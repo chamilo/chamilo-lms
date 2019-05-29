@@ -4911,58 +4911,21 @@ EOT;
         $course = api_get_course_entity($courseId);
         $courseExtra = [
             'course' => $course,
-            'fields' => [],
+            'fields' => isset($extraFields['course'])
+                ? ExtraFieldValue::getValuesForSelectedFields('course', $courseId, $extraFields['course'])
+                : [],
         ];
-
-        if (isset($extraFields['course'])) {
-            $courseFields = $extraFields['course'];
-            $ef = new ExtraField('course');
-            $efv = new ExtraFieldValue('course');
-
-            foreach ($courseFields as $variable) {
-                $extraField = $ef->get_handler_field_info_by_field_variable($variable);
-
-                if (false === $extraField) {
-                    continue;
-                }
-
-                $extraValue = $efv->get_values_by_handler_and_field_id($courseId, $extraField['id'], true);
-
-                if (false === $extraValue) {
-                    continue;
-                }
-
-                $courseExtra['fields'][$extraField['display_text']] = $extraValue['value'];
-            }
-        }
 
         $sessionExtra = [];
 
         if ($sessionId) {
             $session = api_get_session_entity($sessionId);
-            $sessionExtra['session'] = $session;
-
-            if (isset($extraFields['session'])) {
-                $sessionFields = $extraFields['session'];
-                $ef = new ExtraField('session');
-                $efv = new ExtraFieldValue('session');
-
-                foreach ($sessionFields as $variable) {
-                    $extraField = $ef->get_handler_field_info_by_field_variable($variable);
-
-                    if (false === $extraField) {
-                        continue;
-                    }
-
-                    $extraValue = $efv->get_values_by_handler_and_field_id($sessionId, $extraField['id'], true);
-
-                    if (false === $extraValue) {
-                        continue;
-                    }
-
-                    $sessionExtra['fields'][$extraField['display_text']] = $extraValue['value'];
-                }
-            }
+            $sessionExtra = [
+                'session' => $session,
+                'fields' => isset($extraFields['session'])
+                    ? ExtraFieldValue::getValuesForSelectedFields('session', $sessionId, $extraFields['session'])
+                    : [],
+            ];
         }
 
         $view = new Template('', false, false, false, true, false, false);

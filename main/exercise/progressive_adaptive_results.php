@@ -85,51 +85,15 @@ $trackExerciseInfo = ExerciseLib::get_exercise_track_exercise_info(
 $content = $objExercise->showExerciseResultHeader($userInfo, $trackExerciseInfo);
 
 $extraFields = api_get_configuration_value('quiz_adaptive_show_extrafields');
-$courseFields = [];
+$courseFields = isset($extraFields['course'])
+    ? ExtraFieldValue::getValuesForSelectedFields('course', $course->getId(), $extraFields['course'])
+    : [];
 $sessionFields = [];
 
-if (isset($extraFields['course'])) {
-    $ef = new ExtraField('course');
-    $efv = new ExtraFieldValue('course');
-
-    foreach ($extraFields['course'] as $variable) {
-        $extraField = $ef->get_handler_field_info_by_field_variable($variable);
-
-        if (false === $extraField) {
-            continue;
-        }
-
-        $extraValue = $efv->get_values_by_handler_and_field_id($course->getId(), $extraField['id'], true);
-
-        if (false === $extraValue) {
-            continue;
-        }
-
-        $courseFields[$extraField['display_text']] = $extraValue['value'];
-    }
-}
-
 if ($session) {
-    if (isset($extraFields['session'])) {
-        $ef = new ExtraField('session');
-        $efv = new ExtraFieldValue('session');
-
-        foreach ($extraFields['session'] as $variable) {
-            $extraField = $ef->get_handler_field_info_by_field_variable($variable);
-
-            if (false === $extraField) {
-                continue;
-            }
-
-            $extraValue = $efv->get_values_by_handler_and_field_id($session->getId(), $extraField['id'], true);
-
-            if (false === $extraValue) {
-                continue;
-            }
-
-            $sessionExtra['fields'][$extraField['display_text']] = $extraValue['value'];
-        }
-    }
+    $sessionFields = isset($extraFields['session'])
+        ? ExtraFieldValue::getValuesForSelectedFields('session', $session->getId(), $extraFields['session'])
+        : [];
 }
 
 $this_section = SECTION_COURSES;

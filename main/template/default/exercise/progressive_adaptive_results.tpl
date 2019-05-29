@@ -1,7 +1,14 @@
 <div class="row">
     <div class="col-md-10 col-md-offset-1 col-lg-8 col-lg-offset-2">
         <p class="lead"><strong>{{ result.user.completeName }}</strong></p>
-        <p><strong>{{ course.title }}</strong></p>
+        <p class="lead">
+            {% if session %}
+                {{ session.name ~ '(' ~ course.title ~ ')' }}
+            {% else %}
+                {{ course.title }}
+            {% endif %}
+        </p>
+
         {% if not course_fields is empty %}
             <dl class="dl-horizontal">
                 {% for display_text, value in course_fields %}
@@ -10,26 +17,23 @@
                 {% endfor %}
             </dl>
         {% endif %}
-        <br>
-        {% if not session_info is empty %}
-            <p><strong>{{ session_info.session.name }}</strong></p>
-            {% if not session_info.fields is empty %}
-                <dl class="dl-horizontal">
-                    {% for display_text, value in session_info.fields %}
-                        <dt>{{ display_text }}</dt>
-                        <dd>{{ value }}</dd>
-                    {% endfor %}
-                </dl>
-            {% endif %}
+
+        {% if not session_fields is empty %}
+            <dl class="dl-horizontal">
+                {% for display_text, value in session_fields %}
+                    <dt>{{ display_text }}</dt>
+                    <dd>{{ value }}</dd>
+                {% endfor %}
+            </dl>
             <br>
         {% endif %}
     </div>
 </div>
 <div class="row">
-    <div class="col-sm-4 col-md-3 col-md-offset-1 col-lg-2 col-lg-offset-2">
-        <img src="{{ qr }}" alt="{{ 'ResultHashX'|get_lang|format(result.hash) }}">
+    <div class="col-xs-6 col-sm-4 col-md-3 col-md-offset-1 col-lg-2 col-lg-offset-2">
+        <img src="{{ qr }}" alt="{{ result.hash }}" class="img-responsive">
     </div>
-    <div class="col-sm-8 col-md-7 col-lg-6">
+    <div class="col-xs-6 col-sm-8 col-md-7 col-lg-6">
         <p class="lead">{{ 'LevelReachedX'|get_lang|format(result.achievedLevel) }}</p>
         <dl class="dl-horizontal">
             <dt>{{ 'Username'|get_lang }}</dt>

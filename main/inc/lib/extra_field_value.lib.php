@@ -1182,4 +1182,43 @@ class ExtraFieldValue extends Model
 
         return $valueList;
     }
+
+    /**
+     * Get and associative array with the display text and value from selected fields.
+     *
+     * @param string $type           The type of extra field (user, course, session, etc.).
+     * @param int    $itemId         The item ID (user_id, session_id, c_id, etc.).
+     * @param array  $selectedFields Variables from the extra fields.
+     *
+     * @return array
+     */
+    public static function getValuesForSelectedFields($type, $itemId, array $selectedFields)
+    {
+        if (empty($selectedFields)) {
+            return [];
+        }
+
+        $extraInfo = [];
+
+        $ef = new ExtraField($type);
+        $efv = new self($type);
+
+        foreach ($selectedFields as $variable) {
+            $extraField = $ef->get_handler_field_info_by_field_variable($variable);
+
+            if (false === $extraField) {
+                continue;
+            }
+
+            $extraValue = $efv->get_values_by_handler_and_field_id($itemId, $extraField['id'], true);
+
+            if (false === $extraValue) {
+                continue;
+            }
+
+            $extraInfo[$extraField['display_text']] = $extraValue['value'];
+        }
+
+        return $extraInfo;
+    }
 }

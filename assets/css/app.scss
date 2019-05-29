@@ -2,12 +2,12 @@
     Theme Name: Chamilo Origins
     URL Project: http://www.chamilo.org
     Description: Styles main base of Chamilo LMS appearance, works with Bootstrap 4
+    Version: 3.0
     Author:
         alex.aragon@beeznest.com
         angel.quiroz@beeznest.com
         julio.montoya@beeznest.com
         yannick.warnier@beeznest.com
-    Version: 3.0
 */
 
 //@import "~bootstrap/scss/bootstrap";
@@ -26,3 +26,4 @@
 @import '~pretty-checkbox/src/pretty-checkbox.scss';
 @import '~jquery-ui/themes/base/all.css';
 @import "scss/index";
+@import "~jquery-ui-timepicker-addon/dist/jquery-ui-timepicker-addon.css";

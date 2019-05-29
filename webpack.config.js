@@ -33,7 +33,28 @@ Encore
     .enableSassLoader()
     .enableVueLoader()
     .autoProvidejQuery()
+    .copyFiles([
+        {
+            from: './node_modules/multiselect-two-sides/dist/js',
+            to: 'libs/multiselect-two-sides/dist/js/multiselect.js'
+        },
+        {
+            from: './node_modules/pwstrength-bootstrap/dist/',
+            pattern: /\.(js)$/,
+            to: 'libs/pwstrength-bootstrap/dist/pwstrength-bootstrap.js'
+        },
+        {
+            from: './node_modules/readmore-js',
+            pattern: /(readmore.js)$/,
+            to: 'libs/readmore-js/readmore.js'
+        },
+    ])
 ;
+
+// Encore.addPlugin(new copyWebpackPlugin([{
+//     from: 'assets/css/themes/' + theme + '/images',
+//     to: 'css/themes/' + theme + '/images'
+// };
 
 var themes = [
     'chamilo'

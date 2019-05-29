@@ -206,7 +206,7 @@ switch ($action) {
         $tpl->assign('general_score', $generalScore);
         $tpl->assign('global_total', $score);
 
-        $table->setCellContents($row, 0, get_lang('GlobalTotal'));
+        $table->setCellContents($row, 0, get_lang('GeneralTotal'));
         $table->setCellContents($row, 1, '');
         $table->setCellContents($row, 2, $score);
 

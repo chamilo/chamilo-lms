@@ -78,7 +78,11 @@ class ExerciseLib
                 $questionDescription = $objQuestionTmp->selectDescription();
                 if ($show_title) {
                     if ($exercise->display_category_name) {
-                        TestCategory::displayCategoryAndTitle($objQuestionTmp->id);
+                        TestCategory::displayCategoryAndTitle(
+                            $objQuestionTmp->id,
+                            1,
+                            EXERCISE_FEEDBACK_TYPE_PROGRESSIVE_ADAPTIVE != $exercise->feedback_type
+                        );
                     }
                     $titleToDisplay = $objQuestionTmp->getTitleToDisplay($current_item);
                     if ($answerType == READING_COMPREHENSION) {
@@ -1472,7 +1476,11 @@ HTML;
             if (!$only_questions) {
                 if ($show_title) {
                     if ($exercise->display_category_name) {
-                        TestCategory::displayCategoryAndTitle($objQuestionTmp->id);
+                        TestCategory::displayCategoryAndTitle(
+                            $objQuestionTmp->id,
+                            1,
+                            EXERCISE_FEEDBACK_TYPE_PROGRESSIVE_ADAPTIVE != $exercise->feedback_type
+                        );
                     }
                     echo $objQuestionTmp->getTitleToDisplay($current_item);
                 }
@@ -1542,7 +1550,11 @@ HOTSPOT;
             if (!$only_questions) {
                 if ($show_title) {
                     if ($exercise->display_category_name) {
-                        TestCategory::displayCategoryAndTitle($objQuestionTmp->id);
+                        TestCategory::displayCategoryAndTitle(
+                            $objQuestionTmp->id,
+                            1,
+                            EXERCISE_FEEDBACK_TYPE_PROGRESSIVE_ADAPTIVE != $exercise->feedback_type
+                        );
                     }
                     echo $objQuestionTmp->getTitleToDisplay($current_item);
                 }

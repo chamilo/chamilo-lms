@@ -645,21 +645,23 @@ class TestCategory
     }
 
     /**
-     * @param int $questionId
-     * @param int $displayCategoryName
+     * @param int  $questionId
+     * @param int  $displayCategoryName
+     * @param bool $showCategoryLabel
      */
-    public static function displayCategoryAndTitle($questionId, $displayCategoryName = 1)
+    public static function displayCategoryAndTitle($questionId, $displayCategoryName = 1, $showCategoryLabel = true)
     {
-        echo self::returnCategoryAndTitle($questionId, $displayCategoryName);
+        echo self::returnCategoryAndTitle($questionId, $displayCategoryName, $showCategoryLabel);
     }
 
     /**
-     * @param int $questionId
-     * @param int $in_display_category_name
+     * @param int  $questionId
+     * @param int  $in_display_category_name
+     * @param bool $showCategoryLabel
      *
      * @return string|null
      */
-    public static function returnCategoryAndTitle($questionId, $in_display_category_name = 1)
+    public static function returnCategoryAndTitle($questionId, $in_display_category_name = 1, $showCategoryLabel = true)
     {
         $is_student = !(api_is_allowed_to_edit(null, true) || api_is_session_admin());
         /** @var Exercise $objExercise */
@@ -671,8 +673,7 @@ class TestCategory
 
         $categoryName = self::getCategoryNameForQuestion($questionId);
 
-        if (EXERCISE_FEEDBACK_TYPE_PROGRESSIVE_ADAPTIVE == $objExercise->selectFeedbackType() &&
-            $categoryName != ''
+        if (!$showCategoryLabel && $categoryName != ''
         ) {
             return Display::page_header($categoryName, null, 'h3');
         }

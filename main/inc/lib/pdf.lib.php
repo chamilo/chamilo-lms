@@ -43,6 +43,7 @@ class PDF
         $params['right'] = isset($params['right']) ? $params['right'] : 15;
         $params['top'] = isset($params['top']) ? $params['top'] : 30;
         $params['bottom'] = isset($params['bottom']) ? $params['bottom'] : 30;
+        $params['margin_footer'] = isset($params['margin_footer']) ? $params['margin_footer'] : 8;
 
         $this->params['filename'] = isset($params['filename']) ? $params['filename'] : api_get_local_time();
         $this->params['pdf_title'] = isset($params['pdf_title']) ? $params['pdf_title'] : '';
@@ -71,6 +72,8 @@ class PDF
             8,
             $orientation
         );
+
+        $this->pdf->margin_footer = $params['margin_footer'];
 
         // Default value is 96 set in the mpdf library file config.php
         $value = api_get_configuration_value('pdf_img_dpi');

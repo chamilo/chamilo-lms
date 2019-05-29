@@ -232,7 +232,7 @@ switch ($action) {
 
         $content = $contentText.'<pagebreak>'.$tableToString;
 
-        $pdf = new PDF();
+        $pdf = new PDF('A4', 'P', ['margin_footer' => 4]);
 
         $table = new HTML_Table(['class' => 'table']);
         $logo = ChamiloApi::getPlatformLogo(

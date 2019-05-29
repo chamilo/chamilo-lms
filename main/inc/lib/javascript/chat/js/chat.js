@@ -730,7 +730,7 @@ function createChatBox(user_id, chatboxtitle, minimizeChatBox, online, userImage
 
 	$("#chatbox_"+user_id).click(function() {
 		if ($('#chatbox_'+user_id+' .chatboxcontent').css('display') != 'none') {
-			$("#chatbox_"+user_id+" .chatboxtextarea").focus();
+			//$("#chatbox_"+user_id+" .chatboxtextarea").focus();
 		}
 	});
 

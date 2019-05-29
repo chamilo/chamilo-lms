@@ -3059,9 +3059,9 @@ class learnpath
      *
      * @todo    Transcode labels instead of switching to HTML (which requires to know the encoding of the LP)
      */
-    public static function get_iv_interactions_array($lp_iv_id)
+    public static function get_iv_interactions_array($lp_iv_id, $course_id = 0)
     {
-        $course_id = api_get_course_int_id();
+        $course_id = empty($course_id) ? api_get_course_int_id() : (int) $course_id;
         $list = [];
         $table = Database::get_course_table(TABLE_LP_IV_INTERACTION);
         $lp_iv_id = (int) $lp_iv_id;
@@ -3147,15 +3147,20 @@ class learnpath
      * This method can be used as static.
      *
      * @param int $lpItemViewId Learnpath Item View ID
+     * @param int $course_id
      *
      * @return array
      *
      * @todo    Translate labels
      */
-    public static function get_iv_objectives_array($lpItemViewId = 0)
+    public static function get_iv_objectives_array($lpItemViewId = 0, $course_id = 0)
     {
-        $course_id = api_get_course_int_id();
+        $course_id = empty($course_id) ? api_get_course_int_id() : (int) $course_id;
         $lpItemViewId = (int) $lpItemViewId;
+
+        if (empty($course_id) || empty($lpItemViewId)) {
+            return [];
+        }
 
         $table = Database::get_course_table(TABLE_LP_IV_OBJECTIVE);
         $sql = "SELECT * FROM $table
@@ -3175,7 +3180,7 @@ class learnpath
             ];
             while ($row = Database::fetch_array($res)) {
                 $list[] = [
-                    'order_id' => ($row['order_id'] + 1),
+                    'order_id' => $row['order_id'] + 1,
                     'objective_id' => urldecode($row['objective_id']), // urldecode() because they often have %2F
                     'score_raw' => $row['score_raw'],
                     'score_max' => $row['score_max'],

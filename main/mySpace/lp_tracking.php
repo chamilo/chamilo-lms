@@ -21,10 +21,8 @@ if (isset($_GET['from']) && $_GET['from'] == 'myspace') {
     $this_section = SECTION_COURSES;
 }
 
-$session_id = isset($_REQUEST['id_session']) && !empty($_REQUEST['id_session'])
-    ? intval($_REQUEST['id_session'])
-    : api_get_session_id();
-$export_csv = isset($_GET['export']) && $_GET['export'] == 'csv' ? true : false;
+$session_id = isset($_REQUEST['id_session']) ? (int) $_REQUEST['id_session'] : api_get_session_id();
+$export_csv = isset($_GET['export']) && $_GET['export'] == 'csv';
 $user_id = isset($_GET['student_id']) ? (int) $_GET['student_id'] : api_get_user_id();
 $courseCode = isset($_GET['course']) ? Security::remove_XSS($_GET['course']) : api_get_course_id();
 $origin = api_get_origin();
@@ -107,7 +105,7 @@ switch ($action) {
         $duration = learnpathItem::getScormTimeFromParameter('js', $itemView->getTotalTime());
         $endTime = $itemView->getStartTime() + $itemView->getTotalTime();
 
-        $list1 = learnpath::get_iv_interactions_array($itemViewId);
+        $list1 = learnpath::get_iv_interactions_array($itemViewId, $courseInfo['real_id']);
         $counter = 0;
         $table = new HTML_Table();
 

@@ -239,7 +239,7 @@ switch ($action) {
             $theme,
             [
                 'title' => '',
-                'class' => '',
+                'style' => 'max-width:180px',
                 'id' => 'header-logo',
             ]
         );

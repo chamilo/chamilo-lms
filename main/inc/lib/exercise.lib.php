@@ -4940,7 +4940,7 @@ EOT;
 
         if ($sessionId) {
             $session = api_get_session_entity($sessionId);
-            $sessionExtra['session'] = $session;;
+            $sessionExtra['session'] = $session;
 
             if (isset($extraFields['session'])) {
                 $sessionFields = $extraFields['session'];
@@ -4991,7 +4991,7 @@ EOT;
                     'size' => filesize($quizzesDir['system'].$qrFilename),
                     'error' => 0,
                     'comment' => '',
-                ]
+                ],
             ]
         );
     }

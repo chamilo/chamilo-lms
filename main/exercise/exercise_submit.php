@@ -783,27 +783,29 @@ if ($question_count != 0) {
         if (isset($objExercise->questionList[$currentQuestion - 1])) { // Current question is not the last one in quiz
             $currentQuestionId = $objExercise->questionList[$currentQuestion - 1];
             $objCurrentQuestion = Question::read($currentQuestionId, [], false);
+            $currentCategoryId = $objCurrentQuestion->category;
 
             if (isset($objExercise->questionList[$currentQuestion - 2])) { // Current question is not the first one
                 $previousQuestionId = $objExercise->questionList[$currentQuestion - 2];
                 $objPreviousQuestion = Question::read($previousQuestionId, [], false);
+                $previousCategoryId = $objPreviousQuestion->category;
 
                 // Check if category of current question has not been taken.
-                if (!empty($categoryList[$objPreviousQuestion->category])) {
+                if (!empty($categoryList[$previousCategoryId])) {
                     $previousQuestionIsLastInCategory = $objExercise->isLastQuestionInCategory(
-                        $objPreviousQuestion->category,
+                        $previousCategoryId,
                         $previousQuestionId
                     );
 
                     if ($previousQuestionIsLastInCategory) {
                         $destinationCategory = $objExercise->findCategoryDestination(
                             $exe_id,
-                            $objPreviousQuestion->category
+                            $previousCategoryId
                         );
 
-                        if ($objCurrentQuestion->category !== $destinationCategory) {
+                        if ($currentCategoryId !== $destinationCategory) {
                             if (0 === $destinationCategory || !empty($categoryList[$destinationCategory])) {
-                                $category = $objExercise->categoryWithQuestionList[$objPreviousQuestion->category]['category'];
+                                $category = $objExercise->categoryWithQuestionList[$previousCategoryId]['category'];
 
                                 Session::write('adaptive_quiz_level', $category['name']);
 
@@ -822,7 +824,7 @@ if ($question_count != 0) {
 
                         // If go to end quiz or user have already done this category
                         if (0 === $destinationCategory || !empty($categoryList[$destinationCategory])) {
-                            $category = $objExercise->categoryWithQuestionList[$objCurrentQuestion->category]['category'];
+                            $category = $objExercise->categoryWithQuestionList[$currentCategoryId]['category'];
 
                             Session::write('adaptive_quiz_level', $category['name']);
 
@@ -831,10 +833,10 @@ if ($question_count != 0) {
                         }
 
                         // Category of current question is the next category. Then let it continue.
-                        $categoryList[$objCurrentQuestion->category] = true;
+                        $categoryList[$currentCategoryId] = true;
                         Session::write('track_e_adaptive', $categoryList);
                     } else {
-                        if (!$categoryList[$objCurrentQuestion->category]) {
+                        if (!$categoryList[$currentCategoryId]) {
                             Session::write('track_e_adaptive', []);
 
                             header('Location: '.api_get_self().'?'.$params.'&num=0');
@@ -844,7 +846,7 @@ if ($question_count != 0) {
                 } else {
                     // Current question is the first one in its category
                     $currentQuestionIsFirstInCategory = $objExercise->isFirstQuestionInCategory(
-                        $objCurrentQuestion->category,
+                        $currentCategoryId,
                         $objCurrentQuestion->iid
                     );
 
@@ -855,18 +857,19 @@ if ($question_count != 0) {
                         exit;
                     }
 
-                    $categoryList[$objCurrentQuestion->category] = true;
+                    $categoryList[$currentCategoryId] = true;
                     Session::write('track_e_adaptive', $categoryList);
                 }
             } else { // Questions is the first one in quiz. Then let it continue.
-                $categoryList[$objCurrentQuestion->category] = true;
+                $categoryList[$currentCategoryId] = true;
                 Session::write('track_e_adaptive', $categoryList);
             }
         } else { // Current question is the last one in quiz
             $currentQuestionId = $objExercise->questionList[$currentQuestion - 2];
             $objCurrentQuestion = Question::read($currentQuestionId, [], false);
+            $currentCategoryId = $objCurrentQuestion->category;
 
-            $destinationCategory = $objExercise->findCategoryDestination($exe_id, $objCurrentQuestion->category);
+            $destinationCategory = $objExercise->findCategoryDestination($exe_id, $currentCategoryId);
 
             if (0 !== $destinationCategory && empty($categoryList[$destinationCategory])) {
                 $destinationQuestionId = $objExercise->getFirstQuestionInCategory($destinationCategory);
@@ -876,7 +879,7 @@ if ($question_count != 0) {
                 exit;
             }
 
-            $category = $objExercise->categoryWithQuestionList[$objCurrentQuestion->category]['category'];
+            $category = $objExercise->categoryWithQuestionList[$currentCategoryId]['category'];
 
             Session::write('adaptive_quiz_level', $category['name']);
         }
@@ -1326,11 +1329,13 @@ if (!empty($error)) {
             if ('.$reminder.' == 1 ) {
                 url = "exercise_reminder.php?'.$params.'&num='.$currentQuestion.'";
             } else if ('.$reminder.' == 2 ) {
-                url = "exercise_submit.php?'.$params.'&num='.$currentQuestion.'&remind_question_id='.$remind_question_id.'&reminder=2";
+                url = "exercise_submit.php?'.$params.'&num='.$currentQuestion.'&remind_question_id='
+                    .$remind_question_id.'&reminder=2";
             } else {
-                url = "exercise_submit.php?'.$params.'&num='.$currentQuestion.'&remind_question_id='.$remind_question_id.'";
+                url = "exercise_submit.php?'.$params.'&num='.$currentQuestion.'&remind_question_id='
+                    .$remind_question_id.'";
             }
-            //$("#save_for_now_"+question_id).html(\''.Display::return_icon('save.png', get_lang('Saved'), [], ICON_SIZE_SMALL).'\');
+            //$("#save_for_now_"+question_id).html(\''.Display::return_icon('save.png', get_lang('Saved')).'\');
             window.location = url;
         }
         

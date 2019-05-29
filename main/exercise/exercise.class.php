@@ -8297,6 +8297,26 @@ class Exercise
     }
 
     /**
+     * Get the category ID for a question by its ID.
+     *
+     * @param int $sourceQuestionId
+     *
+     * @return int
+     */
+    public function getCategoryByQuestion($sourceQuestionId)
+    {
+        foreach ($this->categoryWithQuestionList as $categoryId => $categoryInfo) {
+            foreach ($categoryInfo['question_list'] as $questionId) {
+                if ((int) $questionId === (int) $sourceQuestionId) {
+                    return (int) $categoryId;
+                }
+            }
+        }
+
+        return 0;
+    }
+
+    /**
      * Gets the question list ordered by the question_order setting (drag and drop).
      *
      * @return array
@@ -8771,25 +8791,5 @@ class Exercise
         );
 
         return $group;
-    }
-
-    /**
-     * Get the category ID for a question by its ID
-     *
-     * @param int $sourceQuestionId
-     *
-     * @return int
-     */
-    public function getCategoryByQuestion($sourceQuestionId)
-    {
-        foreach ($this->categoryWithQuestionList as $categoryId => $categoryInfo) {
-            foreach ($categoryInfo['question_list'] as $questionId) {
-                if ((int) $questionId === (int) $sourceQuestionId) {
-                    return (int) $categoryId;
-                }
-            }
-        }
-
-        return 0;
     }
 }

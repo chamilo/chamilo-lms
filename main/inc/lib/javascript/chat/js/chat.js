@@ -338,7 +338,7 @@ function createChatBubble(my_user_id, item, appendType = 'append')
 
 	var messageObject = $("#chatbox_"+my_user_id+" .chatboxcontent").find('#message_id_' + item.id);
 	var exists = messageObject.length !== 0;
-	var messageHeader = '<div id="message_id_'+item.id+'" class="chatbox-common boot-tooltip well '+myDiv+'" title="'+sentDate+'" >';
+	var messageHeader = '<div id="message_id_'+item.id+'" class="chatbox-common  well '+myDiv+'" title="'+sentDate+'" >';
 	var messageEnd = '</div>';
 
 	var message = '';
@@ -756,10 +756,8 @@ function getMoreItems(userId, scrollType)
 		cache: false,
 		dataType: "json",
 		success: function(items) {
-			console.log(items);
 			items = items.reverse();
 			$.each(items, function(i, item) {
-				console.log(i);
 				if (item) {
 					if ($("#chatbox_"+userId).css('display') == 'none') {
 						$("#chatbox_"+userId).css('display','block');

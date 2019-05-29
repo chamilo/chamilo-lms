@@ -148,8 +148,8 @@ switch ($action) {
         $globalTotalCount = 0;
         foreach ($questions as $data) {
             // Question title
-            $table->setCellContents($row, 0, '<b>'.$data['question'].'</b>');
-            $table->setCellAttributes($row, 0, ['colspan' => '3', 'style' => 'text-align:center;']);
+            $table->setCellContents($row, 0, $data['question']);
+            $table->setCellAttributes($row, 0, ['colspan' => '3', 'style' => 'text-align:center; font-weight:bold']);
             $choiceCounter = 1;
             $row++;
             $total = 0;
@@ -174,10 +174,15 @@ switch ($action) {
             // Question total
             $table->setCellContents($row, 0, get_lang('Total'));
             $table->setCellContents($row, 1, $data['question']);
+
             $totalOptions = count($data['options']);
             $arrayScore = [0 => $total, 1 => $totalOptions];
             $scoreToString = $scoreDisplay->display_score($arrayScore);
             $table->setCellContents($row, 2, $scoreToString);
+
+            $table->setCellAttributes($row, 0, ['style' => 'font-weight:bold']);
+            $table->setCellAttributes($row, 1, ['style' => 'font-weight:bold']);
+            $table->setCellAttributes($row, 2, ['style' => 'font-weight:bold']);
 
             $categories[] = [
                 'name' => $data['question'],
@@ -194,9 +199,9 @@ switch ($action) {
         $globalScoreTotal = [0 => $globalTotal, 1 => $globalTotalCount];
         $score = $scoreDisplay->display_score($globalScoreTotal);
         $generalScore[] = [
-                'score' => $scoreDisplay->display_score($globalScoreTotal, SCORE_DIV),
-                'score_numeric' => $scoreDisplay->display_score($globalScoreTotal, SCORE_NUMERIC),
-                'score_percentage' => $scoreDisplay->display_score($globalScoreTotal, SCORE_PERCENT),
+            'score' => $scoreDisplay->display_score($globalScoreTotal, SCORE_DIV),
+            'score_numeric' => $scoreDisplay->display_score($globalScoreTotal, SCORE_NUMERIC),
+            'score_percentage' => $scoreDisplay->display_score($globalScoreTotal, SCORE_PERCENT),
         ];
         $tpl->assign('general_score', $generalScore);
         $tpl->assign('global_total', $score);
@@ -204,6 +209,10 @@ switch ($action) {
         $table->setCellContents($row, 0, get_lang('GlobalTotal'));
         $table->setCellContents($row, 1, '');
         $table->setCellContents($row, 2, $score);
+
+        $table->setCellAttributes($row, 0, ['style' => 'font-weight:bold']);
+        $table->setCellAttributes($row, 1, ['style' => 'font-weight:bold']);
+        $table->setCellAttributes($row, 2, ['style' => 'font-weight:bold']);
 
         $tableToString = $table->toHtml();
 
@@ -215,13 +224,13 @@ switch ($action) {
             'score' => $score,
             'duration' => $duration,
             'start_time' => api_get_local_time($itemView->getStartTime()),
+            'start_date' => api_get_local_time($itemView->getStartTime(), null, null, null, false),
             'end_time' => api_get_local_time($endTime),
             'candidate' => $studentName,
         ];
 
         $tpl->assign('data', $dataLpInfo);
-        $template = $tpl->fetch($tpl->get_template('my_space/pdf_tracking_lp.tpl'));
-        $contentText = $template;
+        $contentText = $tpl->fetch($tpl->get_template('my_space/pdf_tracking_lp.tpl'));
 
         $content = $contentText.'<pagebreak>'.$tableToString;
 
@@ -247,7 +256,9 @@ switch ($action) {
 
         $background = api_get_path(SYS_PATH).'custompages/url-images/'.api_get_current_access_url_id().'_pdf_background.png';
 
-        $content = '<html><body style="background-image-resize: 5; background-position: top left; background-image: url('.$background.');">'
+        $content =
+            '<html>
+                <body style="background-image-resize: 5; background-position: top left; background-image: url('.$background.');">'
             .$content.'</body></html>';
 
         $pdf->content_to_pdf(

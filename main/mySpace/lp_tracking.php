@@ -159,9 +159,9 @@ switch ($action) {
                 }
                 $table->setCellContents($row, 0, 'Q'.$choiceCounter);
                 $table->setCellContents($row, 1, $option['student_response_formatted']);
-                $result = Display::return_icon('completed.png');
+                $result = Display::return_icon('icon_check.png',null,[],ICON_SIZE_SMALL);
                 if ($option['result'] === 'wrong') {
-                    $result = Display::return_icon('delete.png');
+                    $result = Display::return_icon('icon_error.png', null, [], ICON_SIZE_SMALL);
                 }
 
                 $table->setCellContents($row, 2, $result);
@@ -204,14 +204,6 @@ switch ($action) {
         $tpl->assign('general_score', $generalScore);
         $tpl->assign('global_total', $score);
 
-        $table->setCellContents($row, 0, get_lang('GeneralTotal'));
-        $table->setCellContents($row, 1, '');
-        $table->setCellContents($row, 2, $score);
-
-        $table->setCellAttributes($row, 0, ['style' => 'font-weight:bold']);
-        $table->setCellAttributes($row, 1, ['style' => 'font-weight:bold']);
-        $table->setCellAttributes($row, 2, ['style' => 'font-weight:bold']);
-
         $tableToString = $table->toHtml();
 
         $duration = learnpathItem::getScormTimeFromParameter('js', $itemView->getTotalTime());
@@ -232,14 +224,14 @@ switch ($action) {
 
         $content = $contentText.'<pagebreak>'.$tableToString;
 
-        $pdf = new PDF('A4', 'P', ['margin_footer' => 4]);
+        $pdf = new PDF('A4', 'P', ['margin_footer' => 4, 'top' => 40, 'bottom' => 25 ]);
 
-        $table = new HTML_Table(['class' => 'table']);
+        $table = new HTML_Table(['class' => 'table', 'style' => 'display: block; margin-bottom: 50px;']);
         $logo = ChamiloApi::getPlatformLogo(
             $theme,
             [
                 'title' => '',
-                'style' => 'max-width:180px',
+                'style' => 'max-width:180px, margin-bottom: 100px;',
                 'id' => 'header-logo',
             ]
         );

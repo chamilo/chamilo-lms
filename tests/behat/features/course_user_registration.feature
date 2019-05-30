@@ -26,4 +26,4 @@ Feature: Subscribe users to the course
     Given I am on "/main/user/subscribe_user.php?keyword=fapple&type=5&cidReq=TEMP"
     Then I should see "Fiona"
     Then I follow "Register"
-    Then I should see "User Fiona Apple (fapple) has been registered to course TEMP"
+    Then I should see "User Fiona Apple Maggart (fapple) has been registered to course TEMP"

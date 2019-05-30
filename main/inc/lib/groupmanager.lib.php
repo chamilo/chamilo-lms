@@ -45,6 +45,8 @@ class GroupManager
     const TOOL_NOT_AVAILABLE = 0;
     const TOOL_PUBLIC = 1;
     const TOOL_PRIVATE = 2;
+    const TOOL_PRIVATE_BETWEEN_USERS = 3;
+
     /**
      * Constants for the available group tools.
      */
@@ -2135,6 +2137,13 @@ class GroupManager
                     return true;
                 }
                 break;
+            case self::TOOL_PRIVATE_BETWEEN_USERS:
+                // Only works for announcements for now
+                $userIsInGroup = self::is_user_in_group($user_id, $groupInfo);
+                if ($userIsInGroup && $tool == self::GROUP_TOOL_ANNOUNCEMENT) {
+                    return true;
+                }
+                break;
         }
 
         return false;
@@ -2853,17 +2862,16 @@ class GroupManager
         echo '
             <ul class="toolbar-groups nav nav-tabs">
                 <li class="'.$activeSettings.'">
-                    <a href="'.sprintf($url, 'settings.php').'">
+                    <a id="group_settings_tab" href="'.sprintf($url, 'settings.php').'">
                     '.Display::return_icon('settings.png').' '.get_lang('Settings').'
                     </a>
                 </li>
                 <li class="'.$activeMember.'">
-                    <a href="'.sprintf($url, 'member_settings.php').'">
-                    '.Display::return_icon('user.png').' '.get_lang('GroupMembers').'
-                    </a>
+                    <a id="group_members_tab" href="'.sprintf($url, 'member_settings.php').'">
+                    '.Display::return_icon('user.png').' '.get_lang('GroupMembers').'</a>
                 </li>
                 <li class="'.$activeTutor.'">
-                    <a href="'.sprintf($url, 'tutor_settings.php').'">
+                    <a id="group_tutors_tab" href="'.sprintf($url, 'tutor_settings.php').'">
                     '.Display::return_icon('teacher.png').' '.get_lang('GroupTutors').'
                     </a>
                 </li>

@@ -499,6 +499,30 @@ class FeatureContext extends MinkContext
         return false;
     }
 
+
+    /**
+     * @Then /^I save current URL with name "([^"]*)"$/
+     */
+    public function saveUrlWithName($name)
+    {
+
+        $url = $this->getSession()->getCurrentUrl();
+        $this->getSession()->setCookie($name, $url);
+    }
+
+    /**
+     * @Then /^I visit URL saved with name "([^"]*)"$/
+     */
+    public function visitSavedUrlWithName($name)
+    {
+        $url = $this->getSession()->getCookie($name);
+        echo $url;
+        if (empty($url)) {
+            throw new Exception("Url with name: $name not found");
+        }
+        $this->visit($url);
+    }
+
     /**
      * Example: Then I should see the table "#category_results":
      *               | Categories    | Absolute score | Relative score |

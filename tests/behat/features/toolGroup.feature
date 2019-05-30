@@ -13,10 +13,10 @@ Feature: Group tool
     And I press "group_category_submit"
     Then I should see "Category created"
 
-  Scenario: Create 3 groups
+  Scenario: Create 4 groups
     Given I am on "/main/group/group_creation.php?cidReq=TEMP&id_session=0"
     When I fill in the following:
-      | number_of_groups | 3 |
+      | number_of_groups | 4 |
     And I press "submit"
     Then I should see "New groups creation"
     When I fill in the following:
@@ -255,7 +255,7 @@ Feature: Group tool
     Then I follow "Announcement for all users inside Group 0001"
     Then I should see "Announcement description in Group 0001"
 
-  Scenario: Check fapple access of announcements Group 0003 (fapple group but private)
+  Scenario: Check fapple/acostea access of announcements
     Given I am logged as "fapple"
     And I am on course "TEMP" homepage
     And I am on "/main/group/group.php?cidReq=TEMP&id_session=0"
@@ -267,13 +267,14 @@ Feature: Group tool
     Then I should see "Announcement for user fapple inside Group 0003"
     Then I follow "Announcement for user fapple inside Group 0003 Group"
     Then I should see "Announcement description for user fapple inside Group 0003"
+    Then I save current URL with name "announcement_for_user_fapple_group_0003_private"
     Then I move backward one page
     Then wait for the page to be loaded
     Then I should see "Announcement for all users inside Group 0003"
     Then I follow "Announcement for all users inside Group 0003"
     Then I should see "Announcement description in Group 0003"
-
-  Scenario: Check acostea access of announcements in Group 001
+    Then I save current URL with name "announcement_for_all_users_group_0003_private"
+    ## Finish tests with fapple now check access with acostea ##
     Given I am logged as "acostea"
     And I am on course "TEMP" homepage
     Given I am on "/main/group/group.php?cidReq=TEMP&id_session=0"
@@ -294,3 +295,7 @@ Feature: Group tool
     And I follow "Group 0003"
     Then I should see "Group 0003"
     Then I should not see "Announcements"
+    Then I visit URL saved with name "announcement_for_user_fapple_group_0003_private"
+    Then I should see "Sorry, you are not allowed to access this page"
+    Then I visit URL saved with name "announcement_for_all_users_group_0003_private"
+    Then I should see "Sorry, you are not allowed to access this page"

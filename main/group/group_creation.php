@@ -134,7 +134,7 @@ if (isset($_POST['number_of_groups'])) {
     <?php
         }
         $group_categories = GroupManager::get_categories();
-        $group_id = GroupManager:: get_number_of_groups() + 1;
+        $group_id = GroupManager::get_number_of_groups() + 1;
         $cat_options = [];
         foreach ($group_categories as $index => $category) {
             $cat_options[$category['id']] = $category['title'];
@@ -233,7 +233,7 @@ EOT;
             $form->addGroup($group_el, 'group_'.$group_number, null, '</td><td>', false);
         }
         $defaults['action'] = 'create_groups';
-        $defaults['number_of_groups'] = intval($_POST['number_of_groups']);
+        $defaults['number_of_groups'] = (int) $_POST['number_of_groups'];
         $form->setDefaults($defaults);
         $form->addButtonCreate(get_lang('CreateGroup'), 'submit');
         $form->display();

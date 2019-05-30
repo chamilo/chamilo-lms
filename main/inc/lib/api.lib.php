@@ -8982,11 +8982,17 @@ function api_mail_html(
  */
 function api_protect_course_group($tool, $showHeader = true)
 {
-    $userId = api_get_user_id();
     $groupId = api_get_group_id();
-    $groupInfo = GroupManager::get_group_properties($groupId);
+    if (!empty($groupId)) {
+        $userId = api_get_user_id();
+        $groupInfo = GroupManager::get_group_properties($groupId);
 
-    if (!empty($groupInfo)) {
+        // Group doesn't exists
+        if (empty($groupInfo)) {
+            api_not_allowed($showHeader);
+        }
+
+        // Check group access
         $allow = GroupManager::user_has_access(
             $userId,
             $groupInfo['iid'],

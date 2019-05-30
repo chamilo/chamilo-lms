@@ -63,13 +63,20 @@ class DateRangePicker extends HTML_QuickForm_text
         $start = isset($dates[0]) ? $dates[0] : '';
         $end = isset($dates[1]) ? $dates[1] : '';
 
+        $pattern = 'yyyy-MM-dd HH:mm';
+
+        if ('false' === $this->getAttribute('timePicker') ||
+            false === strpos($this->getAttribute('format'), 'HH:mm')) {
+            $pattern = 'yyyy-MM-dd';
+        }
+
         $formatter = new IntlDateFormatter(
             'en',
             IntlDateFormatter::NONE,
             IntlDateFormatter::NONE,
             'UTC',
             IntlDateFormatter::GREGORIAN,
-            'yyyy-MM-dd HH:mm'
+            $pattern
         );
         $resultStart = $formatter->format($formatter->parse($start));
         $resultEnd = $formatter->format($formatter->parse($end));
@@ -172,7 +179,7 @@ class DateRangePicker extends HTML_QuickForm_text
         $timePicker = 'true';
         $timePickerValue = Security::remove_XSS($this->getAttribute('timePicker'));
         if (!empty($timePickerValue)) {
-            $timePicker = $timePickerValue;
+            $timePicker = 'false';
         }
 
         // timeFormat: 'hh:mm'

@@ -10,6 +10,7 @@ $action = isset($_REQUEST['a']) ? $_REQUEST['a'] : null;
 
 $isAllowedToEdit = api_is_allowed_to_edit();
 $courseInfo = api_get_course_info();
+$courseId = api_get_course_int_id();
 $groupId = api_get_group_id();
 $sessionId = api_get_session_id();
 
@@ -35,12 +36,17 @@ switch ($action) {
         }
 
         if ($allowToEdit === false && !empty($groupId)) {
-            $groupProperties = GroupManager:: get_group_properties($groupId);
+            $groupProperties = GroupManager::get_group_properties($groupId);
             // Check if user is tutor group
             $isTutor = GroupManager::is_tutor_of_group(api_get_user_id(), $groupProperties, $courseId);
             if ($isTutor) {
                 $allowToEdit = true;
             }
+
+            // Last chance ... students can send announcements.
+            /*if ($groupProperties['announcements_state'] == GroupManager::TOOL_PRIVATE_BETWEEN_USERS) {
+                $allowToEdit = true;
+            }*/
         }
 
         if ($allowToEdit === false) {

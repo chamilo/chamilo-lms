@@ -1058,6 +1058,7 @@ class SocialManager extends UserManager
                         </a>
                     </li>';
                 $links .= $personalData;
+
                 $links .= '</ul>';
             }
 
@@ -1082,7 +1083,7 @@ class SocialManager extends UserManager
         if ($show === 'shared_profile') {
             $links = '<ul class="nav nav-pills nav-stacked">';
             // My own profile
-            if ($show_full_profile && $user_id == intval(api_get_user_id())) {
+            if ($show_full_profile && $user_id == api_get_user_id()) {
                 $links .= '
                     <li class="home-icon '.$active.'">
                         <a href="'.api_get_path(WEB_CODE_PATH).'social/home.php">
@@ -1150,6 +1151,18 @@ class SocialManager extends UserManager
                         </li>
                     ';
                 }
+
+                if (!api_get_configuration_value('disable_gdpr')) {
+                    $active = $show == 'personal-data' ? 'active' : null;
+                    $personalData = '
+                    <li class="personal-data-icon '.$active.'">
+                        <a href="'.api_get_path(WEB_CODE_PATH).'social/personal_data.php">
+                            '.$personalDataIcon.' '.get_lang('PersonalDataReport').'
+                        </a>
+                    </li>';
+                    $links .= $personalData;
+                    $links .= '</ul>';
+                }
             }
 
             // My friend profile.
@@ -1215,7 +1228,7 @@ class SocialManager extends UserManager
                 'sn-sidebar-collapse'
             );
 
-            if ($show_full_profile && $user_id == intval(api_get_user_id())) {
+            if ($show_full_profile && $user_id == api_get_user_id()) {
                 $personal_course_list = UserManager::get_personal_session_course_list($user_id);
                 $course_list_code = [];
                 $i = 1;
@@ -1233,14 +1246,13 @@ class SocialManager extends UserManager
                 }
 
                 // Announcements
-                $my_announcement_by_user_id = intval($user_id);
                 $announcements = [];
                 foreach ($course_list_code as $course) {
                     $course_info = api_get_course_info($course['code']);
                     if (!empty($course_info)) {
                         $content = AnnouncementManager::get_all_annoucement_by_user_course(
                             $course_info['code'],
-                            $my_announcement_by_user_id
+                            $user_id
                         );
 
                         if (!empty($content)) {

@@ -1814,11 +1814,11 @@ class GroupManager
         $course_id = empty($course_id) ? api_get_course_int_id() : (int) $course_id;
         $group_id = $groupInfo['id'];
 
-        $table = Database::get_course_table(TABLE_GROUP_USER);
         if (!empty($user_ids)) {
+            $table = Database::get_course_table(TABLE_GROUP_USER);
             foreach ($user_ids as $user_id) {
                 if (self::canUserSubscribe($user_id, $groupInfo)) {
-                    $user_id = intval($user_id);
+                    $user_id = (int) $user_id;
                     $sql = "INSERT INTO ".$table." (c_id, user_id, group_id)
                             VALUES ('$course_id', '".$user_id."', '".$group_id."')";
                     Database::query($sql);

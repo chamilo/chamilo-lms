@@ -127,6 +127,30 @@ Feature: Group tool
     Then I follow "Group 0001"
     Then I should see "Fiona"
 
+  Scenario: Add fapple to the Group 0003 not allowed because group category allows 1 user per group
+    Given I am on "/main/group/group.php?cidReq=TEMP&id_session=0"
+    And I follow "Group 0003"
+    Then I should see "Group 0003"
+    Then I follow "Edit this group"
+    Then I should see "Group members"
+    Then wait for the page to be loaded
+    Then I follow "group_members_tab"
+    Then I select "Fiona Apple Maggart (fapple)" from "group_members"
+    Then I press "group_members_rightSelected"
+    Then I press "Save settings"
+    And wait for the page to be loaded
+    Then I should see "Group settings modified"
+    Then I follow "Group 0003"
+    Then I should not see "Fiona"
+
+  Scenario: Change Group category to allow multiple inscription of the user
+    Given I am on "/main/group/group.php?cidReq=TEMP&id_session=0"
+    And I follow "Edit this category"
+    Then I should see "Edit group category: Group category 1"
+    Then I fill in select bootstrap static by text "#groups_per_user" select "10"
+    Then I press "Edit"
+    Then I should see "Group settings have been modified"
+
   Scenario: Add fapple to the Group 0003
     Given I am on "/main/group/group.php?cidReq=TEMP&id_session=0"
     And I follow "Group 0003"
@@ -237,7 +261,7 @@ Feature: Group tool
     Then I press "submit"
     Then I should see "Announcement has been added"
 
-  Scenario: Check fapple access of announcements Group 0001 (fapple group)
+  Scenario: Check fapple/acostea access of announcements
     Given I am logged as "fapple"
     And I am on course "TEMP" homepage
     And I am on "/main/group/group.php?cidReq=TEMP&id_session=0"
@@ -249,15 +273,13 @@ Feature: Group tool
     Then I should see "Announcement for user fapple inside Group 0001"
     Then I follow "Announcement for user fapple inside Group 0001 Group"
     Then I should see "Announcement description for user fapple inside Group 0001"
+    Then I save current URL with name "announcement_for_user_fapple_group_0001_public"
     Then I move backward one page
     Then wait for the page to be loaded
     Then I should see "Announcement for all users inside Group 0001"
     Then I follow "Announcement for all users inside Group 0001"
+    Then I save current URL with name "announcement_for_all_users_group_0001_public"
     Then I should see "Announcement description in Group 0001"
-
-  Scenario: Check fapple/acostea access of announcements
-    Given I am logged as "fapple"
-    And I am on course "TEMP" homepage
     And I am on "/main/group/group.php?cidReq=TEMP&id_session=0"
     And I follow "Group 0003"
     Then I should see "Group 0003"
@@ -282,20 +304,13 @@ Feature: Group tool
     And I should see "Group 0002"
     And I should see "Group 0003"
     And I should see "Group 0004"
-    And I follow "Group 0001"
-    Then I should see "Group 0001"
+
+    Then I visit URL saved with name "announcement_for_user_fapple_group_0001_public"
+    Then I should see "Sorry, you are not allowed to access this page"
+    Then I visit URL saved with name "announcement_for_all_users_group_0001_public"
+    Then I should see "Sorry, you are not allowed to access this page"
+
+    And I am on "/main/group/group.php?cidReq=TEMP&id_session=0"
+    And I should see "Group 0002"
+    And I follow "Group 0002"
     Then I follow "Announcements"
-    And wait for the page to be loaded
-    Then I should see "Announcement for all users inside Group 0001"
-    Then I should not see "Announcement for user fapple inside Group 0001"
-    Then I follow "Announcement for all users inside Group 0001"
-    Then I should see "Announcement description in Group 0001"
-    Given I am on "/main/group/group.php?cidReq=TEMP&id_session=0"
-    And I should see "Group 0003"
-    And I follow "Group 0003"
-    Then I should see "Group 0003"
-    Then I should not see "Announcements"
-    Then I visit URL saved with name "announcement_for_user_fapple_group_0003_private"
-    Then I should see "Sorry, you are not allowed to access this page"
-    Then I visit URL saved with name "announcement_for_all_users_group_0003_private"
-    Then I should see "Sorry, you are not allowed to access this page"

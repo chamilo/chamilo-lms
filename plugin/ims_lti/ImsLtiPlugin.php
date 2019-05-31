@@ -29,7 +29,7 @@ class ImsLtiPlugin extends Plugin
      */
     protected function __construct()
     {
-        $version = '1.5 (beta)';
+        $version = '1.5.1 (beta)';
         $author = 'Angel Fernando Quiroz Campos';
 
         parent::__construct($version, $author, ['enabled' => 'boolean']);
@@ -140,7 +140,7 @@ class ImsLtiPlugin extends Plugin
             'ALTER TABLE '.self::TABLE_TOOL.' ADD CONSTRAINT FK_C5E47F7C82F80D8B
                 FOREIGN KEY (gradebook_eval_id) REFERENCES gradebook_evaluation (id) ON DELETE SET NULL',
             'ALTER TABLE '.self::TABLE_TOOL.' ADD CONSTRAINT FK_C5E47F7C727ACA70
-                FOREIGN KEY (parent_id) REFERENCES '.self::TABLE_TOOL.' (id);',
+                FOREIGN KEY (parent_id) REFERENCES '.self::TABLE_TOOL.' (id) ON DELETE CASCADE;',
         ];
 
         foreach ($queries as $query) {
@@ -552,6 +552,14 @@ class ImsLtiPlugin extends Plugin
     public function doWhenDeletingCourse($courseId)
     {
         $em = Database::getManager();
+
+        $q = $em
+            ->createQuery(
+                'DELETE FROM ChamiloPluginBundle:ImsLti\ImsLtiTool tool
+                    WHERE tool.course = :c_id and tool.parent IS NOT NULL'
+            );
+        error_log($q->getSQL());
+        $q->execute(['c_id' => (int) $courseId]);
 
         $em->createQuery('DELETE FROM ChamiloPluginBundle:ImsLti\ImsLtiTool tool WHERE tool.course = :c_id')
             ->execute(['c_id' => (int) $courseId]);

@@ -1,7 +1,7 @@
 IMS/LTI plugin
 ===
 
-Version 1.5 (beta)
+Version 1.5.1 (beta)
 
 This plugin is meant to be later integrated into Chamilo (in a major version
 release).
@@ -89,4 +89,11 @@ ALTER TABLE plugin_ims_lti_tool ADD privacy LONGTEXT DEFAULT NULL;
 ALTER TABLE plugin_ims_lti_tool
     CHANGE consumer_key consumer_key VARCHAR(255) DEFAULT NULL,
     CHANGE shared_secret shared_secret VARCHAR(255) DEFAULT NULL;
+```
+
+## To v1.5.1
+```sql
+ALTER TABLE plugin_ims_lti_tool
+    DROP FOREIGN KEY FK_C5E47F7C727ACA70,
+    ADD FOREIGN KEY (parent_id) REFERENCES plugin_ims_lti_tool (id) ON DELETE CASCADE ON UPDATE RESTRICT;
 ```

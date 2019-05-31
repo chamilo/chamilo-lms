@@ -1149,4 +1149,135 @@ class Statistics
 
         return $chartCode;
     }
+
+    /**
+     * @param string $startDate
+     * @param string $endDate
+     *
+     * @return array
+     */
+    private static function getLoginsByDate($startDate, $endDate)
+    {
+        /** @var DateTime $startDate */
+        $startDate = api_get_utc_datetime("$startDate 00:00:00");
+        /** @var DateTime $endDate */
+        $endDate = api_get_utc_datetime("$endDate 23:59:59");
+
+        if (empty($startDate) || empty($endDate)) {
+            return [];
+        }
+
+        $tblUser = Database::get_main_table(TABLE_MAIN_USER);
+        $tblLogin = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
+        $urlJoin = '';
+        $urlWhere = '';
+
+        if (api_is_multiple_url_enabled()) {
+            $tblUrlUser = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
+
+            $urlJoin = "INNER JOIN $tblUrlUser au ON u.id = au.user_id";
+            $urlWhere = 'AND au.access_url_id = '.api_get_current_access_url_id();
+        }
+
+        $sql = "SELECT u.id,
+                    u.firstname,
+                    u.lastname,
+                    u.username,
+                    SUM(TIMESTAMPDIFF(SECOND, l.login_date, l.logout_date)) AS time_count
+                FROM $tblUser u
+                INNER JOIN $tblLogin l ON u.id = l.login_user_id
+                $urlJoin
+                WHERE l.login_date BETWEEN '$startDate' AND '$endDate'
+                $urlWhere
+                GROUP BY u.id";
+
+        $stmt = Database::query($sql);
+        $result = Database::store_result($stmt, 'ASSOC');
+
+        return $result;
+    }
+
+    /**
+     * Display the Logins By Date report and allow export its result to XLS.
+     */
+    public static function printLoginsByDate()
+    {
+        if (isset($_GET['export']) && 'xls' === $_GET['export']) {
+            $result = self::getLoginsByDate($_GET['start'], $_GET['end']);
+            $data = [[get_lang('Username'), get_lang('FirstName'), get_lang('LastName'), get_lang('TotalTime')]];
+
+            foreach ($result as $i => $item) {
+                $data[] = [
+                    $item['username'],
+                    $item['firstname'],
+                    $item['lastname'],
+                    api_time_to_hms($item['time_count']),
+                ];
+            }
+
+            Export::arrayToXls($data);
+
+            exit;
+        }
+
+        echo Display::page_header(get_lang('LoginsByDate'));
+
+        $actions = '';
+        $content = '';
+
+        $form = new FormValidator('frm_logins_by_date', 'get');
+        $form->addDateRangePicker(
+            'daterange',
+            get_lang('DateRange'),
+            true,
+            ['format' => 'YYYY-MM-DD', 'timePicker' => 'false', 'validate_format' => 'Y-m-d']
+        );
+        $form->addHidden('report', 'logins_by_date');
+        $form->addButtonFilter(get_lang('Search'));
+
+        if ($form->validate()) {
+            $values = $form->exportValues();
+
+            $result = self::getLoginsByDate($values['daterange_start'], $values['daterange_end']);
+
+            if (!empty($result)) {
+                $actions = Display::url(
+                    Display::return_icon('excel.png', get_lang('ExportToXls'), [], ICON_SIZE_MEDIUM),
+                    api_get_self().'?'.http_build_query(
+                        [
+                            'report' => 'logins_by_date',
+                            'export' => 'xls',
+                            'start' => Security::remove_XSS($values['daterange_start']),
+                            'end' => Security::remove_XSS($values['daterange_end']),
+                        ]
+                    )
+                );
+            }
+
+            $table = new HTML_Table(['class' => 'data_table']);
+            $table->setHeaderContents(0, 0, get_lang('Username'));
+            $table->setHeaderContents(0, 1, get_lang('FirstName'));
+            $table->setHeaderContents(0, 2, get_lang('LastName'));
+            $table->setHeaderContents(0, 3, get_lang('TotalTime'));
+
+            foreach ($result as $i => $item) {
+                $table->setCellContents($i + 1, 0, $item['username']);
+                $table->setCellContents($i + 1, 1, $item['firstname']);
+                $table->setCellContents($i + 1, 2, $item['lastname']);
+                $table->setCellContents($i + 1, 3, api_time_to_hms($item['time_count']));
+            }
+
+            $table->setColAttributes(0, ['class' => 'text-center']);
+            $table->setColAttributes(3, ['class' => 'text-center']);
+            $content = $table->toHtml();
+        }
+
+        $form->display();
+
+        if (!empty($actions)) {
+            echo  Display::toolbarAction('logins_by_date_toolbar', [$actions]);
+        }
+
+        echo $content;
+    }
 }

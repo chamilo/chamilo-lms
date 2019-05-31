@@ -6,6 +6,13 @@ Feature: Group tool
     Given I am a platform administrator
     And I am on course "TEMP" homepage
 
+  Scenario: Delete default category
+    Given I am on "/main/group/group.php?cidReq=TEMP&id_session=0"
+    Then I should see "Default groups"
+    Then I follow "Delete"
+    Then I confirm the popup
+    Then I should see "The category has been deleted"
+
   Scenario: Create a group directory
     Given I am on "/main/group/group_category.php?cidReq=TEMP&id_session=0&action=add_category"
     When I fill in the following:
@@ -25,6 +32,11 @@ Feature: Group tool
       | group_2_places | 1 |
       | group_3_places | 1 |
       | group_4_places | 2 |
+    And I fill in select bootstrap static by text "#category_0" select "Group category 1"
+    And I fill in select bootstrap static by text "#category_1" select "Group category 1"
+    And I fill in select bootstrap static by text "#category_2" select "Group category 1"
+    And I fill in select bootstrap static by text "#category_3" select "Group category 1"
+    And I fill in select bootstrap static by text "#category_4" select "Group category 1"
     And I press "submit"
     Then I should see "group(s) has (have) been added"
 

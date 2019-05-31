@@ -44,7 +44,7 @@ $nameTools = get_lang('GroupManagement');
 /*
  * Self-registration and un-registration
  */
-$my_group_id = isset($_GET['group_id']) ? intval($_GET['group_id']) : null;
+$my_group_id = isset($_GET['group_id']) ? (int) $_GET['group_id'] : null;
 $my_group = isset($_REQUEST['group']) ? Security::remove_XSS($_REQUEST['group']) : null;
 $my_get_id1 = isset($_GET['id1']) ? Security::remove_XSS($_GET['id1']) : null;
 $my_get_id2 = isset($_GET['id2']) ? Security::remove_XSS($_GET['id2']) : null;
@@ -246,7 +246,7 @@ if (api_get_setting('allow_group_categories') === 'true') {
         if (api_is_allowed_to_edit(false, true) && !empty($categoryId) && empty($sessionId)) {
             // Edit
             $actions .= '<a href="group_category.php?'.api_get_cidreq().'&id='.$categoryId.'" title="'.get_lang('Edit').'">'.
-                Display::return_icon('edit.png', get_lang('EditGroup'), '', ICON_SIZE_SMALL).'</a>';
+                Display::return_icon('edit.png', get_lang('EditCategory'), '', ICON_SIZE_SMALL).'</a>';
 
             // Delete
             $actions .= Display::url(

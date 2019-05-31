@@ -27,3 +27,9 @@ Feature: Subscribe users to the course
     Then I should see "Fiona"
     Then I follow "Register"
     Then I should see "User Fiona Apple Maggart (fapple) has been registered to course TEMP"
+
+  Scenario: Subscribe "amann" again as student to the course "TEMP" (leave it subscribed for further tests)
+    Given I am on "/main/user/subscribe_user.php?keyword=amann&type=5&cidReq=TEMP"
+    Then I should see "Aimee"
+    Then I follow "Register"
+    Then I should see "User Aimee Mann (amann) has been registered to course TEMP"

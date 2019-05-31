@@ -127,6 +127,7 @@ for ($i = 1; $i <= 10; $i++) {
     $possible_values[$i] = $i;
 }
 $possible_values[GroupManager::GROUP_PER_MEMBER_NO_LIMIT] = get_lang('All');
+
 $group = [
     $form->createElement('select', 'groups_per_user', null, $possible_values, ['id' => 'groups_per_user']),
     $form->createElement('static', null, null, get_lang('QtyOfUserCanSubscribe_PartAfterNumber')),

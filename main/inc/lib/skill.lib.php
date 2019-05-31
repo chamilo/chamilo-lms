@@ -37,7 +37,7 @@ class SkillProfile extends Model
     {
         $sql = "SELECT * FROM $this->table p
                 INNER JOIN $this->table_rel_profile sp
-                ON(p.id = sp.profile_id) ";
+                ON (p.id = sp.profile_id) ";
         $result = Database::query($sql);
         $profiles = Database::store_result($result, 'ASSOC');
 
@@ -147,7 +147,7 @@ class SkillRelProfile extends Model
      */
     public function getSkillsByProfile($profileId)
     {
-        $profileId = intval($profileId);
+        $profileId = (int) $profileId;
         $skills = $this->get_all(['where' => ['profile_id = ? ' => $profileId]]);
         $return = [];
         if (!empty($skills)) {
@@ -168,10 +168,11 @@ class SkillRelProfile extends Model
      */
     public function getProfileInfo($profileId)
     {
+        $profileId = (int) $profileId;
         $sql = "SELECT * FROM $this->table p
                 INNER JOIN $this->tableProfile pr
                 ON (pr.id = p.profile_id)
-                WHERE p.profile_id = ".intval($profileId);
+                WHERE p.profile_id = ".$profileId;
         $result = Database::query($sql);
         $profileData = Database::fetch_array($result, 'ASSOC');
 
@@ -204,13 +205,16 @@ class SkillRelSkill extends Model
      */
     public function getSkillInfo($id)
     {
+        $id = (int) $id;
+
         if (empty($id)) {
             return [];
         }
+
         $result = Database::select(
             '*',
             $this->table,
-            ['where' => ['skill_id = ?' => intval($id)]],
+            ['where' => ['skill_id = ?' => $id]],
             'first'
         );
 
@@ -225,7 +229,7 @@ class SkillRelSkill extends Model
      */
     public function getSkillParents($skillId, $add_child_info = true)
     {
-        $skillId = intval($skillId);
+        $skillId = (int) $skillId;
         $sql = 'SELECT child.* FROM '.$this->table.' child
                 LEFT JOIN '.$this->table.' parent
                 ON child.parent_id = parent.skill_id
@@ -569,10 +573,10 @@ class SkillRelUser extends Model
             return [];
         }
 
-        $courseId = intval($courseId);
-        $sessionId = $sessionId ? intval($sessionId) : null;
+        $courseId = (int) $courseId;
+        $sessionId = $sessionId ? (int) $sessionId : null;
         $whereConditions = [
-            'user_id = ? ' => intval($userId),
+            'user_id = ? ' => (int) $userId,
         ];
 
         if ($courseId > 0) {
@@ -727,12 +731,12 @@ class Skill extends Model
         $path = api_get_path(WEB_UPLOAD_PATH).'badges/';
         if (!empty($result['icon'])) {
             $iconSmall = sprintf(
-                "%s-small.png",
+                '%s-small.png',
                 sha1($result['name'])
             );
 
             $iconBig = sprintf(
-                "%s.png",
+                '%s.png',
                 sha1($result['name'])
             );
 
@@ -875,7 +879,7 @@ class Skill extends Model
         $skillInfo = $this->get($id);
         if (!empty($skillInfo)) {
             $skillInfo['extra'] = $skillRelSkill->getSkillInfo($id);
-            $skillInfo['gradebooks'] = self::getGradebooksBySkill($id);
+            $skillInfo['gradebooks'] = $this->getGradebooksBySkill($id);
         }
 
         return $skillInfo;
@@ -903,7 +907,7 @@ class Skill extends Model
             }
 
             $skill['icon_small'] = sprintf(
-                "badges/%s-small.png",
+                'badges/%s-small.png',
                 sha1($skill['name'])
             );
             $skill['name'] = self::translateName($skill['name']);
@@ -929,12 +933,12 @@ class Skill extends Model
     ) {
         $id_condition = '';
         if (!empty($id)) {
-            $id = intval($id);
+            $id = (int) $id;
             $id_condition = " WHERE s.id = $id";
         }
 
         if (!empty($parent_id)) {
-            $parent_id = intval($parent_id);
+            $parent_id = (int) $parent_id;
             if (empty($id_condition)) {
                 $id_condition = " WHERE ss.parent_id = $parent_id";
             } else {
@@ -972,7 +976,7 @@ class Skill extends Model
                 $skillRelSkill = new SkillRelSkill();
                 $parents = $skillRelSkill->getSkillParents($row['id']);
                 $row['level'] = count($parents) - 1;
-                $row['gradebooks'] = self::getGradebooksBySkill($row['id']);
+                $row['gradebooks'] = $this->getGradebooksBySkill($row['id']);
                 $skills[$row['id']] = $row;
             }
         }
@@ -998,7 +1002,7 @@ class Skill extends Model
      */
     public function getGradebooksBySkill($skill_id)
     {
-        $skill_id = intval($skill_id);
+        $skill_id = (int) $skill_id;
         $sql = "SELECT g.* FROM {$this->table_gradebook} g
                 INNER JOIN {$this->table_skill_rel_gradebook} sg
                 ON g.id = sg.gradebook_id
@@ -1118,14 +1122,14 @@ class Skill extends Model
         // Saving name, description
         $skill_id = $this->save($params);
         if ($skill_id) {
-            //Saving skill_rel_skill (parent_id, relation_type)
+            // Saving skill_rel_skill (parent_id, relation_type)
             foreach ($params['parent_id'] as $parent_id) {
                 $relation_exists = $skillRelSkill->relationExists($skill_id, $parent_id);
                 if (!$relation_exists) {
                     $attributes = [
                         'skill_id' => $skill_id,
                         'parent_id' => $parent_id,
-                        'relation_type' => (isset($params['relation_type']) ? $params['relation_type'] : 0),
+                        'relation_type' => isset($params['relation_type']) ? $params['relation_type'] : 0,
                         //'level'         => $params['level'],
                     ];
                     $skillRelSkill->save($attributes);
@@ -1261,7 +1265,7 @@ class Skill extends Model
     /**
      * Get user's skills.
      *
-     * @param int  $userId       User's id
+     * @param int  $userId
      * @param bool $getSkillData
      * @param int  $courseId
      * @param int  $sessionId
@@ -1770,8 +1774,6 @@ class Skill extends Model
                         $depth + 1,
                         $max_depth
                     );
-                } else {
-                    //$tmp['colour'] = $this->colours[$depth][rand(0,3)];
                 }
 
                 if ($depth > $max_depth) {
@@ -1803,8 +1805,9 @@ class Skill extends Model
      */
     public function getUserSkillRanking($user_id)
     {
-        $user_id = intval($user_id);
-        $sql = "SELECT count(skill_id) count FROM {$this->table} s
+        $user_id = (int) $user_id;
+        $sql = "SELECT count(skill_id) count 
+                FROM {$this->table} s
                 INNER JOIN {$this->table_skill_rel_user} su
                 ON (s.id = su.skill_id)
                 WHERE user_id = $user_id";
@@ -1834,8 +1837,9 @@ class Skill extends Model
         $sord,
         $where_condition
     ) {
-        $start = intval($start);
-        $limit = intval($limit);
+        $start = (int) $start;
+        $limit = (int) $limit;
+
         /*  ORDER BY $sidx $sord */
         $sql = "SELECT *, @rownum:=@rownum+1 rank FROM (
                     SELECT u.user_id, firstname, lastname, count(username) skills_acquired
@@ -1908,7 +1912,7 @@ class Skill extends Model
      */
     public function getCoursesBySkill($skillId)
     {
-        $skillId = intval($skillId);
+        $skillId = (int) $skillId;
         $sql = "SELECT c.title, c.code
                 FROM {$this->table_gradebook} g
                 INNER JOIN {$this->table_skill_rel_gradebook} sg
@@ -1934,12 +1938,12 @@ class Skill extends Model
      */
     public function userHasSkill($userId, $skillId, $courseId = 0, $sessionId = 0)
     {
-        $courseId = intval($courseId);
-        $sessionId = intval($sessionId);
+        $courseId = (int) $courseId;
+        $sessionId = (int) $sessionId;
 
         $whereConditions = [
-            'user_id = ? ' => intval($userId),
-            'AND skill_id = ? ' => intval($skillId),
+            'user_id = ? ' => (int) $userId,
+            'AND skill_id = ? ' => (int) $skillId,
         ];
 
         if ($courseId > 0) {
@@ -1974,7 +1978,7 @@ class Skill extends Model
      */
     public static function isSearched($id)
     {
-        $id = intval($id);
+        $id = (int) $id;
 
         if (empty($id)) {
             return false;
@@ -2013,7 +2017,7 @@ class Skill extends Model
      */
     public function listAchievedByCourse($courseId)
     {
-        $courseId = intval($courseId);
+        $courseId = (int) $courseId;
 
         if ($courseId == 0) {
             return [];
@@ -2060,7 +2064,7 @@ class Skill extends Model
      */
     public function listUsersWhoAchieved($skillId)
     {
-        $skillId = intval($skillId);
+        $skillId = (int) $skillId;
 
         if ($skillId == 0) {
             return [];
@@ -2105,7 +2109,7 @@ class Skill extends Model
      */
     public function getSessionsBySkill($skillId)
     {
-        $skillId = intval($skillId);
+        $skillId = (int) $skillId;
 
         $sql = "SELECT s.id, s.name
                 FROM {$this->table_gradebook} g
@@ -2233,8 +2237,8 @@ class Skill extends Model
     }
 
     /**
-     * @param $currentUserId
-     * @param $studentId
+     * @param int $currentUserId
+     * @param int $studentId
      *
      * @return bool
      */
@@ -2242,6 +2246,13 @@ class Skill extends Model
     {
         if (self::isToolAvailable()) {
             if (api_is_platform_admin()) {
+                return true;
+            }
+
+            $currentUserId = (int) $currentUserId;
+            $studentId = (int) $studentId;
+
+            if ($currentUserId === $studentId) {
                 return true;
             }
 
@@ -2283,6 +2294,8 @@ class Skill extends Model
      */
     public function getStudentSkills($userId, $level = 0)
     {
+        $userId = (int) $userId;
+
         $sql = "SELECT s.id, s.name, sru.acquired_skill_at
                 FROM {$this->table} s
                 INNER JOIN {$this->table_skill_rel_user} sru

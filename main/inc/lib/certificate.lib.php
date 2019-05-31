@@ -67,7 +67,6 @@ class Certificate extends Model
         if ($this->user_id) {
             // Need to be called before any operation
             $this->check_certificate_path();
-
             // To force certification generation
             if ($this->force_certificate_generation) {
                 $this->generate([], $sendNotification);

@@ -65,7 +65,7 @@ class DateRangePicker extends HTML_QuickForm_text
 
         $pattern = 'yyyy-MM-dd HH:mm';
 
-        if ('false' === $this->getAttribute('timePicker') ||
+        if ('false' === $this->getAttribute('timePicker') &&
             false === strpos($this->getAttribute('format'), 'HH:mm')) {
             $pattern = 'yyyy-MM-dd';
         }

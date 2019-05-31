@@ -824,7 +824,7 @@ class ImportCsv
                     $userInfoByOfficialCode = api_get_user_info_from_official_code($row['official_code']);
                 }
 
-                $userInfoFromUsername = api_get_user_info_from_official_code($row['username']);
+                $userInfoFromUsername = api_get_user_info_from_username($row['username']);
                 if (!empty($userInfoFromUsername)) {
                     $extraFieldValue = new ExtraFieldValue('user');
                     $extraFieldValues = $extraFieldValue->get_values_by_handler_and_field_variable(
@@ -840,11 +840,12 @@ class ImportCsv
                         if (!empty($user_id) && $value != $user_id) {
                             $emails = api_get_configuration_value('cron_notification_help_desk');
                             if (!empty($emails)) {
+                                $this->logger->addInfo('Preparing email to users in configuration: "cron_notification_help_desk"');
                                 $subject = 'User not added due to same username';
                                 $body = 'Cannot add username: "'.$row['username'].'" 
                                     with external_user_id: '.$row['extra_'.$this->extraFieldIdNameList['user']].'
-                                    because '.$userInfoFromUsername['username'].' with external_user_id '.$value.' exists on the portal    
-    ';
+                                    because '.$userInfoFromUsername['username'].' with external_user_id '.$value.' exists on the portal';
+                                $this->logger->addInfo($body);
                                 foreach ($emails as $email) {
                                     api_mail_html('', $email, $subject, $body);
                                 }

@@ -68,6 +68,10 @@ function get_document_title($name)
     $name = disable_dangerous_file($name);
     $ext = substr(strrchr($name, '.'), 0);
 
+    if (empty($ext)) {
+        return substr($name, 0, strlen($name));
+    }
+
     return substr($name, 0, strlen($name) - strlen(strstr($name, $ext)));
 }
 
@@ -736,7 +740,11 @@ function moveUploadedFile($file, $storePath)
     $handleFromFile = isset($file['from_file']) && $file['from_file'] ? true : false;
     $moveFile = isset($file['move_file']) && $file['move_file'] ? true : false;
     if ($moveFile) {
-        copy($file['tmp_name'], $storePath);
+        $copied = copy($file['tmp_name'], $storePath);
+
+        if (!$copied) {
+            return false;
+        }
     }
     if ($handleFromFile) {
         return file_exists($file['tmp_name']);
@@ -1704,18 +1712,18 @@ function create_unexisting_directory(
                 );
 
                 if ($document_id) {
+                    $lastEditType = [
+                        0 => 'invisible',
+                        1 => 'visible',
+                        2 => 'delete',
+                    ];
                     // Update document item_property
-                    if (!empty($visibility)) {
-                        $visibilities = [
-                            0 => 'invisible',
-                            1 => 'visible',
-                            2 => 'delete',
-                        ];
+                    if (isset($lastEditType[$visibility])) {
                         api_item_property_update(
                             $_course,
                             TOOL_DOCUMENT,
                             $document_id,
-                            $visibilities[$visibility],
+                            $lastEditType[$visibility],
                             $user_id,
                             $groupInfo,
                             $to_user_id,

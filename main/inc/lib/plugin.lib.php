@@ -258,7 +258,7 @@ class AppPlugin
      * @param Template $template
      * @param bool     $forced
      *
-     * @return null|string
+     * @return string|null
      */
     public function load_region($region, $template, $forced = false)
     {
@@ -437,8 +437,9 @@ class AppPlugin
             $settings_filtered = [];
             foreach ($plugin_settings as $item) {
                 if (!empty($item['selected_value'])) {
-                    if (@unserialize($item['selected_value']) !== false) {
-                        $item['selected_value'] = unserialize($item['selected_value']);
+                    $unserialized = UnserializeApi::unserialize('not_allowed_classes', $item['selected_value'], true);
+                    if (false !== $unserialized) {
+                        $item['selected_value'] = $unserialized;
                     }
                 }
                 $settings_filtered[$item['variable']] = $item['selected_value'];
@@ -532,6 +533,36 @@ class AppPlugin
                         $obj->course_install($courseId);
                     }
                 }
+            }
+        }
+    }
+
+    /**
+     * Trigger for Plugin::doWhenDeleting[Item] functions.
+     *
+     * @param string $itemType
+     * @param int    $itemId
+     */
+    public function performActionsWhenDeletingItem($itemType, $itemId)
+    {
+        $pluginList = $this->getInstalledPluginListObject();
+
+        if (empty($pluginList)) {
+            return;
+        }
+
+        /** @var Plugin $pluginObj */
+        foreach ($pluginList as $pluginObj) {
+            switch ($itemType) {
+                case 'course':
+                    $pluginObj->doWhenDeletingCourse($itemId);
+                    break;
+                case 'session':
+                    $pluginObj->doWhenDeletingSession($itemId);
+                    break;
+                case 'user':
+                    $pluginObj->doWhenDeletingUser($itemId);
+                    break;
             }
         }
     }

@@ -2,17 +2,17 @@
 
 {% for row in session %}
     <div class="panel panel-default">
+        {% set collapsable = '' %}
         {% if not row.show_simple_session_info %}
-            {% set collapsable = '' %}
-            {% if row.course_list_session_style %} {# If not style then no show header #}
+            {% if row.course_list_session_style %}
                 <div class="panel-heading">
-                    {% if row.course_list_session_style == 1 or row.course_list_session_style == 2 %} {# Session link #}
+                    {% if row.course_list_session_style == 1 or row.course_list_session_style == 2 %}
+                        {# Session link #}
                         {% if remove_session_url == true %}
                             {{ session_image }} {{ row.title }}
                         {% else %}
                             {# Default link #}
                             {% set session_link = _p.web_main ~ 'session/index.php?session_id=' ~ row.id %}
-
                             {% if row.course_list_session_style == 2 and row.courses|length == 1 %}
                                 {# Linkt to first course #}
                                 {% set session_link = row.courses.0.link %}
@@ -22,8 +22,10 @@
                                 {{ session_image }} {{ row.title }}
                             </a>
                         {% endif %}
-                    {% elseif row.course_list_session_style == 3 %} {# Collapsible panel #}
-                        {# Foldable #}
+                    {% elseif row.course_list_session_style == 4 %}
+                        {{ session_image }} {{ row.title }}
+                    {% elseif row.course_list_session_style == 3 %}
+                        {# Collapsible/Foldable panel #}
                         <a role="button" data-toggle="collapse" data-parent="#page-content" href="#collapse_{{ row.id }}"
                            aria-expanded="false">
                             {{ session_image }} {{ row.title }}
@@ -38,8 +40,20 @@
                             </a>
                         </div>
                     {% endif %}
+                    {% if row.collapsable_link %}
+                        <div class="pull-right">
+                            {{ row.collapsable_link }}
+                        </div>
+                    {% endif %}
                 </div>
             {% endif %}
+
+            {% if row.collapsable_link %}
+                {% if row.collapsed == 1 %}
+                    {% set collapsable = 'collapse' %}
+                {% endif %}
+            {% endif %}
+
             <div class="session panel-body {{ collapsable }}" id="collapse_{{ row.id }}">
                 <div class="row">
                     <div class="col-md-12">

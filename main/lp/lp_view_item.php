@@ -24,7 +24,7 @@ $lp = Session::read('oLP');
 
 if (isset($_GET['lp_item_id'])) {
     // Get parameter only came from lp_view.php.
-    $lp_item_id = intval($_GET['lp_item_id']);
+    $lp_item_id = (int) $_GET['lp_item_id'];
     if (is_object($lp)) {
         $src = $lp->get_link('http', $lp_item_id);
     }
@@ -58,8 +58,7 @@ $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
 $isStudentView = (empty($_REQUEST['isStudentView']) ? 0 : (int) $_REQUEST['isStudentView']);
 $learnpath_id = (int) $_REQUEST['lp_id'];
 
-if ((!$is_allowed_to_edit) || $isStudentView) {
-    error_log('New LP - User not authorized in lp_view_item.php');
+if (!$is_allowed_to_edit || $isStudentView) {
     header('Location: '.api_get_path(WEB_CODE_PATH).'lp/lp_controller.php?action=view&lp_id='.$learnpath_id.'&'.api_get_cidreq());
     exit;
 }

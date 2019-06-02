@@ -684,7 +684,7 @@ class AddCourse
                 'id' => 2,
                 'title' => get_lang('DefaultGroupCategory'),
                 'description' => '',
-                'max_student' => 8,
+                'max_student' => 0,
                 'self_reg_allowed' => 0,
                 'self_unreg_allowed' => 0,
                 'groups_per_user' => 0,
@@ -704,6 +704,7 @@ class AddCourse
         $files = [
             ['path' => '/shared_folder', 'title' => get_lang('UserFolders'), 'filetype' => 'folder', 'size' => 0],
             ['path' => '/chat_files', 'title' => get_lang('ChatFiles'), 'filetype' => 'folder', 'size' => 0],
+            ['path' => '/certificates', 'title' => get_lang('CertificatesFiles'), 'filetype' => 'folder', 'size' => 0],
         ];
 
         $counter = 1;
@@ -730,7 +731,6 @@ class AddCourse
                 ['path' => '/audio', 'title' => get_lang('Audio'), 'filetype' => 'folder', 'size' => 0],
                 ['path' => '/flash', 'title' => get_lang('Flash'), 'filetype' => 'folder', 'size' => 0],
                 ['path' => '/video', 'title' => get_lang('Video'), 'filetype' => 'folder', 'size' => 0],
-                ['path' => '/certificates', 'title' => get_lang('Certificates'), 'filetype' => 'folder', 'size' => 0],
             ];
 
             foreach ($files as $file) {
@@ -744,7 +744,6 @@ class AddCourse
                 'audio',
                 'flash',
                 'video',
-                'certificates',
             ];
 
             $default_course_path = api_get_path(SYS_CODE_PATH).'default_course_document/';

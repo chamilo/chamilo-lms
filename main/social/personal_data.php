@@ -10,6 +10,8 @@ $cidReset = true;
 
 require_once __DIR__.'/../inc/global.inc.php';
 
+api_set_more_memory_and_time_limits();
+
 api_block_anonymous_users();
 
 if (api_get_configuration_value('disable_gdpr')) {
@@ -256,7 +258,7 @@ foreach ($properties as $key => $value) {
                         $personalDataContent .= '<li>'.get_lang('NoData').'</li>';
                     } else {
                         foreach ($subValue as $subSubValue) {
-                            $personalDataContent .= '<li>'.$subSubValue.'</li>';
+                            $personalDataContent .= '<li>'.Security::remove_XSS($subSubValue).'</li>';
                         }
                     }
                     $personalDataContent .= '</ul>';
@@ -268,7 +270,13 @@ foreach ($properties as $key => $value) {
                     $personalDataContent .= '<li>'.get_lang('NoData').'</li>';
                 } else {
                     foreach ($value as $subValue) {
-                        $personalDataContent .= '<li>'.$subValue->variable.': '.$subValue->value.'</li>';
+                        if (is_array($subValue->value)) {
+                            // tags fields can be stored as arrays
+                            $val = json_encode(Security::remove_XSS($subValue->value));
+                        } else {
+                            $val = Security::remove_XSS($subValue->value);
+                        }
+                        $personalDataContent .= '<li>'.$subValue->variable.': '.$val.'</li>';
                     }
                 }
                 $personalDataContent .= '</ul>';
@@ -292,7 +300,7 @@ foreach ($properties as $key => $value) {
                                 );
                                 $personalDataContent .= '<li>'.$documentLink.'</li>';
                             } else {
-                                $personalDataContent .= '<li>'.$subSubValue.'</li>';
+                                $personalDataContent .= '<li>'.Security::remove_XSS($subSubValue).'</li>';
                             }
                         }
                     }
@@ -312,7 +320,7 @@ foreach ($properties as $key => $value) {
                     $personalDataContent .= '<li>'.get_lang('NoData').'</li>';
                 } else {
                     foreach ($value as $subValue) {
-                        $personalDataContent .= '<li>'.$subValue.'</li>';
+                        $personalDataContent .= '<li>'.Security::remove_XSS($subValue).'</li>';
                     }
                 }
                 $personalDataContent .= '</ul>';
@@ -350,7 +358,7 @@ foreach ($properties as $key => $value) {
             $personalDataContent .= '<li>'.$key.': '.get_lang('ComplexDataNotShown').'</li>';
         }*/
     } else {
-        $personalDataContent .= '<li>'.$key.': '.$value.'</li>';
+        $personalDataContent .= '<li>'.$key.': '.Security::remove_XSS($value).'</li>';
     }
 }
 $personalDataContent .= '</ul>';
@@ -442,12 +450,12 @@ if ($showWarningMessage) {
 SocialManager::setSocialUserBlock($tpl, api_get_user_id(), 'messages');
 if (api_get_setting('allow_social_tool') === 'true') {
     $tpl->assign('social_menu_block', $socialMenuBlock);
-    $tpl->assign('personal_data', $personalData);
 } else {
     $tpl->assign('social_menu_block', '');
     $tpl->assign('personal_data_block', $personalDataContent);
 }
 
+$tpl->assign('personal_data', $personalData);
 $tpl->assign('permission', $permissionBlock);
 $tpl->assign('term_link', $termLink);
 $socialLayout = $tpl->get_template('social/personal_data.tpl');

@@ -15,6 +15,8 @@
 $use_anonymous = true;
 require_once __DIR__.'/../inc/global.inc.php';
 
+api_protect_course_script();
+
 /**
  * Get one item's details.
  *

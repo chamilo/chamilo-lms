@@ -91,7 +91,7 @@ class ssoDrupal
     /**
      * Validates the received active connection data with the database.
      *
-     * @return null|false Return the loginFailed variable value to local.inc.php
+     * @return false|null Return the loginFailed variable value to local.inc.php
      */
     public function check_user()
     {
@@ -293,6 +293,9 @@ class ssoDrupal
      */
     private function decode_cookie($cookie)
     {
-        return unserialize(base64_decode($cookie));
+        return UnserializeApi::unserialize(
+            'not_allowed_classes',
+            base64_decode($cookie)
+        );
     }
 }

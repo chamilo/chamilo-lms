@@ -254,7 +254,9 @@ class UniqueAnswerNoOption extends Question
 
         global $text;
         //ie6 fix
-        if ($obj_ex->edit_exercise_in_lp == true) {
+        if ($obj_ex->edit_exercise_in_lp == true ||
+            (empty($this->exerciseList) && empty($obj_ex->id))
+        ) {
             //setting the save button here and not in the question class.php
             $buttonGroup[] = $form->addButtonDelete(get_lang('LessAnswer'), 'lessAnswers', true);
             $buttonGroup[] = $form->addButtonCreate(get_lang('PlusAnswer'), 'moreAnswers', true);
@@ -401,8 +403,11 @@ class UniqueAnswerNoOption extends Question
     {
         $header = parent::return_header($exercise, $counter, $score);
         $header .= '<table class="'.$this->question_table_class.'"><tr>';
-        $header .= '<th>'.get_lang('Choice').'</th>';
-        $header .= '<th>'.get_lang('ExpectedChoice').'</th>';
+
+        if ($exercise->results_disabled != RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER) {
+            $header .= '<th>'.get_lang('Choice').'</th>';
+            $header .= '<th>'.get_lang('ExpectedChoice').'</th>';
+        }
         $header .= '<th>'.get_lang('Answer').'</th>';
         if ($exercise->showExpectedChoice()) {
             $header .= '<th>'.get_lang('Status').'</th>';

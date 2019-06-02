@@ -15,6 +15,8 @@ use ChamiloSession as Session;
 require_once __DIR__.'/../inc/global.inc.php';
 $this_section = SECTION_COURSES;
 
+api_protect_course_script(true);
+
 if (!api_is_allowed_to_edit(null, true)) {
     api_not_allowed(true);
 }
@@ -119,7 +121,7 @@ $htmlHeadXtra[] = '<script>
 function setFocus(){
     $("#exercise_title").focus();
 }
-$(document).ready(function () {
+$(function() {
     setFocus();
 });
 </script>';
@@ -134,7 +136,7 @@ if (isset($_GET['exerciseId'])) {
         'post',
         api_get_self().'?'.api_get_cidreq().'&exerciseId='.intval($_GET['exerciseId'])
     );
-    $objExercise->read($_GET['exerciseId']);
+    $objExercise->read($_GET['exerciseId'], false);
     $form->addElement('hidden', 'edit', 'true');
 } else {
     $form = new FormValidator(
@@ -172,12 +174,12 @@ if ($form->validate()) {
     }
     $nameTools = get_lang('ExerciseManagement');
     $interbreadcrumb[] = [
-        "url" => 'exercise.php?'.api_get_cidreq(),
+        'url' => 'exercise.php?'.api_get_cidreq(),
         'name' => get_lang('Exercises'),
     ];
     $interbreadcrumb[] = [
-        "url" => 'admin.php?exerciseId='.$objExercise->id.'&'.api_get_cidreq(),
-        "name" => $objExercise->selectTitle(true),
+        'url' => 'admin.php?exerciseId='.$objExercise->id.'&'.api_get_cidreq(),
+        'name' => $objExercise->selectTitle(true),
     ];
 
     Display::display_header($nameTools, get_lang('Exercise'));
@@ -190,12 +192,14 @@ if ($form->validate()) {
     } else {
         if (!empty($_GET['lp_id']) || !empty($_POST['lp_id'])) {
             if (!empty($_POST['lp_id'])) {
-                $lp_id = intval($_POST['lp_id']);
+                $lp_id = $_POST['lp_id'];
             //TODO:this remains to be implemented after press the first post
             } else {
-                $lp_id = intval($_GET['lp_id']);
+                $lp_id = $_GET['lp_id'];
             }
-            echo "<a href=\"../lp/lp_controller.php?".api_get_cidreq()."&gradebook=&action=add_item&type=step&lp_id=".$lp_id."#resource_tab-2\">".Display::return_icon('back.png', get_lang("BackTo").' '.get_lang("LearningPaths"), '', ICON_SIZE_MEDIUM)."</a>";
+            $lp_id = (int) $lp_id;
+            echo "<a href=\"../lp/lp_controller.php?".api_get_cidreq()."&gradebook=&action=add_item&type=step&lp_id=".$lp_id."#resource_tab-2\">".
+                Display::return_icon('back.png', get_lang("BackTo").' '.get_lang("LearningPaths"), '', ICON_SIZE_MEDIUM)."</a>";
         } else {
             echo '<a href="exercise.php?'.api_get_cidreq().'">'.
                 Display::return_icon('back.png', get_lang('BackToExercisesList'), '', ICON_SIZE_MEDIUM).

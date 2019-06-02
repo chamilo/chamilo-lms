@@ -243,6 +243,197 @@ switch ($action) {
 
         echo json_encode($courseListToSelect);
         break;
+    case 'get_basic_course_documents_list':
+    case 'get_basic_course_documents_form':
+        $courseId = isset($_GET['course']) ? (int) $_GET['course'] : 0;
+        $sessionId = isset($_GET['session']) ? (int) $_GET['session'] : 0;
+        $currentUserId = api_get_user_id();
+
+        $em = Database::getManager();
+
+        $course = $em->find('ChamiloCoreBundle:Course', $courseId);
+        $session = $em->find('ChamiloCoreBundle:Session', $sessionId);
+
+        if (!$course || !$session) {
+            break;
+        }
+
+        if (!api_is_platform_admin(true) || $session->getSessionAdminId() != $currentUserId) {
+            break;
+        }
+
+        $folderName = '/basic-course-documents__'.$session->getId().'__0';
+
+        if ('get_basic_course_documents_list' === $action) {
+            $courseInfo = api_get_course_info_by_id($course->getId());
+
+            $exists = DocumentManager::folderExists('/basic-course-documents', $courseInfo, $session->getId(), 0);
+
+            if (!$exists) {
+                $courseDir = $courseInfo['directory'].'/document';
+                $sysCoursePath = api_get_path(SYS_COURSE_PATH);
+                $baseWorkDir = $sysCoursePath.$courseDir;
+
+                $newFolderData = create_unexisting_directory(
+                    $courseInfo,
+                    $currentUserId,
+                    $session->getId(),
+                    0,
+                    0,
+                    $baseWorkDir,
+                    '/basic-course-documents',
+                    get_lang('BasicCourseDocuments'),
+                    1
+                );
+
+                $id = (int) $newFolderData['iid'];
+            } else {
+                $id = DocumentManager::get_document_id($courseInfo, $folderName, $session->getId());
+            }
+
+            $http_www = api_get_path(WEB_COURSE_PATH).$courseInfo['directory'].'/document';
+
+            $documentAndFolders = DocumentManager::getAllDocumentData(
+                $courseInfo,
+                $folderName,
+                0,
+                0,
+                false,
+                false,
+                $session->getId()
+            );
+            $documentAndFolders = array_filter(
+                $documentAndFolders,
+                function (array $documentData) {
+                    return $documentData['filetype'] != 'folder';
+                }
+            );
+            $documentAndFolders = array_map(
+                function (array $documentData) use ($course, $session, $courseInfo, $currentUserId, $http_www, $folderName, $id) {
+                    $downloadUrl = api_get_path(WEB_CODE_PATH).'document/document.php?'
+                        .api_get_cidreq_params($course->getCode(), $session->getId()).'&'
+                        .http_build_query(['action' => 'download', 'id' => $documentData['id']]);
+                    $deleteUrl = api_get_path(WEB_AJAX_PATH).'session.ajax.php?'
+                        .http_build_query(
+                            [
+                                'a' => 'delete_basic_course_documents',
+                                'deleteid' => $documentData['id'],
+                                'curdirpath' => $folderName,
+                                'course' => $course->getId(),
+                                'session' => $session->getId(),
+                            ]
+                        );
+
+                    $row = [];
+                    $row[] = DocumentManager::build_document_icon_tag($documentData['filetype'], $documentData['path']);
+                    $row[] = Display::url($documentData['title'], $downloadUrl);
+                    $row[] = format_file_size($documentData['size']);
+                    $row[] = date_to_str_ago($documentData['lastedit_date']).PHP_EOL
+                        .'<div class="muted"><small>'
+                        .api_get_local_time($documentData['lastedit_date'])
+                        ."</small></div>";
+
+                    $row[] = Display::url(
+                            Display::return_icon('save.png', get_lang('Download')),
+                            $downloadUrl
+                        )
+                        .PHP_EOL
+                        .Display::url(
+                            Display::return_icon('delete.png', get_lang('Delete')),
+                            $deleteUrl,
+                            [
+                                'class' => 'delete_document',
+                                'data-course' => $course->getId(),
+                                'data-session' => $session->getId(),
+                            ]
+                        );
+
+                    return $row;
+                },
+                $documentAndFolders
+            );
+
+            $table = new SortableTableFromArray($documentAndFolders, 1, count($documentAndFolders));
+            $table->set_header(0, get_lang('Type'), false, [], ['class' => 'text-center', 'width' => '60px']);
+            $table->set_header(1, get_lang('Name'), false);
+            $table->set_header(2, get_lang('Size'), false, [], ['class' => 'text-right', 'style' => 'width: 80px;']);
+            $table->set_header(3, get_lang('Date'), false, [], ['class' => 'text-center', 'style' => 'width: 200px;']);
+            $table->set_header(4, get_lang('Actions'), false, [], ['class' => 'text-center']);
+            $table->display();
+        }
+
+        if ('get_basic_course_documents_form' === $action) {
+            $form = new FormValidator('get_basic_course_documents_form_'.$session->getId());
+            $form->addMultipleUpload(
+                api_get_path(WEB_AJAX_PATH).'document.ajax.php?'
+                    .api_get_cidreq_params($course->getCode(), $session->getId())
+                    .'&a=upload_file&curdirpath='.$folderName,
+                ''
+            );
+
+            $form->display();
+        }
+        break;
+    case 'delete_basic_course_documents':
+        $curdirpath = isset($_GET['curdirpath']) ? Security::remove_XSS($_GET['curdirpath']) : null;
+        $docId = isset($_GET['deleteid']) ? (int) $_GET['deleteid'] : 0;
+        $courseId = isset($_GET['course']) ? (int) $_GET['course'] : 0;
+        $sessionId = isset($_GET['session']) ? (int) $_GET['session'] : 0;
+
+        if (empty($curdirpath) || empty($docId) || empty($courseId) || empty($sessionId)) {
+            break;
+        }
+
+        $em = Database::getManager();
+
+        $courseInfo = api_get_course_info_by_id($courseId);
+        $session = $em->find('ChamiloCoreBundle:Session', $sessionId);
+        $currentUserId = api_get_user_id();
+
+        if (empty($courseInfo) || !$session) {
+            break;
+        }
+
+        if (!api_is_platform_admin(true) || $session->getSessionAdminId() != $currentUserId) {
+            break;
+        }
+
+        $sysCoursePath = api_get_path(SYS_COURSE_PATH);
+        $courseDir = $courseInfo['directory'].'/document';
+        $baseWorkDir = $sysCoursePath.$courseDir;
+
+        $documentInfo = DocumentManager::get_document_data_by_id(
+            $docId,
+            $courseInfo['code'],
+            false,
+            $session->getId()
+        );
+
+        if (empty($documentInfo)) {
+            break;
+        }
+
+        if ($documentInfo['filetype'] != 'link') {
+            $deletedDocument = DocumentManager::delete_document(
+                $courseInfo,
+                null,
+                $baseWorkDir,
+                $session->getId(),
+                $docId
+            );
+        } else {
+            $deletedDocument = DocumentManager::deleteCloudLink(
+                $courseInfo,
+                $docId
+            );
+        }
+
+        if (!$deletedDocument) {
+            break;
+        }
+
+        echo true;
+        break;
     default:
         echo '';
 }

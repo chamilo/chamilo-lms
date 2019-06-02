@@ -16,7 +16,7 @@ $htmlHeadXtra[] = '<script>
 function setFocus(){
     $("#category_title").focus();
 }
-$(document).ready(function () {
+$(function() {
     setFocus();
 });
 </script>';
@@ -61,7 +61,7 @@ function handle_multiple_actions()
         return get_lang('CheckAtLeastOneFile');
     }
 
-    // STEP 3A: deleting
+    // Deleting
     if ($_POST['action'] == 'delete_received' || $_POST['action'] == 'delete_sent') {
         $dropboxfile = new Dropbox_Person($_user['user_id'], $is_courseAdmin, $is_courseTutor);
         foreach ($checked_file_ids as $key => $value) {
@@ -78,13 +78,7 @@ function handle_multiple_actions()
         return $message;
     }
 
-    // STEP 3B: giving comment
-    if ($_POST['actions'] == 'comment') {
-        // This has not been implemented.
-        // The idea was that it would be possible to write the same feedback for the selected documents.
-    }
-
-    // STEP 3C: moving
+    // moving
     if (strstr($_POST['action'], 'move_')) {
         // check move_received_n or move_sent_n command
         if (strstr($_POST['action'], 'received')) {
@@ -291,7 +285,9 @@ function get_dropbox_categories($filter = '')
 
     $result = Database::query($sql);
     while ($row = Database::fetch_array($result)) {
-        if (($filter == 'sent' && $row['sent'] == 1) || ($filter == 'received' && $row['received'] == 1) || $filter == '') {
+        if (($filter == 'sent' && $row['sent'] == 1) ||
+            ($filter == 'received' && $row['received'] == 1) || $filter == ''
+        ) {
             $return_array[$row['cat_id']] = $row;
         }
     }
@@ -309,9 +305,12 @@ function get_dropbox_categories($filter = '')
 function get_dropbox_category($id)
 {
     $course_id = api_get_course_int_id();
-    if (empty($id) or $id != intval($id)) {
+    $id = (int) $id;
+
+    if (empty($id)) {
         return [];
     }
+
     $sql = "SELECT * FROM ".Database::get_course_table(TABLE_DROPBOX_CATEGORY)."
             WHERE c_id = $course_id AND cat_id='".$id."'";
     $res = Database::query($sql);
@@ -386,7 +385,8 @@ function store_addcategory()
             ];
             $id = Database::insert(Database::get_course_table(TABLE_DROPBOX_CATEGORY), $params);
             if ($id) {
-                $sql = "UPDATE ".Database::get_course_table(TABLE_DROPBOX_CATEGORY)." SET cat_id = iid WHERE iid = $id";
+                $sql = "UPDATE ".Database::get_course_table(TABLE_DROPBOX_CATEGORY)." SET cat_id = iid 
+                        WHERE iid = $id";
                 Database::query($sql);
             }
 
@@ -420,22 +420,24 @@ function store_addcategory()
 /**
  * This function displays the form to add a new category.
  *
- * @param $category_name this parameter is the name of the category (used when no section is selected)
- * @param $id this is the id of the category we are editing
+ * @param string $category_name this parameter is the name of the category (used when no section is selected)
+ * @param int    $id            this is the id of the category we are editing
  *
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
  *
  * @version march 2006
  */
-function display_addcategory_form($category_name = '', $id = '', $action)
+function display_addcategory_form($category_name = '', $id = 0, $action = '')
 {
     $course_id = api_get_course_int_id();
     $title = get_lang('AddNewCategory');
 
-    if (isset($id) && $id != '') {
+    $id = (int) $id;
+
+    if (!empty($id)) {
         // retrieve the category we are editing
         $sql = "SELECT * FROM ".Database::get_course_table(TABLE_DROPBOX_CATEGORY)."
-                WHERE c_id = $course_id AND cat_id = ".intval($id);
+                WHERE c_id = $course_id AND cat_id = ".$id;
         $result = Database::query($sql);
         $row = Database::fetch_array($result);
 
@@ -474,8 +476,8 @@ function display_addcategory_form($category_name = '', $id = '', $action)
     );
     $form->addElement('header', $title);
 
-    if (isset($id) && $id != '') {
-        $form->addElement('hidden', 'edit_id', intval($id));
+    if (!empty($id)) {
+        $form->addElement('hidden', 'edit_id', $id);
     }
     $form->addElement('hidden', 'action', Security::remove_XSS($action));
     $form->addElement('hidden', 'target', Security::remove_XSS($target));
@@ -485,7 +487,7 @@ function display_addcategory_form($category_name = '', $id = '', $action)
     $form->addButtonSave($text, 'StoreCategory');
 
     $defaults = [];
-    $defaults['category_name'] = $category_name;
+    $defaults['category_name'] = Security::remove_XSS($category_name);
     $form->setDefaults($defaults);
     $form->display();
 }
@@ -564,7 +566,14 @@ function display_add_form($viewReceivedCategory, $viewSentCategory, $view, $id =
                 api_get_session_id(),
                 null,
                 null,
-                0
+                0,
+                false,
+                false,
+                false,
+                [],
+                [],
+                [],
+                true
             );
         }
 
@@ -602,7 +611,17 @@ function display_add_form($viewReceivedCategory, $viewSentCategory, $view, $id =
         if (api_get_setting('dropbox_allow_student_to_student') == 'true' || $_user['status'] != STUDENT) {
             $complete_user_list_for_dropbox = CourseManager::get_user_list_from_course_code(
                 $course_info['code'],
-                api_get_session_id()
+                api_get_session_id(),
+                null,
+                null,
+                null,
+                false,
+                false,
+                false,
+                [],
+                [],
+                [],
+                true
             );
         } else {
             $complete_user_list_for_dropbox = CourseManager::get_teacher_list_from_course_code(
@@ -739,22 +758,6 @@ function display_add_form($viewReceivedCategory, $viewSentCategory, $view, $id =
 }
 
 /**
- * @param string $user_id
- *
- * @return bool indicating if user with user_id=$user_id is a course member
- *
- * @todo check if this function is still necessary. There might be a library function for this.
- */
-function isCourseMember($user_id)
-{
-    $_course = api_get_course_info();
-    $course_code = $_course['code'];
-    $is_course_member = CourseManager::is_user_subscribed_in_course($user_id, $course_code, true);
-
-    return $is_course_member;
-}
-
-/**
  * Checks if there are files in the dropbox_file table that aren't used anymore in dropbox_person table.
  * If there are, all entries concerning the file are deleted from the db + the file is deleted from the server.
  */
@@ -800,7 +803,7 @@ function getUserOwningThisMailing($mailingPseudoId, $owner = 0, $or_die = '')
 {
     $course_id = api_get_course_int_id();
 
-    $mailingPseudoId = intval($mailingPseudoId);
+    $mailingPseudoId = (int) $mailingPseudoId;
     $sql = "SELECT f.uploader_id
             FROM ".Database::get_course_table(TABLE_DROPBOX_FILE)." f
             LEFT JOIN ".Database::get_course_table(TABLE_DROPBOX_POST)." p
@@ -836,7 +839,7 @@ function removeMoreIfMailing($file_id)
     //    for all content files, delete mailingPseudoId from person-table
     // 2. finding the owner (getUserOwningThisMailing) is no longer possible, so
     //    for all content files, replace mailingPseudoId by owner as uploader
-    $file_id = intval($file_id);
+    $file_id = (int) $file_id;
     $sql = "SELECT p.dest_user_id
             FROM ".Database::get_course_table(TABLE_DROPBOX_POST)." p
             WHERE c_id = $course_id AND p.file_id = '".$file_id."'";
@@ -862,7 +865,7 @@ function removeMoreIfMailing($file_id)
  * @param array            $file
  * @param Dropbox_SentWork $work
  *
- * @return array|null|string
+ * @return array|string|null
  */
 function store_add_dropbox($file = [], $work = null)
 {
@@ -882,12 +885,19 @@ function store_add_dropbox($file = [], $work = null)
             // Check if all the recipients are valid
             $thisIsAMailing = false;
             $thisIsJustUpload = false;
+
             foreach ($_POST['recipients'] as $rec) {
                 if ($rec == 'mailing') {
                     $thisIsAMailing = true;
                 } elseif ($rec == 'upload') {
                     $thisIsJustUpload = true;
-                } elseif (strpos($rec, 'user_') === 0 && !isCourseMember(substr($rec, strlen('user_')))) {
+                } elseif (strpos($rec, 'user_') === 0 &&
+                    !CourseManager::is_user_subscribed_in_course(
+                        substr($rec, strlen('user_')),
+                        $_course['code'],
+                        true
+                    )
+                ) {
                     Display::addFlash(
                         Display::return_message(
                             get_lang('InvalideUserDetected'),
@@ -1205,8 +1215,8 @@ function feedback_form($url)
 function user_can_download_file($id, $user_id)
 {
     $course_id = api_get_course_int_id();
-    $id = intval($id);
-    $user_id = intval($user_id);
+    $id = (int) $id;
+    $user_id = (int) $user_id;
 
     $sql = "SELECT file_id 
             FROM ".Database::get_course_table(TABLE_DROPBOX_PERSON)."
@@ -1228,7 +1238,7 @@ function user_can_download_file($id, $user_id)
 // add feedback since the other users will never get to see the feedback.
 function check_if_file_exist($id)
 {
-    $id = intval($id);
+    $id = (int) $id;
     $course_id = api_get_course_int_id();
     $sql = "SELECT file_id 
             FROM ".Database::get_course_table(TABLE_DROPBOX_PERSON)."
@@ -1434,12 +1444,13 @@ function generate_html_overview($files, $dont_show_columns = [], $make_link = []
  *
  * @version march 2006
  */
-function get_total_number_feedback($file_id = '')
+function get_total_number_feedback()
 {
     $course_id = api_get_course_int_id();
     $sql = "SELECT COUNT(feedback_id) AS total, file_id
             FROM ".Database::get_course_table(TABLE_DROPBOX_FEEDBACK)."
-            WHERE c_id = $course_id GROUP BY file_id";
+            WHERE c_id = $course_id 
+            GROUP BY file_id";
     $result = Database::query($sql);
     $return = [];
     while ($row = Database::fetch_array($result)) {

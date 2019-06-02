@@ -15,7 +15,7 @@ $tbl_session_rel_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
 $tbl_session_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_USER);
 $tbl_session_rel_course_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 
-$id_session = intval($_GET['id_session']);
+$id_session = isset($_GET['id_session']) ? (int) $_GET['id_session'] : 0;
 SessionManager::protectSession($id_session);
 
 if (empty($id_session)) {
@@ -64,17 +64,11 @@ if (!list($session_name, $course_title) = Database::fetch_row($result)) {
 switch ($action) {
     case 'delete':
         if (is_array($idChecked) && count($idChecked) > 0) {
-            array_map('intval', $idChecked);
-            $idChecked = implode(',', $idChecked);
-        }
-        if (!empty($idChecked)) {
-            $sql = "DELETE FROM $tbl_session_rel_course_rel_user
-                    WHERE session_id='$id_session' AND c_id='".$courseId."' AND user_id IN($idChecked)";
-            $result = Database::query($sql);
-            $nbr_affected_rows = Database::affected_rows($result);
-            $sql = "UPDATE $tbl_session_rel_course SET nbr_users=nbr_users-$nbr_affected_rows
-                    WHERE session_id='$id_session' AND c_id='".$courseId."'";
-            Database::query($sql);
+            foreach ($idChecked as $userId) {
+                SessionManager::unSubscribeUserFromCourseSession($userId, $courseId, $id_session);
+            }
+        } else {
+            SessionManager::unSubscribeUserFromCourseSession($idChecked, $courseId, $id_session);
         }
         header('Location: '.api_get_self()
             .'?id_session='.$id_session.'&course_code='.urlencode($course_code).'&sort='.$sort);
@@ -116,10 +110,10 @@ $nbr_results = sizeof($users);
 
 $tool_name = get_lang('Session').': '.$session_name.' - '.get_lang('Course').': '.$course_title;
 
-$interbreadcrumb[] = ["url" => "session_list.php", "name" => get_lang('SessionList')];
+$interbreadcrumb[] = ['url' => 'session_list.php', 'name' => get_lang('SessionList')];
 $interbreadcrumb[] = [
     'url' => "resume_session.php?id_session=".$id_session,
-    "name" => get_lang('SessionOverview'),
+    'name' => get_lang('SessionOverview'),
 ];
 
 Display::display_header($tool_name);
@@ -158,24 +152,29 @@ echo Display::page_header($tool_name);
                 <?php if ($is_western_name_order) {
                 ?>
                     <th>
-                        <a href="<?php echo api_get_self(); ?>?id_session=<?php echo $id_session; ?>&course_code=<?php echo urlencode($course_code); ?>&sort=firstname&direction=<?php echo urlencode($direction); ?>"><?php echo get_lang('FirstName'); ?></a>
+                        <a href="<?php echo api_get_self(); ?>?id_session=<?php echo $id_session; ?>&course_code=<?php echo urlencode($course_code); ?>&sort=firstname&direction=<?php echo urlencode($direction); ?>">
+                            <?php echo get_lang('FirstName'); ?></a>
                     </th>
                     <th>
-                        <a href="<?php echo api_get_self(); ?>?id_session=<?php echo $id_session; ?>&course_code=<?php echo urlencode($course_code); ?>&sort=lastname&direction=<?php echo urlencode($direction); ?>"><?php echo get_lang('LastName'); ?></a>
+                        <a href="<?php echo api_get_self(); ?>?id_session=<?php echo $id_session; ?>&course_code=<?php echo urlencode($course_code); ?>&sort=lastname&direction=<?php echo urlencode($direction); ?>">
+                            <?php echo get_lang('LastName'); ?></a>
                     </th>
                 <?php
             } else {
                 ?>
                     <th>
-                        <a href="<?php echo api_get_self(); ?>?id_session=<?php echo $id_session; ?>&course_code=<?php echo urlencode($course_code); ?>&sort=lastname&direction=<?php echo urlencode($direction); ?>"><?php echo get_lang('LastName'); ?></a>
+                        <a href="<?php echo api_get_self(); ?>?id_session=<?php echo $id_session; ?>&course_code=<?php echo urlencode($course_code); ?>&sort=lastname&direction=<?php echo urlencode($direction); ?>">
+                            <?php echo get_lang('LastName'); ?></a>
                     </th>
                     <th>
-                        <a href="<?php echo api_get_self(); ?>?id_session=<?php echo $id_session; ?>&course_code=<?php echo urlencode($course_code); ?>&sort=firstname&direction=<?php echo urlencode($direction); ?>"><?php echo get_lang('FirstName'); ?></a>
+                        <a href="<?php echo api_get_self(); ?>?id_session=<?php echo $id_session; ?>&course_code=<?php echo urlencode($course_code); ?>&sort=firstname&direction=<?php echo urlencode($direction); ?>">
+                            <?php echo get_lang('FirstName'); ?></a>
                     </th>
                 <?php
             } ?>
                 <th>
-                    <a href="<?php echo api_get_self(); ?>?id_session=<?php echo $id_session; ?>&course_code=<?php echo urlencode($course_code); ?>&sort=username&direction=<?php echo urlencode($direction); ?>"><?php echo get_lang('Login'); ?></a>
+                    <a href="<?php echo api_get_self(); ?>?id_session=<?php echo $id_session; ?>&course_code=<?php echo urlencode($course_code); ?>&sort=username&direction=<?php echo urlencode($direction); ?>">
+                        <?php echo get_lang('Login'); ?></a>
                 </th>
                 <th><?php echo get_lang('Actions'); ?></th>
             </tr>

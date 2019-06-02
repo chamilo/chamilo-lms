@@ -43,6 +43,7 @@ class PDF
         $params['right'] = isset($params['right']) ? $params['right'] : 15;
         $params['top'] = isset($params['top']) ? $params['top'] : 30;
         $params['bottom'] = isset($params['bottom']) ? $params['bottom'] : 30;
+        $params['margin_footer'] = isset($params['margin_footer']) ? $params['margin_footer'] : 8;
 
         $this->params['filename'] = isset($params['filename']) ? $params['filename'] : api_get_local_time();
         $this->params['pdf_title'] = isset($params['pdf_title']) ? $params['pdf_title'] : '';
@@ -72,6 +73,8 @@ class PDF
             $orientation
         );
 
+        $this->pdf->margin_footer = $params['margin_footer'];
+
         // Default value is 96 set in the mpdf library file config.php
         $value = api_get_configuration_value('pdf_img_dpi');
         if (!empty($value)) {
@@ -83,9 +86,8 @@ class PDF
      * Export the given HTML to PDF, using a global template.
      *
      * @uses \export/table_pdf.tpl
-
      *
-     * @param $content
+     * @param string     $content
      * @param bool|false $saveToFile
      * @param bool|false $returnHtml
      * @param bool       $addDefaultCss (bootstrap/default/base.css)
@@ -147,12 +149,17 @@ class PDF
         $html = $tpl->fetch($tableTemplate);
         $html = api_utf8_encode($html);
 
+        if ($returnHtml) {
+            return $html;
+        }
+
         $css_file = api_get_path(SYS_CSS_PATH).'themes/'.$tpl->theme.'/print.css';
         if (!file_exists($css_file)) {
             $css_file = api_get_path(SYS_CSS_PATH).'print.css';
         }
         $css = file_get_contents($css_file);
-        $html = self::content_to_pdf(
+
+        self::content_to_pdf(
             $html,
             $css,
             $this->params['filename'],
@@ -163,10 +170,6 @@ class PDF
             $returnHtml,
             $addDefaultCss
         );
-
-        if ($returnHtml) {
-            return $html;
-        }
     }
 
     /**
@@ -187,6 +190,7 @@ class PDF
      * @param bool   $print_title     add title
      * @param bool   $complete_style  show header and footer if true
      * @param bool   $addStyle
+     * @param string $mainTitle
      *
      * @return false|null
      */
@@ -196,7 +200,8 @@ class PDF
         $course_code = null,
         $print_title = false,
         $complete_style = true,
-        $addStyle = true
+        $addStyle = true,
+        $mainTitle = ''
     ) {
         if (empty($html_file_array)) {
             return false;
@@ -231,14 +236,13 @@ class PDF
 
         $counter = 1;
         foreach ($html_file_array as $file) {
-            //Add a page break per file
+            // Add a page break per file
             $page_break = '<pagebreak>';
             if ($counter == count($html_file_array)) {
                 $page_break = '';
             }
-            $counter++;
 
-            //if the array provided contained subarrays with 'title' entry,
+            // if the array provided contained subarrays with 'title' entry,
             // then print the title in the PDF
             if (is_array($file) && isset($file['title'])) {
                 $html_title = $file['title'];
@@ -248,14 +252,27 @@ class PDF
                 $html_title = basename($file);
             }
 
+            $counter++;
+
             if (empty($file) && !empty($html_title)) {
-                //this is a chapter, print title & skip the rest
+                // this is a chapter, print title & skip the rest
+                if ($counter === 2 && !empty($mainTitle)) {
+                    $this->pdf->WriteHTML(
+                        '<html><body><h2 style="text-align: center">'.$mainTitle.'</h2></body></html>'
+                    );
+                }
                 if ($print_title) {
                     $this->pdf->WriteHTML(
                         '<html><body><h3>'.$html_title.'</h3></body></html>'.$page_break
                     );
                 }
                 continue;
+            } else {
+                if ($counter === 2 && !empty($mainTitle)) {
+                    $this->pdf->WriteHTML(
+                        '<html><body><h2 style="text-align: center">'.$mainTitle.'</h2></body></html>'
+                    );
+                }
             }
 
             if (!file_exists($file)) {
@@ -269,7 +286,7 @@ class PDF
                 $this->pdf->WriteHTML($css, 1);
             }
 
-            //it's not a chapter but the file exists, print its title
+            // it's not a chapter but the file exists, print its title
             if ($print_title) {
                 $this->pdf->WriteHTML(
                     '<html><body><h3>'.$html_title.'</h3></body></html>'
@@ -329,7 +346,6 @@ class PDF
                 $this->pdf->WriteHTML('<html><body>'.$image.'</body></html>'.$page_break);
             }
         }
-
         if (empty($pdf_name)) {
             $output_file = 'pdf_'.date('Y-m-d-his').'.pdf';
         } else {
@@ -361,6 +377,8 @@ class PDF
      * 'F' (save to local file) or
      * 'S' (return as a string)
      *
+     * @throws MpdfException
+     *
      * @return string Web path
      */
     public function content_to_pdf(
@@ -381,7 +399,7 @@ class PDF
             return false;
         }
 
-        //clean styles and javascript document
+        // clean styles and javascript document
         $clean_search = [
             '@<script[^>]*?>.*?</script>@si',
             '@<style[^>]*?>.*?</style>@siU',
@@ -462,7 +480,11 @@ class PDF
         }
 
         if (!empty($css)) {
-            $this->pdf->WriteHTML($css, 1);
+            try {
+                $this->pdf->WriteHTML($css, 1);
+            } catch (MpdfException $e) {
+                error_log($e);
+            }
         }
 
         if ($addDefaultCss) {
@@ -473,11 +495,19 @@ class PDF
             ];
             foreach ($basicStyles as $style) {
                 $cssContent = file_get_contents($style);
-                $this->pdf->WriteHTML($cssContent, 1);
+                try {
+                    $this->pdf->WriteHTML($cssContent, 1);
+                } catch (MpdfException $e) {
+                    error_log($e);
+                }
             }
         }
 
-        $this->pdf->WriteHTML($document_html);
+        try {
+            $this->pdf->WriteHTML($document_html);
+        } catch (MpdfException $e) {
+            error_log($e);
+        }
 
         if (empty($pdf_name)) {
             $output_file = 'pdf_'.date('Y-m-d-his').'.pdf';
@@ -867,6 +897,7 @@ class PDF
      */
     private static function fixImagesPaths($documentHtml, array $courseInfo, $dirName = '')
     {
+        $documentHtml = '<?xml encoding="utf-8" ?>'.$documentHtml;
         $doc = new DOMDocument();
         @$doc->loadHTML($documentHtml);
 
@@ -892,12 +923,16 @@ class PDF
                 continue;
             }
 
+            // It's a reference to a file in the system, do not change it
+            if (file_exists($src)) {
+                continue;
+            }
+
             if (strpos($src, '/main/default_course_document') === 0) {
                 $element->setAttribute(
                     'src',
                     str_replace('/main/default_course_document', $sysCodePath.'default_course_document', $src)
                 );
-
                 continue;
             }
 
@@ -906,7 +941,6 @@ class PDF
                     'src',
                     str_replace('/main/img/', $sysCodePath.'img/', $src)
                 );
-
                 continue;
             }
 
@@ -915,7 +949,6 @@ class PDF
                     'src',
                     str_replace('/app/upload/', $sysUploadPath, $src)
                 );
-
                 continue;
             }
 

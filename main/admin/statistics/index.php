@@ -16,58 +16,122 @@ $interbreadcrumb[] = ['url' => '../index.php', 'name' => get_lang('PlatformAdmin
 $report = isset($_REQUEST['report']) ? $_REQUEST['report'] : '';
 $sessionDuration = isset($_GET['session_duration']) ? (int) $_GET['session_duration'] : '';
 
-if ($report == 'recentlogins') {
+if (
+    in_array(
+        $report,
+        ['recentlogins', 'tools', 'courses', 'coursebylanguage', 'users']
+    )
+   ) {
     $htmlHeadXtra[] = api_get_js('chartjs/Chart.min.js');
-    $htmlHeadXtra[] = '
-    <script>
-    $(document).ready(function() {
-        $.ajax({
-            url: "'.api_get_path(WEB_CODE_PATH).'inc/ajax/statistics.ajax.php?a=recent_logins&session_duration='.$sessionDuration.'",
-            type: "POST",
-            success: function(data) {
-                Chart.defaults.global.responsive = true;
-                var ctx = document.getElementById("canvas").getContext("2d");
-                var myLoginChart = new Chart(ctx, {
-                    type: "line",
-                    data: data
-                });
-            }
-        });
-    });
-    </script>';
-}
-if ($report == 'tools') {
-    $htmlHeadXtra[] = api_get_js('chartjs/Chart.min.js');
-    $htmlHeadXtra[] = '
-    <script>
-    $(document).ready(function() {
-        $.ajax({
-            url: "'.api_get_path(WEB_CODE_PATH).'inc/ajax/statistics.ajax.php?a=tools_usage",
-            type: "POST",
-            success: function(data) {
-                Chart.defaults.global.responsive = true;
-                var ctx = document.getElementById("canvas").getContext("2d");
-                var myLoginChart = new Chart(ctx, {
-                    type: "pie",
-                    data: data,
-                    options: {
-                      legend: {
-                        position: "left"
-                      },
-                      title: {
-                        text: "'.get_lang('PlatformToolAccess').'",
-                        display: true
-                      }
-                    }
-                });
-            }
-        });
-    });
-    </script>';
+    // Prepare variables for the JS charts
+    $url = $reportName = $reportType = $reportOptions = '';
+    switch ($report) {
+        case 'recentlogins':
+            $url = api_get_path(WEB_CODE_PATH).'inc/ajax/statistics.ajax.php?a=recent_logins&session_duration='.$sessionDuration;
+            $reportName = '';
+            $reportType = 'line';
+            $reportOptions = '';
+            $htmlHeadXtra[] = Statistics::getJSChartTemplate($url, $reportType, $reportOptions);
+            break;
+        case 'tools':
+            $url = api_get_path(WEB_CODE_PATH).'inc/ajax/statistics.ajax.php?a=tools_usage';
+            $reportName = 'PlatformToolAccess';
+            $reportType = 'pie';
+            $reportOptions = '
+                legend: {
+                    position: "left"
+                },
+                title: {
+                    text: "'.get_lang($reportName).'",
+                    display: true
+                },
+                cutoutPercentage: 25
+                ';
+            $htmlHeadXtra[] = Statistics::getJSChartTemplate($url, $reportType, $reportOptions);
+            break;
+        case 'courses':
+            $url = api_get_path(WEB_CODE_PATH).'inc/ajax/statistics.ajax.php?a=courses';
+            $reportName = 'CountCours';
+            $reportType = 'pie';
+            $reportOptions = '
+                legend: {
+                    position: "left"
+                },
+                title: {
+                    text: "'.get_lang($reportName).'",
+                    display: true
+                },
+                cutoutPercentage: 25
+                ';
+            $htmlHeadXtra[] = Statistics::getJSChartTemplate($url, $reportType, $reportOptions);
+            break;
+         case 'coursebylanguage':
+            $url = api_get_path(WEB_CODE_PATH).'inc/ajax/statistics.ajax.php?a=courses_by_language';
+            $reportName = 'CountCourseByLanguage';
+            $reportType = 'pie';
+            $reportOptions = '
+                legend: {
+                    position: "left"
+                },
+                title: {
+                    text: "'.get_lang($reportName).'",
+                    display: true
+                },
+                cutoutPercentage: 25
+                ';
+            $htmlHeadXtra[] = Statistics::getJSChartTemplate($url, $reportType, $reportOptions);
+            break;
+         case 'users':
+            $invisible = isset($_GET['count_invisible_courses']) ? intval($_GET['count_invisible_courses']) : null;
+            $urlBase = api_get_path(WEB_CODE_PATH).'inc/ajax/statistics.ajax.php?';
+            $url1 = $urlBase.'a=users&count_invisible='.$invisible;
+            $url2 = $urlBase.'a=users_teachers&count_invisible='.$invisible;
+            $url3 = $urlBase.'a=users_students&count_invisible='.$invisible;
+            $reportName1 = get_lang('NumberOfUsers');
+            $reportName2 = get_lang('Teachers');
+            $reportName3 = get_lang('Students');
+            $reportType = 'pie';
+            $reportOptions = '
+                legend: {
+                    position: "left"
+                },
+                title: {
+                    text: "%s",
+                    display: true
+                },
+                cutoutPercentage: 25
+                ';
+            $reportOptions1 = sprintf($reportOptions, $reportName1);
+            $reportOptions2 = sprintf($reportOptions, $reportName2);
+            $reportOptions3 = sprintf($reportOptions, $reportName3);
+            $htmlHeadXtra[] = Statistics::getJSChartTemplate(
+                $url1,
+                $reportType,
+                $reportOptions1,
+                'canvas1'
+            );
+            $htmlHeadXtra[] = Statistics::getJSChartTemplate(
+                $url2,
+                $reportType,
+                $reportOptions2,
+                'canvas2'
+            );
+            $htmlHeadXtra[] = Statistics::getJSChartTemplate(
+                $url3,
+                $reportType,
+                $reportOptions3,
+                'canvas3'
+            );
+            break;
+    }
 }
 
 if ($report == 'user_session') {
     $htmlHeadXtra[] = api_get_jqgrid_js();
+}
+
+if (isset($_GET['export'])) {
+    ob_start();
 }
 
 $tool_name = get_lang('Statistics');
@@ -93,6 +157,7 @@ $tools[$strUsers]['report=logins&amp;type=month'] = get_lang('Logins').' ('.get_
 $tools[$strUsers]['report=logins&amp;type=day'] = get_lang('Logins').' ('.get_lang('PeriodDay').')';
 $tools[$strUsers]['report=logins&amp;type=hour'] = get_lang('Logins').' ('.get_lang('PeriodHour').')';
 $tools[$strUsers]['report=pictures'] = get_lang('CountUsers').' ('.get_lang('UserPicture').')';
+$tools[$strUsers]['report=logins_by_date'] = get_lang('LoginsByDate');
 $tools[$strUsers]['report=no_login_users'] = get_lang('StatsUsersDidNotLoginInLastPeriods');
 $tools[$strUsers]['report=zombies'] = get_lang('Zombies');
 
@@ -223,6 +288,7 @@ switch ($report) {
 
         break;
     case 'courses':
+        echo '<canvas class="col-md-12" id="canvas" height="300px" style="margin-bottom: 20px"></canvas>';
         // total amount of courses
         foreach ($course_categories as $code => $name) {
             $courses[$name] = Statistics::countCourses($code);
@@ -235,12 +301,19 @@ switch ($report) {
         Statistics::printToolStats();
         break;
     case 'coursebylanguage':
-        Statistics::printCourseByLanguageStats();
+        echo '<canvas class="col-md-12" id="canvas" height="300px" style="margin-bottom: 20px"></canvas>';
+        $result = Statistics::printCourseByLanguageStats();
+        Statistics::printStats(get_lang('CountCourseByLanguage'), $result, true);
         break;
     case 'courselastvisit':
         Statistics::printCourseLastVisit();
         break;
     case 'users':
+        echo '<div class="row">';
+        echo '<div class="col-md-4"><canvas id="canvas1" style="margin-bottom: 20px"></canvas></div>';
+        echo '<div class="col-md-4"><canvas id="canvas2" style="margin-bottom: 20px"></canvas></div>';
+        echo '<div class="col-md-4"><canvas id="canvas3" style="margin-bottom: 20px"></canvas></div>';
+        echo '</div>';
         // total amount of users
         $teachers = $students = [];
         $countInvisible = isset($_GET['count_invisible_courses']) ? intval($_GET['count_invisible_courses']) : null;
@@ -302,6 +375,13 @@ switch ($report) {
         $friends = Statistics::getFriends();
         Statistics::printStats(get_lang('CountFriends'), $friends);
         break;
+    case 'logins_by_date':
+        Statistics::printLoginsByDate();
+        break;
 }
 
 Display::display_footer();
+
+if (isset($_GET['export'])) {
+    ob_end_clean();
+}

@@ -48,10 +48,6 @@
     <section id="cm-content">
         <div class="container">
             {% if show_header == true %}
-                {% block breadcrumb %}
-                    {{ breadcrumb }}
-                {% endblock %}
-
                 {% if show_course_shortcut is not null %}
                     <!-- TOOLS SHOW COURSE -->
                     <div id="cm-tools" class="nav-tools">
@@ -59,5 +55,9 @@
                     </div>
                     <!-- END TOOLS SHOW COURSE -->
                 {% endif %}
+
+                {% block breadcrumb %}
+                    {{ breadcrumb }}
+                {% endblock %}
             {% endif %}
             {{ flash_messages }}

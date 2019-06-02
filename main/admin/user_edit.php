@@ -65,20 +65,12 @@ function confirmation(name) {
 }
 </script>';
 
-$gMapsPlugin = GoogleMapsPlugin::create();
-$geolocalization = $gMapsPlugin->get('enable_api') === 'true';
-
-if ($geolocalization) {
-    $gmapsApiKey = $gMapsPlugin->get('api_key');
-    $htmlHeadXtra[] = '<script type="text/javascript" src="//maps.googleapis.com/maps/api/js?sensor=true&key='.$gmapsApiKey.'" ></script>';
-}
-
 $htmlHeadXtra[] = api_get_css_asset('cropper/dist/cropper.min.css');
 $htmlHeadXtra[] = api_get_asset('cropper/dist/cropper.min.js');
 $tool_name = get_lang('ModifyUserInfo');
 
-$interbreadcrumb[] = ['url' => 'index.php', "name" => get_lang('PlatformAdmin')];
-$interbreadcrumb[] = ['url' => "user_list.php", "name" => get_lang('UserList')];
+$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('PlatformAdmin')];
+$interbreadcrumb[] = ['url' => 'user_list.php', 'name' => get_lang('UserList')];
 
 $table_user = Database::get_main_table(TABLE_MAIN_USER);
 $table_admin = Database::get_main_table(TABLE_MAIN_ADMIN);
@@ -325,6 +317,8 @@ $returnParams = $extraField->addElements(
     false,
     [],
     [],
+    [],
+    false,
     true
 );
 $jqueryReadyContent = $returnParams['jquery_ready_content'];
@@ -463,9 +457,12 @@ if ($form->validate()) {
             $template
         );
 
-        if (isset($user['student_boss'])) {
-            UserManager::subscribeUserToBossList($user_id, $user['student_boss']);
-        }
+        $studentBossListSent = isset($user['student_boss']) ? $user['student_boss'] : [];
+        UserManager::subscribeUserToBossList(
+            $user_id,
+            $studentBossListSent,
+            true
+        );
 
         if (api_get_setting('openid_authentication') == 'true' && !empty($user['openid'])) {
             $up = UserManager::update_openid($user_id, $user['openid']);

@@ -88,21 +88,27 @@ $action = isset($_REQUEST['action']) ? $_REQUEST['action'] : null;
 
 $courseInfo = api_get_course_info();
 $sessionId = api_get_session_id();
-$is_allowedToEdit = api_is_allowed_to_edit(null, true) ||
+
+$is_allowedToEdit =
+    api_is_allowed_to_edit(null, true) ||
     api_is_course_tutor() ||
     api_is_session_admin() ||
     api_is_drh() ||
     api_is_student_boss();
+
 if (!empty($sessionId) && !$is_allowedToEdit) {
     if (api_is_course_session_coach(
         $currentUserId,
         api_get_course_int_id(),
         $sessionId
     )) {
-        if (!api_coach_can_edit_view_results(api_get_course_int_id(), $sessionId)
-        ) {
+        if (!api_coach_can_edit_view_results(api_get_course_int_id(), $sessionId)) {
             api_not_allowed($printHeaders);
         }
+    }
+} else {
+    if (!$is_allowedToEdit) {
+        api_not_allowed($printHeaders);
     }
 }
 
@@ -122,7 +128,8 @@ if (empty($objExercise)) {
     $objExercise->read($exercise_id);
 }
 $feedback_type = $objExercise->feedback_type;
-//Only users can see their own results
+
+// Only users can see their own results
 if (!$is_allowedToEdit) {
     if ($student_id != $currentUserId) {
         api_not_allowed($printHeaders);
@@ -131,6 +138,9 @@ if (!$is_allowedToEdit) {
 
 $allowRecordAudio = api_get_setting('enable_record_audio') === 'true';
 $allowTeacherCommentAudio = api_get_configuration_value('allow_teacher_comment_audio') === true;
+
+$js = '<script>'.api_get_language_translate_html().'</script>';
+$htmlHeadXtra[] = $js;
 
 if (api_is_in_gradebook()) {
     $interbreadcrumb[] = [
@@ -230,43 +240,47 @@ $showTotalScoreAndUserChoicesInLastAttempt = true;
 if (!empty($track_exercise_info)) {
     // if the results_disabled of the Quiz is 1 when block the script
     $result_disabled = $track_exercise_info['results_disabled'];
-
-    if ($result_disabled == RESULT_DISABLE_NO_SCORE_AND_EXPECTED_ANSWERS) {
-        $show_results = false;
-    } elseif ($result_disabled == RESULT_DISABLE_SHOW_SCORE_ONLY) {
-        $show_results = false;
-        $show_only_total_score = true;
-        if ($origin != 'learnpath') {
-            if ($currentUserId == $student_id) {
-                echo Display::return_message(
-                    get_lang('ThankYouForPassingTheTest'),
-                    'warning',
-                    false
-                );
+    switch ($result_disabled) {
+        case RESULT_DISABLE_NO_SCORE_AND_EXPECTED_ANSWERS:
+            $show_results = false;
+            break;
+        case RESULT_DISABLE_SHOW_SCORE_ONLY:
+            $show_results = false;
+            $show_only_total_score = true;
+            if ($origin != 'learnpath') {
+                if ($currentUserId == $student_id) {
+                    echo Display::return_message(
+                        get_lang('ThankYouForPassingTheTest'),
+                        'warning',
+                        false
+                    );
+                }
             }
-        }
-    } elseif ($result_disabled == RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT) {
-        $attempts = Event::getExerciseResultsByUser(
-            $currentUserId,
-            $objExercise->id,
-            api_get_course_int_id(),
-            api_get_session_id(),
-            $track_exercise_info['orig_lp_id'],
-            $track_exercise_info['orig_lp_item_id'],
-            'desc'
-        );
-        $numberAttempts = count($attempts);
-        if ($numberAttempts >= $track_exercise_info['max_attempt']) {
-            $show_results = true;
-            $show_only_total_score = true;
-            // Attempt reach max so show score/feedback now
-            $showTotalScoreAndUserChoicesInLastAttempt = true;
-        } else {
-            $show_results = true;
-            $show_only_total_score = true;
-            // Last attempt not reach don't show score/feedback
-            $showTotalScoreAndUserChoicesInLastAttempt = false;
-        }
+            break;
+        case RESULT_DISABLE_DONT_SHOW_SCORE_ONLY_IF_USER_FINISHES_ATTEMPTS_SHOW_ALWAYS_FEEDBACK:
+        case RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT:
+            $attempts = Event::getExerciseResultsByUser(
+                $currentUserId,
+                $objExercise->id,
+                api_get_course_int_id(),
+                api_get_session_id(),
+                $track_exercise_info['orig_lp_id'],
+                $track_exercise_info['orig_lp_item_id'],
+                'desc'
+            );
+            $numberAttempts = count($attempts);
+            if ($numberAttempts >= $track_exercise_info['max_attempt']) {
+                $show_results = true;
+                $show_only_total_score = true;
+                // Attempt reach max so show score/feedback now
+                $showTotalScoreAndUserChoicesInLastAttempt = true;
+            } else {
+                $show_results = true;
+                $show_only_total_score = true;
+                // Last attempt not reach don't show score/feedback
+                $showTotalScoreAndUserChoicesInLastAttempt = false;
+            }
+            break;
     }
 } else {
     echo Display::return_message(get_lang('CantViewResults'), 'warning');
@@ -277,7 +291,7 @@ if ($origin == 'learnpath' && !isset($_GET['fb_type'])) {
     $show_results = false;
 }
 
-if ($is_allowedToEdit && in_array($action, ['qualify', 'edit'])) {
+if ($is_allowedToEdit && in_array($action, ['qualify', 'edit', 'export'])) {
     $show_results = true;
 }
 
@@ -317,7 +331,7 @@ $sql = "SELECT attempts.question_id, answer
             questions.id = quizz_rel_questions.question_id AND
             questions.c_id = ".api_get_course_int_id()."
         WHERE
-            attempts.exe_id = ".intval($id)." $user_restriction
+            attempts.exe_id = ".$id." $user_restriction
 		GROUP BY quizz_rel_questions.question_order, attempts.question_id";
 $result = Database::query($sql);
 $question_list_from_database = [];
@@ -369,6 +383,10 @@ if (!empty($maxEditors) && count($questionList) > $maxEditors) {
 }
 
 $objExercise->export = $action === 'export';
+$arrid = [];
+$arrmarks = [];
+$strids = '';
+$marksid = '';
 
 $countPendingQuestions = 0;
 foreach ($questionList as $questionId) {
@@ -388,7 +406,6 @@ foreach ($questionList as $questionId) {
 
     // Start buffer
     ob_start();
-
     if ($answerType == MULTIPLE_ANSWER_COMBINATION_TRUE_FALSE) {
         $choice = [];
     }
@@ -475,7 +492,7 @@ foreach ($questionList as $questionId) {
                             <td colspan=\"2\">
                                 <div id=\"hotspot-solution-$questionId-$id\"></div>
                                 <script>
-                                    $(document).on('ready', function () {
+                                    $(function() {
                                         new HotspotQuestion({
                                             questionId: $questionId,
                                             exerciseId: {$objExercise->id},                                            
@@ -644,7 +661,7 @@ foreach ($questionList as $questionId) {
                             <td colspan=\"2\">
                                 <div id=\"hotspot-solution\"></div>
                                 <script>
-                                    $(document).on('ready', function () {
+                                    $(function() {
                                         new HotspotQuestion({
                                             questionId: $questionId,
                                             exerciseId: {$objExercise->id},
@@ -713,7 +730,6 @@ foreach ($questionList as $questionId) {
         if ($isBossOfStudent) {
             $isFeedbackAllowed = false;
         }
-
         $marksname = '';
         if ($isFeedbackAllowed && $action != 'export') {
             $name = 'fckdiv'.$questionId;
@@ -721,10 +737,9 @@ foreach ($questionList as $questionId) {
             if (in_array($answerType, [FREE_ANSWER, ORAL_EXPRESSION, ANNOTATION])) {
                 $url_name = get_lang('EditCommentsAndMarks');
             } else {
+                $url_name = get_lang('AddComments');
                 if ($action == 'edit') {
                     $url_name = get_lang('EditIndividualComment');
-                } else {
-                    $url_name = get_lang('AddComments');
                 }
             }
             echo '<p>';
@@ -809,7 +824,7 @@ foreach ($questionList as $questionId) {
                 $formMark->addSelect('marks', get_lang('AssignMarks'), $options);
                 $formMark->display();*/
                 echo '<form name="marksform_'.$questionId.'" method="post" action="">';
-                echo get_lang("AssignMarks");
+                echo get_lang('AssignMarks');
                 echo "&nbsp;<select name='marks' id='select_marks_".$questionId."' class='selectpicker exercise_mark_select'>";
                 $model = ExerciseLib::getCourseScoreModel();
                 if (empty($model)) {
@@ -897,17 +912,26 @@ foreach ($questionList as $questionId) {
 
     $score = [];
     if ($show_results) {
+        $scorePassed = $my_total_score >= $my_total_weight;
+        if (function_exists('bccomp')) {
+            $compareResult = bccomp($my_total_score, $my_total_weight, 3);
+            $scorePassed = $compareResult === 1 || $compareResult === 0;
+        }
         $score['result'] = ExerciseLib::show_score(
             $my_total_score,
             $my_total_weight,
             false,
             false
         );
-        $score['pass'] = $my_total_score >= $my_total_weight ? true : false;
+        $score['pass'] = $scorePassed;
         $score['type'] = $answerType;
         $score['score'] = $my_total_score;
         $score['weight'] = $my_total_weight;
         $score['comments'] = isset($comnt) ? $comnt : null;
+
+        if (isset($question_result['user_answered'])) {
+            $score['user_answered'] = $question_result['user_answered'];
+        }
     }
 
     if (in_array($objQuestionTmp->type, [FREE_ANSWER, ORAL_EXPRESSION, ANNOTATION])) {
@@ -942,6 +966,19 @@ foreach ($questionList as $questionId) {
 } // end of large foreach on questions
 
 $totalScoreText = '';
+
+if ($answerType != MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY) {
+    $pluginEvaluation = QuestionOptionsEvaluationPlugin::create();
+
+    if ('true' === $pluginEvaluation->get(QuestionOptionsEvaluationPlugin::SETTING_ENABLE)) {
+        $formula = $pluginEvaluation->getFormulaForExercise($objExercise->selectId());
+
+        if (!empty($formula)) {
+            $totalScore = $pluginEvaluation->getResultWithFormula($id, $formula);
+            $totalWeighting = $pluginEvaluation->getMaxScore();
+        }
+    }
+}
 
 // Total score
 $myTotalScoreTemp = $totalScore;
@@ -989,6 +1026,16 @@ if (!empty($category_list) && ($show_results || $show_only_total_score || $showT
     );
 }
 
+if (RESULT_DISABLE_RANKING == $track_exercise_info['results_disabled']) {
+    echo Display::page_header(get_lang('Ranking'), null, 'h4');
+    echo ExerciseLib::displayResultsInRanking(
+        $objExercise->iId,
+        $student_id,
+        $courseInfo['real_id'],
+        $sessionId
+    );
+}
+
 echo $totalScoreText;
 echo $exercise_content;
 
@@ -997,7 +1044,7 @@ if ($show_results) {
     echo $totalScoreText;
 }
 
-if ($action == 'export') {
+if ($action === 'export') {
     $content = ob_get_clean();
     // needed in order to mpdf to work
     ob_clean();
@@ -1023,8 +1070,8 @@ if ($action == 'export') {
 
 if ($isFeedbackAllowed) {
     if (is_array($arrid) && is_array($arrmarks)) {
-        $strids = implode(",", $arrid);
-        $marksid = implode(",", $arrmarks);
+        $strids = implode(',', $arrid);
+        $marksid = implode(',', $arrmarks);
     }
 }
 
@@ -1065,19 +1112,21 @@ if ($isFeedbackAllowed && $origin != 'learnpath' && $origin != 'student_progress
         );
     }
 
-    $emailForm->addCheckBox(
-        'send_notification',
-        get_lang('SendEmail'),
-        get_lang('SendEmail'),
-        ['onclick' => 'openEmailWrapper();']
-    );
-    $emailForm->addHtml('<div id="email_content_wrapper" style="display:none; margin-bottom: 20px;">');
-    $emailForm->addHtmlEditor(
-        'notification_content',
-        get_lang('Content'),
-        false
-    );
-    $emailForm->addHtml('</div>');
+    if ($objExercise->results_disabled != RESULT_DISABLE_NO_SCORE_AND_EXPECTED_ANSWERS) {
+        $emailForm->addCheckBox(
+            'send_notification',
+            get_lang('SendEmail'),
+            get_lang('SendEmail'),
+            ['onclick' => 'openEmailWrapper();']
+        );
+        $emailForm->addHtml('<div id="email_content_wrapper" style="display:none; margin-bottom: 20px;">');
+        $emailForm->addHtmlEditor(
+            'notification_content',
+            get_lang('Content'),
+            false
+        );
+        $emailForm->addHtml('</div>');
+    }
 
     if (empty($track_exercise_info['orig_lp_id']) || empty($track_exercise_info['orig_lp_item_id'])) {
         // Default url
@@ -1168,3 +1217,4 @@ unset($questionList);
 
 Session::erase('exerciseResult');
 unset($exerciseResult);
+Session::erase('calculatedAnswerId');

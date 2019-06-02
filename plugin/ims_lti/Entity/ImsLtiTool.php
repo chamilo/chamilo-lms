@@ -94,7 +94,7 @@ class ImsLtiTool
      * @var ImsLtiTool|null
      *
      * @ORM\ManyToOne(targetEntity="Chamilo\PluginBundle\Entity\ImsLti\ImsLtiTool", inversedBy="children")
-     * @ORM\JoinColumn(name="parent_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="parent_id", referencedColumnName="id", onDelete="CASCADE")
      */
     private $parent;
 
@@ -465,7 +465,7 @@ class ImsLtiTool
      */
     public function unserializePrivacy()
     {
-        return unserialize($this->privacy);
+        return \UnserializeApi::unserialize('not_allowed_classes', $this->privacy);
     }
 
     /**

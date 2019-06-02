@@ -89,7 +89,7 @@ class Event
             $autoSubscribe = explode('|', $autoSubscribe);
             foreach ($autoSubscribe as $code) {
                 if (CourseManager::course_exists($code)) {
-                    CourseManager::subscribe_user($userId, $code);
+                    CourseManager::subscribeUser($userId, $code);
                 }
             }
         }
@@ -504,6 +504,7 @@ class Event
         $exe_id = Database::escape_string($exe_id);
         $position = Database::escape_string($position);
         $now = api_get_utc_datetime();
+        $course_id = (int) $course_id;
 
         // check user_id or get from context
         if (empty($user_id)) {
@@ -514,10 +515,11 @@ class Event
             }
         }
         // check course_id or get from context
-        if (empty($course_id) or intval($course_id) != $course_id) {
+        if (empty($course_id)) {
             $course_id = api_get_course_int_id();
         }
         // check session_id or get from context
+        $session_id = (int) $session_id;
         if (empty($session_id)) {
             $session_id = api_get_session_id();
         }
@@ -548,8 +550,6 @@ class Event
             $score = 0;
             $answer = 0;
         }
-
-        $session_id = api_get_session_id();
 
         if (!empty($question_id) && !empty($exe_id) && !empty($user_id)) {
             if (is_null($answer)) {
@@ -1144,6 +1144,8 @@ class Event
      * @param int   $lp_id
      * @param array $course
      * @param int   $session_id
+     *
+     * @return bool
      */
     public static function delete_student_lp_events(
         $user_id,
@@ -1156,7 +1158,14 @@ class Event
         $lpInteraction = Database::get_course_table(TABLE_LP_IV_INTERACTION);
         $lpObjective = Database::get_course_table(TABLE_LP_IV_OBJECTIVE);
 
+        if (empty($course)) {
+            return false;
+        }
+
         $course_id = $course['real_id'];
+        $user_id = (int) $user_id;
+        $lp_id = (int) $lp_id;
+        $session_id = (int) $session_id;
 
         if (empty($course_id)) {
             $course_id = api_get_course_int_id();
@@ -1171,10 +1180,6 @@ class Event
         $recording_table = Database::get_main_table(
             TABLE_STATISTIC_TRACK_E_ATTEMPT_RECORDING
         );
-
-        $user_id = (int) $user_id;
-        $lp_id = (int) $lp_id;
-        $session_id = (int) $session_id;
 
         //Make sure we have the exact lp_view_id
         $sql = "SELECT id FROM $lp_view_table
@@ -1199,6 +1204,18 @@ class Event
 
             $sql = "DELETE FROM $lpObjective
                     WHERE c_id = $course_id AND lp_iv_id = $lp_view_id";
+            Database::query($sql);
+        }
+
+        if (api_get_configuration_value('lp_minimum_time')) {
+            $sql = "DELETE FROM track_e_access_complete
+                    WHERE 
+                        tool = 'learnpath' AND 
+                        c_id = $course_id AND 
+                        tool_id = $lp_id AND
+                        user_id = $user_id AND
+                        session_id = $session_id
+                    ";
             Database::query($sql);
         }
 
@@ -1247,6 +1264,8 @@ class Event
             $course_id,
             $session_id
         );
+
+        return true;
     }
 
     /**
@@ -1263,13 +1282,14 @@ class Event
         $course_id,
         $session_id = 0
     ) {
-        $track_e_exercises = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
         $user_id = (int) $user_id;
         $exercise_id = (int) $exercise_id;
         $course_id = (int) $course_id;
         $session_id = (int) $session_id;
-        if (!empty($user_id) && !empty($exercise_id) && !empty($course_code)) {
-            $sql = "DELETE FROM $track_e_exercises
+
+        if (!empty($user_id) && !empty($exercise_id) && !empty($course_id)) {
+            $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
+            $sql = "DELETE FROM $table
                     WHERE
                         exe_user_id = $user_id AND
                         exe_exo_id = $exercise_id AND
@@ -1292,9 +1312,9 @@ class Event
     /**
      * Gets all exercise results (NO Exercises in LPs ) from a given exercise id, course, session.
      *
-     * @param   int     exercise id
+     * @param int $exercise_id
      * @param int $courseId
-     * @param   int     session id
+     * @param int $session_id
      *
      * @return array with the results
      */
@@ -1346,8 +1366,8 @@ class Event
     /**
      * Gets all exercise results (NO Exercises in LPs ) from a given exercise id, course, session.
      *
-     * @param int $courseId
-     * @param   int     session id
+     * @param int  $courseId
+     * @param int  $session_id
      * @param bool $get_count
      *
      * @return array with the results
@@ -1390,9 +1410,9 @@ class Event
     /**
      * Gets all exercise results (NO Exercises in LPs) from a given exercise id, course, session.
      *
-     * @param   int     exercise id
+     * @param int $user_id
      * @param int $courseId
-     * @param   int     session id
+     * @param int $session_id
      *
      * @return array with the results
      */
@@ -1435,7 +1455,7 @@ class Event
     /**
      * Gets exercise results (NO Exercises in LPs) from a given exercise id, course, session.
      *
-     * @param int    $exe_id exercise id
+     * @param int    $exe_id attempt id
      * @param string $status
      *
      * @return array with the results
@@ -1555,9 +1575,9 @@ class Event
      * Count exercise attempts (NO Exercises in LPs ) from a given exercise id, course, session.
      *
      * @param int $user_id
-     * @param   int     exercise id
+     * @param int $exercise_id
      * @param int $courseId
-     * @param   int     session id
+     * @param int $session_id
      *
      * @return array with the results
      */
@@ -2199,7 +2219,6 @@ class Event
      * @param int    $sessionId   The session in which to add the time (if any)
      * @param string $virtualTime The amount of time to be added,
      *                            in a hh:mm:ss format. If int, we consider it is expressed in hours.
-     * @param string $ip          IP address to go on record for this time record
      *
      * @return true on successful insertion, false otherwise
      */
@@ -2207,80 +2226,32 @@ class Event
         $courseId,
         $userId,
         $sessionId,
-        $virtualTime = '',
-        $ip = ''
+        $virtualTime = ''
     ) {
-        $courseTrackingTable = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
-        $time = $loginDate = $logoutDate = api_get_utc_datetime();
-
         $courseId = (int) $courseId;
         $userId = (int) $userId;
         $sessionId = (int) $sessionId;
-        $ip = Database::escape_string($ip);
 
-        // Get the current latest course connection register. We need that
-        // record to re-use the data and create a new record.
-        $sql = "SELECT *
-                FROM $courseTrackingTable
-                WHERE
-                    user_id = $userId AND
-                    c_id = $courseId  AND
-                    session_id  = $sessionId AND
-                    login_course_date > '$time' - INTERVAL 3600 SECOND
-                ORDER BY login_course_date DESC 
-                LIMIT 0,1";
-        $result = Database::query($sql);
+        $logoutDate = api_get_utc_datetime();
+        $loginDate = ChamiloApi::addOrSubTimeToDateTime(
+            $virtualTime,
+            $logoutDate,
+            false
+        );
 
-        // Ignore if we didn't find any course connection record in the last
-        // hour. In this case it wouldn't be right to add a "fake" time record.
-        if (Database::num_rows($result) > 0) {
-            // Found the latest connection
-            $row = Database::fetch_array($result);
-            $courseAccessId = $row['course_access_id'];
-            $courseAccessLoginDate = $row['login_course_date'];
-            $counter = $row['counter'];
-            $counter = $counter ? $counter : 0;
-            // Insert a new record, copy of the current one (except the logout
-            // date that we update to the current time)
-            $sql = "INSERT INTO $courseTrackingTable(
-                    c_id,
-                    user_ip, 
-                    user_id, 
-                    login_course_date, 
-                    logout_course_date, 
-                    counter, 
-                    session_id
-                ) VALUES(
-                    $courseId, 
-                    '$ip', 
-                    $userId, 
-                    '$courseAccessLoginDate', 
-                    '$logoutDate', 
-                    $counter, 
-                    $sessionId
-                )";
-            Database::query($sql);
+        $params = [
+            'login_course_date' => $loginDate,
+            'logout_course_date' => $logoutDate,
+            'session_id' => $sessionId,
+            'user_id' => $userId,
+            'counter' => 0,
+            'c_id' => $courseId,
+            'user_ip' => api_get_real_ip(),
+        ];
+        $courseTrackingTable = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
+        Database::insert($courseTrackingTable, $params);
 
-            $loginDate = ChamiloApi::addOrSubTimeToDateTime(
-                $virtualTime,
-                $courseAccessLoginDate,
-                false
-            );
-            // We update the course tracking table
-            $sql = "UPDATE $courseTrackingTable  
-                    SET 
-                        login_course_date = '$loginDate',
-                        logout_course_date = '$courseAccessLoginDate',
-                        counter = 0
-                    WHERE 
-                        course_access_id = ".intval($courseAccessId)." AND 
-                        session_id = ".$sessionId;
-            Database::query($sql);
-
-            return true;
-        }
-
-        return false;
+        return true;
     }
 
     /**
@@ -2312,8 +2283,6 @@ class Event
             return false;
         }
         $courseTrackingTable = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
-        $time = $loginDate = $logoutDate = api_get_utc_datetime();
-
         $courseId = (int) $courseId;
         $userId = (int) $userId;
         $sessionId = (int) $sessionId;
@@ -2452,5 +2421,46 @@ class Event
         $res = self::event_send_mail_filter_func($values);
         // proper logic for this filter
         return $res;
+    }
+
+    /**
+     * Register the logout of the course (usually when logging out of the platform)
+     * from the track_e_access_complete table.
+     *
+     * @param array $logInfo Information stored by local.inc.php
+     *
+     * @return bool
+     */
+    public static function registerLog($logInfo)
+    {
+        if (!Tracking::minimunTimeAvailable(api_get_session_id(), api_get_course_int_id())) {
+            return false;
+        }
+
+        $loginAs = (int) Session::read('login_as') === true;
+
+        $logInfo['user_id'] = api_get_user_id();
+        $logInfo['date_reg'] = api_get_utc_datetime();
+        $logInfo['tool'] = !empty($logInfo['tool']) ? $logInfo['tool'] : '';
+        $logInfo['tool_id'] = !empty($logInfo['tool_id']) ? (int) $logInfo['tool_id'] : 0;
+        $logInfo['tool_id_detail'] = !empty($logInfo['tool_id_detail']) ? (int) $logInfo['tool_id_detail'] : 0;
+        $logInfo['action'] = !empty($logInfo['action']) ? $logInfo['action'] : '';
+        $logInfo['action_details'] = !empty($logInfo['action_details']) ? $logInfo['action_details'] : '';
+        $logInfo['ip_user'] = api_get_real_ip();
+        $logInfo['user_agent'] = $_SERVER['HTTP_USER_AGENT'];
+        $logInfo['session_id'] = api_get_session_id();
+        $logInfo['c_id'] = api_get_course_int_id();
+        $logInfo['ch_sid'] = session_id();
+        $logInfo['login_as'] = $loginAs;
+        $logInfo['info'] = !empty($logInfo['info']) ? $logInfo['info'] : '';
+        $logInfo['url'] = $_SERVER['REQUEST_URI'];
+        $logInfo['current_id'] = Session::read('last_id', 0);
+
+        $id = Database::insert('track_e_access_complete', $logInfo);
+        if ($id && empty($logInfo['current_id'])) {
+            Session::write('last_id', $id);
+        }
+
+        return true;
     }
 }

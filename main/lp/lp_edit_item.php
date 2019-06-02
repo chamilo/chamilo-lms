@@ -22,7 +22,7 @@ $learnPath = Session::read('oLP');
 
 /* Header and action code */
 $htmlHeadXtra[] = '<script>'.$learnPath->get_js_dropdown_array().'
-$(document).on("ready", function() {
+$(function() {
     CKEDITOR.on("instanceReady", function (e) {
         showTemplates("content_lp");
     });
@@ -38,7 +38,6 @@ $learnpath_id = (int) $_REQUEST['lp_id'];
 $submit = isset($_POST['submit_button']) ? $_POST['submit_button'] : null;
 
 if (!$is_allowed_to_edit || $isStudentView) {
-    error_log('New LP - User not authorized in lp_edit_item.php');
     header('location:lp_controller.php?action=view&lp_id='.$learnpath_id.'&'.api_get_cidreq());
     exit;
 }
@@ -97,7 +96,7 @@ function confirmation(name) {
     }
 }
 
-$(document).ready(function() {
+$(function() {
     jQuery('.scrollbar-inner').scrollbar();
     expandColumnToogle('#hide_bar_template', {
         selector: '#lp_sidebar'
@@ -150,7 +149,6 @@ if (!empty($path_file) && isset($path_parts['extension']) && $path_parts['extens
 } else {
     echo $learnPath->return_new_tree();
 }
-
 echo '</div>';
 echo '<div id="doc_form" class="col-md-8">';
 

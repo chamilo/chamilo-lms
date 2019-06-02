@@ -43,7 +43,7 @@ class GlossaryManager
     }
 
     /**
-     * Get glossary term by glossary id.
+     * Get glossary description by glossary id.
      *
      * @author Isaac Flores <florespaz@bidsoftperu.com>
      *
@@ -55,17 +55,19 @@ class GlossaryManager
     {
         $table = Database::get_course_table(TABLE_GLOSSARY);
         $course_id = api_get_course_int_id();
+        $glossary_id = (int) $glossary_id;
+
         $sql = "SELECT description 
                 FROM $table
-                WHERE c_id = $course_id  AND glossary_id =".intval($glossary_id);
+                WHERE c_id = $course_id  AND glossary_id =".$glossary_id;
         $rs = Database::query($sql);
         if (Database::num_rows($rs) > 0) {
             $row = Database::fetch_array($rs);
 
             return $row['description'];
-        } else {
-            return '';
         }
+
+        return '';
     }
 
     /**
@@ -411,7 +413,7 @@ class GlossaryManager
                 Display::return_icon('save.png', get_lang('Export'), '', ICON_SIZE_MEDIUM).'</a>';
         }
 
-        if (($view == 'table') || (!isset($view))) {
+        if ($view === 'table' || !isset($view)) {
             $actionsLeft .= '<a href="index.php?'.api_get_cidreq().'&action=changeview&view=list">'.
                 Display::return_icon('view_detailed.png', get_lang('ListView'), '', ICON_SIZE_MEDIUM).'</a>';
         } else {
@@ -419,7 +421,7 @@ class GlossaryManager
                 Display::return_icon('view_text.png', get_lang('TableView'), '', ICON_SIZE_MEDIUM).'</a>';
         }
 
-        if (!api_is_anonymous()) {
+        if (api_is_allowed_to_edit(true, true, true)) {
             $actionsLeft .= Display::url(
                 Display::return_icon('export_to_documents.png', get_lang('ExportToDocArea'), [], ICON_SIZE_MEDIUM),
                 api_get_self().'?'.api_get_cidreq().'&'.http_build_query(['action' => 'export_documents'])
@@ -455,7 +457,6 @@ class GlossaryManager
                 ['GlossaryManager', 'get_glossary_data'],
                 0
             );
-            //$table->set_header(0, '', false);
             $table->set_header(0, get_lang('TermName'), true);
             $table->set_header(1, get_lang('TermDefinition'), true);
             if (api_is_allowed_to_edit(null, true)) {
@@ -504,7 +505,7 @@ class GlossaryManager
         // Database table definition
         $t_glossary = Database::get_course_table(TABLE_GLOSSARY);
         $course_id = api_get_course_int_id();
-        $session_id = intval($session_id);
+        $session_id = (int) $session_id;
         $sql_filter = api_get_session_condition($session_id, true, true);
 
         $keyword = isset($_GET['keyword']) ? Database::escape_string($_GET['keyword']) : '';
@@ -550,12 +551,12 @@ class GlossaryManager
         $t_item_propery = Database::get_course_table(TABLE_ITEM_PROPERTY);
 
         if (api_is_allowed_to_edit(null, true)) {
-            $col2 = " glossary.glossary_id	as col2, ";
+            $col2 = ' glossary.glossary_id	as col2, ';
         } else {
             $col2 = ' ';
         }
 
-        //condition for the session
+        // Condition for the session
         $session_id = api_get_session_id();
         $condition_session = api_get_session_condition(
             $session_id,
@@ -564,12 +565,13 @@ class GlossaryManager
             'glossary.session_id'
         );
 
-        $column = intval($column);
+        $column = (int) $column;
+        $from = (int) $from;
+        $number_of_items = (int) $number_of_items;
+
         if (!in_array($direction, ['DESC', 'ASC'])) {
             $direction = 'ASC';
         }
-        $from = intval($from);
-        $number_of_items = intval($number_of_items);
 
         $keyword = isset($_GET['keyword']) ? Database::escape_string($_GET['keyword']) : '';
         $keywordCondition = '';
@@ -591,7 +593,7 @@ class GlossaryManager
 					ip.c_id = ".api_get_course_int_id()."
 					$keywordCondition
 		        ORDER BY col$column $direction
-		        LIMIT $from,$number_of_items";
+		        LIMIT $from, $number_of_items";
         $res = Database::query($sql);
 
         $return = [];
@@ -607,7 +609,7 @@ class GlossaryManager
                 $array[1] = $data[1];
             }
 
-            if (isset($_GET['action']) && $_GET['action'] == 'export') {
+            if (isset($_GET['action']) && $_GET['action'] === 'export') {
                 $array[1] = api_html_entity_decode($data[1]);
             }
 
@@ -813,9 +815,9 @@ class GlossaryManager
             return;
         }
 
-        $data = GlossaryManager::get_glossary_data(
+        $data = self::get_glossary_data(
             0,
-            GlossaryManager::get_number_glossary_terms(api_get_session_id()),
+            self::get_number_glossary_terms(api_get_session_id()),
             0,
             'ASC'
         );

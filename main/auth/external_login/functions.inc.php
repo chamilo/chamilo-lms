@@ -216,7 +216,7 @@ function external_update_user($new_user)
         $autoSubscribe = explode('|', $u['courses']);
         foreach ($autoSubscribe as $code) {
             if (CourseManager::course_exists($code)) {
-                CourseManager::subscribe_user($u['user_id'], $code);
+                CourseManager::subscribeUser($u['user_id'], $code, STUDENT);
             }
         }
     }

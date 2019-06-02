@@ -83,9 +83,9 @@ class GradebookUtils
         $course_code,
         $weight
     ) {
-        $course_code = Database::escape_string($course_code);
+        $link_id = (int) $link_id;
         if (!empty($link_id)) {
-            $link_id = intval($link_id);
+            $course_code = Database::escape_string($course_code);
             $sql = 'UPDATE '.Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINK).'
                     SET weight = '."'".api_float_val($weight)."'".'
                     WHERE course_code = "'.$course_code.'" AND id = '.$link_id;
@@ -350,8 +350,8 @@ class GradebookUtils
         $courseParams = api_get_cidreq_params($eval->get_course_code(), $eval->getSessionId());
 
         if ($message_eval === false && api_is_allowed_to_edit(null, true)) {
-            $visibility_icon = ($eval->is_visible() == 0) ? 'invisible' : 'visible';
-            $visibility_command = ($eval->is_visible() == 0) ? 'set_visible' : 'set_invisible';
+            $visibility_icon = $eval->is_visible() == 0 ? 'invisible' : 'visible';
+            $visibility_command = $eval->is_visible() == 0 ? 'set_visible' : 'set_invisible';
             if ($is_locked && !api_is_platform_admin()) {
                 $modify_icons = Display::return_icon(
                     'edit_na.png',
@@ -378,6 +378,7 @@ class GradebookUtils
                     ICON_SIZE_SMALL
                 ).
                 '</a>';
+
             if (api_is_allowed_to_edit(null, true)) {
                 $modify_icons .= '&nbsp;<a href="gradebook_showlog_eval.php?visiblelog='.$eval->get_id().'&selectcat='.$selectcat.' &'.$courseParams.'">'.
                     Display::return_icon(
@@ -387,6 +388,14 @@ class GradebookUtils
                         ICON_SIZE_SMALL
                     ).
                     '</a>';
+
+                $allowStats = api_get_configuration_value('allow_gradebook_stats');
+                if ($allowStats) {
+                    $modify_icons .= Display::url(
+                        Display::return_icon('reload.png', get_lang('GenerateStats')),
+                        api_get_self().'?itemId='.$eval->get_id().'&action=generate_eval_stats&selectcat='.$selectcat.'&'.$courseParams
+                    );
+                }
             }
 
             if ($is_locked && !api_is_platform_admin()) {
@@ -438,8 +447,8 @@ class GradebookUtils
         );
 
         if ($message_link === false) {
-            $visibility_icon = ($link->is_visible() == 0) ? 'invisible' : 'visible';
-            $visibility_command = ($link->is_visible() == 0) ? 'set_visible' : 'set_invisible';
+            $visibility_icon = $link->is_visible() == 0 ? 'invisible' : 'visible';
+            $visibility_command = $link->is_visible() == 0 ? 'set_visible' : 'set_invisible';
 
             if ($is_locked && !api_is_platform_admin()) {
                 $modify_icons = Display::return_icon(
@@ -466,6 +475,7 @@ class GradebookUtils
                     ICON_SIZE_SMALL
                 ).
                 '</a>';
+
             $modify_icons .= '&nbsp;<a href="gradebook_showlog_link.php?visiblelink='.$link->get_id().'&selectcat='.$selectcat.'&'.$courseParams.'">'.
                 Display::return_icon(
                     'history.png',
@@ -474,6 +484,14 @@ class GradebookUtils
                     ICON_SIZE_SMALL
                 ).
                 '</a>';
+
+            $allowStats = api_get_configuration_value('allow_gradebook_stats');
+            if ($allowStats && $link->get_type() == LINK_EXERCISE) {
+                $modify_icons .= Display::url(
+                    Display::return_icon('reload.png', get_lang('GenerateStats')),
+                    api_get_self().'?itemId='.$link->get_id().'&action=generate_link_stats&selectcat='.$selectcat.'&'.$courseParams
+                );
+            }
 
             //If a work is added in a gradebook you can only delete the link in the work tool
             if ($is_locked && !api_is_platform_admin()) {
@@ -567,10 +585,12 @@ class GradebookUtils
     {
         $course_table = Database::get_main_table(TABLE_MAIN_COURSE);
         $tbl_grade_links = Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
+        $id_link = (int) $id_link;
+
         $sql = 'SELECT c.id FROM '.$course_table.' c
                 INNER JOIN '.$tbl_grade_links.' l
                 ON c.code = l.course_code
-                WHERE l.id='.intval($id_link).' OR l.category_id='.intval($id_link);
+                WHERE l.id='.$id_link.' OR l.category_id='.$id_link;
         $res = Database::query($sql);
         $array = Database::fetch_array($res, 'ASSOC');
 
@@ -615,8 +635,7 @@ class GradebookUtils
             $mainCourseCategory
         );
 
-        $offset = isset($_GET['offset']) ? $_GET['offset'] : '0';
-        $offset = intval($offset);
+        $offset = isset($_GET['offset']) ? (int) $_GET['offset'] : 0;
 
         // step 2: generate rows: students
         $datagen->category = $cat;
@@ -651,40 +670,6 @@ class GradebookUtils
         $current_value = $data;
     }
 
-    /**
-     * XML-parser: handle end of element.
-     */
-    public static function element_end($parser, $data)
-    {
-        global $user;
-        global $users;
-        global $current_value;
-        switch ($data) {
-            case 'Result':
-                $users[] = $user;
-                break;
-            default:
-                $user[$data] = $current_value;
-                break;
-        }
-    }
-
-    /**
-     * XML-parser: handle start of element.
-     */
-    public static function element_start($parser, $data)
-    {
-        global $user;
-        global $current_tag;
-        switch ($data) {
-            case 'Result':
-                $user = [];
-                break;
-            default:
-                $current_tag = $data;
-        }
-    }
-
     public static function overwritescore($resid, $importscore, $eval_max)
     {
         $result = Result::load($resid);
@@ -695,30 +680,6 @@ class GradebookUtils
         $result[0]->set_score($importscore);
         $result[0]->save();
         unset($result);
-    }
-
-    /**
-     * Read the XML-file.
-     *
-     * @param string $file Path to the XML-file
-     *
-     * @return array All user information read from the file
-     */
-    public static function parse_xml_data($file)
-    {
-        global $current_tag;
-        global $current_value;
-        global $user;
-        global $users;
-        $users = [];
-        $parser = xml_parser_create();
-        xml_set_element_handler($parser, 'element_start', 'element_end');
-        xml_set_character_data_handler($parser, "character_data");
-        xml_parser_set_option($parser, XML_OPTION_CASE_FOLDING, false);
-        xml_parse($parser, file_get_contents($file));
-        xml_parser_free($parser);
-
-        return $users;
     }
 
     /**
@@ -925,11 +886,11 @@ class GradebookUtils
             $sql = "SELECT * FROM $t 
                     WHERE course_code = '".Database::escape_string($course_code)."' ";
             if (!empty($session_id)) {
-                $sql .= " AND session_id = ".(int) $session_id;
+                $sql .= " AND session_id = ".$session_id;
             } else {
-                $sql .= " AND (session_id IS NULL OR session_id = 0) ";
+                $sql .= ' AND (session_id IS NULL OR session_id = 0) ';
             }
-            $sql .= " ORDER BY id";
+            $sql .= ' ORDER BY id ';
             $res = Database::query($sql);
             if (Database::num_rows($res) < 1) {
                 //there is no unique category for this course+session combination,
@@ -1360,7 +1321,7 @@ class GradebookUtils
      */
     public static function updateLinkWeight($linkId, $name, $weight)
     {
-        $linkId = intval($linkId);
+        $linkId = (int) $linkId;
         $weight = api_float_val($weight);
         $course_id = api_get_course_int_id();
 
@@ -1426,7 +1387,7 @@ class GradebookUtils
     public static function updateEvaluationWeight($id, $weight)
     {
         $table_evaluation = Database::get_main_table(TABLE_MAIN_GRADEBOOK_EVALUATION);
-        $id = intval($id);
+        $id = (int) $id;
         $evaluation = new Evaluation();
         $evaluation->addEvaluationLog($id);
         $sql = 'UPDATE '.$table_evaluation.'
@@ -1447,7 +1408,7 @@ class GradebookUtils
         $userId,
         $includeNonPublicCertificates = true
     ) {
-        $userId = intval($userId);
+        $userId = (int) $userId;
         $courseList = [];
         $courses = CourseManager::get_courses_list_by_user_id($userId);
 
@@ -1509,7 +1470,7 @@ class GradebookUtils
      */
     public static function getUserCertificatesInSessions($userId, $includeNonPublicCertificates = true)
     {
-        $userId = intval($userId);
+        $userId = (int) $userId;
         $sessionList = [];
         $sessions = SessionManager::get_sessions_by_user($userId, true, true);
 
@@ -1581,16 +1542,19 @@ class GradebookUtils
     }
 
     /**
-     * @param int   $userId
-     * @param array $cats
-     * @param bool  $saveToFile
-     * @param bool  $saveToHtmlFile
-     * @param array $studentList
-     * @param PDF   $pdf
+     * @param GradebookTable $gradebooktable
+     * @param array          $courseInfo
+     * @param int            $userId
+     * @param array          $cats
+     * @param bool           $saveToFile
+     * @param bool           $saveToHtmlFile
+     * @param array          $studentList
+     * @param PDF            $pdf
      *
      * @return string
      */
     public static function generateTable(
+        $courseInfo,
         $userId,
         $cats,
         $saveToFile = false,
@@ -1598,9 +1562,7 @@ class GradebookUtils
         $studentList = [],
         $pdf = null
     ) {
-        $courseInfo = api_get_course_info();
         $userInfo = api_get_user_info($userId);
-
         $cat = $cats[0];
         $allcat = $cats[0]->get_subcategories(
             $userId,
@@ -1618,6 +1580,7 @@ class GradebookUtils
                 $loadStats = [2];
             }
         }
+
         $gradebooktable = new GradebookTable(
             $cat,
             $allcat,
@@ -1634,9 +1597,6 @@ class GradebookUtils
         $gradebooktable->userId = $userId;
 
         if (api_is_allowed_to_edit(null, true)) {
-            /*$gradebooktable->td_attributes = [
-                4 => 'class=centered',
-            ];*/
         } else {
             $gradebooktable->td_attributes = [
                 3 => 'class=centered',
@@ -1646,7 +1606,6 @@ class GradebookUtils
                 7 => 'class=centered',
             ];
         }
-
         $table = $gradebooktable->return_table();
         $graph = $gradebooktable->getGraph();
 
@@ -1674,7 +1633,7 @@ class GradebookUtils
             $table.
             $graph.
             '<br />'.get_lang('Feedback').'<br />
-            <textarea rows="5" cols="100" ></textarea>';
+            <textarea rows="5" cols="100">&nbsp;</textarea>';
 
         $result = $pdf->html_to_pdf_with_template(
             $content,
@@ -1683,6 +1642,7 @@ class GradebookUtils
         );
 
         if ($saveToHtmlFile) {
+            return $result;
             file_put_contents($file, $result);
 
             return $file;

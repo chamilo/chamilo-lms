@@ -31,12 +31,6 @@ if ($allowedFieldsConfiguration !== false) {
     $allowedFields['extra_fields'] = isset($allowedFieldsConfiguration['extra_fields']) ? $allowedFieldsConfiguration['extra_fields'] : [];
 }
 
-$gMapsPlugin = GoogleMapsPlugin::create();
-if ($gMapsPlugin->get('enable_api') === 'true') {
-    $key = $gMapsPlugin->get('api_key');
-    $htmlHeadXtra[] = '<script type="text/javascript" src="//maps.googleapis.com/maps/api/js?sensor=true&key='.$key.'" ></script>';
-}
-
 $extraFieldsLoaded = false;
 $htmlHeadXtra[] = api_get_password_checker_js('#username', '#pass1');
 // User is not allowed if Terms and Conditions are disabled and
@@ -342,13 +336,28 @@ if ($user_already_registered_show_terms === false &&
         if (isset($allowedFields['extra_fields']) && is_array($allowedFields['extra_fields'])) {
             $extraFieldList = $allowedFields['extra_fields'];
         }
+        $requiredFields = api_get_configuration_value('required_extra_fields_in_inscription');
+
+        if (!empty($requiredFields) && $requiredFields['options']) {
+            $requiredFields = $requiredFields['options'];
+        }
+
         $returnParams = $extraField->addElements(
             $form,
             0,
             [],
             false,
             false,
-            $extraFieldList
+            $extraFieldList,
+            [],
+            false,
+            false,
+            false,
+            [],
+            [],
+            [],
+            false,
+            $requiredFields
         );
         $extraFieldsLoaded = true;
     }
@@ -577,7 +586,7 @@ $allowDoubleValidation = api_get_configuration_value('allow_double_validation_in
 $formContainsSendButton = false;
 if ($allowDoubleValidation && $showTerms == false) {
     $htmlHeadXtra[] = '<script>
-        $(document).ready(function() {
+        $(function() {
             $("#pre_validation").click(function() {
                 $(this).hide();
                 $("#final_button").show();
@@ -812,7 +821,7 @@ if ($form->validate()) {
                         ]
                     )
                     ) {
-                        CourseManager::subscribe_user(
+                        CourseManager::subscribeUser(
                             $user_id,
                             $course_info['code']
                         );
@@ -862,7 +871,7 @@ if ($form->validate()) {
                 }
 
                 // 2. set account inactive
-                Usermanager::disable($user_id);
+                UserManager::disable($user_id);
 
                 // 3. exit the page
                 unset($user_id);
@@ -878,7 +887,7 @@ if ($form->validate()) {
                 UserManager::sendUserConfirmationMail($thisUser);
 
                 // 2. set account inactive
-                Usermanager::disable($user_id);
+                UserManager::disable($user_id);
 
                 // 3. exit the page
                 unset($user_id);
@@ -1116,7 +1125,7 @@ if ($form->validate()) {
                         ]
                     )
                     ) {
-                        CourseManager::subscribe_user(
+                        CourseManager::subscribeUser(
                             $user_id,
                             $course_info['code']
                         );

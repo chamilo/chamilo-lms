@@ -34,7 +34,7 @@ $columns = [
     get_lang('Email'),
     get_lang('ManHours'),
     get_lang('CertificateGenerated'),
-    get_lang('Approved'),
+    get_lang('LearnpathsDone'),
     get_lang('CourseAdvance'),
 ];
 

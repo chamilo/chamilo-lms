@@ -44,6 +44,16 @@ if ($form->validate()) {
     }
     $eval->set_visible($visible);
     $eval->save();
+
+    $logInfo = [
+        'tool' => TOOL_GRADEBOOK,
+        'tool_id' => 0,
+        'tool_id_detail' => 0,
+        'action' => 'edit-eval',
+        'action_details' => '',
+    ];
+    Event::registerLog($logInfo);
+
     header('Location: '.Category::getUrl().'editeval=&selectcat='.$eval->get_category_id());
     exit;
 }
@@ -54,7 +64,7 @@ $interbreadcrumb[] = [
 ];
 
 $htmlHeadXtra[] = '<script>
-$(document).ready( function() {
+$(function() {
     $("#hid_category_id").change(function() {
        $("#hid_category_id option:selected").each(function () {
            var cat_id = $(this).val();

@@ -18,6 +18,7 @@ app/logs/*
 
 # Courses
 app/courses/*
+!app/courses/proxy.php
 
 # Home
 app/home/*

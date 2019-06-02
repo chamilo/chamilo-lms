@@ -1,7 +1,11 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use ChamiloSession as Session;
+
 require_once __DIR__.'/../inc/global.inc.php';
+
+api_protect_course_script(true);
 
 $type = $_REQUEST['type'];
 $src = Security::remove_XSS($_REQUEST['source']);
@@ -11,6 +15,27 @@ if (empty($type) || empty($src)) {
 
 $iframe = '';
 switch ($type) {
+    case 'download':
+        /** @var learnpath $learnPath */
+        $learnPath = Session::read('oLP');
+        $itemId = isset($_GET['lp_item_id']) ? $_GET['lp_item_id'] : '';
+        if (!$learnPath || empty($itemId)) {
+            api_not_allowed();
+        }
+
+        $file = learnpath::rl_get_resource_link_for_learnpath(
+            api_get_course_int_id(),
+            $learnPath->get_id(),
+            $itemId,
+            $learnPath->get_view_id()
+        );
+
+        $iframe = Display::return_message(
+            Display::url(get_lang('Download'), $file, ['class' => 'btn btn-primary']),
+            'info',
+            false
+        );
+        break;
     case 'youtube':
         $src = '//www.youtube.com/embed/'.$src;
         $iframe .= '<div id="content" style="width: 700px ;margin-left:auto; margin-right:auto;"><br />';

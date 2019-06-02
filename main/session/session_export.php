@@ -14,6 +14,7 @@ $this_section = SECTION_PLATFORM_ADMIN;
 api_protect_admin_script(true);
 
 $session_id = isset($_GET['session_id']) ? intval($_GET['session_id']) : 0;
+
 $formSent = 0;
 $errorMsg = '';
 

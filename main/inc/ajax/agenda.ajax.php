@@ -19,6 +19,15 @@ if ($type == 'course') {
     api_protect_course_script(true);
 }
 
+$logInfo = [
+    'tool' => TOOL_CALENDAR_EVENT,
+    'tool_id' => 0,
+    'tool_id_detail' => 0,
+    'action' => $action,
+    'info' => '',
+];
+Event::registerLog($logInfo);
+
 $agenda = new Agenda($type);
 // get filtered type
 $type = $agenda->getType();

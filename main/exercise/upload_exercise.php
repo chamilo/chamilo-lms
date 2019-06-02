@@ -14,6 +14,8 @@ $help_content = 'exercise_upload';
 
 require_once __DIR__.'/../inc/global.inc.php';
 
+api_protect_course_script(true);
+
 $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
 $debug = false;
 $origin = api_get_origin();
@@ -23,7 +25,7 @@ if (!$is_allowed_to_edit) {
 
 $this_section = SECTION_COURSES;
 $htmlHeadXtra[] = "<script>
-$(document).ready( function(){
+$(function(){
     $('#user_custom_score').click(function() {
         $('#options').toggle();
     });
@@ -34,8 +36,8 @@ $(document).ready( function(){
 lp_upload_quiz_action_handling();
 
 $interbreadcrumb[] = [
-    "url" => "exercise.php?".api_get_cidreq(),
-    "name" => get_lang('Exercises'),
+    'url' => 'exercise.php?'.api_get_cidreq(),
+    'name' => get_lang('Exercises'),
 ];
 
 // Display the header
@@ -64,7 +66,7 @@ function lp_upload_quiz_actions()
 
 function lp_upload_quiz_main()
 {
-    $lp_id = isset($_GET['lp_id']) ? intval($_GET['lp_id']) : null;
+    $lp_id = isset($_GET['lp_id']) ? (int) $_GET['lp_id'] : null;
 
     $form = new FormValidator(
         'upload',
@@ -119,8 +121,6 @@ function lp_upload_quiz_main()
 
     $form->addProgress();
     $form->addButtonUpload(get_lang('Upload'), 'submit_upload_quiz');
-
-    // Display the upload field
     $form->display();
 }
 
@@ -129,12 +129,17 @@ function lp_upload_quiz_main()
  */
 function lp_upload_quiz_action_handling()
 {
-    $_course = api_get_course_info();
-    $courseId = $_course['real_id'];
-
     if (!isset($_POST['submit_upload_quiz'])) {
         return;
     }
+
+    $_course = api_get_course_info();
+
+    if (empty($_course)) {
+        return false;
+    }
+
+    $courseId = $_course['real_id'];
 
     // Get the extension of the document.
     $path_info = pathinfo($_FILES['user_upload_quiz']['name']);
@@ -232,7 +237,7 @@ function lp_upload_quiz_action_handling()
                 $scoreList[] = $cellScoreInfo->getValue();
                 break;
             case 'NoNegativeScore':
-                $noNegativeScoreList[] = $cellDataInfo->getValue();
+                $noNegativeScoreList[] = $cellScoreInfo->getValue();
                 break;
             case 'Category':
                 $categoryList[] = $cellDataInfo->getValue();
@@ -278,15 +283,6 @@ function lp_upload_quiz_action_handling()
         $quiz_id = $exercise->save();
 
         if ($quiz_id) {
-            // insert into the item_property table
-            api_item_property_update(
-                $_course,
-                TOOL_QUIZ,
-                $quiz_id,
-                'QuizAdded',
-                api_get_user_id()
-            );
-
             // Import questions.
             for ($i = 0; $i < $numberQuestions; $i++) {
                 // Question name
@@ -360,7 +356,6 @@ function lp_upload_quiz_action_handling()
                         );
                     }
                 }
-
                 switch ($detectQuestionType) {
                     case GLOBAL_MULTIPLE_ANSWER:
                     case MULTIPLE_ANSWER:
@@ -407,18 +402,15 @@ function lp_upload_quiz_action_handling()
                                 // Fixing scores:
                                 switch ($detectQuestionType) {
                                     case GLOBAL_MULTIPLE_ANSWER:
-                                        if (!$correct) {
-                                            if (isset($noNegativeScoreList[$i])) {
-                                                if (strtolower($noNegativeScoreList[$i]) == 'x') {
-                                                    $score = 0;
-                                                } else {
-                                                    $score = $scoreList[$i] * -1;
-                                                }
-                                            }
+                                        if ($correct) {
+                                            $score = abs($scoreList[$i]);
                                         } else {
-                                            $score = $scoreList[$i];
+                                            if (isset($noNegativeScoreList[$i]) && $noNegativeScoreList[$i] == 'x') {
+                                                $score = 0;
+                                            } else {
+                                                $score = -abs($scoreList[$i]);
+                                            }
                                         }
-
                                         $score /= $numberRightAnswers;
                                         break;
                                     case UNIQUE_ANSWER:
@@ -446,7 +438,7 @@ function lp_upload_quiz_action_handling()
 
                             $questionObj = Question::read(
                                 $question_id,
-                                $courseId
+                                $_course
                             );
 
                             if ($questionObj) {
@@ -466,7 +458,7 @@ function lp_upload_quiz_action_handling()
                         break;
                     case FREE_ANSWER:
                         $globalScore = isset($scoreList[$i]) ? $scoreList[$i] : null;
-                        $questionObj = Question::read($question_id, $courseId);
+                        $questionObj = Question::read($question_id, $_course);
                         if ($questionObj) {
                             $questionObj->updateWeighting($globalScore);
                             $questionObj->save($exercise);
@@ -499,7 +491,7 @@ function lp_upload_quiz_action_handling()
 
                         $objAnswer->save();
 
-                        $questionObj = Question::read($question_id, $courseId);
+                        $questionObj = Question::read($question_id, $_course);
                         if ($questionObj) {
                             $questionObj->updateWeighting($globalScore);
                             $questionObj->save($exercise);
@@ -530,7 +522,7 @@ function lp_upload_quiz_action_handling()
                             $counter++;
                         }
                         $objAnswer->save();
-                        $questionObj = Question::read($question_id, $courseId);
+                        $questionObj = Question::read($question_id, $_course);
                         if ($questionObj) {
                             $questionObj->updateWeighting($globalScore);
                             $questionObj->save($exercise);
@@ -543,7 +535,8 @@ function lp_upload_quiz_action_handling()
         $lpObject = Session::read('lpobject');
 
         if (!empty($lpObject)) {
-            $oLP = unserialize($lpObject);
+            /** @var learnpath $oLP */
+            $oLP = UnserializeApi::unserialize('lp', $lpObject);
             if (is_object($oLP)) {
                 if ((empty($oLP->cc)) || $oLP->cc != api_get_course_id()) {
                     $oLP = null;
@@ -624,5 +617,5 @@ function detectQuestionType($answers_data)
 
 if ($origin != 'learnpath') {
     //so we are not in learnpath tool
-    Display :: display_footer();
+    Display::display_footer();
 }

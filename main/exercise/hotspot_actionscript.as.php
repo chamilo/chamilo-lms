@@ -12,9 +12,13 @@ use ChamiloSession as Session;
  *
  * @version $Id: admin.php 10680 2007-01-11 21:26:23Z pcool $
  */
-session_cache_limiter("none");
+session_cache_limiter('none');
 
 require_once __DIR__.'/../inc/global.inc.php';
+
+api_protect_course_script(true);
+
+$_course = api_get_course_info();
 require api_get_path(LIBRARY_PATH).'geometry.lib.php';
 
 // set vars

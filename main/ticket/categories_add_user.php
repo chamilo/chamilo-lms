@@ -8,7 +8,7 @@ require_once __DIR__.'/../inc/global.inc.php';
 
 api_protect_admin_script(true);
 
-$categoryId = isset($_REQUEST['id']) ? intval($_REQUEST['id']) : 0;
+$categoryId = isset($_REQUEST['id']) ? (int) $_REQUEST['id'] : 0;
 $projectId = isset($_GET['project_id']) ? (int) $_GET['project_id'] : '';
 
 $categoryInfo = TicketManager::getCategory($categoryId);

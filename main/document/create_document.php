@@ -17,7 +17,7 @@ $this_section = SECTION_COURSES;
 $groupRights = Session::read('group_member_with_upload_rights');
 $htmlHeadXtra[] = '
 <script>
-$(document).ready(function() {
+$(function() {
     $(".scrollbar-light").scrollbar();
 
     expandColumnToogle("#hide_bar_template", {
@@ -63,10 +63,9 @@ if (isset($_REQUEST['certificate']) && $_REQUEST['certificate'] == 'true') {
     $is_certificate_mode = true;
 }
 
+$nameTools = get_lang('CreateDocument');
 if ($is_certificate_mode) {
     $nameTools = get_lang('CreateCertificate');
-} else {
-    $nameTools = get_lang('CreateDocument');
 }
 
 /* Constants and variables */
@@ -171,7 +170,7 @@ if ($relative_url == '') {
 
 $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
 $editorConfig = [
-    'ToolbarSet' => ($is_allowed_to_edit ? 'Documents' : 'DocumentsStudent'),
+    'ToolbarSet' => $is_allowed_to_edit ? 'Documents' : 'DocumentsStudent',
     'Width' => '100%',
     'Height' => '400',
     'cols-size' => [2, 10, 0],

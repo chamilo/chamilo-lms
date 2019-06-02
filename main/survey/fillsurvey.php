@@ -99,8 +99,20 @@ if ($invitationcode == 'auto' && isset($_GET['scode'])) {
     if ($isAnonymous) {
         $autoInvitationcode = 'auto-ANONY_'.md5(time())."-$surveyCode";
     } else {
-        // New invitation code from userid
-        $autoInvitationcode = "auto-$userid-$surveyCode";
+        $invitations = SurveyManager::getUserInvitationsForSurveyInCourse(
+            $userid,
+            $surveyCode,
+            $courseInfo['real_id'],
+            $sessionId
+        );
+        $lastInvitation = current($invitations);
+
+        if (!$lastInvitation) {
+            // New invitation code from userid
+            $autoInvitationcode = "auto-$userid-$surveyCode";
+        } else {
+            $autoInvitationcode = $lastInvitation->getInvitationCode();
+        }
     }
 
     // The survey code must exist in this course, or the URL is invalid
@@ -109,9 +121,9 @@ if ($invitationcode == 'auto' && isset($_GET['scode'])) {
     $result = Database::query($sql);
     if (Database :: num_rows($result) > 0) {
         // Check availability
-        $row = Database :: fetch_array($result, 'ASSOC');
-        $tempdata = SurveyManager :: get_survey($row['survey_id']);
-        check_time_availability($tempdata);
+        $row = Database::fetch_array($result, 'ASSOC');
+        $tempdata = SurveyManager::get_survey($row['survey_id']);
+        SurveyManager::checkTimeAvailability($tempdata);
         // Check for double invitation records (insert should be done once)
         $sql = "SELECT user
                 FROM $table_survey_invitation
@@ -157,8 +169,17 @@ if (!isset($_POST['finish_survey']) &&
     ) ||
     ($survey_invitation['answered'] == 1 && !isset($_GET['user_id']))
 ) {
-    api_not_allowed(true, get_lang('YouAlreadyFilledThisSurvey'));
+    api_not_allowed(true, Display::return_message(get_lang('YouAlreadyFilledThisSurvey')));
 }
+
+$logInfo = [
+    'tool' => TOOL_SURVEY,
+    'tool_id' => $survey_invitation['survey_invitation_id'],
+    'tool_id_detail' => 0,
+    'action' => 'invitationcode',
+    'action_details' => $invitationcode,
+];
+Event::registerLog($logInfo);
 
 // Checking if there is another survey with this code.
 // If this is the case there will be a language choice
@@ -173,8 +194,7 @@ if (Database::num_rows($result) > 1) {
     if ($_POST['language']) {
         $survey_invitation['survey_id'] = $_POST['language'];
     } else {
-        // Header
-        Display :: display_header(get_lang('ToolSurvey'));
+        Display::display_header(get_lang('ToolSurvey'));
         $frmLangUrl = api_get_self().'?'.api_get_cidreq().'&'
             .http_build_query([
                 'course' => Security::remove_XSS($_GET['course']),
@@ -202,6 +222,9 @@ $survey_data = SurveyManager::get_survey($survey_invitation['survey_id']);
 if (empty($survey_data)) {
     api_not_allowed(true);
 }
+
+// Checking time availability
+SurveyManager::checkTimeAvailability($survey_data);
 $survey_data['survey_id'] = $survey_invitation['survey_id'];
 
 if ($survey_data['survey_type'] == '3') {
@@ -210,6 +233,10 @@ if ($survey_data['survey_type'] == '3') {
         'survey/meeting.php?cidReq='.$courseInfo['code'].'&id_session='.$sessionId.'&invitationcode='.Security::remove_XSS($invitationcode)
     );
     exit;
+}
+
+if (!empty($survey_data['anonymous'])) {
+    define('USER_IN_ANON_SURVEY', true);
 }
 
 // Storing the answers
@@ -515,7 +542,7 @@ if ($survey_data['form_fields'] != '' &&
     // the $jquery_ready_content variable collects all functions
     // that will be load in the $(document).ready javascript function
     $htmlHeadXtra[] = '<script>
-    $(document).ready(function(){
+    $(function() {
         '.$jquery_ready_content.'
     });
     </script>';
@@ -524,10 +551,6 @@ if ($survey_data['form_fields'] != '' &&
     $form->setDefaults($user_data);
 }
 
-// Checking time availability
-check_time_availability($survey_data);
-
-// Header
 Display::display_header(get_lang('ToolSurvey'));
 
 // Displaying the survey title and subtitle (appears on every page)
@@ -628,7 +651,7 @@ if (isset($_POST['finish_survey'])) {
         $survey_invitation['c_id']
     );
 
-    if ($courseInfo) {
+    if ($courseInfo && !api_is_anonymous()) {
         echo Display::toolbarButton(
             get_lang('ReturnToCourseHomepage'),
             api_get_course_url($courseInfo['code']),
@@ -648,8 +671,7 @@ if ($survey_data['shuffle'] == 1) {
     $shuffle = ' BY RAND() ';
 }
 
-if (
-    (isset($_GET['show']) && $_GET['show'] != '') ||
+if ((isset($_GET['show']) && $_GET['show'] != '') ||
     isset($_POST['personality'])
 ) {
     // Getting all the questions for this page and add them to a
@@ -696,7 +718,7 @@ if (
         if (array_key_exists($_GET['show'], $paged_questions)) {
             if (isset($_GET['user_id'])) {
                 // Get the user into survey answer table (user or anonymus)
-                $my_user_id = ($survey_data['anonymous'] == 1) ? $surveyUserFromSession : api_get_user_id();
+                $my_user_id = $survey_data['anonymous'] == 1 ? $surveyUserFromSession : api_get_user_id();
 
                 $sql = "SELECT
                             survey_question.survey_group_sec1,
@@ -771,10 +793,6 @@ if (
                     $questions[$row['sort']]['sort'] = $row['sort'];
                     $questions[$row['sort']]['is_required'] = $allowRequiredSurveyQuestions && $row['is_required'];
                 }
-                /*} else {
-                    // If the type is a pagebreak we are finished loading the questions for this page
-                    break;
-                }*/
                 $counter++;
             }
         }
@@ -1250,7 +1268,9 @@ if (isset($questions) && is_array($questions)) {
         $display = new $ch_type();
         // @todo move this in a function.
         $form->addHtml('<div class="survey_question '.$ch_type.'">');
-        $form->addHtml('<h5 class="title">'.$questionNumber.'. '.strip_tags($question['survey_question']).'</h5>');
+        $form->addHtml('<div style="float:left; font-weight: bold; margin-right: 5px;"> '.$questionNumber.'. </div>');
+        $form->addHtml('<div>'.Security::remove_XSS($question['survey_question']).'</div> ');
+
         $userAnswerData = SurveyUtil::get_answers_of_question_by_user($question['survey_id'], $question['question_id']);
         $finalAnswer = null;
 
@@ -1285,7 +1305,7 @@ $form->addHtml('<div class="start-survey">');
 if ($survey_data['survey_type'] == '0') {
     if ($survey_data['show_form_profile'] == 0) {
         // The normal survey as always
-        if (($show < $numberOfPages)) {
+        if ($show < $numberOfPages) {
             if ($show == 0) {
                 $form->addButton(
                     'next_survey_page',
@@ -1314,7 +1334,7 @@ if ($survey_data['survey_type'] == '0') {
         // The normal survey as always but with the form profile
         if (isset($_GET['show'])) {
             $numberOfPages = count($paged_questions);
-            if (($show < $numberOfPages)) { //$show = $_GET['show'] + 1
+            if ($show < $numberOfPages) {
                 if ($show == 0) {
                     $form->addButton(
                         'next_survey_page',
@@ -1400,41 +1420,3 @@ if ($survey_data['survey_type'] == '0') {
 $form->addHtml('</div>');
 $form->display();
 Display::display_footer();
-
-/**
- * Check whether this survey has ended. If so, display message and exit rhis script.
- *
- * @param array $surveyData Survey data
- */
-function check_time_availability($surveyData)
-{
-    $allowSurveyAvailabilityDatetime = api_get_configuration_value('allow_survey_availability_datetime');
-    $utcZone = new DateTimeZone('UTC');
-    $startDate = new DateTime($surveyData['start_date'], $utcZone);
-    $endDate = new DateTime($surveyData['end_date'], $utcZone);
-    $currentDate = new DateTime('now', $utcZone);
-    if (!$allowSurveyAvailabilityDatetime) {
-        $currentDate->modify('today');
-    }
-    if ($currentDate < $startDate) {
-        api_not_allowed(
-            true,
-            Display:: return_message(
-                get_lang('SurveyNotAvailableYet'),
-                'warning',
-                false
-            )
-        );
-    }
-
-    if ($currentDate > $endDate) {
-        api_not_allowed(
-            true,
-            Display:: return_message(
-                get_lang('SurveyNotAvailableAnymore'),
-                'warning',
-                false
-            )
-        );
-    }
-}

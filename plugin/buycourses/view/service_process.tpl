@@ -19,10 +19,25 @@
                                 <img alt="{{ service.name }}" class="img-rounded img-responsive"
                                      src="{{ service.image ? service.image : 'session_default.png'|icon() }}">
                             </a>
+                            {% if service.tax_enable %}
+                            <div class="price-details-tax">
+                                {{ 'Price'|get_plugin_lang('BuyCoursesPlugin')}} :
+                                {{ service.currency == 'BRL' ? 'R$' : service.currency }} {{ service.price_without_tax }}
+                                <br>
+                                {{ service.tax_name }} ({{ service.tax_perc_show }}%):
+                                {{ service.currency == 'BRL' ? 'R$' : service.currency }} {{ service.tax_amount }}
+                            </div>
+                            <div class="price">
+                                {{ 'Total'|get_plugin_lang('BuyCoursesPlugin')}} :
+                                {{ service.currency == 'BRL' ? 'R$' : service.currency }} {{ service.price_with_tax }}
+                            </div>
+                            {% else %}
                             <div class="price">
                                 {{ 'Total'|get_plugin_lang('BuyCoursesPlugin')}} :
                                 {{ service.currency == 'BRL' ? 'R$' : service.currency }} {{ service.price }}
                             </div>
+                            {% endif %}
+                            
                         </div>
                         <div class="col-md-9">
                             <div class="buy-item">
@@ -54,7 +69,11 @@
                                     <li>
                                         <em class="fa-li fa fa-money" aria-hidden="true"></em>
                                         {{ 'Price'|get_plugin_lang('BuyCoursesPlugin') }}
-                                        : {{ service.currency == 'BRL' ? 'R$' : service.currency }} {{ service.price }}
+                                        {% if service.tax_enable %}
+                                            : {{ service.currency == 'BRL' ? 'R$' : service.currency }} {{ service.price_with_tax }}
+                                        {% else %}
+                                            : {{ service.currency == 'BRL' ? 'R$' : service.currency }} {{ service.price }}
+                                        {% endif %}
                                         / {{ service.duration_days == 0 ? 'NoLimit'|get_lang  : service.duration_days ~ ' ' ~ 'Days'|get_lang }}
                                     </li>
                                     <li><em class="fa-li fa fa-user" aria-hidden="true"></em> {{ service.owner_name }}</li>

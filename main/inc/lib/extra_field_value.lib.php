@@ -5,6 +5,7 @@ use Chamilo\CoreBundle\Entity\ExtraField as EntityExtraField;
 use Chamilo\CoreBundle\Entity\ExtraFieldRelTag;
 use Chamilo\CoreBundle\Entity\ExtraFieldValues;
 use Chamilo\CoreBundle\Entity\Tag;
+use ChamiloSession as Session;
 
 /**
  * Class ExtraFieldValue
@@ -80,12 +81,19 @@ class ExtraFieldValue extends Model
      * @param array $params              array for the insertion into the *_field_values table
      * @param bool  $onlySubmittedFields Only save parameters in the $param array
      * @param bool  $showQuery
+     * @param array $saveOnlyThisFields
+     * @param array $avoidFields         do not insert/modify this field
      *
      * @return mixed false on empty params, void otherwise
      * @assert (array()) === false
      */
-    public function saveFieldValues($params, $onlySubmittedFields = false, $showQuery = false)
-    {
+    public function saveFieldValues(
+        $params,
+        $onlySubmittedFields = false,
+        $showQuery = false,
+        $saveOnlyThisFields = [],
+        $avoidFields = []
+    ) {
         foreach ($params as $key => $value) {
             $found = strpos($key, '__persist__');
 
@@ -127,6 +135,18 @@ class ExtraFieldValue extends Model
                 continue;
             }
 
+            if (!empty($avoidFields)) {
+                if (in_array($field_variable, $avoidFields)) {
+                    continue;
+                }
+            }
+
+            if (!empty($saveOnlyThisFields)) {
+                if (!in_array($field_variable, $saveOnlyThisFields)) {
+                    continue;
+                }
+            }
+
             $value = '';
             if (isset($params['extra_'.$field_variable])) {
                 $value = $params['extra_'.$field_variable];
@@ -142,6 +162,21 @@ class ExtraFieldValue extends Model
             $dirPermissions = api_get_permissions_for_new_directories();
 
             switch ($extraFieldInfo['field_type']) {
+                case ExtraField::FIELD_TYPE_GEOLOCALIZATION_COORDINATES:
+                case ExtraField::FIELD_TYPE_GEOLOCALIZATION:
+                    if (!empty($value)) {
+                        if (isset($params['extra_'.$extraFieldInfo['variable'].'_coordinates'])) {
+                            $value = $value.'::'.$params['extra_'.$extraFieldInfo['variable'].'_coordinates'];
+                        }
+                        $newParams = [
+                            'item_id' => $params['item_id'],
+                            'field_id' => $extraFieldInfo['id'],
+                            'value' => $value,
+                            'comment' => $comment,
+                        ];
+                        self::save($newParams, $showQuery);
+                    }
+                    break;
                 case ExtraField::FIELD_TYPE_TAG:
                     if ($type == EntityExtraField::USER_FIELD_TYPE) {
                         UserManager::delete_user_tags(
@@ -169,9 +204,7 @@ class ExtraFieldValue extends Model
                     foreach ($currentTags as $extraFieldtag) {
                         $em->remove($extraFieldtag);
                     }
-
                     $em->flush();
-
                     $tagValues = is_array($value) ? $value : [$value];
                     $tags = [];
 
@@ -289,6 +322,8 @@ class ExtraFieldValue extends Model
                             break;
                     }
 
+                    $cleanedName = api_replace_dangerous_char($value['name']);
+                    $fileName = ExtraField::FIELD_TYPE_FILE."_{$params['item_id']}_$cleanedName";
                     if (!file_exists($fileDir)) {
                         mkdir($fileDir, $dirPermissions, true);
                     }
@@ -325,7 +360,6 @@ class ExtraFieldValue extends Model
                         'value' => $fieldToSave,
                         'comment' => $comment,
                     ];
-
                     $this->save($newParams);
 
                     break;
@@ -896,12 +930,56 @@ class ExtraFieldValue extends Model
                 ORDER BY s.value";
 
         $result = Database::query($sql);
-
+        $idList = [];
         if (Database::num_rows($result)) {
-            return Database::store_result($result, 'ASSOC');
+            $result = Database::store_result($result, 'ASSOC');
+            $finalResult = [];
+            foreach ($result as $item) {
+                $finalResult[$item['id']] = $item;
+            }
+            $idList = array_column($result, 'id');
         }
 
-        return false;
+        $em = Database::getManager();
+
+        $extraField = new ExtraField($this->type);
+        $allData = $extraField->get_all(['filter = ?' => 1]);
+        $allResults = [];
+        foreach ($allData as $field) {
+            if (in_array($field['id'], $idList)) {
+                $allResults[] = $finalResult[$field['id']];
+            } else {
+                if ($field['field_type'] == ExtraField::FIELD_TYPE_TAG) {
+                    $tagResult = [];
+                    $tags = $em->getRepository('ChamiloCoreBundle:ExtraFieldRelTag')
+                        ->findBy(
+                            [
+                                'fieldId' => $field['id'],
+                                'itemId' => $itemId,
+                            ]
+                        );
+                    if ($tags) {
+                        /** @var ExtraFieldRelTag $extraFieldTag */
+                        foreach ($tags as $extraFieldTag) {
+                            /** @var \Chamilo\CoreBundle\Entity\Tag $tag */
+                            $tag = $em->find('ChamiloCoreBundle:Tag', $extraFieldTag->getTagId());
+                            $tagResult[] = [
+                                'id' => $extraFieldTag->getTagId(),
+                                'value' => $tag->getTag(),
+                            ];
+                        }
+                    }
+                    $allResults[] = [
+                        'value' => $tagResult,
+                        'variable' => $field['variable'],
+                        'field_type' => $field['field_type'],
+                        'id' => $field['id'],
+                    ];
+                }
+            }
+        }
+
+        return $allResults;
     }
 
     /**

@@ -1,5 +1,5 @@
 {% extends 'layout/layout_1_col.tpl'|get_template %}
-{% import 'macro/macro.tpl'|get_template as display %}
+{% import 'default/macro/macro.tpl' as display %}
 
 {% block content %}
 <div class="row">
@@ -13,8 +13,6 @@
         {% if term %}
             {{ display.panel('TermsAndConditions'|get_lang, term.content, term.date_text ) }}
         {% endif %}
-
-
     </div>
 </div>
 {% endblock %}

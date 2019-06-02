@@ -21,14 +21,12 @@ require_once __DIR__.'/../inc/global.inc.php';
 
 $this_section = SECTION_COURSES;
 
-// Notification for unauthorized people.
 api_protect_course_script(true);
 
 $nameTools = get_lang('ForumCategories');
 $origin = api_get_origin();
+$_user = api_get_user_info();
 
-/* Including necessary files */
-require_once 'forumconfig.inc.php';
 require_once 'forumfunction.inc.php';
 
 $forumId = isset($_GET['forum']) ? (int) $_GET['forum'] : 0;
@@ -134,7 +132,7 @@ if (!empty($groupId)) {
 /* Header */
 $htmlHeadXtra[] = <<<JS
     <script>
-    $(document).on('ready', function() {
+    $(function() {
         $('#reply-add-attachment').on('click', function(e) {
             e.preventDefault();
 
@@ -155,11 +153,17 @@ $my_action = isset($_GET['action']) ? Security::remove_XSS($_GET['action']) : ''
 $my_post = isset($_GET['post']) ? Security::remove_XSS($_GET['post']) : '';
 $my_elements = isset($_SESSION['formelements']) ? $_SESSION['formelements'] : '';
 
+$logInfo = [
+    'tool' => TOOL_FORUM,
+    'tool_id' => $forumId,
+    'tool_id_detail' => $threadId,
+    'action' => !empty($my_action) ? $my_action : 'reply',
+];
+Event::registerLog($logInfo);
+
 $form = show_add_post_form(
     $current_forum,
-    $forum_setting,
     $my_action,
-    $my_post,
     $my_elements
 );
 

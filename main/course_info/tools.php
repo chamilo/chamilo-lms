@@ -19,7 +19,7 @@ if (!api_is_allowed_to_edit()) {
 }
 
 $action = isset($_GET['action']) ? $_GET['action'] : '';
-$id = isset($_GET['id']) ? intval($_GET['id']) : '';
+$id = isset($_GET['id']) ? (int) $_GET['id'] : '';
 
 $toolName = get_lang('CustomizeIcons');
 

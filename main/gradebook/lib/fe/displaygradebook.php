@@ -23,7 +23,8 @@ class DisplayGradebook
             $header = '<div class="actions">';
             if ($page != 'statistics') {
                 $header .= '<a href="'.Category::getUrl().'selectcat='.$selectcat.'">'.
-                    Display::return_icon(('back.png'), get_lang('FolderView'), '', ICON_SIZE_MEDIUM).'</a>';
+                    Display::return_icon('back.png', get_lang('FolderView'), '', ICON_SIZE_MEDIUM)
+                    .'</a>';
                 if (($evalobj->get_course_code() != null) && !$evalobj->has_results()) {
                     $header .= '<a href="gradebook_add_result.php?'.api_get_cidreq().'&selectcat='.$selectcat.'&selecteval='.$evalobj->get_id().'">
     				'.Display::return_icon('evaluation_rate.png', get_lang('AddResult'), '', ICON_SIZE_MEDIUM).'</a>';
@@ -45,20 +46,13 @@ class DisplayGradebook
                             Display::return_icon('delete.png', get_lang('DeleteResult'), '', ICON_SIZE_MEDIUM).'</a>';
                     }
                 }
-
                 $header .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&print=&selecteval='.$evalobj->get_id().'" target="_blank">'.
                     Display::return_icon('printer.png', get_lang('Print'), '', ICON_SIZE_MEDIUM).'</a>';
             } else {
                 $header .= '<a href="gradebook_view_result.php?'.api_get_cidreq().'&selecteval='.Security::remove_XSS($_GET['selecteval']).'"> '.
-                    Display::return_icon(('back.png'), get_lang('FolderView'), '', ICON_SIZE_MEDIUM).'</a>';
+                    Display::return_icon('back.png', get_lang('FolderView'), '', ICON_SIZE_MEDIUM).'</a>';
             }
             $header .= '</div>';
-        }
-
-        if ($evalobj->is_visible() == '1') {
-            $visible = get_lang('Yes');
-        } else {
-            $visible = get_lang('No');
         }
 
         $scoredisplay = ScoreDisplay::instance();
@@ -87,6 +81,7 @@ class DisplayGradebook
                 }
             }
         }
+
         $description = '';
         if (!$evalobj->get_description() == '') {
             $description = get_lang('Description').' :<b> '.$evalobj->get_description().'</b><br>';
@@ -322,7 +317,7 @@ class DisplayGradebook
                 if (!empty($score)) {
                     $divide = $score[1] == 0 ? 1 : $score[1];
                     $item_value = $score[0] / $divide * $item->get_weight();
-                    $item_value_total += $scoredisplay->format_score($item_value);
+                    $item_value_total += $item_value;
                 }
             }
 
@@ -400,6 +395,28 @@ class DisplayGradebook
         $actionsRight = '';
         $my_api_cidreq = api_get_cidreq();
         if (api_is_allowed_to_edit(null, true)) {
+            if ($selectcat != '0') {
+                $my_category = $catobj->showAllCategoryInfo($catobj->get_id());
+                if ($my_api_cidreq == '') {
+                    $my_api_cidreq = 'cidReq='.$my_category['course_code'];
+                }
+                if ($show_add_link && !$message_resource) {
+                    $actionsLeft .= '<a href="gradebook_add_eval.php?'.$my_api_cidreq.'&selectcat='.$catobj->get_id().'" >'.
+                        Display::return_icon('new_evaluation.png', get_lang('NewEvaluation'), '',
+                            ICON_SIZE_MEDIUM).'</a>';
+                    $cats = Category::load($selectcat);
+
+                    if ($cats[0]->get_course_code() != null && !$message_resource) {
+                        $actionsLeft .= '<a href="gradebook_add_link.php?'.$my_api_cidreq.'&selectcat='.$catobj->get_id().'">'.
+                            Display::return_icon('new_online_evaluation.png', get_lang('MakeLink'), '',
+                                ICON_SIZE_MEDIUM).'</a>';
+                    } else {
+                        $actionsLeft .= '<a href="gradebook_add_link_select_course.php?'.$my_api_cidreq.'&selectcat='.$catobj->get_id().'">'.
+                            Display::return_icon('new_online_evaluation.png', get_lang('MakeLink'), '',
+                                ICON_SIZE_MEDIUM).'</a>';
+                    }
+                }
+            }
             if (empty($grade_model_id) || $grade_model_id == -1) {
                 $actionsLeft .= '<a href="gradebook_add_cat.php?'.api_get_cidreq().'&selectcat='.$catobj->get_id().'">'.
                     Display::return_icon(
@@ -410,24 +427,6 @@ class DisplayGradebook
                     ).'</a></td>';
             }
             if ($selectcat != '0') {
-                $my_category = $catobj->showAllCategoryInfo($catobj->get_id());
-                if ($my_api_cidreq == '') {
-                    $my_api_cidreq = 'cidReq='.$my_category['course_code'];
-                }
-                if ($show_add_link && !$message_resource) {
-                    $actionsLeft .= '<a href="gradebook_add_eval.php?'.$my_api_cidreq.'&selectcat='.$catobj->get_id().'" >'.
-                        Display::return_icon('new_evaluation.png', get_lang('NewEvaluation'), '', ICON_SIZE_MEDIUM).'</a>';
-                    $cats = Category::load($selectcat);
-
-                    if ($cats[0]->get_course_code() != null && !$message_resource) {
-                        $actionsLeft .= '<a href="gradebook_add_link.php?'.$my_api_cidreq.'&selectcat='.$catobj->get_id().'">'.
-                            Display::return_icon('new_online_evaluation.png', get_lang('MakeLink'), '', ICON_SIZE_MEDIUM).'</a>';
-                    } else {
-                        $actionsLeft .= '<a href="gradebook_add_link_select_course.php?'.$my_api_cidreq.'&selectcat='.$catobj->get_id().'">'.
-                            Display::return_icon('new_online_evaluation.png', get_lang('MakeLink'), '', ICON_SIZE_MEDIUM).'</a>';
-                    }
-                }
-
                 if (!$message_resource) {
                     $actionsLeft .= '<a href="gradebook_flatview.php?'.$my_api_cidreq.'&selectcat='.$catobj->get_id().'">'.
                         Display::return_icon('statistics.png', get_lang('FlatView'), '', ICON_SIZE_MEDIUM).'</a>';

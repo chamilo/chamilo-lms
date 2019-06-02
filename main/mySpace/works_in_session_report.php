@@ -38,10 +38,12 @@ foreach ($sessionList as $sessionInfo) {
     $selectSession->addOption($sessionInfo['name'], $sessionInfo['id']);
 }
 
-if (isset($_GET['session']) && intval($_GET['session'])) {
-    $form->setDefaults(['session' => intval($_GET['session'])]);
+$sessionId = isset($_GET['session']) ? (int) $_GET['session'] : 0;
+$session = null;
+if (!empty($sessionId)) {
+    $form->setDefaults(['session' => $sessionId]);
     /** @var Session $session */
-    $session = $em->find('ChamiloCoreBundle:Session', intval($_GET['session']));
+    $session = $em->find('ChamiloCoreBundle:Session', $sessionId);
 }
 
 $coursesInfo = [];

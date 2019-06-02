@@ -305,7 +305,7 @@ class Statistics
             } else {
                 if (!empty($row[2])) {
                     $originalData = str_replace('\\', '', $row[2]);
-                    $row[2] = unserialize($originalData);
+                    $row[2] = UnserializeApi::unserialize('not_allowed_classes', $originalData);
                     if (is_array($row[2]) && !empty($row[2])) {
                         $row[2] = implode_with_key(', ', $row[2]);
                     } else {
@@ -629,12 +629,13 @@ class Statistics
     /**
      * get the number of recent logins.
      *
-     * @param bool $distinct        Whether to only give distinct users stats, or *all* logins
+     * @param bool $distinct            Whether to only give distinct users stats, or *all* logins
      * @param int  $sessionDuration
+     * @param bool $completeMissingDays Whether to fill the daily gaps (if any) when getting a list of logins
      *
      * @return array
      */
-    public static function getRecentLoginStats($distinct = false, $sessionDuration = 0)
+    public static function getRecentLoginStats($distinct = false, $sessionDuration = 0, $completeMissingDays = true)
     {
         $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
         $access_url_rel_user_table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
@@ -650,6 +651,7 @@ class Statistics
         $date = new DateTime($now);
         $date->sub(new DateInterval('P15D'));
         $newDate = $date->format('Y-m-d h:i:s');
+        $totalLogin = self::buildDatesArray($newDate, $now, true);
 
         $field = 'login_id';
         if ($distinct) {
@@ -665,9 +667,9 @@ class Statistics
                 GROUP BY date(login_date)";
 
         $res = Database::query($sql);
-        $totalLogin = [];
         while ($row = Database::fetch_array($res, 'ASSOC')) {
-            $totalLogin[$row['login_date']] = $row['number'];
+            $monthAndDay = substr($row['login_date'], 5, 5);
+            $totalLogin[$monthAndDay] = $row['number'];
         }
 
         return $totalLogin;
@@ -764,7 +766,8 @@ class Statistics
         while ($obj = Database::fetch_object($res)) {
             $result[$obj->course_language] = $obj->number_of_courses;
         }
-        self::printStats(get_lang('CountCourseByLanguage'), $result, true);
+
+        return $result;
     }
 
     /**
@@ -1072,5 +1075,209 @@ class Statistics
             $totalLogin,
             false
         );
+    }
+
+    /**
+     * Returns an array with indexes as the 'yyyy-mm-dd' format of each date
+     * within the provided range (including limits). Dates are assumed to be
+     * given in UTC.
+     *
+     * @param string $startDate  Start date, in Y-m-d or Y-m-d h:i:s format
+     * @param string $endDate    End date, in Y-m-d or Y-m-d h:i:s format
+     * @param bool   $removeYear Whether to remove the year in the results (for easier reading)
+     *
+     * @return array|bool False on error in the params, array of [date1 => 0, date2 => 0, ...] otherwise
+     */
+    public static function buildDatesArray($startDate, $endDate, $removeYear = false)
+    {
+        if (strlen($startDate) > 10) {
+            $startDate = substr($startDate, 0, 10);
+        }
+        if (strlen($endDate) > 10) {
+            $endDate = substr($endDate, 0, 10);
+        }
+        if (!preg_match('/\d\d\d\d-\d\d-\d\d/', $startDate)) {
+            return false;
+        }
+        if (!preg_match('/\d\d\d\d-\d\d-\d\d/', $startDate)) {
+            return false;
+        }
+        $startTimestamp = strtotime($startDate);
+        $endTimestamp = strtotime($endDate);
+        $list = [];
+        for ($time = $startTimestamp; $time < $endTimestamp; $time += 86400) {
+            $datetime = api_get_utc_datetime($time);
+            if ($removeYear) {
+                $datetime = substr($datetime, 5, 5);
+            } else {
+                $dateTime = substr($datetime, 0, 10);
+            }
+            $list[$datetime] = 0;
+        }
+
+        return $list;
+    }
+
+    /**
+     * Prepare the JS code to load a chart.
+     *
+     * @param string $url     URL for AJAX data generator
+     * @param string $type    bar, line, pie, etc
+     * @param string $options Additional options to the chart (see chart-specific library)
+     * @param string A JS code for loading the chart together with a call to AJAX data generator
+     */
+    public static function getJSChartTemplate($url, $type = 'pie', $options = '', $elementId = 'canvas')
+    {
+        $chartCode = '
+        <script>
+        $(function() {
+            $.ajax({
+                url: "'.$url.'",
+                type: "POST",
+                success: function(data) {
+                    Chart.defaults.global.responsive = true;
+                    var ctx = document.getElementById("'.$elementId.'").getContext("2d");
+                    var myLoginChart = new Chart(ctx, {
+                        type: "'.$type.'",
+                        data: data,
+                        options: {'.$options.'}
+                    });
+                }
+            });
+        });
+        </script>';
+
+        return $chartCode;
+    }
+
+    /**
+     * @param string $startDate
+     * @param string $endDate
+     *
+     * @return array
+     */
+    private static function getLoginsByDate($startDate, $endDate)
+    {
+        /** @var DateTime $startDate */
+        $startDate = api_get_utc_datetime("$startDate 00:00:00");
+        /** @var DateTime $endDate */
+        $endDate = api_get_utc_datetime("$endDate 23:59:59");
+
+        if (empty($startDate) || empty($endDate)) {
+            return [];
+        }
+
+        $tblUser = Database::get_main_table(TABLE_MAIN_USER);
+        $tblLogin = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
+        $urlJoin = '';
+        $urlWhere = '';
+
+        if (api_is_multiple_url_enabled()) {
+            $tblUrlUser = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
+
+            $urlJoin = "INNER JOIN $tblUrlUser au ON u.id = au.user_id";
+            $urlWhere = 'AND au.access_url_id = '.api_get_current_access_url_id();
+        }
+
+        $sql = "SELECT u.id,
+                    u.firstname,
+                    u.lastname,
+                    u.username,
+                    SUM(TIMESTAMPDIFF(SECOND, l.login_date, l.logout_date)) AS time_count
+                FROM $tblUser u
+                INNER JOIN $tblLogin l ON u.id = l.login_user_id
+                $urlJoin
+                WHERE l.login_date BETWEEN '$startDate' AND '$endDate'
+                $urlWhere
+                GROUP BY u.id";
+
+        $stmt = Database::query($sql);
+        $result = Database::store_result($stmt, 'ASSOC');
+
+        return $result;
+    }
+
+    /**
+     * Display the Logins By Date report and allow export its result to XLS.
+     */
+    public static function printLoginsByDate()
+    {
+        if (isset($_GET['export']) && 'xls' === $_GET['export']) {
+            $result = self::getLoginsByDate($_GET['start'], $_GET['end']);
+            $data = [[get_lang('Username'), get_lang('FirstName'), get_lang('LastName'), get_lang('TotalTime')]];
+
+            foreach ($result as $i => $item) {
+                $data[] = [
+                    $item['username'],
+                    $item['firstname'],
+                    $item['lastname'],
+                    api_time_to_hms($item['time_count']),
+                ];
+            }
+
+            Export::arrayToXls($data);
+
+            exit;
+        }
+
+        echo Display::page_header(get_lang('LoginsByDate'));
+
+        $actions = '';
+        $content = '';
+
+        $form = new FormValidator('frm_logins_by_date', 'get');
+        $form->addDateRangePicker(
+            'daterange',
+            get_lang('DateRange'),
+            true,
+            ['format' => 'YYYY-MM-DD', 'timePicker' => 'false', 'validate_format' => 'Y-m-d']
+        );
+        $form->addHidden('report', 'logins_by_date');
+        $form->addButtonFilter(get_lang('Search'));
+
+        if ($form->validate()) {
+            $values = $form->exportValues();
+
+            $result = self::getLoginsByDate($values['daterange_start'], $values['daterange_end']);
+
+            if (!empty($result)) {
+                $actions = Display::url(
+                    Display::return_icon('excel.png', get_lang('ExportToXls'), [], ICON_SIZE_MEDIUM),
+                    api_get_self().'?'.http_build_query(
+                        [
+                            'report' => 'logins_by_date',
+                            'export' => 'xls',
+                            'start' => Security::remove_XSS($values['daterange_start']),
+                            'end' => Security::remove_XSS($values['daterange_end']),
+                        ]
+                    )
+                );
+            }
+
+            $table = new HTML_Table(['class' => 'data_table']);
+            $table->setHeaderContents(0, 0, get_lang('Username'));
+            $table->setHeaderContents(0, 1, get_lang('FirstName'));
+            $table->setHeaderContents(0, 2, get_lang('LastName'));
+            $table->setHeaderContents(0, 3, get_lang('TotalTime'));
+
+            foreach ($result as $i => $item) {
+                $table->setCellContents($i + 1, 0, $item['username']);
+                $table->setCellContents($i + 1, 1, $item['firstname']);
+                $table->setCellContents($i + 1, 2, $item['lastname']);
+                $table->setCellContents($i + 1, 3, api_time_to_hms($item['time_count']));
+            }
+
+            $table->setColAttributes(0, ['class' => 'text-center']);
+            $table->setColAttributes(3, ['class' => 'text-center']);
+            $content = $table->toHtml();
+        }
+
+        $form->display();
+
+        if (!empty($actions)) {
+            echo  Display::toolbarAction('logins_by_date_toolbar', [$actions]);
+        }
+
+        echo $content;
     }
 }

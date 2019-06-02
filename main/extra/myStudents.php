@@ -323,17 +323,7 @@ $isDrhOfCourse = CourseManager::isUserSubscribedInCourseAsDrh(
 
 if (api_is_drh() && !api_is_platform_admin()) {
     if (!empty($studentId)) {
-        if (api_drh_can_access_all_session_content()) {
-            //@todo securize drh with student id
-            /*$users = SessionManager::getAllUsersFromCoursesFromAllSessionFromStatus('drh_all', api_get_user_id());
-            $userList = [];
-            foreach ($users as $user) {
-                $userList[] = $user['user_id'];
-            }
-            if (!in_array($student_id, $userList)) {
-                api_not_allowed(true);
-            }*/
-        } else {
+        if (!api_drh_can_access_all_session_content()) {
             if (!($isDrhOfCourse)) {
                 if (api_is_drh() &&
                     !UserManager::is_user_followed_by_drh($studentId, api_get_user_id())

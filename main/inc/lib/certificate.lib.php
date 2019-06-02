@@ -67,7 +67,6 @@ class Certificate extends Model
         if ($this->user_id) {
             // Need to be called before any operation
             $this->check_certificate_path();
-
             // To force certification generation
             if ($this->force_certificate_generation) {
                 $this->generate([], $sendNotification);
@@ -227,14 +226,18 @@ class Certificate extends Model
         if (isset($my_category[0]) && !empty($categoryId) &&
             $my_category[0]->is_certificate_available($this->user_id)
         ) {
-            $courseInfo = api_get_course_info($my_category[0]->get_course_code());
+            /** @var Category $category */
+            $category = $my_category[0];
+
+            $courseInfo = api_get_course_info($category->get_course_code());
             $courseId = $courseInfo['real_id'];
-            $sessionId = $my_category[0]->get_session_id();
+            $sessionId = $category->get_session_id();
 
             $skill = new Skill();
+
             $skill->addSkillToUser(
                 $this->user_id,
-                $this->certificate_data['cat_id'],
+                $category,
                 $courseId,
                 $sessionId
             );
@@ -243,13 +246,13 @@ class Certificate extends Model
                 if (!empty($this->certificate_data)) {
                     $new_content_html = GradebookUtils::get_user_certificate_content(
                         $this->user_id,
-                        $my_category[0]->get_course_code(),
-                        $my_category[0]->get_session_id(),
+                        $category->get_course_code(),
+                        $category->get_session_id(),
                         false,
                         $params['hide_print_button']
                     );
 
-                    if ($my_category[0]->get_id() == strval(intval($this->certificate_data['cat_id']))) {
+                    if ($category->get_id() == $categoryId) {
                         $name = $this->certificate_data['path_certificate'];
                         $myPathCertificate = $this->certification_user_path.basename($name);
 
@@ -288,7 +291,7 @@ class Certificate extends Model
                             $result = @file_put_contents($myPathCertificate, $newContent);
                             if ($result) {
                                 // Updating the path
-                                self::updateUserCertificateInfo(
+                                $this->updateUserCertificateInfo(
                                     $this->certificate_data['cat_id'],
                                     $this->user_id,
                                     $path_certificate
@@ -309,7 +312,7 @@ class Certificate extends Model
                                             $subject = get_lang('NotificationCertificateSubject');
                                             $message = nl2br(get_lang('NotificationCertificateTemplate'));
                                             $score = $this->certificate_data['score_certificate'];
-                                            Certificate::sendNotification(
+                                            self::sendNotification(
                                                 $subject,
                                                 $message,
                                                 api_get_user_info($this->user_id),
@@ -473,13 +476,18 @@ class Certificate extends Model
         $path_certificate,
         $updateCertificateData = true
     ) {
-        if (!UserManager::is_user_certified($categoryId, $user_id) && $updateCertificateData) {
+        $categoryId = (int) $categoryId;
+        $user_id = (int) $user_id;
+
+        if ($updateCertificateData &&
+            !UserManager::is_user_certified($categoryId, $user_id)
+        ) {
             $table = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CERTIFICATE);
             $now = api_get_utc_datetime();
             $sql = 'UPDATE '.$table.' SET 
                         path_certificate="'.Database::escape_string($path_certificate).'",
                         created_at = "'.$now.'"
-                    WHERE cat_id="'.intval($categoryId).'" AND user_id="'.intval($user_id).'" ';
+                    WHERE cat_id = "'.$categoryId.'" AND user_id="'.$user_id.'" ';
             Database::query($sql);
         }
     }
@@ -801,6 +809,7 @@ class Certificate extends Model
         $tplContent->assign('sessions', $sessionsApproved);
         $tplContent->assign('courses', $coursesApproved);
         $tplContent->assign('time_spent_in_lps', api_time_to_hms($totalTimeInLearningPaths));
+        $tplContent->assign('time_spent_in_lps_in_hours', round($totalTimeInLearningPaths / 3600, 1));
         $layoutContent = $tplContent->get_template('gradebook/custom_certificate.tpl');
         $content = $tplContent->fetch($layoutContent);
 
@@ -833,5 +842,85 @@ class Certificate extends Model
             false,
             false
         );
+    }
+
+    /**
+     * @param int $userId
+     *
+     * @return array
+     */
+    public static function getCertificateByUser($userId)
+    {
+        $userId = (int) $userId;
+        if (empty($userId)) {
+            return [];
+        }
+
+        $table = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CERTIFICATE);
+        $sql = "SELECT * FROM $table
+                WHERE user_id= $userId";
+        $rs = Database::query($sql);
+
+        return Database::store_result($rs, 'ASSOC');
+    }
+
+    /**
+     * @param int $userId
+     */
+    public static function generateUserSkills($userId)
+    {
+        $controller = new IndexManager(get_lang('MyCourses'));
+        $courseAndSessions = $controller->returnCoursesAndSessions($userId, true, null, true, false);
+
+        if (isset($courseAndSessions['courses']) && !empty($courseAndSessions['courses'])) {
+            foreach ($courseAndSessions['courses'] as $course) {
+                $cats = Category::load(
+                    null,
+                    null,
+                    $course['code'],
+                    null,
+                    null,
+                    null,
+                    false
+                );
+
+                if (isset($cats[0]) && !empty($cats[0])) {
+                    Category::generateUserCertificate(
+                        $cats[0]->get_id(),
+                        $userId
+                    );
+                }
+            }
+        }
+
+        if (isset($courseAndSessions['sessions']) && !empty($courseAndSessions['sessions'])) {
+            foreach ($courseAndSessions['sessions'] as $sessionCategory) {
+                if (isset($sessionCategory['sessions'])) {
+                    foreach ($sessionCategory['sessions'] as $sessionData) {
+                        if (!empty($sessionData['courses'])) {
+                            $sessionId = $sessionData['session_id'];
+                            foreach ($sessionData['courses'] as $courseData) {
+                                $cats = Category:: load(
+                                    null,
+                                    null,
+                                    $courseData['course_code'],
+                                    null,
+                                    null,
+                                    $sessionId,
+                                    false
+                                );
+
+                                if (isset($cats[0]) && !empty($cats[0])) {
+                                    Category::generateUserCertificate(
+                                        $cats[0]->get_id(),
+                                        $userId
+                                    );
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 }

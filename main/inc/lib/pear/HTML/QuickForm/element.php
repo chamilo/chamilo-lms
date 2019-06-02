@@ -39,6 +39,7 @@ class HTML_QuickForm_element extends HTML_Common
     private $icon;
     private $template;
     private $customFrozenTemplate = '';
+    protected $inputSize;
 
     /**
      * Label of the field
@@ -82,12 +83,12 @@ class HTML_QuickForm_element extends HTML_Common
     /**
      * Class constructor
      *
-     * @param    string     Name of the element
-     * @param    mixed      Label(s) for the element
-     * @param    mixed      Associative array of tag attributes or HTML attributes name="value" pairs
-     * @since    1.0
-     * @access   public
+     * @param string     Name of the element
+     * @param string|array      Label(s) for the element
+     * @param mixed      Associative array of tag attributes or HTML attributes name="value" pairs
+     *
      * @return   void
+     * @since    1.0
      */
     public function __construct($elementName = null, $elementLabel = null, $attributes = null)
     {
@@ -375,7 +376,7 @@ class HTML_QuickForm_element extends HTML_Common
      * @access    public
      * @return    string
      */
-    function getLabel()
+    public function getLabel()
     {
         return $this->_label;
     }
@@ -485,7 +486,7 @@ class HTML_QuickForm_element extends HTML_Common
     * @access public
     * @return void
     */
-    function accept(&$renderer, $required=false, $error=null)
+    public function accept(&$renderer, $required=false, $error=null)
     {
         $renderer->renderElement($this, $required, $error);
     }
@@ -499,7 +500,7 @@ class HTML_QuickForm_element extends HTML_Common
     * @access private
     * @return void
     */
-    function _generateId()
+    public function _generateId()
     {
         static $idx = 1;
 
@@ -516,7 +517,7 @@ class HTML_QuickForm_element extends HTML_Common
     * @access public
     * @return mixed
     */
-    function exportValue(&$submitValues, $assoc = false)
+    public function exportValue(&$submitValues, $assoc = false)
     {
         $value = $this->_findValue($submitValues);
         if (null === $value) {
@@ -533,7 +534,7 @@ class HTML_QuickForm_element extends HTML_Common
     * @access private
     * @return mixed
     */
-    function _prepareValue($value, $assoc)
+    public function _prepareValue($value, $assoc)
     {
         if (null === $value) {
             return null;
@@ -583,5 +584,52 @@ class HTML_QuickForm_element extends HTML_Common
         $this->customFrozenTemplate = $customFrozenTemplate;
 
         return $this;
+    }
+
+    /**
+     * @return null
+     */
+    public function getInputSize()
+    {
+        return $this->inputSize;
+    }
+
+    /**
+     * @param null $inputSize
+     */
+    public function setInputSize($inputSize)
+    {
+        $this->inputSize = $inputSize;
+    }
+
+    /**
+     * @return array
+     */
+    public function calculateSize()
+    {
+        $size = $this->getColumnsSize();
+
+        if (empty($size)) {
+            $sizeTemp = $this->getInputSize();
+            if (empty($size)) {
+                $sizeTemp = 8;
+            }
+            $size = array(2, $sizeTemp, 2);
+        } else {
+            if (is_array($size)) {
+                if (count($size) != 3) {
+                    $sizeTemp = $this->getInputSize();
+                    if (empty($size)) {
+                        $sizeTemp = 8;
+                    }
+                    $size = array(2, $sizeTemp, 2);
+                }
+            } else {
+                // else just keep the $size array as received
+                $size = array(2, (int) $size, 2);
+            }
+        }
+
+        return $size;
     }
 }

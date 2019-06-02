@@ -262,8 +262,6 @@ $(document).ready(function() {
         },
 		// Add event
 		select: function(start, end, jsEvent, view) {
-            var start_date = start.format("YYYY-MM-DD h:mm");
-            var end_date = end.format("YYYY-MM-DD h:mm");
             var diffDays = moment(end).diff(start, 'days');
 
             var allDay = true;
@@ -284,7 +282,10 @@ $(document).ready(function() {
 			// Update chz-select
 			//$("#users_to_send").trigger("chosen:updated");
 			if ({{ can_add_events }} == 1) {
-				var url = '{{ web_agenda_ajax_url }}&a=add_event&start='+start.format("YYYY-MM-DD HH:mm:00")+'&end='+end.format("YYYY-MM-DD HH:mm:00")+'&all_day='+allDay+'&view='+view.name;
+			    var startEn = start.clone().locale('en'),
+                    endEn = end.clone().locale('en');
+
+				var url = '{{ web_agenda_ajax_url }}&a=add_event&start='+startEn.format("YYYY-MM-DD HH:mm:00")+'&end='+endEn.format("YYYY-MM-DD HH:mm:00")+'&all_day='+allDay+'&view='+view.name;
 			    var start_date_value = start.format('{{ js_format_date }}');
                 $('#start_date').html(start_date_value);
 

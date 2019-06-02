@@ -69,6 +69,7 @@ class HTML_Common
      * @access    private
      */
     var $_comment = '';
+    public $freezeSeeOnlySelected;
 
     /**
      * Class constructor
@@ -79,6 +80,7 @@ class HTML_Common
      */
     public function __construct($attributes = null, $tabOffset = 0)
     {
+        $this->freezeSeeOnlySelected = false;
         $this->setAttributes($attributes);
         $this->setTabOffset($tabOffset);
     } // end constructor
@@ -143,7 +145,7 @@ class HTML_Common
             foreach ($attributes as $key => $value) {
             	// Modified by Ivan Tcholakov, 16-MAR-2010
                 $value = @htmlspecialchars($value, ENT_COMPAT, $charset);
-                $strAttr .= ' ' . $key . '= "' . $value. '"';
+                $strAttr .= ' ' . $key . '="' . $value. '"';
             }
         }
 

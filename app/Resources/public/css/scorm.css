@@ -331,17 +331,6 @@ See https://support.chamilo.org/issues/6976
     margin-bottom: 5px;
 }
 
-.image-avatar .media-left img,
-.image-avatar img {
-    border: 1px solid #DDD;
-    border-radius: 5px;
-}
-
-.image-avatar {
-    padding-top: 10px;
-    padding-bottom: 10px;
-}
-
 .scorm-title {
     padding: 10px;
     display: inline-block;
@@ -359,8 +348,27 @@ See https://support.chamilo.org/issues/6976
     color: #686f7a;
 }
 
+.image-avatar {
+    padding-top: 10px;
+    padding-bottom: 10px;
+    margin-left: 3rem;
+    margin-right: 1rem;
+}
+.image-avatar .media-author .media-author-avatar{
+    text-align: center;
+    margin-bottom: 1.5rem;
+}
+.image-avatar .media-author .media-author-avatar img{
+    border: 1px solid #cdcdcd;
+    border-radius: 10px;
+}
+
+.lp-view-tabs{
+    margin-top: 4px;
+}
+
 #learning_path_right_zone .lp-view-tabs li a {
-    padding: 5px 10px;
+    padding: 5px;
 }
 
 #learning_path_main {
@@ -421,11 +429,13 @@ See https://support.chamilo.org/issues/6976
 }
 
 #learning_path_right_zone .lp-view-tabs .tab-content {
-    bottom: 5px;
-    left: 5px;
+    bottom: 0;
+    left: 0;
     position: absolute;
-    right: 5px;
-    top: 60px;
+    right: 0;
+    top: 45px;
+    border: 1px solid #dddddd;
+    border-top: none;
 }
 
 #learning_path_right_zone .tab-pane {
@@ -447,7 +457,9 @@ See https://support.chamilo.org/issues/6976
     left: 0;
     width: 100%;
 }
-
+.iframe_sco{
+    top: 0 !important;
+}
 .nav-tabs li.active a {
     color: #006A84;
 }
@@ -501,13 +513,75 @@ See https://support.chamilo.org/issues/6976
     text-align: center;
 }
 
-.navegation-bar {
-    display: block;
-    padding: 5px 10px 5px 5px;
-    right: 0;
+/** MENU FLOAT **/
+
+.circular-menu {
+    height: auto;
+    left: 0;
     top: 0;
+    position: fixed;
+    z-index: 5;
+}
+
+.circle {
+    opacity: 0;
+    margin-left: 50px;
+    margin-top: 4px;
+    padding: 2px;
+    border-radius: 20px;
+    background-color: #ffffff;
+    border: 1px solid #8dcbf3;
+
+    -webkit-transform: translate(-100%);
+    -moz-transform:  translate(-100%);
+    -transform:  translate(-100%);
+
+    -webkit-transition: all 0.4s ease-out;
+    -moz-transition: all 0.4s ease-out;
+    transition: all 0.4s ease-out;
+}
+
+.open.circle {
+    opacity: 1;
+
+    -webkit-transform:  translate(0%);
+    -moz-transform: translate(0%);
+    -transform: translate(0%);
+}
+
+.circle a {
+    text-decoration: none;
+    color: #fff;
+    display: inline-block;
+    height: 35px;
+    width: 35px;
+    line-height: 35px;
+    text-align: center;
+    border-radius: 100%;
+}
+
+.circle a:hover {
+    color: #eef;
+}
+
+.menu-button {
     position: absolute;
-    z-index: 9999;
+    top: 5px;
+    left: 5px;
+    text-align: center;
+    border-radius: 50%;
+    display: block;
+    height: 40px;
+    width: 40px;
+    line-height: 19px;
+    padding: 10px;
+    background: #ffffff;
+    font-size: 16px;
+    border: 1px solid #8dcbf3;
+}
+
+.menu-button:hover {
+    background-color: #ffffff;
 }
 
 /* LP VIEW COLLAPSE */
@@ -516,7 +590,7 @@ See https://support.chamilo.org/issues/6976
 }
 
 .scorm-collapse .panel-default .panel-heading {
-    background: url(../../../../main/img/icons/svg/arrow-down.svg) #FFF right center no-repeat;
+    background: url(../../main/img/icons/svg/arrow-down.svg) #FFF right center no-repeat;
     padding-top: 0;
     padding-bottom: 0;
 }
@@ -562,19 +636,19 @@ See https://support.chamilo.org/issues/6976
 }
 
 .scorm_item_normal.scorm_completed {
-    background: url(../../../../main/img/icons/svg/check-completed.svg) #F5F5F5 right center no-repeat;
+    background: url(../../main/img/icons/svg/check-completed.svg) #F5F5F5 right center no-repeat;
 }
 
 .scorm_item_normal.scorm_not_attempted {
-    background: url(../../../../main/img/icons/svg/check-not-attempted.svg) #FFFFFF right center no-repeat;
+    background: url(../../main/img/icons/svg/check-not-attempted.svg) #FFFFFF right center no-repeat;
 }
 
 .scorm_item_normal.scorm_highlight.scorm_not_attempted {
-    background: url(../../../../main/img/icons/svg/check-not-attempted.svg) #00829C right center no-repeat;
+    background: url(../../main/img/icons/svg/check-not-attempted.svg) #00829C right center no-repeat;
 }
 
 .scorm_item_normal.scorm_highlight.scorm_completed {
-    background: url(../../../../main/img/icons/svg/check-highlight.svg) #00829C right center no-repeat;
+    background: url(../../main/img/icons/svg/check-highlight.svg) #00829C right center no-repeat;
 }
 
 .sidebar-scorm {
@@ -600,7 +674,19 @@ See https://support.chamilo.org/issues/6976
 .scorm_item_normal.scorm_highlight a {
     color: #FFFFFF;
 }
-
+.tab-none-forum{
+    top: 0 !important;
+}
+.circular-menu.none-forum{
+    top: 0 !important;
+}
+.tabs-right li{
+    display: inline-block;
+    float: initial;
+}
+.tabs-right{
+    text-align: right;
+}
 /* END LP VIEW COLLAPSE */
 /* Small devices (tablets, 768px and up) */
 @media (min-width: 768px) {
@@ -623,9 +709,10 @@ See https://support.chamilo.org/issues/6976
     }
 
     #learning_path_right_zone .lp-view-tabs .tab-content {
-        bottom: 10px;
-        right: 10px;
-        top: 60px;
+        bottom: 0;
+        right: 0;
+        top: 45px;
+        left: 0;
     }
 
     #learning_path_right_zone .tab-pane {
@@ -691,9 +778,6 @@ See https://support.chamilo.org/issues/6976
         margin: 0;
     }
 
-    .nav-tabs-bar {
-        display: none;
-    }
 }
 
 /* Landscape phones and down */
@@ -735,21 +819,6 @@ See https://support.chamilo.org/issues/6976
     }
 
     #panel-scorm .image-avatar {
-        display: none;
-    }
-
-    .navegation-bar {
-        display: block;
-        padding: 2px;
-        position: fixed;
-        top: 0;
-        right: 0;
-        z-index: 999;
-        width: 100%;
-        text-align: center;
-    }
-
-    .nav-tabs-bar {
         display: none;
     }
 

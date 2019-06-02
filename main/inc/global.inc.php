@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
+
 /**
  * It is recommended that ALL Chamilo scripts include this important file.
  * This script manages
@@ -14,8 +16,6 @@
  * @todo remove the code that displays the button that links to the install page
  * but use a redirect immediately. By doing so the $alreadyInstalled variable can be removed.
  */
-
-// Showing/hiding error codes in global error messages.
 define('SHOW_ERROR_CODES', false);
 
 // Include the libraries that are necessary everywhere
@@ -555,6 +555,13 @@ if (!empty($parent_path)) {
     if (file_exists($langfile)) {
         include $langfile;
     }
+
+    // Check if language/custom.php exists
+    $customLanguage = $langpath.$language_interface.'/custom.php';
+
+    if (file_exists($customLanguage)) {
+        include $customLanguage;
+    }
 }
 
 // include the local (contextual) parameters of this course or section
@@ -659,6 +666,7 @@ if (!empty($language_interface)) {
 // if portal is in test mode always generate the file
 if (!file_exists($file) || api_get_setting('server_type') === 'test') {
     $template = new Template();
+    $template->assign('quiz_markers_rolls_js', ChamiloApi::getQuizMarkersRollsJS());
     // Force use of default to avoid problems
     $tpl = 'default/layout/main.js.tpl';
     $contents = $template->fetch($tpl);

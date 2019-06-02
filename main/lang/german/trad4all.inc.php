@@ -1509,7 +1509,7 @@ $RegistrationRequiredFormsTitle = "Erforderliche Angaben bei der Regsitrierung";
 $RegistrationRequiredFormsComment = "Welche Angaben sind erforderlich (ausser Nachname, Vorname, Benutzername und Kennwort)";
 $DefaultGroupQuotumTitle = "Standard Speicherplatz für Gruppen";
 $DefaultGroupQuotumComment = "Standard Speicherplatz für Dokumente innerhalb von Gruppen?";
-$AllowLostPasswordTitle = "\Passwort vergessen\"- Funktion";
+$AllowLostPasswordTitle = "\"Passwort vergessen\"- Funktion";
 $AllowLostPasswordComment = "Darf der Nutzer sein vergessenes Kennwort anfordern?";
 $AllowRegistrationTitle = "Selbst-Registrierung";
 $AllowRegistrationComment = "Sollen sich neue Benutzer selbst registrieren können?";
@@ -7984,4 +7984,6 @@ Benutzer %s hat eine Follow-up-Nachricht zum Lernenden %s gesendet.<br/><br/>
 
 Die Nachricht ist an %s sichtbar";
 $PersonalDataReport = "Persönliche Daten";
+$FromTimeX = "Von %s";
+$ToTimeX = "bis %s";
 ?>

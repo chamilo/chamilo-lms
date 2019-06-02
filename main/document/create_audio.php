@@ -113,7 +113,6 @@ if (!($is_allowed_to_edit || $groupRights ||
     api_not_allowed(true);
 }
 
-/*	Header */
 Event::event_access_tool(TOOL_DOCUMENT);
 
 $display_dir = $dir;
@@ -162,7 +161,7 @@ echo '</div>';
     <!-- javascript and styles for textareaCounter-->
     <script>
         var info;
-        $(document).ready(function () {
+        $(function() {
             var options = {
                 'maxCharacterSize': 100,
                 'originalStyle': 'originalTextareaInfo',

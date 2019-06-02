@@ -63,7 +63,7 @@ if (!api_is_platform_admin()) {
     api_not_allowed(true);
 }
 
-function search_users($needle, $type)
+function search_users($needle, $type = 'multiple')
 {
     global $tbl_access_url_rel_user, $tbl_user, $user_anonymous, $current_user_id, $user_id, $userStatus;
 
@@ -365,6 +365,7 @@ if (count($assigned_users_id) > 0) {
 }
 
 $search_user = '';
+$needle = '';
 if (!empty($firstLetterUser)) {
     $needle = Database::escape_string($firstLetterUser);
     $search_user = "AND ".(api_sort_by_first_name() ? 'firstname' : 'lastname')." LIKE '$needle%'";
@@ -440,7 +441,7 @@ $result = Database::query($sql);
             <?php if ($add_type == 'multiple') {
                             ?>
                 <p><?php echo get_lang('FirstLetterUser'); ?></p>
-                <select class="selectpicker show-tick form-control" name="firstLetterUser" onchange = "xajax_search_users(this.value,'multiple')">
+                <select class="selectpicker form-control" name="firstLetterUser" onchange = "xajax_search_users(this.value,'multiple')">
                     <option value="%">--</option>
                     <?php echo Display::get_alphabet_options($firstLetterUser); ?>
                 </select>

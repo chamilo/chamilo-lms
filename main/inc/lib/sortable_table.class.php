@@ -116,6 +116,7 @@ class SortableTable extends HTML_Table
      * @param string $default_order_direction   The default order direction;
      *                                          either the constant 'ASC' or 'DESC'
      * @param string $table_id
+     * @param array  $parameters                They are custom attributes of the table
      */
     public function __construct(
         $table_name = 'table',
@@ -124,21 +125,31 @@ class SortableTable extends HTML_Table
         $default_column = 1,
         $default_items_per_page = 20,
         $default_order_direction = 'ASC',
-        $table_id = null
+        $table_id = null,
+        $parameters = []
     ) {
         if (empty($table_id)) {
             $table_id = $table_name.uniqid();
         }
+        if (isset($parameters) && empty($parameters)) {
+            $parameters = ['class' => 'table table-bordered data_table', 'id' => $table_id];
+        }
+
         $this->table_id = $table_id;
-        parent::__construct(['class' => 'table table-bordered data_table', 'id' => $table_id]);
+        parent::__construct($parameters);
         $this->table_name = $table_name;
         $this->additional_parameters = [];
         $this->param_prefix = $table_name.'_';
 
         $this->page_nr = Session::read($this->param_prefix.'page_nr', 1);
-        $this->page_nr = isset($_GET[$this->param_prefix.'page_nr']) ? intval($_GET[$this->param_prefix.'page_nr']) : $this->page_nr;
+        $this->page_nr = isset($_GET[$this->param_prefix.'page_nr']) ? (int) $_GET[$this->param_prefix.'page_nr'] : $this->page_nr;
         $this->column = Session::read($this->param_prefix.'column', $default_column);
-        $this->column = isset($_GET[$this->param_prefix.'column']) ? intval($_GET[$this->param_prefix.'column']) : $this->column;
+        $this->column = isset($_GET[$this->param_prefix.'column']) ? (int) $_GET[$this->param_prefix.'column'] : $this->column;
+
+        $defaultRow = api_get_configuration_value('table_default_row');
+        if (!empty($defaultRow)) {
+            $default_items_per_page = $defaultRow;
+        }
 
         // Default direction.
         if (in_array(strtoupper($default_order_direction), ['ASC', 'DESC'])) {
@@ -163,9 +174,9 @@ class SortableTable extends HTML_Table
             if (!in_array($my_get_direction, ['ASC', 'DESC'])) {
                 $this->direction = 'ASC';
             } else {
-                if ($my_get_direction == 'ASC') {
+                if ($my_get_direction === 'ASC') {
                     $this->direction = 'ASC';
-                } elseif ($my_get_direction == 'DESC') {
+                } elseif ($my_get_direction === 'DESC') {
                     $this->direction = 'DESC';
                 }
             }
@@ -676,6 +687,12 @@ class SortableTable extends HTML_Table
         }
         $result[] = '<select name="'.$this->param_prefix.'per_page" onchange="javascript: this.form.submit();">';
         $list = [10, 20, 50, 100, 500, 1000];
+
+        $rowList = api_get_configuration_value('table_row_list');
+        if (!empty($rowList) && isset($rowList['options'])) {
+            $list = $rowList['options'];
+        }
+
         foreach ($list as $nr) {
             if ($total_number_of_items <= $nr) {
                 break;
@@ -1083,7 +1100,11 @@ class SortableTableFromArray extends SortableTable
         if (isset($this->total_number_of_items) && !empty($this->total_number_of_items)) {
             return $this->total_number_of_items;
         } else {
-            return count($this->table_data);
+            if (!empty($this->table_data)) {
+                return count($this->table_data);
+            }
+
+            return 0;
         }
     }
 }
@@ -1144,6 +1165,7 @@ class SortableTableFromArrayConfig extends SortableTable
         $this->column_show = $column_show;
         $this->column_order = $column_order;
         $this->doc_filter = $doc_filter;
+
         parent::__construct(
             $tablename,
             null,

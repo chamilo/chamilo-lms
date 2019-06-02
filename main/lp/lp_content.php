@@ -116,5 +116,5 @@ if ($debug > 0) {
     error_log('New LP - In lp_content.php - Loading '.$src);
 }
 Session::write('oLP', $learnPath);
-header("Location: ".urldecode($src));
+header('Location: '.urldecode($src));
 exit;

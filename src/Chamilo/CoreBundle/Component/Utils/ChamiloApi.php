@@ -174,8 +174,8 @@ class ChamiloApi
     /**
      * Adds or Subtract a time in hh:mm:ss to a datetime.
      *
-     * @param string $time      Time in hh:mm:ss format
-     * @param string $datetime  Datetime as accepted by the Datetime class constructor
+     * @param string $time      Time to add or substract in hh:mm:ss format
+     * @param string $datetime  Datetime to be modified as accepted by the Datetime class constructor
      * @param bool   $operation True for Add, False to Subtract
      *
      * @return string
@@ -320,7 +320,8 @@ class ChamiloApi
         }
         if ($wrapInRGBA) {
             foreach ($palette as $index => $color) {
-                $palette[$index] = 'rgba('.$palette[$index].')';
+                $color = trim($color);
+                $palette[$index] = 'rgba('.$color.')';
             }
         }
         // If we want more colors, loop through existing colors
@@ -332,5 +333,66 @@ class ChamiloApi
         }
 
         return $palette;
+    }
+
+    /**
+     * Get the local time for the midnight.
+     *
+     * @param string|null $utcTime Optional. The time to ve converted.
+     *                             See api_get_local_time.
+     *
+     * @throws \Exception
+     *
+     * @return \DateTime
+     */
+    public static function getServerMidnightTime($utcTime = null)
+    {
+        $localTime = api_get_local_time($utcTime);
+        $localTimeZone = api_get_timezone();
+
+        $localMidnight = new \DateTime($localTime, new \DateTimeZone($localTimeZone));
+        $localMidnight->modify('midnight');
+
+        return $localMidnight;
+    }
+
+    /**
+     * Get JavaScript code necessary to load quiz markers-rolls in medialement's Markers Rolls plugin.
+     *
+     * @return string
+     */
+    public static function getQuizMarkersRollsJS()
+    {
+        $webCodePath = api_get_path(WEB_CODE_PATH);
+        $cidReq = api_get_cidreq(true, true, 'embeddable');
+        $colorPalette = self::getColorPalette(false, true);
+
+        return "
+            var \$originalNode = $(originalNode),
+                    qMarkersRolls = \$originalNode.data('q-markersrolls') || [],
+                    qMarkersColor = \$originalNode.data('q-markersrolls-color') || '{$colorPalette[0]}';
+
+                if (0 == qMarkersRolls.length) {
+                    return;
+                }
+
+                instance.options.markersRollsColor = qMarkersColor;
+                instance.options.markersRollsWidth = 2;
+                instance.options.markersRolls = {};
+
+                qMarkersRolls.forEach(function (qMarkerRoll) {
+                    var url = '{$webCodePath}exercise/exercise_submit.php?$cidReq&'
+                        + $.param({
+                            exerciseId: qMarkerRoll[1],
+                            learnpath_id: 0,
+                            learnpath_item_id: 0,
+                            learnpath_item_view_id: 0
+                        });
+
+                    instance.options.markersRolls[qMarkerRoll[0]] = url;
+                });
+
+                instance.buildmarkersrolls(instance, instance.controls, instance.layers, instance.media);
+        ";
     }
 }

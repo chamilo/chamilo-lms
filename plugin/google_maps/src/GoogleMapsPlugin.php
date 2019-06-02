@@ -10,6 +10,8 @@
  */
 class GoogleMapsPlugin extends Plugin
 {
+    public $javascriptIncluded;
+
     /**
      * Class constructor.
      */
@@ -21,6 +23,8 @@ class GoogleMapsPlugin extends Plugin
             'extra_field_name' => 'text',
         ];
 
+        $this->javascriptIncluded = false;
+
         parent::__construct('1.0', 'José Loguercio Silva', $parameters);
     }
 
@@ -31,7 +35,7 @@ class GoogleMapsPlugin extends Plugin
      */
     public function get_name()
     {
-        return "google_maps";
+        return 'google_maps';
     }
 
     /**

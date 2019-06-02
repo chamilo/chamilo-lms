@@ -1195,7 +1195,12 @@ class FillBlanks extends Question
         $result = '';
         $listStudentAnswerInfo = self::getAnswerInfo($answer, true);
 
-        if ($resultsDisabled == RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT) {
+        if (in_array($resultsDisabled, [
+            RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT,
+            RESULT_DISABLE_DONT_SHOW_SCORE_ONLY_IF_USER_FINISHES_ATTEMPTS_SHOW_ALWAYS_FEEDBACK,
+            ]
+        )
+        ) {
             $resultsDisabled = true;
             if ($showTotalScoreAndUserChoices) {
                 $resultsDisabled = false;
@@ -1227,7 +1232,8 @@ class FillBlanks extends Question
         // rebuild the sentence with student answer inserted
         for ($i = 0; $i < count($listStudentAnswerInfo['common_words']); $i++) {
             $result .= isset($listStudentAnswerInfo['common_words'][$i]) ? $listStudentAnswerInfo['common_words'][$i] : '';
-            $result .= isset($listStudentAnswerInfo['student_answer'][$i]) ? $listStudentAnswerInfo['student_answer'][$i] : '';
+            $studentLabel = isset($listStudentAnswerInfo['student_answer'][$i]) ? $listStudentAnswerInfo['student_answer'][$i] : '';
+            $result .= $studentLabel;
         }
 
         // the last common word (should be </p>)
@@ -1257,15 +1263,23 @@ class FillBlanks extends Question
         $showTotalScoreAndUserChoices = false
     ) {
         $hideExpectedAnswer = false;
-        if ($feedbackType == 0 && $resultsDisabled == RESULT_DISABLE_SHOW_SCORE_ONLY) {
-            $hideExpectedAnswer = true;
-        }
-
-        if ($resultsDisabled == RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT) {
-            $hideExpectedAnswer = true;
-            if ($showTotalScoreAndUserChoices) {
-                $hideExpectedAnswer = false;
-            }
+        $hideUserSelection = false;
+        switch ($resultsDisabled) {
+            case RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER:
+                $hideUserSelection = true;
+                break;
+            case RESULT_DISABLE_SHOW_SCORE_ONLY:
+                if ($feedbackType == 0) {
+                    $hideExpectedAnswer = true;
+                }
+                break;
+            case RESULT_DISABLE_DONT_SHOW_SCORE_ONLY_IF_USER_FINISHES_ATTEMPTS_SHOW_ALWAYS_FEEDBACK:
+            case RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT:
+                $hideExpectedAnswer = true;
+                if ($showTotalScoreAndUserChoices) {
+                    $hideExpectedAnswer = false;
+                }
+                break;
         }
 
         $style = 'feedback-green';
@@ -1310,7 +1324,9 @@ class FillBlanks extends Question
         }
 
         $result = "<span class='feedback-question'>";
-        $result .= $iconAnswer."<span class='$style'>".$answer."</span>";
+        if ($hideUserSelection === false) {
+            $result .= $iconAnswer."<span class='$style'>".$answer."</span>";
+        }
         $result .= "<span class='feedback-separator'>|</span>";
         $result .= $correctAnswerHtml;
         $result .= '</span>';

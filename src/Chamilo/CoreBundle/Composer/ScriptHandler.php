@@ -19,6 +19,18 @@ class ScriptHandler
         $newPath = __DIR__.'/../../../../web';
         $fs = new Filesystem();
         $fs->mirror($appCss, $newPath, null, ['override' => true]);
+
+        if ($fs->exists(__DIR__.'/../../../../web/build')) {
+            $fs->remove(__DIR__.'/../../../../web/build');
+        }
+
+        if ($fs->exists(__DIR__.'/../../../../app/cache/twig')) {
+            $fs->remove(__DIR__.'/../../../../app/cache/twig');
+        }
+
+        if (function_exists('opcache_reset')) {
+            opcache_reset();
+        }
     }
 
     /**
@@ -71,6 +83,7 @@ class ScriptHandler
             __DIR__.'/../../../../main/inc/lib/javascript/jquery-ui',
             __DIR__.'/../../../../main/inc/lib/fckeditor',
             __DIR__.'/../../../../main/inc/lib/mpdf/',
+            __DIR__.'/../../../../main/inc/lib/nanogong/',
             __DIR__.'/../../../../main/inc/lib/symfony/',
             __DIR__.'/../../../../main/inc/lib/system/media/renderer',
             __DIR__.'/../../../../main/inc/lib/system/io',

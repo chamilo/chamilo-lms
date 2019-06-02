@@ -7,9 +7,13 @@
 class DateRangePicker extends HTML_QuickForm_text
 {
     /**
-     * Constructor.
+     * DateRangePicker constructor.
+     *
+     * @param string       $elementName
+     * @param string|array $elementLabel
+     * @param array        $attributes
      */
-    public function __construct($elementName = null, $elementLabel = null, $attributes = null)
+    public function __construct($elementName, $elementLabel = null, $attributes = null)
     {
         if (!isset($attributes['id'])) {
             $attributes['id'] = $elementName;
@@ -59,9 +63,27 @@ class DateRangePicker extends HTML_QuickForm_text
         $start = isset($dates[0]) ? $dates[0] : '';
         $end = isset($dates[1]) ? $dates[1] : '';
 
+        $pattern = 'yyyy-MM-dd HH:mm';
+
+        if ('false' === $this->getAttribute('timePicker') &&
+            false === strpos($this->getAttribute('format'), 'HH:mm')) {
+            $pattern = 'yyyy-MM-dd';
+        }
+
+        $formatter = new IntlDateFormatter(
+            'en',
+            IntlDateFormatter::NONE,
+            IntlDateFormatter::NONE,
+            'UTC',
+            IntlDateFormatter::GREGORIAN,
+            $pattern
+        );
+        $resultStart = $formatter->format($formatter->parse($start));
+        $resultEnd = $formatter->format($formatter->parse($end));
+
         return [
-            'start' => $start,
-            'end' => $end,
+            'start' => $resultStart,
+            'end' => $resultEnd,
         ];
     }
 
@@ -122,7 +144,6 @@ class DateRangePicker extends HTML_QuickForm_text
     {
         $js = null;
         $id = $this->getAttribute('id');
-
         $dateRange = $this->getAttribute('value');
 
         $defaultDates = null;
@@ -158,7 +179,7 @@ class DateRangePicker extends HTML_QuickForm_text
         $timePicker = 'true';
         $timePickerValue = Security::remove_XSS($this->getAttribute('timePicker'));
         if (!empty($timePickerValue)) {
-            $timePicker = $timePickerValue;
+            $timePicker = 'false';
         }
 
         // timeFormat: 'hh:mm'

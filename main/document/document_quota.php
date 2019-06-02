@@ -8,6 +8,8 @@
  */
 require_once __DIR__.'/../inc/global.inc.php';
 
+api_protect_course_script(true);
+
 if (!api_is_allowed_to_edit(null, true)) {
     api_not_allowed(true);
 }
@@ -125,7 +127,7 @@ $session[] = [
 $quota_data = json_encode($session);
 
 $htmlHeadXtra[] = "<script>
-$(document).ready(function() {
+$(function() {
     var data = ".$quota_data.";
     var plot1 = jQuery.jqplot('chart1', [data], {
         seriesDefaults: {

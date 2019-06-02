@@ -37,7 +37,7 @@ if ($table->per_page == 0) {
 }
 
 $formToString = '';
-$id = isset($_GET['id']) ? intval($_GET['id']) : 0;
+$id = isset($_GET['id']) ? (int) $_GET['id'] : 0;
 $projectId = isset($_GET['project_id']) ? (int) $_GET['project_id'] : 0;
 
 $project = TicketManager::getProject($projectId);

@@ -10,7 +10,7 @@ $cidReset = true;
 
 require_once __DIR__.'/../inc/global.inc.php';
 
-api_block_anonymous_users(true);
+api_block_anonymous_users();
 
 $em = Database::getManager();
 
@@ -36,13 +36,18 @@ foreach ($pending as $i => $item) {
 
     $course = $course ? ['id' => $course->getId(), 'title' => $course->getTitle(), 'code' => $course->getCode()] : null;
     $session = $session ? ['id' => $session->getId(), 'name' => $session->getName()] : null;
+    $courseInfo = api_get_course_info_by_id($course->getId());
     $surveysData[$survey->getSurveyId()] = [
         'title' => $survey->getTitle(),
-        'invitation_code' => $invitation->getInvitationCode(),
         'avail_from' => $survey->getAvailFrom(),
         'avail_till' => $survey->getAvailTill(),
         'course' => $course,
         'session' => $session,
+        'link' => SurveyUtil::generateFillSurveyLink(
+            $invitation->getInvitationCode(),
+            $courseInfo,
+            $survey->getSessionId()
+        ),
     ];
 }
 

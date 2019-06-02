@@ -5,9 +5,7 @@ use Chamilo\CourseBundle\Entity\CCalendarEvent;
 use Chamilo\CourseBundle\Entity\CItemProperty;
 use Chamilo\PluginBundle\Entity\StudentFollowUp\CarePost;
 use Fhaculty\Graph\Graph;
-use Graphp\GraphViz\GraphViz;
 use Monolog\Handler\BufferHandler;
-use Monolog\Handler\NativeMailerHandler;
 use Monolog\Handler\RotatingFileHandler;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
@@ -826,6 +824,36 @@ class ImportCsv
                     $userInfoByOfficialCode = api_get_user_info_from_official_code($row['official_code']);
                 }
 
+                $userInfoFromUsername = api_get_user_info_from_username($row['username']);
+                if (!empty($userInfoFromUsername)) {
+                    $extraFieldValue = new ExtraFieldValue('user');
+                    $extraFieldValues = $extraFieldValue->get_values_by_handler_and_field_variable(
+                        $userInfoFromUsername['user_id'],
+                        $this->extraFieldIdNameList['user']
+                    );
+
+                    if (!empty($extraFieldValues)) {
+                        $value = 0;
+                        foreach ($extraFieldValues as $extraFieldValue) {
+                            $value = $extraFieldValue['value'];
+                        }
+                        if (!empty($user_id) && $value != $user_id) {
+                            $emails = api_get_configuration_value('cron_notification_help_desk');
+                            if (!empty($emails)) {
+                                $this->logger->addInfo('Preparing email to users in configuration: "cron_notification_help_desk"');
+                                $subject = 'User not added due to same username';
+                                $body = 'Cannot add username: "'.$row['username'].'" 
+                                    with external_user_id: '.$row['extra_'.$this->extraFieldIdNameList['user']].'
+                                    because '.$userInfoFromUsername['username'].' with external_user_id '.$value.' exists on the portal';
+                                $this->logger->addInfo($body);
+                                foreach ($emails as $email) {
+                                    api_mail_html('', $email, $subject, $body);
+                                }
+                            }
+                        }
+                    }
+                }
+
                 if (empty($userInfo) && empty($userInfoByOfficialCode)) {
                     // Create user
                     $result = UserManager::create_user(
@@ -840,7 +868,7 @@ class ImportCsv
                         $row['phone'],
                         null, //$row['picture'], //picture
                         $row['auth_source'], // ?
-                        $expirationDateOnCreate, //'0000-00-00 00:00:00', //$row['expiration_date'], //$expiration_date = '0000-00-00 00:00:00',
+                        $expirationDateOnCreate,
                         1, //active
                         0,
                         null, // extra
@@ -973,7 +1001,6 @@ class ImportCsv
                                 );
                             }
                         }
-
                         $this->logger->addInfo("Students - User updated: ".$row['username']);
                     } else {
                         $this->logger->addError("Students - User NOT updated: ".$row['username']." ".$row['firstname']." ".$row['lastname']);
@@ -1308,6 +1335,9 @@ class ImportCsv
             }
 
             $eventAlreadySent = [];
+
+            $tpl = new Template(null, false, false, false, false, false);
+
             foreach ($eventsToCreateFinal as $event) {
                 $courseInfo = $event['course_info'];
                 $item = $event['item'];
@@ -1359,7 +1389,7 @@ class ImportCsv
                 }
 
                 // Working days (Mon-Fri)see BT#12156#note-16
-                $days = 5;
+                $days = 3;
                 $startDatePlusDays = api_strtotime("$days weekdays");
 
                 /*
@@ -1368,7 +1398,7 @@ class ImportCsv
                 $startDatePlusDays = "$timePart $datePart";
                 */
                 $this->logger->addInfo(
-                    "startDatePlusDays: ".api_get_utc_datetime($startDatePlusDays).' - First date: '.$firstDate
+                    'startDatePlusDays: '.api_get_utc_datetime($startDatePlusDays).' - First date: '.$firstDate
                 );
 
                 // Send
@@ -1383,7 +1413,8 @@ class ImportCsv
                     $end = $firstEndDate;
 
                     if (!empty($end) &&
-                        api_format_date($start, DATE_FORMAT_LONG) == api_format_date($end, DATE_FORMAT_LONG)
+                        api_format_date($start, DATE_FORMAT_LONG) ==
+                        api_format_date($end, DATE_FORMAT_LONG)
                     ) {
                         $date = api_format_date($start, DATE_FORMAT_LONG).' ('.
                             api_format_date($start, TIME_NO_SEC_FORMAT).' '.
@@ -1399,19 +1430,38 @@ class ImportCsv
                     }
 
                     $courseTitle = $courseInfo['title'].$sessionName;
-                    $emailBody = get_lang('Dear').' ((user_firstname)) <br />'.
-                        sprintf(
-                            get_lang('YouHaveBeenSubscribedToCourseXTheStartDateXAndCommentX'),
-                            $courseTitle,
-                            $date,
-                            $event['comment']
-                        )
-                    ;
 
-                    $subject = sprintf(
+                    /*$subject = sprintf(
                         get_lang('AgendaAvailableInCourseX'),
                         $courseInfo['title']
+                    );*/
+
+                    $sessionExtraFieldValue = new ExtraFieldValue('session');
+                    $values = $sessionExtraFieldValue->get_values_by_handler_and_field_variable(
+                        $event['session_id'],
+                        $this->extraFieldIdNameList['session_career']
                     );
+
+                    $careerName = '';
+                    if (!empty($values)) {
+                        foreach ($values as $value) {
+                            $careerName = $value['value'];
+                        }
+                    }
+
+                    $subject = sprintf(
+                        get_lang('WelcomeToPortalXInCourseSessionX'),
+                        api_get_setting('siteName'),
+                        $courseInfo['title']
+                    );
+
+                    $tpl->assign('site_name', api_get_setting('siteName'));
+                    $tpl->assign('course_title', $courseTitle);
+                    $tpl->assign('career_name', $careerName);
+                    $tpl->assign('first_lesson', $date);
+                    $tpl->assign('location', $eventComment);
+
+                    $emailBody = $tpl->get_template('mail/custom_calendar_welcome.dist.tpl');
 
                     $coaches = SessionManager::getCoachesByCourseSession(
                         $event['session_id'],
@@ -1428,7 +1478,7 @@ class ImportCsv
 
                     if (count($announcementsWithTitleList) === 0) {
                         $this->logger->addInfo(
-                            "Mail to be sent because start date: ".$event['start']." and no announcement found."
+                            'Mail to be sent because start date: '.$event['start'].' and no announcement found.'
                         );
 
                         $senderId = $this->defaultAdminId;
@@ -2419,7 +2469,7 @@ class ImportCsv
                     $userCourseCategory = $courseUserData['user_course_cat'];
                 }
 
-                CourseManager::subscribe_user(
+                $result = CourseManager::subscribeUser(
                     $userId,
                     $courseInfo['code'],
                     $status,
@@ -2427,9 +2477,15 @@ class ImportCsv
                     $userCourseCategory
                 );
 
-                $this->logger->addInfo(
-                    "User $userId added to course ".$courseInfo['code']." with status '$status' with course category: '$userCourseCategory'"
-                );
+                if ($result) {
+                    $this->logger->addInfo(
+                        "User $userId added to course ".$courseInfo['code']." with status '$status' with course category: '$userCourseCategory'"
+                    );
+                } else {
+                    $this->logger->addInfo(
+                        "User $userId was NOT ADDED to course ".$courseInfo['code']." with status '$status' with course category: '$userCourseCategory'"
+                    );
+                }
             }
         }
 

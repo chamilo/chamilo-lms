@@ -508,6 +508,7 @@ class HTML_QuickForm_group extends HTML_QuickForm_element
     {
         parent::freeze();
         foreach (array_keys($this->_elements) as $key) {
+            $this->_elements[$key]->freezeSeeOnlySelected = $this->freezeSeeOnlySelected;
             $this->_elements[$key]->freeze();
         }
     }
@@ -535,22 +536,7 @@ class HTML_QuickForm_group extends HTML_QuickForm_element
      */
     public function getTemplate($layout)
     {
-        $size = $this->getColumnsSize();
-
-        if (empty($size)) {
-            $size = array(2, 8, 2);
-        } else {
-            if (is_array($size)) {
-                if (count($size) == 1) {
-                    $size = array(2, intval($size[0]), 2);
-                } elseif (count($size) != 3) {
-                    $size = array(2, 8, 2);
-                }
-                // else just keep the $size array as received
-            } else {
-                $size = array(2, intval($size), 2);
-            }
-        }
+        $size = $this->calculateSize();
 
         switch ($layout) {
             case FormValidator::LAYOUT_INLINE:

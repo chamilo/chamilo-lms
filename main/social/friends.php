@@ -76,9 +76,9 @@ $name_search = isset($_POST['search_name_q']) ? $_POST['search_name_q'] : null;
 $number_friends = 0;
 
 if (isset($name_search) && $name_search != 'undefined') {
-    $friends = SocialManager::get_friends($user_id, null, $name_search);
+    $friends = SocialManager::get_friends($user_id, USER_RELATION_TYPE_FRIEND, $name_search);
 } else {
-    $friends = SocialManager::get_friends($user_id);
+    $friends = SocialManager::get_friends($user_id, USER_RELATION_TYPE_FRIEND);
 }
 
 $social_right_content = '<div class="col-md-12">';

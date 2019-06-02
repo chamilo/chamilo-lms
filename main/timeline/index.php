@@ -20,6 +20,8 @@ $action = isset($_GET['action']) ? $_GET['action'] : null;
 
 $check = Security::check_token('request');
 $token = Security::get_token();
+$actions = '';
+$message = '';
 
 switch ($action) {
     case 'add':
@@ -149,7 +151,7 @@ switch ($action) {
         break;
 }
 
-$tpl = new Template($tool_name);
+$tpl = new Template();
 
 $tpl->assign('actions', $actions);
 $tpl->assign('message', $message);

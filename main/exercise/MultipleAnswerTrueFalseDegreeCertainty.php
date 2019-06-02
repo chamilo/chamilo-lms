@@ -211,7 +211,9 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
             }
         }
 
-        if ($objEx->edit_exercise_in_lp === true) {
+        if ($objEx->edit_exercise_in_lp === true ||
+            (empty($this->exerciseList) && empty($objEx->id))
+        ) {
             $form->addElement('submit', 'lessAnswers', get_lang('LessAnswer'), 'class="btn btn-danger minus"');
             $form->addElement('submit', 'moreAnswers', get_lang('PlusAnswer'), 'class="btn btn-primary plus"');
             //$text and $class defined in calling script
@@ -305,7 +307,7 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
      * @param int      $counter
      * @param float    $score
      *
-     * @return null|string
+     * @return string|null
      */
     public function return_header($exercise, $counter = null, $score = null)
     {
@@ -1247,7 +1249,7 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
             $objectExercise = new Exercise();
             $objectExercise->read($exerciseId);
 
-            return $objectExercise->get_count_question_list();
+            return $objectExercise->getQuestionCount();
         }
 
         return 0;

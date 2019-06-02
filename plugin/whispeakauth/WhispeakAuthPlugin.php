@@ -63,6 +63,10 @@ class WhispeakAuthPlugin extends Plugin
         }
 
         $em = Database::getManager();
+
+        $em->createQuery('DELETE FROM ChamiloCoreBundle:ExtraFieldValues efv WHERE efv.field = :field')
+            ->execute(['field' => $extraField]);
+
         $em->remove($extraField);
         $em->flush();
     }

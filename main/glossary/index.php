@@ -26,7 +26,7 @@ function setFocus(){
     $("#glossary_title").focus();
 }
 
-$(document).ready(function () {
+$(function() {
     setFocus();
     $( "#dialog:ui-dialog" ).dialog( "destroy" );
     $( "#dialog-confirm" ).dialog({
@@ -380,26 +380,26 @@ switch ($action) {
 
             if (count($termsDeleted) > 0) {
                 Display::addFlash(
-                    Display::return_message(get_lang("TermDeleted").': '.implode(', ', $termsDeleted))
+                    Display::return_message(get_lang('TermDeleted').': '.implode(', ', $termsDeleted))
                 );
             }
 
             if (count($updatedList) > 0) {
                 Display::addFlash(
-                    Display::return_message(get_lang("TermsUpdated").': '.implode(', ', $updatedList))
+                    Display::return_message(get_lang('TermsUpdated').': '.implode(', ', $updatedList))
                 );
             }
 
             if (count($addedList) > 0) {
                 Display::addFlash(
-                    Display::return_message(get_lang("TermsAdded").': '.implode(', ', $addedList))
+                    Display::return_message(get_lang('TermsAdded').': '.implode(', ', $addedList))
                 );
             }
 
             if (count($badList) > 0) {
                 Display::addFlash(
                     Display::return_message(
-                        get_lang("GlossaryTermAlreadyExists").': '.implode(', ', $badList),
+                        get_lang('GlossaryTermAlreadyExists').': '.implode(', ', $badList),
                         'error'
                     )
                 );
@@ -408,7 +408,7 @@ switch ($action) {
             if (count($doubles) > 0) {
                 Display::addFlash(
                     Display::return_message(
-                        get_lang("TermsDuplicatedInFile").': '.implode(', ', $doubles),
+                        get_lang('TermsDuplicatedInFile').': '.implode(', ', $doubles),
                         'warning'
                     )
                 );
@@ -448,18 +448,19 @@ switch ($action) {
         break;
     default:
         $tool_name = get_lang('List');
+        $htmlHeadXtra[] = '<script type="text/javascript" src="'.api_get_path(WEB_CODE_PATH).'glossary/glossary.js.php?add_ready=1&'.api_get_cidreq().'"></script>';
+        $htmlHeadXtra[] = api_get_js('jquery.highlight.js');
         $content = GlossaryManager::display_glossary();
         break;
 }
 
 Display::display_header($tool_name);
 
-// Tool introduction
 Display::display_introduction_section(TOOL_GLOSSARY);
 
 echo $content;
 
-$extra = '<div id="dialog-confirm" title="'.get_lang("ConfirmYourChoice").'">';
+$extra = '<div id="dialog-confirm" title="'.get_lang('ConfirmYourChoice').'">';
 $form = new FormValidator(
     'report',
     'post',

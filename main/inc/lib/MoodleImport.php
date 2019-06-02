@@ -85,11 +85,10 @@ class MoodleImport
                 break;
         }
 
-        $coursePath = api_get_course_path();
+        $courseInfo = api_get_course_info();
         $sessionId = api_get_session_id();
         $groupId = api_get_group_id();
-        $documentPath = api_get_path(SYS_COURSE_PATH).$coursePath.'/document';
-        $courseInfo = api_get_course_info();
+        $documentPath = api_get_path(SYS_COURSE_PATH).$courseInfo['path'].'/document';
 
         create_unexisting_directory(
             $courseInfo,
@@ -107,9 +106,7 @@ class MoodleImport
         $filesXml = @file_get_contents($destinationDir.'/files.xml');
         $mainFileModuleValues = $this->getAllQuestionFiles($filesXml);
         $currentResourceFilePath = $destinationDir.'/files/';
-
         $importedFiles = [];
-
         foreach ($mainFileModuleValues as $fileInfo) {
             $dirs = new RecursiveDirectoryIterator($currentResourceFilePath);
             foreach (new RecursiveIteratorIterator($dirs) as $file) {
@@ -270,7 +267,7 @@ class MoodleImport
                         // Replace the path from @@PLUGINFILE@@ to a correct chamilo path
                         $questionText = str_replace(
                             '@@PLUGINFILE@@',
-                            '/courses/'.$coursePath.'/document/moodle',
+                            '/courses/'.$courseInfo['path'].'/document/moodle',
                             $questionText
                         );
 

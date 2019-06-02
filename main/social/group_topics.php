@@ -149,7 +149,7 @@ function add_image_form() {
 	}
 }
 
-$(document).ready(function() {
+$(function() {
 	if ($("#msg_'.$message_id.'").length) {
 		$("html,body").animate({
 			scrollTop: $("#msg_'.$message_id.'").offset().top
@@ -207,6 +207,5 @@ $tpl->assign('social_menu_block', $social_menu_block);
 $tpl->assign('social_friend_block', $friend_html);
 $tpl->assign('group_message', $group_message);
 $tpl->assign('social_right_content', $social_right_content);
-$tpl->assign('content', $content);
 $social_layout = $tpl->get_template('social/groups_topics.tpl');
 $tpl->display($social_layout);

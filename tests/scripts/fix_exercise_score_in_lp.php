@@ -1,4 +1,6 @@
 <?php
+/* For licensing terms, see /license.txt */
+
 /**
  * This script synchronize the exercise score (track_e_exercises.exe_result)
  * with the LP score result (lp_item_view.score).

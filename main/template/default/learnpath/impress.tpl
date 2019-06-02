@@ -11,14 +11,14 @@
     <p>Use a spacebar or arrow keys to navigate</p>
 </div>
 <script>
-if ("ontouchstart" in document.documentElement) { 
+if ("ontouchstart" in document.documentElement) {
     document.querySelector(".hint").innerHTML = "<p>Tap on the left or right to navigate</p>";
 }
 </script>
 
-<script>     
-$(document).ready(function() {
-    impress().init(); 
+<script>
+$(function() {
+    impress().init();
 });
 </script>
 <script type="text/javascript" src="{{_p.web_lib}}javascript/impress/impress.js"></script>

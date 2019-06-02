@@ -15,7 +15,7 @@ $xajax->registerFunction('search_users');
 // setting the section (for the tabs)
 $this_section = SECTION_PLATFORM_ADMIN;
 
-$id_session = (int) $_GET['id_session'];
+$id_session = isset($_GET['id_session']) ? (int) $_GET['id_session'] : 0;
 $courseId = isset($_GET['course_id']) ? (int) $_GET['course_id'] : 0;
 
 if (empty($id_session) || empty($courseId)) {
@@ -110,7 +110,7 @@ function search_users($needle, $type)
         if (api_is_session_admin()
             && api_get_setting('prevent_session_admins_to_manage_all_users') === 'true'
         ) {
-            $order_clause = " AND user.creator_id = ".api_get_user_id().$order_clause;
+            $order_clause = ' AND user.creator_id = '.api_get_user_id().$order_clause;
         }
 
         $cond_user_id = '';
@@ -118,7 +118,7 @@ function search_users($needle, $type)
         // Only for single & multiple
         if (in_array($type, ['single', 'multiple'])) {
             if (!empty($id_session)) {
-                $id_session = intval($id_session);
+                $id_session = (int) $id_session;
                 // check id_user from session_rel_user table
                 $sql = "
                     SELECT su.user_id 
@@ -153,10 +153,11 @@ function search_users($needle, $type)
                             username LIKE '$needle%'
                             OR lastname LIKE '$needle%'
                             OR firstname LIKE '$needle%'
-                        )
-                        AND user.status <> 6
-                        AND user.status <> ".DRH."
-                    $order_clause LIMIT 11
+                        ) AND 
+                      user.status <> 6 AND 
+                      user.status <> ".DRH."
+                    $order_clause 
+                    LIMIT 11
                 ";
                 break;
             case 'multiple':
@@ -164,9 +165,9 @@ function search_users($needle, $type)
                     SELECT user.id, username, lastname, firstname, official_code
                     FROM $tbl_user user
                     WHERE
-                        lastname LIKE '$needle%'
-                        AND user.status <> ".DRH."
-                        AND user.status <> 6 $cond_user_id
+                        lastname LIKE '$needle%' AND 
+                        user.status <> ".DRH." AND 
+                        user.status <> 6 $cond_user_id
                     $order_clause
                 ";
                 break;
@@ -174,11 +175,12 @@ function search_users($needle, $type)
                 $sql = "
                     SELECT DISTINCT user.id, username, lastname, firstname, official_code
                     FROM $tbl_user user
-                    LEFT OUTER JOIN $tbl_session_rel_user s ON (s.user_id = user.id)
+                    LEFT OUTER JOIN $tbl_session_rel_user s 
+                    ON (s.user_id = user.id)
                     WHERE
-                        s.user_id IS NULL
-                        AND user.status <> ".DRH."
-                        AND user.status <> 6 $cond_user_id
+                        s.user_id IS NULL AND 
+                        user.status <> ".DRH." AND 
+                        user.status <> 6 $cond_user_id
                     $order_clause
                 ";
                 break;
@@ -393,10 +395,10 @@ if ($ajax_search) {
         INNER JOIN $tbl_user u
         ON su.user_id = u.id
         WHERE 
-           su.session_id = ".intval($id_session)." AND
-           su.relation_type <> ".SESSION_RELATION_TYPE_RRHH." AND
-           sc.c_id = $courseId AND
-            u.status<>".DRH."  AND 
+            su.session_id = ".intval($id_session)." AND
+            su.relation_type <> ".SESSION_RELATION_TYPE_RRHH." AND
+            sc.c_id = $courseId AND
+            u.status<>".DRH." AND 
             u.status <> 6
         $order_clause
     ";
@@ -409,17 +411,19 @@ if ($ajax_search) {
                 SELECT u.id, u.lastname, u.firstname, u.username, su.session_id, u.official_code
                 FROM $tbl_user u
                 INNER JOIN $tbl_session_rel_user su
-                    ON su.user_id = u.id
-                    AND su.relation_type <> ".SESSION_RELATION_TYPE_RRHH."
-                    AND su.session_id = ".intval($id_session)."
+                ON 
+                    su.user_id = u.id AND 
+                    su.relation_type <> ".SESSION_RELATION_TYPE_RRHH." AND 
+                    su.session_id = ".intval($id_session)."
                 INNER JOIN $tbl_user_rel_access_url url_user 
                 ON (url_user.user_id = u.id)
                 INNER JOIN $tableRelSessionCourseUser sc
                 ON (sc.session_id = su.session_id AND su.user_id = sc.user_id)
-                WHERE access_url_id = $access_url_id
-                    sc.c_id = $courseId AND
-                    AND u.status <> ".DRH."
-                    AND u.status <> 6
+                WHERE 
+                    access_url_id = $access_url_id AND 
+                    sc.c_id = $courseId AND 
+                    u.status <> ".DRH." AND 
+                    u.status <> 6
                 $order_clause
             ";
         }
@@ -459,7 +463,7 @@ if ($ajax_search) {
                         $use_extra_fields = true;
                         if ($fieldtype == ExtraField::FIELD_TYPE_TAG) {
                             $extra_field_result[] = UserManager::get_extra_user_data_by_tags(
-                                intval($_POST['field_id']),
+                                $_POST['field_id'],
                                 $_POST[$varname]
                             );
                         } else {
@@ -610,9 +614,9 @@ if ($ajax_search) {
                 ON (sc.session_id = su.session_id AND su.user_id = sc.user_id)
                 WHERE 
                     sc.c_id = $courseId AND
-                    access_url_id = $access_url_id
-                    AND u.status <> ".DRH."
-                    AND u.status <> 6
+                    access_url_id = $access_url_id AND 
+                    u.status <> ".DRH." AND 
+                    u.status <> 6
                 $order_clause
             ";
         }
@@ -643,7 +647,6 @@ if ($add_type == 'multiple') {
         '<a href="'.api_get_self().'?course_id='.$courseId.'&id_session='.$id_session.'&amp;add='.$addProcess.'&amp;add_type=multiple">'
         .Display::return_icon('multiple.gif').get_lang('SessionAddTypeMultiple').'</a>';
 }
-
 ?>
     <div class="actions">
         <?php

@@ -2305,6 +2305,94 @@ class MessageManager
 
         return $messages;
     }
+    
+    /**
+     * Get the data of the last received messages for a user.
+     *
+     * @param int $userId The user id
+     * @param int $lastId The id of the last received message
+     *
+     * @return array
+     */
+    public static function getReceivedMessages($userId, $lastId = 0)
+    {
+        $userId = intval($userId);
+        $lastId = intval($lastId);
+
+        if (empty($userId)) {
+            return [];
+        }
+
+        $messagesTable = Database::get_main_table(TABLE_MESSAGE);
+        $userTable = Database::get_main_table(TABLE_MAIN_USER);
+
+        $sql = "SELECT m.*, u.user_id, u.lastname, u.firstname, u.picture_uri 
+                FROM $messagesTable as m
+                INNER JOIN $userTable as u
+                ON m.user_sender_id = u.user_id
+                WHERE
+                    m.user_receiver_id = $userId AND
+                    m.msg_status IN (".MESSAGE_STATUS_NEW.", ".MESSAGE_STATUS_UNREAD.")
+                    AND m.id > $lastId
+                ORDER BY m.send_date DESC";
+
+        $result = Database::query($sql);
+
+        $messages = [];
+        if ($result !== false) {
+            while ($row = Database::fetch_assoc($result)) {
+                $pictureInfo = UserManager::get_user_picture_path_by_id($row['user_id'], 'web');
+                $row['pictureUri'] = $pictureInfo['dir'].$pictureInfo['file'];
+                $messages[] = $row;
+            }
+        }
+
+        return $messages;
+    }
+    
+    /**
+     * Get the data of the last received messages for a user.
+     *
+     * @param int $userId The user id
+     * @param int $lastId The id of the last received message
+     *
+     * @return array
+     */
+    public static function getSentMessages($userId, $lastId = 0)
+    {
+        $userId = intval($userId);
+        $lastId = intval($lastId);
+
+        if (empty($userId)) {
+            return [];
+        }
+
+        $messagesTable = Database::get_main_table(TABLE_MESSAGE);
+        $userTable = Database::get_main_table(TABLE_MAIN_USER);
+
+        $sql = "SELECT m.*, u.user_id, u.lastname, u.firstname, u.picture_uri 
+                FROM $messagesTable as m
+                INNER JOIN $userTable as u
+                ON m.user_receiver_id = u.user_id
+                WHERE
+                    m.user_sender_id = $userId 
+                    AND m.msg_status = ".MESSAGE_STATUS_OUTBOX." 
+                    AND m.id > $lastId
+                ORDER BY m.send_date DESC";
+
+        $result = Database::query($sql);
+
+        $messages = [];
+        if ($result !== false) {
+            while ($row = Database::fetch_assoc($result)) {
+                $pictureInfo = UserManager::get_user_picture_path_by_id($row['user_id'], 'web');
+                $row['pictureUri'] = $pictureInfo['dir'].$pictureInfo['file'];
+                $messages[] = $row;
+            }
+        }
+
+        return $messages;
+    }
 
     /**
      * Check whether a message has attachments.

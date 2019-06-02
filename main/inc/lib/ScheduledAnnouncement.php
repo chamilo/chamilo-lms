@@ -265,7 +265,6 @@ class ScheduledAnnouncement extends Model
     {
         $file = $this->getAttachment($id);
         if (!empty($file) && !empty($file['value'])) {
-            //$file = api_get_uploaded_web_url('schedule_announcement', $id, basename($file['value']));
             $url = api_get_path(WEB_UPLOAD_PATH).$file['value'];
 
             return get_lang('Attachment').': '.Display::url(basename($file['value']), $url, ['target' => '_blank']);

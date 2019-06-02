@@ -33,7 +33,7 @@
                                     <div class="form-group">
                                         <input id="share_button_flash" type="text"
                                                style="width:300px"
-                                               class="form-control" readonly value="{{ conference_url }}&inteface=0">
+                                               class="form-control" readonly value="{{ conference_url }}&interface=0">
                                         <button onclick="copyTextToClipBoard('share_button_flash');" class="btn btn-default">
                                             <span class="fa fa-copy"></span> {{ 'CopyTextToClipboard' | get_lang }}
                                         </button>
@@ -59,7 +59,7 @@
                                     <div class="form-group">
                                         <input id="share_button_html" type="text"
                                                style="width:300px"
-                                               class="form-control" readonly value="{{ conference_url }}&inteface=1">
+                                               class="form-control" readonly value="{{ conference_url }}&interface=1">
 
                                         <button onclick="copyTextToClipBoard('share_button_html');" class="btn btn-default">
                                             <span class="fa fa-copy"></span> {{ 'CopyTextToClipboard' | get_lang }}

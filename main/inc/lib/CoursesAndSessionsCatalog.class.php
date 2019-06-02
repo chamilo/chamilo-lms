@@ -571,27 +571,23 @@ class CoursesAndSessionsCatalog
         $em = Database::getManager();
         $urlId = api_get_current_access_url_id();
 
-        $sql = "SELECT s.id FROM session s ";
-        $sql .= "
-            INNER JOIN access_url_rel_session ars
-            ON s.id = ars.session_id
-        ";
-
-        $sql .= "
-            WHERE s.nbr_courses > 0
-                AND ars.access_url_id = $urlId
-        ";
+        $sql = "SELECT s.id FROM session s 
+                INNER JOIN access_url_rel_session ars
+                ON s.id = ars.session_id
+                WHERE 
+                      s.nbr_courses > 0 AND 
+                      ars.access_url_id = $urlId";
 
         if (!is_null($date)) {
             $date = Database::escape_string($date);
             $sql .= "
                 AND (
-                    ('$date' BETWEEN DATE(s.access_start_date) AND DATE(s.access_end_date))
-                    OR (s.access_end_date IS NULL)
-                    OR (
-                        s.access_start_date IS NULL
-                        AND s.access_end_date IS NOT NULL
-                        AND DATE(s.access_end_date) >= '$date'
+                    ('$date' BETWEEN DATE(s.access_start_date) AND DATE(s.access_end_date)) OR 
+                    (s.access_end_date IS NULL) OR 
+                    (
+                        s.access_start_date IS NULL AND 
+                        s.access_end_date IS NOT NULL AND 
+                        DATE(s.access_end_date) >= '$date'
                     )
                 )
             ";
@@ -606,8 +602,7 @@ class CoursesAndSessionsCatalog
         $list = Database::store_result(Database::query($sql), 'ASSOC');
         $sessions = [];
         foreach ($list as $sessionData) {
-            $id = $sessionData['id'];
-            $sessions[] = $em->find('ChamiloCoreBundle:Session', $id);
+            $sessions[] = $em->find('ChamiloCoreBundle:Session', $sessionData['id']);
         }
 
         return $sessions;

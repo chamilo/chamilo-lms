@@ -226,7 +226,8 @@ class Promotion extends Model
         if ($action == 'edit') {
             $header = get_lang('Modify');
         }
-        $id = isset($_GET['id']) ? intval($_GET['id']) : '';
+
+        $id = isset($_GET['id']) ? (int) $_GET['id'] : '';
 
         $form->addElement('header', '', $header);
         $form->addElement('hidden', 'id', $id);

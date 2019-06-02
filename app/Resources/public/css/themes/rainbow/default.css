@@ -1551,6 +1551,8 @@ blockquote {
     padding: 0.5em 10px;
     quotes: "\201C""\201D""\2018""\2019";
     display: inline-block;
+    color: #000;
+    font-family: Verdana, Helvetica, Arial, sans-serif !important;
 }
 blockquote:before {
     color: #ccc;
@@ -1560,12 +1562,7 @@ blockquote:before {
     margin-right: 0.25em;
     vertical-align: -0.4em;
 }
-blockquote p {
-    display: inline;
-    color: #000;
-    font-family: Verdana, Helvetica, Arial, sans-serif !important;
-    font-size: 12px;
-}
+
 .ck-stand-out{
     background-color: yellow;
 }

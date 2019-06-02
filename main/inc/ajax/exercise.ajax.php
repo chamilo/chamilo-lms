@@ -762,6 +762,37 @@ switch ($action) {
             true
         );
         break;
+    case 'get_quiz_embeddable':
+        $exercises = ExerciseLib::get_all_exercises_for_course_id(
+            api_get_course_info(),
+            api_get_session_id(),
+            api_get_course_int_id(),
+            false
+        );
+
+        $exercises = array_filter(
+            $exercises,
+            function (array $exercise) {
+                return ExerciseLib::isQuizEmbeddable($exercise);
+            }
+        );
+
+        $result = [];
+
+        $codePath = api_get_path(WEB_CODE_PATH);
+
+        foreach ($exercises as $exercise) {
+            $title = Security::remove_XSS(api_html_entity_decode($exercise['title']));
+
+            $result[] = [
+                'id' => $exercise['iid'],
+                'title' => strip_tags($title),
+            ];
+        }
+
+        header('Content-Type: application/json');
+        echo json_encode($result);
+        break;
     default:
         echo '';
 }

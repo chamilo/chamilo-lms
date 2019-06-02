@@ -177,7 +177,7 @@ $logInfo = [
 ];
 Event::registerLog($logInfo);
 
-/*Auto launch code */
+/* Auto launch code */
 $autoLaunchWarning = '';
 $showAutoLaunchLpWarning = false;
 $course_id = api_get_course_int_id();

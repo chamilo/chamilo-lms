@@ -1151,53 +1151,6 @@ class Statistics
     }
 
     /**
-     * @param string $startDate
-     * @param string $endDate
-     *
-     * @return array
-     */
-    private static function getLoginsByDate($startDate, $endDate)
-    {
-        /** @var DateTime $startDate */
-        $startDate = api_get_utc_datetime("$startDate 00:00:00");
-        /** @var DateTime $endDate */
-        $endDate = api_get_utc_datetime("$endDate 23:59:59");
-
-        if (empty($startDate) || empty($endDate)) {
-            return [];
-        }
-
-        $tblUser = Database::get_main_table(TABLE_MAIN_USER);
-        $tblLogin = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
-        $urlJoin = '';
-        $urlWhere = '';
-
-        if (api_is_multiple_url_enabled()) {
-            $tblUrlUser = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
-
-            $urlJoin = "INNER JOIN $tblUrlUser au ON u.id = au.user_id";
-            $urlWhere = 'AND au.access_url_id = '.api_get_current_access_url_id();
-        }
-
-        $sql = "SELECT u.id,
-                    u.firstname,
-                    u.lastname,
-                    u.username,
-                    SUM(TIMESTAMPDIFF(SECOND, l.login_date, l.logout_date)) AS time_count
-                FROM $tblUser u
-                INNER JOIN $tblLogin l ON u.id = l.login_user_id
-                $urlJoin
-                WHERE l.login_date BETWEEN '$startDate' AND '$endDate'
-                $urlWhere
-                GROUP BY u.id";
-
-        $stmt = Database::query($sql);
-        $result = Database::store_result($stmt, 'ASSOC');
-
-        return $result;
-    }
-
-    /**
      * Display the Logins By Date report and allow export its result to XLS.
      */
     public static function printLoginsByDate()
@@ -1279,5 +1232,52 @@ class Statistics
         }
 
         echo $content;
+    }
+
+    /**
+     * @param string $startDate
+     * @param string $endDate
+     *
+     * @return array
+     */
+    private static function getLoginsByDate($startDate, $endDate)
+    {
+        /** @var DateTime $startDate */
+        $startDate = api_get_utc_datetime("$startDate 00:00:00");
+        /** @var DateTime $endDate */
+        $endDate = api_get_utc_datetime("$endDate 23:59:59");
+
+        if (empty($startDate) || empty($endDate)) {
+            return [];
+        }
+
+        $tblUser = Database::get_main_table(TABLE_MAIN_USER);
+        $tblLogin = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
+        $urlJoin = '';
+        $urlWhere = '';
+
+        if (api_is_multiple_url_enabled()) {
+            $tblUrlUser = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
+
+            $urlJoin = "INNER JOIN $tblUrlUser au ON u.id = au.user_id";
+            $urlWhere = 'AND au.access_url_id = '.api_get_current_access_url_id();
+        }
+
+        $sql = "SELECT u.id,
+                    u.firstname,
+                    u.lastname,
+                    u.username,
+                    SUM(TIMESTAMPDIFF(SECOND, l.login_date, l.logout_date)) AS time_count
+                FROM $tblUser u
+                INNER JOIN $tblLogin l ON u.id = l.login_user_id
+                $urlJoin
+                WHERE l.login_date BETWEEN '$startDate' AND '$endDate'
+                $urlWhere
+                GROUP BY u.id";
+
+        $stmt = Database::query($sql);
+        $result = Database::store_result($stmt, 'ASSOC');
+
+        return $result;
     }
 }

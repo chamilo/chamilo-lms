@@ -239,7 +239,7 @@ function search_users($needle, $type)
                     $return .= Display::url(
                         $person_name,
                         'javascript: void(0);',
-                        ['onclick' => "add_user_to_session('".$user['id']."', '".addslashes($person_name)."');",]
+                        ['onclick' => "add_user_to_session('".$user['id']."', '".addslashes($person_name)."');"]
                     ).'<br>';
                 } else {
                     $return .= '...<br />';

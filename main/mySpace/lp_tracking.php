@@ -159,7 +159,7 @@ switch ($action) {
                 }
                 $table->setCellContents($row, 0, 'Q'.$choiceCounter);
                 $table->setCellContents($row, 1, $option['student_response_formatted']);
-                $result = Display::return_icon('icon_check.png',null,[],ICON_SIZE_SMALL);
+                $result = Display::return_icon('icon_check.png', null, [], ICON_SIZE_SMALL);
                 if ($option['result'] === 'wrong') {
                     $result = Display::return_icon('icon_error.png', null, [], ICON_SIZE_SMALL);
                 }
@@ -224,7 +224,7 @@ switch ($action) {
 
         $content = $contentText.'<pagebreak>'.$tableToString;
 
-        $pdf = new PDF('A4', 'P', ['margin_footer' => 4, 'top' => 40, 'bottom' => 25 ]);
+        $pdf = new PDF('A4', 'P', ['margin_footer' => 4, 'top' => 40, 'bottom' => 25]);
 
         $table = new HTML_Table(['class' => 'table', 'style' => 'display: block; margin-bottom: 50px;']);
         $logo = ChamiloApi::getPlatformLogo(

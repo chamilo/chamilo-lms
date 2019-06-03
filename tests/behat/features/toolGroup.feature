@@ -40,32 +40,6 @@ Feature: Group tool
     And I press "submit"
     Then I should see "group(s) has (have) been added"
 
-  Scenario: Change Group 0003 settings to make announcements private
-    Given I am on "/main/group/group.php?cidReq=TEMP&id_session=0"
-    And I follow "Group 0003"
-    Then I should see "Group 0003"
-    Then I follow "Edit this group"
-    Then I check the "announcements_state" radio button with "2" value
-    Then I press "Save settings"
-    Then I should see "Group settings modified"
-
-  Scenario: Change Group 0004 settings to make it private
-    Given I am on "/main/group/group.php?cidReq=TEMP&id_session=0"
-    And I follow "Group 0004"
-    Then I should see "Group 0004"
-    Then I follow "Edit this group"
-    Then I check the "announcements_state" radio button with "2" value
-    Then I press "Save settings"
-    Then I should see "Group settings modified"
-
-  Scenario: Change Group 0005 settings to make announcements private between users
-    Given I am on "/main/group/group.php?cidReq=TEMP&id_session=0"
-    And I follow "Group 0005"
-    Then I should see "Group 0005"
-    Then I follow "Edit this group"
-    Then I check the "announcements_state" radio button with "3" value
-    Then I press "Save settings"
-    Then I should see "Group settings modified"
 
   Scenario: Create document folder in group
     Given I am on "/main/group/group.php?cidReq=TEMP&id_session=0"
@@ -165,6 +139,7 @@ Feature: Group tool
     Then I follow "Group 0003"
     Then I should not see "Fiona"
 
+ # Group category overwrites all other groups settings.
   Scenario: Change Group category to allow multiple inscription of the user
     Given I am on "/main/group/group.php?cidReq=TEMP&id_session=0"
     And I follow "Edit this category"
@@ -172,6 +147,33 @@ Feature: Group tool
     Then I fill in select bootstrap static by text "#groups_per_user" select "10"
     Then I press "Edit"
     Then I should see "Group settings have been modified"
+
+  Scenario: Change Group 0003 settings to make announcements private
+    Given I am on "/main/group/group.php?cidReq=TEMP&id_session=0"
+    And I follow "Group 0003"
+    Then I should see "Group 0003"
+    Then I follow "Edit this group"
+    Then I check the "announcements_state" radio button with "2" value
+    Then I press "Save settings"
+    Then I should see "Group settings modified"
+
+  Scenario: Change Group 0004 settings to make it private
+    Given I am on "/main/group/group.php?cidReq=TEMP&id_session=0"
+    And I follow "Group 0004"
+    Then I should see "Group 0004"
+    Then I follow "Edit this group"
+    Then I check the "announcements_state" radio button with "2" value
+    Then I press "Save settings"
+    Then I should see "Group settings modified"
+
+  Scenario: Change Group 0005 settings to make announcements private between users
+    Given I am on "/main/group/group.php?cidReq=TEMP&id_session=0"
+    And I follow "Group 0005"
+    Then I should see "Group 0005"
+    Then I follow "Edit this group"
+    Then I check the "announcements_state" radio button with "3" value
+    Then I press "Save settings"
+    Then I should see "Group settings modified"
 
   Scenario: Add fapple and acostea to Group 0005
     Given I am on "/main/group/group.php?cidReq=TEMP&id_session=0"
@@ -181,8 +183,8 @@ Feature: Group tool
     Then I should see "Group members"
     Then wait for the page to be loaded
     Then I follow "group_members_tab"
-    Then I select "Fiona Apple Maggart (fapple)" from "group_members"
-    Then I select "Andrea Costea (acostea)" from "group_members"
+    Then I additionally select "Fiona Apple Maggart (fapple)" from "group_members"
+    Then I additionally select "Andrea Costea (acostea)" from "group_members"
     Then I press "group_members_rightSelected"
     Then I press "Save settings"
     And wait for the page to be loaded
@@ -401,5 +403,3 @@ Feature: Group tool
     Then I should see "Sorry, you are not allowed to access this page"
     Then I visit URL saved with name "announcement_only_for_fapple_private"
     Then I should see "Sorry, you are not allowed to access this page"
-
-

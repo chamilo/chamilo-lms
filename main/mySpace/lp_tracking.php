@@ -135,7 +135,13 @@ switch ($action) {
                         $numberChoices++;
                         break;
                     case 'matching':
-                        $interaction['student_response_formatted'] = cut(implode('<br />', explode(',', $data)), 30);
+                        $list = explode(',', $data);
+                        if (!empty($list)) {
+                            foreach ($list as &$item) {
+                                $item = cut($item, 30);
+                            }
+                            $interaction['student_response_formatted'] = implode('<br />', $list);
+                        }
                         $questions[$questionCounter]['options'][] = $interaction;
                         $numberChoices++;
                         break;

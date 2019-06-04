@@ -134,6 +134,10 @@ switch ($action) {
                         $questions[$questionCounter]['options'][] = $interaction;
                         $numberChoices++;
                         break;
+                    case 'matching':
+                        $questions[$questionCounter]['options'][] = $interaction;
+                        $numberChoices++;
+                        break;
                 }
             }
         }

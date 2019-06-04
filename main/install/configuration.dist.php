@@ -1208,6 +1208,35 @@ $_configuration['required_extra_fields_in_profile'] = [
 // Blocks "my files" access to anon users
 //$_configuration['block_my_files_access'] = false;
 
+// Allow compilatio plagiarism prevention tool
+/*
+CREATE TABLE c_plagiarism_compilatio_docs (
+    id INT AUTO_INCREMENT NOT NULL,
+    c_id int(11) NOT NULL,
+    document_id int(11) NOT NULL,
+    compilatio_id varchar(32) CHARACTER SET utf8 NOT NULL,
+    PRIMARY KEY (id)
+) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;
+
+// If table exists already
+ALTER TABLE c_plagiarism_compilatio_docs drop primary key;
+ALTER TABLE c_plagiarism_compilatio_docs ADD COLUMN id INT AUTO_INCREMENT NOT NULL PRIMARY KEY;
+ALTER TABLE c_plagiarism_compilatio_docs CHANGE COLUMN id_doc document_id INT NOT NULL;*/
+//$_configuration['allow_compilatio_tool'] = false;
+//$_configuration['compilatio_tool'] = [
+//    'settings' => [
+//        'key' => '',
+//        'soap_url' => '',
+//        'proxy_host' => '',
+//        'proxy_port' => '',
+//        'max_filesize' => '',
+//        'transport_mode' => '',
+//        'wget_uri' => '',
+//        'wget_login' => '',
+//        'wget_password' => '',
+//    ]
+//];
+
 // KEEP THIS AT THE END
 // -------- Custom DB changes
 // Add user activation by confirmation email

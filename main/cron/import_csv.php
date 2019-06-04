@@ -1224,16 +1224,12 @@ class ImportCsv
                 $update = false;
                 $item = null;
                 if (!isset($event[$extraFieldName])) {
-                    $this->logger->addInfo(
-                        "No external_calendar_itemID found. Skipping ..."
-                    );
+                    $this->logger->addInfo('No external_calendar_itemID found. Skipping ...');
                     continue;
                 } else {
                     $externalEventId = $event[$extraFieldName];
                     if (empty($externalEventId)) {
-                        $this->logger->addInfo(
-                            "external_calendar_itemID was set but empty. Skipping ..."
-                        );
+                        $this->logger->addInfo('external_calendar_itemID was set but empty. Skipping ...');
                         continue;
                     }
 

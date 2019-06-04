@@ -381,6 +381,9 @@ $action_images['shibboleth'] = 'shibboleth.png';
 $action_images['facebook'] = 'facebook.png';
 $action_images['crons'] = 'crons.png';
 $action_images['webservices'] = 'webservices.png';
+if (api_get_configuration_value('allow_compilatio_tool')) {
+    $action_images['plagiarism'] = 'plagiarism.png';
+}
 
 $action_array = [];
 $resultcategories = [];
@@ -407,6 +410,9 @@ $resultcategories[] = ['category' => 'Shibboleth'];
 $resultcategories[] = ['category' => 'Facebook'];
 $resultcategories[] = ['category' => 'Crons'];
 $resultcategories[] = ['category' => 'WebServices'];
+if (api_get_configuration_value('allow_compilatio_tool')) {
+    $resultcategories[] = ['category' => 'Plagiarism'];
+}
 
 foreach ($resultcategories as $row) {
     $url = [];

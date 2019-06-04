@@ -209,6 +209,23 @@ if (api_is_allowed_to_session_edit(false, true) && !empty($workId) && !$isDrhOfC
 
 echo Display::toolbarAction('toolbar-worklist', [$actionsLeft]);
 
+$plagiarismListJqgridColumn = [];
+$plagiarismListJqgridLine = [];
+if (api_get_configuration_value('allow_compilatio_tool')) {
+    require_once api_get_path(SYS_CODE_PATH).'/plagiarism/compilatio/config.php';
+    $plagiarismListJqgridColumn = ['Compilatio'];
+    $plagiarismListJqgridLine = [
+        [
+            'name'=>'compilatio',
+            'index'=>'compilatio',
+            'width'=>'40',
+            'align'=>'left',
+            'search' => 'false',
+            'sortable'=>'false'
+        ]
+    ];
+
+}
 if (!empty($my_folder_data['title'])) {
     echo Display::page_subheader($my_folder_data['title']);
 }
@@ -233,9 +250,10 @@ if (!empty($work_data['enable_qualification']) &&
         get_lang('Score'),
         get_lang('Date'),
         get_lang('Status'),
-        get_lang('UploadCorrection'),
-        get_lang('Actions'),
+	    get_lang('UploadCorrection'),
     ];
+    $columns = array_merge($columns, $plagiarismListJqgridColumn);
+    $columns[] = get_lang('Actions');
 
     $column_model = [
         [
@@ -284,14 +302,15 @@ if (!empty($work_data['enable_qualification']) &&
             'sortable' => 'false',
             'title' => 'false',
         ],
-        [
-            'name' => 'actions',
-            'index' => 'actions',
-            'width' => '25',
-            'align' => 'left',
-            'search' => 'false',
-            'sortable' => 'false',
-        ],
+    ];
+    $column_model = array_merge($column_model, $plagiarismListJqgridLine);
+    $column_model[] = [
+        'name' => 'actions',
+        'index' => 'actions',
+        'width' => '25',
+        'align' => 'left',
+        'search' => 'false',
+        'sortable' => 'false',
     ];
 } else {
     $type = 'complex';
@@ -301,8 +320,9 @@ if (!empty($work_data['enable_qualification']) &&
         get_lang('Feedback'),
         get_lang('Date'),
         get_lang('UploadCorrection'),
-        get_lang('Actions'),
     ];
+    $columns = array_merge($columns, $plagiarismListJqgridColumn);
+    $columns[] = get_lang('Actions');
 
     $column_model = [
         [
@@ -344,16 +364,17 @@ if (!empty($work_data['enable_qualification']) &&
             'sortable' => 'false',
             'title' => 'false',
         ],
-        [
-            'name' => 'actions',
-            'index' => 'actions',
-            'width' => '30',
-            'align' => 'left',
-            'search' => 'false',
-            'sortable' => 'false',
-            //'wrap_cell' => 'true',
-        ],
     ];
+
+    $column_model = array_merge($column_model, $plagiarismListJqgridLine);
+    $column_model[] = [
+         'name' => 'actions',
+         'index' => 'actions',
+         'width' => '25',
+         'align' => 'left',
+         'search' => 'false',
+         'sortable' => 'false',
+     ];
 }
 
 $extra_params = [
@@ -450,4 +471,274 @@ echo '<table style="display:none; width:100%" class="files data_table">
         </tr>
     </table>';
 echo '</div></div></div>';
-Display :: display_footer();
+
+if (api_get_configuration_value('allow_compilatio_tool')) {
+    $workTable = Database :: get_course_table(TABLE_STUDENT_PUBLICATION);
+    $courseId = $courseInfo['real_id'];
+    $form_action['analyseCompilatio'] = [
+        'label' => get_lang('compilatioStartAnalysis'),
+        'data-action' => get_lang('compilatioStartAnalysis'),
+        'onClick' => "onclick='getMultiCompilatio()'",
+    ];
+
+    $html = '<form id ="mes_actions" class="form-search" method="post" name="form_actions">';
+    $html .= '<input type="hidden" name="action">';
+    $html .= '<table style="width:100%;">';
+    $html .= '<tr>';
+    $html .= '<td>';
+    if (count($form_action) > 0) {
+        $html .= '<div class="btn-toolbar">';
+        $html .= '<div class="btn-group">';
+        $html .= '<a class="btn btn-default" href="?'
+            .  '&amp;'
+            . "gbox_results"
+            .  '&amp;'
+            . 'selectall=1" onclick="javascript: setCheckbox(true, \''
+            . "gbox_results". '\'); return false;">'
+            . get_lang('SelectAll')
+            . '</a>';
+        $html .= '<a class="btn btn-default" href="?'
+            .  '" onclick="javascript: setCheckbox(false, \''
+            . "gbox_results"
+            . '\'); return false;">'
+            . get_lang('UnSelectAll')
+            . '</a> ';
+        $html .= '</div>';
+        $html .= '<div class="btn-group">
+                                <button class="btn btn-default" onclick="javascript:return false;">'
+            . get_lang('Actions')
+            . '</button>'
+            . '<button class="btn btn-default dropdown-toggle" data-toggle="dropdown">'
+            . '<span class="caret"></span>'
+            . '</button>';
+	$html .= '<ul class="dropdown-menu">';
+        /*ORIGINAL*/
+//        foreach ($form_action as $action => & $label) {
+//            $html .= '<li><a data-action ="' . $action . '" href="#" onclick="javascript:action_click(this, \'' . "gbox_results" . '\');">' . $label . '</a></li>';
+//        }
+        /*fin original*/
+        foreach ($form_action as $action ) {
+            $html .= '<li>
+                        <a data-action ="'.$action['data-action'].'" href="#" '.$action['onClick'].'>'
+                        .$action['label'].'</a>
+                    </li>';
+        }
+        $html .= '</ul>';
+        $html .= '</div>';//btn-group
+        $html .= '</div>'; //toolbar
+        $html .= '</td></tr></table></form>';
+    }
+    echo $html;
+
+    $compTable = Database::get_course_table(TABLE_PLAGIARISM);
+
+    $listCompilatioDocId = [];
+    $compilatioQuery = "SELECT * FROM $compTable WHERE c_id= $courseId";
+    $compilatioResult = Database::query($compilatioQuery);
+    while ($compilatioData = Database::fetch_array($compilatioResult)) {
+        array_push($listCompilatioDocId, $compilatioData['document_id']);
+    }
+    $javascriptWorkId = '';
+    $sql = "SELECT * FROM $workTable WHERE c_id= $courseId AND parent_id= $workId AND active = 1";
+    $res = Database::query($sql);
+    while ($data = Database::fetch_array($res)) {
+        if (in_array($data['id'], $listCompilatioDocId)) {
+            $javascriptWorkId .= $data['id'].'a';
+        }
+    }
+}
+
+Display::display_footer();
+?>
+<!--
+    Lets display the javascript AJAX tools for refreshing datas that needed to be refreshed
+    Only document with state ANALYSE_IN_QUEUE or ANALYSE_PROCESSING need to ask server
+    for a new state
+    Hubert Borderiou - Grenoble Universites - avril 2013
+-->
+<script>
+    var xhrObject;      // the htmlhttprequest object
+    var analyseComplete = "ANALYSE_COMPLETE";
+    var analyseProcessing = "ANALYSE_PROCESSING";
+    var analyseInQueue = "ANALYSE_IN_QUEUE";
+    var refreshDelaisAfter = 30000;
+    var allWorkId = "<?php echo $javascriptWorkId?>";
+    var workFolderId = "<?php echo $workId; ?>";
+    var compilationWebUrl = "<?php echo api_get_path(WEB_CODE_PATH) . 'plagiarism/compilatio/' ?>";
+    var divExisteTimer = null;
+    var msgWaitJS = '<?php echo Display::display_confirmation_message(get_lang('PleaseWaitThisCouldTakeAWhile')); ?>';
+    var div = document.createElement('div');
+    var referent =  document.getElementById('toolbar-worklist');
+    var Analyse = '<?php echo get_lang('compilatioAnalyse'); ?>';
+    var compiReport = '<?php echo get_lang('compilatioSeeReport'); ?>';
+    var compiNonToAnalyse = '<?php echo Display::display_error_message(get_lang('compilatioNonToAnalyse')); ?>';
+    var clickTrigger = false;
+
+    function compilatioInit() {
+        if (isWorkFolder()) {
+            searchAdvancement();
+            setInterval("searchAdvancement()", refreshDelaisAfter);
+
+            if(!clickTrigger) {
+                clickTrigger = true;
+                $('.getSingleCompilatio').on('click', function () {
+                    var parts = $(this).parent().attr('id').split('id_avancement');
+                    getSingleCompilatio(parts[1]);
+                });
+            }
+
+        }
+    }
+
+    // true if we are in a work folder
+    function isWorkFolder() {
+        var res = false;
+        if (workFolderId.match(/[0-9]+/)) {
+            res = true;
+        }
+        return res;
+    }
+
+    // check all compilatio docs
+    function checkAllCompilatio(action) {
+        $("input").each(function() {
+            if ($(this).attr("id")) {
+                objId = $(this).attr("id");
+                listObjId = objId.match(/jqg_results_(\d+)/)
+                if (listObjId.length > 1) {
+                    $(this).prop('checked', action);
+                }
+            }
+        });
+    }
+
+    function getSingleCompilatio(itemId) {
+        if (div.id == "status_message") {
+            referent.removeChild(div);
+        }
+        div.id = "status_message";
+        div.className = 'row';
+        div.innerHTML = '<div class="col-md-6"> <br>'  + msgWaitJS + '</div>';
+        referent.appendChild(div);
+        $.ajax({
+            url: compilationWebUrl + "upload.php?doc="+itemId,
+            type: "get",
+            dataType: "html",
+            success: function(message) {
+                allWorkId += itemId+"a";
+                compilatioInit();
+                if (message.trim() != ""){
+                    div.id = "status_message";
+                    div.className = 'row';
+                    div.innerHTML = '<div class="col-md-6"> <br>'+message+'</div>';
+                    referent.appendChild(div);
+                }
+            }
+        });
+    }
+
+    function getMultiCompilatio() {
+        if (div.id == "status_message") {
+            referent.removeChild(div);
+        }
+        div.id = "status_message";
+        div.className = 'row';
+        div.innerHTML = '<div class="col-md-6"> <br>'  + msgWaitJS + '</div>';
+        referent.appendChild(div);
+        multi_compilatio = "";
+        $("input:checked").each(function() {
+            if ($(this).attr("id")) {
+                objId = $(this).attr("id");
+                listObjId = objId.match(/jqg_results_(\d+)/)
+                if(listObjId){
+                    objClick = document.getElementById('id_avancement'+listObjId[1]);
+                    if (objClick){
+                        objLink = objClick.getElementsByTagName('a');
+                        if (objLink){
+                            stringLink = [].map.call( objLink, function(node){
+                                return node.textContent || node.innerText || "";
+                            }).join("");
+                            if(stringLink.trim() == Analyse.trim()){
+                                if (listObjId && listObjId.length > 1) {
+                                    multi_compilatio += listObjId[1]+"a";
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        if ($("#verif")) {
+            $("#verif").append(multi_compilatio);
+        }
+
+        // run compilatio
+        if (multi_compilatio !=  "") {
+            $.ajax({
+                url: compilationWebUrl + "upload.php",
+                data: { doc: multi_compilatio, type: "multi"}, // on envoie $_GET['id_region'] *// idz
+                success: function(message) { // idz
+                    allWorkId = multi_compilatio;//idz
+                    compilatioInit();
+                    if (message.trim() != ""){
+                        div.id = "status_message";
+                        div.className = 'row';
+                        div.innerHTML = '<div class="col-md-6"> <br>'+message+'</div>';
+                        referent.appendChild(div);
+                    }
+                }
+            });
+        } else {
+            //multi_compilatio is empty
+            div.id = "status_message";
+            div.className = 'row';
+            div.innerHTML = '<div class="col-md-6"> <br>'  + compiNonToAnalyse + '</div>';
+            referent.appendChild(div);
+        }
+    }
+
+    function searchAdvancement(workId) {
+        $.ajax({
+            url: compilationWebUrl + "compilatio_ajax.php?workid=" + allWorkId,
+            type: "get",
+            dataType: "html",
+            error: function(){
+                showData("<?php echo get_lang('compilatioComunicationAjaxImpossible');?>");
+            },
+            success: function( strData ){
+                showData( strData );
+            }
+        });
+    }
+
+    function deleteIdListeRefresh(id) {
+        var regexp = eval("/"+id+":/");
+        allWorkId = allWorkId.replace(regexp, "");
+    }
+
+    function showData(res) {
+        var listRes = new Array();
+        // for debugging
+        $("#verif").html("");
+        // parse the answer string
+        listRes = res.split("|");
+        for (var i=0; i < listRes.length; i=i+3) {
+            if (listRes[i] != "") {
+                var workId = listRes[i];
+                if (i < listRes.length) {
+                    var HTMLcode = listRes[i+1];
+                }
+                if (i < listRes.length + 1) {
+                    var idStatus = listRes[i+2];
+                    if (idStatus != analyseInQueue && idStatus != analyseProcessing) {
+                        deleteIdListeRefresh(workId);
+                    }
+                    $("#verif").append(workId+":"+idStatus+"<br/>");
+                }
+                $("#"+"id_avancement"+workId).html(HTMLcode);
+            }
+        }
+    }
+</script>
+

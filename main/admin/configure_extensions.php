@@ -341,6 +341,23 @@ Display::display_header($nameTool);
         </div>
     </div>
      */ ?>
+
+        <!-- COMPILATIO JLUCAS -->
+        <div id="main_compilatio">
+            <div id="extension_header_compilatio" class="accordion_header">
+                <a href="#"><?php echo get_lang('compilatioPlagiarismDetector');?></a>
+            </div>
+            <div id="extension_content_compilatio" style="display:none;padding:0;width:780px;" class="accordion_content">
+                <table width="100%" cellpadding="0" cellspacing="0">
+                    <tr>
+                        <td align="center">
+                            <iframe frameborder="0" width="780" height="480" src="../plagiarism/compilatio/compiladmin.php"></iframe>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
 </div><!-- /content -->
 
 <?php

@@ -57,10 +57,10 @@ class ExerciseLink extends AbstractLink
         // @todo
         $uploadPath = null;
 
-        $sql = 'SELECT id,title FROM '.$exerciseTable.'
+        $sql = 'SELECT iid, title FROM '.$exerciseTable.'
 				WHERE c_id = '.$this->course_id.' AND active=1  '.$session_condition;
 
-        $sqlLp = "SELECT e.id, e.title 
+        $sqlLp = "SELECT e.iid, e.title 
                   FROM $exerciseTable e 
                   INNER JOIN $lpItemTable i
                   ON (e.c_id = i.c_id AND e.id = i.path)

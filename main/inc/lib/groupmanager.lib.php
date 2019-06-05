@@ -1819,11 +1819,11 @@ class GroupManager
         $course_id = empty($course_id) ? api_get_course_int_id() : (int) $course_id;
         $group_id = $groupInfo['id'];
 
-        $table = Database::get_course_table(TABLE_GROUP_USER);
         if (!empty($user_ids)) {
+            $table = Database::get_course_table(TABLE_GROUP_USER);
             foreach ($user_ids as $user_id) {
                 if (self::canUserSubscribe($user_id, $groupInfo)) {
-                    $user_id = intval($user_id);
+                    $user_id = (int) $user_id;
                     $sql = "INSERT INTO ".$table." (c_id, user_id, group_id)
                             VALUES ('$course_id', '".$user_id."', '".$group_id."')";
                     Database::query($sql);
@@ -2139,6 +2139,13 @@ class GroupManager
             case self::TOOL_PRIVATE:
                 $userIsInGroup = self::is_user_in_group($user_id, $groupInfo);
                 if ($userIsInGroup) {
+                    return true;
+                }
+                break;
+            case self::TOOL_PRIVATE_BETWEEN_USERS:
+                // Only works for announcements for now
+                $userIsInGroup = self::is_user_in_group($user_id, $groupInfo);
+                if ($userIsInGroup && $tool == self::GROUP_TOOL_ANNOUNCEMENT) {
                     return true;
                 }
                 break;
@@ -2860,17 +2867,16 @@ class GroupManager
         echo '
             <ul class="toolbar-groups nav nav-tabs">
                 <li class="'.$activeSettings.'">
-                    <a href="'.sprintf($url, 'settings.php').'">
+                    <a id="group_settings_tab" href="'.sprintf($url, 'settings.php').'">
                     '.Display::return_icon('settings.png').' '.get_lang('Settings').'
                     </a>
                 </li>
                 <li class="'.$activeMember.'">
-                    <a href="'.sprintf($url, 'member_settings.php').'">
-                    '.Display::return_icon('user.png').' '.get_lang('GroupMembers').'
-                    </a>
+                    <a id="group_members_tab" href="'.sprintf($url, 'member_settings.php').'">
+                    '.Display::return_icon('user.png').' '.get_lang('GroupMembers').'</a>
                 </li>
                 <li class="'.$activeTutor.'">
-                    <a href="'.sprintf($url, 'tutor_settings.php').'">
+                    <a id="group_tutors_tab" href="'.sprintf($url, 'tutor_settings.php').'">
                     '.Display::return_icon('teacher.png').' '.get_lang('GroupTutors').'
                     </a>
                 </li>

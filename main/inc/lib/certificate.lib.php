@@ -871,4 +871,64 @@ class Certificate extends Model
 
         return Database::store_result($rs, 'ASSOC');
     }
+
+    /**
+     * @param int $userId
+     */
+    public static function generateUserSkills($userId)
+    {
+        $controller = new IndexManager(get_lang('MyCourses'));
+        $courseAndSessions = $controller->returnCoursesAndSessions($userId, true, null, true, false);
+
+        if (isset($courseAndSessions['courses']) && !empty($courseAndSessions['courses'])) {
+            foreach ($courseAndSessions['courses'] as $course) {
+                $cats = Category::load(
+                    null,
+                    null,
+                    $course['code'],
+                    null,
+                    null,
+                    null,
+                    false
+                );
+
+                if (isset($cats[0]) && !empty($cats[0])) {
+                    Category::generateUserCertificate(
+                        $cats[0]->get_id(),
+                        $userId
+                    );
+                }
+            }
+        }
+
+        if (isset($courseAndSessions['sessions']) && !empty($courseAndSessions['sessions'])) {
+            foreach ($courseAndSessions['sessions'] as $sessionCategory) {
+                if (isset($sessionCategory['sessions'])) {
+                    foreach ($sessionCategory['sessions'] as $sessionData) {
+                        if (!empty($sessionData['courses'])) {
+                            $sessionId = $sessionData['session_id'];
+                            foreach ($sessionData['courses'] as $courseData) {
+                                $cats = Category:: load(
+                                    null,
+                                    null,
+                                    $courseData['course_code'],
+                                    null,
+                                    null,
+                                    $sessionId,
+                                    false
+                                );
+
+                                if (isset($cats[0]) && !empty($cats[0])) {
+                                    Category::generateUserCertificate(
+                                        $cats[0]->get_id(),
+                                        $userId
+                                    );
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
 }

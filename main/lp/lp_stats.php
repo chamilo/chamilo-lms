@@ -25,7 +25,7 @@ $extendId = isset($_GET['extend_id']) ? $_GET['extend_id'] : null;
 $extendAttemptId = isset($_GET['extend_attempt_id']) ? $_GET['extend_attempt_id'] : null;
 $extendedAttempt = isset($_GET['extend_attempt']) ? $_GET['extend_attempt'] : null;
 $extendedAll = isset($_GET['extend_all']) ? $_GET['extend_all'] : null;
-$export = isset($_GET['export']) && $_GET['export'] === 'csv' ? true : false;
+$export = isset($_GET['export']) && $_GET['export'] === 'csv';
 $allowExtend = isset($_GET['allow_extend']) ? $_GET['allow_extend'] : 1;
 
 $lpReportType = api_get_setting('lp_show_reduced_report');

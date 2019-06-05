@@ -28,6 +28,12 @@ switch ($action) {
         $certificate = new Certificate(0, api_get_user_id(), false, false);
         $certificate->generatePdfFromCustomCertificate();
         break;
+    case 'generate':
+        $certificate = Certificate::generateUserSkills(api_get_user_id());
+        Display::addFlash(Display::return_message(get_lang('Updated')));
+        header('Location: '.api_get_self());
+        exit;
+        break;
 }
 
 $skillTable = Database::get_main_table(TABLE_MAIN_SKILL);

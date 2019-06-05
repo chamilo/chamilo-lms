@@ -87,6 +87,10 @@ $suredel = trim(get_lang('AreYouSureToDeleteJS'));
 
 $lpPathInfo = $lp->generate_lp_folder(api_get_course_info());
 
+DocumentManager::createDefaultAudioFolder($courseInfo);
+
+$audioFolderId = DocumentManager::get_document_id($courseInfo, '/audio');
+
 $file = null;
 if (isset($lp_item->audio) && !empty($lp_item->audio)) {
     $file = api_get_path(SYS_COURSE_PATH).$courseInfo['path'].'/document/audio/'.$lp_item->audio;

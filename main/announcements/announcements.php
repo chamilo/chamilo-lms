@@ -37,6 +37,7 @@ $allowToEdit = (
     api_is_allowed_to_edit(false, true) ||
     (api_get_course_setting('allow_user_edit_announcement') && !api_is_anonymous())
 );
+$allowStudentInGroupToSend = false;
 
 $sessionId = api_get_session_id();
 $drhHasAccessToSessionContent = api_drh_can_access_all_session_content();
@@ -60,15 +61,16 @@ $tbl_courses = Database::get_main_table(TABLE_MAIN_COURSE);
 $tbl_sessions = Database::get_main_table(TABLE_MAIN_SESSION);
 $tbl_announcement = Database::get_course_table(TABLE_ANNOUNCEMENT);
 $tbl_item_property = Database::get_course_table(TABLE_ITEM_PROPERTY);
+
 $isTutor = false;
 if (!empty($group_id)) {
-    $groupProperties = GroupManager:: get_group_properties($group_id);
+    $groupProperties = GroupManager::get_group_properties($group_id);
     $interbreadcrumb[] = [
-        'url' => api_get_path(WEB_CODE_PATH)."group/group.php?".api_get_cidreq(),
+        'url' => api_get_path(WEB_CODE_PATH).'group/group.php?'.api_get_cidreq(),
         'name' => get_lang('Groups'),
     ];
     $interbreadcrumb[] = [
-        'url' => api_get_path(WEB_CODE_PATH)."group/group_space.php?".api_get_cidreq(),
+        'url' => api_get_path(WEB_CODE_PATH).'group/group_space.php?'.api_get_cidreq(),
         'name' => get_lang('GroupSpace').' '.$groupProperties['name'],
     ];
 
@@ -78,10 +80,14 @@ if (!empty($group_id)) {
         if ($isTutor) {
             $allowToEdit = true;
         }
+
+        // Last chance ... students can send announcements
+        if ($groupProperties['announcements_state'] == GroupManager::TOOL_PRIVATE_BETWEEN_USERS) {
+            $allowStudentInGroupToSend = true;
+        }
     }
 }
 
-/* Tracking */
 Event::event_access_tool(TOOL_ANNOUNCEMENT);
 
 $announcement_id = isset($_GET['id']) ? (int) $_GET['id'] : null;
@@ -166,9 +172,11 @@ switch ($action) {
             'url' => api_get_path(WEB_CODE_PATH).'announcements/announcements.php?'.api_get_cidreq(),
             'name' => $nameTools,
         ];
-
         $nameTools = get_lang('View');
         $content = AnnouncementManager::displayAnnouncement($announcement_id);
+        if (empty($content)) {
+            api_not_allowed(true);
+        }
         break;
     case 'list':
         $htmlHeadXtra[] = api_get_jqgrid_js();
@@ -291,20 +299,22 @@ switch ($action) {
 
         if (empty($count)) {
             $html = '';
-            if ($allowToEdit && (empty($_GET['origin']) || $_GET['origin'] !== 'learnpath')) {
-                $html .= '<div id="no-data-view" class="tool-view">';
+            if (($allowToEdit || $allowStudentInGroupToSend) &&
+                (empty($_GET['origin']) || $_GET['origin'] !== 'learnpath')
+            ) {
+                $html .= '<div id="no-data-view">';
                 $html .= '<h3>'.get_lang('Announcements').'</h3>';
                 $html .= Display::return_icon('valves.png', '', [], 64);
                 $html .= '<div class="controls">';
                 $html .= Display::url(
-                    get_lang('Add Announcement'),
+                    get_lang('AddAnnouncement'),
                     api_get_self()."?".api_get_cidreq()."&action=add",
                     ['class' => 'btn btn-primary']
                 );
                 $html .= '</div>';
                 $html .= '</div>';
             } else {
-                $html = Display::return_message(get_lang('No Announcements'), 'warning');
+                $html = Display::return_message(get_lang('NoAnnouncements'), 'warning');
             }
             $content = $html;
         } else {
@@ -389,8 +399,10 @@ switch ($action) {
             api_not_allowed(true);
         }
 
-        if (!$allowToEdit) {
-            api_not_allowed(true);
+        if ($allowStudentInGroupToSend === false) {
+            if (!$allowToEdit) {
+                api_not_allowed(true);
+            }
         }
 
         // DISPLAY ADD ANNOUNCEMENT COMMAND
@@ -768,7 +780,7 @@ if (empty($_GET['origin']) || $_GET['origin'] !== 'learnpath') {
 // Actions
 $show_actions = false;
 $actionsLeft = '';
-if ($allowToEdit && (empty($_GET['origin']) || $_GET['origin'] !== 'learnpath')) {
+if (($allowToEdit || $allowStudentInGroupToSend) && (empty($_GET['origin']) || $_GET['origin'] !== 'learnpath')) {
     if (in_array($action, ['add', 'modify', 'view'])) {
         $actionsLeft .= "<a href='".api_get_self()."?".api_get_cidreq()."'>".
             Display::return_icon('back.png', get_lang('Back'), '', ICON_SIZE_MEDIUM).
@@ -788,7 +800,7 @@ if ($allowToEdit && (empty($_GET['origin']) || $_GET['origin'] !== 'learnpath'))
 
 if ($allowToEdit && api_get_group_id() == 0) {
     $allow = api_get_configuration_value('disable_delete_all_announcements');
-    if ($allow === false) {
+    if ($allow === false && api_is_allowed_to_edit()) {
         if (!isset($_GET['action']) ||
             isset($_GET['action']) && $_GET['action'] == 'list'
         ) {

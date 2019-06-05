@@ -407,6 +407,7 @@ define('SCORE_CUSTOM', 10); // Good!
 define('SCORE_DIV_SIMPLE_WITH_CUSTOM', 11); // X - Good!
 define('SCORE_DIV_SIMPLE_WITH_CUSTOM_LETTERS', 12); // X - Good!
 define('SCORE_ONLY_SCORE', 13); // X - Good!
+define('SCORE_NUMERIC', 14);
 
 define('SCORE_BOTH', 1);
 define('SCORE_ONLY_DEFAULT', 2);
@@ -948,6 +949,7 @@ function api_get_path($path = '', $configuration = [])
             //$paths[$root_web][REL_PATH] = $virtualChamilo[REL_PATH];
             //$paths[$root_web][REL_COURSE_PATH] = $virtualChamilo[REL_COURSE_PATH];
         }
+
         $isInitialized[$root_web] = true;
     }
 
@@ -959,6 +961,7 @@ function api_get_path($path = '', $configuration = [])
     }
 
     // Second purification.
+
     // Replacing Windows back slashes.
     $path = str_replace('\\', '/', $path);
     // Query strings sometimes mighth wrongly appear in non-URLs.
@@ -968,6 +971,7 @@ function api_get_path($path = '', $configuration = [])
     }
 
     // Detection of the input path type. Conversion to semi-absolute type ( /chamilo/main/inc/.... ).
+
     if (preg_match(VALID_WEB_PATH, $path)) {
         // A special case: When a URL points to the document download script directly, without
         // mod-rewrite translation, we have to translate it into an "ordinary" web path.
@@ -1148,7 +1152,6 @@ function api_valid_email($address)
 function api_protect_course_script($print_headers = false, $allow_session_admins = false, $allow_drh = false)
 {
     $course_info = api_get_course_info();
-
     if (empty($course_info)) {
         api_not_allowed($print_headers);
 
@@ -1664,7 +1667,7 @@ function _api_format_user($user, $add_password = false, $loadAvatars = true)
  * @param bool $loadAvatars              turn off to improve performance and if avatars are not needed
  * @param bool $updateCache              update apc cache if exists
  *
- * @return array $user_info user_id, lastname, firstname, username, email, etc
+ * @return mixed $user_info user_id, lastname, firstname, username, email, etc or false on error
  *
  * @author Patrick Cool <patrick.cool@UGent.be>
  * @author Julio Montoya
@@ -4014,13 +4017,13 @@ function convert_sql_date($last_post_datetime)
  * the only one that is actually from the session, in case there are results from
  * session 0 *AND* session n).
  *
- * @param array     Course properties array (result of api_get_course_info())
- * @param string    Tool (learnpath, document, etc)
- * @param int       The item ID in the given tool
- * @param int       The session ID (optional)
- * @param string $tool
+ * @param array  $_course  Course properties array (result of api_get_course_info())
+ * @param string $tool     Tool (learnpath, document, etc)
+ * @param int    $id       The item ID in the given tool
+ * @param int    $session  The session ID (optional)
  * @param int    $user_id
  * @param string $type
+ * @param string $group_id
  *
  * @return int -1 on error, 0 if invisible, 1 if visible
  */
@@ -4897,8 +4900,12 @@ function api_get_language_id($language)
  */
 function api_get_language_info($languageId)
 {
+    if (empty($languageId)) {
+        return [];
+    }
+
     $language = Database::getManager()
-        ->find('ChamiloCoreBundle:Language', intval($languageId));
+        ->find('ChamiloCoreBundle:Language', $languageId);
 
     if (!$language) {
         return [];

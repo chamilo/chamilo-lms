@@ -127,7 +127,7 @@ class AnnouncementManager
                         $value = $extra['value'];
                         if ($value instanceof ExtraFieldValues) {
                             $field = $value->getField();
-                            if ($field) {
+                            if ($field instanceof ExtraFieldEntity) {
                                 $data['extra_'.$field->getVariable()] = $value->getValue();
                             }
                         }
@@ -162,7 +162,7 @@ class AnnouncementManager
      */
     public static function get_all_annoucement_by_course($course_info, $session_id = 0)
     {
-        $session_id = intval($session_id);
+        $session_id = (int) $session_id;
         $courseId = $course_info['real_id'];
 
         $tbl_announcement = Database::get_course_table(TABLE_ANNOUNCEMENT);
@@ -318,13 +318,15 @@ class AnnouncementManager
      * @param int $announcementId
      * @param int $courseId
      * @param int $userId
+     * @param int $groupId
      *
      * @return array
      */
     public static function getAnnouncementInfoById(
         $announcementId,
         $courseId,
-        $userId
+        $userId,
+        $groupId = 0
     ) {
         if (api_is_allowed_to_edit(false, true) ||
             (api_get_course_setting('allow_user_edit_announcement') && !api_is_anonymous())
@@ -339,13 +341,22 @@ class AnnouncementManager
                         a.cId = :course
                     ORDER BY a.displayOrder DESC";
         } else {
-            $group_list = GroupManager::get_group_ids($courseId, api_get_user_id());
-
-            if (empty($group_list)) {
-                $group_list[] = 0;
-            }
+            $groupId = (int) $groupId;
+            $groupList[] = $groupId;
 
             if (api_get_user_id() != 0) {
+                $extraGroupCondition = '';
+                if (!empty($groupId)) {
+                    $groupProperties = GroupManager::get_group_properties($groupId);
+                    if ($groupProperties['announcements_state'] == GroupManager::TOOL_PRIVATE_BETWEEN_USERS) {
+                        $extraGroupCondition = " AND (
+                            ip.toUser = $userId AND ip.group = $groupId OR
+                            (ip.group IN ('0') OR ip.group IS NULL) OR
+                            (ip.group = $groupId AND (ip.toUser IS NULL OR ip.toUser = 0))
+                        )";
+                    }
+                }
+
                 $dql = "SELECT a, ip
                         FROM ChamiloCourseBundle:CAnnouncement a 
                         JOIN ChamiloCourseBundle:CItemProperty ip
@@ -355,11 +366,12 @@ class AnnouncementManager
                             ip.tool='announcement' AND
                             (
                                 ip.toUser = $userId OR
-                                ip.group IN ('0', '".implode("', '", $group_list)."') OR
+                                ip.group IN ('0', '".$groupId."') OR
                                 ip.group IS NULL
                             ) AND
                             ip.visibility = '1' AND                       
                             ip.course = :course
+                            $extraGroupCondition
                         ORDER BY a.displayOrder DESC";
             } else {
                 $dql = "SELECT a, ip
@@ -383,14 +395,14 @@ class AnnouncementManager
             ]
         );
 
-        if (empty($result)) {
-            return [];
+        if (!empty($result)) {
+            return [
+                'announcement' => $result[0],
+                'item_property' => $result[1],
+            ];
         }
 
-        return [
-            'announcement' => $result[0],
-            'item_property' => $result[1],
-        ];
+        return [];
     }
 
     /**
@@ -402,8 +414,10 @@ class AnnouncementManager
      */
     public static function displayAnnouncement($id)
     {
-        if ($id != strval(intval($id))) {
-            return null;
+        $id = (int) $id;
+
+        if (empty($id)) {
+            return '';
         }
 
         global $charset;
@@ -412,8 +426,14 @@ class AnnouncementManager
         $result = self::getAnnouncementInfoById(
             $id,
             api_get_course_int_id(),
-            api_get_user_id()
+            api_get_user_id(),
+            api_get_group_id()
         );
+
+        if (empty($result)) {
+            return '';
+        }
+
         /** @var CAnnouncement $announcement */
         $announcement = $result['announcement'];
         /** @var CItemProperty $itemProperty */
@@ -470,7 +490,7 @@ class AnnouncementManager
         $html .= "</td></tr>";
 
         $allow = !api_get_configuration_value('hide_announcement_sent_to_users_info');
-        if (api_is_allowed_to_edit(false, true) && $allow) {
+        if ($allow && api_is_allowed_to_edit(false, true)) {
             $sent_to = self::sent_to('announcement', $id);
             $sentToForm = self::sent_to_form($sent_to);
             $html .= Display::tag(
@@ -505,7 +525,7 @@ class AnnouncementManager
             }
             $html .= '</td></tr>';
         }
-        $html .= "</table>";
+        $html .= '</table>';
 
         return $html;
     }
@@ -1783,7 +1803,7 @@ class AnnouncementManager
                 if ($user_id) {
                     if ($allowUserEditSetting && !api_is_anonymous()) {
                         $cond_user_id = " AND (
-                            ip.lastedit_user_id = '".api_get_user_id()."' OR
+                                ip.lastedit_user_id = '".api_get_user_id()."' OR
                                 ((ip.to_user_id='$user_id' OR ip.to_user_id IS NULL) AND 
                                 (ip.to_group_id='0' OR ip.to_group_id IS NULL)
                             )
@@ -2021,8 +2041,14 @@ class AnnouncementManager
                     'id' => $row['id'],
                     'title' => $title,
                     'username' => $username_span,
-                    'insert_date' => api_convert_and_format_date($row['insert_date'], DATE_TIME_FORMAT_LONG),
-                    'lastedit_date' => api_convert_and_format_date($row['lastedit_date'], DATE_TIME_FORMAT_LONG),
+                    'insert_date' => api_convert_and_format_date(
+                        $row['insert_date'],
+                        DATE_TIME_FORMAT_LONG
+                    ),
+                    'lastedit_date' => api_convert_and_format_date(
+                        $row['lastedit_date'],
+                        DATE_TIME_FORMAT_LONG
+                    ),
                     'actions' => $modify_icons,
                 ];
 

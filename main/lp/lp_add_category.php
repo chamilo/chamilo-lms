@@ -37,7 +37,7 @@ if (api_get_configuration_value('save_titles_as_html')) {
         get_lang('Name'),
         true,
         false,
-        ['ToolbarSet' => 'Minimal']
+        ['ToolbarSet' => 'Minimal', 'Height' => '100']
     );
 } else {
     $form->addText('name', get_lang('Name'), true);

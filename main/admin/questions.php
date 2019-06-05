@@ -39,8 +39,8 @@ $questionCount = 0;
 
 if ($formSent) {
     $id = isset($_REQUEST['id']) ? (int) $_REQUEST['id'] : '';
-    $description = isset($_REQUEST['description']) ? Security::remove_XSS($_REQUEST['description']) : '';
-    $title = isset($_REQUEST['title']) ? Security::remove_XSS($_REQUEST['title']) : '';
+    $description = isset($_REQUEST['description']) ? $_REQUEST['description'] : '';
+    $title = isset($_REQUEST['title']) ? $_REQUEST['title'] : '';
     $page = isset($_GET['page']) && !empty($_GET['page']) ? (int) $_GET['page'] : 1;
 
     $em = Database::getManager();
@@ -51,7 +51,7 @@ if ($formSent) {
     }
 
     if (!empty($description)) {
-        $criteria->orWhere($criteria->expr()->contains('description', "%$description%"));
+        $criteria->orWhere($criteria->expr()->contains('description', $description."\r"));
     }
 
     if (!empty($title)) {
@@ -65,8 +65,8 @@ if ($formSent) {
     }
     $params = [
         'id' => $id,
-        'title' => $title,
-        'description' => $description,
+        'title' => Security::remove_XSS($title),
+        'description' => Security::remove_XSS($description),
         'form_sent' => 1,
     ];
     $url = api_get_self().'?'.http_build_query($params);

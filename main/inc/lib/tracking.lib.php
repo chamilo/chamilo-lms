@@ -563,7 +563,7 @@ class Tracking
                         }
 
                         if ($extend_this_attempt || $extend_all) {
-                            $list1 = learnpath::get_iv_interactions_array($row['iv_id']);
+                            $list1 = learnpath::get_iv_interactions_array($row['iv_id'], $course_id);
                             foreach ($list1 as $id => $interaction) {
                                 $oddclass = 'row_even';
                                 if (($counter % 2) == 0) {
@@ -591,7 +591,7 @@ class Tracking
                                     </tr>';
                                 $counter++;
                             }
-                            $list2 = learnpath::get_iv_objectives_array($row['iv_id']);
+                            $list2 = learnpath::get_iv_objectives_array($row['iv_id'], $course_id);
                             foreach ($list2 as $id => $interaction) {
                                 if (($counter % 2) == 0) {
                                     $oddclass = 'row_odd';
@@ -951,7 +951,7 @@ class Tracking
                     }
 
                     if ($extend_this_attempt || $extend_all) {
-                        $list1 = learnpath::get_iv_interactions_array($row['iv_id']);
+                        $list1 = learnpath::get_iv_interactions_array($row['iv_id'], $course_id);
                         foreach ($list1 as $id => $interaction) {
                             if (($counter % 2) == 0) {
                                 $oddclass = 'row_odd';
@@ -979,7 +979,7 @@ class Tracking
                                </tr>';
                             $counter++;
                         }
-                        $list2 = learnpath::get_iv_objectives_array($row['iv_id']);
+                        $list2 = learnpath::get_iv_objectives_array($row['iv_id'], $course_id);
 
                         foreach ($list2 as $id => $interaction) {
                             if (($counter % 2) == 0) {

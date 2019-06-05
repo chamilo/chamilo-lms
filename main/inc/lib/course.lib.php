@@ -3209,29 +3209,47 @@ class CourseManager
      */
     public static function get_details_course_description_html(
         $descriptions,
-        $fieldValues
+        $charset,
+        $action_show = true
     ) {
         $data = null;
-        $info = null;
-        $data['extrafield'] = $fieldValues;
         if (isset($descriptions) && count($descriptions) > 0) {
             foreach ($descriptions as $description) {
-                if ($description->description_type === '1') {
-                    $data['description'] = [
-                        'title' => Security::remove_XSS($description->title),
-                        'content' => Security::remove_XSS($description->content),
-                    ];
+                $data .= '<div class="sectiontitle">';
+                if (api_is_allowed_to_edit() && $action_show) {
+                    //delete
+                    $data .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&action=delete&description_id='.$description->id.'" onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(
+                        get_lang('ConfirmYourChoice'),
+                                ENT_QUOTES,
+                        $charset
+                    )).'\')) return false;">';
+                    $data .= Display::return_icon(
+                        'delete.gif',
+                        get_lang('Delete'),
+                        ['style' => 'vertical-align:middle;float:right;']
+                    );
+                    $data .= '</a> ';
+                    //edit
+                    $data .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&description_id='.$description->id.'">';
+                    $data .= Display::return_icon(
+                        'edit.png',
+                        get_lang('Edit'),
+                        ['style' => 'vertical-align:middle;float:right; padding-right:4px;'],
+                        ICON_SIZE_SMALL
+                    );
+                    $data .= '</a> ';
                 }
+                $data .= $description->title;
+                $data .= '</div>';
+                $data .= '<div class="sectioncomment">';
+                $data .= Security::remove_XSS($description->content);
+                $data .= '</div>';
             }
+        } else {
+            $data .= '<em>'.get_lang('ThisCourseDescriptionIsEmpty').'</em>';
         }
-        $template = new Template(null);
-        $essence = new Essence\Essence();
-        $template->assign('essence', $essence);
-        $template->assign('data', $data);
-        $layout = $template->get_template('auth/modal_description.html.twig');
-        $info = $template->fetch($layout);
 
-        return $info;
+        return $data;
     }
 
     /**

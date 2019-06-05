@@ -393,7 +393,7 @@ class Category implements GradebookItem
         $courseId = api_get_course_int_id();
         $courseInfo = api_get_course_info_by_id($courseId);
         $courseCode = $courseInfo['code'];
-        $session_id = intval($session_id);
+        $session_id = (int) $session_id;
 
         if (!empty($session_id)) {
             $table = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);

@@ -1,8 +1,7 @@
-<script type="text/javascript">
+<script>
     $(function(){
         $('[data-toggle="tooltip"]').tooltip();
     });
-
 </script>
 <div class="summary-legend">
     <ul class="list-legend">

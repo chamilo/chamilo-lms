@@ -6,13 +6,9 @@ namespace Chamilo\CoreBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * TrackEDownloads.
+ * TrackEAccessComplete.
  *
- * @ORM\Table(name="track_e_downloads", indexes={
- *     @ORM\Index(name="idx_ted_user_id", columns={"down_user_id"}),
- *     @ORM\Index(name="idx_ted_c_id", columns={"c_id"}),
- *     @ORM\Index(name="down_session_id", columns={"down_session_id"})
- * })
+ * @ORM\Table(name="track_e_access_complete")
  * @ORM\Entity
  */
 class TrackEAccessComplete
@@ -20,25 +16,88 @@ class TrackEAccessComplete
     /**
      * @var int
      *
-     * @ORM\Column(name="down_id", type="integer")
+     * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue
      */
-    protected $downId;
+    protected $id;
 
     /**
      * @var int
      *
-     * @ORM\Column(name="down_user_id", type="integer", nullable=true)
+     * @ORM\Column(name="user_id", type="integer", nullable=false)
      */
-    protected $downUserId;
+    protected $userId;
 
     /**
-     * @var \DateTime
+     * @var int
      *
-     * @ORM\Column(name="down_date", type="datetime", nullable=false)
+     * @ORM\Column(name="date_reg", type="datetime", nullable=false)
      */
-    protected $downDate;
+    protected $dateReg;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="tool", type="string", length=255, nullable=false)
+     */
+    protected $tool;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="tool_id", type="integer", nullable=false)
+     */
+    protected $toolId;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="tool_id_detail", type="integer", nullable=false)
+     */
+    protected $toolIdDetail;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="action", type="string", length=255, nullable=false)
+     */
+    protected $action;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="action_details", type="string", length=255, nullable=false)
+     */
+    protected $actionDetails;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="current_id", type="integer", nullable=false)
+     */
+    protected $currentId;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="ip_user", type="string", length=255, nullable=false)
+     */
+    protected $ipUser;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="user_agent", type="string", length=255, nullable=false)
+     */
+    protected $userAgent;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="session_id", type="integer", nullable=false)
+     */
+    protected $sessionId;
 
     /**
      * @var int
@@ -50,144 +109,28 @@ class TrackEAccessComplete
     /**
      * @var string
      *
-     * @ORM\Column(name="down_doc_path", type="string", length=255, nullable=false)
+     * @ORM\Column(name="ch_sid", type="string", length=255, nullable=false)
      */
-    protected $downDocPath;
+    protected $chSid;
 
     /**
      * @var int
      *
-     * @ORM\Column(name="down_session_id", type="integer", nullable=false)
+     * @ORM\Column(name="login_as", type="integer", nullable=false)
      */
-    protected $downSessionId;
+    protected $loginAs;
 
     /**
-     * Set downUserId.
+     * @var string
      *
-     * @param int $downUserId
-     *
-     * @return TrackEDownloads
+     * @ORM\Column(name="info", type="text", nullable=false)
      */
-    public function setDownUserId($downUserId)
-    {
-        $this->downUserId = $downUserId;
-
-        return $this;
-    }
+    protected $info;
 
     /**
-     * Get downUserId.
+     * @var string
      *
-     * @return int
+     * @ORM\Column(name="url", type="text", nullable=false)
      */
-    public function getDownUserId()
-    {
-        return $this->downUserId;
-    }
-
-    /**
-     * Set downDate.
-     *
-     * @param \DateTime $downDate
-     *
-     * @return TrackEDownloads
-     */
-    public function setDownDate($downDate)
-    {
-        $this->downDate = $downDate;
-
-        return $this;
-    }
-
-    /**
-     * Get downDate.
-     *
-     * @return \DateTime
-     */
-    public function getDownDate()
-    {
-        return $this->downDate;
-    }
-
-    /**
-     * Set cId.
-     *
-     * @param int $cId
-     *
-     * @return TrackEDownloads
-     */
-    public function setCId($cId)
-    {
-        $this->cId = $cId;
-
-        return $this;
-    }
-
-    /**
-     * Get cId.
-     *
-     * @return int
-     */
-    public function getCId()
-    {
-        return $this->cId;
-    }
-
-    /**
-     * Set downDocPath.
-     *
-     * @param string $downDocPath
-     *
-     * @return TrackEDownloads
-     */
-    public function setDownDocPath($downDocPath)
-    {
-        $this->downDocPath = $downDocPath;
-
-        return $this;
-    }
-
-    /**
-     * Get downDocPath.
-     *
-     * @return string
-     */
-    public function getDownDocPath()
-    {
-        return $this->downDocPath;
-    }
-
-    /**
-     * Set downSessionId.
-     *
-     * @param int $downSessionId
-     *
-     * @return TrackEDownloads
-     */
-    public function setDownSessionId($downSessionId)
-    {
-        $this->downSessionId = $downSessionId;
-
-        return $this;
-    }
-
-    /**
-     * Get downSessionId.
-     *
-     * @return int
-     */
-    public function getDownSessionId()
-    {
-        return $this->downSessionId;
-    }
-
-    /**
-     * Get downId.
-     *
-     * @return int
-     */
-    public function getDownId()
-    {
-        return $this->downId;
-    }
+    protected $url;
 }

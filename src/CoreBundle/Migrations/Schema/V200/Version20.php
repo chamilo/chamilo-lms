@@ -236,6 +236,14 @@ class Version20 extends AbstractMigrationChamilo
             );
         }
 
+        $table = $schema->hasTable('track_e_access_complete');
+        if ($table === false) {
+            $this->addSql(
+                'CREATE TABLE track_e_access_complete (id INT AUTO_INCREMENT NOT NULL, user_id INT NOT NULL, date_reg DATETIME NOT NULL, tool VARCHAR(255) NOT NULL, tool_id INT NOT NULL, tool_id_detail INT NOT NULL, action VARCHAR(255) NOT NULL, action_details VARCHAR(255) NOT NULL, current_id INT NOT NULL, ip_user VARCHAR(255) NOT NULL, user_agent VARCHAR(255) NOT NULL, session_id INT NOT NULL, c_id INT NOT NULL, ch_sid VARCHAR(255) NOT NULL, login_as INT NOT NULL, info LONGTEXT NOT NULL, url LONGTEXT NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB ROW_FORMAT = DYNAMIC;'
+            );
+        }
+
+
         /*$table = $schema->getTable('course_rel_class');
         if (!$table->hasColumn('c_id')) {
             $this->addSql("ALTER TABLE course_rel_class ADD c_id int NOT NULL");

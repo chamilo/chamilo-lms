@@ -115,6 +115,19 @@ foreach ($courses as $course) {
                     WHERE iid = $id";
             Database::query($sql);
         }
+
+        // Updating Glossary
+        $sql = "SELECT iid, description FROM c_glossary WHERE c_id = $courseId";
+        $result = Database::query($sql);
+        $items = Database::store_result($result);
+        foreach ($items as $item) {
+            $id = $item['iid'];
+            $gdescription = preg_replace($pathToSearch, $newUrlAppend.'/courses/${4}', $item['description']);
+            $gdescription = Database::escape_string($gdescription);
+
+            $sql = "UPDATE c_glossary SET description = '$gdescription' WHERE iid = $id";
+            Database::query($sql);
+        }
     } else {
         echo "<h4>Path doesn't exist</h4>".'<br />';
     }

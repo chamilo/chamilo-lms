@@ -1800,7 +1800,13 @@ function api_get_user_entity($userId)
  */
 function api_get_current_user()
 {
+    $isLoggedIn = Container::$container->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_REMEMBERED');
+    if ($isLoggedIn === false) {
+        return null;
+    }
+
     $token = Container::$container->get('security.token_storage')->getToken();
+
     if (null !== $token) {
         return $token->getUser();
     }
@@ -2976,6 +2982,12 @@ function api_get_self()
  */
 function api_is_platform_admin($allowSessionAdmins = false, $allowDrh = false)
 {
+    $currentUser = api_get_current_user();
+
+    if ($currentUser === null) {
+        return false;
+    }
+
     $isAdmin = Session::read('is_platformAdmin');
     if ($isAdmin) {
         return true;

@@ -243,7 +243,6 @@ class Version20 extends AbstractMigrationChamilo
             );
         }
 
-
         /*$table = $schema->getTable('course_rel_class');
         if (!$table->hasColumn('c_id')) {
             $this->addSql("ALTER TABLE course_rel_class ADD c_id int NOT NULL");

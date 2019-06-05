@@ -5,7 +5,7 @@ namespace Chamilo\CoreBundle\Entity\Resource;
 
 use Chamilo\CoreBundle\Entity\Tool;
 use Doctrine\ORM\Mapping as ORM;
-use Gedmo\Mapping\Annotation as Gedmo;
+use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -14,6 +14,8 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class ResourceType
 {
+    use TimestampableEntity;
+
     /**
      * @ORM\Id
      * @ORM\Column(type="integer")
@@ -38,20 +40,6 @@ class ResourceType
      * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\Resource\ResourceNode", mappedBy="resourceType", cascade={"persist", "remove"})
      */
     protected $resourceNodes;
-
-    /**
-     * @ORM\Column(name="created_at", type="datetime")
-     *
-     * @Gedmo\Timestampable(on="create")
-     */
-    protected $createdAt;
-
-    /**
-     * @ORM\Column(name="updated_at", type="datetime")
-     *
-     * @Gedmo\Timestampable(on="update")
-     */
-    protected $updatedAt;
 
     /**
      * Constructor.

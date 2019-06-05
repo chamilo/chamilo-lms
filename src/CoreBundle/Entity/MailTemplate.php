@@ -3,8 +3,8 @@
 
 namespace Chamilo\CoreBundle\Entity;
 
-use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Timestampable\Traits\TimestampableEntity;
 
 /**
  * MailTemplate.

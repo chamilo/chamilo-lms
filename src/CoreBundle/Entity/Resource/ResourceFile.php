@@ -5,7 +5,7 @@ namespace Chamilo\CoreBundle\Entity\Resource;
 
 use Chamilo\MediaBundle\Entity\Media;
 use Doctrine\ORM\Mapping as ORM;
-use Gedmo\Mapping\Annotation as Gedmo;
+use Gedmo\Timestampable\Traits\TimestampableEntity;
 
 /**
  * @ORM\Entity
@@ -14,6 +14,8 @@ use Gedmo\Mapping\Annotation as Gedmo;
  */
 class ResourceFile
 {
+    use TimestampableEntity;
+
     /**
      * @ORM\Id
      * @ORM\Column(type="integer")
@@ -105,20 +107,6 @@ class ResourceFile
      * @ORM\Column(name="enabled", type="boolean")
      */
     //protected $enabled;
-
-    /**
-     * @ORM\Column(name="created_at", type="datetime")
-     *
-     * @Gedmo\Timestampable(on="create")
-     */
-    protected $createdAt;
-
-    /**
-     * @ORM\Column(name="updated_at", type="datetime")
-     *
-     * @Gedmo\Timestampable(on="update")
-     */
-    protected $updatedAt;
 
     /**
      * Constructor.

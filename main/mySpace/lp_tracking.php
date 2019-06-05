@@ -134,6 +134,17 @@ switch ($action) {
                         $questions[$questionCounter]['options'][] = $interaction;
                         $numberChoices++;
                         break;
+                    case 'matching':
+                        $list = explode(',', $data);
+                        if (!empty($list)) {
+                            foreach ($list as &$item) {
+                                $item = cut($item, 30);
+                            }
+                            $interaction['student_response_formatted'] = implode('<br />', $list);
+                        }
+                        $questions[$questionCounter]['options'][] = $interaction;
+                        $numberChoices++;
+                        break;
                 }
             }
         }

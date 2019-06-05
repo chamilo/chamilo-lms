@@ -1905,7 +1905,7 @@ class MySpace
         $courseId = api_get_course_int_id($course_code);
         $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
 
-        $sql = "SELECT exe_result, exe_weighting
+        $sql = "SELECT score, max_score
                 FROM $table
                 WHERE 
                     c_id = $courseId AND 

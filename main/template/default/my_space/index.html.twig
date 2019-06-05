@@ -1,5 +1,5 @@
 {% import '@ChamiloTheme/Macros/box.html.twig' as macro %}
-
+{% autoescape false %}
 <div class="search-student">
     {{ form }}
 </div>
@@ -294,3 +294,4 @@
         });
     });
 </script>
+{% endautoescape %}

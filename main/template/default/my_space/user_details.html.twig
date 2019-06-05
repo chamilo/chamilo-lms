@@ -1,5 +1,10 @@
+{% extends "@ChamiloTheme/Layout/layout_one_col.html.twig" %}
+
+{% block content %}
+
 {% import 'macro/macro.tpl'|get_template as display %}
 
+{% autoescape false %}
 {% if title %}
     <h2 class="details-title"><img src="{{ 'course.png'|icon(32) }}"> {{ title }}</h2>
 {% endif %}
@@ -197,3 +202,6 @@
         });
     });
 </script>
+{% autoescape false %}
+
+{% endblock %}

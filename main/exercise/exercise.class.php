@@ -2375,7 +2375,7 @@ class Exercise
 
             $skillList = Skill::addSkillsToForm($form, ITEM_TYPE_EXERCISE, $this->iId);
 
-            $extraField = new ExtraField('exercise');
+            /*$extraField = new ExtraField('exercise');
             $extraField->addElements(
                 $form,
                 $this->iId,
@@ -2385,7 +2385,7 @@ class Exercise
                 [], //show only fields
                 [], // order fields
                 [] // extra data
-            );
+            );*/
             $form->addElement('html', '</div>'); //End advanced setting
             $form->addElement('html', '</div>');
         }
@@ -2399,15 +2399,13 @@ class Exercise
 
         $form->addRule('exerciseTitle', get_lang('GiveExerciseName'), 'required');
 
+        // defaults
         if ($type == 'full') {
             // rules
             $form->addRule('exerciseAttempts', get_lang('Numeric'), 'numeric');
             $form->addRule('start_time', get_lang('InvalidDate'), 'datetime');
             $form->addRule('end_time', get_lang('InvalidDate'), 'datetime');
-        }
 
-        // defaults
-        if ($type == 'full') {
             if ($this->id > 0) {
                 //if ($this->random > $this->selectNbrQuestions()) {
                 //    $defaults['randomQuestions'] = $this->selectNbrQuestions();
@@ -2598,10 +2596,10 @@ class Exercise
 
         $iId = $this->save($type);
         if (!empty($iId)) {
-            $values = $form->getSubmitValues();
+            /*$values = $form->getSubmitValues();
             $values['item_id'] = $iId;
             $extraFieldValue = new ExtraFieldValue('exercise');
-            $extraFieldValue->saveFieldValues($values);
+            $extraFieldValue->saveFieldValues($values);*/
 
             Skill::saveSkills($form, ITEM_TYPE_EXERCISE, $iId);
         }
@@ -8603,6 +8601,15 @@ class Exercise
             ['id' => 'result_disabled_7']
         );
 
+        /*$resultDisabledGroup[] = $form->createElement(
+            'radio',
+            'results_disabled',
+            null,
+            get_lang('AutoEvaluationAndRankingMode'),
+            '8',
+            ['id' => 'result_disabled_8']
+        );*/
+
         $group = $form->addGroup(
             $resultDisabledGroup,
             null,
@@ -8610,50 +8617,5 @@ class Exercise
         );
 
         return $group;
-    }
-
-    /**
-     * @param array $exerciseResultInfo
-     *
-     * @return bool
-     */
-    public function hasResultsAccess($exerciseResultInfo)
-    {
-        $extraFieldValue = new ExtraFieldValue('exercise');
-        $value = $extraFieldValue->get_values_by_handler_and_field_variable(
-            $this->iId,
-            'results_available_for_x_minutes'
-        );
-
-        if (!empty($value)) {
-            $value = (int) $value;
-            $endDate = new DateTime($exerciseResultInfo['exe_date']);
-            $endDate->add(new DateInterval('PT'.$value.'M'));
-
-            if (time() > $endDate->getTimestamp()) {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-    /**
-     * @return int
-     */
-    public function getResultsAccess()
-    {
-        $extraFieldValue = new ExtraFieldValue('exercise');
-        $value = $extraFieldValue->get_values_by_handler_and_field_variable(
-            $this->iId,
-            'results_available_for_x_minutes'
-        );
-
-        if (!empty($value)) {
-
-            return (int) $value;
-        }
-
-        return 0;
     }
 }

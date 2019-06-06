@@ -4423,13 +4423,6 @@ EOT;
             }
         }
 
-        if ($objExercise->hasResultsAccess($exercise_stat_info) === false) {
-            echo Display::return_message(
-                sprintf(get_lang('YouPassedTheLimitOfXMinutesToSeeTheResults'), $objExercise->getResultsAccess())
-            );
-            return false;
-        }
-
         $counter = 1;
         $total_score = $total_weight = 0;
         $exercise_content = null;
@@ -4437,11 +4430,14 @@ EOT;
         // Hide results
         $show_results = false;
         $show_only_score = false;
-        if ($objExercise->results_disabled == RESULT_DISABLE_SHOW_SCORE_AND_EXPECTED_ANSWERS) {
-            $show_results = true;
-        }
 
-        if ($objExercise->results_disabled == RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER) {
+        if (in_array($objExercise->results_disabled,
+            [
+                RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER,
+                RESULT_DISABLE_SHOW_SCORE_AND_EXPECTED_ANSWERS,
+                RESULT_DISABLE_AUTOEVALUATION_AND_RANKING,
+            ]
+        )) {
             $show_results = true;
         }
 

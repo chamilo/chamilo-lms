@@ -15,3 +15,5 @@ Allow authentication with Microsoft's Azure Active Directory
 * Block name: (Optional) The name to show above the buttons
 
 And assign a region. Preferably `login_bottom`
+
+> If you have issues with the OAuth request, try using OAuth 1.0 and modifying the files in this [gist](https://gist.github.com/AngelFQC/45d0d6c5eb4d4bcce24936e699cf7f1f)

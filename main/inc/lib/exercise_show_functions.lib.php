@@ -341,11 +341,12 @@ class ExerciseShowFunctions
         $showComment = false;
         switch ($resultsDisabled) {
             case RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER:
-                $hideStudentChoice = true;
+                $hideStudentChoice = false;
                 $hide_expected_answer = true;
                 $status = Display::label(get_lang('Correct'), 'success');
                 $showComment = true;
-                if (!$answerCorrect) {
+                //var_dump($answerCorrect."-".$studentChoice ." - ".$answerCorrectChoice);
+                if (!$answerCorrect && empty($studentChoice)) {
                     return '';
                 }
                 break;
@@ -370,7 +371,14 @@ class ExerciseShowFunctions
         $iconAnswer .= $answerCorrect ? '_on' : '_off';
         $iconAnswer .= '.png';
 
-        echo '<tr>';
+        $studentChoiceClass = '';
+        if ($resultsDisabled == RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER) {
+            if ($answerCorrect) {
+                $studentChoiceClass = 'success';
+            }
+        }
+
+        echo '<tr class="'.$studentChoiceClass.'">';
         if ($hideStudentChoice === false) {
             echo '<td width="5%">';
             echo Display::return_icon($icon, null, null, ICON_SIZE_TINY);
@@ -396,7 +404,7 @@ class ExerciseShowFunctions
         if ($feedbackType != EXERCISE_FEEDBACK_TYPE_EXAM && $studentChoice) {
             $showComment = true;
             if (!$answerCorrect && $resultsDisabled == RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER) {
-                $showComment = false;
+               // $showComment = false;
             }
         }
 
@@ -452,7 +460,7 @@ class ExerciseShowFunctions
         $hideStudentChoice = false;
         switch ($resultsDisabled) {
             case RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER:
-                $hideStudentChoice = true;
+                $hideStudentChoice = false;
                 $hide_expected_answer = true;
                 break;
             case RESULT_DISABLE_SHOW_SCORE_ONLY:
@@ -470,7 +478,6 @@ class ExerciseShowFunctions
         }
 
         $content = '<tr>';
-
         if ($hideStudentChoice === false) {
             $content .= '<td width="5%">';
             $course_id = api_get_course_int_id();

@@ -52,7 +52,7 @@
             '<td width="100">' +
             '<input class="form-control" readonly name="min[#category_id#][]" type="text" data-category="#category_id#">' +
             '</td>' +
-            '<td width="100" class="text-center">&lt; &times; &leq;</td>' +
+            '<td width="100" class="text-center">&leq; &times; &leq;</td>' +
             '<td width="100">' +
             '<input class="form-control" readonly name="max[#category_id#][]" type="text" data-category="#category_id#" value="100">' +
             '</td>' +

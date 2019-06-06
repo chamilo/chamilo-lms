@@ -225,7 +225,7 @@ if ($isAdaptive) {
         $content = [
             $user->getCompleteNameWithUsername(),
             sprintf(get_lang('LevelReachedX'), $destinationResult->getAchievedLevel()),
-            sprintf(get_lang('ResultHashX'), $destinationResult->getHash()),
+            api_convert_and_format_date($exe->getStartDate(), DATE_TIME_FORMAT_SHORT),
             $qrUrl,
         ];
         $content = array_map(

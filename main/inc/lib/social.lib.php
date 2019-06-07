@@ -3170,7 +3170,8 @@ class SocialManager extends UserManager
             }
         } else {
             // Load my groups
-            $results = $userGroup->get_groups_by_user($userId,
+            $results = $userGroup->get_groups_by_user(
+                $userId,
                 [
                     GROUP_USER_PERMISSION_ADMIN,
                     GROUP_USER_PERMISSION_READER,

@@ -1054,23 +1054,30 @@ class SortableTableFromArray extends SortableTable
     /**
      * Constructor.
      *
-     * @param array $table_data
-     * @param int   $default_column
-     * @param int   $default_items_per_page
+     * @param array  $table_data
+     * @param int    $default_column
+     * @param int    $default_items_per_page
+     * @param string $tableName
+     * @param string $get_total_number_function
+     * @param string $tableId
+     *
      */
     public function __construct(
         $table_data,
         $default_column = 1,
         $default_items_per_page = 20,
-        $tablename = 'tablename',
-        $get_total_number_function = null
+        $tableName = 'tablename',
+        $get_total_number_function = null,
+        $tableId = ''
     ) {
         parent:: __construct(
-            $tablename,
+            $tableName,
             $get_total_number_function,
             null,
             $default_column,
-            $default_items_per_page
+            $default_items_per_page,
+            null,
+            $tableId
         );
         $this->table_data = $table_data;
     }

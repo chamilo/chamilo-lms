@@ -118,6 +118,9 @@ class ExtraField extends Model
                 $this->extraFieldType = EntityExtraField::SESSION_FIELD_TYPE;
                 $this->primaryKey = 'id';
                 break;
+            case 'exercise':
+                $this->extraFieldType = EntityExtraField::EXERCISE_FIELD_TYPE;
+                break;
             case 'question':
                 $this->extraFieldType = EntityExtraField::QUESTION_FIELD_TYPE;
                 break;
@@ -190,6 +193,7 @@ class ExtraField extends Model
             'terms_and_condition',
             'forum_category',
             'forum_post',
+            'exercise',
         ];
 
         if (api_get_configuration_value('allow_scheduled_announcements')) {

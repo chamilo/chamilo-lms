@@ -478,6 +478,7 @@ define('RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT', 4);
 define('RESULT_DISABLE_DONT_SHOW_SCORE_ONLY_IF_USER_FINISHES_ATTEMPTS_SHOW_ALWAYS_FEEDBACK', 5);
 define('RESULT_DISABLE_RANKING', 6);
 define('RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER', 7);
+define('RESULT_DISABLE_AUTOEVALUATION_AND_RANKING', 8);
 
 // 4: Show final score only with  and show expected answers only on the last attempt
 
@@ -6371,7 +6372,7 @@ function api_get_current_access_url_id()
             return -1;
         }
 
-        return $access_url_id;
+        return (int) $access_url_id;
     }
 
     //if the url in WEB_PATH was not found, it can only mean that there is
@@ -8925,11 +8926,17 @@ function api_mail_html(
  */
 function api_protect_course_group($tool, $showHeader = true)
 {
-    $userId = api_get_user_id();
     $groupId = api_get_group_id();
-    $groupInfo = GroupManager::get_group_properties($groupId);
+    if (!empty($groupId)) {
+        $userId = api_get_user_id();
+        $groupInfo = GroupManager::get_group_properties($groupId);
 
-    if (!empty($groupInfo)) {
+        // Group doesn't exists
+        if (empty($groupInfo)) {
+            api_not_allowed($showHeader);
+        }
+
+        // Check group access
         $allow = GroupManager::user_has_access(
             $userId,
             $groupInfo['iid'],
@@ -9450,24 +9457,34 @@ function api_get_language_translate_html()
     $languageList = api_get_languages();
     $hideAll = '';
     foreach ($languageList['all'] as $language) {
-        $hideAll .=
-            '$("span:lang('.$language['isocode'].')").filter(
-                function() {
-                    // Ignore ckeditor classes
-                    return !this.className.match(/cke(.*)/);
-            }).hide();';
+        $hideAll .= '
+        $("span:lang('.$language['isocode'].')").filter(
+            function(e, val) {
+                // Only find the spans if they have set the lang                
+                if ($(this).attr("lang") == null) {                
+                    return false;
+                }
+                
+                // Ignore ckeditor classes
+                return !this.className.match(/cke(.*)/);
+        }).hide();'."\n";
     }
 
     $userInfo = api_get_user_info();
     $languageId = api_get_language_id($userInfo['language']);
     $languageInfo = api_get_language_info($languageId);
+    $isoCode = 'en';
+
+    if (!empty($languageInfo)) {
+        $isoCode = $languageInfo['isocode'];
+    }
 
     return '
             $(function() {
                 '.$hideAll.'                 
-                var defaultLanguageFromUser = "'.$languageInfo['isocode'].'";   
+                var defaultLanguageFromUser = "'.$isoCode.'";   
                                              
-                $("span:lang('.$languageInfo['isocode'].')").filter(
+                $("span:lang('.$isoCode.')").filter(
                     function() {
                         // Ignore ckeditor classes
                         return !this.className.match(/cke(.*)/);

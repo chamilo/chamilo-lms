@@ -2366,6 +2366,17 @@ class Exercise
 
             $skillList = Skill::addSkillsToForm($form, ITEM_TYPE_EXERCISE, $this->iId);
 
+            /*$extraField = new ExtraField('exercise');
+            $extraField->addElements(
+                $form,
+                $this->iId,
+                [], //exclude
+                false, // filter
+                false, // tag as select
+                [], //show only fields
+                [], // order fields
+                [] // extra data
+            );*/
             $form->addElement('html', '</div>'); //End advanced setting
             $form->addElement('html', '</div>');
         }
@@ -2379,15 +2390,13 @@ class Exercise
 
         $form->addRule('exerciseTitle', get_lang('GiveExerciseName'), 'required');
 
+        // defaults
         if ($type == 'full') {
             // rules
             $form->addRule('exerciseAttempts', get_lang('Numeric'), 'numeric');
             $form->addRule('start_time', get_lang('InvalidDate'), 'datetime');
             $form->addRule('end_time', get_lang('InvalidDate'), 'datetime');
-        }
 
-        // defaults
-        if ($type == 'full') {
             if ($this->id > 0) {
                 //if ($this->random > $this->selectNbrQuestions()) {
                 //    $defaults['randomQuestions'] = $this->selectNbrQuestions();
@@ -2578,6 +2587,11 @@ class Exercise
 
         $iId = $this->save($type);
         if (!empty($iId)) {
+            /*$values = $form->getSubmitValues();
+            $values['item_id'] = $iId;
+            $extraFieldValue = new ExtraFieldValue('exercise');
+            $extraFieldValue->saveFieldValues($values);*/
+
             Skill::saveSkills($form, ITEM_TYPE_EXERCISE, $iId);
         }
     }
@@ -8574,8 +8588,17 @@ class Exercise
             'results_disabled',
             null,
             get_lang('ExerciseShowOnlyGlobalScoreAndCorrectAnswers'),
-            '7',
+            RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER,
             ['id' => 'result_disabled_7']
+        );
+
+        $resultDisabledGroup[] = $form->createElement(
+            'radio',
+            'results_disabled',
+            null,
+            get_lang('AutoEvaluationAndRankingMode'),
+            RESULT_DISABLE_AUTOEVALUATION_AND_RANKING,
+            ['id' => 'result_disabled_8']
         );
 
         $group = $form->addGroup(

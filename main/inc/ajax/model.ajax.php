@@ -1856,15 +1856,17 @@ switch ($action) {
                 continue;
             }
             $skills = $obj->getSkillsByGradebook($item['id']);
+            $courseId = $item['c_id'];
+            $courseInfo = api_get_course_info_by_id($courseId);
 
             //Fixes bug when gradebook doesn't have names
             if (empty($item['name'])) {
-                $item['name'] = $item['course_code'];
+                $item['name'] = $courseInfo['code'];
             }
 
             $item['name'] = Display::url(
                 $item['name'],
-                api_get_path(WEB_CODE_PATH).'gradebook/index.php?id_session=0&cidReq='.$item['course_code']
+                api_get_path(WEB_CODE_PATH).'gradebook/index.php?id_session=0&cidReq='.$courseInfo['code']
             );
 
             if (!empty($item['certif_min_score']) && !empty($item['document_id'])) {

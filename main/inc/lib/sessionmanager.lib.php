@@ -513,8 +513,8 @@ class SessionManager
         $isMakingOrder = false;
         $showCountUsers = false;
 
-        if ($getCount == true) {
-            $select = " SELECT count(DISTINCT s.id) as total_rows";
+        if ($getCount === true) {
+            $select = ' SELECT count(DISTINCT s.id) as total_rows ';
         } else {
             if (!empty($columns['column_model'])) {
                 foreach ($columns['column_model'] as $column) {
@@ -1861,7 +1861,9 @@ class SessionManager
         $empty_users = true,
         $registerUsersToAllCourses = true
     ) {
-        if ($sessionId != strval(intval($sessionId))) {
+        $sessionId = (int) $sessionId;
+
+        if (empty($sessionId)) {
             return false;
         }
 

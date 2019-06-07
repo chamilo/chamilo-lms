@@ -1198,8 +1198,7 @@ if ($table->get_total_number_of_items() == 0) {
                 }
                 if ($add_user) {
                     $row_table = [];
-                    $row_table[] = api_get_person_name($user['firstname'],
-                            $user['lastname']).' ('.$user['username'].') ';
+                    $row_table[] = api_get_person_name($user['firstname'], $user['lastname']).' ('.$user['username'].') ';
                     $row_table[] = $access_info_to_string;
                     $url = api_get_self().'?action=add_user_to_my_url&user_id='.$user['id'].'&sec_token='.Security::getTokenFromSession();
                     $row_table[] = Display::url(

@@ -1151,6 +1151,7 @@ if (!empty($exerciseList)) {
                                     RESULT_DISABLE_SHOW_SCORE_AND_EXPECTED_ANSWERS,
                                     RESULT_DISABLE_SHOW_SCORE_ONLY,
                                     RESULT_DISABLE_RANKING,
+                                    RESULT_DISABLE_AUTOEVALUATION_AND_RANKING,
                                 ]
                             )
                         ) {
@@ -1217,6 +1218,7 @@ if (!empty($exerciseList)) {
                                 RESULT_DISABLE_SHOW_SCORE_AND_EXPECTED_ANSWERS,
                                 RESULT_DISABLE_SHOW_SCORE_ONLY,
                                 RESULT_DISABLE_RANKING,
+                                RESULT_DISABLE_AUTOEVALUATION_AND_RANKING,
                             ]
                         )
                     ) {

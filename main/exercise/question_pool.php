@@ -114,7 +114,7 @@ if ($is_allowedToEdit) {
         unset($objQuestionTmp);
     } elseif ($recup && $fromExercise) {
         // gets an existing question and copies it into a new exercise
-        $objQuestionTmp = Question :: read($recup);
+        $objQuestionTmp = Question::read($recup);
         // if the question exists
         if ($objQuestionTmp) {
             /* Adds the exercise ID represented by $fromExercise into the list
@@ -209,10 +209,6 @@ $htmlHeadXtra[] = "
     }
 </script>";
 
-Display::display_header($nameTools, 'Exercise');
-
-// Menu
-echo '<div class="actions">';
 $url = api_get_self().'?'.api_get_cidreq().'&'.http_build_query(
     [
         'fromExercise' => $fromExercise,
@@ -229,6 +225,41 @@ $url = api_get_self().'?'.api_get_cidreq().'&'.http_build_query(
     ]
 );
 
+if (isset($_REQUEST['action'])) {
+    switch ($_REQUEST['action']) {
+        // Delete selected courses
+        case 'reuse':
+            if (!empty($_REQUEST['questions']) && !empty($fromExercise)) {
+                $questions = $_REQUEST['questions'];
+                $objExercise = new Exercise();
+                $objExercise->read($fromExercise, false);
+
+                if (count($questions) > 0) {
+                    foreach ($questions as $questionId) {
+                        // gets an existing question and copies it into a new exercise
+                        $objQuestionTmp = Question::read($questionId);
+                        // if the question exists
+                        if ($objQuestionTmp) {
+                            if ($objExercise->hasQuestion($questionId) === false) {
+                                $objExercise->addToList($questionId);
+                                $objQuestionTmp->addToList($fromExercise);
+                            }
+                        }
+                    }
+                }
+
+                Display::addFlash(Display::return_message(get_lang('Added')));
+                header('Location: '.$url);
+                exit;
+            }
+            break;
+    }
+}
+
+Display::display_header($nameTools, 'Exercise');
+
+// Menu
+echo '<div class="actions">';
 if (isset($fromExercise) && $fromExercise > 0) {
     echo '<a href="admin.php?'.api_get_cidreq().'&exerciseId='.$fromExercise.'">'.
             Display::return_icon('back.png', get_lang('GoBackToQuestionList'), '', ICON_SIZE_MEDIUM).'</a>';
@@ -791,6 +822,18 @@ if (is_array($mainQuestionList)) {
         }
         $sessionId = isset($question['session_id']) ? $question['session_id'] : null;
         $exerciseName = isset($question['exercise_name']) ? '<br />('.$question['exercise_id'].') ' : null;
+
+        if (!$objExercise->hasQuestion($question['id'])) {
+            $row[] = Display::input(
+                'checkbox',
+                'questions[]',
+                $question['id'],
+                ['class' => 'question_checkbox']
+            );
+        } else {
+            $row[] = '';
+        }
+
         $row[] = getLinkForQuestion(
             $questionTagA,
             $fromExercise,
@@ -839,6 +882,13 @@ if (is_array($mainQuestionList)) {
 // Display table
 $header = [
     [
+        '',
+        false,
+        ['style' => 'text-align:center'],
+        ['style' => 'text-align:center'],
+        '',
+    ],
+    [
         get_lang('QuestionUpperCaseFirstLetter'),
         false,
         ['style' => 'text-align:center'],
@@ -876,12 +926,44 @@ $header = [
 
 echo $pagination;
 
+echo '<form id="question_pool_id" method="get" action="'.$url.'">';
+echo '<input type="hidden" name="fromExercise" value="'.$fromExercise.'">';
+echo '<input type="hidden" name="cidReq" value="'.$_course['code'].'">';
 Display::display_sortable_table(
     $header,
     $data,
     '',
     ['per_page_default' => 999, 'per_page' => 999, 'page_nr' => 1]
 );
+echo '</form>';
+
+$tableId = 'question_pool_id';
+$html = '<div class="btn-toolbar">';
+$html .= '<div class="btn-group">';
+$html .= '<a class="btn btn-default" href="?'.$url.'selectall=1" onclick="javascript: setCheckbox(true, \''.$tableId.'\'); return false;">'.
+    get_lang('SelectAll').'</a>';
+$html .= '<a class="btn btn-default" href="?'.$url.'" onclick="javascript: setCheckbox(false, \''.$tableId.'\'); return false;">'.get_lang('UnSelectAll').'</a> ';
+$html .= '</div>';
+$html .= '<div class="btn-group">
+            <button class="btn btn-default" onclick="javascript:return false;">'.get_lang('Actions').'</button>
+            <button class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                <span class="caret"></span>
+            </button>';
+$html .= '<ul class="dropdown-menu">';
+
+$actions = ['reuse' => get_lang('ReuseQuestion')];
+foreach ($actions as $action => &$label) {
+    $html .= '<li>
+                <a data-action ="'.$action.'" href="#" onclick="javascript:action_click(this, \''.$tableId.'\');">'.
+                    $label.'
+                </a>
+              </li>';
+}
+$html .= '</ul>';
+$html .= '</div>'; //btn-group
+$html .= '</div>'; //toolbar
+
+echo $html;
 
 Display::display_footer();
 
@@ -916,9 +998,9 @@ function reset_menu_exo_lvl_type()
  * return the <a> link to admin question, if needed.
  *
  * @param int    $in_addA
- * @param int    $in_fromex
+ * @param int    $fromExercise
  * @param int    $questionId
- * @param int    $questiontype
+ * @param int    $questionType
  * @param string $questionName
  * @param int    $sessionId
  * @param int    $exerciseId
@@ -949,7 +1031,7 @@ function getLinkForQuestion(
 
         $result = Display::url(
             $questionName.$sessionIcon,
-            "admin.php?".api_get_cidreq().
+            'admin.php?'.api_get_cidreq().
             "&exerciseId=$exerciseId&editQuestion=$questionId&type=$questionType&fromExercise=$fromExercise"
         );
     }
@@ -1015,7 +1097,7 @@ function get_action_icon_for_question(
                 $res = "<a href='".api_get_self()."?".
                     api_get_cidreq().$getParams."&recup=$in_questionid&fromExercise=$from_exercise'>";
                 $res .= Display::return_icon('view_more_stats.gif', get_lang('InsertALinkToThisQuestionInTheExercise'));
-                $res .= "</a>";
+                $res .= '</a>';
             }
             break;
         case 'clone':

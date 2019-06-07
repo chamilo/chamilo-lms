@@ -8399,4 +8399,10 @@ $WelcomeToPortalXInCourseSessionX = "Welcome to portal %s Course session: %s";
 $WelcomeToPortalXInCourseSessionXCoursePartOfCareerX = "Welcome to portal %s in course %s, part of career %s";
 $YourNextModule = "Your next module";
 $FirstLesson = "First lesson";
+$ImportCourseTeachersAsCourseCoach = "Import course teachers as course coach in the session";
+$ResumeImport = "Resume import";
+$Candidate = "Candidate";
+$GeneralTotal = "General total";
+$Domains = "Domains";
+$ScormStartAttemptDate = "Date";
 ?>

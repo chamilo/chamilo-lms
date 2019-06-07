@@ -62,20 +62,7 @@ class PDF
         $this->params['pdf_date'] = isset($params['pdf_date']) ? $params['pdf_date'] : api_format_date($localTime, DATE_TIME_FORMAT_LONG);
         $this->params['pdf_date_only'] = isset($params['pdf_date']) ? $params['pdf_date'] : api_format_date($localTime, DATE_FORMAT_LONG);
 
-        /*$this->pdf = new Mpdf(
-            'UTF-8',
-            $pageFormat,
-            '',
-            '',
-            $params['left'],
-            $params['right'],
-            $params['top'],
-            $params['bottom'],
-            8,
-            8,
-            $orientation
-        );*/
-        $params = [
+         $params = [
             'tempDir' => api_get_path(SYS_ARCHIVE_PATH).'mpdf',
             'mode' => 'utf-8',
             'format' => $pageFormat,

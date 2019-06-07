@@ -2793,7 +2793,7 @@ HOTSPOT;
      * @param string $thousandSeparator
      * @param bool   $roundValues           This option rounds the float values into a int using ceil()
      *
-     * @return array an html with the score modified
+     * @return string an html with the score modified
      */
     public static function show_score(
         $score,
@@ -4426,11 +4426,14 @@ EOT;
         // Hide results
         $show_results = false;
         $show_only_score = false;
-        if ($objExercise->results_disabled == RESULT_DISABLE_SHOW_SCORE_AND_EXPECTED_ANSWERS) {
-            $show_results = true;
-        }
 
-        if ($objExercise->results_disabled == RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER) {
+        if (in_array($objExercise->results_disabled,
+            [
+                RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER,
+                RESULT_DISABLE_SHOW_SCORE_AND_EXPECTED_ANSWERS,
+                RESULT_DISABLE_AUTOEVALUATION_AND_RANKING,
+            ]
+        )) {
             $show_results = true;
         }
 
@@ -4497,7 +4500,9 @@ EOT;
                 }
             }
 
-            if ($objExercise->results_disabled == RESULT_DISABLE_DONT_SHOW_SCORE_ONLY_IF_USER_FINISHES_ATTEMPTS_SHOW_ALWAYS_FEEDBACK) {
+            if ($objExercise->results_disabled ==
+                RESULT_DISABLE_DONT_SHOW_SCORE_ONLY_IF_USER_FINISHES_ATTEMPTS_SHOW_ALWAYS_FEEDBACK
+            ) {
                 $show_only_score = false;
                 $show_results = true;
                 $show_all_but_expected_answer = false;
@@ -4510,7 +4515,7 @@ EOT;
             }
         }
 
-        if (($show_results || $show_only_score) && $origin != 'embeddable') {
+        if (($show_results || $show_only_score) && $origin !== 'embeddable') {
             if (isset($exercise_stat_info['exe_user_id'])) {
                 $user_info = api_get_user_info($exercise_stat_info['exe_user_id']);
                 if ($user_info) {
@@ -4524,9 +4529,9 @@ EOT;
         }
 
         // Display text when test is finished #4074 and for LP #4227
-        $end_of_message = $objExercise->selectTextWhenFinished();
-        if (!empty($end_of_message)) {
-            echo Display::return_message($end_of_message, 'normal', false);
+        $endOfMessage = $objExercise->selectTextWhenFinished();
+        if (!empty($endOfMessage)) {
+            echo Display::return_message($endOfMessage, 'normal', false);
             echo "<div class='clear'>&nbsp;</div>";
         }
 
@@ -4856,7 +4861,10 @@ EOT;
             }
         }
 
-        if (RESULT_DISABLE_RANKING == $objExercise->selectResultsDisabled()) {
+        if (in_array(
+            $objExercise->selectResultsDisabled(),
+            [RESULT_DISABLE_RANKING, RESULT_DISABLE_AUTOEVALUATION_AND_RANKING]
+        )) {
             echo Display::page_header(get_lang('Ranking'), null, 'h4');
             echo self::displayResultsInRanking(
                 $objExercise->iId,

@@ -219,9 +219,7 @@ if (!empty($attempts)) {
         );
         $attempt_url = api_get_path(WEB_CODE_PATH).'exercise/result.php?';
         $attempt_url .= api_get_cidreq().'&show_headers=1&';
-        $attempt_url .= http_build_query([
-            'id' => $attempt_result['exe_id'],
-        ]);
+        $attempt_url .= http_build_query(['id' => $attempt_result['exe_id']]);
         $attempt_url .= $url_suffix;
 
         $attempt_link = Display::url(
@@ -258,6 +256,7 @@ if (!empty($attempts)) {
                 RESULT_DISABLE_DONT_SHOW_SCORE_ONLY_IF_USER_FINISHES_ATTEMPTS_SHOW_ALWAYS_FEEDBACK,
                 RESULT_DISABLE_RANKING,
                 RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER,
+                RESULT_DISABLE_AUTOEVALUATION_AND_RANKING,
             ]
         )) {
             $row['result'] = $score;
@@ -272,6 +271,7 @@ if (!empty($attempts)) {
                 RESULT_DISABLE_DONT_SHOW_SCORE_ONLY_IF_USER_FINISHES_ATTEMPTS_SHOW_ALWAYS_FEEDBACK,
                 RESULT_DISABLE_RANKING,
                 RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER,
+                RESULT_DISABLE_AUTOEVALUATION_AND_RANKING,
             ]
         ) || (
             $objExercise->results_disabled == RESULT_DISABLE_SHOW_SCORE_ONLY &&
@@ -290,6 +290,7 @@ if (!empty($attempts)) {
                     unset($row['result']);
                 }
             }
+
             $row['attempt_link'] = $attempt_link;
         }
         $my_attempt_array[] = $row;
@@ -328,6 +329,7 @@ if (!empty($attempts)) {
             }
             break;
         case RESULT_DISABLE_SHOW_SCORE_AND_EXPECTED_ANSWERS:
+        case RESULT_DISABLE_AUTOEVALUATION_AND_RANKING:
         case RESULT_DISABLE_SHOW_FINAL_SCORE_ONLY_WITH_CATEGORIES:
         case RESULT_DISABLE_RANKING:
             $header_names = [

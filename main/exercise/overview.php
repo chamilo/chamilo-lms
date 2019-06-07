@@ -253,6 +253,7 @@ if (!empty($attempts)) {
                 RESULT_DISABLE_DONT_SHOW_SCORE_ONLY_IF_USER_FINISHES_ATTEMPTS_SHOW_ALWAYS_FEEDBACK,
                 RESULT_DISABLE_RANKING,
                 RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER,
+                RESULT_DISABLE_AUTOEVALUATION_AND_RANKING,
             ]
         )) {
             $row['result'] = $score;
@@ -267,6 +268,7 @@ if (!empty($attempts)) {
                 RESULT_DISABLE_DONT_SHOW_SCORE_ONLY_IF_USER_FINISHES_ATTEMPTS_SHOW_ALWAYS_FEEDBACK,
                 RESULT_DISABLE_RANKING,
                 RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER,
+                RESULT_DISABLE_AUTOEVALUATION_AND_RANKING,
             ]
         ) || (
             $objExercise->results_disabled == RESULT_DISABLE_SHOW_SCORE_ONLY &&
@@ -284,9 +286,6 @@ if (!empty($attempts)) {
                 if (isset($row['result'])) {
                     unset($row['result']);
                 }
-            }
-            if (!$objExercise->hasResultsAccess($attempt_result)) {
-                $attempt_link = '';
             }
 
             $row['attempt_link'] = $attempt_link;
@@ -327,6 +326,7 @@ if (!empty($attempts)) {
             }
             break;
         case RESULT_DISABLE_SHOW_SCORE_AND_EXPECTED_ANSWERS:
+        case RESULT_DISABLE_AUTOEVALUATION_AND_RANKING:
         case RESULT_DISABLE_SHOW_FINAL_SCORE_ONLY_WITH_CATEGORIES:
         case RESULT_DISABLE_RANKING:
             $header_names = [

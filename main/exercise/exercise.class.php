@@ -8597,18 +8597,18 @@ class Exercise
             'results_disabled',
             null,
             get_lang('ExerciseShowOnlyGlobalScoreAndCorrectAnswers'),
-            '7',
+            RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER,
             ['id' => 'result_disabled_7']
         );
 
-        /*$resultDisabledGroup[] = $form->createElement(
+        $resultDisabledGroup[] = $form->createElement(
             'radio',
             'results_disabled',
             null,
             get_lang('AutoEvaluationAndRankingMode'),
-            '8',
+            RESULT_DISABLE_AUTOEVALUATION_AND_RANKING,
             ['id' => 'result_disabled_8']
-        );*/
+        );
 
         $group = $form->addGroup(
             $resultDisabledGroup,

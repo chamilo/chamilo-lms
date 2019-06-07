@@ -404,7 +404,7 @@ class ExerciseShowFunctions
         if ($feedbackType != EXERCISE_FEEDBACK_TYPE_EXAM && $studentChoice) {
             $showComment = true;
             if (!$answerCorrect && $resultsDisabled == RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER) {
-               // $showComment = false;
+                // $showComment = false;
             }
         }
 

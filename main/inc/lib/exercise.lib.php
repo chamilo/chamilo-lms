@@ -4504,7 +4504,9 @@ EOT;
                 }
             }
 
-            if ($objExercise->results_disabled == RESULT_DISABLE_DONT_SHOW_SCORE_ONLY_IF_USER_FINISHES_ATTEMPTS_SHOW_ALWAYS_FEEDBACK) {
+            if ($objExercise->results_disabled ==
+                RESULT_DISABLE_DONT_SHOW_SCORE_ONLY_IF_USER_FINISHES_ATTEMPTS_SHOW_ALWAYS_FEEDBACK
+            ) {
                 $show_only_score = false;
                 $show_results = true;
                 $show_all_but_expected_answer = false;
@@ -4517,7 +4519,7 @@ EOT;
             }
         }
 
-        if (($show_results || $show_only_score) && $origin != 'embeddable') {
+        if (($show_results || $show_only_score) && $origin !== 'embeddable') {
             if (isset($exercise_stat_info['exe_user_id'])) {
                 $user_info = api_get_user_info($exercise_stat_info['exe_user_id']);
                 if ($user_info) {
@@ -4531,9 +4533,9 @@ EOT;
         }
 
         // Display text when test is finished #4074 and for LP #4227
-        $end_of_message = $objExercise->selectTextWhenFinished();
-        if (!empty($end_of_message)) {
-            echo Display::return_message($end_of_message, 'normal', false);
+        $endOfMessage = $objExercise->selectTextWhenFinished();
+        if (!empty($endOfMessage)) {
+            echo Display::return_message($endOfMessage, 'normal', false);
             echo "<div class='clear'>&nbsp;</div>";
         }
 
@@ -4863,7 +4865,10 @@ EOT;
             }
         }
 
-        if (RESULT_DISABLE_RANKING == $objExercise->selectResultsDisabled()) {
+        if (in_array(
+            $objExercise->selectResultsDisabled(),
+            [RESULT_DISABLE_RANKING, RESULT_DISABLE_AUTOEVALUATION_AND_RANKING]
+        )) {
             echo Display::page_header(get_lang('Ranking'), null, 'h4');
             echo self::displayResultsInRanking(
                 $objExercise->iId,

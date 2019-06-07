@@ -83,7 +83,7 @@ $origin = 'tracking';
 $action = isset($_REQUEST['action']) ? $_REQUEST['action'] : '';
 switch ($action) {
     case 'export_stats':
-        if (!api_is_allowed_to_edit()) {
+        if (!api_is_allowed_to_edit(false, false, true)) {
             api_not_allowed();
         }
         $tpl = new Template(null, false, false);

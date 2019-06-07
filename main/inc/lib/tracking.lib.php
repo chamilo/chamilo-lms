@@ -272,7 +272,7 @@ class Tracking
 
         $result_disabled_ext_all = true;
         $chapterTypes = learnpath::getChapterTypes();
-
+        $accessToPdfExport = api_is_allowed_to_edit(false, false, true);
         // Show lp items
         if (is_array($list) && count($list) > 0) {
             foreach ($list as $my_item_id) {
@@ -419,7 +419,7 @@ class Tracking
                                     Display::return_icon('visible.png', get_lang('HideAttemptView')),
                                     api_get_self().'?action=stats&extend_id='.$my_item_id.'&fold_attempt_id='.$row['iv_id'].$url_suffix
                                 );
-                                if (api_is_allowed_to_edit()) {
+                                if ($accessToPdfExport) {
                                     $extend_attempt_link .= '&nbsp;'.
                                         Display::url(
                                             Display::return_icon('pdf.png', get_lang('ExportToPdf')),
@@ -433,7 +433,7 @@ class Tracking
                                     Display::return_icon('invisible.png', get_lang('ExtendAttemptView')),
                                     api_get_self().'?action=stats&extend_id='.$my_item_id.'&extend_attempt_id='.$row['iv_id'].$url_suffix
                                 );
-                                if (api_is_allowed_to_edit()) {
+                                if ($accessToPdfExport) {
                                     $extend_attempt_link .= '&nbsp;'.
                                         Display::url(
                                             Display::return_icon('pdf.png', get_lang('ExportToPdf')),

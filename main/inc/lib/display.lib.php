@@ -223,7 +223,10 @@ class Display
      *                               'per_page' = number of items to show per page
      *                               'page_nr' = The page to display
      * @param array $query_vars      Additional variables to add in the query-string
-     * @param string The style that the table will show. You can set 'table' or 'grid'
+     * @param array $form_actions
+     * @param string $style The style that the table will show. You can set 'table' or 'grid'
+     * @param string $tableName
+     * @param string $tableId
      *
      * @author bart.mollet@hogent.be
      */
@@ -234,11 +237,13 @@ class Display
         $paging_options = [],
         $query_vars = null,
         $form_actions = [],
-        $style = 'table'
+        $style = 'table',
+        $tableName = 'tablename',
+        $tableId = ''
     ) {
         $column = isset($sorting_options['column']) ? $sorting_options['column'] : 0;
         $default_items_per_page = isset($paging_options['per_page']) ? $paging_options['per_page'] : 20;
-        $table = new SortableTableFromArray($content, $column, $default_items_per_page);
+        $table = new SortableTableFromArray($content, $column, $default_items_per_page, $tableName, null, $tableId);
         if (is_array($query_vars)) {
             $table->set_additional_parameters($query_vars);
         }

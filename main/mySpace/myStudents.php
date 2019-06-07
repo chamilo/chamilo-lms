@@ -916,6 +916,10 @@ if ($details == 'true') {
     $userInfo['time_spent_course'] = $time_spent_on_the_course;
 }
 
+$icon = '';
+$timeLegalAccept = '';
+$btn = '';
+
 if (api_get_setting('allow_terms_conditions') === 'true') {
     $isBoss = UserManager::userIsBossOfStudent(api_get_user_id(), $student_id);
     if ($isBoss || api_is_platform_admin()) {

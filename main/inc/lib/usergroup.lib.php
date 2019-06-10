@@ -1331,7 +1331,7 @@ class UserGroup extends Model
      *
      * @return bool|string
      */
-    public function manageFileUpload($groupId, $picture, $cropParameters)
+    public function manageFileUpload($groupId, $picture, $cropParameters = '')
     {
         if (!empty($picture['name'])) {
             return $this->update_group_picture(

@@ -975,7 +975,7 @@ class Link extends Model
      * @author Julio Montoya
      * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
      */
-    public static function showLinksPerCategory($catid, $courseId, $session_id)
+    public static function showLinksPerCategory($catid, $courseId, $session_id, $showActionLinks = true)
     {
         global $token;
         $_user = api_get_user_info();

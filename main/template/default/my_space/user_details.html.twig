@@ -1,8 +1,4 @@
-{% extends "@ChamiloTheme/Layout/layout_one_col.html.twig" %}
-
-{% block content %}
-
-{% import 'macro/macro.tpl'|get_template as display %}
+{% import '@ChamiloTheme/Macros/box.html.twig' as display %}
 
 {% autoescape false %}
 {% if title %}
@@ -15,35 +11,34 @@
 <!-- NO DETAILS -->
 {% if details != true %}
     <div class="no-details">
-        <div class="panel panel-default">
-            <div class="panel-body">
-                <div class="row">
-                    <div class="col-md-4">
-                        <div class="user text-center">
-                            <div class="avatar">
-                                <img width="128px" src="{{ user.avatar }}" class="img-responsive">
-                            </div>
-                            <div class="name">
-                                <h3>{{ user.complete_name_link }}</h3>
-                                <p class="email">{{ user.email }}</p>
-                            </div>
+
+        {% set user_content %}
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="user text-center">
+                        <div class="avatar">
+                            <img width="128px" src="{{ user.avatar }}" class="img-responsive">
+                        </div>
+                        <div class="name">
+                            <h3>{{ user.complete_name_link }}</h3>
+                            <p class="email">{{ user.email }}</p>
                         </div>
                     </div>
-                    <div class="col-md-4">
-                        {{ display.reporting_user_details(user) }}
-                    </div>
-                    <div class="col-md-4">
-                        {{ display.card_widget('FirstLoginInPlatform'|get_lang, user.first_connection, 'calendar') }}
-                        {{ display.card_widget('LatestLoginInPlatform'|get_lang, user.last_connection, 'calendar') }}
+                </div>
+                <div class="col-md-4">
+                    {{ display.reporting_user_details(user) }}
+                </div>
+                <div class="col-md-4">
+                    {{ display.card_widget('FirstLoginInPlatform'|get_lang, user.first_connection, 'calendar') }}
+                    {{ display.card_widget('LatestLoginInPlatform'|get_lang, user.last_connection, 'calendar') }}
 
-                        {% if user.legal %}
-                            {{ display.card_widget('LegalAccepted'|get_lang, user.legal.datetime, 'gavel', user.legal.icon) }}
-                        {% endif %}
-                    </div>
+                    {% if user.legal %}
+                        {{ display.card_widget('LegalAccepted'|get_lang, user.legal.datetime, 'gavel', user.legal.icon) }}
+                    {% endif %}
                 </div>
             </div>
-        </div>
-
+        {% endset %}
+        {{ display.panel('', user_content) }}
     </div>
     <!-- DETAILS -->
 {% else %}
@@ -56,7 +51,6 @@
             <div class="col-md-8">
                 <div class="row">
                     <div class="col-md-8">
-
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="easy-donut">
@@ -83,7 +77,6 @@
                         </div>
                         <div class="row">
                             <div class="col-md-6">
-
                                 <div class="card box-widget">
                                     <div class="card-body">
                                         <div class="stat-widget-five">
@@ -122,7 +115,6 @@
 
                             </div>
                             <div class="col-md-6">
-
                                 <div class="card box-widget">
                                     <div class="card-body">
                                         <div class="stat-widget-five">
@@ -164,10 +156,8 @@
                                         </div>
                                     </div>
                                 </div>
-
                             </div>
                         </div>
-
                     </div>
                     <div class="col-md-4">
                         {{ display.card_widget('FirstLoginInPlatform'|get_lang, user.first_connection, 'calendar') }}
@@ -202,6 +192,4 @@
         });
     });
 </script>
-{% autoescape false %}
-
-{% endblock %}
+{% endautoescape %}

@@ -1,6 +1,6 @@
 {{ form }}
 <script>
-    $(document).on('ready', function () {
+    $(function () {
         $('select[name="sub_language"]').on('change', function () {
             location.href += '&sub_language=' + this.value;
         });

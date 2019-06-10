@@ -45,6 +45,7 @@ class GroupManager
     public const TOOL_NOT_AVAILABLE = 0;
     public const TOOL_PUBLIC = 1;
     public const TOOL_PRIVATE = 2;
+    public const TOOL_PRIVATE_BETWEEN_USERS = 3;
 
     /**
      * Constants for the available group tools.
@@ -1824,8 +1825,8 @@ class GroupManager
             foreach ($user_ids as $user_id) {
                 if (self::canUserSubscribe($user_id, $groupInfo)) {
                     $user_id = (int) $user_id;
-                    $sql = "INSERT INTO ".$table." (c_id, user_id, group_id)
-                            VALUES ('$course_id', '".$user_id."', '".$group_id."')";
+                    $sql = "INSERT INTO $table (c_id, user_id, group_id, status, role)
+                            VALUES ('$course_id', '".$user_id."', '".$group_id."', 0, '')";
                     Database::query($sql);
                 }
             }

@@ -1121,6 +1121,9 @@ class Skill extends Model
         $skillRelGradebook = new SkillRelGradebook();
 
         // Saving name, description
+        $params['access_url_id'] = api_get_current_access_url_id();
+        $params['icon'] = '';
+
         $skill_id = $this->save($params);
         if ($skill_id) {
             // Saving skill_rel_skill (parent_id, relation_type)
@@ -2463,8 +2466,8 @@ class Skill extends Model
             $form->addButtonCreate(get_lang('Add'));
         } else {
             $form->addButtonUpdate(get_lang('Update'));
+            $form->addHidden('id', $skillInfo['id']);
         }
-        $form->addHidden('id', null);
 
         return $returnParams;
     }

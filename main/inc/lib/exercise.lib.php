@@ -4015,7 +4015,7 @@ EOT;
             $courseCondition = "
             INNER JOIN $courseUserSession cu
             ON cu.c_id = c.id AND cu.user_id = exe_user_id";
-            $courseConditionWhere = " AND cu.status = 0 ";
+            $courseConditionWhere = ' AND cu.status = 0 ';
         }
 
         $sql = "SELECT DISTINCT exe_user_id
@@ -4023,7 +4023,7 @@ EOT;
     		INNER JOIN $track_hotspot a
     		ON (a.hotspot_exe_id = e.exe_id)
     		INNER JOIN $courseTable c
-    		ON (hotspot_course_code = c.code)
+    		ON (a.c_id = c.id)
     		$courseCondition
     		WHERE
     		    exe_exo_id              = $exercise_id AND

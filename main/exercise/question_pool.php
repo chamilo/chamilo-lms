@@ -23,20 +23,20 @@ $this_section = SECTION_COURSES;
 
 $is_allowedToEdit = api_is_allowed_to_edit(null, true);
 
-$delete = isset($_GET['delete']) ? intval($_GET['delete']) : null;
-$recup = isset($_GET['recup']) ? intval($_GET['recup']) : null;
-$fromExercise = isset($_REQUEST['fromExercise']) ? intval($_REQUEST['fromExercise']) : null;
-$exerciseId = isset($_REQUEST['exerciseId']) ? intval($_REQUEST['exerciseId']) : null;
-$courseCategoryId = isset($_REQUEST['courseCategoryId']) ? intval($_REQUEST['courseCategoryId']) : null;
-$exerciseLevel = isset($_REQUEST['exerciseLevel']) ? intval($_REQUEST['exerciseLevel']) : -1;
-$answerType = isset($_REQUEST['answerType']) ? intval($_REQUEST['answerType']) : null;
-$question_copy = isset($_REQUEST['question_copy']) ? intval($_REQUEST['question_copy']) : 0;
-$session_id = isset($_REQUEST['session_id']) ? intval($_REQUEST['session_id']) : null;
-$selected_course = isset($_GET['selected_course']) ? intval($_GET['selected_course']) : null;
+$delete = isset($_GET['delete']) ? (int) $_GET['delete'] : null;
+$recup = isset($_GET['recup']) ? (int) $_GET['recup'] : null;
+$fromExercise = isset($_REQUEST['fromExercise']) ? (int) $_REQUEST['fromExercise'] : null;
+$exerciseId = isset($_REQUEST['exerciseId']) ? (int) $_REQUEST['exerciseId'] : null;
+$courseCategoryId = isset($_REQUEST['courseCategoryId']) ? (int) $_REQUEST['courseCategoryId'] : null;
+$exerciseLevel = isset($_REQUEST['exerciseLevel']) ? (int) $_REQUEST['exerciseLevel'] : -1;
+$answerType = isset($_REQUEST['answerType']) ? (int) $_REQUEST['answerType'] : null;
+$question_copy = isset($_REQUEST['question_copy']) ? (int) $_REQUEST['question_copy'] : 0;
+$session_id = isset($_REQUEST['session_id']) ? (int) $_REQUEST['session_id'] : null;
+$selected_course = isset($_GET['selected_course']) ? (int) $_GET['selected_course'] : null;
 // save the id of the previous course selected by user to reset menu if we detect that user change course hub 13-10-2011
-$course_id_changed = isset($_GET['course_id_changed']) ? intval($_GET['course_id_changed']) : null;
+$course_id_changed = isset($_GET['course_id_changed']) ? (int) $_GET['course_id_changed'] : null;
 // save the id of the previous exercise selected by user to reset menu if we detect that user change course hub 13-10-2011
-$exercise_id_changed = isset($_GET['exercise_id_changed']) ? intval($_GET['exercise_id_changed']) : null;
+$exercise_id_changed = isset($_GET['exercise_id_changed']) ? (int) $_GET['exercise_id_changed'] : null;
 $questionId = isset($_GET['question_id']) && !empty($_GET['question_id']) ? (int) $_GET['question_id'] : '';
 $description = isset($_GET['description']) ? Database::escape_string($_GET['description']) : '';
 $page = isset($_GET['page']) ? (int) $_GET['page'] : 1;
@@ -131,9 +131,7 @@ if ($is_allowedToEdit) {
         // Adds the question ID represented by $recup into the list of questions for the current exercise
         $objExercise->addToList($recup);
         Session::write('objExercise', $objExercise);
-        Display::addFlash(
-            Display::return_message(get_lang('ItemAdded'), 'success')
-        );
+        Display::addFlash(Display::return_message(get_lang('ItemAdded'), 'success'));
     } elseif (isset($_POST['recup']) && is_array($_POST['recup']) && $fromExercise) {
         $list_recup = $_POST['recup'];
         foreach ($list_recup as $course_id => $question_data) {
@@ -141,7 +139,7 @@ if ($is_allowedToEdit) {
             $origin_course_info = api_get_course_info_by_id($origin_course_id);
             $current_course = api_get_course_info();
             foreach ($question_data as $old_question_id) {
-                //Reading the source question
+                // Reading the source question
                 $old_question_obj = Question::read($old_question_id, $origin_course_info);
                 if ($old_question_obj) {
                     $old_question_obj->updateTitle(
@@ -307,7 +305,7 @@ if (isset($fromExercise) && $fromExercise > 0) {
     echo '<a href="exercise.php?'.api_get_cidreq().'">'.
         Display::return_icon('back.png', get_lang('BackToExercisesList'), '', ICON_SIZE_MEDIUM).'</a>';
     echo "<a href='admin.php?exerciseId=0'>".
-        Display::return_icon('add_question.gif', get_lang('NewQu'), '', ICON_SIZE_MEDIUM)."</a>";
+        Display::return_icon('add_question.gif', get_lang('NewQu'), '', ICON_SIZE_MEDIUM).'</a>';
     $titleAdd = get_lang('ManageAllQuestions');
 }
 echo '</div>';
@@ -992,7 +990,6 @@ $html .= '<div class="btn-group">
                 <span class="caret"></span>
             </button>';
 $html .= '<ul class="dropdown-menu">';
-
 
 $actionLabel = get_lang('ReUseACopyInCurrentTest');
 $actions = ['clone' => get_lang('ReUseACopyInCurrentTest')];

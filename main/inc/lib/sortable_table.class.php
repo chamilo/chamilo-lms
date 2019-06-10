@@ -1050,7 +1050,6 @@ class SortableTableFromArray extends SortableTable
      * @param string $tableName
      * @param string $get_total_number_function
      * @param string $tableId
-     *
      */
     public function __construct(
         $table_data,

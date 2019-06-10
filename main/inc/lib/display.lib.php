@@ -206,25 +206,25 @@ class Display
     /**
      * Displays a table.
      *
-     * @param array $header          Titles for the table header
-     *                               each item in this array can contain 3 values
-     *                               - 1st element: the column title
-     *                               - 2nd element: true or false (column sortable?)
-     *                               - 3th element: additional attributes for
-     *                               th-tag (eg for column-width)
-     *                               - 4the element: additional attributes for the td-tags
-     * @param array $content         2D-array with the tables content
-     * @param array $sorting_options Keys are:
-     *                               'column' = The column to use as sort-key
-     *                               'direction' = SORT_ASC or SORT_DESC
-     * @param array $paging_options  Keys are:
-     *                               'per_page_default' = items per page when switching from
-     *                               full-    list to per-page-view
-     *                               'per_page' = number of items to show per page
-     *                               'page_nr' = The page to display
-     * @param array $query_vars      Additional variables to add in the query-string
-     * @param array $form_actions
-     * @param string $style The style that the table will show. You can set 'table' or 'grid'
+     * @param array  $header          Titles for the table header
+     *                                each item in this array can contain 3 values
+     *                                - 1st element: the column title
+     *                                - 2nd element: true or false (column sortable?)
+     *                                - 3th element: additional attributes for
+     *                                th-tag (eg for column-width)
+     *                                - 4the element: additional attributes for the td-tags
+     * @param array  $content         2D-array with the tables content
+     * @param array  $sorting_options Keys are:
+     *                                'column' = The column to use as sort-key
+     *                                'direction' = SORT_ASC or SORT_DESC
+     * @param array  $paging_options  Keys are:
+     *                                'per_page_default' = items per page when switching from
+     *                                full-    list to per-page-view
+     *                                'per_page' = number of items to show per page
+     *                                'page_nr' = The page to display
+     * @param array  $query_vars      Additional variables to add in the query-string
+     * @param array  $form_actions
+     * @param string $style           The style that the table will show. You can set 'table' or 'grid'
      * @param string $tableName
      * @param string $tableId
      *

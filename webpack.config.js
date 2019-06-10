@@ -48,6 +48,11 @@ Encore
             pattern: /(readmore.js)$/,
             to: 'libs/readmore-js/readmore.js'
         },
+        {
+            from: './node_modules/js-cookie/src/',
+            pattern: /(js.cookie.js)$/,
+            to: 'libs/js-cookie/src/js.cookie.js'
+        },
     ])
 ;
 

@@ -2462,8 +2462,8 @@ class Skill extends Model
             $form->addButtonCreate(get_lang('Add'));
         } else {
             $form->addButtonUpdate(get_lang('Update'));
+            $form->addHidden('id', $skillInfo['id']);
         }
-        $form->addHidden('id', null);
 
         return $returnParams;
     }

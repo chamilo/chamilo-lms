@@ -17,15 +17,19 @@ $this_section = SECTION_PLATFORM_ADMIN;
 api_protect_admin_script();
 Skill::isAllowed();
 
-$interbreadcrumb[] = ["url" => 'index.php', "name" => get_lang('PlatformAdmin')];
+$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('PlatformAdmin')];
 $interbreadcrumb[] = ['url' => 'skill_list.php', 'name' => get_lang('ManageSkills')];
 
 /* Process data */
-$skillId = isset($_REQUEST['id']) ? intval($_REQUEST['id']) : 0;
+$skillId = isset($_REQUEST['id']) ? (int) $_REQUEST['id'] : 0;
 
 $objSkill = new Skill();
 $objGradebook = new Gradebook();
 $skillInfo = $objSkill->getSkillInfo($skillId);
+
+if (empty($skillInfo)) {
+    api_not_allowed(true);
+}
 
 $allGradebooks = $objGradebook->find('all');
 

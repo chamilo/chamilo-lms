@@ -325,7 +325,7 @@ if ($allowEmailTemplate) {
 
 // the $jqueryReadyContent variable collects all functions that will be load in the
 $htmlHeadXtra[] = '<script>
-$(document).ready(function(){
+$(function () {
     '.$jqueryReadyContent.'
 });
 </script>';

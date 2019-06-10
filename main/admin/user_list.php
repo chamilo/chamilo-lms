@@ -159,7 +159,7 @@ function display_advanced_search_form () {
     }
 }
 
-$(document).ready(function() {
+$(function () {
     var select_val = $("#input_select_extra_data").val();
     if ( document.getElementById(\'extra_data_text\')) {
         if (select_val != 0) {
@@ -1097,7 +1097,7 @@ $data = $extraField->addElements($form, 0, [], true, false, $variablesToShow);
 
 $htmlHeadXtra[] = '
     <script>
-    $(document).ready(function() {
+    $(function () {
         '.$data['jquery_ready_content'].'
     })
     </script>

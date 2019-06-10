@@ -19,7 +19,7 @@
         return (match && match.length > 1) ? match[1] : '';
     }
 
-    $().ready(function() {
+    $(function () {
         var winheight = document.documentElement.clientHeight;
         var funcNum = getUrlParam('CKEditorFuncNum');
         var elf = $('#elfinder').elfinder({

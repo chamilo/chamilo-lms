@@ -227,7 +227,6 @@ $url = api_get_self().'?'.api_get_cidreq().'&'.http_build_query(
 
 if (isset($_REQUEST['action'])) {
     switch ($_REQUEST['action']) {
-        // Delete selected courses
         case 'reuse':
             if (!empty($_REQUEST['questions']) && !empty($fromExercise)) {
                 $questions = $_REQUEST['questions'];
@@ -244,6 +243,46 @@ if (isset($_REQUEST['action'])) {
                                 $objExercise->addToList($questionId);
                                 $objQuestionTmp->addToList($fromExercise);
                             }
+                        }
+                    }
+                }
+
+                Display::addFlash(Display::return_message(get_lang('Added')));
+                header('Location: '.$url);
+                exit;
+            }
+            break;
+        case 'clone':
+            if (!empty($_REQUEST['questions']) && !empty($fromExercise)) {
+                $questions = $_REQUEST['questions'];
+                $objExercise = new Exercise();
+                $objExercise->read($fromExercise, false);
+
+                $origin_course_id = (int) $_GET['course_id'];
+                $origin_course_info = api_get_course_info_by_id($origin_course_id);
+                $current_course = api_get_course_info();
+
+                if (count($questions) > 0) {
+                    foreach ($questions as $questionId) {
+                        // gets an existing question and copies it into a new exercise
+                        // Reading the source question
+                        $old_question_obj = Question::read($questionId, $origin_course_info);
+                        $courseId = $current_course['real_id'];
+                        if ($old_question_obj) {
+                            $old_question_obj->updateTitle($old_question_obj->selectTitle().' - '.get_lang('Copy'));
+                            // Duplicating the source question, in the current course
+                            $new_id = $old_question_obj->duplicate($current_course);
+                            // Reading new question
+                            $new_question_obj = Question::read($new_id);
+                            $new_question_obj->addToList($fromExercise);
+                            //Reading Answers obj of the current course
+                            $new_answer_obj = new Answer($old_question_id, $origin_course_id);
+                            $new_answer_obj->read();
+                            //Duplicating the Answers in the current course
+                            $new_answer_obj->duplicate($new_question_obj, $current_course);
+                            // destruction of the Question object
+                            unset($new_question_obj);
+                            unset($old_question_obj);
                         }
                     }
                 }
@@ -796,7 +835,7 @@ if ($fromExercise <= 0) {
     }
 } else {
     // IN A TEST - NOT IN THE COURSE
-    $actionLabel = get_lang('Reuse');
+    $actionLabel = get_lang('ReUseACopyInCurrentTest');
     $actionIcon1 = 'clone';
     $actionIcon2 = '';
     $questionTagA = 0;
@@ -929,6 +968,9 @@ echo $pagination;
 echo '<form id="question_pool_id" method="get" action="'.$url.'">';
 echo '<input type="hidden" name="fromExercise" value="'.$fromExercise.'">';
 echo '<input type="hidden" name="cidReq" value="'.$_course['code'].'">';
+echo '<input type="hidden" name="selected_course" value="'.$selected_course.'">';
+echo '<input type="hidden" name="course_id" value="'.$selected_course.'">';
+
 Display::display_sortable_table(
     $header,
     $data,
@@ -951,7 +993,13 @@ $html .= '<div class="btn-group">
             </button>';
 $html .= '<ul class="dropdown-menu">';
 
-$actions = ['reuse' => get_lang('ReuseQuestion')];
+
+$actionLabel = get_lang('ReUseACopyInCurrentTest');
+$actions = ['clone' => get_lang('ReUseACopyInCurrentTest')];
+if ($selected_course == api_get_course_int_id()) {
+    $actions = ['reuse' => get_lang('ReuseQuestion')];
+}
+
 foreach ($actions as $action => &$label) {
     $html .= '<li>
                 <a data-action ="'.$action.'" href="#" onclick="javascript:action_click(this, \''.$tableId.'\');">'.

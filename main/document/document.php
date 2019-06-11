@@ -41,6 +41,7 @@ $parent_id = null;
 $lib_path = api_get_path(LIBRARY_PATH);
 $actionsRight = '';
 $action = isset($_REQUEST['action']) ? $_REQUEST['action'] : '';
+
 $allowUseTool = false;
 $em = Database::getManager();
 $charset = 'utf-8';
@@ -317,6 +318,7 @@ switch ($action) {
             false,
             $sessionId
         );
+
         if ($sessionId != 0 && !$document_data) {
             // If there is a session defined and asking for the document *from
             // the session* didn't work, try it from the course (out of a

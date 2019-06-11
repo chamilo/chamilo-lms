@@ -3,6 +3,9 @@
 
 namespace Chamilo\CoreBundle\Component\Editor\Driver;
 
+use Chamilo\CoreBundle\Framework\Container;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
+
 /**
  * Class CourseDriver.
  *
@@ -82,7 +85,7 @@ class CourseDriver extends Driver implements DriverInterface
             $courseCode = $this->connector->course->getCode();
             $alias = $courseCode.' '.get_lang('Documents');
             $userId = $this->connector->user->getId();
-            // var_dump($this->getCourseDocumentSysPath());exit;
+
             $config = [
                 'driver' => 'CourseDriver',
                 'path' => $this->getCourseDocumentSysPath(),
@@ -296,22 +299,20 @@ class CourseDriver extends Driver implements DriverInterface
             }
 
             if (!empty($_FILES)) {
-                $files = $_FILES['upload'];
-                $fileList = [];
-                foreach ($files as $tempName => $array) {
-                    $counter = 0;
-                    foreach ($array as $data) {
-                        $fileList[$counter][$tempName] = $data;
-                        $counter++;
-                    }
-                }
-
-                $resultList = [];
+                $request = Container::getRequest();
+                $fileList = $request->files->get('upload');
+                /** @var UploadedFile $file */
                 foreach ($fileList as $file) {
-                    $globalFile = [];
-                    $globalFile['files'] = $file;
-                    $document = \DocumentManager::upload_document(
-                        $globalFile,
+                    $fileInfo = $file->getFileInfo();
+                    $item = [
+                        'files' => [
+                            'tmp_name' => $fileInfo->getPathname(),
+                            'error' => $file->getError(),
+                            'size' => $file->getSize(),
+                        ],
+                    ];
+                    \DocumentManager::upload_document(
+                        $item,
                         $currentDirectory,
                         '',
                         '', // comment
@@ -321,18 +322,10 @@ class CourseDriver extends Driver implements DriverInterface
                         false,
                         'files',
                         true,
-                        0
+                        $directoryParentId,
+                        $file
                     );
                 }
-                exit;
-
-                /*\DocumentManager::addDocument(
-                    $this->connector->course,
-                    $realPath,
-                    'file',
-                    (int) $result['size'],
-                    $result['name']
-                );*/
             }
         }
 

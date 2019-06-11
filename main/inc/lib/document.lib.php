@@ -2873,6 +2873,7 @@ class DocumentManager
      * @param string $fileKey
      * @param bool   $treat_spaces_as_hyphens
      * @param int    $parentId
+     * @param $content
      *
      * @return CDocument|false
      */
@@ -2887,7 +2888,8 @@ class DocumentManager
         $show_output = false,
         $fileKey = 'file',
         $treat_spaces_as_hyphens = true,
-        $parentId = 0
+        $parentId = 0,
+        $content = null
     ) {
         $course_info = api_get_course_info();
         $sessionId = api_get_session_id();
@@ -2915,7 +2917,8 @@ class DocumentManager
                     $sessionId,
                     $treat_spaces_as_hyphens,
                     $fileKey,
-                    $parentId
+                    $parentId,
+                    $content
                 );
 
                 // Showing message when sending zip files
@@ -6475,14 +6478,14 @@ class DocumentManager
                 $provider = 'sonata.media.provider.image';
             }
 
-            error_log($provider);
+            //error_log("Provider: $provider");
 
             $media->setProviderName($provider);
             $media->setEnabled(true);
 
             if ($content instanceof UploadedFile) {
+                //error_log('UploadedFile');
                 $file = $content;
-                error_log('1');
                 $media->setSize($file->getSize());
             } else {
                 // $path points to a file in the directory
@@ -6494,16 +6497,16 @@ class DocumentManager
                         $media->setHeight($size[1]);
                     }
                     $file = $realPath;
-                    error_log('2');
+                    //error_log("file exists: $realPath");
                 } else {
                     // We get the content and create a file
                     $handle = tmpfile();
                     fwrite($handle, $content);
                     $file = new \Sonata\MediaBundle\Extra\ApiMediaFile($handle);
                     $file->setMimetype($media->getContentType());
-                    error_log($file->getSize());
-                    error_log($media->getContentType());
-                    error_log('3');
+                    /*error_log('We get content and create a file from handle');
+                    error_log('Size: '.$file->getSize());
+                    error_log('Content type: '.$media->getContentType());*/
                 }
             }
 

@@ -3,6 +3,7 @@
 
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CDocument;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /**
  * FILE UPLOAD LIBRARY.
@@ -106,7 +107,7 @@ function process_uploaded_file($uploaded_file, $show_output = true)
                 // The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the HTML form.
                 // Not used at the moment, but could be handy if we want to limit the size of an upload
                 // (e.g. image upload in html editor).
-                $max_file_size = intval($_POST['MAX_FILE_SIZE']);
+                $max_file_size = (int) $_POST['MAX_FILE_SIZE'];
                 if ($show_output) {
                     Display::addFlash(
                         Display::return_message(
@@ -221,6 +222,7 @@ function process_uploaded_file($uploaded_file, $show_output = true)
  * @param bool   $treat_spaces_as_hyphens
  * @param string $uploadKey
  * @param int    $parentId
+ * @param $content
  *
  * So far only use for unzip_uploaded_document function.
  * If no output wanted on success, set to false.
@@ -243,7 +245,8 @@ function handle_uploaded_document(
     $sessionId = null,
     $treat_spaces_as_hyphens = true,
     $uploadKey = '',
-    $parentId = 0
+    $parentId = 0,
+    $content = null
 ) {
     if (!$userId) {
         return false;
@@ -361,11 +364,12 @@ function handle_uploaded_document(
             $documentRepo = Container::$container->get('Chamilo\CourseBundle\Repository\CDocumentRepository');
             $document = $documentRepo->find($docId);
 
-            $request = Container::getRequest();
-            $content = $request->files->get($uploadKey);
-
-            if (is_array($content)) {
-                $content = $content[0];
+            if (!($content instanceof UploadedFile)) {
+                $request = Container::getRequest();
+                $content = $request->files->get($uploadKey);
+                if (is_array($content)) {
+                    $content = $content[0];
+                }
             }
 
             // What to do if the target file exists
@@ -511,7 +515,6 @@ function handle_uploaded_document(
                             );
                         }
                     } else {
-                        error_log($filePath);
                         // Put the document data in the database
                         $document = DocumentManager::addDocument(
                             $courseInfo,

@@ -421,7 +421,6 @@ if ($exercise_id_changed == 1) {
     reset_menu_lvl_type();
 }
 
-
 // Exercise List
 $my_exercise_list = [];
 $my_exercise_list['0'] = get_lang('AllExercises');
@@ -969,7 +968,6 @@ $header = [
 ];
 
 echo $pagination;
-
 echo '<form id="question_pool_id" method="get" action="'.$url.'">';
 echo '<input type="hidden" name="fromExercise" value="'.$fromExercise.'">';
 echo '<input type="hidden" name="cidReq" value="'.$_course['code'].'">';

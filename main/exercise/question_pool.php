@@ -327,13 +327,13 @@ $session_select_list = [];
 foreach ($sessionList as $item) {
     $session_select_list[$item['session_id']] = $item['session_name'];
 }
-$select_session_html = Display::select(
+$sessionListToString = Display::select(
     'session_id',
     $session_select_list,
     $session_id,
     ['onchange' => 'submit_form(this)']
 );
-echo Display::form_row(get_lang('Session'), $select_session_html);
+echo Display::form_row(get_lang('Session'), $sessionListToString);
 
 // Course list, get course list of session, or for course where user is admin
 if (!empty($session_id) && $session_id != '-1' && !empty($sessionList)) {
@@ -375,14 +375,14 @@ foreach ($course_list as $item) {
     $course_select_list[$courseItemId] .= $courseInfo['title'];
 }
 
-$select_course_html = Display::select(
+$courseListToString = Display::select(
     'selected_course',
     $course_select_list,
     $selected_course,
     ['onchange' => 'mark_course_id_changed(); submit_form(this);']
 );
 
-echo Display::form_row(get_lang('Course'), $select_course_html);
+echo Display::form_row(get_lang('Course'), $courseListToString);
 
 if (empty($selected_course) || $selected_course == '-1') {
     $course_info = api_get_course_info();
@@ -427,7 +427,7 @@ if (is_array($exercise_list)) {
         if ($row['id'] == $fromExercise && $selected_course == api_get_course_int_id()) {
             $my_exercise_list[$row['id']] = ">&nbsp;&nbsp;&nbsp;&nbsp;";
         }
-        $my_exercise_list[$row['id']] .= $row['title'];
+        $my_exercise_list[$row['id']] .= strip_tags($row['title']);
     }
 }
 

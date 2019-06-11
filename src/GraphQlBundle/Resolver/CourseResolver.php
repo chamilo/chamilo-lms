@@ -15,7 +15,6 @@ use Chamilo\CourseBundle\Entity\CLpCategory;
 use Chamilo\CourseBundle\Entity\CTool;
 use Chamilo\CourseBundle\Repository\CNotebookRepository;
 use Chamilo\GraphQlBundle\Traits\GraphQLTrait;
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\Criteria;
 use Firebase\JWT\JWT;

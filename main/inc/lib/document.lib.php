@@ -6497,7 +6497,7 @@ class DocumentManager
                         $media->setHeight($size[1]);
                     }
                     $file = $realPath;
-                    //error_log("file exists: $realPath");
+                //error_log("file exists: $realPath");
                 } else {
                     // We get the content and create a file
                     $handle = tmpfile();

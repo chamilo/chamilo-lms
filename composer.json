@@ -157,7 +157,8 @@
         "onelogin/php-saml": "^3.0",
         "symfony/dom-crawler": "~2.8",
         "brumann/polyfill-unserialize": "^1.0",
-        "yuloh/bccomp-polyfill":  "dev-master"
+        "yuloh/bccomp-polyfill":  "dev-master",
+        "thenetworg/oauth2-azure": "^1.4"
     },
     "require-dev": {
         "behat/behat": "@stable",

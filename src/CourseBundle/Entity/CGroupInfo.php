@@ -6,7 +6,7 @@ namespace Chamilo\CourseBundle\Entity;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Traits\CourseTrait;
 use Chamilo\UserBundle\Entity\User;
-use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -157,13 +157,6 @@ class CGroupInfo
     /**
      * @var int
      *
-     * ORM\Column(name="doc_access", type="integer", nullable=false, options={"default":0})
-     */
-    protected $docAccess;
-
-    /**
-     * @var int
-     *
      * @ORM\Column(name="document_access", type="integer", nullable=false, options={"default":0})
      */
     protected $documentAccess;
@@ -177,14 +170,14 @@ class CGroupInfo
     protected $course;
 
     /**
-     * @var ArrayCollection
+     * @var Collection
      *
      * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CGroupRelUser", mappedBy="group")
      */
     protected $members;
 
     /**
-     * @var ArrayCollection
+     * @var Collection
      *
      * @ORM\OneToMany(targetEntity="Chamilo\CourseBundle\Entity\CGroupRelTutor", mappedBy="group")
      */
@@ -629,39 +622,19 @@ class CGroupInfo
     }
 
     /**
-     * @return int
+     * @return Collection
      */
-    public function getDocAccess(): int
-    {
-        return $this->docAccess;
-    }
-
-    /**
-     * @param int $docAccess
-     *
-     * @return CGroupInfo
-     */
-    public function setDocAccess(int $docAccess): CGroupInfo
-    {
-        $this->docAccess = $docAccess;
-
-        return $this;
-    }
-
-    /**
-     * @return ArrayCollection
-     */
-    public function getMembers(): ArrayCollection
+    public function getMembers(): Collection
     {
         return $this->members;
     }
 
     /**
-     * @param ArrayCollection $members
+     * @param Collection $members
      *
      * @return CGroupInfo
      */
-    public function setMembers(ArrayCollection $members): CGroupInfo
+    public function setMembers(Collection $members): CGroupInfo
     {
         $this->members = $members;
 
@@ -669,19 +642,19 @@ class CGroupInfo
     }
 
     /**
-     * @return ArrayCollection
+     * @return Collection
      */
-    public function getTutors(): ArrayCollection
+    public function getTutors(): Collection
     {
         return $this->tutors;
     }
 
     /**
-     * @param ArrayCollection $tutors
+     * @param Collection $tutors
      *
      * @return CGroupInfo
      */
-    public function setTutors(ArrayCollection $tutors): CGroupInfo
+    public function setTutors(Collection $tutors): CGroupInfo
     {
         $this->tutors = $tutors;
 

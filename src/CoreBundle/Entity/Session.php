@@ -6,6 +6,7 @@ namespace Chamilo\CoreBundle\Entity;
 use Chamilo\CourseBundle\Entity\CStudentPublication;
 use Chamilo\UserBundle\Entity\User;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -1206,11 +1207,11 @@ class Session
     }
 
     /**
-     * @param ArrayCollection $studentPublications
+     * @param Collection $studentPublications
      *
      * @return Session
      */
-    public function setStudentPublications(ArrayCollection $studentPublications)
+    public function setStudentPublications(Collection $studentPublications)
     {
         $this->studentPublications = new ArrayCollection();
 

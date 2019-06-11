@@ -417,25 +417,32 @@ $exercise_list = ExerciseLib::get_all_exercises_for_course_id(
     false
 );
 
+if ($exercise_id_changed == 1) {
+    reset_menu_lvl_type();
+}
+
+
 // Exercise List
 $my_exercise_list = [];
 $my_exercise_list['0'] = get_lang('AllExercises');
 $my_exercise_list['-1'] = get_lang('OrphanQuestions');
+$titleSavedAsHtml = api_get_configuration_value('save_titles_as_html');
 if (is_array($exercise_list)) {
     foreach ($exercise_list as $row) {
         $my_exercise_list[$row['id']] = '';
         if ($row['id'] == $fromExercise && $selected_course == api_get_course_int_id()) {
             $my_exercise_list[$row['id']] = ">&nbsp;&nbsp;&nbsp;&nbsp;";
         }
-        $my_exercise_list[$row['id']] .= strip_tags($row['title']);
+
+        $exerciseTitle = $row['title'];
+        if ($titleSavedAsHtml) {
+            $exerciseTitle = strip_tags(api_html_entity_decode(trim($exerciseTitle)));
+        }
+        $my_exercise_list[$row['id']] .= $exerciseTitle;
     }
 }
 
-if ($exercise_id_changed == 1) {
-    reset_menu_lvl_type();
-}
-
-$select_exercise_html = Display::select(
+$exerciseListToString = Display::select(
     'exerciseId',
     $my_exercise_list,
     $exerciseId,
@@ -443,7 +450,7 @@ $select_exercise_html = Display::select(
     false
 );
 
-echo Display::form_row(get_lang('Exercise'), $select_exercise_html);
+echo Display::form_row(get_lang('Exercise'), $exerciseListToString);
 
 // Difficulty list (only from 0 to 5)
 $levels = [

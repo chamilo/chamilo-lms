@@ -47,6 +47,8 @@ class ResourceController extends BaseController implements CourseControllerInter
      */
     public function indexAction(Request $request): Response
     {
+        return [];
+
         $source = new Entity('ChamiloCourseBundle:CDocument');
 
         /* @var Grid $grid */

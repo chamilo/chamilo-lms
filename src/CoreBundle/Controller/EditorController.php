@@ -8,6 +8,7 @@ use Chamilo\CoreBundle\Component\Editor\Connector;
 use Chamilo\CoreBundle\Component\Editor\Finder;
 use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
 use Chamilo\SettingsBundle\Manager\SettingsManager;
+use DocumentManager;
 use FM\ElfinderBundle\Connector\ElFinderConnector;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -63,6 +64,54 @@ class EditorController extends BaseController
         ];
 
         return $this->render('@ChamiloTheme/Editor/elfinder.html.twig', $params);
+    }
+
+    /**
+     * @Route("/filemanager", methods={"GET"}, name="editor_filemanager")
+     *
+     * @return Response
+     */
+    public function customEditorFileManager(): Response
+    {
+        $courseInfo = api_get_course_info();
+        $groupIid = api_get_group_id();
+        $isAllowedToEdit = api_is_allowed_to_edit();
+        $groupMemberWithUploadRights = false;
+
+        $documentAndFolders = DocumentManager::getAllDocumentData(
+            $courseInfo,
+            '',
+            $groupIid,
+            null,
+            $isAllowedToEdit || $groupMemberWithUploadRights,
+            false
+        );
+
+        $sortable_data = DocumentManager::processDocumentAndFolders(
+            $documentAndFolders,
+            $courseInfo,
+            false,
+            $groupMemberWithUploadRights,
+            '/',
+            true
+        );
+
+        $table = new \SortableTableFromArrayConfig(
+            $sortable_data,
+            1,
+            20,
+            'documents',
+            [0, 1, 1,1,1],
+            [],
+            'ASC',
+            true
+        );
+
+        $params = [
+            'table' => $table->return_table()
+        ];
+
+        return $this->render('@ChamiloTheme/Editor/custom.html.twig', $params);
     }
 
     /**

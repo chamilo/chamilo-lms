@@ -1153,13 +1153,8 @@ class bbb
                 }
 
                 if ($recordExists) {
-                    $recordingParams = ['recordId' => $recordId];
-                    $result = $this->api->generateRecording($recordingParams);
-                    if (!empty($result) && isset($result['deleted']) && $result['deleted'] === 'true') {
-                        return true;
-                    }
+                    return $this->api->generateRecording(['recordId' => $recordId]);
                 }
-
             }
         }
 

@@ -79,7 +79,8 @@ class BBBPlugin extends Plugin
                         self::LAUNCH_TYPE_SET_BY_STUDENT => 'SetByStudent',
                     ],
                     'translate_options' => true, // variables will be translated using the plugin->get_lang
-                ]
+                ],
+                'allow_regenerate_recording' => 'boolean',
             ]
         );
 

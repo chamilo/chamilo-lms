@@ -734,7 +734,7 @@ class bbb
             );
         }
 
-        $conditions['order'] = "created_at ASC";
+        $conditions['order'] = 'created_at ASC';
 
         $meetingList = Database::select(
             '*',
@@ -1116,6 +1116,53 @@ class bbb
     }
 
     /**
+     * @param int $id
+     * @param int $recordId
+     *
+     * @return bool
+     */
+    public function regenerateRecording($id, $recordId)
+    {
+        if (empty($id)) {
+            return false;
+        }
+
+        $meetingData = Database::select(
+            '*',
+            $this->table,
+            array('where' => array('id = ?' => array($id))),
+            'first'
+        );
+
+        // Check if there are recordings for this meeting
+        $recordings = $this->api->getRecordings(['meetingId' => $meetingData['remote_id']]);
+        if (!empty($recordings) && isset($recordings['messageKey']) && $recordings['messageKey'] == 'noRecordings') {
+            return false;
+        } else {
+            if (!empty($recordings['records'])) {
+                $recordExists = false;
+                foreach ($recordings['records'] as $record) {
+                    if ($recordId == $record['recordId']) {
+                        $recordExists = true;
+                        break;
+                    }
+                }
+
+                if ($recordExists) {
+                    $recordingParams = ['recordId' => $recordId];
+                    $result = $this->api->generateRecordingWithXmlResponseArray($recordingParams);
+                    if (!empty($result) && isset($result['deleted']) && $result['deleted'] === 'true') {
+                        return true;
+                    }
+                }
+
+            }
+        }
+
+        return false;
+    }
+
+    /**
      * Deletes a recording of a meeting
      *
      * @param int $id ID of the recording
@@ -1391,6 +1438,27 @@ class bbb
 
     /**
      * @param array $meeting
+     * @param array $recordInfo
+     *
+     * @return string
+     */
+    public function regenerateRecordUrl($meeting, $recordInfo)
+    {
+        if ($this->plugin->get('allow_regenerate_recording') !== 'true') {
+            return '';
+        }
+
+        if (!isset($meeting['id'])) {
+            return '';
+        }
+
+        return api_get_path(WEB_PLUGIN_PATH).
+            'bbb/listing.php?'.$this->getUrlParams().'&action=regenerate_record&id='.$meeting['id'].'&record_id='.$recordInfo['recordId'];
+    }
+
+
+    /**
+     * @param array $meeting
      * @return string
      */
     public function copyToRecordToLinkTool($meeting)
@@ -1569,6 +1637,13 @@ class bbb
                     ]
                 );
             }
+        }
+
+        if (!empty($recordInfo)) {
+            $links[] = Display::url(
+                Display::return_icon('refresh.gif', get_lang('RegenerateRecord')),
+                $this->regenerateRecordUrl($meetingInfo, $recordInfo)
+            );
         }
 
         if (!$isAdminReport) {

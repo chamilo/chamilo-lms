@@ -640,8 +640,25 @@ class BigBlueButtonBN {
 
 	}
 
+	/** USAGE:
+	 * $recordingParams = array(
+	 * 'recordId' => '1234',        -- REQUIRED - comma separate if multiple ids
+	 * );
+	 */
+	public function generateRecordingWithXmlResponseArray($recordingParams)
+	{
+		$recordingsUrl = $this->_bbbServerBaseUrl.'demo/regenerateRecord.jsp?';
+		$params = 'recordID='.urlencode($recordingParams['recordId']);
+		$url = $recordingsUrl.$params.'&checksum='.sha1('regenerateRecord'.$params.$this->_securitySalt);
 
+		$xml = $this->_processXmlResponse($url);
+		if ($xml) {
+			return array(
+				'returncode' => $xml->returncode->__toString(),
+			);
+		} else {
+			return null;
+		}
 
-} // END OF BIGBLUEBUTTON CLASS
-
-?>
+	}
+}

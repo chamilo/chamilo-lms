@@ -62,6 +62,17 @@ if ($conferenceManager) {
                 $message = Display::return_message(get_lang('Error'), 'error');
             }
             break;
+        case 'regenerate_record':
+            if ($plugin->get('allow_regenerate_recording') !== 'true') {
+                api_not_allowed();
+            }
+            $result = $bbb->regenerateRecording($_GET['id'], $_GET['record_id']);
+            if ($result) {
+                $message = Display::return_message(get_lang('Success'), 'success');
+            } else {
+                $message = Display::return_message(get_lang('Error'), 'error');
+            }
+            break;
         case 'delete_record':
             $result = $bbb->deleteRecording($_GET['id']);
             if ($result) {
@@ -239,19 +250,6 @@ switch ($type) {
                 $meetinUserInfo = $bbb->getMeetingParticipantInfo($meetingInfo['id'], api_get_user_id());
                 $urlList = $plugin->getUrlInterfaceLinks($conferenceUrl);
                 $showClientOptions = true;
-
-                /*if (empty($meetinUserInfo)) {
-                    $url = $plugin->getUrlInterfaceLinks($conferenceUrl);
-                } else {
-                    switch ($meetinUserInfo['interface']) {
-                        case BBBPlugin::INTERFACE_FLASH:
-                            $url = $plugin->getFlashUrl($conferenceUrl);
-                            break;
-                        case BBBPlugin::INTERFACE_HTML5:
-                            $url = $plugin->getHtmlUrl($conferenceUrl);
-                            break;
-                    }
-                }*/
             }
         }
 

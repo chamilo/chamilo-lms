@@ -75,3 +75,4 @@ $strings['ParticipantsWillUseSameInterface'] = 'Participants will use the same i
 $strings['SetByStudent'] = 'Set by student';
 $strings['SetByTeacher'] = 'Set by teacher';
 $strings['SetByDefault'] = 'Set to default interface';
+$strings['allow_regenerate_recording'] = 'Allow regenerate recording';

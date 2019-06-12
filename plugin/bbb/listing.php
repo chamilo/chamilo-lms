@@ -72,6 +72,8 @@ if ($conferenceManager) {
             } else {
                 $message = Display::return_message(get_lang('Error'), 'error');
             }
+            Display::addFlash($message);
+            header('Location: '.$bbb->getListingUrl());
             break;
         case 'delete_record':
             $result = $bbb->deleteRecording($_GET['id']);

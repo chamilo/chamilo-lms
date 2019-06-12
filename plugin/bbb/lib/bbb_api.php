@@ -645,20 +645,21 @@ class BigBlueButtonBN {
 	 * 'recordId' => '1234',        -- REQUIRED - comma separate if multiple ids
 	 * );
 	 */
-	public function generateRecordingWithXmlResponseArray($recordingParams)
+	public function generateRecording($recordingParams)
 	{
-		$recordingsUrl = $this->_bbbServerBaseUrl.'demo/regenerateRecord.jsp?';
+		$recordingsUrl = $this->_bbbServerBaseUrl.'../demo/regenerateRecord.jsp?';
 		$params = 'recordID='.urlencode($recordingParams['recordId']);
 		$url = $recordingsUrl.$params.'&checksum='.sha1('regenerateRecord'.$params.$this->_securitySalt);
 
-		$xml = $this->_processXmlResponse($url);
-		if ($xml) {
-			return array(
-				'returncode' => $xml->returncode->__toString(),
-			);
-		} else {
-			return null;
-		}
+        $ch = curl_init() or die ( curl_error($ch) );
+        $timeout = 10;
+        curl_setopt( $ch, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt( $ch, CURLOPT_URL, $url );
+        curl_setopt( $ch, CURLOPT_RETURNTRANSFER, 1 );
+        curl_setopt( $ch, CURLOPT_CONNECTTIMEOUT, $timeout);
+        $data = curl_exec( $ch );
+        curl_close( $ch );
 
+        return true;
 	}
 }

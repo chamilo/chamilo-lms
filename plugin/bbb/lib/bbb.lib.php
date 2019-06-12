@@ -804,7 +804,7 @@ class bbb
                 }
 
                 $record = [];
-                if (empty($meetingDB['video_url'])) {
+                //if (empty($meetingDB['video_url'])) {
                     $recordingParams = ['meetingId' => $mId];
                     $records = $this->api->getRecordingsWithXmlResponseArray($recordingParams);
 
@@ -815,16 +815,20 @@ class bbb
                                 continue;
                             }
 
-                            $this->updateMeetingVideoUrl($meetingDB['id'], $record['playbackFormatUrl']);
+                            if (!empty($record['playbackFormatUrl'])) {
+                                $this->updateMeetingVideoUrl($meetingDB['id'], $record['playbackFormatUrl']);
+                            }
 
                             if (!$this->isConferenceManager()) {
                                 $record = [];
                             }
                         }
                     }
-                } else {
+                //}
+
+                /* else {
                     $record['playbackFormatUrl'] = $meetingDB['video_url'];
-                }
+                }*/
 
                 $recordLink = isset($record['playbackFormatUrl']) && !empty($record['playbackFormatUrl'])
                     ? Display::url(

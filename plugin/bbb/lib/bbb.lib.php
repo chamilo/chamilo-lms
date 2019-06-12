@@ -1452,8 +1452,12 @@ class bbb
             return '';
         }
 
-        return api_get_path(WEB_PLUGIN_PATH).
-            'bbb/listing.php?'.$this->getUrlParams().'&action=regenerate_record&id='.$meeting['id'].'&record_id='.$recordInfo['recordId'];
+        if (empty($recordInfo) || (!empty($recordInfo['recordId']) && !isset($recordInfo['recordId']))) {
+            return '';
+        }
+
+        return api_get_path(WEB_PLUGIN_PATH).'bbb/listing.php?'.$this->getUrlParams().
+            '&action=regenerate_record&id='.$meeting['id'].'&record_id='.$recordInfo['recordId'];
     }
 
 
@@ -1467,7 +1471,8 @@ class bbb
             return '';
         }
 
-        return api_get_path(WEB_PLUGIN_PATH).'bbb/listing.php?'.$this->getUrlParams().'&action=copy_record_to_link_tool&id='.$meeting['id'];
+        return api_get_path(WEB_PLUGIN_PATH).
+            'bbb/listing.php?'.$this->getUrlParams().'&action=copy_record_to_link_tool&id='.$meeting['id'];
     }
 
     /**
@@ -1641,7 +1646,7 @@ class bbb
 
         if (!empty($recordInfo)) {
             $links[] = Display::url(
-                Display::return_icon('refresh.gif', get_lang('RegenerateRecord')),
+                Display::return_icon('reload.png', get_lang('RegenerateRecord')),
                 $this->regenerateRecordUrl($meetingInfo, $recordInfo)
             );
         }

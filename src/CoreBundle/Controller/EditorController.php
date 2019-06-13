@@ -10,7 +10,6 @@ use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
 use Chamilo\SettingsBundle\Manager\SettingsManager;
 use DocumentManager;
 use FM\ElfinderBundle\Connector\ElFinderConnector;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Routing\RouterInterface;
@@ -67,48 +66,68 @@ class EditorController extends BaseController
     }
 
     /**
-     * @Route("/filemanager", methods={"GET"}, name="editor_filemanager")
+     * @Route("/filemanager/{parentId}", methods={"GET"}, name="editor_filemanager")
+     *
+     * @param int $parentId
      *
      * @return Response
      */
-    public function customEditorFileManager(): Response
+    public function customEditorFileManager($parentId = 0): Response
     {
         $courseInfo = api_get_course_info();
         $groupIid = api_get_group_id();
         $isAllowedToEdit = api_is_allowed_to_edit();
         $groupMemberWithUploadRights = false;
 
+        $path = '/';
+        if (!empty($parentId)) {
+            $doc = $this->getDoctrine()->getRepository('ChamiloCourseBundle:CDocument')->find($parentId);
+            $path = $doc->getPath();
+        }
+
         $documentAndFolders = DocumentManager::getAllDocumentData(
             $courseInfo,
-            '',
+            $path,
             $groupIid,
             null,
             $isAllowedToEdit || $groupMemberWithUploadRights,
-            false
+            false,
+            0,
+            null,
+            $parentId
         );
 
-        $sortable_data = DocumentManager::processDocumentAndFolders(
+        $url = $this->generateUrl('editor_filemanager', ['parentId' => $parentId]);
+        $data = DocumentManager::processDocumentAndFolders(
             $documentAndFolders,
             $courseInfo,
             false,
             $groupMemberWithUploadRights,
-            '/',
-            true
+            $path,
+            true,
+            $url
         );
 
         $table = new \SortableTableFromArrayConfig(
-            $sortable_data,
-            1,
+            $data,
+            2,
             20,
             'documents',
-            [0, 1, 1,1,1],
+            [0, 1, 1, 1, 1],
             [],
             'ASC',
             true
         );
+        $column = 1;
+        $table->set_header($column++, '', false, ['style' => 'width:12px;']);
+        $table->set_header($column++, get_lang('Type'), false, ['style' => 'width:30px;']);
+        $table->set_header($column++, get_lang('Name'));
+        $table->set_header($column++, get_lang('Size'), false, ['style' => 'width:50px;']);
+        $table->set_header($column, get_lang('Date'), false, ['style' => 'width:150px;']);
 
         $params = [
-            'table' => $table->return_table()
+            'table' => $table->return_table(),
+            'parent_id' => (int) $parentId
         ];
 
         return $this->render('@ChamiloTheme/Editor/custom.html.twig', $params);
@@ -119,11 +138,10 @@ class EditorController extends BaseController
      *
      * @param TranslatorInterface $translator
      * @param RouterInterface     $router
-     * @param Request             $request
      *
      * @return Response
      */
-    public function editorConnector(TranslatorInterface $translator, RouterInterface $router, Request $request)
+    public function editorConnector(TranslatorInterface $translator, RouterInterface $router)
     {
         $course = $this->getCourse();
         $session = $this->getCourseSession();

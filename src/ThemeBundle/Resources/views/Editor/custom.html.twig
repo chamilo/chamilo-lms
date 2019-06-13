@@ -7,11 +7,24 @@
             $(function () {
                 $(".select_to_ckeditor").click(function (e) {
                     e.preventDefault();
-                    window.opener.CKEDITOR.tools.callFunction(1, $(this).attr("href"));
-                    window.close();
+                    if (window.opener && window.opener.CKEDITOR) {
+                        window.opener.CKEDITOR.tools.callFunction(1, $(this).attr("href"));
+                        window.close();
+                    }
+                });
+
+                $(".not_select_to_ckeditor").click(function (e) {
+                    e.preventDefault();
                 });
             });
         </script>
+
+    {% if parent_id > 0 %}
+        <div id="toolbar-document" class="actions">
+            <a class="btn" href = "javascript:history.back()">Back</a>
+        </div>
+    {% endif %}
+
     {{ table }}
     {% endautoescape %}
 {% endblock %}

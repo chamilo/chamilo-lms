@@ -1349,10 +1349,9 @@ class UserRepository extends EntityRepository
         $dateNormalizer->setIgnoredAttributes($ignore);
 
         $callback = function ($dateTime) {
-            return $dateTime instanceof \DateTime
-                ? $dateTime->format(\DateTime::ISO8601)
-                : '';
+            return $dateTime instanceof \DateTime ? $dateTime->format(\DateTime::ATOM) : '';
         };
+
         $dateNormalizer->setCallbacks(
             [
                 'createdAt' => $callback,

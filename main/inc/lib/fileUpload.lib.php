@@ -1222,7 +1222,7 @@ function clean_up_files_in_zip($p_event, &$p_header)
 }
 
 /**
- * Allow .htaccess file
+ * Allow .htaccess file.
  *
  * @param $p_event
  * @param $p_header
@@ -1243,7 +1243,7 @@ function cleanZipFilesAllowHtaccess($p_event, &$p_header)
     $skipFiles = [
         '__MACOSX',
         '.Thumbs.db',
-        'Thumbs.db'
+        'Thumbs.db',
     ];
 
     if (in_array($baseName, $skipFiles)) {
@@ -1254,7 +1254,6 @@ function cleanZipFilesAllowHtaccess($p_event, &$p_header)
 
     return 1;
 }
-
 
 /**
  * This function cleans up a given path

@@ -85,7 +85,7 @@ if (!empty($_POST)) {
 }
 
 if (api_is_platform_admin()) {
-    $courseId = getCourse(intval($_GET['action_id']));
+    $courseId = getCourse($_GET['action_id']);
     $interbreadcrumb[] = ["url" => "/plugin/sepe/src/sepe-administration-menu.php", "name" => $plugin->get_lang('MenuSepe')];
     $interbreadcrumb[] = ["url" => "formative-actions-list.php", "name" => $plugin->get_lang('FormativesActionsList')];
     $interbreadcrumb[] = ["url" => "formative-action.php?cid=".$courseId, "name" => $plugin->get_lang('FormativeAction')];
@@ -104,7 +104,7 @@ if (api_is_platform_admin()) {
         $tpl->assign('action_id', intval($_GET['action_id']));
         $tpl->assign('specialty_id', intval($_GET['specialty_id']));
         $tpl->assign('classroom_id', intval($_GET['classroom_id']));
-        $info = getInfoSpecialtyClassroom(intval($_GET['classroom_id']));
+        $info = getInfoSpecialtyClassroom($_GET['classroom_id']);
         $tpl->assign('info', $info);
         $tpl->assign('new_classroom', '0');
     }

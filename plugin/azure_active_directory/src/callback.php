@@ -11,13 +11,8 @@ if (isset($_POST['error']) || empty($_REQUEST)) {
 
 list($jwtHeader, $jwtPayload, $jwtSignature) = explode('.', $_REQUEST['id_token']);
 
-$jwtHeader = json_decode(
-    base64_decode($jwtHeader)
-);
-
-$jwtPayload = json_decode(
-    base64_decode($jwtPayload)
-);
+$jwtHeader = json_decode(base64_decode($jwtHeader));
+$jwtPayload = json_decode(base64_decode($jwtPayload));
 
 $u = [
     'firstname' => $jwtPayload->given_name,

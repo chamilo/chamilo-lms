@@ -12334,9 +12334,9 @@ EOD;
         $total_size = filesize($s) + $documents_total_space;
         if (filesize($s) > $post_max || filesize($s) > $upl_max || $total_size > $course_max_space) {
             return true;
-        } else {
-            return false;
         }
+
+        return false;
     }
 
     /**

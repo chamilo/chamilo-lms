@@ -22,6 +22,11 @@ if (empty($_POST['current_dir'])) {
 }
 $uncompress = 1;
 
+$allowHtaccess = false;
+if (api_get_configuration_value('allow_htaccess_import_from_scorm') && isset($_POST['allow_htaccess'])) {
+    $allowHtaccess = true;
+}
+
 /*
  * Check the request method in place of a variable from POST
  * because if the file size exceed the maximum file upload
@@ -59,6 +64,7 @@ if (isset($_POST) && $is_error) {
     if (!empty($_REQUEST['content_proximity'])) {
         $proximity = Database::escape_string($_REQUEST['content_proximity']);
     }
+
     $maker = 'Scorm';
     if (!empty($_REQUEST['content_maker'])) {
         $maker = Database::escape_string($_REQUEST['content_maker']);
@@ -80,7 +86,14 @@ if (isset($_POST) && $is_error) {
             break;
         case 'scorm':
             $oScorm = new scorm();
-            $manifest = $oScorm->import_package($_FILES['user_file'], $current_dir);
+            $manifest = $oScorm->import_package(
+                $_FILES['user_file'],
+                $current_dir,
+                [],
+                false,
+                null,
+                $allowHtaccess
+            );
             if (!empty($manifest)) {
                 $oScorm->parse_manifest($manifest);
                 $oScorm->import_manifest(api_get_course_id(), $_REQUEST['use_max_score']);
@@ -144,7 +157,7 @@ if (isset($_POST) && $is_error) {
     $new_dir = api_replace_dangerous_char(trim($file_base_name));
 
     $result = learnpath::verify_document_size($s);
-    if ($result == true) {
+    if ($result) {
         Display::addFlash(
             Display::return_message(get_lang('UplFileTooBig'))
         );

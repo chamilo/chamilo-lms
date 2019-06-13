@@ -1208,6 +1208,9 @@ $_configuration['required_extra_fields_in_profile'] = [
 // Blocks "my files" access to anon users
 //$_configuration['block_my_files_access'] = false;
 
+// Allow .htaccess files in SCORM packages
+//$_configuration['allow_htaccess_import_from_scorm'] = false;
+
 // KEEP THIS AT THE END
 // -------- Custom DB changes
 // Add user activation by confirmation email

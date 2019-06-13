@@ -32,11 +32,7 @@ class CourseDriver extends Driver implements DriverInterface
             $courseDir = $course->getDirectory().'/document';
             $baseDir = $coursePath.$courseDir;
             $this->coursePath = $baseDir;
-
-            $courseInfo = [
-                'real_id' => $this->connector->course->getId(),
-                'code' => $this->connector->course->getCode(),
-            ];
+            $courseInfo = $this->getCourseInfoArray();
 
             // Creates shared folder
             if (!file_exists($baseDir.'/shared_folder')) {
@@ -146,10 +142,7 @@ class CourseDriver extends Driver implements DriverInterface
                 }
             }
 
-            $courseInfo = [
-                'real_id' => $this->connector->course->getId(),
-                'code' => $this->connector->course->getCode(),
-            ];
+            $courseInfo = $this->getCourseInfoArray();
 
             $foldersToHide = \DocumentManager::get_all_document_folders(
                 $courseInfo,
@@ -274,19 +267,6 @@ class CourseDriver extends Driver implements DriverInterface
         $this->setConnectorFromPlugin();
 
         if ($this->allowToEdit()) {
-            // upload file by elfinder.
-            //$result = parent::upload($fp, $dst, $name, $tmpname);
-//            var_dump($tmpname);exit;
-            //$name = $result['name'];
-            //$filtered = \URLify::filter($result['name'], 80, '', true);
-            /*if (strcmp($name, $filtered) != 0) {
-                $result = $this->customRename($result['hash'], $filtered);
-            }*/
-            //var_dump($fp, $dst, $name);exit;
-            //$realPath = $this->realpath($result['hash']);
-            //if (!empty($realPath)) {
-            // Removing course path
-
             $directoryParentId = isset($_REQUEST['directory_parent_id']) ? $_REQUEST['directory_parent_id'] : 0;
             $currentDirectory = '';
             if (empty($directoryParentId)) {
@@ -337,8 +317,6 @@ class CourseDriver extends Driver implements DriverInterface
      */
     public function rm($hash)
     {
-        // elfinder does not delete the file
-        //parent::rm($hash);
         $this->setConnectorFromPlugin();
 
         if ($this->allowToEdit()) {
@@ -350,9 +328,10 @@ class CourseDriver extends Driver implements DriverInterface
             $realFilePath = $path;
             $coursePath = $this->getCourseDocumentSysPath();
             $filePath = str_replace($coursePath, '/', $realFilePath);
+            $courseInfo = $this->getCourseInfoArray();
 
             \DocumentManager::delete_document(
-                $this->connector->course,
+                $courseInfo,
                 $filePath,
                 $coursePath
             );
@@ -361,6 +340,19 @@ class CourseDriver extends Driver implements DriverInterface
         }
 
         return false;
+    }
+
+    /**
+     * @return array
+     */
+    public function getCourseInfoArray(): array
+    {
+        $courseInfo = [
+            'real_id' => $this->connector->course->getId(),
+            'code' => $this->connector->course->getCode(),
+        ];
+
+        return $courseInfo;
     }
 
     /**
@@ -412,14 +404,13 @@ class CourseDriver extends Driver implements DriverInterface
         $result = parent::mkdir($path, $name);
 
         if ($result && isset($result['hash'])) {
-            $_course = $this->connector->course;
             $realPathRoot = $this->getCourseDocumentSysPath();
             $realPath = $this->realpath($result['hash']);
 
             // Removing course path
             $newPath = str_replace($realPathRoot, '/', $realPath);
-            $documentId = DocumentManager::addDocument(
-                $_course,
+            $documentId = \DocumentManager::addDocument(
+                $this->getCourseInfoArray(),
                 $newPath,
                 'folder',
                 0,
@@ -442,6 +433,44 @@ class CourseDriver extends Driver implements DriverInterface
         }
 
         return false;
+    }
+
+    protected function getParents($path)
+    {
+        $parents = array();
+
+        while ($path) {
+            if ($file = $this->stat($path)) {
+                array_unshift($parents, $path);
+                $path = isset($file['phash']) ? $this->decode($file['phash']) : false;
+            }
+        }
+
+        if (count($parents)) {
+            array_pop($parents);
+        }
+        return $parents;
+    }
+
+    protected function _path($path)
+    {
+        if (($file = $this->stat($path)) == false) {
+            return '';
+        }
+
+        $parentsIds = $this->getParents($path);
+        $path = '';
+        foreach ($parentsIds as $id) {
+            $dir = $this->stat($id);
+            $path .= $dir['name'] . $this->separator;
+        }
+        return $path . $file['name'];
+    }
+
+
+    public function mount(array $opts)
+    {
+
     }
 
     /**

@@ -177,7 +177,7 @@ class EditorController extends BaseController
 
         $driverList = [
             'PersonalDriver',
-            'CourseDriver',
+            //'CourseDriver',
             //'CourseUserDriver',
             //'HomeDriver'
         ];

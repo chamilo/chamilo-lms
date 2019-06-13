@@ -104,8 +104,8 @@ $logInfo = [
     'tool' => TOOL_QUIZ,
     'tool_id' => $exerciseId,
     'tool_id_detail' => 0,
-    'action' => ((int) $_REQUEST['learnpath_id'] > 0) ? 'learnpath_id' : '',
-    'action_details' => ((int) $_REQUEST['learnpath_id'] > 0) ? (int) $_REQUEST['learnpath_id'] : '',
+    'action' => $learnpath_id,
+    'action_details' => $learnpath_id,
 ];
 Event::registerLog($logInfo);
 

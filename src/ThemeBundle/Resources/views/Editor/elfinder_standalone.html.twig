@@ -10,6 +10,12 @@
 
 <!-- elFinder translation (OPTIONAL) -->
 <script type="text/javascript" src="{{ finderFolder }}js/i18n/elfinder.ru.js"></script>
+<style>
+/* Hide elfinder sidebar */
+.elfinder-navbar {
+    display: none !important;
+}
+</style>
 
 <script type="text/javascript" charset="utf-8">
     // Helper function to get parameters from the query string.
@@ -24,6 +30,7 @@
     $(function () {
         var winheight = document.documentElement.clientHeight;
         var funcNum = getUrlParam('CKEditorFuncNum');
+
         var elf = $('#elfinder').elfinder({
             url : '{{ url('legacy_public') }}editor/connector{{ course_condition }}',
             getFileCallback : function(file) {

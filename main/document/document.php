@@ -2006,7 +2006,6 @@ if (!empty($documentAndFolders)) {
     $tableToString = $table->return_table();
 }
 
-
 Display::display_header('', 'Doc');
 
 /* Introduction section (editable by course admins) */

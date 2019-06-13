@@ -546,6 +546,10 @@ class DocumentManager
         $sessionId = 0,
         User $currentUser = null
     ) {
+        if (empty($courseInfo)) {
+            return [];
+        }
+
         $tblDocument = Database::get_course_table(TABLE_DOCUMENT);
         $currentUser = $currentUser ?: api_get_current_user();
 
@@ -4920,6 +4924,7 @@ class DocumentManager
      * @param bool   $isAllowedToEdit
      * @param bool   $isCertificateMode
      * @param bool   $addToEditor
+     * @param string $editorUrl
      *
      * @return string url
      */
@@ -5163,30 +5168,31 @@ class DocumentManager
                 return '<a href="'.$url.'" title="'.$tooltip_title_alt.'" '.$visibility_class.' style="float:left">'.$title.'</a>'.
                 $force_download_html.$send_to.$copyToMyFiles.$open_in_new_window_link.$pdf_icon;
             }
-            // end copy files to users myfiles
         } else {
+            $urlDecoded = urldecode($checkExtension);
             // Icon column
-            if (preg_match('/shared_folder/', urldecode($checkExtension)) &&
-                preg_match('/shared_folder$/', urldecode($checkExtension)) == false &&
+            if (preg_match('/shared_folder/', $urlDecoded) &&
+                preg_match('/shared_folder$/', $urlDecoded) == false &&
                 preg_match('/shared_folder_session_'.$sessionId.'$/', urldecode($url)) == false
             ) {
-                if ($filetype == 'file') {
-                    //Sound preview
-                    if (preg_match('/mp3$/i', urldecode($checkExtension)) ||
-                        (preg_match('/wav$/i', urldecode($checkExtension))) ||
-                        preg_match('/ogg$/i', urldecode($checkExtension))) {
+                if ($filetype === 'file') {
+                    // Sound preview
+                    if (preg_match('/mp3$/i', $urlDecoded) ||
+                        preg_match('/wav$/i', $urlDecoded) ||
+                        preg_match('/ogg$/i', $urlDecoded)
+                    ) {
                         $soundPreview = self::generateAudioPreview($documentWebPath, $document_data);
 
                         return $soundPreview;
                     } elseif (
                         // Show preview
-                        preg_match('/swf$/i', urldecode($checkExtension)) ||
-                        preg_match('/png$/i', urldecode($checkExtension)) ||
-                        preg_match('/gif$/i', urldecode($checkExtension)) ||
-                        preg_match('/jpg$/i', urldecode($checkExtension)) ||
-                        preg_match('/jpeg$/i', urldecode($checkExtension)) ||
-                        preg_match('/bmp$/i', urldecode($checkExtension)) ||
-                        preg_match('/svg$/i', urldecode($checkExtension))
+                        preg_match('/swf$/i', $urlDecoded) ||
+                        preg_match('/png$/i', $urlDecoded) ||
+                        preg_match('/gif$/i', $urlDecoded) ||
+                        preg_match('/jpg$/i', $urlDecoded) ||
+                        preg_match('/jpeg$/i', $urlDecoded) ||
+                        preg_match('/bmp$/i', $urlDecoded) ||
+                        preg_match('/svg$/i', $urlDecoded)
                     ) {
                         $url = $basePageUrl.'showinframes.php?'.$courseParams.'&id='.$document_data['id'];
 
@@ -5209,23 +5215,23 @@ class DocumentManager
             } else {
                 if ($filetype === 'file') {
                     // Sound preview with jplayer
-                    if (preg_match('/mp3$/i', urldecode($checkExtension)) ||
-                        (preg_match('/wav$/i', urldecode($checkExtension))) ||
-                        preg_match('/ogg$/i', urldecode($checkExtension))) {
+                    if (preg_match('/mp3$/i', $urlDecoded) ||
+                        (preg_match('/wav$/i', $urlDecoded)) ||
+                        preg_match('/ogg$/i', $urlDecoded)) {
                         $soundPreview = self::generateAudioPreview($documentWebPath, $document_data);
 
                         return $soundPreview;
                     } elseif (
                         //Show preview
-                        preg_match('/html$/i', urldecode($checkExtension)) ||
-                        preg_match('/htm$/i', urldecode($checkExtension)) ||
-                        preg_match('/swf$/i', urldecode($checkExtension)) ||
-                        preg_match('/png$/i', urldecode($checkExtension)) ||
-                        preg_match('/gif$/i', urldecode($checkExtension)) ||
-                        preg_match('/jpg$/i', urldecode($checkExtension)) ||
-                        preg_match('/jpeg$/i', urldecode($checkExtension)) ||
-                        preg_match('/bmp$/i', urldecode($checkExtension)) ||
-                        preg_match('/svg$/i', urldecode($checkExtension))
+                        preg_match('/html$/i', $urlDecoded) ||
+                        preg_match('/htm$/i', $urlDecoded) ||
+                        preg_match('/swf$/i', $urlDecoded) ||
+                        preg_match('/png$/i', $urlDecoded) ||
+                        preg_match('/gif$/i', $urlDecoded) ||
+                        preg_match('/jpg$/i', $urlDecoded) ||
+                        preg_match('/jpeg$/i', $urlDecoded) ||
+                        preg_match('/bmp$/i', $urlDecoded) ||
+                        preg_match('/svg$/i', $urlDecoded)
                     ) {
                         $url = $basePageUrl.'showinframes.php?'.$courseParams.'&id='.$document_data['id']; //without preview
                         return '<a href="'.$url.'" title="'.$tooltip_title_alt.'" '.$visibility_class.' style="float:left">'.
@@ -7158,7 +7164,7 @@ class DocumentManager
         $addToEditor = false,
         $editorUrl = ''
     ) {
-        if (empty($documentAndFolders)) {
+        if (empty($documentAndFolders) || empty($courseInfo)) {
             return [];
         }
         $isAllowedToEdit = api_is_allowed_to_edit(null, true);
@@ -7242,13 +7248,6 @@ class DocumentManager
                 $addToEditor,
                 $editorUrl
             );
-
-            $path_info = pathinfo($document_data['path']);
-            if (isset($path_info['extension']) &&
-                in_array($path_info['extension'], ['ogg', 'mp3', 'wav'])
-            ) {
-                $count++;
-            }
 
             // Validation when belongs to a session
             $session_img = api_get_session_image($document_data['session_id'], $currentUserInfo['status']);

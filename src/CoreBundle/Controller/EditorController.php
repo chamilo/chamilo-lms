@@ -51,7 +51,7 @@ class EditorController extends BaseController
     }
 
     /**
-     * @Route("/filemanager", methods={"GET"}, name="editor_filemanager")
+     * @Route("/myfilemanager", methods={"GET"}, name="editor_myfiles")
      *
      * @return Response
      */
@@ -75,60 +75,77 @@ class EditorController extends BaseController
     public function customEditorFileManager($parentId = 0): Response
     {
         $courseInfo = api_get_course_info();
-        $groupIid = api_get_group_id();
-        $isAllowedToEdit = api_is_allowed_to_edit();
-        $groupMemberWithUploadRights = false;
-
-        $path = '/';
-        if (!empty($parentId)) {
-            $doc = $this->getDoctrine()->getRepository('ChamiloCourseBundle:CDocument')->find($parentId);
-            $path = $doc->getPath();
-        }
-
-        $documentAndFolders = DocumentManager::getAllDocumentData(
-            $courseInfo,
-            $path,
-            $groupIid,
-            null,
-            $isAllowedToEdit || $groupMemberWithUploadRights,
-            false,
-            0,
-            null,
-            $parentId
-        );
-
-        $url = $this->generateUrl('editor_filemanager', ['parentId' => $parentId]);
-        $data = DocumentManager::processDocumentAndFolders(
-            $documentAndFolders,
-            $courseInfo,
-            false,
-            $groupMemberWithUploadRights,
-            $path,
-            true,
-            $url
-        );
-
-        $table = new \SortableTableFromArrayConfig(
-            $data,
-            2,
-            20,
-            'documents',
-            [0, 1, 1, 1, 1],
-            [],
-            'ASC',
-            true
-        );
-        $column = 1;
-        $table->set_header($column++, '', false, ['style' => 'width:12px;']);
-        $table->set_header($column++, get_lang('Type'), false, ['style' => 'width:30px;']);
-        $table->set_header($column++, get_lang('Name'));
-        $table->set_header($column++, get_lang('Size'), false, ['style' => 'width:50px;']);
-        $table->set_header($column, get_lang('Date'), false, ['style' => 'width:150px;']);
 
         $params = [
-            'table' => $table->return_table(),
-            'parent_id' => (int) $parentId
+            'table' => '',
+            'parent_id' => 0,
+            'allow_course' => false,
         ];
+
+        if (!empty($courseInfo)) {
+            $groupIid = api_get_group_id();
+            $isAllowedToEdit = api_is_allowed_to_edit();
+            $groupMemberWithUploadRights = false;
+
+            $path = '/';
+            if (!empty($parentId)) {
+                $doc = $this->getDoctrine()->getRepository('ChamiloCourseBundle:CDocument')->find($parentId);
+                $path = $doc->getPath();
+            }
+
+            $documentAndFolders = DocumentManager::getAllDocumentData(
+                $courseInfo,
+                $path,
+                $groupIid,
+                null,
+                $isAllowedToEdit || $groupMemberWithUploadRights,
+                false,
+                0,
+                null,
+                $parentId
+            );
+
+            $url = $this->generateUrl('editor_filemanager', ['parentId' => $parentId]);
+            $data = DocumentManager::processDocumentAndFolders(
+                $documentAndFolders,
+                $courseInfo,
+                false,
+                $groupMemberWithUploadRights,
+                $path,
+                true,
+                $url
+            );
+
+            $show = [1, 1, 1, 1];
+            if ($isAllowedToEdit) {
+                $show = [0, 1, 1, 1, 1];
+            }
+
+            $table = new \SortableTableFromArrayConfig(
+                $data,
+                2,
+                20,
+                'documents',
+                $show,
+                [],
+                'ASC',
+                true
+            );
+            $column = 1;
+            if ($isAllowedToEdit) {
+                $table->set_header($column++, '', false, ['style' => 'width:12px;']);
+            }
+            $table->set_header($column++, get_lang('Type'), false, ['style' => 'width:30px;']);
+            $table->set_header($column++, get_lang('Name'));
+            $table->set_header($column++, get_lang('Size'), false, ['style' => 'width:50px;']);
+            $table->set_header($column, get_lang('Date'), false, ['style' => 'width:150px;']);
+
+            $params = [
+                'table' => $table->return_table(),
+                'parent_id' => (int) $parentId,
+                'allow_course' => true,
+            ];
+        }
 
         return $this->render('@ChamiloTheme/Editor/custom.html.twig', $params);
     }

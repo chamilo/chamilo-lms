@@ -52,7 +52,9 @@
                     {% endif %}
 
                     {% if post.private %}
-                        <p><span class="label label-warning">Private</span></p>
+                        <p><span class="label label-warning">{{ 'Private'|get_plugin_lang('StudentFollowUp') }}</span></p>
+                    {% else %}
+                        <p><span class="label label-warning">{{ 'Public'|get_plugin_lang('StudentFollowUp') }}</span></p>
                     {% endif %}
                 </div>
             </div>

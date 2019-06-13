@@ -16,6 +16,7 @@ $keyword = isset($_GET['keyword']) ? $_GET['keyword'] : '';
 $totalItems = 0;
 $items = [];
 $showPrivate = false;
+
 $pageSize = StudentFollowUpPlugin::getPageSize();
 $firstResults = $pageSize * ($currentPage - 1);
 
@@ -106,7 +107,7 @@ $form->addText(
     get_lang('Search'),
     false,
     [
-        'aria-label' => get_lang("SearchUsers"),
+        'aria-label' => get_lang('SearchUsers'),
     ]
 );
 $form->addButtonSearch(get_lang('Search'));
@@ -121,7 +122,5 @@ $tpl->assign('my_students_url', $url);
 $tpl->assign('pagination', $pagination);
 $tpl->assign('care_title', $plugin->get_lang('CareDetailView'));
 $content = $tpl->fetch('/'.$plugin->get_name().'/view/my_students.html.twig');
-// Assign into content
 $tpl->assign('content', $content);
-// Display
 $tpl->display_one_col_template();

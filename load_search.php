@@ -329,7 +329,7 @@ $extra = $extraField->addElements(
 $fieldsToShow = [
     'heures_disponibilite_par_semaine',
     'moment_de_disponibilite',
-    'langue_cible',
+    //'langue_cible', not needed
 ];
 
 $extra = $extraFieldUser->addElements(
@@ -387,7 +387,8 @@ $extra = $extraField->addElements(
     true
 );
 
-$fieldsToShow = [
+// Commented because BT#15776
+/*$fieldsToShow = [
     'langue_cible',
 ];
 
@@ -402,7 +403,7 @@ $extra = $extraFieldUser->addElements(
     [],
     false,
     $forceShowFields //$forceShowFields = false
-);
+);*/
 
 $form->addHtml('</div></div></div>');
 $form->addHtml('<div class="panel panel-default">');
@@ -657,13 +658,13 @@ if ($form->validate()) {
         $userDataToSave = [
             'item_id' => $userToLoad,
             'extra_heures_disponibilite_par_semaine' => isset($userData['extra_heures_disponibilite_par_semaine']) ? $userData['extra_heures_disponibilite_par_semaine'] : '',
-            'extra_langue_cible' => isset($userData['extra_langue_cible']) ? $userData['extra_langue_cible'] : '',
+            //'extra_langue_cible' => isset($userData['extra_langue_cible']) ? $userData['extra_langue_cible'] : '',
         ];
         $extraFieldValue->saveFieldValues(
             $userDataToSave,
             true,
             false,
-            ['heures_disponibilite_par_semaine', 'langue_cible']
+            ['heures_disponibilite_par_semaine'] //, 'langue_cible'
         );
 
         // Save session search

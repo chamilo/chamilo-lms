@@ -63,7 +63,7 @@ class AzureActiveDirectory extends Plugin
     }
 
     /**
-     * @param $urlType Type of URL to generate
+     * @param string $urlType Type of URL to generate
      *
      * @return string
      */
@@ -74,11 +74,15 @@ class AzureActiveDirectory extends Plugin
 
         foreach ($settingsInfo as $settingInfo) {
             $variable = str_replace($this->get_name().'_', '', $settingInfo['variable']);
-
             $settings[$variable] = $settingInfo['selected_value'];
         }
 
-        $url = "https://login.microsoftonline.com/{$settings[self::SETTING_TENANT]}/oauth2/v2.0/";
+        if (isset($settings[self::SETTING_TENANT])) {
+            $url = "https://login.microsoftonline.com/{$settings[self::SETTING_TENANT]}/oauth2/v2.0/";
+        } else {
+            return '';
+        }
+
         $callback = api_get_path(WEB_PLUGIN_PATH).$this->get_name().'/src/callback.php';
 
         if ($urlType === self::URL_TYPE_SIGNOUT) {

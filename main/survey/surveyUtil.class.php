@@ -2441,6 +2441,15 @@ class SurveyUtil
             (!empty($params['user']) || !empty($params['group_id'])) &&
             !empty($params['survey_code'])
         ) {
+            if (!isset($params['survey_invitation_id'])) {
+                $params['survey_invitation_id'] = 0;
+            }
+            if (!isset($params['answered'])) {
+                $params['answered'] = 0;
+            }
+            if (!isset($params['group_id'])) {
+                $params['group_id'] = 0;
+            }
             $insertId = Database::insert($table, $params);
             if ($insertId) {
                 $sql = "UPDATE $table

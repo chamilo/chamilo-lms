@@ -430,11 +430,11 @@ class SurveyManager
             }
 
             $extraParams = [];
-            $extraParams['one_question_per_page'] = isset($values['one_question_per_page']) ? $values['one_question_per_page'] : null;
-            $extraParams['shuffle'] = isset($values['shuffle']) ? $values['shuffle'] : null;
+            $extraParams['one_question_per_page'] = isset($values['one_question_per_page']) ? $values['one_question_per_page'] : 0;
+            $extraParams['shuffle'] = isset($values['shuffle']) ? $values['shuffle'] : 0;
 
             if ($values['anonymous'] == 0) {
-                $extraParams['show_form_profile'] = isset($values['show_form_profile']) ? $values['show_form_profile'] : '';
+                $extraParams['show_form_profile'] = isset($values['show_form_profile']) ? $values['show_form_profile'] : 0;
                 if ($extraParams['show_form_profile'] == 1) {
                     $fields = explode(',', $values['input_name_list']);
                     $field_values = '';

@@ -146,12 +146,8 @@ if ($accessGranted == false) {
                 if (!empty($certificate['pdf_url']) ||
                     !empty($certificate['badge_link'])
                 ) {
-                    if (is_array($certificate) &&
-                        isset($certificate['pdf_url'])
-                    ) {
-                        $downloadCertificateLink = generateLPFinalItemTemplateCertificateLinks(
-                            $certificate
-                        );
+                    if (is_array($certificate)) {
+                        $downloadCertificateLink = Category::getDownloadCertificateBlock($certificate);
                     }
 
                     if (is_array($certificate) &&
@@ -286,31 +282,4 @@ function generateLPFinalItemTemplateBadgeLinks($userId, $courseId, $sessionId = 
     }
 
     return $badgeLink;
-}
-
-/**
- * Return HTML string with certificate links.
- *
- * @param array $certificate
- *
- * @return string HTML string for certificates
- */
-function generateLPFinalItemTemplateCertificateLinks($certificate)
-{
-    $downloadCertificateLink = Display::url(
-        Display::returnFontAwesomeIcon('file-pdf-o').get_lang('DownloadCertificatePdf'),
-        $certificate['pdf_url'],
-        ['class' => 'btn btn-default']
-    );
-    $viewCertificateLink = $certificate['certificate_link'];
-    $downloadCertificateLink = "
-        <div class='panel panel-default'>
-            <div class='panel-body'>
-                <h3 class='text-center'>".get_lang('NowDownloadYourCertificateClickHere')."</h3>
-                <div class='text-center'>$downloadCertificateLink $viewCertificateLink</div>
-            </div>
-        </div>
-    ";
-
-    return $downloadCertificateLink;
 }

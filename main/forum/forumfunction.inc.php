@@ -1690,11 +1690,12 @@ function get_forums_in_category($cat_id, $courseId = 0)
  * @version february 2006, dokeos 1.8
  */
 function get_forums(
-    $id = '',
+    $id = 0,
     $course_code = '',
     $includeGroupsForum = true,
     $sessionId = 0
 ) {
+    $id = (int) $id;
     $course_info = api_get_course_info($course_code);
 
     $table_forums = Database::get_course_table(TABLE_FORUM);
@@ -1720,7 +1721,9 @@ function get_forums(
         $includeGroupsForumSelect = " AND (forum_of_group = 0 OR forum_of_group IS NULL) ";
     }
 
-    if ($id == '') {
+    $allowToEdit = api_is_allowed_to_edit();
+
+    if (empty($id)) {
         // Student
         // Select all the forum information of all forums (that are visible to students).
         $sql = "SELECT item_properties.*, forum.* 
@@ -1756,7 +1759,7 @@ function get_forums(
                 GROUP BY threads.forum_id";
 
         // Course Admin
-        if (api_is_allowed_to_edit()) {
+        if ($allowToEdit) {
             // Select all the forum information of all forums (that are not deleted).
             $sql = "SELECT item_properties.*, forum.* 
                     FROM $table_forums forum
@@ -1804,7 +1807,7 @@ function get_forums(
                 INNER JOIN $table_forums forum
                 ON (forum.forum_id = item_properties.ref AND forum.c_id = item_properties.c_id)
                 WHERE
-                    forum.forum_id = ".intval($id)." AND
+                    forum.forum_id = $id AND
                     forum.c_id = $course_id AND
                     item_properties.visibility != 2 AND
                     item_properties.tool = '".TOOL_FORUM."'
@@ -1814,14 +1817,14 @@ function get_forums(
         $sql2 = "SELECT count(*) AS number_of_threads, forum_id
                 FROM $table_threads
                 WHERE
-                    forum_id = ".intval($id)."
+                    forum_id = $id
                 GROUP BY forum_id";
     }
 
     // Handling all the forum information.
     $result = Database::query($sql);
     while ($row = Database::fetch_assoc($result)) {
-        if ($id == '') {
+        if (empty($id)) {
             $forum_list[$row['forum_id']] = $row;
         } else {
             $forum_list = $row;
@@ -1831,7 +1834,7 @@ function get_forums(
     // Handling the thread count information.
     $result2 = Database::query($sql2);
     while ($row2 = Database::fetch_array($result2)) {
-        if ($id == '') {
+        if (empty($id)) {
             $forum_list[$row2['forum_id']]['number_of_threads'] = $row2['number_of_threads'];
         } else {
             $forum_list['number_of_threads'] = $row2['number_of_threads'];
@@ -1840,44 +1843,44 @@ function get_forums(
 
     /* Finding the last post information
     (last_post_id, last_poster_id, last_post_date, last_poster_name, last_poster_lastname, last_poster_firstname)*/
-    if ($id == '') {
+    if (empty($id)) {
         if (is_array($forum_list)) {
             foreach ($forum_list as $key => $value) {
-                $last_post_info_of_forum = get_last_post_information(
+                $lastPost = get_last_post_information(
                     $key,
-                    api_is_allowed_to_edit(),
+                    $allowToEdit,
                     $course_id
                 );
 
-                if ($last_post_info_of_forum) {
-                    $forum_list[$key]['last_post_id'] = $last_post_info_of_forum['last_post_id'];
-                    $forum_list[$key]['last_poster_id'] = $last_post_info_of_forum['last_poster_id'];
-                    $forum_list[$key]['last_post_date'] = $last_post_info_of_forum['last_post_date'];
-                    $forum_list[$key]['last_poster_name'] = $last_post_info_of_forum['last_poster_name'];
-                    $forum_list[$key]['last_poster_lastname'] = $last_post_info_of_forum['last_poster_lastname'];
-                    $forum_list[$key]['last_poster_firstname'] = $last_post_info_of_forum['last_poster_firstname'];
-                    $forum_list[$key]['last_post_title'] = $last_post_info_of_forum['last_post_title'];
-                    $forum_list[$key]['last_post_text'] = $last_post_info_of_forum['last_post_text'];
+                if ($lastPost) {
+                    $forum_list[$key]['last_post_id'] = $lastPost['last_post_id'];
+                    $forum_list[$key]['last_poster_id'] = $lastPost['last_poster_id'];
+                    $forum_list[$key]['last_post_date'] = $lastPost['last_post_date'];
+                    $forum_list[$key]['last_poster_name'] = $lastPost['last_poster_name'];
+                    $forum_list[$key]['last_poster_lastname'] = $lastPost['last_poster_lastname'];
+                    $forum_list[$key]['last_poster_firstname'] = $lastPost['last_poster_firstname'];
+                    $forum_list[$key]['last_post_title'] = $lastPost['last_post_title'];
+                    $forum_list[$key]['last_post_text'] = $lastPost['last_post_text'];
                 }
             }
         } else {
             $forum_list = [];
         }
     } else {
-        $last_post_info_of_forum = get_last_post_information(
+        $lastPost = get_last_post_information(
             $id,
-            api_is_allowed_to_edit(),
+            $allowToEdit,
             $course_id
         );
-        if ($last_post_info_of_forum) {
-            $forum_list['last_post_id'] = $last_post_info_of_forum['last_post_id'];
-            $forum_list['last_poster_id'] = $last_post_info_of_forum['last_poster_id'];
-            $forum_list['last_post_date'] = $last_post_info_of_forum['last_post_date'];
-            $forum_list['last_poster_name'] = $last_post_info_of_forum['last_poster_name'];
-            $forum_list['last_poster_lastname'] = $last_post_info_of_forum['last_poster_lastname'];
-            $forum_list['last_poster_firstname'] = $last_post_info_of_forum['last_poster_firstname'];
-            $forum_list['last_post_title'] = $last_post_info_of_forum['last_post_title'];
-            $forum_list['last_post_text'] = $last_post_info_of_forum['last_post_text'];
+        if ($lastPost) {
+            $forum_list['last_post_id'] = $lastPost['last_post_id'];
+            $forum_list['last_poster_id'] = $lastPost['last_poster_id'];
+            $forum_list['last_post_date'] = $lastPost['last_post_date'];
+            $forum_list['last_poster_name'] = $lastPost['last_poster_name'];
+            $forum_list['last_poster_lastname'] = $lastPost['last_poster_lastname'];
+            $forum_list['last_poster_firstname'] = $lastPost['last_poster_firstname'];
+            $forum_list['last_post_title'] = $lastPost['last_post_title'];
+            $forum_list['last_post_text'] = $lastPost['last_post_text'];
         }
     }
 
@@ -2776,9 +2779,9 @@ function updateThread($values)
     } else {
         $params = [
             'thread_title_qualify' => '',
-            'thread_qualify_max' => '',
-            'thread_weight' => '',
-            'thread_peer_qualify' => '',
+            'thread_qualify_max' => 0,
+            'thread_weight' => 0,
+            'thread_peer_qualify' => 0,
         ];
         $where = ['c_id = ? AND thread_id = ?' => [$courseId, $values['thread_id']]];
         Database::update($threadTable, $params, $where);
@@ -5603,14 +5606,14 @@ function get_forums_of_group($groupInfo)
     // (last_post_id, last_poster_id, last_post_date, last_poster_name, last_poster_lastname, last_poster_firstname).
     if (!empty($forum_list)) {
         foreach ($forum_list as $key => $value) {
-            $last_post_info_of_forum = get_last_post_information($key, api_is_allowed_to_edit());
-            if ($last_post_info_of_forum) {
-                $forum_list[$key]['last_post_id'] = $last_post_info_of_forum['last_post_id'];
-                $forum_list[$key]['last_poster_id'] = $last_post_info_of_forum['last_poster_id'];
-                $forum_list[$key]['last_post_date'] = $last_post_info_of_forum['last_post_date'];
-                $forum_list[$key]['last_poster_name'] = $last_post_info_of_forum['last_poster_name'];
-                $forum_list[$key]['last_poster_lastname'] = $last_post_info_of_forum['last_poster_lastname'];
-                $forum_list[$key]['last_poster_firstname'] = $last_post_info_of_forum['last_poster_firstname'];
+            $lastPost = get_last_post_information($key, api_is_allowed_to_edit());
+            if ($lastPost) {
+                $forum_list[$key]['last_post_id'] = $lastPost['last_post_id'];
+                $forum_list[$key]['last_poster_id'] = $lastPost['last_poster_id'];
+                $forum_list[$key]['last_post_date'] = $lastPost['last_post_date'];
+                $forum_list[$key]['last_poster_name'] = $lastPost['last_poster_name'];
+                $forum_list[$key]['last_poster_lastname'] = $lastPost['last_poster_lastname'];
+                $forum_list[$key]['last_poster_firstname'] = $lastPost['last_poster_firstname'];
             }
         }
     }
@@ -6122,22 +6125,26 @@ function get_thread_user_post_limit($course_code, $thread_id, $user_id, $limit =
 }
 
 /**
- * @param string $user_id
- * @param int    $courseId
+ * @param string $userId
+ * @param array  $courseInfo
  * @param int    $sessionId
  *
  * @return array
  */
-function getForumCreatedByUser($user_id, $courseId, $sessionId)
+function getForumCreatedByUser($userId, $courseInfo, $sessionId)
 {
+    if (empty($userId) || empty($courseInfo)) {
+        return [];
+    }
+
+    $courseId = $courseInfo['real_id'];
     $items = api_get_item_property_list_by_tool_by_user(
-        $user_id,
+        $userId,
         'forum',
         $courseId,
         $sessionId
     );
 
-    $courseInfo = api_get_course_info_by_id($courseId);
     $forumList = [];
     if (!empty($items)) {
         foreach ($items as $forum) {
@@ -6147,7 +6154,7 @@ function getForumCreatedByUser($user_id, $courseId, $sessionId)
                 true,
                 $sessionId
             );
-            if (!empty($forumInfo)) {
+            if (!empty($forumInfo) && isset($forumInfo['forum_title'])) {
                 $forumList[] = [
                     $forumInfo['forum_title'],
                     api_get_local_time($forum['insert_date']),

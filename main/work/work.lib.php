@@ -544,7 +544,6 @@ function showTeacherWorkGrid()
             'width' => '35',
             'align' => 'center',
             'sortable' => 'false',
-            'formatter' => '',
         ],
         [
             'name' => 'title',
@@ -552,7 +551,6 @@ function showTeacherWorkGrid()
             'width' => '300',
             'align' => 'left',
             'wrap_cell' => "true",
-            'formatter' => '',
         ],
         ['name' => 'sent_date', 'index' => 'sent_date', 'width' => '125', 'align' => 'center'],
         ['name' => 'expires_on', 'index' => 'expires_on', 'width' => '125', 'align' => 'center'],
@@ -562,7 +560,6 @@ function showTeacherWorkGrid()
             'width' => '110',
             'align' => 'center',
             'sortable' => 'false',
-            'formatter' => '',
         ],
         [
             'name' => 'actions',
@@ -570,7 +567,6 @@ function showTeacherWorkGrid()
             'width' => '110',
             'align' => 'left',
             'sortable' => 'false',
-            'formatter' => '',
         ],
     ];
     $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_work_teacher&'.api_get_cidreq();
@@ -4845,14 +4841,12 @@ function showStudentList($workId)
             'width' => '350px',
             'align' => 'left',
             'sortable' => 'false',
-            'formatter' => '',
         ],
         [
             'name' => 'works',
             'index' => 'works',
             'align' => 'center',
             'sortable' => 'false',
-            'formatter' => '',
         ],
     ];
     $token = null;

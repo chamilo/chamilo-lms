@@ -250,7 +250,6 @@ switch ($action) {
                 'index' => 'actions',
                 'width' => '150',
                 'align' => 'left',
-                //'formatter' => 'action_formatter',
                 'sortable' => 'false',
             ],
         ];

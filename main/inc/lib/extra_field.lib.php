@@ -1925,7 +1925,6 @@ class ExtraField extends Model
                 'width' => '35',
                 'align' => 'left',
                 'sortable' => 'true',
-                'formatter' => '',
             ],
             [
                 'name' => 'visible_to_self',
@@ -1933,7 +1932,6 @@ class ExtraField extends Model
                 'width' => '45',
                 'align' => 'left',
                 'sortable' => 'true',
-                'formatter' => '',
             ],
             [
                 'name' => 'visible_to_others',
@@ -1941,7 +1939,6 @@ class ExtraField extends Model
                 'width' => '35',
                 'align' => 'left',
                 'sortable' => 'true',
-                'formatter' => '',
             ],
             [
                 'name' => 'filter',
@@ -1949,7 +1946,6 @@ class ExtraField extends Model
                 'width' => '30',
                 'align' => 'left',
                 'sortable' => 'true',
-                'formatter' => '',
             ],
             [
                 'name' => 'field_order',

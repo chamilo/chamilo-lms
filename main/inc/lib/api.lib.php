@@ -317,7 +317,6 @@ define('REL_HOME_PATH', 'REL_HOME_PATH');
 
 // Constants for api_get_path() and api_get_path_type(), etc. - registered path types.
 define('WEB_PATH', 'WEB_PATH');
-define('WEB_APP_PATH', 'WEB_APP_PATH');
 define('SYS_PATH', 'SYS_PATH');
 define('SYS_APP_PATH', 'SYS_APP_PATH');
 define('SYS_UPLOAD_PATH', 'SYS_UPLOAD_PATH');
@@ -828,7 +827,7 @@ function api_get_path($path = '', $configuration = [])
             SYS_CODE_PATH => 'main/',
             REL_CODE_PATH => '/main/',
             SYS_LANG_PATH => 'lang/',
-            WEB_IMG_PATH => 'img/',
+            WEB_IMG_PATH => 'public/img/',
             WEB_CSS_PATH => 'public/build/css/',
             SYS_CSS_PATH => 'public/build/css/',
             SYS_PLUGIN_PATH => 'plugin/',
@@ -840,7 +839,6 @@ function api_get_path($path = '', $configuration = [])
             WEB_HOME_PATH => 'app/home/',
             REL_HOME_PATH => 'app/home/',
             SYS_APP_PATH => 'var/',
-            WEB_APP_PATH => 'app/',
             SYS_UPLOAD_PATH => 'var/upload/',
             SYS_INC_PATH => 'inc/',
             CONFIGURATION_PATH => 'app/config/',
@@ -894,7 +892,6 @@ function api_get_path($path = '', $configuration = [])
         $paths[$root_web][WEB_PATH] = $rootWebWithSlash;
         $paths[$root_web][WEB_CODE_PATH] = $rootWebWithSlash.$code_folder;
         $paths[$root_web][WEB_COURSE_PATH] = $rootWebWithSlash.$course_folder;
-        $paths[$root_web][WEB_APP_PATH] = $rootWebWithSlash.$paths[$root_web][WEB_APP_PATH];
         $paths[$root_web][WEB_PLUGIN_PATH] = $rootWebWithSlash.$paths[$root_web][WEB_PLUGIN_PATH];
         $paths[$root_web][WEB_PLUGIN_ASSET_PATH] = $rootWebWithSlash.$paths[$root_web][WEB_PLUGIN_ASSET_PATH];
         $paths[$root_web][WEB_ARCHIVE_PATH] = $rootWebWithSlash.$paths[$root_web][WEB_ARCHIVE_PATH];
@@ -903,7 +900,7 @@ function api_get_path($path = '', $configuration = [])
         $paths[$root_web][WEB_PUBLIC_PATH] = $rootWebWithSlash.$paths[$root_web][WEB_PUBLIC_PATH];
         $paths[$root_web][WEB_HOME_PATH] = $rootWebWithSlash.$paths[$root_web][REL_HOME_PATH];
 
-        $paths[$root_web][WEB_IMG_PATH] = $paths[$root_web][WEB_CODE_PATH].$paths[$root_web][WEB_IMG_PATH];
+        $paths[$root_web][WEB_IMG_PATH] = $rootWebWithSlash.$paths[$root_web][WEB_IMG_PATH];
         $paths[$root_web][WEB_LIBRARY_PATH] = $paths[$root_web][WEB_CODE_PATH].$paths[$root_web][WEB_LIBRARY_PATH];
         $paths[$root_web][WEB_LIBRARY_JS_PATH] = $paths[$root_web][WEB_CODE_PATH].$paths[$root_web][WEB_LIBRARY_JS_PATH];
         $paths[$root_web][WEB_AJAX_PATH] = $paths[$root_web][WEB_CODE_PATH].$paths[$root_web][WEB_AJAX_PATH];

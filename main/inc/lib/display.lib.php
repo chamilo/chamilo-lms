@@ -1368,6 +1368,13 @@ class Display
             $obj->url = $url;
         }
 
+        // Needed it in order to render the links/html in the grid
+        foreach ($column_model as &$columnModel) {
+            if (!isset($columnModel['formatter'])) {
+                $columnModel['formatter'] = '';
+            }
+        }
+
         //This line should only be used/modified in case of having characters
         // encoding problems - see #6159
         //$column_names = array_map("utf8_encode", $column_names);

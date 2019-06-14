@@ -24,6 +24,7 @@ if (!api_is_allowed_to_edit()) {
 }
 
 api_set_more_memory_and_time_limits();
+$isPlatformAdmin = api_is_platform_admin();
 
 // Section for the tabs
 $this_section = SECTION_COURSES;
@@ -133,7 +134,7 @@ if (Security::check_token('post') && ($action === 'course_select_form' || $impor
     }
 } else {
     $user = api_get_user_info();
-    $backups = CourseArchiver::getAvailableBackups($is_platformAdmin ? null : $user['user_id']);
+    $backups = CourseArchiver::getAvailableBackups($isPlatformAdmin ? null : $user['user_id']);
     $backups_available = count($backups) > 0;
 
     $form = new FormValidator(

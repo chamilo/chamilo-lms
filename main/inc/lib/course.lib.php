@@ -1810,9 +1810,11 @@ class CourseManager
         $groupId = 0
     ) {
         $userTable = Database::get_main_table(TABLE_MAIN_USER);
-        $session_id = intval($session_id);
-        $course_code = Database::escape_string($course_code);
+        $session_id = (int) $session_id;
         $courseInfo = api_get_course_info($course_code);
+        if (empty($courseInfo)) {
+            return [];
+        }
         $courseId = $courseInfo['real_id'];
         $students = [];
 

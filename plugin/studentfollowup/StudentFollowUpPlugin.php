@@ -133,7 +133,7 @@ class StudentFollowUpPlugin extends Plugin
             }
 
             // Check if course session coach
-            $sessions = SessionManager::get_sessions_by_user($studentId);
+            $sessions = SessionManager::get_sessions_by_user($studentId, false, true);
             if (!empty($sessions)) {
                 foreach ($sessions as $session) {
                     $sessionId = $session['session_id'];

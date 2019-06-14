@@ -1640,21 +1640,23 @@ class Template
             if (!empty($courseId)) {
                 $tutor_data = '';
                 if ($id_session != 0) {
-                    $coachs_email = CourseManager::get_email_of_tutor_to_session(
-                        $id_session,
-                        $courseId
-                    );
-                    $email_link = [];
-                    foreach ($coachs_email as $coach) {
-                        $email_link[] = Display::encrypted_mailto_link($coach['email'], $coach['complete_name']);
+                    $users = SessionManager::getCoachesByCourseSession($id_session, $courseId);
+                    $links = [];
+                    if (!empty($users)) {
+                        $coaches = [];
+                        foreach ($users as $userId) {
+                            $coaches[] = api_get_user_info($userId);
+                        }
+                        $links = array_column($coaches, 'complete_name_with_message_link');
                     }
-                    if (count($coachs_email) > 1) {
+                    $count = count($links);
+                    if ($count > 1) {
                         $tutor_data .= get_lang('Coachs').' : ';
-                        $tutor_data .= array_to_string($email_link, CourseManager::USER_SEPARATOR);
-                    } elseif (count($coachs_email) == 1) {
+                        $tutor_data .= array_to_string($links, CourseManager::USER_SEPARATOR);
+                    } elseif ($count === 1) {
                         $tutor_data .= get_lang('Coach').' : ';
-                        $tutor_data .= array_to_string($email_link, CourseManager::USER_SEPARATOR);
-                    } elseif (count($coachs_email) == 0) {
+                        $tutor_data .= array_to_string($links, CourseManager::USER_SEPARATOR);
+                    } elseif ($count === 0) {
                         $tutor_data .= '';
                     }
                 }
@@ -1667,19 +1669,19 @@ class Template
             $courseId = api_get_course_int_id();
             if (!empty($courseId)) {
                 $teacher_data = '';
-                $mail = CourseManager::get_emails_of_tutors_to_course($courseId);
-                if (!empty($mail)) {
-                    $teachers_parsed = [];
-                    foreach ($mail as $value) {
-                        foreach ($value as $email => $name) {
-                            $teachers_parsed[] = Display::encrypted_mailto_link($email, $name);
-                        }
+                $teachers = CourseManager::getTeachersFromCourse($courseId);
+                if (!empty($teachers)) {
+                    $teachersParsed = [];
+                    foreach ($teachers as $teacher) {
+                        $userId = $teacher['id'];
+                        $teachersParsed[] = api_get_user_info($userId);
                     }
+                    $links = array_column($teachersParsed, 'complete_name_with_message_link');
                     $label = get_lang('Teacher');
-                    if (count($mail) > 1) {
+                    if (count($links) > 1) {
                         $label = get_lang('Teachers');
                     }
-                    $teacher_data .= $label.' : '.array_to_string($teachers_parsed, CourseManager::USER_SEPARATOR);
+                    $teacher_data .= $label.' : '.array_to_string($links, CourseManager::USER_SEPARATOR);
                 }
                 $this->assign('teachers', $teacher_data);
             }

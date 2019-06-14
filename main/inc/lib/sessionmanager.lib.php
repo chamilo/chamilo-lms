@@ -2151,7 +2151,7 @@ class SessionManager
 
         $statusCondition = null;
         if (isset($status) && !is_null($status)) {
-            $status = intval($status);
+            $status = (int) $status;
             $statusCondition = " AND status = $status";
         }
 
@@ -4782,19 +4782,19 @@ SQL;
     }
 
     /**
-     * @param int  $user_id
+     * @param int  $userId
      * @param bool $ignoreVisibilityForAdmins
      * @param bool $ignoreTimeLimit
      *
      * @return array
      */
     public static function get_sessions_by_user(
-        $user_id,
+        $userId,
         $ignoreVisibilityForAdmins = false,
         $ignoreTimeLimit = false
     ) {
         $sessionCategories = UserManager::get_sessions_by_category(
-            $user_id,
+            $userId,
             false,
             $ignoreVisibilityForAdmins,
             $ignoreTimeLimit

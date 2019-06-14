@@ -2995,6 +2995,7 @@ class UserManager
      *                                           (to give space for courses out of categories)
      * @param bool $ignore_visibility_for_admins optional true if limit time from session is over, false otherwise
      * @param bool $ignoreTimeLimit              ignore time start/end
+     * @param bool $getCount
      *
      * @return array list of statuses [session_category][session_id]
      *
@@ -3007,7 +3008,9 @@ class UserManager
         $ignoreTimeLimit = false,
         $getCount = false
     ) {
-        if ($user_id != strval(intval($user_id))) {
+        $user_id = (int) $user_id;
+
+        if (empty($user_id)) {
             return [];
         }
 
@@ -3023,7 +3026,7 @@ class UserManager
         // LEFT JOIN is used for session_rel_course_rel_user because an inner
         // join would not catch session-courses where the user is general
         // session coach but which do not have students nor coaches registered
-        $dqlSelect = " COUNT(DISTINCT s.id) ";
+        $dqlSelect = ' COUNT(DISTINCT s.id) ';
 
         if (!$getCount) {
             $dqlSelect = " DISTINCT

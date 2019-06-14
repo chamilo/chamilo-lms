@@ -376,7 +376,7 @@ class ImportCsv
                     $this->logger->addInfo("New post will be created no match for externalCareId = ".$row['External_care_id']);
                 }
 
-                $contentDecoded = base64_decode($row['Article']);
+                $contentDecoded = utf8_encode(base64_decode($row['Article']));
 
                 $post
                     ->setTitle($row['Title'])

@@ -1089,10 +1089,10 @@ class Event
         if (Database::num_rows($query) > 0) {
             $attempt = Database::fetch_array($query, 'ASSOC');
 
-            return $attempt['count'];
-        } else {
-            return 0;
+            return (int) $attempt['count'];
         }
+
+        return 0;
     }
 
     /**

@@ -321,7 +321,6 @@ class GradebookDataGenerator
                                 $rankingStudentList[$user['user_id']] = $score['score'][0];
                             }
                         }
-                        error_log('loading not cACHE');
                         $score = AbstractLink::getCurrentUserRanking($userId, $rankingStudentList);
                     }
 

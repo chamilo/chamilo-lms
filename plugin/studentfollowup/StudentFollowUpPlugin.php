@@ -146,7 +146,6 @@ class StudentFollowUpPlugin extends Plugin
                         break;
                     }
                     foreach ($session['courses'] as $course) {
-                        //$isCourseCoach = api_is_coach($sessionId, $course['real_id']);
                         $coachList = SessionManager::getCoachesByCourseSession(
                             $sessionId,
                             $course['real_id']
@@ -183,8 +182,10 @@ class StudentFollowUpPlugin extends Plugin
     {
         switch ($status) {
             case COURSEMANAGER:
-                $sessions = SessionManager::get_sessions_by_user($currentUserId);
-                $sessions = array_column($sessions, 'session_id');
+                /*$sessions = SessionManager::get_sessions_by_user($currentUserId);
+                $sessions = array_column($sessions, 'session_id');*/
+                $sessions = SessionManager::getSessionsCoachedByUser($currentUserId);
+                $sessions = array_column($sessions, 'id');
 
                 // Get session courses where I'm coach
                 $courseList = SessionManager::getCoursesListByCourseCoach($currentUserId);

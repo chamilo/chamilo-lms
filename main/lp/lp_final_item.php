@@ -137,47 +137,45 @@ if ($accessGranted == false) {
             $catCourseCode = CourseManager::get_course_by_category($categoryId);
             $show_message = $cat->show_message_resource_delete($catCourseCode);
 
-            if ($show_message == '') {
-                if (!api_is_allowed_to_edit() && !api_is_excluded_user_type()) {
-                    $certificate = Category::generateUserCertificate(
-                        $categoryId,
-                        $userId
-                    );
+            if (false === $show_message && !api_is_allowed_to_edit() && !api_is_excluded_user_type()) {
+                $certificate = Category::generateUserCertificate(
+                    $categoryId,
+                    $userId
+                );
 
-                    if (!empty($certificate['pdf_url']) ||
-                        !empty($certificate['badge_link'])
+                if (!empty($certificate['pdf_url']) ||
+                    !empty($certificate['badge_link'])
+                ) {
+                    if (is_array($certificate) &&
+                        isset($certificate['pdf_url'])
                     ) {
-                        if (is_array($certificate) &&
-                            isset($certificate['pdf_url'])
-                        ) {
-                            $downloadCertificateLink = generateLPFinalItemTemplateCertificateLinks(
-                                $certificate
-                            );
-                        }
-
-                        if (is_array($certificate) &&
-                            isset($certificate['badge_link'])
-                        ) {
-                            $courseId = api_get_course_int_id();
-                            $badgeLink = generateLPFinalItemTemplateBadgeLinks(
-                                $userId,
-                                $courseId,
-                                $sessionId
-                            );
-                        }
+                        $downloadCertificateLink = generateLPFinalItemTemplateCertificateLinks(
+                            $certificate
+                        );
                     }
 
-                    $currentScore = Category::getCurrentScore(
-                        $userId,
-                        $category,
-                        true
-                    );
-                    Category::registerCurrentScore(
-                        $currentScore,
-                        $userId,
-                        $categoryId
-                    );
+                    if (is_array($certificate) &&
+                        isset($certificate['badge_link'])
+                    ) {
+                        $courseId = api_get_course_int_id();
+                        $badgeLink = generateLPFinalItemTemplateBadgeLinks(
+                            $userId,
+                            $courseId,
+                            $sessionId
+                        );
+                    }
                 }
+
+                $currentScore = Category::getCurrentScore(
+                    $userId,
+                    $category,
+                    true
+                );
+                Category::registerCurrentScore(
+                    $currentScore,
+                    $userId,
+                    $categoryId
+                );
             }
         }
 

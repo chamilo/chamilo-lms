@@ -6967,7 +6967,7 @@ class Tracking
 
         $courseForumInformationArray = getForumCreatedByUser(
             $userId,
-            $courseInfo['real_id'],
+            $courseInfo,
             $sessionId
         );
 

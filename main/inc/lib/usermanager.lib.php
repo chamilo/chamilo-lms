@@ -374,9 +374,8 @@ class UserManager
                 UrlManager::add_user_to_url($userId, 1);
             }
 
-            $extra['item_id'] = $userId;
-
             if (is_array($extra) && count($extra) > 0) {
+                $extra['item_id'] = $userId;
                 $courseFieldValue = new ExtraFieldValue('user');
                 $courseFieldValue->saveFieldValues($extra);
             } else {

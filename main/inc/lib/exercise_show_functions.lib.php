@@ -378,7 +378,7 @@ class ExerciseShowFunctions
 
         if ($exercise->showExpectedChoice()) {
             $status = Display::label(get_lang('Incorrect'), 'danger');
-            if ($studentChoiceInt === $answerCorrectChoice) {
+            if ($answerCorrect || ($answerCorrect && $studentChoiceInt === $answerCorrectChoice)) {
                 $status = Display::label(get_lang('Correct'), 'success');
             }
             echo '<td width="20%">';

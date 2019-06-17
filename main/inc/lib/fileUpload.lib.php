@@ -1384,6 +1384,7 @@ function search_img_from_html($html_file)
  * @param int    $visibility              (0 for invisible, 1 for visible, 2 for deleted)
  * @param bool   $generateNewNameIfExists
  * @param bool   $sendNotification        depends in conf setting "send_notification_when_document_added"
+ * @param array  $parentInfo
  *
  * @return CDocument|false
  */
@@ -1398,7 +1399,8 @@ function create_unexisting_directory(
     $title = '',
     $visibility = '',
     $generateNewNameIfExists = false,
-    $sendNotification = true
+    $sendNotification = true,
+    $parentInfo = []
 ) {
     $course_id = $_course['real_id'];
     $session_id = (int) $session_id;
@@ -1452,6 +1454,12 @@ function create_unexisting_directory(
                 c_id = $course_id AND
                 path = '".Database::escape_string($systemFolderName)."'";
     $rs = Database::query($sql);
+
+    $parentId = 0;
+    if (!empty($parentInfo) && isset($parentInfo['iid'])) {
+        $parentId = $parentInfo['iid'];
+    }
+
     if (Database::num_rows($rs) == 0) {
         $document = DocumentManager::addDocument(
             $_course,
@@ -1465,7 +1473,9 @@ function create_unexisting_directory(
             $to_group_id,
             $session_id,
             $user_id,
-            $sendNotification
+            $sendNotification,
+            '',
+            $parentId
         );
 
         if ($document) {

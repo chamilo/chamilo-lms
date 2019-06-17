@@ -4,6 +4,9 @@
 /**
  * Responses to AJAX calls for the document upload.
  */
+
+use Chamilo\CoreBundle\Framework\Container;
+
 require_once __DIR__.'/../global.inc.php';
 
 $action = $_REQUEST['a'];
@@ -12,7 +15,11 @@ switch ($action) {
         api_protect_course_script(true);
         $path = isset($_GET['path']) ? $_GET['path'] : '';
         $isAllowedToEdit = api_is_allowed_to_edit();
-        $size = DocumentManager::getTotalFolderSize($path, $isAllowedToEdit);
+
+        $repo = Container::$container->get('Chamilo\CourseBundle\Repository\CDocumentRepository');
+        $size = $repo->getFolderSize(api_get_course_int_id(), $path);
+        //var_dump($size);
+        //$size = DocumentManager::getTotalFolderSize($path, $isAllowedToEdit);
         echo format_file_size($size);
         break;
     case 'get_document_quota':

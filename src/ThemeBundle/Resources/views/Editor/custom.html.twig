@@ -18,26 +18,26 @@
                 });
             });
         </script>
-    {% if parent_id > 0 %}
-        <div id="toolbar-document" class="actions">
-            <a class="btn btn-default" href = "javascript:history.back()">Back</a>
-        </div>
-    {% else %}
-        {% if allow_course %}
-        <ul class="nav nav-tabs" id="myTab" role="tablist">
-            <li class="nav-item">
-                <a id="home-tab" class="nav-link active" data-toggle="tab" href="#home" role="tab">
-                    Course
-                </a>
-            </li>
-            <li class="nav-item">
-                <a id="profile-tab" class="nav-link" data-toggle="tab" href="#profile" role="tab" >
-                    My files
-                </a>
-            </li>
-        </ul>
+        {% if parent_id == -1 %}
+            {% if allow_course %}
+                <ul class="nav nav-tabs" id="myTab" role="tablist">
+                    <li class="nav-item">
+                        <a id="home-tab" class="nav-link active" data-toggle="tab" href="#home" role="tab">
+                            {{'Course' | trans}}
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a id="profile-tab" class="nav-link" data-toggle="tab" href="#profile" role="tab" >
+                            {{'My files' | trans}}
+                        </a>
+                    </li>
+                </ul>
+            {% endif %}
+        {% else %}
+            <div id="toolbar-document" class="actions">
+                <a class="btn btn-default" href = "{{ url('editor_filemanager', {'parentId' : parent_id}) }}">{{'Back' | trans}}</a>
+            </div>
         {% endif %}
-    {% endif %}
 
     {% if allow_course %}
         <div class="tab-content" id="myTabContent">

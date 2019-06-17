@@ -3044,6 +3044,8 @@ class DocumentManager
      * @param int $group_id   (to calculate group document space)
      * @param int $session_id
      *
+     * @deprecated use CDocumentRepository::getTotalSpace
+     *
      * @return int total size
      */
     public static function documents_total_space($course_id = null, $group_id = null, $session_id = null)
@@ -6189,6 +6191,7 @@ class DocumentManager
      *
      * @param string $path
      * @param bool   $can_see_invisible
+     * @deprecated use CDocumentRepository::getFolderSize
      *
      * @return int Total size
      */
@@ -7149,7 +7152,7 @@ class DocumentManager
      * @param array  $courseInfo
      * @param bool   $is_certificate_mode
      * @param array  $groupMemberWithUploadRights
-     * @param string $curdirpath
+     * @param string $path
      * @param bool   $addToEditor
      * @param string $editorUrl
      *
@@ -7160,7 +7163,7 @@ class DocumentManager
         $courseInfo,
         $is_certificate_mode,
         $groupMemberWithUploadRights,
-        $curdirpath,
+        $path,
         $addToEditor = false,
         $editorUrl = ''
     ) {
@@ -7179,7 +7182,6 @@ class DocumentManager
         $group_properties = GroupManager::get_group_properties($groupId);
 
         $sortable_data = [];
-        $count = 1;
         foreach ($documentAndFolders as $key => $document_data) {
             $row = [];
             $row['id'] = $document_data['id'];
@@ -7299,7 +7301,7 @@ class DocumentManager
             // Admins get an edit column
             if ($isAllowedToEdit ||
                 $groupMemberWithEditRightsCheckDocument ||
-                self::is_my_shared_folder(api_get_user_id(), $curdirpath, $sessionId)
+                self::is_my_shared_folder(api_get_user_id(), $path, $sessionId)
             ) {
                 $is_template = isset($document_data['is_template']) ? $document_data['is_template'] : false;
 

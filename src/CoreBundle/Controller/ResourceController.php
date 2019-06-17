@@ -410,7 +410,7 @@ class ResourceController extends BaseController implements CourseControllerInter
     {
         $file = $request->get('file');
         $type = $request->get('type');
-        $filter = $request->get('filter');
+        $filter = $request->get('filter'); // see list of filters in config/packages/liip_imagine.yaml
 
         if (empty($type)) {
             $type = 'show';
@@ -470,11 +470,6 @@ class ResourceController extends BaseController implements CourseControllerInter
 
                     return new BinaryFileResponse($filename);
 
-                    return $this->render('@SonataMedia/Media/view.html.twig', [
-                        'media' => $media,
-                        'formats' => $this->get('sonata.media.pool')->getFormatNamesByContext($media->getContext()),
-                        'format' => $format,
-                    ]);
                     break;
                 case 'download':
                     $provider = $this->get('sonata.media.pool')->getProvider($media->getProviderName());

@@ -1401,7 +1401,10 @@ if ($isAllowedToEdit ||
                 $base_work_dir,
                 $dir_name,
                 $post_dir_name,
-                $visibility
+                $visibility,
+                false,
+                true,
+                $document_data
             );
 
             if (!empty($newFolderData)) {

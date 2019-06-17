@@ -7,6 +7,8 @@ use Chamilo\CoreBundle\Component\Editor\CkEditor\CkEditor;
 use Chamilo\CoreBundle\Component\Editor\Connector;
 use Chamilo\CoreBundle\Component\Editor\Finder;
 use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
+use Chamilo\CourseBundle\Entity\CDocument;
+use Chamilo\CourseBundle\Repository\CDocumentRepository;
 use Chamilo\SettingsBundle\Manager\SettingsManager;
 use DocumentManager;
 use FM\ElfinderBundle\Connector\ElFinderConnector;
@@ -72,13 +74,13 @@ class EditorController extends BaseController
      *
      * @return Response
      */
-    public function customEditorFileManager($parentId = 0): Response
+    public function customEditorFileManager($parentId = 0, CDocumentRepository $documentRepository): Response
     {
         $courseInfo = api_get_course_info();
 
         $params = [
             'table' => '',
-            'parent_id' => 0,
+            'parent_id' => -1,
             'allow_course' => false,
         ];
 
@@ -88,9 +90,17 @@ class EditorController extends BaseController
             $groupMemberWithUploadRights = false;
 
             $path = '/';
+            $oldParentId = -1;
             if (!empty($parentId)) {
+                /** @var CDocument $doc */
                 $doc = $this->getDoctrine()->getRepository('ChamiloCourseBundle:CDocument')->find($parentId);
                 $path = $doc->getPath();
+
+                $parent = $documentRepository->getParent($doc);
+                $oldParentId = 0;
+                if (!empty($parent)) {
+                    $oldParentId = $parent->getId();
+                }
             }
 
             $documentAndFolders = DocumentManager::getAllDocumentData(
@@ -105,7 +115,7 @@ class EditorController extends BaseController
                 $parentId
             );
 
-            $url = $this->generateUrl('editor_filemanager', ['parentId' => $parentId]);
+            $url = $this->generateUrl('editor_filemanager');
             $data = DocumentManager::processDocumentAndFolders(
                 $documentAndFolders,
                 $courseInfo,
@@ -142,7 +152,7 @@ class EditorController extends BaseController
 
             $params = [
                 'table' => $table->return_table(),
-                'parent_id' => (int) $parentId,
+                'parent_id' => (int) $oldParentId,
                 'allow_course' => true,
             ];
         }

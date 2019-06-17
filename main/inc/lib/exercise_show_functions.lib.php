@@ -465,7 +465,7 @@ class ExerciseShowFunctions
         } else {
             $content .= '-';
         }
-        echo '</td><td width="5%">';
+        $content .= '</td><td width="5%">';
         // Expected choice
         if (!$hide_expected_answer) {
             if (isset($new_options[$answerCorrect])) {
@@ -479,6 +479,7 @@ class ExerciseShowFunctions
         $content .= '</td><td width="40%">';
         $content .= $answer;
         $content .= '</td>';
+
         if ($exercise->showExpectedChoice()) {
             $status = Display::label(get_lang('Incorrect'), 'danger');
             if (isset($new_options[$studentChoice])) {

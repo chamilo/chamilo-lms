@@ -4322,7 +4322,11 @@ class Exercise
                                     case MATCHING:
                                     case MATCHING_DRAGGABLE:
                                         echo '<tr>';
-                                        if ($this->results_disabled != RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER) {
+                                        if (!in_array($this->results_disabled, [
+                                            RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER_AND_RANKING,
+                                            RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER
+                                            ])
+                                        ) {
                                             echo '<td>'.$s_answer_label.'</td>';
                                             echo '<td>'.$user_answer.'</td>';
                                         } else {
@@ -4365,7 +4369,11 @@ class Exercise
                                         }
                                         echo '<tr>';
                                         if ($this->showExpectedChoice()) {
-                                            if ($this->results_disabled != RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER) {
+                                            if (!in_array($this->results_disabled, [
+                                                RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER_AND_RANKING,
+                                                RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER
+                                            ])
+                                            ) {
                                                 echo '<td>'.$user_answer.'</td>';
                                             } else {
                                                 $status = Display::label(get_lang('Correct'), 'success');
@@ -8605,8 +8613,8 @@ class Exercise
             'radio',
             'results_disabled',
             null,
-            get_lang('AutoEvaluationAndRankingMode'),
-            RESULT_DISABLE_AUTOEVALUATION_AND_RANKING,
+            get_lang('ExerciseShowOnlyGlobalScoreAndCorrectAnswersAndRankingMode'),
+            RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER_AND_RANKING,
             ['id' => 'result_disabled_8']
         );
 

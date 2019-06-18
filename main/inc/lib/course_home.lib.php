@@ -520,6 +520,7 @@ class CourseHome
         );
 
         $lpTable = Database::get_course_table(TABLE_LP_MAIN);
+        $tblLpCategory = Database::get_course_table(TABLE_LP_CATEGORY);
         $orderBy = ' ORDER BY id ';
         switch ($course_tool_category) {
             case TOOL_STUDENT_VIEW:
@@ -542,18 +543,32 @@ class CourseHome
                 $sql = "SELECT t.* FROM $course_tool_table t
                         LEFT JOIN $lpTable l 
                         ON (t.c_id = l.c_id AND link LIKE concat('%/lp_controller.php?action=view&lp_id=', l.id, '&%'))
+                        LEFT JOIN $tblLpCategory lc
+                        ON (t.c_id = lc.c_id AND l.category_id = lc.iid)
                         $conditions AND
                         t.c_id = $course_id $condition_session 
-                        ORDER BY CASE WHEN l.display_order IS NULL THEN 0 ELSE 1 END, l.display_order, t.id";
+                        ORDER BY
+                            CASE WHEN l.category_id IS NULL THEN 0 ELSE 1 END,
+                            CASE WHEN l.display_order IS NULL THEN 0 ELSE 1 END,
+                            lc.position,
+                            l.display_order,
+                            t.id";
                 $orderBy = '';
                 break;
             case TOOL_AUTHORING:
                 $sql = "SELECT t.* FROM $course_tool_table t
-                        LEFT JOIN $lpTable l 
+                        LEFT JOIN $lpTable l
                         ON (t.c_id = l.c_id AND link LIKE concat('%/lp_controller.php?action=view&lp_id=', l.id, '&%'))
-                        WHERE 
+                        LEFT JOIN $tblLpCategory lc
+                        ON (t.c_id = lc.c_id AND l.category_id = lc.iid)
+                        WHERE
                             category = 'authoring' AND t.c_id = $course_id $condition_session
-                        ORDER BY CASE WHEN l.display_order IS NULL THEN 0 ELSE 1 END, l.display_order, t.id";
+                        ORDER BY
+                            CASE WHEN l.category_id IS NULL THEN 0 ELSE 1 END,
+                            CASE WHEN l.display_order IS NULL THEN 0 ELSE 1 END,
+                            lc.position,
+                            l.display_order,
+                            t.id";
                 $orderBy = '';
                 break;
             case TOOL_INTERACTION:

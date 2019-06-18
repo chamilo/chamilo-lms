@@ -575,6 +575,9 @@ $_configuration['send_all_emails_to'] = [
 // Callback get the $exerciseId and $iconSize as parameters.
 // e.g. ['myplugin' => ['MyPlugin', 'urlGeneratorCallback']]
 //$_configuration['exercise_additional_teacher_modify_actions'] = []
+// Generate certificate when ending a quiz.
+// The quiz needs to be linked to a gradebook category and have set the pass percentage.
+//$_configuration['quiz_generate_certificate_ending'] = false;
 
 // Hide search form in session list
 //$_configuration['hide_search_form_in_session_list'] = false;

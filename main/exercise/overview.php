@@ -28,6 +28,7 @@ $htmlHeadXtra[] = $js;
 // Notice for unauthorized people.
 api_protect_course_script(true);
 $sessionId = api_get_session_id();
+$courseCode = api_get_course_id();
 $exercise_id = isset($_REQUEST['exerciseId']) ? intval($_REQUEST['exerciseId']) : 0;
 
 $objExercise = new Exercise();
@@ -210,9 +211,22 @@ if (in_array(
     }
 }
 
+$certificateBlock = '';
+
 if (!empty($attempts)) {
     $i = $counter;
     foreach ($attempts as $attempt_result) {
+        if (empty($certificateBlock)) {
+            $certificateBlock = ExerciseLib::generateAndShowCertificateBlock(
+                $attempt_result['exe_result'],
+                $attempt_result['exe_weighting'],
+                $objExercise,
+                $attempt_result['exe_user_id'],
+                $courseCode,
+                $sessionId
+            );
+        }
+
         $score = ExerciseLib::show_score($attempt_result['exe_result'], $attempt_result['exe_weighting']);
         $attempt_url = api_get_path(WEB_CODE_PATH).'exercise/result.php?';
         $attempt_url .= api_get_cidreq().'&show_headers=1&';
@@ -241,7 +255,7 @@ if (!empty($attempts)) {
             ),
             'userIp' => $attempt_result['user_ip'],
         ];
-        $attempt_link .= '&nbsp;&nbsp;&nbsp;'.$teacher_revised;
+        $attempt_link .= PHP_EOL.$teacher_revised;
 
         if (in_array(
             $objExercise->results_disabled,
@@ -430,6 +444,11 @@ $html .= Display::tag(
     ['class' => 'table-responsive']
 );
 $html .= '</div>';
+
+if ($certificateBlock) {
+    $html .= PHP_EOL.$certificateBlock;
+}
+
 echo $html;
 
 Display::display_footer();

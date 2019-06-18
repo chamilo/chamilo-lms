@@ -1732,8 +1732,7 @@ class Tracking
             if ($first_login_date = Database::result($rs, 0, 0)) {
                 return api_convert_and_format_date(
                     $first_login_date,
-                    DATE_FORMAT_SHORT,
-                    date_default_timezone_get()
+                    DATE_FORMAT_SHORT
                 );
             }
         }

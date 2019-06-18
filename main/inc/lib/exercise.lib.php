@@ -5429,8 +5429,7 @@ EOT;
         $studentId,
         $courseCode,
         $sessionId = 0
-    )
-    {
+    ) {
         if (!api_get_configuration_value('quiz_generate_certificate_ending') ||
             !self::isSuccessExerciseResult($totalScore, $totalWeight, $objExercise->selectPassPercentage())
         ) {

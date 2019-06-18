@@ -419,7 +419,7 @@ class UniqueAnswer extends Question
         $header .= '<th>'.get_lang('Choice').'</th>';
         if (!in_array($exercise->results_disabled, [
             RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER_AND_RANKING,
-            RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER
+            RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER,
         ])
         ) {
             $header .= '<th>'.get_lang('ExpectedChoice').'</th>';

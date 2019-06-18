@@ -4324,7 +4324,7 @@ class Exercise
                                         echo '<tr>';
                                         if (!in_array($this->results_disabled, [
                                             RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER_AND_RANKING,
-                                            RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER
+                                            RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER,
                                             ])
                                         ) {
                                             echo '<td>'.$s_answer_label.'</td>';
@@ -4371,7 +4371,7 @@ class Exercise
                                         if ($this->showExpectedChoice()) {
                                             if (!in_array($this->results_disabled, [
                                                 RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER_AND_RANKING,
-                                                RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER
+                                                RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER,
                                             ])
                                             ) {
                                                 echo '<td>'.$user_answer.'</td>';

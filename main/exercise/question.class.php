@@ -1996,7 +1996,7 @@ abstract class Question
 
         if (in_array($exercise->results_disabled, [
             RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER_AND_RANKING,
-            RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER
+            RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER,
         ])
         ) {
             $scoreLabel = get_lang('QuizWrongAnswerHereIsTheCorrectOne');
@@ -2008,7 +2008,7 @@ abstract class Question
 
             if (in_array($exercise->results_disabled, [
                 RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER_AND_RANKING,
-                RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER
+                RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER,
             ])
             ) {
                 $scoreLabel = get_lang('CorrectAnswer');
@@ -2046,7 +2046,7 @@ abstract class Question
             case UNIQUE_ANSWER:
                 if (in_array($exercise->results_disabled, [
                     RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER_AND_RANKING,
-                    RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER
+                    RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER,
                 ])
                 ) {
                     if (isset($score['user_answered'])) {
@@ -2080,7 +2080,7 @@ abstract class Question
             if (isset($score['result'])) {
                 if (in_array($exercise->results_disabled, [
                     RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER_AND_RANKING,
-                    RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER
+                    RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER,
                 ])
                 ) {
                     $score['result'] = null;

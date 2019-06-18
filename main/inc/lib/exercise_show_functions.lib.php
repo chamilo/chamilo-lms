@@ -262,7 +262,7 @@ class ExerciseShowFunctions
             } else {
                 if (in_array($resultsDisabled, [
                     RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER_AND_RANKING,
-                    RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER
+                    RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER,
                 ])
                 ) {
                     return '';
@@ -378,7 +378,7 @@ class ExerciseShowFunctions
         $studentChoiceClass = '';
         if (in_array($resultsDisabled, [
             RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER_AND_RANKING,
-            RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER
+            RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER,
         ])
         ) {
             if ($answerCorrect) {
@@ -529,7 +529,7 @@ class ExerciseShowFunctions
             $color = 'black';
             if (isset($new_options[$studentChoice]) || in_array($exercise->results_disabled, [
                 RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER_AND_RANKING,
-                RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER
+                RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER,
                 ])
             ) {
                 if ($studentChoice == $answerCorrect) {
@@ -731,7 +731,7 @@ class ExerciseShowFunctions
             //@todo replace this harcoded value
             if ($studentChoice || in_array($resultsDisabled, [
                 RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER_AND_RANKING,
-                RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER
+                RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER,
             ])
             ) {
                 $color = 'black';

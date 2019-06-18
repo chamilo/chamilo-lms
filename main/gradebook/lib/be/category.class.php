@@ -2540,6 +2540,36 @@ class Category implements GradebookItem
     }
 
     /**
+     * Return HTML code with links to download and view certificate.
+     *
+     * @param array $certificate
+     *
+     * @return string
+     */
+    public static function getDownloadCertificateBlock(array $certificate)
+    {
+        if (!isset($certificate['pdf_url'])) {
+            return '';
+        }
+
+        $downloadLink = Display::toolbarButton(
+            get_lang('DownloadCertificatePdf'),
+            $certificate['pdf_url'],
+            'file-pdf-o'
+        );
+        $viewLink = $certificate['certificate_link'];
+
+        return "
+            <div class='panel panel-default'>
+                <div class='panel-body'>
+                    <h3 class='text-center'>".get_lang('NowDownloadYourCertificateClickHere')."</h3>
+                    <div class='text-center'>$downloadLink $viewLink</div>
+                </div>
+            </div>
+        ";
+    }
+
+    /**
      * @return Category
      */
     private static function create_root_category()
@@ -2743,35 +2773,5 @@ class Category implements GradebookItem
         }
 
         return api_float_val($categoryScore);
-    }
-
-    /**
-     * Return HTML code with links to download and view certificate.
-     *
-     * @param array $certificate
-     *
-     * @return string
-     */
-    public static function getDownloadCertificateBlock(array $certificate)
-    {
-        if (!isset($certificate['pdf_url'])) {
-            return '';
-        }
-
-        $downloadLink = Display::toolbarButton(
-            get_lang('DownloadCertificatePdf'),
-            $certificate['pdf_url'],
-            'file-pdf-o'
-        );
-        $viewLink = $certificate['certificate_link'];
-
-        return "
-            <div class='panel panel-default'>
-                <div class='panel-body'>
-                    <h3 class='text-center'>".get_lang('NowDownloadYourCertificateClickHere')."</h3>
-                    <div class='text-center'>$downloadLink $viewLink</div>
-                </div>
-            </div>
-        ";
     }
 }

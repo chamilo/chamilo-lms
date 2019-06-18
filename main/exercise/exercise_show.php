@@ -1028,7 +1028,7 @@ if (!empty($category_list) && ($show_results || $show_only_total_score || $showT
 
 if (in_array(
     $track_exercise_info['results_disabled'],
-    [RESULT_DISABLE_RANKING, RESULT_DISABLE_AUTOEVALUATION_AND_RANKING]
+    [RESULT_DISABLE_RANKING, RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER_AND_RANKING]
 )) {
     echo Display::page_header(get_lang('Ranking'), null, 'h4');
     echo ExerciseLib::displayResultsInRanking(

@@ -1038,9 +1038,6 @@ class DocumentManager
         $session_id = 0,
         $remove_content_from_db = false
     ) {
-        $TABLE_DOCUMENT = Database::get_course_table(TABLE_DOCUMENT);
-        $TABLE_ITEMPROPERTY = Database::get_course_table(TABLE_ITEM_PROPERTY);
-
         // Deleting from the DB
         $user_id = api_get_user_id();
         $document_id = intval($document_id);
@@ -1053,7 +1050,7 @@ class DocumentManager
             $session_id = api_get_session_id();
         }
         // Soft DB delete
-        api_item_property_update(
+        /*api_item_property_update(
             $course_info,
             TOOL_DOCUMENT,
             $document_id,
@@ -1064,13 +1061,20 @@ class DocumentManager
             null,
             null,
             $session_id
-        );
+        );*/
         self::delete_document_from_search_engine($course_info['code'], $document_id);
         self::unsetDocumentAsTemplate($document_id, $course_info['real_id'], $user_id);
 
-        //Hard DB delete
+        // Hard DB delete
         if ($remove_content_from_db) {
-            $sql = "DELETE FROM $TABLE_ITEMPROPERTY
+            $repo = Container::$container->get('Chamilo\CourseBundle\Repository\CDocumentRepository');
+            /** @var CDocument $document */
+            $document = $repo->find($document_id);
+            $repo->softDelete($document);
+
+            return true;
+
+            /*$sql = "DELETE FROM $TABLE_ITEMPROPERTY
                     WHERE
                         c_id = {$course_info['real_id']} AND
                         ref = ".$document_id." AND
@@ -1079,7 +1083,7 @@ class DocumentManager
 
             $sql = "DELETE FROM $TABLE_DOCUMENT
                     WHERE c_id = {$course_info['real_id']} AND id = ".$document_id;
-            Database::query($sql);
+            Database::query($sql);*/
         }
     }
 
@@ -1123,10 +1127,6 @@ class DocumentManager
             return false;
         }
 
-        if (empty($base_work_dir)) {
-            return false;
-        }
-
         if (empty($documentId)) {
             $documentId = self::get_document_id($_course, $path, $sessionId);
             $docInfo = self::get_document_data_by_id(
@@ -1149,18 +1149,16 @@ class DocumentManager
             $path = $docInfo['path'];
         }
 
-        $em = Database::getManager();
         $documentId = (int) $documentId;
 
         if (empty($path) || empty($docInfo) || empty($documentId)) {
             return false;
         }
 
+        $repo = Container::$container->get('Chamilo\CourseBundle\Repository\CDocumentRepository');
         /** @var CDocument $document */
-        $document = $em->getRepository('ChamiloCourseBundle:CDocument')->find($docInfo['iid']);
-        $document->setSoftDelete();
-        $em->persist($document);
-        $em->flush();
+        $document = $repo->find($docInfo['iid']);
+        $repo->softDelete($document);
 
         return true;
 
@@ -1565,14 +1563,13 @@ class DocumentManager
         $file_type = 'file'
     ) {
         $docTable = Database::get_course_table(TABLE_DOCUMENT);
-        $propTable = Database::get_course_table(TABLE_ITEM_PROPERTY);
 
         $course_id = $course['real_id'];
         // note the extra / at the end of doc_path to match every path in
         // the document table that is part of the document path
 
         $session_id = intval($session_id);
-        $condition = "AND d.session_id IN  ('$session_id', '0') ";
+        $condition = " AND d.session_id IN  ('$session_id', '0') ";
         // The " d.filetype='file' " let the user see a file even if the folder is hidden see #2198
 
         /*
@@ -1604,14 +1601,11 @@ class DocumentManager
         }
         $doc_path = Database::escape_string($doc_path).'/';
 
-        $sql = "SELECT visibility
+        $sql = "SELECT iid
                 FROM $docTable d
-                INNER JOIN $propTable ip
-                ON (d.id = ip.ref AND d.c_id = ip.c_id)
         		WHERE
         		    d.c_id  = $course_id AND 
-        		    ip.c_id = $course_id AND
-        		    ip.tool = '".TOOL_DOCUMENT."' $condition AND
+        		    $condition AND
         			filetype = '$file_type' AND
         			locate(concat(path,'/'), '$doc_path')=1
                 ";
@@ -1620,7 +1614,13 @@ class DocumentManager
         $is_visible = false;
         if (Database::num_rows($result) > 0) {
             $row = Database::fetch_array($result, 'ASSOC');
-            if ($row['visibility'] == 1) {
+
+            $em = Database::getManager();
+
+            $repo = $em->getRepository('ChamiloCourseBundle:CDocument');
+            /** @var \Chamilo\CourseBundle\Entity\CDocument $document */
+            $document = $repo->find($row['iid']);
+            if ($document->getVisibility() === ResourceLink::VISIBILITY_PUBLISHED) {
                 $is_visible = api_is_allowed_in_course() || api_is_platform_admin();
             }
         }
@@ -1715,9 +1715,8 @@ class DocumentManager
             $repo = $em->getRepository('ChamiloCourseBundle:CDocument');
             /** @var \Chamilo\CourseBundle\Entity\CDocument $document */
             $document = $repo->find($doc_id);
-            $link = $document->getCourseSessionResourceLink();
 
-            if ($link && $link->getVisibility() == ResourceLink::VISIBILITY_PUBLISHED) {
+            if ($document->isVisible()) {
                 return true;
             }
 
@@ -6056,50 +6055,40 @@ class DocumentManager
             return false;
         }
 
-        $itemPropertyTable = Database::get_course_table(TABLE_ITEM_PROPERTY);
         $documentTable = Database::get_course_table(TABLE_DOCUMENT);
-
         $conditionSession = api_get_session_condition($sessionId, true, false, 'd.session_id');
         $courseId = $courseInfo['real_id'];
 
         // get invisible folders
         $sql = "SELECT DISTINCT d.id, path
-                FROM $itemPropertyTable i
-                INNER JOIN $documentTable d
-                ON (i.c_id = d.c_id)
-                WHERE
-                    d.id = i.ref AND
-                    i.tool = '".TOOL_DOCUMENT."'
+                FROM $documentTable d 
+                WHERE                   
                     $conditionSession AND
-                    i.c_id = $courseId AND
                     d.c_id = $courseId ";
 
         $result = Database::query($sql);
         $documents = Database::store_result($result, 'ASSOC');
         if ($documents) {
-            $course_dir = $courseInfo['directory'].'/document';
-            $sys_course_path = api_get_path(SYS_COURSE_PATH);
-            $base_work_dir = $sys_course_path.$course_dir;
-
             foreach ($documents as $document) {
                 $documentId = $document['id'];
                 self::delete_document(
                     $courseInfo,
                     null,
-                    $base_work_dir,
+                    null,
                     $sessionId,
                     $documentId
                 );
             }
         }
 
+        /*
         $sql = "DELETE FROM $documentTable
                 WHERE c_id = $courseId AND session_id = $sessionId";
         Database::query($sql);
 
         $sql = "DELETE FROM $itemPropertyTable
                 WHERE c_id = $courseId AND session_id = $sessionId AND tool = '".TOOL_DOCUMENT."'";
-        Database::query($sql);
+        Database::query($sql);*/
     }
 
     /**
@@ -6491,8 +6480,6 @@ class DocumentManager
             if ($isImage) {
                 $provider = 'sonata.media.provider.image';
             }
-
-            //error_log("Provider: $provider");
 
             $media->setProviderName($provider);
             $media->setEnabled(true);

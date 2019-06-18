@@ -55,14 +55,16 @@ class ResourceNode
     protected $resourceType;
 
     /**
-     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\Resource\ResourceLink", mappedBy="resourceNode", cascade={"remove"})
+     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\Resource\ResourceLink", mappedBy="resourceNode",
+     *                                                                                cascade={"remove"})
      */
     protected $resourceLinks;
 
     /**
      * @var ResourceFile
      *
-     * @ORM\OneToOne(targetEntity="Chamilo\CoreBundle\Entity\Resource\ResourceFile", inversedBy="resourceNode", cascade={"remove"})
+     * @ORM\OneToOne(targetEntity="Chamilo\CoreBundle\Entity\Resource\ResourceFile", inversedBy="resourceNode",
+     *                                                                               cascade={"remove"})
      * @ORM\JoinColumn(name="resource_file_id", referencedColumnName="id")
      */
     protected $resourceFile;

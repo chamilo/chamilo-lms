@@ -27,7 +27,9 @@ switch ($action) {
         $courseQuota = DocumentManager::get_course_quota();
 
         // Calculating the total space
-        $total = DocumentManager::documents_total_space(api_get_course_int_id());
+        //$total = DocumentManager::getTotalSpace(api_get_course_int_id());
+        $repo = Container::$container->get('Chamilo\CourseBundle\Repository\CDocumentRepository');
+        $total = $repo->getTotalSpace(api_get_course_int_id());
 
         // Displaying the quota
         echo DocumentManager::displaySimpleQuota($courseQuota, $total);

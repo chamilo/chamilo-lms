@@ -3,6 +3,7 @@
 
 use Chamilo\CoreBundle\Entity\Resource\ResourceLink;
 use Chamilo\CoreBundle\Entity\Resource\ResourceRight;
+use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter;
 use ChamiloSession as Session;
 
@@ -1420,6 +1421,9 @@ if ($isAllowedToEdit ||
             }
         }
         Display::addFlash($message);
+
+        header('Location: '.$currentUrl);
+        exit;
     }
 
     // Show them the form for the directory name
@@ -1454,40 +1458,11 @@ if ($isAllowedToEdit) {
                 api_not_allowed(true);
             }
         }
-
+        $repo = Container::$container->get('Chamilo\CourseBundle\Repository\CDocumentRepository');
         /** @var \Chamilo\CourseBundle\Entity\CDocument $document */
-        $document = $em->getRepository('ChamiloCourseBundle:CDocument')->find($update_id);
-
-        $link = $document->getCourseSessionResourceLink();
-
-        $link->setVisibility($defaultVisibility);
-
-        if ($defaultVisibility === ResourceLink::VISIBILITY_DRAFT) {
-            $editorMask = ResourceNodeVoter::getEditorMask();
-            $rights = [];
-            $resourceRight = new ResourceRight();
-            $resourceRight
-                ->setMask($editorMask)
-                ->setRole(ResourceNodeVoter::ROLE_CURRENT_COURSE_TEACHER)
-                ->setResourceLink($link)
-            ;
-            $rights[] = $resourceRight;
-
-            if (!empty($rights)) {
-                $link->setResourceRight($rights);
-                /*foreach ($rights as $right) {
-                    $link->addResourceRight($right);
-                }*/
-            }
-        } else {
-            $link->setResourceRight([]);
-        }
-        $em->persist($link);
-        $em->flush();
-
-        Display::addFlash(
-            Display::return_message(get_lang('VisibilityChanged'), 'confirmation')
-        );
+        $document = $repo->find($update_id);
+        $total = $repo->setVisibility($document, $defaultVisibility);
+        Display::addFlash(Display::return_message(get_lang('VisibilityChanged'), 'confirmation'));
 
         header('Location: '.$currentUrl);
         exit;
@@ -2058,6 +2033,18 @@ if (count($documentAndFolders) > 1) {
 
 if (empty($documentAndFolders)) {
     echo Display::return_message(get_lang('NoDocsInFolder'), 'warning');
+}
+$em = Database::getManager();
+
+$repo = $em->getRepository('ChamiloCourseBundle:CDocument');
+
+/** @var \Chamilo\CourseBundle\Entity\CDocument $document */
+$document = $repo->find(19);
+
+if ($document->isVisible()) {
+
+
+
 }
 
 echo '

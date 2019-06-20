@@ -72,7 +72,7 @@ class AzureActiveDirectory extends Plugin
     }
 
     /**
-     * @param $urlType Type of URL to generate
+     * @param string $urlType Type of URL to generate
      *
      * @return string
      */

@@ -32,7 +32,7 @@ class AzureActiveDirectory extends Plugin
             self::SETTING_BLOCK_NAME => 'text',
         ];
 
-        parent::__construct('1.1', 'Angel Fernando Quiroz Campos', $settings);
+        parent::__construct('2.0', 'Angel Fernando Quiroz Campos', $settings);
     }
 
     /**

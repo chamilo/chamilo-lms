@@ -8596,7 +8596,7 @@ class Exercise
             'results_disabled',
             null,
             get_lang('ExerciseRankingMode'),
-            '6',
+            RESULT_DISABLE_RANKING,
             ['id' => 'result_disabled_6']
         );
 
@@ -8613,7 +8613,7 @@ class Exercise
             'radio',
             'results_disabled',
             null,
-            get_lang('ExerciseShowOnlyGlobalScoreAndCorrectAnswersAndRankingMode'),
+            get_lang('ExerciseAutoEvaluationAndRankingMode'),
             RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER_AND_RANKING,
             ['id' => 'result_disabled_8']
         );

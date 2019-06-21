@@ -11,8 +11,8 @@ api_block_anonymous_users();
 $plugin = StudentFollowUpPlugin::create();
 
 $currentUserId = api_get_user_id();
-$currentPage = isset($_GET['page']) ? (int) $_GET['page'] : 1;
-$keyword = isset($_GET['keyword']) ? Security::remove_XSS($_GET['keyword']) : '';
+$currentPage = isset($_REQUEST['page']) ? (int) $_REQUEST['page'] : 1;
+$keyword = isset($_REQUEST['keyword']) ? Security::remove_XSS($_REQUEST['keyword']) : '';
 $sessionId = isset($_REQUEST['session_id']) ? (int) $_REQUEST['session_id'] : 0;
 $selectedTag = isset($_REQUEST['tag']) ? Security::remove_XSS($_REQUEST['tag']) : '';
 
@@ -81,9 +81,9 @@ if (!empty($userList) || $isAdmin) {
     ;
 
     if (!empty($keyword)) {
-        $keyword = explode(' ', $keyword);
-        if (is_array($keyword)) {
-            foreach ($keyword as $key) {
+        $keywordToArray = explode(' ', $keyword);
+        if (is_array($keywordToArray)) {
+            foreach ($keywordToArray as $key) {
                 $key = trim($key);
                 if (empty($key)) {
                     continue;
@@ -124,7 +124,6 @@ if (!empty($userList) || $isAdmin) {
     $tagList = [];
     foreach ($tags as $tag) {
         $itemTags = $tag['tags'];
-        //var_dump($itemTags);
         foreach ($itemTags as $itemTag) {
             if (in_array($itemTag, array_keys($tagList))) {
                 $tagList[$itemTag]++;
@@ -182,7 +181,13 @@ if (!empty($tagList)) {
 
 $form->addButtonSearch(get_lang('Search'));
 
-$form->setDefaults(['session_id' => $sessionId]);
+$defaults = [
+    'session_id' => $sessionId,
+    'keyword' => $keyword,
+    'tag' => $selectedTag,
+];
+
+$form->setDefaults($defaults);
 
 $tpl = new Template($plugin->get_lang('plugin_title'));
 $tpl->assign('users', $items);

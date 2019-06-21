@@ -528,40 +528,10 @@ $language_interface_initial_value = $language_interface;
 /**
  * Include the trad4all language file.
  */
-// if the sub-language feature is on
-$parent_path = SubLanguageManager::get_parent_language_path($language_interface);
-if (!empty($parent_path)) {
-    // include English
-    include $langpath.'english/trad4all.inc.php';
-    // prepare string for current language and its parent
-    $lang_file = $langpath.$language_interface.'/trad4all.inc.php';
-    $parent_lang_file = $langpath.$parent_path.'/trad4all.inc.php';
-    // load the parent language file first
-    if (file_exists($parent_lang_file)) {
-        include $parent_lang_file;
-    }
-    // overwrite the parent language translations if there is a child
-    if (file_exists($lang_file)) {
-        include $lang_file;
-    }
-} else {
-    // if the sub-languages feature is not on, then just load the
-    // set language interface
-    // include English
-    include $langpath.'english/trad4all.inc.php';
-    // prepare string for current language
-    $langfile = $langpath.$language_interface.'/trad4all.inc.php';
+$languageFilesToLoad = api_get_language_files_to_load($language_interface);
 
-    if (file_exists($langfile)) {
-        include $langfile;
-    }
-
-    // Check if language/custom.php exists
-    $customLanguage = $langpath.$language_interface.'/custom.php';
-
-    if (file_exists($customLanguage)) {
-        include $customLanguage;
-    }
+foreach ($languageFilesToLoad as $languageFile) {
+    include $languageFile;
 }
 
 // include the local (contextual) parameters of this course or section

@@ -2374,3 +2374,50 @@ function api_get_human_date_time($date, $showTime = true, $humanForm = false)
         }
     }
 }
+
+/**
+ * @param string $language
+ *
+ * @return array
+ */
+function api_get_language_files_to_load($language)
+{
+    $parent_path = SubLanguageManager::get_parent_language_path($language);
+    $langPath = api_get_path(SYS_LANG_PATH);
+
+    $languagesToLoad = [
+        $langPath.'english/trad4all.inc.php', // include English always
+    ];
+
+    if (!empty($parent_path)) { // if the sub-language feature is on
+        // prepare string for current language and its parent
+        $lang_file = $langPath.$language.'/trad4all.inc.php';
+        $parent_lang_file = $langPath.$parent_path.'/trad4all.inc.php';
+        // load the parent language file first
+        if (file_exists($parent_lang_file)) {
+            $languagesToLoad[] = $parent_lang_file;
+        }
+        // overwrite the parent language translations if there is a child
+        if (file_exists($lang_file)) {
+            $languagesToLoad[] = $lang_file;
+        }
+    } else {
+        // if the sub-languages feature is not on, then just load the
+        // set language interface
+        // prepare string for current language
+        $langFile = $langPath.$language.'/trad4all.inc.php';
+
+        if (file_exists($langFile)) {
+            $languagesToLoad[] = $langFile;
+        }
+
+        // Check if language/custom.php exists
+        $customLanguage = $langPath.$language.'/custom.php';
+
+        if (file_exists($customLanguage)) {
+            $languagesToLoad[] = $customLanguage;
+        }
+    }
+
+    return $languagesToLoad;
+}

@@ -49,14 +49,11 @@ foreach ($categoriesInfo as $categoryId => $categoryInfo) {
     $firstQuestionInCategory = $objExercise->getFirstQuestionInCategory($categoryId);
     $questionPosition = $objExercise->getPositionInCompressedQuestionList($firstQuestionInCategory);
 
-    $url = "{$webCodePath}exercise/exercise_submit.php?$cidReq&"
+    $url = "{$webCodePath}exercise/overview.php?"
         .http_build_query(
             [
                 'exerciseId' => $exerciseId,
-                'num' => $questionPosition - 1,
-                'learnpath_id' => '',
-                'learnpath_item_id' => '',
-                'learnpath_item_view_id' => '',
+                'cs' => $categoryId,
             ]
         );
     $txtId = "copy-link-$categoryId";

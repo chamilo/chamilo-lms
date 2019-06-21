@@ -777,7 +777,10 @@ if (is_null($currentQuestion)) {
 }
 
 if ($question_count != 0) {
-    if (EXERCISE_FEEDBACK_TYPE_PROGRESSIVE_ADAPTIVE == $objExercise->selectFeedbackType()) {
+    if (ONE_PER_PAGE == $objExercise->type &&
+        EXERCISE_FEEDBACK_TYPE_PROGRESSIVE_ADAPTIVE == $objExercise->selectFeedbackType() &&
+        api_is_allowed_to_session_edit()
+    ) {
         $categoryList = Session::read('track_e_adaptive', []);
 
         if (isset($objExercise->questionList[$currentQuestion - 1])) { // Current question is not the last one in quiz

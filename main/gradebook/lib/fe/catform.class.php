@@ -134,7 +134,7 @@ class CatForm extends FormValidator
 
         $course_code = api_get_course_id();
         $session_id = api_get_session_id();
-        //Freeze or not
+
         $test_cats = Category::load(
             null,
             null,
@@ -143,7 +143,7 @@ class CatForm extends FormValidator
             null,
             $session_id,
             false
-        ); //already init
+        );
 
         $links = null;
         if (isset($test_cats[0])) {
@@ -179,6 +179,7 @@ class CatForm extends FormValidator
                 'is_requirement' => $this->category_object->getIsRequirement(),
             ]
         );
+
         $this->addElement('hidden', 'hid_id', $this->category_object->get_id());
         $this->addElement(
             'hidden',
@@ -375,6 +376,16 @@ class CatForm extends FormValidator
         if ($this->category_object->getIsRequirement()) {
             $isRequirementCheckbox->setChecked(true);
         }
+
+        $documentId = $this->category_object->getDocumentId();
+        if (!empty($documentId)) {
+            $documentData = DocumentManager::get_document_data_by_id($documentId, api_get_course_id());
+
+            if (!empty($documentData)) {
+                $this->addLabel(get_lang('Certificate'), $documentData['title']);
+            }
+        }
+
 
         if ($this->form_type == self::TYPE_ADD) {
             $this->addButtonCreate(get_lang('AddCategory'));

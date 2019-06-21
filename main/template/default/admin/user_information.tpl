@@ -1,4 +1,4 @@
-{% import 'macro/macro.tpl'|get_template as display %}
+{% import 'default/macro/macro.tpl' as display %}
 
 <div class="details">
     <div class="row">

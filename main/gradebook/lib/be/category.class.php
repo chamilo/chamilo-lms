@@ -2572,6 +2572,51 @@ class Category implements GradebookItem
     }
 
     /**
+     * Find a gradebook category by the certificate ID.
+     *
+     * @param int $id
+     *
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     *
+     * @return Category|null
+     */
+    public static function findByCertificate($id)
+    {
+        $categoryId = Database::getManager()
+            ->createQuery("SELECT c.catId FROM ChamiloCoreBundle:GradebookCertificate c WHERE c.id = :id")
+            ->setParameters(['id' => $id])
+            ->getOneOrNullResult();
+
+        if (empty($categoryId)) {
+            return null;
+        }
+
+        $category = self::load($categoryId['catId']);
+
+        if (empty($category)) {
+            return $category;
+        }
+
+        return $category[0];
+    }
+
+    /**
+     * @param int $value
+     */
+    public function setDocumentId($value)
+    {
+        $this->documentId = (int) $value;
+    }
+
+    /**
+     * @return int
+     */
+    public function getDocumentId()
+    {
+        return $this->documentId;
+    }
+
+    /**
      * @return Category
      */
     private static function create_root_category()
@@ -2775,49 +2820,5 @@ class Category implements GradebookItem
         }
 
         return api_float_val($categoryScore);
-    }
-
-    /**
-     * Find a gradebook category by the certificate ID.
-     *
-     * @param int $id
-     *
-     * @return Category|null
-     * @throws \Doctrine\ORM\NonUniqueResultException
-     */
-    public static function findByCertificate($id)
-    {
-        $categoryId = Database::getManager()
-            ->createQuery("SELECT c.catId FROM ChamiloCoreBundle:GradebookCertificate c WHERE c.id = :id")
-            ->setParameters(['id' => $id])
-            ->getOneOrNullResult();
-
-        if (empty($categoryId)) {
-            return null;
-        }
-
-        $category = self::load($categoryId['catId']);
-
-        if (empty($category)) {
-            return $category;
-        }
-
-        return $category[0];
-    }
-
-    /**
-     * @param int $value
-     */
-    public function setDocumentId($value)
-    {
-        $this->documentId = (int) $value;
-    }
-
-    /**
-     * @return int
-     */
-    public function getDocumentId()
-    {
-        return $this->documentId;
     }
 }

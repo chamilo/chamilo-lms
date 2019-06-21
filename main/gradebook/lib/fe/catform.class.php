@@ -386,7 +386,6 @@ class CatForm extends FormValidator
             }
         }
 
-
         if ($this->form_type == self::TYPE_ADD) {
             $this->addButtonCreate(get_lang('AddCategory'));
         } else {

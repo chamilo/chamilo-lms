@@ -139,7 +139,7 @@ if (!empty($userList) || $isAdmin) {
 }
 
 $pagination = '';
-$url = api_get_self().'?session_id='.$sessionId.'&tag='.$selectedTag;
+$url = api_get_self().'?session_id='.$sessionId.'&tag='.$selectedTag.'&';
 if ($totalItems > 1 && $pagesCount > 1) {
     $pagination .= '<ul class="pagination">';
     for ($i = 0; $i < $pagesCount; $i++) {

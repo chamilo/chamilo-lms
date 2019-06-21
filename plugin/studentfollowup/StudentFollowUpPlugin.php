@@ -173,20 +173,27 @@ class StudentFollowUpPlugin extends Plugin
     /**
      * @param string $status
      * @param int    $currentUserId
+     * @param int    $sessionId
      * @param int    $start
      * @param int    $limit
      *
      * @return array
      */
-    public static function getUsers($status, $currentUserId, $start, $limit)
+    public static function getUsers($status, $currentUserId, $sessionId, $start, $limit)
     {
+        $sessions = [];
+        $courses = [];
+        $sessionsFull = [];
+
         switch ($status) {
             case COURSEMANAGER:
                 /*$sessions = SessionManager::get_sessions_by_user($currentUserId);
                 $sessions = array_column($sessions, 'session_id');*/
-                $sessions = SessionManager::getSessionsCoachedByUser($currentUserId);
-                $sessions = array_column($sessions, 'id');
-
+                $sessionsFull = SessionManager::getSessionsCoachedByUser($currentUserId);
+                $sessions = array_column($sessionsFull, 'id');
+                if (!empty($sessionId)) {
+                    $sessions = [$sessionId];
+                }
                 // Get session courses where I'm coach
                 $courseList = SessionManager::getCoursesListByCourseCoach($currentUserId);
                 $courses = [];
@@ -196,8 +203,12 @@ class StudentFollowUpPlugin extends Plugin
                 }
                 break;
             case DRH:
-                $sessions = SessionManager::get_sessions_followed_by_drh($currentUserId);
-                $sessions = array_column($sessions, 'id');
+                $sessionsFull = SessionManager::get_sessions_followed_by_drh($currentUserId);
+                $sessions = array_column($sessionsFull, 'id');
+
+                if (!empty($sessionId)) {
+                    $sessions = [$sessionId];
+                }
                 $courses = [];
                 foreach ($sessions as $sessionId) {
                     $sessionDrhInfo = SessionManager::getSessionFollowedByDrh(
@@ -231,7 +242,10 @@ class StudentFollowUpPlugin extends Plugin
             $userList = array_unique($userList);
         }*/
 
-        return $userList;
+        return [
+            'users' => $userList,
+            'sessions' => $sessionsFull,
+        ];
     }
 
     /**

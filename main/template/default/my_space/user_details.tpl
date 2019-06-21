@@ -1,4 +1,4 @@
-{% import 'macro/macro.tpl'|get_template as display %}
+{% import 'default/macro/macro.tpl' as display %}
 
 {% if title %}
     <h2 class="details-title"><img src="{{ 'course.png'|icon(32) }}"> {{ title }}</h2>

@@ -10,6 +10,24 @@ require_once '../main/inc/global.inc.php';
 $action = isset($_GET['action']) ? $_GET['action'] : null;
 $userId = isset($_GET['user_id']) ? $_GET['user_id'] : 0;
 
+$category = Category::findByCertificate($_GET['id']);
+
+// Check if the certificate should use the course language
+if (!empty($category) && !empty($category->get_course_code())) {
+    $courseInfo = api_get_course_info($category->get_course_code());
+    $language = $courseInfo['language'];
+
+    $languageFilesToLoad = api_get_language_files_to_load($language);
+
+    foreach ($languageFilesToLoad as $languageFile) {
+        include $languageFile;
+    }
+
+    // Overwrite the interface language with the course language
+    $language_interface = $language;
+    $language_interface_initial_value = $language_interface;
+}
+
 $certificate = new Certificate($_GET['id'], $userId);
 
 CustomCertificatePlugin::redirectCheck($certificate, $_GET['id'], $userId);

@@ -34,6 +34,7 @@ class Category implements GradebookItem
     private $isRequirement;
     private $courseDependency;
     private $minimumToValidate;
+    private $documentId;
     /** @var int */
     private $gradeBooksToValidateInDependence;
 
@@ -56,6 +57,7 @@ class Category implements GradebookItem
         $this->generateCertificates = false;
         $this->isRequirement = false;
         $this->courseDependency = [];
+        $this->documentId = 0;
         $this->minimumToValidate = null;
     }
 
@@ -2622,7 +2624,7 @@ class Category implements GradebookItem
             $cat->setCourseListDependency(isset($data['depends']) ? $data['depends'] : []);
             $cat->setMinimumToValidate(isset($data['minimum_to_validate']) ? $data['minimum_to_validate'] : null);
             $cat->setGradeBooksToValidateInDependence(isset($data['gradebooks_to_validate_in_dependence']) ? $data['gradebooks_to_validate_in_dependence'] : null);
-
+            $cat->setDocumentId($data['document_id']);
             if ($allow) {
                 $cat->entity = $repo->find($data['id']);
             }
@@ -2774,4 +2776,21 @@ class Category implements GradebookItem
 
         return api_float_val($categoryScore);
     }
+
+    /**
+     * @param int $value
+     */
+    public function setDocumentId($value)
+    {
+        $this->documentId = (int) $value;
+    }
+
+    /**
+     * @return int
+     */
+    public function getDocumentId()
+    {
+        return $this->documentId;
+    }
+
 }

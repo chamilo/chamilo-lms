@@ -52,6 +52,8 @@ if ($formSent) {
 
     if (!empty($description)) {
         $criteria->orWhere($criteria->expr()->contains('description', $description."\r"));
+        $criteria->orWhere($criteria->expr()->eq('description', $description));
+        $criteria->orWhere($criteria->expr()->eq('description', '<p>'.$description.'</p>'));
     }
 
     if (!empty($title)) {

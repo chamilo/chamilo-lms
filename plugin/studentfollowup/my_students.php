@@ -12,7 +12,7 @@ $plugin = StudentFollowUpPlugin::create();
 
 $currentUserId = api_get_user_id();
 $currentPage = isset($_GET['page']) ? (int) $_GET['page'] : 1;
-$keyword = isset($_GET['keyword']) ? $_GET['keyword'] : '';
+$keyword = isset($_GET['keyword']) ? Security::remove_XSS($_GET['keyword']) : '';
 $sessionId = isset($_REQUEST['session_id']) ? (int) $_REQUEST['session_id'] : 0;
 $selectedTag = isset($_REQUEST['tag']) ? Security::remove_XSS($_REQUEST['tag']) : '';
 
@@ -139,7 +139,7 @@ if (!empty($userList) || $isAdmin) {
 }
 
 $pagination = '';
-$url = api_get_self().'?session_id='.$sessionId.'&tag='.$selectedTag.'&';
+$url = api_get_self().'?session_id='.$sessionId.'&tag='.$selectedTag.'&keyword='.$keyword.'&';
 if ($totalItems > 1 && $pagesCount > 1) {
     $pagination .= '<ul class="pagination">';
     for ($i = 0; $i < $pagesCount; $i++) {

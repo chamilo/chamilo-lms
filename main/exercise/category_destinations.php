@@ -53,7 +53,7 @@ foreach ($categoriesInfo as $categoryId => $categoryInfo) {
         .http_build_query(
             [
                 'exerciseId' => $exerciseId,
-                'cs' => $categoryId,
+                'category_id' => $categoryId,
             ]
         );
     $txtId = "copy-link-$categoryId";

@@ -29,8 +29,8 @@ $htmlHeadXtra[] = $js;
 // Notice for unauthorized people.
 api_protect_course_script(true);
 $sessionId = api_get_session_id();
-$exercise_id = isset($_REQUEST['exerciseId']) ? intval($_REQUEST['exerciseId']) : 0;
-$categoryIdToStart = isset($_REQUEST['cs']) ? (int) $_REQUEST['cs'] : null;
+$exercise_id = isset($_REQUEST['exerciseId']) ? (int) $_REQUEST['exerciseId'] : 0;
+$categoryIdToStart = isset($_REQUEST['category_id']) ? (int) $_REQUEST['category_id'] : 0;
 
 $objExercise = new Exercise();
 $result = $objExercise->read($exercise_id, true);
@@ -39,9 +39,8 @@ $exerciseIsAdaptive = EXERCISE_FEEDBACK_TYPE_PROGRESSIVE_ADAPTIVE == $objExercis
 
 if (
     !$exerciseIsAdaptive ||
-    empty($categoryIdToStart) ||
     empty($objExercise->categoryWithQuestionList) ||
-    !isset($objExercise->categoryWithQuestionList[$categoryIdToStart]) ||
+    empty($objExercise->categoryWithQuestionList[$categoryIdToStart]) ||
     empty($objExercise->categoryWithQuestionList[$categoryIdToStart]['question_list'])
 ) {
     $categoryIdToStart = 0;
@@ -51,9 +50,9 @@ if (!$result) {
     api_not_allowed(true);
 }
 
-$learnpath_id = isset($_REQUEST['learnpath_id']) ? intval($_REQUEST['learnpath_id']) : '';
-$learnpath_item_id = isset($_REQUEST['learnpath_item_id']) ? intval($_REQUEST['learnpath_item_id']) : '';
-$learnpathItemViewId = isset($_REQUEST['learnpath_item_view_id']) ? intval($_REQUEST['learnpath_item_view_id']) : '';
+$learnpath_id = isset($_REQUEST['learnpath_id']) ? (int) $_REQUEST['learnpath_id'] : 0;
+$learnpath_item_id = isset($_REQUEST['learnpath_item_id']) ? (int) $_REQUEST['learnpath_item_id'] : 0;
+$learnpathItemViewId = isset($_REQUEST['learnpath_item_view_id']) ? (int) $_REQUEST['learnpath_item_view_id'] : 0;
 $origin = api_get_origin();
 
 $logInfo = [
@@ -195,10 +194,10 @@ $exercise_url = api_get_path(WEB_CODE_PATH).'exercise/exercise_submit.php?'.api_
     .http_build_query(
         [
             'exerciseId' => $objExercise->id,
+            'num' => empty($questionNumToStart) ? null : $questionNumToStart,
             'learnpath_id' => $learnpath_id,
             'learnpath_item_id' => $learnpath_item_id,
             'learnpath_item_view_id' => $learnpathItemViewId,
-            'num' => empty($questionNumToStart) ? null : $questionNumToStart,
         ]
     )
     .$extra_params;

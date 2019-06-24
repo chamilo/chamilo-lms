@@ -242,14 +242,14 @@ if ($isAdaptive) {
 
         echo '
             <div class="row">
-                <div class="col-md-4 text-right">
-                    '.Display::img($qrWebPath).'
-                </div>
-                <div class="col-md-8 text-left">
+                <div class="col-md-8 col-md-offset-2 col-lg-6 col-lg-offset-3">
+                    '.Display::img($qrWebPath, '', ['class' => 'pull-right']).'
                     <p class="lead">'.sprintf(get_lang('LevelReachedX'), $destinationResult->getAchievedLevel()).'</p>
                     <p>'.$user->getCompleteNameWithUsername().'</p>
                     <p>'.sprintf(get_lang('ResultHashX'), $destinationResult->getHash()).'</p>
                     <p>'.Display::url(get_lang('SeeResults'), $qrUrl, ['target' => '_blank']).'</p>
+                    <hr>
+                    '.Display::return_message(get_lang('TheQuizResultsWereSentToYourEmail'), 'info').'
                 </div>
             </div>
         ';

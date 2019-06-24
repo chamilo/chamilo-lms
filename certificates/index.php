@@ -15,7 +15,7 @@ $certificateId = isset($_GET['id']) ? $_GET['id'] : 0;
 $certificate = new Certificate($certificateId, $userId);
 $certificateData = $certificate->get($certificateId);
 if (empty($certificateData)) {
-    api_not_allowed();
+    api_not_allowed(false, Display::return_message(get_lang('NoCertificateAvailable'), 'warning'));
 }
 
 $category = Category::findByCertificate($certificateId);
@@ -84,22 +84,12 @@ switch ($action) {
     default:
         // Special rules for anonymous users
         if (!$certificate->isVisible()) {
-            Display::display_reduced_header();
-            echo Display::return_message(
-                get_lang('CertificateExistsButNotPublic'),
-                'warning'
-            );
-            Display::display_reduced_footer();
+            api_not_allowed(false, Display::return_message(get_lang('CertificateExistsButNotPublic'), 'warning'));
             break;
         }
 
         if (!$certificate->isAvailable()) {
-            Display::display_reduced_header();
-            echo Display::return_message(
-                get_lang('NoCertificateAvailable'),
-                'error'
-            );
-            Display::display_reduced_footer();
+            api_not_allowed(false, Display::return_message(get_lang('NoCertificateAvailable'), 'warning'));
             break;
         }
 

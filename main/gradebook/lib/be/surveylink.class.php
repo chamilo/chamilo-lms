@@ -179,7 +179,7 @@ class SurveyLink extends AbstractLink
             $sum = $sum / $max_score;
 
             if ($rescount == 0) {
-                return null;
+                return [null, null];
             }
 
             switch ($type) {

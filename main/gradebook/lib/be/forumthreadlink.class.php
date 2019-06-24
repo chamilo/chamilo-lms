@@ -241,7 +241,7 @@ class ForumThreadLink extends AbstractLink
             }
 
             if ($counter == 0) {
-                return null;
+                return [null, null];
             } else {
                 switch ($type) {
                     case 'best':

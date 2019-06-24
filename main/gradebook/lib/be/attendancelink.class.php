@@ -153,7 +153,7 @@ class AttendanceLink extends AbstractLink
             }
 
             if ($rescount == 0) {
-                return null;
+                return [null, null];
             } else {
                 switch ($type) {
                     case 'best':

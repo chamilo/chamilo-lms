@@ -2852,7 +2852,6 @@ HOTSPOT;
             $weight = float_format($weight, 1, $decimalSeparator, $thousandSeparator);
         }
 
-        $html = '';
         if ($show_percentage) {
             $percentageSign = '%';
             if ($hidePercentageSign) {
@@ -5049,7 +5048,7 @@ EOT;
         }
 
         if ($displayChartDegree) {
-            $ribbon .= '<h3>'.get_lang('YourTotalScore').":&nbsp;";
+            $ribbon .= '<h3>'.get_lang('YourTotalScore').':&nbsp;';
             $ribbon .= self::show_score($score, $weight, false, true);
             $ribbon .= '</h3>';
             $ribbon .= '</div>';
@@ -5105,7 +5104,7 @@ EOT;
         } else {
             $ribbon .= '<div class="total">';
         }
-        $ribbon .= '<h3>'.get_lang('YourTotalScore').":&nbsp;";
+        $ribbon .= '<h3>'.get_lang('YourTotalScore').':&nbsp;';
         $ribbon .= self::show_score($score, $weight, false, true);
         $ribbon .= '</h3>';
         $ribbon .= '</div>';

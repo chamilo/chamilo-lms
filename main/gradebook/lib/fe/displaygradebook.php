@@ -325,7 +325,7 @@ class DisplayGradebook
             $total_score = [$item_value_total, $item_total];
             $scorecourse_display = $scoredisplay->display_score($total_score, SCORE_DIV_PERCENT);
 
-            if ((!$catobj->get_id() == '0') && (!isset($_GET['studentoverview'])) && (!isset($_GET['search']))) {
+            if (!$catobj->get_id() == '0' && !isset($_GET['studentoverview']) && !isset($_GET['search'])) {
                 $additionalButtons = null;
                 if (!empty($certificateLinkInfo)) {
                     $additionalButtons .= '<div class="btn-group pull-right">';
@@ -394,9 +394,14 @@ class DisplayGradebook
         $actionsLeft = '';
         $actionsRight = '';
         $my_api_cidreq = api_get_cidreq();
-        if (api_is_allowed_to_edit(null, true)) {
-            if ($selectcat != '0') {
-                $my_category = $catobj->showAllCategoryInfo($catobj->get_id());
+        $isCoach = api_is_coach(api_get_session_id(), api_get_course_int_id());
+        $accessToRead = api_is_allowed_to_edit(null, true) || $isCoach;
+        $accessToEdit = api_is_allowed_to_edit(null, true);
+        $courseCode = api_get_course_id();
+
+        if ($accessToRead) {
+            $my_category = $catobj->showAllCategoryInfo($catobj->get_id());
+            if ($selectcat != '0' && $accessToEdit) {
                 if ($my_api_cidreq == '') {
                     $my_api_cidreq = 'cidReq='.$my_category['course_code'];
                 }
@@ -417,7 +422,7 @@ class DisplayGradebook
                     }
                 }
             }
-            if (empty($grade_model_id) || $grade_model_id == -1) {
+            if ((empty($grade_model_id) || $grade_model_id == -1) && $accessToEdit) {
                 $actionsLeft .= '<a href="gradebook_add_cat.php?'.api_get_cidreq().'&selectcat='.$catobj->get_id().'">'.
                     Display::return_icon(
                         'new_folder.png',
@@ -426,7 +431,8 @@ class DisplayGradebook
                         ICON_SIZE_MEDIUM
                     ).'</a></td>';
             }
-            if ($selectcat != '0') {
+
+            if ($selectcat != '0' && $accessToRead) {
                 if (!$message_resource) {
                     $actionsLeft .= '<a href="gradebook_flatview.php?'.$my_api_cidreq.'&selectcat='.$catobj->get_id().'">'.
                         Display::return_icon('statistics.png', get_lang('FlatView'), '', ICON_SIZE_MEDIUM).'</a>';
@@ -463,30 +469,53 @@ class DisplayGradebook
                     }
 
                     // Right icons
-                    $actionsRight = '<a href="gradebook_edit_cat.php?editcat='.$catobj->get_id().'&cidReq='.$catobj->get_course_code().'&id_session='.$catobj->get_session_id().'">'.
-                        Display::return_icon('edit.png', get_lang('Edit'), '', ICON_SIZE_MEDIUM).'</a>';
-                    $courseCode = api_get_course_id();
-                    if (api_get_plugin_setting('customcertificate', 'enable_plugin_customcertificate') == 'true' &&
-                        api_get_course_setting('customcertificate_course_enable', $courseCode) == 1
-                    ) {
-                        $actionsRight .= '<a href="'.api_get_path(WEB_PLUGIN_PATH).'customcertificate/src/index.php?'.
-                            $my_api_cidreq.'&origin=gradebook&selectcat='.$catobj->get_id().'">'.
-                            Display::return_icon('certificate.png', get_lang('AttachCertificate'), '', ICON_SIZE_MEDIUM).'</a>';
-                    } else {
-                        $actionsRight .= '<a href="'.api_get_path(WEB_CODE_PATH).
-                            'document/document.php?curdirpath=/certificates&'.
-                            $my_api_cidreq.'&origin=gradebook&selectcat='.$catobj->get_id().'">'.
-                            Display::return_icon('certificate.png', get_lang('AttachCertificate'), '', ICON_SIZE_MEDIUM).'</a>';
-                    }
+                    if ($accessToEdit) {
+                        $actionsRight = '<a href="gradebook_edit_cat.php?editcat='.$catobj->get_id(
+                            ).'&cidReq='.$catobj->get_course_code().'&id_session='.$catobj->get_session_id().'">'.
+                            Display::return_icon('edit.png', get_lang('Edit'), '', ICON_SIZE_MEDIUM).'</a>';
 
-                    if (empty($categories)) {
-                        $actionsRight .= '<a href="gradebook_edit_all.php?id_session='.api_get_session_id().'&'.$my_api_cidreq.'&selectcat='.$catobj->get_id().'">'.
-                            Display::return_icon('percentage.png', get_lang('EditAllWeights'), '', ICON_SIZE_MEDIUM).'</a>';
-                    }
-                    $score_display_custom = api_get_setting('gradebook_score_display_custom');
-                    if (api_get_setting('teachers_can_change_score_settings') == 'true' && $score_display_custom['my_display_custom'] == 'true') {
-                        $actionsRight .= '<a href="gradebook_scoring_system.php?'.$my_api_cidreq.'&selectcat='.$catobj->get_id().'">'.
-                            Display::return_icon('ranking.png', get_lang('ScoreEdit'), '', ICON_SIZE_MEDIUM).'</a>';
+                        if (api_get_plugin_setting('customcertificate', 'enable_plugin_customcertificate') == 'true' &&
+                            api_get_course_setting('customcertificate_course_enable', $courseCode) == 1
+                        ) {
+                            $actionsRight .= '<a href="'.api_get_path(
+                                    WEB_PLUGIN_PATH
+                                ).'customcertificate/src/index.php?'.
+                                $my_api_cidreq.'&origin=gradebook&selectcat='.$catobj->get_id().'">'.
+                                Display::return_icon(
+                                    'certificate.png',
+                                    get_lang('AttachCertificate'),
+                                    '',
+                                    ICON_SIZE_MEDIUM
+                                ).'</a>';
+                        } else {
+                            $actionsRight .= '<a href="'.api_get_path(WEB_CODE_PATH).
+                                'document/document.php?curdirpath=/certificates&'.
+                                $my_api_cidreq.'&origin=gradebook&selectcat='.$catobj->get_id().'">'.
+                                Display::return_icon(
+                                    'certificate.png',
+                                    get_lang('AttachCertificate'),
+                                    '',
+                                    ICON_SIZE_MEDIUM
+                                ).'</a>';
+                        }
+
+                        if (empty($categories)) {
+                            $actionsRight .= '<a href="gradebook_edit_all.php?id_session='.api_get_session_id(
+                                ).'&'.$my_api_cidreq.'&selectcat='.$catobj->get_id().'">'.
+                                Display::return_icon(
+                                    'percentage.png',
+                                    get_lang('EditAllWeights'),
+                                    '',
+                                    ICON_SIZE_MEDIUM
+                                ).'</a>';
+                        }
+                        $score_display_custom = api_get_setting('gradebook_score_display_custom');
+                        if (api_get_setting('teachers_can_change_score_settings') == 'true' &&
+                            $score_display_custom['my_display_custom'] == 'true'
+                        ) {
+                            $actionsRight .= '<a href="gradebook_scoring_system.php?'.$my_api_cidreq.'&selectcat='.$catobj->get_id().'">'.
+                                Display::return_icon('ranking.png', get_lang('ScoreEdit'), '', ICON_SIZE_MEDIUM).'</a>';
+                        }
                     }
                 }
             }
@@ -510,14 +539,14 @@ class DisplayGradebook
                 '</a>';
         }
 
-        if (api_is_allowed_to_edit(null, true)) {
+        if (api_is_allowed_to_edit(null, true) || $isCoach) {
             echo $toolbar = Display::toolbarAction(
                 'gradebook-actions',
                 [$actionsLeft, $actionsRight]
             );
         }
 
-        if (api_is_allowed_to_edit(null, true)) {
+        if (api_is_allowed_to_edit(null, true) || $accessToEdit) {
             $weight = intval($catobj->get_weight()) > 0 ? $catobj->get_weight() : 0;
             $weight = '<strong>'.get_lang('TotalWeight').' : </strong>'.$weight;
 

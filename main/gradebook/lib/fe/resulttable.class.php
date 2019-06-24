@@ -222,34 +222,34 @@ class ResultTable extends SortableTable
         $locked_status = $this->evaluation->get_locked();
         $allowMultipleAttempts = api_get_configuration_value('gradebook_multiple_evaluation_attempts');
         $baseUrl = api_get_self().'?selecteval='.$this->evaluation->get_id().'&'.api_get_cidreq();
+        $editColumn = '';
         if (api_is_allowed_to_edit(null, true) && $locked_status == 0) {
-            $edit_column = '';
             if ($allowMultipleAttempts) {
                 if (!empty($item['percentage_score'])) {
-                    $edit_column .=
+                    $editColumn .=
                         Display::url(
                             Display::return_icon('add.png', get_lang('AddAttempt'), '', '22'),
                             $baseUrl.'&action=add_attempt&editres='.$item['result_id']
                         );
                 } else {
-                    $edit_column .= '<a href="'.api_get_self().'?editres='.$item['result_id'].'&selecteval='.$this->evaluation->get_id().'&'.api_get_cidreq().'">'.
+                    $editColumn .= '<a href="'.api_get_self().'?editres='.$item['result_id'].'&selecteval='.$this->evaluation->get_id().'&'.api_get_cidreq().'">'.
                         Display::return_icon('edit.png', get_lang('Modify'), '', '22').'</a>';
                 }
             } else {
-                $edit_column .= '<a href="'.api_get_self().'?editres='.$item['result_id'].'&selecteval='.$this->evaluation->get_id().'&'.api_get_cidreq().'">'.
+                $editColumn .= '<a href="'.api_get_self().'?editres='.$item['result_id'].'&selecteval='.$this->evaluation->get_id().'&'.api_get_cidreq().'">'.
                     Display::return_icon('edit.png', get_lang('Modify'), '', '22').'</a>';
             }
-            $edit_column .= ' <a href="'.api_get_self().'?delete_mark='.$item['result_id'].'&selecteval='.$this->evaluation->get_id().'&'.api_get_cidreq().'">'.
+            $editColumn .= ' <a href="'.api_get_self().'?delete_mark='.$item['result_id'].'&selecteval='.$this->evaluation->get_id().'&'.api_get_cidreq().'">'.
                 Display::return_icon('delete.png', get_lang('Delete'), '', '22').'</a>';
         }
 
         if ($this->evaluation->get_course_code() == null) {
-            $edit_column .= '&nbsp;<a href="'.api_get_self().'?resultdelete='.$item['result_id'].'&selecteval='.$this->evaluation->get_id().'" onclick="return confirmationuser();">';
-            $edit_column .= Display::return_icon('delete.png', get_lang('Delete'));
-            $edit_column .= '</a>';
-            $edit_column .= '&nbsp;<a href="user_stats.php?userid='.$item['id'].'&selecteval='.$this->evaluation->get_id().'&'.api_get_cidreq().'">';
-            $edit_column .= Display::return_icon('statistics.gif', get_lang('Statistics'));
-            $edit_column .= '</a>';
+            $editColumn .= '&nbsp;<a href="'.api_get_self().'?resultdelete='.$item['result_id'].'&selecteval='.$this->evaluation->get_id().'" onclick="return confirmationuser();">';
+            $editColumn .= Display::return_icon('delete.png', get_lang('Delete'));
+            $editColumn .= '</a>';
+            $editColumn .= '&nbsp;<a href="user_stats.php?userid='.$item['id'].'&selecteval='.$this->evaluation->get_id().'&'.api_get_cidreq().'">';
+            $editColumn .= Display::return_icon('statistics.gif', get_lang('Statistics'));
+            $editColumn .= '</a>';
         }
 
         // Evaluation's origin is a link
@@ -258,11 +258,11 @@ class ResultTable extends SortableTable
             $doc_url = $link->get_view_url($item['id']);
 
             if ($doc_url != null) {
-                $edit_column .= '&nbsp;<a href="'.$doc_url.'" target="_blank">';
-                $edit_column .= Display::return_icon('link.gif', get_lang('OpenDocument')).'</a>';
+                $editColumn .= '&nbsp;<a href="'.$doc_url.'" target="_blank">';
+                $editColumn .= Display::return_icon('link.gif', get_lang('OpenDocument')).'</a>';
             }
         }
 
-        return $edit_column;
+        return $editColumn;
     }
 }

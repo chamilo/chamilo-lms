@@ -862,22 +862,6 @@ if (isset($first_time) && $first_time == 1 && api_is_allowed_to_edit(null, true)
         );
     }
 
-    if (api_is_allowed_to_edit(null, true)) {
-        if (((empty($selectCat)) || (isset($_GET['cidReq']) && $_GET['cidReq'] !== '')) ||
-            (isset($_GET['isStudentView']) && $_GET['isStudentView'] == 'false')
-        ) {
-            $cats = Category:: load(
-                null,
-                null,
-                $course_code,
-                null,
-                null,
-                $session_id,
-                false
-            );
-        }
-    }
-
     $cats = Category::load(
         null,
         null,
@@ -891,15 +875,16 @@ if (isset($first_time) && $first_time == 1 && api_is_allowed_to_edit(null, true)
     if (!empty($cats)) {
         if ((api_get_setting('gradebook_enable_grade_model') === 'true') &&
             (
-                api_is_platform_admin() || (api_is_allowed_to_edit(null, true) &&
-                api_get_setting('teachers_can_change_grade_model_settings') === 'true')
+                api_is_platform_admin() || (
+                    api_is_allowed_to_edit(null, true) &&
+                    api_get_setting('teachers_can_change_grade_model_settings') === 'true'
+                )
             )
         ) {
             // Getting grade models.
             $obj = new GradeModel();
             $grade_models = $obj->get_all();
             $grade_model_id = $cats[0]->get_grade_model_id();
-
             // No children.
             if ((count($cats) == 1 && empty($grade_model_id)) ||
                 (count($cats) == 1 && $grade_model_id != -1)
@@ -990,7 +975,7 @@ if (isset($first_time) && $first_time == 1 && api_is_allowed_to_edit(null, true)
                 }
 
                 $exportToPdf = false;
-                if ($action == 'export_table') {
+                if ($action === 'export_table') {
                     $exportToPdf = true;
                 }
 

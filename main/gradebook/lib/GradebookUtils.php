@@ -121,8 +121,18 @@ class GradebookUtils
      */
     public static function block_students()
     {
-        if (!api_is_allowed_to_edit()) {
-            api_not_allowed();
+        $sessionId = api_get_session_id();
+        if (empty($sessionId)) {
+            if (!api_is_allowed_to_edit()) {
+                api_not_allowed();
+            }
+        } else {
+            $isCoach = api_is_coach(api_get_session_id(), api_get_course_int_id());
+            if ($isCoach === false) {
+                if (!api_is_allowed_to_edit()) {
+                    api_not_allowed();
+                }
+            }
         }
     }
 

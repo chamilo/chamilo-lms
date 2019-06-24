@@ -208,7 +208,7 @@ class Category implements GradebookItem
      */
     public function set_parent_id($parent)
     {
-        $this->parent = intval($parent);
+        $this->parent = (int) $parent;
     }
 
     /**
@@ -538,9 +538,8 @@ class Category implements GradebookItem
      *
      * @return \Category
      */
-    public static function createCategoryObjectFromEntity(
-        GradebookCategory $gradebookCategory
-    ) {
+    public static function createCategoryObjectFromEntity(GradebookCategory $gradebookCategory)
+    {
         $category = new Category();
         $category->set_id($gradebookCategory->getId());
         $category->set_name($gradebookCategory->getName());
@@ -551,14 +550,10 @@ class Category implements GradebookItem
         $category->set_weight($gradebookCategory->getWeight());
         $category->set_visible($gradebookCategory->getVisible());
         $category->set_session_id($gradebookCategory->getSessionId());
-        $category->set_certificate_min_score(
-            $gradebookCategory->getCertifMinScore()
-        );
+        $category->set_certificate_min_score($gradebookCategory->getCertifMinScore());
         $category->set_grade_model_id($gradebookCategory->getGradeModelId());
         $category->set_locked($gradebookCategory->getLocked());
-        $category->setGenerateCertificates(
-            $gradebookCategory->getGenerateCertificates()
-        );
+        $category->setGenerateCertificates($gradebookCategory->getGenerateCertificates());
         $category->setIsRequirement($gradebookCategory->getIsRequirement());
 
         return $category;
@@ -750,20 +745,6 @@ class Category implements GradebookItem
     }
 
     /**
-     * Not delete this category from the database,when visible=3 is category eliminated.
-     *
-     * @deprecated To delete categories form course when deleting course use Category::deleteFromCourse
-     */
-    public function update_category_delete($course_id)
-    {
-        $table = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
-        $sql = 'UPDATE '.$table.' SET 
-                    visible = 3
-                WHERE course_code ="'.Database::escape_string($course_id).'"';
-        Database::query($sql);
-    }
-
-    /**
      * Delete the gradebook categories from a course, including course sessions.
      *
      * @param string $courseCode
@@ -829,7 +810,7 @@ class Category implements GradebookItem
      *
      * @return array
      */
-    public function showAllCategoryInfo($categoryId = 0)
+    public function showAllCategoryInfo($categoryId)
     {
         $categoryId = (int) $categoryId;
         if (empty($categoryId)) {
@@ -843,54 +824,6 @@ class Category implements GradebookItem
         $row = Database::fetch_array($result, 'ASSOC');
 
         return $row;
-    }
-
-    /**
-     * Check if a category name (with the same parent category) already exists.
-     *
-     * @param string $name   name to check (if not given, the name property of this object will be checked)
-     * @param int    $parent parent category
-     *
-     * @return bool
-     */
-    public function does_name_exist($name, $parent)
-    {
-        if (!isset($name)) {
-            $name = $this->name;
-            $parent = $this->parent;
-        }
-        $table = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
-        $sql = "SELECT count(id) AS number
-                FROM $table
-                WHERE name = '".Database::escape_string($name)."'";
-
-        if (api_is_allowed_to_edit()) {
-            $parent = self::load($parent);
-            $code = $parent[0]->get_course_code();
-            $courseInfo = api_get_course_info($code);
-            $courseId = $courseInfo['real_id'];
-            if (isset($code) && $code != '0') {
-                $main_course_user_table = Database::get_main_table(TABLE_MAIN_COURSE_USER);
-                $sql .= ' AND user_id IN (
-                            SELECT user_id FROM '.$main_course_user_table.'
-                            WHERE c_id = '.$courseId.' AND status = '.COURSEMANAGER.'
-                        )';
-            } else {
-                $sql .= ' AND user_id = '.api_get_user_id();
-            }
-        } else {
-            $sql .= ' AND user_id = '.api_get_user_id();
-        }
-
-        if (!isset($parent)) {
-            $sql .= ' AND parent_id is null';
-        } else {
-            $sql .= ' AND parent_id = '.intval($parent);
-        }
-        $result = Database::query($sql);
-        $number = Database::fetch_row($result);
-
-        return $number[0] != 0;
     }
 
     /**
@@ -1433,7 +1366,6 @@ class Category implements GradebookItem
             //   -> movable to root or other independent categories
             // - category inside a course
             //   -> movable to root, independent categories or categories inside the course
-
             $user = api_is_platform_admin() ? null : api_get_user_id();
             $targets = [];
             $level = 0;
@@ -1552,6 +1484,8 @@ class Category implements GradebookItem
         $tbl_main_courses = Database::get_main_table(TABLE_MAIN_COURSE);
         $tbl_main_course_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
         $tbl_grade_categories = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
+
+        $user_id = (int) $user_id;
 
         $sql = 'SELECT DISTINCT(code), title
                 FROM '.$tbl_main_courses.' cc, '.$tbl_main_course_user.' cu
@@ -1941,7 +1875,6 @@ class Category implements GradebookItem
         $sessionId = 0
     ) {
         $links = [];
-
         $course_code = empty($course_code) ? $this->get_course_code() : $course_code;
         $sessionId = empty($sessionId) ? $this->get_session_id() : $sessionId;
 
@@ -2003,9 +1936,10 @@ class Category implements GradebookItem
      */
     public function getCategories($catId)
     {
+        $catId = (int) $catId;
         $tblGradeCategories = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
         $sql = 'SELECT * FROM '.$tblGradeCategories.'
-                WHERE parent_id = '.intval($catId);
+                WHERE parent_id = '.$catId;
 
         $result = Database::query($sql);
         $categories = self::create_category_objects_from_sql_result($result);

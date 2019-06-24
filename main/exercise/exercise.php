@@ -1150,6 +1150,7 @@ if (!empty($exerciseList)) {
                                 $my_result_disabled,
                                 [
                                     RESULT_DISABLE_SHOW_SCORE_AND_EXPECTED_ANSWERS,
+                                    RESULT_DISABLE_SHOW_SCORE_AND_EXPECTED_ANSWERS_AND_RANKING,
                                     RESULT_DISABLE_SHOW_SCORE_ONLY,
                                     RESULT_DISABLE_RANKING,
                                 ]
@@ -1216,6 +1217,7 @@ if (!empty($exerciseList)) {
                             $my_result_disabled,
                             [
                                 RESULT_DISABLE_SHOW_SCORE_AND_EXPECTED_ANSWERS,
+                                RESULT_DISABLE_SHOW_SCORE_AND_EXPECTED_ANSWERS_AND_RANKING,
                                 RESULT_DISABLE_SHOW_SCORE_ONLY,
                                 RESULT_DISABLE_RANKING,
                             ]

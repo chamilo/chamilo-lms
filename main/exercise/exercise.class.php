@@ -4323,7 +4323,6 @@ class Exercise
                                     case MATCHING_DRAGGABLE:
                                         echo '<tr>';
                                         if (!in_array($this->results_disabled, [
-                                            RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER_AND_RANKING,
                                             RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER,
                                             ])
                                         ) {
@@ -4370,7 +4369,6 @@ class Exercise
                                         echo '<tr>';
                                         if ($this->showExpectedChoice()) {
                                             if (!in_array($this->results_disabled, [
-                                                RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER_AND_RANKING,
                                                 RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER,
                                             ])
                                             ) {
@@ -8614,7 +8612,7 @@ class Exercise
             'results_disabled',
             null,
             get_lang('ExerciseAutoEvaluationAndRankingMode'),
-            RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER_AND_RANKING,
+            RESULT_DISABLE_SHOW_SCORE_AND_EXPECTED_ANSWERS_AND_RANKING,
             ['id' => 'result_disabled_8']
         );
 

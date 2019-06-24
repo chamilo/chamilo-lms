@@ -261,7 +261,6 @@ class ExerciseShowFunctions
                 $status = Display::label(get_lang('Correct'), 'success');
             } else {
                 if (in_array($resultsDisabled, [
-                    RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER_AND_RANKING,
                     RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER,
                 ])
                 ) {
@@ -344,7 +343,6 @@ class ExerciseShowFunctions
 
         $showComment = false;
         switch ($resultsDisabled) {
-            case RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER_AND_RANKING:
             case RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER:
                 $hideStudentChoice = false;
                 $hide_expected_answer = true;
@@ -377,7 +375,6 @@ class ExerciseShowFunctions
 
         $studentChoiceClass = '';
         if (in_array($resultsDisabled, [
-            RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER_AND_RANKING,
             RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER,
         ])
         ) {
@@ -464,7 +461,6 @@ class ExerciseShowFunctions
         $hide_expected_answer = false;
         $hideStudentChoice = false;
         switch ($resultsDisabled) {
-            case RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER_AND_RANKING:
             case RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER:
                 $hideStudentChoice = false;
                 $hide_expected_answer = true;
@@ -527,10 +523,12 @@ class ExerciseShowFunctions
         if ($feedbackType != EXERCISE_FEEDBACK_TYPE_EXAM) {
             $content .= '<td width="20%">';
             $color = 'black';
-            if (isset($new_options[$studentChoice]) || in_array($exercise->results_disabled, [
-                RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER_AND_RANKING,
-                RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER,
-                ])
+            if (isset($new_options[$studentChoice]) || in_array(
+                    $exercise->results_disabled,
+                    [
+                        RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER,
+                    ]
+                )
             ) {
                 if ($studentChoice == $answerCorrect) {
                     $color = 'green';
@@ -665,7 +663,6 @@ class ExerciseShowFunctions
         $hide_expected_answer = false;
         $hideStudentChoice = false;
         switch ($resultsDisabled) {
-            case RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER_AND_RANKING:
             case RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER:
                 $hideStudentChoice = true;
                 $hide_expected_answer = true;
@@ -730,7 +727,6 @@ class ExerciseShowFunctions
             echo '<td width="20%">';
             //@todo replace this harcoded value
             if ($studentChoice || in_array($resultsDisabled, [
-                RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER_AND_RANKING,
                 RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER,
             ])
             ) {

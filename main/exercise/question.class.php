@@ -1995,7 +1995,6 @@ abstract class Question
         $scoreLabel = get_lang('Wrong');
 
         if (in_array($exercise->results_disabled, [
-            RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER_AND_RANKING,
             RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER,
         ])
         ) {
@@ -2007,7 +2006,6 @@ abstract class Question
             $scoreLabel = get_lang('Correct');
 
             if (in_array($exercise->results_disabled, [
-                RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER_AND_RANKING,
                 RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER,
             ])
             ) {
@@ -2045,7 +2043,6 @@ abstract class Question
                 break;
             case UNIQUE_ANSWER:
                 if (in_array($exercise->results_disabled, [
-                    RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER_AND_RANKING,
                     RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER,
                 ])
                 ) {
@@ -2079,7 +2076,6 @@ abstract class Question
         if ($this->type != MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY) {
             if (isset($score['result'])) {
                 if (in_array($exercise->results_disabled, [
-                    RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER_AND_RANKING,
                     RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER,
                 ])
                 ) {

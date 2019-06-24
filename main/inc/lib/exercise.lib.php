@@ -4439,7 +4439,7 @@ EOT;
             [
                 RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER,
                 RESULT_DISABLE_SHOW_SCORE_AND_EXPECTED_ANSWERS,
-                RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER_AND_RANKING,
+                RESULT_DISABLE_SHOW_SCORE_AND_EXPECTED_ANSWERS_AND_RANKING,
             ]
         )) {
             $show_results = true;
@@ -4882,7 +4882,7 @@ EOT;
 
         if (in_array(
             $objExercise->selectResultsDisabled(),
-            [RESULT_DISABLE_RANKING, RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER_AND_RANKING]
+            [RESULT_DISABLE_RANKING, RESULT_DISABLE_SHOW_SCORE_AND_EXPECTED_ANSWERS_AND_RANKING]
         )) {
             echo Display::page_header(get_lang('Ranking'), null, 'h4');
             echo self::displayResultsInRanking(

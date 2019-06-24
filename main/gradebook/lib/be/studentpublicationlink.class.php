@@ -261,7 +261,7 @@ class StudentPublicationLink extends AbstractLink
         }
 
         if ($rescount == 0) {
-            return null;
+            return [null, null];
         }
 
         switch ($type) {

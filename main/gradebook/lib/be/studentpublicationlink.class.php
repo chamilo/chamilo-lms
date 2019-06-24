@@ -225,7 +225,7 @@ class StudentPublicationLink extends AbstractLink
         // for 1 student
         if (!empty($stud_id)) {
             if (!count($scores)) {
-                return '';
+                return [null, null];
             }
 
             $data = $scores[0];

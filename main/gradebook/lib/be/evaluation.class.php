@@ -644,8 +644,9 @@ class Evaluation implements GradebookItem
                 }
                 $students[$res->get_user_id()] = $score;
             }
+
             if (empty($count)) {
-                return null;
+                return [null, null];
             }
 
             switch ($type) {

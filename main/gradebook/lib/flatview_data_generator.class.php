@@ -730,7 +730,11 @@ class FlatViewDataGenerator
             }
 
             if (!empty($model)) {
-                $temp_score = $temp_score.'&nbsp;'.ExerciseLib::show_score($score[0], $score[1]);
+                $scoreToShow = '';
+                if (isset($score[0]) && isset($score[1])) {
+                    $scoreToShow = ExerciseLib::show_score($score[0], $score[1]);
+                }
+                $temp_score = $temp_score.'&nbsp;'.$scoreToShow;
             }
 
             if (!isset($this->params['only_total_category']) ||
@@ -963,7 +967,7 @@ class FlatViewDataGenerator
                 for ($count = 0; $count < count($this->evals_links); $count++) {
                     $item = $this->evals_links[$count];
                     $score = $item->calc_score($user[0]);
-                    $divide = ($score[1]) == 0 ? 1 : $score[1];
+                    $divide = $score[1] == 0 ? 1 : $score[1];
                     $item_value += $score[0] / $divide * $item->get_weight();
                     $item_total += $item->get_weight();
                     $score_denom = ($score[1] == 0) ? 1 : $score[1];

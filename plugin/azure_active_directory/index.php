@@ -13,4 +13,8 @@ if ($activeDirectoryPlugin->get(AzureActiveDirectory::SETTING_ENABLE) === 'true'
     $_template['block_title'] = $activeDirectoryPlugin->get(AzureActiveDirectory::SETTING_BLOCK_NAME);
 
     $_template['signin_url'] = $activeDirectoryPlugin->getUrl(AzureActiveDirectory::URL_TYPE_AUTHORIZE);
+
+    if ('true' === $activeDirectoryPlugin->get(AzureActiveDirectory::SETTING_FORCE_LOGOUT_BUTTON)) {
+        $_template['signout_url'] = $activeDirectoryPlugin->getUrl(AzureActiveDirectory::URL_TYPE_LOGOUT);
+    }
 }

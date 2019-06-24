@@ -16,9 +16,13 @@ class AzureActiveDirectory extends Plugin
     const SETTING_APP_ID = 'app_id';
     const SETTING_APP_SECRET = 'app_secret';
     const SETTING_BLOCK_NAME = 'block_name';
+    const SETTING_FORCE_LOGOUT_BUTTON = 'force_logout';
 
     const URL_TYPE_AUTHORIZE = 'login';
     const URL_TYPE_LOGOUT = 'logout';
+
+    const EXTRA_FIELD_ORGANISATION_EMAIL = 'organisationemail';
+    const EXTRA_FIELD_AZURE_ID = 'azure_id';
 
     /**
      * AzureActiveDirectory constructor.
@@ -30,6 +34,7 @@ class AzureActiveDirectory extends Plugin
             self::SETTING_APP_ID => 'text',
             self::SETTING_APP_SECRET => 'text',
             self::SETTING_BLOCK_NAME => 'text',
+            self::SETTING_FORCE_LOGOUT_BUTTON => 'boolean',
         ];
 
         parent::__construct('2.0', 'Angel Fernando Quiroz Campos', $settings);
@@ -87,5 +92,24 @@ class AzureActiveDirectory extends Plugin
         }
 
         return api_get_path(WEB_PLUGIN_PATH).$this->get_name().'/src/callback.php';
+    }
+
+    /**
+     * Create extra fields for user when installing.
+     */
+    public function install()
+    {
+        UserManager::create_extra_field(
+            self::EXTRA_FIELD_ORGANISATION_EMAIL,
+            ExtraField::FIELD_TYPE_TEXT,
+            $this->get_lang('OrganisationEmail'),
+            ''
+        );
+        UserManager::create_extra_field(
+            self::EXTRA_FIELD_AZURE_ID,
+            ExtraField::FIELD_TYPE_TEXT,
+            $this->get_lang('AzureId'),
+            ''
+        );
     }
 }

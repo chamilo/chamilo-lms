@@ -117,11 +117,7 @@ if (!empty($user_course_categories)) {
                 echo '<tr><td>';
                 echo '<a name="course'.$course['code'].'"></a>';
                 echo '<strong>'.$course['title'].'</strong>';
-
-                if (api_get_setting('display_coursecode_in_courselist') === 'true') {
-                    echo ' ('.$course['visual_code'].')';
-                }
-
+                echo ' ('.$course['visual_code'].')';
                 echo '<br />';
                 echo $teachersIcon;
                 echo '&nbsp;';
@@ -231,10 +227,7 @@ if (!empty($courses_without_category)) {
         echo '<tr><td>';
         echo '<a name="course'.$course['code'].'"></a>';
         echo '<strong>'.$course['title'].'</strong>';
-        if (api_get_setting('display_coursecode_in_courselist') === 'true') {
-            echo ' ('.$course['visual_code'].')';
-        }
-
+        echo ' ('.$course['visual_code'].')';
         echo '<br />';
         echo $teachersIcon;
         echo '&nbsp;';

@@ -41,7 +41,7 @@ class AzureActiveDirectory extends Plugin
             self::SETTING_MANAGEMENT_LOGIN_NAME => 'text',
         ];
 
-        parent::__construct('2.0', 'Angel Fernando Quiroz Campos', $settings);
+        parent::__construct('2.1', 'Angel Fernando Quiroz Campos', $settings);
     }
 
     /**

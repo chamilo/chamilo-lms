@@ -1967,7 +1967,7 @@ class Display
     }
 
     /**
-     * @param int    $percentage int value between 0 and 100
+     * @param int    $percentage      int value between 0 and 100
      * @param bool   $show_percentage
      * @param string $extra_info
      *

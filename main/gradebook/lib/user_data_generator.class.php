@@ -177,7 +177,6 @@ class UserDataGenerator
                 }
             }
 
-
             $data[] = $row;
         }
 

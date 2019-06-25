@@ -53,7 +53,8 @@ class HTML_QuickForm_text extends HTML_QuickForm_input
             $attributes = [];
         }
         if (is_array($attributes) || empty($attributes)) {
-            $attributes['class'] = 'form-control';
+            $classFromAttributes = isset($attributes['class']) ? $attributes['class'] : '';
+            $attributes['class'] = $classFromAttributes.' form-control';
         }
         $inputSize = isset($attributes['input-size']) ? $attributes['input-size'] : null;
         $this->setInputSize($inputSize);
@@ -161,8 +162,6 @@ class HTML_QuickForm_text extends HTML_QuickForm_input
                             {element}
                         </div>';
                 }
-
-
                 return $template;
                 break;
         }

@@ -811,22 +811,42 @@ foreach ($questionList as $questionId) {
 
         if ($is_allowedToEdit && $isFeedbackAllowed && $action != 'export') {
             if (in_array($answerType, [FREE_ANSWER, ORAL_EXPRESSION, ANNOTATION])) {
-                $marksname = "marksName".$questionId;
+                $marksname = 'marksName'.$questionId;
                 $arrmarks[] = $questionId;
 
                 echo '<div id="'.$marksname.'" class="hidden">';
-                // @todo use FormValidator
-                /*$formMark = new FormValidator("marksform_'.$questionId.'", 'post');
-                $options = [
-                  1,
-                  2
-                ];
-                $formMark->addSelect('marks', get_lang('AssignMarks'), $options);
-                $formMark->display();*/
-                echo '<form name="marksform_'.$questionId.'" method="post" action="">';
+
+                $formMark = new FormValidator('marksform_'.$questionId, 'post');
+                $formMark->addHeader(get_lang('AssignMarks'));
+                $select = $formMark->addSelect('marks', get_lang('AssignMarks'), [], ['disable_js' => true]);
+                $model = ExerciseLib::getCourseScoreModel();
+                if (empty($model)) {
+                    for ($i = 0; $i <= $questionWeighting; $i++) {
+                        $attributes = [];
+                        if ($questionScore == $i) {
+                            $attributes['selected'] = 'selected';
+                        }
+                        $select->addOption($i, $i, $attributes);
+                    }
+                } else {
+                    foreach ($model['score_list'] as $item) {
+                        $i = api_number_format($item['score_to_qualify'] / 100 * $questionWeighting, 2);
+                        $model = ExerciseLib::getModelStyle($item, $i);
+                        $attributes = ['class' => $item['css_class']];
+                        if ($questionScore == $i) {
+                            $attributes['selected'] = 'selected';
+                        }
+                        $select->addOption($model, $i, $attributes);
+                    }
+                    $select->updateSelectWithSelectedOption($formMark);
+                }
+
+                $formMark->display();
+
+                /*echo '<form name="smarksform_'.$questionId.'" method="post" action="">';
                 echo get_lang('AssignMarks');
                 echo "&nbsp;<select name='marks' id='select_marks_".$questionId."' class='selectpicker exercise_mark_select'>";
-                $model = ExerciseLib::getCourseScoreModel();
+
                 if (empty($model)) {
                     for ($i = 0; $i <= $questionWeighting; $i++) {
                         echo '<option value="'.$i.'" '.(($i == $questionScore) ? "selected='selected'" : '').'>'.$i.'</option>';
@@ -839,8 +859,8 @@ foreach ($questionList as $questionId) {
                     }
                 }
                 echo '</select>';
-                echo '</form><br /></div>';
-
+                echo '</form><br /></div>';*/
+                echo '</div>';
                 if ($questionScore == -1) {
                     $questionScore = 0;
                     echo ExerciseLib::getNotCorrectedYetText();

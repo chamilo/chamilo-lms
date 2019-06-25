@@ -121,16 +121,9 @@ class FlatViewDataGenerator
             $this->params['only_subcat'] == $this->category->get_id()
         ) {
             $main_weight = $this->category->get_weight();
-            $grade_model_id = $this->category->get_grade_model_id();
         } else {
             $main_cat = Category::load($parent_id, null, null);
             $main_weight = $main_cat[0]->get_weight();
-            $grade_model_id = $main_cat[0]->get_grade_model_id();
-        }
-
-        $use_grade_model = true;
-        if (empty($grade_model_id) || $grade_model_id == -1) {
-            $use_grade_model = false;
         }
 
         //@todo move these in a function
@@ -161,6 +154,7 @@ class FlatViewDataGenerator
         // No category was added
         $course_code = api_get_course_id();
         $session_id = api_get_session_id();
+        $model = ExerciseLib::getCourseScoreModel();
 
         $allcat = $this->category->get_subcategories(
             null,
@@ -220,7 +214,11 @@ class FlatViewDataGenerator
                     /** @var AbstractLink $item */
                     $item = $this->evals_links[$count + $items_start];
                     $weight = round(100 * $item->get_weight() / $main_weight, 1);
-                    $headers[] = $item->get_name().' '.$weight.' % ';
+                    $label = $item->get_name().' '.$weight.' % ';
+                    if (!empty($model)) {
+                        $label = $item->get_name();
+                    }
+                    $headers[] = $label;
                     $evaluationsAdded[] = $item->get_id();
                 }
             }
@@ -234,7 +232,11 @@ class FlatViewDataGenerator
                     !in_array($item->get_id(), $evaluationsAdded)
                 ) {
                     $weight = round(100 * $item->get_weight() / $main_weight, 1);
-                    $headers[] = $item->get_name().' '.$weight.' % ';
+                    $label = $item->get_name().' '.$weight.' % ';
+                    if (!empty($model)) {
+                        $label = $item->get_name();
+                    }
+                    $headers[] = $label;
                 }
             }
         }
@@ -375,16 +377,9 @@ class FlatViewDataGenerator
             (isset($this->params['only_subcat']) && $this->params['only_subcat'] == $this->category->get_id())
         ) {
             $main_weight = $this->category->get_weight();
-            $grade_model_id = $this->category->get_grade_model_id();
         } else {
             $main_cat = Category::load($parent_id, null, null);
             $main_weight = $main_cat[0]->get_weight();
-            $grade_model_id = $main_cat[0]->get_grade_model_id();
-        }
-
-        $use_grade_model = true;
-        if (empty($grade_model_id) || $grade_model_id == -1) {
-            $use_grade_model = false;
         }
 
         $export_to_pdf = false;
@@ -394,6 +389,7 @@ class FlatViewDataGenerator
 
         $course_code = api_get_course_id();
         $session_id = api_get_session_id();
+        $model = ExerciseLib::getCourseScoreModel();
 
         foreach ($selected_users as $user) {
             $row = [];
@@ -446,10 +442,8 @@ class FlatViewDataGenerator
 
             $row[] = $user[1];
 
-            $item_value = 0;
             $item_value_total = 0;
             $item_total = 0;
-            $convert_using_the_global_weight = true;
 
             $allcat = $this->category->get_subcategories(
                 null,
@@ -599,22 +593,24 @@ class FlatViewDataGenerator
             }
 
             if (!$show_all) {
+                $displayScore = $scoreDisplay->display_score($total_score);
+                if (!empty($model)) {
+                    $displayScore = ExerciseLib::show_score($total_score[0], $total_score[1]);
+                }
                 if ($export_to_pdf) {
-                    $row['total'] = $scoreDisplay->display_score($total_score);
+                    $row['total'] = $displayScore;
                 } else {
-                    $row[] = $scoreDisplay->display_score($total_score);
+                    $row[] = $displayScore;
                 }
             } else {
+                $displayScore = $scoreDisplay->display_score($total_score, $defaultStyle);
+                if (!empty($model)) {
+                    $displayScore = ExerciseLib::show_score($total_score[0], $total_score[1]);
+                }
                 if ($export_to_pdf) {
-                    $row['total'] = $scoreDisplay->display_score(
-                        $total_score,
-                        $defaultStyle
-                    );
+                    $row['total'] = $displayScore;
                 } else {
-                    $row[] = $scoreDisplay->display_score(
-                        $total_score,
-                        $defaultStyle
-                    );
+                    $row[] = $displayScore;
                 }
             }
             unset($score);
@@ -734,7 +730,7 @@ class FlatViewDataGenerator
                 if (isset($score[0]) && isset($score[1])) {
                     $scoreToShow = ExerciseLib::show_score($score[0], $score[1]);
                 }
-                $temp_score = $temp_score.'&nbsp;'.$scoreToShow;
+                $temp_score = $scoreToShow;
             }
 
             if (!isset($this->params['only_total_category']) ||
@@ -877,7 +873,6 @@ class FlatViewDataGenerator
                 $score_final = ($score[0] / $score_denom) * 100;
                 $row[] = $score_final;
             }
-            //$total_score = array($item_value, $item_total);
             $score_final = ($item_value / $item_total) * 100;
 
             $row[] = $score_final;
@@ -917,7 +912,6 @@ class FlatViewDataGenerator
             $item_total = 0;
             $final_score = 0;
             $item_value_total = 0;
-            $convert_using_the_global_weight = true;
             $allcat = $this->category->get_subcategories(
                 null,
                 $course_code,

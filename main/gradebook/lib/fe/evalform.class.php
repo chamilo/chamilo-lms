@@ -206,23 +206,13 @@ class EvalForm extends FormValidator
         }
         usort($results_and_users, ['EvalForm', 'sort_by_user']);
         $defaults = [];
+
+        $model = ExerciseLib::getCourseScoreModel();
+
         foreach ($results_and_users as $result_and_user) {
             $user = $result_and_user['user'];
             $result = $result_and_user['result'];
             $renderer = &$this->defaultRenderer();
-            $this->addFloat(
-                'score['.$result->get_id().']',
-                $this->build_stud_label($user['user_id'], $user['username'], $user['lastname'], $user['firstname']),
-                false,
-                [
-                    'maxlength' => 5,
-                ],
-                false,
-                0,
-                $this->evaluation_object->get_max()
-            );
-
-            $defaults['score['.$result->get_id().']'] = $result->get_score();
 
             if (api_is_western_name_order()) {
                 $user_info = '<td align="left" >'.$user['firstname'].'</td>';
@@ -240,10 +230,55 @@ class EvalForm extends FormValidator
 		         <!-- BEGIN error --><br /><span style="color: #ff0000;font-size:10px">{error}</span><!-- END error -->
 		      </td>
 		   </tr>';
+
+            if (empty($model)) {
+                $this->addFloat(
+                    'score['.$result->get_id().']',
+                    $this->build_stud_label($user['user_id'], $user['username'], $user['lastname'], $user['firstname']),
+                    false,
+                    [
+                        'maxlength' => 5,
+                    ],
+                    false,
+                    0,
+                    $this->evaluation_object->get_max()
+                );
+                $defaults['score['.$result->get_id().']'] = $result->get_score();
+            } else {
+                $questionWeighting = $this->evaluation_object->get_max();
+                $select = $this->addSelect(
+                    'score['.$result->get_id().']',
+                    get_lang('Score'),
+                    [],
+                    ['disable_js' => true, 'id' => 'score_'.$result->get_id()]
+                );
+
+                foreach ($model['score_list'] as $item) {
+                    $i = api_number_format($item['score_to_qualify'] / 100 * $questionWeighting, 2);
+                    $modelStyle = ExerciseLib::getModelStyle($item, $i);
+                    $attributes = ['class' => $item['css_class']];
+                    if ($result->get_score() == $i) {
+                        $attributes['selected'] = 'selected';
+                    }
+                    $select->addOption($modelStyle, $i, $attributes);
+                }
+                $select->updateSelectWithSelectedOption($this);
+
+                $template = '<tr>
+                  <td align="left" >'.$user['official_code'].'</td>
+                  <td align="left" >'.$user['username'].'</td>
+                  '.$user_info.'
+                   <td align="left">{element} <!-- BEGIN error --><br /><span style="color: #ff0000;font-size:10px">{error}</span><!-- END error -->
+                  </td>
+               </tr>';
+            }
             $renderer->setElementTemplate($template, 'score['.$result->get_id().']');
         }
-        $this->setDefaults($defaults);
-        $this->addButtonSave(get_lang('EditResult'), 'submit');
+
+        if (empty($model)) {
+            $this->setDefaults($defaults);
+        }
+        $this->addButtonSave(get_lang('EditResult'));
         $renderer->setElementTemplate($template_submit, 'submit');
     }
 
@@ -369,39 +404,58 @@ class EvalForm extends FormValidator
      */
     protected function build_result_edit_form()
     {
-        $this->setDefaults(
-            [
-                'score' => $this->result_object->get_score(),
-                'maximum' => $this->evaluation_object->get_max(),
-            ]
-        );
         $userInfo = api_get_user_info($this->result_object->get_user_id());
         $this->addHeader(get_lang('User').': '.$userInfo['complete_name']);
 
-        $this->addFloat(
-            'score',
-            [
-                get_lang('Score'),
-                null,
-                '/ '.$this->evaluation_object->get_max(),
-            ],
-            false,
-            [
-                'size' => '4',
-                'maxlength' => '5',
-            ],
-            false,
-            0,
-            $this->evaluation_object->get_max()
-        );
+        $model = ExerciseLib::getCourseScoreModel();
+
+        if (empty($model)) {
+            $this->addFloat(
+                'score',
+                [
+                    get_lang('Score'),
+                    null,
+                    '/ '.$this->evaluation_object->get_max(),
+                ],
+                false,
+                [
+                    'size' => '4',
+                    'maxlength' => '5',
+                ],
+                false,
+                0,
+                $this->evaluation_object->get_max()
+            );
+            $this->setDefaults(
+                [
+                    'score' => $this->result_object->get_score(),
+                    'maximum' => $this->evaluation_object->get_max(),
+                ]
+            );
+        } else {
+            $questionWeighting = $this->evaluation_object->get_max();
+            $select = $this->addSelect('score', get_lang('Score'), [], ['disable_js' => true]);
+
+            foreach ($model['score_list'] as $item) {
+                $i = api_number_format($item['score_to_qualify'] / 100 * $questionWeighting, 2);
+                $model = ExerciseLib::getModelStyle($item, $i);
+                $attributes = ['class' => $item['css_class']];
+                if ($this->result_object->get_score() == $i) {
+                    $attributes['selected'] = 'selected';
+                }
+                $select->addOption($model, $i, $attributes);
+            }
+            $select->updateSelectWithSelectedOption($this);
+        }
 
         $allowMultipleAttempts = api_get_configuration_value('gradebook_multiple_evaluation_attempts');
         if ($allowMultipleAttempts) {
             $this->addTextarea('comment', get_lang('Comment'));
         }
 
-        $this->addButtonSave(get_lang('Edit'), 'submit');
+        $this->addButtonSave(get_lang('Edit'));
         $this->addElement('hidden', 'hid_user_id', $this->result_object->get_user_id());
+
     }
 
     /**
@@ -417,7 +471,7 @@ class EvalForm extends FormValidator
                 'created_at' => api_get_utc_datetime(),
             ]
         );
-        $this->build_basic_form(0);
+        $this->build_basic_form();
         if ($this->evaluation_object->get_course_code() == null) {
             $this->addElement('checkbox', 'adduser', null, get_lang('AddUserToEval'));
         } else {
@@ -463,16 +517,17 @@ class EvalForm extends FormValidator
 
     /**
      * Builds a basic form that is used in add and edit.
+     *
+     * @param int $edit
      */
     private function build_basic_form($edit = 0)
     {
         $form_title = get_lang('NewEvaluation');
-
         if (!empty($_GET['editeval']) && $_GET['editeval'] == 1) {
             $form_title = get_lang('EditEvaluation');
         }
 
-        $this->addElement('header', $form_title);
+        $this->addHeader($form_title);
         $this->addElement('hidden', 'hid_user_id');
         $this->addElement('hidden', 'hid_course_code');
 
@@ -550,8 +605,51 @@ class EvalForm extends FormValidator
             ]
         );
 
+        $model = ExerciseLib::getCourseScoreModel();
+
         if ($edit) {
-            if (!$this->evaluation_object->has_results()) {
+            if (empty($model)) {
+                if (!$this->evaluation_object->has_results()) {
+                    $this->addText(
+                        'max',
+                        get_lang('QualificationNumeric'),
+                        true,
+                        [
+                            'maxlength' => '5',
+                        ]
+                    );
+                } else {
+                    $this->addText(
+                        'max',
+                        [get_lang('QualificationNumeric'), get_lang('CannotChangeTheMaxNote')],
+                        false,
+                        [
+                            'maxlength' => '5',
+                            'disabled' => 'disabled',
+                        ]
+                    );
+                }
+            } else {
+                $class = '';
+                foreach ($model['score_list'] as $item) {
+                    $class = $item['css_class'];
+                }
+                $this->addText(
+                    'max',
+                    get_lang('QualificationNumeric'),
+                    false,
+                    [
+                        'maxlength' => '5',
+                        'class' => $class,
+                        'disabled' => 'disabled'
+                    ]
+                );
+
+                $defaults['max'] = $item['max'];
+                $this->setDefaults($defaults);
+            }
+        } else {
+            if (empty($model)) {
                 $this->addText(
                     'max',
                     get_lang('QualificationNumeric'),
@@ -560,29 +658,28 @@ class EvalForm extends FormValidator
                         'maxlength' => '5',
                     ]
                 );
+                $default_max = api_get_setting('gradebook_default_weight');
+                $defaults['max'] = isset($default_max) ? $default_max : 100;
+                $this->setDefaults($defaults);
             } else {
+                $class = '';
+                foreach ($model['score_list'] as $item) {
+                    $class = $item['css_class'];
+                }
                 $this->addText(
                     'max',
-                    [get_lang('QualificationNumeric'), get_lang('CannotChangeTheMaxNote')],
+                    get_lang('QualificationNumeric'),
                     false,
                     [
                         'maxlength' => '5',
-                        'disabled' => 'disabled',
+                        'class' => $class,
+                        'disabled' => 'disabled'
                     ]
                 );
+
+                $defaults['max'] = $item['max'];
+                $this->setDefaults($defaults);
             }
-        } else {
-            $this->addText(
-                'max',
-                get_lang('QualificationNumeric'),
-                true,
-                [
-                    'maxlength' => '5',
-                ]
-            );
-            $default_max = api_get_setting('gradebook_default_weight');
-            $defaults['max'] = isset($default_max) ? $default_max : 100;
-            $this->setDefaults($defaults);
         }
 
         $this->addElement('textarea', 'description', get_lang('Description'));

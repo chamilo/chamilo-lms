@@ -21,7 +21,7 @@ class DisplayGradebook
         $header = null;
         if (api_is_allowed_to_edit(null, true)) {
             $header = '<div class="actions">';
-            if ($page != 'statistics') {
+            if ($page !== 'statistics') {
                 $header .= '<a href="'.Category::getUrl().'selectcat='.$selectcat.'">'.
                     Display::return_icon('back.png', get_lang('FolderView'), '', ICON_SIZE_MEDIUM)
                     .'</a>';
@@ -62,20 +62,23 @@ class DisplayGradebook
             // TODO this check needed ?
             $score = $evalobj->calc_score();
             if ($score != null) {
-                $average = get_lang('Average').' :<b> '.$scoredisplay->display_score($score, SCORE_AVERAGE).'</b>';
-                $student_score = $evalobj->calc_score(api_get_user_id());
-                $student_score = Display::tag(
-                    'h3',
-                    get_lang('Score').': '.$scoredisplay->display_score($student_score, SCORE_DIV_PERCENT)
-                );
+                $model = ExerciseLib::getCourseScoreModel();
+                if (empty($model)) {
+                    $average = get_lang('Average').' :<b> '.$scoredisplay->display_score($score, SCORE_AVERAGE).'</b>';
+                    $student_score = $evalobj->calc_score(api_get_user_id());
+                    $student_score = Display::tag(
+                        'h3',
+                        get_lang('Score').': '.$scoredisplay->display_score($student_score, SCORE_DIV_PERCENT)
+                    );
 
-                $allowMultipleAttempts = api_get_configuration_value('gradebook_multiple_evaluation_attempts');
-                if ($allowMultipleAttempts) {
-                    $results = Result::load(null, api_get_user_id(), $evalobj->get_id());
-                    if (!empty($results)) {
-                        /** @var Result $resultData */
-                        foreach ($results as $resultData) {
-                            $student_score .= ResultTable::getResultAttemptTable($resultData);
+                    $allowMultipleAttempts = api_get_configuration_value('gradebook_multiple_evaluation_attempts');
+                    if ($allowMultipleAttempts) {
+                        $results = Result::load(null, api_get_user_id(), $evalobj->get_id());
+                        if (!empty($results)) {
+                            /** @var Result $resultData */
+                            foreach ($results as $resultData) {
+                                $student_score .= ResultTable::getResultAttemptTable($resultData);
+                            }
                         }
                     }
                 }
@@ -97,7 +100,9 @@ class DisplayGradebook
         $evalinfo .= '<h2>'.$evalobj->get_name().'</h2><hr>';
         $evalinfo .= $description;
         $evalinfo .= get_lang('Course').' :<b> '.$course.'</b><br />';
-        $evalinfo .= get_lang('QualificationNumeric').' :<b> '.$evalobj->get_max().'</b><br>'.$average;
+        if (empty($model)) {
+            $evalinfo .= get_lang('QualificationNumeric').' :<b> '.$evalobj->get_max().'</b><br>'.$average;
+        }
 
         if (!api_is_allowed_to_edit()) {
             $evalinfo .= $student_score;

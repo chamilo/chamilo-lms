@@ -66,11 +66,9 @@ if (isset($export_flatview_form) && !$file_type == 'pdf') {
         )
     );
 }
-
+$category_id = 0;
 if (isset($_GET['selectcat'])) {
     $category_id = (int) $_GET['selectcat'];
-} else {
-    $category_id = '';
 }
 
 $simple_search_form = new UserForm(

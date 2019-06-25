@@ -178,10 +178,7 @@ class HTML_QuickForm_select extends HTML_QuickForm_element
     function apiVersion()
     {
         return 2.3;
-    } //end func apiVersion
-
-    // }}}
-    // {{{ setSelected()
+    }
 
     /**
      * Sets the default values of the select box
@@ -194,32 +191,14 @@ class HTML_QuickForm_select extends HTML_QuickForm_element
     function setSelected($values)
     {
         if (is_string($values) && $this->getMultiple()) {
-            $values = explode("[ ]?,[ ]?", $values);
+            $values = explode('[ ]?,[ ]?', $values);
         }
         if (is_array($values)) {
             $this->_values = array_values($values);
         } else {
             $this->_values = array($values);
         }
-    } //end func setSelected
-
-    // }}}
-    // {{{ getSelected()
-
-    /**
-     * Returns an array of the selected values
-     *
-     * @since     1.0
-     * @access    public
-     * @return    array of selected values
-     */
-    function getSelected()
-    {
-        return $this->_values;
-    } // end func getSelected
-
-    // }}}
-    // {{{ setName()
+    }
 
     /**
      * Sets the input field name
@@ -232,10 +211,7 @@ class HTML_QuickForm_select extends HTML_QuickForm_element
     function setName($name)
     {
         $this->updateAttributes(array('name' => $name));
-    } //end func setName
-
-    // }}}
-    // {{{ getName()
+    }
 
     /**
      * Returns the element name
@@ -247,10 +223,7 @@ class HTML_QuickForm_select extends HTML_QuickForm_element
     function getName()
     {
         return $this->getAttribute('name');
-    } //end func getName
-
-    // }}}
-    // {{{ getPrivateName()
+    }
 
     /**
      * Returns the element name (possibly with brackets appended)
@@ -266,10 +239,7 @@ class HTML_QuickForm_select extends HTML_QuickForm_element
         } else {
             return $this->getName();
         }
-    } //end func getPrivateName
-
-    // }}}
-    // {{{ setValue()
+    }
 
     /**
      * Sets the value of the form element
@@ -282,10 +252,7 @@ class HTML_QuickForm_select extends HTML_QuickForm_element
     function setValue($value)
     {
         $this->setSelected($value);
-    } // end func setValue
-
-    // }}}
-    // {{{ getValue()
+    }
 
     /**
      * Returns an array of the selected values
@@ -297,10 +264,7 @@ class HTML_QuickForm_select extends HTML_QuickForm_element
     function getValue()
     {
         return $this->_values;
-    } // end func getValue
-
-    // }}}
-    // {{{ setSize()
+    }
 
     /**
      * Sets the select field size, only applies to 'multiple' selects
@@ -313,10 +277,7 @@ class HTML_QuickForm_select extends HTML_QuickForm_element
     function setSize($size)
     {
         $this->updateAttributes(array('size' => $size));
-    } //end func setSize
-
-    // }}}
-    // {{{ getSize()
+    }
 
     /**
      * Returns the select field size
@@ -328,11 +289,7 @@ class HTML_QuickForm_select extends HTML_QuickForm_element
     function getSize()
     {
         return $this->getAttribute('size');
-    } //end func getSize
-
-    // }}}
-    // {{{ setMultiple()
-
+    }
 
     /**
      * Sets the select mutiple attribute
@@ -349,10 +306,7 @@ class HTML_QuickForm_select extends HTML_QuickForm_element
         } else {
             $this->removeAttribute('multiple');
         }
-    } //end func setMultiple
-
-    // }}}
-    // {{{ getMultiple()
+    }
 
     /**
      * Returns the select mutiple attribute
@@ -364,10 +318,7 @@ class HTML_QuickForm_select extends HTML_QuickForm_element
     function getMultiple()
     {
         return (bool)$this->getAttribute('multiple');
-    } //end func getMultiple
-
-    // }}}
-    // {{{ addOption()
+    }
 
     /**
      * Adds a new OPTION to the SELECT
@@ -402,10 +353,9 @@ class HTML_QuickForm_select extends HTML_QuickForm_element
         } else {
             $this->_options[] = array('text' => $text, 'attr' => $attributes);
         }
-    } // end func addOption
+    }
 
-
-        /**
+    /**
      * Adds a new OPTION to the SELECT
      *
      * @param     string    $text       Display text for the OPTION
@@ -521,10 +471,7 @@ class HTML_QuickForm_select extends HTML_QuickForm_element
             }
         }
         return $html;
-    } //end func getFrozenHtml
-
-    // }}}
-    // {{{ exportValue()
+    }
 
    /**
     * We check the options and return only the values that _could_ have been
@@ -577,6 +524,24 @@ class HTML_QuickForm_select extends HTML_QuickForm_element
         } else {
             return parent::onQuickFormEvent($event, $arg, $caller);
         }
+    }
+
+    /**
+     * @param FormValidator $form
+     */
+    public function updateSelectWithSelectedOption(FormValidator $form)
+    {
+        $id = $this->getAttribute('id');
+        $form->addHtml('<script>
+                $(function(){
+                    var optionClass = $("#'.$id.'").find("option:checked").attr("class"); 
+                    $("#'.$id.'").attr("class", "form-control " + optionClass);                    
+                    $("#'.$id.'").on("change", function() {
+                        var optionClass = ($(this).find("option:checked").attr("class")); 
+                        $(this).attr("class", "form-control " + optionClass);
+                    });
+                });
+            </script>');
     }
 
     /**
@@ -633,13 +598,5 @@ class HTML_QuickForm_select extends HTML_QuickForm_element
                         </div>';
                 break;
         }
-    }
-
-    /**
-     * Remove all options
-     */
-    public function clearOptions()
-    {
-        $this->_options = [];
     }
 }

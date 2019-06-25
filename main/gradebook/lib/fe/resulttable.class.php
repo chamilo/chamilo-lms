@@ -64,7 +64,12 @@ class ResultTable extends SortableTable
             $this->set_header($column++, get_lang('LastName'));
             $this->set_header($column++, get_lang('FirstName'));
         }
-        $this->set_header($column++, get_lang('Score'));
+
+        $model = ExerciseLib::getCourseScoreModel();
+        if (empty($model)) {
+            $this->set_header($column++, get_lang('Score'));
+        }
+
         if ($scoredisplay->is_custom()) {
             $this->set_header($column++, get_lang('Display'));
         }
@@ -123,13 +128,15 @@ class ResultTable extends SortableTable
                 break;
         }
 
-        if ($this->direction == 'DESC') {
+        if ($this->direction === 'DESC') {
             $sorting |= ResultsDataGenerator::RDG_SORT_DESC;
         } else {
             $sorting |= ResultsDataGenerator::RDG_SORT_ASC;
         }
 
         $data_array = $this->datagen->get_data($sorting, $from, $this->per_page);
+
+        $model = ExerciseLib::getCourseScoreModel();
 
         // generate the data to display
         $sortable_data = [];
@@ -146,11 +153,13 @@ class ResultTable extends SortableTable
                 $row[] = $item['firstname'];
             }
 
-            $row[] = Display::bar_progress(
-                $item['percentage_score'],
-                false,
-                $item['score']
-            );
+            if (empty($model)) {
+                $row[] = Display::bar_progress(
+                    $item['percentage_score'],
+                    false,
+                    $item['score']
+                );
+            }
 
             if ($scoredisplay->is_custom()) {
                 $row[] = $item['display'];

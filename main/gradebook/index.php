@@ -939,6 +939,8 @@ if (isset($first_time) && $first_time == 1 && api_is_allowed_to_edit(null, true)
         $i = 0;
         $allcat = [];
         $model = ExerciseLib::getCourseScoreModel();
+        $allowGraph = api_get_configuration_value('gradebook_hide_graph') === false;
+        $isAllow = api_is_allowed_to_edit(null, true);
 
         /** @var Category $cat */
         foreach ($cats as $cat) {
@@ -963,9 +965,7 @@ if (isset($first_time) && $first_time == 1 && api_is_allowed_to_edit(null, true)
                     $certificate
                 );
 
-                if (api_is_allowed_to_edit(null, true) &&
-                    api_get_setting('gradebook_enable_grade_model') === 'true'
-                ) {
+                if ($isAllow && api_get_setting('gradebook_enable_grade_model') === 'true') {
                     // Showing the grading system
                     if (!empty($grade_models[$grade_model_id])) {
                         echo Display::return_message(
@@ -980,8 +980,7 @@ if (isset($first_time) && $first_time == 1 && api_is_allowed_to_edit(null, true)
                 }
 
                 $loadStats = [];
-                $teacher = api_is_allowed_to_edit(null, true);
-                if (!$teacher) {
+                if (!$isAllow) {
                     if (api_get_setting('gradebook_detailed_admin_view') === 'true') {
                         $loadStats = [1, 2, 3];
                     } else {
@@ -1004,7 +1003,7 @@ if (isset($first_time) && $first_time == 1 && api_is_allowed_to_edit(null, true)
                     $loadStats
                 );
 
-                if (api_is_allowed_to_edit()) {
+                if ($isAllow) {
                     $gradebookTable->td_attributes = [
                         4 => 'class="text-center"',
                     ];
@@ -1012,9 +1011,8 @@ if (isset($first_time) && $first_time == 1 && api_is_allowed_to_edit(null, true)
 
                 $table = $gradebookTable->return_table();
 
-                $allowGraph = api_get_configuration_value('gradebook_hide_graph') === false;
                 $graph = '';
-                if ($allowGraph) {
+                if ($allowGraph && empty($model)) {
                     $graph = $gradebookTable->getGraph();
                 }
 

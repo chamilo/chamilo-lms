@@ -17,4 +17,18 @@ if ($activeDirectoryPlugin->get(AzureActiveDirectory::SETTING_ENABLE) === 'true'
     if ('true' === $activeDirectoryPlugin->get(AzureActiveDirectory::SETTING_FORCE_LOGOUT_BUTTON)) {
         $_template['signout_url'] = $activeDirectoryPlugin->getUrl(AzureActiveDirectory::URL_TYPE_LOGOUT);
     }
+
+    $managementLoginEnabled = 'true' === $activeDirectoryPlugin->get(AzureActiveDirectory::SETTING_MANAGEMENT_LOGIN_ENABLE);
+
+    $_template['management_login_enabled'] = $managementLoginEnabled;
+
+    if ($managementLoginEnabled) {
+        $managementLoginName = $activeDirectoryPlugin->get(AzureActiveDirectory::SETTING_MANAGEMENT_LOGIN_NAME);
+
+        if (empty($managementLoginName)) {
+            $managementLoginName = $activeDirectoryPlugin->get_lang('ManagementLogin');
+        }
+
+        $_template['management_login_name'] = $managementLoginName;
+    }
 }

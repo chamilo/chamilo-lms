@@ -17,6 +17,8 @@ class AzureActiveDirectory extends Plugin
     const SETTING_APP_SECRET = 'app_secret';
     const SETTING_BLOCK_NAME = 'block_name';
     const SETTING_FORCE_LOGOUT_BUTTON = 'force_logout';
+    const SETTING_MANAGEMENT_LOGIN_ENABLE = 'management_login_enable';
+    const SETTING_MANAGEMENT_LOGIN_NAME = 'management_login_name';
 
     const URL_TYPE_AUTHORIZE = 'login';
     const URL_TYPE_LOGOUT = 'logout';
@@ -35,6 +37,8 @@ class AzureActiveDirectory extends Plugin
             self::SETTING_APP_SECRET => 'text',
             self::SETTING_BLOCK_NAME => 'text',
             self::SETTING_FORCE_LOGOUT_BUTTON => 'boolean',
+            self::SETTING_MANAGEMENT_LOGIN_ENABLE => 'boolean',
+            self::SETTING_MANAGEMENT_LOGIN_NAME => 'text',
         ];
 
         parent::__construct('2.0', 'Angel Fernando Quiroz Campos', $settings);

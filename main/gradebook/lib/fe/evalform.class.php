@@ -455,7 +455,6 @@ class EvalForm extends FormValidator
 
         $this->addButtonSave(get_lang('Edit'));
         $this->addElement('hidden', 'hid_user_id', $this->result_object->get_user_id());
-
     }
 
     /**
@@ -641,7 +640,7 @@ class EvalForm extends FormValidator
                     [
                         'maxlength' => '5',
                         'class' => $class,
-                        'disabled' => 'disabled'
+                        'disabled' => 'disabled',
                     ]
                 );
 
@@ -673,7 +672,7 @@ class EvalForm extends FormValidator
                     [
                         'maxlength' => '5',
                         'class' => $class,
-                        'disabled' => 'disabled'
+                        'disabled' => 'disabled',
                     ]
                 );
 

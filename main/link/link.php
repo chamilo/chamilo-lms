@@ -212,7 +212,7 @@ switch ($action) {
         exit;
         break;
     case 'export':
-        $content = Link::listLinksAndCategories($course_id, $session_id, $categoryId, $show, null, false);
+        $content = Link::listLinksAndCategories($course_id, $session_id, $categoryId, $show, null, false, true);
         $courseInfo = api_get_course_info_by_id($course_id);
         if (!empty($session_id)) {
             $sessionInfo = api_get_session_info($session_id);

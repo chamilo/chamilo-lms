@@ -1562,6 +1562,7 @@ class Link extends Model
      * @param string $show
      * @param null   $token
      * @param bool   $showActionLinks
+     * @param bool   $forceOpenCategories
      *
      * @return string
      */
@@ -1571,12 +1572,11 @@ class Link extends Model
         $categoryId,
         $show = 'none',
         $token = null,
-        $showActionLinks = true
+        $showActionLinks = true,
+        $forceOpenCategories = false
     ) {
         $categoryId = (int) $categoryId;
-
         $content = '';
-
         $categories = self::getLinkCategories($course_id, $session_id);
         $countCategories = count($categories);
         $linksPerCategory = self::showLinksPerCategory(0, $course_id, $session_id, $showActionLinks);
@@ -1636,8 +1636,10 @@ class Link extends Model
             }
 
             // Validation when belongs to a session
-            $showChildren = $categoryId == $myrow['id'] || $show == 'all';
-            $myrow['description'] = $myrow['description'];
+            $showChildren = $categoryId == $myrow['id'] || $show === 'all';
+            if ($forceOpenCategories) {
+                $showChildren = true;
+            }
 
             $strVisibility = '';
             $visibilityClass = null;

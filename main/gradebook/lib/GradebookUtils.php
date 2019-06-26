@@ -1118,10 +1118,10 @@ class GradebookUtils
             'add_signatures' => ['Drh', 'Teacher', 'Date'],
         ];
 
-        $page_format = $params['orientation'] == 'landscape' ? 'A4-L' : 'A4';
+        $page_format = $params['orientation'] === 'landscape' ? 'A4-L' : 'A4';
         ob_start();
         $pdf = new PDF($page_format, $page_format, $pdfParams);
-        $pdf->html_to_pdf_with_template($flatviewtable->return_table());
+        $pdf->html_to_pdf_with_template($flatviewtable->return_table(), false, false, true);
         $content = ob_get_contents();
         ob_end_clean();
         echo $content;

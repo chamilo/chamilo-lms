@@ -137,6 +137,51 @@ foreach ($courses as $course) {
             $sql = "UPDATE c_glossary SET description = '$gdescription' WHERE iid = $id";
             Database::query($sql);
         }
+
+        // Updating forums
+        $sql = "SELECT iid, forum_comment FROM c_forum_forum WHERE c_id = $courseId";
+        $result = Database::query($sql);
+        $items = Database::store_result($result);
+        foreach ($items as $item) {
+            $id = $item['iid'];
+            $text = preg_replace($pathToSearch, $pathToReplace, $item['forum_comment']);
+            $text = Database::escape_string($text);
+
+            $sql = "UPDATE c_forum_forum SET
+                      forum_comment = '$text'
+                    WHERE iid = $id";
+            Database::query($sql);
+        }
+
+        // Updating posts
+        $sql = "SELECT iid, post_text FROM c_forum_post WHERE c_id = $courseId";
+        $result = Database::query($sql);
+        $items = Database::store_result($result);
+        foreach ($items as $item) {
+            $id = $item['iid'];
+            $text = preg_replace($pathToSearch, $pathToReplace, $item['post_text']);
+            $text = Database::escape_string($text);
+
+            $sql = "UPDATE c_forum_post SET
+                      post_text = '$text'
+                    WHERE iid = $id";
+            Database::query($sql);
+        }
+
+        // Updating forum cats
+        $sql = "SELECT iid, cat_comment FROM c_forum_category WHERE c_id = $courseId";
+        $result = Database::query($sql);
+        $items = Database::store_result($result);
+        foreach ($items as $item) {
+            $id = $item['iid'];
+            $text = preg_replace($pathToSearch, $pathToReplace, $item['cat_comment']);
+            $text = Database::escape_string($text);
+
+            $sql = "UPDATE c_forum_category SET
+                      cat_comment = '$text'
+                    WHERE iid = $id";
+            Database::query($sql);
+        }
     } else {
         echo "<h4>Path doesn't exist</h4>".'<br />';
     }

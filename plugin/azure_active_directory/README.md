@@ -13,4 +13,9 @@ Allow authentication (with OAuth2) with Microsoft's Azure Active Directory.
 * _Application ID_: Enter the Application Id assinged to your app by the Azure portal.
 * _Application secret_: Enter the client secret created.
 * _Block name_: (Optional) The name to show above the login button.
-* And assign a region. Preferably `login_bottom`.
+* _Force logout button_: (Optional) Add a button to force logout from Azure.
+* _Management login_: (Optional) Disable the chamilo login and enable an alternative login page for users.   
+   You will need copy the `/plugin/azure_active_directory/layout/login_form.tpl` file to `/main/template/overrides/layout/` directory.
+* _Name for the management login_: A name for the management login. By default is "Management Login".
+
+And assign a region. Preferably `login_bottom`.

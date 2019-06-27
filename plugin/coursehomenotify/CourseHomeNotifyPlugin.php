@@ -29,32 +29,6 @@ class CourseHomeNotifyPlugin extends Plugin
     }
 
     /**
-     * Set the course settings
-     */
-    private function setCourseSettings()
-    {
-        if ('true' !== $this->get(self::SETTING_ENABLED)) {
-            return;
-        }
-
-        $name = $this->get_name();
-
-        $button = Display::toolbarButton(
-            $this->get_lang('SetNotification'),
-            api_get_path(WEB_PLUGIN_PATH).$name.'/configure.php?'.api_get_cidreq(),
-            'cog',
-            'primary'
-        );
-
-        $this->course_settings = [
-            [
-                'name' => '<p>'.$this->get_comment().'</p>'.$button.'<hr>',
-                'type' => 'html',
-            ],
-        ];
-    }
-
-    /**
      * @return CourseHomeNotifyPlugin|null
      */
     public static function create()
@@ -224,5 +198,31 @@ class CourseHomeNotifyPlugin extends Plugin
         </script>";
 
         return $modal;
+    }
+
+    /**
+     * Set the course settings.
+     */
+    private function setCourseSettings()
+    {
+        if ('true' !== $this->get(self::SETTING_ENABLED)) {
+            return;
+        }
+
+        $name = $this->get_name();
+
+        $button = Display::toolbarButton(
+            $this->get_lang('SetNotification'),
+            api_get_path(WEB_PLUGIN_PATH).$name.'/configure.php?'.api_get_cidreq(),
+            'cog',
+            'primary'
+        );
+
+        $this->course_settings = [
+            [
+                'name' => '<p>'.$this->get_comment().'</p>'.$button.'<hr>',
+                'type' => 'html',
+            ],
+        ];
     }
 }

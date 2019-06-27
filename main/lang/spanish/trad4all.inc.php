@@ -8433,4 +8433,7 @@ $Candidate = "Candidato";
 $GeneralTotal = "Total general";
 $Domains = "Dominios";
 $ScormStartAttemptDate = "Fecha";
+$LoginsByDate = "Inicios de sesión por fecha";
+$AllowHtaccessScormImport = "Habilitar archivo htaccess en el importe SCORM";
+$ExerciseAutoEvaluationAndRankingMode = "Modo auto-evaluación y modo clasificación";
 ?>

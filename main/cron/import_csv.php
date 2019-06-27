@@ -1336,7 +1336,7 @@ class ImportCsv
 
             $eventAlreadySent = [];
 
-            $tpl = new Template(null, false, false, false, false, false);
+            $tpl = new Template(null, false, false, false, false, false, false);
 
             foreach ($eventsToCreateFinal as $event) {
                 $courseInfo = $event['course_info'];

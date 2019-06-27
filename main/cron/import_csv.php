@@ -117,7 +117,7 @@ class ImportCsv
             $this->dumpDatabaseTables();
         }
 
-        echo "Reading files: ".PHP_EOL.PHP_EOL;
+        echo 'Reading files: '.PHP_EOL.PHP_EOL;
 
         $files = scandir($path);
         $fileToProcess = [];
@@ -221,6 +221,8 @@ class ImportCsv
                         echo 'File: '.$file.PHP_EOL;
                         echo 'Method : '.$method.PHP_EOL;
                         echo PHP_EOL;
+
+                        $this->logger->addInfo('====================================================');
                         $this->logger->addInfo("Reading file: $file");
                         $this->logger->addInfo("Loading method $method ");
                         if ($method == 'importSessions' || $method == 'importOpenSessions') {
@@ -233,7 +235,7 @@ class ImportCsv
                         } else {
                             $this->$method($file, true);
                         }
-                        $this->logger->addInfo("--Finish reading file--");
+                        $this->logger->addInfo('--Finish reading file--');
                     }
                 }
             }
@@ -271,11 +273,11 @@ class ImportCsv
                             $teacherBackup,
                             $groupBackup
                         );
-                        $this->logger->addInfo("--Finish reading file--");
+                        $this->logger->addInfo('--Finish reading file--');
                     }
                 }
             }
-            $this->logger->addInfo("teacher backup");
+            $this->logger->addInfo('teacher backup');
             $this->logger->addInfo(print_r($teacherBackup, 1));
         }
     }
@@ -1050,7 +1052,7 @@ class ImportCsv
         $data = Import::csvToArray($file);
 
         if (!empty($data)) {
-            $this->logger->addInfo(count($data)." records found.");
+            $this->logger->addInfo(count($data).' records found.');
             $eventsToCreate = [];
             $errorFound = false;
 
@@ -1284,7 +1286,6 @@ class ImportCsv
                             $em->flush();
                         }
                     }
-                    $this->logger->addInfo('Move from course #'.$calendarEvent->getCId().' to #'.$courseInfo['real_id']);
 
                     // Checking if session still exists
                     $calendarSessionId = (int) $calendarEvent->getSessionId();
@@ -1445,7 +1446,9 @@ class ImportCsv
                     $careerName = '';
                     if (!empty($values)) {
                         foreach ($values as $value) {
-                            $careerName = $value['value'];
+                            if (isset($value['value'])) {
+                                $careerName = $value['value'];
+                            }
                         }
                     }
 

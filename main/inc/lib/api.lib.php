@@ -9432,7 +9432,6 @@ function api_set_noreply_and_from_address_to_mailer(PHPMailer $mailer, array $se
     }
 
     $notification = new Notification();
-
     // If the parameter is set don't use the admin.
     $senderName = !empty($sender['name']) ? $sender['name'] : $notification->getDefaultPlatformSenderName();
     $senderEmail = !empty($sender['email']) ? $sender['email'] : $notification->getDefaultPlatformSenderEmail();
@@ -9443,7 +9442,7 @@ function api_set_noreply_and_from_address_to_mailer(PHPMailer $mailer, array $se
 
         if (
             !empty($replyToAddress) &&
-            $platformEmail['SMTP_UNIQUE_REPLY_TO'] &&
+            isset($platformEmail['SMTP_UNIQUE_REPLY_TO']) && $platformEmail['SMTP_UNIQUE_REPLY_TO'] &&
             PHPMailer::ValidateAddress($replyToAddress['mail'])
         ) {
             $mailer->AddReplyTo($replyToAddress['email'], $replyToAddress['name']);

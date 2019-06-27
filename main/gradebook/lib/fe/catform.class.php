@@ -277,15 +277,40 @@ class CatForm extends FormValidator
             }
         }
 
+        $defaultCertification = 0;
         if (isset($this->category_object) &&
             $this->category_object->get_parent_id() == 0
         ) {
-            $this->addText(
-                'certif_min_score',
-                get_lang('CertificateMinScore'),
-                true,
-                ['maxlength' => '5']
-            );
+            $model = ExerciseLib::getCourseScoreModel();
+            if (empty($model)) {
+                $this->addText(
+                    'certif_min_score',
+                    get_lang('CertificateMinScore'),
+                    true,
+                    ['maxlength' => '5']
+                );
+            } else {
+                $questionWeighting = $value;
+                $defaultCertification = api_number_format($this->category_object->getCertificateMinScore(), 2);
+                $select = $this->addSelect(
+                    'certif_min_score',
+                    get_lang('CertificateMinScore'),
+                    [],
+                    ['disable_js' => true]
+                );
+
+                foreach ($model['score_list'] as $item) {
+                    $i = api_number_format($item['score_to_qualify'] / 100 * $questionWeighting, 2);
+                    $model = ExerciseLib::getModelStyle($item, $i);
+                    $attributes = ['class' => $item['css_class']];
+                    if ($defaultCertification == $i) {
+                        $attributes['selected'] = 'selected';
+                    }
+                    $select->addOption($model, $i, $attributes);
+                }
+                $select->updateSelectWithSelectedOption($this);
+            }
+
             $this->addRule(
                 'certif_min_score',
                 get_lang('OnlyNumbers'),
@@ -336,7 +361,7 @@ class CatForm extends FormValidator
                 null,
                 $session_id,
                 false
-            ); //already init
+            );
             $links = null;
             if (!empty($test_cats[0])) {
                 $links = $test_cats[0]->get_links();
@@ -398,6 +423,13 @@ class CatForm extends FormValidator
         if (isset($setting['gradebook']) && $setting['gradebook'] == 'false') {
             $visibility_default = 0;
         }
-        $this->setDefaults(['visible' => $visibility_default, 'skills' => $skillsDefaults]);
+
+        $this->setDefaults(
+            [
+                'visible' => $visibility_default,
+                'skills' => $skillsDefaults,
+                'certif_min_score' => (string) $defaultCertification,
+            ]
+        );
     }
 }

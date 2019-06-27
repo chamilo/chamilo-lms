@@ -1573,6 +1573,7 @@ class GradebookUtils
         $pdf = null
     ) {
         $userInfo = api_get_user_info($userId);
+        $model = ExerciseLib::getCourseScoreModel();
         $cat = $cats[0];
         $allcat = $cats[0]->get_subcategories(
             $userId,
@@ -1608,17 +1609,21 @@ class GradebookUtils
 
         if (api_is_allowed_to_edit(null, true)) {
         } else {
-            $gradebooktable->td_attributes = [
-                3 => 'class=centered',
-                4 => 'class=centered',
-                5 => 'class=centered',
-                6 => 'class=centered',
-                7 => 'class=centered',
-            ];
+            if (empty($model)) {
+                $gradebooktable->td_attributes = [
+                    3 => 'class=centered',
+                    4 => 'class=centered',
+                    5 => 'class=centered',
+                    6 => 'class=centered',
+                    7 => 'class=centered',
+                ];
+            }
         }
         $table = $gradebooktable->return_table();
-        $graph = $gradebooktable->getGraph();
-
+        $graph = '';
+        if (empty($model)) {
+            $graph = $gradebooktable->getGraph();
+        }
         $params = [
             'pdf_title' => sprintf(get_lang('GradeFromX'), $courseInfo['name']),
             'session_info' => '',
@@ -1644,11 +1649,11 @@ class GradebookUtils
             $graph.
             '<br />'.get_lang('Feedback').'<br />
             <textarea rows="5" cols="100">&nbsp;</textarea>';
-
         $result = $pdf->html_to_pdf_with_template(
             $content,
             $saveToFile,
-            $saveToHtmlFile
+            $saveToHtmlFile,
+            true
         );
 
         if ($saveToHtmlFile) {

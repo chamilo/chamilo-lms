@@ -338,11 +338,9 @@ if (isset($_GET['movelink'])) {
 // Parameters for categories.
 if (isset($_GET['visiblecat'])) {
     GradebookUtils::block_students();
-
+    $visibility_command = 0;
     if (isset($_GET['set_visible'])) {
         $visibility_command = 1;
-    } else {
-        $visibility_command = 0;
     }
     $cats = Category::load($_GET['visiblecat']);
     $cats[0]->set_visible($visibility_command);
@@ -791,7 +789,6 @@ if (isset($_GET['studentoverview'])) {
     $addparams['studentoverview'] = '';
 }
 
-//$addparams['cidReq']='';
 if (isset($_GET['cidReq']) && $_GET['cidReq'] != '') {
     $addparams['cidReq'] = Security::remove_XSS($_GET['cidReq']);
 } else {

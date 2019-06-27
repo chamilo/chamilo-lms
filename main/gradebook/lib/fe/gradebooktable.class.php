@@ -406,7 +406,7 @@ class GradebookTable extends SortableTable
                 // list of items inside the gradebook (exercises, lps, forums, etc)
                 $row = [];
                 /** @var AbstractLink $item */
-                $item = $mainCategory = $data[0];
+                $item = $data[0];
 
                 // If the item is invisible, wrap it in a span with class invisible
                 $invisibility_span_open = $isAllowedToEdit && $item->is_visible() == '0' ? '<span class="text-muted">' : '';

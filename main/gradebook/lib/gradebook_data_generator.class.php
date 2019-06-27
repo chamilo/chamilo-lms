@@ -198,8 +198,6 @@ class GradebookDataGenerator
                     $rankingStudentList = [];
                     $invalidateResults = false;
 
-                    $debug = $item->get_id() == 1177;
-
                     // Average
                     if (isset($defaultData[$item->get_id()]) && isset($defaultData[$item->get_id()]['average'])) {
                         $average = $defaultData[$item->get_id()]['average'];

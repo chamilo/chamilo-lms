@@ -275,6 +275,12 @@ class DisplayGradebook
         $userId = api_get_user_id();
         $courseId = api_get_course_int_id();
         $sessionId = api_get_session_id();
+        if (!$is_course_admin) {
+            $model = ExerciseLib::getCourseScoreModel();
+            if (!empty($model)) {
+                return '';
+            }
+        }
 
         // Student.
         $status = CourseManager::getUserInCourseStatus($userId, $courseId);

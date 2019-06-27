@@ -139,8 +139,7 @@ $overwriteColumnHeaderExport = [];
 if (!empty($searchString)) {
     $search = 'true';
 }
-
-if (($search || $forceSearch) && ($search !== 'false')) {
+if (($search === 'true' || $forceSearch === 'true')) {
     $whereCondition = ' 1 = 1 ';
     $whereConditionInForm = getWhereClause(
         $searchField,
@@ -678,6 +677,7 @@ switch ($action) {
     case 'get_sessions':
         $list_type = isset($_REQUEST['list_type']) ? $_REQUEST['list_type'] : 'simple';
         $language = isset($_REQUEST['lang']) ? $_REQUEST['lang'] : '';
+
         $session_columns = SessionManager::getGridColumns($list_type);
         $columns = $session_columns['simple_column_name'];
 
@@ -691,7 +691,6 @@ switch ($action) {
                 $extraFieldsToLoad[] = $fieldData;
             }
         }
-
         if ($list_type === 'simple') {
             $count = SessionManager::get_sessions_admin(
                 ['where' => $whereCondition, 'extra' => $extra_fields],

@@ -1461,7 +1461,7 @@ class ImportCsv
                     $tpl->assign('first_lesson', $date);
                     $tpl->assign('location', $eventComment);
 
-                    $emailBody = $tpl->get_template('mail/custom_calendar_welcome.dist.tpl');
+                    $emailBody = $tpl->get_template('mail/custom_calendar_welcome.tpl');
 
                     $coaches = SessionManager::getCoachesByCourseSession(
                         $event['session_id'],

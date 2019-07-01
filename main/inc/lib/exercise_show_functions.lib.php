@@ -262,7 +262,6 @@ class ExerciseShowFunctions
             } else {
                 if (in_array($resultsDisabled, [
                     RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER,
-                    RESULT_DISABLE_SHOW_SCORE_AND_EXPECTED_ANSWERS_AND_RANKING,
                 ])
                 ) {
                     return '';
@@ -345,7 +344,7 @@ class ExerciseShowFunctions
         $showComment = false;
         switch ($resultsDisabled) {
             case RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER:
-            case RESULT_DISABLE_SHOW_SCORE_AND_EXPECTED_ANSWERS_AND_RANKING:
+            //case RESULT_DISABLE_SHOW_SCORE_AND_EXPECTED_ANSWERS_AND_RANKING:
                 $hideStudentChoice = false;
                 $hide_expected_answer = true;
                 $status = Display::label(get_lang('Correct'), 'success');
@@ -464,7 +463,7 @@ class ExerciseShowFunctions
         $hide_expected_answer = false;
         $hideStudentChoice = false;
         switch ($resultsDisabled) {
-            case RESULT_DISABLE_SHOW_SCORE_AND_EXPECTED_ANSWERS_AND_RANKING:
+            //case RESULT_DISABLE_SHOW_SCORE_AND_EXPECTED_ANSWERS_AND_RANKING:
             case RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER:
                 $hideStudentChoice = false;
                 $hide_expected_answer = true;

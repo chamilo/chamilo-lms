@@ -408,7 +408,7 @@ class ExerciseShowFunctions
             echo '</td>';
         }
 
-        if ($feedbackType != EXERCISE_FEEDBACK_TYPE_EXAM && $studentChoice) {
+        if ($feedbackType != EXERCISE_FEEDBACK_TYPE_EXAM) {
             $showComment = true;
         }
 

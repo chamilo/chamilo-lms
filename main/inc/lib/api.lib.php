@@ -480,8 +480,6 @@ define('RESULT_DISABLE_RANKING', 6);
 define('RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER', 7);
 define('RESULT_DISABLE_SHOW_SCORE_AND_EXPECTED_ANSWERS_AND_RANKING', 8);
 
-// 4: Show final score only with  and show expected answers only on the last attempt
-
 define('EXERCISE_MAX_NAME_SIZE', 80);
 
 // Question types (edit next array as well when adding values)

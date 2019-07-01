@@ -2013,7 +2013,6 @@ abstract class Question
             ) {
                 $scoreLabel = get_lang('CorrectAnswer');
             }
-
             $class = 'success';
         }
 

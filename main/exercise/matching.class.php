@@ -289,6 +289,7 @@ class Matching extends Question
         $header .= '<th>'.get_lang('ElementList').'</th>';
         if (!in_array($exercise->results_disabled, [
             RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER,
+            RESULT_DISABLE_SHOW_SCORE_AND_EXPECTED_ANSWERS_AND_RANKING,
         ])
         ) {
             $header .= '<th>'.get_lang('Choice').'</th>';

@@ -1265,6 +1265,7 @@ class FillBlanks extends Question
         $hideExpectedAnswer = false;
         $hideUserSelection = false;
         switch ($resultsDisabled) {
+            case RESULT_DISABLE_SHOW_SCORE_AND_EXPECTED_ANSWERS_AND_RANKING:
             case RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER:
                 $hideUserSelection = true;
                 break;

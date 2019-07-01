@@ -3082,7 +3082,6 @@ EOT;
                     ICON_SIZE_MEDIUM
                 );
             } else {
-                //$html .= Display::return_message(get_lang('YouDidNotReachTheMinimumScore'), 'warning');
                 $html = get_lang('YouDidNotReachTheMinimumScore');
                 $icon = Display::return_icon(
                     'warning.png',
@@ -5034,7 +5033,7 @@ EOT;
                 $score, $weight, $objExercise->selectPassPercentage()
             );
             // Color the final test score if pass_percentage activated
-            $ribbonTotalSuccessOrError = "";
+            $ribbonTotalSuccessOrError = '';
             if (self::isPassPercentageEnabled($objExercise->selectPassPercentage())) {
                 if ($isSuccess) {
                     $ribbonTotalSuccessOrError = ' ribbon-total-success';

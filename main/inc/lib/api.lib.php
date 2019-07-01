@@ -1158,9 +1158,6 @@ function api_protect_course_script($print_headers = false, $allow_session_admins
         return false;
     }
 
-    $is_allowed_in_course = api_is_allowed_in_course();
-    $is_visible = false;
-
     if (api_is_drh()) {
         return true;
     }
@@ -1175,6 +1172,8 @@ function api_protect_course_script($print_headers = false, $allow_session_admins
         return true;
     }
 
+    $is_allowed_in_course = api_is_allowed_in_course();
+    $is_visible = false;
     if (isset($course_info) && isset($course_info['visibility'])) {
         switch ($course_info['visibility']) {
             default:

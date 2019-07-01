@@ -171,11 +171,11 @@ if (isset($exercise_stat_info['exe_id'])) {
             $questionIdToStart = $objExercise->getFirstQuestionInCategory($categoryIdToStart);
             $questionNumToStart = array_search($questionIdToStart, $questionListInAttempt);
         } else {
-            $lastCategoryId = $objExercise->getCategoryByQuestion($latestQuestionId);
+            $latestQuestion = Question::read($latestQuestionId, [], false);
 
-            if ($lastCategoryId) {
+            if ($latestQuestion->category) {
                 // Flag category as taken
-                Session::write('track_e_adaptive', [$lastCategoryId => true]);
+                Session::write('track_e_adaptive', [$latestQuestion->category => true]);
             }
 
             $questionNumToStart = array_search($latestQuestionId, $questionListInAttempt);

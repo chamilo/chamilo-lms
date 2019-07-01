@@ -56,7 +56,6 @@ class ScormAnswerMatching extends Answer
 
             if ($answerCorrect) {
                 $html[] = '<tr class="option_row">';
-                //$html[] = '<td width="40%" valign="top"><b>'.$counter.'</b>.&nbsp;'.$answer."</td>";
                 $html[] = '<td width="40%" valign="top">&nbsp;'.$answer."</td>";
                 $html[] = '<td width="20%" align="center">&nbsp;&nbsp;';
                 $html[] = '<select name="'.$identifier.$counter.'" id="'.$identifier.$counter.'">';

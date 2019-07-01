@@ -149,7 +149,6 @@ function import_exercise($file)
     if ($result == false) {
         return false;
     }
-    //var_dump($exerciseInfo);exit;
     // 1. Create exercise.
     $exercise = new Exercise();
     $exercise->exercise = $exerciseInfo['name'];

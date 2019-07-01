@@ -152,7 +152,7 @@ $objExercise->createForm($form);
 // VALIDATE FORM
 if ($form->validate()) {
     $objExercise->processCreation($form);
-    if ($form->getSubmitValue('edit') == 'true') {
+    if ($form->getSubmitValue('edit') === 'true') {
         Display::addFlash(
             Display::return_message(get_lang('ExerciseEdited'), 'success')
         );

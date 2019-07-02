@@ -210,6 +210,13 @@ class CQuiz
     protected $hideQuestionTitle;
 
     /**
+     * @var int
+     *
+     * ORM\Column(name="exercise_category_id", type="integer", nullable=true)
+     */
+    protected $exerciseCategoryId;
+
+    /**
      * CQuiz constructor.
      */
     public function __construct()

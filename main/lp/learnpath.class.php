@@ -7702,6 +7702,9 @@ class learnpath
 
         echo Display::return_message(get_lang('ClickOnTheLearnerViewToSeeYourLearningPath'), 'normal');
         $dir = $this->display_item_form('dir', get_lang('EnterDataNewChapter'), 'add_item');
+
+        $selected = isset($_REQUEST['lp_build_selected']) ? (int) $_REQUEST['lp_build_selected'] : 0;
+
         echo Display::tabs(
             $headers,
             [
@@ -7713,7 +7716,10 @@ class learnpath
                 $dir,
                 $finish,
             ],
-            'resource_tab'
+            'resource_tab',
+            [],
+            [],
+            $selected
         );
 
         return true;
@@ -7779,6 +7785,7 @@ class learnpath
     public function display_quiz_form($action = 'add', $id = 0, $extra_info = '')
     {
         $course_id = api_get_course_int_id();
+        $id = (int) $id;
         $tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
         $tbl_quiz = Database::get_course_table(TABLE_QUIZ_TEST);
 
@@ -7801,10 +7808,9 @@ class learnpath
         $item_title = Security::remove_XSS($item_title);
         $item_description = Security::remove_XSS($item_description);
 
+        $parent = 0;
         if ($id != 0 && is_array($extra_info)) {
             $parent = $extra_info['parent_item_id'];
-        } else {
-            $parent = 0;
         }
 
         $sql = "SELECT * FROM $tbl_lp_item 
@@ -7842,9 +7848,9 @@ class learnpath
         );
         $defaults = [];
 
-        if ($action == 'add') {
+        if ($action === 'add') {
             $legend = get_lang('CreateTheExercise');
-        } elseif ($action == 'move') {
+        } elseif ($action === 'move') {
             $legend = get_lang('MoveTheCurrentExercise');
         } else {
             $legend = get_lang('EditCurrentExecice');
@@ -7906,6 +7912,7 @@ class learnpath
                 }
             }
         }
+
         if (is_array($arrLP)) {
             reset($arrLP);
         }
@@ -10133,10 +10140,10 @@ class learnpath
     {
         $_course = api_get_course_info();
         $course_code = api_get_course_id();
-        $return = '<div class="actions">';
-
-        $tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
         $item_id = (int) $item_id;
+
+        $return = '<div class="actions">';
+        $tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
         $sql = "SELECT * FROM $tbl_lp_item 
                 WHERE iid = ".$item_id;
         $result = Database::query($sql);
@@ -10748,18 +10755,78 @@ class learnpath
             $activeCondition = ' active = 1 ';
         }
 
+        $categoryCondition = '';
+        $categoryId = isset($_REQUEST['category_id']) ? (int) $_REQUEST['category_id'] : 0;
+        if (api_get_configuration_value('allow_exercise_categories') && !empty($categoryId)) {
+            $categoryCondition = " AND exercise_category_id = $categoryId ";
+        }
+
+        $keywordCondition = '';
+        $keyword = isset($_REQUEST['keyword']) ? $_REQUEST['keyword'] :'';
+
+        if (!empty($keyword)) {
+            $keyword = Database::escape_string($keyword);
+            $keywordCondition = " AND title LIKE '%$keyword%' ";
+        }
+
         $sql_quiz = "SELECT * FROM $tbl_quiz
-                     WHERE c_id = $course_id AND $activeCondition $condition_session
+                     WHERE 
+                            c_id = $course_id AND 
+                            $activeCondition
+                            $condition_session 
+                            $categoryCondition
+                            $keywordCondition
                      ORDER BY title ASC";
 
         $sql_hot = "SELECT * FROM $tbl_doc
-                     WHERE c_id = $course_id AND path LIKE '".$uploadPath."/%/%htm%'  $condition_session
+                     WHERE 
+                        c_id = $course_id AND 
+                        path LIKE '".$uploadPath."/%/%htm%'  
+                        $condition_session
                      ORDER BY id ASC";
 
         $res_quiz = Database::query($sql_quiz);
         $res_hot = Database::query($sql_hot);
 
-        $return = '<ul class="lp_resource">';
+
+        $currentUrl = api_get_self().'?'.api_get_cidreq().'&action=add_item&type=step&lp_id='.$this->lp_id.'#resource_tab-2';
+
+        // Create a search-box
+        $form = new FormValidator('search_simple', 'get', $currentUrl);
+        $form->addHidden('action', 'add_item');
+        $form->addHidden('type', 'step');
+        $form->addHidden('lp_id', $this->lp_id);
+        $form->addHidden('lp_build_selected', '2');
+
+        $form->addCourseHiddenParams();
+        $form->addText(
+            'keyword',
+            get_lang('Search'),
+            false,
+            [
+                'aria-label' => get_lang('Search'),
+            ]
+        );
+
+        if (api_get_configuration_value('allow_exercise_categories')) {
+            $manager = new ExerciseCategoryManager();
+            $options = $manager->getCategoriesForSelect(api_get_course_int_id());
+            if (!empty($options)) {
+                $form->addSelect(
+                    'category_id',
+                    get_lang('Category'),
+                    $options,
+                    ['placeholder' => get_lang('SelectAnOption')]
+                );
+            }
+        }
+
+        $form->addButtonSearch(get_lang('Search'));
+        $return = $form->returnForm();
+
+        $return .= '<ul class="lp_resource">';
+
+
         $return .= '<li class="lp_resource_element">';
         $return .= Display::return_icon('new_exercice.png');
         $return .= '<a href="'.api_get_path(WEB_CODE_PATH).'exercise/exercise_admin.php?'.api_get_cidreq().'&lp_id='.$this->lp_id.'">'.
@@ -10828,7 +10895,6 @@ class learnpath
                     'class' => $visibility == 0 ? 'moved text-muted' : 'moved',
                 ]
             );
-
             $return .= '</li>';
         }
 

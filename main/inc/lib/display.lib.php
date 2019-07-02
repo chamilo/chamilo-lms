@@ -1167,6 +1167,7 @@ class Display
      * @param string $id            id of the container of the tab in the example "tabs"
      * @param array  $attributes    for the ul
      * @param array  $ul_attributes
+     * @param int    $selected
      *
      * @return string
      */
@@ -1175,7 +1176,8 @@ class Display
         $items,
         $id = 'tabs',
         $attributes = [],
-        $ul_attributes = []
+        $ul_attributes = [],
+        $selected = ''
     ) {
         if (empty($headers) || count($headers) == 0) {
             return '';
@@ -1188,6 +1190,14 @@ class Display
             if ($i == 1) {
                 $active = ' active';
             }
+
+            if (!empty($selected)) {
+                $active = '';
+                if ($selected == $i) {
+                    $active = ' active';
+                }
+            }
+
             $item = self::tag(
                 'a',
                 $item,
@@ -1203,6 +1213,7 @@ class Display
             $lis .= self::tag('li', $item, $ul_attributes);
             $i++;
         }
+
         $ul = self::tag(
             'ul',
             $lis,
@@ -1220,6 +1231,14 @@ class Display
             if ($i == 1) {
                 $active = ' active';
             }
+
+            if (!empty($selected)) {
+                $active = '';
+                if ($selected == $i) {
+                    $active = ' active';
+                }
+            }
+
             $divs .= self::tag(
                 'div',
                 $content,

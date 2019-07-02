@@ -1217,6 +1217,11 @@ $_configuration['required_extra_fields_in_profile'] = [
 // Allow general certificate
 //$_configuration['allow_general_certificate'] = false;
 
+// Allow exercise categories
+// CREATE TABLE c_exercise_category (id BIGINT AUTO_INCREMENT NOT NULL, c_id INT NOT NULL, name VARCHAR(255) NOT NULL, description LONGTEXT DEFAULT NULL, created_at DATETIME NOT NULL, updated_at DATETIME NOT NULL, position INT NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;
+// enable @ORM in CExerciseCategory adn CQuiz::exerciseCategoryId
+//$_configuration['allow_exercise_categories'] = false;
+
 // KEEP THIS AT THE END
 // -------- Custom DB changes
 // Add user activation by confirmation email

@@ -201,6 +201,15 @@ EOT;
     }
 
     /**
+     * Add hidden course params
+     */
+    public function addCourseHiddenParams()
+    {
+        $this->addHidden('cidReq', api_get_course_id());
+        $this->addHidden('id_session', api_get_session_id());
+    }
+
+    /**
      * The "date_range_picker" element creates 2 hidden fields
      * "elementName" + "_start"  and "elementName" + "_end"
      * For example if the name is "range", you will have 2 new fields

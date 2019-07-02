@@ -1870,6 +1870,8 @@ class Exercise
         if ($linkInfo !== false) {
             GradebookUtils::remove_resource_from_course_gradebook($linkInfo['id']);
         }
+
+        return true;
     }
 
     /**

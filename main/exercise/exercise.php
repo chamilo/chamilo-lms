@@ -283,16 +283,6 @@ if (!empty($action) && $is_allowedToEdit) {
     }
 }
 
-if ($origin !== 'learnpath') {
-    //so we are not in learnpath tool
-    Display::display_header($nameTools, get_lang('Exercise'));
-    if (isset($_GET['message']) && in_array($_GET['message'], ['ExerciseEdited'])) {
-        echo Display::return_message(get_lang('ExerciseEdited'), 'confirmation');
-    }
-} else {
-    Display::display_reduced_header();
-}
-
 Event::event_access_tool(TOOL_QUIZ);
 
 $logInfo = [
@@ -303,9 +293,6 @@ $logInfo = [
     'action_details' => isset($_REQUEST['learnpath_id']) ? (int) $_REQUEST['learnpath_id'] : '',
 ];
 Event::registerLog($logInfo);
-
-// Tool introduction
-Display::display_introduction_section(TOOL_QUIZ);
 
 HotPotGCt($documentPath, 1, $userId);
 
@@ -335,7 +322,7 @@ if ($is_allowedToEdit) {
                         // deletes an exercise
                         $result = $objExerciseTmp->delete();
                         if ($result) {
-                            echo Display::return_message(get_lang('ExerciseDeleted'), 'confirmation');
+                            Display::addFlash(Display::return_message(get_lang('ExerciseDeleted'), 'confirmation'));
                         }
                         break;
                     case 'enable':
@@ -362,7 +349,7 @@ if ($is_allowedToEdit) {
                             'visible',
                             $userId
                         );
-                        echo Display::return_message(get_lang('VisibilityChanged'), 'confirmation');
+                        Display::addFlash(Display::return_message(get_lang('VisibilityChanged'), 'confirmation'));
                         break;
                     case 'disable':
                         if ($limitTeacherAccess && !api_is_platform_admin()) {
@@ -388,28 +375,21 @@ if ($is_allowedToEdit) {
                             'invisible',
                             $userId
                         );
-                        echo Display::return_message(
-                            get_lang('VisibilityChanged'),
-                            'confirmation'
-                        );
+                        Display::addFlash(Display::return_message(get_lang('VisibilityChanged'), 'confirmation'));
                         break;
                     case 'disable_results':
                         //disable the results for the learners
                         $objExerciseTmp->disable_results();
                         $objExerciseTmp->save();
-                        echo Display::return_message(
-                            get_lang('ResultsDisabled'),
-                            'confirmation'
-                        );
+                        Display::addFlash(Display::return_message(get_lang('ResultsDisabled'), 'confirmation'));
+
                         break;
                     case 'enable_results':
                         //disable the results for the learners
                         $objExerciseTmp->enable_results();
                         $objExerciseTmp->save();
-                        echo Display::return_message(
-                            get_lang('ResultsEnabled'),
-                            'confirmation'
-                        );
+                        Display::addFlash(Display::return_message(get_lang('ResultsEnabled'), 'confirmation'));
+
                         break;
                     case 'clean_results':
                         if ($limitTeacherAccess && !api_is_platform_admin()) {
@@ -421,24 +401,29 @@ if ($is_allowedToEdit) {
                         if ($exercise_action_locked == false) {
                             $quantity_results_deleted = $objExerciseTmp->cleanResults(true);
                             $title = $objExerciseTmp->selectTitle();
-                            echo Display::return_message(
-                                $title.': '.sprintf(
-                                    get_lang('XResultsCleaned'),
-                                    $quantity_results_deleted
-                                ),
-                                'confirmation'
+
+                            Display::addFlash(
+                                Display::return_message(
+                                    $title.': '.sprintf(
+                                        get_lang('XResultsCleaned'),
+                                        $quantity_results_deleted
+                                    ),
+                                    'confirmation'
+                                )
                             );
                         }
                         break;
                     case 'copy_exercise': //copy an exercise
                         api_set_more_memory_and_time_limits();
                         $objExerciseTmp->copyExercise();
-                        echo Display::return_message(
+                        Display::addFlash(Display::return_message(
                             get_lang('ExerciseCopied'),
                             'confirmation'
-                        );
+                        ));
                         break;
                 }
+                header('Location: '.$currentUrl);
+                exit;
             }
         }
         // destruction of Exercise
@@ -502,6 +487,8 @@ if ($is_allowedToEdit) {
                     $userId
                 );
 
+                Display::addFlash(Display::return_message(get_lang('Updated')));
+
                 break;
             case 'disable': // disables an exercise
                 if ($limitTeacherAccess && !api_is_platform_admin()) {
@@ -524,8 +511,21 @@ if ($is_allowedToEdit) {
             default:
                 break;
         }
+        header('Location: '.$currentUrl);
+        exit;
     }
 }
+
+if ($origin !== 'learnpath') {
+    //so we are not in learnpath tool
+    Display::display_header($nameTools, get_lang('Exercise'));
+    if (isset($_GET['message']) && in_array($_GET['message'], ['ExerciseEdited'])) {
+        echo Display::return_message(get_lang('ExerciseEdited'), 'confirmation');
+    }
+} else {
+    Display::display_reduced_header();
+}
+Display::display_introduction_section(TOOL_QUIZ);
 
 // Selects $limit exercises at the same time
 // maximum number of exercises on a same page

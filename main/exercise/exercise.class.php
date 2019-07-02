@@ -9465,16 +9465,15 @@ class Exercise
                             $actions,
                         ];
                     } else {
+                        $currentRow = [
+                            $currentRow['title'],
+                            $currentRow['attempt']
+                        ];
+
                         if ($isDrhOfCourse) {
-                            $actions = '<a href="exercise_report.php?'.api_get_cidreq().'&exerciseId='.$row['id'].'">'.
+                            $currentRow[] = '<a href="exercise_report.php?'.api_get_cidreq().'&exerciseId='.$row['id'].'">'.
                                 Display::return_icon('test_results.png', get_lang('Results'), '', ICON_SIZE_SMALL).'</a>';
                         }
-                        $currentRow = [
-                            $row['iid'],
-                            $currentRow['title'],
-                            $currentRow['attempt'],
-                            $actions,
-                        ];
                     }
 
                     $tableRows[] = $currentRow;
@@ -9632,17 +9631,16 @@ class Exercise
                         $attemptText = get_lang('NotAttempted').' ';
                     }
 
+                    $currentRow = [
+                        $title,
+                        $attemptText,
+                    ];
+
                     if ($isDrhOfCourse) {
-                        $actions = '<a href="hotpotatoes_exercise_report.php?'.api_get_cidreq().'&path='.$path.'">'.
+                        $currentRow[] = '<a href="hotpotatoes_exercise_report.php?'.api_get_cidreq().'&path='.$path.'">'.
                             Display::return_icon('test_results.png', get_lang('Results'), '', ICON_SIZE_SMALL).'</a>';
                     }
 
-                    $currentRow = [
-                        '',
-                        $title,
-                        $attemptText,
-                        $actions,
-                    ];
                 }
 
                 $tableRows[] = $currentRow;
@@ -9684,14 +9682,18 @@ class Exercise
                 'category_id' => $categoryId,
             ]);
 
-            $formActions = [];
-            $formActions['visible'] = get_lang('Activate');
-            $formActions['invisible'] = get_lang('Deactivate');
-            $formActions['delete'] = get_lang('Delete');
-            $table->set_form_actions($formActions);
+            if ($is_allowedToEdit) {
+                $formActions = [];
+                $formActions['visible'] = get_lang('Activate');
+                $formActions['invisible'] = get_lang('Deactivate');
+                $formActions['delete'] = get_lang('Delete');
+                $table->set_form_actions($formActions);
+            }
 
             $i = 0;
-            $table->set_header($i++, '', false, 'width="18px"');
+            if ($is_allowedToEdit) {
+                $table->set_header($i++, '', false, 'width="18px"');
+            }
             $table->set_header($i++, get_lang('ExerciseName'), false);
 
             if ($is_allowedToEdit) {

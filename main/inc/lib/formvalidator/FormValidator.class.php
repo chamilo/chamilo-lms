@@ -201,7 +201,7 @@ EOT;
     }
 
     /**
-     * Add hidden course params
+     * Add hidden course params.
      */
     public function addCourseHiddenParams()
     {

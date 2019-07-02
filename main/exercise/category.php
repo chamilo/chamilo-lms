@@ -15,7 +15,7 @@ if (!api_is_allowed_to_edit()) {
 
 $interbreadcrumb[] = [
     'url' => api_get_path(WEB_CODE_PATH).'exercise/exercise.php?'.api_get_cidreq(),
-    'name' => get_lang('Exercises')
+    'name' => get_lang('Exercises'),
 ];
 
 $courseId = api_get_course_int_id();
@@ -123,7 +123,7 @@ switch ($action) {
             $content = '<div class="actions">';
             $content .= '<a href="'.$url.'">'.
                 Display::return_icon('back.png', get_lang('Back'), '', ICON_SIZE_MEDIUM).'</a>';
-            $content .=  '</div>';
+            $content .= '</div>';
             $form->addElement('hidden', 'sec_token');
             $form->setConstants(['sec_token' => $token]);
             $content .= $form->returnForm();

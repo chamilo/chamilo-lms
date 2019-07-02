@@ -14,7 +14,6 @@ use ChamiloSession as Session;
  * @author Julio Montoya <gugli100@gmail.com>, lots of cleanup + several improvements
  * Modified by hubert.borderiou (question category)
  */
-
 require_once __DIR__.'/../inc/global.inc.php';
 $current_course_tool = TOOL_QUIZ;
 
@@ -528,7 +527,6 @@ if ($is_allowedToEdit) {
     }
 }
 
-
 // Selects $limit exercises at the same time
 // maximum number of exercises on a same page
 $limit = 50;
@@ -635,7 +633,6 @@ if (api_get_configuration_value('allow_exercise_categories') === false) {
     echo Exercise::exerciseGrid(0, $page, $from, $limit, $keyword);
 } else {
     if (empty($categoryId)) {
-
         echo Display::page_subheader(get_lang('NoCategory'));
         echo Exercise::exerciseGrid(0, $page, $from, $limit, $keyword);
         $counter = 0;
@@ -654,7 +651,6 @@ if (api_get_configuration_value('allow_exercise_categories') === false) {
                 $up = Display::url($upIcon, $modifyUrl.'&action=up_category&category_id_edit='.$categoryIdItem);
                 if ($counter === 0) {
                     $up = Display::url(Display::return_icon('up_na.png'), '#');
-
                 }
                 $down = Display::url($downIcon, $modifyUrl.'&action=down_category&category_id_edit='.$categoryIdItem);
                 $counter++;

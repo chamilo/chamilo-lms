@@ -1821,7 +1821,7 @@ class Exercise
         $limitTeacherAccess = api_get_configuration_value('limit_exercise_teacher_access');
 
         if ($limitTeacherAccess && !api_is_platform_admin()) {
-           return false;
+            return false;
         }
 
         $locked = api_resource_is_locked_by_gradebook(
@@ -7884,7 +7884,6 @@ class Exercise
 
     /**
      * @param int $value
-     *
      */
     public function setExerciseCategoryId($value)
     {
@@ -8201,500 +8200,15 @@ class Exercise
     }
 
     /**
-     * Gets the question list ordered by the question_order setting (drag and drop).
-     *
-     * @return array
-     */
-    private function getQuestionOrderedList()
-    {
-        $TBL_EXERCICE_QUESTION = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
-        $TBL_QUESTIONS = Database::get_course_table(TABLE_QUIZ_QUESTION);
-
-        // Getting question_order to verify that the question
-        // list is correct and all question_order's were set
-        $sql = "SELECT DISTINCT count(e.question_order) as count
-                FROM $TBL_EXERCICE_QUESTION e
-                INNER JOIN $TBL_QUESTIONS q
-                ON (e.question_id = q.id AND e.c_id = q.c_id)
-                WHERE
-                  e.c_id = {$this->course_id} AND
-                  e.exercice_id	= ".$this->id;
-
-        $result = Database::query($sql);
-        $row = Database::fetch_array($result);
-        $count_question_orders = $row['count'];
-
-        // Getting question list from the order (question list drag n drop interface).
-        $sql = "SELECT DISTINCT e.question_id, e.question_order
-                FROM $TBL_EXERCICE_QUESTION e
-                INNER JOIN $TBL_QUESTIONS q
-                ON (e.question_id = q.id AND e.c_id = q.c_id)
-                WHERE
-                    e.c_id = {$this->course_id} AND
-                    e.exercice_id = '".$this->id."'
-                ORDER BY question_order";
-        $result = Database::query($sql);
-
-        // Fills the array with the question ID for this exercise
-        // the key of the array is the question position
-        $temp_question_list = [];
-        $counter = 1;
-        $questionList = [];
-        while ($new_object = Database::fetch_object($result)) {
-            // Correct order.
-            $questionList[$new_object->question_order] = $new_object->question_id;
-            // Just in case we save the order in other array
-            $temp_question_list[$counter] = $new_object->question_id;
-            $counter++;
-        }
-
-        if (!empty($temp_question_list)) {
-            /* If both array don't match it means that question_order was not correctly set
-               for all questions using the default mysql order */
-            if (count($temp_question_list) != $count_question_orders) {
-                $questionList = $temp_question_list;
-            }
-        }
-
-        return $questionList;
-    }
-
-    /**
-     * Select N values from the questions per category array.
-     *
-     * @param array $categoriesAddedInExercise
-     * @param array $question_list
-     * @param array $questions_by_category     per category
-     * @param bool  $flatResult
-     * @param bool  $randomizeQuestions
-     *
-     * @return array
-     */
-    private function pickQuestionsPerCategory(
-        $categoriesAddedInExercise,
-        $question_list,
-        &$questions_by_category,
-        $flatResult = true,
-        $randomizeQuestions = false
-    ) {
-        $addAll = true;
-        $categoryCountArray = [];
-
-        // Getting how many questions will be selected per category.
-        if (!empty($categoriesAddedInExercise)) {
-            $addAll = false;
-            // Parsing question according the category rel exercise settings
-            foreach ($categoriesAddedInExercise as $category_info) {
-                $category_id = $category_info['category_id'];
-                if (isset($questions_by_category[$category_id])) {
-                    // How many question will be picked from this category.
-                    $count = $category_info['count_questions'];
-                    // -1 means all questions
-                    $categoryCountArray[$category_id] = $count;
-                    if ($count == -1) {
-                        $categoryCountArray[$category_id] = 999;
-                    }
-                }
-            }
-        }
-
-        if (!empty($questions_by_category)) {
-            $temp_question_list = [];
-            foreach ($questions_by_category as $category_id => &$categoryQuestionList) {
-                if (isset($categoryCountArray) && !empty($categoryCountArray)) {
-                    $numberOfQuestions = 0;
-                    if (isset($categoryCountArray[$category_id])) {
-                        $numberOfQuestions = $categoryCountArray[$category_id];
-                    }
-                }
-
-                if ($addAll) {
-                    $numberOfQuestions = 999;
-                }
-
-                if (!empty($numberOfQuestions)) {
-                    $elements = TestCategory::getNElementsFromArray(
-                        $categoryQuestionList,
-                        $numberOfQuestions,
-                        $randomizeQuestions
-                    );
-
-                    if (!empty($elements)) {
-                        $temp_question_list[$category_id] = $elements;
-                        $categoryQuestionList = $elements;
-                    }
-                }
-            }
-
-            if (!empty($temp_question_list)) {
-                if ($flatResult) {
-                    $temp_question_list = array_flatten($temp_question_list);
-                }
-                $question_list = $temp_question_list;
-            }
-        }
-
-        return $question_list;
-    }
-
-    /**
-     * Changes the exercise id.
-     *
-     * @param int $id - exercise id
-     */
-    private function updateId($id)
-    {
-        $this->id = $id;
-    }
-
-    /**
-     * Sends a notification when a user ends an examn.
-     *
-     * @param array  $question_list_answers
-     * @param string $origin
-     * @param array  $user_info
-     * @param string $url_email
-     * @param array  $teachers
-     */
-    private function sendNotificationForOpenQuestions(
-        $question_list_answers,
-        $origin,
-        $user_info,
-        $url_email,
-        $teachers
-    ) {
-        // Email configuration settings
-        $courseCode = api_get_course_id();
-        $courseInfo = api_get_course_info($courseCode);
-        $sessionId = api_get_session_id();
-        $sessionData = '';
-        if (!empty($sessionId)) {
-            $sessionInfo = api_get_session_info($sessionId);
-            if (!empty($sessionInfo)) {
-                $sessionData = '<tr>'
-                    .'<td><em>'.get_lang('SessionName').'</em></td>'
-                    .'<td>&nbsp;<b>'.$sessionInfo['name'].'</b></td>'
-                    .'</tr>';
-            }
-        }
-
-        $msg = get_lang('OpenQuestionsAttempted').'<br /><br />'
-            .get_lang('AttemptDetails').' : <br /><br />'
-            .'<table>'
-            .'<tr>'
-            .'<td><em>'.get_lang('CourseName').'</em></td>'
-            .'<td>&nbsp;<b>#course#</b></td>'
-            .'</tr>'
-            .$sessionData
-            .'<tr>'
-            .'<td>'.get_lang('TestAttempted').'</td>'
-            .'<td>&nbsp;#exercise#</td>'
-            .'</tr>'
-            .'<tr>'
-            .'<td>'.get_lang('StudentName').'</td>'
-            .'<td>&nbsp;#firstName# #lastName#</td>'
-            .'</tr>'
-            .'<tr>'
-            .'<td>'.get_lang('StudentEmail').'</td>'
-            .'<td>&nbsp;#mail#</td>'
-            .'</tr>'
-            .'</table>';
-
-        $open_question_list = null;
-        foreach ($question_list_answers as $item) {
-            $question = $item['question'];
-            $answer = $item['answer'];
-            $answer_type = $item['answer_type'];
-
-            if (!empty($question) && !empty($answer) && $answer_type == FREE_ANSWER) {
-                $open_question_list .=
-                    '<tr>'
-                    .'<td width="220" valign="top" bgcolor="#E5EDF8">&nbsp;&nbsp;'.get_lang('Question').'</td>'
-                    .'<td width="473" valign="top" bgcolor="#F3F3F3">'.$question.'</td>'
-                    .'</tr>'
-                    .'<tr>'
-                    .'<td width="220" valign="top" bgcolor="#E5EDF8">&nbsp;&nbsp;'.get_lang('Answer').'</td>'
-                    .'<td valign="top" bgcolor="#F3F3F3">'.$answer.'</td>'
-                    .'</tr>';
-            }
-        }
-
-        if (!empty($open_question_list)) {
-            $msg .= '<p><br />'.get_lang('OpenQuestionsAttemptedAre').' :</p>'.
-                '<table width="730" height="136" border="0" cellpadding="3" cellspacing="3">';
-            $msg .= $open_question_list;
-            $msg .= '</table><br />';
-
-            $msg = str_replace('#exercise#', $this->exercise, $msg);
-            $msg = str_replace('#firstName#', $user_info['firstname'], $msg);
-            $msg = str_replace('#lastName#', $user_info['lastname'], $msg);
-            $msg = str_replace('#mail#', $user_info['email'], $msg);
-            $msg = str_replace(
-                '#course#',
-                Display::url($courseInfo['title'], $courseInfo['course_public_url'].'?id_session='.$sessionId),
-                $msg
-            );
-
-            if ($origin != 'learnpath') {
-                $msg .= '<br /><a href="#url#">'.get_lang('ClickToCommentAndGiveFeedback').'</a>';
-            }
-            $msg = str_replace('#url#', $url_email, $msg);
-            $subject = get_lang('OpenQuestionsAttempted');
-
-            if (!empty($teachers)) {
-                foreach ($teachers as $user_id => $teacher_data) {
-                    MessageManager::send_message_simple(
-                        $user_id,
-                        $subject,
-                        $msg
-                    );
-                }
-            }
-        }
-    }
-
-    /**
-     * Send notification for oral questions.
-     *
-     * @param array  $question_list_answers
-     * @param string $origin
-     * @param int    $exe_id
-     * @param array  $user_info
-     * @param string $url_email
-     * @param array  $teachers
-     */
-    private function sendNotificationForOralQuestions(
-        $question_list_answers,
-        $origin,
-        $exe_id,
-        $user_info,
-        $url_email,
-        $teachers
-    ) {
-        // Email configuration settings
-        $courseCode = api_get_course_id();
-        $courseInfo = api_get_course_info($courseCode);
-        $oral_question_list = null;
-        foreach ($question_list_answers as $item) {
-            $question = $item['question'];
-            $file = $item['generated_oral_file'];
-            $answer = $item['answer'];
-            if ($answer == 0) {
-                $answer = '';
-            }
-            $answer_type = $item['answer_type'];
-            if (!empty($question) && (!empty($answer) || !empty($file)) && $answer_type == ORAL_EXPRESSION) {
-                if (!empty($file)) {
-                    $file = Display::url($file, $file);
-                }
-                $oral_question_list .= '<br />
-                    <table width="730" height="136" border="0" cellpadding="3" cellspacing="3">
-                    <tr>
-                        <td width="220" valign="top" bgcolor="#E5EDF8">&nbsp;&nbsp;'.get_lang('Question').'</td>
-                        <td width="473" valign="top" bgcolor="#F3F3F3">'.$question.'</td>
-                    </tr>
-                    <tr>
-                        <td width="220" valign="top" bgcolor="#E5EDF8">&nbsp;&nbsp;'.get_lang('Answer').'</td>
-                        <td valign="top" bgcolor="#F3F3F3">'.$answer.$file.'</td>
-                    </tr></table>';
-            }
-        }
-
-        if (!empty($oral_question_list)) {
-            $msg = get_lang('OralQuestionsAttempted').'<br /><br />
-                    '.get_lang('AttemptDetails').' : <br /><br />
-                    <table>
-                        <tr>
-                            <td><em>'.get_lang('CourseName').'</em></td>
-                            <td>&nbsp;<b>#course#</b></td>
-                        </tr>
-                        <tr>
-                            <td>'.get_lang('TestAttempted').'</td>
-                            <td>&nbsp;#exercise#</td>
-                        </tr>
-                        <tr>
-                            <td>'.get_lang('StudentName').'</td>
-                            <td>&nbsp;#firstName# #lastName#</td>
-                        </tr>
-                        <tr>
-                            <td>'.get_lang('StudentEmail').'</td>
-                            <td>&nbsp;#mail#</td>
-                        </tr>
-                    </table>';
-            $msg .= '<br />'.sprintf(get_lang('OralQuestionsAttemptedAreX'), $oral_question_list).'<br />';
-            $msg1 = str_replace("#exercise#", $this->exercise, $msg);
-            $msg = str_replace("#firstName#", $user_info['firstname'], $msg1);
-            $msg1 = str_replace("#lastName#", $user_info['lastname'], $msg);
-            $msg = str_replace("#mail#", $user_info['email'], $msg1);
-            $msg = str_replace("#course#", $courseInfo['name'], $msg1);
-
-            if (!in_array($origin, ['learnpath', 'embeddable'])) {
-                $msg .= '<br /><a href="#url#">'.get_lang('ClickToCommentAndGiveFeedback').'</a>';
-            }
-            $msg1 = str_replace("#url#", $url_email, $msg);
-            $mail_content = $msg1;
-            $subject = get_lang('OralQuestionsAttempted');
-
-            if (!empty($teachers)) {
-                foreach ($teachers as $user_id => $teacher_data) {
-                    MessageManager::send_message_simple(
-                        $user_id,
-                        $subject,
-                        $mail_content
-                    );
-                }
-            }
-        }
-    }
-
-    /**
-     * Returns an array with the media list.
-     *
-     * @param array question list
-     *
-     * @example there's 1 question with iid 5 that belongs to the media question with iid = 100
-     * <code>
-     * array (size=2)
-     *  999 =>
-     *    array (size=3)
-     *      0 => int 7
-     *      1 => int 6
-     *      2 => int 3254
-     *  100 =>
-     *   array (size=1)
-     *      0 => int 5
-     *  </code>
-     */
-    private function setMediaList($questionList)
-    {
-        $mediaList = [];
-        /*
-         * Media feature is not activated in 1.11.x
-        if (!empty($questionList)) {
-            foreach ($questionList as $questionId) {
-                $objQuestionTmp = Question::read($questionId, $this->course_id);
-                // If a media question exists
-                if (isset($objQuestionTmp->parent_id) && $objQuestionTmp->parent_id != 0) {
-                    $mediaList[$objQuestionTmp->parent_id][] = $objQuestionTmp->id;
-                } else {
-                    // Always the last item
-                    $mediaList[999][] = $objQuestionTmp->id;
-                }
-            }
-        }*/
-
-        $this->mediaList = $mediaList;
-    }
-
-    /**
-     * @param FormValidator $form
-     *
-     * @return HTML_QuickForm_group
-     */
-    private function setResultDisabledGroup(FormValidator $form)
-    {
-        $resultDisabledGroup = [];
-
-        $resultDisabledGroup[] = $form->createElement(
-            'radio',
-            'results_disabled',
-            null,
-            get_lang('ShowScoreAndRightAnswer'),
-            '0',
-            ['id' => 'result_disabled_0']
-        );
-
-        $resultDisabledGroup[] = $form->createElement(
-            'radio',
-            'results_disabled',
-            null,
-            get_lang('DoNotShowScoreNorRightAnswer'),
-            '1',
-            ['id' => 'result_disabled_1', 'onclick' => 'check_results_disabled()']
-        );
-
-        $resultDisabledGroup[] = $form->createElement(
-            'radio',
-            'results_disabled',
-            null,
-            get_lang('OnlyShowScore'),
-            '2',
-            ['id' => 'result_disabled_2', 'onclick' => 'check_results_disabled()']
-        );
-
-        if ($this->selectFeedbackType() == EXERCISE_FEEDBACK_TYPE_DIRECT) {
-            $group = $form->addGroup(
-                $resultDisabledGroup,
-                null,
-                get_lang('ShowResultsToStudents')
-            );
-
-            return $group;
-        }
-
-        $resultDisabledGroup[] = $form->createElement(
-            'radio',
-            'results_disabled',
-            null,
-            get_lang('ShowScoreEveryAttemptShowAnswersLastAttempt'),
-            '4',
-            ['id' => 'result_disabled_4']
-        );
-
-        $resultDisabledGroup[] = $form->createElement(
-            'radio',
-            'results_disabled',
-            null,
-            get_lang('DontShowScoreOnlyWhenUserFinishesAllAttemptsButShowFeedbackEachAttempt'),
-            '5',
-            ['id' => 'result_disabled_5', 'onclick' => 'check_results_disabled()']
-        );
-
-        $resultDisabledGroup[] = $form->createElement(
-            'radio',
-            'results_disabled',
-            null,
-            get_lang('ExerciseRankingMode'),
-            RESULT_DISABLE_RANKING,
-            ['id' => 'result_disabled_6']
-        );
-
-        $resultDisabledGroup[] = $form->createElement(
-            'radio',
-            'results_disabled',
-            null,
-            get_lang('ExerciseShowOnlyGlobalScoreAndCorrectAnswers'),
-            RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER,
-            ['id' => 'result_disabled_7']
-        );
-
-        $resultDisabledGroup[] = $form->createElement(
-            'radio',
-            'results_disabled',
-            null,
-            get_lang('ExerciseAutoEvaluationAndRankingMode'),
-            RESULT_DISABLE_SHOW_SCORE_AND_EXPECTED_ANSWERS_AND_RANKING,
-            ['id' => 'result_disabled_8']
-        );
-
-        $group = $form->addGroup(
-            $resultDisabledGroup,
-            null,
-            get_lang('ShowResultsToStudents')
-        );
-
-        return $group;
-    }
-
-    /**
      * @param int    $categoryId
      * @param int    $page
      * @param int    $from
      * @param int    $limit
      * @param string $keyword
      *
-     * @return string
      * @throws \Doctrine\ORM\Query\QueryException
+     *
+     * @return string
      */
     public static function exerciseGrid($categoryId, $page, $from, $limit, $keyword = '')
     {
@@ -9467,7 +8981,7 @@ class Exercise
                     } else {
                         $currentRow = [
                             $currentRow['title'],
-                            $currentRow['attempt']
+                            $currentRow['attempt'],
                         ];
 
                         if ($isDrhOfCourse) {
@@ -9640,7 +9154,6 @@ class Exercise
                         $currentRow[] = '<a href="hotpotatoes_exercise_report.php?'.api_get_cidreq().'&path='.$path.'">'.
                             Display::return_icon('test_results.png', get_lang('Results'), '', ICON_SIZE_SMALL).'</a>';
                     }
-
                 }
 
                 $tableRows[] = $currentRow;
@@ -9707,10 +9220,496 @@ class Exercise
             }
 
             //$content .= '<div class="table-responsive">';
-            $content .=  $table->return_table();
+            $content .= $table->return_table();
             //$content .= '</div>';
         }
 
         return $content;
+    }
+
+    /**
+     * Gets the question list ordered by the question_order setting (drag and drop).
+     *
+     * @return array
+     */
+    private function getQuestionOrderedList()
+    {
+        $TBL_EXERCICE_QUESTION = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
+        $TBL_QUESTIONS = Database::get_course_table(TABLE_QUIZ_QUESTION);
+
+        // Getting question_order to verify that the question
+        // list is correct and all question_order's were set
+        $sql = "SELECT DISTINCT count(e.question_order) as count
+                FROM $TBL_EXERCICE_QUESTION e
+                INNER JOIN $TBL_QUESTIONS q
+                ON (e.question_id = q.id AND e.c_id = q.c_id)
+                WHERE
+                  e.c_id = {$this->course_id} AND
+                  e.exercice_id	= ".$this->id;
+
+        $result = Database::query($sql);
+        $row = Database::fetch_array($result);
+        $count_question_orders = $row['count'];
+
+        // Getting question list from the order (question list drag n drop interface).
+        $sql = "SELECT DISTINCT e.question_id, e.question_order
+                FROM $TBL_EXERCICE_QUESTION e
+                INNER JOIN $TBL_QUESTIONS q
+                ON (e.question_id = q.id AND e.c_id = q.c_id)
+                WHERE
+                    e.c_id = {$this->course_id} AND
+                    e.exercice_id = '".$this->id."'
+                ORDER BY question_order";
+        $result = Database::query($sql);
+
+        // Fills the array with the question ID for this exercise
+        // the key of the array is the question position
+        $temp_question_list = [];
+        $counter = 1;
+        $questionList = [];
+        while ($new_object = Database::fetch_object($result)) {
+            // Correct order.
+            $questionList[$new_object->question_order] = $new_object->question_id;
+            // Just in case we save the order in other array
+            $temp_question_list[$counter] = $new_object->question_id;
+            $counter++;
+        }
+
+        if (!empty($temp_question_list)) {
+            /* If both array don't match it means that question_order was not correctly set
+               for all questions using the default mysql order */
+            if (count($temp_question_list) != $count_question_orders) {
+                $questionList = $temp_question_list;
+            }
+        }
+
+        return $questionList;
+    }
+
+    /**
+     * Select N values from the questions per category array.
+     *
+     * @param array $categoriesAddedInExercise
+     * @param array $question_list
+     * @param array $questions_by_category     per category
+     * @param bool  $flatResult
+     * @param bool  $randomizeQuestions
+     *
+     * @return array
+     */
+    private function pickQuestionsPerCategory(
+        $categoriesAddedInExercise,
+        $question_list,
+        &$questions_by_category,
+        $flatResult = true,
+        $randomizeQuestions = false
+    ) {
+        $addAll = true;
+        $categoryCountArray = [];
+
+        // Getting how many questions will be selected per category.
+        if (!empty($categoriesAddedInExercise)) {
+            $addAll = false;
+            // Parsing question according the category rel exercise settings
+            foreach ($categoriesAddedInExercise as $category_info) {
+                $category_id = $category_info['category_id'];
+                if (isset($questions_by_category[$category_id])) {
+                    // How many question will be picked from this category.
+                    $count = $category_info['count_questions'];
+                    // -1 means all questions
+                    $categoryCountArray[$category_id] = $count;
+                    if ($count == -1) {
+                        $categoryCountArray[$category_id] = 999;
+                    }
+                }
+            }
+        }
+
+        if (!empty($questions_by_category)) {
+            $temp_question_list = [];
+            foreach ($questions_by_category as $category_id => &$categoryQuestionList) {
+                if (isset($categoryCountArray) && !empty($categoryCountArray)) {
+                    $numberOfQuestions = 0;
+                    if (isset($categoryCountArray[$category_id])) {
+                        $numberOfQuestions = $categoryCountArray[$category_id];
+                    }
+                }
+
+                if ($addAll) {
+                    $numberOfQuestions = 999;
+                }
+
+                if (!empty($numberOfQuestions)) {
+                    $elements = TestCategory::getNElementsFromArray(
+                        $categoryQuestionList,
+                        $numberOfQuestions,
+                        $randomizeQuestions
+                    );
+
+                    if (!empty($elements)) {
+                        $temp_question_list[$category_id] = $elements;
+                        $categoryQuestionList = $elements;
+                    }
+                }
+            }
+
+            if (!empty($temp_question_list)) {
+                if ($flatResult) {
+                    $temp_question_list = array_flatten($temp_question_list);
+                }
+                $question_list = $temp_question_list;
+            }
+        }
+
+        return $question_list;
+    }
+
+    /**
+     * Changes the exercise id.
+     *
+     * @param int $id - exercise id
+     */
+    private function updateId($id)
+    {
+        $this->id = $id;
+    }
+
+    /**
+     * Sends a notification when a user ends an examn.
+     *
+     * @param array  $question_list_answers
+     * @param string $origin
+     * @param array  $user_info
+     * @param string $url_email
+     * @param array  $teachers
+     */
+    private function sendNotificationForOpenQuestions(
+        $question_list_answers,
+        $origin,
+        $user_info,
+        $url_email,
+        $teachers
+    ) {
+        // Email configuration settings
+        $courseCode = api_get_course_id();
+        $courseInfo = api_get_course_info($courseCode);
+        $sessionId = api_get_session_id();
+        $sessionData = '';
+        if (!empty($sessionId)) {
+            $sessionInfo = api_get_session_info($sessionId);
+            if (!empty($sessionInfo)) {
+                $sessionData = '<tr>'
+                    .'<td><em>'.get_lang('SessionName').'</em></td>'
+                    .'<td>&nbsp;<b>'.$sessionInfo['name'].'</b></td>'
+                    .'</tr>';
+            }
+        }
+
+        $msg = get_lang('OpenQuestionsAttempted').'<br /><br />'
+            .get_lang('AttemptDetails').' : <br /><br />'
+            .'<table>'
+            .'<tr>'
+            .'<td><em>'.get_lang('CourseName').'</em></td>'
+            .'<td>&nbsp;<b>#course#</b></td>'
+            .'</tr>'
+            .$sessionData
+            .'<tr>'
+            .'<td>'.get_lang('TestAttempted').'</td>'
+            .'<td>&nbsp;#exercise#</td>'
+            .'</tr>'
+            .'<tr>'
+            .'<td>'.get_lang('StudentName').'</td>'
+            .'<td>&nbsp;#firstName# #lastName#</td>'
+            .'</tr>'
+            .'<tr>'
+            .'<td>'.get_lang('StudentEmail').'</td>'
+            .'<td>&nbsp;#mail#</td>'
+            .'</tr>'
+            .'</table>';
+
+        $open_question_list = null;
+        foreach ($question_list_answers as $item) {
+            $question = $item['question'];
+            $answer = $item['answer'];
+            $answer_type = $item['answer_type'];
+
+            if (!empty($question) && !empty($answer) && $answer_type == FREE_ANSWER) {
+                $open_question_list .=
+                    '<tr>'
+                    .'<td width="220" valign="top" bgcolor="#E5EDF8">&nbsp;&nbsp;'.get_lang('Question').'</td>'
+                    .'<td width="473" valign="top" bgcolor="#F3F3F3">'.$question.'</td>'
+                    .'</tr>'
+                    .'<tr>'
+                    .'<td width="220" valign="top" bgcolor="#E5EDF8">&nbsp;&nbsp;'.get_lang('Answer').'</td>'
+                    .'<td valign="top" bgcolor="#F3F3F3">'.$answer.'</td>'
+                    .'</tr>';
+            }
+        }
+
+        if (!empty($open_question_list)) {
+            $msg .= '<p><br />'.get_lang('OpenQuestionsAttemptedAre').' :</p>'.
+                '<table width="730" height="136" border="0" cellpadding="3" cellspacing="3">';
+            $msg .= $open_question_list;
+            $msg .= '</table><br />';
+
+            $msg = str_replace('#exercise#', $this->exercise, $msg);
+            $msg = str_replace('#firstName#', $user_info['firstname'], $msg);
+            $msg = str_replace('#lastName#', $user_info['lastname'], $msg);
+            $msg = str_replace('#mail#', $user_info['email'], $msg);
+            $msg = str_replace(
+                '#course#',
+                Display::url($courseInfo['title'], $courseInfo['course_public_url'].'?id_session='.$sessionId),
+                $msg
+            );
+
+            if ($origin != 'learnpath') {
+                $msg .= '<br /><a href="#url#">'.get_lang('ClickToCommentAndGiveFeedback').'</a>';
+            }
+            $msg = str_replace('#url#', $url_email, $msg);
+            $subject = get_lang('OpenQuestionsAttempted');
+
+            if (!empty($teachers)) {
+                foreach ($teachers as $user_id => $teacher_data) {
+                    MessageManager::send_message_simple(
+                        $user_id,
+                        $subject,
+                        $msg
+                    );
+                }
+            }
+        }
+    }
+
+    /**
+     * Send notification for oral questions.
+     *
+     * @param array  $question_list_answers
+     * @param string $origin
+     * @param int    $exe_id
+     * @param array  $user_info
+     * @param string $url_email
+     * @param array  $teachers
+     */
+    private function sendNotificationForOralQuestions(
+        $question_list_answers,
+        $origin,
+        $exe_id,
+        $user_info,
+        $url_email,
+        $teachers
+    ) {
+        // Email configuration settings
+        $courseCode = api_get_course_id();
+        $courseInfo = api_get_course_info($courseCode);
+        $oral_question_list = null;
+        foreach ($question_list_answers as $item) {
+            $question = $item['question'];
+            $file = $item['generated_oral_file'];
+            $answer = $item['answer'];
+            if ($answer == 0) {
+                $answer = '';
+            }
+            $answer_type = $item['answer_type'];
+            if (!empty($question) && (!empty($answer) || !empty($file)) && $answer_type == ORAL_EXPRESSION) {
+                if (!empty($file)) {
+                    $file = Display::url($file, $file);
+                }
+                $oral_question_list .= '<br />
+                    <table width="730" height="136" border="0" cellpadding="3" cellspacing="3">
+                    <tr>
+                        <td width="220" valign="top" bgcolor="#E5EDF8">&nbsp;&nbsp;'.get_lang('Question').'</td>
+                        <td width="473" valign="top" bgcolor="#F3F3F3">'.$question.'</td>
+                    </tr>
+                    <tr>
+                        <td width="220" valign="top" bgcolor="#E5EDF8">&nbsp;&nbsp;'.get_lang('Answer').'</td>
+                        <td valign="top" bgcolor="#F3F3F3">'.$answer.$file.'</td>
+                    </tr></table>';
+            }
+        }
+
+        if (!empty($oral_question_list)) {
+            $msg = get_lang('OralQuestionsAttempted').'<br /><br />
+                    '.get_lang('AttemptDetails').' : <br /><br />
+                    <table>
+                        <tr>
+                            <td><em>'.get_lang('CourseName').'</em></td>
+                            <td>&nbsp;<b>#course#</b></td>
+                        </tr>
+                        <tr>
+                            <td>'.get_lang('TestAttempted').'</td>
+                            <td>&nbsp;#exercise#</td>
+                        </tr>
+                        <tr>
+                            <td>'.get_lang('StudentName').'</td>
+                            <td>&nbsp;#firstName# #lastName#</td>
+                        </tr>
+                        <tr>
+                            <td>'.get_lang('StudentEmail').'</td>
+                            <td>&nbsp;#mail#</td>
+                        </tr>
+                    </table>';
+            $msg .= '<br />'.sprintf(get_lang('OralQuestionsAttemptedAreX'), $oral_question_list).'<br />';
+            $msg1 = str_replace("#exercise#", $this->exercise, $msg);
+            $msg = str_replace("#firstName#", $user_info['firstname'], $msg1);
+            $msg1 = str_replace("#lastName#", $user_info['lastname'], $msg);
+            $msg = str_replace("#mail#", $user_info['email'], $msg1);
+            $msg = str_replace("#course#", $courseInfo['name'], $msg1);
+
+            if (!in_array($origin, ['learnpath', 'embeddable'])) {
+                $msg .= '<br /><a href="#url#">'.get_lang('ClickToCommentAndGiveFeedback').'</a>';
+            }
+            $msg1 = str_replace("#url#", $url_email, $msg);
+            $mail_content = $msg1;
+            $subject = get_lang('OralQuestionsAttempted');
+
+            if (!empty($teachers)) {
+                foreach ($teachers as $user_id => $teacher_data) {
+                    MessageManager::send_message_simple(
+                        $user_id,
+                        $subject,
+                        $mail_content
+                    );
+                }
+            }
+        }
+    }
+
+    /**
+     * Returns an array with the media list.
+     *
+     * @param array question list
+     *
+     * @example there's 1 question with iid 5 that belongs to the media question with iid = 100
+     * <code>
+     * array (size=2)
+     *  999 =>
+     *    array (size=3)
+     *      0 => int 7
+     *      1 => int 6
+     *      2 => int 3254
+     *  100 =>
+     *   array (size=1)
+     *      0 => int 5
+     *  </code>
+     */
+    private function setMediaList($questionList)
+    {
+        $mediaList = [];
+        /*
+         * Media feature is not activated in 1.11.x
+        if (!empty($questionList)) {
+            foreach ($questionList as $questionId) {
+                $objQuestionTmp = Question::read($questionId, $this->course_id);
+                // If a media question exists
+                if (isset($objQuestionTmp->parent_id) && $objQuestionTmp->parent_id != 0) {
+                    $mediaList[$objQuestionTmp->parent_id][] = $objQuestionTmp->id;
+                } else {
+                    // Always the last item
+                    $mediaList[999][] = $objQuestionTmp->id;
+                }
+            }
+        }*/
+
+        $this->mediaList = $mediaList;
+    }
+
+    /**
+     * @param FormValidator $form
+     *
+     * @return HTML_QuickForm_group
+     */
+    private function setResultDisabledGroup(FormValidator $form)
+    {
+        $resultDisabledGroup = [];
+
+        $resultDisabledGroup[] = $form->createElement(
+            'radio',
+            'results_disabled',
+            null,
+            get_lang('ShowScoreAndRightAnswer'),
+            '0',
+            ['id' => 'result_disabled_0']
+        );
+
+        $resultDisabledGroup[] = $form->createElement(
+            'radio',
+            'results_disabled',
+            null,
+            get_lang('DoNotShowScoreNorRightAnswer'),
+            '1',
+            ['id' => 'result_disabled_1', 'onclick' => 'check_results_disabled()']
+        );
+
+        $resultDisabledGroup[] = $form->createElement(
+            'radio',
+            'results_disabled',
+            null,
+            get_lang('OnlyShowScore'),
+            '2',
+            ['id' => 'result_disabled_2', 'onclick' => 'check_results_disabled()']
+        );
+
+        if ($this->selectFeedbackType() == EXERCISE_FEEDBACK_TYPE_DIRECT) {
+            $group = $form->addGroup(
+                $resultDisabledGroup,
+                null,
+                get_lang('ShowResultsToStudents')
+            );
+
+            return $group;
+        }
+
+        $resultDisabledGroup[] = $form->createElement(
+            'radio',
+            'results_disabled',
+            null,
+            get_lang('ShowScoreEveryAttemptShowAnswersLastAttempt'),
+            '4',
+            ['id' => 'result_disabled_4']
+        );
+
+        $resultDisabledGroup[] = $form->createElement(
+            'radio',
+            'results_disabled',
+            null,
+            get_lang('DontShowScoreOnlyWhenUserFinishesAllAttemptsButShowFeedbackEachAttempt'),
+            '5',
+            ['id' => 'result_disabled_5', 'onclick' => 'check_results_disabled()']
+        );
+
+        $resultDisabledGroup[] = $form->createElement(
+            'radio',
+            'results_disabled',
+            null,
+            get_lang('ExerciseRankingMode'),
+            RESULT_DISABLE_RANKING,
+            ['id' => 'result_disabled_6']
+        );
+
+        $resultDisabledGroup[] = $form->createElement(
+            'radio',
+            'results_disabled',
+            null,
+            get_lang('ExerciseShowOnlyGlobalScoreAndCorrectAnswers'),
+            RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER,
+            ['id' => 'result_disabled_7']
+        );
+
+        $resultDisabledGroup[] = $form->createElement(
+            'radio',
+            'results_disabled',
+            null,
+            get_lang('ExerciseAutoEvaluationAndRankingMode'),
+            RESULT_DISABLE_SHOW_SCORE_AND_EXPECTED_ANSWERS_AND_RANKING,
+            ['id' => 'result_disabled_8']
+        );
+
+        $group = $form->addGroup(
+            $resultDisabledGroup,
+            null,
+            get_lang('ShowResultsToStudents')
+        );
+
+        return $group;
     }
 }

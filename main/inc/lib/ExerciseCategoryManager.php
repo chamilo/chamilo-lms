@@ -94,7 +94,6 @@ class ExerciseCategoryManager extends Model
 
     /**
      * @param int $id
-     *
      */
     public function delete($id)
     {
@@ -120,7 +119,6 @@ class ExerciseCategoryManager extends Model
      *
      * @param array $params    Structured array with the values to save
      * @param bool  $showQuery Whether to show the insert query (passed to the parent save() method)
-     *
      */
     public function save($params, $showQuery = false)
     {
@@ -132,20 +130,20 @@ class ExerciseCategoryManager extends Model
             ->setCId(api_get_course_int_id())
             ->setDescription($params['name'])
         ;
-    /*
-        // Update position
-        $query = $em->getRepository('ChamiloCourseBundle:CExerciseCategory')->createQueryBuilder('e');
-        $query
-            ->where('e.cId = :cId')
-            ->setParameter('cId', $courseId)
-            ->setMaxResults(1)
-            ->orderBy('e.position', 'DESC');
-        $last = $query->getQuery()->getOneOrNullResult();
-        $position = 0;
-        if (!empty($last)) {
-            $position = $last->getPosition() + 1;
-        }
-        $category->setPosition($position);
+        /*
+            // Update position
+            $query = $em->getRepository('ChamiloCourseBundle:CExerciseCategory')->createQueryBuilder('e');
+            $query
+                ->where('e.cId = :cId')
+                ->setParameter('cId', $courseId)
+                ->setMaxResults(1)
+                ->orderBy('e.position', 'DESC');
+            $last = $query->getQuery()->getOneOrNullResult();
+            $position = 0;
+            if (!empty($last)) {
+                $position = $last->getPosition() + 1;
+            }
+            $category->setPosition($position);
 */
         $em->persist($category);
         $em->flush();
@@ -247,23 +245,23 @@ JAVASCRIPT;
         // action links
         $content = '<div class="actions">';
         $content .= '<a href="'.api_get_path(WEB_CODE_PATH).'exercise/exercise.php?'.api_get_cidreq().'">';
-        $content .=  Display::return_icon(
+        $content .= Display::return_icon(
             'back.png',
             get_lang('BackTo').' '.get_lang('PlatformAdmin'),
             '',
             ICON_SIZE_MEDIUM
         );
-        $content .=  '</a>';
-        $content .=  '<a href="'.api_get_self().'?action=add&'.api_get_cidreq().'">';
-        $content .=  Display::return_icon(
+        $content .= '</a>';
+        $content .= '<a href="'.api_get_self().'?action=add&'.api_get_cidreq().'">';
+        $content .= Display::return_icon(
             'add.png',
             get_lang('Add'),
             '',
             ICON_SIZE_MEDIUM
         );
-        $content .=  '</a>';
-        $content .=  '</div>';
-        $content .=  Display::grid_html('categories');
+        $content .= '</a>';
+        $content .= '</div>';
+        $content .= Display::grid_html('categories');
 
         return $content;
     }

@@ -4917,6 +4917,9 @@ EOT;
         $table->setHeaderContents(0, 3, get_lang('Date'), ['class' => 'text-center']);
 
         foreach ($data as $r => $item) {
+            if (!isset($item[1])) {
+                continue;
+            }
             $selected = $item[1]->getId() == $currentUserId;
 
             foreach ($item as $c => $value) {

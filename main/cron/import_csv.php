@@ -1221,6 +1221,10 @@ class ImportCsv
                 'mail_not_sent_because_date' => 0,
             ];
 
+            $language = $this->defaultLanguage;
+            global $language_interface;
+            $language_interface = $language;
+
             $eventsToCreateFinal = [];
             foreach ($eventsToCreate as $event) {
                 $update = false;
@@ -1463,6 +1467,7 @@ class ImportCsv
                     $tpl->assign('career_name', $careerName);
                     $tpl->assign('first_lesson', $date);
                     $tpl->assign('location', $eventComment);
+                    $tpl->assign('session_name', $sessionName);
 
                     $templateName = $tpl->get_template('mail/custom_calendar_welcome.tpl');
                     $emailBody = $tpl->fetch($templateName);

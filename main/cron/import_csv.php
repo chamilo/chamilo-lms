@@ -1503,8 +1503,7 @@ class ImportCsv
                             null,
                             null,
                             false,
-                            $senderId,
-                            true
+                            $senderId
                         );
 
                         if ($announcementId) {
@@ -3102,7 +3101,6 @@ $language_interface = $language;
 
 $timeStart = microtime(true);
 $import->run();
-
 $timeEnd = microtime(true);
 $executionTime = round(($timeEnd - $timeStart) / 60, 2);
 $logger->addInfo("Total execution Time $executionTime Min");

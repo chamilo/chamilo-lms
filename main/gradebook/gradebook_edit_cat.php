@@ -66,12 +66,10 @@ if ($form->validate()) {
         $cat->set_certificate_min_score($values['certif_min_score']);
     }
 
+    $visible = 1;
     if (empty($values['visible'])) {
         $visible = 0;
-    } else {
-        $visible = 1;
     }
-
     $cat->set_visible($visible);
 
     if (isset($values['is_requirement'])) {

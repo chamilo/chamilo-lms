@@ -19,6 +19,7 @@ $htmlHeadXtra[] = api_get_js_simple(api_get_path(WEB_PLUGIN_PATH).'whispeakauth/
 
 $template = new Template();
 $template->assign('is_authenticated', WhispeakAuthPlugin::checkUserIsEnrolled($userId));
+$template->assign('action', 'enrollment');
 $template->assign('sample_text', $sampleText);
 
 $content = $template->fetch('whispeakauth/view/record_audio.html.twig');

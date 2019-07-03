@@ -31,3 +31,12 @@ $strings['EnrollmentSuccess'] = 'Enrollment success.';
 $strings['AuthentifyFailed'] = 'Login failed.';
 $strings['AuthentifySuccess'] = 'Authentication success!';
 $strings['TryAgain'] = 'Try again';
+
+$strings['AudioQualityShort'] = 'Too short audio';
+$strings['AudioQualityQuiet'] = 'Too quiet audio';
+$strings['AudioQualityLoud'] = 'Too loud audio';
+$strings['AudioQualityNoisy'] = 'Too noisy audio';
+$strings['AudioQualityFrequency'] = 'Missing some audio frequencies';
+$strings['AudioQualityPoorness'] = 'Too poor general audio quality';
+
+$strings['AgreeAllowResearch'] = 'I agree to allow the use of data for research (no commercial usage)';

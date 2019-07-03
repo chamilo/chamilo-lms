@@ -29,7 +29,7 @@ window.RecordAudio = (function () {
                 if (!rtcInfo.data.hasOwnProperty(prop)) {
                     continue;
                 }
-
+console.log(prop, '=>', rtcInfo.data[prop]);
                 formData.append(prop, rtcInfo.data[prop]);
             }
 

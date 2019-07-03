@@ -31,3 +31,10 @@ $strings['EnrollmentSuccess'] = 'Inscripción correcta.';
 $strings['AuthentifyFailed'] = 'Inicio de sesión fallido.';
 $strings['AuthentifySuccess'] = '¡Autenticación correcta!';
 $strings['TryAgain'] = 'Intente de nuevo.';
+
+$strings['AudioQualityShort'] = 'Audio demasiado corto';
+$strings['AudioQualityQuiet'] = 'Audio demasiado silencioso';
+$strings['AudioQualityLoud'] = 'Audio demasiado alto';
+$strings['AudioQualityNoisy'] = 'Audio demasiado ruidoso';
+$strings['AudioQualityFrequency'] = 'Falta algunas frecuencias de audio';
+$strings['AudioQualityPoorness'] = 'Calidad de audio general demasiado pobre';

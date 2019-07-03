@@ -11,11 +11,12 @@ use Chamilo\UserBundle\Entity\User;
 class WhispeakAuthPlugin extends Plugin
 {
     const SETTING_ENABLE = 'enable';
-    const SETTING_API_URL = 'api_url';
     const SETTING_TOKEN = 'token';
     const SETTING_INSTRUCTION = 'instruction';
 
     const EXTRAFIELD_AUTH_UID = 'whispeak_auth_uid';
+
+    const API_URL = 'http://api.whispeak.io:8080/v1.1/';
 
     /**
      * StudentFollowUpPlugin constructor.
@@ -27,7 +28,6 @@ class WhispeakAuthPlugin extends Plugin
             'Angel Fernando Quiroz',
             [
                 self::SETTING_ENABLE => 'boolean',
-                self::SETTING_API_URL => 'text',
                 self::SETTING_TOKEN => 'text',
                 self::SETTING_INSTRUCTION => 'html',
             ]
@@ -69,6 +69,16 @@ class WhispeakAuthPlugin extends Plugin
 
         $em->remove($extraField);
         $em->flush();
+    }
+
+    /**
+     * @return string
+     */
+    public function getAccessToken()
+    {
+        $token = file_get_contents(__DIR__.'/tokenTest');
+
+        return trim($token);
     }
 
     /**
@@ -133,28 +143,6 @@ class WhispeakAuthPlugin extends Plugin
 
     /**
      * @param User   $user
-     * @param string $filePath
-     *
-     * @return array
-     */
-    public function requestEnrollment(User $user, $filePath)
-    {
-        $metadata = [
-            'motherTongue' => $user->getLanguage(),
-            'spokenTongue' => $user->getLanguage(),
-            'audioType' => 'pcm',
-        ];
-
-        return $this->sendRequest(
-            'enrollment',
-            $metadata,
-            $user,
-            $filePath
-        );
-    }
-
-    /**
-     * @param User   $user
      * @param string $uid
      *
      * @throws \Doctrine\ORM\OptimisticLockException
@@ -162,44 +150,23 @@ class WhispeakAuthPlugin extends Plugin
     public function saveEnrollment(User $user, $uid)
     {
         $em = Database::getManager();
-        $value = self::getAuthUidValue($user->getId());
+        $extraFieldValue = self::getAuthUidValue($user->getId());
 
-        if (empty($value)) {
-            $ef = self::getAuthUidExtraField();
+        if (empty($extraFieldValue)) {
+            $extraField = self::getAuthUidExtraField();
             $now = new DateTime('now', new DateTimeZone('UTC'));
 
-            $value = new ExtraFieldValues();
-            $value
-                ->setField($ef)
+            $extraFieldValue = new ExtraFieldValues();
+            $extraFieldValue
+                ->setField($extraField)
                 ->setItemId($user->getId())
                 ->setUpdatedAt($now);
         }
 
-        $value->setValue($uid);
+        $extraFieldValue->setValue($uid);
 
-        $em->persist($value);
+        $em->persist($extraFieldValue);
         $em->flush();
-    }
-
-    public function requestAuthentify(User $user, $filePath)
-    {
-        $value = self::getAuthUidValue($user->getId());
-
-        if (empty($value)) {
-            return null;
-        }
-
-        $metadata = [
-            'uid' => $value->getValue(),
-            'audioType' => 'pcm',
-        ];
-
-        return $this->sendRequest(
-            'authentify',
-            $metadata,
-            $user,
-            $filePath
-        );
     }
 
     /**
@@ -241,43 +208,18 @@ class WhispeakAuthPlugin extends Plugin
     }
 
     /**
-     * @return string
-     */
-    private function getApiUrl()
-    {
-        $url = $this->get(self::SETTING_API_URL);
-
-        return trim($url, " \t\n\r \v/");
-    }
-
-    /**
-     * @param string $endPoint
-     * @param array  $metadata
-     * @param User   $user
-     * @param string $filePath
+     * @throws Exception
      *
      * @return array
      */
-    private function sendRequest($endPoint, array $metadata, User $user, $filePath)
+    public function generateWsid()
     {
-        $moderator = $user->getCreatorId() ?: $user->getId();
-        $apiUrl = $this->getApiUrl()."/$endPoint";
         $headers = [
-            //"Content-Type: application/x-www-form-urlencoded",
-            "Authorization: Bearer ".$this->get(self::SETTING_TOKEN),
-        ];
-        $post = [
-            'metadata' => json_encode($metadata),
-            'moderator' => "moderator_$moderator",
-            'client' => base64_encode($user->getUserId()),
-            'voice' => new CURLFile($filePath),
+            "Authorization: Bearer ".$this->getAccessToken(),
         ];
 
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $apiUrl);
+        $ch = curl_init(self::API_URL.'whispeakid');
         curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-        curl_setopt($ch, CURLOPT_POST, true);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $post);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         $result = curl_exec($ch);
         curl_close($ch);
@@ -285,9 +227,327 @@ class WhispeakAuthPlugin extends Plugin
         $result = json_decode($result, true);
 
         if (!empty($result['error'])) {
-            return null;
+            throw new Exception($result['error']);
         }
 
-        return json_decode($result, true);
+        return $result;
+    }
+
+    /**
+     * @param strging $wsid
+     * @param bool    $researchPermission
+     *
+     * @throws Exception
+     *
+     * @return array
+     */
+    public function license($wsid, $researchPermission = false)
+    {
+        $headers = [
+            "Content-Type: application/json",
+            "Authorization: Bearer ".$this->getAccessToken(),
+        ];
+
+        $body = [
+            'wsid' => $wsid,
+            'license' => 1,
+            'researchPermission' => $researchPermission,
+        ];
+
+        $ch = curl_init(self::API_URL.'licencse');
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($body));
+        $result = curl_exec($ch);
+        curl_close($ch);
+
+        $result = json_decode($result, true);
+
+        if (!empty($result['error'])) {
+            throw new Exception($result['error']);
+        }
+
+        return $result;
+    }
+
+    /**
+     * Convert the language name to ISO-639-2 code (3 characters)
+     *
+     * @param string $languageName
+     *
+     * @return string
+     */
+    public static function getLanguageIsoCode($languageName)
+    {
+        $listIso3 = [
+            'ab' => 'abk',
+            'aa' => 'aar',
+            'af' => 'afr',
+            'ak' => 'aka',
+            'sq' => 'sqi',
+            'am' => 'amh',
+            'ar' => 'ara',
+            'an' => 'arg',
+            'hy' => 'hye',
+            'as' => 'asm',
+            'av' => 'ava',
+            'ae' => 'ave',
+            'ay' => 'aym',
+            'az' => 'aze',
+            'bm' => 'bam',
+            'ba' => 'bak',
+            'eu' => 'eus',
+            'be' => 'bel',
+            'bn' => 'ben',
+            'bh' => 'bih',
+            'bi' => 'bis',
+            'bs' => 'bos',
+            'br' => 'bre',
+            'bg' => 'bul',
+            'my' => 'mya',
+            'ca' => 'cat',
+            'ch' => 'cha',
+            'ce' => 'che',
+            'ny' => 'nya',
+            'zh' => 'zho',
+            'cv' => 'chv',
+            'kw' => 'cor',
+            'co' => 'cos',
+            'cr' => 'cre',
+            'hr' => 'hrv',
+            'cs' => 'ces',
+            'da' => 'dan',
+            'dv' => 'div',
+            'nl' => 'nld',
+            'dz' => 'dzo',
+            'en' => 'eng',
+            'eo' => 'epo',
+            'et' => 'est',
+            'ee' => 'ewe',
+            'fo' => 'fao',
+            'fj' => 'fij',
+            'fi' => 'fin',
+            'fr' => 'fra',
+            'ff' => 'ful',
+            'gl' => 'glg',
+            'ka' => 'kat',
+            'de' => 'deu',
+            'el' => 'ell',
+            'gn' => 'grn',
+            'gu' => 'guj',
+            'ht' => 'hat',
+            'ha' => 'hau',
+            'he' => 'heb',
+            'hz' => 'her',
+            'hi' => 'hin',
+            'ho' => 'hmo',
+            'hu' => 'hun',
+            'ia' => 'ina',
+            'id' => 'ind',
+            'ie' => 'ile',
+            'ga' => 'gle',
+            'ig' => 'ibo',
+            'ik' => 'ipk',
+            'io' => 'ido',
+            'is' => 'isl',
+            'it' => 'ita',
+            'iu' => 'iku',
+            'ja' => 'jpn',
+            'jv' => 'jav',
+            'kl' => 'kal',
+            'kn' => 'kan',
+            'kr' => 'kau',
+            'ks' => 'kas',
+            'kk' => 'kaz',
+            'km' => 'khm',
+            'ki' => 'kik',
+            'rw' => 'kin',
+            'ky' => 'kir',
+            'kv' => 'kom',
+            'kg' => 'kon',
+            'ko' => 'kor',
+            'ku' => 'kur',
+            'kj' => 'kua',
+            'la' => 'lat',
+            'lb' => 'ltz',
+            'lg' => 'lug',
+            'li' => 'lim',
+            'ln' => 'lin',
+            'lo' => 'lao',
+            'lt' => 'lit',
+            'lu' => 'lub',
+            'lv' => 'lav',
+            'gv' => 'glv',
+            'mk' => 'mkd',
+            'mg' => 'mlg',
+            'ms' => 'msa',
+            'ml' => 'mal',
+            'mt' => 'mlt',
+            'mi' => 'mri',
+            'mr' => 'mar',
+            'mh' => 'mah',
+            'mn' => 'mon',
+            'na' => 'nau',
+            'nv' => 'nav',
+            'nd' => 'nde',
+            'ne' => 'nep',
+            'ng' => 'ndo',
+            'nb' => 'nob',
+            'nn' => 'nno',
+            'no' => 'nor',
+            'ii' => 'iii',
+            'nr' => 'nbl',
+            'oc' => 'oci',
+            'oj' => 'oji',
+            'cu' => 'chu',
+            'om' => 'orm',
+            'or' => 'ori',
+            'os' => 'oss',
+            'pa' => 'pan',
+            'pi' => 'pli',
+            'fa' => 'fas',
+            'pl' => 'pol',
+            'ps' => 'pus',
+            'pt' => 'por',
+            'qu' => 'que',
+            'rm' => 'roh',
+            'rn' => 'run',
+            'ro' => 'ron',
+            'ru' => 'rus',
+            'sa' => 'san',
+            'sc' => 'srd',
+            'sd' => 'snd',
+            'se' => 'sme',
+            'sm' => 'smo',
+            'sg' => 'sag',
+            'sr' => 'srp',
+            'gd' => 'gla',
+            'sn' => 'sna',
+            'si' => 'sin',
+            'sk' => 'slk',
+            'sl' => 'slv',
+            'so' => 'som',
+            'st' => 'sot',
+            'es' => 'spa',
+            'su' => 'sun',
+            'sw' => 'swa',
+            'ss' => 'ssw',
+            'sv' => 'swe',
+            'ta' => 'tam',
+            'te' => 'tel',
+            'tg' => 'tgk',
+            'th' => 'tha',
+            'ti' => 'tir',
+            'bo' => 'bod',
+            'tk' => 'tuk',
+            'tl' => 'tgl',
+            'tn' => 'tsn',
+            'to' => 'ton',
+            'tr' => 'tur',
+            'ts' => 'tso',
+            'tt' => 'tat',
+            'tw' => 'twi',
+            'ty' => 'tah',
+            'ug' => 'uig',
+            'uk' => 'ukr',
+            'ur' => 'urd',
+            'uz' => 'uzb',
+            've' => 'ven',
+            'vi' => 'vie',
+            'vo' => 'vol',
+            'wa' => 'wln',
+            'cy' => 'cym',
+            'wo' => 'wol',
+            'fy' => 'fry',
+            'xh' => 'xho',
+            'yi' => 'yid',
+            'yo' => 'yor',
+            'za' => 'zha',
+            'zu' => 'zul',
+        ];
+
+        $iso2 = api_get_language_isocode($languageName);
+        $iso3 = isset($listIso3[$iso2]) ? $listIso3[$iso2] : $listIso3['en'];
+
+        return $iso3;
+    }
+
+    /**
+     * @param string $wsid
+     * @param User   $user
+     * @param string $filePath
+     *
+     * @throws Exception
+     *
+     * @return array
+     */
+    public function enrollment($wsid, User $user, $filePath)
+    {
+        $headers = [
+            "Content-Type: application/json",
+            "Authorization: Bearer ".$this->getAccessToken(),
+        ];
+
+        $formData = [
+            'wsid' => $wsid,
+            'audioType' => 'pcm',
+            'spokenTongue' => self::getLanguageIsoCode($user->getLanguage()),
+            'voice' => new CURLFile($filePath),
+        ];
+
+        $ch = curl_init(self::API_URL.'enrollment');
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $formData);
+        $result = curl_exec($ch);
+        curl_close($ch);
+
+        $result = json_decode($result, true);
+
+        if (!empty($result['error'])) {
+            throw new Exception($result['error']);
+        }
+
+        return $result;
+    }
+
+    /**
+     * @param string $wsid
+     * @param string $filePath
+     *
+     * @throws Exception
+     *
+     * @return array
+     */
+    public function authentify($wsid, $filePath)
+    {
+        $headers = [
+            "Content-Type: application/json",
+            "Authorization: Bearer ".$this->getAccessToken(),
+        ];
+
+        $formData = [
+            'wsid' => $wsid,
+            'audioType' => 'pcm',
+            'voice' => new CURLFile($filePath),
+        ];
+
+        $ch = curl_init(self::API_URL.'enrollment');
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $formData);
+        $result = curl_exec($ch);
+        curl_close($ch);
+
+        $result = json_decode($result, true);
+
+        if (!empty($result['error'])) {
+            throw new Exception($result['error']);
+        }
+
+        return $result;
     }
 }

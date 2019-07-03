@@ -1221,10 +1221,6 @@ class ImportCsv
                 'mail_not_sent_because_date' => 0,
             ];
 
-            $language = $this->defaultLanguage;
-            global $language_interface;
-            $language_interface = $language;
-
             $eventsToCreateFinal = [];
             foreach ($eventsToCreate as $event) {
                 $update = false;
@@ -1508,7 +1504,8 @@ class ImportCsv
                             null,
                             null,
                             false,
-                            $senderId
+                            $senderId,
+                            true
                         );
 
                         if ($announcementId) {
@@ -1522,7 +1519,8 @@ class ImportCsv
                                 false,
                                 false,
                                 $this->logger,
-                                $senderId
+                                $senderId,
+                                true
                             );
                         } else {
                             $this->logger->addError(
@@ -3091,6 +3089,12 @@ if (isset($_configuration['import_csv_test'])) {
     $import->test = $_configuration['import_csv_test'];
 } else {
     $import->test = true;
+}
+
+$languageFilesToLoad = api_get_language_files_to_load($import->defaultLanguage);
+
+foreach ($languageFilesToLoad as $languageFile) {
+    include $languageFile;
 }
 
 $timeStart = microtime(true);

@@ -191,11 +191,18 @@ class AnnouncementEmail
     /**
      * Email subject.
      *
+     * @param bool $directMessage
+     *
      * @return string
      */
-    public function subject()
+    public function subject($directMessage = false)
     {
-        $result = $this->course('title').' - '.$this->announcement('title');
+        if ($directMessage) {
+            $result = $this->announcement('title');
+        } else {
+            $result = $this->course('title').' - '.$this->announcement('title');
+        }
+
         $result = stripslashes($result);
 
         return $result;
@@ -298,13 +305,14 @@ class AnnouncementEmail
      * @param bool $sendToUsersInSession
      * @param bool $sendToDrhUsers       send a copy of the message to the DRH users
      * @param int  $senderId             related to the main user
+     * @param bool $directMessage
      *
      * @return array
      */
-    public function send($sendToUsersInSession = false, $sendToDrhUsers = false, $senderId = 0)
+    public function send($sendToUsersInSession = false, $sendToDrhUsers = false, $senderId = 0, $directMessage = false)
     {
         $senderId = empty($senderId) ? api_get_user_id() : (int) $senderId;
-        $subject = $this->subject();
+        $subject = $this->subject($directMessage);
 
         // Send email one by one to avoid antispam
         $users = $this->sent_to();

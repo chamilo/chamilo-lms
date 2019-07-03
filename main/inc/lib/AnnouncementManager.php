@@ -1538,7 +1538,8 @@ class AnnouncementManager
      * @param bool  $sendToUsersInSession
      * @param bool  $sendToDrhUsers
      * @param Monolog\Handler\HandlerInterface logger
-     * @param int $senderId
+     * @param int   $senderId
+     * @param bool  $directMessage
      *
      * @return array
      */
@@ -1549,11 +1550,12 @@ class AnnouncementManager
         $sendToUsersInSession = false,
         $sendToDrhUsers = false,
         $logger = null,
-        $senderId = 0
+        $senderId = 0,
+        $directMessage = false
     ) {
         $email = new AnnouncementEmail($courseInfo, $sessionId, $announcementId, $logger);
 
-        return $email->send($sendToUsersInSession, $sendToDrhUsers, $senderId);
+        return $email->send($sendToUsersInSession, $sendToDrhUsers, $senderId, $directMessage);
     }
 
     /**

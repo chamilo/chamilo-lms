@@ -1552,13 +1552,13 @@ class GradebookUtils
     }
 
     /**
-     * @param array          $courseInfo
-     * @param int            $userId
-     * @param array          $cats
-     * @param bool           $saveToFile
-     * @param bool           $saveToHtmlFile
-     * @param array          $studentList
-     * @param PDF            $pdf
+     * @param array $courseInfo
+     * @param int   $userId
+     * @param array $cats
+     * @param bool  $saveToFile
+     * @param bool  $saveToHtmlFile
+     * @param array $studentList
+     * @param PDF   $pdf
      *
      * @return string
      */

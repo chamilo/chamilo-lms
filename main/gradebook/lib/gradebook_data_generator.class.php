@@ -613,6 +613,7 @@ class GradebookDataGenerator
                                 $score[1],
                                 false
                             );
+
                             return [
                                 'display' => $display,
                                 'score' => $score,

@@ -1538,8 +1538,8 @@ class AnnouncementManager
      * @param bool  $sendToUsersInSession
      * @param bool  $sendToDrhUsers
      * @param Monolog\Handler\HandlerInterface logger
-     * @param int   $senderId
-     * @param bool  $directMessage
+     * @param int  $senderId
+     * @param bool $directMessage
      *
      * @return array
      */

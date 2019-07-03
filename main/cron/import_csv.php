@@ -1221,6 +1221,10 @@ class ImportCsv
                 'mail_not_sent_because_date' => 0,
             ];
 
+            $language = $this->defaultLanguage;
+            global $language_interface;
+            $language_interface = $language;
+
             $eventsToCreateFinal = [];
             foreach ($eventsToCreate as $event) {
                 $update = false;

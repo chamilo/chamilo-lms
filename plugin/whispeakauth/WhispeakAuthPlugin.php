@@ -13,6 +13,7 @@ class WhispeakAuthPlugin extends Plugin
     const SETTING_ENABLE = 'enable';
     const SETTING_TOKEN = 'token';
     const SETTING_INSTRUCTION = 'instruction';
+    const SETTING_MAX_ATTEMPTS = 'max_attempts';
 
     const EXTRAFIELD_AUTH_UID = 'whispeak_auth_uid';
 
@@ -29,6 +30,7 @@ class WhispeakAuthPlugin extends Plugin
             [
                 self::SETTING_ENABLE => 'boolean',
                 self::SETTING_TOKEN => 'text',
+                self::SETTING_MAX_ATTEMPTS => 'text',
                 self::SETTING_INSTRUCTION => 'html',
             ]
         );
@@ -549,5 +551,15 @@ class WhispeakAuthPlugin extends Plugin
         }
 
         return $result;
+    }
+
+    /**
+     * Get the max_attemtps option.
+     *
+     * @return int
+     */
+    public function getMaxAttempts()
+    {
+        return (int) $this->get(self::SETTING_MAX_ATTEMPTS);
     }
 }

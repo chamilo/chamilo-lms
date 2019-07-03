@@ -1552,7 +1552,6 @@ class GradebookUtils
     }
 
     /**
-     * @param GradebookTable $gradebooktable
      * @param array          $courseInfo
      * @param int            $userId
      * @param array          $cats
@@ -1597,9 +1596,9 @@ class GradebookUtils
             $allcat,
             $alleval,
             $alllink,
-            null, // params
-            true, // $exportToPdf
-            false, // showteacher
+            null,
+            true,
+            false,
             $userId,
             $studentList,
             $loadStats
@@ -1620,6 +1619,7 @@ class GradebookUtils
             }
         }
         $table = $gradebooktable->return_table();
+
         $graph = '';
         if (empty($model)) {
             $graph = $gradebooktable->getGraph();
@@ -1648,7 +1648,8 @@ class GradebookUtils
             $table.
             $graph.
             '<br />'.get_lang('Feedback').'<br />
-            <textarea rows="5" cols="100">&nbsp;</textarea>';
+            <textarea class="form-control" rows="5" cols="100">&nbsp;</textarea>';
+
         $result = $pdf->html_to_pdf_with_template(
             $content,
             $saveToFile,

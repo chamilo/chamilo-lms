@@ -110,6 +110,7 @@ class PDF
         $tpl->assign('pdf_content', $content);
 
         // Showing only the current teacher/admin instead the all teacher list name see BT#4080
+        $teacher_list = null;
         if (isset($this->params['show_real_course_teachers']) &&
             $this->params['show_real_course_teachers']
         ) {
@@ -127,7 +128,6 @@ class PDF
             }
         } else {
             $user_info = api_get_user_info();
-
             if ($this->params['show_teacher_as_myself']) {
                 $teacher_list = $user_info['complete_name'];
             }

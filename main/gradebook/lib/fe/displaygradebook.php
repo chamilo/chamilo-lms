@@ -562,6 +562,23 @@ class DisplayGradebook
             $weight = '<strong>'.get_lang('TotalWeight').' : </strong>'.$weight;
 
             $min_certification = intval($catobj->getCertificateMinScore() > 0) ? $catobj->getCertificateMinScore() : 0;
+
+            if (!empty($min_certification)) {
+                $model = ExerciseLib::getCourseScoreModel();
+                if (!empty($model)) {
+                    $defaultCertification = api_number_format($min_certification, 2);
+                    $questionWeighting = $catobj->get_weight();
+                    foreach ($model['score_list'] as $item) {
+                        $i = api_number_format($item['score_to_qualify'] / 100 * $questionWeighting, 2);
+                        $model = ExerciseLib::getModelStyle($item, $i);
+                        if ($defaultCertification == $i) {
+                            $min_certification = $model;
+                            break;
+                        }
+                    }
+                }
+            }
+
             $min_certification = get_lang('CertificateMinScore').' : '.$min_certification;
             $edit_icon = '<a href="gradebook_edit_cat.php?editcat='.$catobj->get_id().'&cidReq='.$catobj->get_course_code().'&id_session='.$catobj->get_session_id().'">'.
                 Display::return_icon('edit.png', get_lang('Edit'), [], ICON_SIZE_SMALL).'</a>';

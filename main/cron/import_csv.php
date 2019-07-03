@@ -1436,11 +1436,6 @@ class ImportCsv
 
                     $courseTitle = $courseInfo['title'].$sessionName;
 
-                    /*$subject = sprintf(
-                        get_lang('AgendaAvailableInCourseX'),
-                        $courseInfo['title']
-                    );*/
-
                     $sessionExtraFieldValue = new ExtraFieldValue('session');
                     $values = $sessionExtraFieldValue->get_values_by_handler_and_field_variable(
                         $event['session_id'],
@@ -3100,6 +3095,10 @@ $languageFilesToLoad = api_get_language_files_to_load($import->defaultLanguage);
 foreach ($languageFilesToLoad as $languageFile) {
     include $languageFile;
 }
+
+$language = $import->defaultLanguage;
+global $language_interface;
+$language_interface = $language;
 
 $timeStart = microtime(true);
 $import->run();

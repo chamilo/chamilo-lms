@@ -1221,10 +1221,6 @@ class ImportCsv
                 'mail_not_sent_because_date' => 0,
             ];
 
-            $language = $this->defaultLanguage;
-            global $language_interface;
-            $language_interface = $language;
-
             $eventsToCreateFinal = [];
             foreach ($eventsToCreate as $event) {
                 $update = false;
@@ -3095,9 +3091,12 @@ foreach ($languageFilesToLoad as $languageFile) {
     include $languageFile;
 }
 
+// Set default language to be loaded
 $language = $import->defaultLanguage;
 global $language_interface;
 $language_interface = $language;
+global $language_interface_initial_value;
+$language_interface_initial_value = $language;
 
 $timeStart = microtime(true);
 $import->run();

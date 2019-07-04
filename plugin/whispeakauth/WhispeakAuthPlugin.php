@@ -532,7 +532,7 @@ class WhispeakAuthPlugin extends Plugin
             'voice' => new CURLFile($filePath),
         ];
 
-        $ch = curl_init(self::API_URL.'enrollment');
+        $ch = curl_init(self::API_URL.'authentify');
         curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_POST, true);

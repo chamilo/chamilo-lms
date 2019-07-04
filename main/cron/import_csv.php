@@ -1426,8 +1426,9 @@ class ImportCsv
                     }
 
                     $sessionName = '';
-                    if (!empty($event['session_id'])) {
-                        $sessionName = ' ('.api_get_session_name($event['session_id']).')';
+                    $sessionId = isset($event['session_id']) && !empty($event['session_id']) ? $event['session_id'] : 0;
+                    if (!empty($sessionId)) {
+                        $sessionName = api_get_session_name($sessionId);
                     }
 
                     $courseTitle = $courseInfo['title'];
@@ -1459,6 +1460,18 @@ class ImportCsv
                     $tpl->assign('first_lesson', $date);
                     $tpl->assign('location', $eventComment);
                     $tpl->assign('session_name', $sessionName);
+
+                    if (empty($sessionId)) {
+                        $teachersToString = CourseManager::getTeacherListFromCourseCodeToString($courseInfo['code'], ',');
+                    } else {
+                        $teachersToString = SessionManager::getCoachesByCourseSessionToString(
+                            $sessionId,
+                            $courseInfo['real_id'],
+                            ','
+                        );
+                    }
+
+                    $tpl->assign('teachers', $teachersToString);
 
                     $templateName = $tpl->get_template('mail/custom_calendar_welcome.tpl');
                     $emailBody = $tpl->fetch($templateName);

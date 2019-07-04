@@ -256,7 +256,7 @@ class WhispeakAuthPlugin extends Plugin
             'researchPermission' => $researchPermission,
         ];
 
-        $ch = curl_init(self::API_URL.'licencse');
+        $ch = curl_init(self::API_URL.'license');
         curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_POST, true);
@@ -487,7 +487,6 @@ class WhispeakAuthPlugin extends Plugin
     public function enrollment($wsid, User $user, $filePath)
     {
         $headers = [
-            "Content-Type: application/json",
             "Authorization: Bearer ".$this->getAccessToken(),
         ];
 
@@ -526,7 +525,6 @@ class WhispeakAuthPlugin extends Plugin
     public function authentify($wsid, $filePath)
     {
         $headers = [
-            "Content-Type: application/json",
             "Authorization: Bearer ".$this->getAccessToken(),
         ];
 

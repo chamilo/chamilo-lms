@@ -260,7 +260,7 @@ class MatchingDraggable extends Question
     /**
      * {@inheritdoc}
      */
-    public function return_header($exercise, $counter = null, $score = null)
+    public function return_header(Exercise $exercise, $counter = null, $score = [])
     {
         $header = parent::return_header($exercise, $counter, $score);
         $header .= '<table class="matching '.$this->question_table_class.'"><tr>';

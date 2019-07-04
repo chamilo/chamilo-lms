@@ -1700,10 +1700,9 @@ if (empty($details)) {
                 }
                 $lp_name = !empty($lp_name) ? $lp_name : get_lang('NoLearnpath');
 
+                $css_class = 'row_even';
                 if ($i % 2) {
                     $css_class = 'row_odd';
-                } else {
-                    $css_class = 'row_even';
                 }
 
                 echo '<tr class="'.$css_class.'"><td>'.$exercices['title'].'</td>';
@@ -1795,42 +1794,42 @@ if (empty($details)) {
     // @when using sessions we do not show the survey list
     if (empty($sessionId)) {
         $survey_list = SurveyManager::get_surveys($course_code, $sessionId);
-        $survey_data = [];
-        foreach ($survey_list as $survey) {
-            $user_list = SurveyManager::get_people_who_filled_survey(
-                $survey['survey_id'],
-                false,
-                $courseInfo['real_id']
-            );
-            $survey_done = Display::return_icon(
-                "accept_na.png",
-                get_lang('NoAnswer'),
-                [],
-                ICON_SIZE_SMALL
-            );
-            if (in_array($student_id, $user_list)) {
+        if (!empty($survey_list)) {
+            $survey_data = [];
+            foreach ($survey_list as $survey) {
+                $user_list = SurveyManager::get_people_who_filled_survey(
+                    $survey['survey_id'],
+                    false,
+                    $courseInfo['real_id']
+                );
                 $survey_done = Display::return_icon(
-                    "accept.png",
-                    get_lang('Answered'),
+                    "accept_na.png",
+                    get_lang('NoAnswer'),
                     [],
                     ICON_SIZE_SMALL
                 );
+                if (in_array($student_id, $user_list)) {
+                    $survey_done = Display::return_icon(
+                        "accept.png",
+                        get_lang('Answered'),
+                        [],
+                        ICON_SIZE_SMALL
+                    );
+                }
+                $data = ['title' => $survey['title'], 'done' => $survey_done];
+                $survey_data[] = $data;
             }
-            $data = ['title' => $survey['title'], 'done' => $survey_done];
-            $survey_data[] = $data;
-        }
 
-        if (!empty($survey_list)) {
-            $table = new HTML_Table(['class' => 'data_table']);
-            $header_names = [get_lang('Survey'), get_lang('Answered')];
-            $row = 0;
-            $column = 0;
-            foreach ($header_names as $item) {
-                $table->setHeaderContents($row, $column, $item);
-                $column++;
-            }
-            $row = 1;
             if (!empty($survey_data)) {
+                $table = new HTML_Table(['class' => 'data_table']);
+                $header_names = [get_lang('Survey'), get_lang('Answered')];
+                $row = 0;
+                $column = 0;
+                foreach ($header_names as $item) {
+                    $table->setHeaderContents($row, $column, $item);
+                    $column++;
+                }
+                $row = 1;
                 foreach ($survey_data as $data) {
                     $column = 0;
                     $table->setCellContents($row, $column, $data);
@@ -1842,8 +1841,8 @@ if (empty($details)) {
                     $column++;
                     $row++;
                 }
+                echo $table->toHtml();
             }
-            echo $table->toHtml();
         }
     }
 

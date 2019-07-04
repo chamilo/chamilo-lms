@@ -108,7 +108,7 @@ abstract class AbstractLink implements GradebookItem
      */
     public function get_session_id()
     {
-        return $this->session_id;
+        return (int) $this->session_id;
     }
 
     /**
@@ -270,7 +270,7 @@ abstract class AbstractLink implements GradebookItem
      */
     public function getCourseId()
     {
-        return $this->course_id;
+        return (int) $this->course_id;
     }
 
     /**

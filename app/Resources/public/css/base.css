@@ -933,7 +933,16 @@ input[type=checkbox], input[type=radio] {
     border: 1px solid #bbb;
     border-collapse: collapse;
 }
-
+.file-upload-event{
+    margin-top: 1rem;
+}
+.file-upload-event label{
+    font-weight: normal;
+    margin-top: 1rem;
+}
+.file-upload-event .form-control {
+    margin-bottom: 1rem;
+}
 .agenda_month_divider {
     background-color: #dcdcdc;
     font-weight: bold;
@@ -4395,10 +4404,6 @@ i.size-32.icon-new-work {
 }
 
 /* Default skill partition colors */
-
-#filepaths input {
-    margin-bottom: 5px;
-}
 
 .xdebug-error {
     margin-top: 20px;

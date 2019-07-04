@@ -1430,7 +1430,7 @@ class ImportCsv
                         $sessionName = ' ('.api_get_session_name($event['session_id']).')';
                     }
 
-                    $courseTitle = $courseInfo['title'].$sessionName;
+                    $courseTitle = $courseInfo['title'];
 
                     $sessionExtraFieldValue = new ExtraFieldValue('session');
                     $values = $sessionExtraFieldValue->get_values_by_handler_and_field_variable(

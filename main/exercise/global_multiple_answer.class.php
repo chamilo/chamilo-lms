@@ -261,7 +261,8 @@ class GlobalMultipleAnswer extends Question
     /**
      * {@inheritdoc}
      */
-    public function return_header(Exercise $exercise, $counter = null, $score = []) {
+    public function return_header(Exercise $exercise, $counter = null, $score = [])
+    {
         $header = parent::return_header($exercise, $counter, $score);
         $header .= '<table class="'.$this->question_table_class.'"><tr>';
 

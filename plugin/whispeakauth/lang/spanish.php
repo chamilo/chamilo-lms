@@ -11,7 +11,7 @@ $strings['token'] = 'Llave del API';
 $strings['instruction'] = '<p>Agrega <code>$_configuration[\'whispeak_auth_enabled\'] = true;</code>'.
     'al archivo <code>configuration.php</code></p>';
 $strings['max_attempts'] = 'Máximo de intentos';
-$strings['max_attempts_help'] = 'Si la autenticación de Whispeak falla x intentos, preguntar y verificar la contraseña del usuario';
+$strings['max_attempts_help'] = '(Opcional) Si la autenticación de Whispeak falla x intentos, preguntar y verificar la contraseña del usuario';
 
 $strings['EnrollmentSampleText'] = 'El famoso cuadro de Mona Lisa fue pintado por Leonardo Da Vinci.';
 $strings['AuthentifySampleText1'] = 'Cayendo como moscas.';

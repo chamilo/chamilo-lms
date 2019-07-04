@@ -11,7 +11,7 @@ $strings['token'] = 'API key';
 $strings['instruction'] = '<p>Add <code>$_configuration[\'whispeak_auth_enabled\'] = true;</code>'.
     'in the <code>configuration.php</code> file</p>';
 $strings['max_attempts'] = 'Max attempts';
-$strings['max_attempts_help'] = 'If the Whispeak authentication is failed x times, then ask and verify the password of the user';
+$strings['max_attempts_help'] = '(Optional) If the Whispeak authentication is failed x times, then ask and verify the password of the user';
 
 $strings['EnrollmentSampleText'] = 'The famous Mona Lisa painting was painted by Leonardo Da Vinci.';
 $strings['AuthentifySampleText1'] = 'Dropping Like Flies.';

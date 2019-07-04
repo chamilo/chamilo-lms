@@ -11,7 +11,6 @@ use Chamilo\UserBundle\Entity\User;
 class WhispeakAuthPlugin extends Plugin
 {
     const SETTING_ENABLE = 'enable';
-    const SETTING_TOKEN = 'token';
     const SETTING_INSTRUCTION = 'instruction';
     const SETTING_MAX_ATTEMPTS = 'max_attempts';
 
@@ -29,7 +28,6 @@ class WhispeakAuthPlugin extends Plugin
             'Angel Fernando Quiroz',
             [
                 self::SETTING_ENABLE => 'boolean',
-                self::SETTING_TOKEN => 'text',
                 self::SETTING_MAX_ATTEMPTS => 'text',
                 self::SETTING_INSTRUCTION => 'html',
             ]

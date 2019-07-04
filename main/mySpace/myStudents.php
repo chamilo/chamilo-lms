@@ -1700,10 +1700,9 @@ if (empty($details)) {
                 }
                 $lp_name = !empty($lp_name) ? $lp_name : get_lang('NoLearnpath');
 
+                $css_class = 'row_even';
                 if ($i % 2) {
                     $css_class = 'row_odd';
-                } else {
-                    $css_class = 'row_even';
                 }
 
                 echo '<tr class="'.$css_class.'"><td>'.$exercices['title'].'</td>';

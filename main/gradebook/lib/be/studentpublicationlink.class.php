@@ -82,7 +82,8 @@ class StudentPublicationLink extends AbstractLink
             return [];
         }
         $em = Database::getManager();
-        $session = $em->find('ChamiloCoreBundle:Session', api_get_session_id());
+        $sessionId = $this->get_session_id();
+        $session = $em->find('ChamiloCoreBundle:Session', $sessionId);
         /*
         if (empty($session_id)) {
             $session_condition = api_get_session_condition(0, true);
@@ -128,7 +129,7 @@ class StudentPublicationLink extends AbstractLink
         $id = $data['id'];
 
         $em = Database::getManager();
-        $session = $em->find('ChamiloCoreBundle:Session', api_get_session_id());
+        $session = $em->find('ChamiloCoreBundle:Session', $this->get_session_id());
         $results = $em
             ->getRepository('ChamiloCourseBundle:CStudentPublication')
             ->findBy([
@@ -155,7 +156,7 @@ class StudentPublicationLink extends AbstractLink
             return [];
         }
         $id = $data['id'];
-        $session = $em->find('ChamiloCoreBundle:Session', api_get_session_id());
+        $session = $em->find('ChamiloCoreBundle:Session', $this->get_session_id());
 
         $assignment = $em
             ->getRepository('ChamiloCourseBundle:CStudentPublication')
@@ -302,8 +303,8 @@ class StudentPublicationLink extends AbstractLink
 
     public function get_link()
     {
-        $session_id = api_get_session_id();
-        $url = api_get_path(WEB_PATH).'main/work/work.php?'.api_get_cidreq_params($this->get_course_code(), $session_id).'&id='.$this->exercise_data['id'].'&gradebook=view';
+        $sessionId = $this->get_session_id();
+        $url = api_get_path(WEB_PATH).'main/work/work.php?'.api_get_cidreq_params($this->get_course_code(), $sessionId).'&id='.$this->exercise_data['id'].'&gradebook=view';
 
         return $url;
     }
@@ -329,7 +330,7 @@ class StudentPublicationLink extends AbstractLink
         $sql = 'SELECT count(id) FROM '.$this->get_studpub_table().'
                 WHERE 
                     c_id = "'.$this->course_id.'" AND 
-                    id = '.$id.'';
+                    id = '.$id;
         $result = Database::query($sql);
         $number = Database::fetch_row($result);
 

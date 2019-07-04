@@ -5365,8 +5365,9 @@ EOT;
     }
 
     /**
-     * Check if an exercise complies with the requirements to be embedded in the mobile app or a video. By making sure
-     * it is set on one question per page and it only contains unique-answer or multiple-answer questions.
+     * Check if an exercise complies with the requirements to be embedded in the mobile app or a video.
+     * By making sure it is set on one question per page and it only contains unique-answer or multiple-answer questions
+     * or unique-answer image. And that the exam does not have immediate feedback.
      *
      * @param array $exercise Exercise info
      *
@@ -5378,7 +5379,7 @@ EOT;
     {
         $em = Database::getManager();
 
-        if (2 != $exercise['type']) {
+        if (ONE_PER_PAGE != $exercise['type'] || EXERCISE_FEEDBACK_TYPE_DIRECT == $exercise['feedback_type']) {
             return false;
         }
 

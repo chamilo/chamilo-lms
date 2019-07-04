@@ -11,8 +11,8 @@
  */
 class ExerciseLink extends AbstractLink
 {
-    private $course_info = null;
-    private $exercise_table = null;
+    private $course_info;
+    private $exercise_table;
     private $exercise_data = [];
     private $is_hp;
 
@@ -43,11 +43,11 @@ class ExerciseLink extends AbstractLink
         $exerciseTable = $this->get_exercise_table();
         $lpItemTable = Database::get_course_table(TABLE_LP_ITEM);
 
-        $documentPath = api_get_path(SYS_COURSE_PATH).$this->course_code."/document";
+        $documentPath = api_get_path(SYS_COURSE_PATH).$this->course_code.'/document';
         if (empty($this->course_code)) {
             return [];
         }
-        $sessionId = api_get_session_id();
+        $sessionId = $this->get_session_id();
         if (empty($sessionId)) {
             $session_condition = api_get_session_condition(0, true);
         } else {
@@ -149,7 +149,7 @@ class ExerciseLink extends AbstractLink
     public function has_results()
     {
         $tbl_stats = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
-        $sessionId = api_get_session_id();
+        $sessionId = $this->get_session_id();
         $course_id = api_get_course_int_id($this->get_course_code());
         $sql = "SELECT count(exe_id) AS number 
                 FROM $tbl_stats
@@ -430,14 +430,7 @@ class ExerciseLink extends AbstractLink
      */
     public function get_link()
     {
-        // Status student
-        $user_id = api_get_user_id();
-        $sessionId = api_get_session_id();
-        $course_code = $this->get_course_code();
-        $courseInfo = api_get_course_info($course_code);
-        $courseId = $courseInfo['real_id'];
-        $status_user = api_get_status_of_user_in_course($user_id, $courseId);
-
+        $sessionId = $this->get_session_id();
         $data = $this->get_exercise_data();
         $exerciseId = $data['id'];
         $path = isset($data['path']) ? $data['path'] : '';

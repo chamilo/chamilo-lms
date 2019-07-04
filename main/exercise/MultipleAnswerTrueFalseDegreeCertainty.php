@@ -301,15 +301,9 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
     }
 
     /**
-     * Show result table headers.
-     *
-     * @param Exercise $exercise
-     * @param int      $counter
-     * @param float    $score
-     *
-     * @return string|null
+     * {@inheritdoc}
      */
-    public function return_header($exercise, $counter = null, $score = null)
+    public function return_header(Exercise $exercise, $counter = null, $score = [])
     {
         $header = parent::return_header($exercise, $counter, $score);
         $header .= '<table class="'

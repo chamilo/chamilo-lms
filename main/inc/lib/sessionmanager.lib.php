@@ -5808,14 +5808,16 @@ SQL;
     }
 
     /**
-     * @param int $sessionId
-     * @param int $courseId
+     * @param int    $sessionId
+     * @param int    $courseId
+     * @param string $separator
      *
      * @return string
      */
     public static function getCoachesByCourseSessionToString(
         $sessionId,
-        $courseId
+        $courseId,
+        $separator = ''
     ) {
         $coaches = self::getCoachesByCourseSession($sessionId, $courseId);
         $list = [];
@@ -5828,7 +5830,9 @@ SQL;
             }
         }
 
-        return array_to_string($list, CourseManager::USER_SEPARATOR);
+        $separator = empty($separator) ? CourseManager::USER_SEPARATOR : $separator;
+
+        return array_to_string($list, $separator);
     }
 
     /**

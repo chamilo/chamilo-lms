@@ -371,13 +371,9 @@ class UniqueAnswerImage extends UniqueAnswer
     }
 
     /**
-     * @param Exercise $exercise
-     * @param null     $counter
-     * @param null     $score
-     *
-     * @return string
+     * {@inheritdoc}
      */
-    public function return_header($exercise, $counter = null, $score = null)
+    public function return_header(Exercise $exercise, $counter = null, $score = [])
     {
         if ($exercise->showExpectedChoice()) {
             $header = '<table class="'.$this->question_table_class.'">

@@ -73,7 +73,6 @@ class Certificate extends Model
             if ($this->force_certificate_generation) {
                 $this->generate([], $sendNotification);
             }
-
             if (isset($this->certificate_data) && $this->certificate_data) {
                 if (empty($this->certificate_data['path_certificate'])) {
                     $this->generate([], $sendNotification);
@@ -90,52 +89,53 @@ class Certificate extends Model
             $this->html_file = $this->certification_user_path.basename($this->certificate_data['path_certificate']);
             $this->qr_file = $this->certification_user_path.$pathinfo['filename'].'_qr.png';
         } else {
-            // General certificate
-            $name = md5($this->user_id).'.html';
-            $my_path_certificate = $this->certification_user_path.$name;
-            $path_certificate = '/'.$name;
+            $value = api_get_configuration_value('allow_general_certificate');
+            if ($value === true) {
+                // General certificate
+                $name = md5($this->user_id).'.html';
+                $my_path_certificate = $this->certification_user_path.$name;
+                $path_certificate = '/'.$name;
 
-            // Getting QR filename
-            $file_info = pathinfo($path_certificate);
-            $content = $this->generateCustomCertificate();
+                // Getting QR filename
+                $file_info = pathinfo($path_certificate);
+                $content = $this->generateCustomCertificate();
 
-            $my_new_content_html = str_replace(
-                '((certificate_barcode))',
-                Display::img(
-                    $this->certification_web_user_path.$file_info['filename'].'_qr.png',
-                    'QR'
-                ),
-                $content
-            );
-
-            $my_new_content_html = mb_convert_encoding(
-                $my_new_content_html,
-                'UTF-8',
-                api_get_system_encoding()
-            );
-
-            $this->html_file = $my_path_certificate;
-            $result = @file_put_contents($my_path_certificate, $my_new_content_html);
-
-            if ($result) {
-                // Updating the path
-                self::updateUserCertificateInfo(
-                    0,
-                    $this->user_id,
-                    $path_certificate,
-                    $updateCertificateData
+                $my_new_content_html = str_replace(
+                    '((certificate_barcode))',
+                    Display::img(
+                        $this->certification_web_user_path.$file_info['filename'].'_qr.png',
+                        'QR'
+                    ),
+                    $content
                 );
-                $this->certificate_data['path_certificate'] = $path_certificate;
 
-                if ($this->isHtmlFileGenerated()) {
-                    if (!empty($file_info)) {
-                        //$text = $this->parse_certificate_variables($new_content_html['variables']);
-                        //$this->generate_qr($text, $qr_code_filename);
+                $my_new_content_html = mb_convert_encoding(
+                    $my_new_content_html,
+                    'UTF-8',
+                    api_get_system_encoding()
+                );
+
+                $this->html_file = $my_path_certificate;
+                $result = @file_put_contents($my_path_certificate, $my_new_content_html);
+
+                if ($result) {
+                    // Updating the path
+                    self::updateUserCertificateInfo(
+                        0,
+                        $this->user_id,
+                        $path_certificate,
+                        $updateCertificateData
+                    );
+                    $this->certificate_data['path_certificate'] = $path_certificate;
+
+                    if ($this->isHtmlFileGenerated()) {
+                        if (!empty($file_info)) {
+                            //$text = $this->parse_certificate_variables($new_content_html['variables']);
+                            //$this->generate_qr($text, $qr_code_filename);
+                        }
                     }
                 }
             }
-
-            return $result;
         }
     }
 
@@ -213,7 +213,7 @@ class Certificate extends Model
     {
         // The user directory should be set
         if (empty($this->certification_user_path) &&
-            $this->force_certificate_generation == false
+            $this->force_certificate_generation === false
         ) {
             return false;
         }
@@ -263,7 +263,7 @@ class Certificate extends Model
                             !is_dir($myPathCertificate) &&
                             $this->force_certificate_generation == false
                         ) {
-                            //Seems that the file was already generated
+                            // Seems that the file was already generated
                             return true;
                         } else {
                             // Creating new name
@@ -643,9 +643,9 @@ class Certificate extends Model
             return false;
         }
 
-        $user_certificate = $this->certification_user_path.basename($this->certificate_data['path_certificate']);
+        $userCertificate = $this->certification_user_path.basename($this->certificate_data['path_certificate']);
 
-        if (!file_exists($user_certificate)) {
+        if (!file_exists($userCertificate)) {
             return false;
         }
 
@@ -657,8 +657,6 @@ class Certificate extends Model
      */
     public function show()
     {
-        header('Content-Type: text/html; charset='.api_get_system_encoding());
-
         $user_certificate = $this->certification_user_path.basename($this->certificate_data['path_certificate']);
         if (file_exists($user_certificate)) {
             // Needed in order to browsers don't add custom CSS
@@ -672,7 +670,10 @@ class Certificate extends Model
                 $certificateContent
             );
 
-            if ($this->user_id == api_get_user_id() && !empty($this->certificate_data)) {
+            if ($this->user_id == api_get_user_id() &&
+                !empty($this->certificate_data) &&
+                isset($this->certificate_data['id'])
+            ) {
                 $certificateId = $this->certificate_data['id'];
                 $extraFieldValue = new ExtraFieldValue('user_certificate');
                 $value = $extraFieldValue->get_values_by_handler_and_field_variable(
@@ -688,6 +689,7 @@ class Certificate extends Model
                 }
             }
 
+            header('Content-Type: text/html; charset='.api_get_system_encoding());
             echo $certificateContent;
 
             return;

@@ -41,7 +41,7 @@ foreach ($sessionsInfo as $sessionInfo) {
 
 if (isset($_GET['session']) && intval($_GET['session'])) {
     $form->setDefaults(['session' => intval($_GET['session'])]);
-    $session = $em->find('ChamiloCoreBundle:Session', intval($_GET['session']));
+    $session = api_get_session_entity($_GET['session']);
 }
 
 $data = [];

@@ -327,13 +327,13 @@ $session_select_list = [];
 foreach ($sessionList as $item) {
     $session_select_list[$item['session_id']] = $item['session_name'];
 }
-$select_session_html = Display::select(
+$sessionListToString = Display::select(
     'session_id',
     $session_select_list,
     $session_id,
     ['onchange' => 'submit_form(this)']
 );
-echo Display::form_row(get_lang('Session'), $select_session_html);
+echo Display::form_row(get_lang('Session'), $sessionListToString);
 
 // Course list, get course list of session, or for course where user is admin
 if (!empty($session_id) && $session_id != '-1' && !empty($sessionList)) {
@@ -375,14 +375,14 @@ foreach ($course_list as $item) {
     $course_select_list[$courseItemId] .= $courseInfo['title'];
 }
 
-$select_course_html = Display::select(
+$courseListToString = Display::select(
     'selected_course',
     $course_select_list,
     $selected_course,
     ['onchange' => 'mark_course_id_changed(); submit_form(this);']
 );
 
-echo Display::form_row(get_lang('Course'), $select_course_html);
+echo Display::form_row(get_lang('Course'), $courseListToString);
 
 if (empty($selected_course) || $selected_course == '-1') {
     $course_info = api_get_course_info();
@@ -417,25 +417,31 @@ $exercise_list = ExerciseLib::get_all_exercises_for_course_id(
     false
 );
 
+if ($exercise_id_changed == 1) {
+    reset_menu_lvl_type();
+}
+
 // Exercise List
 $my_exercise_list = [];
 $my_exercise_list['0'] = get_lang('AllExercises');
 $my_exercise_list['-1'] = get_lang('OrphanQuestions');
+$titleSavedAsHtml = api_get_configuration_value('save_titles_as_html');
 if (is_array($exercise_list)) {
     foreach ($exercise_list as $row) {
         $my_exercise_list[$row['id']] = '';
         if ($row['id'] == $fromExercise && $selected_course == api_get_course_int_id()) {
             $my_exercise_list[$row['id']] = ">&nbsp;&nbsp;&nbsp;&nbsp;";
         }
-        $my_exercise_list[$row['id']] .= $row['title'];
+
+        $exerciseTitle = $row['title'];
+        if ($titleSavedAsHtml) {
+            $exerciseTitle = strip_tags(api_html_entity_decode(trim($exerciseTitle)));
+        }
+        $my_exercise_list[$row['id']] .= $exerciseTitle;
     }
 }
 
-if ($exercise_id_changed == 1) {
-    reset_menu_lvl_type();
-}
-
-$select_exercise_html = Display::select(
+$exerciseListToString = Display::select(
     'exerciseId',
     $my_exercise_list,
     $exerciseId,
@@ -443,7 +449,7 @@ $select_exercise_html = Display::select(
     false
 );
 
-echo Display::form_row(get_lang('Exercise'), $select_exercise_html);
+echo Display::form_row(get_lang('Exercise'), $exerciseListToString);
 
 // Difficulty list (only from 0 to 5)
 $levels = [
@@ -962,7 +968,6 @@ $header = [
 ];
 
 echo $pagination;
-
 echo '<form id="question_pool_id" method="get" action="'.$url.'">';
 echo '<input type="hidden" name="fromExercise" value="'.$fromExercise.'">';
 echo '<input type="hidden" name="cidReq" value="'.$_course['code'].'">';

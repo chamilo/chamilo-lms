@@ -177,29 +177,6 @@ class PEAR
         }
     }
 
-    // }}}
-    // {{{ destructor
-
-    /**
-     * Destructor (the emulated type of...).  Does nothing right now,
-     * but is included for forward compatibility, so subclass
-     * destructors should always call it.
-     *
-     * See the note in the class desciption about output from
-     * destructors.
-     *
-     * @access public
-     * @return void
-     */
-    function _PEAR() {
-        if ($this->_debug) {
-            printf("PEAR destructor called, class=%s\n", strtolower(get_class($this)));
-        }
-    }
-
-    // }}}
-    // {{{ getStaticProperty()
-
     /**
     * If you have a class that's mostly/entirely static, and you need static
     * properties, you can use this method to simulate them. Eg. in your method(s)
@@ -385,23 +362,6 @@ class PEAR
         return sizeof($this->_expected_errors);
     }
 
-    // }}}
-    // {{{ popExpect()
-
-    /**
-     * This method pops one element off the expected error codes
-     * stack.
-     *
-     * @return array   the list of error codes that were popped
-     */
-    function popExpect()
-    {
-        return array_pop($this->_expected_errors);
-    }
-
-    // }}}
-    // {{{ _checkDelExpect()
-
     /**
      * This method checks unsets an error code if available
      *
@@ -427,49 +387,6 @@ class PEAR
         }
         return $deleted;
     }
-
-    // }}}
-    // {{{ delExpect()
-
-    /**
-     * This method deletes all occurences of the specified element from
-     * the expected error codes stack.
-     *
-     * @param  mixed $error_code error code that should be deleted
-     * @return mixed list of error codes that were deleted or error
-     * @access public
-     * @since PHP 4.3.0
-     */
-    function delExpect($error_code)
-    {
-        $deleted = false;
-        if ((is_array($error_code) && (0 != count($error_code)))) {
-            // $error_code is a non-empty array here;
-            // we walk through it trying to unset all
-            // values
-            foreach($error_code as $key => $error) {
-                if ($this->_checkDelExpect($error)) {
-                    $deleted =  true;
-                } else {
-                    $deleted = false;
-                }
-            }
-            return $deleted ? true : PEAR::raiseError("The expected error you submitted does not exist"); // IMPROVE ME
-        } elseif (!empty($error_code)) {
-            // $error_code comes alone, trying to unset it
-            if ($this->_checkDelExpect($error_code)) {
-                return true;
-            } else {
-                return PEAR::raiseError("The expected error you submitted does not exist"); // IMPROVE ME
-            }
-        }
-
-        // $error_code is empty
-        return PEAR::raiseError("The expected error you submitted is empty"); // IMPROVE ME
-    }
-
-    // }}}
-    // {{{ raiseError()
 
     /**
      * This method is a wrapper that returns an instance of the
@@ -586,80 +503,6 @@ class PEAR
         return $a;
     }
 
-    // }}}
-    function staticPushErrorHandling($mode, $options = null)
-    {
-        $stack = &$GLOBALS['_PEAR_error_handler_stack'];
-        $def_mode    = &$GLOBALS['_PEAR_default_error_mode'];
-        $def_options = &$GLOBALS['_PEAR_default_error_options'];
-        $stack[] = array($def_mode, $def_options);
-        switch ($mode) {
-            case PEAR_ERROR_EXCEPTION:
-            case PEAR_ERROR_RETURN:
-            case PEAR_ERROR_PRINT:
-            case PEAR_ERROR_TRIGGER:
-            case PEAR_ERROR_DIE:
-            case null:
-                $def_mode = $mode;
-                $def_options = $options;
-                break;
-
-            case PEAR_ERROR_CALLBACK:
-                $def_mode = $mode;
-                // class/object method callback
-                if (is_callable($options)) {
-                    $def_options = $options;
-                } else {
-                    trigger_error("invalid error callback", E_USER_WARNING);
-                }
-                break;
-
-            default:
-                trigger_error("invalid error mode", E_USER_WARNING);
-                break;
-        }
-        $stack[] = array($mode, $options);
-        return true;
-    }
-
-    function staticPopErrorHandling()
-    {
-        $stack = &$GLOBALS['_PEAR_error_handler_stack'];
-        $setmode     = &$GLOBALS['_PEAR_default_error_mode'];
-        $setoptions  = &$GLOBALS['_PEAR_default_error_options'];
-        array_pop($stack);
-        list($mode, $options) = $stack[sizeof($stack) - 1];
-        array_pop($stack);
-        switch ($mode) {
-            case PEAR_ERROR_EXCEPTION:
-            case PEAR_ERROR_RETURN:
-            case PEAR_ERROR_PRINT:
-            case PEAR_ERROR_TRIGGER:
-            case PEAR_ERROR_DIE:
-            case null:
-                $setmode = $mode;
-                $setoptions = $options;
-                break;
-
-            case PEAR_ERROR_CALLBACK:
-                $setmode = $mode;
-                // class/object method callback
-                if (is_callable($options)) {
-                    $setoptions = $options;
-                } else {
-                    trigger_error("invalid error callback", E_USER_WARNING);
-                }
-                break;
-
-            default:
-                trigger_error("invalid error mode", E_USER_WARNING);
-                break;
-        }
-        return true;
-    }
-
-    // {{{ pushErrorHandling()
-
     /**
      * Push a new error handler on top of the error handler options stack. With this
      * you can easily override the actual error handler for some code and restore
@@ -690,30 +533,6 @@ class PEAR
             PEAR::setErrorHandling($mode, $options);
         }
         $stack[] = array($mode, $options);
-        return true;
-    }
-
-    // }}}
-    // {{{ popErrorHandling()
-
-    /**
-    * Pop the last error handler used
-    *
-    * @return bool Always true
-    *
-    * @see PEAR::pushErrorHandling
-    */
-    function popErrorHandling()
-    {
-        $stack = &$GLOBALS['_PEAR_error_handler_stack'];
-        array_pop($stack);
-        list($mode, $options) = $stack[sizeof($stack) - 1];
-        array_pop($stack);
-        if (isset($this) && is_a($this, 'PEAR')) {
-            $this->setErrorHandling($mode, $options);
-        } else {
-            PEAR::setErrorHandling($mode, $options);
-        }
         return true;
     }
 

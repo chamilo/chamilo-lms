@@ -2853,7 +2853,6 @@ HOTSPOT;
             $weight = float_format($weight, 1, $decimalSeparator, $thousandSeparator);
         }
 
-        $html = '';
         if ($show_percentage) {
             $percentageSign = '%';
             if ($hidePercentageSign) {
@@ -3084,7 +3083,6 @@ EOT;
                     ICON_SIZE_MEDIUM
                 );
             } else {
-                //$html .= Display::return_message(get_lang('YouDidNotReachTheMinimumScore'), 'warning');
                 $html = get_lang('YouDidNotReachTheMinimumScore');
                 $icon = Display::return_icon(
                     'warning.png',
@@ -4401,9 +4399,13 @@ EOT;
         $remainingMessage = ''
     ) {
         $origin = api_get_origin();
+        $courseCode = api_get_course_id();
+        $courseId = api_get_course_int_id();
+        $sessionId = api_get_session_id();
 
         // Getting attempt info
         $exercise_stat_info = $objExercise->get_stat_track_exercise_info_by_exe_id($exeId);
+        $studentInfo = api_get_user_info($exercise_stat_info['exe_user_id']);
 
         // Getting question list
         $question_list = [];
@@ -4431,7 +4433,7 @@ EOT;
             [
                 RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER,
                 RESULT_DISABLE_SHOW_SCORE_AND_EXPECTED_ANSWERS,
-                RESULT_DISABLE_AUTOEVALUATION_AND_RANKING,
+                RESULT_DISABLE_SHOW_SCORE_AND_EXPECTED_ANSWERS_AND_RANKING,
             ]
         )) {
             $show_results = true;
@@ -4517,11 +4519,10 @@ EOT;
 
         if (($show_results || $show_only_score) && $origin !== 'embeddable') {
             if (isset($exercise_stat_info['exe_user_id'])) {
-                $user_info = api_get_user_info($exercise_stat_info['exe_user_id']);
-                if ($user_info) {
+                if ($studentInfo) {
                     // Shows exercise header
                     echo $objExercise->showExerciseResultHeader(
-                        $user_info,
+                        $studentInfo,
                         $exercise_stat_info
                     );
                 }
@@ -4733,6 +4734,8 @@ EOT;
         }
 
         $totalScoreText = null;
+        $certificateBlock = '';
+
         if (($show_results || $show_only_score) && $showTotalScore) {
             if ($result['answer_type'] == MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY) {
                 echo '<h1 style="text-align : center; margin : 20px 0;">'.get_lang('YourResults').'</h1><br />';
@@ -4766,6 +4769,15 @@ EOT;
                 );
             }
             $totalScoreText .= '</div>';
+
+            $certificateBlock = self::generateAndShowCertificateBlock(
+                $total_score,
+                $total_weight,
+                $objExercise,
+                $studentInfo['id'],
+                $courseCode,
+                $sessionId
+            );
         }
 
         if ($result['answer_type'] == MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY) {
@@ -4800,6 +4812,7 @@ EOT;
         );
 
         echo $totalScoreText;
+        echo $certificateBlock;
 
         // Ofaj change BT#11784
         if (api_get_configuration_value('quiz_show_description_on_results_page') &&
@@ -4863,7 +4876,7 @@ EOT;
 
         if (in_array(
             $objExercise->selectResultsDisabled(),
-            [RESULT_DISABLE_RANKING, RESULT_DISABLE_AUTOEVALUATION_AND_RANKING]
+            [RESULT_DISABLE_RANKING, RESULT_DISABLE_SHOW_SCORE_AND_EXPECTED_ANSWERS_AND_RANKING]
         )) {
             echo Display::page_header(get_lang('Ranking'), null, 'h4');
             echo self::displayResultsInRanking(
@@ -4900,6 +4913,9 @@ EOT;
         $table->setHeaderContents(0, 3, get_lang('Date'), ['class' => 'text-center']);
 
         foreach ($data as $r => $item) {
+            if (!isset($item[1])) {
+                continue;
+            }
             $selected = $item[1]->getId() == $currentUserId;
 
             foreach ($item as $c => $value) {
@@ -5016,7 +5032,7 @@ EOT;
                 $score, $weight, $objExercise->selectPassPercentage()
             );
             // Color the final test score if pass_percentage activated
-            $ribbonTotalSuccessOrError = "";
+            $ribbonTotalSuccessOrError = '';
             if (self::isPassPercentageEnabled($objExercise->selectPassPercentage())) {
                 if ($isSuccess) {
                     $ribbonTotalSuccessOrError = ' ribbon-total-success';
@@ -5030,7 +5046,7 @@ EOT;
         }
 
         if ($displayChartDegree) {
-            $ribbon .= '<h3>'.get_lang('YourTotalScore').":&nbsp;";
+            $ribbon .= '<h3>'.get_lang('YourTotalScore').':&nbsp;';
             $ribbon .= self::show_score($score, $weight, false, true);
             $ribbon .= '</h3>';
             $ribbon .= '</div>';
@@ -5086,7 +5102,7 @@ EOT;
         } else {
             $ribbon .= '<div class="total">';
         }
-        $ribbon .= '<h3>'.get_lang('YourTotalScore').":&nbsp;";
+        $ribbon .= '<h3>'.get_lang('YourTotalScore').':&nbsp;';
         $ribbon .= self::show_score($score, $weight, false, true);
         $ribbon .= '</h3>';
         $ribbon .= '</div>';
@@ -5348,8 +5364,9 @@ EOT;
     }
 
     /**
-     * Check if an exercise complies with the requirements to be embedded in the mobile app or a video. By making sure
-     * it is set on one question per page and it only contains unique-answer or multiple-answer questions.
+     * Check if an exercise complies with the requirements to be embedded in the mobile app or a video.
+     * By making sure it is set on one question per page and it only contains unique-answer or multiple-answer questions
+     * or unique-answer image. And that the exam does not have immediate feedback.
      *
      * @param array $exercise Exercise info
      *
@@ -5361,7 +5378,7 @@ EOT;
     {
         $em = Database::getManager();
 
-        if (2 != $exercise['type']) {
+        if (ONE_PER_PAGE != $exercise['type'] || EXERCISE_FEEDBACK_TYPE_DIRECT == $exercise['feedback_type']) {
             return false;
         }
 
@@ -5391,5 +5408,70 @@ EOT;
             ->getSingleScalarResult();
 
         return $countAll === $countOfAllowed;
+    }
+
+    /**
+     * Generate a certificate linked to current quiz and.
+     * Return the HTML block with links to download and view the certificate.
+     *
+     * @param float    $totalScore
+     * @param float    $totalWeight
+     * @param Exercise $objExercise
+     * @param int      $studentId
+     * @param string   $courseCode
+     * @param int      $sessionId
+     *
+     * @return string
+     */
+    public static function generateAndShowCertificateBlock(
+        $totalScore,
+        $totalWeight,
+        Exercise $objExercise,
+        $studentId,
+        $courseCode,
+        $sessionId = 0
+    ) {
+        if (!api_get_configuration_value('quiz_generate_certificate_ending') ||
+            !self::isSuccessExerciseResult($totalScore, $totalWeight, $objExercise->selectPassPercentage())
+        ) {
+            return '';
+        }
+
+        /** @var Category $category */
+        $category = Category::load(null, null, $courseCode, null, null, $sessionId, 'ORDER By id');
+
+        if (empty($category)) {
+            return '';
+        }
+
+        /** @var Category $category */
+        $category = $category[0];
+        $categoryId = $category->get_id();
+        $link = LinkFactory::load(
+            null,
+            null,
+            $objExercise->selectId(),
+            null,
+            $courseCode,
+            $categoryId
+        );
+
+        if (empty($link)) {
+            return '';
+        }
+
+        $resourceDeletedMessage = $category->show_message_resource_delete($courseCode);
+
+        if (false !== $resourceDeletedMessage || api_is_allowed_to_edit() || api_is_excluded_user_type()) {
+            return '';
+        }
+
+        $certificate = Category::generateUserCertificate($categoryId, $studentId);
+
+        if (!is_array($certificate)) {
+            return '';
+        }
+
+        return Category::getDownloadCertificateBlock($certificate);
     }
 }

@@ -123,8 +123,18 @@ class GradebookUtils
      */
     public static function block_students()
     {
-        if (!api_is_allowed_to_edit()) {
-            api_not_allowed();
+        $sessionId = api_get_session_id();
+        if (empty($sessionId)) {
+            if (!api_is_allowed_to_edit()) {
+                api_not_allowed();
+            }
+        } else {
+            $isCoach = api_is_coach(api_get_session_id(), api_get_course_int_id());
+            if ($isCoach === false) {
+                if (!api_is_allowed_to_edit()) {
+                    api_not_allowed();
+                }
+            }
         }
     }
 
@@ -1115,10 +1125,10 @@ class GradebookUtils
             'add_signatures' => ['Drh', 'Teacher', 'Date'],
         ];
 
-        $page_format = $params['orientation'] == 'landscape' ? 'A4-L' : 'A4';
+        $page_format = $params['orientation'] === 'landscape' ? 'A4-L' : 'A4';
         ob_start();
         $pdf = new PDF($page_format, $page_format, $pdfParams);
-        $pdf->html_to_pdf_with_template($flatviewtable->return_table());
+        $pdf->html_to_pdf_with_template($flatviewtable->return_table(), false, false, true);
         $content = ob_get_contents();
         ob_end_clean();
         echo $content;
@@ -1551,14 +1561,13 @@ class GradebookUtils
     }
 
     /**
-     * @param GradebookTable $gradebooktable
-     * @param array          $courseInfo
-     * @param int            $userId
-     * @param array          $cats
-     * @param bool           $saveToFile
-     * @param bool           $saveToHtmlFile
-     * @param array          $studentList
-     * @param PDF            $pdf
+     * @param array $courseInfo
+     * @param int   $userId
+     * @param array $cats
+     * @param bool  $saveToFile
+     * @param bool  $saveToHtmlFile
+     * @param array $studentList
+     * @param PDF   $pdf
      *
      * @return string
      */
@@ -1572,6 +1581,7 @@ class GradebookUtils
         $pdf = null
     ) {
         $userInfo = api_get_user_info($userId);
+        $model = ExerciseLib::getCourseScoreModel();
         $cat = $cats[0];
         $allcat = $cats[0]->get_subcategories(
             $userId,
@@ -1595,9 +1605,9 @@ class GradebookUtils
             $allcat,
             $alleval,
             $alllink,
-            null, // params
-            true, // $exportToPdf
-            false, // showteacher
+            null,
+            true,
+            false,
             $userId,
             $studentList,
             $loadStats
@@ -1607,17 +1617,22 @@ class GradebookUtils
 
         if (api_is_allowed_to_edit(null, true)) {
         } else {
-            $gradebooktable->td_attributes = [
-                3 => 'class=centered',
-                4 => 'class=centered',
-                5 => 'class=centered',
-                6 => 'class=centered',
-                7 => 'class=centered',
-            ];
+            if (empty($model)) {
+                $gradebooktable->td_attributes = [
+                    3 => 'class=centered',
+                    4 => 'class=centered',
+                    5 => 'class=centered',
+                    6 => 'class=centered',
+                    7 => 'class=centered',
+                ];
+            }
         }
         $table = $gradebooktable->return_table();
-        $graph = $gradebooktable->getGraph();
 
+        $graph = '';
+        if (empty($model)) {
+            $graph = $gradebooktable->getGraph();
+        }
         $params = [
             'pdf_title' => sprintf(get_lang('GradeFromX'), $courseInfo['name']),
             'session_info' => '',
@@ -1642,12 +1657,13 @@ class GradebookUtils
             $table.
             $graph.
             '<br />'.get_lang('Feedback').'<br />
-            <textarea rows="5" cols="100">&nbsp;</textarea>';
+            <textarea class="form-control" rows="5" cols="100">&nbsp;</textarea>';
 
         $result = $pdf->html_to_pdf_with_template(
             $content,
             $saveToFile,
-            $saveToHtmlFile
+            $saveToHtmlFile,
+            true
         );
 
         if ($saveToHtmlFile) {

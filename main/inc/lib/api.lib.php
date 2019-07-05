@@ -477,9 +477,7 @@ define('RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT', 4);
 define('RESULT_DISABLE_DONT_SHOW_SCORE_ONLY_IF_USER_FINISHES_ATTEMPTS_SHOW_ALWAYS_FEEDBACK', 5);
 define('RESULT_DISABLE_RANKING', 6);
 define('RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER', 7);
-define('RESULT_DISABLE_AUTOEVALUATION_AND_RANKING', 8);
-
-// 4: Show final score only with  and show expected answers only on the last attempt
+define('RESULT_DISABLE_SHOW_SCORE_AND_EXPECTED_ANSWERS_AND_RANKING', 8);
 
 define('EXERCISE_MAX_NAME_SIZE', 80);
 
@@ -1156,9 +1154,6 @@ function api_protect_course_script($print_headers = false, $allow_session_admins
         return false;
     }
 
-    $is_allowed_in_course = api_is_allowed_in_course();
-    $is_visible = false;
-
     if (api_is_drh()) {
         return true;
     }
@@ -1173,6 +1168,8 @@ function api_protect_course_script($print_headers = false, $allow_session_admins
         return true;
     }
 
+    $is_allowed_in_course = api_is_allowed_in_course();
+    $is_visible = false;
     if (isset($course_info) && isset($course_info['visibility'])) {
         switch ($course_info['visibility']) {
             default:
@@ -4765,6 +4762,67 @@ function api_get_languages_combo($name = 'language')
 }
 
 /**
+ * Displays a form (drop down menu) so the user can select his/her preferred language.
+ * The form works with or without javascript.
+ *
+ * @param  bool Hide form if only one language available (defaults to false = show the box anyway)
+ * @param bool $showAsButton
+ *
+ * @return string|null Display the box directly
+ */
+function api_display_language_form($hide_if_no_choice = false, $showAsButton = false)
+{
+    // Retrieve a complete list of all the languages.
+    $language_list = api_get_languages();
+    if (count($language_list['name']) <= 1 && $hide_if_no_choice) {
+        return; //don't show any form
+    }
+
+    // The the current language of the user so that his/her language occurs as selected in the dropdown menu.
+    if (isset($_SESSION['user_language_choice'])) {
+        $user_selected_language = $_SESSION['user_language_choice'];
+    }
+    if (empty($user_selected_language)) {
+        $user_selected_language = api_get_setting('platformLanguage');
+    }
+
+    $currentLanguageId = api_get_language_id($user_selected_language);
+    $currentLanguageInfo = api_get_language_info($currentLanguageId);
+    $countryCode = languageToCountryIsoCode($currentLanguageInfo['isocode']);
+    $url = api_get_self();
+    if ($showAsButton) {
+        $html = '<div class="btn-group">
+              <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                <span class="flag-icon flag-icon-'.$countryCode.'"></span>
+                '.$currentLanguageInfo['original_name'].'
+                <span class="caret">
+                </span>
+              </button>';
+    } else {
+        $html = '
+            <a href="'.$url.'" class="dropdown-toggle" data-toggle="dropdown" role="button">
+                <span class="flag-icon flag-icon-'.$countryCode.'"></span> 
+                '.$currentLanguageInfo['original_name'].'
+                <span class="caret"></span>
+            </a>
+            ';
+    }
+
+    $html .= '<ul class="dropdown-menu" role="menu">';
+    foreach ($language_list['all'] as $key => $data) {
+        $urlLink = $url.'?language='.$data['english_name'];
+        $html .= '<li><a href="'.$urlLink.'"><span class="flag-icon flag-icon-'.languageToCountryIsoCode($data['isocode']).'"></span> '.$data['original_name'].'</a></li>';
+    }
+    $html .= '</ul>';
+
+    if ($showAsButton) {
+        $html .= '</div>';
+    }
+
+    return $html;
+}
+
+/**
  * @param string $languageIsoCode
  *
  * @return string
@@ -7551,8 +7609,6 @@ function api_user_is_login($user_id = null)
  */
 function api_get_real_ip()
 {
-    // Guess the IP if behind a reverse proxy
-    global $debug;
     $ip = trim($_SERVER['REMOTE_ADDR']);
     if (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
         if (preg_match('/,/', $_SERVER['HTTP_X_FORWARDED_FOR'])) {
@@ -7561,9 +7617,6 @@ function api_get_real_ip()
             $ip1 = $_SERVER['HTTP_X_FORWARDED_FOR'];
         }
         $ip = trim($ip1);
-    }
-    if (!empty($debug)) {
-        error_log('Real IP: '.$ip);
     }
 
     return $ip;
@@ -9372,7 +9425,6 @@ function api_set_noreply_and_from_address_to_mailer(PHPMailer $mailer, array $se
     }
 
     $notification = new Notification();
-
     // If the parameter is set don't use the admin.
     $senderName = !empty($sender['name']) ? $sender['name'] : $notification->getDefaultPlatformSenderName();
     $senderEmail = !empty($sender['email']) ? $sender['email'] : $notification->getDefaultPlatformSenderEmail();

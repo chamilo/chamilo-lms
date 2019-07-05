@@ -58,6 +58,7 @@ class Category implements GradebookItem
         $this->generateCertificates = false;
         $this->isRequirement = false;
         $this->courseDependency = [];
+        $this->documentId = 0;
         $this->minimumToValidate = null;
     }
 
@@ -208,7 +209,7 @@ class Category implements GradebookItem
      */
     public function set_parent_id($parent)
     {
-        $this->parent = intval($parent);
+        $this->parent = (int) $parent;
     }
 
     /**
@@ -541,9 +542,8 @@ class Category implements GradebookItem
      *
      * @return \Category
      */
-    public static function createCategoryObjectFromEntity(
-        GradebookCategory $gradebookCategory
-    ) {
+    public static function createCategoryObjectFromEntity(GradebookCategory $gradebookCategory)
+    {
         $category = new Category();
         $category->set_id($gradebookCategory->getId());
         $category->set_name($gradebookCategory->getName());
@@ -554,14 +554,10 @@ class Category implements GradebookItem
         $category->set_weight($gradebookCategory->getWeight());
         $category->set_visible($gradebookCategory->getVisible());
         $category->set_session_id($gradebookCategory->getSessionId());
-        $category->set_certificate_min_score(
-            $gradebookCategory->getCertifMinScore()
-        );
+        $category->set_certificate_min_score($gradebookCategory->getCertifMinScore());
         $category->set_grade_model_id($gradebookCategory->getGradeModelId());
         $category->set_locked($gradebookCategory->getLocked());
-        $category->setGenerateCertificates(
-            $gradebookCategory->getGenerateCertificates()
-        );
+        $category->setGenerateCertificates($gradebookCategory->getGenerateCertificates());
         $category->setIsRequirement($gradebookCategory->getIsRequirement());
 
         return $category;
@@ -1440,7 +1436,6 @@ class Category implements GradebookItem
             //   -> movable to root or other independent categories
             // - category inside a course
             //   -> movable to root, independent categories or categories inside the course
-
             $user = api_is_platform_admin() ? null : api_get_user_id();
             $targets = [];
             $level = 0;
@@ -1559,6 +1554,8 @@ class Category implements GradebookItem
         $tbl_main_courses = Database::get_main_table(TABLE_MAIN_COURSE);
         $tbl_main_course_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
         $tbl_grade_categories = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
+
+        $user_id = (int) $user_id;
 
         $sql = 'SELECT DISTINCT(code), title
                 FROM '.$tbl_main_courses.' cc, '.$tbl_main_course_user.' cu
@@ -1948,7 +1945,6 @@ class Category implements GradebookItem
         $sessionId = 0
     ) {
         $links = [];
-
         $course_code = empty($course_code) ? $this->get_course_code() : $course_code;
         $sessionId = empty($sessionId) ? $this->get_session_id() : $sessionId;
 
@@ -2010,9 +2006,10 @@ class Category implements GradebookItem
      */
     public function getCategories($catId)
     {
+        $catId = (int) $catId;
         $tblGradeCategories = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
         $sql = 'SELECT * FROM '.$tblGradeCategories.'
-                WHERE parent_id = '.intval($catId);
+                WHERE parent_id = '.$catId;
 
         $result = Database::query($sql);
         $categories = self::create_category_objects_from_sql_result($result);
@@ -2251,7 +2248,8 @@ class Category implements GradebookItem
                     get_lang('DisplayCertificate'),
                     $url,
                     'eye',
-                    'primary'
+                    'primary',
+                    ['target' => '_blank']
                 );
 
                 $exportToPDF = Display::url(
@@ -2527,6 +2525,102 @@ class Category implements GradebookItem
         Session::write('gradebook_dest', $url);
     }
 
+
+    /**
+     * @return int
+     */
+    public function getGradeBooksToValidateInDependence()
+    {
+        return $this->gradeBooksToValidateInDependence;
+    }
+
+    /**
+     * @param int $value
+     *
+     * @return Category
+     */
+    public function setGradeBooksToValidateInDependence($value)
+    {
+        $this->gradeBooksToValidateInDependence = $value;
+
+        return $this;
+    }
+
+    /**
+     * Return HTML code with links to download and view certificate.
+     *
+     * @param array $certificate
+     *
+     * @return string
+     */
+    public static function getDownloadCertificateBlock(array $certificate)
+    {
+        if (!isset($certificate['pdf_url'])) {
+            return '';
+        }
+
+        $downloadLink = Display::toolbarButton(
+            get_lang('DownloadCertificatePdf'),
+            $certificate['pdf_url'],
+            'file-pdf-o'
+        );
+        $viewLink = $certificate['certificate_link'];
+
+        return "
+            <div class='panel panel-default'>
+                <div class='panel-body'>
+                    <h3 class='text-center'>".get_lang('NowDownloadYourCertificateClickHere')."</h3>
+                    <div class='text-center'>$downloadLink $viewLink</div>
+                </div>
+            </div>
+        ";
+    }
+
+    /**
+     * Find a gradebook category by the certificate ID.
+     *
+     * @param int $id certificate id
+     *
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     *
+     * @return Category|null
+     */
+    public static function findByCertificate($id)
+    {
+        $category = Database::getManager()
+            ->createQuery('SELECT c.catId FROM ChamiloCoreBundle:GradebookCertificate c WHERE c.id = :id')
+            ->setParameters(['id' => $id])
+            ->getOneOrNullResult();
+
+        if (empty($category)) {
+            return null;
+        }
+
+        $category = self::load($category['catId']);
+
+        if (empty($category)) {
+            return null;
+        }
+
+        return $category[0];
+    }
+
+    /**
+     * @param int $value
+     */
+    public function setDocumentId($value)
+    {
+        $this->documentId = (int) $value;
+    }
+
+    /**
+     * @return int
+     */
+    public function getDocumentId()
+    {
+        return $this->documentId;
+    }
+
     /**
      * @return int
      */
@@ -2622,7 +2716,7 @@ class Category implements GradebookItem
             $cat->setCourseListDependency(isset($data['depends']) ? $data['depends'] : []);
             $cat->setMinimumToValidate(isset($data['minimum_to_validate']) ? $data['minimum_to_validate'] : null);
             $cat->setGradeBooksToValidateInDependence(isset($data['gradebooks_to_validate_in_dependence']) ? $data['gradebooks_to_validate_in_dependence'] : null);
-
+            $cat->setDocumentId($data['document_id']);
             if ($allow) {
                 $cat->entity = $repo->find($data['id']);
             }

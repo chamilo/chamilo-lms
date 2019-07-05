@@ -11,9 +11,9 @@
  */
 class LearnpathLink extends AbstractLink
 {
-    private $course_info = null;
-    private $learnpath_table = null;
-    private $learnpath_data = null;
+    private $course_info;
+    private $learnpath_table;
+    private $learnpath_data;
 
     /**
      * Constructor.
@@ -35,7 +35,7 @@ class LearnpathLink extends AbstractLink
             return [];
         }
 
-        $session_id = api_get_session_id();
+        $session_id = $this->get_session_id();
         if (empty($session_id)) {
             $session_condition = api_get_session_condition(0, true);
         } else {
@@ -129,7 +129,7 @@ class LearnpathLink extends AbstractLink
             }
 
             if ($rescount == 0) {
-                return null;
+                return [null, null];
             } else {
                 switch ($type) {
                     case 'best':
@@ -154,7 +154,7 @@ class LearnpathLink extends AbstractLink
      */
     public function get_link()
     {
-        $session_id = api_get_session_id();
+        $session_id = $this->get_session_id();
         $url = api_get_path(WEB_CODE_PATH).'lp/lp_controller.php?'.api_get_cidreq_params(
             $this->get_course_code(),
                 $session_id

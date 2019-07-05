@@ -1,5 +1,4 @@
 <?php
-/* vim: set expandtab tabstop=4 shiftwidth=4 softtabstop=4: */
 
 /**
  * Contains the Pager class
@@ -51,8 +50,6 @@
  */
 class Pager
 {
-    // {{{ Pager()
-
     /**
      * Constructor
      *
@@ -140,11 +137,7 @@ class Pager
      */
     public function __construct($options = array())
     {
-
     }
-
-    // }}}
-    // {{{ factory()
 
     /**
      * Return a pager based on $mode and $options
@@ -177,7 +170,4 @@ class Pager
         $null = null;
         return $null;
     }
-
-    // }}}
 }
-?>

@@ -212,7 +212,6 @@ if (isset($_REQUEST['comments']) &&
             'marks' => $my_marks,
             'teacher_comment' => $my_comments,
         ];
-
         Database::update(
             $TBL_TRACK_ATTEMPT,
             $params,

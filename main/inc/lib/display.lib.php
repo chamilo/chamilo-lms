@@ -1169,6 +1169,7 @@ class Display
      * @param string $id            id of the container of the tab in the example "tabs"
      * @param array  $attributes    for the ul
      * @param array  $ul_attributes
+     * @param int    $selected
      *
      * @return string
      */
@@ -1177,7 +1178,8 @@ class Display
         $items,
         $id = 'tabs',
         $attributes = [],
-        $ul_attributes = []
+        $ul_attributes = [],
+        $selected = ''
     ) {
         if (empty($headers) || count($headers) == 0) {
             return '';
@@ -1187,10 +1189,15 @@ class Display
         $i = 1;
         foreach ($headers as $item) {
             $active = '';
-            $selected = 'false';
             if ($i == 1) {
                 $active = ' active';
-                $selected = 'true';
+            }
+
+            if (!empty($selected)) {
+                $active = '';
+                if ($selected == $i) {
+                    $active = ' active';
+                }
             }
 
             $item = self::tag(
@@ -1227,6 +1234,14 @@ class Display
             if ($i == 1) {
                 $active = ' show active';
             }
+
+            if (!empty($selected)) {
+                $active = '';
+                if ($selected == $i) {
+                    $active = ' show active';
+                }
+            }
+
             $divs .= self::tag(
                 'div',
                 $content,
@@ -1798,12 +1813,13 @@ class Display
             }
 
             $session = [];
-            $session['category'] = SessionManager::get_session_category($session_info['session_category_id']);
+            $session['category_id'] = $session_info['session_category_id'];
             $session['title'] = $session_info['name'];
-            $session['coach_id'] = $session_info['id_coach'];
-
-            if (api_get_setting('show_session_coach') === 'true') {
-                $session['coach_name'] = api_get_person_name($session_info['firstname'], $session_info['lastname']);
+            $session['id_coach'] = $session_info['id_coach'];
+            $session['dates'] = '';
+            $session['coach'] = '';
+            if (api_get_setting('show_session_coach') === 'true' && isset($coachInfo['complete_name'])) {
+                $session['coach'] = get_lang('GeneralCoach').': '.$coachInfo['complete_name'];
             }
 
             if (($session_info['access_end_date'] == '0000-00-00 00:00:00' &&
@@ -1837,7 +1853,10 @@ class Display
 
             $entityManager = Database::getManager();
             $fieldValuesRepo = $entityManager->getRepository('ChamiloCoreBundle:ExtraFieldValues');
-            $extraFieldValues = $fieldValuesRepo->getVisibleValues(ExtraField::SESSION_FIELD_TYPE, $session_id);
+            $extraFieldValues = $fieldValuesRepo->getVisibleValues(
+                ExtraField::SESSION_FIELD_TYPE,
+                $session_id
+            );
 
             $session['extra_fields'] = [];
             /** @var \Chamilo\CoreBundle\Entity\ExtraFieldValues $value */
@@ -2004,7 +2023,7 @@ class Display
     }
 
     /**
-     * @param int    $percentage
+     * @param int    $percentage      int value between 0 and 100
      * @param bool   $show_percentage
      * @param string $extra_info
      *

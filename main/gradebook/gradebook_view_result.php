@@ -166,8 +166,7 @@ if (isset($_GET['action'])) {
 }
 
 if (isset($_GET['editres'])) {
-    $edit_res_xml = Security::remove_XSS($_GET['editres']);
-    $resultedit = Result::load($edit_res_xml);
+    $resultedit = Result::load($_GET['editres']);
     $edit_res_form = new EvalForm(
         EvalForm::TYPE_RESULT_EDIT,
         $eval[0],
@@ -182,7 +181,7 @@ if (isset($_GET['editres'])) {
         $result = new Result();
         $resultlog = new Result();
         $resultlog->addResultLog($values['hid_user_id'], $select_eval);
-        $result->set_id($edit_res_xml);
+        $result->set_id($_GET['editres']);
         $result->set_user_id($values['hid_user_id']);
         $result->set_evaluation_id($select_eval);
         $row_value = isset($values['score']) ? $values['score'] : 0;
@@ -349,7 +348,7 @@ if (isset($_GET['export'])) {
     ];
     $locked_status = $eval[0]->get_locked();
     $export_result_form = new DataForm(
-        DataForm :: TYPE_EXPORT,
+        DataForm::TYPE_EXPORT,
         'export_result_form',
         null,
         api_get_self().'?export=&selecteval='.$select_eval.'&'.api_get_cidreq(),

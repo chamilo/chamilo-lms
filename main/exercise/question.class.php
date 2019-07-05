@@ -2000,7 +2000,11 @@ abstract class Question
 
         $scoreLabel = get_lang('Wrong');
 
-        if ($exercise->results_disabled == RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER) {
+        if (in_array($exercise->results_disabled, [
+            RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER,
+            RESULT_DISABLE_SHOW_SCORE_AND_EXPECTED_ANSWERS_AND_RANKING,
+        ])
+        ) {
             $scoreLabel = get_lang('QuizWrongAnswerHereIsTheCorrectOne');
         }
 
@@ -2008,10 +2012,13 @@ abstract class Question
         if (isset($score['pass']) && $score['pass'] == true) {
             $scoreLabel = get_lang('Correct');
 
-            if ($exercise->results_disabled == RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER) {
+            if (in_array($exercise->results_disabled, [
+                RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER,
+                RESULT_DISABLE_SHOW_SCORE_AND_EXPECTED_ANSWERS_AND_RANKING,
+            ])
+            ) {
                 $scoreLabel = get_lang('CorrectAnswer');
             }
-
             $class = 'success';
         }
 
@@ -2042,7 +2049,11 @@ abstract class Question
                 }
                 break;
             case UNIQUE_ANSWER:
-                if ($exercise->results_disabled == RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER) {
+                if (in_array($exercise->results_disabled, [
+                    RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER,
+                    RESULT_DISABLE_SHOW_SCORE_AND_EXPECTED_ANSWERS_AND_RANKING,
+                ])
+                ) {
                     if (isset($score['user_answered'])) {
                         if ($score['user_answered'] === false) {
                             $scoreLabel = get_lang('Unanswered');
@@ -2072,7 +2083,11 @@ abstract class Question
         // dont display score for certainty degree questions
         if ($this->type != MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY) {
             if (isset($score['result'])) {
-                if ($exercise->results_disabled == RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER) {
+                if (in_array($exercise->results_disabled, [
+                    RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER,
+                    RESULT_DISABLE_SHOW_SCORE_AND_EXPECTED_ANSWERS_AND_RANKING,
+                ])
+                ) {
                     $score['result'] = null;
                 }
                 $header .= $exercise->getQuestionRibbon($class, $scoreLabel, $score['result'], $scoreCurrent);

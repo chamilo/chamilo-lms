@@ -338,11 +338,9 @@ if (isset($_GET['movelink'])) {
 // Parameters for categories.
 if (isset($_GET['visiblecat'])) {
     GradebookUtils::block_students();
-
+    $visibility_command = 0;
     if (isset($_GET['set_visible'])) {
         $visibility_command = 1;
-    } else {
-        $visibility_command = 0;
     }
     $cats = Category::load($_GET['visiblecat']);
     $cats[0]->set_visible($visibility_command);
@@ -791,7 +789,6 @@ if (isset($_GET['studentoverview'])) {
     $addparams['studentoverview'] = '';
 }
 
-//$addparams['cidReq']='';
 if (isset($_GET['cidReq']) && $_GET['cidReq'] != '') {
     $addparams['cidReq'] = Security::remove_XSS($_GET['cidReq']);
 } else {
@@ -862,22 +859,6 @@ if (isset($first_time) && $first_time == 1 && api_is_allowed_to_edit(null, true)
         );
     }
 
-    if (api_is_allowed_to_edit(null, true)) {
-        if (((empty($selectCat)) || (isset($_GET['cidReq']) && $_GET['cidReq'] !== '')) ||
-            (isset($_GET['isStudentView']) && $_GET['isStudentView'] == 'false')
-        ) {
-            $cats = Category:: load(
-                null,
-                null,
-                $course_code,
-                null,
-                null,
-                $session_id,
-                false
-            );
-        }
-    }
-
     $cats = Category::load(
         null,
         null,
@@ -891,15 +872,16 @@ if (isset($first_time) && $first_time == 1 && api_is_allowed_to_edit(null, true)
     if (!empty($cats)) {
         if ((api_get_setting('gradebook_enable_grade_model') === 'true') &&
             (
-                api_is_platform_admin() || (api_is_allowed_to_edit(null, true) &&
-                api_get_setting('teachers_can_change_grade_model_settings') === 'true')
+                api_is_platform_admin() || (
+                    api_is_allowed_to_edit(null, true) &&
+                    api_get_setting('teachers_can_change_grade_model_settings') === 'true'
+                )
             )
         ) {
             // Getting grade models.
             $obj = new GradeModel();
             $grade_models = $obj->get_all();
             $grade_model_id = $cats[0]->get_grade_model_id();
-
             // No children.
             if ((count($cats) == 1 && empty($grade_model_id)) ||
                 (count($cats) == 1 && $grade_model_id != -1)
@@ -954,6 +936,8 @@ if (isset($first_time) && $first_time == 1 && api_is_allowed_to_edit(null, true)
         $i = 0;
         $allcat = [];
         $model = ExerciseLib::getCourseScoreModel();
+        $allowGraph = api_get_configuration_value('gradebook_hide_graph') === false;
+        $isAllow = api_is_allowed_to_edit(null, true);
 
         /** @var Category $cat */
         foreach ($cats as $cat) {
@@ -978,9 +962,7 @@ if (isset($first_time) && $first_time == 1 && api_is_allowed_to_edit(null, true)
                     $certificate
                 );
 
-                if (api_is_allowed_to_edit(null, true) &&
-                    api_get_setting('gradebook_enable_grade_model') === 'true'
-                ) {
+                if ($isAllow && api_get_setting('gradebook_enable_grade_model') === 'true') {
                     // Showing the grading system
                     if (!empty($grade_models[$grade_model_id])) {
                         echo Display::return_message(
@@ -990,13 +972,12 @@ if (isset($first_time) && $first_time == 1 && api_is_allowed_to_edit(null, true)
                 }
 
                 $exportToPdf = false;
-                if ($action == 'export_table') {
+                if ($action === 'export_table') {
                     $exportToPdf = true;
                 }
 
                 $loadStats = [];
-                $teacher = api_is_allowed_to_edit(null, true);
-                if (!$teacher) {
+                if (!$isAllow) {
                     if (api_get_setting('gradebook_detailed_admin_view') === 'true') {
                         $loadStats = [1, 2, 3];
                     } else {
@@ -1019,7 +1000,7 @@ if (isset($first_time) && $first_time == 1 && api_is_allowed_to_edit(null, true)
                     $loadStats
                 );
 
-                if (api_is_allowed_to_edit()) {
+                if ($isAllow) {
                     $gradebookTable->td_attributes = [
                         4 => 'class="text-center"',
                     ];
@@ -1027,9 +1008,8 @@ if (isset($first_time) && $first_time == 1 && api_is_allowed_to_edit(null, true)
 
                 $table = $gradebookTable->return_table();
 
-                $allowGraph = api_get_configuration_value('gradebook_hide_graph') === false;
                 $graph = '';
-                if ($allowGraph) {
+                if ($allowGraph && empty($model)) {
                     $graph = $gradebookTable->getGraph();
                 }
 

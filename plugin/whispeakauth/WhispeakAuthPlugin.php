@@ -18,6 +18,8 @@ class WhispeakAuthPlugin extends Plugin
 
     const API_URL = 'http://api.whispeak.io:8080/v1.1/';
 
+    const SESSION_FAILED_LOGINS = 'whispeak_failed_logins';
+
     /**
      * StudentFollowUpPlugin constructor.
      */

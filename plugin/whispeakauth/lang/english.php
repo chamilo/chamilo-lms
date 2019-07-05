@@ -41,4 +41,6 @@ $strings['AudioQualityNoisy'] = 'Too noisy audio';
 $strings['AudioQualityFrequency'] = 'Missing some audio frequencies';
 $strings['AudioQualityPoorness'] = 'Too poor general audio quality';
 
-$strings['AgreeAllowResearch'] = 'I agree to allow the use of data for research (no commercial usage)';
+$strings['AgreeAllowResearch'] = 'I agree to allow the use of data for research (no commercial usage).';
+
+$strings['MaxAttemptsReached'] = 'You reached the maximum number of attempts allowed.';

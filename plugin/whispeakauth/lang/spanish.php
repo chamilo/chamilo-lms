@@ -40,3 +40,7 @@ $strings['AudioQualityLoud'] = 'Audio demasiado alto';
 $strings['AudioQualityNoisy'] = 'Audio demasiado ruidoso';
 $strings['AudioQualityFrequency'] = 'Falta algunas frecuencias de audio';
 $strings['AudioQualityPoorness'] = 'Calidad de audio general demasiado pobre';
+
+$strings['AgreeAllowResearch'] = 'Estoy de acuerdo en permitir el uso de datos para investigación (no uso comercial).';
+
+$strings['MaxAttemptsReached'] = 'Ha alcanzado el número máximo de intentos permitidos.';

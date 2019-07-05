@@ -22,6 +22,8 @@ if ($isEnrollment) {
     $isAllowed = !empty($_FILES['audio']);
 } elseif ($isAuthentify) {
     $isAllowed = !empty($_POST['username']) && !empty($_FILES['audio']);
+} else {
+    $isAllowed = false;
 }
 
 if (!$isAllowed) {
@@ -34,7 +36,13 @@ $plugin = WhispeakAuthPlugin::create();
 
 $plugin->protectTool(false);
 
+$failedLogins = 0;
+$maxAttempts = 0;
+
 if ($isAuthentify) {
+    $failedLogins = ChamiloSession::read(WhispeakAuthPlugin::SESSION_FAILED_LOGINS, 0);
+    $maxAttempts = $plugin->getMaxAttempts();
+
     $em = Database::getManager();
     /** @var User|null $user */
     $user = $em->getRepository('ChamiloUserBundle:User')->findOneBy(['username' => $_POST['username']]);
@@ -93,9 +101,9 @@ if ($isEnrollment) {
     $qualityNote = !empty($enrollmentResult['quality']) ? explode('|', $enrollmentResult['quality']) : [];
     $qualityNote = array_map('ucfirst', $qualityNote);
 
-    if ($reliability <= 0) {
-        $message = $plugin->get_lang('EnrollmentSignature0');
-    } else {
+    $message = $plugin->get_lang('EnrollmentSignature0');
+
+    if ($reliability > 0) {
         $plugin->saveEnrollment($user, $enrollmentResult['wsid']);
 
         $message = '<strong>'.$plugin->get_lang('EnrollmentSuccess').'</strong>';
@@ -115,16 +123,22 @@ if ($isEnrollment) {
 }
 
 if ($isAuthentify) {
+    if ($maxAttempts && $failedLogins >= $maxAttempts) {
+        echo Display::return_message($plugin->get_lang('MaxAttemptsReached'), 'warning');
+
+        exit;
+    }
+
     $wsid = WhispeakAuthPlugin::getAuthUidValue($user->getId());
 
     try {
         if (empty($wsid)) {
-            throw new Exception($plugin->get_lang('AuthentifyFailed'));
+            throw new Exception();
         }
 
         $authentifyResult = $plugin->authentify($wsid->getValue(), $newFullPath);
     } catch (Exception $exception) {
-        echo Display::return_message($plugin->get_lang('AuthentifyFailed'), 'error');
+        echo Display::return_message($plugin->get_lang('TryAgain'), 'error');
 
         exit;
     }
@@ -133,14 +147,22 @@ if ($isAuthentify) {
     $qualityNote = !empty($authentifyResult['quality']) ? explode('|', $authentifyResult['quality']) : [];
     $qualityNote = array_map('ucfirst', $qualityNote);
 
+    $message = $plugin->get_lang('AuthentifySuccess');
+
     if (!$success) {
-        $message = $plugin->get_lang('TryAgain');
-    } else {
-        $message = $plugin->get_lang('AuthentifySuccess');
+        $message = $plugin->get_lang('AuthentifyFailed');
+
+        ChamiloSession::write(WhispeakAuthPlugin::SESSION_FAILED_LOGINS, ++$failedLogins);
+
+        if ($maxAttempts && $failedLogins >= $maxAttempts) {
+            $message .= PHP_EOL.$plugin->get_lang('MaxAttemptsReached');
+        } else {
+            $message .= PHP_EOL.$plugin->get_lang('TryAgain');
+        }
     }
 
     foreach ($qualityNote as $note) {
-        $message .= PHP_EOL.'<br>'.$plugin->get_lang("AudioQuality$note");
+        $message .= '<br>'.PHP_EOL.$plugin->get_lang("AudioQuality$note");
     }
 
     echo Display::return_message(
@@ -156,6 +178,7 @@ if ($isAuthentify) {
             'uidReset' => true,
         ];
 
+        ChamiloSession::erase(WhispeakAuthPlugin::SESSION_FAILED_LOGINS);
         ChamiloSession::write('_user', $loggedUser);
         Login::init_user($user->getId(), true);
 

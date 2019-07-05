@@ -25,8 +25,9 @@ class HookCreateUser extends HookEvent implements HookCreateUserEventInterface
      */
     public function notifyCreateUser($type)
     {
-        /** @var \HookCreateUserObserverInterface $observer */
         $this->eventData['type'] = $type;
+
+        /** @var HookCreateUserObserverInterface $observer */
         foreach ($this->observers as $observer) {
             $observer->hookCreateUser($this);
         }

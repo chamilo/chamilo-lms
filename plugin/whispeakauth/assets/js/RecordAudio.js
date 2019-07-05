@@ -29,7 +29,7 @@ window.RecordAudio = (function () {
                 if (!rtcInfo.data.hasOwnProperty(prop)) {
                     continue;
                 }
-console.log(prop, '=>', rtcInfo.data[prop]);
+
                 formData.append(prop, rtcInfo.data[prop]);
             }
 
@@ -45,7 +45,7 @@ console.log(prop, '=>', rtcInfo.data[prop]);
                     btnSave.prop('disabled', true).text(btnSave.data('loadingtext'));
                 }
             }).done(function (response) {
-                $('#messages-deck').append(response);
+                $('#messages-deck').html(response);
             }).always(function () {
                 btnSave.prop('disabled', true).html(btnSaveText).parent().addClass('hidden');
                 btnStop.prop('disabled', true).parent().addClass('hidden');

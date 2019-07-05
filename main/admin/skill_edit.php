@@ -63,7 +63,7 @@ $jquery_ready_content = $returnParams['jquery_ready_content'];
 // in the $(document).ready javascript function
 if (!empty($jquery_ready_content)) {
     $htmlHeadXtra[] = '<script>
-    $(document).ready(function(){
+    $(function () {
         '.$jquery_ready_content.'
     });
     </script>';

@@ -5,11 +5,10 @@ $strings['plugin_title'] = 'Authenticación de voz con Whispeak';
 $strings['plugin_comment'] = 'Permitir autenticación de voz en Chamilo.';
 
 $strings['enable'] = 'Habilitar';
+$strings['enable_help'] = '<p>Agrega <code>$_configuration[\'whispeak_auth_enabled\'] = true;</code> al archivo <code>configuration.php</code></p>';
 $strings['api_url'] = 'URL del API';
 $strings['api_url_help'] = 'http://api.whispeak.io:8080/v1/';
 $strings['token'] = 'Llave del API';
-$strings['instruction'] = '<p>Agrega <code>$_configuration[\'whispeak_auth_enabled\'] = true;</code>'.
-    'al archivo <code>configuration.php</code></p>';
 $strings['max_attempts'] = 'Máximo de intentos';
 $strings['max_attempts_help'] = '(Opcional) Si la autenticación de Whispeak falla x intentos, preguntar y verificar la contraseña del usuario';
 

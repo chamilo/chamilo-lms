@@ -15,6 +15,7 @@ class WhispeakAuthPlugin extends Plugin implements HookPluginInterface
     const SETTING_2FA = '2fa';
 
     const EXTRAFIELD_AUTH_UID = 'whispeak_auth_uid';
+    const EXTRAFIELD_LP_ITEM = 'whispeak_lp_item';
 
     const API_URL = 'http://api.whispeak.io:8080/v1.1/';
 
@@ -55,25 +56,44 @@ class WhispeakAuthPlugin extends Plugin implements HookPluginInterface
             $this->get_lang('Whispeak uid'),
             ''
         );
+
+        LpItem::createExtraField(
+            self::EXTRAFIELD_LP_ITEM,
+            \ExtraField::FIELD_TYPE_CHECKBOX,
+            $this->get_lang('MarkForSpeechAuthentication'),
+            '0',
+            true,
+            true
+        );
     }
 
     public function uninstall()
     {
         $this->uninstallHook();
 
-        $extraField = self::getAuthUidExtraField();
-
-        if (empty($extraField)) {
-            return;
-        }
-
         $em = Database::getManager();
 
-        $em->createQuery('DELETE FROM ChamiloCoreBundle:ExtraFieldValues efv WHERE efv.field = :field')
-            ->execute(['field' => $extraField]);
+        $authIdExtrafield = self::getAuthUidExtraField();
 
-        $em->remove($extraField);
-        $em->flush();
+        if (!empty($authIdExtrafield)) {
+            $em
+                ->createQuery('DELETE FROM ChamiloCoreBundle:ExtraFieldValues efv WHERE efv.field = :field')
+                ->execute(['field' => $authIdExtrafield]);
+
+            $em->remove($authIdExtrafield);
+            $em->flush();
+        }
+
+        $lpItemExtrafield = self::getLpItemExtraField();
+
+        if (!empty($lpItemExtrafield)) {
+            $em
+                ->createQuery('DELETE FROM ChamiloCoreBundle:ExtraFieldValues efv WHERE efv.field = :field')
+                ->execute(['field' => $lpItemExtrafield]);
+
+            $em->remove($lpItemExtrafield);
+            $em->flush();
+        }
     }
 
     /**
@@ -99,6 +119,24 @@ class WhispeakAuthPlugin extends Plugin implements HookPluginInterface
             [
                 'variable' => self::EXTRAFIELD_AUTH_UID,
                 'extraFieldType' => ExtraField::USER_FIELD_TYPE,
+            ]
+        );
+
+        return $extraField;
+    }
+
+    /**
+     * @return ExtraField
+     */
+    public static function getLpItemExtraField()
+    {
+        $efRepo = Database::getManager()->getRepository('ChamiloCoreBundle:ExtraField');
+
+        /** @var ExtraField $extraField */
+        $extraField = $efRepo->findOneBy(
+            [
+                'variable' => self::EXTRAFIELD_LP_ITEM,
+                'extraFieldType' => ExtraField::LP_ITEM_FIELD_TYPE,
             ]
         );
 

@@ -11,6 +11,8 @@ $strings['api_url_help'] = 'http://api.whispeak.io:8080/v1/';
 $strings['token'] = 'API key';
 $strings['max_attempts'] = 'Max attempts';
 $strings['max_attempts_help'] = '(Optional) If the Whispeak authentication is failed x times, then ask and verify the password of the user';
+$strings['2fa'] = 'Two-Factor Authentication';
+$strings['2fa_help'] = 'Allows extend the login page with a Two-Factor Authentication process. After the classic login, the user must authenticate through Whispeak.';
 
 $strings['EnrollmentSampleText'] = 'The famous Mona Lisa painting was painted by Leonardo Da Vinci.';
 $strings['AuthentifySampleText1'] = 'Dropping Like Flies.';
@@ -26,6 +28,7 @@ $strings['EnrollmentSignature1'] = 'Passable signature, advice to make a new enr
 $strings['EnrollmentSignature2'] = 'Correct signature.';
 $strings['EnrollmentSignature3'] = 'Good signature.';
 $strings['SpeechAuthAlreadyEnrolled'] = 'Speech authentication already enrolled previously.';
+$strings['SpeechAuthNotEnrolled'] = 'Speech authentication not enrolled previously.';
 $strings['SpeechAuthentication'] = 'Speech authentication';
 $strings['EnrollmentFailed'] = 'Enrollment failed.';
 $strings['EnrollmentSuccess'] = 'Enrollment success.';

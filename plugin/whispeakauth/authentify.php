@@ -9,14 +9,15 @@ $plugin = WhispeakAuthPlugin::create();
 
 $plugin->protectTool();
 
-$form = new FormValidator('enter_username', 'post', '#');
-$form->addText('username', get_lang('Username'));
+$userId = ChamiloSession::read(WhispeakAuthPlugin::SESSION_2FA_USER, 0);
+$is2fa = (bool) $userId;
 
 $htmlHeadXtra[] = api_get_js('rtc/RecordRTC.js');
 $htmlHeadXtra[] = api_get_js_simple(api_get_path(WEB_PLUGIN_PATH).'whispeakauth/assets/js/RecordAudio.js');
 
 $template = new Template();
-$template->assign('form', $form->returnForm());
+
+$template->assign('show_form', !$is2fa);
 $template->assign('sample_text', $plugin->getAuthentifySampleText());
 
 $content = $template->fetch('whispeakauth/view/authentify_recorder.html.twig');

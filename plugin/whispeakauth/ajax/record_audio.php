@@ -21,7 +21,13 @@ if ($isEnrollment) {
 
     $isAllowed = !empty($_FILES['audio']);
 } elseif ($isAuthentify) {
-    $isAllowed = !empty($_POST['username']) && !empty($_FILES['audio']);
+    $user2fa = ChamiloSession::read(WhispeakAuthPlugin::SESSION_2FA_USER, 0);
+
+    if (!empty($user2fa)) {
+        $isAllowed = !empty($_FILES['audio']);
+    } else {
+        $isAllowed = !empty($_POST['username']) && !empty($_FILES['audio']);
+    }
 } else {
     $isAllowed = false;
 }
@@ -44,8 +50,13 @@ if ($isAuthentify) {
     $maxAttempts = $plugin->getMaxAttempts();
 
     $em = Database::getManager();
-    /** @var User|null $user */
-    $user = $em->getRepository('ChamiloUserBundle:User')->findOneBy(['username' => $_POST['username']]);
+
+    if (!empty($user2fa)) {
+        $user = api_get_user_entity($user2fa);
+    } else {
+        /** @var User|null $user */
+        $user = UserManager::getRepository()->findOneBy(['username' => $_POST['username']]);
+    }
 } else {
     /** @var User $user */
     $user = api_get_user_entity(api_get_user_id());
@@ -131,11 +142,13 @@ if ($isAuthentify) {
 
     $wsid = WhispeakAuthPlugin::getAuthUidValue($user->getId());
 
-    try {
-        if (empty($wsid)) {
-            throw new Exception();
-        }
+    if (empty($wsid)) {
+        echo Display::return_message($plugin->get_lang('SpeechAuthNotEnrolled'), 'warning');
 
+        exit;
+    }
+
+    try {
         $authentifyResult = $plugin->authentify($wsid->getValue(), $newFullPath);
     } catch (Exception $exception) {
         echo Display::return_message($plugin->get_lang('TryAgain'), 'error');
@@ -177,6 +190,10 @@ if ($isAuthentify) {
             'status' => $user->getStatus(),
             'uidReset' => true,
         ];
+
+        if (empty($user2fa)) {
+            ChamiloSession::write(WhispeakAuthPlugin::SESSION_2FA_USER, $user->getId());
+        }
 
         ChamiloSession::erase(WhispeakAuthPlugin::SESSION_FAILED_LOGINS);
         ChamiloSession::write('_user', $loggedUser);

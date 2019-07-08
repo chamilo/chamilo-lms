@@ -8,16 +8,18 @@ use Chamilo\UserBundle\Entity\User;
 /**
  * Class WhispeakAuthPlugin.
  */
-class WhispeakAuthPlugin extends Plugin
+class WhispeakAuthPlugin extends Plugin implements HookPluginInterface
 {
     const SETTING_ENABLE = 'enable';
     const SETTING_MAX_ATTEMPTS = 'max_attempts';
+    const SETTING_2FA = '2fa';
 
     const EXTRAFIELD_AUTH_UID = 'whispeak_auth_uid';
 
     const API_URL = 'http://api.whispeak.io:8080/v1.1/';
 
     const SESSION_FAILED_LOGINS = 'whispeak_failed_logins';
+    const SESSION_2FA_USER = 'whispeak_user_id';
 
     /**
      * StudentFollowUpPlugin constructor.
@@ -30,6 +32,7 @@ class WhispeakAuthPlugin extends Plugin
             [
                 self::SETTING_ENABLE => 'boolean',
                 self::SETTING_MAX_ATTEMPTS => 'text',
+                self::SETTING_2FA => 'boolean',
             ]
         );
     }
@@ -56,6 +59,8 @@ class WhispeakAuthPlugin extends Plugin
 
     public function uninstall()
     {
+        $this->uninstallHook();
+
         $extraField = self::getAuthUidExtraField();
 
         if (empty($extraField)) {
@@ -557,5 +562,41 @@ class WhispeakAuthPlugin extends Plugin
     public function getMaxAttempts()
     {
         return (int) $this->get(self::SETTING_MAX_ATTEMPTS);
+    }
+
+    /**
+     * Install hook when saving the plugin configuration.
+     *
+     * @return WhispeakAuthPlugin
+     */
+    public function performActionsAfterConfigure()
+    {
+        if ('true' === $this->get(self::SETTING_2FA)) {
+            $this->installHook();
+        } else {
+            $this->uninstallHook();
+        }
+
+        return $this;
+    }
+
+    /**
+     * This method will call the Hook management insertHook to add Hook observer from this plugin.
+     */
+    public function installHook()
+    {
+        $observer = WhispeakConditionalLoginHook::create();
+
+        HookConditionalLogin::create()->attach($observer);
+    }
+
+    /**
+     * This method will call the Hook management deleteHook to disable Hook observer from this plugin.
+     */
+    public function uninstallHook()
+    {
+        $observer = WhispeakConditionalLoginHook::create();
+
+        HookConditionalLogin::create()->detach($observer);
     }
 }

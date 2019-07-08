@@ -18,6 +18,14 @@ use ChamiloSession as Session;
  */
 $login_conditions = [];
 
+$conditionalLoginHook = HookConditionalLogin::create();
+
+if (!empty($conditionalLoginHook)) {
+    foreach ($conditionalLoginHook->notifyConditionalLogin() as $condition) {
+        $login_conditions[] = $condition;
+    }
+}
+
 // "Terms and conditions" condition
 array_push(
     $login_conditions,

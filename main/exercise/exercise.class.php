@@ -3115,7 +3115,7 @@ class Exercise
                 ]),
                 [
                     'class' => 'ajax btn btn-default',
-                    'data-title' => $urlTitle,
+                    'data-title' => Security::remove_XSS(get_lang('Comment')),
                     'data-size' => 'md',
                 ]
             );
@@ -3169,7 +3169,6 @@ class Exercise
                                         $num++;
                                     }
                                     $prev_question = $num;
-                                    //$question_id = $beforeId;
                                 }
                             }
 

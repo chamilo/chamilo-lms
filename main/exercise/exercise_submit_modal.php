@@ -9,13 +9,10 @@ use ChamiloSession as Session;
  * @author Julio Montoya <gugli100@gmail.com>
  */
 require_once __DIR__.'/../inc/global.inc.php';
+
 api_protect_course_script(false);
 
 require_once api_get_path(LIBRARY_PATH).'geometry.lib.php';
-
-//Display::display_reduced_header();
-
-echo '<div id="delineation-container">';
 
 $message = null;
 $dbg_local = 0;
@@ -69,12 +66,13 @@ if (isset($_GET['hotspot'])) {
     }
 }
 
-$choice_value = '';
 $user_array = substr($user_array, 0, -1);
-
+$choice_value = '';
 if (isset($_GET['choice'])) {
-    $choice_value = intval($_GET['choice']);
+    $choice_value = (int) $_GET['choice'];
 }
+
+echo '<div id="delineation-container">';
 
 // Getting the options by js
 if (empty($choice_value)) {
@@ -181,7 +179,7 @@ if (!empty($choice_value)) {
         $answerWeighting = $objAnswerTmp->selectWeighting($answerId);
         $numAnswer = $objAnswerTmp->selectAutoId($answerId);
 
-        //delineation
+        // Delineation
         $delineation_cord = $objAnswerTmp->selectHotspotCoordinates(1);
         $answer_delineation_destination = $objAnswerTmp->selectDestination(1);
         if ($dbg_local > 0) {
@@ -219,9 +217,6 @@ if (!empty($choice_value)) {
             }
         } elseif ($answerType == HOT_SPOT_DELINEATION) {
             if ($next) {
-                if ($dbg_local > 0) {
-                    error_log(__LINE__.' - next', 0);
-                }
                 $hot_spot_load = true; //apparently the script is called twice
                 $user_answer = $user_array;
                 $_SESSION['exerciseResultCoordinates'][$questionid] = $user_answer; //needed for exercise_result.php
@@ -255,12 +250,8 @@ if (!empty($choice_value)) {
                     $excess = $poly_results['s2Only'];
                 }
 
-                //$overlap = round(polygons_overlap($poly_answer,$poly_user)); //this is an area in pixels
-                if ($dbg_local > 0) {
-                    error_log(__LINE__.' - Polygons results are '.print_r($poly_results, 1), 0);
-                }
                 if ($overlap < 1) {
-                    //shortcut to avoid complicated calculations
+                    // shortcut to avoid complicated calculations
                     $final_overlap = 0;
                     $final_missing = 100;
                     $final_excess = 100;
@@ -293,15 +284,15 @@ if (!empty($choice_value)) {
                 if ($answerId === 1) {
                     //setting colors
                     if ($final_overlap >= $threadhold1) {
-                        $overlap_color = true; //echo 'a';
+                        $overlap_color = true;
                     }
 
                     if ($final_excess <= $threadhold2) {
-                        $excess_color = true; //echo 'b';
+                        $excess_color = true;
                     }
 
                     if ($final_missing <= $threadhold3) {
-                        $missing_color = true; //echo 'c';
+                        $missing_color = true;
                     }
 
                     $try_hotspot = null;
@@ -328,7 +319,7 @@ if (!empty($choice_value)) {
                     $select_question_hotspot = $destination_items[3];
                     $url_hotspot = $destination_items[4];
                 } elseif ($answerId > 1) {
-                    if ($objAnswerTmp->selectHotspotType($answerId) == 'noerror') {
+                    if ($objAnswerTmp->selectHotspotType($answerId) === 'noerror') {
                         if ($dbg_local > 0) {
                             error_log(__LINE__.' - answerId is of type noerror', 0);
                         }
@@ -347,14 +338,14 @@ if (!empty($choice_value)) {
                     //$delineation_cord=$objAnswerTmp->selectHotspotCoordinates($answerId);
                     $delineation_cord = $objAnswerTmp->selectHotspotCoordinates($answerId); //getting the oars coordinates
                     $poly_answer = convert_coordinates($delineation_cord, '|');
+                    // getting max coordinates
                     $max_coord = poly_get_max(
                         $poly_user,
                         $poly_answer
-                    ); //getting max coordinates
+                    );
                     $test = false;
-                    // if ($answerId == 2 ){$test = true;} for test oars
-
-                    if (empty($_GET['hotspot'])) { //no user response
+                    if (empty($_GET['hotspot'])) {
+                        // no user response
                         $overlap = false;
                     } else {
                         // poly_compile really works tested with gnuplot
@@ -401,11 +392,6 @@ if (!empty($choice_value)) {
                         $select_question_hotspot = $destination_items[3];
                         $url_hotspot = $destination_items[4];
                     }
-                }
-            } else {
-                // the first delineation feedback
-                if ($dbg_local > 0) {
-                    error_log(__LINE__.' first', 0);
                 }
             }
         }
@@ -475,7 +461,6 @@ if (isset($choice_value) && $choice_value == -1) {
 }
 
 $destinationid = null;
-
 if ($answerType != HOT_SPOT_DELINEATION) {
     if (!empty($destination)) {
         $item_list = explode('@@', $destination);
@@ -492,12 +477,10 @@ if ($answerType != HOT_SPOT_DELINEATION) {
     $url = $url_hotspot;
     if ($organs_at_risk_hit == 0 && $wrong_results == false) {
         // no error = no oar and no wrong result for delineation
-        //show if no error
-        //echo 'no error';
+        // show if no error
         $comment = $answerComment = $objAnswerTmp->selectComment($nbrAnswers);
         $answerDestination = $objAnswerTmp->selectDestination($nbrAnswers);
-
-        //we send the error
+        // we send the error
         $destination_items = explode('@@', $answerDestination);
         $try = $destination_items[1];
         $lp = $destination_items[2];
@@ -551,16 +534,17 @@ if ($destinationid == -1) {
 } else {
     // the link to other question
     if (in_array($destinationid, $questionList)) {
-        $objQuestionTmp = Question :: read($destinationid);
+        $objQuestionTmp = Question::read($destinationid);
         $questionName = $objQuestionTmp->selectTitle();
-        $num_value_array = (array_keys($questionList, $destinationid));
-        $links .= Display:: return_icon(
+        $num_value_array = array_keys($questionList, $destinationid);
+        $icon = Display::return_icon(
                 'quiz.png',
                 '',
                 ['style' => 'padding-left:0px;padding-right:5px;']
         );
         $links .= '<a onclick="SendEx('.$num_value_array[0].');" href="#">'.
-            get_lang('GoToQuestion').' '.$num_value_array[0].'</a><br /><br />';
+                get_lang('Question').' '.$num_value_array[0].'</a>&nbsp;';
+        $links .= $icon;
     }
 }
 
@@ -568,25 +552,20 @@ echo '<script>
 function SendEx(num) {
     if (num == -1) {
         window.location.href = "exercise_result.php?take_session=1&exerciseId='.$exerciseId.'&num="+num+"&exerciseType='.$exerciseType.'&origin='.$origin.'&learnpath_item_id='.$learnpath_item_id.'&learnpath_id='.$learnpath_id.'";
-        //tb_remove();
     } else {
         num -= 1;
         window.location.href = "exercise_submit.php?tryagain=1&exerciseId='.$exerciseId.'&num="+num+"&exerciseType='.$exerciseType.'&origin='.$origin.'&learnpath_item_id='.$learnpath_item_id.'&learnpath_id='.$learnpath_id.'";
-        //tb_remove();
     }
     
     return false;
 }
 </script>';
 
-if ($links != '') {
-    echo '<h1><div style="color:#333;">'.get_lang('Feedback').'</div></h1>';
+if (!empty($links)) {
+    //echo '<h1><div style="color:#333;">'.get_lang('Feedback').'</div></h1>';
     if ($answerType == HOT_SPOT_DELINEATION) {
         if ($organs_at_risk_hit > 0) {
-            //$message='<p>'.get_lang('YourDelineation').'</p>';
-            //$message.=$table_resume;
             $message .= '<br />'.get_lang('ResultIs').' <b>'.get_lang('Unacceptable').'</b><br />';
-            //if ($wrong_results) { }
             $message .= '<p style="color:#DC0A0A;"><b>'.get_lang('OARHit').'</b></p>';
             $message .= '<p>'.$comment.'</p>';
         } else {
@@ -595,11 +574,12 @@ if ($links != '') {
             $message .= '<br />'.get_lang('ResultIs').' <b>'.$result_comment.'</b><br />';
             $message .= '<p>'.$comment.'</p>';
         }
+        echo '<br />';
         echo $message;
     } else {
         echo '<p>'.$comment.'</p>';
     }
-    echo '<h3>'.$links.'</h3>';
+    echo '<div style="padding-left: 450px"><h5>'.$links.'</h5></div>';
     echo '</div>';
 
     Session::write('hot_spot_result', $message);
@@ -615,10 +595,7 @@ if ($links != '') {
     $questionNum++;
     echo '<script>
             window.location.href = "exercise_submit.php?exerciseId='.$exerciseId.'&num='.$questionNum.'&exerciseType='.$exerciseType.'&'.api_get_cidreq().'";
-            //tb_remove();
         </script>';
 }
 
 echo '</div>';
-
-//Display::display_footer();

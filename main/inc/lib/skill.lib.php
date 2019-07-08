@@ -9,7 +9,6 @@ use Chamilo\SkillBundle\Entity\SkillRelItem;
 use Chamilo\UserBundle\Entity\User;
 use Fhaculty\Graph\Graph;
 use Fhaculty\Graph\Vertex;
-use Skill as SkillManager;
 
 /**
  * Class SkillProfile.
@@ -2989,8 +2988,9 @@ class Skill extends Model
      * @param string                           $argumentation
      * @param int                              $authorId
      *
-     * @return SkillRelUserEntity
      * @throws \Doctrine\ORM\OptimisticLockException
+     *
+     * @return SkillRelUserEntity
      */
     public function addSkillToUserBadge($user, $skill, $levelId, $argumentation, $authorId)
     {

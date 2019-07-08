@@ -236,7 +236,7 @@ class StudentPublicationLink extends AbstractLink
                 $data->getQualification(),
                 $assignment->getQualification(),
                 api_get_local_time($assignment->getDateOfQualification()),
-                1
+                1,
             ];
         }
 

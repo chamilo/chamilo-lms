@@ -498,8 +498,6 @@ function WSAssignSkill($params)
     return 0;
 }
 
-
-
 // Use the request to (try to) invoke the service
 $GLOBALS['HTTP_RAW_POST_DATA'] = file_get_contents('php://input');
 $HTTP_RAW_POST_DATA = isset($HTTP_RAW_POST_DATA) ? $HTTP_RAW_POST_DATA : '';

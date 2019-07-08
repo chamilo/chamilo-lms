@@ -289,22 +289,13 @@ if ($form->validate()) {
         exit;
     }
 
-    $skillUser = new SkillRelUser();
-    $skillUser->setUser($user);
-    $skillUser->setSkill($skill);
-
-    if ($showLevels) {
-        $level = $skillLevelRepo->find(intval($values['acquired_level']));
-        $skillUser->setAcquiredLevel($level);
-    }
-
-    $skillUser->setArgumentation($values['argumentation']);
-    $skillUser->setArgumentationAuthorId(api_get_user_id());
-    $skillUser->setAcquiredSkillAt(new DateTime());
-    $skillUser->setAssignedBy(0);
-
-    $entityManager->persist($skillUser);
-    $entityManager->flush();
+    $skillUser = $skillManager->addSkillToUserBadge(
+        $user,
+        $skill,
+        $values['acquired_level'],
+        $values['argumentation'],
+        api_get_user_id()
+    );
 
     // Send email depending of children_auto_threshold
     $skillRelSkill = new SkillRelSkill();
@@ -334,9 +325,9 @@ if ($form->validate()) {
                     Display::addFlash(Display::return_message(get_lang('MessageSent')));
                     $url = api_get_path(WEB_CODE_PATH).'badge/assign.php?user='.$userId.'&id='.$parentId;
                     $link = Display::url($url, $url);
-                    $subject = get_lang("StudentHadEnoughSkills");
+                    $subject = get_lang('StudentHadEnoughSkills');
                     $message = sprintf(
-                        get_lang("StudentXHadEnoughSkillsToGetSkillXToAssignClickHereX"),
+                        get_lang('StudentXHadEnoughSkillsToGetSkillXToAssignClickHereX'),
                         $user->getCompleteName(),
                         $parentData['name'],
                         $link

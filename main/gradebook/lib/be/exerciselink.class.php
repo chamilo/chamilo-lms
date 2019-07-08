@@ -240,7 +240,7 @@ class ExerciseLink extends AbstractLink
         $courseId = $this->getCourseId();
         $exerciseData = $this->get_exercise_data();
 
-        $exerciseId = isset($exerciseData['id']) ? $exerciseData['id'] : 0;
+        $exerciseId = isset($exerciseData['id']) ? (int) $exerciseData['id'] : 0;
         $stud_id = (int) $stud_id;
 
         if (empty($exerciseId)) {
@@ -303,7 +303,7 @@ class ExerciseLink extends AbstractLink
                     ON (hp.exe_name = doc.path AND doc.c_id = hp.c_id)
                     WHERE
                         hp.c_id = $courseId AND                        
-                        doc.id = ".$exerciseId;
+                        doc.id = $exerciseId";
 
             if (!empty($stud_id)) {
                 $sql .= " AND hp.exe_user_id = $stud_id ";
@@ -315,7 +315,12 @@ class ExerciseLink extends AbstractLink
         if (isset($stud_id) && empty($type)) {
             // for 1 student
             if ($data = Database::fetch_array($scores)) {
-                $result = [$data['exe_result'], $data['exe_weighting']];
+                $attempts = Database::query($sql);
+                $counter = 0;
+                while ($attempt = Database::fetch_array($attempts)) {
+                    $counter++;
+                }
+                $result = [$data['exe_result'], $data['exe_weighting'], $data['exe_date'], $counter];
                 if ($cacheAvailable) {
                     $cacheDriver->save($key, $result);
                 }

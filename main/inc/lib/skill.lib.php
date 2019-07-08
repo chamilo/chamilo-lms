@@ -9,6 +9,7 @@ use Chamilo\SkillBundle\Entity\SkillRelItem;
 use Chamilo\UserBundle\Entity\User;
 use Fhaculty\Graph\Graph;
 use Fhaculty\Graph\Vertex;
+use Skill as SkillManager;
 
 /**
  * Class SkillProfile.
@@ -2979,5 +2980,51 @@ class Skill extends Model
         }
 
         return api_get_path(WEB_UPLOAD_PATH)."badges/{$skill->getIcon()}";
+    }
+
+    /**
+     * @param User                             $user
+     * @param \Chamilo\CoreBundle\Entity\Skill $skill
+     * @param int                              $levelId
+     * @param string                           $argumentation
+     * @param int                              $authorId
+     *
+     * @return SkillRelUserEntity
+     * @throws \Doctrine\ORM\OptimisticLockException
+     */
+    public function addSkillToUserBadge($user, $skill, $levelId, $argumentation, $authorId)
+    {
+        $showLevels = api_get_configuration_value('hide_skill_levels') === false;
+
+        $entityManager = Database::getManager();
+
+        $skillUserRepo = $entityManager->getRepository('ChamiloSkillBundle:SkillRelUser');
+
+        $criteria = ['user' => $user, 'skill' => $skill];
+        $result = $skillUserRepo->findOneBy($criteria);
+
+        if (!empty($result)) {
+            return false;
+        }
+        $skillLevelRepo = $entityManager->getRepository('ChamiloSkillBundle:Level');
+
+        $skillUser = new \Chamilo\CoreBundle\Entity\SkillRelUser();
+        $skillUser->setUser($user);
+        $skillUser->setSkill($skill);
+
+        if ($showLevels && !empty($levelId)) {
+            $level = $skillLevelRepo->find($levelId);
+            $skillUser->setAcquiredLevel($level);
+        }
+
+        $skillUser->setArgumentation($argumentation);
+        $skillUser->setArgumentationAuthorId($authorId);
+        $skillUser->setAcquiredSkillAt(new DateTime());
+        $skillUser->setAssignedBy(0);
+
+        $entityManager->persist($skillUser);
+        $entityManager->flush();
+
+        return $skillUser;
     }
 }

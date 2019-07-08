@@ -10,8 +10,8 @@
  */
 class StudentPublicationLink extends AbstractLink
 {
-    private $studpub_table = null;
-    private $itemprop_table = null;
+    private $studpub_table;
+    private $itemprop_table;
 
     /**
      * Constructor.
@@ -34,17 +34,18 @@ class StudentPublicationLink extends AbstractLink
         // with the same title as the evaluation name
 
         $eval = $this->get_evaluation();
-        $stud_id = intval($stud_id);
+        $stud_id = (int) $stud_id;
         $itemProperty = $this->get_itemprop_table();
         $workTable = $this->get_studpub_table();
         $courseId = $this->course_id;
 
         $sql = "SELECT pub.url
-                FROM $itemProperty prop INNER JOIN $workTable pub
+                FROM $itemProperty prop 
+                INNER JOIN $workTable pub
                 ON (prop.c_id = pub.c_id AND prop.ref = pub.id)
                 WHERE
-                    prop.c_id = ".$courseId." AND
-                    pub.c_id = ".$courseId." AND
+                    prop.c_id = $courseId AND
+                    pub.c_id = $courseId AND
                     prop.tool = 'work' AND 
                     prop.insert_user_id = $stud_id AND                     
                     pub.title = '".Database::escape_string($eval->get_name())."' AND 
@@ -156,7 +157,7 @@ class StudentPublicationLink extends AbstractLink
             return [];
         }
         $id = $data['id'];
-        $session = $em->find('ChamiloCoreBundle:Session', $this->get_session_id());
+        $session = api_get_session_entity($this->get_session_id());
 
         $assignment = $em
             ->getRepository('ChamiloCourseBundle:CStudentPublication')
@@ -234,6 +235,8 @@ class StudentPublicationLink extends AbstractLink
             return [
                 $data->getQualification(),
                 $assignment->getQualification(),
+                api_get_local_time($assignment->getDateOfQualification()),
+                1
             ];
         }
 

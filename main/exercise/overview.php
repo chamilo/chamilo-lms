@@ -148,10 +148,10 @@ $list['is_visible'] = $objExercise->is_visible(
 
 // Exercise is not visible remove the button
 if ($list['is_visible']['value'] == false) {
-    if ($is_allowed_to_edit) {
+    if ($isAllowedToEdit) {
         $message = get_lang('ThisItemIsInvisibleForStudentsButYouHaveAccessAsTeacher');
     } else {
-        $message = $visible_return['message'];
+        $message = $list['is_visible']['message'];
     }
 }
 

@@ -2256,3 +2256,7 @@ blockquote:before {
 .post-attachment {
     text-align: center;
 }
+
+.exercise_actions {
+    margin-bottom: 60px;
+}

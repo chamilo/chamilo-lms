@@ -7953,6 +7953,11 @@ class learnpath
             }
         }
 
+        if ('edit' === $action) {
+            $extraField = new ExtraField('lp_item');
+            $extraField->addElements($form, $id);
+        }
+
         if ($action == 'add') {
             $form->addButtonSave(get_lang('AddExercise'), 'submit_button');
         } else {
@@ -8363,6 +8368,11 @@ class learnpath
             }
         }
 
+        if ('edit' === $action) {
+            $extraField = new ExtraField('lp_item');
+            $extraField->addElements($form, $id);
+        }
+
         if ($action == 'add') {
             $form->addButtonSave(get_lang('AddForumToCourse'), 'submit_button');
         } else {
@@ -8593,6 +8603,12 @@ class learnpath
                     $selectPrerequisites->setSelected($key);
                 }
             }
+
+        }
+
+        if ('edit' === $action) {
+            $extraField = new ExtraField('lp_item');
+            $extraField->addElements($form, $id);
         }
 
         $form->addButtonSave(get_lang('Ok'), 'submit_button');
@@ -9141,6 +9157,11 @@ class learnpath
             reset($arrLP);
         }
 
+        if ('edit' === $action) {
+            $extraField = new ExtraField('lp_item');
+            $extraField->addElements($form, $id);
+        }
+
         if ($action != 'move') {
             $arrHide = [];
             for ($i = 0; $i < count($arrLP); $i++) {
@@ -9518,6 +9539,11 @@ class learnpath
 
         if (is_array($arrLP)) {
             reset($arrLP);
+        }
+
+        if ('edit' === $action) {
+            $extraField = new ExtraField('lp_item');
+            $extraField->addElements($form, $id);
         }
 
         $arrHide = [];
@@ -9917,6 +9943,11 @@ class learnpath
             }
         }
 
+        if ('edit' === $action) {
+            $extraField = new ExtraField('lp_item');
+            $extraField->addElements($form, $id);
+        }
+
         if ($action == 'add') {
             $form->addButtonSave(get_lang('AddLinkToCourse'), 'submit_button');
         } else {
@@ -10098,6 +10129,11 @@ class learnpath
                     $previousSelect->setSelected($arrLP[$i]['id']);
                 }
             }
+        }
+
+        if ('edit' === $action) {
+            $extraField = new ExtraField('lp_item');
+            $extraField->addElements($form, $id);
         }
 
         if ($action == 'add') {

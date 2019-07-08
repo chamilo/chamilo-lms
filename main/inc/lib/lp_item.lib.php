@@ -109,4 +109,40 @@ class LpItem
             Database::query($sql);
         }
     }
+
+    /**
+     * Create extra field for learning path item.
+     *
+     * @param string      $variable
+     * @param int         $fieldType
+     * @param string      $displayText
+     * @param string|null $default         Optional.
+     * @param bool        $changeable      Optional.
+     * @param bool        $visibleToSelf   Optional.
+     * @param bool        $visibleToOthers Optional.
+     *
+     * @return bool|int
+     */
+    public static function createExtraField(
+        $variable,
+        $fieldType,
+        $displayText,
+        $default = null,
+        $changeable = false,
+        $visibleToSelf = false,
+        $visibleToOthers = false
+    ) {
+        $extraField = new ExtraField('lp_item');
+        $params = [
+            'variable' => $variable,
+            'field_type' => $fieldType,
+            'display_text' => $displayText,
+            'default_value' => $default,
+            'changeable' => $changeable,
+            'visible_to_self' => $visibleToSelf,
+            'visible_to_others' => $visibleToOthers,
+        ];
+
+        return $extraField->save($params);
+    }
 }

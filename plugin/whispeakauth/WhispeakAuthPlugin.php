@@ -599,4 +599,26 @@ class WhispeakAuthPlugin extends Plugin implements HookPluginInterface
 
         HookConditionalLogin::create()->detach($observer);
     }
+
+    /**
+     * @param int $userId
+     *
+     * @throws \Doctrine\ORM\OptimisticLockException
+     *
+     * @return bool
+     */
+    public static function deleteEnrollment($userId)
+    {
+        $extraFieldValue = self::getAuthUidValue($userId);
+
+        if (empty($extraFieldValue)) {
+            return false;
+        }
+
+        $em = Database::getManager();
+        $em->remove($extraFieldValue);
+        $em->flush();
+
+        return true;
+    }
 }

@@ -172,6 +172,14 @@ if ($isAuthentify) {
         } else {
             $message .= PHP_EOL.$plugin->get_lang('TryAgain');
         }
+
+        if ('true' === api_get_setting('allow_lostpassword')) {
+            $message .= '<br>'
+                .Display::url(
+                    get_lang('LostPassword'),
+                    api_get_path(WEB_CODE_PATH).'auth/lostPassword.php'
+                );
+        }
     }
 
     foreach ($qualityNote as $note) {

@@ -121,7 +121,7 @@ if ($isEnrollment) {
         $message .= PHP_EOL;
         $message .= $plugin->get_lang("EnrollmentSignature$reliability");
     }
-    
+
     foreach ($qualityNote as $note) {
         $message .= PHP_EOL.'<br>'.$plugin->get_lang("AudioQuality$note");
     }

@@ -277,7 +277,7 @@ class WhispeakAuthPlugin extends Plugin implements HookPluginInterface
     }
 
     /**
-     * Convert the language name to ISO-639-2 code (3 characters)
+     * Convert the language name to ISO-639-2 code (3 characters).
      *
      * @param string $languageName
      *

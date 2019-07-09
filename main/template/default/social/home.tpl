@@ -38,6 +38,7 @@
             <div id="display_response_id"></div>
         </div>
         <div class="col-md-3">
+            {{ social_group_block }}
             <!-- Block chat list -->
             <div class="chat-friends">
                 <div class="panel-group" id="blocklistFriends" role="tablist" aria-multiselectable="true">
@@ -76,8 +77,6 @@
                     </div>
                 </div>
             </div>
-
-            {{ social_group_block }}
 
             {{ social_skill_block }}
 

@@ -30,6 +30,8 @@
         {{ social_auto_extend_link }}
     </div>
     <div class="col-md-3">
+        {{ social_group_info_block }}
+
         <div class="chat-friends">
             <div class="panel-group" id="blocklistFriends" role="tablist" aria-multiselectable="true">
                 <div class="panel panel-default">
@@ -48,8 +50,6 @@
                 </div>
             </div>
         </div>
-
-        {{ social_group_info_block }}
 
         {{ social_skill_block }}
 

@@ -647,6 +647,10 @@ class BigBlueButtonBN {
 	 */
 	public function generateRecording($recordingParams)
 	{
+	    if (empty($recordingParams)) {
+	        return false;
+        }
+
 		$recordingsUrl = $this->_bbbServerBaseUrl.'../demo/regenerateRecord.jsp?';
 		$params = 'recordID='.urlencode($recordingParams['recordId']);
 		$url = $recordingsUrl.$params.'&checksum='.sha1('regenerateRecord'.$params.$this->_securitySalt);

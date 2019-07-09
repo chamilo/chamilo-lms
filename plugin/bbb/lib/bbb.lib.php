@@ -579,7 +579,7 @@ class bbb
             }
         }
 
-        if (strval($meetingIsRunningInfo['returncode']) == 'SUCCESS' &&
+        if (strval($meetingIsRunningInfo['returncode']) === 'SUCCESS' &&
             isset($meetingIsRunningInfo['meetingName']) &&
             !empty($meetingIsRunningInfo['meetingName'])
         ) {
@@ -1140,7 +1140,7 @@ class bbb
 
         // Check if there are recordings for this meeting
         $recordings = $this->api->getRecordings(['meetingId' => $meetingData['remote_id']]);
-        if (!empty($recordings) && isset($recordings['messageKey']) && $recordings['messageKey'] == 'noRecordings') {
+        if (!empty($recordings) && isset($recordings['messageKey']) && $recordings['messageKey'] === 'noRecordings') {
             return false;
         } else {
             if (!empty($recordings['records'])) {

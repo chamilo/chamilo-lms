@@ -67,13 +67,16 @@ if ($conferenceManager) {
                 api_not_allowed();
             }
             $result = $bbb->regenerateRecording($_GET['id'], $_GET['record_id']);
+
             if ($result) {
                 $message = Display::return_message(get_lang('Success'), 'success');
             } else {
                 $message = Display::return_message(get_lang('Error'), 'error');
             }
+
             Display::addFlash($message);
             header('Location: '.$bbb->getListingUrl());
+            exit;
             break;
         case 'delete_record':
             $result = $bbb->deleteRecording($_GET['id']);
@@ -150,7 +153,6 @@ if (($meetingExists || $userCanSeeJoinButton) && ($maxUsers == 0 || $maxUsers > 
     $showJoinButton = true;
 }
 $conferenceUrl = $bbb->getConferenceUrl();
-
 $courseInfo = api_get_course_info();
 $formToString = '';
 
@@ -161,7 +163,7 @@ if ($bbb->isGlobalConference() === false &&
 ) {
     $url = api_get_self().'?'.api_get_cidreq(true, false).'&gidReq=';
     $htmlHeadXtra[] = '<script>        
-        $(document).ready(function(){
+        $(document).ready(function() {
             $("#group_select").on("change", function() {
                 var groupId = $(this).find("option:selected").val();
                 var url = "'.$url.'";                
@@ -193,18 +195,6 @@ if ($bbb->isGlobalConference() === false &&
     }
 }
 
-$tpl = new Template($tool_name);
-$tpl->assign('allow_to_edit', $conferenceManager);
-$tpl->assign('meetings', $meetings);
-$tpl->assign('conference_url', $conferenceUrl);
-$tpl->assign('users_online', $usersOnline);
-$tpl->assign('conference_manager', $conferenceManager);
-$tpl->assign('max_users_limit', $maxUsers);
-$tpl->assign('bbb_status', $status);
-$tpl->assign('show_join_button', $showJoinButton);
-$tpl->assign('message', $message);
-$tpl->assign('form', $formToString);
-
 // Default URL
 $urlList[] = Display::url(
     $plugin->get_lang('EnterConference'),
@@ -213,7 +203,7 @@ $urlList[] = Display::url(
 );
 
 $type = $plugin->get('launch_type');
-$warningIntefaceMessage = '';
+$warningInterfaceMessage = '';
 $showClientOptions = false;
 
 switch ($type) {
@@ -228,7 +218,7 @@ switch ($type) {
     case BBBPlugin::LAUNCH_TYPE_SET_BY_TEACHER:
         if ($conferenceManager) {
             $urlList = $plugin->getUrlInterfaceLinks($conferenceUrl);
-            $warningIntefaceMessage = Display::return_message($plugin->get_lang('ParticipantsWillUseSameInterface'));
+            $warningInterfaceMessage = Display::return_message($plugin->get_lang('ParticipantsWillUseSameInterface'));
             $showClientOptions = true;
         } else {
             $meetingInfo = $bbb->getMeetingByName($videoConferenceName);
@@ -248,8 +238,8 @@ switch ($type) {
             $showClientOptions = true;
         } else {
             if ($meetingExists) {
-                $meetingInfo = $bbb->getMeetingByName($videoConferenceName);
-                $meetinUserInfo = $bbb->getMeetingParticipantInfo($meetingInfo['id'], api_get_user_id());
+                //$meetingInfo = $bbb->getMeetingByName($videoConferenceName);
+                //$meetinUserInfo = $bbb->getMeetingParticipantInfo($meetingInfo['id'], api_get_user_id());
                 $urlList = $plugin->getUrlInterfaceLinks($conferenceUrl);
                 $showClientOptions = true;
             }
@@ -257,13 +247,24 @@ switch ($type) {
 
         break;
 }
-
+$tpl = new Template($tool_name);
+$tpl->assign('allow_to_edit', $conferenceManager);
+$tpl->assign('meetings', $meetings);
+$tpl->assign('conference_url', $conferenceUrl);
+$tpl->assign('users_online', $usersOnline);
+$tpl->assign('conference_manager', $conferenceManager);
+$tpl->assign('max_users_limit', $maxUsers);
+$tpl->assign('bbb_status', $status);
+$tpl->assign('show_join_button', $showJoinButton);
+$tpl->assign('message', $message);
+$tpl->assign('form', $formToString);
 $tpl->assign('enter_conference_links', $urlList);
-$tpl->assign('warning_inteface_msg', $warningIntefaceMessage);
+$tpl->assign('warning_inteface_msg', $warningInterfaceMessage);
 $tpl->assign('show_client_options', $showClientOptions);
 
 $listing_tpl = 'bbb/view/listing.tpl';
 $content = $tpl->fetch($listing_tpl);
+
 $actionLinks = '';
 if (api_is_platform_admin()) {
     $actionLinks .= Display::toolbarButton(

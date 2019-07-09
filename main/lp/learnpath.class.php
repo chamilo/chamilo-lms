@@ -3646,14 +3646,20 @@ class learnpath
      */
     public function get_name()
     {
-        if ($this->debug > 0) {
-            error_log('In learnpath::get_name()', 0);
-        }
         if (!empty($this->name)) {
             return $this->name;
-        } else {
-            return 'N/A';
         }
+
+        return 'N/A';
+    }
+
+    /**
+     * @return string
+     *
+     */
+    public function getNameNoTags()
+    {
+       return strip_tags($this->get_name());
     }
 
     /**
@@ -5298,9 +5304,6 @@ class learnpath
      */
     public function set_name($name = null)
     {
-        if ($this->debug > 0) {
-            error_log('In learnpath::set_name()', 0);
-        }
         if (empty($name)) {
             return false;
         }
@@ -5309,11 +5312,8 @@ class learnpath
         $lp_id = $this->get_id();
         $course_id = $this->course_info['real_id'];
         $sql = "UPDATE $lp_table SET
-                name = '".Database::escape_string($this->name)."'
+                name = '".$this->name."'
                 WHERE iid = $lp_id";
-        if ($this->debug > 2) {
-            error_log('lp updated with new name : '.$this->name, 0);
-        }
         $result = Database::query($sql);
         // If the lp is visible on the homepage, change his name there.
         if (Database::affected_rows($result)) {
@@ -5328,9 +5328,9 @@ class learnpath
             Database::query($sql);
 
             return true;
-        } else {
-            return false;
         }
+
+        return false;
     }
 
     /**

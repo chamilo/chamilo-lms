@@ -452,7 +452,7 @@ if ($is_allowed_to_edit) {
     ];
     $interbreadcrumb[] = [
         'url' => api_get_self()."?action=add_item&type=step&lp_id={$lp->lp_id}&isStudentView=false&".api_get_cidreq(true, true, 'course'),
-        'name' => $lp->get_name(),
+        'name' => $lp->getNameNoTags(),
     ];
 
     $interbreadcrumb[] = [

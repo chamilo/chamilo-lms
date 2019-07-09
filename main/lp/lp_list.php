@@ -326,7 +326,7 @@ foreach ($categories as $item) {
                     .'</div>';
             }
 
-            $my_title = $name;
+            $my_title = strip_tags($name);
             $icon_learnpath = Display::return_icon(
                 'learnpath.png',
                 get_lang('LPName')

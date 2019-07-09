@@ -35,7 +35,7 @@ $interbreadcrumb[] = [
 ];
 $interbreadcrumb[] = [
     'url' => api_get_self()."?action=build&lp_id=".$lpId.'&'.api_get_cidreq(),
-    'name' => $learnPath->get_name(),
+    'name' => $learnPath->getNameNoTags(),
 ];
 
 $htmlHeadXtra[] = '<script>
@@ -68,7 +68,17 @@ $form = new FormValidator(
 $form->addElement('header', get_lang('EditLPSettings'));
 
 // Title
-$form->addElement('text', 'lp_name', api_ucfirst(get_lang('LearnpathTitle')), ['size' => 43]);
+if (api_get_configuration_value('save_titles_as_html')) {
+    $form->addHtmlEditor(
+        'lp_name',
+        get_lang('LPName'),
+        true,
+        false,
+        ['ToolbarSet' => 'Minimal', 'Height' => '100']
+    );
+} else {
+    $form->addElement('text', 'lp_name', api_ucfirst(get_lang('LearnpathTitle')), ['size' => 43]);
+}
 $form->applyFilter('lp_name', 'html_filter');
 $form->addRule('lp_name', get_lang('ThisFieldIsRequired'), 'required');
 $form->addElement('hidden', 'lp_encoding');
@@ -111,7 +121,7 @@ if (strlen($learnPath->get_preview_image()) > 0) {
     $form->addElement('label', get_lang('ImagePreview'), $show_preview_image);
     $form->addElement('checkbox', 'remove_picture', null, get_lang('DelImage'));
 }
-$label = ($learnPath->get_preview_image() != '' ? get_lang('UpdateImage') : get_lang('AddImage'));
+$label = $learnPath->get_preview_image() != '' ? get_lang('UpdateImage') : get_lang('AddImage');
 $form->addElement('file', 'lp_preview_image', [$label, get_lang('ImageWillResizeMsg')]);
 $form->addRule('lp_preview_image', get_lang('OnlyImagesAllowed'), 'filetype', ['jpg', 'jpeg', 'png', 'gif']);
 

@@ -428,8 +428,6 @@ switch ($action) {
             Session::write('refresh', 1);
 
             if (isset($_POST['submit_button']) && !empty($post_title)) {
-                // If a title was submitted:
-
                 // Updating the lp.modified_on
                 $_SESSION['oLP']->set_modified_on();
 
@@ -1058,10 +1056,9 @@ switch ($action) {
             }
             $_SESSION['oLP']->set_theme($_REQUEST['lp_theme']);
 
+            $hide_toc_frame = null;
             if (isset($_REQUEST['hide_toc_frame']) && $_REQUEST['hide_toc_frame'] == 1) {
                 $hide_toc_frame = $_REQUEST['hide_toc_frame'];
-            } else {
-                $hide_toc_frame = null;
             }
             $_SESSION['oLP']->set_hide_toc_frame($hide_toc_frame);
             $_SESSION['oLP']->set_prerequisite(isset($_POST['prerequisites']) ? (int) $_POST['prerequisites'] : 0);
@@ -1073,18 +1070,16 @@ switch ($action) {
 
             $accumulateScormTime = isset($_REQUEST['accumulate_scorm_time']) ? $_REQUEST['accumulate_scorm_time'] : 'true';
             $_SESSION['oLP']->setAccumulateScormTime($accumulateScormTime);
-
+            $publicated_on = null;
             if (isset($_REQUEST['activate_start_date_check']) && $_REQUEST['activate_start_date_check'] == 1) {
                 $publicated_on = $_REQUEST['publicated_on'];
-            } else {
-                $publicated_on = null;
             }
 
+            $expired_on = null;
             if (isset($_REQUEST['activate_end_date_check']) && $_REQUEST['activate_end_date_check'] == 1) {
                 $expired_on = $_REQUEST['expired_on'];
-            } else {
-                $expired_on = null;
             }
+
             $_SESSION['oLP']->setCategoryId($_REQUEST['category_id']);
             $_SESSION['oLP']->set_modified_on();
             $_SESSION['oLP']->set_publicated_on($publicated_on);

@@ -8,11 +8,11 @@
             {% for item in data_list %}
             <div id="toc_{{ item.id }}" class="{{ item.class }} item-{{ item.type }}">
                 {% if item.type == 'dir' %}
-                <div class="section {{ item.css_level }}" title="{{ item.description }}">
+                <div class="section {{ item.css_level }}" title="{{ item.description | e('html') }}">
                     {{ item.title }}
                 </div>
                 {% else %}
-                <div class="item {{ item.css_level }}" title="{{ item.description }}">
+                <div class="item {{ item.css_level }}" title="{{ item.description | e('html')}}">
                     <a name="atoc_{{ item.id }}"></a>
                     <a data-type="type-{{ item.type }}" class="items-list"  href="#"
                        onclick="switch_item('{{ item.current_id }}','{{ item.id }}'); return false;">

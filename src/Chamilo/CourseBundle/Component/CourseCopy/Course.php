@@ -70,18 +70,18 @@ class Course
     /**
      * Does this course has resources?
      *
-     * @param int $resource_type Check if this course has resources of the
+     * @param int $type Check if this course has resources of the
      *                           given type. If no type is given, check if course has resources of any
      *                           type.
      *
      * @return bool
      */
-    public function has_resources($resource_type = null)
+    public function has_resources($type = null)
     {
-        if ($resource_type != null) {
+        if ($type != null) {
             return
-                isset($this->resources[$resource_type]) && is_array($this->resources[$resource_type]) && (
-                    count($this->resources[$resource_type]) > 0
+                isset($this->resources[$type]) && is_array($this->resources[$type]) && (
+                    count($this->resources[$type]) > 0
                 );
         }
 
@@ -124,7 +124,6 @@ class Course
                             $title = $resource->title;
                             $description = $resource->description;
                             break;
-
                         case RESOURCE_FORUMCATEGORY:
                             $title = $resource->title;
                             $description = $resource->description;

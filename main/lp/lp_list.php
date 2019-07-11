@@ -303,14 +303,13 @@ foreach ($categories as $item) {
             }
 
             $counter++;
+            $oddclass = 'row_even';
             if (($counter % 2) == 0) {
                 $oddclass = 'row_odd';
-            } else {
-                $oddclass = 'row_even';
             }
 
             $url_start_lp = 'lp_controller.php?'.api_get_cidreq().'&action=view&lp_id='.$id;
-            $name = Security::remove_XSS($details['lp_name']);
+            $my_title = $name = strip_tags(Security::remove_XSS($details['lp_name']));
             $extra = null;
 
             if ($is_allowed_to_edit) {
@@ -326,7 +325,6 @@ foreach ($categories as $item) {
                     .'</div>';
             }
 
-            $my_title = strip_tags($name);
             $icon_learnpath = Display::return_icon(
                 'learnpath.png',
                 get_lang('LPName')

@@ -41,7 +41,7 @@ class CkEditor extends Editor
      */
     public function createHtml($value)
     {
-        $html = '<textarea id="'.$this->getName().'" name="'.$this->getName().'" class="ckeditor">
+        $html = '<textarea id="'.$this->getTextareaId().'" name="'.$this->getName().'" class="ckeditor">
                  '.$value.'
                  </textarea>';
         $html .= $this->editorReplace();
@@ -74,7 +74,7 @@ class CkEditor extends Editor
             $style .= api_get_css(ChamiloApi::getEditorDocStylePath());
         }
 
-        $html = '<textarea id="'.$this->getName().'" name="'.$this->getName().'" class="ckeditor">
+        $html = '<textarea id="'.$this->getTextareaId().'" name="'.$this->getName().'" class="ckeditor">
                  '.$style.$value.'
                  </textarea>';
         $html .= $this->editorReplace();
@@ -97,7 +97,7 @@ class CkEditor extends Editor
         $javascript = $this->toJavascript($config);
 
         $html = "<script>
-           CKEDITOR.replace('".$this->getName()."',
+           CKEDITOR.replace('".$this->getTextareaId()."',
                $javascript
            );
            </script>";

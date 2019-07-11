@@ -7145,7 +7145,6 @@ class learnpath
 
         // stripslashes() before calling api_replace_dangerous_char() because $_POST['title']
         // is already escaped twice when it gets here.
-
         $originalTitle = !empty($title) ? $title : $_POST['title'];
         if (!empty($title)) {
             $title = api_replace_dangerous_char(strip_tags(stripslashes($title)));
@@ -7862,7 +7861,7 @@ class learnpath
             }
         }
 
-        if ($action == 'add') {
+        if ($action === 'add') {
             $form->addButtonSave(get_lang('AddExercise'), 'submit_button');
         } else {
             $form->addButtonSave(get_lang('EditCurrentExecice'), 'submit_button');
@@ -7906,9 +7905,9 @@ class learnpath
         } elseif (is_numeric($extra_info)) {
             $TBL_DOCUMENT = Database::get_course_table(TABLE_DOCUMENT);
 
-            $sql = "SELECT * FROM ".$TBL_DOCUMENT."
+            $sql = "SELECT * FROM $TBL_DOCUMENT
                     WHERE
-                        c_id = ".$course_id." AND
+                        c_id = $course_id AND
                         path LIKE '".$uploadPath."/%/%htm%' AND
                         iid = ".(int) $extra_info."
                     ORDER BY iid ASC";
@@ -7927,10 +7926,9 @@ class learnpath
             $item_description = '';
         }
 
+        $parent = 0;
         if ($id != 0 && is_array($extra_info)) {
             $parent = $extra_info['parent_item_id'];
-        } else {
-            $parent = 0;
         }
 
         $arrLP = $this->getItemsForForm();
@@ -8495,7 +8493,7 @@ class learnpath
             $arrLP[] = [
                 'id' => $row['iid'],
                 'item_type' => $row['item_type'],
-                'title' => $row['title'],
+                'title' => $this->cleanItemTitle($row['title']),
                 'path' => $row['path'],
                 'description' => $row['description'],
                 'parent_item_id' => $row['parent_item_id'],
@@ -8515,7 +8513,7 @@ class learnpath
 
         $url = api_get_self().'?'.api_get_cidreq().'&action='.$action.'&type='.$item_type.'&lp_id='.$this->lp_id;
 
-        $form = new FormValidator('form', 'POST', $url);
+        $form = new FormValidator('form_'.$item_type, 'POST', $url);
         $defaults['title'] = api_html_entity_decode(
             $item_title,
             ENT_QUOTES,
@@ -8529,7 +8527,7 @@ class learnpath
         $charset = api_get_system_encoding();
         for ($i = 0; $i < count($arrLP); $i++) {
             if ($action != 'add') {
-                if ($arrLP[$i]['item_type'] == 'dir' && !in_array($arrLP[$i]['id'], $arrHide) &&
+                if ($arrLP[$i]['item_type'] === 'dir' && !in_array($arrLP[$i]['id'], $arrHide) &&
                     !in_array($arrLP[$i]['parent_item_id'], $arrHide)
                 ) {
                     $arrHide[$arrLP[$i]['id']]['value'] = $arrLP[$i]['title'];
@@ -8539,7 +8537,7 @@ class learnpath
                     }
                 }
             } else {
-                if ($arrLP[$i]['item_type'] == 'dir') {
+                if ($arrLP[$i]['item_type'] === 'dir') {
                     $arrHide[$arrLP[$i]['id']]['value'] = $arrLP[$i]['title'];
                     $arrHide[$arrLP[$i]['id']]['padding'] = 20 + $arrLP[$i]['depth'] * 20;
                     if ($parent == $arrLP[$i]['id']) {
@@ -8551,8 +8549,6 @@ class learnpath
 
         if ($action != 'move') {
             $this->setItemTitle($form);
-            $form->applyFilter('title', 'html_filter');
-            $form->addRule('title', get_lang('ThisFieldIsRequired'), 'required');
         } else {
             $form->addElement('hidden', 'title');
         }
@@ -8564,7 +8560,7 @@ class learnpath
             '',
             [
                 'id' => 'idParent',
-                'onchange' => "javascript: load_cbo(this.value);",
+                'onchange' => 'javascript: load_cbo(this.value);',
             ]
         );
 
@@ -8584,6 +8580,7 @@ class learnpath
         if (is_array($arrLP)) {
             reset($arrLP);
         }
+
         $arrHide = [];
         // POSITION
         for ($i = 0; $i < count($arrLP); $i++) {
@@ -8623,7 +8620,7 @@ class learnpath
         }
 
         // When new chapter add at the end
-        if ($action == 'add_item') {
+        if ($action === 'add_item') {
             $position->setSelected($lastPosition);
         }
 
@@ -8634,7 +8631,7 @@ class learnpath
         $form->addButtonSave(get_lang('SaveSection'), 'submit_button');
 
         //fix in order to use the tab
-        if ($item_type == 'dir') {
+        if ($item_type === 'dir') {
             $form->addElement('hidden', 'type', 'dir');
         }
 
@@ -8659,7 +8656,6 @@ class learnpath
             );
 
             $relative_prefix = '';
-
             $editor_config = [
                 'ToolbarSet' => 'LearningPathDocuments',
                 'Width' => '100%',
@@ -13884,12 +13880,10 @@ EOD;
                 get_lang('Title'),
                 true,
                 false,
-                ['ToolbarSet' => 'Minimal', 'Height' => '100']
+                ['ToolbarSet' => 'TitleAsHtml']
             );
         } else {
             $form->addText('title', get_lang('Title'), true, ['id' => 'idTitle', 'class' => 'learnpath_item_form']);
-            $form->applyFilter('title', 'html_filter');
-
             $form->applyFilter('title', 'trim');
             $form->applyFilter('title', 'html_filter');
         }

@@ -18,7 +18,7 @@ $current_course_tool = TOOL_USER;
 $this_section = SECTION_COURSES;
 
 // notice for unauthorized people.
-api_protect_course_script(true);
+api_protect_course_script(true, false, 'user');
 
 if (!api_is_platform_admin(true)) {
     if (!api_is_course_admin() && !api_is_coach()) {
@@ -39,10 +39,9 @@ $_user = api_get_user_info();
 $courseCode = $course_info['code'];
 $courseId = $course_info['real_id'];
 $type = isset($_REQUEST['type']) ? intval($_REQUEST['type']) : STUDENT;
-
 $canEditUsers = api_get_setting('allow_user_course_subscription_by_course_admin') == 'true' || api_is_platform_admin();
 
-//Can't auto unregister from a session
+// Can't auto unregister from a session
 if (!empty($sessionId)) {
     $course_info['unsubscribe'] = 0;
 }

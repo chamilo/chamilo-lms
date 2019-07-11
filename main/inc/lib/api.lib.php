@@ -1140,6 +1140,7 @@ function api_valid_email($address)
  *
  * @param bool Option to print headers when displaying error message. Default: false
  * @param bool whether session admins should be allowed or not
+ * @param bool $checkTool check if tool is available for users (user, group)
  *
  * @return bool True if the user has access to the current course or is out of a course context, false otherwise
  *
@@ -1147,7 +1148,7 @@ function api_valid_email($address)
  *
  * @author Roan Embrechts
  */
-function api_protect_course_script($print_headers = false, $allow_session_admins = false, $allow_drh = false)
+function api_protect_course_script($print_headers = false, $allow_session_admins = false, $checkTool = '')
 {
     $course_info = api_get_course_info();
     if (empty($course_info)) {
@@ -1170,26 +1171,26 @@ function api_protect_course_script($print_headers = false, $allow_session_admins
         return true;
     }
 
-    $is_allowed_in_course = api_is_allowed_in_course();
+    $isAllowedInCourse = api_is_allowed_in_course();
     $is_visible = false;
     if (isset($course_info) && isset($course_info['visibility'])) {
         switch ($course_info['visibility']) {
             default:
             case COURSE_VISIBILITY_CLOSED:
                 // Completely closed: the course is only accessible to the teachers. - 0
-                if (api_get_user_id() && !api_is_anonymous() && $is_allowed_in_course) {
+                if (api_get_user_id() && !api_is_anonymous() && $isAllowedInCourse) {
                     $is_visible = true;
                 }
                 break;
             case COURSE_VISIBILITY_REGISTERED:
                 // Private - access authorized to course members only - 1
-                if (api_get_user_id() && !api_is_anonymous() && $is_allowed_in_course) {
+                if (api_get_user_id() && !api_is_anonymous() && $isAllowedInCourse) {
                     $is_visible = true;
                 }
                 break;
             case COURSE_VISIBILITY_OPEN_PLATFORM:
                 // Open - access allowed for users registered on the platform - 2
-                if (api_get_user_id() && !api_is_anonymous() && $is_allowed_in_course) {
+                if (api_get_user_id() && !api_is_anonymous() && $isAllowedInCourse) {
                     $is_visible = true;
                 }
                 break;
@@ -1206,7 +1207,7 @@ function api_protect_course_script($print_headers = false, $allow_session_admins
         }
 
         //If password is set and user is not registered to the course then the course is not visible
-        if ($is_allowed_in_course == false &&
+        if ($isAllowedInCourse == false &&
             isset($course_info['registration_code']) &&
             !empty($course_info['registration_code'])
         ) {
@@ -1214,12 +1215,23 @@ function api_protect_course_script($print_headers = false, $allow_session_admins
         }
     }
 
+    if (!empty($checkTool)) {
+        if (!api_is_allowed_to_edit(true, true, true)) {
+            $toolInfo = api_get_tool_information_by_name($checkTool);
+            if (!empty($toolInfo) && isset($toolInfo['visibility']) && $toolInfo['visibility'] == 0) {
+                api_not_allowed(true);
+
+                return false;
+            }
+        }
+    }
+
     // Check session visibility
     $session_id = api_get_session_id();
 
     if (!empty($session_id)) {
-        //$is_allowed_in_course was set in local.inc.php
-        if (!$is_allowed_in_course) {
+        // $isAllowedInCourse was set in local.inc.php
+        if (!$isAllowedInCourse) {
             $is_visible = false;
         }
     }

@@ -3620,11 +3620,10 @@ class learnpath
 
     /**
      * @return string
-     *
      */
     public function getNameNoTags()
     {
-       return strip_tags($this->get_name());
+        return strip_tags($this->get_name());
     }
 
     /**
@@ -13863,6 +13862,83 @@ EOD;
     }
 
     /**
+     * @param string $value
+     *
+     * @return string
+     */
+    public function cleanItemTitle($value)
+    {
+        $value = Security::remove_XSS(strip_tags($value));
+
+        return $value;
+    }
+
+    /**
+     * @param FormValidator $form
+     */
+    public function setItemTitle(FormValidator $form)
+    {
+        if (api_get_configuration_value('save_titles_as_html')) {
+            $form->addHtmlEditor(
+                'title',
+                get_lang('Title'),
+                true,
+                false,
+                ['ToolbarSet' => 'Minimal', 'Height' => '100']
+            );
+        } else {
+            $form->addText('title', get_lang('Title'), true, ['id' => 'idTitle', 'class' => 'learnpath_item_form']);
+            $form->applyFilter('title', 'html_filter');
+
+            $form->applyFilter('title', 'trim');
+            $form->applyFilter('title', 'html_filter');
+        }
+    }
+
+    /**
+     * @return array
+     */
+    public function getItemsForForm($addParentCondition = false)
+    {
+        $tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
+        $course_id = api_get_course_int_id();
+
+        $sql = "SELECT * FROM $tbl_lp_item 
+                WHERE c_id = $course_id AND lp_id = ".$this->lp_id;
+
+        if ($addParentCondition) {
+            $sql .= ' AND parent_item_id = 0 ';
+        }
+        $sql .= ' ORDER BY display_order ASC';
+
+        $result = Database::query($sql);
+        $arrLP = [];
+        while ($row = Database::fetch_array($result)) {
+            $arrLP[] = [
+                'iid' => $row['iid'],
+                'id' => $row['iid'],
+                'item_type' => $row['item_type'],
+                'title' => $this->cleanItemTitle($row['title']),
+                'path' => $row['path'],
+                'description' => Security::remove_XSS($row['description']),
+                'parent_item_id' => $row['parent_item_id'],
+                'previous_item_id' => $row['previous_item_id'],
+                'next_item_id' => $row['next_item_id'],
+                'display_order' => $row['display_order'],
+                'max_score' => $row['max_score'],
+                'min_score' => $row['min_score'],
+                'mastery_score' => $row['mastery_score'],
+                'prerequisite' => $row['prerequisite'],
+                'max_time_allowed' => $row['max_time_allowed'],
+                'prerequisite_min_score' => $row['prerequisite_min_score'],
+                'prerequisite_max_score' => $row['prerequisite_max_score'],
+            ];
+        }
+
+        return $arrLP;
+    }
+
+    /**
      * Get the depth level of LP item.
      *
      * @param array $items
@@ -13965,82 +14041,5 @@ EOD;
         }
 
         return '';
-    }
-
-    /**
-     * @param string $value
-     *
-     * @return string
-     */
-    public function cleanItemTitle($value)
-    {
-        $value = Security::remove_XSS(strip_tags($value));
-
-        return $value;
-    }
-
-    /**
-     * @param FormValidator $form
-     */
-    public function setItemTitle(FormValidator $form)
-    {
-        if (api_get_configuration_value('save_titles_as_html')) {
-            $form->addHtmlEditor(
-                'title',
-                get_lang('Title'),
-                true,
-                false,
-                ['ToolbarSet' => 'Minimal', 'Height' => '100']
-            );
-        } else {
-            $form->addText('title', get_lang('Title'), true, ['id' => 'idTitle', 'class' => 'learnpath_item_form']);
-            $form->applyFilter('title', 'html_filter');
-
-            $form->applyFilter('title', 'trim');
-            $form->applyFilter('title', 'html_filter');
-        }
-    }
-
-    /**
-     * @return array
-     */
-    public function getItemsForForm($addParentCondition = false)
-    {
-        $tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
-        $course_id = api_get_course_int_id();
-
-        $sql = "SELECT * FROM $tbl_lp_item 
-                WHERE c_id = $course_id AND lp_id = ".$this->lp_id;
-
-        if ($addParentCondition) {
-            $sql .= ' AND parent_item_id = 0 ';
-        }
-        $sql .= ' ORDER BY display_order ASC';
-
-        $result = Database::query($sql);
-        $arrLP = [];
-        while ($row = Database::fetch_array($result)) {
-            $arrLP[] = [
-                'iid' => $row['iid'],
-                'id' => $row['iid'],
-                'item_type' => $row['item_type'],
-                'title' => $this->cleanItemTitle($row['title']),
-                'path' => $row['path'],
-                'description' => Security::remove_XSS($row['description']),
-                'parent_item_id' => $row['parent_item_id'],
-                'previous_item_id' => $row['previous_item_id'],
-                'next_item_id' => $row['next_item_id'],
-                'display_order' => $row['display_order'],
-                'max_score' => $row['max_score'],
-                'min_score' => $row['min_score'],
-                'mastery_score' => $row['mastery_score'],
-                'prerequisite' => $row['prerequisite'],
-                'max_time_allowed' => $row['max_time_allowed'],
-                'prerequisite_min_score' => $row['prerequisite_min_score'],
-                'prerequisite_max_score' => $row['prerequisite_max_score'],
-            ];
-        }
-
-        return $arrLP;
     }
 }

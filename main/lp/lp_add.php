@@ -103,7 +103,7 @@ if (api_get_configuration_value('save_titles_as_html')) {
         get_lang('LPName'),
         true,
         false,
-        ['ToolbarSet' => 'Minimal', 'Height' => '100']
+        ['ToolbarSet' => 'TitleAsHtml']
     );
 } else {
     $form->addElement(

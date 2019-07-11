@@ -65,7 +65,7 @@ $form = new FormValidator(
 );
 
 // Form title
-$form->addElement('header', get_lang('EditLPSettings'));
+$form->addElement('header', get_lang('Edit'));
 
 // Title
 if (api_get_configuration_value('save_titles_as_html')) {
@@ -74,7 +74,7 @@ if (api_get_configuration_value('save_titles_as_html')) {
         get_lang('LPName'),
         true,
         false,
-        ['ToolbarSet' => 'Minimal', 'Height' => '100']
+        ['ToolbarSet' => 'TitleAsHtml']
     );
 } else {
     $form->addElement('text', 'lp_name', api_ucfirst(get_lang('LearnpathTitle')), ['size' => 43]);

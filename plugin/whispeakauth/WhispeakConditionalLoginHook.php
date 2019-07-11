@@ -43,9 +43,11 @@ class WhispeakConditionalLoginHook extends HookObserver implements HookCondition
                     return true;
                 }
 
-                ChamiloSession::write(WhispeakAuthPlugin::SESSION_2FA_USER, $userInfo['user_id']);
-
                 $isEnrolled = WhispeakAuthPlugin::checkUserIsEnrolled($userInfo['user_id']);
+
+                if ($isEnrolled) {
+                    ChamiloSession::write(WhispeakAuthPlugin::SESSION_2FA_USER, $userInfo['user_id']);
+                }
 
                 return !$isEnrolled;
             },

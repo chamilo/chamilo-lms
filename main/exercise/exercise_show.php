@@ -127,7 +127,7 @@ if (empty($objExercise)) {
     $objExercise = new Exercise();
     $objExercise->read($exercise_id);
 }
-$feedback_type = $objExercise->feedback_type;
+$feedback_type = $objExercise->getFeedbackType();
 
 // Only users can see their own results
 if (!$is_allowedToEdit) {

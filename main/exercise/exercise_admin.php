@@ -185,7 +185,6 @@ if ($form->validate()) {
     Display::display_header($nameTools, get_lang('Exercise'));
 
     echo '<div class="actions">';
-
     if ($objExercise->id != 0) {
         echo '<a href="admin.php?'.api_get_cidreq().'&exerciseId='.$objExercise->id.'">'.
             Display::return_icon('back.png', get_lang('GoBackToQuestionList'), '', ICON_SIZE_MEDIUM).'</a>';
@@ -199,7 +198,7 @@ if ($form->validate()) {
             }
             $lp_id = (int) $lp_id;
             echo "<a href=\"../lp/lp_controller.php?".api_get_cidreq()."&gradebook=&action=add_item&type=step&lp_id=".$lp_id."#resource_tab-2\">".
-                Display::return_icon('back.png', get_lang("BackTo").' '.get_lang("LearningPaths"), '', ICON_SIZE_MEDIUM)."</a>";
+                Display::return_icon('back.png', get_lang("BackTo").' '.get_lang('LearningPaths'), '', ICON_SIZE_MEDIUM)."</a>";
         } else {
             echo '<a href="exercise.php?'.api_get_cidreq().'">'.
                 Display::return_icon('back.png', get_lang('BackToExercisesList'), '', ICON_SIZE_MEDIUM).
@@ -208,11 +207,11 @@ if ($form->validate()) {
     }
     echo '</div>';
 
-    if ($objExercise->feedback_type == 1) {
+    if (in_array($objExercise->getFeedbackType(), [EXERCISE_FEEDBACK_TYPE_DIRECT, EXERCISE_FEEDBACK_TYPE_POPUP])) {
         echo Display::return_message(get_lang('DirectFeedbackCantModifyTypeQuestion'));
     }
 
-    if (api_get_setting('search_enabled') == 'true' &&
+    if (api_get_setting('search_enabled') === 'true' &&
         !extension_loaded('xapian')
     ) {
         echo Display::return_message(get_lang('SearchXapianModuleNotInstalled'), 'error');

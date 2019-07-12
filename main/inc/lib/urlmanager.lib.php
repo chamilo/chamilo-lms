@@ -1316,6 +1316,7 @@ class UrlManager
                 }
             }
         }
+
         $response->addAssign(
             'ajax_list_courses',
             'innerHTML',

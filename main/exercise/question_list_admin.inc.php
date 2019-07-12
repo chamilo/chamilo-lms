@@ -43,7 +43,6 @@ $ajax_url = api_get_path(WEB_AJAX_PATH).'exercise.ajax.php?'.api_get_cidreq().'&
         <?php echo get_lang('AreYouSureToDelete'); ?>
     </p>
 </div>
-
 <script>
     $(function () {
         $("#dialog:ui-dialog").dialog("destroy");
@@ -148,7 +147,7 @@ $ajax_url = api_get_path(WEB_AJAX_PATH).'exercise.ajax.php?'.api_get_cidreq().'&
 </script>
 <?php
 
-//we filter the type of questions we can add
+// Filter the type of questions we can add
 Question::displayTypeMenu($objExercise);
 
 echo '<div id="message"></div>';

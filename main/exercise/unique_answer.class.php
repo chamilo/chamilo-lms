@@ -58,12 +58,18 @@ class UniqueAnswer extends Question
          */
 
         $feedback_title = '';
-        if ($obj_ex->selectFeedbackType() == EXERCISE_FEEDBACK_TYPE_DIRECT) {
-            //Scenario
-            $comment_title = '<th width="20%">'.get_lang('Comment').'</th>';
-            $feedback_title = '<th width="20%">'.get_lang('Scenario').'</th>';
-        } else {
-            $comment_title = '<th width="40%">'.get_lang('Comment').'</th>';
+        switch ($obj_ex->getFeedbackType()) {
+            case EXERCISE_FEEDBACK_TYPE_DIRECT:
+                // Scenario
+                $comment_title = '<th width="20%">'.get_lang('Comment').'</th>';
+                $feedback_title = '<th width="20%">'.get_lang('Scenario').'</th>';
+                break;
+            case EXERCISE_FEEDBACK_TYPE_POPUP:
+                $comment_title = '<th width="20%">'.get_lang('Comment').'</th>';
+                break;
+            default:
+                $comment_title = '<th width="40%">'.get_lang('Comment').'</th>';
+                break;
         }
 
         $html = '<table class="table table-striped table-hover">
@@ -218,52 +224,14 @@ class UniqueAnswer extends Question
                 'required'
             );
 
-            if ($obj_ex->selectFeedbackType() == EXERCISE_FEEDBACK_TYPE_DIRECT) {
-                $form->addHtmlEditor(
-                    'comment['.$i.']',
-                    null,
-                    null,
-                    false,
-                    $editor_config
-                );
-                // Direct feedback
-                //Adding extra feedback fields
-                $group = [];
-                $group['try'.$i] = $form->createElement(
-                    'checkbox',
-                    'try'.$i,
-                    null,
-                    get_lang('TryAgain')
-                );
-                $group['lp'.$i] = $form->createElement(
-                    'select',
-                    'lp'.$i,
-                    get_lang('SeeTheory').': ',
-                    $select_lp_id
-                );
-                $group['destination'.$i] = $form->createElement(
-                    'select',
-                    'destination'.$i,
-                    get_lang('GoToQuestion').': ',
-                    $select_question
-                );
-                $group['url'.$i] = $form->createElement(
-                    'text',
-                    'url'.$i,
-                    get_lang('Other').': ',
-                    [
-                        'class' => 'col-md-2',
-                        'placeholder' => get_lang('Other'),
-                    ]
-                );
-                $form->addGroup($group, 'scenario');
-
-                $renderer->setElementTemplate(
-                    '<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}',
-                    'scenario'
-                );
-            } else {
-                $form->addHtmlEditor('comment['.$i.']', null, null, false, $editor_config);
+            switch ($obj_ex->getFeedbackType()) {
+                case EXERCISE_FEEDBACK_TYPE_DIRECT:
+                    $this->setDirectOptions($i, $form, $renderer, $select_lp_id, $select_question);
+                    break;
+                case EXERCISE_FEEDBACK_TYPE_POPUP:
+                default:
+                    $form->addHtmlEditor('comment['.$i.']', null, null, false, $editor_config);
+                    break;
             }
             $form->addText('weighting['.$i.']', null, null, ['value' => '0']);
             $form->addHtml('</tr>');
@@ -312,6 +280,59 @@ class UniqueAnswer extends Question
             }
         }
         $form->setConstants(['nb_answers' => $nb_answers]);
+    }
+
+    public function setDirectOptions($i, FormValidator $form, $renderer, $select_lp_id, $select_question)
+    {
+        $editor_config = [
+            'ToolbarSet' => 'TestProposedAnswer',
+            'Width' => '100%',
+            'Height' => '125',
+        ];
+
+        $form->addHtmlEditor(
+            'comment['.$i.']',
+            null,
+            null,
+            false,
+            $editor_config
+        );
+        // Direct feedback
+        //Adding extra feedback fields
+        $group = [];
+        $group['try'.$i] = $form->createElement(
+            'checkbox',
+            'try'.$i,
+            null,
+            get_lang('TryAgain')
+        );
+        $group['lp'.$i] = $form->createElement(
+            'select',
+            'lp'.$i,
+            get_lang('SeeTheory').': ',
+            $select_lp_id
+        );
+        $group['destination'.$i] = $form->createElement(
+            'select',
+            'destination'.$i,
+            get_lang('GoToQuestion').': ',
+            $select_question
+        );
+        $group['url'.$i] = $form->createElement(
+            'text',
+            'url'.$i,
+            get_lang('Other').': ',
+            [
+                'class' => 'col-md-2',
+                'placeholder' => get_lang('Other'),
+            ]
+        );
+        $form->addGroup($group, 'scenario');
+
+        $renderer->setElementTemplate(
+            '<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}',
+            'scenario'
+        );
     }
 
     /**

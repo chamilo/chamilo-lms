@@ -52,7 +52,7 @@ class MultipleAnswerTrueFalse extends Question
         $html .= '<th>'.get_lang('Answer').'</th>';
 
         // show column comment when feedback is enable
-        if ($obj_ex->selectFeedbackType() != EXERCISE_FEEDBACK_TYPE_EXAM) {
+        if ($obj_ex->getFeedbackType() != EXERCISE_FEEDBACK_TYPE_EXAM) {
             $html .= '<th>'.get_lang('Comment').'</th>';
         }
 
@@ -146,7 +146,7 @@ class MultipleAnswerTrueFalse extends Question
             );
 
             // show comment when feedback is enable
-            if ($obj_ex->selectFeedbackType() != EXERCISE_FEEDBACK_TYPE_EXAM) {
+            if ($obj_ex->getFeedbackType() != EXERCISE_FEEDBACK_TYPE_EXAM) {
                 $form->addElement(
                     'html_editor',
                     'comment['.$i.']',
@@ -327,7 +327,7 @@ class MultipleAnswerTrueFalse extends Question
         if ($exercise->showExpectedChoice()) {
             $header .= '<th>'.get_lang('Status').'</th>';
         }
-        if ($exercise->feedback_type != EXERCISE_FEEDBACK_TYPE_EXAM ||
+        if ($exercise->getFeedbackType() != EXERCISE_FEEDBACK_TYPE_EXAM ||
             in_array(
                 $exercise->results_disabled,
                 [

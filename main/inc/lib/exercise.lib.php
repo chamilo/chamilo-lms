@@ -61,7 +61,7 @@ class ExerciseLib
             return false;
         }
 
-        if ($exercise->feedback_type != EXERCISE_FEEDBACK_TYPE_END) {
+        if ($exercise->getFeedbackType() != EXERCISE_FEEDBACK_TYPE_END) {
             $show_comment = false;
         }
 
@@ -428,7 +428,7 @@ class ExerciseLib
                     ]
                 )) {
                     $header = Display::tag('th', get_lang('Options'));
-                    if ($exercise->feedback_type == EXERCISE_FEEDBACK_TYPE_END) {
+                    if ($exercise->getFeedbackType() == EXERCISE_FEEDBACK_TYPE_END) {
                         $header .= Display::tag('th', get_lang('Feedback'));
                     }
                     $s .= '<table class="table table-hover table-striped">';
@@ -4409,18 +4409,22 @@ EOT;
 
         // Getting attempt info
         $exercise_stat_info = $objExercise->get_stat_track_exercise_info_by_exe_id($exeId);
-        $studentInfo = api_get_user_info($exercise_stat_info['exe_user_id']);
 
         // Getting question list
         $question_list = [];
+        $studentInfo = [];
         if (!empty($exercise_stat_info['data_tracking'])) {
+            $studentInfo = api_get_user_info($exercise_stat_info['exe_user_id']);
             $question_list = explode(',', $exercise_stat_info['data_tracking']);
         } else {
             // Try getting the question list only if save result is off
             if ($save_user_result == false) {
                 $question_list = $objExercise->get_validated_question_list();
             }
-            if ($objExercise->selectFeedbackType() == EXERCISE_FEEDBACK_TYPE_DIRECT) {
+            if (in_array(
+                $objExercise->getFeedbackType(),
+                [EXERCISE_FEEDBACK_TYPE_DIRECT, EXERCISE_FEEDBACK_TYPE_POPUP]
+            )) {
                 $question_list = $objExercise->get_validated_question_list();
             }
         }
@@ -4458,7 +4462,7 @@ EOT;
         // Not display expected answer, but score, and feedback
         $show_all_but_expected_answer = false;
         if ($objExercise->results_disabled == RESULT_DISABLE_SHOW_SCORE_ONLY &&
-            $objExercise->feedback_type == EXERCISE_FEEDBACK_TYPE_END
+            $objExercise->getFeedbackType() == EXERCISE_FEEDBACK_TYPE_END
         ) {
             $show_all_but_expected_answer = true;
             $show_results = true;
@@ -4523,7 +4527,7 @@ EOT;
 
         if (($show_results || $show_only_score) && $origin !== 'embeddable') {
             if (isset($exercise_stat_info['exe_user_id'])) {
-                if ($studentInfo) {
+                if (!empty($studentInfo)) {
                     // Shows exercise header
                     echo $objExercise->showExerciseResultHeader(
                         $studentInfo,
@@ -4549,7 +4553,10 @@ EOT;
         $exerciseResultCoordinates = null;
         $delineationResults = null;
 
-        if ($objExercise->selectFeedbackType() == EXERCISE_FEEDBACK_TYPE_DIRECT) {
+        if (in_array(
+            $objExercise->getFeedbackType(),
+            [EXERCISE_FEEDBACK_TYPE_DIRECT, EXERCISE_FEEDBACK_TYPE_POPUP]
+        )) {
             $loadChoiceFromSession = true;
             $fromDatabase = false;
             $exerciseResult = Session::read('exerciseResult');
@@ -4739,7 +4746,6 @@ EOT;
 
         $totalScoreText = null;
         $certificateBlock = '';
-
         if (($show_results || $show_only_score) && $showTotalScore) {
             if ($result['answer_type'] == MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY) {
                 echo '<h1 style="text-align : center; margin : 20px 0;">'.get_lang('YourResults').'</h1><br />';
@@ -4774,14 +4780,16 @@ EOT;
             }
             $totalScoreText .= '</div>';
 
-            $certificateBlock = self::generateAndShowCertificateBlock(
-                $total_score,
-                $total_weight,
-                $objExercise,
-                $studentInfo['id'],
-                $courseCode,
-                $sessionId
-            );
+            if (!empty($studentInfo)) {
+                $certificateBlock = self::generateAndShowCertificateBlock(
+                    $total_score,
+                    $total_weight,
+                    $objExercise,
+                    $studentInfo['id'],
+                    $courseCode,
+                    $sessionId
+                );
+            }
         }
 
         if ($result['answer_type'] == MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY) {
@@ -5379,7 +5387,9 @@ EOT;
     {
         $em = Database::getManager();
 
-        if (ONE_PER_PAGE != $exercise['type'] || EXERCISE_FEEDBACK_TYPE_DIRECT == $exercise['feedback_type']) {
+        if (ONE_PER_PAGE != $exercise['type'] ||
+            in_array($exercise['feedback_type'], [EXERCISE_FEEDBACK_TYPE_DIRECT, EXERCISE_FEEDBACK_TYPE_POPUP])
+        ) {
             return false;
         }
 

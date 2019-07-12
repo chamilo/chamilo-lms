@@ -77,7 +77,7 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
             .'</th>';
 
         // show column comment when feedback is enable
-        if ($objEx->selectFeedbackType() != EXERCISE_FEEDBACK_TYPE_EXAM) {
+        if ($objEx->getFeedbackType() != EXERCISE_FEEDBACK_TYPE_EXAM) {
             $html .= '<th>'.get_lang('Comment').'</th>';
         }
         $html .= '</tr>';
@@ -173,7 +173,7 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
             $form->addRule('answer['.$i.']', get_lang('ThisFieldIsRequired'), 'required');
 
             // show comment when feedback is enable
-            if ($objEx->selectFeedbackType() != EXERCISE_FEEDBACK_TYPE_EXAM) {
+            if ($objEx->getFeedbackType() != EXERCISE_FEEDBACK_TYPE_EXAM) {
                 $form->addElement(
                     'html_editor',
                     'comment['.$i.']',
@@ -318,7 +318,7 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
             .get_lang('YourDegreeOfCertainty')
             .'</th>'
         ;
-        if ($exercise->feedback_type != EXERCISE_FEEDBACK_TYPE_EXAM) {
+        if ($exercise->getFeedbackType() != EXERCISE_FEEDBACK_TYPE_EXAM) {
             $header .= '<th>'.get_lang('Comment').'</th>';
         } else {
             $header .= '<th>&nbsp;</th>';

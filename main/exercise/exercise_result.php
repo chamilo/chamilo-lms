@@ -100,7 +100,7 @@ if (api_is_course_admin() && !in_array($origin, ['learnpath', 'embeddable'])) {
     echo '</div>';
 }
 
-$feedback_type = $objExercise->feedback_type;
+$feedback_type = $objExercise->getFeedbackType();
 $exercise_stat_info = $objExercise->get_stat_track_exercise_info_by_exe_id($exe_id);
 
 if (!empty($exercise_stat_info['data_tracking'])) {
@@ -222,7 +222,7 @@ if (!in_array($origin, ['learnpath', 'embeddable'])) {
         Session::erase('duration_time');
     }
     Display::display_footer();
-} elseif ($origin == 'embeddable') {
+} elseif ($origin === 'embeddable') {
     if (api_is_allowed_to_session_edit()) {
         Session::erase('objExercise');
         Session::erase('exe_id');
@@ -232,14 +232,12 @@ if (!in_array($origin, ['learnpath', 'embeddable'])) {
     }
 
     Session::write('attempt_remaining', $remainingMessage);
-
     showEmbeddableFinishButton();
-
     Display::display_reduced_footer();
 } else {
     $lp_mode = Session::read('lp_mode');
-    $url = '../lp/lp_controller.php?'.api_get_cidreq().'&action=view&lp_id='.$learnpath_id.'&lp_item_id='.$learnpath_item_id.'&exeId='.$exercise_stat_info['exe_id'].'&fb_type='.$objExercise->feedback_type.'#atoc_'.$learnpath_item_id;
-    $href = $lp_mode == 'fullscreen' ? ' window.opener.location.href="'.$url.'" ' : ' top.location.href="'.$url.'"';
+    $url = '../lp/lp_controller.php?'.api_get_cidreq().'&action=view&lp_id='.$learnpath_id.'&lp_item_id='.$learnpath_item_id.'&exeId='.$exercise_stat_info['exe_id'].'&fb_type='.$objExercise->getFeedbackType().'#atoc_'.$learnpath_item_id;
+    $href = $lp_mode === 'fullscreen' ? ' window.opener.location.href="'.$url.'" ' : ' top.location.href="'.$url.'"';
 
     if (api_is_allowed_to_session_edit()) {
         Session::erase('objExercise');

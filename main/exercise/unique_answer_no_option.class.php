@@ -54,7 +54,7 @@ class UniqueAnswerNoOption extends Question
          */
 
         $feedback_title = '';
-        if ($obj_ex->selectFeedbackType() == 1) {
+        if ($obj_ex->getFeedbackType() == 1) {
             $editor_config['Width'] = '250';
             $editor_config['Height'] = '110';
             $comment_title = '<th width="50%" >'.get_lang('Comment').'</th>';

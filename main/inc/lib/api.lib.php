@@ -468,7 +468,8 @@ define('ONE_PER_PAGE', 2);
 
 define('EXERCISE_FEEDBACK_TYPE_END', 0); //Feedback 		 - show score and expected answers
 define('EXERCISE_FEEDBACK_TYPE_DIRECT', 1); //DirectFeedback - Do not show score nor answers
-define('EXERCISE_FEEDBACK_TYPE_EXAM', 2); //NoFeedback 	 - Show score only
+define('EXERCISE_FEEDBACK_TYPE_EXAM', 2); // NoFeedback 	 - Show score only
+define('EXERCISE_FEEDBACK_TYPE_POPUP', 3); // Popup BT#15827
 
 define('RESULT_DISABLE_SHOW_SCORE_AND_EXPECTED_ANSWERS', 0); //show score and expected answers
 define('RESULT_DISABLE_NO_SCORE_AND_EXPECTED_ANSWERS', 1); //Do not show score nor answers

@@ -35,6 +35,8 @@ $strings['EnrollmentSuccess'] = 'Inscripción correcta.';
 $strings['AuthentifyFailed'] = 'Inicio de sesión fallido.';
 $strings['AuthentifySuccess'] = '¡Autenticación correcta!';
 $strings['TryAgain'] = 'Intente de nuevo.';
+$strings['MaxAttemptsReached'] = 'Ha alcanzado el número máximo de intentos permitidos.';
+$strings['LoginWithUsernameAndPassword'] = 'Debe iniciar sesión usando su nombre de usuario y contraseña.';
 
 $strings['AudioQualityShort'] = 'Audio demasiado corto';
 $strings['AudioQualityQuiet'] = 'Audio demasiado silencioso';
@@ -45,5 +47,4 @@ $strings['AudioQualityPoorness'] = 'Calidad de audio general demasiado pobre';
 
 $strings['AgreeAllowResearch'] = 'Estoy de acuerdo en permitir el uso de datos para investigación (no uso comercial).';
 
-$strings['MaxAttemptsReached'] = 'Ha alcanzado el número máximo de intentos permitidos.';
 $strings['MarkForSpeechAuthentication'] = 'Marcar elemento para autenticación con voz';

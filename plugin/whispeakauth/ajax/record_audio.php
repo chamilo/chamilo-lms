@@ -168,17 +168,22 @@ if ($isAuthentify) {
         ChamiloSession::write(WhispeakAuthPlugin::SESSION_FAILED_LOGINS, ++$failedLogins);
 
         if ($maxAttempts && $failedLogins >= $maxAttempts) {
-            $message .= PHP_EOL.$plugin->get_lang('MaxAttemptsReached');
+            $message .= PHP_EOL
+                .$plugin->get_lang('MaxAttemptsReached')
+                .PHP_EOL
+                .'<br><strong>'
+                .$plugin->get_lang('LoginWithUsernameAndPassword')
+                .'</strong>';
         } else {
             $message .= PHP_EOL.$plugin->get_lang('TryAgain');
-        }
 
-        if ('true' === api_get_setting('allow_lostpassword')) {
-            $message .= '<br>'
-                .Display::url(
-                    get_lang('LostPassword'),
-                    api_get_path(WEB_CODE_PATH).'auth/lostPassword.php'
-                );
+            if ('true' === api_get_setting('allow_lostpassword')) {
+                $message .= '<br>'
+                    .Display::url(
+                        get_lang('LostPassword'),
+                        api_get_path(WEB_CODE_PATH).'auth/lostPassword.php'
+                    );
+            }
         }
     }
 
@@ -191,6 +196,14 @@ if ($isAuthentify) {
         $success ? 'success' : 'warning',
         false
     );
+
+    if (!$success && $maxAttempts && $failedLogins >= $maxAttempts) {
+        echo '<script>window.setTimeout(function () {
+            window.location.href = "'.api_get_path(WEB_PATH).'";
+            }, 1500);</script>';
+
+        exit;
+    }
 
     if ($success) {
         $loggedUser = [
@@ -209,6 +222,4 @@ if ($isAuthentify) {
 
         echo '<script>window.location.href = "'.api_get_path(WEB_PATH).'";</script>';
     }
-
-    exit;
 }

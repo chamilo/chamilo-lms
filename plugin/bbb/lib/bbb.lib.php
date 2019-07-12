@@ -628,9 +628,8 @@ class bbb
                 if ($this->debug) {
                     error_log("Failed to get any response. Maybe we can't contact the BBB server.");
                 }
-            } else {
-                return $result;
             }
+            return $result;
         } catch (Exception $e) {
             if ($this->debug) {
                 error_log('Caught exception: ', $e->getMessage(), "\n");
@@ -766,7 +765,7 @@ class bbb
             );
 
             if ($meetingBBB === false) {
-                //checking with the remote_id didn't work, so just in case and
+                // Checking with the remote_id didn't work, so just in case and
                 // to provide backwards support, check with the id
                 $params = array(
                     'meetingId' => $meetingDB['id'],
@@ -783,7 +782,7 @@ class bbb
 
             $meetingBBB['end_url'] = $this->endUrl($meetingDB);
 
-            if (isset($meetingBBB['returncode']) && (string) $meetingBBB['returncode'] == 'FAILED') {
+            if (isset($meetingBBB['returncode']) && (string) $meetingBBB['returncode'] === 'FAILED') {
                 if ($meetingDB['status'] == 1 && $this->isConferenceManager()) {
                     $this->endMeeting($meetingDB['id'], $courseCode);
                 }
@@ -804,39 +803,35 @@ class bbb
                 }
 
                 $record = [];
-                //if (empty($meetingDB['video_url'])) {
-                    $recordingParams = ['meetingId' => $mId];
-                    $records = $this->api->getRecordingsWithXmlResponseArray($recordingParams);
+                $recordingParams = ['meetingId' => $mId];
+                $records = $this->api->getRecordingsWithXmlResponseArray($recordingParams);
 
-                    if (!empty($records)) {
-                        if (!isset($records['messageKey']) || $records['messageKey'] != 'noRecordings') {
-                            $record = end($records);
-                            if (!is_array($record) || !isset($record['recordId'])) {
-                                continue;
-                            }
+                if (!empty($records)) {
+                    if (!isset($records['messageKey']) || $records['messageKey'] !== 'noRecordings') {
+                        $record = end($records);
+                        if (!is_array($record) || !isset($record['recordId'])) {
+                            continue;
+                        }
 
-                            if (!empty($record['playbackFormatUrl'])) {
-                                $this->updateMeetingVideoUrl($meetingDB['id'], $record['playbackFormatUrl']);
-                            }
+                        if (!empty($record['playbackFormatUrl'])) {
+                            $this->updateMeetingVideoUrl($meetingDB['id'], $record['playbackFormatUrl']);
+                        }
 
-                            if (!$this->isConferenceManager()) {
-                                $record = [];
-                            }
+                        if (!$this->isConferenceManager()) {
+                            $record = [];
                         }
                     }
-                //}
+                }
 
-                /* else {
-                    $record['playbackFormatUrl'] = $meetingDB['video_url'];
-                }*/
-
-                $recordLink = isset($record['playbackFormatUrl']) && !empty($record['playbackFormatUrl'])
-                    ? Display::url(
+                if (isset($record['playbackFormatUrl']) && !empty($record['playbackFormatUrl'])) {
+                    $recordLink = Display::url(
                         $this->plugin->get_lang('ViewRecord'),
                         $record['playbackFormatUrl'],
                         ['target' => '_blank']
-                    )
-                    : $this->plugin->get_lang('NoRecording');
+                    );
+                } else {
+                    $recordLink = $this->plugin->get_lang('NoRecording');
+                }
 
                 if ($isAdminReport) {
                     $this->forceCIdReq(
@@ -1127,6 +1122,10 @@ class bbb
      */
     public function regenerateRecording($id, $recordId)
     {
+        if ($this->plugin->get('allow_regenerate_recording') !== 'true') {
+            return false;
+        }
+
         if (empty($id)) {
             return false;
         }
@@ -1141,6 +1140,13 @@ class bbb
         // Check if there are recordings for this meeting
         $recordings = $this->api->getRecordings(['meetingId' => $meetingData['remote_id']]);
         if (!empty($recordings) && isset($recordings['messageKey']) && $recordings['messageKey'] === 'noRecordings') {
+            // we regenerate the meeting id
+            $pass = $this->getModMeetingPassword();
+            $info = $this->getMeetingInfo(['meetingId' => $meetingData['remote_id'], 'password' => $pass]);
+            if (!empty($info) && isset($info['internalMeetingID'])) {
+                return $this->api->generateRecording(['recordId' => $info['internalMeetingID']]);
+            }
+
             return false;
         } else {
             if (!empty($recordings['records'])) {
@@ -1459,6 +1465,24 @@ class bbb
             '&action=regenerate_record&id='.$meeting['id'].'&record_id='.$recordInfo['recordId'];
     }
 
+    /**
+     * @param array $meeting
+     *
+     * @return string
+     */
+    public function regenerateRecordUrlFromMeeting($meeting)
+    {
+        if ($this->plugin->get('allow_regenerate_recording') !== 'true') {
+            return '';
+        }
+
+        if (!isset($meeting['id'])) {
+            return '';
+        }
+
+        return api_get_path(WEB_PLUGIN_PATH).'bbb/listing.php?'.$this->getUrlParams().
+            '&action=regenerate_record&id='.$meeting['id'];
+    }
 
     /**
      * @param array $meeting
@@ -1590,14 +1614,29 @@ class bbb
             );
 
         $links = [];
+        if ($this->plugin->get('allow_regenerate_recording') === 'true' && $meetingInfo['status'] == 1) {
+            if (!empty($recordInfo)) {
+                $links[] = Display::url(
+                    Display::return_icon('reload.png', get_lang('RegenerateRecord')),
+                    $this->regenerateRecordUrl($meetingInfo, $recordInfo)
+                );
+            } else {
+                $links[] = Display::url(
+                    Display::return_icon('reload.png', get_lang('RegenerateRecord')),
+                    $this->regenerateRecordUrlFromMeeting($meetingInfo)
+                );
+            }
+        }
 
         if (empty($recordInfo)) {
             if (!$isAdminReport) {
-                $links[] = Display::url(
-                    Display::return_icon('delete.png', get_lang('Delete')),
-                    $this->deleteRecordUrl($meetingInfo)
-                );
-                $links[] = $linkVisibility;
+                if ($meetingInfo['status'] == 0) {
+                    $links[] = Display::url(
+                        Display::return_icon('delete.png', get_lang('Delete')),
+                        $this->deleteRecordUrl($meetingInfo)
+                    );
+                    $links[] = $linkVisibility;
+                }
 
                 return $links;
             } else {
@@ -1643,12 +1682,6 @@ class bbb
             }
         }
 
-        if (!empty($recordInfo)) {
-            $links[] = Display::url(
-                Display::return_icon('reload.png', get_lang('RegenerateRecord')),
-                $this->regenerateRecordUrl($meetingInfo, $recordInfo)
-            );
-        }
 
         if (!$isAdminReport) {
             $links[] = Display::url(
@@ -1662,6 +1695,7 @@ class bbb
                 $this->getListingUrl()
             );
         }
+
 
         return $links;
     }

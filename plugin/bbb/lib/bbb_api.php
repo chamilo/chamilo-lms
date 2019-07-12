@@ -37,32 +37,27 @@ Versions:
 					    -- See included samples for usage examples
 */
 
-/* _______________________________________________________________________*/
-
-/* get the config values */
-//require_once "config.php";
-
-class BigBlueButtonBN {
-
+class BigBlueButtonBN
+{
 	private $_securitySalt;
 	private $_bbbServerBaseUrl;
 
-	/* ___________ General Methods for the BigBlueButton Class __________ */
-
-	function __construct() {
-	/*
-	Establish just our basic elements in the constructor:
-	*/
+	public function __construct()
+    {
+        /*
+        Establish just our basic elements in the constructor:
+        */
 		// BASE CONFIGS - set these for your BBB server in config.php and they will
 		// simply flow in here via the constants:
 		$this->_securitySalt 		= CONFIG_SECURITY_SALT;
 		$this->_bbbServerBaseUrl 	= CONFIG_SERVER_BASE_URL;
 	}
 
-	private function _processXmlResponse($url){
-	/*
-	A private utility method used by other public methods to process XML responses.
-	*/
+	private function _processXmlResponse($url)
+    {
+        /*
+        A private utility method used by other public methods to process XML responses.
+        */
 		if (extension_loaded('curl')) {
 			$ch = curl_init() or die ( curl_error($ch) );
 			$timeout = 10;
@@ -396,8 +391,7 @@ class BigBlueButtonBN {
 					'message' => $xml->message->__toString()
 				);
 				return $result;
-			}
-			else {
+			} else {
 				// In this case, we have success and meeting info:
 				$result = array(
 					'returncode' => $xml->returncode->__toString(),
@@ -415,7 +409,9 @@ class BigBlueButtonBN {
 					'participantCount' => $xml->participantCount->__toString(),
 					'maxUsers' => $xml->maxUsers->__toString(),
 					'moderatorCount' => $xml->moderatorCount->__toString(),
+                    'internalMeetingID' => $xml->internalMeetingID->__toString()
 				);
+
 				// Then interate through attendee results and return them as part of the array:
 				foreach ($xml->attendees->attendee as $a) {
 					$result[] = array(

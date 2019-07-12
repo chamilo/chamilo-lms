@@ -66,8 +66,8 @@ if ($conferenceManager) {
             if ($plugin->get('allow_regenerate_recording') !== 'true') {
                 api_not_allowed();
             }
-            $result = $bbb->regenerateRecording($_GET['id'], $_GET['record_id']);
-
+            $recordId = isset($_GET['record_id']) ? $_GET['record_id'] : '';
+            $result = $bbb->regenerateRecording($_GET['id'], $recordId);
             if ($result) {
                 $message = Display::return_message(get_lang('Success'), 'success');
             } else {
@@ -93,9 +93,7 @@ if ($conferenceManager) {
         case 'end':
             $bbb->endMeeting($_GET['id']);
             $message = Display::return_message(
-                $plugin->get_lang('MeetingClosed').'<br />'.$plugin->get_lang(
-                    'MeetingClosedComment'
-                ),
+                $plugin->get_lang('MeetingClosed').'<br />'.$plugin->get_lang('MeetingClosedComment'),
                 'success',
                 false
             );
@@ -238,8 +236,6 @@ switch ($type) {
             $showClientOptions = true;
         } else {
             if ($meetingExists) {
-                //$meetingInfo = $bbb->getMeetingByName($videoConferenceName);
-                //$meetinUserInfo = $bbb->getMeetingParticipantInfo($meetingInfo['id'], api_get_user_id());
                 $urlList = $plugin->getUrlInterfaceLinks($conferenceUrl);
                 $showClientOptions = true;
             }

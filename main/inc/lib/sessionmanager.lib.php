@@ -9161,7 +9161,7 @@ SQL;
             }
 
             $usergroup->subscribe_sessions_to_usergroup(
-                $usergroup->get_id_by_name($className),
+                $usergroup->getIdByName($className),
                 [$sessionId],
                 $deleteClassSessions
             );

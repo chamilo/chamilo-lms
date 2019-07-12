@@ -914,7 +914,9 @@ EOT;
      */
     public function addHeader($text)
     {
-        $this->addElement('header', $text);
+        if (!empty($text)) {
+            $this->addElement('header', $text);
+        }
     }
 
     /**

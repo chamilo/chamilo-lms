@@ -550,7 +550,9 @@ class UserGroup extends Model
 
     /**
      * @param int $course_id
+     *
      * @deprecated  ?
+     *
      * @return array
      */
     public function get_usergroup_by_course($course_id)
@@ -1221,7 +1223,7 @@ class UserGroup extends Model
 
     /**
      * @param string $firstLetter
-     * @param int $limit
+     * @param int    $limit
      *
      * @return array
      */
@@ -2288,7 +2290,7 @@ class UserGroup extends Model
     }
 
     /** Gets the last groups created
-     * @param int  $num        quantity of records
+     * @param int  $num       quantity of records
      * @param bool $withImage show groups with image or not
      *
      * @return array with group content

@@ -60,6 +60,20 @@ if ($dir) {
                 $src = $learnPath->get_link('http', $lpItemId);
                 $learnPath->start_current_item(); // starts time counter manually if asset
                 $src = $learnPath->fixBlockedLinks($src);
+
+                if (WhispeakAuthPlugin::create()->isEnabled()) {
+                    $itemIsMarked = WhispeakAuthPlugin::checkLpItemIsMarked($lpItemId);
+
+                    if ($itemIsMarked) {
+                        ChamiloSession::write(
+                            WhispeakAuthPlugin::SESSION_LP_ITEM,
+                            ['id' => $lpItemId, 'src' => $src]
+                        );
+
+                        $src = api_get_path(WEB_PLUGIN_PATH).'whispeakauth/authentify.php';
+                        break;
+                    }
+                }
                 break;
             }
             $src = 'blank.php?error=prerequisites&prerequisite_message='.Security::remove_XSS($learnPath->error);

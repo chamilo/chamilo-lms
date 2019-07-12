@@ -21,6 +21,7 @@ class WhispeakAuthPlugin extends Plugin implements HookPluginInterface
 
     const SESSION_FAILED_LOGINS = 'whispeak_failed_logins';
     const SESSION_2FA_USER = 'whispeak_user_id';
+    const SESSION_LP_ITEM = 'whispeak_lp_item';
 
     /**
      * StudentFollowUpPlugin constructor.
@@ -158,6 +159,33 @@ class WhispeakAuthPlugin extends Plugin implements HookPluginInterface
         $value = $efvRepo->findOneBy(['field' => $extraField, 'itemId' => $userId]);
 
         return $value;
+    }
+
+    /**
+     * Get the whispeak_lp_item value for a LP item ID
+     *
+     * @param int $lpItemId
+     *
+     * @return array|false
+     */
+    public static function getLpItemValue($lpItemId)
+    {
+        $efv = new ExtraFieldValue('lp_item');
+        $value = $efv->get_values_by_handler_and_field_variable($lpItemId, self::EXTRAFIELD_LP_ITEM);
+
+        return $value;
+    }
+
+    /**
+     * @param int $lpItemId
+     *
+     * @return bool
+     */
+    public static function checkLpItemIsMarked($lpItemId)
+    {
+        $value = self::getLpItemValue($lpItemId);
+
+        return !empty($value) && !empty($value['value']);
     }
 
     /**
@@ -658,5 +686,20 @@ class WhispeakAuthPlugin extends Plugin implements HookPluginInterface
         $em->flush();
 
         return true;
+    }
+
+    /**
+     * Check if the WhispeakAuth plugin is installed and enabled.
+     *
+     * @return bool
+     */
+    public function isEnabled()
+    {
+        return parent::isEnabled() && 'true' === api_get_plugin_setting('whispeakauth', self::SETTING_ENABLE);
+    }
+
+    public function is()
+    {
+        
     }
 }

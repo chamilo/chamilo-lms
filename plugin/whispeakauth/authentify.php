@@ -9,15 +9,70 @@ $plugin = WhispeakAuthPlugin::create();
 
 $plugin->protectTool();
 
-$userId = ChamiloSession::read(WhispeakAuthPlugin::SESSION_2FA_USER, 0);
-$is2fa = (bool) $userId;
+$userId = ChamiloSession::read(WhispeakAuthPlugin::SESSION_2FA_USER, 0) ?: api_get_user_id();
+$showForm = !$userId;
+
+/** @var array $lpItemInfo */
+$lpItemInfo = ChamiloSession::read(WhispeakAuthPlugin::SESSION_LP_ITEM, []);
+/** @var learnpath $oLp */
+$oLp = ChamiloSession::read('oLP', null);
+
+$showHeader = empty($lpItemInfo) || empty($oLp);
+
+if ($userId) {
+    $wsid = WhispeakAuthPlugin::getAuthUidValue($userId);
+
+    if (empty($wsid)) {
+        $form = new FormValidator(
+            'form-login',
+            'POST',
+            api_get_path(WEB_PLUGIN_PATH).'whispeakauth/ajax/authentify_password.php',
+            null,
+            null,
+            FormValidator::LAYOUT_BOX_NO_LABEL
+        );
+        $form->addElement(
+            'password',
+            'password',
+            get_lang('Pass'),
+            ['id' => 'password', 'icon' => 'lock fa-fw', 'placeholder' => get_lang('Pass')]
+        );
+        $form->addHidden('sec_token', '');
+        $form->setConstants(['sec_token' => Security::get_token()]);
+        $form->addButton('submitAuth', get_lang('LoginEnter'), 'check', 'primary', 'default', 'btn-block');
+
+        $template = new Template(
+            !$showHeader ? '' : $plugin->get_title(),
+            $showHeader,
+            $showHeader,
+            false,
+            true,
+            false
+        );
+        $template->assign('message', Display::return_message($plugin->get_lang('SpeechAuthNotEnrolled'), 'warning'));
+        $template->assign('form', $form->returnForm());
+
+        $content = $template->fetch('whispeakauth/view/authentify_password.html.twig');
+
+        $template->assign('header', $plugin->get_title());
+        $template->assign('content', $content);
+        $template->display_one_col_template();
+        exit;
+    }
+}
 
 $htmlHeadXtra[] = api_get_js('rtc/RecordRTC.js');
 $htmlHeadXtra[] = api_get_js_simple(api_get_path(WEB_PLUGIN_PATH).'whispeakauth/assets/js/RecordAudio.js');
 
-$template = new Template();
-
-$template->assign('show_form', !$is2fa);
+$template = new Template(
+    !$showHeader ? '' : $plugin->get_title(),
+    $showHeader,
+    $showHeader,
+    false,
+    true,
+    false
+);
+$template->assign('show_form', $showForm);
 $template->assign('sample_text', $plugin->getAuthentifySampleText());
 
 $content = $template->fetch('whispeakauth/view/authentify_recorder.html.twig');

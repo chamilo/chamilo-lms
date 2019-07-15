@@ -251,21 +251,17 @@ if (!isset($src)) {
 
                 $src = $lp->fixBlockedLinks($src);
 
-                $lp->start_current_item(); // starts time counter manually if asset
+                if (WhispeakAuthPlugin::isLpItemMarked($lp_item_id)) {
+                    ChamiloSession::write(
+                        WhispeakAuthPlugin::SESSION_LP_ITEM,
+                        ['id' => $lp_item_id, 'src' => $src]
+                    );
 
-                if (WhispeakAuthPlugin::create()->isEnabled()) {
-                    $itemIsMarked = WhispeakAuthPlugin::checkLpItemIsMarked($lp_item_id);
-
-                    if ($itemIsMarked) {
-                        ChamiloSession::write(
-                            WhispeakAuthPlugin::SESSION_LP_ITEM,
-                            ['id' => $lp_item_id, 'src' => $src]
-                        );
-
-                        $src = api_get_path(WEB_PLUGIN_PATH).'whispeakauth/authentify.php';
-                        break;
-                    }
+                    $src = api_get_path(WEB_PLUGIN_PATH).'whispeakauth/authentify.php';
+                    break;
                 }
+
+                $lp->start_current_item(); // starts time counter manually if asset
             } else {
                 $src = 'blank.php?error=prerequisites';
             }

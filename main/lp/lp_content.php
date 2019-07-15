@@ -61,18 +61,13 @@ if ($dir) {
                 $learnPath->start_current_item(); // starts time counter manually if asset
                 $src = $learnPath->fixBlockedLinks($src);
 
-                if (WhispeakAuthPlugin::create()->isEnabled()) {
-                    $itemIsMarked = WhispeakAuthPlugin::checkLpItemIsMarked($lpItemId);
+                if (WhispeakAuthPlugin::isLpItemMarked($lpItemId)) {
+                    ChamiloSession::write(
+                        WhispeakAuthPlugin::SESSION_LP_ITEM,
+                        ['id' => $lpItemId, 'src' => $src]
+                    );
 
-                    if ($itemIsMarked) {
-                        ChamiloSession::write(
-                            WhispeakAuthPlugin::SESSION_LP_ITEM,
-                            ['id' => $lpItemId, 'src' => $src]
-                        );
-
-                        $src = api_get_path(WEB_PLUGIN_PATH).'whispeakauth/authentify.php';
-                        break;
-                    }
+                    $src = api_get_path(WEB_PLUGIN_PATH).'whispeakauth/authentify.php';
                 }
                 break;
             }

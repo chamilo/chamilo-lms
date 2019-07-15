@@ -5758,7 +5758,10 @@ class learnpath
             $item_type = $this->items[$this->current]->get_type();
             if (($type == 2 && $item_type != 'sco') ||
                 ($type == 3 && $item_type != 'au') ||
-                ($type == 1 && $item_type != TOOL_QUIZ && $item_type != TOOL_HOTPOTATOES)
+                (
+                    $type == 1 && $item_type != TOOL_QUIZ && $item_type != TOOL_HOTPOTATOES &&
+                    WhispeakAuthPlugin::isAllowedToSaveLpItem($this->current)
+                )
             ) {
                 if ($debug) {
                     error_log('item type: '.$item_type);

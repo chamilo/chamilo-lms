@@ -181,8 +181,12 @@ class WhispeakAuthPlugin extends Plugin implements HookPluginInterface
      *
      * @return bool
      */
-    public static function checkLpItemIsMarked($lpItemId)
+    public static function isLpItemMarked($lpItemId)
     {
+        if (!self::create()->isEnabled()) {
+            return false;
+        }
+
         $value = self::getLpItemValue($lpItemId);
 
         return !empty($value) && !empty($value['value']);
@@ -698,8 +702,27 @@ class WhispeakAuthPlugin extends Plugin implements HookPluginInterface
         return parent::isEnabled() && 'true' === api_get_plugin_setting('whispeakauth', self::SETTING_ENABLE);
     }
 
-    public function is()
+    /**
+     * @param int $lpItemId
+     *
+     * @return bool
+     */
+    public static function isAllowedToSaveLpItem($lpItemId)
     {
-        
+        if (!self::isLpItemMarked($lpItemId)) {
+            return true;
+        }
+
+        $markedItem = ChamiloSession::read(self::SESSION_LP_ITEM, []);
+
+        if (empty($markedItem)) {
+            return true;
+        }
+
+        if ((int) $lpItemId !== (int) $markedItem['id']) {
+            return true;
+        }
+
+        return false;
     }
 }

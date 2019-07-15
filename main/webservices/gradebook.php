@@ -177,6 +177,7 @@ function WSGetGradebookUserItemScore($params)
                 case LINK_EXERCISE:
                     /** @var ExerciseLink $link */
                     foreach ($links as $link) {
+                        $link->set_session_id($link->getCategory()->get_session_id());
                         $score = $link->calc_score($userInfo['user_id']);
                         break;
                     }
@@ -184,6 +185,7 @@ function WSGetGradebookUserItemScore($params)
                 case LINK_STUDENTPUBLICATION:
                     /** @var StudentPublicationLink $link */
                     foreach ($links as $link) {
+                        $link->set_session_id($link->getCategory()->get_session_id());
                         $score = $link->calc_score($userInfo['user_id']);
                         break;
                     }

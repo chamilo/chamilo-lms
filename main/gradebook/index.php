@@ -39,11 +39,21 @@ switch ($action) {
         if (!empty($itemId)) {
             $link = LinkFactory::create(LINK_EXERCISE);
             $links = $link::load($itemId);
+
+            $exercise = new Exercise(api_get_course_int_id());
             /** @var ExerciseLink $link */
             foreach ($links as $link) {
-                $exercise = new Exercise(api_get_course_int_id());
-                $exercise->read($link->get_ref_id());
-                $exercise->generateStats($link->get_ref_id(), api_get_course_info(), api_get_session_id());
+                $exerciseId = $link->get_ref_id();
+                $data = $link->get_exercise_data();
+                if (empty($data)) {
+                    continue;
+                }
+
+                $exerciseId = $data['id'];
+                $result = $exercise->read($exerciseId);
+                if ($result) {
+                    $exercise->generateStats($exerciseId, api_get_course_info(), api_get_session_id());
+                }
             }
             Display::addFlash(Display::return_message(get_lang('Updated')));
         }

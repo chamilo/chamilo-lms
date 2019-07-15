@@ -262,7 +262,7 @@ class ExerciseLink extends AbstractLink
         }
 
         $exercise = new Exercise($courseId);
-        $exercise->read($exerciseData['id']);
+        $exercise->read($exerciseId);
 
         if (!$this->is_hp) {
             if ($exercise->exercise_was_added_in_lp == false) {
@@ -573,7 +573,7 @@ class ExerciseLink extends AbstractLink
     /**
      * Lazy load function to get the database contents of this exercise.
      */
-    private function get_exercise_data()
+    public function get_exercise_data()
     {
         $tableItemProperty = Database::get_course_table(TABLE_ITEM_PROPERTY);
         if ($this->is_hp == 1) {
@@ -584,29 +584,27 @@ class ExerciseLink extends AbstractLink
 
         $exerciseId = $this->get_ref_id();
 
-        if ($table == '') {
-            return false;
-        } elseif (empty($this->exercise_data)) {
+        if (empty($this->exercise_data)) {
             if ($this->is_hp == 1) {
                 $sql = "SELECT * FROM $table ex
-                        INNER JOIN $tableItemProperty ip
-                        ON (ip.ref = ex.id AND ip.c_id = ex.c_id)
-                        WHERE
-                            ip.c_id = $this->course_id AND
-                            ex.c_id = $this->course_id AND
-                            ip.ref = $exerciseId AND
-                            ip.tool = '".TOOL_DOCUMENT."' AND
-                            ex.path LIKE '%htm%' AND
-                            ex.path LIKE '%HotPotatoes_files%' AND
-                            ip.visibility = 1";
+                    INNER JOIN $tableItemProperty ip
+                    ON (ip.ref = ex.id AND ip.c_id = ex.c_id)
+                    WHERE
+                        ip.c_id = $this->course_id AND
+                        ex.c_id = $this->course_id AND
+                        ip.ref = $exerciseId AND
+                        ip.tool = '".TOOL_DOCUMENT."' AND
+                        ex.path LIKE '%htm%' AND
+                        ex.path LIKE '%HotPotatoes_files%' AND
+                        ip.visibility = 1";
                 $result = Database::query($sql);
                 $this->exercise_data = Database::fetch_array($result);
             } else {
                 // Try with iid
                 $sql = 'SELECT * FROM '.$table.'
-                        WHERE
-                            c_id = '.$this->course_id.' AND
-                            iid = '.$exerciseId;
+                    WHERE
+                        c_id = '.$this->course_id.' AND
+                        iid = '.$exerciseId;
                 $result = Database::query($sql);
                 $rows = Database::num_rows($result);
 
@@ -615,13 +613,17 @@ class ExerciseLink extends AbstractLink
                 } else {
                     // Try wit id
                     $sql = 'SELECT * FROM '.$table.'
-                            WHERE
-                                c_id = '.$this->course_id.' AND
-                                id = '.$exerciseId;
+                        WHERE
+                            c_id = '.$this->course_id.' AND
+                            id = '.$exerciseId;
                     $result = Database::query($sql);
                     $this->exercise_data = Database::fetch_array($result);
                 }
             }
+        }
+
+        if (empty($this->exercise_data)) {
+            return false;
         }
 
         return $this->exercise_data;

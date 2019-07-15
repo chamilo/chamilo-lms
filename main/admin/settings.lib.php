@@ -1142,7 +1142,7 @@ function addEditTemplate()
         $defaults['template_id'] = $id;
         $defaults['template_text'] = $template->getContent();
         // Forcing get_lang().
-        $defaults['title'] = get_lang($template->getTitle());
+        $defaults['title'] = $template->getTitle();
 
         // Adding an extra field: a hidden field with the id of the template we are editing.
         $form->addElement('hidden', 'template_id');

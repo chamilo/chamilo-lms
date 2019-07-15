@@ -8606,7 +8606,6 @@ class learnpath
                     $selectPrerequisites->setSelected($key);
                 }
             }
-
         }
 
         if ('edit' === $action) {

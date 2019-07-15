@@ -162,7 +162,7 @@ class WhispeakAuthPlugin extends Plugin implements HookPluginInterface
     }
 
     /**
-     * Get the whispeak_lp_item value for a LP item ID
+     * Get the whispeak_lp_item value for a LP item ID.
      *
      * @param int $lpItemId
      *

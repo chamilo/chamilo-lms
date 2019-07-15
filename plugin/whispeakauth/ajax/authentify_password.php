@@ -47,11 +47,11 @@ if (!$isValidPassword || !$isActive || !$isExpired) {
     $userPass = false;
 
     $message = $plugin->get_lang('AuthentifyFailed');
-    
+
     if (!$isActive) {
         $message .= PHP_EOL.get_lang('Account inactive');
     }
-    
+
     if (!$isExpired) {
         $message .= PHP_EOL.get_lang('AccountExpired');
     }

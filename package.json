@@ -44,7 +44,7 @@
     "mediaelement": "^4.2.9",
     "moment": "^2.22",
     "multiselect-two-sides": "^2.5.5",
-    "mxgraph": "^3.9.3",
+    "mxgraph": "^4.0",
     "optimize-css-assets-webpack-plugin": "^5.0.1",
     "pace-js-amd-fix": "^1.0.5",
     "perfect-scrollbar": "^1.4.0",

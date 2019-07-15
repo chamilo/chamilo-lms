@@ -21,9 +21,10 @@ if ($isEnrollment) {
 
     $isAllowed = !empty($_FILES['audio']);
 } elseif ($isAuthentify) {
+    $userId = api_get_user_id();
     $user2fa = ChamiloSession::read(WhispeakAuthPlugin::SESSION_2FA_USER, 0);
 
-    if (!empty($user2fa)) {
+    if (!empty($user2fa) || !empty($userId)) {
         $isAllowed = !empty($_FILES['audio']);
     } else {
         $isAllowed = !empty($_POST['username']) && !empty($_FILES['audio']);
@@ -53,6 +54,8 @@ if ($isAuthentify) {
 
     if (!empty($user2fa)) {
         $user = api_get_user_entity($user2fa);
+    } elseif (!empty($userId)) {
+        $user = api_get_user_entity($userId);
     } else {
         /** @var User|null $user */
         $user = UserManager::getRepository()->findOneBy(['username' => $_POST['username']]);
@@ -197,7 +200,20 @@ if ($isAuthentify) {
         false
     );
 
+    /** @var array $lpItemInfo */
+    $lpItemInfo = ChamiloSession::read(WhispeakAuthPlugin::SESSION_LP_ITEM, []);
+
     if (!$success && $maxAttempts && $failedLogins >= $maxAttempts) {
+        if (!empty($lpItemInfo)) {
+            ChamiloSession::erase(WhispeakAuthPlugin::SESSION_FAILED_LOGINS);
+
+            echo '<script>window.setTimeout(function () {
+                    window.location.href = "'.api_get_path(WEB_PLUGIN_PATH).'whispeakauth/authentify_password.php";
+                }, 1500);</script>';
+
+            exit;
+        }
+
         echo '<script>window.setTimeout(function () {
             window.location.href = "'.api_get_path(WEB_PATH).'";
             }, 1500);</script>';
@@ -206,6 +222,18 @@ if ($isAuthentify) {
     }
 
     if ($success) {
+        if (!empty($lpItemInfo)) {
+            ChamiloSession::erase(WhispeakAuthPlugin::SESSION_FAILED_LOGINS);
+            ChamiloSession::erase(WhispeakAuthPlugin::SESSION_LP_ITEM);
+            ChamiloSession::erase(WhispeakAuthPlugin::SESSION_2FA_USER);
+
+            echo '<script>window.setTimeout(function () {
+                    window.location.href = "'.$lpItemInfo['src'].'";
+                }, 1500);</script>';
+
+            exit;
+        }
+
         $loggedUser = [
             'user_id' => $user->getId(),
             'status' => $user->getStatus(),

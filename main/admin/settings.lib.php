@@ -1118,6 +1118,7 @@ function addEditTemplate()
 
     // Setting the form elements: the title of the template.
     $form->addText('title', get_lang('Title'), false);
+    $form->addText('comment', get_lang('Description'), false);
 
     // Setting the form elements: the content of the template (wysiwyg editor).
     $form->addHtmlEditor(
@@ -1143,6 +1144,7 @@ function addEditTemplate()
         $defaults['template_text'] = $template->getContent();
         // Forcing get_lang().
         $defaults['title'] = $template->getTitle();
+        $defaults['comment'] = $template->getComment();
 
         // Adding an extra field: a hidden field with the id of the template we are editing.
         $form->addElement('hidden', 'template_id');
@@ -1228,14 +1230,15 @@ function addEditTemplate()
 
 
             // Store the information in the database (as insert or as update).
-            $bootstrap = api_get_css(api_get_path(WEB_PUBLIC_PATH).'assets/bootstrap/dist/css/bootstrap.min.css');
+            //$bootstrap = api_get_css(api_get_path(WEB_PUBLIC_PATH).'assets/bootstrap/dist/css/bootstrap.min.css');
             $viewport = '<meta name="viewport" content="width=device-width, initial-scale=1.0">';
 
             if ($_GET['action'] == 'add') {
-                $templateContent = '<head>'.$viewport.'<title>'.$values['title'].'</title>'.$bootstrap.'</head>'
+                $templateContent = '<head>'.$viewport.'<title>'.$values['title'].'</title></head>'
                     .$values['template_text'];
                 $template
                     ->setTitle($values['title'])
+                    ->setComment(Security::remove_XSS($values['comment']))
                     ->setContent(Security::remove_XSS($templateContent, COURSEMANAGERLOWSECURITY))
                     ->setImage($new_file_name);
                 $em->persist($template);
@@ -1253,6 +1256,7 @@ function addEditTemplate()
                 $templateContent = $values['template_text'];
                 $template
                     ->setTitle($values['title'])
+                    ->setComment(Security::remove_XSS($values['comment']))
                     ->setContent(Security::remove_XSS($templateContent, COURSEMANAGERLOWSECURITY));
 
                 if ($isDelete) {

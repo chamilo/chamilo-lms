@@ -579,7 +579,7 @@ class ExerciseLink extends AbstractLink
         if ($this->is_hp == 1) {
             $table = Database::get_course_table(TABLE_DOCUMENT);
         } else {
-            $table = $this->get_exercise_table();
+            $table = Database::get_course_table(TABLE_QUIZ_TEST);
         }
 
         $exerciseId = $this->get_ref_id();

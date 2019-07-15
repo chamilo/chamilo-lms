@@ -8170,11 +8170,20 @@ class Exercise
         $em = Database::getManager();
 
         $links = AbstractLink::getGradebookLinksFromItem(
-            $this->selectId(),
+            $this->id,
             LINK_EXERCISE,
-            api_get_course_id(),
-            api_get_session_id()
+            $courseInfo['code'],
+            $sessionId
         );
+
+        if (empty($links)) {
+            $links = AbstractLink::getGradebookLinksFromItem(
+                $this->iId,
+                LINK_EXERCISE,
+                $courseInfo['code'],
+                $sessionId
+            );
+        }
 
         if (!empty($links)) {
             $repo = $em->getRepository('ChamiloCoreBundle:GradebookLink');

@@ -1223,6 +1223,9 @@ $_configuration['required_extra_fields_in_profile'] = [
 // enable @ORM in CExerciseCategory adn CQuiz::exerciseCategoryId
 //$_configuration['allow_exercise_categories'] = false;
 
+// Send new user inscription notification only to general admins (table settings_current = emailAdministrator)
+//$_configuration['send_inscription_notification_to_general_admin_only'] = false;
+
 // KEEP THIS AT THE END
 // -------- Custom DB changes
 // Add user activation by confirmation email

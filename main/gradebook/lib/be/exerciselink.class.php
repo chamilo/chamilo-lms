@@ -505,9 +505,9 @@ class ExerciseLink extends AbstractLink
     {
         if ($this->is_hp == 1) {
             return 'HotPotatoes';
-        } else {
-            return get_lang('Quiz');
         }
+
+        return get_lang('Quiz');
     }
 
     public function needs_name_and_description()
@@ -555,19 +555,8 @@ class ExerciseLink extends AbstractLink
     {
         switch ($type) {
             case 'best':
-
                 break;
         }
-    }
-
-    /**
-     * Lazy load function to get the database table of the exercise.
-     */
-    private function get_exercise_table()
-    {
-        $this->exercise_table = Database::get_course_table(TABLE_QUIZ_TEST);
-
-        return $this->exercise_table;
     }
 
     /**
@@ -627,5 +616,15 @@ class ExerciseLink extends AbstractLink
         }
 
         return $this->exercise_data;
+    }
+
+    /**
+     * Lazy load function to get the database table of the exercise.
+     */
+    private function get_exercise_table()
+    {
+        $this->exercise_table = Database::get_course_table(TABLE_QUIZ_TEST);
+
+        return $this->exercise_table;
     }
 }

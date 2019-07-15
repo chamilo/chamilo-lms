@@ -158,7 +158,7 @@ function WSGetGradebookUserItemScore($params)
     $userInfo = api_get_user_info_from_email($email);
 
     if (empty($userInfo)) {
-        return 'User not found';
+        return new soap_fault('Server', '', 'User not found');
     }
 
     $em = Database::getManager();
@@ -169,7 +169,7 @@ function WSGetGradebookUserItemScore($params)
             /** @var \Chamilo\CoreBundle\Entity\GradebookLink $link */
             $link = $em->getRepository('ChamiloCoreBundle:GradebookLink')->find($itemId);
             if (empty($link)) {
-                return 'gradebook link not found';
+                return new soap_fault('Server', '', 'gradebook link not found');
             }
 
             $links = AbstractLink::load($link->getId());
@@ -201,7 +201,7 @@ function WSGetGradebookUserItemScore($params)
         return ['score' => $result, 'date' => $score[2], 'counter' => $score[3]];
     }
 
-    return 'Score not found';
+    return new soap_fault('Server', '', 'Score not found');
 }
 
 $server->wsdl->addComplexType(
@@ -261,12 +261,12 @@ function WSGetGradebookCategoryUserScore($params)
     $userInfo = api_get_user_info_from_email($email);
 
     if (empty($userInfo)) {
-        return 'User not found';
+        return new soap_fault('Server', '', 'User not found');
     }
     $userId = $userInfo['user_id'];
     $courseInfo = api_get_course_info($courseCode);
     if (empty($courseInfo)) {
-        return 'Course not found';
+        return new soap_fault('Server', '', 'Course not found');
     }
 
     $cats = Category::load(null,
@@ -308,10 +308,10 @@ function WSGetGradebookCategoryUserScore($params)
     }
 
     if (empty($category)) {
-        return 'Gradebook category not found';
+        return new soap_fault('Server', '', 'Gradebook category not found');
     }
 
-    return 'Score not found';
+    return new soap_fault('Server', '', 'Score not found');
 }
 
 $server->wsdl->addComplexType(
@@ -366,14 +366,14 @@ function WSGetLpProgress($params)
     $courseCode = $params['course_code'];
     $courseInfo = api_get_course_info($courseCode);
     if (empty($courseInfo)) {
-        return 'Course not found';
+        return new soap_fault('Server', '', 'Course not found');
     }
 
     $sessionId = (int) $params['session_id'];
     if (!empty($sessionId)) {
         $sessionInfo = api_get_session_info($sessionId);
         if (empty($sessionInfo)) {
-            return 'Session not found';
+            return new soap_fault('Server', '', 'Session not found');
         }
     }
 
@@ -382,14 +382,14 @@ function WSGetLpProgress($params)
     $userId = $userInfo['user_id'];
 
     if (empty($userInfo)) {
-        return 'User not found';
+        return new soap_fault('Server', '', 'User not found');
     }
 
     $lpId = $params['lp_id'];
     $lp = new learnpath($courseCode, $lpId, $userId);
 
     if (empty($lp)) {
-        return 'LP not found';
+        return new soap_fault('Server', '', 'LP not found');
     }
 
     return $lp->progress_db;
@@ -456,13 +456,13 @@ function WSAssignSkill($params)
     $skill = $skillRepo->find($skillId);
 
     if (empty($skill)) {
-        return 'Skill not found';
+        return new soap_fault('Server', '', 'Skill not found');
     }
 
     $justification = $params['justification'];
 
     if (strlen($justification) < 10) {
-        return 'Justification smaller than 10 chars';
+        return new soap_fault('Server', '', 'Justification smaller than 10 chars');
     }
 
     $level = (int) $params['level'];
@@ -471,14 +471,14 @@ function WSAssignSkill($params)
     $userInfo = api_get_user_info_from_email($email);
 
     if (empty($userInfo)) {
-        return 'User not found';
+        return new soap_fault('Server', '', 'User not found');
     }
 
     $email = $params['author_email'];
     $authorInfo = api_get_user_info_from_email($email);
 
     if (empty($authorInfo)) {
-        return 'Author not found';
+        return new soap_fault('Server', '', 'Author not found');
     }
 
     $userId = $userInfo['user_id'];

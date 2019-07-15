@@ -460,8 +460,6 @@ class FlatViewDataGenerator
 
                     if (api_get_setting('gradebook_detailed_admin_view') === 'true') {
                         $links = $sub_cat->get_links();
-                        $evaluations = $sub_cat->get_evaluations();
-
                         /** @var ExerciseLink $link */
                         $linkScoreList = [];
                         foreach ($links as $link) {
@@ -472,7 +470,9 @@ class FlatViewDataGenerator
                             );
                         }
 
+                        $evaluations = $sub_cat->get_evaluations();
                         $evalScoreList = [];
+                        /** @var Evaluation $evaluation */
                         foreach ($evaluations as $evaluation) {
                             $evalScore = $evaluation->calc_score($user_id);
                             $evalScoreList[] = $scoreDisplay->display_score(

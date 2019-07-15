@@ -644,10 +644,10 @@ class Exercise
                     ON (e.question_id = q.id AND e.c_id = ".$this->course_id." )
 					WHERE e.exercice_id	= '".$this->id."' ";
 
-            $orderCondition = "ORDER BY question_order";
+            $orderCondition = ' ORDER BY question_order ';
 
             if (!empty($sidx) && !empty($sord)) {
-                if ($sidx == 'question') {
+                if ($sidx === 'question') {
                     if (in_array(strtolower($sord), ['desc', 'asc'])) {
                         $orderCondition = " ORDER BY q.$sidx $sord";
                     }
@@ -657,8 +657,8 @@ class Exercise
             $sql .= $orderCondition;
             $limitCondition = null;
             if (isset($start) && isset($limit)) {
-                $start = intval($start);
-                $limit = intval($limit);
+                $start = (int) $start;
+                $limit = (int) $limit;
                 $limitCondition = " LIMIT $start, $limit";
             }
             $sql .= $limitCondition;
@@ -677,7 +677,7 @@ class Exercise
                     );
 
                     if (empty($category_labels)) {
-                        $category_labels = "-";
+                        $category_labels = '-';
                     }
 
                     // Question type
@@ -8076,6 +8076,8 @@ class Exercise
         $courseId = $courseInfo['real_id'];
 
         $sessionId = (int) $sessionId;
+        $exerciseId = (int) $exerciseId;
+
         $result = $this->read($exerciseId);
 
         if (empty($result)) {
@@ -8085,7 +8087,7 @@ class Exercise
         $statusToFilter = empty($sessionId) ? STUDENT : 0;
 
         $studentList = CourseManager::get_user_list_from_course_code(
-            api_get_course_id(),
+            $courseInfo['code'],
             $sessionId,
             null,
             null,

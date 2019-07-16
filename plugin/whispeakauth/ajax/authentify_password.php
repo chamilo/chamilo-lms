@@ -14,7 +14,7 @@ $plugin->protectTool(false);
 $tokenIsValid = Security::check_token();
 
 if (!$tokenIsValid) {
-    api_not_allowed(false);
+    WhispeakAuthPlugin::displayNotAllowedMessage();
 }
 
 $maxAttempts = $plugin->getMaxAttempts();
@@ -30,11 +30,11 @@ $user = api_get_user_entity(api_get_user_id());
 $password = isset($_POST['password']) ? $_POST['password'] : null;
 
 if (empty($password) || empty($user)) {
-    api_not_allowed(false);
+    WhispeakAuthPlugin::displayNotAllowedMessage();
 }
 
 if (!in_array($user->getAuthSource(), [PLATFORM_AUTH_SOURCE, CAS_AUTH_SOURCE])) {
-    api_not_allowed(false);
+    WhispeakAuthPlugin::displayNotAllowedMessage();
 }
 
 $isValidPassword = UserManager::isPasswordValid($user->getPassword(), $password, $user->getSalt());
@@ -67,7 +67,7 @@ if (!$isValidPassword || !$isActive || !$isExpired) {
     echo Display::return_message($message, 'error', false);
 
     if ($maxAttempts && $failedLogins >= $maxAttempts) {
-        $userPass = true;
+        //$userPass = true;
     }
 } elseif ($isValidPassword) {
     echo Display::return_message($plugin->get_lang('AuthentifySuccess'), 'success');
@@ -83,5 +83,5 @@ if ($userPass) {
 
     echo '<script>window.setTimeout(function () {
             window.location.href = "'.$lpItemInfo['src'].'";
-            }, 1500);</script>';
+        }, 1500);</script>';
 }

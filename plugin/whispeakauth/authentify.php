@@ -23,6 +23,10 @@ if ($userId) {
     $wsid = WhispeakAuthPlugin::getAuthUidValue($userId);
 
     if (empty($wsid)) {
+        Display::addFlash(
+            Display::return_message($plugin->get_lang('SpeechAuthNotEnrolled'), 'warning')
+        );
+
         header('Location: '.api_get_path(WEB_PLUGIN_PATH).'whispeakauth/authentify_password.php');
 
         exit;

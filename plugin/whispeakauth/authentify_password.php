@@ -48,7 +48,6 @@ $template = new Template(
     true,
     false
 );
-$template->assign('message', Display::return_message($plugin->get_lang('SpeechAuthNotEnrolled'), 'warning'));
 $template->assign('form', $form->returnForm());
 
 $content = $template->fetch('whispeakauth/view/authentify_password.html.twig');

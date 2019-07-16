@@ -300,6 +300,7 @@ class ScheduledAnnouncement extends Model
         $messagesSent = 0;
         $now = api_get_utc_datetime();
         $result = $this->get_all();
+        $extraFieldValue = new ExtraFieldValue('scheduled_announcement');
 
         foreach ($result as $result) {
             if (empty($result['sent'])) {
@@ -323,21 +324,34 @@ class ScheduledAnnouncement extends Model
                     }
 
                     if ($users) {
+                        $sendToCoaches = $extraFieldValue->get_values_by_handler_and_field_variable($result['id'], 'send_to_coaches');
+                        $courseList = SessionManager::getCoursesInSession($sessionId);
+                        $coachList = [];
+                        if (!empty($sendToCoaches) && !empty($sendToCoaches['value']) && $sendToCoaches['value'] == 1) {
+                            foreach ($courseList as $courseItemId) {
+                                $result = SessionManager::getCoachesByCourseSession(
+                                    $sessionId,
+                                    $courseItemId
+                                );
+                                $coachList = array_merge($coachList, $result);
+                            }
+                            $coachList = array_unique($coachList);
+                        }
+
                         $this->update(['id' => $result['id'], 'sent' => 1]);
                         $attachments = $this->getAttachmentToString($result['id']);
                         $subject = $result['subject'];
 
+                        $courseInfo = [];
+                        if (!empty($courseList)) {
+                            $courseId = current($courseList);
+                            $courseInfo = api_get_course_info_by_id($courseId);
+                        }
+
                         foreach ($users as $user) {
                             // Take original message
                             $message = $result['message'];
-
                             $userInfo = api_get_user_info($user['user_id']);
-                            $courseList = SessionManager::getCoursesInSession($sessionId);
-                            $courseInfo = [];
-                            if (!empty($courseList)) {
-                                $courseId = current($courseList);
-                                $courseInfo = api_get_course_info_by_id($courseId);
-                            }
 
                             $progress = '';
                             if (!empty($sessionInfo) && !empty($courseInfo)) {
@@ -377,6 +391,7 @@ class ScheduledAnnouncement extends Model
                                     $generalCoachEmail = $coachInfo['email'];
                                 }
                             }
+
                             $tags = [
                                 '((session_name))' => $sessionInfo['name'],
                                 '((session_start_date))' => $startTime,
@@ -395,6 +410,17 @@ class ScheduledAnnouncement extends Model
                             MessageManager::send_message_simple(
                                 $userInfo['user_id'],
                                 $subject,
+                                $message,
+                                $coachId
+                            );
+                        }
+
+                        $message = get_lang('YouAreReceivingACopyBecauseYouAreACourseCoach').'<br /><br />'.$message;
+
+                        foreach ($coachList as $courseCoachId) {
+                            MessageManager::send_message_simple(
+                                $courseCoachId,
+                                get_lang('YouAreReceivingACopyBecauseYouAreACourseCoach').'&nbsp;'.$subject,
                                 $message,
                                 $coachId
                             );

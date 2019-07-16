@@ -8436,4 +8436,5 @@ $ScormStartAttemptDate = "Fecha";
 $LoginsByDate = "Inicios de sesión por fecha";
 $AllowHtaccessScormImport = "Habilitar archivo htaccess en el importe SCORM";
 $ExerciseAutoEvaluationAndRankingMode = "Mostrar sólo la nota global (no la nota de cada pregunta) y mostrar la respuesta correcta y la respuesta seleccionada por el alumno + modo clasificación.";
+$YouAreReceivingACopyBecauseYouAreACourseCoach = "Usted recibe esta copia en calidad de tutor de este curso";
 ?>

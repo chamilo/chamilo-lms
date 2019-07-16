@@ -760,7 +760,7 @@ class Rest extends WebService
                 if (!learnpath::is_lp_visible_for_student(
                     $lpId,
                     $this->user->getId(),
-                    $this->course->getCode(),
+                    api_get_course_info($this->course->getCode()),
                     $sessionId
                 )) {
                     continue;

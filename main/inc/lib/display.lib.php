@@ -1725,7 +1725,7 @@ class Display
             }
 
             if ($notification['tool'] == TOOL_LEARNPATH) {
-                if (!learnpath::is_lp_visible_for_student($notification['ref'], $user_id, $course_code)) {
+                if (!learnpath::is_lp_visible_for_student($notification['ref'], $user_id, $courseInfo)) {
                     continue;
                 }
             }

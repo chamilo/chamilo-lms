@@ -2491,20 +2491,20 @@ class learnpath
      * of its prerequisite is completed, considering the time availability and
      * the LP visibility.
      *
-     * @param int  $lp_id
-     * @param int  $student_id
-     * @param null $courseCode
-     * @param int  $sessionId
+     * @param int   $lp_id
+     * @param int   $student_id
+     * @param array $courseInfo
+     * @param int   $sessionId
      *
      * @return bool
      */
     public static function is_lp_visible_for_student(
         $lp_id,
         $student_id,
-        $courseCode = null,
+        $courseInfo = [],
         $sessionId = 0
     ) {
-        $courseInfo = api_get_course_info($courseCode);
+        $courseInfo = empty($courseInfo) ? api_get_course_info() : $courseInfo;
         $lp_id = (int) $lp_id;
         $sessionId = (int) $sessionId;
 
@@ -2516,8 +2516,10 @@ class learnpath
             $sessionId = api_get_session_id();
         }
 
+        $courseId = $courseInfo['real_id'];
+
         $itemInfo = api_get_item_property_info(
-            $courseInfo['real_id'],
+            $courseId,
             TOOL_LEARNPATH,
             $lp_id,
             $sessionId
@@ -2599,7 +2601,7 @@ class learnpath
                     if ($userVisibility == 1) {
                         $is_visible = true;
                     } else {
-                        $userGroups = GroupManager::getAllGroupPerUserSubscription($student_id);
+                        $userGroups = GroupManager::getAllGroupPerUserSubscription($student_id, $courseId);
                         if (!empty($userGroups)) {
                             foreach ($userGroups as $groupInfo) {
                                 $groupId = $groupInfo['iid'];

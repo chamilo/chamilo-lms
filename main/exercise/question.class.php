@@ -1749,6 +1749,9 @@ abstract class Question
             }
         }
 
+        $extraField = new ExtraField('question');
+        $extraField->addElements($form, $this->iid);
+
         // default values
         $defaults = [];
         $defaults['questionName'] = $this->question;
@@ -1795,6 +1798,9 @@ abstract class Question
             // modify the exercise
             $exercise->addToList($this->id);
             $exercise->update_question_positions();
+
+            $extraFieldValues = new ExtraFieldValue('question');
+            $extraFieldValues->saveFieldValues($form->exportValues());
         }
     }
 

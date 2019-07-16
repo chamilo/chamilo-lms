@@ -2646,7 +2646,7 @@ class learnpath
 
         $sessionCondition = api_get_session_condition($sessionId);
         $table = Database::get_course_table(TABLE_LP_VIEW);
-        $sql = "SELECT * FROM $table
+        $sql = "SELECT progress FROM $table
                 WHERE
                     c_id = $courseId AND
                     lp_id = $lpId AND
@@ -2655,11 +2655,53 @@ class learnpath
 
         $progress = 0;
         if (Database::num_rows($res) > 0) {
-            $row = Database:: fetch_array($res);
+            $row = Database::fetch_array($res);
             $progress = (int) $row['progress'];
         }
 
         return $progress;
+    }
+
+    /**
+     * @param array $lpList
+     * @param int $userId
+     * @param int $courseId
+     * @param int $sessionId
+     *
+     * @return int
+     */
+    public static function getProgressFromLpList($lpList, $userId, $courseId, $sessionId = 0)
+    {
+        $lpList = array_map('intval', $lpList);
+        if (empty($lpList)) {
+            return [];
+        }
+
+        $lpList = implode("','", $lpList);
+
+        $userId = (int) $userId;
+        $courseId = (int) $courseId;
+        $sessionId = (int) $sessionId;
+
+        $sessionCondition = api_get_session_condition($sessionId);
+        $table = Database::get_course_table(TABLE_LP_VIEW);
+        $sql = "SELECT lp_id, progress FROM $table
+                WHERE
+                    c_id = $courseId AND
+                    lp_id IN ('".$lpList."') AND
+                    user_id = $userId $sessionCondition ";
+        $res = Database::query($sql);
+
+        if (Database::num_rows($res) > 0) {
+            $list = [];
+            while ($row = Database::fetch_array($res)) {
+                $list[$row['lp_id']] = $row['progress'];
+            }
+
+            return $list;
+        }
+
+        return [];
     }
 
     /**
@@ -3705,8 +3747,8 @@ class learnpath
         		FROM $lp_table l
                 INNER JOIN $lp_item_table li
                 ON (li.lp_id = l.iid)
-        		WHERE 
-        		    li.iid = $item_id 
+        		WHERE
+        		    li.iid = $item_id
         		";
         if ($this->debug > 2) {
             error_log('In learnpath::get_link() - selecting item '.$sql, 0);
@@ -4147,7 +4189,7 @@ class learnpath
         $tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
         $sql_sel = "SELECT *
                     FROM $tbl_lp_item
-                    WHERE  
+                    WHERE
                         iid = $id
                     ";
         $res_sel = Database::query($sql_sel);
@@ -4234,7 +4276,7 @@ class learnpath
                     error_log('Movement down detected', 0);
                 }
                 if ($next != 0) {
-                    $sql_sel2 = "SELECT * FROM $tbl_lp_item 
+                    $sql_sel2 = "SELECT * FROM $tbl_lp_item
                                  WHERE iid = $next";
                     if ($this->debug > 2) {
                         error_log('Selecting next: '.$sql_sel2, 0);
@@ -4248,7 +4290,7 @@ class learnpath
                     $next_next = $row2['next_item_id'];
                     // Update previous item (switch with current).
                     if ($previous != 0) {
-                        $sql_upd2 = "UPDATE $tbl_lp_item 
+                        $sql_upd2 = "UPDATE $tbl_lp_item
                                      SET next_item_id = $next
                                      WHERE iid = $previous";
                         Database::query($sql_upd2);
@@ -4256,8 +4298,8 @@ class learnpath
                     // Update current item (switch with previous).
                     if ($id != 0) {
                         $sql_upd2 = "UPDATE $tbl_lp_item SET
-                                     previous_item_id = $next, 
-                                     next_item_id = $next_next, 
+                                     previous_item_id = $next,
+                                     next_item_id = $next_next,
                                      display_order = display_order + 1
                                      WHERE iid = $id";
                         Database::query($sql_upd2);
@@ -4266,8 +4308,8 @@ class learnpath
                     // Update next item (new previous item).
                     if ($next != 0) {
                         $sql_upd2 = "UPDATE $tbl_lp_item SET
-                                     previous_item_id = $previous, 
-                                     next_item_id = $id, 
+                                     previous_item_id = $previous,
+                                     next_item_id = $id,
                                      display_order = display_order-1
                                      WHERE iid = $next";
                         Database::query($sql_upd2);
@@ -4689,10 +4731,10 @@ class learnpath
             $num = Database::num_rows($result);
             if ($set_visibility == 'i' && $num > 0) {
                 $sql = "DELETE FROM $tbl_tool
-                        WHERE 
-                            c_id = $course_id AND 
-                            (link = '$link' OR link = '$oldLink') AND 
-                            image='scormbuilder.gif' 
+                        WHERE
+                            c_id = $course_id AND
+                            (link = '$link' OR link = '$oldLink') AND
+                            image='scormbuilder.gif'
                             $session_condition";
                 Database::query($sql);
             } elseif ($set_visibility == 'v' && $num == 0) {
@@ -4717,8 +4759,8 @@ class learnpath
                             session_id = $session_id
                         WHERE
                             c_id = ".$course_id." AND
-                            (link = '$link' OR link = '$oldLink') AND 
-                            image='scormbuilder.gif' 
+                            (link = '$link' OR link = '$oldLink') AND
+                            image='scormbuilder.gif'
                             $session_condition
                         ";
                 Database::query($sql);
@@ -4938,7 +4980,7 @@ class learnpath
         $tools = $em
             ->createQuery("
                 SELECT t FROM ChamiloCourseBundle:CTool t
-                WHERE t.cId = :course AND 
+                WHERE t.cId = :course AND
                     t.name = :name AND
                     t.image = 'lp_category.gif' AND
                     t.link LIKE :link
@@ -5222,7 +5264,7 @@ class learnpath
             $lp = $this->get_id();
             if ($lp != 0) {
                 $tbl_lp = Database::get_course_table(TABLE_LP_MAIN);
-                $sql = "UPDATE $tbl_lp SET default_encoding = '$enc' 
+                $sql = "UPDATE $tbl_lp SET default_encoding = '$enc'
                         WHERE iid = ".$lp;
                 $res = Database::query($sql);
 
@@ -5250,7 +5292,7 @@ class learnpath
 
         if ($lp != 0) {
             $tbl_lp = Database::get_course_table(TABLE_LP_MAIN);
-            $sql = "UPDATE $tbl_lp SET js_lib = '$lib' 
+            $sql = "UPDATE $tbl_lp SET js_lib = '$lib'
                     WHERE iid = $lp";
             $res = Database::query($sql);
 
@@ -5426,7 +5468,7 @@ class learnpath
         $this->theme = $name;
         $table = Database::get_course_table(TABLE_LP_MAIN);
         $lp_id = $this->get_id();
-        $sql = "UPDATE $table 
+        $sql = "UPDATE $table
                 SET theme = '".Database::escape_string($this->theme)."'
                 WHERE iid = $lp_id";
         if ($this->debug > 2) {
@@ -5945,8 +5987,8 @@ class learnpath
     {
         $course_id = api_get_course_int_id();
         $table = Database::get_course_table(TABLE_LP_MAIN);
-        $sql = "SELECT * FROM $table 
-                WHERE c_id = $course_id 
+        $sql = "SELECT * FROM $table
+                WHERE c_id = $course_id
                 ORDER BY display_order";
         $res = Database::query($sql);
         if ($res === false) {
@@ -6125,7 +6167,7 @@ class learnpath
             error_log('In learnpath::set_seriousgame_mode()', 0);
         }
         $lp_table = Database::get_course_table(TABLE_LP_MAIN);
-        $sql = "SELECT * FROM $lp_table 
+        $sql = "SELECT * FROM $lp_table
                 WHERE iid = ".$this->get_id();
         $res = Database::query($sql);
         if (Database::num_rows($res) > 0) {

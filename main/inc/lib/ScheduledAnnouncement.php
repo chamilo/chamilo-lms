@@ -329,11 +329,11 @@ class ScheduledAnnouncement extends Model
                         $coachList = [];
                         if (!empty($sendToCoaches) && !empty($sendToCoaches['value']) && $sendToCoaches['value'] == 1) {
                             foreach ($courseList as $courseItemId) {
-                                $result = SessionManager::getCoachesByCourseSession(
+                                $coaches = SessionManager::getCoachesByCourseSession(
                                     $sessionId,
                                     $courseItemId
                                 );
-                                $coachList = array_merge($coachList, $result);
+                                $coachList = array_merge($coachList, $coaches);
                             }
                             $coachList = array_unique($coachList);
                         }

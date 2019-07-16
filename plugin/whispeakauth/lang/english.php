@@ -47,4 +47,4 @@ $strings['AudioQualityPoorness'] = 'Too poor general audio quality';
 
 $strings['AgreeAllowResearch'] = 'I agree to allow the use of data for research (no commercial usage).';
 
-$strings['MarkForSpeechAuthentication'] = 'Mark item for speech authentication';
+$strings['MarkForSpeechAuthentication'] = 'Mark it for speech authentication';

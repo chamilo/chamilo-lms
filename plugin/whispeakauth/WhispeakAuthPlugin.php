@@ -16,6 +16,7 @@ class WhispeakAuthPlugin extends Plugin implements HookPluginInterface
 
     const EXTRAFIELD_AUTH_UID = 'whispeak_auth_uid';
     const EXTRAFIELD_LP_ITEM = 'whispeak_lp_item';
+    const EXTRAFIELD_QUIZ_QUESTION = 'whispeak_quiz_question';
 
     const API_URL = 'http://api.whispeak.io:8080/v1.1/';
 
@@ -66,6 +67,19 @@ class WhispeakAuthPlugin extends Plugin implements HookPluginInterface
             true,
             true
         );
+
+        $extraField = new \ExtraField('question');
+        $params = [
+            'variable' => self::EXTRAFIELD_QUIZ_QUESTION,
+            'field_type' => \ExtraField::FIELD_TYPE_CHECKBOX,
+            'display_text' => $this->get_lang('MarkForSpeechAuthentication'),
+            'default_value' => '0',
+            'changeable' => true,
+            'visible_to_self' => true,
+            'visible_to_others' => false,
+        ];
+
+        return $extraField->save($params);
     }
 
     public function uninstall()
@@ -93,6 +107,17 @@ class WhispeakAuthPlugin extends Plugin implements HookPluginInterface
                 ->execute(['field' => $lpItemExtrafield]);
 
             $em->remove($lpItemExtrafield);
+            $em->flush();
+        }
+
+        $quizQuestionExtrafield = self::getQuizQuestionExtraField();
+
+        if (!empty($quizQuestionExtrafield)) {
+            $em
+                ->createQuery('DELETE FROM ChamiloCoreBundle:ExtraFieldValues efv WHERE efv.field = :field')
+                ->execute(['field' => $quizQuestionExtrafield]);
+
+            $em->remove($quizQuestionExtrafield);
             $em->flush();
         }
     }
@@ -145,6 +170,24 @@ class WhispeakAuthPlugin extends Plugin implements HookPluginInterface
     }
 
     /**
+     * @return ExtraField
+     */
+    public static function getQuizQuestionExtraField()
+    {
+        $efRepo = Database::getManager()->getRepository('ChamiloCoreBundle:ExtraField');
+
+        /** @var ExtraField $extraField */
+        $extraField = $efRepo->findOneBy(
+            [
+                'variable' => self::EXTRAFIELD_QUIZ_QUESTION,
+                'extraFieldType' => ExtraField::QUESTION_FIELD_TYPE,
+            ]
+        );
+
+        return $extraField;
+    }
+
+    /**
      * @param int $userId
      *
      * @return ExtraFieldValues
@@ -188,6 +231,37 @@ class WhispeakAuthPlugin extends Plugin implements HookPluginInterface
         }
 
         $value = self::getLpItemValue($lpItemId);
+
+        return !empty($value) && !empty($value['value']);
+    }
+
+    /**
+     * Get the whispeak_quiz_question value for a quiz question ID.
+     *
+     * @param int $questionId
+     *
+     * @return array|false
+     */
+    public static function getQuizQuestionValue($questionId)
+    {
+        $efv = new ExtraFieldValue('question');
+        $value = $efv->get_values_by_handler_and_field_variable($questionId, self::EXTRAFIELD_QUIZ_QUESTION);
+
+        return $value;
+    }
+
+    /**
+     * @param int $questionId
+     *
+     * @return bool
+     */
+    public static function isQuizQuestionMarked($questionId)
+    {
+        if (!self::create()->isEnabled()) {
+            return false;
+        }
+
+        $value = self::getQuizQuestionValue($questionId);
 
         return !empty($value) && !empty($value['value']);
     }

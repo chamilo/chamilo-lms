@@ -2664,11 +2664,11 @@ class learnpath
 
     /**
      * @param array $lpList
-     * @param int $userId
-     * @param int $courseId
-     * @param int $sessionId
+     * @param int   $userId
+     * @param int   $courseId
+     * @param int   $sessionId
      *
-     * @return int
+     * @return array
      */
     public static function getProgressFromLpList($lpList, $userId, $courseId, $sessionId = 0)
     {

@@ -58,7 +58,7 @@ class LearnpathList
 
         // Condition for the session.
         if (!empty($session_id)) {
-            $session_id = intval($session_id);
+            $session_id = (int) $session_id;
         } else {
             $session_id = api_get_session_id();
         }
@@ -72,7 +72,7 @@ class LearnpathList
 
         $tbl_tool = Database::get_course_table(TABLE_TOOL_LIST);
 
-        $order = "ORDER BY lp.displayOrder ASC, lp.name ASC";
+        $order = ' ORDER BY lp.displayOrder ASC, lp.name ASC';
         if (isset($order_by)) {
             $order = Database::parse_conditions(['order' => $order_by]);
         }
@@ -95,7 +95,7 @@ class LearnpathList
                 $categoryId = (int) $categoryId;
                 $categoryFilter = " AND lp.categoryId = $categoryId";
             } else {
-                $categoryFilter = " AND (lp.categoryId = 0 OR lp.categoryId IS NULL) ";
+                $categoryFilter = ' AND (lp.categoryId = 0 OR lp.categoryId IS NULL) ';
             }
         }
 
@@ -111,6 +111,7 @@ class LearnpathList
         $learningPaths = Database::getManager()->createQuery($dql)->getResult();
         $showBlockedPrerequisite = api_get_configuration_value('show_prerequisite_as_blocked');
         $names = [];
+        $isAllowToEdit = api_is_allowed_to_edit();
         /** @var CLp $row */
         foreach ($learningPaths as $row) {
             // Use domesticate here instead of Database::escape_string because
@@ -139,7 +140,7 @@ class LearnpathList
 
             // Check if visible.
             $visibility = api_get_item_visibility(
-                api_get_course_info($course_code),
+                $course_info,
                 'learnpath',
                 $row->getId(),
                 $session_id
@@ -147,7 +148,7 @@ class LearnpathList
 
             // If option is not true then don't show invisible LP to user
             if ($ignoreLpVisibility === false) {
-                if ($showBlockedPrerequisite !== true && !api_is_allowed_to_edit()) {
+                if ($showBlockedPrerequisite !== true && !$isAllowToEdit) {
                     $lpVisibility = learnpath::is_lp_visible_for_student(
                         $row->getId(),
                         $user_id,

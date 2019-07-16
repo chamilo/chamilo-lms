@@ -1592,8 +1592,9 @@ class bbb
     /**
      * @param array $meetingInfo
      * @param array $recordInfo
-     * @param bool $isGlobal
-     * @param bool $isAdminReport
+     * @param bool  $isGlobal
+     * @param bool  $isAdminReport
+     *
      * @return array
      */
     private function getActionLinks(
@@ -1614,7 +1615,7 @@ class bbb
             );
 
         $links = [];
-        if ($this->plugin->get('allow_regenerate_recording') === 'true' && $meetingInfo['status'] == 1) {
+        if ($this->plugin->get('allow_regenerate_recording') === 'true' && $meetingInfo['record'] == 1) {
             if (!empty($recordInfo)) {
                 $links[] = Display::url(
                     Display::return_icon('reload.png', get_lang('RegenerateRecord')),

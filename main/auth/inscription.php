@@ -854,7 +854,7 @@ if ($form->validate()) {
 
                 $emailbody .= get_lang('ManageUser').": $url_edit";
 
-                if (api_get_configuration_value('send_inscription_notification_to_general_admin_only'))  {
+                if (api_get_configuration_value('send_inscription_notification_to_general_admin_only')) {
                     $email = api_get_setting('emailAdministrator');
                     $firtname = api_get_setting('administratorSurname');
                     $lastname = api_get_setting('administratorName');

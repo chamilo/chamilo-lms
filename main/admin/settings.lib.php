@@ -1130,10 +1130,9 @@ function addEditTemplate()
     );
 
     // Setting the form elements: the form to upload an image to be used with the template.
-    if(empty($template->getImage())){
+    if (empty($template->getImage())) {
         $form->addElement('file', 'template_image', get_lang('Image'), '');
     }
-
 
     // Setting the form elements: a little bit information about the template image.
     $form->addElement('static', 'file_comment', '', get_lang('TemplateImageComment100x70'));
@@ -1161,7 +1160,7 @@ function addEditTemplate()
                     .'" alt="'.get_lang('TemplatePreview')
                     .'"/>'
             );
-            $form->addCheckBox('delete_image',null, get_lang('DeletePicture'));
+            $form->addCheckBox('delete_image', null, get_lang('DeletePicture'));
         } else {
             $form->addElement(
                 'static',
@@ -1178,7 +1177,7 @@ function addEditTemplate()
     $form->addButtonSave(get_lang('Ok'), 'submit');
 
     // Setting the rules: the required fields.
-    if(empty($template->getImage())) {
+    if (empty($template->getImage())) {
         $form->addRule(
             'template_image',
             get_lang('ThisFieldIsRequired'),
@@ -1196,7 +1195,7 @@ function addEditTemplate()
             // Exporting the values.
             $values = $form->exportValues();
             $isDelete = null;
-            if(isset($values['delete_image'])){
+            if (isset($values['delete_image'])) {
                 $isDelete = $values['delete_image'];
             }
 
@@ -1227,7 +1226,6 @@ function addEditTemplate()
                     $temp->send_image($upload_dir.$new_file_name);
                 }
             }
-
 
             // Store the information in the database (as insert or as update).
             //$bootstrap = api_get_css(api_get_path(WEB_PUBLIC_PATH).'assets/bootstrap/dist/css/bootstrap.min.css');
@@ -1260,7 +1258,7 @@ function addEditTemplate()
                     ->setContent(Security::remove_XSS($templateContent, COURSEMANAGERLOWSECURITY));
 
                 if ($isDelete) {
-                    $filePath = api_get_path(SYS_APP_PATH) . 'home/default_platform_document/template_thumb/' . $template->getImage();
+                    $filePath = api_get_path(SYS_APP_PATH).'home/default_platform_document/template_thumb/'.$template->getImage();
                     if (file_exists($filePath)) {
                         unlink($filePath);
                     }

@@ -3750,7 +3750,7 @@ class CourseManager
             $sql .= " AND access_url_id = $current_url_id";
         }
         // Use user's classification for courses (if any).
-        $sql .= " ORDER BY course_rel_user.user_course_cat, course_rel_user.sort ASC";
+        $sql .= ' ORDER BY course_rel_user.user_course_cat, course_rel_user.sort ASC';
         $result = Database::query($sql);
 
         $showCustomIcon = api_get_setting('course_images_in_courses_list');
@@ -3866,6 +3866,7 @@ class CourseManager
             $params['category'] = $course_info['categoryName'];
             $params['category_code'] = $course_info['categoryCode'];
             $params['teachers'] = $teachers;
+            $params['real_id'] = $course_info['real_id'];
 
             if ($course_info['visibility'] != COURSE_VISIBILITY_CLOSED) {
                 $params['notifications'] = $showNotification;

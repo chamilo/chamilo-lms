@@ -30,9 +30,8 @@ if (!$is_allowedToTrack) {
 // the section (for the tabs)
 $this_section = SECTION_TRACKING;
 
-/* MAIN */
-$user_id = intval($_REQUEST['student']);
-$session_id = intval($_GET['id_session']);
+$user_id = isset($_REQUEST['student']) ? (int) $_REQUEST['student'] : 0;
+$session_id = (int) $_GET['id_session'];
 $type = isset($_REQUEST['type']) ? Security::remove_XSS($_REQUEST['type']) : '';
 $course_code = isset($_REQUEST['course']) ? Security::remove_XSS($_REQUEST['course']) : '';
 $courseInfo = api_get_course_info($course_code);
@@ -127,10 +126,9 @@ $(function() {
 });
 </script>';
 
-//Changes END
 $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('AccessDetails')];
 
-Display :: display_header('');
+Display::display_header('');
 $userInfo = api_get_user_info($user_id);
 $result_to_print = '';
 $sql_result = MySpace::get_connections_to_course($user_id, $courseInfo);
@@ -178,4 +176,4 @@ $form->display();
 </div>
 
 <?php
-Display:: display_footer();
+Display::display_footer();

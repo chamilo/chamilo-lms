@@ -377,9 +377,7 @@ switch ($action) {
             $sessionInfo['name']
         ));
         $tpl->assign('table_course', $courseTable);
-        $template = $tpl->fetch($tpl->get_template('my_space/pdf_export_student.tpl'));
-
-        $content = ''.$template;
+        $content = $tpl->fetch($tpl->get_template('my_space/pdf_export_student.tpl'));
 
         $params = [
             'pdf_title' => get_lang('Resume'),
@@ -392,38 +390,21 @@ switch ($action) {
             'show_teacher_as_myself' => false,
             'orientation' => 'P',
         ];
-
         $pdf = new PDF('A4', $params['orientation'], $params);
+
         try {
-            $theme = $tpl->theme;
-            $themeName = empty($theme) ? api_get_visual_theme() : $theme;
-            $themeDir = \Template::getThemeDir($theme);
-            $customLetterhead = $themeDir.'images/letterhead.png';
-            $urlPathLetterhead = api_get_path(SYS_CSS_PATH).$customLetterhead;
-
-            $urlWebLetterhead = '#FFFFFF';
-            $fullPage = false;
-            if (file_exists($urlPathLetterhead)) {
-                $fullPage = true;
-                $urlWebLetterhead = 'url('.api_get_path(WEB_CSS_PATH).$customLetterhead.')';
-            }
-
-            if ($fullPage) {
-                $pdf->pdf->SetDisplayMode('fullpage');
-                $pdf->pdf->SetDefaultBodyCSS('background', $urlWebLetterhead);
-                $pdf->pdf->SetDefaultBodyCSS('background-image-resize', '6');
-            }
-
-            @$pdf->content_to_pdf($content,
-                $css = '',
-                $pdf_name = '',
-                $course_code = null,
-                $outputMode = 'D',
-                $saveInFile = false,
-                $fileToSave = null,
-                $returnHtml = false,
-                $addDefaultCss = true,
-                $completeHeader = false
+            $pdf->setBackground($tpl->theme);
+            @$pdf->content_to_pdf(
+                $content,
+                '',
+                '',
+                null,
+                'D',
+                false,
+                null,
+                false,
+                true,
+                false
             );
         } catch (MpdfException $e) {
             error_log($e);
@@ -682,6 +663,11 @@ echo '<a href="'.api_get_self().'?'.Security::remove_XSS($_SERVER['QUERY_STRING'
 
 echo '<a href="'.api_get_self().'?'.Security::remove_XSS($_SERVER['QUERY_STRING']).'&export=xls">'
     .Display::return_icon('export_excel.png', get_lang('ExportAsXLS'), '', ICON_SIZE_MEDIUM).'</a> ';
+
+echo Display::url(
+    Display::return_icon('export.png', get_lang('Export'), '', ICON_SIZE_MEDIUM),
+    api_get_path(WEB_CODE_PATH).'mySpace/access_details_session.php?user_id='.$student_id
+);
 
 if (!empty($user_info['email'])) {
     $send_mail = '<a href="mailto:'.$user_info['email'].'">'.

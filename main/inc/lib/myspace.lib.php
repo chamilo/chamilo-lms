@@ -2992,6 +2992,7 @@ class MySpace
                 $connections[] = [
                     'login' => $row['login_course_date'],
                     'logout' => $row['logout_course_date'],
+                    'duration' => $row['duration'],
                 ];
             }
         }

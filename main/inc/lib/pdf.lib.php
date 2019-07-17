@@ -990,4 +990,30 @@ class PDF
 
         return $doc->saveHTML();
     }
+
+    /**
+     * @param string $theme
+     *
+     * @throws MpdfException
+     */
+    public function setBackground($theme)
+    {
+        $themeName = empty($theme) ? api_get_visual_theme() : $theme;
+        $themeDir = \Template::getThemeDir($themeName);
+        $customLetterhead = $themeDir.'images/letterhead.png';
+        $urlPathLetterhead = api_get_path(SYS_CSS_PATH).$customLetterhead;
+
+        $urlWebLetterhead = '#FFFFFF';
+        $fullPage = false;
+        if (file_exists($urlPathLetterhead)) {
+            $fullPage = true;
+            $urlWebLetterhead = 'url('.api_get_path(WEB_CSS_PATH).$customLetterhead.')';
+        }
+
+        if ($fullPage) {
+            $this->pdf->SetDisplayMode('fullpage');
+            $this->pdf->SetDefaultBodyCSS('background', $urlWebLetterhead);
+            $this->pdf->SetDefaultBodyCSS('background-image-resize', '6');
+        }
+    }
 }

@@ -8410,4 +8410,8 @@ $AllowHtaccessScormImport = "Allow htaccess in the SCORM import";
 $ExerciseAutoEvaluationAndRankingMode = "Auto-evaluation mode and ranking";
 $YouAreReceivingACopyBecauseYouAreACourseCoach = "You're receiving a copy because, you're a course coach";
 $GenerateReport = "Generate report";
+$VersionFromVersionFile = "Version from the version file";
+$VersionFromConfigFile = "Version from the config file";
+$TheVersionFromTheVersionFileIsUpdatedWithEachVersionIfMainInstallDirectoryIsPresent = "The version from the version.php file is updated with each version but only available if the main/install/ directory is present.";
+$TheVersionFromTheConfigurationFileShowsOnTheAdminPageButHasToBeChangedManuallyOnUpgrade = "The version from the main configuration file shows on the main administration page, but has to be changed manually on upgrade.";
 ?>

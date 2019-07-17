@@ -138,7 +138,8 @@ class BigBlueButtonBN
 		return ( $creationUrl.$params.'&checksum='.sha1("create".$params.$this->_securitySalt) );
 	}
 
-	public function createMeetingWithXmlResponseArray($creationParams) {
+	public function createMeetingWithXmlResponseArray($creationParams)
+    {
 		/*
 		USAGE:
 		$creationParams = array(
@@ -160,27 +161,28 @@ class BigBlueButtonBN
 		$xml = $this->_processXmlResponse($this->getCreateMeetingURL($creationParams));
 
         if ($xml) {
-			if($xml->meetingID)
-				return array(
-					'returncode' => $xml->returncode->__toString(),
-					'message' => $xml->message->__toString(),
-					'messageKey' => $xml->messageKey->__toString(),
-					'meetingId' => $xml->meetingID->__toString(),
-					'attendeePw' => $xml->attendeePW->__toString(),
-					'moderatorPw' => $xml->moderatorPW->__toString(),
-					'hasBeenForciblyEnded' => $xml->hasBeenForciblyEnded->__toString(),
-					'createTime' => $xml->createTime->__toString()
-					);
-			else
-				return array(
-					'returncode' => $xml->returncode->__toString(),
-					'message' => $xml->message->__toString(),
-					'messageKey' => $xml->messageKey->__toString()
-					);
-		}
-		else {
-			return null;
-		}
+            if ($xml->meetingID) {
+                return array(
+                    'returncode' => $xml->returncode->__toString(),
+                    'message' => $xml->message->__toString(),
+                    'messageKey' => $xml->messageKey->__toString(),
+                    'meetingId' => $xml->meetingID->__toString(),
+                    'attendeePw' => $xml->attendeePW->__toString(),
+                    'moderatorPw' => $xml->moderatorPW->__toString(),
+                    'hasBeenForciblyEnded' => $xml->hasBeenForciblyEnded->__toString(),
+                    'createTime' => $xml->createTime->__toString(),
+                    'internalMeetingID' => $xml->internalMeetingID->__toString()
+                );
+            } else {
+                return array(
+                    'returncode' => $xml->returncode->__toString(),
+                    'message' => $xml->message->__toString(),
+                    'messageKey' => $xml->messageKey->__toString(),
+                );
+            }
+        } else {
+            return null;
+        }
 	}
 
 	public function getJoinMeetingURL($joinParams) {

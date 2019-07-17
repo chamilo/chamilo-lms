@@ -357,7 +357,7 @@ class bbb
             $meetingName = isset($params['meeting_name']) ? $params['meeting_name'] : $this->getCurrentVideoConferenceName();
             $welcomeMessage = isset($params['welcome_msg']) ? $params['welcome_msg'] : null;
             $record = isset($params['record']) && $params['record'] ? 'true' : 'false';
-            $duration = isset($params['duration']) ? intval($params['duration']) : 0;
+            //$duration = isset($params['duration']) ? intval($params['duration']) : 0;
             // This setting currently limits the maximum conference duration,
             // to avoid lingering sessions on the video-conference server #6261
             $duration = 300;
@@ -377,31 +377,23 @@ class bbb
                 //'meta_category' => '', 				// Use to pass additional info to BBB server. See API docs.
             );
 
-            if ($this->debug) {
-                error_log("create_meeting params: ".print_r($bbbParams, 1));
-            }
-
             $status = false;
             $meeting = null;
-
             while ($status === false) {
-                $result = $this->api->createMeetingWithXmlResponseArray(
-                    $bbbParams
-                );
+                $result = $this->api->createMeetingWithXmlResponseArray($bbbParams);
                 if (isset($result) && strval($result['returncode']) == 'SUCCESS') {
-                    if ($this->debug) {
-                        error_log(
-                            "create_meeting result: ".print_r($result, 1)
-                        );
+                    if ($this->plugin->get('allow_regenerate_recording') === 'true') {
+                        $sql = "UPDATE $this->table SET internal_meeting_id = '".$result['internalMeetingID']."' 
+                                WHERE id = $id";
+                        Database::query($sql);
                     }
                     $meeting = $this->joinMeeting($meetingName, true);
 
                     return $meeting;
                 }
             }
-
-            return false;
         }
+
         return false;
     }
 
@@ -827,7 +819,7 @@ class bbb
                     $recordLink = Display::url(
                         $this->plugin->get_lang('ViewRecord'),
                         $record['playbackFormatUrl'],
-                        ['target' => '_blank']
+                        ['target' => '_blank', 'class' => 'btn btn-default']
                     );
                 } else {
                     $recordLink = $this->plugin->get_lang('NoRecording');
@@ -1140,13 +1132,15 @@ class bbb
         // Check if there are recordings for this meeting
         $recordings = $this->api->getRecordings(['meetingId' => $meetingData['remote_id']]);
         if (!empty($recordings) && isset($recordings['messageKey']) && $recordings['messageKey'] === 'noRecordings') {
-            // we regenerate the meeting id
-            $pass = $this->getModMeetingPassword();
+            // Regenerate the meeting id
+            if (!empty($meetingData['internal_meeting_id'])) {
+                return $this->api->generateRecording(['recordId' => $meetingData['internal_meeting_id']]);
+            }
+            /*$pass = $this->getModMeetingPassword();
             $info = $this->getMeetingInfo(['meetingId' => $meetingData['remote_id'], 'password' => $pass]);
             if (!empty($info) && isset($info['internalMeetingID'])) {
-                return $this->api->generateRecording(['recordId' => $info['internalMeetingID']]);
-            }
-
+                return $this->api->generateRecording(['recordId' => $meetingData['internal_meeting_id']]);
+            }*/
             return false;
         } else {
             if (!empty($recordings['records'])) {

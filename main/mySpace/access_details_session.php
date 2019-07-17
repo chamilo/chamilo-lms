@@ -191,19 +191,9 @@ if ($form->validate()) {
         true,
         false
     );
-
-
     exit;
 }
-$htmlHeadXtra[] = "<script>
-$(function() {
-    var dates = $('#date_from, #date_to').datepicker({
-        dateFormat: ".$quote_simple."yy-mm-dd".$quote_simple.",
-        changeMonth: true,
-        changeYear: true
-    });
-});
-</script>";
+
 
 $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('AccessDetails')];
 

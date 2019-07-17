@@ -199,6 +199,7 @@ function WSGetGradebookUserItemScore($params)
 
     if (!empty($score)) {
         $result = ExerciseLib::show_score($score[0], $score[1], false);
+        $result = strip_tags($result);
 
         return ['score' => $result, 'date' => $score[2], 'counter' => $score[3]];
     }

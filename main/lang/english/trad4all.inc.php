@@ -8409,4 +8409,5 @@ $LoginsByDate = "Logins by date";
 $AllowHtaccessScormImport = "Allow htaccess in the SCORM import";
 $ExerciseAutoEvaluationAndRankingMode = "Auto-evaluation mode and ranking";
 $YouAreReceivingACopyBecauseYouAreACourseCoach = "You're receiving a copy because, you're a course coach";
+$GenerateReport = "Generate report";
 ?>

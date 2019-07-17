@@ -8337,4 +8337,5 @@ $Candidate = "Candidat";
 $GeneralTotal = "Total général";
 $Domains = "Domaines";
 $ScormStartAttemptDate = "Date";
+$GenerateReport = "Générer le rapport";
 ?>

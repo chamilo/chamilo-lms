@@ -184,6 +184,7 @@ class UserManager
      * @param FormValidator $form
      * @param int           $creatorId
      * @param array         $emailTemplate
+     * @param string        $redirectToURLAfterLogin
      *
      * @return mixed new user id - if the new user creation succeeds, false otherwise
      * @desc The function tries to retrieve user id from the session.
@@ -214,7 +215,8 @@ class UserManager
         $sendEmailToAllAdmins = false,
         $form = null,
         $creatorId = 0,
-        $emailTemplate = []
+        $emailTemplate = [],
+        $redirectToURLAfterLogin = ''
     ) {
         $creatorId = empty($creatorId) ? api_get_user_id() : 0;
         $hook = HookCreateUser::create();
@@ -418,6 +420,10 @@ class UserManager
                 'already_logged_in',
                 'false'
             );
+
+            if (api_get_configuration_value('plugin_redirection_enabled') && !empty($redirectToURLAfterLogin)) {
+                RedirectionPlugin::insert($userId, $redirectToURLAfterLogin);
+            }
 
             if (!empty($email) && $send_mail) {
                 $recipient_name = api_get_person_name(
@@ -798,6 +804,10 @@ class UserManager
         $sql = "DELETE FROM $table_session_user
                 WHERE user_id = '".$user_id."'";
         Database::query($sql);
+
+        if (api_get_configuration_value('plugin_redirection_enabled')) {
+            RedirectionPlugin::deleteUserRedirection($user_id);
+        }
 
         // Delete user picture
         /* TODO: Logic about api_get_setting('split_users_upload_directory') == 'true'

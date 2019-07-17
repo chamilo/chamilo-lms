@@ -74,7 +74,7 @@ $form->addElement('text', 'to', get_lang('Until'), ['id' => 'date_to']);
 $form->addElement('hidden', 'user_id', $userId);
 $form->addRule('from', get_lang('ThisFieldIsRequired'), 'required');
 $form->addRule('to', get_lang('ThisFieldIsRequired'), 'required');
-$form->addButtonSearch(get_lang('Search'));
+$form->addButtonSearch(get_lang('GenerateReport'));
 
 if ($form->validate()) {
     $values = $form->getSubmitValues();

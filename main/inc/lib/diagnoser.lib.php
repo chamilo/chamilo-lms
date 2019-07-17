@@ -222,6 +222,31 @@ class Diagnoser
                 $message2
             );
         }
+        $new_version = '-';
+        $file = api_get_path(SYS_CODE_PATH).'install/version.php';
+        if (is_file($file)) {
+            @include($file);
+        }
+        $array[] = $this->build_setting(
+            $status,
+            '[CONFIG]',
+            get_lang('VersionFromVersionFile'),
+            '#',
+            $new_version,
+            '-',
+            null,
+            get_lang('TheVersionFromTheVersionFileIsUpdatedWithEachVersionIfMainInstallDirectoryIsPresent')
+        );
+        $array[] = $this->build_setting(
+            $status,
+            '[CONFIG]',
+            get_lang('VersionFromConfigFile'),
+            '#',
+            api_get_configuration_value('system_version'),
+            $new_version,
+            null,
+            get_lang('TheVersionFromTheConfigurationFileShowsOnTheAdminPageButHasToBeChangedManuallyOnUpgrade')
+        );
 
         return $array;
     }

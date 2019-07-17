@@ -8337,4 +8337,13 @@ $Candidate = "Candidat";
 $GeneralTotal = "Total général";
 $Domains = "Domaines";
 $ScormStartAttemptDate = "Date";
+$LoginsByDate = "Logins par date";
+$AllowHtaccessScormImport = "Permettre les fichiers htaccess dans les imports SCORM";
+$ExerciseAutoEvaluationAndRankingMode = "Mode auto-évaluation et ranking: Montrer seulement la note globale (pas le détail de chaque question) et montrer la réponse correcte et la réponse sélectionnée par l'apprenant, tout en montrant la table de classification";
+$YouAreReceivingACopyBecauseYouAreACourseCoach = "Vous recevez cette copie en tant que tuteur de ce cours";
+$GenerateReport = "Générer le rapport";
+$VersionFromVersionFile = "Version du fichier de version";
+$VersionFromConfigFile = "Version du fichier de configuration";
+$TheVersionFromTheVersionFileIsUpdatedWithEachVersionIfMainInstallDirectoryIsPresent = "La version du fichier version.php est mise à jour à chaque nouvelle version installée, mais n'est disponible que si le répertoire main/install/ est présent sur le disque.";
+$TheVersionFromTheConfigurationFileShowsOnTheAdminPageButHasToBeChangedManuallyOnUpgrade = "La version du fichier de configuration principal s'affiche sur la page principale d'administration, mais doit être modifiée manuellement à chaque mise à jour.";
 ?>

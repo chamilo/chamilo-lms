@@ -88,7 +88,7 @@ class RedirectionPlugin extends Plugin
     }
 
     /**
-     * Deletes redirection from user
+     * Deletes redirection from user.
      *
      * @param int $userId
      */

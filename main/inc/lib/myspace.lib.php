@@ -656,6 +656,7 @@ class MySpace
 
     /**
      * Display a sortable table that contains an overview off all the progress of the user in a session.
+     *
      * @deprecated ?
      *
      * @author César Perales <cesar.perales@beeznest.com>, Beeznest Team

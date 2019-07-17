@@ -163,20 +163,20 @@ class UserManager
      *
      * @param string        $firstName
      * @param string        $lastName
-     * @param int           $status               (1 for course tutor, 5 for student, 6 for anonymous)
+     * @param int           $status                  (1 for course tutor, 5 for student, 6 for anonymous)
      * @param string        $email
      * @param string        $loginName
      * @param string        $password
-     * @param string        $official_code        Any official code (optional)
-     * @param string        $language             User language    (optional)
-     * @param string        $phone                Phone number    (optional)
-     * @param string        $picture_uri          Picture URI        (optional)
-     * @param string        $authSource           Authentication source (defaults to 'platform', dependind on constant)
-     * @param string        $expirationDate       Account expiration date (optional, defaults to null)
-     * @param int           $active               Whether the account is enabled or disabled by default
-     * @param int           $hr_dept_id           The department of HR in which the user is registered (defaults to 0)
-     * @param array         $extra                Extra fields
-     * @param string        $encrypt_method       Used if password is given encrypted. Set to an empty string by default
+     * @param string        $official_code           Any official code (optional)
+     * @param string        $language                User language    (optional)
+     * @param string        $phone                   Phone number    (optional)
+     * @param string        $picture_uri             Picture URI        (optional)
+     * @param string        $authSource              Authentication source (defaults to 'platform', dependind on constant)
+     * @param string        $expirationDate          Account expiration date (optional, defaults to null)
+     * @param int           $active                  Whether the account is enabled or disabled by default
+     * @param int           $hr_dept_id              The department of HR in which the user is registered (defaults to 0)
+     * @param array         $extra                   Extra fields
+     * @param string        $encrypt_method          Used if password is given encrypted. Set to an empty string by default
      * @param bool          $send_mail
      * @param bool          $isAdmin
      * @param string        $address

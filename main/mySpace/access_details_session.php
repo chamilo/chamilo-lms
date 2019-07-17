@@ -100,7 +100,7 @@ if ($form->validate()) {
 
                 foreach ($result as $item) {
                     $record = [
-                        $courseInfo['name'],
+                        $courseInfo['title'],
                         $session['session_name'],
                         api_get_local_time($item['login']),
                         api_get_local_time($item['logout']),
@@ -126,7 +126,7 @@ if ($form->validate()) {
 
         foreach ($result as $item) {
             $record = [
-                $courseInfo['name'],
+                $course['title'],
                 '',
                 api_get_local_time($item['login']),
                 api_get_local_time($item['logout']),

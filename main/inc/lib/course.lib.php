@@ -3759,6 +3759,9 @@ class CourseManager
         $courseList = [];
         while ($row = Database::fetch_array($result)) {
             $course_info = api_get_course_info_by_id($row['id']);
+            if (empty($course_info)) {
+                continue;
+            }
 
             if (isset($course_info['visibility']) &&
                 $course_info['visibility'] == COURSE_VISIBILITY_HIDDEN
@@ -3844,7 +3847,7 @@ class CourseManager
             }
 
             $params['status'] = $row['status'];
-            if (api_get_setting('display_coursecode_in_courselist') == 'true') {
+            if (api_get_setting('display_coursecode_in_courselist') === 'true') {
                 $params['code_course'] = '('.$course_info['visual_code'].') ';
             }
 

@@ -256,7 +256,7 @@ function WSGetGradebookCategoryUserScore($params)
     if (!empty($sessionId)) {
         $sessionInfo = api_get_session_info($sessionId);
         if (empty($sessionInfo)) {
-            return 'Session not found';
+            return new soap_fault('Server', '', 'Session not found');
         }
     }
 
@@ -289,12 +289,15 @@ function WSGetGradebookCategoryUserScore($params)
         $category = isset($categoryCourse[0]) ? $categoryCourse[0] : null;
         $allevals = $category->get_evaluations($userId, true);
         $alllinks = $category->get_links($userId, true);
+
         $allEvalsLinks = array_merge($allevals, $alllinks);
         $main_weight = $category->get_weight();
         $scoredisplay = ScoreDisplay::instance();
         $item_value_total = 0;
-        for ($count = 0; $count < count($allEvalsLinks); $count++) {
-            $item = $allEvalsLinks[$count];
+        /** @var AbstractLink $item */
+        foreach ($allEvalsLinks as $item) {
+            $item->set_session_id($sessionId);
+            $item->set_course_code($courseCode);
             $score = $item->calc_score($userId);
             if (!empty($score)) {
                 $divide = $score[1] == 0 ? 1 : $score[1];
@@ -305,9 +308,10 @@ function WSGetGradebookCategoryUserScore($params)
 
         $item_total = $main_weight;
         $total_score = [$item_value_total, $item_total];
-        $scorecourse_display = $scoredisplay->display_score($total_score, SCORE_DIV_PERCENT);
+        $score = $scoredisplay->display_score($total_score, SCORE_DIV_PERCENT);
+        $score = strip_tags($score);
 
-        return $scorecourse_display;
+        return $score;
     }
 
     if (empty($category)) {

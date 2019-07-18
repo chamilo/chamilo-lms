@@ -568,6 +568,8 @@ class Version20 extends AbstractMigrationChamilo
             );
         }
 
+        $this->addSql('ALTER TABLE c_quiz MODIFY COLUMN save_correct_answers INT NULL DEFAULT NULL');
+
         $table = $schema->getTable('c_lp_item_view');
         if ($table->hasIndex('idx_c_lp_item_view_cid_id_view_count') == false) {
             $this->addSql(

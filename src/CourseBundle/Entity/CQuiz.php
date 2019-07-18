@@ -155,8 +155,9 @@ class CQuiz
     protected $propagateNeg;
 
     /**
-     * @var bool
-     * @ORm\Column(name="save_correct_answers", type="boolean", nullable=false)
+     * @var int
+     *
+     * @ORm\Column(name="save_correct_answers", type="integer", nullable=true)
      */
     protected $saveCorrectAnswers;
 
@@ -633,7 +634,7 @@ class CQuiz
     }
 
     /**
-     * @param $saveCorrectAnswers boolean
+     * @param int $saveCorrectAnswers
      *
      * @return CQuiz
      */
@@ -645,7 +646,7 @@ class CQuiz
     }
 
     /**
-     * @return bool
+     * @return int
      */
     public function getSaveCorrectAnswers()
     {

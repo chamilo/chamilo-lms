@@ -15,11 +15,23 @@ $userId = ChamiloSession::read(WhispeakAuthPlugin::SESSION_2FA_USER, 0) ?: api_g
 $lpItemInfo = ChamiloSession::read(WhispeakAuthPlugin::SESSION_LP_ITEM, []);
 /** @var learnpath $oLp */
 $oLp = ChamiloSession::read('oLP', null);
+/** @var array $lpQuestionInfo */
+$lpQuestionInfo = ChamiloSession::read(WhispeakAuthPlugin::SESSION_QUIZ_QUESTION, []);
 
-$showHeader = empty($lpItemInfo) || empty($oLp);
+$showHeader = (empty($lpItemInfo) && empty($oLp)) && empty($lpQuestionInfo);
 
 if (empty($userId)) {
     api_not_allowed($showHeader);
+}
+
+if (empty($wsid)) {
+    $message = Display::return_message($plugin->get_lang('SpeechAuthNotEnrolled'), 'warning');
+
+    if (!empty($lpQuestionInfo)) {
+        echo $message;
+    } else {
+        Display::addFlash($message);
+    }
 }
 
 $form = new FormValidator(
@@ -51,6 +63,12 @@ $template = new Template(
 $template->assign('form', $form->returnForm());
 
 $content = $template->fetch('whispeakauth/view/authentify_password.html.twig');
+
+if (!empty($lpQuestionInfo)) {
+    echo $content;
+
+    exit;
+}
 
 $template->assign('header', $plugin->get_title());
 $template->assign('content', $content);

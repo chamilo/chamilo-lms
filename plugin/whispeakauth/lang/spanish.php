@@ -37,6 +37,7 @@ $strings['AuthentifySuccess'] = '¡Autenticación correcta!';
 $strings['TryAgain'] = 'Intente de nuevo.';
 $strings['MaxAttemptsReached'] = 'Ha alcanzado el número máximo de intentos permitidos.';
 $strings['LoginWithUsernameAndPassword'] = 'Debe iniciar sesión usando su nombre de usuario y contraseña.';
+$strings['PleaseWaitWhileLoading'] = "Por favor, espere mientras dure la carga...";
 
 $strings['AudioQualityShort'] = 'Audio demasiado corto';
 $strings['AudioQualityQuiet'] = 'Audio demasiado silencioso';

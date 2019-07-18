@@ -23,6 +23,8 @@ class WhispeakAuthPlugin extends Plugin implements HookPluginInterface
     const SESSION_FAILED_LOGINS = 'whispeak_failed_logins';
     const SESSION_2FA_USER = 'whispeak_user_id';
     const SESSION_LP_ITEM = 'whispeak_lp_item';
+    const SESSION_QUIZ_QUESTION = 'whispeak_quiz_question';
+    const SESSION_AUTH_PASSWORD = 'whispeak_auth_password';
 
     /**
      * StudentFollowUpPlugin constructor.
@@ -264,6 +266,38 @@ class WhispeakAuthPlugin extends Plugin implements HookPluginInterface
         $value = self::getQuizQuestionValue($questionId);
 
         return !empty($value) && !empty($value['value']);
+    }
+
+    /**
+     * @param int $questionId
+     *
+     * @return bool
+     */
+    public static function questionRequireAuthentify($questionId)
+    {
+        $isMarked = self::isQuizQuestionMarked($questionId);
+
+        if (!$isMarked) {
+            return false;
+        }
+
+        $questionInfo = ChamiloSession::read(WhispeakAuthPlugin::SESSION_QUIZ_QUESTION, []);
+
+        if (empty($questionInfo)) {
+            return true;
+        }
+
+        if ((int) $questionId !== $questionInfo['question']) {
+            return true;
+        }
+
+        if (false === $questionInfo['passed']) {
+            return true;
+        }
+
+        ChamiloSession::erase(WhispeakAuthPlugin::SESSION_QUIZ_QUESTION);
+
+        return false;
     }
 
     /**
@@ -805,5 +839,33 @@ class WhispeakAuthPlugin extends Plugin implements HookPluginInterface
         echo Display::return_message(get_lang('NotAllowed'), 'error', false);
 
         exit;
+    }
+
+    /**
+     * @param int      $questionId
+     * @param Exercise $exercise
+     *
+     * @throws Exception
+     *
+     * @return string
+     */
+    public static function quizQuestionAuthentify($questionId, Exercise $exercise)
+    {
+        ChamiloSession::write(
+            self::SESSION_QUIZ_QUESTION,
+            [
+                'exercise' => (int) $exercise->iId,
+                'question' => (int) $questionId,
+                'url_params' => $_SERVER['QUERY_STRING'],
+                'passed' => false,
+            ]
+        );
+
+        $template = new Template('', false, false, false, true, false, false);
+        $template->assign('question', $questionId);
+        $template->assign('exercise', $exercise->iId);
+        $content = $template->fetch('whispeakauth/view/quiz_question.html.twig');
+
+        echo $content;
     }
 }

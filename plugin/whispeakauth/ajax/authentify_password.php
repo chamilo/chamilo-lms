@@ -74,14 +74,31 @@ if (!$isValidPassword || !$isActive || !$isExpired) {
 }
 
 if ($userPass) {
+    $url = '';
+
     /** @var array $lpItemInfo */
     $lpItemInfo = ChamiloSession::read(WhispeakAuthPlugin::SESSION_LP_ITEM, []);
+    $quizQuestionInfo = ChamiloSession::read(WhispeakAuthPlugin::SESSION_QUIZ_QUESTION, []);
 
     ChamiloSession::erase(WhispeakAuthPlugin::SESSION_FAILED_LOGINS);
-    ChamiloSession::erase(WhispeakAuthPlugin::SESSION_LP_ITEM);
     ChamiloSession::erase(WhispeakAuthPlugin::SESSION_2FA_USER);
 
-    echo '<script>window.setTimeout(function () {
-            window.location.href = "'.$lpItemInfo['src'].'";
-        }, 1500);</script>';
+    if ($lpItemInfo) {
+        ChamiloSession::erase(WhispeakAuthPlugin::SESSION_LP_ITEM);
+
+        $url = $lpItemInfo['src'];
+    } elseif ($quizQuestionInfo) {
+        $quizQuestionInfo['passed'] = true;
+        $url = api_get_path(WEB_CODE_PATH).'exercise/exercise_submit.php?'.$quizQuestionInfo['url_params'];
+
+        ChamiloSession::write(WhispeakAuthPlugin::SESSION_QUIZ_QUESTION, $quizQuestionInfo);
+    }
+
+    if (!empty($url)) {
+        echo '
+            <script>window.setTimeout(function () {
+                window.location.href = "'.$url.'";
+            }, 1500);</script>
+        ';
+    }
 }

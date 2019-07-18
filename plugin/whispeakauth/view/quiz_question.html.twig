@@ -1,0 +1,45 @@
+<div class="text-center">
+    <p>Necesita identificarse para responder esta pregunta.</p>
+
+    <button type="button" class="btn btn-info" id="whispeak-question-{{ question }}" data-loading-text="{{ 'PleaseWaitWhileLoading'|get_plugin_lang('WhispeakAuthPlugin') }}">
+        Identificarme
+    </button>
+</div>
+
+<script>
+    $(function () {
+        function loadAuth() {
+            var $btnTrigger = $('#whispeak-question-{{ question }}'),
+                originalText = $btnTrigger.text(),
+                $modal = $('#global-modal'),
+                $modalTitle = $modal.find('.modal-title'),
+                $modalBody = $modal.find('.modal-body');
+
+            $btnTrigger.text($btnTrigger.data('loading-text')).prop('disabled', true);
+
+            $modalTitle.text('{{ 'PleaseWaitWhileLoading'|get_plugin_lang('WhispeakAuthPlugin') }}');
+            $modalBody.html('');
+            $modal.modal('show');
+
+            $
+                .ajax({
+                    url: _p.web_plugin + 'whispeakauth/authentify.php'
+                })
+                .then(function (response) {
+                    console.log(response);
+                    $modalBody.html(response);
+
+                    $modalTitle.text('{{ 'plugin_title'|get_plugin_lang('WhispeakAuthPlugin') }}');
+                    $btnTrigger.text(originalText).prop('disabled', false);
+                });
+        }
+
+        $('#whispeak-question-{{ question }}').on('click', function (e) {
+            e.preventDefault();
+
+            loadAuth();
+        });
+
+        loadAuth();
+    });
+</script>

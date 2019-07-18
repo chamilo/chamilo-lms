@@ -16,16 +16,41 @@ $showForm = !$userId;
 $lpItemInfo = ChamiloSession::read(WhispeakAuthPlugin::SESSION_LP_ITEM, []);
 /** @var learnpath $oLp */
 $oLp = ChamiloSession::read('oLP', null);
+$lpQuestionInfo = ChamiloSession::read(WhispeakAuthPlugin::SESSION_QUIZ_QUESTION, []);
 
-$showHeader = empty($lpItemInfo) || empty($oLp);
+$showHeader = (empty($lpItemInfo) && empty($oLp)) && empty($lpQuestionInfo);
+
+if (ChamiloSession::read(WhispeakAuthPlugin::SESSION_AUTH_PASSWORD, false)) {
+    ChamiloSession::erase(WhispeakAuthPlugin::SESSION_AUTH_PASSWORD);
+
+    $message = Display::return_message(
+        $plugin->get_lang('MaxAttemptsReached').'<br>'
+        .'<strong>'.$plugin->get_lang('LoginWithUsernameAndPassword').'</strong>',
+        'warning'
+    );
+
+    if (!empty($lpQuestionInfo)) {
+        echo $message;
+    } else {
+        Display::addFlash($message);
+    }
+
+    header('Location: '.api_get_path(WEB_PLUGIN_PATH).'whispeakauth/authentify_password.php');
+
+    exit;
+}
 
 if ($userId) {
     $wsid = WhispeakAuthPlugin::getAuthUidValue($userId);
 
     if (empty($wsid)) {
-        Display::addFlash(
-            Display::return_message($plugin->get_lang('SpeechAuthNotEnrolled'), 'warning')
-        );
+        $message = Display::return_message($plugin->get_lang('SpeechAuthNotEnrolled'), 'warning');
+
+        if (!empty($lpQuestionInfo)) {
+            echo $message;
+        } else {
+            Display::addFlash($message);
+        }
 
         header('Location: '.api_get_path(WEB_PLUGIN_PATH).'whispeakauth/authentify_password.php');
 
@@ -33,8 +58,13 @@ if ($userId) {
     }
 }
 
-$htmlHeadXtra[] = api_get_js('rtc/RecordRTC.js');
-$htmlHeadXtra[] = api_get_js_simple(api_get_path(WEB_PLUGIN_PATH).'whispeakauth/assets/js/RecordAudio.js');
+if (!empty($lpQuestionInfo)) {
+    echo api_get_js('rtc/RecordRTC.js');
+    echo api_get_js_simple(api_get_path(WEB_PLUGIN_PATH).'whispeakauth/assets/js/RecordAudio.js');
+} else {
+    $htmlHeadXtra[] = api_get_js('rtc/RecordRTC.js');
+    $htmlHeadXtra[] = api_get_js_simple(api_get_path(WEB_PLUGIN_PATH).'whispeakauth/assets/js/RecordAudio.js');
+}
 
 $template = new Template(
     !$showHeader ? '' : $plugin->get_title(),
@@ -48,6 +78,12 @@ $template->assign('show_form', $showForm);
 $template->assign('sample_text', $plugin->getAuthentifySampleText());
 
 $content = $template->fetch('whispeakauth/view/authentify_recorder.html.twig');
+
+if (!empty($lpQuestionInfo)) {
+    echo $content;
+
+    exit;
+}
 
 $template->assign('header', $plugin->get_title());
 $template->assign('content', $content);

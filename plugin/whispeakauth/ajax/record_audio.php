@@ -14,7 +14,7 @@ $license = !empty($_POST['license']) ? true : false;
 $isEnrollment = 'enrollment' === $action;
 $isAuthentify = 'authentify' === $action;
 
-$isAllowed = true;
+$isAllowed = false;
 
 if ($isEnrollment) {
     api_block_anonymous_users(false);
@@ -29,14 +29,10 @@ if ($isEnrollment) {
     } else {
         $isAllowed = !empty($_POST['username']) && !empty($_FILES['audio']);
     }
-} else {
-    $isAllowed = false;
 }
 
 if (!$isAllowed) {
-    echo Display::return_message(get_lang('NotAllowed'), 'error');
-
-    exit;
+    WhispeakAuthPlugin::displayNotAllowedMessage();
 }
 
 $plugin = WhispeakAuthPlugin::create();
@@ -202,14 +198,28 @@ if ($isAuthentify) {
 
     /** @var array $lpItemInfo */
     $lpItemInfo = ChamiloSession::read(WhispeakAuthPlugin::SESSION_LP_ITEM, []);
+    /** @var array $quizQuestionInfo */
+    $quizQuestionInfo = ChamiloSession::read(WhispeakAuthPlugin::SESSION_QUIZ_QUESTION, []);
 
     if (!$success && $maxAttempts && $failedLogins >= $maxAttempts) {
-        if (!empty($lpItemInfo)) {
-            ChamiloSession::erase(WhispeakAuthPlugin::SESSION_FAILED_LOGINS);
+        ChamiloSession::erase(WhispeakAuthPlugin::SESSION_FAILED_LOGINS);
 
+        if (!empty($lpItemInfo)) {
             echo '<script>window.setTimeout(function () {
                     window.location.href = "'.api_get_path(WEB_PLUGIN_PATH).'whispeakauth/authentify_password.php";
                 }, 1500);</script>';
+
+            exit;
+        }
+
+        if (!empty($quizQuestionInfo)) {
+            $url = api_get_path(WEB_CODE_PATH).'exercise/exercise_submit.php?'.$quizQuestionInfo['url_params'];
+
+            ChamiloSession::write(WhispeakAuthPlugin::SESSION_AUTH_PASSWORD, true);
+
+            echo "<script>window.setTimeout(function () {
+                    window.location.href = '".$url."';
+                }, 1500);</script>";
 
             exit;
         }
@@ -222,13 +232,27 @@ if ($isAuthentify) {
     }
 
     if ($success) {
+        ChamiloSession::erase(WhispeakAuthPlugin::SESSION_FAILED_LOGINS);
+
         if (!empty($lpItemInfo)) {
-            ChamiloSession::erase(WhispeakAuthPlugin::SESSION_FAILED_LOGINS);
             ChamiloSession::erase(WhispeakAuthPlugin::SESSION_LP_ITEM);
             ChamiloSession::erase(WhispeakAuthPlugin::SESSION_2FA_USER);
 
             echo '<script>window.setTimeout(function () {
                     window.location.href = "'.$lpItemInfo['src'].'";
+                }, 1500);</script>';
+
+            exit;
+        }
+
+        if (!empty($quizQuestionInfo)) {
+            $quizQuestionInfo['passed'] = true;
+            $url = api_get_path(WEB_CODE_PATH).'exercise/exercise_submit.php?'.$quizQuestionInfo['url_params'];
+
+            ChamiloSession::write(WhispeakAuthPlugin::SESSION_QUIZ_QUESTION, $quizQuestionInfo);
+
+            echo '<script>window.setTimeout(function () {
+                    window.location.href = "'.$url.'";
                 }, 1500);</script>';
 
             exit;

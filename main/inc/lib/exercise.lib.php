@@ -61,6 +61,8 @@ class ExerciseLib
             return false;
         }
 
+        $questionRequireAuth = WhispeakAuthPlugin::questionRequireAuthentify($questionId);
+
         if ($exercise->feedback_type != EXERCISE_FEEDBACK_TYPE_END) {
             $show_comment = false;
         }
@@ -91,6 +93,13 @@ class ExerciseLib
                     }
                     echo $titleToDisplay;
                 }
+
+                if ($questionRequireAuth) {
+                    WhispeakAuthPlugin::quizQuestionAuthentify($questionId, $exercise);
+
+                    return false;
+                }
+
                 if (!empty($questionDescription) && $answerType != READING_COMPREHENSION) {
                     echo Display::div(
                         $questionDescription,
@@ -1475,6 +1484,13 @@ HTML;
                     }
                     echo $objQuestionTmp->getTitleToDisplay($current_item);
                 }
+
+                if ($questionRequireAuth) {
+                    WhispeakAuthPlugin::quizQuestionAuthentify($questionId, $exercise);
+
+                    return false;
+                }
+
                 //@todo I need to the get the feedback type
                 echo <<<HOTSPOT
                     <input type="hidden" name="hidden_hotspot_id" value="$questionId" />
@@ -1545,6 +1561,13 @@ HOTSPOT;
                     }
                     echo $objQuestionTmp->getTitleToDisplay($current_item);
                 }
+
+                if ($questionRequireAuth) {
+                    WhispeakAuthPlugin::quizQuestionAuthentify($questionId, $exercise);
+
+                    return false;
+                }
+
                 echo '
                     <input type="hidden" name="hidden_hotspot_id" value="'.$questionId.'" />
                     <div class="exercise_questions">

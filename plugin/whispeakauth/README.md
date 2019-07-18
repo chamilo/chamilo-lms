@@ -1,6 +1,12 @@
 Speech authentication with Whispeak
 ===================================
 
+**Notice:**
+
+This plugin requires the user to grant permission to use the microphone connected in the web browser. Currently,
+browsers are limiting this permission to be used only in a secure environment with HTTPS. 
+**If your portal does not work with HTTP, then Whispeak authentication may not work.**
+
 Instructions:
 -------------
 

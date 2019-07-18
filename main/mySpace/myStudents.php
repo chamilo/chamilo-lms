@@ -12,7 +12,8 @@ use ChamiloSession as Session;
 require_once __DIR__.'/../inc/global.inc.php';
 
 api_block_anonymous_users();
-$htmlHeadXtra[] = '<script type="text/javascript" src="'.api_get_path(WEB_PUBLIC_PATH).'assets/jquery.easy-pie-chart/dist/jquery.easypiechart.js"></script>';
+$htmlHeadXtra[] = '<script type="text/javascript" src="'.api_get_path(WEB_PUBLIC_PATH)
+    .'assets/jquery.easy-pie-chart/dist/jquery.easypiechart.js"></script>';
 
 $export = isset($_GET['export']) ? $_GET['export'] : false;
 $sessionId = isset($_GET['id_session']) ? (int) $_GET['id_session'] : 0;
@@ -337,12 +338,9 @@ switch ($action) {
                     $progress = empty($progress) ? '0%' : $progress.'%';
                     $score = empty($bestScore) ? '0%' : $bestScore.'%';
 
-                    $courseTable .= '<tr>
-                        <td ><a href="'.$courseInfoItem['course_public_url'].'?id_session='.$sId.'">'.
-                            $courseInfoItem['title'].'</a></td>
-                        <td >'.$time_spent_on_course.'</td>
-                        <td >'.$progress.'</td>
-                        <td >'.$score.'</td>';
+                    $courseTable .= '<tr><td ><a href="'.$courseInfoItem['course_public_url'].'?id_session='.$sId.'">'
+                        .$courseInfoItem['title'].'</a></td><td>'
+                        .$time_spent_on_course.'</td><td>'.$progress.'</td><td>'.$score.'</td>';
                     $courseTable .= '</tr>';
                 }
             }
@@ -372,10 +370,13 @@ switch ($action) {
         $tpl->assign('session_title', $sessionInfo['name']);
         $tpl->assign('student', $studentInfo['complete_name']);
         $tpl->assign('table_progress', $table->toHtml());
-        $tpl->assign('subtitle', sprintf(
-            get_lang('InSessionXYouHadTheFollowingResults'),
-            $sessionInfo['name']
-        ));
+        $tpl->assign(
+            'subtitle',
+            sprintf(
+                get_lang('InSessionXYouHadTheFollowingResults'),
+                $sessionInfo['name']
+            )
+        );
         $tpl->assign('table_course', $courseTable);
         $template = $tpl->fetch($tpl->get_template('my_space/pdf_export_student.tpl'));
 
@@ -397,7 +398,7 @@ switch ($action) {
         try {
             $theme = $tpl->theme;
             $themeName = empty($theme) ? api_get_visual_theme() : $theme;
-            $themeDir = \Template::getThemeDir($theme);
+            $themeDir = Template::getThemeDir($theme);
             $customLetterhead = $themeDir.'images/letterhead.png';
             $urlPathLetterhead = api_get_path(SYS_CSS_PATH).$customLetterhead;
 
@@ -414,7 +415,8 @@ switch ($action) {
                 $pdf->pdf->SetDefaultBodyCSS('background-image-resize', '6');
             }
 
-            @$pdf->content_to_pdf($content,
+            @$pdf->content_to_pdf(
+                $content,
                 $css = '',
                 $pdf_name = '',
                 $course_code = null,
@@ -895,18 +897,18 @@ $timezone_user = UserManager::get_extra_user_data_by_field(
     'timezone'
 );
 $use_users_timezone = api_get_setting('use_users_timezone', 'timezones');
-    if ($timezone_user['timezone'] != null && $use_users_timezone === 'true') {
-        $timezone = $timezone_user['timezone'];
-    }
-    if ($timezone !== null) {
-        $userInfo['timezone'] = $timezone;
-    }
+if ($timezone_user['timezone'] != null && $use_users_timezone === 'true') {
+    $timezone = $timezone_user['timezone'];
+}
+if ($timezone !== null) {
+    $userInfo['timezone'] = $timezone;
+}
 
-    if (is_numeric($avg_student_score)) {
-        $score = $avg_student_score.'%';
-    } else {
-        $score = $avg_student_score;
-    }
+if (is_numeric($avg_student_score)) {
+    $score = $avg_student_score.'%';
+} else {
+    $score = $avg_student_score;
+}
 
 $userInfo['student_score'] = $score;
 $userInfo['student_progress'] = $avg_student_progress;
@@ -1152,11 +1154,14 @@ if (empty($details)) {
                     $attendances_faults_avg = '0/0 (0%)';
                     if (!empty($results_faults_avg['total'])) {
                         if (api_is_drh()) {
-                            $attendances_faults_avg = '<a title="'.get_lang('GoAttendance').'" href="'.api_get_path(WEB_CODE_PATH)
-                                .'attendance/index.php?cidReq='.$courseCodeItem.'&id_session='.$sId.'&student_id='
-                                .$student_id.'">'
-                                .$results_faults_avg['faults'].'/'.$results_faults_avg['total'].' ('
-                                .$results_faults_avg['porcent'].'%)</a>';
+                            $attendances_faults_avg = Display::url(
+                                $results_faults_avg['faults'].'/'.$results_faults_avg['total']
+                                    .' ('.$results_faults_avg['porcent'].'%)',
+                                api_get_path(WEB_CODE_PATH)
+                                    .'attendance/index.php?cidReq='.$courseCodeItem.'&id_session='.$sId.'&student_id='
+                                    .$student_id,
+                                ['title' => get_lang('GoAttendance')]
+                            );
                         } else {
                             $attendances_faults_avg = $results_faults_avg['faults'].'/'
                                 .$results_faults_avg['total']
@@ -1233,13 +1238,13 @@ if (empty($details)) {
                     $exportCourseList[$sId][] = $csvRow;
 
                     echo '<tr>
-                    <td ><a href="'.$courseInfoItem['course_public_url'].'?id_session='.$sId.'">'.
+                    <td><a href="'.$courseInfoItem['course_public_url'].'?id_session='.$sId.'">'.
                         $courseInfoItem['title'].'</a></td>
-                    <td >'.$time_spent_on_course.'</td>
-                    <td >'.$progress.'</td>
-                    <td >'.$score.'</td>
-                    <td >'.$attendances_faults_avg.'</td>
-                    <td >'.$scoretotal_display.'</td>';
+                    <td>'.$time_spent_on_course.'</td>
+                    <td>'.$progress.'</td>
+                    <td>'.$score.'</td>
+                    <td>'.$attendances_faults_avg.'</td>
+                    <td>'.$scoretotal_display.'</td>';
 
                     if (!empty($coachId)) {
                         echo '<td width="10"><a href="'.api_get_self().'?student='.$user_info['user_id']
@@ -1248,7 +1253,8 @@ if (empty($details)) {
                             .Display::return_icon('2rightarrow.png', get_lang('Details')).'</a></td>';
                     } else {
                         echo '<td width="10"><a href="'.api_get_self().'?student='.$user_info['user_id']
-                            .'&details=true&course='.$courseInfoItem['code'].'&origin='.$origin.'&id_session='.$sId.'#infosStudent">'
+                            .'&details=true&course='.$courseInfoItem['code'].'&origin='.$origin.'&id_session='.$sId
+                            .'#infosStudent">'
                             .Display::return_icon('2rightarrow.png', get_lang('Details')).'</a></td>';
                     }
                     echo '</tr>';
@@ -1288,29 +1294,32 @@ if (empty($details)) {
             $exportCourseList[$sId][] = $csvRow;
             $sessionAction = Display::url(
                 Display::return_icon('export_csv.png', get_lang('ExportAsCSV'), [], ICON_SIZE_MEDIUM),
-                $currentUrl
-                    .'&'
+                $currentUrl.'&'
                     .http_build_query(
-                        ['action' => 'export_one_session_row', 'export' => 'csv', 'session_to_export' => $sId]
+                        [
+                            'action' => 'export_one_session_row',
+                            'export' => 'csv',
+                            'session_to_export' => $sId
+                        ]
                     )
             );
             $sessionAction .= Display::url(
                 Display::return_icon('export_excel.png', get_lang('ExportAsXLS'), [], ICON_SIZE_MEDIUM),
-                $currentUrl
-                    .'&'
+                $currentUrl.'&'
                     .http_build_query(
-                        ['action' => 'export_one_session_row', 'export' => 'xls', 'session_to_export' => $sId]
+                        [
+                            'action' => 'export_one_session_row',
+                            'export' => 'xls',
+                            'session_to_export' => $sId
+                        ]
                     )
             );
 
             if (!empty($sId)) {
                 $sessionAction .= Display::url(
                     Display::return_icon('pdf.png', get_lang('ExportToPDF'), [], ICON_SIZE_MEDIUM),
-                    $currentUrl
-                    .'&'
-                    .http_build_query(
-                        ['action' => 'export_to_pdf', 'session_to_export' => $sId]
-                    )
+                    $currentUrl.'&'
+                        .http_build_query(['action' => 'export_to_pdf', 'session_to_export' => $sId])
                 );
             }
             echo $sessionAction;
@@ -1340,11 +1349,7 @@ if (empty($details)) {
                 ['align' => 'absmiddle', 'hspace' => '3px']
             ),
         'progress' => get_lang('Progress').
-            Display::return_icon(
-                'info3.gif',
-                get_lang('LPProgressScore'),
-                ['align' => 'absmiddle', 'hspace' => '3px']
-            ),
+            Display::return_icon('info3.gif', get_lang('LPProgressScore'), ['align' => 'absmiddle', 'hspace' => '3px']),
         'last_connection' => get_lang('LastConnexion').
             Display::return_icon(
                 'info3.gif',
@@ -1471,12 +1476,7 @@ if (empty($details)) {
                 }
 
                 // Get last connection time in lp
-                $start_time = Tracking::get_last_connection_time_in_lp(
-                    $student_id,
-                    $course_code,
-                    $lp_id,
-                    $sessionId
-                );
+                $start_time = Tracking::get_last_connection_time_in_lp($student_id, $course_code, $lp_id, $sessionId);
 
                 if (!empty($start_time)) {
                     $start_time = api_convert_and_format_date($start_time, DATE_TIME_FORMAT_LONG);
@@ -1621,17 +1621,14 @@ if (empty($details)) {
 
     if ($user_info['status'] != INVITEE) {
         echo '<div class="table-responsive">
-        <table class="table table-striped table-hover">
-        <thead>
-        <tr>';
+            <table class="table table-striped table-hover">
+            <thead>
+            <tr>';
         echo '<th>'.get_lang('Exercises').'</th>';
         echo '<th>'.get_lang('LearningPath').'</th>';
-        echo '<th>'.get_lang('AvgCourseScore').' '.
-            Display::return_icon(
-                'info3.gif',
-                get_lang('AverageScore'),
-                ['align' => 'absmiddle', 'hspace' => '3px']
-            ).'</th>';
+        echo '<th>'.get_lang('AvgCourseScore').PHP_EOL
+            .Display::return_icon('info3.gif', get_lang('AverageScore'), ['align' => 'absmiddle', 'hspace' => '3px'])
+            .'</th>';
         echo '<th>'.get_lang('Attempts').'</th>';
         echo '<th>'.get_lang('LatestAttempt').'</th>';
         echo '<th>'.get_lang('AllAttempts').'</th>';
@@ -1802,20 +1799,12 @@ if (empty($details)) {
                 false,
                 $courseInfo['real_id']
             );
-            $survey_done = Display::return_icon(
-                "accept_na.png",
-                get_lang('NoAnswer'),
-                [],
-                ICON_SIZE_SMALL
-            );
+            $survey_done = Display::return_icon("accept_na.png", get_lang('NoAnswer'));
+
             if (in_array($student_id, $user_list)) {
-                $survey_done = Display::return_icon(
-                    "accept.png",
-                    get_lang('Answered'),
-                    [],
-                    ICON_SIZE_SMALL
-                );
+                $survey_done = Display::return_icon("accept.png", get_lang('Answered'));
             }
+
             $data = ['title' => $survey['title'], 'done' => $survey_done];
             $survey_data[] = $data;
         }

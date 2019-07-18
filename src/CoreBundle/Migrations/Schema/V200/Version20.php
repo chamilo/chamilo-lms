@@ -562,6 +562,12 @@ class Version20 extends AbstractMigrationChamilo
             );
         }
 
+        if ($table->hasColumn('page_result_configuration') === false) {
+            $this->addSql(
+                "ALTER TABLE c_quiz ADD page_result_configuration LONGTEXT DEFAULT NULL COMMENT '(DC2Type:array)'"
+            );
+        }
+
         $table = $schema->getTable('c_lp_item_view');
         if ($table->hasIndex('idx_c_lp_item_view_cid_id_view_count') == false) {
             $this->addSql(

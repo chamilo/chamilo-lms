@@ -231,6 +231,13 @@ class CQuiz
     protected $autoLaunch;
 
     /**
+     * @var int
+     *
+     * @ORM\Column(name="page_result_configuration", type="array", nullable=true)
+     */
+    protected $pageResultConfiguration;
+
+    /**
      * CQuiz constructor.
      */
     public function __construct()

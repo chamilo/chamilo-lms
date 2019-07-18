@@ -306,13 +306,14 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
     public function return_header(Exercise $exercise, $counter = null, $score = [])
     {
         $header = parent::return_header($exercise, $counter, $score);
-        $header .= '<table class="'
-            .$this->question_table_class
-            .'"><tr><th>'
-            .get_lang('Choice')
-            .'</th><th>'
-            .get_lang('ExpectedChoice')
-            .'</th><th>'
+        $header .= '<table class="'.$this->question_table_class.'"><tr>';
+        $header .= '<th>'.get_lang('Choice').'</th>';
+
+        if ($exercise->showExpectedChoiceColumn()) {
+            $header .= '<th>'.get_lang('ExpectedChoice').'</th>';
+        }
+
+        $header .='<th>'
             .get_lang('Answer')
             .'</th><th colspan="2" style="text-align:center;">'
             .get_lang('YourDegreeOfCertainty')

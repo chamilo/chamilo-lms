@@ -523,9 +523,7 @@ class Category implements GradebookItem
         $result = Database::query($sql);
         $categories = [];
         if (Database::num_rows($result) > 0) {
-            $categories = self::create_category_objects_from_sql_result(
-                $result
-            );
+            $categories = self::create_category_objects_from_sql_result($result);
         }
 
         return $categories;

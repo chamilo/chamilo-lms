@@ -1227,6 +1227,10 @@ $_configuration['required_extra_fields_in_profile'] = [
 // Send new user inscription notification only to general admins (table settings_current = emailAdministrator)
 //$_configuration['send_inscription_notification_to_general_admin_only'] = false;
 
+// Allow extra settings for the quiz results page
+// ALTER TABLE c_quiz ADD page_result_configuration LONGTEXT DEFAULT NULL COMMENT '(DC2Type:array)';
+//$_configuration['allow_quiz_results_page_config'] = false;
+
 // KEEP THIS AT THE END
 // -------- Custom DB changes
 // Add user activation by confirmation email

@@ -5061,6 +5061,7 @@ EOT;
             $ribbon .= '<h3>'.get_lang('YourTotalScore').':&nbsp;';
             $ribbon .= self::show_score($score, $weight, false, true);
             $ribbon .= '</h3>';
+
             $ribbon .= '</div>';
         }
 
@@ -5093,6 +5094,11 @@ EOT;
         $checkPassPercentage = false,
         $countPendingQuestions = 0
     ) {
+        $hide = (int) $objExercise->getPageConfigurationAttribute('hide_total_score');
+        if ($hide === 1) {
+            return '';
+        }
+
         $passPercentage = $objExercise->selectPassPercentage();
         $ribbon = '<div class="title-score">';
         if ($checkPassPercentage) {

@@ -3,6 +3,7 @@
 
 use Chamilo\CoreBundle\Entity\TrackEHotspot;
 use ChamiloSession as Session;
+use Doctrine\DBAL\Types\Type;
 
 /**
  * Class Exercise.
@@ -84,6 +85,7 @@ class Exercise
     public $export = false;
     public $autolaunch;
     public $exerciseCategoryId;
+    public $pageResultConfiguration;
 
     /**
      * Constructor of the class.
@@ -199,6 +201,10 @@ class Exercise
             $this->notifications = [];
             if (!empty($object->notifications)) {
                 $this->notifications = explode(',', $object->notifications);
+            }
+
+            if (!empty($object->page_result_configuration)) {
+                $this->pageResultConfiguration = $object->page_result_configuration;
             }
 
             if (isset($object->show_previous_button)) {
@@ -1588,6 +1594,11 @@ class Exercise
                     $notifications = implode(',', $notifications);
                     $paramsExtra['notifications'] = $notifications;
                 }
+
+                $pageConfig = api_get_configuration_value('allow_quiz_results_page_config');
+                if ($pageConfig && !empty($this->pageResultConfiguration)) {
+                    $paramsExtra['page_result_configuration'] = $this->pageResultConfiguration;
+                }
             }
 
             $params = array_merge($params, $paramsExtra);
@@ -1671,6 +1682,11 @@ class Exercise
                     $notifications = implode(',', $notifications);
                     $params['notifications'] = $notifications;
                 }
+            }
+
+            $pageConfig = api_get_configuration_value('allow_quiz_results_page_config');
+            if ($pageConfig && !empty($this->pageResultConfiguration)) {
+                $params['page_result_configuration'] = $this->pageResultConfiguration;
             }
 
             $this->id = $this->iId = Database::insert($TBL_EXERCISES, $params);
@@ -2085,6 +2101,31 @@ class Exercise
                 ]
             );
 
+            $pageConfig = api_get_configuration_value('allow_quiz_results_page_config');
+            if ($pageConfig) {
+                $group = [
+                    $form->createElement(
+                        'checkbox',
+                        'hide_expected_answer',
+                        null,
+                        get_lang('HideExpectedAnswer')
+                    ),
+                    $form->createElement(
+                        'checkbox',
+                        'hide_total_score',
+                        null,
+                        get_lang('HideTotalScore')
+                    ),
+                    $form->createElement(
+                        'checkbox',
+                        'hide_question_score',
+                        null,
+                        get_lang('HideQuestionScore')
+                    )
+                ];
+                $form->addGroup($group, null, get_lang('ResultsConfigurationPage'));
+            }
+
             $displayMatrix = 'none';
             $displayRandom = 'none';
             $selectionType = $this->getQuestionSelectionType();
@@ -2132,19 +2173,19 @@ class Exercise
             $form->addElement('label', null, $cat_form);
             $form->addElement('html', '</div>');
 
-            // Category name.
-            $radio_display_cat_name = [
-                $form->createElement('radio', 'display_category_name', null, get_lang('Yes'), '1'),
-                $form->createElement('radio', 'display_category_name', null, get_lang('No'), '0'),
-            ];
-            $form->addGroup($radio_display_cat_name, null, get_lang('QuestionDisplayCategoryName'));
-
             // Random answers.
             $radios_random_answers = [
                 $form->createElement('radio', 'randomAnswers', null, get_lang('Yes'), '1'),
                 $form->createElement('radio', 'randomAnswers', null, get_lang('No'), '0'),
             ];
             $form->addGroup($radios_random_answers, null, get_lang('RandomAnswers'));
+
+            // Category name.
+            $radio_display_cat_name = [
+                $form->createElement('radio', 'display_category_name', null, get_lang('Yes'), '1'),
+                $form->createElement('radio', 'display_category_name', null, get_lang('No'), '0'),
+            ];
+            $form->addGroup($radio_display_cat_name, null, get_lang('QuestionDisplayCategoryName'));
 
             // Hide question title.
             $group = [
@@ -2370,12 +2411,7 @@ class Exercise
             $form->addRule('end_time', get_lang('InvalidDate'), 'datetime');
 
             if ($this->id > 0) {
-                //if ($this->random > $this->selectNbrQuestions()) {
-                //    $defaults['randomQuestions'] = $this->selectNbrQuestions();
-                //} else {
                 $defaults['randomQuestions'] = $this->random;
-                //}
-
                 $defaults['randomAnswers'] = $this->getRandomAnswers();
                 $defaults['exerciseType'] = $this->selectType();
                 $defaults['exerciseTitle'] = $this->get_formated_title();
@@ -2443,6 +2479,9 @@ class Exercise
         if (api_get_setting('search_enabled') === 'true') {
             $defaults['index_document'] = 'checked="checked"';
         }
+
+
+        $this->setPageResultConfigurationDefaults($defaults);
         $form->setDefaults($defaults);
 
         // Freeze some elements.
@@ -2572,6 +2611,7 @@ class Exercise
         $this->setShowPreviousButton($form->getSubmitValue('show_previous_button'));
         $this->setNotifications($form->getSubmitValue('notifications'));
         $this->setExerciseCategoryId($form->getSubmitValue('exercise_category_id'));
+        $this->setPageResultConfiguration($form->getSubmitValues());
 
         $this->start_time = null;
         if ($form->getSubmitValue('activate_start_date_check') == 1) {
@@ -4351,10 +4391,12 @@ class Exercise
                                     case MATCHING:
                                     case MATCHING_DRAGGABLE:
                                         echo '<tr>';
-                                        if (!in_array($this->results_disabled, [
-                                            RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER,
-                                            //RESULT_DISABLE_SHOW_SCORE_AND_EXPECTED_ANSWERS_AND_RANKING,
-                                            ])
+                                        if (!in_array(
+                                            $this->results_disabled,
+                                            [
+                                                RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER,
+                                            ]
+                                        )
                                         ) {
                                             echo '<td>'.$s_answer_label.'</td>';
                                             echo '<td>'.$user_answer.'</td>';
@@ -4364,31 +4406,35 @@ class Exercise
                                         }
 
                                         if ($this->showExpectedChoice()) {
-                                            echo '<td>';
-                                            if (in_array($answerType, [MATCHING, MATCHING_DRAGGABLE])) {
-                                                if (isset($real_list[$i_answer_correct_answer]) &&
-                                                    $showTotalScoreAndUserChoicesInLastAttempt == true
-                                                ) {
-                                                    echo Display::span(
-                                                        $real_list[$i_answer_correct_answer]
-                                                    );
+                                            if ($this->showExpectedChoiceColumn()) {
+                                                echo '<td>';
+                                                if (in_array($answerType, [MATCHING, MATCHING_DRAGGABLE])) {
+                                                    if (isset($real_list[$i_answer_correct_answer]) &&
+                                                        $showTotalScoreAndUserChoicesInLastAttempt == true
+                                                    ) {
+                                                        echo Display::span(
+                                                            $real_list[$i_answer_correct_answer]
+                                                        );
+                                                    }
                                                 }
+                                                echo '</td>';
                                             }
-                                            echo '</td>';
                                             echo '<td>'.$status.'</td>';
                                         } else {
-                                            echo '<td>';
                                             if (in_array($answerType, [MATCHING, MATCHING_DRAGGABLE])) {
                                                 if (isset($real_list[$i_answer_correct_answer]) &&
                                                     $showTotalScoreAndUserChoicesInLastAttempt === true
                                                 ) {
-                                                    echo Display::span(
-                                                        $real_list[$i_answer_correct_answer],
-                                                        ['style' => 'color: #008000; font-weight: bold;']
-                                                    );
+                                                    if ($this->showExpectedChoiceColumn()) {
+                                                        echo '<td>';
+                                                        echo Display::span(
+                                                            $real_list[$i_answer_correct_answer],
+                                                            ['style' => 'color: #008000; font-weight: bold;']
+                                                        );
+                                                        echo '</td>';
+                                                    }
                                                 }
                                             }
-                                            echo '</td>';
                                         }
                                         echo '</tr>';
                                         break;
@@ -4696,6 +4742,7 @@ class Exercise
                             );
                         } elseif ($answerType == MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY) {
                             ExerciseShowFunctions::displayMultipleAnswerTrueFalseDegreeCertainty(
+                                $this,
                                 $feedback_type,
                                 $studentChoice,
                                 $studentChoiceDegree,
@@ -4722,6 +4769,7 @@ class Exercise
                             );
                         } elseif ($answerType == FILL_IN_BLANKS) {
                             ExerciseShowFunctions::display_fill_in_blanks_answer(
+                                $this,
                                 $feedback_type,
                                 $answer,
                                 0,
@@ -5092,6 +5140,7 @@ class Exercise
                         case MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY:
                             if ($answerId == 1) {
                                 ExerciseShowFunctions::displayMultipleAnswerTrueFalseDegreeCertainty(
+                                    $this,
                                     $feedback_type,
                                     $studentChoice,
                                     $studentChoiceDegree,
@@ -5103,6 +5152,7 @@ class Exercise
                                 );
                             } else {
                                 ExerciseShowFunctions::displayMultipleAnswerTrueFalseDegreeCertainty(
+                                    $this,
                                     $feedback_type,
                                     $studentChoice,
                                     $studentChoiceDegree,
@@ -5116,6 +5166,7 @@ class Exercise
                             break;
                         case FILL_IN_BLANKS:
                             ExerciseShowFunctions::display_fill_in_blanks_answer(
+                                $this,
                                 $feedback_type,
                                 $answer,
                                 $exeId,
@@ -7886,6 +7937,76 @@ class Exercise
     }
 
     /**
+     * @param array $values
+     *
+     * @throws \Doctrine\DBAL\DBALException
+     */
+    public function setPageResultConfiguration($values)
+    {
+        $pageConfig = api_get_configuration_value('allow_quiz_results_page_config');
+        if ($pageConfig) {
+            $params = [
+                'hide_expected_answer' => isset($values['hide_expected_answer']) ? $values['hide_expected_answer'] : '',
+                'hide_question_score' => isset($values['hide_question_score']) ? $values['hide_question_score'] : '',
+                'hide_total_score' => isset($values['hide_total_score']) ? $values['hide_total_score'] : ''
+            ];
+            $type = Type::getType('array');
+            $platform = Database::getManager()->getConnection()->getDatabasePlatform();
+            $this->pageResultConfiguration = $type->convertToDatabaseValue($params, $platform);
+        }
+    }
+
+    /**
+     * @param array $defaults
+     */
+    public function setPageResultConfigurationDefaults(&$defaults)
+    {
+        $configuration = $this->getPageResultConfiguration();
+        if (!empty($configuration) && !empty($defaults)) {
+            $defaults = array_merge($defaults, $configuration);
+        }
+    }
+
+    /**
+     * @return array
+     */
+    public function getPageResultConfiguration()
+    {
+        $pageConfig = api_get_configuration_value('allow_quiz_results_page_config');
+        if ($pageConfig) {
+            /*$params = [
+                'hide_expected_answer' => isset($values['hide_expected_answer']) ? $values['hide_expected_answer'] : '',
+                'hide_question_score' => isset($values['hide_question_score']) ? $values['hide_question_score'] : '',
+                'hide_total_score' => isset($values['hide_total_score']) ? $values['hide_total_score'] : ''
+            ];*/
+            $type = \Doctrine\DBAL\Types\Type::getType('array');
+            $platform = Database::getManager()->getConnection()->getDatabasePlatform();
+            $result = $type->convertToPHPValue($this->pageResultConfiguration, $platform);
+
+            return $result;
+        }
+
+        return $this->pageResultConfiguration;
+    }
+
+    /**
+     * @param string $attribute
+     *
+     * @return mixed|null
+     */
+    public function getPageConfigurationAttribute($attribute)
+    {
+        $result = $this->getPageResultConfiguration();
+
+        if (!empty($result)) {
+            $value = isset($result[$attribute]) ? $result[$attribute] : null;
+            return $value;
+        }
+
+        return null;
+    }
+
+    /**
      * @param bool $showPreviousButton
      *
      * @return Exercise
@@ -7922,6 +8043,26 @@ class Exercise
     }
 
     /**
+     * @return bool
+     */
+    public function showExpectedChoiceColumn()
+    {
+        if (!in_array($this->results_disabled, [
+            RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER
+        ])
+        ) {
+            $hide = (int) $this->getPageConfigurationAttribute('hide_expected_answer');
+            if ($hide === 1) {
+                return false;
+            }
+
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
      * @param string $class
      * @param string $scoreLabel
      * @param string $result
@@ -7931,6 +8072,11 @@ class Exercise
      */
     public function getQuestionRibbon($class, $scoreLabel, $result, $array)
     {
+        $hide = (int) $this->getPageConfigurationAttribute('hide_question_score');
+        if ($hide === 1) {
+            return '';
+        }
+
         if ($this->showExpectedChoice()) {
             $html = null;
             $hideLabel = api_get_configuration_value('exercise_hide_label');

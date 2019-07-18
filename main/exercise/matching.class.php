@@ -292,13 +292,17 @@ class Matching extends Question
         ])
         ) {
             $header .= '<th>'.get_lang('Choice').'</th>';
-            $header .= '<th>'.get_lang('ExpectedChoice').'</th>';
+            //if ($exercise->showExpectedChoiceColumn()) {
+                //$header .= '<th>'.get_lang('ExpectedChoice').'</th>';
+            //}
         }
 
         if ($exercise->showExpectedChoice()) {
             $header .= '<th>'.get_lang('Status').'</th>';
         } else {
-            $header .= '<th>'.get_lang('CorrespondsTo').'</th>';
+            if ($exercise->showExpectedChoiceColumn()) {
+                $header .= '<th>'.get_lang('CorrespondsTo').'</th>';
+            }
         }
         $header .= '</tr>';
 

@@ -225,6 +225,7 @@ class Diagnoser
             );
         }
         $new_version = '-';
+        $new_version_status = '';
         $file = api_get_path(SYS_CODE_PATH).'install/version.php';
         if (is_file($file)) {
             @include($file);
@@ -234,7 +235,7 @@ class Diagnoser
             '[CONFIG]',
             get_lang('VersionFromVersionFile'),
             '#',
-            $new_version,
+            $new_version.' '.$new_version_status,
             '-',
             null,
             get_lang('TheVersionFromTheVersionFileIsUpdatedWithEachVersionIfMainInstallDirectoryIsPresent')

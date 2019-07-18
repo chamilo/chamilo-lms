@@ -8437,4 +8437,9 @@ $LoginsByDate = "Inicios de sesión por fecha";
 $AllowHtaccessScormImport = "Habilitar archivo htaccess en el importe SCORM";
 $ExerciseAutoEvaluationAndRankingMode = "Mostrar sólo la nota global (no la nota de cada pregunta) y mostrar la respuesta correcta y la respuesta seleccionada por el alumno + modo clasificación.";
 $YouAreReceivingACopyBecauseYouAreACourseCoach = "Usted recibe esta copia en calidad de tutor de este curso";
+$GenerateReport = "Generar reporte";
+$VersionFromVersionFile = "Versión del archivo version";
+$VersionFromConfigFile = "Versión del archivo de configuración";
+$TheVersionFromTheVersionFileIsUpdatedWithEachVersionIfMainInstallDirectoryIsPresent = "La version del archivo version.php es actualizada a cada actualización del software, pero solo está disponible si la carpeta main/install/ está presente en el disco.";
+$TheVersionFromTheConfigurationFileShowsOnTheAdminPageButHasToBeChangedManuallyOnUpgrade = "La versión del archivo de configuración principal se muestra en la página principal de administración, pero tiene que ser modificada manualmente a cada actualización de la plataforma.";
 ?>

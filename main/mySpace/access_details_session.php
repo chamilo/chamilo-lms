@@ -194,7 +194,6 @@ if ($form->validate()) {
     exit;
 }
 
-
 $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('AccessDetails')];
 
 Display::display_header('');

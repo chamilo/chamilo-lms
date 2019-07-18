@@ -743,7 +743,6 @@ if ($count_fields > 0) {
     }
 }
 
-
 if (api_get_configuration_value('plugin_redirection_enabled')) {
     $list[] = 'Redirection';
     $list_reponse[] = api_get_path(WEB_PATH);

@@ -37,6 +37,8 @@ $strings['AuthentifySuccess'] = 'Authentication success!';
 $strings['TryAgain'] = 'Try again';
 $strings['MaxAttemptsReached'] = 'You reached the maximum number of attempts allowed.';
 $strings['LoginWithUsernameAndPassword'] = 'You should login using the username and password.';
+$strings['YouNeedToIdentifyYourselfToAnswerThisQuestion'] = 'You need to identify yourself to answer this question.';
+$strings['IdentifyMe'] = 'Identify me';
 $strings['PleaseWaitWhileLoading'] = "Please wait while loading...";
 
 $strings['AudioQualityShort'] = 'Too short audio';

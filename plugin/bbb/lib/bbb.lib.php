@@ -143,8 +143,8 @@ class bbb
     public function forceCIdReq($courseCode, $sessionId = 0, $groupId = 0)
     {
         $this->courseCode = $courseCode;
-        $this->sessionId = intval($sessionId);
-        $this->groupId = intval($groupId);
+        $this->sessionId = (int) $sessionId;
+        $this->groupId = (int) $groupId;
     }
 
     /**
@@ -265,39 +265,40 @@ class bbb
         if ($max < 0) {
             $max = 0;
         }
-        $this->maxUsersLimit = intval($max);
+        $this->maxUsersLimit = (int) $max;
     }
 
     /**
      * See this file in you BBB to set up default values
-     * @param   array $params Array of parameters that will be completed if not containing all expected variables
-
-    /var/lib/tomcat6/webapps/bigbluebutton/WEB-INF/classes/bigbluebutton.properties
      *
-    More record information:
-    http://code.google.com/p/bigbluebutton/wiki/RecordPlaybackSpecification
-
-    # Default maximum number of users a meeting can have.
-    # Doesn't get enforced yet but is the default value when the create
-    # API doesn't pass a value.
-    defaultMaxUsers=20
-
-    # Default duration of the meeting in minutes.
-    # Current default is 0 (meeting doesn't end).
-    defaultMeetingDuration=0
-
-    # Remove the meeting from memory when the end API is called.
-    # This allows 3rd-party apps to recycle the meeting right-away
-    # instead of waiting for the meeting to expire (see below).
-    removeMeetingWhenEnded=false
-
-    # The number of minutes before the system removes the meeting from memory.
-    defaultMeetingExpireDuration=1
-
-    # The number of minutes the system waits when a meeting is created and when
-    # a user joins. If after this period, a user hasn't joined, the meeting is
-    # removed from memory.
-    defaultMeetingCreateJoinDuration=5
+     * @param array $params Array of parameters that will be completed if not containing all expected variables
+     *
+     * /var/lib/tomcat6/webapps/bigbluebutton/WEB-INF/classes/bigbluebutton.properties
+     *
+     * More record information:
+     * http://code.google.com/p/bigbluebutton/wiki/RecordPlaybackSpecification
+     *
+     * Default maximum number of users a meeting can have.
+     * Doesn't get enforced yet but is the default value when the create
+     * API doesn't pass a value.
+     * defaultMaxUsers=20
+     *
+     * Default duration of the meeting in minutes.
+     * Current default is 0 (meeting doesn't end).
+     * defaultMeetingDuration=0
+     *
+     * Remove the meeting from memory when the end API is called.
+     * This allows 3rd-party apps to recycle the meeting right-away
+     * instead of waiting for the meeting to expire (see below).
+     * removeMeetingWhenEnded=false
+     *
+     * The number of minutes before the system removes the meeting from memory.
+     * defaultMeetingExpireDuration=1
+     *
+     * The number of minutes the system waits when a meeting is created and when
+     * a user joins. If after this period, a user hasn't joined, the meeting is
+     * removed from memory.
+     * defaultMeetingCreateJoinDuration=5
      *
      * @return mixed
      */
@@ -361,7 +362,7 @@ class bbb
                 'dialNumber' => '', // The main number to call into. Optional.
                 'voiceBridge' => $params['voice_bridge'], // PIN to join voice. Required.
                 'webVoice' => '', // Alphanumeric to join voice. Optional.
-                'logoutUrl' =>  $this->logoutUrl,
+                'logoutUrl' =>  $this->logoutUrl.'&action=logout&remote_id='.$params['remote_id'],
                 'maxParticipants' => $max, // Optional. -1 = unlimitted. Not supported in BBB. [number]
                 'record' => $record, // New. 'true' will tell BBB to record the meeting.
                 'duration' => $duration, // Default = 0 which means no set duration in minutes. [number]
@@ -374,7 +375,8 @@ class bbb
                 $result = $this->api->createMeetingWithXmlResponseArray($bbbParams);
                 if (isset($result) && strval($result['returncode']) == 'SUCCESS') {
                     if ($this->plugin->get('allow_regenerate_recording') === 'true') {
-                        $sql = "UPDATE $this->table SET internal_meeting_id = '".$result['internalMeetingID']."' 
+                        $internalId = Database::escape_string($result['internalMeetingID']);
+                        $sql = "UPDATE $this->table SET internal_meeting_id = '".$internalId."' 
                                 WHERE id = $id";
                         Database::query($sql);
                     }
@@ -1098,12 +1100,12 @@ class bbb
     }
 
     /**
-     * @param int $id
-     * @param int $recordId
+     * @param int    $id
+     * @param string $recordId
      *
      * @return bool
      */
-    public function regenerateRecording($id, $recordId)
+    public function regenerateRecording($id, $recordId = '')
     {
         if ($this->plugin->get('allow_regenerate_recording') !== 'true') {
             return false;
@@ -1513,6 +1515,25 @@ class bbb
             '*',
             'plugin_bbb_meeting',
             array('where' => array('id = ?' => $id)),
+            'first'
+        );
+
+        return $meetingData;
+    }
+
+    /**
+     * Get the meeting info.
+     *
+     * @param int $id
+     *
+     * @return array
+     */
+    public function getMeetingByRemoteId($id)
+    {
+        $meetingData = Database::select(
+            '*',
+            'plugin_bbb_meeting',
+            array('where' => array('remote_id = ?' => $id)),
             'first'
         );
 

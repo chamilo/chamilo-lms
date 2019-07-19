@@ -76,3 +76,4 @@ $strings['SetByStudent'] = 'Set by student';
 $strings['SetByTeacher'] = 'Set by teacher';
 $strings['SetByDefault'] = 'Set to default interface';
 $strings['allow_regenerate_recording'] = 'Allow regenerate recording';
+$strings['bbb_force_record_generation'] = 'Force record generation at the end of the meeting';

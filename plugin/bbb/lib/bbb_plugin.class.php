@@ -33,6 +33,10 @@ class BBBPlugin extends Plugin
         [
             'name' => 'bbb_enable_conference_in_groups',
             'type' => 'checkbox',
+        ],
+        [
+            'name' => 'bbb_force_record_generation',
+            'type' => 'checkbox',
         ]
     ];
 
@@ -42,7 +46,7 @@ class BBBPlugin extends Plugin
     protected function __construct()
     {
         parent::__construct(
-            '2.8',
+            '2.8.1',
             'Julio Montoya, Yannick Warnier, Angel Fernando Quiroz Campos',
             [
                 'tool_enable' => 'boolean',

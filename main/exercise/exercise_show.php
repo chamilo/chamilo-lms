@@ -358,7 +358,7 @@ if (!empty($track_exercise_info['data_tracking'])) {
 }
 
 // Display the text when finished message if we are on a LP #4227
-$end_of_message = $objExercise->selectTextWhenFinished();
+$end_of_message = $objExercise->getTextWhenFinished();
 if (!empty($end_of_message) && ($origin === 'learnpath')) {
     echo Display::return_message($end_of_message, 'normal', false);
     echo "<div class='clear'>&nbsp;</div>";

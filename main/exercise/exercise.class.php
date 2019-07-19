@@ -1,9 +1,11 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\GradebookLink;
 use Chamilo\CoreBundle\Entity\TrackEHotspot;
 use ChamiloSession as Session;
 use Doctrine\DBAL\Types\Type;
+
 
 /**
  * Class Exercise.
@@ -125,6 +127,8 @@ class Exercise
         $this->globalCategoryId = null;
         $this->notifications = [];
         $this->exerciseCategoryId = 0;
+        $this->pageResultConfiguration = [];
+
 
         if (!empty($courseId)) {
             $courseInfo = api_get_course_info_by_id($courseId);
@@ -422,7 +426,7 @@ class Exercise
      *
      * @return string html text : the text to display ay the end of the test
      */
-    public function selectTextWhenFinished()
+    public function getTextWhenFinished()
     {
         return $this->text_when_finished;
     }
@@ -1094,7 +1098,7 @@ class Exercise
     /**
      * @return int
      */
-    public function selectSaveCorrectAnswers()
+    public function getSaveCorrectAnswers()
     {
         return $this->saveCorrectAnswers;
     }
@@ -1263,7 +1267,7 @@ class Exercise
      */
     public function updateSaveCorrectAnswers($value)
     {
-        $this->saveCorrectAnswers = $value;
+        $this->saveCorrectAnswers = (int) $value;
     }
 
     /**
@@ -1520,7 +1524,7 @@ class Exercise
         $random_answers = $this->random_answers;
         $active = $this->active;
         $propagate_neg = (int) $this->propagate_neg;
-        $saveCorrectAnswers = isset($this->saveCorrectAnswers) && $this->saveCorrectAnswers ? 1 : 0;
+        $saveCorrectAnswers = isset($this->saveCorrectAnswers) ? (int) $this->saveCorrectAnswers : 0;
         $review_answers = isset($this->review_answers) && $this->review_answers ? 1 : 0;
         $randomByCat = (int) $this->randomByCat;
         $text_when_finished = $this->text_when_finished;
@@ -1659,7 +1663,7 @@ class Exercise
                 'text_when_finished' => $text_when_finished,
                 'display_category_name' => $display_category_name,
                 'pass_percentage' => $pass_percentage,
-                'save_correct_answers' => (int) $saveCorrectAnswers,
+                'save_correct_answers' => $saveCorrectAnswers,
                 'propagate_neg' => $propagate_neg,
                 'hide_question_title' => $this->getHideQuestionTitle(),
             ];
@@ -2270,11 +2274,26 @@ class Exercise
                 null,
                 get_lang('PropagateNegativeResults')
             );
-            $form->addCheckBox(
-                'save_correct_answers',
-                null,
-                get_lang('SaveTheCorrectAnswersForTheNextAttempt')
-            );
+
+            if (api_get_configuration_value('allow_quiz_save_correct_options')) {
+                $options = [
+                    '' => get_lang('SelectAnOption'),
+                    1 => get_lang('SaveTheCorrectAnswersForTheNextAttempt'),
+                    2 => get_lang('SaveAllAnswers'),
+                ];
+                $form->addSelect(
+                    'save_correct_answers',
+                    get_lang('SaveAnswers'),
+                    $options
+                );
+            } else {
+                $form->addCheckBox(
+                    'save_correct_answers',
+                    null,
+                    get_lang('SaveTheCorrectAnswersForTheNextAttempt')
+                );
+            }
+
             $form->addElement('html', '<div class="clear">&nbsp;</div>');
             $form->addElement('checkbox', 'review_answers', null, get_lang('ReviewAnswers'));
             $form->addElement('html', '<div id="divtimecontrol"  style="display:'.$display.';">');
@@ -2420,10 +2439,10 @@ class Exercise
                 $defaults['exerciseFeedbackType'] = $this->getFeedbackType();
                 $defaults['results_disabled'] = $this->selectResultsDisabled();
                 $defaults['propagate_neg'] = $this->selectPropagateNeg();
-                $defaults['save_correct_answers'] = $this->selectSaveCorrectAnswers();
+                $defaults['save_correct_answers'] = $this->getSaveCorrectAnswers();
                 $defaults['review_answers'] = $this->review_answers;
                 $defaults['randomByCat'] = $this->getRandomByCategory();
-                $defaults['text_when_finished'] = $this->selectTextWhenFinished();
+                $defaults['text_when_finished'] = $this->getTextWhenFinished();
                 $defaults['display_category_name'] = $this->selectDisplayCategoryName();
                 $defaults['pass_percentage'] = $this->selectPassPercentage();
                 $defaults['question_selection_type'] = $this->getQuestionSelectionType();
@@ -7854,12 +7873,13 @@ class Exercise
     /**
      * Get the correct answers in all attempts.
      *
-     * @param int $learnPathId
-     * @param int $learnPathItemId
+     * @param int  $learnPathId
+     * @param int  $learnPathItemId
+     * @param bool $onlyCorrect
      *
      * @return array
      */
-    public function getCorrectAnswersInAllAttempts($learnPathId = 0, $learnPathItemId = 0)
+    public function getAnswersInAllAttempts($learnPathId = 0, $learnPathItemId = 0, $onlyCorrect = true)
     {
         $attempts = Event::getExerciseResultsByUser(
             api_get_user_id(),
@@ -7868,43 +7888,63 @@ class Exercise
             api_get_session_id(),
             $learnPathId,
             $learnPathItemId,
-            'asc'
+            'DESC'
         );
 
-        $corrects = [];
+        $list = [];
         foreach ($attempts as $attempt) {
             foreach ($attempt['question_list'] as $answers) {
                 foreach ($answers as $answer) {
                     $objAnswer = new Answer($answer['question_id']);
-
-                    switch ($objAnswer->getQuestionType()) {
-                        case FILL_IN_BLANKS:
-                            $isCorrect = FillBlanks::isCorrect($answer['answer']);
-                            break;
-                        case MATCHING:
-                        case DRAGGABLE:
-                        case MATCHING_DRAGGABLE:
-                            $isCorrect = Matching::isCorrect(
-                                $answer['position'],
-                                $answer['answer'],
-                                $answer['question_id']
-                            );
-                            break;
-                        case ORAL_EXPRESSION:
-                            $isCorrect = false;
-                            break;
-                        default:
-                            $isCorrect = $objAnswer->isCorrectByAutoId($answer['answer']);
-                    }
-
-                    if ($isCorrect) {
-                        $corrects[$answer['question_id']][] = $answer;
+                    if ($onlyCorrect) {
+                        switch ($objAnswer->getQuestionType()) {
+                            case FILL_IN_BLANKS:
+                                $isCorrect = FillBlanks::isCorrect($answer['answer']);
+                                break;
+                            case MATCHING:
+                            case DRAGGABLE:
+                            case MATCHING_DRAGGABLE:
+                                $isCorrect = Matching::isCorrect(
+                                    $answer['position'],
+                                    $answer['answer'],
+                                    $answer['question_id']
+                                );
+                                break;
+                            case ORAL_EXPRESSION:
+                                $isCorrect = false;
+                                break;
+                            default:
+                                $isCorrect = $objAnswer->isCorrectByAutoId($answer['answer']);
+                        }
+                        if ($isCorrect) {
+                            $list[$answer['question_id']][] = $answer;
+                        }
+                    } else {
+                        $list[$answer['question_id']][] = $answer;
                     }
                 }
             }
+
+            if ($onlyCorrect === false) {
+                // Only take latest attempt
+                break;
+            }
         }
 
-        return $corrects;
+        return $list;
+    }
+
+    /**
+     * Get the correct answers in all attempts.
+     *
+     * @param int $learnPathId
+     * @param int $learnPathItemId
+     *
+     * @return array
+     */
+    public function getCorrectAnswersInAllAttempts($learnPathId = 0, $learnPathItemId = 0)
+    {
+        return $this->getAnswersInAllAttempts($learnPathId , $learnPathItemId);
     }
 
     /**
@@ -7979,14 +8019,14 @@ class Exercise
                 'hide_question_score' => isset($values['hide_question_score']) ? $values['hide_question_score'] : '',
                 'hide_total_score' => isset($values['hide_total_score']) ? $values['hide_total_score'] : ''
             ];*/
-            $type = \Doctrine\DBAL\Types\Type::getType('array');
+            $type = Type::getType('array');
             $platform = Database::getManager()->getConnection()->getDatabasePlatform();
             $result = $type->convertToPHPValue($this->pageResultConfiguration, $platform);
 
             return $result;
         }
 
-        return $this->pageResultConfiguration;
+        return [];
     }
 
     /**
@@ -8336,7 +8376,7 @@ class Exercise
 
             foreach ($links as $link) {
                 $linkId = $link['id'];
-                /** @var \Chamilo\CoreBundle\Entity\GradebookLink $exerciseLink */
+                /** @var GradebookLink $exerciseLink */
                 $exerciseLink = $repo->find($linkId);
                 if ($exerciseLink) {
                     $exerciseLink

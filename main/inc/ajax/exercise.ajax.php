@@ -453,6 +453,8 @@ switch ($action) {
 
                 echo 'ok';
                 break;
+            } else {
+                ChamiloSession::erase(WhispeakAuthPlugin::SESSION_QUIZ_QUESTION);
             }
 
             // Getting information of the current exercise.

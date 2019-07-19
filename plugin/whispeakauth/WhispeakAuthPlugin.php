@@ -281,7 +281,7 @@ class WhispeakAuthPlugin extends Plugin implements HookPluginInterface
             return false;
         }
 
-        $questionInfo = ChamiloSession::read(WhispeakAuthPlugin::SESSION_QUIZ_QUESTION, []);
+        $questionInfo = ChamiloSession::read(self::SESSION_QUIZ_QUESTION, []);
 
         if (empty($questionInfo)) {
             return true;
@@ -294,8 +294,6 @@ class WhispeakAuthPlugin extends Plugin implements HookPluginInterface
         if (false === $questionInfo['passed']) {
             return true;
         }
-
-        ChamiloSession::erase(WhispeakAuthPlugin::SESSION_QUIZ_QUESTION);
 
         return false;
     }

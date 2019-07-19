@@ -175,10 +175,9 @@ if ($form->validate()) {
             $infoCertificateDefault = Database::select(
                 '*',
                 $table,
-                ['where' => ['certificate_default = ? ' => 1]],
+                ['where' => ['access_url_id = ? AND certificate_default = ? ' => [$accessUrlId, 1]]],
                 'first'
             );
-
             if (!empty($infoCertificateDefault)) {
                 foreach ($fieldList as $field) {
                     if (!empty($infoCertificateDefault[$field]) && !$checkLogo[$field]) {

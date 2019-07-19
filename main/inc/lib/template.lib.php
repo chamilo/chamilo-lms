@@ -1501,8 +1501,6 @@ class Template
                 $this->assign('footer_extra_content', $extra_footer);
             }
         }
-
-        // Tutor name
     }
 
     /**

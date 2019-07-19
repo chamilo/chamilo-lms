@@ -483,7 +483,6 @@ class GradebookTable extends SortableTable
                     }
 
                     // Students get the results and certificates columns
-
                     $value_data = isset($data[4]) ? $data[4] : null;
                     $best = isset($data['best']) ? $data['best'] : null;
                     $average = isset($data['average']) ? $data['average'] : null;
@@ -497,15 +496,17 @@ class GradebookTable extends SortableTable
                     $totalUserResult[0] += $totalResult[0] / ($totalResult[1] ?: 1) * $data[3];
                     $totalUserResult[1] += $data[3];
 
-                    $totalBest = [
-                        $scoredisplay->format_score($totalBest[0] + $data['best_score'][0]),
-                        $scoredisplay->format_score($totalBest[1] + $data['best_score'][1]),
-                    ];
+                    if (empty($model)) {
+                        $totalBest = [
+                            $scoredisplay->format_score($totalBest[0] + $data['best_score'][0]),
+                            $scoredisplay->format_score($totalBest[1] + $data['best_score'][1]),
+                        ];
 
-                    $totalAverage = [
-                        $data['average_score'][0],
-                        $data['average_score'][1],
-                    ];
+                        $totalAverage = [
+                            $data['average_score'][0],
+                            $data['average_score'][1],
+                        ];
+                    }
 
                     // Student result
                     if (empty($model)) {

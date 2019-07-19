@@ -2525,7 +2525,6 @@ class Category implements GradebookItem
         Session::write('gradebook_dest', $url);
     }
 
-
     /**
      * @return int
      */

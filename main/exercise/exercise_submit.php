@@ -109,7 +109,6 @@ $logInfo = [
 ];
 Event::registerLog($logInfo);
 
-// Error message
 $error = '';
 $exercise_attempt_table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
 
@@ -667,7 +666,7 @@ if ($formSent && isset($_POST)) {
                 // stores the user answer into the array
                 $exerciseResult[$key] = $choice[$key];
                 //saving each question
-                if ($objExercise->feedback_type != EXERCISE_FEEDBACK_TYPE_DIRECT) {
+                if (!in_array($objExercise->getFeedbackType(), [EXERCISE_FEEDBACK_TYPE_DIRECT, EXERCISE_FEEDBACK_TYPE_POPUP])) {
                     $nro_question = $current_question; // - 1;
                     $questionId = $key;
                     // gets the student choice for this question
@@ -1395,7 +1394,7 @@ if (!empty($error)) {
                 $i++;
                 continue;
             } else {
-                if ($objExercise->feedback_type != EXERCISE_FEEDBACK_TYPE_DIRECT) {
+                if (!in_array($objExercise->getFeedbackType(), [EXERCISE_FEEDBACK_TYPE_DIRECT, EXERCISE_FEEDBACK_TYPE_POPUP])) {
                     // if the user has already answered this question
                     if (isset($exerciseResult[$questionId])) {
                         // construction of the Question object
@@ -1414,11 +1413,23 @@ if (!empty($error)) {
         $user_choice = null;
         if (isset($attempt_list[$questionId])) {
             $user_choice = $attempt_list[$questionId];
-        } elseif ($objExercise->saveCorrectAnswers) {
-            $correctAnswers = $objExercise->getCorrectAnswersInAllAttempts(
-                $learnpath_id,
-                $learnpath_item_id
-            );
+        } elseif ($objExercise->getSaveCorrectAnswers()) {
+            $correctAnswers = [];
+            switch ($objExercise->getSaveCorrectAnswers()) {
+                case 1:
+                    $correctAnswers = $objExercise->getCorrectAnswersInAllAttempts(
+                        $learnpath_id,
+                        $learnpath_item_id
+                    );
+                    break;
+                case 2:
+                    $correctAnswers = $objExercise->getAnswersInAllAttempts(
+                        $learnpath_id,
+                        $learnpath_item_id,
+                        false
+                    );
+                    break;
+            }
 
             if (isset($correctAnswers[$questionId])) {
                 $user_choice = $correctAnswers[$questionId];
@@ -1426,8 +1437,7 @@ if (!empty($error)) {
         }
 
         $remind_highlight = '';
-
-        //Hides questions when reviewing a ALL_ON_ONE_PAGE exercise see #4542 no_remind_highlight class hide with jquery
+        // Hides questions when reviewing a ALL_ON_ONE_PAGE exercise see #4542 no_remind_highlight class hide with jquery
         if ($objExercise->type == ALL_ON_ONE_PAGE &&
             isset($_GET['reminder']) && $_GET['reminder'] == 2
         ) {

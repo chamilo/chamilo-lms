@@ -54,7 +54,7 @@ class UniqueAnswerNoOption extends Question
          */
 
         $feedback_title = '';
-        if ($obj_ex->selectFeedbackType() == 1) {
+        if ($obj_ex->getFeedbackType() == 1) {
             $editor_config['Width'] = '250';
             $editor_config['Height'] = '110';
             $comment_title = '<th width="50%" >'.get_lang('Comment').'</th>';
@@ -405,12 +405,13 @@ class UniqueAnswerNoOption extends Question
         $header .= '<table class="'.$this->question_table_class.'"><tr>';
 
         if (!in_array($exercise->results_disabled, [
-            RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER,
-            //RESULT_DISABLE_SHOW_SCORE_AND_EXPECTED_ANSWERS_AND_RANKING,
+            RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER
         ])
         ) {
             $header .= '<th>'.get_lang('Choice').'</th>';
-            $header .= '<th>'.get_lang('ExpectedChoice').'</th>';
+            if ($exercise->showExpectedChoiceColumn()) {
+                $header .= '<th>'.get_lang('ExpectedChoice').'</th>';
+            }
         }
         $header .= '<th>'.get_lang('Answer').'</th>';
         if ($exercise->showExpectedChoice()) {

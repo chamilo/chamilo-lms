@@ -1816,17 +1816,17 @@ abstract class Question
      */
     public static function displayTypeMenu($objExercise)
     {
-        $feedback_type = $objExercise->feedback_type;
+        $feedbackType = $objExercise->getFeedbackType();
         $exerciseId = $objExercise->id;
 
         // 1. by default we show all the question types
         $question_type_custom_list = self::get_question_type_list();
 
-        if (!isset($feedback_type)) {
-            $feedback_type = 0;
+        if (!isset($feedbackType)) {
+            $feedbackType = 0;
         }
 
-        if ($feedback_type == 1) {
+        if (in_array($feedbackType, [EXERCISE_FEEDBACK_TYPE_DIRECT, EXERCISE_FEEDBACK_TYPE_POPUP])) {
             //2. but if it is a feedback DIRECT we only show the UNIQUE_ANSWER type that is currently available
             $question_type_custom_list = [
                 UNIQUE_ANSWER => self::$questionTypes[UNIQUE_ANSWER],
@@ -1875,7 +1875,7 @@ abstract class Question
                 ICON_SIZE_BIG
             );
         } else {
-            if ($feedback_type == 1) {
+            if (in_array($feedbackType, [EXERCISE_FEEDBACK_TYPE_DIRECT, EXERCISE_FEEDBACK_TYPE_POPUP])) {
                 echo $url = "<a href=\"question_pool.php?".api_get_cidreq()."&type=1&fromExercise=$exerciseId\">";
             } else {
                 echo $url = '<a href="question_pool.php?'.api_get_cidreq().'&fromExercise='.$exerciseId.'">';
@@ -2403,7 +2403,7 @@ abstract class Question
     {
         return
             in_array($this->type, $this->questionTypeWithFeedback) &&
-            $exercise->feedback_type != EXERCISE_FEEDBACK_TYPE_EXAM;
+            $exercise->getFeedbackType() != EXERCISE_FEEDBACK_TYPE_EXAM;
     }
 
     /**

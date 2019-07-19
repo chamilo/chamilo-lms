@@ -1231,6 +1231,7 @@ $_configuration['required_extra_fields_in_profile'] = [
 // ALTER TABLE c_quiz ADD page_result_configuration LONGTEXT DEFAULT NULL COMMENT '(DC2Type:array)';
 //$_configuration['allow_quiz_results_page_config'] = false;
 
+// Allow multiple options for the exercise "save answer" option
 // ALTER TABLE c_quiz MODIFY COLUMN save_correct_answers INT NULL DEFAULT NULL;
 //$_configuration['allow_quiz_save_correct_options'] = false;
 

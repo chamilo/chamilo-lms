@@ -254,7 +254,7 @@ if (!isset($src)) {
                 if (WhispeakAuthPlugin::isLpItemMarked($lp_item_id)) {
                     ChamiloSession::write(
                         WhispeakAuthPlugin::SESSION_LP_ITEM,
-                        ['lp' => $lp->lp_id,'lp_item' => $lp_item_id, 'src' => $src]
+                        ['lp' => $lp->lp_id, 'lp_item' => $lp_item_id, 'src' => $src]
                     );
 
                     $src = api_get_path(WEB_PLUGIN_PATH).'whispeakauth/authentify.php';

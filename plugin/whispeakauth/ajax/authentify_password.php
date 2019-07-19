@@ -2,7 +2,6 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\PluginBundle\Entity\WhispeakAuth\LogEvent;
-use Chamilo\PluginBundle\Entity\WhispeakAuth\LogEventQuiz;
 
 $cidReset = true;
 

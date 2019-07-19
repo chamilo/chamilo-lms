@@ -62,166 +62,11 @@ class WhispeakAuthPlugin extends Plugin implements HookPluginInterface
         $this->installEntities();
     }
 
-    /**
-     * Install extra fields for user, learning path and quiz question.
-     */
-    private function installExtraFields()
-    {
-        UserManager::create_extra_field(
-            self::EXTRAFIELD_AUTH_UID,
-            \ExtraField::FIELD_TYPE_TEXT,
-            $this->get_lang('Whispeak uid'),
-            ''
-        );
-
-        LpItem::createExtraField(
-            self::EXTRAFIELD_LP_ITEM,
-            \ExtraField::FIELD_TYPE_CHECKBOX,
-            $this->get_lang('MarkForSpeechAuthentication'),
-            '0',
-            true,
-            true
-        );
-
-        $extraField = new \ExtraField('question');
-        $params = [
-            'variable' => self::EXTRAFIELD_QUIZ_QUESTION,
-            'field_type' => \ExtraField::FIELD_TYPE_CHECKBOX,
-            'display_text' => $this->get_lang('MarkForSpeechAuthentication'),
-            'default_value' => '0',
-            'changeable' => true,
-            'visible_to_self' => true,
-            'visible_to_others' => false,
-        ];
-
-        $extraField->save($params);
-    }
-
-    /**
-     * Install the Doctrine's entities.
-     */
-    private function installEntities()
-    {
-        $pluginEntityPath = $this->getEntityPath();
-
-        if (!is_dir($pluginEntityPath)) {
-            if (!is_writable(dirname($pluginEntityPath))) {
-                Display::addFlash(
-                    Display::return_message(get_lang('ErrorCreatingDir').": $pluginEntityPath", 'error')
-                );
-
-                return;
-            }
-
-            mkdir($pluginEntityPath, api_get_permissions_for_new_directories());
-        }
-
-        $fs = new Filesystem();
-        $fs->mirror(__DIR__.'/Entity/', $pluginEntityPath, null, ['override']);
-
-        $schema = Database::getManager()->getConnection()->getSchemaManager();
-
-        if (false === $schema->tablesExist('whispeak_log_event')) {
-            $sql = "CREATE TABLE whispeak_log_event (
-                    id INT AUTO_INCREMENT NOT NULL,
-                    user_id INT NOT NULL,
-                    lp_item_id INT DEFAULT NULL,
-                    lp_id INT DEFAULT NULL,
-                    question_id INT DEFAULT NULL,
-                    quiz_id INT DEFAULT NULL,
-                    datetime DATETIME NOT NULL,
-                    action_status SMALLINT NOT NULL,
-                    discr VARCHAR(255) NOT NULL,
-                    INDEX IDX_A5C4B9FFA76ED395 (user_id),
-                    INDEX IDX_A5C4B9FFDBF72317 (lp_item_id),
-                    INDEX IDX_A5C4B9FF68DFD1EF (lp_id),
-                    INDEX IDX_A5C4B9FF1E27F6BF (question_id),
-                    INDEX IDX_A5C4B9FF853CD175 (quiz_id),
-                    PRIMARY KEY(id)
-                ) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB";
-            Database::query($sql);
-            $sql = "ALTER TABLE whispeak_log_event ADD CONSTRAINT FK_A5C4B9FFA76ED395
-                FOREIGN KEY (user_id) REFERENCES user (id)";
-            Database::query($sql);
-            $sql = "ALTER TABLE whispeak_log_event ADD CONSTRAINT FK_A5C4B9FFDBF72317
-                FOREIGN KEY (lp_item_id) REFERENCES c_lp_item (iid)";
-            Database::query($sql);
-            $sql = "ALTER TABLE whispeak_log_event ADD CONSTRAINT FK_A5C4B9FF68DFD1EF
-                FOREIGN KEY (lp_id) REFERENCES c_lp (iid)";
-            Database::query($sql);
-            $sql = "ALTER TABLE whispeak_log_event ADD CONSTRAINT FK_A5C4B9FF1E27F6BF
-                FOREIGN KEY (question_id) REFERENCES c_quiz_question (iid)";
-            Database::query($sql);
-            $sql = "ALTER TABLE whispeak_log_event ADD CONSTRAINT FK_A5C4B9FF853CD175
-                FOREIGN KEY (quiz_id) REFERENCES c_quiz (iid)";
-            Database::query($sql);
-        }
-    }
-
     public function uninstall()
     {
         $this->uninstallHook();
         $this->uninstallExtraFields();
         $this->uninstallEntities();
-    }
-
-    /**
-     * Uninstall extra fields for user, learning path and quiz question.
-     */
-    private function uninstallExtraFields()
-    {
-        $em = Database::getManager();
-
-        $authIdExtrafield = self::getAuthUidExtraField();
-
-        if (!empty($authIdExtrafield)) {
-            $em
-                ->createQuery('DELETE FROM ChamiloCoreBundle:ExtraFieldValues efv WHERE efv.field = :field')
-                ->execute(['field' => $authIdExtrafield]);
-
-            $em->remove($authIdExtrafield);
-            $em->flush();
-        }
-
-        $lpItemExtrafield = self::getLpItemExtraField();
-
-        if (!empty($lpItemExtrafield)) {
-            $em
-                ->createQuery('DELETE FROM ChamiloCoreBundle:ExtraFieldValues efv WHERE efv.field = :field')
-                ->execute(['field' => $lpItemExtrafield]);
-
-            $em->remove($lpItemExtrafield);
-            $em->flush();
-        }
-
-        $quizQuestionExtrafield = self::getQuizQuestionExtraField();
-
-        if (!empty($quizQuestionExtrafield)) {
-            $em
-                ->createQuery('DELETE FROM ChamiloCoreBundle:ExtraFieldValues efv WHERE efv.field = :field')
-                ->execute(['field' => $quizQuestionExtrafield]);
-
-            $em->remove($quizQuestionExtrafield);
-            $em->flush();
-        }
-    }
-
-    /**
-     * Uninstall the Doctrine's entities.
-     */
-    private function uninstallEntities()
-    {
-        $pluginEntityPath = $this->getEntityPath();
-
-        $fs = new Filesystem();
-
-        if ($fs->exists($pluginEntityPath)) {
-            $fs->remove($pluginEntityPath);
-        }
-
-        $table = Database::get_main_table('whispeak_log_event');
-        $sql = "DROP TABLE IF EXISTS $table";
-        Database::query($sql);
     }
 
     /**
@@ -1111,50 +956,6 @@ class WhispeakAuthPlugin extends Plugin implements HookPluginInterface
     }
 
     /**
-     * @param int $lpId
-     * @param int $userId
-     *
-     * @throws \Doctrine\ORM\Query\QueryException
-     *
-     * @return string
-     */
-    private static function countAllAttemptsInLearningPath($lpId, $userId)
-    {
-        $query = Database::getManager()
-            ->createQuery(
-                'SELECT COUNT(log) AS c FROM ChamiloPluginBundle:WhispeakAuth\LogEventLp log
-                WHERE log.lp = :lp AND log.user = :user'
-            )
-            ->setParameters(['lp' => $lpId, 'user' => $userId]);
-
-        $totalCount = (int) $query->getSingleScalarResult();
-
-        return $totalCount;
-    }
-
-    /**
-     * @param int $lpId
-     * @param int $userId
-     *
-     * @throws \Doctrine\ORM\Query\QueryException
-     *
-     * @return string
-     */
-    private static function countSuccessAttemptsInLearningPath($lpId, $userId)
-    {
-        $query = Database::getManager()
-            ->createQuery(
-                'SELECT COUNT(log) AS c FROM ChamiloPluginBundle:WhispeakAuth\LogEventLp log
-                WHERE log.lp = :lp AND log.user = :user AND log.actionStatus = :status'
-            )
-            ->setParameters(['lp' => $lpId, 'user' => $userId, 'status' => LogEvent::STATUS_SUCCESS]);
-
-        $totalCount = (int) $query->getSingleScalarResult();
-
-        return $totalCount;
-    }
-
-    /**
      * @param int $userId
      * @param int $questionId
      * @param int $quizId
@@ -1286,6 +1087,205 @@ class WhispeakAuthPlugin extends Plugin implements HookPluginInterface
         }
 
         return Display::tag('strong', $return, $attributes);
+    }
+
+    /**
+     * Install extra fields for user, learning path and quiz question.
+     */
+    private function installExtraFields()
+    {
+        UserManager::create_extra_field(
+            self::EXTRAFIELD_AUTH_UID,
+            \ExtraField::FIELD_TYPE_TEXT,
+            $this->get_lang('Whispeak uid'),
+            ''
+        );
+
+        LpItem::createExtraField(
+            self::EXTRAFIELD_LP_ITEM,
+            \ExtraField::FIELD_TYPE_CHECKBOX,
+            $this->get_lang('MarkForSpeechAuthentication'),
+            '0',
+            true,
+            true
+        );
+
+        $extraField = new \ExtraField('question');
+        $params = [
+            'variable' => self::EXTRAFIELD_QUIZ_QUESTION,
+            'field_type' => \ExtraField::FIELD_TYPE_CHECKBOX,
+            'display_text' => $this->get_lang('MarkForSpeechAuthentication'),
+            'default_value' => '0',
+            'changeable' => true,
+            'visible_to_self' => true,
+            'visible_to_others' => false,
+        ];
+
+        $extraField->save($params);
+    }
+
+    /**
+     * Install the Doctrine's entities.
+     */
+    private function installEntities()
+    {
+        $pluginEntityPath = $this->getEntityPath();
+
+        if (!is_dir($pluginEntityPath)) {
+            if (!is_writable(dirname($pluginEntityPath))) {
+                Display::addFlash(
+                    Display::return_message(get_lang('ErrorCreatingDir').": $pluginEntityPath", 'error')
+                );
+
+                return;
+            }
+
+            mkdir($pluginEntityPath, api_get_permissions_for_new_directories());
+        }
+
+        $fs = new Filesystem();
+        $fs->mirror(__DIR__.'/Entity/', $pluginEntityPath, null, ['override']);
+
+        $schema = Database::getManager()->getConnection()->getSchemaManager();
+
+        if (false === $schema->tablesExist('whispeak_log_event')) {
+            $sql = "CREATE TABLE whispeak_log_event (
+                    id INT AUTO_INCREMENT NOT NULL,
+                    user_id INT NOT NULL,
+                    lp_item_id INT DEFAULT NULL,
+                    lp_id INT DEFAULT NULL,
+                    question_id INT DEFAULT NULL,
+                    quiz_id INT DEFAULT NULL,
+                    datetime DATETIME NOT NULL,
+                    action_status SMALLINT NOT NULL,
+                    discr VARCHAR(255) NOT NULL,
+                    INDEX IDX_A5C4B9FFA76ED395 (user_id),
+                    INDEX IDX_A5C4B9FFDBF72317 (lp_item_id),
+                    INDEX IDX_A5C4B9FF68DFD1EF (lp_id),
+                    INDEX IDX_A5C4B9FF1E27F6BF (question_id),
+                    INDEX IDX_A5C4B9FF853CD175 (quiz_id),
+                    PRIMARY KEY(id)
+                ) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB";
+            Database::query($sql);
+            $sql = "ALTER TABLE whispeak_log_event ADD CONSTRAINT FK_A5C4B9FFA76ED395
+                FOREIGN KEY (user_id) REFERENCES user (id)";
+            Database::query($sql);
+            $sql = "ALTER TABLE whispeak_log_event ADD CONSTRAINT FK_A5C4B9FFDBF72317
+                FOREIGN KEY (lp_item_id) REFERENCES c_lp_item (iid)";
+            Database::query($sql);
+            $sql = "ALTER TABLE whispeak_log_event ADD CONSTRAINT FK_A5C4B9FF68DFD1EF
+                FOREIGN KEY (lp_id) REFERENCES c_lp (iid)";
+            Database::query($sql);
+            $sql = "ALTER TABLE whispeak_log_event ADD CONSTRAINT FK_A5C4B9FF1E27F6BF
+                FOREIGN KEY (question_id) REFERENCES c_quiz_question (iid)";
+            Database::query($sql);
+            $sql = "ALTER TABLE whispeak_log_event ADD CONSTRAINT FK_A5C4B9FF853CD175
+                FOREIGN KEY (quiz_id) REFERENCES c_quiz (iid)";
+            Database::query($sql);
+        }
+    }
+
+    /**
+     * Uninstall extra fields for user, learning path and quiz question.
+     */
+    private function uninstallExtraFields()
+    {
+        $em = Database::getManager();
+
+        $authIdExtrafield = self::getAuthUidExtraField();
+
+        if (!empty($authIdExtrafield)) {
+            $em
+                ->createQuery('DELETE FROM ChamiloCoreBundle:ExtraFieldValues efv WHERE efv.field = :field')
+                ->execute(['field' => $authIdExtrafield]);
+
+            $em->remove($authIdExtrafield);
+            $em->flush();
+        }
+
+        $lpItemExtrafield = self::getLpItemExtraField();
+
+        if (!empty($lpItemExtrafield)) {
+            $em
+                ->createQuery('DELETE FROM ChamiloCoreBundle:ExtraFieldValues efv WHERE efv.field = :field')
+                ->execute(['field' => $lpItemExtrafield]);
+
+            $em->remove($lpItemExtrafield);
+            $em->flush();
+        }
+
+        $quizQuestionExtrafield = self::getQuizQuestionExtraField();
+
+        if (!empty($quizQuestionExtrafield)) {
+            $em
+                ->createQuery('DELETE FROM ChamiloCoreBundle:ExtraFieldValues efv WHERE efv.field = :field')
+                ->execute(['field' => $quizQuestionExtrafield]);
+
+            $em->remove($quizQuestionExtrafield);
+            $em->flush();
+        }
+    }
+
+    /**
+     * Uninstall the Doctrine's entities.
+     */
+    private function uninstallEntities()
+    {
+        $pluginEntityPath = $this->getEntityPath();
+
+        $fs = new Filesystem();
+
+        if ($fs->exists($pluginEntityPath)) {
+            $fs->remove($pluginEntityPath);
+        }
+
+        $table = Database::get_main_table('whispeak_log_event');
+        $sql = "DROP TABLE IF EXISTS $table";
+        Database::query($sql);
+    }
+
+    /**
+     * @param int $lpId
+     * @param int $userId
+     *
+     * @throws \Doctrine\ORM\Query\QueryException
+     *
+     * @return string
+     */
+    private static function countAllAttemptsInLearningPath($lpId, $userId)
+    {
+        $query = Database::getManager()
+            ->createQuery(
+                'SELECT COUNT(log) AS c FROM ChamiloPluginBundle:WhispeakAuth\LogEventLp log
+                WHERE log.lp = :lp AND log.user = :user'
+            )
+            ->setParameters(['lp' => $lpId, 'user' => $userId]);
+
+        $totalCount = (int) $query->getSingleScalarResult();
+
+        return $totalCount;
+    }
+
+    /**
+     * @param int $lpId
+     * @param int $userId
+     *
+     * @throws \Doctrine\ORM\Query\QueryException
+     *
+     * @return string
+     */
+    private static function countSuccessAttemptsInLearningPath($lpId, $userId)
+    {
+        $query = Database::getManager()
+            ->createQuery(
+                'SELECT COUNT(log) AS c FROM ChamiloPluginBundle:WhispeakAuth\LogEventLp log
+                WHERE log.lp = :lp AND log.user = :user AND log.actionStatus = :status'
+            )
+            ->setParameters(['lp' => $lpId, 'user' => $userId, 'status' => LogEvent::STATUS_SUCCESS]);
+
+        $totalCount = (int) $query->getSingleScalarResult();
+
+        return $totalCount;
     }
 
     /**

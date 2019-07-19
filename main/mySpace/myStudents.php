@@ -1302,7 +1302,7 @@ if (empty($details)) {
                         [
                             'action' => 'export_one_session_row',
                             'export' => 'csv',
-                            'session_to_export' => $sId
+                            'session_to_export' => $sId,
                         ]
                     )
             );
@@ -1313,7 +1313,7 @@ if (empty($details)) {
                         [
                             'action' => 'export_one_session_row',
                             'export' => 'xls',
-                            'session_to_export' => $sId
+                            'session_to_export' => $sId,
                         ]
                     )
             );

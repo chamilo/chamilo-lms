@@ -8414,4 +8414,10 @@ $VersionFromVersionFile = "Version from the version file";
 $VersionFromConfigFile = "Version from the config file";
 $TheVersionFromTheVersionFileIsUpdatedWithEachVersionIfMainInstallDirectoryIsPresent = "The version from the version.php file is updated with each version but only available if the main/install/ directory is present.";
 $TheVersionFromTheConfigurationFileShowsOnTheAdminPageButHasToBeChangedManuallyOnUpgrade = "The version from the main configuration file shows on the main administration page, but has to be changed manually on upgrade.";
+$ResultsConfigurationPage = "Results page configuration";
+$HideExpectedAnswer = "Hide expected answers column";
+$HideTotalScore = "Hide total score";
+$HideQuestionScore = "Hide question score";
+$SaveAnswers = "Save answers";
+$SaveAllAnswers = "Pre-fill with answers from previous attempt";
 ?>

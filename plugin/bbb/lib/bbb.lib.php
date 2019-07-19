@@ -331,11 +331,6 @@ class bbb
         // Each simultaneous conference room needs to have a different
         // voice_bridge composed of a 5 digits number, so generating a random one
         $params['voice_bridge'] = rand(10000, 99999);
-
-        if ($this->debug) {
-            error_log("enter create_meeting ".print_r($params, 1));
-        }
-
         $params['created_at'] = api_get_utc_datetime();
         $params['access_url'] = $this->accessUrl;
 
@@ -350,10 +345,6 @@ class bbb
         $id = Database::insert($this->table, $params);
 
         if ($id) {
-            if ($this->debug) {
-                error_log("create_meeting: $id ");
-            }
-
             $meetingName = isset($params['meeting_name']) ? $params['meeting_name'] : $this->getCurrentVideoConferenceName();
             $welcomeMessage = isset($params['welcome_msg']) ? $params['welcome_msg'] : null;
             $record = isset($params['record']) && $params['record'] ? 'true' : 'false';
@@ -374,7 +365,7 @@ class bbb
                 'maxParticipants' => $max, // Optional. -1 = unlimitted. Not supported in BBB. [number]
                 'record' => $record, // New. 'true' will tell BBB to record the meeting.
                 'duration' => $duration, // Default = 0 which means no set duration in minutes. [number]
-                //'meta_category' => '', 				// Use to pass additional info to BBB server. See API docs.
+                //'meta_category' => '',  // Use to pass additional info to BBB server. See API docs.
             );
 
             $status = false;

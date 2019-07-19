@@ -127,7 +127,7 @@ class Exercise
         $this->globalCategoryId = null;
         $this->notifications = [];
         $this->exerciseCategoryId = 0;
-        $this->pageResultConfiguration = [];
+        $this->pageResultConfiguration;
 
 
         if (!empty($courseId)) {

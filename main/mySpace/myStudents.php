@@ -1035,6 +1035,9 @@ if (!empty($userGroups)) {
 }
 echo '</div></div>';
 
+$whispeakPlugin = WhispeakAuthPlugin::create();
+$isWhispeakEnabled = $whispeakPlugin->isEnabled();
+
 $exportCourseList = [];
 $lpIdList = [];
 if (empty($details)) {
@@ -1387,6 +1390,12 @@ if (empty($details)) {
                 $columnName
             );
         }
+
+        if ($isWhispeakEnabled) {
+            $columnHeadersToExport[] = get_plugin_lang('plugin_title', 'WhispeakAuthPlugin');
+            $headers .= Display::tag('th', get_plugin_lang('plugin_title', 'WhispeakAuthPlugin'));
+        }
+
         $csv_content[] = $columnHeadersToExport;
         $columnHeadersKeys = array_keys($columnHeaders);
         $categoriesTempList = learnpath::getCategories($courseInfo['real_id']);
@@ -1578,6 +1587,14 @@ if (empty($details)) {
                     echo Display::tag('td', $start_time);
                 }
 
+                if ($isWhispeakEnabled) {
+                    $whispeakReporting = WhispeakAuthPlugin::returnLearningPathReporting($lp_id, $student_id);
+
+                    $contentToExport[] = strip_tags($whispeakReporting);
+
+                    echo Display::tag('td', $whispeakReporting, ['class' => 'text-center']);
+                }
+
                 $csv_content[] = $contentToExport;
 
                 if ($any_result === true) {
@@ -1612,8 +1629,9 @@ if (empty($details)) {
                         );
                     }
                     echo '</td>';
-                    echo '</tr>';
                 }
+
+                echo '</tr>';
             }
             echo '</tbody></table></div>';
         }
@@ -1632,6 +1650,11 @@ if (empty($details)) {
         echo '<th>'.get_lang('Attempts').'</th>';
         echo '<th>'.get_lang('LatestAttempt').'</th>';
         echo '<th>'.get_lang('AllAttempts').'</th>';
+
+        if ($isWhispeakEnabled) {
+            echo '<th>'.get_plugin_lang('plugin_title', 'WhispeakAuthPlugin').'</th>';
+        }
+
         echo '</tr></thead><tbody>';
 
         $csv_content[] = [];
@@ -1641,6 +1664,10 @@ if (empty($details)) {
             get_lang('AvgCourseScore'),
             get_lang('Attempts'),
         ];
+
+        if ($isWhispeakEnabled) {
+            $csv_content[] = get_plugin_lang('plugin_title', 'WhispeakAuthPlugin');
+        }
 
         $t_quiz = Database::get_course_table(TABLE_QUIZ_TEST);
         $sessionCondition = api_get_session_condition(
@@ -1769,6 +1796,13 @@ if (empty($details)) {
                     );
                 }
                 echo '</td>';
+
+                if ($isWhispeakEnabled) {
+                    $whispeakReporting = WhispeakAuthPlugin::returnQuizReporting($exercise_id, $student_id);
+
+                    echo Display::tag('td', $whispeakReporting, ['class' => 'text-center']);
+                }
+
                 echo '</tr>';
                 $data_exercices[$i][] = $exercices['title'];
                 $data_exercices[$i][] = $score_percentage.'%';
@@ -1780,6 +1814,11 @@ if (empty($details)) {
                     $score_percentage,
                     $count_attempts,
                 ];
+
+                if ($isWhispeakEnabled) {
+                    $csvContentIndex = count($csv_content) - 1;
+                    $csv_content[$csvContentIndex][] = strip_tags($whispeakReporting);
+                }
 
                 $i++;
             }

@@ -3,7 +3,11 @@
 
 use Chamilo\CoreBundle\Entity\ExtraField;
 use Chamilo\CoreBundle\Entity\ExtraFieldValues;
+use Chamilo\PluginBundle\Entity\WhispeakAuth\LogEvent;
+use Chamilo\PluginBundle\Entity\WhispeakAuth\LogEventLp;
+use Chamilo\PluginBundle\Entity\WhispeakAuth\LogEventQuiz;
 use Chamilo\UserBundle\Entity\User;
+use Symfony\Component\Filesystem\Filesystem;
 
 /**
  * Class WhispeakAuthPlugin.
@@ -54,6 +58,15 @@ class WhispeakAuthPlugin extends Plugin implements HookPluginInterface
 
     public function install()
     {
+        $this->installExtraFields();
+        $this->installEntities();
+    }
+
+    /**
+     * Install extra fields for user, learning path and quiz question.
+     */
+    private function installExtraFields()
+    {
         UserManager::create_extra_field(
             self::EXTRAFIELD_AUTH_UID,
             \ExtraField::FIELD_TYPE_TEXT,
@@ -81,13 +94,82 @@ class WhispeakAuthPlugin extends Plugin implements HookPluginInterface
             'visible_to_others' => false,
         ];
 
-        return $extraField->save($params);
+        $extraField->save($params);
+    }
+
+    /**
+     * Install the Doctrine's entities.
+     */
+    private function installEntities()
+    {
+        $pluginEntityPath = $this->getEntityPath();
+
+        if (!is_dir($pluginEntityPath)) {
+            if (!is_writable(dirname($pluginEntityPath))) {
+                Display::addFlash(
+                    Display::return_message(get_lang('ErrorCreatingDir').": $pluginEntityPath", 'error')
+                );
+
+                return;
+            }
+
+            mkdir($pluginEntityPath, api_get_permissions_for_new_directories());
+        }
+
+        $fs = new Filesystem();
+        $fs->mirror(__DIR__.'/Entity/', $pluginEntityPath, null, ['override']);
+
+        $schema = Database::getManager()->getConnection()->getSchemaManager();
+
+        if (false === $schema->tablesExist('whispeak_log_event')) {
+            $sql = "CREATE TABLE whispeak_log_event (
+                    id INT AUTO_INCREMENT NOT NULL,
+                    user_id INT NOT NULL,
+                    lp_item_id INT DEFAULT NULL,
+                    lp_id INT DEFAULT NULL,
+                    question_id INT DEFAULT NULL,
+                    quiz_id INT DEFAULT NULL,
+                    datetime DATETIME NOT NULL,
+                    action_status SMALLINT NOT NULL,
+                    discr VARCHAR(255) NOT NULL,
+                    INDEX IDX_A5C4B9FFA76ED395 (user_id),
+                    INDEX IDX_A5C4B9FFDBF72317 (lp_item_id),
+                    INDEX IDX_A5C4B9FF68DFD1EF (lp_id),
+                    INDEX IDX_A5C4B9FF1E27F6BF (question_id),
+                    INDEX IDX_A5C4B9FF853CD175 (quiz_id),
+                    PRIMARY KEY(id)
+                ) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB";
+            Database::query($sql);
+            $sql = "ALTER TABLE whispeak_log_event ADD CONSTRAINT FK_A5C4B9FFA76ED395
+                FOREIGN KEY (user_id) REFERENCES user (id)";
+            Database::query($sql);
+            $sql = "ALTER TABLE whispeak_log_event ADD CONSTRAINT FK_A5C4B9FFDBF72317
+                FOREIGN KEY (lp_item_id) REFERENCES c_lp_item (iid)";
+            Database::query($sql);
+            $sql = "ALTER TABLE whispeak_log_event ADD CONSTRAINT FK_A5C4B9FF68DFD1EF
+                FOREIGN KEY (lp_id) REFERENCES c_lp (iid)";
+            Database::query($sql);
+            $sql = "ALTER TABLE whispeak_log_event ADD CONSTRAINT FK_A5C4B9FF1E27F6BF
+                FOREIGN KEY (question_id) REFERENCES c_quiz_question (iid)";
+            Database::query($sql);
+            $sql = "ALTER TABLE whispeak_log_event ADD CONSTRAINT FK_A5C4B9FF853CD175
+                FOREIGN KEY (quiz_id) REFERENCES c_quiz (iid)";
+            Database::query($sql);
+        }
     }
 
     public function uninstall()
     {
         $this->uninstallHook();
+        $this->uninstallExtraFields();
+        $this->uninstallEntities();
+    }
 
+    /**
+     * Uninstall extra fields for user, learning path and quiz question.
+     */
+    private function uninstallExtraFields()
+    {
         $em = Database::getManager();
 
         $authIdExtrafield = self::getAuthUidExtraField();
@@ -122,6 +204,32 @@ class WhispeakAuthPlugin extends Plugin implements HookPluginInterface
             $em->remove($quizQuestionExtrafield);
             $em->flush();
         }
+    }
+
+    /**
+     * Uninstall the Doctrine's entities.
+     */
+    private function uninstallEntities()
+    {
+        $pluginEntityPath = $this->getEntityPath();
+
+        $fs = new Filesystem();
+
+        if ($fs->exists($pluginEntityPath)) {
+            $fs->remove($pluginEntityPath);
+        }
+
+        $table = Database::get_main_table('whispeak_log_event');
+        $sql = "DROP TABLE IF EXISTS $table";
+        Database::query($sql);
+    }
+
+    /**
+     * @return string
+     */
+    public function getEntityPath()
+    {
+        return api_get_path(SYS_PATH).'src/Chamilo/PluginBundle/Entity/'.$this->getCamelCaseName();
     }
 
     /**
@@ -825,7 +933,7 @@ class WhispeakAuthPlugin extends Plugin implements HookPluginInterface
             return true;
         }
 
-        if ((int) $lpItemId !== (int) $markedItem['id']) {
+        if ((int) $lpItemId !== (int) $markedItem['lp_item']) {
             return true;
         }
 
@@ -852,7 +960,7 @@ class WhispeakAuthPlugin extends Plugin implements HookPluginInterface
         ChamiloSession::write(
             self::SESSION_QUIZ_QUESTION,
             [
-                'exercise' => (int) $exercise->iId,
+                'quiz' => (int) $exercise->iId,
                 'question' => (int) $questionId,
                 'url_params' => $_SERVER['QUERY_STRING'],
                 'passed' => false,
@@ -865,5 +973,362 @@ class WhispeakAuthPlugin extends Plugin implements HookPluginInterface
         $content = $template->fetch('whispeakauth/view/quiz_question.html.twig');
 
         echo $content;
+    }
+
+    /**
+     * @param int $userId
+     * @param int $lpItemId
+     * @param int $lpId
+     *
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     *
+     * @return LogEventLp|null
+     */
+    public function getLastRequiredAttemptInLearningPath($userId, $lpItemId, $lpId)
+    {
+        $query = Database::getManager()
+            ->createQuery(
+                'SELECT log FROM ChamiloPluginBundle:WhispeakAuth\LogEventLp log
+                WHERE
+                    log.user = :user AND
+                    log.lp = :lp AND
+                    log.lpItem = :lp_item AND
+                    log.actionStatus = :action_status
+                ORDER BY log.datetime DESC'
+            )
+            ->setMaxResults(1)
+            ->setParameters(
+                [
+                    'user' => $userId,
+                    'lp' => $lpId,
+                    'lp_item' => $lpItemId,
+                    'action_status' => LogEvent::STATUS_REQUIRED,
+                ]
+            );
+
+        /** @var LogEventLp|null $logEvent */
+        $logEvent = $query->getOneOrNullResult();
+
+        return $logEvent;
+    }
+
+    /**
+     * @param int $userId
+     * @param int $lpItemId
+     * @param int $lpId
+     *
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws \Doctrine\ORM\TransactionRequiredException
+     *
+     * @return LogEventLp|null
+     */
+    public function addAttemptInLearningPath($userId, $lpItemId, $lpId)
+    {
+        $em = Database::getManager();
+
+        $user = api_get_user_entity($userId);
+        $lpItem = $em->find('ChamiloCourseBundle:CLpItem', $lpItemId);
+        $lp = $em->find('ChamiloCourseBundle:CLp', $lpId);
+
+        if (empty($lp) || empty($lpItem)) {
+            return null;
+        }
+
+        $logEvent = new LogEventLp();
+        $logEvent
+            ->setLpItem($lpItem)
+            ->setLp($lp)
+            ->setUser($user)
+            ->setDatetime(
+                api_get_utc_datetime(null, false, true)
+            )
+            ->setActionStatus($logEvent::STATUS_REQUIRED);
+
+        $em->persist($logEvent);
+        $em->flush();
+
+        return $logEvent;
+    }
+
+    /**
+     * @param int $status
+     * @param int $userId
+     * @param int $lpItemId
+     * @param int $lpId
+     *
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     *
+     * @return LogEventLp|null
+     */
+    public function updateAttemptInLearningPath($status, $userId, $lpItemId, $lpId)
+    {
+        $em = Database::getManager();
+
+        $logEvent = $this->getLastRequiredAttemptInLearningPath($userId, $lpItemId, $lpId);
+
+        if (empty($logEvent)) {
+            return null;
+        }
+
+        if ($logEvent->getActionStatus() !== $status) {
+            $logEvent->setActionStatus($status);
+
+            $em->persist($logEvent);
+            $em->flush();
+        }
+
+        return $logEvent;
+    }
+
+    /**
+     * @param int $lpId
+     * @param int $userId
+     *
+     * @throws \Doctrine\ORM\Query\QueryException
+     *
+     * @return string
+     */
+    public static function returnLearningPathReporting($lpId, $userId)
+    {
+        $totalCount = self::countAllAttemptsInLearningPath($lpId, $userId);
+
+        if (0 === $totalCount) {
+            return '-';
+        }
+
+        $successCount = self::countSuccessAttemptsInLearningPath($lpId, $userId);
+
+        $attributes = ['class' => 'text-success'];
+        $return = "$successCount / $totalCount";
+
+        if ($successCount <= $totalCount / 2) {
+            $attributes['class'] = 'text-danger';
+        }
+
+        return Display::tag('strong', $return, $attributes);
+    }
+
+    /**
+     * @param int $lpId
+     * @param int $userId
+     *
+     * @throws \Doctrine\ORM\Query\QueryException
+     *
+     * @return string
+     */
+    private static function countAllAttemptsInLearningPath($lpId, $userId)
+    {
+        $query = Database::getManager()
+            ->createQuery(
+                'SELECT COUNT(log) AS c FROM ChamiloPluginBundle:WhispeakAuth\LogEventLp log
+                WHERE log.lp = :lp AND log.user = :user'
+            )
+            ->setParameters(['lp' => $lpId, 'user' => $userId]);
+
+        $totalCount = (int) $query->getSingleScalarResult();
+
+        return $totalCount;
+    }
+
+    /**
+     * @param int $lpId
+     * @param int $userId
+     *
+     * @throws \Doctrine\ORM\Query\QueryException
+     *
+     * @return string
+     */
+    private static function countSuccessAttemptsInLearningPath($lpId, $userId)
+    {
+        $query = Database::getManager()
+            ->createQuery(
+                'SELECT COUNT(log) AS c FROM ChamiloPluginBundle:WhispeakAuth\LogEventLp log
+                WHERE log.lp = :lp AND log.user = :user AND log.actionStatus = :status'
+            )
+            ->setParameters(['lp' => $lpId, 'user' => $userId, 'status' => LogEvent::STATUS_SUCCESS]);
+
+        $totalCount = (int) $query->getSingleScalarResult();
+
+        return $totalCount;
+    }
+
+    /**
+     * @param int $userId
+     * @param int $questionId
+     * @param int $quizId
+     *
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     *
+     * @return LogEventQuiz|null
+     */
+    public function getLastRequiredAttemptInQuiz($userId, $questionId, $quizId)
+    {
+        $query = Database::getManager()
+            ->createQuery(
+                'SELECT log FROM ChamiloPluginBundle:WhispeakAuth\LogEventQuiz log
+                WHERE
+                    log.user = :user AND
+                    log.quiz = :quiz AND
+                    log.question = :question AND
+                    log.actionStatus = :action_status
+                ORDER BY log.datetime DESC'
+            )
+            ->setMaxResults(1)
+            ->setParameters(
+                [
+                    'user' => $userId,
+                    'quiz' => $quizId,
+                    'question' => $questionId,
+                    'action_status' => LogEvent::STATUS_REQUIRED,
+                ]
+            );
+
+        /** @var LogEventQuiz|null $logEvent */
+        $logEvent = $query->getOneOrNullResult();
+
+        return $logEvent;
+    }
+
+    /**
+     * @param int $userId
+     * @param int $questionId
+     * @param int $quizId
+     *
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws \Doctrine\ORM\TransactionRequiredException
+     *
+     * @return LogEventQuiz|null
+     */
+    public function addAttemptInQuiz($userId, $questionId, $quizId)
+    {
+        $em = Database::getManager();
+
+        $user = api_get_user_entity($userId);
+        $question = $em->find('ChamiloCourseBundle:CQuizQuestion', $questionId);
+        $quiz = $em->find('ChamiloCourseBundle:CQuiz', $quizId);
+
+        if (empty($quiz) || empty($question)) {
+            return null;
+        }
+
+        $logEvent = new LogEventQuiz();
+        $logEvent
+            ->setQuestion($question)
+            ->setQuiz($quiz)
+            ->setUser($user)
+            ->setDatetime(
+                api_get_utc_datetime(null, false, true)
+            )
+            ->setActionStatus($logEvent::STATUS_REQUIRED);
+
+        $em->persist($logEvent);
+        $em->flush();
+
+        return $logEvent;
+    }
+
+    /**
+     * @param int $status
+     * @param int $userId
+     * @param int $questionId
+     * @param int $quizId
+     *
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     *
+     * @return LogEventQuiz|null
+     */
+    public function updateAttemptInQuiz($status, $userId, $questionId, $quizId)
+    {
+        $logEvent = $this->getLastRequiredAttemptInQuiz($userId, $questionId, $quizId);
+
+        if (empty($logEvent)) {
+            return null;
+        }
+
+        if ($logEvent->getActionStatus() !== $status) {
+            $logEvent->setActionStatus($status);
+
+            $em = Database::getManager();
+            $em->persist($logEvent);
+            $em->flush();
+        }
+
+        return $logEvent;
+    }
+
+    /**
+     * @param int $quizId
+     * @param int $userId
+     *
+     * @throws \Doctrine\ORM\Query\QueryException
+     *
+     * @return string
+     */
+    public static function returnQuizReporting($quizId, $userId)
+    {
+        $totalCount = self::countAllAttemptsInQuiz($quizId, $userId);
+
+        if (0 === $totalCount) {
+            return '-';
+        }
+
+        $successCount = self::countSuccessAttemptsInQuiz($quizId, $userId);
+
+        $attributes = ['class' => 'text-success'];
+        $return = "$successCount / $totalCount";
+
+        if ($successCount <= $totalCount / 2) {
+            $attributes['class'] = 'text-danger';
+        }
+
+        return Display::tag('strong', $return, $attributes);
+    }
+
+    /**
+     * @param int $quizId
+     * @param int $userId
+     *
+     * @throws \Doctrine\ORM\Query\QueryException
+     *
+     * @return string
+     */
+    private static function countAllAttemptsInQuiz($quizId, $userId)
+    {
+        $query = Database::getManager()
+            ->createQuery(
+                'SELECT COUNT(log) AS c FROM ChamiloPluginBundle:WhispeakAuth\LogEventQuiz log
+                WHERE log.quiz = :quiz AND log.user = :user'
+            )
+            ->setParameters(['quiz' => $quizId, 'user' => $userId]);
+
+        $totalCount = (int) $query->getSingleScalarResult();
+
+        return $totalCount;
+    }
+
+    /**
+     * @param int $quizId
+     * @param int $userId
+     *
+     * @throws \Doctrine\ORM\Query\QueryException
+     *
+     * @return string
+     */
+    private static function countSuccessAttemptsInQuiz($quizId, $userId)
+    {
+        $query = Database::getManager()
+            ->createQuery(
+                'SELECT COUNT(log) AS c FROM ChamiloPluginBundle:WhispeakAuth\LogEventQuiz log
+                WHERE log.quiz = :quiz AND log.user = :user AND log.actionStatus = :status'
+            )
+            ->setParameters(['quiz' => $quizId, 'user' => $userId, 'status' => LogEvent::STATUS_SUCCESS]);
+
+        $totalCount = (int) $query->getSingleScalarResult();
+
+        return $totalCount;
     }
 }

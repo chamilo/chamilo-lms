@@ -1,6 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\PluginBundle\Entity\WhispeakAuth\LogEvent;
 use Chamilo\UserBundle\Entity\User;
 use FFMpeg\FFMpeg;
 use FFMpeg\Format\Audio\Wav;
@@ -238,6 +239,13 @@ if ($isAuthentify) {
             ChamiloSession::erase(WhispeakAuthPlugin::SESSION_LP_ITEM);
             ChamiloSession::erase(WhispeakAuthPlugin::SESSION_2FA_USER);
 
+            $plugin->updateAttemptInLearningPath(
+                LogEvent::STATUS_SUCCESS,
+                $user->getId(),
+                $lpItemInfo['lp_item'],
+                $lpItemInfo['lp']
+            );
+
             echo '<script>window.setTimeout(function () {
                     window.location.href = "'.$lpItemInfo['src'].'";
                 }, 1500);</script>';
@@ -250,6 +258,13 @@ if ($isAuthentify) {
             $url = api_get_path(WEB_CODE_PATH).'exercise/exercise_submit.php?'.$quizQuestionInfo['url_params'];
 
             ChamiloSession::write(WhispeakAuthPlugin::SESSION_QUIZ_QUESTION, $quizQuestionInfo);
+
+            $plugin->updateAttemptInQuiz(
+                LogEvent::STATUS_SUCCESS,
+                $user->getId(),
+                $quizQuestionInfo['question'],
+                $quizQuestionInfo['quiz']
+            );
 
             echo '<script>window.setTimeout(function () {
                     window.location.href = "'.$url.'";

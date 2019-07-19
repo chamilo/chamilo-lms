@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\PluginBundle\Entity\WhispeakAuth\LogEvent;
+
 $cidReset = true;
 
 require_once __DIR__.'/../../main/inc/global.inc.php';
@@ -38,6 +40,20 @@ if (ChamiloSession::read(WhispeakAuthPlugin::SESSION_AUTH_PASSWORD, false)) {
     header('Location: '.api_get_path(WEB_PLUGIN_PATH).'whispeakauth/authentify_password.php');
 
     exit;
+}
+
+if (!empty($lpItemInfo)) {
+    $plugin->addAttemptInLearningPath(
+        $userId,
+        $lpItemInfo['lp_item'],
+        $lpItemInfo['lp']
+    );
+} elseif (!empty($lpQuestionInfo)) {
+    $plugin->addAttemptInQuiz(
+        $userId,
+        $lpQuestionInfo['question'],
+        $lpQuestionInfo['quiz']
+    );
 }
 
 if ($userId) {

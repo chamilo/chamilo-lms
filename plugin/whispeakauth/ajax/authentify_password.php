@@ -1,6 +1,9 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\PluginBundle\Entity\WhispeakAuth\LogEvent;
+use Chamilo\PluginBundle\Entity\WhispeakAuth\LogEventQuiz;
+
 $cidReset = true;
 
 require_once __DIR__.'/../../../main/inc/global.inc.php';
@@ -37,6 +40,11 @@ if (!in_array($user->getAuthSource(), [PLATFORM_AUTH_SOURCE, CAS_AUTH_SOURCE])) 
     WhispeakAuthPlugin::displayNotAllowedMessage();
 }
 
+/** @var array $lpItemInfo */
+$lpItemInfo = ChamiloSession::read(WhispeakAuthPlugin::SESSION_LP_ITEM, []);
+/** @var array $quizQuestionInfo */
+$quizQuestionInfo = ChamiloSession::read(WhispeakAuthPlugin::SESSION_QUIZ_QUESTION, []);
+
 $isValidPassword = UserManager::isPasswordValid($user->getPassword(), $password, $user->getSalt());
 $isActive = $user->isActive();
 $isExpired = empty($user->getExpirationDate()) || $user->getExpirationDate() > api_get_utc_datetime(null, false, true);
@@ -66,19 +74,49 @@ if (!$isValidPassword || !$isActive || !$isExpired) {
 
     echo Display::return_message($message, 'error', false);
 
-    if ($maxAttempts && $failedLogins >= $maxAttempts) {
-        //$userPass = true;
+    if (!$maxAttempts ||
+        ($maxAttempts && $failedLogins >= $maxAttempts)
+    ) {
+        if (!empty($lpItemInfo)) {
+            $plugin->updateAttemptInLearningPath(
+                LogEvent::STATUS_FAILED,
+                $user->getId(),
+                $lpItemInfo['lp_item'],
+                $lpItemInfo['lp']
+            );
+        } elseif (!empty($quizQuestionInfo)) {
+            $plugin->updateAttemptInQuiz(
+                LogEvent::STATUS_FAILED,
+                $user->getId(),
+                $quizQuestionInfo['question'],
+                $quizQuestionInfo['quiz']
+            );
+        }
+
+        $userPass = true;
     }
 } elseif ($isValidPassword) {
+    if (!empty($lpItemInfo)) {
+        $plugin->updateAttemptInLearningPath(
+            LogEvent::STATUS_SUCCESS,
+            $user->getId(),
+            $lpItemInfo['lp_item'],
+            $lpItemInfo['lp']
+        );
+    } elseif (!empty($quizQuestionInfo)) {
+        $plugin->updateAttemptInQuiz(
+            LogEvent::STATUS_SUCCESS,
+            $user->getId(),
+            $quizQuestionInfo['question'],
+            $quizQuestionInfo['quiz']
+        );
+    }
+
     echo Display::return_message($plugin->get_lang('AuthentifySuccess'), 'success');
 }
 
 if ($userPass) {
     $url = '';
-
-    /** @var array $lpItemInfo */
-    $lpItemInfo = ChamiloSession::read(WhispeakAuthPlugin::SESSION_LP_ITEM, []);
-    $quizQuestionInfo = ChamiloSession::read(WhispeakAuthPlugin::SESSION_QUIZ_QUESTION, []);
 
     ChamiloSession::erase(WhispeakAuthPlugin::SESSION_FAILED_LOGINS);
     ChamiloSession::erase(WhispeakAuthPlugin::SESSION_2FA_USER);

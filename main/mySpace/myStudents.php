@@ -1035,9 +1035,6 @@ if (!empty($userGroups)) {
 }
 echo '</div></div>';
 
-$whispeakPlugin = WhispeakAuthPlugin::create();
-$isWhispeakEnabled = $whispeakPlugin->isEnabled();
-
 $exportCourseList = [];
 $lpIdList = [];
 if (empty($details)) {
@@ -1668,8 +1665,21 @@ if (empty($details)) {
         echo '<th>'.get_lang('LatestAttempt').'</th>';
         echo '<th>'.get_lang('AllAttempts').'</th>';
 
-        if ($isWhispeakEnabled) {
-            echo '<th>'.get_plugin_lang('plugin_title', 'WhispeakAuthPlugin').'</th>';
+        $hookQuizTracking = HookMyStudentsQuizTracking::create();
+
+        if ($hookQuizTracking) {
+            $hookHeaders = array_map(
+                function ($hookHeader) {
+                    return Display::tag(
+                        'th',
+                        $hookHeader['value'],
+                        isset($hookHeader['attrs']) ? $hookHeader['attrs'] : []
+                    );
+                },
+                $hookQuizTracking->notifyTrackingHeader()
+            );
+
+            echo implode(PHP_EOL, $hookHeaders);
         }
 
         echo '</tr></thead><tbody>';
@@ -1682,8 +1692,16 @@ if (empty($details)) {
             get_lang('Attempts'),
         ];
 
-        if ($isWhispeakEnabled) {
-            $csv_content[] = get_plugin_lang('plugin_title', 'WhispeakAuthPlugin');
+        if ($hookQuizTracking) {
+            $hookHeaders = array_map(
+                function ($hookHeader) {
+                    return strip_tags($hookHeader['value']);
+                },
+                $hookQuizTracking->notifyTrackingHeader()
+            );
+
+            $csvContentIndex = count($csv_content) - 1;
+            $csv_content[$csvContentIndex] = array_merge($csv_content[$csvContentIndex], $hookHeaders);
         }
 
         $t_quiz = Database::get_course_table(TABLE_QUIZ_TEST);
@@ -1724,6 +1742,10 @@ if (empty($details)) {
                     1,
                     0
                 );
+
+                $hookContents = $hookQuizTracking
+                    ? $hookQuizTracking->notifyTrackingContent($exercise_id, $student_id)
+                    : [];
 
                 if (!isset($score_percentage) && $count_attempts > 0) {
                     $scores_lp = Tracking::get_avg_student_exercise_score(
@@ -1814,10 +1836,14 @@ if (empty($details)) {
                 }
                 echo '</td>';
 
-                if ($isWhispeakEnabled) {
-                    $whispeakReporting = WhispeakAuthPlugin::returnQuizReporting($exercise_id, $student_id);
-
-                    echo Display::tag('td', $whispeakReporting, ['class' => 'text-center']);
+                if (!empty($hookContents)) {
+                    foreach ($hookContents as $hookContent) {
+                        echo Display::tag(
+                            'td',
+                            $hookContent['value'],
+                            isset($hookContent['attrs']) ? $hookContent['attrs'] : []
+                        );
+                    }
                 }
 
                 echo '</tr>';
@@ -1832,9 +1858,12 @@ if (empty($details)) {
                     $count_attempts,
                 ];
 
-                if ($isWhispeakEnabled) {
+                if (!empty($hookContents)) {
                     $csvContentIndex = count($csv_content) - 1;
-                    $csv_content[$csvContentIndex][] = strip_tags($whispeakReporting);
+
+                    foreach ($hookContents as $hookContent) {
+                        $csv_content[$csvContentIndex][] = strip_tags($hookContent['value']);
+                    }
                 }
 
                 $i++;

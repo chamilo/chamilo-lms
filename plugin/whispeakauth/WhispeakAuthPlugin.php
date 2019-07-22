@@ -60,6 +60,7 @@ class WhispeakAuthPlugin extends Plugin implements HookPluginInterface
     {
         $this->installExtraFields();
         $this->installEntities();
+        $this->installHook();
     }
 
     public function uninstall()
@@ -708,9 +709,6 @@ class WhispeakAuthPlugin extends Plugin implements HookPluginInterface
             HookConditionalLogin::create()->detach($observer);
         }
 
-        $observer = WhispeakMyStudentsLpTrackingHook::create();
-        HookMyStudentsLpTracking::create()->attach($observer);
-
         return $this;
     }
 
@@ -719,6 +717,11 @@ class WhispeakAuthPlugin extends Plugin implements HookPluginInterface
      */
     public function installHook()
     {
+        $observer = WhispeakMyStudentsLpTrackingHook::create();
+        HookMyStudentsLpTracking::create()->attach($observer);
+
+        $observer = WhispeakMyStudentsQuizTrackingHook::create();
+        HookMyStudentsQuizTracking::create()->attach($observer);
     }
 
     /**
@@ -1038,34 +1041,6 @@ class WhispeakAuthPlugin extends Plugin implements HookPluginInterface
     }
 
     /**
-     * @param int $quizId
-     * @param int $userId
-     *
-     * @throws \Doctrine\ORM\Query\QueryException
-     *
-     * @return string
-     */
-    public static function returnQuizReporting($quizId, $userId)
-    {
-        $totalCount = self::countAllAttemptsInQuiz($quizId, $userId);
-
-        if (0 === $totalCount) {
-            return '-';
-        }
-
-        $successCount = self::countSuccessAttemptsInQuiz($quizId, $userId);
-
-        $attributes = ['class' => 'text-success'];
-        $return = "$successCount / $totalCount";
-
-        if ($successCount <= $totalCount / 2) {
-            $attributes['class'] = 'text-danger';
-        }
-
-        return Display::tag('strong', $return, $attributes);
-    }
-
-    /**
      * Install extra fields for user, learning path and quiz question.
      */
     private function installExtraFields()
@@ -1272,7 +1247,7 @@ class WhispeakAuthPlugin extends Plugin implements HookPluginInterface
      *
      * @return string
      */
-    private static function countAllAttemptsInQuiz($quizId, $userId)
+    public static function countAllAttemptsInQuiz($quizId, $userId)
     {
         $query = Database::getManager()
             ->createQuery(
@@ -1294,7 +1269,7 @@ class WhispeakAuthPlugin extends Plugin implements HookPluginInterface
      *
      * @return string
      */
-    private static function countSuccessAttemptsInQuiz($quizId, $userId)
+    public static function countSuccessAttemptsInQuiz($quizId, $userId)
     {
         $query = Database::getManager()
             ->createQuery(

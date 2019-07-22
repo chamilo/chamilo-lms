@@ -9916,7 +9916,7 @@ class Exercise
         );
         if (!empty($value)) {
             $value = (int) $value;
-            $endDate = new DateTime($exerciseResultInfo['exe_date']);
+            $endDate = new DateTime($exerciseResultInfo['exe_date'], new DateTimeZone('UTC'));
             $endDate->add(new DateInterval('PT'.$value.'M'));
             if (time() > $endDate->getTimestamp()) {
                 return false;
@@ -9924,6 +9924,7 @@ class Exercise
         }
         return true;
     }
+
     /**
      * @return int
      */

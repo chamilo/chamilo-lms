@@ -62,7 +62,10 @@ class WhispeakMyStudentsQuizTrackingHook extends HookObserver implements HookMyS
         $totalCount = WhispeakAuthPlugin::countAllAttemptsInQuiz($data['quiz_id'], $data['student_id']);
 
         if (0 === $totalCount) {
-            return ['value' => '-'];
+            return [
+                'value' => '-',
+                'attrs' => ['class' => 'text-center']
+            ];
         }
 
         $successCount = WhispeakAuthPlugin::countSuccessAttemptsInQuiz($data['quiz_id'], $data['student_id']);

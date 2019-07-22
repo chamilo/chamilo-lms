@@ -1396,11 +1396,7 @@ if (empty($details)) {
             foreach ($hookHeaders as $hookHeader) {
                 $columnHeadersToExport[] = $hookHeader['value'];
 
-                $headers .= Display::tag(
-                    'th',
-                    $hookHeader['value'],
-                    isset($hookHeader['attrs']) ? $hookHeader['attrs'] : []
-                );
+                $headers .= Display::tag('th', $hookHeader['value'], $hookHeader['attrs']);
             }
         }
 
@@ -1601,11 +1597,7 @@ if (empty($details)) {
                     foreach ($hookContents as $hookContent) {
                         $contentToExport[] = strip_tags($hookContent['value']);
 
-                        echo Display::tag(
-                            'td',
-                            $hookContent['value'],
-                            isset($hookContent['attrs']) ? $hookContent['attrs'] : []
-                        );
+                        echo Display::tag('td', $hookContent['value'], $hookContent['attrs']);
                     }
                 }
 
@@ -1670,11 +1662,7 @@ if (empty($details)) {
         if ($hookQuizTracking) {
             $hookHeaders = array_map(
                 function ($hookHeader) {
-                    return Display::tag(
-                        'th',
-                        $hookHeader['value'],
-                        isset($hookHeader['attrs']) ? $hookHeader['attrs'] : []
-                    );
+                    return Display::tag('th', $hookHeader['value'], $hookHeader['attrs']);
                 },
                 $hookQuizTracking->notifyTrackingHeader()
             );
@@ -1838,11 +1826,7 @@ if (empty($details)) {
 
                 if (!empty($hookContents)) {
                     foreach ($hookContents as $hookContent) {
-                        echo Display::tag(
-                            'td',
-                            $hookContent['value'],
-                            isset($hookContent['attrs']) ? $hookContent['attrs'] : []
-                        );
+                        echo Display::tag('td', $hookContent['value'], $hookContent['attrs']);
                     }
                 }
 

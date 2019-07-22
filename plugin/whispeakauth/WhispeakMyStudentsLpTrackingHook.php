@@ -44,7 +44,10 @@ class WhispeakMyStudentsLpTrackingHook extends HookObserver implements HookMyStu
         $totalCount = WhispeakAuthPlugin::countAllAttemptsInLearningPath($data['lp_id'], $data['student_id']);
 
         if (0 === $totalCount) {
-            return ['value' => '-'];
+            return [
+                'value' => '-',
+                'attrs' => ['class' => 'text-center']
+            ];
         }
 
         $successCount = WhispeakAuthPlugin::countSuccessAttemptsInLearningPath($data['lp_id'], $data['student_id']);

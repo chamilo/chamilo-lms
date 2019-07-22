@@ -302,6 +302,10 @@ if (!empty($attempts)) {
                 }
             }
 
+            if (!$objExercise->hasResultsAccess($attempt_result)) {
+                $attempt_link = '';
+            }
+
             $row['attempt_link'] = $attempt_link;
         }
         $my_attempt_array[] = $row;

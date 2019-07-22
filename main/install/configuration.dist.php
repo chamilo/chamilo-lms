@@ -1235,6 +1235,9 @@ $_configuration['required_extra_fields_in_profile'] = [
 // ALTER TABLE c_quiz MODIFY COLUMN save_correct_answers INT NULL DEFAULT NULL;
 //$_configuration['allow_quiz_save_correct_options'] = false;
 
+// Show languages flags by country in the language switcher.
+//$_configuration['language_flags_by_country'] = false;
+
 // KEEP THIS AT THE END
 // -------- Custom DB changes
 // Add user activation by confirmation email

@@ -64,7 +64,7 @@ class WhispeakMyStudentsQuizTrackingHook extends HookObserver implements HookMyS
         if (0 === $totalCount) {
             return [
                 'value' => '-',
-                'attrs' => ['class' => 'text-center']
+                'attrs' => ['class' => 'text-center'],
             ];
         }
 

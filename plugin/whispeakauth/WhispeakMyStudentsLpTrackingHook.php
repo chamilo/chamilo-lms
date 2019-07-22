@@ -46,7 +46,7 @@ class WhispeakMyStudentsLpTrackingHook extends HookObserver implements HookMyStu
         if (0 === $totalCount) {
             return [
                 'value' => '-',
-                'attrs' => ['class' => 'text-center']
+                'attrs' => ['class' => 'text-center'],
             ];
         }
 

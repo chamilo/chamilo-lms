@@ -6697,6 +6697,27 @@ SQL;
     }
 
     /**
+     * Return the user's full name. Optionally with the username.
+     *
+     * @param User $user
+     * @param bool $includeUsername Optional. By default username is not included.
+     *
+     * @return string
+     */
+    public static function formatUserFullName(User $user, $includeUsername = false)
+    {
+        $fullName = api_get_person_name($user->getFirstname(), $user->getLastname());
+
+        if ($includeUsername && api_get_configuration_value('hide_username_with_complete_name') !== true) {
+            $username = $user->getUsername();
+
+            return "$fullName ($username)";
+        }
+
+        return $fullName;
+    }
+
+    /**
      * @return EncoderFactory
      */
     private static function getEncoderFactory()

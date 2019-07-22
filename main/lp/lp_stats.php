@@ -51,7 +51,7 @@ $output = Tracking::getLpStats(
 );
 
 // Origin = tracking means that teachers see that info in the Reporting tool
-if ($origin != 'tracking') {
+if ($origin !== 'tracking') {
     Display::display_reduced_header();
     $output .= '</body></html>';
 }

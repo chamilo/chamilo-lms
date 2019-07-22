@@ -171,10 +171,9 @@ class Tracking
 
         // Extend all button
         $output = '';
+        $url_suffix = '&lp_id='.$lp_id;
         if ($origin === 'tracking') {
             $url_suffix = '&session_id='.$session_id.'&course='.$courseCode.'&student_id='.$user_id.'&lp_id='.$lp_id.'&origin='.$origin;
-        } else {
-            $url_suffix = '&lp_id='.$lp_id;
         }
 
         $extend_all = 0;
@@ -622,7 +621,7 @@ class Tracking
                     $my_lp_view_id = $row['mylpviewid'];
                     $my_path = $row['path'];
                     $result_disabled_ext_all = false;
-                    if ($row['item_type'] == 'quiz') {
+                    if ($row['item_type'] === 'quiz') {
                         // Check results_disabled in quiz table.
                         $my_path = Database::escape_string($my_path);
                         $sql = "SELECT results_disabled

@@ -6,7 +6,6 @@ use Chamilo\CoreBundle\Entity\TrackEHotspot;
 use ChamiloSession as Session;
 use Doctrine\DBAL\Types\Type;
 
-
 /**
  * Class Exercise.
  *
@@ -128,7 +127,6 @@ class Exercise
         $this->notifications = [];
         $this->exerciseCategoryId = 0;
         $this->pageResultConfiguration;
-
 
         if (!empty($courseId)) {
             $courseInfo = api_get_course_info_by_id($courseId);
@@ -2498,7 +2496,6 @@ class Exercise
         if (api_get_setting('search_enabled') === 'true') {
             $defaults['index_document'] = 'checked="checked"';
         }
-
 
         $this->setPageResultConfigurationDefaults($defaults);
         $form->setDefaults($defaults);

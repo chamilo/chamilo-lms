@@ -700,11 +700,16 @@ class WhispeakAuthPlugin extends Plugin implements HookPluginInterface
      */
     public function performActionsAfterConfigure()
     {
+        $observer = WhispeakConditionalLoginHook::create();
+
         if ('true' === $this->get(self::SETTING_2FA)) {
-            $this->installHook();
+            HookConditionalLogin::create()->attach($observer);
         } else {
-            $this->uninstallHook();
+            HookConditionalLogin::create()->detach($observer);
         }
+
+        $observer = WhispeakMyStudentsLpTrackingHook::create();
+        HookMyStudentsLpTracking::create()->attach($observer);
 
         return $this;
     }
@@ -714,9 +719,6 @@ class WhispeakAuthPlugin extends Plugin implements HookPluginInterface
      */
     public function installHook()
     {
-        $observer = WhispeakConditionalLoginHook::create();
-
-        HookConditionalLogin::create()->attach($observer);
     }
 
     /**
@@ -725,8 +727,10 @@ class WhispeakAuthPlugin extends Plugin implements HookPluginInterface
     public function uninstallHook()
     {
         $observer = WhispeakConditionalLoginHook::create();
-
         HookConditionalLogin::create()->detach($observer);
+
+        $observer = WhispeakMyStudentsLpTrackingHook::create();
+        HookMyStudentsLpTracking::create()->detach($observer);
     }
 
     /**
@@ -925,34 +929,6 @@ class WhispeakAuthPlugin extends Plugin implements HookPluginInterface
         }
 
         return $logEvent;
-    }
-
-    /**
-     * @param int $lpId
-     * @param int $userId
-     *
-     * @throws \Doctrine\ORM\Query\QueryException
-     *
-     * @return string
-     */
-    public static function returnLearningPathReporting($lpId, $userId)
-    {
-        $totalCount = self::countAllAttemptsInLearningPath($lpId, $userId);
-
-        if (0 === $totalCount) {
-            return '-';
-        }
-
-        $successCount = self::countSuccessAttemptsInLearningPath($lpId, $userId);
-
-        $attributes = ['class' => 'text-success'];
-        $return = "$successCount / $totalCount";
-
-        if ($successCount <= $totalCount / 2) {
-            $attributes['class'] = 'text-danger';
-        }
-
-        return Display::tag('strong', $return, $attributes);
     }
 
     /**
@@ -1252,7 +1228,7 @@ class WhispeakAuthPlugin extends Plugin implements HookPluginInterface
      *
      * @return string
      */
-    private static function countAllAttemptsInLearningPath($lpId, $userId)
+    public static function countAllAttemptsInLearningPath($lpId, $userId)
     {
         $query = Database::getManager()
             ->createQuery(
@@ -1274,7 +1250,7 @@ class WhispeakAuthPlugin extends Plugin implements HookPluginInterface
      *
      * @return string
      */
-    private static function countSuccessAttemptsInLearningPath($lpId, $userId)
+    public static function countSuccessAttemptsInLearningPath($lpId, $userId)
     {
         $query = Database::getManager()
             ->createQuery(

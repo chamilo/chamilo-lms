@@ -1391,9 +1391,20 @@ if (empty($details)) {
             );
         }
 
-        if ($isWhispeakEnabled) {
-            $columnHeadersToExport[] = get_plugin_lang('plugin_title', 'WhispeakAuthPlugin');
-            $headers .= Display::tag('th', get_plugin_lang('plugin_title', 'WhispeakAuthPlugin'));
+        $hookLpTracking = HookMyStudentsLpTracking::create();
+
+        if ($hookLpTracking) {
+            $hookHeaders = $hookLpTracking->notifyTrackingHeader();
+
+            foreach ($hookHeaders as $hookHeader) {
+                $columnHeadersToExport[] = $hookHeader['value'];
+
+                $headers .= Display::tag(
+                    'th',
+                    $hookHeader['value'],
+                    isset($hookHeader['attrs']) ? $hookHeader['attrs'] : []
+                );
+            }
         }
 
         $csv_content[] = $columnHeadersToExport;
@@ -1587,12 +1598,18 @@ if (empty($details)) {
                     echo Display::tag('td', $start_time);
                 }
 
-                if ($isWhispeakEnabled) {
-                    $whispeakReporting = WhispeakAuthPlugin::returnLearningPathReporting($lp_id, $student_id);
+                if ($hookLpTracking) {
+                    $hookContents = $hookLpTracking->notifyTrackingContent($lp_id, $student_id);
 
-                    $contentToExport[] = strip_tags($whispeakReporting);
+                    foreach ($hookContents as $hookContent) {
+                        $contentToExport[] = strip_tags($hookContent['value']);
 
-                    echo Display::tag('td', $whispeakReporting, ['class' => 'text-center']);
+                        echo Display::tag(
+                            'td',
+                            $hookContent['value'],
+                            isset($hookContent['attrs']) ? $hookContent['attrs'] : []
+                        );
+                    }
                 }
 
                 $csv_content[] = $contentToExport;

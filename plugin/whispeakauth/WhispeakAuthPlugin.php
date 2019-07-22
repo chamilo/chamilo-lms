@@ -1041,6 +1041,94 @@ class WhispeakAuthPlugin extends Plugin implements HookPluginInterface
     }
 
     /**
+     * @param int $lpId
+     * @param int $userId
+     *
+     * @throws \Doctrine\ORM\Query\QueryException
+     *
+     * @return string
+     */
+    public static function countAllAttemptsInLearningPath($lpId, $userId)
+    {
+        $query = Database::getManager()
+            ->createQuery(
+                'SELECT COUNT(log) AS c FROM ChamiloPluginBundle:WhispeakAuth\LogEventLp log
+                WHERE log.lp = :lp AND log.user = :user'
+            )
+            ->setParameters(['lp' => $lpId, 'user' => $userId]);
+
+        $totalCount = (int) $query->getSingleScalarResult();
+
+        return $totalCount;
+    }
+
+    /**
+     * @param int $lpId
+     * @param int $userId
+     *
+     * @throws \Doctrine\ORM\Query\QueryException
+     *
+     * @return string
+     */
+    public static function countSuccessAttemptsInLearningPath($lpId, $userId)
+    {
+        $query = Database::getManager()
+            ->createQuery(
+                'SELECT COUNT(log) AS c FROM ChamiloPluginBundle:WhispeakAuth\LogEventLp log
+                WHERE log.lp = :lp AND log.user = :user AND log.actionStatus = :status'
+            )
+            ->setParameters(['lp' => $lpId, 'user' => $userId, 'status' => LogEvent::STATUS_SUCCESS]);
+
+        $totalCount = (int) $query->getSingleScalarResult();
+
+        return $totalCount;
+    }
+
+    /**
+     * @param int $quizId
+     * @param int $userId
+     *
+     * @throws \Doctrine\ORM\Query\QueryException
+     *
+     * @return string
+     */
+    public static function countAllAttemptsInQuiz($quizId, $userId)
+    {
+        $query = Database::getManager()
+            ->createQuery(
+                'SELECT COUNT(log) AS c FROM ChamiloPluginBundle:WhispeakAuth\LogEventQuiz log
+                WHERE log.quiz = :quiz AND log.user = :user'
+            )
+            ->setParameters(['quiz' => $quizId, 'user' => $userId]);
+
+        $totalCount = (int) $query->getSingleScalarResult();
+
+        return $totalCount;
+    }
+
+    /**
+     * @param int $quizId
+     * @param int $userId
+     *
+     * @throws \Doctrine\ORM\Query\QueryException
+     *
+     * @return string
+     */
+    public static function countSuccessAttemptsInQuiz($quizId, $userId)
+    {
+        $query = Database::getManager()
+            ->createQuery(
+                'SELECT COUNT(log) AS c FROM ChamiloPluginBundle:WhispeakAuth\LogEventQuiz log
+                WHERE log.quiz = :quiz AND log.user = :user AND log.actionStatus = :status'
+            )
+            ->setParameters(['quiz' => $quizId, 'user' => $userId, 'status' => LogEvent::STATUS_SUCCESS]);
+
+        $totalCount = (int) $query->getSingleScalarResult();
+
+        return $totalCount;
+    }
+
+    /**
      * Install extra fields for user, learning path and quiz question.
      */
     private function installExtraFields()
@@ -1193,93 +1281,5 @@ class WhispeakAuthPlugin extends Plugin implements HookPluginInterface
         $table = Database::get_main_table('whispeak_log_event');
         $sql = "DROP TABLE IF EXISTS $table";
         Database::query($sql);
-    }
-
-    /**
-     * @param int $lpId
-     * @param int $userId
-     *
-     * @throws \Doctrine\ORM\Query\QueryException
-     *
-     * @return string
-     */
-    public static function countAllAttemptsInLearningPath($lpId, $userId)
-    {
-        $query = Database::getManager()
-            ->createQuery(
-                'SELECT COUNT(log) AS c FROM ChamiloPluginBundle:WhispeakAuth\LogEventLp log
-                WHERE log.lp = :lp AND log.user = :user'
-            )
-            ->setParameters(['lp' => $lpId, 'user' => $userId]);
-
-        $totalCount = (int) $query->getSingleScalarResult();
-
-        return $totalCount;
-    }
-
-    /**
-     * @param int $lpId
-     * @param int $userId
-     *
-     * @throws \Doctrine\ORM\Query\QueryException
-     *
-     * @return string
-     */
-    public static function countSuccessAttemptsInLearningPath($lpId, $userId)
-    {
-        $query = Database::getManager()
-            ->createQuery(
-                'SELECT COUNT(log) AS c FROM ChamiloPluginBundle:WhispeakAuth\LogEventLp log
-                WHERE log.lp = :lp AND log.user = :user AND log.actionStatus = :status'
-            )
-            ->setParameters(['lp' => $lpId, 'user' => $userId, 'status' => LogEvent::STATUS_SUCCESS]);
-
-        $totalCount = (int) $query->getSingleScalarResult();
-
-        return $totalCount;
-    }
-
-    /**
-     * @param int $quizId
-     * @param int $userId
-     *
-     * @throws \Doctrine\ORM\Query\QueryException
-     *
-     * @return string
-     */
-    public static function countAllAttemptsInQuiz($quizId, $userId)
-    {
-        $query = Database::getManager()
-            ->createQuery(
-                'SELECT COUNT(log) AS c FROM ChamiloPluginBundle:WhispeakAuth\LogEventQuiz log
-                WHERE log.quiz = :quiz AND log.user = :user'
-            )
-            ->setParameters(['quiz' => $quizId, 'user' => $userId]);
-
-        $totalCount = (int) $query->getSingleScalarResult();
-
-        return $totalCount;
-    }
-
-    /**
-     * @param int $quizId
-     * @param int $userId
-     *
-     * @throws \Doctrine\ORM\Query\QueryException
-     *
-     * @return string
-     */
-    public static function countSuccessAttemptsInQuiz($quizId, $userId)
-    {
-        $query = Database::getManager()
-            ->createQuery(
-                'SELECT COUNT(log) AS c FROM ChamiloPluginBundle:WhispeakAuth\LogEventQuiz log
-                WHERE log.quiz = :quiz AND log.user = :user AND log.actionStatus = :status'
-            )
-            ->setParameters(['quiz' => $quizId, 'user' => $userId, 'status' => LogEvent::STATUS_SUCCESS]);
-
-        $totalCount = (int) $query->getSingleScalarResult();
-
-        return $totalCount;
     }
 }

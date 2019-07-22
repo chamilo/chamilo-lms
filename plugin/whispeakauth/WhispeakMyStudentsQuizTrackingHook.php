@@ -2,7 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * Class WhispeakMyStudentsQuizTrackingHook
+ * Class WhispeakMyStudentsQuizTrackingHook.
  */
 class WhispeakMyStudentsQuizTrackingHook extends HookObserver implements HookMyStudentsQuizTrackingObserverInterface
 {
@@ -24,7 +24,7 @@ class WhispeakMyStudentsQuizTrackingHook extends HookObserver implements HookMyS
      *     'value' => 'Users online',
      *     'attrs' => ['class' => 'text-center'],
      * ]
-     * </code>
+     * </code>.
      *
      * @param HookMyStudentsQuizTrackingEventInterface $hook
      *
@@ -47,7 +47,7 @@ class WhispeakMyStudentsQuizTrackingHook extends HookObserver implements HookMyS
      *     'value' => '5 connected users ',
      *     'attrs' => ['class' => 'text-center text-success'],
      * ]
-     * </code>
+     * </code>.
      *
      * @param HookMyStudentsQuizTrackingEventInterface $hook
      *

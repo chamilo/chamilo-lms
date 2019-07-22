@@ -13,7 +13,7 @@ interface HookMyStudentsLpTrackingObserverInterface extends HookObserverInterfac
      *     'value' => 'Users online',
      *     'attrs' => ['class' => 'text-center'],
      * ]
-     * </code>
+     * </code>.
      *
      * @param HookMyStudentsLpTrackingEventInterface $hook
      *
@@ -28,7 +28,7 @@ interface HookMyStudentsLpTrackingObserverInterface extends HookObserverInterfac
      *     'value' => '5 connected users ',
      *     'attrs' => ['class' => 'text-center text-success'],
      * ]
-     * </code>
+     * </code>.
      *
      * @param HookMyStudentsLpTrackingEventInterface $hook
      *

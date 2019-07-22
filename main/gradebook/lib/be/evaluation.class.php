@@ -1,6 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\GradebookEvaluation;
 use ChamiloSession as Session;
 
 /**
@@ -11,7 +12,7 @@ use ChamiloSession as Session;
 class Evaluation implements GradebookItem
 {
     public $studentList;
-    /** @var \Chamilo\CoreBundle\Entity\GradebookEvaluation */
+    /** @var GradebookEvaluation */
     public $entity;
     private $id;
     private $name;

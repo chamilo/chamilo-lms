@@ -171,13 +171,13 @@ class Tracking
 
         // Extend all button
         $output = '';
-        $extend_all = 0;
         if ($origin === 'tracking') {
             $url_suffix = '&session_id='.$session_id.'&course='.$courseCode.'&student_id='.$user_id.'&lp_id='.$lp_id.'&origin='.$origin;
         } else {
             $url_suffix = '&lp_id='.$lp_id;
         }
 
+        $extend_all = 0;
         if (!empty($extendedAll)) {
             $extend_all_link = Display::url(
                 Display::return_icon('view_less_stats.gif', get_lang('HideAllAttempts')),

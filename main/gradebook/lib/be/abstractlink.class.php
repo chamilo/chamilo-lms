@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\GradebookLink;
+
 /**
  * Class AbstractLink
  * Defines a gradebook AbstractLink object.
@@ -17,7 +19,7 @@ abstract class AbstractLink implements GradebookItem
 {
     public $course_id;
     public $studentList;
-    /** @var \Chamilo\CoreBundle\Entity\GradebookLink */
+    /** @var GradebookLink */
     public $entity;
     protected $id;
     protected $type;

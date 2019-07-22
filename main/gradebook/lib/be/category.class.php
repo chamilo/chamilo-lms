@@ -643,6 +643,7 @@ class Category implements GradebookItem
     {
         $em = Database::getManager();
 
+        /** @var GradebookCategory $gradebookCategory */
         $gradebookCategory = $em
             ->getRepository('ChamiloCoreBundle:GradebookCategory')
             ->find($this->id);

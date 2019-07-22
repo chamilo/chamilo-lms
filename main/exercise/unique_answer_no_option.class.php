@@ -405,7 +405,7 @@ class UniqueAnswerNoOption extends Question
         $header .= '<table class="'.$this->question_table_class.'"><tr>';
 
         if (!in_array($exercise->results_disabled, [
-            RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER
+            RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER,
         ])
         ) {
             $header .= '<th>'.get_lang('Choice').'</th>';

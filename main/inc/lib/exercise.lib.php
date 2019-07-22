@@ -4417,9 +4417,9 @@ EOT;
             echo Display::return_message(
                 sprintf(get_lang('YouPassedTheLimitOfXMinutesToSeeTheResults'), $objExercise->getResultsAccess())
             );
+
             return false;
         }
-
 
         $counter = 1;
         $total_score = $total_weight = 0;

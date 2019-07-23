@@ -3284,7 +3284,6 @@ class Exercise
     public function showSimpleTimeControl($timeLeft, $url = '')
     {
         $timeLeft = (int) $timeLeft;
-        $url = Security::remove_XSS($url);
 
         return "<script>
             function openClockWarning() {

@@ -4412,20 +4412,23 @@ EOT;
             }
         }
 
-        if ($objExercise->hasResultsAccess($exercise_stat_info) === false) {
-            echo Display::return_message(
-                sprintf(get_lang('YouPassedTheLimitOfXMinutesToSeeTheResults'), $objExercise->getResultsAccess())
-            );
+        if ($objExercise->getResultAccess()) {
+            if ($objExercise->hasResultsAccess($exercise_stat_info) === false) {
+                echo Display::return_message(
+                    sprintf(get_lang('YouPassedTheLimitOfXMinutesToSeeTheResults'), $objExercise->getResultsAccess())
+                );
 
-            return false;
-        }
+                return false;
+            }
 
-        if (!empty($objExercise->getResultAccess())) {
-            echo $objExercise->returnTimeLeftDiv();
-            echo $objExercise->showSimpleTimeControl(
-                $objExercise->getResultAccessTimeDiff($exercise_stat_info),
-                api_get_path(WEB_CODE_PATH).'exercise/overview.php?'.api_get_cidreq().'&exerciseId='.$objExercise->id
-            );
+            if (!empty($objExercise->getResultAccess())) {
+                echo $objExercise->returnTimeLeftDiv();
+                echo $objExercise->showSimpleTimeControl(
+                    $objExercise->getResultAccessTimeDiff($exercise_stat_info),
+                    api_get_path(WEB_CODE_PATH).'exercise/overview.php?'.api_get_cidreq(
+                    ).'&exerciseId='.$objExercise->id
+                );
+            }
         }
 
         $counter = 1;

@@ -170,10 +170,6 @@ if ($debug > 0) {
     error_log(' $myrefresh: '.$myrefresh);
 }
 
-if (!empty($_REQUEST['dialog_box'])) {
-    $dialog_box = stripslashes(urldecode($_REQUEST['dialog_box']));
-}
-
 $lp_controller_touched = 1;
 $lp_found = false;
 $lpObject = Session::read('lpobject');
@@ -324,6 +320,7 @@ if (empty($lp_id)) {
 }
 
 $lp_detail_id = 0;
+$attemptId = 0;
 switch ($action) {
     case '':
     case 'list':
@@ -331,7 +328,8 @@ switch ($action) {
         break;
     case 'view':
     case 'content':
-        $lp_detail_id = $_SESSION['oLP']->get_current_item_id();
+        $lp_detail_id = $oLP->get_current_item_id();
+        $attemptId = $oLP->getCurrentAttempt();
         break;
     default:
         $lp_detail_id = (!empty($_REQUEST['id']) ? (int) $_REQUEST['id'] : 0);
@@ -342,6 +340,7 @@ $logInfo = [
     'tool' => TOOL_LEARNPATH,
     'tool_id' => $eventLpId,
     'tool_id_detail' => $lp_detail_id,
+    'action_details' => $attemptId,
     'action' => !empty($action) ? $action : 'list',
 ];
 Event::registerLog($logInfo);
@@ -362,50 +361,44 @@ if (isset($_POST['title'])) {
 $redirectTo = '';
 if ($debug > 0) {
     error_log('action "'.$action.'" triggered');
-    if (!$lp_found) {
-        //check if the learnpath ID was defined, otherwise send back to list
-        error_log('No learnpath given');
-    }
 }
 
 switch ($action) {
     case 'send_notify_teacher':
-        // Enviar correo al profesor
+        // Send notification to the teacher
         $studentInfo = api_get_user_info();
         $course_info = api_get_course_info();
+        $sessionId = api_get_session_id();
 
-        global $_configuration;
-        $root_web = $_configuration['root_web'];
-
-        if (api_get_session_id() > 0) {
-            $session_info = api_get_session_info(api_get_session_id());
-            $course_name = $session_info['name'];
-            $course_url = $root_web.'courses/'.$course_info['code'].'/index.php?id_session='.api_get_session_id();
-        } else {
-            $course_name = $course_info['title'];
-            $course_url = $root_web.'courses/'.$course_info['code'].'/index.php?';
+        $courseName = $course_info['title'];
+        $courseUrl = $course_info['course_public_url'];
+        if (!empty($sessionId)) {
+            $sessionInfo = api_get_session_info($sessionId);
+            $courseName = $sessionInfo['name'];
+            $courseUrl .= '?id_session='.$sessionId;
         }
-        $url = Display::url($course_name, $course_url, ['title' => get_lang('GoToCourse')]);
-        $coachList = CourseManager::get_coachs_from_course(api_get_session_id(), api_get_course_int_id());
-        foreach ($coachList as $coach_course) {
-            $recipient_name = $coach_course['full_name'];
 
+        $url = Display::url($courseName, $courseUrl, ['title' => get_lang('GoToCourse')]);
+        $coachList = CourseManager::get_coachs_from_course($sessionId, api_get_course_int_id());
+        foreach ($coachList as $coach_course) {
+            $recipientName = $coach_course['full_name'];
             $coachInfo = api_get_user_info($coach_course['user_id']);
+
+            if (empty($coachInfo)) {
+                continue;
+            }
             $email = $coachInfo['email'];
 
             $tplContent = new Template(null, false, false, false, false, false);
-            // variables for the default template
-            $tplContent->assign('name_teacher', $recipient_name);
+            $tplContent->assign('name_teacher', $recipientName);
             $tplContent->assign('name_student', $studentInfo['complete_name']);
-            $tplContent->assign('course_name', $course_name);
+            $tplContent->assign('course_name', $courseName);
             $tplContent->assign('course_url', $url);
-            //$tplContent->assign('telefono', $telefono);
-            //$tplContent->assign('prefix', $prefix);
             $layoutContent = $tplContent->get_template('mail/content_ending_learnpath.tpl');
             $emailBody = $tplContent->fetch($layoutContent);
 
             api_mail_html(
-                $recipient_name,
+                $recipientName,
                 $email,
                 sprintf(get_lang('StudentXFinishedLp'), $studentInfo['complete_name']),
                 $emailBody,
@@ -415,7 +408,9 @@ switch ($action) {
             );
         }
         Display::addFlash(Display::return_message(get_lang('MessageSent')));
-        require 'lp_list.php';
+        $url = api_get_self().'?action=list&'.api_get_cidreq();
+        header('Location: '.$url);
+        exit;
         break;
     case 'add_item':
         if (!$is_allowed_to_edit) {
@@ -704,7 +699,6 @@ switch ($action) {
             require 'lp_list.php';
         } else {
             Session::write('refresh', 1);
-            //require 'lp_build.php';
             $url = api_get_self().'?action=add_item&type=step&lp_id='.intval($_SESSION['oLP']->lp_id).'&'.api_get_cidreq();
             header('Location: '.$url);
             exit;

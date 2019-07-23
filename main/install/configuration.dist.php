@@ -1092,6 +1092,9 @@ $_configuration['profile_fields_visibility'] = [
 // Only applied for courses with extra field "new_tracking_system" to "1"
 //$_configuration['lp_minimum_time'] = false;
 
+// Track LP attempts using the new tracking system.
+//$_configuration['use_new_tracking_in_lp_item'] = false;
+
 // Add collapsable option for user course categories
 // ALTER TABLE user_course_category ADD collapsed TINYINT(1) DEFAULT NULL;
 // $_configuration['allow_user_course_category_collapsable'] = false;

@@ -26,15 +26,14 @@ if ($lp_controller_touched != 1) {
 
 require_once __DIR__.'/../inc/global.inc.php';
 
+api_protect_course_script();
+
 if (isset($_REQUEST['origin']) && $_REQUEST['origin'] === 'learnpath') {
     $_REQUEST['origin'] = '';
 }
 
-//To prevent the template class
+// To prevent the template class
 $show_learnpath = true;
-
-api_protect_course_script();
-
 $lp_id = !empty($_GET['lp_id']) ? (int) $_GET['lp_id'] : 0;
 $sessionId = api_get_session_id();
 $course_code = api_get_course_id();
@@ -250,7 +249,6 @@ if (!isset($src)) {
                 }
 
                 $src = $lp->fixBlockedLinks($src);
-
                 $lp->start_current_item(); // starts time counter manually if asset
             } else {
                 $src = 'blank.php?error=prerequisites';
@@ -313,9 +311,7 @@ if (!empty($_REQUEST['exeId']) &&
     $safe_id = $lp_id;
     $safe_exe_id = (int) $_REQUEST['exeId'];
 
-    if ($safe_id == strval(intval($safe_id)) &&
-        $safe_item_id == strval(intval($safe_item_id))
-    ) {
+    if (!empty($safe_id) && !empty($safe_item_id)) {
         $sql = 'SELECT start_date, exe_date, exe_result, exe_weighting, exe_exo_id, exe_duration
                 FROM '.$TBL_TRACK_EXERCICES.'
                 WHERE exe_id = '.$safe_exe_id;
@@ -335,7 +331,7 @@ if (!empty($_REQUEST['exeId']) &&
                 WHERE
                     c_id = $course_id AND
                     lp_item_id = $safe_item_id AND
-                    lp_view_id = ".$lp->lp_view_id."
+                    lp_view_id = ".$lp->get_view_id()."
                 ORDER BY id DESC
                 LIMIT 1";
         $res_last_attempt = Database::query($sql);

@@ -2123,7 +2123,7 @@ class Exercise
                         'hide_question_score',
                         null,
                         get_lang('HideQuestionScore')
-                    )
+                    ),
                 ];
                 $form->addGroup($group, null, get_lang('ResultsConfigurationPage'));
             }
@@ -7941,7 +7941,7 @@ class Exercise
      */
     public function getCorrectAnswersInAllAttempts($learnPathId = 0, $learnPathItemId = 0)
     {
-        return $this->getAnswersInAllAttempts($learnPathId , $learnPathItemId);
+        return $this->getAnswersInAllAttempts($learnPathId, $learnPathItemId);
     }
 
     /**
@@ -7985,7 +7985,7 @@ class Exercise
             $params = [
                 'hide_expected_answer' => isset($values['hide_expected_answer']) ? $values['hide_expected_answer'] : '',
                 'hide_question_score' => isset($values['hide_question_score']) ? $values['hide_question_score'] : '',
-                'hide_total_score' => isset($values['hide_total_score']) ? $values['hide_total_score'] : ''
+                'hide_total_score' => isset($values['hide_total_score']) ? $values['hide_total_score'] : '',
             ];
             $type = Type::getType('array');
             $platform = Database::getManager()->getConnection()->getDatabasePlatform();
@@ -8037,6 +8037,7 @@ class Exercise
 
         if (!empty($result)) {
             $value = isset($result[$attribute]) ? $result[$attribute] : null;
+
             return $value;
         }
 
@@ -8085,7 +8086,7 @@ class Exercise
     public function showExpectedChoiceColumn()
     {
         if (!in_array($this->results_disabled, [
-            RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER
+            RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER,
         ])
         ) {
             $hide = (int) $this->getPageConfigurationAttribute('hide_expected_answer');
@@ -9417,6 +9418,47 @@ class Exercise
     }
 
     /**
+     * @param array $exerciseResultInfo
+     *
+     * @return bool
+     */
+    public function hasResultsAccess($exerciseResultInfo)
+    {
+        $extraFieldValue = new ExtraFieldValue('exercise');
+        $value = $extraFieldValue->get_values_by_handler_and_field_variable(
+            $this->iId,
+            'results_available_for_x_minutes'
+        );
+        if (!empty($value)) {
+            $value = (int) $value;
+            $endDate = new DateTime($exerciseResultInfo['exe_date'], new DateTimeZone('UTC'));
+            $endDate->add(new DateInterval('PT'.$value.'M'));
+            if (time() > $endDate->getTimestamp()) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * @return int
+     */
+    public function getResultsAccess()
+    {
+        $extraFieldValue = new ExtraFieldValue('exercise');
+        $value = $extraFieldValue->get_values_by_handler_and_field_variable(
+            $this->iId,
+            'results_available_for_x_minutes'
+        );
+        if (!empty($value)) {
+            return (int) $value;
+        }
+
+        return 0;
+    }
+
+    /**
      * Gets the question list ordered by the question_order setting (drag and drop).
      *
      * @return array
@@ -9900,44 +9942,5 @@ class Exercise
         );
 
         return $group;
-    }
-
-    /**
-     * @param array $exerciseResultInfo
-     *
-     * @return bool
-     */
-    public function hasResultsAccess($exerciseResultInfo)
-    {
-        $extraFieldValue = new ExtraFieldValue('exercise');
-        $value = $extraFieldValue->get_values_by_handler_and_field_variable(
-            $this->iId,
-            'results_available_for_x_minutes'
-        );
-        if (!empty($value)) {
-            $value = (int) $value;
-            $endDate = new DateTime($exerciseResultInfo['exe_date'], new DateTimeZone('UTC'));
-            $endDate->add(new DateInterval('PT'.$value.'M'));
-            if (time() > $endDate->getTimestamp()) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    /**
-     * @return int
-     */
-    public function getResultsAccess()
-    {
-        $extraFieldValue = new ExtraFieldValue('exercise');
-        $value = $extraFieldValue->get_values_by_handler_and_field_variable(
-            $this->iId,
-            'results_available_for_x_minutes'
-        );
-        if (!empty($value)) {
-            return (int) $value;
-        }
-        return 0;
     }
 }

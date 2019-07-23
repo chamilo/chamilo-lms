@@ -230,7 +230,7 @@ class Diagnoser
         $new_version_status = '';
         $file = api_get_path(SYS_CODE_PATH).'install/version.php';
         if (is_file($file)) {
-            @include($file);
+            @include $file;
         }
         $array[] = $this->build_setting(
             self::STATUS_INFORMATION,
@@ -790,15 +790,17 @@ class Diagnoser
 
     /**
      * Additional functions needed for fast integration.
-     * @param   int   $status Status constant defining which icon to use to illustrate the info
-     * @param   string  $section    The name of the section this setting is included in
-     * @param   string  $title  The name of the setting (usually a translated string)
-     * @param   string  $url    A URL to point the user to regarding this setting, or '#' otherwise
-     * @param   mixed   $current_value   The current value for this setting
-     * @param   mixed   $expected_value  The expected value for this setting
-     * @param   string  $formatter  If this setting is expressed in some kind of format, which format to use
-     * @param   string  $comment    A translated string explaining what this setting represents
-     * @return array    A list of elements to show in an array's row
+     *
+     * @param int    $status         Status constant defining which icon to use to illustrate the info
+     * @param string $section        The name of the section this setting is included in
+     * @param string $title          The name of the setting (usually a translated string)
+     * @param string $url            A URL to point the user to regarding this setting, or '#' otherwise
+     * @param mixed  $current_value  The current value for this setting
+     * @param mixed  $expected_value The expected value for this setting
+     * @param string $formatter      If this setting is expressed in some kind of format, which format to use
+     * @param string $comment        A translated string explaining what this setting represents
+     *
+     * @return array A list of elements to show in an array's row
      */
     public function build_setting(
         $status,

@@ -313,7 +313,7 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
             $header .= '<th>'.get_lang('ExpectedChoice').'</th>';
         }
 
-        $header .='<th>'
+        $header .= '<th>'
             .get_lang('Answer')
             .'</th><th colspan="2" style="text-align:center;">'
             .get_lang('YourDegreeOfCertainty')

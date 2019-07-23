@@ -25,8 +25,8 @@ class ExerciseShowFunctions
      * @param Exercise $exercise
      * @param int      $feedbackType
      * @param string   $answer
-     * @param int      $id         Exercise ID
-     * @param int      $questionId Question ID
+     * @param int      $id                           Exercise ID
+     * @param int      $questionId                   Question ID
      * @param int      $resultsDisabled
      * @param string   $originalStudentAnswer
      * @param bool     $showTotalScoreAndUserChoices

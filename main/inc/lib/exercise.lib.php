@@ -4388,7 +4388,6 @@ EOT;
     ) {
         $origin = api_get_origin();
         $courseCode = api_get_course_id();
-        $courseId = api_get_course_int_id();
         $sessionId = api_get_session_id();
 
         // Getting attempt info
@@ -4419,6 +4418,14 @@ EOT;
             );
 
             return false;
+        }
+
+        if (!empty($objExercise->getResultAccess())) {
+            echo $objExercise->returnTimeLeftDiv();
+            echo $objExercise->showSimpleTimeControl(
+                $objExercise->getResultAccessTimeDiff($exercise_stat_info),
+                api_get_path(WEB_CODE_PATH).'exercise/overview.php?'.api_get_cidreq().'&exerciseId='.$objExercise->id
+            );
         }
 
         $counter = 1;

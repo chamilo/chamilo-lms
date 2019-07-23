@@ -3276,16 +3276,78 @@ class Exercise
     }
 
     /**
-     * So the time control will work.
-     *
-     * @param string $time_left
+     * @param int $timeLeft in seconds
+     * @param string $url
      *
      * @return string
      */
-    public function showTimeControlJS($time_left)
+    public function showSimpleTimeControl($timeLeft, $url = '')
     {
-        $time_left = (int) $time_left;
-        $script = "redirectExerciseToResult();";
+        $timeLeft = (int) $timeLeft;
+        $url = Security::remove_XSS($url);
+
+        return "<script>
+            function openClockWarning() {
+                $('#clock_warning').dialog({
+                    modal:true,
+                    height:250,
+                    closeOnEscape: false,
+                    resizable: false,
+                    buttons: {
+                        '".addslashes(get_lang('Close'))."': function() {
+                            $('#clock_warning').dialog('close');
+                        }
+                    },
+                    close: function() {
+                        window.location.href = '$url';
+                    }
+                });                
+                $('#clock_warning').dialog('open');
+                $('#counter_to_redirect').epiclock({
+                    mode: $.epiclock.modes.countdown,
+                    offset: {seconds: 5},
+                    format: 's'
+                }).bind('timer', function () {                    
+                    window.location.href = '$url';                    
+                });
+            }        
+
+            function onExpiredTimeExercise() {
+                $('#wrapper-clock').hide();
+                $('#expired-message-id').show();
+                // Fixes bug #5263
+                $('#num_current_id').attr('value', '".$this->selectNbrQuestions()."');
+                openClockWarning();
+            }
+
+			$(function() {
+				// time in seconds when using minutes there are some seconds lost
+                var time_left = parseInt(".$timeLeft.");
+                $('#exercise_clock_warning').epiclock({
+                    mode: $.epiclock.modes.countdown,
+                    offset: {seconds: time_left},
+                    format: 'x:i:s',
+                    renderer: 'minute'
+                }).bind('timer', function () {                    
+                    onExpiredTimeExercise();
+                });
+	       		$('#submit_save').click(function () {});
+	        });
+	    </script>";
+
+    }
+
+    /**
+     * So the time control will work.
+     *
+     * @param int $timeLeft
+     *
+     * @return string
+     */
+    public function showTimeControlJS($timeLeft)
+    {
+        $timeLeft = (int) $timeLeft;
+        $script = 'redirectExerciseToResult();';
         if ($this->type == ALL_ON_ONE_PAGE) {
             $script = "save_now_all('validate');";
         }
@@ -3298,7 +3360,7 @@ class Exercise
                     closeOnEscape: false,
                     resizable: false,
                     buttons: {
-                        '".addslashes(get_lang("EndTest"))."': function() {
+                        '".addslashes(get_lang('EndTest'))."': function() {
                             $('#clock_warning').dialog('close');
                         }
                     },
@@ -3336,7 +3398,7 @@ class Exercise
 
 			$(function() {
 				// time in seconds when using minutes there are some seconds lost
-                var time_left = parseInt(".$time_left.");
+                var time_left = parseInt(".$timeLeft.");
                 $('#exercise_clock_warning').epiclock({
                     mode: $.epiclock.modes.countdown,
                     offset: {seconds: time_left},
@@ -3346,7 +3408,7 @@ class Exercise
                     onExpiredTimeExercise();
                 });
 	       		$('#submit_save').click(function () {});
-	    });
+	        });
 	    </script>";
     }
 
@@ -6937,7 +6999,7 @@ class Exercise
     /**
      * @return string
      */
-    public function return_time_left_div()
+    public function returnTimeLeftDiv()
     {
         $html = '<div id="clock_warning" style="display:none">';
         $html .= Display::return_message(
@@ -6996,7 +7058,7 @@ class Exercise
             if (Database::num_rows($result)) {
                 $row = Database::fetch_array($result);
 
-                return $row['count_questions'];
+                return (int) $row['count_questions'];
             }
         }
 
@@ -9409,12 +9471,49 @@ class Exercise
                 }
             }
 
-            //$content .= '<div class="table-responsive">';
             $content .= $table->return_table();
-            //$content .= '</div>';
         }
 
         return $content;
+    }
+
+    /**
+     * @return int value in minutes
+     */
+    public function getResultAccess()
+    {
+        $extraFieldValue = new ExtraFieldValue('exercise');
+        $value = $extraFieldValue->get_values_by_handler_and_field_variable(
+            $this->iId,
+            'results_available_for_x_minutes'
+        );
+
+        if (!empty($value)) {
+            return (int) $value;
+        }
+
+        return 0;
+    }
+
+    /**
+     * @param array $exerciseResultInfo
+     *
+     * @return bool
+     */
+    public function getResultAccessTimeDiff($exerciseResultInfo)
+    {
+        $value = $this->getResultAccess();
+        if (!empty($value)) {
+            $endDate = new DateTime($exerciseResultInfo['exe_date'], new DateTimeZone('UTC'));
+            $endDate->add(new DateInterval('PT'.$value.'M'));
+            $now = time();
+            if ($endDate->getTimestamp() > $now) {
+
+                return (int) $endDate->getTimestamp() - $now;
+            }
+        }
+
+        return 0;
     }
 
     /**
@@ -9424,18 +9523,9 @@ class Exercise
      */
     public function hasResultsAccess($exerciseResultInfo)
     {
-        $extraFieldValue = new ExtraFieldValue('exercise');
-        $value = $extraFieldValue->get_values_by_handler_and_field_variable(
-            $this->iId,
-            'results_available_for_x_minutes'
-        );
-        if (!empty($value)) {
-            $value = (int) $value;
-            $endDate = new DateTime($exerciseResultInfo['exe_date'], new DateTimeZone('UTC'));
-            $endDate->add(new DateInterval('PT'.$value.'M'));
-            if (time() > $endDate->getTimestamp()) {
-                return false;
-            }
+        $diff = $this->getResultAccessTimeDiff($exerciseResultInfo);
+        if ($diff === 0) {
+            return false;
         }
 
         return true;

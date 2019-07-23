@@ -575,10 +575,6 @@ if ($time_control) {
     } else {
         $clock_expired_time = $_SESSION['expired_time'][$current_expired_time_key];
     }
-} else {
-    if ($debug) {
-        error_log("7 No time control");
-    }
 }
 
 // Get time left for expiring time
@@ -755,10 +751,6 @@ if ($formSent && isset($_POST)) {
     if ($debug) {
         error_log('11. $formSent was set - end');
     }
-} else {
-    if ($debug) {
-        error_log('9. $formSent was NOT sent');
-    }
 }
 
 // If questionNum comes from POST and not from GET
@@ -845,7 +837,7 @@ if ($question_count != 0) {
     $error = get_lang('ThereAreNoQuestionsForThisExercise');
     // if we are in the case where user select random by category, but didn't choose the number of random question
     if ($objExercise->getRandomByCategory() > 0 && $objExercise->random <= 0) {
-        $error .= "<br/>".get_lang('PleaseSelectSomeRandomQuestion');
+        $error .= '<br/>'.get_lang('PleaseSelectSomeRandomQuestion');
     }
 }
 
@@ -857,10 +849,10 @@ if (api_is_in_gradebook()) {
 }
 
 $interbreadcrumb[] = [
-    "url" => "exercise.php?".api_get_cidreq(),
-    "name" => get_lang('Exercises'),
+    'url' => 'exercise.php?'.api_get_cidreq(),
+    'name' => get_lang('Exercises'),
 ];
-$interbreadcrumb[] = ["url" => "#", "name" => $objExercise->selectTitle(true)];
+$interbreadcrumb[] = ['url' => '#', 'name' => $objExercise->selectTitle(true)];
 
 if (!in_array($origin, ['learnpath', 'embeddable'])) { //so we are not in learnpath tool
     if (!api_is_allowed_to_session_edit()) {
@@ -976,7 +968,7 @@ if (isset($_custom['exercises_hidden_when_no_start_date']) &&
 
 // Timer control
 if ($time_control) {
-    echo $objExercise->return_time_left_div();
+    echo $objExercise->returnTimeLeftDiv();
     echo '<div style="display:none" class="warning-message" id="expired-message-id">'.
         get_lang('ExerciseExpiredTimeMessage').'</div>';
 }

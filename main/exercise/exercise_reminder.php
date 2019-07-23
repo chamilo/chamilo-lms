@@ -131,7 +131,7 @@ if (api_is_course_admin() && !$hideHeaderAndFooter) {
 echo Display::page_header(get_lang('QuestionsToReview'));
 
 if ($time_control) {
-    echo $objExercise->return_time_left_div();
+    echo $objExercise->returnTimeLeftDiv();
 }
 
 echo Display::div('', ['id' => 'message']);
@@ -139,7 +139,7 @@ echo '<script>
     var lp_data = $.param({"learnpath_id": '.$learnpath_id.', "learnpath_item_id" : '.$learnpath_item_id.', "learnpath_item_view_id": '.$learnpath_item_view_id.'});
 
     function final_submit() {
-        //Normal inputs
+        // Normal inputs
         window.location = "'.api_get_path(WEB_CODE_PATH).'exercise/exercise_result.php?'.api_get_cidreq().'&exe_id='.$exe_id.'&" + lp_data;
     }
     

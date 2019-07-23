@@ -78,6 +78,13 @@ if (api_get_configuration_value('quiz_prevent_copy_paste')) {
     $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_JS_PATH).'jquery.nocopypaste.js"></script>';
 }
 
+if (!empty($objExercise->getResultAccess())) {
+    $htmlHeadXtra[] = api_get_css(api_get_path(WEB_LIBRARY_PATH).'javascript/epiclock/renderers/minute/epiclock.minute.css');
+    $htmlHeadXtra[] = api_get_js('epiclock/javascript/jquery.dateformat.min.js');
+    $htmlHeadXtra[] = api_get_js('epiclock/javascript/jquery.epiclock.min.js');
+    $htmlHeadXtra[] = api_get_js('epiclock/renderers/minute/epiclock.minute.js');
+}
+
 if (!in_array($origin, ['learnpath', 'embeddable'])) {
     // So we are not in learnpath tool
     Display::display_header($nameTools, get_lang('Exercise'));

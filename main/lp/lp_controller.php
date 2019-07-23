@@ -415,7 +415,8 @@ switch ($action) {
             );
         }
         Display::addFlash(Display::return_message(get_lang('MessageSent')));
-        require 'lp_list.php';
+        $url = api_get_self().'?action=list&'.api_get_cidreq();
+        header('Location: '.$url);
         break;
     case 'add_item':
         if (!$is_allowed_to_edit) {

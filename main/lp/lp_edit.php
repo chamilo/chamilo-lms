@@ -236,11 +236,9 @@ if (!empty($options)) {
     $defaults['extra_lp_icon'] = learnpath::getSelectedIcon($lpId);
 }
 
-$enableLpExtraFields = false;
-if ($enableLpExtraFields) {
-    $extraField = new ExtraField('lp');
-    $extra = $extraField->addElements($form, $lpId);
-}
+
+$extraField = new ExtraField('lp');
+$extra = $extraField->addElements($form, $lpId, ['lp_icon']);
 
 $skillList = Skill::addSkillsToForm($form, ITEM_TYPE_LEARNPATH, $lpId);
 
@@ -251,13 +249,12 @@ $form->addButtonSave(get_lang('SaveLPSettings'));
 $form->addElement('hidden', 'action', 'update_lp');
 $form->addElement('hidden', 'lp_id', $lpId);
 
-if ($enableLpExtraFields) {
-    $htmlHeadXtra[] = '<script>
-    $(function() {
-        '.$extra['jquery_ready_content'].'
-    });
-    </script>';
-}
+$htmlHeadXtra[] = '<script>
+$(function() {
+    '.$extra['jquery_ready_content'].'
+});
+</script>';
+
 
 $htmlHeadXtra[] = '<script>'.$learnPath->get_js_dropdown_array().'</script>';
 

@@ -612,20 +612,18 @@ switch ($action) {
             } else {
                 Session::write('post_time', $_POST['post_time']);
 
+                $publicated_on = null;
                 if (isset($_REQUEST['activate_start_date_check']) &&
                     $_REQUEST['activate_start_date_check'] == 1
                 ) {
                     $publicated_on = $_REQUEST['publicated_on'];
-                } else {
-                    $publicated_on = null;
                 }
 
+                $expired_on = null;
                 if (isset($_REQUEST['activate_end_date_check']) &&
                     $_REQUEST['activate_end_date_check'] == 1
                 ) {
                     $expired_on = $_REQUEST['expired_on'];
-                } else {
-                    $expired_on = null;
                 }
 
                 $new_lp_id = learnpath::add_lp(
@@ -645,6 +643,10 @@ switch ($action) {
                     $form = new FormValidator('lp_add');
                     $form->addSelect('skills', 'skills');
                     Skill::saveSkills($form, ITEM_TYPE_LEARNPATH, $new_lp_id);
+
+                    $extraFieldValue = new ExtraFieldValue('lp');
+                    $_REQUEST['item_id'] = $new_lp_id;
+                    $extraFieldValue->saveFieldValues($_REQUEST);
 
                     // TODO: Maybe create a first directory directly to avoid bugging the user with useless queries
                     $_SESSION['oLP'] = new learnpath(
@@ -713,7 +715,7 @@ switch ($action) {
         } else {
             Session::write('refresh', 1);
             if (isset($_POST['submit_button']) && !empty($post_title)) {
-                //Updating the lp.modified_on
+                // Updating the lp.modified_on
                 $_SESSION['oLP']->set_modified_on();
 
                 // TODO: mp3 edit
@@ -742,15 +744,12 @@ switch ($action) {
                 if (isset($_POST['content_lp'])) {
                     $_SESSION['oLP']->edit_document($_course);
                 }
-                $is_success = true;
-
                 Display::addFlash(Display::return_message(get_lang('Updated')));
-
                 $url = api_get_self().'?action=add_item&type=step&lp_id='.intval($_SESSION['oLP']->lp_id).'&'.api_get_cidreq();
                 header('Location: '.$url);
                 exit;
             }
-            if (isset($_GET['view']) && $_GET['view'] == 'build') {
+            if (isset($_GET['view']) && $_GET['view'] === 'build') {
                 require 'lp_edit_item.php';
             } else {
                 require 'lp_admin_view.php';
@@ -777,10 +776,6 @@ switch ($action) {
                     $min,
                     $max
                 );
-
-                if ($editPrerequisite) {
-                    $is_success = true;
-                }
 
                 Display::addFlash(Display::return_message(get_lang('Updated')));
                 $url = api_get_self().'?action=add_item&type=step&lp_id='.intval($_SESSION['oLP']->lp_id).'&'.api_get_cidreq();
@@ -810,7 +805,6 @@ switch ($action) {
                     $post_title,
                     $_POST['description']
                 );
-                $is_success = true;
                 $url = api_get_self().'?action=add_item&type=step&lp_id='.intval($_SESSION['oLP']->lp_id).'&'.api_get_cidreq();
                 header('Location: '.$url);
                 exit;
@@ -1061,23 +1055,20 @@ switch ($action) {
             $_SESSION['oLP']->set_prerequisite(isset($_POST['prerequisites']) ? (int) $_POST['prerequisites'] : 0);
             $_SESSION['oLP']->setAccumulateWorkTime(isset($_REQUEST['accumulate_work_time']) ? $_REQUEST['accumulate_work_time'] : 0);
             $_SESSION['oLP']->set_use_max_score(isset($_POST['use_max_score']) ? 1 : 0);
-
             $subscribeUsers = isset($_REQUEST['subscribe_users']) ? 1 : 0;
             $_SESSION['oLP']->setSubscribeUsers($subscribeUsers);
 
             $accumulateScormTime = isset($_REQUEST['accumulate_scorm_time']) ? $_REQUEST['accumulate_scorm_time'] : 'true';
             $_SESSION['oLP']->setAccumulateScormTime($accumulateScormTime);
 
+            $publicated_on = null;
             if (isset($_REQUEST['activate_start_date_check']) && $_REQUEST['activate_start_date_check'] == 1) {
                 $publicated_on = $_REQUEST['publicated_on'];
-            } else {
-                $publicated_on = null;
             }
 
+            $expired_on = null;
             if (isset($_REQUEST['activate_end_date_check']) && $_REQUEST['activate_end_date_check'] == 1) {
                 $expired_on = $_REQUEST['expired_on'];
-            } else {
-                $expired_on = null;
             }
             $_SESSION['oLP']->setCategoryId($_REQUEST['category_id']);
             $_SESSION['oLP']->set_modified_on();

@@ -1093,6 +1093,7 @@ $_configuration['profile_fields_visibility'] = [
 //$_configuration['lp_minimum_time'] = false;
 
 // Track LP attempts using the new tracking system.
+// Requires to add an LP extra field called "track_lp_item" (checkbox) in order to use this feature.
 //$_configuration['use_new_tracking_in_lp_item'] = false;
 
 // Add collapsable option for user course categories

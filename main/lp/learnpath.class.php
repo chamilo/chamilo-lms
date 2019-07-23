@@ -1317,14 +1317,13 @@ class learnpath
     ) {
         $course_id = api_get_course_int_id();
         $_course = api_get_course_info();
+        $id = (int) $id;
 
-        if ($this->debug > 0) {
-            error_log('In learnpath::edit_item()', 0);
-        }
         if (empty($max_time_allowed)) {
             $max_time_allowed = 0;
         }
-        if (empty($id) || ($id != strval(intval($id))) || empty($title)) {
+
+        if (empty($id) || empty($_course)) {
             return false;
         }
 
@@ -1374,7 +1373,7 @@ class learnpath
 
             // Upload file in documents.
             $pi = pathinfo($audio['name']);
-            if ($pi['extension'] == 'mp3') {
+            if ($pi['extension'] === 'mp3') {
                 $c_det = api_get_course_info($this->cc);
                 $bp = api_get_path(SYS_COURSE_PATH).$c_det['path'].'/document';
                 $path = handle_uploaded_document(

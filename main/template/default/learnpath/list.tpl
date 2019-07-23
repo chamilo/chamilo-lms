@@ -398,7 +398,6 @@
                              role="tabpanel" aria-labelledby="heading-{{ lp_data.category.getId() }}">
                             <div class="panel-body">
                                 {% if lp_data.lp_list %}
-
                                     {% if is_allowed_to_edit %}
                                         <div class="table-responsive">
                                             <table class="table table-hover table-striped">
@@ -449,7 +448,6 @@
                                                                 </td>
                                                             {% endif %}
                                                         {% endif %}
-
                                                         <td>
                                                             {{ row.action_build }}
                                                             {{ row.action_edit }}
@@ -500,7 +498,6 @@
                             </div>
                         </div>
                     </div>
-
                 {% endif %}
                 <!-- end view block accordeon -->
             {% endif %}

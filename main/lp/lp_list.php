@@ -43,9 +43,6 @@ function confirmation(name) {
 $nameTools = get_lang('LearningPaths');
 Event::event_access_tool(TOOL_LEARNPATH);
 
-/**
- * Display.
- */
 /* Require the search widget and prepare the header with its stuff. */
 if (api_get_setting('search_enabled') === 'true') {
     require api_get_path(LIBRARY_PATH).'search/search_widget.php';
@@ -121,7 +118,6 @@ if ($is_allowed_to_edit) {
 
 $token = Security::get_token();
 
-/* DISPLAY SCORM LIST */
 $categoriesTempList = learnpath::getCategories(api_get_course_int_id());
 $categoryTest = new CLpCategory();
 $categoryTest->setId(0);
@@ -693,7 +689,7 @@ foreach ($categories as $item) {
                 }
 
                 /*  DEBUG  */
-                if ($test_mode == 'test' || api_is_platform_admin()) {
+                if ($test_mode === 'test' || api_is_platform_admin()) {
                     if ($details['lp_scorm_debug'] == 1) {
                         $dsp_debug = Display::url(
                             Display::return_icon(

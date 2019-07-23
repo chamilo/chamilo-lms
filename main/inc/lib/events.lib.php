@@ -1171,17 +1171,11 @@ class Event
             $course_id = api_get_course_int_id();
         }
 
-        $track_e_exercises = Database::get_main_table(
-            TABLE_STATISTIC_TRACK_E_EXERCISES
-        );
-        $track_attempts = Database::get_main_table(
-            TABLE_STATISTIC_TRACK_E_ATTEMPT
-        );
-        $recording_table = Database::get_main_table(
-            TABLE_STATISTIC_TRACK_E_ATTEMPT_RECORDING
-        );
+        $track_e_exercises = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
+        $track_attempts = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
+        $recording_table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT_RECORDING);
 
-        //Make sure we have the exact lp_view_id
+        // Make sure we have the exact lp_view_id
         $sql = "SELECT id FROM $lp_view_table
                 WHERE
                     c_id = $course_id AND
@@ -1243,15 +1237,15 @@ class Event
         if (!empty($exe_list) && is_array($exe_list) && count($exe_list) > 0) {
             $exeListString = implode(',', $exe_list);
             $sql = "DELETE FROM $track_e_exercises
-                WHERE exe_id IN ($exeListString)";
+                    WHERE exe_id IN ($exeListString)";
             Database::query($sql);
 
             $sql = "DELETE FROM $track_attempts
-                WHERE exe_id IN ($exeListString)";
+                    WHERE exe_id IN ($exeListString)";
             Database::query($sql);
 
             $sql = "DELETE FROM $recording_table
-                WHERE exe_id IN ($exeListString)";
+                    WHERE exe_id IN ($exeListString)";
             Database::query($sql);
         }
 

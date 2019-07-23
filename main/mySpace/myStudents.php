@@ -112,46 +112,46 @@ if (!empty($details)) {
             ];
         }
         $interbreadcrumb[] = [
-            'url' => "../user/user.php?cidReq=".$course_code,
-            'name' => get_lang("Users"),
+            'url' => '../user/user.php?cidReq='.$course_code,
+            'name' => get_lang('Users'),
         ];
     } else {
         if ($origin === 'tracking_course') {
             $interbreadcrumb[] = [
-                'url' => "../tracking/courseLog.php?cidReq=".$course_code.'&id_session='.api_get_session_id(),
-                'name' => get_lang("Tracking"),
+                'url' => '../tracking/courseLog.php?cidReq='.$course_code.'&id_session='.api_get_session_id(),
+                'name' => get_lang('Tracking'),
             ];
         } else {
             if ($origin === 'resume_session') {
                 $interbreadcrumb[] = [
-                    'url' => "../session/session_list.php",
+                    'url' => '../session/session_list.php',
                     'name' => get_lang('SessionList'),
                 ];
                 $interbreadcrumb[] = [
-                    'url' => "../session/resume_session.php?id_session=".$sessionId,
+                    'url' => '../session/resume_session.php?id_session='.$sessionId,
                     'name' => get_lang('SessionOverview'),
                 ];
             } else {
                 $interbreadcrumb[] = [
-                    'url' => api_is_student_boss() ? "#" : "index.php",
+                    'url' => api_is_student_boss() ? '#' : 'index.php',
                     'name' => get_lang('MySpace'),
                 ];
                 if (!empty($coachId)) {
                     $interbreadcrumb[] = [
-                        'url' => "student.php?id_coach=".$coachId,
-                        'name' => get_lang("CoachStudents"),
+                        'url' => 'student.php?id_coach='.$coachId,
+                        'name' => get_lang('CoachStudents'),
                     ];
                     $interbreadcrumb[] = [
-                        'url' => "myStudents.php?student=".$student_id.'&id_coach='.$coachId,
-                        'name' => get_lang("StudentDetails"),
+                        'url' => 'myStudents.php?student='.$student_id.'&id_coach='.$coachId,
+                        'name' => get_lang('StudentDetails'),
                     ];
                 } else {
                     $interbreadcrumb[] = [
-                        'url' => "student.php",
+                        'url' => 'student.php',
                         'name' => get_lang('MyStudents'),
                     ];
                     $interbreadcrumb[] = [
-                        'url' => "myStudents.php?student=".$student_id,
+                        'url' => 'myStudents.php?student='.$student_id,
                         'name' => get_lang('StudentDetails'),
                     ];
                 }
@@ -167,36 +167,36 @@ if (!empty($details)) {
         ];
         if (!empty($sessionId)) {
             $interbreadcrumb[] = [
-                'url' => "../session/resume_session.php?id_session=".$sessionId,
+                'url' => '../session/resume_session.php?id_session='.$sessionId,
                 'name' => get_lang('SessionOverview'),
             ];
         }
     } elseif ($origin === 'teacher_details') {
         $this_section = SECTION_TRACKING;
-        $interbreadcrumb[] = ['url' => "index.php", 'name' => get_lang('MySpace')];
-        $interbreadcrumb[] = ['url' => "teachers.php", 'name' => get_lang('Teachers')];
+        $interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('MySpace')];
+        $interbreadcrumb[] = ['url' => 'teachers.php', 'name' => get_lang('Teachers')];
         $nameTools = $user_info['complete_name'];
     } else {
         $interbreadcrumb[] = [
-            'url' => api_is_student_boss() ? "#" : "index.php",
+            'url' => api_is_student_boss() ? '#' : 'index.php',
             'name' => get_lang('MySpace'),
         ];
         if (!empty($coachId)) {
             if ($sessionId) {
                 $interbreadcrumb[] = [
-                    'url' => "student.php?id_coach=".$coachId."&id_session=".$sessionId,
-                    'name' => get_lang("CoachStudents"),
+                    'url' => 'student.php?id_coach='.$coachId.'&id_session='.$sessionId,
+                    'name' => get_lang('CoachStudents'),
                 ];
             } else {
                 $interbreadcrumb[] = [
-                    'url' => "student.php?id_coach=".$coachId,
-                    'name' => get_lang("CoachStudents"),
+                    'url' => 'student.php?id_coach='.$coachId,
+                    'name' => get_lang('CoachStudents'),
                 ];
             }
         } else {
             $interbreadcrumb[] = [
-                'url' => "student.php",
-                'name' => get_lang("MyStudents"),
+                'url' => 'student.php',
+                'name' => get_lang('MyStudents'),
             ];
         }
     }
@@ -516,12 +516,12 @@ switch ($action) {
         }
         break;
     case 'reset_lp':
-        $lp_id = isset($_GET['lp_id']) ? intval($_GET['lp_id']) : '';
+        $lp_id = isset($_GET['lp_id']) ? (int) $_GET['lp_id'] : '';
         $check = true;
 
-        if (api_is_allowed_to_edit() &&
-            !empty($lp_id) &&
+        if (!empty($lp_id) &&
             !empty($student_id) &&
+            api_is_allowed_to_edit() &&
             Security::check_token('get')
         ) {
             Event::delete_student_lp_events(
@@ -533,9 +533,7 @@ switch ($action) {
 
             // @todo delete the stats.track_e_exercises records.
             // First implement this http://support.chamilo.org/issues/1334
-            Display::addFlash(
-                Display::return_message(get_lang('LPWasReset'), 'success')
-            );
+            Display::addFlash(Display::return_message(get_lang('LPWasReset'), 'success'));
             Security::clear_token();
         }
         break;
@@ -898,7 +896,7 @@ $userInfo['student_score'] = $score;
 $userInfo['student_progress'] = $avg_student_progress;
 $userInfo['first_connection'] = $first_connection_date;
 $userInfo['last_connection'] = $last_connection_date;
-if ($details == 'true') {
+if ($details === 'true') {
     $userInfo['time_spent_course'] = $time_spent_on_the_course;
 }
 
@@ -1107,8 +1105,7 @@ if (empty($details)) {
                 if (empty($session_info)) {
                     $isSubscribed = CourseManager::is_user_subscribed_in_course(
                         $student_id,
-                        $courseCodeItem,
-                        false
+                        $courseCodeItem
                     );
                 } else {
                     $isSubscribed = CourseManager::is_user_subscribed_in_course(
@@ -1420,7 +1417,6 @@ if (empty($details)) {
 
             foreach ($flat_list as $learnpath) {
                 $lpIdList[] = $learnpath['iid'];
-
                 $lp_id = $learnpath['lp_old_id'];
                 $lp_name = $learnpath['lp_name'];
                 $any_result = false;

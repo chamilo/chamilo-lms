@@ -188,7 +188,7 @@ $course_quiz_answer = 'quiz_answer';
 $course_student_publication = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
 $TABLECALHORAIRE = Database:: get_course_table(TABLE_CAL_HORAIRE);
 
-if (isset($_GET['user_id']) && $_GET['user_id'] != "") {
+if (isset($_GET['user_id']) && $_GET['user_id'] != '') {
     $user_id = intval($_GET['user_id']);
 } else {
     $user_id = api_get_user_id();

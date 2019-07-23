@@ -72,10 +72,6 @@ class aicc extends learnpath
      */
     public function open($id)
     {
-        // Redefine parent method.
-        if ($this->debug > 0) {
-            error_log('In aicc::open()', 0);
-        }
     }
 
     /**
@@ -675,9 +671,6 @@ class aicc extends learnpath
     public function set_author($author = '')
     {
         $course_id = api_get_course_int_id();
-        if ($this->debug > 0) {
-            error_log('In aicc::set_author('.$author.') method', 0);
-        }
         $lp = $this->get_id();
         if ($lp != 0) {
             $tbl_lp = Database::get_course_table(TABLE_LP_MAIN);
@@ -686,9 +679,9 @@ class aicc extends learnpath
             Database::query($sql);
 
             return true;
-        } else {
-            return false;
         }
+
+        return false;
     }
 
     /**

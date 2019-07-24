@@ -3289,7 +3289,8 @@ class Exercise
             function openClockWarning() {
                 $('#clock_warning').dialog({
                     modal:true,
-                    height:250,
+                    height:320,
+                    width:550,
                     closeOnEscape: false,
                     resizable: false,
                     buttons: {
@@ -3354,7 +3355,8 @@ class Exercise
             function openClockWarning() {
                 $('#clock_warning').dialog({
                     modal:true,
-                    height:250,
+                    height:320,
+                    width:550,
                     closeOnEscape: false,
                     resizable: false,
                     buttons: {

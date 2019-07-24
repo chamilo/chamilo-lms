@@ -2744,10 +2744,10 @@ function api_get_session_condition(
     $session_id = (int) $session_id;
 
     if (empty($session_field)) {
-        $session_field = "session_id";
+        $session_field = 'session_id';
     }
     // Condition to show resources by session
-    $condition_add = $and ? " AND " : " WHERE ";
+    $condition_add = $and ? ' AND ' : ' WHERE ';
 
     if ($with_base_content) {
         $condition_session = $condition_add." ( $session_field = $session_id OR $session_field = 0 OR $session_field IS NULL) ";

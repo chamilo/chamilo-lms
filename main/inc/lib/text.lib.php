@@ -414,9 +414,7 @@ function api_trunc_str($text, $length = 30, $suffix = '...', $middle = false, $e
  */
 function domesticate($input)
 {
-    $input = stripslashes($input);
-    $input = str_replace("'", "''", $input);
-    $input = str_replace('"', "''", $input);
+    $input = str_replace(["'", '"'], "''", stripslashes($input));
 
     return $input;
 }

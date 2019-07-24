@@ -737,7 +737,7 @@ class Rest extends WebService
         foreach ($categories as $category) {
             $learnPathList = new LearnpathList(
                 $this->user->getId(),
-                $this->course->getCode(),
+                api_get_course_info($this->course->getCode()),
                 $sessionId,
                 null,
                 false,

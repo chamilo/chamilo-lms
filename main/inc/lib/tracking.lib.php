@@ -2751,7 +2751,7 @@ class Tracking
             if (empty($lpIdList)) {
                 $lpList = new LearnpathList(
                     $studentId,
-                    $courseCode,
+                    $courseInfo,
                     $sessionId,
                     null,
                     false,
@@ -5867,7 +5867,7 @@ class Tracking
 
             $list = new LearnpathList(
                 api_get_user_id(),
-                $course_info['code'],
+                $course_info,
                 $session_id,
                 'lp.publicatedOn ASC',
                 true,
@@ -5877,7 +5877,7 @@ class Tracking
 
             $lp_list = $list->get_flat_list();
 
-            if (!empty($lp_list) > 0) {
+            if (!empty($lp_list)) {
                 foreach ($lp_list as $lp_id => $learnpath) {
                     if (!$learnpath['lp_visibility']) {
                         continue;

@@ -3930,10 +3930,10 @@ class SessionManager
         $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
         $tbl_session_rel_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
         $session_id = (int) $session_id;
-        $sqlSelect = "*, c.id, c.id as real_id";
+        $sqlSelect = '*, c.id, c.id as real_id';
 
         if ($getCount) {
-            $sqlSelect = "COUNT(1) as count";
+            $sqlSelect = 'COUNT(1) as count';
         }
 
         // select the courses
@@ -3953,9 +3953,9 @@ class SessionManager
             $orderBy = " ORDER BY $orderBy";
         } else {
             if (self::orderCourseIsEnabled()) {
-                $orderBy .= " ORDER BY position ";
+                $orderBy .= ' ORDER BY position ';
             } else {
-                $orderBy .= " ORDER BY title ";
+                $orderBy .= ' ORDER BY title ';
             }
         }
 
@@ -4504,7 +4504,7 @@ class SessionManager
                         if ($course_info) {
                             //By default new elements are invisible
                             if ($set_exercises_lp_invisible) {
-                                $list = new LearnpathList('', $course_info['code'], $sid);
+                                $list = new LearnpathList('', $course_info, $sid);
                                 $flat_list = $list->get_flat_list();
                                 if (!empty($flat_list)) {
                                     foreach ($flat_list as $lp_id => $data) {

@@ -114,7 +114,7 @@ if (!empty($courseList)) {
 
         $list = new LearnpathList(
             api_get_user_id(),
-            $course_data['code'],
+            api_get_course_info($course_data['code']),
             $session_id,
             'lp.publicatedOn ASC',
             true,

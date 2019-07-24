@@ -215,7 +215,7 @@ foreach ($categories as $item) {
 
     $list = new LearnpathList(
         $userId,
-        api_get_course_id(),
+        $courseInfo,
         $sessionId,
         null,
         false,

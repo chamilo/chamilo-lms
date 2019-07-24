@@ -9486,8 +9486,8 @@ class Exercise
             'results_available_for_x_minutes'
         );
 
-        if (!empty($value)) {
-            return (int) $value;
+        if (!empty($value) && isset($value['value'])) {
+            return (int) $value['value'];
         }
 
         return 0;

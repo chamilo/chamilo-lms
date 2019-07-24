@@ -12,6 +12,8 @@ use ChamiloSession as Session;
  * @author Olivier Brouckaert <oli.brouckaert@skynet.be> 2003-2004
  * @author Hubert Borderiou 2011-10-21
  * @author ivantcholakov2009-07-20
+ * @author Julio Montoya
+ *
  */
 class ExerciseLib
 {
@@ -4422,11 +4424,11 @@ EOT;
             }
 
             if (!empty($objExercise->getResultAccess())) {
+                $url = api_get_path(WEB_CODE_PATH).'exercise/overview.php?'.api_get_cidreq().'&exerciseId='.$objExercise->id;
                 echo $objExercise->returnTimeLeftDiv();
                 echo $objExercise->showSimpleTimeControl(
                     $objExercise->getResultAccessTimeDiff($exercise_stat_info),
-                    api_get_path(WEB_CODE_PATH).'exercise/overview.php?'.api_get_cidreq(
-                    ).'&exerciseId='.$objExercise->id
+                    $url
                 );
             }
         }

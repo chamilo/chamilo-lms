@@ -54,7 +54,7 @@ $msgLang = isset($_SESSION['disabled_languages']) ? 1 : 0;
 $disabledLang = isset($_SESSION['disabled_languages']) ? $_SESSION['disabled_languages'] : null;
 
 $htmlHeadXtra[] = '<script>
- $(document).ready(function() {
+ $(function () {
     var msgLang = '.$msgLang.';
     var disabledLang = "'.$disabledLang.'"
 

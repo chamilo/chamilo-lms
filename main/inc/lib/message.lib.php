@@ -481,8 +481,8 @@ class MessageManager
             //@todo it's possible to edit a message? yes, only for groups
             if (!empty($editMessageId)) {
                 $query = " UPDATE $table SET
-                                update_date = '".$now."',
-                                content = '".Database::escape_string($content)."'
+                              update_date = '".$now."',
+                              content = '".Database::escape_string($content)."'
                            WHERE id = '$editMessageId' ";
                 Database::query($query);
                 $messageId = $editMessageId;

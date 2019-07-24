@@ -349,16 +349,16 @@ class Rest extends WebService
                     'title' => $document['title'],
                     'path' => $document['path'],
                     'url' => $webPath.http_build_query([
-                            'username' => $this->user->getUsername(),
-                            'api_key' => $this->apiKey,
-                            'cidReq' => $this->course->getCode(),
-                            'id_session' => $sessionId,
-                            'gidReq' => 0,
-                            'gradebook' => 0,
-                            'origin' => '',
-                            'action' => 'download',
-                            'id' => $document['id'],
-                        ]),
+                        'username' => $this->user->getUsername(),
+                        'api_key' => $this->apiKey,
+                        'cidReq' => $this->course->getCode(),
+                        'id_session' => $sessionId,
+                        'gidReq' => 0,
+                        'gradebook' => 0,
+                        'origin' => '',
+                        'action' => 'download',
+                        'id' => $document['id'],
+                    ]),
                     'icon' => $icon,
                     'size' => format_file_size($document['size']),
                 ];
@@ -430,7 +430,7 @@ class Rest extends WebService
         return [
             'id' => $announcement['announcement']->getIid(),
             'title' => $announcement['announcement']->getTitle(),
-            'creatorName' => $announcement['item_property']->getInsertUser()->getCompleteName(),
+            'creatorName' => UserManager::formatUserFullName($announcement['item_property']->getInsertUser()),
             'date' => api_convert_and_format_date(
                 $announcement['item_property']->getInsertDate(),
                 DATE_TIME_FORMAT_LONG_24H
@@ -692,7 +692,7 @@ class Rest extends WebService
             'pictureUri' => $pictureInfo['dir'].$pictureInfo['file'],
             'id' => $this->user->getId(),
             'status' => $this->user->getStatus(),
-            'fullName' => $this->user->getCompleteName(),
+            'fullName' => UserManager::formatUserFullName($this->user),
             'username' => $this->user->getUsername(),
             'officialCode' => $this->user->getOfficialCode(),
             'phone' => $this->user->getPhone(),
@@ -802,13 +802,13 @@ class Rest extends WebService
                     'title' => Security::remove_XSS($lpDetails['lp_name']),
                     'progress' => intval($progress),
                     'url' => api_get_path(WEB_CODE_PATH).'webservices/api/v2.php?'.http_build_query([
-                            'hash' => $this->encodeParams([
-                                'action' => 'course_learnpath',
-                                'lp_id' => $lpId,
-                                'course' => $this->course->getId(),
-                                'session' => $sessionId,
-                            ]),
+                        'hash' => $this->encodeParams([
+                            'action' => 'course_learnpath',
+                            'lp_id' => $lpId,
+                            'course' => $this->course->getId(),
+                            'session' => $sessionId,
                         ]),
+                    ]),
                 ];
             }
 
@@ -854,15 +854,15 @@ class Rest extends WebService
         Login::init_user($this->user->getId(), true);
 
         $url = api_get_path(WEB_CODE_PATH).'lp/lp_controller.php?'.http_build_query([
-                'cidReq' => $this->course->getCode(),
-                'id_session' => $sessionId,
-                'gidReq' => 0,
-                'gradebook' => 0,
-                'origin' => '',
-                'action' => 'view',
-                'lp_id' => intval($lpId),
-                'isStudentView' => 'true',
-            ]);
+            'cidReq' => $this->course->getCode(),
+            'id_session' => $sessionId,
+            'gidReq' => 0,
+            'gradebook' => 0,
+            'origin' => '',
+            'action' => 'view',
+            'lp_id' => intval($lpId),
+            'isStudentView' => 'true',
+        ]);
 
         header("Location: $url");
         exit;
@@ -973,7 +973,7 @@ class Rest extends WebService
 
         /** @var User $user */
         foreach ($users as $user) {
-            $userName = $user->getCompleteName();
+            $userName = UserManager::formatUserFullName($user);
 
             if ($showEmail) {
                 $userName .= " ({$user->getEmail()})";

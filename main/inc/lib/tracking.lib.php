@@ -509,7 +509,6 @@ class Tracking
                             }
                         }
 
-                        //$time = learnpathItem::getScormTimeFromParameter('js', $attemptTime).' - '.learnpathItem::getScormTimeFromParameter('js',$attemptResult);
                         $time = learnpathItem::getScormTimeFromParameter('js', $attemptTime);
 
                         if ($score == 0) {

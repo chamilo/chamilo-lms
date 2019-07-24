@@ -103,7 +103,7 @@ function process_uploaded_file($uploaded_file, $show_output = true)
                 // The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the HTML form.
                 // Not used at the moment, but could be handy if we want to limit the size of an upload
                 // (e.g. image upload in html editor).
-                $max_file_size = intval($_POST['MAX_FILE_SIZE']);
+                $max_file_size = (int) $_POST['MAX_FILE_SIZE'];
                 if ($show_output) {
                     Display::addFlash(
                         Display::return_message(
@@ -1660,7 +1660,7 @@ function create_unexisting_directory(
     $sendNotification = true
 ) {
     $course_id = $_course['real_id'];
-    $session_id = intval($session_id);
+    $session_id = (int) $session_id;
 
     $folderExists = DocumentManager::folderExists(
         $desired_dir_name,
@@ -1834,7 +1834,7 @@ function move_uploaded_file_collection_into_directory(
     $max_filled_space
 ) {
     $number_of_uploaded_images = count($uploaded_file_collection['name']);
-    $new_file_list = [];
+    $list = [];
     for ($i = 0; $i < $number_of_uploaded_images; $i++) {
         $missing_file['name'] = $uploaded_file_collection['name'][$i];
         $missing_file['type'] = $uploaded_file_collection['type'][$i];
@@ -1844,7 +1844,7 @@ function move_uploaded_file_collection_into_directory(
 
         $upload_ok = process_uploaded_file($missing_file);
         if ($upload_ok) {
-            $new_file_list[] = handle_uploaded_document(
+            $list[] = handle_uploaded_document(
                 $_course,
                 $missing_file,
                 $base_work_dir,
@@ -1860,7 +1860,7 @@ function move_uploaded_file_collection_into_directory(
         unset($missing_file);
     }
 
-    return $new_file_list;
+    return $list;
 }
 
 /**

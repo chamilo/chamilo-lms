@@ -1665,8 +1665,6 @@ class Event
         foreach ($list as $student_result) {
             $user_id = $student_result['exe_user_id'];
             $current_best_score[$user_id] = $student_result['exe_result'];
-
-            //echo $current_best_score[$user_id].' - '.$best_score_return[$user_id]['exe_result'].'<br />';
             if (!isset($best_score_return[$user_id]['exe_result'])) {
                 $best_score_return[$user_id] = $student_result;
             }

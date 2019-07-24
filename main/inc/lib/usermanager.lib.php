@@ -6228,7 +6228,7 @@ SQL;
             .Display::url($url, $url);
 
         api_mail_html(
-            $user->getCompleteName(),
+            self::formatUserFullName($user),
             $user->getEmail(),
             $mailSubject,
             $mailBody

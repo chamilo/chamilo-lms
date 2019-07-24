@@ -2680,7 +2680,7 @@ class MySpace
         if (!empty($studentId)) {
             $student = api_get_user_entity($studentId);
             if ($student) {
-                $studentList[$student->getId()] = $student->getCompleteName();
+                $studentList[$student->getId()] = UserManager::formatUserFullName($student);
             }
         }
 

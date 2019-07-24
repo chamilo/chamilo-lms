@@ -857,7 +857,7 @@ class CoursesController
 
             $generalCoach = $session->getGeneralCoach();
             $coachId = $generalCoach ? $generalCoach->getId() : 0;
-            $coachName = $generalCoach ? $session->getGeneralCoach()->getCompleteName() : '';
+            $coachName = $generalCoach ? UserManager::formatUserFullName($session->getGeneralCoach()) : '';
 
             $actions = null;
             if (api_is_platform_admin()) {

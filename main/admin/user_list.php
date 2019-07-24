@@ -157,7 +157,7 @@ function display_advanced_search_form () {
     }
 }
 
-$(document).ready(function() {
+$(function () {
     var select_val = $("#input_select_extra_data").val();
     if ( document.getElementById(\'extra_data_text\')) {
         if (select_val != 0) {

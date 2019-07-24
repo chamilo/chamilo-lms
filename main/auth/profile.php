@@ -26,7 +26,6 @@ $logInfo = [
     'tool_id' => 0,
     'tool_id_detail' => 0,
     'action' => $this_section,
-    'info' => '',
 ];
 Event::registerLog($logInfo);
 
@@ -651,20 +650,18 @@ if ($form->validate()) {
     Session::write('_user', $userInfo);
 
     if ($hook) {
-        Database::getManager()->clear(User::class); //Avoid cache issue (user entity is used before)
-
-        $user = api_get_user_entity(api_get_user_id()); //Get updated user info for hook event
-
+        Database::getManager()->clear(User::class); // Avoid cache issue (user entity is used before)
+        $user = api_get_user_entity(api_get_user_id()); // Get updated user info for hook event
         $hook->setEventData(['user' => $user]);
         $hook->notifyUpdateUser(HOOK_EVENT_TYPE_POST);
     }
 
+    Session::erase('system_timezone');
+
     $url = api_get_self();
-    header("Location: ".$url);
+    header("Location: $url");
     exit;
 }
-
-// the header
 
 $actions = '';
 if ($allowSocialTool) {

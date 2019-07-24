@@ -236,7 +236,6 @@ if (!empty($options)) {
     $defaults['extra_lp_icon'] = learnpath::getSelectedIcon($lpId);
 }
 
-
 $extraField = new ExtraField('lp');
 $extra = $extraField->addElements($form, $lpId, ['lp_icon']);
 
@@ -254,7 +253,6 @@ $(function() {
     '.$extra['jquery_ready_content'].'
 });
 </script>';
-
 
 $htmlHeadXtra[] = '<script>'.$learnPath->get_js_dropdown_array().'</script>';
 

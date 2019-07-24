@@ -1603,7 +1603,9 @@ class learnpath
     /**
      * Gets all the chapters belonging to the same parent as the item/chapter given
      * Can also be called as abstract method.
+     *
      * @deprecated not used
+     *
      * @param int $id Item ID
      *
      * @return array A list of all the "brother items" (or an empty array on failure)
@@ -1645,7 +1647,9 @@ class learnpath
     /**
      * Gets all the items belonging to the same parent as the item given
      * Can also be called as abstract method.
+     *
      * @deprecated not used
+     *
      * @param int $id Item ID
      *
      * @return array A list of all the "brother items" (or an empty array on failure)
@@ -3606,7 +3610,6 @@ class learnpath
         return '';
     }
 
-
     /**
      * Gets the learnpath name/title.
      *
@@ -4054,6 +4057,7 @@ class learnpath
         if (!empty($this->user_id)) {
             return (int) $this->user_id;
         }
+
         return false;
     }
 
@@ -5192,6 +5196,7 @@ class learnpath
 
             return $res;
         }
+
         return false;
     }
 

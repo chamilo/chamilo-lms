@@ -518,7 +518,6 @@ function save_item(
         'action_details' => $myLP->getCurrentAttempt(),
         'tool_id_detail' => $myLP->get_current_item_id(),
         'action' => 'save_item',
-
     ];
     Event::registerLog($logInfo);
 

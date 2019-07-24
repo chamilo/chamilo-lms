@@ -3174,7 +3174,7 @@ class Tracking
                                 c_id = $course_id AND
                                 (item_type = 'quiz' OR item_type = 'sco') AND
                                 lp_id = ".$lp_id;
-                      $result_have_quiz = Database::query($sql);
+                    $result_have_quiz = Database::query($sql);
                     if (Database::num_rows($result_have_quiz) > 0) {
                         $row = Database::fetch_array($result_have_quiz, 'ASSOC');
                         if (is_numeric($row['count']) && $row['count'] != 0) {

@@ -3276,7 +3276,7 @@ class Exercise
     }
 
     /**
-     * @param int $timeLeft in seconds
+     * @param int    $timeLeft in seconds
      * @param string $url
      *
      * @return string
@@ -3333,7 +3333,6 @@ class Exercise
 	       		$('#submit_save').click(function () {});
 	        });
 	    </script>";
-
     }
 
     /**
@@ -9507,7 +9506,6 @@ class Exercise
             $endDate->add(new DateInterval('PT'.$value.'M'));
             $now = time();
             if ($endDate->getTimestamp() > $now) {
-
                 return (int) $endDate->getTimestamp() - $now;
             }
         }

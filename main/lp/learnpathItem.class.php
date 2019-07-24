@@ -434,6 +434,7 @@ class learnpathItem
         if (empty($this->current_start_time)) {
             return time();
         }
+
         return $this->current_start_time;
     }
 
@@ -3045,12 +3046,10 @@ class learnpathItem
         $lpItemId = $this->get_id();
 
         if (empty($lpItemId)) {
-
             return false;
         }
 
         if (empty($lp_view_id)) {
-
             return false;
         }
 

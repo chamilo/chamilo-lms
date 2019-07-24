@@ -2700,18 +2700,19 @@ function api_get_session_visibility(
  * This function returns a (star) session icon if the session is not null and
  * the user is not a student.
  *
- * @param int $session_id
- * @param int $status_id  User status id - if 5 (student), will return empty
+ * @param int $sessionId
+ * @param int $statusId  User status id - if 5 (student), will return empty
  *
  * @return string Session icon
  */
-function api_get_session_image($session_id, $status_id)
+function api_get_session_image($sessionId, $statusId)
 {
-    $session_id = (int) $session_id;
-    $session_img = '';
-    if ((int) $status_id != 5) { //check whether is not a student
-        if ($session_id > 0) {
-            $session_img = "&nbsp;&nbsp;".Display::return_icon(
+    $sessionId = (int) $sessionId;
+    $image = '';
+    if ($statusId != STUDENT) {
+        // Check whether is not a student
+        if ($sessionId > 0) {
+            $image = '&nbsp;&nbsp;'.Display::return_icon(
                 'star.png',
                 get_lang('SessionSpecificResource'),
                 ['align' => 'absmiddle'],
@@ -2720,7 +2721,7 @@ function api_get_session_image($session_id, $status_id)
         }
     }
 
-    return $session_img;
+    return $image;
 }
 
 /**

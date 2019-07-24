@@ -48,6 +48,7 @@ if (api_get_setting('search_enabled') === 'true') {
     require api_get_path(LIBRARY_PATH).'search/search_widget.php';
     search_widget_prepare($htmlHeadXtra);
 }
+$courseId = api_get_course_int_id();
 $sessionId = api_get_session_id();
 $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
 $courseInfo = api_get_course_info();
@@ -118,7 +119,7 @@ if ($is_allowed_to_edit) {
 
 $token = Security::get_token();
 
-$categoriesTempList = learnpath::getCategories(api_get_course_int_id());
+$categoriesTempList = learnpath::getCategories($courseId);
 $categoryTest = new CLpCategory();
 $categoryTest->setId(0);
 $categoryTest->setName(get_lang('WithOutCategory'));
@@ -150,10 +151,10 @@ if ($filteredCategoryId) {
 $test_mode = api_get_setting('server_type');
 $showBlockedPrerequisite = api_get_configuration_value('show_prerequisite_as_blocked');
 $allowLpChamiloExport = api_get_configuration_value('allow_lp_chamilo_export');
-$allowMinTime = Tracking::minimunTimeAvailable(api_get_session_id(), api_get_course_int_id());
+$allowMinTime = Tracking::minimunTimeAvailable($sessionId, $courseId);
 $accumulateWorkTimeTotal = 0;
 if ($allowMinTime) {
-    $accumulateWorkTimeTotal = learnpath::getAccumulateWorkTimeTotal(api_get_course_int_id());
+    $accumulateWorkTimeTotal = learnpath::getAccumulateWorkTimeTotal($courseId);
 }
 
 $user = api_get_user_entity($userId);
@@ -186,6 +187,7 @@ $courseSettingsDisableIcon = Display::return_icon(
 );
 
 $enableAutoLaunch = api_get_course_setting('enable_lp_auto_launch');
+$gameMode = api_get_setting('gamification_mode');
 
 $data = [];
 /** @var CLpCategory $item */
@@ -201,7 +203,7 @@ foreach ($categories as $item) {
         );
 
         if (!$is_allowed_to_edit) {
-            if ((int) $categoryVisibility !== 1 && $categoryVisibility != -1) {
+            if ($categoryVisibility !== 1 && $categoryVisibility != -1) {
                 continue;
             }
         }
@@ -212,9 +214,9 @@ foreach ($categories as $item) {
     }
 
     $list = new LearnpathList(
-        api_get_user_id(),
+        $userId,
         api_get_course_id(),
-        api_get_session_id(),
+        $sessionId,
         null,
         false,
         $categoryId
@@ -223,14 +225,14 @@ foreach ($categories as $item) {
     $flat_list = $list->get_flat_list();
 
     // Hiding categories with out LPs (only for student)
-    if (empty($flat_list) && !api_is_allowed_to_edit()) {
+    if (empty($flat_list) && !$is_allowed_to_edit) {
         continue;
     }
 
     $listData = [];
     $lpTimeList = [];
     if ($allowMinTime) {
-        $lpTimeList = Tracking::getCalculateTime($userId, api_get_course_int_id(), api_get_session_id());
+        $lpTimeList = Tracking::getCalculateTime($userId, $courseId, $sessionId);
     }
 
     if (!empty($flat_list)) {
@@ -242,17 +244,13 @@ foreach ($categories as $item) {
         $progressList = learnpath::getProgressFromLpList(
             array_column($flat_list, 'lp_old_id'),
             $userId,
-            api_get_course_int_id(),
-            api_get_session_id()
+            $courseId,
+            $sessionId
         );
 
+        $now = time();
         foreach ($flat_list as $id => $details) {
             $id = $details['lp_old_id'];
-            // Validation when belongs to a session.
-            $session_img = api_get_session_image(
-                $details['lp_session'],
-                $userInfo['status']
-            );
 
             if (!$is_allowed_to_edit && $details['lp_visibility'] == 0) {
                 // This is a student and this path is invisible, skip.
@@ -267,7 +265,7 @@ foreach ($categories as $item) {
                     $userId,
                     $details['prerequisite'],
                     $courseInfo,
-                    api_get_session_id()
+                    $sessionId
                 );
                 if ($lpVisibility === false && $isBlocked && $showBlockedPrerequisite === false) {
                     continue;
@@ -275,12 +273,17 @@ foreach ($categories as $item) {
             }
 
             $start_time = $end_time = '';
-            if (!$is_allowed_to_edit) {
+            if ($is_allowed_to_edit) {
+                if (!empty($details['publicated_on'])) {
+                    $start_time = api_convert_and_format_date($details['publicated_on'], DATE_TIME_FORMAT_LONG_24H);
+                }
+                if (!empty($details['expired_on'])) {
+                    $end_time = api_convert_and_format_date($details['expired_on'], DATE_TIME_FORMAT_LONG_24H);
+                }
+            } else {
                 $time_limits = false;
                 // This is an old LP (from a migration 1.8.7) so we do nothing
-                if (empty($details['created_on']) &&
-                    empty($details['modified_on'])
-                ) {
+                if (empty($details['created_on']) && empty($details['modified_on'])) {
                     $time_limits = false;
                 }
 
@@ -291,18 +294,9 @@ foreach ($categories as $item) {
 
                 if ($time_limits) {
                     // Check if start time
-                    if (!empty($details['publicated_on']) &&
-                        !empty($details['expired_on'])
-                    ) {
-                        $start_time = api_strtotime(
-                            $details['publicated_on'],
-                            'UTC'
-                        );
-                        $end_time = api_strtotime(
-                            $details['expired_on'],
-                            'UTC'
-                        );
-                        $now = time();
+                    if (!empty($details['publicated_on']) && !empty($details['expired_on'])) {
+                        $start_time = api_strtotime($details['publicated_on'], 'UTC');
+                        $end_time = api_strtotime($details['expired_on'], 'UTC');
                         $is_actived_time = false;
                         if ($now > $start_time && $end_time > $now) {
                             $is_actived_time = true;
@@ -312,20 +306,6 @@ foreach ($categories as $item) {
                             continue;
                         }
                     }
-                }
-                $start_time = $end_time = '';
-            } else {
-                if (!empty($details['publicated_on'])) {
-                    $start_time = api_convert_and_format_date(
-                        $details['publicated_on'],
-                        DATE_TIME_FORMAT_LONG_24H
-                    );
-                }
-                if (!empty($details['expired_on'])) {
-                    $end_time = api_convert_and_format_date(
-                        $details['expired_on'],
-                        DATE_TIME_FORMAT_LONG_24H
-                    );
                 }
             }
 
@@ -348,8 +328,7 @@ foreach ($categories as $item) {
                     .($lpVisibility
                         ? ''
                         : ' - ('.get_lang('LPNotVisibleToStudent').')');
-                $extra = '<div class ="lp_content_type_label">'.$dsp_desc
-                    .'</div>';
+                $extra = '<div class ="lp_content_type_label">'.$dsp_desc.'</div>';
             }
 
             $my_title = $name;
@@ -415,7 +394,7 @@ foreach ($categories as $item) {
             $linkMinTime = '';
             if ($allowMinTime) {
                 // Minimum time (in minutes) to pass the learning path
-                $accumulateWorkTime = learnpath::getAccumulateWorkTimePrerequisite($id, api_get_course_int_id());
+                $accumulateWorkTime = learnpath::getAccumulateWorkTimePrerequisite($id, $courseId);
                 if ($accumulateWorkTime > 0) {
                     $lpTime = isset($lpTimeList[TOOL_LEARNPATH][$id]) ? $lpTimeList[TOOL_LEARNPATH][$id] : 0;
 
@@ -566,8 +545,7 @@ foreach ($categories as $item) {
                                 'lp_publish_na.png',
                                 get_lang('LearnpathPublish')
                             ),
-                            api_get_self().'?'.$cidReq
-                                ."&lp_id=$id&action=toggle_publish&new_status=v"
+                            api_get_self().'?'.$cidReq."&lp_id=$id&action=toggle_publish&new_status=v"
                         );
                     } else {
                         $dsp_publish = Display::url(
@@ -575,8 +553,7 @@ foreach ($categories as $item) {
                                 'lp_publish.png',
                                 get_lang('LearnpathDoNotPublish')
                             ),
-                            api_get_self().'?'.$cidReq
-                                ."&lp_id=$id&action=toggle_publish&new_status=i"
+                            api_get_self().'?'.$cidReq."&lp_id=$id&action=toggle_publish&new_status=i"
                         );
                     }
                 } else {
@@ -845,14 +822,7 @@ foreach ($categories as $item) {
                     );
                 }
 
-                if ($is_allowed_to_edit) {
-                    $start_time = $start_time;
-                    $end_time = $end_time;
-                } else {
-                    $start_time = $end_time = '';
-                }
-
-                if (api_get_setting('gamification_mode') == 1) {
+                if ($gameMode == 1) {
                     if ($details['seriousgame_mode'] == 0) {
                         $actionSeriousGame = Display::toolbarButton(
                             null,
@@ -899,11 +869,16 @@ foreach ($categories as $item) {
                 $export_icon = null;
             }
 
+            $sessionImage = api_get_session_image(
+                $details['lp_session'],
+                $userInfo['status']
+            );
+
             $listData[] = [
                 'learnpath_icon' => $icon_learnpath,
                 'url_start' => $url_start_lp,
                 'title' => $my_title,
-                'session_image' => $session_img,
+                'session_image' => $sessionImage,
                 'extra' => $extra,
                 'start_time' => $start_time,
                 'end_time' => $end_time,

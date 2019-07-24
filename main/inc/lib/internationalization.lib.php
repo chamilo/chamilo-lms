@@ -1,8 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use Patchwork\Utf8;
 use ChamiloSession as Session;
+use Patchwork\Utf8;
 
 /**
  * File: internationalization.lib.php

@@ -1058,8 +1058,6 @@ function api_is_facebook_auth_activated()
 function api_add_trailing_slash($path)
 {
     return substr($path, -1) == '/' ? $path : $path.'/';
-    // This code is about 20% faster than the preg_replace equivalent
-    //return preg_replace('/([^\/])$/', '$1/', $path);
 }
 
 /**

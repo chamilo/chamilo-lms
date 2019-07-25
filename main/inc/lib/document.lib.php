@@ -1691,11 +1691,10 @@ class DocumentManager
             }
         }
 
-        $doc_id = intval($doc_id);
-        $session_id = intval($session_id);
-
-        //2. Course and Session visibility are handle in local.inc.php/global.inc.php
-        //3. Checking if user exist in course/session
+        $doc_id = (int) $doc_id;
+        $session_id = (int) $session_id;
+        // 2. Course and Session visibility are handle in local.inc.php/global.inc.php
+        // 3. Checking if user exist in course/session
         if ($session_id == 0) {
             if (is_null($userIsSubscribed)) {
                 $userIsSubscribed = CourseManager::is_user_subscribed_in_course(
@@ -4731,7 +4730,7 @@ class DocumentManager
             return false;
         }
 
-        $sessionId = intval($sessionId);
+        $sessionId = (int) $sessionId;
         $folderWithSuffix = self::fixDocumentName(
             $folder,
             'folder',
@@ -4783,7 +4782,7 @@ class DocumentManager
             return false;
         }
 
-        $sessionId = intval($sessionId);
+        $sessionId = (int) $sessionId;
         $fileNameEscape = Database::escape_string($fileName);
 
         $fileNameWithSuffix = self::fixDocumentName(

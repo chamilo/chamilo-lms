@@ -1154,6 +1154,8 @@ class GradebookUtils
      *
      * @param string $courseCode
      *
+     * @deprecated use CourseManager
+     *
      * @return array
      */
     public static function get_users_in_course($courseCode)
@@ -1183,7 +1185,7 @@ class GradebookUtils
             $sql = 'SELECT user.user_id, user.username, lastname, firstname, official_code
                     FROM '.$tbl_course_user.' as course_rel_user 
                     INNER JOIN '.$tbl_user.' as user
-                    ON (course_rel_user.user_id=user.user_id)
+                    ON (course_rel_user.user_id = user.id)
                     WHERE
                         course_rel_user.status = '.STUDENT.' AND
                         course_rel_user.c_id = "'.$courseId.'" '.

@@ -16,10 +16,6 @@ use Patchwork\Utf8;
  * @package chamilo.library
  */
 
-/**
- * Constants.
- */
-
 // Special tags for marking untranslated variables.
 define('SPECIAL_OPENING_TAG', '[=');
 define('SPECIAL_CLOSING_TAG', '=]');

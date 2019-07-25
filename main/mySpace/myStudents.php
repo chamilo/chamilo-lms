@@ -124,7 +124,7 @@ if (!empty($details)) {
         } else {
             if ($origin === 'resume_session') {
                 $interbreadcrumb[] = [
-                    'url' => '../session/session_list.php',
+                    'url' => "../session/session_list.php",
                     'name' => get_lang('SessionList'),
                 ];
                 $interbreadcrumb[] = [

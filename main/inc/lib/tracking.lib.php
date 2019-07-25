@@ -2003,23 +2003,6 @@ class Tracking
                     //see #5736
                     $last_login_date_timestamp = api_strtotime($last_login_date);
                     $now = time();
-                    //If the last connection is > than 7 days, the text is red
-                    //345600 = 7 days in seconds
-                    /*
-                    if ($now - $last_login_date_timestamp > 604800) {
-                        if ($convert_date) {
-                            $last_login_date = api_convert_and_format_date($last_login_date, DATE_FORMAT_SHORT);
-                            $icon = api_is_allowed_to_edit() ?
-                                '<a href="'.api_get_path(WEB_CODE_PATH).'announcements/announcements.php?action=add&remind_inactive='.$student_id.'&cidReq='.$courseInfo['code'].'" title="'.get_lang('RemindInactiveUser').'">
-                                  '.Display::return_icon('messagebox_warning.gif').'
-                                 </a>'
-                                : null;
-                            return $icon.Display::label($last_login_date, 'warning');
-                        } else {
-                            return $last_login_date;
-                        }
-                    } else {
-                    */
                     if ($convert_date) {
                         return api_convert_and_format_date($last_login_date, DATE_FORMAT_SHORT);
                     } else {

@@ -14,7 +14,6 @@ use ChamiloSession as Session;
  * @author Hubert Borderiou 2011-10-21
  * @author ivantcholakov2009-07-20
  * @author Julio Montoya
- *
  */
 class ExerciseLib
 {

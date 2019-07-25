@@ -2089,7 +2089,6 @@ class Exercise
                 ]
             );
 
-
             $group = [
                 $form->createElement(
                     'checkbox',
@@ -2108,10 +2107,9 @@ class Exercise
                     'hide_question_score',
                     null,
                     get_lang('HideQuestionScore')
-                )
+                ),
             ];
             $form->addGroup($group, null, get_lang('ResultsConfigurationPage'));
-        
 
             $displayMatrix = 'none';
             $displayRandom = 'none';
@@ -2258,7 +2256,6 @@ class Exercise
                 get_lang('PropagateNegativeResults')
             );
 
-
             $options = [
                 '' => get_lang('SelectAnOption'),
                 1 => get_lang('SaveTheCorrectAnswersForTheNextAttempt'),
@@ -2268,7 +2265,7 @@ class Exercise
                 'save_correct_answers',
                 get_lang('SaveAnswers'),
                 $options
-            );       
+            );
 
             $form->addElement('html', '<div class="clear">&nbsp;</div>');
             $form->addElement('checkbox', 'review_answers', null, get_lang('ReviewAnswers'));

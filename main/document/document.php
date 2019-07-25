@@ -2,9 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\Resource\ResourceLink;
-use Chamilo\CoreBundle\Entity\Resource\ResourceRight;
 use Chamilo\CoreBundle\Framework\Container;
-use Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter;
 use ChamiloSession as Session;
 
 /**
@@ -114,7 +112,6 @@ if ($capturePluginInstalled) {
         </script>
     ';
 }
-
 
 $htmlHeadXtra[]
     = '<script>
@@ -2042,9 +2039,6 @@ $repo = $em->getRepository('ChamiloCourseBundle:CDocument');
 $document = $repo->find(19);
 
 if ($document->isVisible()) {
-
-
-
 }
 
 echo '

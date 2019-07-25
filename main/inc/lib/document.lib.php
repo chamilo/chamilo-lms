@@ -6188,6 +6188,7 @@ class DocumentManager
      *
      * @param string $path
      * @param bool   $can_see_invisible
+     *
      * @deprecated use CDocumentRepository::getFolderSize
      *
      * @return int Total size
@@ -6719,6 +6720,199 @@ class DocumentManager
     }
 
     /**
+     * @param array  $documentAndFolders
+     * @param array  $courseInfo
+     * @param bool   $is_certificate_mode
+     * @param array  $groupMemberWithUploadRights
+     * @param string $path
+     * @param bool   $addToEditor
+     * @param string $editorUrl
+     *
+     * @return array
+     */
+    public static function processDocumentAndFolders(
+        $documentAndFolders,
+        $courseInfo,
+        $is_certificate_mode,
+        $groupMemberWithUploadRights,
+        $path,
+        $addToEditor = false,
+        $editorUrl = ''
+    ) {
+        if (empty($documentAndFolders) || empty($courseInfo)) {
+            return [];
+        }
+        $isAllowedToEdit = api_is_allowed_to_edit(null, true);
+        $userId = api_get_user_id();
+        $currentUserInfo = api_get_user_info();
+        $sessionId = api_get_session_id();
+        $groupId = api_get_group_id();
+        $userIsSubscribed = CourseManager::is_user_subscribed_in_course($userId, $courseInfo['code']);
+        $url = api_get_path(WEB_COURSE_PATH).$courseInfo['directory'].'/document';
+
+        $courseId = $courseInfo['real_id'];
+        $group_properties = GroupManager::get_group_properties($groupId);
+
+        $sortable_data = [];
+        foreach ($documentAndFolders as $key => $document_data) {
+            $row = [];
+            $row['id'] = $document_data['id'];
+            $row['type'] = $document_data['filetype'];
+
+            // If the item is invisible, wrap it in a span with class invisible.
+            $is_visible = self::is_visible_by_id(
+                $document_data['id'],
+                $courseInfo,
+                $sessionId,
+                $userId,
+                false,
+                $userIsSubscribed
+            );
+            $invisibility_span_open = $is_visible == 0 ? '<span class="muted">' : '';
+            $invisibility_span_close = $is_visible == 0 ? '</span>' : '';
+            $size = 1;
+            // Get the title or the basename depending on what we're using
+            if ($document_data['title'] != '') {
+                $document_name = $document_data['title'];
+            } else {
+                $document_name = basename($document_data['path']);
+            }
+            $row['name'] = $document_name;
+            // Data for checkbox
+            if (($isAllowedToEdit || $groupMemberWithUploadRights) && count($documentAndFolders) > 1) {
+                $row[] = $document_data['id'];
+            }
+
+            if (self::is_folder_to_avoid($document_data['path'], $is_certificate_mode)) {
+                continue;
+            }
+
+            // Show the owner of the file only in groups
+            $user_link = '';
+            if (!empty($groupId)) {
+                if (!empty($document_data['insert_user_id'])) {
+                    $userInfo = api_get_user_info(
+                        $document_data['insert_user_id'],
+                        false,
+                        false,
+                        false,
+                        false,
+                        false
+                    );
+                    $user_link = '<div class="document_owner">'
+                        .get_lang('Owner').': '.UserManager::getUserProfileLink($userInfo)
+                        .'</div>';
+                }
+            }
+
+            // Hack in order to avoid the download icon appearing on cloud links
+            if ($document_data['filetype'] == 'link') {
+                $size = 0;
+            }
+
+            // Icons (clickable)
+            $row[] = self::create_document_link(
+                $url,
+                $document_data,
+                true,
+                $is_visible,
+                $size,
+                $isAllowedToEdit,
+                $is_certificate_mode,
+                $addToEditor,
+                $editorUrl
+            );
+
+            // Validation when belongs to a session
+            $session_img = api_get_session_image($document_data['session_id'], $currentUserInfo['status']);
+
+            $link = self::create_document_link(
+                $url,
+                $document_data,
+                false,
+                $is_visible,
+                $size,
+                $isAllowedToEdit,
+                $is_certificate_mode,
+                $addToEditor,
+                $editorUrl
+            );
+
+            // Document title with link
+            $row[] = $link.$session_img.'<br />'.$invisibility_span_open.'<i>'
+                .nl2br(htmlspecialchars($document_data['comment'], ENT_QUOTES, 'utf-8'))
+                .'</i>'.$invisibility_span_close.$user_link;
+
+            if ($document_data['filetype'] == 'folder') {
+                $displaySize = '<span id="document_size_'.$document_data['id']
+                    .'" data-path= "'.$document_data['path']
+                    .'" class="document_size"></span>';
+            } else {
+                $displaySize = format_file_size($document_data['size']);
+            }
+
+            $row[] = '<span style="display:none;">'.$size.'</span>'.
+                $invisibility_span_open.
+                $displaySize.
+                $invisibility_span_close;
+
+            // Last edit date
+            $last_edit_date = api_get_local_time($document_data['updated_at']);
+            $display_date = date_to_str_ago($document_data['updated_at']).
+                ' <div class="muted"><small>'.$last_edit_date."</small></div>";
+
+            $row[] = $invisibility_span_open.$display_date.$invisibility_span_close;
+
+            $groupMemberWithEditRightsCheckDocument = GroupManager::allowUploadEditDocument(
+                $userId,
+                $courseId,
+                $group_properties,
+                $document_data
+            );
+
+            // Admins get an edit column
+            if ($isAllowedToEdit ||
+                $groupMemberWithEditRightsCheckDocument ||
+                self::is_my_shared_folder(api_get_user_id(), $path, $sessionId)
+            ) {
+                $is_template = isset($document_data['is_template']) ? $document_data['is_template'] : false;
+
+                // If readonly, check if it the owner of the file or if the user is an admin
+                if ($document_data['creator_id'] == api_get_user_id() || api_is_platform_admin()) {
+                    $edit_icons = self::build_edit_icons(
+                        $document_data,
+                        $key,
+                        $is_template,
+                        $is_visible
+                    );
+                } else {
+                    $edit_icons = self::build_edit_icons(
+                        $document_data,
+                        $key,
+                        $is_template,
+                        $is_visible
+                    );
+                }
+                $row[] = $edit_icons;
+            } else {
+                $row[] = '';
+            }
+            $row[] = $last_edit_date;
+            $row[] = $size;
+            $row[] = $document_name;
+
+            if ((isset($_GET['keyword']) && self::search_keyword($document_name, $_GET['keyword'])) ||
+                !isset($_GET['keyword']) ||
+                empty($_GET['keyword'])
+            ) {
+                $sortable_data[] = $row;
+            }
+        }
+
+        return $sortable_data;
+    }
+
+    /**
      * Parse file information into a link.
      *
      * @param array  $userInfo        Current user info
@@ -7140,198 +7334,5 @@ class DocumentManager
         }
 
         return $btn;
-    }
-
-    /**
-     * @param array  $documentAndFolders
-     * @param array  $courseInfo
-     * @param bool   $is_certificate_mode
-     * @param array  $groupMemberWithUploadRights
-     * @param string $path
-     * @param bool   $addToEditor
-     * @param string $editorUrl
-     *
-     * @return array
-     */
-    public static function processDocumentAndFolders(
-        $documentAndFolders,
-        $courseInfo,
-        $is_certificate_mode,
-        $groupMemberWithUploadRights,
-        $path,
-        $addToEditor = false,
-        $editorUrl = ''
-    ) {
-        if (empty($documentAndFolders) || empty($courseInfo)) {
-            return [];
-        }
-        $isAllowedToEdit = api_is_allowed_to_edit(null, true);
-        $userId = api_get_user_id();
-        $currentUserInfo = api_get_user_info();
-        $sessionId = api_get_session_id();
-        $groupId = api_get_group_id();
-        $userIsSubscribed = CourseManager::is_user_subscribed_in_course($userId, $courseInfo['code']);
-        $url = api_get_path(WEB_COURSE_PATH).$courseInfo['directory'].'/document';
-
-        $courseId = $courseInfo['real_id'];
-        $group_properties = GroupManager::get_group_properties($groupId);
-
-        $sortable_data = [];
-        foreach ($documentAndFolders as $key => $document_data) {
-            $row = [];
-            $row['id'] = $document_data['id'];
-            $row['type'] = $document_data['filetype'];
-
-            // If the item is invisible, wrap it in a span with class invisible.
-            $is_visible = self::is_visible_by_id(
-                $document_data['id'],
-                $courseInfo,
-                $sessionId,
-                $userId,
-                false,
-                $userIsSubscribed
-            );
-            $invisibility_span_open = $is_visible == 0 ? '<span class="muted">' : '';
-            $invisibility_span_close = $is_visible == 0 ? '</span>' : '';
-            $size = 1;
-            // Get the title or the basename depending on what we're using
-            if ($document_data['title'] != '') {
-                $document_name = $document_data['title'];
-            } else {
-                $document_name = basename($document_data['path']);
-            }
-            $row['name'] = $document_name;
-            // Data for checkbox
-            if (($isAllowedToEdit || $groupMemberWithUploadRights) && count($documentAndFolders) > 1) {
-                $row[] = $document_data['id'];
-            }
-
-            if (self::is_folder_to_avoid($document_data['path'], $is_certificate_mode)) {
-                continue;
-            }
-
-            // Show the owner of the file only in groups
-            $user_link = '';
-            if (!empty($groupId)) {
-                if (!empty($document_data['insert_user_id'])) {
-                    $userInfo = api_get_user_info(
-                        $document_data['insert_user_id'],
-                        false,
-                        false,
-                        false,
-                        false,
-                        false
-                    );
-                    $user_link = '<div class="document_owner">'
-                        .get_lang('Owner').': '.UserManager::getUserProfileLink($userInfo)
-                        .'</div>';
-                }
-            }
-
-            // Hack in order to avoid the download icon appearing on cloud links
-            if ($document_data['filetype'] == 'link') {
-                $size = 0;
-            }
-
-            // Icons (clickable)
-            $row[] = self::create_document_link(
-                $url,
-                $document_data,
-                true,
-                $is_visible,
-                $size,
-                $isAllowedToEdit,
-                $is_certificate_mode,
-                $addToEditor,
-                $editorUrl
-            );
-
-            // Validation when belongs to a session
-            $session_img = api_get_session_image($document_data['session_id'], $currentUserInfo['status']);
-
-            $link = self::create_document_link(
-                $url,
-                $document_data,
-                false,
-                $is_visible,
-                $size,
-                $isAllowedToEdit,
-                $is_certificate_mode,
-                $addToEditor,
-                $editorUrl
-            );
-
-            // Document title with link
-            $row[] = $link.$session_img.'<br />'.$invisibility_span_open.'<i>'
-                .nl2br(htmlspecialchars($document_data['comment'], ENT_QUOTES, 'utf-8'))
-                .'</i>'.$invisibility_span_close.$user_link;
-
-            if ($document_data['filetype'] == 'folder') {
-                $displaySize = '<span id="document_size_'.$document_data['id']
-                    .'" data-path= "'.$document_data['path']
-                    .'" class="document_size"></span>';
-            } else {
-                $displaySize = format_file_size($document_data['size']);
-            }
-
-            $row[] = '<span style="display:none;">'.$size.'</span>'.
-                $invisibility_span_open.
-                $displaySize.
-                $invisibility_span_close;
-
-            // Last edit date
-            $last_edit_date = api_get_local_time($document_data['updated_at']);
-            $display_date = date_to_str_ago($document_data['updated_at']).
-                ' <div class="muted"><small>'.$last_edit_date."</small></div>";
-
-            $row[] = $invisibility_span_open.$display_date.$invisibility_span_close;
-
-            $groupMemberWithEditRightsCheckDocument = GroupManager::allowUploadEditDocument(
-                $userId,
-                $courseId,
-                $group_properties,
-                $document_data
-            );
-
-            // Admins get an edit column
-            if ($isAllowedToEdit ||
-                $groupMemberWithEditRightsCheckDocument ||
-                self::is_my_shared_folder(api_get_user_id(), $path, $sessionId)
-            ) {
-                $is_template = isset($document_data['is_template']) ? $document_data['is_template'] : false;
-
-                // If readonly, check if it the owner of the file or if the user is an admin
-                if ($document_data['creator_id'] == api_get_user_id() || api_is_platform_admin()) {
-                    $edit_icons = self::build_edit_icons(
-                        $document_data,
-                        $key,
-                        $is_template,
-                        $is_visible
-                    );
-                } else {
-                    $edit_icons = self::build_edit_icons(
-                        $document_data,
-                        $key,
-                        $is_template,
-                        $is_visible
-                    );
-                }
-                $row[] = $edit_icons;
-            } else {
-                $row[] = '';
-            }
-            $row[] = $last_edit_date;
-            $row[] = $size;
-            $row[] = $document_name;
-
-            if ((isset($_GET['keyword']) && self::search_keyword($document_name, $_GET['keyword'])) ||
-                !isset($_GET['keyword']) ||
-                empty($_GET['keyword'])
-            ) {
-                $sortable_data[] = $row;
-            }
-        }
-
-        return $sortable_data;
     }
 }

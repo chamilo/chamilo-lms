@@ -6,7 +6,6 @@ use Chamilo\CoreBundle\Framework\Container;
 /**
  * Responses to AJAX calls for the document upload.
  */
-
 require_once __DIR__.'/../global.inc.php';
 
 $action = $_REQUEST['a'];

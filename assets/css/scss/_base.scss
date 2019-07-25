@@ -4071,10 +4071,16 @@ table.certaintyTable {
   vertical-align: top;
 }
 
+// Aliases from 1.11.x
+
 .pull-right {
   @extend .float-right;
 }
 
 .btn-default {
   @extend .btn-secondary;
+}
+
+.img-responsive {
+  @extend .img-fluid;
 }

@@ -29,7 +29,7 @@ $htmlHeadXtra[] = $js;
 api_protect_course_script(true);
 $sessionId = api_get_session_id();
 $courseCode = api_get_course_id();
-$exercise_id = isset($_REQUEST['exerciseId']) ? intval($_REQUEST['exerciseId']) : 0;
+$exercise_id = isset($_REQUEST['exerciseId']) ? (int) $_REQUEST['exerciseId'] : 0;
 
 $objExercise = new Exercise();
 $result = $objExercise->read($exercise_id, true);
@@ -302,6 +302,11 @@ if (!empty($attempts)) {
                 }
             }
 
+            if (!empty($objExercise->getResultAccess())) {
+                if (!$objExercise->hasResultsAccess($attempt_result)) {
+                    $attempt_link = '';
+                }
+            }
             $row['attempt_link'] = $attempt_link;
         }
         $my_attempt_array[] = $row;
@@ -400,7 +405,7 @@ if ($objExercise->selectAttempts()) {
 }
 
 if ($time_control) {
-    $html .= $objExercise->return_time_left_div();
+    $html .= $objExercise->returnTimeLeftDiv();
 }
 
 $html .= $message;

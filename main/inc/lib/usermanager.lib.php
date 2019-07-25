@@ -181,7 +181,8 @@ class UserManager
         $sendEmailToAllAdmins = false,
         $form = null,
         $creatorId = 0,
-        $emailTemplate = []
+        $emailTemplate = [],
+        $redirectToURLAfterLogin = ''
     ) {
         $creatorId = empty($creatorId) ? api_get_user_id() : 0;
         $hook = HookCreateUser::create();
@@ -402,6 +403,10 @@ class UserManager
                 'already_logged_in',
                 'false'
             );
+
+            if (api_get_configuration_value('plugin_redirection_enabled') && !empty($redirectToURLAfterLogin)) {
+                RedirectionPlugin::insert($userId, $redirectToURLAfterLogin);
+            }
 
             if (!empty($email) && $send_mail) {
                 $recipient_name = api_get_person_name(
@@ -775,6 +780,10 @@ class UserManager
         $sql = "DELETE FROM $table_session_user
                 WHERE user_id = '".$user_id."'";
         Database::query($sql);
+
+        if (api_get_configuration_value('plugin_redirection_enabled')) {
+            RedirectionPlugin::deleteUserRedirection($user_id);
+        }
 
         // Delete user picture
         /* TODO: Logic about api_get_setting('split_users_upload_directory') == 'true'
@@ -2942,6 +2951,7 @@ class UserManager
      *                                           (to give space for courses out of categories)
      * @param bool $ignore_visibility_for_admins optional true if limit time from session is over, false otherwise
      * @param bool $ignoreTimeLimit              ignore time start/end
+     * @param bool $getCount
      *
      * @return array list of statuses [session_category][session_id]
      *
@@ -2954,7 +2964,9 @@ class UserManager
         $ignoreTimeLimit = false,
         $getCount = false
     ) {
-        if ($user_id != strval(intval($user_id))) {
+        $user_id = (int) $user_id;
+
+        if (empty($user_id)) {
             return [];
         }
 
@@ -2970,7 +2982,7 @@ class UserManager
         // LEFT JOIN is used for session_rel_course_rel_user because an inner
         // join would not catch session-courses where the user is general
         // session coach but which do not have students nor coaches registered
-        $dqlSelect = " COUNT(DISTINCT s.id) ";
+        $dqlSelect = ' COUNT(DISTINCT s.id) ';
 
         if (!$getCount) {
             $dqlSelect = " DISTINCT
@@ -6165,7 +6177,7 @@ SQL;
             .Display::url($url, $url);
 
         api_mail_html(
-            UserManager::formatUserFullName($user),
+            self::formatUserFullName($user),
             $user->getEmail(),
             $mailSubject,
             $mailBody

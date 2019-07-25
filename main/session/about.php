@@ -26,8 +26,7 @@ $sessionId = isset($_GET['session_id']) ? (int) $_GET['session_id'] : 0;
 
 $em = Database::getManager();
 
-/** @var Session $session */
-$session = $em->find('ChamiloCoreBundle:Session', $sessionId);
+$session = api_get_session_entity($sessionId);
 
 if (!$session) {
     api_not_allowed(true);

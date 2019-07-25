@@ -113,14 +113,14 @@ if (!empty($details)) {
             ];
         }
         $interbreadcrumb[] = [
-            'url' => "../user/user.php?cidReq=".$course_code,
-            'name' => get_lang("Users"),
+            'url' => '../user/user.php?cidReq='.$course_code,
+            'name' => get_lang('Users'),
         ];
     } else {
         if ($origin === 'tracking_course') {
             $interbreadcrumb[] = [
-                'url' => "../tracking/courseLog.php?cidReq=".$course_code.'&id_session='.api_get_session_id(),
-                'name' => get_lang("Tracking"),
+                'url' => '../tracking/courseLog.php?cidReq='.$course_code.'&id_session='.api_get_session_id(),
+                'name' => get_lang('Tracking'),
             ];
         } else {
             if ($origin === 'resume_session') {
@@ -129,30 +129,30 @@ if (!empty($details)) {
                     'name' => get_lang('SessionList'),
                 ];
                 $interbreadcrumb[] = [
-                    'url' => "../session/resume_session.php?id_session=".$sessionId,
+                    'url' => '../session/resume_session.php?id_session='.$sessionId,
                     'name' => get_lang('SessionOverview'),
                 ];
             } else {
                 $interbreadcrumb[] = [
-                    'url' => api_is_student_boss() ? "#" : "index.php",
+                    'url' => api_is_student_boss() ? '#' : 'index.php',
                     'name' => get_lang('MySpace'),
                 ];
                 if (!empty($coachId)) {
                     $interbreadcrumb[] = [
-                        'url' => "student.php?id_coach=".$coachId,
-                        'name' => get_lang("CoachStudents"),
+                        'url' => 'student.php?id_coach='.$coachId,
+                        'name' => get_lang('CoachStudents'),
                     ];
                     $interbreadcrumb[] = [
-                        'url' => "myStudents.php?student=".$student_id.'&id_coach='.$coachId,
-                        'name' => get_lang("StudentDetails"),
+                        'url' => 'myStudents.php?student='.$student_id.'&id_coach='.$coachId,
+                        'name' => get_lang('StudentDetails'),
                     ];
                 } else {
                     $interbreadcrumb[] = [
-                        'url' => "student.php",
+                        'url' => 'student.php',
                         'name' => get_lang('MyStudents'),
                     ];
                     $interbreadcrumb[] = [
-                        'url' => "myStudents.php?student=".$student_id,
+                        'url' => 'myStudents.php?student='.$student_id,
                         'name' => get_lang('StudentDetails'),
                     ];
                 }
@@ -168,36 +168,36 @@ if (!empty($details)) {
         ];
         if (!empty($sessionId)) {
             $interbreadcrumb[] = [
-                'url' => "../session/resume_session.php?id_session=".$sessionId,
+                'url' => '../session/resume_session.php?id_session='.$sessionId,
                 'name' => get_lang('SessionOverview'),
             ];
         }
     } elseif ($origin === 'teacher_details') {
         $this_section = SECTION_TRACKING;
-        $interbreadcrumb[] = ['url' => "index.php", 'name' => get_lang('MySpace')];
-        $interbreadcrumb[] = ['url' => "teachers.php", 'name' => get_lang('Teachers')];
+        $interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('MySpace')];
+        $interbreadcrumb[] = ['url' => 'teachers.php', 'name' => get_lang('Teachers')];
         $nameTools = $user_info['complete_name'];
     } else {
         $interbreadcrumb[] = [
-            'url' => api_is_student_boss() ? "#" : "index.php",
+            'url' => api_is_student_boss() ? '#' : 'index.php',
             'name' => get_lang('MySpace'),
         ];
         if (!empty($coachId)) {
             if ($sessionId) {
                 $interbreadcrumb[] = [
-                    'url' => "student.php?id_coach=".$coachId."&id_session=".$sessionId,
-                    'name' => get_lang("CoachStudents"),
+                    'url' => 'student.php?id_coach='.$coachId.'&id_session='.$sessionId,
+                    'name' => get_lang('CoachStudents'),
                 ];
             } else {
                 $interbreadcrumb[] = [
-                    'url' => "student.php?id_coach=".$coachId,
-                    'name' => get_lang("CoachStudents"),
+                    'url' => 'student.php?id_coach='.$coachId,
+                    'name' => get_lang('CoachStudents'),
                 ];
             }
         } else {
             $interbreadcrumb[] = [
-                'url' => "student.php",
-                'name' => get_lang("MyStudents"),
+                'url' => 'student.php',
+                'name' => get_lang('MyStudents'),
             ];
         }
     }
@@ -378,9 +378,7 @@ switch ($action) {
             $sessionInfo['name']
         ));
         $tpl->assign('table_course', $courseTable);
-        $template = $tpl->fetch($tpl->get_template('my_space/pdf_export_student.tpl'));
-
-        $content = ''.$template;
+        $content = $tpl->fetch($tpl->get_template('my_space/pdf_export_student.tpl'));
 
         $params = [
             'pdf_title' => get_lang('Resume'),
@@ -393,38 +391,21 @@ switch ($action) {
             'show_teacher_as_myself' => false,
             'orientation' => 'P',
         ];
-
         $pdf = new PDF('A4', $params['orientation'], $params);
+
         try {
-            $theme = $tpl->theme;
-            $themeName = empty($theme) ? api_get_visual_theme() : $theme;
-            $themeDir = \Template::getThemeDir($theme);
-            $customLetterhead = $themeDir.'images/letterhead.png';
-            $urlPathLetterhead = api_get_path(SYS_CSS_PATH).$customLetterhead;
-
-            $urlWebLetterhead = '#FFFFFF';
-            $fullPage = false;
-            if (file_exists($urlPathLetterhead)) {
-                $fullPage = true;
-                $urlWebLetterhead = 'url('.api_get_path(WEB_CSS_PATH).$customLetterhead.')';
-            }
-
-            if ($fullPage) {
-                $pdf->pdf->SetDisplayMode('fullpage');
-                $pdf->pdf->SetDefaultBodyCSS('background', $urlWebLetterhead);
-                $pdf->pdf->SetDefaultBodyCSS('background-image-resize', '6');
-            }
-
-            @$pdf->content_to_pdf($content,
-                $css = '',
-                $pdf_name = '',
-                $course_code = null,
-                $outputMode = 'D',
-                $saveInFile = false,
-                $fileToSave = null,
-                $returnHtml = false,
-                $addDefaultCss = true,
-                $completeHeader = false
+            $pdf->setBackground($tpl->theme);
+            @$pdf->content_to_pdf(
+                $content,
+                '',
+                '',
+                null,
+                'D',
+                false,
+                null,
+                false,
+                true,
+                false
             );
         } catch (MpdfException $e) {
             error_log($e);
@@ -536,12 +517,12 @@ switch ($action) {
         }
         break;
     case 'reset_lp':
-        $lp_id = isset($_GET['lp_id']) ? intval($_GET['lp_id']) : '';
+        $lp_id = isset($_GET['lp_id']) ? (int) $_GET['lp_id'] : '';
         $check = true;
 
-        if (api_is_allowed_to_edit() &&
-            !empty($lp_id) &&
+        if (!empty($lp_id) &&
             !empty($student_id) &&
+            api_is_allowed_to_edit() &&
             Security::check_token('get')
         ) {
             Event::delete_student_lp_events(
@@ -553,9 +534,7 @@ switch ($action) {
 
             // @todo delete the stats.track_e_exercises records.
             // First implement this http://support.chamilo.org/issues/1334
-            Display::addFlash(
-                Display::return_message(get_lang('LPWasReset'), 'success')
-            );
+            Display::addFlash(Display::return_message(get_lang('LPWasReset'), 'success'));
             Security::clear_token();
         }
         break;
@@ -683,6 +662,11 @@ echo '<a href="'.api_get_self().'?'.Security::remove_XSS($_SERVER['QUERY_STRING'
 
 echo '<a href="'.api_get_self().'?'.Security::remove_XSS($_SERVER['QUERY_STRING']).'&export=xls">'
     .Display::return_icon('export_excel.png', get_lang('ExportAsXLS'), '', ICON_SIZE_MEDIUM).'</a> ';
+
+echo Display::url(
+    Display::return_icon('export.png', get_lang('Export'), '', ICON_SIZE_MEDIUM),
+    api_get_path(WEB_CODE_PATH).'mySpace/access_details_session.php?user_id='.$student_id
+);
 
 if (!empty($user_info['email'])) {
     $send_mail = '<a href="mailto:'.$user_info['email'].'">'.
@@ -913,7 +897,7 @@ $userInfo['student_score'] = $score;
 $userInfo['student_progress'] = $avg_student_progress;
 $userInfo['first_connection'] = $first_connection_date;
 $userInfo['last_connection'] = $last_connection_date;
-if ($details == 'true') {
+if ($details === 'true') {
     $userInfo['time_spent_course'] = $time_spent_on_the_course;
 }
 
@@ -1122,8 +1106,7 @@ if (empty($details)) {
                 if (empty($session_info)) {
                     $isSubscribed = CourseManager::is_user_subscribed_in_course(
                         $student_id,
-                        $courseCodeItem,
-                        false
+                        $courseCodeItem
                     );
                 } else {
                     $isSubscribed = CourseManager::is_user_subscribed_in_course(
@@ -1409,7 +1392,7 @@ if (empty($details)) {
 
             $list = new LearnpathList(
                 api_get_user_id(),
-                $courseInfo['code'],
+                $courseInfo,
                 $sessionId,
                 null,
                 false,
@@ -1435,7 +1418,6 @@ if (empty($details)) {
 
             foreach ($flat_list as $learnpath) {
                 $lpIdList[] = $learnpath['iid'];
-
                 $lp_id = $learnpath['lp_old_id'];
                 $lp_name = $learnpath['lp_name'];
                 $any_result = false;
@@ -1701,10 +1683,9 @@ if (empty($details)) {
                 }
                 $lp_name = !empty($lp_name) ? $lp_name : get_lang('NoLearnpath');
 
+                $css_class = 'row_even';
                 if ($i % 2) {
                     $css_class = 'row_odd';
-                } else {
-                    $css_class = 'row_even';
                 }
 
                 echo '<tr class="'.$css_class.'"><td>'.$exercices['title'].'</td>';
@@ -1796,42 +1777,42 @@ if (empty($details)) {
     // @when using sessions we do not show the survey list
     if (empty($sessionId)) {
         $survey_list = SurveyManager::get_surveys($course_code, $sessionId);
-        $survey_data = [];
-        foreach ($survey_list as $survey) {
-            $user_list = SurveyManager::get_people_who_filled_survey(
-                $survey['survey_id'],
-                false,
-                $courseInfo['real_id']
-            );
-            $survey_done = Display::return_icon(
-                "accept_na.png",
-                get_lang('NoAnswer'),
-                [],
-                ICON_SIZE_SMALL
-            );
-            if (in_array($student_id, $user_list)) {
+        if (!empty($survey_list)) {
+            $survey_data = [];
+            foreach ($survey_list as $survey) {
+                $user_list = SurveyManager::get_people_who_filled_survey(
+                    $survey['survey_id'],
+                    false,
+                    $courseInfo['real_id']
+                );
                 $survey_done = Display::return_icon(
-                    "accept.png",
-                    get_lang('Answered'),
+                    "accept_na.png",
+                    get_lang('NoAnswer'),
                     [],
                     ICON_SIZE_SMALL
                 );
+                if (in_array($student_id, $user_list)) {
+                    $survey_done = Display::return_icon(
+                        "accept.png",
+                        get_lang('Answered'),
+                        [],
+                        ICON_SIZE_SMALL
+                    );
+                }
+                $data = ['title' => $survey['title'], 'done' => $survey_done];
+                $survey_data[] = $data;
             }
-            $data = ['title' => $survey['title'], 'done' => $survey_done];
-            $survey_data[] = $data;
-        }
 
-        if (!empty($survey_list)) {
-            $table = new HTML_Table(['class' => 'data_table']);
-            $header_names = [get_lang('Survey'), get_lang('Answered')];
-            $row = 0;
-            $column = 0;
-            foreach ($header_names as $item) {
-                $table->setHeaderContents($row, $column, $item);
-                $column++;
-            }
-            $row = 1;
             if (!empty($survey_data)) {
+                $table = new HTML_Table(['class' => 'data_table']);
+                $header_names = [get_lang('Survey'), get_lang('Answered')];
+                $row = 0;
+                $column = 0;
+                foreach ($header_names as $item) {
+                    $table->setHeaderContents($row, $column, $item);
+                    $column++;
+                }
+                $row = 1;
                 foreach ($survey_data as $data) {
                     $column = 0;
                     $table->setCellContents($row, $column, $data);
@@ -1843,8 +1824,8 @@ if (empty($details)) {
                     $column++;
                     $row++;
                 }
+                echo $table->toHtml();
             }
-            echo $table->toHtml();
         }
     }
 

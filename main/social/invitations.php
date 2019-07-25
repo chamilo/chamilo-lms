@@ -123,7 +123,7 @@ if ($numberLoop != 0) {
         $invitationHtml .= '<div class="row">';
         $invitationHtml .= '<div class="col-md-2">';
         $invitationHtml .= '<a href="profile.php?u='.$sender_user_id.'">';
-        $invitationHtml .= '<img class="img-fluid img-rounded" src="'.$userPicture.'"/></a>';
+        $invitationHtml .= '<img class="img-responsive img-rounded" src="'.$userPicture.'"/></a>';
         $invitationHtml .= '</div>';
         $invitationHtml .= '<div class="col-md-10">';
 
@@ -177,7 +177,7 @@ if (count($list_get_invitation_sent) > 0) {
         $invitationSentHtml .= '<div class="row">';
         $invitationSentHtml .= '<div class="col-md-3">';
         $invitationSentHtml .= '<a href="profile.php?u='.$sender_user_id.'">';
-        $invitationSentHtml .= '<img class="img-fluid img-rounded" src="'.$user_info['avatar'].'" /></a>';
+        $invitationSentHtml .= '<img class="img-responsive img-rounded" src="'.$user_info['avatar'].'" /></a>';
         $invitationSentHtml .= '</div>';
         $invitationSentHtml .= '<div class="col-md-9">';
         $invitationSentHtml .= '<h4 class="title-profile">
@@ -201,7 +201,7 @@ if (count($pending_invitations) > 0) {
             null,
             GROUP_IMAGE_SIZE_BIG
         );
-        $img = '<img class="img-fluid" src="'.$picture['file'].'" />';
+        $img = '<img class="img-responsive" src="'.$picture['file'].'" />';
         $invitation['picture_uri'] = '<a href="group_view.php?id='.$invitation['id'].'">'.$img.'</a>';
         $invitation['name'] = '<a href="group_view.php?id='.$invitation['id'].'">'.
             cut($invitation['name'], 120, true).'</a>';

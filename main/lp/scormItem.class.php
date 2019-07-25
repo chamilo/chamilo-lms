@@ -189,8 +189,5 @@ class scormItem extends learnpathItem
         parent::save($from_outside, $prereqs_complete);
         // Under certain conditions, the scorm_contact should not be set, because no scorm signal was sent.
         $this->scorm_contact = true;
-        if (!$this->scorm_contact) {
-            //error_log('New LP - was expecting SCORM message but none received', 0);
-        }
     }
 }

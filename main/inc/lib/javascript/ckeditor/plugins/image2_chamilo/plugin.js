@@ -347,7 +347,7 @@
 
 				this.parts.image.setAttributes( {
 					src: this.data.src,
-					class: this.data.isResponsive ? 'img-fluid' : '',
+					class: this.data.isResponsive ? 'img-responsive' : '',
 
 					// This internal is required by the editor.
 					'data-cke-saved-src': this.data.src,
@@ -394,7 +394,7 @@
 						alt: image.getAttribute( 'alt' ) || '',
 						width: image.getAttribute( 'width' ) || '',
 						height: image.getAttribute( 'height' ) || '',
-						isResponsive: !!image.$.className.match(/img-fluid/i),
+						isResponsive: !!image.$.className.match(/img-responsive/i),
 						// Lock ratio is on by default (#10833).
 						lock: this.ready ? helpers.checkHasNaturalRatio( image ) : true,
 						borderWidth: !this.parts.caption ? image.getStyle('border-width') : '',

@@ -323,13 +323,14 @@ class Template
         $this->assign('show_header', $status);
 
         $show_toolbar = 0;
+
         if (self::isToolBarDisplayedForUser()) {
             $show_toolbar = 1;
         }
 
         $this->assign('show_toolbar', $show_toolbar);
 
-        //Only if course is available
+        // Only if course is available
         $courseToolBar = '';
         $show_course_navigation_menu = '';
         if (!empty($this->course_id) && $this->user_is_logged_in) {
@@ -1182,13 +1183,17 @@ class Template
             if (!empty($courseInfo)) {
                 $courseParams = api_get_cidreq();
             }
-            $url = api_get_path(WEB_CODE_PATH).
-                'ticket/tickets.php?project_id='.$defaultProjectId.'&'.$courseParams;
-            $rightFloatMenu .= '<div class="help">
-                <a href="'.$url.'" target="_blank">
-                    '.$iconTicket.'
-                </a>
-            </div>';
+            $url = api_get_path(WEB_CODE_PATH).'ticket/tickets.php?project_id='.$defaultProjectId.'&'.$courseParams;
+
+            $allow = TicketManager::userIsAllowInProject(api_get_user_info(), $defaultProjectId);
+
+            if ($allow) {
+                $rightFloatMenu .= '<div class="help">
+                    <a href="'.$url.'" target="_blank">
+                        '.$iconTicket.'
+                    </a>
+                </div>';
+            }
         }
 
         $this->assign('bug_notification', $rightFloatMenu);
@@ -1351,9 +1356,12 @@ class Template
         $this->assign('prefetch', $prefetch);
         $this->assign('text_direction', api_get_text_direction());
         $this->assign('section_name', 'section-'.$this_section);
-        $this->assignFavIcon(); //Set a 'favico' var for the template
+        $this->assignFavIcon();
         $this->setHelp();
+
         $this->assignBugNotification(); //Prepare the 'bug_notification' var for the template
+
+        $this->assignAccessibilityBlock(); //Prepare the 'accessibility' var for the template
 
         // Preparing values for the menu
 
@@ -1566,6 +1574,7 @@ class Template
     {
         // Default root chamilo favicon
         $favico = '<link rel="shortcut icon" href="'.api_get_path(WEB_PATH).'favicon.ico" type="image/x-icon" />';
+
         //Added to verify if in the current Chamilo Theme exist a favicon
         $favicoThemeUrl = api_get_path(SYS_CSS_PATH).$this->themeDir.'images/';
 

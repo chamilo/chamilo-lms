@@ -1353,7 +1353,7 @@ class SocialManager extends UserManager
                 $lastname = '';
             }
 
-            $img = '<img class="img-fluid img-circle" title="'.$completeName.'" alt="'.$completeName.'" src="'.$userPicture.'">';
+            $img = '<img class="img-responsive img-circle" title="'.$completeName.'" alt="'.$completeName.'" src="'.$userPicture.'">';
 
             $url = null;
             // Anonymous users can't have access to the profile
@@ -2035,7 +2035,7 @@ class SocialManager extends UserManager
         $title = $graph->title;
         $html = '<div class="thumbnail social-thumbnail">';
         $html .= empty($image) ? '' : '<a target="_blank" href="'.$url.'">
-                <img class="img-fluid social-image" src="'.$image.'" /></a>';
+                <img class="img-responsive social-image" src="'.$image.'" /></a>';
         $html .= '<div class="social-description">';
         $html .= '<a target="_blank" href="'.$url.'"><h5 class="social-title"><b>'.$title.'</b></h5></a>';
         $html .= empty($description) ? '' : '<span>'.$description.'</span>';
@@ -3203,7 +3203,7 @@ class SocialManager extends UserManager
                         GROUP_IMAGE_SIZE_BIG
                     );
 
-                    $result['picture'] = '<img class="img-fluid" src="'.$picture['file'].'" />';
+                    $result['picture'] = '<img class="img-responsive" src="'.$picture['file'].'" />';
                     $group_actions = '<div class="group-more"><a class="btn btn-default" href="groups.php?#tab_browse-2">'.
                         get_lang('SeeMore').'</a></div>';
                     $group_info = '<div class="description"><p>'.cut($result['description'], 120, true)."</p></div>";

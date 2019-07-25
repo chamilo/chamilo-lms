@@ -9,7 +9,7 @@ use Chamilo\CoreBundle\Repository\SequenceRepository;
 use Chamilo\CoreBundle\Repository\SessionRepository;
 
 /**
- * @author Bart Mollet, Julio Montoya lot of fixes
+ * @author  Bart Mollet, Julio Montoya lot of fixes
  *
  * @package chamilo.admin
  */
@@ -118,6 +118,8 @@ switch ($action) {
                 $_GET['user']
             );
         }
+
+        Display::addFlash(Display::return_message(get_lang('Updated')));
         break;
 }
 

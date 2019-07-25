@@ -329,6 +329,11 @@ class AnnouncementManager
         $userId,
         $groupId = 0
     ) {
+        $announcementId = (int) $announcementId;
+        $courseId = (int) $courseId;
+        $userId = (int) $userId;
+        $groupId = (int) $groupId;
+
         if (api_is_allowed_to_edit(false, true) ||
             (api_get_course_setting('allow_user_edit_announcement') && !api_is_anonymous())
         ) {
@@ -342,7 +347,6 @@ class AnnouncementManager
                         a.cId = :course
                     ORDER BY a.displayOrder DESC";
         } else {
-            $groupId = (int) $groupId;
             $groupList[] = $groupId;
 
             if (api_get_user_id() != 0) {
@@ -1084,8 +1088,8 @@ class AnnouncementManager
      */
     public static function get_by_id($courseId, $id)
     {
-        $id = intval($id);
-        $courseId = $courseId ? intval($courseId) : api_get_course_int_id();
+        $id = (int) $id;
+        $courseId = $courseId ? (int) $courseId : api_get_course_int_id();
 
         $tbl_announcement = Database::get_course_table(TABLE_ANNOUNCEMENT);
         $tbl_item_property = Database::get_course_table(TABLE_ITEM_PROPERTY);

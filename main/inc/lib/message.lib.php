@@ -1490,7 +1490,7 @@ class MessageManager
 
                 $image = $user_sender_info['avatar'];
 
-                $user_info = '<div class="author text-center"><img class="img-fluid rounded-circle" src="'.$image.'" alt="'.$name.'"  width="64" height="64" title="'.$name.'" /></div>';
+                $user_info = '<div class="author text-center"><img class="img-responsive rounded-circle" src="'.$image.'" alt="'.$name.'"  width="64" height="64" title="'.$name.'" /></div>';
                 $user_info .= '<div class="name text-center"><a href="'.api_get_path(
                         WEB_PATH
                     ).'main/social/profile.php?u='.$topic['user_sender_id'].'">'.$name.'&nbsp;</a></div>';
@@ -1645,7 +1645,7 @@ class MessageManager
         $main_content .= Display::img(
             $userPicture,
             $name,
-            ['width' => '60px', 'class' => 'img-fluid img-circle'],
+            ['width' => '60px', 'class' => 'img-responsive img-circle'],
             false
         );
         $main_content .= '</div>';
@@ -1773,7 +1773,7 @@ class MessageManager
                 $html_items .= Display::img(
                     $userPicture,
                     $name,
-                    ['width' => '60px', 'class' => 'img-fluid img-circle'],
+                    ['width' => '60px', 'class' => 'img-responsive img-circle'],
                     false
                 );
                 $html_items .= '</div>';

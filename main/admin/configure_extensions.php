@@ -152,7 +152,7 @@ Display::display_header($nameTool);
     </div>
         <div class="row">
             <div class="col-md-5">
-                <?php Display::display_icon('screenshot_ppt2lp.jpg', get_lang('Ppt2lp'), ['class' => 'img-fluid']); ?>
+                <?php Display::display_icon('screenshot_ppt2lp.jpg', get_lang('Ppt2lp'), ['class' => 'img-responsive']); ?>
             </div>
             <div class="col-md-7">
                 <form method="POST" class="form-horizontal" action="<?php echo api_get_self(); ?>">

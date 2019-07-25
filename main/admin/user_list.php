@@ -141,11 +141,11 @@ function active_user(element_div) {
 }
 
 function clear_course_list(div_course) {
-    $("div#"+div_course).html("");
+    $("div#"+div_course).html("&nbsp;");
     $("div#"+div_course).hide("");
 }
 function clear_session_list(div_session) {
-    $("div#"+div_session).html("");
+    $("div#"+div_session).html("&nbsp;");
     $("div#"+div_session).hide("");
 }
 
@@ -1022,7 +1022,7 @@ $form->addButtonSearch(get_lang('Search'));
 
 $searchAdvanced = '
 <a id="advanced_params" href="javascript://" 
-    class="btn btn-light advanced_options" onclick="display_advanced_search_form();">
+    class="btn btn-default advanced_options" onclick="display_advanced_search_form();">
     <span id="img_plus_and_minus">&nbsp;
     '.Display::returnFontAwesomeIcon('arrow-right').' '.get_lang('AdvancedSearch').'
     </span>
@@ -1031,8 +1031,8 @@ $actionsLeft = '';
 $actionsCenter = '';
 $actionsRight = '';
 if (api_is_platform_admin()) {
-    $actionsRight .= '<a class="float-right" href="'.api_get_path(WEB_CODE_PATH).'admin/user_add.php">'.
-        Display::return_icon('new_user.png', get_lang('AddUsers'), '', ICON_SIZE_MEDIUM).'</a>';
+    $actionsRight .= '<a class="pull-right" href="'.api_get_path(WEB_CODE_PATH).'admin/user_add.php">'.
+         Display::return_icon('new_user.png', get_lang('AddUsers'), '', ICON_SIZE_MEDIUM).'</a>';
 }
 
 $actionsLeft .= $form->returnForm();

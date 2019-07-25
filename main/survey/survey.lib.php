@@ -2393,7 +2393,7 @@ class SurveyManager
 
     /**
      * @param array $userInfo
-     * @param int   $answered
+     * @param int   $answered (1 = answered 0 = not answered)
      *
      * @return string
      */
@@ -2424,13 +2424,37 @@ class SurveyManager
             $table->setHeaderContents(0, 0, get_lang('SurveyName'));
             $table->setHeaderContents(0, 1, get_lang('Course'));
 
+            if (empty($answered)) {
+                $table->setHeaderContents(0, 2, get_lang('Survey').' - '.get_lang('EndDate'));
+            }
+
             // Not answered
             /** @var CSurveyInvitation $invitation */
             $row = 1;
             foreach ($invitations as $invitation) {
                 $courseId = $invitation->getCId();
                 $courseInfo = api_get_course_info_by_id($courseId);
+
+                $courseCode = $courseInfo['code'];
+                if (empty($courseInfo)) {
+                    continue;
+                }
                 $sessionId = $invitation->getSessionId();
+
+                if (!empty($answered)) {
+                    // check if user is subscribed to the course/session
+                    if (empty($sessionId)) {
+                        $subscribe = CourseManager::is_user_subscribed_in_course($userId, $courseCode);
+                    } else {
+                        $subscribe = CourseManager::is_user_subscribed_in_course($userId, $courseCode, true, $sessionId);
+                    }
+
+                    // User is not subscribe skip!
+                    if (empty($subscribe)) {
+                        continue;
+                    }
+                }
+
                 $surveyCode = $invitation->getSurveyCode();
 
                 $survey = $repoSurvey->findOneBy([
@@ -2443,7 +2467,7 @@ class SurveyManager
                     continue;
                 }
 
-                $url = $mainUrl.'survey_id='.$survey->getSurveyId().'&cidReq='.$courseInfo['code'].'&id_session='.$sessionId;
+                $url = $mainUrl.'survey_id='.$survey->getSurveyId().'&cidReq='.$courseCode.'&id_session='.$sessionId;
                 $title = $survey->getTitle();
                 $title = Display::url($title, $url);
 
@@ -2452,9 +2476,23 @@ class SurveyManager
                     $courseInfo['name'] .= ' ('.$sessionInfo['name'].')';
                 }
 
-                $surveyData = SurveyManager::get_survey($survey->getSurveyId(), 0, $courseInfo['code']);
+                $surveyData = self::get_survey($survey->getSurveyId(), 0, $courseCode);
                 $table->setCellContents($row, 0, $title);
                 $table->setCellContents($row, 1, $courseInfo['name']);
+
+                if (empty($answered)) {
+                    $table->setHeaderContents(
+                        $row,
+                        2,
+                        api_get_local_time(
+                            $survey->getAvailTill(),
+                            null,
+                            null,
+                            true,
+                            false
+                        )
+                    );
+                }
 
                 if (!empty($answered) && $surveyData['anonymous'] == 0) {
                     $answers = SurveyUtil::displayCompleteReport(

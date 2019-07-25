@@ -2374,7 +2374,7 @@ class Exercise
 
             $skillList = Skill::addSkillsToForm($form, ITEM_TYPE_EXERCISE, $this->iId);
 
-            /*$extraField = new ExtraField('exercise');
+            $extraField = new ExtraField('exercise');
             $extraField->addElements(
                 $form,
                 $this->iId,
@@ -2384,7 +2384,7 @@ class Exercise
                 [], //show only fields
                 [], // order fields
                 [] // extra data
-            );*/
+            );
             $form->addElement('html', '</div>'); //End advanced setting
             $form->addElement('html', '</div>');
         }
@@ -2656,10 +2656,10 @@ class Exercise
 
         $iId = $this->save($type);
         if (!empty($iId)) {
-            /*$values = $form->getSubmitValues();
+            $values = $form->getSubmitValues();
             $values['item_id'] = $iId;
             $extraFieldValue = new ExtraFieldValue('exercise');
-            $extraFieldValue->saveFieldValues($values);*/
+            $extraFieldValue->saveFieldValues($values);
 
             Skill::saveSkills($form, ITEM_TYPE_EXERCISE, $iId);
         }
@@ -3254,16 +3254,77 @@ class Exercise
     }
 
     /**
-     * So the time control will work.
-     *
-     * @param string $time_left
+     * @param int    $timeLeft in seconds
+     * @param string $url
      *
      * @return string
      */
-    public function showTimeControlJS($time_left)
+    public function showSimpleTimeControl($timeLeft, $url = '')
     {
-        $time_left = (int) $time_left;
-        $script = "redirectExerciseToResult();";
+        $timeLeft = (int) $timeLeft;
+
+        return "<script>
+            function openClockWarning() {
+                $('#clock_warning').dialog({
+                    modal:true,
+                    height:320,
+                    width:550,
+                    closeOnEscape: false,
+                    resizable: false,
+                    buttons: {
+                        '".addslashes(get_lang('Close'))."': function() {
+                            $('#clock_warning').dialog('close');
+                        }
+                    },
+                    close: function() {
+                        window.location.href = '$url';
+                    }
+                });                
+                $('#clock_warning').dialog('open');
+                $('#counter_to_redirect').epiclock({
+                    mode: $.epiclock.modes.countdown,
+                    offset: {seconds: 5},
+                    format: 's'
+                }).bind('timer', function () {                    
+                    window.location.href = '$url';                    
+                });
+            }        
+
+            function onExpiredTimeExercise() {
+                $('#wrapper-clock').hide();
+                $('#expired-message-id').show();
+                // Fixes bug #5263
+                $('#num_current_id').attr('value', '".$this->selectNbrQuestions()."');
+                openClockWarning();
+            }
+
+			$(function() {
+				// time in seconds when using minutes there are some seconds lost
+                var time_left = parseInt(".$timeLeft.");
+                $('#exercise_clock_warning').epiclock({
+                    mode: $.epiclock.modes.countdown,
+                    offset: {seconds: time_left},
+                    format: 'x:i:s',
+                    renderer: 'minute'
+                }).bind('timer', function () {                    
+                    onExpiredTimeExercise();
+                });
+	       		$('#submit_save').click(function () {});
+	        });
+	    </script>";
+    }
+
+    /**
+     * So the time control will work.
+     *
+     * @param int $timeLeft
+     *
+     * @return string
+     */
+    public function showTimeControlJS($timeLeft)
+    {
+        $timeLeft = (int) $timeLeft;
+        $script = 'redirectExerciseToResult();';
         if ($this->type == ALL_ON_ONE_PAGE) {
             $script = "save_now_all('validate');";
         }
@@ -3272,11 +3333,12 @@ class Exercise
             function openClockWarning() {
                 $('#clock_warning').dialog({
                     modal:true,
-                    height:250,
+                    height:320,
+                    width:550,
                     closeOnEscape: false,
                     resizable: false,
                     buttons: {
-                        '".addslashes(get_lang("EndTest"))."': function() {
+                        '".addslashes(get_lang('EndTest'))."': function() {
                             $('#clock_warning').dialog('close');
                         }
                     },
@@ -3314,7 +3376,7 @@ class Exercise
 
 			$(function() {
 				// time in seconds when using minutes there are some seconds lost
-                var time_left = parseInt(".$time_left.");
+                var time_left = parseInt(".$timeLeft.");
                 $('#exercise_clock_warning').epiclock({
                     mode: $.epiclock.modes.countdown,
                     offset: {seconds: time_left},
@@ -3324,7 +3386,7 @@ class Exercise
                     onExpiredTimeExercise();
                 });
 	       		$('#submit_save').click(function () {});
-	    });
+	        });
 	    </script>";
     }
 
@@ -6915,7 +6977,7 @@ class Exercise
     /**
      * @return string
      */
-    public function return_time_left_div()
+    public function returnTimeLeftDiv()
     {
         $html = '<div id="clock_warning" style="display:none">';
         $html .= Display::return_message(
@@ -6974,7 +7036,7 @@ class Exercise
             if (Database::num_rows($result)) {
                 $row = Database::fetch_array($result);
 
-                return $row['count_questions'];
+                return (int) $row['count_questions'];
             }
         }
 
@@ -7919,7 +7981,7 @@ class Exercise
      */
     public function getCorrectAnswersInAllAttempts($learnPathId = 0, $learnPathItemId = 0)
     {
-        return $this->getAnswersInAllAttempts($learnPathId , $learnPathItemId);
+        return $this->getAnswersInAllAttempts($learnPathId, $learnPathItemId);
     }
 
     /**
@@ -7963,7 +8025,7 @@ class Exercise
             $params = [
                 'hide_expected_answer' => isset($values['hide_expected_answer']) ? $values['hide_expected_answer'] : '',
                 'hide_question_score' => isset($values['hide_question_score']) ? $values['hide_question_score'] : '',
-                'hide_total_score' => isset($values['hide_total_score']) ? $values['hide_total_score'] : ''
+                'hide_total_score' => isset($values['hide_total_score']) ? $values['hide_total_score'] : '',
             ];
             $type = Type::getType('array');
             $platform = Database::getManager()->getConnection()->getDatabasePlatform();
@@ -8015,6 +8077,7 @@ class Exercise
 
         if (!empty($result)) {
             $value = isset($result[$attribute]) ? $result[$attribute] : null;
+
             return $value;
         }
 
@@ -8063,7 +8126,7 @@ class Exercise
     public function showExpectedChoiceColumn()
     {
         if (!in_array($this->results_disabled, [
-            RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER
+            RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER,
         ])
         ) {
             $hide = (int) $this->getPageConfigurationAttribute('hide_expected_answer');
@@ -9386,12 +9449,80 @@ class Exercise
                 }
             }
 
-            //$content .= '<div class="table-responsive">';
             $content .= $table->return_table();
-            //$content .= '</div>';
         }
 
         return $content;
+    }
+
+    /**
+     * @return int value in minutes
+     */
+    public function getResultAccess()
+    {
+        $extraFieldValue = new ExtraFieldValue('exercise');
+        $value = $extraFieldValue->get_values_by_handler_and_field_variable(
+            $this->iId,
+            'results_available_for_x_minutes'
+        );
+
+        if (!empty($value) && isset($value['value'])) {
+            return (int) $value['value'];
+        }
+
+        return 0;
+    }
+
+    /**
+     * @param array $exerciseResultInfo
+     *
+     * @return bool
+     */
+    public function getResultAccessTimeDiff($exerciseResultInfo)
+    {
+        $value = $this->getResultAccess();
+        if (!empty($value)) {
+            $endDate = new DateTime($exerciseResultInfo['exe_date'], new DateTimeZone('UTC'));
+            $endDate->add(new DateInterval('PT'.$value.'M'));
+            $now = time();
+            if ($endDate->getTimestamp() > $now) {
+                return (int) $endDate->getTimestamp() - $now;
+            }
+        }
+
+        return 0;
+    }
+
+    /**
+     * @param array $exerciseResultInfo
+     *
+     * @return bool
+     */
+    public function hasResultsAccess($exerciseResultInfo)
+    {
+        $diff = $this->getResultAccessTimeDiff($exerciseResultInfo);
+        if ($diff === 0) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * @return int
+     */
+    public function getResultsAccess()
+    {
+        $extraFieldValue = new ExtraFieldValue('exercise');
+        $value = $extraFieldValue->get_values_by_handler_and_field_variable(
+            $this->iId,
+            'results_available_for_x_minutes'
+        );
+        if (!empty($value)) {
+            return (int) $value;
+        }
+
+        return 0;
     }
 
     /**

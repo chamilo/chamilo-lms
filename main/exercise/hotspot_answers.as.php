@@ -124,7 +124,7 @@ if (in_array(
 }
 
 $hideExpectedAnswer = false;
-if ($objExercise->selectFeedbackType() == 0 &&
+if ($objExercise->getFeedbackType() == 0 &&
     $objExercise->selectResultsDisabled() == RESULT_DISABLE_SHOW_SCORE_ONLY
 ) {
     $hideExpectedAnswer = true;

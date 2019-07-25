@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use ChamiloSession as Session;
+
 /**
  * @package chamilo.admin
  */
@@ -480,6 +482,8 @@ if ($form->validate()) {
             $userInfo['complete_name_with_username'],
             api_get_path(WEB_CODE_PATH).'admin/user_edit.php?user_id='.$user_id
         );
+
+        Session::erase('system_timezone');
 
         Display::addFlash(Display::return_message($message, 'normal', false));
         header('Location: user_list.php');

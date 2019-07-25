@@ -690,6 +690,8 @@ class Rest extends WebService
 
         $result = [
             'pictureUri' => $pictureInfo['dir'].$pictureInfo['file'],
+            'id' => $this->user->getId(),
+            'status' => $this->user->getStatus(),
             'fullName' => UserManager::formatUserFullName($this->user),
             'username' => $this->user->getUsername(),
             'officialCode' => $this->user->getOfficialCode(),
@@ -735,7 +737,7 @@ class Rest extends WebService
         foreach ($categories as $category) {
             $learnPathList = new LearnpathList(
                 $this->user->getId(),
-                $this->course->getCode(),
+                api_get_course_info($this->course->getCode()),
                 $sessionId,
                 null,
                 false,
@@ -758,7 +760,7 @@ class Rest extends WebService
                 if (!learnpath::is_lp_visible_for_student(
                     $lpId,
                     $this->user->getId(),
-                    $this->course->getCode(),
+                    api_get_course_info($this->course->getCode()),
                     $sessionId
                 )) {
                     continue;

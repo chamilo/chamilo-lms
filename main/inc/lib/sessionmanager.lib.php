@@ -2163,7 +2163,7 @@ class SessionManager
 
         $statusCondition = null;
         if (isset($status) && !is_null($status)) {
-            $status = intval($status);
+            $status = (int) $status;
             $statusCondition = " AND status = $status";
         }
 
@@ -3942,10 +3942,10 @@ class SessionManager
         $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
         $tbl_session_rel_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
         $session_id = (int) $session_id;
-        $sqlSelect = "*, c.id, c.id as real_id";
+        $sqlSelect = '*, c.id, c.id as real_id';
 
         if ($getCount) {
-            $sqlSelect = "COUNT(1) as count";
+            $sqlSelect = 'COUNT(1) as count';
         }
 
         // select the courses
@@ -3965,9 +3965,9 @@ class SessionManager
             $orderBy = " ORDER BY $orderBy";
         } else {
             if (self::orderCourseIsEnabled()) {
-                $orderBy .= " ORDER BY position ";
+                $orderBy .= ' ORDER BY position ';
             } else {
-                $orderBy .= " ORDER BY title ";
+                $orderBy .= ' ORDER BY title ';
             }
         }
 
@@ -4516,7 +4516,7 @@ class SessionManager
                         if ($course_info) {
                             //By default new elements are invisible
                             if ($set_exercises_lp_invisible) {
-                                $list = new LearnpathList('', $course_info['code'], $sid);
+                                $list = new LearnpathList('', $course_info, $sid);
                                 $flat_list = $list->get_flat_list();
                                 if (!empty($flat_list)) {
                                     foreach ($flat_list as $lp_id => $data) {
@@ -4794,19 +4794,19 @@ SQL;
     }
 
     /**
-     * @param int  $user_id
+     * @param int  $userId
      * @param bool $ignoreVisibilityForAdmins
      * @param bool $ignoreTimeLimit
      *
      * @return array
      */
     public static function get_sessions_by_user(
-        $user_id,
+        $userId,
         $ignoreVisibilityForAdmins = false,
         $ignoreTimeLimit = false
     ) {
         $sessionCategories = UserManager::get_sessions_by_category(
-            $user_id,
+            $userId,
             false,
             $ignoreVisibilityForAdmins,
             $ignoreTimeLimit
@@ -5820,14 +5820,16 @@ SQL;
     }
 
     /**
-     * @param int $sessionId
-     * @param int $courseId
+     * @param int    $sessionId
+     * @param int    $courseId
+     * @param string $separator
      *
      * @return string
      */
     public static function getCoachesByCourseSessionToString(
         $sessionId,
-        $courseId
+        $courseId,
+        $separator = ''
     ) {
         $coaches = self::getCoachesByCourseSession($sessionId, $courseId);
         $list = [];
@@ -5840,7 +5842,9 @@ SQL;
             }
         }
 
-        return array_to_string($list, CourseManager::USER_SEPARATOR);
+        $separator = empty($separator) ? CourseManager::USER_SEPARATOR : $separator;
+
+        return array_to_string($list, $separator);
     }
 
     /**
@@ -8152,7 +8156,6 @@ SQL;
                         'width' => '160',
                         'align' => 'left',
                         'search' => 'true',
-                        'formatter' => null,
                         'searchoptions' => ['sopt' => $operators],
                     ],
                     [
@@ -9195,7 +9198,7 @@ SQL;
             }
 
             $usergroup->subscribe_sessions_to_usergroup(
-                $usergroup->get_id_by_name($className),
+                $usergroup->getIdByName($className),
                 [$sessionId],
                 $deleteClassSessions
             );

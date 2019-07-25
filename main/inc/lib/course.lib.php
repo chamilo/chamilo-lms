@@ -2998,88 +2998,6 @@ class CourseManager
     }
 
     /**
-     * Get emails of tutors to course.
-     *
-     * @param int $courseId
-     *
-     * @return array List of emails of tutors to course
-     *
-     * @author Carlos Vargas <carlos.vargas@dokeos.com>, Dokeos Latino
-     * */
-    public static function get_emails_of_tutors_to_course($courseId)
-    {
-        $list = [];
-        $courseId = intval($courseId);
-        $res = Database::query(
-            "SELECT user_id 
-            FROM ".Database::get_main_table(TABLE_MAIN_COURSE_USER)."
-            WHERE c_id = $courseId AND status = 1"
-        );
-        while ($list_users = Database::fetch_array($res)) {
-            $result = Database::query(
-                "SELECT * FROM ".Database::get_main_table(TABLE_MAIN_USER)."
-                WHERE user_id = ".$list_users['user_id']
-            );
-            while ($row_user = Database::fetch_array($result)) {
-                $name_teacher = api_get_person_name($row_user['firstname'], $row_user['lastname']);
-                $list[] = [$row_user['email'] => $name_teacher];
-            }
-        }
-
-        return $list;
-    }
-
-    /**
-     * Get coaches emails by session.
-     *
-     * @param int $session_id
-     * @param int $courseId
-     *
-     * @return array array(email => name_tutor)  by coach
-     *
-     * @author Carlos Vargas <carlos.vargas@dokeos.com>
-     */
-    public static function get_email_of_tutor_to_session($session_id, $courseId)
-    {
-        $tbl_session_course_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
-        $tbl_user = Database::get_main_table(TABLE_MAIN_USER);
-        $coachs_emails = [];
-
-        $courseId = intval($courseId);
-        $session_id = intval($session_id);
-
-        $sql = "SELECT user_id
-                FROM $tbl_session_course_user
-                WHERE
-                    session_id = $session_id AND
-                    c_id = $courseId AND
-                    status = 2
-                ";
-        $rs = Database::query($sql);
-
-        if (Database::num_rows($rs) > 0) {
-            $user_ids = [];
-            while ($row = Database::fetch_array($rs)) {
-                $user_ids[] = $row['user_id'];
-            }
-
-            $sql = "SELECT firstname, lastname, email FROM $tbl_user
-                    WHERE user_id IN (".implode(",", $user_ids).")";
-            $rs_user = Database::query($sql);
-
-            while ($row_emails = Database::fetch_array($rs_user)) {
-                $mail_tutor = [
-                    'email' => $row_emails['email'],
-                    'complete_name' => api_get_person_name($row_emails['firstname'], $row_emails['lastname']),
-                ];
-                $coachs_emails[] = $mail_tutor;
-            }
-        }
-
-        return $coachs_emails;
-    }
-
-    /**
      * Creates a new extra field for a given course.
      *
      * @param string $variable    Field's internal variable name
@@ -3880,7 +3798,7 @@ class CourseManager
             $sql .= " AND access_url_id = $current_url_id";
         }
         // Use user's classification for courses (if any).
-        $sql .= " ORDER BY course_rel_user.user_course_cat, course_rel_user.sort ASC";
+        $sql .= ' ORDER BY course_rel_user.user_course_cat, course_rel_user.sort ASC';
         $result = Database::query($sql);
 
         $showCustomIcon = api_get_setting('course_images_in_courses_list');
@@ -3889,6 +3807,9 @@ class CourseManager
         $courseList = [];
         while ($row = Database::fetch_array($result)) {
             $course_info = api_get_course_info_by_id($row['id']);
+            if (empty($course_info)) {
+                continue;
+            }
 
             if (isset($course_info['visibility']) &&
                 $course_info['visibility'] == COURSE_VISIBILITY_HIDDEN
@@ -3974,7 +3895,7 @@ class CourseManager
             }
 
             $params['status'] = $row['status'];
-            if (api_get_setting('display_coursecode_in_courselist') == 'true') {
+            if (api_get_setting('display_coursecode_in_courselist') === 'true') {
                 $params['code_course'] = '('.$course_info['visual_code'].') ';
             }
 
@@ -3998,6 +3919,7 @@ class CourseManager
             $params['category_id'] = $course_info['categoryId'];
             $params['color'] = Display::randomColor($params['category_id']);
             $params['teachers'] = $teachers;
+            $params['real_id'] = $course_info['real_id'];
 
             if ($course_info['visibility'] != COURSE_VISIBILITY_CLOSED) {
                 $params['notifications'] = $showNotification;

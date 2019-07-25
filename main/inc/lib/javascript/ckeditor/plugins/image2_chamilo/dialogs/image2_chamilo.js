@@ -551,7 +551,7 @@ CKEDITOR.dialog.add( 'image2_chamilo', function( editor ) {
 								img = widget.element.$.firstChild;
 							}
 
-                            img.className += ' img-fluid ';
+                            img.className += ' img-responsive ';
 							widget.setData( 'isResponsive', this.getValue() );
                         }
 					}

@@ -161,22 +161,18 @@ if (!empty($_REQUEST['command'])) {
                         break;
                 }
             }
-            //error_log('In '.__FILE__.', '.__LINE__.' - aicc data is '.$hacp_aicc_data, 0);
             // Treat the incoming request:
             $aicc = new aicc();
             $msg_array = $aicc->parse_ini_string_quotes_safe($hacp_aicc_data, ['core_lesson', 'core_vendor']);
-            //error_log('Message is now in this form: '.print_r($msg_array, true), 0);
             foreach ($msg_array as $key => $dummy) {
                 switch (strtolower($key)) {
                     case 'core':
                         foreach ($msg_array[$key] as $subkey => $value) {
                             switch (strtolower($subkey)) {
                                 case 'lesson_location':
-                                    //error_log('Setting lesson_location to '.$value, 0);
                                     $oItem->set_lesson_location($value);
                                     break;
                                 case 'lesson_status':
-                                    //error_log('Setting lesson_status to '.$value, 0);
                                     // Sometimes values are sent abbreviated
                                     switch ($value) {
                                         case 'C':
@@ -201,11 +197,9 @@ if (!empty($_REQUEST['command'])) {
                                     $oItem->set_status($value);
                                     break;
                                 case 'score':
-                                    //error_log('Setting lesson_score to '.$value, 0);
                                     $oItem->set_score($value);
                                     break;
                                 case 'time':
-                                    //error_log('Setting lesson_time to '.$value, 0);
                                     if (strpos($value, ':') !== false) {
                                         $oItem->set_time($value, 'scorm');
                                     } else {
@@ -216,7 +210,6 @@ if (!empty($_REQUEST['command'])) {
                         }
                         break;
                     case 'core_lesson':
-                        //error_log('Setting suspend_data to '.print_r($msg_array[$key], true), 0);
                         $oItem->current_data = $msg_array[$key];
                         break;
                     case 'comments':

@@ -26,15 +26,14 @@ if ($lp_controller_touched != 1) {
 
 require_once __DIR__.'/../inc/global.inc.php';
 
+api_protect_course_script();
+
 if (isset($_REQUEST['origin']) && $_REQUEST['origin'] === 'learnpath') {
     $_REQUEST['origin'] = '';
 }
 
-//To prevent the template class
+// To prevent the template class
 $show_learnpath = true;
-
-api_protect_course_script();
-
 $lp_id = !empty($_GET['lp_id']) ? (int) $_GET['lp_id'] : 0;
 $sessionId = api_get_session_id();
 $course_code = api_get_course_id();
@@ -190,6 +189,20 @@ if (isset($exerciseResult) || isset($_SESSION['exerciseResult'])) {
     Session::erase('duration_time');
 }
 
+// additional APIs
+$htmlHeadXtra[] = '<script>
+chamilo_courseCode = "'.$course_code.'";
+</script>';
+// Document API
+$htmlHeadXtra[] = '<script src="js/documentapi.js" type="text/javascript" language="javascript"></script>';
+// Storage API
+$htmlHeadXtra[] = '<script>
+var sv_user = \''.api_get_user_id().'\';
+var sv_course = chamilo_courseCode;
+var sv_sco = \''.$lp_id.'\';
+</script>'; // FIXME fetch sco and userid from a more reliable source directly in sotrageapi.js
+$htmlHeadXtra[] = '<script type="text/javascript" src="js/storageapi.js"></script>';
+
 /**
  * Get a link to the corresponding document.
  */
@@ -236,7 +249,6 @@ if (!isset($src)) {
                 }
 
                 $src = $lp->fixBlockedLinks($src);
-
                 $lp->start_current_item(); // starts time counter manually if asset
             } else {
                 $src = 'blank.php?error=prerequisites';
@@ -299,9 +311,7 @@ if (!empty($_REQUEST['exeId']) &&
     $safe_id = $lp_id;
     $safe_exe_id = (int) $_REQUEST['exeId'];
 
-    if ($safe_id == strval(intval($safe_id)) &&
-        $safe_item_id == strval(intval($safe_item_id))
-    ) {
+    if (!empty($safe_id) && !empty($safe_item_id)) {
         $sql = 'SELECT start_date, exe_date, score, max_score, exe_exo_id, exe_duration
                 FROM '.$TBL_TRACK_EXERCICES.'
                 WHERE exe_id = '.$safe_exe_id;
@@ -321,7 +331,7 @@ if (!empty($_REQUEST['exeId']) &&
                 WHERE
                     c_id = $course_id AND
                     lp_item_id = $safe_item_id AND
-                    lp_view_id = ".$lp->lp_view_id."
+                    lp_view_id = ".$lp->get_view_id()."
                 ORDER BY id DESC
                 LIMIT 1";
         $res_last_attempt = Database::query($sql);
@@ -362,7 +372,7 @@ if (!empty($_REQUEST['exeId']) &&
             Database::query($sql);
         }
     }
-    if (intval($_GET['fb_type']) > 0) {
+    if (intval($_GET['fb_type']) != EXERCISE_FEEDBACK_TYPE_END) {
         $src = 'blank.php?msg=exerciseFinished';
     } else {
         $src = api_get_path(WEB_CODE_PATH).'exercise/result.php?id='.$safe_exe_id.'&'.api_get_cidreq(true, true, 'learnpath');
@@ -387,7 +397,7 @@ if ($lp->mode == 'fullscreen') {
         window.open('$src','content_id','toolbar=0,location=0,status=0,scrollbars=1,resizable=1');
     </script>";
 }
-
+// Set flag to ensure lp_header.php is loaded by this script (flag is unset in lp_header.php).
 Session::write('loaded_lp_view', true);
 $display_none = '';
 $margin_left = '340px';

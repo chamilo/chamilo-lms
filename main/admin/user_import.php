@@ -16,6 +16,10 @@ require_once __DIR__.'/../inc/global.inc.php';
 $purification_option_for_usernames = false;
 $userId = api_get_user_id();
 
+api_protect_admin_script(true, null);
+api_protect_limit_for_session_admin();
+set_time_limit(0);
+
 /**
  * @param array $users
  * @param bool  $checkUniqueEmail
@@ -220,6 +224,8 @@ function save_data($users, $sendMail = false)
 
             $user = complete_missing_data($user);
             $user['Status'] = api_status_key($user['Status']);
+            $redirection = isset($user['Redirection']) ? $user['Redirection'] : '';
+
             $user_id = UserManager::create_user(
                 $user['FirstName'],
                 $user['LastName'],
@@ -237,7 +243,14 @@ function save_data($users, $sendMail = false)
                 0,
                 null,
                 null,
-                $sendMail
+                $sendMail,
+                false,
+                '',
+                false,
+                null,
+                null,
+                null,
+                $redirection
             );
 
             if ($user_id) {
@@ -484,12 +497,7 @@ function processUsers(&$users, $sendMail)
 }
 
 $this_section = SECTION_PLATFORM_ADMIN;
-api_protect_admin_script(true, null);
-api_protect_limit_for_session_admin();
-set_time_limit(0);
-
 $defined_auth_sources[] = PLATFORM_AUTH_SOURCE;
-
 if (isset($extAuthSource) && is_array($extAuthSource)) {
     $defined_auth_sources = array_merge($defined_auth_sources, array_keys($extAuthSource));
 }
@@ -734,6 +742,12 @@ if ($count_fields > 0) {
         $i++;
     }
 }
+
+if (api_get_configuration_value('plugin_redirection_enabled')) {
+    $list[] = 'Redirection';
+    $list_reponse[] = api_get_path(WEB_PATH);
+}
+
 ?>
 <p><?php echo get_lang('CSVMustLookLike').' ('.get_lang('MandatoryFields').')'; ?> :</p>
 <blockquote>

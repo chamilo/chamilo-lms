@@ -27,7 +27,7 @@ $course_id = api_get_course_int_id();
 $sessionId = api_get_session_id();
 
 // Notice for unauthorized people.
-api_protect_course_script(true);
+api_protect_course_script(true, false, 'group');
 
 $htmlHeadXtra[] = '<script>
 $(function() {

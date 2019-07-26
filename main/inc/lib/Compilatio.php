@@ -3,12 +3,12 @@
 
 /**
  * Build the comunication with the SOAP server Compilatio.net
- * call severals methods for the file management in Compilatio.net
+ * call severals methods for the file management in Compilatio.net.
  *
  * Date: 26/05/16
+ *
  * @version:1.0
  */
-
 class Compilatio
 {
     /** Identification key for the Compilatio account*/
@@ -25,7 +25,6 @@ class Compilatio
 
     /**
      * Compilatio constructor.
-     *
      */
     public function __construct()
     {
@@ -59,19 +58,19 @@ class Compilatio
                 $this->key = $key;
                 if (!empty($urlsoap)) {
                     if (!empty($proxyHost)) {
-                        $param = array(
+                        $param = [
                             'trace' => false,
                             'soap_version' => $soapVersion,
                             'exceptions' => true,
                             'proxy_host' => '"'.$proxyHost.'"',
                             'proxy_port' => $proxyPort,
-                        );
+                        ];
                     } else {
-                        $param = array(
+                        $param = [
                             'trace' => false,
                             'soap_version' => $soapVersion,
                             'exceptions' => true,
-                        );
+                        ];
                     }
                     $this->soapcli = new SoapClient($urlsoap, $param);
                 } else {
@@ -248,7 +247,7 @@ class Compilatio
     }
 
     /**
-     * Method for the file load
+     * Method for the file load.
      *
      * @param $title
      * @param $description
@@ -266,24 +265,24 @@ class Compilatio
             }
             $idDocument = $this->soapcli->__call(
                 'addDocumentBase64',
-                array(
+                [
                     $this->key,
                     utf8_encode(urlencode($title)),
                     utf8_encode(urlencode($description)),
                     utf8_encode(urlencode($filename)),
                     utf8_encode($mimeType),
                     base64_encode($content),
-                )
+                ]
             );
 
             return $idDocument;
         } catch (SoapFault $fault) {
-            return ("Erreur sendDoc()".$fault->faultcode." ".$fault->faultstring);
+            return "Erreur sendDoc()".$fault->faultcode." ".$fault->faultstring;
         }
     }
 
     /**
-     * Method for recover a document's information
+     * Method for recover a document's information.
      *
      * @param $compiHash
      *
@@ -293,19 +292,19 @@ class Compilatio
     {
         try {
             if (!is_object($this->soapcli)) {
-                return ("Error in constructor compilatio() ".$this->soapcli);
+                return "Error in constructor compilatio() ".$this->soapcli;
             }
-            $param = array($this->key, $compiHash);
+            $param = [$this->key, $compiHash];
             $idDocument = $this->soapcli->__call('getDocument', $param);
 
             return $idDocument;
         } catch (SoapFault $fault) {
-            return ("Erreur getDoc()".$fault->faultcode." ".$fault->faultstring);
+            return "Erreur getDoc()".$fault->faultcode." ".$fault->faultstring;
         }
     }
 
     /**
-     * method for recover an url document's report
+     * method for recover an url document's report.
      *
      * @param $compiHash
      *
@@ -315,19 +314,19 @@ class Compilatio
     {
         try {
             if (!is_object($this->soapcli)) {
-                return ("Error in constructor compilatio() ".$this->soapcli);
+                return "Error in constructor compilatio() ".$this->soapcli;
             }
-            $param = array($this->key, $compiHash);
+            $param = [$this->key, $compiHash];
             $idDocument = $this->soapcli->__call('getDocumentReportUrl', $param);
 
             return $idDocument;
         } catch (SoapFault $fault) {
-            return ("Erreur  getReportUrl()".$fault->faultcode." ".$fault->faultstring);
+            return "Erreur  getReportUrl()".$fault->faultcode." ".$fault->faultstring;
         }
     }
 
     /**
-     *  Method for deleting a Compialtio's account document
+     *  Method for deleting a Compialtio's account document.
      *
      * @param $compiHash
      *
@@ -337,17 +336,17 @@ class Compilatio
     {
         try {
             if (!is_object($this->soapcli)) {
-                return ("Error in constructor compilatio() ".$this->soapcli);
+                return "Error in constructor compilatio() ".$this->soapcli;
             }
-            $param = array($this->key, $compiHash);
+            $param = [$this->key, $compiHash];
             $this->soapcli->__call('deleteDocument', $param);
         } catch (SoapFault $fault) {
-            return ("Erreur  deldoc()".$fault->faultcode." ".$fault->faultstring);
+            return "Erreur  deldoc()".$fault->faultcode." ".$fault->faultstring;
         }
     }
 
     /**
-     * Method for start the analysis for a document
+     * Method for start the analysis for a document.
      *
      * @param $compiHash
      *
@@ -357,36 +356,37 @@ class Compilatio
     {
         try {
             if (!is_object($this->soapcli)) {
-                return ("Error in constructor compilatio() ".$this->soapcli);
+                return "Error in constructor compilatio() ".$this->soapcli;
             }
-            $param = array($this->key, $compiHash);
+            $param = [$this->key, $compiHash];
             $this->soapcli->__call('startDocumentAnalyse', $param);
         } catch (SoapFault $fault) {
-            return ("Erreur  startAnalyse()".$fault->faultcode." ".$fault->faultstring);
+            return "Erreur  startAnalyse()".$fault->faultcode." ".$fault->faultstring;
         }
     }
 
     /**
-     * Method for recover the account's quota
+     * Method for recover the account's quota.
+     *
      * @return string
      */
     public function getQuotas()
     {
         try {
             if (!is_object($this->soapcli)) {
-                return ("Error in constructor compilatio() ".$this->soapcli);
+                return "Error in constructor compilatio() ".$this->soapcli;
             }
-            $param = array($this->key);
+            $param = [$this->key];
             $resultat = $this->soapcli->__call('getAccountQuotas', $param);
 
             return $resultat;
         } catch (SoapFault $fault) {
-            return ("Erreur  getQuotas()".$fault->faultcode." ".$fault->faultstring);
+            return "Erreur  getQuotas()".$fault->faultcode." ".$fault->faultstring;
         }
     }
 
     /**
-     * Method for identify a file extension and the possibility that the document can be managed by Compilatio
+     * Method for identify a file extension and the possibility that the document can be managed by Compilatio.
      *
      * @param $filename
      *
@@ -402,12 +402,12 @@ class Compilatio
     }
 
     /**
-     * Fonction  affichage de la barre de progression d'analyse version 3.1
+     * Fonction  affichage de la barre de progression d'analyse version 3.1.
      *
      * @param string $status From the document
      * @param $pour
      * @param string $imagesPath
-     * @param array $text   Array includes the extract from the text
+     * @param array  $text       Array includes the extract from the text
      *
      * @return string
      */
@@ -461,7 +461,7 @@ class Compilatio
     }
 
     /**
-     * Method for display the PomprseuilmankBar (% de plagiat)
+     * Method for display the PomprseuilmankBar (% de plagiat).
      *
      * @param $percentagePumping
      * @param $weakThreshold
@@ -512,11 +512,11 @@ class Compilatio
     }
 
     /**
-     * Method for validation of hash
+     * Method for validation of hash.
+     *
      * @param string $hash
      *
      * @return bool
-     *
      */
     public static function isMd5($hash)
     {
@@ -524,7 +524,7 @@ class Compilatio
     }
 
     /**
-     * function for delete a document of the compilatio table if plagiarismTool is Compilatio
+     * function for delete a document of the compilatio table if plagiarismTool is Compilatio.
      *
      * @param int $courseId
      * @param int $itemId

@@ -26,39 +26,38 @@ echo "<b>"
 
 ?>
 <br><br>
-<?
-if (!isset($_GET['action']))
-{
-?>
+<?php
+if (!isset($_GET['action'])) {
+    ?>
 <body style="margin:0px;padding:0px">
 <form style="margin:0px;" method="GET">
     <input type="submit" name="action" value="Test de Connexion SOAP">
 </form>
-<?
+<?php
 } else {
-    echo get_lang('compilatioConnectionTestSoap')."<br>";
-    echo "1) ".get_lang('compilatioServerConnection')."<br>";
-    $compilatio = new Compilatio();
-    if ($compilatio) {
-        echo get_lang('compilatioConnectionAccomplished')."<br>";
-        echo "2) ".get_lang('compilatioSendTextToServer')."<br>";
-        $text = get_lang('compilatioTestSendText').$compilatio->getKey();
-        $id_compi = $compilatio->SendDoc(
+        echo get_lang('compilatioConnectionTestSoap')."<br>";
+        echo "1) ".get_lang('compilatioServerConnection')."<br>";
+        $compilatio = new Compilatio();
+        if ($compilatio) {
+            echo get_lang('compilatioConnectionAccomplished')."<br>";
+            echo "2) ".get_lang('compilatioSendTextToServer')."<br>";
+            $text = get_lang('compilatioTestSendText').$compilatio->getKey();
+            $id_compi = $compilatio->SendDoc(
             'Doc de test',
             'test',
             'test',
             'text/plain',
             $text
         );
-        if (Compilatio::isMd5($id_compi)) {
-            echo get_lang('compilatioSuccessfulTransfer')."<br>";
+            if (Compilatio::isMd5($id_compi)) {
+                echo get_lang('compilatioSuccessfulTransfer')."<br>";
+            } else {
+                echo get_lang('compilatioFailedTransfer')."<br>";
+            }
         } else {
-            echo get_lang('compilatioFailedTransfer')."<br>";
+            echo get_lang('compilatioNotConnection')."<br>";
+            echo get_lang('compilatioParamVerification')."<br>";
         }
-    } else {
-        echo get_lang('compilatioNotConnection')."<br>";
-        echo get_lang('compilatioParamVerification')."<br>";
     }
-}
 ?>
 </body>

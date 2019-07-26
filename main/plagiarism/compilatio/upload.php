@@ -31,7 +31,7 @@ if (isset($_REQUEST['type']) && $_REQUEST['type'] === 'multi') {
         /**
          * File problem in the url field that no longer have the file extension,
          * Compilatio's server refuse the files
-         * we renames in the FS and the database with the file extension that is found in the title field
+         * we renames in the FS and the database with the file extension that is found in the title field.
          */
         compilatioUpdateWorkDocument($documentId, $courseId);
 
@@ -87,7 +87,7 @@ if (isset($_REQUEST['type']) && $_REQUEST['type'] === 'multi') {
         }
     }
 } else {
-    $documentId = isset($_GET['doc']) ? $_GET['doc']: 0;
+    $documentId = isset($_GET['doc']) ? $_GET['doc'] : 0;
     sendDocument($documentId, $courseInfo);
 }
 
@@ -137,7 +137,7 @@ function sendDocument($documentId, $courseInfo)
 }
 
 /**
- * function for show and recovery the extension from a file
+ * function for show and recovery the extension from a file.
  *
  * @param $docId
  * @param $courseId

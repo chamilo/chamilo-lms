@@ -2260,7 +2260,7 @@ function get_work_user_list(
                     }
                     $work['compilatio'] = $actionCompilatio;
                 }
-		        $works[] = $work;
+                $works[] = $work;
             }
         }
 

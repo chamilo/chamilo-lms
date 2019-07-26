@@ -1226,8 +1226,8 @@ switch ($action) {
                 'qualification',
                 'sent_date',
                 'qualificator_id',
-		        'correction',
-	        ];
+                'correction',
+            ];
             $columns = array_merge($columns, $plagiarismColumns);
             $columns[] = 'actions';
         } else {
@@ -1236,10 +1236,10 @@ switch ($action) {
                 'title',
                 'qualification',
                 'sent_date',
-		        'correction',
+                'correction',
             ];
             $columns = array_merge($columns, $plagiarismColumns);
-	        $columns[] = 'actions';
+            $columns[] = 'actions';
         }
 
         $whereCondition = " AND $whereCondition ";
@@ -1263,10 +1263,10 @@ switch ($action) {
             $columns = [
                 'type', 'firstname', 'lastname', 'title', 'qualification', 'sent_date', 'qualificator_id',
             ];
-	        $columns = array_merge($columns, $plagiarismColumns);
+            $columns = array_merge($columns, $plagiarismColumns);
             $columns[] = 'actions';
-	    } else {
-            $columns = array('type', 'firstname', 'lastname', 'title', 'sent_date');
+        } else {
+            $columns = ['type', 'firstname', 'lastname', 'title', 'sent_date'];
             $columns = array_merge($columns, $plagiarismColumns);
             $columns[] = 'actions';
         }
@@ -1291,15 +1291,15 @@ switch ($action) {
             $plagiarismColumns = ['compilatio'];
         }
         if (isset($_GET['type']) && $_GET['type'] == 'simple') {
-	        $columns = [
-                'type', 'title', 'qualification', 'sent_date', 'qualificator_id'
+            $columns = [
+                'type', 'title', 'qualification', 'sent_date', 'qualificator_id',
             ];
             $columns = array_merge($columns, $plagiarismColumns);
             $columns[] = 'actions';
-	    } else {
+        } else {
             $columns = ['type', 'title', 'qualification', 'sent_date'];
             $columns = array_merge($columns, $plagiarismColumns);
-	        $columns[] = 'actions';
+            $columns[] = 'actions';
         }
         $documents = getAllDocumentToWork($work_id, api_get_course_int_id());
 

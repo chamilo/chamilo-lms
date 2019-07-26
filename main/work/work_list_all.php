@@ -216,13 +216,13 @@ if ($allowAntiPlagiarism) {
     $plagiarismListJqgridColumn = ['Compilatio'];
     $plagiarismListJqgridLine = [
         [
-            'name'=>'compilatio',
-            'index'=>'compilatio',
-            'width'=>'40',
-            'align'=>'left',
+            'name' => 'compilatio',
+            'index' => 'compilatio',
+            'width' => '40',
+            'align' => 'left',
             'search' => 'false',
-            'sortable'=>'false'
-        ]
+            'sortable' => 'false',
+        ],
     ];
 }
 
@@ -250,7 +250,7 @@ if (!empty($work_data['enable_qualification']) &&
         get_lang('Score'),
         get_lang('Date'),
         get_lang('Status'),
-	    get_lang('UploadCorrection'),
+        get_lang('UploadCorrection'),
     ];
     $columns = array_merge($columns, $plagiarismListJqgridColumn);
     $columns[] = get_lang('Actions');
@@ -539,9 +539,7 @@ if ($allowAntiPlagiarism) {
         if (in_array($data['id'], $listCompilatioDocId)) {
             $javascriptWorkId .= $data['id'].'a';
         }
-    }
-
-    ?>
+    } ?>
     <!--
         Lets display the javascript AJAX tools for refreshing datas that needed to be refreshed
         Only document with state ANALYSE_IN_QUEUE or ANALYSE_PROCESSING need to ask server
@@ -554,9 +552,9 @@ if ($allowAntiPlagiarism) {
         var analyseProcessing = "ANALYSE_PROCESSING";
         var analyseInQueue = "ANALYSE_IN_QUEUE";
         var refreshDelaisAfter = 30000;
-        var allWorkId = "<?php echo $javascriptWorkId ?>";
+        var allWorkId = "<?php echo $javascriptWorkId; ?>";
         var workFolderId = "<?php echo $workId; ?>";
-        var compilationWebUrl = "<?php echo api_get_path(WEB_CODE_PATH).'plagiarism/compilatio/' ?>";
+        var compilationWebUrl = "<?php echo api_get_path(WEB_CODE_PATH).'plagiarism/compilatio/'; ?>";
         var divExisteTimer = null;
         var msgWaitJS = '<?php echo Display::return_message(get_lang('PleaseWaitThisCouldTakeAWhile')); ?>';
         var div = document.createElement('div');
@@ -695,7 +693,7 @@ if ($allowAntiPlagiarism) {
                 type: "get",
                 dataType: "html",
                 error: function () {
-                    showData("<?php echo get_lang('CompilatioComunicationAjaxImpossible');?>");
+                    showData("<?php echo get_lang('CompilatioComunicationAjaxImpossible'); ?>");
                 },
                 success: function (strData) {
                     showData(strData);

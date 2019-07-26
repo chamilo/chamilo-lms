@@ -1999,7 +1999,7 @@ class Display
      * @param int    $percentage      int value between 0 and 100
      * @param bool   $show_percentage
      * @param string $extra_info
-     * @param string $class danger/success/infowarning
+     * @param string $class           danger/success/infowarning
      *
      * @return string
      */

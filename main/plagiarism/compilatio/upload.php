@@ -11,12 +11,6 @@ api_set_more_memory_and_time_limits();
 
 $courseId = api_get_course_int_id();
 $courseInfo = api_get_course_info();
-$typeMessage = 0;
-$errorCodeNotValid = get_lang('compilatioError').get_lang('documentCodeNotValid');
-$errorLoadError = get_lang('compilatioLoadError').get_lang('compilatioContactAdmin');
-
-/*message to the user for be patient*/
-$msgWait = get_lang('PleaseWaitThisCouldTakeAWhile');
 $compilatio = new Compilatio();
 
 /* if we have to upload severals documents*/

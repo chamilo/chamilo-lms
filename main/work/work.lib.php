@@ -2249,7 +2249,7 @@ function get_work_user_list(
                                 ."<a href='javascript:void(0)' class=\"getSingleCompilatio\" onClick='getSingleCompilatio("
                                 .$item_id
                                 .");'>"
-                                .get_lang('CompilatioAnalyse')
+                                .get_lang('CompilatioAnalysis')
                                 ." </a>"
                                 .get_lang('CompilatioWithCompilatio')
                                 ."</div>";

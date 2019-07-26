@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+exit;
+
 /**
  *	This file is responsible for  passing requested documents to the browser.
  *	Html files are parsed to fix a few problems with URLs,
@@ -23,7 +25,6 @@ header('Pragma: no-cache');
 api_protect_course_script(true);
 
 $id = (int) $_GET['id'];
-
 $courseInfo = api_get_course_info();
 
 if (empty($courseInfo)) {
@@ -33,14 +34,15 @@ if (empty($courseInfo)) {
 $tbl_student_publication = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
 
 if (!empty($courseInfo['real_id'])) {
-	$sql = 'SELECT * FROM '.$tbl_student_publication.' 
-	        WHERE c_id = '.$courseInfo['real_id'].' AND id = "'.$id.'"';
+    $courseId = $courseInfo['real_id'];
+	$sql = "SELECT * FROM $tbl_student_publication 
+	        WHERE c_id = $courseId AND id = $id";
 	$result = Database::query($sql);
 	if ($result && Database::num_rows($result)) {
 	    $row = Database::fetch_array($result, 'ASSOC');
         $full_file_name = $courseInfo['course_sys_path'].$row['url'];
 
-        $item_info = api_get_item_property_info(api_get_course_int_id(), 'work', $row['id']);
+        $item_info = api_get_item_property_info($courseId, 'work', $row['id']);
         if (empty($item_info)) {
             exit;
         }

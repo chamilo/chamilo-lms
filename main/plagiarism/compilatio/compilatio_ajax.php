@@ -3,6 +3,8 @@
 
 require_once '../../inc/global.inc.php';
 
+api_protect_course_script();
+
 if (isset($_GET['workid'])) {
     $workIdList = $_GET['workid'];    // list of workid separate by the :
     $result = '';

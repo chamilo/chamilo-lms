@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+exit;
+
 ini_set('soap.wsdl_cache_enabled', 0);
 ini_set('default_socket_timeout', '1000');
 

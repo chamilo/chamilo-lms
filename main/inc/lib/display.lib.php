@@ -1441,10 +1441,6 @@ class Display
             }
         }
 
-        if (api_get_configuration_value('allow_compilatio_tool')) {
-            $obj->gridComplete = 'function () { compilatioInit() }';
-        }
-
         if (!empty($extra_params['viewrecords'])) {
             $obj->viewrecords = $extra_params['viewrecords'];
         }

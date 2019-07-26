@@ -1955,13 +1955,10 @@ function get_work_user_list(
 
         $blockEdition = api_get_configuration_value('block_student_publication_edition');
         $blockScoreEdition = api_get_configuration_value('block_student_publication_score_edition');
-
+        $loading = Display::returnFontAwesomeIcon('spinner', null, true, 'fa-spin');
         while ($work = Database::fetch_array($result, 'ASSOC')) {
             $item_id = $work['id'];
-            /* JLUCAS COMPILATIO */
             $dbTitle = $work['title'];
-            /* FIN  JLUCAS COMPILATIO */
-
             // Get the author ID for that document from the item_property table
             $is_author = false;
             $can_read = false;
@@ -2242,29 +2239,22 @@ function get_work_user_list(
                     $workDirectory = api_get_path(SYS_COURSE_PATH).$course_info['directory'];
                     if ($compilationId) {
                         $actionCompilatio = "<div id='id_avancement".$item_id."'>
-                            <img src='".$compilatio_web_folder."/img/ajax-loader2.gif' style='margin-right:10px'/>"
-                            .get_lang('compilatioConnectionWithServer')
+                            ".$loading."&nbsp;".get_lang('CompilatioConnectionWithServer')
                             ."</div>";
                     } else {
                         if (!Compilatio::verifiFileType($dbTitle)) {
-                            $actionCompilatio = "<div style='font-style:italic'>"
-                                .get_lang('compilatioFileisnotsupported')
-                                ."</div>";
-                        } elseif (filesize($workDirectory."/".$work['url']) > $compilation->getMaxFileSize()) {
-                            $sizeFile = round(filesize($workDirectory."/".$work['url']) / 1000000);
-                            $actionCompilatio = "<div style='font-style:italic'>"
-                                .get_lang('compilatioTooHeavyDocument')
-                                .": "
-                                .$sizeFile
-                                ." Mo.<br/></div>";
+                            $actionCompilatio = get_lang('CompilatioFileIsNotSupported');
+                        } elseif (filesize($workDirectory.'/'.$work['url']) > $compilation->getMaxFileSize()) {
+                            $sizeFile = round(filesize($workDirectory.'/'.$work['url']) / 1000000);
+                            $actionCompilatio = get_lang('CompilatioFileIsTooBig').': '.format_file_size($sizeFile).'<br />';
                         } else {
                             $actionCompilatio = "<div id='id_avancement".$item_id."'>"
                                 ."<a href='javascript:void(0)' class=\"getSingleCompilatio\" onClick='getSingleCompilatio("
                                 .$item_id
                                 .");'>"
-                                .get_lang('compilatioAnalyse')
+                                .get_lang('CompilatioAnalyse')
                                 ." </a>"
-                                .get_lang('compilatioWithCompilatio')
+                                .get_lang('CompilatioWithCompilatio')
                                 ."</div>";
                         }
                     }

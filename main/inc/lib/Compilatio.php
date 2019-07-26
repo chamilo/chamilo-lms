@@ -32,10 +32,16 @@ class Compilatio
         if (empty(api_get_configuration_value('allow_compilatio_tool')) ||
             empty(api_get_configuration_value('compilatio_tool'))
         ) {
-            throw new Exception('Compilation not available');
+            throw new Exception('Compilatio not available');
         }
 
         $settings = api_get_configuration_value('compilatio_tool');
+
+        if (isset($settings['settings'])) {
+            $settings = $settings['settings'];
+        } else {
+            throw new Exception('Compilatio config available');
+        }
 
         $key = $this->key = $settings['key'];
         $urlsoap = $settings['soap_url'];
@@ -46,6 +52,7 @@ class Compilatio
         $this->wgetUri = $settings['wget_uri'];
         $this->wgetLogin = $settings['wget_login'];
         $this->wgetPassword = $settings['wget_password'];
+        $soapVersion = 2;
 
         try {
             if (!empty($key)) {
@@ -54,7 +61,7 @@ class Compilatio
                     if (!empty($proxyHost)) {
                         $param = array(
                             'trace' => false,
-                            'soap_version' => SOAP_1_2,
+                            'soap_version' => $soapVersion,
                             'exceptions' => true,
                             'proxy_host' => '"'.$proxyHost.'"',
                             'proxy_port' => $proxyPort,
@@ -62,21 +69,21 @@ class Compilatio
                     } else {
                         $param = array(
                             'trace' => false,
-                            'soap_version' => SOAP_1_2,
+                            'soap_version' => $soapVersion,
                             'exceptions' => true,
                         );
                     }
                     $this->soapcli = new SoapClient($urlsoap, $param);
                 } else {
-                    $this->soapcli = 'WS urlsoap not available';
+                    throw new Exception('WS urlsoap not available');
                 }
             } else {
-                $this->soapcli = 'API key not available';
+                throw new Exception('API key not available');
             }
         } catch (SoapFault $fault) {
-            $this->soapcli = "Error constructor compilatio ".$fault->faultcode." ".$fault->faultstring;
+            $this->soapcli = "Error constructor compilatio $fault->faultcode $fault->faultstring ";
         } catch (Exception $e) {
-            $this->soapcli = "Error constructor compilatio with urlsoap".$urlsoap;
+            $this->soapcli = "Error constructor compilatio with urlsoap $urlsoap ".$e->getMessage();
         }
     }
 
@@ -255,7 +262,7 @@ class Compilatio
     {
         try {
             if (!is_object($this->soapcli)) {
-                return ("Error in constructor compilatio() ".$this->soapcli);
+                return "Error in constructor compilatio() $this->soapcli";
             }
             $idDocument = $this->soapcli->__call(
                 'addDocumentBase64',
@@ -387,7 +394,7 @@ class Compilatio
      */
     public static function verifiFileType($filename)
     {
-        $types = array('doc', 'docx', 'rtf', 'xls', 'xlsx', 'ppt', 'pptx', 'odt', 'pdf', 'txt', 'htm', 'html');
+        $types = ['doc', 'docx', 'rtf', 'xls', 'xlsx', 'ppt', 'pptx', 'odt', 'pdf', 'txt', 'htm', 'html'];
         $extension = substr($filename, strrpos($filename, '.') + 1);
         $extension = strtolower($extension);
 
@@ -402,7 +409,7 @@ class Compilatio
      * @param string $imagesPath
      * @param array $text   Array includes the extract from the text
      *
-     * @return unknown_type
+     * @return string
      */
     public static function getProgressionAnalyseDocv31($status, $pour = 0, $imagesPath = '', $text = [])
     {
@@ -459,23 +466,28 @@ class Compilatio
      * @param $percentagePumping
      * @param $weakThreshold
      * @param $highThreshold
-     * @param $imagesPath
+     * @param $chemin_images
      * @param $text : array  includes the extract from the text
      *
-     * @return unknown_type
+     * @return string
      */
-    public static function getPomprankBarv31($pourcentagePompage, $weakThreshold, $highThreshold, $chemin_images = '', $texte = '')
-    {
+    public static function getPomprankBarv31(
+        $pourcentagePompage,
+        $weakThreshold,
+        $highThreshold,
+        $chemin_images = '',
+        $texte = ''
+    ) {
         $pourcentagePompage = round($pourcentagePompage);
         $pour = round((50 * $pourcentagePompage) / 100);
         $return = '';
         if ($pourcentagePompage < $weakThreshold) {
-            $couleur = "vert";
+            $couleur = 'vert';
         } else {
             if ($pourcentagePompage >= $weakThreshold && $pourcentagePompage < $highThreshold) {
-                $couleur = "orange";
+                $couleur = 'orange';
             } else {
-                $couleur = "rouge";
+                $couleur = 'rouge';
             }
         }
         $return .= "<div style='float:left;margin-right:2px;'><img src='"
@@ -501,7 +513,8 @@ class Compilatio
 
     /**
      * Method for validation of hash
-     * @param $hash
+     * @param string $hash
+     *
      * @return bool
      *
      */
@@ -510,34 +523,13 @@ class Compilatio
         return preg_match('`^[a-f0-9]{32}$`', $hash);
     }
 
-    /*
-     * Method for identify Internet media type
-     * @param $filename
-     */
-    public static function typeMime($filename)
-    {
-        if (preg_match("@Opera(/| )([0-9].[0-9]{1,2})@", $_SERVER['HTTP_USER_AGENT'], $resultats)) {
-            $navigateur = "Opera";
-        } elseif (preg_match("@MSIE ([0-9].[0-9]{1,2})@", $_SERVER['HTTP_USER_AGENT'], $resultats)) {
-            $navigateur = "Internet Explorer";
-        } else {
-            $navigateur = "Mozilla";
-            $mime = parse_ini_file("mime.ini");
-            $extension = substr($filename, strrpos($filename, ".") + 1);
-        }
-        if (array_key_exists($extension, $mime)) {
-            $type = $mime[$extension];
-        } else {
-            $type = ($navigateur != "Mozilla") ? 'application/octetstream' : 'application/octet-stream';
-        }
-
-        return $type;
-    }
-
     /**
      * function for delete a document of the compilatio table if plagiarismTool is Compilatio
+     *
      * @param int $courseId
      * @param int $itemId
+     *
+     * @return bool
      */
     public static function plagiarismDeleteDoc($courseId, $itemId)
     {
@@ -548,6 +540,8 @@ class Compilatio
         $table = Database:: get_course_table(TABLE_PLAGIARISM);
         $params = [$courseId, $itemId];
         Database::delete($table, ['c_id = ? AND document_id = ?' => $params]);
+
+        return true;
     }
 
     /**
@@ -607,81 +601,80 @@ class Compilatio
         $compilatioId = $this->getCompilatioId($workId, $courseId);
 
         $actionCompilatio = '';
+        $status = '';
         if (!empty($compilatioId)) {
             if (self::isMd5($compilatioId)) {
-                // if compilatio_id is a hash md5, we call the function of the compilatio's webservice who return the document's status
+                // if compilatio_id is a hash md5, we call the function of the compilatio's
+                // webservice who return the document's status
                 $soapRes = $this->getDoc($compilatioId);
-                $status = '';
                 if (isset($soapRes->documentStatus)) {
                     $status = $soapRes->documentStatus->status;
                 }
             } else {
-                // if the compilatio's hash is not a valide hash md5, we return à specific status (cf : IsInCompilatio() )
+                // if the compilatio's hash is not a valide hash md5,
+                // we return à specific status (cf : IsInCompilatio() )
                 $status = 'NOT_IN_COMPILATIO';
-                $actionCompilatio = "<div style='font-style:italic'>"
-                    .get_lang('compilatioDocumentTextNotImage')
-                    ."<br/>"
-                    .get_lang('compilatioDocumentNotCorrupt')
-                    ."</div>";
+                $actionCompilatio = get_lang('CompilatioDocumentTextNotImage').'<br/>'.
+                    get_lang('CompilatioDocumentNotCorrupt');
             }
 
-            if ($status === 'ANALYSE_COMPLETE') {
-                $urlRapport = $this->getReportUrl($compilatioId);
-                $actionCompilatio .= self::getPomprankBarv31(
-                        $soapRes->documentStatus->indice,
-                        10,
-                        35,
+            switch ($status) {
+                case 'ANALYSE_COMPLETE':
+                    $urlRapport = $this->getReportUrl($compilatioId);
+                    $actionCompilatio .= self::getPomprankBarv31(
+                            $soapRes->documentStatus->indice,
+                            10,
+                            35,
+                            $compilatioImgFolder,
+                            $text
+                        )
+                        ."<br/><a href='".$urlRapport."' target='_blank'>"
+                        .get_lang('compilatioSeeReport')
+                        ."</a>";
+                    break;
+                case 'ANALYSE_PROCESSING':
+                    $actionCompilatio .= "<div style='font-weight:bold;text-align:left'>"
+                        .get_lang('CompilatioAnalysisInProgress')
+                        ."</div>";
+                    $actionCompilatio .= "<div style='font-size:80%;font-style:italic;margin-bottom:5px;'>"
+                        .get_lang('CompilatioAnalysisPercentage')
+                        ."</div>";
+                    $text['analysisinqueue'] = get_lang('CompilatioWaitingAnalysis');
+                    $text['analysisinfinalization'] = get_lang('CompilatioAnalysisEnding');
+                    $text['refresh'] = get_lang('Refresh');
+                    $actionCompilatio .= self::getProgressionAnalyseDocv31(
+                        $status,
+                        $soapRes->documentStatus->progression,
                         $compilatioImgFolder,
                         $text
-                    )
-                    ."<br/><a href='"
-                    .$urlRapport
-                    ."' target='_blank'>"
-                    .get_lang('compilatioSeeReport')
-                    ."</a>";
-            } elseif ($status === 'ANALYSE_PROCESSING') {
-                $actionCompilatio .= "<div style='font-weight:bold;text-align:left'>"
-                    .get_lang('compilatioAnalysisInProgress')
-                    ."</div>";
-                $actionCompilatio .= "<div style='font-size:80%;font-style:italic;margin-bottom:5px;'>"
-                    .get_lang('compilatioAnalysisPercentage')
-                    ."</div>";
-                $text['analysisinqueue'] = get_lang('compilatioWaitingAnalysis');
-                $text['analysisinfinalization'] = get_lang('compilatioAnalysisEnding');
-                $text['refresh'] = get_lang('Refresh');
-                $actionCompilatio .= self::getProgressionAnalyseDocv31(
-                    $status,
-                    $soapRes->documentStatus->progression,
-                    $compilatioImgFolder,
-                    $text
-                );
-            } elseif ($status == 'ANALYSE_IN_QUEUE') {
-                $actionCompilatio .= "<img src='"
-                    .$compilatioImgFolder
-                    ."/ajax-loader2.gif' style='margin-right:10px;' />"
-                    .get_lang('compilatioAwaitingAnalysis');
-            } elseif ($status == 'BAD_FILETYPE') {
-                $actionCompilatio .= "<div style='font-style:italic'>"
-                    .get_lang('compilatioFileisnotsupported')
-                    ."<br/>"
-                    .get_lang('compilatioProtectedPdfVerification')
-                    ."</div>";
-            } elseif ($status == 'BAD_FILESIZE') {
-                $actionCompilatio .= "<div style='font-style:italic'>"
-                    .get_lang('compilatioTooHeavyDocument')
-                    ."</div>";
+                    );
+                    break;
+                case 'ANALYSE_IN_QUEUE':
+                    $loading = Display::returnFontAwesomeIcon('spinner', null, true, 'fa-spin');
+                    $actionCompilatio .= $loading.'&nbsp;'.get_lang('compilatioAwaitingAnalysis');
+                    break;
+                case 'BAD_FILETYPE':
+                    $actionCompilatio .= get_lang('CompilatioFileIsNotSupported')
+                        ."<br/>"
+                        .get_lang('CompilatioProtectedPdfVerification');
+                    break;
+                case 'BAD_FILESIZE':
+                    $actionCompilatio .= get_lang('CompilatioFileIsTooBig');
+                    break;
+            }
+
+            /*
             } elseif ($status != 'NOT_IN_COMPILATIO') {
                 $actionCompilatio .= "<div style='font-style:italic'>"
                     .get_lang('compilatioMomentarilyUnavailableResult')
                     ." : [ "
                     .$status
                     ."].</div>";
-            }
+            }*/
         }
 
         $result = $workId.'|'.$actionCompilatio.'|'.$status.'|';
 
         return $result;
     }
-
 }

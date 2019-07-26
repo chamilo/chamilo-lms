@@ -6,6 +6,9 @@ require_once '../../work/work.lib.php';
 
 ini_set('soap.wsdl_cache_enabled', 0);
 ini_set('default_socket_timeout', '1000');
+
+api_set_more_memory_and_time_limits();
+
 $courseId = api_get_course_int_id();
 $courseInfo = api_get_course_info();
 $typeMessage = 0;
@@ -17,13 +20,11 @@ $msgWait = get_lang('PleaseWaitThisCouldTakeAWhile');
 $compilatio = new Compilatio();
 
 /* if we have to upload severals documents*/
-if (isset($_REQUEST['type']) && $_REQUEST['type'] == 'multi') {
-    $docs = preg_split("/a/", $_REQUEST['doc']);
-    for ($k = 0; $k < sizeof($docs) - 1; $k++) {
-        /* We have to modify the timeout server for send the heavy files */
-        set_time_limit(600);
+if (isset($_REQUEST['type']) && $_REQUEST['type'] === 'multi') {
+    $docs = explode('a', $_REQUEST['doc']);
+    for ($k = 0; $k < count($docs) - 1; $k++) {
         $documentId = 0;
-        if (intval($docs[$k])) {
+        if (!isset($docs[$k])) {
             $documentId = (int) $docs[$k];
         }
 
@@ -35,11 +36,9 @@ if (isset($_REQUEST['type']) && $_REQUEST['type'] == 'multi') {
         compilatioUpdateWorkDocument($documentId, $courseId);
 
         $compilatioId = $compilatio->getCompilatioId($documentId, $courseId);
-        if (!empty($compilatioId)) {
-            /*The document is already in Compilatio, we do nothing*/
-        } else {
+        if (empty($compilatioId)) {
             $workTable = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
-            $query = "SELECT * FROM $workTable WHERE id='".$documentId."' AND c_id= $courseId";
+            $query = "SELECT * FROM $workTable WHERE id= $documentId AND c_id= $courseId";
             $sqlResult = Database::query($query);
             $doc = Database::fetch_object($sqlResult);
             if ($doc) {
@@ -47,9 +46,7 @@ if (isset($_REQUEST['type']) && $_REQUEST['type'] == 'multi') {
                 $currentCourseRepositoryWeb = api_get_path(WEB_COURSE_PATH).$courseInfo['path'].'/';
                 $WrkUrl = $currentCourseRepositoryWeb.$doc->url;
                 $LocalWrkUrl = $courseInfo['course_sys_path'].$doc->url;
-                $LocalWrkTitle = $doc->title;
-                $mime = Compilatio::typeMime($LocalWrkTitle);
-
+                $mime = DocumentManager::file_get_mime_type($doc->title);
                 if ($compilatio->getTransportMode() === 'wget') {
                     /*Compilatio's server recover tjre file throught wget like this:
                     username:password@http://somedomain.com/reg/remotefilename.tar.gz */
@@ -90,25 +87,32 @@ if (isset($_REQUEST['type']) && $_REQUEST['type'] == 'multi') {
         }
     }
 } else {
-    // non multiple
-    $documentId = $_GET['doc'];
+    $documentId = isset($_GET['doc']) ? $_GET['doc']: 0;
+    sendDocument($documentId, $courseInfo);
+}
+
+function sendDocument($documentId, $courseInfo)
+{
+    $courseId = $courseInfo['real_id'];
+
     compilatioUpdateWorkDocument($documentId, $courseId);
     $workTable = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
     $query = "SELECT * FROM $workTable 
-              WHERE id= $documentId AND c_id= $courseId";
+              WHERE id = $documentId AND c_id= $courseId";
     $sqlResult = Database::query($query);
     $doc = Database::fetch_object($sqlResult);
     $currentCourseRepositoryWeb = api_get_path(WEB_COURSE_PATH).$courseInfo['path'].'/';
-    $WrkUrl = $currentCourseRepositoryWeb.$doc->url;
-    $WrkTitle = $doc->title;
-    $LocalWrkUrl = $courseInfo['course_sys_path'].$doc->url;
-    $mime = Compilatio::typeMime($WrkTitle);
+    $documentUrl = $currentCourseRepositoryWeb.$doc->url;
+
+    $filePath = $courseInfo['course_sys_path'].$doc->url;
+    $mime = DocumentManager::file_get_mime_type($doc->title);
+
     $compilatio = new Compilatio();
     if ($compilatio->getTransportMode() === 'wget') {
         if (strlen($compilatio->getWgetUri()) > 2) {
-            $filename = preg_replace('/$', '', $compilatio->getWgetUri()).'/'.$_course['path'].'/'.$doc->title;
+            $filename = preg_replace('/$', '', $compilatio->getWgetUri()).'/'.$courseInfo['path'].'/'.$doc->title;
         } else {
-            $filename = $WrkUrl;
+            $filename = $documentUrl;
         }
         if (strlen($compilatio->getWgetLogin()) > 2) {
             $filename = $compilatio->getWgetLogin().':'.$compilatio->getWgetPassword().'@'.$filename;
@@ -118,15 +122,17 @@ if (isset($_REQUEST['type']) && $_REQUEST['type'] == 'multi') {
         $pieces = explode('/', $doc->url);
         $nbPieces = count($pieces);
         $filename = $pieces[$nbPieces - 1];
-        $compilatioId = $compilatio->sendDoc($doc->title, '', $filename, $mime, file_get_contents($LocalWrkUrl));
+        $compilatioId = $compilatio->sendDoc($doc->title, '', $filename, $mime, file_get_contents($filePath));
     }
+
+    var_dump($compilatioId);
 
     if (Compilatio::isMd5($compilatioId)) {
         $compilatio->saveDocument($courseId, $doc->id, $compilatioId);
-        $soapRes = $compilatio->startAnalyse($compilatioId);
-        Display::addFlash(Display::return_message(get_lang('Uploaded')));
+        $compilatio->startAnalyse($compilatioId);
+        echo Display::return_message(get_lang('Uploaded'));
     } else {
-        Display::addFlash(Display::return_message(get_lang('Error')));
+        echo Display::return_message(get_lang('Error'), 'error');
     }
 }
 

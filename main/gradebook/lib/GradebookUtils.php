@@ -790,6 +790,7 @@ class GradebookUtils
         $user_id,
         $cat_id = null
     ) {
+        $user_id = (int) $user_id;
         $table_certificate = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CERTIFICATE);
         $sql = 'SELECT 
                     gc.score_certificate, 
@@ -799,18 +800,18 @@ class GradebookUtils
                     gc.user_id, 
                     gc.id
                 FROM  '.$table_certificate.' gc
-                WHERE gc.user_id="'.intval($user_id).'" ';
+                WHERE gc.user_id = "'.$user_id.'" ';
         if (!is_null($cat_id) && $cat_id > 0) {
             $sql .= ' AND cat_id='.intval($cat_id);
         }
 
         $rs = Database::query($sql);
-        $list_certificate = [];
+        $list = [];
         while ($row = Database::fetch_array($rs)) {
-            $list_certificate[] = $row;
+            $list[] = $row;
         }
 
-        return $list_certificate;
+        return $list;
     }
 
     /**

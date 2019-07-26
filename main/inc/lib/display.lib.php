@@ -1441,13 +1441,17 @@ class Display
             }
         }
 
+        if (api_get_configuration_value('allow_compilatio_tool')) {
+            $obj->gridComplete = 'function () { compilatioInit() }';
+        }
+
         if (!empty($extra_params['viewrecords'])) {
             $obj->viewrecords = $extra_params['viewrecords'];
         }
 
         $beforeSelectRow = null;
         if (isset($extra_params['beforeSelectRow'])) {
-            $beforeSelectRow = "beforeSelectRow: ".$extra_params['beforeSelectRow'].", ";
+            $beforeSelectRow = 'beforeSelectRow: '.$extra_params['beforeSelectRow'].', ';
             unset($extra_params['beforeSelectRow']);
         }
 
@@ -1507,6 +1511,16 @@ class Display
         $json_encode = str_replace('"formatter":"extra_formatter"', 'formatter:extra_formatter', $json_encode);
         $json_encode = str_replace(['{"first":"first",', '"end":"end"}'], '', $json_encode);
 
+        if (api_get_configuration_value('allow_compilatio_tool') &&
+            (strpos($_SERVER['REQUEST_URI'], 'work/work.php') !== false ||
+             strpos($_SERVER['REQUEST_URI'], 'work/work_list_all.php') != false
+            )
+        ) {
+            $json_encode = str_replace('"function () { compilatioInit() }"',
+                'function () { compilatioInit() }',
+                $json_encode
+            );
+        }
         // Creating the jqgrid element.
         $json .= '$("#'.$div_id.'").jqGrid({';
         //$json .= $beforeSelectRow;

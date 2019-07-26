@@ -1797,6 +1797,12 @@ function get_work_user_list(
 
     $column = !empty($column) ? Database::escape_string($column) : 'sent_date';
 
+    $compilatio_web_folder = api_get_path(WEB_CODE_PATH).'plagiarism/compilatio/';
+    $compilation = null;
+    if (api_get_configuration_value('allow_compilatio_tool')) {
+        $compilation = new Compilatio();
+    }
+
     if (!in_array($direction, ['asc', 'desc'])) {
         $direction = 'desc';
     }
@@ -1952,6 +1958,10 @@ function get_work_user_list(
 
         while ($work = Database::fetch_array($result, 'ASSOC')) {
             $item_id = $work['id'];
+            /* JLUCAS COMPILATIO */
+            $dbTitle = $work['title'];
+            /* FIN  JLUCAS COMPILATIO */
+
             // Get the author ID for that document from the item_property table
             $is_author = false;
             $can_read = false;
@@ -2225,7 +2235,42 @@ function get_work_user_list(
                 $work['qualificator_id'] = $qualificator_id.' '.$hasCorrection;
                 $work['actions'] = '<div class="work-action">'.$linkToDownload.$action.'</div>';
                 $work['correction'] = $correction;
-                $works[] = $work;
+
+                if (!empty($compilation)) {
+                    $compilationId = $compilation->getCompilatioId($item_id, $course_id);
+
+                    $workDirectory = api_get_path(SYS_COURSE_PATH).$course_info['directory'];
+                    if ($compilationId) {
+                        $actionCompilatio = "<div id='id_avancement".$item_id."'>
+                            <img src='".$compilatio_web_folder."/img/ajax-loader2.gif' style='margin-right:10px'/>"
+                            .get_lang('compilatioConnectionWithServer')
+                            ."</div>";
+                    } else {
+                        if (!Compilatio::verifiFileType($dbTitle)) {
+                            $actionCompilatio = "<div style='font-style:italic'>"
+                                .get_lang('compilatioFileisnotsupported')
+                                ."</div>";
+                        } elseif (filesize($workDirectory."/".$work['url']) > $compilation->getMaxFileSize()) {
+                            $sizeFile = round(filesize($workDirectory."/".$work['url']) / 1000000);
+                            $actionCompilatio = "<div style='font-style:italic'>"
+                                .get_lang('compilatioTooHeavyDocument')
+                                .": "
+                                .$sizeFile
+                                ." Mo.<br/></div>";
+                        } else {
+                            $actionCompilatio = "<div id='id_avancement".$item_id."'>"
+                                ."<a href='javascript:void(0)' class=\"getSingleCompilatio\" onClick='getSingleCompilatio("
+                                .$item_id
+                                .");'>"
+                                .get_lang('compilatioAnalyse')
+                                ." </a>"
+                                .get_lang('compilatioWithCompilatio')
+                                ."</div>";
+                        }
+                    }
+                    $work['compilatio'] = $actionCompilatio;
+                }
+		        $works[] = $work;
             }
         }
 
@@ -4526,6 +4571,8 @@ function deleteWorkItem($item_id, $courseInfo)
             $sql = "DELETE FROM $TSTDPUBASG
                     WHERE c_id = $course_id AND publication_id = $item_id";
             Database::query($sql);
+
+            Compilatio::plagiarismDeleteDoc($course_id, $item_id);
 
             api_item_property_update(
                 $courseInfo,

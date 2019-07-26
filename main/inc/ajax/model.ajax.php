@@ -1215,6 +1215,10 @@ switch ($action) {
         );
         break;
     case 'get_work_user_list_all':
+        $plagiarismColumns = [];
+        if (api_get_configuration_value('allow_compilatio_tool')) {
+            $plagiarismColumns = ['compilatio'];
+        }
         if (isset($_GET['type']) && $_GET['type'] === 'simple') {
             $columns = [
                 'fullname',
@@ -1222,18 +1226,20 @@ switch ($action) {
                 'qualification',
                 'sent_date',
                 'qualificator_id',
-                'correction',
-                'actions',
-            ];
+		        'correction',
+	        ];
+            $columns = array_merge($columns, $plagiarismColumns);
+            $columns[] = 'actions';
         } else {
             $columns = [
                 'fullname',
                 'title',
                 'qualification',
                 'sent_date',
-                'correction',
-                'actions',
+		        'correction',
             ];
+            $columns = array_merge($columns, $plagiarismColumns);
+	        $columns[] = 'actions';
         }
 
         $whereCondition = " AND $whereCondition ";
@@ -1248,12 +1254,21 @@ switch ($action) {
         );
         break;
     case 'get_work_user_list_others':
+        $plagiarismColumns = [];
+        if (api_get_configuration_value('allow_compilatio_tool')) {
+            $plagiarismColumns = ['compilatio'];
+        }
+
         if (isset($_GET['type']) && $_GET['type'] === 'simple') {
             $columns = [
-                'type', 'firstname', 'lastname', 'title', 'qualification', 'sent_date', 'qualificator_id', 'actions',
+                'type', 'firstname', 'lastname', 'title', 'qualification', 'sent_date', 'qualificator_id',
             ];
-        } else {
-            $columns = ['type', 'firstname', 'lastname', 'title', 'sent_date', 'actions'];
+	        $columns = array_merge($columns, $plagiarismColumns);
+            $columns[] = 'actions';
+	    } else {
+            $columns = array('type', 'firstname', 'lastname', 'title', 'sent_date');
+            $columns = array_merge($columns, $plagiarismColumns);
+            $columns[] = 'actions';
         }
 
         if (trim($whereCondition) === '1 = 1') {
@@ -1271,14 +1286,21 @@ switch ($action) {
         );
         break;
     case 'get_work_user_list':
-        if (isset($_GET['type']) && $_GET['type'] == 'simple') {
-            $columns = [
-                'type', 'title', 'qualification', 'sent_date', 'qualificator_id', 'actions',
-            ];
-        } else {
-            $columns = ['type', 'title', 'qualification', 'sent_date', 'actions'];
+        $plagiarismColumns = [];
+        if (api_get_configuration_value('allow_compilatio_tool')) {
+            $plagiarismColumns = ['compilatio'];
         }
-
+        if (isset($_GET['type']) && $_GET['type'] == 'simple') {
+	        $columns = [
+                'type', 'title', 'qualification', 'sent_date', 'qualificator_id'
+            ];
+            $columns = array_merge($columns, $plagiarismColumns);
+            $columns[] = 'actions';
+	    } else {
+            $columns = ['type', 'title', 'qualification', 'sent_date'];
+            $columns = array_merge($columns, $plagiarismColumns);
+	        $columns[] = 'actions';
+        }
         $documents = getAllDocumentToWork($work_id, api_get_course_int_id());
 
         if (trim($whereCondition) === '1 = 1') {
@@ -1286,7 +1308,7 @@ switch ($action) {
         }
 
         if (empty($documents)) {
-            $whereCondition .= " AND u.user_id = ".api_get_user_id();
+            $whereCondition .= ' AND u.user_id = '.api_get_user_id();
             $result = get_work_user_list(
                 $start,
                 $limit,
@@ -2301,7 +2323,7 @@ $allowed_actions = [
     'get_exercise_categories',
 ];
 
-//5. Creating an obj to return a json
+// 5. Creating an obj to return a json
 if (in_array($action, $allowed_actions)) {
     $response = new stdClass();
     $response->page = $page;

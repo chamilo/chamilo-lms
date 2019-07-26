@@ -111,7 +111,7 @@ trait GraphQLTrait
     private function encodeToken(User $user): string
     {
         $secret = $this->container->getParameter('secret');
-        $time = time();
+        $time = api_get_utc_datetime(null, false, true)->getTimestamp();
 
         $payload = [
             'iat' => $time,
@@ -121,7 +121,7 @@ trait GraphQLTrait
             ],
         ];
 
-        return JWT::encode($payload, $secret, 'HS384');
+        return JWT::encode($payload, $secret);
     }
 
     /**
@@ -134,7 +134,7 @@ trait GraphQLTrait
         $secret = $this->container->getParameter('secret');
 
         try {
-            $jwt = JWT::decode($token, $secret, ['HS384']);
+            $jwt = JWT::decode($token, $secret, ['HS256']);
 
             $data = (array) $jwt->data;
 

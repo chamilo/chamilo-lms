@@ -125,8 +125,6 @@ function sendDocument($documentId, $courseInfo)
         $compilatioId = $compilatio->sendDoc($doc->title, '', $filename, $mime, file_get_contents($filePath));
     }
 
-    var_dump($compilatioId);
-
     if (Compilatio::isMd5($compilatioId)) {
         $compilatio->saveDocument($courseId, $doc->id, $compilatioId);
         $compilatio->startAnalyse($compilatioId);

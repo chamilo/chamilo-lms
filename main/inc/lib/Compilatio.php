@@ -463,50 +463,30 @@ class Compilatio
     /**
      * Method for display the PomprseuilmankBar (% de plagiat).
      *
-     * @param $percentagePumping
+     * @param $index
      * @param $weakThreshold
      * @param $highThreshold
-     * @param $chemin_images
-     * @param $text : array  includes the extract from the text
      *
      * @return string
      */
     public static function getPomprankBarv31(
-        $pourcentagePompage,
+        $index,
         $weakThreshold,
-        $highThreshold,
-        $chemin_images = '',
-        $texte = ''
+        $highThreshold
     ) {
-        $pourcentagePompage = round($pourcentagePompage);
-        $pour = round((50 * $pourcentagePompage) / 100);
+        $index = round($index);
+        $pour = round((50 * $index) / 100);
         $return = '';
-        if ($pourcentagePompage < $weakThreshold) {
-            $couleur = 'vert';
+        $class = 'error';
+        if ($index < $weakThreshold) {
+            $class = 'success';
         } else {
-            if ($pourcentagePompage >= $weakThreshold && $pourcentagePompage < $highThreshold) {
-                $couleur = 'orange';
-            } else {
-                $couleur = 'rouge';
+            if ($index >= $weakThreshold && $index < $highThreshold) {
+                $class = 'warning';
             }
         }
-        $return .= "<div style='float:left;margin-right:2px;'><img src='"
-            .$chemin_images."mini-drapeau_$couleur.png' title='"
-            .$texte['result']
-            ."' alt='faible' width='15' height='15' /></div>";
-        $return .= "<div style='float:left; margin-right:5px;width:45px;text-align:right;'>"
-            .$pourcentagePompage
-            ." %</div>";
-        $return .= "<div style='float:left;background:transparent url("
-            .$chemin_images
-            ."mini-jauge_fond.png) no-repeat scroll 0;height:12px;margin-top:5px;padding:0 0 0 2px;width:55px;'>";
-        $return .= "<div style='float:left;background:transparent url("
-            .$chemin_images
-            ."mini-jauge_"
-            .$couleur
-            .".png) no-repeat scroll 0;height:12px;width:"
-            .$pour
-            ."px'></div></div>";
+
+        $return .= Display::label($index.'% - '.$pour, $class);
 
         return $return;
     }
@@ -553,7 +533,6 @@ class Compilatio
     {
         $documentId = (int) $documentId;
         $courseId = (int) $courseId;
-        $compilatioId = (int) $compilatioId;
 
         $table = Database::get_course_table(TABLE_PLAGIARISM);
         $params = [
@@ -565,31 +544,31 @@ class Compilatio
     }
 
     /**
-     * @param int $itemId
+     * @param int $documentId
      * @param int $courseId
      *
-     * @return int
+     * @return string md5 value
      */
-    public function getCompilatioId($itemId, $courseId)
+    public function getCompilatioId($documentId, $courseId)
     {
-        $itemId = (int) $itemId;
+        $documentId = (int) $documentId;
         $courseId = (int) $courseId;
 
         $table = Database::get_course_table(TABLE_PLAGIARISM);
         $sql = "SELECT compilatio_id FROM $table 
-                WHERE document_id = $itemId AND c_id= $courseId";
-        $compiSqlResult = Database::query($sql);
-        $result = Database::fetch_object($compiSqlResult);
+                WHERE document_id = $documentId AND c_id= $courseId";
+        $result = Database::query($sql);
+        $result = Database::fetch_object($result);
 
         if ($result) {
-            return (int) $result->compilatio_id;
+            return (string) $result->compilatio_id;
         }
 
         return 0;
     }
 
     /**
-     * @param $workId
+     * @param int $workId
      *
      * @return string
      */
@@ -624,12 +603,10 @@ class Compilatio
                     $actionCompilatio .= self::getPomprankBarv31(
                             $soapRes->documentStatus->indice,
                             10,
-                            35,
-                            $compilatioImgFolder,
-                            $text
+                            35
                         )
                         ."<br/><a href='".$urlRapport."' target='_blank'>"
-                        .get_lang('compilatioSeeReport')
+                        .get_lang('CompilatioAnalysis')
                         ."</a>";
                     break;
                 case 'ANALYSE_PROCESSING':
@@ -651,11 +628,11 @@ class Compilatio
                     break;
                 case 'ANALYSE_IN_QUEUE':
                     $loading = Display::returnFontAwesomeIcon('spinner', null, true, 'fa-spin');
-                    $actionCompilatio .= $loading.'&nbsp;'.get_lang('compilatioAwaitingAnalysis');
+                    $actionCompilatio .= $loading.'&nbsp;'.get_lang('CompilatioAwaitingAnalysis');
                     break;
                 case 'BAD_FILETYPE':
                     $actionCompilatio .= get_lang('CompilatioFileIsNotSupported')
-                        ."<br/>"
+                        .'<br/>'
                         .get_lang('CompilatioProtectedPdfVerification');
                     break;
                 case 'BAD_FILESIZE':

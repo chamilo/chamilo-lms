@@ -559,9 +559,9 @@ if ($allowAntiPlagiarism) {
         var msgWaitJS = '<?php echo Display::return_message(get_lang('PleaseWaitThisCouldTakeAWhile')); ?>';
         var div = document.createElement('div');
         var referent = document.getElementById('compilation-results');
-        var Analyse = '<?php echo get_lang('compilatioAnalyse'); ?>';
-        var compiReport = '<?php echo get_lang('compilatioSeeReport'); ?>';
-        var compiNonToAnalyse = '<?php echo Display::return_message(get_lang('compilatioNonToAnalyse'), 'error'); ?>';
+        var Analyse = '<?php echo get_lang('CompilatioAnalysis'); ?>';
+        var compiReport = '<?php echo get_lang('CompilatioSeeReport'); ?>';
+        var compiNonToAnalyse = '<?php echo Display::return_message(get_lang('CompilatioNonToAnalyse'), 'error'); ?>';
         var clickTrigger = false;
 
         function compilatioInit() {
@@ -613,7 +613,6 @@ if ($allowAntiPlagiarism) {
                 type: "get",
                 dataType: "html",
                 success: function (message) {
-                    console.log(message);
                     allWorkId += itemId + "a";
                     compilatioInit();
                     if (message.trim() != "") {

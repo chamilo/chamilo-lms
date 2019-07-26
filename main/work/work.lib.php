@@ -2040,11 +2040,10 @@ function get_work_user_list(
                     if ($qualification_exists) {
                         $feedback .= ' ';
                     }
-
-                    $feedback .= '<a href="'.$url.'view.php?'.api_get_cidreq().'&id='.$item_id.'" title="'.get_lang(
-                            'View'
-                        ).'">'.
-                        $count.' '.Display::returnFontAwesomeIcon('comments-o').'</a> ';
+                    $feedback .= Display::url(
+                        $count.' '.Display::returnFontAwesomeIcon('comments-o'),
+                        $url.'view.php?'.api_get_cidreq().'&id='.$item_id
+                    );
                 }
 
                 $correction = '';
@@ -2235,13 +2234,11 @@ function get_work_user_list(
 
                 if (!empty($compilation)) {
                     $compilationId = $compilation->getCompilatioId($item_id, $course_id);
-
-                    $workDirectory = api_get_path(SYS_COURSE_PATH).$course_info['directory'];
                     if ($compilationId) {
                         $actionCompilatio = "<div id='id_avancement".$item_id."'>
-                            ".$loading."&nbsp;".get_lang('CompilatioConnectionWithServer')
-                            ."</div>";
+                            ".$loading.'&nbsp;'.get_lang('CompilatioConnectionWithServer').'</div>';
                     } else {
+                        $workDirectory = api_get_path(SYS_COURSE_PATH).$course_info['directory'];
                         if (!Compilatio::verifiFileType($dbTitle)) {
                             $actionCompilatio = get_lang('CompilatioFileIsNotSupported');
                         } elseif (filesize($workDirectory.'/'.$work['url']) > $compilation->getMaxFileSize()) {

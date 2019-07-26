@@ -486,7 +486,7 @@ class Compilatio
             }
         }
 
-        $return .= Display::label($index.'% - '.$pour, $class);
+        $return .= Display::bar_progress($index, true, null, $class);
 
         return $return;
     }
@@ -574,7 +574,6 @@ class Compilatio
      */
     public function giveWorkIdState($workId)
     {
-        $text = '';
         $compilatioImgFolder = api_get_path(WEB_CODE_PATH).'plagiarism/compilatio/img/';
         $courseId = api_get_course_int_id();
         $compilatioId = $this->getCompilatioId($workId, $courseId);
@@ -605,9 +604,7 @@ class Compilatio
                             10,
                             35
                         )
-                        ."<br/><a href='".$urlRapport."' target='_blank'>"
-                        .get_lang('CompilatioAnalysis')
-                        ."</a>";
+                        ."<a href='".$urlRapport."' target='_blank'>".get_lang('CompilatioAnalysis')."</a>";
                     break;
                 case 'ANALYSE_PROCESSING':
                     $actionCompilatio .= "<div style='font-weight:bold;text-align:left'>"
@@ -616,6 +613,7 @@ class Compilatio
                     $actionCompilatio .= "<div style='font-size:80%;font-style:italic;margin-bottom:5px;'>"
                         .get_lang('CompilatioAnalysisPercentage')
                         ."</div>";
+                    $text = [];
                     $text['analysisinqueue'] = get_lang('CompilatioWaitingAnalysis');
                     $text['analysisinfinalization'] = get_lang('CompilatioAnalysisEnding');
                     $text['refresh'] = get_lang('Refresh');

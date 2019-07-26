@@ -2235,7 +2235,7 @@ function get_work_user_list(
                 if (!empty($compilation)) {
                     $compilationId = $compilation->getCompilatioId($item_id, $course_id);
                     if ($compilationId) {
-                        $actionCompilatio = "<div id='id_avancement".$item_id."'>
+                        $actionCompilatio = "<div id='id_avancement".$item_id."' class='compilation_block'>
                             ".$loading.'&nbsp;'.get_lang('CompilatioConnectionWithServer').'</div>';
                     } else {
                         $workDirectory = api_get_path(SYS_COURSE_PATH).$course_info['directory'];
@@ -2245,7 +2245,7 @@ function get_work_user_list(
                             $sizeFile = round(filesize($workDirectory.'/'.$work['url']) / 1000000);
                             $actionCompilatio = get_lang('CompilatioFileIsTooBig').': '.format_file_size($sizeFile).'<br />';
                         } else {
-                            $actionCompilatio = "<div id='id_avancement".$item_id."'>"
+                            $actionCompilatio = "<div id='id_avancement".$item_id."' class='compilation_block'>"
                                 ."<a href='javascript:void(0)' class=\"getSingleCompilatio\" onClick='getSingleCompilatio("
                                 .$item_id
                                 .");'>"

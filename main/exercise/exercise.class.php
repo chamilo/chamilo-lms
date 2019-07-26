@@ -3,8 +3,10 @@
 
 use Chamilo\CoreBundle\Entity\GradebookLink;
 use Chamilo\CoreBundle\Entity\TrackEHotspot;
+use Chamilo\CourseBundle\Entity\CExerciseCategory;
 use ChamiloSession as Session;
 use Doctrine\DBAL\Types\Type;
+
 
 /**
  * Class Exercise.
@@ -689,7 +691,8 @@ class Exercise
                     }
 
                     // Question type
-                    list($typeImg, $typeExpl) = $objQuestionTmp->get_type_icon_html();
+                    $typeImg = $objQuestionTmp->getTypePicture();
+                    $typeExpl = $objQuestionTmp->getExplanation();
 
                     $question_media = null;
                     if (!empty($objQuestionTmp->parent_id)) {
@@ -1939,7 +1942,7 @@ class Exercise
             $categories = $categoryManager->getCategories(api_get_course_int_id());
             $options = [];
             if (!empty($categories)) {
-                /** @var \Chamilo\CourseBundle\Entity\CExerciseCategory $category */
+                /** @var CExerciseCategory $category */
                 foreach ($categories as $category) {
                     $options[$category->getId()] = $category->getName();
                 }
@@ -3141,10 +3144,11 @@ class Exercise
             if ($questionNum == count($this->questionList)) {
                 $urlTitle = get_lang('EndTest');
             }
+            $url = api_get_path(WEB_CODE_PATH).'exercise/exercise_submit_modal.php?'.api_get_cidreq();
 
             $html .= Display::url(
                 $urlTitle,
-                api_get_path(WEB_CODE_PATH).'exercise/exercise_submit_modal.php?'.http_build_query([
+                $url.'&'.http_build_query([
                     'learnpath_id' => $safe_lp_id,
                     'learnpath_item_id' => $safe_lp_item_id,
                     'learnpath_item_view_id' => $safe_lp_item_view_id,
@@ -3520,7 +3524,6 @@ class Exercise
                 error_log(print_r($extra, 1));
             }
             // Fixes problems with negatives values using intval
-
             $true_score = floatval(trim($extra[0]));
             $false_score = floatval(trim($extra[1]));
             $doubt_score = floatval(trim($extra[2]));
@@ -3612,7 +3615,7 @@ class Exercise
             $answerCorrect = $objAnswerTmp->isCorrect($answerId);
             $answerWeighting = (float) $objAnswerTmp->selectWeighting($answerId);
             $answerAutoId = $objAnswerTmp->selectAutoId($answerId);
-            $answerIid = isset($objAnswerTmp->iid[$answerId]) ? $objAnswerTmp->iid[$answerId] : '';
+            $answerIid = isset($objAnswerTmp->iid[$answerId]) ? (int) $objAnswerTmp->iid[$answerId] : 0;
             $answer_correct_array[$answerId] = (bool) $answerCorrect;
 
             if ($debug) {
@@ -3741,7 +3744,7 @@ class Exercise
                     }
                     $totalScore = $questionScore;
                     break;
-                case MULTIPLE_ANSWER: //2
+                case MULTIPLE_ANSWER:
                     if ($from_database) {
                         $choice = [];
                         $sql = "SELECT answer FROM ".$TBL_TRACK_ATTEMPT."
@@ -4629,7 +4632,7 @@ class Exercise
                                             WHERE
                                                 hotspot_exe_id = $exeId AND
                                                 hotspot_question_id= $questionId AND
-                                                hotspot_answer_id = ".intval($answerIid)."
+                                                hotspot_answer_id = $answerIid
                                             ORDER BY hotspot_id ASC";
                                     $result = Database::query($sql);
 

@@ -15,8 +15,8 @@ class FillBlanks extends Question
     const FILL_THE_BLANK_MENU = 1;
     const FILL_THE_BLANK_SEVERAL_ANSWER = 2;
 
-    public static $typePicture = 'fill_in_blanks.png';
-    public static $explanationLangVar = 'FillBlanks';
+    public $typePicture = 'fill_in_blanks.png';
+    public $explanationLangVar = 'FillBlanks';
 
     /**
      * Constructor.

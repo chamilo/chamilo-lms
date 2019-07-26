@@ -33,8 +33,8 @@ abstract class Question
     public $isContent;
     public $course;
     public $feedback;
-    public static $typePicture = 'new_question.png';
-    public static $explanationLangVar = '';
+    public $typePicture = 'new_question.png';
+    public $explanationLangVar = '';
     public $question_table_class = 'table table-striped';
     public $questionTypeWithFeedback;
     public $extra;
@@ -48,7 +48,7 @@ abstract class Question
         FREE_ANSWER => ['freeanswer.class.php', 'FreeAnswer'],
         ORAL_EXPRESSION => ['oral_expression.class.php', 'OralExpression'],
         HOT_SPOT => ['hotspot.class.php', 'HotSpot'],
-        HOT_SPOT_DELINEATION => ['hotspot.class.php', 'HotspotDelineation'],
+        HOT_SPOT_DELINEATION => ['HotSpotDelineation.php', 'HotSpotDelineation'],
         MULTIPLE_ANSWER_COMBINATION => ['multiple_answer_combination.class.php', 'MultipleAnswerCombination'],
         UNIQUE_ANSWER_NO_OPTION => ['unique_answer_no_option.class.php', 'UniqueAnswerNoOption'],
         MULTIPLE_ANSWER_TRUE_FALSE => ['multiple_answer_true_false.class.php', 'MultipleAnswerTrueFalse'],
@@ -1547,12 +1547,13 @@ abstract class Question
     /**
      * @return array
      */
-    public static function get_question_type_list()
+    public static function getQuestionTypeList()
     {
         if (api_get_setting('enable_record_audio') !== 'true') {
             self::$questionTypes[ORAL_EXPRESSION] = null;
             unset(self::$questionTypes[ORAL_EXPRESSION]);
         }
+
         if (api_get_setting('enable_quiz_scenario') !== 'true') {
             self::$questionTypes[HOT_SPOT_DELINEATION] = null;
             unset(self::$questionTypes[HOT_SPOT_DELINEATION]);
@@ -1814,33 +1815,41 @@ abstract class Question
         $exerciseId = $objExercise->id;
 
         // 1. by default we show all the question types
-        $question_type_custom_list = self::get_question_type_list();
+        $questionTypeList = self::getQuestionTypeList();
 
         if (!isset($feedbackType)) {
             $feedbackType = 0;
         }
 
-        if (in_array($feedbackType, [EXERCISE_FEEDBACK_TYPE_DIRECT, EXERCISE_FEEDBACK_TYPE_POPUP])) {
-            //2. but if it is a feedback DIRECT we only show the UNIQUE_ANSWER type that is currently available
-            $question_type_custom_list = [
-                UNIQUE_ANSWER => self::$questionTypes[UNIQUE_ANSWER],
-                HOT_SPOT_DELINEATION => self::$questionTypes[HOT_SPOT_DELINEATION],
-            ];
-        } else {
-            unset($question_type_custom_list[HOT_SPOT_DELINEATION]);
+        switch ($feedbackType) {
+            case EXERCISE_FEEDBACK_TYPE_DIRECT:
+                $questionTypeList = [
+                    UNIQUE_ANSWER => self::$questionTypes[UNIQUE_ANSWER],
+                    HOT_SPOT_DELINEATION => self::$questionTypes[HOT_SPOT_DELINEATION],
+                ];
+                break;
+            case EXERCISE_FEEDBACK_TYPE_POPUP:
+                $questionTypeList = [
+                    UNIQUE_ANSWER => self::$questionTypes[UNIQUE_ANSWER],
+                    MULTIPLE_ANSWER => self::$questionTypes[MULTIPLE_ANSWER],
+                    DRAGGABLE => self::$questionTypes[DRAGGABLE],
+                    HOT_SPOT_DELINEATION => self::$questionTypes[HOT_SPOT_DELINEATION],
+                    CALCULATED_ANSWER => self::$questionTypes[CALCULATED_ANSWER],
+                ];
+                break;
+            default:
+                unset($questionTypeList[HOT_SPOT_DELINEATION]);
+                break;
         }
 
         echo '<div class="panel panel-default">';
         echo '<div class="panel-body">';
         echo '<ul class="question_menu">';
-        foreach ($question_type_custom_list as $i => $a_type) {
-            // @todo remove require_once classes are already loaded using composer
-            // include the class of the type
-            require_once $a_type[0];
-            // get the picture of the type and the langvar which describes it
-            $img = $explanation = '';
-            eval('$img = '.$a_type[1].'::$typePicture;');
-            eval('$explanation = get_lang('.$a_type[1].'::$explanationLangVar);');
+        foreach ($questionTypeList as $i => $type) {
+            /** @var Question $type */
+            $type = new $type[1];
+            $img = $type->getTypePicture();
+            $explanation = get_lang($type->getExplanation());
             echo '<li>';
             echo '<div class="icon-image">';
             $icon = '<a href="admin.php?'.api_get_cidreq().'&newQuestion=yes&answerType='.$i.'">'.
@@ -1853,7 +1862,6 @@ abstract class Question
                     $icon = Display::return_icon($img, $explanation, null, ICON_SIZE_BIG);
                 }
             }
-
             echo $icon;
             echo '</div>';
             echo '</li>';
@@ -2198,26 +2206,24 @@ abstract class Question
     }
 
     /**
-     * @return array the image filename of the question type
+     * @return string
      */
-    public function get_type_icon_html()
+    public function getTypePicture()
     {
-        $type = $this->selectType();
-        $tabQuestionList = self::get_question_type_list(); // [0]=file to include [1]=type name
+        return $this->typePicture;
+    }
 
-        require_once $tabQuestionList[$type][0];
-
-        $img = $explanation = null;
-        eval('$img = '.$tabQuestionList[$type][1].'::$typePicture;');
-        eval('$explanation = get_lang('.$tabQuestionList[$type][1].'::$explanationLangVar);');
-
-        return [$img, $explanation];
+    /**
+     * @return string
+     */
+    public function getExplanation()
+    {
+        return $this->explanationLangVar;
     }
 
     /**
      * Get course medias.
      *
-     * @param int course id
      * @param int $course_id
      *
      * @return array

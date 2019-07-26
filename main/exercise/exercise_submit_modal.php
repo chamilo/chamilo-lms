@@ -26,9 +26,7 @@ $threadhold3 = null;
 
 $exerciseResult = Session::read('exerciseResult');
 $exerciseResultCoordinates = isset($_REQUEST['exerciseResultCoordinates']) ? $_REQUEST['exerciseResultCoordinates'] : null;
-$origin = api_get_origin();
 
-// if origin is learnpath
 $learnpath_id = 0;
 if (isset($_REQUEST['learnpath_id'])) {
     $learnpath_id = (int) $_REQUEST['learnpath_id'];
@@ -46,7 +44,7 @@ if (empty($objExercise)) {
     api_not_allowed();
 }
 
-$_SESSION['hotspot_coord'] = [];
+Session::write('hotspot_coord', []);
 $newQuestionList = Session::read('newquestionList', []);
 $questionList = Session::read('questionList');
 $exerciseId = (int) $_GET['exerciseId'];
@@ -58,6 +56,62 @@ $nbrQuestions = isset($_GET['nbrQuestions']) ? (int) $_GET['nbrQuestions'] : nul
 Session::erase('objExerciseExtra'.$exerciseId);
 Session::erase('exerciseResultExtra'.$exerciseId);
 Session::erase('questionListExtra'.$exerciseId);
+$choiceValue = isset($_GET['choice']) ? $_GET['choice'] : '';
+if (!empty($choiceValue)) {
+    $choiceValue = json_decode($choiceValue);
+    if (isset($choiceValue->answers)) {
+        $choiceValue = $choiceValue->answers;
+    }
+}
+
+echo '<div id="delineation-container">';
+// Getting the options by js
+if (empty($choiceValue)) {
+    echo "<script>
+        // this works for only radio buttons
+        var f = window.document.frm_exercise;        
+        var choice_js = {answers: []};
+        var hotspot = new Array();
+        var hotspotcoord = new Array();
+        var counter = 0;
+        
+        for (var i = 0; i < f.elements.length; i++) {            
+            if (f.elements[i].type == 'radio' && f.elements[i].checked) {                
+                choice_js.answers.push(f.elements[i].value);
+                counter ++;
+            }
+            
+            if (f.elements[i].type == 'checkbox' && f.elements[i].checked) {
+                choice_js.answers.push(f.elements[i].value);
+                counter ++;
+            }
+
+            if (f.elements[i].type == 'hidden') {
+                var name = f.elements[i].name;
+                
+                if (name.substr(0,7) == 'hotspot') {
+                    hotspot.push(f.elements[i].value);
+                }
+
+                if (name.substr(0,20) == 'hotspot_coordinates') {
+                    hotspotcoord.push(f.elements[i].value);
+                }
+            }
+        }
+
+        if (counter == 0) {
+            choice_js = -1; // this is an error
+        } else {
+            choice_js = JSON.stringify(choice_js);
+        }
+    ";
+    // IMPORTANT
+    // This is the real redirect function
+    echo ' url = "exercise_submit_modal.php?learnpath_id='.$learnpath_id.'&learnpath_item_id='.$learnpath_item_id.'&hotspotcoord="+ hotspotcoord + "&hotspot="+ hotspot + "&choice="+ choice_js + "&exerciseId='.$exerciseId.'&num='.$questionNum.'&exerciseType='.$exerciseType.'&'.api_get_cidreq().'&gradebook='.$gradebook.'";';
+    echo "$('#global-modal .modal-body').load(url);";
+    echo '</script>';
+    exit;
+}
 
 // Round-up the coordinates
 $user_array = '';
@@ -74,57 +128,11 @@ if (isset($_GET['hotspot'])) {
 }
 
 $user_array = substr($user_array, 0, -1);
-$choice_value = '';
-if (isset($_GET['choice'])) {
-    $choice_value = (int) $_GET['choice'];
-}
-
-echo '<div id="delineation-container">';
-// Getting the options by js
-if (empty($choice_value)) {
-    echo "<script>
-        // this works for only radio buttons
-        var f = window.document.frm_exercise;
-        var choice_js='';
-        var hotspot = new Array();
-        var hotspotcoord = new Array();
-        var counter=0;
-        for ( var i = 0; i < f.elements.length; i++ ) {
-            if (f.elements[i].type=='radio' && f.elements[i].checked) {
-                choice_js = f.elements[i].value;
-                counter ++;
-            }
-
-            if (f.elements[i].type=='hidden' ) {
-                var name = f.elements[i].name;
-                if (name.substr(0,7)=='hotspot')
-                    hotspot.push(f.elements[i].value);
-
-                if (name.substr(0,20)=='hotspot_coordinates')
-                    hotspotcoord.push(f.elements[i].value);
-            }
-        }
-
-        if (counter==0) {
-            choice_js=-1; // this is an error
-        }
-
-    ";
-    // IMPORTANT
-    //this is the real redirect function
-    //echo 'window.location.href = "exercise_submit_modal.php?learnpath_id='.$learnpath_id.'&learnpath_item_id='.$learnpath_item_id.'&hotspotcoord="+ hotspotcoord + "&hotspot="+ hotspot + "&choice="+ choice_js + "&exerciseId='.$exerciseId.'&num='.$questionNum.'&exerciseType='.$exerciseType.'&origin='.$origin.'&gradebook='.$gradebook.'";';
-    echo ' url = "exercise_submit_modal.php?learnpath_id='.$learnpath_id.'&learnpath_item_id='.$learnpath_item_id.'&hotspotcoord="+ hotspotcoord + "&hotspot="+ hotspot + "&choice="+ choice_js + "&exerciseId='.$exerciseId.'&num='.$questionNum.'&exerciseType='.$exerciseType.'&'.api_get_cidreq().'&gradebook='.$gradebook.'";';
-    echo "$('#global-modal .modal-body').load(url);";
-    echo '</script>';
-    exit;
-}
 
 $choice = [];
 $questionId = $questionList[$questionNum];
-// $choice_value => value of the user selection
-$choice[$questionId] = isset($choice_value) ? $choice_value : null;
+$choice[$questionId] = isset($choiceValue) ? $choiceValue : null;
 
-// initializing
 if (!is_array($exerciseResult)) {
     $exerciseResult = [];
 }
@@ -152,7 +160,7 @@ Session::write('exerciseResultCoordinates', $exerciseResultCoordinates);
 
 // creates a temporary Question object
 if (in_array($questionId, $questionList)) {
-    $objQuestionTmp = Question:: read($questionId);
+    $objQuestionTmp = Question::read($questionId);
     $questionName = $objQuestionTmp->selectTitle();
     $questionDescription = $objQuestionTmp->selectDescription();
     $questionWeighting = $objQuestionTmp->selectWeighting();
@@ -166,8 +174,8 @@ $choice = $exerciseResult[$questionId];
 $destination = [];
 $comment = '';
 $next = 1;
-$_SESSION['hotspot_coord'] = [];
-$_SESSION['hotspot_dest'] = [];
+Session::write('hotspot_coord', []);
+Session::write('hotspot_dest', []);
 $overlap_color = $missing_color = $excess_color = false;
 $organs_at_risk_hit = 0;
 $wrong_results = false;
@@ -175,7 +183,16 @@ $hot_spot_load = false;
 $questionScore = 0;
 $totalScore = 0;
 
-if (!empty($choice_value)) {
+switch ($answerType) {
+    case MULTIPLE_ANSWER:
+        $choiceValue = array_combine(array_values($choiceValue), array_values($choiceValue));
+        break;
+}
+ob_start();
+$result = $objExercise->manage_answer(0, $questionId, $choiceValue, 'exercise_show', null, false);
+$contents = ob_get_clean();
+/*
+if (!empty($choiceValue)) {
     for ($answerId = 1; $answerId <= $nbrAnswers; $answerId++) {
         $answer = $objAnswerTmp->selectAnswer($answerId);
         $answerComment = $objAnswerTmp->selectComment($answerId);
@@ -189,10 +206,22 @@ if (!empty($choice_value)) {
         $delineation_cord = $objAnswerTmp->selectHotspotCoordinates(1);
         $answer_delineation_destination = $objAnswerTmp->selectDestination(1);
 
+        var_dump($choiceValue);
         switch ($answerType) {
-            // for unique answer
+            case CALCULATED_ANSWER:
+                break;
+            case DRAGGABLE:
+                break;
+            case MULTIPLE_ANSWER:
+                $studentChoice = $choiceValue == $numAnswer ? 1 : 0;
+                if ($studentChoice) {
+                    $questionScore += $answerWeighting;
+                    $totalScore += $answerWeighting;
+                    $newQuestionList[] = $questionId;
+                }
+                break;
             case UNIQUE_ANSWER:
-                $studentChoice = $choice_value == $numAnswer ? 1 : 0;
+                $studentChoice = $choiceValue == $numAnswer ? 1 : 0;
                 if ($studentChoice) {
                     $questionScore += $answerWeighting;
                     $totalScore += $answerWeighting;
@@ -363,7 +392,7 @@ if (!empty($choice_value)) {
                         );
                     }
 
-                    if ($overlap == false) {
+                    if ($overlap == false) $contents{
                         //all good, no overlap
                         $next = 1;
                         continue;
@@ -446,11 +475,11 @@ if (!empty($choice_value)) {
         <td><div style="color:'.$missing_color.'">'.(($final_missing < 0) ? 0 : intval($final_missing)).'</div></td>
     </tr>
     </table>';
-}
+}*/
 Session::write('newquestionList', $newQuestionList);
 $links = '';
 if ($objExercise->getFeedbackType() === EXERCISE_FEEDBACK_TYPE_DIRECT) {
-    if (isset($choice_value) && $choice_value == -1) {
+    if (isset($choiceValue) && $choiceValue == -1) {
         if ($answerType != HOT_SPOT_DELINEATION) {
             $links .= '<a href="#" onclick="tb_remove();">'.get_lang('ChooseAnAnswer').'</a><br />';
         }
@@ -553,18 +582,16 @@ if ($destinationId == -1) {
 echo '<script>
 function SendEx(num) {
     if (num == -1) {
-        window.location.href = "exercise_result.php?take_session=1&exerciseId='.$exerciseId.'&num="+num+"&exerciseType='.$exerciseType.'&origin='.$origin.'&learnpath_item_id='.$learnpath_item_id.'&learnpath_id='.$learnpath_id.'";
+        window.location.href = "exercise_result.php?'.api_get_cidreq().'&take_session=1&exerciseId='.$exerciseId.'&num="+num+"&exerciseType='.$exerciseType.'&learnpath_item_id='.$learnpath_item_id.'&learnpath_id='.$learnpath_id.'";
     } else {
         num -= 1;
-        window.location.href = "exercise_submit.php?tryagain=1&exerciseId='.$exerciseId.'&num="+num+"&exerciseType='.$exerciseType.'&origin='.$origin.'&learnpath_item_id='.$learnpath_item_id.'&learnpath_id='.$learnpath_id.'";
-    }
-    
+        window.location.href = "exercise_submit.php?'.api_get_cidreq().'&tryagain=1&exerciseId='.$exerciseId.'&num="+num+"&exerciseType='.$exerciseType.'&learnpath_item_id='.$learnpath_item_id.'&learnpath_id='.$learnpath_id.'";
+    }    
     return false;
 }
 </script>';
 
 if (!empty($links)) {
-    //echo '<h1><div style="color:#333;">'.get_lang('Feedback').'</div></h1>';
     if ($answerType == HOT_SPOT_DELINEATION) {
         if ($organs_at_risk_hit > 0) {
             $message .= '<br />'.get_lang('ResultIs').' <b>'.get_lang('Unacceptable').'</b><br />';
@@ -579,7 +606,12 @@ if (!empty($links)) {
         echo '<br />';
         echo $message;
     } else {
-        echo '<p>'.$comment.'</p>';
+        echo $objQuestionTmp->return_header(
+            $objExercise,
+            $questionNum,
+            []
+        );
+        echo '<p>'.$contents.'</p>';
     }
     echo '<div style="padding-left: 450px"><h5>'.$links.'</h5></div>';
     echo '</div>';
@@ -589,15 +621,14 @@ if (!empty($links)) {
     // Resetting the exerciseResult variable
     Session::write('exerciseResult', $exerciseResult);
 
-    //save this variables just in case the exercise loads an LP with other exercise
-    $_SESSION['objExerciseExtra'.$exerciseId] = $_SESSION['objExercise'];
-    $_SESSION['exerciseResultExtra'.$exerciseId] = $_SESSION['exerciseResult'];
-    $_SESSION['questionListExtra'.$exerciseId] = $_SESSION['questionList'];
+    // Save this variables just in case the exercise loads an LP with other exercise
+    Session::write('objExerciseExtra'.$exerciseId, Session::read('objExercise'));
+    Session::write('exerciseResultExtra'.$exerciseId, Session::read('exerciseResult'));
+    Session::write('questionListExtra'.$exerciseId, Session::read('questionList'));
 } else {
     $questionNum++;
     echo '<script>
             window.location.href = "exercise_submit.php?exerciseId='.$exerciseId.'&num='.$questionNum.'&exerciseType='.$exerciseType.'&'.api_get_cidreq().'";
         </script>';
 }
-
 echo '</div>';

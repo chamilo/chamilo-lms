@@ -472,7 +472,7 @@ $select_difficulty_html = Display::select(
 echo Display::form_row(get_lang('Difficulty'), $select_difficulty_html);
 
 // Answer type
-$question_list = Question::get_question_type_list();
+$question_list = Question::getQuestionTypeList();
 
 $new_question_list = [];
 $new_question_list['-1'] = get_lang('All');
@@ -1177,10 +1177,12 @@ function get_action_icon_for_question(
 function get_question_type_for_question($in_selectedcourse, $in_questionid)
 {
     $courseInfo = api_get_course_info_by_id($in_selectedcourse);
-    $myObjQuestion = Question::read($in_questionid, $courseInfo);
+    $question = Question::read($in_questionid, $courseInfo);
     $questionType = null;
-    if (!empty($myObjQuestion)) {
-        list($typeImg, $typeExpl) = $myObjQuestion->get_type_icon_html();
+    if (!empty($question)) {
+        $typeImg = $question->getTypePicture();
+        $typeExpl = $question->getExplanation();
+
         $questionType = Display::tag('div', Display::return_icon($typeImg, $typeExpl, [], 32), []);
     }
 

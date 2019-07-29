@@ -1274,6 +1274,9 @@ requires extension "php-soap"  sudo apt-get install php-soap
 //    ]
 //];
 
+// Allow user to enter a LP item if it was validated in another session.
+// $_configuration['validate_lp_prerequisite_from_other_session'] = false;
+
 // KEEP THIS AT THE END
 // -------- Custom DB changes
 // Add user activation by confirmation email

@@ -2658,13 +2658,16 @@ JAVASCRIPT;
         if (empty($col)) {
             return '';
         }
-        if ($oper == 'bw' || $oper == 'bn') {
+
+        if ($oper === 'bw' || $oper === 'bn') {
             $val .= '%';
         }
-        if ($oper == 'ew' || $oper == 'en') {
+
+        if ($oper === 'ew' || $oper === 'en') {
             $val = '%'.$val;
         }
-        if ($oper == 'cn' || $oper == 'nc' || $oper == 'in' || $oper == 'ni') {
+
+        if ($oper === 'cn' || $oper === 'nc' || $oper === 'in' || $oper === 'ni') {
             if (is_array($val)) {
                 $result = '"%'.implode(';', $val).'%"';
                 foreach ($val as $item) {
@@ -2675,7 +2678,11 @@ JAVASCRIPT;
 
                 return " $col {$this->ops[$oper]} $val ";
             } else {
-                $val = '%'.$val.'%';
+                if (is_string($val)) {
+                    $val = '%'.$val.'%';
+                } else {
+                    $val = '';
+                }
             }
         }
         $val = \Database::escape_string($val);
@@ -2744,7 +2751,7 @@ JAVASCRIPT;
                         }
                     } else {
                         if (isset($rule->data)) {
-                            if ($rule->data == -1) {
+                            if (isset($rule->data) && is_int($rule->data) && $rule->data == -1) {
                                 continue;
                             }
                             $condition_array[] = ' ('

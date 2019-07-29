@@ -394,7 +394,6 @@ class ExtraFieldValue extends Model
                 $table = Database::get_main_table(TABLE_MAIN_USER);
                 $sql = "UPDATE $table SET profile_completed = $profileCompleted WHERE user_id = $userId";
                 Database::query($sql);
-
                 Session::write('profile_completed_result', $justTermResults);
             }
         }

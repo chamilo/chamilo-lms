@@ -10,9 +10,11 @@ browsers are limiting this permission to be used only in a secure environment wi
 Instructions:
 -------------
 
+> Make sure the directory `src/Chamilo\PluginBundle` is writable by the web server in order for the plugin is installed
+> properly. This might imply a manual change on your server (outside of the Chamilo interface).
+
 1. Install plugin in Chamilo.
-2. Create one file called `tokenTest` in `/path/to/chamilo/plugin/whispeak/`
-folder with your JSON Web Token provided by Whispeak.
+2. Set your JSON Web Token provided by Whispeak in the `/path/to/chamilo/plugin/whispeak/tokenTest`:
 ```shell
 echo "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c" > /path/to/chamilo/plugin/whispeak/tokenTest
 ``` 

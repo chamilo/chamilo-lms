@@ -188,7 +188,6 @@ function manageForm($default, $select_from_user_list = null, $sent_to = '', $tpl
             }
 
             MessageManager::cleanAudioMessage();
-
         }
         Security::clear_token();
         header('Location: '.api_get_path(WEB_PATH).'main/social/promoted_messages.php');
@@ -203,13 +202,11 @@ function manageForm($default, $select_from_user_list = null, $sent_to = '', $tpl
     return $html;
 }
 
-
 $this_section = SECTION_SOCIAL;
 $interbreadcrumb[] = [
     'url' => api_get_path(WEB_PATH).'main/social/home.php',
     'name' => get_lang('SocialNetwork'),
 ];
-
 
 $interbreadcrumb[] = [
     'url' => api_get_path(WEB_PATH).'main/messages/inbox.php',
@@ -232,7 +229,6 @@ $social_right_content .= '</div>';
 $social_right_content .= '</div>';
 $social_right_content .= '<div class="col-md-12">';
 
-
 // MAIN CONTENT
 if (!isset($_POST['compose'])) {
     if (isset($_GET['re_id'])) {
@@ -254,7 +250,6 @@ if (!isset($_POST['compose'])) {
 
 $social_right_content .= '</div>';
 $social_right_content .= '</div>';
-
 
 // Block Social Avatar
 SocialManager::setSocialUserBlock($tpl, api_get_user_id(), 'messages');

@@ -97,11 +97,13 @@ if ('wav' !== substr($fileType, -3)) {
 
 if ($isEnrollment) {
     try {
-        $wsid = $plugin->generateWsid();
+        $wsid = WhispeakAuthRequest::whispeakId($plugin);
+        $wsid = WhispeakAuthRequest::license($plugin, $wsid, $license);
 
-        $wsid = $plugin->license($wsid['wsid'], $license);
+        $text = ChamiloSession::read(WhispeakAuthPlugin::SESSION_SENTENCE_TEXT);
+        ChamiloSession::erase(WhispeakAuthPlugin::SESSION_SENTENCE_TEXT);
 
-        $enrollmentResult = $plugin->enrollment($wsid['wsid'], $user, $newFullPath);
+        $enrollmentResult = WhispeakAuthRequest::enrollment($plugin, $user, $wsid, $text, $newFullPath);
     } catch (Exception $exception) {
         echo Display::return_message($plugin->get_lang('EnrollmentFailed'));
 
@@ -149,7 +151,11 @@ if ($isAuthentify) {
     }
 
     try {
-        $authentifyResult = $plugin->authentify($wsid->getValue(), $newFullPath);
+        $text = ChamiloSession::read(WhispeakAuthPlugin::SESSION_SENTENCE_TEXT);
+
+        $authentifyResult = WhispeakAuthRequest::authentify($plugin, $wsid->getValue(), $text, $newFullPath);
+
+        ChamiloSession::erase(WhispeakAuthPlugin::SESSION_SENTENCE_TEXT);
     } catch (Exception $exception) {
         echo Display::return_message($plugin->get_lang('TryAgain'), 'error');
 

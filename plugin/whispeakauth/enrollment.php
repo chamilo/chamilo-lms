@@ -12,7 +12,16 @@ $plugin = WhispeakAuthPlugin::create();
 
 $plugin->protectTool();
 
-$sampleText = $plugin->get_lang('EnrollmentSampleText');
+try {
+    $sampleText = WhispeakAuthRequest::enrollmentSentence($plugin);
+} catch (Exception $exception) {
+    api_not_allowed(
+        true,
+        Display::return_message($exception->getMessage(), 'error')
+    );
+}
+
+ChamiloSession::write(WhispeakAuthPlugin::SESSION_SENTENCE_TEXT, $sampleText);
 
 $htmlHeadXtra[] = api_get_js('rtc/RecordRTC.js');
 $htmlHeadXtra[] = api_get_js_simple(api_get_path(WEB_PLUGIN_PATH).'whispeakauth/assets/js/RecordAudio.js');

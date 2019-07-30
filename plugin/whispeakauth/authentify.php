@@ -80,6 +80,25 @@ if (!empty($lpQuestionInfo)) {
     $htmlHeadXtra[] = api_get_js_simple(api_get_path(WEB_PLUGIN_PATH).'whispeakauth/assets/js/RecordAudio.js');
 }
 
+$sampleText = '';
+
+try {
+    $sampleText = WhispeakAuthRequest::authenticateSentence($plugin);
+} catch (Exception $exception) {
+    $message = Display::return_message($exception->getMessage(), 'error');
+
+    if (!empty($lpQuestionInfo)) {
+        echo $message;
+
+
+        exit;
+    }
+
+    Display::addFlash($message);
+}
+
+ChamiloSession::write(WhispeakAuthPlugin::SESSION_SENTENCE_TEXT, $sampleText);
+
 $template = new Template(
     !$showHeader ? '' : $plugin->get_title(),
     $showHeader,
@@ -89,7 +108,7 @@ $template = new Template(
     false
 );
 $template->assign('show_form', $showForm);
-$template->assign('sample_text', $plugin->getAuthentifySampleText());
+$template->assign('sample_text', $sampleText);
 
 $content = $template->fetch('whispeakauth/view/authentify_recorder.html.twig');
 

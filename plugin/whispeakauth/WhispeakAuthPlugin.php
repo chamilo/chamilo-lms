@@ -29,6 +29,7 @@ class WhispeakAuthPlugin extends Plugin implements HookPluginInterface
     const SESSION_LP_ITEM = 'whispeak_lp_item';
     const SESSION_QUIZ_QUESTION = 'whispeak_quiz_question';
     const SESSION_AUTH_PASSWORD = 'whispeak_auth_password';
+    const SESSION_SENTENCE_TEXT = 'whispeak_sentence_text';
 
     /**
      * StudentFollowUpPlugin constructor.
@@ -305,22 +306,6 @@ class WhispeakAuthPlugin extends Plugin implements HookPluginInterface
     }
 
     /**
-     * @return string
-     */
-    public function getAuthentifySampleText()
-    {
-        $phrases = [];
-
-        for ($i = 1; $i <= 6; $i++) {
-            $phrases[] = $this->get_lang("AuthentifySampleText$i");
-        }
-
-        $rand = array_rand($phrases, 1);
-
-        return $phrases[$rand];
-    }
-
-    /**
      * @return bool
      */
     public function toolIsEnabled()
@@ -340,70 +325,6 @@ class WhispeakAuthPlugin extends Plugin implements HookPluginInterface
         }
 
         api_not_allowed($printHeaders);
-    }
-
-    /**
-     * @throws Exception
-     *
-     * @return array
-     */
-    public function generateWsid()
-    {
-        $headers = [
-            "Authorization: Bearer ".$this->getAccessToken(),
-        ];
-
-        $ch = curl_init(self::API_URL.'whispeakid');
-        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        $result = curl_exec($ch);
-        curl_close($ch);
-
-        $result = json_decode($result, true);
-
-        if (!empty($result['error'])) {
-            throw new Exception($result['error']);
-        }
-
-        return $result;
-    }
-
-    /**
-     * @param strging $wsid
-     * @param bool    $researchPermission
-     *
-     * @throws Exception
-     *
-     * @return array
-     */
-    public function license($wsid, $researchPermission = false)
-    {
-        $headers = [
-            "Content-Type: application/json",
-            "Authorization: Bearer ".$this->getAccessToken(),
-        ];
-
-        $body = [
-            'wsid' => $wsid,
-            'license' => 1,
-            'researchPermission' => $researchPermission,
-        ];
-
-        $ch = curl_init(self::API_URL.'license');
-        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_POST, true);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($body));
-        $result = curl_exec($ch);
-        curl_close($ch);
-
-        $result = json_decode($result, true);
-
-        if (!empty($result['error'])) {
-            throw new Exception($result['error']);
-        }
-
-        return $result;
     }
 
     /**
@@ -606,82 +527,6 @@ class WhispeakAuthPlugin extends Plugin implements HookPluginInterface
         $iso3 = isset($listIso3[$iso2]) ? $listIso3[$iso2] : $listIso3['en'];
 
         return $iso3;
-    }
-
-    /**
-     * @param string $wsid
-     * @param User   $user
-     * @param string $filePath
-     *
-     * @throws Exception
-     *
-     * @return array
-     */
-    public function enrollment($wsid, User $user, $filePath)
-    {
-        $headers = [
-            "Authorization: Bearer ".$this->getAccessToken(),
-        ];
-
-        $formData = [
-            'wsid' => $wsid,
-            'audioType' => 'pcm',
-            'spokenTongue' => self::getLanguageIsoCode($user->getLanguage()),
-            'voice' => new CURLFile($filePath),
-        ];
-
-        $ch = curl_init(self::API_URL.'enrollment');
-        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_POST, true);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $formData);
-        $result = curl_exec($ch);
-        curl_close($ch);
-
-        $result = json_decode($result, true);
-
-        if (!empty($result['error'])) {
-            throw new Exception($result['error']);
-        }
-
-        return $result;
-    }
-
-    /**
-     * @param string $wsid
-     * @param string $filePath
-     *
-     * @throws Exception
-     *
-     * @return array
-     */
-    public function authentify($wsid, $filePath)
-    {
-        $headers = [
-            "Authorization: Bearer ".$this->getAccessToken(),
-        ];
-
-        $formData = [
-            'wsid' => $wsid,
-            'audioType' => 'pcm',
-            'voice' => new CURLFile($filePath),
-        ];
-
-        $ch = curl_init(self::API_URL.'authentify');
-        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_POST, true);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $formData);
-        $result = curl_exec($ch);
-        curl_close($ch);
-
-        $result = json_decode($result, true);
-
-        if (!empty($result['error'])) {
-            throw new Exception($result['error']);
-        }
-
-        return $result;
     }
 
     /**

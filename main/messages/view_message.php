@@ -49,8 +49,6 @@ $message = '';
 
 $logInfo = [
     'tool' => 'Messages',
-    'tool_id' => 0,
-    'tool_id_detail' => 0,
     'action' => $source,
     'action_details' => 'view-message',
 ];

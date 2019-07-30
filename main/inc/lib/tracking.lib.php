@@ -288,7 +288,7 @@ class Tracking
         $chapterTypes = learnpath::getChapterTypes();
         $accessToPdfExport = api_is_allowed_to_edit(false, false, true);
 
-        $minimunAvailable = self::minimunTimeAvailable($session_id, $course_id);
+        $minimunAvailable = self::minimumTimeAvailable($session_id, $course_id);
         $timeCourse = [];
         if ($minimunAvailable) {
             $timeCourse = self::getCalculateTime($user_id, $course_id, $session_id);
@@ -1679,7 +1679,7 @@ class Tracking
      *
      * @return bool
      */
-    public static function minimunTimeAvailable($sessionId, $courseId)
+    public static function minimumTimeAvailable($sessionId, $courseId)
     {
         if (!api_get_configuration_value('lp_minimum_time')) {
             return false;
@@ -1725,7 +1725,7 @@ class Tracking
             return 0;
         }
 
-        if (self::minimunTimeAvailable($session_id, $courseId)) {
+        if (self::minimumTimeAvailable($session_id, $courseId)) {
             $courseTime = self::getCalculateTime($user_id, $courseId, $session_id);
             $time = isset($courseTime['total_time']) ? $courseTime['total_time'] : 0;
 
@@ -1902,7 +1902,7 @@ class Tracking
         $courseId = (int) $courseId;
         $session_id = (int) $session_id;
 
-        if (self::minimunTimeAvailable($session_id, $courseId)) {
+        if (self::minimumTimeAvailable($session_id, $courseId)) {
             $tbl_track_e_access = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ACCESS);
             $sql = 'SELECT access_date
                     FROM '.$tbl_track_e_access.'
@@ -1974,7 +1974,7 @@ class Tracking
         $session_id = (int) $session_id;
         $courseId = $courseInfo['real_id'];
 
-        if (self::minimunTimeAvailable($session_id, $courseId)) {
+        if (self::minimumTimeAvailable($session_id, $courseId)) {
             // Show the last date on which the user acceed the session when it was active
             $where_condition = '';
             $userInfo = api_get_user_info($student_id);

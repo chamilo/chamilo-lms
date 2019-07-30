@@ -2356,7 +2356,7 @@ class Event
      */
     public static function registerLog($logInfo)
     {
-        if (!Tracking::minimunTimeAvailable(api_get_session_id(), api_get_course_int_id())) {
+        if (!Tracking::minimumTimeAvailable(api_get_session_id(), api_get_course_int_id())) {
             return false;
         }
 

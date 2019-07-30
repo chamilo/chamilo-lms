@@ -15,10 +15,7 @@ if (api_get_setting('allow_message_tool') != 'true') {
 
 $logInfo = [
     'tool' => 'Messages',
-    'tool_id' => 0,
-    'tool_id_detail' => 0,
     'action' => isset($_GET['action']) ? $_GET['action'] : 'outbox',
-    'action_details' => '',
 ];
 Event::registerLog($logInfo);
 

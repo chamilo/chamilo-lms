@@ -51,7 +51,7 @@ if (isset($_GET['form_reply']) || isset($_GET['form_delete'])) {
 
     if (isset($button_sent)) {
         $title = urldecode($info_reply[0]);
-        $content = str_replace("\\", "", urldecode($info_reply[1]));
+        $content = str_replace("\\", '', urldecode($info_reply[1]));
 
         $user_reply = $info_reply[2];
         $user_email_base = str_replace(')', '(', $info_reply[5]);
@@ -69,12 +69,12 @@ if (isset($_GET['form_reply']) || isset($_GET['form_delete'])) {
         if (isset($user_reply) && !is_null($user_id_by_email) && strlen($info_reply[0]) > 0) {
             MessageManager::send_message($user_id_by_email, $title, $content);
             $show_message .= MessageManager::return_message($user_id_by_email, 'confirmation');
-            $social_right_content .= MessageManager::inbox_display();
+            $social_right_content .= MessageManager::inboxDisplay();
             exit;
         } elseif (is_null($user_id_by_email)) {
             $message_box = get_lang('ErrorSendingMessage');
             $show_message .= Display::return_message(api_xml_http_response_encode($message_box), 'error');
-            $social_right_content .= MessageManager::inbox_display();
+            $social_right_content .= MessageManager::inboxDisplay();
             exit;
         }
     } elseif (trim($info_delete[0]) == 'delete') {
@@ -86,7 +86,7 @@ if (isset($_GET['form_reply']) || isset($_GET['form_delete'])) {
         }
         $message_box = get_lang('SelectedMessagesDeleted');
         $show_message .= Display::return_message(api_xml_http_response_encode($message_box));
-        $social_right_content .= MessageManager::inbox_display();
+        $social_right_content .= MessageManager::inboxDisplay();
         exit;
     }
 }
@@ -112,7 +112,6 @@ $interbreadcrumb[] = [
 $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Inbox')];
 
 $actions = '';
-
 // Comes from normal profile
 if ($allowSocial === false && $allowMessage) {
     $actions .= '<a href="'.api_get_path(WEB_PATH).'main/messages/new_message.php">'.
@@ -149,7 +148,7 @@ if ($allowSocial) {
 }
 
 if (!isset($_GET['del_msg'])) {
-    $social_right_content .= MessageManager::inbox_display($keyword);
+    $social_right_content .= MessageManager::inboxDisplay($keyword);
 } else {
     $num_msg = (int) $_POST['total'];
     for ($i = 0; $i < $num_msg; $i++) {
@@ -161,7 +160,7 @@ if (!isset($_GET['del_msg'])) {
             );
         }
     }
-    $social_right_content .= MessageManager::inbox_display();
+    $social_right_content .= MessageManager::inboxDisplay();
 }
 
 $tpl = new Template(null);
@@ -171,7 +170,7 @@ if ($actions) {
 }
 // Block Social Avatar
 SocialManager::setSocialUserBlock($tpl, api_get_user_id(), 'messages');
-if (api_get_setting('allow_social_tool') == 'true') {
+if ($allowSocial) {
     $tpl->assign('social_menu_block', $social_menu_block);
     $tpl->assign('social_right_content', $social_right_content);
     $social_layout = $tpl->get_template('social/inbox.tpl');

@@ -85,16 +85,14 @@ $sampleText = '';
 try {
     $sampleText = WhispeakAuthRequest::authenticateSentence($plugin);
 } catch (Exception $exception) {
-    $message = Display::return_message($exception->getMessage(), 'error');
-
-    if (!empty($lpQuestionInfo)) {
-        echo $message;
-
-
-        exit;
+    if ($showHeader) {
+        api_not_allowed(
+            true,
+            Display::return_message($exception->getMessage(), 'error')
+        );
     }
 
-    Display::addFlash($message);
+    WhispeakAuthPlugin::displayNotAllowedMessage($exception->getMessage());
 }
 
 ChamiloSession::write(WhispeakAuthPlugin::SESSION_SENTENCE_TEXT, $sampleText);

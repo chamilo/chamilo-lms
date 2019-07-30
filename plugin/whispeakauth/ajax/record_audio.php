@@ -152,10 +152,9 @@ if ($isAuthentify) {
 
     try {
         $text = ChamiloSession::read(WhispeakAuthPlugin::SESSION_SENTENCE_TEXT);
+        ChamiloSession::erase(WhispeakAuthPlugin::SESSION_SENTENCE_TEXT);
 
         $authentifyResult = WhispeakAuthRequest::authentify($plugin, $wsid->getValue(), $text, $newFullPath);
-
-        ChamiloSession::erase(WhispeakAuthPlugin::SESSION_SENTENCE_TEXT);
     } catch (Exception $exception) {
         echo Display::return_message($plugin->get_lang('TryAgain'), 'error');
 

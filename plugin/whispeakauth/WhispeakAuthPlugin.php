@@ -637,9 +637,16 @@ class WhispeakAuthPlugin extends Plugin implements HookPluginInterface
         return false;
     }
 
-    public static function displayNotAllowedMessage()
+    /**
+     * Display a error message
+     *
+     * @param string|null $error Optional. The message text
+     */
+    public static function displayNotAllowedMessage($error = null)
     {
-        echo Display::return_message(get_lang('NotAllowed'), 'error', false);
+        $error = empty($error) ? get_lang('NotAllowed') : $error;
+
+        echo Display::return_message($error, 'error', false);
 
         exit;
     }

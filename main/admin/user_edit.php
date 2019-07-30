@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use ChamiloSession as Session;
+
 /**
  * @package chamilo.admin
  */
@@ -325,7 +327,7 @@ if ($allowEmailTemplate) {
 
 // the $jqueryReadyContent variable collects all functions that will be load in the
 $htmlHeadXtra[] = '<script>
-$(document).ready(function(){
+$(function () {
     '.$jqueryReadyContent.'
 });
 </script>';
@@ -480,6 +482,8 @@ if ($form->validate()) {
             $userInfo['complete_name_with_username'],
             api_get_path(WEB_CODE_PATH).'admin/user_edit.php?user_id='.$user_id
         );
+
+        Session::erase('system_timezone');
 
         Display::addFlash(Display::return_message($message, 'normal', false));
         header('Location: user_list.php');

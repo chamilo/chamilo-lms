@@ -363,6 +363,8 @@ class TicketManager
             'assigned_last_user' => $assignedUserId,
             'subject' => $subject,
             'message' => $content,
+            'code' => '',
+            'total_messages' => 0,
         ];
 
         if (!empty($course_id)) {
@@ -375,7 +377,7 @@ class TicketManager
         $ticketId = Database::insert($table_support_tickets, $params);
 
         if ($ticketId) {
-            $ticket_code = "A".str_pad($ticketId, 11, '0', STR_PAD_LEFT);
+            $ticket_code = 'A'.str_pad($ticketId, 11, '0', STR_PAD_LEFT);
             $titleCreated = sprintf(
                 get_lang('TicketXCreated'),
                 $ticket_code
@@ -567,9 +569,9 @@ class TicketManager
             );
 
             return true;
-        } else {
-            return false;
         }
+
+        return false;
     }
 
     /**
@@ -718,6 +720,7 @@ class TicketManager
         $now = api_get_utc_datetime();
         $userId = api_get_user_id();
         $ticketId = (int) $ticketId;
+
         $new_file_name = add_ext_on_mime(
             stripslashes($file_attach['name']),
             $file_attach['type']
@@ -989,7 +992,7 @@ class TicketManager
                 ];
             }
             if ($isAdmin) {
-                $ticket['0'] .= '&nbsp;&nbsp;<a  href="javascript:void(0)" onclick="load_history_ticket(\'div_'.$row['ticket_id'].'\','.$row['ticket_id'].')">
+                $ticket['0'] .= '&nbsp;&nbsp;<a href="javascript:void(0)" onclick="load_history_ticket(\'div_'.$row['ticket_id'].'\','.$row['ticket_id'].')">
 					<img onclick="load_course_list(\'div_'.$row['ticket_id'].'\','.$row['ticket_id'].')" onmouseover="clear_course_list (\'div_'.$row['ticket_id'].'\')" src="'.Display::returnIconPath('history.gif').'" title="'.get_lang('Historial').'" alt="'.get_lang('Historial').'"/>
 					<div class="blackboard_hide" id="div_'.$row['ticket_id'].'">&nbsp;&nbsp;</div>
 					</a>&nbsp;&nbsp;';
@@ -1281,9 +1284,9 @@ class TicketManager
             );
 
             return true;
-        } else {
-            return false;
         }
+
+        return false;
     }
 
     /**
@@ -1457,9 +1460,9 @@ class TicketManager
             );
 
             return true;
-        } else {
-            return false;
         }
+
+        return false;
     }
 
     /**
@@ -1619,17 +1622,13 @@ class TicketManager
             TABLE_TICKET_CATEGORY
         );
         $table_support_tickets = Database::get_main_table(TABLE_TICKET_TICKET);
-        $table_support_priority = Database::get_main_table(
-            TABLE_TICKET_PRIORITY
-        );
+        $table_support_priority = Database::get_main_table(TABLE_TICKET_PRIORITY);
         $table_support_status = Database::get_main_table(TABLE_TICKET_STATUS);
-        $table_support_messages = Database::get_main_table(
-            TABLE_TICKET_MESSAGE
-        );
+        $table_support_messages = Database::get_main_table(TABLE_TICKET_MESSAGE);
         $table_main_user = Database::get_main_table(TABLE_MAIN_USER);
 
         if (is_null($direction)) {
-            $direction = "DESC";
+            $direction = 'DESC';
         }
         if (is_null($userId) || $userId == 0) {
             $userId = api_get_user_id();
@@ -1843,6 +1842,8 @@ class TicketManager
     }
 
     /**
+     * @param array $criteria
+     *
      * @return array
      */
     public static function getTicketsFromCriteria($criteria)
@@ -1869,6 +1870,7 @@ class TicketManager
             ->getRepository('ChamiloTicketBundle:Status')
             ->findOneBy(['code' => $code])
         ;
+
         if ($item) {
             return $item->getId();
         }
@@ -1960,12 +1962,13 @@ class TicketManager
         $project->setName($params['name']);
         $project->setDescription($params['description']);
         $project->setInsertUserId(api_get_user_id());
+
         Database::getManager()->persist($project);
         Database::getManager()->flush();
     }
 
     /**
-     * @param $id
+     * @param int $id
      *
      * @return Project
      */

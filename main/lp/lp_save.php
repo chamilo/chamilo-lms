@@ -15,7 +15,6 @@ use ChamiloSession as Session;
  * Initialization is to be done by lp_controller.php.
  * Switching within the field to update.
  */
-error_log('New LP - Loaded lp_save : '.$_SERVER['REQUEST_URI'].' from '.$_SERVER['HTTP_REFERER'], 0);
 ?>
 <!DOCTYPE html
      PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"

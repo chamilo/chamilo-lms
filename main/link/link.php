@@ -20,7 +20,6 @@
  */
 require_once __DIR__.'/../inc/global.inc.php';
 $current_course_tool = TOOL_LINK;
-
 $this_section = SECTION_COURSES;
 api_protect_course_script(true);
 
@@ -93,7 +92,7 @@ Event::event_access_tool(TOOL_LINK);
 $id = isset($_REQUEST['id']) ? $_REQUEST['id'] : null;
 $scope = isset($_REQUEST['scope']) ? $_REQUEST['scope'] : null;
 $show = isset($_REQUEST['show']) && in_array(trim($_REQUEST['show']), ['all', 'none']) ? $_REQUEST['show'] : '';
-$categoryId = isset($_REQUEST['category_id']) ? intval($_REQUEST['category_id']) : '';
+$categoryId = isset($_REQUEST['category_id']) ? (int) $_REQUEST['category_id'] : '';
 $linkListUrl = api_get_self().'?'.api_get_cidreq().'&category_id='.$categoryId.'&show='.$show;
 $content = '';
 $token = Security::get_existing_token();
@@ -212,11 +211,29 @@ switch ($action) {
         header('Location: '.$linkListUrl);
         exit;
         break;
+    case 'export':
+        $content = Link::listLinksAndCategories($course_id, $session_id, $categoryId, $show, null, false, true);
+        $courseInfo = api_get_course_info_by_id($course_id);
+        if (!empty($session_id)) {
+            $sessionInfo = api_get_session_info($session_id);
+            $courseInfo['title'] = $courseInfo['title'].' '.$sessionInfo['name'];
+        }
+        $pdf = new PDF();
+        $pdf->content_to_pdf(
+            $content,
+            null,
+            $courseInfo['title'].'_'.get_lang('Link'),
+            $courseInfo['code'],
+            'D',
+            false,
+            null,
+            false,
+            true
+        );
+        break;
     case 'list':
     default:
-        ob_start();
-        Link::listLinksAndCategories($course_id, $session_id, $categoryId, $show);
-        $content = ob_get_clean();
+        $content = Link::listLinksAndCategories($course_id, $session_id, $categoryId, $show);
         break;
 }
 

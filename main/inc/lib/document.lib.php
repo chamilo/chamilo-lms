@@ -546,6 +546,10 @@ class DocumentManager
         $sessionId = 0,
         User $currentUser = null
     ) {
+        if (empty($courseInfo)) {
+            return [];
+        }
+
         $tblDocument = Database::get_course_table(TABLE_DOCUMENT);
         $currentUser = $currentUser ?: api_get_current_user();
 
@@ -729,6 +733,10 @@ class DocumentManager
         $getInvisibleList = false,
         $path = ''
     ) {
+        if (empty($courseInfo)) {
+            return [];
+        }
+
         $TABLE_DOCUMENT = Database::get_course_table(TABLE_DOCUMENT);
         $groupIid = (int) $groupIid;
         $courseId = $courseInfo['real_id'];
@@ -923,8 +931,7 @@ class DocumentManager
         $file = null,
         $document_id = 0,
         $to_delete = false,
-        $sessionId = null,
-        $documentId = null
+        $sessionId = null
     ) {
         $sessionId = (int) $sessionId;
         if (empty($sessionId)) {
@@ -1035,9 +1042,6 @@ class DocumentManager
         $session_id = 0,
         $remove_content_from_db = false
     ) {
-        $TABLE_DOCUMENT = Database::get_course_table(TABLE_DOCUMENT);
-        $TABLE_ITEMPROPERTY = Database::get_course_table(TABLE_ITEM_PROPERTY);
-
         // Deleting from the DB
         $user_id = api_get_user_id();
         $document_id = intval($document_id);
@@ -1050,7 +1054,7 @@ class DocumentManager
             $session_id = api_get_session_id();
         }
         // Soft DB delete
-        api_item_property_update(
+        /*api_item_property_update(
             $course_info,
             TOOL_DOCUMENT,
             $document_id,
@@ -1061,13 +1065,20 @@ class DocumentManager
             null,
             null,
             $session_id
-        );
+        );*/
         self::delete_document_from_search_engine($course_info['code'], $document_id);
         self::unsetDocumentAsTemplate($document_id, $course_info['real_id'], $user_id);
 
-        //Hard DB delete
+        // Hard DB delete
         if ($remove_content_from_db) {
-            $sql = "DELETE FROM $TABLE_ITEMPROPERTY
+            $repo = Container::$container->get('Chamilo\CourseBundle\Repository\CDocumentRepository');
+            /** @var CDocument $document */
+            $document = $repo->find($document_id);
+            $repo->softDelete($document);
+
+            return true;
+
+            /*$sql = "DELETE FROM $TABLE_ITEMPROPERTY
                     WHERE
                         c_id = {$course_info['real_id']} AND
                         ref = ".$document_id." AND
@@ -1076,7 +1087,7 @@ class DocumentManager
 
             $sql = "DELETE FROM $TABLE_DOCUMENT
                     WHERE c_id = {$course_info['real_id']} AND id = ".$document_id;
-            Database::query($sql);
+            Database::query($sql);*/
         }
     }
 
@@ -1120,10 +1131,6 @@ class DocumentManager
             return false;
         }
 
-        if (empty($base_work_dir)) {
-            return false;
-        }
-
         if (empty($documentId)) {
             $documentId = self::get_document_id($_course, $path, $sessionId);
             $docInfo = self::get_document_data_by_id(
@@ -1146,18 +1153,16 @@ class DocumentManager
             $path = $docInfo['path'];
         }
 
-        $em = Database::getManager();
         $documentId = (int) $documentId;
 
         if (empty($path) || empty($docInfo) || empty($documentId)) {
             return false;
         }
 
+        $repo = Container::$container->get('Chamilo\CourseBundle\Repository\CDocumentRepository');
         /** @var CDocument $document */
-        $document = $em->getRepository('ChamiloCourseBundle:CDocument')->find($docInfo['iid']);
-        $document->setSoftDelete();
-        $em->persist($document);
-        $em->flush();
+        $document = $repo->find($docInfo['iid']);
+        $repo->softDelete($document);
 
         return true;
 
@@ -1392,6 +1397,8 @@ class DocumentManager
         }
 
         $session_id = empty($session_id) ? api_get_session_id() : (int) $session_id;
+        $groupId = api_get_group_id();
+
         $www = api_get_path(WEB_COURSE_PATH).$course_info['path'].'/document';
         $TABLE_DOCUMENT = Database::get_course_table(TABLE_DOCUMENT);
         $id = (int) $id;
@@ -1405,14 +1412,16 @@ class DocumentManager
         }
 
         $result = Database::query($sql);
+        $courseParam = '&cidReq='.$course_code.'&id='.$id.'&id_session='.$session_id.'&gidReq='.$groupId;
         if ($result && Database::num_rows($result) == 1) {
             $row = Database::fetch_array($result, 'ASSOC');
             //@todo need to clarify the name of the URLs not nice right now
             $url_path = urlencode($row['path']);
             $path = str_replace('%2F', '/', $url_path);
             $pathinfo = pathinfo($row['path']);
-            $row['url'] = api_get_path(WEB_CODE_PATH).'document/showinframes.php?cidReq='.$course_code.'&id='.$id;
-            $row['document_url'] = api_get_path(WEB_CODE_PATH).'document/document.php?cidReq='.$course_code.'&id='.$id;
+
+            $row['url'] = api_get_path(WEB_CODE_PATH).'document/showinframes.php?id='.$id.$courseParam;
+            $row['document_url'] = api_get_path(WEB_CODE_PATH).'document/document.php?id='.$id.$courseParam;
             $row['absolute_path'] = api_get_path(SYS_COURSE_PATH).$course_info['path'].'/document'.$row['path'];
             $row['absolute_path_from_document'] = '/document'.$row['path'];
             $row['absolute_parent_path'] = api_get_path(SYS_COURSE_PATH).$course_info['path'].'/document'.$pathinfo['dirname'].'/';
@@ -1562,14 +1571,13 @@ class DocumentManager
         $file_type = 'file'
     ) {
         $docTable = Database::get_course_table(TABLE_DOCUMENT);
-        $propTable = Database::get_course_table(TABLE_ITEM_PROPERTY);
 
         $course_id = $course['real_id'];
         // note the extra / at the end of doc_path to match every path in
         // the document table that is part of the document path
 
         $session_id = intval($session_id);
-        $condition = "AND d.session_id IN  ('$session_id', '0') ";
+        $condition = " AND d.session_id IN  ('$session_id', '0') ";
         // The " d.filetype='file' " let the user see a file even if the folder is hidden see #2198
 
         /*
@@ -1601,14 +1609,11 @@ class DocumentManager
         }
         $doc_path = Database::escape_string($doc_path).'/';
 
-        $sql = "SELECT visibility
+        $sql = "SELECT iid
                 FROM $docTable d
-                INNER JOIN $propTable ip
-                ON (d.id = ip.ref AND d.c_id = ip.c_id)
         		WHERE
         		    d.c_id  = $course_id AND 
-        		    ip.c_id = $course_id AND
-        		    ip.tool = '".TOOL_DOCUMENT."' $condition AND
+        		    $condition AND
         			filetype = '$file_type' AND
         			locate(concat(path,'/'), '$doc_path')=1
                 ";
@@ -1617,7 +1622,13 @@ class DocumentManager
         $is_visible = false;
         if (Database::num_rows($result) > 0) {
             $row = Database::fetch_array($result, 'ASSOC');
-            if ($row['visibility'] == 1) {
+
+            $em = Database::getManager();
+
+            $repo = $em->getRepository('ChamiloCourseBundle:CDocument');
+            /** @var \Chamilo\CourseBundle\Entity\CDocument $document */
+            $document = $repo->find($row['iid']);
+            if ($document->getVisibility() === ResourceLink::VISIBILITY_PUBLISHED) {
                 $is_visible = api_is_allowed_in_course() || api_is_platform_admin();
             }
         }
@@ -1712,9 +1723,8 @@ class DocumentManager
             $repo = $em->getRepository('ChamiloCourseBundle:CDocument');
             /** @var \Chamilo\CourseBundle\Entity\CDocument $document */
             $document = $repo->find($doc_id);
-            $link = $document->getCourseSessionResourceLink();
 
-            if ($link && $link->getVisibility() == ResourceLink::VISIBILITY_PUBLISHED) {
+            if ($document->isVisible()) {
                 return true;
             }
 
@@ -2242,7 +2252,7 @@ class DocumentManager
                         break;
                 }
             } else {
-                return false;
+                return [];
             }
         }
 
@@ -2873,6 +2883,7 @@ class DocumentManager
      * @param string $fileKey
      * @param bool   $treat_spaces_as_hyphens
      * @param int    $parentId
+     * @param $content
      *
      * @return CDocument|false
      */
@@ -2887,7 +2898,8 @@ class DocumentManager
         $show_output = false,
         $fileKey = 'file',
         $treat_spaces_as_hyphens = true,
-        $parentId = 0
+        $parentId = 0,
+        $content = null
     ) {
         $course_info = api_get_course_info();
         $sessionId = api_get_session_id();
@@ -2915,7 +2927,8 @@ class DocumentManager
                     $sessionId,
                     $treat_spaces_as_hyphens,
                     $fileKey,
-                    $parentId
+                    $parentId,
+                    $content
                 );
 
                 // Showing message when sending zip files
@@ -3037,6 +3050,8 @@ class DocumentManager
      * @param int $course_id
      * @param int $group_id   (to calculate group document space)
      * @param int $session_id
+     *
+     * @deprecated use CDocumentRepository::getTotalSpace
      *
      * @return int total size
      */
@@ -4914,10 +4929,11 @@ class DocumentManager
      * @param array  $document_data
      * @param bool   $show_as_icon      - if it is true, only a clickable icon will be shown
      * @param int    $visibility        (1/0)
-     * @param int    $counter
      * @param int    $size
      * @param bool   $isAllowedToEdit
      * @param bool   $isCertificateMode
+     * @param bool   $addToEditor
+     * @param string $editorUrl
      *
      * @return string url
      */
@@ -4925,14 +4941,14 @@ class DocumentManager
         $documentWebPath,
         $document_data,
         $show_as_icon = false,
-        $counter = null,
         $visibility,
         $size = 0,
         $isAllowedToEdit = false,
-        $isCertificateMode = false
+        $isCertificateMode = false,
+        $addToEditor = false,
+        $editorUrl = ''
     ) {
         global $dbl_click_id;
-        $www = $documentWebPath;
 
         $sessionId = api_get_session_id();
         $courseParams = api_get_cidreq();
@@ -4953,7 +4969,12 @@ class DocumentManager
         $pageUrl = $basePageUrl.'document.php';
 
         // Add class="invisible" on invisible files
-        $visibility_class = $visibility == false ? ' class="muted"' : '';
+        $classAddToEditor = '';
+        if ($addToEditor) {
+            $classAddToEditor = 'select_to_ckeditor';
+        }
+        $visibility_class = $visibility === false ? ' class="muted"' : ' class="'.$classAddToEditor.'" ';
+
         $forcedownload_link = '';
         $forcedownload_icon = '';
         $prevent_multiple_click = '';
@@ -4961,35 +4982,33 @@ class DocumentManager
 
         if (!$show_as_icon) {
             // Build download link (icon)
-            $forcedownload_link = $filetype == 'folder'
+            $forcedownload_link = $filetype === 'folder'
                 ? $pageUrl.'?'.$courseParams.'&action=downloadfolder&id='.$document_data['id']
-                : $pageUrl.'?'.$courseParams.'&amp;action=download&amp;id='.$document_data['id'];
+                : $pageUrl.'?'.$courseParams.'&action=download&id='.$document_data['id'];
             // Folder download or file download?
-            $forcedownload_icon = $filetype == 'folder' ? 'save_pack.png' : 'save.png';
+            $forcedownload_icon = $filetype === 'folder' ? 'save_pack.png' : 'save.png';
             // Prevent multiple clicks on zipped folder download
-            $prevent_multiple_click = $filetype == 'folder' ? " onclick=\"javascript: if(typeof clic_$dbl_click_id == 'undefined' || !clic_$dbl_click_id) { clic_$dbl_click_id=true; window.setTimeout('clic_".($dbl_click_id++)."=false;',10000); } else { return false; }\"" : '';
+            $prevent_multiple_click = $filetype === 'folder' ? " onclick=\"javascript: if(typeof clic_$dbl_click_id == 'undefined' || !clic_$dbl_click_id) { clic_$dbl_click_id=true; window.setTimeout('clic_".($dbl_click_id++)."=false;',10000); } else { return false; }\"" : '';
         }
 
         $target = '_self';
         $is_browser_viewable_file = false;
 
-        if ($filetype == 'file') {
+        if ($filetype === 'file') {
             // Check the extension
             $ext = explode('.', $path);
-            $ext = strtolower($ext[sizeof($ext) - 1]);
+            $ext = strtolower($ext[count($ext) - 1]);
 
             // HTML-files an some other types are shown in a frameset by default.
             $is_browser_viewable_file = self::isBrowserViewable($ext);
             if ($is_browser_viewable_file) {
                 if ($ext == 'pdf' || in_array($ext, $webODFList)) {
-                    $url = $pageUrl.'?'.$courseParams.'&amp;action=download&amp;id='.$document_data['id'];
+                    $url = $pageUrl.'?'.$courseParams.'&action=download&amp;id='.$document_data['id'];
                 } else {
                     $url = $basePageUrl.'showinframes.php?'.$courseParams.'&id='.$document_data['id'];
                 }
             } else {
-                // url-encode for problematic characters (we may not call them dangerous characters...)
-                //$path = str_replace('%2F', '/', $url_path).'?'.$courseParams;
-                $url = $www.str_replace('%2F', '/', $url_path).'?'.$courseParams;
+                $url = $documentWebPath.str_replace('%2F', '/', $url_path).'?'.$courseParams;
             }
         } else {
             $url = $pageUrl.'?'.$courseParams.'&id='.$document_data['id'];
@@ -5008,10 +5027,10 @@ class DocumentManager
             $url = $document_data['comment'].'" target="_blank';
         }
 
-        if ($path == '/shared_folder') {
+        if ($path === '/shared_folder') {
             $tooltip_title_alt = get_lang('UserFolders');
         } elseif (strstr($path, 'shared_folder_session_')) {
-            $tooltip_title_alt = get_lang('UserFolders').' ('.api_get_session_name(api_get_session_id()).')';
+            $tooltip_title_alt = get_lang('UserFolders').' ('.api_get_session_name($sessionId).')';
         } elseif (strstr($tooltip_title, 'sf_user_')) {
             $userinfo = api_get_user_info(substr($tooltip_title, 8));
             $tooltip_title_alt = get_lang('UserFolder').' '.$userinfo['complete_name'];
@@ -5062,29 +5081,14 @@ class DocumentManager
                     }
                 }
             } else {
-                $force_download_html = ($size == 0) ? '' : '<a href="'.$forcedownload_link.'" style="float:right"'.$prevent_multiple_click.' download="'.$document_data['basename'].'">'.
+                $force_download_html = $size == 0 ? '' : '<a href="'.$forcedownload_link.'" style="float:right"'.$prevent_multiple_click.' download="'.$document_data['basename'].'">'.
                     Display::return_icon($forcedownload_icon, get_lang('Download'), [], ICON_SIZE_SMALL).'</a>';
-            }
-
-            // Copy files to user's myfiles
-            if (api_get_setting('allow_my_files') === 'true' &&
-                api_get_setting('users_copy_files') === 'true' && api_is_anonymous() === false
-            ) {
-                $copy_myfiles_link = $filetype == 'file' ? $pageUrl.'?'.$courseParams.'&action=copytomyfiles&id='.$document_data['id'] : api_get_self().'?'.$courseParams;
-                if ($filetype == 'file') {
-                    /*$copyToMyFiles = '<a href="'.$copy_myfiles_link.'" style="float:right"'.$prevent_multiple_click.'>'.
-                        Display::return_icon('briefcase.png', get_lang('CopyToMyFiles'), [], ICON_SIZE_SMALL).'&nbsp;&nbsp;</a>';
-
-                    if (api_get_setting('allow_my_files') === 'false') {
-                        $copyToMyFiles = '';
-                    }*/
-                }
             }
 
             $pdf_icon = '';
             if (!$isAllowedToEdit &&
                 api_get_setting('students_export2pdf') == 'true' &&
-                $filetype == 'file' &&
+                $filetype === 'file' &&
                 in_array($extension, ['html', 'htm'])
             ) {
                 $pdf_icon = ' <a style="float:right".'.$prevent_multiple_click.' href="'.$pageUrl.'?'.$courseParams.'&action=export_to_pdf&id='.$document_data['id'].'&curdirpath='.$curdirpath.'">'.
@@ -5092,11 +5096,23 @@ class DocumentManager
             }
 
             if ($is_browser_viewable_file) {
-                $open_in_new_window_link = '<a href="'.$www.str_replace('%2F', '/', $url_path).'?'.$courseParams.'" style="float:right"'.$prevent_multiple_click.' target="_blank">'.
+                $open_in_new_window_link = '<a href="'.$documentWebPath.str_replace('%2F', '/', $url_path).'?'.$courseParams.'" style="float:right"'.$prevent_multiple_click.' target="_blank">'.
                     Display::return_icon('open_in_new_window.png', get_lang('OpenInANewWindow'), [], ICON_SIZE_SMALL).'&nbsp;&nbsp;</a>';
             }
 
-            if ($filetype == 'file') {
+            if ($addToEditor) {
+                $force_download_html = '';
+                $open_in_new_window_link = '';
+                $send_to = '';
+                $pdf_icon = '';
+                if ($filetype === 'folder') {
+                    $url = $editorUrl.'/'.$document_data['id'].'/?'.api_get_cidreq();
+                } else {
+                    $url = $documentWebPath.str_replace('%2F', '/', $url_path).'?'.$courseParams;
+                }
+            }
+
+            if ($filetype === 'file') {
                 // Sound preview
                 if (preg_match('/mp3$/i', urldecode($checkExtension)) ||
                     (preg_match('/wav$/i', urldecode($checkExtension))) ||
@@ -5117,9 +5133,16 @@ class DocumentManager
                 ) {
                     // Simpler version of showinframesmin.php with no headers
                     $url = 'show_content.php?'.$courseParams.'&id='.$document_data['id'];
-                    $class = 'ajax';
+                    $class = 'ajax ';
+                    if ($addToEditor) {
+                        $class = $classAddToEditor;
+                        $url = $documentWebPath.str_replace('%2F', '/', $url_path).'?'.$courseParams;
+                    }
                     if ($visibility == false) {
-                        $class = "ajax text-muted";
+                        $class = ' ajax text-muted ';
+                        if ($addToEditor) {
+                            $class = ' text-muted not_select_to_ckeditor';
+                        }
                     }
 
                     return Display::url(
@@ -5154,30 +5177,31 @@ class DocumentManager
                 return '<a href="'.$url.'" title="'.$tooltip_title_alt.'" '.$visibility_class.' style="float:left">'.$title.'</a>'.
                 $force_download_html.$send_to.$copyToMyFiles.$open_in_new_window_link.$pdf_icon;
             }
-            // end copy files to users myfiles
         } else {
+            $urlDecoded = urldecode($checkExtension);
             // Icon column
-            if (preg_match('/shared_folder/', urldecode($checkExtension)) &&
-                preg_match('/shared_folder$/', urldecode($checkExtension)) == false &&
+            if (preg_match('/shared_folder/', $urlDecoded) &&
+                preg_match('/shared_folder$/', $urlDecoded) == false &&
                 preg_match('/shared_folder_session_'.$sessionId.'$/', urldecode($url)) == false
             ) {
-                if ($filetype == 'file') {
-                    //Sound preview
-                    if (preg_match('/mp3$/i', urldecode($checkExtension)) ||
-                        (preg_match('/wav$/i', urldecode($checkExtension))) ||
-                        preg_match('/ogg$/i', urldecode($checkExtension))) {
+                if ($filetype === 'file') {
+                    // Sound preview
+                    if (preg_match('/mp3$/i', $urlDecoded) ||
+                        preg_match('/wav$/i', $urlDecoded) ||
+                        preg_match('/ogg$/i', $urlDecoded)
+                    ) {
                         $soundPreview = self::generateAudioPreview($documentWebPath, $document_data);
 
                         return $soundPreview;
                     } elseif (
                         // Show preview
-                        preg_match('/swf$/i', urldecode($checkExtension)) ||
-                        preg_match('/png$/i', urldecode($checkExtension)) ||
-                        preg_match('/gif$/i', urldecode($checkExtension)) ||
-                        preg_match('/jpg$/i', urldecode($checkExtension)) ||
-                        preg_match('/jpeg$/i', urldecode($checkExtension)) ||
-                        preg_match('/bmp$/i', urldecode($checkExtension)) ||
-                        preg_match('/svg$/i', urldecode($checkExtension))
+                        preg_match('/swf$/i', $urlDecoded) ||
+                        preg_match('/png$/i', $urlDecoded) ||
+                        preg_match('/gif$/i', $urlDecoded) ||
+                        preg_match('/jpg$/i', $urlDecoded) ||
+                        preg_match('/jpeg$/i', $urlDecoded) ||
+                        preg_match('/bmp$/i', $urlDecoded) ||
+                        preg_match('/svg$/i', $urlDecoded)
                     ) {
                         $url = $basePageUrl.'showinframes.php?'.$courseParams.'&id='.$document_data['id'];
 
@@ -5198,25 +5222,25 @@ class DocumentManager
                     '</a>';
                 }
             } else {
-                if ($filetype == 'file') {
+                if ($filetype === 'file') {
                     // Sound preview with jplayer
-                    if (preg_match('/mp3$/i', urldecode($checkExtension)) ||
-                        (preg_match('/wav$/i', urldecode($checkExtension))) ||
-                        preg_match('/ogg$/i', urldecode($checkExtension))) {
+                    if (preg_match('/mp3$/i', $urlDecoded) ||
+                        (preg_match('/wav$/i', $urlDecoded)) ||
+                        preg_match('/ogg$/i', $urlDecoded)) {
                         $soundPreview = self::generateAudioPreview($documentWebPath, $document_data);
 
                         return $soundPreview;
                     } elseif (
                         //Show preview
-                        preg_match('/html$/i', urldecode($checkExtension)) ||
-                        preg_match('/htm$/i', urldecode($checkExtension)) ||
-                        preg_match('/swf$/i', urldecode($checkExtension)) ||
-                        preg_match('/png$/i', urldecode($checkExtension)) ||
-                        preg_match('/gif$/i', urldecode($checkExtension)) ||
-                        preg_match('/jpg$/i', urldecode($checkExtension)) ||
-                        preg_match('/jpeg$/i', urldecode($checkExtension)) ||
-                        preg_match('/bmp$/i', urldecode($checkExtension)) ||
-                        preg_match('/svg$/i', urldecode($checkExtension))
+                        preg_match('/html$/i', $urlDecoded) ||
+                        preg_match('/htm$/i', $urlDecoded) ||
+                        preg_match('/swf$/i', $urlDecoded) ||
+                        preg_match('/png$/i', $urlDecoded) ||
+                        preg_match('/gif$/i', $urlDecoded) ||
+                        preg_match('/jpg$/i', $urlDecoded) ||
+                        preg_match('/jpeg$/i', $urlDecoded) ||
+                        preg_match('/bmp$/i', $urlDecoded) ||
+                        preg_match('/svg$/i', $urlDecoded)
                     ) {
                         $url = $basePageUrl.'showinframes.php?'.$courseParams.'&id='.$document_data['id']; //without preview
                         return '<a href="'.$url.'" title="'.$tooltip_title_alt.'" '.$visibility_class.' style="float:left">'.
@@ -5349,12 +5373,11 @@ class DocumentManager
      * @param array $document_data
      * @param int   $id
      * @param bool  $is_template
-     * @param int   $is_read_only
      * @param int   $visibility    (1/0)
      *
      * @return string html img tags with hyperlinks
      */
-    public static function build_edit_icons($document_data, $id, $is_template, $is_read_only = 0, $visibility)
+    public static function build_edit_icons($document_data, $id, $is_template, $visibility)
     {
         $sessionId = api_get_session_id();
         $courseParams = api_get_cidreq();
@@ -6040,50 +6063,40 @@ class DocumentManager
             return false;
         }
 
-        $itemPropertyTable = Database::get_course_table(TABLE_ITEM_PROPERTY);
         $documentTable = Database::get_course_table(TABLE_DOCUMENT);
-
         $conditionSession = api_get_session_condition($sessionId, true, false, 'd.session_id');
         $courseId = $courseInfo['real_id'];
 
         // get invisible folders
         $sql = "SELECT DISTINCT d.id, path
-                FROM $itemPropertyTable i
-                INNER JOIN $documentTable d
-                ON (i.c_id = d.c_id)
-                WHERE
-                    d.id = i.ref AND
-                    i.tool = '".TOOL_DOCUMENT."'
+                FROM $documentTable d 
+                WHERE                   
                     $conditionSession AND
-                    i.c_id = $courseId AND
                     d.c_id = $courseId ";
 
         $result = Database::query($sql);
         $documents = Database::store_result($result, 'ASSOC');
         if ($documents) {
-            $course_dir = $courseInfo['directory'].'/document';
-            $sys_course_path = api_get_path(SYS_COURSE_PATH);
-            $base_work_dir = $sys_course_path.$course_dir;
-
             foreach ($documents as $document) {
                 $documentId = $document['id'];
                 self::delete_document(
                     $courseInfo,
                     null,
-                    $base_work_dir,
+                    null,
                     $sessionId,
                     $documentId
                 );
             }
         }
 
+        /*
         $sql = "DELETE FROM $documentTable
                 WHERE c_id = $courseId AND session_id = $sessionId";
         Database::query($sql);
 
         $sql = "DELETE FROM $itemPropertyTable
                 WHERE c_id = $courseId AND session_id = $sessionId AND tool = '".TOOL_DOCUMENT."'";
-        Database::query($sql);
+        Database::query($sql);*/
     }
 
     /**
@@ -6175,6 +6188,7 @@ class DocumentManager
      *
      * @param string $path
      * @param bool   $can_see_invisible
+     * @deprecated use CDocumentRepository::getFolderSize
      *
      * @return int Total size
      */
@@ -6475,14 +6489,12 @@ class DocumentManager
                 $provider = 'sonata.media.provider.image';
             }
 
-            error_log($provider);
-
             $media->setProviderName($provider);
             $media->setEnabled(true);
 
             if ($content instanceof UploadedFile) {
+                //error_log('UploadedFile');
                 $file = $content;
-                error_log('1');
                 $media->setSize($file->getSize());
             } else {
                 // $path points to a file in the directory
@@ -6494,16 +6506,16 @@ class DocumentManager
                         $media->setHeight($size[1]);
                     }
                     $file = $realPath;
-                    error_log('2');
+                //error_log("file exists: $realPath");
                 } else {
                     // We get the content and create a file
                     $handle = tmpfile();
                     fwrite($handle, $content);
                     $file = new \Sonata\MediaBundle\Extra\ApiMediaFile($handle);
                     $file->setMimetype($media->getContentType());
-                    error_log($file->getSize());
-                    error_log($media->getContentType());
-                    error_log('3');
+                    /*error_log('We get content and create a file from handle');
+                    error_log('Size: '.$file->getSize());
+                    error_log('Content type: '.$media->getContentType());*/
                 }
             }
 
@@ -7128,5 +7140,198 @@ class DocumentManager
         }
 
         return $btn;
+    }
+
+    /**
+     * @param array  $documentAndFolders
+     * @param array  $courseInfo
+     * @param bool   $is_certificate_mode
+     * @param array  $groupMemberWithUploadRights
+     * @param string $path
+     * @param bool   $addToEditor
+     * @param string $editorUrl
+     *
+     * @return array
+     */
+    public static function processDocumentAndFolders(
+        $documentAndFolders,
+        $courseInfo,
+        $is_certificate_mode,
+        $groupMemberWithUploadRights,
+        $path,
+        $addToEditor = false,
+        $editorUrl = ''
+    ) {
+        if (empty($documentAndFolders) || empty($courseInfo)) {
+            return [];
+        }
+        $isAllowedToEdit = api_is_allowed_to_edit(null, true);
+        $userId = api_get_user_id();
+        $currentUserInfo = api_get_user_info();
+        $sessionId = api_get_session_id();
+        $groupId = api_get_group_id();
+        $userIsSubscribed = CourseManager::is_user_subscribed_in_course($userId, $courseInfo['code']);
+        $url = api_get_path(WEB_COURSE_PATH).$courseInfo['directory'].'/document';
+
+        $courseId = $courseInfo['real_id'];
+        $group_properties = GroupManager::get_group_properties($groupId);
+
+        $sortable_data = [];
+        foreach ($documentAndFolders as $key => $document_data) {
+            $row = [];
+            $row['id'] = $document_data['id'];
+            $row['type'] = $document_data['filetype'];
+
+            // If the item is invisible, wrap it in a span with class invisible.
+            $is_visible = self::is_visible_by_id(
+                $document_data['id'],
+                $courseInfo,
+                $sessionId,
+                $userId,
+                false,
+                $userIsSubscribed
+            );
+            $invisibility_span_open = $is_visible == 0 ? '<span class="muted">' : '';
+            $invisibility_span_close = $is_visible == 0 ? '</span>' : '';
+            $size = 1;
+            // Get the title or the basename depending on what we're using
+            if ($document_data['title'] != '') {
+                $document_name = $document_data['title'];
+            } else {
+                $document_name = basename($document_data['path']);
+            }
+            $row['name'] = $document_name;
+            // Data for checkbox
+            if (($isAllowedToEdit || $groupMemberWithUploadRights) && count($documentAndFolders) > 1) {
+                $row[] = $document_data['id'];
+            }
+
+            if (self::is_folder_to_avoid($document_data['path'], $is_certificate_mode)) {
+                continue;
+            }
+
+            // Show the owner of the file only in groups
+            $user_link = '';
+            if (!empty($groupId)) {
+                if (!empty($document_data['insert_user_id'])) {
+                    $userInfo = api_get_user_info(
+                        $document_data['insert_user_id'],
+                        false,
+                        false,
+                        false,
+                        false,
+                        false
+                    );
+                    $user_link = '<div class="document_owner">'
+                        .get_lang('Owner').': '.UserManager::getUserProfileLink($userInfo)
+                        .'</div>';
+                }
+            }
+
+            // Hack in order to avoid the download icon appearing on cloud links
+            if ($document_data['filetype'] == 'link') {
+                $size = 0;
+            }
+
+            // Icons (clickable)
+            $row[] = self::create_document_link(
+                $url,
+                $document_data,
+                true,
+                $is_visible,
+                $size,
+                $isAllowedToEdit,
+                $is_certificate_mode,
+                $addToEditor,
+                $editorUrl
+            );
+
+            // Validation when belongs to a session
+            $session_img = api_get_session_image($document_data['session_id'], $currentUserInfo['status']);
+
+            $link = self::create_document_link(
+                $url,
+                $document_data,
+                false,
+                $is_visible,
+                $size,
+                $isAllowedToEdit,
+                $is_certificate_mode,
+                $addToEditor,
+                $editorUrl
+            );
+
+            // Document title with link
+            $row[] = $link.$session_img.'<br />'.$invisibility_span_open.'<i>'
+                .nl2br(htmlspecialchars($document_data['comment'], ENT_QUOTES, 'utf-8'))
+                .'</i>'.$invisibility_span_close.$user_link;
+
+            if ($document_data['filetype'] == 'folder') {
+                $displaySize = '<span id="document_size_'.$document_data['id']
+                    .'" data-path= "'.$document_data['path']
+                    .'" class="document_size"></span>';
+            } else {
+                $displaySize = format_file_size($document_data['size']);
+            }
+
+            $row[] = '<span style="display:none;">'.$size.'</span>'.
+                $invisibility_span_open.
+                $displaySize.
+                $invisibility_span_close;
+
+            // Last edit date
+            $last_edit_date = api_get_local_time($document_data['updated_at']);
+            $display_date = date_to_str_ago($document_data['updated_at']).
+                ' <div class="muted"><small>'.$last_edit_date."</small></div>";
+
+            $row[] = $invisibility_span_open.$display_date.$invisibility_span_close;
+
+            $groupMemberWithEditRightsCheckDocument = GroupManager::allowUploadEditDocument(
+                $userId,
+                $courseId,
+                $group_properties,
+                $document_data
+            );
+
+            // Admins get an edit column
+            if ($isAllowedToEdit ||
+                $groupMemberWithEditRightsCheckDocument ||
+                self::is_my_shared_folder(api_get_user_id(), $path, $sessionId)
+            ) {
+                $is_template = isset($document_data['is_template']) ? $document_data['is_template'] : false;
+
+                // If readonly, check if it the owner of the file or if the user is an admin
+                if ($document_data['creator_id'] == api_get_user_id() || api_is_platform_admin()) {
+                    $edit_icons = self::build_edit_icons(
+                        $document_data,
+                        $key,
+                        $is_template,
+                        $is_visible
+                    );
+                } else {
+                    $edit_icons = self::build_edit_icons(
+                        $document_data,
+                        $key,
+                        $is_template,
+                        $is_visible
+                    );
+                }
+                $row[] = $edit_icons;
+            } else {
+                $row[] = '';
+            }
+            $row[] = $last_edit_date;
+            $row[] = $size;
+            $row[] = $document_name;
+
+            if ((isset($_GET['keyword']) && self::search_keyword($document_name, $_GET['keyword'])) ||
+                !isset($_GET['keyword']) ||
+                empty($_GET['keyword'])
+            ) {
+                $sortable_data[] = $row;
+            }
+        }
+
+        return $sortable_data;
     }
 }

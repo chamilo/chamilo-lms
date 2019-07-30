@@ -2,6 +2,28 @@
 /* For licensing terms, see /license.txt */
 
 /**
+ * Interface ImsAnswerInterface.
+ */
+interface ImsAnswerInterface
+{
+    /**
+     * @param $questionIdent
+     * @param $questionStatment
+     *
+     * @return mixed
+     */
+    public function imsExportResponses($questionIdent, $questionStatment);
+
+    /**
+     * @param               $questionIdent
+     * @param Question|null $question
+     *
+     * @return mixed
+     */
+    public function imsExportResponsesDeclaration($questionIdent, Question $question = null);
+}
+
+/**
  * @author Claro Team <cvs@claroline.net>
  * @author Yannick Warnier <yannick.warnier@beeznest.com> -
  * updated ImsAnswerHotspot to match QTI norms
@@ -74,7 +96,7 @@ class Ims2Question extends Question
  *
  * @package chamilo.exercise
  */
-class ImsAnswerMultipleChoice extends Answer
+class ImsAnswerMultipleChoice extends Answer implements ImsAnswerInterface
 {
     /**
      * Return the XML flow for the possible answers.
@@ -105,7 +127,7 @@ class ImsAnswerMultipleChoice extends Answer
     /**
      * Return the XML flow of answer ResponsesDeclaration.
      */
-    public function imsExportResponsesDeclaration($questionIdent)
+    public function imsExportResponsesDeclaration($questionIdent, Question $question = null)
     {
         $this->answerList = $this->getAnswersList(true);
         $type = $this->getQuestionType();
@@ -150,8 +172,11 @@ class ImsAnswerMultipleChoice extends Answer
  *
  * @package chamilo.exercise
  */
-class ImsAnswerFillInBlanks extends Answer
+class ImsAnswerFillInBlanks extends Answer implements ImsAnswerInterface
 {
+    private $answerList = [];
+    private $gradeList = [];
+
     /**
      * Export the text with missing words.
      */
@@ -171,7 +196,7 @@ class ImsAnswerFillInBlanks extends Answer
         return $text;
     }
 
-    public function imsExportResponsesDeclaration($questionIdent)
+    public function imsExportResponsesDeclaration($questionIdent, Question $question = null)
     {
         $this->answerList = $this->getAnswersList(true);
         $this->gradeList = $this->getGradesList();
@@ -203,10 +228,11 @@ class ImsAnswerFillInBlanks extends Answer
  *
  * @package chamilo.exercise
  */
-class ImsAnswerMatching extends Answer
+class ImsAnswerMatching extends Answer implements ImsAnswerInterface
 {
-    public $leftList;
-    public $rightList;
+    public $leftList = [];
+    public $rightList = [];
+    private $answerList = [];
 
     /**
      * Export the question part as a matrix-choice, with only one possible answer per line.
@@ -250,7 +276,7 @@ class ImsAnswerMatching extends Answer
         return $out;
     }
 
-    public function imsExportResponsesDeclaration($questionIdent)
+    public function imsExportResponsesDeclaration($questionIdent, Question $question = null)
     {
         $this->answerList = $this->getAnswersList(true);
         $out = '  <responseDeclaration identifier="'.$questionIdent.'" cardinality="single" baseType="identifier">'."\n";
@@ -290,8 +316,11 @@ class ImsAnswerMatching extends Answer
  *
  * @package chamilo.exercise
  */
-class ImsAnswerHotspot extends Answer
+class ImsAnswerHotspot extends Answer implements ImsAnswerInterface
 {
+    private $answerList = [];
+    private $gradeList = [];
+
     /**
      * TODO update this to match hot spots instead of copying matching
      * Export the question part as a matrix-choice, with only one possible answer per line.
@@ -299,8 +328,10 @@ class ImsAnswerHotspot extends Answer
     public function imsExportResponses($questionIdent, $questionStatment, $questionDesc = '', $questionMedia = '')
     {
         $this->answerList = $this->getAnswersList(true);
-        $questionMedia = api_get_path(WEB_COURSE_PATH).api_get_course_path().'/document/images/'.$questionMedia;
-        $mimetype = mime_content_type($questionMedia);
+        $mediaFilePath = api_get_course_path().'/document/images/'.$questionMedia;
+        $sysQuestionMediaPath = api_get_path(SYS_COURSE_PATH).$mediaFilePath;
+        $questionMedia = api_get_path(WEB_COURSE_PATH).$mediaFilePath;
+        $mimetype = mime_content_type($sysQuestionMediaPath);
         if (empty($mimetype)) {
             $mimetype = 'image/jpeg';
         }
@@ -347,7 +378,7 @@ class ImsAnswerHotspot extends Answer
         return $text;
     }
 
-    public function imsExportResponsesDeclaration($questionIdent)
+    public function imsExportResponsesDeclaration($questionIdent, Question $question = null)
     {
         $this->answerList = $this->getAnswersList(true);
         $this->gradeList = $this->getGradesList();
@@ -372,7 +403,7 @@ class ImsAnswerHotspot extends Answer
  *
  * @package chamilo.exercise
  */
-class ImsAnswerFree extends Answer
+class ImsAnswerFree extends Answer implements ImsAnswerInterface
 {
     /**
      * TODO implement
@@ -393,7 +424,7 @@ class ImsAnswerFree extends Answer
             </extendedTextInteraction>';
     }
 
-    public function imsExportResponsesDeclaration($questionIdent, $question)
+    public function imsExportResponsesDeclaration($questionIdent, Question $question = null)
     {
         $out = '  <responseDeclaration identifier="'.$questionIdent.'" cardinality="single" baseType="string">';
         $out .= '<outcomeDeclaration identifier="SCORE" cardinality="single" baseType="float">

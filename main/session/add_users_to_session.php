@@ -7,7 +7,6 @@
 // resetting the course id
 $cidReset = true;
 
-// including some necessary files
 require_once __DIR__.'/../inc/global.inc.php';
 $xajax = new xajax();
 $xajax->registerFunction('search_users');
@@ -43,7 +42,6 @@ if (isset($_REQUEST['add_type']) && $_REQUEST['add_type'] != '') {
 $page = isset($_GET['page']) ? Security::remove_XSS($_GET['page']) : null;
 
 // Checking for extra field with filter on
-
 $extra_field_list = UserManager::get_extra_fields();
 
 $new_field_list = [];
@@ -108,7 +106,7 @@ function search_users($needle, $type)
         // Only for single & multiple
         if (in_array($type, ['single', 'multiple'])) {
             if (!empty($id_session)) {
-                $id_session = intval($id_session);
+                $id_session = (int) $id_session;
                 // check id_user from session_rel_user table
                 $sql = "
                     SELECT user_id FROM $tbl_session_rel_user
@@ -180,14 +178,14 @@ function search_users($needle, $type)
                             INNER JOIN $tbl_user_rel_access_url url_user
                                 ON (url_user.user_id = user.id)
                             WHERE
-                                access_url_id = '$access_url_id'
-                                AND (
-                                    username LIKE '$needle%'
-                                    OR lastname LIKE '$needle%'
-                                    OR firstname LIKE '$needle%'
-                                )
-                                AND user.status <> 6
-                                AND user.status <> ".DRH."
+                                access_url_id = '$access_url_id' AND
+                                (
+                                    username LIKE '$needle%' OR 
+                                    lastname LIKE '$needle%' OR 
+                                    firstname LIKE '$needle%'
+                                ) AND 
+                                user.status <> 6 AND 
+                                user.status <> ".DRH."
                             $order_clause LIMIT 11
                         ";
                         break;
@@ -238,8 +236,11 @@ function search_users($needle, $type)
                             $officialCode.$user['lastname'].' '.$user['firstname'].' ('.$user['username'].')';
                     }
 
-                    $return .= '<a href="javascript: void(0);" onclick="javascript: add_user_to_session(\''.$user['id']
-                        .'\',\''.$person_name.' '.'\')">'.$person_name.' </a><br />';
+                    $return .= Display::url(
+                        $person_name,
+                        'javascript: void(0);',
+                        ['onclick' => "add_user_to_session('".$user['id']."', '".addslashes($person_name)."');"]
+                    ).'<br>';
                 } else {
                     $return .= '...<br />';
                 }
@@ -247,7 +248,6 @@ function search_users($needle, $type)
 
             $xajax_response->addAssign('ajax_list_users_single', 'innerHTML', api_utf8_encode($return));
         } else {
-            global $nosessionUsersList;
             $return .= '<select id="origin_users" name="nosessionUsersList[]" multiple="multiple" size="15" style="width:360px;">';
             while ($user = Database:: fetch_array($rs)) {
                 $person_name =

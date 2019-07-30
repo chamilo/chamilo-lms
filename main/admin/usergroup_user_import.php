@@ -83,7 +83,7 @@ function save_data($users_classes, $deleteUsersNotInList = false)
                      WHERE username = '".Database::escape_string(UserManager::purify_username($user_class['UserName'], $purification_option_for_usernames))."'";
             $res1 = Database::query($sql1);
             $obj1 = Database::fetch_object($res1);
-            $id = $usergroup->get_id_by_name($user_class['ClassName']);
+            $id = $usergroup->getIdByName($user_class['ClassName']);
 
             if ($obj1 && $id) {
                 $csv_data[$id]['user_list'][] = $obj1->user_id;

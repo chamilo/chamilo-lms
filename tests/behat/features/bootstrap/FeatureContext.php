@@ -71,7 +71,7 @@ class FeatureContext extends MinkContext
     public function courseExists($argument)
     {
         $this->iAmAPlatformAdministrator();
-        $this->visit('/main/admin/course_list.php?keyword=' . $argument);
+        $this->visit('/main/admin/course_list.php?keyword='.$argument);
         $this->assertPageContainsText($argument);
     }
 
@@ -81,7 +81,7 @@ class FeatureContext extends MinkContext
     public function courseIsDeleted($argument)
     {
         $this->iAmAPlatformAdministrator();
-        $this->visit('/main/admin/course_list.php?keyword=' . $argument);
+        $this->visit('/main/admin/course_list.php?keyword='.$argument);
         $this->clickLink('Delete');
     }
 
@@ -136,16 +136,16 @@ class FeatureContext extends MinkContext
         $sendInvitationURL = '/main/inc/ajax/message.ajax.php?'.
             http_build_query(
                 [
-            'a' => 'send_invitation',
-            'user_id' => $friendId,
+                    'a' => 'send_invitation',
+                    'user_id' => $friendId,
                     'content' => 'Add me',
                 ]
             );
         $acceptInvitationURL = '/main/inc/ajax/social.ajax.php?'.
             http_build_query(
                 [
-            'a' => 'add_friend',
-            'friend_id' => $adminId,
+                    'a' => 'add_friend',
+                    'friend_id' => $adminId,
                     'is_my_friend' => 'friend',
                 ]
             );
@@ -166,14 +166,14 @@ class FeatureContext extends MinkContext
         $this->fillFields(
             new TableNode(
                 [
-            ['title', 'Password Protected'],
-            ['visual_code', $code],
+                    ['title', 'Password Protected'],
+                    ['visual_code', $code],
                     ['visibility', 3],
                 ]
             )
         );
         $this->pressButton('submit');
-        $this->visit('/main/course_info/infocours.php?cidReq=' . $code);
+        $this->visit('/main/course_info/infocours.php?cidReq='.$code);
         $this->assertPageContainsText('Course registration password');
         $this->fillField('course_registration_password', $password);
         $this->pressButton('submit_save');
@@ -194,7 +194,7 @@ class FeatureContext extends MinkContext
      */
     public function iInviteAFriendToASocialGroup($friendId, $groupId)
     {
-        $this->visit('/main/social/group_invitation.php?id=' . $groupId);
+        $this->visit('/main/social/group_invitation.php?id='.$groupId);
         $this->fillField('invitation[]', $friendId);
         $this->pressButton('submit');
     }
@@ -233,7 +233,7 @@ class FeatureContext extends MinkContext
      */
     public function iAmOnSocialGroupMembersPageWithId($groupId)
     {
-        $this->visit('/main/social/group_view.php?id=' . $groupId);
+        $this->visit('/main/social/group_view.php?id='.$groupId);
     }
 
     /**
@@ -244,8 +244,8 @@ class FeatureContext extends MinkContext
         $this->visit(
             '/main/social/group_members.php?'.http_build_query(
                 [
-            'id' => $groupId,
-            'u' => $friendId,
+                    'id' => $groupId,
+                    'u' => $friendId,
                     'action' => 'delete',
                 ]
             )
@@ -468,6 +468,29 @@ class FeatureContext extends MinkContext
             return true;
         }
         return false;
+    }
+
+    /**
+     * @Then /^I save current URL with name "([^"]*)"$/
+     */
+    public function saveUrlWithName($name)
+    {
+
+        $url = $this->getSession()->getCurrentUrl();
+        $this->getSession()->setCookie($name, $url);
+    }
+
+    /**
+     * @Then /^I visit URL saved with name "([^"]*)"$/
+     */
+    public function visitSavedUrlWithName($name)
+    {
+        $url = $this->getSession()->getCookie($name);
+        echo $url;
+        if (empty($url)) {
+            throw new Exception("Url with name: $name not found");
+        }
+        $this->visit($url);
     }
 
     /**

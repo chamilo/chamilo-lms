@@ -188,7 +188,7 @@ $course_quiz_answer = 'quiz_answer';
 $course_student_publication = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
 $TABLECALHORAIRE = Database:: get_course_table(TABLE_CAL_HORAIRE);
 
-if (isset($_GET['user_id']) && $_GET['user_id'] != "") {
+if (isset($_GET['user_id']) && $_GET['user_id'] != '') {
     $user_id = intval($_GET['user_id']);
 } else {
     $user_id = api_get_user_id();
@@ -323,17 +323,7 @@ $isDrhOfCourse = CourseManager::isUserSubscribedInCourseAsDrh(
 
 if (api_is_drh() && !api_is_platform_admin()) {
     if (!empty($studentId)) {
-        if (api_drh_can_access_all_session_content()) {
-            //@todo securize drh with student id
-            /*$users = SessionManager::getAllUsersFromCoursesFromAllSessionFromStatus('drh_all', api_get_user_id());
-            $userList = [];
-            foreach ($users as $user) {
-                $userList[] = $user['user_id'];
-            }
-            if (!in_array($student_id, $userList)) {
-                api_not_allowed(true);
-            }*/
-        } else {
+        if (!api_drh_can_access_all_session_content()) {
             if (!($isDrhOfCourse)) {
                 if (api_is_drh() &&
                     !UserManager::is_user_followed_by_drh($studentId, api_get_user_id())

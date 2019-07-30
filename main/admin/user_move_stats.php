@@ -122,7 +122,7 @@ if (isset($_REQUEST['load_ajax'])) {
                     );
                 }
 
-                //Begin with the import process
+                // Begin with the import process
                 $course_info = api_get_course_info($origin_course_code);
                 $course_id = $course_info['real_id'];
 
@@ -237,6 +237,7 @@ if (isset($_REQUEST['load_ajax'])) {
                 while ($row = Database::fetch_array($res, 'ASSOC')) {
                     $list[] = $row['access_id'];
                 }
+
                 if (!empty($list)) {
                     foreach ($list as $id) {
                         if ($update_database) {
@@ -260,7 +261,7 @@ if (isset($_REQUEST['load_ajax'])) {
                 $res = Database::query($sql);
 
                 //Getting the list of LPs in the new session
-                $lp_list = new LearnpathList($user_id, $origin_course_code, $new_session_id);
+                $lp_list = new LearnpathList($user_id, $course_info, $new_session_id);
                 $flat_list = $lp_list->get_flat_list();
 
                 $list = [];
@@ -312,8 +313,8 @@ if (isset($_REQUEST['load_ajax'])) {
                     $sql = "SELECT * FROM $TBL_LP_VIEW WHERE user_id = $user_id AND session_id = $new_session_id AND c_id = $course_id";
                     $res = Database::query($sql);
 
-                    //Getting the list of LPs in the new session
-                    $lp_list = new LearnpathList($user_id, $origin_course_code, $new_session_id);
+                    // Getting the list of LPs in the new session
+                    $lp_list = new LearnpathList($user_id, $course_info, $new_session_id);
                     $flat_list = $lp_list->get_flat_list();
 
                     $list = [];

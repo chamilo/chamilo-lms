@@ -75,11 +75,11 @@ function api_set_encoding_html(&$string, $encoding)
         $count = 1;
         if (strpos('</head>', strtolower($string)) !== false) {
             $string = str_ireplace(
-            '</head>',
-            '<meta http-equiv="Content-Type" content="text/html; charset='.$encoding.'"/></head>',
-            $string,
-            $count
-        );
+                '</head>',
+                '<meta http-equiv="Content-Type" content="text/html; charset='.$encoding.'"/></head>',
+                $string,
+                $count
+            );
         } else {
             $string = str_ireplace(
                 '<body>',
@@ -414,9 +414,7 @@ function api_trunc_str($text, $length = 30, $suffix = '...', $middle = false, $e
  */
 function domesticate($input)
 {
-    $input = stripslashes($input);
-    $input = str_replace("'", "''", $input);
-    $input = str_replace('"', "''", $input);
+    $input = str_replace(["'", '"'], "''", stripslashes($input));
 
     return $input;
 }

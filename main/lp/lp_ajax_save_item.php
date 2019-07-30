@@ -121,6 +121,15 @@ function save_item(
             error_log('Prerequisites are OK');
         }
 
+        $logInfo = [
+            'tool' => TOOL_LEARNPATH,
+            'tool_id' => $lp_id,
+            'tool_id_detail' => $item_id,
+            'action' => 'view',
+            'action_details' => $myLP->getCurrentAttempt(),
+        ];
+        Event::registerLog($logInfo);
+
         if (isset($max) && $max != -1) {
             $myLPI->max_score = $max;
             $myLPI->set_max_score($max);
@@ -490,17 +499,8 @@ function save_item(
     }
 
     if ($myLP->get_type() == 2) {
-        $return .= "update_stats();";
+        $return .= 'update_stats();';
     }
-
-    $logInfo = [
-        'tool' => TOOL_LEARNPATH,
-        'tool_id' => $myLP->get_id(),
-        'tool_id_detail' => $myLP->get_current_item_id(),
-        'action' => 'save_item',
-        'info' => '',
-    ];
-    Event::registerLog($logInfo);
 
     // To be sure progress is updated.
     $myLP->save_last();
@@ -511,6 +511,15 @@ function save_item(
         error_log("lp_view_session_id :".$myLP->lp_view_session_id);
         error_log('---------------- lp_ajax_save_item.php : save_item end ----- ');
     }
+
+    $logInfo = [
+        'tool' => TOOL_LEARNPATH,
+        'tool_id' => $myLP->get_id(),
+        'action_details' => $myLP->getCurrentAttempt(),
+        'tool_id_detail' => $myLP->get_current_item_id(),
+        'action' => 'save_item',
+    ];
+    Event::registerLog($logInfo);
 
     return $return;
 }

@@ -1,3 +1,4 @@
+{% autoescape false %}
 {{ form }}
 
 {% if session %}
@@ -31,3 +32,5 @@
         </table>
     </div>
 {% endif %}
+
+{% endautoescape %}

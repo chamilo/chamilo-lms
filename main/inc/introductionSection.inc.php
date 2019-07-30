@@ -54,7 +54,7 @@ if (!empty($courseId)) {
 }
 
 $config = [
-    'ToolbarSet' => 'Basic',
+    'ToolbarSet' => 'IntroductionSection',
     'Width' => '100%',
     'Height' => '300',
 ];

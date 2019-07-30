@@ -105,9 +105,10 @@ if ($currentSession) {
             'stats' => [],
         ];
 
+        $courseInfo = api_get_course_info($course->getCode());
         $learningPathList = new LearnpathList(
             $user->getId(),
-            $course->getCode(),
+            $courseInfo,
             $currentSession->getId()
         );
 
@@ -123,10 +124,8 @@ if ($currentSession) {
                 ]).api_get_cidreq(),
             ];
         }
-
         $sessionData[$course->getId()] = $courseData;
     }
-
     $template->assign('session_data', $sessionData);
 }
 

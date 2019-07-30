@@ -141,7 +141,7 @@ class CourseHome
                     !learnpath::is_lp_visible_for_student(
                         $lpId,
                         api_get_user_id(),
-                        api_get_course_id(),
+                        api_get_course_info(),
                         api_get_session_id()
                     )
                 ) {
@@ -354,7 +354,7 @@ class CourseHome
                         !learnpath::is_lp_visible_for_student(
                             $lpId,
                             api_get_user_id(),
-                            api_get_course_id(),
+                            api_get_course_info(),
                             api_get_session_id()
                         )
                     ) {
@@ -460,7 +460,7 @@ class CourseHome
                     }
                 }
                 if (is_array($lnk)) {
-                    $html .= '<div class="float-right">';
+                    $html .= '<div class="pull-right">';
                     $html .= '<div class="btn-options">';
                     $html .= '<div class="btn-group btn-group-sm" role="group">';
                     foreach ($lnk as &$this_link) {
@@ -511,6 +511,7 @@ class CourseHome
         // Condition for the session
         $sessionId = $sessionId ?: api_get_session_id();
         $course_id = $courseId ?: api_get_course_int_id();
+        $courseInfo = api_get_course_info_by_id($course_id);
         $userId = api_get_user_id();
         $user = api_get_user_entity($userId);
         $condition_session = api_get_session_condition(
@@ -521,6 +522,7 @@ class CourseHome
         );
 
         $lpTable = Database::get_course_table(TABLE_LP_MAIN);
+        $tblLpCategory = Database::get_course_table(TABLE_LP_CATEGORY);
         $studentView = api_is_student_view_active();
 
         $orderBy = ' ORDER BY id ';
@@ -543,18 +545,32 @@ class CourseHome
                 $sql = "SELECT t.* FROM $course_tool_table t
                         LEFT JOIN $lpTable l 
                         ON (t.c_id = l.c_id AND link LIKE concat('%/lp_controller.php?action=view&lp_id=', l.id, '&%'))
+                        LEFT JOIN $tblLpCategory lc
+                        ON (t.c_id = lc.c_id AND l.category_id = lc.iid)
                         $conditions AND
                         t.c_id = $course_id $condition_session 
-                        ORDER BY CASE WHEN l.display_order IS NULL THEN 0 ELSE 1 END, l.display_order, t.id";
+                        ORDER BY
+                            CASE WHEN l.category_id IS NULL THEN 0 ELSE 1 END,
+                            CASE WHEN l.display_order IS NULL THEN 0 ELSE 1 END,
+                            lc.position,
+                            l.display_order,
+                            t.id";
                 $orderBy = '';
                 break;
             case TOOL_AUTHORING:
                 $sql = "SELECT t.* FROM $course_tool_table t
-                        LEFT JOIN $lpTable l 
+                        LEFT JOIN $lpTable l
                         ON (t.c_id = l.c_id AND link LIKE concat('%/lp_controller.php?action=view&lp_id=', l.id, '&%'))
-                        WHERE 
+                        LEFT JOIN $tblLpCategory lc
+                        ON (t.c_id = lc.c_id AND l.category_id = lc.iid)
+                        WHERE
                             category = 'authoring' AND t.c_id = $course_id $condition_session
-                        ORDER BY CASE WHEN l.display_order IS NULL THEN 0 ELSE 1 END, l.display_order, t.id";
+                        ORDER BY
+                            CASE WHEN l.category_id IS NULL THEN 0 ELSE 1 END,
+                            CASE WHEN l.display_order IS NULL THEN 0 ELSE 1 END,
+                            lc.position,
+                            l.display_order,
+                            t.id";
                 $orderBy = '';
                 break;
             case TOOL_INTERACTION:
@@ -665,8 +681,8 @@ class CourseHome
                         $add = learnpath::is_lp_visible_for_student(
                             $lpId,
                             $userId,
-                            api_get_course_id(),
-                            api_get_session_id()
+                            $courseInfo,
+                            $sessionId
                         );
                     }
                     if ($path) {
@@ -766,7 +782,7 @@ class CourseHome
             $tbl_blogs_rel_user = Database::get_course_table(TABLE_BLOGS_REL_USER);
             foreach ($tmp_all_tools_list as $tool) {
                 if ($tool['image'] == 'blog.gif') {
-                    // Init
+                    // Get blog id
                     $blog_id = substr($tool['link'], strrpos($tool['link'], '=') + 1, strlen($tool['link']));
 
                     // Get blog members
@@ -846,7 +862,7 @@ class CourseHome
                 $studentview = false;
                 $tool['original_link'] = $tool['link'];
                 if ($tool['image'] == 'scormbuilder.gif') {
-                    // check if the published learnpath is visible for student
+                    // Check if the published learnpath is visible for student
                     $lpId = self::getPublishedLpIdFromLink($tool['link']);
                     if (api_is_allowed_to_edit(null, true)) {
                         $studentview = true;
@@ -855,7 +871,7 @@ class CourseHome
                         !learnpath::is_lp_visible_for_student(
                             $lpId,
                             api_get_user_id(),
-                            api_get_course_id(),
+                            api_get_course_info(),
                             api_get_session_id()
                         )
                     ) {

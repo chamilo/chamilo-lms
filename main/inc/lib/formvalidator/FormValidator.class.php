@@ -202,6 +202,15 @@ EOT;
     }
 
     /**
+     * Add hidden course params.
+     */
+    public function addCourseHiddenParams()
+    {
+        $this->addHidden('cidReq', api_get_course_id());
+        $this->addHidden('id_session', api_get_session_id());
+    }
+
+    /**
      * The "date_range_picker" element creates 2 hidden fields
      * "elementName" + "_start"  and "elementName" + "_end"
      * For example if the name is "range", you will have 2 new fields
@@ -907,7 +916,9 @@ EOT;
      */
     public function addHeader($text)
     {
-        $this->addElement('header', $text);
+        if (!empty($text)) {
+            $this->addElement('header', $text);
+        }
     }
 
     /**
@@ -1033,10 +1044,10 @@ EOT;
 
         /** @var HtmlEditor $element */
         $element = $this->getElement($name);
-        $config['style'] = false;
+        $config['style'] = isset($config['style']) ? $config['style'] : false;
         if ($fullPage) {
             $config['fullPage'] = true;
-            // Adds editor.css in ckEditor
+            // Adds editor_content.css in ckEditor
             $config['style'] = true;
         }
 

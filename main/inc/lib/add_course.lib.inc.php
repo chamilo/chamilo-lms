@@ -233,15 +233,15 @@ class AddCourse
         $tables[] = 'student_publication';
         $tables[] = 'student_publication_assignment';
         $tables[] = 'document';
-        $tables[] = 'forum_post';
+        $tables[] = 'forum_category';
+        $tables[] = 'forum_forum';
         $tables[] = 'forum_thread';
+        $tables[] = 'forum_post';
         $tables[] = 'forum_mailcue';
         $tables[] = 'forum_attachment';
         $tables[] = 'forum_notification';
         $tables[] = 'forum_thread_qualify';
         $tables[] = 'forum_thread_qualify_log';
-        $tables[] = 'forum_forum';
-        $tables[] = 'forum_category';
         $tables[] = 'link';
         $tables[] = 'link_category';
         $tables[] = 'online_connected';
@@ -453,6 +453,7 @@ class AddCourse
         $files = [
             ['path' => '/shared_folder', 'title' => get_lang('UserFolders'), 'filetype' => 'folder', 'size' => 0],
             ['path' => '/chat_files', 'title' => get_lang('ChatFiles'), 'filetype' => 'folder', 'size' => 0],
+            ['path' => '/certificates', 'title' => get_lang('CertificatesFiles'), 'filetype' => 'folder', 'size' => 0],
         ];
 
         $counter = 1;
@@ -471,7 +472,6 @@ class AddCourse
                 ['path' => '/audio', 'title' => get_lang('Audio'), 'filetype' => 'folder', 'size' => 0],
                 ['path' => '/flash', 'title' => get_lang('Flash'), 'filetype' => 'folder', 'size' => 0],
                 ['path' => '/video', 'title' => get_lang('Video'), 'filetype' => 'folder', 'size' => 0],
-                ['path' => '/certificates', 'title' => get_lang('Certificates'), 'filetype' => 'folder', 'size' => 0],
             ];
 
             foreach ($files as $file) {
@@ -765,14 +765,15 @@ class AddCourse
     /**
      * Function register_course to create a record in the course table of the main database.
      *
-     * @param array Course details (see code for details)
+     * @param array $params      Course details (see code for details).
+     * @param int   $accessUrlId Optional.
      *
      * @return int Created course ID
      *
      * @todo use an array called $params instead of lots of params
      * @assert (null) === false
      */
-    public static function register_course($params)
+    public static function register_course($params, $accessUrlId = 1)
     {
         global $error_msg;
         $title = $params['title'];
@@ -944,16 +945,7 @@ class AddCourse
                 }
 
                 // Adding the course to an URL.
-                // Already added by when saving the entity
-                /*if (api_is_multiple_url_enabled()) {
-                    $url_id = 1;
-                    if (api_get_current_access_url_id() != -1) {
-                        $url_id = api_get_current_access_url_id();
-                    }
-                    UrlManager::add_course_to_url($course_id, $url_id);
-                } else {
-                    UrlManager::add_course_to_url($course_id, 1);
-                }*/
+                UrlManager::add_course_to_url($course_id, $accessUrlId);
 
                 // Add event to the system log.
                 $user_id = api_get_user_id();

@@ -133,10 +133,9 @@
     </div>
     {% if badge.allow_download_export %}
         <script>
-            $(document).on('ready', function () {
+            $(function () {
                 $('#badge-export-button-{{ badge.issue_info.id }}').on('click', function (e) {
                     e.preventDefault();
-
                     OpenBadges.issue({{ badge.issue_info.badge_assertion|json_encode() }});
                 });
             });

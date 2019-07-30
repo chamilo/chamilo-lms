@@ -121,7 +121,7 @@ switch ($type) {
         break;
 }
 
-if ($action == 'add_item' && $type == 'document') {
+if ($action === 'add_item' && $type === 'document') {
     $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('NewDocumentCreated')];
 }
 
@@ -216,7 +216,6 @@ if (($type == 'document' || $type == 'step') && !isset($_GET['file'])) {
     echo '<div id="frmModel" class="scrollbar-inner lp-add-item">';
     echo '</div>';
 }
-
 echo '</div>';
 
 echo '<div id="doc_form" class="col-md-8">';

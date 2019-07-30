@@ -1,13 +1,11 @@
+{% autoescape false %}
 {{ form }}
 
 {% for item in list %}
-
     <h4>{{ item.name }}
-
         {#<a href="{{ _p.web_main }}admin/skill_level.php?action=add_level&id={{ item.id }}">#}
         {#<img src="{{ 'add.png'|icon(22) }}">#}
         {#</a>#}
-
         <a href="{{ _p.web_main }}admin/skill_profile.php?action=edit&id={{ item.id }}">
             <img src="{{ 'edit.png'|icon(22) }}"> </a>
 
@@ -15,12 +13,10 @@
             <img src="{{ 'delete.png'|icon(22) }}">
         </a>
     </h4>
-
     <ul>
         {% for level in item.levels %}
             <li>
                 {{ level }}
-
                 {% if loop.first %}
                     <img src="{{ 'up_na.png'|icon(22) }}">
                 {% else %}
@@ -40,3 +36,4 @@
         {% endfor %}
     </ul>
 {% endfor %}
+{% endautoescape %}

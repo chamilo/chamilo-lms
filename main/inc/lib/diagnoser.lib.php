@@ -115,7 +115,7 @@ class Diagnoser
                 $row++;
             }
 
-            echo $table->display();
+            $table->display();
         }
         echo '</div></div>';
     }
@@ -192,6 +192,7 @@ class Diagnoser
         $access_url_id = api_get_current_access_url_id();
 
         if ($access_url_id === 1) {
+            $size = '-';
             global $_configuration;
             $message2 = '';
             if ($access_url_id === 1) {
@@ -201,6 +202,7 @@ class Diagnoser
                     $dir = api_get_path(SYS_PATH);
                     $du = exec('du -sh '.$dir, $err);
                     list($size, $none) = explode("\t", $du);
+                    unset($none);
                     $limit = 0;
                     if (isset($_configuration[$access_url_id])) {
                         if (isset($_configuration[$access_url_id]['hosting_limit_disk_space'])) {
@@ -222,6 +224,32 @@ class Diagnoser
                 $message2
             );
         }
+        $new_version = '-';
+        $new_version_status = '';
+        $file = api_get_path(SYS_CODE_PATH).'install/version.php';
+        if (is_file($file)) {
+            @include $file;
+        }
+        $array[] = $this->build_setting(
+            self::STATUS_INFORMATION,
+            '[CONFIG]',
+            get_lang('VersionFromVersionFile'),
+            '#',
+            $new_version.' '.$new_version_status,
+            '-',
+            null,
+            get_lang('TheVersionFromTheVersionFileIsUpdatedWithEachVersionIfMainInstallDirectoryIsPresent')
+        );
+        $array[] = $this->build_setting(
+            self::STATUS_INFORMATION,
+            '[CONFIG]',
+            get_lang('VersionFromConfigFile'),
+            '#',
+            api_get_configuration_value('system_version'),
+            $new_version,
+            null,
+            get_lang('TheVersionFromTheConfigurationFileShowsOnTheAdminPageButHasToBeChangedManuallyOnUpgrade')
+        );
 
         return $array;
     }
@@ -760,6 +788,17 @@ class Diagnoser
 
     /**
      * Additional functions needed for fast integration.
+     *
+     * @param int    $status         Status constant defining which icon to use to illustrate the info
+     * @param string $section        The name of the section this setting is included in
+     * @param string $title          The name of the setting (usually a translated string)
+     * @param string $url            A URL to point the user to regarding this setting, or '#' otherwise
+     * @param mixed  $current_value  The current value for this setting
+     * @param mixed  $expected_value The expected value for this setting
+     * @param string $formatter      If this setting is expressed in some kind of format, which format to use
+     * @param string $comment        A translated string explaining what this setting represents
+     *
+     * @return array A list of elements to show in an array's row
      */
     public function build_setting(
         $status,
@@ -782,6 +821,7 @@ class Diagnoser
                 $img = 'bullet_red.png';
                 break;
             case self::STATUS_INFORMATION:
+            default:
                 $img = 'bullet_blue.png';
                 break;
         }

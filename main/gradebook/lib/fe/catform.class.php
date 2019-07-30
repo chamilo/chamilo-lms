@@ -39,26 +39,23 @@ class CatForm extends FormValidator
         if (isset($category_object)) {
             $this->category_object = $category_object;
         }
-        if ($this->form_type == self::TYPE_EDIT) {
-            $this->build_editing_form();
-        } elseif ($this->form_type == self::TYPE_ADD) {
-            $this->build_add_form();
-        } elseif ($this->form_type == self::TYPE_MOVE) {
-            $this->build_move_form();
-        } elseif ($this->form_type == self::TYPE_SELECT_COURSE) {
-            $this->build_select_course_form();
+
+        switch ($this->form_type) {
+            case self::TYPE_EDIT:
+                $this->build_editing_form();
+                break;
+            case self::TYPE_ADD:
+                $this->build_add_form();
+                break;
+            case self::TYPE_MOVE:
+                $this->build_move_form();
+                break;
+            case self::TYPE_SELECT_COURSE:
+                $this->build_select_course_form();
+                break;
         }
+
         $this->setDefaults();
-    }
-
-    public function display()
-    {
-        parent::display();
-    }
-
-    public function setDefaults($defaults = [], $filter = null)
-    {
-        parent::setDefaults($defaults, $filter);
     }
 
     /**
@@ -98,13 +95,12 @@ class CatForm extends FormValidator
      */
     protected function build_add_form()
     {
-        //check if we are a root category
-        //if so, you can only choose between courses
+        // check if we are a root category
+        // if so, you can only choose between courses
         if ($this->category_object->get_parent_id() == '0') {
             $this->setDefaults(
                 [
-                    'select_course' => $this->category_object->get_course_code(
-                    ),
+                    'select_course' => $this->category_object->get_course_code(),
                     'hid_user_id' => $this->category_object->get_user_id(),
                     'hid_parent_id' => $this->category_object->get_parent_id(),
                 ]
@@ -134,7 +130,7 @@ class CatForm extends FormValidator
 
         $course_code = api_get_course_id();
         $session_id = api_get_session_id();
-        //Freeze or not
+
         $test_cats = Category::load(
             null,
             null,
@@ -143,7 +139,7 @@ class CatForm extends FormValidator
             null,
             $session_id,
             false
-        ); //already init
+        );
 
         $links = null;
         if (isset($test_cats[0])) {
@@ -179,6 +175,7 @@ class CatForm extends FormValidator
                 'is_requirement' => $this->category_object->getIsRequirement(),
             ]
         );
+
         $this->addElement('hidden', 'hid_id', $this->category_object->get_id());
         $this->addElement(
             'hidden',
@@ -200,10 +197,9 @@ class CatForm extends FormValidator
             [get_lang('PickACourse'), 'test'],
             null
         );
-        $coursecat = Category::get_all_courses(api_get_user_id());
+        $courses = Category::get_all_courses(api_get_user_id());
         //only return courses that are not yet created by the teacher
-
-        foreach ($coursecat as $row) {
+        foreach ($courses as $row) {
             $select->addoption($row[1], $row[0]);
         }
         $this->setDefaults([
@@ -228,7 +224,7 @@ class CatForm extends FormValidator
         if (isset($this->category_object) &&
             $this->category_object->get_parent_id() == 0
         ) {
-            //we can't change the root category
+            // we can't change the root category
             $this->freeze('name');
         }
 
@@ -276,15 +272,40 @@ class CatForm extends FormValidator
             }
         }
 
+        $defaultCertification = 0;
         if (isset($this->category_object) &&
             $this->category_object->get_parent_id() == 0
         ) {
-            $this->addText(
-                'certif_min_score',
-                get_lang('CertificateMinScore'),
-                true,
-                ['maxlength' => '5']
-            );
+            $model = ExerciseLib::getCourseScoreModel();
+            if (empty($model)) {
+                $this->addText(
+                    'certif_min_score',
+                    get_lang('CertificateMinScore'),
+                    true,
+                    ['maxlength' => '5']
+                );
+            } else {
+                $questionWeighting = $value;
+                $defaultCertification = api_number_format($this->category_object->getCertificateMinScore(), 2);
+                $select = $this->addSelect(
+                    'certif_min_score',
+                    get_lang('CertificateMinScore'),
+                    [],
+                    ['disable_js' => true]
+                );
+
+                foreach ($model['score_list'] as $item) {
+                    $i = api_number_format($item['score_to_qualify'] / 100 * $questionWeighting, 2);
+                    $model = ExerciseLib::getModelStyle($item, $i);
+                    $attributes = ['class' => $item['css_class']];
+                    if ($defaultCertification == $i) {
+                        $attributes['selected'] = 'selected';
+                    }
+                    $select->addOption($model, $i, $attributes);
+                }
+                $select->updateSelectWithSelectedOption($this);
+            }
+
             $this->addRule(
                 'certif_min_score',
                 get_lang('OnlyNumbers'),
@@ -335,7 +356,7 @@ class CatForm extends FormValidator
                 null,
                 $session_id,
                 false
-            ); //already init
+            );
             $links = null;
             if (!empty($test_cats[0])) {
                 $links = $test_cats[0]->get_links();
@@ -376,6 +397,15 @@ class CatForm extends FormValidator
             $isRequirementCheckbox->setChecked(true);
         }
 
+        $documentId = $this->category_object->getDocumentId();
+        if (!empty($documentId)) {
+            $documentData = DocumentManager::get_document_data_by_id($documentId, api_get_course_id());
+
+            if (!empty($documentData)) {
+                $this->addLabel(get_lang('Certificate'), $documentData['title']);
+            }
+        }
+
         if ($this->form_type == self::TYPE_ADD) {
             $this->addButtonCreate(get_lang('AddCategory'));
         } else {
@@ -388,6 +418,13 @@ class CatForm extends FormValidator
         if (isset($setting['gradebook']) && $setting['gradebook'] == 'false') {
             $visibility_default = 0;
         }
-        $this->setDefaults(['visible' => $visibility_default, 'skills' => $skillsDefaults]);
+
+        $this->setDefaults(
+            [
+                'visible' => $visibility_default,
+                'skills' => $skillsDefaults,
+                'certif_min_score' => (string) $defaultCertification,
+            ]
+        );
     }
 }

@@ -83,7 +83,7 @@ if (!empty($action)) {
 $tool_name = get_lang('AdminCategories');
 $interbreadcrumb[] = [
     'url' => 'index.php',
-    "name" => get_lang('PlatformAdmin'),
+    'name' => get_lang('PlatformAdmin'),
 ];
 
 Display::display_header($tool_name);

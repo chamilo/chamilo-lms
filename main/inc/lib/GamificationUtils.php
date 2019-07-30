@@ -59,7 +59,7 @@ class GamificationUtils
         foreach ($courses as $course) {
             $learnPathListObject = new LearnpathList(
                 $userId,
-                $course['code'],
+                api_get_course_info($course['code']),
                 $sessionId
             );
             $learnPaths = $learnPathListObject->get_flat_list();
@@ -145,7 +145,7 @@ class GamificationUtils
         foreach ($courses as $course) {
             $learnPathListObject = new LearnpathList(
                 $userId,
-                $course['code'],
+                api_get_course_info($course['code']),
                 $sessionId
             );
             $learnPaths = $learnPathListObject->get_flat_list();

@@ -1,4 +1,6 @@
 <?php
+/* For licensing terms, see /license.txt*/
+
 /**
  * Validates imported data.
  */
@@ -87,6 +89,8 @@ function complete_missing_data($user)
 
 /**
  * Save the imported data.
+ *
+ * @param array
  */
 function save_data($users)
 {
@@ -107,13 +111,16 @@ function save_data($users)
                 '',
                 $user['AuthSource']
             );
-            foreach ($user['Courses'] as $index => $course) {
-                if (CourseManager:: course_exists($course)) {
-                    CourseManager:: subscribe_user(
-                        $user_id,
-                        $course,
-                        $user['Status']
-                    );
+
+            if (!empty($user['Courses'])) {
+                foreach ($user['Courses'] as $course) {
+                    if (CourseManager::course_exists($course)) {
+                        CourseManager::subscribeUser(
+                            $user_id,
+                            $course,
+                            $user['Status']
+                        );
+                    }
                 }
             }
 
@@ -151,7 +158,7 @@ function save_data($users)
  */
 function parse_csv_data($file)
 {
-    $users = Import :: csvToArray($file);
+    $users = Import::csvToArray($file);
     foreach ($users as $index => $user) {
         if (isset($user['Courses'])) {
             $user['Courses'] = explode('|', trim($user['Courses']));

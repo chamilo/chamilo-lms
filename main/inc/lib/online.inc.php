@@ -207,7 +207,7 @@ function user_is_online($user_id)
 
     $online_time = time() - $time_limit * 60;
     $limit_date = api_get_utc_datetime($online_time);
-    $user_id = intval($user_id);
+    $user_id = (int) $user_id;
 
     $query = " SELECT login_user_id, login_date
                FROM $track_online_table track

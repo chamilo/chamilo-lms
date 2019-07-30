@@ -30,7 +30,7 @@ $tool_name = get_lang('SubscribeUsersToClass');
 $htmlHeadXtra[] = '
 <script>
 
-$(document).ready( function() {
+$(function () {
     $("#relation").change(function() {
         window.location = "add_users_to_usergroup.php?id='.$id.'" +"&relation=" + $(this).val();
     });

@@ -1,3 +1,4 @@
+{% autoescape false %}
 {% if allow_skill_tool %}
     <div class="btn-group">
         <a class="btn btn-default" href="{{ _p.web_main }}social/skills_wheel.php">
@@ -39,3 +40,4 @@
         {{ skill_table }}
     {% endif %}
 {% endif %}
+{% endautoescape %}

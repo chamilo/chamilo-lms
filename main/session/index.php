@@ -114,7 +114,7 @@ if (!empty($courseList)) {
 
         $list = new LearnpathList(
             api_get_user_id(),
-            $course_data['code'],
+            api_get_course_info($course_data['code']),
             $session_id,
             'lp.publicatedOn ASC',
             true,
@@ -421,7 +421,7 @@ $columns_courses = [
     get_lang('NumberOfPublishedLps'),
 ];
 $column_model_courses = [
-    ['name' => 'title', 'index' => 'title', 'width' => '400px', 'align' => 'left', 'sortable' => 'true', 'formatter' => ''],
+    ['name' => 'title', 'index' => 'title', 'width' => '400px', 'align' => 'left', 'sortable' => 'true'],
     //array('name'=>'recent_lps',         'index'=>'recent_lps',          'width'=>'10px',  'align'=>'left',  'sortable'=>'false'),
 //    array('name'=>'max_mutation_date',  'index'=>'max_mutation_date',   'width'=>'120px',  'align'=>'left',  'sortable'=>'true'),
     ['name' => 'exercise_count', 'index' => 'exercise_count', 'width' => '180px', 'align' => 'left', 'sortable' => 'true'],

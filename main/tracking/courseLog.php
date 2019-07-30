@@ -469,9 +469,6 @@ if ($nbStudents > 0) {
         $_GET['users_tracking_per_page'] = 1000000;
     }
 
-    $all_datas = [];
-    $course_code = $_course['id'];
-
     $table = new SortableTableFromArray(
         $usersTracking,
         1,

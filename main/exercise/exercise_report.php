@@ -15,7 +15,6 @@ require_once __DIR__.'/../inc/global.inc.php';
 
 // Setting the tabs
 $this_section = SECTION_COURSES;
-
 $htmlHeadXtra[] = api_get_jqgrid_js();
 
 $filter_user = isset($_REQUEST['filter_by_user']) ? (int) $_REQUEST['filter_by_user'] : null;
@@ -46,8 +45,6 @@ $_course = api_get_course_info();
 $documentPath = api_get_path(SYS_COURSE_PATH).$_course['path']."/document";
 $origin = api_get_origin();
 $path = isset($_GET['path']) ? Security::remove_XSS($_GET['path']) : null;
-
-/* Constants and variables */
 
 $is_allowedToEdit = api_is_allowed_to_edit(null, true) ||
     api_is_drh() ||
@@ -132,7 +129,7 @@ if (!empty($_REQUEST['export_report']) && $_REQUEST['export_report'] == '1') {
                     null,
                     $loadExtraData,
                     null,
-                    $_GET['exerciseId']
+                    $exercise_id
                 );
                 exit;
                 break;
@@ -143,7 +140,7 @@ if (!empty($_REQUEST['export_report']) && $_REQUEST['export_report'] == '1') {
                     null,
                     $loadExtraData,
                     null,
-                    $_GET['exerciseId']
+                    $exercise_id
                 );
                 exit;
                 break;
@@ -164,7 +161,7 @@ if (isset($_REQUEST['comments']) &&
     ($is_allowedToEdit || $is_tutor || $allowCoachFeedbackExercises)
 ) {
     // Filtered by post-condition
-    $id = intval($_GET['exeid']);
+    $id = (int) $_GET['exeid'];
     $track_exercise_info = ExerciseLib::get_exercise_track_exercise_info($id);
 
     if (empty($track_exercise_info)) {
@@ -175,7 +172,7 @@ if (isset($_REQUEST['comments']) &&
     $session_id = $track_exercise_info['session_id'];
     $lp_id = $track_exercise_info['orig_lp_id'];
     $lpItemId = $track_exercise_info['orig_lp_item_id'];
-    $lp_item_view_id = $track_exercise_info['orig_lp_item_view_id'];
+    $lp_item_view_id = (int) $track_exercise_info['orig_lp_item_view_id'];
     $exerciseId = $track_exercise_info['exe_exo_id'];
     $exeWeighting = $track_exercise_info['max_score'];
 
@@ -209,13 +206,12 @@ if (isset($_REQUEST['comments']) &&
         if (isset($_POST['comments_'.$array_content_id_exe[$i]])) {
             $my_comments = $_POST['comments_'.$array_content_id_exe[$i]];
         }
-        $my_questionid = intval($array_content_id_exe[$i]);
+        $my_questionid = (int) $array_content_id_exe[$i];
 
         $params = [
             'marks' => $my_marks,
             'teacher_comment' => $my_comments,
         ];
-
         Database::update(
             $TBL_TRACK_ATTEMPT,
             $params,
@@ -246,8 +242,8 @@ if (isset($_REQUEST['comments']) &&
 
     if (!$useEvaluationPlugin) {
         $qry = 'SELECT DISTINCT question_id, marks
-            FROM '.$TBL_TRACK_ATTEMPT.' WHERE exe_id = '.$id.'
-            GROUP BY question_id';
+                FROM '.$TBL_TRACK_ATTEMPT.' WHERE exe_id = '.$id.'
+                GROUP BY question_id';
         $res = Database::query($qry);
         $tot = 0;
         while ($row = Database :: fetch_array($res, 'ASSOC')) {
@@ -297,18 +293,7 @@ if (isset($_REQUEST['comments']) &&
             if ($prereqCheck) {
                 $passed = true;
             }
-
-            /*$minScore = $item->getPrerequisiteMinScore();
-            $maxScore = $item->getPrerequisiteMaxScore();
-
-            $passed = false;
-            // Check lp item min/max
-            if (isset($minScore) && isset($maxScore)) {
-                if ($tot >= $minScore && $tot <= $maxScore) {
-                    $passed = true;
-                }
-            }*/
-            if ($passed == false) {
+            if ($passed === false) {
                 if (!empty($objExerciseTmp->pass_percentage)) {
                     $passed = ExerciseLib::isSuccessExerciseResult(
                         $tot,
@@ -339,7 +324,7 @@ if (isset($_REQUEST['comments']) &&
             exit;
         }
 
-        if ($origin == 'tracking_course') {
+        if ($origin === 'tracking_course') {
             //Redirect to the course detail in lp
             header('Location: '.api_get_path(WEB_CODE_PATH).'exercise/exercise.php?course='.Security::remove_XSS($_GET['course']));
             exit;
@@ -367,7 +352,7 @@ if ($is_allowedToEdit && $origin != 'learnpath') {
         $actions .= '<a href="stats.php?'.api_get_cidreq().'&exerciseId='.$exercise_id.'">'.
             Display::return_icon('statistics.png', get_lang('ReportByQuestion'), '', ICON_SIZE_MEDIUM).'</a>';
 
-        $actions .= '<a id="export_opener" href="'.api_get_self().'?export_report=1&exerciseId='.intval($_GET['exerciseId']).'" >'.
+        $actions .= '<a id="export_opener" href="'.api_get_self().'?export_report=1&exerciseId='.$exercise_id.'" >'.
         Display::return_icon('save.png', get_lang('Export'), '', ICON_SIZE_MEDIUM).'</a>';
         // clean result before a selected date icon
         $actions .= Display::url(
@@ -378,7 +363,7 @@ if ($is_allowedToEdit && $origin != 'learnpath') {
                 ICON_SIZE_MEDIUM
             ),
             '#',
-            ['onclick' => "javascript:display_date_picker()"]
+            ['onclick' => 'javascript:display_date_picker()']
         );
         // clean result before a selected date datepicker popup
         $actions .= Display::span(
@@ -417,7 +402,7 @@ if (($is_allowedToEdit || $is_tutor || api_is_coach()) &&
     isset($_GET['delete']) && $_GET['delete'] == 'delete' &&
     !empty($_GET['did']) && $locked == false
 ) {
-    $exe_id = intval($_GET['did']);
+    $exe_id = (int) $_GET['did'];
     if (!empty($exe_id)) {
         $sql = 'DELETE FROM '.$TBL_TRACK_EXERCISES.' WHERE exe_id = '.$exe_id;
         Database::query($sql);
@@ -437,21 +422,21 @@ if (($is_allowedToEdit || $is_tutor || api_is_coach()) &&
 
 if ($is_allowedToEdit || $is_tutor) {
     $interbreadcrumb[] = [
-        "url" => "exercise.php?".api_get_cidreq(),
-        "name" => get_lang('Exercises'),
+        'url' => "exercise.php?".api_get_cidreq(),
+        'name' => get_lang('Exercises'),
     ];
 
     $nameTools = get_lang('StudentScore');
     if ($exerciseExists) {
         $interbreadcrumb[] = [
-            "url" => '#',
-            "name" => $objExerciseTmp->selectTitle(true),
+            'url' => '#',
+            'name' => $objExerciseTmp->selectTitle(true),
         ];
     }
 } else {
     $interbreadcrumb[] = [
-        "url" => "exercise.php?".api_get_cidreq(),
-        "name" => get_lang('Exercises'),
+        'url' => 'exercise.php?'.api_get_cidreq(),
+        'name' => get_lang('Exercises'),
     ];
     if ($exerciseExists) {
         $nameTools = get_lang('Results').': '.$objExerciseTmp->selectTitle(true);
@@ -623,7 +608,7 @@ if ($is_allowedToEdit || $is_tutor) {
         $columns = array_merge([get_lang('OfficialCode')], $columns);
     }
 
-    //Column config
+    // Column config
     $column_model = [
         ['name' => 'firstname', 'index' => 'firstname', 'width' => '50', 'align' => 'left', 'search' => 'true'],
         ['name' => 'lastname', 'index' => 'lastname', 'width' => '50', 'align' => 'left', 'formatter' => 'action_formatter', 'search' => 'true'],
@@ -675,183 +660,186 @@ if ($is_allowedToEdit || $is_tutor) {
     }';
 }
 
-//Autowidth
+// Autowidth
 $extra_params['autowidth'] = 'true';
 
-//height auto
+// Height auto
 $extra_params['height'] = 'auto';
+
+$extra_params['gridComplete'] = "
+    defaultGroupId = Cookies.get('default_group_".$exercise_id."');
+    if (typeof defaultGroupId !== 'undefined') {
+        $('#gs_group_name').val(defaultGroupId);        
+    }
+";
+
+$extra_params['beforeRequest'] = "
+//console.log('beforeRequest');
+var defaultGroupId = $('#gs_group_name').val();
+
+// Load from group menu
+if (typeof defaultGroupId !== 'undefined') {
+    Cookies.set('default_group_".$exercise_id."', defaultGroupId);
+} else {
+    // get from cookies
+    defaultGroupId = Cookies.get('default_group_".$exercise_id."');
+    $('#gs_group_name').val(defaultGroupId);
+    //console.log('from cookies');
+}
+ 
+if (typeof defaultGroupId !== 'undefined') {
+    var posted_data = $(\"#results\").jqGrid('getGridParam', 'postData');
+    var defFilter = '{\"groupOp\":\"AND\",\"rules\":[{\"field\":\"group_id\",\"op\":\"eq\",\"data\":\"'+ defaultGroupId +'\"}]}';
+    posted_data.filters = defFilter;
+    //console.log(posted_data);
+    $(this).jqGrid('setGridParam', 'postData', posted_data);          
+}
+";
+
+$gridJs = Display::grid_js(
+    'results',
+    $url,
+    $columns,
+    $column_model,
+    $extra_params,
+    [],
+    $action_links,
+    true
+);
+
 ?>
 <script>
-    function setSearchSelect(columnName) {
-        $("#results").jqGrid(
-            'setColProp',
-            columnName, {
-                searchoptions:{
-                    dataInit:function(el) {
-                        $("option[value='1']",el).attr("selected", "selected");
-                        setTimeout(function(){
-                            $(el).trigger('change');
-                        },1000);
-                    }
-                }
-            }
-        );
-    }
-
     function exportExcel()
     {
-        var mya=new Array();
-        mya=$("#results").getDataIDs();  // Get All IDs
-        var data=$("#results").getRowData(mya[0]);     // Get First row to get the labels
-        var colNames=new Array();
-        var ii=0;
-        for (var i in data){colNames[ii++]=i;}    // capture col names
-        var html="";
-
-        for(i=0;i<mya.length;i++) {
-            data=$("#results").getRowData(mya[i]); // get each row
-            for(j=0;j<colNames.length;j++) {
-                html=html+data[colNames[j]]+","; // output each column as tab delimited
+        var mya = $("#results").getDataIDs();  // Get All IDs
+        var data = $("#results").getRowData(mya[0]);     // Get First row to get the labels
+        var colNames = new Array();
+        var ii = 0;
+        for (var i in data) {
+            colNames[ii++] = i;
+        }    // capture col names
+        var html = "";
+        for (i = 0; i < mya.length; i++) {
+            data = $("#results").getRowData(mya[i]); // get each row
+            for (j = 0; j < colNames.length; j++) {
+                html = html + data[colNames[j]] + ","; // output each column as tab delimited
             }
-            html=html+"\n";  // output each row with end of line
+            html = html + "\n";  // output each row with end of line
         }
-        html = html+"\n";  // end of line at the end
-
+        html = html + "\n";  // end of line at the end
         var form = $("#export_report_form");
-
         $("#csvBuffer").attr('value', html);
         form.target='_blank';
         form.submit();
     }
 
     $(function() {
+        $("#datepicker_start").datepicker({
+            defaultDate: "",
+            changeMonth: false,
+            numberOfMonths: 1
+        });
         <?php
-        echo Display::grid_js(
-            'results',
-            $url,
-            $columns,
-            $column_model,
-            $extra_params,
-            [],
-            $action_links,
-            true
-        );
+        echo $gridJs;
 
         if ($is_allowedToEdit || $is_tutor) {
             ?>
-                //setSearchSelect("status");
-                //
-                //view:true, del:false, add:false, edit:false, excel:true}
-                $("#results").jqGrid('navGrid','#results_pager', {view:true, edit:false, add:false, del:false, excel:false},
+            $("#results").jqGrid(
+                'navGrid',
+                '#results_pager', {
+                    view:true, edit:false, add:false, del:false, excel:false
+                },
                 {height:280, reloadAfterSubmit:false}, // view options
                 {height:280, reloadAfterSubmit:false}, // edit options
                 {height:280, reloadAfterSubmit:false}, // add options
                 {reloadAfterSubmit: false}, // del options
-                {width:500} // search options
+                {width:500}, // search options
             );
-                /*
-            // add custom button to export the data to excel
-            jQuery("#results").jqGrid('navButtonAdd','#results_pager',{
-                caption:"",
-                onClickButton : function () {
-                     //exportExcel();
-                }
-            });*/
 
-                /*
-            jQuery('#sessions').jqGrid('navButtonAdd','#sessions_pager',{id:'pager_csv',caption:'',title:'Export To CSV',onClickButton : function(e)
-            {
-                try {
-                    jQuery("#sessions").jqGrid('excelExport',{tag:'csv', url:'grid.php'});
-                } catch (e) {
-                    window.location= 'grid.php?oper=csv';
-                }
-            },buttonicon:'ui-icon-document'})
-                 */
+            var sgrid = $("#results")[0];
 
-                //Adding search options
-                var options = {
-                    'stringResult': true,
-                    'autosearch' : true,
-                    'searchOnEnter':false
-                }
-                jQuery("#results").jqGrid('filterToolbar',options);
-                var sgrid = $("#results")[0];
-                sgrid.triggerToolbar();
+            // Update group
+            var defaultGroupId = Cookies.get('default_group_<?php echo $exercise_id; ?>');
+            //console.log('cookie GET defaultGroupId ' + defaultGroupId );
 
-                $('#results').on('click', 'a.exercise-recalculate', function (e) {
-                    e.preventDefault();
-                    if (!$(this).data('user') || !$(this).data('exercise') || !$(this).data('id')) {
-                        return;
-                    }
-                    var url = '<?php echo api_get_path(WEB_CODE_PATH); ?>exercise/recalculate.php?<?php echo api_get_cidreq(); ?>';
-                    var recalculateXhr = $.post(url, $(this).data());
-
-                    $.when(recalculateXhr).done(function (response) {
-                        $('#results').trigger('reloadGrid');
+            $('#gs_group_name').val(defaultGroupId);
+            // Adding search options
+            var options = {
+                'stringResult': true,
+                'autosearch' : true,
+                'searchOnEnter': false,
+                afterSearch: function () {
+                    $('#gs_group_name').on('change', function() {
+                        //console.log('changed');
+                        var defaultGroupId = $('#gs_group_name').val();
+                        // Save default group id
+                        Cookies.set('default_group_<?php echo $exercise_id; ?>', defaultGroupId);
+                        //console.log('cookie SET defaultGroupId ' + defaultGroupId );
                     });
+                }
+            }
+
+            jQuery("#results").jqGrid('filterToolbar', options);
+            sgrid.triggerToolbar();
+            $('#results').on('click', 'a.exercise-recalculate', function (e) {
+                e.preventDefault();
+                if (!$(this).data('user') || !$(this).data('exercise') || !$(this).data('id')) {
+                    return;
+                }
+                var url = '<?php echo api_get_path(WEB_CODE_PATH); ?>exercise/recalculate.php?<?php echo api_get_cidreq(); ?>';
+                var recalculateXhr = $.post(url, $(this).data());
+                $.when(recalculateXhr).done(function (response) {
+                    $('#results').trigger('reloadGrid');
                 });
+            });
         <?php
         }
         ?>
         });
+    // datepicker functions
+    var datapickerInputModified = false;
+    /**
+     * return true if the datepicker input has been modified
+     */
+    function datepicker_input_changed() {
+        datapickerInputModified = true;
+    }
 
-        // datepicker functions
-        var datapickerInputModified = false;
+    /**
+    * disply the datepicker calendar on mouse over the input
+    */
+    function datepicker_input_mouseover() {
+        $('#datepicker_start').datepicker( "show" );
+    }
 
-        /**
-         * return true if the datepicker input has been modified
-         */
-        function datepicker_input_changed() {
-            datapickerInputModified = true;
-        }
-
-        /**
-        * disply the datepicker calendar on mouse over the input
-        */
-        function datepicker_input_mouseover() {
+    /**
+    * display or hide the datepicker input, calendar and button
+    */
+    function display_date_picker() {
+        if (!$('#datepicker_span').is(":visible")) {
+            $('#datepicker_span').show();
             $('#datepicker_start').datepicker( "show" );
+        } else {
+            $('#datepicker_start').datepicker( "hide" );
+            $('#datepicker_span').hide();
         }
+    }
 
-        /**
-        * display or hide the datepicker input, calendar and button
-        */
-        function display_date_picker() {
-            if (!$('#datepicker_span').is(":visible")) {
-                $('#datepicker_span').show();
-                $('#datepicker_start').datepicker( "show" );
-            } else {
-                $('#datepicker_start').datepicker( "hide" );
-                $('#datepicker_span').hide();
+    /**
+    * confirm deletion
+    */
+    function submit_datepicker() {
+        if (datapickerInputModified) {
+            var dateTypeVar = $('#datepicker_start').datepicker('getDate');
+            var dateForBDD = $.datepicker.formatDate('yy-mm-dd', dateTypeVar);
+            // Format the date for confirm box
+            var dateFormat = $( "#datepicker_start" ).datepicker( "option", "dateFormat" );
+            var selectedDate = $.datepicker.formatDate(dateFormat, dateTypeVar);
+            if (confirm("<?php echo convert_double_quote_to_single(get_lang('AreYouSureDeleteTestResultBeforeDateD')).' '; ?>" + selectedDate)) {
+                self.location.href = "exercise_report.php?<?php echo api_get_cidreq(); ?>&exerciseId=<?php echo $exercise_id; ?>&delete_before_date="+dateForBDD+"&sec_token=<?php echo $token; ?>";
             }
         }
-
-        /**
-        * confirm deletion
-        */
-        function submit_datepicker() {
-            if (datapickerInputModified) {
-                var dateTypeVar = $('#datepicker_start').datepicker('getDate');
-                var dateForBDD = $.datepicker.formatDate('yy-mm-dd', dateTypeVar);
-                // Format the date for confirm box
-                var dateFormat = $( "#datepicker_start" ).datepicker( "option", "dateFormat" );
-                var selectedDate = $.datepicker.formatDate(dateFormat, dateTypeVar);
-                if (confirm("<?php echo convert_double_quote_to_single(get_lang('AreYouSureDeleteTestResultBeforeDateD')).' '; ?>" + selectedDate)) {
-                    self.location.href = "exercise_report.php?<?php echo api_get_cidreq(); ?>&exerciseId=<?php echo $exercise_id; ?>&delete_before_date="+dateForBDD+"&sec_token=<?php echo $token; ?>";
-                }
-            }
-        }
-
-        /**
-        * initiate datepicker
-        */
-        $(function() {
-            $("#datepicker_start").datepicker({
-                defaultDate: "",
-                changeMonth: false,
-                numberOfMonths: 1
-            });
-        });
+    }
 </script>
 <form id="export_report_form" method="post" action="exercise_report.php?<?php echo api_get_cidreq(); ?>">
     <input type="hidden" name="csvBuffer" id="csvBuffer" value="" />
@@ -861,4 +849,4 @@ $extra_params['height'] = 'auto';
 
 <?php
 echo Display::grid_html('results');
-Display :: display_footer();
+Display::display_footer();

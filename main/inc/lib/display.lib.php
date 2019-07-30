@@ -1,6 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
 use Chamilo\CoreBundle\Entity\ExtraField;
 use Chamilo\CoreBundle\Framework\Container;
 use ChamiloSession as Session;
@@ -212,24 +213,27 @@ class Display
     /**
      * Displays a table.
      *
-     * @param array $header          Titles for the table header
-     *                               each item in this array can contain 3 values
-     *                               - 1st element: the column title
-     *                               - 2nd element: true or false (column sortable?)
-     *                               - 3th element: additional attributes for
-     *                               th-tag (eg for column-width)
-     *                               - 4the element: additional attributes for the td-tags
-     * @param array $content         2D-array with the tables content
-     * @param array $sorting_options Keys are:
-     *                               'column' = The column to use as sort-key
-     *                               'direction' = SORT_ASC or SORT_DESC
-     * @param array $paging_options  Keys are:
-     *                               'per_page_default' = items per page when switching from
-     *                               full-    list to per-page-view
-     *                               'per_page' = number of items to show per page
-     *                               'page_nr' = The page to display
-     * @param array $query_vars      Additional variables to add in the query-string
-     * @param string The style that the table will show. You can set 'table' or 'grid'
+     * @param array  $header          Titles for the table header
+     *                                each item in this array can contain 3 values
+     *                                - 1st element: the column title
+     *                                - 2nd element: true or false (column sortable?)
+     *                                - 3th element: additional attributes for
+     *                                th-tag (eg for column-width)
+     *                                - 4the element: additional attributes for the td-tags
+     * @param array  $content         2D-array with the tables content
+     * @param array  $sorting_options Keys are:
+     *                                'column' = The column to use as sort-key
+     *                                'direction' = SORT_ASC or SORT_DESC
+     * @param array  $paging_options  Keys are:
+     *                                'per_page_default' = items per page when switching from
+     *                                full-    list to per-page-view
+     *                                'per_page' = number of items to show per page
+     *                                'page_nr' = The page to display
+     * @param array  $query_vars      Additional variables to add in the query-string
+     * @param array  $form_actions
+     * @param string $style           The style that the table will show. You can set 'table' or 'grid'
+     * @param string $tableName
+     * @param string $tableId
      *
      * @author bart.mollet@hogent.be
      */
@@ -240,11 +244,13 @@ class Display
         $paging_options = [],
         $query_vars = null,
         $form_actions = [],
-        $style = 'table'
+        $style = 'table',
+        $tableName = 'tablename',
+        $tableId = ''
     ) {
         $column = isset($sorting_options['column']) ? $sorting_options['column'] : 0;
         $default_items_per_page = isset($paging_options['per_page']) ? $paging_options['per_page'] : 20;
-        $table = new SortableTableFromArray($content, $column, $default_items_per_page);
+        $table = new SortableTableFromArray($content, $column, $default_items_per_page, $tableName, null, $tableId);
         if (is_array($query_vars)) {
             $table->set_additional_parameters($query_vars);
         }
@@ -418,8 +424,7 @@ class Display
      * @param array $query_vars      Additional variables to add in the query-string
      * @param array $column_show     Array of binaries 1= show columns 0. hide a column
      * @param array $column_order    An array of integers that let us decide how the columns are going to be sort.
-     *                               i.e:  $column_order=array('1''4','3','4'); The 2nd column will be order like the
-     *                               4th column
+     *                               i.e:  $column_order=array('1''4','3','4'); The 2nd column will be order like the 4th column
      * @param array $form_actions    Set optional forms actions
      *
      * @author Julio Montoya
@@ -618,6 +623,7 @@ class Display
      * @param string  e-mail
      * @param string  clickable text
      * @param string  optional, class from stylesheet
+     * @param bool $addExtraContent
      *
      * @return string encrypted mailto hyperlink
      */
@@ -625,31 +631,60 @@ class Display
         $email,
         $clickable_text = null,
         $style_class = '',
-        $cut = false
+        $addExtraContent = false
     ) {
         if (is_null($clickable_text)) {
             $clickable_text = $email;
         }
+
         // "mailto:" already present?
         if (substr($email, 0, 7) != 'mailto:') {
             $email = 'mailto:'.$email;
         }
+
         // Class (stylesheet) defined?
         if ($style_class != '') {
             $style_class = ' class="'.$style_class.'"';
         }
+
         // Encrypt email
         $hmail = '';
         for ($i = 0; $i < strlen($email); $i++) {
-            $hmail .= '&#'.ord($email[
-            $i]).';';
+            $hmail .= '&#'.ord($email[$i]).';';
         }
-        $hclickable_text = null;
+
+        $value = api_get_configuration_value('add_user_course_information_in_mailto');
+
+        if ($value) {
+            $hmail .= '?';
+            if (!api_is_anonymous()) {
+                $hmail .= '&subject='.Security::remove_XSS(api_get_setting('siteName'));
+            }
+            if ($addExtraContent) {
+                $content = '';
+                if (!api_is_anonymous()) {
+                    $userInfo = api_get_user_info();
+                    $content .= get_lang('User').': '.$userInfo['complete_name']."\n";
+
+                    $courseInfo = api_get_course_info();
+                    if (!empty($courseInfo)) {
+                        $content .= get_lang('Course').': ';
+                        $content .= $courseInfo['name'];
+                        $sessionInfo = api_get_session_info(api_get_session_id());
+                        if (!empty($sessionInfo)) {
+                            $content .= ' '.$sessionInfo['name'].' <br />';
+                        }
+                    }
+                }
+                $hmail .= '&body='.rawurlencode($content);
+            }
+        }
+
+        $hclickable_text = '';
         // Encrypt clickable text if @ is present
         if (strpos($clickable_text, '@')) {
             for ($i = 0; $i < strlen($clickable_text); $i++) {
-                $hclickable_text .= '&#'.ord($clickable_text[
-                $i]).';';
+                $hclickable_text .= '&#'.ord($clickable_text[$i]).';';
             }
         } else {
             $hclickable_text = @htmlspecialchars(
@@ -659,12 +694,7 @@ class Display
             );
         }
         // Return encrypted mailto hyperlink
-        $classCut = '';
-        if ($cut) {
-            $classCut = 'cut-email';
-        }
-
-        return '<a href="'.$hmail.'"'.$style_class.' class="clickable_email_link '.$classCut.'">'.$hclickable_text.'</a>';
+        return '<a href="'.$hmail.'"'.$style_class.' class="clickable_email_link">'.$hclickable_text.'</a>';
     }
 
     /**
@@ -1144,6 +1174,7 @@ class Display
      * @param string $id            id of the container of the tab in the example "tabs"
      * @param array  $attributes    for the ul
      * @param array  $ul_attributes
+     * @param int    $selected
      *
      * @return string
      */
@@ -1152,7 +1183,8 @@ class Display
         $items,
         $id = 'tabs',
         $attributes = [],
-        $ul_attributes = []
+        $ul_attributes = [],
+        $selected = ''
     ) {
         if (empty($headers) || count($headers) == 0) {
             return '';
@@ -1162,10 +1194,15 @@ class Display
         $i = 1;
         foreach ($headers as $item) {
             $active = '';
-            $selected = 'false';
             if ($i == 1) {
                 $active = ' active';
-                $selected = 'true';
+            }
+
+            if (!empty($selected)) {
+                $active = '';
+                if ($selected == $i) {
+                    $active = ' active';
+                }
             }
 
             $item = self::tag(
@@ -1202,6 +1239,14 @@ class Display
             if ($i == 1) {
                 $active = ' show active';
             }
+
+            if (!empty($selected)) {
+                $active = '';
+                if ($selected == $i) {
+                    $active = ' show active';
+                }
+            }
+
             $divs .= self::tag(
                 'div',
                 $content,
@@ -1312,7 +1357,7 @@ class Display
      *
      * @param string $div_id       div id
      * @param string $url          url where the jqgrid will ask for data (if datatype = json)
-     * @param array  $column_names visible columns (you should use get_lang).
+     * @param array  $column_names Visible columns (you should use get_lang).
      *                             An array in which we place the names of the columns.
      *                             This is the text that appears in the head of the grid (Header layer).
      *                             Example: colname   {name:'date',     index:'date',   width:120, align:'right'},
@@ -1341,6 +1386,13 @@ class Display
 
         if (!empty($url)) {
             $obj->url = $url;
+        }
+
+        // Needed it in order to render the links/html in the grid
+        foreach ($column_model as &$columnModel) {
+            if (!isset($columnModel['formatter'])) {
+                $columnModel['formatter'] = '';
+            }
         }
 
         //This line should only be used/modified in case of having characters
@@ -1425,6 +1477,24 @@ class Display
             unset($extra_params['beforeSelectRow']);
         }
 
+        $beforeProcessing = '';
+        if (isset($extra_params['beforeProcessing'])) {
+            $beforeProcessing = 'beforeProcessing : function() { '.$extra_params['beforeProcessing'].' },';
+            unset($extra_params['beforeProcessing']);
+        }
+
+        $beforeRequest = '';
+        if (isset($extra_params['beforeRequest'])) {
+            $beforeRequest = 'beforeRequest : function() { '.$extra_params['beforeRequest'].' },';
+            unset($extra_params['beforeRequest']);
+        }
+
+        $gridComplete = '';
+        if (isset($extra_params['gridComplete'])) {
+            $gridComplete = 'gridComplete : function() { '.$extra_params['gridComplete'].' },';
+            unset($extra_params['gridComplete']);
+        }
+
         // Adding extra params
         if (!empty($extra_params)) {
             foreach ($extra_params as $key => $element) {
@@ -1466,6 +1536,9 @@ class Display
         // Creating the jqgrid element.
         $json .= '$("#'.$div_id.'").jqGrid({';
         //$json .= $beforeSelectRow;
+        $json .= $gridComplete;
+        $json .= $beforeProcessing;
+        $json .= $beforeRequest;
         $json .= $json_encode;
         $json .= '});';
 
@@ -1745,12 +1818,13 @@ class Display
             }
 
             $session = [];
-            $session['category'] = SessionManager::get_session_category($session_info['session_category_id']);
+            $session['category_id'] = $session_info['session_category_id'];
             $session['title'] = $session_info['name'];
-            $session['coach_id'] = $session_info['id_coach'];
-
-            if (api_get_setting('show_session_coach') === 'true') {
-                $session['coach_name'] = api_get_person_name($session_info['firstname'], $session_info['lastname']);
+            $session['id_coach'] = $session_info['id_coach'];
+            $session['dates'] = '';
+            $session['coach'] = '';
+            if (api_get_setting('show_session_coach') === 'true' && isset($coachInfo['complete_name'])) {
+                $session['coach'] = get_lang('GeneralCoach').': '.$coachInfo['complete_name'];
             }
 
             if (($session_info['access_end_date'] == '0000-00-00 00:00:00' &&
@@ -1784,7 +1858,10 @@ class Display
 
             $entityManager = Database::getManager();
             $fieldValuesRepo = $entityManager->getRepository('ChamiloCoreBundle:ExtraFieldValues');
-            $extraFieldValues = $fieldValuesRepo->getVisibleValues(ExtraField::SESSION_FIELD_TYPE, $session_id);
+            $extraFieldValues = $fieldValuesRepo->getVisibleValues(
+                ExtraField::SESSION_FIELD_TYPE,
+                $session_id
+            );
 
             $session['extra_fields'] = [];
             /** @var \Chamilo\CoreBundle\Entity\ExtraFieldValues $value */
@@ -1829,7 +1906,6 @@ class Display
         if (!empty($percentage)) {
             $percentage = $percentage * 125 / 100;
         }
-
         $accesses = isset($point_info['accesses']) ? $point_info['accesses'] : 0;
         $star_label = sprintf(get_lang('XStarsOutOf5'), $point_info['point_average_star']);
 
@@ -1910,14 +1986,15 @@ class Display
         return self::page_subheader($title, $second_title);
     }
 
-    public static function page_subheader($title, $second_title = null, $size = 'h3')
+    public static function page_subheader($title, $second_title = null, $size = 'h3', $attributes = [])
     {
         if (!empty($second_title)) {
             $second_title = Security::remove_XSS($second_title);
             $title .= "<small> $second_title<small>";
         }
+        $subTitle = self::tag($size, Security::remove_XSS($title), $attributes);
 
-        return '<'.$size.'>'.Security::remove_XSS($title).'</'.$size.'>';
+        return $subTitle;
     }
 
     public static function page_subheader2($title, $second_title = null)
@@ -1951,7 +2028,7 @@ class Display
     }
 
     /**
-     * @param int    $percentage
+     * @param int    $percentage      int value between 0 and 100
      * @param bool   $show_percentage
      * @param string $extra_info
      *
@@ -2217,17 +2294,14 @@ class Display
     {
         $fileInfo = pathinfo($file);
 
+        $autoplay = isset($params['autoplay']) && 'true' === $params['autoplay'] ? 'autoplay' : '';
+        $id = isset($params['id']) ? $params['id'] : $fileInfo['basename'];
+        $width = isset($params['width']) ? 'width="'.$params['width'].'"' : null;
+        $class = isset($params['class']) ? ' class="'.$params['class'].'"' : null;
+
         switch ($fileInfo['extension']) {
             case 'mp3':
             case 'webm':
-                $autoplay = null;
-                if (isset($params['autoplay']) && $params['autoplay'] == 'true') {
-                    $autoplay = 'autoplay';
-                }
-                $width = isset($params['width']) ? 'width="'.$params['width'].'"' : null;
-                $id = isset($params['id']) ? $params['id'] : $fileInfo['basename'];
-                $class = isset($params['class']) ? ' class="'.$params['class'].'"' : null;
-
                 $html = '<audio id="'.$id.'" '.$class.' controls '.$autoplay.' '.$width.' src="'.$params['url'].'" >';
                 $html .= '<object width="'.$width.'" height="50" type="application/x-shockwave-flash" data="'.api_get_path(WEB_LIBRARY_PATH).'javascript/mediaelement/flashmediaelement.swf">
                             <param name="movie" value="'.api_get_path(WEB_LIBRARY_PATH).'javascript/mediaelement/flashmediaelement.swf" />
@@ -2239,7 +2313,7 @@ class Display
                 break;
             case 'wav':
             case 'ogg':
-                $html = '<audio width="300px" controls src="'.$params['url'].'" >';
+                $html = '<audio width="300px" controls id="'.$id.'" '.$autoplay.' src="'.$params['url'].'" >';
 
                 return $html;
                 break;
@@ -2599,7 +2673,7 @@ class Display
             });
         }
 
-        $html = '<div id="'.$id.'" class="actions" >';
+        $html = '<div id="'.$id.'" class="actions">';
         $html .= '<div class="row">';
 
         for ($i = 0; $i < $col; $i++) {
@@ -2625,7 +2699,7 @@ class Display
     /**
      * Get a HTML code for a icon by Font Awesome.
      *
-     * @param string     $name            The icon name
+     * @param string     $name            The icon name. Example: "mail-reply"
      * @param int|string $size            Optional. The size for the icon. (Example: lg, 2, 3, 4, 5)
      * @param bool       $fixWidth        Optional. Whether add the fw class
      * @param string     $additionalClass Optional. Additional class
@@ -2698,6 +2772,7 @@ class Display
             $contentClass = 'panel-collapse collapse ';
             $contentClass .= $open ? 'in' : '';
             $ariaExpanded = $open ? 'true' : 'false';
+
             $html = <<<HTML
             
                 <div class="card" id="$id">
@@ -2706,7 +2781,6 @@ class Display
                     </div>                    
                     <div class="card-body">$content</div>                    
                 </div>
-            
 HTML;
         } else {
             if (!empty($id)) {
@@ -2766,7 +2840,7 @@ HTML;
         }
 
         if (!empty($toolbar)) {
-            $toolbar = '<div class="btn-group float-right">'.$toolbar.'</div>';
+            $toolbar = '<div class="btn-group pull-right">'.$toolbar.'</div>';
         }
 
         return '<div id="user_card_'.$userInfo['id'].'" class="card d-flex flex-row">                    
@@ -2806,7 +2880,7 @@ HTML;
             case 'jpeg':
             case 'gif':
             case 'png':
-                $content = '<img class="img-fluid" src="'.$fileUrl.'" />';
+                $content = '<img class="img-responsive" src="'.$fileUrl.'" />';
                 break;
             default:
                 //$html = self::url($data['basename'], $fileUrl);
@@ -2824,70 +2898,85 @@ HTML;
      */
     public static function getFrameReadyBlock($frameName)
     {
-        $defaultFeatures = ['playpause', 'current', 'progress', 'duration', 'tracks', 'volume', 'fullscreen', 'vrview'];
+        $webPublicPath = api_get_path(WEB_PUBLIC_PATH);
+
+        $videoFeatures = [
+            'playpause',
+            'current',
+            'progress',
+            'duration',
+            'tracks',
+            'volume',
+            'fullscreen',
+            'vrview',
+            'markersrolls',
+        ];
         $features = api_get_configuration_value('video_features');
-        $bowerJsFiles = [];
-        $bowerCSSFiles = [];
+        $videoPluginsJS = [];
+        $videoPluginCSS = [];
         if (!empty($features) && isset($features['features'])) {
             foreach ($features['features'] as $feature) {
                 if ($feature === 'vrview') {
                     continue;
                 }
                 $defaultFeatures[] = $feature;
-                $bowerJsFiles[] = "mediaelement/plugins/$feature/$feature.js";
-                $bowerCSSFiles[] = "mediaelement/plugins/$feature/$feature.css";
+                $videoPluginsJS[] = "mediaelement/plugins/$feature/$feature.js";
+                $videoPluginCSS[] = "mediaelement/plugins/$feature/$feature.css";
             }
+        }
+
+        $videoPluginFiles = '';
+        foreach ($videoPluginsJS as $file) {
+            $videoPluginFiles .= '{type: "script", src: "'.$webPublicPath.'assets/'.$file.'"},';
+        }
+
+        $videoPluginCssFiles = '';
+        foreach ($videoPluginCSS as $file) {
+            $videoPluginCssFiles .= '{type: "stylesheet", src: "'.$webPublicPath.'assets/'.$file.'"},';
         }
 
         $translateHtml = '';
         $translate = api_get_configuration_value('translate_html');
         if ($translate) {
-            $translateHtml = '{type:"script", id:"_fr4", src:"'.api_get_path(WEB_AJAX_PATH).'lang.ajax.php?a=translate_html&'.api_get_cidreq().'"},';
+            $translateHtml = '{type:"script", src:"'.api_get_path(WEB_AJAX_PATH).'lang.ajax.php?a=translate_html&'.api_get_cidreq().'"},';
         }
 
-        $counter = 10;
-        $extraMediaFiles = '';
-        foreach ($bowerJsFiles as $file) {
-            $extraMediaFiles .= '{type: "script", id: "media_'.$counter.'", src: "'.api_get_path(WEB_PUBLIC_PATH).'assets/'.$file.'"},';
-            $counter++;
-        }
-
-        foreach ($bowerCSSFiles as $file) {
-            $extraMediaFiles .= '{type: "stylesheet", id: "media_'.$counter.'", src: "'.api_get_path(WEB_PUBLIC_PATH).'assets/'.$file.'"},';
-            $counter++;
-        }
-
-        $defaultFeatures = implode("','", $defaultFeatures);
+        $videoFeatures = implode("','", $videoFeatures);
         $frameReady = '
-          $.frameReady(function() {
-            $(function() {
-                $("video:not(.skip), audio:not(.skip)").mediaelementplayer({                    
-                    pluginPath: "'.api_get_path(WEB_PUBLIC_PATH).'assets/mediaelement/build/",            
-                    features: ["'.$defaultFeatures.'"],
+        $.frameReady(function() {
+             $(function () {
+                $("video:not(.skip), audio:not(.skip)").mediaelementplayer({
+                    pluginPath: "'.$webPublicPath.'assets/mediaelement/plugins/",            
+                    features: [\''.$videoFeatures.'\'],
                     success: function(mediaElement, originalNode, instance) {
+                        '.ChamiloApi::getQuizMarkersRollsJS().'
                     },
-                    vrPath: "'.api_get_path(WEB_PUBLIC_PATH).'assets/vrview/build/vrview.js"
+                    vrPath: "'.$webPublicPath.'assets/vrview/build/vrview.js"
                 });
             });
-          }, "'.$frameName.'",
-          {
-            load: [
-                { type:"script", id:"_fr1", src:"'.api_get_jquery_web_path().'"},
-                { type:"script", id:"_fr7", src:"'.api_get_path(WEB_PUBLIC_PATH).'assets/MathJax/MathJax.js?config=AM_HTMLorMML"},
-                { type:"script", id:"_fr4", src:"'.api_get_path(WEB_PUBLIC_PATH).'assets/jquery-ui/jquery-ui.min.js"},
-                { type:"stylesheet", id:"_fr5", src:"'.api_get_path(WEB_PUBLIC_PATH).'assets/jquery-ui/themes/smoothness/jquery-ui.min.css"},
-                { type:"stylesheet", id:"_fr6", src:"'.api_get_path(WEB_PUBLIC_PATH).'assets/jquery-ui/themes/smoothness/theme.css"},
-                { type:"script", id:"_fr2", src:"'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.highlight.js"},
-                { type:"stylesheet", id:"_fr7", src:"'.api_get_path(WEB_PUBLIC_PATH).'css/dialog.css"},
-                { type:"script", id:"_fr3", src:"'.api_get_path(WEB_CODE_PATH).'glossary/glossary.js.php?'.api_get_cidreq().'"},
-                {type: "script", id: "_media1", src: "'.api_get_path(WEB_PUBLIC_PATH).'assets/mediaelement/build/mediaelement-and-player.min.js"},
-                {type: "stylesheet", id: "_media2", src: "'.api_get_path(WEB_PUBLIC_PATH).'assets/mediaelement/build/mediaelementplayer.min.css"},                
-                {type: "stylesheet", id: "_media4", src: "'.api_get_path(WEB_PUBLIC_PATH).'assets/mediaelement/plugins/vrview/vrview.css"},
-                {type: "script", id: "_media4", src: "'.api_get_path(WEB_PUBLIC_PATH).'assets/mediaelement/plugins/vrview/vrview.js"},
-                '.$extraMediaFiles.'
+        }, 
+        "'.$frameName.'",
+        [
+            {type:"script", src:"'.api_get_jquery_web_path().'", deps: [
+                {type:"script", src:"'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.highlight.js"},
+                {type:"script", src:"'.api_get_path(WEB_CODE_PATH).'glossary/glossary.js.php?'.api_get_cidreq().'"},
+                {type:"script", src:"'.$webPublicPath.'assets/jquery-ui/jquery-ui.min.js"},
+                {type:"script", src: "'.$webPublicPath.'assets/mediaelement/build/mediaelement-and-player.min.js", 
+                    deps: [
+                    {type:"script", src: "'.$webPublicPath.'assets/mediaelement/plugins/vrview/vrview.js"},
+                    {type:"script", src: "'.$webPublicPath.'assets/mediaelement/plugins/markersrolls/markersrolls.js"},
+                    '.$videoPluginFiles.'
+                ]},                
                 '.$translateHtml.'
-            ]
-          });';
+            ]},
+            '.$videoPluginCssFiles.'
+            {type:"script", src:"'.$webPublicPath.'assets/MathJax/MathJax.js?config=AM_HTMLorMML"},
+            {type:"stylesheet", src:"'.$webPublicPath.'assets/jquery-ui/themes/smoothness/jquery-ui.min.css"},
+            {type:"stylesheet", src:"'.$webPublicPath.'assets/jquery-ui/themes/smoothness/theme.css"},                
+            {type:"stylesheet", src:"'.$webPublicPath.'css/dialog.css"},
+            {type:"stylesheet", src: "'.$webPublicPath.'assets/mediaelement/build/mediaelementplayer.min.css"},                
+            {type:"stylesheet", src: "'.$webPublicPath.'assets/mediaelement/plugins/vrview/vrview.css"},
+        ]);';
 
         return $frameReady;
     }

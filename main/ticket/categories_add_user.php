@@ -9,7 +9,7 @@ require_once __DIR__.'/../inc/global.inc.php';
 api_protect_admin_script(true);
 
 $categoryId = isset($_REQUEST['id']) ? (int) $_REQUEST['id'] : 0;
-$projectId = isset($_GET['project_id']) ? (int) $_GET['project_id'] : '';
+$projectId = isset($_GET['project_id']) ? (int) $_GET['project_id'] : 0;
 
 $categoryInfo = TicketManager::getCategory($categoryId);
 
@@ -49,7 +49,7 @@ if ($form->validate()) {
     TicketManager::deleteAllUserInCategory($categoryId);
     TicketManager::addUsersToCategory($categoryId, $values['users']);
     Display::addFlash(Display::return_message(get_lang('Updated')));
-    header("Location: ".api_get_self()."?id=".$categoryId.'&project_id='.$projectId);
+    header('Location: '.api_get_self().'?id='.$categoryId.'&project_id='.$projectId);
     exit;
 }
 

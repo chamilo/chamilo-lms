@@ -327,9 +327,16 @@ function convert_coordinates($coords, $sep = '|')
 {
     $points = [];
     $pairs = explode($sep, $coords);
-    foreach ($pairs as $idx => $pcoord) {
-        list($x, $y) = explode(';', $pcoord);
-        $points[] = ['x' => $x, 'y' => $y];
+    if (!empty($pairs)) {
+        foreach ($pairs as $idx => $pcoord) {
+            if (empty($pcoord)) {
+                continue;
+            }
+            $parts = explode(';', $pcoord);
+            if (!empty($parts)) {
+                $points[] = ['x' => $parts[0], 'y' => $parts[1]];
+            }
+        }
     }
 
     return $points;

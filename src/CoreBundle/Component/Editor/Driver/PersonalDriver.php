@@ -53,6 +53,9 @@ class PersonalDriver extends Driver implements DriverInterface
                     'path' => $dir.'my_files',
                     'URL' => $dirWeb.'my_files',
                     'accessControl' => [$this, 'access'],
+                    // @todo change tmp path
+                    'tmbURL' => api_get_path(WEB_PATH).'var/cache/elfinder/',
+                    'tmbPath' => api_get_path(SYS_ARCHIVE_PATH).'elfinder/',
                     'disabled' => [
                         'duplicate',
                         //'rename',

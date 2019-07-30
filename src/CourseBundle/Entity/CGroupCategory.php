@@ -142,13 +142,6 @@ class CGroupCategory
     /**
      * @var int
      *
-     * ORM\Column(name="doc_access", type="integer", nullable=false, options={"default":0})
-     */
-    protected $docAccess;
-
-    /**
-     * @var int
-     *
      * @ORM\Column(name="document_access", type="integer", nullable=false, options={"default":0})
      */
     protected $documentAccess;
@@ -535,26 +528,6 @@ class CGroupCategory
     public function getCId()
     {
         return $this->cId;
-    }
-
-    /**
-     * @return int
-     */
-    public function getDocAccess(): int
-    {
-        return $this->docAccess;
-    }
-
-    /**
-     * @param int $docAccess
-     *
-     * @return CGroupCategory
-     */
-    public function setDocAccess(int $docAccess): CGroupCategory
-    {
-        $this->docAccess = $docAccess;
-
-        return $this;
     }
 
     /**

@@ -157,7 +157,7 @@ class Editor
      */
     public function getEditorStandAloneTemplate()
     {
-        return 'elfinder_standalone.html.twig';
+        return 'javascript/editor/elfinder_standalone.html.twig';
     }
 
     /**

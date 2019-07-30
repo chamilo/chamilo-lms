@@ -29,8 +29,7 @@ var disconnect_lang = 'ChatDisconnected';
 // Import Vue and Components
 import Vue from 'vue';
 import {VueConfig} from './VueConfig';
-import Example from './components/Example'
-
+import Example from './components/Example';
 
 $(function() {
     // Create App Aplication Vue
@@ -84,6 +83,7 @@ $(function() {
         }
         addMainEvent(window, 'unload', courseLogout ,false);
     }
+
     $("#open-view-list").click(function(){
         $("#student-list-work").fadeIn(300);
     });
@@ -102,8 +102,6 @@ $(function() {
             });
         });
     }
-
-
 
     // Start modals
     // class='ajax' loads a page in a modal

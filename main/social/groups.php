@@ -21,10 +21,10 @@ $allowed_views = ['mygroups', 'newest', 'pop'];
 $content = null;
 
 if (isset($_GET['view']) && in_array($_GET['view'], $allowed_views)) {
-    if ($_GET['view'] == 'mygroups') {
+    if ($_GET['view'] === 'mygroups') {
         $interbreadcrumb[] = ['url' => 'groups.php', 'name' => get_lang('Groups')];
         $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('MyGroups')];
-    } elseif ($_GET['view'] == 'newest') {
+    } elseif ($_GET['view'] === 'newest') {
         $interbreadcrumb[] = ['url' => 'groups.php', 'name' => get_lang('Groups')];
         $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Newest')];
     } else {
@@ -41,9 +41,7 @@ if (isset($_GET['view']) && in_array($_GET['view'], $allowed_views)) {
 // getting group information
 $relation_group_title = '';
 $my_group_role = 0;
-
 $usergroup = new UserGroup();
-
 $create_thread_link = '';
 
 $show_menu = 'browse_groups';

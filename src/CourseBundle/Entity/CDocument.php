@@ -8,7 +8,10 @@ use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Resource\AbstractResource;
 use Chamilo\CoreBundle\Entity\Resource\ResourceInterface;
 use Chamilo\CoreBundle\Entity\Resource\ResourceLink;
+use Chamilo\CoreBundle\Entity\Resource\ResourceNode;
+use Chamilo\CoreBundle\Entity\Resource\ResourceRight;
 use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Mapping as ORM;
@@ -353,11 +356,19 @@ class CDocument extends AbstractResource implements ResourceInterface
     }
 
     /**
-     * This is a "soft delete" only changes visibility, doesn't delete the record.
+     * Visiblity types ResourceLink::VISIBILITY_DELETED
+     *
+     * @return int
      */
-    public function setSoftDelete()
+    public function getVisibility()
     {
-        $this->getCourseSessionResourceLink()->setVisibility(ResourceLink::VISIBILITY_DELETED);
+        return $this->getCourseSessionResourceLink()->getVisibility();
+    }
+
+
+    public function isVisible()
+    {
+        return $this->getVisibility() === ResourceLink::VISIBILITY_PUBLISHED;
     }
 
     /**

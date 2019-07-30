@@ -5,6 +5,7 @@ use ChamiloSession as Session;
 
 /**
  * Class TestCategory.
+ * Manage question categories inside an exercise.
  *
  * @author hubert.borderiou
  * @author Julio Montoya - several fixes
@@ -711,40 +712,6 @@ class TestCategory
         }
 
         return $tabResult;
-    }
-
-    /**
-     * return total score for test exe_id for all question in the category $in_cat_id for user
-     * If no question for this category, return "".
-     */
-    public static function getCatScoreForExeidForUserid($in_cat_id, $in_exe_id, $in_user_id)
-    {
-        $tbl_track_attempt = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
-        $tbl_question_rel_category = Database::get_course_table(TABLE_QUIZ_QUESTION_REL_CATEGORY);
-        $in_cat_id = (int) $in_cat_id;
-        $in_exe_id = (int) $in_exe_id;
-        $in_user_id = (int) $in_user_id;
-
-        $query = "SELECT DISTINCT
-                        marks, 
-                        exe_id, 
-                        user_id, 
-                        ta.question_id, 
-                        category_id
-                  FROM $tbl_track_attempt ta 
-                  INNER JOIN $tbl_question_rel_category qrc
-                  ON (ta.question_id = qrc.question_id)
-                  WHERE
-                    qrc.category_id = $in_cat_id AND
-                    exe_id = $in_exe_id AND 
-                    user_id = $in_user_id";
-        $res = Database::query($query);
-        $score = '';
-        while ($data = Database::fetch_array($res)) {
-            $score += $data['marks'];
-        }
-
-        return $score;
     }
 
     /**

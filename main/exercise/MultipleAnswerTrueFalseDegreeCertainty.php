@@ -77,7 +77,7 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
             .'</th>';
 
         // show column comment when feedback is enable
-        if ($objEx->selectFeedbackType() != EXERCISE_FEEDBACK_TYPE_EXAM) {
+        if ($objEx->getFeedbackType() != EXERCISE_FEEDBACK_TYPE_EXAM) {
             $html .= '<th>'.get_lang('Comment').'</th>';
         }
         $html .= '</tr>';
@@ -173,7 +173,7 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
             $form->addRule('answer['.$i.']', get_lang('ThisFieldIsRequired'), 'required');
 
             // show comment when feedback is enable
-            if ($objEx->selectFeedbackType() != EXERCISE_FEEDBACK_TYPE_EXAM) {
+            if ($objEx->getFeedbackType() != EXERCISE_FEEDBACK_TYPE_EXAM) {
                 $form->addElement(
                     'html_editor',
                     'comment['.$i.']',
@@ -211,7 +211,9 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
             }
         }
 
-        if ($objEx->edit_exercise_in_lp === true) {
+        if ($objEx->edit_exercise_in_lp === true ||
+            (empty($this->exerciseList) && empty($objEx->id))
+        ) {
             $form->addElement('submit', 'lessAnswers', get_lang('LessAnswer'), 'class="btn btn-danger minus"');
             $form->addElement('submit', 'moreAnswers', get_lang('PlusAnswer'), 'class="btn btn-primary plus"');
             //$text and $class defined in calling script
@@ -299,30 +301,25 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
     }
 
     /**
-     * Show result table headers.
-     *
-     * @param Exercise $exercise
-     * @param int      $counter
-     * @param float    $score
-     *
-     * @return string|null
+     * {@inheritdoc}
      */
-    public function return_header($exercise, $counter = null, $score = null)
+    public function return_header(Exercise $exercise, $counter = null, $score = [])
     {
         $header = parent::return_header($exercise, $counter, $score);
-        $header .= '<table class="'
-            .$this->question_table_class
-            .'"><tr><th>'
-            .get_lang('Choice')
-            .'</th><th>'
-            .get_lang('ExpectedChoice')
-            .'</th><th>'
+        $header .= '<table class="'.$this->question_table_class.'"><tr>';
+        $header .= '<th>'.get_lang('Choice').'</th>';
+
+        if ($exercise->showExpectedChoiceColumn()) {
+            $header .= '<th>'.get_lang('ExpectedChoice').'</th>';
+        }
+
+        $header .= '<th>'
             .get_lang('Answer')
             .'</th><th colspan="2" style="text-align:center;">'
             .get_lang('YourDegreeOfCertainty')
             .'</th>'
         ;
-        if ($exercise->feedback_type != EXERCISE_FEEDBACK_TYPE_EXAM) {
+        if ($exercise->getFeedbackType() != EXERCISE_FEEDBACK_TYPE_EXAM) {
             $header .= '<th>'.get_lang('Comment').'</th>';
         } else {
             $header .= '<th>&nbsp;</th>';

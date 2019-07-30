@@ -141,11 +141,11 @@ function active_user(element_div) {
 }
 
 function clear_course_list(div_course) {
-    $("div#"+div_course).html("");
+    $("div#"+div_course).html("&nbsp;");
     $("div#"+div_course).hide("");
 }
 function clear_session_list(div_session) {
-    $("div#"+div_session).html("");
+    $("div#"+div_session).html("&nbsp;");
     $("div#"+div_session).hide("");
 }
 
@@ -159,7 +159,7 @@ function display_advanced_search_form () {
     }
 }
 
-$(document).ready(function() {
+$(function () {
     var select_val = $("#input_select_extra_data").val();
     if ( document.getElementById(\'extra_data_text\')) {
         if (select_val != 0) {
@@ -1022,7 +1022,7 @@ $form->addButtonSearch(get_lang('Search'));
 
 $searchAdvanced = '
 <a id="advanced_params" href="javascript://" 
-    class="btn btn-light advanced_options" onclick="display_advanced_search_form();">
+    class="btn btn-default advanced_options" onclick="display_advanced_search_form();">
     <span id="img_plus_and_minus">&nbsp;
     '.Display::returnFontAwesomeIcon('arrow-right').' '.get_lang('AdvancedSearch').'
     </span>
@@ -1031,8 +1031,8 @@ $actionsLeft = '';
 $actionsCenter = '';
 $actionsRight = '';
 if (api_is_platform_admin()) {
-    $actionsRight .= '<a class="float-right" href="'.api_get_path(WEB_CODE_PATH).'admin/user_add.php">'.
-        Display::return_icon('new_user.png', get_lang('AddUsers'), '', ICON_SIZE_MEDIUM).'</a>';
+    $actionsRight .= '<a class="pull-right" href="'.api_get_path(WEB_CODE_PATH).'admin/user_add.php">'.
+         Display::return_icon('new_user.png', get_lang('AddUsers'), '', ICON_SIZE_MEDIUM).'</a>';
 }
 
 $actionsLeft .= $form->returnForm();
@@ -1097,7 +1097,7 @@ $data = $extraField->addElements($form, 0, [], true, false, $variablesToShow);
 
 $htmlHeadXtra[] = '
     <script>
-    $(document).ready(function() {
+    $(function () {
         '.$data['jquery_ready_content'].'
     })
     </script>
@@ -1198,8 +1198,7 @@ if ($table->get_total_number_of_items() == 0) {
                 }
                 if ($add_user) {
                     $row_table = [];
-                    $row_table[] = api_get_person_name($user['firstname'],
-                            $user['lastname']).' ('.$user['username'].') ';
+                    $row_table[] = api_get_person_name($user['firstname'], $user['lastname']).' ('.$user['username'].') ';
                     $row_table[] = $access_info_to_string;
                     $url = api_get_self().'?action=add_user_to_my_url&user_id='.$user['id'].'&sec_token='.Security::getTokenFromSession();
                     $row_table[] = Display::url(

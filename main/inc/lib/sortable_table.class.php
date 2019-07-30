@@ -129,7 +129,7 @@ class SortableTable extends HTML_Table
         $parameters = []
     ) {
         if (empty($table_id)) {
-            $table_id = $table_name.uniqid();
+            $table_id = $table_name.uniqid('table', true);
         }
         if (isset($parameters) && empty($parameters)) {
             $parameters = ['class' => 'table data_table', 'id' => $table_id];
@@ -161,9 +161,9 @@ class SortableTable extends HTML_Table
             if (!in_array($my_session_direction, ['ASC', 'DESC'])) {
                 $this->direction = 'ASC';
             } else {
-                if ($my_session_direction == 'ASC') {
+                if ($my_session_direction === 'ASC') {
                     $this->direction = 'ASC';
-                } elseif ($my_session_direction == 'DESC') {
+                } elseif ($my_session_direction === 'DESC') {
                     $this->direction = 'DESC';
                 }
             }
@@ -186,7 +186,7 @@ class SortableTable extends HTML_Table
         Session::erase($this->param_prefix.'per_page');
 
         $this->per_page = Session::read($this->param_prefix.'per_page', $default_items_per_page);
-        $this->per_page = isset($_GET[$this->param_prefix.'per_page']) ? intval($_GET[$this->param_prefix.'per_page']) : $this->per_page;
+        $this->per_page = isset($_GET[$this->param_prefix.'per_page']) ? (int) $_GET[$this->param_prefix.'per_page'] : $this->per_page;
 
         Session::write($this->param_prefix.'per_page', $this->per_page);
         Session::write($this->param_prefix.'direction', $this->direction);
@@ -208,14 +208,15 @@ class SortableTable extends HTML_Table
 
     /**
      * Get the Pager object to split the showed data in several pages.
+     *
+     * @return Pager_Sliding
      */
     public function get_pager()
     {
-        if (is_null($this->pager)) {
-            $total_number_of_items = $this->get_total_number_of_items();
+        if ($this->pager === null) {
             $params['mode'] = 'Sliding';
             $params['perPage'] = $this->per_page;
-            $params['totalItems'] = $total_number_of_items;
+            $params['totalItems'] = $this->get_total_number_of_items();
             $params['urlVar'] = $this->param_prefix.'page_nr';
             $params['currentPage'] = $this->page_nr;
             $icon_attributes = ['style' => 'vertical-align: middle;'];
@@ -1003,6 +1004,14 @@ class SortableTable extends HTML_Table
     }
 
     /**
+     * @param int $value
+     */
+    public function setTotalNumberOfItems($value)
+    {
+        $this->total_number_of_items = (int) $value;
+    }
+
+    /**
      * Get the data to display.  This function calls the function given as
      * 2nd argument in the constructor of a SortableTable. Make sure your
      * function has the same parameters as defined here.
@@ -1054,23 +1063,29 @@ class SortableTableFromArray extends SortableTable
     /**
      * Constructor.
      *
-     * @param array $table_data
-     * @param int   $default_column
-     * @param int   $default_items_per_page
+     * @param array  $table_data
+     * @param int    $default_column
+     * @param int    $default_items_per_page
+     * @param string $tableName
+     * @param string $get_total_number_function
+     * @param string $tableId
      */
     public function __construct(
         $table_data,
         $default_column = 1,
         $default_items_per_page = 20,
-        $tablename = 'tablename',
-        $get_total_number_function = null
+        $tableName = 'tablename',
+        $get_total_number_function = null,
+        $tableId = ''
     ) {
         parent:: __construct(
-            $tablename,
+            $tableName,
             $get_total_number_function,
             null,
             $default_column,
-            $default_items_per_page
+            $default_items_per_page,
+            null,
+            $tableId
         );
         $this->table_data = $table_data;
     }
@@ -1153,20 +1168,20 @@ class SortableTableFromArrayConfig extends SortableTable
     /**
      * Constructor.
      *
-     * @param array  $table_data             All the information of the table
-     * @param int    $default_column         Default column that will be use in the sorts functions
-     * @param int    $default_items_per_page quantity of pages that we are going to see
-     * @param int    $tablename              Name of the table
-     * @param array  $column_show            An array with binary values 1: we show the column 2: we don't show it
-     * @param array  $column_order           an array of integers that let us decide how the columns are going to be sort
+     * @param array  $data         All the information of the table
+     * @param int    $column       Default column that will be use in the sorts functions
+     * @param int    $itemsPerPage quantity of pages that we are going to see
+     * @param string $tableName    Name of the table
+     * @param array  $column_show  An array with binary values 1: we show the column 2: we don't show it
+     * @param array  $column_order an array of integers that let us decide how the columns are going to be sort
      * @param string $direction
-     * @param bool   $doc_filter             special modification to fix the document name order
+     * @param bool   $doc_filter   special modification to fix the document name order
      */
     public function __construct(
-        $table_data,
-        $default_column = 1,
-        $default_items_per_page = 20,
-        $tablename = 'tablename',
+        $data,
+        $column = 1,
+        $itemsPerPage = 20,
+        $tableName = 'tablename',
         $column_show = [],
         $column_order = [],
         $direction = 'ASC',
@@ -1177,14 +1192,14 @@ class SortableTableFromArrayConfig extends SortableTable
         $this->doc_filter = $doc_filter;
 
         parent::__construct(
-            $tablename,
+            $tableName,
             null,
             null,
-            $default_column,
-            $default_items_per_page,
+            $column,
+            $itemsPerPage,
             $direction
         );
-        $this->table_data = $table_data;
+        $this->table_data = $data;
     }
 
     /**
@@ -1202,7 +1217,7 @@ class SortableTableFromArrayConfig extends SortableTable
         $content = TableSort::sort_table_config(
             $this->table_data,
             $this->column,
-            $this->direction == 'ASC' ? SORT_ASC : SORT_DESC,
+            $this->direction === 'ASC' ? SORT_ASC : SORT_DESC,
             $this->column_show,
             $this->column_order,
             SORT_REGULAR,

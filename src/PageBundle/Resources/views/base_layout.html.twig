@@ -7,7 +7,7 @@
                 {% if sonata_page.isEditor and sonata_page.isInlineEditionOn %}
                     <!-- CMS specific variables -->
                     <script>
-                        jQuery(document).ready(function() {
+                        $(function () {
                             Sonata.Page.init({
                                 url: {
                                     block_save_position: '{{ sonata_admin.objectUrl('sonata.page.admin.page', 'edit', page) }}',

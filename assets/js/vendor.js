@@ -25,20 +25,14 @@ require("select2");
 require("timeago");
 require("sweetalert/dist/sweetalert.min");
 require('bootstrap-select/dist/js/bootstrap-select.js');
-
 require("bootstrap-daterangepicker");
 require("fullcalendar/dist/fullcalendar.js");
 require("fullcalendar/dist/gcal.js");
 require("fullcalendar/dist/locale-all.js");
 require("easy-pie-chart/dist/jquery.easypiechart.min");
-
-//require("readmore-js");
+require("jquery-ui-timepicker-addon");
 
 // doesn't work with webpack added directly in /public/libs folder
 /*
-require("pwstrength-bootstrap");
-
-require("js-cookie");
-require("jquery-ui-timepicker-addon");
 require("ckeditor");
 */

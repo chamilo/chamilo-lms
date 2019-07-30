@@ -174,11 +174,13 @@ class GlobalMultipleAnswer extends Question
 
         global $text;
 
-        if ($obj_ex->edit_exercise_in_lp) {
+        if ($obj_ex->edit_exercise_in_lp ||
+            (empty($this->exerciseList) && empty($obj_ex->id))
+        ) {
+            // setting the save button here and not in the question class.php
             $form->addButtonDelete(get_lang('LessAnswer'), 'lessAnswers');
             $form->addButtonCreate(get_lang('PlusAnswer'), 'moreAnswers');
             $form->addButtonSave($text, 'submitQuestion');
-            // setting the save button here and not in the question class.php
         }
 
         $renderer->setElementTemplate('{element}&nbsp;', 'lessAnswers');
@@ -259,17 +261,16 @@ class GlobalMultipleAnswer extends Question
     /**
      * {@inheritdoc}
      */
-    public function return_header(
-        $exercise,
-        $counter = null,
-        $score = null
-    ) {
+    public function return_header(Exercise $exercise, $counter = null, $score = [])
+    {
         $header = parent::return_header($exercise, $counter, $score);
         $header .= '<table class="'.$this->question_table_class.'"><tr>';
 
-        if ($exercise->results_disabled != RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER) {
+        if (!in_array($exercise->results_disabled, [RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER])) {
             $header .= '<th>'.get_lang('Choice').'</th>';
-            $header .= '<th>'.get_lang('ExpectedChoice').'</th>';
+            if ($exercise->showExpectedChoiceColumn()) {
+                $header .= '<th>'.get_lang('ExpectedChoice').'</th>';
+            }
         }
 
         $header .= '<th>'.get_lang('Answer').'</th>';

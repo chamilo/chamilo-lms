@@ -143,7 +143,7 @@
 </div>
 {% if allow_download_export %}
     <script>
-        $(document).on('ready', function () {
+        $(function () {
             $('#badge-export-button').on('click', function (e) {
                 e.preventDefault();
                 OpenBadges.issue({{ issue_info.badge_assertion|json_encode() }});

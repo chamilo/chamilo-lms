@@ -50,8 +50,6 @@ class OpenofficePresentation extends OpenofficeDocument
                 slide name (with accents) || file name (without accents) || all slide text (to be indexed).
             */
             list($slide_name, $file_name, $slide_body) = explode('||', $file);
-            //error_log('Treating '.$file_name.' from '.__FUNCTION__);
-
             // Filename is utf8 encoded, but when we decode, some chars are not translated (like quote &rsquo;).
             // so we remove these chars by translating it in htmlentities and the reconvert it in want charset.
             $slide_name = api_htmlentities($slide_name, ENT_COMPAT, $this->original_charset);
@@ -67,7 +65,6 @@ class OpenofficePresentation extends OpenofficeDocument
             }
 
             if (!is_file($this->base_work_dir.$dir.$file_name) or filesize($this->base_work_dir.$dir.$file_name) == 0) {
-                //error_log($this->base_work_dir.$dir.$file_name . ' is not a file or is 0');
                 continue;
             }
 

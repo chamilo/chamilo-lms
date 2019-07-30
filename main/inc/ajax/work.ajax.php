@@ -8,14 +8,54 @@ require_once api_get_path(SYS_CODE_PATH).'work/work.lib.php';
 
 $action = isset($_REQUEST['a']) ? $_REQUEST['a'] : null;
 $isAllowedToEdit = api_is_allowed_to_edit();
+$courseInfo = api_get_course_info();
 
 switch ($action) {
+    case 'show_student_work':
+        api_protect_course_script(true);
+        if ($isAllowedToEdit) {
+            $itemList = isset($_REQUEST['item_list']) ? $_REQUEST['item_list'] : [];
+            $itemList = explode(',', $itemList);
+            if (!empty($itemList)) {
+                foreach ($itemList as $itemId) {
+                    makeVisible($itemId, $courseInfo);
+                }
+                echo '1';
+                exit;
+            }
+        }
+        echo '0';
+        break;
+    case 'hide_student_work':
+        api_protect_course_script(true);
+        if ($isAllowedToEdit) {
+            $itemList = isset($_REQUEST['item_list']) ? $_REQUEST['item_list'] : [];
+            $itemList = explode(',', $itemList);
+            if (!empty($itemList)) {
+                foreach ($itemList as $itemId) {
+                    makeInvisible($itemId, $courseInfo);
+                }
+                echo '1';
+                exit;
+            }
+        }
+        echo '0';
+        break;
+    case 'delete_student_work':
+        api_protect_course_script(true);
+        if ($isAllowedToEdit) {
+            $itemId = isset($_REQUEST['id']) ? $_REQUEST['id'] : 0;
+            deleteWorkItem($itemId, $courseInfo);
+            echo '1';
+            exit;
+        }
+        echo '0';
+        break;
     case 'upload_file':
         api_protect_course_script(true);
         $workId = isset($_REQUEST['id']) ? $_REQUEST['id'] : '';
 
         $workInfo = get_work_data_by_id($workId);
-        $courseInfo = api_get_course_info();
         $sessionId = api_get_session_id();
         $userId = api_get_user_id();
         $groupId = api_get_group_id();

@@ -43,14 +43,12 @@ function confirmation(name) {
 $nameTools = get_lang('LearningPaths');
 Event::event_access_tool(TOOL_LEARNPATH);
 
-/**
- * Display.
- */
 /* Require the search widget and prepare the header with its stuff. */
 if (api_get_setting('search_enabled') === 'true') {
     require api_get_path(LIBRARY_PATH).'search/search_widget.php';
     search_widget_prepare($htmlHeadXtra);
 }
+$courseId = api_get_course_int_id();
 $sessionId = api_get_session_id();
 $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
 $courseInfo = api_get_course_info();
@@ -121,8 +119,7 @@ if ($is_allowed_to_edit) {
 
 $token = Security::get_token();
 
-/* DISPLAY SCORM LIST */
-$categoriesTempList = learnpath::getCategories(api_get_course_int_id());
+$categoriesTempList = learnpath::getCategories($courseId);
 $categoryTest = new CLpCategory();
 $categoryTest->setId(0);
 $categoryTest->setName(get_lang('WithOutCategory'));
@@ -134,7 +131,6 @@ $categories = [
 if (!empty($categoriesTempList)) {
     $categories = array_merge($categories, $categoriesTempList);
 }
-
 $userId = api_get_user_id();
 $userInfo = api_get_user_info();
 $lpIsShown = false;
@@ -155,15 +151,48 @@ if ($filteredCategoryId) {
 $test_mode = api_get_setting('server_type');
 $showBlockedPrerequisite = api_get_configuration_value('show_prerequisite_as_blocked');
 $allowLpChamiloExport = api_get_configuration_value('allow_lp_chamilo_export');
-$allowMinTime = Tracking::minimunTimeAvailable(api_get_session_id(), api_get_course_int_id());
+$allowMinTime = Tracking::minimunTimeAvailable($sessionId, $courseId);
+$accumulateWorkTimeTotal = 0;
+if ($allowMinTime) {
+    $accumulateWorkTimeTotal = learnpath::getAccumulateWorkTimeTotal($courseId);
+}
+
 $user = api_get_user_entity($userId);
 $ending = true;
+$isInvitee = api_is_invitee();
+$hideScormExportLink = api_get_setting('hide_scorm_export_link');
+$hideScormCopyLink = api_get_setting('hide_scorm_copy_link');
+$hideScormPdfLink = api_get_setting('hide_scorm_pdf_link');
+$options = learnpath::getIconSelect();
+$cidReq = api_get_cidreq();
+
+$defaultLpIcon = Display::return_icon(
+    'learnpath.png',
+    get_lang('LPName')
+);
+
+$defaultDisableLpIcon = Display::return_icon(
+    'learnpath_na.png',
+    get_lang('LPName')
+);
+
+$courseSettingsIcon = Display::return_icon(
+    'settings.png',
+    get_lang('CourseSettings')
+);
+
+$courseSettingsDisableIcon = Display::return_icon(
+    'settings_na.png',
+    get_lang('CourseSettings')
+);
+
+$enableAutoLaunch = api_get_course_setting('enable_lp_auto_launch');
+$gameMode = api_get_setting('gamification_mode');
 
 $data = [];
 /** @var CLpCategory $item */
 foreach ($categories as $item) {
     $categoryId = $item->getId();
-
     if ($categoryId !== 0 && $subscriptionSettings['allow_add_users_to_lp_category'] == true) {
         // "Without category" has id = 0
         $categoryVisibility = api_get_item_visibility(
@@ -174,7 +203,7 @@ foreach ($categories as $item) {
         );
 
         if (!$is_allowed_to_edit) {
-            if ((int) $categoryVisibility !== 1 && $categoryVisibility != -1) {
+            if ($categoryVisibility !== 1 && $categoryVisibility != -1) {
                 continue;
             }
         }
@@ -185,9 +214,9 @@ foreach ($categories as $item) {
     }
 
     $list = new LearnpathList(
-        api_get_user_id(),
-        api_get_course_id(),
-        api_get_session_id(),
+        $userId,
+        $courseInfo,
+        $sessionId,
         null,
         false,
         $categoryId
@@ -196,64 +225,65 @@ foreach ($categories as $item) {
     $flat_list = $list->get_flat_list();
 
     // Hiding categories with out LPs (only for student)
-    if (empty($flat_list) && !api_is_allowed_to_edit()) {
+    if (empty($flat_list) && !$is_allowed_to_edit) {
         continue;
     }
 
     $listData = [];
     $lpTimeList = [];
     if ($allowMinTime) {
-        $lpTimeList = Tracking::getCalculateTime($userId, api_get_course_int_id(), api_get_session_id());
+        $lpTimeList = Tracking::getCalculateTime($userId, $courseId, $sessionId);
     }
-
-    $options = learnpath::getIconSelect();
 
     if (!empty($flat_list)) {
         $max = count($flat_list);
         $counter = 0;
         $current = 0;
         $autolaunch_exists = false;
-        $accumulateWorkTimeTotal = 0;
-        if ($allowMinTime) {
-            $accumulateWorkTimeTotal = learnpath::getAccumulateWorkTimeTotal(api_get_course_int_id());
-        }
 
+        $progressList = learnpath::getProgressFromLpList(
+            array_column($flat_list, 'lp_old_id'),
+            $userId,
+            $courseId,
+            $sessionId
+        );
+
+        $now = time();
         foreach ($flat_list as $id => $details) {
             $id = $details['lp_old_id'];
-            // Validation when belongs to a session.
-            $session_img = api_get_session_image(
-                $details['lp_session'],
-                $userInfo['status']
-            );
 
             if (!$is_allowed_to_edit && $details['lp_visibility'] == 0) {
                 // This is a student and this path is invisible, skip.
                 continue;
             }
 
-            $lpVisibility = learnpath::is_lp_visible_for_student($id, $userId);
-            $isBlocked = learnpath::isBlockedByPrerequisite(
-                $userId,
-                $details['prerequisite'],
-                $courseInfo,
-                api_get_session_id()
-            );
+            $lpVisibility = learnpath::is_lp_visible_for_student($id, $userId, $courseInfo);
 
             // Check if the learnpath is visible for student.
-            if (!$is_allowed_to_edit && $lpVisibility === false
-                && ($isBlocked && $showBlockedPrerequisite === false)
-            ) {
-                continue;
+            if (!$is_allowed_to_edit) {
+                $isBlocked = learnpath::isBlockedByPrerequisite(
+                    $userId,
+                    $details['prerequisite'],
+                    $courseInfo,
+                    $sessionId
+                );
+                if ($lpVisibility === false && $isBlocked && $showBlockedPrerequisite === false) {
+                    continue;
+                }
             }
 
             $start_time = $end_time = '';
-            if (!$is_allowed_to_edit) {
+            if ($is_allowed_to_edit) {
+                if (!empty($details['publicated_on'])) {
+                    $start_time = api_convert_and_format_date($details['publicated_on'], DATE_TIME_FORMAT_LONG_24H);
+                }
+                if (!empty($details['expired_on'])) {
+                    $end_time = api_convert_and_format_date($details['expired_on'], DATE_TIME_FORMAT_LONG_24H);
+                }
+            } else {
                 $time_limits = false;
-
                 // This is an old LP (from a migration 1.8.7) so we do nothing
-                if (empty($details['created_on']) &&
-                    empty($details['modified_on'])
-                ) {
+                if (empty($details['created_on']) && empty($details['modified_on'])) {
                     $time_limits = false;
                 }
 
@@ -264,18 +294,9 @@ foreach ($categories as $item) {
 
                 if ($time_limits) {
                     // Check if start time
-                    if (!empty($details['publicated_on']) &&
-                        !empty($details['expired_on'])
-                    ) {
-                        $start_time = api_strtotime(
-                            $details['publicated_on'],
-                            'UTC'
-                        );
-                        $end_time = api_strtotime(
-                            $details['expired_on'],
-                            'UTC'
-                        );
-                        $now = time();
+                    if (!empty($details['publicated_on']) && !empty($details['expired_on'])) {
+                        $start_time = api_strtotime($details['publicated_on'], 'UTC');
+                        $end_time = api_strtotime($details['expired_on'], 'UTC');
                         $is_actived_time = false;
                         if ($now > $start_time && $end_time > $now) {
                             $is_actived_time = true;
@@ -286,30 +307,15 @@ foreach ($categories as $item) {
                         }
                     }
                 }
-                $start_time = $end_time = '';
-            } else {
-                if (!empty($details['publicated_on'])) {
-                    $start_time = api_convert_and_format_date(
-                        $details['publicated_on'],
-                        DATE_TIME_FORMAT_LONG_24H
-                    );
-                }
-                if (!empty($details['expired_on'])) {
-                    $end_time = api_convert_and_format_date(
-                        $details['expired_on'],
-                        DATE_TIME_FORMAT_LONG_24H
-                    );
-                }
             }
 
             $counter++;
+            $oddclass = 'row_even';
             if (($counter % 2) == 0) {
                 $oddclass = 'row_odd';
-            } else {
-                $oddclass = 'row_even';
             }
 
-            $url_start_lp = 'lp_controller.php?'.api_get_cidreq().'&action=view&lp_id='.$id;
+            $url_start_lp = 'lp_controller.php?'.$cidReq.'&action=view&lp_id='.$id;
             $name = Security::remove_XSS($details['lp_name']);
             $extra = null;
 
@@ -322,26 +328,18 @@ foreach ($categories as $item) {
                     .($lpVisibility
                         ? ''
                         : ' - ('.get_lang('LPNotVisibleToStudent').')');
-                $extra = '<div class ="lp_content_type_label">'.$dsp_desc
-                    .'</div>';
+                $extra = '<div class ="lp_content_type_label">'.$dsp_desc.'</div>';
             }
 
             $my_title = $name;
-            $icon_learnpath = Display::return_icon(
-                'learnpath.png',
-                get_lang('LPName')
-            );
-
+            $icon_learnpath = $defaultLpIcon;
             if ($details['lp_visibility'] == 0) {
                 $my_title = Display::tag(
                     'font',
                     $name,
                     ['class' => 'text-muted']
                 );
-                $icon_learnpath = Display::return_icon(
-                    'learnpath_na.png',
-                    get_lang('LPName')
-                );
+                $icon_learnpath = $defaultDisableLpIcon;
             }
 
             if (!empty($options)) {
@@ -360,10 +358,7 @@ foreach ($categories as $item) {
                     $name,
                     ['class' => 'text-muted']
                 );
-                $icon_learnpath = Display::return_icon(
-                    'learnpath_na.png',
-                    get_lang('LPName')
-                );
+                $icon_learnpath = $defaultDisableLpIcon;
                 $url_start_lp = '#';
             }
 
@@ -376,22 +371,17 @@ foreach ($categories as $item) {
             $dsp_default_view = '';
             $dsp_debug = '';
             $dsp_order = '';
-            $progress = 0;
 
-            if (!api_is_invitee()) {
-                $progress = learnpath::getProgress(
-                    $id,
-                    $userId,
-                    api_get_course_int_id(),
-                    api_get_session_id()
-                );
+            $progress = 0;
+            if (!$isInvitee) {
+                $progress = isset($progressList[$id]) && !empty($progressList[$id]) ? $progressList[$id] : 0;
             }
 
             if ($is_allowed_to_edit) {
                 $dsp_progress = '<center>'.$progress.'%</center>';
             } else {
                 $dsp_progress = '';
-                if (!api_is_invitee()) {
+                if (!$isInvitee) {
                     $dsp_progress = learnpath::get_progress_bar($progress, '%');
                 }
             }
@@ -404,7 +394,7 @@ foreach ($categories as $item) {
             $linkMinTime = '';
             if ($allowMinTime) {
                 // Minimum time (in minutes) to pass the learning path
-                $accumulateWorkTime = learnpath::getAccumulateWorkTimePrerequisite($id, api_get_course_int_id());
+                $accumulateWorkTime = learnpath::getAccumulateWorkTimePrerequisite($id, $courseId);
                 if ($accumulateWorkTime > 0) {
                     $lpTime = isset($lpTimeList[TOOL_LEARNPATH][$id]) ? $lpTimeList[TOOL_LEARNPATH][$id] : 0;
 
@@ -444,7 +434,7 @@ foreach ($categories as $item) {
                         $time_progress_perc = '100%';
                         $time_progress_value = 100;
                     } else {
-                        $time_progress_value = intval(($lpTime * 100) / ($accumulateWorkTime * 60));
+                        $time_progress_value = (int) (($lpTime * 100) / ($accumulateWorkTime * 60));
                     }
 
                     if ($time_progress_value < 100) {
@@ -472,18 +462,11 @@ foreach ($categories as $item) {
                 // EDIT LP
                 if ($sessionId == $details['lp_session']) {
                     $dsp_edit_lp = Display::url(
-                        Display::return_icon(
-                            'settings.png',
-                            get_lang('CourseSettings')
-                        ),
-                        "lp_controller.php?".api_get_cidreq()
-                            ."&action=edit&lp_id=$id"
+                        $courseSettingsIcon,
+                        'lp_controller.php?'.$cidReq."&action=edit&lp_id=$id"
                     );
                 } else {
-                    $dsp_edit_lp = Display::return_icon(
-                        'settings_na.png',
-                        get_lang('CourseSettings')
-                    );
+                    $dsp_edit_lp = $courseSettingsDisableIcon;
                 }
 
                 // BUILD
@@ -494,7 +477,7 @@ foreach ($categories as $item) {
                                 'edit.png',
                                 get_lang('LearnpathEditLearnpath')
                             ),
-                            'lp_controller.php?'.api_get_cidreq().'&'
+                            'lp_controller.php?'.$cidReq.'&'
                                 .http_build_query(
                                     [
                                         'action' => 'add_item',
@@ -531,22 +514,20 @@ foreach ($categories as $item) {
                                 'invisible.png',
                                 get_lang('Show')
                             ),
-                            api_get_self().'?'.api_get_cidreq()
-                                ."&lp_id=$id&action=toggle_visible&new_status=1"
+                            api_get_self().'?'.$cidReq."&lp_id=$id&action=toggle_visible&new_status=1"
                         );
                     } else {
                         $dsp_visible = Display::url(
                             Display::return_icon('visible.png', get_lang('Hide')),
-                            api_get_self().'?'.api_get_cidreq()
-                                ."&lp_id=$id&action=toggle_visible&new_status=0"
+                            api_get_self().'?'.$cidReq."&lp_id=$id&action=toggle_visible&new_status=0"
                         );
                     }
                 }
 
                 // Tracking command
-                $trackingActionUrl = 'lp_controller.php?'
-                    .api_get_cidreq().'&'
-                    .http_build_query(['action' => 'report', 'lp_id' => $id]);
+                $trackingActionUrl = 'lp_controller.php?'.$cidReq.'&'.http_build_query(
+                    ['action' => 'report', 'lp_id' => $id]
+                );
 
                 $trackingAction = Display::url(
                     Display::return_icon(
@@ -558,14 +539,13 @@ foreach ($categories as $item) {
 
                 /* PUBLISH COMMAND */
                 if ($sessionId == $details['lp_session']) {
-                    if ($details['lp_published'] == "i") {
+                    if ($details['lp_published'] == 'i') {
                         $dsp_publish = Display::url(
                             Display::return_icon(
                                 'lp_publish_na.png',
                                 get_lang('LearnpathPublish')
                             ),
-                            api_get_self().'?'.api_get_cidreq()
-                                ."&lp_id=$id&action=toggle_publish&new_status=v"
+                            api_get_self().'?'.$cidReq."&lp_id=$id&action=toggle_publish&new_status=v"
                         );
                     } else {
                         $dsp_publish = Display::url(
@@ -573,8 +553,7 @@ foreach ($categories as $item) {
                                 'lp_publish.png',
                                 get_lang('LearnpathDoNotPublish')
                             ),
-                            api_get_self().'?'.api_get_cidreq()
-                                ."&lp_id=$id&action=toggle_publish&new_status=i"
+                            api_get_self().'?'.$cidReq."&lp_id=$id&action=toggle_publish&new_status=i"
                         );
                     }
                 } else {
@@ -591,17 +570,14 @@ foreach ($categories as $item) {
                  * It is thus a mix betwenn multiple attempt and mono attempt
                  */
                 if ($sessionId == $details['lp_session']) {
-                    if ($details['seriousgame_mode'] == 1
-                        && $details['lp_prevent_reinit'] == 1
-                    ) {
+                    if ($details['seriousgame_mode'] == 1 && $details['lp_prevent_reinit'] == 1) {
                         // seriousgame mode | next = single
                         $dsp_reinit = Display::url(
                             Display::return_icon(
                                 'reload.png',
                                 get_lang('PreventMultipleAttempts')
                             ),
-                            "lp_controller.php?".api_get_cidreq()
-                                ."&action=switch_attempt_mode&lp_id=$id"
+                            'lp_controller.php?'.$cidReq."&action=switch_attempt_mode&lp_id=$id"
                         );
                     }
                     if ($details['seriousgame_mode'] == 0 &&
@@ -613,8 +589,7 @@ foreach ($categories as $item) {
                                 'reload_na.png',
                                 get_lang('AllowMultipleAttempts')
                             ),
-                            "lp_controller.php?".api_get_cidreq()
-                                ."&action=switch_attempt_mode&lp_id=$id"
+                            'lp_controller.php?'.$cidReq."&action=switch_attempt_mode&lp_id=$id"
                         );
                     }
                     if ($details['seriousgame_mode'] == 0 &&
@@ -626,8 +601,7 @@ foreach ($categories as $item) {
                                 'reload.png',
                                 get_lang('AllowMultipleAttempts')
                             ),
-                            "lp_controller.php?".api_get_cidreq()
-                                ."&action=switch_attempt_mode&lp_id=$id"
+                            'lp_controller.php?'.$cidReq."&action=switch_attempt_mode&lp_id=$id"
                         );
                     }
                 } else {
@@ -646,9 +620,7 @@ foreach ($categories as $item) {
                                     'view_fullscreen.png',
                                     get_lang('ViewModeFullScreen')
                                 ),
-                                'lp_controller.php?'.api_get_cidreq()
-                                    .'&action=switch_view_mode&lp_id='.$id
-                                    .$token_parameter
+                                'lp_controller.php?'.$cidReq.'&action=switch_view_mode&lp_id='.$id.$token_parameter
                             );
                             break;
                         case 'embedded':
@@ -657,9 +629,7 @@ foreach ($categories as $item) {
                                     'view_left_right.png',
                                     get_lang('ViewModeEmbedded')
                                 ),
-                                'lp_controller.php?'.api_get_cidreq()
-                                    .'&action=switch_view_mode&lp_id='.$id
-                                    .$token_parameter
+                                'lp_controller.php?'.$cidReq.'&action=switch_view_mode&lp_id='.$id.$token_parameter
                             );
                             break;
                         case 'embedframe':
@@ -668,9 +638,7 @@ foreach ($categories as $item) {
                                     'view_nofullscreen.png',
                                     get_lang('ViewModeEmbedFrame')
                                 ),
-                                'lp_controller.php?'.api_get_cidreq()
-                                    .'&action=switch_view_mode&lp_id='.$id
-                                    .$token_parameter
+                                'lp_controller.php?'.$cidReq.'&action=switch_view_mode&lp_id='.$id.$token_parameter
                             );
                             break;
                         case 'impress':
@@ -679,14 +647,12 @@ foreach ($categories as $item) {
                                     'window_list_slide.png',
                                     get_lang('ViewModeImpress')
                                 ),
-                                'lp_controller.php?'.api_get_cidreq()
-                                    .'&action=switch_view_mode&lp_id='.$id
-                                    .$token_parameter
+                                'lp_controller.php?'.$cidReq.'&action=switch_view_mode&lp_id='.$id.$token_parameter
                             );
                             break;
                     }
                 } else {
-                    if ($details['lp_view_mode'] == 'fullscreen') {
+                    if ($details['lp_view_mode'] === 'fullscreen') {
                         $dsp_default_view = Display::return_icon(
                             'view_fullscreen_na.png',
                             get_lang('ViewModeEmbedded')
@@ -700,15 +666,14 @@ foreach ($categories as $item) {
                 }
 
                 /*  DEBUG  */
-                if ($test_mode == 'test' || api_is_platform_admin()) {
+                if ($test_mode === 'test' || api_is_platform_admin()) {
                     if ($details['lp_scorm_debug'] == 1) {
                         $dsp_debug = Display::url(
                             Display::return_icon(
                                 'bug.png',
                                 get_lang('HideDebug')
                             ),
-                            "lp_controller.php?".api_get_cidreq()
-                                ."&action=switch_scorm_debug&lp_id=$id"
+                            "lp_controller.php?$cidReq&action=switch_scorm_debug&lp_id=$id"
                         );
                     } else {
                         $dsp_debug = Display::url(
@@ -716,8 +681,7 @@ foreach ($categories as $item) {
                                 'bug_na.png',
                                 get_lang('ShowDebug')
                             ),
-                            "lp_controller.php?".api_get_cidreq()
-                                ."&action=switch_scorm_debug&lp_id=$id"
+                            'lp_controller.php?'.$cidReq."&action=switch_scorm_debug&lp_id=$id"
                         );
                     }
                 }
@@ -726,15 +690,13 @@ foreach ($categories as $item) {
                 if ($details['lp_type'] == 1) {
                     $dsp_disk = Display::url(
                         Display::return_icon('cd.png', get_lang('ExportShort')),
-                        api_get_self()."?".api_get_cidreq()
-                            ."&action=export&lp_id=$id"
+                        api_get_self()."?$cidReq&action=export&lp_id=$id"
                     );
                 } elseif ($details['lp_type'] == 2) {
                     $dsp_disk = Display::url(
                         Display::return_icon('cd.png', get_lang('ExportShort')),
-                        api_get_self()."?".api_get_cidreq()
-                            ."&action=export&lp_id=$id&export_name="
-                            .api_replace_dangerous_char($name).".zip"
+                        api_get_self()."?$cidReq&action=export&lp_id=$id&export_name="
+                            .api_replace_dangerous_char($name).'.zip'
                     );
                 } else {
                     $dsp_disk = Display::return_icon(
@@ -746,7 +708,7 @@ foreach ($categories as $item) {
                 // Copy
                 $copy = Display::url(
                     Display::return_icon('cd_copy.png', get_lang('Copy')),
-                    api_get_self()."?".api_get_cidreq()."&action=copy&lp_id=$id"
+                    api_get_self().'?'.$cidReq."&action=copy&lp_id=$id"
                 );
 
                 // Subscribe users
@@ -759,12 +721,12 @@ foreach ($categories as $item) {
                             'user.png',
                             get_lang('SubscribeUsersToLp')
                         ),
-                        api_get_path(WEB_CODE_PATH)."lp/lp_subscribe_users.php?lp_id=$id&".api_get_cidreq()
+                        api_get_path(WEB_CODE_PATH)."lp/lp_subscribe_users.php?lp_id=$id&".$cidReq
                     );
                 }
 
                 /* Auto launch LP code */
-                if (api_get_course_setting('enable_lp_auto_launch') == 1) {
+                if ($enableAutoLaunch == 1) {
                     if ($details['autolaunch'] == 1 &&
                         $autolaunch_exists == false
                     ) {
@@ -774,8 +736,7 @@ foreach ($categories as $item) {
                                 'launch.png',
                                 get_lang('DisableLPAutoLaunch')
                             ),
-                            api_get_self().'?'.api_get_cidreq()
-                            ."&action=auto_launch&status=0&lp_id=$id"
+                            api_get_self().'?'.$cidReq."&action=auto_launch&status=0&lp_id=$id"
                         );
                     } else {
                         $lp_auto_launch_icon = Display::url(
@@ -783,8 +744,7 @@ foreach ($categories as $item) {
                                 'launch_na.png',
                                 get_lang('EnableLPAutoLaunch')
                             ),
-                            api_get_self().'?'.api_get_cidreq()
-                            ."&action=auto_launch&status=1&lp_id=$id"
+                            api_get_self().'?'.$cidReq."&action=auto_launch&status=1&lp_id=$id"
                         );
                     }
                 }
@@ -795,8 +755,7 @@ foreach ($categories as $item) {
                         'pdf.png',
                         get_lang('ExportToPDFOnlyHTMLAndImages')
                     ),
-                    api_get_self().'?'.api_get_cidreq()
-                    ."&action=export_to_pdf&lp_id=$id"
+                    api_get_self().'?'.$cidReq."&action=export_to_pdf&lp_id=$id"
                 );
 
                 /* Delete */
@@ -806,7 +765,7 @@ foreach ($categories as $item) {
                             'delete.png',
                             get_lang('LearnpathDeleteLearnpath')
                         ),
-                        'lp_controller.php?'.api_get_cidreq()."&action=delete&lp_id=$id",
+                        'lp_controller.php?'.$cidReq."&action=delete&lp_id=$id",
                         [
                             'onclick' => "javascript: return confirmation('".addslashes($name)."');",
                         ]
@@ -824,33 +783,29 @@ foreach ($categories as $item) {
                     if ($details['lp_display_order'] == 1 && $max != 1) {
                         $dsp_order .= Display::url(
                             Display::return_icon('down.png', get_lang('MoveDown')),
-                            "lp_controller.php?".api_get_cidreq()
-                                ."&action=move_lp_down&lp_id=$id&category_id=$categoryId"
+                            "lp_controller.php?$cidReq&action=move_lp_down&lp_id=$id&category_id=$categoryId"
                         );
                     } elseif ($current == $max - 1 && $max != 1) {
                         $dsp_order .= Display::url(
                             Display::return_icon('up.png', get_lang('MoveUp')),
-                            "lp_controller.php?".api_get_cidreq()
-                                ."&action=move_lp_up&lp_id=$id&category_id=$categoryId"
+                            "lp_controller.php?$cidReq&action=move_lp_up&lp_id=$id&category_id=$categoryId"
                         );
                     } elseif ($max == 1) {
                         $dsp_order = '';
                     } else {
                         $dsp_order .= Display::url(
                             Display::return_icon('down.png', get_lang('MoveDown')),
-                            "lp_controller.php?".api_get_cidreq()
-                                ."&action=move_lp_down&lp_id=$id&category_id=$categoryId"
+                            "lp_controller.php?$cidReq&action=move_lp_down&lp_id=$id&category_id=$categoryId"
                         );
                         $dsp_order .= Display::url(
                             Display::return_icon('up.png', get_lang('MoveUp')),
-                            "lp_controller.php?".api_get_cidreq()
-                                ."&action=move_lp_up&lp_id=$id&category_id=$categoryId"
+                            "lp_controller.php?$cidReq&action=move_lp_up&lp_id=$id&category_id=$categoryId"
                         );
                     }
                 }
 
                 if ($details['lp_type'] == 2) {
-                    $url = api_get_path(WEB_CODE_PATH)."lp/lp_update_scorm.php?".api_get_cidreq()."&lp_id=$id";
+                    $url = api_get_path(WEB_CODE_PATH).'lp/lp_update_scorm.php?'.$cidReq."&lp_id=$id";
                     $actionUpdateScormFile = Display::url(
                         Display::return_icon('upload_file.png', get_lang('Update')),
                         $url
@@ -863,23 +818,15 @@ foreach ($categories as $item) {
                             'backup.png',
                             get_lang('ExportToChamiloFormat')
                         ),
-                        api_get_self().'?'.api_get_cidreq()
-                        ."&action=export_to_course_build&lp_id=$id"
+                        api_get_self().'?'.$cidReq."&action=export_to_course_build&lp_id=$id"
                     );
                 }
 
-                if ($is_allowed_to_edit) {
-                    $start_time = $start_time;
-                    $end_time = $end_time;
-                } else {
-                    $start_time = $end_time = '';
-                }
-
-                if (api_get_setting('gamification_mode') == 1) {
+                if ($gameMode == 1) {
                     if ($details['seriousgame_mode'] == 0) {
                         $actionSeriousGame = Display::toolbarButton(
                             null,
-                            api_get_self().'?'.api_get_cidreq()
+                            api_get_self().'?'.$cidReq
                                 ."&lp_id=$id&action=toggle_seriousgame",
                             'trophy',
                             'default',
@@ -891,7 +838,7 @@ foreach ($categories as $item) {
                     } else {
                         $actionSeriousGame = Display::toolbarButton(
                             null,
-                            api_get_self().'?'.api_get_cidreq()
+                            api_get_self().'?'.$cidReq
                                 ."&lp_id=$id&action=toggle_seriousgame",
                             'trophy',
                             'warning',
@@ -906,31 +853,32 @@ foreach ($categories as $item) {
                 // Student
                 $export_icon = Display::url(
                     Display::return_icon('pdf.png', get_lang('ExportToPDF')),
-                    api_get_self().'?'.api_get_cidreq()
-                        ."&action=export_to_pdf&lp_id=$id"
+                    api_get_self().'?'.$cidReq."&action=export_to_pdf&lp_id=$id"
                 );
             }
 
-            $hideScormExportLink = api_get_setting('hide_scorm_export_link');
             if ($hideScormExportLink === 'true') {
                 $dsp_disk = null;
             }
 
-            $hideScormCopyLink = api_get_setting('hide_scorm_copy_link');
             if ($hideScormCopyLink === 'true') {
                 $copy = null;
             }
 
-            $hideScormPdfLink = api_get_setting('hide_scorm_pdf_link');
             if ($hideScormPdfLink === 'true') {
                 $export_icon = null;
             }
+
+            $sessionImage = api_get_session_image(
+                $details['lp_session'],
+                $userInfo['status']
+            );
 
             $listData[] = [
                 'learnpath_icon' => $icon_learnpath,
                 'url_start' => $url_start_lp,
                 'title' => $my_title,
-                'session_image' => $session_img,
+                'session_image' => $sessionImage,
                 'extra' => $extra,
                 'start_time' => $start_time,
                 'end_time' => $end_time,
@@ -993,7 +941,7 @@ DocumentManager::removeGeneratedAudioTempFile();
 $template = new Template($nameTools);
 $template->assign('subscription_settings', $subscriptionSettings);
 $template->assign('is_allowed_to_edit', $is_allowed_to_edit);
-$template->assign('is_invitee', api_is_invitee());
+$template->assign('is_invitee', $isInvitee);
 $template->assign('is_ending', $ending);
 $template->assign('actions', $actions);
 $template->assign('categories', $categories);

@@ -202,7 +202,6 @@ switch ($action) {
                     lastname,
                     aa.status,
                     start_date,
-                    score,
                     max_score,
                     score/max_score as score,
                     exe_duration,
@@ -215,7 +214,6 @@ switch ($action) {
                         t.exe_user_id,
                         status,
                         start_date,
-                        score,
                         max_score,
                         score/max_score as score,
                         exe_duration,
@@ -274,12 +272,12 @@ switch ($action) {
                     $h = floor($remaining / 3600);
                     $m = floor(($remaining - ($h * 3600)) / 60);
                     $s = ($remaining - ($h * 3600) - ($m * 60));
-                    $timeInfo = api_format_date(
+                    $timeInfo = api_convert_and_format_date(
                             $row['start_date'],
                             DATE_TIME_FORMAT_LONG
                         ).' ['.($h > 0 ? $h.':' : '').sprintf("%02d", $m).':'.sprintf("%02d", $s).']';
                 } else {
-                    $timeInfo = api_format_date(
+                    $timeInfo = api_convert_and_format_date(
                         $row['start_date'],
                         DATE_TIME_FORMAT_LONG
                     );
@@ -782,9 +780,11 @@ switch ($action) {
         $codePath = api_get_path(WEB_CODE_PATH);
 
         foreach ($exercises as $exercise) {
+            $title = Security::remove_XSS(api_html_entity_decode($exercise['title']));
+
             $result[] = [
                 'id' => $exercise['iid'],
-                'title' => Security::remove_XSS($exercise['title']),
+                'title' => strip_tags($title),
             ];
         }
 

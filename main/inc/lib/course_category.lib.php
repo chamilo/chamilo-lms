@@ -49,7 +49,6 @@ class CourseCategory
             if ($result) {
                 $category['access_url_id'] = $result['access_url_id'];
             }
-            $category['course_count'] = self::countCoursesInCategory($categoryCode);
 
             return $category;
         }

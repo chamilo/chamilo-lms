@@ -60,7 +60,7 @@ function add_image_form() {
 </script>';
 $nameTools = get_lang('ComposeMessage');
 
-$tpl = new Template($nameTools);
+$tpl = new Template(get_lang('ComposeMessage'));
 
 /**
  * Shows the compose area + a list of users to select from.
@@ -179,7 +179,7 @@ function manageForm($default, $select_from_user_list = null, $sent_to = '', $tpl
         get_lang('Message'),
         false,
         false,
-        ['ToolbarSet' => 'Messages', 'Width' => '100%', 'Height' => '250']
+        ['ToolbarSet' => 'Messages', 'Width' => '100%', 'Height' => '250', 'style' => true]
     );
 
     if (isset($_GET['re_id'])) {
@@ -191,10 +191,10 @@ function manageForm($default, $select_from_user_list = null, $sent_to = '', $tpl
         // Adding reply mail
         $user_reply_info = api_get_user_info($message_reply_info['user_sender_id']);
         $default['content'] = '<p><br/></p>'.sprintf(
-                get_lang('XWroteY'),
-                $user_reply_info['complete_name'],
-                Security::filter_terms($message_reply_info['content'])
-            );
+            get_lang('XWroteY'),
+            $user_reply_info['complete_name'],
+            Security::filter_terms($message_reply_info['content'])
+        );
     }
 
     if (isset($_GET['forward_id'])) {
@@ -352,17 +352,17 @@ $message_content = null;
 $actions = null;
 
 if ($group_id != 0) {
-    $actions .= '<a href="' . api_get_path(WEB_PATH) . 'main/social/group_view.php?id=' . $group_id . '">' .
-        Display::return_icon('back.png', api_xml_http_response_encode(get_lang('ComposeMessage'))) . '</a>';
-    $actions .= '<a href="' . api_get_path(WEB_PATH) . 'main/messages/new_message.php?group_id=' . $group_id . '">' .
-        Display::return_icon('message_new.png', api_xml_http_response_encode(get_lang('ComposeMessage'))) . '</a>';
+    $actions .= '<a href="'.api_get_path(WEB_PATH).'main/social/group_view.php?id='.$group_id.'">'.
+        Display::return_icon('back.png', api_xml_http_response_encode(get_lang('ComposeMessage'))).'</a>';
+    $actions .= '<a href="'.api_get_path(WEB_PATH).'main/messages/new_message.php?group_id='.$group_id.'">'.
+        Display::return_icon('message_new.png', api_xml_http_response_encode(get_lang('ComposeMessage'))).'</a>';
 } else {
-    $actions .= '<a href="' . api_get_path(WEB_PATH) . 'main/messages/new_message.php">' .
-        Display::return_icon('message_new.png', get_lang('ComposeMessage')) . '</a>';
-    $actions .= '<a href="' . api_get_path(WEB_PATH) . 'main/messages/inbox.php">' .
-        Display::return_icon('inbox.png', get_lang('Inbox')) . '</a>';
-    $actions .= '<a href="' . api_get_path(WEB_PATH) . 'main/messages/outbox.php">' .
-        Display::return_icon('outbox.png', get_lang('Outbox')) . '</a>';
+    $actions .= '<a href="'.api_get_path(WEB_PATH).'main/messages/new_message.php">'.
+        Display::return_icon('message_new.png', get_lang('ComposeMessage')).'</a>';
+    $actions .= '<a href="'.api_get_path(WEB_PATH).'main/messages/inbox.php">'.
+        Display::return_icon('inbox.png', get_lang('Inbox')).'</a>';
+    $actions .= '<a href="'.api_get_path(WEB_PATH).'main/messages/outbox.php">'.
+        Display::return_icon('outbox.png', get_lang('Outbox')).'</a>';
 }
 
 $show_message = null;
@@ -413,7 +413,6 @@ if (!isset($_POST['compose'])) {
         }
     }
 }
-
 
 MessageManager::cleanAudioMessage();
 if ($actions) {

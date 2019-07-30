@@ -198,7 +198,7 @@ function aiken_import_exercise($file)
             $question->type = constant($type);
             $question->save($exercise);
             $last_question_id = $question->selectId();
-            //3. Create answer
+
             // 3. Create answer
             $answer = new Answer($last_question_id, $courseId, $exercise, false);
             $answer->new_nbrAnswers = count($question_array['answer']);
@@ -259,7 +259,7 @@ function aiken_import_exercise($file)
                 $max_score = $scoreFromFile;
             }
 
-            // Now that we know the question score, set it!
+            //$answer->save();
 
             $params = ['ponderation' => $max_score];
             Database::update(

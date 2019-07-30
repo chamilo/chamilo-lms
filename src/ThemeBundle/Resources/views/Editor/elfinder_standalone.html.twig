@@ -10,6 +10,12 @@
 
 <!-- elFinder translation (OPTIONAL) -->
 <script type="text/javascript" src="{{ finderFolder }}js/i18n/elfinder.ru.js"></script>
+<style>
+/* Hide elfinder sidebar */
+.elfinder-navbar {
+    display: none !important;
+}
+</style>
 
 <script type="text/javascript" charset="utf-8">
     // Helper function to get parameters from the query string.
@@ -19,14 +25,17 @@
         return (match && match.length > 1) ? match[1] : '';
     }
 
-    $().ready(function() {
+    $(function () {
         var winheight = document.documentElement.clientHeight;
         var funcNum = getUrlParam('CKEditorFuncNum');
+
         var elf = $('#elfinder').elfinder({
-            url : '{{ url('editor_connector') }}{{ course_condition }}',  // connector URL (REQUIRED)
+            url : '{{ url('legacy_public') }}editor/connector{{ course_condition }}',
             getFileCallback : function(file) {
-                window.opener.CKEDITOR.tools.callFunction(funcNum, file.url);
-                window.close();
+                if (window.opener) {
+                    window.opener.CKEDITOR.tools.callFunction(funcNum, file.url);
+                    window.close();
+                }
             },
             resizable: false,
             height : winheight

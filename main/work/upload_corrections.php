@@ -107,7 +107,7 @@ if ($form->validate()) {
 
         // Uncompress zip file
         // We extract using a callback function that "cleans" the path
-        $result = $zip->extract(
+        $zip->extract(
             PCLZIP_OPT_PATH,
             $destinationDir,
             PCLZIP_CB_PRE_EXTRACT,

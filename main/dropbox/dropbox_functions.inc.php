@@ -61,7 +61,7 @@ function handle_multiple_actions()
         return get_lang('CheckAtLeastOneFile');
     }
 
-    // STEP 3A: deleting
+    // Deleting
     if ($_POST['action'] == 'delete_received' || $_POST['action'] == 'delete_sent') {
         $dropboxfile = new Dropbox_Person($_user['user_id'], $is_courseAdmin, $is_courseTutor);
         foreach ($checked_file_ids as $key => $value) {
@@ -78,7 +78,7 @@ function handle_multiple_actions()
         return $message;
     }
 
-    // STEP 3B: giving comment
+    // moving
     if (strstr($_POST['action'], 'move_')) {
         // check move_received_n or move_sent_n command
         if (strstr($_POST['action'], 'received')) {
@@ -1271,18 +1271,19 @@ function store_feedback()
     if (empty($_POST['feedback'])) {
         return get_lang('PleaseTypeText');
     } else {
+        $table = Database::get_course_table(TABLE_DROPBOX_FEEDBACK);
         $params = [
             'c_id' => $course_id,
             'file_id' => $_GET['id'],
             'author_user_id' => api_get_user_id(),
             'feedback' => $_POST['feedback'],
             'feedback_date' => api_get_utc_datetime(),
+            'feedback_id' => 0,
         ];
 
-        $id = Database::insert(Database::get_course_table(TABLE_DROPBOX_FEEDBACK), $params);
+        $id = Database::insert($table, $params);
         if ($id) {
-            $sql = "UPDATE ".Database::get_course_table(TABLE_DROPBOX_FEEDBACK)." 
-                    SET feedback_id = iid WHERE iid = $id";
+            $sql = "UPDATE $table SET feedback_id = iid WHERE iid = $id";
             Database::query($sql);
         }
 

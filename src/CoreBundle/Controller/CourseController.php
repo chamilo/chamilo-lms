@@ -58,6 +58,7 @@ class CourseController extends AbstractController
 
     /**
      * @Route("/welcome/{course}")
+     *
      * @ParamConverter(
      *      "course",
      *      class="ChamiloCoreBundle:Course",

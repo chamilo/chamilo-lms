@@ -894,10 +894,10 @@ class Event
         if (Database::num_rows($query) > 0) {
             $attempt = Database::fetch_array($query, 'ASSOC');
 
-            return $attempt['count'];
-        } else {
-            return 0;
+            return (int) $attempt['count'];
         }
+
+        return 0;
     }
 
     /**
@@ -976,17 +976,11 @@ class Event
             $course_id = api_get_course_int_id();
         }
 
-        $track_e_exercises = Database::get_main_table(
-            TABLE_STATISTIC_TRACK_E_EXERCISES
-        );
-        $track_attempts = Database::get_main_table(
-            TABLE_STATISTIC_TRACK_E_ATTEMPT
-        );
-        $recording_table = Database::get_main_table(
-            TABLE_STATISTIC_TRACK_E_ATTEMPT_RECORDING
-        );
+        $track_e_exercises = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
+        $track_attempts = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
+        $recording_table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT_RECORDING);
 
-        //Make sure we have the exact lp_view_id
+        // Make sure we have the exact lp_view_id
         $sql = "SELECT id FROM $lp_view_table
                 WHERE
                     c_id = $course_id AND
@@ -1048,15 +1042,15 @@ class Event
         if (!empty($exe_list) && is_array($exe_list) && count($exe_list) > 0) {
             $exeListString = implode(',', $exe_list);
             $sql = "DELETE FROM $track_e_exercises
-                WHERE exe_id IN ($exeListString)";
+                    WHERE exe_id IN ($exeListString)";
             Database::query($sql);
 
             $sql = "DELETE FROM $track_attempts
-                WHERE exe_id IN ($exeListString)";
+                    WHERE exe_id IN ($exeListString)";
             Database::query($sql);
 
             $sql = "DELETE FROM $recording_table
-                WHERE exe_id IN ($exeListString)";
+                    WHERE exe_id IN ($exeListString)";
             Database::query($sql);
         }
 
@@ -1087,13 +1081,14 @@ class Event
         $course_id,
         $session_id = 0
     ) {
-        $track_e_exercises = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
         $user_id = (int) $user_id;
         $exercise_id = (int) $exercise_id;
         $course_id = (int) $course_id;
         $session_id = (int) $session_id;
-        if (!empty($user_id) && !empty($exercise_id) && !empty($course_code)) {
-            $sql = "DELETE FROM $track_e_exercises
+
+        if (!empty($user_id) && !empty($exercise_id) && !empty($course_id)) {
+            $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
+            $sql = "DELETE FROM $table
                     WHERE
                         exe_user_id = $user_id AND
                         exe_exo_id = $exercise_id AND
@@ -1116,9 +1111,9 @@ class Event
     /**
      * Gets all exercise results (NO Exercises in LPs ) from a given exercise id, course, session.
      *
-     * @param   int     exercise id
+     * @param int $exercise_id
      * @param int $courseId
-     * @param   int     session id
+     * @param int $session_id
      *
      * @return array with the results
      */
@@ -1170,8 +1165,8 @@ class Event
     /**
      * Gets all exercise results (NO Exercises in LPs ) from a given exercise id, course, session.
      *
-     * @param int $courseId
-     * @param   int     session id
+     * @param int  $courseId
+     * @param int  $session_id
      * @param bool $get_count
      *
      * @return array with the results
@@ -1214,9 +1209,9 @@ class Event
     /**
      * Gets all exercise results (NO Exercises in LPs) from a given exercise id, course, session.
      *
-     * @param   int     exercise id
+     * @param int $user_id
      * @param int $courseId
-     * @param   int     session id
+     * @param int $session_id
      *
      * @return array with the results
      */
@@ -1259,7 +1254,7 @@ class Event
     /**
      * Gets exercise results (NO Exercises in LPs) from a given exercise id, course, session.
      *
-     * @param int    $exe_id exercise id
+     * @param int    $exe_id attempt id
      * @param string $status
      *
      * @return array with the results
@@ -1379,9 +1374,9 @@ class Event
      * Count exercise attempts (NO Exercises in LPs ) from a given exercise id, course, session.
      *
      * @param int $user_id
-     * @param   int     exercise id
+     * @param int $exercise_id
      * @param int $courseId
-     * @param   int     session id
+     * @param int $session_id
      *
      * @return array with the results
      */
@@ -1455,7 +1450,7 @@ class Event
             $userId = (int) $userId;
             $sql .= " AND exe_user_id = $userId ";
         }
-        $sql .= " ORDER BY exe_id";
+        $sql .= ' ORDER BY exe_id';
 
         $res = Database::query($sql);
         $list = [];
@@ -1578,42 +1573,6 @@ class Event
     }
 
     /**
-     * Gets all exercise BEST results attempts (NO Exercises in LPs)
-     * from a given exercise id, course, session per user.
-     *
-     * @param   int     exercise id
-     * @param   int   course id
-     * @param   int     session id
-     *
-     * @return array with the results
-     */
-    public static function get_count_exercises_attempted_by_course(
-        $courseId,
-        $session_id = 0
-    ) {
-        $table_track_exercises = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
-        $courseId = (int) $courseId;
-        $session_id = (int) $session_id;
-
-        $sql = "SELECT DISTINCT exe_exo_id, exe_user_id
-                FROM $table_track_exercises
-                WHERE
-                    status = '' AND
-                    c_id = $courseId AND
-                    session_id = $session_id AND
-                    orig_lp_id = 0 AND
-                    orig_lp_item_id = 0
-                ORDER BY exe_id";
-        $res = Database::query($sql);
-        $count = 0;
-        if (Database::num_rows($res) > 0) {
-            $count = Database::num_rows($res);
-        }
-
-        return $count;
-    }
-
-    /**
      * Gets all exercise events from a Learning Path within a Course    nd Session.
      *
      * @param int $exercise_id
@@ -1679,12 +1638,12 @@ class Event
                 ORDER BY parent_item_id, display_order";
         $res = Database::query($sql);
 
-        $my_exercise_list = [];
+        $list = [];
         while ($row = Database::fetch_array($res, 'ASSOC')) {
-            $my_exercise_list[] = $row;
+            $list[] = $row;
         }
 
-        return $my_exercise_list;
+        return $list;
     }
 
     /**

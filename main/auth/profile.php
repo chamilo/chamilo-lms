@@ -703,7 +703,7 @@ SocialManager::setSocialUserBlock($tpl, api_get_user_id(), 'messages');
 
 if (api_get_setting('allow_social_tool') === 'true') {
     SocialManager::setSocialUserBlock($tpl, api_get_user_id(), 'home');
-    $menu = SocialManager::getMenuSocial(
+    $menu = SocialManager::show_social_menu(
         'home',
         null,
         api_get_user_id(),

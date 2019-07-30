@@ -364,6 +364,7 @@ class ChamiloApi
     public static function getQuizMarkersRollsJS()
     {
         $webCodePath = api_get_path(WEB_CODE_PATH);
+        $cidReq = api_get_cidreq(true, true, 'embeddable');
         $colorPalette = self::getColorPalette(false, true);
 
         return "
@@ -380,13 +381,12 @@ class ChamiloApi
                 instance.options.markersRolls = {};
 
                 qMarkersRolls.forEach(function (qMarkerRoll) {
-                    var url = '{$webCodePath}exercise/exercise_submit.php?{{ _p.web_cid_query }}&'
+                    var url = '{$webCodePath}exercise/exercise_submit.php?$cidReq&'
                         + $.param({
                             exerciseId: qMarkerRoll[1],
                             learnpath_id: 0,
                             learnpath_item_id: 0,
-                            learnpath_item_view_id: 0,
-                            origin: 'embeddable'
+                            learnpath_item_view_id: 0
                         });
 
                     instance.options.markersRolls[qMarkerRoll[0]] = url;

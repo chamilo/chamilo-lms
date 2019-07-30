@@ -597,6 +597,7 @@ class scorm extends learnpath
      * @param array     $courseInfo
      * @param bool      $updateDirContents
      * @param learnpath $lpToCheck
+     * @param bool      $allowHtaccess
      *
      * @return string $current_dir Absolute path to the imsmanifest.xml file or empty string on error
      */
@@ -605,7 +606,8 @@ class scorm extends learnpath
         $currentDir = '',
         $courseInfo = [],
         $updateDirContents = false,
-        $lpToCheck = null
+        $lpToCheck = null,
+        $allowHtaccess = false
     ) {
         if ($this->debug > 0) {
             error_log(
@@ -745,9 +747,14 @@ class scorm extends learnpath
 
             chdir($courseSysDir.$newDir);
 
+            $callBack = 'clean_up_files_in_zip';
+            if ($allowHtaccess) {
+                $callBack = 'cleanZipFilesAllowHtaccess';
+            }
+
             $zipFile->extract(
                 PCLZIP_CB_PRE_EXTRACT,
-                'clean_up_files_in_zip'
+                $callBack
             );
 
             if (!empty($newDir)) {

@@ -187,7 +187,7 @@ $interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('PlatformAdmin')]
 
 // the $jquery_ready_content variable collects all functions that will be load in the $(document).ready javascript function
 $htmlHeadXtra[] = '<script>
-$(document).ready(function(){
+$(function () {
     '.$jqueryReady.'
 });
 </script>';

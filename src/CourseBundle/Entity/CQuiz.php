@@ -155,8 +155,9 @@ class CQuiz
     protected $propagateNeg;
 
     /**
-     * @var bool
-     * @ORm\Column(name="save_correct_answers", type="boolean", nullable=false)
+     * @var int
+     *
+     * @ORm\Column(name="save_correct_answers", type="integer", nullable=true)
      */
     protected $saveCorrectAnswers;
 
@@ -229,6 +230,13 @@ class CQuiz
      * @ORM\Column(name="autolaunch", type="boolean", nullable=true, options={"default":0})
      */
     protected $autoLaunch;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="page_result_configuration", type="array", nullable=true)
+     */
+    protected $pageResultConfiguration;
 
     /**
      * CQuiz constructor.
@@ -626,7 +634,7 @@ class CQuiz
     }
 
     /**
-     * @param $saveCorrectAnswers boolean
+     * @param int $saveCorrectAnswers
      *
      * @return CQuiz
      */
@@ -638,7 +646,7 @@ class CQuiz
     }
 
     /**
-     * @return bool
+     * @return int
      */
     public function getSaveCorrectAnswers()
     {

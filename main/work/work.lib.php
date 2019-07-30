@@ -544,7 +544,6 @@ function showTeacherWorkGrid()
             'width' => '35',
             'align' => 'center',
             'sortable' => 'false',
-            'formatter' => '',
         ],
         [
             'name' => 'title',
@@ -552,7 +551,6 @@ function showTeacherWorkGrid()
             'width' => '300',
             'align' => 'left',
             'wrap_cell' => "true",
-            'formatter' => '',
         ],
         ['name' => 'sent_date', 'index' => 'sent_date', 'width' => '125', 'align' => 'center'],
         ['name' => 'expires_on', 'index' => 'expires_on', 'width' => '125', 'align' => 'center'],
@@ -562,7 +560,6 @@ function showTeacherWorkGrid()
             'width' => '110',
             'align' => 'center',
             'sortable' => 'false',
-            'formatter' => '',
         ],
         [
             'name' => 'actions',
@@ -570,7 +567,6 @@ function showTeacherWorkGrid()
             'width' => '110',
             'align' => 'left',
             'sortable' => 'false',
-            'formatter' => '',
         ],
     ];
     $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_work_teacher&'.api_get_cidreq();
@@ -1240,31 +1236,31 @@ function getWorkListStudent(
     }
 
     $column = !empty($column) ? Database::escape_string($column) : 'sent_date';
-    $start = intval($start);
-    $limit = intval($limit);
+    $start = (int) $start;
+    $limit = (int) $limit;
 
     $groupIid = 0;
     if ($group_id) {
         $groupInfo = GroupManager::get_group_properties($group_id);
-        $groupIid = $groupInfo['iid'];
+        if ($groupInfo) {
+            $groupIid = (int) $groupInfo['iid'];
+        }
     }
-    $groupIid = (int) $groupIid;
 
-    // Get list from database
     if (!empty($groupIid)) {
         $group_query = " WHERE w.c_id = $course_id AND post_group_id = $groupIid";
-        $subdirs_query = "AND parent_id = 0";
+        $subdirs_query = 'AND parent_id = 0';
     } else {
         $group_query = " WHERE w.c_id = $course_id AND (post_group_id = '0' or post_group_id is NULL)  ";
-        $subdirs_query = "AND parent_id = 0";
+        $subdirs_query = 'AND parent_id = 0';
     }
 
     $active_condition = ' AND active IN (1, 0)';
 
     if ($getCount) {
-        $select = "SELECT count(w.id) as count ";
+        $select = 'SELECT count(w.id) as count ';
     } else {
-        $select = "SELECT w.*, a.expires_on, expires_on, ends_on, enable_qualification ";
+        $select = 'SELECT w.*, a.expires_on, expires_on, ends_on, enable_qualification ';
     }
 
     $sql = "$select
@@ -1318,7 +1314,7 @@ function getWorkListStudent(
             $work['title'] = basename($work['url']);
         }
 
-        $whereCondition = " AND u.user_id = ".intval($userId);
+        $whereCondition = " AND u.user_id = $userId ";
 
         $workList = get_work_user_list(
             0,
@@ -1790,7 +1786,7 @@ function get_work_user_list_from_documents(
  * @param int    $column
  * @param string $direction
  * @param int    $work_id
- * @param array  $where_condition
+ * @param string $whereCondition
  * @param int    $studentId
  * @param bool   $getCount
  * @param int    $courseId
@@ -1804,7 +1800,7 @@ function get_work_user_list(
     $column,
     $direction,
     $work_id,
-    $where_condition = null,
+    $whereCondition = '',
     $studentId = null,
     $getCount = false,
     $courseId = 0,
@@ -1819,10 +1815,11 @@ function get_work_user_list(
     $course_info = empty($course_info) ? api_get_course_info_by_id($courseId) : $course_info;
     $course_id = isset($course_info['real_id']) ? $course_info['real_id'] : $courseId;
 
-    $work_id = intval($work_id);
+    $work_id = (int) $work_id;
+    $start = (int) $start;
+    $limit = (int) $limit;
+
     $column = !empty($column) ? Database::escape_string($column) : 'sent_date';
-    $start = intval($start);
-    $limit = intval($limit);
 
     if (!in_array($direction, ['asc', 'desc'])) {
         $direction = 'desc';
@@ -1836,6 +1833,7 @@ function get_work_user_list(
         false,
         'work.session_id'
     );
+
     $locked = api_resource_is_locked_by_gradebook(
         $work_id,
         LINK_STUDENTPUBLICATION,
@@ -1850,13 +1848,15 @@ function get_work_user_list(
     $groupIid = 0;
     if ($group_id) {
         $groupInfo = GroupManager::get_group_properties($group_id);
-        $groupIid = $groupInfo['iid'];
+        if ($groupInfo) {
+            $groupIid = $groupInfo['iid'];
+        }
     }
 
     if (!empty($work_data)) {
         if (!empty($group_id)) {
-            $extra_conditions = " work.post_group_id = '".intval($groupIid)."' ";
-        // set to select only messages posted by the user's group
+            // set to select only messages posted by the user's group
+            $extra_conditions = " work.post_group_id = '".$groupIid."' ";
         } else {
             $extra_conditions = " (work.post_group_id = '0' OR work.post_group_id is NULL) ";
         }
@@ -1873,7 +1873,7 @@ function get_work_user_list(
             }
         }
 
-        $extra_conditions .= " AND parent_id  = ".$work_id." ";
+        $extra_conditions .= " AND parent_id  = $work_id ";
 
         $select = 'SELECT DISTINCT
                         u.user_id,
@@ -1898,13 +1898,14 @@ function get_work_user_list(
                         title_correction
                         ';
         if ($getCount) {
-            $select = "SELECT DISTINCT count(u.user_id) as count ";
+            $select = 'SELECT DISTINCT count(u.user_id) as count ';
         }
 
         $work_assignment = get_work_assignment_by_id($work_id, $courseId);
 
         if (!empty($studentId)) {
-            $where_condition .= " AND u.user_id = ".intval($studentId);
+            $studentId = (int) $studentId;
+            $whereCondition .= " AND u.user_id = $studentId ";
         }
 
         $sql = " $select
@@ -1914,7 +1915,7 @@ function get_work_user_list(
                 WHERE
                     work.c_id = $course_id AND
                     $extra_conditions 
-                    $where_condition 
+                    $whereCondition 
                     $condition_session
                     AND u.status != ".INVITEE."
                 ORDER BY $column $direction";
@@ -3758,7 +3759,7 @@ function sendAlertToUsers($workId, $courseInfo, $sessionId)
     if ($send == SEND_EMAIL_EVERYONE || $send == SEND_EMAIL_TEACHERS) {
         // Lets predefine some variables. Be sure to change the from address!
         if (empty($sessionId)) {
-            //Teachers
+            // Teachers
             $userList = CourseManager::get_user_list_from_course_code(
                 api_get_course_id(),
                 null,
@@ -4462,13 +4463,17 @@ function deleteAllWorkPerUser($userId, $courseInfo)
  */
 function deleteWorkItem($item_id, $courseInfo)
 {
+    $item_id = (int) $item_id;
+
+    if (empty($item_id) || empty($courseInfo)) {
+        return false;
+    }
+
     $work_table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
     $TSTDPUBASG = Database::get_course_table(TABLE_STUDENT_PUBLICATION_ASSIGNMENT);
     $currentCourseRepositorySys = api_get_path(SYS_COURSE_PATH).$courseInfo['path'].'/';
     $is_allowed_to_edit = api_is_allowed_to_edit();
     $file_deleted = false;
-    $item_id = intval($item_id);
-
     $is_author = user_is_author($item_id);
     $work_data = get_work_data_by_id($item_id);
     $locked = api_resource_is_locked_by_gradebook($work_data['parent_id'], LINK_STUDENTPUBLICATION);
@@ -4729,51 +4734,51 @@ function getUploadDocumentType()
 }
 
 /**
- * @param int   $item_id
+ * @param int   $itemId
  * @param array $course_info
  *
  * @return bool
  */
-function makeVisible($item_id, $course_info)
+function makeVisible($itemId, $course_info)
 {
-    if (empty($course_info) || empty($item_id)) {
+    $itemId = (int) $itemId;
+    if (empty($course_info) || empty($itemId)) {
         return false;
     }
     $work_table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
     $course_id = $course_info['real_id'];
-    $item_id = intval($item_id);
 
     $sql = "UPDATE $work_table SET accepted = 1
-            WHERE c_id = $course_id AND id = $item_id";
+            WHERE c_id = $course_id AND id = $itemId";
     Database::query($sql);
-    api_item_property_update($course_info, 'work', $item_id, 'visible', api_get_user_id());
+    api_item_property_update($course_info, 'work', $itemId, 'visible', api_get_user_id());
 
     return true;
 }
 
 /**
- * @param int   $item_id
+ * @param int   $itemId
  * @param array $course_info
  *
  * @return int
  */
-function makeInvisible($item_id, $course_info)
+function makeInvisible($itemId, $course_info)
 {
-    if (empty($course_info) || empty($item_id)) {
+    $itemId = (int) $itemId;
+    if (empty($course_info) || empty($itemId)) {
         return false;
     }
 
     $table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
-    $item_id = intval($item_id);
     $course_id = $course_info['real_id'];
     $sql = "UPDATE $table
             SET accepted = 0
-            WHERE c_id = $course_id AND id = '".$item_id."'";
+            WHERE c_id = $course_id AND id = '".$itemId."'";
     Database::query($sql);
     api_item_property_update(
         $course_info,
         'work',
-        $item_id,
+        $itemId,
         'invisible',
         api_get_user_id()
     );
@@ -4795,9 +4800,9 @@ function generateMoveForm($item_id, $path, $courseInfo, $groupId, $sessionId)
     $work_table = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
     $courseId = $courseInfo['real_id'];
     $folders = [];
-    $session_id = intval($sessionId);
-    $groupId = intval($groupId);
-    $sessionCondition = empty($sessionId) ? " AND (session_id = 0 OR session_id IS NULL) " : " AND session_id='".$session_id."'";
+    $session_id = (int) $sessionId;
+    $groupId = (int) $groupId;
+    $sessionCondition = empty($sessionId) ? ' AND (session_id = 0 OR session_id IS NULL) ' : " AND session_id='".$session_id."'";
 
     $groupIid = 0;
     if ($groupId) {
@@ -4836,14 +4841,12 @@ function showStudentList($workId)
             'width' => '350px',
             'align' => 'left',
             'sortable' => 'false',
-            'formatter' => '',
         ],
         [
             'name' => 'works',
             'index' => 'works',
             'align' => 'center',
             'sortable' => 'false',
-            'formatter' => '',
         ],
     ];
     $token = null;

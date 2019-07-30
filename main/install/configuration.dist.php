@@ -1201,6 +1201,9 @@ $_configuration['required_extra_fields_in_profile'] = [
 // - launch "composer install" to rebuild the autoload.php
 //$_configuration['social_enable_messages_feedback'] = false;
 
+// Disable dislike button in the social network.
+//$_configuration['disable_dislike_option'] = false;
+
 // Block student's access to the course documents when using the ckeditor "Browse server" button
 //$_configuration['block_editor_file_manager_for_students'] = false;
 // Show a language flag next to the user picture in the social network

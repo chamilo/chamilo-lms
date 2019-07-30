@@ -2680,18 +2680,22 @@ class MessageManager
                 'data-group' => $groupId,
             ]
         );
-        $btnDislike = Display::button(
-            'like',
-            Display::returnFontAwesomeIcon('thumbs-down', '', true)
-            .PHP_EOL.'<span>'.$countLikes['dislikes'].'</span>',
-            [
-                'title' => get_lang('VoteDislike'),
-                'class' => 'btn btn-default social-like '.($countLikes['user_disliked'] ? 'disabled' : ''),
-                'data-status' => 'dislike',
-                'data-message' => $messageId,
-                'data-group' => $groupId,
-            ]
-        );
+
+        $btnDislike = '';
+        if (api_get_configuration_value('disable_dislike_option') === false) {
+            $btnDislike = Display::button(
+                'like',
+                Display::returnFontAwesomeIcon('thumbs-down', '', true)
+                .PHP_EOL.'<span>'.$countLikes['dislikes'].'</span>',
+                [
+                    'title' => get_lang('VoteDislike'),
+                    'class' => 'btn btn-default social-like '.($countLikes['user_disliked'] ? 'disabled' : ''),
+                    'data-status' => 'dislike',
+                    'data-message' => $messageId,
+                    'data-group' => $groupId,
+                ]
+            );
+        }
 
         return $btnLike.PHP_EOL.$btnDislike;
     }

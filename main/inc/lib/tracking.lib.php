@@ -1974,25 +1974,25 @@ class Tracking
         $session_id = (int) $session_id;
         $courseId = $courseInfo['real_id'];
 
+        $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
+
         if (self::minimumTimeAvailable($session_id, $courseId)) {
             // Show the last date on which the user acceed the session when it was active
             $where_condition = '';
             $userInfo = api_get_user_info($student_id);
-            if ($userInfo['status'] == 5 && $session_id > 0) {
+            if ($userInfo['status'] == STUDENT && !empty($session_id)) {
                 // fin de acceso a la sesión
                 $sessionInfo = SessionManager::fetch($session_id);
                 $last_access = $sessionInfo['access_end_date'];
                 $where_condition = ' AND logout_course_date < "'.$last_access.'" ';
             }
-
-            $tbl_track_e_course_access = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
             $sql = "SELECT logout_course_date
-                FROM $tbl_track_e_course_access
-                WHERE   user_id = $student_id AND
-                        c_id = $courseId AND
-                        session_id = $session_id $where_condition
-                ORDER BY logout_course_date DESC
-                LIMIT 0,1";
+                    FROM $table
+                    WHERE   user_id = $student_id AND
+                            c_id = $courseId AND
+                            session_id = $session_id $where_condition
+                    ORDER BY logout_course_date DESC
+                    LIMIT 0,1";
 
             $rs = Database::query($sql);
             if (Database::num_rows($rs) > 0) {
@@ -2000,21 +2000,16 @@ class Tracking
                     if (empty($last_login_date)) {
                         return false;
                     }
-                    //see #5736
-                    $last_login_date_timestamp = api_strtotime($last_login_date);
-                    $now = time();
                     if ($convert_date) {
                         return api_convert_and_format_date($last_login_date, DATE_FORMAT_SHORT);
-                    } else {
-                        return $last_login_date;
                     }
-                    //}
+
+                    return $last_login_date;
                 }
             }
         } else {
-            $tbl_track_e_course_access = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
             $sql = "SELECT logout_course_date
-                    FROM $tbl_track_e_course_access
+                    FROM $table
                     WHERE   user_id = $student_id AND
                             c_id = $courseId AND
                             session_id = $session_id
@@ -2035,26 +2030,24 @@ class Tracking
                     if ($now - $last_login_date_timestamp > 604800) {
                         if ($convert_date) {
                             $last_login_date = api_convert_and_format_date($last_login_date, DATE_FORMAT_SHORT);
-                            $icon = api_is_allowed_to_edit() ?
-                                '<a href="'.api_get_path(
-                                    WEB_CODE_PATH
-                                ).'announcements/announcements.php?action=add&remind_inactive='.$student_id.'&cidReq='.$courseInfo['code'].'" title="'.get_lang(
-                                    'RemindInactiveUser'
-                                ).'">
+                            $icon = null;
+                            if (api_is_allowed_to_edit()) {
+                                $url = api_get_path(WEB_CODE_PATH).
+                                    'announcements/announcements.php?action=add&remind_inactive='.$student_id.'&cidReq='.$courseInfo['code'];
+                                $icon = '<a href="'.$url.'" title="'.get_lang('RemindInactiveUser').'">
                                   '.Display::return_icon('messagebox_warning.gif').'
-                                 </a>'
-                                : null;
+                                 </a>';
+                            }
 
                             return $icon.Display::label($last_login_date, 'warning');
-                        } else {
-                            return $last_login_date;
                         }
+                        return $last_login_date;
                     } else {
                         if ($convert_date) {
                             return api_convert_and_format_date($last_login_date, DATE_FORMAT_SHORT);
-                        } else {
-                            return $last_login_date;
                         }
+
+                        return $last_login_date;
                     }
                 }
             }
@@ -7718,8 +7711,8 @@ class TrackingCourseLog
         $url_table = null;
         $url_condition = null;
         if (api_is_multiple_url_enabled()) {
-            $url_table = ", ".$tbl_url_rel_user." as url_users";
-            $url_condition = " AND user.user_id = url_users.user_id AND access_url_id='$access_url_id'";
+            $url_table = ", $tbl_url_rel_user as url_users";
+            $url_condition = " AND user.user_id = url_users.user_id AND access_url_id = '$access_url_id'";
         }
 
         $invitedUsersCondition = '';
@@ -7744,7 +7737,7 @@ class TrackingCourseLog
         $number_of_items = (int) $number_of_items;
 
         $sql .= " ORDER BY col$column $direction ";
-        $sql .= " LIMIT $from,$number_of_items";
+        $sql .= " LIMIT $from, $number_of_items";
 
         $res = Database::query($sql);
         $users = [];

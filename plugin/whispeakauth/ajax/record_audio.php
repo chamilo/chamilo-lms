@@ -175,7 +175,7 @@ if ($isAuthentify) {
 
         if ($maxAttempts && $failedLogins >= $maxAttempts) {
             $message .= PHP_EOL
-                .$plugin->get_lang('MaxAttemptsReached')
+                .'<span data-reach-attempts="true">'.$plugin->get_lang('MaxAttemptsReached').'</span>'
                 .PHP_EOL
                 .'<br><strong>'
                 .$plugin->get_lang('LoginWithUsernameAndPassword')

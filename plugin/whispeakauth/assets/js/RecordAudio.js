@@ -53,6 +53,10 @@ window.RecordAudio = (function () {
             }).always(function () {
                 btnStop.prop('disabled', true).html(btnStopText).parent().addClass('hidden');
                 btnStart.prop('disabled', false).parent().removeClass('hidden');
+
+                if ($('#messages-deck > .alert.alert-warning [data-reach-attempts]').length > 0) {
+                    btnStart.prop('disabled', true);
+                }
             });
         }
 

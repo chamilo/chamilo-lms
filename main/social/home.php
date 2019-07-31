@@ -84,14 +84,13 @@ if (!empty($threadList)) {
     $threadIdList = array_column($threadList, 'id');
 }
 
-// Social Post Wall
 $posts = SocialManager::getMyWallMessages($user_id, 0, 10, $threadIdList);
 $countPost = $posts['count'];
 $posts = $posts['posts'];
 SocialManager::getScrollJs($countPost, $htmlHeadXtra);
 
 // Block Menu
-$social_menu_block = SocialManager::show_social_menu('home');
+$menu = SocialManager::show_social_menu('home');
 
 $social_search_block = Display::panel(
     UserManager::get_search_form(''),
@@ -140,9 +139,9 @@ $htmlHeadXtra[] = SocialManager::getScriptToGetOpenGraph();
 
 $tpl = new Template(get_lang('SocialNetwork'));
 SocialManager::setSocialUserBlock($tpl, $user_id, 'home');
-$tpl->assign('social_wall_block', $wallSocialAddPost);
-$tpl->assign('social_post_wall_block', $posts);
-$tpl->assign('social_menu_block', $social_menu_block);
+$tpl->assign('add_post_form', $wallSocialAddPost);
+$tpl->assign('posts', $posts);
+$tpl->assign('social_menu_block', $menu);
 $tpl->assign('social_auto_extend_link', $socialAutoExtendLink);
 $tpl->assign('search_friends_form', $formSearch->returnForm());
 $tpl->assign('social_friend_block', $friend_html);

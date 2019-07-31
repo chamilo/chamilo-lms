@@ -24,14 +24,12 @@ if (api_get_setting('allow_message_tool') !== 'true') {
 
 $logInfo = [
     'tool' => 'Messages',
-    'tool_id' => 0,
-    'tool_id_detail' => 0,
     'action' => 'new_message',
     'action_details' => isset($_GET['re_id']) ? 're_id' : '',
 ];
 Event::registerLog($logInfo);
 
-$allowSocial = api_get_setting('allow_social_tool') == 'true';
+$allowSocial = api_get_setting('allow_social_tool') === 'true';
 $nameTools = api_xml_http_response_encode(get_lang('Messages'));
 
 $htmlHeadXtra[] = '<script>
@@ -59,7 +57,6 @@ function add_image_form() {
 }
 </script>';
 $nameTools = get_lang('ComposeMessage');
-
 $tpl = new Template(get_lang('ComposeMessage'));
 
 /**
@@ -315,7 +312,7 @@ function manageForm($default, $select_from_user_list = null, $sent_to = '', $tpl
             }
         }
         Security::clear_token();
-        header('Location: '.api_get_path(WEB_PATH).'main/messages/inbox.php');
+        header('Location: '.api_get_path(WEB_CODE_PATH).'messages/inbox.php');
         exit;
     } else {
         $token = Security::get_token();
@@ -330,19 +327,19 @@ function manageForm($default, $select_from_user_list = null, $sent_to = '', $tpl
 if ($allowSocial) {
     $this_section = SECTION_SOCIAL;
     $interbreadcrumb[] = [
-        'url' => api_get_path(WEB_PATH).'main/social/home.php',
+        'url' => api_get_path(WEB_CODE_PATH).'social/home.php',
         'name' => get_lang('SocialNetwork'),
     ];
 } else {
     $this_section = SECTION_MYPROFILE;
     $interbreadcrumb[] = [
-        'url' => api_get_path(WEB_PATH).'main/auth/profile.php',
+        'url' => api_get_path(WEB_CODE_PATH).'auth/profile.php',
         'name' => get_lang('Profile'),
     ];
 }
 
 $interbreadcrumb[] = [
-    'url' => api_get_path(WEB_PATH).'main/messages/inbox.php',
+    'url' => api_get_path(WEB_CODE_PATH).'messages/inbox.php',
     'name' => get_lang('Messages'),
 ];
 
@@ -350,9 +347,9 @@ $group_id = isset($_REQUEST['group_id']) ? (int) $_REQUEST['group_id'] : 0;
 $social_right_content = null;
 if ($group_id != 0) {
     $social_right_content .= '<div class=actions>';
-    $social_right_content .= '<a href="'.api_get_path(WEB_PATH).'main/social/group_view.php?id='.$group_id.'">'.
+    $social_right_content .= '<a href="'.api_get_path(WEB_CODE_PATH).'social/group_view.php?id='.$group_id.'">'.
         Display::return_icon('back.png', api_xml_http_response_encode(get_lang('ComposeMessage'))).'</a>';
-    $social_right_content .= '<a href="'.api_get_path(WEB_PATH).'main/messages/new_message.php?group_id='.$group_id.'">'.
+    $social_right_content .= '<a href="'.api_get_path(WEB_CODE_PATH).'messages/new_message.php?group_id='.$group_id.'">'.
         Display::return_icon('message_new.png', api_xml_http_response_encode(get_lang('ComposeMessage'))).'</a>';
     $social_right_content .= '</div>';
 } else {
@@ -360,11 +357,11 @@ if ($group_id != 0) {
     } else {
         $social_right_content .= '<div class=actions>';
         if (api_get_setting('allow_message_tool') === 'true') {
-            $social_right_content .= '<a href="'.api_get_path(WEB_PATH).'main/messages/new_message.php">'.
+            $social_right_content .= '<a href="'.api_get_path(WEB_CODE_PATH).'messages/new_message.php">'.
                 Display::return_icon('message_new.png', get_lang('ComposeMessage')).'</a>';
-            $social_right_content .= '<a href="'.api_get_path(WEB_PATH).'main/messages/inbox.php">'.
+            $social_right_content .= '<a href="'.api_get_path(WEB_CODE_PATH).'messages/inbox.php">'.
                 Display::return_icon('inbox.png', get_lang('Inbox')).'</a>';
-            $social_right_content .= '<a href="'.api_get_path(WEB_PATH).'main/messages/outbox.php">'.
+            $social_right_content .= '<a href="'.api_get_path(WEB_CODE_PATH).'messages/outbox.php">'.
                 Display::return_icon('outbox.png', get_lang('Outbox')).'</a>';
         }
         $social_right_content .= '</div>';
@@ -379,7 +376,7 @@ if ($allowSocial) {
     $social_right_content .= '<div class="row">';
     $social_right_content .= '<div class="col-md-12">';
     $social_right_content .= '<div class="actions">';
-    $social_right_content .= '<a href="'.api_get_path(WEB_PATH).'main/messages/inbox.php">'.
+    $social_right_content .= '<a href="'.api_get_path(WEB_CODE_PATH).'messages/inbox.php">'.
         Display::return_icon('back.png', get_lang('Back'), [], 32).'</a>';
     $social_right_content .= '</div>';
     $social_right_content .= '</div>';

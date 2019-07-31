@@ -1447,7 +1447,7 @@ class Display
 
         $beforeSelectRow = null;
         if (isset($extra_params['beforeSelectRow'])) {
-            $beforeSelectRow = "beforeSelectRow: ".$extra_params['beforeSelectRow'].", ";
+            $beforeSelectRow = 'beforeSelectRow: '.$extra_params['beforeSelectRow'].', ';
             unset($extra_params['beforeSelectRow']);
         }
 
@@ -1507,6 +1507,16 @@ class Display
         $json_encode = str_replace('"formatter":"extra_formatter"', 'formatter:extra_formatter', $json_encode);
         $json_encode = str_replace(['{"first":"first",', '"end":"end"}'], '', $json_encode);
 
+        if (api_get_configuration_value('allow_compilatio_tool') &&
+            (strpos($_SERVER['REQUEST_URI'], 'work/work.php') !== false ||
+             strpos($_SERVER['REQUEST_URI'], 'work/work_list_all.php') != false
+            )
+        ) {
+            $json_encode = str_replace('"function () { compilatioInit() }"',
+                'function () { compilatioInit() }',
+                $json_encode
+            );
+        }
         // Creating the jqgrid element.
         $json .= '$("#'.$div_id.'").jqGrid({';
         //$json .= $beforeSelectRow;
@@ -1989,15 +1999,18 @@ class Display
      * @param int    $percentage      int value between 0 and 100
      * @param bool   $show_percentage
      * @param string $extra_info
+     * @param string $class           danger/success/infowarning
      *
      * @return string
      */
-    public static function bar_progress($percentage, $show_percentage = true, $extra_info = '')
+    public static function bar_progress($percentage, $show_percentage = true, $extra_info = '', $class = '')
     {
         $percentage = (int) $percentage;
+        $class = empty($class) ? '' : "progress-bar-$class";
+
         $div = '<div class="progress">
                 <div
-                    class="progress-bar progress-bar-striped"
+                    class="progress-bar progress-bar-striped '.$class.'"
                     role="progressbar"
                     aria-valuenow="'.$percentage.'"
                     aria-valuemin="0"

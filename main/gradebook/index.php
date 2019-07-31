@@ -370,7 +370,7 @@ if (isset($_GET['deletecat'])) {
     GradebookUtils::block_students();
     $cats = Category::load($_GET['deletecat']);
     if (isset($cats[0])) {
-        //delete all categories,subcategories and results
+        // Delete all categories,subcategories and results
         if ($cats[0] != null) {
             if ($cats[0]->get_id() != 0) {
                 // better don't try to delete the root...
@@ -406,12 +406,11 @@ if (isset($_GET['visibleeval'])) {
 if (isset($_GET['lockedeval'])) {
     GradebookUtils::block_students();
     $locked = (int) $_GET['lockedeval'];
+    $type_locked = 1;
+    $confirmation_message = get_lang('EvaluationHasBeenLocked');
     if (isset($_GET['typelocked']) && api_is_platform_admin()) {
         $type_locked = 0;
         $confirmation_message = get_lang('EvaluationHasBeenUnLocked');
-    } else {
-        $type_locked = 1;
-        $confirmation_message = get_lang('EvaluationHasBeenLocked');
     }
     $eval = Evaluation::load($locked);
     if ($eval[0] != null) {

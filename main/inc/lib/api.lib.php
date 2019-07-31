@@ -150,6 +150,7 @@ define('TOOL_NOTEBOOK', 'notebook');
 define('TOOL_ATTENDANCE', 'attendance');
 define('TOOL_COURSE_PROGRESS', 'course_progress');
 define('TOOL_PORTFOLIO', 'portfolio');
+define('TOOL_PLAGIARISM', 'compilatio');
 
 // CONSTANTS defining Chamilo interface sections
 define('SECTION_CAMPUS', 'mycampus');
@@ -587,6 +588,7 @@ define('MESSAGE_STATUS_WALL_DELETE', '9');
 define('MESSAGE_STATUS_WALL_POST', '10');
 define('MESSAGE_STATUS_CONVERSATION', '11');
 define('MESSAGE_STATUS_FORUM', '12');
+define('MESSAGE_STATUS_PROMOTED', '13');
 
 // Images
 define('IMAGE_WALL_SMALL_SIZE', 200);
@@ -2258,6 +2260,7 @@ function api_format_course_array($course_data)
     $_course['registration_code'] = !empty($course_data['registration_code']) ? sha1($course_data['registration_code']) : null;
     $_course['disk_quota'] = $course_data['disk_quota'];
     $_course['course_public_url'] = $webCourseHome.'/index.php';
+    $_course['course_sys_path'] = $courseSys.'/';
 
     if (array_key_exists('add_teachers_to_sessions_courses', $course_data)) {
         $_course['add_teachers_to_sessions_courses'] = $course_data['add_teachers_to_sessions_courses'];

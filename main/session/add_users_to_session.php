@@ -748,7 +748,7 @@ $newLinks .= Display::url(
                         class="form-control">
                 </select>
                 <br />
-                <button style="display:none" id="remove_user" name="remove_user" class="btn btn-primary" type="button"
+                <button style="display:none" id="remove_user" name="remove_user" class="btn btn-danger" type="button"
                         onclick="remove_item(document.getElementById('destination_users'))">
                     <?php echo get_lang('Remove'); ?> <em class="fa fa-trash"></em>
                 </button>

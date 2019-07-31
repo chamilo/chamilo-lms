@@ -539,7 +539,7 @@ class learnpathItem
                     c_id = $course_id AND
                     lp_item_id = ".$this->db_id." AND
                     lp_view_id = ".$this->view_id." AND
-                    view_count = ".$this->attempt_id;
+                    view_count = ".$this->get_view_count();
         $res = Database::query($sql);
         if (Database::num_rows($res) > 0) {
             $row = Database::fetch_array($res);
@@ -688,9 +688,9 @@ class learnpathItem
                 ['\r', '\n', "\\'"],
                 $this->lesson_location
             );
-        } else {
-            return '';
         }
+
+        return '';
     }
 
     /**
@@ -860,8 +860,8 @@ class learnpathItem
             if (!empty($this->lp_id)) {
                 $table = Database::get_course_table(TABLE_LP_MAIN);
                 $sql = "SELECT prevent_reinit
-                    FROM $table
-                    WHERE iid = ".$this->lp_id;
+                        FROM $table
+                        WHERE iid = ".$this->lp_id;
                 $res = Database::query($sql);
                 if (Database::num_rows($res) < 1) {
                     $this->error = "Could not find parent learnpath in lp table";
@@ -1786,7 +1786,7 @@ class learnpathItem
             $sessionLifetime = 3600;
         }
 
-        if (!Tracking::minimunTimeAvailable(api_get_session_id(), api_get_course_int_id())) {
+        if (!Tracking::minimumTimeAvailable(api_get_session_id(), api_get_course_int_id())) {
             $fixedAddedMinute = 5 * 60; // Add only 5 minutes
             if ($time > $sessionLifetime) {
                 error_log("fixAbusiveTime: Total time is too big: $time replaced with: $fixedAddedMinute");
@@ -2031,6 +2031,7 @@ class learnpathItem
 
         // Deal with &, |, ~, =, <>, {}, ,, X*, () in reverse order.
         $this->prereq_alert = '';
+
         // First parse all parenthesis by using a sequential loop
         //  (looking for less-inclusives first).
         if ($prereqs_string == '_true_') {
@@ -2556,6 +2557,17 @@ class learnpathItem
                                     } else {
                                         $status = $itemToCheck->get_status(false);
                                         $returnstatus = $status == $this->possible_status[2] || $status == $this->possible_status[3];
+
+                                        // Check results from another sessions.
+                                        $checkOtherSessions = api_get_configuration_value('validate_lp_prerequisite_from_other_session');
+                                        if ($checkOtherSessions && !$returnstatus) {
+                                            $returnstatus = $this->getStatusFromOtherSessions(
+                                                $user_id,
+                                                $prereqs_string,
+                                                $refs_list
+                                            );
+                                        }
+
                                         if (!$returnstatus) {
                                             $explanation = sprintf(
                                                 get_lang('ItemXBlocksThisElement'),
@@ -2577,29 +2589,28 @@ class learnpathItem
                                             }
                                         }
 
-                                        if ($returnstatus && $this->prevent_reinit == 1) {
-                                            // I would prefer check in the database.
-                                            $lp_item_view = Database::get_course_table(TABLE_LP_ITEM_VIEW);
-                                            $lp_view = Database::get_course_table(TABLE_LP_VIEW);
+                                        $lp_item_view = Database::get_course_table(TABLE_LP_ITEM_VIEW);
+                                        $lp_view = Database::get_course_table(TABLE_LP_VIEW);
 
-                                            $sql = 'SELECT iid FROM '.$lp_view.'
+                                        if ($returnstatus && $this->prevent_reinit == 1) {
+                                            $sql = "SELECT iid FROM $lp_view
                                                     WHERE
-                                                        c_id = '.$course_id.' AND
-                                                        user_id = '.$user_id.'  AND
-                                                        lp_id = '.$this->lp_id.' AND
-                                                        session_id = '.$sessionId.'
-                                                    LIMIT 0, 1';
+                                                        c_id = $course_id AND
+                                                        user_id = $user_id  AND
+                                                        lp_id = $this->lp_id AND
+                                                        session_id = $sessionId
+                                                    LIMIT 0, 1";
                                             $rs_lp = Database::query($sql);
                                             if (Database::num_rows($rs_lp)) {
                                                 $lp_id = Database::fetch_row($rs_lp);
                                                 $my_lp_id = $lp_id[0];
 
-                                                $sql = 'SELECT status FROM '.$lp_item_view.'
+                                                $sql = "SELECT status FROM $lp_item_view
                                                         WHERE
-                                                            c_id = '.$course_id.' AND
-                                                            lp_view_id = '.$my_lp_id.' AND
-                                                            lp_item_id = '.$refs_list[$prereqs_string].'
-                                                        LIMIT 0, 1';
+                                                            c_id = $course_id AND
+                                                            lp_view_id = $my_lp_id AND
+                                                            lp_item_id = $refs_list[$prereqs_string]
+                                                        LIMIT 0, 1";
                                                 $rs_lp = Database::query($sql);
                                                 $status_array = Database::fetch_row($rs_lp);
                                                 $status = $status_array[0];
@@ -2619,9 +2630,17 @@ class learnpathItem
                                                         error_log('New LP - Prerequisite '.$prereqs_string.' complete');
                                                     }
                                                 }
-
-                                                return $returnstatus;
                                             }
+
+                                            if ($checkOtherSessions && $returnstatus === false) {
+                                                $returnstatus = $returnstatus = $this->getStatusFromOtherSessions(
+                                                    $user_id,
+                                                    $prereqs_string,
+                                                    $refs_list
+                                                );
+                                            }
+
+                                            return $returnstatus;
                                         } else {
                                             return $returnstatus;
                                         }
@@ -3780,7 +3799,7 @@ class learnpathItem
                         c_id = $course_id AND
                         lp_item_id = ".$this->db_id." AND
                         lp_view_id = ".$this->view_id." AND
-                        view_count = ".intval($this->get_attempt_id());
+                        view_count = ".$this->get_attempt_id();
             if ($debug) {
                 error_log(
                     'learnpathItem::write_to_db() - Querying item_view: '.$sql,
@@ -3820,7 +3839,7 @@ class learnpathItem
                     Database::query($sql);
                 }
             } else {
-                if ($this->type == 'hotpotatoes') {
+                if ($this->type === 'hotpotatoes') {
                     $params = [
                         'total_time' => $this->get_total_time(),
                         'start_time' => $this->get_current_start_time(),
@@ -4558,5 +4577,56 @@ class learnpathItem
     public function getIid()
     {
         return $this->iId;
+    }
+
+    /**
+     * @param int    $user_id
+     * @param string $prereqs_string
+     * @param array  $refs_list
+     *
+     * @return bool
+     */
+    public function getStatusFromOtherSessions($user_id, $prereqs_string, $refs_list)
+    {
+        $lp_item_view = Database::get_course_table(TABLE_LP_ITEM_VIEW);
+        $lp_view = Database::get_course_table(TABLE_LP_VIEW);
+        $course_id = api_get_course_int_id();
+        $user_id = (int) $user_id;
+
+        // Check results from another sessions:
+        $checkOtherSessions = api_get_configuration_value('validate_lp_prerequisite_from_other_session');
+        if ($checkOtherSessions) {
+            // Check items
+            $sql = "SELECT iid FROM $lp_view
+                    WHERE
+                        c_id = $course_id AND
+                        user_id = $user_id  AND
+                        lp_id = $this->lp_id AND
+                        session_id <> 0
+                    ";
+            $result = Database::query($sql);
+            $resultFromOtherSessions = false;
+            while ($row = Database::fetch_array($result)) {
+                $lpIid = $row['iid'];
+                $sql = "SELECT status FROM $lp_item_view
+                        WHERE
+                            c_id = $course_id AND
+                            lp_view_id = $lpIid AND
+                            lp_item_id = $refs_list[$prereqs_string]
+                        LIMIT 1";
+                $resultRow = Database::query($sql);
+                if (Database::num_rows($resultRow)) {
+                    $statusResult = Database::fetch_array($resultRow);
+                    $status = $statusResult['status'];
+                    $checked = $status == $this->possible_status[2] || $status == $this->possible_status[3];
+                    if ($checked) {
+                        $resultFromOtherSessions = true;
+                        break;
+                    }
+                }
+            }
+
+            return $resultFromOtherSessions;
+        }
     }
 }

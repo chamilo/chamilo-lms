@@ -4725,20 +4725,21 @@ class CourseManager
             return [];
         }
 
-        $limit = intval($limit);
+        $limit = (int) $limit;
+        $userId = api_get_user_id();
 
         // Getting my courses
-        $my_course_list = self::get_courses_list_by_user_id(api_get_user_id());
+        $my_course_list = self::get_courses_list_by_user_id($userId);
 
-        $my_course_code_list = [];
+        $codeList = [];
         foreach ($my_course_list as $course) {
-            $my_course_code_list[$course['real_id']] = $course['real_id'];
+            $codeList[$course['real_id']] = $course['real_id'];
         }
 
         if (api_is_drh()) {
-            $courses = self::get_courses_followed_by_drh(api_get_user_id());
+            $courses = self::get_courses_followed_by_drh($userId);
             foreach ($courses as $course) {
-                $my_course_code_list[$course['real_id']] = $course['real_id'];
+                $codeList[$course['real_id']] = $course['real_id'];
             }
         }
 
@@ -4767,10 +4768,9 @@ class CourseManager
 
         $result = Database::query($sql);
         $courses = [];
-
         if (Database::num_rows($result)) {
             $courses = Database::store_result($result, 'ASSOC');
-            $courses = self::processHotCourseItem($courses, $my_course_code_list);
+            $courses = self::processHotCourseItem($courses, $codeList);
         }
 
         return $courses;
@@ -4778,11 +4778,11 @@ class CourseManager
 
     /**
      * @param array $courses
-     * @param array $my_course_code_list
+     * @param array $codeList
      *
      * @return mixed
      */
-    public static function processHotCourseItem($courses, $my_course_code_list = [])
+    public static function processHotCourseItem($courses, $codeList = [])
     {
         $hotCourses = [];
         $ajax_url = api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=add_course_vote';
@@ -4800,7 +4800,7 @@ class CourseManager
             $access_link = self::get_access_link_by_user(
                 api_get_user_id(),
                 $course_info,
-                $my_course_code_list
+                $codeList
             );
 
             $userRegisteredInCourse = self::is_user_subscribed_in_course($user_id, $course_info['code']);
@@ -5381,8 +5381,8 @@ class CourseManager
         $endDate
     ) {
         $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
-        $courseId = intval($courseId);
-        $sessionId = intval($sessionId);
+        $courseId = (int) $courseId;
+        $sessionId = (int) $sessionId;
         $startDate = Database::escape_string($startDate);
         $endDate = Database::escape_string($endDate);
 

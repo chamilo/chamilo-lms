@@ -216,7 +216,7 @@ if (!$inATest) {
 
         if (is_array($questionList)) {
             foreach ($questionList as $id) {
-                //To avoid warning messages
+                // To avoid warning messages.
                 if (!is_numeric($id)) {
                     continue;
                 }
@@ -237,7 +237,8 @@ if (!$inATest) {
                     api_get_self().'?'.api_get_cidreq().'&clone_question='.$id.'&page='.$page,
                     ['class' => 'btn btn-default btn-sm']
                 );
-                $edit_link = $objQuestionTmp->type == CALCULATED_ANSWER && $objQuestionTmp->isAnswered()
+
+                $edit_link = $objQuestionTmp->selectType() == CALCULATED_ANSWER && $objQuestionTmp->isAnswered()
                     ? Display::span(
                         Display::return_icon(
                             'edit_na.png',
@@ -317,11 +318,11 @@ if (!$inATest) {
                     TestCategory::getCategoryNameForQuestion($objQuestionTmp->id)
                 );
                 if (empty($txtQuestionCat)) {
-                    $txtQuestionCat = "-";
+                    $txtQuestionCat = '-';
                 }
 
                 // Question level
-                $txtQuestionLevel = $objQuestionTmp->level;
+                $txtQuestionLevel = $objQuestionTmp->getLevel();
                 if (empty($objQuestionTmp->level)) {
                     $txtQuestionLevel = '-';
                 }

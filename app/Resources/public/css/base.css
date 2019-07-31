@@ -10196,6 +10196,11 @@ ul.dropdown-menu.inner > li > a {
     clear: left;
 }
 
+.compilation_block .progress {
+    margin:0px;
+    width:120px
+}
+
 @media (min-width: 768px) {
     .clear-rows-6-4-3 .col-sm-6:nth-child(2n+1) {
         clear: left;

@@ -2423,7 +2423,7 @@ class learnpath
                 $isBlocked = true;
             }
 
-            if (Tracking::minimunTimeAvailable($sessionId, $courseId)) {
+            if (Tracking::minimumTimeAvailable($sessionId, $courseId)) {
                 // Block if it does not exceed minimum time
                 // Minimum time (in minutes) to pass the learning path
                 $accumulateWorkTime = self::getAccumulateWorkTimePrerequisite($prerequisite, $courseId);
@@ -4443,7 +4443,7 @@ class learnpath
 
         $debug = $this->debug;
         if ($debug > 0) {
-            error_log('In learnpath::prerequisites_match()', 0);
+            error_log('In learnpath::prerequisites_match()');
         }
 
         if (empty($itemId)) {
@@ -4467,11 +4467,13 @@ class learnpath
 
                 return true;
             }
+
             // Clean spaces.
             $prereq_string = str_replace(' ', '', $prereq_string);
             if ($debug > 0) {
                 error_log('Found prereq_string: '.$prereq_string, 0);
             }
+
             // Now send to the parse_prereq() function that will check this component's prerequisites.
             $result = $currentItem->parse_prereq(
                 $prereq_string,

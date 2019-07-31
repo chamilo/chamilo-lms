@@ -416,13 +416,12 @@ function api_get_timezone()
  * Returns the given date as a DATETIME in UTC timezone.
  * This function should be used before entering any date in the DB.
  *
- * @param mixed $time                    date to be converted (can be a string supported by date() or a timestamp)
- * @param bool  $returnNullIfInvalidDate if the date is not correct return null instead of the current date
- * @param bool  $returnObj
+ * @param mixed $time                    Date to be converted (can be a string supported by date() or a timestamp)
+ * @param bool  $returnNullIfInvalidDate If the date is not correct return null instead of the current date
+ * @param bool  $returnObj               Returns a DateTime object
  *
  * @return string|DateTime The DATETIME in UTC to be inserted in the DB,
  *                         or null if the format of the argument is not supported
- *                         or datetime
  *
  * @author Julio Montoya - Adding the 2nd parameter
  * @author Guillaume Viguier <guillaume.viguier@beeznest.com>
@@ -466,11 +465,15 @@ function api_get_utc_datetime(
 /**
  * Returns a DATETIME string converted to the right timezone.
  *
- * @param mixed The time to be converted
- * @param string The timezone to be converted to.
- * If null, the timezone will be determined based on user preference,
- * or timezone chosen by the admin for the platform.
- * @param string The timezone to be converted from. If null, UTC will be assumed.
+ * @param mixed  $time          The time to be converted
+ * @param string $to_timezone   The timezone to be converted to.
+ *                              If null, the timezone will be determined based on user preference,
+ *                              or timezone chosen by the admin for the platform.
+ * @param string $from_timezone The timezone to be converted from. If null, UTC will be assumed.
+ * @param bool   $returnNullIfInvalidDate
+ * @param bool   $showTime
+ * @param bool   $humanForm
+ * @param string $format
  *
  * @return string The converted time formatted as Y-m-d H:i:s
  *
@@ -480,9 +483,10 @@ function api_get_local_time(
     $time = null,
     $to_timezone = null,
     $from_timezone = null,
-    $return_null_if_invalid_date = false,
+    $returnNullIfInvalidDate = false,
     $showTime = true,
-    $humanForm = false
+    $humanForm = false,
+    $format = ''
 ) {
     // Determining the timezone to be converted from
     if (is_null($from_timezone)) {
@@ -491,7 +495,7 @@ function api_get_local_time(
 
     // If time is a timestamp, convert it to a string
     if (is_null($time) || empty($time) || $time == '0000-00-00 00:00:00') {
-        if ($return_null_if_invalid_date) {
+        if ($returnNullIfInvalidDate) {
             return null;
         }
         $from_timezone = 'UTC';
@@ -500,7 +504,7 @@ function api_get_local_time(
 
     if (is_numeric($time)) {
         $time = (int) $time;
-        if ($return_null_if_invalid_date) {
+        if ($returnNullIfInvalidDate) {
             if (strtotime(date('d-m-Y H:i:s', $time)) !== (int) $time) {
                 return null;
             }
@@ -509,6 +513,7 @@ function api_get_local_time(
         $from_timezone = 'UTC';
         $time = gmdate('Y-m-d H:i:s', $time);
     }
+
     if ($time instanceof DateTime) {
         $time = $time->format('Y-m-d H:i:s');
         $from_timezone = 'UTC';
@@ -522,6 +527,10 @@ function api_get_local_time(
 
         $date = new DateTime($time, new DateTimezone($from_timezone));
         $date->setTimezone(new DateTimeZone($to_timezone));
+
+        if (!empty($format)) {
+            return $date->format($format);
+        }
 
         return api_get_human_date_time($date, $showTime, $humanForm);
     } catch (Exception $e) {

@@ -1201,6 +1201,9 @@ $_configuration['required_extra_fields_in_profile'] = [
 // - launch "composer install" to rebuild the autoload.php
 //$_configuration['social_enable_messages_feedback'] = false;
 
+// Disable dislike button in the social network.
+//$_configuration['disable_dislike_option'] = false;
+
 // Block student's access to the course documents when using the ckeditor "Browse server" button
 //$_configuration['block_editor_file_manager_for_students'] = false;
 // Show a language flag next to the user picture in the social network
@@ -1241,6 +1244,41 @@ $_configuration['required_extra_fields_in_profile'] = [
 
 // Show languages flags by country in the language switcher.
 //$_configuration['language_flags_by_country'] = false;
+
+// Allow compilatio plagiarism prevention tool
+/*
+CREATE TABLE c_plagiarism_compilatio_docs (
+    id INT AUTO_INCREMENT NOT NULL,
+    c_id int(11) NOT NULL,
+    document_id int(11) NOT NULL,
+    compilatio_id varchar(32) CHARACTER SET utf8 NOT NULL,
+    PRIMARY KEY (id)
+) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;
+
+// If table exists already
+ALTER TABLE c_plagiarism_compilatio_docs drop primary key;
+ALTER TABLE c_plagiarism_compilatio_docs ADD COLUMN id INT AUTO_INCREMENT NOT NULL PRIMARY KEY;
+ALTER TABLE c_plagiarism_compilatio_docs CHANGE COLUMN id_doc document_id INT NOT NULL;
+
+requires extension "php-soap"  sudo apt-get install php-soap
+*/
+//$_configuration['allow_compilatio_tool'] = false;
+//$_configuration['compilatio_tool'] = [
+//    'settings' => [
+//        'key' => '',
+//        'soap_url' => '',
+//        'proxy_host' => '',
+//        'proxy_port' => '',
+//        'max_filesize' => '',
+//        'transport_mode' => '',
+//        'wget_uri' => '',
+//        'wget_login' => '',
+//        'wget_password' => '',
+//    ]
+//];
+
+// Allow user to enter a LP item if it was validated in another session.
+// $_configuration['validate_lp_prerequisite_from_other_session'] = false;
 
 // KEEP THIS AT THE END
 // -------- Custom DB changes

@@ -38,20 +38,8 @@ $startDate = '';
 $endDate = '';
 if (!empty($sessions)) {
     foreach ($sessions as $session) {
-        $startDate = api_get_local_time(
-            $session['access_start_date'],
-            null,
-            null,
-            true,
-            false
-        );
-        $endDate = api_get_local_time(
-            $session['access_end_date'],
-            null,
-            null,
-            true,
-            false
-        );
+        $startDate = customDate($session['access_start_date']);
+        $endDate = customDate($session['access_end_date']);
     }
 }
 
@@ -64,23 +52,37 @@ $form = new FormValidator(
 );
 $form->addElement('text', 'from', get_lang('From'), ['id' => 'date_from']);
 $form->addElement('text', 'to', get_lang('Until'), ['id' => 'date_to']);
-/*$form->addElement(
-    'select',
-    'type',
-    get_lang('Type'),
-    ['day' => get_lang('Day'), 'month' => get_lang('Month')],
-    ['id' => 'type']
-);*/
 $form->addElement('hidden', 'user_id', $userId);
 $form->addRule('from', get_lang('ThisFieldIsRequired'), 'required');
 $form->addRule('to', get_lang('ThisFieldIsRequired'), 'required');
 $form->addButtonSearch(get_lang('GenerateReport'));
+
+function customDate($dateTime)
+{
+    $dateTime = api_get_local_time(
+        $dateTime,
+        null,
+        null,
+        true,
+        false,
+        true,
+        'd/m/Y'
+    );
+
+    return $dateTime;
+}
 
 if ($form->validate()) {
     $values = $form->getSubmitValues();
     $from = $values['from'];
     $to = $values['to'];
     $sessionCategories = UserManager::get_sessions_by_category($userId, false);
+
+    $from = DateTime::createFromFormat('d/m/Y', $from);
+    $to = DateTime::createFromFormat('d/m/Y', $to);
+
+    $from = api_get_utc_datetime($from->format('Y-m-d'));
+    $to = api_get_utc_datetime($to->format('Y-m-d'));
 
     $sessionCourseList = [];
     $report = [];
@@ -102,8 +104,8 @@ if ($form->validate()) {
                     $record = [
                         $courseInfo['title'],
                         $session['session_name'],
-                        api_get_local_time($item['login']),
-                        api_get_local_time($item['logout']),
+                        customDate($item['login']),
+                        customDate($item['logout']),
                         api_format_time($item['duration'], 'js'),
                     ];
                     $report[] = $record;
@@ -128,8 +130,8 @@ if ($form->validate()) {
             $record = [
                 $course['title'],
                 '',
-                api_get_local_time($item['login']),
-                api_get_local_time($item['logout']),
+                customDate($item['login']),
+                customDate($item['logout']),
                 api_format_time($item['duration'], 'js'),
             ];
             $report[] = $record;
@@ -176,7 +178,7 @@ if ($form->validate()) {
         'orientation' => 'P',
     ];
 
-    $pdf = new PDF('A4', $params['orientation'], $params);
+    $pdf = @new PDF('A4', $params['orientation'], $params);
 
     $pdf->setBackground($tpl->theme);
     @$pdf->content_to_pdf(

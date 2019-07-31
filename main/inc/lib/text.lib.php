@@ -10,6 +10,13 @@
  */
 define('EXERCISE_NUMBER_OF_DECIMALS', 2);
 
+/* XML processing functions */
+
+// A regular expression for accessing declared encoding within xml-formatted text.
+// Published by Steve Minutillo,
+// http://minutillo.com/steve/weblog/2004/6/17/php-xml-and-character-encodings-a-tale-of-sadness-rage-and-data-loss/
+define('_PCRE_XML_ENCODING', '/<\?xml.*encoding=[\'"](.*?)[\'"].*\?>/m');
+
 /**
  * This function strips all html-tags found in the input string and outputs a pure text.
  * Mostly, the function is to be used before language or encoding detection of the input string.
@@ -128,19 +135,13 @@ function api_get_title_html(&$string, $output_encoding = null, $input_encoding =
     return '';
 }
 
-/* XML processing functions */
-
-// A regular expression for accessing declared encoding within xml-formatted text.
-// Published by Steve Minutillo,
-// http://minutillo.com/steve/weblog/2004/6/17/php-xml-and-character-encodings-a-tale-of-sadness-rage-and-data-loss/
-define('_PCRE_XML_ENCODING', '/<\?xml.*encoding=[\'"](.*?)[\'"].*\?>/m');
-
 /**
  * Detects encoding of xml-formatted text.
  *
  * @param string $string           the input xml-formatted text
  * @param string $default_encoding This is the default encoding to be returned
- *                                 if there is no way the xml-text's encoding to be detected. If it not spesified, the system encoding is assumed then.
+ *                                 if there is no way the xml-text's encoding to be detected.
+ *                                 If it not spesified, the system encoding is assumed then.
  *
  * @return string returns the detected encoding
  *
@@ -315,8 +316,6 @@ function api_contains_asciisvg($html)
 
     return false;
 }
-
-/* Miscellaneous text processing functions */
 
 /**
  * Convers a string from camel case into underscore.
@@ -525,34 +524,6 @@ function esc_url($url, $protocols = null, $_context = 'display')
     }
 
     return Security::remove_XSS($url);
-
-    /*// Replace ampersands and single quotes only when displaying.
-    if ( 'display' == $_context ) {
-        $url = wp_kses_normalize_entities( $url );
-        $url = str_replace( '&amp;', '&#038;', $url );
-        $url = str_replace( "'", '&#039;', $url );
-    }
-
-    if ( '/' === $url[0] ) {
-        $good_protocol_url = $url;
-    } else {
-        if ( ! is_array( $protocols ) )
-            $protocols = wp_allowed_protocols();
-        $good_protocol_url = wp_kses_bad_protocol( $url, $protocols );
-        if ( strtolower( $good_protocol_url ) != strtolower( $url ) )
-            return '';
-    }
-
-    /**
-     * Filter a string cleaned and escaped for output as a URL.
-     *
-     * @since 2.3.0
-     *
-     * @param string $good_protocol_url The cleaned URL to be returned.
-     * @param string $original_url      The URL prior to cleaning.
-     * @param string $_context          If 'display', replace ampersands and single quotes only.
-     */
-    //return apply_filters( 'clean_url', $good_protocol_url, $original_url, $_context );98
 }
 
 /**
@@ -872,9 +843,9 @@ function get_week_from_day($date)
         $time = api_strtotime($date, 'UTC');
 
         return date('W', $time);
-    } else {
-        return date('W');
     }
+
+    return date('W');
 }
 
 /**
@@ -938,7 +909,7 @@ function implode_with_key($glue, $array)
  */
 function format_file_size($file_size)
 {
-    $file_size = intval($file_size);
+    $file_size = (int) $file_size;
     if ($file_size >= 1073741824) {
         $file_size = (round($file_size / 1073741824 * 100) / 100).'G';
     } elseif ($file_size >= 1048576) {

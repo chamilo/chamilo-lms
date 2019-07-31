@@ -7,7 +7,6 @@ use Chamilo\CourseBundle\Entity\CExerciseCategory;
 use ChamiloSession as Session;
 use Doctrine\DBAL\Types\Type;
 
-
 /**
  * Class Exercise.
  *

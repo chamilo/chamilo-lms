@@ -1847,7 +1847,7 @@ abstract class Question
         echo '<ul class="question_menu">';
         foreach ($questionTypeList as $i => $type) {
             /** @var Question $type */
-            $type = new $type[1];
+            $type = new $type[1]();
             $img = $type->getTypePicture();
             $explanation = get_lang($type->getExplanation());
             echo '<li>';

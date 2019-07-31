@@ -2041,6 +2041,7 @@ class Tracking
 
                             return $icon.Display::label($last_login_date, 'warning');
                         }
+
                         return $last_login_date;
                     } else {
                         if ($convert_date) {

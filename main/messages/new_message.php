@@ -191,7 +191,7 @@ function manageForm($default, $select_from_user_list = null, $sent_to = '', $tpl
         // Adding reply mail
         $user_reply_info = api_get_user_info($message_reply_info['user_sender_id']);
         $default['content'] = '<link href="';
-        $default['content'] .= api_get_cdn_path(api_get_path(WEB_CSS_PATH).'web/css/themes/'.api_get_visual_theme().'/document.css');
+        $default['content'] .= api_get_cdn_path(api_get_path(WEB_CSS_PATH).api_get_visual_theme().'/document.css');
         $default['content'] .= '" media="screen" rel="stylesheet" type="text/css" />';
         $default['content'] .= '<p><br/></p>'.sprintf(
             get_lang('XWroteY'),

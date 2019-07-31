@@ -212,9 +212,9 @@ if ($isAuthentify) {
         ChamiloSession::erase(WhispeakAuthPlugin::SESSION_FAILED_LOGINS);
 
         if (!empty($lpItemInfo)) {
-            echo '<script>window.setTimeout(function () {
-                    window.location.href = "'.api_get_path(WEB_PLUGIN_PATH).'whispeakauth/authentify_password.php";
-                }, 1500);</script>';
+            echo '<script>window.location.href = "'
+                .api_get_path(WEB_PLUGIN_PATH)
+                .'whispeakauth/authentify_password.php";</script>';
 
             exit;
         }
@@ -224,16 +224,12 @@ if ($isAuthentify) {
 
             ChamiloSession::write(WhispeakAuthPlugin::SESSION_AUTH_PASSWORD, true);
 
-            echo "<script>window.setTimeout(function () {
-                    window.location.href = '".$url."';
-                }, 1500);</script>";
+            echo "<script>window.location.href = '".$url."';</script>";
 
             exit;
         }
 
-        echo '<script>window.setTimeout(function () {
-            window.location.href = "'.api_get_path(WEB_PATH).'";
-            }, 1500);</script>';
+        echo '<script>window.location.href = "'.api_get_path(WEB_PATH).'";</script>';
 
         exit;
     }
@@ -252,9 +248,7 @@ if ($isAuthentify) {
                 $lpItemInfo['lp']
             );
 
-            echo '<script>window.setTimeout(function () {
-                    window.location.href = "'.$lpItemInfo['src'].'";
-                }, 1500);</script>';
+            echo '<script>window.location.href = "'.$lpItemInfo['src'].'";</script>';
 
             exit;
         }
@@ -272,9 +266,7 @@ if ($isAuthentify) {
                 $quizQuestionInfo['quiz']
             );
 
-            echo '<script>window.setTimeout(function () {
-                    window.location.href = "'.$url.'";
-                }, 1500);</script>';
+            echo '<script>window.location.href = "'.$url.'";</script>';
 
             exit;
         }

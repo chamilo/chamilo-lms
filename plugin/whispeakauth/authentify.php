@@ -29,9 +29,7 @@ if (ChamiloSession::read(WhispeakAuthPlugin::SESSION_AUTH_PASSWORD, false)) {
         'warning'
     );
 
-    if (!empty($lpQuestionInfo)) {
-        echo $message;
-    } else {
+    if (empty($lpQuestionInfo)) {
         Display::addFlash($message);
     }
 

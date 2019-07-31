@@ -133,9 +133,7 @@ if ($userPass) {
 
     if (!empty($url)) {
         echo '
-            <script>window.setTimeout(function () {
-                window.location.href = "'.$url.'";
-            }, 1500);</script>
+            <script>window.location.href = "'.$url.'";</script>
         ';
     }
 }

@@ -24,14 +24,13 @@ if (empty($userId)) {
     api_not_allowed($showHeader);
 }
 
-if (empty($wsid)) {
-    $message = Display::return_message($plugin->get_lang('SpeechAuthNotEnrolled'), 'warning');
-
-    if (!empty($lpQuestionInfo)) {
-        echo $message;
-    } else {
-        Display::addFlash($message);
-    }
+if (!empty($lpQuestionInfo)) {
+    echo Display::return_message(
+        $plugin->get_lang('MaxAttemptsReached').'<br>'
+        .'<strong>'.$plugin->get_lang('LoginWithUsernameAndPassword').'</strong>',
+        'warning',
+        false
+    );
 }
 
 $form = new FormValidator(

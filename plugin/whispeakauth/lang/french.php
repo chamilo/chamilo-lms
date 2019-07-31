@@ -22,7 +22,7 @@ $strings['AuthentifySampleText4'] = 'Errer dans la campagne.';
 $strings['AuthentifySampleText5'] = 'Sous l\'océan.';
 $strings['AuthentifySampleText6'] = 'Prendre la mouche.';
 
-$strings['RepeatThisPhrase'] = 'Autorisez l\'enregistrement audio puis répétez cette phrase trois fois:';
+$strings['RepeatThisPhrase'] = 'Autorisez l\'enregistrement audio puis lisez cette phrase à voix haute :';
 $strings['EnrollmentSignature0'] = 'Signature non utilisable, nécessite un nouvel enregistrement';
 $strings['EnrollmentSignature1'] = 'Signature passable, il est conseillé de faire un nouvel enregistrement.';
 $strings['EnrollmentSignature2'] = 'Signature correcte.';
@@ -36,7 +36,7 @@ $strings['AuthentifyFailed'] = 'Échec de l\'authentification.';
 $strings['AuthentifySuccess'] = 'Authentification réussie!';
 $strings['TryAgain'] = 'Essayez encore';
 $strings['MaxAttemptsReached'] = 'Vous avez atteint le nombre maximum de tentatives autorisées.';
-$strings['LoginWithUsernameAndPassword'] = 'Authentifiez-vous en utilisant votr mot de passe.';
+$strings['LoginWithUsernameAndPassword'] = 'Authentifiez-vous en utilisant votre mot de passe.';
 $strings['YouNeedToIdentifyYourselfToAnswerThisQuestion'] = 'Vous devez vous authentifier pour répondre à cette question.';
 $strings['IdentifyMe'] = 'M\'identifier';
 $strings['PleaseWaitWhileLoading'] = 'Connexion au serveur d\'authentification. Veuillez patienter...';

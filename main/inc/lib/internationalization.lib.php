@@ -416,13 +416,12 @@ function api_get_timezone()
  * Returns the given date as a DATETIME in UTC timezone.
  * This function should be used before entering any date in the DB.
  *
- * @param mixed $time                    date to be converted (can be a string supported by date() or a timestamp)
- * @param bool  $returnNullIfInvalidDate if the date is not correct return null instead of the current date
- * @param bool  $returnObj
+ * @param mixed $time                    Date to be converted (can be a string supported by date() or a timestamp)
+ * @param bool  $returnNullIfInvalidDate If the date is not correct return null instead of the current date
+ * @param bool  $returnObj               Returns a DateTime object
  *
  * @return string|DateTime The DATETIME in UTC to be inserted in the DB,
  *                         or null if the format of the argument is not supported
- *                         or datetime
  *
  * @author Julio Montoya - Adding the 2nd parameter
  * @author Guillaume Viguier <guillaume.viguier@beeznest.com>

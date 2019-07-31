@@ -66,7 +66,7 @@ if (!$isValidPassword || !$isActive || !$isExpired) {
     ChamiloSession::write(WhispeakAuthPlugin::SESSION_FAILED_LOGINS, ++$failedLogins);
 
     if ($maxAttempts && $failedLogins >= $maxAttempts) {
-        $message .= PHP_EOL.$plugin->get_lang('MaxAttemptsReached');
+        $message .= PHP_EOL.'<span data-reach-attempts="true">'.$plugin->get_lang('MaxAttemptsReached').'</span>';
     } else {
         $message .= PHP_EOL.$plugin->get_lang('TryAgain');
     }

@@ -50,13 +50,18 @@ window.RecordAudio = (function () {
                 } else {
                     tagAudio.parents('#audio-wrapper').removeClass('hidden').addClass('show');
                 }
-            }).always(function () {
-                btnStop.prop('disabled', true).html(btnStopText).parent().addClass('hidden');
-                btnStart.prop('disabled', false).parent().removeClass('hidden');
 
-                if ($('#messages-deck > .alert.alert-warning [data-reach-attempts]').length > 0) {
+                btnStop.prop('disabled', true).html(btnStopText).parent().addClass('hidden');
+
+                if ($('#messages-deck > .alert.alert-success').length > 0 ||
+                    $('#messages-deck > .alert.alert-warning [data-reach-attempts]').length > 0
+                ) {
                     btnStart.prop('disabled', true);
+                } else {
+                    btnStart.prop('disabled', false);
                 }
+
+                btnStart.parent().removeClass('hidden');
             });
         }
 

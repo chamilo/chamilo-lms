@@ -11,7 +11,6 @@ $cidReset = true;
 require_once __DIR__.'/../../../main/inc/global.inc.php';
 
 $action = isset($_POST['action']) ? $_POST['action'] : 'enrollment';
-$license = !empty($_POST['license']) ? true : false;
 $isEnrollment = 'enrollment' === $action;
 $isAuthentify = 'authentify' === $action;
 
@@ -96,6 +95,8 @@ if ('wav' !== substr($fileType, -3)) {
 }
 
 if ($isEnrollment) {
+    $license = !empty($_POST['license']) ? true : false;
+
     try {
         $wsid = WhispeakAuthRequest::whispeakId($plugin);
         $wsid = WhispeakAuthRequest::license($plugin, $wsid, $license);

@@ -53,6 +53,42 @@ class WhispeakAuthRequest
     }
 
     /**
+     * @param string $uri
+     * @param array  $headers
+     *
+     * @throws Exception
+     *
+     * @return array
+     */
+    private static function doGet($uri, array $headers = [])
+    {
+        $ch = curl_init(self::API_URL.$uri);
+
+        if ($headers) {
+            curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+        }
+
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+        $result = curl_exec($ch);
+        $error = curl_error($ch);
+
+        curl_close($ch);
+
+        if (!empty($error)) {
+            throw new Exception($error);
+        }
+
+        $result = json_decode($result, true);
+
+        if (!empty($result['error'])) {
+            throw new Exception($result['error']);
+        }
+
+        return $result;
+    }
+
+    /**
      * @param WhispeakAuthPlugin $plugin
      *
      * @throws Exception
@@ -63,20 +99,15 @@ class WhispeakAuthRequest
     {
         $headers = [
             "Authorization: Bearer {$plugin->getAccessToken()}",
-            "Content-Type: application/x-www-form-urlencoded",
-        ];
-        $body = [
-            'moderator' => 'ModeratorID',
-            'client' => 'ClientID',
         ];
 
-        $result = self::doPost('activityid', $headers, $body);
+        $result = self::doGet('activityid', $headers);
 
-        if (empty($result['activityid'])) {
+        if (empty($result['activity_id'])) {
             throw new Exception(get_lang('BadFormData'));
         }
 
-        return $result['activityid'];
+        return $result['activity_id'];
     }
 
     /**
@@ -89,48 +120,37 @@ class WhispeakAuthRequest
     public static function whispeakId(WhispeakAuthPlugin $plugin)
     {
         $headers = [
-            'Content-Type: application/x-www-form-urlencoded',
             "Authorization: Bearer {$plugin->getAccessToken()}",
         ];
-        $body = [
-            'moderator' => 'ModeratorID',
-            'client' => 'ClientID'
-        ];
 
-        $result = self::doPost('whispeakid', $headers, $body);
+        $result = self::doGet('whispeakid', $headers);
 
-        if (empty($result['wsId'])) {
+        if (empty($result['wsid'])) {
             throw new Exception(get_lang('BadFormData'));
         }
 
-        return $result['wsId'];
+        return $result['wsid'];
     }
 
     /**
      * @param WhispeakAuthPlugin $plugin    Plugin instance.
      * @param string             $wsId      User's Whispeak ID.
-     * @param bool               $grantGtu  Whether user accepted the General Term of Use.
      * @param bool               $grantAurp Whether user Allow to Use for Research Purpose.
      *
      * @throws Exception
      *
      * @return string
      */
-    public static function license(WhispeakAuthPlugin $plugin, $wsId, $grantGtu, $grantAurp)
+    public static function license(WhispeakAuthPlugin $plugin, $wsId, $grantAurp)
     {
         $headers = [
-            'Content-Type: application/x-www-form-urlencoded',
+            'Content-Type: application/json',
             "Authorization: Bearer ".$plugin->getAccessToken(),
         ];
-        $metadata = [
-            'wsId' => $wsId,
-            'GTU' => $grantGtu,
-            'AURP' => $grantAurp,
-        ];
         $body = [
-            'metadata' => json_encode($metadata),
-            'moderator' => 'ModeratorID',
-            'client' => 'ClientID',
+            'wsid' => $wsId,
+            'license' => 1,
+            'research' => $grantAurp,
         ];
 
         $result = self::doPost('license', $headers, $body);
@@ -152,19 +172,10 @@ class WhispeakAuthRequest
     public static function enrollmentSentence(WhispeakAuthPlugin $plugin)
     {
         $headers = [
-            'Content-Type: application/x-www-form-urlencoded',
             "Authorization: Bearer ".$plugin->getAccessToken(),
         ];
-        $metadata = [
-            //'spokenTongue' => WhispeakAuthPlugin::getLanguageIsoCode($user->getLanguage()),
-        ];
-        $body = [
-            'metadata' => json_encode($metadata),
-            'moderator' => 'ModeratorID',
-            'client' => 'ClientID',
-        ];
 
-        $result = self::doPost('enrollmentsentence', $headers, $body);
+        $result = self::doGet('enrollmentsentence', $headers);
 
         if (empty($result['text'])) {
             throw new Exception(get_lang('BadFormData'));
@@ -186,19 +197,13 @@ class WhispeakAuthRequest
      */
     public static function enrollment(WhispeakAuthPlugin $plugin, User $user, $wsId, $text, $filePath) {
         $headers = [
-            'Content-Type: application/x-www-form-urlencoded',
             "Authorization: Bearer ".$plugin->getAccessToken(),
         ];
-        $metadata = [
+        $body = [
             'wsid' => $wsId,
             'audioType' => 'pcm',
             'spokenTongue' => WhispeakAuthPlugin::getLanguageIsoCode($user->getLanguage()),
             'text' => $text,
-        ];
-        $body = [
-            'metadata' => json_encode($metadata),
-            'moderator' => 'ModeratorID',
-            'client' => 'ClientID',
             'voice' => new CURLFile($filePath),
         ];
 
@@ -221,16 +226,10 @@ class WhispeakAuthRequest
     public static function authenticateSentence(WhispeakAuthPlugin $plugin)
     {
         $headers = [
-            'Content-Type: application/x-www-form-urlencoded',
             "Authorization: Bearer ".$plugin->getAccessToken(),
         ];
-        $body = [
-            'metadata' => json_encode([]),
-            'moderator' => 'ModeratorID',
-            'client' => 'ClientID',
-        ];
 
-        $result = self::doPost('authenticatesentence', $headers, $body);
+        $result = self::doGet('authenticatesentence', $headers);
 
         if (empty($result['text'])) {
             throw new Exception(get_lang('BadFormData'));
@@ -254,17 +253,12 @@ class WhispeakAuthRequest
         $headers = [
             "Authorization: Bearer ".$plugin->getAccessToken(),
         ];
-        $metadata = [
+        $body = [
             'wsid' => $wsId,
             'activityId' => self::activityId($plugin),
             'audioType' => 'pcm',
-            'text' => $text,
-        ];
-        $body = [
-            'metadata' => json_encode($metadata),
-            'moderator' => 'ModeratorID',
-            'client' => 'ClientID',
             'voice' => new CURLFile($filePath),
+            'text' => $text,
         ];
 
         $result = self::doPost('authentify', $headers, $body);
@@ -278,7 +272,7 @@ class WhispeakAuthRequest
 
     /**
      * @param WhispeakAuthPlugin $plugin
-     * @param string             $wsId
+     * @param array              $wsIds
      * @param string             $activityId
      * @param DateTime           $date
      *
@@ -286,9 +280,9 @@ class WhispeakAuthRequest
      *
      * @return array
      */
-    public static function getUserInfos(
+    public static function getUsersInfos(
         WhispeakAuthPlugin $plugin,
-        $wsId,
+        array $wsIds,
         $activityId,
         DateTime $date = null
     ) {
@@ -297,9 +291,8 @@ class WhispeakAuthRequest
             "Authorization: Bearer ".$plugin->getAccessToken(),
         ];
         $metadata = [
-            'wsIds' => [$wsId],
+            'wsIds' => $wsIds,
             'activityId' => $activityId,
-            'audioType' => 'pcm',
         ];
 
         if ($date) {

@@ -731,6 +731,16 @@ class CourseManager
                     );
                 }
 
+                $subscribe = (int) api_get_course_setting('subscribe_users_to_forum_notifications', $courseCode);
+                if ($subscribe === 1) {
+                    require_once api_get_path(SYS_CODE_PATH).'forum/forumfunction.inc.php';
+                    $forums = get_forums(0, $courseCode, true, $sessionId);
+                    foreach ($forums as $forum) {
+                        $forumId = $forum['iid'];
+                        set_notification('forum', $forumId, false, $userInfo, $courseInfo);
+                    }
+                }
+
                 // Add event to the system log
                 Event::addEvent(
                     LOG_SUBSCRIBE_USER_TO_COURSE,
@@ -5277,6 +5287,7 @@ class CourseManager
             'student_delete_own_publication',
             'hide_forum_notifications',
             'quiz_question_limit_per_day',
+            'subscribe_users_to_forum_notifications',
         ];
 
         $courseModels = ExerciseLib::getScoreModels();

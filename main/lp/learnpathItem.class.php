@@ -1511,60 +1511,20 @@ class learnpathItem
                             c_id = $course_id AND
                             iid = '".$this->db_item_view_id."' AND
                             view_count = '".$this->get_attempt_id()."'";
-
-                if ($debug > 2) {
-                    error_log(
-                        'learnpathItem::get_status() - Checking DB: '.$sql,
-                        0
-                    );
-                }
-
                 $res = Database::query($sql);
                 if (Database::num_rows($res) == 1) {
                     $row = Database::fetch_array($res);
                     if ($update_local) {
-                        if ($debug > 2) {
-                            error_log(
-                                'learnpathItem::set_status() :'.$row['status'],
-                                0
-                            );
-                        }
                         $this->set_status($row['status']);
-                    }
-                    if ($debug > 2) {
-                        error_log(
-                            'learnpathItem::get_status() - Returning db value '.$row['status'],
-                            0
-                        );
                     }
 
                     return $row['status'];
                 }
             }
         } else {
-            if ($debug > 2) {
-                error_log(
-                    'learnpathItem::get_status() - in get_status: using attrib',
-                    0
-                );
-            }
             if (!empty($this->status)) {
-                if ($debug > 2) {
-                    error_log(
-                        'learnpathItem::get_status() - Returning attrib: '.$this->status,
-                        0
-                    );
-                }
-
                 return $this->status;
             }
-        }
-
-        if ($debug > 2) {
-            error_log(
-                'learnpathItem::get_status() - Returning default '.$this->possible_status[0],
-                0
-            );
         }
 
         return $this->possible_status[0];
@@ -1602,12 +1562,12 @@ class learnpathItem
         if (!isset($time)) {
             if ($origin == 'js') {
                 return '00 : 00: 00';
-            } else {
-                return '00 '.$h.' 00 \' 00"';
             }
-        } else {
-            return api_format_time($time, $origin);
+
+            return '00 '.$h.' 00 \' 00"';
         }
+
+        return api_format_time($time, $origin);
     }
 
     /**
@@ -2370,13 +2330,6 @@ class learnpathItem
                             } else {
                                 // Nothing found there either. Now return the
                                 // value of the corresponding resource completion status.
-                                if ($debug) {
-                                    error_log(
-                                        'New LP - Didnt find any group, returning value for '.$prereqs_string,
-                                        0
-                                    );
-                                }
-
                                 if (isset($refs_list[$prereqs_string]) &&
                                     isset($items[$refs_list[$prereqs_string]])
                                 ) {
@@ -2394,26 +2347,12 @@ class learnpathItem
                                                 $itemToCheck->get_title()
                                             );
                                             $this->prereq_alert = $explanation;
-                                            if ($debug) {
-                                                error_log(
-                                                    'New LP - Prerequisite '.$prereqs_string.' not complete',
-                                                    0
-                                                );
-                                            }
-                                        } else {
-                                            if ($debug) {
-                                                error_log(
-                                                    'New LP - Prerequisite '.$prereqs_string.' complete',
-                                                    0
-                                                );
-                                            }
                                         }
 
                                         // For one and first attempt.
                                         if ($this->prevent_reinit == 1) {
                                             // 2. If is completed we check the results in the DB of the quiz.
                                             if ($returnstatus) {
-                                                //AND origin_lp_item_id = '.$user_id.'
                                                 $sql = 'SELECT exe_result, exe_weighting
                                                         FROM '.Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES).'
                                                         WHERE
@@ -2431,14 +2370,6 @@ class learnpathItem
                                                     $myItemToCheck = $items[$refs_list[$this->get_id()]];
                                                     $minScore = $myItemToCheck->getPrerequisiteMinScore();
                                                     $maxScore = $myItemToCheck->getPrerequisiteMaxScore();
-
-                                                    /*if (empty($minScore)) {
-                                                        // Try with mastery_score
-                                                        $masteryScoreAsMin = $myItemToCheck->get_mastery_score();
-                                                        if (!empty($masteryScoreAsMin)) {
-                                                            $minScore = $masteryScoreAsMin;
-                                                        }
-                                                    }*/
 
                                                     if (isset($minScore) && isset($minScore)) {
                                                         // Taking min/max prerequisites values see BT#5776
@@ -2535,6 +2466,18 @@ class learnpathItem
                                             }
                                         }
 
+                                        if ($returnstatus === false) {
+                                            // Check results from another sessions.
+                                            $checkOtherSessions = api_get_configuration_value('validate_lp_prerequisite_from_other_session');
+                                            if ($checkOtherSessions) {
+                                                $returnstatus = $this->getStatusFromOtherSessions(
+                                                    $user_id,
+                                                    $prereqs_string,
+                                                    $refs_list
+                                                );
+                                            }
+                                        }
+
                                         return $returnstatus;
                                     } elseif ($itemToCheck->type === 'student_publication') {
                                         require_once api_get_path(SYS_CODE_PATH).'work/work.lib.php';
@@ -2545,12 +2488,6 @@ class learnpathItem
                                         } else {
                                             $returnstatus = false;
                                             $this->prereq_alert = get_lang('LearnpathPrereqNotCompleted');
-                                            if (self::DEBUG > 1) {
-                                                error_log(
-                                                    'Student pub, prereq'.$prereqs_string.' not completed',
-                                                    0
-                                                );
-                                            }
                                         }
 
                                         return $returnstatus;
@@ -2574,19 +2511,6 @@ class learnpathItem
                                                 $itemToCheck->get_title()
                                             );
                                             $this->prereq_alert = $explanation;
-                                            if (self::DEBUG > 1) {
-                                                error_log(
-                                                    'New LP - Prerequisite '.$prereqs_string.' not complete',
-                                                    0
-                                                );
-                                            }
-                                        } else {
-                                            if (self::DEBUG > 1) {
-                                                error_log(
-                                                    'New LP - Prerequisite '.$prereqs_string.' complete',
-                                                    0
-                                                );
-                                            }
                                         }
 
                                         $lp_item_view = Database::get_course_table(TABLE_LP_ITEM_VIEW);
@@ -2619,17 +2543,6 @@ class learnpathItem
                                                 if (!$returnstatus && empty($this->prereq_alert)) {
                                                     $this->prereq_alert = get_lang('LearnpathPrereqNotCompleted');
                                                 }
-                                                if (!$returnstatus) {
-                                                    if (self::DEBUG > 1) {
-                                                        error_log(
-                                                            'New LP - Prerequisite '.$prereqs_string.' not complete'
-                                                        );
-                                                    }
-                                                } else {
-                                                    if (self::DEBUG > 1) {
-                                                        error_log('New LP - Prerequisite '.$prereqs_string.' complete');
-                                                    }
-                                                }
                                             }
 
                                             if ($checkOtherSessions && $returnstatus === false) {
@@ -2639,21 +2552,9 @@ class learnpathItem
                                                     $refs_list
                                                 );
                                             }
-
-                                            return $returnstatus;
-                                        } else {
-                                            return $returnstatus;
                                         }
-                                    }
-                                } else {
-                                    if (self::DEBUG > 1) {
-                                        error_log(
-                                            'New LP - Could not find '.$prereqs_string.' in '.print_r(
-                                                $refs_list,
-                                                true
-                                            ),
-                                            0
-                                        );
+
+                                        return $returnstatus;
                                     }
                                 }
                             }

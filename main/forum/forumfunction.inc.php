@@ -5680,7 +5680,6 @@ function set_notification($content, $id, $addOnly = false, $userInfo = [], $cour
                 user_id = $userId ";
     $result = Database::query($sql);
     $total = Database::num_rows($result);
-    error_log($total);
 
     // If the user did not indicate that (s)he wanted to be notified already
     // then we store the notification request (to prevent double notification requests).
@@ -5690,7 +5689,6 @@ function set_notification($content, $id, $addOnly = false, $userInfo = [], $cour
         Database::query($sql);
         Session::erase('forum_notification');
         getNotificationsPerUser(0, true);
-        error_log($sql);
         return get_lang('YouWillBeNotifiedOfNewPosts');
     } else {
         if (!$addOnly) {
@@ -6238,8 +6236,8 @@ function editAttachedFile($array, $id, $courseId = null)
 {
     // Init variables
     $setString = '';
-    $id = intval($id);
-    $courseId = intval($courseId);
+    $id = (int) $id;
+    $courseId = (int) $courseId;
     if (empty($courseId)) {
         // $courseId can be null, use api method
         $courseId = api_get_course_int_id();
@@ -6287,8 +6285,7 @@ function editAttachedFile($array, $id, $courseId = null)
  */
 function getAttachmentsAjaxTable($postId = 0)
 {
-    // Init variables
-    $postId = intval($postId);
+    $postId = (int) $postId;
     $courseId = api_get_course_int_id();
     $attachIds = getAttachmentIdsByPostId($postId, $courseId);
     $fileDataContent = '';
@@ -6367,10 +6364,10 @@ function getAttachedFiles(
     $attachId = 0,
     $courseId = 0
 ) {
-    $forumId = intval($forumId);
-    $courseId = intval($courseId);
-    $attachId = intval($attachId);
-    $postId = intval($postId);
+    $forumId = (int) $forumId;
+    $courseId = (int) $courseId;
+    $attachId = (int) $attachId;
+    $postId = (int) $postId;
     $threadId = !empty($threadId) ? intval($threadId) : isset($_REQUEST['thread']) ? intval($_REQUEST['thread']) : '';
     if (empty($courseId)) {
         // $courseId can be null, use api method
@@ -6378,7 +6375,7 @@ function getAttachedFiles(
     }
     if (empty($forumId)) {
         if (!empty($_REQUEST['forum'])) {
-            $forumId = intval($_REQUEST['forum']);
+            $forumId = (int) $_REQUEST['forum'];
         } else {
             // if forum ID is empty, cannot generate delete url
 
@@ -6448,11 +6445,11 @@ function getAttachedFiles(
  *
  * @return array
  */
-function clearAttachedFiles($postId = null, $courseId = null)
+function clearAttachedFiles($postId = 0, $courseId = 0)
 {
     // Init variables
-    $courseId = intval($courseId);
-    $postId = intval($postId);
+    $courseId = (int) $courseId;
+    $postId = (int) $postId;
     $array = [];
     if (empty($courseId)) {
         // $courseId can be null, use api method
@@ -6498,8 +6495,8 @@ function clearAttachedFiles($postId = null, $courseId = null)
 function getAttachmentIdsByPostId($postId, $courseId = 0)
 {
     $array = [];
-    $courseId = intval($courseId);
-    $postId = intval($postId);
+    $courseId = (int) $courseId;
+    $postId = (int) $postId;
     if (empty($courseId)) {
         // $courseId can be null, use api method
         $courseId = api_get_course_int_id();
@@ -6530,7 +6527,8 @@ function getAttachmentIdsByPostId($postId, $courseId = 0)
  */
 function getForumCategoryByTitle($title, $courseId, $sessionId = 0)
 {
-    $sessionId = intval($sessionId);
+    $sessionId = (int) $sessionId;
+    $courseId = (int) $courseId;
     $forumCategoryTable = Database::get_course_table(TABLE_FORUM_CATEGORY);
     $itemProperty = Database::get_course_table(TABLE_ITEM_PROPERTY);
 
@@ -6560,7 +6558,7 @@ function getForumCategoryByTitle($title, $courseId, $sessionId = 0)
                 'ip.tool = ? AND ' => TOOL_FORUM_CATEGORY,
                 'fc.session_id = ? AND ' => $sessionId,
                 'fc.cat_title = ? AND ' => $title,
-                'fc.c_id = ?' => intval($courseId),
+                'fc.c_id = ?' => $courseId,
             ],
         ],
         'first'

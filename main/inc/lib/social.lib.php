@@ -2518,7 +2518,7 @@ class SocialManager extends UserManager
         foreach ($messages as $message) {
             $post = $message['html'];
             $comments = '';
-            if ($message['msg_status'] == MESSAGE_STATUS_WALL_POST) {
+            if (in_array($message['msg_status'], [MESSAGE_STATUS_WALL_POST, MESSAGE_STATUS_PROMOTED])) {
                 $comments = self::getWallPostComments($userId, $message);
             }
 
@@ -2548,7 +2548,10 @@ class SocialManager extends UserManager
     }
 
     /**
-     * @param int $userId
+     * @param int   $userId
+     * @param array $groupList
+     * @param array $friendList
+     * @param array $threadList
      *
      * @return int
      */
@@ -2619,7 +2622,8 @@ class SocialManager extends UserManager
     }
 
     /**
-     * @param int $user_id
+     * @param int  $user_id
+     * @param bool $isArray
      *
      * @return string|array
      */

@@ -27,15 +27,8 @@ $threadhold3 = null;
 $exerciseResult = Session::read('exerciseResult');
 $exerciseResultCoordinates = isset($_REQUEST['exerciseResultCoordinates']) ? $_REQUEST['exerciseResultCoordinates'] : null;
 
-$learnpath_id = 0;
-if (isset($_REQUEST['learnpath_id'])) {
-    $learnpath_id = (int) $_REQUEST['learnpath_id'];
-}
-
-$learnpath_item_id = 0;
-if (isset($_REQUEST['learnpath_item_id'])) {
-    $learnpath_item_id = (int) $_REQUEST['learnpath_item_id'];
-}
+$learnpath_id = isset($_REQUEST['learnpath_id']) ? (int) $_REQUEST['learnpath_id'] : 0;
+$learnpath_item_id = isset($_REQUEST['learnpath_item_id']) ? (int) $_REQUEST['learnpath_item_id'] : 0;
 
 /** @var Exercise $objExercise */
 $objExercise = Session::read('objExercise');
@@ -47,26 +40,35 @@ if (empty($objExercise)) {
 Session::write('hotspot_coord', []);
 $newQuestionList = Session::read('newquestionList', []);
 $questionList = Session::read('questionList');
+
 $exerciseId = (int) $_GET['exerciseId'];
 $exerciseType = (int) $_GET['exerciseType'];
 $questionNum = (int) $_GET['num'];
 $nbrQuestions = isset($_GET['nbrQuestions']) ? (int) $_GET['nbrQuestions'] : null;
+$questionId = $questionList[$questionNum];
 
 // Clean extra session variables
 Session::erase('objExerciseExtra'.$exerciseId);
 Session::erase('exerciseResultExtra'.$exerciseId);
 Session::erase('questionListExtra'.$exerciseId);
 $choiceValue = isset($_GET['choice']) ? $_GET['choice'] : '';
+$hotSpot = isset($_GET['hotspot']) ? $_GET['hotspot'] : '';
+
+if (!empty($hotSpot)) {
+    if (isset($hotSpot[$questionId])) {
+        $hotSpot = $hotSpot[$questionId];
+    }
+}
+
 if (!empty($choiceValue)) {
-    $choiceValue = json_decode($choiceValue);
-    if (isset($choiceValue->answers)) {
-        $choiceValue = $choiceValue->answers;
+    if (isset($choiceValue[$questionId])) {
+        $choiceValue = $choiceValue[$questionId];
     }
 }
 
 echo '<div id="delineation-container">';
 // Getting the options by js
-if (empty($choiceValue)) {
+if (empty($choiceValue) && empty($hotSpot)) {
     echo "<script>
         // this works for only radio buttons
         var f = window.document.frm_exercise;        
@@ -98,39 +100,22 @@ if (empty($choiceValue)) {
                 }
             }
         }
-
-        if (counter == 0) {
-            choice_js = -1; // this is an error
-        } else {
-            choice_js = JSON.stringify(choice_js);
-        }
+        
+        var my_choice = $('*[name*=\"choice[".$questionId."]\"]').serialize();
+        var hotspot = $('*[name*=\"hotspot[".$questionId."]\"]').serialize();
+        //var my_choiceDc = $('*[name*=\"choiceDegreeCertainty['+question_id+']\"]').serialize();        
     ";
+
+    $url = api_get_path(WEB_CODE_PATH).'exercise/exercise_submit_modal.php';
     // IMPORTANT
     // This is the real redirect function
-    echo ' url = "exercise_submit_modal.php?learnpath_id='.$learnpath_id.'&learnpath_item_id='.$learnpath_item_id.'&hotspotcoord="+ hotspotcoord + "&hotspot="+ hotspot + "&choice="+ choice_js + "&exerciseId='.$exerciseId.'&num='.$questionNum.'&exerciseType='.$exerciseType.'&'.api_get_cidreq().'&gradebook='.$gradebook.'";';
+    $extraUrl = '&exerciseId='.$exerciseId.'&num='.$questionNum.'&exerciseType='.$exerciseType.'&'.api_get_cidreq().'learnpath_id='.$learnpath_id.'&learnpath_item_id='.$learnpath_item_id;
+    echo ' url = "'.addslashes($url).'?hotspotcoord="+ hotspotcoord + "&"+ hotspot + "&"+ my_choice + "&'.$extraUrl.'";';
     echo "$('#global-modal .modal-body').load(url);";
     echo '</script>';
     exit;
 }
-
-// Round-up the coordinates
-$user_array = '';
-if (isset($_GET['hotspot'])) {
-    $coords = explode('/', $_GET['hotspot']);
-    if (is_array($coords) && count($coords) > 0) {
-        foreach ($coords as $coord) {
-            if (!empty($coord)) {
-                list($x, $y) = explode(';', $coord);
-                $user_array .= round($x).';'.round($y).'/';
-            }
-        }
-    }
-}
-
-$user_array = substr($user_array, 0, -1);
-
 $choice = [];
-$questionId = $questionList[$questionNum];
 $choice[$questionId] = isset($choiceValue) ? $choiceValue : null;
 
 if (!is_array($exerciseResult)) {
@@ -182,15 +167,97 @@ $wrong_results = false;
 $hot_spot_load = false;
 $questionScore = 0;
 $totalScore = 0;
+$showResult = false;
+
+$objAnswerTmp = new Answer($questionId, api_get_course_int_id());
+if ($objExercise->getFeedbackType() === EXERCISE_FEEDBACK_TYPE_DIRECT) {
+    $showResult = true;
+}
 
 switch ($answerType) {
     case MULTIPLE_ANSWER:
-        $choiceValue = array_combine(array_values($choiceValue), array_values($choiceValue));
+        if (is_array($choiceValue)) {
+            $choiceValue = array_combine(array_values($choiceValue), array_values($choiceValue));
+        }
+        break;
+    case UNIQUE_ANSWER:
+        if (is_array($choiceValue) && isset($choiceValue[0])) {
+            $choiceValue = $choiceValue[0];
+        }
+        break;
+    case DRAGGABLE:
+        break;
+    case HOT_SPOT_DELINEATION:
+        $showResult = true;
+        if (is_array($hotSpot)) {
+            $choiceValue = isset($hotSpot[1]) ? $hotSpot[1] : '';
+            $_SESSION['exerciseResultCoordinates'][$questionId] = $choiceValue; //needed for exercise_result.php
+            $delineation_cord = $objAnswerTmp->selectHotspotCoordinates(1);
+            $answer_delineation_destination = $objAnswerTmp->selectDestination(1);
+            $_SESSION['hotspot_coord'][1] = $delineation_cord;
+            $_SESSION['hotspot_dest'][1] = $answer_delineation_destination;
+        }
+        break;
+    case CALCULATED_ANSWER:
         break;
 }
+
 ob_start();
-$result = $objExercise->manage_answer(0, $questionId, $choiceValue, 'exercise_show', null, false);
-$contents = ob_get_clean();
+$result = $objExercise->manage_answer(
+    0,
+    $questionId,
+    $choiceValue,
+    'exercise_show',
+    null,
+    false,
+    false,
+    $showResult
+);
+$manageAnswerHtmlContent = ob_get_clean();
+
+if ($showResult) {
+    /*echo $objQuestionTmp->return_header(
+        $objExercise,
+        $questionNum,
+        []
+    );
+    echo $manageAnswerHtmlContent;*/
+}
+
+$contents = '';
+$answerCorrect = false;
+if (!empty($result)) {
+    switch ($answerType) {
+        case UNIQUE_ANSWER:
+        case MULTIPLE_ANSWER:
+        case DRAGGABLE:
+        case HOT_SPOT_DELINEATION:
+            if ($result['score'] == $result['weight']) {
+                $answerCorrect = true;
+            }
+            break;
+    }
+}
+
+
+
+if ($objExercise->getFeedbackType() === EXERCISE_FEEDBACK_TYPE_DIRECT) {
+    if (isset($result['correct_answer_id'])) {
+        /** @var Answer $answer */
+        $answerId = $result['correct_answer_id'];
+        $contents = $objAnswerTmp->selectComment($answerId);
+    }
+    if ($answerType === HOT_SPOT_DELINEATION) {
+        $contents = $manageAnswerHtmlContent;
+        var_dump($manageAnswerHtmlContent);
+    }
+} else {
+    $contents = Display::return_message(get_lang('Incorrect'), 'warning');
+    if ($answerCorrect) {
+        $contents = Display::return_message(get_lang('Correct'), 'success');
+    }
+}
+
 /*
 if (!empty($choiceValue)) {
     for ($answerId = 1; $answerId <= $nbrAnswers; $answerId++) {
@@ -392,7 +459,7 @@ if (!empty($choiceValue)) {
                         );
                     }
 
-                    if ($overlap == false) $contents{
+                    if ($overlap == false) {
                         //all good, no overlap
                         $next = 1;
                         continue;
@@ -487,7 +554,16 @@ if ($objExercise->getFeedbackType() === EXERCISE_FEEDBACK_TYPE_DIRECT) {
 }
 
 $destinationId = null;
-if ($answerType != HOT_SPOT_DELINEATION) {
+
+if (isset($result['answer_destination'])) {
+    $itemList = explode('@@', $result['answer_destination']);
+    $try = $itemList[0];
+    $lp = $itemList[1];
+    $destinationId = $itemList[2];
+    $url = $itemList[3];
+}
+
+/*if ($answerType != HOT_SPOT_DELINEATION) {
     if (!empty($destination)) {
         $item_list = explode('@@', $destination);
         $try = $item_list[0];
@@ -515,7 +591,7 @@ if ($answerType != HOT_SPOT_DELINEATION) {
         $url = $destination_items[4];
         $exerciseResult[$questionId] = 1;
     }
-}
+}*/
 
 // the link to retry the question
 if (isset($try) && $try == 1) {
@@ -542,7 +618,7 @@ if (!empty($lp)) {
 $links .= '<br />';
 
 // the link to an external website or link
-if (!empty($url)) {
+if (!empty($url) && $url <> -1) {
     $links .= Display:: return_icon(
         'link.gif',
         '',
@@ -593,7 +669,7 @@ function SendEx(num) {
 
 if (!empty($links)) {
     if ($answerType == HOT_SPOT_DELINEATION) {
-        if ($organs_at_risk_hit > 0) {
+        /*if ($organs_at_risk_hit > 0) {
             $message .= '<br />'.get_lang('ResultIs').' <b>'.get_lang('Unacceptable').'</b><br />';
             $message .= '<p style="color:#DC0A0A;"><b>'.get_lang('OARHit').'</b></p>';
             $message .= '<p>'.$comment.'</p>';
@@ -602,17 +678,17 @@ if (!empty($links)) {
             $message .= $table_resume;
             $message .= '<br />'.get_lang('ResultIs').' <b>'.$result_comment.'</b><br />';
             $message .= '<p>'.$comment.'</p>';
-        }
-        echo '<br />';
-        echo $message;
+        }*/
+        //echo '<br />';
     } else {
-        echo $objQuestionTmp->return_header(
+        /*echo $objQuestionTmp->return_header(
             $objExercise,
             $questionNum,
             []
-        );
-        echo '<p>'.$contents.'</p>';
+        );*/
     }
+
+    echo '<div>'.$contents.'</div>';
     echo '<div style="padding-left: 450px"><h5>'.$links.'</h5></div>';
     echo '</div>';
 

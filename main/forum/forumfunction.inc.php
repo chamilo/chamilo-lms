@@ -5636,8 +5636,8 @@ function get_forums_of_group($groupInfo)
 /**
  * This function stores which users have to be notified of which forums or threads.
  *
- * @param string $content does the user want to be notified about a forum or about a thread
- * @param int    $id      the id of the forum or thread
+ * @param string $content    does the user want to be notified about a forum or about a thread
+ * @param int    $id         the id of the forum or thread
  * @param bool   $addOnly
  * @param array  $userInfo
  * @param array  $courseInfo
@@ -5689,6 +5689,7 @@ function set_notification($content, $id, $addOnly = false, $userInfo = [], $cour
         Database::query($sql);
         Session::erase('forum_notification');
         getNotificationsPerUser(0, true);
+
         return get_lang('YouWillBeNotifiedOfNewPosts');
     } else {
         if (!$addOnly) {

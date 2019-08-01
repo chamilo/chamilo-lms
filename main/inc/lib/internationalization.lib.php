@@ -465,11 +465,11 @@ function api_get_utc_datetime(
 /**
  * Returns a DATETIME string converted to the right timezone.
  *
- * @param mixed  $time          The time to be converted
- * @param string $to_timezone   The timezone to be converted to.
- *                              If null, the timezone will be determined based on user preference,
- *                              or timezone chosen by the admin for the platform.
- * @param string $from_timezone The timezone to be converted from. If null, UTC will be assumed.
+ * @param mixed  $time                    The time to be converted
+ * @param string $to_timezone             The timezone to be converted to.
+ *                                        If null, the timezone will be determined based on user preference,
+ *                                        or timezone chosen by the admin for the platform.
+ * @param string $from_timezone           The timezone to be converted from. If null, UTC will be assumed.
  * @param bool   $returnNullIfInvalidDate
  * @param bool   $showTime
  * @param bool   $humanForm

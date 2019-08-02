@@ -2250,7 +2250,7 @@ function get_work_user_list(
                                 get_lang('CompilatioAnalysis'),
                                 'javascript:void(0)',
                                 [
-                                    'class' => 'getSingleCompilatio btn btn-default',
+                                    'class' => 'getSingleCompilatio btn btn-primary btn-xs',
                                     'onclick' => "getSingleCompilatio($item_id);",
                                 ]
                             );

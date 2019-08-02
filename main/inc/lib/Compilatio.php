@@ -580,7 +580,7 @@ class Compilatio
                         .Display::url(
                             get_lang('CompilatioAnalysis'),
                             $urlRapport,
-                            ['class' => 'btn btn-default', 'target' => '_blank']
+                            ['class' => 'btn btn-primary btn-xs', 'target' => '_blank']
                         );
                     break;
                 case 'ANALYSE_PROCESSING':

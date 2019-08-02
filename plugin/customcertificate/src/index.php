@@ -950,6 +950,7 @@ function checkInstanceImage($certificateId, $imagePath, $field, $type = 'certifi
     $table = Database::get_main_table(CustomCertificatePlugin::TABLE_CUSTOMCERTIFICATE);
     $imagePath = Database::escape_string($imagePath);
     $field = Database::escape_string($field);
+    $certificateId = (int) $certificateId;
 
     $sql = "SELECT * FROM $table WHERE $field = '$imagePath'";
     $res = Database::query($sql);

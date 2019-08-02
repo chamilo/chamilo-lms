@@ -2245,14 +2245,16 @@ function get_work_user_list(
                             $sizeFile = round(filesize($workDirectory.'/'.$work['url']) / 1000000);
                             $actionCompilatio = get_lang('CompilatioFileIsTooBig').': '.format_file_size($sizeFile).'<br />';
                         } else {
-                            $actionCompilatio = "<div id='id_avancement".$item_id."' class='compilation_block'>"
-                                ."<a href='javascript:void(0)' class=\"getSingleCompilatio\" onClick='getSingleCompilatio("
-                                .$item_id
-                                .");'>"
-                                .get_lang('CompilatioAnalysis')
-                                ." </a>"
-                                .get_lang('CompilatioWithCompilatio')
-                                ."</div>";
+                            $actionCompilatio = "<div id='id_avancement".$item_id."' class='compilation_block'>";
+                            $actionCompilatio .= Display::url(
+                                get_lang('CompilatioAnalysis'),
+                                'javascript:void(0)',
+                                [
+                                    'class' => 'getSingleCompilatio btn btn-default',
+                                    'onclick' => "getSingleCompilatio($item_id);",
+                                ]
+                            );
+                            $actionCompilatio .= get_lang('CompilatioWithCompilatio');
                         }
                     }
                     $work['compilatio'] = $actionCompilatio;

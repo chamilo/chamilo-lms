@@ -573,6 +573,10 @@ class learnpathItem
     public function get_interactions_count($checkdb = false)
     {
         $return = 0;
+        if (api_is_invitee()) {
+            // If the user is an invitee, we consider there's no interaction
+            return 0;
+        }
         $course_id = api_get_course_int_id();
 
         if ($checkdb) {
@@ -3515,6 +3519,10 @@ class learnpathItem
         if (self::DEBUG > 0) {
             error_log('learnpathItem::write_objectives_to_db()', 0);
         }
+        if (api_is_invitee()) {
+            // If the user is an invitee, we don't write anything to DB
+            return true;
+        }
         $course_id = api_get_course_int_id();
         if (is_array($this->objectives) && count($this->objectives) > 0) {
             // Save objectives.
@@ -3606,6 +3614,10 @@ class learnpathItem
             }
 
             return false;
+        }
+        if (api_is_invitee()) {
+            // If the user is an invitee, we don't write anything to DB
+            return true;
         }
 
         $course_id = api_get_course_int_id();

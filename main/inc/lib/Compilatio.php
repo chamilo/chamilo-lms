@@ -413,51 +413,24 @@ class Compilatio
      */
     public static function getProgressionAnalyseDocv31($status, $pour = 0, $imagesPath = '', $text = [])
     {
-        $refreshReturn = "<a href='javascript:window.location.reload(false);'><img src='"
-            .$imagesPath
-            ."ajax-loader_green.gif' title='"
-            .$text['refresh']
-            ."' alt='"
-            .$text['refresh']
-            ."'/></a> ";
-        $startReturn = "<table cellpadding='0' cellspacing='0' style='border:0;margin:0;padding:0;'><tr>";
-        $startReturn .= "<td width='25' style='border:0;margin:0;padding:0;'>&nbsp;</td>";
-        $startReturn .= "<td valign='middle' align='right' style='border:0;margin:0;padding-right:10px;'>"
-            .$refreshReturn
-            ."</td>";
-        $startReturn .= "<td style='border:0;margin:0;padding:0;'>";
-        $startReturnLittleWidth = "<table cellpadding='0' cellspacing='0' style='border:0;margin:0;padding:0;'><tr>";
-        $startReturnLittleWidth .= "<td width='25' valign='middle' align='right' style='border:0;margin:0;padding:0;'>"
-            .$refreshReturn
-            ."</td>";
-        $finretour = "</td></tr></table>";
+        $loading = Display::returnFontAwesomeIcon('spinner', null, true, 'fa-spin');
+        $loading .= '&nbsp;';
 
-        if ($status == 'ANALYSE_IN_QUEUE') {
-            return $startReturn."<span style='font-size:11px'>".$text['analysisinqueue']."</span>".$finretour;
+        $refreshReturn = Display::url('javascript:window.location.reload(false);', $loading);
+
+        switch ($status) {
+            case 'ANALYSE_IN_QUEUE' :
+                $content = $loading.$text['analysisinqueue'];
+                break;
+            case 'ANALYSE_PROCESSING':
+                $content = $loading.$text['analysisinfinalization'];
+                break;
+            default:
+                $content = Display::bar_progress($pour, true);
+                break;
         }
-        if ($status == 'ANALYSE_PROCESSING') {
-            if ($pour == 100) {
-                return $startReturn
-                    ."<span style='font-size:11px'>"
-                    .$text['analysisinfinalization']
-                    ."</span>"
-                    .$finretour;
-            } else {
-                return $startReturnLittleWidth
-                    ."<td align=\"right\" style=\"border:0;margin:0;padding-right:10px;\">"
-                    .$pour
-                    ."%</td><td style=\"border:0;margin:0;padding:0;\"><div style=\"background"
-                    .":transparent url("
-                    .$imagesPath
-                    ."mini-jauge_fond.png) no-repeat scroll 0;height:12px;padding:0 0 0 2px;width:55px;\"><div style=\""
-                    ."background:transparent url("
-                    .$imagesPath
-                    ."mini-jauge_gris.png) no-repeat scroll 0;height:12px;width:"
-                    .$pour / 2
-                    ."px;\"></div></div>"
-                    .$finretour;
-            }
-        }
+
+        return $content;
     }
 
     /**
@@ -604,7 +577,11 @@ class Compilatio
                             10,
                             35
                         )
-                        ."<a href='".$urlRapport."' target='_blank'>".get_lang('CompilatioAnalysis')."</a>";
+                        .Display::url(
+                            get_lang('CompilatioAnalysis'),
+                            $urlRapport,
+                            ['class' => 'btn btn-default', 'target' => '_blank']
+                        );
                     break;
                 case 'ANALYSE_PROCESSING':
                     $actionCompilatio .= "<div style='font-weight:bold;text-align:left'>"
@@ -637,15 +614,6 @@ class Compilatio
                     $actionCompilatio .= get_lang('CompilatioFileIsTooBig');
                     break;
             }
-
-            /*
-            } elseif ($status != 'NOT_IN_COMPILATIO') {
-                $actionCompilatio .= "<div style='font-style:italic'>"
-                    .get_lang('compilatioMomentarilyUnavailableResult')
-                    ." : [ "
-                    .$status
-                    ."].</div>";
-            }*/
         }
 
         $result = $workId.'|'.$actionCompilatio.'|'.$status.'|';

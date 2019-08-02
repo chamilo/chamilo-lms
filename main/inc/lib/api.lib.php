@@ -9459,18 +9459,20 @@ function api_set_noreply_and_from_address_to_mailer(PHPMailer $mailer, array $se
     $senderName = !empty($sender['name']) ? $sender['name'] : $notification->getDefaultPlatformSenderName();
     $senderEmail = !empty($sender['email']) ? $sender['email'] : $notification->getDefaultPlatformSenderEmail();
 
+    // Send errors to the platform admin
+    $adminEmail = api_get_setting('emailAdministrator');
+    if (PHPMailer::ValidateAddress($adminEmail)) {
+        $mailer->AddCustomHeader('Errors-To: '.$adminEmail);
+    }
+
     // Reply to first
     if (!$avoidReplyToAddress) {
-        $mailer->AddCustomHeader('Errors-To: '.$notification->getDefaultPlatformSenderEmail());
-
         if (
             !empty($replyToAddress) &&
             isset($platformEmail['SMTP_UNIQUE_REPLY_TO']) && $platformEmail['SMTP_UNIQUE_REPLY_TO'] &&
             PHPMailer::ValidateAddress($replyToAddress['mail'])
         ) {
             $mailer->AddReplyTo($replyToAddress['email'], $replyToAddress['name']);
-            // Errors to sender
-            $mailer->AddCustomHeader('Errors-To: '.$replyToAddress['mail']);
             $mailer->Sender = $replyToAddress['mail'];
         }
     }

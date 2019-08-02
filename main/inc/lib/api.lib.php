@@ -8796,10 +8796,11 @@ function api_create_protected_dir($name, $parentDirectory)
  * @param string    email body
  * @param string    sender name
  * @param string    sender e-mail
- * @param array     extra headers in form $headers = array($name => $value) to allow parsing
- * @param array     data file (path and filename)
- * @param bool      True for attaching a embedded file inside content html (optional)
- * @param array     Additional parameters
+ * @param array  $extra_headers  in form $headers = array($name => $value) to allow parsing
+ * @param array  $data_file      (path and filename)
+ * @param bool   $embedded_image True for attaching a embedded file inside content html (optional)
+ * @param array  $additionalParameters
+ * @param string $sendErrorTo    If there's an error while sending the email, $sendErrorTo will receive a notification
  *
  * @return int true if mail was sent
  *
@@ -8815,7 +8816,8 @@ function api_mail_html(
     $extra_headers = [],
     $data_file = [],
     $embedded_image = false,
-    $additionalParameters = []
+    $additionalParameters = [],
+    $sendErrorTo = ''
 ) {
     global $platform_email;
 
@@ -8847,6 +8849,10 @@ function api_mail_html(
         !empty($extra_headers['reply_to']) ? $extra_headers['reply_to'] : []
     );
 
+    if (!empty($sendErrorTo) && PHPMailer::ValidateAddress($sendErrorTo)) {
+        $mail->AddCustomHeader('Errors-To: '.$sendErrorTo);
+    }
+
     unset($extra_headers['reply_to']);
 
     $mail->Subject = $subject;
@@ -8857,7 +8863,6 @@ function api_mail_html(
     $list = api_get_configuration_value('send_all_emails_to');
     if (!empty($list) && isset($list['emails'])) {
         foreach ($list['emails'] as $email) {
-            //$mail->AddBCC($email);
             $mail->AddAddress($email);
         }
     }
@@ -8902,7 +8907,7 @@ function api_mail_html(
 
     $noReply = api_get_setting('noreply_email_address');
     if (!empty($noReply)) {
-        $message .= "<br />".get_lang('ThisIsAutomaticEmailNoReply');
+        $message .= '<br />'.get_lang('ThisIsAutomaticEmailNoReply');
     }
     $mailView->assign('content', $message);
 
@@ -8914,7 +8919,7 @@ function api_mail_html(
     $layout = $mailView->get_template('mail/mail.tpl');
     $mail->Body = $mailView->fetch($layout);
 
-    // Attachment ...
+    // Attachment.
     if (!empty($data_file)) {
         foreach ($data_file as $file_attach) {
             if (!empty($file_attach['path']) && !empty($file_attach['filename'])) {

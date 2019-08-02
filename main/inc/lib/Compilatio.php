@@ -5,9 +5,7 @@
  * Build the comunication with the SOAP server Compilatio.net
  * call severals methods for the file management in Compilatio.net.
  *
- * Date: 26/05/16
- *
- * @version:1.0
+ * @version: 2.0
  */
 class Compilatio
 {
@@ -402,24 +400,22 @@ class Compilatio
     }
 
     /**
-     * Fonction  affichage de la barre de progression d'analyse version 3.1.
+     * Fonction affichage de la barre de progression d'analyse version 3.1.
      *
      * @param string $status From the document
-     * @param $pour
-     * @param string $imagesPath
-     * @param array  $text       Array includes the extract from the text
+     * @param int    $pour
+     * @param array  $text   Array includes the extract from the text
      *
      * @return string
      */
-    public static function getProgressionAnalyseDocv31($status, $pour = 0, $imagesPath = '', $text = [])
+    public static function getProgressionAnalyseDocv31($status, $pour = 0, $text = [])
     {
         $loading = Display::returnFontAwesomeIcon('spinner', null, true, 'fa-spin');
         $loading .= '&nbsp;';
-
-        $refreshReturn = Display::url('javascript:window.location.reload(false);', $loading);
+        //$refreshReturn = Display::url('javascript:window.location.reload(false);', $loading);
 
         switch ($status) {
-            case 'ANALYSE_IN_QUEUE' :
+            case 'ANALYSE_IN_QUEUE':
                 $content = $loading.$text['analysisinqueue'];
                 break;
             case 'ANALYSE_PROCESSING':
@@ -597,7 +593,6 @@ class Compilatio
                     $actionCompilatio .= self::getProgressionAnalyseDocv31(
                         $status,
                         $soapRes->documentStatus->progression,
-                        $compilatioImgFolder,
                         $text
                     );
                     break;

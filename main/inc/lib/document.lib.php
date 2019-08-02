@@ -1835,7 +1835,7 @@ class DocumentManager
     public static function get_default_certificate_id($course_id, $session_id = 0)
     {
         $tbl_category = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
-        $session_id = intval($session_id);
+        $session_id = (int) $session_id;
         if (empty($session_id)) {
             $session_id = api_get_session_id();
         }
@@ -1843,7 +1843,7 @@ class DocumentManager
         if (empty($session_id)) {
             $sql_session = 'AND (session_id = 0 OR isnull(session_id)) ';
         } elseif ($session_id > 0) {
-            $sql_session = 'AND session_id='.intval($session_id);
+            $sql_session = 'AND session_id='.$session_id;
         } else {
             $sql_session = '';
         }

@@ -2131,20 +2131,18 @@ class Category implements GradebookItem
             return false;
         }
 
-        $cattotal = self::load($category_id);
-        $scoretotal = $cattotal[0]->calc_score($user_id);
+        $scoretotal = $category->calc_score($user_id);
 
         // Do not remove this the gradebook/lib/fe/gradebooktable.class.php
         // file load this variable as a global
         $scoredisplay = ScoreDisplay::instance();
-
         $my_score_in_gradebook = $scoredisplay->display_score(
             $scoretotal,
             SCORE_SIMPLE
         );
 
         $my_certificate = GradebookUtils::get_certificate_by_user_id(
-            $category->get_id(),
+            $category_id,
             $user_id
         );
 
@@ -2156,7 +2154,7 @@ class Category implements GradebookItem
                 api_get_utc_datetime()
             );
             $my_certificate = GradebookUtils::get_certificate_by_user_id(
-                $category->get_id(),
+                $category_id,
                 $user_id
             );
         }

@@ -141,7 +141,6 @@ EOT;
                 <div class="col-sm-8">
                     {icon}
                     {element}
-
                     <!-- BEGIN label_2 -->
                         <p class="help-block">{label_2}</p>
                     <!-- END label_2 -->
@@ -199,6 +198,15 @@ EOT;
         }
 
         return $element;
+    }
+
+    /**
+     * Add hidden course params.
+     */
+    public function addCourseHiddenParams()
+    {
+        $this->addHidden('cidReq', api_get_course_id());
+        $this->addHidden('id_session', api_get_session_id());
     }
 
     /**
@@ -271,11 +279,11 @@ EOT;
     }
 
     /**
-     * @param string $name
-     * @param string $label
-     * @param array  $attributes
+     * @param string       $name
+     * @param string|array $label
+     * @param array        $attributes
      *
-     * @return mixed
+     * @return DateTimePicker
      */
     public function addDateTimePicker($name, $label, $attributes = [])
     {
@@ -283,11 +291,11 @@ EOT;
     }
 
     /**
-     * @param string $name
-     * @param string $label
-     * @param array  $attributes
+     * @param string       $name
+     * @param string|array $label
+     * @param array        $attributes
      *
-     * @return HTML_QuickForm_element
+     * @return DateTimeRangePicker
      */
     public function addDateTimeRangePicker($name, $label, $attributes = [])
     {
@@ -305,10 +313,10 @@ EOT;
     }
 
     /**
-     * @param string $name
-     * @param string $label
-     * @param array  $attributes
-     * @param bool   $required
+     * @param string       $name
+     * @param string|array $label
+     * @param array        $attributes
+     * @param bool         $required
      *
      * @return HTML_QuickForm_textarea
      */
@@ -906,7 +914,9 @@ EOT;
      */
     public function addHeader($text)
     {
-        $this->addElement('header', $text);
+        if (!empty($text)) {
+            $this->addElement('header', $text);
+        }
     }
 
     /**
@@ -997,11 +1007,11 @@ EOT;
     /**
      * Adds a HTML-editor to the form.
      *
-     * @param string $name
-     * @param string $label    The label for the form-element
-     * @param bool   $required (optional) Is the form-element required (default=true)
-     * @param bool   $fullPage (optional) When it is true, the editor loads completed html code for a full page
-     * @param array  $config   (optional) Configuration settings for the online editor
+     * @param string       $name
+     * @param string|array $label    The label for the form-element
+     * @param bool         $required (optional) Is the form-element required (default=true)
+     * @param bool         $fullPage (optional) When it is true, the editor loads completed html code for a full page
+     * @param array        $config   (optional) Configuration settings for the online editor
      */
     public function addHtmlEditor(
         $name,
@@ -1024,7 +1034,6 @@ EOT;
 
         /** @var HtmlEditor $element */
         $element = $this->getElement($name);
-
         $config['style'] = isset($config['style']) ? $config['style'] : false;
         if ($fullPage) {
             $config['fullPage'] = true;
@@ -1623,7 +1632,7 @@ EOT;
             $this->addHtml('</div>');
 
             $this->addHtml("<script>            
-            $(document).on('ready', function() {
+            $(function() {
                 var defaultValue = '$defaultId';
                 $('#$typeNoDots').val(defaultValue);
                 $('#$typeNoDots').selectpicker('render');

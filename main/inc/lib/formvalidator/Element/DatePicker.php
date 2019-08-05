@@ -9,11 +9,11 @@
 class DatePicker extends HTML_QuickForm_text
 {
     /**
-     * @param string $elementName
-     * @param string $elementLabel
-     * @param array  $attributes
+     * @param string       $elementName
+     * @param string|array $elementLabel
+     * @param array        $attributes
      */
-    public function __construct($elementName = null, $elementLabel = null, $attributes = null)
+    public function __construct($elementName, $elementLabel = null, $attributes = null)
     {
         if (!isset($attributes['id'])) {
             $attributes['id'] = $elementName;
@@ -80,28 +80,7 @@ class DatePicker extends HTML_QuickForm_text
      */
     public function getTemplate($layout)
     {
-        $size = $this->getColumnsSize();
-
-        if (empty($size)) {
-            $sizeTemp = $this->getInputSize();
-            if (empty($size)) {
-                $sizeTemp = 8;
-            }
-            $size = [2, $sizeTemp, 2];
-        } else {
-            if (is_array($size)) {
-                if (count($size) != 3) {
-                    $sizeTemp = $this->getInputSize();
-                    if (empty($size)) {
-                        $sizeTemp = 8;
-                    }
-                    $size = [2, $sizeTemp, 2];
-                }
-                // else just keep the $size array as received
-            } else {
-                $size = [2, (int) $size, 2];
-            }
-        }
+        $size = $this->calculateSize();
 
         switch ($layout) {
             case FormValidator::LAYOUT_INLINE:

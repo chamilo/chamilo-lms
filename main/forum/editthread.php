@@ -17,6 +17,7 @@ api_protect_course_script(true);
 
 $cidreq = api_get_cidreq();
 $nameTools = get_lang('ToolForum');
+$_user = api_get_user_info();
 
 require_once 'forumfunction.inc.php';
 

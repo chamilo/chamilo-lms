@@ -210,23 +210,8 @@ class HTML_QuickForm_button extends HTML_QuickForm_input
      */
     public function getTemplate($layout)
     {
-        $size = $this->getColumnsSize();
+        $size = $this->calculateSize();
         $attributes = $this->getAttributes();
-
-        if (empty($size)) {
-            $size = array(2, 8, 2);
-        } else {
-            if (is_array($size)) {
-                if (count($size) == 1) {
-                    $size = array(2, intval($size[0]), 2);
-                } elseif (count($size) != 3) {
-                    $size = array(2, 8, 2);
-                }
-                // else just keep the $size array as received
-            } else {
-                $size = array(2, intval($size), 2);
-            }
-        }
 
         switch ($layout) {
             case FormValidator::LAYOUT_INLINE:

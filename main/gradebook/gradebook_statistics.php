@@ -47,7 +47,7 @@ DisplayGradebook::display_header_result(
     'statistics'
 );
 
-//Bad, Regular, Good  - User definitions
+// Bad, Regular, Good  - User definitions
 $displays = $displayScore->get_custom_score_display_settings();
 
 if (!$displayScore->is_custom() || empty($displays)) {
@@ -86,21 +86,28 @@ if (!$displayScore->is_custom() || empty($displays)) {
     }
 
     // Generate table
-    $stattable = '<table class="data_table" cellspacing="0" cellpadding="3">';
-    $stattable .= '<tr><th>'.get_lang('ScoringSystem').'</th>';
-    $stattable .= '<th>'.get_lang('Percentage').'</th>';
-    $stattable .= '<th>'.get_lang('CountUsers').'</th></tr>';
+    $html = '<table class="data_table" cellspacing="0" cellpadding="3">';
+    $html .= '<tr><th>'.get_lang('ScoringSystem').'</th>';
+    $html .= '<th>'.get_lang('Percentage').'</th>';
+    $html .= '<th>'.get_lang('CountUsers').'</th></tr>';
     $counter = 0;
+
+    $model = ExerciseLib::getCourseScoreModel();
     foreach ($keys as $key) {
         $bar = ($highest_ratio > 0 ? ($nr_items[$key] / $highest_ratio) * 100 : 0);
-        $stattable .= '<tr class="row_'.($counter % 2 == 0 ? 'odd' : 'even').'">';
-        $stattable .= '<td width="150">'.$key.'</td>';
-        $stattable .= '<td width="550">'.Display::bar_progress($bar).'</td>';
-        $stattable .= '<td align="right">'.$nr_items[$key].'</td>';
-        $stattable .= '</tr>';
+        $html .= '<tr class="row_'.($counter % 2 == 0 ? 'odd' : 'even').'">';
+        $html .= '<td width="150">'.$key.'</td>';
+        if (empty($model)) {
+            $html .= '<td width="550">'.Display::bar_progress($bar).'</td>';
+        } else {
+            $html .= '<td width="550">'.ExerciseLib::convertScoreToModel($bar).'</td>';
+        }
+
+        $html .= '<td align="right">'.$nr_items[$key].'</td>';
+        $html .= '</tr>';
         $counter++;
     }
-    $stattable .= '</table>';
-    echo $stattable;
+    $html .= '</table>';
+    echo $html;
 }
 Display :: display_footer();

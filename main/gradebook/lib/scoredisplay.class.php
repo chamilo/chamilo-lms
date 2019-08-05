@@ -309,6 +309,11 @@ class ScoreDisplay
 
             return Display::bar_progress($percentage);
         }
+        if ($type == SCORE_NUMERIC) {
+            $percentage = $my_score[0] / $my_score[1] * 100;
+
+            return round($percentage);
+        }
 
         if ($type == SCORE_SIMPLE) {
             $simpleScore = $this->format_score($my_score[0], $ignoreDecimals);

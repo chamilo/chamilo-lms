@@ -470,7 +470,7 @@ class HTML_Table_Storage extends HTML_Common
      * @return   int
      * @access   public
      */
-    function addRow($contents = null, $attributes = null, $type = 'td',
+    function addRow($contents = [], $attributes = null, $type = 'td',
         $inTR = false)
     {
         if (isset($contents) && !is_array($contents)) {

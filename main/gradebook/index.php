@@ -17,12 +17,75 @@ $current_course_tool = TOOL_GRADEBOOK;
 api_block_anonymous_users();
 api_protect_course_script(true);
 
-ob_start();
-
 $course_code = api_get_course_id();
 $stud_id = api_get_user_id();
 $session_id = api_get_session_id();
 $course_id = api_get_course_int_id();
+$courseInfo = api_get_course_info();
+
+$action = isset($_GET['action']) ? $_GET['action'] : null;
+$itemId = isset($_GET['itemId']) ? $_GET['itemId'] : 0;
+
+switch ($action) {
+    case 'generate_eval_stats':
+        if (!empty($itemId)) {
+            Evaluation::generateStats($itemId);
+            Display::addFlash(Display::return_message(get_lang('Updated')));
+        }
+        header('Location: '.api_get_self().'?'.api_get_cidreq());
+        exit;
+        break;
+    case 'generate_link_stats':
+        if (!empty($itemId)) {
+            $link = LinkFactory::create(LINK_EXERCISE);
+            $links = $link::load($itemId);
+
+            $exercise = new Exercise(api_get_course_int_id());
+            /** @var ExerciseLink $link */
+            foreach ($links as $link) {
+                $exerciseId = $link->get_ref_id();
+                $data = $link->get_exercise_data();
+                if (empty($data)) {
+                    continue;
+                }
+
+                $exerciseId = $data['id'];
+                $result = $exercise->read($exerciseId);
+                if ($result) {
+                    $exercise->generateStats($exerciseId, api_get_course_info(), api_get_session_id());
+                }
+            }
+            Display::addFlash(Display::return_message(get_lang('Updated')));
+        }
+        header('Location: '.api_get_self().'?'.api_get_cidreq());
+        exit;
+        break;
+    case 'lock':
+        $category_to_lock = Category::load($_GET['category_id']);
+        $category_to_lock[0]->lockAllItems(1);
+        $confirmation_message = get_lang('GradebookLockedAlert');
+        break;
+    case 'unlock':
+        if (api_is_platform_admin()) {
+            $category_to_lock = Category::load($_GET['category_id']);
+            $category_to_lock[0]->lockAllItems(0);
+            $confirmation_message = get_lang('EvaluationHasBeenUnLocked');
+        }
+        break;
+    case 'export_table':
+        $hidePdfReport = api_get_configuration_value('gradebook_hide_pdf_report_button');
+        if ($hidePdfReport) {
+            api_not_allowed(true);
+        }
+        if (isset($_GET['category_id'])) {
+            $cats = Category::load($_GET['category_id'], null, null, null, null, null, false);
+            GradebookUtils::generateTable($courseInfo, api_get_user_id(), $cats);
+            exit;
+        }
+        break;
+}
+
+ob_start();
 
 // Make sure the destination for scripts is index.php instead of gradebook.php
 Category::setUrl('index.php');
@@ -41,7 +104,7 @@ function confirmation() {
 	}
 }
 
-$(document).ready(function() {
+$(function() {
     $("body").on("click", ".view_children", function() {
         var id = $(this).attr("data-cat-id");
         $(".hidden_"+id).removeClass("hidden");
@@ -115,8 +178,6 @@ $my_actions = implode(';', $list_actions);
 $my_actions_values = implode(';', $list_values);
 $logInfo = [
     'tool' => TOOL_GRADEBOOK,
-    'tool_id' => 0,
-    'tool_id_detail' => 0,
     'action' => $my_actions,
     'action_details' => $my_actions_values,
 ];
@@ -197,19 +258,19 @@ if (isset($_GET['visiblelog'])) {
 //move a category
 if (isset($_GET['movecat'])) {
     GradebookUtils::block_students();
-    $cats = Category::load($_GET['movecat']);
+    $moveCategoryId = isset($_GET['movecat']) ? (int) $_GET['movecat'] : 0;
+    $cats = Category::load($moveCategoryId);
     if (!isset($_GET['targetcat'])) {
         $move_form = new CatForm(
             CatForm::TYPE_MOVE,
             $cats[0],
             'move_cat_form',
             null,
-            api_get_self().'?movecat='.intval($_GET['movecat']).'&selectcat='.$selectCat
+            api_get_self().'?movecat='.$moveCategoryId.'&selectcat='.$selectCat
         );
         if ($move_form->validate()) {
             header('Location: '.api_get_self().'?selectcat='.$selectCat
-                .'&movecat='.intval($_GET['movecat'])
-                .'&targetcat='.$move_form->exportValue('move_cat'));
+                .'&movecat='.$moveCategoryId.'&targetcat='.$move_form->exportValue('move_cat'));
             exit;
         }
     } else {
@@ -262,15 +323,16 @@ if (isset($_GET['moveeval'])) {
 
 //move a link
 if (isset($_GET['movelink'])) {
+    $moveLink = (int) $_GET['movelink'];
     GradebookUtils::block_students();
-    $link = LinkFactory::load($_GET['movelink']);
+    $link = LinkFactory::load($moveLink);
     $move_form = new LinkForm(
         LinkForm::TYPE_MOVE,
         null,
         $link[0],
         'move_link_form',
         null,
-        api_get_self().'?movelink='.$_GET['movelink'].'&selectcat='.$selectCat.'&'.api_get_cidreq()
+        api_get_self().'?movelink='.$moveLink.'&selectcat='.$selectCat.'&'.api_get_cidreq()
     );
 
     if ($move_form->validate()) {
@@ -284,11 +346,9 @@ if (isset($_GET['movelink'])) {
 // Parameters for categories.
 if (isset($_GET['visiblecat'])) {
     GradebookUtils::block_students();
-
+    $visibility_command = 0;
     if (isset($_GET['set_visible'])) {
         $visibility_command = 1;
-    } else {
-        $visibility_command = 0;
     }
     $cats = Category::load($_GET['visiblecat']);
     $cats[0]->set_visible($visibility_command);
@@ -308,7 +368,7 @@ if (isset($_GET['deletecat'])) {
     GradebookUtils::block_students();
     $cats = Category::load($_GET['deletecat']);
     if (isset($cats[0])) {
-        //delete all categories,subcategories and results
+        // Delete all categories,subcategories and results
         if ($cats[0] != null) {
             if ($cats[0]->get_id() != 0) {
                 // better don't try to delete the root...
@@ -323,10 +383,9 @@ if (isset($_GET['deletecat'])) {
 // Parameters for evaluations.
 if (isset($_GET['visibleeval'])) {
     GradebookUtils::block_students();
+    $visibility_command = 0;
     if (isset($_GET['set_visible'])) {
         $visibility_command = 1;
-    } else {
-        $visibility_command = 0;
     }
     $eval = Evaluation::load($_GET['visibleeval']);
     $eval[0]->set_visible($visibility_command);
@@ -344,13 +403,12 @@ if (isset($_GET['visibleeval'])) {
 // Parameters for evaluations.
 if (isset($_GET['lockedeval'])) {
     GradebookUtils::block_students();
-    $locked = Security::remove_XSS($_GET['lockedeval']);
+    $locked = (int) $_GET['lockedeval'];
+    $type_locked = 1;
+    $confirmation_message = get_lang('EvaluationHasBeenLocked');
     if (isset($_GET['typelocked']) && api_is_platform_admin()) {
         $type_locked = 0;
         $confirmation_message = get_lang('EvaluationHasBeenUnLocked');
-    } else {
-        $type_locked = 1;
-        $confirmation_message = get_lang('EvaluationHasBeenLocked');
     }
     $eval = Evaluation::load($locked);
     if ($eval[0] != null) {
@@ -373,10 +431,9 @@ if (isset($_GET['deleteeval'])) {
 // Parameters for links.
 if (isset($_GET['visiblelink'])) {
     GradebookUtils::block_students();
+    $visibility_command = 0;
     if (isset($_GET['set_visible'])) {
         $visibility_command = 1;
-    } else {
-        $visibility_command = 0;
     }
     $link = LinkFactory::load($_GET['visiblelink']);
     if (isset($link) && isset($link[0])) {
@@ -395,7 +452,7 @@ if (isset($_GET['visiblelink'])) {
 
 if (isset($_GET['deletelink'])) {
     GradebookUtils::block_students();
-    $get_delete_link = intval($_GET['deletelink']);
+    $get_delete_link = (int) $_GET['deletelink'];
     //fixing #5229
     if (!empty($get_delete_link)) {
         $link = LinkFactory::load($get_delete_link);
@@ -433,7 +490,7 @@ if (!empty($course_to_crsind) && !isset($_GET['confirm'])) {
         die('Error: movecat or moveeval not defined');
     }
     $button = '<form name="confirm" method="post" action="'.api_get_self().'?confirm='
-        .(isset($_GET['movecat']) ? '&movecat='.intval($_GET['movecat'])
+        .(isset($_GET['movecat']) ? '&movecat='.$moveCategoryId
             : '&moveeval='.intval($_GET['moveeval'])).'&selectcat='.$selectCat.'&targetcat='.intval($_GET['targetcat']).'">
 			   <input type="submit" value="'.get_lang('Ok').'">
 			   </form>';
@@ -441,38 +498,12 @@ if (!empty($course_to_crsind) && !isset($_GET['confirm'])) {
     $filter_warning_msg = false;
 }
 
-$action = isset($_GET['action']) ? $_GET['action'] : null;
-
-switch ($action) {
-    case 'lock':
-        $category_to_lock = Category::load($_GET['category_id']);
-        $category_to_lock[0]->lockAllItems(1);
-        $confirmation_message = get_lang('GradebookLockedAlert');
-        break;
-    case 'unlock':
-        if (api_is_platform_admin()) {
-            $category_to_lock = Category::load($_GET['category_id']);
-            $category_to_lock[0]->lockAllItems(0);
-            $confirmation_message = get_lang('EvaluationHasBeenUnLocked');
-        }
-        break;
-    case 'export_table':
-        $hidePdfReport = api_get_configuration_value('gradebook_hide_pdf_report_button');
-        if ($hidePdfReport) {
-            api_not_allowed(true);
-        }
-
-        //table will be export below
-        ob_start();
-        break;
-}
-
 // Actions on the sortabletable.
 if (isset($_POST['action'])) {
     GradebookUtils::block_students();
     $number_of_selected_items = count($_POST['id']);
 
-    if ($number_of_selected_items == '0') {
+    if ($number_of_selected_items == 0) {
         $warning_message = get_lang('NoItemsSelected');
         $filter_warning_msg = false;
     } else {
@@ -614,7 +645,6 @@ if (isset($move_form)) {
 }
 
 $viewTitle = '';
-
 // DISPLAY HEADERS AND MESSAGES
 if (!isset($_GET['exportpdf'])) {
     if (isset($_GET['studentoverview'])) {
@@ -647,7 +677,7 @@ $simple_search_form = '';
 if (isset($_GET['studentoverview'])) {
     //@todo this code also seems to be deprecated ...
     $cats = Category::load($selectCat);
-    $stud_id = (api_is_allowed_to_edit() ? null : $stud_id);
+    $stud_id = api_is_allowed_to_edit() ? null : $stud_id;
     $allcat = $cats[0]->get_subcategories($stud_id, $course_code, $session_id);
     $alleval = $cats[0]->get_evaluations($stud_id, true);
     $alllink = $cats[0]->get_links($stud_id, true);
@@ -703,7 +733,7 @@ if (isset($_GET['studentoverview'])) {
 } else {
     // Student view
 
-    //in any other case (no search, no pdf), print the available gradebooks
+    // In any other case (no search, no pdf), print the available gradebooks
     // Important note: loading a category will actually load the *contents* of
     // this category. This means that, to show the categories of a course,
     // we have to show the root category and show its subcategories that
@@ -711,51 +741,48 @@ if (isset($_GET['studentoverview'])) {
     // $cats[0]->get_subcategories(), not at the time of doing Category::load()
     // $category comes from GET['selectcat']
 
-    //if $category = 0 (which happens when GET['selectcat'] is undefined)
+    // if $category = 0 (which happens when GET['selectcat'] is undefined)
     // then Category::load() will create a new 'root' category with empty
     // course and session fields in memory (Category::create_root_category())
-    if ($_in_course === true) {
-        $cats = Category:: load(
-            null,
-            null,
-            $course_code,
-            null,
-            null,
-            $session_id,
-            false
-        );
-        if (empty($cats)) {
-            // There is no category for this course+session, so create one
-            $cat = new Category();
-            if (!empty($session_id)) {
-                $sessionName = api_get_session_name($session_id);
-                $cat->set_name($course_code.' - '.get_lang('Session').' '.$sessionName);
-                $cat->set_session_id($session_id);
-            } else {
-                $cat->set_name($course_code);
-            }
-            $cat->set_course_code($course_code);
-            $cat->set_description(null);
-            $cat->set_user_id($stud_id);
-            $cat->set_parent_id(0);
-            $cat->set_weight(100);
-            $cat->set_visible(0);
-            $cat->set_certificate_min_score(75);
-            $can_edit = api_is_allowed_to_edit(true, true);
-            if ($can_edit) {
-                $cat->add();
-            }
-            unset($cat);
-        }
-        unset($cats);
-    }
-    $cats = Category::load($selectCat, null, null, null, null, null, false);
 
-    //with this fix the teacher only can view 1 gradebook
+    $cats = Category:: load(
+        null,
+        null,
+        $course_code,
+        null,
+        null,
+        $session_id,
+        false
+    );
+
+    if (empty($cats)) {
+        // There is no category for this course+session, so create one
+        $cat = new Category();
+        if (!empty($session_id)) {
+            $sessionName = api_get_session_name($session_id);
+            $cat->set_name($course_code.' - '.get_lang('Session').' '.$sessionName);
+            $cat->set_session_id($session_id);
+        } else {
+            $cat->set_name($course_code);
+        }
+        $cat->set_course_code($course_code);
+        $cat->set_description(null);
+        $cat->set_user_id($stud_id);
+        $cat->set_parent_id(0);
+        $cat->set_weight(100);
+        $cat->set_visible(0);
+        $cat->set_certificate_min_score(75);
+        $can_edit = api_is_allowed_to_edit(true, true);
+        if ($can_edit) {
+            $cat->add();
+        }
+        unset($cat);
+    }
+
+    $cats = Category::load($selectCat, null, null, null, null, null, false);
+    // With this fix the teacher only can view 1 gradebook
     if (api_is_platform_admin()) {
-        $stud_id = (api_is_allowed_to_edit() ? null : api_get_user_id());
-    } else {
-        $stud_id = $stud_id;
+        $stud_id = api_is_allowed_to_edit() ? null : api_get_user_id();
     }
 
     $allcat = $cats[0]->get_subcategories($stud_id, $course_code, $session_id);
@@ -765,11 +792,10 @@ if (isset($_GET['studentoverview'])) {
 
 // add params to the future links (in the table shown)
 $addparams = ['selectcat' => $selectCat];
-
 if (isset($_GET['studentoverview'])) {
     $addparams['studentoverview'] = '';
 }
-//$addparams['cidReq']='';
+
 if (isset($_GET['cidReq']) && $_GET['cidReq'] != '') {
     $addparams['cidReq'] = Security::remove_XSS($_GET['cidReq']);
 } else {
@@ -787,7 +813,6 @@ if (!empty($selectCat)) {
     $cat = new Category();
     $course_id = CourseManager::get_course_by_category($selectCat);
     $show_message = $cat->show_message_resource_delete($course_id);
-
     if ($show_message == '') {
         // Student
         if (!api_is_allowed_to_edit() && !api_is_excluded_user_type()) {
@@ -796,7 +821,7 @@ if (!empty($selectCat)) {
                 $stud_id
             );
 
-            if (isset($certificate['pdf_url']) && $hideCertificateExport !== 'true') {
+            if ($hideCertificateExport !== 'true' && isset($certificate['pdf_url'])) {
                 $actionsLeft .= Display::url(
                     Display::returnFontAwesomeIcon('file-pdf-o').get_lang('DownloadCertificatePdf'),
                     $certificate['pdf_url'],
@@ -819,7 +844,7 @@ if (!api_is_allowed_to_edit(null, true)) {
     if ($allowButton) {
         $actionsLeft .= Display::url(
             Display::returnFontAwesomeIcon('file-pdf-o').get_lang('DownloadReportPdf'),
-            api_get_self().'?action=export_table&'.api_get_cidreq(),
+            api_get_self().'?action=export_table&'.api_get_cidreq().'&category_id='.$selectCat,
             ['class' => 'btn btn-default']
         );
     }
@@ -841,22 +866,6 @@ if (isset($first_time) && $first_time == 1 && api_is_allowed_to_edit(null, true)
         );
     }
 
-    if (api_is_allowed_to_edit(null, true)) {
-        if (((empty($selectCat)) || (isset($_GET['cidReq']) && $_GET['cidReq'] !== '')) ||
-            (isset($_GET['isStudentView']) && $_GET['isStudentView'] == 'false')
-        ) {
-            $cats = Category:: load(
-                null,
-                null,
-                $course_code,
-                null,
-                null,
-                $session_id,
-                false
-            );
-        }
-    }
-
     $cats = Category::load(
         null,
         null,
@@ -870,15 +879,16 @@ if (isset($first_time) && $first_time == 1 && api_is_allowed_to_edit(null, true)
     if (!empty($cats)) {
         if ((api_get_setting('gradebook_enable_grade_model') === 'true') &&
             (
-                api_is_platform_admin() || (api_is_allowed_to_edit(null, true) &&
-                api_get_setting('teachers_can_change_grade_model_settings') === 'true')
+                api_is_platform_admin() || (
+                    api_is_allowed_to_edit(null, true) &&
+                    api_get_setting('teachers_can_change_grade_model_settings') === 'true'
+                )
             )
         ) {
             // Getting grade models.
             $obj = new GradeModel();
             $grade_models = $obj->get_all();
             $grade_model_id = $cats[0]->get_grade_model_id();
-
             // No children.
             if ((count($cats) == 1 && empty($grade_model_id)) ||
                 (count($cats) == 1 && $grade_model_id != -1)
@@ -933,6 +943,8 @@ if (isset($first_time) && $first_time == 1 && api_is_allowed_to_edit(null, true)
         $i = 0;
         $allcat = [];
         $model = ExerciseLib::getCourseScoreModel();
+        $allowGraph = api_get_configuration_value('gradebook_hide_graph') === false;
+        $isAllow = api_is_allowed_to_edit(null, true);
 
         /** @var Category $cat */
         foreach ($cats as $cat) {
@@ -957,10 +969,8 @@ if (isset($first_time) && $first_time == 1 && api_is_allowed_to_edit(null, true)
                     $certificate
                 );
 
-                if (api_is_allowed_to_edit(null, true) &&
-                    api_get_setting('gradebook_enable_grade_model') === 'true'
-                ) {
-                    //Showing the grading system
+                if ($isAllow && api_get_setting('gradebook_enable_grade_model') === 'true') {
+                    // Showing the grading system
                     if (!empty($grade_models[$grade_model_id])) {
                         echo Display::return_message(
                             get_lang('GradeModel').': '.$grade_models[$grade_model_id]['name']
@@ -969,13 +979,12 @@ if (isset($first_time) && $first_time == 1 && api_is_allowed_to_edit(null, true)
                 }
 
                 $exportToPdf = false;
-                if ($action == 'export_table') {
+                if ($action === 'export_table') {
                     $exportToPdf = true;
                 }
 
                 $loadStats = [];
-                $teacher = api_is_allowed_to_edit(null, true);
-                if (!$teacher) {
+                if (!$isAllow) {
                     if (api_get_setting('gradebook_detailed_admin_view') === 'true') {
                         $loadStats = [1, 2, 3];
                     } else {
@@ -998,43 +1007,20 @@ if (isset($first_time) && $first_time == 1 && api_is_allowed_to_edit(null, true)
                     $loadStats
                 );
 
-                if (api_is_allowed_to_edit()) {
+                if ($isAllow) {
                     $gradebookTable->td_attributes = [
                         4 => 'class="text-center"',
                     ];
-                } else {
-                    /*if (empty($model)) {
-                        $gradebookTable->td_attributes = [
-                            3 => 'class="text-right"',
-                            4 => 'class="text-center"',
-                        ];
-
-                        if (!empty($loadStats)) {
-                            for ($z = 5; $z < count($loadStats); $z++) {
-                                $gradebookTable->td_attributes[$z] = 'class="text-center"';
-                            }
-                        }
-                    } else {
-                        $gradebookTable->td_attributes = [
-                            3 => 'class="text-right"',
-                            4 => 'class="text-center"',
-                        ];
-                    }
-
-                    if ($action == 'export_table') {
-                        unset($gradebookTable->td_attributes[7]);
-                    }*/
                 }
 
                 $table = $gradebookTable->return_table();
 
-                $allowGraph = api_get_configuration_value('gradebook_hide_graph') === false;
                 $graph = '';
-                if ($allowGraph) {
+                if ($allowGraph && empty($model)) {
                     $graph = $gradebookTable->getGraph();
                 }
 
-                if ($action == 'export_table') {
+                if ($action === 'export_table') {
                     ob_clean();
                     $params = [
                         'pdf_title' => sprintf(get_lang('GradeFromX'), $courseInfo['name']),

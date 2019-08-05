@@ -179,7 +179,6 @@ class Result
                 $sql .= ' WHERE';
             }
             $sql .= ' gr.evaluation_id = '.intval($evaluation_id);
-            $paramcount++;
         }
         $sql .= ' ORDER BY u.lastname, u.firstname';
 
@@ -230,13 +229,13 @@ class Result
     public function addResultLog($userid, $evaluationid)
     {
         if (isset($userid) && isset($evaluationid)) {
-            $tbl_grade_results_log = Database::get_main_table(TABLE_MAIN_GRADEBOOK_RESULT_LOG);
+            $table = Database::get_main_table(TABLE_MAIN_GRADEBOOK_RESULT_LOG);
             $result = new Result();
 
             $arr_result = $result->load(null, $userid, $evaluationid);
             $arr = get_object_vars($arr_result[0]);
 
-            $sql = 'INSERT INTO '.$tbl_grade_results_log
+            $sql = 'INSERT INTO '.$table
                 .' (id_result,user_id, evaluation_id,created_at';
             if (isset($arr['score'])) {
                 $sql .= ',score';
@@ -273,6 +272,8 @@ class Result
         $sql .= ' WHERE id = '.$this->id;
         // no need to update creation date
         Database::query($sql);
+
+        Evaluation::generateStats($this->get_evaluation_id());
     }
 
     /**
@@ -289,6 +290,8 @@ class Result
             $sql = "DELETE FROM $table WHERE result_id = ".$this->id;
             Database::query($sql);
         }
+
+        Evaluation::generateStats($this->get_evaluation_id());
     }
 
     /**

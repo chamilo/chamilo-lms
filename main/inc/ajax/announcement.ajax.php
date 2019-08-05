@@ -42,6 +42,11 @@ switch ($action) {
             if ($isTutor) {
                 $allowToEdit = true;
             }
+
+            // Last chance ... students can send announcements.
+            if ($groupProperties['announcements_state'] == GroupManager::TOOL_PRIVATE_BETWEEN_USERS) {
+                $allowToEdit = true;
+            }
         }
 
         if ($allowToEdit === false) {

@@ -62,9 +62,9 @@ if (api_is_in_gradebook()) {
 $search_forum = isset($_GET['search']) ? Security::remove_XSS($_GET['search']) : '';
 
 /* ACTIONS */
-$actions = isset($_GET['action']) ? $_GET['action'] : '';
+$action = isset($_GET['action']) ? $_GET['action'] : '';
 
-if ($actions === 'add') {
+if ($action === 'add') {
     switch ($_GET['content']) {
         case 'forum':
             $interbreadcrumb[] = [
@@ -102,12 +102,12 @@ $form_count = 0;
 $formContent = '';
 if (api_is_allowed_to_edit(false, true)) {
     //if is called from a learning path lp_id
-    $lp_id = isset($_REQUEST['lp_id']) ? intval($_REQUEST['lp_id']) : null;
+    $lp_id = isset($_REQUEST['lp_id']) ? (int) $_REQUEST['lp_id'] : null;
     $formContent = handle_forum_and_forumcategories($lp_id);
 }
 
 // Notification
-if ($actions == 'notify' && isset($_GET['content']) && isset($_GET['id'])) {
+if ($action == 'notify' && isset($_GET['content']) && isset($_GET['id'])) {
     if (api_get_session_id() != 0 &&
         api_is_allowed_to_session_edit(false, true) == false
     ) {
@@ -120,14 +120,11 @@ if ($actions == 'notify' && isset($_GET['content']) && isset($_GET['id'])) {
 get_whats_new();
 $whatsnew_post_info = Session::read('whatsnew_post_info');
 
-/* TRACKING */
 Event::event_access_tool(TOOL_FORUM);
 
 $logInfo = [
     'tool' => TOOL_FORUM,
-    'tool_id' => 0,
-    'tool_id_detail' => 0,
-    'action' => !empty($actions) ? $actions : 'list-category',
+    'action' => !empty($action) ? $action : 'list-category',
     'action_details' => isset($_GET['content']) ? $_GET['content'] : '',
 ];
 Event::registerLog($logInfo);
@@ -557,7 +554,7 @@ if (is_array($forumCategories)) {
                             }
                         }
 
-                        if (!api_is_anonymous() && api_is_allowed_to_session_edit(false, true) && $hideNotifications == false) {
+                        if ($hideNotifications == false && !api_is_anonymous() && api_is_allowed_to_session_edit(false, true)) {
                             $toolActions .= '<a href="'.api_get_self().'?'.api_get_cidreq()
                                 .'&action=notify&content=forum&id='.$forum['forum_id'].'">'
                                 .Display::return_icon($iconnotify, get_lang('NotifyMe'), null, ICON_SIZE_SMALL)

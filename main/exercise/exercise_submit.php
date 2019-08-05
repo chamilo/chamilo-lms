@@ -82,36 +82,34 @@ if (api_get_setting('enable_record_audio') === 'true') {
 $template = new Template();
 
 // General parameters passed via POST/GET
-$learnpath_id = isset($_REQUEST['learnpath_id']) ? intval($_REQUEST['learnpath_id']) : 0;
-$learnpath_item_id = isset($_REQUEST['learnpath_item_id']) ? intval($_REQUEST['learnpath_item_id']) : 0;
-$learnpath_item_view_id = isset($_REQUEST['learnpath_item_view_id']) ? intval($_REQUEST['learnpath_item_view_id']) : 0;
+$learnpath_id = isset($_REQUEST['learnpath_id']) ? (int) $_REQUEST['learnpath_id'] : 0;
+$learnpath_item_id = isset($_REQUEST['learnpath_item_id']) ? (int) $_REQUEST['learnpath_item_id'] : 0;
+$learnpath_item_view_id = isset($_REQUEST['learnpath_item_view_id']) ? (int) $_REQUEST['learnpath_item_view_id'] : 0;
 
-$reminder = isset($_REQUEST['reminder']) ? intval($_REQUEST['reminder']) : 0;
-$remind_question_id = isset($_REQUEST['remind_question_id']) ? intval($_REQUEST['remind_question_id']) : 0;
-$exerciseId = isset($_REQUEST['exerciseId']) ? intval($_REQUEST['exerciseId']) : 0;
+$reminder = isset($_REQUEST['reminder']) ? (int) $_REQUEST['reminder'] : 0;
+$remind_question_id = isset($_REQUEST['remind_question_id']) ? (int) $_REQUEST['remind_question_id'] : 0;
+$exerciseId = isset($_REQUEST['exerciseId']) ? (int) $_REQUEST['exerciseId'] : 0;
 $formSent = isset($_REQUEST['formSent']) ? $_REQUEST['formSent'] : null;
 $exerciseResult = isset($_REQUEST['exerciseResult']) ? $_REQUEST['exerciseResult'] : null;
 $exerciseResultCoordinates = isset($_REQUEST['exerciseResultCoordinates']) ? $_REQUEST['exerciseResultCoordinates'] : null;
 $choice = isset($_REQUEST['choice']) ? $_REQUEST['choice'] : null;
 $choice = empty($choice) ? isset($_REQUEST['choice2']) ? $_REQUEST['choice2'] : null : null;
 
-//From submit modal
-$current_question = isset($_REQUEST['num']) ? intval($_REQUEST['num']) : null;
-$currentAnswer = isset($_REQUEST['num_answer']) ? intval($_REQUEST['num_answer']) : null;
+// From submit modal
+$current_question = isset($_REQUEST['num']) ? (int) $_REQUEST['num'] : null;
+$currentAnswer = isset($_REQUEST['num_answer']) ? (int) $_REQUEST['num_answer'] : null;
 $endExercise = isset($_REQUEST['end_exercise']) && $_REQUEST['end_exercise'] == 1 ? true : false;
 
 $logInfo = [
     'tool' => TOOL_QUIZ,
     'tool_id' => $exerciseId,
     'tool_id_detail' => 0,
-    'action' => ((int) $_REQUEST['learnpath_id'] > 0) ? 'learnpath_id' : '',
-    'action_details' => ((int) $_REQUEST['learnpath_id'] > 0) ? (int) $_REQUEST['learnpath_id'] : '',
+    'action' => $learnpath_id,
+    'action_details' => $learnpath_id,
 ];
 Event::registerLog($logInfo);
 
-// Error message
 $error = '';
-
 $exercise_attempt_table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
 
 /*  Teacher takes an exam and want to see a preview,
@@ -178,7 +176,8 @@ $exercise_sound = $objExercise->selectSound();
 // If reminder ends we jump to the exercise_reminder
 if ($objExercise->review_answers) {
     if ($remind_question_id == -1) {
-        header('Location: exercise_reminder.php?exerciseId='.$exerciseId.'&'.api_get_cidreq());
+        header('Location: '.api_get_path(WEB_CODE_PATH).
+            'exercise/exercise_reminder.php?exerciseId='.$exerciseId.'&'.api_get_cidreq());
         exit;
     }
 }
@@ -250,7 +249,7 @@ if ($objExercise->selectAttempts() > 0) {
                 if (!empty($exercise_stat_info)) {
                     $isQuestionsLimitReached = ExerciseLib::isQuestionsLimitPerDayReached(
                         $user_id,
-                        $objExercise->selectNbrQuestions(),
+                        count($objExercise->get_validated_question_list()),
                         $courseId,
                         $sessionId
                     );
@@ -576,10 +575,6 @@ if ($time_control) {
     } else {
         $clock_expired_time = $_SESSION['expired_time'][$current_expired_time_key];
     }
-} else {
-    if ($debug) {
-        error_log("7 No time control");
-    }
 }
 
 // Get time left for expiring time
@@ -667,7 +662,7 @@ if ($formSent && isset($_POST)) {
                 // stores the user answer into the array
                 $exerciseResult[$key] = $choice[$key];
                 //saving each question
-                if ($objExercise->feedback_type != EXERCISE_FEEDBACK_TYPE_DIRECT) {
+                if (!in_array($objExercise->getFeedbackType(), [EXERCISE_FEEDBACK_TYPE_DIRECT, EXERCISE_FEEDBACK_TYPE_POPUP])) {
                     $nro_question = $current_question; // - 1;
                     $questionId = $key;
                     // gets the student choice for this question
@@ -756,10 +751,6 @@ if ($formSent && isset($_POST)) {
     if ($debug) {
         error_log('11. $formSent was set - end');
     }
-} else {
-    if ($debug) {
-        error_log('9. $formSent was NOT sent');
-    }
 }
 
 // If questionNum comes from POST and not from GET
@@ -846,7 +837,7 @@ if ($question_count != 0) {
     $error = get_lang('ThereAreNoQuestionsForThisExercise');
     // if we are in the case where user select random by category, but didn't choose the number of random question
     if ($objExercise->getRandomByCategory() > 0 && $objExercise->random <= 0) {
-        $error .= "<br/>".get_lang('PleaseSelectSomeRandomQuestion');
+        $error .= '<br/>'.get_lang('PleaseSelectSomeRandomQuestion');
     }
 }
 
@@ -858,10 +849,10 @@ if (api_is_in_gradebook()) {
 }
 
 $interbreadcrumb[] = [
-    "url" => "exercise.php?".api_get_cidreq(),
-    "name" => get_lang('Exercises'),
+    'url' => 'exercise.php?'.api_get_cidreq(),
+    'name' => get_lang('Exercises'),
 ];
-$interbreadcrumb[] = ["url" => "#", "name" => $objExercise->selectTitle(true)];
+$interbreadcrumb[] = ['url' => '#', 'name' => $objExercise->selectTitle(true)];
 
 if (!in_array($origin, ['learnpath', 'embeddable'])) { //so we are not in learnpath tool
     if (!api_is_allowed_to_session_edit()) {
@@ -977,7 +968,7 @@ if (isset($_custom['exercises_hidden_when_no_start_date']) &&
 
 // Timer control
 if ($time_control) {
-    echo $objExercise->return_time_left_div();
+    echo $objExercise->returnTimeLeftDiv();
     echo '<div style="display:none" class="warning-message" id="expired-message-id">'.
         get_lang('ExerciseExpiredTimeMessage').'</div>';
 }
@@ -1395,7 +1386,7 @@ if (!empty($error)) {
                 $i++;
                 continue;
             } else {
-                if ($objExercise->feedback_type != EXERCISE_FEEDBACK_TYPE_DIRECT) {
+                if (!in_array($objExercise->getFeedbackType(), [EXERCISE_FEEDBACK_TYPE_DIRECT, EXERCISE_FEEDBACK_TYPE_POPUP])) {
                     // if the user has already answered this question
                     if (isset($exerciseResult[$questionId])) {
                         // construction of the Question object
@@ -1414,11 +1405,23 @@ if (!empty($error)) {
         $user_choice = null;
         if (isset($attempt_list[$questionId])) {
             $user_choice = $attempt_list[$questionId];
-        } elseif ($objExercise->saveCorrectAnswers) {
-            $correctAnswers = $objExercise->getCorrectAnswersInAllAttempts(
-                $learnpath_id,
-                $learnpath_item_id
-            );
+        } elseif ($objExercise->getSaveCorrectAnswers()) {
+            $correctAnswers = [];
+            switch ($objExercise->getSaveCorrectAnswers()) {
+                case 1:
+                    $correctAnswers = $objExercise->getCorrectAnswersInAllAttempts(
+                        $learnpath_id,
+                        $learnpath_item_id
+                    );
+                    break;
+                case 2:
+                    $correctAnswers = $objExercise->getAnswersInAllAttempts(
+                        $learnpath_id,
+                        $learnpath_item_id,
+                        false
+                    );
+                    break;
+            }
 
             if (isset($correctAnswers[$questionId])) {
                 $user_choice = $correctAnswers[$questionId];
@@ -1426,8 +1429,7 @@ if (!empty($error)) {
         }
 
         $remind_highlight = '';
-
-        //Hides questions when reviewing a ALL_ON_ONE_PAGE exercise see #4542 no_remind_highlight class hide with jquery
+        // Hides questions when reviewing a ALL_ON_ONE_PAGE exercise see #4542 no_remind_highlight class hide with jquery
         if ($objExercise->type == ALL_ON_ONE_PAGE &&
             isset($_GET['reminder']) && $_GET['reminder'] == 2
         ) {

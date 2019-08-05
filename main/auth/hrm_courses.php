@@ -58,7 +58,7 @@ foreach ($assignedUsers as $assignedUserId => $assignedUserInfo) {
 
     $userInfo = [
         'username' => $assignedUser->getUsername(),
-        'complete_name' => $assignedUser->getCompleteName(),
+        'complete_name' => UserManager::formatUserFullName($assignedUser),
         'picture_url' => UserManager::getUserPicture($assignedUserId),
         'course_list' => $courseController->returnCoursesAndSessions($assignedUserId)['html'],
     ];

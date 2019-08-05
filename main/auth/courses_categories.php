@@ -98,21 +98,8 @@ if ($showCourses) {
     }
     echo '</div>';
     echo '<div class="col-md-'.($showSessions ? '4' : '6').'">';
-
-    $categoriesSelect = '';
-    $cacheAvailable = api_get_configuration_value('apc');
-    $accessUrlId = api_get_current_access_url_id();
-    if ($cacheAvailable === true) {
-        $apcVar = api_get_configuration_value('apc_prefix').'_'.$accessUrlId.'_course_categories_select';
-        if (apcu_exists($apcVar)) {
-            $categoriesSelect = apcu_fetch($apcVar);
-        } else {
-            $categoriesSelect = getOptionSelect($list_categories, $codeType);
-            apcu_store($apcVar, $categoriesSelect, 60);
-        }
-    } else {
-        $categoriesSelect = getOptionSelect($list_categories, $codeType);
-    }
+    $listCategories = CoursesAndSessionsCatalog::getCourseCategoriesTree();
+    $categoriesSelect = getOptionSelect($listCategories, $codeType);
 
     $webAction = api_get_path(WEB_CODE_PATH).'auth/courses.php';
     $form = '<form action="'.$webAction.'" method="GET">';
@@ -393,9 +380,9 @@ function return_teacher($courseInfo)
             $name = $value['firstname'].' '.$value['lastname'];
             $html .= '<div class="popover-teacher">';
             $html .= '<a href="'.$value['url'].'" class="ajax" data-title="'.$name.'" title="'.$name.'">
-                        <img src="'.$value['avatar'].'" alt="'.get_lang('UserPicture').'"/></a>';
+                        <img src="'.$value['avatar'].'" title="'.$name.'" alt="'.get_lang('UserPicture').'"/></a>';
             $html .= '<div class="teachers-details"><h5>
-                        <a href="'.$value['url'].'" class="ajax" data-title="'.$name.'">'
+                        <a href="'.$value['url'].'" class="ajax" data-title="'.$name.'" title="'.$name.'">'
                         .$name.'</a></h5></div>';
             $html .= '</div>';
         }
@@ -405,10 +392,10 @@ function return_teacher($courseInfo)
             $name = $value['firstname'].' '.$value['lastname'];
             if ($length > 2) {
                 $html .= '<a href="'.$value['url'].'" class="ajax" data-title="'.$name.'" title="'.$name.'">
-                        <img src="'.$value['avatar'].'" alt="'.get_lang('UserPicture').'"/></a>';
+                        <img src="'.$value['avatar'].'" title="'.$name.'" alt="'.get_lang('UserPicture').'"/></a>';
             } else {
                 $html .= '<a href="'.$value['url'].'" class="ajax" data-title="'.$name.'" title="'.$name.'">
-                        <img src="'.$value['avatar'].'" alt="'.get_lang('UserPicture').'"/></a>';
+                        <img src="'.$value['avatar'].'" title="'.$name.'" alt="'.get_lang('UserPicture').'"/></a>';
                 $html .= '<div class="teachers-details"><h5>
                         <a href="'.$value['url'].'" class="ajax" data-title="'.$name.'">'
                         .$name.'</a></h5><p>'.get_lang('Teacher').'</p></div>';

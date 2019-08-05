@@ -1118,6 +1118,7 @@ function addEditTemplate()
 
     // Setting the form elements: the title of the template.
     $form->addText('title', get_lang('Title'), false);
+    $form->addText('comment', get_lang('Description'), false);
 
     // Setting the form elements: the content of the template (wysiwyg editor).
     $form->addHtmlEditor(
@@ -1129,7 +1130,9 @@ function addEditTemplate()
     );
 
     // Setting the form elements: the form to upload an image to be used with the template.
-    $form->addElement('file', 'template_image', get_lang('Image'), '');
+    if (empty($template->getImage())) {
+        $form->addElement('file', 'template_image', get_lang('Image'), '');
+    }
 
     // Setting the form elements: a little bit information about the template image.
     $form->addElement('static', 'file_comment', '', get_lang('TemplateImageComment100x70'));
@@ -1139,12 +1142,14 @@ function addEditTemplate()
         $defaults['template_id'] = $id;
         $defaults['template_text'] = $template->getContent();
         // Forcing get_lang().
-        $defaults['title'] = get_lang($template->getTitle());
+        $defaults['title'] = $template->getTitle();
+        $defaults['comment'] = $template->getComment();
 
         // Adding an extra field: a hidden field with the id of the template we are editing.
         $form->addElement('hidden', 'template_id');
 
         // Adding an extra field: a preview of the image that is currently used.
+
         if (!empty($template->getImage())) {
             $form->addElement(
                 'static',
@@ -1155,6 +1160,7 @@ function addEditTemplate()
                     .'" alt="'.get_lang('TemplatePreview')
                     .'"/>'
             );
+            $form->addCheckBox('delete_image', null, get_lang('DeletePicture'));
         } else {
             $form->addElement(
                 'static',
@@ -1171,20 +1177,28 @@ function addEditTemplate()
     $form->addButtonSave(get_lang('Ok'), 'submit');
 
     // Setting the rules: the required fields.
-    $form->addRule(
-        'template_image',
-        get_lang('ThisFieldIsRequired'),
-        'required'
-    );
-    $form->addRule('title', get_lang('ThisFieldIsRequired'), 'required');
+    if (empty($template->getImage())) {
+        $form->addRule(
+            'template_image',
+            get_lang('ThisFieldIsRequired'),
+            'required'
+        );
+        $form->addRule('title', get_lang('ThisFieldIsRequired'), 'required');
+    }
 
     // if the form validates (complies to all rules) we save the information,
     // else we display the form again (with error message if needed)
     if ($form->validate()) {
         $check = Security::check_token('post');
+
         if ($check) {
             // Exporting the values.
             $values = $form->exportValues();
+            $isDelete = null;
+            if (isset($values['delete_image'])) {
+                $isDelete = $values['delete_image'];
+            }
+
             // Upload the file.
             if (!empty($_FILES['template_image']['name'])) {
                 $upload_ok = process_uploaded_file($_FILES['template_image']);
@@ -1214,14 +1228,15 @@ function addEditTemplate()
             }
 
             // Store the information in the database (as insert or as update).
-            $bootstrap = api_get_css(api_get_path(WEB_PUBLIC_PATH).'assets/bootstrap/dist/css/bootstrap.min.css');
+            //$bootstrap = api_get_css(api_get_path(WEB_PUBLIC_PATH).'assets/bootstrap/dist/css/bootstrap.min.css');
             $viewport = '<meta name="viewport" content="width=device-width, initial-scale=1.0">';
 
             if ($_GET['action'] == 'add') {
-                $templateContent = '<head>'.$viewport.'<title>'.$values['title'].'</title>'.$bootstrap.'</head>'
+                $templateContent = '<head>'.$viewport.'<title>'.$values['title'].'</title></head>'
                     .$values['template_text'];
                 $template
                     ->setTitle($values['title'])
+                    ->setComment(Security::remove_XSS($values['comment']))
                     ->setContent(Security::remove_XSS($templateContent, COURSEMANAGERLOWSECURITY))
                     ->setImage($new_file_name);
                 $em->persist($template);
@@ -1236,12 +1251,19 @@ function addEditTemplate()
                     Display::return_icon('new_template.png', get_lang('AddTemplate'), '', ICON_SIZE_MEDIUM).
                     '</a>';
             } else {
-                $templateContent = '<head>'.$viewport.'<title>'.$values['title'].'</title>'.$bootstrap.'</head>'
-                    .$values['template_text'];
-
+                $templateContent = $values['template_text'];
                 $template
                     ->setTitle($values['title'])
+                    ->setComment(Security::remove_XSS($values['comment']))
                     ->setContent(Security::remove_XSS($templateContent, COURSEMANAGERLOWSECURITY));
+
+                if ($isDelete) {
+                    $filePath = api_get_path(SYS_APP_PATH).'home/default_platform_document/template_thumb/'.$template->getImage();
+                    if (file_exists($filePath)) {
+                        unlink($filePath);
+                    }
+                    $template->setImage(null);
+                }
 
                 if (!empty($new_file_name)) {
                     $template->setImage($new_file_name);
@@ -1902,7 +1924,7 @@ function generateCSSDownloadLink($style)
     if (is_dir($dir) && $check) {
         $zip = new PclZip($arch);
         // Remove path prefix except the style name and put file on disk
-        $zip->create($dir, PCLZIP_OPT_REMOVE_PATH, substr($dir, 0, -strlen($style)));
+        $zip->create($dir, PCLZIP_OPT_REMOVE_PATH, dirname($dir));
         $url = api_get_path(WEB_CODE_PATH).'course_info/download.php?archive_path=&archive='.str_replace(api_get_path(SYS_ARCHIVE_PATH), '', $arch);
 
         //@TODO: use more generic script to download.

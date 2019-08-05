@@ -78,6 +78,13 @@ if (api_get_configuration_value('quiz_prevent_copy_paste')) {
     $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_JS_PATH).'jquery.nocopypaste.js"></script>';
 }
 
+if (!empty($objExercise->getResultAccess())) {
+    $htmlHeadXtra[] = api_get_css(api_get_path(WEB_LIBRARY_PATH).'javascript/epiclock/renderers/minute/epiclock.minute.css');
+    $htmlHeadXtra[] = api_get_js('epiclock/javascript/jquery.dateformat.min.js');
+    $htmlHeadXtra[] = api_get_js('epiclock/javascript/jquery.epiclock.min.js');
+    $htmlHeadXtra[] = api_get_js('epiclock/renderers/minute/epiclock.minute.js');
+}
+
 if (!in_array($origin, ['learnpath', 'embeddable'])) {
     // So we are not in learnpath tool
     Display::display_header($nameTools, get_lang('Exercise'));
@@ -100,7 +107,7 @@ if (api_is_course_admin() && !in_array($origin, ['learnpath', 'embeddable'])) {
     echo '</div>';
 }
 
-$feedback_type = $objExercise->feedback_type;
+$feedback_type = $objExercise->getFeedbackType();
 $exercise_stat_info = $objExercise->get_stat_track_exercise_info_by_exe_id($exe_id);
 
 if (!empty($exercise_stat_info['data_tracking'])) {
@@ -124,17 +131,21 @@ if ($origin == 'learnpath') {
 $i = $total_score = $max_score = 0;
 
 $remainingMessage = '';
-$attemptButton = Display::toolbarButton(
-    get_lang('AnotherAttempt'),
-    api_get_path(WEB_CODE_PATH).'exercise/overview.php?'.api_get_cidreq().'&'.http_build_query([
-        'exerciseId' => $objExercise->id,
-        'learnpath_id' => $learnpath_id,
-        'learnpath_item_id' => $learnpath_item_id,
-        'learnpath_item_view_id' => $learnpath_item_view_id,
-    ]),
-    'pencil-square-o',
-    'info'
-);
+$attemptButton = '';
+
+if ($origin !== 'embeddable') {
+    $attemptButton = Display::toolbarButton(
+        get_lang('AnotherAttempt'),
+        api_get_path(WEB_CODE_PATH).'exercise/overview.php?'.api_get_cidreq().'&'.http_build_query([
+            'exerciseId' => $objExercise->id,
+            'learnpath_id' => $learnpath_id,
+            'learnpath_item_id' => $learnpath_item_id,
+            'learnpath_item_view_id' => $learnpath_item_view_id,
+        ]),
+        'pencil-square-o',
+        'info'
+    );
+}
 
 // We check if the user attempts before sending to the exercise_result.php
 if ($objExercise->selectAttempts() > 0) {
@@ -166,7 +177,7 @@ if ($objExercise->selectAttempts() > 0) {
         }
     }
 } else {
-    $remainingMessage = "<p>$attemptButton</p>";
+    $remainingMessage = $attemptButton ? "<p>$attemptButton</p>" : '';
 }
 
 $total_score = 0;
@@ -176,7 +187,13 @@ if (!empty($exercise_stat_info)) {
 
 $max_score = $objExercise->get_max_score();
 
-echo Display::return_message(get_lang('Saved').'<br />', 'normal', false);
+if ($origin !== 'embeddable') {
+    echo Display::return_message(get_lang('Saved').'<br />', 'normal', false);
+}
+
+if ($origin == 'embeddable') {
+    showEmbeddableFinishButton();
+}
 
 // Display and save questions
 ExerciseLib::displayQuestionListByAttempt(
@@ -195,7 +212,7 @@ ExerciseLib::exercise_time_control_delete(
 
 ExerciseLib::delete_chat_exercise_session($exe_id);
 
-if ($origin != 'learnpath') {
+if (!in_array($origin, ['learnpath', 'embeddable'])) {
     echo '<div class="question-return">';
     echo Display::url(
         get_lang('ReturnToCourseHomepage'),
@@ -212,10 +229,22 @@ if ($origin != 'learnpath') {
         Session::erase('duration_time');
     }
     Display::display_footer();
+} elseif ($origin === 'embeddable') {
+    if (api_is_allowed_to_session_edit()) {
+        Session::erase('objExercise');
+        Session::erase('exe_id');
+        Session::erase('calculatedAnswerId');
+        Session::erase('duration_time_previous');
+        Session::erase('duration_time');
+    }
+
+    Session::write('attempt_remaining', $remainingMessage);
+    showEmbeddableFinishButton();
+    Display::display_reduced_footer();
 } else {
     $lp_mode = Session::read('lp_mode');
-    $url = '../lp/lp_controller.php?'.api_get_cidreq().'&action=view&lp_id='.$learnpath_id.'&lp_item_id='.$learnpath_item_id.'&exeId='.$exercise_stat_info['exe_id'].'&fb_type='.$objExercise->feedback_type.'#atoc_'.$learnpath_item_id;
-    $href = $lp_mode == 'fullscreen' ? ' window.opener.location.href="'.$url.'" ' : ' top.location.href="'.$url.'"';
+    $url = '../lp/lp_controller.php?'.api_get_cidreq().'&action=view&lp_id='.$learnpath_id.'&lp_item_id='.$learnpath_item_id.'&exeId='.$exercise_stat_info['exe_id'].'&fb_type='.$objExercise->getFeedbackType().'#atoc_'.$learnpath_item_id;
+    $href = $lp_mode === 'fullscreen' ? ' window.opener.location.href="'.$url.'" ' : ' top.location.href="'.$url.'"';
 
     if (api_is_allowed_to_session_edit()) {
         Session::erase('objExercise');
@@ -231,4 +260,27 @@ if ($origin != 'learnpath') {
     echo '<script type="text/javascript">'.$href.'</script>';
 
     Display::display_reduced_footer();
+}
+
+function showEmbeddableFinishButton()
+{
+    echo '<script>
+        $(function () {
+            $(\'.btn-close-quiz\').on(\'click\', function () {    
+                window.parent.$(\'video:not(.skip), audio:not(.skip)\').get(0).play();
+            });
+        });
+    </script>';
+
+    echo Display::tag(
+        'p',
+        Display::toolbarButton(
+            get_lang('EndTest'),
+            '#',
+            'times',
+            'warning',
+            ['role' => 'button', 'class' => 'btn-close-quiz']
+        ),
+        ['class' => 'text-right']
+    );
 }

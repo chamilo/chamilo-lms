@@ -5,6 +5,7 @@ use ChamiloSession as Session;
 
 /**
  * Class TestCategory.
+ * Manage question categories inside an exercise.
  *
  * @author hubert.borderiou
  * @author Julio Montoya - several fixes

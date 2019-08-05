@@ -484,7 +484,7 @@ class FillBlanks extends Question
     /**
      * {@inheritdoc}
      */
-    public function return_header($exercise, $counter = null, $score = null)
+    public function return_header(Exercise $exercise, $counter = null, $score = [])
     {
         $header = parent::return_header($exercise, $counter, $score);
         $header .= '<table class="'.$this->question_table_class.'">
@@ -1231,14 +1231,9 @@ class FillBlanks extends Question
 
         // rebuild the sentence with student answer inserted
         for ($i = 0; $i < count($listStudentAnswerInfo['common_words']); $i++) {
-            if ($resultsDisabled == RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER) {
-                if (isset($listStudentAnswerInfo['student_score'][$i]) &&
-                    $listStudentAnswerInfo['student_score'][$i] != 1) {
-                    continue;
-                }
-            }
             $result .= isset($listStudentAnswerInfo['common_words'][$i]) ? $listStudentAnswerInfo['common_words'][$i] : '';
-            $result .= isset($listStudentAnswerInfo['student_answer'][$i]) ? $listStudentAnswerInfo['student_answer'][$i] : '';
+            $studentLabel = isset($listStudentAnswerInfo['student_answer'][$i]) ? $listStudentAnswerInfo['student_answer'][$i] : '';
+            $result .= $studentLabel;
         }
 
         // the last common word (should be </p>)
@@ -1268,7 +1263,12 @@ class FillBlanks extends Question
         $showTotalScoreAndUserChoices = false
     ) {
         $hideExpectedAnswer = false;
+        $hideUserSelection = false;
         switch ($resultsDisabled) {
+            case RESULT_DISABLE_SHOW_SCORE_AND_EXPECTED_ANSWERS_AND_RANKING:
+            case RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER:
+                $hideUserSelection = true;
+                break;
             case RESULT_DISABLE_SHOW_SCORE_ONLY:
                 if ($feedbackType == 0) {
                     $hideExpectedAnswer = true;
@@ -1325,7 +1325,9 @@ class FillBlanks extends Question
         }
 
         $result = "<span class='feedback-question'>";
-        $result .= $iconAnswer."<span class='$style'>".$answer."</span>";
+        if ($hideUserSelection === false) {
+            $result .= $iconAnswer."<span class='$style'>".$answer."</span>";
+        }
         $result .= "<span class='feedback-separator'>|</span>";
         $result .= $correctAnswerHtml;
         $result .= '</span>';

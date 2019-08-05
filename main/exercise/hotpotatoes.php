@@ -9,6 +9,9 @@
  * @author Istvan Mandak (original author)
  */
 require_once __DIR__.'/../inc/global.inc.php';
+
+api_protect_course_script(true);
+
 require_once 'hotpotatoes.lib.php';
 
 // Section (for the tabs).

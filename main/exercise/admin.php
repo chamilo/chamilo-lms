@@ -62,7 +62,7 @@ if (!$is_allowedToEdit) {
     api_not_allowed(true);
 }
 
-$exerciseId = isset($_GET['exerciseId']) ? (int) $_GET['exerciseId'] : '0';
+$exerciseId = isset($_GET['exerciseId']) ? (int) $_GET['exerciseId'] : 0;
 
 /*  stripslashes POST data  */
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -223,7 +223,7 @@ if ($cancelQuestion) {
     // if we are creating a new question from the question pool
     if (!$exerciseId && !$questionId) {
         // goes back to the question pool
-        header('Location: question_pool.php');
+        header('Location: question_pool.php?'.api_get_cidreq());
         exit();
     } else {
         // goes back to the question viewing
@@ -253,6 +253,8 @@ if (!empty($clone_question) && !empty($objExercise->id)) {
     // Reloading tne $objExercise obj
     $objExercise->read($objExercise->id, false);
 
+    Display::addFlash(Display::return_message(get_lang('ItemCopied')));
+
     header('Location: admin.php?'.api_get_cidreq().'&exerciseId='.$objExercise->id.'&page='.$page);
     exit;
 }
@@ -263,7 +265,8 @@ if ($cancelAnswers) {
     $editQuestion = $modifyAnswers;
     unset($modifyAnswers);
 }
-$nameTools = null;
+
+$nameTools = '';
 // modifies the query string that is used in the link of tool name
 if ($editQuestion || $modifyQuestion || $newQuestion || $modifyAnswers) {
     $nameTools = get_lang('QuestionManagement');
@@ -298,7 +301,7 @@ if (!$exerciseId && $nameTools != get_lang('ExerciseManagement')) {
 }
 
 // if the question is duplicated, disable the link of tool name
-if ($modifyIn == 'thisExercise') {
+if ($modifyIn === 'thisExercise') {
     if ($buttonBack) {
         $modifyIn = 'allExercises';
     }
@@ -327,12 +330,12 @@ $inATest = isset($exerciseId) && $exerciseId > 0;
 
 if ($inATest) {
     echo '<div class="actions">';
-    if (isset($_GET['hotspotadmin']) || isset($_GET['newQuestion']) || isset($_GET['myid'])) {
+    if (isset($_GET['hotspotadmin']) || isset($_GET['newQuestion'])) {
         echo '<a href="'.api_get_path(WEB_CODE_PATH).'exercise/admin.php?exerciseId='.$exerciseId.'&'.api_get_cidreq().'">'.
             Display::return_icon('back.png', get_lang('GoBackToQuestionList'), '', ICON_SIZE_MEDIUM).'</a>';
     }
 
-    if (!isset($_GET['hotspotadmin']) && !isset($_GET['newQuestion']) && !isset($_GET['myid']) && !isset($_GET['editQuestion'])) {
+    if (!isset($_GET['hotspotadmin']) && !isset($_GET['newQuestion']) && !isset($_GET['editQuestion'])) {
         echo '<a href="'.api_get_path(WEB_CODE_PATH).'exercise/exercise.php?'.api_get_cidreq().'">'.
             Display::return_icon('back.png', get_lang('BackToExercisesList'), '', ICON_SIZE_MEDIUM).'</a>';
     }
@@ -364,7 +367,7 @@ if ($inATest) {
     if ($objExercise->added_in_lp()) {
         echo Display::return_message(get_lang('AddedToLPCannotBeAccessed'), 'warning');
     }
-    if ($editQuestion && $objQuestion->existsInAnotherExercises()) {
+    if ($editQuestion && $objQuestion->existsInAnotherExercise()) {
         echo Display::return_message(
             Display::returnFontAwesomeIcon('exclamation-triangle"')
                 .get_lang('ThisQuestionExistsInAnotherExercisesWarning'),
@@ -450,7 +453,7 @@ if (!$newQuestion && !$modifyQuestion && !$editQuestion && !isset($_GET['hotspot
 
 // if we are in question authoring, display warning to user is feedback not shown at the end of the test -ref #6619
 // this test to display only message in the question authoring page and not in the question list page too
-if ($objExercise->selectFeedbackType() == EXERCISE_FEEDBACK_TYPE_EXAM) {
+if ($objExercise->getFeedbackType() == EXERCISE_FEEDBACK_TYPE_EXAM) {
     echo Display::return_message(get_lang('TestFeedbackNotShown'), 'normal');
 }
 

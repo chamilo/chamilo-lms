@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
+
 /**
  * It is recommended that ALL Chamilo scripts include this important file.
  * This script manages
@@ -14,8 +16,6 @@
  * @todo remove the code that displays the button that links to the install page
  * but use a redirect immediately. By doing so the $alreadyInstalled variable can be removed.
  */
-
-// Showing/hiding error codes in global error messages.
 define('SHOW_ERROR_CODES', false);
 
 // Include the libraries that are necessary everywhere
@@ -528,33 +528,10 @@ $language_interface_initial_value = $language_interface;
 /**
  * Include the trad4all language file.
  */
-// if the sub-language feature is on
-$parent_path = SubLanguageManager::get_parent_language_path($language_interface);
-if (!empty($parent_path)) {
-    // include English
-    include $langpath.'english/trad4all.inc.php';
-    // prepare string for current language and its parent
-    $lang_file = $langpath.$language_interface.'/trad4all.inc.php';
-    $parent_lang_file = $langpath.$parent_path.'/trad4all.inc.php';
-    // load the parent language file first
-    if (file_exists($parent_lang_file)) {
-        include $parent_lang_file;
-    }
-    // overwrite the parent language translations if there is a child
-    if (file_exists($lang_file)) {
-        include $lang_file;
-    }
-} else {
-    // if the sub-languages feature is not on, then just load the
-    // set language interface
-    // include English
-    include $langpath.'english/trad4all.inc.php';
-    // prepare string for current language
-    $langfile = $langpath.$language_interface.'/trad4all.inc.php';
+$languageFilesToLoad = api_get_language_files_to_load($language_interface);
 
-    if (file_exists($langfile)) {
-        include $langfile;
-    }
+foreach ($languageFilesToLoad as $languageFile) {
+    include $languageFile;
 }
 
 // include the local (contextual) parameters of this course or section
@@ -659,6 +636,7 @@ if (!empty($language_interface)) {
 // if portal is in test mode always generate the file
 if (!file_exists($file) || api_get_setting('server_type') === 'test') {
     $template = new Template();
+    $template->assign('quiz_markers_rolls_js', ChamiloApi::getQuizMarkersRollsJS());
     // Force use of default to avoid problems
     $tpl = 'default/layout/main.js.tpl';
     $contents = $template->fetch($tpl);

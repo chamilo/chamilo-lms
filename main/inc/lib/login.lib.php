@@ -230,7 +230,7 @@ class Login
         );
 
         api_mail_html(
-            $user->getCompleteName(),
+            UserManager::formatUserFullName($user),
             $user->getEmail(),
             $mailSubject,
             $mailBody

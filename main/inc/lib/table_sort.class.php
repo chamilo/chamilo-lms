@@ -36,10 +36,8 @@ class TableSort
         if (!is_array($data) || empty($data)) {
             return [];
         }
-        if ($column != strval(intval($column))) {
-            // Probably an attack
-            return $data;
-        }
+        $column = (int) $column;
+
         if (!in_array($direction, [SORT_ASC, SORT_DESC])) {
             // Probably an attack
             return $data;
@@ -78,7 +76,7 @@ class TableSort
             case SORT_NUMERIC:
                 $function = function ($a, $b) use ($column, $compareOperator) {
                     $result = strip_tags($a[$column]) <= strip_tags($b[$column]);
-                    if ($compareOperator == '>') {
+                    if ($compareOperator === '>') {
                         $result = strip_tags($a[$column]) > strip_tags($b[$column]);
                     }
 
@@ -91,7 +89,7 @@ class TableSort
                         api_strtolower(strip_tags($a[$column], "<img>")),
                         api_strtolower(strip_tags($b[$column], "<img>"))
                     ) <= 0;
-                    if ($compareOperator == '>') {
+                    if ($compareOperator === '>') {
                         $result = api_strnatcmp(
                             api_strtolower(strip_tags($a[$column], "<img>")),
                             api_strtolower(strip_tags($b[$column], "<img>"))
@@ -105,7 +103,7 @@ class TableSort
             case SORT_DATE:
                 $function = function ($a, $b) use ($column, $compareOperator) {
                     $result = strtotime(strip_tags($a[$column])) <= strtotime(strip_tags($b[$column]));
-                    if ($compareOperator == '>') {
+                    if ($compareOperator === '>') {
                         $result = strtotime(strip_tags($a[$column])) > strtotime(strip_tags($b[$column]));
                     }
 
@@ -119,7 +117,7 @@ class TableSort
                         api_strtolower(strip_tags($a[$column])),
                         api_strtolower(strip_tags($b[$column]))
                     ) <= 0;
-                    if ($compareOperator == '>') {
+                    if ($compareOperator === '>') {
                         $result = api_strnatcmp(
                             api_strtolower(strip_tags($a[$column])),
                             api_strtolower(strip_tags($b[$column]))
@@ -164,10 +162,7 @@ class TableSort
             return [];
         }
 
-        if ($column != strval(intval($column))) {
-            // Probably an attack
-            return $data;
-        }
+        $column = (int) $column;
 
         if (!in_array($direction, [SORT_ASC, SORT_DESC])) {
             // Probably an attack
@@ -198,7 +193,7 @@ class TableSort
             $new_data = [];
             if (!empty($data)) {
                 foreach ($data as $document) {
-                    if ($document['type'] == 'folder') {
+                    if ($document['type'] === 'folder') {
                         $docs_to_sort[$document['id']] = api_strtolower($document['name']);
                     } else {
                         $folder_to_sort[$document['id']] = api_strtolower($document['name']);

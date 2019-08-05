@@ -1,6 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
 use Chamilo\CoreBundle\Entity\ExtraField;
 use ChamiloSession as Session;
 
@@ -205,24 +206,27 @@ class Display
     /**
      * Displays a table.
      *
-     * @param array $header          Titles for the table header
-     *                               each item in this array can contain 3 values
-     *                               - 1st element: the column title
-     *                               - 2nd element: true or false (column sortable?)
-     *                               - 3th element: additional attributes for
-     *                               th-tag (eg for column-width)
-     *                               - 4the element: additional attributes for the td-tags
-     * @param array $content         2D-array with the tables content
-     * @param array $sorting_options Keys are:
-     *                               'column' = The column to use as sort-key
-     *                               'direction' = SORT_ASC or SORT_DESC
-     * @param array $paging_options  Keys are:
-     *                               'per_page_default' = items per page when switching from
-     *                               full-    list to per-page-view
-     *                               'per_page' = number of items to show per page
-     *                               'page_nr' = The page to display
-     * @param array $query_vars      Additional variables to add in the query-string
-     * @param string The style that the table will show. You can set 'table' or 'grid'
+     * @param array  $header          Titles for the table header
+     *                                each item in this array can contain 3 values
+     *                                - 1st element: the column title
+     *                                - 2nd element: true or false (column sortable?)
+     *                                - 3th element: additional attributes for
+     *                                th-tag (eg for column-width)
+     *                                - 4the element: additional attributes for the td-tags
+     * @param array  $content         2D-array with the tables content
+     * @param array  $sorting_options Keys are:
+     *                                'column' = The column to use as sort-key
+     *                                'direction' = SORT_ASC or SORT_DESC
+     * @param array  $paging_options  Keys are:
+     *                                'per_page_default' = items per page when switching from
+     *                                full-    list to per-page-view
+     *                                'per_page' = number of items to show per page
+     *                                'page_nr' = The page to display
+     * @param array  $query_vars      Additional variables to add in the query-string
+     * @param array  $form_actions
+     * @param string $style           The style that the table will show. You can set 'table' or 'grid'
+     * @param string $tableName
+     * @param string $tableId
      *
      * @author bart.mollet@hogent.be
      */
@@ -233,11 +237,13 @@ class Display
         $paging_options = [],
         $query_vars = null,
         $form_actions = [],
-        $style = 'table'
+        $style = 'table',
+        $tableName = 'tablename',
+        $tableId = ''
     ) {
         $column = isset($sorting_options['column']) ? $sorting_options['column'] : 0;
         $default_items_per_page = isset($paging_options['per_page']) ? $paging_options['per_page'] : 20;
-        $table = new SortableTableFromArray($content, $column, $default_items_per_page);
+        $table = new SortableTableFromArray($content, $column, $default_items_per_page, $tableName, null, $tableId);
         if (is_array($query_vars)) {
             $table->set_additional_parameters($query_vars);
         }
@@ -610,37 +616,68 @@ class Display
      * @param string  e-mail
      * @param string  clickable text
      * @param string  optional, class from stylesheet
+     * @param bool $addExtraContent
      *
      * @return string encrypted mailto hyperlink
      */
     public static function encrypted_mailto_link(
         $email,
         $clickable_text = null,
-        $style_class = ''
+        $style_class = '',
+        $addExtraContent = false
     ) {
         if (is_null($clickable_text)) {
             $clickable_text = $email;
         }
+
         // "mailto:" already present?
         if (substr($email, 0, 7) != 'mailto:') {
             $email = 'mailto:'.$email;
         }
+
         // Class (stylesheet) defined?
         if ($style_class != '') {
             $style_class = ' class="'.$style_class.'"';
         }
+
         // Encrypt email
         $hmail = '';
         for ($i = 0; $i < strlen($email); $i++) {
-            $hmail .= '&#'.ord($email[
-            $i]).';';
+            $hmail .= '&#'.ord($email[$i]).';';
         }
-        $hclickable_text = null;
+
+        $value = api_get_configuration_value('add_user_course_information_in_mailto');
+
+        if ($value) {
+            $hmail .= '?';
+            if (!api_is_anonymous()) {
+                $hmail .= '&subject='.Security::remove_XSS(api_get_setting('siteName'));
+            }
+            if ($addExtraContent) {
+                $content = '';
+                if (!api_is_anonymous()) {
+                    $userInfo = api_get_user_info();
+                    $content .= get_lang('User').': '.$userInfo['complete_name']."\n";
+
+                    $courseInfo = api_get_course_info();
+                    if (!empty($courseInfo)) {
+                        $content .= get_lang('Course').': ';
+                        $content .= $courseInfo['name'];
+                        $sessionInfo = api_get_session_info(api_get_session_id());
+                        if (!empty($sessionInfo)) {
+                            $content .= ' '.$sessionInfo['name'].' <br />';
+                        }
+                    }
+                }
+                $hmail .= '&body='.rawurlencode($content);
+            }
+        }
+
+        $hclickable_text = '';
         // Encrypt clickable text if @ is present
         if (strpos($clickable_text, '@')) {
             for ($i = 0; $i < strlen($clickable_text); $i++) {
-                $hclickable_text .= '&#'.ord($clickable_text[
-                $i]).';';
+                $hclickable_text .= '&#'.ord($clickable_text[$i]).';';
             }
         } else {
             $hclickable_text = @htmlspecialchars(
@@ -1130,6 +1167,7 @@ class Display
      * @param string $id            id of the container of the tab in the example "tabs"
      * @param array  $attributes    for the ul
      * @param array  $ul_attributes
+     * @param int    $selected
      *
      * @return string
      */
@@ -1138,7 +1176,8 @@ class Display
         $items,
         $id = 'tabs',
         $attributes = [],
-        $ul_attributes = []
+        $ul_attributes = [],
+        $selected = ''
     ) {
         if (empty($headers) || count($headers) == 0) {
             return '';
@@ -1151,6 +1190,14 @@ class Display
             if ($i == 1) {
                 $active = ' active';
             }
+
+            if (!empty($selected)) {
+                $active = '';
+                if ($selected == $i) {
+                    $active = ' active';
+                }
+            }
+
             $item = self::tag(
                 'a',
                 $item,
@@ -1166,6 +1213,7 @@ class Display
             $lis .= self::tag('li', $item, $ul_attributes);
             $i++;
         }
+
         $ul = self::tag(
             'ul',
             $lis,
@@ -1183,6 +1231,14 @@ class Display
             if ($i == 1) {
                 $active = ' active';
             }
+
+            if (!empty($selected)) {
+                $active = '';
+                if ($selected == $i) {
+                    $active = ' active';
+                }
+            }
+
             $divs .= self::tag(
                 'div',
                 $content,
@@ -1269,10 +1325,10 @@ class Display
      */
     public static function form_row($label, $form_item)
     {
-        $label = self::span($label, ['class' => 'control-label']);
-        $form_item = self::div($form_item, ['class' => 'controls']);
+        $label = self::tag('label', $label, ['class' => 'col-sm-2 control-label']);
+        $form_item = self::div($form_item, ['class' => 'col-sm-10']);
 
-        return self::div($label.$form_item, ['class' => 'control-group']);
+        return self::div($label.$form_item, ['class' => 'form-group']);
     }
 
     /**
@@ -1391,8 +1447,26 @@ class Display
 
         $beforeSelectRow = null;
         if (isset($extra_params['beforeSelectRow'])) {
-            $beforeSelectRow = "beforeSelectRow: ".$extra_params['beforeSelectRow'].", ";
+            $beforeSelectRow = 'beforeSelectRow: '.$extra_params['beforeSelectRow'].', ';
             unset($extra_params['beforeSelectRow']);
+        }
+
+        $beforeProcessing = '';
+        if (isset($extra_params['beforeProcessing'])) {
+            $beforeProcessing = 'beforeProcessing : function() { '.$extra_params['beforeProcessing'].' },';
+            unset($extra_params['beforeProcessing']);
+        }
+
+        $beforeRequest = '';
+        if (isset($extra_params['beforeRequest'])) {
+            $beforeRequest = 'beforeRequest : function() { '.$extra_params['beforeRequest'].' },';
+            unset($extra_params['beforeRequest']);
+        }
+
+        $gridComplete = '';
+        if (isset($extra_params['gridComplete'])) {
+            $gridComplete = 'gridComplete : function() { '.$extra_params['gridComplete'].' },';
+            unset($extra_params['gridComplete']);
         }
 
         // Adding extra params
@@ -1433,9 +1507,22 @@ class Display
         $json_encode = str_replace('"formatter":"extra_formatter"', 'formatter:extra_formatter', $json_encode);
         $json_encode = str_replace(['{"first":"first",', '"end":"end"}'], '', $json_encode);
 
+        if (api_get_configuration_value('allow_compilatio_tool') &&
+            (strpos($_SERVER['REQUEST_URI'], 'work/work.php') !== false ||
+             strpos($_SERVER['REQUEST_URI'], 'work/work_list_all.php') != false
+            )
+        ) {
+            $json_encode = str_replace('"function () { compilatioInit() }"',
+                'function () { compilatioInit() }',
+                $json_encode
+            );
+        }
         // Creating the jqgrid element.
         $json .= '$("#'.$div_id.'").jqGrid({';
         //$json .= $beforeSelectRow;
+        $json .= $gridComplete;
+        $json .= $beforeProcessing;
+        $json .= $beforeRequest;
         $json .= $json_encode;
         $json .= '});';
 
@@ -1648,7 +1735,7 @@ class Display
             }
 
             if ($notification['tool'] == TOOL_LEARNPATH) {
-                if (!learnpath::is_lp_visible_for_student($notification['ref'], $user_id, $course_code)) {
+                if (!learnpath::is_lp_visible_for_student($notification['ref'], $user_id, $courseInfo)) {
                     continue;
                 }
             }
@@ -1867,14 +1954,15 @@ class Display
         return self::page_subheader($title, $second_title);
     }
 
-    public static function page_subheader($title, $second_title = null, $size = 'h3')
+    public static function page_subheader($title, $second_title = null, $size = 'h3', $attributes = [])
     {
         if (!empty($second_title)) {
             $second_title = Security::remove_XSS($second_title);
             $title .= "<small> $second_title<small>";
         }
+        $subTitle = self::tag($size, Security::remove_XSS($title), $attributes);
 
-        return '<'.$size.'>'.Security::remove_XSS($title).'</'.$size.'>';
+        return $subTitle;
     }
 
     public static function page_subheader2($title, $second_title = null)
@@ -1908,18 +1996,21 @@ class Display
     }
 
     /**
-     * @param int    $percentage
+     * @param int    $percentage      int value between 0 and 100
      * @param bool   $show_percentage
      * @param string $extra_info
+     * @param string $class           danger/success/infowarning
      *
      * @return string
      */
-    public static function bar_progress($percentage, $show_percentage = true, $extra_info = '')
+    public static function bar_progress($percentage, $show_percentage = true, $extra_info = '', $class = '')
     {
         $percentage = (int) $percentage;
+        $class = empty($class) ? '' : "progress-bar-$class";
+
         $div = '<div class="progress">
                 <div
-                    class="progress-bar progress-bar-striped"
+                    class="progress-bar progress-bar-striped '.$class.'"
                     role="progressbar"
                     aria-valuenow="'.$percentage.'"
                     aria-valuemin="0"
@@ -2173,17 +2264,14 @@ class Display
     {
         $fileInfo = pathinfo($file);
 
+        $autoplay = isset($params['autoplay']) && 'true' === $params['autoplay'] ? 'autoplay' : '';
+        $id = isset($params['id']) ? $params['id'] : $fileInfo['basename'];
+        $width = isset($params['width']) ? 'width="'.$params['width'].'"' : null;
+        $class = isset($params['class']) ? ' class="'.$params['class'].'"' : null;
+
         switch ($fileInfo['extension']) {
             case 'mp3':
             case 'webm':
-                $autoplay = null;
-                if (isset($params['autoplay']) && $params['autoplay'] == 'true') {
-                    $autoplay = 'autoplay';
-                }
-                $width = isset($params['width']) ? 'width="'.$params['width'].'"' : null;
-                $id = isset($params['id']) ? $params['id'] : $fileInfo['basename'];
-                $class = isset($params['class']) ? ' class="'.$params['class'].'"' : null;
-
                 $html = '<audio id="'.$id.'" '.$class.' controls '.$autoplay.' '.$width.' src="'.$params['url'].'" >';
                 $html .= '<object width="'.$width.'" height="50" type="application/x-shockwave-flash" data="'.api_get_path(WEB_LIBRARY_PATH).'javascript/mediaelement/flashmediaelement.swf">
                             <param name="movie" value="'.api_get_path(WEB_LIBRARY_PATH).'javascript/mediaelement/flashmediaelement.swf" />
@@ -2195,7 +2283,7 @@ class Display
                 break;
             case 'wav':
             case 'ogg':
-                $html = '<audio width="300px" controls src="'.$params['url'].'" >';
+                $html = '<audio width="300px" controls id="'.$id.'" '.$autoplay.' src="'.$params['url'].'" >';
 
                 return $html;
                 break;
@@ -2804,70 +2892,85 @@ HTML;
      */
     public static function getFrameReadyBlock($frameName)
     {
-        $defaultFeatures = ['playpause', 'current', 'progress', 'duration', 'tracks', 'volume', 'fullscreen', 'vrview'];
+        $webPublicPath = api_get_path(WEB_PUBLIC_PATH);
+
+        $videoFeatures = [
+            'playpause',
+            'current',
+            'progress',
+            'duration',
+            'tracks',
+            'volume',
+            'fullscreen',
+            'vrview',
+            'markersrolls',
+        ];
         $features = api_get_configuration_value('video_features');
-        $bowerJsFiles = [];
-        $bowerCSSFiles = [];
+        $videoPluginsJS = [];
+        $videoPluginCSS = [];
         if (!empty($features) && isset($features['features'])) {
             foreach ($features['features'] as $feature) {
                 if ($feature === 'vrview') {
                     continue;
                 }
                 $defaultFeatures[] = $feature;
-                $bowerJsFiles[] = "mediaelement/plugins/$feature/$feature.js";
-                $bowerCSSFiles[] = "mediaelement/plugins/$feature/$feature.css";
+                $videoPluginsJS[] = "mediaelement/plugins/$feature/$feature.js";
+                $videoPluginCSS[] = "mediaelement/plugins/$feature/$feature.css";
             }
+        }
+
+        $videoPluginFiles = '';
+        foreach ($videoPluginsJS as $file) {
+            $videoPluginFiles .= '{type: "script", src: "'.$webPublicPath.'assets/'.$file.'"},';
+        }
+
+        $videoPluginCssFiles = '';
+        foreach ($videoPluginCSS as $file) {
+            $videoPluginCssFiles .= '{type: "stylesheet", src: "'.$webPublicPath.'assets/'.$file.'"},';
         }
 
         $translateHtml = '';
         $translate = api_get_configuration_value('translate_html');
         if ($translate) {
-            $translateHtml = '{type:"script", id:"_fr4", src:"'.api_get_path(WEB_AJAX_PATH).'lang.ajax.php?a=translate_html&'.api_get_cidreq().'"},';
+            $translateHtml = '{type:"script", src:"'.api_get_path(WEB_AJAX_PATH).'lang.ajax.php?a=translate_html&'.api_get_cidreq().'"},';
         }
 
-        $counter = 10;
-        $extraMediaFiles = '';
-        foreach ($bowerJsFiles as $file) {
-            $extraMediaFiles .= '{type: "script", id: "media_'.$counter.'", src: "'.api_get_path(WEB_PUBLIC_PATH).'assets/'.$file.'"},';
-            $counter++;
-        }
-
-        foreach ($bowerCSSFiles as $file) {
-            $extraMediaFiles .= '{type: "stylesheet", id: "media_'.$counter.'", src: "'.api_get_path(WEB_PUBLIC_PATH).'assets/'.$file.'"},';
-            $counter++;
-        }
-
-        $defaultFeatures = implode("','", $defaultFeatures);
+        $videoFeatures = implode("','", $videoFeatures);
         $frameReady = '
-          $.frameReady(function() {
-            $(function() {
-                $("video:not(.skip), audio:not(.skip)").mediaelementplayer({                    
-                    pluginPath: "'.api_get_path(WEB_PUBLIC_PATH).'assets/mediaelement/build/",            
-                    features: ["'.$defaultFeatures.'"],
+        $.frameReady(function() {
+             $(function () {
+                $("video:not(.skip), audio:not(.skip)").mediaelementplayer({
+                    pluginPath: "'.$webPublicPath.'assets/mediaelement/plugins/",            
+                    features: [\''.$videoFeatures.'\'],
                     success: function(mediaElement, originalNode, instance) {
+                        '.ChamiloApi::getQuizMarkersRollsJS().'
                     },
-                    vrPath: "'.api_get_path(WEB_PUBLIC_PATH).'assets/vrview/build/vrview.js"
+                    vrPath: "'.$webPublicPath.'assets/vrview/build/vrview.js"
                 });
             });
-          }, "'.$frameName.'",
-          {
-            load: [
-                { type:"script", id:"_fr1", src:"'.api_get_jquery_web_path().'"},
-                { type:"script", id:"_fr7", src:"'.api_get_path(WEB_PUBLIC_PATH).'assets/MathJax/MathJax.js?config=AM_HTMLorMML"},
-                { type:"script", id:"_fr4", src:"'.api_get_path(WEB_PUBLIC_PATH).'assets/jquery-ui/jquery-ui.min.js"},
-                { type:"stylesheet", id:"_fr5", src:"'.api_get_path(WEB_PUBLIC_PATH).'assets/jquery-ui/themes/smoothness/jquery-ui.min.css"},
-                { type:"stylesheet", id:"_fr6", src:"'.api_get_path(WEB_PUBLIC_PATH).'assets/jquery-ui/themes/smoothness/theme.css"},
-                { type:"script", id:"_fr2", src:"'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.highlight.js"},
-                { type:"stylesheet", id:"_fr7", src:"'.api_get_path(WEB_PUBLIC_PATH).'css/dialog.css"},
-                { type:"script", id:"_fr3", src:"'.api_get_path(WEB_CODE_PATH).'glossary/glossary.js.php?'.api_get_cidreq().'"},
-                {type: "script", id: "_media1", src: "'.api_get_path(WEB_PUBLIC_PATH).'assets/mediaelement/build/mediaelement-and-player.min.js"},
-                {type: "stylesheet", id: "_media2", src: "'.api_get_path(WEB_PUBLIC_PATH).'assets/mediaelement/build/mediaelementplayer.min.css"},                
-                {type: "stylesheet", id: "_media4", src: "'.api_get_path(WEB_PUBLIC_PATH).'assets/mediaelement/plugins/vrview/vrview.css"},
-                {type: "script", id: "_media4", src: "'.api_get_path(WEB_PUBLIC_PATH).'assets/mediaelement/plugins/vrview/vrview.js"},
-                '.$extraMediaFiles.'
+        }, 
+        "'.$frameName.'",
+        [
+            {type:"script", src:"'.api_get_jquery_web_path().'", deps: [
+                {type:"script", src:"'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.highlight.js"},
+                {type:"script", src:"'.api_get_path(WEB_CODE_PATH).'glossary/glossary.js.php?'.api_get_cidreq().'"},
+                {type:"script", src:"'.$webPublicPath.'assets/jquery-ui/jquery-ui.min.js"},
+                {type:"script", src: "'.$webPublicPath.'assets/mediaelement/build/mediaelement-and-player.min.js", 
+                    deps: [
+                    {type:"script", src: "'.$webPublicPath.'assets/mediaelement/plugins/vrview/vrview.js"},
+                    {type:"script", src: "'.$webPublicPath.'assets/mediaelement/plugins/markersrolls/markersrolls.js"},
+                    '.$videoPluginFiles.'
+                ]},                
                 '.$translateHtml.'
-            ]
-          });';
+            ]},
+            '.$videoPluginCssFiles.'
+            {type:"script", src:"'.$webPublicPath.'assets/MathJax/MathJax.js?config=AM_HTMLorMML"},
+            {type:"stylesheet", src:"'.$webPublicPath.'assets/jquery-ui/themes/smoothness/jquery-ui.min.css"},
+            {type:"stylesheet", src:"'.$webPublicPath.'assets/jquery-ui/themes/smoothness/theme.css"},                
+            {type:"stylesheet", src:"'.$webPublicPath.'css/dialog.css"},
+            {type:"stylesheet", src: "'.$webPublicPath.'assets/mediaelement/build/mediaelementplayer.min.css"},                
+            {type:"stylesheet", src: "'.$webPublicPath.'assets/mediaelement/plugins/vrview/vrview.css"},
+        ]);';
 
         return $frameReady;
     }

@@ -68,6 +68,10 @@ function get_document_title($name)
     $name = disable_dangerous_file($name);
     $ext = substr(strrchr($name, '.'), 0);
 
+    if (empty($ext)) {
+        return substr($name, 0, strlen($name));
+    }
+
     return substr($name, 0, strlen($name) - strlen(strstr($name, $ext)));
 }
 
@@ -99,7 +103,7 @@ function process_uploaded_file($uploaded_file, $show_output = true)
                 // The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the HTML form.
                 // Not used at the moment, but could be handy if we want to limit the size of an upload
                 // (e.g. image upload in html editor).
-                $max_file_size = intval($_POST['MAX_FILE_SIZE']);
+                $max_file_size = (int) $_POST['MAX_FILE_SIZE'];
                 if ($show_output) {
                     Display::addFlash(
                         Display::return_message(
@@ -736,7 +740,11 @@ function moveUploadedFile($file, $storePath)
     $handleFromFile = isset($file['from_file']) && $file['from_file'] ? true : false;
     $moveFile = isset($file['move_file']) && $file['move_file'] ? true : false;
     if ($moveFile) {
-        copy($file['tmp_name'], $storePath);
+        $copied = copy($file['tmp_name'], $storePath);
+
+        if (!$copied) {
+            return false;
+        }
     }
     if ($handleFromFile) {
         return file_exists($file['tmp_name']);
@@ -1203,6 +1211,41 @@ function clean_up_files_in_zip($p_event, &$p_header)
         '.Thumbs.db',
         'Thumbs.db',
     ];
+
+    if (in_array($baseName, $skipFiles)) {
+        return 0;
+    }
+    $modifiedStoredFileName = clean_up_path($originalStoredFileName);
+    $p_header['filename'] = str_replace($originalStoredFileName, $modifiedStoredFileName, $p_header['filename']);
+
+    return 1;
+}
+
+/**
+ * Allow .htaccess file.
+ *
+ * @param $p_event
+ * @param $p_header
+ *
+ * @return int
+ */
+function cleanZipFilesAllowHtaccess($p_event, &$p_header)
+{
+    $originalStoredFileName = $p_header['stored_filename'];
+    $baseName = basename($originalStoredFileName);
+
+    $allowFiles = ['.htaccess'];
+    if (in_array($baseName, $allowFiles)) {
+        return 1;
+    }
+
+    // Skip files
+    $skipFiles = [
+        '__MACOSX',
+        '.Thumbs.db',
+        'Thumbs.db',
+    ];
+
     if (in_array($baseName, $skipFiles)) {
         return 0;
     }
@@ -1617,7 +1660,7 @@ function create_unexisting_directory(
     $sendNotification = true
 ) {
     $course_id = $_course['real_id'];
-    $session_id = intval($session_id);
+    $session_id = (int) $session_id;
 
     $folderExists = DocumentManager::folderExists(
         $desired_dir_name,
@@ -1704,18 +1747,18 @@ function create_unexisting_directory(
                 );
 
                 if ($document_id) {
+                    $lastEditType = [
+                        0 => 'invisible',
+                        1 => 'visible',
+                        2 => 'delete',
+                    ];
                     // Update document item_property
-                    if (!empty($visibility)) {
-                        $visibilities = [
-                            0 => 'invisible',
-                            1 => 'visible',
-                            2 => 'delete',
-                        ];
+                    if (isset($lastEditType[$visibility])) {
                         api_item_property_update(
                             $_course,
                             TOOL_DOCUMENT,
                             $document_id,
-                            $visibilities[$visibility],
+                            $lastEditType[$visibility],
                             $user_id,
                             $groupInfo,
                             $to_user_id,
@@ -1791,7 +1834,7 @@ function move_uploaded_file_collection_into_directory(
     $max_filled_space
 ) {
     $number_of_uploaded_images = count($uploaded_file_collection['name']);
-    $new_file_list = [];
+    $list = [];
     for ($i = 0; $i < $number_of_uploaded_images; $i++) {
         $missing_file['name'] = $uploaded_file_collection['name'][$i];
         $missing_file['type'] = $uploaded_file_collection['type'][$i];
@@ -1801,7 +1844,7 @@ function move_uploaded_file_collection_into_directory(
 
         $upload_ok = process_uploaded_file($missing_file);
         if ($upload_ok) {
-            $new_file_list[] = handle_uploaded_document(
+            $list[] = handle_uploaded_document(
                 $_course,
                 $missing_file,
                 $base_work_dir,
@@ -1817,7 +1860,7 @@ function move_uploaded_file_collection_into_directory(
         unset($missing_file);
     }
 
-    return $new_file_list;
+    return $list;
 }
 
 /**

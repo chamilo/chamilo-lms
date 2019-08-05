@@ -116,6 +116,9 @@ class ExtraField extends Model
                 $this->extraFieldType = EntityExtraField::SESSION_FIELD_TYPE;
                 $this->primaryKey = 'id';
                 break;
+            case 'exercise':
+                $this->extraFieldType = EntityExtraField::EXERCISE_FIELD_TYPE;
+                break;
             case 'question':
                 $this->extraFieldType = EntityExtraField::QUESTION_FIELD_TYPE;
                 break;
@@ -188,6 +191,7 @@ class ExtraField extends Model
             'terms_and_condition',
             'forum_category',
             'forum_post',
+            'exercise',
         ];
 
         if (api_get_configuration_value('allow_scheduled_announcements')) {
@@ -2203,14 +2207,14 @@ class ExtraField extends Model
         $form = new FormValidator($this->type.'_field', 'post', $url);
 
         $form->addElement('hidden', 'type', $this->type);
-        $id = isset($_GET['id']) ? intval($_GET['id']) : null;
+        $id = isset($_GET['id']) ? (int) $_GET['id'] : null;
         $form->addElement('hidden', 'id', $id);
 
         // Setting the form elements
         $header = get_lang('Add');
         $defaults = [];
 
-        if ($action == 'edit') {
+        if ($action === 'edit') {
             $header = get_lang('Modify');
             // Setting the defaults
             $defaults = $this->get($id, false);
@@ -2218,7 +2222,7 @@ class ExtraField extends Model
 
         $form->addElement('header', $header);
 
-        if ($action == 'edit') {
+        if ($action === 'edit') {
             $translateUrl = api_get_path(WEB_CODE_PATH).'extrafield/translate.php?'
                 .http_build_query(['extra_field' => $id]);
             $translateButton = Display::toolbarButton(get_lang('TranslateThisTerm'), $translateUrl, 'language', 'link');
@@ -2410,11 +2414,11 @@ JAVASCRIPT;
                     : null;
 
                 if ($field['field_type'] == self::FIELD_TYPE_DOUBLE_SELECT) {
-                    //Add 2 selects
+                    // Add 2 selects
                     $options = $extraFieldOption->get_field_options_by_field($field['id']);
                     $options = self::extra_field_double_select_convert_array_to_ordered_array($options);
-                    $first_options = [];
 
+                    $first_options = [];
                     if (!empty($options)) {
                         foreach ($options as $option) {
                             foreach ($option as $sub_option) {
@@ -2658,16 +2662,13 @@ JAVASCRIPT;
         if (empty($col)) {
             return '';
         }
-
-        if ($oper === 'bw' || $oper === 'bn') {
+        if ($oper == 'bw' || $oper == 'bn') {
             $val .= '%';
         }
-
-        if ($oper === 'ew' || $oper === 'en') {
+        if ($oper == 'ew' || $oper == 'en') {
             $val = '%'.$val;
         }
-
-        if ($oper === 'cn' || $oper === 'nc' || $oper === 'in' || $oper === 'ni') {
+        if ($oper == 'cn' || $oper == 'nc' || $oper == 'in' || $oper == 'ni') {
             if (is_array($val)) {
                 $result = '"%'.implode(';', $val).'%"';
                 foreach ($val as $item) {

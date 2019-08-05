@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CourseBundle\Entity\CForumPost;
+use Chamilo\CourseBundle\Entity\CForumThread;
 use ChamiloSession as Session;
 use Zend\Feed\Reader\Entry\Rss;
 use Zend\Feed\Reader\Reader;
@@ -409,12 +411,14 @@ class SocialManager extends UserManager
      * @author isaac flores paz
      *
      * @param int $userId
+     * @param int $limit
      *
      * @return array
      */
-    public static function get_list_invitation_of_friends_by_user_id($userId)
+    public static function get_list_invitation_of_friends_by_user_id($userId, $limit = 0)
     {
         $userId = (int) $userId;
+        $limit = (int) $limit;
 
         if (empty($userId)) {
             return [];
@@ -426,6 +430,9 @@ class SocialManager extends UserManager
                 WHERE
                     user_receiver_id = '.$userId.' AND
                     msg_status = '.MESSAGE_STATUS_INVITATION_PENDING;
+        if ($limit != null && $limit > 0) {
+            $sql .= ' LIMIT '.$limit;
+        }
         $res = Database::query($sql);
         $list = [];
         while ($row = Database::fetch_array($res, 'ASSOC')) {
@@ -554,25 +561,6 @@ class SocialManager extends UserManager
         Database::query($sql);
 
         return true;
-    }
-
-    /**
-     * Allow attaching to group.
-     *
-     * @author Isaac Flores Paz
-     *
-     * @param int $id_friend_qualify User to qualify
-     * @param int $type_qualify      Kind of rating
-     *
-     * @deprecated 2017-03
-     */
-    public static function qualify_friend($id_friend_qualify, $type_qualify)
-    {
-        $table = Database::get_main_table(TABLE_MAIN_USER_REL_USER);
-        $user_id = api_get_user_id();
-        $sql = 'UPDATE '.$table.' SET relation_type='.((int) $type_qualify).'
-                WHERE user_id = '.$user_id.' AND friend_user_id='.(int) $id_friend_qualify;
-        Database::query($sql);
     }
 
     /**
@@ -929,7 +917,7 @@ class SocialManager extends UserManager
         ];
 
         // get count unread message and total invitations
-        $count_unread_message = MessageManager::getNumberOfMessages(true);
+        $count_unread_message = MessageManager::getNumberOfMessages(['message_status' => [MESSAGE_STATUS_UNREAD]]);
         $count_unread_message = !empty($count_unread_message) ? Display::badge($count_unread_message) : null;
 
         $number_of_new_messages_of_friend = self::get_message_number_invitation_by_user_id(api_get_user_id());
@@ -976,7 +964,7 @@ class SocialManager extends UserManager
                         '.$homeIcon.' '.get_lang('Home').'
                     </a>
                 </li>';
-            $active = $show == 'messages' ? 'active' : null;
+            $active = $show === 'messages' ? 'active' : null;
             $links .= '
                 <li class="messages-icon '.$active.'">
                     <a href="'.api_get_path(WEB_CODE_PATH).'messages/inbox.php">
@@ -985,7 +973,7 @@ class SocialManager extends UserManager
                 </li>';
 
             // Invitations
-            $active = $show == 'invitations' ? 'active' : null;
+            $active = $show === 'invitations' ? 'active' : null;
             $links .= '
                 <li class="invitations-icon '.$active.'">
                     <a href="'.api_get_path(WEB_CODE_PATH).'social/invitations.php">
@@ -994,14 +982,14 @@ class SocialManager extends UserManager
                 </li>';
 
             // Shared profile and groups
-            $active = $show == 'shared_profile' ? 'active' : null;
+            $active = $show === 'shared_profile' ? 'active' : null;
             $links .= '
                 <li class="shared-profile-icon'.$active.'">
                     <a href="'.api_get_path(WEB_CODE_PATH).'social/profile.php">
                         '.$sharedProfileIcon.' '.get_lang('ViewMySharedProfile').'
                     </a>
                 </li>';
-            $active = $show == 'friends' ? 'active' : null;
+            $active = $show === 'friends' ? 'active' : null;
             $links .= '
                 <li class="friends-icon '.$active.'">
                     <a href="'.api_get_path(WEB_CODE_PATH).'social/friends.php">
@@ -1017,7 +1005,7 @@ class SocialManager extends UserManager
                 </li>';
 
             // Search users
-            $active = $show == 'search' ? 'active' : null;
+            $active = $show === 'search' ? 'active' : null;
             $links .= '
                 <li class="search-icon '.$active.'">
                     <a href="'.api_get_path(WEB_CODE_PATH).'social/search.php">
@@ -1026,7 +1014,7 @@ class SocialManager extends UserManager
                 </li>';
 
             // My files
-            $active = $show == 'myfiles' ? 'active' : null;
+            $active = $show === 'myfiles' ? 'active' : null;
 
             $myFiles = '
                 <li class="myfiles-icon '.$active.'">
@@ -1041,7 +1029,7 @@ class SocialManager extends UserManager
             $links .= $myFiles;
             if (api_get_configuration_value('allow_portfolio_tool')) {
                 $links .= '
-                    <li class="portoflio-icon '.($show == 'portfolio' ? 'active' : '').'">
+                    <li class="portoflio-icon '.($show === 'portfolio' ? 'active' : '').'">
                         <a href="'.api_get_path(WEB_CODE_PATH).'portfolio/index.php">
                             '.$portfolioIcon.' '.get_lang('Portfolio').'
                         </a>
@@ -1050,7 +1038,7 @@ class SocialManager extends UserManager
             }
 
             if (!api_get_configuration_value('disable_gdpr')) {
-                $active = $show == 'personal-data' ? 'active' : null;
+                $active = $show === 'personal-data' ? 'active' : null;
                 $personalData = '
                     <li class="personal-data-icon '.$active.'">
                         <a href="'.api_get_path(WEB_CODE_PATH).'social/personal_data.php">
@@ -1058,10 +1046,19 @@ class SocialManager extends UserManager
                         </a>
                     </li>';
                 $links .= $personalData;
-
-                $links .= '</ul>';
             }
 
+            if (api_is_platform_admin()) {
+                $active = $show === 'promoted_messages' ? 'active' : null;
+                $personalData = '
+                    <li class="personal-data-icon '.$active.'">
+                        <a href="'.api_get_path(WEB_CODE_PATH).'social/promoted_messages.php">
+                            '.$personalDataIcon.' '.get_lang('PromotedMessages').'
+                        </a>
+                    </li>';
+                $links .= $personalData;
+            }
+            $links .= '</ul>';
             $html .= Display::panelCollapse(
                 get_lang('SocialNetwork'),
                 $links,
@@ -1072,7 +1069,7 @@ class SocialManager extends UserManager
             );
         }
 
-        if (in_array($show, $show_groups) && !empty($group_id)) {
+        if (!empty($group_id) && in_array($show, $show_groups)) {
             $html .= $usergroup->show_group_column_information(
                 $group_id,
                 api_get_user_id(),
@@ -1201,10 +1198,10 @@ class SocialManager extends UserManager
             }
 
             // Check if I already sent an invitation message
-            $invitation_sent_list = self::get_list_invitation_sent_by_user_id(api_get_user_id());
+            $invitationSentList = self::get_list_invitation_sent_by_user_id(api_get_user_id());
 
-            if (isset($invitation_sent_list[$user_id]) && is_array($invitation_sent_list[$user_id]) &&
-                count($invitation_sent_list[$user_id]) > 0
+            if (isset($invitationSentList[$user_id]) && is_array($invitationSentList[$user_id]) &&
+                count($invitationSentList[$user_id]) > 0
             ) {
                 $links .= '<li><a href="'.api_get_path(WEB_CODE_PATH).'social/invitations.php">'.
                     Display::return_icon('invitation.png', get_lang('YouAlreadySentAnInvitation'))
@@ -1642,7 +1639,6 @@ class SocialManager extends UserManager
         $userId = (int) $userId;
         $start = (int) $start;
         $length = (int) $length;
-        $startDate = Database::escape_string($startDate);
 
         $select = " SELECT
                     id,
@@ -1663,19 +1659,22 @@ class SocialManager extends UserManager
         }
 
         $sql = "$select                    
-                    FROM $tblMessage tm
+                    FROM $tblMessage m
                 WHERE
                     msg_status <> ".MESSAGE_STATUS_WALL_DELETE.' AND ';
 
-        // My own posts
+        // Get my own posts
         $userReceiverCondition = ' (
             user_receiver_id = '.$userId.' AND 
             msg_status IN ('.MESSAGE_STATUS_WALL_POST.', '.MESSAGE_STATUS_WALL.') AND
             parent_id = '.$parentId.'
         )';
 
-        // User condition
         $sql .= $userReceiverCondition;
+
+        $sql .= ' OR (
+            msg_status IN ('.MESSAGE_STATUS_PROMOTED.')             
+        ) ';
 
         // Get my group posts
         $groupCondition = '';
@@ -1691,8 +1690,8 @@ class SocialManager extends UserManager
             $groupCondition .= ' AND msg_status IN ('.MESSAGE_STATUS_NEW.', '.MESSAGE_STATUS_UNREAD.')) ';
         }
 
-        $friendCondition = '';
         // Get my friend posts
+        $friendCondition = '';
         if (!empty($friendId)) {
             if (is_array($friendId)) {
                 $friendId = array_map('intval', $friendId);
@@ -1725,7 +1724,7 @@ class SocialManager extends UserManager
                                 forum_id,
                                 thread_id,
                                 c_id                            
-        ";
+                            ";
             }
 
             $threadList = array_map('intval', $threadList);
@@ -1757,7 +1756,6 @@ class SocialManager extends UserManager
             $repo = $em->getRepository('ChamiloCourseBundle:CForumPost');
             $repoThread = $em->getRepository('ChamiloCourseBundle:CForumThread');
             $groups = [];
-            $forums = [];
             $userGroup = new UserGroup();
             $urlGroup = api_get_path(WEB_CODE_PATH).'social/group_view.php?id=';
             while ($row = Database::fetch_array($res, 'ASSOC')) {
@@ -1773,14 +1771,14 @@ class SocialManager extends UserManager
                     }
                 }
 
-                // forums
+                // Forums
                 $row['post_title'] = '';
                 $row['forum_title'] = '';
                 $row['thread_url'] = '';
                 if ($row['msg_status'] == MESSAGE_STATUS_FORUM) {
-                    /** @var \Chamilo\CourseBundle\Entity\CForumPost $post */
+                    /** @var CForumPost $post */
                     $post = $repo->find($row['id']);
-                    /** @var \Chamilo\CourseBundle\Entity\CForumThread $thread */
+                    /** @var CForumThread $thread */
                     $thread = $repoThread->find($row['thread_id']);
                     if ($post && $thread) {
                         $courseInfo = api_get_course_info_by_id($post->getCId());
@@ -2520,7 +2518,7 @@ class SocialManager extends UserManager
         foreach ($messages as $message) {
             $post = $message['html'];
             $comments = '';
-            if ($message['msg_status'] == MESSAGE_STATUS_WALL_POST) {
+            if (in_array($message['msg_status'], [MESSAGE_STATUS_WALL_POST, MESSAGE_STATUS_PROMOTED])) {
                 $comments = self::getWallPostComments($userId, $message);
             }
 
@@ -2550,7 +2548,10 @@ class SocialManager extends UserManager
     }
 
     /**
-     * @param int $userId
+     * @param int   $userId
+     * @param array $groupList
+     * @param array $friendList
+     * @param array $threadList
      *
      * @return int
      */
@@ -2621,7 +2622,8 @@ class SocialManager extends UserManager
     }
 
     /**
-     * @param int $user_id
+     * @param int  $user_id
+     * @param bool $isArray
      *
      * @return string|array
      */
@@ -3053,7 +3055,7 @@ class SocialManager extends UserManager
         $userId = (int) $userId;
         $socialAjaxUrl = api_get_path(WEB_AJAX_PATH).'social.ajax.php';
         $socialAutoExtendLink = '';
-        if ($countPost > self::DEFAULT_SCROLL_NEW_POST) {
+        if ($countPost > self::DEFAULT_WALL_POSTS) {
             $socialAutoExtendLink = Display::url(
                 get_lang('SeeMore'),
                 $socialAjaxUrl.'?u='.$userId.'&a=list_wall_message&start='.

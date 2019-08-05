@@ -26,15 +26,14 @@ if ($lp_controller_touched != 1) {
 
 require_once __DIR__.'/../inc/global.inc.php';
 
+api_protect_course_script();
+
 if (isset($_REQUEST['origin']) && $_REQUEST['origin'] === 'learnpath') {
     $_REQUEST['origin'] = '';
 }
 
-//To prevent the template class
+// To prevent the template class
 $show_learnpath = true;
-
-api_protect_course_script();
-
 $lp_id = !empty($_GET['lp_id']) ? (int) $_GET['lp_id'] : 0;
 $sessionId = api_get_session_id();
 $course_code = api_get_course_id();
@@ -250,7 +249,6 @@ if (!isset($src)) {
                 }
 
                 $src = $lp->fixBlockedLinks($src);
-
                 $lp->start_current_item(); // starts time counter manually if asset
             } else {
                 $src = 'blank.php?error=prerequisites';
@@ -313,9 +311,7 @@ if (!empty($_REQUEST['exeId']) &&
     $safe_id = $lp_id;
     $safe_exe_id = (int) $_REQUEST['exeId'];
 
-    if ($safe_id == strval(intval($safe_id)) &&
-        $safe_item_id == strval(intval($safe_item_id))
-    ) {
+    if (!empty($safe_id) && !empty($safe_item_id)) {
         $sql = 'SELECT start_date, exe_date, exe_result, exe_weighting, exe_exo_id, exe_duration
                 FROM '.$TBL_TRACK_EXERCICES.'
                 WHERE exe_id = '.$safe_exe_id;
@@ -335,7 +331,7 @@ if (!empty($_REQUEST['exeId']) &&
                 WHERE
                     c_id = $course_id AND
                     lp_item_id = $safe_item_id AND
-                    lp_view_id = ".$lp->lp_view_id."
+                    lp_view_id = ".$lp->get_view_id()."
                 ORDER BY id DESC
                 LIMIT 1";
         $res_last_attempt = Database::query($sql);
@@ -376,7 +372,7 @@ if (!empty($_REQUEST['exeId']) &&
             Database::query($sql);
         }
     }
-    if (intval($_GET['fb_type']) > 0) {
+    if (intval($_GET['fb_type']) != EXERCISE_FEEDBACK_TYPE_END) {
         $src = 'blank.php?msg=exerciseFinished';
     } else {
         $src = api_get_path(WEB_CODE_PATH).'exercise/result.php?id='.$safe_exe_id.'&'.api_get_cidreq(true, true, 'learnpath');
@@ -556,6 +552,51 @@ if ($gamificationMode == 1) {
 }
 
 $template->assign('lp_author', $lp->get_author());
+
+$lpMinTime = '';
+if (Tracking::minimumTimeAvailable(api_get_session_id(), api_get_course_int_id())) {
+    // Calulate minimum and accumulated time
+    $timeLp = $_SESSION['oLP']->getAccumulateWorkTime();
+    $timeTotalCourse = $_SESSION['oLP']->getAccumulateWorkTimeTotalCourse();
+    // Minimum connection percentage
+    $perc = 100;
+    // Time from the course
+    $tc = $timeTotalCourse;
+    // Percentage of the learning paths
+    $pl = 0;
+    if (!empty($timeTotalCourse)) {
+        $pl = $timeLp / $timeTotalCourse;
+    }
+
+    // Minimum time for each learning path
+    $time_min = intval($pl * $tc * $perc / 100);
+
+    if ($_SESSION['oLP']->getAccumulateWorkTime() > 0) {
+        $lpMinTime = '('.$time_min.' min)';
+    }
+
+    $lpTimeList = Tracking::getCalculateTime($user_id, api_get_course_int_id(), api_get_session_id());
+    $lpTime = isset($lpTimeList[TOOL_LEARNPATH][$lp_id]) ? (int) $lpTimeList[TOOL_LEARNPATH][$lp_id] : 0;
+
+    if ($lpTime >= ($time_min * 60)) {
+        $time_progress_perc = '100%';
+        $time_progress_value = 100;
+    } else {
+        $time_progress_value = intval(($lpTime * 100) / ($time_min * 60));
+        $time_progress_perc = $time_progress_value.'%';
+    }
+
+    $template->assign('time_progress_perc', $time_progress_perc);
+    $template->assign('time_progress_value', $time_progress_value);
+    // Cronometro
+    $hour = (intval($lpTime / 3600)) < 10 ? '0'.intval($lpTime / 3600) : intval($lpTime / 3600);
+    $template->assign('hour', $hour);
+    $template->assign('minute', date('i', $lpTime));
+    $template->assign('second', date('s', $lpTime));
+    $template->assign('hour_min', api_time_to_hms($timeLp * 60, '</div><div class="divider">:</div><div>'));
+}
+
+$template->assign('lp_accumulate_work_time', $lpMinTime);
 $template->assign('lp_mode', $lp->mode);
 $template->assign('lp_title_scorm', $lp->name);
 // ofaj
@@ -580,6 +621,9 @@ $template->assign(
         ICON_SIZE_BIG
     )
 );
+
+$frameReady = Display::getFrameReadyBlock('#content_id, #content_id_blank');
+$template->assign('frame_ready', $frameReady);
 
 // Ofaj
 $template->assign('lp_id', $lp->lp_id);

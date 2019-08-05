@@ -1,7 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use Chamilo\CoreBundle\Entity\Message;
 use Chamilo\CourseBundle\Entity\CLpCategory;
 use ChamiloSession as Session;
 
@@ -13,6 +12,7 @@ use ChamiloSession as Session;
 require_once __DIR__.'/../inc/global.inc.php';
 
 api_block_anonymous_users();
+$htmlHeadXtra[] = '<script type="text/javascript" src="'.api_get_path(WEB_PUBLIC_PATH).'assets/jquery.easy-pie-chart/dist/jquery.easypiechart.js"></script>';
 
 $export = isset($_GET['export']) ? $_GET['export'] : false;
 $sessionId = isset($_GET['id_session']) ? (int) $_GET['id_session'] : 0;
@@ -94,12 +94,10 @@ if ($export) {
 }
 $csv_content = [];
 $from_myspace = false;
-
-if (isset($_GET['from']) && $_GET['from'] == 'myspace') {
+$this_section = SECTION_COURSES;
+if (isset($_GET['from']) && $_GET['from'] === 'myspace') {
     $from_myspace = true;
     $this_section = SECTION_TRACKING;
-} else {
-    $this_section = SECTION_COURSES;
 }
 
 $nameTools = get_lang('StudentDetails');
@@ -114,14 +112,14 @@ if (!empty($details)) {
             ];
         }
         $interbreadcrumb[] = [
-            'url' => "../user/user.php?cidReq=".$course_code,
-            'name' => get_lang("Users"),
+            'url' => '../user/user.php?cidReq='.$course_code,
+            'name' => get_lang('Users'),
         ];
     } else {
         if ($origin === 'tracking_course') {
             $interbreadcrumb[] = [
-                'url' => "../tracking/courseLog.php?cidReq=".$course_code.'&id_session='.api_get_session_id(),
-                'name' => get_lang("Tracking"),
+                'url' => '../tracking/courseLog.php?cidReq='.$course_code.'&id_session='.api_get_session_id(),
+                'name' => get_lang('Tracking'),
             ];
         } else {
             if ($origin === 'resume_session') {
@@ -130,30 +128,30 @@ if (!empty($details)) {
                     'name' => get_lang('SessionList'),
                 ];
                 $interbreadcrumb[] = [
-                    'url' => "../session/resume_session.php?id_session=".$sessionId,
+                    'url' => '../session/resume_session.php?id_session='.$sessionId,
                     'name' => get_lang('SessionOverview'),
                 ];
             } else {
                 $interbreadcrumb[] = [
-                    'url' => api_is_student_boss() ? "#" : "index.php",
+                    'url' => api_is_student_boss() ? '#' : 'index.php',
                     'name' => get_lang('MySpace'),
                 ];
                 if (!empty($coachId)) {
                     $interbreadcrumb[] = [
-                        'url' => "student.php?id_coach=".$coachId,
-                        'name' => get_lang("CoachStudents"),
+                        'url' => 'student.php?id_coach='.$coachId,
+                        'name' => get_lang('CoachStudents'),
                     ];
                     $interbreadcrumb[] = [
-                        'url' => "myStudents.php?student=".$student_id.'&id_coach='.$coachId,
-                        'name' => get_lang("StudentDetails"),
+                        'url' => 'myStudents.php?student='.$student_id.'&id_coach='.$coachId,
+                        'name' => get_lang('StudentDetails'),
                     ];
                 } else {
                     $interbreadcrumb[] = [
-                        'url' => "student.php",
+                        'url' => 'student.php',
                         'name' => get_lang('MyStudents'),
                     ];
                     $interbreadcrumb[] = [
-                        'url' => "myStudents.php?student=".$student_id,
+                        'url' => 'myStudents.php?student='.$student_id,
                         'name' => get_lang('StudentDetails'),
                     ];
                 }
@@ -162,43 +160,43 @@ if (!empty($details)) {
     }
     $nameTools = get_lang('DetailsStudentInCourse');
 } else {
-    if ($origin == 'resume_session') {
+    if ($origin === 'resume_session') {
         $interbreadcrumb[] = [
-            'url' => "../session/session_list.php",
+            'url' => '../session/session_list.php',
             'name' => get_lang('SessionList'),
         ];
         if (!empty($sessionId)) {
             $interbreadcrumb[] = [
-                'url' => "../session/resume_session.php?id_session=".$sessionId,
+                'url' => '../session/resume_session.php?id_session='.$sessionId,
                 'name' => get_lang('SessionOverview'),
             ];
         }
     } elseif ($origin === 'teacher_details') {
         $this_section = SECTION_TRACKING;
-        $interbreadcrumb[] = ['url' => "index.php", 'name' => get_lang('MySpace')];
-        $interbreadcrumb[] = ['url' => "teachers.php", 'name' => get_lang('Teachers')];
+        $interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('MySpace')];
+        $interbreadcrumb[] = ['url' => 'teachers.php', 'name' => get_lang('Teachers')];
         $nameTools = $user_info['complete_name'];
     } else {
         $interbreadcrumb[] = [
-            'url' => api_is_student_boss() ? "#" : "index.php",
+            'url' => api_is_student_boss() ? '#' : 'index.php',
             'name' => get_lang('MySpace'),
         ];
         if (!empty($coachId)) {
             if ($sessionId) {
                 $interbreadcrumb[] = [
-                    'url' => "student.php?id_coach=".$coachId."&id_session=".$sessionId,
-                    'name' => get_lang("CoachStudents"),
+                    'url' => 'student.php?id_coach='.$coachId.'&id_session='.$sessionId,
+                    'name' => get_lang('CoachStudents'),
                 ];
             } else {
                 $interbreadcrumb[] = [
-                    'url' => "student.php?id_coach=".$coachId,
-                    'name' => get_lang("CoachStudents"),
+                    'url' => 'student.php?id_coach='.$coachId,
+                    'name' => get_lang('CoachStudents'),
                 ];
             }
         } else {
             $interbreadcrumb[] = [
-                'url' => "student.php",
-                'name' => get_lang("MyStudents"),
+                'url' => 'student.php',
+                'name' => get_lang('MyStudents'),
             ];
         }
     }
@@ -336,13 +334,6 @@ switch ($action) {
                         $totalScore += $bestScore;
                     }
 
-                    /*$score = Tracking::get_avg_student_score(
-                        $user_info['user_id'],
-                        $courseCodeItem,
-                        [],
-                        $sId
-                    );*/
-
                     $progress = empty($progress) ? '0%' : $progress.'%';
                     $score = empty($bestScore) ? '0%' : $bestScore.'%';
 
@@ -386,13 +377,10 @@ switch ($action) {
             $sessionInfo['name']
         ));
         $tpl->assign('table_course', $courseTable);
-        $template = $tpl->fetch($tpl->get_template('my_space/pdf_export_student.tpl'));
-
-        $content = ''.$template;
+        $content = $tpl->fetch($tpl->get_template('my_space/pdf_export_student.tpl'));
 
         $params = [
             'pdf_title' => get_lang('Resume'),
-            //'course_code' => api_get_course_id(),
             'session_info' => $sessionInfo,
             'course_info' => '',
             'pdf_date' => '',
@@ -402,38 +390,21 @@ switch ($action) {
             'show_teacher_as_myself' => false,
             'orientation' => 'P',
         ];
-
         $pdf = new PDF('A4', $params['orientation'], $params);
+
         try {
-            $theme = $tpl->theme;
-            $themeName = empty($theme) ? api_get_visual_theme() : $theme;
-            $themeDir = \Template::getThemeDir($theme);
-            $customLetterhead = $themeDir.'images/letterhead.png';
-            $urlPathLetterhead = api_get_path(SYS_CSS_PATH).$customLetterhead;
-
-            $urlWebLetterhead = '#FFFFFF';
-            $fullPage = false;
-            if (file_exists($urlPathLetterhead)) {
-                $fullPage = true;
-                $urlWebLetterhead = 'url('.api_get_path(WEB_CSS_PATH).$customLetterhead.')';
-            }
-
-            if ($fullPage) {
-                $pdf->pdf->SetDisplayMode('fullpage');
-                $pdf->pdf->SetDefaultBodyCSS('background', $urlWebLetterhead);
-                $pdf->pdf->SetDefaultBodyCSS('background-image-resize', '6');
-            }
-
-            @$pdf->content_to_pdf($content,
-                $css = '',
-                $pdf_name = '',
-                $course_code = null,
-                $outputMode = 'D',
-                $saveInFile = false,
-                $fileToSave = null,
-                $returnHtml = false,
-                $addDefaultCss = true,
-                $completeHeader = false
+            $pdf->setBackground($tpl->theme);
+            @$pdf->content_to_pdf(
+                $content,
+                '',
+                '',
+                null,
+                'D',
+                false,
+                null,
+                false,
+                true,
+                false
             );
         } catch (MpdfException $e) {
             error_log($e);
@@ -553,12 +524,12 @@ switch ($action) {
         }
         break;
     case 'reset_lp':
-        $lp_id = isset($_GET['lp_id']) ? intval($_GET['lp_id']) : '';
+        $lp_id = isset($_GET['lp_id']) ? (int) $_GET['lp_id'] : '';
         $check = true;
 
-        if (api_is_allowed_to_edit() &&
-            !empty($lp_id) &&
+        if (!empty($lp_id) &&
             !empty($student_id) &&
+            api_is_allowed_to_edit() &&
             Security::check_token('get')
         ) {
             Event::delete_student_lp_events(
@@ -570,15 +541,14 @@ switch ($action) {
 
             // @todo delete the stats.track_e_exercises records.
             // First implement this http://support.chamilo.org/issues/1334
-            Display::addFlash(
-                Display::return_message(get_lang('LPWasReset'), 'success')
-            );
+            Display::addFlash(Display::return_message(get_lang('LPWasReset'), 'success'));
             Security::clear_token();
         }
         break;
     default:
         break;
 }
+
 $courses_in_session = [];
 
 // See #4676
@@ -658,23 +628,14 @@ while ($row = Database::fetch_array($rs, 'ASSOC')) {
 
 $isDrhOfCourse = CourseManager::isUserSubscribedInCourseAsDrh(
     api_get_user_id(),
-    api_get_course_info()
+    $courseInfo
 );
 
 if (api_is_drh() && !api_is_platform_admin()) {
     if (!empty($student_id)) {
         if (api_drh_can_access_all_session_content()) {
-            //@todo securize drh with student id
-            /*$users = SessionManager::getAllUsersFromCoursesFromAllSessionFromStatus('drh_all', api_get_user_id());
-            $userList = array();
-            foreach ($users as $user) {
-                $userList[] = $user['user_id'];
-            }
-            if (!in_array($student_id, $userList)) {
-                api_not_allowed(true);
-            }*/
         } else {
-            if (!($isDrhOfCourse)) {
+            if (!$isDrhOfCourse) {
                 if (api_is_drh() &&
                    !UserManager::is_user_followed_by_drh($student_id, api_get_user_id())
                 ) {
@@ -771,10 +732,9 @@ if ($isAllow) {
 echo '</div>';
 
 // is the user online ?
+$online = get_lang('No');
 if (user_is_online($student_id)) {
     $online = get_lang('Yes');
-} else {
-    $online = get_lang('No');
 }
 
 // get average of score and average of progress by student
@@ -865,6 +825,7 @@ $table_title = Display::return_icon('user.png', get_lang('User')).$user_info['co
 
 echo Display::page_subheader($table_title);
 $userPicture = UserManager::getUserPicture($user_info['user_id'], USER_IMAGE_SIZE_BIG);
+
 $userGroupManager = new UserGroup();
 $userGroups = $userGroupManager->getNameListByUser(
     $user_info['user_id'],
@@ -1518,13 +1479,13 @@ if (empty($details)) {
     ];
 
     $timeCourse = null;
-    if (Tracking::minimunTimeAvailable($session_id, $courseInfo['real_id'])) {
-        $timeCourse = Tracking::getCalculateTime($student_id, $courseInfo['real_id'], $session_id);
+    if (Tracking::minimumTimeAvailable($sessionId, $courseInfo['real_id'])) {
+        $timeCourse = Tracking::getCalculateTime($student_id, $courseInfo['real_id'], $sessionId);
     }
 
     if ($user_info['status'] != INVITEE) {
         $csv_content[] = [];
-        $csv_content[] = [str_replace('&nbsp;', '', strip_tags($table_title))];
+        $csv_content[] = [str_replace('&nbsp;', '', strip_tags($userInfo['complete_name']))];
         $trackingColumns = api_get_configuration_value('tracking_columns');
         if (isset($trackingColumns['my_students_lp'])) {
             foreach ($columnHeaders as $key => $value) {
@@ -1566,13 +1527,13 @@ if (empty($details)) {
         /** @var CLpCategory $item */
         foreach ($categories as $item) {
             $categoryId = $item->getId();
-            if (!learnpath::categoryIsVisibleForStudent($item, $userEntity)) {
+            if (!learnpath::categoryIsVisibleForStudent($item, $userEntity, $courseInfo['real_id'], $sessionId)) {
                 continue;
             }
 
             $list = new LearnpathList(
                 api_get_user_id(),
-                $courseInfo['code'],
+                $courseInfo,
                 $sessionId,
                 null,
                 false,
@@ -1598,7 +1559,6 @@ if (empty($details)) {
 
             foreach ($flat_list as $learnpath) {
                 $lpIdList[] = $learnpath['iid'];
-
                 $lp_id = $learnpath['lp_old_id'];
                 $lp_name = $learnpath['lp_name'];
                 $any_result = false;
@@ -1687,9 +1647,9 @@ if (empty($details)) {
                 }
 
                 if ($i % 2 == 0) {
-                    $css_class = "row_even";
+                    $css_class = 'row_even';
                 } else {
-                    $css_class = "row_odd";
+                    $css_class = 'row_odd';
                 }
 
                 $i++;
@@ -1829,7 +1789,7 @@ if (empty($details)) {
         $i = 0;
         if (Database::num_rows($result_exercices) > 0) {
             while ($exercices = Database::fetch_array($result_exercices)) {
-                $exercise_id = intval($exercices['id']);
+                $exercise_id = (int) $exercices['id'];
                 $count_attempts = Tracking::count_student_exercise_attempts(
                     $student_id,
                     $courseInfo['real_id'],
@@ -1864,10 +1824,9 @@ if (empty($details)) {
                 }
                 $lp_name = !empty($lp_name) ? $lp_name : get_lang('NoLearnpath');
 
+                $css_class = 'row_even';
                 if ($i % 2) {
                     $css_class = 'row_odd';
-                } else {
-                    $css_class = 'row_even';
                 }
 
                 echo '<tr class="'.$css_class.'"><td>'.$exercices['title'].'</td>';
@@ -1894,23 +1853,29 @@ if (empty($details)) {
                 echo '<td>';
 
                 $sql = 'SELECT exe_id FROM '.$tbl_stats_exercices.'
-                     WHERE
-                        exe_exo_id = "'.$exercise_id.'" AND
-                        exe_user_id ="'.$student_id.'" AND
-                        c_id = '.$courseInfo['real_id'].' AND
-                        session_id = "'.$sessionId.'" AND
-                        status = ""
-                    ORDER BY exe_date DESC
-                    LIMIT 1';
+                         WHERE
+                            exe_exo_id = "'.$exercise_id.'" AND
+                            exe_user_id ="'.$student_id.'" AND
+                            c_id = '.$courseInfo['real_id'].' AND
+                            session_id = "'.$sessionId.'" AND
+                            status = ""
+                        ORDER BY exe_date DESC
+                        LIMIT 1';
                 $result_last_attempt = Database::query($sql);
                 if (Database::num_rows($result_last_attempt) > 0) {
                     $id_last_attempt = Database::result($result_last_attempt, 0, 0);
                     if ($count_attempts > 0) {
-                        echo '<a href="../exercise/exercise_show.php?id='.$id_last_attempt.'&cidReq='.$course_code
+                        $qualifyLink = '';
+                        if ($allowToQualify) {
+                            $qualifyLink = '&action=qualify';
+                        }
+                        $attemptLink = '../exercise/exercise_show.php?id='.$id_last_attempt.'&cidReq='.$course_code
                             .'&id_session='.$sessionId.'&session_id='.$sessionId.'&student='.$student_id.'&origin='
-                            .(empty($origin) ? 'tracking' : $origin).'">'
-                            .Display::return_icon('quiz.png')
-                            .'</a>';
+                            .(empty($origin) ? 'tracking' : $origin).$qualifyLink;
+                        echo Display::url(
+                            Display::return_icon('quiz.png', get_lang('Exercise')),
+                            $attemptLink
+                        );
                     }
                 }
                 echo '</td>';
@@ -1953,42 +1918,42 @@ if (empty($details)) {
     // @when using sessions we do not show the survey list
     if (empty($sessionId)) {
         $survey_list = SurveyManager::get_surveys($course_code, $sessionId);
-        $survey_data = [];
-        foreach ($survey_list as $survey) {
-            $user_list = SurveyManager::get_people_who_filled_survey(
-                $survey['survey_id'],
-                false,
-                $courseInfo['real_id']
-            );
-            $survey_done = Display::return_icon(
-                "accept_na.png",
-                get_lang('NoAnswer'),
-                [],
-                ICON_SIZE_SMALL
-            );
-            if (in_array($student_id, $user_list)) {
+        if (!empty($survey_list)) {
+            $survey_data = [];
+            foreach ($survey_list as $survey) {
+                $user_list = SurveyManager::get_people_who_filled_survey(
+                    $survey['survey_id'],
+                    false,
+                    $courseInfo['real_id']
+                );
                 $survey_done = Display::return_icon(
-                    "accept.png",
-                    get_lang('Answered'),
+                    "accept_na.png",
+                    get_lang('NoAnswer'),
                     [],
                     ICON_SIZE_SMALL
                 );
+                if (in_array($student_id, $user_list)) {
+                    $survey_done = Display::return_icon(
+                        "accept.png",
+                        get_lang('Answered'),
+                        [],
+                        ICON_SIZE_SMALL
+                    );
+                }
+                $data = ['title' => $survey['title'], 'done' => $survey_done];
+                $survey_data[] = $data;
             }
-            $data = ['title' => $survey['title'], 'done' => $survey_done];
-            $survey_data[] = $data;
-        }
 
-        if (!empty($survey_list)) {
-            $table = new HTML_Table(['class' => 'data_table']);
-            $header_names = [get_lang('Survey'), get_lang('Answered')];
-            $row = 0;
-            $column = 0;
-            foreach ($header_names as $item) {
-                $table->setHeaderContents($row, $column, $item);
-                $column++;
-            }
-            $row = 1;
             if (!empty($survey_data)) {
+                $table = new HTML_Table(['class' => 'data_table']);
+                $header_names = [get_lang('Survey'), get_lang('Answered')];
+                $row = 0;
+                $column = 0;
+                foreach ($header_names as $item) {
+                    $table->setHeaderContents($row, $column, $item);
+                    $column++;
+                }
+                $row = 1;
                 foreach ($survey_data as $data) {
                     $column = 0;
                     $table->setCellContents($row, $column, $data);
@@ -2000,8 +1965,8 @@ if (empty($details)) {
                     $column++;
                     $row++;
                 }
+                echo $table->toHtml();
             }
-            echo $table->toHtml();
         }
     }
 

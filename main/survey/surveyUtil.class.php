@@ -250,13 +250,13 @@ class SurveyUtil
                 self::display_question_report($survey_data);
                 break;
             case 'userreport':
-                self::display_user_report($people_filled, $survey_data);
+                self::displayUserReport($survey_data, $people_filled);
                 break;
             case 'comparativereport':
                 self::display_comparative_report();
                 break;
             case 'completereport':
-                self::display_complete_report($survey_data);
+                echo self::displayCompleteReport($survey_data);
                 break;
             case 'deleteuserreport':
                 self::delete_user_report($_GET['survey_id'], $_GET['user']);
@@ -313,58 +313,18 @@ class SurveyUtil
     }
 
     /**
-     * This function displays the user report which is basically nothing more
-     * than a one-page display of all the questions
-     * of the survey that is filled with the answers of the person who filled the survey.
+     * @param array $survey_data
+     * @param array $people_filled
      *
-     * @return string html code of the one-page survey with the answers of the selected user
-     *
-     * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
-     *
-     * @version February 2007 - Updated March 2008
+     * @return string
      */
-    public static function display_user_report($people_filled, $survey_data)
+    public static function displayUserReportForm($survey_data, $people_filled)
     {
-        // Database table definitions
-        $table_survey_question = Database::get_course_table(TABLE_SURVEY_QUESTION);
-        $table_survey_question_option = Database::get_course_table(TABLE_SURVEY_QUESTION_OPTION);
-        $table_survey_answer = Database::get_course_table(TABLE_SURVEY_ANSWER);
-        $surveyId = isset($_GET['survey_id']) ? (int) $_GET['survey_id'] : 0;
+        $surveyId = $survey_data['survey_id'];
 
-        // Actions bar
-        echo '<div class="actions">';
-        echo '<a href="'.api_get_path(WEB_CODE_PATH).'survey/reporting.php?survey_id='.$surveyId.'&'.api_get_cidreq().'">'.
-            Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('ReportingOverview'), '', ICON_SIZE_MEDIUM)
-            .'</a>';
-        if (isset($_GET['user'])) {
-            if (api_is_allowed_to_edit()) {
-                // The delete link
-                echo '<a href="'.api_get_path(WEB_CODE_PATH).'survey/reporting.php?action=deleteuserreport&survey_id='
-                    .$surveyId.'&'.api_get_cidreq().'&user='.Security::remove_XSS($_GET['user']).'" >'.
-                    Display::return_icon('delete.png', get_lang('Delete'), '', ICON_SIZE_MEDIUM).'</a>';
-            }
-
-            // Export the user report
-            echo '<a href="javascript: void(0);" onclick="document.form1a.submit();">'
-                .Display::return_icon('export_csv.png', get_lang('ExportAsCSV'), '', ICON_SIZE_MEDIUM).'</a> ';
-            echo '<a href="javascript: void(0);" onclick="document.form1b.submit();">'
-                .Display::return_icon('export_excel.png', get_lang('ExportAsXLS'), '', ICON_SIZE_MEDIUM).'</a> ';
-            echo '<form id="form1a" name="form1a" method="post" action="'.api_get_self().'?action='
-                .Security::remove_XSS($_GET['action']).'&survey_id='.$surveyId.'&'.api_get_cidreq().'&user_id='
-                .Security::remove_XSS($_GET['user']).'">';
-            echo '<input type="hidden" name="export_report" value="export_report">';
-            echo '<input type="hidden" name="export_format" value="csv">';
-            echo '</form>';
-            echo '<form id="form1b" name="form1b" method="post" action="'.api_get_self().'?action='
-                .Security::remove_XSS($_GET['action']).'&survey_id='.$surveyId.'&'.api_get_cidreq().'&user_id='
-                .Security::remove_XSS($_GET['user']).'">';
-            echo '<input type="hidden" name="export_report" value="export_report">';
-            echo '<input type="hidden" name="export_format" value="xls">';
-            echo '</form>';
-            echo '<form id="form2" name="form2" method="post" action="'.api_get_self().'?action='
-                .Security::remove_XSS($_GET['action']).'&survey_id='.$surveyId.'&'.api_get_cidreq().'">';
+        if (empty($survey_data)) {
+            return '';
         }
-        echo '</div>';
 
         // Step 1: selection of the user
         echo "<script>
@@ -374,7 +334,6 @@ class SurveyUtil
         }
 		</script>";
         echo get_lang('SelectUserWhoFilledSurvey').'<br />';
-
         echo '<select name="user" onchange="jumpMenu(\'parent\',this,0)">';
         echo '<option value="'.api_get_path(WEB_CODE_PATH).'survey/reporting.php?action='
             .Security::remove_XSS($_GET['action']).'&survey_id='.$surveyId.'&'.api_get_cidreq().'">'
@@ -401,15 +360,33 @@ class SurveyUtil
             echo '>'.$name.'</option>';
         }
         echo '</select>';
+    }
 
-        $course_id = api_get_course_int_id();
+    /**
+     * @param int   $userId
+     * @param array $survey_data
+     * @param bool  $addMessage
+     */
+    public static function displayUserReportAnswers($userId, $survey_data, $addMessage = true)
+    {
+        // Database table definitions
+        $table_survey_question = Database::get_course_table(TABLE_SURVEY_QUESTION);
+        $table_survey_question_option = Database::get_course_table(TABLE_SURVEY_QUESTION_OPTION);
+        $table_survey_answer = Database::get_course_table(TABLE_SURVEY_ANSWER);
+        $course_id = (int) $survey_data['c_id'];
+        $surveyId = (int) $survey_data['survey_id'];
+        $userId = Database::escape_string($userId);
+
+        $content = '';
         // Step 2: displaying the survey and the answer of the selected users
-        if (isset($_GET['user'])) {
-            echo Display::return_message(
-                get_lang('AllQuestionsOnOnePage'),
-                'normal',
-                false
-            );
+        if (!empty($userId)) {
+            if ($addMessage) {
+                $content .= Display::return_message(
+                    get_lang('AllQuestionsOnOnePage'),
+                    'normal',
+                    false
+                );
+            }
 
             // Getting all the questions and options
             $sql = "SELECT
@@ -451,7 +428,7 @@ class SurveyUtil
 			        WHERE
                         c_id = $course_id AND
                         survey_id = '".$surveyId."' AND
-                        user = '".Database::escape_string($_GET['user'])."'";
+                        user = '".$userId."'";
             $result = Database::query($sql);
             while ($row = Database::fetch_array($result, 'ASSOC')) {
                 $answers[$row['question_id']][] = $row['option_id'];
@@ -459,7 +436,6 @@ class SurveyUtil
             }
 
             // Displaying all the questions
-
             foreach ($questions as &$question) {
                 // If the question type is a scoring then we have to format the answers differently
                 switch ($question['type']) {
@@ -495,9 +471,78 @@ class SurveyUtil
                     $form->addHtml($question['survey_question']);
                     $display->render($form, $question, $finalAnswer);
                     $form->addHtml('</div></div>');
-                    $form->display();
+                    $content .= $form->returnForm();
                 }
             }
+        }
+
+        return $content;
+    }
+
+    /**
+     * This function displays the user report which is basically nothing more
+     * than a one-page display of all the questions
+     * of the survey that is filled with the answers of the person who filled the survey.
+     *
+     * @return string html code of the one-page survey with the answers of the selected user
+     *
+     * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
+     *
+     * @version February 2007 - Updated March 2008
+     */
+    public static function displayUserReport($survey_data, $people_filled, $addActionBar = true)
+    {
+        if (empty($survey_data)) {
+            return '';
+        }
+
+        $surveyId = $survey_data['survey_id'];
+        $reportingUrl = api_get_path(WEB_CODE_PATH).'survey/reporting.php?survey_id='.$surveyId.'&'.api_get_cidreq();
+
+        // Actions bar
+        if ($addActionBar) {
+            echo '<div class="actions">';
+            echo '<a href="'.$reportingUrl.'">'.
+                Display::return_icon(
+                    'back.png',
+                    get_lang('BackTo').' '.get_lang('ReportingOverview'),
+                    '',
+                    ICON_SIZE_MEDIUM
+                )
+                .'</a>';
+            if (isset($_GET['user'])) {
+                if (api_is_allowed_to_edit()) {
+                    // The delete link
+                    echo '<a href="'.$reportingUrl.'&action=deleteuserreport&user='.Security::remove_XSS($_GET['user']).'" >'.
+                        Display::return_icon('delete.png', get_lang('Delete'), '', ICON_SIZE_MEDIUM).'</a>';
+                }
+
+                // Export the user report
+                echo '<a href="javascript: void(0);" onclick="document.form1a.submit();">'
+                    .Display::return_icon('export_csv.png', get_lang('ExportAsCSV'), '', ICON_SIZE_MEDIUM).'</a> ';
+                echo '<a href="javascript: void(0);" onclick="document.form1b.submit();">'
+                    .Display::return_icon('export_excel.png', get_lang('ExportAsXLS'), '', ICON_SIZE_MEDIUM).'</a> ';
+                echo '<form id="form1a" name="form1a" method="post" action="'.api_get_self().'?action='
+                    .Security::remove_XSS($_GET['action']).'&survey_id='.$surveyId.'&'.api_get_cidreq().'&user_id='
+                    .Security::remove_XSS($_GET['user']).'">';
+                echo '<input type="hidden" name="export_report" value="export_report">';
+                echo '<input type="hidden" name="export_format" value="csv">';
+                echo '</form>';
+                echo '<form id="form1b" name="form1b" method="post" action="'.api_get_self().'?action='
+                    .Security::remove_XSS($_GET['action']).'&survey_id='.$surveyId.'&'.api_get_cidreq().'&user_id='
+                    .Security::remove_XSS($_GET['user']).'">';
+                echo '<input type="hidden" name="export_report" value="export_report">';
+                echo '<input type="hidden" name="export_format" value="xls">';
+                echo '</form>';
+                echo '<form id="form2" name="form2" method="post" action="'.api_get_self().'?action='
+                    .Security::remove_XSS($_GET['action']).'&survey_id='.$surveyId.'&'.api_get_cidreq().'">';
+            }
+            echo '</div>';
+        }
+
+        echo self::displayUserReportForm($survey_data, $people_filled);
+        if (isset($_GET['user'])) {
+            echo self::displayUserReportAnswers($_GET['user'], $survey_data);
         }
     }
 
@@ -864,92 +909,119 @@ class SurveyUtil
     /**
      * This functions displays the complete reporting.
      *
-     * @return string HTML code
+     * @param array $survey_data
+     * @param int   $userId
+     * @param bool  $addActionBar
+     * @param bool  $addFilters
+     * @param bool  $addExtraFields
      *
-     * @todo open questions are not in the complete report yet.
-     *
-     * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
-     *
-     * @version February 2007
+     * @return string
      */
-    public static function display_complete_report($survey_data)
-    {
+    public static function displayCompleteReport(
+        $survey_data,
+        $userId = 0,
+        $addActionBar = true,
+        $addFilters = true,
+        $addExtraFields = true
+    ) {
         // Database table definitions
         $table_survey_question = Database::get_course_table(TABLE_SURVEY_QUESTION);
         $table_survey_question_option = Database::get_course_table(TABLE_SURVEY_QUESTION_OPTION);
         $table_survey_answer = Database::get_course_table(TABLE_SURVEY_ANSWER);
-        $course_id = api_get_course_int_id();
-        $surveyId = isset($_GET['survey_id']) ? (int) $_GET['survey_id'] : 0;
+
+        $surveyId = (int) $survey_data['survey_id'];
+        $course_id = (int) $survey_data['c_id'];
+
+        if (empty($surveyId) || empty($course_id)) {
+            return '';
+        }
+
         $action = isset($_GET['action']) ? Security::remove_XSS($_GET['action']) : '';
+        $content = '';
+        if ($addActionBar) {
+            $content .= '<div class="actions">';
+            $content .= '<a 
+                href="'.api_get_path(WEB_CODE_PATH).'survey/reporting.php?survey_id='.$surveyId.'&'.api_get_cidreq().'">'
+                .Display::return_icon(
+                    'back.png',
+                    get_lang('BackTo').' '.get_lang('ReportingOverview'),
+                    [],
+                    ICON_SIZE_MEDIUM
+                )
+                .'</a>';
+            $content .= '<a class="survey_export_link" href="javascript: void(0);" onclick="document.form1a.submit();">'
+                .Display::return_icon('export_csv.png', get_lang('ExportAsCSV'), '', ICON_SIZE_MEDIUM).'</a>';
+            $content .= '<a class="survey_export_link" href="javascript: void(0);" onclick="document.form1b.submit();">'
+                .Display::return_icon('export_excel.png', get_lang('ExportAsXLS'), '', ICON_SIZE_MEDIUM).'</a>';
+            $content .= '</div>';
 
-        // Actions bar
-        echo '<div class="actions">';
-        echo '<a href="'.api_get_path(WEB_CODE_PATH).'survey/reporting.php?survey_id='.$surveyId.'&'.api_get_cidreq().'">'
-            .Display::return_icon(
-                'back.png',
-                get_lang('BackTo').' '.get_lang('ReportingOverview'),
-                [],
-                ICON_SIZE_MEDIUM
-            )
-            .'</a>';
-        echo '<a class="survey_export_link" href="javascript: void(0);" onclick="document.form1a.submit();">'
-            .Display::return_icon('export_csv.png', get_lang('ExportAsCSV'), '', ICON_SIZE_MEDIUM).'</a>';
-        echo '<a class="survey_export_link" href="javascript: void(0);" onclick="document.form1b.submit();">'
-            .Display::return_icon('export_excel.png', get_lang('ExportAsXLS'), '', ICON_SIZE_MEDIUM).'</a>';
-        echo '</div>';
+            // The form
+            $content .= '<form id="form1a" name="form1a" method="post" action="'.api_get_self(
+                ).'?action='.$action.'&survey_id='
+                .$surveyId.'&'.api_get_cidreq().'">';
+            $content .= '<input type="hidden" name="export_report" value="export_report">';
+            $content .= '<input type="hidden" name="export_format" value="csv">';
+            $content .= '</form>';
+            $content .= '<form id="form1b" name="form1b" method="post" action="'.api_get_self(
+                ).'?action='.$action.'&survey_id='
+                .$surveyId.'&'.api_get_cidreq().'">';
+            $content .= '<input type="hidden" name="export_report" value="export_report">';
+            $content .= '<input type="hidden" name="export_format" value="xls">';
+            $content .= '</form>';
+        }
 
-        // The form
-        echo '<form id="form1a" name="form1a" method="post" action="'.api_get_self().'?action='.$action.'&survey_id='
-            .$surveyId.'&'.api_get_cidreq().'">';
-        echo '<input type="hidden" name="export_report" value="export_report">';
-        echo '<input type="hidden" name="export_format" value="csv">';
-        echo '</form>';
-        echo '<form id="form1b" name="form1b" method="post" action="'.api_get_self().'?action='.$action.'&survey_id='
-            .$surveyId.'&'.api_get_cidreq().'">';
-        echo '<input type="hidden" name="export_report" value="export_report">';
-        echo '<input type="hidden" name="export_format" value="xls">';
-        echo '</form>';
-
-        echo '<form id="form2" name="form2" method="post" action="'.api_get_self().'?action='.$action.'&survey_id='
+        $content .= '<form id="form2" name="form2" method="post" action="'.api_get_self().'?action='.$action.'&survey_id='
             .$surveyId.'&'.api_get_cidreq().'">';
 
         // The table
-        echo '<br /><table class="data_table" border="1">';
+        $content .= '<br /><table class="data_table" border="1">';
         // Getting the number of options per question
-        echo '	<tr>';
-        echo '		<th>';
-        if ((isset($_POST['submit_question_filter']) && $_POST['submit_question_filter']) ||
-            (isset($_POST['export_report']) && $_POST['export_report'])
-        ) {
-            echo '<button class="cancel" type="submit" name="reset_question_filter" value="'
-                .get_lang('ResetQuestionFilter').'">'.get_lang('ResetQuestionFilter').'</button>';
+        $content .= '	<tr>';
+        $content .= '		<th>';
+
+        if ($addFilters) {
+            if ((isset($_POST['submit_question_filter']) && $_POST['submit_question_filter']) ||
+                (isset($_POST['export_report']) && $_POST['export_report'])
+            ) {
+                $content .= '<button class="cancel" 
+                                type="submit" 
+                                name="reset_question_filter" value="'.get_lang('ResetQuestionFilter').'">'.
+                                get_lang('ResetQuestionFilter').'</button>';
+            }
+            $content .= '<button 
+                            class = "save" 
+                            type="submit" name="submit_question_filter" value="'.get_lang('SubmitQuestionFilter').'">'.
+                            get_lang('SubmitQuestionFilter').'</button>';
+            $content .= '</th>';
         }
-        echo '<button class="save" type="submit" name="submit_question_filter" value="'.get_lang('SubmitQuestionFilter')
-            .'">'.get_lang('SubmitQuestionFilter').'</button>';
-        echo '</th>';
 
         $display_extra_user_fields = false;
-        if (!(isset($_POST['submit_question_filter']) && $_POST['submit_question_filter'] ||
-            isset($_POST['export_report']) && $_POST['export_report']) ||
-            !empty($_POST['fields_filter'])
-        ) {
-            // Show user fields section with a big th colspan that spans over all fields
-            $extra_user_fields = UserManager::get_extra_fields(
-                0,
-                0,
-                5,
-                'ASC',
-                false,
-                true
-            );
-            $num = count($extra_user_fields);
-            if ($num > 0) {
-                echo '<th '.($num > 0 ? ' colspan="'.$num.'"' : '').'>';
-                echo '<label><input type="checkbox" name="fields_filter" value="1" checked="checked"/> ';
-                echo get_lang('UserFields');
-                echo '</label>';
-                echo '</th>';
-                $display_extra_user_fields = true;
+        if ($addExtraFields) {
+            if (!(isset($_POST['submit_question_filter']) && $_POST['submit_question_filter'] ||
+                    isset($_POST['export_report']) && $_POST['export_report']) ||
+                !empty($_POST['fields_filter'])
+            ) {
+                // Show user fields section with a big th colspan that spans over all fields
+                $extra_user_fields = UserManager::get_extra_fields(
+                    0,
+                    0,
+                    5,
+                    'ASC',
+                    false,
+                    true
+                );
+                $num = count($extra_user_fields);
+                if ($num > 0) {
+                    $content .= '<th '.($num > 0 ? ' colspan="'.$num.'"' : '').'>';
+                    $content .= '<label>';
+                    if ($addFilters) {
+                        $content .= '<input type="checkbox" name="fields_filter" value="1" checked="checked"/> ';
+                    }
+                    $content .= get_lang('UserFields');
+                    $content .= '</label>';
+                    $content .= '</th>';
+                    $display_extra_user_fields = true;
+                }
             }
         }
 
@@ -974,36 +1046,44 @@ class SurveyUtil
             // 1. there is no question filter and the export button has not been clicked
             // 2. there is a quesiton filter but the question is selected for display
             if (!(isset($_POST['submit_question_filter']) && $_POST['submit_question_filter']) ||
-                (is_array($_POST['questions_filter']) && in_array($row['question_id'], $_POST['questions_filter']))
+                (is_array($_POST['questions_filter']) &&
+                in_array($row['question_id'], $_POST['questions_filter']))
             ) {
                 // We do not show comment and pagebreak question types
                 if ($row['type'] != 'pagebreak') {
-                    echo ' <th';
+                    $content .= ' <th';
                     if ($row['number_of_options'] > 0 && $row['type'] != 'percentage') {
-                        echo ' colspan="'.$row['number_of_options'].'"';
+                        $content .= ' colspan="'.$row['number_of_options'].'"';
                     }
-                    echo '>';
-                    echo '<label><input type="checkbox" name="questions_filter[]" value="'.$row['question_id']
-                        .'" checked="checked"/> ';
-                    echo $row['survey_question'];
-                    echo '</label>';
-                    echo '</th>';
+                    $content .= '>';
+                    $content .= '<label>';
+                    if ($addFilters) {
+                        $content .= '<input 
+                                type="checkbox" 
+                                name="questions_filter[]" value="'.$row['question_id'].'" checked="checked"/>';
+                    }
+                    $content .= $row['survey_question'];
+                    $content .= '</label>';
+                    $content .= '</th>';
                 }
                 // No column at all if it's not a question
             }
             $questions[$row['question_id']] = $row;
         }
-        echo '	</tr>';
+        $content .= '	</tr>';
+
         // Getting all the questions and options
-        echo '	<tr>';
-        echo '		<th>&nbsp;</th>'; // the user column
+        $content .= '	<tr>';
+        $content .= '		<th>&nbsp;</th>'; // the user column
 
         if (!(isset($_POST['submit_question_filter']) && $_POST['submit_question_filter'] ||
             isset($_POST['export_report']) && $_POST['export_report']) || !empty($_POST['fields_filter'])
         ) {
-            //show the fields names for user fields
-            foreach ($extra_user_fields as &$field) {
-                echo '<th>'.$field[3].'</th>';
+            if ($addExtraFields) {
+                // show the fields names for user fields
+                foreach ($extra_user_fields as &$field) {
+                    $content .= '<th>'.$field[3].'</th>';
+                }
             }
         }
 
@@ -1040,26 +1120,32 @@ class SurveyUtil
             ) {
                 // we do not show comment and pagebreak question types
                 if ($row['type'] == 'open' || $row['type'] == 'comment') {
-                    echo '<th>&nbsp;-&nbsp;</th>';
+                    $content .= '<th>&nbsp;-&nbsp;</th>';
                     $possible_answers[$row['question_id']][$row['question_option_id']] = $row['question_option_id'];
                     $display_percentage_header = 1;
                 } elseif ($row['type'] == 'percentage' && $display_percentage_header) {
-                    echo '<th>&nbsp;%&nbsp;</th>';
+                    $content .= '<th>&nbsp;%&nbsp;</th>';
                     $possible_answers[$row['question_id']][$row['question_option_id']] = $row['question_option_id'];
                     $display_percentage_header = 0;
                 } elseif ($row['type'] == 'percentage') {
                     $possible_answers[$row['question_id']][$row['question_option_id']] = $row['question_option_id'];
                 } elseif ($row['type'] != 'pagebreak' && $row['type'] != 'percentage') {
-                    echo '<th>';
-                    echo $row['option_text'];
-                    echo '</th>';
+                    $content .= '<th>';
+                    $content .= $row['option_text'];
+                    $content .= '</th>';
                     $possible_answers[$row['question_id']][$row['question_option_id']] = $row['question_option_id'];
                     $display_percentage_header = 1;
                 }
             }
         }
 
-        echo '	</tr>';
+        $content .= '	</tr>';
+
+        $userCondition = '';
+        if (!empty($userId)) {
+            $userId = (int) $userId;
+            $userCondition = " AND user = $userId ";
+        }
 
         // Getting all the answers of the users
         $old_user = '';
@@ -1067,7 +1153,8 @@ class SurveyUtil
         $sql = "SELECT * FROM $table_survey_answer
                 WHERE
                     c_id = $course_id AND
-                    survey_id='".$surveyId."'
+                    survey_id = $surveyId 
+                    $userCondition
                 ORDER BY answer_id, user ASC";
         $result = Database::query($sql);
         $i = 1;
@@ -1078,7 +1165,7 @@ class SurveyUtil
                     $userParam = $i;
                     $i++;
                 }
-                self::display_complete_report_row(
+                $content .= self::display_complete_report_row(
                     $survey_data,
                     $possible_answers,
                     $answers_of_user,
@@ -1098,12 +1185,14 @@ class SurveyUtil
             }
             $old_user = $row['user'];
         }
+
         $userParam = $old_user;
         if ($survey_data['anonymous'] != 0) {
             $userParam = $i;
             $i++;
         }
-        self::display_complete_report_row(
+
+        $content .= self::display_complete_report_row(
             $survey_data,
             $possible_answers,
             $answers_of_user,
@@ -1111,23 +1200,25 @@ class SurveyUtil
             $questions,
             $display_extra_user_fields
         );
+
         // This is to display the last user
-        echo '</table>';
-        echo '</form>';
+        $content .= '</table>';
+        $content .= '</form>';
+
+        return $content;
     }
 
     /**
-     * This function displays a row (= a user and his/her answers) in the table of the complete report.
+     * Return user answers in a row.
      *
-     * @param array $survey_data
-     * @param array    Possible options
-     * @param array    User answers
-     * @param mixed    User ID or user details string
-     * @param bool  Whether to show extra user fields or not
+     * @param      $survey_data
+     * @param      $possible_options
+     * @param      $answers_of_user
+     * @param      $user
+     * @param      $questions
+     * @param bool $display_extra_user_fields
      *
-     * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
-     *
-     * @version February 2007 - Updated March 2008
+     * @return string
      */
     public static function display_complete_report_row(
         $survey_data,
@@ -1138,24 +1229,31 @@ class SurveyUtil
         $display_extra_user_fields = false
     ) {
         $user = Security::remove_XSS($user);
-        echo '<tr>';
+        $surveyId = (int) $survey_data['survey_id'];
+
+        if (empty($surveyId)) {
+            return '';
+        }
+
+        $content = '<tr>';
+        $url = api_get_path(WEB_CODE_PATH).'survey/reporting.php?survey_id='.$surveyId.'&'.api_get_cidreq();
         if ($survey_data['anonymous'] == 0) {
             if (intval($user) !== 0) {
                 $userInfo = api_get_user_info($user);
+                $user_displayed = '-';
                 if (!empty($userInfo)) {
                     $user_displayed = $userInfo['complete_name_with_username'];
-                } else {
-                    $user_displayed = '-';
                 }
-                echo '<th>
-                    <a href="'.api_get_self().'?action=userreport&survey_id='.intval($_GET['survey_id']).'&user='.$user.'">'
+
+                $content .= '<th>
+                    <a href="'.$url.'&action=userreport&user='.$user.'">'
                     .$user_displayed.'</a>
                     </th>'; // the user column
             } else {
-                echo '<th>'.$user.'</th>'; // the user column
+                $content .= '<th>'.$user.'</th>'; // the user column
             }
         } else {
-            echo '<th>'.get_lang('Anonymous').' '.$user.'</th>';
+            $content .= '<th>'.get_lang('Anonymous').' '.$user.'</th>';
         }
 
         if ($display_extra_user_fields) {
@@ -1168,33 +1266,33 @@ class SurveyUtil
                 true
             );
             foreach ($user_fields_values as &$value) {
-                echo '<td align="center">'.$value.'</td>';
+                $content .= '<td align="center">'.$value.'</td>';
             }
         }
 
         if (is_array($possible_options)) {
             foreach ($possible_options as $question_id => &$possible_option) {
                 if ($questions[$question_id]['type'] == 'open' || $questions[$question_id]['type'] == 'comment') {
-                    echo '<td align="center">';
+                    $content .= '<td align="center">';
                     if (isset($answers_of_user[$question_id]) && isset($answers_of_user[$question_id]['0'])) {
-                        echo $answers_of_user[$question_id]['0']['option_id'];
+                        $content .= $answers_of_user[$question_id]['0']['option_id'];
                     }
-                    echo '</td>';
+                    $content .= '</td>';
                 } else {
                     foreach ($possible_option as $option_id => &$value) {
                         if ($questions[$question_id]['type'] == 'percentage') {
                             if (!empty($answers_of_user[$question_id][$option_id])) {
-                                echo "<td align='center'>";
-                                echo $answers_of_user[$question_id][$option_id]['value'];
-                                echo "</td>";
+                                $content .= "<td align='center'>";
+                                $content .= $answers_of_user[$question_id][$option_id]['value'];
+                                $content .= "</td>";
                             }
                         } else {
-                            echo '<td align="center">';
+                            $content .= '<td align="center">';
                             if (!empty($answers_of_user[$question_id][$option_id])) {
                                 if ($answers_of_user[$question_id][$option_id]['value'] != 0) {
-                                    echo $answers_of_user[$question_id][$option_id]['value'];
+                                    $content .= $answers_of_user[$question_id][$option_id]['value'];
                                 } else {
-                                    echo 'v';
+                                    $content .= 'v';
                                 }
                             }
                         }
@@ -1202,7 +1300,10 @@ class SurveyUtil
                 }
             }
         }
-        echo '</tr>';
+
+        $content .= '</tr>';
+
+        return $content;
     }
 
     /**
@@ -1512,6 +1613,7 @@ class SurveyUtil
     public static function export_complete_report_xls($survey_data, $filename, $user_id = 0)
     {
         $course_id = api_get_course_int_id();
+        $user_id = (int) $user_id;
         $surveyId = isset($_GET['survey_id']) ? (int) $_GET['survey_id'] : 0;
 
         if (empty($course_id) || empty($surveyId)) {
@@ -1672,7 +1774,7 @@ class SurveyUtil
         $sql = "SELECT * FROM $table_survey_answer
                 WHERE c_id = $course_id AND survey_id = $surveyId";
         if ($user_id != 0) {
-            $sql .= " AND user='".intval($user_id)."' ";
+            $sql .= " AND user='".$user_id."' ";
         }
         $sql .= ' ORDER BY user ASC';
 
@@ -2195,8 +2297,8 @@ class SurveyUtil
      * @param int  $reminder
      * @param bool $sendmail
      * @param int  $remindUnAnswered
-     *
-     * @return bool $isAdditionalEmail
+     * @param bool $isAdditionalEmail
+     * @param bool $hideLink
      *
      * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
      * @author Julio Montoya - Adding auto-generated link support
@@ -2210,7 +2312,8 @@ class SurveyUtil
         $reminder = 0,
         $sendmail = false,
         $remindUnAnswered = 0,
-        $isAdditionalEmail = false
+        $isAdditionalEmail = false,
+        $hideLink = false
     ) {
         if (!is_array($users_array)) {
             // Should not happen
@@ -2225,7 +2328,8 @@ class SurveyUtil
 
         // Remind unanswered is a special version of remind all reminder
         $exclude_users = [];
-        if ($remindUnAnswered == 1) { // Remind only unanswered users
+        if ($remindUnAnswered == 1) {
+            // Remind only unanswered users
             $reminder = 1;
             $exclude_users = SurveyManager::get_people_who_filled_survey($_GET['survey_id']);
         }
@@ -2315,7 +2419,8 @@ class SurveyUtil
                     $value,
                     $invitation_code,
                     $invitation_title,
-                    $invitation_text
+                    $invitation_text,
+                    $hideLink
                 );
                 $counter++;
             }
@@ -2337,6 +2442,15 @@ class SurveyUtil
             (!empty($params['user']) || !empty($params['group_id'])) &&
             !empty($params['survey_code'])
         ) {
+            if (!isset($params['survey_invitation_id'])) {
+                $params['survey_invitation_id'] = 0;
+            }
+            if (!isset($params['answered'])) {
+                $params['answered'] = 0;
+            }
+            if (!isset($params['group_id'])) {
+                $params['group_id'] = 0;
+            }
             $insertId = Database::insert($table, $params);
             if ($insertId) {
                 $sql = "UPDATE $table
@@ -2389,7 +2503,8 @@ class SurveyUtil
         $invitedUser,
         $invitation_code,
         $invitation_title,
-        $invitation_text
+        $invitation_text,
+        $hideLink = false
     ) {
         $_user = api_get_user_info();
         $_course = api_get_course_info();
@@ -2397,14 +2512,17 @@ class SurveyUtil
 
         // Replacing the **link** part with a valid link for the user
         $link = self::generateFillSurveyLink($invitation_code, $_course, $sessionId);
+        if ($hideLink) {
+            $full_invitation_text = str_replace('**link**', '', $invitation_text);
+        } else {
+            $text_link = '<a href="'.$link.'">'.get_lang('ClickHereToAnswerTheSurvey')."</a><br />\r\n<br />\r\n"
+                .get_lang('OrCopyPasteTheFollowingUrl')." <br /> \r\n <br /> \r\n ".$link;
 
-        $text_link = '<a href="'.$link.'">'.get_lang('ClickHereToAnswerTheSurvey')."</a><br />\r\n<br />\r\n"
-            .get_lang('OrCopyPasteTheFollowingUrl')." <br /> \r\n <br /> \r\n ".$link;
-
-        $replace_count = 0;
-        $full_invitation_text = api_str_ireplace('**link**', $text_link, $invitation_text, $replace_count);
-        if ($replace_count < 1) {
-            $full_invitation_text = $full_invitation_text."<br />\r\n<br />\r\n".$text_link;
+            $replace_count = 0;
+            $full_invitation_text = api_str_ireplace('**link**', $text_link, $invitation_text, $replace_count);
+            if ($replace_count < 1) {
+                $full_invitation_text = $full_invitation_text."<br />\r\n<br />\r\n".$text_link;
+            }
         }
 
         // Sending the mail
@@ -3385,7 +3503,13 @@ class SurveyUtil
         $now = api_get_utc_datetime(null, false, true);
         $filterDate = $allowSurveyAvailabilityDatetime ? $now->format('Y-m-d H:i') : $now->format('Y-m-d');
 
-        $sql = "SELECT *
+        $sql = "SELECT survey_invitation.answered,
+                    survey_invitation.invitation_code,
+                    survey_invitation.session_id,
+                    survey.title,
+                    survey.visible_results,
+                    survey.survey_id,
+                    survey.anonymous
                 FROM $table_survey survey
                 INNER JOIN
                 $table_survey_invitation survey_invitation
@@ -3406,7 +3530,13 @@ class SurveyUtil
 
         $efv = new ExtraFieldValue('survey');
 
+        $surveyIds = [];
+
         while ($row = Database::fetch_array($result, 'ASSOC')) {
+            if (in_array($row['survey_id'], $surveyIds)) {
+                continue;
+            }
+
             echo '<tr>';
             if ($row['answered'] == 0) {
                 echo '<td>';
@@ -3457,6 +3587,8 @@ class SurveyUtil
                 echo '<td class="text-center">'.($efvMandatory['value'] ? get_lang('Yes') : get_lang('No')).'</td>';
             }
             echo '</tr>';
+
+            $surveyIds[] = $row['survey_id'];
         }
         echo '</tbody>';
         echo '</table>';
@@ -3881,6 +4013,7 @@ class SurveyUtil
                 ON (survey_invitation.user = user.id AND survey_invitation.c_id = $courseId)
                 WHERE
                     survey_invitation.survey_code = '$surveyCode'
+                    AND survey_invitation.c_id = $courseId
                     $sessionCondition";
 
         $query = Database::query($sql);

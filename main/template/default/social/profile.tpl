@@ -16,7 +16,7 @@
         </div>
     </div>
     <div id="wallMessages" class="col-md-6">
-        {{ social_wall_block }}
+        {{ add_post_form }}
         <div class="spinner"></div>
         <div class="panel panel-preview panel-default" hidden="true">
             <div class="panel-heading">
@@ -26,7 +26,7 @@
                 <div class="url_preview"></div>
             </div>
         </div>
-        {{ social_post_wall_block }}
+        {{ posts }}
         {{ social_auto_extend_link }}
     </div>
     <div class="col-md-3">

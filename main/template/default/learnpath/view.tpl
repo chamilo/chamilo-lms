@@ -10,12 +10,12 @@
                                 {{ lp_preview_image }}
                             </div>
                         {% else %}
-                            <div class="media">
-                                <div class="media-left">
+                            <div class="media-author">
+                                <div class="media-author-avatar">
                                     {{ lp_preview_image }}
                                 </div>
-                                <div class="media-body">
-                                    <div class="description-autor"> {{ lp_author }} </div>
+                                <div class="media-author-description">
+                                    {{ lp_author }}
                                 </div>
                             </div>
                         {% endif %}
@@ -130,18 +130,15 @@
                             </div>
                             <div class="row">
                                 <div class="col-xs-12 navegation-bar">
-                                    <div id="progress_bar">
-                                        {{ progress_bar }}
-                                    </div>
+                                   {{ lp_progress }}
                                 </div>
                             </div>
                         </div>
-                       <!--- end gamification -->
+                        <!--- end gamification -->
                     {% else %}
-                        <div id="progress_bar">
-                            {{ progress_bar }}
-                        </div>
+                       {{ lp_progress }}
                     {% endif %}
+
                     {{ teacher_toc_buttons }}
                 </div>
             </div>
@@ -224,7 +221,7 @@
         }
     };
 
-    $(document).on('ready', function () {
+    $(function() {
         if (/iPhone|iPod|iPad/.test(navigator.userAgent)) {
             // Fix an issue where you cannot scroll below first screen in
             // learning paths on Apple devices

@@ -2739,23 +2739,17 @@ class Wiki
                     $sql = "SELECT * FROM ".$tbl_wiki."
                             WHERE
                                 c_id = $course_id AND
-                                title LIKE '%".Database::escape_string(
-                            $search_term
-                        )."%' OR
+                                title LIKE '%".Database::escape_string($search_term)."%' OR
                                 content LIKE '%".Database::escape_string(
                             $search_term
-                        )."%' AND
-                                ".$groupfilter.$condition_session."";
-                //search all pages and all versions
+                        )."%' AND ".$groupfilter.$condition_session;
                 } else {
                     $sql = "SELECT * FROM ".$tbl_wiki."
                             WHERE
                                 c_id = $course_id AND
                                 title LIKE '%".Database::escape_string(
                             $search_term
-                        )."%' AND
-                                ".$groupfilter.$condition_session."";
-                    //search all pages and all versions
+                        )."%' AND ".$groupfilter.$condition_session;
                 }
             } else {
                 if ($search_content == '1') {
@@ -2797,24 +2791,16 @@ class Wiki
                             WHERE
                                 c_id = $course_id AND
                                 visibility=1 AND
-                                title LIKE '%".Database::escape_string(
-                            $search_term
-                        )."%' OR
-                                content LIKE '%".Database::escape_string(
-                            $search_term
-                        )."%' AND
-                                ".$groupfilter.$condition_session."";
-                //search all pages and all versions
+                                title LIKE '%".Database::escape_string($search_term)."%' OR
+                                content LIKE '%".Database::escape_string($search_term)."%' AND
+                                ".$groupfilter.$condition_session;
                 } else {
                     $sql = "SELECT * FROM ".$tbl_wiki."
                             WHERE
                                 c_id = $course_id AND
                                 visibility=1 AND
-                                title LIKE '%".Database::escape_string(
-                            $search_term
-                        )."%' AND
-                                ".$groupfilter.$condition_session."";
-                    //search all pages and all versions
+                                title LIKE '%".Database::escape_string($search_term)."%' AND
+                                ".$groupfilter.$condition_session;
                 }
             } else {
                 if ($search_content == '1') {
@@ -2822,12 +2808,8 @@ class Wiki
                             WHERE
                                 s1.c_id = $course_id AND
                                 visibility=1 AND
-                                title LIKE '%".Database::escape_string(
-                            $search_term
-                        )."%' OR
-                                content LIKE '%".Database::escape_string(
-                            $search_term
-                        )."%' AND
+                                title LIKE '%".Database::escape_string($search_term)."%' OR
+                                content LIKE '%".Database::escape_string($search_term)."%' AND
                                 id=(
                                     SELECT MAX(s2.id)
                                     FROM ".$tbl_wiki." s2

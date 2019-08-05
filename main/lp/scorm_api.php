@@ -210,8 +210,8 @@ if (olms.score == 0 && olms.lms_item_type == 'sco' && olms.lesson_status == 'not
 }
 
 olms.asset_timer = 0;
-olms.userfname = '<?php echo str_replace("'", "\\'", $user['firstname']); ?>';
-olms.userlname = '<?php echo str_replace("'", "\\'", $user['lastname']); ?>';
+olms.userfname = '<?php echo addslashes(trim($user['firstname'])); ?>';
+olms.userlname = '<?php echo addslashes(trim($user['lastname'])); ?>';
 olms.execute_stats = false;
 
 var courseUrl = '?cidReq='+olms.lms_course_code+'&id_session='+olms.lms_session_id;
@@ -237,7 +237,6 @@ $(function() {
 
     olms.info_lms_item[0] = '<?php echo $oItem->get_id(); ?>';
     olms.info_lms_item[1] = '<?php echo $oItem->get_id(); ?>';
-
 
     $("#content_id").load(function() {
         logit_lms('#content_id load event starts');
@@ -337,7 +336,12 @@ function LMSInitialize() {
 
         logit_scorm('LMSInitialize() with params: '+log);
 
-    if (olms.lms_lp_type == 1 || olms.lms_item_type == 'asset' || olms.lms_item_type == 'document') {
+        if(olms.lms_item_type == 'sco'){
+            $("#tab-iframe").removeClass();
+            $("#tab-iframe").addClass("tab-content iframe_"+olms.lms_item_type);
+        }
+
+        if (olms.lms_lp_type == 1 || olms.lms_item_type == 'asset' || olms.lms_item_type == 'document') {
             xajax_start_timer();
         }
 
@@ -471,7 +475,7 @@ function LMSGetValue(param) {
     } else if(param == 'cmi.core.student_name'){
         // ---- cmi.core.student_name
         <?php
-          $who = addslashes($user['lastname']).', '.addslashes($user['firstname']);
+          $who = addslashes(trim($user['lastname']).', '.trim($user['firstname']));
           echo "result='$who';";
         ?>
     } else if(param == 'cmi.core.lesson_location'){
@@ -867,7 +871,7 @@ function savedata(item_id) {
 
     // Status is NOT modified here see the lp_ajax_save_item.php file
     if (olms.lesson_status != '') {
-        olms.updatable_vars_list['cmi.core.lesson_status'] = true;
+        //olms.updatable_vars_list['cmi.core.lesson_status'] = true;
     }
 
     old_item_id = olms.info_lms_item[0];
@@ -1439,7 +1443,25 @@ function reinit_updatable_vars_list() {
  * @param	string		This parameter can be a string specifying the next
  *						item (like 'next', 'previous', 'first' or 'last') or the id to the next item
  */
-function switch_item(current_item, next_item){
+function switch_item(current_item, next_item)
+{
+    logit_lms('switch_item() called with params '+olms.lms_item_id+' and '+next_item+'',2);
+
+    if (olms.lms_initialized == 0) {
+        // Fix error when flash is not loaded and SCO is not started BT#14944
+        olms.G_LastError = G_NotInitialized;
+        olms.G_LastErrorMessage = G_NotInitializedMessage;
+        logit_scorm('Error '+ G_NotInitialized + G_NotInitializedMessage, 0);
+        //window.location.reload(false);
+
+        var url = window.location.href + '&item_id='  + parseInt(next_item);
+        window.location.replace(url);
+
+        return false;
+    }
+
+    olms.switch_finished = 0; //only changed back once LMSInitialize() happens
+
     // backup these params
     var orig_current_item   = current_item;
     var orig_next_item      = next_item;
@@ -1451,8 +1473,6 @@ function switch_item(current_item, next_item){
         // set in a previous stage
         olms.statusSignalReceived = 1;
     }
-
-    logit_lms('switch_item() called with params '+olms.lms_item_id+' and '+next_item+'',2);
 
     /*
      There are four "cases" for switching items:
@@ -1685,9 +1705,10 @@ function switch_item(current_item, next_item){
             if ($("#lp_media_file").length != 0) {
                 $("#lp_media_file").html(tmp_data);
             }
+
+            LPViewUtils.setHeightLPToc();
         }
     });
-    olms.switch_finished = 0; //only changed back once LMSInitialize() happens
 
     loadForumThread(olms.lms_lp_id, next_item);
     checkCurrentItemPosition(olms.lms_item_id);
@@ -1740,11 +1761,15 @@ var loadForumThread = function(lpId, lpItemId) {
         var tabForumLink = $('.lp-view-tabs a[href="#lp-view-forum"]'),
             tabForum = tabForumLink.parent();
             $("#navTabs").show();
+            $("#tab-iframe").removeClass("tab-none-forum");
+            $("#btn-menu-float").removeClass("none-forum");
 
         if (forumThreadData.error) {
             tabForumLink.removeAttr('data-toggle');
             tabForum.addClass('disabled');
             $("#navTabs").hide();
+            $("#tab-iframe").addClass("tab-none-forum");
+            $("#btn-menu-float").addClass("none-forum");
             $('#lp-view-forum').html('');
 
             return;
@@ -1915,7 +1940,9 @@ function xajax_save_item_scorm(
         } else if (my_scorm_values[k]=='cmi.completion_status') {
         } else if (my_scorm_values[k]=='cmi.score.scaled') {
         } else if (my_scorm_values[k]=='cmi.suspend_data') {
-            params += '&suspend='+olms.suspend_data;
+            // params += '&suspend='+olms.suspend_data;
+            // Fixes error when scorm sends text with "+" sign
+            params += '&suspend='+encodeURIComponent(olms.suspend_data);
         } else if (my_scorm_values[k]=='cmi.completion_status') {
         } else if (my_scorm_values[k]=='cmi.core.exit') {
             params += '&core_exit='+olms.lms_item_core_exit;

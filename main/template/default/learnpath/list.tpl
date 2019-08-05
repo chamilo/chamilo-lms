@@ -22,7 +22,7 @@
                 {% if categories|length > 1 and lp_data.category.id %}
                     {% if is_allowed_to_edit %}
                         <h3 class="page-header">
-                            {{ lp_data.category.getName() }}
+                            {{ lp_data.category.getName() | trim }}
 
                             {% if lp_data.category.getId() > 0 %}
                                 {% if not _c.session_id %}
@@ -393,12 +393,11 @@
                                 </a>
                             </h4>
                         </div>
-
-                        <div id="collapse-{{ lp_data.category.getId() }}" class="panel-collapse collapse {{ (categories|length > 1 ? 'in':'') }}"
+                        {% set number = number + 1 %}
+                        <div id="collapse-{{ lp_data.category.getId() }}" class="panel-collapse collapse {{ (number == 1 ? 'in':'') }}"
                              role="tabpanel" aria-labelledby="heading-{{ lp_data.category.getId() }}">
                             <div class="panel-body">
                                 {% if lp_data.lp_list %}
-
                                     {% if is_allowed_to_edit %}
                                         <div class="table-responsive">
                                             <table class="table table-hover table-striped">
@@ -449,7 +448,6 @@
                                                                 </td>
                                                             {% endif %}
                                                         {% endif %}
-
                                                         <td>
                                                             {{ row.action_build }}
                                                             {{ row.action_edit }}
@@ -500,7 +498,6 @@
                             </div>
                         </div>
                     </div>
-
                 {% endif %}
                 <!-- end view block accordeon -->
             {% endif %}

@@ -130,6 +130,8 @@ function get_users($from, $limit, $column, $direction)
     $all_datas = [];
     foreach ($students as $student_data) {
         $student_id = $student_data['user_id'];
+        $student_data = api_get_user_info($student_id);
+
         if (isset($_GET['id_session'])) {
             $courses = Tracking :: get_course_list_in_session_from_student($student_id, $sessionId);
         }
@@ -252,12 +254,7 @@ if (api_is_drh()) {
         ),
     ];
 
-    $nb_menu_items = count($menu_items);
-    if ($nb_menu_items > 1) {
-        foreach ($menu_items as $key => $item) {
-            $actionsLeft .= $item;
-        }
-    }
+    $actionsLeft .= implode('', $menu_items);
 } elseif (api_is_student_boss()) {
     $actionsLeft .= Display::url(
         Display::return_icon('statistics.png', get_lang('MyStats'), '', ICON_SIZE_MEDIUM),
@@ -267,7 +264,7 @@ if (api_is_drh()) {
         Display::return_icon('user_na.png', get_lang('Students'), [], ICON_SIZE_MEDIUM),
         '#'
     );
-    $actions .= Display::url(
+    $actionsLeft .= Display::url(
         Display::return_icon('skills.png', get_lang('Skills'), [], ICON_SIZE_MEDIUM),
         $webCodePath.'social/my_skills_report.php'
     );

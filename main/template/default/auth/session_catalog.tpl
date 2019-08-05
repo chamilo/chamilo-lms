@@ -119,11 +119,11 @@
                             	{% endif %}
                             	<div class="block-info">
                                     <ul class="info list-inline">
-                                        <li>
+                                        <li class="course_label_number_courses">
                                             <i class="fa fa-book" aria-hidden="true"></i>
                                             {{ item.nbr_courses ~ ' ' ~ 'Courses'|get_lang }}
                                         </li>
-                                        <li>
+                                        <li class="course_label_number_users">
                                             <i class="fa fa-user" aria-hidden="true"></i>
                                             {{ item.nbr_users ~ ' ' ~ 'NbUsers'|get_lang }}
                                         </li>

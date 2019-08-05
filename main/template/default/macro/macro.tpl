@@ -116,3 +116,102 @@
         {% endif %}
     </div>
 {% endmacro %}
+
+{% macro box_widget(name, content, icon) %}
+    <div class="card box-widget">
+        <div class="card-body">
+            <div class="stat-widget-five">
+                <i class="fa fa-{{ icon }}" aria-hidden="true"></i>
+                {{ content }}
+                <div class="box-name">
+                    {{ name }}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endmacro %}
+
+{% macro card_widget(name, content, icon, extra) %}
+    <div class="card card-first-date">
+        <div class="card-body">
+            <div class="stat-widget-five">
+                <div class="stat-icon">
+                    <i class="fa fa-{{ icon }}" aria-hidden="true"></i>
+                    {% if extra %}
+                        <span class="active-icon">{{ extra }}</span>
+                    {% endif %}
+                </div>
+                <div class="stat-content">
+                    <div class="text-left">
+                        <div class="stat-text">
+                            {{ content }}
+                        </div>
+                        <div class="stat-heading">
+                            {{ name }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endmacro %}
+
+{% macro reporting_user_details(user) %}
+    <div class="parameters">
+        <dl class="dl-horizontal">
+            {% if user.status %}
+                <dt>{{ 'Status'|get_lang }}</dt>
+                <dd>{{ user.status }}</dd>
+            {% endif %}
+
+            <dt>{{ 'OfficialCode'|get_lang }}</dt>
+            <dd>{{ user.code == '' ? 'NoOfficialCode'|get_lang : user.code }}</dd>
+            <dt>{{ 'OnLine'|get_lang }}</dt>
+            <dd>
+                {{ user.user_is_online }}
+                {{ user.online }}
+            </dd>
+            <dt>{{ 'Tel'|get_lang }}</dt>
+            <dd>{{ user.phone == '' ? 'NoTel'|get_lang : user.phone }}</dd>
+
+            {% if user.timezone %}
+                <dt>{{ 'Timezone'|get_lang }}</dt>
+                <dd>{{ user.timezone }}</dd>
+            {% endif %}
+        </dl>
+
+        {% if user.created %}
+            <div class="create">{{ user.created }}</div>
+        {% endif %}
+
+        {% if user.url_access or user.legal.url_send %}
+            <div class="access">
+                {{ user.url_access }}
+                {{ user.legal.url_send }}
+            </div>
+        {% endif %}
+    </div>
+{% endmacro %}
+
+{% macro reporting_user_box(user) %}
+    {% import _self as display %}
+
+    <div class="user">
+        <div class="avatar">
+            <img width="128px" src="{{ user.avatar }}" class="img-responsive">
+        </div>
+        <div class="name">
+            <h3>
+                {% if user.complete_name_link %}
+                    {{ user.complete_name_link }}
+                {% else %}
+                    {{ user.complete_name }}
+                {% endif %}
+            </h3>
+            <p class="email">{{ user.email }}</p>
+        </div>
+
+        {{ display.reporting_user_details(user) }}
+
+    </div>
+{% endmacro %}

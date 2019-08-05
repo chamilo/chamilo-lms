@@ -64,9 +64,7 @@ if ((user_is_author($id) || $isDrhOfCourse || (api_is_allowed_to_edit() || api_i
         $work['active'] == 1 &&
         $work['accepted'] == 1
         ) ||
-        (api_is_allowed_to_edit() || api_is_coach()) ||
-        user_is_author($id) ||
-        $isDrhOfCourse
+        (api_is_allowed_to_edit() || api_is_coach()) || user_is_author($id) || $isDrhOfCourse
     ) {
         $action = isset($_REQUEST['action']) ? $_REQUEST['action'] : null;
         $page = isset($_REQUEST['page']) ? $_REQUEST['page'] : null;

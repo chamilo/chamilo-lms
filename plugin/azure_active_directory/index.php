@@ -10,23 +10,25 @@
 $activeDirectoryPlugin = AzureActiveDirectory::create();
 
 if ($activeDirectoryPlugin->get(AzureActiveDirectory::SETTING_ENABLE) === 'true') {
-    $signUp = $activeDirectoryPlugin->get(AzureActiveDirectory::SETTING_SIGNIN_POLICY);
-    $signIn = $activeDirectoryPlugin->get(AzureActiveDirectory::SETTING_SIGNUP_POLICY);
-    $signUnified = $activeDirectoryPlugin->get(AzureActiveDirectory::SETTING_SIGNUNIFIED_POLICY);
-
     $_template['block_title'] = $activeDirectoryPlugin->get(AzureActiveDirectory::SETTING_BLOCK_NAME);
 
-    if ($signUp) {
-        $_template['signup_url'] = $activeDirectoryPlugin->getUrl(AzureActiveDirectory::URL_TYPE_SIGNUP);
+    $_template['signin_url'] = $activeDirectoryPlugin->getUrl(AzureActiveDirectory::URL_TYPE_AUTHORIZE);
+
+    if ('true' === $activeDirectoryPlugin->get(AzureActiveDirectory::SETTING_FORCE_LOGOUT_BUTTON)) {
+        $_template['signout_url'] = $activeDirectoryPlugin->getUrl(AzureActiveDirectory::URL_TYPE_LOGOUT);
     }
 
-    if ($signIn) {
-        $_template['signin_url'] = $activeDirectoryPlugin->getUrl(AzureActiveDirectory::URL_TYPE_SIGNIN);
-    }
+    $managementLoginEnabled = 'true' === $activeDirectoryPlugin->get(AzureActiveDirectory::SETTING_MANAGEMENT_LOGIN_ENABLE);
 
-    if ($signUnified) {
-        $_template['signunified_url'] = $activeDirectoryPlugin->getUrl(AzureActiveDirectory::URL_TYPE_SIGNUNIFIED);
-    }
+    $_template['management_login_enabled'] = $managementLoginEnabled;
 
-    $_template['signout_url'] = $activeDirectoryPlugin->getUrl(AzureActiveDirectory::URL_TYPE_SIGNOUT);
+    if ($managementLoginEnabled) {
+        $managementLoginName = $activeDirectoryPlugin->get(AzureActiveDirectory::SETTING_MANAGEMENT_LOGIN_NAME);
+
+        if (empty($managementLoginName)) {
+            $managementLoginName = $activeDirectoryPlugin->get_lang('ManagementLogin');
+        }
+
+        $_template['management_login_name'] = $managementLoginName;
+    }
 }

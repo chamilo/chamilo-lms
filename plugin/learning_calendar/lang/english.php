@@ -8,9 +8,9 @@ $strings['LearningCalendar'] = 'Learning calendar';
 $strings['NumberDaysAccumulatedInCalendar'] = 'Number of days accumulated in the calendar: ';
 $strings['NumberDaysAccumulatedInLp'] = 'Number of days accumulated in the LP: ';
 $strings['NumberDaysInRetard'] = 'Number of days in retard: ';
-$strings['DifferenceOfDaysAndCalendar'] = 'Difference of days and calendar';
+$strings['DifferenceOfDaysAndCalendar'] = 'Difference of days with the calendar plan';
 
-$strings['EventTypeTaken'] = 'Taken';
+$strings['EventTypeTaken'] = 'Busy';
 $strings['EventTypeExam'] = 'Exam';
 $strings['EventTypeFree'] = 'Free';
 $strings['CourseHoursDuration'] = 'Course hours duration';

@@ -70,18 +70,18 @@ class Course
     /**
      * Does this course has resources?
      *
-     * @param int $resource_type Check if this course has resources of the
-     *                           given type. If no type is given, check if course has resources of any
-     *                           type.
+     * @param int $type Check if this course has resources of the
+     *                  given type. If no type is given, check if course has resources of any
+     *                  type.
      *
      * @return bool
      */
-    public function has_resources($resource_type = null)
+    public function has_resources($type = null)
     {
-        if ($resource_type != null) {
+        if ($type != null) {
             return
-                isset($this->resources[$resource_type]) && is_array($this->resources[$resource_type]) && (
-                    count($this->resources[$resource_type]) > 0
+                isset($this->resources[$type]) && is_array($this->resources[$type]) && (
+                    count($this->resources[$type]) > 0
                 );
         }
 
@@ -109,6 +109,9 @@ class Course
                     $description = '';
                     switch ($type) {
                         case RESOURCE_ANNOUNCEMENT:
+                        case RESOURCE_EVENT:
+                        case RESOURCE_THEMATIC:
+                        case RESOURCE_WIKI:
                             $title = $resource->title;
                             $description = $resource->content;
                             break;
@@ -116,16 +119,13 @@ class Course
                             $title = $resource->title;
                             $description = $resource->comment;
                             break;
-                        case RESOURCE_EVENT:
-                            $title = $resource->title;
-                            $description = $resource->content;
-                            break;
                         case RESOURCE_FORUM:
-                            $title = $resource->title;
-                            $description = $resource->description;
-                            break;
-
                         case RESOURCE_FORUMCATEGORY:
+                        case RESOURCE_LINK:
+                        case RESOURCE_LINKCATEGORY:
+                        case RESOURCE_QUIZ:
+                        case RESOURCE_TEST_CATEGORY:
+                        case RESOURCE_WORK:
                             $title = $resource->title;
                             $description = $resource->description;
                             break;
@@ -133,13 +133,11 @@ class Course
                             $title = $resource->title;
                             $description = $resource->text;
                             break;
+                        case RESOURCE_SCORM:
                         case RESOURCE_FORUMTOPIC:
                             $title = $resource->title;
                             break;
                         case RESOURCE_GLOSSARY:
-                            $title = $resource->name;
-                            $description = $resource->description;
-                            break;
                         case RESOURCE_LEARNPATH:
                             $title = $resource->name;
                             $description = $resource->description;
@@ -147,28 +145,9 @@ class Course
                         case RESOURCE_LEARNPATH_CATEGORY:
                             $title = $resource->name;
                             break;
-                        case RESOURCE_LINK:
-                            $title = $resource->title;
-                            $description = $resource->description;
-                            break;
-                        case RESOURCE_LINKCATEGORY:
-                            $title = $resource->title;
-                            $description = $resource->description;
-                            break;
-                        case RESOURCE_QUIZ:
-                            $title = $resource->title;
-                            $description = $resource->description;
-                            break;
-                        case RESOURCE_TEST_CATEGORY:
-                            $title = $resource->title;
-                            $description = $resource->description;
-                            break;
                         case RESOURCE_QUIZQUESTION:
                             $title = $resource->question;
                             $description = $resource->description;
-                            break;
-                        case RESOURCE_SCORM:
-                            $title = $resource->title;
                             break;
                         case RESOURCE_SURVEY:
                             $title = $resource->title;
@@ -181,21 +160,9 @@ class Course
                         case RESOURCE_TOOL_INTRO:
                             $description = $resource->intro_text;
                             break;
-                        case RESOURCE_WIKI:
-                            $title = $resource->title;
-                            $description = $resource->content;
-                            break;
-                        case RESOURCE_THEMATIC:
-                            $title = $resource->title;
-                            $description = $resource->content;
-                            break;
                         case RESOURCE_ATTENDANCE:
                             $title = $resource->params['name'];
                             $description = $resource->params['description'];
-                            break;
-                        case RESOURCE_WORK:
-                            $title = $resource->title;
-                            $description = $resource->description;
                             break;
                         default:
                             break;
@@ -234,6 +201,7 @@ class Course
                 foreach ($resources as &$resource) {
                     switch ($type) {
                         case RESOURCE_ANNOUNCEMENT:
+                        case RESOURCE_EVENT:
                             $resource->title = api_to_system_encoding($resource->title, $this->encoding);
                             $resource->content = api_to_system_encoding($resource->content, $this->encoding);
                             break;
@@ -241,15 +209,12 @@ class Course
                             $resource->title = api_to_system_encoding($resource->title, $this->encoding);
                             $resource->comment = api_to_system_encoding($resource->comment, $this->encoding);
                             break;
-                        case RESOURCE_EVENT:
-                            $resource->title = api_to_system_encoding($resource->title, $this->encoding);
-                            $resource->content = api_to_system_encoding($resource->content, $this->encoding);
-                            break;
                         case RESOURCE_FORUM:
-                            $resource->title = api_to_system_encoding($resource->title, $this->encoding);
-                            $resource->description = api_to_system_encoding($resource->description, $this->encoding);
-                            break;
+                        case RESOURCE_QUIZ:
                         case RESOURCE_FORUMCATEGORY:
+                        case RESOURCE_LINK:
+                        case RESOURCE_LINKCATEGORY:
+                        case RESOURCE_TEST_CATEGORY:
                             $resource->title = api_to_system_encoding($resource->title, $this->encoding);
                             $resource->description = api_to_system_encoding($resource->description, $this->encoding);
                             break;
@@ -273,18 +238,6 @@ class Course
                             $resource->content_maker = api_to_system_encoding($resource->content_maker, $this->encoding);
                             $resource->content_license = api_to_system_encoding($resource->content_license, $this->encoding);
                             break;
-                        case RESOURCE_LINK:
-                            $resource->title = api_to_system_encoding($resource->title, $this->encoding);
-                            $resource->description = api_to_system_encoding($resource->description, $this->encoding);
-                            break;
-                        case RESOURCE_LINKCATEGORY:
-                            $resource->title = api_to_system_encoding($resource->title, $this->encoding);
-                            $resource->description = api_to_system_encoding($resource->description, $this->encoding);
-                            break;
-                        case RESOURCE_QUIZ:
-                            $resource->title = api_to_system_encoding($resource->title, $this->encoding);
-                            $resource->description = api_to_system_encoding($resource->description, $this->encoding);
-                            break;
                         case RESOURCE_QUIZQUESTION:
                             $resource->question = api_to_system_encoding($resource->question, $this->encoding);
                             $resource->description = api_to_system_encoding($resource->description, $this->encoding);
@@ -294,10 +247,6 @@ class Course
                                     $answer['comment'] = api_to_system_encoding($answer['comment'], $this->encoding);
                                 }
                             }
-                            break;
-                        case RESOURCE_TEST_CATEGORY:
-                            $resource->title = api_to_system_encoding($resource->title, $this->encoding);
-                            $resource->description = api_to_system_encoding($resource->description, $this->encoding);
                             break;
                         case RESOURCE_SCORM:
                             $resource->title = api_to_system_encoding($resource->title, $this->encoding);

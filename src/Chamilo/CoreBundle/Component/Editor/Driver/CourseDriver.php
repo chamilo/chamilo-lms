@@ -340,6 +340,11 @@ class CourseDriver extends Driver implements DriverInterface
             return false;
         }
 
+        $block = api_get_configuration_value('block_editor_file_manager_for_students');
+        if ($block && !api_is_allowed_to_edit()) {
+            return false;
+        }
+
         if (isset($this->connector->course) && !empty($this->connector->course)) {
             return true;
         }

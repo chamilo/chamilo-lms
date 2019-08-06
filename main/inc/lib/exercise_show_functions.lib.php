@@ -416,6 +416,10 @@ class ExerciseShowFunctions
         echo '</td>';
 
         if ($exercise->showExpectedChoice()) {
+            $status = Display::label(get_lang('Incorrect'), 'danger');
+            if ($answerCorrect || ($answerCorrect && $studentChoiceInt === $answerCorrectChoice)) {
+                $status = Display::label(get_lang('Correct'), 'success');
+            }
             echo '<td width="20%">';
             echo $status;
             echo '</td>';

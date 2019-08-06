@@ -2503,7 +2503,6 @@ class MessageManager
         $i = 1;
         while (!feof($file)) {
             $line = fgets($file);
-            // $line = trim($line);
 
             if (trim($line) == '') {
                 continue;

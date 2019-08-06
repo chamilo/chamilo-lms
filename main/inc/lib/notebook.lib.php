@@ -147,7 +147,7 @@ class NotebookManager
      */
     public static function update_note($values)
     {
-        if (!is_array($values) || empty($values['note_title'])) {
+        if (!is_array($values) or empty($values['note_title'])) {
             return false;
         }
 

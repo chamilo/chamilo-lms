@@ -285,7 +285,7 @@ if ($form->validate()) {
                 foreach ($record as $item) {
                     $table->setCellContents($row, $column++, $item);
                     if ($row == $countData) {
-                        $table->setRowAttributes($row,  ['style' => 'font-weight:bold']);
+                        $table->setRowAttributes($row, ['style' => 'font-weight:bold']);
                     }
                 }
                 $row++;

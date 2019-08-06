@@ -8795,11 +8795,11 @@ function api_create_protected_dir($name, $parentDirectory)
  * @param string    email body
  * @param string    sender name
  * @param string    sender e-mail
- * @param array  $extra_headers  in form $headers = array($name => $value) to allow parsing
- * @param array  $data_file      (path and filename)
- * @param bool   $embedded_image True for attaching a embedded file inside content html (optional)
+ * @param array  $extra_headers        in form $headers = array($name => $value) to allow parsing
+ * @param array  $data_file            (path and filename)
+ * @param bool   $embedded_image       True for attaching a embedded file inside content html (optional)
  * @param array  $additionalParameters
- * @param string $sendErrorTo    If there's an error while sending the email, $sendErrorTo will receive a notification
+ * @param string $sendErrorTo          If there's an error while sending the email, $sendErrorTo will receive a notification
  *
  * @return int true if mail was sent
  *

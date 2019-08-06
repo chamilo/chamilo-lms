@@ -4333,6 +4333,7 @@ class Tracking
 
             return $count;
         }
+
         return 0;
     }
 

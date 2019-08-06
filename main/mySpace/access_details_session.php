@@ -112,7 +112,10 @@ if ($form->validate()) {
 
     $sessionCategories = UserManager::get_sessions_by_category($userId, false);
     $report = [];
-    $content = '';
+    $minLogin = 0;
+    $maxLogin = 0;
+    $totalDuration = 0;
+
     foreach ($sessionCategories as $category) {
         foreach ($category['sessions'] as $session) {
             $sessionId = $session['session_id'];
@@ -127,12 +130,50 @@ if ($form->validate()) {
                     $to
                 );
 
+                $partialMinLogin = 0;
+                $partialMaxLogin = 0;
+                $partialDuration = 0;
+
                 foreach ($result as $item) {
                     $record = [
-                        //$courseInfo['title'],
                         customDate($item['login'], true),
                         customDate($item['logout'], true),
                         api_format_time($item['duration'], 'js'),
+                    ];
+
+                    $totalDuration += $item['duration'];
+
+                    if (empty($minLogin)) {
+                        $minLogin = api_strtotime($item['login'], 'UTC');
+                    }
+                    if ($minLogin > api_strtotime($item['login'], 'UTC')) {
+                        $minLogin = api_strtotime($item['login'], 'UTC');
+                    }
+                    if (api_strtotime($item['logout']) > $maxLogin) {
+                        $maxLogin = api_strtotime($item['logout'], 'UTC');
+                    }
+
+                    // Partials
+                    $partialDuration += $item['duration'];
+                    if (empty($partialMinLogin)) {
+                        $partialMinLogin = api_strtotime($item['login'], 'UTC');
+                    }
+                    if ($partialMinLogin > api_strtotime($item['login'], 'UTC')) {
+                        $partialMinLogin = api_strtotime($item['login'], 'UTC');
+                    }
+                    if (api_strtotime($item['logout'], 'UTC') > $partialMaxLogin) {
+                        $partialMaxLogin = api_strtotime($item['logout'], 'UTC');
+                    }
+
+                    $report[$sessionId]['courses'][$course['real_id']][] = $record;
+                    $report[$sessionId]['name'][$course['real_id']] = $courseInfo['title'].'&nbsp; ('.$session['session_name'].')';
+                }
+
+                if (!empty($result)) {
+                    $record = [
+                        customDate($partialMinLogin, true),
+                        customDate($partialMaxLogin, true),
+                        api_format_time($partialDuration, 'js'),
                     ];
                     $report[$sessionId]['courses'][$course['real_id']][] = $record;
                     $report[$sessionId]['name'][$course['real_id']] = $courseInfo['title'].'&nbsp; ('.$session['session_name'].')';
@@ -153,6 +194,10 @@ if ($form->validate()) {
             $to
         );
 
+        $partialMinLogin = 0;
+        $partialMaxLogin = 0;
+        $partialDuration = 0;
+
         foreach ($result as $item) {
             $record = [
                 customDate($item['login'], true),
@@ -161,15 +206,68 @@ if ($form->validate()) {
             ];
             $report[0]['courses'][$course['course_id']][] = $record;
             $report[0]['name'][$course['course_id']] = $course['title'];
+
+            $totalDuration += $item['duration'];
+
+            if (empty($minLogin)) {
+                $minLogin = api_strtotime($item['login'], 'UTC');
+            }
+            if ($minLogin > api_strtotime($item['login'], 'UTC')) {
+                $minLogin = api_strtotime($item['login'], 'UTC');
+            }
+            if (api_strtotime($item['logout'], 'UTC') > $maxLogin) {
+                $maxLogin = api_strtotime($item['logout'], 'UTC');
+            }
+
+            // Partials
+            $partialDuration += $item['duration'];
+            if (empty($partialMinLogin)) {
+                $partialMinLogin = api_strtotime($item['login'], 'UTC');
+            }
+            if ($partialMinLogin > api_strtotime($item['login'], 'UTC')) {
+                $partialMinLogin = api_strtotime($item['login'], 'UTC');
+            }
+            if (api_strtotime($item['logout'], 'UTC') > $partialMaxLogin) {
+                $partialMaxLogin = api_strtotime($item['logout'], 'UTC');
+            }
+        }
+
+        if (!empty($result)) {
+            $record = [
+                customDate($partialMinLogin, true),
+                customDate($partialMaxLogin, true),
+                api_format_time($partialDuration, 'js'),
+            ];
+
+            $report[0]['courses'][$course['course_id']][] = $record;
+            $report[0]['name'][$course['course_id']] = $course['title'];
         }
     }
+
+    $table = new HTML_Table(['class' => 'data_table']);
+    $headers = [
+        get_lang('MinStartDate'),
+        get_lang('MaxEndDate'),
+        get_lang('TotalDuration'),
+    ];
+    $row = 0;
+    $column = 0;
+    foreach ($headers as $header) {
+        $table->setHeaderContents($row, $column, $header);
+        $column++;
+    }
+    $row++;
+    $column = 0;
+    $table->setCellContents($row, $column++, customDate($minLogin));
+    $table->setCellContents($row, $column++, customDate($maxLogin));
+    $table->setCellContents($row, $column++, api_format_time($totalDuration, 'js'));
+    $content = Display::page_subheader3(get_lang('Total')).$table->toHtml();
 
     foreach ($report as $sessionId => $data) {
         foreach ($data['courses'] as $courseId => $courseData) {
             $content .= Display::page_subheader3($data['name'][$courseId]);
             $table = new HTML_Table(['class' => 'data_table']);
             $headers = [
-                //get_lang('Course'),
                 get_lang('StartDate'),
                 get_lang('EndDate'),
                 get_lang('Duration'),
@@ -181,10 +279,14 @@ if ($form->validate()) {
                 $column++;
             }
             $row++;
+            $countData = count($courseData);
             foreach ($courseData as $record) {
                 $column = 0;
                 foreach ($record as $item) {
                     $table->setCellContents($row, $column++, $item);
+                    if ($row == $countData) {
+                        $table->setRowAttributes($row,  ['style' => 'font-weight:bold']);
+                    }
                 }
                 $row++;
             }

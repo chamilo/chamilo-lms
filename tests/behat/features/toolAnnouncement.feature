@@ -14,7 +14,10 @@ Feature: Announcement tool
     And I select "John Doe" from "users"
     And I press "add"
     And I fill in ckeditor field "content" with "Announcement description"
-    And I press "submit"
+    And I follow "Preview"
+    And wait for the page to be loaded
+    Then I should see "Announcement will be sent to"
+    Then I press "submit"
     Then I should see "Announcement has been added"
 
   Scenario: Create an announcement for all users
@@ -22,7 +25,10 @@ Feature: Announcement tool
     When I fill in the following:
       | title   | Announcement test                       |
     And I fill in ckeditor field "content" with "Announcement description"
-    And I press "submit"
+    And I follow "Preview"
+    And wait for the page to be loaded
+    Then I should see "Announcement will be sent to"
+    Then I press "submit"
     Then I should see "Announcement has been added"
 
   Scenario: Delete all announcements

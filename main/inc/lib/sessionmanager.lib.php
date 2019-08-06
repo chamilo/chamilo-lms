@@ -4661,7 +4661,6 @@ class SessionManager
      */
     public static function countSessionsByEndDate($date = null)
     {
-        $count = 0;
         $sessionTable = Database::get_main_table(TABLE_MAIN_SESSION);
         $url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
         $date = Database::escape_string($date);

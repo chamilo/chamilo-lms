@@ -53,6 +53,10 @@ class MySpace
                 'url' => api_get_path(WEB_CODE_PATH).'mySpace/exercise_category_report.php',
                 'content' => get_lang('ExerciseCategoryAllSessionsReport'),
             ],
+            [
+                'url' => api_get_path(WEB_CODE_PATH).'mySpace/survey_report.php',
+                'content' => get_lang('SurveyReport'),
+            ],
         ];
 
         return Display::actions($actions, null);
@@ -63,8 +67,8 @@ class MySpace
      */
     public static function getTopMenu()
     {
-        $menu_items = [];
-        $menu_items[] = Display::url(
+        $menuItems = [];
+        $menuItems[] = Display::url(
             Display::return_icon(
                 'statistics.png',
                 get_lang('MyStats'),
@@ -73,7 +77,7 @@ class MySpace
             ),
             api_get_path(WEB_CODE_PATH)."auth/my_progress.php"
         );
-        $menu_items[] = Display::url(
+        $menuItems[] = Display::url(
             Display::return_icon(
                 'teacher.png',
                 get_lang('TeacherInterface'),
@@ -82,7 +86,7 @@ class MySpace
             ),
             api_get_path(WEB_CODE_PATH).'mySpace/?view=teacher'
         );
-        $menu_items[] = Display::url(
+        $menuItems[] = Display::url(
             Display::return_icon(
                 'star_na.png',
                 get_lang('AdminInterface'),
@@ -91,12 +95,12 @@ class MySpace
             ),
             '#'
         );
-        $menu_items[] = Display::url(
+        $menuItems[] = Display::url(
             Display::return_icon('quiz.png', get_lang('ExamTracking'), [], 32),
             api_get_path(WEB_CODE_PATH).'tracking/exams.php'
         );
         $menu = '';
-        foreach ($menu_items as $item) {
+        foreach ($menuItems as $item) {
             $menu .= $item;
         }
         $menu .= '<br />';
@@ -207,13 +211,15 @@ class MySpace
         }
 
         // protect data
-        $user_id = intval($user_id);
-        $session_id = intval($session_id);
+        $user_id = (int) $user_id;
+        $session_id = (int) $session_id;
         $new_course_list = [];
         foreach ($course_list as $course_item) {
             $courseInfo = api_get_course_info($course_item['code']);
-            $courseId = $courseInfo['real_id'];
-            $new_course_list[] = '"'.$courseId.'"';
+            if ($courseInfo) {
+                $courseId = $courseInfo['real_id'];
+                $new_course_list[] = '"'.$courseId.'"';
+            }
         }
         $course_list = implode(', ', $new_course_list);
 
@@ -321,80 +327,27 @@ class MySpace
     public static function display_tracking_user_overview()
     {
         self::display_user_overview_export_options();
-        $t_head = '<table style="width: 100%;border:0;padding:0;border-collapse:collapse;table-layout: fixed">';
-        $t_head .= '<tr>';
-        $t_head .= '<th width="155px" style="border-left:0;border-bottom:0"><span>'.get_lang('Course').'</span></th>';
-        $t_head .= '<th style="padding:0;border-bottom:0"><span>'.cut(get_lang('AvgTimeSpentInTheCourse'), 6, true).'</span></th>';
-        $t_head .= '<th style="padding:0;border-bottom:0"><span>'.cut(get_lang('AvgStudentsProgress'), 6, true).'</span></th>';
-        $t_head .= '<th style="padding:0;border-bottom:0"><span>'.cut(get_lang('AvgCourseScore'), 6, true).'</span></th>';
-        $t_head .= '<th style="padding:0;border-bottom:0"><span>'.cut(get_lang('TotalNumberOfMessages'), 6, true).'</span></th>';
-        $t_head .= '<th style="padding:0;border-bottom:0"><span>'.cut(get_lang('TotalNumberOfAssignments'), 6, true).'</span></th>';
-        $t_head .= '<th width="105px" style="border-bottom:0"><span>'.get_lang('TotalExercisesScoreObtained').'</span></th>';
-        $t_head .= '<th style="padding:0;border-bottom:0"><span>'.cut(get_lang('TotalExercisesAnswered'), 6, true).'</span></th>';
-        $t_head .= '<th style="padding:0;border-bottom:0;border-right:0;"><span>'.get_lang('LatestLogin').'</span></th>';
-        $t_head .= '</tr></table>';
-        $addparams = ['view' => 'admin', 'display' => 'user'];
+
+        $params = ['view' => 'admin', 'display' => 'user'];
         $table = new SortableTable(
             'tracking_user_overview',
             ['MySpace', 'get_number_of_users_tracking_overview'],
             ['MySpace', 'get_user_data_tracking_overview'],
-            0
-        );
-        $table->additional_parameters = $addparams;
-        $table->set_header(
             0,
-            get_lang('OfficialCode'),
-            true,
-            ['style' => 'font-size:8pt'],
-            ['style' => 'font-size:8pt']
+            20,
+            'ASC',
+            null, [
+                'class' => 'table table-transparent',
+            ]
         );
-        if (api_is_western_name_order()) {
-            $table->set_header(
-                1,
-                get_lang('FirstName'),
-                true,
-                ['style' => 'font-size:8pt'],
-                ['style' => 'font-size:8pt']
-            );
-            $table->set_header(
-                2,
-                get_lang('LastName'),
-                true,
-                ['style' => 'font-size:8pt'],
-                ['style' => 'font-size:8pt']
-            );
-        } else {
-            $table->set_header(
-                1,
-                get_lang('LastName'),
-                true,
-                ['style' => 'font-size:8pt'],
-                ['style' => 'font-size:8pt']
-            );
-            $table->set_header(
-                2,
-                get_lang('FirstName'),
-                true,
-                ['style' => 'font-size:8pt'],
-                ['style' => 'font-size:8pt']
-            );
-        }
-        $table->set_header(
-            3,
-            get_lang('LoginName'),
-            true,
-            ['style' => 'font-size:8pt'],
-            ['style' => 'font-size:8pt']
-        );
-        $table->set_header(
-            4,
-            $t_head,
-            false,
-            ['style' => 'width:90%;border:0;padding:0;font-size:7.5pt;'],
-            ['style' => 'width:90%;padding:0;font-size:7.5pt;']
-        );
-        $table->set_column_filter(4, ['MySpace', 'course_info_tracking_filter']);
-        $table->display();
+        $table->additional_parameters = $params;
+
+        $table->set_column_filter(0, ['MySpace', 'returnTrackingUserOverviewFilter']);
+        $tableContent = $table->return_table();
+        $tpl = new Template('', false, false, false, false, false, false);
+        $tpl->assign('table', $tableContent);
+        $templateName = $tpl->get_template('my_space/user_summary.tpl');
+        $tpl->display($templateName);
     }
 
     /**
@@ -415,19 +368,19 @@ class MySpace
             $order = [
                 0 => 'firstname',
                 1 => 'lastname',
-                2 => ($sort_by_first_name ? 'firstname' : 'lastname'),
+                2 => $sort_by_first_name ? 'firstname' : 'lastname',
                 3 => 'login_date',
-                4 => ($sort_by_first_name ? 'firstname' : 'lastname'),
-                5 => ($sort_by_first_name ? 'firstname' : 'lastname'),
+                4 => $sort_by_first_name ? 'firstname' : 'lastname',
+                5 => $sort_by_first_name ? 'firstname' : 'lastname',
             ];
         } else {
             $order = [
                 0 => 'lastname',
                 1 => 'firstname',
-                2 => ($sort_by_first_name ? 'firstname' : 'lastname'),
+                2 => $sort_by_first_name ? 'firstname' : 'lastname',
                 3 => 'login_date',
-                4 => ($sort_by_first_name ? 'firstname' : 'lastname'),
-                5 => ($sort_by_first_name ? 'firstname' : 'lastname'),
+                4 => $sort_by_first_name ? 'firstname' : 'lastname',
+                5 => $sort_by_first_name ? 'firstname' : 'lastname',
             ];
         }
         $table = new SortableTable(
@@ -514,7 +467,7 @@ class MySpace
             }
         }
         if (!empty($order[$tracking_column])) {
-            $sqlCoachs .= " ORDER BY ".$order[$tracking_column]." ".$tracking_direction;
+            $sqlCoachs .= ' ORDER BY '.$order[$tracking_column].' '.$tracking_direction;
         }
 
         $result_coaches = Database::query($sqlCoachs);
@@ -664,6 +617,8 @@ class MySpace
     /**
      * Display a sortable table that contains an overview off all the progress of the user in a session.
      *
+     * @deprecated ?
+     *
      * @author César Perales <cesar.perales@beeznest.com>, Beeznest Team
      */
     public static function display_tracking_lp_progress_overview(
@@ -783,6 +738,8 @@ class MySpace
      * @param     $date_to
      *
      * @return string HTML array of results formatted for gridJS
+     *
+     * @deprecated ?
      *
      * @author César Perales <cesar.perales@beeznest.com>, Beeznest Team
      */
@@ -986,31 +943,26 @@ class MySpace
      */
     public static function display_tracking_course_overview()
     {
-        $t_head = '<table style="width: 100%;border:0;padding:0;border-collapse:collapse;table-layout: fixed">';
-        $t_head .= '<tr>';
-        $t_head .= '<th style="padding:0;border-bottom:0"><span>'.cut(get_lang('AvgTimeSpentInTheCourse'), 6, true).'</span></th>';
-        $t_head .= '<th style="padding:0;border-bottom:0"><span>'.cut(get_lang('AvgStudentsProgress'), 6, true).'</span></th>';
-        $t_head .= '<th style="padding:0;border-bottom:0"><span>'.cut(get_lang('AvgCourseScore'), 6, true).'</span></th>';
-        $t_head .= '<th style="padding:0;border-bottom:0"><span>'.cut(get_lang('TotalNumberOfMessages'), 6, true).'</span></th>';
-        $t_head .= '<th style="padding:0;border-bottom:0"><span>'.cut(get_lang('TotalNumberOfAssignments'), 6, true).'</span></th>';
-        $t_head .= '<th width="105px" style="border-bottom:0"><span>'.get_lang('TotalExercisesScoreObtained').'</span></th>';
-        $t_head .= '<th style="padding:0;border-bottom:0"><span>'.cut(get_lang('TotalExercisesAnswered'), 6, true).'</span></th>';
-        $t_head .= '<th style="padding:0;border-bottom:0;border-right:0;"><span>'.get_lang('LatestLogin').'</span></th>';
-        $t_head .= '</tr></table>';
-        $addparams = ['view' => 'admin', 'display' => 'courseoverview'];
+        $params = ['view' => 'admin', 'display' => 'courseoverview'];
         $table = new SortableTable(
             'tracking_session_overview',
             ['MySpace', 'get_total_number_courses'],
             ['MySpace', 'get_course_data_tracking_overview'],
-            1
+            1,
+            20,
+            'ASC',
+            null, [
+                'class' => 'table table-transparent',
+            ]
         );
-        $table->additional_parameters = $addparams;
+        $table->additional_parameters = $params;
+        $table->set_column_filter(0, ['MySpace', 'course_tracking_filter']);
+        $tableContent = $table->return_table();
 
-        $table->set_header(0, '', false, null, ['style' => 'display: none']);
-        $table->set_header(1, get_lang('Course'), true, ['style' => 'font-size:8pt'], ['style' => 'font-size:8pt']);
-        $table->set_header(2, $t_head, false, ['style' => 'width:90%;border:0;padding:0;font-size:7.5pt;'], ['style' => 'width:90%;padding:0;font-size:7.5pt;']);
-        $table->set_column_filter(2, ['MySpace', 'course_tracking_filter']);
-        $table->display();
+        $tpl = new Template('', false, false, false, false, false, false);
+        $tpl->assign('table', $tableContent);
+        $templateName = $tpl->get_template('my_space/course_summary.tpl');
+        $tpl->display($templateName);
     }
 
     /**
@@ -1054,8 +1006,6 @@ class MySpace
             $list[] = [
                 '0' => $course['code'],
                 'col0' => $course['code'],
-                '1' => $course['title'],
-                'col1' => $course['title'],
             ];
         }
 
@@ -1077,8 +1027,8 @@ class MySpace
         $courseInfo = api_get_course_info($course_code);
         $courseId = $courseInfo['real_id'];
 
-        // the table header
-        $return = '<table class="data_table" style="width: 100%;border:0;padding:0;border-collapse:collapse;table-layout: fixed">';
+        $tpl = new Template('', false, false, false, false, false, false);
+        $data = null;
 
         // database table definition
         $tbl_course_rel_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
@@ -1146,9 +1096,8 @@ class MySpace
                 $last_login_date == false
             ) { // TODO: To be cleaned
                 $last_login_date = $last_login_date_tmp;
-            } elseif ($last_login_date_tmp != false &&
-                $last_login_date != false
-            ) { // TODO: Repeated previous condition. To be cleaned.
+            } elseif ($last_login_date_tmp != false && $last_login_date != false) {
+                // TODO: Repeated previous condition. To be cleaned.
                 // Find the max and assign it to first_login_date
                 if (strtotime($last_login_date_tmp) > strtotime($last_login_date)) {
                     $last_login_date = $last_login_date_tmp;
@@ -1189,26 +1138,30 @@ class MySpace
         } else {
             $total_score = '-';
         }
-        $return .= '<tr>';
-        // time spent in the course
-        $return .= '    <td style="width:164px;">'.api_time_to_hms($time_spent).'</td>';
-        // student progress in course
-        $return .= '    <td>'.$avg_progress.'</td>';
-        // student score
-        $return .= '    <td>'.$avg_score.'</td>';
-        // student messages
-        $return .= '    <td>'.$nb_messages.'</td>';
-        // student assignments
-        $return .= '    <td>'.$nb_assignments.'</td>';
-        // student exercises results (obtained score, maximum score, number of exercises answered, score percentage)
-        $return .= '<td width="105px;">'.$total_score.'</td>';
-        $return .= '<td>'.$total_questions_answered.'</td>';
-        // last connection
-        $return .= '    <td>'.$last_login_date.'</td>';
-        $return .= '</tr>';
-        $return .= '</table>';
 
-        return $return;
+        $data = [
+            'course_code' => $course_code,
+            'id' => $courseId,
+            'image' => $courseInfo['course_image_large'],
+            'image_small' => $courseInfo['course_image'],
+            'title' => $courseInfo['title'],
+            'url' => $courseInfo['course_public_url'],
+            'category' => $courseInfo['categoryName'],
+            'time_spent' => api_time_to_hms($time_spent),
+            'avg_progress' => $avg_progress,
+            'avg_score' => $avg_score,
+            'number_message' => $nb_messages,
+            'number_assignments' => $nb_assignments,
+            'total_score' => $total_score,
+            'questions_answered' => $total_questions_answered,
+            'last_login' => $last_login_date,
+        ];
+
+        $tpl->assign('data', $data);
+        $layout = $tpl->get_template('my_space/partials/tracking_course_overview.tpl');
+        $content = $tpl->fetch($layout);
+
+        return $content;
     }
 
     /**
@@ -1415,14 +1368,14 @@ class MySpace
         $head .= '<th style="padding:0;border-bottom:0;border-right:0;"><span>'.get_lang('LatestLogin').'</span></th>';
         $head .= '</tr></table>';
 
-        $addparams = ['view' => 'admin', 'display' => 'sessionoverview'];
+        $params = ['view' => 'admin', 'display' => 'sessionoverview'];
         $table = new SortableTable(
             'tracking_session_overview',
             ['MySpace', 'get_total_number_sessions'],
             ['MySpace', 'get_session_data_tracking_overview'],
             1
         );
-        $table->additional_parameters = $addparams;
+        $table->additional_parameters = $params;
 
         $table->set_header(0, '', false, null, ['style' => 'display: none']);
         $table->set_header(
@@ -1644,21 +1597,19 @@ class MySpace
         $tbl_user = Database::get_main_table(TABLE_MAIN_USER);
 
         // the values of the sortable table
+        $from = 0;
         if ($_GET['tracking_session_overview_page_nr']) {
             $from = $_GET['tracking_session_overview_page_nr'];
-        } else {
-            $from = 0;
-        }
-        if ($_GET['tracking_session_overview_column']) {
-            $orderby = $_GET['tracking_session_overview_column'];
-        } else {
-            $orderby = 0;
         }
 
+        $orderby = 0;
+        if ($_GET['tracking_session_overview_column']) {
+            $orderby = $_GET['tracking_session_overview_column'];
+        }
+
+        $direction = 'ASC';
         if ($_GET['tracking_session_overview_direction']) {
             $direction = $_GET['tracking_session_overview_direction'];
-        } else {
-            $direction = 'ASC';
         }
 
         $session_data = self::get_session_data_tracking_overview($from, 1000, $orderby, $direction);
@@ -1835,6 +1786,7 @@ class MySpace
      *
      * @param int    $user_id     the id of the user
      * @param string $course_code the course code
+     * @param int    $session_id
      *
      * @return array
      *
@@ -1844,15 +1796,20 @@ class MySpace
      *
      * @since November 2008
      */
-    public static function exercises_results($user_id, $course_code, $session_id = false)
+    public static function exercises_results($user_id, $course_code, $session_id = 0)
     {
+        $user_id = (int) $user_id;
         $courseId = api_get_course_int_id($course_code);
-        $sql = 'SELECT exe_result, exe_weighting
-                FROM '.Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES)."
+        $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
+
+        $sql = "SELECT exe_result, exe_weighting
+                FROM $table
                 WHERE 
-                    c_id = ' . $courseId . ' AND 
-                    exe_user_id = '".intval($user_id)."'";
-        if ($session_id !== false) {
+                    c_id = $courseId AND 
+                    exe_user_id = $user_id";
+
+        $session_id = (int) $session_id;
+        if (!empty($session_id)) {
             $sql .= " AND session_id = '".$session_id."' ";
         }
         $result = Database::query($sql);
@@ -1865,10 +1822,9 @@ class MySpace
             $questions_answered++;
         }
 
+        $percentage = null;
         if ($score_possible != 0) {
             $percentage = round(($score_obtained / $score_possible * 100), 2);
-        } else {
-            $percentage = null;
         }
 
         return [
@@ -1926,16 +1882,16 @@ class MySpace
         $csv_row = [];
         $csv_row[] = get_lang('OfficialCode');
         if ($is_western_name_order) {
-            $csv_row[] = get_lang('FirstName', '');
-            $csv_row[] = get_lang('LastName', '');
+            $csv_row[] = get_lang('FirstName');
+            $csv_row[] = get_lang('LastName');
         } else {
-            $csv_row[] = get_lang('LastName', '');
-            $csv_row[] = get_lang('FirstName', '');
+            $csv_row[] = get_lang('LastName');
+            $csv_row[] = get_lang('FirstName');
         }
         $csv_row[] = get_lang('LoginName');
         $csv_row[] = get_lang('CourseCode');
-        // the additional user defined fields (only those that were selected to be exported)
 
+        // the additional user defined fields (only those that were selected to be exported)
         $fields = UserManager::get_extra_fields(0, 50, 5, 'ASC');
 
         $additionalExportFields = Session::read('additional_export_fields');
@@ -2163,6 +2119,7 @@ class MySpace
     public static function get_user_data_tracking_overview($from, $numberItems, $column, $direction)
     {
         $isWestern = api_is_western_name_order();
+
         switch ($column) {
             case '0':
                 $column = 'official_code';
@@ -2227,9 +2184,9 @@ class MySpace
     public static function get_user_overview_export_extra_fields($user_id)
     {
         // include the user manager
-        $extra_data = UserManager::get_extra_user_data($user_id, true);
+        $data = UserManager::get_extra_user_data($user_id, true);
 
-        return $extra_data;
+        return $data;
     }
 
     /**
@@ -2243,7 +2200,7 @@ class MySpace
      *
      * @return array with the username, the sufix
      *
-     * @author Julio Montoya Armas
+     * @author Julio Montoya
      */
     public static function make_username($firstname, $lastname, $username, $language = null, $encoding = null)
     {
@@ -2258,9 +2215,7 @@ class MySpace
                 }
                 $desired_username = UserManager::create_username(
                     $firstname,
-                    $lastname,
-                    $language,
-                    $encoding
+                    $lastname
                 );
                 if (UserManager::is_username_available($desired_username.$sufix)) {
                     break;
@@ -2320,10 +2275,10 @@ class MySpace
     {
         $table_user = Database::get_main_table(TABLE_MAIN_USER);
         $tbl_session_rel_course_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
-        $id_session = intval($id_session);
+        $id_session = (int) $id_session;
         $username = Database::escape_string($username);
         foreach ($course_list as $courseId) {
-            $courseId = intval($courseId);
+            $courseId = (int) $courseId;
             $sql = " SELECT u.user_id FROM $tbl_session_rel_course_rel_user rel
                      INNER JOIN $table_user u
                      ON (rel.user_id = u.user_id)
@@ -2335,8 +2290,6 @@ class MySpace
             $rs = Database::query($sql);
             if (Database::num_rows($rs) > 0) {
                 return Database::result($rs, 0, 0);
-            } else {
-                return 0;
             }
         }
 
@@ -2412,9 +2365,8 @@ class MySpace
     public static function get_user_creator($users)
     {
         $errors = [];
+        $table_user = Database::get_main_table(TABLE_MAIN_USER);
         foreach ($users as $index => $user) {
-            // database table definition
-            $table_user = Database::get_main_table(TABLE_MAIN_USER);
             $username = Database::escape_string($user['UserName']);
             $sql = "SELECT creator_id FROM $table_user WHERE username='$username' ";
 
@@ -2528,24 +2480,20 @@ class MySpace
         $users = $new_users;
 
         // Inserting users.
-        $super_list = [];
         foreach ($course_list as $enreg_course) {
             $nbr_users = 0;
             $new_users = [];
             $enreg_course = Database::escape_string($enreg_course);
             foreach ($users as $index => $user) {
-                $userid = intval($user['id']);
+                $userid = (int) $user['id'];
                 $sql = "INSERT IGNORE INTO $tbl_session_rel_course_rel_user(session_id, c_id, user_id)
                         VALUES('$id_session','$enreg_course','$userid')";
-                $course_session = ['course' => $enreg_course, 'added' => 1];
-
                 $result = Database::query($sql);
                 if (Database::affected_rows($result)) {
                     $nbr_users++;
                 }
                 $new_users[] = $user;
             }
-            $super_list[] = $new_users;
 
             //update the nbr_users field
             $sql_select = "SELECT COUNT(user_id) as nbUsers FROM $tbl_session_rel_course_rel_user
@@ -2575,7 +2523,6 @@ class MySpace
         // Sending emails.
         $addedto = '';
         if ($sendMail) {
-            $i = 0;
             foreach ($users as $index => $user) {
                 $emailsubject = '['.api_get_setting('siteName').'] '.get_lang('YourReg').' '.api_get_setting('siteName');
                 $emailbody = get_lang('Dear').' '.
@@ -2615,7 +2562,6 @@ class MySpace
                 $registered_users .= UserManager::getUserProfileLink($userInfo).' - '.$addedto.'<br />';
             }
         } else {
-            $i = 0;
             foreach ($users as $index => $user) {
                 $userInfo = api_get_user_info($user['id']);
                 if (($user['added_at_platform'] == 1 && $user['added_at_session'] == 1) || $user['added_at_session'] == 1) {
@@ -2720,7 +2666,7 @@ class MySpace
         if (!empty($studentId)) {
             $student = api_get_user_entity($studentId);
             if ($student) {
-                $studentList[$student->getId()] = $student->getCompleteName();
+                $studentList[$student->getId()] = UserManager::formatUserFullName($student);
             }
         }
 
@@ -2815,9 +2761,6 @@ class MySpace
                 ['MySpace', 'getUserDataAccessTrackingOverview'],
                 0
             );
-
-            //$table->additional_parameters = $form->exportValues();
-
             $table->set_header(0, get_lang('LoginDate'), true);
             $table->set_header(1, get_lang('Username'), true);
             if (api_is_western_name_order()) {
@@ -2876,6 +2819,11 @@ class MySpace
         $column,
         $orderDirection
     ) {
+        $from = (int) $from;
+        $numberItems = (int) $numberItems;
+        $column = (int) $column;
+        $orderDirection = Database::escape_string($orderDirection);
+
         $user = Database::get_main_table(TABLE_MAIN_USER);
         $course = Database::get_main_table(TABLE_MAIN_COURSE);
         $track_e_login = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
@@ -2917,11 +2865,6 @@ class MySpace
         if (isset($_GET['session_id']) && !empty($_GET['session_id'])) {
             $sessionId = (int) $_GET['session_id'];
             $sql .= " AND a.session_id = ".$sessionId;
-        }
-
-        if (isset($_GET['student_id']) && !empty($_GET['student_id'])) {
-            $userId = (int) $_GET['student_id'];
-            $sql .= " AND u.user_id = ".$userId;
         }
 
         if (isset($_GET['student_id']) && !empty($_GET['student_id'])) {
@@ -3012,10 +2955,16 @@ class MySpace
         $user_id = (int) $user_id;
         $connections = [];
         if (!empty($course_info)) {
-            $courseId = intval($course_info['real_id']);
+            $courseId = (int) $course_info['real_id'];
             $end_date = add_day_to($end_date);
+
+            $start_date = Database::escape_string($start_date);
+            $end_date = Database::escape_string($end_date);
             $sessionCondition = api_get_session_condition($sessionId);
-            $sql = "SELECT login_course_date, logout_course_date
+            $sql = "SELECT 
+                        login_course_date, 
+                        logout_course_date, 
+                        TIMESTAMPDIFF(SECOND, login_course_date, logout_course_date) duration
                     FROM $table
                     WHERE
                         user_id = $user_id AND
@@ -3030,6 +2979,7 @@ class MySpace
                 $connections[] = [
                     'login' => $row['login_course_date'],
                     'logout' => $row['logout_course_date'],
+                    'duration' => $row['duration'],
                 ];
             }
         }
@@ -3056,11 +3006,15 @@ function get_stats($user_id, $course_info, $sessionId, $start_date = null, $end_
         $stringEndDate = '';
         if ($start_date != null && $end_date != null) {
             $end_date = add_day_to($end_date);
+
+            $start_date = Database::escape_string($start_date);
+            $end_date = Database::escape_string($end_date);
+
             $stringStartDate = "AND login_course_date BETWEEN '$start_date' AND '$end_date'";
             $stringEndDate = "AND logout_course_date BETWEEN '$start_date' AND '$end_date'";
         }
-        $user_id = intval($user_id);
-        $courseId = intval($course_info['real_id']);
+        $user_id = (int) $user_id;
+        $courseId = (int) $course_info['real_id'];
         $sessionCondition = api_get_session_condition($sessionId);
         $sql = "SELECT
                 SEC_TO_TIME(AVG(time_to_sec(timediff(logout_course_date,login_course_date)))) as avrg,
@@ -3092,32 +3046,10 @@ function get_stats($user_id, $course_info, $sessionId, $start_date = null, $end_
 function add_day_to($end_date)
 {
     $foo_date = strtotime($end_date);
-    $foo_date = strtotime(" +1 day", $foo_date);
-    $foo_date = date("Y-m-d", $foo_date);
+    $foo_date = strtotime(' +1 day', $foo_date);
+    $foo_date = date('Y-m-d', $foo_date);
 
     return $foo_date;
-}
-
-/**
- * @param array
- *
- * @author Jorge Frisancho Jibaja
- *
- * @version OCT-22- 2010
- *
- * @return array
- */
-function convert_to_array($sql_result)
-{
-    $result_to_print = '<table>';
-    foreach ($sql_result as $key => $data) {
-        $result_to_print .= '<tr><td>'.date('d-m-Y (H:i:s)', $data['login']).'</td><td>'.
-            api_time_to_hms($data['logout'] - $data['login']).'</tr></td>'."\n";
-    }
-    $result_to_print .= '</table>';
-    $result_to_print = ["result" => $result_to_print];
-
-    return $result_to_print;
 }
 
 /**

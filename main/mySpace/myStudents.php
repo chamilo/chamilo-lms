@@ -670,6 +670,11 @@ echo '<a href="'.api_get_self().'?'.Security::remove_XSS($_SERVER['QUERY_STRING'
 echo '<a href="'.api_get_self().'?'.Security::remove_XSS($_SERVER['QUERY_STRING']).'&export=xls">'
     .Display::return_icon('export_excel.png', get_lang('ExportAsXLS'), '', ICON_SIZE_MEDIUM).'</a> ';
 
+echo Display::url(
+    Display::return_icon('export.png', get_lang('Export'), '', ICON_SIZE_MEDIUM),
+    api_get_path(WEB_CODE_PATH).'mySpace/access_details_session.php?user_id='.$student_id
+);
+
 if (!empty($user_info['email'])) {
     $send_mail = '<a href="mailto:'.$user_info['email'].'">'.
         Display::return_icon('mail_send.png', get_lang('SendMail'), '', ICON_SIZE_MEDIUM).'</a>';
@@ -740,7 +745,18 @@ if (user_is_online($student_id)) {
 // get average of score and average of progress by student
 $avg_student_progress = $avg_student_score = 0;
 
-if (CourseManager::is_user_subscribed_in_course($user_info['user_id'], $course_code, true)) {
+if (empty($sessionId)) {
+    $isSubscribedToCourse = CourseManager::is_user_subscribed_in_course($user_info['user_id'], $course_code);
+} else {
+    $isSubscribedToCourse = CourseManager::is_user_subscribed_in_course(
+        $user_info['user_id'],
+        $course_code,
+        true,
+        $sessionId
+    );
+}
+
+if ($isSubscribedToCourse) {
     $avg_student_progress = Tracking::get_avg_student_progress(
         $user_info['user_id'],
         $course_code,

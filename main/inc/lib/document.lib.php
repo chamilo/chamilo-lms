@@ -2938,14 +2938,6 @@ class DocumentManager
 
                 // When sending zip files
                 if ($new_path === true && $unzip == 1) {
-                    if ($show_output) {
-                        echo Display::return_message(
-                            get_lang('UplUploadSucceeded').'<br />',
-                            'confirm',
-                            false
-                        );
-                    }
-
                     return [
                         'title' => $files[$fileKey]['name'],
                         'url' => '#',
@@ -5202,7 +5194,7 @@ class DocumentManager
                     $url = 'show_content.php?'.$courseParams.'&id='.$document_data['id'];
                     $class = 'ajax';
                     if ($visibility == false) {
-                        $class = "ajax text-muted";
+                        $class = 'ajax text-muted';
                     }
 
                     return Display::url(

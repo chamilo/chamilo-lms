@@ -21,7 +21,7 @@ $htmlHeadXtra[] = api_get_asset('cropper/dist/cropper.min.js');
 $tbl_user = Database::get_main_table(TABLE_MAIN_USER);
 $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
 
-$id = intval($_GET['id']);
+$id = (int) $_GET['id'];
 
 SessionManager::protectSession($id);
 
@@ -51,11 +51,10 @@ if (!empty($sessionInfo['coach_access_end_date'])) {
     $sessionInfo['coach_access_end_date'] = api_get_local_time($sessionInfo['coach_access_end_date']);
 }
 
-$id_coach = $sessionInfo['id_coach'];
 $tool_name = get_lang('EditSession');
 
-$interbreadcrumb[] = ['url' => "session_list.php", "name" => get_lang('SessionList')];
-$interbreadcrumb[] = ['url' => "resume_session.php?id_session=".$id, "name" => get_lang('SessionOverview')];
+$interbreadcrumb[] = ['url' => 'session_list.php', 'name' => get_lang('SessionList')];
+$interbreadcrumb[] = ['url' => 'resume_session.php?id_session='.$id, 'name' => get_lang('SessionOverview')];
 
 if (isset($_POST['formSent']) && $_POST['formSent']) {
     $formSent = 1;
@@ -206,7 +205,6 @@ $form->display();
 
 <script>
 $(function() {
-
 <?php
     if (!empty($sessionInfo['duration'])) {
         echo 'accessSwitcher(0);';

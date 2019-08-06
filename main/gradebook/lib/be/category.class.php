@@ -2060,7 +2060,7 @@ class Category implements GradebookItem
         $category_id = (int) $category_id;
 
         // Generating the total score for a course
-        $cats_course = self::load(
+        $category = self::load(
             $category_id,
             null,
             null,
@@ -2071,7 +2071,7 @@ class Category implements GradebookItem
         );
 
         /** @var Category $category */
-        $category = $cats_course[0];
+        $category = $category[0];
 
         if (empty($category)) {
             return false;
@@ -2169,8 +2169,16 @@ class Category implements GradebookItem
 
             $fileWasGenerated = $certificate_obj->isHtmlFileGenerated();
 
+            // Fix when using custom certificate BT#15937
+            if (api_get_plugin_setting('customcertificate', 'enable_plugin_customcertificate') === 'true') {
+                $infoCertificate = CustomCertificatePlugin::getCertificateData($my_certificate['id'], $user_id);
+                if (!empty($infoCertificate)) {
+                    $fileWasGenerated = true;
+                }
+            }
+
             if (!empty($fileWasGenerated)) {
-                $url = api_get_path(WEB_PATH).'certificates/index.php?id='.$my_certificate['id'];
+                $url = api_get_path(WEB_PATH).'certificates/index.php?id='.$my_certificate['id'].'&user_id='.$user_id;
                 $certificates = Display::toolbarButton(
                     get_lang('DisplayCertificate'),
                     $url,

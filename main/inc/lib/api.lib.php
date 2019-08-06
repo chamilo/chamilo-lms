@@ -2610,7 +2610,6 @@ function api_get_session_visibility(
     }
 
     $now = time();
-
     if (empty($session_id)) {
         return 0; // Means that the session is still available.
     }

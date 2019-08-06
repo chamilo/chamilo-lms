@@ -4206,9 +4206,9 @@ class Tracking
             $count = $row[0];
 
             return $count;
-        } else {
-            return null;
         }
+
+        return 0;
     }
 
     /**
@@ -4238,7 +4238,7 @@ class Tracking
 
         $condition_session = '';
         if (isset($session_id)) {
-            $session_id = intval($session_id);
+            $session_id = (int) $session_id;
             $condition_session = ' AND f.session_id = '.$session_id;
         }
 
@@ -4274,9 +4274,9 @@ class Tracking
             $count = $row[0];
 
             return $count;
-        } else {
-            return null;
         }
+
+        return 0;
     }
 
     /**
@@ -4303,11 +4303,11 @@ class Tracking
 
         $condition_session = '';
         if (isset($session_id)) {
-            $session_id = intval($session_id);
+            $session_id = (int) $session_id;
             $condition_session = ' AND f.session_id = '.$session_id;
         }
 
-        $groupId = intval($groupId);
+        $groupId = (int) $groupId;
         if (!empty($groupId)) {
             $groupCondition = " i.to_group_id = $groupId ";
         } else {
@@ -4332,9 +4332,8 @@ class Tracking
             $count = $row[0];
 
             return $count;
-        } else {
-            return null;
         }
+        return 0;
     }
 
     /**
@@ -4358,8 +4357,9 @@ class Tracking
         $course_id = $course_info['real_id'];
 
         // Protect data
-        $last_days = intval($last_days);
-        $session_id = intval($session_id);
+        $last_days = (int) $last_days;
+        $session_id = (int) $session_id;
+
         $tbl_stats_access = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ACCESS);
         $now = api_get_utc_datetime();
 
@@ -4368,16 +4368,16 @@ class Tracking
                     DATE_SUB('$now',INTERVAL $last_days DAY) <= access_date AND
                     c_id = '$course_id' AND
                     access_tool='".TOOL_CHAT."' AND
-                    access_session_id='$session_id' ";
+                    access_session_id = '$session_id' ";
         $result = Database::query($sql);
         if (Database::num_rows($result)) {
             $row = Database::fetch_row($result);
             $count = $row[0];
 
             return $count;
-        } else {
-            return null;
         }
+
+        return 0;
     }
 
     /**
@@ -4394,9 +4394,9 @@ class Tracking
         $courseId,
         $session_id = 0
     ) {
-        $student_id = intval($student_id);
-        $courseId = intval($courseId);
-        $session_id = intval($session_id);
+        $student_id = (int) $student_id;
+        $courseId = (int) $courseId;
+        $session_id = (int) $session_id;
         $date_time = '';
 
         // table definition
@@ -4433,9 +4433,9 @@ class Tracking
      */
     public static function count_student_visited_links($student_id, $courseId, $session_id = 0)
     {
-        $student_id = intval($student_id);
-        $courseId = intval($courseId);
-        $session_id = intval($session_id);
+        $student_id = (int) $student_id;
+        $courseId = (int) $courseId;
+        $session_id = (int) $session_id;
 
         // table definition
         $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LINKS);
@@ -4463,9 +4463,9 @@ class Tracking
      */
     public static function count_student_downloaded_documents($student_id, $courseId, $session_id = 0)
     {
-        $student_id = intval($student_id);
-        $courseId = intval($courseId);
-        $session_id = intval($session_id);
+        $student_id = (int) $student_id;
+        $courseId = (int) $courseId;
+        $session_id = (int) $session_id;
 
         // table definition
         $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_DOWNLOADS);
@@ -4596,59 +4596,6 @@ class Tracking
     }
 
     /**
-     * Get count login per student.
-     *
-     * @param int $student_id Student id
-     * @param int $courseId
-     * @param int $session_id Session id (optional)
-     *
-     * @return int count login
-     */
-    public static function count_login_per_student($student_id, $courseId, $session_id = 0)
-    {
-        $student_id = intval($student_id);
-        $courseId = intval($courseId);
-        $session_id = intval($session_id);
-        $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ACCESS);
-
-        $sql = 'SELECT '.$student_id.'
-                FROM '.$table.'
-                WHERE
-                    access_user_id='.$student_id.' AND
-                    c_id="'.$courseId.'" AND
-                    access_session_id = "'.$session_id.'" ';
-
-        $rs = Database::query($sql);
-        $nb_login = Database::num_rows($rs);
-
-        return $nb_login;
-    }
-
-    /**
-     * Get students followed by a human resources manager.
-     *
-     * @param    int        Drh id
-     *
-     * @return array Student list
-     */
-    public static function get_student_followed_by_drh($hr_dept_id)
-    {
-        $hr_dept_id = intval($hr_dept_id);
-        $a_students = [];
-        $tbl_user = Database::get_main_table(TABLE_MAIN_USER);
-
-        $sql = 'SELECT DISTINCT user_id FROM '.$tbl_user.' as user
-                WHERE hr_dept_id='.$hr_dept_id;
-        $rs = Database::query($sql);
-
-        while ($user = Database::fetch_array($rs)) {
-            $a_students[$user['user_id']] = $user['user_id'];
-        }
-
-        return $a_students;
-    }
-
-    /**
      * get count clicks about tools most used by course.
      *
      * @param int $courseId
@@ -4660,12 +4607,12 @@ class Tracking
      */
     public static function get_tools_most_used_by_course($courseId, $session_id = null)
     {
-        $courseId = intval($courseId);
+        $courseId = (int) $courseId;
         $data = [];
         $TABLETRACK_ACCESS = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LASTACCESS);
         $condition_session = '';
         if (isset($session_id)) {
-            $session_id = intval($session_id);
+            $session_id = (int) $session_id;
             $condition_session = ' AND access_session_id = '.$session_id;
         }
         $sql = "SELECT

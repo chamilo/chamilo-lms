@@ -2004,12 +2004,14 @@ class learnpath
     /**
      * Gets the navigation bar for the learnpath display screen.
      *
+     * @param string $barId
+     *
      * @return string The HTML string to use as a navigation bar
      */
-    public function get_navigation_bar($idBar = null, $display = null)
+    public function get_navigation_bar($barId = '')
     {
-        if (empty($idBar)) {
-            $idBar = 'control-top';
+        if (empty($barId)) {
+            $barId = 'control-top';
         }
         $lpId = $this->lp_id;
         $mycurrentitemid = $this->get_current_item_id();
@@ -2032,7 +2034,7 @@ class learnpath
 
         if (!empty($display)) {
             $showReporting = isset($display['show_reporting_icon']) ? $display['show_reporting_icon'] : true;
-            if ($showReporting == false) {
+            if ($showReporting === false) {
                 $reportingIcon = '';
             }
         }
@@ -2060,7 +2062,7 @@ class learnpath
 
         if ($this->mode === 'fullscreen') {
             $navbar = '
-                  <span id="'.$idBar.'" class="buttons">
+                  <span id="'.$barId.'" class="buttons">
                     '.$reportingIcon.'
                     '.$previousIcon.'                    
                     '.$nextIcon.'
@@ -2071,11 +2073,11 @@ class learnpath
                   </span>';
         } else {
             $navbar = '
-            <span id="'.$idBar.'" class="buttons text-right">
-                '.$reportingIcon.'
-                '.$previousIcon.'
-                '.$nextIcon.'               
-            </span>';
+                 <span id="'.$barId.'" class="buttons text-right">
+                    '.$reportingIcon.'
+                    '.$previousIcon.'
+                    '.$nextIcon.'               
+                </span>';
         }
 
         return $navbar;

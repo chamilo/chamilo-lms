@@ -219,21 +219,22 @@ function prepare_user_sql_query($getCount)
     if ($getCount) {
         $sql .= "SELECT COUNT(u.id) AS total_number_of_items FROM $user_table u";
     } else {
-        $sql .= "SELECT u.id AS col0, u.official_code AS col2, ";
+        $sql .= 'SELECT u.id AS col0, u.official_code AS col2, ';
 
         if (api_is_western_name_order()) {
-            $sql .= "u.firstname AS col3, u.lastname AS col4, ";
+            $sql .= 'u.firstname AS col3, u.lastname AS col4, ';
         } else {
-            $sql .= "u.lastname AS col3, u.firstname AS col4, ";
+            $sql .= 'u.lastname AS col3, u.firstname AS col4, ';
         }
 
         $sql .= " u.username AS col5,
                     u.email AS col6,
                     u.status AS col7,
                     u.active AS col8,
-                    u.id AS col9,
-                    u.registration_date AS col10,
-                    u.expiration_date AS exp,
+                    u.registration_date AS col9,
+                    u.last_login as col10,                    
+                    u.id AS col11,
+                    u.expiration_date AS exp,                    
                     u.password
                 FROM $user_table u";
     }
@@ -277,9 +278,7 @@ function prepare_user_sql_query($getCount)
         $extra_info = UserManager::get_extra_field_information_by_name($keyword_extra_data);
         $field_id = $extra_info['id'];
         $sql.= " INNER JOIN user_field_values ufv ON u.id=ufv.user_id AND ufv.field_id=$field_id ";
-    }
-    */
-
+    } */
     if (isset($_GET['keyword']) && !empty($_GET['keyword'])) {
         $keywordFiltered = Database::escape_string("%".$_GET['keyword']."%");
         $sql .= " WHERE (
@@ -332,18 +331,18 @@ function prepare_user_sql_query($getCount)
         if (isset($keywordListValues['keyword_active']) &&
             !isset($keywordListValues['keyword_inactive'])
         ) {
-            $sql .= " AND u.active = 1";
+            $sql .= ' AND u.active = 1';
         } elseif (isset($keywordListValues['keyword_inactive']) &&
             !isset($keywordListValues['keyword_active'])
         ) {
-            $sql .= " AND u.active = 0";
+            $sql .= ' AND u.active = 0';
         }
-        $sql .= " ) ";
+        $sql .= ' ) ';
     }
 
     $preventSessionAdminsToManageAllUsers = api_get_setting('prevent_session_admins_to_manage_all_users');
     if (api_is_session_admin() && $preventSessionAdminsToManageAllUsers === 'true') {
-        $sql .= " AND u.creator_id = ".api_get_user_id();
+        $sql .= ' AND u.creator_id = '.api_get_user_id();
     }
 
     $variables = Session::read('variables_to_show', []);
@@ -410,7 +409,7 @@ function prepare_user_sql_query($getCount)
     if ((api_is_platform_admin() || api_is_session_admin()) &&
         api_get_multiple_access_url()
     ) {
-        $sql .= " AND url_rel_user.access_url_id=".api_get_current_access_url_id();
+        $sql .= ' AND url_rel_user.access_url_id = '.api_get_current_access_url_id();
     }
 
     return $sql;
@@ -448,97 +447,49 @@ function get_user_data($from, $number_of_items, $column, $direction)
     if (!in_array($direction, ['ASC', 'DESC'])) {
         $direction = 'ASC';
     }
-    $_admins_list = Session::read('admin_list', []);
-    $column = intval($column);
-    $from = intval($from);
-    $number_of_items = intval($number_of_items);
+    $column = (int) $column;
+    $from = (int) $from;
+    $number_of_items = (int) $number_of_items;
+
     $sql .= " ORDER BY col$column $direction ";
-    $sql .= " LIMIT $from,$number_of_items";
+    $sql .= " LIMIT $from, $number_of_items";
 
     $res = Database::query($sql);
 
     $users = [];
     $t = time();
-    $currentUser = api_get_current_user();
-
-    while ($user = Database::fetch_row($res)) {
+    while ($user = Database::fetch_array($res)) {
         $userPicture = UserManager::getUserPicture(
             $user[0],
             USER_IMAGE_SIZE_SMALL
         );
-        $is_admin = in_array($user[0], $_admins_list);
         $photo = '<img 
-            src="'.$userPicture.'" class="rounded-circle avatar" 
+            src="'.$userPicture.'" width="22" height="22" 
             alt="'.api_get_person_name($user[2], $user[3]).'" 
             title="'.api_get_person_name($user[2], $user[3]).'" />';
 
-        if ($user[7] == 1 && !empty($user[10])) {
+        if ($user[7] == 1 && !empty($user['exp'])) {
             // check expiration date
-            $expiration_time = convert_sql_date($user[10]);
+            $expiration_time = convert_sql_date($user['exp']);
             // if expiration date is passed, store a special value for active field
             if ($expiration_time < $t) {
                 $user[7] = '-1';
             }
         }
 
-        $iconAdmin = '';
-        if ($is_admin) {
-            $iconAdmin .= Display::return_icon(
-                'admin_star.png',
-                get_lang('IsAdministrator'),
-                null,
-                ICON_SIZE_SMALL
-            );
-        }
-
-        $iconActive = null;
-        $action = null;
-        $image = null;
-
-        if ($user[7] == '1') {
-            $action = 'Lock';
-            $image = 'accept';
-        } elseif ($user[7] == '-1') {
-            $action = 'edit';
-            $image = 'warning';
-        } elseif ($user[7] == '0') {
-            $action = 'Unlock';
-            $image = 'error';
-        }
-
-        if ($action === 'edit') {
-            $iconActive = Display::return_icon(
-                $image.'.png',
-                get_lang('AccountExpired'),
-                [],
-                16
-            );
-        } elseif ($user['0'] != $currentUser->getId()) {
-            // you cannot lock yourself out otherwise you could disable all the
-            // accounts including your own => everybody is locked out and nobody
-            // can change it anymore.
-            $iconActive = Display::return_icon(
-                $image.'.png',
-                get_lang(ucfirst($action)),
-                ['onclick' => 'active_user(this);', 'id' => 'img_'.$user['0']],
-                16
-            );
-        }
-
-        $profile = '<div class="avatar-user">'.$photo.'<span class="is-admin">'
-            .$iconAdmin.'</span><span class="is-active">'.$iconActive.'</span></div>';
-
         // forget about the expiration date field
         $users[] = [
-            $user[0],
-            $profile,
+            $user[0], // id
+            $photo,
             $user[1],
             $user[2],
             $user[3],
-            $user[4],
-            $user[5],
+            $user[4], // username
+            $user[5], // email
             $user[6],
-            api_get_local_time($user[9]),
+            $user[7], // active
+            api_get_local_time($user[8]),
+            api_get_local_time($user[9], null, null, true),
             $user[0],
         ];
     }
@@ -555,13 +506,13 @@ function get_user_data($from, $number_of_items, $column, $direction)
  */
 function email_filter($email)
 {
-    return Display:: encrypted_mailto_link($email, $email, null, true);
+    return Display::encrypted_mailto_link($email, $email);
 }
 
 /**
  * Returns a mailto-link.
  *
- * @param string $email  An email-address
+ * @param string $name
  * @param array  $params Deprecated
  * @param array  $row
  *
@@ -585,6 +536,8 @@ function user_filter($name, $params, $row)
  */
 function modify_filter($user_id, $url_params, $row)
 {
+    $_admins_list = Session::read('admin_list', []);
+    $is_admin = in_array($user_id, $_admins_list);
     $statusname = api_get_status_langvars();
     $user_is_anonymous = false;
     $current_user_status_label = $row['7'];
@@ -592,7 +545,7 @@ function modify_filter($user_id, $url_params, $row)
     if ($current_user_status_label == $statusname[ANONYMOUS]) {
         $user_is_anonymous = true;
     }
-    $result = '<div class="toolbar-table">';
+    $result = '';
     if (!$user_is_anonymous) {
         $icon = Display::return_icon(
             'course.png',
@@ -601,7 +554,7 @@ function modify_filter($user_id, $url_params, $row)
         );
         $result .= '<a href="javascript:void(0)" onclick="load_course_list(\'div_'.$user_id.'\','.$user_id.')" >
                     '.$icon.'
-                    <div class="blackboard_hide" id="div_'.$user_id.'"></div>
+                    <div class="blackboard_hide" id="div_'.$user_id.'">&nbsp;&nbsp;</div>
                     </a>';
 
         $icon = Display::return_icon(
@@ -611,26 +564,26 @@ function modify_filter($user_id, $url_params, $row)
         );
         $result .= '<a href="javascript:void(0)" onclick="load_session_list(\'div_s_'.$user_id.'\','.$user_id.')" >
                     '.$icon.'
-                    <div class="blackboard_hide" id="div_s_'.$user_id.'"></div>
+                    <div class="blackboard_hide" id="div_s_'.$user_id.'">&nbsp;&nbsp;</div>
                     </a>';
     } else {
-        $result .= Display::return_icon('course_na.png', get_lang('Courses'));
-        $result .= Display::return_icon('course_na.png', get_lang('Sessions'));
+        $result .= Display::return_icon('course_na.png', get_lang('Courses')).'&nbsp;&nbsp;';
+        $result .= Display::return_icon('course_na.png', get_lang('Sessions')).'&nbsp;&nbsp;';
     }
 
     if (api_is_platform_admin()) {
         if (!$user_is_anonymous) {
             $result .= '<a href="user_information.php?user_id='.$user_id.'">'.
-                Display::return_icon('info2.png', get_lang('Info')).'</a>';
+                        Display::return_icon('info2.png', get_lang('Info')).'</a>&nbsp;&nbsp;';
         } else {
-            $result .= Display::return_icon('info2_na.png', get_lang('Info'));
+            $result .= Display::return_icon('info2_na.png', get_lang('Info')).'&nbsp;&nbsp;';
         }
     }
 
-    //only allow platform admins to login_as, or session admins only for students (not teachers nor other admins)
+    // Only allow platform admins to login_as, or session admins only for students (not teachers nor other admins)
     $loginAsStatusForSessionAdmins = [$statusname[STUDENT]];
 
-    //except when session.allow_session_admin_login_as_teacher is enabled, then can login_as teachers also
+    // Except when session.allow_session_admin_login_as_teacher is enabled, then can login_as teachers also
     if (api_get_configuration_value('session.allow_session_admin_login_as_teacher')) {
         $loginAsStatusForSessionAdmins[] = $statusname[COURSEMANAGER];
     }
@@ -642,26 +595,26 @@ function modify_filter($user_id, $url_params, $row)
         if (!$user_is_anonymous) {
             if (api_global_admin_can_edit_admin($user_id, null, $sessionAdminCanLoginAs)) {
                 $result .= '<a href="user_list.php?action=login_as&user_id='.$user_id.'&sec_token='.Security::getTokenFromSession().'">'.
-                    Display::return_icon('login_as.png', get_lang('LoginAs')).'</a>';
+                    Display::return_icon('login_as.png', get_lang('LoginAs')).'</a>&nbsp;';
             } else {
-                $result .= Display::return_icon('login_as_na.png', get_lang('LoginAs'));
+                $result .= Display::return_icon('login_as_na.png', get_lang('LoginAs')).'&nbsp;';
             }
         } else {
-            $result .= Display::return_icon('login_as_na.png', get_lang('LoginAs'));
+            $result .= Display::return_icon('login_as_na.png', get_lang('LoginAs')).'&nbsp;';
         }
     } else {
-        $result .= Display::return_icon('login_as_na.png', get_lang('LoginAs'));
+        $result .= Display::return_icon('login_as_na.png', get_lang('LoginAs')).'&nbsp;';
     }
 
     if ($current_user_status_label != $statusname[STUDENT]) {
         $result .= Display::return_icon(
             'statistics_na.png',
             get_lang('Reporting')
-        );
+        ).'&nbsp;';
     } else {
         $result .= '<a href="../mySpace/myStudents.php?student='.$user_id.'">'.
             Display::return_icon('statistics.png', get_lang('Reporting')).
-            '</a>';
+            '</a>&nbsp;';
     }
 
     if (api_is_platform_admin(true)) {
@@ -676,14 +629,14 @@ function modify_filter($user_id, $url_params, $row)
                     [],
                     ICON_SIZE_SMALL
                 ).
-                '</a>';
+                '</a>&nbsp;';
         } else {
             $result .= Display::return_icon(
-                    'edit_na.png',
-                    get_lang('Edit'),
-                    [],
-                    ICON_SIZE_SMALL
-                ).'</a>';
+                'edit_na.png',
+                get_lang('Edit'),
+                [],
+                ICON_SIZE_SMALL
+            ).'</a>&nbsp;';
         }
     }
 
@@ -698,6 +651,19 @@ function modify_filter($user_id, $url_params, $row)
                 ICON_SIZE_SMALL
             ),
             api_get_path(WEB_CODE_PATH).'badge/assign.php?'.http_build_query(['user' => $user_id])
+        );
+    }
+
+    if ($is_admin) {
+        $result .= Display::return_icon(
+            'admin_star.png',
+            get_lang('IsAdministrator'),
+            ['width' => ICON_SIZE_SMALL, 'heigth' => ICON_SIZE_SMALL]
+        );
+    } else {
+        $result .= Display::return_icon(
+            'admin_star_na.png',
+            get_lang('IsNotAdministrator')
         );
     }
 
@@ -814,7 +780,6 @@ function modify_filter($user_id, $url_params, $row)
                 );
             }
         }
-        $result .= '</div>';
     }
 
     return $result;
@@ -884,17 +849,17 @@ function active_filter($active, $params, $row)
  */
 function status_filter($status)
 {
-    $statusname = api_get_status_langvars();
+    $name = api_get_status_langvars();
 
-    return $statusname[$status];
+    return $name[$status];
 }
 
 if (isset($_GET['keyword']) || isset($_GET['keyword_firstname'])) {
-    $interbreadcrumb[] = ["url" => 'index.php', "name" => get_lang('PlatformAdmin')];
-    $interbreadcrumb[] = ["url" => 'user_list.php', "name" => get_lang('UserList')];
+    $interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('PlatformAdmin')];
+    $interbreadcrumb[] = ['url' => 'user_list.php', 'name' => get_lang('UserList')];
     $tool_name = get_lang('SearchUsers');
 } else {
-    $interbreadcrumb[] = ["url" => 'index.php', "name" => get_lang('PlatformAdmin')];
+    $interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('PlatformAdmin')];
     $tool_name = get_lang('UserList');
 }
 
@@ -1015,7 +980,7 @@ $form->addText(
     get_lang('Search'),
     false,
     [
-        'aria-label' => get_lang("SearchUsers"),
+        'aria-label' => get_lang('SearchUsers'),
     ]
 );
 $form->addButtonSearch(get_lang('Search'));
@@ -1134,16 +1099,22 @@ if (api_is_western_name_order()) {
 $table->set_header(5, get_lang('LoginName'));
 $table->set_header(6, get_lang('Email'));
 $table->set_header(7, get_lang('Profile'));
-//$table->set_header(8, get_lang('Active'), true);
-$table->set_header(8, get_lang('RegistrationDate'), true);
-$table->set_header(9, get_lang('Action'), false);
+$table->set_header(8, get_lang('Active'), true, 'width="15px"');
+$table->set_header(9, get_lang('RegistrationDate'), true, 'width="90px"');
+$table->set_header(10, get_lang('LatestLogin'), true, 'width="90px"');
+$table->set_header(11, get_lang('Action'), false, 'width="220px"');
 
 $table->set_column_filter(3, 'user_filter');
 $table->set_column_filter(4, 'user_filter');
 $table->set_column_filter(6, 'email_filter');
 $table->set_column_filter(7, 'status_filter');
-//$table->set_column_filter(8, 'active_filter');
-$table->set_column_filter(9, 'modify_filter');
+$table->set_column_filter(8, 'active_filter');
+$table->set_column_filter(11, 'modify_filter');
+
+// Hide email column if login is email, to avoid column with same data
+if (api_get_setting('login_is_email') === 'true') {
+    $table->setHideColumn(6);
+}
 
 // Only show empty actions bar if delete users has been blocked
 $actionsList = [];
@@ -1159,7 +1130,7 @@ $table->set_form_actions($actionsList);
 $table_result = $table->return_table();
 $extra_search_options = '';
 
-//Try to search the user everywhere
+// Try to search the user everywhere
 if ($table->get_total_number_of_items() == 0) {
     if (api_get_multiple_access_url() && isset($_REQUEST['keyword'])) {
         $keyword = Database::escape_string($_REQUEST['keyword']);

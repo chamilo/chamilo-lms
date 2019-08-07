@@ -558,13 +558,13 @@ class DocumentManager
             $toUserId = (int) $toUserId;
             $userGroupFilter = "last.to_user_id = $toUserId";
             if (empty($toUserId)) {
-                $userGroupFilter = " (last.to_user_id = 0 OR last.to_user_id IS NULL) ";
+                $userGroupFilter = ' (last.to_user_id = 0 OR last.to_user_id IS NULL) ';
             }
         } else {
             $toGroupId = (int) $toGroupId;
             $userGroupFilter = "last.to_group_id = $toGroupId";
             if (empty($toGroupId)) {
-                $userGroupFilter = "( last.to_group_id = 0 OR last.to_group_id IS NULL) ";
+                $userGroupFilter = '( last.to_group_id = 0 OR last.to_group_id IS NULL) ';
             }
         }
 
@@ -643,6 +643,17 @@ class DocumentManager
                 // Then we avoid the documents that have visibility in session but that they come from a base course
                 if ($hideInvisibleDocuments && $sessionId) {
                     if ($row['item_property_session_id'] == $sessionId && empty($row['session_id'])) {
+                        continue;
+                    }
+                }
+
+                if (self::isBasicCourseFolder($row['path'], $sessionId)) {
+                    $basicCourseDocumentsContent = self::getAllDocumentData(
+                        $courseInfo,
+                        $row['path']
+                    );
+
+                    if (empty($basicCourseDocumentsContent)) {
                         continue;
                     }
                 }

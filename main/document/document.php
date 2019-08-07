@@ -1658,6 +1658,8 @@ if ($is_certificate_mode && $curdirpath != '/certificates') {
     );
 }
 
+$column_show = [];
+
 if ($isAllowedToEdit ||
     $groupMemberWithUploadRights ||
     DocumentManager::is_my_shared_folder(api_get_user_id(), $curdirpath, $sessionId)

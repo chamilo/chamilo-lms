@@ -26,7 +26,6 @@ $logInfo = [
     'tool_id' => 0,
     'tool_id_detail' => 0,
     'action' => $this_section,
-    'info' => '',
 ];
 Event::registerLog($logInfo);
 
@@ -538,6 +537,7 @@ if ($form->validate()) {
 
     //Only update values that are request by the "profile" setting
     //Adding missing variables
+
     $available_values_to_modify = [];
     foreach ($profileList as $key) {
         switch ($key) {
@@ -562,7 +562,7 @@ if ($form->validate()) {
         }
     }
 
-    // Fixing missing variables
+    //Fixing missing variables
     $available_values_to_modify = array_merge(
         $available_values_to_modify,
         ['competences', 'diplomas', 'openarea', 'teach', 'openid', 'address']
@@ -617,7 +617,6 @@ if ($form->validate()) {
     }
 
     $sql .= " WHERE id  = '".api_get_user_id()."'";
-
     Database::query($sql);
 
     if (isset($user_data['language']) && !empty($user_data['language'])) {
@@ -652,23 +651,21 @@ if ($form->validate()) {
     Session::write('_user', $userInfo);
 
     if ($hook) {
-        Database::getManager()->clear(User::class); //Avoid cache issue (user entity is used before)
-
-        $user = api_get_user_entity(api_get_user_id()); //Get updated user info for hook event
-
+        Database::getManager()->clear(User::class); // Avoid cache issue (user entity is used before)
+        $user = api_get_user_entity(api_get_user_id()); // Get updated user info for hook event
         $hook->setEventData(['user' => $user]);
         $hook->notifyUpdateUser(HOOK_EVENT_TYPE_POST);
     }
+
+    Session::erase('system_timezone');
 
     $url = api_get_self();
     header("Location: $url");
     exit;
 }
 
-// the header
-
 $actions = '';
-if (api_get_setting('allow_social_tool') !== 'true') {
+if ($allowSocialTool) {
     if (api_get_setting('extended_profile') === 'true') {
         if (api_get_setting('allow_message_tool') === 'true') {
             $actions .= '<a href="'.api_get_path(WEB_PATH).'main/social/profile.php">'.
@@ -701,7 +698,7 @@ if ($actions) {
 
 SocialManager::setSocialUserBlock($tpl, api_get_user_id(), 'messages');
 
-if (api_get_setting('allow_social_tool') === 'true') {
+if ($allowSocialTool) {
     SocialManager::setSocialUserBlock($tpl, api_get_user_id(), 'home');
     $menu = SocialManager::show_social_menu(
         'home',

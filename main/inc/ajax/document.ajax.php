@@ -17,8 +17,7 @@ switch ($action) {
 
         $repo = Container::$container->get('Chamilo\CourseBundle\Repository\CDocumentRepository');
         $size = $repo->getFolderSize(api_get_course_int_id(), $path);
-        //var_dump($size);
-        //$size = DocumentManager::getTotalFolderSize($path, $isAllowedToEdit);
+
         echo format_file_size($size);
         break;
     case 'get_document_quota':

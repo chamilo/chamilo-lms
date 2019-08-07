@@ -51,7 +51,7 @@ if (!empty($user_course_categories)) {
         }
         if ($action != 'unsubscribe') {
             if ($allowCollapsable) {
-                if ($row['collapsed'] == 0) {
+                if (isset($row['collapsed']) && $row['collapsed'] == 0) {
                     echo Display::url(
                         '<i class="fa fa-folder-open"></i>',
                         $url.'&action=set_collapsable&option=1'

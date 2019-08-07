@@ -33,7 +33,7 @@ class PageController extends Controller
             'routeName' => 'page_slug',
             'metaKeyword' => 'news',
         ];
-        $order = ['position' => 'desc'];
+        $order = ['position' => 'asc'];
         // Get latest pages
         $pages = $this->container->get('sonata.page.manager.page')->findBy($criteria, $order, $number);
         $pagesToShow = [];
@@ -77,7 +77,7 @@ class PageController extends Controller
             'routeName' => 'page_slug',
             'metaKeyword' => 'block',
         ];
-        $order = ['position' => 'desc'];
+        $order = ['position' => 'asc'];
         // Get latest pages
         $pages = $this->container->get('sonata.page.manager.page')->findBy($criteria, $order, $number);
 

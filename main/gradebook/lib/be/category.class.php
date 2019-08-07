@@ -100,9 +100,9 @@ class Category implements GradebookItem
     {
         if (!empty($this->certificate_min_score)) {
             return $this->certificate_min_score;
-        } else {
-            return null;
         }
+
+        return null;
     }
 
     /**

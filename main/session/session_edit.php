@@ -53,8 +53,8 @@ if (!empty($sessionInfo['coach_access_end_date'])) {
 
 $tool_name = get_lang('EditSession');
 
-$interbreadcrumb[] = ['url' => "session_list.php", "name" => get_lang('SessionList')];
-$interbreadcrumb[] = ['url' => "resume_session.php?id_session=".$id, "name" => get_lang('SessionOverview')];
+$interbreadcrumb[] = ['url' => 'session_list.php', 'name' => get_lang('SessionList')];
+$interbreadcrumb[] = ['url' => 'resume_session.php?id_session='.$id, 'name' => get_lang('SessionOverview')];
 
 if (isset($_POST['formSent']) && $_POST['formSent']) {
     $formSent = 1;
@@ -205,7 +205,6 @@ $form->display();
 
 <script>
 $(function() {
-
 <?php
     if (!empty($sessionInfo['duration'])) {
         echo 'accessSwitcher(0);';

@@ -2827,6 +2827,7 @@ HOTSPOT;
             $score = $result['score'];
             $weight = $result['weight'];
         }
+
         $percentage = (100 * $score) / ($weight != 0 ? $weight : 1);
         // Formats values
         $percentage = float_format($percentage, 1);
@@ -2882,6 +2883,13 @@ HOTSPOT;
         $scoreBasedInModel = self::convertScoreToModel($percentage);
         if (!empty($scoreBasedInModel)) {
             $html = $scoreBasedInModel;
+        }
+
+        // Ignore other formats and use the configuratio['exercise_score_format'] value
+        // But also keep the round values settings.
+        $format = api_get_configuration_value('exercise_score_format');
+        if (!empty($format)) {
+            $html = ScoreDisplay::instance()->display_score([ $score, $weight], $format);
         }
 
         $html = Display::span($html, ['class' => 'score_exercise']);
@@ -5060,7 +5068,6 @@ EOT;
             $ribbon .= '<h3>'.get_lang('YourTotalScore').':&nbsp;';
             $ribbon .= self::show_score($score, $weight, false, true);
             $ribbon .= '</h3>';
-
             $ribbon .= '</div>';
         }
 

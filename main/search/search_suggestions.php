@@ -123,5 +123,3 @@ if (isset($_GET['term'])) {
 
     get_suggestions_from_search_engine($q);
 }
-//echo $q . "| value\n";
-get_suggestions_from_search_engine($q);

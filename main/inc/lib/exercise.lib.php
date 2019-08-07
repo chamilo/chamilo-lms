@@ -2885,6 +2885,13 @@ HOTSPOT;
             $html = $scoreBasedInModel;
         }
 
+        // Ignore other formats and use the configuratio['exercise_score_format'] value
+        // But also keep the round values settings.
+        $format = api_get_configuration_value('exercise_score_format');
+        if (!empty($format)) {
+            $html = ScoreDisplay::instance()->display_score([ $score, $weight]);
+        }
+
         $html = Display::span($html, ['class' => 'score_exercise']);
 
         return $html;

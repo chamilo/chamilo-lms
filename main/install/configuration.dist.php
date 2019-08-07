@@ -1280,6 +1280,12 @@ requires extension "php-soap"  sudo apt-get install php-soap
 // Allow user to enter a LP item if it was validated in another session.
 // $_configuration['validate_lp_prerequisite_from_other_session'] = false;
 
+// 1 = SCORE_AVERAGE (5 / 10)
+// 2 = SCORE_PERCENT (50%)
+// 3 = SCORE_DIV_PERCENT (5 / 10 (50%))
+// 5 = SCORE_DECIMAL (0.5 (50%))
+// $_configuration['exercise_score_format'] = 0;
+
 // KEEP THIS AT THE END
 // -------- Custom DB changes
 // Add user activation by confirmation email

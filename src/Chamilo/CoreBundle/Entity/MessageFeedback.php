@@ -19,7 +19,7 @@ use Doctrine\ORM\Mapping\Index;
  *     }
  * )
  * Add @ to the next line if api_get_configuration_value('social_enable_messages_feedback') is true
- * ORM\Entity()
+ * @ORM\Entity()
  */
 class MessageFeedback
 {

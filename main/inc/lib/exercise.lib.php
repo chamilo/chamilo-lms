@@ -2827,6 +2827,7 @@ HOTSPOT;
             $score = $result['score'];
             $weight = $result['weight'];
         }
+
         $percentage = (100 * $score) / ($weight != 0 ? $weight : 1);
         // Formats values
         $percentage = float_format($percentage, 1);
@@ -5060,7 +5061,6 @@ EOT;
             $ribbon .= '<h3>'.get_lang('YourTotalScore').':&nbsp;';
             $ribbon .= self::show_score($score, $weight, false, true);
             $ribbon .= '</h3>';
-
             $ribbon .= '</div>';
         }
 

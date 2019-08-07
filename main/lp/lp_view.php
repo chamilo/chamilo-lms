@@ -545,12 +545,13 @@ $template->assign('iframe_src', $src);
 $template->assign('navigation_bar_bottom', $navigation_bar_bottom);
 $template->assign('show_left_column', $lp->getHideTableOfContents() == 0);
 
-$showMenu = $lp->getHideTableOfContents() == 0;
+$showMenu = 0;
 $settings = api_get_configuration_value('lp_view_settings');
 $display = isset($settings['display']) ? $settings['display'] : false;
 if (!empty($display)) {
     $showMenu = isset($display['show_toolbar_by_default']) && $display['show_toolbar_by_default'] ? 1 : 0;
 }
+
 $template->assign('show_toolbar_by_default', $showMenu);
 
 if ($gamificationMode == 1) {

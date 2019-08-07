@@ -3632,8 +3632,8 @@ class Exercise
                     if ($from_database) {
                         $sql = "SELECT answer FROM $TBL_TRACK_ATTEMPT
                                 WHERE
-                                    exe_id = '".$exeId."' AND
-                                    question_id= '".$questionId."'";
+                                    exe_id = $exeId AND
+                                    question_id = $questionId";
                         $result = Database::query($sql);
                         $choice = Database::result($result, 0, 'answer');
 
@@ -3829,7 +3829,7 @@ class Exercise
                     if ($from_database) {
                         $choice = [];
                         $sql = "SELECT answer FROM $TBL_TRACK_ATTEMPT
-                                WHERE exe_id = $exeId AND question_id= $questionId";
+                                WHERE exe_id = $exeId AND question_id = $questionId";
                         $resultans = Database::query($sql);
                         while ($row = Database::fetch_array($resultans)) {
                             $choice[$row['answer']] = 1;
@@ -4260,7 +4260,7 @@ class Exercise
                                 FROM $TBL_TRACK_ATTEMPT
                                 WHERE
                                     exe_id = $exeId AND
-                                    question_id= ".intval($questionId);
+                                    question_id = $questionId";
                             $result = Database::query($sql);
                             $resultData = Database::fetch_array($result, 'ASSOC');
                             $answer = $resultData['answer'];
@@ -4460,7 +4460,7 @@ class Exercise
                             }
 
                             if ($show_result) {
-                                if ($this->showExpectedChoice() == false &&
+                                if ($this->showExpectedChoice() === false &&
                                     $showTotalScoreAndUserChoicesInLastAttempt === false
                                 ) {
                                     $user_answer = '';
@@ -4585,7 +4585,7 @@ class Exercise
                                 WHERE
                                     hotspot_exe_id = $exeId AND
                                     hotspot_question_id= $questionId AND
-                                    hotspot_answer_id = ".intval($answerAutoId)."
+                                    hotspot_answer_id = $answerAutoId
                                 ORDER BY hotspot_id ASC";
                         $result = Database::query($sql);
                         if (Database::num_rows($result)) {

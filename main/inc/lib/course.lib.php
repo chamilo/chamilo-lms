@@ -6387,7 +6387,7 @@ class CourseManager
         return api_get_path(WEB_COURSE_PATH).$course->getDirectory().'/course-pic85x85.png';
     }
 
-     /**
+    /**
      * @return int
      */
     public static function getCountOpenCourses()

@@ -14,7 +14,7 @@ require_once __DIR__.'/../inc/global.inc.php';
 api_protect_admin_script();
 
 // Load terms & conditions from the current lang
-if (api_get_setting('allow_terms_conditions') == 'true') {
+if (api_get_setting('allow_terms_conditions') === 'true') {
     $get = array_keys($_GET);
     if (isset($get)) {
         if (isset($get[0]) && $get[0] == 'legal') {

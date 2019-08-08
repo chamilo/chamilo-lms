@@ -18,7 +18,7 @@ $groupId = api_get_group_id();
 
 // Section (for the tabs)
 $this_section = SECTION_COURSES;
-$work_id = isset($_GET['id']) ? intval($_GET['id']) : null;
+$work_id = isset($_GET['id']) ? (int) $_GET['id'] : null;
 $my_folder_data = get_work_data_by_id($work_id);
 
 $curdirpath = '';
@@ -29,13 +29,13 @@ $htmlHeadXtra[] = to_javascript_work();
 
 $tool_name = get_lang('StudentPublications');
 
-$item_id = isset($_REQUEST['item_id']) ? intval($_REQUEST['item_id']) : null;
+$item_id = isset($_REQUEST['item_id']) ? (int) $_REQUEST['item_id'] : null;
 $origin = api_get_origin();
 $course_dir = api_get_path(SYS_COURSE_PATH).$courseInfo['path'];
 $base_work_dir = $course_dir.'/work';
 $action = isset($_REQUEST['action']) ? $_REQUEST['action'] : 'list';
 
-//Download folder
+// Download folder
 if ($action === 'downloadfolder') {
     require 'downloadfolder.inc.php';
 }
@@ -107,17 +107,16 @@ if (!empty($groupId)) {
             ];
         }
 
-        if ($action == 'upload_form') {
+        if ($action === 'upload_form') {
             $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('UploadADocument')];
         }
 
-        if ($action == 'create_dir') {
+        if ($action === 'create_dir') {
             $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('CreateAssignment')];
         }
     }
 }
 
-// Stats
 Event::event_access_tool(TOOL_STUDENTPUBLICATION);
 
 $logInfo = [
@@ -125,7 +124,6 @@ $logInfo = [
     'tool_id' => 0,
     'tool_id_detail' => 0,
     'action' => $action,
-    'action_details' => '',
 ];
 Event::registerLog($logInfo);
 

@@ -4435,7 +4435,7 @@ class Exercise
                             }
 
                             if ($show_result) {
-                                if ($this->showExpectedChoice() == false &&
+                                if ($this->showExpectedChoice() === false &&
                                     $showTotalScoreAndUserChoicesInLastAttempt === false
                                 ) {
                                     $user_answer = '';

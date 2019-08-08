@@ -987,7 +987,7 @@ class SessionManager
         $date_to,
         $options
     ) {
-        $sessionId = intval($sessionId);
+        $sessionId = (int) $sessionId;
 
         $getAllSessions = false;
         if (empty($sessionId)) {

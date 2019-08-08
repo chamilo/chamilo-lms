@@ -166,10 +166,12 @@ function online_logout($user_id = null, $logout_redirect = false)
     $url = api_get_path(WEB_PATH).'index.php';
 
     if ($logout_redirect && api_get_plugin_setting('azure_active_directory', 'enable') == 'true') {
-        $activeDirectoryPlugin = AzureActiveDirectory::create();
-        $azureLogout = $activeDirectoryPlugin->getUrl(AzureActiveDirectory::URL_TYPE_SIGNOUT);
-        if (!empty($azureLogout)) {
-            $url = $azureLogout;
+        if (ChamiloSession::read('_user_auth_source') === 'azure_active_directory') {
+            $activeDirectoryPlugin = AzureActiveDirectory::create();
+            $azureLogout = $activeDirectoryPlugin->getUrl(AzureActiveDirectory::URL_TYPE_LOGOUT);
+            if (!empty($azureLogout)) {
+                $url = $azureLogout;
+            }
         }
     }
 

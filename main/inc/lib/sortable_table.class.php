@@ -100,6 +100,7 @@ class SortableTable extends HTML_Table
      *            Columns to hide
      */
     private $columnsToHide = [];
+    private $dataFunctionParams;
 
     /**
      * Create a new SortableTable.
@@ -204,6 +205,27 @@ class SortableTable extends HTML_Table
         $this->td_attributes = [];
         $this->th_attributes = [];
         $this->other_tables = [];
+        $this->dataFunctionParams = [];
+    }
+
+    /**
+     * @return array
+     */
+    public function getDataFunctionParams()
+    {
+        return $this->dataFunctionParams;
+    }
+
+    /**
+     * @param array $dataFunctionParams
+     *
+     * @return $this
+     */
+    public function setDataFunctionParams($dataFunctionParams)
+    {
+        $this->dataFunctionParams = $dataFunctionParams;
+
+        return $this;
     }
 
     /**
@@ -749,7 +771,6 @@ class SortableTable extends HTML_Table
     public function processHeaders()
     {
         $counter = 0;
-
         foreach ($this->headers as $column => $columnInfo) {
             $label = $columnInfo['label'];
             $sortable = $columnInfo['sortable'];
@@ -997,7 +1018,10 @@ class SortableTable extends HTML_Table
     public function get_total_number_of_items()
     {
         if ($this->total_number_of_items == -1 && !is_null($this->get_total_number_function)) {
-            $this->total_number_of_items = call_user_func($this->get_total_number_function);
+            $this->total_number_of_items = call_user_func(
+                $this->get_total_number_function,
+                $this->getDataFunctionParams()
+            );
         }
 
         return $this->total_number_of_items;
@@ -1034,13 +1058,14 @@ class SortableTable extends HTML_Table
         $sort = null
     ) {
         $data = [];
-        if (!is_null($this->get_data_function)) {
+        if ($this->get_data_function !== null) {
             $data = call_user_func(
                 $this->get_data_function,
                 $from,
                 $this->per_page,
                 $this->column,
-                $this->direction
+                $this->direction,
+                $this->dataFunctionParams
             );
         }
 
@@ -1106,7 +1131,7 @@ class SortableTableFromArray extends SortableTable
             $content = TableSort::sort_table(
                 $this->table_data,
                 $this->column,
-                $this->direction == 'ASC' ? SORT_ASC : SORT_DESC
+                $this->direction === 'ASC' ? SORT_ASC : SORT_DESC
             );
         } else {
             $content = $this->table_data;

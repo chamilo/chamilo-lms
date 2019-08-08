@@ -41,7 +41,7 @@ if (!empty($messageInfo['group_id'])) {
 }
 
 // Only process wall messages
-if (!in_array($messageInfo['msg_status'], [MESSAGE_STATUS_WALL, MESSAGE_STATUS_WALL_POST])) {
+if (!in_array($messageInfo['msg_status'], [MESSAGE_STATUS_WALL, MESSAGE_STATUS_WALL_POST, MESSAGE_STATUS_PROMOTED])) {
     api_not_allowed();
 }
 

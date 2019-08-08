@@ -408,7 +408,7 @@ class Evaluation implements GradebookItem
     {
         $table = Database::get_main_table(TABLE_MAIN_GRADEBOOK_EVALUATION);
         $sql = 'DELETE FROM '.$table.' 
-                WHERE id = '.intval($this->id);
+                WHERE id = '.$this->get_id();
         Database::query($sql);
     }
 

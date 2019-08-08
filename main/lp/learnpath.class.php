@@ -1870,12 +1870,14 @@ class learnpath
     /**
      * Gets the navigation bar for the learnpath display screen.
      *
+     * @param string $barId
+     *
      * @return string The HTML string to use as a navigation bar
      */
-    public function get_navigation_bar($idBar = null, $display = null)
+    public function get_navigation_bar($barId = '')
     {
-        if (empty($idBar)) {
-            $idBar = 'control-top';
+        if (empty($barId)) {
+            $barId = 'control-top';
         }
         $lpId = $this->lp_id;
         $mycurrentitemid = $this->get_current_item_id();
@@ -1898,7 +1900,7 @@ class learnpath
 
         if (!empty($display)) {
             $showReporting = isset($display['show_reporting_icon']) ? $display['show_reporting_icon'] : true;
-            if ($showReporting == false) {
+            if ($showReporting === false) {
                 $reportingIcon = '';
             }
         }
@@ -1926,7 +1928,7 @@ class learnpath
 
         if ($this->mode === 'fullscreen') {
             $navbar = '
-                  <span id="'.$idBar.'" class="buttons">
+                  <span id="'.$barId.'" class="buttons">
                     '.$reportingIcon.'
                     '.$previousIcon.'                    
                     '.$nextIcon.'
@@ -1937,11 +1939,11 @@ class learnpath
                   </span>';
         } else {
             $navbar = '
-            <span id="'.$idBar.'" class="buttons text-right">
-                '.$reportingIcon.'
-                '.$previousIcon.'
-                '.$nextIcon.'               
-            </span>';
+                 <span id="'.$barId.'" class="buttons text-right">
+                    '.$reportingIcon.'
+                    '.$previousIcon.'
+                    '.$nextIcon.'               
+                </span>';
         }
 
         return $navbar;
@@ -2289,7 +2291,7 @@ class learnpath
                 $isBlocked = true;
             }
 
-            if (Tracking::minimunTimeAvailable($sessionId, $courseId)) {
+            if (Tracking::minimumTimeAvailable($sessionId, $courseId)) {
                 // Block if it does not exceed minimum time
                 // Minimum time (in minutes) to pass the learning path
                 $accumulateWorkTime = self::getAccumulateWorkTimePrerequisite($prerequisite, $courseId);
@@ -4309,7 +4311,7 @@ class learnpath
 
         $debug = $this->debug;
         if ($debug > 0) {
-            error_log('In learnpath::prerequisites_match()', 0);
+            error_log('In learnpath::prerequisites_match()');
         }
 
         if (empty($itemId)) {
@@ -4333,11 +4335,13 @@ class learnpath
 
                 return true;
             }
+
             // Clean spaces.
             $prereq_string = str_replace(' ', '', $prereq_string);
             if ($debug > 0) {
                 error_log('Found prereq_string: '.$prereq_string, 0);
             }
+
             // Now send to the parse_prereq() function that will check this component's prerequisites.
             $result = $currentItem->parse_prereq(
                 $prereq_string,

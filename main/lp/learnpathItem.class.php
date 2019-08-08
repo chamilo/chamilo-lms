@@ -539,7 +539,7 @@ class learnpathItem
                     c_id = $course_id AND
                     lp_item_id = ".$this->db_id." AND
                     lp_view_id = ".$this->view_id." AND
-                    view_count = ".$this->attempt_id;
+                    view_count = ".$this->get_view_count();
         $res = Database::query($sql);
         if (Database::num_rows($res) > 0) {
             $row = Database::fetch_array($res);
@@ -573,6 +573,10 @@ class learnpathItem
     public function get_interactions_count($checkdb = false)
     {
         $return = 0;
+        if (api_is_invitee()) {
+            // If the user is an invitee, we consider there's no interaction
+            return 0;
+        }
         $course_id = api_get_course_int_id();
 
         if ($checkdb) {
@@ -688,9 +692,9 @@ class learnpathItem
                 ['\r', '\n', "\\'"],
                 $this->lesson_location
             );
-        } else {
-            return '';
         }
+
+        return '';
     }
 
     /**
@@ -860,8 +864,8 @@ class learnpathItem
             if (!empty($this->lp_id)) {
                 $table = Database::get_course_table(TABLE_LP_MAIN);
                 $sql = "SELECT prevent_reinit
-                    FROM $table
-                    WHERE iid = ".$this->lp_id;
+                        FROM $table
+                        WHERE iid = ".$this->lp_id;
                 $res = Database::query($sql);
                 if (Database::num_rows($res) < 1) {
                     $this->error = "Could not find parent learnpath in lp table";
@@ -1511,60 +1515,20 @@ class learnpathItem
                             c_id = $course_id AND
                             iid = '".$this->db_item_view_id."' AND
                             view_count = '".$this->get_attempt_id()."'";
-
-                if ($debug > 2) {
-                    error_log(
-                        'learnpathItem::get_status() - Checking DB: '.$sql,
-                        0
-                    );
-                }
-
                 $res = Database::query($sql);
                 if (Database::num_rows($res) == 1) {
                     $row = Database::fetch_array($res);
                     if ($update_local) {
-                        if ($debug > 2) {
-                            error_log(
-                                'learnpathItem::set_status() :'.$row['status'],
-                                0
-                            );
-                        }
                         $this->set_status($row['status']);
-                    }
-                    if ($debug > 2) {
-                        error_log(
-                            'learnpathItem::get_status() - Returning db value '.$row['status'],
-                            0
-                        );
                     }
 
                     return $row['status'];
                 }
             }
         } else {
-            if ($debug > 2) {
-                error_log(
-                    'learnpathItem::get_status() - in get_status: using attrib',
-                    0
-                );
-            }
             if (!empty($this->status)) {
-                if ($debug > 2) {
-                    error_log(
-                        'learnpathItem::get_status() - Returning attrib: '.$this->status,
-                        0
-                    );
-                }
-
                 return $this->status;
             }
-        }
-
-        if ($debug > 2) {
-            error_log(
-                'learnpathItem::get_status() - Returning default '.$this->possible_status[0],
-                0
-            );
         }
 
         return $this->possible_status[0];
@@ -1602,12 +1566,12 @@ class learnpathItem
         if (!isset($time)) {
             if ($origin == 'js') {
                 return '00 : 00: 00';
-            } else {
-                return '00 '.$h.' 00 \' 00"';
             }
-        } else {
-            return api_format_time($time, $origin);
+
+            return '00 '.$h.' 00 \' 00"';
         }
+
+        return api_format_time($time, $origin);
     }
 
     /**
@@ -1786,7 +1750,7 @@ class learnpathItem
             $sessionLifetime = 3600;
         }
 
-        if (!Tracking::minimunTimeAvailable(api_get_session_id(), api_get_course_int_id())) {
+        if (!Tracking::minimumTimeAvailable(api_get_session_id(), api_get_course_int_id())) {
             $fixedAddedMinute = 5 * 60; // Add only 5 minutes
             if ($time > $sessionLifetime) {
                 error_log("fixAbusiveTime: Total time is too big: $time replaced with: $fixedAddedMinute");
@@ -2031,6 +1995,7 @@ class learnpathItem
 
         // Deal with &, |, ~, =, <>, {}, ,, X*, () in reverse order.
         $this->prereq_alert = '';
+
         // First parse all parenthesis by using a sequential loop
         //  (looking for less-inclusives first).
         if ($prereqs_string == '_true_') {
@@ -2369,13 +2334,6 @@ class learnpathItem
                             } else {
                                 // Nothing found there either. Now return the
                                 // value of the corresponding resource completion status.
-                                if ($debug) {
-                                    error_log(
-                                        'New LP - Didnt find any group, returning value for '.$prereqs_string,
-                                        0
-                                    );
-                                }
-
                                 if (isset($refs_list[$prereqs_string]) &&
                                     isset($items[$refs_list[$prereqs_string]])
                                 ) {
@@ -2393,26 +2351,12 @@ class learnpathItem
                                                 $itemToCheck->get_title()
                                             );
                                             $this->prereq_alert = $explanation;
-                                            if ($debug) {
-                                                error_log(
-                                                    'New LP - Prerequisite '.$prereqs_string.' not complete',
-                                                    0
-                                                );
-                                            }
-                                        } else {
-                                            if ($debug) {
-                                                error_log(
-                                                    'New LP - Prerequisite '.$prereqs_string.' complete',
-                                                    0
-                                                );
-                                            }
                                         }
 
                                         // For one and first attempt.
                                         if ($this->prevent_reinit == 1) {
                                             // 2. If is completed we check the results in the DB of the quiz.
                                             if ($returnstatus) {
-                                                //AND origin_lp_item_id = '.$user_id.'
                                                 $sql = 'SELECT score, max_score
                                                         FROM '.Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES).'
                                                         WHERE
@@ -2430,14 +2374,6 @@ class learnpathItem
                                                     $myItemToCheck = $items[$refs_list[$this->get_id()]];
                                                     $minScore = $myItemToCheck->getPrerequisiteMinScore();
                                                     $maxScore = $myItemToCheck->getPrerequisiteMaxScore();
-
-                                                    /*if (empty($minScore)) {
-                                                        // Try with mastery_score
-                                                        $masteryScoreAsMin = $myItemToCheck->get_mastery_score();
-                                                        if (!empty($masteryScoreAsMin)) {
-                                                            $minScore = $masteryScoreAsMin;
-                                                        }
-                                                    }*/
 
                                                     if (isset($minScore) && isset($minScore)) {
                                                         // Taking min/max prerequisites values see BT#5776
@@ -2483,7 +2419,7 @@ class learnpathItem
                                                         exe_exo_id = '.$items[$refs_list[$prereqs_string]]->path.' AND
                                                         exe_user_id = '.$user_id.' AND
                                                         orig_lp_id = '.$this->lp_id.' AND
-                                                        orig_lp_item_id = '.$prereqs_string.' ';
+                                                        orig_lp_item_id = '.$prereqs_string;
 
                                             $rs_quiz = Database::query($sql);
                                             if (Database::num_rows($rs_quiz) > 0) {
@@ -2532,6 +2468,18 @@ class learnpathItem
                                             }
                                         }
 
+                                        if ($returnstatus === false) {
+                                            // Check results from another sessions.
+                                            $checkOtherSessions = api_get_configuration_value('validate_lp_prerequisite_from_other_session');
+                                            if ($checkOtherSessions) {
+                                                $returnstatus = $this->getStatusFromOtherSessions(
+                                                    $user_id,
+                                                    $prereqs_string,
+                                                    $refs_list
+                                                );
+                                            }
+                                        }
+
                                         return $returnstatus;
                                     } elseif ($itemToCheck->type === 'student_publication') {
                                         require_once api_get_path(SYS_CODE_PATH).'work/work.lib.php';
@@ -2542,62 +2490,53 @@ class learnpathItem
                                         } else {
                                             $returnstatus = false;
                                             $this->prereq_alert = get_lang('LearnpathPrereqNotCompleted');
-                                            if (self::DEBUG > 1) {
-                                                error_log(
-                                                    'Student pub, prereq'.$prereqs_string.' not completed',
-                                                    0
-                                                );
-                                            }
                                         }
 
                                         return $returnstatus;
                                     } else {
                                         $status = $itemToCheck->get_status(false);
                                         $returnstatus = $status == $this->possible_status[2] || $status == $this->possible_status[3];
+
+                                        // Check results from another sessions.
+                                        $checkOtherSessions = api_get_configuration_value('validate_lp_prerequisite_from_other_session');
+                                        if ($checkOtherSessions && !$returnstatus) {
+                                            $returnstatus = $this->getStatusFromOtherSessions(
+                                                $user_id,
+                                                $prereqs_string,
+                                                $refs_list
+                                            );
+                                        }
+
                                         if (!$returnstatus) {
                                             $explanation = sprintf(
                                                 get_lang('ItemXBlocksThisElement'),
                                                 $itemToCheck->get_title()
                                             );
                                             $this->prereq_alert = $explanation;
-                                            if (self::DEBUG > 1) {
-                                                error_log(
-                                                    'New LP - Prerequisite '.$prereqs_string.' not complete',
-                                                    0
-                                                );
-                                            }
-                                        } else {
-                                            if (self::DEBUG > 1) {
-                                                error_log(
-                                                    'New LP - Prerequisite '.$prereqs_string.' complete',
-                                                    0
-                                                );
-                                            }
                                         }
 
-                                        if ($returnstatus && $this->prevent_reinit == 1) {
-                                            // I would prefer check in the database.
-                                            $lp_item_view = Database::get_course_table(TABLE_LP_ITEM_VIEW);
-                                            $lp_view = Database::get_course_table(TABLE_LP_VIEW);
+                                        $lp_item_view = Database::get_course_table(TABLE_LP_ITEM_VIEW);
+                                        $lp_view = Database::get_course_table(TABLE_LP_VIEW);
 
-                                            $sql = 'SELECT iid FROM '.$lp_view.'
+                                        if ($returnstatus && $this->prevent_reinit == 1) {
+                                            $sql = "SELECT iid FROM $lp_view
                                                     WHERE
-                                                        c_id = '.$course_id.' AND
-                                                        user_id = '.$user_id.'  AND
-                                                        lp_id = '.$this->lp_id.' AND
-                                                        session_id = '.$sessionId.'
-                                                    LIMIT 0, 1';
+                                                        c_id = $course_id AND
+                                                        user_id = $user_id  AND
+                                                        lp_id = $this->lp_id AND
+                                                        session_id = $sessionId
+                                                    LIMIT 0, 1";
                                             $rs_lp = Database::query($sql);
                                             if (Database::num_rows($rs_lp)) {
                                                 $lp_id = Database::fetch_row($rs_lp);
                                                 $my_lp_id = $lp_id[0];
 
-                                                $sql = 'SELECT status FROM '.$lp_item_view.'
+                                                $sql = "SELECT status FROM $lp_item_view
                                                         WHERE
-                                                            c_id = '.$course_id.' AND
-                                                            lp_view_id = '.$my_lp_id.' AND
-                                                            lp_item_id = '.$refs_list[$prereqs_string].'
-                                                        LIMIT 0, 1';
+                                                            c_id = $course_id AND
+                                                            lp_view_id = $my_lp_id AND
+                                                            lp_item_id = $refs_list[$prereqs_string]
+                                                        LIMIT 0, 1";
                                                 $rs_lp = Database::query($sql);
                                                 $status_array = Database::fetch_row($rs_lp);
                                                 $status = $status_array[0];
@@ -2606,33 +2545,18 @@ class learnpathItem
                                                 if (!$returnstatus && empty($this->prereq_alert)) {
                                                     $this->prereq_alert = get_lang('LearnpathPrereqNotCompleted');
                                                 }
-                                                if (!$returnstatus) {
-                                                    if (self::DEBUG > 1) {
-                                                        error_log(
-                                                            'New LP - Prerequisite '.$prereqs_string.' not complete'
-                                                        );
-                                                    }
-                                                } else {
-                                                    if (self::DEBUG > 1) {
-                                                        error_log('New LP - Prerequisite '.$prereqs_string.' complete');
-                                                    }
-                                                }
-
-                                                return $returnstatus;
                                             }
-                                        } else {
-                                            return $returnstatus;
+
+                                            if ($checkOtherSessions && $returnstatus === false) {
+                                                $returnstatus = $returnstatus = $this->getStatusFromOtherSessions(
+                                                    $user_id,
+                                                    $prereqs_string,
+                                                    $refs_list
+                                                );
+                                            }
                                         }
-                                    }
-                                } else {
-                                    if (self::DEBUG > 1) {
-                                        error_log(
-                                            'New LP - Could not find '.$prereqs_string.' in '.print_r(
-                                                $refs_list,
-                                                true
-                                            ),
-                                            0
-                                        );
+
+                                        return $returnstatus;
                                     }
                                 }
                             }
@@ -3208,9 +3132,6 @@ class learnpathItem
      */
     public function set_max_score($score)
     {
-        if (self::DEBUG > 0) {
-            error_log('learnpathItem::set_max_score('.$score.')', 0);
-        }
         if (is_int($score) || $score == '') {
             $this->view_max_score = $score;
 
@@ -3596,6 +3517,10 @@ class learnpathItem
         if (self::DEBUG > 0) {
             error_log('learnpathItem::write_objectives_to_db()', 0);
         }
+        if (api_is_invitee()) {
+            // If the user is an invitee, we don't write anything to DB
+            return true;
+        }
         $course_id = api_get_course_int_id();
         if (is_array($this->objectives) && count($this->objectives) > 0) {
             // Save objectives.
@@ -3687,6 +3612,10 @@ class learnpathItem
             }
 
             return false;
+        }
+        if (api_is_invitee()) {
+            // If the user is an invitee, we don't write anything to DB
+            return true;
         }
 
         $course_id = api_get_course_int_id();
@@ -3781,7 +3710,7 @@ class learnpathItem
                         c_id = $course_id AND
                         lp_item_id = ".$this->db_id." AND
                         lp_view_id = ".$this->view_id." AND
-                        view_count = ".intval($this->get_attempt_id());
+                        view_count = ".$this->get_attempt_id();
             if ($debug) {
                 error_log(
                     'learnpathItem::write_to_db() - Querying item_view: '.$sql,
@@ -3821,7 +3750,7 @@ class learnpathItem
                     Database::query($sql);
                 }
             } else {
-                if ($this->type == 'hotpotatoes') {
+                if ($this->type === 'hotpotatoes') {
                     $params = [
                         'total_time' => $this->get_total_time(),
                         'start_time' => $this->get_current_start_time(),
@@ -4534,5 +4463,56 @@ class learnpathItem
     public function getIid()
     {
         return $this->iId;
+    }
+
+    /**
+     * @param int    $user_id
+     * @param string $prereqs_string
+     * @param array  $refs_list
+     *
+     * @return bool
+     */
+    public function getStatusFromOtherSessions($user_id, $prereqs_string, $refs_list)
+    {
+        $lp_item_view = Database::get_course_table(TABLE_LP_ITEM_VIEW);
+        $lp_view = Database::get_course_table(TABLE_LP_VIEW);
+        $course_id = api_get_course_int_id();
+        $user_id = (int) $user_id;
+
+        // Check results from another sessions:
+        $checkOtherSessions = api_get_configuration_value('validate_lp_prerequisite_from_other_session');
+        if ($checkOtherSessions) {
+            // Check items
+            $sql = "SELECT iid FROM $lp_view
+                    WHERE
+                        c_id = $course_id AND
+                        user_id = $user_id  AND
+                        lp_id = $this->lp_id AND
+                        session_id <> 0
+                    ";
+            $result = Database::query($sql);
+            $resultFromOtherSessions = false;
+            while ($row = Database::fetch_array($result)) {
+                $lpIid = $row['iid'];
+                $sql = "SELECT status FROM $lp_item_view
+                        WHERE
+                            c_id = $course_id AND
+                            lp_view_id = $lpIid AND
+                            lp_item_id = $refs_list[$prereqs_string]
+                        LIMIT 1";
+                $resultRow = Database::query($sql);
+                if (Database::num_rows($resultRow)) {
+                    $statusResult = Database::fetch_array($resultRow);
+                    $status = $statusResult['status'];
+                    $checked = $status == $this->possible_status[2] || $status == $this->possible_status[3];
+                    if ($checked) {
+                        $resultFromOtherSessions = true;
+                        break;
+                    }
+                }
+            }
+
+            return $resultFromOtherSessions;
+        }
     }
 }

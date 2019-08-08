@@ -339,23 +339,12 @@ class ExerciseShowFunctions
 
         $studentChoiceInt = (int) $studentChoice;
         $answerCorrectChoice = (int) $answerCorrect;
-        $hideStudentChoice = false;
+
         $hide_expected_answer = false;
-
-        $status = '';
-        if ($exercise->showExpectedChoice()) {
-            $status = Display::label(get_lang('Incorrect'), 'danger');
-            if ($answerCorrect || ($answerCorrect && $studentChoiceInt === $answerCorrectChoice)) {
-                $status = Display::label(get_lang('Correct'), 'success');
-            }
-        }
-
         $showComment = false;
         switch ($resultsDisabled) {
             case RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER:
-                $hideStudentChoice = false;
                 $hide_expected_answer = true;
-                $status = Display::label(get_lang('Correct'), 'success');
                 $showComment = true;
                 if (!$answerCorrect && empty($studentChoice)) {
                     return '';
@@ -397,16 +386,19 @@ class ExerciseShowFunctions
         }
 
         echo '<tr class="'.$studentChoiceClass.'">';
-        if ($hideStudentChoice === false) {
-            echo '<td width="5%">';
-            echo Display::return_icon($icon, null, null, ICON_SIZE_TINY);
-            echo '</td>';
-        }
 
-        if (!$hide_expected_answer) {
-            if ($exercise->showExpectedChoiceColumn()) {
+        echo '<td width="5%">';
+        echo Display::return_icon($icon, null, null, ICON_SIZE_TINY);
+        echo '</td>';
+
+        if ($exercise->showExpectedChoiceColumn()) {
+            if ($hide_expected_answer === false) {
                 echo '<td width="5%">';
                 echo Display::return_icon($iconAnswer, null, null, ICON_SIZE_TINY);
+                echo '</td>';
+            } else {
+                echo '<td width="5%">';
+                echo '-';
                 echo '</td>';
             }
         }
@@ -416,6 +408,10 @@ class ExerciseShowFunctions
         echo '</td>';
 
         if ($exercise->showExpectedChoice()) {
+            $status = Display::label(get_lang('Incorrect'), 'danger');
+            if ($answerCorrect || ($answerCorrect && $studentChoiceInt === $answerCorrectChoice)) {
+                $status = Display::label(get_lang('Correct'), 'success');
+            }
             echo '<td width="20%">';
             echo $status;
             echo '</td>';
@@ -510,8 +506,8 @@ class ExerciseShowFunctions
         }
 
         // Expected choice
-        if (!$hide_expected_answer) {
-            if ($exercise->showExpectedChoiceColumn()) {
+        if ($exercise->showExpectedChoiceColumn()) {
+            if (!$hide_expected_answer) {
                 $content .= '<td width="5%">';
                 if (isset($new_options[$answerCorrect])) {
                     $content .= get_lang($new_options[$answerCorrect]['name']);

@@ -2828,6 +2828,7 @@ HOTSPOT;
             $score = $result['score'];
             $weight = $result['weight'];
         }
+
         $percentage = (100 * $score) / ($weight != 0 ? $weight : 1);
         // Formats values
         $percentage = float_format($percentage, 1);
@@ -2883,6 +2884,13 @@ HOTSPOT;
         $scoreBasedInModel = self::convertScoreToModel($percentage);
         if (!empty($scoreBasedInModel)) {
             $html = $scoreBasedInModel;
+        }
+
+        // Ignore other formats and use the configuratio['exercise_score_format'] value
+        // But also keep the round values settings.
+        $format = api_get_configuration_value('exercise_score_format');
+        if (!empty($format)) {
+            $html = ScoreDisplay::instance()->display_score([$score, $weight], $format);
         }
 
         $html = Display::span($html, ['class' => 'score_exercise']);
@@ -3184,17 +3192,16 @@ EOT;
         }
 
         $now = api_get_utc_datetime();
-        $time_conditions = '';
-
+        $timeConditions = '';
         if ($check_publication_dates) {
-            //start and end are set
-            $time_conditions = " AND ((start_time <> '' AND start_time < '$now' AND end_time <> '' AND end_time > '$now' )  OR ";
+            // Start and end are set
+            $timeConditions = " AND ((start_time <> '' AND start_time < '$now' AND end_time <> '' AND end_time > '$now' )  OR ";
             // only start is set
-            $time_conditions .= " (start_time <> '' AND start_time < '$now' AND end_time is NULL) OR ";
+            $timeConditions .= " (start_time <> '' AND start_time < '$now' AND end_time is NULL) OR ";
             // only end is set
-            $time_conditions .= " (start_time IS NULL AND end_time <> '' AND end_time > '$now') OR ";
+            $timeConditions .= " (start_time IS NULL AND end_time <> '' AND end_time > '$now') OR ";
             // nothing is set
-            $time_conditions .= ' (start_time IS NULL AND end_time IS NULL)) ';
+            $timeConditions .= ' (start_time IS NULL AND end_time IS NULL)) ';
         }
 
         $needle_where = !empty($search) ? " AND title LIKE '?' " : '';
@@ -3213,7 +3220,7 @@ EOT;
         if ($search_all_sessions == true) {
             $conditions = [
                 'where' => [
-                    $active_sql.' c_id = ? '.$needle_where.$time_conditions => [
+                    $active_sql.' c_id = ? '.$needle_where.$timeConditions => [
                         $course_id,
                         $needle,
                     ],
@@ -3224,7 +3231,7 @@ EOT;
             if (empty($session_id)) {
                 $conditions = [
                     'where' => [
-                        $active_sql.' (session_id = 0 OR session_id IS NULL) AND c_id = ? '.$needle_where.$time_conditions => [
+                        $active_sql.' (session_id = 0 OR session_id IS NULL) AND c_id = ? '.$needle_where.$timeConditions => [
                             $course_id,
                             $needle,
                         ],
@@ -3234,7 +3241,7 @@ EOT;
             } else {
                 $conditions = [
                     'where' => [
-                        $active_sql.' (session_id = 0 OR session_id IS NULL OR session_id = ? ) AND c_id = ? '.$needle_where.$time_conditions => [
+                        $active_sql.' (session_id = 0 OR session_id IS NULL OR session_id = ? ) AND c_id = ? '.$needle_where.$timeConditions => [
                             $session_id,
                             $course_id,
                             $needle,
@@ -3246,32 +3253,6 @@ EOT;
         }
 
         $table = Database::get_course_table(TABLE_QUIZ_TEST);
-
-        return Database::select('*', $table, $conditions);
-    }
-
-    /**
-     * Get exercise information by id.
-     *
-     * @param int $exerciseId Exercise Id
-     * @param int $courseId   The course ID (necessary as c_quiz.id is not unique)
-     *
-     * @return array Exercise info
-     */
-    public static function get_exercise_by_id($exerciseId = 0, $courseId = 0)
-    {
-        $table = Database::get_course_table(TABLE_QUIZ_TEST);
-        if (empty($courseId)) {
-            $courseId = api_get_course_int_id();
-        } else {
-            $courseId = intval($courseId);
-        }
-        $conditions = [
-            'where' => [
-                'id = ?' => [$exerciseId],
-                ' AND c_id = ? ' => $courseId,
-            ],
-        ];
 
         return Database::select('*', $table, $conditions);
     }
@@ -3790,10 +3771,10 @@ EOT;
         $track_exercises = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
         $track_attempt = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
 
-        $question_id = intval($question_id);
-        $exercise_id = intval($exercise_id);
+        $question_id = (int) $question_id;
+        $exercise_id = (int) $exercise_id;
         $course_code = Database::escape_string($course_code);
-        $session_id = intval($session_id);
+        $session_id = (int) $session_id;
         $courseId = api_get_course_int_id($course_code);
 
         $sql = "SELECT MAX(marks) as max, MIN(marks) as min, AVG(marks) as average
@@ -5061,7 +5042,6 @@ EOT;
             $ribbon .= '<h3>'.get_lang('YourTotalScore').':&nbsp;';
             $ribbon .= self::show_score($score, $weight, false, true);
             $ribbon .= '</h3>';
-
             $ribbon .= '</div>';
         }
 

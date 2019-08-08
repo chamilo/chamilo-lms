@@ -24,14 +24,12 @@ if (api_get_setting('allow_message_tool') !== 'true') {
 
 $logInfo = [
     'tool' => 'Messages',
-    'tool_id' => 0,
-    'tool_id_detail' => 0,
     'action' => 'new_message',
     'action_details' => isset($_GET['re_id']) ? 're_id' : '',
 ];
 Event::registerLog($logInfo);
 
-$allowSocial = api_get_setting('allow_social_tool') == 'true';
+$allowSocial = api_get_setting('allow_social_tool') === 'true';
 $nameTools = api_xml_http_response_encode(get_lang('Messages'));
 
 $htmlHeadXtra[] = '<script>
@@ -59,7 +57,6 @@ function add_image_form() {
 }
 </script>';
 $nameTools = get_lang('ComposeMessage');
-
 $tpl = new Template(get_lang('ComposeMessage'));
 
 /**
@@ -315,7 +312,7 @@ function manageForm($default, $select_from_user_list = null, $sent_to = '', $tpl
             }
         }
         Security::clear_token();
-        header('Location: '.api_get_path(WEB_PATH).'main/messages/inbox.php');
+        header('Location: '.api_get_path(WEB_CODE_PATH).'messages/inbox.php');
         exit;
     } else {
         $token = Security::get_token();
@@ -330,55 +327,74 @@ function manageForm($default, $select_from_user_list = null, $sent_to = '', $tpl
 if ($allowSocial) {
     $this_section = SECTION_SOCIAL;
     $interbreadcrumb[] = [
-        'url' => api_get_path(WEB_PATH).'main/social/home.php',
+        'url' => api_get_path(WEB_CODE_PATH).'social/home.php',
         'name' => get_lang('SocialNetwork'),
     ];
 } else {
     $this_section = SECTION_MYPROFILE;
     $interbreadcrumb[] = [
-        'url' => api_get_path(WEB_PATH).'main/auth/profile.php',
+        'url' => api_get_path(WEB_CODE_PATH).'auth/profile.php',
         'name' => get_lang('Profile'),
     ];
 }
 
 $interbreadcrumb[] = [
-    'url' => api_get_path(WEB_PATH).'main/messages/inbox.php',
+    'url' => api_get_path(WEB_CODE_PATH).'messages/inbox.php',
     'name' => get_lang('Messages'),
 ];
 
 $group_id = isset($_REQUEST['group_id']) ? (int) $_REQUEST['group_id'] : 0;
-
-$message_content = null;
-$actions = null;
-
+$social_right_content = null;
 if ($group_id != 0) {
-    $actions .= '<a href="'.api_get_path(WEB_PATH).'main/social/group_view.php?id='.$group_id.'">'.
+    $social_right_content .= '<div class=actions>';
+    $social_right_content .= '<a href="'.api_get_path(WEB_CODE_PATH).'social/group_view.php?id='.$group_id.'">'.
         Display::return_icon('back.png', api_xml_http_response_encode(get_lang('ComposeMessage'))).'</a>';
-    $actions .= '<a href="'.api_get_path(WEB_PATH).'main/messages/new_message.php?group_id='.$group_id.'">'.
+    $social_right_content .= '<a href="'.api_get_path(WEB_CODE_PATH).'messages/new_message.php?group_id='.$group_id.'">'.
         Display::return_icon('message_new.png', api_xml_http_response_encode(get_lang('ComposeMessage'))).'</a>';
+    $social_right_content .= '</div>';
 } else {
-    $actions .= '<a href="'.api_get_path(WEB_PATH).'main/messages/new_message.php">'.
-        Display::return_icon('message_new.png', get_lang('ComposeMessage')).'</a>';
-    $actions .= '<a href="'.api_get_path(WEB_PATH).'main/messages/inbox.php">'.
-        Display::return_icon('inbox.png', get_lang('Inbox')).'</a>';
-    $actions .= '<a href="'.api_get_path(WEB_PATH).'main/messages/outbox.php">'.
-        Display::return_icon('outbox.png', get_lang('Outbox')).'</a>';
+    if ($allowSocial) {
+    } else {
+        $social_right_content .= '<div class=actions>';
+        if (api_get_setting('allow_message_tool') === 'true') {
+            $social_right_content .= '<a href="'.api_get_path(WEB_CODE_PATH).'messages/new_message.php">'.
+                Display::return_icon('message_new.png', get_lang('ComposeMessage')).'</a>';
+            $social_right_content .= '<a href="'.api_get_path(WEB_CODE_PATH).'messages/inbox.php">'.
+                Display::return_icon('inbox.png', get_lang('Inbox')).'</a>';
+            $social_right_content .= '<a href="'.api_get_path(WEB_CODE_PATH).'messages/outbox.php">'.
+                Display::return_icon('outbox.png', get_lang('Outbox')).'</a>';
+        }
+        $social_right_content .= '</div>';
+    }
 }
 
-$show_message = null;
+// LEFT COLUMN
+$social_left_content = '';
+if ($allowSocial) {
+    // Block Social Menu
+    $social_menu_block = SocialManager::show_social_menu('messages');
+    $social_right_content .= '<div class="row">';
+    $social_right_content .= '<div class="col-md-12">';
+    $social_right_content .= '<div class="actions">';
+    $social_right_content .= '<a href="'.api_get_path(WEB_CODE_PATH).'messages/inbox.php">'.
+        Display::return_icon('back.png', get_lang('Back'), [], 32).'</a>';
+    $social_right_content .= '</div>';
+    $social_right_content .= '</div>';
+    $social_right_content .= '<div class="col-md-12">';
+}
 
 // MAIN CONTENT
 if (!isset($_POST['compose'])) {
     if (isset($_GET['re_id'])) {
-        $message_content .= show_compose_reply_to_message(
+        $social_right_content .= show_compose_reply_to_message(
             $_GET['re_id'],
             api_get_user_id(),
             $tpl
         );
     } elseif (isset($_GET['send_to_user'])) {
-        $message_content .= show_compose_to_user($_GET['send_to_user'], $tpl);
+        $social_right_content .= show_compose_to_user($_GET['send_to_user'], $tpl);
     } else {
-        $message_content .= show_compose_to_any($tpl);
+        $social_right_content .= show_compose_to_any($tpl);
     }
 } else {
     $restrict = false;
@@ -395,7 +411,7 @@ if (!isset($_POST['compose'])) {
 
     // comes from a reply button
     if (isset($_GET['re_id']) || isset($_GET['forward_id'])) {
-        $message_content .= manageForm($default, null, null, $tpl);
+        $social_right_content .= manageForm($default, null, null, $tpl);
     } else {
         // post
         if ($restrict) {
@@ -407,24 +423,29 @@ if (!isset($_POST['compose'])) {
             if (isset($_POST['hidden_user'])) {
                 $default['users'] = [$_POST['hidden_user']];
             }
-            $message_content .= manageForm($default, null, null, $tpl);
+            $social_right_content .= manageForm($default, null, null, $tpl);
         } else {
-            $message_content .= Display::return_message(get_lang('ErrorSendingMessage'), 'error');
+            $social_right_content .= Display::return_message(get_lang('ErrorSendingMessage'), 'error');
         }
     }
 }
 
-MessageManager::cleanAudioMessage();
-if ($actions) {
-    $tpl->assign(
-        'actions',
-        Display::toolbarAction('toolbar', [$actions])
-    );
+if ($allowSocial) {
+    $social_right_content .= '</div>';
+    $social_right_content .= '</div>';
 }
 
-$tpl->assign('message', $show_message);
-$tpl->assign('content_inbox', $message_content);
-$social_layout = $tpl->get_template('message/inbox.html.twig');
-$content = $tpl->fetch($social_layout);
-$tpl->assign('content', $content);
-$tpl->display_one_col_template();
+// Block Social Avatar
+SocialManager::setSocialUserBlock($tpl, api_get_user_id(), 'messages');
+
+MessageManager::cleanAudioMessage();
+if ($allowSocial) {
+    $tpl->assign('social_menu_block', $social_menu_block);
+    $tpl->assign('social_right_content', $social_right_content);
+    $social_layout = $tpl->get_template('social/inbox.tpl');
+    $tpl->display($social_layout);
+} else {
+    $content = $social_right_content;
+    $tpl->assign('content', $content);
+    $tpl->display_one_col_template();
+}

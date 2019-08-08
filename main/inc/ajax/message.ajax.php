@@ -112,7 +112,7 @@ switch ($action) {
 
         /** @var User $user */
         foreach ($users as $user) {
-            $userName = $user->getCompleteNameWithUsername();
+            $userName = UserManager::formatUserFullName($user, true);
 
             if ($showEmail) {
                 $userName .= " ({$user->getEmail()})";
@@ -123,7 +123,7 @@ switch ($action) {
                 'id' => $user->getId(),
             ];
         }
-
+        header('Content-type:application/json');
         echo json_encode($return);
         break;
     default:

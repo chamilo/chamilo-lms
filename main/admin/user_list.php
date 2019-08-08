@@ -1060,7 +1060,7 @@ $data = $extraField->addElements($form, 0, [], true, false, $variablesToShow);
 
 $htmlHeadXtra[] = '
     <script>
-    $(document).ready(function() {
+    $(function () {
         '.$data['jquery_ready_content'].'
     })
     </script>

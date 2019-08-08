@@ -17,17 +17,6 @@ $interbreadcrumb[] = ['url' => api_get_path(WEB_PATH).'main/social/home.php', 'n
 $interbreadcrumb[] = ['url' => 'promoted_messages.php', 'name' => get_lang('PromotedMessages')];
 
 $social_right_content = '';
-/*$social_right_content = '<div class="actions">';
-if (api_get_setting('allow_message_tool') === 'true') {
-    $social_right_content .= '<a href="'.api_get_path(WEB_PATH).'main/messages/new_message.php">'.
-        Display::return_icon('new-message.png', get_lang('ComposeMessage')).'</a>';
-    $social_right_content .= '<a href="'.api_get_path(WEB_PATH).'main/messages/inbox.php">'.
-        Display::return_icon('inbox.png', get_lang('Inbox')).'</a>';
-    $social_right_content .= '<a href="'.api_get_path(WEB_PATH).'main/messages/outbox.php">'.
-        Display::return_icon('outbox.png', get_lang('Outbox')).'</a>';
-}
-$social_right_content .= '</div>';*/
-
 if (empty($_GET['id'])) {
     $messageId = $_GET['id_send'];
     $source = 'outbox';
@@ -46,7 +35,6 @@ $logInfo = [
     'action_details' => 'view-message',
 ];
 Event::registerLog($logInfo);
-
 $social_menu_block = SocialManager::show_social_menu($show_menu);
 $message .= MessageManager::showMessageBox($messageId, 'promoted_messages');
 

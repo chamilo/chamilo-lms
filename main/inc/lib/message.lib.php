@@ -63,7 +63,7 @@ class MessageManager
         $messageStatusCondition = implode("','", $messageStatus);
 
         $table = Database::get_main_table(TABLE_MESSAGE);
-        $keyword = isset($params['keyword']) ? $params['keyword'] : '';
+        $keyword = isset($params['keyword']) && !empty($params['keyword']) ? $params['keyword'] : '';
 
         $keywordCondition = '';
         if (!empty($keyword)) {
@@ -125,8 +125,11 @@ class MessageManager
             $column = 2;
         }
 
-        $keyword = isset($extraParams['keyword']) ? $extraParams['keyword'] : '';
-        $viewUrl = isset($extraParams['view_url']) ? $extraParams['view_url'] : api_get_path(WEB_CODE_PATH).'message/view_message.php';
+        $keyword = isset($extraParams['keyword']) && !empty($extraParams['keyword']) ? $extraParams['keyword'] : '';
+        $viewUrl = api_get_path(WEB_CODE_PATH).'messages/view_message.php';
+        if (isset($extraParams['view_url']) && !empty($extraParams['view_url'])) {
+            $viewUrl = $extraParams['view_url'];
+        }
 
         $keywordCondition = '';
         if (!empty($keyword)) {
@@ -1190,7 +1193,7 @@ class MessageManager
         }
         $table = Database::get_main_table(TABLE_MESSAGE);
         $request = api_is_xml_http_request();
-        $keyword = isset($extraParams['keyword']) ? $extraParams['keyword'] : '';
+        $keyword = isset($extraParams['keyword']) && !empty($extraParams['keyword']) ? $extraParams['keyword'] : '';
         $keywordCondition = '';
         if (!empty($keyword)) {
             $keyword = Database::escape_string($keyword);
@@ -1270,38 +1273,43 @@ class MessageManager
      *
      * @return string html with the message content
      */
-    public static function showMessageBox($messageId, $source = 'inbox')
+    public static function showMessageBox($messageId, $source)
     {
         $table = Database::get_main_table(TABLE_MESSAGE);
         $messageId = (int) $messageId;
+
+        if (empty($messageId)) {
+            return '';
+        }
         $currentUserId = api_get_user_id();
 
-        if ($source === 'outbox') {
-            if (isset($messageId) && is_numeric($messageId)) {
-                $query = "SELECT * FROM $table
-                          WHERE
-                            user_sender_id = ".$currentUserId." AND
-                            id = $messageId AND
-                            msg_status = ".MESSAGE_STATUS_OUTBOX;
-                $result = Database::query($query);
-            }
-        } else {
-            if (is_numeric($messageId) && !empty($messageId)) {
+        switch ($source) {
+            case 'outbox':
+                $status = MESSAGE_STATUS_OUTBOX;
+                $userCondition = " user_sender_id = $currentUserId AND ";
+
+                break;
+            case 'inbox':
+                $status = MESSAGE_STATUS_NEW;
+                $userCondition = " user_receiver_id = $currentUserId AND ";
+
                 $query = "UPDATE $table SET
                           msg_status = '".MESSAGE_STATUS_NEW."'
-                          WHERE
-                            user_receiver_id=".$currentUserId." AND
-                            id = '".$messageId."'";
+                          WHERE id = $messageId ";
                 Database::query($query);
-
-                $query = "SELECT * FROM $table
-                          WHERE
-                            msg_status<> ".MESSAGE_STATUS_OUTBOX." AND
-                            user_receiver_id = ".$currentUserId." AND
-                            id = '".$messageId."'";
-                $result = Database::query($query);
-            }
+                break;
+            case 'promoted_messages':
+                $status = MESSAGE_STATUS_PROMOTED;
+                $userCondition = " user_receiver_id = $currentUserId AND ";
+                break;
         }
+
+        $query = "SELECT * FROM $table
+                          WHERE                            
+                            id = $messageId AND 
+                            $userCondition
+                            msg_status = $status";
+        $result = Database::query($query);
         $row = Database::fetch_array($result, 'ASSOC');
 
         if (empty($row)) {

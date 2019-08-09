@@ -4,7 +4,7 @@
             <strong>{{ _s.institution }}</strong>
         </td>
         <td class="text-right">
-            <strong> {PAGENO} / {nb} </strong>
+            <strong>{PAGENO} / {nb}</strong>
         </td>
     </tr>
 </table>

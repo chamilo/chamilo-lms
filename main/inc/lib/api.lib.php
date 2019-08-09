@@ -17,10 +17,6 @@ use Symfony\Component\Finder\Finder;
  * @package chamilo.library
  */
 
-/**
- * Constants declaration.
- */
-
 // PHP version requirement.
 define('REQUIRED_PHP_VERSION', '5.6');
 define('REQUIRED_MIN_MEMORY_LIMIT', '128');

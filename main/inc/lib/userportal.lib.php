@@ -1004,6 +1004,9 @@ class IndexManager
      */
     public function return_course_block()
     {
+        if (api_get_configuration_value('hide_course_sidebar')) {
+            return '';
+        }
         $isHrm = api_is_drh();
         $show_create_link = false;
         $show_course_link = false;

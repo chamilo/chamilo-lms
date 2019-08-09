@@ -1286,6 +1286,9 @@ requires extension "php-soap"  sudo apt-get install php-soap
 // 3 = SCORE_DIV_PERCENT (5 / 10 (50%))
 // $_configuration['exercise_score_format'] = 0;
 
+// Hide course sidebar
+//$_configuration['hide_course_sidebar'] = true;
+
 // KEEP THIS AT THE END
 // -------- Custom DB changes
 // Add user activation by confirmation email

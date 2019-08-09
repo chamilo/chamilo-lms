@@ -99,7 +99,7 @@ function handle_forum_and_forumcategories($lp_id = null)
     $get_content = isset($_GET['content']) ? $_GET['content'] : '';
     $post_submit_cat = isset($_POST['SubmitForumCategory']) ? true : false;
     $post_submit_forum = isset($_POST['SubmitForum']) ? true : false;
-    $get_id = isset($_GET['id']) ? intval($_GET['id']) : '';
+    $get_id = isset($_GET['id']) ? (int) $_GET['id'] : 0;
     $forum_categories_list = get_forum_categories();
 
     // Verify if forum category exists
@@ -110,23 +110,23 @@ function handle_forum_and_forumcategories($lp_id = null)
     $content = '';
 
     // Adding a forum category
-    if (($action_forum_cat == 'add' && $get_content == 'forumcategory') || $post_submit_cat) {
+    if (($action_forum_cat === 'add' && $get_content === 'forumcategory') || $post_submit_cat) {
         $content = show_add_forumcategory_form([], $lp_id); //$lp_id when is called from learning path
     }
 
     // Adding a forum
-    if ((($action_forum_cat == 'add' || $action_forum_cat == 'edit') && $get_content == 'forum') ||
+    if ((($action_forum_cat === 'add' || $action_forum_cat === 'edit') && $get_content === 'forum') ||
         $post_submit_forum
     ) {
         $inputvalues = [];
-        if ($action_forum_cat == 'edit' && $get_id || $post_submit_forum) {
+        if ($action_forum_cat === 'edit' && $get_id || $post_submit_forum) {
             $inputvalues = get_forums($get_id);
         }
         $content = show_add_forum_form($inputvalues, $lp_id);
     }
 
     // Edit a forum category
-    if (($action_forum_cat == 'edit' && $get_content == 'forumcategory') ||
+    if (($action_forum_cat === 'edit' && $get_content === 'forumcategory') ||
     (isset($_POST['SubmitEditForumCategory'])) ? true : false
     ) {
         $forum_category = get_forum_categories($get_id);
@@ -134,10 +134,8 @@ function handle_forum_and_forumcategories($lp_id = null)
     }
 
     // Delete a forum category
-    if ($action_forum_cat == 'delete') {
-        $id_forum = intval($get_id);
-        $list_threads = get_threads($id_forum);
-
+    if ($action_forum_cat === 'delete') {
+        $list_threads = get_threads($get_id);
         for ($i = 0; $i < count($list_threads); $i++) {
             deleteForumCategoryThread('thread', $list_threads[$i]['thread_id']);
             $link_info = GradebookUtils::isResourceInCourseGradebook(
@@ -154,21 +152,21 @@ function handle_forum_and_forumcategories($lp_id = null)
     }
 
     // Change visibility of a forum or a forum category.
-    if ($action_forum_cat == 'invisible' || $action_forum_cat == 'visible') {
+    if ($action_forum_cat === 'invisible' || $action_forum_cat === 'visible') {
         $return_message = change_visibility($get_content, $get_id, $action_forum_cat);
         Display::addFlash(
             Display::return_message($return_message, 'confirmation', false)
         );
     }
     // Change lock status of a forum or a forum category.
-    if ($action_forum_cat == 'lock' || $action_forum_cat == 'unlock') {
+    if ($action_forum_cat === 'lock' || $action_forum_cat === 'unlock') {
         $return_message = change_lock_status($get_content, $get_id, $action_forum_cat);
         Display::addFlash(
             Display::return_message($return_message, 'confirmation', false)
         );
     }
     // Move a forum or a forum category.
-    if ($action_forum_cat == 'move' && isset($_GET['direction'])) {
+    if ($action_forum_cat === 'move' && isset($_GET['direction'])) {
         $return_message = move_up_down($get_content, $_GET['direction'], $get_id);
         Display::addFlash(
             Display::return_message($return_message, 'confirmation', false)
@@ -267,14 +265,14 @@ function show_add_forum_form($inputvalues = [], $lp_id)
         $form_title = get_lang('EditForum');
     }
 
-    $form->addElement('header', $form_title);
+    $form->addHeader($form_title);
 
     // We have a hidden field if we are editing.
     if (!empty($inputvalues) && is_array($inputvalues)) {
         $my_forum_id = isset($inputvalues['forum_id']) ? $inputvalues['forum_id'] : null;
         $form->addElement('hidden', 'forum_id', $my_forum_id);
     }
-    $lp_id = intval($lp_id);
+    $lp_id = (int) $lp_id;
 
     // hidden field if from learning path
     $form->addElement('hidden', 'lp_id', $lp_id);
@@ -892,7 +890,6 @@ function store_forum($values, $courseInfo = [], $returnId = false)
         $logInfo = [
             'tool' => TOOL_FORUM,
             'tool_id' => $values['forum_id'],
-            'tool_id_detail' => 0,
             'action' => 'update-forum',
             'action_details' => 'forum',
             'info' => $values['forum_title'],
@@ -921,7 +918,7 @@ function store_forum($values, $courseInfo = [], $returnId = false)
             'end_time' => !empty($values['end_time']) ? api_get_utc_datetime($values['end_time']) : null,
             'forum_order' => isset($new_max) ? $new_max : null,
             'session_id' => $session_id,
-            'lp_id' => isset($values['lp_id']) ? intval($values['lp_id']) : 0,
+            'lp_id' => isset($values['lp_id']) ? (int) $values['lp_id'] : 0,
             'locked' => 0,
             'forum_id' => 0,
         ];
@@ -930,6 +927,25 @@ function store_forum($values, $courseInfo = [], $returnId = false)
         if ($forumId > 0) {
             $sql = "UPDATE $table_forums SET forum_id = iid WHERE iid = $forumId";
             Database::query($sql);
+            $courseCode = $courseInfo['code'];
+            $subscribe = (int) api_get_course_setting('subscribe_users_to_forum_notifications', $courseCode);
+
+            $status = STUDENT;
+            if (!empty($session_id)) {
+                $status = 0;
+            }
+            if ($subscribe === 1) {
+                $userList = CourseManager::get_user_list_from_course_code(
+                    $courseCode,
+                    $session_id,
+                    null,
+                    null,
+                    $status
+                );
+                foreach ($userList as $userInfo) {
+                    set_notification('forum', $forumId, false, $userInfo, $courseInfo);
+                }
+            }
 
             api_item_property_update(
                 $courseInfo,
@@ -950,7 +966,6 @@ function store_forum($values, $courseInfo = [], $returnId = false)
             $logInfo = [
                 'tool' => TOOL_FORUM,
                 'tool_id' => $forumId,
-                'tool_id_detail' => 0,
                 'action' => 'new-forum',
                 'action_details' => 'forum',
                 'info' => $values['forum_title'],
@@ -999,7 +1014,7 @@ function deleteForumCategoryThread($content, $id)
     $groupId = api_get_group_id();
     $groupInfo = GroupManager::get_group_properties($groupId);
     $userId = api_get_user_id();
-    $id = intval($id);
+    $id = (int) $id;
 
     // Delete all attachment file about this tread id.
     $sql = "SELECT post_id FROM $table_forums_post
@@ -1011,7 +1026,7 @@ function deleteForumCategoryThread($content, $id)
 
     $tool_constant = null;
     $return_message = '';
-    if ($content == 'forumcategory') {
+    if ($content === 'forumcategory') {
         $tool_constant = TOOL_FORUM_CATEGORY;
         $return_message = get_lang('ForumCategoryDeleted');
 
@@ -1033,7 +1048,7 @@ function deleteForumCategoryThread($content, $id)
         }
     }
 
-    if ($content == 'forum') {
+    if ($content === 'forum') {
         $tool_constant = TOOL_FORUM;
         $return_message = get_lang('ForumDeleted');
 
@@ -1055,7 +1070,7 @@ function deleteForumCategoryThread($content, $id)
         }
     }
 
-    if ($content == 'thread') {
+    if ($content === 'thread') {
         $tool_constant = TOOL_FORUM_THREAD;
         $return_message = get_lang('ThreadDeleted');
         Skill::deleteSkillsFromItem($id, ITEM_TYPE_FORUM_THREAD);
@@ -5621,58 +5636,68 @@ function get_forums_of_group($groupInfo)
 /**
  * This function stores which users have to be notified of which forums or threads.
  *
- * @param string $content does the user want to be notified about a forum or about a thread
- * @param int    $id      the id of the forum or thread
+ * @param string $content    does the user want to be notified about a forum or about a thread
+ * @param int    $id         the id of the forum or thread
+ * @param bool   $addOnly
+ * @param array  $userInfo
+ * @param array  $courseInfo
  *
  * @return string language variable
  *
- * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Belgium
+ * @author  Patrick Cool <patrick.cool@UGent.be>, Ghent University, Belgium
+ * @author  Julio Montoya
  *
- * @version May 2008, dokeos 1.8.5
- *
- * @since May 2008, dokeos 1.8.5
+ * @since   May 2008 v1.8.5
  */
-function set_notification($content, $id, $add_only = false)
+function set_notification($content, $id, $addOnly = false, $userInfo = [], $courseInfo = [])
 {
-    $_user = api_get_user_info();
+    $userInfo = empty($userInfo) ? api_get_user_info() : $userInfo;
+    $courseInfo = empty($courseInfo) ? api_get_course_info() : $courseInfo;
+    $id = (int) $id;
+
+    if (empty($userInfo) || empty($courseInfo) || empty($id) || empty($content)) {
+        return false;
+    }
+
     // Database table definition
     $table_notification = Database::get_course_table(TABLE_FORUM_NOTIFICATION);
 
-    $course_id = api_get_course_int_id();
+    $course_id = $courseInfo['real_id'];
 
     // Which database field do we have to store the id in?
-    if ($content == 'forum') {
-        $database_field = 'forum_id';
-    } else {
-        $database_field = 'thread_id';
+    $field = 'thread_id';
+    if ($content === 'forum') {
+        $field = 'forum_id';
     }
+
+    $userId = $userInfo['user_id'];
 
     // First we check if the notification is already set for this.
     $sql = "SELECT * FROM $table_notification
             WHERE
                 c_id = $course_id AND
-                $database_field = '".Database::escape_string($id)."' AND
-                user_id = '".intval($_user['user_id'])."'";
+                $field = $id AND
+                user_id = $userId ";
     $result = Database::query($sql);
     $total = Database::num_rows($result);
 
     // If the user did not indicate that (s)he wanted to be notified already
     // then we store the notification request (to prevent double notification requests).
     if ($total <= 0) {
-        $sql = "INSERT INTO $table_notification (c_id, $database_field, user_id)
-                VALUES (".$course_id.", '".Database::escape_string($id)."','".intval($_user['user_id'])."')";
+        $sql = "INSERT INTO $table_notification (c_id, $field, user_id)
+                VALUES ($course_id, '$id','$userId')";
         Database::query($sql);
         Session::erase('forum_notification');
         getNotificationsPerUser(0, true);
 
         return get_lang('YouWillBeNotifiedOfNewPosts');
     } else {
-        if (!$add_only) {
+        if (!$addOnly) {
             $sql = "DELETE FROM $table_notification
                     WHERE
                         c_id = $course_id AND
-                        $database_field = '".Database::escape_string($id)."' AND
-                        user_id = '".intval($_user['user_id'])."'";
+                        $field = $id AND
+                        user_id = $userId ";
             Database::query($sql);
             Session::erase('forum_notification');
             getNotificationsPerUser(0, true);
@@ -5692,6 +5717,7 @@ function set_notification($content, $id, $add_only = false)
  * @return array returns
  *
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University, Belgium
+ * @author Julio Montoya
  *
  * @version May 2008, dokeos 1.8.5
  *
@@ -5705,18 +5731,19 @@ function get_notifications($content, $id)
     $course_id = api_get_course_int_id();
 
     // Which database field contains the notification?
-    if ($content == 'forum') {
-        $database_field = 'forum_id';
-    } else {
-        $database_field = 'thread_id';
+    $field = 'thread_id';
+    if ($content === 'forum') {
+        $field = 'forum_id';
     }
+
+    $id = (int) $id;
 
     $sql = "SELECT user.user_id, user.firstname, user.lastname, user.email, user.user_id user
             FROM $table_users user, $table_notification notification
             WHERE 
                 notification.c_id = $course_id AND user.active = 1 AND
                 user.user_id = notification.user_id AND
-                notification.$database_field= '".Database::escape_string($id)."'";
+                notification.$field = $id ";
 
     $result = Database::query($sql);
     $return = [];
@@ -5746,20 +5773,7 @@ function get_notifications($content, $id)
  */
 function send_notifications($forum_id = 0, $thread_id = 0, $post_id = 0)
 {
-    //$_course = api_get_course_info();
-
-    /*$forumCourseId = api_get_configuration_value('global_forums_course_id');
-    if (!empty($forumCourseId)) {
-        if ($_course['real_id'] == $forumCourseId) {
-            return false;
-        }
-    }*/
-
     $forum_id = (int) $forum_id;
-
-    // The content of the mail
-    //$thread_link = api_get_path(WEB_CODE_PATH).'forum/viewthread.php?'.api_get_cidreq().'&forum='.$forum_id.'&thread='.$thread_id;
-
     // Users who subscribed to the forum
     if ($forum_id != 0) {
         $users_to_be_notified_by_forum = get_notifications('forum', $forum_id);
@@ -5768,8 +5782,6 @@ function send_notifications($forum_id = 0, $thread_id = 0, $post_id = 0)
     }
 
     $current_thread = get_thread_information($forum_id, $thread_id);
-    //$current_forum = get_forum_information($current_thread['forum_id']);
-    //$subject = get_lang('NewForumPost').' - '.$_course['official_code'].' - '.$current_forum['forum_title'].' - '.$current_thread['thread_title'];
 
     // User who subscribed to the thread
     if ($thread_id != 0) {
@@ -6225,8 +6237,8 @@ function editAttachedFile($array, $id, $courseId = null)
 {
     // Init variables
     $setString = '';
-    $id = intval($id);
-    $courseId = intval($courseId);
+    $id = (int) $id;
+    $courseId = (int) $courseId;
     if (empty($courseId)) {
         // $courseId can be null, use api method
         $courseId = api_get_course_int_id();
@@ -6274,8 +6286,7 @@ function editAttachedFile($array, $id, $courseId = null)
  */
 function getAttachmentsAjaxTable($postId = 0)
 {
-    // Init variables
-    $postId = intval($postId);
+    $postId = (int) $postId;
     $courseId = api_get_course_int_id();
     $attachIds = getAttachmentIdsByPostId($postId, $courseId);
     $fileDataContent = '';
@@ -6354,10 +6365,10 @@ function getAttachedFiles(
     $attachId = 0,
     $courseId = 0
 ) {
-    $forumId = intval($forumId);
-    $courseId = intval($courseId);
-    $attachId = intval($attachId);
-    $postId = intval($postId);
+    $forumId = (int) $forumId;
+    $courseId = (int) $courseId;
+    $attachId = (int) $attachId;
+    $postId = (int) $postId;
     $threadId = !empty($threadId) ? intval($threadId) : isset($_REQUEST['thread']) ? intval($_REQUEST['thread']) : '';
     if (empty($courseId)) {
         // $courseId can be null, use api method
@@ -6365,7 +6376,7 @@ function getAttachedFiles(
     }
     if (empty($forumId)) {
         if (!empty($_REQUEST['forum'])) {
-            $forumId = intval($_REQUEST['forum']);
+            $forumId = (int) $_REQUEST['forum'];
         } else {
             // if forum ID is empty, cannot generate delete url
 
@@ -6435,11 +6446,11 @@ function getAttachedFiles(
  *
  * @return array
  */
-function clearAttachedFiles($postId = null, $courseId = null)
+function clearAttachedFiles($postId = 0, $courseId = 0)
 {
     // Init variables
-    $courseId = intval($courseId);
-    $postId = intval($postId);
+    $courseId = (int) $courseId;
+    $postId = (int) $postId;
     $array = [];
     if (empty($courseId)) {
         // $courseId can be null, use api method
@@ -6485,8 +6496,8 @@ function clearAttachedFiles($postId = null, $courseId = null)
 function getAttachmentIdsByPostId($postId, $courseId = 0)
 {
     $array = [];
-    $courseId = intval($courseId);
-    $postId = intval($postId);
+    $courseId = (int) $courseId;
+    $postId = (int) $postId;
     if (empty($courseId)) {
         // $courseId can be null, use api method
         $courseId = api_get_course_int_id();
@@ -6517,7 +6528,8 @@ function getAttachmentIdsByPostId($postId, $courseId = 0)
  */
 function getForumCategoryByTitle($title, $courseId, $sessionId = 0)
 {
-    $sessionId = intval($sessionId);
+    $sessionId = (int) $sessionId;
+    $courseId = (int) $courseId;
     $forumCategoryTable = Database::get_course_table(TABLE_FORUM_CATEGORY);
     $itemProperty = Database::get_course_table(TABLE_ITEM_PROPERTY);
 
@@ -6547,7 +6559,7 @@ function getForumCategoryByTitle($title, $courseId, $sessionId = 0)
                 'ip.tool = ? AND ' => TOOL_FORUM_CATEGORY,
                 'fc.session_id = ? AND ' => $sessionId,
                 'fc.cat_title = ? AND ' => $title,
-                'fc.c_id = ?' => intval($courseId),
+                'fc.c_id = ?' => $courseId,
             ],
         ],
         'first'

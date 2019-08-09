@@ -707,9 +707,12 @@ class GradebookUtils
         $date_certificate
     ) {
         $table = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CERTIFICATE);
-        $sql = 'SELECT COUNT(id) as count
-                FROM '.$table.' gc
-                WHERE gc.cat_id="'.intval($cat_id).'" AND user_id="'.intval($user_id).'" ';
+        $cat_id = (int) $cat_id;
+        $user_id = (int) $user_id;
+
+        $sql = "SELECT COUNT(id) as count
+                FROM $table gc
+                WHERE gc.cat_id = $cat_id AND user_id = $user_id ";
         $rs_exist = Database::query($sql);
         $row = Database::fetch_array($rs_exist);
         if ($row['count'] == 0) {
@@ -734,8 +737,11 @@ class GradebookUtils
     public static function get_certificate_by_user_id($cat_id, $user_id)
     {
         $table = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CERTIFICATE);
-        $sql = 'SELECT * FROM '.$table.'
-                WHERE cat_id="'.intval($cat_id).'" AND user_id="'.intval($user_id).'"';
+        $cat_id = (int) $cat_id;
+        $user_id = (int) $user_id;
+
+        $sql = "SELECT * FROM $table
+                WHERE cat_id = $cat_id AND user_id = $user_id ";
 
         $result = Database::query($sql);
         $row = Database::fetch_array($result, 'ASSOC');
@@ -792,12 +798,12 @@ class GradebookUtils
     ) {
         $user_id = (int) $user_id;
         $table_certificate = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CERTIFICATE);
-        $sql = 'SELECT 
-                    gc.score_certificate, 
-                    gc.created_at, 
-                    gc.path_certificate, 
-                    gc.cat_id, 
-                    gc.user_id, 
+        $sql = 'SELECT
+                    gc.score_certificate,
+                    gc.created_at,
+                    gc.path_certificate,
+                    gc.cat_id,
+                    gc.user_id,
                     gc.id
                 FROM  '.$table_certificate.' gc
                 WHERE gc.user_id = "'.$user_id.'" ';
@@ -849,9 +855,9 @@ class GradebookUtils
 
         //add print header
         if (!$hide_print_button) {
-            $print = '<style>#print_div {               
+            $print = '<style>#print_div {
                 padding:4px;border: 0 none;position: absolute;top: 0px;right: 0px;
-            }            
+            }
             @media print {
                 #print_div  {
                     display: none !important;
@@ -1184,7 +1190,7 @@ class GradebookUtils
                     ";
         } else {
             $sql = 'SELECT user.user_id, user.username, lastname, firstname, official_code
-                    FROM '.$tbl_course_user.' as course_rel_user 
+                    FROM '.$tbl_course_user.' as course_rel_user
                     INNER JOIN '.$tbl_user.' as user
                     ON (course_rel_user.user_id = user.id)
                     WHERE

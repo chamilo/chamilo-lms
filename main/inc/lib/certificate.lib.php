@@ -211,6 +211,7 @@ class Certificate extends Model
 
         $params['hide_print_button'] = isset($params['hide_print_button']) ? true : false;
         $categoryId = 0;
+        $my_category = [];
         if (isset($this->certificate_data) && isset($this->certificate_data['cat_id'])) {
             $categoryId = $this->certificate_data['cat_id'];
             $my_category = Category::load($categoryId);
@@ -227,7 +228,6 @@ class Certificate extends Model
             $sessionId = $category->get_session_id();
 
             $skill = new Skill();
-
             $skill->addSkillToUser(
                 $this->user_id,
                 $category,

@@ -60,7 +60,7 @@
                                 {% endif %}
                             {% endfor %}
                         </div>
-                        <!-- End language cible ->
+                        <!-- End language cible -->
                         {% endif %}
                     </div>
                     {# Ofaj #}

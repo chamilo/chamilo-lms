@@ -847,6 +847,7 @@ ALTER TABLE skill_rel_course ADD CONSTRAINT FK_E7CEC7FA613FECDF FOREIGN KEY (ses
     'display' => [
         'show_reporting_icon' => true,
         'hide_lp_arrow_navigation' => false,
+        'show_toolbar_by_default' => false,
     ],
 ];*/
 
@@ -1279,6 +1280,14 @@ requires extension "php-soap"  sudo apt-get install php-soap
 
 // Allow user to enter a LP item if it was validated in another session.
 // $_configuration['validate_lp_prerequisite_from_other_session'] = false;
+
+// 1 = SCORE_AVERAGE (5 / 10)
+// 2 = SCORE_PERCENT (50%)
+// 3 = SCORE_DIV_PERCENT (5 / 10 (50%))
+// $_configuration['exercise_score_format'] = 0;
+
+// Hide course sidebar
+//$_configuration['hide_course_sidebar'] = true;
 
 // KEEP THIS AT THE END
 // -------- Custom DB changes

@@ -1,5 +1,5 @@
 <div class="grid-courses">
-    {% for category in courses.in_category %}
+    {% for category in categories %}
         {% set nameCategory = category.title_category %}
         {% set idCategory = category.id_category %}
         <div id="category_{{ idCategory }}" class="panel panel-default">

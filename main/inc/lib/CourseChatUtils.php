@@ -177,7 +177,7 @@ class CourseChatUtils
             $fileContent = '
                 <div class="message-teacher">
                     <div class="content-message">
-                        <div class="chat-message-block-name">'.$user->getCompleteName().'</div>
+                        <div class="chat-message-block-name">'.UserManager::formatUserFullName($user).'</div>
                         <div class="chat-message-block-content">'.$message.'</div>
                         <div class="message-date">'.$timeNow.'</div>
                     </div>
@@ -191,7 +191,7 @@ class CourseChatUtils
                     <img class="chat-image" src="'.$userPhoto.'">
                     <div class="icon-message"></div>
                     <div class="content-message">
-                        <div class="chat-message-block-name">'.$user->getCompleteName().'</div>
+                        <div class="chat-message-block-name">'.UserManager::formatUserFullName($user).'</div>
                         <div class="chat-message-block-content">'.$message.'</div>
                         <div class="message-date">'.$timeNow.'</div>
                     </div>

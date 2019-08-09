@@ -74,7 +74,7 @@ class Evaluation implements GradebookItem
      */
     public function get_id()
     {
-        return $this->id;
+        return (int) $this->id;
     }
 
     /**
@@ -424,7 +424,7 @@ class Evaluation implements GradebookItem
     {
         $table = Database::get_main_table(TABLE_MAIN_GRADEBOOK_EVALUATION);
         $sql = 'DELETE FROM '.$table.' 
-                WHERE id = '.intval($this->id);
+                WHERE id = '.$this->get_id();
         Database::query($sql);
     }
 
@@ -490,7 +490,7 @@ class Evaluation implements GradebookItem
         $table = Database::get_main_table(TABLE_MAIN_GRADEBOOK_RESULT);
         $sql = 'SELECT count(id) AS number
                 FROM '.$table.'
-                WHERE evaluation_id = '.intval($this->id);
+                WHERE evaluation_id = '.intval($this->get_id());
         $result = Database::query($sql);
         $number = Database::fetch_row($result);
 
@@ -504,7 +504,7 @@ class Evaluation implements GradebookItem
     {
         $table = Database::get_main_table(TABLE_MAIN_GRADEBOOK_RESULT);
         $sql = 'DELETE FROM '.$table.'
-                WHERE evaluation_id = '.intval($this->id);
+                WHERE evaluation_id = '.$this->get_id();
         Database::query($sql);
     }
 
@@ -784,7 +784,7 @@ class Evaluation implements GradebookItem
                     lastname LIKE '".Database::escape_string($first_letter_user)."%' AND 
                     status = ".STUDENT." AND user_id NOT IN (
                         SELECT user_id FROM $table 
-                        WHERE evaluation_id = ".intval($this->id)."
+                        WHERE evaluation_id = ".$this->get_id()."
                     )
                 ORDER BY lastname";
 
@@ -840,7 +840,7 @@ class Evaluation implements GradebookItem
         $table_evaluation = Database::get_main_table(TABLE_MAIN_GRADEBOOK_EVALUATION);
         $sql = "UPDATE $table_evaluation 
                 SET locked = '".intval($locked)."' 
-                WHERE id='".intval($this->id)."'";
+                WHERE id='".$this->get_id()."'";
         Database::query($sql);
     }
 
@@ -963,13 +963,15 @@ class Evaluation implements GradebookItem
     /**
      * Internal function used by get_target_categories().
      *
-     * @param int $level
+     * @param array $targets
+     * @param int   $level
+     * @param int   $categoryId
      *
      * @return array
      */
-    private function addTargetSubcategories($targets, $level, $catid)
+    private function addTargetSubcategories($targets, $level, $categoryId)
     {
-        $subcats = Category::load(null, null, null, $catid);
+        $subcats = Category::load(null, null, null, $categoryId);
         foreach ($subcats as $cat) {
             $targets[] = [$cat->get_id(), $cat->get_name(), $level + 1];
             $targets = $this->addTargetSubcategories(

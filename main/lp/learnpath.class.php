@@ -2004,12 +2004,14 @@ class learnpath
     /**
      * Gets the navigation bar for the learnpath display screen.
      *
+     * @param string $barId
+     *
      * @return string The HTML string to use as a navigation bar
      */
-    public function get_navigation_bar($idBar = null, $display = null)
+    public function get_navigation_bar($barId = '')
     {
-        if (empty($idBar)) {
-            $idBar = 'control-top';
+        if (empty($barId)) {
+            $barId = 'control-top';
         }
         $lpId = $this->lp_id;
         $mycurrentitemid = $this->get_current_item_id();
@@ -2032,7 +2034,7 @@ class learnpath
 
         if (!empty($display)) {
             $showReporting = isset($display['show_reporting_icon']) ? $display['show_reporting_icon'] : true;
-            if ($showReporting == false) {
+            if ($showReporting === false) {
                 $reportingIcon = '';
             }
         }
@@ -2060,7 +2062,7 @@ class learnpath
 
         if ($this->mode === 'fullscreen') {
             $navbar = '
-                  <span id="'.$idBar.'" class="buttons">
+                  <span id="'.$barId.'" class="buttons">
                     '.$reportingIcon.'
                     '.$previousIcon.'                    
                     '.$nextIcon.'
@@ -2071,11 +2073,11 @@ class learnpath
                   </span>';
         } else {
             $navbar = '
-            <span id="'.$idBar.'" class="buttons text-right">
-                '.$reportingIcon.'
-                '.$previousIcon.'
-                '.$nextIcon.'               
-            </span>';
+                 <span id="'.$barId.'" class="buttons text-right">
+                    '.$reportingIcon.'
+                    '.$previousIcon.'
+                    '.$nextIcon.'               
+                </span>';
         }
 
         return $navbar;
@@ -6213,13 +6215,41 @@ class learnpath
         $return_audio = null;
         $iconPath = api_get_path(SYS_CODE_PATH).'img/';
         $mainUrl = api_get_path(WEB_CODE_PATH).'lp/lp_controller.php?'.api_get_cidreq();
+        $countItems = count($arrLP);
 
-        for ($i = 0; $i < count($arrLP); $i++) {
+        $upIcon = Display::return_icon(
+            'up.png',
+            get_lang('Up'),
+            [],
+            ICON_SIZE_TINY
+        );
+
+        $disableUpIcon = Display::return_icon(
+            'up_na.png',
+            get_lang('Up'),
+            [],
+            ICON_SIZE_TINY
+        );
+
+        $downIcon = Display::return_icon(
+            'down.png',
+            get_lang('Down'),
+            [],
+            ICON_SIZE_TINY
+        );
+
+        $disableDownIcon = Display::return_icon(
+            'down_na.png',
+            get_lang('Down'),
+            [],
+            ICON_SIZE_TINY
+        );
+        for ($i = 0; $i < $countItems; $i++) {
+            $parent_id = $arrLP[$i]['parent_item_id'];
             $title = $arrLP[$i]['title'];
             $title_cut = cut($arrLP[$i]['title'], self::MAX_LP_ITEM_TITLE_LENGTH);
-
             // Link for the documents
-            if ($arrLP[$i]['item_type'] == 'document' || $arrLP[$i]['item_type'] == TOOL_READOUT_TEXT) {
+            if ($arrLP[$i]['item_type'] === 'document' || $arrLP[$i]['item_type'] == TOOL_READOUT_TEXT) {
                 $url = $mainUrl.'&action=view_item&mode=preview_document&id='.$arrLP[$i]['id'].'&lp_id='.$this->lp_id;
                 $title_cut = Display::url(
                     $title_cut,
@@ -6237,10 +6267,9 @@ class learnpath
                 Session::write('pathItem', $arrLP[$i]['path']);
             }
 
+            $oddClass = 'row_even';
             if (($i % 2) == 0) {
                 $oddClass = 'row_odd';
-            } else {
-                $oddClass = 'row_even';
             }
             $return_audio .= '<tr id ="lp_item_'.$arrLP[$i]['id'].'" class="'.$oddClass.'">';
             $icon_name = str_replace(' ', '', $arrLP[$i]['item_type']);
@@ -6293,6 +6322,7 @@ class learnpath
             $forumIcon = '';
             $previewIcon = '';
             $pluginCalendarIcon = '';
+            $orderIcons = '';
 
             $pluginCalendar = api_get_plugin_setting('learning_calendar', 'enabled') === 'true';
             $plugin = null;
@@ -6396,7 +6426,6 @@ class learnpath
                 if ($pluginCalendar) {
                     $pluginLink = $pluginUrl.
                         '&action=toggle_visibility&lp_item_id='.$arrLP[$i]['id'].'&lp_id='.$this->lp_id;
-
                     $iconCalendar = Display::return_icon('agenda_na.png', get_lang('OneDay'), [], ICON_SIZE_TINY);
                     $itemInfo = $plugin->getItemVisibility($arrLP[$i]['id']);
                     if ($itemInfo && $itemInfo['value'] == 1) {
@@ -6406,6 +6435,29 @@ class learnpath
                         $iconCalendar,
                         $pluginLink,
                         ['class' => 'btn btn-default']
+                    );
+                }
+
+                if (in_array($arrLP[$i]['item_type'], ['dir', 'final_item'])) {
+                    /*if ($isFirst) {
+                        $orderIcons = Display::url($disableUpIcon, '#', ['class' => 'btn btn-default']);
+                    } else {
+                    }*/
+                    $orderIcons = Display::url(
+                        $upIcon,
+                        'javascript:void(0)',
+                        ['class' => 'btn btn-default order_items', 'data-dir' => 'up', 'data-id' => $arrLP[$i]['id']]
+                    );
+
+                    /*if ($isLast) {
+                        $orderIcons .= Display::url($disableDownIcon, '#', ['class' => 'btn btn-default']);
+                    } else {
+
+                    }*/
+                    $orderIcons .= Display::url(
+                        $downIcon,
+                        'javascript:void(0)',
+                        ['class' => 'btn btn-default order_items', 'data-dir' => 'down', 'data-id' => $arrLP[$i]['id']]
                     );
                 }
 
@@ -6533,6 +6585,7 @@ class learnpath
                                     $prerequisities_icon 
                                     $move_item_icon 
                                     $audio_icon 
+                                    $orderIcons
                                     $delete_icon
                                 </div>",
                         ['class' => 'btn-toolbar button_actions']
@@ -6543,7 +6596,6 @@ class learnpath
                     Display::span($audio, ['class' => 'button_actions']);
             }
 
-            $parent_id = $arrLP[$i]['parent_item_id'];
             $default_data[$arrLP[$i]['id']] = $row;
             $default_content[$arrLP[$i]['id']] = $arrLP[$i];
 

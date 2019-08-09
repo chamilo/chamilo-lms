@@ -219,6 +219,9 @@ class UserManager
         $redirectToURLAfterLogin = ''
     ) {
         $creatorId = empty($creatorId) ? api_get_user_id() : 0;
+        $creatorInfo = api_get_user_info($creatorId);
+        $creatorEmail = isset($creatorInfo['email']) ? $creatorInfo['email'] : '';
+
         $hook = HookCreateUser::create();
         if (!empty($hook)) {
             $hook->notifyCreateUser(HOOK_EVENT_TYPE_PRE);
@@ -421,7 +424,7 @@ class UserManager
                 'false'
             );
 
-            if (api_get_configuration_value('plugin_redirection_enabled') && !empty($redirectToURLAfterLogin)) {
+            if (!empty($redirectToURLAfterLogin) && api_get_configuration_value('plugin_redirection_enabled')) {
                 RedirectionPlugin::insert($userId, $redirectToURLAfterLogin);
             }
 
@@ -491,7 +494,6 @@ class UserManager
                     EventsDispatcher::events('user_registration', $values);
                 } else {
                     $phoneNumber = isset($extra['mobile_phone_number']) ? $extra['mobile_phone_number'] : null;
-
                     $additionalParameters = [
                         'smsType' => SmsPlugin::WELCOME_LOGIN_PASSWORD,
                         'userId' => $return,
@@ -536,7 +538,8 @@ class UserManager
                             null,
                             null,
                             null,
-                            $additionalParameters
+                            $additionalParameters,
+                            $creatorEmail
                         );
 
                         $layoutContent = $tplContent->get_template('mail/new_user_second_email_confirmation.tpl');
@@ -562,7 +565,8 @@ class UserManager
                             null,
                             null,
                             null,
-                            $additionalParameters
+                            $additionalParameters,
+                            $creatorEmail
                         );
                     } else {
                         if (!empty($emailBodyTemplate)) {
@@ -594,7 +598,8 @@ class UserManager
                                 null,
                                 null,
                                 null,
-                                $additionalParameters
+                                $additionalParameters,
+                                $creatorEmail
                             );
                         }
                     }
@@ -1160,6 +1165,7 @@ class UserManager
         }
         $original_password = $password;
         $user_id = (int) $user_id;
+        $creator_id = (int) $creator_id;
 
         if (empty($user_id)) {
             return false;
@@ -1311,13 +1317,22 @@ class UserManager
                 $userInfo = api_get_user_info($user_id);
                 $emailBody = $mailTemplateManager->parseTemplate($emailTemplate['user_edit_content.tpl'], $userInfo);
             }
+
+            $creatorInfo = api_get_user_info($creator_id);
+            $creatorEmail = isset($creatorInfo['email']) ? $creatorInfo['email'] : '';
+
             api_mail_html(
                 $recipient_name,
                 $email,
                 $emailsubject,
                 $emailBody,
                 $sender_name,
-                $email_admin
+                $email_admin,
+                null,
+                null,
+                null,
+                null,
+                $creatorEmail
             );
         }
 

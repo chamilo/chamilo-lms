@@ -100,9 +100,9 @@ class Category implements GradebookItem
     {
         if (!empty($this->certificate_min_score)) {
             return $this->certificate_min_score;
-        } else {
-            return null;
         }
+
+        return null;
     }
 
     /**
@@ -2060,7 +2060,7 @@ class Category implements GradebookItem
         $category_id = (int) $category_id;
 
         // Generating the total score for a course
-        $cats_course = self::load(
+        $category = self::load(
             $category_id,
             null,
             null,
@@ -2071,7 +2071,7 @@ class Category implements GradebookItem
         );
 
         /** @var Category $category */
-        $category = $cats_course[0];
+        $category = $category[0];
 
         if (empty($category)) {
             return false;
@@ -2131,20 +2131,18 @@ class Category implements GradebookItem
             return false;
         }
 
-        $cattotal = self::load($category_id);
-        $scoretotal = $cattotal[0]->calc_score($user_id);
+        $scoretotal = $category->calc_score($user_id);
 
         // Do not remove this the gradebook/lib/fe/gradebooktable.class.php
         // file load this variable as a global
         $scoredisplay = ScoreDisplay::instance();
-
         $my_score_in_gradebook = $scoredisplay->display_score(
             $scoretotal,
             SCORE_SIMPLE
         );
 
         $my_certificate = GradebookUtils::get_certificate_by_user_id(
-            $category->get_id(),
+            $category_id,
             $user_id
         );
 
@@ -2156,7 +2154,7 @@ class Category implements GradebookItem
                 api_get_utc_datetime()
             );
             $my_certificate = GradebookUtils::get_certificate_by_user_id(
-                $category->get_id(),
+                $category_id,
                 $user_id
             );
         }
@@ -2171,8 +2169,16 @@ class Category implements GradebookItem
 
             $fileWasGenerated = $certificate_obj->isHtmlFileGenerated();
 
+            // Fix when using custom certificate BT#15937
+            if (api_get_plugin_setting('customcertificate', 'enable_plugin_customcertificate') === 'true') {
+                $infoCertificate = CustomCertificatePlugin::getCertificateData($my_certificate['id'], $user_id);
+                if (!empty($infoCertificate)) {
+                    $fileWasGenerated = true;
+                }
+            }
+
             if (!empty($fileWasGenerated)) {
-                $url = api_get_path(WEB_PATH).'certificates/index.php?id='.$my_certificate['id'];
+                $url = api_get_path(WEB_PATH).'certificates/index.php?id='.$my_certificate['id'].'&user_id='.$user_id;
                 $certificates = Display::toolbarButton(
                     get_lang('DisplayCertificate'),
                     $url,

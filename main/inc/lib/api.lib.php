@@ -17,12 +17,8 @@ use Symfony\Component\Finder\Finder;
  * @package chamilo.library
  */
 
-/**
- * Constants declaration.
- */
-
 // PHP version requirement.
-define('REQUIRED_PHP_VERSION', '5.5');
+define('REQUIRED_PHP_VERSION', '5.6');
 define('REQUIRED_MIN_MEMORY_LIMIT', '128');
 define('REQUIRED_MIN_UPLOAD_MAX_FILESIZE', '10');
 define('REQUIRED_MIN_POST_MAX_SIZE', '10');
@@ -2610,7 +2606,6 @@ function api_get_session_visibility(
     }
 
     $now = time();
-
     if (empty($session_id)) {
         return 0; // Means that the session is still available.
     }
@@ -8796,10 +8791,11 @@ function api_create_protected_dir($name, $parentDirectory)
  * @param string    email body
  * @param string    sender name
  * @param string    sender e-mail
- * @param array     extra headers in form $headers = array($name => $value) to allow parsing
- * @param array     data file (path and filename)
- * @param bool      True for attaching a embedded file inside content html (optional)
- * @param array     Additional parameters
+ * @param array  $extra_headers        in form $headers = array($name => $value) to allow parsing
+ * @param array  $data_file            (path and filename)
+ * @param bool   $embedded_image       True for attaching a embedded file inside content html (optional)
+ * @param array  $additionalParameters
+ * @param string $sendErrorTo          If there's an error while sending the email, $sendErrorTo will receive a notification
  *
  * @return int true if mail was sent
  *
@@ -8815,7 +8811,8 @@ function api_mail_html(
     $extra_headers = [],
     $data_file = [],
     $embedded_image = false,
-    $additionalParameters = []
+    $additionalParameters = [],
+    $sendErrorTo = ''
 ) {
     global $platform_email;
 
@@ -8847,6 +8844,10 @@ function api_mail_html(
         !empty($extra_headers['reply_to']) ? $extra_headers['reply_to'] : []
     );
 
+    if (!empty($sendErrorTo) && PHPMailer::ValidateAddress($sendErrorTo)) {
+        $mail->AddCustomHeader('Errors-To: '.$sendErrorTo);
+    }
+
     unset($extra_headers['reply_to']);
 
     $mail->Subject = $subject;
@@ -8857,7 +8858,6 @@ function api_mail_html(
     $list = api_get_configuration_value('send_all_emails_to');
     if (!empty($list) && isset($list['emails'])) {
         foreach ($list['emails'] as $email) {
-            //$mail->AddBCC($email);
             $mail->AddAddress($email);
         }
     }
@@ -8902,7 +8902,7 @@ function api_mail_html(
 
     $noReply = api_get_setting('noreply_email_address');
     if (!empty($noReply)) {
-        $message .= "<br />".get_lang('ThisIsAutomaticEmailNoReply');
+        $message .= '<br />'.get_lang('ThisIsAutomaticEmailNoReply');
     }
     $mailView->assign('content', $message);
 
@@ -8914,7 +8914,7 @@ function api_mail_html(
     $layout = $mailView->get_template('mail/mail.tpl');
     $mail->Body = $mailView->fetch($layout);
 
-    // Attachment ...
+    // Attachment.
     if (!empty($data_file)) {
         foreach ($data_file as $file_attach) {
             if (!empty($file_attach['path']) && !empty($file_attach['filename'])) {
@@ -9459,18 +9459,20 @@ function api_set_noreply_and_from_address_to_mailer(PHPMailer $mailer, array $se
     $senderName = !empty($sender['name']) ? $sender['name'] : $notification->getDefaultPlatformSenderName();
     $senderEmail = !empty($sender['email']) ? $sender['email'] : $notification->getDefaultPlatformSenderEmail();
 
+    // Send errors to the platform admin
+    $adminEmail = api_get_setting('emailAdministrator');
+    if (PHPMailer::ValidateAddress($adminEmail)) {
+        $mailer->AddCustomHeader('Errors-To: '.$adminEmail);
+    }
+
     // Reply to first
     if (!$avoidReplyToAddress) {
-        $mailer->AddCustomHeader('Errors-To: '.$notification->getDefaultPlatformSenderEmail());
-
         if (
             !empty($replyToAddress) &&
             isset($platformEmail['SMTP_UNIQUE_REPLY_TO']) && $platformEmail['SMTP_UNIQUE_REPLY_TO'] &&
             PHPMailer::ValidateAddress($replyToAddress['mail'])
         ) {
             $mailer->AddReplyTo($replyToAddress['email'], $replyToAddress['name']);
-            // Errors to sender
-            $mailer->AddCustomHeader('Errors-To: '.$replyToAddress['mail']);
             $mailer->Sender = $replyToAddress['mail'];
         }
     }

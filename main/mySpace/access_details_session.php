@@ -5,7 +5,6 @@ require_once __DIR__.'/../inc/global.inc.php';
 
 api_block_anonymous_users();
 
-// Access restrictions.
 $is_allowedToTrack = api_is_platform_admin(true, true) ||
     api_is_teacher() || api_is_course_tutor();
 
@@ -24,14 +23,39 @@ if (empty($userInfo)) {
     api_not_allowed(true);
 }
 
+/**
+ * @param string $dateTime
+ * @param bool   $showTime
+ *
+ * @return string
+ */
+function customDate($dateTime, $showTime = false)
+{
+    $format = 'd/m/Y';
+    if ($showTime) {
+        $format = 'd/m/Y H:i:s';
+    }
+    $dateTime = api_get_local_time(
+        $dateTime,
+        null,
+        null,
+        true,
+        false,
+        true,
+        $format
+    );
+
+    return $dateTime;
+}
+
 $sessions = SessionManager::getSessionsFollowedByUser($userId,
     null,
-        null,
-        null,
-        false,
-        false,
-        false,
-        'ORDER BY s.access_end_date'
+    null,
+    null,
+    false,
+    false,
+    false,
+    'ORDER BY s.access_end_date'
 );
 
 $startDate = '';
@@ -50,33 +74,35 @@ $form = new FormValidator(
     null,
     ['id' => 'myform']
 );
-$form->addElement('text', 'from', get_lang('From'), ['id' => 'date_from']);
-$form->addElement('text', 'to', get_lang('Until'), ['id' => 'date_to']);
+$form->addElement('text', 'from', get_lang('From'));
+$form->addElement('text', 'to', get_lang('Until'));
 $form->addElement('hidden', 'user_id', $userId);
 $form->addRule('from', get_lang('ThisFieldIsRequired'), 'required');
+$form->addRule('from', get_lang('ThisFieldIsRequired').' dd/mm/yyyy', 'callback', 'validateDate');
 $form->addRule('to', get_lang('ThisFieldIsRequired'), 'required');
+$form->addRule('to', get_lang('ThisFieldIsRequired').' dd/mm/yyyy', 'callback', 'validateDate');
 $form->addButtonSearch(get_lang('GenerateReport'));
 
-function customDate($dateTime)
+/**
+ * @param string $value
+ *
+ * @return bool
+ */
+function validateDate($value)
 {
-    $dateTime = api_get_local_time(
-        $dateTime,
-        null,
-        null,
-        true,
-        false,
-        true,
-        'd/m/Y'
-    );
+    $value = DateTime::createFromFormat('d/m/Y', $value);
 
-    return $dateTime;
+    if ($value === false) {
+        return false;
+    }
+
+    return true;
 }
 
 if ($form->validate()) {
     $values = $form->getSubmitValues();
     $from = $values['from'];
     $to = $values['to'];
-    $sessionCategories = UserManager::get_sessions_by_category($userId, false);
 
     $from = DateTime::createFromFormat('d/m/Y', $from);
     $to = DateTime::createFromFormat('d/m/Y', $to);
@@ -84,8 +110,12 @@ if ($form->validate()) {
     $from = api_get_utc_datetime($from->format('Y-m-d'));
     $to = api_get_utc_datetime($to->format('Y-m-d'));
 
-    $sessionCourseList = [];
+    $sessionCategories = UserManager::get_sessions_by_category($userId, false);
     $report = [];
+    $minLogin = 0;
+    $maxLogin = 0;
+    $totalDuration = 0;
+
     foreach ($sessionCategories as $category) {
         foreach ($category['sessions'] as $session) {
             $sessionId = $session['session_id'];
@@ -94,21 +124,59 @@ if ($form->validate()) {
                 $courseInfo = api_get_course_info_by_id($course['real_id']);
                 $result = MySpace::get_connections_to_course_by_date(
                     $userId,
-                    $course,
+                    $courseInfo,
                     $sessionId,
                     $from,
                     $to
                 );
 
+                $partialMinLogin = 0;
+                $partialMaxLogin = 0;
+                $partialDuration = 0;
+
                 foreach ($result as $item) {
                     $record = [
-                        $courseInfo['title'],
-                        $session['session_name'],
-                        customDate($item['login']),
-                        customDate($item['logout']),
+                        customDate($item['login'], true),
+                        customDate($item['logout'], true),
                         api_format_time($item['duration'], 'js'),
                     ];
-                    $report[] = $record;
+
+                    $totalDuration += $item['duration'];
+
+                    if (empty($minLogin)) {
+                        $minLogin = api_strtotime($item['login'], 'UTC');
+                    }
+                    if ($minLogin > api_strtotime($item['login'], 'UTC')) {
+                        $minLogin = api_strtotime($item['login'], 'UTC');
+                    }
+                    if (api_strtotime($item['logout']) > $maxLogin) {
+                        $maxLogin = api_strtotime($item['logout'], 'UTC');
+                    }
+
+                    // Partials
+                    $partialDuration += $item['duration'];
+                    if (empty($partialMinLogin)) {
+                        $partialMinLogin = api_strtotime($item['login'], 'UTC');
+                    }
+                    if ($partialMinLogin > api_strtotime($item['login'], 'UTC')) {
+                        $partialMinLogin = api_strtotime($item['login'], 'UTC');
+                    }
+                    if (api_strtotime($item['logout'], 'UTC') > $partialMaxLogin) {
+                        $partialMaxLogin = api_strtotime($item['logout'], 'UTC');
+                    }
+
+                    $report[$sessionId]['courses'][$course['real_id']][] = $record;
+                    $report[$sessionId]['name'][$course['real_id']] = $courseInfo['title'].'&nbsp; ('.$session['session_name'].')';
+                }
+
+                if (!empty($result)) {
+                    $record = [
+                        customDate($partialMinLogin, true),
+                        customDate($partialMaxLogin, true),
+                        api_format_time($partialDuration, 'js'),
+                    ];
+                    $report[$sessionId]['courses'][$course['real_id']][] = $record;
+                    $report[$sessionId]['name'][$course['real_id']] = $courseInfo['title'].'&nbsp; ('.$session['session_name'].')';
                 }
             }
         }
@@ -126,25 +194,61 @@ if ($form->validate()) {
             $to
         );
 
+        $partialMinLogin = 0;
+        $partialMaxLogin = 0;
+        $partialDuration = 0;
+
         foreach ($result as $item) {
             $record = [
-                $course['title'],
-                '',
-                customDate($item['login']),
-                customDate($item['logout']),
+                customDate($item['login'], true),
+                customDate($item['logout'], true),
                 api_format_time($item['duration'], 'js'),
             ];
-            $report[] = $record;
+            $report[0]['courses'][$course['course_id']][] = $record;
+            $report[0]['name'][$course['course_id']] = $course['title'];
+
+            $totalDuration += $item['duration'];
+
+            if (empty($minLogin)) {
+                $minLogin = api_strtotime($item['login'], 'UTC');
+            }
+            if ($minLogin > api_strtotime($item['login'], 'UTC')) {
+                $minLogin = api_strtotime($item['login'], 'UTC');
+            }
+            if (api_strtotime($item['logout'], 'UTC') > $maxLogin) {
+                $maxLogin = api_strtotime($item['logout'], 'UTC');
+            }
+
+            // Partials
+            $partialDuration += $item['duration'];
+            if (empty($partialMinLogin)) {
+                $partialMinLogin = api_strtotime($item['login'], 'UTC');
+            }
+            if ($partialMinLogin > api_strtotime($item['login'], 'UTC')) {
+                $partialMinLogin = api_strtotime($item['login'], 'UTC');
+            }
+            if (api_strtotime($item['logout'], 'UTC') > $partialMaxLogin) {
+                $partialMaxLogin = api_strtotime($item['logout'], 'UTC');
+            }
+        }
+
+        if (!empty($result)) {
+            $record = [
+                customDate($partialMinLogin, true),
+                customDate($partialMaxLogin, true),
+                api_format_time($partialDuration, 'js'),
+            ];
+
+            $report[0]['courses'][$course['course_id']][] = $record;
+            $report[0]['name'][$course['course_id']] = $course['title'];
         }
     }
 
     $table = new HTML_Table(['class' => 'data_table']);
     $headers = [
-        get_lang('Course'),
-        get_lang('Session'),
-        get_lang('StartDate'),
-        get_lang('EndDate'),
-        get_lang('Duration'),
+        get_lang('MinStartDate'),
+        get_lang('MaxEndDate'),
+        get_lang('TotalDuration'),
     ];
     $row = 0;
     $column = 0;
@@ -153,18 +257,48 @@ if ($form->validate()) {
         $column++;
     }
     $row++;
-    foreach ($report as $record) {
-        $column = 0;
-        foreach ($record as $item) {
-            $table->setCellContents($row, $column++, $item);
+    $column = 0;
+    $table->setCellContents($row, $column++, customDate($minLogin));
+    $table->setCellContents($row, $column++, customDate($maxLogin));
+    $table->setCellContents($row, $column++, api_format_time($totalDuration, 'js'));
+    $content = Display::page_subheader3(get_lang('Total')).$table->toHtml();
+
+    foreach ($report as $sessionId => $data) {
+        foreach ($data['courses'] as $courseId => $courseData) {
+            $content .= Display::page_subheader3($data['name'][$courseId]);
+            $table = new HTML_Table(['class' => 'data_table']);
+            $headers = [
+                get_lang('StartDate'),
+                get_lang('EndDate'),
+                get_lang('Duration'),
+            ];
+            $row = 0;
+            $column = 0;
+            foreach ($headers as $header) {
+                $table->setHeaderContents($row, $column, $header);
+                $column++;
+            }
+            $row++;
+            $countData = count($courseData);
+            foreach ($courseData as $record) {
+                $column = 0;
+                foreach ($record as $item) {
+                    $table->setCellContents($row, $column++, $item);
+                    if ($row == $countData) {
+                        $table->setRowAttributes($row, ['style' => 'font-weight:bold']);
+                    }
+                }
+                $row++;
+            }
+            $content .= $table->toHtml();
         }
-        $row++;
     }
 
     $tpl = new Template('', false, false, false, true, false, false);
     $tpl->assign('title', get_lang('AttestationOfAttendance'));
     $tpl->assign('student', $userInfo['complete_name']);
-    $tpl->assign('table_progress', $table->toHtml());
+    $tpl->assign('table_progress', $content);
+
     $content = $tpl->fetch($tpl->get_template('my_space/pdf_export_student.tpl'));
     $params = [
         'pdf_title' => get_lang('Resume'),
@@ -178,7 +312,7 @@ if ($form->validate()) {
         'orientation' => 'P',
     ];
 
-    $pdf = @new PDF('A4', $params['orientation'], $params);
+    @$pdf = new PDF('A4', $params['orientation'], $params);
 
     $pdf->setBackground($tpl->theme);
     @$pdf->content_to_pdf(

@@ -3590,10 +3590,11 @@ class Exercise
 
         $organs_at_risk_hit = 0;
         $questionScore = 0;
-        $orderedHotSpots = [];
+        $answer_correct_array = [];
+        $orderedHotspots = [];
 
         if ($answerType == HOT_SPOT || $answerType == ANNOTATION) {
-            $orderedHotSpots = $em->getRepository('ChamiloCoreBundle:TrackEHotspot')->findBy(
+            $orderedHotspots = $em->getRepository('ChamiloCoreBundle:TrackEHotspot')->findBy(
                 [
                     'hotspotQuestionId' => $questionId,
                     'cId' => $course_id,
@@ -3636,7 +3637,7 @@ class Exercise
                         $sql = "SELECT answer FROM $TBL_TRACK_ATTEMPT
                                 WHERE
                                     exe_id = $exeId AND
-                                    question_id = $questionId ";
+                                    question_id = $questionId";
                         $result = Database::query($sql);
                         $choice = Database::result($result, 0, 'answer');
 
@@ -3834,7 +3835,7 @@ class Exercise
                     if ($from_database) {
                         $choice = [];
                         $sql = "SELECT answer FROM $TBL_TRACK_ATTEMPT
-                                WHERE exe_id = $exeId AND question_id= $questionId";
+                                WHERE exe_id = $exeId AND question_id = $questionId";
                         $resultans = Database::query($sql);
                         while ($row = Database::fetch_array($resultans)) {
                             $choice[$row['answer']] = 1;
@@ -4460,7 +4461,7 @@ class Exercise
                             }
 
                             if ($show_result) {
-                                if ($this->showExpectedChoice() == false &&
+                                if ($this->showExpectedChoice() === false &&
                                     $showTotalScoreAndUserChoicesInLastAttempt === false
                                 ) {
                                     $user_answer = '';
@@ -4585,7 +4586,7 @@ class Exercise
                                 WHERE
                                     hotspot_exe_id = $exeId AND
                                     hotspot_question_id= $questionId AND
-                                    hotspot_answer_id = ".intval($answerAutoId)."
+                                    hotspot_answer_id = $answerAutoId
                                 ORDER BY hotspot_id ASC";
                         $result = Database::query($sql);
                         if (Database::num_rows($result)) {
@@ -4727,6 +4728,10 @@ class Exercise
                         }
                         $user_array = substr($user_array, 0, -1);
                     } else {
+                        if (!empty($studentChoice)) {
+                            $newquestionList[] = $questionId;
+                        }
+
                         if ($answerId === 1) {
                             $studentChoice = $choice[$answerId];
                             $questionScore += $answerWeighting;
@@ -5287,7 +5292,6 @@ class Exercise
                             break;
                         case HOT_SPOT_DELINEATION:
                             $user_answer = $user_array;
-                            error_log($next);
                             if ($next) {
                                 $user_answer = $user_array;
                                 // we compare only the delineation not the other points
@@ -5484,7 +5488,7 @@ class Exercise
             'threadhold3' => $threadhold3,
         ];
 
-        if ($from === 'exercise_result') {
+        if ($from == 'exercise_result') {
             // if answer is hotspot. To the difference of exercise_show.php,
             //  we use the results from the session (from_db=0)
             // TODO Change this, because it is wrong to show the user

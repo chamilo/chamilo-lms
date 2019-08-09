@@ -46,11 +46,7 @@
                     {% endif %}
                 {% endblock %}
 
-                {% if announcements_block %}
-                    <article id="homepage-announcements">
-                        {{ announcements_block }}
-                    </article>
-                {% endif %}
+
 
                 {% if course_category_block %}
                     <article id="homepage-course-category">
@@ -175,45 +171,26 @@
                 {% if section_name == 'section-mycampus' %}
 
                 <div id="latest_blocks"></div>
-
-                <!-- block statistics -->
-                <div class="statistics">
-                    <div class="row">
-                        <div class="col-xs-4 col-md-4">
-                            <ul class="items">
-                                <li><i class="fa fa-user fa-4x icon-color" aria-hidden="true"></i></li>
-                                <li>
-                                    <h2 class="number">{{ total_users }}</h2>
-                                    <p class="text">{{ "RegisteredUsers"|get_lang }}</p>
-                                </li>
-                            </ul>
-                        </div>
-                        <div class="col-xs-4 col-md-4">
-                            <ul class="items">
-                                <li><i class="fa fa-book fa-4x icon-color" aria-hidden="true"></i></li>
-                                <li>
-                                    <h2 class="number">{{ total_courses }}</h2>
-                                    <p class="text">{{ "OpenCourses"|get_lang }}</p>
-                                </li>
-                            </ul>
-                        </div>
-                        <div class="col-xs-4 col-md-4">
-                            <ul class="items">
-                                <li><i class="fa fa-signal fa-4x icon-color" aria-hidden="true"></i></li>
-                                <li>
-                                    <h2 class="number">{{ total_exercises }}</h2>
-                                    <p class="text">{{ "Exercises"|get_lang }}</p>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-                <!-- end block statistics -->
+                {% if announcements_block %}
+                    <article id="homepage-announcements">
+                        {{ announcements_block }}
+                    </article>
+                {% endif %}
 
                 <!-- HOT COURSE -->
                 {% include 'layout/hot_courses.tpl'|get_template %}
 
                 <!-- END HOT COURSE -->
+
+                <!-- MESSAGE -->
+                    <section id="demo-home">
+                        <h3>{{ 'Curieuse/curieux ? Essaye la démo' | get_lang  }}  </h3>
+                        <div class="demostration">
+                            <a href="{{ _p.web }}web/page-de-dmo-francais" class="btn btn-primary btn-demo">
+                                {{ 'demo' | get_lang }}
+                            </a>
+                        </div>
+                    </section>
                 <!-- CMS -->
 
                 {#{% include template ~ "/layout/cms.tpl" %}#}

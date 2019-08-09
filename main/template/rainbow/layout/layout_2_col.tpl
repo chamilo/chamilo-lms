@@ -175,7 +175,7 @@
                 {% if section_name == 'section-mycampus' %}
 
                 <div id="latest_blocks"></div>
-
+<!--
                 <!-- block statistics -->
                 <div class="statistics">
                     <div class="row">
@@ -208,6 +208,7 @@
                         </div>
                     </div>
                 </div>
+-->
                 <!-- end block statistics -->
 
                 <!-- HOT COURSE -->

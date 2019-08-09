@@ -103,16 +103,23 @@ $htmlHeadXtra[] = '
             var jItems = $("#lp_item_list li.li_container");            
             var jItem = $("#"+ itemId);          
             var index = jItems.index(jItem);
+            var total = jItems.length;
                                     
             switch (dir) {
                 case "up":
-                    if (index != 0) {
+                    if (index != 0 && jItems[index - 1]) {
                         var item = jItem.detach().insertBefore(jItems[index - 1]);
                     }
                     break;
                 case "down":
-                     if (index != jItems.length - 1) {
-                        var item = jItem.detach().insertAfter(jItems[index + 1]);                        
+                     if (index != jItems.length - 1) {                        
+                        var subItems = jItem.find("li.li_container");                        
+                        if (subItems.length >= 0) { 
+                            index = subItems.length + index;
+                        }                                                
+                        if ((index + 1) < total) {
+                            var item = jItem.detach().insertAfter(jItems[index + 1]);
+                        }
                      }
                      break;
             }   

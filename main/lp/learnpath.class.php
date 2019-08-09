@@ -6438,6 +6438,7 @@ class learnpath
                     );
                 }
 
+                //if ($arrLP[$i]['item_type'] == 'dir') {
                     /*if ($isFirst) {
                         $orderIcons = Display::url($disableUpIcon, '#', ['class' => 'btn btn-default']);
                     } else {
@@ -6458,7 +6459,7 @@ class learnpath
                         'javascript:void(0)',
                         ['class' => 'btn btn-default order_items', 'data-dir' => 'down', 'data-id' => $arrLP[$i]['id']]
                     );
-
+                //}
 
 
 

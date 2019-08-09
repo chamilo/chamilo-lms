@@ -3432,6 +3432,7 @@ class Exercise
      * @param array  $hotspot_delineation_result
      * @param bool   $showTotalScoreAndUserChoicesInLastAttempt
      * @param bool   $updateResults
+     * @param bool   $showHotSpotDelineationTable
      *
      * @todo    reduce parameters of this function
      *
@@ -3449,7 +3450,8 @@ class Exercise
         $propagate_neg = 0,
         $hotspot_delineation_result = [],
         $showTotalScoreAndUserChoicesInLastAttempt = true,
-        $updateResults = false
+        $updateResults = false,
+        $showHotSpotDelineationTable = false
     ) {
         $debug = false;
         //needed in order to use in the exercise_attempt() for the time
@@ -4243,14 +4245,12 @@ class Exercise
                                 $answer .= ''; // remove &nbsp; that causes issue
                             }
                             // adds the correct word, followed by ] to close the blank
-
                             if ($this->results_disabled != EXERCISE_FEEDBACK_TYPE_EXAM) {
                                 $answer .= ' / <font color="green"><b>'.$realCorrectTags[$i].'</b></font>';
                                 $calculatedStatus = Display::label(get_lang('Correct'), 'success');
                                 $expectedAnswer = $realCorrectTags[$i];
                             }
                             $answer .= ']';
-
                             if (isset($realText[$i + 1])) {
                                 $answer .= $realText[$i + 1];
                             }
@@ -5349,13 +5349,13 @@ class Exercise
                                 if ($answerId === 1) {
                                     //setting colors
                                     if ($final_overlap >= $threadhold1) {
-                                        $overlap_color = true; //echo 'a';
+                                        $overlap_color = true;
                                     }
                                     if ($final_excess <= $threadhold2) {
-                                        $excess_color = true; //echo 'b';
+                                        $excess_color = true;
                                     }
                                     if ($final_missing <= $threadhold3) {
-                                        $missing_color = true; //echo 'c';
+                                        $missing_color = true;
                                     }
 
                                     // if pass
@@ -5488,7 +5488,7 @@ class Exercise
             'threadhold3' => $threadhold3,
         ];
 
-        if ($from == 'exercise_result') {
+        if ($from === 'exercise_result') {
             // if answer is hotspot. To the difference of exercise_show.php,
             //  we use the results from the session (from_db=0)
             // TODO Change this, because it is wrong to show the user
@@ -5498,22 +5498,21 @@ class Exercise
                     error_log('$from AND this is a hotspot kind of question ');
                 }
                 if ($answerType == HOT_SPOT_DELINEATION) {
-                    if (0) {
+                    if ($showHotSpotDelineationTable) {
+                        $overlap_color = 'red';
                         if ($overlap_color) {
                             $overlap_color = 'green';
-                        } else {
-                            $overlap_color = 'red';
                         }
+                        $missing_color = 'red';
                         if ($missing_color) {
                             $missing_color = 'green';
-                        } else {
-                            $missing_color = 'red';
                         }
+
+                        $excess_color = 'red';
                         if ($excess_color) {
                             $excess_color = 'green';
-                        } else {
-                            $excess_color = 'red';
                         }
+
                         if (!is_numeric($final_overlap)) {
                             $final_overlap = 0;
                         }
@@ -5554,10 +5553,10 @@ class Exercise
                                 </tr>
                             </table>';
                         if ($next == 0) {
-                            $try = $try_hotspot;
+                            /*$try = $try_hotspot;
                             $lp = $lp_hotspot;
                             $destinationid = $select_question_hotspot;
-                            $url = $url_hotspot;
+                            $url = $url_hotspot;*/
                         } else {
                             $comment = $answerComment = $objAnswerTmp->selectComment($nbrAnswers);
                             $answerDestination = $objAnswerTmp->selectDestination($nbrAnswers);
@@ -5581,14 +5580,14 @@ class Exercise
                     //save the score attempts
                     if (1) {
                         //getting the answer 1 or 0 comes from exercise_submit_modal.php
-                        $final_answer = $hotspot_delineation_result[1];
+                        $final_answer = isset($hotspot_delineation_result[1]) ? $hotspot_delineation_result[1] : '';
                         if ($final_answer == 0) {
                             $questionScore = 0;
                         }
                         // we always insert the answer_id 1 = delineation
                         Event::saveQuestionAttempt($questionScore, 1, $quesId, $exeId, 0);
                         //in delineation mode, get the answer from $hotspot_delineation_result[1]
-                        $hotspotValue = (int) $hotspot_delineation_result[1] === 1 ? 1 : 0;
+                        $hotspotValue = isset($hotspot_delineation_result[1]) ? (int) $hotspot_delineation_result[1] === 1 ? 1 : 0 : 0;
                         Event::saveExerciseAttemptHotspot(
                             $exeId,
                             $quesId,
@@ -9972,7 +9971,7 @@ class Exercise
         return $group;
     }
 
-    public function getDelineationResult(Question $objQuestionTmp, $questionId, $question_result, $show_results, $question_result)
+    public function getDelineationResult(Question $objQuestionTmp, $questionId, $show_results, $question_result)
     {
         $id = (int) $objQuestionTmp->id;
         $questionId = (int) $questionId;

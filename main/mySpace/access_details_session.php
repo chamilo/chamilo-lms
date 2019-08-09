@@ -244,7 +244,7 @@ if ($form->validate()) {
         }
     }
 
-    $table = new HTML_Table(['class' => 'data_table']);
+    $table = new HTML_Table(['class' => 'data_table_pdf']);
     $headers = [
         get_lang('MinStartDate'),
         get_lang('MaxEndDate'),

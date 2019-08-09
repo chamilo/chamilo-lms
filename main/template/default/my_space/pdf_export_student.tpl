@@ -3,7 +3,7 @@
 </div>
 
 {% if title %}
-<h1 style="color:#000000; background-color:#fff;font-size: 22px; text-align: center; font-weight: bold; padding: 5px 10px;">
+<h1 style="color:#000000; background-color:transparent;font-size: 22px; text-align: center; font-weight: bold; padding: 5px 10px;">
     {{ title }}
 </h1>
 {% endif %}
@@ -21,7 +21,7 @@
 {% endif %}
 
 {% if table_progress %}
-<div style="background: #f1f6ff;">
+<div style="background: transparent;">
     {{ table_progress }}
 </div>
 {% endif %}

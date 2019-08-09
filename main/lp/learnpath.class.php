@@ -6438,7 +6438,7 @@ class learnpath
                     );
                 }
 
-                //if ($arrLP[$i]['item_type'] == 'dir') {
+                if (in_array($arrLP[$i]['item_type'], ['dir', 'final_item'])) {
                     /*if ($isFirst) {
                         $orderIcons = Display::url($disableUpIcon, '#', ['class' => 'btn btn-default']);
                     } else {
@@ -6459,9 +6459,7 @@ class learnpath
                         'javascript:void(0)',
                         ['class' => 'btn btn-default order_items', 'data-dir' => 'down', 'data-id' => $arrLP[$i]['id']]
                     );
-                //}
-
-
+                }
 
                 $delete_icon .= ' <a 
                     href="'.$mainUrl.'&action=delete_item&id='.$arrLP[$i]['id'].'&lp_id='.$this->lp_id.'" 

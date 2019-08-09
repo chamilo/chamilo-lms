@@ -33,11 +33,11 @@ class CourseCategory
      *
      * @return array
      */
-    public static function getCategory($category)
+    public static function getCategory($categoryCode)
     {
         $table = Database::get_main_table(TABLE_MAIN_CATEGORY);
-        $category = Database::escape_string($category);
-        $sql = "SELECT * FROM $table WHERE code ='$category'";
+        $categoryCode = Database::escape_string($categoryCode);
+        $sql = "SELECT * FROM $table WHERE code ='$categoryCode'";
         $result = Database::query($sql);
         if (Database::num_rows($result)) {
             $category = Database::fetch_array($result, 'ASSOC');
@@ -677,51 +677,6 @@ class CourseCategory
     }
 
     /**
-     * create recursively all categories as option of the select passed in parameter.
-     *
-     * @param HTML_QuickForm_Element $element
-     * @param string                 $defaultCode the option value to select by default (used mainly for edition of courses)
-     * @param string                 $parentCode  the parent category of the categories added (default=null for root category)
-     * @param string                 $padding     the indent param (you shouldn't indicate something here)
-     */
-    public static function setCategoriesInForm(
-        $element,
-        $defaultCode = null,
-        $parentCode = null,
-        $padding = null
-    ) {
-        $tbl_category = Database::get_main_table(TABLE_MAIN_CATEGORY);
-
-        $table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE_CATEGORY);
-        $conditions = " INNER JOIN $table a ON (c.id = a.course_category_id)";
-        $whereCondition = " AND a.access_url_id = ".api_get_current_access_url_id();
-
-        $sql = "SELECT code, name, auth_course_child, auth_cat_child
-                FROM $tbl_category c
-                $conditions
-                WHERE parent_id ".(empty($parentCode) ? "IS NULL" : "='".Database::escape_string($parentCode)."'")."
-                $whereCondition
-                ORDER BY name,  code";
-        $res = Database::query($sql);
-
-        while ($cat = Database::fetch_array($res, 'ASSOC')) {
-            $params = $cat['auth_course_child'] == 'TRUE' ? '' : 'disabled';
-            $params .= ($cat['code'] == $defaultCode) ? ' selected' : '';
-            $option = $padding.' '.$cat['name'].' ('.$cat['code'].')';
-
-            $element->addOption($option, $cat['code'], $params);
-            if ($cat['auth_cat_child'] == 'TRUE') {
-                self::setCategoriesInForm(
-                    $element,
-                    $defaultCode,
-                    $cat['code'],
-                    $padding.' - '
-                );
-            }
-        }
-    }
-
-    /**
      * @param array $list
      *
      * @return array
@@ -773,33 +728,6 @@ class CourseCategory
                     c.code LIKE '%$keyword%' OR name LIKE '%$keyword%'
                 ) AND auth_course_child = 'TRUE'
                 $whereCondition ";
-        $result = Database::query($sql);
-
-        return Database::store_result($result, 'ASSOC');
-    }
-
-    /**
-     * @param array $list
-     *
-     * @return array
-     */
-    public static function searchCategoryById($list)
-    {
-        if (empty($list)) {
-            return [];
-        } else {
-            $list = array_map('intval', $list);
-            $list = implode("','", $list);
-        }
-
-        $tableCategory = Database::get_main_table(TABLE_MAIN_CATEGORY);
-
-        $table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE_CATEGORY);
-        $conditions = " INNER JOIN $table a ON (c.id = a.course_category_id)";
-        $whereCondition = " AND a.access_url_id = ".api_get_current_access_url_id();
-
-        $sql = "SELECT c.*, c.name as text FROM $tableCategory c $conditions
-                WHERE c.id IN $list $whereCondition";
         $result = Database::query($sql);
 
         return Database::store_result($result, 'ASSOC');

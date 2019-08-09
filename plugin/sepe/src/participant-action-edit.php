@@ -201,10 +201,10 @@ if (api_is_platform_admin()) {
         $templateName = $plugin->get_lang('EditParticipantAction');
         $tpl = new Template($templateName);
         $tpl->assign('action_id', $actionId);
-        $info = getInfoParticipantAction(intval($_GET['participant_id']));
+        $info = getInfoParticipantAction($_GET['participant_id']);
         $tpl->assign('info', $info);
         $tpl->assign('new_participant', '0');
-        $tpl->assign('participant_id', intval($_GET['participant_id']));
+        $tpl->assign('participant_id', (int) $_GET['participant_id']);
 
         if ($info['platform_user_id'] != 0) {
             $infoUserPlatform = api_get_user_info($info['platform_user_id']);
@@ -225,10 +225,8 @@ if (api_is_platform_admin()) {
         }
     }
     $tpl->assign('listStudent', $listStudentInfo);
-    $listTutorCompany = [];
     $listTutorCompany = listTutorType("company = '1'");
     $tpl->assign('list_tutor_company', $listTutorCompany);
-    $listTutorTraining = [];
     $listTutorTraining = listTutorType("training = '1'");
     $tpl->assign('list_tutor_training', $listTutorTraining);
     if (isset($_SESSION['sepe_message_info'])) {

@@ -173,12 +173,9 @@ function get_course_data($from, $number_of_items, $column, $direction)
     while ($course = Database::fetch_array($res)) {
         // Place colour icons in front of courses.
         $show_visual_code = $course['visual_code'] != $course[2] ? Display::label($course['visual_code'], 'info') : null;
-        $course[1] = get_course_visibility_icon($course[8]).
-            '<a href="'.$coursePath.$course[9].'/index.php">'.
-            Security::remove_XSS($course[1]).
-            '</a> '.
-            $show_visual_code
-        ;
+        $course[1] = get_course_visibility_icon($course[8]).PHP_EOL
+            .Display::url(Security::remove_XSS($course[1]), $coursePath.$course[9].'/index.php').PHP_EOL
+            .$show_visual_code;
         $course[5] = $course[5] == SUBSCRIBE_ALLOWED ? get_lang('Yes') : get_lang('No');
         $course[6] = $course[6] == UNSUBSCRIBE_ALLOWED ? get_lang('Yes') : get_lang('No');
         $language = isset($languages[$course[3]]) ? $languages[$course[3]] : $course[3];
@@ -186,18 +183,35 @@ function get_course_data($from, $number_of_items, $column, $direction)
         $courseCode = $course[0];
         $courseId = $course['id'];
 
-        $actions = '<a href="course_information.php?code='.$courseCode.'">'.
-            Display::return_icon('info2.png', get_lang('Info')).'</a>&nbsp;'.
-            '<a href="'.$coursePath.$course['directory'].'/index.php">'.
-            Display::return_icon('course_home.png', get_lang('CourseHomepage')).'</a>&nbsp;'.
-            '<a href="'.$path.'tracking/courseLog.php?'.api_get_cidreq_params($courseCode).'">'.
-            Display::return_icon('statistics.png', get_lang('Tracking')).'</a>&nbsp;'.
-            '<a href="'.$path.'admin/course_edit.php?id='.$courseId.'">'.
-            Display::return_icon('edit.png', get_lang('Edit'), [], ICON_SIZE_SMALL).'</a>&nbsp;'.
-            '<a href="'.$path.'coursecopy/create_backup.php?'.api_get_cidreq_params($courseCode).'">'.
-            Display::return_icon('backup.png', get_lang('CreateBackup')).'</a>&nbsp;'.
-            '<a href="'.$path.'admin/course_list.php?delete_course='.$courseCode.'"  onclick="javascript: if (!confirm('."'".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES))."'".')) return false;">'.
-            Display::return_icon('delete.png', get_lang('Delete'), [], ICON_SIZE_SMALL).'</a>';
+        $actions = [];
+        $actions[] = Display::url(
+            Display::return_icon('info2.png', get_lang('Info')),
+            "course_information.php?code=$courseCode"
+        );
+        $actions[] = Display::url(
+            Display::return_icon('course_home.png', get_lang('CourseHomepage')),
+            $coursePath.$course['directory'].'/index.php'
+        );
+        $actions[] = Display::url(
+            Display::return_icon('statistics.png', get_lang('Tracking')),
+            $path.'tracking/courseLog.php?'.api_get_cidreq_params($courseCode)
+        );
+        $actions[] = Display::url(
+            Display::return_icon('edit.png', get_lang('Edit')),
+            $path.'admin/course_edit.php?id='.$courseId
+        );
+        $actions[] = Display::url(
+            Display::return_icon('backup.png', get_lang('CreateBackup')),
+            $path.'coursecopy/create_backup.php?'.api_get_cidreq_params($courseCode)
+        );
+        $actions[] = Display::url(
+            Display::return_icon('delete.png', get_lang('Delete')),
+            $path.'admin/course_list.php?delete_course='.$courseCode,
+            [
+                'onclick' => "javascript: if (!confirm('"
+                    .addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES))."')) return false;",
+            ]
+        );
 
         $courseItem = [
             $course[0],
@@ -207,7 +221,7 @@ function get_course_data($from, $number_of_items, $column, $direction)
             $course[4],
             $course[5],
             $course[6],
-            $actions,
+            implode(PHP_EOL, $actions),
         ];
         $courses[] = $courseItem;
     }

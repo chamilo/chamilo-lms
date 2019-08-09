@@ -25,13 +25,13 @@ $interbreadcrumb[] = [
 ];
 
 //load the evaluation & category
-$select_eval = intval($_GET['selecteval']);
+$select_eval = (int) $_GET['selecteval'];
 if (empty($select_eval)) {
     api_not_allowed();
 }
 
 $displayscore = ScoreDisplay::instance();
-$eval = Evaluation :: load($select_eval);
+$eval = Evaluation::load($select_eval);
 $overwritescore = 0;
 if ($eval[0]->get_category_id() < 0) {
     // if category id is negative, then the evaluation's origin is a link
@@ -43,7 +43,7 @@ if ($eval[0]->get_category_id() < 0) {
 
 //load the result with the evaluation id
 if (isset($_GET['delete_mark'])) {
-    $result = Result :: load($_GET['delete_mark']);
+    $result = Result::load($_GET['delete_mark']);
     if (!empty($result[0])) {
         $result[0]->delete();
     }
@@ -116,13 +116,6 @@ if (isset($_GET['action'])) {
                 );
 
                 $form->addTextarea('comment', get_lang('Comment'));
-
-                /*$form->addRule(
-                    'score',
-                    get_lang('ValueTooBig'),
-                    'max_numeric_length',
-                    $evaluation->get_max()
-                );*/
                 $form->addButtonSave(get_lang('Save'));
                 $attemptList = ResultTable::getResultAttemptTable($result, $url);
                 $form->addLabel(get_lang('Attempts'), $attemptList);
@@ -130,7 +123,6 @@ if (isset($_GET['action'])) {
                 if ($form->validate()) {
                     $values = $form->getSubmitValues();
                     $newScore = $values['score'];
-
                     $newScore = api_number_format(
                         $newScore,
                         api_get_setting('gradebook_number_decimals')
@@ -155,7 +147,6 @@ if (isset($_GET['action'])) {
                 }
 
                 Display::display_header();
-
                 $items[] = [
                     'url' => $backUrl,
                     'content' => Display::return_icon(
@@ -165,7 +156,6 @@ if (isset($_GET['action'])) {
                         ICON_SIZE_MEDIUM
                     ),
                 ];
-
                 echo Display::actions($items);
                 $form->display();
                 Display::display_footer();
@@ -176,8 +166,7 @@ if (isset($_GET['action'])) {
 }
 
 if (isset($_GET['editres'])) {
-    $edit_res_xml = Security::remove_XSS($_GET['editres']);
-    $resultedit = Result::load($edit_res_xml);
+    $resultedit = Result::load($_GET['editres']);
     $edit_res_form = new EvalForm(
         EvalForm::TYPE_RESULT_EDIT,
         $eval[0],
@@ -192,7 +181,7 @@ if (isset($_GET['editres'])) {
         $result = new Result();
         $resultlog = new Result();
         $resultlog->addResultLog($values['hid_user_id'], $select_eval);
-        $result->set_id($edit_res_xml);
+        $result->set_id($_GET['editres']);
         $result->set_user_id($values['hid_user_id']);
         $result->set_evaluation_id($select_eval);
         $row_value = isset($values['score']) ? $values['score'] : 0;
@@ -215,7 +204,6 @@ if (isset($_GET['editres'])) {
                 'created_at' => $now,
                 'updated_at' => $now,
             ];
-
             Database::insert($table, $params);
         }
 
@@ -360,7 +348,7 @@ if (isset($_GET['export'])) {
     ];
     $locked_status = $eval[0]->get_locked();
     $export_result_form = new DataForm(
-        DataForm :: TYPE_EXPORT,
+        DataForm::TYPE_EXPORT,
         'export_result_form',
         null,
         api_get_self().'?export=&selecteval='.$select_eval.'&'.api_get_cidreq(),
@@ -651,7 +639,7 @@ if (!isset($_GET['export']) && (!isset($_GET['import']))) {
         'url' => api_get_path(WEB_CODE_PATH).'gradebook/gradebook_view_result.php?selecteval='.$select_eval.'&'.api_get_cidreq(),
         'name' => get_lang('ViewResult'),
     ];
-    Display :: display_header('');
+    Display::display_header();
 }
 
 if (isset($_GET['adduser'])) {

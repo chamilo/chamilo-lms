@@ -19,20 +19,20 @@ $sessionId = api_get_session_id();
 $sortByFirstName = api_sort_by_first_name();
 $from_myspace = false;
 $from = isset($_GET['from']) ? $_GET['from'] : null;
+$origin = api_get_origin();
 
 // Starting the output buffering when we are exporting the information.
-$export_csv = isset($_GET['export']) && $_GET['export'] == 'csv' ? true : false;
+$export_csv = isset($_GET['export']) && $_GET['export'] === 'csv' ? true : false;
 
 $htmlHeadXtra[] = api_get_js('chartjs/Chart.min.js');
 $htmlHeadXtra[] = ' ';
 
 $this_section = SECTION_COURSES;
-if ($from == 'myspace') {
+if ($from === 'myspace') {
     $from_myspace = true;
     $this_section = 'session_my_space';
 }
 
-// Access restrictions.
 $is_allowedToTrack = Tracking::isAllowToTrack($sessionId);
 
 if (!$is_allowedToTrack) {
@@ -44,11 +44,7 @@ if (api_is_drh()) {
     // Blocking course for drh
     if (api_drh_can_access_all_session_content()) {
         // If the drh has been configured to be allowed to see all session content, give him access to the session courses
-        $coursesFromSession = SessionManager::getAllCoursesFollowedByUser(
-            api_get_user_id(),
-            null
-        );
-
+        $coursesFromSession = SessionManager::getAllCoursesFollowedByUser(api_get_user_id(), null);
         $coursesFromSessionCodeList = [];
         if (!empty($coursesFromSession)) {
             foreach ($coursesFromSession as $course) {
@@ -63,7 +59,7 @@ if (api_is_drh()) {
 
         if (!in_array($courseCode, $coursesFollowedList)) {
             if (!in_array($courseCode, $coursesFromSessionCodeList)) {
-                api_not_allowed();
+                api_not_allowed(true);
             }
         }
     } else {
@@ -89,7 +85,6 @@ if (!empty($columnsToHideFromSetting) && isset($columnsToHideFromSetting['column
     $columnsToHide = $columnsToHideFromSetting['columns'];
 }
 $columnsToHide = json_encode($columnsToHide);
-
 $csv_content = [];
 
 // Scripts for reporting array hide/show columns
@@ -142,7 +137,7 @@ $table_user = Database::get_main_table(TABLE_MAIN_USER);
 $TABLEQUIZ = Database::get_course_table(TABLE_QUIZ_TEST);
 
 // Breadcrumbs.
-if (isset($_GET['origin']) && $_GET['origin'] == 'resume_session') {
+if ($origin === 'resume_session') {
     $interbreadcrumb[] = [
         'url' => '../admin/index.php',
         'name' => get_lang('PlatformAdmin'),
@@ -160,26 +155,24 @@ if (isset($_GET['origin']) && $_GET['origin'] == 'resume_session') {
 $view = isset($_REQUEST['view']) ? $_REQUEST['view'] : '';
 $nameTools = get_lang('Tracking');
 
-//Template Tracking
 $tpl = new Template($nameTools);
-
-// getting all the students of the course
+// Getting all the students of the course
 if (empty($sessionId)) {
     // Registered students in a course outside session.
-    $a_students = CourseManager::get_student_list_from_course_code($courseId);
+    $studentList = CourseManager::get_student_list_from_course_code($courseId);
 } else {
     // Registered students in session.
-    $a_students = CourseManager::get_student_list_from_course_code($courseId, true, $sessionId);
+    $studentList = CourseManager::get_student_list_from_course_code($courseId, true, $sessionId);
 }
 
-$nbStudents = count($a_students);
-$user_ids = array_keys($a_students);
+$nbStudents = count($studentList);
+$user_ids = array_keys($studentList);
 $extra_info = [];
 $userProfileInfo = [];
 // Getting all the additional information of an additional profile field.
 if (isset($_GET['additional_profile_field'])) {
     $user_array = [];
-    foreach ($a_students as $key => $item) {
+    foreach ($studentList as $key => $item) {
         $user_array[] = $key;
     }
 
@@ -197,7 +190,6 @@ if (isset($_GET['additional_profile_field'])) {
 Session::write('additional_user_profile_info', $userProfileInfo);
 Session::write('extra_field_info', $extra_info);
 
-// Display the header.
 Display::display_header($nameTools, 'Tracking');
 
 $actionsLeft = TrackingCourseLog::actionsLeft('users', $sessionId);
@@ -206,10 +198,10 @@ $actionsRight = '<div class="pull-right">';
 $actionsRight .= '<a href="javascript: void(0);" onclick="javascript: window.print();">'.
     Display::return_icon('printer.png', get_lang('Print'), '', ICON_SIZE_MEDIUM).'</a>';
 
-$addional_param = '';
+$additionalParams = '';
 if (isset($_GET['additional_profile_field'])) {
     foreach ($_GET['additional_profile_field'] as $fieldId) {
-        $addional_param .= '&additional_profile_field[]='.(int) $fieldId;
+        $additionalParams .= '&additional_profile_field[]='.(int) $fieldId;
     }
 }
 
@@ -218,7 +210,7 @@ if (isset($_GET['users_tracking_per_page'])) {
     $users_tracking_per_page = '&users_tracking_per_page='.intval($_GET['users_tracking_per_page']);
 }
 
-$actionsRight .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&export=csv&'.$addional_param.$users_tracking_per_page.'">
+$actionsRight .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&export=csv&'.$additionalParams.$users_tracking_per_page.'">
      '.Display::return_icon('export_csv.png', get_lang('ExportAsCSV'), '', ICON_SIZE_MEDIUM).'</a>';
 $actionsRight .= '</div>';
 // Create a search-box.
@@ -354,7 +346,7 @@ if ($nbStudents > 0) {
 
     $hideReports = api_get_configuration_value('hide_course_report_graph');
 
-    if ($hideReports == false) {
+    if ($hideReports === false) {
         foreach ($usersTracking as $userTracking) {
             $userInfo = api_get_user_info_from_username($userTracking[3]);
             if (empty($userInfo)) {
@@ -445,7 +437,7 @@ if ($nbStudents > 0) {
         'since',
         Display::returnFontAwesomeIcon('warning').get_lang('RemindInactivesLearnersSince'),
         $options,
-        ['class' => 'col-sm-3']
+        ['disable_js' => true, 'class' => 'col-sm-3']
     );
     $el->setSelected(7);
 
@@ -468,9 +460,6 @@ if ($nbStudents > 0) {
         //override the SortableTable "per page" limit if CSV
         $_GET['users_tracking_per_page'] = 1000000;
     }
-
-    $all_datas = [];
-    $course_code = $_course['id'];
 
     $table = new SortableTableFromArray(
         $usersTracking,
@@ -613,11 +602,11 @@ if ($nbStudents > 0) {
         );
         $index++;
     }
-    $html .= "</div>";
-    // Display the table
-    $html .= "<div id='reporting_table'>";
+    $html .= '</div>';
+
+    $html .= '<div id="reporting_table">';
     $html .= $table->return_table();
-    $html .= "</div>";
+    $html .= '</div>';
 } else {
     $html .= Display::return_message(get_lang('NoUsersInCourse'), 'warning', true);
 }

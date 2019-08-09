@@ -15,7 +15,7 @@ $tbl_session_rel_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
 $tbl_session_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_USER);
 $tbl_session_rel_course_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 
-$id_session = intval($_GET['id_session']);
+$id_session = isset($_GET['id_session']) ? (int) $_GET['id_session'] : 0;
 SessionManager::protectSession($id_session);
 
 if (empty($id_session)) {

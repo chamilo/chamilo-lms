@@ -25,14 +25,14 @@ if (!empty($_GET['course'])) {
 $selectcat = isset($_GET['selectcat']) ? (int) $_GET['selectcat'] : 0;
 
 $htmlHeadXtra[] = '<script>
-$(document).ready( function() {
+$(function() {
 	for (i=0;i<$(".actions").length;i++) {
 		if ($(".actions:eq("+i+")").html()=="<table border=\"0\"></table>" || $(".actions:eq("+i+")").html()=="" || $(".actions:eq("+i+")").html()==null) {
 			$(".actions:eq("+i+")").hide();
 		}
 	}
- } );
- </script>';
+});
+</script>';
 api_block_anonymous_users();
 
 $htmlHeadXtra[] = '<script>

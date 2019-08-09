@@ -68,14 +68,22 @@
                                 {% endif %}
                             </p>
                             <p><em class="fa fa-money"></em> <b>{{ 'Price'|get_plugin_lang('BuyCoursesPlugin') }}</b>
+                            {% if service.tax_enable %}
+                                : {{ service.currency == 'BRL' ? 'R$' : service.currency }} {{ service.price_with_tax }}
+                            {% else %}
                                 : {{ service.currency == 'BRL' ? 'R$' : service.currency }} {{ service.price }}</p>
+                            {% endif %}
                         </div>
                         <div class="service-buy">
                             <div class="row">
                                 <div class="col-sm-6">
                                     <div class="price">
                                         {{ 'Total'|get_lang }}
-                                        : {{ service.currency == 'BRL' ? 'R$' : service.currency }} {{ service.price }}
+                                        {% if service.tax_enable %}
+                                            : {{ service.currency == 'BRL' ? 'R$' : service.currency }} {{ service.price_with_tax }}
+                                        {% else %}
+                                            : {{ service.currency == 'BRL' ? 'R$' : service.currency }} {{ service.price }}
+                                        {% endif %}
                                     </div>
                                 </div>
                                 <div class="col-sm-6">

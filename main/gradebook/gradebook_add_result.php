@@ -37,18 +37,25 @@ if ($add_result_form->validate()) {
         header('Location: gradebook_view_result.php?addresultnostudents=&selecteval='.$selectEval.'&'.api_get_cidreq());
         exit;
     }
-    $scores = ($values['score']);
-    foreach ($scores as $row) {
+
+    $scores = $values['score'];
+    $sumResult = 0;
+    $bestResult = 0;
+    $studentScoreList = [];
+    foreach ($scores as $userId => $row) {
         $res = new Result();
         $res->set_evaluation_id($values['evaluation_id']);
         $res->set_user_id(key($scores));
         //if no scores are given, don't set the score
-        if ((!empty($row)) || ($row == '0')) {
+        if (!empty($row) || $row == '0') {
             $res->set_score($row);
         }
         $res->add();
         next($scores);
     }
+
+    Evaluation::generateStats($values['evaluation_id']);
+
     Display::addFlash(Display::return_message(get_lang('ResultAdded'), 'confirmation', false));
     header('Location: gradebook_view_result.php?addresult=&selecteval='.$selectEval.'&'.api_get_cidreq());
     exit;

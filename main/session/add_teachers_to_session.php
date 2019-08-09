@@ -24,7 +24,7 @@ $tool_name = get_lang('EnrollTrainersFromExistingSessions');
 
 $form_sent = 0;
 $errorMsg = '';
-$id = intval($_GET['id']);
+$id = isset($_GET['id']) ? (int) $_GET['id'] : 0;
 
 SessionManager::protectSession($id);
 

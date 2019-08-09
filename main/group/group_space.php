@@ -13,7 +13,7 @@ require_once __DIR__.'/../inc/global.inc.php';
 $current_course_tool = TOOL_GROUP;
 
 // Notice for unauthorized people.
-api_protect_course_script(true);
+api_protect_course_script(true, false, 'group');
 
 require_once api_get_path(SYS_CODE_PATH).'forum/forumfunction.inc.php';
 

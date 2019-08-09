@@ -268,6 +268,7 @@ $(function() {
             //renderers: ['html5', 'flash_video', 'native_flv'],
             features: ['{{ video_features }}'],
             success: function(mediaElement, originalNode, instance) {
+                {{ quiz_markers_rolls_js }}
             },
             vrPath: _p.web + 'web/assets/vrview/build/vrview.js'
         });
@@ -325,7 +326,7 @@ $(function() {
     $('video:not(.skip)').attr('preload', 'metadata');
 
     function socialLikes() {
-        {% if 'social_enable_likes_messages'|api_get_configuration_value %}
+        {% if 'social_enable_messages_feedback'|api_get_configuration_value %}
         $('body').on('click', '.social-like', function (e) {
             e.preventDefault();
 
@@ -570,6 +571,7 @@ if (typeof CKEDITOR !== 'undefined') {
         'youtube',
         'flash',
         'inserthtml',
+        'qmarkersrolls',
         'image2_chamilo'
     ];
 

@@ -16,9 +16,15 @@
                 <div class="description">
                     <div class="block-title">
                         <h5 class="title">
-                            <a alt="{{ item.title }}" title="{{ item.title }}" href="{{ _p.web }}course/{{ item.real_id  }}/about">
-                                {{ item.title_cut}}
-                            </a>
+                            {% if item.is_course_student or item.is_course_teacher %}
+                                <a alt="{{ item.title }}" title="{{ item.title }}" href="{{ _p.web }}courses/{{ item.code  }}/">
+                                    {{ item.title_cut}}
+                                </a>
+                            {% else %}
+                                <a alt="{{ item.title }}" title="{{ item.title }}" href="{{ _p.web }}course/{{ item.real_id  }}/about">
+                                    {{ item.title_cut}}
+                                </a>
+                            {% endif %}
                         </h5>
                     </div>
                     <div class="ranking">

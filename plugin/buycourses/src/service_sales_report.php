@@ -17,17 +17,30 @@ $plugin = BuyCoursesPlugin::create();
 $paypalEnable = $plugin->get('paypal_enable');
 $commissionsEnable = $plugin->get('commissions_enable');
 $includeServices = $plugin->get('include_services');
+$invoicingEnable = $plugin->get('invoicing_enable') === 'true';
 
 $saleStatuses = $plugin->getServiceSaleStatuses();
 $paymentTypes = $plugin->getPaymentTypes();
 
+$selectedStatus = isset($_GET['status']) ? $_GET['status'] : BuyCoursesPlugin::SALE_STATUS_PENDING;
+$searchTerm = '';
+
 $form = new FormValidator('search', 'get');
+
+if ($form->validate()) {
+    $selectedStatus = $form->getSubmitValue('status');
+    $searchTerm = $form->getSubmitValue('user');
+
+    if ($selectedStatus === false) {
+        $selectedStatus = BuyCoursesPlugin::SALE_STATUS_PENDING;
+    }
+}
 
 $form->addSelect('status', $plugin->get_lang('OrderStatus'), $saleStatuses, ['cols-size' => [0, 0, 0]]);
 $form->addText('user', get_lang('User'), false, ['cols-size' => [0, 0, 0]]);
 $form->addButtonSearch(get_lang('Search'), 'search');
 
-$servicesSales = $plugin->getServiceSale();
+$servicesSales = $plugin->getServiceSale(null, null, $selectedStatus);
 $serviceSaleList = [];
 
 foreach ($servicesSales as $sale) {
@@ -35,12 +48,14 @@ foreach ($servicesSales as $sale) {
         'id' => $sale['id'],
         'reference' => $sale['reference'],
         'status' => $sale['status'],
-        'date' => api_format_date($sale['buy_date'], DATE_TIME_FORMAT_LONG_24H),
+        'date' => api_convert_and_format_date($sale['buy_date'], DATE_TIME_FORMAT_LONG_24H),
         'currency' => $sale['currency'],
         'price' => $sale['price'],
         'service_type' => $sale['service']['applies_to'],
         'service_name' => $sale['service']['name'],
         'complete_user_name' => $sale['buyer']['name'],
+        'invoice' => $sale['invoice'],
+        'num_invoice' => $plugin->getNumInvoice($sale['id'], 1),
     ];
 }
 
@@ -87,6 +102,7 @@ $template->assign('sale_list', $serviceSaleList);
 $template->assign('sale_status_cancelled', BuyCoursesPlugin::SERVICE_STATUS_CANCELLED);
 $template->assign('sale_status_pending', BuyCoursesPlugin::SERVICE_STATUS_PENDING);
 $template->assign('sale_status_completed', BuyCoursesPlugin::SERVICE_STATUS_COMPLETED);
+$template->assign('invoicing_enable', $invoicingEnable);
 $content = $template->fetch('buycourses/view/service_sales_report.tpl');
 $template->assign('content', $content);
 $template->display_one_col_template();

@@ -23,8 +23,10 @@ if (!$isDrhOfCourse) {
     GradebookUtils::block_students();
 }
 
+$categoryId = isset($_REQUEST['selectcat']) ? (int) $_REQUEST['selectcat'] : 0;
+
 if (isset($_POST['submit']) && isset($_POST['keyword'])) {
-    header('Location: '.api_get_self().'?selectcat='.intval($_GET['selectcat']).'&search='.Security::remove_XSS($_POST['keyword']));
+    header('Location: '.api_get_self().'?selectcat='.$categoryId.'&search='.Security::remove_XSS($_POST['keyword']));
     exit;
 }
 
@@ -35,27 +37,25 @@ $interbreadcrumb[] = [
 
 $showeval = isset($_POST['showeval']) ? '1' : '0';
 $showlink = isset($_POST['showlink']) ? '1' : '0';
-if (($showlink == '0') && ($showeval == '0')) {
+if ($showlink == '0' && $showeval == '0') {
     $showlink = '1';
     $showeval = '1';
 }
 
-$cat = Category::load($_REQUEST['selectcat']);
+$cat = Category::load($categoryId);
 $userId = isset($_GET['userid']) ? (int) $_GET['userid'] : 0;
 
+$alleval = null;
 if ($showeval) {
     $alleval = $cat[0]->get_evaluations($userId, true);
-} else {
-    $alleval = null;
 }
 
+$alllinks = null;
 if ($showlink) {
     $alllinks = $cat[0]->get_links($userId, true);
-} else {
-    $alllinks = null;
 }
 
-if (isset($export_flatview_form) && (!$file_type == 'pdf')) {
+if (isset($export_flatview_form) && !$file_type === 'pdf') {
     Display::addFlash(
         Display::return_message(
             $export_flatview_form->toHtml(),
@@ -64,19 +64,17 @@ if (isset($export_flatview_form) && (!$file_type == 'pdf')) {
         )
     );
 }
-
+$category_id = 0;
 if (isset($_GET['selectcat'])) {
     $category_id = (int) $_GET['selectcat'];
-} else {
-    $category_id = '';
 }
 
 $simple_search_form = new UserForm(
-    UserForm :: TYPE_SIMPLE_SEARCH,
+    UserForm::TYPE_SIMPLE_SEARCH,
     null,
     'simple_search_form',
     null,
-    api_get_self().'?selectcat='.$category_id
+    api_get_self().'?selectcat='.$category_id.'&'.api_get_cidreq()
 );
 $values = $simple_search_form->exportValues();
 
@@ -84,17 +82,16 @@ $keyword = '';
 if (isset($_GET['search']) && !empty($_GET['search'])) {
     $keyword = Security::remove_XSS($_GET['search']);
 }
-if ($simple_search_form->validate() && (empty($keyword))) {
+if ($simple_search_form->validate() && empty($keyword)) {
     $keyword = $values['keyword'];
 }
 
 if (!empty($keyword)) {
     $users = GradebookUtils::find_students($keyword);
 } else {
+    $users = null;
     if (isset($alleval) && isset($alllinks)) {
         $users = GradebookUtils::get_all_users($alleval, $alllinks);
-    } else {
-        $users = null;
     }
 }
 $offset = isset($_GET['offset']) ? $_GET['offset'] : '0';
@@ -126,7 +123,7 @@ $flatViewTable = new FlatViewTable(
 );
 
 $flatViewTable->setAutoFill(false);
-$parameters = ['selectcat' => intval($_GET['selectcat'])];
+$parameters = ['selectcat' => $categoryId];
 $flatViewTable->set_additional_parameters($parameters);
 
 $params = [];
@@ -136,7 +133,7 @@ if (isset($_GET['export_pdf']) && $_GET['export_pdf'] == 'category') {
     $params['show_official_code'] = true;
     $params['export_pdf'] = true;
     if ($cat[0]->is_locked() == true || api_is_platform_admin()) {
-        Display :: set_header(null, false, false);
+        Display::set_header(null, false, false);
         GradebookUtils::export_pdf_flatview(
             $flatViewTable,
             $cat,
@@ -151,7 +148,7 @@ if (isset($_GET['export_pdf']) && $_GET['export_pdf'] == 'category') {
 
 if (isset($_GET['exportpdf'])) {
     $interbreadcrumb[] = [
-        'url' => api_get_self().'?selectcat='.Security::remove_XSS($_GET['selectcat']).'&'.api_get_cidreq(),
+        'url' => api_get_self().'?selectcat='.$categoryId.'&'.api_get_cidreq(),
         'name' => get_lang('FlatView'),
     ];
 
@@ -160,7 +157,7 @@ if (isset($_GET['exportpdf'])) {
     $url = api_get_self().'?'.api_get_cidreq().'&'.http_build_query([
         'exportpdf' => '',
         'offset' => $offset,
-        'selectcat' => intval($_GET['selectcat']),
+        'selectcat' => $categoryId,
         'flatviewlist_page_nr' => $pageNum,
         'flatviewlist_per_page' => $perPage,
     ]);
@@ -176,7 +173,7 @@ if (isset($_GET['exportpdf'])) {
 
     if ($export_pdf_form->validate()) {
         $params = $export_pdf_form->exportValues();
-        Display :: set_header(null, false, false);
+        Display::set_header();
         $params['join_firstname_lastname'] = true;
         $params['show_official_code'] = true;
         $params['export_pdf'] = true;
@@ -191,7 +188,7 @@ if (isset($_GET['exportpdf'])) {
             $mainCourseCategory[0]
         );
     } else {
-        Display :: display_header(get_lang('ExportPDF'));
+        Display::display_header(get_lang('ExportPDF'));
     }
 }
 
@@ -214,7 +211,7 @@ if (isset($_GET['print'])) {
 }
 
 if (!empty($_GET['export_report']) &&
-    $_GET['export_report'] == 'export_report'
+    $_GET['export_report'] === 'export_report'
 ) {
     if (api_is_platform_admin() || api_is_course_admin() || api_is_session_general_coach() || $isDrhOfCourse) {
         $user_id = null;
@@ -222,9 +219,11 @@ if (!empty($_GET['export_report']) &&
         if (empty($_SESSION['export_user_fields'])) {
             $_SESSION['export_user_fields'] = false;
         }
-        if (!api_is_allowed_to_edit(false, false) and !api_is_course_tutor()) {
+        if (!api_is_allowed_to_edit(false, false) && !api_is_course_tutor()) {
             $user_id = api_get_user_id();
         }
+
+        $params['show_official_code'] = true;
         $printable_data = GradebookUtils::get_printable_data(
             $cat[0],
             $users,

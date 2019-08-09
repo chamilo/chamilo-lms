@@ -124,7 +124,7 @@ $interbreadcrumb[] = [
 ];
 
 $htmlHeadXtra[] = '<script>
-$(document).ready( function() {
+$(function() {
     $("#hide_category_id").change(function() {
        $("#hide_category_id option:selected").each(function () {
            var cat_id = $(this).val();

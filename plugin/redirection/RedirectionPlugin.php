@@ -88,6 +88,20 @@ class RedirectionPlugin extends Plugin
     }
 
     /**
+     * Deletes redirection from user.
+     *
+     * @param int $userId
+     */
+    public static function deleteUserRedirection($userId)
+    {
+        $table = Database::get_main_table('plugin_redirection');
+        Database::delete(
+            $table,
+            ['user_id = ?' => [$userId]]
+        );
+    }
+
+    /**
      * Deletes an existing redirection.
      *
      * @param int $id

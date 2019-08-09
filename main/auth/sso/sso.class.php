@@ -266,7 +266,7 @@ class sso
 
         return $loginFailed;
     }
-    
+
     /**
      * Generate the URL for profile editing for a any user or the current user.
      *

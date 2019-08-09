@@ -5,7 +5,6 @@ use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ExtraField;
 use Chamilo\CoreBundle\Entity\Repository\SequenceRepository;
 use Chamilo\CoreBundle\Entity\SequenceResource;
-use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CourseBundle\Entity\CCourseDescription;
 use Chamilo\UserBundle\Entity\User;
 
@@ -26,8 +25,7 @@ $sessionId = isset($_GET['session_id']) ? (int) $_GET['session_id'] : 0;
 
 $em = Database::getManager();
 
-/** @var Session $session */
-$session = $em->find('ChamiloCoreBundle:Session', $sessionId);
+$session = api_get_session_entity($sessionId);
 
 if (!$session) {
     api_not_allowed(true);
@@ -63,7 +61,7 @@ foreach ($sessionCourses as $sessionCourse) {
     /** @var User $courseCoach */
     foreach ($courseCoaches as $courseCoach) {
         $coachData = [
-            'complete_name' => $courseCoach->getCompleteName(),
+            'complete_name' => UserManager::formatUserFullName($courseCoach),
             'image' => UserManager::getUserPicture(
                 $courseCoach->getId(),
                 USER_IMAGE_SIZE_ORIGINAL

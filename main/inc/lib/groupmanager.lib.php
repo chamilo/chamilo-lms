@@ -45,6 +45,8 @@ class GroupManager
     const TOOL_NOT_AVAILABLE = 0;
     const TOOL_PUBLIC = 1;
     const TOOL_PRIVATE = 2;
+    const TOOL_PRIVATE_BETWEEN_USERS = 3;
+
     /**
      * Constants for the available group tools.
      */
@@ -1812,11 +1814,11 @@ class GroupManager
         $course_id = empty($course_id) ? api_get_course_int_id() : (int) $course_id;
         $group_id = $groupInfo['id'];
 
-        $table = Database::get_course_table(TABLE_GROUP_USER);
         if (!empty($user_ids)) {
+            $table = Database::get_course_table(TABLE_GROUP_USER);
             foreach ($user_ids as $user_id) {
                 if (self::canUserSubscribe($user_id, $groupInfo)) {
-                    $user_id = intval($user_id);
+                    $user_id = (int) $user_id;
                     $sql = "INSERT INTO ".$table." (c_id, user_id, group_id)
                             VALUES ('$course_id', '".$user_id."', '".$group_id."')";
                     Database::query($sql);
@@ -2053,32 +2055,6 @@ class GroupManager
     }
 
     /**
-     * Remove all users that are not students and all users who have tutor status
-     * from  the list.
-     *
-     * @param array $user_array_in
-     *
-     * @return array
-     */
-    public static function filter_only_students($user_array_in)
-    {
-        $user_array_out = [];
-        foreach ($user_array_in as $this_user) {
-            if (api_get_session_id()) {
-                if ($this_user['status_session'] == 0) {
-                    $user_array_out[] = $this_user;
-                }
-            } else {
-                if ($this_user['status_rel'] == STUDENT) {
-                    $user_array_out[] = $this_user;
-                }
-            }
-        }
-
-        return $user_array_out;
-    }
-
-    /**
      * Check if a user has access to a certain group tool.
      *
      * @param int    $user_id  The user id
@@ -2158,6 +2134,13 @@ class GroupManager
             case self::TOOL_PRIVATE:
                 $userIsInGroup = self::is_user_in_group($user_id, $groupInfo);
                 if ($userIsInGroup) {
+                    return true;
+                }
+                break;
+            case self::TOOL_PRIVATE_BETWEEN_USERS:
+                // Only works for announcements for now
+                $userIsInGroup = self::is_user_in_group($user_id, $groupInfo);
+                if ($userIsInGroup && $tool == self::GROUP_TOOL_ANNOUNCEMENT) {
                     return true;
                 }
                 break;
@@ -2250,16 +2233,18 @@ class GroupManager
      * Get all groups where a specific user is subscribed.
      *
      * @param int $user_id
+     * @param int $courseId
      *
      * @return array
      */
-    public static function getAllGroupPerUserSubscription($user_id)
+    public static function getAllGroupPerUserSubscription($user_id, $courseId = 0)
     {
         $table_group_user = Database::get_course_table(TABLE_GROUP_USER);
         $table_tutor_user = Database::get_course_table(TABLE_GROUP_TUTOR);
         $table_group = Database::get_course_table(TABLE_GROUP);
-        $user_id = intval($user_id);
-        $course_id = api_get_course_int_id();
+        $user_id = (int) $user_id;
+        $courseId = empty($courseId) ? api_get_course_int_id() : (int) $courseId;
+
         $sql = "SELECT DISTINCT g.*
                FROM $table_group g
                LEFT JOIN $table_group_user gu
@@ -2267,7 +2252,7 @@ class GroupManager
                LEFT JOIN $table_tutor_user tu
                ON (tu.group_id = g.iid AND g.c_id = tu.c_id)
                WHERE
-                  g.c_id = $course_id AND
+                  g.c_id = $courseId AND
                   (gu.user_id = $user_id OR tu.user_id = $user_id) ";
         $res = Database::query($sql);
         $groups = [];
@@ -2276,45 +2261,6 @@ class GroupManager
         }
 
         return $groups;
-    }
-
-    /**
-     * @param array $userList
-     * @param array $groupInfo
-     *
-     * @return mixed
-     */
-    public static function getNumberLeftFromGroupFromUserList($userList, $groupInfo)
-    {
-        $groupIid = (int) $groupInfo['iid'];
-        $category = self::get_category_from_group($groupIid);
-        $number_groups_per_user = $groupInfo['maximum_number_of_students'];
-        $categoryId = 0;
-        if ($category) {
-            $groups_per_user = $category['groups_per_user'];
-            $number_groups_per_user = $groups_per_user == self::GROUP_PER_MEMBER_NO_LIMIT ? self::INFINITE : $groups_per_user;
-            $categoryId = $category['id'];
-        }
-
-        $usersAdded = [];
-        foreach ($userList as &$userInfo) {
-            // find # of groups the user is enrolled in
-            $numberOfGroups = self::user_in_number_of_groups(
-                $userInfo['user_id'],
-                $categoryId
-            );
-
-            if (in_array($userInfo['user_id'], $usersAdded)) {
-                continue;
-            }
-
-            $usersAdded[] = $userInfo['user_id'];
-
-            // add # of groups to user list
-            $userInfo['number_groups_left'] = $number_groups_per_user - $numberOfGroups;
-        }
-
-        return $userList;
     }
 
     /**
@@ -2918,17 +2864,16 @@ class GroupManager
         echo '
             <ul class="toolbar-groups nav nav-tabs">
                 <li class="'.$activeSettings.'">
-                    <a href="'.sprintf($url, 'settings.php').'">
+                    <a id="group_settings_tab" href="'.sprintf($url, 'settings.php').'">
                     '.Display::return_icon('settings.png').' '.get_lang('Settings').'
                     </a>
                 </li>
                 <li class="'.$activeMember.'">
-                    <a href="'.sprintf($url, 'member_settings.php').'">
-                    '.Display::return_icon('user.png').' '.get_lang('GroupMembers').'
-                    </a>
+                    <a id="group_members_tab" href="'.sprintf($url, 'member_settings.php').'">
+                    '.Display::return_icon('user.png').' '.get_lang('GroupMembers').'</a>
                 </li>
                 <li class="'.$activeTutor.'">
-                    <a href="'.sprintf($url, 'tutor_settings.php').'">
+                    <a id="group_tutors_tab" href="'.sprintf($url, 'tutor_settings.php').'">
                     '.Display::return_icon('teacher.png').' '.get_lang('GroupTutors').'
                     </a>
                 </li>

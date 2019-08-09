@@ -3,9 +3,9 @@
 /**
  * @package chamilo.dropbox
  */
-
-// including the basic Chamilo initialisation file
 require_once __DIR__.'/../inc/global.inc.php';
+
+$_course = api_get_course_info();
 
 // the dropbox file that contains additional functions
 require_once 'dropbox_functions.inc.php';

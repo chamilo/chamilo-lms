@@ -453,6 +453,7 @@ body{
     #learning_path_left_zone {
         width: 250px;
     }
+
     #learning_path_right_zone {
         left: 250px;
         width: calc(100% - 250px);
@@ -477,8 +478,10 @@ body{
         right: 10px;
         top: 75px;
     }
-    #learning_path_right_zone .tab-pane{
+
+    #learning_path_right_zone .tab-pane {
     }
+
     #learning_path_right_zone .tab-pane iframe {
     }
 }
@@ -498,26 +501,42 @@ body{
 /* Large devices (large desktops, 1200px and up) */
 @media (min-width: 1200px) {
     #learning_path_left_zone {
-        width: 350px;
+        width: 450px;
     }
 
     #learning_path_right_zone {
-        left: 350px;
-        width: calc(100% - 350px);
+        left: 465px;
+        width: calc(100% - 465px);
     }
 }
-@media (min-width : 480px) and (max-width: 767px) {
-    #panel-scorm .image-avatar{
+
+@media (min-width: 979px) and (max-width: 1024px) {
+    #panel-scorm .image-avatar {
         display: none;
     }
+}
+
+@media (min-width: 768px) and (max-width: 978px) {
+    #panel-scorm .image-avatar {
+        display: none;
+    }
+}
+
+@media (min-width: 480px) and (max-width: 767px) {
+    #panel-scorm .image-avatar {
+        display: none;
+    }
+
     #scorm-info {
         padding: 0;
         margin: 0;
     }
+
     #learning_path_left_zone .lp-view-zone-container,
-    #learning_path_right_zone .lp-view-zone-container{
+    #learning_path_right_zone .lp-view-zone-container {
         padding: 0;
     }
+
     #scorm-info {
         padding: 30px 0 0 0;
         margin: 0;
@@ -526,16 +545,55 @@ body{
         display: none;
     }
 }
+
 /* Landscape phones and down */
 @media (max-width: 480px) {
-    #home-course{
-        display: none !important;
-    }
-    .scorm-title{
+    .scorm-title {
         font-size: 14px;
         padding: 10px;
     }
-    .movil-toolbar{
-        padding-left: 35%;
+
+    .movil-toolbar {
+        width: 100%;
+        height: auto;
+    }
+
+    .scorm_item_normal {
+        padding: 10px 5px;
+    }
+
+    .icon-toolbar .fa {
+        width: 35px;
+        height: 35px;
+        line-height: 35px;
+        font-size: 22px;
+    }
+
+    .btn-movil {
+        width: 130px;
+        margin: auto;
+    }
+
+    #scorm-info {
+        padding: 30px 0 0 0;
+        margin: 0;
+    }
+
+    #learning_path_right_zone {
+        left: 100%;
+        width: auto;
+    }
+
+    #panel-scorm .image-avatar {
+        display: none;
+    }
+
+    #learning_path_left_zone .lp-view-zone-container,
+    #learning_path_right_zone .lp-view-zone-container {
+        padding: 0;
+    }
+
+    #scorm-info hr {
+        display: none;
     }
 }

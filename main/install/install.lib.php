@@ -2279,12 +2279,11 @@ function fixIds(EntityManager $em)
     $result = $connection->fetchAll($sql);
     foreach ($result as $item) {
         $courseId = $item['c_id'];
-        $iid = isset($item['iid']) ? intval($item['iid']) : 0;
-        $ref = isset($item['ref']) ? intval($item['ref']) : 0;
+        $iid = isset($item['iid']) ? (int) $item['iid'] : 0;
+        $ref = isset($item['ref']) ? (int) $item['ref'] : 0;
         $sql = null;
 
         $newId = '';
-
         switch ($item['item_type']) {
             case TOOL_LINK:
                 $sql = "SELECT * FROM c_link WHERE c_id = $courseId AND id = $ref";
@@ -2355,11 +2354,10 @@ function fixIds(EntityManager $em)
 
     // Delete group data of groups that don't exist.
     $sql = "DELETE FROM c_item_property
-            WHERE to_group_id IS NOT NULL AND to_group_id NOT IN (SELECT DISTINCT id FROM c_group_info)";
+            WHERE to_group_id <> 0 AND to_group_id IS NOT NULL AND to_group_id NOT IN (SELECT DISTINCT iid FROM c_group_info)";
     $connection->executeQuery($sql);
 
     // This updates the group_id with c_group_info.iid instead of c_group_info.id
-
     if ($debug) {
         error_log('update iids');
     }
@@ -2430,7 +2428,8 @@ function fixIds(EntityManager $em)
             $ref = $item['ref'];
 
             // Fix group id
-            if (!empty($groupId)) {
+            // Commented group id is already fixed in Version20150603181728.php
+            /*if (!empty($groupId)) {
                 $sql = "SELECT * FROM c_group_info
                         WHERE c_id = $courseId AND id = $groupId";
                 $data = $connection->fetchAssoc($sql);
@@ -2444,12 +2443,16 @@ function fixIds(EntityManager $em)
                     $sql = "DELETE FROM c_item_property WHERE iid = $iid";
                     $connection->executeQuery($sql);
                 }
-            }
+            }*/
 
             $sql = '';
-            $newId = '';
+            //$newId = '';
             switch ($item['tool']) {
-                case TOOL_LINK:
+                case TOOL_LEARNPATH:
+                    $sql = "SELECT * FROM c_lp WHERE c_id = $courseId AND id = $ref ";
+                    break;
+                // already fixed in c_lp_item
+                /*case TOOL_LINK:
                     $sql = "SELECT * FROM c_link WHERE c_id = $courseId AND id = $ref ";
                     break;
                 case TOOL_STUDENTPUBLICATION:
@@ -2466,17 +2469,16 @@ function fixIds(EntityManager $em)
                     break;
                 case 'thread':
                     $sql = "SELECT * FROM c_forum_thread WHERE c_id = $courseId AND id = $ref";
-                    break;
+                    break;*/
             }
 
-            if (!empty($sql) && !empty($newId)) {
+            if (!empty($sql)) {
                 $data = $connection->fetchAssoc($sql);
-                if (isset($data['iid'])) {
+                if (isset($data['iid']) && !empty($data['iid'])) {
                     $newId = $data['iid'];
+                    $sql = "UPDATE c_item_property SET ref = $newId WHERE iid = $iid";
+                    $connection->executeQuery($sql);
                 }
-                $sql = "UPDATE c_item_property SET ref = $newId WHERE iid = $iid";
-                error_log($sql);
-                $connection->executeQuery($sql);
             }
         }
 
@@ -2911,7 +2913,7 @@ function fixLpId($connection, $debug)
                         }
                     }
 
-                    if ($item['item_type'] == 'document' && !empty($item['path'])) {
+                    if ($item['item_type'] === 'document' && !empty($item['path'])) {
                         $oldDocumentId = $item['path'];
                         $sql = "SELECT * FROM c_document WHERE c_id = $courseId AND id = $oldDocumentId";
                         $result = $connection->query($sql);
@@ -2920,12 +2922,23 @@ function fixLpId($connection, $debug)
                             $newDocumentId = $document['iid'];
                             if (!empty($newDocumentId)) {
                                 $sql = "UPDATE $tblCLpItem SET path = $newDocumentId 
-                                    WHERE iid = $itemIid AND c_id = $courseId";
+                                        WHERE iid = $itemIid AND c_id = $courseId";
                                 $connection->query($sql);
-                                if ($debug) {
-                                    //error_log("Fix document: ");
-                                    //error_log($sql);
-                                }
+                            }
+                        }
+                    }
+
+                    if ($item['item_type'] === 'link' && !empty($item['path'])) {
+                        $oldLinkId = $item['path'];
+                        $sql = "SELECT * FROM c_link WHERE c_id = $courseId AND id = $oldLinkId";
+                        $result = $connection->query($sql);
+                        $document = $result->fetch();
+                        if (!empty($document)) {
+                            $newLinkId = $document['iid'];
+                            if (!empty($newLinkId)) {
+                                $sql = "UPDATE $tblCLpItem SET path = $newLinkId 
+                                        WHERE iid = $itemIid AND c_id = $courseId";
+                                $connection->query($sql);
                             }
                         }
                     }
@@ -3602,26 +3615,36 @@ function fixPostGroupIds($connection)
         $courseId = $row['c_id'];
         $sessionId = $row['session_id'];
         $workId = $row['id'];
-        $itemInfo = api_get_item_property_info(
-            $courseId,
-            'work',
-            $workId,
-            $sessionId
-        );
-        $courseInfo = api_get_course_info_by_id($courseId);
+        $sessionCondition = " session_id = $sessionId";
+        if (empty($sessionId)) {
+            $sessionCondition = ' (session_id = 0 OR session_id IS NULL) ';
+        }
+        $sql = "SELECT * FROM c_item_property
+                WHERE
+                    c_id = $courseId AND
+                    tool = 'work' AND
+                    ref = $workId AND
+                    $sessionCondition ";
+        $itemInfo = $connection->fetchAssoc($sql);
         if (empty($itemInfo)) {
-            api_item_property_update(
-                $courseInfo,
-                'work',
-                $workId,
-                'visible',
-                1,
-                $groupId,
-                null,
-                null,
-                null,
-                $sessionId
-            );
+            $params = [
+                'c_id' => $courseId,
+                'to_group_id' => $groupId,
+                //'to_user_id' => null,
+                'insert_user_id' => 1,
+                'session_id' => $sessionId,
+                'tool' => 'work',
+                'insert_date' => api_get_utc_datetime(),
+                'lastedit_date' => api_get_utc_datetime(),
+                'ref' => $workId,
+                'lastedit_type' => 'visible',
+                'lastedit_user_id' => 1,
+                'visibility' => 1,
+            ];
+            $connection->insert('c_item_property', $params);
+            $id = $connection->lastInsertId();
+            $sql = "UPDATE c_item_property SET id = iid WHERE iid = $id";
+            $connection->executeQuery($sql);
         }
     }
     error_log('End - Fix work documents');

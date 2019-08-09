@@ -847,7 +847,7 @@ if (!empty($filterToSend)) {
     // see https://task.beeznest.com/issues/10849#change-81902
     foreach ($filterToSend['rules'] as &$filterItem) {
         if (isset($filterItem['field'])) {
-            switch($filterItem['field']) {
+            switch ($filterItem['field']) {
                 case 'extra_filiere':
                 case 'extra_domaine':
                 case 'extra_theme_it':

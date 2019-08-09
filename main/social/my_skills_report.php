@@ -28,6 +28,12 @@ switch ($action) {
         $certificate = new Certificate(0, api_get_user_id(), false, false);
         $certificate->generatePdfFromCustomCertificate();
         break;
+    case 'generate':
+        $certificate = Certificate::generateUserSkills(api_get_user_id());
+        Display::addFlash(Display::return_message(get_lang('Updated')));
+        header('Location: '.api_get_self());
+        exit;
+        break;
 }
 
 $skillTable = Database::get_main_table(TABLE_MAIN_SKILL);
@@ -47,15 +53,26 @@ if ($isStudent) {
     $tpl->assign('skill_table', $result['table']);
     $tplPath = 'skill/student_report.tpl';
 } elseif ($isStudentBoss) {
-    $selectedStudent = isset($_REQUEST['student']) ? (int) $_REQUEST['student'] : 0;
     $tableRows = [];
     $followedStudents = UserManager::getUsersFollowedByStudentBoss($userId);
 
+    $frmStudents = new FormValidator('students', 'get');
+    $slcStudent = $frmStudents->addSelect(
+        'student',
+        get_lang('Student'),
+        ['0' => get_lang('Select')]
+    );
+    $frmStudents->addButtonSearch(get_lang('Search'));
+
     foreach ($followedStudents as &$student) {
         $student['completeName'] = api_get_person_name($student['firstname'], $student['lastname']);
+
+        $slcStudent->addOption($student['completeName'], $student['user_id']);
     }
 
-    if ($selectedStudent > 0) {
+    if ($frmStudents->validate()) {
+        $selectedStudent = (int) $frmStudents->exportValue('student');
+
         $sql = "SELECT s.name, sru.acquired_skill_at, c.title, c.directory
                 FROM $skillTable s
                 INNER JOIN $skillRelUserTable sru
@@ -109,8 +126,7 @@ if ($isStudent) {
     }
 
     $tplPath = 'skill/student_boss_report.tpl';
-    $tpl->assign('followed_students', $followedStudents);
-    $tpl->assign('selected_student', $selectedStudent);
+    $tpl->assign('form', $frmStudents->returnForm());
 } elseif ($isDRH) {
     $selectedCourse = isset($_REQUEST['course']) ? intval($_REQUEST['course']) : null;
     $selectedSkill = isset($_REQUEST['skill']) ? intval($_REQUEST['skill']) : 0;

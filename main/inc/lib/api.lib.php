@@ -22,7 +22,7 @@ use Symfony\Component\Finder\Finder;
  */
 
 // PHP version requirement.
-define('REQUIRED_PHP_VERSION', '5.5');
+define('REQUIRED_PHP_VERSION', '5.6');
 define('REQUIRED_MIN_MEMORY_LIMIT', '128');
 define('REQUIRED_MIN_UPLOAD_MAX_FILESIZE', '10');
 define('REQUIRED_MIN_POST_MAX_SIZE', '10');
@@ -150,6 +150,7 @@ define('TOOL_NOTEBOOK', 'notebook');
 define('TOOL_ATTENDANCE', 'attendance');
 define('TOOL_COURSE_PROGRESS', 'course_progress');
 define('TOOL_PORTFOLIO', 'portfolio');
+define('TOOL_PLAGIARISM', 'compilatio');
 
 // CONSTANTS defining Chamilo interface sections
 define('SECTION_CAMPUS', 'mycampus');
@@ -468,7 +469,8 @@ define('ONE_PER_PAGE', 2);
 
 define('EXERCISE_FEEDBACK_TYPE_END', 0); //Feedback 		 - show score and expected answers
 define('EXERCISE_FEEDBACK_TYPE_DIRECT', 1); //DirectFeedback - Do not show score nor answers
-define('EXERCISE_FEEDBACK_TYPE_EXAM', 2); //NoFeedback 	 - Show score only
+define('EXERCISE_FEEDBACK_TYPE_EXAM', 2); // NoFeedback 	 - Show score only
+define('EXERCISE_FEEDBACK_TYPE_POPUP', 3); // Popup BT#15827
 
 define('RESULT_DISABLE_SHOW_SCORE_AND_EXPECTED_ANSWERS', 0); //show score and expected answers
 define('RESULT_DISABLE_NO_SCORE_AND_EXPECTED_ANSWERS', 1); //Do not show score nor answers
@@ -478,8 +480,7 @@ define('RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT', 4);
 define('RESULT_DISABLE_DONT_SHOW_SCORE_ONLY_IF_USER_FINISHES_ATTEMPTS_SHOW_ALWAYS_FEEDBACK', 5);
 define('RESULT_DISABLE_RANKING', 6);
 define('RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER', 7);
-
-// 4: Show final score only with  and show expected answers only on the last attempt
+define('RESULT_DISABLE_SHOW_SCORE_AND_EXPECTED_ANSWERS_AND_RANKING', 8);
 
 define('EXERCISE_MAX_NAME_SIZE', 80);
 
@@ -587,6 +588,7 @@ define('MESSAGE_STATUS_WALL_DELETE', '9');
 define('MESSAGE_STATUS_WALL_POST', '10');
 define('MESSAGE_STATUS_CONVERSATION', '11');
 define('MESSAGE_STATUS_FORUM', '12');
+define('MESSAGE_STATUS_PROMOTED', '13');
 
 // Images
 define('IMAGE_WALL_SMALL_SIZE', 200);
@@ -1058,8 +1060,6 @@ function api_is_facebook_auth_activated()
 function api_add_trailing_slash($path)
 {
     return substr($path, -1) == '/' ? $path : $path.'/';
-    // This code is about 20% faster than the preg_replace equivalent
-    //return preg_replace('/([^\/])$/', '$1/', $path);
 }
 
 /**
@@ -1141,6 +1141,7 @@ function api_valid_email($address)
  *
  * @param bool Option to print headers when displaying error message. Default: false
  * @param bool whether session admins should be allowed or not
+ * @param bool $checkTool check if tool is available for users (user, group)
  *
  * @return bool True if the user has access to the current course or is out of a course context, false otherwise
  *
@@ -1148,7 +1149,7 @@ function api_valid_email($address)
  *
  * @author Roan Embrechts
  */
-function api_protect_course_script($print_headers = false, $allow_session_admins = false, $allow_drh = false)
+function api_protect_course_script($print_headers = false, $allow_session_admins = false, $checkTool = '')
 {
     $course_info = api_get_course_info();
     if (empty($course_info)) {
@@ -1156,9 +1157,6 @@ function api_protect_course_script($print_headers = false, $allow_session_admins
 
         return false;
     }
-
-    $is_allowed_in_course = api_is_allowed_in_course();
-    $is_visible = false;
 
     if (api_is_drh()) {
         return true;
@@ -1174,24 +1172,26 @@ function api_protect_course_script($print_headers = false, $allow_session_admins
         return true;
     }
 
+    $isAllowedInCourse = api_is_allowed_in_course();
+    $is_visible = false;
     if (isset($course_info) && isset($course_info['visibility'])) {
         switch ($course_info['visibility']) {
             default:
             case COURSE_VISIBILITY_CLOSED:
                 // Completely closed: the course is only accessible to the teachers. - 0
-                if (api_get_user_id() && !api_is_anonymous() && $is_allowed_in_course) {
+                if (api_get_user_id() && !api_is_anonymous() && $isAllowedInCourse) {
                     $is_visible = true;
                 }
                 break;
             case COURSE_VISIBILITY_REGISTERED:
                 // Private - access authorized to course members only - 1
-                if (api_get_user_id() && !api_is_anonymous() && $is_allowed_in_course) {
+                if (api_get_user_id() && !api_is_anonymous() && $isAllowedInCourse) {
                     $is_visible = true;
                 }
                 break;
             case COURSE_VISIBILITY_OPEN_PLATFORM:
                 // Open - access allowed for users registered on the platform - 2
-                if (api_get_user_id() && !api_is_anonymous() && $is_allowed_in_course) {
+                if (api_get_user_id() && !api_is_anonymous() && $isAllowedInCourse) {
                     $is_visible = true;
                 }
                 break;
@@ -1208,7 +1208,7 @@ function api_protect_course_script($print_headers = false, $allow_session_admins
         }
 
         //If password is set and user is not registered to the course then the course is not visible
-        if ($is_allowed_in_course == false &&
+        if ($isAllowedInCourse == false &&
             isset($course_info['registration_code']) &&
             !empty($course_info['registration_code'])
         ) {
@@ -1216,12 +1216,23 @@ function api_protect_course_script($print_headers = false, $allow_session_admins
         }
     }
 
+    if (!empty($checkTool)) {
+        if (!api_is_allowed_to_edit(true, true, true)) {
+            $toolInfo = api_get_tool_information_by_name($checkTool);
+            if (!empty($toolInfo) && isset($toolInfo['visibility']) && $toolInfo['visibility'] == 0) {
+                api_not_allowed(true);
+
+                return false;
+            }
+        }
+    }
+
     // Check session visibility
     $session_id = api_get_session_id();
 
     if (!empty($session_id)) {
-        //$is_allowed_in_course was set in local.inc.php
-        if (!$is_allowed_in_course) {
+        // $isAllowedInCourse was set in local.inc.php
+        if (!$isAllowedInCourse) {
             $is_visible = false;
         }
     }
@@ -1685,7 +1696,12 @@ function api_get_user_info(
         $userFromSession = Session::read('_user');
 
         if (isset($userFromSession)) {
-            if ($cacheAvailable === true) {
+            if ($cacheAvailable === true &&
+                (
+                    empty($userFromSession['is_anonymous']) &&
+                    (isset($userFromSession['status']) && $userFromSession['status'] != ANONYMOUS)
+                )
+            ) {
                 $apcVar = api_get_configuration_value('apc_prefix').'userinfo_'.$userFromSession['user_id'];
                 if (apcu_exists($apcVar)) {
                     if ($updateCache) {
@@ -2245,6 +2261,7 @@ function api_format_course_array($course_data)
     $_course['registration_code'] = !empty($course_data['registration_code']) ? sha1($course_data['registration_code']) : null;
     $_course['disk_quota'] = $course_data['disk_quota'];
     $_course['course_public_url'] = $webCourseHome.'/index.php';
+    $_course['course_sys_path'] = $courseSys.'/';
 
     if (array_key_exists('add_teachers_to_sessions_courses', $course_data)) {
         $_course['add_teachers_to_sessions_courses'] = $course_data['add_teachers_to_sessions_courses'];
@@ -2281,7 +2298,7 @@ function api_format_course_array($course_data)
             null,
             null,
             true,
-            false
+            true
         );
     }
 
@@ -2594,7 +2611,6 @@ function api_get_session_visibility(
     }
 
     $now = time();
-
     if (empty($session_id)) {
         return 0; // Means that the session is still available.
     }
@@ -2685,18 +2701,19 @@ function api_get_session_visibility(
  * This function returns a (star) session icon if the session is not null and
  * the user is not a student.
  *
- * @param int $session_id
- * @param int $status_id  User status id - if 5 (student), will return empty
+ * @param int $sessionId
+ * @param int $statusId  User status id - if 5 (student), will return empty
  *
  * @return string Session icon
  */
-function api_get_session_image($session_id, $status_id)
+function api_get_session_image($sessionId, $statusId)
 {
-    $session_id = (int) $session_id;
-    $session_img = '';
-    if ((int) $status_id != 5) { //check whether is not a student
-        if ($session_id > 0) {
-            $session_img = "&nbsp;&nbsp;".Display::return_icon(
+    $sessionId = (int) $sessionId;
+    $image = '';
+    if ($statusId != STUDENT) {
+        // Check whether is not a student
+        if ($sessionId > 0) {
+            $image = '&nbsp;&nbsp;'.Display::return_icon(
                 'star.png',
                 get_lang('SessionSpecificResource'),
                 ['align' => 'absmiddle'],
@@ -2705,7 +2722,7 @@ function api_get_session_image($session_id, $status_id)
         }
     }
 
-    return $session_img;
+    return $image;
 }
 
 /**
@@ -2728,10 +2745,10 @@ function api_get_session_condition(
     $session_id = (int) $session_id;
 
     if (empty($session_field)) {
-        $session_field = "session_id";
+        $session_field = 'session_id';
     }
     // Condition to show resources by session
-    $condition_add = $and ? " AND " : " WHERE ";
+    $condition_add = $and ? ' AND ' : ' WHERE ';
 
     if ($with_base_content) {
         $condition_session = $condition_add." ( $session_field = $session_id OR $session_field = 0 OR $session_field IS NULL) ";
@@ -4745,6 +4762,8 @@ function api_display_language_form($hide_if_no_choice = false, $showAsButton = f
  */
 function languageToCountryIsoCode($languageIsoCode)
 {
+    $allow = api_get_configuration_value('language_flags_by_country');
+
     // @todo save in DB
     switch ($languageIsoCode) {
         case 'ko':
@@ -4755,9 +4774,15 @@ function languageToCountryIsoCode($languageIsoCode)
             break;
         case 'ca':
             $country = 'es';
+            if ($allow) {
+                $country = 'catalan';
+            }
             break;
-        case 'gl':
+        case 'gl': // galego
             $country = 'es';
+            if ($allow) {
+                $country = 'galician';
+            }
             break;
         case 'ka':
             $country = 'ge';
@@ -4765,8 +4790,11 @@ function languageToCountryIsoCode($languageIsoCode)
         case 'sl':
             $country = 'si';
             break;
-        case 'eu':
+        case 'eu': // Euskera
             $country = 'es';
+            if ($allow) {
+                $country = 'basque';
+            }
             break;
         case 'cs':
             $country = 'cz';
@@ -4783,8 +4811,8 @@ function languageToCountryIsoCode($languageIsoCode)
         case 'he':
             $country = 'il';
             break;
-        case 'uk':
-            $country = 'ua'; //Ukraine
+        case 'uk': // Ukraine
+            $country = 'ua';
             break;
         case 'da':
             $country = 'dk';
@@ -8768,10 +8796,11 @@ function api_create_protected_dir($name, $parentDirectory)
  * @param string    email body
  * @param string    sender name
  * @param string    sender e-mail
- * @param array     extra headers in form $headers = array($name => $value) to allow parsing
- * @param array     data file (path and filename)
- * @param bool      True for attaching a embedded file inside content html (optional)
- * @param array     Additional parameters
+ * @param array  $extra_headers        in form $headers = array($name => $value) to allow parsing
+ * @param array  $data_file            (path and filename)
+ * @param bool   $embedded_image       True for attaching a embedded file inside content html (optional)
+ * @param array  $additionalParameters
+ * @param string $sendErrorTo          If there's an error while sending the email, $sendErrorTo will receive a notification
  *
  * @return int true if mail was sent
  *
@@ -8787,7 +8816,8 @@ function api_mail_html(
     $extra_headers = [],
     $data_file = [],
     $embedded_image = false,
-    $additionalParameters = []
+    $additionalParameters = [],
+    $sendErrorTo = ''
 ) {
     global $platform_email;
 
@@ -8813,43 +8843,18 @@ function api_mail_html(
     $mail->Priority = 3;
     $mail->SMTPKeepAlive = true;
 
-    // Default values
-    $notification = new Notification();
-    $defaultEmail = $notification->getDefaultPlatformSenderEmail();
-    $defaultName = $notification->getDefaultPlatformSenderName();
+    api_set_noreply_and_from_address_to_mailer(
+        $mail,
+        ['name' => $senderName, 'email' => $senderEmail],
+        !empty($extra_headers['reply_to']) ? $extra_headers['reply_to'] : []
+    );
 
-    // If the parameter is set don't use the admin.
-    $senderName = !empty($senderName) ? $senderName : $defaultName;
-    $senderEmail = !empty($senderEmail) ? $senderEmail : $defaultEmail;
-
-    // Reply to first
-    if (isset($extra_headers['reply_to']) && empty($platform_email['SMTP_UNIQUE_REPLY_TO'])) {
-        if (PHPMailer::validateAddress($extra_headers['reply_to']['mail'])) {
-            $mail->AddReplyTo(
-                $extra_headers['reply_to']['mail'],
-                $extra_headers['reply_to']['name']
-            );
-            // Errors to sender
-            $mail->AddCustomHeader('Errors-To: '.$extra_headers['reply_to']['mail']);
-            $mail->Sender = $extra_headers['reply_to']['mail'];
-            unset($extra_headers['reply_to']);
-        }
-    } else {
-        $mail->AddCustomHeader('Errors-To: '.$defaultEmail);
+    if (!empty($sendErrorTo) && PHPMailer::ValidateAddress($sendErrorTo)) {
+        $mail->AddCustomHeader('Errors-To: '.$sendErrorTo);
     }
 
-    //If the SMTP configuration only accept one sender
-    if (isset($platform_email['SMTP_UNIQUE_SENDER']) && $platform_email['SMTP_UNIQUE_SENDER']) {
-        $senderName = $platform_email['SMTP_FROM_NAME'];
-        $senderEmail = $platform_email['SMTP_FROM_EMAIL'];
-        $valid = PHPMailer::validateAddress($senderEmail);
-        if ($valid) {
-            //force-set Sender to $senderEmail, otherwise SetFrom only does it if it is currently empty
-            $mail->Sender = $senderEmail;
-        }
-    }
+    unset($extra_headers['reply_to']);
 
-    $mail->SetFrom($senderEmail, $senderName);
     $mail->Subject = $subject;
     $mail->AltBody = strip_tags(
         str_replace('<br />', "\n", api_html_entity_decode($message))
@@ -8858,7 +8863,6 @@ function api_mail_html(
     $list = api_get_configuration_value('send_all_emails_to');
     if (!empty($list) && isset($list['emails'])) {
         foreach ($list['emails'] as $email) {
-            //$mail->AddBCC($email);
             $mail->AddAddress($email);
         }
     }
@@ -8903,7 +8907,7 @@ function api_mail_html(
 
     $noReply = api_get_setting('noreply_email_address');
     if (!empty($noReply)) {
-        $message .= "<br />".get_lang('ThisIsAutomaticEmailNoReply');
+        $message .= '<br />'.get_lang('ThisIsAutomaticEmailNoReply');
     }
     $mailView->assign('content', $message);
 
@@ -8915,7 +8919,7 @@ function api_mail_html(
     $layout = $mailView->get_template('mail/mail.tpl');
     $mail->Body = $mailView->fetch($layout);
 
-    // Attachment ...
+    // Attachment.
     if (!empty($data_file)) {
         foreach ($data_file as $file_attach) {
             if (!empty($file_attach['path']) && !empty($file_attach['filename'])) {
@@ -9007,11 +9011,17 @@ function api_mail_html(
  */
 function api_protect_course_group($tool, $showHeader = true)
 {
-    $userId = api_get_user_id();
     $groupId = api_get_group_id();
-    $groupInfo = GroupManager::get_group_properties($groupId);
+    if (!empty($groupId)) {
+        $userId = api_get_user_id();
+        $groupInfo = GroupManager::get_group_properties($groupId);
 
-    if (!empty($groupInfo)) {
+        // Group doesn't exists
+        if (empty($groupInfo)) {
+            api_not_allowed($showHeader);
+        }
+
+        // Check group access
         $allow = GroupManager::user_has_access(
             $userId,
             $groupInfo['iid'],
@@ -9450,23 +9460,24 @@ function api_set_noreply_and_from_address_to_mailer(PHPMailer $mailer, array $se
     }
 
     $notification = new Notification();
-
     // If the parameter is set don't use the admin.
     $senderName = !empty($sender['name']) ? $sender['name'] : $notification->getDefaultPlatformSenderName();
     $senderEmail = !empty($sender['email']) ? $sender['email'] : $notification->getDefaultPlatformSenderEmail();
 
+    // Send errors to the platform admin
+    $adminEmail = api_get_setting('emailAdministrator');
+    if (PHPMailer::ValidateAddress($adminEmail)) {
+        $mailer->AddCustomHeader('Errors-To: '.$adminEmail);
+    }
+
     // Reply to first
     if (!$avoidReplyToAddress) {
-        $mailer->AddCustomHeader('Errors-To: '.$notification->getDefaultPlatformSenderEmail());
-
         if (
             !empty($replyToAddress) &&
-            $platformEmail['SMTP_UNIQUE_REPLY_TO'] &&
+            isset($platformEmail['SMTP_UNIQUE_REPLY_TO']) && $platformEmail['SMTP_UNIQUE_REPLY_TO'] &&
             PHPMailer::ValidateAddress($replyToAddress['mail'])
         ) {
             $mailer->AddReplyTo($replyToAddress['email'], $replyToAddress['name']);
-            // Errors to sender
-            $mailer->AddCustomHeader('Errors-To: '.$replyToAddress['mail']);
             $mailer->Sender = $replyToAddress['mail'];
         }
     }

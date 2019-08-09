@@ -10,6 +10,8 @@
  */
 require_once __DIR__.'/../inc/global.inc.php';
 
+api_protect_course_script(true);
+
 $TBL_ANSWER = Database::get_course_table(TABLE_QUIZ_ANSWER);
 $questionId = intval($_GET['questionId']);
 $answerId = intval($_GET['answerId']);

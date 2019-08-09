@@ -53,10 +53,10 @@ function check_max_number_of_members($value)
  */
 function check_groups_per_user($value)
 {
-    $groups_per_user = $value['groups_per_user'];
+    $groups_per_user = (int) $value['groups_per_user'];
     if (isset($_POST['id']) &&
-        intval($groups_per_user) != GroupManager::GROUP_PER_MEMBER_NO_LIMIT &&
-        GroupManager::get_current_max_groups_per_user($_POST['id']) > intval($groups_per_user)) {
+        $groups_per_user != GroupManager::GROUP_PER_MEMBER_NO_LIMIT &&
+        GroupManager::get_current_max_groups_per_user($_POST['id']) > $groups_per_user) {
         return false;
     }
 
@@ -127,8 +127,9 @@ for ($i = 1; $i <= 10; $i++) {
     $possible_values[$i] = $i;
 }
 $possible_values[GroupManager::GROUP_PER_MEMBER_NO_LIMIT] = get_lang('All');
+
 $group = [
-    $form->createElement('select', 'groups_per_user', null, $possible_values),
+    $form->createElement('select', 'groups_per_user', null, $possible_values, ['id' => 'groups_per_user']),
     $form->createElement('static', null, null, get_lang('QtyOfUserCanSubscribe_PartAfterNumber')),
 ];
 $form->addGroup($group, 'limit_group', get_lang('QtyOfUserCanSubscribe_PartBeforeNumber'), null, false);

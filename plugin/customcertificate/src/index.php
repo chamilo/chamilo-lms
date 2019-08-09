@@ -1,7 +1,9 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-if (intval($_GET['default']) == 1) {
+$isDefault = isset($_GET['default']) ? (int) $_GET['default'] : null;
+
+if ($isDefault === 1) {
     $cidReset = true;
 }
 
@@ -17,7 +19,7 @@ $enable = $plugin->get('enable_plugin_customcertificate') == 'true';
 $accessUrlId = api_get_current_access_url_id();
 $course_info = api_get_course_info();
 
-if (intval($_GET['default']) == 1) {
+if ($isDefault === 1) {
     $courseId = 0;
     $courseCode = '';
     $sessionId = 0;
@@ -72,15 +74,6 @@ $infoCertificate = Database::select(
     ],
     'first'
 );
-if (!is_array($infoCertificate)) {
-    $infoCertificate = [
-        'type_date_expediction' => '',
-        'year' => '',
-        'month' => '',
-        'day' => '',
-        'date_change' => '',
-    ];
-}
 
 $form = new FormValidator(
     'formEdit',
@@ -106,13 +99,13 @@ if ($form->validate()) {
             'c_id' => $formValues['c_id'],
             'session_id' => $formValues['session_id'],
             'content_course' => $formValues['content_course'],
-            'contents_type' => intval($formValues['contents_type']),
+            'contents_type' => (int) $formValues['contents_type'],
             'contents' => $contents,
             'date_change' => intval($formValues['date_change']),
             'date_start' => date("Y-m-d", strtotime($date_start)),
             'date_end' => date("Y-m-d", strtotime($date_end)),
             'place' => $formValues['place'],
-            'type_date_expediction' => intval($formValues['type_date_expediction']),
+            'type_date_expediction' => (int) $formValues['type_date_expediction'],
             'day' => $formValues['day'],
             'month' => $formValues['month'],
             'year' => $formValues['year'],
@@ -120,8 +113,8 @@ if ($form->validate()) {
             'signature_text2' => $formValues['signature_text2'],
             'signature_text3' => $formValues['signature_text3'],
             'signature_text4' => $formValues['signature_text4'],
-            'margin_left' => intval($formValues['margin_left']),
-            'margin_right' => intval($formValues['margin_right']),
+            'margin_left' => (int) $formValues['margin_left'],
+            'margin_right' => (int) $formValues['margin_right'],
             'certificate_default' => 0,
         ];
 
@@ -182,10 +175,9 @@ if ($form->validate()) {
             $infoCertificateDefault = Database::select(
                 '*',
                 $table,
-                ['where' => ['certificate_default = ? ' => 1]],
+                ['where' => ['access_url_id = ? AND certificate_default = ? ' => [$accessUrlId, 1]]],
                 'first'
             );
-
             if (!empty($infoCertificateDefault)) {
                 foreach ($fieldList as $field) {
                     if (!empty($infoCertificateDefault[$field]) && !$checkLogo[$field]) {
@@ -215,7 +207,13 @@ if (empty($infoCertificate)) {
     );
 
     if (!is_array($infoCertificate)) {
-        $infoCertificate = [];
+        $infoCertificate = [
+            'type_date_expediction' => '',
+            'year' => '',
+            'month' => '',
+            'day' => '',
+            'date_change' => '',
+        ];
     }
     if (!empty($infoCertificate)) {
         $useDefault = true;
@@ -245,7 +243,7 @@ $dir = '/';
 $courseInfo = api_get_course_info();
 $isAllowedToEdit = api_is_allowed_to_edit(null, true);
 $editorConfig = [
-    'ToolbarSet' => ($isAllowedToEdit ? 'Documents' : 'DocumentsStudent'),
+    'ToolbarSet' => $isAllowedToEdit ? 'Documents' : 'DocumentsStudent',
     'Width' => '100%',
     'Height' => '300',
     'cols-size' => [0, 12, 0],
@@ -455,7 +453,7 @@ $form->addText(
 );
 
 $group = [];
-$option1 = &$form->createElement(
+$option = &$form->createElement(
     'radio',
     'type_date_expediction',
     '',
@@ -467,9 +465,9 @@ $option1 = &$form->createElement(
         (($sessionId == 0) ? 'disabled' : ''),
     ]
 );
-$group[] = $option1;
+$group[] = $option;
 
-$option2 = &$form->createElement(
+$option = &$form->createElement(
     'radio',
     'type_date_expediction',
     '',
@@ -480,9 +478,22 @@ $option2 = &$form->createElement(
         'onclick' => 'javascript: typeDateExpedictionSwitchRadioButton();',
     ]
 );
-$group[] = $option2;
+$group[] = $option;
 
-$option4 = &$form->createElement(
+$option = &$form->createElement(
+    'radio',
+    'type_date_expediction',
+    '',
+    get_lang('UseDateGenerationCertificate'),
+    4,
+    [
+        'id' => 'type_date_expediction_4',
+        'onclick' => 'javascript: typeDateExpedictionSwitchRadioButton();',
+    ]
+);
+$group[] = $option;
+
+$option = &$form->createElement(
     'radio',
     'type_date_expediction',
     '',
@@ -493,9 +504,9 @@ $option4 = &$form->createElement(
         'onclick' => 'javascript: typeDateExpedictionSwitchRadioButton();',
     ]
 );
-$group[] = $option4;
+$group[] = $option;
 
-$option3 = &$form->createElement(
+$option = &$form->createElement(
     'radio',
     'type_date_expediction',
     '',
@@ -506,7 +517,7 @@ $option3 = &$form->createElement(
         'onclick' => 'javascript: typeDateExpedictionSwitchRadioButton();',
     ]
 );
-$group[] = $option3;
+$group[] = $option;
 
 $form->addGroup(
     $group,
@@ -939,6 +950,7 @@ function checkInstanceImage($certificateId, $imagePath, $field, $type = 'certifi
     $table = Database::get_main_table(CustomCertificatePlugin::TABLE_CUSTOMCERTIFICATE);
     $imagePath = Database::escape_string($imagePath);
     $field = Database::escape_string($field);
+    $certificateId = (int) $certificateId;
 
     $sql = "SELECT * FROM $table WHERE $field = '$imagePath'";
     $res = Database::query($sql);

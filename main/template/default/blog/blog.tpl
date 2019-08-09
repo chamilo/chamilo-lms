@@ -101,7 +101,7 @@
     </div>
 </div>
 <script>
-    $(document).on('ready', function () {
+    $(function () {
         $('.btn-read-more').on('click', function (e) {
             e.preventDefault();
 

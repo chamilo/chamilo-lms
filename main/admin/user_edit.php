@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use ChamiloSession as Session;
+
 /**
  * @package chamilo.admin
  */
@@ -69,8 +71,8 @@ $htmlHeadXtra[] = api_get_css_asset('cropper/dist/cropper.min.css');
 $htmlHeadXtra[] = api_get_asset('cropper/dist/cropper.min.js');
 $tool_name = get_lang('ModifyUserInfo');
 
-$interbreadcrumb[] = ['url' => 'index.php', "name" => get_lang('PlatformAdmin')];
-$interbreadcrumb[] = ['url' => "user_list.php", "name" => get_lang('UserList')];
+$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('PlatformAdmin')];
+$interbreadcrumb[] = ['url' => 'user_list.php', 'name' => get_lang('UserList')];
 
 $table_user = Database::get_main_table(TABLE_MAIN_USER);
 $table_admin = Database::get_main_table(TABLE_MAIN_ADMIN);
@@ -329,9 +331,8 @@ if ($allowEmailTemplate) {
 }
 
 // the $jqueryReadyContent variable collects all functions that will be load in the
-// $(document).ready javascript function
 $htmlHeadXtra[] = '<script>
-$(document).ready(function(){
+$(function () {
     '.$jqueryReadyContent.'
 });
 </script>';
@@ -489,6 +490,8 @@ if ($form->validate()) {
             $userInfo['complete_name_with_username'],
             api_get_path(WEB_CODE_PATH).'admin/user_edit.php?user_id='.$user_id
         );
+
+        Session::erase('system_timezone');
 
         Display::addFlash(Display::return_message($message, 'normal', false));
         header('Location: user_list.php');

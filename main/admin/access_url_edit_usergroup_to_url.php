@@ -109,7 +109,7 @@ echo '</div>';
 api_display_tool_title($tool_name);
 
 $noUserGroupList = $userGroupList = [];
-$ajax_search = $add_type == 'unique' ? true : false;
+$ajax_search = $add_type === 'unique' ? true : false;
 
 if ($ajax_search) {
     $userGroups = UrlManager::get_url_rel_usergroup_data($access_url_id);

@@ -10,11 +10,11 @@ use ChamiloSession as Session;
  */
 require_once __DIR__.'/../inc/global.inc.php';
 
-$id = isset($_REQUEST['id']) ? (int) $_GET['id'] : null; //exe id
+$id = isset($_REQUEST['id']) ? (int) $_GET['id'] : 0; // exe id
 $show_headers = isset($_REQUEST['show_headers']) ? (int) $_REQUEST['show_headers'] : null;
 $origin = api_get_origin();
 
-if ($origin == 'learnpath') {
+if (in_array($origin, ['learnpath', 'embeddable'])) {
     $show_headers = false;
 }
 
@@ -57,6 +57,13 @@ if (!$is_allowedToEdit) {
 $htmlHeadXtra[] = '<link rel="stylesheet" href="'.api_get_path(WEB_LIBRARY_JS_PATH).'hotspot/css/hotspot.css">';
 $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_JS_PATH).'hotspot/js/hotspot.js"></script>';
 $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_JS_PATH).'annotation/js/annotation.js"></script>';
+
+if (!empty($objExercise->getResultAccess())) {
+    $htmlHeadXtra[] = api_get_css(api_get_path(WEB_LIBRARY_PATH).'javascript/epiclock/renderers/minute/epiclock.minute.css');
+    $htmlHeadXtra[] = api_get_js('epiclock/javascript/jquery.dateformat.min.js');
+    $htmlHeadXtra[] = api_get_js('epiclock/javascript/jquery.epiclock.min.js');
+    $htmlHeadXtra[] = api_get_js('epiclock/renderers/minute/epiclock.minute.js');
+}
 
 if ($show_headers) {
     $interbreadcrumb[] = [

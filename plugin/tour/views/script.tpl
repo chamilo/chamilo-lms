@@ -51,13 +51,13 @@
 
                                 intro.start();
                             }
-                        }).appendTo('#tour-button-cotainer');
+                        }).appendTo('#tour-button-container');
                     });
                 }
             };
         })();
 
-        $(document).on('ready', function() {
+        $(function () {
             var pages = {{ tour.pages }};
 
             $.each(pages, function(index, page) {
@@ -84,5 +84,5 @@
         });
     </script>
 
-    <div id="tour-button-cotainer"></div>
+    <div id="tour-button-container"></div>
 {% endif %}

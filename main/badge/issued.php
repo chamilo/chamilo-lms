@@ -100,7 +100,7 @@ $skillIssueInfo = [
     'argumentation' => $skillIssue->getArgumentation(),
     'source_name' => $skillIssue->getSourceName(),
     'user_id' => $skillIssue->getUser()->getId(),
-    'user_complete_name' => $skillIssue->getUser()->getCompleteName(),
+    'user_complete_name' => UserManager::formatUserFullName($skillIssue->getUser()),
     'skill_id' => $skillIssue->getSkill()->getId(),
     'skill_badge_image' => Skill::getWebIconPath($skillIssue->getSkill()),
     'skill_name' => $skillIssue->getSkill()->getName(),
@@ -123,7 +123,7 @@ foreach ($skillIssueComments as $comment) {
     $skillIssueInfo['comments'][] = [
         'text' => $comment->getFeedbackText(),
         'value' => $comment->getFeedbackValue(),
-        'giver_complete_name' => $comment->getFeedbackGiver()->getCompleteName(),
+        'giver_complete_name' => UserManager::formatUserFullName($comment->getFeedbackGiver()),
         'datetime' => api_format_date($commentDate, DATE_TIME_FORMAT_SHORT),
     ];
 }
@@ -183,7 +183,7 @@ if ($showLevels && $allowToEdit) {
 
     if ($formAcquiredLevel->validate() && $allowComment) {
         $values = $formAcquiredLevel->exportValues();
-        $level = $skillLevelRepo->find(intval($values['acquired_level']));
+        $level = $skillLevelRepo->find($values['acquired_level']);
         $skillIssue->setAcquiredLevel($level);
 
         $entityManager->persist($skillIssue);

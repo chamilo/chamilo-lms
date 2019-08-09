@@ -83,23 +83,9 @@ if ($form->validate()) {
     switch ($confirmPayments['PAYMENTINFO_0_PAYMENTSTATUS']) {
         case 'Completed':
             $saleIsCompleted = $plugin->completeSale($sale['id']);
-            if ($saleIsCompleted && $buyingSession) {
+            if ($saleIsCompleted) {
                 Display::addFlash(
-                    Display::return_message(
-                        sprintf($plugin->get_lang('SubscriptionToCourseXSuccessful'), $session['name']),
-                        'success'
-                    )
-                );
-                $plugin->storePayouts($sale['id']);
-                break;
-            }
-
-            if ($saleIsCompleted && $buyingCourse) {
-                Display::addFlash(
-                    Display::return_message(
-                        sprintf($plugin->get_lang('SubscriptionToCourseXSuccessful'), $course['title']),
-                        'success'
-                    )
+                    $plugin->getSubscriptionSuccessMessage($sale)
                 );
                 $plugin->storePayouts($sale['id']);
                 break;

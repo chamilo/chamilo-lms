@@ -16,10 +16,8 @@
             </div>
         </div>
         <div class="col-md-6">
-            {#{{ social_search_block }}#}
-
             <div id="wallMessages">
-                {{ social_wall_block }}
+                {{ add_post_form }}
                 <div class="spinner"></div>
                 <div class="panel panel-preview panel-default" hidden="true">
                     <div class="panel-heading">
@@ -29,19 +27,16 @@
                         <div class="url_preview"></div>
                     </div>
                 </div>
-                {{ social_post_wall_block }}
+                {{ posts }}
                 {{ social_auto_extend_link }}
             </div>
 
-            {#{{ social_skill_block }}#}
             {{ social_right_content }}
             <div id="message_ajax_reponse" class=""></div>
             <div id="display_response_id"></div>
         </div>
         <div class="col-md-3">
-
             {{ social_group_block }}
-
             <!-- Block chat list -->
             <div class="chat-friends">
                 <div class="panel-group" id="blocklistFriends" role="tablist" aria-multiselectable="true">

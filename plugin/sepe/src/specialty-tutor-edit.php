@@ -189,16 +189,16 @@ if (api_is_platform_admin()) {
         $tpl->assign('action_id', intval($_GET['action_id']));
         $tpl->assign('specialty_id', intval($_GET['specialty_id']));
         $tpl->assign('tutor_id', intval($_GET['tutor_id']));
-        $info = getInfoSpecialtyTutor(intval($_GET['tutor_id']));
+        $info = getInfoSpecialtyTutor($_GET['tutor_id']);
         $tpl->assign('info', $info);
         $tpl->assign('new_tutor', '0');
         $platformUserId = $info['platform_user_id'];
     }
-    $tutorsList = getTutorsSpecialty(intval($_GET['specialty_id']));
+    $tutorsList = getTutorsSpecialty($_GET['specialty_id']);
     $tpl->assign('ExistingTutorsList', $tutorsList);
 
     $listTeachers = CourseManager::getTeachersFromCourse($courseId);
-    $listTeachers = freeTeacherList($listTeachers, intval($_GET['specialty_id']), $platformUserId);
+    $listTeachers = freeTeacherList($listTeachers, $_GET['specialty_id'], $platformUserId);
     $tpl->assign('listTeachers', $listTeachers);
     if (isset($_SESSION['sepe_message_info'])) {
         $tpl->assign('message_info', $_SESSION['sepe_message_info']);

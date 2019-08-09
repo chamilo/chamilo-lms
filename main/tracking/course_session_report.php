@@ -98,7 +98,7 @@ foreach ($course_list as $current_course) {
     $attempt_result = [];
 
     // Getting LP list
-    $list = new LearnpathList('', $current_course['code'], $session_id);
+    $list = new LearnpathList('', $course_info, $session_id);
     $lp_list = $list->get_flat_list();
 
     // Looping LPs

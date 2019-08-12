@@ -73,7 +73,6 @@ switch ($action) {
         }
         $user_id = api_get_user_id();
         $name_search = Security::remove_XSS($_POST['search_name_q']);
-        $number_friends = 0;
 
         if (isset($name_search) && $name_search != 'undefined') {
             $friends = SocialManager::get_friends($user_id, null, $name_search);
@@ -193,7 +192,6 @@ switch ($action) {
                 }
                 break;
             case 'unload_course':
-                break;
             default:
                 break;
         }
@@ -264,7 +262,6 @@ switch ($action) {
             break;
         }
         $start = isset($_REQUEST['start']) ? (int) $_REQUEST['start'] : 0;
-        $length = isset($_REQUEST['length']) ? (int) $_REQUEST['length'] : 10;
         $userId = isset($_REQUEST['u']) ? (int) $_REQUEST['u'] : api_get_user_id();
 
         $html = '';

@@ -1341,7 +1341,7 @@ class MessageManager
             );
         }
 
-        $message_content = Display::page_subheader(str_replace("\\", "", $title));
+        $message_content = Display::page_subheader(str_replace("\\", '', $title));
 
         $receiverUserInfo = [];
         if (!empty($row['user_receiver_id'])) {

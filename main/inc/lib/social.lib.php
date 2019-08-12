@@ -2540,11 +2540,18 @@ class SocialManager extends UserManager
      */
     public static function wrapPost($message, $content)
     {
+        $class = '';
+        if ($message['msg_status'] === MESSAGE_STATUS_PROMOTED) {
+            $class = 'promoted_post';
+        }
+
         return Display::panel($content, '',
             '',
             'default',
             '',
-            'post_'.$message['id']
+            'post_'.$message['id'],
+            null,
+            $class
         );
     }
 
@@ -3302,9 +3309,9 @@ class SocialManager extends UserManager
         }
 
         $postAttachment = self::getPostAttachment($message);
+        $class = $message['msg_status'] === MESSAGE_STATUS_PROMOTED ? 'promoted' : '';
 
-        $html = '';
-        $html .= '<div class="top-mediapost" >';
+        $html = '<div class = "top-mediapost '.$class.'"" >';
         $html .= '<div class="pull-right btn-group btn-group-sm">';
 
         $html .= MessageManager::getLikesButton(

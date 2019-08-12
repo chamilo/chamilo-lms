@@ -9481,6 +9481,189 @@ class Exercise
     }
 
     /**
+     * @param Question $objQuestionTmp
+     * @param int      $questionId
+     * @param bool     $show_results
+     * @param array    $question_result
+     */
+    public function getDelineationResult(Question $objQuestionTmp, $questionId, $show_results, $question_result)
+    {
+        $id = (int) $objQuestionTmp->id;
+        $questionId = (int) $questionId;
+
+        $final_overlap = $question_result['extra']['final_overlap'];
+        $final_missing = $question_result['extra']['final_missing'];
+        $final_excess = $question_result['extra']['final_excess'];
+
+        $overlap_color = $question_result['extra']['overlap_color'];
+        $missing_color = $question_result['extra']['missing_color'];
+        $excess_color = $question_result['extra']['excess_color'];
+
+        $threadhold1 = $question_result['extra']['threadhold1'];
+        $threadhold2 = $question_result['extra']['threadhold2'];
+        $threadhold3 = $question_result['extra']['threadhold3'];
+
+        if ($show_results) {
+            if ($overlap_color) {
+                $overlap_color = 'green';
+            } else {
+                $overlap_color = 'red';
+            }
+
+            if ($missing_color) {
+                $missing_color = 'green';
+            } else {
+                $missing_color = 'red';
+            }
+            if ($excess_color) {
+                $excess_color = 'green';
+            } else {
+                $excess_color = 'red';
+            }
+
+            if (!is_numeric($final_overlap)) {
+                $final_overlap = 0;
+            }
+
+            if (!is_numeric($final_missing)) {
+                $final_missing = 0;
+            }
+            if (!is_numeric($final_excess)) {
+                $final_excess = 0;
+            }
+
+            if ($final_excess > 100) {
+                $final_excess = 100;
+            }
+
+            $table_resume = '
+                    <table class="data_table">
+                        <tr class="row_odd" >
+                            <td>&nbsp;</td>
+                            <td><b>'.get_lang('Requirements').'</b></td>
+                            <td><b>'.get_lang('YourAnswer').'</b></td>
+                        </tr>
+                        <tr class="row_even">
+                            <td><b>'.get_lang('Overlap').'</b></td>
+                            <td>'.get_lang('Min').' '.$threadhold1.'</td>
+                            <td>
+                                <div style="color:'.$overlap_color.'">
+                                    '.(($final_overlap < 0) ? 0 : intval($final_overlap)).'
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><b>'.get_lang('Excess').'</b></td>
+                            <td>'.get_lang('Max').' '.$threadhold2.'</td>
+                            <td>
+                                <div style="color:'.$excess_color.'">
+                                    '.(($final_excess < 0) ? 0 : intval($final_excess)).'
+                                </div>
+                            </td>
+                        </tr>
+                        <tr class="row_even">
+                            <td><b>'.get_lang('Missing').'</b></td>
+                            <td>'.get_lang('Max').' '.$threadhold3.'</td>
+                            <td>
+                                <div style="color:'.$missing_color.'">
+                                    '.(($final_missing < 0) ? 0 : intval($final_missing)).'
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                ';
+
+            $answerType = $objQuestionTmp->selectType();
+            if ($answerType != HOT_SPOT_DELINEATION) {
+                $item_list = explode('@@', $destination);
+                $try = $item_list[0];
+                $lp = $item_list[1];
+                $destinationid = $item_list[2];
+                $url = $item_list[3];
+                $table_resume = '';
+            } else {
+                if ($next == 0) {
+                    $try = $try_hotspot;
+                    $lp = $lp_hotspot;
+                    $destinationid = $select_question_hotspot;
+                    $url = $url_hotspot;
+                } else {
+                    //show if no error
+                    $comment = $answerComment = $objAnswerTmp->selectComment($nbrAnswers);
+                    $answerDestination = $objAnswerTmp->selectDestination($nbrAnswers);
+                }
+            }
+
+            echo '<h1><div style="color:#333;">'.get_lang('Feedback').'</div></h1>';
+            if ($answerType == HOT_SPOT_DELINEATION) {
+                if ($organs_at_risk_hit > 0) {
+                    $message = '<br />'.get_lang('ResultIs').' <b>'.$result_comment.'</b><br />';
+                    $message .= '<p style="color:#DC0A0A;"><b>'.get_lang('OARHit').'</b></p>';
+                } else {
+                    $message = '<p>'.get_lang('YourDelineation').'</p>';
+                    $message .= $table_resume;
+                    $message .= '<br />'.get_lang('ResultIs').' <b>'.$result_comment.'</b><br />';
+                }
+                $message .= '<p>'.$comment.'</p>';
+                echo $message;
+            } else {
+                echo '<p>'.$comment.'</p>';
+            }
+
+            // Showing the score
+            /*$queryfree = "SELECT marks FROM $TBL_TRACK_ATTEMPT
+                          WHERE exe_id = $id AND question_id =  $questionId";
+            $resfree = Database::query($queryfree);
+            $questionScore = Database::result($resfree, 0, 'marks');
+            $totalScore += $questionScore;*/
+            $relPath = api_get_path(REL_PATH);
+            echo '</table></td></tr>';
+            echo "
+                        <tr>
+                            <td colspan=\"2\">
+                                <div id=\"hotspot-solution\"></div>
+                                <script>
+                                    $(function() {
+                                        new HotspotQuestion({
+                                            questionId: $questionId,
+                                            exerciseId: {$this->id},
+                                            exeId: $id,
+                                            selector: '#hotspot-solution',
+                                            for: 'solution',
+                                            relPath: '$relPath'
+                                        });
+                                    });
+                                </script>
+                            </td>
+                        </tr>
+                    </table>
+                ";
+        }
+    }
+
+    /**
+     * Clean exercise session variables.
+     */
+    public static function cleanSessionVariables()
+    {
+        Session::erase('objExercise');
+        Session::erase('exe_id');
+        Session::erase('calculatedAnswerId');
+        Session::erase('duration_time_previous');
+        Session::erase('duration_time');
+        Session::erase('objQuestion');
+        Session::erase('objAnswer');
+        Session::erase('questionList');
+        Session::erase('exerciseResult');
+        Session::erase('firstTime');
+
+        Session::erase('exerciseResultCoordinates');
+        Session::erase('hotspot_coord');
+        Session::erase('hotspot_dest');
+        Session::erase('hotspot_delineation_result');
+    }
+
+    /**
      * Gets the question list ordered by the question_order setting (drag and drop).
      *
      * @return array
@@ -9964,188 +10147,5 @@ class Exercise
         );
 
         return $group;
-    }
-
-    /**
-     * @param Question $objQuestionTmp
-     * @param int      $questionId
-     * @param bool     $show_results
-     * @param array    $question_result
-     */
-    public function getDelineationResult(Question $objQuestionTmp, $questionId, $show_results, $question_result)
-    {
-        $id = (int) $objQuestionTmp->id;
-        $questionId = (int) $questionId;
-
-        $final_overlap = $question_result['extra']['final_overlap'];
-        $final_missing = $question_result['extra']['final_missing'];
-        $final_excess = $question_result['extra']['final_excess'];
-
-        $overlap_color = $question_result['extra']['overlap_color'];
-        $missing_color = $question_result['extra']['missing_color'];
-        $excess_color = $question_result['extra']['excess_color'];
-
-        $threadhold1 = $question_result['extra']['threadhold1'];
-        $threadhold2 = $question_result['extra']['threadhold2'];
-        $threadhold3 = $question_result['extra']['threadhold3'];
-
-        if ($show_results) {
-            if ($overlap_color) {
-                $overlap_color = 'green';
-            } else {
-                $overlap_color = 'red';
-            }
-
-            if ($missing_color) {
-                $missing_color = 'green';
-            } else {
-                $missing_color = 'red';
-            }
-            if ($excess_color) {
-                $excess_color = 'green';
-            } else {
-                $excess_color = 'red';
-            }
-
-            if (!is_numeric($final_overlap)) {
-                $final_overlap = 0;
-            }
-
-            if (!is_numeric($final_missing)) {
-                $final_missing = 0;
-            }
-            if (!is_numeric($final_excess)) {
-                $final_excess = 0;
-            }
-
-            if ($final_excess > 100) {
-                $final_excess = 100;
-            }
-
-            $table_resume = '
-                    <table class="data_table">
-                        <tr class="row_odd" >
-                            <td>&nbsp;</td>
-                            <td><b>'.get_lang('Requirements').'</b></td>
-                            <td><b>'.get_lang('YourAnswer').'</b></td>
-                        </tr>
-                        <tr class="row_even">
-                            <td><b>'.get_lang('Overlap').'</b></td>
-                            <td>'.get_lang('Min').' '.$threadhold1.'</td>
-                            <td>
-                                <div style="color:'.$overlap_color.'">
-                                    '.(($final_overlap < 0) ? 0 : intval($final_overlap)).'
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td><b>'.get_lang('Excess').'</b></td>
-                            <td>'.get_lang('Max').' '.$threadhold2.'</td>
-                            <td>
-                                <div style="color:'.$excess_color.'">
-                                    '.(($final_excess < 0) ? 0 : intval($final_excess)).'
-                                </div>
-                            </td>
-                        </tr>
-                        <tr class="row_even">
-                            <td><b>'.get_lang('Missing').'</b></td>
-                            <td>'.get_lang('Max').' '.$threadhold3.'</td>
-                            <td>
-                                <div style="color:'.$missing_color.'">
-                                    '.(($final_missing < 0) ? 0 : intval($final_missing)).'
-                                </div>
-                            </td>
-                        </tr>
-                    </table>
-                ';
-
-            $answerType = $objQuestionTmp->selectType();
-            if ($answerType != HOT_SPOT_DELINEATION) {
-                $item_list = explode('@@', $destination);
-                $try = $item_list[0];
-                $lp = $item_list[1];
-                $destinationid = $item_list[2];
-                $url = $item_list[3];
-                $table_resume = '';
-            } else {
-                if ($next == 0) {
-                    $try = $try_hotspot;
-                    $lp = $lp_hotspot;
-                    $destinationid = $select_question_hotspot;
-                    $url = $url_hotspot;
-                } else {
-                    //show if no error
-                    $comment = $answerComment = $objAnswerTmp->selectComment($nbrAnswers);
-                    $answerDestination = $objAnswerTmp->selectDestination($nbrAnswers);
-                }
-            }
-
-            echo '<h1><div style="color:#333;">'.get_lang('Feedback').'</div></h1>';
-            if ($answerType == HOT_SPOT_DELINEATION) {
-                if ($organs_at_risk_hit > 0) {
-                    $message = '<br />'.get_lang('ResultIs').' <b>'.$result_comment.'</b><br />';
-                    $message .= '<p style="color:#DC0A0A;"><b>'.get_lang('OARHit').'</b></p>';
-                } else {
-                    $message = '<p>'.get_lang('YourDelineation').'</p>';
-                    $message .= $table_resume;
-                    $message .= '<br />'.get_lang('ResultIs').' <b>'.$result_comment.'</b><br />';
-                }
-                $message .= '<p>'.$comment.'</p>';
-                echo $message;
-            } else {
-                echo '<p>'.$comment.'</p>';
-            }
-
-            // Showing the score
-            /*$queryfree = "SELECT marks FROM $TBL_TRACK_ATTEMPT
-                          WHERE exe_id = $id AND question_id =  $questionId";
-            $resfree = Database::query($queryfree);
-            $questionScore = Database::result($resfree, 0, 'marks');
-            $totalScore += $questionScore;*/
-            $relPath = api_get_path(REL_PATH);
-            echo '</table></td></tr>';
-            echo "
-                        <tr>
-                            <td colspan=\"2\">
-                                <div id=\"hotspot-solution\"></div>
-                                <script>
-                                    $(function() {
-                                        new HotspotQuestion({
-                                            questionId: $questionId,
-                                            exerciseId: {$this->id},
-                                            exeId: $id,
-                                            selector: '#hotspot-solution',
-                                            for: 'solution',
-                                            relPath: '$relPath'
-                                        });
-                                    });
-                                </script>
-                            </td>
-                        </tr>
-                    </table>
-                ";
-        }
-    }
-
-    /**
-     * Clean exercise session variables
-     */
-    public static function cleanSessionVariables()
-    {
-        Session::erase('objExercise');
-        Session::erase('exe_id');
-        Session::erase('calculatedAnswerId');
-        Session::erase('duration_time_previous');
-        Session::erase('duration_time');
-        Session::erase('objQuestion');
-        Session::erase('objAnswer');
-        Session::erase('questionList');
-        Session::erase('exerciseResult');
-        Session::erase('firstTime');
-
-        Session::erase('exerciseResultCoordinates');
-        Session::erase('hotspot_coord');
-        Session::erase('hotspot_dest');
-        Session::erase('hotspot_delineation_result');
     }
 }

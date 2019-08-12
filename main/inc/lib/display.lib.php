@@ -2557,6 +2557,7 @@ class Display
      * @param string $extra
      * @param string $id
      * @param string $customColor
+     * @param string $extraClass
      *
      * @return string
      */
@@ -2567,7 +2568,8 @@ class Display
         $type = 'default',
         $extra = '',
         $id = '',
-        $customColor = ''
+        $customColor = '',
+        $extraClass = ''
     ) {
         $headerStyle = '';
         if (!empty($customColor)) {
@@ -2584,7 +2586,7 @@ class Display
         }
 
         return '
-            <div '.$id.' class="panel panel-'.$style.'">
+            <div '.$id.' class="panel panel-'.$style.' '.$extraClass.' ">
                 '.$title.'
                 '.self::contentPanel($content).'
                 '.$footer.'

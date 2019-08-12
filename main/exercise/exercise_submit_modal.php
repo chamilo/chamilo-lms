@@ -14,22 +14,6 @@ api_protect_course_script();
 
 require_once api_get_path(LIBRARY_PATH).'geometry.lib.php';
 
-$message = null;
-$dbg_local = 0;
-$gradebook = null;
-$final_overlap = null;
-$final_missing = null;
-$final_excess = null;
-$threadhold1 = null;
-$threadhold2 = null;
-$threadhold3 = null;
-
-$exerciseResult = Session::read('exerciseResult');
-$exerciseResultCoordinates = isset($_REQUEST['exerciseResultCoordinates']) ? $_REQUEST['exerciseResultCoordinates'] : null;
-
-$learnpath_id = isset($_REQUEST['learnpath_id']) ? (int) $_REQUEST['learnpath_id'] : 0;
-$learnpath_item_id = isset($_REQUEST['learnpath_item_id']) ? (int) $_REQUEST['learnpath_item_id'] : 0;
-
 /** @var Exercise $objExercise */
 $objExercise = Session::read('objExercise');
 
@@ -37,20 +21,23 @@ if (empty($objExercise)) {
     api_not_allowed();
 }
 
-Session::write('hotspot_coord', []);
-$newQuestionList = Session::read('newquestionList', []);
+$feedbackType = $objExercise->getFeedbackType();
+$exerciseType = $objExercise->type;
+if (!in_array($feedbackType, [EXERCISE_FEEDBACK_TYPE_DIRECT, EXERCISE_FEEDBACK_TYPE_POPUP])) {
+    api_not_allowed();
+}
+
+$exerciseResult = Session::read('exerciseResult');
+$learnpath_id = isset($_REQUEST['learnpath_id']) ? (int) $_REQUEST['learnpath_id'] : 0;
+$learnpath_item_id = isset($_REQUEST['learnpath_item_id']) ? (int) $_REQUEST['learnpath_item_id'] : 0;
 $questionList = Session::read('questionList');
 
 $exerciseId = (int) $_GET['exerciseId'];
-$exerciseType = (int) $_GET['exerciseType'];
+//$exerciseType = (int) $_GET['exerciseType'];
 $questionNum = (int) $_GET['num'];
-$nbrQuestions = isset($_GET['nbrQuestions']) ? (int) $_GET['nbrQuestions'] : null;
+//$nbrQuestions = isset($_GET['nbrQuestions']) ? (int) $_GET['nbrQuestions'] : null;
 $questionId = $questionList[$questionNum];
 
-// Clean extra session variables
-Session::erase('objExerciseExtra'.$exerciseId);
-Session::erase('exerciseResultExtra'.$exerciseId);
-Session::erase('questionListExtra'.$exerciseId);
 $choiceValue = isset($_GET['choice']) ? $_GET['choice'] : '';
 $hotSpot = isset($_GET['hotspot']) ? $_GET['hotspot'] : '';
 
@@ -106,11 +93,11 @@ if (empty($choiceValue) && empty($hotSpot)) {
         //var my_choiceDc = $('*[name*=\"choiceDegreeCertainty['+question_id+']\"]').serialize();        
     ";
 
-    $url = api_get_path(WEB_CODE_PATH).'exercise/exercise_submit_modal.php';
     // IMPORTANT
     // This is the real redirect function
-    $extraUrl = '&exerciseId='.$exerciseId.'&num='.$questionNum.'&exerciseType='.$exerciseType.'&'.api_get_cidreq().'learnpath_id='.$learnpath_id.'&learnpath_item_id='.$learnpath_item_id;
-    echo ' url = "'.addslashes($url).'?hotspotcoord="+ hotspotcoord + "&"+ hotspot + "&"+ my_choice + "&'.$extraUrl.'";';
+    $extraUrl = '&exerciseId='.$exerciseId.'&num='.$questionNum.'&learnpath_id='.$learnpath_id.'&learnpath_item_id='.$learnpath_item_id;
+    $url = api_get_path(WEB_CODE_PATH).'exercise/exercise_submit_modal.php?'.api_get_cidreq().$extraUrl;
+    echo ' url = "'.addslashes($url).'&hotspotcoord="+ hotspotcoord + "&"+ hotspot + "&"+ my_choice;';
     echo "$('#global-modal .modal-body').load(url);";
     echo '</script>';
     exit;
@@ -141,32 +128,11 @@ if (is_array($choice)) {
 
 // the script "exercise_result.php" will take the variable $exerciseResult from the session
 Session::write('exerciseResult', $exerciseResult);
-Session::write('exerciseResultCoordinates', $exerciseResultCoordinates);
 
-// creates a temporary Question object
-if (in_array($questionId, $questionList)) {
-    $objQuestionTmp = Question::read($questionId);
-    $questionName = $objQuestionTmp->selectTitle();
-    $questionDescription = $objQuestionTmp->selectDescription();
-    $questionWeighting = $objQuestionTmp->selectWeighting();
-    $answerType = $objQuestionTmp->selectType();
-    $quesId = $objQuestionTmp->selectId(); //added by priya saini
-}
-
+$objQuestionTmp = Question::read($questionId);
+$answerType = $objQuestionTmp->selectType();
 $objAnswerTmp = new Answer($questionId);
 $nbrAnswers = $objAnswerTmp->selectNbrAnswers();
-$choice = $exerciseResult[$questionId];
-$destination = [];
-$comment = '';
-$next = 1;
-Session::write('hotspot_coord', []);
-Session::write('hotspot_dest', []);
-$overlap_color = $missing_color = $excess_color = false;
-$organs_at_risk_hit = 0;
-$wrong_results = false;
-$hot_spot_load = false;
-$questionScore = 0;
-$totalScore = 0;
 $showResult = false;
 
 $objAnswerTmp = new Answer($questionId, api_get_course_int_id());
@@ -194,15 +160,16 @@ switch ($answerType) {
             $_SESSION['exerciseResultCoordinates'][$questionId] = $choiceValue; //needed for exercise_result.php
             $delineation_cord = $objAnswerTmp->selectHotspotCoordinates(1);
             $answer_delineation_destination = $objAnswerTmp->selectDestination(1);
-            $_SESSION['hotspot_coord'][1] = $delineation_cord;
-            $_SESSION['hotspot_dest'][1] = $answer_delineation_destination;
+            $_SESSION['hotspot_coord'][$questionId][1] = $delineation_cord;
+            $_SESSION['hotspot_dest'][$questionId][1] = $answer_delineation_destination;
         }
         break;
     case CALCULATED_ANSWER:
-        $_SESSION['calculatedAnswerId'][$questionId] = mt_rand(
+        /*$_SESSION['calculatedAnswerId'][$questionId] = mt_rand(
             1,
             $nbrAnswers
-        );
+        );*/
+        //var_dump($_SESSION['calculatedAnswerId'][$questionId]);
         break;
 }
 
@@ -223,16 +190,6 @@ $result = $objExercise->manage_answer(
     true
 );
 $manageAnswerHtmlContent = ob_get_clean();
-
-if ($showResult) {
-    /*echo $objQuestionTmp->return_header(
-        $objExercise,
-        $questionNum,
-        []
-    );
-    echo $manageAnswerHtmlContent;*/
-}
-
 $contents = '';
 $answerCorrect = false;
 if (!empty($result)) {
@@ -255,9 +212,6 @@ if ($objExercise->getFeedbackType() === EXERCISE_FEEDBACK_TYPE_DIRECT) {
         $answerId = $result['correct_answer_id'];
         $contents = $objAnswerTmp->selectComment($answerId);
     }
-    if ($answerType === HOT_SPOT_DELINEATION) {
-        $contents = $manageAnswerHtmlContent;
-    }
 } else {
     $contents = Display::return_message(get_lang('Incorrect'), 'warning');
     if ($answerCorrect) {
@@ -265,7 +219,9 @@ if ($objExercise->getFeedbackType() === EXERCISE_FEEDBACK_TYPE_DIRECT) {
     }
 }
 
-Session::write('newquestionList', $newQuestionList);
+if ($answerType === HOT_SPOT_DELINEATION) {
+    $contents = $manageAnswerHtmlContent;
+}
 $links = '';
 if ($objExercise->getFeedbackType() === EXERCISE_FEEDBACK_TYPE_DIRECT) {
     if (isset($choiceValue) && $choiceValue == -1) {
@@ -297,8 +253,6 @@ if (isset($try) && $try == 1) {
 // the link to theory (a learning path)
 if (!empty($lp)) {
     $lp_url = api_get_path(WEB_CODE_PATH).'lp/lp_controller.php?'.api_get_cidreq().'&action=view&lp_id='.$lp;
-    /*$list = new LearnpathList(api_get_user_id());
-    $flat_list = $list->get_flat_list();*/
     $links .= Display:: return_icon(
         'theory.gif',
         '',
@@ -309,7 +263,7 @@ if (!empty($lp)) {
 $links .= '<br />';
 
 // the link to an external website or link
-if (!empty($url) && $url <> -1) {
+if (!empty($url) && $url != -1) {
     $links .= Display:: return_icon(
         'link.gif',
         '',
@@ -317,10 +271,8 @@ if (!empty($url) && $url <> -1) {
     ).'<a target="_blank" href="'.$url.'">'.get_lang('VisitUrl').'</a><br /><br />';
 }
 
-//if ($objExercise->getFeedbackType() === EXERCISE_FEEDBACK_TYPE_POPUP) {
-    $nextQuestion = $questionNum + 1;
-    $destinationId = isset($questionList[$nextQuestion]) ? $questionList[$nextQuestion] : -1;
-//}
+$nextQuestion = $questionNum + 1;
+$destinationId = isset($questionList[$nextQuestion]) ? $questionList[$nextQuestion] : -1;
 
 // the link to finish the test
 if ($destinationId == -1) {
@@ -332,8 +284,6 @@ if ($destinationId == -1) {
 } else {
     // the link to other question
     if (in_array($destinationId, $questionList)) {
-        /*$objQuestionTmp = Question::read($destinationId);
-        $questionName = $objQuestionTmp->selectTitle();*/
         $num_value_array = array_keys($questionList, $destinationId);
         $icon = Display::return_icon(
                 'quiz.png',
@@ -349,10 +299,10 @@ if ($destinationId == -1) {
 echo '<script>
 function SendEx(num) {
     if (num == -1) {
-        window.location.href = "exercise_result.php?'.api_get_cidreq().'&take_session=1&exerciseId='.$exerciseId.'&num="+num+"&exerciseType='.$exerciseType.'&learnpath_item_id='.$learnpath_item_id.'&learnpath_id='.$learnpath_id.'";
+        window.location.href = "exercise_result.php?'.api_get_cidreq().'&take_session=1&exerciseId='.$exerciseId.'&num="+num+"&learnpath_item_id='.$learnpath_item_id.'&learnpath_id='.$learnpath_id.'";
     } else {
         num -= 1;
-        window.location.href = "exercise_submit.php?'.api_get_cidreq().'&tryagain=1&exerciseId='.$exerciseId.'&num="+num+"&exerciseType='.$exerciseType.'&learnpath_item_id='.$learnpath_item_id.'&learnpath_id='.$learnpath_id.'";
+        window.location.href = "exercise_submit.php?'.api_get_cidreq().'&tryagain=1&exerciseId='.$exerciseId.'&num="+num+"&learnpath_item_id='.$learnpath_item_id.'&learnpath_id='.$learnpath_id.'";
     }    
     return false;
 }
@@ -362,20 +312,10 @@ if (!empty($links)) {
     echo '<div>'.$contents.'</div>';
     echo '<div style="padding-left: 450px"><h5>'.$links.'</h5></div>';
     echo '</div>';
-
-    Session::write('hot_spot_result', $message);
-    $_SESSION['hotspot_delineation_result'][$exerciseId][$questionId] = [$message, $exerciseResult[$questionId]];
-    // Resetting the exerciseResult variable
-    Session::write('exerciseResult', $exerciseResult);
-
-    // Save this variables just in case the exercise loads an LP with other exercise
-    Session::write('objExerciseExtra'.$exerciseId, Session::read('objExercise'));
-    Session::write('exerciseResultExtra'.$exerciseId, Session::read('exerciseResult'));
-    Session::write('questionListExtra'.$exerciseId, Session::read('questionList'));
 } else {
     $questionNum++;
     echo '<script>
-            window.location.href = "exercise_submit.php?exerciseId='.$exerciseId.'&num='.$questionNum.'&exerciseType='.$exerciseType.'&'.api_get_cidreq().'";
+            window.location.href = "exercise_submit.php?exerciseId='.$exerciseId.'&num='.$questionNum.'&'.api_get_cidreq().'";
         </script>';
 }
 echo '</div>';

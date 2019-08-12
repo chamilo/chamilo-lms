@@ -3072,16 +3072,10 @@ class Exercise
         $weight = 0
     ) {
         $track_exercises = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
-        $safe_lp_id = intval($safe_lp_id);
-        $safe_lp_item_id = intval($safe_lp_item_id);
-        $safe_lp_item_view_id = intval($safe_lp_item_view_id);
+        $safe_lp_id = (int) $safe_lp_id;
+        $safe_lp_item_id = (int) $safe_lp_item_id;
+        $safe_lp_item_view_id = (int) $safe_lp_item_view_id;
 
-        if (empty($safe_lp_id)) {
-            $safe_lp_id = 0;
-        }
-        if (empty($safe_lp_item_id)) {
-            $safe_lp_item_id = 0;
-        }
         if (empty($clock_expired_time)) {
             $clock_expired_time = null;
         }
@@ -3130,7 +3124,7 @@ class Exercise
         $currentAnswer = '',
         $myRemindList = []
     ) {
-        global $origin, $safe_lp_id, $safe_lp_item_id, $safe_lp_item_view_id;
+        global $safe_lp_id, $safe_lp_item_id, $safe_lp_item_view_id;
         $nbrQuestions = $this->getQuestionCount();
         $buttonList = [];
         $html = $label = '';
@@ -3144,21 +3138,20 @@ class Exercise
                 $urlTitle = get_lang('EndTest');
             }
             $url = api_get_path(WEB_CODE_PATH).'exercise/exercise_submit_modal.php?'.api_get_cidreq();
-
+            $url .= '&'.http_build_query([
+                'learnpath_id' => $safe_lp_id,
+                'learnpath_item_id' => $safe_lp_item_id,
+                'learnpath_item_view_id' => $safe_lp_item_view_id,
+                'hotspot' => $hotspot_get,
+                'nbrQuestions' => $nbrQuestions,
+                'num' => $questionNum,
+                'exerciseType' => $this->type,
+                'exerciseId' => $this->id,
+                'reminder' => empty($myRemindList) ? null : 2,
+            ]);
             $html .= Display::url(
                 $urlTitle,
-                $url.'&'.http_build_query([
-                    'learnpath_id' => $safe_lp_id,
-                    'learnpath_item_id' => $safe_lp_item_id,
-                    'learnpath_item_view_id' => $safe_lp_item_view_id,
-                    'origin' => $origin,
-                    'hotspot' => $hotspot_get,
-                    'nbrQuestions' => $nbrQuestions,
-                    'num' => $questionNum,
-                    'exerciseType' => $this->type,
-                    'exerciseId' => $this->id,
-                    'reminder' => empty($myRemindList) ? null : 2,
-                ]),
+                $url,
                 [
                     'class' => 'ajax btn btn-default',
                     'data-title' => Security::remove_XSS(get_lang('Comment')),
@@ -3605,7 +3598,7 @@ class Exercise
                 ['hotspotAnswerId' => 'ASC']
             );
         }
-        $debug= true;
+        $debug = true;
         if ($debug) {
             error_log('Start answer loop ');
         }
@@ -4740,8 +4733,8 @@ class Exercise
                             $user_array = $_SESSION['exerciseResultCoordinates'][$questionId];
                         }
                     }
-                    $_SESSION['hotspot_coord'][1] = $delineation_cord;
-                    $_SESSION['hotspot_dest'][1] = $answer_delineation_destination;
+                    $_SESSION['hotspot_coord'][$questionId][1] = $delineation_cord;
+                    $_SESSION['hotspot_dest'][$questionId][1] = $answer_delineation_destination;
                     break;
                 case ANNOTATION:
                     if ($from_database) {
@@ -4931,8 +4924,8 @@ class Exercise
                             if ($next) {
                                 $user_answer = $user_array;
                                 // We compare only the delineation not the other points
-                                $answer_question = $_SESSION['hotspot_coord'][1];
-                                $answerDestination = $_SESSION['hotspot_dest'][1];
+                                $answer_question = $_SESSION['hotspot_coord'][$questionId][1];
+                                $answerDestination = $_SESSION['hotspot_dest'][$questionId][1];
 
                                 // Calculating the area
                                 $poly_user = convert_coordinates($user_answer, '/');
@@ -5295,8 +5288,8 @@ class Exercise
                             if ($next) {
                                 $user_answer = $user_array;
                                 // we compare only the delineation not the other points
-                                $answer_question = $_SESSION['hotspot_coord'][1];
-                                $answerDestination = $_SESSION['hotspot_dest'][1];
+                                $answer_question = $_SESSION['hotspot_coord'][$questionId][1];
+                                $answerDestination = $_SESSION['hotspot_dest'][$questionId][1];
 
                                 // calculating the area
                                 $poly_user = convert_coordinates($user_answer, '/');
@@ -5497,7 +5490,7 @@ class Exercise
                 if ($debug) {
                     error_log('$from AND this is a hotspot kind of question ');
                 }
-                if ($answerType == HOT_SPOT_DELINEATION) {
+                if ($answerType === HOT_SPOT_DELINEATION) {
                     if ($showHotSpotDelineationTable) {
                         $overlap_color = 'red';
                         if ($overlap_color) {
@@ -5562,10 +5555,9 @@ class Exercise
                             $answerDestination = $objAnswerTmp->selectDestination($nbrAnswers);
                         }
 
-                        echo '<h1><div style="color:#333;">'.get_lang('Feedback').'</div></h1>
-                            <p style="text-align:center">';
-
-                        $message = '<p>'.get_lang('YourDelineation').'</p>';
+                        $message = '<h1><div style="color:#333;">'.get_lang('Feedback').'</div></h1>
+                                    <p style="text-align:center">';
+                        $message .= '<p>'.get_lang('YourDelineation').'</p>';
                         $message .= $table_resume;
                         $message .= '<br />'.get_lang('ResultIs').' '.$result_comment.'<br />';
                         if ($organs_at_risk_hit > 0) {
@@ -5573,11 +5565,14 @@ class Exercise
                         }
                         $message .= '<p>'.$comment.'</p>';
                         echo $message;
+
+                        $_SESSION['hotspot_delineation_result'][$this->selectId()][$questionId][0] = $message;
+                        $_SESSION['hotspot_delineation_result'][$this->selectId()][$questionId][1] = $_SESSION['exerciseResultCoordinates'][$questionId];
                     } else {
                         echo $hotspot_delineation_result[0];
                     }
 
-                    //save the score attempts
+                    // Save the score attempts
                     if (1) {
                         //getting the answer 1 or 0 comes from exercise_submit_modal.php
                         $final_answer = isset($hotspot_delineation_result[1]) ? $hotspot_delineation_result[1] : '';
@@ -9971,6 +9966,12 @@ class Exercise
         return $group;
     }
 
+    /**
+     * @param Question $objQuestionTmp
+     * @param int      $questionId
+     * @param bool     $show_results
+     * @param array    $question_result
+     */
     public function getDelineationResult(Question $objQuestionTmp, $questionId, $show_results, $question_result)
     {
         $id = (int) $objQuestionTmp->id;
@@ -10124,6 +10125,27 @@ class Exercise
                     </table>
                 ";
         }
+    }
 
+    /**
+     * Clean exercise session variables
+     */
+    public static function cleanSessionVariables()
+    {
+        Session::erase('objExercise');
+        Session::erase('exe_id');
+        Session::erase('calculatedAnswerId');
+        Session::erase('duration_time_previous');
+        Session::erase('duration_time');
+        Session::erase('objQuestion');
+        Session::erase('objAnswer');
+        Session::erase('questionList');
+        Session::erase('exerciseResult');
+        Session::erase('firstTime');
+
+        Session::erase('exerciseResultCoordinates');
+        Session::erase('hotspot_coord');
+        Session::erase('hotspot_dest');
+        Session::erase('hotspot_delineation_result');
     }
 }

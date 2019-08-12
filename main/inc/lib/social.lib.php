@@ -3309,9 +3309,8 @@ class SocialManager extends UserManager
         }
 
         $postAttachment = self::getPostAttachment($message);
-        $class = $message['msg_status'] === MESSAGE_STATUS_PROMOTED ? 'promoted' : '';
 
-        $html = '<div class = "top-mediapost '.$class.'"" >';
+        $html = '<div class="top-mediapost" >';
         $html .= '<div class="pull-right btn-group btn-group-sm">';
 
         $html .= MessageManager::getLikesButton(

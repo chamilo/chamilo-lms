@@ -46,7 +46,7 @@
 
             <!-- START CONTENT -->
             <section id="cm-content">
-                <div class="container">
+                <div class="container{{ fluid == true ? '-fluid':'' }}">
                     {% if show_course_shortcut is not null %}
                         <!-- TOOLS SHOW COURSE -->
                         <div id="cm-tools" class="nav-tools">

@@ -75,9 +75,9 @@ class Template
         $this->title = $title;
         $this->show_learnpath = $show_learnpath;
         $this->setResponseCode($responseCode);
+        $origin = api_get_origin();
 
         if (empty($this->show_learnpath)) {
-            $origin = api_get_origin();
             if ($origin === 'learnpath') {
                 $this->show_learnpath = true;
                 $show_footer = false;
@@ -229,6 +229,30 @@ class Template
         $this->assign('template', $this->templateFolder);
         $this->assign('locale', api_get_language_isocode());
         $this->assign('login_class', null);
+        $this->assign('origin', $origin);
+        // ofaj
+        $fluid = '';
+        $baseName = basename(api_get_self());
+        $dirName = basename(dirname(api_get_self()));
+
+        $fluidPages = [
+            'exercise_submit.php',
+            'result.php',
+            'overview.php',
+        ];
+        // ofaj
+        /*$fluidPagesInLearnPath = [
+            'viewthread.php',
+            'viewforum.php',
+        ];*/
+        if (in_array($baseName, $fluidPages)) {
+            $fluid = true;
+        }
+        if ($origin === 'learnpath' && $dirName === 'forum') {
+            $fluid = true;
+        }
+
+        $this->assign('fluid', $fluid);
 
         $allow = api_get_configuration_value('show_language_selector_in_menu');
         if ($allow) {

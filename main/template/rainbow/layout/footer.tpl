@@ -19,9 +19,6 @@
                     <a href="http://www.cavilam.com" target="_blank">
                         <img src="{{ _p.web_css_theme }}images/logo_cavilam.png"/>
                     </a>
-                    <a href="http://www.dw.com" target="_blank">
-                        <img src="{{ _p.web_css_theme }}images/logo-dw.png"/>
-                    </a>
                     <a href="https://www.cdc.de/" target="_blank">
                         <img src="{{ _p.web_css_theme }}images/carlduisberg.png"/>
                     </a>

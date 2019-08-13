@@ -98,8 +98,6 @@ $choice = empty($choice) ? isset($_REQUEST['choice2']) ? $_REQUEST['choice2'] : 
 // From submit modal
 $current_question = isset($_REQUEST['num']) ? (int) $_REQUEST['num'] : null;
 $currentAnswer = isset($_REQUEST['num_answer']) ? (int) $_REQUEST['num_answer'] : null;
-$endExercise = isset($_REQUEST['end_exercise']) && $_REQUEST['end_exercise'] == 1 ? true : false;
-
 $logInfo = [
     'tool' => TOOL_QUIZ,
     'tool_id' => $exerciseId,
@@ -1213,8 +1211,7 @@ if (!empty($error)) {
                 url = "exercise_submit.php?'.$params.'&num='.$current_question.'&remind_question_id='.$remind_question_id.'&reminder=2";
             } else {
                 url = "exercise_submit.php?'.$params.'&num='.$current_question.'&remind_question_id='.$remind_question_id.'";
-            }
-            //$("#save_for_now_"+question_id).html(\''.Display::return_icon('save.png', get_lang('Saved'), [], ICON_SIZE_SMALL).'\');
+            }            
             window.location = url;
         }
         
@@ -1224,19 +1221,19 @@ if (!empty($error)) {
         }
 
         function save_now(question_id, url_extra, validate) {
-            //1. Normal choice inputs
+            // 1. Normal choice inputs
             var my_choice = $(\'*[name*="choice[\'+question_id+\']"]\').serialize();
-
-            //2. Reminder checkbox
+            
+            // 2. Reminder checkbox
             var remind_list = $(\'*[name*="remind_list"]\').serialize();
 
-            //3. Hotspots
+            // 3. Hotspots
             var hotspot = $(\'*[name*="hotspot[\'+question_id+\']"]\').serialize();
             
-            //4. choice for degree of certainty
+            // 4. choice for degree of certainty
             var my_choiceDc = $(\'*[name*="choiceDegreeCertainty[\'+question_id+\']"]\').serialize();
 
-            // Checking FCK
+            // Checking CkEditor
             if (question_id) {
                 if (CKEDITOR.instances["choice["+question_id+"]"]) {
                     var ckContent = CKEDITOR.instances["choice["+question_id+"]"].getData();
@@ -1313,7 +1310,7 @@ if (!empty($error)) {
             var question_list = ['.implode(',', $questionList).'];
             var free_answers = {};
             $.each(question_list, function(index, my_question_id) {
-                // Checking FCK
+                // Checking Ckeditor
                 if (my_question_id) {
                     if (CKEDITOR.instances["choice["+my_question_id+"]"]) {
                         var ckContent = CKEDITOR.instances["choice["+my_question_id+"]"].getData();
@@ -1551,10 +1548,8 @@ if (!empty($error)) {
     }
     echo '</form>';
 }
-
 if (!in_array($origin, ['learnpath', 'embeddable'])) {
     // So we are not in learnpath tool
     echo '</div>'; //End glossary div
 }
-
 Display::display_footer();

@@ -4413,7 +4413,6 @@ EOT;
         // Hide results
         $show_results = false;
         $show_only_score = false;
-
         if (in_array($objExercise->results_disabled,
             [
                 RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER,

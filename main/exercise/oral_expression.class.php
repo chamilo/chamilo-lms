@@ -12,8 +12,8 @@
  */
 class OralExpression extends Question
 {
-    public static $typePicture = 'audio_question.png';
-    public static $explanationLangVar = 'OralExpression';
+    public $typePicture = 'audio_question.png';
+    public $explanationLangVar = 'OralExpression';
     public $available_extensions = ['wav', 'ogg'];
     private $sessionId;
     private $userId;

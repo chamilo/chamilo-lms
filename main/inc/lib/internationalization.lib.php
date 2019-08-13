@@ -466,14 +466,13 @@ function api_get_utc_datetime(
  * Returns a DATETIME string converted to the right timezone.
  *
  * @param mixed  $time                    The time to be converted
- * @param string $to_timezone             The timezone to be converted to.
- *                                        If null, the timezone will be determined based on user preference,
+ * @param string $to_timezone             If null, the timezone will be determined based on user preference,
  *                                        or timezone chosen by the admin for the platform.
  * @param string $from_timezone           The timezone to be converted from. If null, UTC will be assumed.
- * @param bool   $returnNullIfInvalidDate
- * @param bool   $showTime
- * @param bool   $humanForm
- * @param string $format
+ * @param bool   $returnNullIfInvalidDate Return null if date is not correct.
+ * @param bool   $showTime                Show time.
+ * @param bool   $humanForm               Return a readable date time.
+ * @param string $format                  Specify format.
  *
  * @return string The converted time formatted as Y-m-d H:i:s
  *

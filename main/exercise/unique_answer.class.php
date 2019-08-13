@@ -18,8 +18,8 @@ use ChamiloSession as Session;
  */
 class UniqueAnswer extends Question
 {
-    public static $typePicture = 'mcua.png';
-    public static $explanationLangVar = 'UniqueSelect';
+    public $typePicture = 'mcua.png';
+    public $explanationLangVar = 'UniqueSelect';
 
     /**
      * Constructor.
@@ -37,6 +37,7 @@ class UniqueAnswer extends Question
     public function createAnswersForm($form)
     {
         // Getting the exercise list
+        /** @var Exercise $obj_ex */
         $obj_ex = Session::read('objExercise');
 
         $editor_config = [
@@ -49,13 +50,6 @@ class UniqueAnswer extends Question
         // The previous default value was 2. See task #1759.
         $nb_answers = isset($_POST['nb_answers']) ? (int) $_POST['nb_answers'] : 4;
         $nb_answers += (isset($_POST['lessAnswers']) ? -1 : (isset($_POST['moreAnswers']) ? 1 : 0));
-
-        /*
-          Types of Feedback
-          $feedback_option[0]=get_lang('Feedback');
-          $feedback_option[1]=get_lang('DirectFeedback');
-          $feedback_option[2]=get_lang('NoFeedback');
-         */
 
         $feedback_title = '';
         switch ($obj_ex->getFeedbackType()) {
@@ -99,8 +93,8 @@ class UniqueAnswer extends Question
         }
         $form->addElement('hidden', 'nb_answers');
 
-        //Feedback SELECT
-        $question_list = $obj_ex->selectQuestionList();
+        $obj_ex->setQuestionList(true);
+        $question_list = $obj_ex->getQuestionList();
         $select_question = [];
         $select_question[0] = get_lang('SelectTargetQuestion');
         if (is_array($question_list)) {

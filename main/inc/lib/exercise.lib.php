@@ -1476,6 +1476,7 @@ HTML;
                             });
                         </script>
                     ";
+
                     return;
                 }
             }

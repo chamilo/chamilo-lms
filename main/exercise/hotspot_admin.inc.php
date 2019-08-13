@@ -11,7 +11,6 @@ use ChamiloSession as Session;
  *
  * @author  Toon Keppens
  */
-
 $modifyAnswers = (int) $_GET['hotspotadmin'];
 if (!is_object($objQuestion)) {
     $objQuestion = Question::read($modifyAnswers);

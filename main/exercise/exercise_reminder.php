@@ -18,43 +18,15 @@ $this_section = SECTION_COURSES;
 api_protect_course_script(true);
 $origin = api_get_origin();
 
-if (empty($learnpath_id)) {
-    if (!empty($_REQUEST['learnpath_id'])) {
-        $learnpath_id = (int) $_REQUEST['learnpath_id'];
-    } else {
-        $learnpath_id = 0;
-    }
-}
-if (empty($learnpath_item_id)) {
-    if (!empty($_REQUEST['learnpath_item_id'])) {
-        $learnpath_item_id = (int) $_REQUEST['learnpath_item_id'];
-    } else {
-        $learnpath_item_id = 0;
-    }
-}
-if (empty($learnpath_item_view_id)) {
-    if (!empty($_REQUEST['learnpath_item_view_id'])) {
-        $learnpath_item_view_id = (int) $_REQUEST['learnpath_item_view_id'];
-    } else {
-        $learnpath_item_view_id = 0;
-    }
-}
+$learnpath_id = isset($_REQUEST['learnpath_id']) ? (int) $_REQUEST['learnpath_id'] : 0;
+$learnpath_item_id = isset($_REQUEST['learnpath_item_id']) ? (int) $_REQUEST['learnpath_item_id'] : 0;
+$learnpath_item_view_id = isset($_REQUEST['learnpath_item_view_id']) ? (int) $_REQUEST['learnpath_item_view_id'] : 0;
+$exerciseId = isset($_REQUEST['exerciseId']) ? (int) $_REQUEST['exerciseId'] : 0;
 
-if (empty($exerciseId)) {
-    if (!empty($_REQUEST['exerciseId'])) {
-        $exerciseId = (int) $_REQUEST['exerciseId'];
-    } else {
-        $exerciseId = 0;
-    }
-}
-
-if (empty($objExercise)) {
-    $exerciseInSession = Session::read('objExercise');
-    if (!empty($exerciseInSession)) {
-        $objExercise = $exerciseInSession;
-    } else {
-        $objExercise = null;
-    }
+$objExercise = null;
+$exerciseInSession = Session::read('objExercise');
+if (!empty($exerciseInSession)) {
+    $objExercise = $exerciseInSession;
 }
 
 if (!$objExercise) {
@@ -229,7 +201,6 @@ foreach ($question_list as $questionId) {
     unset($objQuestionTmp);
     // creates a temporary Question object
     $objQuestionTmp = Question:: read($questionId);
-    $quesId = $objQuestionTmp->selectId();
     $check_id = 'remind_list['.$questionId.']';
 
     $attributes = ['id' => $check_id, 'onclick' => "save_remind_item(this, '$questionId');"];

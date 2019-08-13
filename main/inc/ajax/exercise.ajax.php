@@ -547,7 +547,7 @@ switch ($action) {
                     $hotspot_delineation_result = $_SESSION['hotspot_delineation_result'][$objExercise->selectId()][$my_question_id];
                 }
 
-                if ($type == 'simple') {
+                if ($type === 'simple') {
                     // Getting old attempt in order to decrees the total score.
                     $old_result = $objExercise->manage_answer(
                         $exeId,
@@ -558,10 +558,8 @@ switch ($action) {
                         false,
                         true,
                         false,
-                        $objExercise->selectPropagateNeg(),
-                        []
+                        $objExercise->selectPropagateNeg()
                     );
-
                     // Removing old score.
                     $total_score = $total_score - $old_result['score'];
                 }

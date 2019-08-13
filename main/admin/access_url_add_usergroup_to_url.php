@@ -20,16 +20,11 @@ if (!api_get_multiple_access_url()) {
 }
 
 $userGroup = new UserGroup();
-$form_sent = 0;
 $firstLetterUserGroup = null;
 $courses = [];
 $url_list = [];
 
-$tbl_access_url_rel_course = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
 $tbl_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL);
-$tbl_user = Database::get_main_table(TABLE_MAIN_USER);
-$tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
-
 $tool_name = get_lang('AddUserGroupToURL');
 $interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('PlatformAdmin')];
 $interbreadcrumb[] = ['url' => 'access_urls.php', 'name' => get_lang('MultipleAccessURLs')];

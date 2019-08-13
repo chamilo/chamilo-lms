@@ -1343,7 +1343,7 @@ class MessageManager
             );
         }
 
-        $message_content = Display::page_subheader(str_replace("\\", "", $title));
+        $message_content = Display::page_subheader(str_replace("\\", '', $title));
 
         $receiverUserInfo = [];
         if (!empty($row['user_receiver_id'])) {
@@ -2012,44 +2012,28 @@ class MessageManager
         $files = self::getAttachmentList($messageId);
         // get file attachments by message id
         $list = [];
-        $totalSize = 0;
-
         if ($files) {
+            $attachIcon = Display::return_icon('attachment.gif', '');
             $archiveURL = api_get_path(WEB_CODE_PATH).'messages/download.php?type='.$type.'&file=';
-            $countFiles = count($files);
-
             foreach ($files as $row_file) {
                 $archiveFile = $row_file['path'];
                 $filename = $row_file['filename'];
-                $totalSize += $row_file['size'];
                 $size = format_file_size($row_file['size']);
                 $comment = Security::remove_XSS($row_file['comment']);
                 $filename = Security::remove_XSS($filename);
-                $type = 'file';
+                $link = Display::url($filename, $archiveURL.$archiveFile);
+                $comment = !empty($comment) ? '&nbsp;-&nbsp;<i>'.$comment.'</i>' : '';
 
+                $attachmentLine = $attachIcon.'&nbsp;'.$link.'&nbsp;('.$size.')'.$comment;
                 if ($row_file['comment'] == 'audio_message') {
-                    $type = 'audio';
+                    $attachmentLine = '<audio src="'.$archiveURL.$archiveFile.'"/>';
                 }
 
-                $listTemp = [
-                    'filename' => $filename,
-                    'size' => $size,
-                    'comment' => $comment,
-                    'url' => $archiveURL.$archiveFile,
-                    'type' => $type,
-                ];
-
-                $list[] = $listTemp;
+                $list[] = $attachmentLine;
             }
-
-            return [
-                'quantity' => $countFiles,
-                'total_size' => format_file_size($totalSize),
-                'files' => $list,
-            ];
-        } else {
-            return [];
         }
+
+        return $list;
     }
 
     /**

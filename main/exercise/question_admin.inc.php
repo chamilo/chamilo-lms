@@ -32,7 +32,7 @@ if (is_object($objQuestion)) {
         $type = $_REQUEST['answerType'];
     }
 
-    $typesInformation = Question::get_question_type_list();
+    $typesInformation = Question::getQuestionTypeList();
     $form_title_extra = isset($typesInformation[$type][1]) ? get_lang($typesInformation[$type][1]) : null;
 
     $code = '';

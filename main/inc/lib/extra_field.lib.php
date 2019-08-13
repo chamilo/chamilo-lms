@@ -2520,7 +2520,7 @@ JAVASCRIPT;
                         }
                     } else {
                         if (isset($rule->data)) {
-                            if ($rule->data == -1) {
+                            if (isset($rule->data) && is_int($rule->data) && $rule->data == -1) {
                                 continue;
                             }
                             $condition_array[] = ' ('

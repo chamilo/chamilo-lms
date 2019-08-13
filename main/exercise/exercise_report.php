@@ -44,8 +44,6 @@ $_course = api_get_course_info();
 // document path
 $documentPath = api_get_path(SYS_COURSE_PATH).$_course['path']."/document";
 $origin = api_get_origin();
-$path = isset($_GET['path']) ? Security::remove_XSS($_GET['path']) : null;
-
 $is_allowedToEdit = api_is_allowed_to_edit(null, true) ||
     api_is_drh() ||
     api_is_student_boss() ||
@@ -57,7 +55,6 @@ $TBL_TRACK_ATTEMPT = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
 $TBL_TRACK_ATTEMPT_RECORDING = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT_RECORDING);
 $TBL_LP_ITEM_VIEW = Database::get_course_table(TABLE_LP_ITEM_VIEW);
 $allowCoachFeedbackExercises = api_get_setting('allow_coach_feedback_exercises') === 'true';
-
 $course_id = api_get_course_int_id();
 $exercise_id = isset($_REQUEST['exerciseId']) ? (int) $_REQUEST['exerciseId'] : 0;
 $locked = api_resource_is_locked_by_gradebook($exercise_id, LINK_EXERCISE);
@@ -153,11 +150,9 @@ if (!empty($_REQUEST['export_report']) && $_REQUEST['export_report'] == '1') {
 $objExerciseTmp = new Exercise();
 $exerciseExists = $objExerciseTmp->read($exercise_id);
 
-$courseInfo = api_get_course_info();
-
 //Send student email @todo move this code in a class, library
 if (isset($_REQUEST['comments']) &&
-    $_REQUEST['comments'] == 'update' &&
+    $_REQUEST['comments'] === 'update' &&
     ($is_allowedToEdit || $is_tutor || $allowCoachFeedbackExercises)
 ) {
     // Filtered by post-condition
@@ -167,18 +162,13 @@ if (isset($_REQUEST['comments']) &&
     if (empty($track_exercise_info)) {
         api_not_allowed();
     }
-    $test = $track_exercise_info['title'];
     $student_id = $track_exercise_info['exe_user_id'];
     $session_id = $track_exercise_info['session_id'];
     $lp_id = $track_exercise_info['orig_lp_id'];
     $lpItemId = $track_exercise_info['orig_lp_item_id'];
     $lp_item_view_id = (int) $track_exercise_info['orig_lp_item_view_id'];
     $exerciseId = $track_exercise_info['exe_exo_id'];
-    $exeWeighting = $track_exercise_info['max_score'];
-
-    $url = api_get_path(WEB_CODE_PATH).'exercise/result.php?id='.$track_exercise_info['exe_id'].'&'.api_get_cidreq().'&show_headers=1&id_session='.$session_id;
-
-    $my_post_info = [];
+    $exeWeighting = $track_exercise_info['exe_weighting'];
     $post_content_id = [];
     $comments_exist = false;
 
@@ -186,14 +176,12 @@ if (isset($_REQUEST['comments']) &&
         $my_post_info = explode('_', $key_index);
         $post_content_id[] = isset($my_post_info[1]) ? $my_post_info[1] : null;
 
-        if ($my_post_info[0] == 'comments') {
+        if ($my_post_info[0] === 'comments') {
             $comments_exist = true;
         }
     }
 
     $loop_in_track = $comments_exist === true ? (count($_POST) / 2) : count($_POST);
-    $array_content_id_exe = [];
-
     if ($comments_exist === true) {
         $array_content_id_exe = array_slice($post_content_id, $loop_in_track);
     } else {
@@ -351,7 +339,6 @@ if ($is_allowedToEdit && $origin != 'learnpath') {
             Display::return_icon('activity_monitor.png', get_lang('LiveResults'), '', ICON_SIZE_MEDIUM).'</a>';
         $actions .= '<a href="stats.php?'.api_get_cidreq().'&exerciseId='.$exercise_id.'">'.
             Display::return_icon('statistics.png', get_lang('ReportByQuestion'), '', ICON_SIZE_MEDIUM).'</a>';
-
         $actions .= '<a id="export_opener" href="'.api_get_self().'?export_report=1&exerciseId='.$exercise_id.'" >'.
         Display::return_icon('save.png', get_lang('Export'), '', ICON_SIZE_MEDIUM).'</a>';
         // clean result before a selected date icon
@@ -399,7 +386,7 @@ if ($is_allowedToEdit && $origin != 'learnpath') {
 
 // Deleting an attempt
 if (($is_allowedToEdit || $is_tutor || api_is_coach()) &&
-    isset($_GET['delete']) && $_GET['delete'] == 'delete' &&
+    isset($_GET['delete']) && $_GET['delete'] === 'delete' &&
     !empty($_GET['did']) && $locked == false
 ) {
     $exe_id = (int) $_GET['did'];
@@ -422,7 +409,7 @@ if (($is_allowedToEdit || $is_tutor || api_is_coach()) &&
 
 if ($is_allowedToEdit || $is_tutor) {
     $interbreadcrumb[] = [
-        'url' => "exercise.php?".api_get_cidreq(),
+        'url' => 'exercise.php?'.api_get_cidreq(),
         'name' => get_lang('Exercises'),
     ];
 
@@ -444,17 +431,17 @@ if ($is_allowedToEdit || $is_tutor) {
 }
 
 if (($is_allowedToEdit || $is_tutor || api_is_coach()) &&
-    isset($_GET['a']) && $_GET['a'] == 'close' &&
+    isset($_GET['a']) && $_GET['a'] === 'close' &&
     !empty($_GET['id']) && $locked == false
 ) {
     // Close the user attempt otherwise left pending
-    $exe_id = intval($_GET['id']);
+    $exe_id = (int) $_GET['id'];
     $sql = "UPDATE $TBL_TRACK_EXERCISES SET status = '' 
             WHERE exe_id = $exe_id AND status = 'incomplete'";
     Database::query($sql);
 }
 
-Display :: display_header($nameTools);
+Display::display_header($nameTools);
 
 // Clean all results for this test before the selected date
 if (($is_allowedToEdit || $is_tutor || api_is_coach()) &&
@@ -514,7 +501,7 @@ $extra = '<script>
     });
     </script>';
 
-$extra .= '<div id="dialog-confirm" title="'.get_lang("ConfirmYourChoice").'">';
+$extra .= '<div id="dialog-confirm" title="'.get_lang('ConfirmYourChoice').'">';
 $form = new FormValidator(
     'report',
     'post',
@@ -643,7 +630,7 @@ if ($is_allowedToEdit || $is_tutor) {
         ['name' => 'actions', 'index' => 'actions', 'width' => '60', 'align' => 'left', 'search' => 'false', 'sortable' => 'false'],
     ];
 
-    if ($officialCodeInList == 'true') {
+    if ($officialCodeInList === 'true') {
         $officialCodeRow = ['name' => 'official_code', 'index' => 'official_code', 'width' => '50', 'align' => 'left', 'search' => 'true'];
         $column_model = array_merge([$officialCodeRow], $column_model);
     }
@@ -652,7 +639,7 @@ if ($is_allowedToEdit || $is_tutor) {
     // add username as title in lastname filed - ref 4226
     function action_formatter(cellvalue, options, rowObject) {
         // rowObject is firstname,lastname,login,... get the third word
-        var loginx = "'.api_htmlentities(sprintf(get_lang("LoginX"), ":::"), ENT_QUOTES).'";
+        var loginx = "'.api_htmlentities(sprintf(get_lang('LoginX'), ':::'), ENT_QUOTES).'";
         var tabLoginx = loginx.split(/:::/);
         // tabLoginx[0] is before and tabLoginx[1] is after :::
         // may be empty string but is defined
@@ -674,7 +661,6 @@ $extra_params['gridComplete'] = "
 ";
 
 $extra_params['beforeRequest'] = "
-//console.log('beforeRequest');
 var defaultGroupId = $('#gs_group_name').val();
 
 // Load from group menu
@@ -683,15 +669,17 @@ if (typeof defaultGroupId !== 'undefined') {
 } else {
     // get from cookies
     defaultGroupId = Cookies.get('default_group_".$exercise_id."');
-    $('#gs_group_name').val(defaultGroupId);
-    //console.log('from cookies');
+    $('#gs_group_name').val(defaultGroupId);    
 }
  
 if (typeof defaultGroupId !== 'undefined') {
     var posted_data = $(\"#results\").jqGrid('getGridParam', 'postData');
-    var defFilter = '{\"groupOp\":\"AND\",\"rules\":[{\"field\":\"group_id\",\"op\":\"eq\",\"data\":\"'+ defaultGroupId +'\"}]}';
-    posted_data.filters = defFilter;
-    //console.log(posted_data);
+    var extraFilter = ',{\"field\":\"group_id\",\"op\":\"eq\",\"data\":\"'+ defaultGroupId +'\"}]}';        
+    // var defFilter = '{\"groupOp\":\"AND\",\"rules\": [{\"field\":\"group_id\",\"op\":\"eq\",\"data\":\"'+ defaultGroupId +'\"}] }';
+    // posted_data.filters = defFilter;    
+    var filters = posted_data.filters;        
+    var stringObj = new String(filters);    
+    stringObj.replace(']}', extraFilter);         
     $(this).jqGrid('setGridParam', 'postData', posted_data);          
 }
 ";
@@ -717,7 +705,8 @@ $gridJs = Display::grid_js(
         var ii = 0;
         for (var i in data) {
             colNames[ii++] = i;
-        }    // capture col names
+        }
+        // capture col names
         var html = "";
         for (i = 0; i < mya.length; i++) {
             data = $("#results").getRowData(mya[i]); // get each row
@@ -760,8 +749,6 @@ $gridJs = Display::grid_js(
 
             // Update group
             var defaultGroupId = Cookies.get('default_group_<?php echo $exercise_id; ?>');
-            //console.log('cookie GET defaultGroupId ' + defaultGroupId );
-
             $('#gs_group_name').val(defaultGroupId);
             // Adding search options
             var options = {
@@ -778,7 +765,6 @@ $gridJs = Display::grid_js(
                     });
                 }
             }
-
             jQuery("#results").jqGrid('filterToolbar', options);
             sgrid.triggerToolbar();
             $('#results').on('click', 'a.exercise-recalculate', function (e) {

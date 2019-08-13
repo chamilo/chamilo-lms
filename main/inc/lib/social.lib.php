@@ -938,6 +938,7 @@ class SocialManager extends UserManager
         $searchIcon = Display::return_icon('sn-search.png', get_lang('Search'), null, ICON_SIZE_SMALL);
         $portfolioIcon = Display::return_icon('wiki_task.png', get_lang('Portfolio'));
         $personalDataIcon = Display::return_icon('database.png', get_lang('PersonalDataReport'));
+        $messageSocialIcon = Display::return_icon('promoted_message.png', get_lang('PromotedMessages'));
 
         $forumCourseId = api_get_configuration_value('global_forums_course_id');
         $groupUrl = api_get_path(WEB_CODE_PATH).'social/groups.php';
@@ -1051,7 +1052,7 @@ class SocialManager extends UserManager
                 $personalData = '
                     <li class="personal-data-icon '.$active.'">
                         <a href="'.api_get_path(WEB_CODE_PATH).'social/promoted_messages.php">
-                            '.$personalDataIcon.' '.get_lang('PromotedMessages').'
+                            '.$messageSocialIcon.' '.get_lang('PromotedMessages').'
                         </a>
                     </li>';
                 $links .= $personalData;
@@ -2537,11 +2538,18 @@ class SocialManager extends UserManager
      */
     public static function wrapPost($message, $content)
     {
+        $class = '';
+        if ($message['msg_status'] === MESSAGE_STATUS_PROMOTED) {
+            $class = 'promoted_post';
+        }
+
         return Display::panel($content, '',
             '',
             'default',
             '',
-            'post_'.$message['id']
+            'post_'.$message['id'],
+            null,
+            $class
         );
     }
 
@@ -3300,8 +3308,7 @@ class SocialManager extends UserManager
 
         $postAttachment = self::getPostAttachment($message);
 
-        $html = '';
-        $html .= '<div class="top-mediapost" >';
+        $html = '<div class="top-mediapost" >';
         $html .= '<div class="pull-right btn-group btn-group-sm">';
 
         $html .= MessageManager::getLikesButton(

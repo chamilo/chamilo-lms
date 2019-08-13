@@ -151,6 +151,7 @@ class UserManager
      * @param FormValidator $form
      * @param int           $creatorId
      * @param array         $emailTemplate
+     * @param string        $redirectToURLAfterLogin
      *
      * @return mixed new user id - if the new user creation succeeds, false otherwise
      * @desc The function tries to retrieve user id from the session.

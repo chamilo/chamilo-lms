@@ -2249,9 +2249,6 @@ class learnpath
      */
     public function get_previous_index()
     {
-        if ($this->debug > 0) {
-            error_log('In learnpath::get_previous_index()', 0);
-        }
         $index = $this->index;
         if (isset($this->ordered_items[$index - 1])) {
             $index--;
@@ -2262,11 +2259,6 @@ class learnpath
                 if ($index < 0) {
                     return $this->index;
                 }
-            }
-        } else {
-            // There is no previous item.
-            if ($this->debug > 2) {
-                error_log('get_previous_index() - there was no previous index available, reusing '.$index, 0);
             }
         }
 
@@ -2280,9 +2272,9 @@ class learnpath
      */
     public function get_previous_item_id()
     {
-        $new_index = $this->get_previous_index();
+        $index = $this->get_previous_index();
 
-        return $this->ordered_items[$new_index];
+        return $this->ordered_items[$index];
     }
 
     /**
@@ -13533,6 +13525,9 @@ EOD;
     public static function rl_get_resource_name($course_code, $learningPathId, $id_in_path)
     {
         $_course = api_get_course_info($course_code);
+        if (empty($_course)) {
+            return '';
+        }
         $course_id = $_course['real_id'];
         $tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
         $learningPathId = (int) $learningPathId;
@@ -13583,7 +13578,7 @@ EOD;
                 $myrow = Database::fetch_array($result);
                 $output = $myrow['forum_name'];
                 break;
-            case TOOL_THREAD:  //=topics
+            case TOOL_THREAD:
                 $tbl_post = Database::get_course_table(TABLE_FORUM_POST);
                 // Grabbing the title of the post.
                 $sql_title = "SELECT * FROM $tbl_post WHERE c_id = $course_id AND post_id=".$id;
@@ -13593,26 +13588,17 @@ EOD;
                 break;
             case TOOL_POST:
                 $tbl_post = Database::get_course_table(TABLE_FORUM_POST);
-                //$tbl_post_text = Database::get_course_table(FORUM_POST_TEXT_TABLE);
                 $sql = "SELECT * FROM $tbl_post p WHERE c_id = $course_id AND p.post_id = $id";
                 $result = Database::query($sql);
                 $post = Database::fetch_array($result);
                 $output = $post['post_title'];
                 break;
             case 'dir':
-                $title = $row_item['title'];
-                if (!empty($title)) {
-                    $output = $title;
-                } else {
-                    $output = '-';
-                }
-                break;
             case TOOL_DOCUMENT:
                 $title = $row_item['title'];
+                $output = '-';
                 if (!empty($title)) {
                     $output = $title;
-                } else {
-                    $output = '-';
                 }
                 break;
             case 'hotpotatoes':
@@ -13622,8 +13608,6 @@ EOD;
                 $pathname = explode('/', $myrow['path']); // Making a correct name for the link.
                 $last = count($pathname) - 1; // Making a correct name for the link.
                 $filename = $pathname[$last]; // Making a correct name for the link.
-                $ext = explode('.', $filename);
-                $ext = strtolower($ext[sizeof($ext) - 1]);
                 $myrow['path'] = rawurlencode($myrow['path']);
                 $output = $filename;
                 break;
@@ -13648,7 +13632,6 @@ EOD;
 
         while ($parent) {
             $return[] = $parent->get_title();
-
             $parent = $this->getItem($parent->get_parent());
         }
 

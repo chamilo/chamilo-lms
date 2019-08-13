@@ -48,6 +48,7 @@ class ExerciseLib
         $show_icon = false
     ) {
         $course_id = $exercise->course_id;
+        $exerciseId = $exercise->iId;
 
         if (empty($course_id)) {
             return '';
@@ -198,7 +199,7 @@ class ExerciseLib
                     // Add nanog
                     if (api_get_setting('enable_record_audio') === 'true') {
                         //@todo pass this as a parameter
-                        global $exercise_stat_info, $exerciseId;
+                        global $exercise_stat_info;
                         if (!empty($exercise_stat_info)) {
                             $objQuestionTmp->initFile(
                                 api_get_session_id(),
@@ -339,8 +340,7 @@ class ExerciseLib
                              $('.question-validate-btn').attr('disabled', 'disabled');
                         } else {
                             $('.question-validate-btn').removeAttr('disabled');
-                        }
-                    
+                        }                    
                     });
                 </script>";
 
@@ -359,6 +359,7 @@ class ExerciseLib
                         $header .= Display::tag('th', $item);
                     }
                 }
+
                 if ($show_comment) {
                     $header .= Display::tag('th', get_lang('Feedback'));
                 }
@@ -372,15 +373,18 @@ class ExerciseLib
                 foreach ($objQuestionTmp->options as $item) {
                     $colorBorder1 = ($cpt1 == (count($objQuestionTmp->options) - 1))
                         ? '' : 'border-right: solid #FFFFFF 1px;';
-                    if ($item == 'True' || $item == 'False') {
-                        $header1 .= Display::tag('th',
+                    if ($item === 'True' || $item === 'False') {
+                        $header1 .= Display::tag(
+                            'th',
                             get_lang($item),
                             ['style' => 'background-color: #F7C9B4; color: black;'.$colorBorder1]
                         );
                     } else {
-                        $header1 .= Display::tag('th',
+                        $header1 .= Display::tag(
+                            'th',
                             $item,
-                            ['style' => 'background-color: #e6e6ff; color: black;padding:5px; '.$colorBorder1]);
+                            ['style' => 'background-color: #e6e6ff; color: black;padding:5px; '.$colorBorder1]
+                        );
                     }
                     $cpt1++;
                 }
@@ -401,7 +405,6 @@ class ExerciseLib
                     get_lang('DegreeOfCertaintyIAmVerySure'),
                 ];
                 $counter2 = 0;
-
                 foreach ($objQuestionTmp->options as $item) {
                     if ($item == 'True' || $item == 'False') {
                         $header2 .= Display::tag('td',
@@ -1385,7 +1388,7 @@ HTML;
             }
             echo $s;
         } elseif ($answerType == HOT_SPOT || $answerType == HOT_SPOT_DELINEATION) {
-            global $exerciseId, $exe_id;
+            global $exe_id;
             // Question is a HOT_SPOT
             // Checking document/images visibility
             if (api_is_platform_admin() || api_is_course_admin()) {
@@ -1462,17 +1465,16 @@ HTML;
                             </div>
                         </div>
                         <script>
-                                new ".($answerType == HOT_SPOT ? "HotspotQuestion" : "DelineationQuestion")."({
-                                    questionId: $questionId,
-                                    exerciseId: $exerciseId,
-                                    exeId: 0,
-                                    selector: '#hotspot-preview-$questionId',
-                                    for: 'preview',
-                                    relPath: '$relPath'
-                                });
+                            new ".($answerType == HOT_SPOT ? "HotspotQuestion" : "DelineationQuestion")."({
+                                questionId: $questionId,
+                                exerciseId: $exerciseId,
+                                exeId: 0,
+                                selector: '#hotspot-preview-$questionId',
+                                for: 'preview',
+                                relPath: '$relPath'
+                            });
                         </script>
                     ";
-
                     return;
                 }
             }
@@ -1500,7 +1502,7 @@ HOTSPOT;
                         $(function() {
                             new ".($answerType == HOT_SPOT_DELINEATION ? 'DelineationQuestion' : 'HotspotQuestion')."({
                                 questionId: $questionId,
-                                exerciseId: $exe_id,
+                                exerciseId: $exerciseId,
                                 selector: '#question_div_' + $questionId + ' .hotspot-image',
                                 for: 'user',
                                 relPath: '$relPath'
@@ -1565,7 +1567,7 @@ HOTSPOT;
                                 <script>
                                     AnnotationQuestion({
                                         questionId: '.$questionId.',
-                                        exerciseId: '.$exe_id.',
+                                        exerciseId: '.$exerciseId.',
                                         relPath: \''.$relPath.'\',
                                         courseId: '.$course_id.',
                                     });
@@ -2267,7 +2269,6 @@ HOTSPOT;
                     $from_gradebook = true;
                 }
                 $sizeof = count($results);
-                $user_list_id = [];
                 $locked = api_resource_is_locked_by_gradebook(
                     $exercise_id,
                     LINK_EXERCISE

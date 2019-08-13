@@ -3488,6 +3488,7 @@ class Exercise
         $exeId = (int) $exeId;
         $TBL_TRACK_ATTEMPT = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
         $table_ans = Database::get_course_table(TABLE_QUIZ_ANSWER);
+        $studentChoiceDegree = null;
 
         // Creates a temporary Question object
         $course_id = $this->course_id;
@@ -3585,11 +3586,9 @@ class Exercise
 
         $organs_at_risk_hit = 0;
         $questionScore = 0;
-        $answer_correct_array = [];
-        $orderedHotspots = [];
-
+        $orderedHotSpots = [];
         if ($answerType == HOT_SPOT || $answerType == ANNOTATION) {
-            $orderedHotspots = $em->getRepository('ChamiloCoreBundle:TrackEHotspot')->findBy(
+            $orderedHotSpots = $em->getRepository('ChamiloCoreBundle:TrackEHotspot')->findBy(
                 [
                     'hotspotQuestionId' => $questionId,
                     'cId' => $course_id,
@@ -3598,7 +3597,7 @@ class Exercise
                 ['hotspotAnswerId' => 'ASC']
             );
         }
-        $debug = true;
+
         if ($debug) {
             error_log('Start answer loop ');
         }
@@ -3713,8 +3712,7 @@ class Exercise
                     }
 
                     $studentChoice = isset($choice[$answerAutoId]) ? $choice[$answerAutoId] : null;
-                    $studentChoiceDegree = isset($choiceDegreeCertainty[$answerAutoId]) ?
-                        $choiceDegreeCertainty[$answerAutoId] : null;
+                    $studentChoiceDegree = isset($choiceDegreeCertainty[$answerAutoId]) ? $choiceDegreeCertainty[$answerAutoId] : null;
 
                     // student score update
                     if (!empty($studentChoice)) {
@@ -4973,18 +4971,12 @@ class Exercise
                                 }
 
                                 // Checking the destination parameters parsing the "@@"
-                                $destination_items = explode(
-                                    '@@',
-                                    $answerDestination
-                                );
+                                $destination_items = explode('@@', $answerDestination);
                                 $threadhold_total = $destination_items[0];
-                                $threadhold_items = explode(
-                                    ';',
-                                    $threadhold_total
-                                );
+                                $threadhold_items = explode(';', $threadhold_total);
                                 $threadhold1 = $threadhold_items[0]; // overlap
                                 $threadhold2 = $threadhold_items[1]; // excess
-                                $threadhold3 = $threadhold_items[2]; //missing
+                                $threadhold3 = $threadhold_items[2]; // missing
 
                                 // if is delineation
                                 if ($answerId === 1) {
@@ -5747,11 +5739,7 @@ class Exercise
             } elseif ($answerType == MULTIPLE_ANSWER || $answerType == GLOBAL_MULTIPLE_ANSWER) {
                 if ($choice != 0) {
                     $reply = array_keys($choice);
-
-                    if ($debug) {
-                        error_log("reply ".print_r($reply, 1)."");
-                    }
-                    for ($i = 0; $i < sizeof($reply); $i++) {
+                    for ($i = 0; $i < count($reply); $i++) {
                         $ans = $reply[$i];
                         Event::saveQuestionAttempt($questionScore, $ans, $quesId, $exeId, $i, $this->id);
                     }
@@ -5761,7 +5749,7 @@ class Exercise
             } elseif ($answerType == MULTIPLE_ANSWER_COMBINATION) {
                 if ($choice != 0) {
                     $reply = array_keys($choice);
-                    for ($i = 0; $i < sizeof($reply); $i++) {
+                    for ($i = 0; $i < count($reply); $i++) {
                         $ans = $reply[$i];
                         Event::saveQuestionAttempt($questionScore, $ans, $quesId, $exeId, $i, $this->id);
                     }

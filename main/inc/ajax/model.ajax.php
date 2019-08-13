@@ -1330,9 +1330,6 @@ switch ($action) {
         }
         break;
     case 'get_exercise_results':
-        $course = api_get_course_info();
-        // Used inside ExerciseLib::get_exam_results_data()
-        $documentPath = api_get_path(SYS_COURSE_PATH).$course['path']."/document";
         $is_allowedToEdit = api_is_allowed_to_edit(null, true) ||
             api_is_drh() ||
             api_is_student_boss() ||
@@ -1368,10 +1365,6 @@ switch ($action) {
         );
         break;
     case 'get_exercise_results_report':
-        // Used inside ExerciseLib::get_exam_results_data()
-        $documentPath = api_get_path(SYS_COURSE_PATH).$courseInfo['path'].'/document';
-        $sessionId = api_get_session_id();
-
         $columns = [
             'firstname',
             'lastname',

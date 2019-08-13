@@ -1969,14 +1969,15 @@ HOTSPOT;
         $roundValues = false
     ) {
         //@todo replace all this globals
-        global $documentPath, $filter;
-
+        global $filter;
         $courseCode = empty($courseCode) ? api_get_course_id() : $courseCode;
         $courseInfo = api_get_course_info($courseCode);
 
         if (empty($courseInfo)) {
             return [];
         }
+
+        $documentPath = api_get_path(SYS_COURSE_PATH).$courseInfo['path'].'/document';
 
         $course_id = $courseInfo['real_id'];
         $sessionId = api_get_session_id();
@@ -2131,7 +2132,7 @@ HOTSPOT;
             $first_and_last_name = api_is_western_name_order() ? "firstname, lastname" : "lastname, firstname";
 
             if ($get_count) {
-                $sql_select = "SELECT count(te.exe_id) ";
+                $sql_select = 'SELECT count(te.exe_id) ';
             } else {
                 $sql_select = "SELECT DISTINCT
                     user_id,
@@ -2197,8 +2198,8 @@ HOTSPOT;
                     AND tth.c_id = $course_id
                     $hotpotatoe_where
                     $sqlWhereOption
-                    AND user.status NOT IN(".api_get_users_status_ignored_in_reports('string').")
-                ORDER BY tth.c_id ASC, tth.exe_date DESC";
+                    AND user.status NOT IN (".api_get_users_status_ignored_in_reports('string').")
+                ORDER BY tth.c_id ASC, tth.exe_date DESC ";
         }
 
         if (empty($sql)) {
@@ -2212,9 +2213,7 @@ HOTSPOT;
             return $rowx[0];
         }
 
-        $teacher_list = CourseManager::get_teacher_list_from_course_code(
-            $courseCode
-        );
+        $teacher_list = CourseManager::get_teacher_list_from_course_code($courseCode);
         $teacher_id_list = [];
         if (!empty($teacher_list)) {
             foreach ($teacher_list as $teacher) {
@@ -2347,7 +2346,6 @@ HOTSPOT;
                     }
 
                     $results[$i]['exe_duration'] = !empty($results[$i]['exe_duration']) ? round($results[$i]['exe_duration'] / 60) : 0;
-                    $user_list_id[] = $results[$i]['exe_user_id'];
                     $id = $results[$i]['exe_id'];
                     $dt = api_convert_and_format_date($results[$i]['exe_weighting']);
 

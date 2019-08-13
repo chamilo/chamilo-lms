@@ -6438,7 +6438,7 @@ class learnpath
                     );
                 }
 
-                if (in_array($arrLP[$i]['item_type'], ['dir', 'final_item'])) {
+                if (in_array($arrLP[$i]['item_type'], ['dir', 'document'])) {
                     /*if ($isFirst) {
                         $orderIcons = Display::url($disableUpIcon, '#', ['class' => 'btn btn-default']);
                     } else {

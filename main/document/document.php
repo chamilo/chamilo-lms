@@ -2033,16 +2033,6 @@ if (count($documentAndFolders) > 1) {
 if (empty($documentAndFolders)) {
     echo Display::return_message(get_lang('NoDocsInFolder'), 'warning');
 }
-$em = Database::getManager();
-
-$repo = $em->getRepository('ChamiloCourseBundle:CDocument');
-
-/** @var \Chamilo\CourseBundle\Entity\CDocument $document */
-$document = $repo->find(19);
-
-if ($document->isVisible()) {
-}
-
 echo '
     <div id="convertModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog">

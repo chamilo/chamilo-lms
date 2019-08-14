@@ -7,7 +7,6 @@ use APY\DataGridBundle\Grid\Action\RowAction;
 use APY\DataGridBundle\Grid\Source\Entity;
 use Chamilo\CoreBundle\Component\Editor\CkEditor\Toolbar\Introduction;
 use Chamilo\CourseBundle\Entity\CToolIntro;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -15,9 +14,8 @@ use Symfony\Component\Routing\Annotation\Route;
 /**
  * Class CToolIntroController.
  *
- * @package Chamilo\CourseBundle\Controller
- *
  * @author Julio Montoya <gugli100@gmail.com>
+ *
  * @Route("/introduction")
  */
 class CToolIntroController extends ToolBaseController
@@ -70,16 +68,12 @@ class CToolIntroController extends ToolBaseController
 
         // Return the response of the grid to the template
         return $grid->getGridResponse(
-            'ChamiloCourseBundle:CToolIntro:grid.html.twig'
+            'grid.html.twig'
         );
     }
 
     /**
      * @Route("/{tool}/create")
-     *
-     * @Template("ChamiloCourseBundle:CToolIntro:create.html.twig")
-     *
-     * @return array
      */
     public function createAction(Request $request, $tool)
     {
@@ -127,13 +121,14 @@ class CToolIntroController extends ToolBaseController
             );
         }
 
-        return ['form' => $form->createView(), 'tool' => $tool];
+        return $this->render(
+            '@ChamiloTheme/CToolIntro/create.html.twig',
+            ['form' => $form->createView(), 'tool' => $tool]
+        );
     }
 
     /**
      * @Route("/{iid}/update/", methods={"GET|POST"})
-     *
-     * @Template("ChamiloCourseBundle:CToolIntro:update.html.twig")
      *
      * @return Response
      */
@@ -178,11 +173,14 @@ class CToolIntroController extends ToolBaseController
             );
         }
 
-        return [
-            'tool' => $tool,
-            'iid' => $iid,
-            'form' => $form->createView(),
-        ];
+        return $this->render(
+            '@ChamiloTheme/CToolIntro/update.html.twig',
+            [
+                'tool' => $tool,
+                'iid' => $iid,
+                'form' => $form->createView(),
+            ]
+        );
     }
 
     /**

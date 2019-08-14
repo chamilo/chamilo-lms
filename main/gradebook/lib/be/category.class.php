@@ -2585,26 +2585,6 @@ class Category implements GradebookItem
     }
 
     /**
-     * @return int
-     */
-    public function getGradeBooksToValidateInDependence()
-    {
-        return $this->gradeBooksToValidateInDependence;
-    }
-
-    /**
-     * @param int $value
-     *
-     * @return Category
-     */
-    public function setGradeBooksToValidateInDependence($value)
-    {
-        $this->gradeBooksToValidateInDependence = $value;
-
-        return $this;
-    }
-
-    /**
      * @return Category
      */
     private static function create_root_category()

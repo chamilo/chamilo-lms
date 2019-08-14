@@ -523,6 +523,12 @@ class Notification extends Model
                 'title' => $title,
                 'message' => $content,
             ],
+            'notification' => [
+                'title' => $title,
+                'body' => $content,
+            ],
+            'collapse_key' => 'Messages',
+            'sound' => true,
         ]);
 
         $ch = curl_init();

@@ -78,6 +78,7 @@ class MessageManager
                     user_receiver_id = ".api_get_user_id()."
                     $keywordCondition
                 ";
+
         $result = Database::query($sql);
         $result = Database::fetch_array($result);
 
@@ -847,14 +848,10 @@ class MessageManager
      */
     public static function delete_message_by_user_sender($user_sender_id, $id)
     {
-        if ($id != strval(intval($id))) {
-            return false;
-        }
+        $user_sender_id = (int) $user_sender_id;
+        $id = (int) $id;
 
         $table = Database::get_main_table(TABLE_MESSAGE);
-
-        $id = intval($id);
-        $user_sender_id = intval($user_sender_id);
 
         $sql = "SELECT * FROM $table WHERE id='$id'";
         $rs = Database::query($sql);
@@ -865,7 +862,7 @@ class MessageManager
             // delete message
             $sql = "UPDATE $table
                     SET msg_status = ".MESSAGE_STATUS_DELETED."
-                    WHERE user_sender_id='$user_sender_id' AND id='$id'";
+                    WHERE user_sender_id= $user_sender_id AND id= $id";
             Database::query($sql);
 
             return true;

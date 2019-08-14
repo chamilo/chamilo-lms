@@ -94,16 +94,16 @@ if ($action == 'delete') {
             $delete_list_id[$i]
         );
     }
-    $delete_list_id = [];
-    $social_right_content .= MessageManager::outbox_display($keyword);
+    MessageManager::outbox_display($keyword);
+    header("Location: ".api_get_self());
+    exit;
 } elseif ($action == 'deleteone') {
-    $delete_list_id = [];
-    $id = Security::remove_XSS($_GET['id']);
-    MessageManager::delete_message_by_user_sender(api_get_user_id(), $id);
-    $delete_list_id = [];
-    $social_right_content .= MessageManager::outbox_display($keyword);
+    MessageManager::delete_message_by_user_sender(api_get_user_id(), $_GET['id']);
+    MessageManager::outbox_display($keyword);
+    header("Location: ".api_get_self());
+    exit;
 } else {
-    $social_right_content .= MessageManager::outbox_display($keyword);
+    $social_right_content = MessageManager::outbox_display($keyword);
 }
 
 $tpl = new Template(get_lang('Outbox'));

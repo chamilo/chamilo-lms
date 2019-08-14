@@ -70,7 +70,10 @@ $nameTools = CourseCategory::getCourseCatalogNameTools($action);
 if (empty($nameTools)) {
     $nameTools = get_lang('CourseManagement');
 } else {
-    if (!in_array($action, ['sortmycourses', 'createcoursecategory', 'display_random_courses', 'display_courses', 'subscribe'])) {
+    if (!in_array(
+        $action,
+        ['sortmycourses', 'createcoursecategory', 'display_random_courses', 'display_courses', 'subscribe']
+    )) {
         $interbreadcrumb[] = [
             'url' => api_get_path(WEB_CODE_PATH).'auth/courses.php',
             'name' => get_lang('CourseManagement'),
@@ -273,7 +276,7 @@ switch ($action) {
             api_not_allowed(true);
         }
 
-        $courseController->sessionsList($action, $nameTools, $limit);
+        $courseController->sessionList($action, $nameTools, $limit);
         break;
     case 'subscribe_to_session':
         if (!$user_can_view_page) {

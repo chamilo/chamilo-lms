@@ -58,18 +58,23 @@ class NotebookTeacherPlugin extends Plugin
             return false;
         }
 
-        $srcfile1 = __DIR__.'/../resources/img/64/notebookteacher.png';
-        $srcfile2 = __DIR__.'/../resources/img/64/notebookteacher_na.png';
-        $srcfile3 = __DIR__.'/../resources/img/32/notebookteacher.png';
-        $srcfile4 = __DIR__.'/../resources/img/22/notebookteacher.png';
-        $dstfile1 = __DIR__.'/../../../main/img/icons/64/notebookteacher.png';
-        $dstfile2 = __DIR__.'/../../../main/img/icons/64/notebookteacher_na.png';
-        $dstfile3 = __DIR__.'/../../../main/img/icons/32/notebookteacher.png';
-        $dstfile4 = __DIR__.'/../../../main/img/notebookteacher.png';
-        copy($srcfile1, $dstfile1);
-        copy($srcfile2, $dstfile2);
-        copy($srcfile3, $dstfile3);
-        copy($srcfile4, $dstfile4);
+        $list = [
+            '/64/notebookteacher.png',
+            '/64/notebookteacher_na.png',
+            '/32/notebookteacher.png',
+            '/32/notebookteacher_na.png',
+            '/32/test2pdf_na.png',
+            '/22/notebookteacher.png',
+        ];
+
+        foreach ($list as $file) {
+            $source = __DIR__.'/../resources/img/'.$file;
+            $destination = __DIR__.'/../../../main/img/icons/'.$file;
+            $res = @copy($source, $destination);
+            if (!$res) {
+                break;
+            }
+        }
 
         require_once api_get_path(SYS_PLUGIN_PATH).'notebookteacher/database.php';
     }

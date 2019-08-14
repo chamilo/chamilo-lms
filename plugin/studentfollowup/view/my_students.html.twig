@@ -3,8 +3,8 @@
 {% if users %}
     <table class="data_table">
     <tr>
-        <th>Student</th>
-        <th>Action</th>
+        <th>{{'Student' | get_lang }}</th>
+        <th>{{'Action' | get_lang }}</th>
     </tr>
     {% for user in users %}
         <tr>

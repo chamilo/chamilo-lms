@@ -133,7 +133,7 @@ class StudentFollowUpPlugin extends Plugin
             }
 
             // Check if course session coach
-            $sessions = SessionManager::get_sessions_by_user($studentId);
+            $sessions = SessionManager::get_sessions_by_user($studentId, false, true);
             if (!empty($sessions)) {
                 foreach ($sessions as $session) {
                     $sessionId = $session['session_id'];
@@ -146,7 +146,6 @@ class StudentFollowUpPlugin extends Plugin
                         break;
                     }
                     foreach ($session['courses'] as $course) {
-                        //$isCourseCoach = api_is_coach($sessionId, $course['real_id']);
                         $coachList = SessionManager::getCoachesByCourseSession(
                             $sessionId,
                             $course['real_id']
@@ -174,18 +173,27 @@ class StudentFollowUpPlugin extends Plugin
     /**
      * @param string $status
      * @param int    $currentUserId
+     * @param int    $sessionId
      * @param int    $start
      * @param int    $limit
      *
      * @return array
      */
-    public static function getUsers($status, $currentUserId, $start, $limit)
+    public static function getUsers($status, $currentUserId, $sessionId, $start, $limit)
     {
+        $sessions = [];
+        $courses = [];
+        $sessionsFull = [];
+
         switch ($status) {
             case COURSEMANAGER:
-                $sessions = SessionManager::get_sessions_by_user($currentUserId);
-                $sessions = array_column($sessions, 'session_id');
-
+                /*$sessions = SessionManager::get_sessions_by_user($currentUserId);
+                $sessions = array_column($sessions, 'session_id');*/
+                $sessionsFull = SessionManager::getSessionsCoachedByUser($currentUserId);
+                $sessions = array_column($sessionsFull, 'id');
+                if (!empty($sessionId)) {
+                    $sessions = [$sessionId];
+                }
                 // Get session courses where I'm coach
                 $courseList = SessionManager::getCoursesListByCourseCoach($currentUserId);
                 $courses = [];
@@ -195,8 +203,12 @@ class StudentFollowUpPlugin extends Plugin
                 }
                 break;
             case DRH:
-                $sessions = SessionManager::get_sessions_followed_by_drh($currentUserId);
-                $sessions = array_column($sessions, 'id');
+                $sessionsFull = SessionManager::get_sessions_followed_by_drh($currentUserId);
+                $sessions = array_column($sessionsFull, 'id');
+
+                if (!empty($sessionId)) {
+                    $sessions = [$sessionId];
+                }
                 $courses = [];
                 foreach ($sessions as $sessionId) {
                     $sessionDrhInfo = SessionManager::getSessionFollowedByDrh(
@@ -230,7 +242,10 @@ class StudentFollowUpPlugin extends Plugin
             $userList = array_unique($userList);
         }*/
 
-        return $userList;
+        return [
+            'users' => $userList,
+            'sessions' => $sessionsFull,
+        ];
     }
 
     /**
@@ -239,5 +254,16 @@ class StudentFollowUpPlugin extends Plugin
     public static function getPageSize()
     {
         return 20;
+    }
+
+    /**
+     * @param int $userId
+     */
+    public function doWhenDeletingUser($userId)
+    {
+        $userId = (int) $userId;
+
+        Database::query("DELETE FROM sfu_post WHERE user_id = $userId");
+        Database::query("DELETE FROM sfu_post WHERE insert_user_id = $userId");
     }
 }

@@ -759,7 +759,7 @@ class CourseChatUtils
             'status' => $status,
             'image_url' => UserManager::getUserPicture($user->getId(), USER_IMAGE_SIZE_MEDIUM),
             'profile_url' => api_get_path(WEB_CODE_PATH).'social/profile.php?u='.$user->getId(),
-            'complete_name' => $user->getCompleteName(),
+            'complete_name' => UserManager::formatUserFullName($user),
             'username' => $user->getUsername(),
             'email' => $user->getEmail(),
             'isConnected' => $this->userIsConnected($user->getId()),

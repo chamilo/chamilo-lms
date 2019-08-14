@@ -13,8 +13,6 @@
         {% if term %}
             {{ display.panel('TermsAndConditions'|get_lang, term.content, term.date_text ) }}
         {% endif %}
-
-
     </div>
 </div>
 {% endblock %}

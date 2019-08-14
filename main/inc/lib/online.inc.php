@@ -166,13 +166,16 @@ function online_logout($user_id = null, $logout_redirect = false)
     $url = api_get_path(WEB_PATH).'index.php';
 
     if ($logout_redirect && api_get_plugin_setting('azure_active_directory', 'enable') == 'true') {
-        $activeDirectoryPlugin = AzureActiveDirectory::create();
-        $azureLogout = $activeDirectoryPlugin->getUrl(AzureActiveDirectory::URL_TYPE_SIGNOUT);
-        if (!empty($azureLogout)) {
-            $url = $azureLogout;
+        if (ChamiloSession::read('_user_auth_source') === 'azure_active_directory') {
+            $activeDirectoryPlugin = AzureActiveDirectory::create();
+            $azureLogout = $activeDirectoryPlugin->getUrl(AzureActiveDirectory::URL_TYPE_LOGOUT);
+            if (!empty($azureLogout)) {
+                $url = $azureLogout;
+            }
         }
     }
 
+    api_delete_firstpage_parameter();
     Session::erase('last_id');
     CourseChatUtils::exitChat($user_id);
     session_regenerate_id();
@@ -206,7 +209,7 @@ function user_is_online($user_id)
 
     $online_time = time() - $time_limit * 60;
     $limit_date = api_get_utc_datetime($online_time);
-    $user_id = intval($user_id);
+    $user_id = (int) $user_id;
 
     $query = " SELECT login_user_id, login_date
                FROM $track_online_table track

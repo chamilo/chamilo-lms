@@ -145,7 +145,7 @@ class WSReport extends WS
             );
         }
 
-        $lp = new LearnpathList($user_id, $course_code);
+        $lp = new LearnpathList($user_id, api_get_course_info($course_code));
         $list = $lp->list;
         $return = [];
         foreach ($list as $id => $item) {

@@ -54,7 +54,7 @@ class UniqueAnswerNoOption extends Question
          */
 
         $feedback_title = '';
-        if ($obj_ex->selectFeedbackType() == 1) {
+        if ($obj_ex->getFeedbackType() == 1) {
             $editor_config['Width'] = '250';
             $editor_config['Height'] = '110';
             $comment_title = '<th width="50%" >'.get_lang('Comment').'</th>';
@@ -254,7 +254,9 @@ class UniqueAnswerNoOption extends Question
 
         global $text;
         //ie6 fix
-        if ($obj_ex->edit_exercise_in_lp == true) {
+        if ($obj_ex->edit_exercise_in_lp == true ||
+            (empty($this->exerciseList) && empty($obj_ex->id))
+        ) {
             //setting the save button here and not in the question class.php
             $buttonGroup[] = $form->addButtonDelete(get_lang('LessAnswer'), 'lessAnswers', true);
             $buttonGroup[] = $form->addButtonCreate(get_lang('PlusAnswer'), 'moreAnswers', true);
@@ -397,12 +399,20 @@ class UniqueAnswerNoOption extends Question
     /**
      * {@inheritdoc}
      */
-    public function return_header($exercise, $counter = null, $score = null)
+    public function return_header(Exercise $exercise, $counter = null, $score = [])
     {
         $header = parent::return_header($exercise, $counter, $score);
         $header .= '<table class="'.$this->question_table_class.'"><tr>';
-        $header .= '<th>'.get_lang('Choice').'</th>';
-        $header .= '<th>'.get_lang('ExpectedChoice').'</th>';
+
+        if (!in_array($exercise->results_disabled, [
+            RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER,
+        ])
+        ) {
+            $header .= '<th>'.get_lang('Choice').'</th>';
+            if ($exercise->showExpectedChoiceColumn()) {
+                $header .= '<th>'.get_lang('ExpectedChoice').'</th>';
+            }
+        }
         $header .= '<th>'.get_lang('Answer').'</th>';
         if ($exercise->showExpectedChoice()) {
             $header .= '<th>'.get_lang('Status').'</th>';

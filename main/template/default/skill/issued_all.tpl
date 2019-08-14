@@ -52,21 +52,22 @@
             {% endif %}
         </div>
         <div class="col-md-7">
-            <h3>{{ 'RecipientDetails'|get_lang }}</h3>
+            <h5>{{ 'RecipientDetails'|get_lang }}</h5>
             <p class="lead">{{ badge.issue_info.user_complete_name }}</p>
-            <h4>{{ 'SkillAcquiredAt'|get_lang }}</h4>
+            <h4 class="bage-username">{{ 'SkillAcquiredAt'|get_lang }}</h4>
             <ul class="fa-ul">
-                <li>
+                <li class="badge-item">
                     {% if badge.issue_info.source_name %}
-                        <em class="fa-li fa fa-clock-o fa-fw"></em> {{ 'TimeXThroughCourseY'|get_lang|format(badge.issue_info.datetime, badge.issue_info.source_name) }}
+                        <em class="fa fa-clock-o fa-fw"></em> {{ 'TimeXThroughCourseY'|get_lang|format(badge.issue_info.datetime, badge.issue_info.source_name) }}
                     {% else %}
-                        <em class="fa-li fa fa-clock-o fa-fw"></em> {{ badge.issue_info.datetime }}
+                        <em class="fa fa-clock-o fa-fw"></em> {{ badge.issue_info.datetime }}
                     {% endif %}
                     {% if badge.issue_info.argumentation %}
                         {% if badge.issue_info.argumentation %}
-                            <b><p style="font-style: italic;">{{ 'UserXIndicated'|get_lang|format(badge.issue_info.argumentation_author_name) }} </p></b>
+                            <br>
+                            <p>{{ 'UserXIndicated'|get_lang|format(badge.issue_info.argumentation_author_name) }} </p>
                         {% endif %}
-                        <p>{{ badge.issue_info.argumentation }}</p>
+                        <p class="msg">{{ badge.issue_info.argumentation }}</p>
                     {% endif %}
                 </li>
             </ul>

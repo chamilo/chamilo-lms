@@ -81,7 +81,7 @@ function msort($array, $id = 'id', $order = 'desc')
  */
 function utf8_sort($array)
 {
-    $old_locale = setlocale(LC_ALL, null);
+    $old_locale = setlocale(LC_ALL, 0);
     $code = api_get_language_isocode();
     $locale_list = [$code.'.utf8', 'en.utf8', 'en_US.utf8', 'en_GB.utf8'];
     $try_sort = false;

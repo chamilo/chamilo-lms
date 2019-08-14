@@ -34,26 +34,11 @@ $interbreadcrumb[] = [
     'name' => get_lang('SessionOverview'),
 ];
 
-if ($action == 'add') {
-    $interbreadcrumb[] = [
-        'url' => api_get_self().'?session_id='.$sessionId,
-        'name' => get_lang('ScheduledAnnouncements'),
-    ];
-    $tool_name = get_lang('Add');
-} elseif ($action == 'edit') {
-    $tool_name = get_lang('Edit');
-    $interbreadcrumb[] = [
-        'url' => api_get_self().'?session_id='.$sessionId,
-        'name' => get_lang('ScheduledAnnouncements'),
-    ];
-} else {
-    $tool_name = get_lang('ScheduledAnnouncements');
-}
+$tool_name = get_lang('ScheduledAnnouncements');
 
 switch ($action) {
     case 'run':
         $messagesSent = $object->sendPendingMessages();
-
         Display::addFlash(
             Display::return_message(
                 get_lang('MessageSent').': '.$messagesSent,
@@ -61,10 +46,15 @@ switch ($action) {
             )
         );
         $content = $object->getGrid($sessionId);
-
         break;
     case 'add':
-        $url = api_get_self().'?action='.Security::remove_XSS($_GET['action']).'&session_id='.$sessionId;
+        $interbreadcrumb[] = [
+            'url' => api_get_self().'?session_id='.$sessionId,
+            'name' => get_lang('ScheduledAnnouncements'),
+        ];
+        $tool_name = get_lang('Add');
+
+        $url = api_get_self().'?action=add&session_id='.$sessionId;
         $form = $object->returnForm($url, 'add', $sessionInfo);
 
         // The validation or display
@@ -125,8 +115,14 @@ switch ($action) {
         }
         break;
     case 'edit':
+        $tool_name = get_lang('Edit');
+        $interbreadcrumb[] = [
+            'url' => api_get_self().'?session_id='.$sessionId,
+            'name' => get_lang('ScheduledAnnouncements'),
+        ];
+
         // Action handling: Editing
-        $url = api_get_self().'?action='.Security::remove_XSS($_GET['action']).'&id='.$id.'&session_id='.$sessionId;
+        $url = api_get_self().'?action=edit&id='.$id.'&session_id='.$sessionId;
         $form = $object->returnSimpleForm($id, $url, 'edit', $sessionInfo);
         if ($form->validate()) {
             $values = $form->getSubmitValues();

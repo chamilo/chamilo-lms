@@ -41,11 +41,11 @@ function get_zip_files_in_garbage()
  */
 $nameTools = get_lang('FileUpload');
 $interbreadcrumb[] = [
-    "url" => api_get_path(WEB_CODE_PATH)."lp/lp_controller.php?action=list&".api_get_cidreq(),
-    "name" => get_lang("ToolLearnpath"),
+    'url' => api_get_path(WEB_CODE_PATH).'lp/lp_controller.php?action=list&'.api_get_cidreq(),
+    'name' => get_lang('ToolLearnpath'),
 ];
 
-Display::display_header($nameTools, "Path");
+Display::display_header($nameTools, 'Path');
 
 require_once '../lp/content_makers.inc.php';
 require_once api_get_path(LIBRARY_PATH).'specific_fields_manager.lib.php';
@@ -61,8 +61,8 @@ $form = new FormValidator(
     api_get_path(WEB_CODE_PATH).'upload/upload.php?'.api_get_cidreq(),
     '',
     [
-        'id' => "upload_form",
-        'enctype' => "multipart/form-data",
+        'id' => 'upload_form',
+        'enctype' => 'multipart/form-data',
     ]
 );
 $form->addHeader($nameTools);
@@ -87,6 +87,11 @@ if (api_get_setting('search_enabled') == 'true') {
 if (api_is_platform_admin()) {
     $form->addElement('checkbox', 'use_max_score', null, get_lang('UseMaxScore100'));
 }
+
+if (api_get_configuration_value('allow_htaccess_import_from_scorm')) {
+    $form->addElement('checkbox', 'allow_htaccess', null, get_lang('AllowHtaccessScormImport'));
+}
+
 $form->addButtonUpload(get_lang('Upload'));
 
 // the default values for the form

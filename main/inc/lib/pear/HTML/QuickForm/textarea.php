@@ -45,21 +45,19 @@ class HTML_QuickForm_textarea extends HTML_QuickForm_element
     /**
      * Class constructor
      *
-     * @param     string    Input field name attribute
-     * @param     mixed     Label(s) for a field
-     * @param     mixed     Either a typical HTML attribute string or an associative array
-     * @since     1.0
-     * @access    public
+     * @param string       $elementName Input field name attribute
+     * @param string|array $label       Label(s) for a field
+     * @param mixed        $attributes  Either a typical HTML attribute string or an associative array
      */
     public function __construct(
         $elementName = null,
-        $elementLabel = null,
+        $label = null,
         $attributes = null
     ) {
         $attributes['class'] = isset($attributes['class']) ? $attributes['class'] : 'form-control';
         $columnsSize = isset($attributes['cols-size']) ? $attributes['cols-size'] : null;
         $this->setColumnsSize($columnsSize);
-        parent::__construct($elementName, $elementLabel, $attributes);
+        parent::__construct($elementName, $label, $attributes);
         $this->_persistantFreeze = true;
         $this->_type = 'textarea';
         $this->_value = null;
@@ -73,9 +71,9 @@ class HTML_QuickForm_textarea extends HTML_QuickForm_element
      * @access    public
      * @return    void
      */
-    function setName($name)
+    public function setName($name)
     {
-        $this->updateAttributes(array('name'=>$name));
+        $this->updateAttributes(array('name' => $name));
     }
 
     /**
@@ -85,7 +83,7 @@ class HTML_QuickForm_textarea extends HTML_QuickForm_element
      * @access    public
      * @return    string
      */
-    function getName()
+    public function getName()
     {
         return $this->getAttribute('name');
     }
@@ -98,7 +96,7 @@ class HTML_QuickForm_textarea extends HTML_QuickForm_element
      * @access    public
      * @return    void
      */
-    function setValue($value)
+    public function setValue($value)
     {
         $this->_value = $value;
     }
@@ -110,22 +108,9 @@ class HTML_QuickForm_textarea extends HTML_QuickForm_element
      * @access    public
      * @return    string
      */
-    function getValue()
+    public function getValue()
     {
         return $this->_value;
-    }
-
-    /**
-     * Sets wrap type for textarea element
-     *
-     * @param     string    $wrap  Wrap type
-     * @since     1.0
-     * @access    public
-     * @return    void
-     */
-    function setWrap($wrap)
-    {
-        $this->updateAttributes(array('wrap' => $wrap));
     }
 
     /**
@@ -136,7 +121,7 @@ class HTML_QuickForm_textarea extends HTML_QuickForm_element
      * @access    public
      * @return    void
      */
-    function setRows($rows)
+    public function setRows($rows)
     {
         $this->updateAttributes(array('rows' => $rows));
     }
@@ -149,7 +134,7 @@ class HTML_QuickForm_textarea extends HTML_QuickForm_element
      * @access    public
      * @return    void
      */
-    function setCols($cols)
+    public function setCols($cols)
     {
         $this->updateAttributes(array('cols' => $cols));
     }
@@ -166,7 +151,7 @@ class HTML_QuickForm_textarea extends HTML_QuickForm_element
         if ($this->_flagFrozen) {
             return $this->getFrozenHtml();
         } else {
-            return $this->_getTabs() .
+            return $this->_getTabs().
                    '<textarea' . $this->_getAttrString($this->_attributes) . '>' .
                    // because we wrap the form later we don't want the text indented
                    // Modified by Ivan Tcholakov, 16-MAR-2010.

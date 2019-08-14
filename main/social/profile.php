@@ -156,8 +156,8 @@ if (is_array($personal_course_list)) {
     $course_list_code = array_unique_dimensional($course_list_code);
 }
 
-//Social Block Menu
-$social_menu_block = SocialManager::show_social_menu(
+// Social Block Menu
+$menu = SocialManager::show_social_menu(
     'shared_profile',
     null,
     $user_id,
@@ -173,49 +173,13 @@ $sessionList = SessionManager::getSessionsFollowedByUser(
 
 // My friends
 $friend_html = SocialManager::listMyFriendsBlock($user_id, $link_shared);
-$wallSocialAddPost = SocialManager::getWallForm(api_get_self());
+$addPostForm = SocialManager::getWallForm(api_get_self());
 
 $posts = SocialManager::getWallMessagesByUser($friendId);
 $socialAutoExtendLink = SocialManager::getAutoExtendLink($user_id, $countPost);
 
 // Added a Jquery Function to return the Preview of OpenGraph URL Content
-$htmlHeadXtra[] = '<script>
-$(function() {
-    var getUrl = $("[name=\'social_wall_new_msg_main\']");
-    var matchUrl = /https?:\/\/w{0,3}\w*?\.(\w*?\.)?\w{2,3}\S*|www\.(\w*?\.)?\w*?\.\w{2,3}\S*|(\w*?\.)?\w*?\.\w{2,3}[\/\?]\S*/ ;
-
-    getUrl.on("paste", function(e) {
-        $.ajax({
-            contentType: "application/x-www-form-urlencoded",
-            beforeSend: function() {
-                $("[name=\'wall_post_button\']").prop( "disabled", true );
-                $(".panel-preview").hide();
-                $(".spinner").html("'.
-                    '<div class=\'text-center\'>'.
-                        '<em class=\'fa fa-spinner fa-pulse fa-1x\'></em>'.
-                        '<p>'.get_lang('Loading').' '.get_lang('Preview').'</p>'.
-                    '</div>'.
-                '");
-            },
-            type: "POST",
-            url: "'.api_get_path(WEB_AJAX_PATH).'social.ajax.php?a=read_url_with_open_graph",
-            data: "social_wall_new_msg_main=" + e.originalEvent.clipboardData.getData("text"),
-            success: function(response) {
-                $("[name=\'wall_post_button\']").prop( "disabled", false );
-                if (!response == false) {
-                    $(".spinner").html("");
-                    $(".panel-preview").show();
-                    $(".url_preview").html(response);
-                    $("[name=\'url_content\']").val(response);
-                    $(".url_preview img").addClass("img-responsive");
-                } else {
-                    $(".spinner").html("");
-                }
-            }
-        });
-    });
-});
-</script>';
+$htmlHeadXtra[] = SocialManager::getScriptToGetOpenGraph();
 
 $socialRightInformation = '';
 $social_right_content = '';
@@ -381,9 +345,9 @@ SocialManager::setSocialUserBlock(
 );
 
 $tpl->assign('social_friend_block', $friend_html);
-$tpl->assign('social_menu_block', $social_menu_block);
-$tpl->assign('social_wall_block', $wallSocialAddPost);
-$tpl->assign('social_post_wall_block', $posts);
+$tpl->assign('social_menu_block', $menu);
+$tpl->assign('add_post_form', $addPostForm);
+$tpl->assign('posts', $posts);
 $tpl->assign('social_course_block', $social_course_block);
 $tpl->assign('social_group_info_block', $social_group_info_block);
 $tpl->assign('social_rss_block', $social_rss_block);
@@ -394,7 +358,7 @@ $tpl->assign('social_right_information', $socialRightInformation);
 $tpl->assign('social_auto_extend_link', $socialAutoExtendLink);
 
 $formModalTpl = new Template();
-$formModalTpl->assign('invitation_form', MessageManager::generate_invitation_form('send_invitation'));
+$formModalTpl->assign('invitation_form', MessageManager::generate_invitation_form());
 $template = $formModalTpl->get_template('social/form_modals.tpl');
 $formModals = $formModalTpl->fetch($template);
 

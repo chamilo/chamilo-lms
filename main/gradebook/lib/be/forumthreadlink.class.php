@@ -10,8 +10,8 @@
  */
 class ForumThreadLink extends AbstractLink
 {
-    private $forum_thread_table = null;
-    private $itemprop_table = null;
+    private $forum_thread_table;
+    private $itemprop_table;
 
     /**
      * Constructor.
@@ -39,45 +39,6 @@ class ForumThreadLink extends AbstractLink
     }
 
     /**
-     * Generate an array of exercises that a teacher hasn't created a link for.
-     *
-     * @return array 2-dimensional array - every element contains 2 subelements (id, name)
-     */
-    public function get_not_created_links()
-    {
-        if (empty($this->course_code)) {
-            return [];
-        }
-
-        $tbl_grade_links = Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
-        $sql = 'SELECT thread_id,thread_title,thread_title_qualify 
-                FROM '.$this->get_forum_thread_table().'
-                forum_thread WHERE thread_id NOT IN
-                (
-                    SELECT ref_id FROM '.$tbl_grade_links.' 
-                    WHERE 
-                        type = '.LINK_FORUM_THREAD.' AND
-                        c_id = '.intval($this->course_id).'
-                ) 
-                AND forum_thread.session_id='.api_get_session_id();
-
-        $result = Database::query($sql);
-        $cats = [];
-        while ($data = Database::fetch_array($result)) {
-            if (isset($data['thread_title_qualify']) && $data['thread_title_qualify'] != "") {
-                $cats[] = [
-                    $data['thread_id'],
-                    $data['thread_title_qualify'],
-                ];
-            } else {
-                $cats[] = [$data['thread_id'], $data['thread_title']];
-            }
-        }
-
-        return $cats;
-    }
-
-    /**
      * Generate an array of all exercises available.
      *
      * @return array 2-dimensional array - every element contains 2 subelements (id, name)
@@ -90,10 +51,10 @@ class ForumThreadLink extends AbstractLink
 
         $tbl_grade_links = Database::get_course_table(TABLE_FORUM_THREAD);
         $tbl_item_property = Database::get_course_table(TABLE_ITEM_PROPERTY);
-        $session_id = api_get_session_id();
+        $sessionId = $this->get_session_id();
 
-        if ($session_id) {
-            $session_condition = 'tl.session_id='.api_get_session_id();
+        if ($sessionId) {
+            $session_condition = 'tl.session_id='.$sessionId;
         } else {
             $session_condition = '(tl.session_id = 0 OR tl.session_id IS NULL)';
         }
@@ -241,7 +202,7 @@ class ForumThreadLink extends AbstractLink
             }
 
             if ($counter == 0) {
-                return null;
+                return [null, null];
             } else {
                 switch ($type) {
                     case 'best':
@@ -286,9 +247,9 @@ class ForumThreadLink extends AbstractLink
         $thread_title_qualify = isset($this->exercise_data['thread_title_qualify']) ? $this->exercise_data['thread_title_qualify'] : '';
         if (isset($thread_title_qualify) && $thread_title_qualify != '') {
             return $this->exercise_data['thread_title_qualify'];
-        } else {
-            return $thread_title;
         }
+
+        return $thread_title;
     }
 
     /**
@@ -304,11 +265,12 @@ class ForumThreadLink extends AbstractLink
      */
     public function is_valid_link()
     {
+        $sessionId = $this->get_session_id();
         $sql = 'SELECT count(id) from '.$this->get_forum_thread_table().'
                 WHERE 
                     c_id = '.$this->course_id.' AND 
                     thread_id = '.$this->get_ref_id().' AND 
-                    session_id='.api_get_session_id();
+                    session_id='.$sessionId;
         $result = Database::query($sql);
         $number = Database::fetch_row($result);
 
@@ -317,7 +279,7 @@ class ForumThreadLink extends AbstractLink
 
     public function get_link()
     {
-        $sessionId = api_get_session_id();
+        $sessionId = $this->get_session_id();
         //it was extracts the forum id
         $sql = 'SELECT * FROM '.$this->get_forum_thread_table()."
                 WHERE
@@ -355,7 +317,7 @@ class ForumThreadLink extends AbstractLink
     {
         $ref_id = $this->get_ref_id();
         if (!empty($ref_id)) {
-            //Cleans forum
+            // Cleans forum
             $sql = 'UPDATE '.$this->get_forum_thread_table().' SET
                     thread_qualify_max = 0,
                     thread_weight = 0,
@@ -375,9 +337,9 @@ class ForumThreadLink extends AbstractLink
 
     private function get_exercise_data()
     {
-        $session_id = api_get_session_id();
-        if ($session_id) {
-            $session_condition = 'session_id='.api_get_session_id();
+        $sessionId = $this->get_session_id();
+        if ($sessionId) {
+            $session_condition = 'session_id = '.$sessionId;
         } else {
             $session_condition = '(session_id = 0 OR session_id IS NULL)';
         }

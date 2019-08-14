@@ -116,7 +116,7 @@ $course_code = api_get_course_id();
 $course_id = api_get_course_int_id();
 
 if ($lpReporting) {
-    $list = new LearnpathList(null, $course_code, $session_id);
+    $list = new LearnpathList(null, $course_info, $session_id);
     $flat_list = $list->get_flat_list();
 
     if (count($flat_list) > 0) {

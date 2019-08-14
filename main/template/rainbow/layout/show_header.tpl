@@ -52,11 +52,7 @@
 
     <!-- START CONTENT -->
     <section id="cm-content">
-        {% if (_p.self_basename == 'exercise_submit.php' or _p.self_basename == 'result.php') %}
-            <div class="container-fluid">
-        {% else %}
-            <div class="container">
-        {% endif %}
+        <div class="container{{ fluid == true ? '-fluid':'' }}">
             {% block breadcrumb %}
                 {{ breadcrumb }}
             {% endblock %}

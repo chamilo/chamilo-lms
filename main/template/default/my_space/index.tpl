@@ -261,7 +261,7 @@
     </div>
 </div>
 
-<script type="text/javascript">
+<script>
     $(function() {
         $('#easypiechart-teal').easyPieChart({
             scaleColor: false,
@@ -269,27 +269,21 @@
             lineWidth:8,
             trackColor: '#f2f2f2'
         });
-    });
 
-    $(function() {
         $('#easypiechart-orange').easyPieChart({
             scaleColor: false,
             barColor: '#ffb53e',
             lineWidth:8,
             trackColor: '#f2f2f2'
         });
-    });
 
-    $(function() {
         $('#easypiechart-red').easyPieChart({
             scaleColor: false,
             barColor: '#f9243f',
             lineWidth:8,
             trackColor: '#f2f2f2'
         });
-    });
 
-    $(function() {
         $('#easypiechart-blue').easyPieChart({
             scaleColor: false,
             barColor: '#30a5ff',
@@ -297,5 +291,4 @@
             trackColor: '#f2f2f2'
         });
     });
-
 </script>

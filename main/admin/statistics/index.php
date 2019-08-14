@@ -130,6 +130,10 @@ if ($report == 'user_session') {
     $htmlHeadXtra[] = api_get_jqgrid_js();
 }
 
+if (isset($_GET['export'])) {
+    ob_start();
+}
+
 $tool_name = get_lang('Statistics');
 Display::display_header($tool_name);
 echo Display::page_header($tool_name);
@@ -153,6 +157,7 @@ $tools[$strUsers]['report=logins&amp;type=month'] = get_lang('Logins').' ('.get_
 $tools[$strUsers]['report=logins&amp;type=day'] = get_lang('Logins').' ('.get_lang('PeriodDay').')';
 $tools[$strUsers]['report=logins&amp;type=hour'] = get_lang('Logins').' ('.get_lang('PeriodHour').')';
 $tools[$strUsers]['report=pictures'] = get_lang('CountUsers').' ('.get_lang('UserPicture').')';
+$tools[$strUsers]['report=logins_by_date'] = get_lang('LoginsByDate');
 $tools[$strUsers]['report=no_login_users'] = get_lang('StatsUsersDidNotLoginInLastPeriods');
 $tools[$strUsers]['report=zombies'] = get_lang('Zombies');
 
@@ -370,6 +375,13 @@ switch ($report) {
         $friends = Statistics::getFriends();
         Statistics::printStats(get_lang('CountFriends'), $friends);
         break;
+    case 'logins_by_date':
+        Statistics::printLoginsByDate();
+        break;
 }
 
 Display::display_footer();
+
+if (isset($_GET['export'])) {
+    ob_end_clean();
+}

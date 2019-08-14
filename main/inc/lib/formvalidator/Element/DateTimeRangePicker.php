@@ -53,29 +53,7 @@ class DateTimeRangePicker extends DateRangePicker
      */
     public function getTemplate($layout)
     {
-        $size = $this->getColumnsSize();
-
-        if (empty($size)) {
-            $sizeTemp = $this->getInputSize();
-            if (empty($size)) {
-                $sizeTemp = 8;
-            }
-            $size = [2, $sizeTemp, 2];
-        } else {
-            if (is_array($size)) {
-                if (count($size) != 3) {
-                    $sizeTemp = $this->getInputSize();
-                    if (empty($size)) {
-                        $sizeTemp = 8;
-                    }
-                    $size = [2, $sizeTemp, 2];
-                }
-                // else just keep the $size array as received
-            } else {
-                $size = [2, (int) $size, 2];
-            }
-        }
-
+        $size = $this->calculateSize();
         $id = $this->getAttribute('id');
 
         switch ($layout) {

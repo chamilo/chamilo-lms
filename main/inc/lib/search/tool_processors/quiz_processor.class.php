@@ -132,7 +132,7 @@ class quiz_processor extends search_processor
                     ]);
 
                 if ($item_result) {
-                    $author = $item_result->getInsertUser()->getCompleteName();
+                    $author = UserManager::formatUserFullName($item_result->getInsertUser());
                 }
             }
 

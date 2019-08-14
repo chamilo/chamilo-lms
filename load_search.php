@@ -300,8 +300,18 @@ $extra = $extraFieldUser->addElements(
 
 $userForm->addHtml('</div></div></div>');
 
+if (isset($_POST) && !empty($_POST)) {
+    $searchChecked1 = isset($_POST['search_using_1']) ? 'checked' : '';
+    $searchChecked2 = isset($_POST['search_using_2']) ? 'checked' : '';
+    $searchChecked3 = isset($_POST['search_using_3']) ? 'checked' : '';
+} else {
+    $searchChecked1 = 'checked';
+    $searchChecked2 = 'checked';
+    $searchChecked3 = 'checked';
+}
+
 $form->addHtml('<div class="panel panel-default">');
-$form->addHtml('<div class="panel-heading"><a role="button" data-toggle="collapse" data-parent="#search_extrafield" href="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">'.get_lang('DisponibiliteAvant').'</a></div>');
+$form->addHtml('<div class="panel-heading"><input type="checkbox" name="search_using_1" '.$searchChecked1.' />&nbsp;<a role="button" data-toggle="collapse" data-parent="#search_extrafield" href="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">'.get_lang('DisponibiliteAvant').'</a></div>');
 $form->addHtml('<div id="collapseTwo" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingTwo">');
 $form->addHtml('<div class="panel-body"><p class="text-info">'.get_lang('DisponibiliteAvantExplanation').'</p>');
 
@@ -348,7 +358,7 @@ $extra = $extraFieldUser->addElements(
 $form->addHtml('</div></div></div>');
 
 $form->addHtml('<div class="panel panel-default">');
-$form->addHtml('<div class="panel-heading"><a role="button" data-toggle="collapse" data-parent="#search_extrafield" href="#collapseFour" aria-expanded="true" aria-controls="collapseFour">'.get_lang('ThemesObjectifs').'</a></div>');
+$form->addHtml('<div class="panel-heading"><input type="checkbox" name="search_using_2" '.$searchChecked2.' />&nbsp;<a role="button" data-toggle="collapse" data-parent="#search_extrafield" href="#collapseFour" aria-expanded="true" aria-controls="collapseFour">'.get_lang('ThemesObjectifs').'</a></div>');
 $form->addHtml('<div id="collapseFour" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingFour">');
 $form->addHtml('<div class="panel-body"><p class="text-info">'.get_lang('ThemesObjectifsExplanation').'</p>');
 
@@ -407,7 +417,7 @@ $extra = $extraFieldUser->addElements(
 
 $form->addHtml('</div></div></div>');
 $form->addHtml('<div class="panel panel-default">');
-$form->addHtml('<div class="panel-heading"><a role="button" data-toggle="collapse" data-parent="#search_extrafield" href="#collapseFive" aria-expanded="true" aria-controls="collapseFive">'.get_lang('NiveauLangue').'</a></div>');
+$form->addHtml('<div class="panel-heading"><input type="checkbox" name="search_using_3" '.$searchChecked3.' />&nbsp;<a role="button" data-toggle="collapse" data-parent="#search_extrafield" href="#collapseFive" aria-expanded="true" aria-controls="collapseFive">'.get_lang('NiveauLangue').'</a></div>');
 $form->addHtml('<div id="collapseFive" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingFive">');
 $form->addHtml('<div class="panel-body"><p class="text-info">'.get_lang('NiveauLangueExplanation').'</p>');
 
@@ -586,6 +596,17 @@ if (!empty($filters)) {
             if ($count > 5) {
                 if (isset($filters[$column['name']])) {
                     $defaultValues['jqg'.$countExtraField] = $filters[$column['name']];
+                    /*switch ($column['name']) {
+                        case 'extra_theme_it':
+                        case 'extra_theme_de':
+                        case 'extra_theme_es':
+                        case 'extra_theme_fr':
+                            break;
+                        case 'extra_domaine':
+                            break;
+                        case '':
+                            break;
+                    }*/
                     $filterToSend['rules'][] = ['field' => $column['name'], 'op' => 'cn', 'data' => $filters[$column['name']]];
                 }
                 $countExtraField++;
@@ -652,7 +673,6 @@ if ($form->validate()) {
 
     if ($save) {
         $userData = $params;
-
         // Update extra_heures_disponibilite_par_semaine
         $extraFieldValue = new ExtraFieldValue('user');
         $userDataToSave = [
@@ -782,42 +802,44 @@ $(function() {
 </script>';
 
 if (!empty($filterToSend)) {
-    // Get start and end date from ExtraFieldSavedSearch
-    $defaultExtraStartDate = isset($defaults['extra_access_start_date']) ? $defaults['extra_access_start_date'] : '';
-    $defaultExtraEndDate = isset($defaults['extra_access_end_date']) ? $defaults['extra_access_end_date'] : '';
+    if (isset($params['search_using_1'])) {
+        // Get start and end date from ExtraFieldSavedSearch
+        $defaultExtraStartDate = isset($defaults['extra_access_start_date']) ? $defaults['extra_access_start_date'] : '';
+        $defaultExtraEndDate = isset($defaults['extra_access_end_date']) ? $defaults['extra_access_end_date'] : '';
 
-    $userStartDate = isset($params['extra_access_start_date']) ? $params['extra_access_start_date'] : $defaultExtraStartDate;
-    $userEndDate = isset($params['extra_access_end_date']) ? $params['extra_access_end_date'] : $defaultExtraEndDate;
+        $userStartDate = isset($params['extra_access_start_date']) ? $params['extra_access_start_date'] : $defaultExtraStartDate;
+        $userEndDate = isset($params['extra_access_end_date']) ? $params['extra_access_end_date'] : $defaultExtraEndDate;
 
-    // Minus 3 days
-    $date = new DateTime($userStartDate);
-    $date->sub(new DateInterval('P3D'));
-    $userStartDateMinus = $date->format('Y-m-d h:i:s');
+        // Minus 3 days
+        $date = new DateTime($userStartDate);
+        $date->sub(new DateInterval('P3D'));
+        $userStartDateMinus = $date->format('Y-m-d h:i:s');
 
-    // Plus 2 days
-    $date = new DateTime($userEndDate);
-    $date->add(new DateInterval('P2D'));
-    $userEndDatePlus = $date->format('Y-m-d h:i:s');
+        // Plus 2 days
+        $date = new DateTime($userEndDate);
+        $date->add(new DateInterval('P2D'));
+        $userEndDatePlus = $date->format('Y-m-d h:i:s');
 
-    // Ofaj fix
-    $userStartDateMinus = api_get_utc_datetime(substr($userStartDateMinus, 0, 11).'00:00:00');
-    $userEndDatePlus = api_get_utc_datetime(substr($userEndDatePlus, 0, 11).'23:59:59');
+        // Ofaj fix
+        $userStartDateMinus = api_get_utc_datetime(substr($userStartDateMinus, 0, 11).'00:00:00');
+        $userEndDatePlus = api_get_utc_datetime(substr($userEndDatePlus, 0, 11).'23:59:59');
 
-    // Special OFAJ date logic
-    if ($userEndDate == '') {
-        $sql = " AND (
-            (s.access_start_date >= '$userStartDateMinus') OR 
-            ((s.access_start_date = '' OR s.access_start_date IS NULL) AND (s.access_end_date = '' OR s.access_end_date IS NULL))
-        )";
-    } else {
-        $sql = " AND (
-            (s.access_start_date >= '$userStartDateMinus' AND s.access_end_date < '$userEndDatePlus') OR
-            (s.access_start_date >= '$userStartDateMinus' AND (s.access_end_date = '' OR s.access_end_date IS NULL)) OR 
-            ((s.access_start_date = '' OR s.access_start_date IS NULL) AND (s.access_end_date = '' OR s.access_end_date IS NULL))
-        )";
+        // Special OFAJ date logic
+        if ($userEndDate == '') {
+            $sql = " AND (
+                (s.access_start_date >= '$userStartDateMinus') OR 
+                ((s.access_start_date = '' OR s.access_start_date IS NULL) AND (s.access_end_date = '' OR s.access_end_date IS NULL))
+            )";
+        } else {
+            $sql = " AND (
+                (s.access_start_date >= '$userStartDateMinus' AND s.access_end_date < '$userEndDatePlus') OR
+                (s.access_start_date >= '$userStartDateMinus' AND (s.access_end_date = '' OR s.access_end_date IS NULL)) OR 
+                ((s.access_start_date = '' OR s.access_start_date IS NULL) AND (s.access_end_date = '' OR s.access_end_date IS NULL))
+            )";
+        }
     }
-    $deleteFiliere = false;
 
+    $deleteFiliere = false;
     $extraFieldOptions = new ExtraFieldOption('session');
     $extraFieldSession = new ExtraField('session');
 
@@ -826,11 +848,28 @@ if (!empty($filterToSend)) {
     foreach ($filterToSend['rules'] as &$filterItem) {
         if (isset($filterItem['field'])) {
             switch ($filterItem['field']) {
+                case 'extra_filiere':
+                case 'extra_domaine':
+                case 'extra_theme_it':
+                case 'extra_theme_fr':
+                case 'extra_theme_de':
+                case 'extra_theme_pl':
+                    if (!isset($params['search_using_2'])) {
+                        $filterItem = null;
+                    }
+                    break;
+            }
+
+            switch ($filterItem['field']) {
                 case 'extra_ecouter':
                 case 'extra_lire':
                 case 'extra_participer_a_une_conversation':
                 case 'extra_s_exprimer_oralement_en_continu':
                 case 'extra_ecrire':
+                    if (!isset($params['search_using_3'])) {
+                        $filterItem = null;
+                        break;
+                    }
                     $selectedValue = '';
                     $fieldExtra = str_replace('extra_', '', $filterItem['field']);
                     $extraFieldSessionData = $extraFieldSession->get_handler_field_info_by_field_variable($fieldExtra);
@@ -878,6 +917,9 @@ if (!empty($filterToSend)) {
                     $filterItem['data'] = $searchOptions;
                     break;
                 case 'extra_domaine':
+                    if (!isset($params['search_using_2'])) {
+                        break;
+                    }
                     // Special condition see:
                     // https://task.beeznest.com/issues/10849#note-218
                     // Remove filiere
@@ -918,14 +960,18 @@ if (!empty($filterToSend)) {
     $lang = isset($params['extra_langue_cible']) ? $params['extra_langue_cible'] : $defaultLangCible;
     $lang = strtolower($lang);
 
-    if ($userStartDate && !empty($userStartDate)) {
-        $filterToSend['custom_dates'] = $sql;
+    if (isset($params['search_using_1'])) {
+        if ($userStartDate && !empty($userStartDate)) {
+            $filterToSend['custom_dates'] = $sql;
+        }
     }
+
     $filterToSend = json_encode($filterToSend);
-    $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_sessions&_search=true&load_extra_field='.$extraFieldListToString.'&_force_search=true&rows=20&page=1&sidx=&sord=asc&filters2='.$filterToSend;
-    //$url .= '&lang='.$lang;
+    $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_sessions&_search=true&load_extra_field='.
+        $extraFieldListToString.'&_force_search=true&rows=20&page=1&sidx=&sord=asc&filters2='.$filterToSend;
 } else {
-    $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_sessions&_search=true&load_extra_field='.$extraFieldListToString.'&_force_search=true&rows=20&page=1&sidx=&sord=asc';
+    $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_sessions&_search=true&load_extra_field='.
+        $extraFieldListToString.'&_force_search=true&rows=20&page=1&sidx=&sord=asc';
 }
 
 // Autowidth
@@ -935,8 +981,8 @@ $extra_params['autowidth'] = 'true';
 $extra_params['height'] = 'auto';
 $extra_params['postData'] = [
     'filters' => [
-        "groupOp" => "AND",
-        "rules" => $result['rules'],
+        'groupOp' => 'AND',
+        'rules' => $result['rules'],
     ],
 ];
 

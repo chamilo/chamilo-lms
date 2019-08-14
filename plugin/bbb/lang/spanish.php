@@ -30,7 +30,7 @@ $strings['ServerIsNotConfigured'] = "El servidor de videoconferencia no está co
 $strings['XUsersOnLine'] = "%s usuario(s) en la sala";
 
 $strings['host'] = 'Host de BigBlueButton';
-$strings['host_help'] = 'Este es el nombre del servidor donde su servidor BigBlueButton está corriendo. Puede ser localhost, una dirección IP (ej: 192.168.13.54) o un nombre de dominio (ej: mi.video.com).';
+$strings['host_help'] = 'Este es el nombre del servidor donde su servidor BigBlueButton está corriendo. Puede ser localhost, una dirección IP (ej: http://192.168.13.54) o un nombre de dominio (ej: http://mi.video.com).';
 
 $strings['salt'] = 'Clave BigBlueButton';
 $strings['salt_help'] = 'Esta es la llave de seguridad de su servidor BigBlueButton (llamada "salt" en inglés), que permitirá a su servidor de autentifica la instalación de Chamilo (como autorizada). Refiérese a la documentación de BigBlueButton para ubicarla, o use el comando "bbb-conf --salt" si tiene acceso al servidor en línea de comando.';

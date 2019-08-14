@@ -192,7 +192,7 @@ switch ($action) {
         foreach ($users as $user) {
             $list['items'][] = [
                 'id' => $user->getId(),
-                'text' => $user->getCompleteName(),
+                'text' => UserManager::formatUserFullName($user),
             ];
         }
 

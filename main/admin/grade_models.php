@@ -204,5 +204,9 @@ switch ($action) {
         $obj->display();
         break;
 }
-echo '<script> $(document).ready(function(){ $("input").removeClass("form-control"); }); </script>';
+echo '<script> 
+$(function () { 
+    $("input").removeClass("form-control"); 
+}); 
+</script>';
 Display::display_footer();

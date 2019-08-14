@@ -13,10 +13,10 @@
  */
 if (isset($_GET['editQuestion'])) {
     $objQuestion = Question::read($_GET['editQuestion']);
-    $action = api_get_self()."?".api_get_cidreq()."&myid=1&modifyQuestion=".$modifyQuestion."&editQuestion=".$objQuestion->id.'&page='.$page;
+    $action = api_get_self().'?'.api_get_cidreq().'&modifyQuestion='.$modifyQuestion.'&editQuestion='.$objQuestion->id.'&page='.$page;
 } else {
     $objQuestion = Question::getInstance($_REQUEST['answerType']);
-    $action = api_get_self()."?".api_get_cidreq()."&modifyQuestion=".$modifyQuestion."&newQuestion=".$newQuestion;
+    $action = api_get_self().'?'.api_get_cidreq().'&modifyQuestion='.$modifyQuestion.'&newQuestion='.$newQuestion;
 }
 
 if (is_object($objQuestion)) {
@@ -50,7 +50,7 @@ if (is_object($objQuestion)) {
     $objQuestion->createAnswersForm($form);
 
     // this variable  $show_quiz_edition comes from admin.php blocks the exercise/quiz modifications
-    if ($objExercise->edit_exercise_in_lp == false) {
+    if (!empty($objExercise->id) && $objExercise->edit_exercise_in_lp == false) {
         $form->freeze();
     }
 
@@ -65,6 +65,12 @@ if (is_object($objQuestion)) {
             $objQuestion->type != HOT_SPOT_DELINEATION
         ) {
             if (isset($_GET['editQuestion'])) {
+                if (empty($exerciseId)) {
+                    Display::addFlash(Display::return_message(get_lang('ItemUpdated')));
+                    $url = 'admin.php?exerciseId='.$exerciseId.'&'.api_get_cidreq().'&editQuestion='.$objQuestion->id;
+                    echo '<script type="text/javascript">window.location.href="'.$url.'"</script>';
+                    exit;
+                }
                 echo '<script type="text/javascript">window.location.href="admin.php?exerciseId='.$exerciseId.'&'.api_get_cidreq().'&page='.$page.'&message=ItemUpdated"</script>';
             } else {
                 // New question

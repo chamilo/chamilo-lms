@@ -1436,81 +1436,6 @@ class Link extends Model
     }
 
     /**
-     * CSV file import functions.
-     *
-     * @author René Haentjens , Ghent University
-     */
-    public static function import_link($linkdata)
-    {
-        // url, category_id, title, description, ...
-        // Field names used in the uploaded file
-        $known_fields = [
-            'url',
-            'category',
-            'title',
-            'description',
-            'on_homepage',
-            'hidden',
-        ];
-
-        $hide_fields = [
-            'kw',
-            'kwd',
-            'kwds',
-            'keyword',
-            'keywords',
-        ];
-
-        // All other fields are added to description, as "name:value".
-        // Only one hide_field is assumed to be present, <> is removed from value.
-        if (!($url = trim($linkdata['url'])) || !($title = trim($linkdata['title']))) {
-            return 0; // 0 = fail
-        }
-
-        $cat = ($catname = trim($linkdata['category'])) ? self::get_cat($catname) : 0;
-
-        $regs = []; // Will be passed to ereg()
-        $d = '';
-        foreach ($linkdata as $key => $value) {
-            if (!in_array($key, $known_fields)) {
-                if (in_array($key, $hide_fields) && ereg(
-                        '^<?([^>]*)>?$',
-                        $value,
-                        $regs
-                    )
-                ) { // possibly in <...>
-                    if (($kwlist = trim($regs[1])) != '') {
-                        $kw = '<i kw="'.htmlspecialchars($kwlist).'">';
-                    } else {
-                        $kw = '';
-                    }
-                    // i.e. assume only one of the $hide_fields will be present
-                    // and if found, hide the value as expando property of an <i> tag
-                } elseif (trim($value)) {
-                    $d .= ', '.$key.':'.$value;
-                }
-            }
-        }
-        if (!empty($d)) {
-            $d = substr($d, 2).' - ';
-        }
-
-        return self::put_link(
-            $url,
-            $cat,
-            $title,
-            $kw.ereg_replace(
-                '\[((/?(b|big|i|small|sub|sup|u))|br/)\]',
-                '<\\1>',
-                htmlspecialchars($d.$linkdata['description'])
-            ).($kw ? '</i>' : ''),
-            $linkdata['on_homepage'] ? '1' : '0',
-            $linkdata['hidden'] ? '1' : '0'
-        );
-        // i.e. allow some BBcode tags, e.g. [b]...[/b]
-    }
-
-    /**
      * This function checks if the url is a vimeo link.
      *
      * @author Julio Montoya
@@ -1638,6 +1563,7 @@ class Link extends Model
      * @param string $show
      * @param null   $token
      * @param bool   $showActionLinks
+     * @param bool   $forceOpenCategories
      *
      * @return string
      */
@@ -1647,12 +1573,11 @@ class Link extends Model
         $categoryId,
         $show = 'none',
         $token = null,
-        $showActionLinks = true
+        $showActionLinks = true,
+        $forceOpenCategories = false
     ) {
         $categoryId = (int) $categoryId;
-
         $content = '';
-
         $categories = self::getLinkCategories($course_id, $session_id);
         $countCategories = count($categories);
         $linksPerCategory = self::showLinksPerCategory(0, $course_id, $session_id, $showActionLinks);
@@ -1712,8 +1637,10 @@ class Link extends Model
             }
 
             // Validation when belongs to a session
-            $showChildren = $categoryId == $myrow['id'] || $show == 'all';
-            $myrow['description'] = $myrow['description'];
+            $showChildren = $categoryId == $myrow['id'] || $show === 'all';
+            if ($forceOpenCategories) {
+                $showChildren = true;
+            }
 
             $strVisibility = '';
             $visibilityClass = null;

@@ -3,7 +3,9 @@
 
 use Chamilo\CourseBundle\Entity\CLpCategory;
 
-if (intval($_GET['default']) == 1) {
+$default = isset($_GET['default']) ? (int) $_GET['default'] : null;
+
+if ($default === 1) {
     $cidReset = true;
 }
 
@@ -19,7 +21,7 @@ if (!$enable) {
     api_not_allowed(true, $plugin->get_lang('ToolDisabled'));
 }
 
-if (intval($_GET['default']) == 1) {
+if ($default == 1) {
     $courseId = 0;
     $courseCode = '';
     $sessionId = 0;
@@ -32,6 +34,21 @@ if (intval($_GET['default']) == 1) {
     $enableCourse = api_get_course_setting('customcertificate_course_enable', $courseCode) == 1 ? true : false;
     $useDefault = api_get_course_setting('use_certificate_default', $courseCode) == 1 ? true : false;
 }
+
+if (empty($courseCode)) {
+    $courseCode = isset($_REQUEST['course_code']) ? Database::escape_string($_REQUEST['course_code']) : '';
+    $courseInfo = api_get_course_info($courseCode);
+    if (!empty($courseInfo)) {
+        $courseId = $courseInfo['real_id'];
+    }
+} else {
+    $courseInfo = api_get_course_info($courseCode);
+}
+
+if (empty($sessionId)) {
+    $sessionId = isset($_REQUEST['session_id']) ? (int) $_REQUEST['session_id'] : '';
+}
+
 $accessUrlId = api_get_current_access_url_id();
 
 $userList = [];
@@ -101,17 +118,21 @@ if (empty($infoCertificate)) {
 
 $workSpace = intval(297 - $infoCertificate['margin_left'] - $infoCertificate['margin_right']);
 $widthCell = intval($workSpace / 6);
-$htmlText = '<html>';
-$htmlText .= '
+$htmlList = [];
+
+$currentLocalTime = api_get_local_time();
+
+foreach ($userList as $userInfo) {
+    $htmlText = '<html>';
+    $htmlText .= '
     <link rel="stylesheet"
         type="text/css"
         href="'.api_get_path(WEB_PLUGIN_PATH).'customcertificate/resources/css/certificate.css">';
-$htmlText .= '
+    $htmlText .= '
     <link rel="stylesheet"
         type="text/css"
         href="'.api_get_path(WEB_CSS_PATH).'document.css">';
-$htmlText .= '<body>';
-foreach ($userList as $userInfo) {
+    $htmlText .= '<body>';
     $studentId = $userInfo['user_id'];
 
     if (empty($infoCertificate['background'])) {
@@ -162,19 +183,19 @@ foreach ($userList as $userInfo) {
     $htmlText .= '</tr>';
     $htmlText .= '</table>';
 
-    $all_user_info = DocumentManager::get_all_info_to_certificate(
+    $allUserInfo = DocumentManager::get_all_info_to_certificate(
         $studentId,
         $courseCode,
-        true
+        false
     );
 
     $myContentHtml = $infoCertificate['content_course'];
     $myContentHtml = str_replace(chr(13).chr(10).chr(13).chr(10), chr(13).chr(10), $myContentHtml);
-    $info_to_be_replaced_in_content_html = $all_user_info[0];
-    $info_to_replace_in_content_html = $all_user_info[1];
+    $infoToBeReplacedInContentHtml = $allUserInfo[0];
+    $infoToReplaceInContentHtml = $allUserInfo[1];
     $myContentHtml = str_replace(
-        $info_to_be_replaced_in_content_html,
-        $info_to_replace_in_content_html,
+        $infoToBeReplacedInContentHtml,
+        $infoToReplaceInContentHtml,
         $myContentHtml
     );
 
@@ -232,9 +253,13 @@ foreach ($userList as $userInfo) {
                     '............'
                 );
             }
+        } elseif ($infoCertificate['type_date_expediction'] == 4) {
+            $dateExpediction .= $plugin->get_lang('to').$infoToReplaceInContentHtml[9]; //date_certificate_no_time
         } else {
-            $dateInfo = api_get_local_time($sessionInfo['access_end_date']);
-            $dateExpediction .= $plugin->get_lang('to').api_format_date($dateInfo, DATE_FORMAT_LONG);
+            if (!empty($sessionInfo)) {
+                $dateInfo = api_get_local_time($sessionInfo['access_end_date']);
+                $dateExpediction .= $plugin->get_lang('to').api_format_date($dateInfo, DATE_FORMAT_LONG);
+            }
         }
     }
 
@@ -450,24 +475,50 @@ foreach ($userList as $userInfo) {
         }
         $htmlText .= '</div>';
     }
+    $htmlText .= '</body></html>';
+    $fileName = 'certificate_'.$courseInfo['code'].'_'.$userInfo['complete_name'].'_'.$currentLocalTime;
+    $htmlList[$fileName] = $htmlText;
 }
-$htmlText .= '</body></html>';
 
-$fileName = 'certificate_'.date("Ymd_His");
-$params = [
-    'filename' => $fileName,
-    'pdf_title' => "Certificate",
-    'pdf_description' => '',
-    'format' => 'A4-L',
-    'orientation' => 'L',
-    'left' => 15,
-    'top' => 15,
-    'bottom' => 0,
-];
+$fileList = [];
+$archivePath = api_get_path(SYS_ARCHIVE_PATH).'certificates/';
+if (!is_dir($archivePath)) {
+    mkdir($archivePath, api_get_permissions_for_new_directories());
+}
 
-$pdf = new PDF($params['format'], $params['orientation'], $params);
-$pdf->content_to_pdf($htmlText, '', $fileName, null, 'D', false, null, false, false, false);
-exit;
+foreach ($htmlList as $fileName => $content) {
+    $fileName = api_replace_dangerous_char($fileName);
+    $params = [
+        'filename' => $fileName,
+        'pdf_title' => 'Certificate',
+        'pdf_description' => '',
+        'format' => 'A4-L',
+        'orientation' => 'L',
+        'left' => 15,
+        'top' => 15,
+        'bottom' => 0,
+    ];
+    $pdf = new PDF($params['format'], $params['orientation'], $params);
+    if (count($htmlList) == 1) {
+        $pdf->content_to_pdf($content, '', $fileName, null, 'D', false, null, false, false, false);
+        exit;
+    } else {
+        $filePath = $archivePath.$fileName.'.pdf';
+        $pdf->content_to_pdf($content, '', $fileName, null, 'F', true, $filePath, false, false, false);
+        $fileList[] = $filePath;
+    }
+}
+
+if (!empty($fileList)) {
+    $zipFile = $archivePath.'certificates_'.api_get_unique_id().'.zip';
+    $zipFolder = new PclZip($zipFile);
+    foreach ($fileList as $file) {
+        $zipFolder->add($file, PCLZIP_OPT_REMOVE_ALL_PATH);
+    }
+    $name = 'certificates_'.$courseInfo['code'].'_'.$currentLocalTime.'.zip';
+    DocumentManager::file_send_for_download($zipFile, true, $name);
+    exit;
+}
 
 function getIndexFiltered($index)
 {
@@ -476,12 +527,16 @@ function getIndexFiltered($index)
     $lines = explode(chr(13).chr(10), $txt);
     $text1 = '';
     for ($x = 0; $x < 47; $x++) {
-        $text1 .= $lines[$x].chr(13).chr(10);
+        if (isset($lines[$x])) {
+            $text1 .= $lines[$x].chr(13).chr(10);
+        }
     }
 
     $text2 = '';
     for ($x = 47; $x < 94; $x++) {
-        $text2 .= $lines[$x].chr(13).chr(10);
+        if (isset($lines[$x])) {
+            $text2 .= $lines[$x].chr(13).chr(10);
+        }
     }
 
     $showLeft = str_replace(chr(13).chr(10), "<br/>", $text1);

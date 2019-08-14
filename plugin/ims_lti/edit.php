@@ -29,34 +29,42 @@ if (!$tool) {
     exit;
 }
 
-$form = new FormValidator('ims_lti_edit_tool');
-$form->addText('name', get_lang('Name'));
-$form->addTextarea('description', get_lang('Description'), ['rows' => 10]);
-$form->addText('url', $plugin->get_lang('LaunchUrl'));
-$form->addText('consumer_key', $plugin->get_lang('ConsumerKey'));
-$form->addText('shared_secret', $plugin->get_lang('SharedSecret'));
-$form->addTextarea('custom_params', $plugin->get_lang('CustomParams'));
-$form->addButtonSave(get_lang('Save'));
-$form->addHidden('id', $tool->getId());
-$form->setDefaults([
-    'name' => $tool->getName(),
-    'description' => $tool->getDescription(),
-    'url' => $tool->getLaunchUrl(),
-    'consumer_key' => $tool->getConsumerKey(),
-    'shared_secret' => $tool->getSharedSecret(),
-    'custom_params' => $tool->getCustomParams()
-]);
+$form = new FrmEdit('ims_lti_edit_tool', [], $tool);
+$form->build();
 
 if ($form->validate()) {
     $formValues = $form->exportValues();
 
     $tool
         ->setName($formValues['name'])
-        ->setDescription($formValues['description'])
-        ->setLaunchUrl($formValues['url'])
-        ->setConsumerKey($formValues['consumer_key'])
-        ->setSharedSecret($formValues['shared_secret'])
-        ->setCustomParams($formValues['custom_params']);
+        ->setDescription(
+            empty($formValues['description']) ? null : $formValues['description']
+        )
+        ->setCustomParams(
+            empty($formValues['custom_params']) ? null : $formValues['custom_params']
+        )
+        ->setPrivacy(
+            !empty($formValues['share_name']),
+            !empty($formValues['share_email']),
+            !empty($formValues['share_picture'])
+        );
+
+    if (null === $tool->getParent()) {
+        $tool
+            ->setLaunchUrl($formValues['launch_url'])
+            ->setConsumerKey(
+                empty($formValues['consumer_key']) ? null : $formValues['consumer_key']
+            )
+            ->setSharedSecret(
+                empty($formValues['shared_secret']) ? null : $formValues['shared_secret']
+            );
+    }
+
+    if (null === $tool->getParent() ||
+        (null !== $tool->getParent() && !$tool->getParent()->isActiveDeepLinking())
+    ) {
+        $tool->setActiveDeepLinking(!empty($formValues['deep_linking']));
+    }
 
     $em->persist($tool);
     $em->flush();
@@ -68,6 +76,11 @@ if ($form->validate()) {
     header('Location: '.api_get_path(WEB_PLUGIN_PATH).'ims_lti/admin.php');
     exit;
 }
+
+$form->setDefaultValues();
+
+$interbreadcrumb[] = ['url' => api_get_path(WEB_CODE_PATH).'admin/index.php', 'name' => get_lang('PlatformAdmin')];
+$interbreadcrumb[] = ['url' => api_get_path(WEB_PLUGIN_PATH).'ims_lti/admin.php', 'name' => $plugin->get_title()];
 
 $template = new Template($plugin->get_lang('EditExternalTool'));
 $template->assign('form', $form->returnForm());

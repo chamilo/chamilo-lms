@@ -5,9 +5,7 @@ use Chamilo\CourseBundle\Entity\CCalendarEvent;
 use Chamilo\CourseBundle\Entity\CItemProperty;
 use Chamilo\PluginBundle\Entity\StudentFollowUp\CarePost;
 use Fhaculty\Graph\Graph;
-use Graphp\GraphViz\GraphViz;
 use Monolog\Handler\BufferHandler;
-use Monolog\Handler\NativeMailerHandler;
 use Monolog\Handler\RotatingFileHandler;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
@@ -119,7 +117,7 @@ class ImportCsv
             $this->dumpDatabaseTables();
         }
 
-        echo "Reading files: ".PHP_EOL.PHP_EOL;
+        echo 'Reading files: '.PHP_EOL.PHP_EOL;
 
         $files = scandir($path);
         $fileToProcess = [];
@@ -223,6 +221,8 @@ class ImportCsv
                         echo 'File: '.$file.PHP_EOL;
                         echo 'Method : '.$method.PHP_EOL;
                         echo PHP_EOL;
+
+                        $this->logger->addInfo('====================================================');
                         $this->logger->addInfo("Reading file: $file");
                         $this->logger->addInfo("Loading method $method ");
                         if ($method == 'importSessions' || $method == 'importOpenSessions') {
@@ -235,7 +235,7 @@ class ImportCsv
                         } else {
                             $this->$method($file, true);
                         }
-                        $this->logger->addInfo("--Finish reading file--");
+                        $this->logger->addInfo('--Finish reading file--');
                     }
                 }
             }
@@ -273,11 +273,11 @@ class ImportCsv
                             $teacherBackup,
                             $groupBackup
                         );
-                        $this->logger->addInfo("--Finish reading file--");
+                        $this->logger->addInfo('--Finish reading file--');
                     }
                 }
             }
-            $this->logger->addInfo("teacher backup");
+            $this->logger->addInfo('teacher backup');
             $this->logger->addInfo(print_r($teacherBackup, 1));
         }
     }
@@ -378,7 +378,7 @@ class ImportCsv
                     $this->logger->addInfo("New post will be created no match for externalCareId = ".$row['External_care_id']);
                 }
 
-                $contentDecoded = base64_decode($row['Article']);
+                $contentDecoded = utf8_encode(base64_decode($row['Article']));
 
                 $post
                     ->setTitle($row['Title'])
@@ -826,6 +826,36 @@ class ImportCsv
                     $userInfoByOfficialCode = api_get_user_info_from_official_code($row['official_code']);
                 }
 
+                $userInfoFromUsername = api_get_user_info_from_username($row['username']);
+                if (!empty($userInfoFromUsername)) {
+                    $extraFieldValue = new ExtraFieldValue('user');
+                    $extraFieldValues = $extraFieldValue->get_values_by_handler_and_field_variable(
+                        $userInfoFromUsername['user_id'],
+                        $this->extraFieldIdNameList['user']
+                    );
+
+                    if (!empty($extraFieldValues)) {
+                        $value = 0;
+                        foreach ($extraFieldValues as $extraFieldValue) {
+                            $value = $extraFieldValue['value'];
+                        }
+                        if (!empty($user_id) && $value != $user_id) {
+                            $emails = api_get_configuration_value('cron_notification_help_desk');
+                            if (!empty($emails)) {
+                                $this->logger->addInfo('Preparing email to users in configuration: "cron_notification_help_desk"');
+                                $subject = 'User not added due to same username';
+                                $body = 'Cannot add username: "'.$row['username'].'" 
+                                    with external_user_id: '.$row['extra_'.$this->extraFieldIdNameList['user']].'
+                                    because '.$userInfoFromUsername['username'].' with external_user_id '.$value.' exists on the portal';
+                                $this->logger->addInfo($body);
+                                foreach ($emails as $email) {
+                                    api_mail_html('', $email, $subject, $body);
+                                }
+                            }
+                        }
+                    }
+                }
+
                 if (empty($userInfo) && empty($userInfoByOfficialCode)) {
                     // Create user
                     $result = UserManager::create_user(
@@ -840,7 +870,7 @@ class ImportCsv
                         $row['phone'],
                         null, //$row['picture'], //picture
                         $row['auth_source'], // ?
-                        $expirationDateOnCreate, //'0000-00-00 00:00:00', //$row['expiration_date'], //$expiration_date = '0000-00-00 00:00:00',
+                        $expirationDateOnCreate,
                         1, //active
                         0,
                         null, // extra
@@ -973,7 +1003,6 @@ class ImportCsv
                                 );
                             }
                         }
-
                         $this->logger->addInfo("Students - User updated: ".$row['username']);
                     } else {
                         $this->logger->addError("Students - User NOT updated: ".$row['username']." ".$row['firstname']." ".$row['lastname']);
@@ -1023,7 +1052,7 @@ class ImportCsv
         $data = Import::csvToArray($file);
 
         if (!empty($data)) {
-            $this->logger->addInfo(count($data)." records found.");
+            $this->logger->addInfo(count($data).' records found.');
             $eventsToCreate = [];
             $errorFound = false;
 
@@ -1197,16 +1226,12 @@ class ImportCsv
                 $update = false;
                 $item = null;
                 if (!isset($event[$extraFieldName])) {
-                    $this->logger->addInfo(
-                        "No external_calendar_itemID found. Skipping ..."
-                    );
+                    $this->logger->addInfo('No external_calendar_itemID found. Skipping ...');
                     continue;
                 } else {
                     $externalEventId = $event[$extraFieldName];
                     if (empty($externalEventId)) {
-                        $this->logger->addInfo(
-                            "external_calendar_itemID was set but empty. Skipping ..."
-                        );
+                        $this->logger->addInfo('external_calendar_itemID was set but empty. Skipping ...');
                         continue;
                     }
 
@@ -1257,7 +1282,6 @@ class ImportCsv
                             $em->flush();
                         }
                     }
-                    $this->logger->addInfo('Move from course #'.$calendarEvent->getCId().' to #'.$courseInfo['real_id']);
 
                     // Checking if session still exists
                     $calendarSessionId = (int) $calendarEvent->getSessionId();
@@ -1308,6 +1332,9 @@ class ImportCsv
             }
 
             $eventAlreadySent = [];
+
+            $tpl = new Template(null, false, false, false, false, false, false);
+
             foreach ($eventsToCreateFinal as $event) {
                 $courseInfo = $event['course_info'];
                 $item = $event['item'];
@@ -1359,7 +1386,7 @@ class ImportCsv
                 }
 
                 // Working days (Mon-Fri)see BT#12156#note-16
-                $days = 5;
+                $days = 3;
                 $startDatePlusDays = api_strtotime("$days weekdays");
 
                 /*
@@ -1368,7 +1395,7 @@ class ImportCsv
                 $startDatePlusDays = "$timePart $datePart";
                 */
                 $this->logger->addInfo(
-                    "startDatePlusDays: ".api_get_utc_datetime($startDatePlusDays).' - First date: '.$firstDate
+                    'startDatePlusDays: '.api_get_utc_datetime($startDatePlusDays).' - First date: '.$firstDate
                 );
 
                 // Send
@@ -1383,7 +1410,8 @@ class ImportCsv
                     $end = $firstEndDate;
 
                     if (!empty($end) &&
-                        api_format_date($start, DATE_FORMAT_LONG) == api_format_date($end, DATE_FORMAT_LONG)
+                        api_format_date($start, DATE_FORMAT_LONG) ==
+                        api_format_date($end, DATE_FORMAT_LONG)
                     ) {
                         $date = api_format_date($start, DATE_FORMAT_LONG).' ('.
                             api_format_date($start, TIME_NO_SEC_FORMAT).' '.
@@ -1394,24 +1422,55 @@ class ImportCsv
                     }
 
                     $sessionName = '';
-                    if (!empty($event['session_id'])) {
-                        $sessionName = ' ('.api_get_session_name($event['session_id']).')';
+                    $sessionId = isset($event['session_id']) && !empty($event['session_id']) ? $event['session_id'] : 0;
+                    if (!empty($sessionId)) {
+                        $sessionName = api_get_session_name($sessionId);
                     }
 
-                    $courseTitle = $courseInfo['title'].$sessionName;
-                    $emailBody = get_lang('Dear').' ((user_firstname)) <br />'.
-                        sprintf(
-                            get_lang('YouHaveBeenSubscribedToCourseXTheStartDateXAndCommentX'),
-                            $courseTitle,
-                            $date,
-                            $event['comment']
-                        )
-                    ;
+                    $courseTitle = $courseInfo['title'];
+
+                    $sessionExtraFieldValue = new ExtraFieldValue('session');
+                    $values = $sessionExtraFieldValue->get_values_by_handler_and_field_variable(
+                        $event['session_id'],
+                        $this->extraFieldIdNameList['session_career']
+                    );
+
+                    $careerName = '';
+                    if (!empty($values)) {
+                        foreach ($values as $value) {
+                            if (isset($value['value'])) {
+                                $careerName = $value['value'];
+                            }
+                        }
+                    }
 
                     $subject = sprintf(
-                        get_lang('AgendaAvailableInCourseX'),
+                        get_lang('WelcomeToPortalXInCourseSessionX'),
+                        api_get_setting('siteName'),
                         $courseInfo['title']
                     );
+
+                    $tpl->assign('site_name', api_get_setting('siteName'));
+                    $tpl->assign('course_title', $courseTitle);
+                    $tpl->assign('career_name', $careerName);
+                    $tpl->assign('first_lesson', $date);
+                    $tpl->assign('location', $eventComment);
+                    $tpl->assign('session_name', $sessionName);
+
+                    if (empty($sessionId)) {
+                        $teachersToString = CourseManager::getTeacherListFromCourseCodeToString($courseInfo['code'], ',');
+                    } else {
+                        $teachersToString = SessionManager::getCoachesByCourseSessionToString(
+                            $sessionId,
+                            $courseInfo['real_id'],
+                            ','
+                        );
+                    }
+
+                    $tpl->assign('teachers', $teachersToString);
+
+                    $templateName = $tpl->get_template('mail/custom_calendar_welcome.tpl');
+                    $emailBody = $tpl->fetch($templateName);
 
                     $coaches = SessionManager::getCoachesByCourseSession(
                         $event['session_id'],
@@ -1428,7 +1487,7 @@ class ImportCsv
 
                     if (count($announcementsWithTitleList) === 0) {
                         $this->logger->addInfo(
-                            "Mail to be sent because start date: ".$event['start']." and no announcement found."
+                            'Mail to be sent because start date: '.$event['start'].' and no announcement found.'
                         );
 
                         $senderId = $this->defaultAdminId;
@@ -1463,7 +1522,8 @@ class ImportCsv
                                 false,
                                 false,
                                 $this->logger,
-                                $senderId
+                                $senderId,
+                                true
                             );
                         } else {
                             $this->logger->addError(
@@ -3034,9 +3094,21 @@ if (isset($_configuration['import_csv_test'])) {
     $import->test = true;
 }
 
+$languageFilesToLoad = api_get_language_files_to_load($import->defaultLanguage);
+
+foreach ($languageFilesToLoad as $languageFile) {
+    include $languageFile;
+}
+
+// Set default language to be loaded
+$language = $import->defaultLanguage;
+global $language_interface;
+$language_interface = $language;
+global $language_interface_initial_value;
+$language_interface_initial_value = $language;
+
 $timeStart = microtime(true);
 $import->run();
-
 $timeEnd = microtime(true);
 $executionTime = round(($timeEnd - $timeStart) / 60, 2);
 $logger->addInfo("Total execution Time $executionTime Min");

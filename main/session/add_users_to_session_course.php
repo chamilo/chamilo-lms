@@ -15,7 +15,7 @@ $xajax->registerFunction('search_users');
 // setting the section (for the tabs)
 $this_section = SECTION_PLATFORM_ADMIN;
 
-$id_session = (int) $_GET['id_session'];
+$id_session = isset($_GET['id_session']) ? (int) $_GET['id_session'] : 0;
 $courseId = isset($_GET['course_id']) ? (int) $_GET['course_id'] : 0;
 
 if (empty($id_session) || empty($courseId)) {

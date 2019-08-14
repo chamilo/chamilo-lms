@@ -210,14 +210,16 @@ class Draggable extends Question
     /**
      * {@inheritdoc}
      */
-    public function return_header($exercise, $counter = null, $score = null)
+    public function return_header(Exercise $exercise, $counter = null, $score = [])
     {
         $header = parent::return_header($exercise, $counter, $score);
         $header .= '<table class="'.$this->question_table_class.'"><tr>';
 
         if ($exercise->showExpectedChoice()) {
             $header .= '<th>'.get_lang('YourChoice').'</th>';
-            $header .= '<th>'.get_lang('ExpectedChoice').'</th>';
+            if ($exercise->showExpectedChoiceColumn()) {
+                $header .= '<th>'.get_lang('ExpectedChoice').'</th>';
+            }
         } else {
             $header .= '<th>'.get_lang('ElementList').'</th>';
         }

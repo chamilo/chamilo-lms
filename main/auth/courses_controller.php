@@ -636,13 +636,13 @@ class CoursesController
     }
 
     /**
-     * Return Session Catalogue rendered view.
+     * Return Session catalog rendered view.
      *
      * @param string $action
      * @param string $nameTools
      * @param array  $limit
      */
-    public function sessionsList($action, $nameTools, $limit = [])
+    public function sessionList($action, $nameTools, $limit = [])
     {
         $date = isset($_POST['date']) ? $_POST['date'] : date('Y-m-d');
         $hiddenLinks = isset($_GET['hidden_links']) ? $_GET['hidden_links'] == 1 : false;
@@ -857,7 +857,7 @@ class CoursesController
 
             $generalCoach = $session->getGeneralCoach();
             $coachId = $generalCoach ? $generalCoach->getId() : 0;
-            $coachName = $generalCoach ? $session->getGeneralCoach()->getCompleteName() : '';
+            $coachName = $generalCoach ? UserManager::formatUserFullName($session->getGeneralCoach()) : '';
 
             $actions = null;
             if (api_is_platform_admin()) {

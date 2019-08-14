@@ -11,15 +11,7 @@
  */
 abstract class EvalLink extends AbstractLink
 {
-    protected $evaluation = null;
-
-    /**
-     * Constructor.
-     */
-    public function __construct()
-    {
-        parent::__construct();
-    }
+    protected $evaluation;
 
     /**
      * @return bool
@@ -50,12 +42,13 @@ abstract class EvalLink extends AbstractLink
         // course/platform admin can go to the view_results page
         if (api_is_allowed_to_edit()) {
             return 'gradebook_view_result.php?'.api_get_cidreq().'&selecteval='.$eval->get_id();
-        } // students can go to the statistics page (if custom display enabled)
-        elseif (ScoreDisplay::instance()->is_custom()) {
+        } elseif (ScoreDisplay::instance()->is_custom()) {
+            // students can go to the statistics page (if custom display enabled)
+
             return 'gradebook_statistics.php?'.api_get_cidreq().'&selecteval='.$eval->get_id();
-        } else {
-            return null;
         }
+
+        return null;
     }
 
     public function get_name()

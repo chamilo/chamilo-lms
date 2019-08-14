@@ -9,6 +9,9 @@
  * @author Istvan Mandak
  */
 require_once __DIR__.'/../inc/global.inc.php';
+
+api_protect_course_script(true);
+
 require_once api_get_path(SYS_CODE_PATH).'exercise/hotpotatoes.lib.php';
 $_course = api_get_course_info();
 
@@ -93,7 +96,7 @@ $htmlHeadXtra[] = <<<HTML
             iframe.height = maxheight;
         }
         
-        $(document).on('ready', function () {
+        $(function() {
             var iframe = document.getElementById('hotpotatoe');
             iframe.onload = function () {
                 // this.height = $(this.contentDocument.body).outerHeight(true)
@@ -113,5 +116,9 @@ if ($origin == 'learnpath') {
 }
 $url = $document_web_path.$doc_url.$user_id.'.t.html?time='.intval($time);
 echo '<iframe id="hotpotatoe" name="hotpotatoe" width="100%" height="100%" frameborder="0" src="'.$url.'"></iframe>';
-echo '</body></html>';
-exit;
+
+if ($origin == 'learnpath') {
+    Display::display_reduced_footer();
+} else {
+    Display::display_footer();
+}

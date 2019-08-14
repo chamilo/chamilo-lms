@@ -11,6 +11,8 @@ $plugin = ImsLtiPlugin::create();
 $em = Database::getManager();
 $tools = $em->getRepository('ChamiloPluginBundle:ImsLti\ImsLtiTool')->findAll();
 
+$interbreadcrumb[] = ['url' => api_get_path(WEB_CODE_PATH).'admin/index.php', 'name' => get_lang('PlatformAdmin')];
+
 $template = new Template($plugin->get_title());
 $template->assign('tools', $tools);
 

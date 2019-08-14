@@ -457,7 +457,7 @@ VALUES
 ('allow_coach_to_edit_course_session','false','No'),
 ('show_glossary_in_extra_tools', 'none', 'None'),
 ('show_glossary_in_extra_tools', 'exercise', 'Exercise'),
-('show_glossary_in_extra_tools', 'lp', 'Learning path'),
+('show_glossary_in_extra_tools', 'lp', 'LearningPaths'),
 ('show_glossary_in_extra_tools', 'exercise_and_lp', 'ExerciseAndLearningPath'),
 ('send_email_to_admin_when_create_course','true','Yes'),
 ('send_email_to_admin_when_create_course','false','No'),
@@ -1960,3 +1960,11 @@ INSERT INTO settings_current (variable, type, category, selected_value, title, c
 VALUES ('allow_download_documents_by_api_key', 'radio', 'WebServices', 'false', 'AllowDownloadDocumentsByApiKeyTitle', 'AllowDownloadDocumentsByApiKeyComment', '', NULL, 1);
 INSERT INTO settings_options (variable, value, display_text) VALUES ('allow_download_documents_by_api_key', 'true', 'Yes');
 INSERT INTO settings_options (variable, value, display_text) VALUES ('allow_download_documents_by_api_key', 'false', 'No');
+
+INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('exercise_invisible_in_session',NULL,'radio','Session','false','ExerciseInvisibleInSessionTitle','ExerciseInvisibleInSessionComment','',NULL, 1);
+INSERT INTO settings_options (variable, value, display_text) VALUES ('exercise_invisible_in_session','true','Yes');
+INSERT INTO settings_options (variable, value, display_text) VALUES ('exercise_invisible_in_session','false','No');
+
+INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('configure_exercise_visibility_in_course',NULL,'radio','Session','false','ConfigureExerciseVisibilityInCourseTitle','ConfigureExerciseVisibilityInCourseComment','',NULL, 1);
+INSERT INTO settings_options (variable, value, display_text) VALUES ('configure_exercise_visibility_in_course','true','Yes');
+INSERT INTO settings_options (variable, value, display_text) VALUES ('configure_exercise_visibility_in_course','false','No');

@@ -69,9 +69,7 @@
                     {{ teacher_toc_buttons }}
                 </div>
             </div>
-
             {# TOC layout #}
-
             <div id="toc_id" class="scorm-body" name="toc_name">
                 {% include 'learnpath/scorm_list.tpl'|get_template %}
             </div>
@@ -143,7 +141,6 @@
                         </div>
                     </div>
                     <div role="tabpanel" class="tab-pane" id="lp-view-forum">
-
                     </div>
                 </div>
             </div>
@@ -153,8 +150,7 @@
 </div>
 {% if data_panel is not empty %}
     <script type="text/javascript">
-        $( document ).ready(function() {
-
+        $(function() {
             $('#scorm-panel .panel.higher .status-heading').on("click", function () {
                 $(this).siblings().find(".panel-heading").removeClass("on");
                 $(this).find(".panel-heading").toggleClass("on");
@@ -172,8 +168,7 @@
     </script>
 {% endif %}
 <script>
-    (function () {
-        var LPViewUtils = {
+    var LPViewUtils = {
             setHeightLPToc: function () {
                 var scormInfoHeight = $('#scorm-info').outerHeight(true);
 
@@ -210,8 +205,9 @@
                 });
             }
         };
+       
 
-        $(document).on('ready', function () {
+        $(function() {
             {% if data_panel %}
             LPViewUtils.groupToc();
             {% endif %}
@@ -228,18 +224,14 @@
             //$('#learning_path_main').addClass('lp-view-collapsed');
             $('#lp-view-expand-button, #lp-view-expand-toggle').on('click', function (e) {
                 e.preventDefault();
-
                 $('#learning_path_main').toggleClass('lp-view-collapsed');
-
                 $('#lp-view-expand-toggle span.fa').toggleClass('fa-compress');
                 $('#lp-view-expand-toggle span.fa').toggleClass('fa-expand');
             });
             {% else %}
             $('#lp-view-expand-button, #lp-view-expand-toggle').on('click', function (e) {
                 e.preventDefault();
-
                 $('#learning_path_main').toggleClass('lp-view-collapsed');
-
                 $('#lp-view-expand-toggle span.fa').toggleClass('fa-expand');
                 $('#lp-view-expand-toggle span.fa').toggleClass('fa-compress');
             });
@@ -274,105 +266,72 @@
 
                 $('.lp-view-tabs').fadeIn();
             });
-
-            loadForumThread({{ lp_id }}, {{ lp_current_item_id }});
+    
+          loadForumThread({{ lp_id }}, {{ lp_current_item_id }});
             checkCurrentItemPosition({{ lp_current_item_id }});
 
-            {% if glossary_extra_tools in glossary_tool_availables %}
+        {% if glossary_extra_tools in glossary_tool_available_list %}
             // Loads the glossary library.
             (function () {
                 {% if show_glossary_in_documents == 'ismanual' %}
-                $.frameReady(
-                    function () {
-                        //  $("<div>I am a div courses</div>").prependTo("body");
-                    },
-                    "top.content_name",
-                    {
-                        load: [
-                            {type: "script", id: "_fr1", src: "{{ jquery_web_path }}"},
-                            {type: "script", id: "_fr4", src: "{{ jquery_ui_js_web_path }}"},
-                            {type: "stylesheet", id: "_fr5", src: "{{ jquery_ui_css_web_path }}"},
-                            {type: "script", id: "_fr2", src: "{{ _p.web_lib }}javascript/jquery.highlight.js"},
-                            {{ fix_link }}
+                    $.frameReady(
+                        function(){
+                            //  $("<div>I am a div courses</div>").prependTo("body");
+                        },
+                        "#content_id",
+                        [
+                            { type:"script", id:"_fr1", src:"{{ jquery_web_path }}", deps: [
+                                { type:"script", id:"_fr4", src:"{{ jquery_ui_js_web_path }}"},
+                                { type:"script", id:"_fr2", src:"{{ _p.web_lib }}javascript/jquery.highlight.js"},
+                                {{ fix_link }}
+                            ]},
+                            { type:"stylesheet", id:"_fr5", src:"{{ jquery_ui_css_web_path }}"},
                         ]
-                    }
-                );
+                    );
                 {% elseif show_glossary_in_documents == 'isautomatic' %}
-                $.frameReady(
-                    function () {
-                        //  $("<div>I am a div courses</div>").prependTo("body");
-                    },
-                    "top.content_name",
-                    {
-                        load: [
-                            {type: "script", id: "_fr1", src: "{{ jquery_web_path }}"},
-                            {type: "script", id: "_fr4", src: "{{ jquery_ui_js_web_path }}"},
-                            {type: "stylesheet", id: "_fr5", src: "{{ jquery_ui_css_web_path }}"},
-                            {type: "script", id: "_fr2", src: "{{ _p.web_lib }}javascript/jquery.highlight.js"},
-                            {{ fix_link }}
+                    $.frameReady(
+                        function(){
+                            //  $("<div>I am a div courses</div>").prependTo("body");
+                        },
+                        "#content_id",
+                        [
+                            { type:"script", id:"_fr1", src:"{{ jquery_web_path }}", deps: [
+                                { type:"script", id:"_fr4", src:"{{ jquery_ui_js_web_path }}"},
+                                { type:"script", id:"_fr2", src:"{{ _p.web_lib }}javascript/jquery.highlight.js"},
+                                {{ fix_link }}
+                            ]},
+                            { type:"stylesheet", id:"_fr5", src:"{{ jquery_ui_css_web_path }}"},
                         ]
-                    }
-                );
+                    );
                 {% elseif fix_link != '' %}
-                $.frameReady(
-                    function () {
-                        //  $("<div>I am a div courses</div>").prependTo("body");
-                    },
-                    "top.content_name",
-                    {
-                        load: [
-                            {type: "script", id: "_fr1", src: "{{ jquery_web_path }}"},
-                            {type: "script", id: "_fr4", src: "{{ jquery_ui_js_web_path }}"},
-                            {type: "stylesheet", id: "_fr5", src: "{{ jquery_ui_css_web_path }}"},
-                            {{ fix_link }}
+                    $.frameReady(
+                        function(){
+                            //  $("<div>I am a div courses</div>").prependTo("body");
+                        },
+                        "#content_id",
+                        [
+                            { type:"script", id:"_fr1", src:"{{ jquery_web_path }}", deps: [
+                                { type:"script", id:"_fr4", src:"{{ jquery_ui_js_web_path }}"},
+                                {{ fix_link }}
+                            ]},
+                            { type:"stylesheet", id:"_fr5", src:"{{ jquery_ui_css_web_path }}"},
                         ]
-                    }
-                );
+                    );
                 {% endif %}
             })();
-            {% endif %}
+        {% endif %}
+        {% if disable_js_in_lp_view == 0 %}
+            $(function() {
+                var arr = ['link', 'sco'];
 
-            $('iframe#content_id').on('load', function () {
-                $.frameReady(
-                    function () {
-                        $(document).ready(function () {
-                            $('video:not(.skip)').attr('preload', 'metadata');
-                        })
-                    },
-                    'top.content_name',
-                    {
-                        load: [
-                            {type: 'script', id: '_fr1', src: '{{ _p.web }}web/assets/jquery/dist/jquery.min.js'},
-                            {
-                                type: 'script',
-                                id: '_fr7',
-                                src: '{{ _p.web }}web/assets/MathJax/MathJax.js?config=AM_HTMLorMML'
-                            },
-                            {type: 'script', id: '_fr4', src: '{{ _p.web }}web/assets/jquery-ui/jquery-ui.min.js'},
-                            {
-                                type: 'stylesheet',
-                                id: '_fr5',
-                                src: '{{ _p.web }}web/assets/jquery-ui/themes/smoothness/jquery-ui.min.css'
-                            },
-                            {
-                                type: 'stylesheet',
-                                id: '_fr6',
-                                src: '{{ _p.web }}web/assets/jquery-ui/themes/smoothness/theme.css'
-                            },
-                            {type: 'script', id: '_fr3', src: '{{ _p.web_main }}glossary/glossary.js.php'},
-                            {type: 'script', id: '_fr3', src: '{{ _p.web_main }}glossary/glossary.js.php?{{ _p.web_cid_query }}'},
-                            {type: "script", id:"_fr4", src: '{{ _p.web_main }}inc/ajax/lang.ajax.php?a=translate_html&'},
-                            {type: 'script', id: '_media1', src: '{{ _p.web }}web/assets/mediaelement/build/mediaelement-and-player.min.js'},
-                            {type: 'stylesheet', id: '_media2', src: '{{ _p.web }}web/assets/mediaelement/build/mediaelementplayer.min.css'},
-                            {type: 'stylesheet', id: '_media3', src: '{{ _p.web_css_theme }}mediaelement.css'}
-                        ]
-                    }
-                );
+                if ($.inArray(olms.lms_item_type, arr) == -1) {
+                    {{ frame_ready }}
+                }
             });
-        });
+        {% endif %}
 
         $(window).on('resize', function () {
             LPViewUtils.setHeightLPToc();
         });
-    })();
+    });
 </script>

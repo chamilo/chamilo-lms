@@ -212,12 +212,17 @@ switch ($action) {
         exit;
         break;
     case 'export':
-        $content = Link::listLinksAndCategories($course_id, $session_id, $categoryId, $show, null, false);
+        $content = Link::listLinksAndCategories($course_id, $session_id, $categoryId, $show, null, false, true);
+        $courseInfo = api_get_course_info_by_id($course_id);
+        if (!empty($session_id)) {
+            $sessionInfo = api_get_session_info($session_id);
+            $courseInfo['title'] = $courseInfo['title'].' '.$sessionInfo['name'];
+        }
         $pdf = new PDF();
         $pdf->content_to_pdf(
             $content,
             null,
-            $courseInfo['code'].get_lang('Link'),
+            $courseInfo['title'].'_'.get_lang('Link'),
             $courseInfo['code'],
             'D',
             false,

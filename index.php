@@ -20,7 +20,7 @@ if ($allow) {
 }
 
 // The section (for the tabs).
-$this_section = SECTION_CAMPUS;
+$this_section = SECTION_CAMPUS; //rewritten below if including HTML file
 $includeFile = !empty($_GET['include']);
 if ($includeFile) {
     $this_section = SECTION_INCLUDE;
@@ -34,16 +34,13 @@ if (!api_is_anonymous()) {
 }
 
 $controller = new IndexManager($header_title);
-
 //Actions
 $loginFailed = isset($_GET['loginFailed']) ? true : isset($loginFailed);
-
 if (!empty($_GET['logout'])) {
     $redirect = !empty($_GET['no_redirect']) ? false : true;
     // pass $logoutInfo defined in local.inc.php
     $controller->logout($redirect, $logoutInfo);
 }
-
 /**
  * Registers in the track_e_default table (view in important activities in admin
  * interface) a possible attempted break in, sending auth data through get.
@@ -66,7 +63,6 @@ if (isset($_GET['submitAuth']) && $_GET['submitAuth'] == 1) {
     session_destroy();
     die();
 }
-
 // Delete session item necessary to check for legal terms
 if (api_get_setting('allow_terms_conditions') === 'true') {
     Session::erase('term_and_condition');
@@ -79,7 +75,6 @@ if (!api_user_is_login() && CustomPages::enabled()) {
         CustomPages::display(CustomPages::INDEX_UNLOGGED);
     }
 }
-
 /**
  * @todo This piece of code should probably move to local.inc.php where the
  * actual login procedure is handled.
@@ -122,8 +117,8 @@ if (api_get_setting('display_categories_on_homepage') === 'true') {
     $controller->tpl->assign('course_category_block', $controller->return_courses_in_categories());
 }
 $controller->set_login_form();
-
 //@todo move this inside the IndexManager
+
 if (!api_is_anonymous()) {
     $controller->tpl->assign('profile_block', $controller->return_profile_block());
     $controller->tpl->assign('user_image_block', $controller->return_user_image_block());
@@ -147,7 +142,7 @@ if ($useCookieValidation === 'true') {
         $controller->tpl->assign('displayCookieUsageWarning', true);
     }
 }
-
+// When loading a chamilo page do not include the hot courses and news
 if (!isset($_REQUEST['include'])) {
     if (api_get_setting('show_hot_courses') == 'true') {
         $hotCourses = $controller->return_hot_courses();
@@ -197,3 +192,9 @@ if (isset($_GET['firstpage'])) {
 
 $controller->setGradeBookDependencyBar(api_get_user_id());
 $controller->tpl->display_two_col_template();
+
+// Deleting the session_id.
+Session::erase('session_id');
+Session::erase('id_session');
+Session::erase('studentview');
+api_remove_in_gradebook();

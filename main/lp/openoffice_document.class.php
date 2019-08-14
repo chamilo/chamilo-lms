@@ -33,9 +33,6 @@ abstract class OpenofficeDocument extends learnpath
      */
     public function __construct($course_code = null, $resource_id = null, $user_id = null)
     {
-        if ($this->debug > 0) {
-            error_log('In OpenofficeDocument::OpenofficeDocument()', 0);
-        }
         if (!empty($course_code) && !empty($resource_id) && !empty($user_id)) {
             parent::__construct($course_code, $resource_id, $user_id);
         }
@@ -378,7 +375,6 @@ abstract class OpenofficeDocument extends learnpath
         ];
 
         try {
-            //error_log('['.time().'] Calling wsConvertPpt webservice on ' . $ppt2lp_host);
             $result = $client->__call('wsConvertPpt', ['pptData' => $params]);
         } catch (Exception $e) {
             error_log('['.time().'] Chamilo SOAP call error: '.$e->getMessage());

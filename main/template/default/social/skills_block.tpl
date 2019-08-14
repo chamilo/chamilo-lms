@@ -8,7 +8,8 @@ $(function() {
     <div class="panel panel-default">
         <div class="panel-heading" role="tab" id="headingOne">
             <h4 class="panel-title">
-                <a role="button" data-toggle="collapse" data-parent="#skill-block" href="#skillList" aria-expanded="true" aria-controls="skillList">
+                <a role="button" data-toggle="collapse"
+                   data-parent="#skill-block" href="#skillList" aria-expanded="true" aria-controls="skillList">
                     {{ "Skills" | get_lang }}
                 </a>
                 <div class="btn-group pull-right">

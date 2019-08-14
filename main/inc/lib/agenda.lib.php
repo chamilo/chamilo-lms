@@ -2490,12 +2490,16 @@ class Agenda
             $form->addElement('textarea', 'comment', get_lang('Comment'));
             $form->addLabel(
                 get_lang('FilesAttachment'),
-                '<span id="filepaths">
+                '<div id="filepaths" class="file-upload-event">
+                        
                         <div id="filepath_1">
-                            <input type="file" name="attach_1"/><br />
-                            '.get_lang('Description').'&nbsp;&nbsp;<input type="text" name="legend[]" /><br /><br />
+                            <input type="file" name="attach_1"/>
+                            
+                            <label>'.get_lang('Description').'</label>
+                            <input class="form-control" type="text" name="legend[]" />
                         </div>
-                    </span>'
+                        
+                    </div>'
             );
 
             $form->addLabel(

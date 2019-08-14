@@ -59,6 +59,13 @@ if (defined('SYSTEM_INSTALLATION')) {
             error_log('Could not delete. It seems the file '.$entity.' does not exists.');
         }
     }
+
+    $oldDefaultCertificatePath = api_get_path(SYS_CODE_PATH).'default_course_document/certificates/';
+
+    if (is_dir($oldDefaultCertificatePath)) {
+        @rrmdir($oldDefaultCertificatePath);
+    }
+
     if ($debug) {
         error_log('Folders cleaned up');
     }

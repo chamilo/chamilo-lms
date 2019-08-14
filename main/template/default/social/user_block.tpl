@@ -3,7 +3,8 @@
         <div class="panel panel-default">
             <div class="panel-heading" role="tab" id="heading-sn">
                 <h4 class="panel-title">
-                    <a role="button" data-toggle="collapse" data-parent="#sn-avatar" href="#sn-avatar-one" aria-expanded="true" aria-controls="sn-avatar-one">
+                    <a role="button" data-toggle="collapse" data-parent="#sn-avatar"
+                       href="#sn-avatar-one" aria-expanded="true" aria-controls="sn-avatar-one">
                     {{ "Profile" | get_lang }}
                     </a>
                 </h4>
@@ -20,9 +21,9 @@
                             <!-- End user icon -->
                         {% endif %}
 
-                        <!-- LM -->
+                        {% if show_language_flag %}
+                        <!-- Language flag -->
                         <div class="avatar-lm">
-                            <h5></h5>
                             {% if user.language %}
                                 {% if user.language.code == 'fr' %}
                                     <img src="{{ _p.web }}web/assets/flag-icon-css/flags/4x3/fr.svg" width="36px">
@@ -37,13 +38,12 @@
                                 {% endif %}
                             {% endif %}
                         </div>
-                        <!-- END LM -->
-                        <!-- LC -->
+                        <!-- End language flag -->
+
+                        <!-- Language cible -->
                         <div class="avatar-lc">
-                            <h5></h5>
                             {% for item in extra_info %}
                                 {% if item.variable == 'langue_cible' %}
-
                                     {% if item.value == 'French2' %}
                                         <img src="{{ _p.web }}web/assets/flag-icon-css/flags/4x3/fr.svg" width="36px">
                                     {% elseif item.value == 'German2' %}
@@ -60,7 +60,8 @@
                                 {% endif %}
                             {% endfor %}
                         </div>
-                        <!-- END LC -->
+                        <!-- End language cible -->
+                        {% endif %}
                     </div>
                     {# Ofaj #}
                     <ul class="list-user-data">
@@ -130,9 +131,6 @@
                                             {{ "Chat" | get_lang }} ({{ "Online" | get_lang }})
                                         </a>
                                     </li>
-                                {# else #}
-                                    {# <img src="{{ "offline.png" | icon }}" alt="{{ "Online" | get_lang }}"> #}
-                                    {# {{ "Chat" | get_lang }} ({{ "Offline" | get_lang }}) #}
                                 {% endif %}
                             {% endif %}
                         {% endif %}

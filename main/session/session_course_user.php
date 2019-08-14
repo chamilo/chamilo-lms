@@ -14,11 +14,10 @@ require_once __DIR__.'/../inc/global.inc.php';
 // setting the section (for the tabs)
 $this_section = SECTION_PLATFORM_ADMIN;
 $tool_name = get_lang('EditSessionCoursesByUser');
-
-$id_session = intval($_GET['id_session']);
-$id_user = intval($_GET['id_user']);
-
+$id_session = isset($_GET['id_session']) ? (int) $_GET['id_session'] : 0;
 SessionManager::protectSession($id_session);
+
+$id_user = intval($_GET['id_user']);
 
 $em = Database::getManager();
 /** @var Session $session */
@@ -103,7 +102,7 @@ $interbreadcrumb[] = [
 ];
 
 Display::display_header($tool_name);
-echo Display::page_header($session->getName().' - '.$user->getCompleteName());
+echo Display::page_header($session->getName().' - '.UserManager::formatUserFullName($user));
 ?>
 <div class="row">
     <div class="col-sm-8 col-sm-offset-2">

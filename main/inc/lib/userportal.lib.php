@@ -1487,8 +1487,8 @@ class IndexManager
                             $params['courses'] = $list_courses_session;
                             $params['is_old'] = $markAsOld;
                             $params['is_future'] = $markAsFuture;
-                            $params['category'] = $session_box['category'];
-                            $params['color'] = Display::randomColor($session_box['category']['id']);
+                            //$params['category'] = $session_box['category'];
+                           //$params['color'] = Display::randomColor($session_box['category']['id']);
 
                             if ($showSimpleSessionInfo) {
                                 $params['subtitle'] = self::getSimpleSessionDetails(

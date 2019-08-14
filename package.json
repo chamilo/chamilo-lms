@@ -21,7 +21,7 @@
     "vue-template-compiler": "^2.6.10"
   },
   "dependencies": {
-    "blueimp-file-upload": "^9.19.2",
+    "blueimp-file-upload": "^10.0",
     "bootstrap-daterangepicker": "^3.0",
     "bootstrap-select": "^1.13.6",
     "chosen-js": "^1.8.7",
@@ -52,7 +52,7 @@
     "pwstrength-bootstrap": "^3.0.4",
     "qtip2": "^3.0.3",
     "readmore-js": "^2.2.1",
-    "select2": "^4.0.6-rc.1",
+    "select2": "^4.0",
     "sweetalert": "^2.1.2",
     "timeago": "^1.6.7",
     "timepicker": "^1.11.14",

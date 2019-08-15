@@ -586,16 +586,20 @@ function date_to_str_ago($date, $timeZone = 'UTC', $returnDateDifference = false
 
     $getOldTimezone = api_get_timezone();
     $isoCode = api_get_language_isocode();
-    if ($isoCode == 'pt') {
+    if ($isoCode === 'pt') {
         $isoCode = 'pt-BR';
     }
-    $checkFile = api_get_path(SYS_PATH).'vendor/jimmiw/php-time-ago/translations/'.$isoCode.'.php';
-    if (!file_exists($checkFile)) {
-        $isoCode = 'en';
-    }
-    $timeAgo = new TimeAgo($timeZone, $isoCode);
-    $value = $timeAgo->inWords($date);
+    $isoCode = ucfirst($isoCode);
+    $class = "Westsworld\TimeAgo\Translations\\".$isoCode;
 
+    if (class_exists($class)) {
+        $language = new $class();
+    } else {
+        $language = new Westsworld\TimeAgo\Translations\En();
+    }
+    $timeAgo = new TimeAgo($language);
+    $date = api_get_utc_datetime($date, null, true);
+    $value = $timeAgo->inWords($date);
     date_default_timezone_set($getOldTimezone);
 
     if ($returnDateDifference) {

@@ -2866,13 +2866,15 @@ class MessageManager
 
         $countLikes = self::countLikesAndDislikes($messageId, $userId);
 
+        $class = $countLikes['user_liked'] ? 'btn-primary' : 'btn-default';
+
         $btnLike = Display::button(
             'like',
             Display::returnFontAwesomeIcon('thumbs-up', '', true)
                 .PHP_EOL.'<span>'.$countLikes['likes'].'</span>',
             [
                 'title' => get_lang('VoteLike'),
-                'class' => 'btn btn-default social-like '.($countLikes['user_liked'] ? 'disabled' : ''),
+                'class' => 'btn  social-like '.$class,
                 'data-status' => 'like',
                 'data-message' => $messageId,
                 'data-group' => $groupId,
@@ -2881,13 +2883,15 @@ class MessageManager
 
         $btnDislike = '';
         if (api_get_configuration_value('disable_dislike_option') === false) {
+            $disabled = $countLikes['user_disliked'] ? 'btn-danger' : 'btn-default';
+
             $btnDislike = Display::button(
                 'like',
                 Display::returnFontAwesomeIcon('thumbs-down', '', true)
                 .PHP_EOL.'<span>'.$countLikes['dislikes'].'</span>',
                 [
                     'title' => get_lang('VoteDislike'),
-                    'class' => 'btn btn-default social-like '.($countLikes['user_disliked'] ? 'disabled' : ''),
+                    'class' => 'btn social-like '.$disabled,
                     'data-status' => 'dislike',
                     'data-message' => $messageId,
                     'data-group' => $groupId,

@@ -353,12 +353,12 @@ $(function() {
 
                     $count.text(++currentCount);
 
-                    if ($dislike.prop('disabled') || $dislike.is('.disabled')) {
+                    if ($dislike.is('.btn-danger')) {
                         $dislikeCount.text(dislikeCount <= 0 ? 0 : --dislikeCount);
-                        $dislike.removeClass('disabled').prop('disabled', false);
+                        $dislike.removeClass('btn-danger');
                     }
 
-                    $self.addClass('disabled').prop('disabled', true);
+                    $self.addClass('btn-primary');
                 } else if ('dislike' === status) {
                     var $like = $self.prev(),
                         $likeCount = $like.children('span'),
@@ -366,12 +366,12 @@ $(function() {
 
                     $count.text(++currentCount);
 
-                    if ($like.prop('disabled') || $like.is('.disabled')) {
+                    if ($like.is('.btn-primary')) {
                         $likeCount.text(likeCount <= 0 ? 0 : --likeCount);
-                        $like.removeClass('disabled').prop('disabled', false);
+                        $like.removeClass('btn-primary');
                     }
 
-                    $self.addClass('disabled').prop('disabled', true);
+                    $self.addClass('btn-danger');
                 }
             });
         });

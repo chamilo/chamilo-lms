@@ -8,12 +8,18 @@ $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 api_block_anonymous_users();
 
-if (api_get_setting('allow_message_tool') != 'true') {
+$allowSocial = api_get_setting('allow_social_tool') === 'true';
+$allowMessage = api_get_setting('allow_message_tool') === 'true';
+
+if (!$allowMessage) {
     api_not_allowed(true);
 }
 
-$allowSocial = api_get_setting('allow_social_tool') === 'true';
-$allowMessage = api_get_setting('allow_message_tool') === 'true';
+$messageId = isset($_GET['id']) ? (int) $_GET['id'] : 0;
+
+if (empty($messageId)) {
+    api_not_allowed(true);
+}
 
 if ($allowSocial) {
     $this_section = SECTION_SOCIAL;
@@ -25,7 +31,7 @@ if ($allowSocial) {
 $interbreadcrumb[] = ['url' => 'inbox.php', 'name' => get_lang('Messages')];
 
 $social_right_content = '<div class="actions">';
-if (api_get_setting('allow_message_tool') === 'true') {
+if ($allowMessage) {
     $social_right_content .= '<a href="'.api_get_path(WEB_PATH).'main/messages/new_message.php">'.
         Display::return_icon('new-message.png', get_lang('ComposeMessage')).'</a>';
     $social_right_content .= '<a href="'.api_get_path(WEB_PATH).'main/messages/inbox.php">'.
@@ -34,22 +40,18 @@ if (api_get_setting('allow_message_tool') === 'true') {
         Display::return_icon('outbox.png', get_lang('Outbox')).'</a>';
 }
 $social_right_content .= '</div>';
+$type = isset($_GET['type']) ? (int) $_GET['type'] : MessageManager::MESSAGE_TYPE_INBOX;
 
-if (empty($_GET['id'])) {
-    $messageId = $_GET['id_send'];
-    $source = 'outbox';
+$show_menu = 'messages_inbox';
+if ($type === MessageManager::MESSAGE_TYPE_OUTBOX) {
     $show_menu = 'messages_outbox';
-} else {
-    $messageId = $_GET['id'];
-    $source = 'inbox';
-    $show_menu = 'messages_inbox';
 }
 
 $message = '';
-
 $logInfo = [
     'tool' => 'Messages',
-    'action' => $source,
+    'tool_id' => $messageId,
+    'action' => 'view-message',
     'action_details' => 'view-message',
 ];
 Event::registerLog($logInfo);
@@ -60,7 +62,7 @@ if (api_get_setting('allow_social_tool') === 'true') {
     $social_menu_block = SocialManager::show_social_menu($show_menu);
 }
 // MAIN CONTENT
-$message .= MessageManager::showMessageBox($messageId, $source);
+$message .= MessageManager::showMessageBox($messageId, $type);
 
 if (!empty($message)) {
     $social_right_content .= $message;

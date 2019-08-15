@@ -62,7 +62,7 @@ switch ($action) {
         $count_unread_message = 0;
         if (api_get_setting('allow_message_tool') === 'true') {
             // get count unread message and total invitations
-            $count_unread_message = MessageManager::getNumberOfMessages(['message_status' => [MESSAGE_STATUS_UNREAD]]);
+            $count_unread_message = MessageManager::getCountNewMessagesFromDB($userId);
         }
 
         if (api_get_setting('allow_social_tool') === 'true') {

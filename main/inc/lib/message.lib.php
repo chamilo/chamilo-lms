@@ -2921,11 +2921,11 @@ class MessageManager
         $sql = "SELECT COUNT(id) as count 
                 FROM $table
                 WHERE
-                    user_receiver_id=".$userId." AND
+                    user_receiver_id = $userId AND
                     msg_status = ".MESSAGE_STATUS_UNREAD;
         $result = Database::query($sql);
         $row = Database::fetch_assoc($result);
 
-        return $row['count'];
+        return (int) $row['count'];
     }
 }

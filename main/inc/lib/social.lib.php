@@ -917,7 +917,7 @@ class SocialManager extends UserManager
         ];
 
         // get count unread message and total invitations
-        $count_unread_message = MessageManager::getNumberOfMessages(['message_status' => [MESSAGE_STATUS_UNREAD]]);
+        $count_unread_message = MessageManager::getCountNewMessagesFromDB(api_get_user_id());
         $count_unread_message = !empty($count_unread_message) ? Display::badge($count_unread_message) : null;
 
         $number_of_new_messages_of_friend = self::get_message_number_invitation_by_user_id(api_get_user_id());
@@ -1950,7 +1950,7 @@ class SocialManager extends UserManager
                 }
             }
         } else {
-            $list = MessageManager::getAttachmentLinkList($messageId);
+            $list = MessageManager::getAttachmentLinkList($messageId, 0);
         }
 
         return $list;

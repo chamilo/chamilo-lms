@@ -1012,7 +1012,6 @@ class SortableTable extends HTML_Table
                 $this->getDataFunctionParams()
             );
         }
-
         return $this->total_number_of_items;
     }
 

@@ -55,11 +55,6 @@ if ($allowMessage) {
         Display::return_icon('outbox.png', get_lang('Outbox')).'</a>';
 }
 
-$action = null;
-if (isset($_REQUEST['action'])) {
-    $action = $_REQUEST['action'];
-}
-
 $keyword = '';
 $social_right_content = '';
 if ($allowSocial) {
@@ -79,32 +74,8 @@ if ($allowSocial) {
         [$actionsLeft, $actionsRight]
     );
 }
-//MAIN CONTENT
-if ($action == 'delete') {
-    $delete_list_id = [];
-    if (isset($_POST['out'])) {
-        $delete_list_id = $_POST['out'];
-    }
-    if (isset($_POST['id'])) {
-        $delete_list_id = $_POST['id'];
-    }
-    for ($i = 0; $i < count($delete_list_id); $i++) {
-        MessageManager::delete_message_by_user_sender(
-            api_get_user_id(),
-            $delete_list_id[$i]
-        );
-    }
-    MessageManager::outbox_display($keyword);
-    header("Location: ".api_get_self());
-    exit;
-} elseif ($action == 'deleteone') {
-    MessageManager::delete_message_by_user_sender(api_get_user_id(), $_GET['id']);
-    MessageManager::outbox_display($keyword);
-    header("Location: ".api_get_self());
-    exit;
-} else {
-    $social_right_content = MessageManager::outbox_display($keyword);
-}
+
+$social_right_content .= MessageManager::outBoxDisplay($keyword);
 
 $tpl = new Template(get_lang('Outbox'));
 // Block Social Avatar

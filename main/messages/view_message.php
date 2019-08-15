@@ -21,7 +21,6 @@ if (empty($messageId)) {
     api_not_allowed(true);
 }
 
-
 if ($allowSocial) {
     $this_section = SECTION_SOCIAL;
     $interbreadcrumb[] = ['url' => api_get_path(WEB_PATH).'main/social/home.php', 'name' => get_lang('SocialNetwork')];
@@ -32,7 +31,7 @@ if ($allowSocial) {
 $interbreadcrumb[] = ['url' => 'inbox.php', 'name' => get_lang('Messages')];
 
 $social_right_content = '<div class="actions">';
-if ($allowMessage === 'true') {
+if ($allowMessage) {
     $social_right_content .= '<a href="'.api_get_path(WEB_PATH).'main/messages/new_message.php">'.
         Display::return_icon('new-message.png', get_lang('ComposeMessage')).'</a>';
     $social_right_content .= '<a href="'.api_get_path(WEB_PATH).'main/messages/inbox.php">'.

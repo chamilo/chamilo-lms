@@ -17,31 +17,6 @@ $logInfo = [
 ];
 Event::registerLog($logInfo);
 
-$nameTools = get_lang('Messages');
-$show_message = null;
-if (isset($_GET['form_reply']) || isset($_GET['form_delete'])) {
-    $info_reply = [];
-    $info_delete = [];
-    if (isset($_GET['form_delete'])) {
-        //allow to delete messages
-        $info_delete = explode(',', $_GET['form_delete']);
-        $count_delete = (count($info_delete) - 1);
-    }
-
-    if (trim($info_delete[0]) === 'delete') {
-        for ($i = 1; $i <= $count_delete; $i++) {
-            MessageManager::delete_message_by_user_receiver(
-                api_get_user_id(),
-                $info_delete[$i]
-            );
-        }
-        $message_box = get_lang('SelectedMessagesDeleted');
-        $show_message .= Display::return_message(api_xml_http_response_encode($message_box));
-        $social_right_content .= MessageManager::inboxDisplay();
-        exit;
-    }
-}
-
 $this_section = SECTION_SOCIAL;
 $interbreadcrumb[] = [
     'url' => api_get_path(WEB_CODE_PATH).'social/home.php',
@@ -68,22 +43,7 @@ if ($form->validate()) {
 }
 $actionsRight = $form->returnForm();
 $social_right_content .= Display::toolbarAction('toolbar', [$actionsLeft, $actionsRight]);
-
-if (!isset($_GET['del_msg'])) {
-    $social_right_content .= MessageManager::getPromotedMessagesGrid($keyword);
-} else {
-    $num_msg = (int) $_POST['total'];
-    for ($i = 0; $i < $num_msg; $i++) {
-        if ($_POST[$i]) {
-            // The user_id was necessary to delete a message??
-            $show_message .= MessageManager::delete_message_by_user_receiver(
-                api_get_user_id(),
-                $_POST['_'.$i]
-            );
-        }
-    }
-    $social_right_content .= MessageManager::getPromotedMessagesGrid();
-}
+$social_right_content .= MessageManager::getPromotedMessagesGrid($keyword);
 
 $tpl = new Template(null);
 // Block Social Avatar

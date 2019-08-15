@@ -907,6 +907,7 @@ class MessageManager
                     SET msg_status = '".MESSAGE_STATUS_DELETED."'
                     WHERE user_sender_id= $user_sender_id AND id= $id";
             Database::query($sql);
+
             return true;
         }
 
@@ -1345,6 +1346,10 @@ class MessageManager
                 $status = MESSAGE_STATUS_PROMOTED;
                 $userCondition = " user_receiver_id = $currentUserId AND ";
                 break;
+        }
+
+        if (empty($userCondition)) {
+            return '';
         }
 
         $query = "SELECT * FROM $table
@@ -2259,6 +2264,8 @@ class MessageManager
                     }
                     break;
             }
+            header('Location: '.api_get_self());
+            exit;
         }
 
         $actions = ['reply', 'mark_as_unread', 'mark_as_read', 'forward', 'delete'];
@@ -2299,6 +2306,9 @@ class MessageManager
                     ));
                     break;
             }
+
+            header('Location: '.api_get_self());
+            exit;
         }
 
         $html = self::getMessageGrid(self::MESSAGE_TYPE_PROMOTED, $keyword, $actions);
@@ -2328,6 +2338,7 @@ class MessageManager
                         'normal',
                         false
                     ));
+
                     break;
                 case 'deleteone':
                     self::delete_message_by_user_sender($currentUserId, $_GET['id']);
@@ -2338,6 +2349,9 @@ class MessageManager
                     ));
                     break;
             }
+
+            header('Location: '.api_get_self());
+            exit;
         }
 
         $html = self::getMessageGrid(self::MESSAGE_TYPE_OUTBOX, $keyword, $actions);

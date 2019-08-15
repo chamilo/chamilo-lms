@@ -80,8 +80,6 @@ switch ($action) {
         if (api_is_allowed_to_edit(null, true)) {
             $new_order = $_POST['new_order'];
             $sections = explode('^', $new_order);
-            $new_array = [];
-
             // We have to update parent_item_id, previous_item_id, next_item_id, display_order in the database
             $itemList = new LpItemOrderList();
             foreach ($sections as $items) {

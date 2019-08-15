@@ -917,7 +917,7 @@ class SocialManager extends UserManager
         ];
 
         // get count unread message and total invitations
-        $count_unread_message = MessageManager::getNumberOfMessages(['message_status' => [MESSAGE_STATUS_UNREAD]]);
+        $count_unread_message = MessageManager::getCountNewMessagesFromDB(api_get_user_id());
         $count_unread_message = !empty($count_unread_message) ? Display::badge($count_unread_message) : null;
 
         $number_of_new_messages_of_friend = self::get_message_number_invitation_by_user_id(api_get_user_id());
@@ -1836,14 +1836,14 @@ class SocialManager extends UserManager
         }
 
         $formattedList .= '</div>';
-        $formattedList .= '<div class="mediapost-form">';
+        $formattedList .= '<div class="mediapost-form row">';
         $formattedList .= '<form class="form-horizontal" id="form_comment_'.$messageId.'" name="post_comment" method="POST">
                 <div class="col-sm-9">
                 <label for="comment" class="hide">'.get_lang('SocialWriteNewComment').'</label>
                 <input type="hidden" name = "messageId" value="'.$messageId.'" />
                 <textarea rows="3" class="form-control" placeholder="'.get_lang('SocialWriteNewComment').'" name="comment" rows="1" ></textarea>
                 </div>
-                <div class="col-sm-3">
+                <div class="col-sm-3 pull-right">
                 <a onclick="submitComment('.$messageId.');" href="javascript:void(0);" name="social_wall_new_msg_submit" class="btn btn-default btn-post">
                     <em class="fa fa-pencil"></em> '.get_lang('Post').'
                 </a>
@@ -1950,7 +1950,7 @@ class SocialManager extends UserManager
                 }
             }
         } else {
-            $list = MessageManager::getAttachmentLinkList($messageId);
+            $list = MessageManager::getAttachmentLinkList($messageId, 0);
         }
 
         return $list;
@@ -2450,15 +2450,15 @@ class SocialManager extends UserManager
             null,
             [
                 'placeholder' => $socialWallPlaceholder,
-                'cols-size' => [1, 10, 1],
+                'cols-size' => [1, 12, 1],
                 'aria-label' => $socialWallPlaceholder,
             ]
         );
         $form->addHtml('<div class="form-group">');
-        $form->addHtml('<div class="col-sm-4 col-md-offset-1">');
+        $form->addHtml('<div class="col-sm-6">');
         $form->addFile('picture', get_lang('UploadFile'), ['custom' => true]);
         $form->addHtml('</div>');
-        $form->addHtml('<div class="col-sm-6">');
+        $form->addHtml('<div class="col-sm-6 "><div class="pull-right">');
         $form->addButtonSend(
             get_lang('Post'),
             'wall_post_button',
@@ -2468,9 +2468,8 @@ class SocialManager extends UserManager
                 'custom' => true,
             ]
         );
+        $form->addHtml('</div></div>');
         $form->addHtml('</div>');
-        $form->addHtml('</div>');
-
         $form->addHidden('url_content', '');
         $html = Display::panel($form->returnForm(), get_lang('SocialWall'));
 
@@ -3310,8 +3309,7 @@ class SocialManager extends UserManager
 
         $postAttachment = self::getPostAttachment($message);
 
-        $html = '';
-        $html .= '<div class="top-mediapost" >';
+        $html = '<div class="top-mediapost" >';
         $html .= '<div class="pull-right btn-group btn-group-sm">';
 
         $html .= MessageManager::getLikesButton(

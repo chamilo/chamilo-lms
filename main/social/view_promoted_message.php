@@ -1,9 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-/**
- * @package chamilo.messages
- */
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 api_block_anonymous_users();
@@ -17,26 +14,17 @@ $interbreadcrumb[] = ['url' => api_get_path(WEB_PATH).'main/social/home.php', 'n
 $interbreadcrumb[] = ['url' => 'promoted_messages.php', 'name' => get_lang('PromotedMessages')];
 
 $social_right_content = '';
-if (empty($_GET['id'])) {
-    $messageId = $_GET['id_send'];
-    $source = 'outbox';
-    $show_menu = 'messages_outbox';
-} else {
-    $messageId = $_GET['id'];
-    $source = 'inbox';
-    $show_menu = 'messages_inbox';
-}
+$messageId = $_GET['id'];
 
 $message = '';
-
 $logInfo = [
     'tool' => 'Messages',
-    'action' => $source,
+    'action' => 'promoted_messages',
     'action_details' => 'view-message',
 ];
 Event::registerLog($logInfo);
-$social_menu_block = SocialManager::show_social_menu($show_menu);
-$message .= MessageManager::showMessageBox($messageId, 'promoted_messages');
+$social_menu_block = SocialManager::show_social_menu('inbox');
+$message .= MessageManager::showMessageBox($messageId, MessageManager::MESSAGE_TYPE_PROMOTED);
 
 if (!empty($message)) {
     $social_right_content .= $message;
@@ -45,7 +33,7 @@ if (!empty($message)) {
 }
 $tpl = new Template(get_lang('View'));
 // Block Social Avatar
-SocialManager::setSocialUserBlock($tpl, api_get_user_id(), $show_menu);
+SocialManager::setSocialUserBlock($tpl, api_get_user_id(), 'promoted_messages');
 
 $tpl->assign('social_menu_block', $social_menu_block);
 $tpl->assign('social_right_content', $social_right_content);

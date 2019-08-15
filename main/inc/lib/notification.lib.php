@@ -491,9 +491,11 @@ class Notification extends Model
             return false;
         }
 
-        $content = str_replace(['<br>', '<br/>', '<br />'], "\n", $content);
         $content = strip_tags($content);
-        $content = html_entity_decode($content, ENT_QUOTES);
+        $content = explode("\n", $content);
+        $content = array_map('trim', $content);
+        $content = array_filter($content);
+        $content = implode(PHP_EOL, $content);
 
         $gcmRegistrationIds = [];
         foreach ($userIds as $userId) {
@@ -525,6 +527,12 @@ class Notification extends Model
                 'title' => $title,
                 'message' => $content,
             ],
+            'notification' => [
+                'title' => $title,
+                'body' => $content,
+            ],
+            'collapse_key' => get_lang('Messages'),
+            'sound' => true,
         ]);
 
         $ch = curl_init();

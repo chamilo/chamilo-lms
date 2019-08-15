@@ -71,11 +71,7 @@ function remove_item(origin) {
 }
 </script>';
 
-$form_sent = 0;
 $errorMsg = '';
-$UserList = $SessionList = [];
-$users = $sessions = [];
-
 if (isset($_POST['form_sent']) && $_POST['form_sent']) {
     $form_sent = $_POST['form_sent'];
     $course_list = $_POST['course_list'];
@@ -130,7 +126,7 @@ if ($ajax_search) {
 $link_add_type_unique = ['class' => 'disabled'];
 $link_add_type_multiple = [];
 
-if ($add_type == 'multiple') {
+if ($add_type === 'multiple') {
     $link_add_type_unique = [];
     $link_add_type_multiple = ['class' => 'disabled'];
 }

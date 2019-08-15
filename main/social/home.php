@@ -27,8 +27,6 @@ if (api_get_setting('allow_social_tool') !== 'true') {
     exit;
 }
 
-$userGroup = new UserGroup();
-
 //fast upload image
 if (api_get_setting('profile', 'picture') == 'true') {
     $form = new FormValidator('profile', 'post', 'home.php', null, []);

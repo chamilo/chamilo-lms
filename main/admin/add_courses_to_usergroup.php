@@ -47,10 +47,7 @@ function remove_item(origin) {
 
 </script>';
 
-$form_sent = 0;
 $errorMsg = '';
-$sessions = [];
-
 if (isset($_POST['form_sent']) && $_POST['form_sent']) {
     $form_sent = $_POST['form_sent'];
     $elements_posted = $_POST['elements_in_name'];
@@ -301,7 +298,6 @@ unset($sessionUsersList);
 </tr>
 </table>
 </form>
-
 <script>
 function moveItem(origin , destination) {
     for(var i = 0 ; i<origin.options.length ; i++) {

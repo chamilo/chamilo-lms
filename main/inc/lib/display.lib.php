@@ -1473,7 +1473,7 @@ class Display
 
         $beforeSelectRow = null;
         if (isset($extra_params['beforeSelectRow'])) {
-            $beforeSelectRow = "beforeSelectRow: ".$extra_params['beforeSelectRow'].", ";
+            $beforeSelectRow = 'beforeSelectRow: '.$extra_params['beforeSelectRow'].', ';
             unset($extra_params['beforeSelectRow']);
         }
 
@@ -1533,6 +1533,16 @@ class Display
         $json_encode = str_replace('"formatter":"extra_formatter"', 'formatter:extra_formatter', $json_encode);
         $json_encode = str_replace(['{"first":"first",', '"end":"end"}'], '', $json_encode);
 
+        if (api_get_configuration_value('allow_compilatio_tool') &&
+            (strpos($_SERVER['REQUEST_URI'], 'work/work.php') !== false ||
+             strpos($_SERVER['REQUEST_URI'], 'work/work_list_all.php') != false
+            )
+        ) {
+            $json_encode = str_replace('"function () { compilatioInit() }"',
+                'function () { compilatioInit() }',
+                $json_encode
+            );
+        }
         // Creating the jqgrid element.
         $json .= '$("#'.$div_id.'").jqGrid({';
         //$json .= $beforeSelectRow;
@@ -1751,7 +1761,7 @@ class Display
             }
 
             if ($notification['tool'] == TOOL_LEARNPATH) {
-                if (!learnpath::is_lp_visible_for_student($notification['ref'], $user_id, $course_code)) {
+                if (!learnpath::is_lp_visible_for_student($notification['ref'], $user_id, $courseInfo)) {
                     continue;
                 }
             }
@@ -1797,7 +1807,7 @@ class Display
     /**
      * Get the session box details as an array.
      *
-     * @param int       Session ID
+     * @param int $session_id
      *
      * @return array Empty array or session array
      *               ['title'=>'...','category'=>'','dates'=>'...','coach'=>'...','active'=>true/false,'session_category_id'=>int]
@@ -1820,7 +1830,7 @@ class Display
             $session = [];
             $session['category_id'] = $session_info['session_category_id'];
             $session['title'] = $session_info['name'];
-            $session['id_coach'] = $session_info['id_coach'];
+            $session['coach_id'] = $session['id_coach'] = $session_info['id_coach'];
             $session['dates'] = '';
             $session['coach'] = '';
             if (api_get_setting('show_session_coach') === 'true' && isset($coachInfo['complete_name'])) {
@@ -1919,15 +1929,6 @@ class Display
         ';
         $html .= '</ul></div>';
         $html .= '</section>';
-        /*$html.= '<ul id="'.$id.'" class="star-rating">
-                    <li class="current-rating" style="width:'.$percentage.'px;"></li>
-                    <li><a href="javascript:void(0);" data-link="'.$url.'&amp;star=1" title="'.$star_label.'" class="one-star">1</a></li>
-                    <li><a href="javascript:void(0);" data-link="'.$url.'&amp;star=2" title="'.$star_label.'" class="two-stars">2</a></li>
-                    <li><a href="javascript:void(0);" data-link="'.$url.'&amp;star=3" title="'.$star_label.'" class="three-stars">3</a></li>
-                    <li><a href="javascript:void(0);" data-link="'.$url.'&amp;star=4" title="'.$star_label.'" class="four-stars">4</a></li>
-                    <li><a href="javascript:void(0);" data-link="'.$url.'&amp;star=5" title="'.$star_label.'" class="five-stars">5</a></li>
-                </ul>';*/
-
         $labels = [];
 
         $labels[] = $number_of_users_who_voted == 1 ? $number_of_users_who_voted.' '.get_lang('Vote') : $number_of_users_who_voted.' '.get_lang('Votes');
@@ -2031,15 +2032,18 @@ class Display
      * @param int    $percentage      int value between 0 and 100
      * @param bool   $show_percentage
      * @param string $extra_info
+     * @param string $class           danger/success/infowarning
      *
      * @return string
      */
-    public static function bar_progress($percentage, $show_percentage = true, $extra_info = '')
+    public static function bar_progress($percentage, $show_percentage = true, $extra_info = '', $class = '')
     {
         $percentage = (int) $percentage;
+        $class = empty($class) ? '' : "progress-bar-$class";
+
         $div = '<div class="progress">
                 <div
-                    class="progress-bar progress-bar-striped"
+                    class="progress-bar progress-bar-striped '.$class.'"
                     role="progressbar"
                     aria-valuenow="'.$percentage.'"
                     aria-valuemin="0"

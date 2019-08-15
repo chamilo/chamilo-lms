@@ -59,8 +59,34 @@ class Event
     }
 
     /**
+     * @param int $sessionId
+     *
+     * @return bool
+     */
+    public static function isSessionLogNeedToBeSave($sessionId)
+    {
+        if (!empty($sessionId)) {
+            $visibility = api_get_session_visibility($sessionId);
+            if (!empty($visibility) && $visibility != SESSION_AVAILABLE) {
+                $extraFieldValue = new ExtraFieldValue('session');
+                $value = $extraFieldValue->get_values_by_handler_and_field_variable(
+                    $sessionId,
+                    'disable_log_after_session_ends'
+                );
+                if (!empty($value) && isset($value['value']) && (int) $value['value'] == 1) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
+
+    /**
      * @author Sebastien Piraux <piraux_seb@hotmail.com>
      * @desc Record information for access event for courses
+     *
+     * @return bool
      */
     public static function accessCourse()
     {
@@ -69,22 +95,26 @@ class Event
         }
 
         $TABLETRACK_ACCESS = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ACCESS);
-        //for "what's new" notification
+        // For "what's new" notification
         $TABLETRACK_LASTACCESS = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LASTACCESS);
 
-        $id_session = api_get_session_id();
+        $sessionId = api_get_session_id();
         $now = api_get_utc_datetime();
         $courseId = api_get_course_int_id();
         $userId = api_get_user_id();
         $ip = Database::escape_string(api_get_real_ip());
 
+        if (self::isSessionLogNeedToBeSave($sessionId) === false) {
+            return false;
+        }
+
         if ($userId) {
             $userId = $userId;
         } else {
-            $userId = "0"; // no one
+            $userId = '0'; // no one
         }
         $sql = "INSERT INTO $TABLETRACK_ACCESS  (user_ip, access_user_id, c_id, access_date, access_session_id) 
-                VALUES ('$ip', $userId, $courseId, '$now', $id_session)";
+                VALUES ('$ip', $userId, $courseId, '$now', $sessionId)";
 
         Database::query($sql);
 
@@ -94,16 +124,16 @@ class Event
                   access_user_id = $userId AND
                   c_id = $courseId AND 
                   access_tool IS NULL AND 
-                  access_session_id = $id_session";
+                  access_session_id = $sessionId";
         $result = Database::query($sql);
 
         if (Database::affected_rows($result) == 0) {
             $sql = "INSERT INTO $TABLETRACK_LASTACCESS (access_user_id, c_id, access_date, access_session_id)
-                    VALUES ($userId, $courseId, '$now', $id_session)";
+                    VALUES ($userId, $courseId, '$now', $sessionId)";
             Database::query($sql);
         }
 
-        return 1;
+        return true;
     }
 
     /**
@@ -143,6 +173,11 @@ class Event
         if (empty($courseInfo)) {
             return false;
         }
+
+        if (self::isSessionLogNeedToBeSave($sessionId) === false) {
+            return false;
+        }
+
         $courseId = $courseInfo['real_id'];
 
         $tableAccess = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ACCESS);
@@ -1794,6 +1829,12 @@ class Event
         if (Session::read('login_as')) {
             return false;
         }
+
+        $sessionId = (int) $sessionId;
+        if (self::isSessionLogNeedToBeSave($sessionId) === false) {
+            return false;
+        }
+
         $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
         $loginDate = $logoutDate = api_get_utc_datetime();
 
@@ -1801,7 +1842,6 @@ class Event
         $counter = 1;
         $courseId = (int) $courseId;
         $user_id = (int) $user_id;
-        $sessionId = (int) $sessionId;
         $ip = Database::escape_string(api_get_real_ip());
 
         $sql = "INSERT INTO $table(c_id, user_ip, user_id, login_course_date, logout_course_date, counter, session_id)
@@ -1848,9 +1888,14 @@ class Event
             return false;
         }
 
+        $sessionId = (int) $sessionId;
+
+        if (self::isSessionLogNeedToBeSave($sessionId) === false) {
+            return false;
+        }
+
         $courseId = (int) $courseId;
         $userId = (int) $userId;
-        $sessionId = (int) $sessionId;
 
         $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
         $sql = "SELECT course_access_id, logout_course_date 
@@ -1920,13 +1965,19 @@ class Event
             $sessionLifetime = 3600; // 1 hour
         }
         if (!empty($logoutInfo) && !empty($logoutInfo['cid'])) {
-            $tableCourseAccess = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
-            $userId = (int) $logoutInfo['uid'];
-            $courseId = (int) $logoutInfo['cid'];
             $sessionId = 0;
             if (!empty($logoutInfo['sid'])) {
                 $sessionId = (int) $logoutInfo['sid'];
             }
+
+            if (self::isSessionLogNeedToBeSave($sessionId) === false) {
+                return false;
+            }
+
+            $tableCourseAccess = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
+            $userId = (int) $logoutInfo['uid'];
+            $courseId = (int) $logoutInfo['cid'];
+
             $currentDate = api_get_utc_datetime();
             // UTC time
             $diff = time() - $sessionLifetime;
@@ -2096,7 +2147,14 @@ class Event
      */
     public static function registerLog($logInfo)
     {
-        if (!Tracking::minimunTimeAvailable(api_get_session_id(), api_get_course_int_id())) {
+        $sessionId = api_get_session_id();
+        $courseId = api_get_course_int_id();
+
+        if (!Tracking::minimumTimeAvailable($sessionId, $courseId)) {
+            return false;
+        }
+
+        if (self::isSessionLogNeedToBeSave($sessionId) === false) {
             return false;
         }
 
@@ -2111,8 +2169,8 @@ class Event
         $logInfo['action_details'] = !empty($logInfo['action_details']) ? $logInfo['action_details'] : '';
         $logInfo['ip_user'] = api_get_real_ip();
         $logInfo['user_agent'] = $_SERVER['HTTP_USER_AGENT'];
-        $logInfo['session_id'] = api_get_session_id();
-        $logInfo['c_id'] = api_get_course_int_id();
+        $logInfo['session_id'] = $sessionId;
+        $logInfo['c_id'] = $courseId;
         $logInfo['ch_sid'] = session_id();
         $logInfo['login_as'] = $loginAs;
         $logInfo['info'] = !empty($logInfo['info']) ? $logInfo['info'] : '';

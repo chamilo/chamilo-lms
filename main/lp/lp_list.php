@@ -151,7 +151,7 @@ if ($filteredCategoryId) {
 $test_mode = api_get_setting('server_type');
 $showBlockedPrerequisite = api_get_configuration_value('show_prerequisite_as_blocked');
 $allowLpChamiloExport = api_get_configuration_value('allow_lp_chamilo_export');
-$allowMinTime = Tracking::minimunTimeAvailable($sessionId, $courseId);
+$allowMinTime = Tracking::minimumTimeAvailable($sessionId, $courseId);
 $accumulateWorkTimeTotal = 0;
 if ($allowMinTime) {
     $accumulateWorkTimeTotal = learnpath::getAccumulateWorkTimeTotal($courseId);

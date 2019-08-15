@@ -160,6 +160,7 @@ define('TABLE_STUDENT_PUBLICATION_ASSIGNMENT', 'student_publication_assignment')
 define('TABLE_STUDENT_PUBLICATION_REL_DOCUMENT', 'student_publication_rel_document');
 define('TABLE_STUDENT_PUBLICATION_REL_USER', 'student_publication_rel_user');
 define('TABLE_STUDENT_PUBLICATION_ASSIGNMENT_COMMENT', 'student_publication_comment');
+define('TABLE_PLAGIARISM', 'plagiarism_compilatio_docs');
 
 // Course forum tables
 define('TABLE_FORUM_CATEGORY', 'forum_category');

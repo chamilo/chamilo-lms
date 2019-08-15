@@ -15,10 +15,7 @@ require_once __DIR__.'/../inc/global.inc.php';
 $current_course_tool = TOOL_QUIZ;
 
 // Clear the exercise session just in case
-Session::erase('objExercise');
-Session::erase('calculatedAnswerId');
-Session::erase('duration_time_previous');
-Session::erase('duration_time');
+Exercise::cleanSessionVariables();
 
 $this_section = SECTION_COURSES;
 
@@ -391,10 +388,11 @@ if (!empty($attempts)) {
     $table_content = $table->toHtml();
 }
 
-if ($objExercise->selectAttempts()) {
-    $attempt_message = get_lang('Attempts').' '.$counter.' / '.$objExercise->selectAttempts();
+$selectAttempts = $objExercise->selectAttempts();
+if ($selectAttempts) {
+    $attempt_message = get_lang('Attempts').' '.$counter.' / '.$selectAttempts;
 
-    if ($counter == $objExercise->selectAttempts()) {
+    if ($counter == $selectAttempts) {
         $attempt_message = Display::return_message($attempt_message, 'error');
     } else {
         $attempt_message = Display::return_message($attempt_message, 'info');

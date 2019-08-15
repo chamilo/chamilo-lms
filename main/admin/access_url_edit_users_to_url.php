@@ -25,9 +25,6 @@ if (!api_get_multiple_access_url()) {
 
 // Database Table Definitions
 $tbl_user = Database::get_main_table(TABLE_MAIN_USER);
-$tbl_access_url_rel_user = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
-$tbl_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL);
-
 // setting breadcrumbs
 $tool_name = get_lang('EditUsersToURL');
 $interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('PlatformAdmin')];
@@ -73,9 +70,7 @@ function remove_item(origin) {
 }
 </script>';
 
-$form_sent = 0;
 $errorMsg = '';
-$UserList = [];
 $message = '';
 
 if (isset($_POST['form_sent']) && $_POST['form_sent']) {

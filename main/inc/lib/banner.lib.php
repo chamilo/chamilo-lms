@@ -86,6 +86,21 @@ function accessToWhoIsOnline()
         $access = true;
     }
 
+    if ($access === true) {
+        $profileList = api_get_configuration_value('allow_online_users_by_status');
+        if (!empty($profileList) && isset($profileList['status'])) {
+            $userInfo = api_get_user_info();
+            if ($userInfo['is_admin']) {
+                $userInfo['status'] = PLATFORM_ADMIN;
+            }
+            $profileList = $profileList['status'];
+            $access = false;
+            if (in_array($userInfo['status'], $profileList)) {
+                $access = true;
+            }
+        }
+    }
+
     return $access;
 }
 

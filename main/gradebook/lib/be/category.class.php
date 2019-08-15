@@ -35,6 +35,7 @@ class Category implements GradebookItem
     private $isRequirement;
     private $courseDependency;
     private $minimumToValidate;
+    private $documentId;
     /** @var int */
     private $gradeBooksToValidateInDependence;
 
@@ -101,9 +102,9 @@ class Category implements GradebookItem
     {
         if (!empty($this->certificate_min_score)) {
             return $this->certificate_min_score;
-        } else {
-            return null;
         }
+
+        return null;
     }
 
     /**
@@ -527,9 +528,7 @@ class Category implements GradebookItem
         $result = Database::query($sql);
         $categories = [];
         if (Database::num_rows($result) > 0) {
-            $categories = self::create_category_objects_from_sql_result(
-                $result
-            );
+            $categories = self::create_category_objects_from_sql_result($result);
         }
 
         return $categories;
@@ -756,19 +755,6 @@ class Category implements GradebookItem
     }
 
     /**
-     * Not delete this category from the database,when visible=3 is category eliminated.
-     *
-     * @param int $courseId
-     */
-    public function update_category_delete($courseId)
-    {
-        $tbl_grade_categories = Database :: get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
-        $sql = 'UPDATE '.$tbl_grade_categories.' SET visible=3
-                WHERE c_id ="'.intval($courseId).'"';
-        Database::query($sql);
-    }
-
-    /**
      * Delete the gradebook categories from a course, including course sessions.
      *
      * @param \Chamilo\CoreBundle\Entity\Course $course
@@ -832,7 +818,7 @@ class Category implements GradebookItem
      *
      * @return array
      */
-    public function showAllCategoryInfo($categoryId = 0)
+    public function showAllCategoryInfo($categoryId)
     {
         $categoryId = (int) $categoryId;
         if (empty($categoryId)) {
@@ -846,54 +832,6 @@ class Category implements GradebookItem
         $row = Database::fetch_array($result, 'ASSOC');
 
         return $row;
-    }
-
-    /**
-     * Check if a category name (with the same parent category) already exists.
-     *
-     * @param string $name   name to check (if not given, the name property of this object will be checked)
-     * @param int    $parent parent category
-     *
-     * @return bool
-     */
-    public function does_name_exist($name, $parent)
-    {
-        if (!isset($name)) {
-            $name = $this->name;
-            $parent = $this->parent;
-        }
-        $table = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
-        $sql = "SELECT count(id) AS number
-                FROM $table
-                WHERE name = '".Database::escape_string($name)."'";
-
-        if (api_is_allowed_to_edit()) {
-            $parent = self::load($parent);
-            $code = $parent[0]->get_course_code();
-            $courseInfo = api_get_course_info($code);
-            $courseId = $courseInfo['real_id'];
-            if (isset($code) && $code != '0') {
-                $main_course_user_table = Database::get_main_table(TABLE_MAIN_COURSE_USER);
-                $sql .= ' AND user_id IN (
-                            SELECT user_id FROM '.$main_course_user_table.'
-                            WHERE c_id = '.$courseId.' AND status = '.COURSEMANAGER.'
-                        )';
-            } else {
-                $sql .= ' AND user_id = '.api_get_user_id();
-            }
-        } else {
-            $sql .= ' AND user_id = '.api_get_user_id();
-        }
-
-        if (!isset($parent)) {
-            $sql .= ' AND parent_id is null';
-        } else {
-            $sql .= ' AND parent_id = '.intval($parent);
-        }
-        $result = Database::query($sql);
-        $number = Database::fetch_row($result);
-
-        return $number[0] != 0;
     }
 
     /**
@@ -2131,7 +2069,7 @@ class Category implements GradebookItem
         $category_id = (int) $category_id;
 
         // Generating the total score for a course
-        $cats_course = self::load(
+        $category = self::load(
             $category_id,
             null,
             null,
@@ -2142,7 +2080,7 @@ class Category implements GradebookItem
         );
 
         /** @var Category $category */
-        $category = $cats_course[0];
+        $category = $category[0];
 
         if (empty($category)) {
             return false;
@@ -2202,20 +2140,18 @@ class Category implements GradebookItem
             return false;
         }
 
-        $cattotal = self::load($category_id);
-        $scoretotal = $cattotal[0]->calc_score($user_id);
+        $scoretotal = $category->calc_score($user_id);
 
         // Do not remove this the gradebook/lib/fe/gradebooktable.class.php
         // file load this variable as a global
         $scoredisplay = ScoreDisplay::instance();
-
         $my_score_in_gradebook = $scoredisplay->display_score(
             $scoretotal,
             SCORE_SIMPLE
         );
 
         $my_certificate = GradebookUtils::get_certificate_by_user_id(
-            $category->get_id(),
+            $category_id,
             $user_id
         );
 
@@ -2227,7 +2163,7 @@ class Category implements GradebookItem
                 api_get_utc_datetime()
             );
             $my_certificate = GradebookUtils::get_certificate_by_user_id(
-                $category->get_id(),
+                $category_id,
                 $user_id
             );
         }
@@ -2242,8 +2178,16 @@ class Category implements GradebookItem
 
             $fileWasGenerated = $certificate_obj->isHtmlFileGenerated();
 
+            // Fix when using custom certificate BT#15937
+            if (api_get_plugin_setting('customcertificate', 'enable_plugin_customcertificate') === 'true') {
+                $infoCertificate = CustomCertificatePlugin::getCertificateData($my_certificate['id'], $user_id);
+                if (!empty($infoCertificate)) {
+                    $fileWasGenerated = true;
+                }
+            }
+
             if (!empty($fileWasGenerated)) {
-                $url = api_get_path(WEB_PATH).'certificates/index.php?id='.$my_certificate['id'];
+                $url = api_get_path(WEB_PATH).'certificates/index.php?id='.$my_certificate['id'].'&user_id='.$user_id;
                 $certificates = Display::toolbarButton(
                     get_lang('DisplayCertificate'),
                     $url,
@@ -2636,26 +2580,6 @@ class Category implements GradebookItem
     public function setCourseId($courseId)
     {
         $this->courseId = $courseId;
-
-        return $this;
-    }
-
-    /**
-     * @return int
-     */
-    public function getGradeBooksToValidateInDependence()
-    {
-        return $this->gradeBooksToValidateInDependence;
-    }
-
-    /**
-     * @param int $value
-     *
-     * @return Category
-     */
-    public function setGradeBooksToValidateInDependence($value)
-    {
-        $this->gradeBooksToValidateInDependence = $value;
 
         return $this;
     }

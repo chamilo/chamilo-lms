@@ -126,7 +126,6 @@ $form->applyFilter('department_url', 'html_filter');
 
 // Extra fields
 $extra_field = new ExtraField('course');
-
 $extraFieldAdminPermissions = false;
 $showOnlyTheseFields = ['tags', 'video_url', 'course_hours_duration', 'max_subscribed_students'];
 $extra = $extra_field->addElements(
@@ -211,8 +210,6 @@ if (!empty($scoreModels)) {
 $form->addButtonSave(get_lang('SaveSettings'), 'submit_save');
 
 $form->addHtml(card_settings_close());
-
-//************* COURSE ACCESS ******************//
 
 $group = [];
 $group[] = $form->createElement(
@@ -313,9 +310,7 @@ $form->addPanelOption(
     'accordionSettings'
 );
 
-//************** END COURSE ACCESS *************//
-
-//************** START DOCUMENTS ***************//
+// Documents
 $globalGroup = [];
 if (api_get_setting('documents_default_visibility_defined_in_course') == 'true') {
     $group = [
@@ -356,12 +351,7 @@ $form->addPanelOption(
     'accordionSettings'
 );
 
-// *************** END DOCUMENTS ***************** //
-
-// ************** START EMAIL NOTIFICATIONS *******************//
-
 $globalGroup = [];
-
 $group = [];
 $group[] = $form->createElement(
     'radio',
@@ -505,8 +495,6 @@ $form->addPanelOption(
     'accordionSettings'
 );
 
-//************** END EMAIL NOTIFICATIONS ******************//
-//*******************  START USER *******************//
 $group = [];
 $group[] = $form->createElement(
     'radio',
@@ -576,10 +564,8 @@ $form->addPanelOption(
     false,
     'accordionSettings'
 );
-//****************** END USER ****************//
 
-//***************** CHAT SETTINGS ***************//
-
+// CHAT SETTINGS
 $group = [];
 $group[] = $form->createElement(
     'radio',
@@ -604,8 +590,6 @@ $form->addPanelOption(
     false,
     'accordionSettings'
 );
-
-//*************** START LEARNING PATH  *************** //
 
 $globalGroup = [];
 $group = [];
@@ -721,9 +705,7 @@ $form->addPanelOption(
     false,
     'accordionSettings'
 );
-// ********** END CONFIGURE LEARN PATH ***************//
 
-// ********** EXERCISE ********************* //
 if (api_get_configuration_value('allow_exercise_auto_launch')) {
     $globalGroup = [];
 
@@ -814,9 +796,6 @@ $form->addPanelOption(
     'accordionSettings'
 );
 
-// ************* END THEMATIC  *********** //
-
-// ************* CERTIFICATE SETTINGS ***************** //
 if (api_get_setting('allow_public_certificates') === 'true') {
     $group = [];
     $group[] = $form->createElement(
@@ -872,7 +851,7 @@ $form->addPanelOption(
     'accordionSettings'
 );
 
-//********** STUDENT PUBLICATION ***************** //
+// Student publication
 $group = [
     $form->createElement('radio', 'show_score', null, get_lang('NewVisible'), 0),
     $form->createElement('radio', 'show_score', null, get_lang('NewUnvisible'), 1),

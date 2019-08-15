@@ -150,6 +150,7 @@ define('TOOL_NOTEBOOK', 'notebook');
 define('TOOL_ATTENDANCE', 'attendance');
 define('TOOL_COURSE_PROGRESS', 'course_progress');
 define('TOOL_PORTFOLIO', 'portfolio');
+define('TOOL_PLAGIARISM', 'compilatio');
 
 // CONSTANTS defining Chamilo interface sections
 define('SECTION_CAMPUS', 'mycampus');
@@ -579,6 +580,7 @@ define('MESSAGE_STATUS_WALL_DELETE', '9');
 define('MESSAGE_STATUS_WALL_POST', '10');
 define('MESSAGE_STATUS_CONVERSATION', '11');
 define('MESSAGE_STATUS_FORUM', '12');
+define('MESSAGE_STATUS_PROMOTED', '13');
 
 // Images
 define('IMAGE_WALL_SMALL_SIZE', 200);
@@ -2305,6 +2307,7 @@ function api_format_course_array($course_data)
     $_course['registration_code'] = !empty($course_data['registration_code']) ? sha1($course_data['registration_code']) : null;
     $_course['disk_quota'] = $course_data['disk_quota'];
     $_course['course_public_url'] = $webCourseHome.'/index.php';
+    $_course['course_sys_path'] = $courseSys.'/';
 
     if (array_key_exists('add_teachers_to_sessions_courses', $course_data)) {
         $_course['add_teachers_to_sessions_courses'] = $course_data['add_teachers_to_sessions_courses'];
@@ -2596,7 +2599,6 @@ function api_get_session_visibility(
     }
 
     $now = time();
-
     if (empty($session_id)) {
         return 0; // Means that the session is still available.
     }
@@ -3477,7 +3479,6 @@ function api_is_allowed_to_edit(
     $check_student_view = true
 ) {
     $allowSessionAdminEdit = api_get_setting('session.session_admins_edit_courses_content') === true;
-    // Admins can edit anything.
     // Admins can edit anything.
     if (api_is_platform_admin($allowSessionAdminEdit)) {
         //The student preview was on
@@ -8437,11 +8438,11 @@ function api_is_allowed_in_course()
  * Set the cookie to go directly to the course code $in_firstpage
  * after login.
  *
- * @param string $in_firstpage is the course code of the course to go
+ * @param string $value is the course code of the course to go
  */
-function api_set_firstpage_parameter($in_firstpage)
+function api_set_firstpage_parameter($value)
 {
-    //setcookie('GotoCourse', $in_firstpage);
+    setcookie('GotoCourse', $value);
 }
 
 /**
@@ -9445,18 +9446,20 @@ function api_set_noreply_and_from_address_to_mailer(PHPMailer $mailer, array $se
     $senderName = !empty($sender['name']) ? $sender['name'] : $notification->getDefaultPlatformSenderName();
     $senderEmail = !empty($sender['email']) ? $sender['email'] : $notification->getDefaultPlatformSenderEmail();
 
+    // Send errors to the platform admin
+    $adminEmail = api_get_setting('emailAdministrator');
+    if (PHPMailer::ValidateAddress($adminEmail)) {
+        $mailer->AddCustomHeader('Errors-To: '.$adminEmail);
+    }
+
     // Reply to first
     if (!$avoidReplyToAddress) {
-        $mailer->AddCustomHeader('Errors-To: '.$notification->getDefaultPlatformSenderEmail());
-
         if (
             !empty($replyToAddress) &&
             isset($platformEmail['SMTP_UNIQUE_REPLY_TO']) && $platformEmail['SMTP_UNIQUE_REPLY_TO'] &&
             PHPMailer::ValidateAddress($replyToAddress['mail'])
         ) {
             $mailer->AddReplyTo($replyToAddress['email'], $replyToAddress['name']);
-            // Errors to sender
-            $mailer->AddCustomHeader('Errors-To: '.$replyToAddress['mail']);
             $mailer->Sender = $replyToAddress['mail'];
         }
     }

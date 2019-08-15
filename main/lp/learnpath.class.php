@@ -1870,12 +1870,14 @@ class learnpath
     /**
      * Gets the navigation bar for the learnpath display screen.
      *
+     * @param string $barId
+     *
      * @return string The HTML string to use as a navigation bar
      */
-    public function get_navigation_bar($idBar = null, $display = null)
+    public function get_navigation_bar($barId = '')
     {
-        if (empty($idBar)) {
-            $idBar = 'control-top';
+        if (empty($barId)) {
+            $barId = 'control-top';
         }
         $lpId = $this->lp_id;
         $mycurrentitemid = $this->get_current_item_id();
@@ -1898,7 +1900,7 @@ class learnpath
 
         if (!empty($display)) {
             $showReporting = isset($display['show_reporting_icon']) ? $display['show_reporting_icon'] : true;
-            if ($showReporting == false) {
+            if ($showReporting === false) {
                 $reportingIcon = '';
             }
         }
@@ -1926,7 +1928,7 @@ class learnpath
 
         if ($this->mode === 'fullscreen') {
             $navbar = '
-                  <span id="'.$idBar.'" class="buttons">
+                  <span id="'.$barId.'" class="buttons">
                     '.$reportingIcon.'
                     '.$previousIcon.'                    
                     '.$nextIcon.'
@@ -1937,11 +1939,11 @@ class learnpath
                   </span>';
         } else {
             $navbar = '
-            <span id="'.$idBar.'" class="buttons text-right">
-                '.$reportingIcon.'
-                '.$previousIcon.'
-                '.$nextIcon.'               
-            </span>';
+                 <span id="'.$barId.'" class="buttons text-right">
+                    '.$reportingIcon.'
+                    '.$previousIcon.'
+                    '.$nextIcon.'               
+                </span>';
         }
 
         return $navbar;
@@ -2113,9 +2115,6 @@ class learnpath
      */
     public function get_previous_index()
     {
-        if ($this->debug > 0) {
-            error_log('In learnpath::get_previous_index()', 0);
-        }
         $index = $this->index;
         if (isset($this->ordered_items[$index - 1])) {
             $index--;
@@ -2126,11 +2125,6 @@ class learnpath
                 if ($index < 0) {
                     return $this->index;
                 }
-            }
-        } else {
-            // There is no previous item.
-            if ($this->debug > 2) {
-                error_log('get_previous_index() - there was no previous index available, reusing '.$index, 0);
             }
         }
 
@@ -2144,9 +2138,9 @@ class learnpath
      */
     public function get_previous_item_id()
     {
-        $new_index = $this->get_previous_index();
+        $index = $this->get_previous_index();
 
-        return $this->ordered_items[$new_index];
+        return $this->ordered_items[$index];
     }
 
     /**
@@ -2289,7 +2283,7 @@ class learnpath
                 $isBlocked = true;
             }
 
-            if (Tracking::minimunTimeAvailable($sessionId, $courseId)) {
+            if (Tracking::minimumTimeAvailable($sessionId, $courseId)) {
                 // Block if it does not exceed minimum time
                 // Minimum time (in minutes) to pass the learning path
                 $accumulateWorkTime = self::getAccumulateWorkTimePrerequisite($prerequisite, $courseId);
@@ -4309,7 +4303,7 @@ class learnpath
 
         $debug = $this->debug;
         if ($debug > 0) {
-            error_log('In learnpath::prerequisites_match()', 0);
+            error_log('In learnpath::prerequisites_match()');
         }
 
         if (empty($itemId)) {
@@ -4333,11 +4327,13 @@ class learnpath
 
                 return true;
             }
+
             // Clean spaces.
             $prereq_string = str_replace(' ', '', $prereq_string);
             if ($debug > 0) {
                 error_log('Found prereq_string: '.$prereq_string, 0);
             }
+
             // Now send to the parse_prereq() function that will check this component's prerequisites.
             $result = $currentItem->parse_prereq(
                 $prereq_string,
@@ -6077,13 +6073,41 @@ class learnpath
         $return_audio = null;
         $iconPath = api_get_path(SYS_CODE_PATH).'img/';
         $mainUrl = api_get_path(WEB_CODE_PATH).'lp/lp_controller.php?'.api_get_cidreq();
+        $countItems = count($arrLP);
 
-        for ($i = 0; $i < count($arrLP); $i++) {
+        $upIcon = Display::return_icon(
+            'up.png',
+            get_lang('Up'),
+            [],
+            ICON_SIZE_TINY
+        );
+
+        $disableUpIcon = Display::return_icon(
+            'up_na.png',
+            get_lang('Up'),
+            [],
+            ICON_SIZE_TINY
+        );
+
+        $downIcon = Display::return_icon(
+            'down.png',
+            get_lang('Down'),
+            [],
+            ICON_SIZE_TINY
+        );
+
+        $disableDownIcon = Display::return_icon(
+            'down_na.png',
+            get_lang('Down'),
+            [],
+            ICON_SIZE_TINY
+        );
+        for ($i = 0; $i < $countItems; $i++) {
+            $parent_id = $arrLP[$i]['parent_item_id'];
             $title = $arrLP[$i]['title'];
             $title_cut = cut($arrLP[$i]['title'], self::MAX_LP_ITEM_TITLE_LENGTH);
-
             // Link for the documents
-            if ($arrLP[$i]['item_type'] == 'document' || $arrLP[$i]['item_type'] == TOOL_READOUT_TEXT) {
+            if ($arrLP[$i]['item_type'] === 'document' || $arrLP[$i]['item_type'] == TOOL_READOUT_TEXT) {
                 $url = $mainUrl.'&action=view_item&mode=preview_document&id='.$arrLP[$i]['id'].'&lp_id='.$this->lp_id;
                 $title_cut = Display::url(
                     $title_cut,
@@ -6101,10 +6125,9 @@ class learnpath
                 Session::write('pathItem', $arrLP[$i]['path']);
             }
 
+            $oddClass = 'row_even';
             if (($i % 2) == 0) {
                 $oddClass = 'row_odd';
-            } else {
-                $oddClass = 'row_even';
             }
             $return_audio .= '<tr id ="lp_item_'.$arrLP[$i]['id'].'" class="'.$oddClass.'">';
             $icon_name = str_replace(' ', '', $arrLP[$i]['item_type']);
@@ -6157,6 +6180,7 @@ class learnpath
             $forumIcon = '';
             $previewIcon = '';
             $pluginCalendarIcon = '';
+            $orderIcons = '';
 
             $pluginCalendar = api_get_plugin_setting('learning_calendar', 'enabled') === 'true';
             $plugin = null;
@@ -6260,7 +6284,6 @@ class learnpath
                 if ($pluginCalendar) {
                     $pluginLink = $pluginUrl.
                         '&action=toggle_visibility&lp_item_id='.$arrLP[$i]['id'].'&lp_id='.$this->lp_id;
-
                     $iconCalendar = Display::return_icon('agenda_na.png', get_lang('OneDay'), [], ICON_SIZE_TINY);
                     $itemInfo = $plugin->getItemVisibility($arrLP[$i]['id']);
                     if ($itemInfo && $itemInfo['value'] == 1) {
@@ -6270,6 +6293,29 @@ class learnpath
                         $iconCalendar,
                         $pluginLink,
                         ['class' => 'btn btn-default']
+                    );
+                }
+
+                if ($arrLP[$i]['item_type'] != 'final_item') {
+                    /*if ($isFirst) {
+                        $orderIcons = Display::url($disableUpIcon, '#', ['class' => 'btn btn-default']);
+                    } else {
+                    }*/
+                    $orderIcons = Display::url(
+                        $upIcon,
+                        'javascript:void(0)',
+                        ['class' => 'btn btn-default order_items', 'data-dir' => 'up', 'data-id' => $arrLP[$i]['id']]
+                    );
+
+                    /*if ($isLast) {
+                        $orderIcons .= Display::url($disableDownIcon, '#', ['class' => 'btn btn-default']);
+                    } else {
+
+                    }*/
+                    $orderIcons .= Display::url(
+                        $downIcon,
+                        'javascript:void(0)',
+                        ['class' => 'btn btn-default order_items', 'data-dir' => 'down', 'data-id' => $arrLP[$i]['id']]
                     );
                 }
 
@@ -6397,6 +6443,7 @@ class learnpath
                                     $prerequisities_icon 
                                     $move_item_icon 
                                     $audio_icon 
+                                    $orderIcons
                                     $delete_icon
                                 </div>",
                         ['class' => 'btn-toolbar button_actions']
@@ -6407,7 +6454,6 @@ class learnpath
                     Display::span($audio, ['class' => 'button_actions']);
             }
 
-            $parent_id = $arrLP[$i]['parent_item_id'];
             $default_data[$arrLP[$i]['id']] = $row;
             $default_content[$arrLP[$i]['id']] = $arrLP[$i];
 
@@ -13311,6 +13357,9 @@ EOD;
     public static function rl_get_resource_name($course_code, $learningPathId, $id_in_path)
     {
         $_course = api_get_course_info($course_code);
+        if (empty($_course)) {
+            return '';
+        }
         $course_id = $_course['real_id'];
         $tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
         $learningPathId = (int) $learningPathId;
@@ -13361,7 +13410,7 @@ EOD;
                 $myrow = Database::fetch_array($result);
                 $output = $myrow['forum_name'];
                 break;
-            case TOOL_THREAD:  //=topics
+            case TOOL_THREAD:
                 $tbl_post = Database::get_course_table(TABLE_FORUM_POST);
                 // Grabbing the title of the post.
                 $sql_title = "SELECT * FROM $tbl_post WHERE c_id = $course_id AND post_id=".$id;
@@ -13371,26 +13420,17 @@ EOD;
                 break;
             case TOOL_POST:
                 $tbl_post = Database::get_course_table(TABLE_FORUM_POST);
-                //$tbl_post_text = Database::get_course_table(FORUM_POST_TEXT_TABLE);
                 $sql = "SELECT * FROM $tbl_post p WHERE c_id = $course_id AND p.post_id = $id";
                 $result = Database::query($sql);
                 $post = Database::fetch_array($result);
                 $output = $post['post_title'];
                 break;
             case 'dir':
-                $title = $row_item['title'];
-                if (!empty($title)) {
-                    $output = $title;
-                } else {
-                    $output = '-';
-                }
-                break;
             case TOOL_DOCUMENT:
                 $title = $row_item['title'];
+                $output = '-';
                 if (!empty($title)) {
                     $output = $title;
-                } else {
-                    $output = '-';
                 }
                 break;
             case 'hotpotatoes':
@@ -13400,8 +13440,6 @@ EOD;
                 $pathname = explode('/', $myrow['path']); // Making a correct name for the link.
                 $last = count($pathname) - 1; // Making a correct name for the link.
                 $filename = $pathname[$last]; // Making a correct name for the link.
-                $ext = explode('.', $filename);
-                $ext = strtolower($ext[sizeof($ext) - 1]);
                 $myrow['path'] = rawurlencode($myrow['path']);
                 $output = $filename;
                 break;
@@ -13426,7 +13464,6 @@ EOD;
 
         while ($parent) {
             $return[] = $parent->get_title();
-
             $parent = $this->getItem($parent->get_parent());
         }
 

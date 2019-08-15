@@ -987,7 +987,7 @@ class SessionManager
         $date_to,
         $options
     ) {
-        $sessionId = intval($sessionId);
+        $sessionId = (int) $sessionId;
 
         $getAllSessions = false;
         if (empty($sessionId)) {
@@ -2299,6 +2299,12 @@ class SessionManager
         $course_code = Database::escape_string($course_code);
         $courseInfo = api_get_course_info($course_code);
         $courseId = $courseInfo['real_id'];
+        $subscribe = (int) api_get_course_setting('subscribe_users_to_forum_notifications', $course_code);
+        $forums = [];
+        if ($subscribe === 1) {
+            require_once api_get_path(SYS_CODE_PATH).'forum/forumfunction.inc.php';
+            $forums = get_forums(0, $course_code, true, $session_id);
+        }
 
         if ($removeUsersNotInList) {
             $currentUsers = self::getUsersByCourseSession($session_id, $courseInfo, 0);
@@ -2344,6 +2350,14 @@ class SessionManager
                 $result = Database::query($sql);
                 if (Database::affected_rows($result)) {
                     $nbr_users++;
+                }
+            }
+
+            if (!empty($forums)) {
+                $userInfo = api_get_user_info($enreg_user);
+                foreach ($forums as $forum) {
+                    $forumId = $forum['iid'];
+                    set_notification('forum', $forumId, false, $userInfo, $courseInfo);
                 }
             }
 

@@ -156,8 +156,8 @@ if (is_array($personal_course_list)) {
     $course_list_code = array_unique_dimensional($course_list_code);
 }
 
-//Social Block Menu
-$social_menu_block = SocialManager::show_social_menu(
+// Social Block Menu
+$menu = SocialManager::show_social_menu(
     'shared_profile',
     null,
     $user_id,
@@ -173,7 +173,7 @@ $sessionList = SessionManager::getSessionsFollowedByUser(
 
 // My friends
 $friend_html = SocialManager::listMyFriendsBlock($user_id, $link_shared);
-$wallSocialAddPost = SocialManager::getWallForm(api_get_self());
+$addPostForm = SocialManager::getWallForm(api_get_self());
 
 $posts = SocialManager::getWallMessagesByUser($friendId);
 $socialAutoExtendLink = SocialManager::getAutoExtendLink($user_id, $countPost);
@@ -345,9 +345,9 @@ SocialManager::setSocialUserBlock(
 );
 
 $tpl->assign('social_friend_block', $friend_html);
-$tpl->assign('social_menu_block', $social_menu_block);
-$tpl->assign('social_wall_block', $wallSocialAddPost);
-$tpl->assign('social_post_wall_block', $posts);
+$tpl->assign('social_menu_block', $menu);
+$tpl->assign('add_post_form', $addPostForm);
+$tpl->assign('posts', $posts);
 $tpl->assign('social_course_block', $social_course_block);
 $tpl->assign('social_group_info_block', $social_group_info_block);
 $tpl->assign('social_rss_block', $social_rss_block);

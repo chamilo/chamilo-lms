@@ -3395,7 +3395,7 @@ function finishInstallationWithContainer(
     UserManager::setPasswordEncryption($encryptPassForm);
 
     // Create admin user.
-    UserManager::create_user(
+    @UserManager::create_user(
         $adminFirstName,
         $adminLastName,
         1,

@@ -2,6 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\ExtraFieldSavedSearch;
+use ChamiloSession as Session;
 
 $cidReset = true;
 
@@ -304,10 +305,18 @@ if (isset($_POST) && !empty($_POST)) {
     $searchChecked1 = isset($_POST['search_using_1']) ? 'checked' : '';
     $searchChecked2 = isset($_POST['search_using_2']) ? 'checked' : '';
     $searchChecked3 = isset($_POST['search_using_3']) ? 'checked' : '';
+    Session::write('search_using_1', $searchChecked1);
+    Session::write('search_using_2', $searchChecked2);
+    Session::write('search_using_3', $searchChecked3);
 } else {
-    $searchChecked1 = 'checked';
-    $searchChecked2 = 'checked';
-    $searchChecked3 = 'checked';
+    $searchChecked1 = Session::read('search_using_1');
+    $searchChecked1 = $searchChecked1 === null ? 'checked' : $searchChecked1;
+
+    $searchChecked2 = Session::read('search_using_2');
+    $searchChecked2 = $searchChecked2 === null ? 'checked' : $searchChecked2;
+
+    $searchChecked3 = Session::read('search_using_3');
+    $searchChecked3 = $searchChecked3 === null ? 'checked' : $searchChecked3;
 }
 
 $form->addHtml('<div class="panel panel-default">');

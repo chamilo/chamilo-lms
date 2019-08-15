@@ -1289,6 +1289,13 @@ requires extension "php-soap"  sudo apt-get install php-soap
 // Hide course sidebar
 //$_configuration['hide_course_sidebar'] = true;
 
+// Allow online users by user profile
+// 1 = COURSEMANAGER (teacher)
+// 5 = STUDENT
+// 11 = PLATFORM_ADMIN
+// Example: The online users will be available only for teachers and students.
+//$_configuration['allow_online_users_by_status'] = ['status' =>  [1, 5]];
+
 // KEEP THIS AT THE END
 // -------- Custom DB changes
 // Add user activation by confirmation email

@@ -2284,3 +2284,13 @@ blockquote:before {
 .exercise_actions {
     margin-bottom: 60px;
 }
+
+.exercise_overview_options {
+    text-align: left;
+}
+
+.exercise_overview_options .btn-success {
+    color: #fff;
+    background-color: #162A83;
+    border-color: #162A83;
+}

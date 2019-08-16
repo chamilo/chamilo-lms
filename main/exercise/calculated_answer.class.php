@@ -13,8 +13,8 @@ use Webit\Util\EvalMath\EvalMath;
  */
 class CalculatedAnswer extends Question
 {
-    public static $typePicture = 'calculated_answer.png';
-    public static $explanationLangVar = 'CalculatedAnswer';
+    public $typePicture = 'calculated_answer.png';
+    public $explanationLangVar = 'CalculatedAnswer';
 
     /**
      * Constructor.

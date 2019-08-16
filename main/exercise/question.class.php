@@ -34,8 +34,8 @@ abstract class Question
     public $isContent;
     public $course;
     public $feedback;
-    public static $typePicture = 'new_question.png';
-    public static $explanationLangVar = '';
+    public $typePicture = 'new_question.png';
+    public $explanationLangVar = '';
     public $question_table_class = 'table table-striped';
     public $questionTypeWithFeedback;
     public $extra;

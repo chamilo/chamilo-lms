@@ -16,8 +16,8 @@ use ChamiloSession as Session;
  */
 class MultipleAnswerCombination extends Question
 {
-    public static $typePicture = 'mcmac.png';
-    public static $explanationLangVar = 'MultipleSelectCombination';
+    public $typePicture = 'mcmac.png';
+    public $explanationLangVar = 'MultipleSelectCombination';
 
     /**
      * Constructor.

@@ -8,8 +8,8 @@ use ChamiloSession as Session;
  */
 class GlobalMultipleAnswer extends Question
 {
-    public static $typePicture = 'mcmagl.png';
-    public static $explanationLangVar = 'GlobalMultipleAnswer';
+    public $typePicture = 'mcmagl.png';
+    public $explanationLangVar = 'GlobalMultipleAnswer';
 
     /**
      * GlobalMultipleAnswer constructor.

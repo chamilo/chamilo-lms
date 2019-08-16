@@ -15,8 +15,8 @@ use ChamiloSession as Session;
  */
 class UniqueAnswerNoOption extends Question
 {
-    public static $typePicture = 'mcuao.png';
-    public static $explanationLangVar = 'UniqueAnswerNoOption';
+    public $typePicture = 'mcuao.png';
+    public $explanationLangVar = 'UniqueAnswerNoOption';
 
     /**
      * Constructor.

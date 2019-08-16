@@ -36,21 +36,17 @@
         {% endblock %}
 
         <section class="container-fluid">
-            <div class="mb-4">
-                <div id="card-container">
-                    {% if introduction != '' %}
-                        {{ introduction }}
-                    {% endif %}
+            {% if introduction != '' %}
+                {{ introduction }}
+            {% endif %}
 
-                    {% if actions != '' %}
-                        {{ actions }}
-                    {% endif %}
-                    {# Content #}
-                    {% block content %}
-                        {{ content }}
-                    {% endblock %}
-                </div>
-            </div>
+            {% if actions != '' %}
+                {{ actions }}
+            {% endif %}
+            {# Content #}
+            {% block content %}
+                {{ content }}
+            {% endblock %}
         </section>
         {% endautoescape %}
     </section>

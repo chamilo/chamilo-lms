@@ -7,13 +7,11 @@
  * @package chamilo.plugin.buycourses
  */
 $plugin = BuyCoursesPlugin::create();
-$guess_enable = $plugin->get('unregistered_users_enable');
+$allow = $plugin->get('unregistered_users_enable');
 
-if ($guess_enable == 'true' || isset($_SESSION['_user'])) {
-    if (api_is_platform_admin()) {
-        $tpl = new Template();
-        $content = $tpl->fetch('buycourses/view/index.tpl');
-        $tpl->assign('content', $content);
-        $tpl->display_one_col_template();
-    }
+if (($allow === 'true' && api_is_anonymous()) || !api_is_anonymous()) {
+    $tpl = new Template();
+    $content = $tpl->fetch('buycourses/view/index.tpl');
+    $tpl->assign('content', $content);
+    $tpl->display_one_col_template();
 }

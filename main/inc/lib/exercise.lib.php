@@ -4965,8 +4965,8 @@ EOT;
         usort(
             $data,
             function ($a, $b) {
-                if ($a['exe_result'] != $b['exe_result']) {
-                    return $a['exe_result'] > $b['exe_result'] ? -1 : 1;
+                if ($a['score'] != $b['score']) {
+                    return $a['score'] > $b['score'] ? -1 : 1;
                 }
 
                 if ($a['exe_date'] != $b['exe_date']) {
@@ -4978,21 +4978,21 @@ EOT;
         );
 
         // flags to display the same position in case of tie
-        $lastScore = $data[0]['exe_result'];
+        $lastScore = $data[0]['score'];
         $position = 1;
 
         $data = array_map(
             function ($item) use (&$lastScore, &$position) {
-                if ($item['exe_result'] < $lastScore) {
+                if ($item['score'] < $lastScore) {
                     $position++;
                 }
 
-                $lastScore = $item['exe_result'];
+                $lastScore = $item['score'];
 
                 return [
                     $position,
                     api_get_user_entity($item['exe_user_id']),
-                    self::show_score($item['exe_result'], $item['exe_weighting'], true, true, true),
+                    self::show_score($item['score'], $item['max_score'], true, true, true),
                     api_convert_and_format_date($item['exe_date'], DATE_TIME_FORMAT_SHORT),
                 ];
             },

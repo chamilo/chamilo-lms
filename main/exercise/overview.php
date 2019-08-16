@@ -215,8 +215,8 @@ if (!empty($attempts)) {
     foreach ($attempts as $attempt_result) {
         if (empty($certificateBlock)) {
             $certificateBlock = ExerciseLib::generateAndShowCertificateBlock(
-                $attempt_result['exe_result'],
-                $attempt_result['exe_weighting'],
+                $attempt_result['score'],
+                $attempt_result['max_score'],
                 $objExercise,
                 $attempt_result['exe_user_id'],
                 $courseCode,
@@ -224,7 +224,7 @@ if (!empty($attempts)) {
             );
         }
 
-        $score = ExerciseLib::show_score($attempt_result['exe_result'], $attempt_result['exe_weighting']);
+        $score = ExerciseLib::show_score($attempt_result['score'], $attempt_result['max_score']);
         $attempt_url = api_get_path(WEB_CODE_PATH).'exercise/result.php?';
         $attempt_url .= api_get_cidreq().'&show_headers=1&';
         $attempt_url .= http_build_query(['id' => $attempt_result['exe_id']]);

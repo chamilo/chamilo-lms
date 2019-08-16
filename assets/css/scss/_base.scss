@@ -1435,12 +1435,6 @@ hr {
     ._jsPlumb_endpoint {
       z-index: 50;
     }
-    .data_table{
-      border: none;
-      td{
-        border: none;
-      }
-    }
     .window {
       border: 1px solid #dddddd;
       border-radius: 10px;
@@ -4071,8 +4065,13 @@ table.certaintyTable {
   vertical-align: top;
 }
 
-// Aliases from 1.11.x
+// Convert classic 1.11.x styles into a v2 format.
 
+.data_table {
+  @extend .table;
+  @extend .table-bordered;
+  @extend .table-striped;
+}
 .pull-right {
   @extend .float-right;
 }

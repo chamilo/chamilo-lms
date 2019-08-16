@@ -27,6 +27,9 @@ if ($bbb->isGlobalConference()) {
     api_protect_course_script(true);
 }
 
+$courseInfo = api_get_course_info();
+$courseCode = isset($courseInfo['code']) ? $courseInfo['code'] : '';
+
 $message = '';
 if ($conferenceManager) {
     switch ($action) {
@@ -62,6 +65,22 @@ if ($conferenceManager) {
                 $message = Display::return_message(get_lang('Error'), 'error');
             }
             break;
+        case 'regenerate_record':
+            if ($plugin->get('allow_regenerate_recording') !== 'true') {
+                api_not_allowed(true);
+            }
+            $recordId = isset($_GET['record_id']) ? $_GET['record_id'] : '';
+            $result = $bbb->regenerateRecording($_GET['id'], $recordId);
+            if ($result) {
+                $message = Display::return_message(get_lang('Success'), 'success');
+            } else {
+                $message = Display::return_message(get_lang('Error'), 'error');
+            }
+
+            Display::addFlash($message);
+            header('Location: '.$bbb->getListingUrl());
+            exit;
+            break;
         case 'delete_record':
             $result = $bbb->deleteRecording($_GET['id']);
             if ($result) {
@@ -77,9 +96,7 @@ if ($conferenceManager) {
         case 'end':
             $bbb->endMeeting($_GET['id']);
             $message = Display::return_message(
-                $plugin->get_lang('MeetingClosed').'<br />'.$plugin->get_lang(
-                    'MeetingClosedComment'
-                ),
+                $plugin->get_lang('MeetingClosed').'<br />'.$plugin->get_lang('MeetingClosedComment'),
                 'success',
                 false
             );
@@ -101,10 +118,35 @@ if ($conferenceManager) {
             exit;
             break;
         case 'publish':
-            $result = $bbb->publishMeeting($_GET['id']);
+            $bbb->publishMeeting($_GET['id']);
+            Display::addFlash(Display::return_message(get_lang('Updated')));
+            header('Location: '.$bbb->getListingUrl());
+            exit;
             break;
         case 'unpublish':
-            $result = $bbb->unpublishMeeting($_GET['id']);
+            $bbb->unpublishMeeting($_GET['id']);
+            Display::addFlash(Display::return_message(get_lang('Updated')));
+            header('Location: '.$bbb->getListingUrl());
+            exit;
+            break;
+        case 'logout':
+            if ($plugin->get('allow_regenerate_recording') !== 'true') {
+                api_not_allowed(true);
+            }
+            $allow = api_get_course_setting('bbb_force_record_generation', $courseCode) == 1 ? true : false;
+            if ($allow) {
+                $result = $bbb->getMeetingByRemoteId($_GET['remote_id']);
+                if (!empty($result)) {
+                    $result = $bbb->regenerateRecording($result['id']);
+                    if ($result) {
+                        Display::addFlash(Display::return_message(get_lang('Success')));
+                    } else {
+                        Display::addFlash(Display::return_message(get_lang('Error'), 'error'));
+                    }
+                }
+            }
+            header('Location: '.$bbb->getListingUrl());
+            exit;
             break;
         default:
             break;
@@ -137,7 +179,6 @@ if (($meetingExists || $userCanSeeJoinButton) && ($maxUsers == 0 || $maxUsers > 
     $showJoinButton = true;
 }
 $conferenceUrl = $bbb->getConferenceUrl();
-
 $courseInfo = api_get_course_info();
 $formToString = '';
 
@@ -148,7 +189,7 @@ if ($bbb->isGlobalConference() === false &&
 ) {
     $url = api_get_self().'?'.api_get_cidreq(true, false).'&gidReq=';
     $htmlHeadXtra[] = '<script>        
-        $(document).ready(function(){
+        $(document).ready(function() {
             $("#group_select").on("change", function() {
                 var groupId = $(this).find("option:selected").val();
                 var url = "'.$url.'";                
@@ -180,18 +221,6 @@ if ($bbb->isGlobalConference() === false &&
     }
 }
 
-$tpl = new Template($tool_name);
-$tpl->assign('allow_to_edit', $conferenceManager);
-$tpl->assign('meetings', $meetings);
-$tpl->assign('conference_url', $conferenceUrl);
-$tpl->assign('users_online', $usersOnline);
-$tpl->assign('conference_manager', $conferenceManager);
-$tpl->assign('max_users_limit', $maxUsers);
-$tpl->assign('bbb_status', $status);
-$tpl->assign('show_join_button', $showJoinButton);
-$tpl->assign('message', $message);
-$tpl->assign('form', $formToString);
-
 // Default URL
 $urlList[] = Display::url(
     $plugin->get_lang('EnterConference'),
@@ -200,7 +229,7 @@ $urlList[] = Display::url(
 );
 
 $type = $plugin->get('launch_type');
-$warningIntefaceMessage = '';
+$warningInterfaceMessage = '';
 $showClientOptions = false;
 
 switch ($type) {
@@ -215,7 +244,7 @@ switch ($type) {
     case BBBPlugin::LAUNCH_TYPE_SET_BY_TEACHER:
         if ($conferenceManager) {
             $urlList = $plugin->getUrlInterfaceLinks($conferenceUrl);
-            $warningIntefaceMessage = Display::return_message($plugin->get_lang('ParticipantsWillUseSameInterface'));
+            $warningInterfaceMessage = Display::return_message($plugin->get_lang('ParticipantsWillUseSameInterface'));
             $showClientOptions = true;
         } else {
             $meetingInfo = $bbb->getMeetingByName($videoConferenceName);
@@ -235,35 +264,31 @@ switch ($type) {
             $showClientOptions = true;
         } else {
             if ($meetingExists) {
-                $meetingInfo = $bbb->getMeetingByName($videoConferenceName);
-                $meetinUserInfo = $bbb->getMeetingParticipantInfo($meetingInfo['id'], api_get_user_id());
                 $urlList = $plugin->getUrlInterfaceLinks($conferenceUrl);
                 $showClientOptions = true;
-
-                /*if (empty($meetinUserInfo)) {
-                    $url = $plugin->getUrlInterfaceLinks($conferenceUrl);
-                } else {
-                    switch ($meetinUserInfo['interface']) {
-                        case BBBPlugin::INTERFACE_FLASH:
-                            $url = $plugin->getFlashUrl($conferenceUrl);
-                            break;
-                        case BBBPlugin::INTERFACE_HTML5:
-                            $url = $plugin->getHtmlUrl($conferenceUrl);
-                            break;
-                    }
-                }*/
             }
         }
 
         break;
 }
-
+$tpl = new Template($tool_name);
+$tpl->assign('allow_to_edit', $conferenceManager);
+$tpl->assign('meetings', $meetings);
+$tpl->assign('conference_url', $conferenceUrl);
+$tpl->assign('users_online', $usersOnline);
+$tpl->assign('conference_manager', $conferenceManager);
+$tpl->assign('max_users_limit', $maxUsers);
+$tpl->assign('bbb_status', $status);
+$tpl->assign('show_join_button', $showJoinButton);
+$tpl->assign('message', $message);
+$tpl->assign('form', $formToString);
 $tpl->assign('enter_conference_links', $urlList);
-$tpl->assign('warning_inteface_msg', $warningIntefaceMessage);
+$tpl->assign('warning_inteface_msg', $warningInterfaceMessage);
 $tpl->assign('show_client_options', $showClientOptions);
 
 $listing_tpl = 'bbb/view/listing.tpl';
 $content = $tpl->fetch($listing_tpl);
+
 $actionLinks = '';
 if (api_is_platform_admin()) {
     $actionLinks .= Display::toolbarButton(

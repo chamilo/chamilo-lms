@@ -175,10 +175,9 @@ if ($form->validate()) {
             $infoCertificateDefault = Database::select(
                 '*',
                 $table,
-                ['where' => ['certificate_default = ? ' => 1]],
+                ['where' => ['access_url_id = ? AND certificate_default = ? ' => [$accessUrlId, 1]]],
                 'first'
             );
-
             if (!empty($infoCertificateDefault)) {
                 foreach ($fieldList as $field) {
                     if (!empty($infoCertificateDefault[$field]) && !$checkLogo[$field]) {
@@ -454,7 +453,7 @@ $form->addText(
 );
 
 $group = [];
-$option1 = &$form->createElement(
+$option = &$form->createElement(
     'radio',
     'type_date_expediction',
     '',
@@ -466,9 +465,9 @@ $option1 = &$form->createElement(
         (($sessionId == 0) ? 'disabled' : ''),
     ]
 );
-$group[] = $option1;
+$group[] = $option;
 
-$option2 = &$form->createElement(
+$option = &$form->createElement(
     'radio',
     'type_date_expediction',
     '',
@@ -479,9 +478,22 @@ $option2 = &$form->createElement(
         'onclick' => 'javascript: typeDateExpedictionSwitchRadioButton();',
     ]
 );
-$group[] = $option2;
+$group[] = $option;
 
-$option4 = &$form->createElement(
+$option = &$form->createElement(
+    'radio',
+    'type_date_expediction',
+    '',
+    get_lang('UseDateGenerationCertificate'),
+    4,
+    [
+        'id' => 'type_date_expediction_4',
+        'onclick' => 'javascript: typeDateExpedictionSwitchRadioButton();',
+    ]
+);
+$group[] = $option;
+
+$option = &$form->createElement(
     'radio',
     'type_date_expediction',
     '',
@@ -492,9 +504,9 @@ $option4 = &$form->createElement(
         'onclick' => 'javascript: typeDateExpedictionSwitchRadioButton();',
     ]
 );
-$group[] = $option4;
+$group[] = $option;
 
-$option3 = &$form->createElement(
+$option = &$form->createElement(
     'radio',
     'type_date_expediction',
     '',
@@ -505,7 +517,7 @@ $option3 = &$form->createElement(
         'onclick' => 'javascript: typeDateExpedictionSwitchRadioButton();',
     ]
 );
-$group[] = $option3;
+$group[] = $option;
 
 $form->addGroup(
     $group,
@@ -938,6 +950,7 @@ function checkInstanceImage($certificateId, $imagePath, $field, $type = 'certifi
     $table = Database::get_main_table(CustomCertificatePlugin::TABLE_CUSTOMCERTIFICATE);
     $imagePath = Database::escape_string($imagePath);
     $field = Database::escape_string($field);
+    $certificateId = (int) $certificateId;
 
     $sql = "SELECT * FROM $table WHERE $field = '$imagePath'";
     $res = Database::query($sql);

@@ -73,3 +73,4 @@ $strings['ParticipantsWillUseSameInterface'] = 'Les apprenants utiliseront la m�
 $strings['SetByDefault'] = 'Lancement de l\'interface par défaut';
 $strings['SetByTeacher'] = 'Choisi par le professeur';
 $strings['SetByStudent'] = 'Choisi par l\'apprenant';
+$strings['bbb_force_record_generation'] = 'Forcer la génération de l\'enregistrement à la fin de la session';

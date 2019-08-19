@@ -1270,6 +1270,12 @@ class bbb
      */
     public function isServerRunning()
     {
+        $host = $this->plugin->get('host');
+
+        if (empty($host)) {
+            return false;
+        }
+
         return true;
         //return BigBlueButtonBN::isServerRunning($this->protocol.$this->url);
     }

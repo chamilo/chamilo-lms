@@ -211,6 +211,10 @@ class Rest extends WebService
     /**
      * Get the user courses.
      *
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws \Doctrine\ORM\TransactionRequiredException
+     *
      * @return array
      */
     public function getUserCourses()
@@ -222,13 +226,15 @@ class Rest extends WebService
             /** @var Course $course */
             $course = Database::getManager()->find('ChamiloCoreBundle:Course', $courseId['real_id']);
             $teachers = CourseManager::getTeacherListFromCourseCodeToString($course->getCode());
+            $picturePath = CourseManager::getPicturePath($course, true)
+                ?: Display::return_icon('session_default.png', null, null, null, null, true);
 
             $data[] = [
                 'id' => $course->getId(),
                 'title' => $course->getTitle(),
                 'code' => $course->getCode(),
                 'directory' => $course->getDirectory(),
-                'urlPicture' => CourseManager::getPicturePath($course, true),
+                'urlPicture' => $picturePath,
                 'teachers' => $teachers,
             ];
         }

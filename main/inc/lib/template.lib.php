@@ -694,7 +694,7 @@ class Template
             'moment/min/moment-with-locales.js',
             //'bootstrap-daterangepicker/daterangepicker.js',
             'jquery-timeago/jquery.timeago.js',
-            'mediaelement/build/mediaelement-and-player.min.js',
+            'mediaelement/mediaelement-and-player.min.js',
             'jqueryui-timepicker-addon/dist/jquery-ui-timepicker-addon.min.js',
             'image-map-resizer/js/imageMapResizer.min.js',
             'jquery.scrollbar/jquery.scrollbar.min.js',

@@ -687,7 +687,7 @@ class Template
         $js_file_to_string = '';
         $bowerJsFiles = [
             'modernizr/modernizr.js',
-            'jquery/dist/jquery.min.js',
+            'jquery/query.min.js',
             'bootstrap/dist/js/bootstrap.min.js',
             'jquery-ui/jquery-ui.min.js',
             'jqueryui-touch-punch/jquery.ui.touch-punch.min.js',

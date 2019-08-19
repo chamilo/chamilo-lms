@@ -10,6 +10,7 @@ use Chamilo\CourseBundle\Entity\CDocument;
 use Chamilo\CourseBundle\Entity\CGroupInfo;
 use Chamilo\UserBundle\Entity\User;
 use ChamiloSession as Session;
+use Sonata\MediaBundle\Extra\ApiMediaFile;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /**
@@ -6339,17 +6340,18 @@ class DocumentManager
     }
 
     /**
-     * @param CDocument  $document
-     * @param string     $path
-     * @param string     $realPath
-     * @param            $content
-     * @param int        $visibility
-     * @param CGroupInfo $group
+     * @param CDocument           $document
+     * @param string              $path
+     * @param string              $realPath
+     * @param string|UploadedFile $content
+     * @param int                 $visibility
+     * @param CGroupInfo          $group
      *
      * @return bool|CDocument
      */
     public static function addFileToDocument(CDocument $document, $path, $realPath, $content, $visibility, $group)
     {
+        $debug = true;
         $fileType = $document->getFiletype();
         $resourceNode = $document->getResourceNode();
 
@@ -6359,6 +6361,7 @@ class DocumentManager
 
         $em = Database::getManager();
         $title = $document->getTitle();
+        var_dump($title, $document->getId());
 
         // Only create a ResourceFile and Media if there's a file involved
         if ($fileType === 'file') {
@@ -6389,7 +6392,7 @@ class DocumentManager
             $media->setEnabled(true);
 
             if ($content instanceof UploadedFile) {
-                //error_log('UploadedFile');
+                error_log('UploadedFile');
                 $file = $content;
                 $media->setSize($file->getSize());
             } else {
@@ -6402,16 +6405,20 @@ class DocumentManager
                         $media->setHeight($size[1]);
                     }
                     $file = $realPath;
-                //error_log("file exists: $realPath");
+                    if ($debug) {
+                        error_log("file exists: $realPath");
+                    }
                 } else {
                     // We get the content and create a file
                     $handle = tmpfile();
                     fwrite($handle, $content);
-                    $file = new \Sonata\MediaBundle\Extra\ApiMediaFile($handle);
+                    $file = new ApiMediaFile($handle);
                     $file->setMimetype($media->getContentType());
-                    /*error_log('We get content and create a file from handle');
-                    error_log('Size: '.$file->getSize());
-                    error_log('Content type: '.$media->getContentType());*/
+                    if ($debug) {
+                        error_log('We get content and create a file from handle');
+                        error_log('Size: '.$file->getSize());
+                        error_log('Content type: '.$media->getContentType());
+                    }
                 }
             }
 
@@ -6460,7 +6467,6 @@ class DocumentManager
                     ->setRole(ResourceNodeVoter::ROLE_CURRENT_COURSE_TEACHER)
                 ;
                 $rights[] = $resourceRight;
-
                 break;
         }
 
@@ -6475,6 +6481,11 @@ class DocumentManager
         $em->flush();
 
         $documentId = $document->getIid();
+
+        if ($debug) {
+            error_log($documentId);
+        }
+
         if ($documentId) {
             $table = Database::get_course_table(TABLE_DOCUMENT);
             $sql = "UPDATE $table SET id = iid WHERE iid = $documentId";
@@ -6543,8 +6554,6 @@ class DocumentManager
         $session = api_get_session_entity($sessionId);
         $group = api_get_group_entity($groupId);
         $readonly = (int) $readonly;
-
-        $em = Database::getManager();
         $documentRepo = Container::$container->get('Chamilo\CourseBundle\Repository\CDocumentRepository');
 
         $parentNode = null;
@@ -6574,14 +6583,13 @@ class DocumentManager
             ->setReadonly($readonly)
             ->setSession($session)
         ;
-
+        $em = $documentRepo->getEntityManager();
         $em->persist($document);
         $em->flush();
 
         $resourceNode = $documentRepo->addResourceNode($document, $userEntity);
         $resourceNode->setParent($parentNode);
         $document->setResourceNode($resourceNode);
-
         $document = self::addFileToDocument($document, $path, $realPath, $content, $visibility, $group);
 
         if ($document) {

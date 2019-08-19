@@ -3,6 +3,10 @@
 // Load symfony routes in order to use it in a js
 const routes = require('../../public/js/fos_js_routes.json');
 import Routing from '../../vendor/friendsofsymfony/jsrouting-bundle/Resources/public/js/router.min.js';
+// Import Vue and Components
+import Vue from 'vue';
+import {VueConfig} from './VueConfig';
+import Example from './components/Example';
 
 Routing.setRoutingData(routes);
 
@@ -26,34 +30,30 @@ var disconnect_lang = '{{ "ChatDisconnected"|get_lang }}';*/
 var connect_lang = 'ChatConnected';
 var disconnect_lang = 'ChatDisconnected';
 
-// Import Vue and Components
-import Vue from 'vue';
-import {VueConfig} from './VueConfig';
-import Example from './components/Example';
-
-$(function() {
-    // Create App Aplication Vue
-    new Vue(
-        Object.assign(VueConfig, {
-            el: '#app_header',
-            components: {Example},
-            data() {
-                return {
-                    chamilo: ''
+$(function () {
+    if (document.getElementById('app_header')) {
+        // Create Vue Application
+        new Vue(
+            Object.assign(VueConfig, {
+                el: '#app_header',
+                components: {Example},
+                data() {
+                    return {
+                        chamilo: ''
+                    }
+                },
+                methods: {
+                    getConsole() {
+                        console.log("Hello Vuejs");
+                    }
+                }, created() {
+                    this.chamilo = "Hello Chamilo";
+                    this.getConsole();
+                    console.log(this.chamilo);
                 }
-            },
-            methods: {
-                getConsole() {
-                    console.log("Hello Vuejs");
-                }
-            }, created() {
-                this.chamilo = "Hello Chamilo";
-                this.getConsole();
-                console.log(this.chamilo);
-            }
-        })
-    );
-
+            })
+        );
+    }
 
     var webCidReq = '&cidReq=' + $('body').attr('data-course-code');
     window.webCidReq = webCidReq;
@@ -84,17 +84,17 @@ $(function() {
         addMainEvent(window, 'unload', courseLogout ,false);
     }
 
-    $("#open-view-list").click(function(){
+    $("#open-view-list").click(function () {
         $("#student-list-work").fadeIn(300);
     });
-    $("#closed-view-list").click(function(){
+    $("#closed-view-list").click(function () {
         $("#student-list-work").fadeOut(300);
     });
 
     // Removes the yellow input in Chrome
     if (navigator.userAgent.toLowerCase().indexOf("chrome") >= 0) {
         $(window).on("load", function () {
-            $('input:-webkit-autofill').each(function(){
+            $('input:-webkit-autofill').each(function () {
                 var text = $(this).val();
                 var name = $(this).attr('name');
                 $(this).after(this.outerHTML).remove();
@@ -105,14 +105,14 @@ $(function() {
 
     // Start modals
     // class='ajax' loads a page in a modal
-    $('body').on('click', 'a.ajax', function(e) {
+    $('body').on('click', 'a.ajax', function (e) {
         e.preventDefault();
 
         var contentUrl = this.href,
             loadModalContent = $.get(contentUrl),
             self = $(this);
 
-        $.when(loadModalContent).done(function(modalContent) {
+        $.when(loadModalContent).done(function (modalContent) {
             var modalDialog = $('#global-modal').find('.modal-dialog'),
                 modalSize = self.data('size') || get_url_params(contentUrl, 'modal_size'),
                 modalWidth = self.data('width') || get_url_params(contentUrl, 'width'),
@@ -144,11 +144,11 @@ $(function() {
     });
 
     // Expands an image modal
-    $('a.expand-image').on('click', function(e) {
+    $('a.expand-image').on('click', function (e) {
         e.preventDefault();
         var title = $(this).attr('title');
         var image = new Image();
-        image.onload = function() {
+        image.onload = function () {
             if (title) {
                 $('#expand-image-modal').find('.modal-title').text(title);
             } else {
@@ -164,7 +164,7 @@ $(function() {
     });
 
     // Delete modal
-    $('#confirm-delete').on('show.bs.modal', function(e) {
+    $('#confirm-delete').on('show.bs.modal', function (e) {
         $(this).find('.btn-ok').attr('href', $(e.relatedTarget).data('href'));
         //var message = '{{ 'AreYouSureToDeleteJS' | get_lang }}: <strong>' + $(e.relatedTarget).data('item-title') + '</strong>';
         var message = 'AreYouSureToDeleteJS : <strong>' + $(e.relatedTarget).data('item-title') + '</strong>';
@@ -198,23 +198,23 @@ $(function() {
     /* Make responsive image maps */
     $('map').imageMapResize();
 
-    jQuery.fn.filterByText = function(textbox) {
-        return this.each(function() {
+    jQuery.fn.filterByText = function (textbox) {
+        return this.each(function () {
             var select = this;
             var options = [];
-            $(select).find('option').each(function() {
+            $(select).find('option').each(function () {
                 options.push({value: $(this).val(), text: $(this).text()});
             });
             $(select).data('options', options);
 
-            $(textbox).bind('change keyup', function() {
+            $(textbox).bind('change keyup', function () {
                 var options = $(select).empty().data('options');
                 var search = $.trim($(this).val());
-                var regex = new RegExp(search,"gi");
+                var regex = new RegExp(search, "gi");
 
-                $.each(options, function(i) {
+                $.each(options, function (i) {
                     var option = options[i];
-                    if(option.text.match(regex) !== null) {
+                    if (option.text.match(regex) !== null) {
                         $(select).append(
                             $('<option>').text(option.text).val(option.value)
                         );
@@ -224,17 +224,18 @@ $(function() {
         });
     };
 
-    $(".black-shadow").mouseenter(function() {
+    $(".black-shadow").mouseenter(function () {
         $(this).addClass('hovered-course');
-    }).mouseleave(function() {
+    }).mouseleave(function () {
         $(this).removeClass('hovered-course');
     });
 
-    $("[data-toggle=popover]").each(function(i, obj) {
+    $("[data-toggle=popover]").each(function (i, obj) {
         $(this).popover({
             html: true,
-            content: function() {
-                var id = $(this).attr('id')
+            content: function () {
+                var id = $(this).attr('id');
+
                 return $('#popover-content-' + id).html();
             }
         });
@@ -249,10 +250,10 @@ $(function() {
 
     // Fix old calls of "inc/lib/mediaplayer/player.swf" and convert to <audio> tag, then rendered by media element js
     // see BT#13405
-    $('embed').each( function () {
+    $('embed').each(function () {
         var flashVars = $(this).attr('flashvars');
         if (flashVars && flashVars.indexOf("file") == -1) {
-            var audioId = Math.floor( Math.random()*99999 );
+            var audioId = Math.floor(Math.random() * 99999);
             flashVars = flashVars.replace('&autostart=false', '');
             flashVars = flashVars.replace('&autostart=true', '');
             var audioDiv = '<audio id="'+audioId+'" controls="controls" style="width:400px;" width:"400px;" src="'+flashVars+'" ><source src="'+flashVars+'" type="audio/mp3"  ></source></audio>';
@@ -292,28 +293,28 @@ $(function() {
         var id = $(this).attr('id') + '_options';
 
         $("#" + id).toggle();
-        if($("#card-container").height()>700){
-            $("#card-container").css("height","auto");
+        if ($("#card-container").height() > 700) {
+            $("#card-container").css("height", "auto");
         } else {
-            $("#card-container").css("height","100vh");
+            $("#card-container").css("height", "100vh");
         }
 
-        if($("#column-left").hasClass("col-md-12")){
+        if ($("#column-left").hasClass("col-md-12")) {
             $("#column-left").removeClass('col-md-12');
             $("#column-right").removeClass('col-md-12');
             $("#column-right").addClass('col-md-4');
             $("#column-left").addClass('col-md-8');
-        }else{
+        } else {
             $("#column-left").removeClass('col-md-8');
             $("#column-right").removeClass('col-md-4');
             $("#column-left").addClass('col-md-12');
             $("#column-right").addClass('col-md-12');
-        };
+        }
+        ;
 
-        if($("#preview_course_add_course").length >= 0){
+        if ($("#preview_course_add_course").length >= 0) {
             $("#preview_course_add_course").toggle();
         }
-
     });
 
     /**
@@ -334,7 +335,7 @@ $(function() {
     });
 
     // Adv multi-select search input.
-    $('.select_class_filter').each( function () {
+    $('.select_class_filter').each(function () {
         var inputId = $(this).attr('id');
         inputId = inputId.replace('-filter', '');
         $("#" + inputId).filterByText($("#" + inputId + "-filter"));
@@ -367,14 +368,14 @@ $(function() {
     };
     $('.boot-tooltip').tooltip(tip_options);
 
-    $('.star-rating li a').on('click', function(event) {
+    $('.star-rating li a').on('click', function (event) {
         var id = $(this).parents('ul').attr('id');
         //$('#vote_label2_' + id).html("{{'Loading'|get_lang}}");
         $('#vote_label2_' + id).html("loading");
         $.ajax({
             url: $(this).attr('data-link'),
-            success: function(data) {
-                $("#rating_wrapper_"+id).html(data);
+            success: function (data) {
+                $("#rating_wrapper_" + id).html(data);
                 if (data == 'added') {
                     //$('#vote_label2_' + id).html("{{'Saved'|get_lang}}");
                 }
@@ -388,7 +389,7 @@ $(function() {
     $("#notifications").load(webAjax + "online.ajax.php?a=get_users_online");
 });
 
-$(document).scroll(function() {
+$(document).scroll(function () {
     var valor = $('body').outerHeight() - 700;
     if ($(this).scrollTop() > 100) {
         $('.bottom_actions').addClass('bottom_actions_fixed');
@@ -450,11 +451,12 @@ $(document).scroll(function() {
     }
 });
 
-function get_url_params(q, attribute) {
+function get_url_params(q, attribute)
+{
     var hash;
     if (q != undefined) {
         q = q.split('&');
-        for(var i = 0; i < q.length; i++){
+        for (var i = 0; i < q.length; i++) {
             hash = q[i].split('=');
             if (hash[0] == attribute) {
                 return hash[1];
@@ -463,9 +465,10 @@ function get_url_params(q, attribute) {
     }
 }
 
-function setCheckbox(value, table_id) {
-    var checkboxes = $("#"+table_id+" input:checkbox");
-    $.each(checkboxes, function(index, checkbox) {
+function setCheckbox(value, table_id)
+{
+    var checkboxes = $("#" + table_id + " input:checkbox");
+    $.each(checkboxes, function (index, checkbox) {
         checkbox.checked = value;
         if (value) {
             $(checkbox).parentsUntil("tr").parent().addClass("row_selected");
@@ -473,18 +476,21 @@ function setCheckbox(value, table_id) {
             $(checkbox).parentsUntil("tr").parent().removeClass("row_selected");
         }
     });
+
     return false;
 }
 
-function action_click(element, table_id) {
-    var d = $("#"+table_id);
+function action_click(element, table_id)
+{
+    var d = $("#" + table_id);
     if (!confirm('ConfirmYourChoice')) {
-    //if (!confirm('{{ "ConfirmYourChoice"|get_lang }}')) {
+        //if (!confirm('{{ "ConfirmYourChoice"|get_lang }}')) {
         return false;
     } else {
-        var action =$(element).attr("data-action");
-        $('#'+table_id+' input[name="action"] ').attr("value", action);
+        var action = $(element).attr("data-action");
+        $('#' + table_id + ' input[name="action"] ').attr("value", action);
         d.submit();
+
         return false;
     }
 }
@@ -497,7 +503,8 @@ function action_click(element, table_id) {
  * @param inTxtUnhide   : text two of the button
  * @todo : allow to detect if text is from a button or from a <a>
  */
-function hideUnhide(inId, inIdTxt, inTxtHide, inTxtUnhide) {
+function hideUnhide(inId, inIdTxt, inTxtHide, inTxtUnhide)
+{
     if ($('#'+inId).css("display") == "none") {
         $('#'+inId).show(400);
         $('#'+inIdTxt).attr("value", inTxtUnhide);
@@ -507,7 +514,8 @@ function hideUnhide(inId, inIdTxt, inTxtHide, inTxtUnhide) {
     }
 }
 
-function expandColumnToogle(buttonSelector, col1Info, col2Info) {
+function expandColumnToogle(buttonSelector, col1Info, col2Info)
+{
     $(buttonSelector).on('click', function (e) {
         e.preventDefault();
 
@@ -623,6 +631,7 @@ function addMainEvent(elm, evType, fn, useCapture)
 {
     if (elm.addEventListener) {
         elm.addEventListener(evType, fn, useCapture);
+
         return true;
     } else if (elm.attachEvent) {
         elm.attachEvent('on' + evType, fn);

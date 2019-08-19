@@ -4,6 +4,9 @@
 /**
  * @package chamilo.document
  */
+
+use Chamilo\CoreBundle\Framework\Container;
+
 require_once __DIR__.'/../inc/global.inc.php';
 require_once api_get_path(LIBRARY_PATH).'specific_fields_manager.lib.php';
 
@@ -230,7 +233,9 @@ $form = new FormValidator(
 $form->addElement('hidden', 'id', $document_id);
 $form->addElement('hidden', 'curdirpath', $path);
 
-$courseQuota = format_file_size(DocumentManager::get_course_quota() - DocumentManager::documents_total_space());
+$repo = Container::$container->get('Chamilo\CourseBundle\Repository\CDocumentRepository');
+$total = $repo->getTotalSpace(api_get_course_int_id());
+$courseQuota = format_file_size(DocumentManager::get_course_quota() - $total);
 $label =
     get_lang('MaxFileSize').': '.ini_get('upload_max_filesize').'<br/>'.
     get_lang('DocumentQuota').': '.$courseQuota;

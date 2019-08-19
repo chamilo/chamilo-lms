@@ -1,6 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CStudentPublication;
 use ChamiloSession as Session;
 
@@ -3720,7 +3721,8 @@ function uploadWork($my_folder_data, $_course, $isCorrection = false, $workInfo 
         ];
     }
 
-    $totalSpace = DocumentManager::documents_total_space($_course['real_id']);
+    $repo = Container::$container->get('Chamilo\CourseBundle\Repository\CDocumentRepository');
+    $totalSpace = $repo->getTotalSpace($_course['real_id']);
     $course_max_space = DocumentManager::get_course_quota($_course['code']);
     $total_size = $filesize + $totalSpace;
 

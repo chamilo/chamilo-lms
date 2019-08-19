@@ -1,6 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Repository\CourseRepository;
 use Chamilo\CourseBundle\Component\CourseCopy\CourseArchiver;
 use Chamilo\CourseBundle\Component\CourseCopy\CourseBuilder;
@@ -12159,7 +12160,10 @@ EOD;
         } elseif (substr($upl_max, -1, 1) == 'G') {
             $upl_max = intval(substr($upl_max, 0, -1)) * 1024 * 1024 * 1024;
         }
-        $documents_total_space = DocumentManager::documents_total_space();
+
+        $repo = Container::$container->get('Chamilo\CourseBundle\Repository\CDocumentRepository');
+        $documents_total_space = $repo->getTotalSpace(api_get_course_int_id());
+
         $course_max_space = DocumentManager::get_course_quota();
         $total_size = filesize($s) + $documents_total_space;
         if (filesize($s) > $post_max || filesize($s) > $upl_max || $total_size > $course_max_space) {

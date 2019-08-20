@@ -565,9 +565,10 @@ class learnpath
             }
         }
 
+        $id = (int) $id;
         $typeCleaned = Database::escape_string($type);
         $max_score = 100;
-        if ($type === TOOL_QUIZ) {
+        if ($type === 'quiz') {
             $sql = 'SELECT SUM(ponderation)
                     FROM '.Database::get_course_table(TABLE_QUIZ_QUESTION).' as quiz_question
                     INNER JOIN '.Database::get_course_table(TABLE_QUIZ_TEST_QUESTION).' as quiz_rel_question
@@ -1140,7 +1141,7 @@ class learnpath
         $course_id = $this->course_info['real_id'];
         $num = 0;
         $id = (int) $id;
-        if (empty($id)) {
+        if (empty($id) || empty($course_id)) {
             return false;
         }
         $lp_item = Database::get_course_table(TABLE_LP_ITEM);
@@ -1150,7 +1151,7 @@ class learnpath
         while ($row = Database::fetch_array($res)) {
             $num += $this->delete_children_items($row['iid']);
             $sql = "DELETE FROM $lp_item 
-                    WHERE c_id = ".$course_id." AND iid = ".$row['iid'];
+                    WHERE c_id = $course_id AND iid = ".$row['iid'];
             Database::query($sql);
             $num++;
         }
@@ -1172,7 +1173,7 @@ class learnpath
         $course_id = api_get_course_int_id();
         $id = (int) $id;
         // TODO: Implement the resource removal.
-        if (empty($id)) {
+        if (empty($id) || empty($course_id)) {
             return false;
         }
         // First select item to get previous, next, and display order.
@@ -1193,16 +1194,13 @@ class learnpath
         // Now delete the item.
         $sql_del = "DELETE FROM $lp_item WHERE iid = $id";
         Database::query($sql_del);
-
         // Now update surrounding items.
         $sql_upd = "UPDATE $lp_item SET next_item_id = $next
                     WHERE iid = $previous";
         Database::query($sql_upd);
-
         $sql_upd = "UPDATE $lp_item SET previous_item_id = $previous
                     WHERE iid = $next AND item_type != '".TOOL_LP_FINAL_ITEM."'";
         Database::query($sql_upd);
-
         // Now update all following items with new display order.
         $sql_all = "UPDATE $lp_item SET display_order = display_order-1
                     WHERE 
@@ -1218,8 +1216,8 @@ class learnpath
         Database::query($sql_all);
 
         $sql = "UPDATE $lp_item
-                    SET previous_item_id = ".$this->getLastInFirstLevel()."
-                    WHERE c_id = $course_id AND lp_id = {$this->lp_id} AND item_type = '".TOOL_LP_FINAL_ITEM."'";
+                SET previous_item_id = ".$this->getLastInFirstLevel()."
+                WHERE c_id = $course_id AND lp_id = {$this->lp_id} AND item_type = '".TOOL_LP_FINAL_ITEM."'";
         Database::query($sql);
 
         // Remove from search engine if enabled.
@@ -1877,15 +1875,9 @@ class learnpath
      */
     public function get_next_index()
     {
-        if ($this->debug > 0) {
-            error_log('In learnpath::get_next_index()', 0);
-        }
         // TODO
         $index = $this->index;
         $index++;
-        if ($this->debug > 2) {
-            error_log('Now looking at ordered_items['.($index).'] - type is '.$this->items[$this->ordered_items[$index]]->type, 0);
-        }
         while (
             !empty($this->ordered_items[$index]) && ($this->items[$this->ordered_items[$index]]->get_type() == 'dir') &&
             $index < $this->max_ordered_items
@@ -1894,16 +1886,13 @@ class learnpath
             if ($index == $this->max_ordered_items) {
                 if ($this->items[$this->ordered_items[$index]]->get_type() == 'dir') {
                     return $this->index;
-                } else {
-                    return $index;
                 }
+
+                return $index;
             }
         }
         if (empty($this->ordered_items[$index])) {
             return $this->index;
-        }
-        if ($this->debug > 2) {
-            error_log('index is now '.$index, 0);
         }
 
         return $index;
@@ -1916,21 +1905,11 @@ class learnpath
      */
     public function get_next_item_id()
     {
-        if ($this->debug > 0) {
-            error_log('In learnpath::get_next_item_id()', 0);
-        }
         $new_index = $this->get_next_index();
         if (!empty($new_index)) {
             if (isset($this->ordered_items[$new_index])) {
-                if ($this->debug > 2) {
-                    error_log('In learnpath::get_next_index() - Returning '.$this->ordered_items[$new_index], 0);
-                }
-
                 return $this->ordered_items[$new_index];
             }
-        }
-        if ($this->debug > 2) {
-            error_log('In learnpath::get_next_index() - Problem - Returning 0', 0);
         }
 
         return 0;
@@ -5626,9 +5605,6 @@ class learnpath
      */
     public function switch_attempt_mode()
     {
-        if ($this->debug > 0) {
-            error_log('In learnpath::switch_attempt_mode()', 0);
-        }
         $mode = $this->get_attempt_mode();
         switch ($mode) {
             case 'single':
@@ -5638,8 +5614,6 @@ class learnpath
                 $next_mode = 'seriousgame';
                 break;
             case 'seriousgame':
-                $next_mode = 'single';
-                break;
             default:
                 $next_mode = 'single';
                 break;
@@ -6127,21 +6101,11 @@ class learnpath
                 }
 
                 if ($arrLP[$i]['item_type'] != 'final_item') {
-                    /*if ($isFirst) {
-                        $orderIcons = Display::url($disableUpIcon, '#', ['class' => 'btn btn-default']);
-                    } else {
-                    }*/
                     $orderIcons = Display::url(
                         $upIcon,
                         'javascript:void(0)',
                         ['class' => 'btn btn-default order_items', 'data-dir' => 'up', 'data-id' => $arrLP[$i]['id']]
                     );
-
-                    /*if ($isLast) {
-                        $orderIcons .= Display::url($disableDownIcon, '#', ['class' => 'btn btn-default']);
-                    } else {
-
-                    }*/
                     $orderIcons .= Display::url(
                         $downIcon,
                         'javascript:void(0)',
@@ -6191,13 +6155,8 @@ class learnpath
                     case TOOL_STUDENTPUBLICATION:
                     case TOOL_LP_FINAL_ITEM:
                     case TOOL_LINK:
-                        //$target = '';
-                        //$class = 'btn btn-default ajax';
-                        //if ($arrLP[$i]['item_type'] == TOOL_LINK) {
                         $class = 'btn btn-default';
                         $target = '_blank';
-                        //}
-
                         $link = self::rl_get_resource_link_for_learnpath(
                             $this->course_int_id,
                             $this->lp_id,
@@ -6426,7 +6385,7 @@ class learnpath
             $sub_list = '';
             if (isset($item['type']) && $item['type'] == 'dir') {
                 // empty value
-                $sub_list = Display::tag('li', '', ['class' => 'sub_item empty']);
+                $sub_list = Display::tag('li', '', ['class' => 'sub_item empty record li_container']);
             }
             if (empty($item['children'])) {
                 $sub_list = Display::tag('ul', $sub_list, ['id' => 'UL_'.$key, 'class' => 'record li_container']);
@@ -12606,6 +12565,7 @@ EOD;
     public function fixBlockedLinks($src)
     {
         $urlInfo = parse_url($src);
+
         $platformProtocol = 'https';
         if (strpos(api_get_path(WEB_CODE_PATH), 'https') === false) {
             $platformProtocol = 'http';

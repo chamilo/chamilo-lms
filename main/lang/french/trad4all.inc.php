@@ -8346,4 +8346,10 @@ $VersionFromVersionFile = "Version du fichier de version";
 $VersionFromConfigFile = "Version du fichier de configuration";
 $TheVersionFromTheVersionFileIsUpdatedWithEachVersionIfMainInstallDirectoryIsPresent = "La version du fichier version.php est mise à jour à chaque nouvelle version installée, mais n'est disponible que si le répertoire main/install/ est présent sur le disque.";
 $TheVersionFromTheConfigurationFileShowsOnTheAdminPageButHasToBeChangedManuallyOnUpgrade = "La version du fichier de configuration principal s'affiche sur la page principale d'administration, mais doit être modifiée manuellement à chaque mise à jour.";
+$ResultsConfigurationPage = "Configuration de la page de résultats";
+$HideExpectedAnswer = "Cacher la colonne des choix attendus";
+$HideTotalScore = "Cacher le score total";
+$HideQuestionScore = "Cacher le score de chaque question";
+$SaveAnswers = "Garder les réponses";
+$SaveAllAnswers = "Préremplir avec les réponses de la tentative précédente";
 ?>

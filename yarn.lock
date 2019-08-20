@@ -4818,10 +4818,9 @@ media-typer@0.3.0:
   resolved "https://registry.yarnpkg.com/media-typer/-/media-typer-0.3.0.tgz#8710d7af0aa626f8fffa1ce00168545263255748"
   integrity sha1-hxDXrwqmJvj/+hzgAWhUUmMlV0g=
 
-mediaelement-plugins@^2.5.0:
+"mediaelement-plugins@https://github.com/chamilo/mediaelement-plugins":
   version "2.5.0"
-  resolved "https://registry.yarnpkg.com/mediaelement-plugins/-/mediaelement-plugins-2.5.0.tgz#e48b499a57510431bb61a3ec00335f4bc4d1eb25"
-  integrity sha512-MokCToMlroarsOPOrsRcWXM8IGJrSPf2jZrd+Pr3I5xzCFVb9L3VNfq3Ts2MiIaxGZwB5OaWNQ4b1A7Z6zGFug==
+  resolved "https://github.com/chamilo/mediaelement-plugins#f1fd1c8a5e71019e2c286733253e7728a4064903"
   dependencies:
     global "^4.3.1"
     mediaelement "^4.0.7"

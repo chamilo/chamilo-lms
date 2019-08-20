@@ -95,8 +95,7 @@ $htmlHeadXtra[] = '
                 $(ui.item).css("width", "100%");
             }
         });
-        
-        
+                
         $(".li_container .order_items").click(function(e) {            
             var dir = $(this).data("dir");
             var itemId = $(this).data("id");             
@@ -104,21 +103,30 @@ $htmlHeadXtra[] = '
             var jItem = $("#"+ itemId);          
             var index = jItems.index(jItem);
             var total = jItems.length;
-                                    
             switch (dir) {
                 case "up":
                     if (index != 0 && jItems[index - 1]) {
-                        var item = jItem.detach().insertBefore(jItems[index - 1]);
-                    }
+                        var subItems = $(jItems[index - 1]).find("li.sub_item");
+                        if (subItems.length >= 0) {
+                            index = index - 1;
+                        }
+                        jItem.detach().insertBefore(jItems[index - 1]);
+                    }                                        
                     break;
                 case "down":
                      if (index != jItems.length - 1) {                        
-                        var subItems = jItem.find("li.li_container");                        
+                        var subItems = jItem.find("li.li_container");  
                         if (subItems.length >= 0) { 
                             index = subItems.length + index;
-                        }                                                
+                        }                  
+                        
+                        // is a chapter?
+                        var subItems = $(jItems[index + 1]).find("li.sub_item");
+                        if (subItems.length >= 0) {
+                            index = index + 1; 
+                        }
                         if ((index + 1) < total) {
-                            var item = jItem.detach().insertAfter(jItems[index + 1]);
+                            jItem.detach().insertAfter(jItems[index + 1]);
                         }
                      }
                      break;

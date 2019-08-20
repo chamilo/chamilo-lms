@@ -149,11 +149,11 @@ class WhispeakAuthRequest
         ];
         $body = [
             'wsid' => $wsId,
-            'license' => 1,
-            'research' => $grantAurp,
+            'GTU' => 'lorem ipsum',
+            'AURP' => $grantAurp,
         ];
 
-        $result = self::doPost('license', $headers, $body);
+        $result = self::doPost('license', $headers, json_encode($body));
 
         if (empty($result['wsid'])) {
             throw new Exception(get_lang('BadFormData'));
@@ -253,12 +253,15 @@ class WhispeakAuthRequest
         $headers = [
             "Authorization: Bearer ".$plugin->getAccessToken(),
         ];
+        if (empty($text)) {
+            $text = '';
+        }
         $body = [
             'wsid' => $wsId,
             'activityId' => self::activityId($plugin),
             'audioType' => 'pcm',
-            'voice' => new CURLFile($filePath),
             'text' => $text,
+            'voice' => new CURLFile($filePath),
         ];
 
         $result = self::doPost('authentify', $headers, $body);

@@ -1251,24 +1251,11 @@ switch ($action) {
         }
         break;
     case 'content':
-        if ($debug > 0) {
-            error_log('lp_controller: action: content');
-            error_log('Item id is '.intval($_GET['item_id']));
-        }
         if (!$lp_found) {
             require 'lp_list.php';
         } else {
-            if ($debug > 0) {
-                error_log('save_last()');
-            }
             $_SESSION['oLP']->save_last();
-            if ($debug > 0) {
-                error_log('set_current_item('.$_GET['item_id'].')');
-            }
             $_SESSION['oLP']->set_current_item($_GET['item_id']);
-            if ($debug > 0) {
-                error_log('start_current_item()');
-            }
             $_SESSION['oLP']->start_current_item();
             require 'lp_content.php';
         }
@@ -1277,9 +1264,6 @@ switch ($action) {
         if (!$lp_found) {
             require 'lp_list.php';
         } else {
-            if ($debug > 0) {
-                error_log('Trying to set current item to '.$_REQUEST['item_id'], 0);
-            }
             if (!empty($_REQUEST['item_id'])) {
                 $_SESSION['oLP']->set_current_item($_REQUEST['item_id']);
             }

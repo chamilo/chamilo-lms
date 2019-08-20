@@ -503,9 +503,6 @@ class learnpath
         $userId = 0
     ) {
         $course_id = $this->course_info['real_id'];
-        if ($this->debug > 0) {
-            error_log('In learnpath::add_item('.$parent.','.$previous.','.$type.','.$id.','.$title.')');
-        }
         if (empty($course_id)) {
             // Sometimes Oogie doesn't catch the course info but sets $this->cc
             $this->course_info = api_get_course_info($this->cc);
@@ -618,9 +615,6 @@ class learnpath
 
         $new_item_id = Database::insert($tbl_lp_item, $params);
         if ($new_item_id) {
-            if ($this->debug > 2) {
-                error_log('Inserting dir/chapter: '.$new_item_id, 0);
-            }
             $sql = "UPDATE $tbl_lp_item SET id = iid WHERE iid = $new_item_id";
             Database::query($sql);
 
@@ -912,10 +906,6 @@ class learnpath
     {
         $debug = $this->debug;
 
-        if ($debug) {
-            error_log('Learnpath::autocomplete_parents()');
-        }
-
         if (empty($item)) {
             $item = $this->current;
         }
@@ -1206,9 +1196,7 @@ class learnpath
     public function delete_item($id)
     {
         $course_id = api_get_course_int_id();
-        if ($this->debug > 0) {
-            error_log('In learnpath::delete_item()', 0);
-        }
+        $id = (int) $id;
         // TODO: Implement the resource removal.
         if (empty($id) || empty($course_id)) {
             return false;
@@ -1227,7 +1215,7 @@ class learnpath
         $parent = $row['parent_item_id'];
         $lp = $row['lp_id'];
         // Delete children items.
-        $num = $this->delete_children_items($id);
+        $this->delete_children_items($id);
         // Now delete the item.
         $sql_del = "DELETE FROM $lp_item WHERE iid = $id";
         Database::query($sql_del);
@@ -2647,12 +2635,10 @@ class learnpath
         if ($mode == '%') {
             if ($total_items > 0) {
                 $percentage = ((float) $completeItems / (float) $total_items) * 100;
-            } else {
-                $percentage = 0;
             }
             $percentage = number_format($percentage, 0);
             $text = '%';
-        } elseif ($mode == 'abs') {
+        } elseif ($mode === 'abs') {
             $percentage = $completeItems;
             $text = '/'.$total_items;
         }
@@ -4243,9 +4229,6 @@ class learnpath
      */
     public function open($id)
     {
-        if ($this->debug > 0) {
-            error_log('In learnpath::open()', 0);
-        }
         // TODO:
         // set the current resource attribute to this resource
         // switch on element type (redefine in child class?)

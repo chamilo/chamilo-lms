@@ -378,7 +378,7 @@ class CDocument extends AbstractResource implements ResourceInterface
         $em = $args->getEntityManager();
         $this->setId($this->iid);
         $em->persist($this);
-        $em->flush($this);
+        $em->flush();
     }
 
     /**

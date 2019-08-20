@@ -12,13 +12,13 @@
 {% endblock widget_attributes %}
 
 {% block choice_widget_expanded %}
-    {% spaceless %}
+    {% apply spaceless %}
         <div {{ block('widget_container_attributes') }}>
             {% for child in form %}
                 {{ form_widget(child) }}
             {% endfor %}
         </div>
-    {% endspaceless %}
+    {% endapply %}
 {% endblock choice_widget_expanded %}
 
 {% block choice_widget_collapsed %}
@@ -28,7 +28,7 @@
 
 {% block checkbox_widget %}
     <div class="checkbox">
-        {% spaceless %}
+        {% apply spaceless %}
             {% if not compound %}
                 {% set label_attr = label_attr|merge({'for': id}) %}
             {% endif %}
@@ -44,13 +44,13 @@
                 {{ label|trans({}, translation_domain) }}
             {% endif %}
             </label>
-        {% endspaceless %}
+        {% endapply %}
     </div>
 {% endblock checkbox_widget %}
 
 {% block radio_widget %}
     <div class="radio">
-        {% spaceless %}
+        {% apply spaceless %}
             {% if not compound %}
                 {% set label_attr = label_attr|merge({'for': id}) %}
             {% endif %}
@@ -66,7 +66,7 @@
                 {{ label|trans({}, translation_domain) }}
             {% endif %}
             </label>
-        {% endspaceless %}
+        {% endapply %}
     </div>
 {% endblock radio_widget %}
 
@@ -152,7 +152,7 @@
 {% endblock form_label %}
 
 {% block form_errors %}
-    {% spaceless %}
+    {% apply spaceless %}
         {% if errors|length > 0 %}
             <ul class="list-unstyled">
                 {% for error in errors %}
@@ -160,6 +160,6 @@
                 {% endfor %}
             </ul>
         {% endif %}
-    {% endspaceless %}
+    {% endapply %}
 {% endblock form_errors %}
 

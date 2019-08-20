@@ -2896,7 +2896,7 @@ $TryAgain = "Intenta otra vez";
 $SeeTheory = "Revisar la teoría";
 $EndActivity = "Fin de la actividad";
 $NoFeedback = "Examen (sin retroalimentación)";
-$DirectFeedback = "Autoevaluación (retroalimentación inmediata)";
+$DirectFeedback = "Prueba adaptativa con retroalimentación inmediata";
 $FeedbackType = "Retro-alimentación";
 $Scenario = "Escenario";
 $VisitUrl = "Visitar esta dirección";
@@ -8448,4 +8448,6 @@ $HideTotalScore = "Esconder la puntuación total";
 $HideQuestionScore = "Esconder la puntuación de preguntas";
 $SaveAnswers = "Guardar respuestas";
 $SaveAllAnswers = "Prellenar con las respuestas del intento anterior";
+$SubscribeUsersToAllForumNotifications = "Inscripción automatica de todos los usuarios a todas las notificaciones de forum";
+$ExerciseDirectPopUp = "Retroalimentación inmediata como pop-up";
 ?>

@@ -2886,7 +2886,7 @@ $TryAgain = "Réessayer";
 $SeeTheory = "Voir la théorie";
 $EndActivity = "Fin de l'activité";
 $NoFeedback = "Pas de feedback";
-$DirectFeedback = "Immédiat en popup";
+$DirectFeedback = "Test adaptatif avec feedback immédiat";
 $FeedbackType = "Feedback";
 $Scenario = "Scénario";
 $VisitUrl = "Suivre ce lien";
@@ -8352,4 +8352,6 @@ $HideTotalScore = "Cacher le score total";
 $HideQuestionScore = "Cacher le score de chaque question";
 $SaveAnswers = "Garder les réponses";
 $SaveAllAnswers = "Préremplir avec les réponses de la tentative précédente";
+$SubscribeUsersToAllForumNotifications = "Abonner automatiquement tous les utilisateurs";
+$ExerciseDirectPopUp = "Feedback immédiat en pop-up";
 ?>

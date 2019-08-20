@@ -90,6 +90,13 @@ try {
         );
     }
 
+    if (!$showHeader && $oLp) {
+        api_not_allowed(
+            false,
+            Display::return_message($exception->getMessage(), 'error')
+        );
+    }
+
     WhispeakAuthPlugin::displayNotAllowedMessage($exception->getMessage());
 }
 

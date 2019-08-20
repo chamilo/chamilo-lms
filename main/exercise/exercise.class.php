@@ -3156,6 +3156,7 @@ class Exercise
                     'class' => 'ajax btn btn-default',
                     'data-title' => Security::remove_XSS(get_lang('Comment')),
                     'data-size' => 'md',
+                    'id' => "button_$question_id"
                 ]
             );
             $html .= '<br />';

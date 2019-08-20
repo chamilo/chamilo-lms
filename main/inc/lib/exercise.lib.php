@@ -1018,10 +1018,7 @@ class ExerciseLib
                                     api_strlen($studentItem) - 2
                                 );
                                 $size = strlen($studentItem);
-                                $attributes['class'] = self::detectInputAppropriateClass(
-                                    $size
-                                );
-
+                                $attributes['class'] = self::detectInputAppropriateClass($size);
                                 $answer .= $tabComments[$i].
                                     Display::input(
                                         'text',
@@ -1037,9 +1034,12 @@ class ExerciseLib
                             // every [xxx] are replaced with an empty input field
                             foreach ($correctAnswerList[0] as $item) {
                                 $size = strlen($item);
-                                $attributes['class'] = self::detectInputAppropriateClass(
-                                    $size
-                                );
+                                $attributes['class'] = self::detectInputAppropriateClass($size);
+                                if ($exercise->getFeedbackType() == EXERCISE_FEEDBACK_TYPE_POPUP) {
+                                    $attributes['id'] = "question_$questionId";
+                                    $attributes['class'] .= ' checkCalculatedQuestionOnEnter ';
+                                }
+
                                 $answer = str_replace(
                                     $item,
                                     Display::input(

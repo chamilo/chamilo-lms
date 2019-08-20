@@ -1122,6 +1122,16 @@ if (!empty($error)) {
             $(".block_on_enter").keypress(function(event) {
                 return event.keyCode != 13;
             });
+            
+            $(".checkCalculatedQuestionOnEnter").keypress(function(event) {
+                if (event.keyCode === 13) {
+                    event.preventDefault();
+                    var id = $(this).attr("id");
+                    var parts = id.split("_");
+                    var buttonId = "button_" + parts[1];
+                    document.getElementById(buttonId).click();                    
+                }
+            });
 
             $(".main_question").mouseover(function() {
                 //$(this).find(".exercise_save_now_button").show();

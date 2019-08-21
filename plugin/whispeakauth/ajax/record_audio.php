@@ -166,6 +166,11 @@ if ($isAuthentify) {
     $qualityNote = !empty($authentifyResult['quality']) ? explode('|', $authentifyResult['quality']) : [];
     $qualityNote = array_map('ucfirst', $qualityNote);
 
+    /** @var array $lpItemInfo */
+    $lpItemInfo = ChamiloSession::read(WhispeakAuthPlugin::SESSION_LP_ITEM, []);
+    /** @var array $quizQuestionInfo */
+    $quizQuestionInfo = ChamiloSession::read(WhispeakAuthPlugin::SESSION_QUIZ_QUESTION, []);
+
     $message = $plugin->get_lang('AuthentifySuccess');
 
     if (!$success) {
@@ -187,7 +192,8 @@ if ($isAuthentify) {
                 $message .= '<br>'
                     .Display::url(
                         get_lang('LostPassword'),
-                        api_get_path(WEB_CODE_PATH).'auth/lostPassword.php'
+                        api_get_path(WEB_CODE_PATH).'auth/lostPassword.php',
+                        ['target' => $lpItemInfo ? '_top' : '_self']
                     );
             }
         }
@@ -202,11 +208,6 @@ if ($isAuthentify) {
         $success ? 'success' : 'warning',
         false
     );
-
-    /** @var array $lpItemInfo */
-    $lpItemInfo = ChamiloSession::read(WhispeakAuthPlugin::SESSION_LP_ITEM, []);
-    /** @var array $quizQuestionInfo */
-    $quizQuestionInfo = ChamiloSession::read(WhispeakAuthPlugin::SESSION_QUIZ_QUESTION, []);
 
     if (!$success && $maxAttempts && $failedLogins >= $maxAttempts) {
         ChamiloSession::erase(WhispeakAuthPlugin::SESSION_FAILED_LOGINS);

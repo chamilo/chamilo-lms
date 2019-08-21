@@ -9147,7 +9147,7 @@ class Exercise
                         }
 
                         $currentRow = [
-                            $row['iid'],
+                            $row['id'],
                             $currentRow['title'],
                             $currentRow['count_questions'],
                             $actions,

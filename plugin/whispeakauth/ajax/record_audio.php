@@ -102,7 +102,6 @@ if ($isEnrollment) {
         $wsid = WhispeakAuthRequest::license($plugin, $wsid, $license);
 
         $text = ChamiloSession::read(WhispeakAuthPlugin::SESSION_SENTENCE_TEXT);
-        ChamiloSession::erase(WhispeakAuthPlugin::SESSION_SENTENCE_TEXT);
 
         $enrollmentResult = WhispeakAuthRequest::enrollment($plugin, $user, $wsid, $text, $newFullPath);
     } catch (Exception $exception) {
@@ -118,6 +117,8 @@ if ($isEnrollment) {
     $message = $plugin->get_lang('EnrollmentSignature0');
 
     if ($reliability > 0) {
+        ChamiloSession::erase(WhispeakAuthPlugin::SESSION_SENTENCE_TEXT);
+
         $plugin->saveEnrollment($user, $enrollmentResult['wsid']);
 
         $message = '<strong>'.$plugin->get_lang('EnrollmentSuccess').'</strong>';
@@ -153,7 +154,6 @@ if ($isAuthentify) {
 
     try {
         $text = ChamiloSession::read(WhispeakAuthPlugin::SESSION_SENTENCE_TEXT);
-        ChamiloSession::erase(WhispeakAuthPlugin::SESSION_SENTENCE_TEXT);
 
         $authentifyResult = WhispeakAuthRequest::authentify($plugin, $wsid->getValue(), $text, $newFullPath);
     } catch (Exception $exception) {
@@ -236,6 +236,7 @@ if ($isAuthentify) {
     }
 
     if ($success) {
+        ChamiloSession::erase(WhispeakAuthPlugin::SESSION_SENTENCE_TEXT);
         ChamiloSession::erase(WhispeakAuthPlugin::SESSION_FAILED_LOGINS);
 
         if (!empty($lpItemInfo)) {

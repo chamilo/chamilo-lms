@@ -1730,9 +1730,6 @@ class Exercise
 
         $this->save_categories_in_exercise($this->categories);
 
-        // Updates the question position
-        $this->update_question_positions();
-
         return $this->iId;
     }
 

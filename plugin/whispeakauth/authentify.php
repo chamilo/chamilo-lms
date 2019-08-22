@@ -16,9 +16,15 @@ $showForm = !$userId;
 $lpItemInfo = ChamiloSession::read(WhispeakAuthPlugin::SESSION_LP_ITEM, []);
 /** @var learnpath $oLp */
 $oLp = ChamiloSession::read('oLP', null);
+/** @var array $lpQuestionInfo */
 $lpQuestionInfo = ChamiloSession::read(WhispeakAuthPlugin::SESSION_QUIZ_QUESTION, []);
+/** @var Exercise $objExercise */
+$objExercise = ChamiloSession::read('objExercise', null);
 
-$showHeader = (empty($lpItemInfo) && empty($oLp)) && empty($lpQuestionInfo);
+$isAuthOnLp = !empty($lpItemInfo) && !empty($oLp);
+$isAuthOnQuiz = !empty($lpQuestionInfo) && !empty($objExercise);
+
+$showFullPage = !$isAuthOnLp && !$isAuthOnQuiz;
 
 if (ChamiloSession::read(WhispeakAuthPlugin::SESSION_AUTH_PASSWORD, false)) {
     ChamiloSession::erase(WhispeakAuthPlugin::SESSION_AUTH_PASSWORD);
@@ -58,7 +64,7 @@ if ($userId) {
     if (empty($wsid)) {
         $message = Display::return_message($plugin->get_lang('SpeechAuthNotEnrolled'), 'warning');
 
-        if (!empty($lpQuestionInfo)) {
+        if (!empty($lpQuestionInfo) && empty($lpItemInfo)) {
             echo $message;
         } else {
             Display::addFlash($message);
@@ -70,7 +76,7 @@ if ($userId) {
     }
 }
 
-if (!empty($lpQuestionInfo)) {
+if (!empty($lpQuestionInfo) && empty($lpItemInfo)) {
     echo api_get_js('rtc/RecordRTC.js');
     echo api_get_js_simple(api_get_path(WEB_PLUGIN_PATH).'whispeakauth/assets/js/RecordAudio.js');
 } else {
@@ -83,14 +89,14 @@ $sampleText = '';
 try {
     $sampleText = WhispeakAuthRequest::authenticateSentence($plugin);
 } catch (Exception $exception) {
-    if ($showHeader) {
+    if ($showFullPage) {
         api_not_allowed(
             true,
             Display::return_message($exception->getMessage(), 'error')
         );
     }
 
-    if (!$showHeader && $oLp) {
+    if (!$showFullPage && $oLp) {
         api_not_allowed(
             false,
             Display::return_message($exception->getMessage(), 'error')
@@ -103,9 +109,9 @@ try {
 ChamiloSession::write(WhispeakAuthPlugin::SESSION_SENTENCE_TEXT, $sampleText);
 
 $template = new Template(
-    !$showHeader ? '' : $plugin->get_title(),
-    $showHeader,
-    $showHeader,
+    !$showFullPage ? '' : $plugin->get_title(),
+    $showFullPage,
+    $showFullPage,
     false,
     true,
     false
@@ -115,7 +121,7 @@ $template->assign('sample_text', $sampleText);
 
 $content = $template->fetch('whispeakauth/view/authentify_recorder.html.twig');
 
-if (!empty($lpQuestionInfo)) {
+if (!empty($lpQuestionInfo) && empty($lpItemInfo)) {
     echo $content;
 
     exit;

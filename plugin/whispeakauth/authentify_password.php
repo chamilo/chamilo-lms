@@ -17,14 +17,19 @@ $lpItemInfo = ChamiloSession::read(WhispeakAuthPlugin::SESSION_LP_ITEM, []);
 $oLp = ChamiloSession::read('oLP', null);
 /** @var array $lpQuestionInfo */
 $lpQuestionInfo = ChamiloSession::read(WhispeakAuthPlugin::SESSION_QUIZ_QUESTION, []);
+/** @var Exercise $objExercise */
+$objExercise = ChamiloSession::read('objExercise', null);
 
-$showHeader = (empty($lpItemInfo) && empty($oLp)) && empty($lpQuestionInfo);
+$isAuthOnLp = !empty($lpItemInfo) && !empty($oLp);
+$isAuthOnQuiz = !empty($lpQuestionInfo) && !empty($objExercise);
+
+$showFullPage = !$isAuthOnLp && !$isAuthOnQuiz;
 
 if (empty($userId)) {
-    api_not_allowed($showHeader);
+    api_not_allowed($showFullPage);
 }
 
-if (!empty($lpQuestionInfo)) {
+if (!empty($lpQuestionInfo) && empty($lpItemInfo)) {
     echo Display::return_message(
         $plugin->get_lang('MaxAttemptsReached').'<br>'
         .'<strong>'.$plugin->get_lang('LoginWithUsernameAndPassword').'</strong>',
@@ -52,9 +57,9 @@ $form->setConstants(['sec_token' => Security::get_token()]);
 $form->addButton('submitAuth', get_lang('LoginEnter'), 'check', 'primary', 'default', 'btn-block');
 
 $template = new Template(
-    !$showHeader ? '' : $plugin->get_title(),
-    $showHeader,
-    $showHeader,
+    !$showFullPage ? '' : $plugin->get_title(),
+    $showFullPage,
+    $showFullPage,
     false,
     true,
     false
@@ -63,7 +68,7 @@ $template->assign('form', $form->returnForm());
 
 $content = $template->fetch('whispeakauth/view/authentify_password.html.twig');
 
-if (!empty($lpQuestionInfo)) {
+if (!empty($lpQuestionInfo) && empty($lpItemInfo)) {
     echo $content;
 
     exit;

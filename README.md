@@ -99,3 +99,8 @@ with this purpose into your repository forked from the original Chamilo reposito
 ## Documentation
 
 For more information on Chamilo, visit https://campus.chamilo.org/documentation/index.html
+
+## Notes
+
+You can install Yarn on Ubuntu following the instructions at https://linuxize.com/post/how-to-install-yarn-on-ubuntu-18-04/
+You can install Composer on Ubuntu following the instructions at https://getcomposer.org/download/

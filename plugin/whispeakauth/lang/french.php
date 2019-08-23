@@ -40,6 +40,10 @@ $strings['LoginWithUsernameAndPassword'] = 'Authentifiez-vous en utilisant votre
 $strings['YouNeedToIdentifyYourselfToAnswerThisQuestion'] = 'Vous devez vous authentifier pour répondre à cette question.';
 $strings['IdentifyMe'] = 'M\'identifier';
 $strings['PleaseWaitWhileLoading'] = 'Connexion au serveur d\'authentification. Veuillez patienter...';
+$strings['Quality'] = 'Quality';
+$strings['Failed'] = "Failed";
+$strings['ActivityId'] = "Activity ID";
+$strings['Success'] = "Success";
 
 $strings['AudioQualityShort'] = 'Audio trop court';
 $strings['AudioQualityQuiet'] = 'Audio trop peu audible';

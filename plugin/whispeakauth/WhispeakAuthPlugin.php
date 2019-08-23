@@ -48,6 +48,18 @@ class WhispeakAuthPlugin extends Plugin implements HookPluginInterface
     }
 
     /**
+     * Get the admin URL for the plugin if Plugin::isAdminPlugin is true.
+     *
+     * @return string
+     */
+    public function getAdminUrl()
+    {
+        $webPath = api_get_path(WEB_PLUGIN_PATH).$this->get_name();
+
+        return "$webPath/admin.php";
+    }
+
+    /**
      * @return WhispeakAuthPlugin
      */
     public static function create()

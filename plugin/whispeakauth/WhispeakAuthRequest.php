@@ -276,7 +276,7 @@ class WhispeakAuthRequest
     /**
      * @param WhispeakAuthPlugin $plugin
      * @param array              $wsIds
-     * @param string             $activityId
+     * @param array              $activityIds
      * @param DateTime           $date
      *
      * @throws Exception
@@ -286,35 +286,28 @@ class WhispeakAuthRequest
     public static function getUsersInfos(
         WhispeakAuthPlugin $plugin,
         array $wsIds,
-        $activityId,
+        array $activityIds = [],
         DateTime $date = null
     ) {
         $headers = [
-            'Content-Type: application/x-www-form-urlencoded',
+            'Content-Type: application/json',
             "Authorization: Bearer ".$plugin->getAccessToken(),
         ];
-        $metadata = [
-            'wsIds' => $wsIds,
-            'activityId' => $activityId,
-        ];
+        $metadata = ['wsids' => $wsIds];
+
+        if ($activityIds) {
+            $metadata['activityids'] = $activityIds;
+        }
 
         if ($date) {
-            $metadata['year'] = (int) $date->format('Y');
-            $metadata['month'] = (int) $date->format('m');
-            $metadata['day'] = (int) $date->format('d');
+            $metadata['date'] = [
+                'year' => (int) $date->format('Y'),
+                'month' => (int) $date->format('m'),
+                'day' => (int) $date->format('d'),
+            ];
         }
 
-        $body = [
-            'metadata' => json_encode($metadata),
-            'moderator' => 'ModeratorID',
-            'client' => 'ClientID',
-        ];
-
-        $result = self::doPost('getusersinfos', $headers, $body);
-
-        if (empty($result)) {
-            throw new Exception(get_lang('BadFormData'));
-        }
+        $result = self::doPost('getusersinfos', $headers, json_encode($metadata));
 
         return $result;
     }

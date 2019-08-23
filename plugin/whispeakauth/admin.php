@@ -111,7 +111,7 @@ foreach ($results as $wsId => $activities) {
 
     $slctUsers->addOption($user->getCompleteNameWithUsername(), $user->getId());
 
-    $table = new SortableTableFromArray($activities, 0);
+    $table = new SortableTableFromArray($activities, 3);
     $table->setTotalNumberOfItems(count($activities));
     $table->set_header(
         0,
@@ -137,7 +137,7 @@ foreach ($results as $wsId => $activities) {
     $table->set_header(
         3,
         get_lang('DateTime'),
-        false,
+        true,
         ['class' => 'text-center'],
         ['class' => 'text-center']
     );

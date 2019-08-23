@@ -21,3 +21,4 @@ echo "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6I
 3. Set the plugin configuration enabling the plugin and (optionally) set the max attempts. 
 4. Set the `login_bottom` region to the plugin. 
 5. Add `$_configuration['whispeak_auth_enabled'] = true;` to `configuration.php` file.
+6. Optionally, you can add the `menu_administrator` region to se the user logged activities from Whispeak.

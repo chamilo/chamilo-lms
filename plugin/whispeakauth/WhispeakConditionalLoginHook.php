@@ -37,6 +37,12 @@ class WhispeakConditionalLoginHook extends HookObserver implements HookCondition
     {
         return [
             'conditional_function' => function (array $userInfo) {
+                $isEnrolled = WhispeakAuthPlugin::checkUserIsEnrolled($userInfo['user_id']);
+
+                if (!$isEnrolled) {
+                    return true;
+                }
+
                 $user2fa = (int) ChamiloSession::read(WhispeakAuthPlugin::SESSION_2FA_USER, 0);
 
                 if ($user2fa === (int) $userInfo['user_id']) {
@@ -45,13 +51,9 @@ class WhispeakConditionalLoginHook extends HookObserver implements HookCondition
                     return true;
                 }
 
-                $isEnrolled = WhispeakAuthPlugin::checkUserIsEnrolled($userInfo['user_id']);
+                ChamiloSession::write(WhispeakAuthPlugin::SESSION_2FA_USER, $userInfo['user_id']);
 
-                if ($isEnrolled) {
-                    ChamiloSession::write(WhispeakAuthPlugin::SESSION_2FA_USER, $userInfo['user_id']);
-                }
-
-                return !$isEnrolled;
+                return false;
             },
             'url' => api_get_path(WEB_PLUGIN_PATH).$this->getPluginName().'/authentify.php',
         ];

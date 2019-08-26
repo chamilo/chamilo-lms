@@ -18,7 +18,8 @@ $plugin->protectTool();
  *
  * @return array
  */
-function findWsIds(array $userIds) {
+function findWsIds(array $userIds)
+{
     $wsIds = [];
 
     foreach ($userIds as $userId) {
@@ -47,7 +48,8 @@ function findWsIds(array $userIds) {
  *
  * @return array
  */
-function groupResults(array $results) {
+function groupResults(array $results)
+{
     $groups = [];
 
     foreach ($results as $row) {
@@ -187,4 +189,4 @@ $template->assign(
     'content',
     $form->returnForm().PHP_EOL.$pageContent
 );
-$template->display_one_col_template();;
+$template->display_one_col_template();

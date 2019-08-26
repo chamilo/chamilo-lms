@@ -11,84 +11,6 @@ class WhispeakAuthRequest
     const API_URL = 'http://api.whispeak.io:8080/v1.1/';
 
     /**
-     * @param string       $uri
-     * @param array        $headers
-     * @param array|string $body
-     *
-     * @throws Exception
-     *
-     * @return array
-     */
-    private static function doPost($uri, array $headers = [], $body = null)
-    {
-        $ch = curl_init(self::API_URL.$uri);
-
-        if ($headers) {
-            curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-        }
-
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_POST, true);
-
-        if ($body) {
-            curl_setopt($ch, CURLOPT_POSTFIELDS, $body);
-        }
-
-        $result = curl_exec($ch);
-        $error = curl_error($ch);
-
-        curl_close($ch);
-
-        if (!empty($error)) {
-            throw new Exception($error);
-        }
-
-        $result = json_decode($result, true);
-
-        if (!empty($result['error'])) {
-            throw new Exception($result['error']);
-        }
-
-        return $result;
-    }
-
-    /**
-     * @param string $uri
-     * @param array  $headers
-     *
-     * @throws Exception
-     *
-     * @return array
-     */
-    private static function doGet($uri, array $headers = [])
-    {
-        $ch = curl_init(self::API_URL.$uri);
-
-        if ($headers) {
-            curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-        }
-
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-
-        $result = curl_exec($ch);
-        $error = curl_error($ch);
-
-        curl_close($ch);
-
-        if (!empty($error)) {
-            throw new Exception($error);
-        }
-
-        $result = json_decode($result, true);
-
-        if (!empty($result['error'])) {
-            throw new Exception($result['error']);
-        }
-
-        return $result;
-    }
-
-    /**
      * @param WhispeakAuthPlugin $plugin
      *
      * @throws Exception
@@ -195,7 +117,8 @@ class WhispeakAuthRequest
      *
      * @return array
      */
-    public static function enrollment(WhispeakAuthPlugin $plugin, User $user, $wsId, $text, $filePath) {
+    public static function enrollment(WhispeakAuthPlugin $plugin, User $user, $wsId, $text, $filePath)
+    {
         $headers = [
             "Authorization: Bearer ".$plugin->getAccessToken(),
         ];
@@ -308,6 +231,84 @@ class WhispeakAuthRequest
         }
 
         $result = self::doPost('getusersinfos', $headers, json_encode($metadata));
+
+        return $result;
+    }
+
+    /**
+     * @param string       $uri
+     * @param array        $headers
+     * @param array|string $body
+     *
+     * @throws Exception
+     *
+     * @return array
+     */
+    private static function doPost($uri, array $headers = [], $body = null)
+    {
+        $ch = curl_init(self::API_URL.$uri);
+
+        if ($headers) {
+            curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+        }
+
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_POST, true);
+
+        if ($body) {
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $body);
+        }
+
+        $result = curl_exec($ch);
+        $error = curl_error($ch);
+
+        curl_close($ch);
+
+        if (!empty($error)) {
+            throw new Exception($error);
+        }
+
+        $result = json_decode($result, true);
+
+        if (!empty($result['error'])) {
+            throw new Exception($result['error']);
+        }
+
+        return $result;
+    }
+
+    /**
+     * @param string $uri
+     * @param array  $headers
+     *
+     * @throws Exception
+     *
+     * @return array
+     */
+    private static function doGet($uri, array $headers = [])
+    {
+        $ch = curl_init(self::API_URL.$uri);
+
+        if ($headers) {
+            curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+        }
+
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+        $result = curl_exec($ch);
+        $error = curl_error($ch);
+
+        curl_close($ch);
+
+        if (!empty($error)) {
+            throw new Exception($error);
+        }
+
+        $result = json_decode($result, true);
+
+        if (!empty($result['error'])) {
+            throw new Exception($result['error']);
+        }
 
         return $result;
     }

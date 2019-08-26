@@ -650,7 +650,7 @@ class WhispeakAuthPlugin extends Plugin implements HookPluginInterface
     }
 
     /**
-     * Display a error message
+     * Display a error message.
      *
      * @param string|null $error Optional. The message text
      */

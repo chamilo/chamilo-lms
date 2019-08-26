@@ -185,6 +185,12 @@ if ($isAuthentify) {
                 .'<br><strong>'
                 .$plugin->get_lang('LoginWithUsernameAndPassword')
                 .'</strong>';
+
+            if (!empty($user2fa)) {
+                Display::addFlash(
+                    Display::return_message($message, 'warning', false)
+                );
+            }
         } else {
             $message .= PHP_EOL.$plugin->get_lang('TryAgain');
 

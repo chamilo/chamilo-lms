@@ -37,7 +37,9 @@ class WhispeakConditionalLoginHook extends HookObserver implements HookCondition
     {
         return [
             'conditional_function' => function (array $userInfo) {
-                if (ChamiloSession::has(WhispeakAuthPlugin::SESSION_2FA_USER)) {
+                $user2fa = (int) ChamiloSession::read(WhispeakAuthPlugin::SESSION_2FA_USER, 0);
+
+                if ($user2fa === (int) $userInfo['user_id']) {
                     ChamiloSession::erase(WhispeakAuthPlugin::SESSION_2FA_USER);
 
                     return true;

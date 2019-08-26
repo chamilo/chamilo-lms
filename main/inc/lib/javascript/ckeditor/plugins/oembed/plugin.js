@@ -148,6 +148,12 @@
             }
 
             function embedCode(url, instance, closeDialog, maxWidth, maxHeight, responsiveResize, widget) {
+                var extraProviderParams = {};
+
+                if (responsiveResize) {
+                    extraProviderParams.responsive = true;
+                }
+
                 jQuery('body').oembed(url, {
                     onEmbed: function(e) {
                         var codeElement,
@@ -213,7 +219,8 @@
                     maxHeight: maxHeight,
                     maxWidth: maxWidth,
                     useResponsiveResize: responsiveResize,
-                    embedMethod: 'editor'
+                    embedMethod: 'editor',
+                    'vimeo': extraProviderParams
                 });
             }
 

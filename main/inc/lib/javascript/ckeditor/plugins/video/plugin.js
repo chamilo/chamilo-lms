@@ -183,7 +183,10 @@ var en = {
   infoLabel: 'Information',
   html360: 'This feature (only MP4 videos) is currently still in BETA mode.<br />It only works on dynamic pages, not inside documents created<br />in the documents tool or seen through learning paths.<br />Please do not add more than one 360° video on a single page<br /> as more than one on the same page might generate conflicts.',
   video360: 'Enable 360° video player',
-  video360stereo: 'Stereo video (1:1 aspect ratio)'
+  video360stereo: 'Stereo video (1:1 aspect ratio)',
+  responsive: 'Resposive size (mobile-optimized)',
+  ratio16by9: '16:9 aspect ratio',
+  ratio4by3: '4:3 aspect ratio'
 };
 
 var es = {
@@ -201,7 +204,10 @@ var es = {
   infoLabel: 'Información',
   html360: 'Esta funcionalidad (sólo MP4) todavía se encuentra en modo BETA.<br />Sólo funciona en páginas dinámicas, mas no dentro de documentos<br />creados en la herramienta de documentos o visualizados a través<br />de las lecciones.<br />Por favor no colocar más de un vídeo 360° en una misma página<br />ya que puede provocar conflictos y bloquearlos todos.',
   video360: 'Habilitar reproductor de vídeo 360°',
-  video360stereo: 'Vídeo estéreo (relación de aspecto 1:1)'
+  video360stereo: 'Vídeo estéreo (relación de aspecto 1:1)',
+  responsive: 'Tamaño adaptable (tamaño optimizado para móviles)',
+  ratio16by9: 'Relación de aspecto 16:9',
+  ratio4by3: 'Relación de aspecto 4:3'
 };
 
 var fr = {
@@ -219,7 +225,10 @@ var fr = {
 	infoLabel: 'Information',
 	html360: 'Cette fonctionnalité (MP4 uniquement) est actuellement en mode BETA.<br />Elle ne fonctionne que sur les pages dynamiques, et pas<br />dans les documents créés à partir de l\'outil document ou visualisés<br />au travers de l\'outil parcours.<br />Merci de ne pas placer plus d\'une vidéo 360° par page. Cela<br />peut causer des conflits et toutes les rendre inactives.',
 	video360: 'Activer la visualisation 360°',
-	video360stereo: 'Vidéo stéréo (proportions 1:1 / apparence de 2 vidéos superposées)'
+	video360stereo: 'Vidéo stéréo (proportions 1:1 / apparence de 2 vidéos superposées)',
+	responsive: 'Resposive',
+	ratio16by9: '16:9 aspect ratio',
+	ratio4by3: '4:3 aspect ratio'
 };
 
 // v3

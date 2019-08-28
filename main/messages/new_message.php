@@ -201,7 +201,7 @@ function manageForm($default, $select_from_user_list = null, $sent_to = '', $tpl
     if (isset($_GET['forward_id'])) {
         $forwardId = (int) $_GET['forward_id'];
         $message_reply_info = MessageManager::get_message_by_id($forwardId);
-        $attachments = MessageManager::getAttachmentLinkList($forwardId);
+        $attachments = MessageManager::getAttachmentLinkList($forwardId, MessageManager::MESSAGE_TYPE_INBOX);
         if (!empty($attachments)) {
             $fileListToString = !empty($attachments) ? implode('<br />', $attachments) : '';
             $form->addLabel('', $fileListToString);

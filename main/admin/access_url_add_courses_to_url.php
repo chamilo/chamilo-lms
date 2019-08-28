@@ -13,7 +13,6 @@ $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 
 $this_section = SECTION_PLATFORM_ADMIN;
-
 api_protect_global_admin_script();
 
 if (!api_get_multiple_access_url()) {
@@ -21,15 +20,12 @@ if (!api_get_multiple_access_url()) {
     exit;
 }
 
-$form_sent = 0;
 $first_letter_course = '';
 $courses = [];
 $url_list = [];
 $users = [];
 
-$tbl_access_url_rel_course = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
 $tbl_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL);
-$tbl_user = Database::get_main_table(TABLE_MAIN_USER);
 $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
 
 /*	Header   */
@@ -68,29 +64,19 @@ if (isset($_POST['form_sent']) && $_POST['form_sent']) {
     }
 }
 
-if (empty($first_letter_user)) {
-    $sql = "SELECT count(*) as num_courses FROM $tbl_course";
-    $result = Database::query($sql);
-    $num_row = Database::fetch_array($result);
-    if ($num_row['num_courses'] > 1000) {
-        //if there are too much num_courses to gracefully handle with the HTML select list,
-        // assign a default filter on users names
-        $first_letter_user = 'A';
-    }
-    unset($result);
-}
-
 $first_letter_course_lower = Database::escape_string(api_strtolower($first_letter_course));
 
 $sql = "SELECT code, title FROM $tbl_course
-		WHERE title LIKE '".$first_letter_course_lower."%' OR title LIKE '".$first_letter_course_lower."%'
+		WHERE 
+            title LIKE '".$first_letter_course_lower."%' OR 
+		    title LIKE '".$first_letter_course_lower."%'
 		ORDER BY title, code DESC ";
 
 $result = Database::query($sql);
 $db_courses = Database::store_result($result);
 unset($result);
 
-$sql = "SELECT id, url FROM $tbl_access_url  WHERE active=1 ORDER BY url";
+$sql = "SELECT id, url FROM $tbl_access_url WHERE active = 1 ORDER BY url";
 $result = Database::query($sql);
 $db_urls = Database::store_result($result);
 unset($result);

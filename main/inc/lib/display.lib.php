@@ -1804,7 +1804,7 @@ class Display
             $session = [];
             $session['category_id'] = $session_info['session_category_id'];
             $session['title'] = $session_info['name'];
-            $session['id_coach'] = $session_info['id_coach'];
+            $session['coach_id'] = $session['id_coach'] = $session_info['id_coach'];
             $session['dates'] = '';
             $session['coach'] = '';
             if (api_get_setting('show_session_coach') === 'true' && isset($coachInfo['complete_name'])) {

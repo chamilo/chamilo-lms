@@ -390,11 +390,11 @@ if (!empty($attempts)) {
     }
     $table_content = $table->toHtml();
 }
+$selectAttempts = $objExercise->selectAttempts();
+if ($selectAttempts) {
+    $attempt_message = get_lang('Attempts').' '.$counter.' / '.$selectAttempts;
 
-if ($objExercise->selectAttempts()) {
-    $attempt_message = get_lang('Attempts').' '.$counter.' / '.$objExercise->selectAttempts();
-
-    if ($counter == $objExercise->selectAttempts()) {
+    if ($counter == $selectAttempts) {
         $attempt_message = Display::return_message($attempt_message, 'error');
     } else {
         $attempt_message = Display::return_message($attempt_message, 'info');
@@ -407,11 +407,9 @@ if ($objExercise->selectAttempts()) {
 if ($time_control) {
     $html .= $objExercise->returnTimeLeftDiv();
 }
-
-$html .= $message;
-
+// Ofaj
+//$html .= $message;
 $disable = api_get_configuration_value('exercises_disable_new_attempts');
-
 if ($disable && empty($exercise_stat_info)) {
     $exercise_url_button = Display::return_message(get_lang('NewExerciseAttemptDisabled'));
 }
@@ -424,7 +422,7 @@ $isLimitReached = ExerciseLib::isQuestionsLimitPerDayReached(
 );
 
 if (!empty($exercise_url_button) && !$isLimitReached) {
-    $html .= Display::div(
+   $html .= Display::div(
         Display::div(
             $exercise_url_button,
             ['class' => 'exercise_overview_options']
@@ -432,6 +430,31 @@ if (!empty($exercise_url_button) && !$isLimitReached) {
         ['class' => 'options']
     );
 }
+
+// ofaj
+ if ($counter == $selectAttempts) {
+     $html .= '<div class="alert alert-error" role="alert">';
+     $html .= get_lang('Attempts')." $counter / $selectAttempts ";
+     $html .= '</div>';
+ } else {
+     $html .= '<div class="attempts">
+            <ul class="attempts-status">';
+     $path = api_get_path(WEB_CSS_PATH).api_get_visual_theme();
+     if ($counter != 0) {
+         for ($i = 0; $i <= $counter -1; $i++) {
+             $html .= '<li>'.Display::return_icon('attempt-check.png').'</li>';
+         }
+     }
+     if ($counter != $selectAttempts) {
+         for ($i = 0; $i <= $selectAttempts - 1 - $counter ; $i++) {
+             $html .= '<li>'.Display::return_icon('attempt-nocheck.png').'</li>';
+         }
+     }
+     $html .= '</ul>
+            <div class="details">';
+     $html .= get_lang('Attempts')." $counter /  $selectAttempts ";
+     $html .= '</div></div>';
+ }
 
 if ($isLimitReached) {
     $maxQuestionsAnswered = (int) api_get_course_setting('quiz_question_limit_per_day');

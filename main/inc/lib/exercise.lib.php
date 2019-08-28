@@ -48,6 +48,7 @@ class ExerciseLib
         $show_icon = false
     ) {
         $course_id = $exercise->course_id;
+        $exerciseId = $exercise->iId;
 
         if (empty($course_id)) {
             return '';
@@ -198,7 +199,7 @@ class ExerciseLib
                     // Add nanog
                     if (api_get_setting('enable_record_audio') === 'true') {
                         //@todo pass this as a parameter
-                        global $exercise_stat_info, $exerciseId;
+                        global $exercise_stat_info;
                         if (!empty($exercise_stat_info)) {
                             $objQuestionTmp->initFile(
                                 api_get_session_id(),
@@ -339,8 +340,7 @@ class ExerciseLib
                              $('.question-validate-btn').attr('disabled', 'disabled');
                         } else {
                             $('.question-validate-btn').removeAttr('disabled');
-                        }
-                    
+                        }                    
                     });
                 </script>";
 
@@ -359,6 +359,7 @@ class ExerciseLib
                         $header .= Display::tag('th', $item);
                     }
                 }
+
                 if ($show_comment) {
                     $header .= Display::tag('th', get_lang('Feedback'));
                 }
@@ -372,15 +373,18 @@ class ExerciseLib
                 foreach ($objQuestionTmp->options as $item) {
                     $colorBorder1 = ($cpt1 == (count($objQuestionTmp->options) - 1))
                         ? '' : 'border-right: solid #FFFFFF 1px;';
-                    if ($item == 'True' || $item == 'False') {
-                        $header1 .= Display::tag('th',
+                    if ($item === 'True' || $item === 'False') {
+                        $header1 .= Display::tag(
+                            'th',
                             get_lang($item),
                             ['style' => 'background-color: #F7C9B4; color: black;'.$colorBorder1]
                         );
                     } else {
-                        $header1 .= Display::tag('th',
+                        $header1 .= Display::tag(
+                            'th',
                             $item,
-                            ['style' => 'background-color: #e6e6ff; color: black;padding:5px; '.$colorBorder1]);
+                            ['style' => 'background-color: #e6e6ff; color: black;padding:5px; '.$colorBorder1]
+                        );
                     }
                     $cpt1++;
                 }
@@ -401,7 +405,6 @@ class ExerciseLib
                     get_lang('DegreeOfCertaintyIAmVerySure'),
                 ];
                 $counter2 = 0;
-
                 foreach ($objQuestionTmp->options as $item) {
                     if ($item == 'True' || $item == 'False') {
                         $header2 .= Display::tag('td',
@@ -1385,7 +1388,7 @@ HTML;
             }
             echo $s;
         } elseif ($answerType == HOT_SPOT || $answerType == HOT_SPOT_DELINEATION) {
-            global $exerciseId, $exe_id;
+            global $exe_id;
             // Question is a HOT_SPOT
             // Checking document/images visibility
             if (api_is_platform_admin() || api_is_course_admin()) {
@@ -1462,14 +1465,14 @@ HTML;
                             </div>
                         </div>
                         <script>
-                                new ".($answerType == HOT_SPOT ? "HotspotQuestion" : "DelineationQuestion")."({
-                                    questionId: $questionId,
-                                    exerciseId: $exerciseId,
-                                    exeId: 0,
-                                    selector: '#hotspot-preview-$questionId',
-                                    for: 'preview',
-                                    relPath: '$relPath'
-                                });
+                            new ".($answerType == HOT_SPOT ? "HotspotQuestion" : "DelineationQuestion")."({
+                                questionId: $questionId,
+                                exerciseId: $exerciseId,
+                                exeId: 0,
+                                selector: '#hotspot-preview-$questionId',
+                                for: 'preview',
+                                relPath: '$relPath'
+                            });
                         </script>
                     ";
 
@@ -1500,7 +1503,7 @@ HOTSPOT;
                         $(function() {
                             new ".($answerType == HOT_SPOT_DELINEATION ? 'DelineationQuestion' : 'HotspotQuestion')."({
                                 questionId: $questionId,
-                                exerciseId: $exe_id,
+                                exerciseId: $exerciseId,
                                 selector: '#question_div_' + $questionId + ' .hotspot-image',
                                 for: 'user',
                                 relPath: '$relPath'
@@ -1565,7 +1568,7 @@ HOTSPOT;
                                 <script>
                                     AnnotationQuestion({
                                         questionId: '.$questionId.',
-                                        exerciseId: '.$exe_id.',
+                                        exerciseId: '.$exerciseId.',
                                         relPath: \''.$relPath.'\',
                                         courseId: '.$course_id.',
                                     });
@@ -1969,14 +1972,15 @@ HOTSPOT;
         $roundValues = false
     ) {
         //@todo replace all this globals
-        global $documentPath, $filter;
-
+        global $filter;
         $courseCode = empty($courseCode) ? api_get_course_id() : $courseCode;
         $courseInfo = api_get_course_info($courseCode);
 
         if (empty($courseInfo)) {
             return [];
         }
+
+        $documentPath = api_get_path(SYS_COURSE_PATH).$courseInfo['path'].'/document';
 
         $course_id = $courseInfo['real_id'];
         $sessionId = api_get_session_id();
@@ -2131,7 +2135,7 @@ HOTSPOT;
             $first_and_last_name = api_is_western_name_order() ? "firstname, lastname" : "lastname, firstname";
 
             if ($get_count) {
-                $sql_select = "SELECT count(te.exe_id) ";
+                $sql_select = 'SELECT count(te.exe_id) ';
             } else {
                 $sql_select = "SELECT DISTINCT
                     user_id,
@@ -2197,8 +2201,8 @@ HOTSPOT;
                     AND tth.c_id = $course_id
                     $hotpotatoe_where
                     $sqlWhereOption
-                    AND user.status NOT IN(".api_get_users_status_ignored_in_reports('string').")
-                ORDER BY tth.c_id ASC, tth.exe_date DESC";
+                    AND user.status NOT IN (".api_get_users_status_ignored_in_reports('string').")
+                ORDER BY tth.c_id ASC, tth.exe_date DESC ";
         }
 
         if (empty($sql)) {
@@ -2212,9 +2216,7 @@ HOTSPOT;
             return $rowx[0];
         }
 
-        $teacher_list = CourseManager::get_teacher_list_from_course_code(
-            $courseCode
-        );
+        $teacher_list = CourseManager::get_teacher_list_from_course_code($courseCode);
         $teacher_id_list = [];
         if (!empty($teacher_list)) {
             foreach ($teacher_list as $teacher) {
@@ -2268,7 +2270,6 @@ HOTSPOT;
                     $from_gradebook = true;
                 }
                 $sizeof = count($results);
-                $user_list_id = [];
                 $locked = api_resource_is_locked_by_gradebook(
                     $exercise_id,
                     LINK_EXERCISE
@@ -2347,7 +2348,6 @@ HOTSPOT;
                     }
 
                     $results[$i]['exe_duration'] = !empty($results[$i]['exe_duration']) ? round($results[$i]['exe_duration'] / 60) : 0;
-                    $user_list_id[] = $results[$i]['exe_user_id'];
                     $id = $results[$i]['exe_id'];
                     $dt = api_convert_and_format_date($results[$i]['exe_weighting']);
 
@@ -4415,7 +4415,6 @@ EOT;
         // Hide results
         $show_results = false;
         $show_only_score = false;
-
         if (in_array($objExercise->results_disabled,
             [
                 RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER,

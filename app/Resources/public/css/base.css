@@ -1187,6 +1187,14 @@ div.attendance-calendar-add div.row div.formw, div.attendance-calendar-edit div.
     height: 64px;
 }
 
+.promoted_post{
+    background: #f1fff1;
+    border-color: #9bd6b8;
+}
+.promoted_post .msg-content div{
+    border-bottom: 1px solid #9bd6b8;
+}
+
 /**********************************************
  *  MESSAGE TOOL                           *
  **********************************************/

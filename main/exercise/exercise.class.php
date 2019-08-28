@@ -1048,18 +1048,18 @@ class Exercise
 
             switch ($questionSelectionType) {
                 case EX_Q_SELECTION_ORDERED:
-                    $questionList = $this->getQuestionOrderedList();
+                    $questionList = $this->getQuestionOrderedList($adminView);
                     break;
                 case EX_Q_SELECTION_RANDOM:
                     // Not a random exercise, or if there are not at least 2 questions
                     if ($this->random == 0 || $nbQuestions < 2) {
-                        $questionList = $this->getQuestionOrderedList();
+                        $questionList = $this->getQuestionOrderedList($adminView);
                     } else {
                         $questionList = $this->getRandomList($adminView);
                     }
                     break;
                 default:
-                    $questionList = $this->getQuestionOrderedList();
+                    $questionList = $this->getQuestionOrderedList($adminView);
                     $result = $this->getQuestionListWithCategoryListFilteredByCategorySettings(
                         $questionList,
                         $questionSelectionType
@@ -1729,9 +1729,6 @@ class Exercise
         }
 
         $this->save_categories_in_exercise($this->categories);
-
-        // Updates the question position
-        $this->update_question_positions();
 
         return $this->iId;
     }
@@ -9655,9 +9652,11 @@ class Exercise
     /**
      * Gets the question list ordered by the question_order setting (drag and drop).
      *
+     * @param bool $adminView Optional.
+     *
      * @return array
      */
-    private function getQuestionOrderedList()
+    private function getQuestionOrderedList($adminView = false)
     {
         $TBL_EXERCICE_QUESTION = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
         $TBL_QUESTIONS = Database::get_course_table(TABLE_QUIZ_QUESTION);
@@ -9693,8 +9692,13 @@ class Exercise
         $counter = 1;
         $questionList = [];
         while ($new_object = Database::fetch_object($result)) {
-            // Correct order.
-            $questionList[$new_object->question_order] = $new_object->question_id;
+            if (!$adminView) {
+                // Correct order.
+                $questionList[$new_object->question_order] = $new_object->question_id;
+            } else {
+                $questionList[$counter] = $new_object->question_id;
+            }
+
             // Just in case we save the order in other array
             $temp_question_list[$counter] = $new_object->question_id;
             $counter++;

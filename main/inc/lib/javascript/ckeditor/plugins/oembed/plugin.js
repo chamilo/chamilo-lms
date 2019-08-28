@@ -148,6 +148,12 @@
             }
 
             function embedCode(url, instance, closeDialog, maxWidth, maxHeight, responsiveResize, widget) {
+                var extraProviderParams = {};
+
+                if (responsiveResize) {
+                    extraProviderParams.responsive = true;
+                }
+
                 jQuery('body').oembed(url, {
                     onEmbed: function(e) {
                         var codeElement,
@@ -197,7 +203,7 @@
                         }
                         
                         if (elementAdded) {
-                            if (closeDialog) {
+                            if (closeDialog && CKEDITOR.dialog.getCurrent()) {
                                 CKEDITOR.dialog.getCurrent().hide();
                             }
                         }
@@ -213,7 +219,8 @@
                     maxHeight: maxHeight,
                     maxWidth: maxWidth,
                     useResponsiveResize: responsiveResize,
-                    embedMethod: 'editor'
+                    embedMethod: 'editor',
+                    'vimeo': extraProviderParams
                 });
             }
 
@@ -223,9 +230,9 @@
                     minWidth: CKEDITOR.env.ie && CKEDITOR.env.quirks ? 568 : 550,
                     minHeight: 155,
                     onShow: function() {
-                        var resizetype = this.getContentElement('general', 'resizeType').getValue(),
-                            maxSizeBox = this.getContentElement('general', 'maxSizeBox').getElement(),
-                            sizeBox = this.getContentElement('general', 'sizeBox').getElement();
+                        var resizetype = CKEDITOR.dialog.getCurrent().getContentElement('general', 'resizeType').getValue(),
+                            maxSizeBox = CKEDITOR.dialog.getCurrent().getContentElement('general', 'maxSizeBox').getElement(),
+                            sizeBox = CKEDITOR.dialog.getCurrent().getContentElement('general', 'sizeBox').getElement();
 
                         if (resizetype == 'noresize') {
                             maxSizeBox.hide();
@@ -284,19 +291,19 @@
                                         responsiveResize = false;
                                     } else {
                                         if (resizetype == "responsive") {
-                                            maxWidth = this.getContentElement('general', 'maxWidth').
+                                            maxWidth = CKEDITOR.dialog.getCurrent().getContentElement('general', 'maxWidth').
                                                 getInputElement().
                                                 getValue();
-                                            maxHeight = this.getContentElement('general', 'maxHeight').
+                                            maxHeight = CKEDITOR.dialog.getCurrent().getContentElement('general', 'maxHeight').
                                                 getInputElement().
                                                 getValue();
 
                                             responsiveResize = true;
                                         } else if (resizetype == "custom") {
-                                            maxWidth = this.getContentElement('general', 'width').
+                                            maxWidth = CKEDITOR.dialog.getCurrent().getContentElement('general', 'width').
                                                 getInputElement().
                                                 getValue();
-                                            maxHeight = this.getContentElement('general', 'height').
+                                            maxHeight = CKEDITOR.dialog.getCurrent().getContentElement('general', 'height').
                                                 getInputElement().
                                                 getValue();
 

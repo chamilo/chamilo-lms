@@ -6535,7 +6535,7 @@ class learnpath
             $sub_list = '';
             if (isset($item['type']) && $item['type'] == 'dir') {
                 // empty value
-                $sub_list = Display::tag('li', '', ['class' => 'sub_item empty record li_container']);
+                $sub_list = Display::tag('li', '', ['class' => 'sub_item empty']);
             }
             if (empty($item['children'])) {
                 $sub_list = Display::tag('ul', $sub_list, ['id' => 'UL_'.$key, 'class' => 'record li_container']);

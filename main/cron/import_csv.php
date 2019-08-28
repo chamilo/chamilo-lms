@@ -1436,18 +1436,21 @@ class ImportCsv
                         $event['session_id'],
                         'careerid'
                     );
-                    $externalCareerId = substr($externalCareerId, 1, -1);
+                    $externalCareerId = $externalCareerId['value'];
+                    if (substr($externalCareerId, 0, 1) === '[') {
+                        $externalCareerId = substr($externalCareerId, 1, -1);
+                    }
 
                     // Using the external_career_id field (from above),
                     // find the career ID
                     $careerExtraFieldValue = new ExtraFieldValue('career');
-                    $careerId = $careerExtraFieldValue->get_item_id_from_field_variable_and_field_value(
+                    $careerValue = $careerExtraFieldValue->get_item_id_from_field_variable_and_field_value(
                         'external_career_id',
                         $externalCareerId
                     );
 
                     $career = new Career();
-                    $career = $career->find($careerId);
+                    $career = $career->find($careerValue['item_id']);
                     $careerName = $career['name'];
 
                     $subject = sprintf(

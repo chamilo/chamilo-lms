@@ -1429,20 +1429,26 @@ class ImportCsv
 
                     $courseTitle = $courseInfo['title'];
 
+                    // Get the value of the "careerid" extra field of this
+                    // session
                     $sessionExtraFieldValue = new ExtraFieldValue('session');
-                    $values = $sessionExtraFieldValue->get_values_by_handler_and_field_variable(
+                    $externalCareerId = $sessionExtraFieldValue->get_values_by_handler_and_field_variable(
                         $event['session_id'],
-                        $this->extraFieldIdNameList['session_career']
+                        'careerid'
+                    );
+                    $externalCareerId = substr($externalCareerId, 1, -1);
+
+                    // Using the external_career_id field (from above),
+                    // find the career ID
+                    $careerExtraFieldValue = new ExtraFieldValue('career');
+                    $careerId = $careerExtraFieldValue->get_item_id_from_field_variable_and_field_value(
+                        'external_career_id',
+                        $externalCareerId
                     );
 
-                    $careerName = '';
-                    if (!empty($values)) {
-                        foreach ($values as $value) {
-                            if (isset($value['value'])) {
-                                $careerName = $value['value'];
-                            }
-                        }
-                    }
+                    $career = new Career();
+                    $career = $career->find($careerId);
+                    $careerName = $career['name'];
 
                     $subject = sprintf(
                         get_lang('WelcomeToPortalXInCourseSessionX'),

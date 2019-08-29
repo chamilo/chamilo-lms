@@ -8418,7 +8418,11 @@ class Exercise
         $categoryCondition = '';
         $categoryId = (int) $categoryId;
         if (api_get_configuration_value('allow_exercise_categories')) {
-            $categoryCondition = " AND exercise_category_id = $categoryId ";
+            if (!empty($categoryId)) {
+                $categoryCondition = " AND exercise_category_id = $categoryId ";
+            } else {
+                $categoryCondition = " AND exercise_category_id IS NULL ";
+            }
         }
 
         $keywordCondition = '';

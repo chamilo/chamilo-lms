@@ -45,10 +45,10 @@ CKEDITOR.dialog.add( 'video', function ( editor )
                 extraStyles.backgroundImage = 'url(' + value + ')';
                 break;
             case 'width':
-                extraStyles.width = value.indexOf('%') > 0 ? '100%' : ( value + 'px');
+                extraStyles.width = value.indexOf('%') > 0 ? value : (parseInt(value) + 'px');
                 break;
             case 'height':
-                extraStyles.height = value.indexOf('%') > 0 ? '100%' : ( value + 'px');
+                extraStyles.height = value.indexOf('%') > 0 ? value : (parseInt(value) + 'px');
                 break;
         }
     }

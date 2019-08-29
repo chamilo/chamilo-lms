@@ -22,6 +22,7 @@ use Doctrine\DBAL\Types\Type;
  */
 class Exercise
 {
+    const PAGINATION_ITEMS_PER_PAGE = 5;
     public $iId;
     public $id;
     public $name;
@@ -8382,11 +8383,10 @@ class Exercise
      * Return an HTML table of exercises for on-screen printing, including
      * action icons. If no exercise is present and the user can edit the
      * course, show a "create test" button.
+
      *
      * @param int    $categoryId
      * @param string $keyword
-     *
-     * @throws \Doctrine\ORM\Query\QueryException
      *
      * @return string
      */
@@ -8398,9 +8398,10 @@ class Exercise
         $TBL_EXERCISES = Database::get_course_table(TABLE_QUIZ_TEST);
         $TBL_TRACK_EXERCISES = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
 
-        //$page = (int) $page;
-        //$from = (int) $from;
-        //$limit = (int) $limit;
+        $categoryId = (int) $categoryId;
+        $keyword = Database::escape_string($keyword);
+        $learnpath_id = isset($_REQUEST['learnpath_id']) ? (int) $_REQUEST['learnpath_id'] : null;
+        $learnpath_item_id = isset($_REQUEST['learnpath_item_id']) ? (int) $_REQUEST['learnpath_item_id'] : null;
 
         $autoLaunchAvailable = false;
         if (api_get_course_setting('enable_exercise_auto_launch') == 1 &&
@@ -8421,22 +8422,26 @@ class Exercise
         $charset = 'utf-8';
         $token = Security::get_token();
         $userId = api_get_user_id();
-        $isDrhOfCourse = CourseManager::isUserSubscribedInCourseAsDrh(
-            $userId,
-            $courseInfo
-        );
+        $isDrhOfCourse = CourseManager::isUserSubscribedInCourseAsDrh($userId, $courseInfo);
         $documentPath = api_get_path(SYS_COURSE_PATH).$courseInfo['path'].'/document';
         $limitTeacherAccess = api_get_configuration_value('limit_exercise_teacher_access');
-
-        $learnpath_id = isset($_REQUEST['learnpath_id']) ? (int) $_REQUEST['learnpath_id'] : null;
-        $learnpath_item_id = isset($_REQUEST['learnpath_item_id']) ? (int) $_REQUEST['learnpath_item_id'] : null;
 
         // Condition for the session
         $condition_session = api_get_session_condition($sessionId, true, true);
         $content = '';
 
+        $table = new SortableTableFromArrayConfig(
+            [],
+            1,
+            self::PAGINATION_ITEMS_PER_PAGE,
+            'exercises_cat_'.$categoryId
+        );
+
+        $limit = self::PAGINATION_ITEMS_PER_PAGE;
+        $page = $table->page_nr;
+        $from = $limit * ($page - 1);
+
         $categoryCondition = '';
-        $categoryId = (int) $categoryId;
         if (api_get_configuration_value('allow_exercise_categories')) {
             if (!empty($categoryId)) {
                 $categoryCondition = " AND exercise_category_id = $categoryId ";
@@ -8447,7 +8452,6 @@ class Exercise
 
         $keywordCondition = '';
         if (!empty($keyword)) {
-            $keyword = Database::escape_string($keyword);
             $keywordCondition = " AND title LIKE '%$keyword%' ";
         }
 
@@ -8469,8 +8473,8 @@ class Exercise
                         $condition_session 
                         $categoryCondition
                         $keywordCondition
-                    ORDER BY title";
-        // LIMIT $from , $limit";
+                    ORDER BY title
+                    LIMIT $from , $limit";
         } else {
             // Only for students
             $total_sql = "SELECT count(iid) as count 
@@ -8488,8 +8492,8 @@ class Exercise
                           $condition_session
                           $categoryCondition
                           $keywordCondition 
-                    ORDER BY title ";
-            // LIMIT $from , $limit";
+                    ORDER BY title
+                    LIMIT $from , $limit";
         }
 
         $result = Database::query($sql);
@@ -9180,16 +9184,16 @@ class Exercise
                     WHERE
                         d.c_id = $courseId AND
                         (d.path LIKE '%htm%') AND
-                        d.path  LIKE '".Database :: escape_string($uploadPath.'/%/%')."' ";
-        // LIMIT $from , $limit"; // only .htm or .html files listed
+                        d.path  LIKE '".Database :: escape_string($uploadPath.'/%/%')."'
+                    LIMIT $from , $limit"; // only .htm or .html files listed
         } else {
             $sql = "SELECT d.iid, d.path as path, d.comment as comment
                     FROM $TBL_DOCUMENT d
                     WHERE
                         d.c_id = $courseId AND
                         (d.path LIKE '%htm%') AND
-                        d.path  LIKE '".Database :: escape_string($uploadPath.'/%/%')."' ";
-            // LIMIT $from , $limit";
+                        d.path  LIKE '".Database :: escape_string($uploadPath.'/%/%')."'
+                    LIMIT $from , $limit";
         }
 
         $result = Database::query($sql);
@@ -9308,7 +9312,6 @@ class Exercise
                         )
                     );
 
-                    $actions = '';
                     if (!empty($attempt)) {
                         $actions = '<a href="hotpotatoes_exercise_report.php?'.api_get_cidreq().'&path='.$path.'&filter_by_user='.$userId.'">'.Display::return_icon('test_results.png', get_lang('Results'), '', ICON_SIZE_SMALL).'</a>';
                         $attemptText = get_lang('LatestAttempt').' : ';
@@ -9356,12 +9359,7 @@ class Exercise
                 return '';
             }
 
-            $table = new SortableTableFromArrayConfig(
-                $tableRows,
-                1,
-                20,
-                'exercises_cat'.$categoryId
-            );
+            $table->setTableData($tableRows);
 
             $table->setTotalNumberOfItems($total);
             $table->set_additional_parameters([

@@ -184,7 +184,7 @@ class ExerciseLib
                     $form = new FormValidator('free_choice_'.$questionId);
                     $config = [
                         'ToolbarSet' => 'TestFreeAnswer',
-                        'id' => 'choice['.$questionId.']'
+                        'id' => 'choice['.$questionId.']',
                     ];
                     $form->addHtmlEditor(
                         'choice['.$questionId.']',

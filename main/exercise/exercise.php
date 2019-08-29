@@ -275,7 +275,6 @@ Event::event_access_tool(TOOL_QUIZ);
 $logInfo = [
     'tool' => TOOL_QUIZ,
     'tool_id' => (int) $exerciseId,
-    'tool_id_detail' => 0,
     'action' => isset($_REQUEST['learnpath_id']) ? 'learnpath_id' : '',
     'action_details' => isset($_REQUEST['learnpath_id']) ? (int) $_REQUEST['learnpath_id'] : '',
 ];
@@ -514,6 +513,10 @@ if ($origin !== 'learnpath') {
 }
 Display::display_introduction_section(TOOL_QUIZ);
 
+// Selects $limit exercises at the same time
+// maximum number of exercises on a same page
+$limit = Exercise::PAGINATION_ITEMS_PER_PAGE;
+
 HotPotGCt($documentPath, 1, $userId);
 
 $token = Security::get_token();
@@ -609,13 +612,12 @@ if ($is_allowedToEdit) {
         [6, 1, 5]
     );
 }
-
 if (api_get_configuration_value('allow_exercise_categories') === false) {
-    echo Exercise::exerciseGrid(0, $keyword);
+    echo Exercise::exerciseGrid(0,  $keyword);
 } else {
     if (empty($categoryId)) {
         echo Display::page_subheader(get_lang('NoCategory'));
-        echo Exercise::exerciseGrid(0, $keyword);
+        echo Exercise::exerciseGrid(0,  $keyword);
         $counter = 0;
         $manager = new ExerciseCategoryManager();
         $categories = $manager->getCategories($courseId);

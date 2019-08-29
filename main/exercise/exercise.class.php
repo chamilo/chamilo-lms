@@ -2961,6 +2961,7 @@ class Exercise
         // Hides the new exercise
         $exerciseObject->updateStatus(false);
         $exerciseObject->updateId(0);
+        $exerciseObject->sessionId = api_get_session_id();
         $exerciseObject->save();
         $newId = $exerciseObject->selectId();
         if ($newId && !empty($questionList)) {

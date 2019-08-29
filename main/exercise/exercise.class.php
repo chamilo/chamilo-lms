@@ -4710,12 +4710,13 @@ class Exercise
                         // THIS is very important otherwise the poly_compile will throw an error!!
                         // round-up the coordinates
                         $coords = explode('/', $user_answer);
+                        $coords = array_filter($coords);
                         $user_array = '';
                         foreach ($coords as $coord) {
                             list($x, $y) = explode(';', $coord);
                             $user_array .= round($x).';'.round($y).'/';
                         }
-                        $user_array = substr($user_array, 0, -1);
+                        $user_array = substr($user_array, 0, -1) ?: '';
                     } else {
                         if (!empty($studentChoice)) {
                             $newquestionList[] = $questionId;
@@ -4907,6 +4908,7 @@ class Exercise
 
                             // Round-up the coordinates
                             $coords = explode('/', $user_answer);
+                            $coords = array_filter($coords);
                             $user_array = '';
                             foreach ($coords as $coord) {
                                 if (!empty($coord)) {
@@ -4916,7 +4918,7 @@ class Exercise
                                     }
                                 }
                             }
-                            $user_array = substr($user_array, 0, -1);
+                            $user_array = substr($user_array, 0, -1) ?: '';
                             if ($next) {
                                 $user_answer = $user_array;
                                 // We compare only the delineation not the other points
@@ -5482,20 +5484,6 @@ class Exercise
                 }
                 if ($answerType === HOT_SPOT_DELINEATION) {
                     if ($showHotSpotDelineationTable) {
-                        $overlap_color = 'red';
-                        if ($overlap_color) {
-                            $overlap_color = 'green';
-                        }
-                        $missing_color = 'red';
-                        if ($missing_color) {
-                            $missing_color = 'green';
-                        }
-
-                        $excess_color = 'red';
-                        if ($excess_color) {
-                            $excess_color = 'green';
-                        }
-
                         if (!is_numeric($final_overlap)) {
                             $final_overlap = 0;
                         }
@@ -5519,20 +5507,20 @@ class Exercise
                                 <tr class="row_even">
                                     <td><b>'.get_lang('Overlap').'</b></td>
                                     <td>'.get_lang('Min').' '.$threadhold1.'</td>
-                                    <td><div style="color:'.$overlap_color.'">'
-                            .(($final_overlap < 0) ? 0 : intval($final_overlap)).'</div></td>
+                                    <td class="text-right '.($overlap_color ? 'text-success' : 'text-danger').'">'
+                            .(($final_overlap < 0) ? 0 : intval($final_overlap)).'</td>
                                 </tr>
                                 <tr>
                                     <td><b>'.get_lang('Excess').'</b></td>
                                     <td>'.get_lang('Max').' '.$threadhold2.'</td>
-                                    <td><div style="color:'.$excess_color.'">'
-                            .(($final_excess < 0) ? 0 : intval($final_excess)).'</div></td>
+                                    <td class="text-right '.($excess_color ? 'text-success' : 'text-danger').'">'
+                            .(($final_excess < 0) ? 0 : intval($final_excess)).'</td>
                                 </tr>
                                 <tr class="row_even">
                                     <td><b>'.get_lang('Missing').'</b></td>
                                     <td>'.get_lang('Max').' '.$threadhold3.'</td>
-                                    <td><div style="color:'.$missing_color.'">'
-                            .(($final_missing < 0) ? 0 : intval($final_missing)).'</div></td>
+                                    <td class="text-right '.($missing_color ? 'text-success' : 'text-danger').'">'
+                            .(($final_missing < 0) ? 0 : intval($final_missing)).'</td>
                                 </tr>
                             </table>';
                         if ($next == 0) {

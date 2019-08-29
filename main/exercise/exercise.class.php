@@ -8371,17 +8371,17 @@ class Exercise
     }
 
     /**
+     * Return an HTML table of exercises for on-screen printing, including
+     * action icons. If no exercise is present and the user can edit the
+     * course, show a "create test" button.
      * @param int    $categoryId
-     * @param int    $page
-     * @param int    $from
-     * @param int    $limit
      * @param string $keyword
      *
      * @throws \Doctrine\ORM\Query\QueryException
      *
      * @return string
      */
-    public static function exerciseGrid($categoryId, $page, $from, $limit, $keyword = '')
+    public static function exerciseGrid($categoryId, $keyword = '')
     {
         $TBL_DOCUMENT = Database::get_course_table(TABLE_DOCUMENT);
         $TBL_ITEM_PROPERTY = Database::get_course_table(TABLE_ITEM_PROPERTY);
@@ -8389,9 +8389,9 @@ class Exercise
         $TBL_EXERCISES = Database::get_course_table(TABLE_QUIZ_TEST);
         $TBL_TRACK_EXERCISES = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
 
-        $page = (int) $page;
-        $from = (int) $from;
-        $limit = (int) $limit;
+        //$page = (int) $page;
+        //$from = (int) $from;
+        //$limit = (int) $limit;
 
         $autoLaunchAvailable = false;
         if (api_get_course_setting('enable_exercise_auto_launch') == 1 &&
@@ -8456,8 +8456,8 @@ class Exercise
                         $condition_session 
                         $categoryCondition
                         $keywordCondition
-                    ORDER BY title
-                    LIMIT $from , $limit";
+                    ORDER BY title";
+                    // LIMIT $from , $limit";
         } else {
             // Only for students
             $total_sql = "SELECT count(iid) as count 
@@ -8473,8 +8473,8 @@ class Exercise
                     WHERE c_id = $courseId AND
                           active='1' $condition_session
                           $categoryCondition
-                          $keywordCondition
-                    ORDER BY title LIMIT $from , $limit";
+                          $keywordCondition ";
+                    // ORDER BY title LIMIT $from , $limit";
         }
         $result = Database::query($sql);
         $result_total = Database::query($total_sql);
@@ -8767,7 +8767,7 @@ class Exercise
                                             '',
                                             ICON_SIZE_SMALL
                                         ),
-                                        'exercise.php?'.api_get_cidreq().'&choice=enable_launch&sec_token='.$token.'&page='.$page.'&exerciseId='.$row['id']
+                                        'exercise.php?'.api_get_cidreq().'&choice=enable_launch&sec_token='.$token.'&exerciseId='.$row['id']
                                     );
                                 } else {
                                     $actions .= Display::url(
@@ -8777,7 +8777,7 @@ class Exercise
                                             '',
                                             ICON_SIZE_SMALL
                                         ),
-                                        'exercise.php?'.api_get_cidreq().'&choice=disable_launch&sec_token='.$token.'&page='.$page.'&exerciseId='.$row['id']
+                                        'exercise.php?'.api_get_cidreq().'&choice=disable_launch&sec_token='.$token.'&exerciseId='.$row['id']
                                     );
                                 }
                             }
@@ -8838,7 +8838,7 @@ class Exercise
                                             '',
                                             ICON_SIZE_SMALL
                                         ),
-                                        'exercise.php?'.api_get_cidreq().'&choice=enable&sec_token='.$token.'&page='.$page.'&exerciseId='.$row['id']
+                                        'exercise.php?'.api_get_cidreq().'&choice=enable&sec_token='.$token.'&exerciseId='.$row['id']
                                     );
                                 } else {
                                     // else if not active
@@ -8849,7 +8849,7 @@ class Exercise
                                             '',
                                             ICON_SIZE_SMALL
                                         ),
-                                        'exercise.php?'.api_get_cidreq().'&choice=disable&sec_token='.$token.'&page='.$page.'&exerciseId='.$row['id']
+                                        'exercise.php?'.api_get_cidreq().'&choice=disable&sec_token='.$token.'&exerciseId='.$row['id']
                                     );
                                 }
                             }
@@ -8900,7 +8900,7 @@ class Exercise
                                             '',
                                             ICON_SIZE_SMALL
                                         ),
-                                        'exercise.php?'.api_get_cidreq().'&choice=enable&sec_token='.$token.'&page='.$page.'&exerciseId='.$row['id']
+                                        'exercise.php?'.api_get_cidreq().'&choice=enable&sec_token='.$token.'&exerciseId='.$row['id']
                                     );
                                 } else {
                                     // else if not active
@@ -8911,7 +8911,7 @@ class Exercise
                                             '',
                                             ICON_SIZE_SMALL
                                         ),
-                                        'exercise.php?'.api_get_cidreq().'&choice=disable&sec_token='.$token.'&page='.$page.'&exerciseId='.$row['id']
+                                        'exercise.php?'.api_get_cidreq().'&choice=disable&sec_token='.$token.'&exerciseId='.$row['id']
                                     );
                                 }
                             }
@@ -9174,16 +9174,16 @@ class Exercise
                     WHERE
                         d.c_id = $courseId AND
                         (d.path LIKE '%htm%') AND
-                        d.path  LIKE '".Database :: escape_string($uploadPath.'/%/%')."'
-                    LIMIT $from , $limit"; // only .htm or .html files listed
+                        d.path  LIKE '".Database :: escape_string($uploadPath.'/%/%')."' ";
+                    // LIMIT $from , $limit"; // only .htm or .html files listed
         } else {
             $sql = "SELECT d.iid, d.path as path, d.comment as comment
                     FROM $TBL_DOCUMENT d
                     WHERE
                         d.c_id = $courseId AND
                         (d.path LIKE '%htm%') AND
-                        d.path  LIKE '".Database :: escape_string($uploadPath.'/%/%')."'
-                    LIMIT $from , $limit";
+                        d.path  LIKE '".Database :: escape_string($uploadPath.'/%/%')."' ";
+                    // LIMIT $from , $limit";
         }
 
         $result = Database::query($sql);
@@ -9255,10 +9255,10 @@ class Exercise
                     // if active
                     if ($visibility != 0) {
                         $nbrActiveTests = $nbrActiveTests + 1;
-                        $actions .= '      <a href="'.$exercisePath.'?'.api_get_cidreq().'&hpchoice=disable&page='.$page.'&file='.$path.'">'.
+                        $actions .= '      <a href="'.$exercisePath.'?'.api_get_cidreq().'&hpchoice=disable&file='.$path.'">'.
                             Display::return_icon('visible.png', get_lang('Deactivate'), '', ICON_SIZE_SMALL).'</a>';
                     } else { // else if not active
-                        $actions .= '    <a href="'.$exercisePath.'?'.api_get_cidreq().'&hpchoice=enable&page='.$page.'&file='.$path.'">'.
+                        $actions .= '    <a href="'.$exercisePath.'?'.api_get_cidreq().'&hpchoice=enable&file='.$path.'">'.
                             Display::return_icon('invisible.png', get_lang('Activate'), '', ICON_SIZE_SMALL).'</a>';
                     }
                     $actions .= '<a href="'.$exercisePath.'?'.api_get_cidreq().'&hpchoice=delete&file='.$path.'" onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang('AreYouSureToDeleteJS'), ENT_QUOTES, $charset)).'\')) return false;">'.

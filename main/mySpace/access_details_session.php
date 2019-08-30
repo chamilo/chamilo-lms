@@ -130,8 +130,8 @@ if ($form->validate()) {
                     $to
                 );
 
-                $partialMinLogin = 0;
-                $partialMaxLogin = 0;
+//                $partialMinLogin = 0;
+//                $partialMaxLogin = 0;
                 $partialDuration = 0;
 
                 foreach ($result as $item) {
@@ -155,6 +155,7 @@ if ($form->validate()) {
 
                     // Partials
                     $partialDuration += $item['duration'];
+/*
                     if (empty($partialMinLogin)) {
                         $partialMinLogin = api_strtotime($item['login'], 'UTC');
                     }
@@ -164,7 +165,7 @@ if ($form->validate()) {
                     if (api_strtotime($item['logout'], 'UTC') > $partialMaxLogin) {
                         $partialMaxLogin = api_strtotime($item['logout'], 'UTC');
                     }
-
+ */
                     $report[$sessionId]['courses'][$course['real_id']][] = $record;
                     $report[$sessionId]['name'][$course['real_id']] = $courseInfo['title'].'&nbsp; ('.$session['session_name'].')';
                 }
@@ -194,8 +195,8 @@ if ($form->validate()) {
             $to
         );
 
-        $partialMinLogin = 0;
-        $partialMaxLogin = 0;
+//        $partialMinLogin = 0;
+//        $partialMaxLogin = 0;
         $partialDuration = 0;
 
         foreach ($result as $item) {
@@ -221,6 +222,7 @@ if ($form->validate()) {
 
             // Partials
             $partialDuration += $item['duration'];
+/*
             if (empty($partialMinLogin)) {
                 $partialMinLogin = api_strtotime($item['login'], 'UTC');
             }
@@ -230,14 +232,23 @@ if ($form->validate()) {
             if (api_strtotime($item['logout'], 'UTC') > $partialMaxLogin) {
                 $partialMaxLogin = api_strtotime($item['logout'], 'UTC');
             }
-        }
+ */
+	}
 
         if (!empty($result)) {
+/*
             $record = [
                 customDate($partialMinLogin, true),
                 customDate($partialMaxLogin, true),
                 api_format_time($partialDuration, 'js'),
             ];
+ */
+           $record = [
+                "",
+                "",
+                api_format_time($partialDuration, 'js'),
+            ];
+
 
             $report[0]['courses'][$course['course_id']][] = $record;
             $report[0]['name'][$course['course_id']] = $course['title'];
@@ -295,7 +306,7 @@ if ($form->validate()) {
     }
 
     $tpl = new Template('', false, false, false, true, false, false);
-    $tpl->assign('title', get_lang('AttestationOfAttendance'));
+    $tpl->assign('title', get_lang('RealisationCertificate'));
     $tpl->assign('student', $userInfo['complete_name']);
     $tpl->assign('table_progress', $content);
 

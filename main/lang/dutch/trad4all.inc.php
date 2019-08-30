@@ -6874,6 +6874,6 @@ Het eerstvolgende moment dat voor deze module werd ingevuld is: <br />
 $WelcomeToPortalXInCourseSessionX = "Welkom bij %s: informatie over de module %s";
 $WelcomeToPortalXInCourseSessionXCoursePartOfCareerX = "Welkom bij %s. Je bent ingeschreven voor de module %s.
 Deze module maakt deel uit van de opleiding %s.";
-$YourNextModule = "Jouw eerstvolgende lesmoment voor deze module:";
+$YourNextModule = "Jouw eerstvolgende lesmoment voor de module:";
 $FirstLesson = "Eerste lesmoment";
 ?>

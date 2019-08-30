@@ -8422,4 +8422,8 @@ $SaveAnswers = "Save answers";
 $SaveAllAnswers = "Pre-fill with answers from previous attempt";
 $SubscribeUsersToAllForumNotifications = "Subscribe automatically all users to all forum notifications";
 $ExerciseDirectPopUp = "Direct feedback as pop-up";
+$MinStartDate = "First connection";
+$MaxEndDate = "Last connection";
+$TotalDuration = "Total time spent";
+$RealisationCertificate = "Certificate of achievement";
 ?>

@@ -1440,7 +1440,7 @@ class ImportCsv
                     $externalCareerIds = [];
                     if (substr($externalCareerIdList, 0, 1) === '[') {
                         $externalCareerIdList = substr($externalCareerIdList, 1, -1);
-                        $externalCareerIds = preg_split('/,/',$externalCareerIdList);
+                        $externalCareerIds = preg_split('/,/', $externalCareerIdList);
                     } else {
                         $externalCareerIds = [$externalCareerIdList];
                     }

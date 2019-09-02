@@ -7939,6 +7939,7 @@ class Exercise
         if (empty($this->exerciseCategoryId)) {
             return null;
         }
+
         return (int) $this->exerciseCategoryId;
     }
 
@@ -7948,7 +7949,7 @@ class Exercise
     public function setExerciseCategoryId($value)
     {
         if (!empty($value)) {
-            $this->exerciseCategoryId = (int)$value;
+            $this->exerciseCategoryId = (int) $value;
         }
     }
 
@@ -8372,6 +8373,7 @@ class Exercise
      * Return an HTML table of exercises for on-screen printing, including
      * action icons. If no exercise is present and the user can edit the
      * course, show a "create test" button.
+     *
      * @param int    $categoryId
      * @param string $keyword
      *
@@ -8459,7 +8461,7 @@ class Exercise
                         $categoryCondition
                         $keywordCondition
                     ORDER BY title";
-                    // LIMIT $from , $limit";
+        // LIMIT $from , $limit";
         } else {
             // Only for students
             $total_sql = "SELECT count(iid) as count 
@@ -8477,7 +8479,7 @@ class Exercise
                           $condition_session
                           $categoryCondition
                           $keywordCondition ";
-                    // ORDER BY title LIMIT $from , $limit";
+            // ORDER BY title LIMIT $from , $limit";
         }
         $result = Database::query($sql);
         $result_total = Database::query($total_sql);
@@ -9179,7 +9181,7 @@ class Exercise
                         d.c_id = $courseId AND
                         (d.path LIKE '%htm%') AND
                         d.path  LIKE '".Database :: escape_string($uploadPath.'/%/%')."' ";
-                    // LIMIT $from , $limit"; // only .htm or .html files listed
+        // LIMIT $from , $limit"; // only .htm or .html files listed
         } else {
             $sql = "SELECT d.iid, d.path as path, d.comment as comment
                     FROM $TBL_DOCUMENT d
@@ -9187,7 +9189,7 @@ class Exercise
                         d.c_id = $courseId AND
                         (d.path LIKE '%htm%') AND
                         d.path  LIKE '".Database :: escape_string($uploadPath.'/%/%')."' ";
-                    // LIMIT $from , $limit";
+            // LIMIT $from , $limit";
         }
 
         $result = Database::query($sql);

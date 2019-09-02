@@ -126,7 +126,7 @@ class Exercise
         $this->scoreTypeModel = 0;
         $this->globalCategoryId = null;
         $this->notifications = [];
-        $this->exerciseCategoryId = 0;
+        $this->exerciseCategoryId = null;
         $this->pageResultConfiguration;
 
         if (!empty($courseId)) {
@@ -199,7 +199,7 @@ class Exercise
             $this->questionSelectionType = isset($object->question_selection_type) ? $object->question_selection_type : null;
             $this->hideQuestionTitle = isset($object->hide_question_title) ? (int) $object->hide_question_title : 0;
             $this->autolaunch = isset($object->autolaunch) ? (int) $object->autolaunch : 0;
-            $this->exerciseCategoryId = isset($object->exercise_category_id) ? (int) $object->exercise_category_id : 0;
+            $this->exerciseCategoryId = isset($object->exercise_category_id) ? (int) $object->exercise_category_id : null;
 
             $this->notifications = [];
             if (!empty($object->notifications)) {
@@ -1589,7 +1589,9 @@ class Exercise
 
                 $allow = api_get_configuration_value('allow_exercise_categories');
                 if ($allow === true) {
-                    $paramsExtra['exercise_category_id'] = $this->getExerciseCategoryId();
+                    if (!empty($this->getExerciseCategoryId())) {
+                        $paramsExtra['exercise_category_id'] = $this->getExerciseCategoryId();
+                    }
                 }
 
                 $allow = api_get_configuration_value('allow_notification_setting_per_exercise');
@@ -1670,7 +1672,9 @@ class Exercise
 
             $allow = api_get_configuration_value('allow_exercise_categories');
             if ($allow === true) {
-                $params['exercise_category_id'] = $this->getExerciseCategoryId();
+                if (!empty($this->getExerciseCategoryId())) {
+                    $params['exercise_category_id'] = $this->getExerciseCategoryId();
+                }
             }
 
             $allow = api_get_configuration_value('allow_quiz_show_previous_button_setting');
@@ -7932,6 +7936,9 @@ class Exercise
      */
     public function getExerciseCategoryId()
     {
+        if (empty($this->exerciseCategoryId)) {
+            return null;
+        }
         return (int) $this->exerciseCategoryId;
     }
 
@@ -7940,7 +7947,9 @@ class Exercise
      */
     public function setExerciseCategoryId($value)
     {
-        $this->exerciseCategoryId = (int) $value;
+        if (!empty($value)) {
+            $this->exerciseCategoryId = (int)$value;
+        }
     }
 
     /**

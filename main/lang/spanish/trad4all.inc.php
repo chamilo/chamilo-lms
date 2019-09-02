@@ -8454,4 +8454,5 @@ $MinStartDate = "Primera conexion";
 $MaxEndDate = "Ultima conexion";
 $TotalDuration = "Tiempo total pasado";
 $RealisationCertificate = "Certificado de logro";
+$SurveysReport = "Reporte de encuestas";
 ?>

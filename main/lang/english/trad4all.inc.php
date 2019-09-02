@@ -8426,4 +8426,5 @@ $MinStartDate = "First connection";
 $MaxEndDate = "Last connection";
 $TotalDuration = "Total time spent";
 $RealisationCertificate = "Certificate of achievement";
+$SurveysReport = "Surveys report";
 ?>

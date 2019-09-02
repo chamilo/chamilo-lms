@@ -477,25 +477,27 @@ class FlatViewTable extends SortableTable
             $table_data[] = $firstHeader;
         }
 
+        $columnOffset = empty($this->datagen->params['show_official_code']) ? 0 : 1;
+
         foreach ($data_array as $user_row) {
             $user_id = $user_row[0];
             unset($user_row[0]);
             $userInfo = api_get_user_info($user_id);
             if ($is_western_name_order) {
-                $user_row[1] = $this->build_name_link(
+                $user_row[1 + $columnOffset] = $this->build_name_link(
                     $user_id,
                     $userInfo['firstname']
                 );
-                $user_row[2] = $this->build_name_link(
+                $user_row[2 + $columnOffset] = $this->build_name_link(
                     $user_id,
                     $userInfo['lastname']
                 );
             } else {
-                $user_row[1] = $this->build_name_link(
+                $user_row[1 + $columnOffset] = $this->build_name_link(
                     $user_id,
                     $userInfo['lastname']
                 );
-                $user_row[2] = $this->build_name_link(
+                $user_row[2 + $columnOffset] = $this->build_name_link(
                     $user_id,
                     $userInfo['firstname']
                 );

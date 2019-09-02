@@ -130,8 +130,6 @@ if ($form->validate()) {
                     $to
                 );
 
-//                $partialMinLogin = 0;
-//                $partialMaxLogin = 0;
                 $partialDuration = 0;
 
                 foreach ($result as $item) {
@@ -155,25 +153,14 @@ if ($form->validate()) {
 
                     // Partials
                     $partialDuration += $item['duration'];
-                    /*
-                                        if (empty($partialMinLogin)) {
-                                            $partialMinLogin = api_strtotime($item['login'], 'UTC');
-                                        }
-                                        if ($partialMinLogin > api_strtotime($item['login'], 'UTC')) {
-                                            $partialMinLogin = api_strtotime($item['login'], 'UTC');
-                                        }
-                                        if (api_strtotime($item['logout'], 'UTC') > $partialMaxLogin) {
-                                            $partialMaxLogin = api_strtotime($item['logout'], 'UTC');
-                                        }
-                     */
                     $report[$sessionId]['courses'][$course['real_id']][] = $record;
                     $report[$sessionId]['name'][$course['real_id']] = $courseInfo['title'].'&nbsp; ('.$session['session_name'].')';
                 }
 
                 if (!empty($result)) {
                     $record = [
-                        customDate($partialMinLogin, true),
-                        customDate($partialMaxLogin, true),
+                        '',
+                        '',
                         api_format_time($partialDuration, 'js'),
                     ];
                     $report[$sessionId]['courses'][$course['real_id']][] = $record;
@@ -195,8 +182,6 @@ if ($form->validate()) {
             $to
         );
 
-//        $partialMinLogin = 0;
-//        $partialMaxLogin = 0;
         $partialDuration = 0;
 
         foreach ($result as $item) {
@@ -222,30 +207,12 @@ if ($form->validate()) {
 
             // Partials
             $partialDuration += $item['duration'];
-            /*
-                        if (empty($partialMinLogin)) {
-                            $partialMinLogin = api_strtotime($item['login'], 'UTC');
-                        }
-                        if ($partialMinLogin > api_strtotime($item['login'], 'UTC')) {
-                            $partialMinLogin = api_strtotime($item['login'], 'UTC');
-                        }
-                        if (api_strtotime($item['logout'], 'UTC') > $partialMaxLogin) {
-                            $partialMaxLogin = api_strtotime($item['logout'], 'UTC');
-                        }
-             */
         }
 
         if (!empty($result)) {
-            /*
-                        $record = [
-                            customDate($partialMinLogin, true),
-                            customDate($partialMaxLogin, true),
-                            api_format_time($partialDuration, 'js'),
-                        ];
-             */
             $record = [
-                "",
-                "",
+                '',
+                '',
                 api_format_time($partialDuration, 'js'),
             ];
 

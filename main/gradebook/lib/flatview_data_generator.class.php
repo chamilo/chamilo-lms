@@ -199,10 +199,10 @@ class FlatViewDataGenerator
 
                     $list = [];
                     $list['items'] = $finalList;
-                    $list['header'] = '<center>'.$mainHeader.'</center>';
+                    $list['header'] = '<span class="text-center">'.$mainHeader.'</span>';
                     $headers[] = $list;
                 } else {
-                    $headers[] = '<center>'.$mainHeader.'</center>';
+                    $headers[] = '<span class="text-center">'.$mainHeader.'</span>';
                 }
             }
         } else {
@@ -241,7 +241,7 @@ class FlatViewDataGenerator
             }
         }
 
-        $headers[] = '<center>'.api_strtoupper(get_lang('GradebookQualificationTotal')).'</center>';
+        $headers[] = '<span class="text-center">'.api_strtoupper(get_lang('GradebookQualificationTotal')).'</span>';
 
         return $headers;
     }
@@ -542,7 +542,7 @@ class FlatViewDataGenerator
                                 }
                                 $finalList[] = round($average, 2);
                                 foreach ($finalList as $finalValue) {
-                                    $row[] = '<center>'.$finalValue.'</center>';
+                                    $row[] = '<span class="text-center">'.$finalValue.'</span>';
                                 }
                             } else {
                                 $row[] = $temp_score.' ';

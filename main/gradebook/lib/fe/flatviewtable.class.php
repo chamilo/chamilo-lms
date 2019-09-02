@@ -455,7 +455,7 @@ class FlatViewTable extends SortableTable
                 );
 
                 foreach ($headerData['items'] as $item) {
-                    $firstHeader[] = '<center>'.$item.'</center>';
+                    $firstHeader[] = '<span class="text-center">'.$item.'</span>';
                 }
             } else {
                 $this->set_header($column, $headerData, false, $thAttributes);

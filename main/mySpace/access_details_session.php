@@ -155,17 +155,17 @@ if ($form->validate()) {
 
                     // Partials
                     $partialDuration += $item['duration'];
-/*
-                    if (empty($partialMinLogin)) {
-                        $partialMinLogin = api_strtotime($item['login'], 'UTC');
-                    }
-                    if ($partialMinLogin > api_strtotime($item['login'], 'UTC')) {
-                        $partialMinLogin = api_strtotime($item['login'], 'UTC');
-                    }
-                    if (api_strtotime($item['logout'], 'UTC') > $partialMaxLogin) {
-                        $partialMaxLogin = api_strtotime($item['logout'], 'UTC');
-                    }
- */
+                    /*
+                                        if (empty($partialMinLogin)) {
+                                            $partialMinLogin = api_strtotime($item['login'], 'UTC');
+                                        }
+                                        if ($partialMinLogin > api_strtotime($item['login'], 'UTC')) {
+                                            $partialMinLogin = api_strtotime($item['login'], 'UTC');
+                                        }
+                                        if (api_strtotime($item['logout'], 'UTC') > $partialMaxLogin) {
+                                            $partialMaxLogin = api_strtotime($item['logout'], 'UTC');
+                                        }
+                     */
                     $report[$sessionId]['courses'][$course['real_id']][] = $record;
                     $report[$sessionId]['name'][$course['real_id']] = $courseInfo['title'].'&nbsp; ('.$session['session_name'].')';
                 }
@@ -222,33 +222,32 @@ if ($form->validate()) {
 
             // Partials
             $partialDuration += $item['duration'];
-/*
-            if (empty($partialMinLogin)) {
-                $partialMinLogin = api_strtotime($item['login'], 'UTC');
-            }
-            if ($partialMinLogin > api_strtotime($item['login'], 'UTC')) {
-                $partialMinLogin = api_strtotime($item['login'], 'UTC');
-            }
-            if (api_strtotime($item['logout'], 'UTC') > $partialMaxLogin) {
-                $partialMaxLogin = api_strtotime($item['logout'], 'UTC');
-            }
- */
-	}
+            /*
+                        if (empty($partialMinLogin)) {
+                            $partialMinLogin = api_strtotime($item['login'], 'UTC');
+                        }
+                        if ($partialMinLogin > api_strtotime($item['login'], 'UTC')) {
+                            $partialMinLogin = api_strtotime($item['login'], 'UTC');
+                        }
+                        if (api_strtotime($item['logout'], 'UTC') > $partialMaxLogin) {
+                            $partialMaxLogin = api_strtotime($item['logout'], 'UTC');
+                        }
+             */
+        }
 
         if (!empty($result)) {
-/*
+            /*
+                        $record = [
+                            customDate($partialMinLogin, true),
+                            customDate($partialMaxLogin, true),
+                            api_format_time($partialDuration, 'js'),
+                        ];
+             */
             $record = [
-                customDate($partialMinLogin, true),
-                customDate($partialMaxLogin, true),
-                api_format_time($partialDuration, 'js'),
-            ];
- */
-           $record = [
                 "",
                 "",
                 api_format_time($partialDuration, 'js'),
             ];
-
 
             $report[0]['courses'][$course['course_id']][] = $record;
             $report[0]['name'][$course['course_id']] = $course['title'];

@@ -111,6 +111,8 @@ class FlatViewDataGenerator
 
         $headers[] = get_lang('Username');
 
+        $this->addExtraFieldColumnsHeaders($headers);
+
         if (!isset($items_count)) {
             $items_count = count($this->evals_links) - $items_start;
         }
@@ -442,6 +444,8 @@ class FlatViewDataGenerator
 
             $row[] = $user[1];
 
+            $this->addExtraFieldColumnsData($row, $user[0]);
+
             $item_value_total = 0;
             $item_total = 0;
 
@@ -618,6 +622,52 @@ class FlatViewDataGenerator
         }
 
         return $data;
+    }
+
+    /**
+     * Add columns heders according to gradebook_flatview_extrafields_columns conf setting.
+     *
+     * @param array $headers
+     */
+    private function addExtraFieldColumnsHeaders(array &$headers)
+    {
+        $extraFieldColumns = api_get_configuration_value('gradebook_flatview_extrafields_columns');
+
+        if (!$extraFieldColumns || !is_array($extraFieldColumns)) {
+            return;
+        }
+
+        foreach ($extraFieldColumns['variables'] as $extraFieldVariable) {
+            $extraField = new ExtraField('user');
+            $extraFieldInfo = $extraField->get_handler_field_info_by_field_variable($extraFieldVariable);
+
+            $headers[] = $extraFieldInfo['display_text'];
+        }
+    }
+
+    /**
+     * Add columns data according to gradebook_flatview_extrafields_columns conf setting.
+     *
+     * @param array $row
+     * @param int   $userId
+     */
+    private function addExtraFieldColumnsData(array &$row, $userId)
+    {
+        $extraFieldColumns = api_get_configuration_value('gradebook_flatview_extrafields_columns');
+
+        if (!$extraFieldColumns || !is_array($extraFieldColumns)) {
+            return;
+        }
+
+        foreach ($extraFieldColumns['variables'] as $extraFieldVariable) {
+            $extraFieldValue = new ExtraFieldValue('user');
+            $extraFieldValueInfo = $extraFieldValue->get_values_by_handler_and_field_variable(
+                $userId,
+                $extraFieldVariable
+            );
+
+            $row[] = $extraFieldValueInfo ? $extraFieldValueInfo['value'] : null;
+        }
     }
 
     /**

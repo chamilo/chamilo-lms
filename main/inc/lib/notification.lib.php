@@ -530,9 +530,9 @@ class Notification extends Model
             'notification' => [
                 'title' => $title,
                 'body' => $content,
+                'sound' => 'default',
             ],
             'collapse_key' => get_lang('Messages'),
-            'sound' => true,
         ]);
 
         $ch = curl_init();

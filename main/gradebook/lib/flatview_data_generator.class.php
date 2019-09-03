@@ -625,52 +625,6 @@ class FlatViewDataGenerator
     }
 
     /**
-     * Add columns heders according to gradebook_flatview_extrafields_columns conf setting.
-     *
-     * @param array $headers
-     */
-    private function addExtraFieldColumnsHeaders(array &$headers)
-    {
-        $extraFieldColumns = api_get_configuration_value('gradebook_flatview_extrafields_columns');
-
-        if (!$extraFieldColumns || !is_array($extraFieldColumns)) {
-            return;
-        }
-
-        foreach ($extraFieldColumns['variables'] as $extraFieldVariable) {
-            $extraField = new ExtraField('user');
-            $extraFieldInfo = $extraField->get_handler_field_info_by_field_variable($extraFieldVariable);
-
-            $headers[] = $extraFieldInfo['display_text'];
-        }
-    }
-
-    /**
-     * Add columns data according to gradebook_flatview_extrafields_columns conf setting.
-     *
-     * @param array $row
-     * @param int   $userId
-     */
-    private function addExtraFieldColumnsData(array &$row, $userId)
-    {
-        $extraFieldColumns = api_get_configuration_value('gradebook_flatview_extrafields_columns');
-
-        if (!$extraFieldColumns || !is_array($extraFieldColumns)) {
-            return;
-        }
-
-        foreach ($extraFieldColumns['variables'] as $extraFieldVariable) {
-            $extraFieldValue = new ExtraFieldValue('user');
-            $extraFieldValueInfo = $extraFieldValue->get_values_by_handler_and_field_variable(
-                $userId,
-                $extraFieldVariable
-            );
-
-            $row[] = $extraFieldValueInfo ? $extraFieldValueInfo['value'] : null;
-        }
-    }
-
-    /**
      * Parse evaluations.
      *
      * @param int   $user_id
@@ -1072,5 +1026,51 @@ class FlatViewDataGenerator
     public function sort_by_first_name($item1, $item2)
     {
         return api_strcmp($item1[3], $item2[3]);
+    }
+
+    /**
+     * Add columns heders according to gradebook_flatview_extrafields_columns conf setting.
+     *
+     * @param array $headers
+     */
+    private function addExtraFieldColumnsHeaders(array &$headers)
+    {
+        $extraFieldColumns = api_get_configuration_value('gradebook_flatview_extrafields_columns');
+
+        if (!$extraFieldColumns || !is_array($extraFieldColumns)) {
+            return;
+        }
+
+        foreach ($extraFieldColumns['variables'] as $extraFieldVariable) {
+            $extraField = new ExtraField('user');
+            $extraFieldInfo = $extraField->get_handler_field_info_by_field_variable($extraFieldVariable);
+
+            $headers[] = $extraFieldInfo['display_text'];
+        }
+    }
+
+    /**
+     * Add columns data according to gradebook_flatview_extrafields_columns conf setting.
+     *
+     * @param array $row
+     * @param int   $userId
+     */
+    private function addExtraFieldColumnsData(array &$row, $userId)
+    {
+        $extraFieldColumns = api_get_configuration_value('gradebook_flatview_extrafields_columns');
+
+        if (!$extraFieldColumns || !is_array($extraFieldColumns)) {
+            return;
+        }
+
+        foreach ($extraFieldColumns['variables'] as $extraFieldVariable) {
+            $extraFieldValue = new ExtraFieldValue('user');
+            $extraFieldValueInfo = $extraFieldValue->get_values_by_handler_and_field_variable(
+                $userId,
+                $extraFieldVariable
+            );
+
+            $row[] = $extraFieldValueInfo ? $extraFieldValueInfo['value'] : null;
+        }
     }
 }

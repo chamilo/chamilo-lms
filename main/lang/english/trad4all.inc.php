@@ -3910,7 +3910,7 @@ $NewMessageInForum = "New message posted in the forum";
 $FolderCreated = "New folder created";
 $AgendaAdded = "Event added";
 $ShouldBeCSVFormat = "File should be CSV format. Do not add spaces. Structure should be exactly :";
-$Enter2passToChange = "To change your password, enter your current password in the field above and your new password in both fields below. To maintain the current password, leave the three fields empty.";
+$TypeCurrentPassword = "To change your password, enter your current password in the field above and your new password in both fields below. To maintain the current password, leave the three fields empty.";
 $AuthInfo = "Authentication";
 $ImageWrong = "The file size should be smaller than";
 $NewPass = "New password";
@@ -8427,4 +8427,6 @@ $MaxEndDate = "Last connection";
 $TotalDuration = "Total time spent";
 $RealisationCertificate = "Certificate of achievement";
 $SurveysReport = "Surveys report";
+$EnterYourNewPassword = "Enter your new password here.";
+$RepeatYourNewPassword = "Type your new password once again, to reduce the likeliness of typing errors.";
 ?>

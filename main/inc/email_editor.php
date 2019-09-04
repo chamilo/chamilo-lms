@@ -18,6 +18,8 @@ if (empty(api_get_user_id())) {
     api_not_allowed(true);
 }
 
+$_user = api_get_user_info();
+
 $originUrl = Session::read('origin_url');
 if (empty($originUrl)) {
     Session::write('origin_url', $_SERVER['HTTP_REFERER']);
@@ -51,9 +53,10 @@ switch ($action) {
         $emailText = $objTemplate->fetch($mailTemplate);
         break;
     default:
-        $emailDest = Security::remove_XSS($_REQUEST['dest']);
-        $emailTitle = Security::remove_XSS($_REQUEST['email_title']);
-        $emailText = Security::remove_XSS($_REQUEST['email_text']);
+        $emailDest = isset($_REQUEST['dest']) ? Security::remove_XSS($_REQUEST['dest']) : '';
+        $emailTitle = isset($_REQUEST['subject']) ? Security::remove_XSS($_REQUEST['subject']) : '';
+        $emailText = isset($_REQUEST['body']) ? Security::remove_XSS($_REQUEST['body']) : '';
+        break;
 }
 
 $defaults = [
@@ -62,15 +65,13 @@ $defaults = [
     'email_title' => $emailTitle,
     'email_text' => $emailText,
 ];
-
 $form->setDefaults($defaults);
 
 if ($form->validate()) {
-    $text = Security::remove_XSS($_POST['email_text'])."\n\n---\n".get_lang('EmailSentFromLMS').' '.api_get_path(WEB_PATH);
-    $email_administrator = Security::remove_XSS($_POST['dest']);
-    $user_id = api_get_user_id();
-    $title = Security::remove_XSS($_POST['email_title']);
-    $content = Security::remove_XSS($_POST['email_text']);
+    $values = $form->getSubmitValues();
+    $text = Security::remove_XSS($values['email_text'])."\n\n---\n".get_lang('EmailSentFromLMS').' '.api_get_path(WEB_PATH);
+    $email_administrator = Security::remove_XSS($values['dest']);
+    $title = Security::remove_XSS($values['email_title']);
     if (!empty($_user['mail'])) {
         api_mail_html(
             '',
@@ -79,7 +80,8 @@ if ($form->validate()) {
             $text,
             api_get_person_name($_user['firstname'], $_user['lastname']),
             '',
-            ['reply_to' => [
+            [
+                'reply_to' => [
                     'mail' => $_user['mail'],
                     'name' => api_get_person_name($_user['firstname'], $_user['lastname']),
                 ],

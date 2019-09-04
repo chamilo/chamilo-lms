@@ -3900,7 +3900,7 @@ $NewMessageInForum = "Un nouveau message a été posté dans le forum";
 $FolderCreated = "Un nouveau dossier a été créé";
 $AgendaAdded = "Un évènement d'agenda a été ajouté";
 $ShouldBeCSVFormat = "Le fichier devrait être au format CSV. N'ajoutez pas d'espaces. La structure devrait être exactement :";
-$Enter2passToChange = "La saisie du nouveau mot de passe ainsi que sa confirmation sont nécessaires en cas de modification de votre mot de passe. <br />Dans tous les autres cas, laissez ces deux champs vides.";
+$TypeCurrentPassword = "Saisissez votre mot de passe actuel ci-dessus pour autoriser le changement de mot de passe. Ensuite, introduisez votre nouveau mot de passe deux fois de suite, ci-dessous. Pour ne pas changer votre mot de passe, laissez ces 3 champs vides.";
 $AuthInfo = "Paramètres de connexion";
 $ImageWrong = "La taille du fichier doit être inférieure à";
 $NewPass = "Nouveau mot de passe";
@@ -8359,4 +8359,6 @@ $MaxEndDate = "Dernière connexion";
 $TotalDuration = "Temps passé total";
 $RealisationCertificate = "Certificat de réalisation";
 $SurveysReport = "Rapport d'enquêtes";
+$EnterYourNewPassword = "Saisissez votre nouveau mot de passe ici.";
+$RepeatYourNewPassword = "Saisissez votre nouveau mot de passe une fois de plus ici, pour éviter les erreurs.";
 ?>

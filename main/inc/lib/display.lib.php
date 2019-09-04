@@ -631,12 +631,12 @@ class Display
         }
 
         // "mailto:" already present?
-        if (substr($email, 0, 7) != 'mailto:') {
+        if (substr($email, 0, 7) !== 'mailto:') {
             $email = 'mailto:'.$email;
         }
 
         // Class (stylesheet) defined?
-        if ($style_class != '') {
+        if ($style_class !== '') {
             $style_class = ' class="'.$style_class.'"';
         }
 
@@ -649,7 +649,10 @@ class Display
         $value = api_get_configuration_value('add_user_course_information_in_mailto');
 
         if ($value) {
-            $hmail .= '?';
+            if (api_get_setting('allow_email_editor') === 'false') {
+                $hmail .= '?';
+            }
+
             if (!api_is_anonymous()) {
                 $hmail .= '&subject='.Security::remove_XSS(api_get_setting('siteName'));
             }

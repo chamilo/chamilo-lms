@@ -802,9 +802,9 @@ class bbb
                             $this->updateMeetingVideoUrl($meetingDB['id'], $record['playbackFormatUrl']);
                         }
 
-                        if (!$this->isConferenceManager()) {
+                        /*if (!$this->isConferenceManager()) {
                             $record = [];
-                        }
+                        }*/
                     }
                 }
 

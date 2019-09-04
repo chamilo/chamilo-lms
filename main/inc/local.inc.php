@@ -1350,8 +1350,7 @@ if ((isset($uidReset) && $uidReset) || $cidReset) {
             // User has not access to the course
             // This will check if the course was added in one of his sessions
             // Then it will be redirected to that course-session
-
-            if ($is_courseMember == false) {
+            if ($is_courseMember === false && $is_platformAdmin === false) {
                 // Search session
                 $courseSession = SessionManager::searchCourseInSessionsFromUser(
                     $user_id,

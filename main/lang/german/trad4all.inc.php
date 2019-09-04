@@ -3870,7 +3870,7 @@ $NewMessageInForum = "Neuer Beitrag wurde im Forum hinzugefügt";
 $FolderCreated = "Neues Verzeichnis wurde erstellt";
 $AgendaAdded = "Kalender Eintrag wurde hinzugefügt";
 $ShouldBeCSVFormat = "Die Datei sollte im CSV-Fomrat sein. Fügen Sie keine Leerzeichen ein. Die Struktur sollte wie folgt aussehen:";
-$Enter2passToChange = "Wenn Sie Ihr Passwort ändern möchten, geben Sie das neue Passwort bitte zweimal ein. Andernfalls lassen Sie diese Felder einfach frei.";
+$TypeCurrentPassword = "Wenn Sie Ihr Passwort ändern möchten, geben Sie das neue Passwort bitte zweimal ein. Andernfalls lassen Sie diese Felder einfach frei.";
 $AuthInfo = "Authentifizierung";
 $ImageWrong = "Die Dateigröße sollte geringer sein als";
 $NewPass = "Neues Kennwort";
@@ -7986,4 +7986,5 @@ Die Nachricht ist an %s sichtbar";
 $PersonalDataReport = "Persönliche Daten";
 $FromTimeX = "Von %s";
 $ToTimeX = "bis %s";
+$SubscribeUsersToAllForumNotifications = "Automatisch alle Benutzer anmelden";
 ?>

@@ -3910,7 +3910,7 @@ $NewMessageInForum = "Ha sido publicado un nuevo mensaje en el foro";
 $FolderCreated = "Ha sido creado un nuevo directorio";
 $AgendaAdded = "Ha sido añadido un evento de la agenda";
 $ShouldBeCSVFormat = "El archivo debe estar formato CSV. No añada espacios. La estructura debe ser exactamente :";
-$Enter2passToChange = "Para cambiar la contraseña, introduzca la nueva contraseña en estos dos campos. Si desea mantener la actual, deje vacíos los dos campos.";
+$TypeCurrentPassword = "Para cambiar la contraseña, introduzca primero su contraseña actual en este campo. Luego, introduzca la nueva contraseña en los dos campos a continuación. Si desea mantener la contraseña actual, deje simplemente estos 3 campos vacíos.";
 $AuthInfo = "Autentificación";
 $ImageWrong = "El archivo debe tener un tamaño menor de";
 $NewPass = "Nueva contraseña";
@@ -8455,4 +8455,6 @@ $MaxEndDate = "Ultima conexion";
 $TotalDuration = "Tiempo total pasado";
 $RealisationCertificate = "Certificado de logro";
 $SurveysReport = "Reporte de encuestas";
+$EnterYourNewPassword = "Introduzca su nueva contraseña aquí.";
+$RepeatYourNewPassword = "Introduzca su nueva contraseña una vez más, para reducir la probabilidad de errores.";
 ?>

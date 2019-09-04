@@ -311,10 +311,10 @@ if (is_platform_authentication() &&
     is_profile_editable() &&
     api_get_setting('profile', 'password') == 'true'
 ) {
-    $form->addElement('password', 'password0', [get_lang('Pass'), get_lang('ChangePasswordCurrent')], ['size' => 40]);
-    $form->addElement('password', 'password1', [get_lang('NewPass'), get_lang('EnterNewPassword')], ['id' => 'password1', 'size' => 40]);
+    $form->addElement('password', 'password0', [get_lang('Pass'), get_lang('TypeCurrentPassword')], ['size' => 40]);
+    $form->addElement('password', 'password1', [get_lang('NewPass'), get_lang('EnterYourNewPassword')], ['id' => 'password1', 'size' => 40]);
 
-    $form->addElement('password', 'password2', [get_lang('Confirmation'), get_lang('RepeatYouNewPassword')], ['size' => 40]);
+    $form->addElement('password', 'password2', [get_lang('Confirmation'), get_lang('RepeatYourNewPassword')], ['size' => 40]);
     //    user must enter identical password twice so we can prevent some user errors
     $form->addRule(['password1', 'password2'], get_lang('PassTwo'), 'compare');
     $form->addPasswordRule('password1');

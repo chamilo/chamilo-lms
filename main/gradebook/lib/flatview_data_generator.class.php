@@ -597,7 +597,7 @@ class FlatViewDataGenerator
             }
 
             if (!$show_all) {
-                $displayScore = $scoreDisplay->display_score($total_score);
+                $displayScore = $scoreDisplay->display_score($total_score, $defaultStyle);
                 if (!empty($model)) {
                     $displayScore = ExerciseLib::show_score($total_score[0], $total_score[1]);
                 }

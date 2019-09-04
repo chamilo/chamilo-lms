@@ -240,7 +240,12 @@ abstract class Question
         }
 
         $title .= $showQuestionTitleHtml ? '' : '<strong>';
-        $title .= $itemNumber.'. '.$this->selectTitle();
+
+        if (!empty($itemNumber)) {
+            $title .= $itemNumber.'. ';
+        }
+
+        $title .= $this->selectTitle();
         $title .= $showQuestionTitleHtml ? '' : '</strong>';
 
         return Display::div(

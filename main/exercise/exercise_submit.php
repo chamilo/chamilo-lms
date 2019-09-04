@@ -173,6 +173,8 @@ if (!is_object($objExercise)) {
     exit;
 }
 
+$exerciseIsProgressiveAdaptive = EXERCISE_FEEDBACK_TYPE_PROGRESSIVE_ADAPTIVE == $objExercise->selectFeedbackType();
+
 // if the user has submitted the form
 $exercise_title = $objExercise->selectTitle();
 $exercise_sound = $objExercise->selectSound();
@@ -778,7 +780,7 @@ if (is_null($currentQuestion)) {
 
 if ($question_count != 0) {
     if (ONE_PER_PAGE == $objExercise->type &&
-        EXERCISE_FEEDBACK_TYPE_PROGRESSIVE_ADAPTIVE == $objExercise->selectFeedbackType() &&
+        $exerciseIsProgressiveAdaptive &&
         api_is_allowed_to_session_edit()
     ) {
         $categoryList = Session::read('track_e_adaptive', []);
@@ -1584,7 +1586,7 @@ if (!empty($error)) {
             $questionId,
             false,
             $origin,
-            $i,
+            $exerciseIsProgressiveAdaptive ? '' : $i,
             $objExercise->getHideQuestionTitle() ? false : true,
             false,
             $user_choice,

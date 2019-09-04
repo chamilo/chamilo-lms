@@ -4817,7 +4817,7 @@ class Tracking
         $extraInnerJoin = null;
 
         if (SessionManager::orderCourseIsEnabled() && !empty($session_id)) {
-            $orderBy = ' ORDER BY s.id, position ';
+            $orderBy = ' ORDER BY s.id, src.position ';
             $tableSessionRelCourse = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
             $extraInnerJoin = " INNER JOIN $tableSessionRelCourse src
                                 ON (cu.c_id = src.c_id AND src.session_id = $session_id) ";

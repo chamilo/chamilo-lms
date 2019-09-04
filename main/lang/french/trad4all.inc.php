@@ -8354,4 +8354,9 @@ $SaveAnswers = "Garder les réponses";
 $SaveAllAnswers = "Préremplir avec les réponses de la tentative précédente";
 $SubscribeUsersToAllForumNotifications = "Abonner automatiquement tous les utilisateurs";
 $ExerciseDirectPopUp = "Feedback immédiat en pop-up";
+$MinStartDate = "Première connexion";
+$MaxEndDate = "Dernière connexion";
+$TotalDuration = "Temps passé total";
+$RealisationCertificate = "Certificat de réalisation";
+$SurveysReport = "Rapport d'enquêtes";
 ?>

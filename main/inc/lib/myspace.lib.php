@@ -55,7 +55,7 @@ class MySpace
             ],
             [
                 'url' => api_get_path(WEB_CODE_PATH).'mySpace/survey_report.php',
-                'content' => get_lang('SurveyReport'),
+                'content' => get_lang('SurveysReport'),
             ],
         ];
 

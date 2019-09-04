@@ -126,7 +126,7 @@ class Exercise
         $this->scoreTypeModel = 0;
         $this->globalCategoryId = null;
         $this->notifications = [];
-        $this->exerciseCategoryId = 0;
+        $this->exerciseCategoryId = null;
         $this->pageResultConfiguration;
 
         if (!empty($courseId)) {
@@ -199,7 +199,7 @@ class Exercise
             $this->questionSelectionType = isset($object->question_selection_type) ? $object->question_selection_type : null;
             $this->hideQuestionTitle = isset($object->hide_question_title) ? (int) $object->hide_question_title : 0;
             $this->autolaunch = isset($object->autolaunch) ? (int) $object->autolaunch : 0;
-            $this->exerciseCategoryId = isset($object->exercise_category_id) ? (int) $object->exercise_category_id : 0;
+            $this->exerciseCategoryId = isset($object->exercise_category_id) ? (int) $object->exercise_category_id : null;
 
             $this->notifications = [];
             if (!empty($object->notifications)) {
@@ -1589,7 +1589,9 @@ class Exercise
 
                 $allow = api_get_configuration_value('allow_exercise_categories');
                 if ($allow === true) {
-                    $paramsExtra['exercise_category_id'] = $this->getExerciseCategoryId();
+                    if (!empty($this->getExerciseCategoryId())) {
+                        $paramsExtra['exercise_category_id'] = $this->getExerciseCategoryId();
+                    }
                 }
 
                 $allow = api_get_configuration_value('allow_notification_setting_per_exercise');
@@ -1670,7 +1672,9 @@ class Exercise
 
             $allow = api_get_configuration_value('allow_exercise_categories');
             if ($allow === true) {
-                $params['exercise_category_id'] = $this->getExerciseCategoryId();
+                if (!empty($this->getExerciseCategoryId())) {
+                    $params['exercise_category_id'] = $this->getExerciseCategoryId();
+                }
             }
 
             $allow = api_get_configuration_value('allow_quiz_show_previous_button_setting');
@@ -2961,6 +2965,7 @@ class Exercise
         // Hides the new exercise
         $exerciseObject->updateStatus(false);
         $exerciseObject->updateId(0);
+        $exerciseObject->sessionId = api_get_session_id();
         $exerciseObject->save();
         $newId = $exerciseObject->selectId();
         if ($newId && !empty($questionList)) {
@@ -4710,12 +4715,13 @@ class Exercise
                         // THIS is very important otherwise the poly_compile will throw an error!!
                         // round-up the coordinates
                         $coords = explode('/', $user_answer);
+                        $coords = array_filter($coords);
                         $user_array = '';
                         foreach ($coords as $coord) {
                             list($x, $y) = explode(';', $coord);
                             $user_array .= round($x).';'.round($y).'/';
                         }
-                        $user_array = substr($user_array, 0, -1);
+                        $user_array = substr($user_array, 0, -1) ?: '';
                     } else {
                         if (!empty($studentChoice)) {
                             $newquestionList[] = $questionId;
@@ -4907,6 +4913,7 @@ class Exercise
 
                             // Round-up the coordinates
                             $coords = explode('/', $user_answer);
+                            $coords = array_filter($coords);
                             $user_array = '';
                             foreach ($coords as $coord) {
                                 if (!empty($coord)) {
@@ -4916,7 +4923,7 @@ class Exercise
                                     }
                                 }
                             }
-                            $user_array = substr($user_array, 0, -1);
+                            $user_array = substr($user_array, 0, -1) ?: '';
                             if ($next) {
                                 $user_answer = $user_array;
                                 // We compare only the delineation not the other points
@@ -5482,20 +5489,6 @@ class Exercise
                 }
                 if ($answerType === HOT_SPOT_DELINEATION) {
                     if ($showHotSpotDelineationTable) {
-                        $overlap_color = 'red';
-                        if ($overlap_color) {
-                            $overlap_color = 'green';
-                        }
-                        $missing_color = 'red';
-                        if ($missing_color) {
-                            $missing_color = 'green';
-                        }
-
-                        $excess_color = 'red';
-                        if ($excess_color) {
-                            $excess_color = 'green';
-                        }
-
                         if (!is_numeric($final_overlap)) {
                             $final_overlap = 0;
                         }
@@ -5519,20 +5512,20 @@ class Exercise
                                 <tr class="row_even">
                                     <td><b>'.get_lang('Overlap').'</b></td>
                                     <td>'.get_lang('Min').' '.$threadhold1.'</td>
-                                    <td><div style="color:'.$overlap_color.'">'
-                            .(($final_overlap < 0) ? 0 : intval($final_overlap)).'</div></td>
+                                    <td class="text-right '.($overlap_color ? 'text-success' : 'text-danger').'">'
+                            .(($final_overlap < 0) ? 0 : intval($final_overlap)).'</td>
                                 </tr>
                                 <tr>
                                     <td><b>'.get_lang('Excess').'</b></td>
                                     <td>'.get_lang('Max').' '.$threadhold2.'</td>
-                                    <td><div style="color:'.$excess_color.'">'
-                            .(($final_excess < 0) ? 0 : intval($final_excess)).'</div></td>
+                                    <td class="text-right '.($excess_color ? 'text-success' : 'text-danger').'">'
+                            .(($final_excess < 0) ? 0 : intval($final_excess)).'</td>
                                 </tr>
                                 <tr class="row_even">
                                     <td><b>'.get_lang('Missing').'</b></td>
                                     <td>'.get_lang('Max').' '.$threadhold3.'</td>
-                                    <td><div style="color:'.$missing_color.'">'
-                            .(($final_missing < 0) ? 0 : intval($final_missing)).'</div></td>
+                                    <td class="text-right '.($missing_color ? 'text-success' : 'text-danger').'">'
+                            .(($final_missing < 0) ? 0 : intval($final_missing)).'</td>
                                 </tr>
                             </table>';
                         if ($next == 0) {
@@ -7943,6 +7936,10 @@ class Exercise
      */
     public function getExerciseCategoryId()
     {
+        if (empty($this->exerciseCategoryId)) {
+            return null;
+        }
+
         return (int) $this->exerciseCategoryId;
     }
 
@@ -7951,7 +7948,9 @@ class Exercise
      */
     public function setExerciseCategoryId($value)
     {
-        $this->exerciseCategoryId = (int) $value;
+        if (!empty($value)) {
+            $this->exerciseCategoryId = (int) $value;
+        }
     }
 
     /**
@@ -8371,17 +8370,18 @@ class Exercise
     }
 
     /**
+     * Return an HTML table of exercises for on-screen printing, including
+     * action icons. If no exercise is present and the user can edit the
+     * course, show a "create test" button.
+     *
      * @param int    $categoryId
-     * @param int    $page
-     * @param int    $from
-     * @param int    $limit
      * @param string $keyword
      *
      * @throws \Doctrine\ORM\Query\QueryException
      *
      * @return string
      */
-    public static function exerciseGrid($categoryId, $page, $from, $limit, $keyword = '')
+    public static function exerciseGrid($categoryId, $keyword = '')
     {
         $TBL_DOCUMENT = Database::get_course_table(TABLE_DOCUMENT);
         $TBL_ITEM_PROPERTY = Database::get_course_table(TABLE_ITEM_PROPERTY);
@@ -8389,9 +8389,9 @@ class Exercise
         $TBL_EXERCISES = Database::get_course_table(TABLE_QUIZ_TEST);
         $TBL_TRACK_EXERCISES = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
 
-        $page = (int) $page;
-        $from = (int) $from;
-        $limit = (int) $limit;
+        //$page = (int) $page;
+        //$from = (int) $from;
+        //$limit = (int) $limit;
 
         $autoLaunchAvailable = false;
         if (api_get_course_setting('enable_exercise_auto_launch') == 1 &&
@@ -8429,7 +8429,11 @@ class Exercise
         $categoryCondition = '';
         $categoryId = (int) $categoryId;
         if (api_get_configuration_value('allow_exercise_categories')) {
-            $categoryCondition = " AND exercise_category_id = $categoryId ";
+            if (!empty($categoryId)) {
+                $categoryCondition = " AND exercise_category_id = $categoryId ";
+            } else {
+                $categoryCondition = " AND exercise_category_id IS NULL ";
+            }
         }
 
         $keywordCondition = '';
@@ -8444,7 +8448,7 @@ class Exercise
                           FROM $TBL_EXERCISES
                           WHERE 
                                 c_id = $courseId AND 
-                                active<>'-1' 
+                                active <> -1 
                                 $condition_session 
                                 $categoryCondition
                                 $keywordCondition
@@ -8452,29 +8456,30 @@ class Exercise
             $sql = "SELECT * FROM $TBL_EXERCISES
                     WHERE 
                         c_id = $courseId AND 
-                        active <> '-1' 
+                        active <> -1 
                         $condition_session 
                         $categoryCondition
                         $keywordCondition
-                    ORDER BY title
-                    LIMIT $from , $limit";
+                    ORDER BY title";
+        // LIMIT $from , $limit";
         } else {
             // Only for students
             $total_sql = "SELECT count(iid) as count 
                           FROM $TBL_EXERCISES
                           WHERE 
                                 c_id = $courseId AND 
-                                active = '1' 
+                                active = 1 
                                 $condition_session 
                                 $categoryCondition
                                 $keywordCondition
                           ";
             $sql = "SELECT * FROM $TBL_EXERCISES
                     WHERE c_id = $courseId AND
-                          active='1' $condition_session
+                          active = 1
+                          $condition_session
                           $categoryCondition
-                          $keywordCondition
-                    ORDER BY title LIMIT $from , $limit";
+                          $keywordCondition ";
+            // ORDER BY title LIMIT $from , $limit";
         }
         $result = Database::query($sql);
         $result_total = Database::query($total_sql);
@@ -8500,7 +8505,7 @@ class Exercise
                     WHERE                
                         ip.tool = '".TOOL_DOCUMENT."' AND
                         d.path LIKE '".Database::escape_string($uploadPath.'/%/%')."' AND
-                        ip.visibility ='1' AND
+                        ip.visibility = 1 AND
                         d.c_id = $courseId AND
                         ip.c_id  = $courseId";
             $res = Database::query($sql);
@@ -8570,6 +8575,7 @@ class Exercise
 
         if (!empty($exerciseList)) {
             if ($origin !== 'learnpath') {
+                $visibilitySetting = api_get_configuration_value('show_hidden_exercise_added_to_lp');
                 //avoid sending empty parameters
                 $mylpid = empty($learnpath_id) ? '' : '&learnpath_id='.$learnpath_id;
                 $mylpitemid = empty($learnpath_item_id) ? '' : '&learnpath_item_id='.$learnpath_item_id;
@@ -8654,6 +8660,7 @@ class Exercise
                             );
                         }
 
+                        // Get visibility in base course
                         $visibility = api_get_item_visibility(
                             $courseInfo,
                             TOOL_QUIZ,
@@ -8662,16 +8669,15 @@ class Exercise
                         );
 
                         if (!empty($sessionId)) {
-                            $setting = api_get_configuration_value('show_hidden_exercise_added_to_lp');
-                            if ($setting) {
-                                if ($exercise->exercise_was_added_in_lp == false) {
-                                    if ($visibility == 0) {
+                            // If we are in a session, the test is invisible
+                            // in the base course, it is included in a LP
+                            // *and* the setting to show it is *not*
+                            // specifically set to true, then hide it.
+                            if ($visibility == 0) {
+                                if (!$visibilitySetting) {
+                                    if ($exercise->exercise_was_added_in_lp == true) {
                                         continue;
                                     }
-                                }
-                            } else {
-                                if ($visibility == 0) {
-                                    continue;
                                 }
                             }
 
@@ -8767,7 +8773,7 @@ class Exercise
                                             '',
                                             ICON_SIZE_SMALL
                                         ),
-                                        'exercise.php?'.api_get_cidreq().'&choice=enable_launch&sec_token='.$token.'&page='.$page.'&exerciseId='.$row['id']
+                                        'exercise.php?'.api_get_cidreq().'&choice=enable_launch&sec_token='.$token.'&exerciseId='.$row['id']
                                     );
                                 } else {
                                     $actions .= Display::url(
@@ -8777,7 +8783,7 @@ class Exercise
                                             '',
                                             ICON_SIZE_SMALL
                                         ),
-                                        'exercise.php?'.api_get_cidreq().'&choice=disable_launch&sec_token='.$token.'&page='.$page.'&exerciseId='.$row['id']
+                                        'exercise.php?'.api_get_cidreq().'&choice=disable_launch&sec_token='.$token.'&exerciseId='.$row['id']
                                     );
                                 }
                             }
@@ -8838,7 +8844,7 @@ class Exercise
                                             '',
                                             ICON_SIZE_SMALL
                                         ),
-                                        'exercise.php?'.api_get_cidreq().'&choice=enable&sec_token='.$token.'&page='.$page.'&exerciseId='.$row['id']
+                                        'exercise.php?'.api_get_cidreq().'&choice=enable&sec_token='.$token.'&exerciseId='.$row['id']
                                     );
                                 } else {
                                     // else if not active
@@ -8849,7 +8855,7 @@ class Exercise
                                             '',
                                             ICON_SIZE_SMALL
                                         ),
-                                        'exercise.php?'.api_get_cidreq().'&choice=disable&sec_token='.$token.'&page='.$page.'&exerciseId='.$row['id']
+                                        'exercise.php?'.api_get_cidreq().'&choice=disable&sec_token='.$token.'&exerciseId='.$row['id']
                                     );
                                 }
                             }
@@ -8900,7 +8906,7 @@ class Exercise
                                             '',
                                             ICON_SIZE_SMALL
                                         ),
-                                        'exercise.php?'.api_get_cidreq().'&choice=enable&sec_token='.$token.'&page='.$page.'&exerciseId='.$row['id']
+                                        'exercise.php?'.api_get_cidreq().'&choice=enable&sec_token='.$token.'&exerciseId='.$row['id']
                                     );
                                 } else {
                                     // else if not active
@@ -8911,7 +8917,7 @@ class Exercise
                                             '',
                                             ICON_SIZE_SMALL
                                         ),
-                                        'exercise.php?'.api_get_cidreq().'&choice=disable&sec_token='.$token.'&page='.$page.'&exerciseId='.$row['id']
+                                        'exercise.php?'.api_get_cidreq().'&choice=disable&sec_token='.$token.'&exerciseId='.$row['id']
                                     );
                                 }
                             }
@@ -9174,16 +9180,16 @@ class Exercise
                     WHERE
                         d.c_id = $courseId AND
                         (d.path LIKE '%htm%') AND
-                        d.path  LIKE '".Database :: escape_string($uploadPath.'/%/%')."'
-                    LIMIT $from , $limit"; // only .htm or .html files listed
+                        d.path  LIKE '".Database :: escape_string($uploadPath.'/%/%')."' ";
+        // LIMIT $from , $limit"; // only .htm or .html files listed
         } else {
             $sql = "SELECT d.iid, d.path as path, d.comment as comment
                     FROM $TBL_DOCUMENT d
                     WHERE
                         d.c_id = $courseId AND
                         (d.path LIKE '%htm%') AND
-                        d.path  LIKE '".Database :: escape_string($uploadPath.'/%/%')."'
-                    LIMIT $from , $limit";
+                        d.path  LIKE '".Database :: escape_string($uploadPath.'/%/%')."' ";
+            // LIMIT $from , $limit";
         }
 
         $result = Database::query($sql);
@@ -9255,10 +9261,10 @@ class Exercise
                     // if active
                     if ($visibility != 0) {
                         $nbrActiveTests = $nbrActiveTests + 1;
-                        $actions .= '      <a href="'.$exercisePath.'?'.api_get_cidreq().'&hpchoice=disable&page='.$page.'&file='.$path.'">'.
+                        $actions .= '      <a href="'.$exercisePath.'?'.api_get_cidreq().'&hpchoice=disable&file='.$path.'">'.
                             Display::return_icon('visible.png', get_lang('Deactivate'), '', ICON_SIZE_SMALL).'</a>';
                     } else { // else if not active
-                        $actions .= '    <a href="'.$exercisePath.'?'.api_get_cidreq().'&hpchoice=enable&page='.$page.'&file='.$path.'">'.
+                        $actions .= '    <a href="'.$exercisePath.'?'.api_get_cidreq().'&hpchoice=enable&file='.$path.'">'.
                             Display::return_icon('invisible.png', get_lang('Activate'), '', ICON_SIZE_SMALL).'</a>';
                     }
                     $actions .= '<a href="'.$exercisePath.'?'.api_get_cidreq().'&hpchoice=delete&file='.$path.'" onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang('AreYouSureToDeleteJS'), ENT_QUOTES, $charset)).'\')) return false;">'.

@@ -8450,4 +8450,9 @@ $SaveAnswers = "Guardar respuestas";
 $SaveAllAnswers = "Prellenar con las respuestas del intento anterior";
 $SubscribeUsersToAllForumNotifications = "Inscripción automatica de todos los usuarios a todas las notificaciones de forum";
 $ExerciseDirectPopUp = "Retroalimentación inmediata como pop-up";
+$MinStartDate = "Primera conexion";
+$MaxEndDate = "Ultima conexion";
+$TotalDuration = "Tiempo total pasado";
+$RealisationCertificate = "Certificado de logro";
+$SurveysReport = "Reporte de encuestas";
 ?>

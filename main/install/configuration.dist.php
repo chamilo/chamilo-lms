@@ -1296,6 +1296,11 @@ requires extension "php-soap"  sudo apt-get install php-soap
 // Example: The online users will be available only for teachers and students.
 //$_configuration['allow_online_users_by_status'] = ['status' =>  [1, 5]];
 
+// Allow add one column by each user extra field indicated to the Gradebook Flatview for each user.
+/*$_configuration['gradebook_flatview_extrafields_columns'] = [
+    'variables' => [],
+];*/
+
 // KEEP THIS AT THE END
 // -------- Custom DB changes
 // Add user activation by confirmation email

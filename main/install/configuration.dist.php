@@ -592,8 +592,8 @@ $_configuration['send_all_emails_to'] = [
 // Show the username field in exercise results report
 //$_configuration['exercise_attempts_report_show_username'] = false;
 // Add the progressive/adaptive quiz mode:
-// 1. Add "@" in the ORM phpdoc block for $destinations property.
-// 2. Add "@" in the ORM phpdoc block for CQuizDestinationResult class. For ORM\Table and ORM\Table.
+// 1. Add "@" in the ORM phpdoc block for CQuizCategory::$destinations property.
+// 2. Add "@" in the ORM phpdoc block for CQuizDestinationResult class. For ORM\Table and ORM\Entity.
 // 3. Run this query in database
 /*
 ALTER TABLE c_quiz_rel_category ADD destinations LONGTEXT DEFAULT NULL;

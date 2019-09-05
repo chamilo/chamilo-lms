@@ -2294,3 +2294,7 @@ blockquote:before {
     background-color: #162A83;
     border-color: #162A83;
 }
+
+.exercise-overview .page-header {
+    font-weight: normal !important;
+}

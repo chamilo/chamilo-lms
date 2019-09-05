@@ -131,7 +131,6 @@ if ($form->validate()) {
                 );
 
                 $partialDuration = 0;
-
                 foreach ($result as $item) {
                     $record = [
                         customDate($item['login'], true),
@@ -238,11 +237,13 @@ if ($form->validate()) {
     $table->setCellContents($row, $column++, customDate($minLogin));
     $table->setCellContents($row, $column++, customDate($maxLogin));
     $table->setCellContents($row, $column++, api_format_time($totalDuration, 'js'));
-    $content = Display::page_subheader3(get_lang('Total')).$table->toHtml();
+    $totalTable = Display::page_subheader3(get_lang('Total')).$table->toHtml();
 
+    $courseSessionTable = '';
+    $courseSessionTableData = [];
     foreach ($report as $sessionId => $data) {
         foreach ($data['courses'] as $courseId => $courseData) {
-            $content .= Display::page_subheader3($data['name'][$courseId]);
+            $courseSessionTable .= Display::page_subheader3($data['name'][$courseId]);
             $table = new HTML_Table(['class' => 'data_table']);
             $headers = [
                 get_lang('StartDate'),
@@ -262,19 +263,40 @@ if ($form->validate()) {
                 foreach ($record as $item) {
                     $table->setCellContents($row, $column++, $item);
                     if ($row == $countData) {
+                        $courseSessionTableData[$data['name'][$courseId]] = $row;
                         $table->setRowAttributes($row, ['style' => 'font-weight:bold']);
                     }
                 }
                 $row++;
             }
-            $content .= $table->toHtml();
+            $courseSessionTable .= $table->toHtml();
         }
     }
+
+    $table = new HTML_Table(['class' => 'data_table']);
+    $headers = [
+        get_lang('Course'),
+        get_lang('TotalDuration'),
+    ];
+    $row = 0;
+    $column = 0;
+    foreach ($headers as $header) {
+        $table->setHeaderContents($row, $column, $header);
+        $column++;
+    }
+    $row++;
+    foreach ($courseSessionTableData as $name => $duration) {
+        $column = 0;
+        $table->setCellContents($row, $column++, $name);
+        $table->setCellContents($row, $column++, api_format_time($duration, 'js'));
+        $row++;
+    }
+    $totalCourseSessionTable = $table->toHtml();
 
     $tpl = new Template('', false, false, false, true, false, false);
     $tpl->assign('title', get_lang('RealisationCertificate'));
     $tpl->assign('student', $userInfo['complete_name']);
-    $tpl->assign('table_progress', $content);
+    $tpl->assign('table_progress', $totalCourseSessionTable.$totalTable.$courseSessionTable);
 
     $content = $tpl->fetch($tpl->get_template('my_space/pdf_export_student.tpl'));
     $params = [

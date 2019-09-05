@@ -3139,6 +3139,7 @@ class Exercise
             if ($questionNum == count($this->questionList)) {
                 $urlTitle = get_lang('EndTest');
             }
+
             $url = api_get_path(WEB_CODE_PATH).'exercise/exercise_submit_modal.php?'.api_get_cidreq();
             $url .= '&'.http_build_query([
                 'learnpath_id' => $safe_lp_id,
@@ -3151,15 +3152,23 @@ class Exercise
                 'exerciseId' => $this->id,
                 'reminder' => empty($myRemindList) ? null : 2,
             ]);
+
+            $params = [
+                'class' => 'ajax btn btn-default no-close-button',
+                'data-title' => Security::remove_XSS(get_lang('Comment')),
+                'data-size' => 'md',
+                'id' => "button_$question_id",
+            ];
+
+            if ($this->getFeedbackType() === EXERCISE_FEEDBACK_TYPE_POPUP) {
+                //$params['data-block-div-after-closing'] = "question_div_$question_id";
+                $params['data-block-closing'] = 'true';
+            }
+
             $html .= Display::url(
                 $urlTitle,
                 $url,
-                [
-                    'class' => 'ajax btn btn-default',
-                    'data-title' => Security::remove_XSS(get_lang('Comment')),
-                    'data-size' => 'md',
-                    'id' => "button_$question_id",
-                ]
+                $params
             );
             $html .= '<br />';
         } else {

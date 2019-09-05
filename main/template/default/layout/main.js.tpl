@@ -54,17 +54,31 @@ $(function() {
     $('body').on('click', 'a.ajax', function(e) {
         e.preventDefault();
 
-        var contentUrl = this.href,
-                loadModalContent = $.get(contentUrl),
-                self = $(this);
+        var globalModal = $('#global-modal');
+        if ($(this).hasClass('no-close-button')) {
+            globalModal.find('.close').hide();
+        }
+        var contentUrl = this.href;
+        var loadModalContent = $.get(contentUrl);
+        var self = $(this);
+
+        var blockDiv = $(this).attr('data-block-closing');
+        if (blockDiv != '') {
+            /*globalModal.on('hidden.bs.modal', function () {
+                $('#' + blockDiv + ' :input').attr('disabled', 'true');
+            });*/
+            globalModal.attr('data-backdrop', 'static');
+            globalModal.attr('data-keyboard', 'false');
+        }
 
         $.when(loadModalContent).done(function(modalContent) {
-            var modalDialog = $('#global-modal').find('.modal-dialog'),
+            var modalDialog = globalModal.find('.modal-dialog'),
                     modalSize = self.data('size') || get_url_params(contentUrl, 'modal_size'),
                     modalWidth = self.data('width') || get_url_params(contentUrl, 'width'),
                     modalTitle = self.data('title') || ' ';
 
             modalDialog.removeClass('modal-lg modal-sm').css('width', '');
+
 
             if (modalSize && modalSize.length != 0) {
                 switch (modalSize) {
@@ -79,9 +93,9 @@ $(function() {
                 modalDialog.css('width', modalWidth + 'px');
             }
 
-            $('#global-modal').find('.modal-title').text(modalTitle);
-            $('#global-modal').find('.modal-body').html(modalContent);
-            $('#global-modal').modal('show');
+            globalModal.find('.modal-title').text(modalTitle);
+            globalModal.find('.modal-body').html(modalContent);
+            globalModal.modal('show');
         });
     });
 

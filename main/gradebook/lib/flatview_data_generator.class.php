@@ -591,12 +591,10 @@ class FlatViewDataGenerator
             $total_score = [$item_value_total, $item_total];
 
             $style = api_get_configuration_value('gradebook_report_score_style');
-            $defaultStyle = SCORE_DIV_SIMPLE_WITH_CUSTOM_LETTERS;
-            if (!empty($style)) {
-                $defaultStyle = (int) $style;
-            }
 
             if (!$show_all) {
+                $defaultStyle = empty($style) ? SCORE_DIV_PERCENT : (int) $style;
+
                 $displayScore = $scoreDisplay->display_score($total_score, $defaultStyle);
                 if (!empty($model)) {
                     $displayScore = ExerciseLib::show_score($total_score[0], $total_score[1]);
@@ -607,6 +605,8 @@ class FlatViewDataGenerator
                     $row[] = $displayScore;
                 }
             } else {
+                $defaultStyle = empty($style) ? SCORE_DIV_SIMPLE_WITH_CUSTOM_LETTERS : (int) $style;
+
                 $displayScore = $scoreDisplay->display_score($total_score, $defaultStyle);
                 if (!empty($model)) {
                     $displayScore = ExerciseLib::show_score($total_score[0], $total_score[1]);

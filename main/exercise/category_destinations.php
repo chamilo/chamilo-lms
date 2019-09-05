@@ -104,6 +104,15 @@ if (!empty($_POST)) {
         /** @var CQuizCategory $cQuizRelCategory */
         $cQuizRelCategory = $quizCategoryRepo->findOneBy(['exerciseId' => $exerciseId, 'categoryId' => $categoryId]);
 
+        if (!$cQuizRelCategory) {
+            $cQuizRelCategory = new CQuizCategory();
+            $cQuizRelCategory
+                ->setCId($courseId)
+                ->setCategoryId($categoryId)
+                ->setExerciseId($exerciseId)
+                ->setCountQuestions(-1);
+        }
+
         $cQuizRelCategory->setDestinations(
             implode('@@', $destinations)
         );

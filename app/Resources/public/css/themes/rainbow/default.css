@@ -720,7 +720,7 @@ footer #footer_right{
 }
 .exercise_description{
     padding: 0px 0px 10px 0px;
-    border-bottom: 1px solid #84bd00;
+    border-bottom: none;
     margin-bottom: 5px;
 }
 .alert.alert-info.hotspot{

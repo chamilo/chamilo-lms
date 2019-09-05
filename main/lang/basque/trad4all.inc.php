@@ -1105,6 +1105,7 @@ $LinkURL = "Loturaren URL";
 $OpenInNewWindow = "Ireki beste leiho batean";
 $LimitUsersListDefaultMaxComment = "Ikastaroetan edo klaseetan erabiltzaileek izena emateko pantailetan, ez iragazitako lehen zerrendak erabiltzaile kopuru hau baino gehiago baditu, orduan lehenetsi lehen letrari (A)";
 $HideDLTTMarkupComment = "Ezkutatu [= ... =] marka, hizkuntzaren aldagai bat itzulita ez dagoenean";
+$SignUp = "Erregistroa";
 $UserDeleted = "Erabiltzailea kendu da";
 $NoClassesForThisCourse = "Ez dago klase inskribaturik ikastaro honetan";
 $CourseUsage = "Ikastaroaren erabilera";

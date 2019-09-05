@@ -2233,16 +2233,18 @@ class GroupManager
      * Get all groups where a specific user is subscribed.
      *
      * @param int $user_id
+     * @param int $courseId
      *
      * @return array
      */
-    public static function getAllGroupPerUserSubscription($user_id)
+    public static function getAllGroupPerUserSubscription($user_id, $courseId = 0)
     {
         $table_group_user = Database::get_course_table(TABLE_GROUP_USER);
         $table_tutor_user = Database::get_course_table(TABLE_GROUP_TUTOR);
         $table_group = Database::get_course_table(TABLE_GROUP);
-        $user_id = intval($user_id);
-        $course_id = api_get_course_int_id();
+        $user_id = (int) $user_id;
+        $courseId = empty($courseId) ? api_get_course_int_id() : (int) $courseId;
+
         $sql = "SELECT DISTINCT g.*
                FROM $table_group g
                LEFT JOIN $table_group_user gu
@@ -2250,7 +2252,7 @@ class GroupManager
                LEFT JOIN $table_tutor_user tu
                ON (tu.group_id = g.iid AND g.c_id = tu.c_id)
                WHERE
-                  g.c_id = $course_id AND
+                  g.c_id = $courseId AND
                   (gu.user_id = $user_id OR tu.user_id = $user_id) ";
         $res = Database::query($sql);
         $groups = [];

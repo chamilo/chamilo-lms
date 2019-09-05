@@ -2447,7 +2447,11 @@ JAVASCRIPT;
 
                 return " $col {$this->ops[$oper]} $val ";
             } else {
-                $val = '%'.$val.'%';
+                if (is_string($val)) {
+                    $val = '%'.$val.'%';
+                } else {
+                    $val = '';
+                }
             }
         }
         $val = \Database::escape_string($val);
@@ -2516,7 +2520,7 @@ JAVASCRIPT;
                         }
                     } else {
                         if (isset($rule->data)) {
-                            if ($rule->data == -1) {
+                            if (isset($rule->data) && is_int($rule->data) && $rule->data == -1) {
                                 continue;
                             }
                             $condition_array[] = ' ('

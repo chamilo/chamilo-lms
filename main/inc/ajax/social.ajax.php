@@ -73,7 +73,6 @@ switch ($action) {
         }
         $user_id = api_get_user_id();
         $name_search = Security::remove_XSS($_POST['search_name_q']);
-        $number_friends = 0;
 
         if (isset($name_search) && $name_search != 'undefined') {
             $friends = SocialManager::get_friends($user_id, null, $name_search);
@@ -193,7 +192,6 @@ switch ($action) {
                 }
                 break;
             case 'unload_course':
-                break;
             default:
                 break;
         }
@@ -219,19 +217,12 @@ switch ($action) {
             $comment = isset($_REQUEST['comment']) ? $_REQUEST['comment'] : '';
             if (!empty($comment)) {
                 $messageId = SocialManager::sendWallMessage(
-                    api_get_user_id(),
+                    $userId,
                     $messageInfo['user_receiver_id'],
                     $comment,
                     $messageId,
                     MESSAGE_STATUS_WALL
                 );
-                /*if ($messageId && !empty($_FILES['picture']['tmp_name'])) {
-                    self::sendWallMessageAttachmentFile(
-                        $friendId,
-                        $_FILES['picture'],
-                        $messageId
-                    );
-                }*/
                 if ($messageId) {
                     $messageInfo = MessageManager::get_message_by_id($messageId);
                     echo SocialManager::processPostComment($messageInfo);
@@ -271,8 +262,8 @@ switch ($action) {
             break;
         }
         $start = isset($_REQUEST['start']) ? (int) $_REQUEST['start'] : 0;
-        $length = isset($_REQUEST['length']) ? (int) $_REQUEST['length'] : 10;
         $userId = isset($_REQUEST['u']) ? (int) $_REQUEST['u'] : api_get_user_id();
+
         $html = '';
         if ($userId == api_get_user_id()) {
             $threadList = SocialManager::getThreadList($userId);
@@ -281,7 +272,12 @@ switch ($action) {
                 $threadIdList = array_column($threadList, 'id');
             }
 
-            $html = SocialManager::getMyWallMessages($userId, $start, SocialManager::DEFAULT_SCROLL_NEW_POST, $threadIdList);
+            $html = SocialManager::getMyWallMessages(
+                $userId,
+                $start,
+                SocialManager::DEFAULT_SCROLL_NEW_POST,
+                $threadIdList
+            );
             $html = $html['posts'];
         } else {
             $messages = SocialManager::getWallMessages(

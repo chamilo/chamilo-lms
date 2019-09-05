@@ -37,12 +37,12 @@ $userInfo = api_get_user_info($user_id);
 $name = $userInfo['complete_name'];
 $isBoss = UserManager::userIsBossOfStudent(api_get_user_id(), $user_id);
 
-if (!api_is_platform_admin(true) &&
-    !CourseManager::is_course_teacher(api_get_user_id(), $courseCode) &&
-    !$isBoss &&
-    !Tracking::is_allowed_to_coach_student(api_get_user_id(), $user_id) &&
+if (!$isBoss &&
+    !api_is_platform_admin(true) &&
     !api_is_drh() &&
-    !api_is_course_tutor()
+    !api_is_course_tutor() &&
+    !CourseManager::is_course_teacher(api_get_user_id(), $courseCode) &&
+    !Tracking::is_allowed_to_coach_student(api_get_user_id(), $user_id)
 ) {
     api_not_allowed(api_get_origin() !== 'learnpath');
 }
@@ -252,15 +252,10 @@ switch ($action) {
         $logo2 = Display::img($secondLogo, null, ['style' => 'height:70px;']);
         $table->setCellContents(0, 1, $logo2);
         $table->setCellAttributes(0, 1, ['style' => 'display:block;float:right;text-align:right']);
-
         $pdf->set_custom_header($table->toHtml());
 
         $background = api_get_path(SYS_PATH).'custompages/url-images/'.api_get_current_access_url_id().'_pdf_background.png';
-
-        $content =
-            '<html>
-                <body style="background-image-resize: 5; background-position: top left; background-image: url('.$background.');">'
-            .$content.'</body></html>';
+        $content = '<html><body style="background-image-resize: 5; background-position: top left; background-image: url('.$background.');">'.$content.'</body></html>';
 
         $pdf->content_to_pdf(
             $content,

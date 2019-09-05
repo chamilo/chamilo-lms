@@ -11,8 +11,8 @@
  */
 class Annotation extends Question
 {
-    public static $typePicture = 'annotation.png';
-    public static $explanationLangVar = 'Annotation';
+    public $typePicture = 'annotation.png';
+    public $explanationLangVar = 'Annotation';
 
     /**
      * Annotation constructor.

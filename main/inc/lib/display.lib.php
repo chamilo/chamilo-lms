@@ -631,12 +631,12 @@ class Display
         }
 
         // "mailto:" already present?
-        if (substr($email, 0, 7) != 'mailto:') {
+        if (substr($email, 0, 7) !== 'mailto:') {
             $email = 'mailto:'.$email;
         }
 
         // Class (stylesheet) defined?
-        if ($style_class != '') {
+        if ($style_class !== '') {
             $style_class = ' class="'.$style_class.'"';
         }
 
@@ -649,7 +649,10 @@ class Display
         $value = api_get_configuration_value('add_user_course_information_in_mailto');
 
         if ($value) {
-            $hmail .= '?';
+            if (api_get_setting('allow_email_editor') === 'false') {
+                $hmail .= '?';
+            }
+
             if (!api_is_anonymous()) {
                 $hmail .= '&subject='.Security::remove_XSS(api_get_setting('siteName'));
             }
@@ -1447,7 +1450,7 @@ class Display
 
         $beforeSelectRow = null;
         if (isset($extra_params['beforeSelectRow'])) {
-            $beforeSelectRow = "beforeSelectRow: ".$extra_params['beforeSelectRow'].", ";
+            $beforeSelectRow = 'beforeSelectRow: '.$extra_params['beforeSelectRow'].', ';
             unset($extra_params['beforeSelectRow']);
         }
 
@@ -1507,6 +1510,16 @@ class Display
         $json_encode = str_replace('"formatter":"extra_formatter"', 'formatter:extra_formatter', $json_encode);
         $json_encode = str_replace(['{"first":"first",', '"end":"end"}'], '', $json_encode);
 
+        if (api_get_configuration_value('allow_compilatio_tool') &&
+            (strpos($_SERVER['REQUEST_URI'], 'work/work.php') !== false ||
+             strpos($_SERVER['REQUEST_URI'], 'work/work_list_all.php') != false
+            )
+        ) {
+            $json_encode = str_replace('"function () { compilatioInit() }"',
+                'function () { compilatioInit() }',
+                $json_encode
+            );
+        }
         // Creating the jqgrid element.
         $json .= '$("#'.$div_id.'").jqGrid({';
         //$json .= $beforeSelectRow;
@@ -1725,7 +1738,7 @@ class Display
             }
 
             if ($notification['tool'] == TOOL_LEARNPATH) {
-                if (!learnpath::is_lp_visible_for_student($notification['ref'], $user_id, $course_code)) {
+                if (!learnpath::is_lp_visible_for_student($notification['ref'], $user_id, $courseInfo)) {
                     continue;
                 }
             }
@@ -1794,7 +1807,7 @@ class Display
             $session = [];
             $session['category_id'] = $session_info['session_category_id'];
             $session['title'] = $session_info['name'];
-            $session['id_coach'] = $session_info['id_coach'];
+            $session['coach_id'] = $session['id_coach'] = $session_info['id_coach'];
             $session['dates'] = '';
             $session['coach'] = '';
             if (api_get_setting('show_session_coach') === 'true' && isset($coachInfo['complete_name'])) {
@@ -1989,15 +2002,18 @@ class Display
      * @param int    $percentage      int value between 0 and 100
      * @param bool   $show_percentage
      * @param string $extra_info
+     * @param string $class           danger/success/infowarning
      *
      * @return string
      */
-    public static function bar_progress($percentage, $show_percentage = true, $extra_info = '')
+    public static function bar_progress($percentage, $show_percentage = true, $extra_info = '', $class = '')
     {
         $percentage = (int) $percentage;
+        $class = empty($class) ? '' : "progress-bar-$class";
+
         $div = '<div class="progress">
                 <div
-                    class="progress-bar progress-bar-striped"
+                    class="progress-bar progress-bar-striped '.$class.'"
                     role="progressbar"
                     aria-valuenow="'.$percentage.'"
                     aria-valuemin="0"
@@ -2544,6 +2560,7 @@ class Display
      * @param string $extra
      * @param string $id
      * @param string $customColor
+     * @param string $extraClass
      *
      * @return string
      */
@@ -2554,7 +2571,8 @@ class Display
         $type = 'default',
         $extra = '',
         $id = '',
-        $customColor = ''
+        $customColor = '',
+        $extraClass = ''
     ) {
         $headerStyle = '';
         if (!empty($customColor)) {
@@ -2571,7 +2589,7 @@ class Display
         }
 
         return '
-            <div '.$id.' class="panel panel-'.$style.'">
+            <div '.$id.' class="panel panel-'.$style.' '.$extraClass.' ">
                 '.$title.'
                 '.self::contentPanel($content).'
                 '.$footer.'
@@ -2922,6 +2940,12 @@ HTML;
             $translateHtml = '{type:"script", src:"'.api_get_path(WEB_AJAX_PATH).'lang.ajax.php?a=translate_html&'.api_get_cidreq().'"},';
         }
 
+        $fixLinkSetting = api_get_configuration_value('lp_fix_embed_content');
+        $fixLink = '';
+        if ($fixLinkSetting) {
+            $fixLink = '{type:"script", src:"'.api_get_path(WEB_LIBRARY_PATH).'fixlinks.js"},';
+        }
+
         $videoFeatures = implode("','", $videoFeatures);
         $frameReady = '
         $.frameReady(function() {
@@ -2939,6 +2963,8 @@ HTML;
         "'.$frameName.'",
         [
             {type:"script", src:"'.api_get_jquery_web_path().'", deps: [
+            
+                '.$fixLink.'   
                 {type:"script", src:"'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.highlight.js"},
                 {type:"script", src:"'.api_get_path(WEB_CODE_PATH).'glossary/glossary.js.php?'.api_get_cidreq().'"},
                 {type:"script", src:"'.$webPublicPath.'assets/jquery-ui/jquery-ui.min.js"},
@@ -2948,7 +2974,7 @@ HTML;
                     {type:"script", src: "'.$webPublicPath.'assets/mediaelement/plugins/markersrolls/markersrolls.js"},
                     '.$videoPluginFiles.'
                 ]},                
-                '.$translateHtml.'
+                '.$translateHtml.'             
             ]},
             '.$videoPluginCssFiles.'
             {type:"script", src:"'.$webPublicPath.'assets/MathJax/MathJax.js?config=AM_HTMLorMML"},

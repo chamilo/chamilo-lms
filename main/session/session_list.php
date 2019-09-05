@@ -13,7 +13,7 @@ $this_section = SECTION_PLATFORM_ADMIN;
 
 SessionManager::protectSession(null, false);
 
-//Add the JS needed to use the jqgrid
+// Add the JS needed to use the jqgrid
 $htmlHeadXtra[] = api_get_jqgrid_js();
 
 $action = isset($_REQUEST['action']) ? $_REQUEST['action'] : null;

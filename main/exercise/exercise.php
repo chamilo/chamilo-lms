@@ -69,15 +69,7 @@ $exercisePath = substr($exercisePath, 0, strpos($exercisePath, $exfile));
 $exercisePath = $exercisePath.'exercise.php';
 
 // Clear the exercise session
-Session::erase('objExercise');
-Session::erase('objQuestion');
-Session::erase('objAnswer');
-Session::erase('questionList');
-Session::erase('exerciseResult');
-Session::erase('firstTime');
-Session::erase('calculatedAnswerId');
-Session::erase('duration_time_previous');
-Session::erase('duration_time');
+Exercise::cleanSessionVariables();
 
 //General POST/GET/SESSION/COOKIES parameters recovery
 $origin = api_get_origin();
@@ -87,14 +79,9 @@ $exerciseId = isset($_REQUEST['exerciseId']) ? (int) $_REQUEST['exerciseId'] : n
 $file = isset($_REQUEST['file']) ? Database::escape_string($_REQUEST['file']) : null;
 $learnpath_id = isset($_REQUEST['learnpath_id']) ? (int) $_REQUEST['learnpath_id'] : null;
 $learnpath_item_id = isset($_REQUEST['learnpath_item_id']) ? (int) $_REQUEST['learnpath_item_id'] : null;
-$page = isset($_REQUEST['page']) ? (int) $_REQUEST['page'] : null;
 $categoryId = isset($_REQUEST['category_id']) ? (int) $_REQUEST['category_id'] : 0;
 $action = isset($_REQUEST['action']) ? $_REQUEST['action'] : '';
 $keyword = isset($_REQUEST['keyword']) ? Security::remove_XSS($_REQUEST['keyword']) : '';
-
-if ($page < 0) {
-    $page = 1;
-}
 
 if (api_is_in_gradebook()) {
     $interbreadcrumb[] = [
@@ -527,12 +514,6 @@ if ($origin !== 'learnpath') {
 }
 Display::display_introduction_section(TOOL_QUIZ);
 
-// Selects $limit exercises at the same time
-// maximum number of exercises on a same page
-$limit = 50;
-
-// Display the next and previous link if needed
-$from = $page * $limit;
 HotPotGCt($documentPath, 1, $userId);
 
 $token = Security::get_token();
@@ -630,11 +611,11 @@ if ($is_allowedToEdit) {
 }
 
 if (api_get_configuration_value('allow_exercise_categories') === false) {
-    echo Exercise::exerciseGrid(0, $page, $from, $limit, $keyword);
+    echo Exercise::exerciseGrid(0, $keyword);
 } else {
     if (empty($categoryId)) {
         echo Display::page_subheader(get_lang('NoCategory'));
-        echo Exercise::exerciseGrid(0, $page, $from, $limit, $keyword);
+        echo Exercise::exerciseGrid(0, $keyword);
         $counter = 0;
         $manager = new ExerciseCategoryManager();
         $categories = $manager->getCategories($courseId);
@@ -660,13 +641,13 @@ if (api_get_configuration_value('allow_exercise_categories') === false) {
                 }
             }
             echo Display::page_subheader($category->getName().$up.$down);
-            echo Exercise::exerciseGrid($category->getId(), $page, $from, $limit, $keyword);
+            echo Exercise::exerciseGrid($category->getId(), $keyword);
         }
     } else {
         $manager = new ExerciseCategoryManager();
         $category = $manager->get($categoryId);
         echo Display::page_subheader($category['name']);
-        echo Exercise::exerciseGrid($category['id'], $page, $from, $limit, $keyword);
+        echo Exercise::exerciseGrid($category['id'], $keyword);
     }
 }
 

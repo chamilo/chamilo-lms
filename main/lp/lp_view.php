@@ -26,15 +26,13 @@ if ($lp_controller_touched != 1) {
 
 require_once __DIR__.'/../inc/global.inc.php';
 
+api_protect_course_script();
+
 if (isset($_REQUEST['origin']) && $_REQUEST['origin'] === 'learnpath') {
     $_REQUEST['origin'] = '';
 }
 
-//To prevent the template class
-$show_learnpath = true;
-
-api_protect_course_script();
-
+// To prevent the template class
 $lp_id = !empty($_GET['lp_id']) ? (int) $_GET['lp_id'] : 0;
 $sessionId = api_get_session_id();
 $course_code = api_get_course_id();
@@ -170,7 +168,7 @@ if ($allowLpItemTip) {
 }
 
 // Impress js
-if ($lp->mode == 'impress') {
+if ($lp->mode === 'impress') {
     $lp_id = $lp->get_id();
     $url = api_get_path(WEB_CODE_PATH)."lp/lp_impress.php?lp_id=$lp_id&".api_get_cidreq();
     header("Location: $url");
@@ -250,7 +248,6 @@ if (!isset($src)) {
                 }
 
                 $src = $lp->fixBlockedLinks($src);
-
                 $lp->start_current_item(); // starts time counter manually if asset
             } else {
                 $src = 'blank.php?error=prerequisites';
@@ -313,9 +310,7 @@ if (!empty($_REQUEST['exeId']) &&
     $safe_id = $lp_id;
     $safe_exe_id = (int) $_REQUEST['exeId'];
 
-    if ($safe_id == strval(intval($safe_id)) &&
-        $safe_item_id == strval(intval($safe_item_id))
-    ) {
+    if (!empty($safe_id) && !empty($safe_item_id)) {
         $sql = 'SELECT start_date, exe_date, exe_result, exe_weighting, exe_exo_id, exe_duration
                 FROM '.$TBL_TRACK_EXERCICES.'
                 WHERE exe_id = '.$safe_exe_id;
@@ -335,7 +330,7 @@ if (!empty($_REQUEST['exeId']) &&
                 WHERE
                     c_id = $course_id AND
                     lp_item_id = $safe_item_id AND
-                    lp_view_id = ".$lp->lp_view_id."
+                    lp_view_id = ".$lp->get_view_id()."
                 ORDER BY id DESC
                 LIMIT 1";
         $res_last_attempt = Database::query($sql);
@@ -423,7 +418,7 @@ if (!api_is_invitee()) {
     $progress_bar = $lp->getProgressBar();
 }
 $navigation_bar = $lp->get_navigation_bar();
-$navigation_bar_bottom = $lp->get_navigation_bar('control-bottom', 'display:none');
+$navigation_bar_bottom = $lp->get_navigation_bar('control-bottom');
 $mediaplayer = $lp->get_mediaplayer($lp->current, $autostart);
 
 $tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
@@ -520,7 +515,7 @@ $template = new Template('', false, false, true, true, false);
 $fixLinkSetting = api_get_configuration_value('lp_fix_embed_content');
 $fixLink = '';
 if ($fixLinkSetting) {
-    $fixLink = '{type:"script", id:"_fr10", src:"'.api_get_path(WEB_LIBRARY_PATH).'javascript/fixlinks.js"}';
+    $fixLink = '{type:"script", id:"_fr10", src:"'.api_get_path(WEB_LIBRARY_PATH).'fixlinks.js"}';
 }
 
 $template->assign('fix_link', $fixLink);
@@ -550,6 +545,15 @@ $template->assign('iframe_src', $src);
 $template->assign('navigation_bar_bottom', $navigation_bar_bottom);
 $template->assign('show_left_column', $lp->getHideTableOfContents() == 0);
 
+$showMenu = 0;
+$settings = api_get_configuration_value('lp_view_settings');
+$display = isset($settings['display']) ? $settings['display'] : false;
+if (!empty($display)) {
+    $showMenu = isset($display['show_toolbar_by_default']) && $display['show_toolbar_by_default'] ? 1 : 0;
+}
+
+$template->assign('show_toolbar_by_default', $showMenu);
+
 if ($gamificationMode == 1) {
     $template->assign('gamification_stars', $lp->getCalculateStars($sessionId));
     $template->assign('gamification_points', $lp->getCalculateScore($sessionId));
@@ -558,7 +562,7 @@ if ($gamificationMode == 1) {
 $template->assign('lp_author', $lp->get_author());
 
 $lpMinTime = '';
-if (Tracking::minimunTimeAvailable(api_get_session_id(), api_get_course_int_id())) {
+if (Tracking::minimumTimeAvailable(api_get_session_id(), api_get_course_int_id())) {
     // Calulate minimum and accumulated time
     $timeLp = $_SESSION['oLP']->getAccumulateWorkTime();
     $timeTotalCourse = $_SESSION['oLP']->getAccumulateWorkTimeTotalCourse();

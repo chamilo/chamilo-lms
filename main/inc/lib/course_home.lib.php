@@ -140,7 +140,7 @@ class CourseHome
                     !learnpath::is_lp_visible_for_student(
                         $lpId,
                         api_get_user_id(),
-                        api_get_course_id(),
+                        api_get_course_info(),
                         api_get_session_id()
                     )
                 ) {
@@ -352,7 +352,7 @@ class CourseHome
                         !learnpath::is_lp_visible_for_student(
                             $lpId,
                             api_get_user_id(),
-                            api_get_course_id(),
+                            api_get_course_info(),
                             api_get_session_id()
                         )
                     ) {
@@ -679,7 +679,7 @@ class CourseHome
                         $add = learnpath::is_lp_visible_for_student(
                             $lpId,
                             $userId,
-                            $courseInfo['code'],
+                            $courseInfo,
                             $sessionId
                         );
                     }
@@ -868,7 +868,7 @@ class CourseHome
                         !learnpath::is_lp_visible_for_student(
                             $lpId,
                             api_get_user_id(),
-                            api_get_course_id(),
+                            api_get_course_info(),
                             api_get_session_id()
                         )
                     ) {

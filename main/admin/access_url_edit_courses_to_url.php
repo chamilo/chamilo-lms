@@ -26,11 +26,6 @@ if (!api_get_multiple_access_url()) {
     exit;
 }
 
-// Database Table Definitions
-$tbl_access_url_rel_course = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
-$tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
-$tbl_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL);
-
 // setting breadcrumbs
 $tool_name = get_lang('EditCoursesToURL');
 $interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('PlatformAdmin')];
@@ -75,10 +70,6 @@ function remove_item(origin) {
 	}
 }
 </script>';
-
-$form_sent = 0;
-$UserList = $SessionList = [];
-$users = $sessions = [];
 
 if (isset($_POST['form_sent']) && $_POST['form_sent']) {
     $form_sent = $_POST['form_sent'];

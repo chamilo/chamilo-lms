@@ -33,6 +33,10 @@ class BBBPlugin extends Plugin
         [
             'name' => 'bbb_enable_conference_in_groups',
             'type' => 'checkbox',
+        ],
+        [
+            'name' => 'bbb_force_record_generation',
+            'type' => 'checkbox',
         ]
     ];
 
@@ -42,7 +46,7 @@ class BBBPlugin extends Plugin
     protected function __construct()
     {
         parent::__construct(
-            '2.7',
+            '2.8.1',
             'Julio Montoya, Yannick Warnier, Angel Fernando Quiroz Campos',
             [
                 'tool_enable' => 'boolean',
@@ -96,9 +100,9 @@ class BBBPlugin extends Plugin
         if ($variable === 'bbb_enable_conference_in_groups') {
             if ($this->get('enable_conference_in_course_groups') === 'true') {
                 return true;
-            } else {
-                return false;
             }
+
+            return false;
         }
 
         return true;
@@ -134,12 +138,13 @@ class BBBPlugin extends Plugin
                 welcome_msg VARCHAR(255) NOT NULL DEFAULT '',
                 session_id INT unsigned DEFAULT 0,
                 remote_id CHAR(30),
+                internal_meeting_id VARCHAR(255) DEFAULT NULL,
                 visibility TINYINT NOT NULL DEFAULT 1,
                 voice_bridge INT NOT NULL DEFAULT 1,
                 access_url INT NOT NULL DEFAULT 1,
                 video_url TEXT NULL,
                 has_video_m4v TINYINT NOT NULL DEFAULT 0,
-                interface INT NOT NULL DEFAULT 0                
+                interface INT NOT NULL DEFAULT 0                                              
                 )";
         Database::query($sql);
 
@@ -281,7 +286,7 @@ class BBBPlugin extends Plugin
     {
         $data = [
             'text' => $this->get_lang('EnterConferenceFlash'),
-            'url' => $conferenceUrl . '&interface=' . self::INTERFACE_FLASH,
+            'url' => $conferenceUrl.'&interface='.self::INTERFACE_FLASH,
             'icon' => 'resources/img/64/videoconference_flash.png'
         ];
         return $data;
@@ -296,8 +301,8 @@ class BBBPlugin extends Plugin
     {
         $data = [
             'text' => $this->get_lang('EnterConferenceHTML5'),
-            'url' => $conferenceUrl . '&interface=' . self::INTERFACE_HTML5,
-            'icon' => 'resources/img/64/videoconference_html5.png'
+            'url' => $conferenceUrl.'&interface='.self::INTERFACE_HTML5,
+            'icon' => 'resources/img/64/videoconference_html5.png',
         ];
         return $data;
     }

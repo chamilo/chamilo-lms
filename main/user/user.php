@@ -18,7 +18,7 @@ $current_course_tool = TOOL_USER;
 $this_section = SECTION_COURSES;
 
 // notice for unauthorized people.
-api_protect_course_script(true);
+api_protect_course_script(true, false, 'user');
 
 if (!api_is_platform_admin(true)) {
     if (!api_is_course_admin() && !api_is_coach()) {
@@ -28,8 +28,6 @@ if (!api_is_platform_admin(true)) {
     }
 }
 
-/* Constants and variables */
-$course_code = api_get_course_id();
 $sessionId = api_get_session_id();
 $is_western_name_order = api_is_western_name_order();
 $sort_by_first_name = api_sort_by_first_name();
@@ -38,11 +36,10 @@ $user_id = api_get_user_id();
 $_user = api_get_user_info();
 $courseCode = $course_info['code'];
 $courseId = $course_info['real_id'];
-$type = isset($_REQUEST['type']) ? intval($_REQUEST['type']) : STUDENT;
-
+$type = isset($_REQUEST['type']) ? (int) $_REQUEST['type'] : STUDENT;
 $canEditUsers = api_get_setting('allow_user_course_subscription_by_course_admin') == 'true' || api_is_platform_admin();
 
-//Can't auto unregister from a session
+// Can't auto unregister from a session
 if (!empty($sessionId)) {
     $course_info['unsubscribe'] = 0;
 }
@@ -110,7 +107,6 @@ if (isset($_GET['action'])) {
             if (!$canRead) {
                 api_not_allowed();
             }
-            $table_course_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
             $table_users = Database::get_main_table(TABLE_MAIN_USER);
             $is_western_name_order = api_is_western_name_order();
 
@@ -354,7 +350,7 @@ if (isset($_GET['action'])) {
                             $user[$key] = $extra_value;
                         }
                     }
-                    if ($_GET['format'] == 'pdf') {
+                    if ($_GET['format'] === 'pdf') {
                         $user_info = api_get_user_info($user['user_id']);
                         $user_image = '<img src="'.$user_info['avatar'].'" width ="'.$user_image_pdf_size.'px" />';
 
@@ -427,20 +423,20 @@ if (api_is_allowed_to_edit(null, true)) {
         if (isset($_GET['user_id']) && is_numeric($_GET['user_id']) &&
             ($_GET['user_id'] != $_user['user_id'] || api_is_platform_admin())
         ) {
-            $user_id = intval($_GET['user_id']);
+            $user_id = (int) $_GET['user_id'];
             $tbl_user = Database::get_main_table(TABLE_MAIN_USER);
             $tbl_session_rel_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
             $tbl_session_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_USER);
 
-            $sql = 'SELECT user.user_id
-					FROM '.$tbl_user.' user
-					INNER JOIN '.$tbl_session_rel_user.' reluser
-					ON user.user_id = reluser.user_id AND reluser.relation_type<>'.SESSION_RELATION_TYPE_RRHH.'
-					INNER JOIN '.$tbl_session_rel_course.' rel_course
+            $sql = "SELECT user.user_id
+					FROM $tbl_user user
+					INNER JOIN $tbl_session_rel_user reluser
+					ON user.user_id = reluser.user_id AND reluser.relation_type <> ".SESSION_RELATION_TYPE_RRHH."
+					INNER JOIN $tbl_session_rel_course rel_course
 					ON rel_course.session_id = reluser.session_id
 					WHERE
-					    user.user_id = "'.$user_id.'" AND
-					    rel_course.c_id = "'.$courseId.'"';
+					    user.user_id = $user_id AND
+					    rel_course.c_id = $courseId ";
 
             $result = Database::query($sql);
             $row = Database::fetch_array($result, 'ASSOC');
@@ -559,7 +555,7 @@ if (api_is_allowed_to_edit(null, true)) {
 }
 
 /*	Header */
-if (isset($origin) && $origin == 'learnpath') {
+if (isset($origin) && $origin === 'learnpath') {
     Display::display_reduced_header();
 } else {
     if (isset($_GET['keyword']) && !empty($_GET['keyword'])) {
@@ -776,17 +772,18 @@ function get_user_data($from, $number_of_items, $column, $direction)
 {
     global $is_western_name_order;
     global $extraFields;
-    $canEditUsers = api_get_setting('allow_user_course_subscription_by_course_admin') == 'true' || api_is_platform_admin();
     $type = isset($_REQUEST['type']) ? intval($_REQUEST['type']) : STUDENT;
     $course_info = api_get_course_info();
     $sessionId = api_get_session_id();
     $course_code = $course_info['code'];
     $a_users = [];
     $limit = null;
+    $from = (int) $from;
+    $number_of_items = (int) $number_of_items;
 
     // limit
     if (!isset($_GET['keyword']) || empty($_GET['keyword'])) {
-        $limit = 'LIMIT '.intval($from).','.intval($number_of_items);
+        $limit = 'LIMIT '.$from.','.$number_of_items;
     }
 
     if (!in_array($direction, ['ASC', 'DESC'])) {

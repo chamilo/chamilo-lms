@@ -209,3 +209,4 @@ $strings['PurchaseDetailsIntro'] = "Detalles de la comprar";
 $strings['PurchaseDetailsEnd'] = "Atentamente";
 $strings['ProductName'] = "Nombre producto";
 $strings['BankAccountIntro'] = "Información cuentas bancarias";
+$strings['CurrencyIsNotConfigured'] = "Por favor, confogure una moneda antes de continuar.";

@@ -73,9 +73,7 @@ function validate_filter() {
 }
 </script>';
 
-$form_sent = 0;
 $errorMsg = '';
-$sessions = [];
 if (isset($_POST['form_sent']) && $_POST['form_sent']) {
     $form_sent = $_POST['form_sent'];
     $elements_posted = $_POST['elements_in_name'];

@@ -546,6 +546,7 @@ ALTER TABLE c_survey_question ADD is_required TINYINT(1) DEFAULT 0 NOT NULL;
 //CREATE TABLE scheduled_announcements (id INT AUTO_INCREMENT NOT NULL, subject VARCHAR(255) NOT NULL, message LONGTEXT NOT NULL, date DATETIME DEFAULT NULL, sent TINYINT(1) NOT NULL, session_id INT NOT NULL, c_id INT DEFAULT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;
 // sudo mkdir app/upload/scheduled_announcement
 // Add "attachment" file extra field in: main/admin/extra_fields.php?type=scheduled_announcement&action=add
+// Add "send_to_coaches" checkbox field in: main/admin/extra_fields.php?type=scheduled_announcement&action=add
 //$_configuration['allow_scheduled_announcements'] = false;
 // Add the list of emails as a bcc when sending an email.
 /*
@@ -851,6 +852,7 @@ ALTER TABLE skill_rel_course ADD CONSTRAINT FK_E7CEC7FA613FECDF FOREIGN KEY (ses
     'display' => [
         'show_reporting_icon' => true,
         'hide_lp_arrow_navigation' => false,
+        'show_toolbar_by_default' => false,
     ],
 ];*/
 
@@ -1096,6 +1098,10 @@ $_configuration['profile_fields_visibility'] = [
 // Only applied for courses with extra field "new_tracking_system" to "1"
 //$_configuration['lp_minimum_time'] = false;
 
+// Track LP attempts using the new tracking system.
+// Requires to add an LP extra field called "track_lp_item" (checkbox) in order to use this feature.
+//$_configuration['use_new_tracking_in_lp_item'] = false;
+
 // Add collapsable option for user course categories
 // ALTER TABLE user_course_category ADD collapsed TINYINT(1) DEFAULT NULL;
 // $_configuration['allow_user_course_category_collapsable'] = false;
@@ -1201,6 +1207,9 @@ $_configuration['required_extra_fields_in_profile'] = [
 // - launch "composer install" to rebuild the autoload.php
 //$_configuration['social_enable_messages_feedback'] = false;
 
+// Disable dislike button in the social network.
+//$_configuration['disable_dislike_option'] = false;
+
 // Block student's access to the course documents when using the ckeditor "Browse server" button
 //$_configuration['block_editor_file_manager_for_students'] = false;
 // Show a language flag next to the user picture in the social network
@@ -1227,6 +1236,75 @@ $_configuration['required_extra_fields_in_profile'] = [
 // ALTER TABLE c_quiz ADD exercise_category_id INT DEFAULT NULL;
 // enable @ORM in CExerciseCategory adn CQuiz::exerciseCategoryId
 //$_configuration['allow_exercise_categories'] = false;
+
+// Send new user inscription notification only to general admins (table settings_current = emailAdministrator)
+//$_configuration['send_inscription_notification_to_general_admin_only'] = false;
+
+// Allow extra settings for the quiz results page
+// ALTER TABLE c_quiz ADD page_result_configuration LONGTEXT DEFAULT NULL COMMENT '(DC2Type:array)';
+//$_configuration['allow_quiz_results_page_config'] = false;
+
+// Allow multiple options for the exercise "save answer" option
+// ALTER TABLE c_quiz MODIFY COLUMN save_correct_answers INT NULL DEFAULT NULL;
+//$_configuration['allow_quiz_save_correct_options'] = false;
+
+// Show languages flags by country in the language switcher.
+//$_configuration['language_flags_by_country'] = false;
+
+// Allow compilatio plagiarism prevention tool
+/*
+CREATE TABLE c_plagiarism_compilatio_docs (
+    id INT AUTO_INCREMENT NOT NULL,
+    c_id int(11) NOT NULL,
+    document_id int(11) NOT NULL,
+    compilatio_id varchar(32) CHARACTER SET utf8 NOT NULL,
+    PRIMARY KEY (id)
+) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;
+
+// If table exists already
+ALTER TABLE c_plagiarism_compilatio_docs drop primary key;
+ALTER TABLE c_plagiarism_compilatio_docs ADD COLUMN id INT AUTO_INCREMENT NOT NULL PRIMARY KEY;
+ALTER TABLE c_plagiarism_compilatio_docs CHANGE COLUMN id_doc document_id INT NOT NULL;
+
+requires extension "php-soap"  sudo apt-get install php-soap
+*/
+//$_configuration['allow_compilatio_tool'] = false;
+//$_configuration['compilatio_tool'] = [
+//    'settings' => [
+//        'key' => '',
+//        'soap_url' => '',
+//        'proxy_host' => '',
+//        'proxy_port' => '',
+//        'max_filesize' => '',
+//        'transport_mode' => '',
+//        'wget_uri' => '',
+//        'wget_login' => '',
+//        'wget_password' => '',
+//    ]
+//];
+
+// Allow user to enter a LP item if it was validated in another session.
+// $_configuration['validate_lp_prerequisite_from_other_session'] = false;
+
+// 1 = SCORE_AVERAGE (5 / 10)
+// 2 = SCORE_PERCENT (50%)
+// 3 = SCORE_DIV_PERCENT (5 / 10 (50%))
+// $_configuration['exercise_score_format'] = 0;
+
+// Hide course sidebar
+//$_configuration['hide_course_sidebar'] = true;
+
+// Allow online users by user profile
+// 1 = COURSEMANAGER (teacher)
+// 5 = STUDENT
+// 11 = PLATFORM_ADMIN
+// Example: The online users will be available only for teachers and students.
+//$_configuration['allow_online_users_by_status'] = ['status' =>  [1, 5]];
+
+// Allow add one column by each user extra field indicated to the Gradebook Flatview for each user.
+/*$_configuration['gradebook_flatview_extrafields_columns'] = [
+    'variables' => [],
+];*/
 
 // KEEP THIS AT THE END
 // -------- Custom DB changes

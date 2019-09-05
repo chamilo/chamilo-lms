@@ -37,7 +37,6 @@
 }
 
 html {
-    background-color: #FFF;
     position: relative;
     min-height: 100%;
 }
@@ -1286,6 +1285,14 @@ div.attendance-calendar-add div.row div.formw, div.attendance-calendar-edit div.
 .tableFloatingHeaderOriginal {
     font-size: 12px;
     height: 64px;
+}
+
+.promoted_post{
+    background: #f1fff1;
+    border-color: #9bd6b8;
+}
+.promoted_post .msg-content div{
+    border-bottom: 1px solid #9bd6b8;
 }
 
 /**********************************************
@@ -2938,14 +2945,14 @@ form .formw .freeze {
 }
 
 #social_wall_main_wall_post_button{
-    background: #f5f6f7 !important;
+    /*background: #f5f6f7 !important;
     color: #7a7a7a !important;
-    border: 1px solid #bababa !important;
+    border: 1px solid #bababa !important;*/
 }
 #social_wall_main_wall_post_button:hover{
-    border: 1px solid #162a83 !important;
+    /*border: 1px solid #162a83 !important;
     background: #162a83 !important;
-    color: #ffffff !important;
+    color: #ffffff !important;*/
 }
 .input-file-container {
     position: relative;
@@ -2955,7 +2962,7 @@ form .formw .freeze {
 }
 .js .input-file-trigger {
     display: inline-block;
-    padding: 7px 15px;
+    padding: 6px 12px;
     background: #f5f6f7;
     color: #7a7a7a;
     font-size: 14px;
@@ -10194,6 +10201,11 @@ ul.dropdown-menu.inner > li > a {
 
 .section-mycourses #course_tools .col-xs-6:nth-child(2n+1) {
     clear: left;
+}
+
+.compilation_block .progress {
+    margin:0px;
+    width:120px
 }
 
 @media (min-width: 768px) {

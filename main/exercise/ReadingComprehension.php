@@ -11,8 +11,8 @@
  */
 class ReadingComprehension extends UniqueAnswer
 {
-    public static $typePicture = 'reading-comprehension.png';
-    public static $explanationLangVar = 'ReadingComprehension';
+    public $typePicture = 'reading-comprehension.png';
+    public $explanationLangVar = 'ReadingComprehension';
 
     /**
      * Defines the different speeds of scrolling for the reading window,

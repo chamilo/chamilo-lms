@@ -1691,11 +1691,10 @@ class DocumentManager
             }
         }
 
-        $doc_id = intval($doc_id);
-        $session_id = intval($session_id);
-
-        //2. Course and Session visibility are handle in local.inc.php/global.inc.php
-        //3. Checking if user exist in course/session
+        $doc_id = (int) $doc_id;
+        $session_id = (int) $session_id;
+        // 2. Course and Session visibility are handle in local.inc.php/global.inc.php
+        // 3. Checking if user exist in course/session
         if ($session_id == 0) {
             if (is_null($userIsSubscribed)) {
                 $userIsSubscribed = CourseManager::is_user_subscribed_in_course(
@@ -1836,7 +1835,7 @@ class DocumentManager
     public static function get_default_certificate_id($course_id, $session_id = 0)
     {
         $tbl_category = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
-        $session_id = intval($session_id);
+        $session_id = (int) $session_id;
         if (empty($session_id)) {
             $session_id = api_get_session_id();
         }
@@ -1844,7 +1843,7 @@ class DocumentManager
         if (empty($session_id)) {
             $sql_session = 'AND (session_id = 0 OR isnull(session_id)) ';
         } elseif ($session_id > 0) {
-            $sql_session = 'AND session_id='.intval($session_id);
+            $sql_session = 'AND session_id='.$session_id;
         } else {
             $sql_session = '';
         }
@@ -4731,7 +4730,7 @@ class DocumentManager
             return false;
         }
 
-        $sessionId = intval($sessionId);
+        $sessionId = (int) $sessionId;
         $folderWithSuffix = self::fixDocumentName(
             $folder,
             'folder',
@@ -4783,7 +4782,7 @@ class DocumentManager
             return false;
         }
 
-        $sessionId = intval($sessionId);
+        $sessionId = (int) $sessionId;
         $fileNameEscape = Database::escape_string($fileName);
 
         $fileNameWithSuffix = self::fixDocumentName(
@@ -5052,7 +5051,7 @@ class DocumentManager
         if ($filetype == 'file') {
             // Check the extension
             $ext = explode('.', $path);
-            $ext = strtolower($ext[sizeof($ext) - 1]);
+            $ext = strtolower($ext[count($ext) - 1]);
 
             // HTML-files an some other types are shown in a frameset by default.
             $is_browser_viewable_file = self::isBrowserViewable($ext);
@@ -5126,19 +5125,19 @@ class DocumentManager
                             preg_match('/shared_folder_session_'.$sessionId.'\/sf_user_'.api_get_user_id().'$/', urldecode($forcedownload_link)) ||
                             $isAllowedToEdit || api_is_platform_admin()
                         ) {
-                            $force_download_html = ($size == 0) ? '' : '<a href="'.$forcedownload_link.'" style="float:right"'.$prevent_multiple_click.'>'.
+                            $force_download_html = $size == 0 ? '' : '<a href="'.$forcedownload_link.'" style="float:right"'.$prevent_multiple_click.'>'.
                                 Display::return_icon($forcedownload_icon, get_lang('Download'), [], ICON_SIZE_SMALL).'</a>';
                         }
                     } elseif (!preg_match('/shared_folder/', urldecode($forcedownload_link)) ||
                         $isAllowedToEdit ||
                         api_is_platform_admin()
                     ) {
-                        $force_download_html = ($size == 0) ? '' : '<a href="'.$forcedownload_link.'" style="float:right"'.$prevent_multiple_click.'>'.
+                        $force_download_html = $size == 0 ? '' : '<a href="'.$forcedownload_link.'" style="float:right"'.$prevent_multiple_click.'>'.
                             Display::return_icon($forcedownload_icon, get_lang('Download'), [], ICON_SIZE_SMALL).'</a>';
                     }
                 }
             } else {
-                $force_download_html = ($size == 0) ? '' : '<a href="'.$forcedownload_link.'" style="float:right"'.$prevent_multiple_click.' download="'.$document_data['basename'].'">'.
+                $force_download_html = $size == 0 ? '' : '<a href="'.$forcedownload_link.'" style="float:right"'.$prevent_multiple_click.' download="'.$document_data['basename'].'">'.
                     Display::return_icon($forcedownload_icon, get_lang('Download'), [], ICON_SIZE_SMALL).'</a>';
             }
 
@@ -5146,8 +5145,8 @@ class DocumentManager
             if (api_get_setting('allow_my_files') === 'true' &&
                 api_get_setting('users_copy_files') === 'true' && api_is_anonymous() === false
             ) {
-                $copy_myfiles_link = $filetype == 'file' ? $pageUrl.'?'.$courseParams.'&action=copytomyfiles&id='.$document_data['id'] : api_get_self().'?'.$courseParams;
-                if ($filetype == 'file') {
+                $copy_myfiles_link = $filetype === 'file' ? $pageUrl.'?'.$courseParams.'&action=copytomyfiles&id='.$document_data['id'] : api_get_self().'?'.$courseParams;
+                if ($filetype === 'file') {
                     $copyToMyFiles = '<a href="'.$copy_myfiles_link.'" style="float:right"'.$prevent_multiple_click.'>'.
                         Display::return_icon('briefcase.png', get_lang('CopyToMyFiles'), [], ICON_SIZE_SMALL).'&nbsp;&nbsp;</a>';
 
@@ -5159,8 +5158,8 @@ class DocumentManager
 
             $pdf_icon = '';
             if (!$isAllowedToEdit &&
+                $filetype === 'file' &&
                 api_get_setting('students_export2pdf') == 'true' &&
-                $filetype == 'file' &&
                 in_array($extension, ['html', 'htm'])
             ) {
                 $pdf_icon = ' <a style="float:right".'.$prevent_multiple_click.' href="'.$pageUrl.'?'.$courseParams.'&action=export_to_pdf&id='.$document_data['id'].'&curdirpath='.$curdirpath.'">'.
@@ -5172,7 +5171,7 @@ class DocumentManager
                     Display::return_icon('open_in_new_window.png', get_lang('OpenInANewWindow'), [], ICON_SIZE_SMALL).'&nbsp;&nbsp;</a>';
             }
 
-            if ($filetype == 'file') {
+            if ($filetype === 'file') {
                 // Sound preview
                 if (preg_match('/mp3$/i', urldecode($checkExtension)) ||
                     (preg_match('/wav$/i', urldecode($checkExtension))) ||
@@ -5195,7 +5194,7 @@ class DocumentManager
                     $url = 'show_content.php?'.$courseParams.'&id='.$document_data['id'];
                     $class = 'ajax';
                     if ($visibility == false) {
-                        $class = "ajax text-muted";
+                        $class = 'ajax text-muted';
                     }
 
                     return Display::url(
@@ -5274,7 +5273,7 @@ class DocumentManager
                     '</a>';
                 }
             } else {
-                if ($filetype == 'file') {
+                if ($filetype === 'file') {
                     // Sound preview with jplayer
                     if (preg_match('/mp3$/i', urldecode($checkExtension)) ||
                         (preg_match('/wav$/i', urldecode($checkExtension))) ||

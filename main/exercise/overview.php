@@ -15,10 +15,7 @@ require_once __DIR__.'/../inc/global.inc.php';
 $current_course_tool = TOOL_QUIZ;
 
 // Clear the exercise session just in case
-Session::erase('objExercise');
-Session::erase('calculatedAnswerId');
-Session::erase('duration_time_previous');
-Session::erase('duration_time');
+Exercise::cleanSessionVariables();
 
 $this_section = SECTION_COURSES;
 
@@ -29,7 +26,7 @@ $htmlHeadXtra[] = $js;
 api_protect_course_script(true);
 $sessionId = api_get_session_id();
 $courseCode = api_get_course_id();
-$exercise_id = isset($_REQUEST['exerciseId']) ? intval($_REQUEST['exerciseId']) : 0;
+$exercise_id = isset($_REQUEST['exerciseId']) ? (int) $_REQUEST['exerciseId'] : 0;
 
 $objExercise = new Exercise();
 $result = $objExercise->read($exercise_id, true);
@@ -286,7 +283,7 @@ if (!empty($attempts)) {
             ]
         ) || (
             $objExercise->results_disabled == RESULT_DISABLE_SHOW_SCORE_ONLY &&
-            $objExercise->feedback_type == EXERCISE_FEEDBACK_TYPE_END
+            $objExercise->getFeedbackType() == EXERCISE_FEEDBACK_TYPE_END
         )
         ) {
             if ($blockShowAnswers &&
@@ -302,6 +299,11 @@ if (!empty($attempts)) {
                 }
             }
 
+            if (!empty($objExercise->getResultAccess())) {
+                if (!$objExercise->hasResultsAccess($attempt_result)) {
+                    $attempt_link = '';
+                }
+            }
             $row['attempt_link'] = $attempt_link;
         }
         $my_attempt_array[] = $row;
@@ -355,7 +357,7 @@ if (!empty($attempts)) {
             $header_names = [get_lang('Attempt'), get_lang('StartDate'), get_lang('IP')];
             break;
         case RESULT_DISABLE_SHOW_SCORE_ONLY:
-            if ($objExercise->feedback_type != EXERCISE_FEEDBACK_TYPE_END) {
+            if ($objExercise->getFeedbackType() != EXERCISE_FEEDBACK_TYPE_END) {
                 $header_names = [get_lang('Attempt'), get_lang('StartDate'), get_lang('IP'), get_lang('Score')];
             } else {
                 $header_names = [
@@ -386,10 +388,11 @@ if (!empty($attempts)) {
     $table_content = $table->toHtml();
 }
 
-if ($objExercise->selectAttempts()) {
-    $attempt_message = get_lang('Attempts').' '.$counter.' / '.$objExercise->selectAttempts();
+$selectAttempts = $objExercise->selectAttempts();
+if ($selectAttempts) {
+    $attempt_message = get_lang('Attempts').' '.$counter.' / '.$selectAttempts;
 
-    if ($counter == $objExercise->selectAttempts()) {
+    if ($counter == $selectAttempts) {
         $attempt_message = Display::return_message($attempt_message, 'error');
     } else {
         $attempt_message = Display::return_message($attempt_message, 'info');
@@ -400,7 +403,7 @@ if ($objExercise->selectAttempts()) {
 }
 
 if ($time_control) {
-    $html .= $objExercise->return_time_left_div();
+    $html .= $objExercise->returnTimeLeftDiv();
 }
 
 $html .= $message;

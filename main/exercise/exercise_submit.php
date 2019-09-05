@@ -98,8 +98,6 @@ $choice = empty($choice) ? isset($_REQUEST['choice2']) ? $_REQUEST['choice2'] : 
 // From submit modal
 $current_question = isset($_REQUEST['num']) ? (int) $_REQUEST['num'] : null;
 $currentAnswer = isset($_REQUEST['num_answer']) ? (int) $_REQUEST['num_answer'] : null;
-$endExercise = isset($_REQUEST['end_exercise']) && $_REQUEST['end_exercise'] == 1 ? true : false;
-
 $logInfo = [
     'tool' => TOOL_QUIZ,
     'tool_id' => $exerciseId,
@@ -109,7 +107,6 @@ $logInfo = [
 ];
 Event::registerLog($logInfo);
 
-// Error message
 $error = '';
 $exercise_attempt_table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
 
@@ -154,6 +151,7 @@ if (!isset($exerciseInSession) || isset($exerciseInSession) && ($exerciseInSessi
     Session::write('firstTime', false);
 }
 //2. Checking if $objExercise is set
+/** @var |Exercise $objExercise */
 if (!isset($objExercise) && isset($exerciseInSession)) {
     if ($debug) {
         error_log('2. Loading $objExercise from session');
@@ -576,10 +574,6 @@ if ($time_control) {
     } else {
         $clock_expired_time = $_SESSION['expired_time'][$current_expired_time_key];
     }
-} else {
-    if ($debug) {
-        error_log("7 No time control");
-    }
 }
 
 // Get time left for expiring time
@@ -667,7 +661,7 @@ if ($formSent && isset($_POST)) {
                 // stores the user answer into the array
                 $exerciseResult[$key] = $choice[$key];
                 //saving each question
-                if ($objExercise->feedback_type != EXERCISE_FEEDBACK_TYPE_DIRECT) {
+                if (!in_array($objExercise->getFeedbackType(), [EXERCISE_FEEDBACK_TYPE_DIRECT, EXERCISE_FEEDBACK_TYPE_POPUP])) {
                     $nro_question = $current_question; // - 1;
                     $questionId = $key;
                     // gets the student choice for this question
@@ -756,10 +750,6 @@ if ($formSent && isset($_POST)) {
     if ($debug) {
         error_log('11. $formSent was set - end');
     }
-} else {
-    if ($debug) {
-        error_log('9. $formSent was NOT sent');
-    }
 }
 
 // If questionNum comes from POST and not from GET
@@ -846,7 +836,7 @@ if ($question_count != 0) {
     $error = get_lang('ThereAreNoQuestionsForThisExercise');
     // if we are in the case where user select random by category, but didn't choose the number of random question
     if ($objExercise->getRandomByCategory() > 0 && $objExercise->random <= 0) {
-        $error .= "<br/>".get_lang('PleaseSelectSomeRandomQuestion');
+        $error .= '<br/>'.get_lang('PleaseSelectSomeRandomQuestion');
     }
 }
 
@@ -858,10 +848,10 @@ if (api_is_in_gradebook()) {
 }
 
 $interbreadcrumb[] = [
-    "url" => "exercise.php?".api_get_cidreq(),
-    "name" => get_lang('Exercises'),
+    'url' => 'exercise.php?'.api_get_cidreq(),
+    'name' => get_lang('Exercises'),
 ];
-$interbreadcrumb[] = ["url" => "#", "name" => $objExercise->selectTitle(true)];
+$interbreadcrumb[] = ['url' => '#', 'name' => $objExercise->selectTitle(true)];
 
 if (!in_array($origin, ['learnpath', 'embeddable'])) { //so we are not in learnpath tool
     if (!api_is_allowed_to_session_edit()) {
@@ -977,7 +967,7 @@ if (isset($_custom['exercises_hidden_when_no_start_date']) &&
 
 // Timer control
 if ($time_control) {
-    echo $objExercise->return_time_left_div();
+    echo $objExercise->returnTimeLeftDiv();
     echo '<div style="display:none" class="warning-message" id="expired-message-id">'.
         get_lang('ExerciseExpiredTimeMessage').'</div>';
 }
@@ -1133,6 +1123,16 @@ if (!empty($error)) {
             $(".block_on_enter").keypress(function(event) {
                 return event.keyCode != 13;
             });
+            
+            $(".checkCalculatedQuestionOnEnter").keypress(function(event) {
+                if (event.keyCode === 13) {
+                    event.preventDefault();
+                    var id = $(this).attr("id");
+                    var parts = id.split("_");
+                    var buttonId = "button_" + parts[1];
+                    document.getElementById(buttonId).click();                    
+                }
+            });
 
             $(".main_question").mouseover(function() {
                 //$(this).find(".exercise_save_now_button").show();
@@ -1222,8 +1222,7 @@ if (!empty($error)) {
                 url = "exercise_submit.php?'.$params.'&num='.$current_question.'&remind_question_id='.$remind_question_id.'&reminder=2";
             } else {
                 url = "exercise_submit.php?'.$params.'&num='.$current_question.'&remind_question_id='.$remind_question_id.'";
-            }
-            //$("#save_for_now_"+question_id).html(\''.Display::return_icon('save.png', get_lang('Saved'), [], ICON_SIZE_SMALL).'\');
+            }            
             window.location = url;
         }
         
@@ -1233,19 +1232,19 @@ if (!empty($error)) {
         }
 
         function save_now(question_id, url_extra, validate) {
-            //1. Normal choice inputs
+            // 1. Normal choice inputs
             var my_choice = $(\'*[name*="choice[\'+question_id+\']"]\').serialize();
-
-            //2. Reminder checkbox
+            
+            // 2. Reminder checkbox
             var remind_list = $(\'*[name*="remind_list"]\').serialize();
 
-            //3. Hotspots
+            // 3. Hotspots
             var hotspot = $(\'*[name*="hotspot[\'+question_id+\']"]\').serialize();
             
-            //4. choice for degree of certainty
+            // 4. choice for degree of certainty
             var my_choiceDc = $(\'*[name*="choiceDegreeCertainty[\'+question_id+\']"]\').serialize();
 
-            // Checking FCK
+            // Checking CkEditor
             if (question_id) {
                 if (CKEDITOR.instances["choice["+question_id+"]"]) {
                     var ckContent = CKEDITOR.instances["choice["+question_id+"]"].getData();
@@ -1322,7 +1321,7 @@ if (!empty($error)) {
             var question_list = ['.implode(',', $questionList).'];
             var free_answers = {};
             $.each(question_list, function(index, my_question_id) {
-                // Checking FCK
+                // Checking Ckeditor
                 if (my_question_id) {
                     if (CKEDITOR.instances["choice["+my_question_id+"]"]) {
                         var ckContent = CKEDITOR.instances["choice["+my_question_id+"]"].getData();
@@ -1395,7 +1394,7 @@ if (!empty($error)) {
                 $i++;
                 continue;
             } else {
-                if ($objExercise->feedback_type != EXERCISE_FEEDBACK_TYPE_DIRECT) {
+                if (!in_array($objExercise->getFeedbackType(), [EXERCISE_FEEDBACK_TYPE_DIRECT, EXERCISE_FEEDBACK_TYPE_POPUP])) {
                     // if the user has already answered this question
                     if (isset($exerciseResult[$questionId])) {
                         // construction of the Question object
@@ -1414,11 +1413,23 @@ if (!empty($error)) {
         $user_choice = null;
         if (isset($attempt_list[$questionId])) {
             $user_choice = $attempt_list[$questionId];
-        } elseif ($objExercise->saveCorrectAnswers) {
-            $correctAnswers = $objExercise->getCorrectAnswersInAllAttempts(
-                $learnpath_id,
-                $learnpath_item_id
-            );
+        } elseif ($objExercise->getSaveCorrectAnswers()) {
+            $correctAnswers = [];
+            switch ($objExercise->getSaveCorrectAnswers()) {
+                case 1:
+                    $correctAnswers = $objExercise->getCorrectAnswersInAllAttempts(
+                        $learnpath_id,
+                        $learnpath_item_id
+                    );
+                    break;
+                case 2:
+                    $correctAnswers = $objExercise->getAnswersInAllAttempts(
+                        $learnpath_id,
+                        $learnpath_item_id,
+                        false
+                    );
+                    break;
+            }
 
             if (isset($correctAnswers[$questionId])) {
                 $user_choice = $correctAnswers[$questionId];
@@ -1426,8 +1437,7 @@ if (!empty($error)) {
         }
 
         $remind_highlight = '';
-
-        //Hides questions when reviewing a ALL_ON_ONE_PAGE exercise see #4542 no_remind_highlight class hide with jquery
+        // Hides questions when reviewing a ALL_ON_ONE_PAGE exercise see #4542 no_remind_highlight class hide with jquery
         if ($objExercise->type == ALL_ON_ONE_PAGE &&
             isset($_GET['reminder']) && $_GET['reminder'] == 2
         ) {
@@ -1463,21 +1473,33 @@ if (!empty($error)) {
 
         echo '<div id="question_div_'.$questionId.'" class="main-question '.$remind_highlight.'" >';
 
+        $showQuestion = true;
+        $exerciseResultFromSession = Session::read('exerciseResult');
+        if ($objExercise->getFeedbackType() === EXERCISE_FEEDBACK_TYPE_POPUP &&
+            isset($exerciseResultFromSession[$questionId])
+        ) {
+            $showQuestion = false;
+        }
+
         // Shows the question and its answers
-        ExerciseLib::showQuestion(
-            $objExercise,
-            $questionId,
-            false,
-            $origin,
-            $i,
-            $objExercise->getHideQuestionTitle() ? false : true,
-            false,
-            $user_choice,
-            false,
-            null,
-            false,
-            true
-        );
+        if ($showQuestion) {
+            ExerciseLib::showQuestion(
+                $objExercise,
+                $questionId,
+                false,
+                $origin,
+                $i,
+                $objExercise->getHideQuestionTitle() ? false : true,
+                false,
+                $user_choice,
+                false,
+                null,
+                false,
+                true
+            );
+        } else {
+            echo Display::return_message(get_lang('AlreadyAnswered'));
+        }
 
         // Button save and continue
         switch ($objExercise->type) {
@@ -1549,10 +1571,8 @@ if (!empty($error)) {
     }
     echo '</form>';
 }
-
 if (!in_array($origin, ['learnpath', 'embeddable'])) {
     // So we are not in learnpath tool
     echo '</div>'; //End glossary div
 }
-
 Display::display_footer();

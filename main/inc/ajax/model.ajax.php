@@ -1215,6 +1215,10 @@ switch ($action) {
         );
         break;
     case 'get_work_user_list_all':
+        $plagiarismColumns = [];
+        if (api_get_configuration_value('allow_compilatio_tool')) {
+            $plagiarismColumns = ['compilatio'];
+        }
         if (isset($_GET['type']) && $_GET['type'] === 'simple') {
             $columns = [
                 'fullname',
@@ -1223,8 +1227,9 @@ switch ($action) {
                 'sent_date',
                 'qualificator_id',
                 'correction',
-                'actions',
             ];
+            $columns = array_merge($columns, $plagiarismColumns);
+            $columns[] = 'actions';
         } else {
             $columns = [
                 'fullname',
@@ -1232,8 +1237,9 @@ switch ($action) {
                 'qualification',
                 'sent_date',
                 'correction',
-                'actions',
             ];
+            $columns = array_merge($columns, $plagiarismColumns);
+            $columns[] = 'actions';
         }
 
         $whereCondition = " AND $whereCondition ";
@@ -1248,12 +1254,21 @@ switch ($action) {
         );
         break;
     case 'get_work_user_list_others':
+        $plagiarismColumns = [];
+        if (api_get_configuration_value('allow_compilatio_tool')) {
+            $plagiarismColumns = ['compilatio'];
+        }
+
         if (isset($_GET['type']) && $_GET['type'] === 'simple') {
             $columns = [
-                'type', 'firstname', 'lastname', 'title', 'qualification', 'sent_date', 'qualificator_id', 'actions',
+                'type', 'firstname', 'lastname', 'title', 'qualification', 'sent_date', 'qualificator_id',
             ];
+            $columns = array_merge($columns, $plagiarismColumns);
+            $columns[] = 'actions';
         } else {
-            $columns = ['type', 'firstname', 'lastname', 'title', 'sent_date', 'actions'];
+            $columns = ['type', 'firstname', 'lastname', 'title', 'sent_date'];
+            $columns = array_merge($columns, $plagiarismColumns);
+            $columns[] = 'actions';
         }
 
         if (trim($whereCondition) === '1 = 1') {
@@ -1271,14 +1286,21 @@ switch ($action) {
         );
         break;
     case 'get_work_user_list':
+        $plagiarismColumns = [];
+        if (api_get_configuration_value('allow_compilatio_tool')) {
+            $plagiarismColumns = ['compilatio'];
+        }
         if (isset($_GET['type']) && $_GET['type'] == 'simple') {
             $columns = [
-                'type', 'title', 'qualification', 'sent_date', 'qualificator_id', 'actions',
+                'type', 'title', 'qualification', 'sent_date', 'qualificator_id',
             ];
+            $columns = array_merge($columns, $plagiarismColumns);
+            $columns[] = 'actions';
         } else {
-            $columns = ['type', 'title', 'qualification', 'sent_date', 'actions'];
+            $columns = ['type', 'title', 'qualification', 'sent_date'];
+            $columns = array_merge($columns, $plagiarismColumns);
+            $columns[] = 'actions';
         }
-
         $documents = getAllDocumentToWork($work_id, api_get_course_int_id());
 
         if (trim($whereCondition) === '1 = 1') {
@@ -1286,7 +1308,7 @@ switch ($action) {
         }
 
         if (empty($documents)) {
-            $whereCondition .= " AND u.user_id = ".api_get_user_id();
+            $whereCondition .= ' AND u.user_id = '.api_get_user_id();
             $result = get_work_user_list(
                 $start,
                 $limit,
@@ -1308,9 +1330,6 @@ switch ($action) {
         }
         break;
     case 'get_exercise_results':
-        $course = api_get_course_info();
-        // Used inside ExerciseLib::get_exam_results_data()
-        $documentPath = api_get_path(SYS_COURSE_PATH).$course['path']."/document";
         $is_allowedToEdit = api_is_allowed_to_edit(null, true) ||
             api_is_drh() ||
             api_is_student_boss() ||
@@ -1346,10 +1365,6 @@ switch ($action) {
         );
         break;
     case 'get_exercise_results_report':
-        // Used inside ExerciseLib::get_exam_results_data()
-        $documentPath = api_get_path(SYS_COURSE_PATH).$courseInfo['path'].'/document';
-        $sessionId = api_get_session_id();
-
         $columns = [
             'firstname',
             'lastname',
@@ -2301,7 +2316,7 @@ $allowed_actions = [
     'get_exercise_categories',
 ];
 
-//5. Creating an obj to return a json
+// 5. Creating an obj to return a json
 if (in_array($action, $allowed_actions)) {
     $response = new stdClass();
     $response->page = $page;

@@ -39,11 +39,21 @@ switch ($action) {
         if (!empty($itemId)) {
             $link = LinkFactory::create(LINK_EXERCISE);
             $links = $link::load($itemId);
+
+            $exercise = new Exercise(api_get_course_int_id());
             /** @var ExerciseLink $link */
             foreach ($links as $link) {
-                $exercise = new Exercise(api_get_course_int_id());
-                $exercise->read($link->get_ref_id());
-                $exercise->generateStats($link->get_ref_id(), api_get_course_info(), api_get_session_id());
+                $exerciseId = $link->get_ref_id();
+                $data = $link->get_exercise_data();
+                if (empty($data)) {
+                    continue;
+                }
+
+                $exerciseId = $data['id'];
+                $result = $exercise->read($exerciseId);
+                if ($result) {
+                    $exercise->generateStats($exerciseId, api_get_course_info(), api_get_session_id());
+                }
             }
             Display::addFlash(Display::return_message(get_lang('Updated')));
         }
@@ -168,8 +178,6 @@ $my_actions = implode(';', $list_actions);
 $my_actions_values = implode(';', $list_values);
 $logInfo = [
     'tool' => TOOL_GRADEBOOK,
-    'tool_id' => 0,
-    'tool_id_detail' => 0,
     'action' => $my_actions,
     'action_details' => $my_actions_values,
 ];
@@ -250,19 +258,19 @@ if (isset($_GET['visiblelog'])) {
 //move a category
 if (isset($_GET['movecat'])) {
     GradebookUtils::block_students();
-    $cats = Category::load($_GET['movecat']);
+    $moveCategoryId = isset($_GET['movecat']) ? (int) $_GET['movecat'] : 0;
+    $cats = Category::load($moveCategoryId);
     if (!isset($_GET['targetcat'])) {
         $move_form = new CatForm(
             CatForm::TYPE_MOVE,
             $cats[0],
             'move_cat_form',
             null,
-            api_get_self().'?movecat='.intval($_GET['movecat']).'&selectcat='.$selectCat
+            api_get_self().'?movecat='.$moveCategoryId.'&selectcat='.$selectCat
         );
         if ($move_form->validate()) {
             header('Location: '.api_get_self().'?selectcat='.$selectCat
-                .'&movecat='.intval($_GET['movecat'])
-                .'&targetcat='.$move_form->exportValue('move_cat'));
+                .'&movecat='.$moveCategoryId.'&targetcat='.$move_form->exportValue('move_cat'));
             exit;
         }
     } else {
@@ -360,7 +368,7 @@ if (isset($_GET['deletecat'])) {
     GradebookUtils::block_students();
     $cats = Category::load($_GET['deletecat']);
     if (isset($cats[0])) {
-        //delete all categories,subcategories and results
+        // Delete all categories,subcategories and results
         if ($cats[0] != null) {
             if ($cats[0]->get_id() != 0) {
                 // better don't try to delete the root...
@@ -396,12 +404,11 @@ if (isset($_GET['visibleeval'])) {
 if (isset($_GET['lockedeval'])) {
     GradebookUtils::block_students();
     $locked = (int) $_GET['lockedeval'];
+    $type_locked = 1;
+    $confirmation_message = get_lang('EvaluationHasBeenLocked');
     if (isset($_GET['typelocked']) && api_is_platform_admin()) {
         $type_locked = 0;
         $confirmation_message = get_lang('EvaluationHasBeenUnLocked');
-    } else {
-        $type_locked = 1;
-        $confirmation_message = get_lang('EvaluationHasBeenLocked');
     }
     $eval = Evaluation::load($locked);
     if ($eval[0] != null) {
@@ -483,7 +490,7 @@ if (!empty($course_to_crsind) && !isset($_GET['confirm'])) {
         die('Error: movecat or moveeval not defined');
     }
     $button = '<form name="confirm" method="post" action="'.api_get_self().'?confirm='
-        .(isset($_GET['movecat']) ? '&movecat='.intval($_GET['movecat'])
+        .(isset($_GET['movecat']) ? '&movecat='.$moveCategoryId
             : '&moveeval='.intval($_GET['moveeval'])).'&selectcat='.$selectCat.'&targetcat='.intval($_GET['targetcat']).'">
 			   <input type="submit" value="'.get_lang('Ok').'">
 			   </form>';

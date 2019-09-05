@@ -142,7 +142,7 @@ $strings['XIsOnlyPaymentMethodAvailable'] = '%s is the only payment method avail
 $strings['hide_free_text'] = "Hide 'Free' text";
 $strings['culqi_enable'] = "Enable culqi";
 $strings['include_services'] = "Include services";
-
+$strings['CurrencyIsNotConfigured'] = "Please, configure a currency before continuing.";
 $strings['Services'] = "Services";
 $strings['ServiceName'] = "Service name";
 $strings['AppliesTo'] = "Applies to";

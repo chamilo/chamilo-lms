@@ -38,14 +38,17 @@ CKEDITOR.dialog.add( 'video', function ( editor )
             return;
         switch( this.id )
         {
+            case 'responsive':
+                videoNode.addClass('embed-responsive-item');
+                break;
             case 'poster':
                 extraStyles.backgroundImage = 'url(' + value + ')';
                 break;
             case 'width':
-                extraStyles.width = value + 'px';
+                extraStyles.width = value.indexOf('%') > 0 ? value : (parseInt(value) + 'px');
                 break;
             case 'height':
-                extraStyles.height = value + 'px';
+                extraStyles.height = value.indexOf('%') > 0 ? value : (parseInt(value) + 'px');
                 break;
         }
     }
@@ -176,6 +179,15 @@ CKEDITOR.dialog.add( 'video', function ( editor )
             }
 
             var extraStyles = {}, videos = [];
+            var responsive = this.getValueOf('info', 'responsive');
+
+            videoNode.removeClass('embed-responsive-item');
+
+            if (responsive) {
+                this.setValueOf('info', 'width', '100%');
+                this.setValueOf('info', 'height', '100%');
+            }
+
             this.commitContent( videoNode, extraStyles, videos );
 
             var innerHtml = '', links = '',
@@ -191,6 +203,7 @@ CKEDITOR.dialog.add( 'video', function ( editor )
             }
             videoNode.setHtml( innerHtml + fallbackTemplate.replace( '%links%', links ) );
 
+            var responsiveParent = null;
             // Refresh the fake image.
             var newFakeImage = editor.createFakeElement( videoNode, 'cke_video', 'video', false );
             newFakeImage.setStyles( extraStyles );
@@ -198,6 +211,13 @@ CKEDITOR.dialog.add( 'video', function ( editor )
             {
                 newFakeImage.replace( this.fakeImage );
                 editor.getSelection().selectElement( newFakeImage );
+
+                if (responsive) {
+                    responsiveParent = newFakeImage.getParent();
+                    responsiveParent.removeClass('embed-responsive');
+                    responsiveParent.removeClass('embed-responsive-16by9');
+                    responsiveParent.removeClass('embed-responsive-4by3');
+                }
             }
             else
             {
@@ -205,6 +225,21 @@ CKEDITOR.dialog.add( 'video', function ( editor )
                 var div = new CKEDITOR.dom.element( 'DIV', editor.document );
                 editor.insertElement( div );
                 div.append( newFakeImage );
+
+                responsiveParent = div;
+            }
+
+            if (responsive) {
+                responsiveParent.addClass('embed-responsive');
+
+                switch (responsive) {
+                    case '16by9':
+                        responsiveParent.addClass('embed-responsive-16by9');
+                        break;
+                    case '4by3':
+                        responsiveParent.addClass('embed-responsive-4by3');
+                        break;
+                }
             }
         },
         onHide : function()
@@ -226,37 +261,6 @@ CKEDITOR.dialog.add( 'video', function ( editor )
                     label: lang.infoLabel,
                     elements :
                         [
-                            {
-                                type : 'hbox',
-                                widths: [ '33%', '33%', '33%'],
-                                children : [
-                                    {
-                                        type : 'text',
-                                        id : 'width',
-                                        label : editor.lang.common.width,
-                                        'default' : 400,
-                                        validate : CKEDITOR.dialog.validate.notEmpty( lang.widthRequired ),
-                                        commit : commitValue,
-                                        setup : loadValue
-                                    },
-                                    {
-                                        type : 'text',
-                                        id : 'height',
-                                        label : editor.lang.common.height,
-                                        'default' : 300,
-                                        //validate : CKEDITOR.dialog.validate.notEmpty(lang.heightRequired ),
-                                        commit : commitValue,
-                                        setup : loadValue
-                                    },
-                                    {
-                                        type : 'text',
-                                        id : 'id',
-                                        label : 'Id',
-                                        commit : commitValue,
-                                        setup : loadValue
-                                    }
-                                ]
-                            },
                             {
                                 type : 'hbox',
                                 widths: [ '', '100px', '75px'],
@@ -375,6 +379,45 @@ CKEDITOR.dialog.add( 'video', function ( editor )
                                             },
                                         label : editor.lang.common.browseServer
                                     }]
+                            },
+                            {
+                                type : 'hbox',
+                                widths: [ '33%', '33%', '33%'],
+                                children : [
+                                    {
+                                        type : 'text',
+                                        id : 'width',
+                                        label : editor.lang.common.width,
+                                        'default' : 400,
+                                        validate : CKEDITOR.dialog.validate.notEmpty( lang.widthRequired ),
+                                        commit : commitValue,
+                                        setup : loadValue
+                                    },
+                                    {
+                                        type : 'text',
+                                        id : 'height',
+                                        label : editor.lang.common.height,
+                                        'default' : 300,
+                                        //validate : CKEDITOR.dialog.validate.notEmpty(lang.heightRequired ),
+                                        commit : commitValue,
+                                        setup : loadValue
+                                    },
+                                    {
+                                        type : 'text',
+                                        id : 'id',
+                                        label : 'Id',
+                                        commit : commitValue,
+                                        setup : loadValue
+                                    }
+                                ]
+                            },
+                            {
+                                type: 'radio',
+                                id: 'responsive',
+                                label: lang.responsive,
+                                items: [ [ lang.ratio16by9, '16by9' ], [ lang.ratio4by3, '4by3' ] ],
+                                commit : commitValue,
+                                setup : loadValue
                             }
                         ]
                 },

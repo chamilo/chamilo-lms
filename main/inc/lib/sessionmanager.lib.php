@@ -979,7 +979,7 @@ class SessionManager
         $date_to,
         $options
     ) {
-        $sessionId = intval($sessionId);
+        $sessionId = (int) $sessionId;
 
         $getAllSessions = false;
         if (empty($sessionId)) {
@@ -2287,6 +2287,12 @@ class SessionManager
         $course_code = Database::escape_string($course_code);
         $courseInfo = api_get_course_info($course_code);
         $courseId = $courseInfo['real_id'];
+        $subscribe = (int) api_get_course_setting('subscribe_users_to_forum_notifications', $course_code);
+        $forums = [];
+        if ($subscribe === 1) {
+            require_once api_get_path(SYS_CODE_PATH).'forum/forumfunction.inc.php';
+            $forums = get_forums(0, $course_code, true, $session_id);
+        }
 
         if ($removeUsersNotInList) {
             $currentUsers = self::getUsersByCourseSession($session_id, $courseInfo, 0);
@@ -2332,6 +2338,14 @@ class SessionManager
                 $result = Database::query($sql);
                 if (Database::affected_rows($result)) {
                     $nbr_users++;
+                }
+            }
+
+            if (!empty($forums)) {
+                $userInfo = api_get_user_info($enreg_user);
+                foreach ($forums as $forum) {
+                    $forumId = $forum['iid'];
+                    set_notification('forum', $forumId, false, $userInfo, $courseInfo);
                 }
             }
 
@@ -3930,10 +3944,10 @@ class SessionManager
         $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
         $tbl_session_rel_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
         $session_id = (int) $session_id;
-        $sqlSelect = "*, c.id, c.id as real_id";
+        $sqlSelect = '*, c.id, c.id as real_id';
 
         if ($getCount) {
-            $sqlSelect = "COUNT(1) as count";
+            $sqlSelect = 'COUNT(1) as count';
         }
 
         // select the courses
@@ -3953,9 +3967,9 @@ class SessionManager
             $orderBy = " ORDER BY $orderBy";
         } else {
             if (self::orderCourseIsEnabled()) {
-                $orderBy .= " ORDER BY position ";
+                $orderBy .= ' ORDER BY position ';
             } else {
-                $orderBy .= " ORDER BY title ";
+                $orderBy .= ' ORDER BY title ';
             }
         }
 
@@ -4504,7 +4518,7 @@ class SessionManager
                         if ($course_info) {
                             //By default new elements are invisible
                             if ($set_exercises_lp_invisible) {
-                                $list = new LearnpathList('', $course_info['code'], $sid);
+                                $list = new LearnpathList('', $course_info, $sid);
                                 $flat_list = $list->get_flat_list();
                                 if (!empty($flat_list)) {
                                     foreach ($flat_list as $lp_id => $data) {
@@ -9161,7 +9175,7 @@ SQL;
             }
 
             $usergroup->subscribe_sessions_to_usergroup(
-                $usergroup->get_id_by_name($className),
+                $usergroup->getIdByName($className),
                 [$sessionId],
                 $deleteClassSessions
             );

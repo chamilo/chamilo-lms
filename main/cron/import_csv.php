@@ -1226,16 +1226,12 @@ class ImportCsv
                 $update = false;
                 $item = null;
                 if (!isset($event[$extraFieldName])) {
-                    $this->logger->addInfo(
-                        "No external_calendar_itemID found. Skipping ..."
-                    );
+                    $this->logger->addInfo('No external_calendar_itemID found. Skipping ...');
                     continue;
                 } else {
                     $externalEventId = $event[$extraFieldName];
                     if (empty($externalEventId)) {
-                        $this->logger->addInfo(
-                            "external_calendar_itemID was set but empty. Skipping ..."
-                        );
+                        $this->logger->addInfo('external_calendar_itemID was set but empty. Skipping ...');
                         continue;
                     }
 
@@ -1433,28 +1429,46 @@ class ImportCsv
 
                     $courseTitle = $courseInfo['title'];
 
+                    // Get the value of the "careerid" extra field of this
+                    // session
                     $sessionExtraFieldValue = new ExtraFieldValue('session');
-                    $values = $sessionExtraFieldValue->get_values_by_handler_and_field_variable(
+                    $externalCareerIdList = $sessionExtraFieldValue->get_values_by_handler_and_field_variable(
                         $event['session_id'],
-                        $this->extraFieldIdNameList['session_career']
+                        'careerid'
                     );
-
-                    $careerName = '';
-                    if (!empty($values)) {
-                        foreach ($values as $value) {
-                            if (isset($value['value'])) {
-                                $careerName = $value['value'];
-                            }
-                        }
+                    $externalCareerIdList = $externalCareerIdList['value'];
+                    $externalCareerIds = [];
+                    if (substr($externalCareerIdList, 0, 1) === '[') {
+                        $externalCareerIdList = substr($externalCareerIdList, 1, -1);
+                        $externalCareerIds = preg_split('/,/', $externalCareerIdList);
+                    } else {
+                        $externalCareerIds = [$externalCareerIdList];
                     }
+
+                    $careerExtraFieldValue = new ExtraFieldValue('career');
+                    $career = new Career();
+                    $careerName = '';
+
+                    // Concat the names of each career linked to this session
+                    foreach ($externalCareerIds as $externalCareerId) {
+                        // Using the external_career_id field (from above),
+                        // find the career ID
+                        $careerValue = $careerExtraFieldValue->get_item_id_from_field_variable_and_field_value(
+                            'external_career_id',
+                            $externalCareerId
+                        );
+                        $career = $career->find($careerValue['item_id']);
+                        $careerName .= $career['name'].', ';
+                    }
+                    // Remove trailing comma
+                    $careerName = substr($careerName, 0, -2);
 
                     $subject = sprintf(
                         get_lang('WelcomeToPortalXInCourseSessionX'),
-                        api_get_setting('siteName'),
+                        api_get_setting('Institution'),
                         $courseInfo['title']
                     );
 
-                    $tpl->assign('site_name', api_get_setting('siteName'));
                     $tpl->assign('course_title', $courseTitle);
                     $tpl->assign('career_name', $careerName);
                     $tpl->assign('first_lesson', $date);

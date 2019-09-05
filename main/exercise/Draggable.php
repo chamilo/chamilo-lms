@@ -8,8 +8,8 @@
  */
 class Draggable extends Question
 {
-    public static $typePicture = 'ordering.png';
-    public static $explanationLangVar = 'Draggable';
+    public $typePicture = 'ordering.png';
+    public $explanationLangVar = 'Draggable';
 
     /**
      * Class constructor.
@@ -217,7 +217,9 @@ class Draggable extends Question
 
         if ($exercise->showExpectedChoice()) {
             $header .= '<th>'.get_lang('YourChoice').'</th>';
-            $header .= '<th>'.get_lang('ExpectedChoice').'</th>';
+            if ($exercise->showExpectedChoiceColumn()) {
+                $header .= '<th>'.get_lang('ExpectedChoice').'</th>';
+            }
         } else {
             $header .= '<th>'.get_lang('ElementList').'</th>';
         }

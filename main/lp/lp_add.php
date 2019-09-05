@@ -42,16 +42,10 @@ $isStudentView = isset($_REQUEST['isStudentView']) ? $_REQUEST['isStudentView'] 
 $learnpath_id = isset($_REQUEST['lp_id']) ? $_REQUEST['lp_id'] : null;
 
 /* MAIN CODE */
-if ((!$is_allowed_to_edit) || ($isStudentView)) {
-    header('location:lp_controller.php?action=view&lp_id='.$learnpath_id);
+if ((!$is_allowed_to_edit) || $isStudentView) {
+    header('location:lp_controller.php?action=view&lp_id='.$learnpath_id.'&'.api_get_cidreq());
     exit;
 }
-// From here on, we are admin because of the previous condition, so don't check anymore.
-
-/*
-    Course admin section
-    - all the functions not available for students - always available in this case (page only shown to admin)
-*/
 
 if (api_is_in_gradebook()) {
     $interbreadcrumb[] = [
@@ -61,7 +55,7 @@ if (api_is_in_gradebook()) {
 }
 
 $interbreadcrumb[] = [
-    'url' => 'lp_controller.php?action=list',
+    'url' => 'lp_controller.php?action=list&'.api_get_cidreq(),
     'name' => get_lang('LearningPaths'),
 ];
 
@@ -160,16 +154,19 @@ $form->addElement('html', '<div id="end_date_div" style="display:none;">');
 $form->addDatePicker('expired_on', get_lang('ExpirationDate'));
 $form->addElement('html', '</div>');
 
+$extraField = new ExtraField('lp');
+
+$extra = $extraField->addElements($form, 0, ['lp_icon']);
+
 Skill::addSkillsToForm($form, ITEM_TYPE_LEARNPATH, 0);
 
 $form->addElement('html', '</div>');
 
 $defaults['activate_start_date_check'] = 1;
 
+$defaults['accumulate_scorm_time'] = 0;
 if (api_get_setting('scorm_cumulative_session_time') == 'true') {
     $defaults['accumulate_scorm_time'] = 1;
-} else {
-    $defaults['accumulate_scorm_time'] = 0;
 }
 
 $defaults['publicated_on'] = date('Y-m-d 08:00:00');
@@ -177,7 +174,6 @@ $defaults['expired_on'] = date('Y-m-d 08:00:00', time() + 86400);
 
 $form->setDefaults($defaults);
 $form->addButtonCreate(get_lang('CreateLearningPath'));
-
 $form->display();
 
 Display::display_footer();

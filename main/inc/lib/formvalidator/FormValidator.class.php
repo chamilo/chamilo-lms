@@ -262,14 +262,17 @@ EOT;
      * @param array  $options
      * @param array  $attributes
      *
-     * @throws
+     * @throws Exception
+     *
+     * @return HTML_QuickForm_element
      */
     public function addSelectAjax($name, $label, $options = [], $attributes = [])
     {
         if (!isset($attributes['url'])) {
             throw new \Exception('select_ajax needs an URL');
         }
-        $this->addElement(
+
+        return $this->addElement(
             'select_ajax',
             $name,
             $label,
@@ -914,7 +917,9 @@ EOT;
      */
     public function addHeader($text)
     {
-        $this->addElement('header', $text);
+        if (!empty($text)) {
+            $this->addElement('header', $text);
+        }
     }
 
     /**

@@ -665,17 +665,17 @@ class PDF
     /**
      * Sets the PDF header.
      *
-     * @param array $course_data
+     * @param array $courseInfo
      */
-    public function set_header($course_data)
+    public function set_header($courseInfo)
     {
         $this->pdf->defaultheaderfontsize = 10; // in pts
         $this->pdf->defaultheaderfontstyle = 'BI'; // blank, B, I, or BI
         $this->pdf->defaultheaderline = 1; // 1 to include line below header/above footer
 
         $userId = api_get_user_id();
-        if (!empty($course_data['code'])) {
-            $teacher_list = CourseManager::get_teacher_list_from_course_code($course_data['code']);
+        if (!empty($courseInfo['code'])) {
+            $teacher_list = CourseManager::get_teacher_list_from_course_code($courseInfo['code']);
 
             $teachers = '';
             if (!empty($teacher_list)) {
@@ -732,14 +732,14 @@ class PDF
      * Pre-formats a PDF to the right size and, if not stated otherwise, with
      * header, footer and watermark (if any).
      *
-     * @param array $course_data General course information (to fill headers)
-     * @param bool  $complete    Whether we want headers, footers and watermark or not
+     * @param array $courseInfo General course information (to fill headers)
+     * @param bool  $complete   Whether we want headers, footers and watermark or not
      */
-    public function format_pdf($course_data, $complete = true)
+    public function format_pdf($courseInfo, $complete = true)
     {
-        $course_code = null;
-        if (!empty($course_data)) {
-            $course_code = $course_data['code'];
+        $courseCode = null;
+        if (!empty($courseInfo)) {
+            $courseCode = $courseInfo['code'];
         }
 
         /*$pdf->SetAuthor('Documents Chamilo');
@@ -757,7 +757,7 @@ class PDF
         if ($complete) {
             // Adding watermark
             if (api_get_setting('pdf_export_watermark_enable') == 'true') {
-                $watermark_file = self::get_watermark($course_code);
+                $watermark_file = self::get_watermark($courseCode);
                 if ($watermark_file) {
                     //http://mpdf1.com/manual/index.php?tid=269&searchstring=watermark
                     $this->pdf->SetWatermarkImage($watermark_file);
@@ -769,7 +769,7 @@ class PDF
                         $this->pdf->showWatermarkImage = true;
                     }
                 }
-                if ($course_code) {
+                if ($courseCode) {
                     $watermark_text = api_get_course_setting('pdf_export_watermark_text');
                     if (empty($watermark_text)) {
                         $watermark_text = api_get_setting('pdf_export_watermark_text');
@@ -787,7 +787,7 @@ class PDF
             }
 
             if (empty($this->custom_header)) {
-                self::set_header($course_data);
+                self::set_header($courseInfo);
             } else {
                 $this->pdf->SetHTMLHeader($this->custom_header, 'E');
                 $this->pdf->SetHTMLHeader($this->custom_header, 'O');
@@ -884,6 +884,32 @@ class PDF
         );
 
         Display::addFlash(Display::return_message(get_lang('ItemAdded')));
+    }
+
+    /**
+     * @param string $theme
+     *
+     * @throws MpdfException
+     */
+    public function setBackground($theme)
+    {
+        $themeName = empty($theme) ? api_get_visual_theme() : $theme;
+        $themeDir = \Template::getThemeDir($themeName);
+        $customLetterhead = $themeDir.'images/letterhead.png';
+        $urlPathLetterhead = api_get_path(SYS_CSS_PATH).$customLetterhead;
+
+        $urlWebLetterhead = '#FFFFFF';
+        $fullPage = false;
+        if (file_exists($urlPathLetterhead)) {
+            $fullPage = true;
+            $urlWebLetterhead = 'url('.api_get_path(WEB_CSS_PATH).$customLetterhead.')';
+        }
+
+        if ($fullPage) {
+            $this->pdf->SetDisplayMode('fullpage');
+            $this->pdf->SetDefaultBodyCSS('background', $urlWebLetterhead);
+            $this->pdf->SetDefaultBodyCSS('background-image-resize', '6');
+        }
     }
 
     /**

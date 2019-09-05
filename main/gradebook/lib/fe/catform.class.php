@@ -273,6 +273,10 @@ class CatForm extends FormValidator
         }
 
         $defaultCertification = 0;
+        if (!empty($this->category_object)) {
+            $defaultCertification = $this->category_object->getCertificateMinScore();
+        }
+
         if (isset($this->category_object) &&
             $this->category_object->get_parent_id() == 0
         ) {

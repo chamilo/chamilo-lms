@@ -18,43 +18,15 @@ $this_section = SECTION_COURSES;
 api_protect_course_script(true);
 $origin = api_get_origin();
 
-if (empty($learnpath_id)) {
-    if (!empty($_REQUEST['learnpath_id'])) {
-        $learnpath_id = (int) $_REQUEST['learnpath_id'];
-    } else {
-        $learnpath_id = 0;
-    }
-}
-if (empty($learnpath_item_id)) {
-    if (!empty($_REQUEST['learnpath_item_id'])) {
-        $learnpath_item_id = (int) $_REQUEST['learnpath_item_id'];
-    } else {
-        $learnpath_item_id = 0;
-    }
-}
-if (empty($learnpath_item_view_id)) {
-    if (!empty($_REQUEST['learnpath_item_view_id'])) {
-        $learnpath_item_view_id = (int) $_REQUEST['learnpath_item_view_id'];
-    } else {
-        $learnpath_item_view_id = 0;
-    }
-}
+$learnpath_id = isset($_REQUEST['learnpath_id']) ? (int) $_REQUEST['learnpath_id'] : 0;
+$learnpath_item_id = isset($_REQUEST['learnpath_item_id']) ? (int) $_REQUEST['learnpath_item_id'] : 0;
+$learnpath_item_view_id = isset($_REQUEST['learnpath_item_view_id']) ? (int) $_REQUEST['learnpath_item_view_id'] : 0;
+$exerciseId = isset($_REQUEST['exerciseId']) ? (int) $_REQUEST['exerciseId'] : 0;
 
-if (empty($exerciseId)) {
-    if (!empty($_REQUEST['exerciseId'])) {
-        $exerciseId = (int) $_REQUEST['exerciseId'];
-    } else {
-        $exerciseId = 0;
-    }
-}
-
-if (empty($objExercise)) {
-    $exerciseInSession = Session::read('objExercise');
-    if (!empty($exerciseInSession)) {
-        $objExercise = $exerciseInSession;
-    } else {
-        $objExercise = null;
-    }
+$objExercise = null;
+$exerciseInSession = Session::read('objExercise');
+if (!empty($exerciseInSession)) {
+    $objExercise = $exerciseInSession;
 }
 
 if (!$objExercise) {
@@ -131,7 +103,7 @@ if (api_is_course_admin() && !$hideHeaderAndFooter) {
 echo Display::page_header(get_lang('QuestionsToReview'));
 
 if ($time_control) {
-    echo $objExercise->return_time_left_div();
+    echo $objExercise->returnTimeLeftDiv();
 }
 
 echo Display::div('', ['id' => 'message']);
@@ -139,7 +111,7 @@ echo '<script>
     var lp_data = $.param({"learnpath_id": '.$learnpath_id.', "learnpath_item_id" : '.$learnpath_item_id.', "learnpath_item_view_id": '.$learnpath_item_view_id.'});
 
     function final_submit() {
-        //Normal inputs
+        // Normal inputs
         window.location = "'.api_get_path(WEB_CODE_PATH).'exercise/exercise_result.php?'.api_get_cidreq().'&exe_id='.$exe_id.'&" + lp_data;
     }
     
@@ -229,7 +201,6 @@ foreach ($question_list as $questionId) {
     unset($objQuestionTmp);
     // creates a temporary Question object
     $objQuestionTmp = Question:: read($questionId);
-    $quesId = $objQuestionTmp->selectId();
     $check_id = 'remind_list['.$questionId.']';
 
     $attributes = ['id' => $check_id, 'onclick' => "save_remind_item(this, '$questionId');"];
@@ -239,14 +210,15 @@ foreach ($question_list as $questionId) {
 
     $checkbox = Display::input('checkbox', 'remind_list['.$questionId.']', '', $attributes);
 
-    $checkbox = '<div class="pretty p-default">
+    $checkbox = '<div class="pretty p-svg p-curve">
         '.$checkbox.'
         <div class="state p-primary ">
-            <label>&nbsp;</label>
+         <svg class="svg svg-icon" viewBox="0 0 20 20">
+                <path d="M7.629,14.566c0.125,0.125,0.291,0.188,0.456,0.188c0.164,0,0.329-0.062,0.456-0.188l8.219-8.221c0.252-0.252,0.252-0.659,0-0.911c-0.252-0.252-0.659-0.252-0.911,0l-7.764,7.763L4.152,9.267c-0.252-0.251-0.66-0.251-0.911,0c-0.252,0.252-0.252,0.66,0,0.911L7.629,14.566z" style="stroke: white;fill:white;"></path>
+         </svg>
+         <label>&nbsp;</label>
         </div>
     </div>';
-
-    $url = 'exercise_submit.php?exerciseId='.$objExercise->id.'&num='.$counter.'&reminder=1&'.api_get_cidreq();
 
     $counter++;
     $questionTitle = $counter.'. '.strip_tags($objQuestionTmp->selectTitle());

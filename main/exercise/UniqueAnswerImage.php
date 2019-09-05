@@ -10,8 +10,8 @@ use ChamiloSession as Session;
  */
 class UniqueAnswerImage extends UniqueAnswer
 {
-    public static $typePicture = 'uaimg.png';
-    public static $explanationLangVar = 'UniqueAnswerImage';
+    public $typePicture = 'uaimg.png';
+    public $explanationLangVar = 'UniqueAnswerImage';
 
     /**
      * UniqueAnswerImage constructor.
@@ -43,13 +43,18 @@ class UniqueAnswerImage extends UniqueAnswer
         $numberAnswers += (isset($_POST['lessAnswers']) ? -1 : (isset($_POST['moreAnswers']) ? 1 : 0));
 
         $feedbackTitle = '';
-
-        if ($objExercise->selectFeedbackType() == EXERCISE_FEEDBACK_TYPE_DIRECT) {
-            //Scenario
-            $commentTitle = '<th>'.get_lang('Comment').'</th>';
-            $feedbackTitle = '<th>'.get_lang('Scenario').'</th>';
-        } else {
-            $commentTitle = '<th >'.get_lang('Comment').'</th>';
+        switch ($objExercise->getFeedbackType()) {
+            case EXERCISE_FEEDBACK_TYPE_DIRECT:
+                // Scenario
+                $commentTitle = '<th width="20%">'.get_lang('Comment').'</th>';
+                $feedbackTitle = '<th width="20%">'.get_lang('Scenario').'</th>';
+                break;
+            case EXERCISE_FEEDBACK_TYPE_POPUP:
+                $commentTitle = '<th width="20%">'.get_lang('Comment').'</th>';
+                break;
+            default:
+                $commentTitle = '<th width="40%">'.get_lang('Comment').'</th>';
+                break;
         }
 
         $html = '<div class="alert alert-success" role="alert">'.
@@ -114,7 +119,6 @@ class UniqueAnswerImage extends UniqueAnswer
         }
 
         $tempScenario = [];
-
         if ($numberAnswers < 1) {
             $numberAnswers = 1;
             echo Display::return_message(get_lang('YouHaveToCreateAtLeastOneAnswer'));
@@ -196,49 +200,17 @@ class UniqueAnswerImage extends UniqueAnswer
 
             $form->addRule('answer['.$i.']', get_lang('ThisFieldIsRequired'), 'required');
 
-            if ($objExercise->selectFeedbackType() == EXERCISE_FEEDBACK_TYPE_DIRECT) {
-                $form->addHtmlEditor(
-                    'comment['.$i.']',
-                    null,
-                    null,
-                    false,
-                    $editorConfig
-                );
-                // Direct feedback
-                // Adding extra feedback fields
-                $group = [];
-                $group['try'.$i] = $form->createElement('checkbox', 'try'.$i, null, get_lang('TryAgain'));
-                $group['lp'.$i] = $form->createElement(
-                    'select',
-                    'lp'.$i,
-                    get_lang('SeeTheory').': ',
-                    $selectLpId
-                );
-                $group['destination'.$i] = $form->createElement(
-                    'select',
-                    'destination'.$i,
-                    get_lang('GoToQuestion').': ',
-                    $selectQuestion
-                );
-                $group['url'.$i] = $form->createElement(
-                    'text',
-                    'url'.$i,
-                    get_lang('Other').': ',
-                    [
-                        'class' => 'col-md-2',
-                        'placeholder' => get_lang('Other'),
-                    ]
-                );
-                $form->addGroup($group, 'scenario');
-
-                $renderer->setElementTemplate(
-                    '<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}',
-                    'scenario'
-                );
-            } else {
-                $form->addHtmlEditor('comment['.$i.']', null, null, false, $editorConfig);
+            switch ($objExercise->getFeedbackType()) {
+                case EXERCISE_FEEDBACK_TYPE_DIRECT:
+                    $this->setDirectOptions($i, $form, $renderer, $selectLpId, $selectQuestion);
+                    break;
+                case EXERCISE_FEEDBACK_TYPE_POPUP:
+                default:
+                    $form->addHtmlEditor('comment['.$i.']', null, null, false, $editorConfig);
+                    break;
             }
-            $form->addText('weighting['.$i.']', null, null, ['class' => "col-md-1", 'value' => '0']);
+
+            $form->addText('weighting['.$i.']', null, null, ['class' => 'col-md-1', 'value' => '0']);
             $form->addHtml('</tr>');
         }
 
@@ -378,9 +350,11 @@ class UniqueAnswerImage extends UniqueAnswer
         if ($exercise->showExpectedChoice()) {
             $header = '<table class="'.$this->question_table_class.'">
 			<tr>
-				<th>'.get_lang('Choice').'</th>
-				<th>'.get_lang('ExpectedChoice').'</th>
-				<th>'.get_lang('Answer').'</th>';
+				<th>'.get_lang('Choice').'</th>';
+            if ($exercise->showExpectedChoiceColumn()) {
+                $header .= '<th>'.get_lang('ExpectedChoice').'</th>';
+            }
+            $header .= '<th>'.get_lang('Answer').'</th>';
             $header .= '<th>'.get_lang('Status').'</th>';
             $header .= '<th>'.get_lang('Comment').'</th>';
             $header .= '</tr>';

@@ -48,7 +48,7 @@ $userId = $user['user_id'];
 
 $currentUrl = api_get_self().'?user_id='.$userId;
 
-$tool_name = $userEntity->getCompleteName();
+$tool_name = UserManager::formatUserFullName($userEntity);
 $table_course_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
 $table_course = Database::get_main_table(TABLE_MAIN_COURSE);
 $csvContent = [];
@@ -218,13 +218,13 @@ if (api_get_setting('allow_terms_conditions') === 'true') {
         $btn = Display::url(
             get_lang('DeleteLegal'),
             api_get_self().'?action=delete_legal&user_id='.$userId,
-            ['class' => 'btn btn-danger']
+            ['class' => 'btn btn-danger btn-xs']
         );
     } else {
         $btn = Display::url(
             get_lang('SendLegal'),
             api_get_self().'?action=send_legal&user_id='.$userId,
-            ['class' => 'btn btn-primary']
+            ['class' => 'btn btn-primary btn-xs']
         );
         $timeLegalAccept = get_lang('NotRegistered');
     }

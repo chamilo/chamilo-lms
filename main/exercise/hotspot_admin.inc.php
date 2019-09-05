@@ -12,7 +12,6 @@ use ChamiloSession as Session;
  * @author  Toon Keppens
  */
 $modifyAnswers = (int) $_GET['hotspotadmin'];
-
 if (!is_object($objQuestion)) {
     $objQuestion = Question::read($modifyAnswers);
 }
@@ -120,7 +119,7 @@ if ($submitAnswers || $buttonBack) {
 
                 $reponse[$i] = trim($reponse[$i]);
                 $comment[$i] = trim($comment[$i]);
-                $weighting[$i] = ($weighting[$i]); //it can be float
+                $weighting[$i] = $weighting[$i]; // It can be float.
 
                 if ($weighting[$i]) {
                     $questionWeighting += $weighting[$i];
@@ -159,9 +158,9 @@ if ($submitAnswers || $buttonBack) {
         }
 
         $questionWeighting = $nbrGoodAnswers = 0;
-        $select_question = $_POST['select_question'];
+        $select_question = isset($_POST['select_question']) ? $_POST['select_question'] : null;
         $try = isset($_POST['try']) ? $_POST['try'] : [];
-        $url = $_POST['url'];
+        $url = isset($_POST['url']) ? $_POST['url'] : '';
         $destination = [];
 
         $threadhold1 = $_POST['threadhold1'];
@@ -169,10 +168,6 @@ if ($submitAnswers || $buttonBack) {
         $threadhold3 = $_POST['threadhold3'];
 
         for ($i = 1; $i <= $nbrAnswers; $i++) {
-            if ($debug > 0) {
-                echo str_repeat('&nbsp;', 4).'$answerType is HOT_SPOT'."<br />\n";
-            }
-
             $reponse[$i] = trim($reponse[$i]);
             $comment[$i] = trim($comment[$i]);
             $weighting[$i] = $weighting[$i];
@@ -180,19 +175,19 @@ if ($submitAnswers || $buttonBack) {
             if (empty($threadhold1[$i])) {
                 $threadhold1_str = 0;
             } else {
-                $threadhold1_str = intval($threadhold1[$i]);
+                $threadhold1_str = (int) $threadhold1[$i];
             }
 
             if (empty($threadhold2[$i])) {
                 $threadhold2_str = 0;
             } else {
-                $threadhold2_str = intval($threadhold2[$i]);
+                $threadhold2_str = (int) $threadhold2[$i];
             }
 
             if (empty($threadhold3[$i])) {
                 $threadhold3_str = 0;
             } else {
-                $threadhold3_str = intval($threadhold3[$i]);
+                $threadhold3_str = (int) $threadhold3[$i];
             }
 
             $threadhold_total = $threadhold1_str.';'.$threadhold2_str.';'.$threadhold3_str;
@@ -209,9 +204,8 @@ if ($submitAnswers || $buttonBack) {
                 $lp_str = $lp[$i];
             }
 
-            if ($url[$i] == '') {
-                $url_str = '';
-            } else {
+            $url_str = '';
+            if (isset($url[$i]) && !empty($url[$i])) {
                 $url_str = $url[$i];
             }
 
@@ -245,14 +239,14 @@ if ($submitAnswers || $buttonBack) {
                 $objAnswer->cancel();
                 break;
             }
-        }  // end for()
+        }
 
-        //now the noerror section
-        $selectQuestionNoError = Security::remove_XSS($_POST['select_question_noerror']);
-        $lp_noerror = Security::remove_XSS($_POST['lp_noerror']);
+        // now the noerror section
+        $selectQuestionNoError = isset($_POST['select_question_noerror']) ? Security::remove_XSS($_POST['select_question_noerror']) : null;
+        $lp_noerror = isset($_POST['lp_noerror']) ? Security::remove_XSS($_POST['lp_noerror']) : '';
         $try_noerror = isset($_POST['try_noerror']) ? Security::remove_XSS($_POST['try_noerror']) : null;
-        $url_noerror = Security::remove_XSS($_POST['url_noerror']);
-        $comment_noerror = Security::remove_XSS($_POST['comment_noerror']);
+        $url_noerror = isset($_POST['url_noerror']) ? Security::remove_XSS($_POST['url_noerror']) : null;
+        $comment_noerror = isset($_POST['comment_noerror']) ? Security::remove_XSS($_POST['comment_noerror']) : null;
         $threadhold_total = '0;0;0';
 
         if ($try_noerror == 'on') {
@@ -365,7 +359,6 @@ if (isset($modifyAnswers)) {
 
     if (!$nbrAnswers) {
         $nbrAnswers = $objAnswer->selectNbrAnswers();
-
         if ($answerType == HOT_SPOT_DELINEATION) {
             // the magic happens here ...
             // we do this to not count the if no error section
@@ -385,7 +378,7 @@ if (isset($modifyAnswers)) {
         for ($i = 1; $i <= $nbrAnswers; $i++) {
             $reponse[$i] = $objAnswer->selectAnswer($i);
 
-            if ($objExercise->selectFeedbackType() != EXERCISE_FEEDBACK_TYPE_EXAM) {
+            if ($objExercise->getFeedbackType() != EXERCISE_FEEDBACK_TYPE_EXAM) {
                 $comment[$i] = $objAnswer->selectComment($i);
             }
 
@@ -417,7 +410,6 @@ if (isset($modifyAnswers)) {
 
     if ($answerType == HOT_SPOT_DELINEATION) {
         //added the noerror answer
-        $reponse_noerror = 'noerror';
         $comment_noerror = $objAnswer->selectComment($nbrAnswers + 1);
         $destination_noerror_list = $objAnswer->selectDestination($nbrAnswers + 1);
 
@@ -426,7 +418,6 @@ if (isset($modifyAnswers)) {
         }
 
         $destination_items = explode('@@', $destination_noerror_list);
-
         $try_noerror = $destination_items[1];
         $lp_noerror = $destination_items[2];
         $selectQuestionNoError = $destination_items[3];
@@ -436,7 +427,7 @@ if (isset($modifyAnswers)) {
     $_SESSION['tmp_answers'] = [];
     $_SESSION['tmp_answers']['answer'] = $reponse;
 
-    if ($objExercise->selectFeedbackType() != EXERCISE_FEEDBACK_TYPE_EXAM) {
+    if ($objExercise->getFeedbackType() != EXERCISE_FEEDBACK_TYPE_EXAM) {
         $_SESSION['tmp_answers']['comment'] = $comment;
     }
 
@@ -474,7 +465,7 @@ if (isset($modifyAnswers)) {
                 $nbrAnswers--;
                 // Remove the last answer
                 $tmp = array_pop($_SESSION['tmp_answers']['answer']);
-                if ($objExercise->selectFeedbackType() != EXERCISE_FEEDBACK_TYPE_EXAM) {
+                if ($objExercise->getFeedbackType() != EXERCISE_FEEDBACK_TYPE_EXAM) {
                     $tmp = array_pop($_SESSION['tmp_answers']['comment']);
                 }
                 $tmp = array_pop($_SESSION['tmp_answers']['weighting']);
@@ -494,7 +485,7 @@ if (isset($modifyAnswers)) {
 
             // Add a new answer
             $_SESSION['tmp_answers']['answer'][] = '';
-            if ($objExercise->selectFeedbackType() != EXERCISE_FEEDBACK_TYPE_EXAM) {
+            if ($objExercise->getFeedbackType() != EXERCISE_FEEDBACK_TYPE_EXAM) {
                 $_SESSION['tmp_answers']['comment'][] = '';
             }
             $_SESSION['tmp_answers']['weighting'][] = '1';
@@ -615,7 +606,7 @@ if (isset($modifyAnswers)) {
                     <th width="5">&nbsp;</th>
                     <th><?php echo get_lang('HotspotDescription'); ?> *</th>
                     <?php
-                    if ($objExercise->selectFeedbackType() == EXERCISE_FEEDBACK_TYPE_DIRECT) {
+                    if ($objExercise->getFeedbackType() == EXERCISE_FEEDBACK_TYPE_DIRECT) {
                         echo '<th>'.get_lang('Comment').'</th>';
                         if ($answerType == HOT_SPOT_DELINEATION) {
                             echo '<th >'.get_lang('Scenario').'</th>';
@@ -736,7 +727,7 @@ if (isset($modifyAnswers)) {
                                 <input type="hidden" name="hotspot_coordinates[<?php echo $i; ?>]" value="<?php
                                 echo empty($hotspot_coordinates[$i]) ? '0;0|0|0' : $hotspot_coordinates[$i]; ?>"/>
                             </td>
-                            <?php if ($objExercise->selectFeedbackType() == EXERCISE_FEEDBACK_TYPE_DIRECT) {
+                            <?php if ($objExercise->getFeedbackType() == EXERCISE_FEEDBACK_TYPE_DIRECT) {
                                     ?>
                                 <td>
                                     <div class="checkbox">
@@ -795,7 +786,7 @@ if (isset($modifyAnswers)) {
                                               name="comment[<?php echo $i; ?>]"
                                               style="width: 100%"><?php echo Security::remove_XSS($comment[$i]); ?></textarea>
                                 </td>
-                                <?php if ($objExercise->selectFeedbackType() == EXERCISE_FEEDBACK_TYPE_DIRECT) {
+                                <?php if ($objExercise->getFeedbackType() == EXERCISE_FEEDBACK_TYPE_DIRECT) {
                     ?>
                                     <td>
                                         <table>
@@ -850,7 +841,7 @@ if (isset($modifyAnswers)) {
                                 <tr>
                                     <th width="5">&nbsp;<?php /* echo get_lang('Hotspot'); */ ?></th>
                                     <th><?php echo get_lang('OAR'); ?>*</th>
-                                    <?php if ($objExercise->selectFeedbackType() == EXERCISE_FEEDBACK_TYPE_DIRECT) {
+                                    <?php if ($objExercise->getFeedbackType() == EXERCISE_FEEDBACK_TYPE_DIRECT) {
                         ?>
                                         <th colspan="2"><?php echo get_lang('Comment'); ?></th>
                                         <th><?php if ($answerType == HOT_SPOT_DELINEATION) {
@@ -883,7 +874,7 @@ if (isset($modifyAnswers)) {
                                 <input type="hidden" name="hotspot_coordinates[<?php echo $i; ?>]" value="<?php
                                 echo empty($hotspot_coordinates[$i]) ? '0;0|0|0' : $hotspot_coordinates[$i]; ?>"/>
                             </td>
-                            <?php if ($objExercise->selectFeedbackType() == EXERCISE_FEEDBACK_TYPE_DIRECT) {
+                            <?php if ($objExercise->getFeedbackType() == EXERCISE_FEEDBACK_TYPE_DIRECT) {
                                     ?>
                                 <td>
                                     <div class="checkbox">
@@ -1029,7 +1020,7 @@ if (isset($modifyAnswers)) {
         ?>
                     <tr>
                         <th colspan="2"><?php echo get_lang('IfNoError'); ?></th>
-                        <?php if ($objExercise->selectFeedbackType() == EXERCISE_FEEDBACK_TYPE_DIRECT) {
+                        <?php if ($objExercise->getFeedbackType() == EXERCISE_FEEDBACK_TYPE_DIRECT) {
             ?>
                             <th colspan="2"><?php echo get_lang('Feedback'); ?></th>
                             <th><?php echo get_lang('Scenario'); ?></th>
@@ -1049,7 +1040,7 @@ if (isset($modifyAnswers)) {
                             <textarea class="form-control" wrap="virtual" rows="3" cols="25"
                                       name="comment_noerror"><?php echo Security::remove_XSS($comment_noerror); ?></textarea>
                         </td>
-                        <?php if ($objExercise->selectFeedbackType() == EXERCISE_FEEDBACK_TYPE_DIRECT) {
+                        <?php if ($objExercise->getFeedbackType() == EXERCISE_FEEDBACK_TYPE_DIRECT) {
             ?>
                             <td>
                                 <div class="checkbox">
@@ -1096,8 +1087,7 @@ if (isset($modifyAnswers)) {
         <div class="row">
             <div class="col-xs-12">
                 <?php
-                $swf_loaded = $answerType == HOT_SPOT_DELINEATION ? 'hotspot_delineation_admin' : 'hotspot_admin';
-    $height = 450;
+
     $relPath = api_get_path(WEB_CODE_PATH); ?>
                 <div id="hotspot-container" class="center-block"></div>
             </div>

@@ -16,6 +16,10 @@ require_once __DIR__.'/../inc/global.inc.php';
 $purification_option_for_usernames = false;
 $userId = api_get_user_id();
 
+api_protect_admin_script(true, null);
+api_protect_limit_for_session_admin();
+set_time_limit(0);
+
 /**
  * @param array $users
  * @param bool  $checkUniqueEmail
@@ -220,6 +224,8 @@ function save_data($users, $sendMail = false)
 
             $user = complete_missing_data($user);
             $user['Status'] = api_status_key($user['Status']);
+            $redirection = isset($user['Redirection']) ? $user['Redirection'] : '';
+
             $user_id = UserManager::create_user(
                 $user['FirstName'],
                 $user['LastName'],
@@ -237,7 +243,14 @@ function save_data($users, $sendMail = false)
                 0,
                 null,
                 null,
-                $sendMail
+                $sendMail,
+                false,
+                '',
+                false,
+                null,
+                null,
+                null,
+                $redirection
             );
 
             if ($user_id) {
@@ -484,12 +497,7 @@ function processUsers(&$users, $sendMail)
 }
 
 $this_section = SECTION_PLATFORM_ADMIN;
-api_protect_admin_script(true, null);
-api_protect_limit_for_session_admin();
-set_time_limit(0);
-
 $defined_auth_sources[] = PLATFORM_AUTH_SOURCE;
-
 if (isset($extAuthSource) && is_array($extAuthSource)) {
     $defined_auth_sources = array_merge($defined_auth_sources, array_keys($extAuthSource));
 }
@@ -734,14 +742,20 @@ if ($count_fields > 0) {
         $i++;
     }
 }
+
+if (api_get_configuration_value('plugin_redirection_enabled')) {
+    $list[] = 'Redirection';
+    $list_reponse[] = api_get_path(WEB_PATH);
+}
+
 ?>
 <p><?php echo get_lang('CSVMustLookLike').' ('.get_lang('MandatoryFields').')'; ?> :</p>
 <blockquote>
 <pre>
-<b>LastName</b>;<b>FirstName</b>;<b>Email</b>;UserName;Password;AuthSource;OfficialCode;PhoneNumber;Status;ExpiryDate;<span style="color:red;"><?php if (count($list) > 0) {
+<b>LastName</b>;<b>FirstName</b>;<b>Email</b>;UserName;Password;AuthSource;OfficialCode;language;PhoneNumber;Status;ExpiryDate;<span style="color:red;"><?php if (count($list) > 0) {
     echo implode(';', $list).';';
 } ?></span>Courses;Sessions;ClassId;
-<b>xxx</b>;<b>xxx</b>;<b>xxx</b>;xxx;xxx;<?php echo implode('/', $defined_auth_sources); ?>;xxx;xxx;user/teacher/drh;0000-00-00 00:00:00;<span style="color:red;"><?php if (count($list_reponse) > 0) {
+<b>xxx</b>;<b>xxx</b>;<b>xxx</b>;xxx;xxx;<?php echo implode('/', $defined_auth_sources); ?>;xxx;english/spanish/(other);xxx;user/teacher/drh;0000-00-00 00:00:00;<span style="color:red;"><?php if (count($list_reponse) > 0) {
     echo implode(';', $list_reponse).';';
 } ?></span>xxx1|xxx2|xxx3;sessionId|sessionId|sessionId;1;<br />
 </pre>
@@ -759,17 +773,18 @@ if ($count_fields > 0) {
         &lt;AuthSource&gt;<?php echo implode('/', $defined_auth_sources); ?>&lt;/AuthSource&gt;
         <b>&lt;Email&gt;xxx&lt;/Email&gt;</b>
         &lt;OfficialCode&gt;xxx&lt;/OfficialCode&gt;
+        &lt;language&gt;english/spanish/(other)&lt;/language&gt;
         &lt;PhoneNumber&gt;xxx&lt;/PhoneNumber&gt;
-        &lt;Status&gt;user/teacher/drh<?php if ($result_xml != '') {
+        &lt;Status&gt;user/teacher/drh&lt;/Status&gt;<?php if ($result_xml != '') {
     echo '<br /><span style="color:red;">', $result_xml;
-    echo '</span>';
-} ?>&lt;/Status&gt;
+    echo '</span><br />';
+} ?>
         &lt;Courses&gt;xxx1|xxx2|xxx3&lt;/Courses&gt;
         &lt;Sessions&gt;sessionId|sessionId|sessionId&lt;/Sessions&gt;
         &lt;ClassId&gt;1&lt;/ClassId&gt;
-        &lt;/Contact&gt;
+    &lt;/Contact&gt;
 &lt;/Contacts&gt;
 </pre>
-    </blockquote>
+</blockquote>
 <?php
 Display::display_footer();

@@ -36,6 +36,13 @@ $entityManager = Database::getManager();
 $userRepo = UserManager::getRepository();
 
 $currency = $plugin->getSelectedCurrency();
+
+if (empty($currency)) {
+    Display::addFlash(
+        Display::return_message($plugin->get_lang('CurrencyIsNotConfigured'), 'error')
+    );
+}
+
 $currencyIso = null;
 
 if ($editingCourse) {
@@ -254,7 +261,12 @@ if ($commissionsEnable === 'true') {
 
 $form->addHidden('t', null);
 $form->addHidden('i', null);
-$form->addButtonSave(get_lang('Save'));
+$button = $form->addButtonSave(get_lang('Save'));
+
+if (empty($currency)) {
+    $button->setAttribute('disabled');
+}
+
 $form->freeze(['product_type', 'name']);
 
 if ($form->validate()) {

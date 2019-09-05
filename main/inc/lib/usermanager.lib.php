@@ -163,20 +163,20 @@ class UserManager
      *
      * @param string        $firstName
      * @param string        $lastName
-     * @param int           $status               (1 for course tutor, 5 for student, 6 for anonymous)
+     * @param int           $status                  (1 for course tutor, 5 for student, 6 for anonymous)
      * @param string        $email
      * @param string        $loginName
      * @param string        $password
-     * @param string        $official_code        Any official code (optional)
-     * @param string        $language             User language    (optional)
-     * @param string        $phone                Phone number    (optional)
-     * @param string        $picture_uri          Picture URI        (optional)
-     * @param string        $authSource           Authentication source (defaults to 'platform', dependind on constant)
-     * @param string        $expirationDate       Account expiration date (optional, defaults to null)
-     * @param int           $active               Whether the account is enabled or disabled by default
-     * @param int           $hr_dept_id           The department of HR in which the user is registered (defaults to 0)
-     * @param array         $extra                Extra fields
-     * @param string        $encrypt_method       Used if password is given encrypted. Set to an empty string by default
+     * @param string        $official_code           Any official code (optional)
+     * @param string        $language                User language    (optional)
+     * @param string        $phone                   Phone number    (optional)
+     * @param string        $picture_uri             Picture URI        (optional)
+     * @param string        $authSource              Authentication source (defaults to 'platform', dependind on constant)
+     * @param string        $expirationDate          Account expiration date (optional, defaults to null)
+     * @param int           $active                  Whether the account is enabled or disabled by default
+     * @param int           $hr_dept_id              The department of HR in which the user is registered (defaults to 0)
+     * @param array         $extra                   Extra fields
+     * @param string        $encrypt_method          Used if password is given encrypted. Set to an empty string by default
      * @param bool          $send_mail
      * @param bool          $isAdmin
      * @param string        $address
@@ -184,6 +184,7 @@ class UserManager
      * @param FormValidator $form
      * @param int           $creatorId
      * @param array         $emailTemplate
+     * @param string        $redirectToURLAfterLogin
      *
      * @return mixed new user id - if the new user creation succeeds, false otherwise
      * @desc The function tries to retrieve user id from the session.
@@ -214,9 +215,13 @@ class UserManager
         $sendEmailToAllAdmins = false,
         $form = null,
         $creatorId = 0,
-        $emailTemplate = []
+        $emailTemplate = [],
+        $redirectToURLAfterLogin = ''
     ) {
         $creatorId = empty($creatorId) ? api_get_user_id() : 0;
+        $creatorInfo = api_get_user_info($creatorId);
+        $creatorEmail = isset($creatorInfo['email']) ? $creatorInfo['email'] : '';
+
         $hook = HookCreateUser::create();
         if (!empty($hook)) {
             $hook->notifyCreateUser(HOOK_EVENT_TYPE_PRE);
@@ -419,6 +424,10 @@ class UserManager
                 'false'
             );
 
+            if (!empty($redirectToURLAfterLogin) && api_get_configuration_value('plugin_redirection_enabled')) {
+                RedirectionPlugin::insert($userId, $redirectToURLAfterLogin);
+            }
+
             if (!empty($email) && $send_mail) {
                 $recipient_name = api_get_person_name(
                     $firstName,
@@ -485,7 +494,6 @@ class UserManager
                     EventsDispatcher::events('user_registration', $values);
                 } else {
                     $phoneNumber = isset($extra['mobile_phone_number']) ? $extra['mobile_phone_number'] : null;
-
                     $additionalParameters = [
                         'smsType' => SmsPlugin::WELCOME_LOGIN_PASSWORD,
                         'userId' => $return,
@@ -530,7 +538,8 @@ class UserManager
                             null,
                             null,
                             null,
-                            $additionalParameters
+                            $additionalParameters,
+                            $creatorEmail
                         );
 
                         $layoutContent = $tplContent->get_template('mail/new_user_second_email_confirmation.tpl');
@@ -556,7 +565,8 @@ class UserManager
                             null,
                             null,
                             null,
-                            $additionalParameters
+                            $additionalParameters,
+                            $creatorEmail
                         );
                     } else {
                         if (!empty($emailBodyTemplate)) {
@@ -588,7 +598,8 @@ class UserManager
                                 null,
                                 null,
                                 null,
-                                $additionalParameters
+                                $additionalParameters,
+                                $creatorEmail
                             );
                         }
                     }
@@ -798,6 +809,10 @@ class UserManager
         $sql = "DELETE FROM $table_session_user
                 WHERE user_id = '".$user_id."'";
         Database::query($sql);
+
+        if (api_get_configuration_value('plugin_redirection_enabled')) {
+            RedirectionPlugin::deleteUserRedirection($user_id);
+        }
 
         // Delete user picture
         /* TODO: Logic about api_get_setting('split_users_upload_directory') == 'true'
@@ -1150,6 +1165,7 @@ class UserManager
         }
         $original_password = $password;
         $user_id = (int) $user_id;
+        $creator_id = (int) $creator_id;
 
         if (empty($user_id)) {
             return false;
@@ -1301,13 +1317,22 @@ class UserManager
                 $userInfo = api_get_user_info($user_id);
                 $emailBody = $mailTemplateManager->parseTemplate($emailTemplate['user_edit_content.tpl'], $userInfo);
             }
+
+            $creatorInfo = api_get_user_info($creator_id);
+            $creatorEmail = isset($creatorInfo['email']) ? $creatorInfo['email'] : '';
+
             api_mail_html(
                 $recipient_name,
                 $email,
                 $emailsubject,
                 $emailBody,
                 $sender_name,
-                $email_admin
+                $email_admin,
+                null,
+                null,
+                null,
+                null,
+                $creatorEmail
             );
         }
 
@@ -6218,7 +6243,7 @@ SQL;
             .Display::url($url, $url);
 
         api_mail_html(
-            $user->getCompleteName(),
+            self::formatUserFullName($user),
             $user->getEmail(),
             $mailSubject,
             $mailBody
@@ -6684,6 +6709,27 @@ SQL;
         );
 
         return $calendar;
+    }
+
+    /**
+     * Return the user's full name. Optionally with the username.
+     *
+     * @param User $user
+     * @param bool $includeUsername Optional. By default username is not included.
+     *
+     * @return string
+     */
+    public static function formatUserFullName(User $user, $includeUsername = false)
+    {
+        $fullName = api_get_person_name($user->getFirstname(), $user->getLastname());
+
+        if ($includeUsername && api_get_configuration_value('hide_username_with_complete_name') !== true) {
+            $username = $user->getUsername();
+
+            return "$fullName ($username)";
+        }
+
+        return $fullName;
     }
 
     /**

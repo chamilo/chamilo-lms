@@ -1797,6 +1797,12 @@ function get_work_user_list(
 
     $column = !empty($column) ? Database::escape_string($column) : 'sent_date';
 
+    $compilatio_web_folder = api_get_path(WEB_CODE_PATH).'plagiarism/compilatio/';
+    $compilation = null;
+    if (api_get_configuration_value('allow_compilatio_tool')) {
+        $compilation = new Compilatio();
+    }
+
     if (!in_array($direction, ['asc', 'desc'])) {
         $direction = 'desc';
     }
@@ -1949,9 +1955,10 @@ function get_work_user_list(
 
         $blockEdition = api_get_configuration_value('block_student_publication_edition');
         $blockScoreEdition = api_get_configuration_value('block_student_publication_score_edition');
-
+        $loading = Display::returnFontAwesomeIcon('spinner', null, true, 'fa-spin');
         while ($work = Database::fetch_array($result, 'ASSOC')) {
             $item_id = $work['id'];
+            $dbTitle = $work['title'];
             // Get the author ID for that document from the item_property table
             $is_author = false;
             $can_read = false;
@@ -2033,11 +2040,10 @@ function get_work_user_list(
                     if ($qualification_exists) {
                         $feedback .= ' ';
                     }
-
-                    $feedback .= '<a href="'.$url.'view.php?'.api_get_cidreq().'&id='.$item_id.'" title="'.get_lang(
-                            'View'
-                        ).'">'.
-                        $count.' '.Display::returnFontAwesomeIcon('comments-o').'</a> ';
+                    $feedback .= Display::url(
+                        $count.' '.Display::returnFontAwesomeIcon('comments-o'),
+                        $url.'view.php?'.api_get_cidreq().'&id='.$item_id
+                    );
                 }
 
                 $correction = '';
@@ -2225,6 +2231,34 @@ function get_work_user_list(
                 $work['qualificator_id'] = $qualificator_id.' '.$hasCorrection;
                 $work['actions'] = '<div class="work-action">'.$linkToDownload.$action.'</div>';
                 $work['correction'] = $correction;
+
+                if (!empty($compilation)) {
+                    $compilationId = $compilation->getCompilatioId($item_id, $course_id);
+                    if ($compilationId) {
+                        $actionCompilatio = "<div id='id_avancement".$item_id."' class='compilation_block'>
+                            ".$loading.'&nbsp;'.get_lang('CompilatioConnectionWithServer').'</div>';
+                    } else {
+                        $workDirectory = api_get_path(SYS_COURSE_PATH).$course_info['directory'];
+                        if (!Compilatio::verifiFileType($dbTitle)) {
+                            $actionCompilatio = get_lang('CompilatioFileIsNotSupported');
+                        } elseif (filesize($workDirectory.'/'.$work['url']) > $compilation->getMaxFileSize()) {
+                            $sizeFile = round(filesize($workDirectory.'/'.$work['url']) / 1000000);
+                            $actionCompilatio = get_lang('CompilatioFileIsTooBig').': '.format_file_size($sizeFile).'<br />';
+                        } else {
+                            $actionCompilatio = "<div id='id_avancement".$item_id."' class='compilation_block'>";
+                            $actionCompilatio .= Display::url(
+                                get_lang('CompilatioAnalysis'),
+                                'javascript:void(0)',
+                                [
+                                    'class' => 'getSingleCompilatio btn btn-primary btn-xs',
+                                    'onclick' => "getSingleCompilatio($item_id);",
+                                ]
+                            );
+                            $actionCompilatio .= get_lang('CompilatioWithCompilatio');
+                        }
+                    }
+                    $work['compilatio'] = $actionCompilatio;
+                }
                 $works[] = $work;
             }
         }
@@ -4526,6 +4560,8 @@ function deleteWorkItem($item_id, $courseInfo)
             $sql = "DELETE FROM $TSTDPUBASG
                     WHERE c_id = $course_id AND publication_id = $item_id";
             Database::query($sql);
+
+            Compilatio::plagiarismDeleteDoc($course_id, $item_id);
 
             api_item_property_update(
                 $courseInfo,

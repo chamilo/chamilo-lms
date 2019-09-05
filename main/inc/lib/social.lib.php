@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CourseBundle\Entity\CForumPost;
+use Chamilo\CourseBundle\Entity\CForumThread;
 use ChamiloSession as Session;
 use Zend\Feed\Reader\Entry\Rss;
 use Zend\Feed\Reader\Reader;
@@ -562,25 +564,6 @@ class SocialManager extends UserManager
     }
 
     /**
-     * Allow attaching to group.
-     *
-     * @author Isaac Flores Paz
-     *
-     * @param int $id_friend_qualify User to qualify
-     * @param int $type_qualify      Kind of rating
-     *
-     * @deprecated 2017-03
-     */
-    public static function qualify_friend($id_friend_qualify, $type_qualify)
-    {
-        $table = Database::get_main_table(TABLE_MAIN_USER_REL_USER);
-        $user_id = api_get_user_id();
-        $sql = 'UPDATE '.$table.' SET relation_type='.((int) $type_qualify).'
-                WHERE user_id = '.$user_id.' AND friend_user_id='.(int) $id_friend_qualify;
-        Database::query($sql);
-    }
-
-    /**
      * Get user's feeds.
      *
      * @param int $user  User ID
@@ -934,7 +917,7 @@ class SocialManager extends UserManager
         ];
 
         // get count unread message and total invitations
-        $count_unread_message = MessageManager::getNumberOfMessages(true);
+        $count_unread_message = MessageManager::getCountNewMessagesFromDB(api_get_user_id());
         $count_unread_message = !empty($count_unread_message) ? Display::badge($count_unread_message) : null;
 
         $number_of_new_messages_of_friend = self::get_message_number_invitation_by_user_id(api_get_user_id());
@@ -957,6 +940,7 @@ class SocialManager extends UserManager
         $searchIcon = Display::return_icon('sn-search.png', get_lang('Search'), null, ICON_SIZE_SMALL);
         $portfolioIcon = Display::return_icon('wiki_task.png', get_lang('Portfolio'));
         $personalDataIcon = Display::return_icon('database.png', get_lang('PersonalDataReport'));
+        $messageSocialIcon = Display::return_icon('promoted_message.png', get_lang('PromotedMessages'));
 
         $forumCourseId = api_get_configuration_value('global_forums_course_id');
         $groupUrl = api_get_path(WEB_CODE_PATH).'social/groups.php';
@@ -981,7 +965,7 @@ class SocialManager extends UserManager
                         '.$homeIcon.' '.get_lang('Home').'
                     </a>
                 </li>';
-            $active = $show == 'messages' ? 'active' : null;
+            $active = $show === 'messages' ? 'active' : null;
             $links .= '
                 <li class="messages-icon '.$active.'">
                     <a href="'.api_get_path(WEB_CODE_PATH).'messages/inbox.php">
@@ -990,7 +974,7 @@ class SocialManager extends UserManager
                 </li>';
 
             // Invitations
-            $active = $show == 'invitations' ? 'active' : null;
+            $active = $show === 'invitations' ? 'active' : null;
             $links .= '
                 <li class="invitations-icon '.$active.'">
                     <a href="'.api_get_path(WEB_CODE_PATH).'social/invitations.php">
@@ -999,14 +983,14 @@ class SocialManager extends UserManager
                 </li>';
 
             // Shared profile and groups
-            $active = $show == 'shared_profile' ? 'active' : null;
+            $active = $show === 'shared_profile' ? 'active' : null;
             $links .= '
                 <li class="shared-profile-icon'.$active.'">
                     <a href="'.api_get_path(WEB_CODE_PATH).'social/profile.php">
                         '.$sharedProfileIcon.' '.get_lang('ViewMySharedProfile').'
                     </a>
                 </li>';
-            $active = $show == 'friends' ? 'active' : null;
+            $active = $show === 'friends' ? 'active' : null;
             $links .= '
                 <li class="friends-icon '.$active.'">
                     <a href="'.api_get_path(WEB_CODE_PATH).'social/friends.php">
@@ -1022,7 +1006,7 @@ class SocialManager extends UserManager
                 </li>';
 
             // Search users
-            $active = $show == 'search' ? 'active' : null;
+            $active = $show === 'search' ? 'active' : null;
             $links .= '
                 <li class="search-icon '.$active.'">
                     <a href="'.api_get_path(WEB_CODE_PATH).'social/search.php">
@@ -1031,7 +1015,7 @@ class SocialManager extends UserManager
                 </li>';
 
             // My files
-            $active = $show == 'myfiles' ? 'active' : null;
+            $active = $show === 'myfiles' ? 'active' : null;
 
             $myFiles = '
                 <li class="myfiles-icon '.$active.'">
@@ -1046,7 +1030,7 @@ class SocialManager extends UserManager
             $links .= $myFiles;
             if (api_get_configuration_value('allow_portfolio_tool')) {
                 $links .= '
-                    <li class="portoflio-icon '.($show == 'portfolio' ? 'active' : '').'">
+                    <li class="portoflio-icon '.($show === 'portfolio' ? 'active' : '').'">
                         <a href="'.api_get_path(WEB_CODE_PATH).'portfolio/index.php">
                             '.$portfolioIcon.' '.get_lang('Portfolio').'
                         </a>
@@ -1055,7 +1039,7 @@ class SocialManager extends UserManager
             }
 
             if (!api_get_configuration_value('disable_gdpr')) {
-                $active = $show == 'personal-data' ? 'active' : null;
+                $active = $show === 'personal-data' ? 'active' : null;
                 $personalData = '
                     <li class="personal-data-icon '.$active.'">
                         <a href="'.api_get_path(WEB_CODE_PATH).'social/personal_data.php">
@@ -1063,10 +1047,19 @@ class SocialManager extends UserManager
                         </a>
                     </li>';
                 $links .= $personalData;
-
-                $links .= '</ul>';
             }
 
+            if (api_is_platform_admin()) {
+                $active = $show === 'promoted_messages' ? 'active' : null;
+                $personalData = '
+                    <li class="personal-data-icon '.$active.'">
+                        <a href="'.api_get_path(WEB_CODE_PATH).'social/promoted_messages.php">
+                            '.$messageSocialIcon.' '.get_lang('PromotedMessages').'
+                        </a>
+                    </li>';
+                $links .= $personalData;
+            }
+            $links .= '</ul>';
             $html .= Display::panelCollapse(
                 get_lang('SocialNetwork'),
                 $links,
@@ -1077,7 +1070,7 @@ class SocialManager extends UserManager
             );
         }
 
-        if (in_array($show, $show_groups) && !empty($group_id)) {
+        if (!empty($group_id) && in_array($show, $show_groups)) {
             $html .= $usergroup->show_group_column_information(
                 $group_id,
                 api_get_user_id(),
@@ -1206,10 +1199,10 @@ class SocialManager extends UserManager
             }
 
             // Check if I already sent an invitation message
-            $invitation_sent_list = self::get_list_invitation_sent_by_user_id(api_get_user_id());
+            $invitationSentList = self::get_list_invitation_sent_by_user_id(api_get_user_id());
 
-            if (isset($invitation_sent_list[$user_id]) && is_array($invitation_sent_list[$user_id]) &&
-                count($invitation_sent_list[$user_id]) > 0
+            if (isset($invitationSentList[$user_id]) && is_array($invitationSentList[$user_id]) &&
+                count($invitationSentList[$user_id]) > 0
             ) {
                 $links .= '<li><a href="'.api_get_path(WEB_CODE_PATH).'social/invitations.php">'.
                     Display::return_icon('invitation.png', get_lang('YouAlreadySentAnInvitation'))
@@ -1647,7 +1640,6 @@ class SocialManager extends UserManager
         $userId = (int) $userId;
         $start = (int) $start;
         $length = (int) $length;
-        $startDate = Database::escape_string($startDate);
 
         $select = " SELECT
                     id,
@@ -1668,19 +1660,22 @@ class SocialManager extends UserManager
         }
 
         $sql = "$select                    
-                    FROM $tblMessage tm
+                    FROM $tblMessage m
                 WHERE
                     msg_status <> ".MESSAGE_STATUS_WALL_DELETE.' AND ';
 
-        // My own posts
+        // Get my own posts
         $userReceiverCondition = ' (
             user_receiver_id = '.$userId.' AND 
             msg_status IN ('.MESSAGE_STATUS_WALL_POST.', '.MESSAGE_STATUS_WALL.') AND
             parent_id = '.$parentId.'
         )';
 
-        // User condition
         $sql .= $userReceiverCondition;
+
+        $sql .= ' OR (
+            msg_status IN ('.MESSAGE_STATUS_PROMOTED.')             
+        ) ';
 
         // Get my group posts
         $groupCondition = '';
@@ -1696,8 +1691,8 @@ class SocialManager extends UserManager
             $groupCondition .= ' AND msg_status IN ('.MESSAGE_STATUS_NEW.', '.MESSAGE_STATUS_UNREAD.')) ';
         }
 
-        $friendCondition = '';
         // Get my friend posts
+        $friendCondition = '';
         if (!empty($friendId)) {
             if (is_array($friendId)) {
                 $friendId = array_map('intval', $friendId);
@@ -1730,7 +1725,7 @@ class SocialManager extends UserManager
                                 forum_id,
                                 thread_id,
                                 c_id                            
-        ";
+                            ";
             }
 
             $threadList = array_map('intval', $threadList);
@@ -1762,7 +1757,6 @@ class SocialManager extends UserManager
             $repo = $em->getRepository('ChamiloCourseBundle:CForumPost');
             $repoThread = $em->getRepository('ChamiloCourseBundle:CForumThread');
             $groups = [];
-            $forums = [];
             $userGroup = new UserGroup();
             $urlGroup = api_get_path(WEB_CODE_PATH).'social/group_view.php?id=';
             while ($row = Database::fetch_array($res, 'ASSOC')) {
@@ -1778,14 +1772,14 @@ class SocialManager extends UserManager
                     }
                 }
 
-                // forums
+                // Forums
                 $row['post_title'] = '';
                 $row['forum_title'] = '';
                 $row['thread_url'] = '';
                 if ($row['msg_status'] == MESSAGE_STATUS_FORUM) {
-                    /** @var \Chamilo\CourseBundle\Entity\CForumPost $post */
+                    /** @var CForumPost $post */
                     $post = $repo->find($row['id']);
-                    /** @var \Chamilo\CourseBundle\Entity\CForumThread $thread */
+                    /** @var CForumThread $thread */
                     $thread = $repoThread->find($row['thread_id']);
                     if ($post && $thread) {
                         $courseInfo = api_get_course_info_by_id($post->getCId());
@@ -1842,14 +1836,14 @@ class SocialManager extends UserManager
         }
 
         $formattedList .= '</div>';
-        $formattedList .= '<div class="mediapost-form">';
+        $formattedList .= '<div class="mediapost-form row">';
         $formattedList .= '<form class="form-horizontal" id="form_comment_'.$messageId.'" name="post_comment" method="POST">
                 <div class="col-sm-9">
                 <label for="comment" class="hide">'.get_lang('SocialWriteNewComment').'</label>
                 <input type="hidden" name = "messageId" value="'.$messageId.'" />
                 <textarea rows="3" class="form-control" placeholder="'.get_lang('SocialWriteNewComment').'" name="comment" rows="1" ></textarea>
                 </div>
-                <div class="col-sm-3">
+                <div class="col-sm-3 pull-right">
                 <a onclick="submitComment('.$messageId.');" href="javascript:void(0);" name="social_wall_new_msg_submit" class="btn btn-default btn-post">
                     <em class="fa fa-pencil"></em> '.get_lang('Post').'
                 </a>
@@ -1956,7 +1950,7 @@ class SocialManager extends UserManager
                 }
             }
         } else {
-            $list = MessageManager::getAttachmentLinkList($messageId);
+            $list = MessageManager::getAttachmentLinkList($messageId, 0);
         }
 
         return $list;
@@ -2456,15 +2450,15 @@ class SocialManager extends UserManager
             null,
             [
                 'placeholder' => $socialWallPlaceholder,
-                'cols-size' => [1, 10, 1],
+                'cols-size' => [1, 12, 1],
                 'aria-label' => $socialWallPlaceholder,
             ]
         );
         $form->addHtml('<div class="form-group">');
-        $form->addHtml('<div class="col-sm-4 col-md-offset-1">');
+        $form->addHtml('<div class="col-sm-6">');
         $form->addFile('picture', get_lang('UploadFile'), ['custom' => true]);
         $form->addHtml('</div>');
-        $form->addHtml('<div class="col-sm-6">');
+        $form->addHtml('<div class="col-sm-6 "><div class="pull-right">');
         $form->addButtonSend(
             get_lang('Post'),
             'wall_post_button',
@@ -2474,9 +2468,8 @@ class SocialManager extends UserManager
                 'custom' => true,
             ]
         );
+        $form->addHtml('</div></div>');
         $form->addHtml('</div>');
-        $form->addHtml('</div>');
-
         $form->addHidden('url_content', '');
         $html = Display::panel($form->returnForm(), get_lang('SocialWall'));
 
@@ -2525,7 +2518,7 @@ class SocialManager extends UserManager
         foreach ($messages as $message) {
             $post = $message['html'];
             $comments = '';
-            if ($message['msg_status'] == MESSAGE_STATUS_WALL_POST) {
+            if (in_array($message['msg_status'], [MESSAGE_STATUS_WALL_POST, MESSAGE_STATUS_PROMOTED])) {
                 $comments = self::getWallPostComments($userId, $message);
             }
 
@@ -2546,16 +2539,26 @@ class SocialManager extends UserManager
      */
     public static function wrapPost($message, $content)
     {
+        $class = '';
+        if ($message['msg_status'] === MESSAGE_STATUS_PROMOTED) {
+            $class = 'promoted_post';
+        }
+
         return Display::panel($content, '',
             '',
             'default',
             '',
-            'post_'.$message['id']
+            'post_'.$message['id'],
+            null,
+            $class
         );
     }
 
     /**
-     * @param int $userId
+     * @param int   $userId
+     * @param array $groupList
+     * @param array $friendList
+     * @param array $threadList
      *
      * @return int
      */
@@ -2626,7 +2629,8 @@ class SocialManager extends UserManager
     }
 
     /**
-     * @param int $user_id
+     * @param int  $user_id
+     * @param bool $isArray
      *
      * @return string|array
      */
@@ -3305,8 +3309,7 @@ class SocialManager extends UserManager
 
         $postAttachment = self::getPostAttachment($message);
 
-        $html = '';
-        $html .= '<div class="top-mediapost" >';
+        $html = '<div class="top-mediapost" >';
         $html .= '<div class="pull-right btn-group btn-group-sm">';
 
         $html .= MessageManager::getLikesButton(

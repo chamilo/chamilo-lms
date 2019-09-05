@@ -175,10 +175,9 @@ if ($form->validate()) {
             $infoCertificateDefault = Database::select(
                 '*',
                 $table,
-                ['where' => ['certificate_default = ? ' => 1]],
+                ['where' => ['access_url_id = ? AND certificate_default = ? ' => [$accessUrlId, 1]]],
                 'first'
             );
-
             if (!empty($infoCertificateDefault)) {
                 foreach ($fieldList as $field) {
                     if (!empty($infoCertificateDefault[$field]) && !$checkLogo[$field]) {
@@ -951,6 +950,7 @@ function checkInstanceImage($certificateId, $imagePath, $field, $type = 'certifi
     $table = Database::get_main_table(CustomCertificatePlugin::TABLE_CUSTOMCERTIFICATE);
     $imagePath = Database::escape_string($imagePath);
     $field = Database::escape_string($field);
+    $certificateId = (int) $certificateId;
 
     $sql = "SELECT * FROM $table WHERE $field = '$imagePath'";
     $res = Database::query($sql);

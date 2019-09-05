@@ -1024,11 +1024,11 @@ switch ($action) {
                                            disabled="disabled"/>
                                 </div>
                                 <button class="btn btn-primary btn-block" type="button" name="submitAuth"
-                                        value="<?php echo get_lang('Ok'); ?>"
-                                        disabled="disabled"><?php echo get_lang('Ok'); ?></button>
+                                        value="<?php echo get_lang('LoginEnter'); ?>"
+                                        disabled="disabled"><?php echo get_lang('LoginEnter'); ?></button>
                             </form>
                             <ul class="nav nav-pills nav-stacked">
-                                <li><?php echo api_ucfirst(get_lang('Registration')); ?></li>
+                                <li><?php echo api_ucfirst(get_lang('SignUp')); ?></li>
                                 <li><?php echo api_ucfirst(get_lang('LostPassword')); ?></li>
                             </ul>
                         </div>

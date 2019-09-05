@@ -26,7 +26,6 @@ $logInfo = [
     'tool_id' => 0,
     'tool_id_detail' => 0,
     'action' => $this_section,
-    'info' => '',
 ];
 Event::registerLog($logInfo);
 
@@ -312,10 +311,10 @@ if (is_platform_authentication() &&
     is_profile_editable() &&
     api_get_setting('profile', 'password') == 'true'
 ) {
-    $form->addElement('password', 'password0', [get_lang('Pass'), get_lang('Enter2passToChange')], ['size' => 40]);
-    $form->addElement('password', 'password1', get_lang('NewPass'), ['id' => 'password1', 'size' => 40]);
+    $form->addElement('password', 'password0', [get_lang('Pass'), get_lang('TypeCurrentPassword')], ['size' => 40]);
+    $form->addElement('password', 'password1', [get_lang('NewPass'), get_lang('EnterYourNewPassword')], ['id' => 'password1', 'size' => 40]);
 
-    $form->addElement('password', 'password2', get_lang('Confirmation'), ['size' => 40]);
+    $form->addElement('password', 'password2', [get_lang('Confirmation'), get_lang('RepeatYourNewPassword')], ['size' => 40]);
     //    user must enter identical password twice so we can prevent some user errors
     $form->addRule(['password1', 'password2'], get_lang('PassTwo'), 'compare');
     $form->addPasswordRule('password1');
@@ -651,20 +650,18 @@ if ($form->validate()) {
     Session::write('_user', $userInfo);
 
     if ($hook) {
-        Database::getManager()->clear(User::class); //Avoid cache issue (user entity is used before)
-
-        $user = api_get_user_entity(api_get_user_id()); //Get updated user info for hook event
-
+        Database::getManager()->clear(User::class); // Avoid cache issue (user entity is used before)
+        $user = api_get_user_entity(api_get_user_id()); // Get updated user info for hook event
         $hook->setEventData(['user' => $user]);
         $hook->notifyUpdateUser(HOOK_EVENT_TYPE_POST);
     }
 
+    Session::erase('system_timezone');
+
     $url = api_get_self();
-    header("Location: ".$url);
+    header("Location: $url");
     exit;
 }
-
-// the header
 
 $actions = '';
 if ($allowSocialTool) {

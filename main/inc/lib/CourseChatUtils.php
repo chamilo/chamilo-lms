@@ -177,7 +177,7 @@ class CourseChatUtils
             $fileContent = '
                 <div class="message-teacher">
                     <div class="content-message">
-                        <div class="chat-message-block-name">'.$user->getCompleteName().'</div>
+                        <div class="chat-message-block-name">'.UserManager::formatUserFullName($user).'</div>
                         <div class="chat-message-block-content">'.$message.'</div>
                         <div class="message-date">'.$timeNow.'</div>
                     </div>
@@ -191,7 +191,7 @@ class CourseChatUtils
                     <img class="chat-image" src="'.$userPhoto.'">
                     <div class="icon-message"></div>
                     <div class="content-message">
-                        <div class="chat-message-block-name">'.$user->getCompleteName().'</div>
+                        <div class="chat-message-block-name">'.UserManager::formatUserFullName($user).'</div>
                         <div class="chat-message-block-content">'.$message.'</div>
                         <div class="message-date">'.$timeNow.'</div>
                     </div>
@@ -759,7 +759,7 @@ class CourseChatUtils
             'status' => $status,
             'image_url' => UserManager::getUserPicture($user->getId(), USER_IMAGE_SIZE_MEDIUM),
             'profile_url' => api_get_path(WEB_CODE_PATH).'social/profile.php?u='.$user->getId(),
-            'complete_name' => $user->getCompleteName(),
+            'complete_name' => UserManager::formatUserFullName($user),
             'username' => $user->getUsername(),
             'email' => $user->getEmail(),
             'isConnected' => $this->userIsConnected($user->getId()),

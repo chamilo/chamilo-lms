@@ -33,11 +33,11 @@ class CourseCategory
      *
      * @return array
      */
-    public static function getCategory($category)
+    public static function getCategory($categoryCode)
     {
         $table = Database::get_main_table(TABLE_MAIN_CATEGORY);
-        $category = Database::escape_string($category);
-        $sql = "SELECT * FROM $table WHERE code ='$category'";
+        $categoryCode = Database::escape_string($categoryCode);
+        $sql = "SELECT * FROM $table WHERE code ='$categoryCode'";
         $result = Database::query($sql);
         if (Database::num_rows($result)) {
             $category = Database::fetch_array($result, 'ASSOC');

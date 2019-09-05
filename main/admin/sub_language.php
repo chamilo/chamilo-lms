@@ -12,7 +12,7 @@ $this_section = SECTION_PLATFORM_ADMIN;
 
 api_protect_admin_script();
 $htmlHeadXtra[] = '<script>
- $(document).ready(function() {
+ $(function () {
     $(".save").click(function() {
         var button_name=$(this).attr("name");
         var button_array=button_name.split("|");

@@ -27,6 +27,9 @@ if ($bbb->isGlobalConference()) {
     api_protect_course_script(true);
 }
 
+$courseInfo = api_get_course_info();
+$courseCode = isset($courseInfo['code']) ? $courseInfo['code'] : '';
+
 $message = '';
 if ($conferenceManager) {
     switch ($action) {
@@ -64,10 +67,10 @@ if ($conferenceManager) {
             break;
         case 'regenerate_record':
             if ($plugin->get('allow_regenerate_recording') !== 'true') {
-                api_not_allowed();
+                api_not_allowed(true);
             }
-            $result = $bbb->regenerateRecording($_GET['id'], $_GET['record_id']);
-
+            $recordId = isset($_GET['record_id']) ? $_GET['record_id'] : '';
+            $result = $bbb->regenerateRecording($_GET['id'], $recordId);
             if ($result) {
                 $message = Display::return_message(get_lang('Success'), 'success');
             } else {
@@ -93,9 +96,7 @@ if ($conferenceManager) {
         case 'end':
             $bbb->endMeeting($_GET['id']);
             $message = Display::return_message(
-                $plugin->get_lang('MeetingClosed').'<br />'.$plugin->get_lang(
-                    'MeetingClosedComment'
-                ),
+                $plugin->get_lang('MeetingClosed').'<br />'.$plugin->get_lang('MeetingClosedComment'),
                 'success',
                 false
             );
@@ -117,10 +118,35 @@ if ($conferenceManager) {
             exit;
             break;
         case 'publish':
-            $result = $bbb->publishMeeting($_GET['id']);
+            $bbb->publishMeeting($_GET['id']);
+            Display::addFlash(Display::return_message(get_lang('Updated')));
+            header('Location: '.$bbb->getListingUrl());
+            exit;
             break;
         case 'unpublish':
-            $result = $bbb->unpublishMeeting($_GET['id']);
+            $bbb->unpublishMeeting($_GET['id']);
+            Display::addFlash(Display::return_message(get_lang('Updated')));
+            header('Location: '.$bbb->getListingUrl());
+            exit;
+            break;
+        case 'logout':
+            if ($plugin->get('allow_regenerate_recording') !== 'true') {
+                api_not_allowed(true);
+            }
+            $allow = api_get_course_setting('bbb_force_record_generation', $courseCode) == 1 ? true : false;
+            if ($allow) {
+                $result = $bbb->getMeetingByRemoteId($_GET['remote_id']);
+                if (!empty($result)) {
+                    $result = $bbb->regenerateRecording($result['id']);
+                    if ($result) {
+                        Display::addFlash(Display::return_message(get_lang('Success')));
+                    } else {
+                        Display::addFlash(Display::return_message(get_lang('Error'), 'error'));
+                    }
+                }
+            }
+            header('Location: '.$bbb->getListingUrl());
+            exit;
             break;
         default:
             break;
@@ -238,8 +264,6 @@ switch ($type) {
             $showClientOptions = true;
         } else {
             if ($meetingExists) {
-                //$meetingInfo = $bbb->getMeetingByName($videoConferenceName);
-                //$meetinUserInfo = $bbb->getMeetingParticipantInfo($meetingInfo['id'], api_get_user_id());
                 $urlList = $plugin->getUrlInterfaceLinks($conferenceUrl);
                 $showClientOptions = true;
             }

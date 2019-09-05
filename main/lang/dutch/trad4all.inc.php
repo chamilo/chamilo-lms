@@ -3851,7 +3851,7 @@ $NewMessageInForum = "Nieuw bericht geplaatst in het forum";
 $FolderCreated = "Nieuwe folder aangemaakt";
 $AgendaAdded = "Agenda item toegevoegd";
 $ShouldBeCSVFormat = "Het bestand moet in CSV-formaat zijn. Voeg geen spaties toe. De structuur moet exact zijn zoals:";
-$Enter2passToChange = "Nieuw wachtwoord tweemaal invullen, of blanco laten om het huidige te behouden.";
+$TypeCurrentPassword = "Nieuw wachtwoord tweemaal invullen, of blanco laten om het huidige te behouden.";
 $AuthInfo = "Authenticatie";
 $ImageWrong = "De bestandsgrootte voor de foto moet kleiner zijn dan";
 $NewPass = "Nieuw wachtwoord";
@@ -6874,6 +6874,6 @@ Het eerstvolgende moment dat voor deze module werd ingevuld is: <br />
 $WelcomeToPortalXInCourseSessionX = "Welkom bij %s: informatie over de module %s";
 $WelcomeToPortalXInCourseSessionXCoursePartOfCareerX = "Welkom bij %s. Je bent ingeschreven voor de module %s.
 Deze module maakt deel uit van de opleiding %s.";
-$YourNextModule = "Jouw eerstvolgende lesmoment voor deze module:";
+$YourNextModule = "Jouw eerstvolgende lesmoment voor de module";
 $FirstLesson = "Eerste lesmoment";
 ?>

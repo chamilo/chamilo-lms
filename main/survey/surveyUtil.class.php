@@ -1613,6 +1613,7 @@ class SurveyUtil
     public static function export_complete_report_xls($survey_data, $filename, $user_id = 0)
     {
         $course_id = api_get_course_int_id();
+        $user_id = (int) $user_id;
         $surveyId = isset($_GET['survey_id']) ? (int) $_GET['survey_id'] : 0;
 
         if (empty($course_id) || empty($surveyId)) {
@@ -1773,7 +1774,7 @@ class SurveyUtil
         $sql = "SELECT * FROM $table_survey_answer
                 WHERE c_id = $course_id AND survey_id = $surveyId";
         if ($user_id != 0) {
-            $sql .= " AND user='".intval($user_id)."' ";
+            $sql .= " AND user='".$user_id."' ";
         }
         $sql .= ' ORDER BY user ASC';
 

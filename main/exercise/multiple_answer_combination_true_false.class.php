@@ -13,8 +13,8 @@
  */
 class MultipleAnswerCombinationTrueFalse extends MultipleAnswerCombination
 {
-    public static $typePicture = 'mcmaco.png';
-    public static $explanationLangVar = 'MultipleAnswerCombinationTrueFalse';
+    public $typePicture = 'mcmaco.png';
+    public $explanationLangVar = 'MultipleAnswerCombinationTrueFalse';
     public $options;
 
     /**

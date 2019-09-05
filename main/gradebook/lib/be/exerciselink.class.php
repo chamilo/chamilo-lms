@@ -262,7 +262,7 @@ class ExerciseLink extends AbstractLink
         }
 
         $exercise = new Exercise($courseId);
-        $exercise->read($exerciseData['id']);
+        $exercise->read($exerciseId);
 
         if (!$this->is_hp) {
             if ($exercise->exercise_was_added_in_lp == false) {
@@ -505,9 +505,9 @@ class ExerciseLink extends AbstractLink
     {
         if ($this->is_hp == 1) {
             return 'HotPotatoes';
-        } else {
-            return get_lang('Quiz');
         }
+
+        return get_lang('Quiz');
     }
 
     public function needs_name_and_description()
@@ -555,9 +555,67 @@ class ExerciseLink extends AbstractLink
     {
         switch ($type) {
             case 'best':
-
                 break;
         }
+    }
+
+    /**
+     * Lazy load function to get the database contents of this exercise.
+     */
+    public function get_exercise_data()
+    {
+        $tableItemProperty = Database::get_course_table(TABLE_ITEM_PROPERTY);
+        if ($this->is_hp == 1) {
+            $table = Database::get_course_table(TABLE_DOCUMENT);
+        } else {
+            $table = Database::get_course_table(TABLE_QUIZ_TEST);
+        }
+
+        $exerciseId = $this->get_ref_id();
+
+        if (empty($this->exercise_data)) {
+            if ($this->is_hp == 1) {
+                $sql = "SELECT * FROM $table ex
+                    INNER JOIN $tableItemProperty ip
+                    ON (ip.ref = ex.id AND ip.c_id = ex.c_id)
+                    WHERE
+                        ip.c_id = $this->course_id AND
+                        ex.c_id = $this->course_id AND
+                        ip.ref = $exerciseId AND
+                        ip.tool = '".TOOL_DOCUMENT."' AND
+                        ex.path LIKE '%htm%' AND
+                        ex.path LIKE '%HotPotatoes_files%' AND
+                        ip.visibility = 1";
+                $result = Database::query($sql);
+                $this->exercise_data = Database::fetch_array($result);
+            } else {
+                // Try with iid
+                $sql = 'SELECT * FROM '.$table.'
+                    WHERE
+                        c_id = '.$this->course_id.' AND
+                        iid = '.$exerciseId;
+                $result = Database::query($sql);
+                $rows = Database::num_rows($result);
+
+                if (!empty($rows)) {
+                    $this->exercise_data = Database::fetch_array($result);
+                } else {
+                    // Try wit id
+                    $sql = 'SELECT * FROM '.$table.'
+                        WHERE
+                            c_id = '.$this->course_id.' AND
+                            id = '.$exerciseId;
+                    $result = Database::query($sql);
+                    $this->exercise_data = Database::fetch_array($result);
+                }
+            }
+        }
+
+        if (empty($this->exercise_data)) {
+            return false;
+        }
+
+        return $this->exercise_data;
     }
 
     /**
@@ -568,62 +626,5 @@ class ExerciseLink extends AbstractLink
         $this->exercise_table = Database::get_course_table(TABLE_QUIZ_TEST);
 
         return $this->exercise_table;
-    }
-
-    /**
-     * Lazy load function to get the database contents of this exercise.
-     */
-    private function get_exercise_data()
-    {
-        $tableItemProperty = Database::get_course_table(TABLE_ITEM_PROPERTY);
-        if ($this->is_hp == 1) {
-            $table = Database::get_course_table(TABLE_DOCUMENT);
-        } else {
-            $table = $this->get_exercise_table();
-        }
-
-        $exerciseId = $this->get_ref_id();
-
-        if ($table == '') {
-            return false;
-        } elseif (empty($this->exercise_data)) {
-            if ($this->is_hp == 1) {
-                $sql = "SELECT * FROM $table ex
-                        INNER JOIN $tableItemProperty ip
-                        ON (ip.ref = ex.id AND ip.c_id = ex.c_id)
-                        WHERE
-                            ip.c_id = $this->course_id AND
-                            ex.c_id = $this->course_id AND
-                            ip.ref = $exerciseId AND
-                            ip.tool = '".TOOL_DOCUMENT."' AND
-                            ex.path LIKE '%htm%' AND
-                            ex.path LIKE '%HotPotatoes_files%' AND
-                            ip.visibility = 1";
-                $result = Database::query($sql);
-                $this->exercise_data = Database::fetch_array($result);
-            } else {
-                // Try with iid
-                $sql = 'SELECT * FROM '.$table.'
-                        WHERE
-                            c_id = '.$this->course_id.' AND
-                            iid = '.$exerciseId;
-                $result = Database::query($sql);
-                $rows = Database::num_rows($result);
-
-                if (!empty($rows)) {
-                    $this->exercise_data = Database::fetch_array($result);
-                } else {
-                    // Try wit id
-                    $sql = 'SELECT * FROM '.$table.'
-                            WHERE
-                                c_id = '.$this->course_id.' AND
-                                id = '.$exerciseId;
-                    $result = Database::query($sql);
-                    $this->exercise_data = Database::fetch_array($result);
-                }
-            }
-        }
-
-        return $this->exercise_data;
     }
 }

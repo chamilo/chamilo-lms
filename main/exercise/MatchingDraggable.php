@@ -8,8 +8,8 @@
  */
 class MatchingDraggable extends Question
 {
-    public static $typePicture = 'matchingdrag.png';
-    public static $explanationLangVar = 'MatchingDraggable';
+    public $typePicture = 'matchingdrag.png';
+    public $explanationLangVar = 'MatchingDraggable';
 
     /**
      * Class constructor.
@@ -274,7 +274,9 @@ class MatchingDraggable extends Question
         }
 
         if ($exercise->showExpectedChoice()) {
-            $header .= '<th>'.get_lang('ExpectedChoice').'</th>';
+            if ($exercise->showExpectedChoiceColumn()) {
+                $header .= '<th>'.get_lang('ExpectedChoice').'</th>';
+            }
             $header .= '<th>'.get_lang('Status').'</th>';
         } else {
             $header .= '<th>'.get_lang('CorrespondsTo').'</th>';

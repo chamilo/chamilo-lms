@@ -20,12 +20,12 @@ switch ($action) {
 
         // Setting notifications
         $count_unread_message = 0;
-        if (api_get_setting('allow_message_tool') == 'true') {
+        if (api_get_setting('allow_message_tool') === 'true') {
             // get count unread message and total invitations
-            $count_unread_message = MessageManager::getNumberOfMessages(true);
+            $count_unread_message = MessageManager::getCountNewMessagesFromDB($userId);
         }
 
-        if (api_get_setting('allow_social_tool') == 'true') {
+        if (api_get_setting('allow_social_tool') === 'true') {
             $number_of_new_messages_of_friend = SocialManager::get_message_number_invitation_by_user_id(
                 $userId
             );
@@ -112,7 +112,7 @@ switch ($action) {
 
         /** @var User $user */
         foreach ($users as $user) {
-            $userName = $user->getCompleteNameWithUsername();
+            $userName = UserManager::formatUserFullName($user, true);
 
             if ($showEmail) {
                 $userName .= " ({$user->getEmail()})";
@@ -123,7 +123,7 @@ switch ($action) {
                 'id' => $user->getId(),
             ];
         }
-
+        header('Content-type:application/json');
         echo json_encode($return);
         break;
     default:

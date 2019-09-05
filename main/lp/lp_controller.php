@@ -95,6 +95,147 @@ $htmlHeadXtra[] = '
                 $(ui.item).css("width", "100%");
             }
         });
+                
+        $(".li_container .order_items").click(function(e) {            
+            var dir = $(this).data("dir");
+            var itemId = $(this).data("id");             
+            var jItems = $("#lp_item_list li.li_container");            
+            var jItem = $("#"+ itemId);          
+            var index = jItems.index(jItem);
+            var total = jItems.length;     
+              
+            //console.log("total " + total);            
+            //console.log("current " + index);   
+               
+            switch (dir) {
+                case "up":
+                    if (index != 0 && jItems[index - 1]) {
+                        /*var subItems = $(jItems[index - 1]).find("li.sub_item");
+                        if (subItems.length >= 0) {
+                            index = index - 1;
+                        }*/
+                        var subItems = $(jItems[index - 1]).find("li.sub_item");                        
+                        var parentClass = $(jItems[index - 1]).parent().parent().attr("class");                        
+                        var parentId = $(jItems[index]).parent().parent().attr("id");                        
+                        var myParentId = $(jItems[index - 1]).parent().parent().attr("id");
+                        //console.log(parentId + " - " + myParentId);
+                        
+                        // We are brothers!
+                        if (parentId == myParentId) {
+                            console.log("Brothers");
+                            console.log(subItems.length);
+                            if (subItems.length > 0) {
+                                var lastItem = $(jItems[index - 1]).find("li.sub_item");    
+                                parentIndex = jItems.index(lastItem);                         
+                                console.log(parentIndex);
+                                jItem.detach().insertAfter(lastItem);    
+                                //console.log("not classic");
+                            } else {
+                                //console.log("classic");
+                                jItem.detach().insertBefore(jItems[index - 1]);  
+                            }                            
+                            break;
+                        }
+                        
+                        //console.log(parentClass);
+                        if (parentClass == "record li_container") {
+                            // previous is a chapter
+                            var lastItem = $(jItems[index - 1]).parent().parent().find("li.li_container").last();    
+                            parentIndex = jItems.index(lastItem);                         
+                            //console.log(parentIndex);
+                            jItem.detach().insertAfter(jItems[parentIndex]);                            
+                        } else {
+                            jItem.detach().insertBefore(jItems[index - 1]);    
+                        }                       
+                    }                                        
+                    break;
+                case "down":
+                     if (index != total - 1) {   
+                        const originIndex = index;
+                        // The element is a chapter with items
+                        var subItems = jItem.find("li.li_container");  
+                        if (subItems.length > 0) { 
+                            index = subItems.length + index;
+                            //console.log("element is a chapter with items");                            
+                            //console.log("new index = " + index);
+                        }            
+                        
+                        var subItems = $(jItems[index + 1]).find("li.sub_item");
+                        //console.log("next subItems.length: "+subItems.length);
+                        // This is an element entering in a chapter
+                        if (subItems.length > 0) {   
+                            // Check if im a child
+                            var parentClass = jItem.parent().parent().attr("class");                            
+                            //console.log(parentClass);
+                            if (parentClass == "record li_container") {
+                                // Parent position
+                                var parentIndex = jItems.index(jItem.parent().parent());
+                                //console.log(jItem.parent().parent().attr("id"));
+                                //console.log(parentIndex);
+                                jItem.detach().insertAfter(jItems[parentIndex]);
+                            } else {
+                                jItem.detach().insertAfter(subItems);    
+                            }                            
+                            break;
+                        }     
+                                                                       
+                        var currentSubItems = $(jItems[index]).parent().find("li.sub_item");
+                        //console.log("currentSubItems"+currentSubItems.length);
+                        
+                        var parentId = $(jItems[originIndex]).parent().parent().attr("id");                        
+                        var myParentId = $(jItems[index + 1]).parent().parent().attr("id");
+                        //console.log("parent ids: "+ parentId + " - " + myParentId);
+                        
+                        // We are brothers!
+                        if (parentId == myParentId) {
+                            if ((index + 1) < total) {
+                                //console.log(index + 1);
+                                //console.log("We are brothers");
+                                jItem.detach().insertAfter(jItems[index + 1]);
+                            }                            
+                            break;
+                        }
+                        
+                        if (currentSubItems.length > 0) {                     
+                            var parentIndex = jItems.index(jItem.parent().parent());
+                            //console.log("has currentSubItems");
+                            //console.log("id " + jItem.parent().parent().attr("id"));
+                            //console.log("parentIndex: " + parentIndex);
+                            if (parentIndex >= 0) {
+                                jItem.detach().insertAfter(jItems[parentIndex]);
+                                break;
+                            }
+                            //jItem.detach().insertAfter($(jItems[index]).parent().parent());                            
+                        }   
+                        
+                        //var lastItem = $(jItems[index + 1]).parent().parent().find("li.li_container").last();                                              
+                        if (subItems.length > 0) {
+                            index = originIndex;
+                        }
+                        
+                        if ((index + 1) < total) {
+                            //console.log(index + 1);
+                            //console.log("changed");
+                            jItem.detach().insertAfter(jItems[index + 1]);
+                        }
+                     }
+                     break;
+            }   
+            
+            //console.log("rebuild");
+            buildLPtree($("#lp_item_list"), 0);
+            
+            var order = "new_order="+ newOrderData + "&a=update_lp_item_order";
+            $.post(
+                "'.$ajax_url.'",
+                order,
+                function(reponse) {
+                    $("#message").html(reponse);
+                    order = "";
+                    newOrderData = "";
+                }
+            );            
+        });
 
         $("#lp_item_list").sortable({
             items: "li",
@@ -168,10 +309,6 @@ if ($refresh == 1) {
 if ($debug > 0) {
     error_log(' $refresh: '.$refresh);
     error_log(' $myrefresh: '.$myrefresh);
-}
-
-if (!empty($_REQUEST['dialog_box'])) {
-    $dialog_box = stripslashes(urldecode($_REQUEST['dialog_box']));
 }
 
 $lp_controller_touched = 1;
@@ -324,6 +461,7 @@ if (empty($lp_id)) {
 }
 
 $lp_detail_id = 0;
+$attemptId = 0;
 switch ($action) {
     case '':
     case 'list':
@@ -331,7 +469,8 @@ switch ($action) {
         break;
     case 'view':
     case 'content':
-        $lp_detail_id = $_SESSION['oLP']->get_current_item_id();
+        $lp_detail_id = $oLP->get_current_item_id();
+        $attemptId = $oLP->getCurrentAttempt();
         break;
     default:
         $lp_detail_id = (!empty($_REQUEST['id']) ? (int) $_REQUEST['id'] : 0);
@@ -342,6 +481,7 @@ $logInfo = [
     'tool' => TOOL_LEARNPATH,
     'tool_id' => $eventLpId,
     'tool_id_detail' => $lp_detail_id,
+    'action_details' => $attemptId,
     'action' => !empty($action) ? $action : 'list',
 ];
 Event::registerLog($logInfo);
@@ -362,50 +502,44 @@ if (isset($_POST['title'])) {
 $redirectTo = '';
 if ($debug > 0) {
     error_log('action "'.$action.'" triggered');
-    if (!$lp_found) {
-        //check if the learnpath ID was defined, otherwise send back to list
-        error_log('No learnpath given');
-    }
 }
 
 switch ($action) {
     case 'send_notify_teacher':
-        // Enviar correo al profesor
+        // Send notification to the teacher
         $studentInfo = api_get_user_info();
         $course_info = api_get_course_info();
+        $sessionId = api_get_session_id();
 
-        global $_configuration;
-        $root_web = $_configuration['root_web'];
-
-        if (api_get_session_id() > 0) {
-            $session_info = api_get_session_info(api_get_session_id());
-            $course_name = $session_info['name'];
-            $course_url = $root_web.'courses/'.$course_info['code'].'/index.php?id_session='.api_get_session_id();
-        } else {
-            $course_name = $course_info['title'];
-            $course_url = $root_web.'courses/'.$course_info['code'].'/index.php?';
+        $courseName = $course_info['title'];
+        $courseUrl = $course_info['course_public_url'];
+        if (!empty($sessionId)) {
+            $sessionInfo = api_get_session_info($sessionId);
+            $courseName = $sessionInfo['name'];
+            $courseUrl .= '?id_session='.$sessionId;
         }
-        $url = Display::url($course_name, $course_url, ['title' => get_lang('GoToCourse')]);
-        $coachList = CourseManager::get_coachs_from_course(api_get_session_id(), api_get_course_int_id());
-        foreach ($coachList as $coach_course) {
-            $recipient_name = $coach_course['full_name'];
 
+        $url = Display::url($courseName, $courseUrl, ['title' => get_lang('GoToCourse')]);
+        $coachList = CourseManager::get_coachs_from_course($sessionId, api_get_course_int_id());
+        foreach ($coachList as $coach_course) {
+            $recipientName = $coach_course['full_name'];
             $coachInfo = api_get_user_info($coach_course['user_id']);
+
+            if (empty($coachInfo)) {
+                continue;
+            }
             $email = $coachInfo['email'];
 
             $tplContent = new Template(null, false, false, false, false, false);
-            // variables for the default template
-            $tplContent->assign('name_teacher', $recipient_name);
+            $tplContent->assign('name_teacher', $recipientName);
             $tplContent->assign('name_student', $studentInfo['complete_name']);
-            $tplContent->assign('course_name', $course_name);
+            $tplContent->assign('course_name', $courseName);
             $tplContent->assign('course_url', $url);
-            //$tplContent->assign('telefono', $telefono);
-            //$tplContent->assign('prefix', $prefix);
             $layoutContent = $tplContent->get_template('mail/content_ending_learnpath.tpl');
             $emailBody = $tplContent->fetch($layoutContent);
 
             api_mail_html(
-                $recipient_name,
+                $recipientName,
                 $email,
                 sprintf(get_lang('StudentXFinishedLp'), $studentInfo['complete_name']),
                 $emailBody,
@@ -415,7 +549,9 @@ switch ($action) {
             );
         }
         Display::addFlash(Display::return_message(get_lang('MessageSent')));
-        require 'lp_list.php';
+        $url = api_get_self().'?action=list&'.api_get_cidreq();
+        header('Location: '.$url);
+        exit;
         break;
     case 'add_item':
         if (!$is_allowed_to_edit) {
@@ -428,6 +564,8 @@ switch ($action) {
             Session::write('refresh', 1);
 
             if (isset($_POST['submit_button']) && !empty($post_title)) {
+                // If a title was submitted:
+
                 // Updating the lp.modified_on
                 $_SESSION['oLP']->set_modified_on();
 
@@ -615,20 +753,18 @@ switch ($action) {
             } else {
                 Session::write('post_time', $_POST['post_time']);
 
+                $publicated_on = null;
                 if (isset($_REQUEST['activate_start_date_check']) &&
                     $_REQUEST['activate_start_date_check'] == 1
                 ) {
                     $publicated_on = $_REQUEST['publicated_on'];
-                } else {
-                    $publicated_on = null;
                 }
 
+                $expired_on = null;
                 if (isset($_REQUEST['activate_end_date_check']) &&
                     $_REQUEST['activate_end_date_check'] == 1
                 ) {
                     $expired_on = $_REQUEST['expired_on'];
-                } else {
-                    $expired_on = null;
                 }
 
                 $new_lp_id = learnpath::add_lp(
@@ -648,6 +784,10 @@ switch ($action) {
                     $form = new FormValidator('lp_add');
                     $form->addSelect('skills', 'skills');
                     Skill::saveSkills($form, ITEM_TYPE_LEARNPATH, $new_lp_id);
+
+                    $extraFieldValue = new ExtraFieldValue('lp');
+                    $_REQUEST['item_id'] = $new_lp_id;
+                    $extraFieldValue->saveFieldValues($_REQUEST);
 
                     // TODO: Maybe create a first directory directly to avoid bugging the user with useless queries
                     $_SESSION['oLP'] = new learnpath(
@@ -702,7 +842,6 @@ switch ($action) {
             require 'lp_list.php';
         } else {
             Session::write('refresh', 1);
-            //require 'lp_build.php';
             $url = api_get_self().'?action=add_item&type=step&lp_id='.intval($_SESSION['oLP']->lp_id).'&'.api_get_cidreq();
             header('Location: '.$url);
             exit;
@@ -717,7 +856,7 @@ switch ($action) {
         } else {
             Session::write('refresh', 1);
             if (isset($_POST['submit_button']) && !empty($post_title)) {
-                //Updating the lp.modified_on
+                // Updating the lp.modified_on
                 $_SESSION['oLP']->set_modified_on();
 
                 // TODO: mp3 edit
@@ -746,15 +885,12 @@ switch ($action) {
                 if (isset($_POST['content_lp'])) {
                     $_SESSION['oLP']->edit_document($_course);
                 }
-                $is_success = true;
-
                 Display::addFlash(Display::return_message(get_lang('Updated')));
-
                 $url = api_get_self().'?action=add_item&type=step&lp_id='.intval($_SESSION['oLP']->lp_id).'&'.api_get_cidreq();
                 header('Location: '.$url);
                 exit;
             }
-            if (isset($_GET['view']) && $_GET['view'] == 'build') {
+            if (isset($_GET['view']) && $_GET['view'] === 'build') {
                 require 'lp_edit_item.php';
             } else {
                 require 'lp_admin_view.php';
@@ -781,10 +917,6 @@ switch ($action) {
                     $min,
                     $max
                 );
-
-                if ($editPrerequisite) {
-                    $is_success = true;
-                }
 
                 Display::addFlash(Display::return_message(get_lang('Updated')));
                 $url = api_get_self().'?action=add_item&type=step&lp_id='.intval($_SESSION['oLP']->lp_id).'&'.api_get_cidreq();
@@ -814,7 +946,6 @@ switch ($action) {
                     $post_title,
                     $_POST['description']
                 );
-                $is_success = true;
                 $url = api_get_self().'?action=add_item&type=step&lp_id='.intval($_SESSION['oLP']->lp_id).'&'.api_get_cidreq();
                 header('Location: '.$url);
                 exit;
@@ -893,7 +1024,7 @@ switch ($action) {
 
         // Teachers can export to PDF
         if (!$is_allowed_to_edit) {
-            if (!learnpath::is_lp_visible_for_student($_SESSION['oLP']->lp_id, api_get_user_id())) {
+            if (!learnpath::is_lp_visible_for_student($_SESSION['oLP']->lp_id, api_get_user_id(), $_course)) {
                 api_not_allowed();
             }
         }
@@ -1070,6 +1201,7 @@ switch ($action) {
 
             $accumulateScormTime = isset($_REQUEST['accumulate_scorm_time']) ? $_REQUEST['accumulate_scorm_time'] : 'true';
             $_SESSION['oLP']->setAccumulateScormTime($accumulateScormTime);
+
             $publicated_on = null;
             if (isset($_REQUEST['activate_start_date_check']) && $_REQUEST['activate_start_date_check'] == 1) {
                 $publicated_on = $_REQUEST['publicated_on'];
@@ -1211,24 +1343,11 @@ switch ($action) {
         }
         break;
     case 'content':
-        if ($debug > 0) {
-            error_log('lp_controller: action: content');
-            error_log('Item id is '.intval($_GET['item_id']));
-        }
         if (!$lp_found) {
             require 'lp_list.php';
         } else {
-            if ($debug > 0) {
-                error_log('save_last()');
-            }
             $_SESSION['oLP']->save_last();
-            if ($debug > 0) {
-                error_log('set_current_item('.$_GET['item_id'].')');
-            }
             $_SESSION['oLP']->set_current_item($_GET['item_id']);
-            if ($debug > 0) {
-                error_log('start_current_item()');
-            }
             $_SESSION['oLP']->start_current_item();
             require 'lp_content.php';
         }
@@ -1237,9 +1356,6 @@ switch ($action) {
         if (!$lp_found) {
             require 'lp_list.php';
         } else {
-            if ($debug > 0) {
-                error_log('Trying to set current item to '.$_REQUEST['item_id'], 0);
-            }
             if (!empty($_REQUEST['item_id'])) {
                 $_SESSION['oLP']->set_current_item($_REQUEST['item_id']);
             }

@@ -32,8 +32,6 @@
                             #timer .container{display:table;background:#777;color:#eee;font-weight:bold;width:100%;text-align:center;text-shadow:1px 1px 4px #999;}
                             #timer .container div{display:table-cell;font-size:24px;padding:0px;width:20px;}
                             #timer .container .divider{width:10px;color:#ddd;}
-                            #btn-comenzar{box-sizing:border-box;background:#eee;border:none;margin:0 auto;padding:20px;width:100%;font-size:30px;color:#777;}
-                            #btn-comenzar:hover{background:#fff;}
                         </style>
                         <script>
                             $(function() {
@@ -42,7 +40,6 @@
                                     minute: parseInt($("#minute").text()),
                                     second:  parseInt($("#second").text())
                                 };
-                                //window.timerInterval = null;
                                 clearInterval(window.timerInterval);
                                 window.timerInterval = setInterval(function(){
                                     // Seconds
@@ -76,7 +73,6 @@
                                 </div>
                             </div>
                         </div>
-
                         <div class="row">
                             <div class="col-xs-4">
                                 <b>
@@ -91,7 +87,6 @@
                                         <div id="minute">{{ minute }}</div>
                                         <div class="divider">:</div>
                                         <div id="second">{{ second }}</div>
-
                                         <div id="slash"> / </div>
                                         <div>{{ hour_min }}</div>
                                     </div>
@@ -175,7 +170,7 @@
                     </ul>
                 </div>
                 <nav id="btn-menu-float" class="circular-menu">
-                    <div class="circle">
+                    <div class="circle {{ show_toolbar_by_default == 1 ? 'open' : '' }}">
                         {% if show_left_column == 1 %}
                             <a href="#" title = "{{ 'Expand'|get_lang }}" id="lp-view-expand-toggle"
                                class="icon-toolbar expand" role="button">
@@ -262,7 +257,6 @@
         }
 
         {% if lp_mode == 'embedframe' %}
-            //$('#learning_path_main').addClass('lp-view-collapsed');
             $('#lp-view-expand-button, #lp-view-expand-toggle').on('click', function (e) {
                 e.preventDefault();
                 $('#learning_path_main').toggleClass('lp-view-collapsed');
@@ -383,7 +377,6 @@
         {% if disable_js_in_lp_view == 0 %}
             $(function() {
                 var arr = ['link', 'sco'];
-
                 if ($.inArray(olms.lms_item_type, arr) == -1) {
                     {{ frame_ready }}
                 }

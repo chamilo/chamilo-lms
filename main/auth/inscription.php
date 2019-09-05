@@ -854,20 +854,28 @@ if ($form->validate()) {
 
                 $emailbody .= get_lang('ManageUser').": $url_edit";
 
-                $admins = UserManager::get_all_administrators();
-                foreach ($admins as $admin_info) {
-                    MessageManager::send_message(
-                        $admin_info['user_id'],
-                        $emailsubject,
-                        $emailbody,
-                        [],
-                        [],
-                        null,
-                        null,
-                        null,
-                        null,
-                        $user_id
-                    );
+                if (api_get_configuration_value('send_inscription_notification_to_general_admin_only')) {
+                    $email = api_get_setting('emailAdministrator');
+                    $firtname = api_get_setting('administratorSurname');
+                    $lastname = api_get_setting('administratorName');
+
+                    api_mail_html("$firtname $lastname", $email, $emailsubject, $emailbody);
+                } else {
+                    $admins = UserManager::get_all_administrators();
+                    foreach ($admins as $admin_info) {
+                        MessageManager::send_message(
+                            $admin_info['user_id'],
+                            $emailsubject,
+                            $emailbody,
+                            [],
+                            [],
+                            null,
+                            null,
+                            null,
+                            null,
+                            $user_id
+                        );
+                    }
                 }
 
                 // 2. set account inactive

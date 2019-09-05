@@ -2,6 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\TrackEHotspot;
+use Chamilo\CourseBundle\Entity\CQuizCategory;
 use ChamiloSession as Session;
 
 /**
@@ -3285,8 +3286,10 @@ class Exercise
      * @param int    $exeId
      * @param int    $questionId
      * @param mixed  $choice                                    the user-selected option
-     * @param string $from                                      function is called from 'exercise_show' or 'exercise_result'
-     * @param array  $exerciseResultCoordinates                 the hotspot coordinates $hotspot[$question_id] = coordinates
+     * @param string $from                                      function is called from 'exercise_show' or
+     *                                                          'exercise_result'
+     * @param array  $exerciseResultCoordinates                 the hotspot coordinates $hotspot[$question_id] =
+     *                                                          coordinates
      * @param bool   $saved_results                             save results in the DB or just show the reponse
      * @param bool   $from_database                             gets information from DB or from the current selection
      * @param bool   $show_result                               show results or not
@@ -6910,26 +6913,47 @@ class Exercise
      * Save categories in the TABLE_QUIZ_REL_CATEGORY table.
      *
      * @param array $categories
+     *
+     * @throws \Doctrine\ORM\OptimisticLockException
      */
     public function save_categories_in_exercise($categories)
     {
-        if (!empty($categories) && !empty($this->id)) {
-            $table = Database::get_course_table(TABLE_QUIZ_REL_CATEGORY);
-            $sql = "DELETE FROM $table
-                    WHERE exercise_id = {$this->id} AND c_id = {$this->course_id}";
-            Database::query($sql);
-            if (!empty($categories)) {
-                foreach ($categories as $categoryId => $countQuestions) {
-                    $params = [
-                        'c_id' => $this->course_id,
-                        'exercise_id' => $this->id,
-                        'category_id' => $categoryId,
-                        'count_questions' => $countQuestions,
-                    ];
-                    Database::insert($table, $params);
-                }
+        $categoriesId = array_keys($categories);
+
+        $em = Database::getManager();
+        $quizCategoryRepo = $em->getRepository('ChamiloCourseBundle:CQuizCategory');
+
+        $currentQuizCategories = $quizCategoryRepo->findBy(['exerciseId' => $this->iId, 'cId' => $this->course_id]);
+
+        /** @var CQuizCategory $currentQuizCategory */
+        foreach ($currentQuizCategories as $currentQuizCategory) {
+            $currentQuizCategoryId = $currentQuizCategory->getCategoryId();
+
+            if (in_array($currentQuizCategoryId, $categoriesId)) {
+                $currentQuizCategory->setCountQuestions($categories[$currentQuizCategoryId]);
+
+                $em->persist($currentQuizCategory);
+
+                unset($categories[$currentQuizCategoryId]);
+
+                continue;
             }
+
+            $em->remove($currentQuizCategory);
         }
+
+        foreach ($categories as $categoryId => $countQuestions) {
+            $quizCategory = new CQuizCategory();
+            $quizCategory
+                ->setCategoryId($categoryId)
+                ->setCountQuestions($countQuestions)
+                ->setExerciseId($this->iId)
+                ->setCId($this->course_id);
+
+            $em->persist($quizCategory);
+        }
+
+        $em->flush();
     }
 
     /**

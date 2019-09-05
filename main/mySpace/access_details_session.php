@@ -288,7 +288,7 @@ if ($form->validate()) {
     foreach ($courseSessionTableData as $name => $duration) {
         $column = 0;
         $table->setCellContents($row, $column++, $name);
-        $table->setCellContents($row, $column++, api_format_time($duration, 'js'));
+        $table->setCellContents($row, $column++, $duration);
         $row++;
     }
     $totalCourseSessionTable = $table->toHtml();

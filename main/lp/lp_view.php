@@ -515,7 +515,7 @@ $template = new Template('', false, false, true, true, false);
 $fixLinkSetting = api_get_configuration_value('lp_fix_embed_content');
 $fixLink = '';
 if ($fixLinkSetting) {
-    $fixLink = '{type:"script", id:"_fr10", src:"'.api_get_path(WEB_LIBRARY_PATH).'javascript/fixlinks.js"}';
+    $fixLink = '{type:"script", id:"_fr10", src:"'.api_get_path(WEB_LIBRARY_PATH).'fixlinks.js"}';
 }
 
 $template->assign('fix_link', $fixLink);

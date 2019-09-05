@@ -263,7 +263,7 @@ if ($form->validate()) {
                 foreach ($record as $item) {
                     $table->setCellContents($row, $column++, $item);
                     if ($row == $countData) {
-                        $courseSessionTableData[$data['name'][$courseId]] = $row;
+                        $courseSessionTableData[$data['name'][$courseId]] = $item;
                         $table->setRowAttributes($row, ['style' => 'font-weight:bold']);
                     }
                 }

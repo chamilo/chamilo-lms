@@ -151,7 +151,7 @@ if (!isset($exerciseInSession) || isset($exerciseInSession) && ($exerciseInSessi
     Session::write('firstTime', false);
 }
 //2. Checking if $objExercise is set
-/** @var |Exercise $objExercise  */
+/** @var |Exercise $objExercise */
 if (!isset($objExercise) && isset($exerciseInSession)) {
     if ($debug) {
         error_log('2. Loading $objExercise from session');

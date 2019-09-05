@@ -2298,3 +2298,7 @@ blockquote:before {
 .exercise-overview .page-header {
     font-weight: normal !important;
 }
+
+.btn {
+    border-radius: 0px !important;
+}

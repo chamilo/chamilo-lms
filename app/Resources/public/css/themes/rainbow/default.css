@@ -2303,6 +2303,11 @@ blockquote:before {
     border-radius: 0px !important;
 }
 
+.promoted_post{
+    background: #F9FFEA;
+    border-color: #9bd6b8;
+}
+
 .exercise_overview_options {
     background-color: white;
 }

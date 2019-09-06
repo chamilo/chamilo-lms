@@ -293,13 +293,19 @@ class SocialManager extends UserManager
         } else {
             // invitation already exist
             $sql = 'SELECT COUNT(*) AS count, id FROM '.$tbl_message.'
-                    WHERE user_sender_id='.$user_id.' AND user_receiver_id='.$friend_id.' AND msg_status = 7';
+                    WHERE 
+                        user_sender_id='.$user_id.' AND 
+                        user_receiver_id='.$friend_id.' AND 
+                        msg_status = 7';
             $res_if_exist = Database::query($sql);
             $row_if_exist = Database::fetch_array($res_if_exist, 'ASSOC');
             if ($row_if_exist['count'] == 1) {
                 $sql = 'UPDATE '.$tbl_message.' SET
-                        msg_status=5, content = "'.$clean_message_content.'"
-                        WHERE user_sender_id='.$user_id.' AND user_receiver_id='.$friend_id.' AND msg_status = 7 ';
+                            msg_status = 5, content = "'.$clean_message_content.'"
+                        WHERE 
+                            user_sender_id='.$user_id.' AND 
+                            user_receiver_id='.$friend_id.' AND 
+                            msg_status = 7 ';
                 Database::query($sql);
 
                 return true;
@@ -325,7 +331,7 @@ class SocialManager extends UserManager
         $sql = 'SELECT COUNT(*) as count_message_in_box FROM '.$table.'
                 WHERE
                     user_receiver_id='.$userId.' AND
-                    msg_status='.MESSAGE_STATUS_INVITATION_PENDING;
+                    msg_status = '.MESSAGE_STATUS_INVITATION_PENDING;
         $res = Database::query($sql);
         $row = Database::fetch_array($res, 'ASSOC');
         if ($row) {
@@ -1673,9 +1679,7 @@ class SocialManager extends UserManager
 
         $sql .= $userReceiverCondition;
 
-        $sql .= ' OR (
-            msg_status IN ('.MESSAGE_STATUS_PROMOTED.')             
-        ) ';
+        $sql .= ' OR ( msg_status = '.MESSAGE_STATUS_PROMOTED.' ) ';
 
         // Get my group posts
         $groupCondition = '';
@@ -1702,7 +1706,7 @@ class SocialManager extends UserManager
                 $friendId = (int) $friendId;
                 $friendCondition = " OR ( user_receiver_id = '$friendId' ";
             }
-            $friendCondition .= ' AND msg_status IN ('.MESSAGE_STATUS_WALL_POST.') AND parent_id = 0) ';
+            $friendCondition .= ' AND msg_status = '.MESSAGE_STATUS_WALL_POST.' AND parent_id = 0) ';
         }
 
         if (!empty($groupCondition) || !empty($friendCondition)) {

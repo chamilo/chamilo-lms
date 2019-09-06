@@ -14,35 +14,33 @@
         <td>{{ 'GeneralCoach' | get_lang}} :</td>
         <td>{{ general_coach.complete_name_with_message_link }}</td>
     </tr>
-    {% if session_category  %}
+    {% if session_category %}
     <tr>
         <td>{{ 'SessionCategory' | get_lang}} </td>
         <td>{{ session_category }}</td>
     </tr>
     {% endif %}
-
     {% if session.duration > 0 %}
-    <tr>
-        <td>{{ 'Duration' | get_lang}} </td>
-        <td>
-            {{ session.duration }} {{ 'Days' | get_lang }}
-        </td>
-    </tr>
+        <tr>
+            <td>{{ 'Duration' | get_lang}} </td>
+            <td>
+                {{ session.duration }} {{ 'Days' | get_lang }}
+            </td>
+        </tr>
     {% else %}
-    <tr>
-        <td>{{ 'DisplayDates' | get_lang}} </td>
-        <td>{{ session_dates.display }}</td>
-    </tr>
-    <tr>
-        <td>{{ 'AccessDates' | get_lang}} </td>
-        <td>{{ session_dates.access }}</td>
-    </tr>
-    <tr>
-        <td>{{ 'CoachDates' | get_lang}} </td>
-        <td>{{ session_dates.coach }}</td>
-    </tr>
+        <tr>
+            <td>{{ 'DisplayDates' | get_lang}} </td>
+            <td>{{ session_dates.display }}</td>
+        </tr>
+        <tr>
+            <td>{{ 'AccessDates' | get_lang}} </td>
+            <td>{{ session_dates.access }}</td>
+        </tr>
+        <tr>
+            <td>{{ 'CoachDates' | get_lang}} </td>
+            <td>{{ session_dates.coach }}</td>
+        </tr>
     {% endif %}
-
     <tr>
         <td>{{ 'Description' | get_lang}} </td>
         <td>
@@ -83,7 +81,6 @@
             </td>
         </tr>
     {% endif %}
-
     {% if url_list %}
         <tr>
             <td>URL</td>
@@ -120,107 +117,107 @@
 {{ requirements }}
 {{ dependencies }}
 
-    <script>
-        $(function () {
-            function loadFiles(courseId, sessionId) {
-                return $.get('{{ _p.web_ajax }}session.ajax.php', {
-                    course: courseId,
-                    session: sessionId,
-                    a: 'get_basic_course_documents_list'
-                });
+<script>
+    $(function () {
+        function loadFiles(courseId, sessionId) {
+            return $.get('{{ _p.web_ajax }}session.ajax.php', {
+                course: courseId,
+                session: sessionId,
+                a: 'get_basic_course_documents_list'
+            });
+        }
+
+        function loadForm(courseId, sessionId) {
+            return $.get('{{ _p.web_ajax }}session.ajax.php', {
+                course: courseId,
+                session: sessionId,
+                a: 'get_basic_course_documents_form'
+            });
+        }
+
+        var c = 0;
+
+        $('.session-upload-file-btn').on('click', function (e) {
+            e.preventDefault();
+
+            var $self = $(this),
+                $trParent = $self.parents('tr'),
+                $trContainer = $trParent.next(),
+                courseId = $self.data('course') || 0,
+                sessionId = $self.data('session') || 0;
+
+            $('.session-upload-file-tr').remove();
+
+            if (courseId == c) {
+                c = 0;
+
+                return;
             }
 
-            function loadForm(courseId, sessionId) {
-                return $.get('{{ _p.web_ajax }}session.ajax.php', {
-                    course: courseId,
-                    session: sessionId,
-                    a: 'get_basic_course_documents_form'
+            c = courseId;
+
+            $trContainer = $('<tr>')
+                .addClass('session-upload-file-tr')
+                .html('<td colspan="4">{{ 'Loading'|get_lang }}</td>')
+                .insertAfter($trParent);
+
+            $.when
+                .apply($, [loadFiles(courseId, sessionId), loadForm(courseId, sessionId)])
+                .then(function (response1, response2) {
+                    var filesCount = 0,
+                        filesUploadedCount = 0;
+
+                    $trContainer.find('td:first')
+                        .html('<div id="session-' + sessionId + '-docs">' + response1[0] + '</div>'
+                            + '<div id="session-' + sessionId + '-form">' + response2[0] + '</div>');
+
+                    $('#input_file_upload')
+                        .on('fileuploadadd', function (e, data) {
+                            filesCount += data.files.length;
+                        })
+                        .on('fileuploaddone', function (e, data) {
+                            filesUploadedCount += data.files.length;
+
+                            data.context.parent().remove();
+
+                            if (filesUploadedCount < filesCount) {
+                                return;
+                            }
+
+                            $('#session-' + sessionId + '-docs').html('{{ 'Loading'|get_lang }}');
+
+                            loadFiles(courseId, sessionId)
+                                .then(function (response) {
+                                    filesCount = 0;
+                                    filesUploadedCount = 0;
+
+                                    $('#session-' + sessionId + '-docs').html(response);
+                                });
+                        });
                 });
-            }
-
-            var c = 0;
-
-            $('.session-upload-file-btn').on('click', function (e) {
-                e.preventDefault();
-
-                var $self = $(this),
-                    $trParent = $self.parents('tr'),
-                    $trContainer = $trParent.next(),
-                    courseId = $self.data('course') || 0,
-                    sessionId = $self.data('session') || 0;
-
-                $('.session-upload-file-tr').remove();
-
-                if (courseId == c) {
-                    c = 0;
-
-                    return;
-                }
-
-                c = courseId;
-
-                $trContainer = $('<tr>')
-                    .addClass('session-upload-file-tr')
-                    .html('<td colspan="4">{{ 'Loading'|get_lang }}</td>')
-                    .insertAfter($trParent);
-
-                $.when
-                    .apply($, [loadFiles(courseId, sessionId), loadForm(courseId, sessionId)])
-                    .then(function (response1, response2) {
-                        var filesCount = 0,
-                            filesUploadedCount = 0;
-
-                        $trContainer.find('td:first')
-                            .html('<div id="session-' + sessionId + '-docs">' + response1[0] + '</div>'
-                                + '<div id="session-' + sessionId + '-form">' + response2[0] + '</div>');
-
-                        $('#input_file_upload')
-                            .on('fileuploadadd', function (e, data) {
-                                filesCount += data.files.length;
-                            })
-                            .on('fileuploaddone', function (e, data) {
-                                filesUploadedCount += data.files.length;
-
-                                data.context.parent().remove();
-
-                                if (filesUploadedCount < filesCount) {
-                                    return;
-                                }
-
-                                $('#session-' + sessionId + '-docs').html('{{ 'Loading'|get_lang }}');
-
-                                loadFiles(courseId, sessionId)
-                                    .then(function (response) {
-                                        filesCount = 0;
-                                        filesUploadedCount = 0;
-
-                                        $('#session-' + sessionId + '-docs').html(response);
-                                    });
-                            });
-                    });
-            });
-
-            $('#session-list-course').on('click', '.delete_document', function (e) {
-                e.preventDefault();
-
-                if (!confirm('{{ 'ConfirmYourChoice'|get_lang }}')) {
-                    return;
-                }
-
-                var $self = $(this),
-                    courseId = $self.data('course') || 0,
-                    sessionId = $self.data('session') || 0;
-
-                $('#session-' + sessionId + '-docs').html('{{ 'Loading'|get_lang }}');
-
-                $.ajax(this.href)
-                    .then(function () {
-                        loadFiles(courseId, sessionId)
-                            .then(function (response) {
-                                $('#session-' + sessionId + '-docs').html(response);
-                            })
-                    });
-            });
         });
-    </script>
+
+        $('#session-list-course').on('click', '.delete_document', function (e) {
+            e.preventDefault();
+
+            if (!confirm('{{ 'ConfirmYourChoice'|get_lang }}')) {
+                return;
+            }
+
+            var $self = $(this),
+                courseId = $self.data('course') || 0,
+                sessionId = $self.data('session') || 0;
+
+            $('#session-' + sessionId + '-docs').html('{{ 'Loading'|get_lang }}');
+
+            $.ajax(this.href)
+                .then(function () {
+                    loadFiles(courseId, sessionId)
+                        .then(function (response) {
+                            $('#session-' + sessionId + '-docs').html(response);
+                        })
+                });
+        });
+    });
+</script>
 {% endblock %}

@@ -136,7 +136,6 @@
                                 <img src="{{ course_data.image }}" class="img-rounded img-responsive" width="100%">
                             </div>
                         {% endif %}
-
                     </div>
                     <div class="col-sm-7">
                         {% if courses|length > 1 %}
@@ -153,7 +152,6 @@
                 </div>
                 {% if course_data.tags %}
                     <div class="panel-tags">
-
                         <ul class="list-inline course-tags">
                             <li>{{ 'Tags'|get_lang }} :</li>
                             {% for tag in course_data.tags %}
@@ -176,20 +174,21 @@
                                 {% if course_data.objectives %}
                                     {% for objectives in course_data.objectives %}
                                         <div class="topics">
-                                            <h4 class="title-info"><em
-                                                        class="fa fa-book"></em> {{ objectives.title }}</h4>
+                                            <h4 class="title-info">
+                                                <em class="fa fa-book"></em> {{ objectives.title }}
+                                            </h4>
                                             <div class="content-info">
                                                 {{ objectives.content }}
                                             </div>
                                         </div>
                                     {% endfor %}
                                 {% endif %}
-
                                 {% if course_data.topics %}
                                     {% for topics in course_data.topics %}
                                         <div class="topics">
-                                            <h4 class="title-info"><em
-                                                        class="fa fa-book"></em> {{ topics.title }}</h4>
+                                            <h4 class="title-info">
+                                                <em class="fa fa-book"></em> {{ topics.title }}
+                                            </h4>
                                             <div class="content-info">
                                                 {{ topics.content }}
                                             </div>
@@ -200,8 +199,10 @@
                                 {% if course_data.methodology %}
                                     {% for methodology in course_data.methodology %}
                                         <div class="topics">
-                                            <h4 class="title-info"><em
-                                                        class="fa fa-book"></em> {{ methodology.title }}</h4>
+                                            <h4 class="title-info">
+                                                <em class="fa fa-book"></em>
+                                                {{ methodology.title }}
+                                            </h4>
                                             <div class="content-info">
                                                 {{ methodology.content }}
                                             </div>
@@ -224,8 +225,10 @@
                                 {% if course_data.resources %}
                                     {% for resources in course_data.resources %}
                                         <div class="topics">
-                                            <h4 class="title-info"><em
-                                                        class="fa fa-book"></em> {{ resources.title }}</h4>
+                                            <h4 class="title-info">
+                                                <em class="fa fa-book"></em>
+                                                {{ resources.title }}
+                                            </h4>
                                             <div class="content-info">
                                                 {{ resources.content }}
                                             </div>
@@ -236,8 +239,9 @@
                                 {% if course_data.assessment %}
                                     {% for assessment in course_data.assessment %}
                                         <div class="topics">
-                                            <h4 class="title-info"><em
-                                                        class="fa fa-book"></em> {{ assessment.title }}</h4>
+                                            <h4 class="title-info">
+                                                <em class="fa fa-book"></em> {{ assessment.title }}
+                                            </h4>
                                             <div class="content-info">
                                                 {{ assessment.content }}
                                             </div>
@@ -248,7 +252,8 @@
                                 {% if course_data.custom %}
                                     {% for custom in course_data.custom %}
                                         <div class="topics">
-                                            <h4 class="title-info"><em class="fa fa-book"></em> {{ custom.title }}
+                                            <h4 class="title-info">
+                                                <em class="fa fa-book"></em> {{ custom.title }}
                                             </h4>
                                             <div class="content-info">
                                                 {{ custom.content }}
@@ -259,12 +264,10 @@
                             </div>
                         </div>
                     </div>
-
                 </div>
                 <div class="col-md-4">
                     <div class="panel panel-default">
                         <div class="panel-body">
-
                             {% if course_data.coaches %}
                                 <div class="panel-teachers">
                                     <h3 class="sub-title">{{ "Coaches"|get_lang }}</h3>
@@ -301,7 +304,6 @@
                                     {% endfor %}
                                 </div>
                             {% endif %}
-
                         </div>
                     </div>
                 </div>
@@ -311,8 +313,8 @@
     </div>
 </section>
 
-<script type="text/javascript">
-    $(document).ready(function () {
+<script>
+    $(function () {
         $('.course-information').readmore({
             speed: 100,
             lessLink: '<a class="hide-content" href="#">{{ 'SetInvisible' | get_lang }}</a>',

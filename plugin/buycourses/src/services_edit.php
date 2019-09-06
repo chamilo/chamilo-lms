@@ -10,7 +10,7 @@ $cidReset = true;
 
 require_once '../../../main/inc/global.inc.php';
 
-$serviceId = isset($_REQUEST['id']) ? intval($_REQUEST['id']) : null;
+$serviceId = isset($_REQUEST['id']) ? (int) $_REQUEST['id'] : null;
 
 if (!$serviceId) {
     header('Location: configuration.php');
@@ -18,7 +18,6 @@ if (!$serviceId) {
 
 $plugin = BuyCoursesPlugin::create();
 $currency = $plugin->getSelectedCurrency();
-$em = Database::getManager();
 $users = UserManager::getRepository()->findAll();
 $userOptions = [];
 if (!empty($users)) {
@@ -38,7 +37,7 @@ $interbreadcrumb[] = [
 ];
 
 $globalSettingsParams = $plugin->getGlobalParameters();
-$service = $plugin->getServices($serviceId);
+$service = $plugin->getService($serviceId);
 
 $formDefaultValues = [
     'name' => $service['name'],

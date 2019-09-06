@@ -20,17 +20,11 @@ $includeServices = $plugin->get('include_services');
 $invoicingEnable = $plugin->get('invoicing_enable') === 'true';
 
 $saleStatuses = $plugin->getServiceSaleStatuses();
-$paymentTypes = $plugin->getPaymentTypes();
-
 $selectedStatus = isset($_GET['status']) ? $_GET['status'] : BuyCoursesPlugin::SALE_STATUS_PENDING;
-$searchTerm = '';
-
 $form = new FormValidator('search', 'get');
 
 if ($form->validate()) {
     $selectedStatus = $form->getSubmitValue('status');
-    $searchTerm = $form->getSubmitValue('user');
-
     if ($selectedStatus === false) {
         $selectedStatus = BuyCoursesPlugin::SALE_STATUS_PENDING;
     }

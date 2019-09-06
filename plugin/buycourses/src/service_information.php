@@ -25,7 +25,7 @@ if (!$includeServices) {
     api_not_allowed(true);
 }
 
-$service = $plugin->getServices($serviceId);
+$service = $plugin->getService($serviceId);
 
 if (!$service['id']) {
     api_not_allowed(true);

@@ -85,7 +85,7 @@
                             </td>
                         {% endif %}
                         <td class="text-right">
-                            <a href="{{ _p.web_plugin ~ 'buycourses/src/configure_course.php?' ~ {'i': item.course_id, 't':product_type_course}|url_encode() }}"
+                            <a href="{{ _p.web_plugin ~ 'buycourses/src/configure_course.php?' ~ {'id': item.course_id, 'type':product_type_course}|url_encode() }}"
                                class="btn btn-info btn-sm">
                                 <em class="fa fa-wrench fa-fw"></em> {{ 'Configure'|get_lang }}
                             </a>
@@ -146,9 +146,10 @@
                                 </td>
                             {% endif %}
                             <td class="text-right">
-                                <a href="{{ _p.web_plugin ~ 'buycourses/src/configure_course.php?' ~ {'i': item.session_id, 't': product_type_session}|url_encode() }}"
+                                <a href="{{ _p.web_plugin ~ 'buycourses/src/configure_course.php?' ~ {'id': item.session_id, 'type': product_type_session}|url_encode() }}"
                                    class="btn btn-info btn-sm">
-                                    <em class="fa fa-wrench fa-fw"></em> {{ 'Configure'|get_lang }}
+                                    <em class="fa fa-wrench fa-fw"></em>
+                                    {{ 'Configure'|get_lang }}
                                 </a>
                             </td>
                         </tr>

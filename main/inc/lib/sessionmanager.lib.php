@@ -3374,9 +3374,9 @@ class SessionManager
             }
 
             return $sessions;
-        } else {
-            return false;
         }
+
+        return false;
     }
 
     /**

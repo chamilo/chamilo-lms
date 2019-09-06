@@ -1,5 +1,6 @@
 <?php
 /* For license terms, see /license.txt */
+
 use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
 
 /**
@@ -137,5 +138,5 @@ $params = [
     'orientation' => 'P',
 ];
 $pdf = new PDF($params['format'], $params['orientation'], $params);
-$pdf->content_to_pdf($htmlText, '', $fileName, null, 'D', false, null, false, false, false);
+@$pdf->content_to_pdf($htmlText, '', $fileName, null, 'D', false, null, false, false, false);
 exit;

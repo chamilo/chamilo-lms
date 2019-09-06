@@ -21,13 +21,13 @@
                                      src="{{ course.course_img ? course.course_img : 'session_default.png'|icon() }}">
                             </a>
                             {% if course.tax_enable %}
-                            <div class="price-details-tax">
-                                {{ 'Price'|get_plugin_lang('BuyCoursesPlugin')}} :
-                                {{ course.currency == 'BRL' ? 'R$' : course.currency }} {{ course.price_without_tax }}
-                                <br>
-                                {{ course.tax_name }} ({{ course.tax_perc }}%):
-                                {{ course.currency == 'BRL' ? 'R$' : course.currency }} {{ course.tax_amount }}
-                            </div>
+                                <div class="price-details-tax">
+                                    {{ 'Price'|get_plugin_lang('BuyCoursesPlugin')}} :
+                                    {{ course.currency == 'BRL' ? 'R$' : course.currency }} {{ course.price_without_tax }}
+                                    <br>
+                                    {{ course.tax_name }} ({{ course.tax_perc }}%):
+                                    {{ course.currency == 'BRL' ? 'R$' : course.currency }} {{ course.tax_amount }}
+                                </div>
                             {% endif %}
                             <div class="price">
                                 {{ 'Total'|get_plugin_lang('BuyCoursesPlugin')}} :

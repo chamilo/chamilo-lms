@@ -12,12 +12,14 @@ require_once '../config.php';
 
 api_protect_admin_script();
 
-if (!isset($_REQUEST['t'], $_REQUEST['i'])) {
-    die;
+$id = isset($_REQUEST['id']) ? (int) $_REQUEST['id'] : 0;
+$type = isset($_REQUEST['type']) ? (int) $_REQUEST['type'] : 0;
+
+if (empty($id) || empty($type)) {
+    api_not_allowed();
 }
 
 $plugin = BuyCoursesPlugin::create();
-
 $commissionsEnable = $plugin->get('commissions_enable');
 
 if ($commissionsEnable == 'true') {
@@ -28,13 +30,11 @@ if ($commissionsEnable == 'true') {
 }
 
 $includeSession = $plugin->get('include_sessions') === 'true';
-
-$editingCourse = intval($_REQUEST['t']) === BuyCoursesPlugin::PRODUCT_TYPE_COURSE;
-$editingSession = intval($_REQUEST['t']) === BuyCoursesPlugin::PRODUCT_TYPE_SESSION;
+$editingCourse = $type === BuyCoursesPlugin::PRODUCT_TYPE_COURSE;
+$editingSession =  $type === BuyCoursesPlugin::PRODUCT_TYPE_SESSION;
 
 $entityManager = Database::getManager();
 $userRepo = UserManager::getRepository();
-
 $currency = $plugin->getSelectedCurrency();
 
 if (empty($currency)) {
@@ -46,7 +46,7 @@ if (empty($currency)) {
 $currencyIso = null;
 
 if ($editingCourse) {
-    $course = $entityManager->find('ChamiloCoreBundle:Course', $_REQUEST['i']);
+    $course = $entityManager->find('ChamiloCoreBundle:Course', $id);
 
     if (!$course) {
         api_not_allowed(true);
@@ -67,22 +67,17 @@ if ($editingCourse) {
             'text' => $teacher->getCompleteName(),
             'value' => $teacher->getId(),
         ];
-
         $defaultBeneficiaries[] = $teacher->getId();
     }
 
     $currentBeneficiaries = $plugin->getItemBeneficiaries($courseItem['item_id']);
-
     if (!empty($currentBeneficiaries)) {
         $defaultBeneficiaries = array_column($currentBeneficiaries, 'user_id');
-
         if ($commissionsEnable === 'true') {
             $defaultCommissions = array_column($currentBeneficiaries, 'commissions');
-
             foreach ($defaultCommissions as $defaultCommission) {
                 $commissions .= $defaultCommission.',';
             }
-
             $commissions = substr($commissions, 0, -1);
         }
     }
@@ -90,22 +85,21 @@ if ($editingCourse) {
     $currencyIso = $courseItem['currency'];
     $formDefaults = [
         'product_type' => get_lang('Course'),
-        'i' => $courseItem['course_id'],
-        't' => BuyCoursesPlugin::PRODUCT_TYPE_COURSE,
+        'id' => $courseItem['course_id'],
+        'type' => BuyCoursesPlugin::PRODUCT_TYPE_COURSE,
         'name' => $courseItem['course_title'],
         'visible' => $courseItem['visible'],
         'price' => $courseItem['price'],
         'tax_perc' => $courseItem['tax_perc'],
         'beneficiaries' => $defaultBeneficiaries,
-        ($commissionsEnable == "true") ? 'commissions' : '' => ($commissionsEnable == "true") ? $commissions : '',
+        $commissionsEnable == 'true' ? 'commissions' : '' => $commissionsEnable == 'true' ? $commissions : '',
     ];
 } elseif ($editingSession) {
     if (!$includeSession) {
         api_not_allowed(true);
     }
 
-    $session = $entityManager->find('ChamiloCoreBundle:Session', $_REQUEST['i']);
-
+    $session = $entityManager->find('ChamiloCoreBundle:Session', $id);
     if (!$session) {
         api_not_allowed(true);
     }
@@ -143,7 +137,7 @@ if ($editingCourse) {
     if (!empty($currentBeneficiaries)) {
         $defaultBeneficiaries = array_column($currentBeneficiaries, 'user_id');
 
-        if ($commissionsEnable == "true") {
+        if ($commissionsEnable == 'true') {
             $defaultCommissions = array_column($currentBeneficiaries, 'commissions');
 
             foreach ($defaultCommissions as $defaultCommission) {
@@ -157,14 +151,14 @@ if ($editingCourse) {
     $currencyIso = $sessionItem['currency'];
     $formDefaults = [
         'product_type' => get_lang('Session'),
-        'i' => $session->getId(),
-        't' => BuyCoursesPlugin::PRODUCT_TYPE_SESSION,
+        'id' => $session->getId(),
+        'type' => BuyCoursesPlugin::PRODUCT_TYPE_SESSION,
         'name' => $sessionItem['session_name'],
         'visible' => $sessionItem['visible'],
         'price' => $sessionItem['price'],
         'tax_perc' => $sessionItem['tax_perc'],
         'beneficiaries' => $defaultBeneficiaries,
-        ($commissionsEnable == "true") ? 'commissions' : '' => ($commissionsEnable == "true") ? $commissions : '',
+        $commissionsEnable == 'true' ? 'commissions' : '' => $commissionsEnable == 'true' ? $commissions : '',
     ];
 } else {
     api_not_allowed(true);
@@ -182,9 +176,7 @@ if ($commissionsEnable === 'true') {
                 } else {
                     showSliders(100, 'default', '".$commissions."');
                 }
-            });
-
-            $(document).ready(function () {
+                
                 var maxPercentage = 100;
                 $('#selectBox').on('change', function() {
                     $('#panelSliders').html('');
@@ -204,7 +196,7 @@ $globalSettingsParams = $plugin->getGlobalParameters();
 $form = new FormValidator('beneficiaries');
 $form->addText('product_type', $plugin->get_lang('ProductType'), false);
 $form->addText('name', get_lang('Name'), false);
-$visibleCheckbox = $form->addCheckBox(
+$form->addCheckBox(
     'visible',
     $plugin->get_lang('VisibleInCatalog'),
     $plugin->get_lang('ShowOnCourseCatalog')
@@ -251,16 +243,15 @@ if ($commissionsEnable === 'true') {
                     'info',
                     false
                 ).'
-                <div class="" id="panelSliders"></div>
+                <div id="panelSliders"></div>
             </div>
         </div>'
     );
-
     $form->addHidden('commissions', '');
 }
 
-$form->addHidden('t', null);
-$form->addHidden('i', null);
+$form->addHidden('type', null);
+$form->addHidden('id', null);
 $button = $form->addButtonSave(get_lang('Save'));
 
 if (empty($currency)) {
@@ -271,8 +262,8 @@ $form->freeze(['product_type', 'name']);
 
 if ($form->validate()) {
     $formValues = $form->exportValues();
-    $productItem = $plugin->getItemByProduct($formValues['i'], $formValues['t']);
-
+    $id = $formValues['id'];
+    $productItem = $plugin->getItemByProduct($id, $formValues['type']);
     if (isset($formValues['visible'])) {
         $taxPerc = $formValues['tax_perc'] != '' ? (int) $formValues['tax_perc'] : null;
         if (!empty($productItem)) {
@@ -287,8 +278,8 @@ if ($form->validate()) {
         } else {
             $itemId = $plugin->registerItem([
                 'currency_id' => (int) $currency['id'],
-                'product_type' => $formValues['t'],
-                'product_id' => intval($formValues['i']),
+                'product_type' => $formValues['type'],
+                'product_id' => $id,
                 'price' => floatval($_POST['price']),
                 'tax_perc' => $taxPerc,
             ]);
@@ -300,7 +291,7 @@ if ($form->validate()) {
         if (isset($formValues['beneficiaries'])) {
             if ($commissionsEnable === 'true') {
                 $usersId = $formValues['beneficiaries'];
-                $commissions = explode(",", $formValues['commissions']);
+                $commissions = explode(',', $formValues['commissions']);
                 $commissions = (count($usersId) != count($commissions))
                     ? array_fill(0, count($usersId), 0)
                     : $commissions;
@@ -310,7 +301,6 @@ if ($form->validate()) {
                 $commissions = array_fill(0, count($usersId), 0);
                 $beneficiaries = array_combine($usersId, $commissions);
             }
-
             $plugin->registerItemBeneficiaries($productItem['id'], $beneficiaries);
         }
     } else {
@@ -323,7 +313,6 @@ if ($form->validate()) {
 
 $form->setDefaults($formDefaults);
 
-// View
 $templateName = $plugin->get_lang('AvailableCourse');
 
 $interbreadcrumb[] = [

@@ -1,6 +1,8 @@
 <?php
 /* For license terms, see /license.txt */
 
+use ChamiloSession as Session;
+
 /**
  * Process purchase confirmation script for the Buy Courses plugin.
  *
@@ -9,15 +11,13 @@
 require_once '../config.php';
 
 $plugin = BuyCoursesPlugin::create();
-
-$serviceSaleId = $_SESSION['bc_service_sale_id'];
+$serviceSaleId = Session::read('bc_service_sale_id');
 
 if (empty($serviceSaleId)) {
     api_not_allowed(true);
 }
 
 $serviceSale = $plugin->getServiceSale($serviceSaleId);
-
 $userInfo = api_get_user_info($serviceSale['buyer']['id']);
 
 if (empty($serviceSale)) {
@@ -46,8 +46,7 @@ switch ($serviceSale['payment_type']) {
 
         // The extra params for handle the hard job, this var is VERY IMPORTANT !!
         $extra = '';
-
-        require_once "paypalfunctions.php";
+        require_once 'paypalfunctions.php';
 
         $extra .= "&L_PAYMENTREQUEST_0_NAME0={$serviceSale['service']['name']}";
         $extra .= "&L_PAYMENTREQUEST_0_QTY0=1";
@@ -63,7 +62,7 @@ switch ($serviceSale['payment_type']) {
             $extra
         );
 
-        if ($expressCheckout["ACK"] !== 'Success') {
+        if ($expressCheckout['ACK'] !== 'Success') {
             $erroMessage = vsprintf(
                 $plugin->get_lang('ErrorOccurred'),
                 [$expressCheckout['L_ERRORCODE0'], $expressCheckout['L_LONGMESSAGE0']]
@@ -72,8 +71,7 @@ switch ($serviceSale['payment_type']) {
                 Display::return_message($erroMessage, 'error', false)
             );
 
-            $plugin->cancelServiceSale(intval($serviceSale['id']));
-
+            $plugin->cancelServiceSale($serviceSale['id']);
             header('Location: '.api_get_path(WEB_PLUGIN_PATH).'buycourses/src/service_catalog.php');
             exit;
         }
@@ -118,7 +116,7 @@ switch ($serviceSale['payment_type']) {
             $formValues = $form->getSubmitValues();
 
             if (isset($formValues['cancel'])) {
-                $plugin->cancelServiceSale(intval($serviceSale['id']));
+                $plugin->cancelServiceSale($serviceSale['id']);
 
                 unset($_SESSION['bc_service_sale_id']);
                 Display::addFlash(
@@ -209,7 +207,6 @@ switch ($serviceSale['payment_type']) {
         );
 
         $template = new Template();
-
         $template->assign('terms', $globalParameters['terms_and_conditions']);
         $template->assign('title', $serviceSale['service']['name']);
         $template->assign('price', $serviceSale['price']);
@@ -225,7 +222,6 @@ switch ($serviceSale['payment_type']) {
         $template->assign('content', $content);
         $template->display_one_col_template();
         break;
-
     case BuyCoursesPlugin::PAYMENT_TYPE_CULQI:
         // We need to include the main online script, acording to the Culqi documentation the JS needs to be loeaded
         // directly from the main url "https://integ-pago.culqi.com" because a local copy of this JS is not supported

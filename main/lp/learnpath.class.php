@@ -1834,7 +1834,7 @@ class learnpath
             error_log('In learnpath::first() - First item is '.$this->get_current_item_id());
         }
     }
-    
+
     /**
      * Gets the js library from the database.
      *
@@ -5992,8 +5992,37 @@ class learnpath
         $return_audio = null;
         $iconPath = api_get_path(SYS_CODE_PATH).'img/';
         $mainUrl = api_get_path(WEB_CODE_PATH).'lp/lp_controller.php?'.api_get_cidreq();
+        $countItems = count($arrLP);
 
-        for ($i = 0; $i < count($arrLP); $i++) {
+        $upIcon = Display::return_icon(
+            'up.png',
+            get_lang('Up'),
+            [],
+            ICON_SIZE_TINY
+        );
+
+        $disableUpIcon = Display::return_icon(
+            'up_na.png',
+            get_lang('Up'),
+            [],
+            ICON_SIZE_TINY
+        );
+
+        $downIcon = Display::return_icon(
+            'down.png',
+            get_lang('Down'),
+            [],
+            ICON_SIZE_TINY
+        );
+
+        $disableDownIcon = Display::return_icon(
+            'down_na.png',
+            get_lang('Down'),
+            [],
+            ICON_SIZE_TINY
+        );
+        for ($i = 0; $i < $countItems; $i++) {
+            $parent_id = $arrLP[$i]['parent_item_id'];
             $title = $arrLP[$i]['title'];
             $title_cut = cut($arrLP[$i]['title'], self::MAX_LP_ITEM_TITLE_LENGTH);
             // Link for the documents
@@ -6329,7 +6358,6 @@ class learnpath
                     Display::span($audio, ['class' => 'button_actions']);
             }
 
-            $parent_id = $arrLP[$i]['parent_item_id'];
             $default_data[$arrLP[$i]['id']] = $row;
             $default_content[$arrLP[$i]['id']] = $arrLP[$i];
 

@@ -267,7 +267,7 @@ if (in_array(
 if (!empty($attempts)) {
     $i = $counter;
     foreach ($attempts as $attempt_result) {
-        if (EXERCISE_FEEDBACK_TYPE_PROGRESSIVE_ADAPTIVE == $objExercise->selectFeedbackType()) {
+        if ($exerciseIsAdaptive) {
             $destinationResult = Database::getManager()
                 ->getRepository('ChamiloCourseBundle:CQuizDestinationResult')
                 ->findOneBy(['exe' => $attempt_result['exe_id'], 'user' => $attempt_result['exe_user_id']]);

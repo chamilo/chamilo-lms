@@ -8174,6 +8174,21 @@ class Exercise
      *
      * @return array
      */
+    public function getCategoryInfo($categoryId)
+    {
+        if (!isset($this->categoryWithQuestionList[$categoryId])) {
+            return [];
+        }
+
+        return $this->categoryWithQuestionList[$categoryId]['category'];
+
+    }
+
+    /**
+     * @param int $categoryId
+     *
+     * @return array
+     */
     public function getQuestionsInCategory($categoryId)
     {
         if (!isset($this->categoryWithQuestionList[$categoryId])) {

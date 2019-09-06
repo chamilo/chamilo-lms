@@ -1524,6 +1524,10 @@ if (!empty($error)) {
     }
 
     foreach ($questionList as $questionId) {
+        $categoryId = $objExercise->getCategoryByQuestion(
+            $objExercise->questionList[$currentQuestion - 1]
+        );
+
         // for sequential exercises
         if ($objExercise->type == ONE_PER_PAGE) {
             // if it is not the right question, goes to the next loop iteration
@@ -1544,6 +1548,14 @@ if (!empty($error)) {
                         break;
                     }
                 }
+            }
+        }
+
+        if ($categoryId) {
+            $categoryInfo = $objExercise->getCategoryInfo($categoryId);
+
+            if ($exerciseIsProgressiveAdaptive) {
+                Session::write('adaptive_quiz_level', $categoryInfo['name']);
             }
         }
 

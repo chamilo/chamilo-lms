@@ -235,7 +235,10 @@ if ($form->validate()) {
     $row++;
     $column = 0;
     $table->setCellContents($row, $column++, customDate($minLogin));
+
     $table->setCellContents($row, $column++, customDate($maxLogin));
+    $table->setRowAttributes($row, ['style' => 'font-weight:bold']);
+
     $table->setCellContents($row, $column++, api_format_time($totalDuration, 'js'));
     $totalTable = Display::page_subheader3(get_lang('Total')).$table->toHtml();
 

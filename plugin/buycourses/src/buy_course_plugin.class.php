@@ -10,12 +10,12 @@ use Doctrine\ORM\Query\Expr\Join;
  *
  * @package chamilo.plugin.buycourses
  *
- * @author Jose Angel Ruiz <jaruiz@nosolored.com>
- * @author Imanol Losada <imanol.losada@beeznest.com>
- * @author Alex Aragón <alex.aragon@beeznest.com>
- * @author Angel Fernando Quiroz Campos <angel.quiroz@beeznest.com>
- * @author José Loguercio Silva  <jose.loguercio@beeznest.com>
- * @author Julio Montoya
+ * @author  Jose Angel Ruiz <jaruiz@nosolored.com>
+ * @author  Imanol Losada <imanol.losada@beeznest.com>
+ * @author  Alex Aragón <alex.aragon@beeznest.com>
+ * @author  Angel Fernando Quiroz Campos <angel.quiroz@beeznest.com>
+ * @author  José Loguercio Silva  <jose.loguercio@beeznest.com>
+ * @author  Julio Montoya
  */
 class BuyCoursesPlugin extends Plugin
 {
@@ -281,19 +281,19 @@ class BuyCoursesPlugin extends Plugin
         $fieldtype = '1';
         $fieldtitle = $this->get_lang('Company');
         $fielddefault = '';
-        $field_id = UserManager::create_extra_field($fieldlabel, $fieldtype, $fieldtitle, $fielddefault);
+        UserManager::create_extra_field($fieldlabel, $fieldtype, $fieldtitle, $fielddefault);
 
         $fieldlabel = 'buycourses_vat';
         $fieldtype = '1';
         $fieldtitle = $this->get_lang('VAT');
         $fielddefault = '';
-        $field_id = UserManager::create_extra_field($fieldlabel, $fieldtype, $fieldtitle, $fielddefault);
+        UserManager::create_extra_field($fieldlabel, $fieldtype, $fieldtitle, $fielddefault);
 
         $fieldlabel = 'buycourses_address';
         $fieldtype = '1';
         $fieldtitle = $this->get_lang('Address');
         $fielddefault = '';
-        $field_id = UserManager::create_extra_field($fieldlabel, $fieldtype, $fieldtitle, $fielddefault);
+        UserManager::create_extra_field($fieldlabel, $fieldtype, $fieldtitle, $fielddefault);
 
         header('Location: '.api_get_path(WEB_PLUGIN_PATH).'buycourses');
     }
@@ -319,21 +319,25 @@ class BuyCoursesPlugin extends Plugin
             $item = $this->getItemByProduct($productId, $productType);
             $html = '<div class="buycourses-price">';
             if ($item) {
-                $html .= '<span class="label label-primary label-price"><strong>'.$item['iso_code'].' '.$item['price'].'</strong></span>';
+                $html .= '<span class="label label-primary label-price">
+                            <strong>'.$item['iso_code'].' '.$item['price'].'</strong>
+                          </span>';
                 $return['verificator'] = true;
             } else {
                 if ($hideFree == false) {
-                    $html .= '<span class="label label-primary label-free"><strong>'.$this->get_lang('Free').'</strong></span>';
+                    $html .= '<span class="label label-primary label-free">
+                                <strong>'.$this->get_lang('Free').'</strong>
+                              </span>';
                 }
                 $return['verificator'] = false;
             }
             $html .= '</div>';
             $return['html'] = $html;
-        } else {
-            return false;
+
+            return $return;
         }
 
-        return $return;
+        return false;
     }
 
     /**
@@ -649,6 +653,10 @@ class BuyCoursesPlugin extends Plugin
             return [];
         }
 
+        $taxEnable = $this->get('tax_enable') === 'true';
+        $globalParameters = $this->getGlobalParameters();
+        $taxAppliesTo = $globalParameters['tax_applies_to'];
+
         $courseCatalog = [];
         foreach ($courses as $course) {
             $item = $this->getItemByProduct(
@@ -663,10 +671,6 @@ class BuyCoursesPlugin extends Plugin
             $price = $item['price'];
             $taxPerc = null;
             $priceWithoutTax = $item['price'];
-
-            $taxEnable = $this->get('tax_enable') === 'true';
-            $globalParameters = $this->getGlobalParameters();
-            $taxAppliesTo = $globalParameters['tax_applies_to'];
             if ($taxEnable &&
                 ($taxAppliesTo == self::TAX_APPLIES_TO_ALL || $taxAppliesTo == self::TAX_APPLIES_TO_ONLY_COURSE)
             ) {
@@ -693,7 +697,7 @@ class BuyCoursesPlugin extends Plugin
                 $courseItem['teachers'][] = $teacher->getCompleteName();
             }
 
-            //check images
+            // Check images
             $possiblePath = api_get_path(SYS_COURSE_PATH);
             $possiblePath .= $course->getDirectory();
             $possiblePath .= '/course-pic.png';
@@ -2232,7 +2236,7 @@ class BuyCoursesPlugin extends Plugin
 
         if (!empty($id)) {
             $conditions = ['WHERE' => ['ss.id = ?' => $id]];
-            $showData = "first";
+            $showData = 'first';
         }
 
         if (!empty($buyerId)) {

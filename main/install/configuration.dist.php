@@ -1306,6 +1306,9 @@ requires extension "php-soap"  sudo apt-get install php-soap
     'variables' => [],
 ];*/
 
+// Show hidden exercises that were added to a LP in the exercise list
+// $_configuration['show_hidden_exercise_added_to_lp'] = true;
+
 // KEEP THIS AT THE END
 // -------- Custom DB changes
 // Add user activation by confirmation email

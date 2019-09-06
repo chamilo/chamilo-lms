@@ -216,9 +216,19 @@ if (!empty($durationTime) && isset($durationTime[$current_expired_time_key])) {
 }
 Session::write('duration_time', [$current_expired_time_key => $current_timestamp]);
 
+$allowAdaptiveTimeControlByCategory = api_get_configuration_value('quiz_allow_adaptive_time_control_by_category');
+
 if ($time_control) {
     // Get the expired time of the current exercise in track_e_exercises
     $total_seconds = $objExercise->expired_time * 60;
+
+    if ($exerciseIsProgressiveAdaptive && $allowAdaptiveTimeControlByCategory) {
+        $categoriesInExercise = TestCategory::getListOfCategoriesIDForTestObject($objExercise);
+        $countCategoriesInExercise = count($categoriesInExercise) ?: 1;
+
+        // Total time (in seconds) for each category in quiz
+        $total_seconds = $objExercise->expired_time / $countCategoriesInExercise * 60;
+    }
 }
 
 $show_clock = true;
@@ -589,14 +599,6 @@ if ($time_control) {
 // Get time left for expiring time
 $time_left = api_strtotime($clock_expired_time, 'UTC') - time();
 
-/*
- * The time control feature is enable here - this feature is enable for a jquery plugin called epiclock
- * for more details of how it works see this link : http://eric.garside.name/docs.html?p=epiclock
- */
-if ($time_control) { //Sends the exercise form when the expired time is finished
-    $htmlHeadXtra[] = $objExercise->showTimeControlJS($time_left);
-}
-
 //in LP's is enabled the "remember question" feature?
 if (!isset($_SESSION['questionList'])) {
     // selects the list of question ID
@@ -803,6 +805,15 @@ if ($question_count != 0) {
                     );
 
                     if ($previousQuestionIsLastInCategory) {
+                        if ($time_control && $allowAdaptiveTimeControlByCategory) {
+                            $time_left = $total_seconds;
+
+                            /** @var DateTime $currentUtcTime */
+                            $currentUtcTime = api_get_utc_datetime(null, false, true);
+                            $currentUtcTime->add(new DateInterval("PT{$total_seconds}S"));
+                            $_SESSION['expired_time'][$current_expired_time_key] = $currentUtcTime->format('Y-m-d H:i:s');
+                        }
+
                         $destinationCategory = $objExercise->findCategoryDestination(
                             $exe_id,
                             $previousCategoryId
@@ -977,6 +988,14 @@ $interbreadcrumb[] = [
     "name" => get_lang('Exercises'),
 ];
 $interbreadcrumb[] = ["url" => "#", "name" => $objExercise->selectTitle(true)];
+
+/*
+ * The time control feature is enable here - this feature is enable for a jquery plugin called epiclock
+ * for more details of how it works see this link : http://eric.garside.name/docs.html?p=epiclock
+ */
+if ($time_control) { //Sends the exercise form when the expired time is finished
+    $htmlHeadXtra[] = $objExercise->showTimeControlJS($time_left);
+}
 
 if (!in_array($origin, ['learnpath', 'embeddable'])) { //so we are not in learnpath tool
     if (!api_is_allowed_to_session_edit()) {

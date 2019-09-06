@@ -2978,8 +2978,7 @@ HTML;
             {type:"stylesheet", src:"'.$webPublicPath.'assets/jquery-ui/themes/smoothness/theme.css"},                
             {type:"stylesheet", src:"'.$webPublicPath.'css/dialog.css"},
             {type:"stylesheet", src: "'.$webPublicPath.'assets/mediaelement/build/mediaelementplayer.min.css"},                
-            {type:"stylesheet", src: "'.$webPublicPath.'assets/mediaelement/plugins/vrview/vrview.css"},
-            {type:"stylesheet", src: "'.$webPublicPath.'css/themes/rainbow/mediaelement.css"},
+            {type:"stylesheet", src: "'.$webPublicPath.'assets/mediaelement/plugins/vrview/vrview.css"},git 
             '.$fileCustomCssMedia.',
         ]);';
 

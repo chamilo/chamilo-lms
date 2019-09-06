@@ -42,12 +42,9 @@ if (!$is_allowed_to_edit || $isStudentView) {
     exit;
 }
 // From here on, we are admin because of the previous condition, so don't check anymore.
-
+/** @var learnpath $learnPath */
+$learnPath = Session::read('oLP');
 $course_id = api_get_course_int_id();
-$sql = "SELECT * FROM $tbl_lp
-        WHERE c_id = $course_id AND id = $learnpath_id";
-$result = Database::query($sql);
-$therow = Database::fetch_array($result);
 
 /*
     Course admin section
@@ -65,7 +62,7 @@ $interbreadcrumb[] = [
 ];
 $interbreadcrumb[] = [
     'url' => api_get_self()."?action=build&lp_id=$learnpath_id&".api_get_cidreq(),
-    'name' => Security::remove_XSS($therow['name']),
+    'name' => $learnPath->getNameNoTags(),
 ];
 $interbreadcrumb[] = [
     'url' => api_get_self()."?action=add_item&type=step&lp_id=$learnpath_id&".api_get_cidreq(),

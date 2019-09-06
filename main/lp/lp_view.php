@@ -447,7 +447,7 @@ if ($is_allowed_to_edit) {
     ];
     $interbreadcrumb[] = [
         'url' => api_get_self()."?action=add_item&type=step&lp_id={$lp->lp_id}&isStudentView=false&".api_get_cidreq(true, true, 'course'),
-        'name' => $lp->get_name(),
+        'name' => $lp->getNameNoTags(),
     ];
 
     $interbreadcrumb[] = [
@@ -606,7 +606,7 @@ if (Tracking::minimumTimeAvailable(api_get_session_id(), api_get_course_int_id()
 
 $template->assign('lp_accumulate_work_time', $lpMinTime);
 $template->assign('lp_mode', $lp->mode);
-$template->assign('lp_title_scorm', $lp->name);
+$template->assign('lp_title_scorm', $lp->get_name());
 if (api_get_configuration_value('lp_view_accordion') === true && $lpType == 1) {
     $template->assign('data_panel', $lp->getParentToc($get_toc_list));
 } else {
@@ -619,7 +619,7 @@ $template->assign(
     'lp_preview_image',
     Display::img(
         $lpPreviewImagePath,
-        $lp->name,
+        $lp->getNameNoTags(),
         [],
         ICON_SIZE_BIG
     )

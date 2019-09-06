@@ -35,11 +35,13 @@ class HtmlEditor extends HTML_QuickForm_textarea
         }
 
         parent::__construct($name, $label, $attributes);
+        $id = $this->getAttribute('id');
         $this->_persistantFreeze = true;
         $this->_type = 'html_editor';
         $editor = new CkEditor();
         if ($editor) {
             $this->editor = $editor;
+            $this->editor->setTextareaId($id);
             $this->editor->setName($name);
             $this->editor->processConfig($config);
         }

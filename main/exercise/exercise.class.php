@@ -1923,7 +1923,7 @@ class Exercise
                 get_lang('ExerciseName'),
                 false,
                 false,
-                ['ToolbarSet' => 'Minimal']
+                ['ToolbarSet' => 'TitleAsHtml']
             );
         } else {
             $form->addElement(

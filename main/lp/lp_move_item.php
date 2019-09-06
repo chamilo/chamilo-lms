@@ -63,7 +63,7 @@ $interbreadcrumb[] = [
 ];
 $interbreadcrumb[] = [
     'url' => api_get_self()."?action=build&lp_id=$learnpath_id&".api_get_cidreq(),
-    'name' => stripslashes($learnPath->get_name()),
+    'name' => $learnPath->getNameNoTags(),
 ];
 $interbreadcrumb[] = [
     'url' => api_get_self()."?action=add_item&type=step&lp_id=$learnpath_id&".api_get_cidreq(),

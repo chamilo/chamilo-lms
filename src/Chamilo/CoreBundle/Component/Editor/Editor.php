@@ -14,6 +14,11 @@ use Symfony\Component\Translation\Translator;
 class Editor
 {
     /**
+     * @var string
+     */
+    public $textareaId;
+
+    /**
      * Name of the instance.
      *
      * @var string
@@ -81,6 +86,26 @@ class Editor
     }
 
     /**
+     * @return string
+     */
+    public function getTextareaId()
+    {
+        return $this->textareaId;
+    }
+
+    /**
+     * @param string $textareaId
+     *
+     * @return Editor
+     */
+    public function setTextareaId($textareaId)
+    {
+        $this->textareaId = $textareaId;
+
+        return $this;
+    }
+
+    /**
      * Return the HTML code required to run editor.
      *
      * @param string $value
@@ -89,7 +114,7 @@ class Editor
      */
     public function createHtml($value)
     {
-        $html = '<textarea id="'.$this->getName().'" name="'.$this->getName().'">'.$value.'</textarea>';
+        $html = '<textarea id="'.$this->getTextareaId().'" name="'.$this->getName().'">'.$value.'</textarea>';
 
         return $html;
     }
@@ -105,7 +130,7 @@ class Editor
         $javascript = $this->toJavascript($config);
 
         $html = "<script>
-           CKEDITOR.replace('".$this->name."',
+           CKEDITOR.replace('".$this->getTextareaId()."',
                $javascript
            );
            

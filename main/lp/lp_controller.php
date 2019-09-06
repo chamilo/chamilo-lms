@@ -1187,15 +1187,15 @@ switch ($action) {
             }
             $_SESSION['oLP']->set_theme($_REQUEST['lp_theme']);
 
+            $hide_toc_frame = null;
             if (isset($_REQUEST['hide_toc_frame']) && $_REQUEST['hide_toc_frame'] == 1) {
                 $hide_toc_frame = $_REQUEST['hide_toc_frame'];
-            } else {
-                $hide_toc_frame = null;
             }
             $_SESSION['oLP']->set_hide_toc_frame($hide_toc_frame);
             $_SESSION['oLP']->set_prerequisite(isset($_POST['prerequisites']) ? (int) $_POST['prerequisites'] : 0);
             $_SESSION['oLP']->setAccumulateWorkTime(isset($_REQUEST['accumulate_work_time']) ? $_REQUEST['accumulate_work_time'] : 0);
             $_SESSION['oLP']->set_use_max_score(isset($_POST['use_max_score']) ? 1 : 0);
+
             $subscribeUsers = isset($_REQUEST['subscribe_users']) ? 1 : 0;
             $_SESSION['oLP']->setSubscribeUsers($subscribeUsers);
 
@@ -1211,6 +1211,7 @@ switch ($action) {
             if (isset($_REQUEST['activate_end_date_check']) && $_REQUEST['activate_end_date_check'] == 1) {
                 $expired_on = $_REQUEST['expired_on'];
             }
+
             $_SESSION['oLP']->setCategoryId($_REQUEST['category_id']);
             $_SESSION['oLP']->set_modified_on();
             $_SESSION['oLP']->set_publicated_on($publicated_on);

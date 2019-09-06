@@ -227,7 +227,7 @@ if (!empty($lpAutoLaunch)) {
                 } else {
                     $session_key = 'lp_autolaunch_'.$session_id.'_'.api_get_course_int_id().'_'.api_get_user_id();
                     if (!isset($_SESSION[$session_key])) {
-                        //redirecting to the LP
+                        // Redirecting to the LP
                         $url = api_get_path(WEB_CODE_PATH).'lp/lp_controller.php?'.api_get_cidreq().'&action=view&lp_id='.$lp_data['id'];
 
                         $_SESSION[$session_key] = true;
@@ -325,9 +325,8 @@ if ($documentAutoLaunch == 1) {
     }
 }
 
+// Used in different pages
 $tool_table = Database::get_course_table(TABLE_TOOL_LIST);
-$temps = time();
-$reqdate = "&reqdate=$temps";
 
 /*	Introduction section (editable by course admins) */
 $content = Display::return_introduction_section(
@@ -349,16 +348,22 @@ if (!empty($autoLaunchWarning)) {
     );
 }
 
-if (api_get_setting('homepage_view') === 'activity' ||
-    api_get_setting('homepage_view') === 'activity_big'
-) {
-    require 'activity.php';
-} elseif (api_get_setting('homepage_view') === '2column') {
-    require '2column.php';
-} elseif (api_get_setting('homepage_view') === '3column') {
-    require '3column.php';
-} elseif (api_get_setting('homepage_view') === 'vertical_activity') {
-    require 'vertical_activity.php';
+$homePageView = api_get_setting('homepage_view');
+
+switch ($homePageView) {
+    case 'activity':
+    case 'activity_big':
+        require 'activity.php';
+        break;
+    case '2column':
+        require '2column.php';
+        break;
+    case '3column':
+        require '3column.php';
+        break;
+    case 'vertical_activity':
+        require 'vertical_activity.php';
+        break;
 }
 
 // Get session-career diagram
@@ -417,6 +422,7 @@ Session::erase('_gid');
 Session::erase('oLP');
 Session::erase('lpobject');
 api_remove_in_gradebook();
+Exercise::cleanSessionVariables();
 DocumentManager::removeGeneratedAudioTempFile();
 
 $tpl = new Template(null);

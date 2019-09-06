@@ -2937,6 +2937,13 @@ HTML;
             $translateHtml = '{type:"script", src:"'.api_get_path(WEB_AJAX_PATH).'lang.ajax.php?a=translate_html&'.api_get_cidreq().'"},';
         }
 
+        $customCss = api_get_visual_theme();
+        $fileMedia = api_get_path(SYS_CSS_PATH).$customCss.'mediaelement.css';
+        $fileCustomCssMedia = null;
+        if(file_exists($fileMedia)){
+            $fileCustomCssMedia = '{type:"stylesheet", src:"'.api_get_path(SYS_CSS_PATH).$customCss.'mediaelement.css"}';
+        }
+
         $videoFeatures = implode("','", $videoFeatures);
         $frameReady = '
         $.frameReady(function() {
@@ -2972,6 +2979,8 @@ HTML;
             {type:"stylesheet", src:"'.$webPublicPath.'css/dialog.css"},
             {type:"stylesheet", src: "'.$webPublicPath.'assets/mediaelement/build/mediaelementplayer.min.css"},                
             {type:"stylesheet", src: "'.$webPublicPath.'assets/mediaelement/plugins/vrview/vrview.css"},
+            {type:"stylesheet", src: "'.$webPublicPath.'css/themes/rainbow/mediaelement.css"},
+            '.$fileCustomCssMedia.',
         ]);';
 
         return $frameReady;

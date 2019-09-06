@@ -296,7 +296,7 @@ if ($form->validate()) {
     $tpl = new Template('', false, false, false, true, false, false);
     $tpl->assign('title', get_lang('RealisationCertificate'));
     $tpl->assign('student', $userInfo['complete_name']);
-    $tpl->assign('table_progress', $totalCourseSessionTable.$totalTable.$courseSessionTable);
+    $tpl->assign('table_progress', $totalTable.$totalCourseSessionTable.'<pagebreak>'.$courseSessionTable);
 
     $content = $tpl->fetch($tpl->get_template('my_space/pdf_export_student.tpl'));
     $params = [
@@ -333,7 +333,6 @@ $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('AccessDetails')];
 
 Display::display_header('');
 $userInfo = api_get_user_info($userId);
-$result_to_print = '';
 echo Display::page_header(get_lang('DetailsStudentInCourse'));
 echo Display::page_subheader(
     get_lang('User').': '.$userInfo['complete_name']

@@ -2938,10 +2938,10 @@ HTML;
         }
 
         $customCss = api_get_visual_theme();
-        $fileMedia = api_get_path(SYS_CSS_PATH).$customCss.'mediaelement.css';
+        $fileMedia = api_get_path(SYS_CSS_PATH).'themes/'.$customCss.'/mediaelement.css';
         $fileCustomCssMedia = null;
         if(file_exists($fileMedia)){
-            $fileCustomCssMedia = '{type:"stylesheet", src:"'.api_get_path(SYS_CSS_PATH).$customCss.'mediaelement.css"}';
+            $fileCustomCssMedia = '{type:"stylesheet", src:"'.api_get_path(WEB_CSS_PATH).'themes/'.$customCss.'/mediaelement.css"}';
         }
 
         $videoFeatures = implode("','", $videoFeatures);
@@ -2978,7 +2978,7 @@ HTML;
             {type:"stylesheet", src:"'.$webPublicPath.'assets/jquery-ui/themes/smoothness/theme.css"},                
             {type:"stylesheet", src:"'.$webPublicPath.'css/dialog.css"},
             {type:"stylesheet", src: "'.$webPublicPath.'assets/mediaelement/build/mediaelementplayer.min.css"},                
-            {type:"stylesheet", src: "'.$webPublicPath.'assets/mediaelement/plugins/vrview/vrview.css"},git 
+            {type:"stylesheet", src: "'.$webPublicPath.'assets/mediaelement/plugins/vrview/vrview.css"}, 
             '.$fileCustomCssMedia.',
         ]);';
 

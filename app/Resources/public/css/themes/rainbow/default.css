@@ -2307,3 +2307,7 @@ blockquote:before {
     background: #F9FFEA;
     border-color: #9bd6b8;
 }
+
+.exercise_overview_options {
+    background-color: white;
+}

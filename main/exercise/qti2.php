@@ -12,6 +12,8 @@
  */
 require_once __DIR__.'/../inc/global.inc.php';
 
+api_protect_course_script(true);
+
 // section (for the tabs)
 $this_section = SECTION_COURSES;
 
@@ -22,8 +24,8 @@ if (!api_is_allowed_to_edit(null, true)) {
 
 // the breadcrumbs
 $interbreadcrumb[] = [
-    "url" => api_get_path(WEB_CODE_PATH)."exercise/exercise.php?".api_get_cidreq(),
-    "name" => get_lang('Exercises'),
+    'url' => api_get_path(WEB_CODE_PATH).'exercise/exercise.php?'.api_get_cidreq(),
+    'name' => get_lang('Exercises'),
 ];
 $is_allowedToEdit = api_is_allowed_to_edit(null, true);
 
@@ -39,7 +41,7 @@ function displayForm()
     $formValidator = new FormValidator(
         'qti_upload',
         'post',
-        api_get_self()."?".api_get_cidreq(),
+        api_get_self().'?'.api_get_cidreq(),
         null,
         ['enctype' => 'multipart/form-data']
     );
@@ -81,7 +83,7 @@ function importFile($array_file)
 $message = null;
 
 // import file
-if ((api_is_allowed_to_edit(null, true))) {
+if (api_is_allowed_to_edit(null, true)) {
     if (isset($_POST['submit'])) {
         $imported = importFile($_FILES['userFile']);
 
@@ -94,7 +96,6 @@ if ((api_is_allowed_to_edit(null, true))) {
     }
 }
 
-// Display header
 Display::display_header(get_lang('ImportQtiQuiz'), 'Exercises');
 
 echo $message;
@@ -102,5 +103,4 @@ echo $message;
 // display qti form
 displayForm();
 
-// display the footer
 Display::display_footer();

@@ -159,7 +159,7 @@ $form->addElement('html', '</div>');
 $form->addElement('html', '<div class="col-md-2"></div>');
 $form->addElement('html', '</div>');
 // Time Control
-if (Tracking::minimunTimeAvailable(api_get_session_id(), api_get_course_int_id())) {
+if (Tracking::minimumTimeAvailable(api_get_session_id(), api_get_course_int_id())) {
     $accumulateTime = $_SESSION['oLP']->getAccumulateWorkTime();
     $form->addText('accumulate_work_time', [get_lang('LpMinTime'), get_lang('LpMinTimeDescription')]);
     $defaults['accumulate_work_time'] = $accumulateTime;
@@ -236,11 +236,8 @@ if (!empty($options)) {
     $defaults['extra_lp_icon'] = learnpath::getSelectedIcon($lpId);
 }
 
-$enableLpExtraFields = false;
-if ($enableLpExtraFields) {
-    $extraField = new ExtraField('lp');
-    $extra = $extraField->addElements($form, $lpId);
-}
+$extraField = new ExtraField('lp');
+$extra = $extraField->addElements($form, $lpId, ['lp_icon']);
 
 $skillList = Skill::addSkillsToForm($form, ITEM_TYPE_LEARNPATH, $lpId);
 
@@ -251,13 +248,11 @@ $form->addButtonSave(get_lang('SaveLPSettings'));
 $form->addElement('hidden', 'action', 'update_lp');
 $form->addElement('hidden', 'lp_id', $lpId);
 
-if ($enableLpExtraFields) {
-    $htmlHeadXtra[] = '<script>
-    $(function() {
-        '.$extra['jquery_ready_content'].'
-    });
-    </script>';
-}
+$htmlHeadXtra[] = '<script>
+$(function() {
+    '.$extra['jquery_ready_content'].'
+});
+</script>';
 
 $htmlHeadXtra[] = '<script>'.$learnPath->get_js_dropdown_array().'</script>';
 

@@ -48,12 +48,12 @@ if ($form->validate()) {
         $values['destination'],
         $values['subject'],
         $values['content'],
-        $user->getCompleteName(),
+        UserManager::formatUserFullName($user),
         $user->getEmail()
     );
 
     Display::addFlash(
-        Display::return_message(get_lang('MailingTestSent'), 'warning')
+        Display::return_message(get_lang('MailingTestSent'), 'success')
     );
 
     header('Location: '.api_get_self());

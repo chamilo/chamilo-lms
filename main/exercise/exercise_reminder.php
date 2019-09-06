@@ -15,28 +15,26 @@ require_once __DIR__.'/../inc/global.inc.php';
 
 $this_section = SECTION_COURSES;
 
-/* ACCESS RIGHTS  */
-// notice for unauthorized people.
 api_protect_course_script(true);
 $origin = api_get_origin();
 
 if (empty($learnpath_id)) {
     if (!empty($_REQUEST['learnpath_id'])) {
-        $learnpath_id = intval($_REQUEST['learnpath_id']);
+        $learnpath_id = (int) $_REQUEST['learnpath_id'];
     } else {
         $learnpath_id = 0;
     }
 }
 if (empty($learnpath_item_id)) {
     if (!empty($_REQUEST['learnpath_item_id'])) {
-        $learnpath_item_id = intval($_REQUEST['learnpath_item_id']);
+        $learnpath_item_id = (int) $_REQUEST['learnpath_item_id'];
     } else {
         $learnpath_item_id = 0;
     }
 }
 if (empty($learnpath_item_view_id)) {
     if (!empty($_REQUEST['learnpath_item_view_id'])) {
-        $learnpath_item_view_id = intval($_REQUEST['learnpath_item_view_id']);
+        $learnpath_item_view_id = (int) $_REQUEST['learnpath_item_view_id'];
     } else {
         $learnpath_item_view_id = 0;
     }
@@ -44,7 +42,7 @@ if (empty($learnpath_item_view_id)) {
 
 if (empty($exerciseId)) {
     if (!empty($_REQUEST['exerciseId'])) {
-        $exerciseId = intval($_REQUEST['exerciseId']);
+        $exerciseId = (int) $_REQUEST['exerciseId'];
     } else {
         $exerciseId = 0;
     }
@@ -60,9 +58,9 @@ if (empty($objExercise)) {
 }
 
 if (!$objExercise) {
-    //Redirect to the exercise overview
-    //Check if the exe_id exists
-    header("Location: overview.php?exerciseId=".$exerciseId.'&'.api_get_cidreq());
+    // Redirect to the exercise overview
+    // Check if the exe_id exists
+    header('Location: '.api_get_path(WEB_CODE_PATH).'exercise/overview.php?exerciseId='.$exerciseId.'&'.api_get_cidreq());
     exit;
 }
 
@@ -88,6 +86,8 @@ if ($time_control) {
     $htmlHeadXtra[] = $objExercise->showTimeControlJS($time_left);
 }
 
+$htmlHeadXtra[] = api_get_css_asset('pretty-checkbox/dist/pretty-checkbox.min.css');
+
 $exe_id = 0;
 if (isset($_GET['exe_id'])) {
     $exe_id = (int) $_GET['exe_id'];
@@ -106,9 +106,11 @@ if (empty($exercise_stat_info) || empty($question_list)) {
 }
 
 $nameTools = get_lang('Exercises');
-$interbreadcrumb[] = ["url" => "exercise.php?".api_get_cidreq(), "name" => get_lang('Exercises')];
+$interbreadcrumb[] = ['url' => 'exercise.php?'.api_get_cidreq(), 'name' => get_lang('Exercises')];
 
-if ($origin != 'learnpath') {
+$hideHeaderAndFooter = in_array($origin, ['learnpath', 'embeddable']);
+
+if (!$hideHeaderAndFooter) {
     //so we are not in learnpath tool
     Display::display_header($nameTools, get_lang('Exercise'));
 } else {
@@ -118,7 +120,7 @@ if ($origin != 'learnpath') {
 /* DISPLAY AND MAIN PROCESS */
 
 // I'm in a preview mode as course admin. Display the action menu.
-if (api_is_course_admin() && $origin != 'learnpath') {
+if (api_is_course_admin() && !$hideHeaderAndFooter) {
     echo '<div class="actions">';
     echo '<a href="admin.php?'.api_get_cidreq().'&exerciseId='.$objExercise->id.'">'.
         Display::return_icon('back.png', get_lang('GoBackToQuestionList'), [], 32).'</a>';
@@ -129,7 +131,7 @@ if (api_is_course_admin() && $origin != 'learnpath') {
 echo Display::page_header(get_lang('QuestionsToReview'));
 
 if ($time_control) {
-    echo $objExercise->return_time_left_div();
+    echo $objExercise->returnTimeLeftDiv();
 }
 
 echo Display::div('', ['id' => 'message']);
@@ -137,8 +139,8 @@ echo '<script>
     var lp_data = $.param({"learnpath_id": '.$learnpath_id.', "learnpath_item_id" : '.$learnpath_item_id.', "learnpath_item_view_id": '.$learnpath_item_view_id.'});
 
     function final_submit() {
-        //Normal inputs
-        window.location = "exercise_result.php?'.api_get_cidreq().'&exe_id='.$exe_id.'&" + lp_data;
+        // Normal inputs
+        window.location = "'.api_get_path(WEB_CODE_PATH).'exercise/exercise_result.php?'.api_get_cidreq().'&exe_id='.$exe_id.'&" + lp_data;
     }
     
     function changeOptionStatus(status) 
@@ -215,13 +217,13 @@ foreach ($attempt_list as $question_id => $options) {
         }
     }
 }
-echo Display::label(get_lang('QuestionWithNoAnswer'), 'warning');
+echo Display::label(get_lang('QuestionWithNoAnswer'), 'danger');
 echo '<div class="clear"></div><br />';
 
 $table = '';
 $counter = 0;
-// Loop over all question to show results for each of them, one by one
 
+// Loop over all question to show results for each of them, one by one
 foreach ($question_list as $questionId) {
     // destruction of the Question object
     unset($objQuestionTmp);
@@ -229,34 +231,34 @@ foreach ($question_list as $questionId) {
     $objQuestionTmp = Question:: read($questionId);
     $quesId = $objQuestionTmp->selectId();
     $check_id = 'remind_list['.$questionId.']';
-    $attributes = ['id' => $check_id, 'onclick' => "save_remind_item(this, '$questionId');"];
 
+    $attributes = ['id' => $check_id, 'onclick' => "save_remind_item(this, '$questionId');"];
     if (in_array($questionId, $remind_list)) {
         $attributes['checked'] = 1;
     }
-    $label_attributes = [];
-    $label_attributes['class'] = 'checkbox';
-    $label_attributes['for'] = $check_id;
-    $label_attributes['class'] = "checkbox";
+
     $checkbox = Display::input('checkbox', 'remind_list['.$questionId.']', '', $attributes);
+
+    $checkbox = '<div class="pretty p-default">
+        '.$checkbox.'
+        <div class="state p-primary ">
+            <label>&nbsp;</label>
+        </div>
+    </div>';
+
     $url = 'exercise_submit.php?exerciseId='.$objExercise->id.'&num='.$counter.'&reminder=1&'.api_get_cidreq();
 
     $counter++;
-    if ($objExercise->type == ONE_PER_PAGE) {
-        $question_title = Display::url(
-            $counter.'. '.cut($objQuestionTmp->selectTitle(), 40),
-            $url
-        );
-        $question_title = $counter.'. '.cut($objQuestionTmp->selectTitle(), 40);
-    } else {
-        $question_title = $counter.'. '.cut($objQuestionTmp->selectTitle(), 40);
-    }
-    //Check if the question doesn't have an answer
+    $questionTitle = $counter.'. '.strip_tags($objQuestionTmp->selectTitle());
+    // Check if the question doesn't have an answer
     if (!in_array($questionId, $exercise_result)) {
-        $question_title = Display::label($question_title, 'warning');
+        $questionTitle = Display::label($questionTitle, 'danger');
     }
-    $question_title = Display::tag('label', $checkbox.$question_title, $label_attributes);
-    $table .= Display::div($question_title, ['class' => 'exercise_reminder_item']);
+
+    $label_attributes = [];
+    $label_attributes['for'] = $check_id;
+    $questionTitle = Display::tag('label', $checkbox.$questionTitle, $label_attributes);
+    $table .= Display::div($questionTitle, ['class' => 'exercise_reminder_item ']);
 } // end foreach() block that loops over all questions
 
 echo Display::div($table, ['class' => 'question-check-test']);
@@ -264,7 +266,7 @@ echo Display::div($table, ['class' => 'question-check-test']);
 $exerciseActions = Display::url(
     get_lang('ReviewQuestions'),
     'javascript://',
-    ['onclick' => 'review_questions();', 'class' => 'btn btn-success']
+    ['onclick' => 'review_questions();', 'class' => 'btn btn-primary']
 );
 
 $exerciseActions .= '&nbsp;'.Display::url(
@@ -288,7 +290,9 @@ $exerciseActions .= '&nbsp;'.Display::url(
 echo Display::div('', ['class' => 'clear']);
 echo Display::div($exerciseActions, ['class' => 'form-actions']);
 
-if ($origin != 'learnpath') {
-    // We are not in learnpath tool
+if (!$hideHeaderAndFooter) {
+    // We are not in learnpath tool or embeddable quiz
     Display::display_footer();
+} else {
+    Display::display_reduced_footer();
 }

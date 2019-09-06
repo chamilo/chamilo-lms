@@ -56,6 +56,7 @@ class Forum extends Basic
                 'JustifyLeft',
                 'JustifyCenter',
                 'JustifyRight',
+                'JustifyBlock',
             ],
         ];
     }
@@ -72,7 +73,7 @@ class Forum extends Basic
             ['Undo', 'Redo'],
             ['Link', 'Image', 'Video', 'Oembed', 'Flash', 'Youtube', 'Audio', 'Table', 'Asciimath', 'Asciisvg'],
             ['BulletedList', 'NumberedList', 'HorizontalRule'],
-            ['JustifyLeft', 'JustifyCenter', 'JustifyBlock'],
+            ['JustifyLeft', 'JustifyCenter', 'JustifyRight'],
             ['Format', 'Font', 'FontSize', 'Bold', 'Italic', 'Underline', 'TextColor', 'BGColor', 'Source'],
             ['Toolbarswitch'],
         ];

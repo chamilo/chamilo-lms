@@ -31,6 +31,7 @@ $strings['ExpectionPlace'] = "Lugar expedición";
 $strings['DateExpediction'] = "Fecha expedición";
 $strings['UseDateEndAccessSession'] = "Usar fecha fin de acceso de la sesión";
 $strings['UseDateDownloadCertificate'] = "Usar fecha de descarga del certificado";
+$strings['UseDateGenerationCertificate'] = "Usar fecha de generación del certificado";
 $strings['UseCustomDate'] = "Usar fechas personalizadas";
 $strings['LogosSeal'] = "Logos / Sellos";
 $strings['LogoLeft'] = "Logo izquierda";

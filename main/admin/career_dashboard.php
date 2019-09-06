@@ -37,7 +37,7 @@ $career = new Career();
 $condition = ['status = ?' => 1];
 if ($form->validate()) {
     $data = $form->getSubmitValues();
-    $filter = intval($data['filter']);
+    $filter = (int) $data['filter'];
     if (!empty($filter)) {
         $condition = ['status = ? AND id = ? ' => [1, $filter]];
     }

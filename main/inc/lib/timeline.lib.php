@@ -219,15 +219,16 @@ class Timeline extends Model
 
     /**
      * @param array $params
+     * @param bool  $showQuery
      *
      * @return bool
      */
-    public function save($params)
+    public function save($params, $showQuery = false)
     {
         $params['c_id'] = api_get_course_int_id();
         $params['parent_id'] = '0';
         $params['type'] = 'default';
-        $id = parent::save($params);
+        $id = parent::save($params, $showQuery);
         if (!empty($id)) {
             //event_system(LOG_CAREER_CREATE, LOG_CAREER_ID, $id, api_get_utc_datetime(), api_get_user_id());
         }

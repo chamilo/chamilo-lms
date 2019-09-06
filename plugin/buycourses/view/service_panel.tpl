@@ -56,7 +56,7 @@
     </table>
 </div>
 <script>
-    $(document).on('ready', function () {
+    $(function () {
         $("td a").click(function () {
             var id = $(this).attr('tag');
             var action = $(this).attr('id');

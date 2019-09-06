@@ -709,7 +709,7 @@ class LearningCalendarPlugin extends Plugin
                 ON (r.evaluation_id = e.id)
                 WHERE 
                   e.type = 'evaluation' AND
-                  r.score > 0 AND
+                  r.score >= 2 AND
                   r.user_id = $userId   
                   $courseSessionConditionToString                  
         ";

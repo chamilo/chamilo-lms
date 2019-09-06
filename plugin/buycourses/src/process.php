@@ -11,11 +11,7 @@ use ChamiloSession as Session;
 require_once '../config.php';
 
 $currentUserId = api_get_user_id();
-if (empty($currentUserId)) {
-    Session::write('buy_course_redirect', Security::remove_XSS($_SERVER['REQUEST_URI']));
-    header('Location: '.api_get_path(WEB_CODE_PATH).'auth/inscription.php');
-    exit;
-}
+
 $htmlHeadXtra[] = '<link rel="stylesheet" type="text/css" href="'.api_get_path(
         WEB_PLUGIN_PATH
     ).'buycourses/resources/css/style.css"/>';
@@ -36,6 +32,12 @@ if (!isset($_REQUEST['t'], $_REQUEST['i'])) {
 $buyingCourse = intval($_REQUEST['t']) === BuyCoursesPlugin::PRODUCT_TYPE_COURSE;
 $buyingSession = intval($_REQUEST['t']) === BuyCoursesPlugin::PRODUCT_TYPE_SESSION;
 $queryString = 'i='.intval($_REQUEST['i']).'&t='.intval($_REQUEST['t']);
+
+if (empty($currentUserId)) {
+    Session::write('buy_course_redirect', api_get_self().'?'.$queryString);
+    header('Location: '.api_get_path(WEB_CODE_PATH).'auth/inscription.php');
+    exit;
+}
 
 if ($buyingCourse) {
     $courseInfo = $plugin->getCourseInfo($_REQUEST['i']);

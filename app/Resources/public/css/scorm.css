@@ -8,10 +8,11 @@ See https://support.chamilo.org/issues/6976
 body{
     background: #FFF !important;
 }
-.audio-scorm #container{
+.audio-scorm #container {
     min-height: 45px;
     margin-bottom: 5px;
 }
+
 #author_image {
     border: 1px solid #CCCCCC;
     float: left;
@@ -20,31 +21,38 @@ body{
     position: relative;
     width: 100%;
 }
+
 #author_name {
     float: left;
-    text-align:center;
+    text-align: center;
     width: 100%;
     font-size: 11px;
     color: #888;
     margin-top: 2px;
 }
-#learning_path_left_zone #scorm-gamification{
+
+#learning_path_left_zone #scorm-gamification {
 }
-#scorm-gamification .fa-star{
+
+#scorm-gamification .fa-star {
     font-size: 20px;
     color: #C2C2C2;
 }
-#scorm-gamification .fa-star.level{
+
+#scorm-gamification .fa-star.level {
     color: #D9534F;
 }
-#learning_path_left_zone .navegation-bar .buttons{
+
+#learning_path_left_zone .navegation-bar .buttons {
     padding-top: 5px;
     padding-bottom: 5px;
 }
-#learning_path_left_zone .description-autor{
+
+#learning_path_left_zone .description-autor {
     text-align: left;
     padding-top: 10px;
 }
+
 .inner_lp_toc .scorm_item a {
     font-weight: bold;
     font-size: 14px;
@@ -53,10 +61,12 @@ body{
     text-decoration: none;
     color: #2F3E46;
 }
+
 .inner_lp_toc .scorm_item a.chapter_module {
     font-weight: normal;
     margin-right: 10px;
 }
+
 .inner_lp_toc .scorm_item_highlight {
     border: 1px solid #999;
     background:#999;
@@ -72,12 +82,14 @@ body{
     padding: 10px 0px 10px 0px;
     text-decoration: none;
 }
+
 .inner_lp_toc .scorm_item_highlight a {
-    color:#fff;
+    color: #fff;
     margin-right: 1px;
     text-decoration: none;
     font-weight: bold;
 }
+
 .inner_lp_toc .scorm_item {
     font-size: 16px;
     margin-left: 10px;
@@ -85,64 +97,76 @@ body{
     text-decoration: none;
     border-color: rgba(255, 255, 255, 0.3);
 }
+
 .inner_lp_toc .scorm_item_section .scorm_item:before {
     content : url('../../main/img/lp_section.png');  /* path from main/lp/lp_controller.php file */
     vertical-align: text-top;
     margin-right : 5px;
 }
+
 /* learning path's classes for section and item for 5 levels of depth */
 .scorm_section_level_0 {
     margin: 0 0 0 0;
 }
+
 .scorm_section_level_1 {
     margin: 0 0.5em 0 20px;
 }
+
 .scorm_section_level_2 {
     margin: 0 0.5em 0 40px;
 }
+
 .scorm_section_level_3 {
     margin: 0 0.5em 0 60px;
 }
+
 .scorm_section_level_4 {
     margin: 0 0.5em 0 70px;
 }
+
 .scorm_section_level_5 {
     margin: 0 0.5em 0 10em;
 }
-.scorm_item_normal{
+
+.scorm_item_normal {
     line-height: 25px;
     border-bottom: 1px solid #DDD;
     padding: 5px 0;
 }
+
 .level_0 {
     margin: 0;
     padding-left: 30px;
 }
+
 .level_1 {
     margin: 0 0.5em 0 20px;
     padding-left: 30px;
 }
+
 .level_2 {
     margin: 0 0.5em 0 40px;
     padding-left: 30px;
 }
+
 .level_3 {
     margin: 0 0.5em 0 60px;
-    padding-left: 30px;
-    padding-top: 5px;
-    padding-bottom: 5px;
-    padding-right: 5px;
+    padding: 5px 5px 5px 30px;
     line-height: 14px;
 }
+
 .level_4 {
     margin: 0 0.5em 0 70px;
     padding-left: 30px;
 }
+
 .level_5 {
     margin: 0 0.5em 0 90px;
     padding-left: 30px;
 }
-#learning_path_breadcrumb_zone .breadcrumb{
+
+#learning_path_breadcrumb_zone .breadcrumb {
     background-color: #2b3d53;
     border-radius: 0;
     -moz-border-radius: 0;
@@ -150,46 +174,57 @@ body{
     color: #ffffff;
     font-size: 12px;
 }
-#learning_path_breadcrumb_zone .breadcrumb a{
+
+#learning_path_breadcrumb_zone .breadcrumb a {
     color: #ffffff;
     text-decoration: none;
 }
-#learning_path_breadcrumb_zone .breadcrumb a:hover{
+
+#learning_path_breadcrumb_zone .breadcrumb a:hover {
     color: #dddddd;
 }
-.total{
+
+.total {
     width: 100%;
 }
-.view-options{
+
+.view-options {
     padding-top: 3px;
     margin-right: 5px;
 }
-.panel-default .panel-heading .btn{
+
+.panel-default .panel-heading .btn {
     top: -25px;
 }
-.panel-default .panel-heading .dropdown-menu{
+
+.panel-default .panel-heading .dropdown-menu {
     top: 30%;
 }
-#content-scorm .breadcrumb{
+
+#content-scorm .breadcrumb {
     padding: 5px;
 }
-.scorm-heading{
+
+.scorm-heading {
     font-size: 14px;
     padding-top: 5px;
     padding-bottom: 5px;
 }
-#control-bottom{
+
+#control-bottom {
     position: fixed;
     bottom: 0;
     width: 100%;
     text-align: center;
     left: 0;
 }
-#control-bottom.well{
+
+#control-bottom.well {
     margin-bottom: 0;
 }
+
 /*SCORM CSS BASE */
-#learning_path_left_zone .home{
+#learning_path_left_zone .home {
     display: inline-block;
     width: 94%;
     margin-bottom: .5em;
@@ -229,6 +264,7 @@ body{
     background-color: #F5F5F5;
     color: #000;
 }
+
 .scorm_completed .item {
     background:url("../../main/img/scorm/scorm_completed.png") no-repeat 10px center;
 }
@@ -322,7 +358,7 @@ body{
 #learning_path_right_zone .lp-view-zone-container {
     bottom: 0;
     left: 0;
-    padding: 5px;
+    padding: 0px;
     position: absolute;
     right: 0;
     top: 0;
@@ -453,6 +489,7 @@ body{
     #learning_path_left_zone {
         width: 250px;
     }
+
     #learning_path_right_zone {
         left: 250px;
         width: calc(100% - 250px);
@@ -469,7 +506,7 @@ body{
         padding-right: 5px;
     }
     #learning_path_right_zone .lp-view-zone-container {
-        padding-left: 5px;
+        padding-left: 0px;
     }
 
     #learning_path_right_zone .lp-view-tabs .tab-content {
@@ -477,8 +514,10 @@ body{
         right: 10px;
         top: 75px;
     }
-    #learning_path_right_zone .tab-pane{
+
+    #learning_path_right_zone .tab-pane {
     }
+
     #learning_path_right_zone .tab-pane iframe {
     }
 }
@@ -498,26 +537,42 @@ body{
 /* Large devices (large desktops, 1200px and up) */
 @media (min-width: 1200px) {
     #learning_path_left_zone {
-        width: 350px;
+        width: 450px;
     }
 
     #learning_path_right_zone {
-        left: 350px;
-        width: calc(100% - 350px);
+        left: 465px;
+        width: calc(100% - 465px);
     }
 }
-@media (min-width : 480px) and (max-width: 767px) {
-    #panel-scorm .image-avatar{
+
+@media (min-width: 979px) and (max-width: 1024px) {
+    #panel-scorm .image-avatar {
         display: none;
     }
+}
+
+@media (min-width: 768px) and (max-width: 978px) {
+    #panel-scorm .image-avatar {
+        display: none;
+    }
+}
+
+@media (min-width: 480px) and (max-width: 767px) {
+    #panel-scorm .image-avatar {
+        display: none;
+    }
+
     #scorm-info {
         padding: 0;
         margin: 0;
     }
+
     #learning_path_left_zone .lp-view-zone-container,
-    #learning_path_right_zone .lp-view-zone-container{
+    #learning_path_right_zone .lp-view-zone-container {
         padding: 0;
     }
+
     #scorm-info {
         padding: 30px 0 0 0;
         margin: 0;
@@ -526,16 +581,55 @@ body{
         display: none;
     }
 }
+
 /* Landscape phones and down */
 @media (max-width: 480px) {
-    #home-course{
-        display: none !important;
-    }
-    .scorm-title{
+    .scorm-title {
         font-size: 14px;
         padding: 10px;
     }
-    .movil-toolbar{
-        padding-left: 35%;
+
+    .movil-toolbar {
+        width: 100%;
+        height: auto;
+    }
+
+    .scorm_item_normal {
+        padding: 10px 5px;
+    }
+
+    .icon-toolbar .fa {
+        width: 35px;
+        height: 35px;
+        line-height: 35px;
+        font-size: 22px;
+    }
+
+    .btn-movil {
+        width: 130px;
+        margin: auto;
+    }
+
+    #scorm-info {
+        padding: 30px 0 0 0;
+        margin: 0;
+    }
+
+    #learning_path_right_zone {
+        left: 100%;
+        width: auto;
+    }
+
+    #panel-scorm .image-avatar {
+        display: none;
+    }
+
+    #learning_path_left_zone .lp-view-zone-container,
+    #learning_path_right_zone .lp-view-zone-container {
+        padding: 0;
+    }
+
+    #scorm-info hr {
+        display: none;
     }
 }

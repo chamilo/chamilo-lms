@@ -149,7 +149,6 @@ function import_exercise($file)
     if ($result == false) {
         return false;
     }
-
     // 1. Create exercise.
     $exercise = new Exercise();
     $exercise->exercise = $exerciseInfo['name'];
@@ -172,6 +171,9 @@ function import_exercise($file)
     if (!empty($last_exercise_id)) {
         // For each question found...
         foreach ($exerciseInfo['question'] as $question_array) {
+            if (!in_array($question_array['type'], [UNIQUE_ANSWER, MULTIPLE_ANSWER, FREE_ANSWER])) {
+                continue;
+            }
             //2. Create question
             $question = new Ims2Question();
             $question->type = $question_array['type'];
@@ -262,6 +264,7 @@ function import_exercise($file)
             $question->save($exercise);
             $answer->save();
         }
+
         // delete the temp dir where the exercise was unzipped
         my_delete($baseWorkDir.$uploadPath);
 
@@ -355,19 +358,19 @@ function parseQti2($xmlData)
     $currentQuestionItemBody = '';
     $cardinality = '';
     $nonHTMLTagToAvoid = [
-        "simpleChoice",
-        "choiceInteraction",
-        "inlineChoiceInteraction",
-        "inlineChoice",
-        "soMPLEMATCHSET",
-        "simpleAssociableChoice",
-        "textEntryInteraction",
-        "feedbackInline",
-        "matchInteraction",
+        'simpleChoice',
+        'choiceInteraction',
+        'inlineChoiceInteraction',
+        'inlineChoice',
+        'soMPLEMATCHSET',
+        'simpleAssociableChoice',
+        'textEntryInteraction',
+        'feedbackInline',
+        'matchInteraction',
         'extendedTextInteraction',
-        "itemBody",
-        "br",
-        "img",
+        'itemBody',
+        'br',
+        'img',
     ];
     $currentMatchSet = null;
 
@@ -463,13 +466,20 @@ function parseQti2($xmlData)
                     $exerciseInfo['question'][$currentQuestionIdent]['answer'][$currentAnswerId] = [];
                 }
 
+                //$simpleChoiceValue = $node->nodeValue;
+                $simpleChoiceValue = '';
+                /** @var DOMElement $childNode */
+                foreach ($node->childNodes as $childNode) {
+                    if ('feedbackInline' === $childNode->nodeName) {
+                        continue;
+                    }
+                    $simpleChoiceValue .= $childNode->nodeValue;
+                }
+                $simpleChoiceValue = trim($simpleChoiceValue);
                 if (!isset($exerciseInfo['question'][$currentQuestionIdent]['answer'][$currentAnswerId]['value'])) {
-                    $exerciseInfo['question'][$currentQuestionIdent]['answer'][$currentAnswerId]['value'] = trim(
-                        $node->nodeValue
-                    );
+                    $exerciseInfo['question'][$currentQuestionIdent]['answer'][$currentAnswerId]['value'] = $simpleChoiceValue;
                 } else {
-                    $exerciseInfo['question'][$currentQuestionIdent]['answer'][$currentAnswerId]['value'] .= ''
-                        .trim($node->nodeValue);
+                    $exerciseInfo['question'][$currentQuestionIdent]['answer'][$currentAnswerId]['value'] .= $simpleChoiceValue;
                 }
                 break;
             case 'mapEntry':
@@ -487,14 +497,12 @@ function parseQti2($xmlData)
                 break;
             case 'mapping':
                 $defaultValue = $node->getAttribute('defaultValue');
-
                 if (!empty($defaultValue)) {
                     $exerciseInfo['question'][$currentQuestionIdent]['default_weighting'] = $defaultValue;
                 }
                 // no break ?
             case 'itemBody':
                 $nodeValue = $node->nodeValue;
-
                 $currentQuestionItemBody = '';
 
                 /** @var DOMElement $childNode */
@@ -512,18 +520,14 @@ function parseQti2($xmlData)
                             }
                         }
 
-                        $currentQuestionItemBody .= '>'
-                            .$childNode->nodeValue
-                            .'</'.$node->nodeName.'>';
+                        $currentQuestionItemBody .= '>'.$childNode->nodeValue.'</'.$node->nodeName.'>';
 
                         continue;
                     }
 
                     if ('inlineChoiceInteraction' === $childNode->nodeName) {
-                        $currentQuestionItemBody .= "**claroline_start**"
-                            .$childNode->attr('responseIdentifier')
+                        $currentQuestionItemBody .= "**claroline_start**".$childNode->attr('responseIdentifier')
                             ."**claroline_end**";
-
                         continue;
                     }
 
@@ -575,14 +579,13 @@ function parseQti2($xmlData)
                 break;
             case 'feedbackInline':
                 if (!isset($exerciseInfo['question'][$currentQuestionIdent]['answer'][$currentAnswerId]['feedback'])) {
-                    $exerciseInfo['question'][$currentQuestionIdent]['answer'][$currentAnswerId] = trim(
+                    $exerciseInfo['question'][$currentQuestionIdent]['answer'][$currentAnswerId]['feedback'] = trim(
                         $node->nodeValue
                     );
                 } else {
-                    $exerciseInfo['question'][$currentQuestionIdent]['answer'][$currentAnswerId]['feedback'] .= ''
-                        .trim(
-                            $node->nodeValue
-                        );
+                    $exerciseInfo['question'][$currentQuestionIdent]['answer'][$currentAnswerId]['feedback'] .= trim(
+                        $node->nodeValue
+                    );
                 }
                 break;
             case 'value':

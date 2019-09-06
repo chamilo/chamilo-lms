@@ -13,3 +13,4 @@ $strings['block_title'] = "Block title";
 
 $strings['title'] = "Title";
 $strings['no_rss'] = "There is no RSS configured. Please add a RSS";
+$strings['no_valid_rss'] = "Please check if the URL contains a valid RSS URL";

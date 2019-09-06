@@ -16,7 +16,7 @@ use ChamiloSession as Session;
  * @todo small letters for table variables
  */
 require_once __DIR__.'/../inc/global.inc.php';
-$debug = false;
+
 $origin = api_get_origin();
 $currentUserId = api_get_user_id();
 $printHeaders = $origin === 'learnpath';
@@ -67,7 +67,7 @@ if (empty($exerciseResult)) {
 if (empty($choiceDegreeCertainty)) {
     $choiceDegreeCertainty = isset($_REQUEST['choiceDegreeCertainty']) ? $_REQUEST['choiceDegreeCertainty'] : null;
 }
-$questionId = isset($_REQUEST['questionId']) ? $_REQUEST['questionId'] : null;
+$questionId = isset($_REQUEST['questionId']) ? (int) $_REQUEST['questionId'] : null;
 
 if (empty($choice)) {
     $choice = isset($_REQUEST['choice']) ? $_REQUEST['choice'] : null;
@@ -127,7 +127,7 @@ if (empty($objExercise)) {
     $objExercise = new Exercise();
     $objExercise->read($exercise_id);
 }
-$feedback_type = $objExercise->feedback_type;
+$feedback_type = $objExercise->getFeedbackType();
 
 // Only users can see their own results
 if (!$is_allowedToEdit) {
@@ -309,29 +309,24 @@ if ($show_results || $show_only_total_score || $showTotalScoreAndUserChoicesInLa
 }
 
 $i = $totalScore = $totalWeighting = 0;
-if ($debug > 0) {
-    error_log("ExerciseResult: ".print_r($exerciseResult, 1));
-    error_log("QuestionList: ".print_r($questionList, 1));
-}
-
 $arrques = [];
 $arrans = [];
-$user_restriction = $is_allowedToEdit ? '' : "AND user_id=".intval($student_id)." ";
+$user_restriction = $is_allowedToEdit ? '' : " AND user_id= $student_id ";
 $sql = "SELECT attempts.question_id, answer
         FROM $TBL_TRACK_ATTEMPT as attempts
-        INNER JOIN ".$TBL_TRACK_EXERCISES." AS stats_exercises
-        ON stats_exercises.exe_id=attempts.exe_id
+        INNER JOIN $TBL_TRACK_EXERCISES AS stats_exercises
+        ON stats_exercises.exe_id = attempts.exe_id
         INNER JOIN $TBL_EXERCISE_QUESTION AS quizz_rel_questions
         ON
             quizz_rel_questions.exercice_id=stats_exercises.exe_exo_id AND
             quizz_rel_questions.question_id = attempts.question_id AND
             quizz_rel_questions.c_id=".api_get_course_int_id()."
-        INNER JOIN ".$TBL_QUESTIONS." AS questions
+        INNER JOIN $TBL_QUESTIONS AS questions
         ON
             questions.id = quizz_rel_questions.question_id AND
             questions.c_id = ".api_get_course_int_id()."
         WHERE
-            attempts.exe_id = ".$id." $user_restriction
+            attempts.exe_id = $id $user_restriction
 		GROUP BY quizz_rel_questions.question_order, attempts.question_id";
 $result = Database::query($sql);
 $question_list_from_database = [];
@@ -358,7 +353,7 @@ if (!empty($track_exercise_info['data_tracking'])) {
 }
 
 // Display the text when finished message if we are on a LP #4227
-$end_of_message = $objExercise->selectTextWhenFinished();
+$end_of_message = $objExercise->getTextWhenFinished();
 if (!empty($end_of_message) && ($origin === 'learnpath')) {
     echo Display::return_message($end_of_message, 'normal', false);
     echo "<div class='clear'>&nbsp;</div>";
@@ -548,15 +543,13 @@ foreach ($questionList as $questionId) {
                     $overlap_color = 'red';
                 }
 
+                $missing_color = 'red';
                 if ($missing_color) {
                     $missing_color = 'green';
-                } else {
-                    $missing_color = 'red';
                 }
+                $excess_color = 'red';
                 if ($excess_color) {
                     $excess_color = 'green';
-                } else {
-                    $excess_color = 'red';
                 }
 
                 if (!is_numeric($final_overlap)) {
@@ -648,9 +641,9 @@ foreach ($questionList as $questionId) {
                     echo '<p>'.$comment.'</p>';
                 }
 
-                //showing the score
-                $queryfree = "SELECT marks from ".$TBL_TRACK_ATTEMPT." 
-                              WHERE exe_id = ".intval($id)." AND question_id= ".intval($questionId);
+                // Showing the score
+                $queryfree = "SELECT marks FROM $TBL_TRACK_ATTEMPT 
+                              WHERE exe_id = $id AND question_id= ".intval($questionId);
                 $resfree = Database::query($queryfree);
                 $questionScore = Database::result($resfree, 0, "marks");
                 $totalScore += $questionScore;
@@ -738,7 +731,7 @@ foreach ($questionList as $questionId) {
                 $url_name = get_lang('EditCommentsAndMarks');
             } else {
                 $url_name = get_lang('AddComments');
-                if ($action == 'edit') {
+                if ($action === 'edit') {
                     $url_name = get_lang('EditIndividualComment');
                 }
             }
@@ -811,36 +804,38 @@ foreach ($questionList as $questionId) {
 
         if ($is_allowedToEdit && $isFeedbackAllowed && $action != 'export') {
             if (in_array($answerType, [FREE_ANSWER, ORAL_EXPRESSION, ANNOTATION])) {
-                $marksname = "marksName".$questionId;
+                $marksname = 'marksName'.$questionId;
                 $arrmarks[] = $questionId;
 
                 echo '<div id="'.$marksname.'" class="hidden">';
-                // @todo use FormValidator
-                /*$formMark = new FormValidator("marksform_'.$questionId.'", 'post');
-                $options = [
-                  1,
-                  2
-                ];
-                $formMark->addSelect('marks', get_lang('AssignMarks'), $options);
-                $formMark->display();*/
-                echo '<form name="marksform_'.$questionId.'" method="post" action="">';
-                echo get_lang('AssignMarks');
-                echo "&nbsp;<select name='marks' id='select_marks_".$questionId."' class='selectpicker exercise_mark_select'>";
+
+                $formMark = new FormValidator('marksform_'.$questionId, 'post');
+                $formMark->addHeader(get_lang('AssignMarks'));
+                $select = $formMark->addSelect('marks', get_lang('AssignMarks'), [], ['disable_js' => true]);
                 $model = ExerciseLib::getCourseScoreModel();
                 if (empty($model)) {
                     for ($i = 0; $i <= $questionWeighting; $i++) {
-                        echo '<option value="'.$i.'" '.(($i == $questionScore) ? "selected='selected'" : '').'>'.$i.'</option>';
+                        $attributes = [];
+                        if ($questionScore == $i) {
+                            $attributes['selected'] = 'selected';
+                        }
+                        $select->addOption($i, $i, $attributes);
                     }
                 } else {
                     foreach ($model['score_list'] as $item) {
                         $i = api_number_format($item['score_to_qualify'] / 100 * $questionWeighting, 2);
                         $model = ExerciseLib::getModelStyle($item, $i);
-                        echo '<option class = "'.$item['css_class'].'" value="'.$i.'" '.(($i == $questionScore) ? "selected='selected'" : '').'>'.$model.'</option>';
+                        $attributes = ['class' => $item['css_class']];
+                        if ($questionScore == $i) {
+                            $attributes['selected'] = 'selected';
+                        }
+                        $select->addOption($model, $i, $attributes);
                     }
+                    $select->updateSelectWithSelectedOption($formMark);
                 }
-                echo '</select>';
-                echo '</form><br /></div>';
 
+                $formMark->display();
+                echo '</div>';
                 if ($questionScore == -1) {
                     $questionScore = 0;
                     echo ExerciseLib::getNotCorrectedYetText();
@@ -928,6 +923,10 @@ foreach ($questionList as $questionId) {
         $score['score'] = $my_total_score;
         $score['weight'] = $my_total_weight;
         $score['comments'] = isset($comnt) ? $comnt : null;
+
+        if (isset($question_result['user_answered'])) {
+            $score['user_answered'] = $question_result['user_answered'];
+        }
     }
 
     if (in_array($objQuestionTmp->type, [FREE_ANSWER, ORAL_EXPRESSION, ANNOTATION])) {
@@ -963,9 +962,22 @@ foreach ($questionList as $questionId) {
 
 $totalScoreText = '';
 
+if ($answerType != MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY) {
+    $pluginEvaluation = QuestionOptionsEvaluationPlugin::create();
+
+    if ('true' === $pluginEvaluation->get(QuestionOptionsEvaluationPlugin::SETTING_ENABLE)) {
+        $formula = $pluginEvaluation->getFormulaForExercise($objExercise->selectId());
+
+        if (!empty($formula)) {
+            $totalScore = $pluginEvaluation->getResultWithFormula($id, $formula);
+            $totalWeighting = $pluginEvaluation->getMaxScore();
+        }
+    }
+}
+
 // Total score
 $myTotalScoreTemp = $totalScore;
-if ($origin != 'learnpath' || ($origin == 'learnpath' && isset($_GET['fb_type']))) {
+if ($origin != 'learnpath' || ($origin === 'learnpath' && isset($_GET['fb_type']))) {
     if ($show_results || $show_only_total_score || $showTotalScoreAndUserChoicesInLastAttempt) {
         $totalScoreText .= '<div class="question_row">';
         if ($objExercise->selectPropagateNeg() == 0 && $myTotalScoreTemp < 0) {
@@ -1009,7 +1021,10 @@ if (!empty($category_list) && ($show_results || $show_only_total_score || $showT
     );
 }
 
-if (RESULT_DISABLE_RANKING == $track_exercise_info['results_disabled']) {
+if (in_array(
+    $track_exercise_info['results_disabled'],
+    [RESULT_DISABLE_RANKING, RESULT_DISABLE_SHOW_SCORE_AND_EXPECTED_ANSWERS_AND_RANKING]
+)) {
     echo Display::page_header(get_lang('Ranking'), null, 'h4');
     echo ExerciseLib::displayResultsInRanking(
         $objExercise->iId,
@@ -1095,19 +1110,21 @@ if ($isFeedbackAllowed && $origin != 'learnpath' && $origin != 'student_progress
         );
     }
 
-    $emailForm->addCheckBox(
-        'send_notification',
-        get_lang('SendEmail'),
-        get_lang('SendEmail'),
-        ['onclick' => 'openEmailWrapper();']
-    );
-    $emailForm->addHtml('<div id="email_content_wrapper" style="display:none; margin-bottom: 20px;">');
-    $emailForm->addHtmlEditor(
-        'notification_content',
-        get_lang('Content'),
-        false
-    );
-    $emailForm->addHtml('</div>');
+    if ($objExercise->results_disabled != RESULT_DISABLE_NO_SCORE_AND_EXPECTED_ANSWERS) {
+        $emailForm->addCheckBox(
+            'send_notification',
+            get_lang('SendEmail'),
+            get_lang('SendEmail'),
+            ['onclick' => 'openEmailWrapper();']
+        );
+        $emailForm->addHtml('<div id="email_content_wrapper" style="display:none; margin-bottom: 20px;">');
+        $emailForm->addHtmlEditor(
+            'notification_content',
+            get_lang('Content'),
+            false
+        );
+        $emailForm->addHtml('</div>');
+    }
 
     if (empty($track_exercise_info['orig_lp_id']) || empty($track_exercise_info['orig_lp_item_id'])) {
         // Default url
@@ -1198,3 +1215,4 @@ unset($questionList);
 
 Session::erase('exerciseResult');
 unset($exerciseResult);
+Session::erase('calculatedAnswerId');

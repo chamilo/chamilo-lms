@@ -93,7 +93,7 @@ $form->setDefaults(['course_code' => (string) $course_code]);
 $course_info = api_get_course_info($course_code);
 
 if (!empty($course_info)) {
-    $list = new LearnpathList('', $course_code);
+    $list = new LearnpathList('', $course_info);
     $lp_list = $list->get_flat_list();
 
     $main_question_list = [];

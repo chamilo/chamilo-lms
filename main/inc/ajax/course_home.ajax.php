@@ -204,7 +204,8 @@ switch ($action) {
         $count = 0;
         $temp = [];
         foreach ($course_list as $item) {
-            $list = new LearnpathList(api_get_user_id(), $item['code'], $session_id);
+            $courseInfo = api_get_course_info($item['code']);
+            $list = new LearnpathList(api_get_user_id(), $courseInfo, $session_id);
             $flat_list = $list->get_flat_list();
             $lps[$item['code']] = $flat_list;
             $course_url = api_get_path(WEB_COURSE_PATH).$item['directory'].'/?id_session='.$session_id;
@@ -342,7 +343,7 @@ switch ($action) {
 
             $list = new LearnpathList(
                 api_get_user_id(),
-                $item['code'],
+                api_get_course_info($item['code']),
                 $session_id,
                 'lp.publicatedOn DESC'
             );
@@ -485,7 +486,7 @@ switch ($action) {
 
             $list = new LearnpathList(
                 api_get_user_id(),
-                $item['code'],
+                api_get_course_info($item['code']),
                 $session_id
             );
             $flat_list = $list->get_flat_list();

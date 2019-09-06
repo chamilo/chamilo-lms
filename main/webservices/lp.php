@@ -356,7 +356,7 @@ function WSGetLpList($params)
         }
     }
 
-    $list = new LearnpathList(null, $courseInfo['code'], $sessionId);
+    $list = new LearnpathList(null, $courseInfo, $sessionId);
     $flatList = $list->get_flat_list();
     $result = [];
     foreach ($flatList as $id => $lp) {

@@ -222,7 +222,7 @@ jsPlumb.ready(function () {
     }
 });
 
-$(document).on('ready', function () {
+$(function () {
     DraggableAnswer.init(
         $(".exercise-draggable-answer"),
         $(".droppable")

@@ -28,6 +28,9 @@
                     <th class="text-center">{{ 'OrderStatus'|get_plugin_lang('BuyCoursesPlugin') }}</th>
                     <th class="text-center">{{ 'OrderDate'|get_plugin_lang('BuyCoursesPlugin') }}</th>
                     <th class="text-right">{{ 'Price'|get_plugin_lang('BuyCoursesPlugin') }}</th>
+                    {% if sale.invoice == 1 and invoicing_enable %}
+                        <th class="text-right">{{ 'Invoice'|get_plugin_lang('BuyCoursesPlugin') }}</th>
+                    {% endif %}
                     <th class="text-center">{{ 'ServiceSaleInfo'|get_plugin_lang('BuyCoursesPlugin') }}</th>
                 </tr>
                 </thead>
@@ -47,6 +50,16 @@
                         </td>
                         <td class="text-center">{{ sale.date }}</td>
                         <td class="text-right">{{ sale.currency ~ ' ' ~ sale.price }}</td>
+                        {% if invoicing_enable %}
+                            <td class="text-center">
+                            {% if sale.invoice == 1 %}
+                                <a href="{{ _p.web_plugin ~ 'buycourses/src/invoice.php?' ~ {'invoice': sale.id, 'is_service': 1}|url_encode() }}" title="{{ 'InvoiceView'|get_plugin_lang('BuyCoursesPlugin') }}" >
+                                    <img src="{{ _p.web_img }}/icons/32/default.png" alt="{{ 'InvoiceView'|get_plugin_lang('BuyCoursesPlugin') }}" />
+                                    <br>{{ sale.num_invoice }}
+                                </a>
+                            {% endif %}
+                            </td>
+                        {% endif %}
                         <td class="text-center">
                             <a id="service_sale_info" tag="{{ sale.id }}" name="s_{{ sale.id }}"
                                class="btn btn-info btn-sm">{{ 'Info'|get_lang }}</a>
@@ -60,7 +73,7 @@
 </div>
 
 <script>
-    $(document).on('ready', function () {
+    $(function () {
         $("td a").click(function () {
             var id = $(this).attr('tag');
             var action = $(this).attr('id');

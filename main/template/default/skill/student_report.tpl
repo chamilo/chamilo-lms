@@ -3,6 +3,10 @@
         <a class="btn btn-default" href="{{ _p.web_main }}social/skills_wheel.php">
             {{ 'SkillsWheel' | get_lang }}
         </a>
+
+        <a class="btn btn-default" href="{{ _p.web_main }}social/my_skills_report.php?a=generate">
+            {{ 'RecalculateResults' | get_lang }}
+        </a>
     </div>
 {% endif %}
 

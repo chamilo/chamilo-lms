@@ -24,7 +24,7 @@ class LearningPathAuthor extends Basic
             $config['toolbar_maxToolbar'] = $this->getMaximizedToolbar();
         }
 
-        $config['fullPage'] = true;
+        $config['fullPage'] = false;
 
         return $config;
     }
@@ -38,7 +38,6 @@ class LearningPathAuthor extends Basic
     {
         return [
             ['PageBreak', 'ShowBlocks', 'Source'],
-            ['Toolbarswitch'],
         ];
     }
 
@@ -63,7 +62,6 @@ class LearningPathAuthor extends Basic
     {
         return [
             ['Link', 'Unlink', 'Bold', 'Italic', 'TextColor', 'BGColor', 'Source'],
-            ['Toolbarswitch'],
         ];
     }
 }

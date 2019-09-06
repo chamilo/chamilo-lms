@@ -41,6 +41,15 @@
     letter-spacing: -0.020em;
 }
 
+.buy-info .price-details-tax, .service-buy .price-details-tax {
+    font-size: 18px;
+    line-height: 24px;
+    font-weight: bold;
+    padding-bottom: 0px;
+    padding-top: 10px;
+    letter-spacing: -0.020em;
+}
+
 .buy-info .buy-item .title {
     margin-top: 5px;
     font-weight: bold;

@@ -274,12 +274,12 @@ switch ($action) {
                     $h = floor($remaining / 3600);
                     $m = floor(($remaining - ($h * 3600)) / 60);
                     $s = ($remaining - ($h * 3600) - ($m * 60));
-                    $timeInfo = api_format_date(
+                    $timeInfo = api_convert_and_format_date(
                             $row['start_date'],
                             DATE_TIME_FORMAT_LONG
                         ).' ['.($h > 0 ? $h.':' : '').sprintf("%02d", $m).':'.sprintf("%02d", $s).']';
                 } else {
-                    $timeInfo = api_format_date(
+                    $timeInfo = api_convert_and_format_date(
                         $row['start_date'],
                         DATE_TIME_FORMAT_LONG
                     );
@@ -498,7 +498,7 @@ switch ($action) {
             $total_weight = 0;
             if ($type == 'simple') {
                 foreach ($question_list as $my_question_id) {
-                    $objQuestionTmp = Question::read($my_question_id, $course_id);
+                    $objQuestionTmp = Question::read($my_question_id, $objExercise->course);
                     $total_weight += $objQuestionTmp->selectWeighting();
                 }
             }
@@ -521,7 +521,7 @@ switch ($action) {
                 }
 
                 // Creates a temporary Question object
-                $objQuestionTmp = Question::read($my_question_id, $course_id);
+                $objQuestionTmp = Question::read($my_question_id, $objExercise->course);
 
                 $myChoiceDegreeCertainty = null;
                 if ($objQuestionTmp->type === MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY) {
@@ -549,7 +549,7 @@ switch ($action) {
                     $hotspot_delineation_result = $_SESSION['hotspot_delineation_result'][$objExercise->selectId()][$my_question_id];
                 }
 
-                if ($type == 'simple') {
+                if ($type === 'simple') {
                     // Getting old attempt in order to decrees the total score.
                     $old_result = $objExercise->manage_answer(
                         $exeId,
@@ -563,7 +563,6 @@ switch ($action) {
                         $objExercise->selectPropagateNeg(),
                         []
                     );
-
                     // Removing old score.
                     $total_score = $total_score - $old_result['score'];
                 }

@@ -7720,7 +7720,7 @@ between this method and jsPlumb.reset).
 			return _node("circle", {
 					"cx"	:	d[2] / 2,
 					"cy"	:	d[3] / 2,
-					"r"		:	d[2] / 3
+					"r"		:	d[2] / 2
 				});			
 		};
 	};

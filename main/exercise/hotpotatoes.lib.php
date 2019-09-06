@@ -424,7 +424,7 @@ function GenerateHpFolder($folder)
 function GetFolderName($fname)
 {
     $name = explode('/', $fname);
-    $name = $name[sizeof($name) - 2];
+    $name = $name[count($name) - 2];
 
     return $name;
 }

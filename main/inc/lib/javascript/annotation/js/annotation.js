@@ -324,7 +324,7 @@
     };
 
     window.AnnotationQuestion = function (userSettings) {
-        $(document).on('ready', function () {
+        $(function () {
             var settings = $.extend(
                 {
                     questionId: 0,

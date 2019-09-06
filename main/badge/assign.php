@@ -2,7 +2,6 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\Skill;
-use Chamilo\CoreBundle\Entity\SkillRelUser;
 use Chamilo\UserBundle\Entity\User;
 use Skill as SkillManager;
 
@@ -278,7 +277,7 @@ if ($form->validate()) {
             Display::return_message(
                 sprintf(
                     get_lang('TheUserXHasAlreadyAchievedTheSkillY'),
-                    $user->getCompleteName(),
+                    UserManager::formatUserFullName($user),
                     $skill->getName()
                 ),
                 'warning'
@@ -289,22 +288,13 @@ if ($form->validate()) {
         exit;
     }
 
-    $skillUser = new SkillRelUser();
-    $skillUser->setUser($user);
-    $skillUser->setSkill($skill);
-
-    if ($showLevels) {
-        $level = $skillLevelRepo->find(intval($values['acquired_level']));
-        $skillUser->setAcquiredLevel($level);
-    }
-
-    $skillUser->setArgumentation($values['argumentation']);
-    $skillUser->setArgumentationAuthorId(api_get_user_id());
-    $skillUser->setAcquiredSkillAt(new DateTime());
-    $skillUser->setAssignedBy(0);
-
-    $entityManager->persist($skillUser);
-    $entityManager->flush();
+    $skillUser = $skillManager->addSkillToUserBadge(
+        $user,
+        $skill,
+        $values['acquired_level'],
+        $values['argumentation'],
+        api_get_user_id()
+    );
 
     // Send email depending of children_auto_threshold
     $skillRelSkill = new SkillRelSkill();
@@ -334,10 +324,10 @@ if ($form->validate()) {
                     Display::addFlash(Display::return_message(get_lang('MessageSent')));
                     $url = api_get_path(WEB_CODE_PATH).'badge/assign.php?user='.$userId.'&id='.$parentId;
                     $link = Display::url($url, $url);
-                    $subject = get_lang("StudentHadEnoughSkills");
+                    $subject = get_lang('StudentHadEnoughSkills');
                     $message = sprintf(
-                        get_lang("StudentXHadEnoughSkillsToGetSkillXToAssignClickHereX"),
-                        $user->getCompleteName(),
+                        get_lang('StudentXHadEnoughSkillsToGetSkillXToAssignClickHereX'),
+                        UserManager::formatUserFullName($user),
                         $parentData['name'],
                         $link
                     );
@@ -359,7 +349,7 @@ if ($form->validate()) {
             sprintf(
                 get_lang('SkillXAssignedToUserY'),
                 $skill->getName(),
-                $user->getCompleteName()
+                UserManager::formatUserFullName($user)
             ),
             'success'
         )
@@ -369,7 +359,7 @@ if ($form->validate()) {
     exit;
 }
 
-$form->setDefaults(['user_name' => $user->getCompleteNameWithUsername()]);
+$form->setDefaults(['user_name' => UserManager::formatUserFullName($user, true)]);
 $form->freeze(['user_name']);
 
 if (api_is_drh()) {
@@ -390,7 +380,7 @@ if (api_is_drh()) {
     }
     $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'mySpace/myStudents.php?student='.$userId,
-        'name' => $user->getCompleteName(),
+        'name' => UserManager::formatUserFullName($user),
     ];
 } else {
     $interbreadcrumb[] = [
@@ -403,7 +393,7 @@ if (api_is_drh()) {
     ];
     $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'admin/user_information.php?user_id='.$userId,
-        'name' => $user->getCompleteName(),
+        'name' => UserManager::formatUserFullName($user),
     ];
 }
 

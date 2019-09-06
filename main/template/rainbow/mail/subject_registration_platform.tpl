@@ -1,1 +1,1 @@
-Bienvenue sur PARKUR ! Willkommen auf PARKUR !
+{{ 'WelcomeToParkur'|get_lang }}

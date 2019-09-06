@@ -75,9 +75,9 @@ class Template
         $this->title = $title;
         $this->show_learnpath = $show_learnpath;
         $this->setResponseCode($responseCode);
+        $origin = api_get_origin();
 
         if (empty($this->show_learnpath)) {
-            $origin = api_get_origin();
             if ($origin === 'learnpath') {
                 $this->show_learnpath = true;
                 $show_footer = false;
@@ -149,6 +149,7 @@ class Template
             'api_get_user_info',
             'api_get_configuration_value',
             'api_get_setting',
+            'api_get_plugin_setting',
             [
                 'name' => 'return_message',
                 'callable' => 'Display::return_message_and_translate',
@@ -228,6 +229,30 @@ class Template
         $this->assign('template', $this->templateFolder);
         $this->assign('locale', api_get_language_isocode());
         $this->assign('login_class', null);
+        $this->assign('origin', $origin);
+        // ofaj
+        $fluid = '';
+        $baseName = basename(api_get_self());
+        $dirName = basename(dirname(api_get_self()));
+
+        $fluidPages = [
+            'exercise_submit.php',
+            'result.php',
+            'overview.php',
+        ];
+        // ofaj
+        /*$fluidPagesInLearnPath = [
+            'viewthread.php',
+            'viewforum.php',
+        ];*/
+        if (in_array($baseName, $fluidPages)) {
+            $fluid = true;
+        }
+        if ($origin === 'learnpath' && $dirName === 'forum') {
+            $fluid = true;
+        }
+
+        $this->assign('fluid', $fluid);
 
         $allow = api_get_configuration_value('show_language_selector_in_menu');
         if ($allow) {
@@ -588,7 +613,17 @@ class Template
         }
 
         $features = api_get_configuration_value('video_features');
-        $defaultFeatures = ['playpause', 'current', 'progress', 'duration', 'tracks', 'volume', 'fullscreen', 'vrview'];
+        $defaultFeatures = [
+            'playpause',
+            'current',
+            'progress',
+            'duration',
+            'tracks',
+            'volume',
+            'fullscreen',
+            'vrview',
+            'markersrolls',
+        ];
 
         if (!empty($features) && isset($features['features'])) {
             foreach ($features['features'] as $feature) {
@@ -731,6 +766,7 @@ class Template
             "select2/dist/js/i18n/$isoCode.js",
             'mediaelement/plugins/vrview/vrview.js',
             'js-cookie/src/js.cookie.js',
+            'mediaelement/plugins/markersrolls/markersrolls.min.js',
         ];
 
         $viewBySession = api_get_setting('my_courses_view_by_session') === 'true';
@@ -1207,7 +1243,7 @@ class Template
 
         /** @var User $tutor */
         foreach ($tutors as $tutor) {
-            $names[] = $tutor->getCompleteName();
+            $names[] = UserManager::formatUserFullName($tutor);
         }
 
         return implode(CourseManager::USER_SEPARATOR, $names);
@@ -1237,7 +1273,7 @@ class Template
 
         /** @var User $teacher */
         foreach ($teachers as $teacher) {
-            $names[] = $teacher->getCompleteName();
+            $names[] = UserManager::formatUserFullName($teacher);
         }
 
         return implode(CourseManager::USER_SEPARATOR, $names);
@@ -1618,11 +1654,13 @@ class Template
             $adminName = '';
             // Administrator name
             if (!empty($name)) {
-                $adminName = get_lang('Manager').' : '.
-                    Display::encrypted_mailto_link(
-                        api_get_setting('emailAdministrator'),
-                        $name
-                    );
+                $adminName = get_lang('Manager').' : ';
+                $adminName .= Display::encrypted_mailto_link(
+                    api_get_setting('emailAdministrator'),
+                    $name,
+                    '',
+                    true
+                );
             }
             $this->assign('administrator_name', $adminName);
         }
@@ -1643,21 +1681,23 @@ class Template
             if (!empty($courseId)) {
                 $tutor_data = '';
                 if ($id_session != 0) {
-                    $coachs_email = CourseManager::get_email_of_tutor_to_session(
-                        $id_session,
-                        $courseId
-                    );
-                    $email_link = [];
-                    foreach ($coachs_email as $coach) {
-                        $email_link[] = Display::encrypted_mailto_link($coach['email'], $coach['complete_name']);
+                    $users = SessionManager::getCoachesByCourseSession($id_session, $courseId);
+                    $links = [];
+                    if (!empty($users)) {
+                        $coaches = [];
+                        foreach ($users as $userId) {
+                            $coaches[] = api_get_user_info($userId);
+                        }
+                        $links = array_column($coaches, 'complete_name_with_message_link');
                     }
-                    if (count($coachs_email) > 1) {
+                    $count = count($links);
+                    if ($count > 1) {
                         $tutor_data .= get_lang('Coachs').' : ';
-                        $tutor_data .= array_to_string($email_link, CourseManager::USER_SEPARATOR);
-                    } elseif (count($coachs_email) == 1) {
+                        $tutor_data .= array_to_string($links, CourseManager::USER_SEPARATOR);
+                    } elseif ($count === 1) {
                         $tutor_data .= get_lang('Coach').' : ';
-                        $tutor_data .= array_to_string($email_link, CourseManager::USER_SEPARATOR);
-                    } elseif (count($coachs_email) == 0) {
+                        $tutor_data .= array_to_string($links, CourseManager::USER_SEPARATOR);
+                    } elseif ($count === 0) {
                         $tutor_data .= '';
                     }
                 }
@@ -1670,19 +1710,19 @@ class Template
             $courseId = api_get_course_int_id();
             if (!empty($courseId)) {
                 $teacher_data = '';
-                $mail = CourseManager::get_emails_of_tutors_to_course($courseId);
-                if (!empty($mail)) {
-                    $teachers_parsed = [];
-                    foreach ($mail as $value) {
-                        foreach ($value as $email => $name) {
-                            $teachers_parsed[] = Display::encrypted_mailto_link($email, $name);
-                        }
+                $teachers = CourseManager::getTeachersFromCourse($courseId);
+                if (!empty($teachers)) {
+                    $teachersParsed = [];
+                    foreach ($teachers as $teacher) {
+                        $userId = $teacher['id'];
+                        $teachersParsed[] = api_get_user_info($userId);
                     }
+                    $links = array_column($teachersParsed, 'complete_name_with_message_link');
                     $label = get_lang('Teacher');
-                    if (count($mail) > 1) {
+                    if (count($links) > 1) {
                         $label = get_lang('Teachers');
                     }
-                    $teacher_data .= $label.' : '.array_to_string($teachers_parsed, CourseManager::USER_SEPARATOR);
+                    $teacher_data .= $label.' : '.array_to_string($links, CourseManager::USER_SEPARATOR);
                 }
                 $this->assign('teachers', $teacher_data);
             }

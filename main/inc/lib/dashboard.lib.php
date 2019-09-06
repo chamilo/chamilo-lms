@@ -490,6 +490,11 @@ class DashboardManager
         $user_id = intval($user_id);
         $field_variable = 'dashboard';
         $extra_user_data = UserManager::get_extra_user_data_by_field($user_id, $field_variable);
+
+        if (!isset($extra_user_data[$field_variable])) {
+            return [];
+        }
+
         $extra_user_data = explode(';', $extra_user_data[$field_variable]);
         $data = [];
         foreach ($extra_user_data as $extra) {

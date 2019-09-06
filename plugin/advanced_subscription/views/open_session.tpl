@@ -1,7 +1,7 @@
 <link href="{{ _p.web_plugin }}advanced_subscription/views/css/style.css" rel="stylesheet" type="text/css">
 
 <script>
-    $(document).on('ready', function () {
+    $(function () {
         $('#asp-close-window').on('click', function (e) {
             e.preventDefault();
 

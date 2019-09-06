@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\GradebookLink;
+
 /**
  * Class AbstractLink
  * Defines a gradebook AbstractLink object.
@@ -17,6 +19,8 @@ abstract class AbstractLink implements GradebookItem
 {
     public $course_id;
     public $studentList;
+    /** @var GradebookLink */
+    public $entity;
     protected $id;
     protected $type;
     protected $ref_id;
@@ -106,7 +110,7 @@ abstract class AbstractLink implements GradebookItem
      */
     public function get_session_id()
     {
-        return $this->session_id;
+        return (int) $this->session_id;
     }
 
     /**
@@ -268,7 +272,7 @@ abstract class AbstractLink implements GradebookItem
      */
     public function getCourseId()
     {
-        return $this->course_id;
+        return (int) $this->course_id;
     }
 
     /**
@@ -692,6 +696,47 @@ abstract class AbstractLink implements GradebookItem
     }
 
     /**
+     * @param int    $itemId
+     * @param int    $linkType
+     * @param string $courseCode
+     * @param int    $sessionId
+     *
+     * @return array|bool|\Doctrine\DBAL\Driver\Statement
+     */
+    public static function getGradebookLinksFromItem($itemId, $linkType, $courseCode, $sessionId = 0)
+    {
+        if (empty($courseCode) || empty($itemId) || empty($linkType)) {
+            return false;
+        }
+        $table = Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
+        $tableCategory = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
+        $itemId = (int) $itemId;
+        $linkType = (int) $linkType;
+        $sessionId = (int) $sessionId;
+
+        $sessionCondition = api_get_session_condition($sessionId, true, false, 'c.session_id');
+        $courseCode = Database::escape_string($courseCode);
+
+        $sql = "SELECT DISTINCT l.* 
+                FROM $table l INNER JOIN $tableCategory c 
+                ON (c.course_code = l.course_code AND c.id = l.category_id)
+                WHERE 
+                    ref_id = $itemId AND 
+                    type = $linkType AND 
+                    l.course_code = '$courseCode' 
+                    $sessionCondition ";
+
+        $result = Database::query($sql);
+        if (Database::num_rows($result)) {
+            $result = Database::store_result($result);
+
+            return $result;
+        }
+
+        return false;
+    }
+
+    /**
      * @param Doctrine\DBAL\Driver\Statement|null $result
      *
      * @return array
@@ -699,6 +744,12 @@ abstract class AbstractLink implements GradebookItem
     private static function create_objects_from_sql_result($result)
     {
         $links = [];
+        $allow = api_get_configuration_value('allow_gradebook_stats');
+        if ($allow) {
+            $em = Database::getManager();
+            $repo = $em->getRepository('ChamiloCoreBundle:GradebookLink');
+        }
+
         while ($data = Database::fetch_array($result)) {
             $link = LinkFactory::create($data['type']);
             $link->set_id($data['id']);
@@ -714,8 +765,11 @@ abstract class AbstractLink implements GradebookItem
 
             //session id should depend of the category --> $data['category_id']
             $session_id = api_get_session_id();
-
             $link->set_session_id($session_id);
+
+            if ($allow) {
+                $link->entity = $repo->find($data['id']);
+            }
             $links[] = $link;
         }
 

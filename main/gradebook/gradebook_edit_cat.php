@@ -2,15 +2,13 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * Script.
- *
  * @package chamilo.gradebook
  */
 require_once __DIR__.'/../inc/global.inc.php';
 
 api_block_anonymous_users();
 GradebookUtils::block_students();
-$edit_cat = isset($_REQUEST['editcat']) ? intval($_REQUEST['editcat']) : '';
+$edit_cat = isset($_REQUEST['editcat']) ? (int) $_REQUEST['editcat'] : 0;
 
 $catedit = Category::load($edit_cat);
 $form = new CatForm(
@@ -66,12 +64,10 @@ if ($form->validate()) {
         $cat->set_certificate_min_score($values['certif_min_score']);
     }
 
+    $visible = 1;
     if (empty($values['visible'])) {
         $visible = 0;
-    } else {
-        $visible = 1;
     }
-
     $cat->set_visible($visible);
 
     if (isset($values['is_requirement'])) {

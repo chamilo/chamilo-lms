@@ -2,7 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\Message;
-use Chamilo\CoreBundle\Entity\MessageLikes;
+use Chamilo\CoreBundle\Entity\MessageFeedback;
 use ChamiloSession as Session;
 
 /**
@@ -73,7 +73,6 @@ switch ($action) {
         }
         $user_id = api_get_user_id();
         $name_search = Security::remove_XSS($_POST['search_name_q']);
-        $number_friends = 0;
 
         if (isset($name_search) && $name_search != 'undefined') {
             $friends = SocialManager::get_friends($user_id, null, $name_search);
@@ -193,7 +192,6 @@ switch ($action) {
                 }
                 break;
             case 'unload_course':
-                break;
             default:
                 break;
         }
@@ -219,19 +217,12 @@ switch ($action) {
             $comment = isset($_REQUEST['comment']) ? $_REQUEST['comment'] : '';
             if (!empty($comment)) {
                 $messageId = SocialManager::sendWallMessage(
-                    api_get_user_id(),
+                    $userId,
                     $messageInfo['user_receiver_id'],
                     $comment,
                     $messageId,
                     MESSAGE_STATUS_WALL
                 );
-                /*if ($messageId && !empty($_FILES['picture']['tmp_name'])) {
-                    self::sendWallMessageAttachmentFile(
-                        $friendId,
-                        $_FILES['picture'],
-                        $messageId
-                    );
-                }*/
                 if ($messageId) {
                     $messageInfo = MessageManager::get_message_by_id($messageId);
                     echo SocialManager::processPostComment($messageInfo);
@@ -271,8 +262,8 @@ switch ($action) {
             break;
         }
         $start = isset($_REQUEST['start']) ? (int) $_REQUEST['start'] : 0;
-        $length = isset($_REQUEST['length']) ? (int) $_REQUEST['length'] : 10;
         $userId = isset($_REQUEST['u']) ? (int) $_REQUEST['u'] : api_get_user_id();
+
         $html = '';
         if ($userId == api_get_user_id()) {
             $threadList = SocialManager::getThreadList($userId);
@@ -281,7 +272,12 @@ switch ($action) {
                 $threadIdList = array_column($threadList, 'id');
             }
 
-            $html = SocialManager::getMyWallMessages($userId, $start, $length, $threadIdList);
+            $html = SocialManager::getMyWallMessages(
+                $userId,
+                $start,
+                SocialManager::DEFAULT_SCROLL_NEW_POST,
+                $threadIdList
+            );
             $html = $html['posts'];
         } else {
             $messages = SocialManager::getWallMessages(
@@ -291,7 +287,7 @@ switch ($action) {
                 0,
                 '',
                 $start,
-                $length
+                SocialManager::DEFAULT_SCROLL_NEW_POST
             );
             $messages = SocialManager::formatWallMessages($messages);
 
@@ -310,7 +306,7 @@ switch ($action) {
                 Display::url(
                     get_lang('SeeMore'),
                     api_get_self().'?u='.$userId.'&a=list_wall_message&start='.
-                    ($start + $length + 1).'&length='.$length,
+                    ($start + SocialManager::DEFAULT_SCROLL_NEW_POST).'&length='.SocialManager::DEFAULT_SCROLL_NEW_POST,
                     [
                         'class' => 'nextPage',
                     ]
@@ -339,7 +335,7 @@ switch ($action) {
 
         if (
             api_is_anonymous() ||
-            !api_get_configuration_value('social_enable_likes_messages')
+            !api_get_configuration_value('social_enable_messages_feedback')
         ) {
             echo json_encode(false);
             exit;
@@ -356,7 +352,7 @@ switch ($action) {
 
         $em = Database::getManager();
         $messageRepo = $em->getRepository('ChamiloCoreBundle:Message');
-        $messageLikesRepo = $em->getRepository('ChamiloCoreBundle:MessageLikes');
+        $messageLikesRepo = $em->getRepository('ChamiloCoreBundle:MessageFeedback');
 
         /** @var Message $message */
         $message = $messageRepo->find($messageId);
@@ -393,7 +389,7 @@ switch ($action) {
         $userLike = $messageLikesRepo->findOneBy(['message' => $message, 'user' => $user]);
 
         if (empty($userLike)) {
-            $userLike = new MessageLikes();
+            $userLike = new MessageFeedback();
             $userLike
                 ->setMessage($message)
                 ->setUser($user);

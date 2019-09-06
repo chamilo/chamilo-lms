@@ -1,13 +1,9 @@
 <h2 class="page-header">{{ 'DisplayAccessOverview'|get_lang }}</h2>
-
 {{ form }}
-
 <h3 class="page-header">{{ 'Results'|get_lang }}</h3>
-
 {{ table }}
-
 <script>
-    $(document).on('ready', function () {
+    $(function(){
         var courseIdEl = $('#access_overview_course_id'),
             sessionIdEl = $('#access_overview_session_id');
 

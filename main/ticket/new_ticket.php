@@ -12,15 +12,12 @@ if (!api_is_platform_admin() && api_get_setting('ticket_allow_student_add') !== 
 }
 
 api_block_anonymous_users();
-
 $courseId = api_get_course_int_id();
 
 $htmlHeadXtra[] = '<script>
-
-function updateCourseList(sessionId) {    
+function updateCourseList(sessionId) {
     $selectCourse = $("select#course_id");
-    $selectCourse.empty();
-        
+    $selectCourse.empty();        
     $.get("'.api_get_path(WEB_AJAX_PATH).'session.ajax.php", {
         a: "get_courses_inside_session",
         session_id : sessionId
@@ -104,12 +101,12 @@ function add_image_form() {
         }
     }
 }
-</script>
-';
-$projectId = isset($_GET['project_id']) ? (int) $_GET['project_id'] : '';
+</script>';
+
+$projectId = isset($_GET['project_id']) ? (int) $_GET['project_id'] : 0;
 
 $types = TicketManager::get_all_tickets_categories($projectId, 'category.name ASC');
-$htmlHeadXtra[] = '<script language="javascript">
+$htmlHeadXtra[] = '<script>
     var projects = '.js_array($types, 'projects', 'project_id').'
     var course_required = '.js_array($types, 'course_required', 'course_required').'
     var other_area = '.js_array($types, 'other_area', 'other_area').'
@@ -147,7 +144,7 @@ function save_ticket()
 {
     $content = $_POST['content'];
     if (!empty($_POST['phone'])) {
-        $content .= '<p style="color:red">&nbsp;'.get_lang('Phone').': '.$_POST['phone'].'</p>';
+        $content .= '<p style="color:red">&nbsp;'.get_lang('Phone').': '.Security::remove_XSS($_POST['phone']).'</p>';
     }
     $course_id = isset($_POST['course_id']) ? (int) $_POST['course_id'] : '';
     $sessionId = isset($_POST['session_id']) ? (int) $_POST['session_id'] : '';

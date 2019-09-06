@@ -57,3 +57,7 @@ ALTER TABLE plugin_bbb_room ADD COLUMN interface INT NOT NULL DEFAULT 0;
 ALTER TABLE plugin_bbb_room MODIFY COLUMN in_at datetime;
 ALTER TABLE plugin_bbb_room MODIFY COLUMN out_at datetime;
 ```
+
+For version 2.8
+
+ALTER TABLE plugin_bbb_meeting ADD COLUMN internal_meeting_id VARCHAR(255) DEFAULT NULL;

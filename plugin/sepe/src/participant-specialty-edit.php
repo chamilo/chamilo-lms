@@ -178,7 +178,7 @@ if (api_is_platform_admin()) {
         $tpl->assign('action_id', $actionId);
         $tpl->assign('specialty_id', intval($_GET['specialty_id']));
         $tpl->assign('participant_id', intval($_GET['participant_id']));
-        $info = getInfoSpecialtyParticipant(intval($_GET['specialty_id']));
+        $info = getInfoSpecialtyParticipant($_GET['specialty_id']);
         $tpl->assign('info', $info);
         $tpl->assign('new_specialty', '0');
         if ($info['registration_date'] != '0000-00-00' && $info['registration_date'] != null) {
@@ -221,7 +221,7 @@ if (api_is_platform_admin()) {
         } else {
             $endYear = date("Y");
         }
-        $listSpecialtyTutorials = getListSpecialtyTutorial(intval($_GET['specialty_id']));
+        $listSpecialtyTutorials = getListSpecialtyTutorial($_GET['specialty_id']);
         $tpl->assign('listSpecialtyTutorials', $listSpecialtyTutorials);
     }
 

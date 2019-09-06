@@ -41,7 +41,7 @@
                     {{ skill.img_small }}
                 </td>
                 <td width="200">{{ skill.name }}</td>
-                <td class="text-center">{{ skill.short_code }}</td>
+                <td>{{ skill.short_code }}</td>
                 <td width="500">{{ skill.description }}</td>
                 <td class="text-right">
                     <a href="{{ _p.web_main }}admin/skill_edit.php?id={{ skill.id }}" class="btn btn-default btn-sm" title="{{ "Edit" | get_lang }}">

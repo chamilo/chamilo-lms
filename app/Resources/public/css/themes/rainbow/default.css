@@ -102,6 +102,30 @@ hr{
     padding-top: 5px;
     padding-bottom: 5px;
 }
+#demo-home{
+    text-align: center;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    padding: 1rem 0;
+}
+#demo-home .btn-demo{
+    background-color: #96BD0D;
+    border-color:  #96BD0D;
+    text-transform: uppercase;
+    font-weight: bold;
+    width: 250px;
+    margin-top: 1.5rem;
+    padding: 1rem 2rem;
+    font-size: 1.6rem;
+}
+#demo-home .btn-demo:hover{
+    background-color: #6B1D82;
+    border-color: #6B1D82;
+}
+#carousel-announcement {
+    min-height: auto;
+    margin-bottom: 3rem;
+}
 .title{
     position: static;
     font-size: 25px;
@@ -696,7 +720,7 @@ footer #footer_right{
 }
 .exercise_description{
     padding: 0px 0px 10px 0px;
-    border-bottom: 1px solid #84bd00;
+    border-bottom: none;
     margin-bottom: 5px;
 }
 .alert.alert-info.hotspot{
@@ -2259,4 +2283,31 @@ blockquote:before {
 
 .exercise_actions {
     margin-bottom: 60px;
+}
+
+.exercise_overview_options {
+    text-align: left;
+}
+
+.exercise_overview_options .btn-success {
+    color: #fff;
+    background-color: #162A83;
+    border-color: #162A83;
+}
+
+.exercise-overview .page-header {
+    font-weight: normal !important;
+}
+
+.btn {
+    border-radius: 0px !important;
+}
+
+.promoted_post{
+    background: #F9FFEA;
+    border-color: #9bd6b8;
+}
+
+.exercise_overview_options {
+    background-color: white;
 }

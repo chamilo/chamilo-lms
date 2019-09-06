@@ -98,14 +98,14 @@ class ResultsDataGenerator
                     $ignore_score_color
                 );
             }
-            $user['percentage_score'] = intval(
-                $scoreDisplay->display_score(
-                    [$result->get_score(), $this->evaluation->get_max()],
-                    SCORE_PERCENT,
-                    SCORE_BOTH,
-                    true
-                )
+
+            $user['percentage_score'] = (int) $scoreDisplay->display_score(
+                [$result->get_score(), $this->evaluation->get_max()],
+                SCORE_PERCENT,
+                SCORE_BOTH,
+                true
             );
+
             if ($pdf && $number_decimals == null) {
                 $user['scoreletter'] = $result->get_score();
             }

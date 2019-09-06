@@ -18,6 +18,7 @@ app/logs/*
 
 # Courses
 app/courses/*
+!app/courses/proxy.php
 
 # Home
 app/home/*
@@ -49,4 +50,5 @@ plugin/vchamilo/templates/*
 # Stuff updated through composer - Remove just before release
 vendor
 web/assets/*
-
+node_modules
+yarn.lock

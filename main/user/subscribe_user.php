@@ -31,7 +31,7 @@ if (!api_is_allowed_to_edit()) {
 }
 
 $tool_name = get_lang('SubscribeUserToCourse');
-$type = isset($_REQUEST['type']) ? intval($_REQUEST['type']) : STUDENT;
+$type = isset($_REQUEST['type']) ? (int) $_REQUEST['type'] : STUDENT;
 $keyword = isset($_REQUEST['keyword']) ? Security::remove_XSS($_REQUEST['keyword']) : null;
 
 $courseInfo = api_get_course_info();
@@ -501,7 +501,7 @@ function get_user_data($from, $number_of_items, $column, $direction)
                         field_values.field_id = '".intval($field_identification[0])."' AND
                         field_values.value = '".Database::escape_string($field_identification[1])."'";
             } else {
-                $sql .= "WHERE cu.user_id IS NULL AND u.status<>".DRH." ";
+                $sql .= "WHERE cu.user_id IS NULL AND u.status <> ".DRH." ";
             }
 
             // adding a teacher NOT trough a session on a portal with multiple URLs
@@ -529,7 +529,7 @@ function get_user_data($from, $number_of_items, $column, $direction)
                                 field_values.field_id = '".intval($field_identification[0])."' AND
                                 field_values.value = '".Database::escape_string($field_identification[1])."'";
                     } else {
-                        $sql .= "WHERE cu.user_id IS NULL AND u.status<>".DRH." AND access_url_id= $url_access_id ";
+                        $sql .= "WHERE cu.user_id IS NULL AND u.status <> ".DRH." AND access_url_id= $url_access_id ";
                     }
                 }
             }
@@ -542,8 +542,8 @@ function get_user_data($from, $number_of_items, $column, $direction)
                     LEFT JOIN $tbl_session_rel_course_user cu
                     ON
                         u.user_id = cu.user_id AND
-                        c_id ='".$courseId."' AND
-                        session_id ='".$sessionId."' ";
+                        c_id = $courseId AND
+                        session_id = $sessionId ";
 
             if (api_is_multiple_url_enabled()) {
                 $sql .= " INNER JOIN $tbl_url_rel_user as url_rel_user ON (url_rel_user.user_id = u.user_id) ";
@@ -566,7 +566,7 @@ function get_user_data($from, $number_of_items, $column, $direction)
             } else {
                 $sql .= "WHERE
                             cu.user_id IS NULL AND
-                            u.status<>".DRH." AND
+                            u.status <> ".DRH." AND
                             (u.official_code <> 'ADMIN' OR u.official_code IS NULL) ";
             }
             if (api_is_multiple_url_enabled()) {
@@ -578,7 +578,7 @@ function get_user_data($from, $number_of_items, $column, $direction)
                     LEFT JOIN $course_user_table cu
                     ON
                         u.user_id = cu.user_id AND
-                        c_id ='".$courseId."'";
+                        c_id = $courseId ";
 
             // applying the filter of the additional user profile fields
             if (isset($_GET['subscribe_user_filter_value']) && !empty($_GET['subscribe_user_filter_value'])) {
@@ -588,11 +588,11 @@ function get_user_data($from, $number_of_items, $column, $direction)
                         ON field_values.item_id = u.user_id
                     WHERE
                         cu.user_id IS NULL AND
-                        u.status<>".DRH." AND
+                        u.status <> ".DRH." AND
                         field_values.field_id = '".intval($field_identification[0])."' AND
                         field_values.value = '".Database::escape_string($field_identification[1])."'";
             } else {
-                $sql .= "WHERE cu.user_id IS NULL AND u.status<>".DRH." ";
+                $sql .= "WHERE cu.user_id IS NULL AND u.status <> ".DRH." ";
             }
 
             //showing only the courses of the current Chamilo access_url_id
@@ -622,7 +622,7 @@ function get_user_data($from, $number_of_items, $column, $direction)
                                 access_url_id = $url_access_id
                             ";
                     } else {
-                        $sql .= "WHERE cu.user_id IS NULL AND u.status<>".DRH." AND access_url_id= $url_access_id ";
+                        $sql .= "WHERE cu.user_id IS NULL AND u.status<>".DRH." AND access_url_id = $url_access_id ";
                     }
                 }
             }

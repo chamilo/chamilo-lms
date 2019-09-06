@@ -21,7 +21,7 @@ class FeatureContext extends MinkContext
      */
     public function iAmAPlatformAdministrator()
     {
-        $this->visit('/index.php?logout=logout');
+        $this->visit('/index.php?logout=logout&uid=1');
         $this->iAmOnHomepage();
         $this->fillField('login', 'admin');
         $this->fillField('password', 'admin');
@@ -95,7 +95,7 @@ class FeatureContext extends MinkContext
     public function courseExists($argument)
     {
         $this->iAmAPlatformAdministrator();
-        $this->visit('/main/admin/course_list.php?keyword=' . $argument);
+        $this->visit('/main/admin/course_list.php?keyword='.$argument);
         $this->assertPageContainsText($argument);
     }
 
@@ -105,7 +105,7 @@ class FeatureContext extends MinkContext
     public function courseIsDeleted($argument)
     {
         $this->iAmAPlatformAdministrator();
-        $this->visit('/main/admin/course_list.php?keyword=' . $argument);
+        $this->visit('/main/admin/course_list.php?keyword='.$argument);
         $this->clickLink('Delete');
     }
 
@@ -142,10 +142,14 @@ class FeatureContext extends MinkContext
     {
         $this->visit('/index.php?logout=logout');
         $this->iAmOnHomepage();
-        $this->fillFields(new TableNode([
-            ['login', $username],
-            ['password', $username]
-        ]));
+        $this->fillFields(
+            new TableNode(
+                [
+                    ['login', $username],
+                    ['password', $username],
+                ]
+            )
+        );
         $this->pressButton('submitAuth');
     }
 
@@ -158,16 +162,22 @@ class FeatureContext extends MinkContext
         $friendId = $friendId;
         $friendUsername = $friendUsername;
 
-        $sendInvitationURL = '/main/inc/ajax/message.ajax.php?' . http_build_query([
-            'a' => 'send_invitation',
-            'user_id' => $friendId,
-            'content' => 'Add me'
-        ]);
-        $acceptInvitationURL = '/main/inc/ajax/social.ajax.php?' . http_build_query([
-            'a' => 'add_friend',
-            'friend_id' => $adminId,
-            'is_my_friend' => 'friend'
-        ]);
+        $sendInvitationURL = '/main/inc/ajax/message.ajax.php?'.
+            http_build_query(
+                [
+                    'a' => 'send_invitation',
+                    'user_id' => $friendId,
+                    'content' => 'Add me',
+                ]
+            );
+        $acceptInvitationURL = '/main/inc/ajax/social.ajax.php?'.
+            http_build_query(
+                [
+                    'a' => 'add_friend',
+                    'friend_id' => $adminId,
+                    'is_my_friend' => 'friend',
+                ]
+            );
 
         $this->iAmAPlatformAdministrator();
         $this->visit($sendInvitationURL);
@@ -182,13 +192,17 @@ class FeatureContext extends MinkContext
     public function iHaveAPublicPasswordProtectedCourse($code, $password)
     {
         $this->visit('/main/admin/course_add.php');
-        $this->fillFields(new TableNode([
-            ['title', 'Password Protected'],
-            ['visual_code', $code],
-            ['visibility', 3]
-        ]));
+        $this->fillFields(
+            new TableNode(
+                [
+                    ['title', 'Password Protected'],
+                    ['visual_code', $code],
+                    ['visibility', 3],
+                ]
+            )
+        );
         $this->pressButton('submit');
-        $this->visit('/main/course_info/infocours.php?cidReq=' . $code);
+        $this->visit('/main/course_info/infocours.php?cidReq='.$code);
         $this->assertPageContainsText('Course registration password');
         $this->fillField('course_registration_password', $password);
         $this->pressButton('submit_save');
@@ -209,7 +223,7 @@ class FeatureContext extends MinkContext
      */
     public function iInviteAFriendToASocialGroup($friendId, $groupId)
     {
-        $this->visit('/main/social/group_invitation.php?id=' . $groupId);
+        $this->visit('/main/social/group_invitation.php?id='.$groupId);
         $this->fillField('invitation[]', $friendId);
         $this->pressButton('submit');
     }
@@ -248,7 +262,7 @@ class FeatureContext extends MinkContext
      */
     public function iAmOnSocialGroupMembersPageWithId($groupId)
     {
-        $this->visit('/main/social/group_view.php?id=' . $groupId);
+        $this->visit('/main/social/group_view.php?id='.$groupId);
     }
 
     /**
@@ -256,11 +270,15 @@ class FeatureContext extends MinkContext
      */
     public function iTryDeleteAFriendFromSocialGroup($friendId, $groupId)
     {
-        $this->visit('/main/social/group_members.php?' . http_build_query([
-            'id' => $groupId,
-            'u' => $friendId,
-            'action' => 'delete'
-        ]));
+        $this->visit(
+            '/main/social/group_members.php?'.http_build_query(
+                [
+                    'id' => $groupId,
+                    'u' => $friendId,
+                    'action' => 'delete',
+                ]
+            )
+        );
     }
 
     /**
@@ -384,8 +402,16 @@ class FeatureContext extends MinkContext
      */
     public function waitForThePageToBeLoaded()
     {
-        //$this->getSession()->wait(10000, "document.readyState === 'complete'");
         $this->getSession()->wait(3000);
+    }
+
+    /**
+     * @When /^wait very long for the page to be loaded$/
+     */
+    public function waitVeryLongForThePageToBeLoaded()
+    {
+        //$this->getSession()->wait(10000, "document.readyState === 'complete'");
+        $this->getSession()->wait(8000);
     }
 
     /**
@@ -473,28 +499,28 @@ class FeatureContext extends MinkContext
         return false;
     }
 
+
     /**
-     * @Given /^I am a student subscribed to session "([^"]*)"$/
-     *
-     * @param string$sessionName
+     * @Then /^I save current URL with name "([^"]*)"$/
      */
-    public function iAmStudentSubscribedToXSession($sessionName)
+    public function saveUrlWithName($name)
     {
-        $this->iAmAPlatformAdministrator();
-        $this->visit('/main/session/session_add.php');
-        $this->fillField('name', $sessionName);
-        $this->pressButton('Next step');
-        $this->selectOption('NoSessionCoursesList[]', 'TEMP (TEMP)');
-        $this->pressButton('add_course');
-        $this->pressButton('Next step');
-        $this->assertPageContainsText('Update successful');
-        $this->fillField('user_to_add', 'acostea');
-        $this->waitForThePageToBeLoaded();
-        $this->clickLink('Costea Andrea (acostea)');
-        $this->pressButton('Finish session creation');
-        $this->assertPageContainsText('Session overview');
-        //$this->assertPageContainsText('Costea Andrea (acostea)');
-        $this->iAmAStudent();
+
+        $url = $this->getSession()->getCurrentUrl();
+        $this->getSession()->setCookie($name, $url);
+    }
+
+    /**
+     * @Then /^I visit URL saved with name "([^"]*)"$/
+     */
+    public function visitSavedUrlWithName($name)
+    {
+        $url = $this->getSession()->getCookie($name);
+        echo $url;
+        if (empty($url)) {
+            throw new Exception("Url with name: $name not found");
+        }
+        $this->visit($url);
     }
 
     /**

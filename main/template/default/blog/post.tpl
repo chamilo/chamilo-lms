@@ -156,7 +156,7 @@
 </div>
 
 <script>
-    $(document).on('ready', function () {
+    $(function () {
         $('.btn-reply-to').on('click', function (e) {
             e.preventDefault();
 

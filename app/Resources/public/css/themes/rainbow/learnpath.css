@@ -64,11 +64,11 @@
     background-color: #ffffff;
 }
 .title-learnpath{
-    padding-left: 30px;
+    padding-left: 0px;
     padding-top: 10px;
 }
 #learning_path_right_zone .tab-pane iframe {
-    padding-left: 15px;
+    padding-left: 0px;
     margin-top: 20px;
 }
 .title-learnpath h4,
@@ -483,9 +483,13 @@ table.lp_overview img {
 }
 /* nuevo css */
 
+.container-fluid {
+    padding-left: 0px;
+}
+
 #learning_path_right_zone .lp-view-tabs .tab-content {
     bottom: 5px;
-    left: 5px;
+    left: 0px;
     position: absolute;
     right: 5px;
     top: 84px;

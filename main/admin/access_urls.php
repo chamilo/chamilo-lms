@@ -20,7 +20,7 @@ if (!api_get_multiple_access_url()) {
     exit;
 }
 
-$interbreadcrumb[] = ["url" => 'index.php', 'name' => get_lang('PlatformAdmin')];
+$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('PlatformAdmin')];
 $tool_name = get_lang('MultipleAccessURLs');
 Display :: display_header($tool_name);
 
@@ -30,7 +30,7 @@ $url_list = UrlManager::get_url_data();
 
 // Actions
 if (isset($_GET['action'])) {
-    $url_id = (empty($_GET['url_id']) ? 0 : intval($_GET['url_id']));
+    $url_id = empty($_GET['url_id']) ? 0 : (int) $_GET['url_id'];
 
     switch ($_GET['action']) {
         case 'delete_url':

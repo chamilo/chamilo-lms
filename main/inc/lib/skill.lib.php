@@ -1152,44 +1152,68 @@ class Skill extends Model
     }
 
     /**
-     * @param int $user_id
-     * @param int $gradebookId
-     * @param int $courseId
-     * @param int $sessionId
+     * @param int      $userId
+     * @param Category $category
+     * @param int      $courseId
+     * @param int      $sessionId
+     *
+     * @return bool
      */
     public function addSkillToUser(
-        $user_id,
-        $gradebookId,
-        $courseId = 0,
-        $sessionId = 0
+        $userId,
+        $category,
+        $courseId,
+        $sessionId
     ) {
         $skill_gradebook = new SkillRelGradebook();
         $skill_rel_user = new SkillRelUser();
 
-        $skill_gradebooks = $skill_gradebook->get_all(
-            ['where' => ['gradebook_id = ?' => $gradebookId]]
-        );
+        if (empty($category)) {
+            return false;
+        }
+
+        // Load subcategories
+        if (empty($category->get_parent_id())) {
+            $subCategories = $category->get_subcategories(
+                $userId,
+                $category->get_course_code(),
+                $category->get_session_id()
+            );
+            if (!empty($subCategories)) {
+                /** @var Category $subCategory */
+                foreach ($subCategories as $subCategory) {
+                    $this->addSkillToUser($userId, $subCategory, $courseId, $sessionId);
+                }
+            }
+        }
+
+        $gradebookId = $category->get_id();
+        $skill_gradebooks = $skill_gradebook->get_all(['where' => ['gradebook_id = ?' => $gradebookId]]);
+
         if (!empty($skill_gradebooks)) {
             foreach ($skill_gradebooks as $skill_gradebook) {
-                $user_has_skill = $this->userHasSkill(
-                    $user_id,
+                $hasSkill = $this->userHasSkill(
+                    $userId,
                     $skill_gradebook['skill_id'],
                     $courseId,
                     $sessionId
                 );
-                if (!$user_has_skill) {
+
+                if (!$hasSkill) {
                     $params = [
-                        'user_id' => $user_id,
+                        'user_id' => $userId,
                         'skill_id' => $skill_gradebook['skill_id'],
                         'acquired_skill_at' => api_get_utc_datetime(),
-                        'course_id' => intval($courseId),
-                        'session_id' => $sessionId ? intval($sessionId) : null,
+                        'course_id' => (int) $courseId,
+                        'session_id' => $sessionId ? (int) $sessionId : null,
                     ];
 
                     $skill_rel_user->save($params);
                 }
             }
         }
+
+        return true;
     }
 
     /* Deletes a skill */
@@ -1426,7 +1450,7 @@ class Skill extends Model
             ];
 
             if (!empty($courseInfo)) {
-                $tableRow['course_image'] = $courseInfo['course_image_source'];
+                $tableRow['course_image'] = $courseInfo['course_image'];
                 $tableRow['course_name'] = $courseInfo['title'];
             }
             $tableRows[] = $tableRow;
@@ -1441,7 +1465,7 @@ class Skill extends Model
         }
 
         if ($addTitle) {
-            $tableResult .= '<div class="header-title">'.get_lang('AchievedSkills').'</div>
+            $tableResult .= '<h3 class="section-title">'.get_lang('AchievedSkills').'</h3>
                     <div class="skills-badges">
                    ';
         }
@@ -2438,8 +2462,8 @@ class Skill extends Model
             $form->addButtonCreate(get_lang('Add'));
         } else {
             $form->addButtonUpdate(get_lang('Update'));
+            $form->addHidden('id', $skillInfo['id']);
         }
-        $form->addHidden('id', null);
 
         return $returnParams;
     }
@@ -2955,5 +2979,52 @@ class Skill extends Model
         }
 
         return api_get_path(WEB_UPLOAD_PATH)."badges/{$skill->getIcon()}";
+    }
+
+    /**
+     * @param User                             $user
+     * @param \Chamilo\CoreBundle\Entity\Skill $skill
+     * @param int                              $levelId
+     * @param string                           $argumentation
+     * @param int                              $authorId
+     *
+     * @throws \Doctrine\ORM\OptimisticLockException
+     *
+     * @return SkillRelUserEntity
+     */
+    public function addSkillToUserBadge($user, $skill, $levelId, $argumentation, $authorId)
+    {
+        $showLevels = api_get_configuration_value('hide_skill_levels') === false;
+
+        $entityManager = Database::getManager();
+
+        $skillUserRepo = $entityManager->getRepository('ChamiloSkillBundle:SkillRelUser');
+
+        $criteria = ['user' => $user, 'skill' => $skill];
+        $result = $skillUserRepo->findOneBy($criteria);
+
+        if (!empty($result)) {
+            return false;
+        }
+        $skillLevelRepo = $entityManager->getRepository('ChamiloSkillBundle:Level');
+
+        $skillUser = new \Chamilo\CoreBundle\Entity\SkillRelUser();
+        $skillUser->setUser($user);
+        $skillUser->setSkill($skill);
+
+        if ($showLevels && !empty($levelId)) {
+            $level = $skillLevelRepo->find($levelId);
+            $skillUser->setAcquiredLevel($level);
+        }
+
+        $skillUser->setArgumentation($argumentation);
+        $skillUser->setArgumentationAuthorId($authorId);
+        $skillUser->setAcquiredSkillAt(new DateTime());
+        $skillUser->setAssignedBy(0);
+
+        $entityManager->persist($skillUser);
+        $entityManager->flush();
+
+        return $skillUser;
     }
 }

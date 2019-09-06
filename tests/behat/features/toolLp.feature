@@ -48,11 +48,8 @@ Feature: LP tool
     Then I should see "LP 1"
     And I should see "Document 1"
     And I should see "Exercise 1"
-
-  Scenario: Delete a LP category
-    Given I am on "/main/lp/lp_controller.php?cidReq=TEMP&action=list"
-    And I follow "Delete"
-    Then I should not see "LP category 1"
+    And I am on "/main/lp/lp_controller.php?cidReq=TEMP&action=list"
+    Then I should see "LP 1"
 
 #  Scenario: Check the PDF export in LP list if hide SCORM PDF link is false
 #    Given I am on "/main/admin/settings.php?category=Course"
@@ -68,8 +65,19 @@ Feature: LP tool
 #    And I am on "/main/lp/lp_controller.php?cidReq=TEMP&action=list&isStudentView=true"
 #    Then I should not see an icon with title "Export to PDF"
 
+  Scenario: LP exists and LP category exists
+    And I am on "/main/lp/lp_controller.php?cidReq=TEMP&id_session=0&gidReq=0&gradebook=0&origin="
+    Then I should see "LP 1"
+    And I should see "LP category 1"
+
   Scenario: Delete a LP
-    Given I am on "/main/lp/lp_controller.php?cidReq=TEMP&action=list"
+    Given I am on "/main/lp/lp_controller.php?cidReq=TEMP"
     And I follow "Delete"
     And I confirm the popup
     Then I should not see "LP 1"
+
+  Scenario: Delete a LP category
+    Given I am on "/main/lp/lp_controller.php?cidReq=TEMP"
+    Then I should see "LP category 1"
+    And I follow "Delete"
+    Then I should see "Deleted"

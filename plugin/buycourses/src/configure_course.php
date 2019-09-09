@@ -52,9 +52,9 @@ if ($editingCourse) {
         api_not_allowed(true);
     }
 
-    if (!$plugin->isValidCourse($course)) {
+    /*if (!$plugin->isValidCourse($course)) {
         api_not_allowed(true);
-    }
+    }*/
 
     $courseItem = $plugin->getCourseForConfiguration($course, $currency);
     $defaultBeneficiaries = [];

@@ -555,7 +555,7 @@ class Database
      * @param mixed  $columns     array (or string if only one column)
      * @param string $table_name
      * @param array  $conditions
-     * @param string $type_result
+     * @param string $type_result all|first|count
      * @param string $option
      * @param bool   $debug
      *
@@ -569,17 +569,26 @@ class Database
         $option = 'ASSOC',
         $debug = false
     ) {
+        if ($type_result === 'count') {
+            $conditions['LIMIT'] = null;
+            $conditions['limit'] = null;
+        }
+
         $conditions = self::parse_conditions($conditions);
 
         //@todo we could do a describe here to check the columns ...
         if (is_array($columns)) {
             $clean_columns = implode(',', $columns);
         } else {
-            if ($columns == '*') {
+            if ($columns === '*') {
                 $clean_columns = '*';
             } else {
                 $clean_columns = (string) $columns;
             }
+        }
+
+        if ($type_result === 'count') {
+            $clean_columns = ' count(*) count ';
         }
 
         $sql = "SELECT $clean_columns FROM $table_name $conditions";
@@ -587,8 +596,17 @@ class Database
             var_dump($sql);
         }
         $result = self::query($sql);
-        $array = [];
 
+        if ($type_result === 'count') {
+            $row = self::fetch_array($result, $option);
+            if ($row) {
+                return (int) $row['count'];
+            }
+
+            return 0;
+        }
+
+        $array = [];
         if ($type_result === 'all') {
             while ($row = self::fetch_array($result, $option)) {
                 if (isset($row['id'])) {

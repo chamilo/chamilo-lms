@@ -14,6 +14,10 @@ require_once __DIR__.'/../../../main/inc/global.inc.php';
 
 $plugin = BuyCoursesPlugin::create();
 $includeSession = $plugin->get('include_sessions') === 'true';
+
+if (!$includeSession) {
+    api_not_allowed(true);
+}
 $includeServices = $plugin->get('include_services') === 'true';
 $taxEnable = $plugin->get('tax_enable') === 'true';
 
@@ -27,26 +31,8 @@ Display::addFlash(
 );
 
 $pageSize = BuyCoursesPlugin::PAGINATION_PAGE_SIZE;
-$type = isset($_GET['type']) ? (int) $_GET['type'] : BuyCoursesPlugin::PRODUCT_TYPE_COURSE;
 $currentPage = isset($_GET['page']) ? (int) $_GET['page'] : 1;
 $first = $pageSize * ($currentPage - 1);
-
-$qb = $plugin->getCourseList($first, $pageSize);
-$query = $qb->getQuery();
-$courses = new Paginator($query, $fetchJoinCollection = true);
-foreach ($courses as $course) {
-    $item = $plugin->getItemByProduct($course->getId(), BuyCoursesPlugin::PRODUCT_TYPE_COURSE);
-    $course->buyCourseData = [];
-    if ($item !== false) {
-        $course->buyCourseData = $item;
-    }
-}
-
-$totalItems = count($courses);
-$pagesCount = ceil($totalItems / $pageSize);
-
-$url = api_get_self().'?type='.$type;
-$pagination = Display::getPagination($url, $currentPage, $pagesCount, $totalItems);
 
 // breadcrumbs
 $interbreadcrumb[] = [
@@ -60,11 +46,28 @@ $tpl = new Template($templateName);
 
 $tpl->assign('product_type_course', BuyCoursesPlugin::PRODUCT_TYPE_COURSE);
 $tpl->assign('product_type_session', BuyCoursesPlugin::PRODUCT_TYPE_SESSION);
-$tpl->assign('courses', $courses);
-$tpl->assign('course_pagination', $pagination);
 $tpl->assign('sessions_are_included', $includeSession);
 $tpl->assign('services_are_included', $includeServices);
 $tpl->assign('tax_enable', $taxEnable);
+
+$query = CoursesAndSessionsCatalog::browseSessions(null, ['start' => $first, 'length' => $pageSize], true);
+$sessions = new Paginator($query, $fetchJoinCollection = true);
+foreach ($sessions as $session) {
+    $item = $plugin->getItemByProduct($session->getId(), BuyCoursesPlugin::PRODUCT_TYPE_SESSION);
+    $session->buyCourseData = [];
+    if ($item !== false) {
+        $session->buyCourseData = $item;
+    }
+}
+
+$totalItems = count($sessions);
+$pagesCount = ceil($totalItems / $pageSize);
+
+$url = api_get_self().'?type='.BuyCoursesPlugin::PRODUCT_TYPE_SESSION;
+$pagination = Display::getPagination($url, $currentPage, $pagesCount, $totalItems);
+
+$tpl->assign('sessions', $sessions);
+$tpl->assign('session_pagination', $pagination);
 
 if ($taxEnable) {
     $globalParameters = $plugin->getGlobalParameters();

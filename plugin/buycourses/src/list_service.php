@@ -15,6 +15,10 @@ require_once __DIR__.'/../../../main/inc/global.inc.php';
 $plugin = BuyCoursesPlugin::create();
 $includeSession = $plugin->get('include_sessions') === 'true';
 $includeServices = $plugin->get('include_services') === 'true';
+if (!$includeServices) {
+    api_not_allowed(true);
+}
+
 $taxEnable = $plugin->get('tax_enable') === 'true';
 
 api_protect_admin_script(true);
@@ -27,25 +31,14 @@ Display::addFlash(
 );
 
 $pageSize = BuyCoursesPlugin::PAGINATION_PAGE_SIZE;
-$type = isset($_GET['type']) ? (int) $_GET['type'] : BuyCoursesPlugin::PRODUCT_TYPE_COURSE;
 $currentPage = isset($_GET['page']) ? (int) $_GET['page'] : 1;
 $first = $pageSize * ($currentPage - 1);
 
-$qb = $plugin->getCourseList($first, $pageSize);
-$query = $qb->getQuery();
-$courses = new Paginator($query, $fetchJoinCollection = true);
-foreach ($courses as $course) {
-    $item = $plugin->getItemByProduct($course->getId(), BuyCoursesPlugin::PRODUCT_TYPE_COURSE);
-    $course->buyCourseData = [];
-    if ($item !== false) {
-        $course->buyCourseData = $item;
-    }
-}
-
-$totalItems = count($courses);
+$services = $plugin->getServices($first, $pageSize);
+$totalItems = $plugin->getServices(null, null, 'count');
 $pagesCount = ceil($totalItems / $pageSize);
 
-$url = api_get_self().'?type='.$type;
+$url = api_get_self().'?';
 $pagination = Display::getPagination($url, $currentPage, $pagesCount, $totalItems);
 
 // breadcrumbs
@@ -60,11 +53,11 @@ $tpl = new Template($templateName);
 
 $tpl->assign('product_type_course', BuyCoursesPlugin::PRODUCT_TYPE_COURSE);
 $tpl->assign('product_type_session', BuyCoursesPlugin::PRODUCT_TYPE_SESSION);
-$tpl->assign('courses', $courses);
-$tpl->assign('course_pagination', $pagination);
 $tpl->assign('sessions_are_included', $includeSession);
 $tpl->assign('services_are_included', $includeServices);
 $tpl->assign('tax_enable', $taxEnable);
+$tpl->assign('services', $services);
+$tpl->assign('service_pagination', $pagination);
 
 if ($taxEnable) {
     $globalParameters = $plugin->getGlobalParameters();

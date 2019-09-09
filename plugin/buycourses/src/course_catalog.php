@@ -56,7 +56,7 @@ $courseList = $plugin->getCatalogCourseList($nameFilter, $minFilter, $maxFilter)
 //View
 if (api_is_platform_admin()) {
     $interbreadcrumb[] = [
-        'url' => 'configuration.php',
+        'url' => 'list.php',
         'name' => $plugin->get_lang('AvailableCoursesConfiguration'),
     ];
     $interbreadcrumb[] = [

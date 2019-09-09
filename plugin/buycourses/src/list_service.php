@@ -5,6 +5,9 @@
  *
  * @package chamilo.plugin.buycourses
  */
+
+use Doctrine\ORM\Tools\Pagination\Paginator;
+
 $cidReset = true;
 
 require_once __DIR__.'/../../../main/inc/global.inc.php';
@@ -12,6 +15,10 @@ require_once __DIR__.'/../../../main/inc/global.inc.php';
 $plugin = BuyCoursesPlugin::create();
 $includeSession = $plugin->get('include_sessions') === 'true';
 $includeServices = $plugin->get('include_services') === 'true';
+if (!$includeServices) {
+    api_not_allowed(true);
+}
+
 $taxEnable = $plugin->get('tax_enable') === 'true';
 
 api_protect_admin_script(true);
@@ -23,7 +30,16 @@ Display::addFlash(
     )
 );
 
-$courses = $plugin->getCoursesForConfiguration();
+$pageSize = BuyCoursesPlugin::PAGINATION_PAGE_SIZE;
+$currentPage = isset($_GET['page']) ? (int) $_GET['page'] : 1;
+$first = $pageSize * ($currentPage - 1);
+
+$services = $plugin->getServices($first, $pageSize);
+$totalItems = $plugin->getServices(null, null, 'count');
+$pagesCount = ceil($totalItems / $pageSize);
+
+$url = api_get_self().'?';
+$pagination = Display::getPagination($url, $currentPage, $pagesCount, $totalItems);
 
 // breadcrumbs
 $interbreadcrumb[] = [
@@ -37,20 +53,11 @@ $tpl = new Template($templateName);
 
 $tpl->assign('product_type_course', BuyCoursesPlugin::PRODUCT_TYPE_COURSE);
 $tpl->assign('product_type_session', BuyCoursesPlugin::PRODUCT_TYPE_SESSION);
-$tpl->assign('courses', $courses);
 $tpl->assign('sessions_are_included', $includeSession);
 $tpl->assign('services_are_included', $includeServices);
 $tpl->assign('tax_enable', $taxEnable);
-
-if ($includeSession) {
-    $sessions = $plugin->getSessionsForConfiguration();
-    $tpl->assign('sessions', $sessions);
-}
-
-if ($includeServices) {
-    $services = $plugin->getServices();
-    $tpl->assign('services', $services);
-}
+$tpl->assign('services', $services);
+$tpl->assign('service_pagination', $pagination);
 
 if ($taxEnable) {
     $globalParameters = $plugin->getGlobalParameters();
@@ -59,7 +66,7 @@ if ($taxEnable) {
     $tpl->assign('tax_name', $globalParameters['tax_name']);
 }
 
-$content = $tpl->fetch('buycourses/view/configuration.tpl');
+$content = $tpl->fetch('buycourses/view/list.tpl');
 
 $tpl->assign('header', $templateName);
 $tpl->assign('content', $content);

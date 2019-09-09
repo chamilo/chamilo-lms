@@ -52,9 +52,9 @@ if ($editingCourse) {
         api_not_allowed(true);
     }
 
-    if (!$plugin->isValidCourse($course)) {
+    /*if (!$plugin->isValidCourse($course)) {
         api_not_allowed(true);
-    }
+    }*/
 
     $courseItem = $plugin->getCourseForConfiguration($course, $currency);
     $defaultBeneficiaries = [];
@@ -307,7 +307,7 @@ if ($form->validate()) {
         $plugin->deleteItem($productItem['id']);
     }
 
-    header('Location: '.api_get_path(WEB_PLUGIN_PATH).'buycourses/src/configuration.php');
+    header('Location: '.api_get_path(WEB_PLUGIN_PATH).'buycourses/src/list.php');
     exit;
 }
 
@@ -320,7 +320,7 @@ $interbreadcrumb[] = [
     'name' => get_lang('Configuration'),
 ];
 $interbreadcrumb[] = [
-    'url' => 'configuration.php',
+    'url' => 'list.php',
     'name' => $plugin->get_lang('AvailableCourses'),
 ];
 

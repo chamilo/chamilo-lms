@@ -56,6 +56,7 @@ class BuyCoursesPlugin extends Plugin
     const TAX_APPLIES_TO_ONLY_COURSE = 2;
     const TAX_APPLIES_TO_ONLY_SESSION = 3;
     const TAX_APPLIES_TO_ONLY_SERVICES = 4;
+    const PAGINATION_PAGE_SIZE = 2;
 
     public $isAdminPlugin = true;
 
@@ -352,7 +353,8 @@ class BuyCoursesPlugin extends Plugin
     public function returnBuyCourseButton($productId, $productType)
     {
         $productId = (int) $productId;
-        $url = api_get_path(WEB_PLUGIN_PATH).'buycourses/src/process.php?i='.$productId.'&t='.Security::remove_XSS($productType);
+        $productType = (int) $productType;
+        $url = api_get_path(WEB_PLUGIN_PATH).'buycourses/src/process.php?i='.$productId.'&t='.$productType;
         $html = '<a class="btn btn-success btn-sm" title="'.$this->get_lang('Buy').'" href="'.$url.'">'.
             Display::returnFontAwesomeIcon('shopping-cart').'</a>';
 
@@ -394,7 +396,7 @@ class BuyCoursesPlugin extends Plugin
      *
      * @param int $selectedId The currency Id
      */
-    public function selectCurrency($selectedId)
+    public function saveCurrency($selectedId)
     {
         $currencyTable = Database::get_main_table(
             self::TABLE_CURRENCY
@@ -560,42 +562,25 @@ class BuyCoursesPlugin extends Plugin
      *
      * @return array
      */
-    public function getCoursesForConfiguration()
+    public function getCourseList($first, $maxResults)
     {
-        $courses = $this->getCourses();
+        return $this->getCourses($first, $maxResults);
 
         if (empty($courses)) {
             return [];
         }
 
-        $configurationCourses = [];
         $currency = $this->getSelectedCurrency();
 
+        $courseList = [];
         foreach ($courses as $course) {
-            $configurationCourses[] = $this->getCourseForConfiguration(
+            $courseList[] = $this->getCourseForConfiguration(
                 $course,
                 $currency
             );
         }
 
-        return $configurationCourses;
-    }
-
-    /**
-     * List sessions details from the buy-session table and the session table.
-     *
-     * @return array The sessions. Otherwise return false
-     */
-    public function getSessionsForConfiguration()
-    {
-        $sessions = CoursesAndSessionsCatalog::browseSessions();
-        $currency = $this->getSelectedCurrency();
-        $items = [];
-        foreach ($sessions as $session) {
-            $items[] = $this->getSessionForConfiguration($session, $currency);
-        }
-
-        return $items;
+        return $courseList;
     }
 
     /**
@@ -2043,6 +2028,12 @@ class BuyCoursesPlugin extends Plugin
         );
     }
 
+    /**
+     * @param array $product
+     * @param int   $productType
+     *
+     * @return bool
+     */
     public function setPriceSettings(&$product, $productType)
     {
         if (empty($product)) {
@@ -2099,15 +2090,9 @@ class BuyCoursesPlugin extends Plugin
         $globalParameters = $this->getGlobalParameters();
 
         $this->setPriceSettings($service, self::TAX_APPLIES_TO_ONLY_SERVICES);
-        /*$service['tax_perc'] = $return['tax_perc'];
-        $service['price_with_tax'] = $return['total_price_formatted'];
-        $service['price_without_tax'] = $return['price_formatted'];
-        $service['tax_amount'] = $return['tax_amount_formatted'];
-        $service['tax_perc_show'] = $return['tax_perc_show'];*/
 
         $service['price_with_tax'] = $service['total_price_formatted'];
         $service['price_without_tax'] = $service['price_formatted'];
-
         $service['tax_name'] = $globalParameters['tax_name'];
         $service['tax_enable'] = $this->checkTaxEnabledInProduct(self::TAX_APPLIES_TO_ONLY_SERVICES);
         $service['owner_name'] = api_get_person_name($service['firstname'], $service['lastname']);
@@ -2121,20 +2106,26 @@ class BuyCoursesPlugin extends Plugin
      *
      * @return array
      */
-    public function getServices()
+    public function getServices($start, $end, $typeResult = 'all')
     {
         $servicesTable = Database::get_main_table(self::TABLE_SERVICES);
         $userTable = Database::get_main_table(TABLE_MAIN_USER);
 
-        $conditions = null;
-        $showData = 'all';
+        $start = (int) $start;
+        $end = (int) $end;
+
+        $conditions = ['LIMIT' => "$start, $end"];
         $innerJoins = "INNER JOIN $userTable u ON s.owner_id = u.id";
         $return = Database::select(
             's.id',
             "$servicesTable s $innerJoins",
             $conditions,
-            $showData
+            $typeResult
         );
+
+        if ($typeResult === 'count') {
+            return $return;
+        }
 
         $services = [];
         foreach ($return as $index => $service) {
@@ -2686,9 +2677,8 @@ class BuyCoursesPlugin extends Plugin
     /**
      * Filter the registered courses for show in plugin catalog.
      *
-     * @return array
      */
-    private function getCourses()
+    private function getCourses($first, $maxResults)
     {
         $em = Database::getManager();
         $urlId = api_get_current_access_url_id();
@@ -2730,11 +2720,10 @@ class BuyCoursesPlugin extends Plugin
                         ->getDQL()
                 )
             )
-            ->getQuery();
+        ->setFirstResult($first)
+        ->setMaxResults($maxResults);
 
-        $courses = $qb->getResult();
-
-        return $courses;
+        return $qb;
     }
 
     /**
@@ -2774,7 +2763,7 @@ class BuyCoursesPlugin extends Plugin
         );
 
         if ($sale['qty'] > 0) {
-            return "TMP";
+            return 'TMP';
         }
 
         // Check if user is already subscribe to session
@@ -2826,7 +2815,7 @@ class BuyCoursesPlugin extends Plugin
         );
 
         if ($sale['qty'] > 0) {
-            return "TMP";
+            return 'TMP';
         }
 
         // Check if user is already subscribe to course

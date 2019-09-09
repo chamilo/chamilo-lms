@@ -78,30 +78,59 @@ class ChamiloApi
      */
     public static function getPlatformLogoPath($theme = '', $getSysPath = false)
     {
-        $theme = empty($theme) ? api_get_visual_theme() : $theme;
-        $accessUrlId = api_get_current_access_url_id();
-        $themeDir = \Template::getThemeDir($theme);
-        $customLogoPath = $themeDir."images/header-logo-custom$accessUrlId.png";
-
-        if (file_exists(api_get_path(SYS_PUBLIC_PATH)."css/$customLogoPath")) {
-            if ($getSysPath) {
-                return api_get_path(SYS_PUBLIC_PATH)."css/$customLogoPath";
+        static $logoPath;
+        if (!isset($logoPath)) {
+            $theme = empty($theme) ? api_get_visual_theme() : $theme;
+            $accessUrlId = api_get_current_access_url_id();
+            $themeDir = \Template::getThemeDir($theme);
+            $customLogoPath = $themeDir."images/header-logo-custom$accessUrlId.png";
+    
+            $svgIcons = api_get_setting('icons_mode_svg');
+            if ($svgIcons == 'true') {
+                $customLogoPathSVG = substr($customLogoPath, 0, -3).'svg';
+                if (file_exists(api_get_path(SYS_PUBLIC_PATH)."css/$customLogoPathSVG")) {
+                    if ($getSysPath) {
+                        $logoPath = api_get_path(SYS_PUBLIC_PATH)."css/$customLogoPathSVG";
+                        return $logoPath;
+                    }
+                    $logoPath = api_get_path(WEB_CSS_PATH).$customLogoPathSVG;
+                    return $logoPath;
+                }
             }
-
-            return api_get_path(WEB_CSS_PATH).$customLogoPath;
-        }
-
-        $originalLogoPath = $themeDir."images/header-logo.png";
-
-        if (file_exists(api_get_path(SYS_CSS_PATH).$originalLogoPath)) {
-            if ($getSysPath) {
-                return api_get_path(SYS_CSS_PATH).$originalLogoPath;
+            if (file_exists(api_get_path(SYS_PUBLIC_PATH)."css/$customLogoPath")) {
+                if ($getSysPath) {
+                    $logoPath = api_get_path(SYS_PUBLIC_PATH)."css/$customLogoPath";
+                    return $logoPath;
+                }
+    
+                $logoPath = api_get_path(WEB_CSS_PATH).$customLogoPath;
+                return $logoPath;
             }
-
-            return api_get_path(WEB_CSS_PATH).$originalLogoPath;
+    
+            $originalLogoPath = $themeDir."images/header-logo.png";
+            if ($svgIcons == 'true') {
+                $originalLogoPathSVG = $themeDir."images/header-logo.svg";
+                if (file_exists(api_get_path(SYS_CSS_PATH).$originalLogoPathSVG)) {
+                    if ($getSysPath) {
+                        $logoPath = api_get_path(SYS_CSS_PATH).$originalLogoPathSVG;
+                        return $logoPath;
+                    }
+                    $logoPath = api_get_path(WEB_CSS_PATH).$originalLogoPathSVG;
+                    return $logoPath;
+                }
+            }
+            if (file_exists(api_get_path(SYS_CSS_PATH).$originalLogoPath)) {
+                if ($getSysPath) {
+                    $logoPath = api_get_path(SYS_CSS_PATH).$originalLogoPath;
+                    return $logoPath;
+                }
+    
+                $logoPath = api_get_path(WEB_CSS_PATH).$originalLogoPath;
+                return $logoPath;
+            }
+            $logoPath = '';
         }
-
-        return '';
+        return $logoPath;
     }
 
     /**

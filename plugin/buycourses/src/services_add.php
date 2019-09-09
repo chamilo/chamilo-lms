@@ -28,7 +28,7 @@ $htmlHeadXtra[] = api_get_asset('cropper/dist/cropper.min.js');
 
 //view
 $interbreadcrumb[] = [
-    'url' => 'configuration.php',
+    'url' => 'list.php',
     'name' => $plugin->get_lang('Configuration'),
 ];
 
@@ -125,7 +125,7 @@ if ($form->validate()) {
         Display::return_message($plugin->get_lang('ServiceAdded'), 'success')
     );
 
-    header('Location: configuration.php');
+    header('Location: list.php');
     exit;
 }
 

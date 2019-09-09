@@ -13,7 +13,8 @@ require_once '../../../main/inc/global.inc.php';
 $serviceId = isset($_REQUEST['id']) ? (int) $_REQUEST['id'] : null;
 
 if (!$serviceId) {
-    header('Location: configuration.php');
+    header('Location: list.php');
+    exit;
 }
 
 $plugin = BuyCoursesPlugin::create();
@@ -32,7 +33,7 @@ $htmlHeadXtra[] = api_get_asset('cropper/dist/cropper.min.js');
 
 //view
 $interbreadcrumb[] = [
-    'url' => 'configuration.php',
+    'url' => 'list.php',
     'name' => $plugin->get_lang('Configuration'),
 ];
 
@@ -143,7 +144,7 @@ if ($form->validate()) {
             Display::return_message($plugin->get_lang('ServiceEdited'), 'success')
         );
     }
-    header('Location: configuration.php');
+    header('Location: list.php');
     exit;
 }
 

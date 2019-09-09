@@ -59,7 +59,7 @@ if ($taxEnable) {
     $tpl->assign('tax_name', $globalParameters['tax_name']);
 }
 
-$content = $tpl->fetch('buycourses/view/configuration.tpl');
+$content = $tpl->fetch('buycourses/view/list.tpl');
 
 $tpl->assign('header', $templateName);
 $tpl->assign('content', $content);

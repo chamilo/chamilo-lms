@@ -13,7 +13,9 @@
         {% if services_are_included %}
             <li role="presentation">
                 <a href="#services" aria-controls="services" role="tab"
-                   data-toggle="tab">{{ 'Services'|get_plugin_lang('BuyCoursesPlugin') }}</a>
+                   data-toggle="tab">
+                    {{ 'Services'|get_plugin_lang('BuyCoursesPlugin') }}
+                </a>
             </li>
         {% endif %}
     </ul>

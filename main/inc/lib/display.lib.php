@@ -3006,6 +3006,7 @@ HTML;
             ]},
             '.$videoPluginCssFiles.'
             {type:"script", src:"'.$webPublicPath.'assets/MathJax/MathJax.js?config=AM_HTMLorMML"},
+            {type:"stylesheet", src:"'.$webPublicPath.'assets/bootstrap/dist/css/bootstrap.min.css"},
             {type:"stylesheet", src:"'.$webPublicPath.'assets/jquery-ui/themes/smoothness/jquery-ui.min.css"},
             {type:"stylesheet", src:"'.$webPublicPath.'assets/jquery-ui/themes/smoothness/theme.css"},                
             {type:"stylesheet", src:"'.$webPublicPath.'css/dialog.css"},

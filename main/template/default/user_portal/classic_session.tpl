@@ -86,8 +86,7 @@
                                 <div class="row">
                                     <div class="col-md-2">
                                         <a href="{{ item.link }}" class="thumbnail">
-                                            <img class="img-responsive"
-                                                 src="{{ item.thumbnails ? item.thumbnails : item.icon }}">
+                                            {{ item.html_image }}
                                         </a>
                                     </div>
                                     <div class="col-md-10">

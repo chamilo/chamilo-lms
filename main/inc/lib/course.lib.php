@@ -4103,6 +4103,12 @@ class CourseManager
         }
         $params['thumbnails'] = $thumbnails;
         $params['image'] = $image;
+        $params['html_image'] = '';
+        if (!empty($thumbnails)) {
+            $params['html_image'] = Display::img($thumbnails, $course_info['name'], ['class' => 'img-responsive']);
+        } else {
+            $params['html_image'] = Display::return_icon('session.png', $course_info['name'], ['class' => 'img-responsive'], ICON_SIZE_LARGE, $course_info['name']);
+        }
         $params['link'] = $session_url;
         $params['title'] = $session_title;
         $params['name'] = $course_info['name'];

@@ -4031,7 +4031,7 @@ class CourseManager
         $session_url = '';
         $params = [];
         $params['icon'] = Display::return_icon(
-            'blackboard_blue.png',
+            'session.png',
             null,
             [],
             ICON_SIZE_LARGE,

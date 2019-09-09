@@ -2455,7 +2455,7 @@ class IndexManager
         }
 
         $icon = Display::return_icon(
-            'blackboard_blue.png',
+            'session.png',
             $title,
             ['class' => 'sessionView'],
             ICON_SIZE_LARGE

@@ -8568,6 +8568,9 @@ main[dir="rtl"] .radio-inline input[type=radio]{
     position: relative;
     margin-left: 10px;
 }
+.key-login{
+    display: none;
+}
 /* CSS Responsive */
 @media (min-width: 1025px) and (max-width: 1200px) {
     .sidebar-scorm {
@@ -8879,6 +8882,12 @@ main[dir="rtl"] .radio-inline input[type=radio]{
     }
     .forum_display .panel .pull-right{
         float: initial;
+    }
+    .key-login{
+        display: block;
+        position: absolute;
+        right: 10px;
+        top: 25px;
     }
 }
 

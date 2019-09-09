@@ -13,6 +13,11 @@
     <div class="container">
         <div class="row">
             <div class="col-xs-12 col-md-3">
+                <div class="key-login">
+                    <a href="#login-block" id="btn-login" class="btn btn-default">
+                        <img src="{{ 'key.png'|icon(22) }}"> {{ 'LoginAsThisUser'|get_lang }}
+                    </a>
+                </div>
                 <div class="logo">
                     {{ logo }}
                 </div>
@@ -56,6 +61,7 @@
                         </ol>
                     </div>
                 </div>
+
             </div>
         </div>
     </div>

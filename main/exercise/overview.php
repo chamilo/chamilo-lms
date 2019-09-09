@@ -173,7 +173,7 @@ if (isset($exercise_stat_info['exe_id'])) {
         } else {
             $latestQuestion = Question::read($latestQuestionId, [], false);
 
-            if ($latestQuestion->category) {
+            if ($latestQuestion && $latestQuestion->category) {
                 // Flag category as taken
                 Session::write('track_e_adaptive', [$latestQuestion->category => true]);
             }

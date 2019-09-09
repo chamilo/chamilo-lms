@@ -464,6 +464,7 @@ define('GROUP_TITLE_LENGTH', 50);
 // @todo move into a class
 define('ALL_ON_ONE_PAGE', 1);
 define('ONE_PER_PAGE', 2);
+define('ONE_CATEGORY_PER_PAGE', 3);
 
 define('EXERCISE_FEEDBACK_TYPE_END', 0); //Feedback 		 - show score and expected answers
 define('EXERCISE_FEEDBACK_TYPE_DIRECT', 1); //DirectFeedback - Do not show score nor answers

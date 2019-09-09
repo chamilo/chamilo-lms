@@ -1328,6 +1328,16 @@ if (!empty($error)) {
                 validate_all();
             });
             
+            $(\'button[name="save_category_now"]\').on(\'touchstart click\', function (e) {
+                e.preventDefault();
+                e.stopPropagation();
+                
+                var self = $(this),
+                    categoryId = parseInt(self.data(\'category\')) || 0;
+                
+                save_category_now(categoryId);
+            });
+
             // Save attempt duration
             addExerciseEvent(window, \'unload\', updateDuration , false);            
             addExerciseEvent(window, \'beforeunload\', updateDuration , false);                                    
@@ -1489,6 +1499,51 @@ if (!empty($error)) {
             });
             return false;
         }
+        
+        function save_category_now (categoryId) {
+            var loader = $("#save_for_now_" + categoryId);
+
+            loader.html(\''.Display::returnFontAwesomeIcon('spinner', null, true, 'fa-spin').'\');
+
+            // 1. Input choice.
+            var my_choice = $(\'*[name*="choice"]\').serialize();
+            // 2. Reminder.
+            var remind_list = $(\'*[name*="remind_list"]\').serialize();
+            // 3. Hotspots.
+            var hotspot = $(\'*[name*="hotspot"]\').serialize();
+
+            // Question list.
+            var question_list = ['.implode(',', $questionList).'];
+            var free_answers = {};
+            $.each(question_list, function(index, my_question_id) {
+                // Checking FCK
+                if (CKEDITOR.instances["choice["+my_question_id+"]"]) {
+                    var ckContent = CKEDITOR.instances["choice["+my_question_id+"]"].getData();
+                    free_answers["free_choice["+my_question_id+"]"] = ckContent;
+                }
+            });
+
+            free_answers = $.param(free_answers);
+            
+            $.ajax({
+                type: "post",
+                async: false,
+                url: "'.api_get_path(WEB_AJAX_PATH).'exercise.ajax.php?'.api_get_cidreq().'&a=save_exercise_by_now",
+                data: "'.$params.'&category=" + categoryId + "&type=category&"
+                    + [my_choice, hotspot, free_answers, remind_list].join("&"),
+                success: function (response) {
+                    if (response === \'error\') {
+                        loader.html(\''.Display::return_icon('wrong.gif').'\');
+                        
+                        return;
+                    }
+
+                    loader.html(\''.Display::return_icon('save.png', get_lang('Saved')).'\');
+                    
+                    window.location.href = response;
+                }
+            });
+        }
 
         function validate_all() {
             save_now_all("validate");
@@ -1548,6 +1603,13 @@ if (!empty($error)) {
                         break;
                     }
                 }
+            }
+        } elseif ($objExercise->type == ONE_CATEGORY_PER_PAGE) {
+            $questionsInCategory = $objExercise->getQuestionsInCategory($categoryId);
+
+            if (!in_array($questionId, $questionsInCategory)) {
+                $i++;
+                continue;
             }
         }
 
@@ -1634,10 +1696,11 @@ if (!empty($error)) {
                     $questionId,
                     $currentQuestion,
                     [],
-                    [],
+                    0,
                     $myRemindList
                 );
                 break;
+            case ONE_CATEGORY_PER_PAGE:
             case ALL_ON_ONE_PAGE:
                 if (api_is_allowed_to_session_edit()) {
                     $button = [
@@ -1685,16 +1748,22 @@ if (!empty($error)) {
             // quits the loop
             break;
         }
+    } // end foreach()
+
+    switch ($objExercise->type) {
+        case ALL_ON_ONE_PAGE:
+        case ONE_CATEGORY_PER_PAGE:
+            $exerciseActions = $objExercise->show_button(
+                $questionId,
+                $currentQuestion,
+                [],
+                $categoryId
+            );
+            echo Display::div($exerciseActions, ['class' => 'exercise_actions']);
+            echo '<br>';
+            break;
     }
-    // end foreach()
-    if ($objExercise->type == ALL_ON_ONE_PAGE) {
-        $exerciseActions = $objExercise->show_button(
-            $questionId,
-            $currentQuestion
-        );
-        echo Display::div($exerciseActions, ['class' => 'exercise_actions']);
-        echo '<br>';
-    }
+
     echo '</form>';
 }
 

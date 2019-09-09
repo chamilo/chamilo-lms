@@ -2000,6 +2000,14 @@ class Exercise
                         'id' => 'option_page_one',
                     ]
                 );
+                $radios[] = $form->createElement(
+                    'radio',
+                    'exerciseType',
+                    null,
+                    get_lang('OneCategoryPerPage'),
+                    '3',
+                    ['id' => 'option_category_page']
+                );
 
                 $form->addGroup($radios, null, get_lang('QuestionsPerPage'));
             } else {
@@ -3033,7 +3041,7 @@ class Exercise
      * @param int    $questionId
      * @param int    $questionNum
      * @param array  $questionsInMedia
-     * @param string $currentAnswer
+     * @param int    $questionCategoryId
      * @param array  $myRemindList
      *
      * @return string
@@ -3042,7 +3050,7 @@ class Exercise
         $questionId,
         $questionNum,
         $questionsInMedia = [],
-        $currentAnswer = '',
+        $questionCategoryId = 0,
         $myRemindList = []
     ) {
         global $origin, $safe_lp_id, $safe_lp_item_id, $safe_lp_item_view_id;
@@ -3181,6 +3189,18 @@ class Exercise
                     $buttonList[] = '<span id="save_for_now_'.$questionId.'" class="exercise_save_mini_message"></span>&nbsp;';
 
                     $html .= implode(PHP_EOL, $buttonList);
+                } elseif ($this->type == ONE_CATEGORY_PER_PAGE) {
+                    $buttonList[] = Display::button(
+                        'save_category_now',
+                        get_lang('Next'),
+                        ['type' => 'button', 'class' => $class, 'data-category' => $questionCategoryId]
+                    );
+                    $buttonList[] = Display::span(
+                        '',
+                        ['id' => "save_for_now_$questionCategoryId", 'class' => 'exercise_save_mini_message']
+                    );
+
+                    $html .= implode(PHP_EOL, $buttonList).PHP_EOL;
                 } else {
                     if ($this->review_answers) {
                         $allLabel = get_lang('ReviewQuestions');
@@ -7377,7 +7397,8 @@ class Exercise
                     $exercise_actions .= $this->show_button(
                         $questionId,
                         $current_question,
-                        null,
+                        [],
+                        0,
                         $remindList
                     );
                     break;
@@ -7417,7 +7438,7 @@ class Exercise
                 }
 
                 if ($last_question_in_media && $this->type == ONE_PER_PAGE) {
-                    $exercise_actions = $this->show_button($questionId, $current_question, $questions_in_media);
+                    $exercise_actions = $this->show_button($questionId, $current_question, 0, $questions_in_media);
                 }
             }
 

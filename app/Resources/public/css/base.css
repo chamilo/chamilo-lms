@@ -4761,6 +4761,12 @@ i.size-32.icon-new-work {
     text-align: center;
 }
 
+#sn-avatar .btn-social-edit{
+    position: absolute;
+    top: 5px;
+    right: 25px;
+}
+
 .social-profile .expand-image {
     display: inline-block;
 }

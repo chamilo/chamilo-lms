@@ -7,6 +7,13 @@
                        href="#sn-avatar-one" aria-expanded="true" aria-controls="sn-avatar-one">
                     {{ "Profile" | get_lang }}
                     </a>
+                    {% if _u.is_admin == 1 %}
+                        <div class="pull-right">
+                            <a class="btn btn-default btn-sm btn-social-edit" title="{{ "Edit"|get_lang }}" href="{{ _p.web }}main/admin/user_edit.php?user_id={{ user.id }}">
+                                <i class="fa fa-pencil" aria-hidden="true"></i>
+                            </a>
+                        </div>
+                    {% endif %}
                 </h4>
             </div>
             <div id="sn-avatar-one" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="heading-sn">
@@ -68,18 +75,12 @@
                         <li class="item item-name">
                             <h5>{{ user.complete_name }} </h5>
                         </li>
-                        {% if _u.is_admin == 1 %}
-                            <li class="item">
-                                <a href="{{ _p.web }}main/admin/user_edit.php?user_id={{ user.id }}">
-                                    <img src="{{ "edit.png" | icon }}" alt="{{ "Edit" | get_lang }}">
-                                </a>
-                            </li>
-                        {% endif %}
+
                         {% if show_full_profile %}
                             {% if user.email %}
                             <li class="item">
                                 <a href="{{ _p.web }}main/messages/new_message.php">
-                                <img src="{{ "instant_message.png" | icon }}" alt="{{ "Email" | get_lang }}">
+                                    {{ "sn-message.png"|img(22, "Email" | get_lang) }}
                                     <div class="email-overflow">{{ user.email }}</div>
                                 </a>
                             </li>
@@ -88,8 +89,8 @@
                             {% if vcard_user_link %}
                                 <li class="item">
                                     <a href="{{ vcard_user_link }}">
-                                    <img src="{{ "vcard.png" | icon(16) }}" alt="{{ "BusinessCard" | get_lang }}" width="16" height="16">
-                                    {{ "BusinessCard" | get_lang }}
+                                        {{ "vcard.png"|img(22, "BusinessCard" | get_lang) }}
+                                        {{ "BusinessCard" | get_lang }}
                                     </a>
                                 </li>
                             {% endif %}

@@ -32,7 +32,6 @@ api_protect_course_group(GroupManager::GROUP_TOOL_FORUM);
 
 // The section (tabs).
 $this_section = SECTION_COURSES;
-
 $nameTools = get_lang('ToolForum');
 
 // Are we in a lp ?
@@ -46,7 +45,6 @@ $groupId = api_get_group_id();
 $courseId = api_get_course_int_id();
 $groupInfo = GroupManager::get_group_properties($groupId);
 $isTutor = GroupManager::is_tutor_of_group($userId, $groupInfo, $courseId);
-
 $isAllowedToEdit = api_is_allowed_to_edit(false, true) && api_is_allowed_to_session_edit(false, true);
 
 /* MAIN DISPLAY SECTION */
@@ -58,7 +56,7 @@ $isForumOpenByDateAccess = api_is_date_in_date_range($current_forum['start_time'
 
 if (!$isForumOpenByDateAccess && !$isAllowedToEdit) {
     if ($origin) {
-        api_not_allowed();
+        api_not_allowed(true);
     } else {
         api_not_allowed(true);
     }
@@ -81,19 +79,21 @@ if (!empty($groupId)) {
 
     // Course
     if (!api_is_allowed_to_edit(false, true) && //is a student
-        (($current_forum_category && $current_forum_category['visibility'] == 0) ||
-        $current_forum['visibility'] == 0)
+        (
+            ($current_forum_category && $current_forum_category['visibility'] == 0) ||
+            $current_forum['visibility'] == 0
+        )
     ) {
         api_not_allowed(true);
     }
 } else {
-    //Course
+    // Course
     if (!api_is_allowed_to_edit(false, true) && (
         ($current_forum_category && $current_forum_category['visibility'] == 0) ||
         $current_forum['visibility'] == 0
         ) //forum category or forum visibility is false
     ) {
-        api_not_allowed();
+        api_not_allowed(true);
     }
 }
 
@@ -185,7 +185,7 @@ if ($my_action == 'delete' &&
         $link_info = GradebookUtils::isResourceInCourseGradebook(
             api_get_course_id(),
             5,
-            intval($_GET['id']),
+            $_GET['id'],
             api_get_session_id()
         );
         $link_id = $link_info['id'];
@@ -326,15 +326,12 @@ if ($origin == 'learnpath') {
 }
 
 /* Display the action messages */
-
 if (!empty($message)) {
     echo Display::return_message($message, 'confirm');
 }
 
 /* Action links */
-
 echo '<div class="actions">';
-
 if ($origin != 'learnpath') {
     if (!empty($groupId)) {
         echo '<a href="'.api_get_path(WEB_CODE_PATH).'group/group_space.php?'.api_get_cidreq().'">'

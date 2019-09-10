@@ -753,8 +753,17 @@ switch ($action) {
 
             $destinationCategory = $objExercise->findCategoryDestination($exeId, $categoryId);
 
-            if (0 === $destinationCategory || !empty($categoryList[$destinationCategory])) {
+            if (0 === $destinationCategory) {
                 $categoryInfo = $objExercise->categoryWithQuestionList[$categoryId]['category'];
+
+                Session::write('adaptive_quiz_level', $categoryInfo['name']);
+
+                echo "exercise_result.php?$params";
+                break;
+            }
+
+            if (!empty($categoryList[$destinationCategory])) {
+                $categoryInfo = $objExercise->categoryWithQuestionList[$destinationCategory]['category'];
 
                 Session::write('adaptive_quiz_level', $categoryInfo['name']);
 

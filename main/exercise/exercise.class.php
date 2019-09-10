@@ -3238,6 +3238,16 @@ class Exercise
         $script = "redirectExerciseToResult();";
         if ($this->type == ALL_ON_ONE_PAGE) {
             $script = "save_now_all('validate');";
+        } elseif ($this->type == ONE_CATEGORY_PER_PAGE &&
+            $this->feedback_type == EXERCISE_FEEDBACK_TYPE_PROGRESSIVE_ADAPTIVE
+        ) {
+            $script = "
+                var button = $('button[name=\"save_category_now\"]');
+            
+                if (button.length) {
+                    button.trigger('click');
+                }
+            ";
         }
 
         return "<script>

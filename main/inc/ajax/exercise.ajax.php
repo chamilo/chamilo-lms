@@ -721,22 +721,6 @@ switch ($action) {
 
         if ($objExercise->type == ONE_CATEGORY_PER_PAGE && $type === 'category' && $exerciseIsProgressiveAdaptive) {
             $allowAdaptiveTimeControlByCategory = api_get_configuration_value('quiz_allow_adaptive_time_control_by_category');
-            $timeControl = $objExercise->expired_time != 0;
-
-            if ($timeControl && $allowAdaptiveTimeControlByCategory) {
-                $currentExpiredTimeKey = ExerciseLib::get_time_control_key(
-                    $objExercise->iId,
-                    $learnpath_id,
-                    $learnpath_item_id
-                );
-
-                $categoriesInExercise = TestCategory::getListOfCategoriesIDForTestObject($objExercise);
-                $timeLeft = $objExercise->expired_time / (count($categoriesInExercise) ?: 1) * 60;
-
-                $currentUtcTime = api_get_utc_datetime(null, false, true);
-                $currentUtcTime->add(new DateInterval("PT{$timeLeft}S"));
-                $_SESSION['expired_time'][$currentExpiredTimeKey] = $currentUtcTime->format('Y-m-d H:i:s');
-            }
 
             $params = api_get_cidreq().'&'.http_build_query(
                 [
@@ -750,21 +734,38 @@ switch ($action) {
             );
 
             $categoryList = Session::read('track_e_adaptive', []);
-
             $destinationCategory = $objExercise->findCategoryDestination($exeId, $categoryId);
+            $categoryInfo = 0 === $destinationCategory
+                ? $objExercise->categoryWithQuestionList[$categoryId]['category']
+                : $objExercise->categoryWithQuestionList[$destinationCategory]['category'];
 
-            if (0 === $destinationCategory) {
-                $categoryInfo = $objExercise->categoryWithQuestionList[$categoryId]['category'];
+            if ($objExercise->expired_time != 0) {
+                $currentExpiredTimeKey = ExerciseLib::get_time_control_key(
+                    $objExercise->iId,
+                    $learnpath_id,
+                    $learnpath_item_id
+                );
+                $currentUtcTime = api_get_utc_datetime(null, false, true);
 
-                Session::write('adaptive_quiz_level', $categoryInfo['name']);
+                $expiredTime = new DateTime($_SESSION['expired_time'][$currentExpiredTimeKey], new DateTimeZone('UTC'));
 
-                echo "exercise_result.php?$params";
-                break;
+                if ($expiredTime <= $currentUtcTime) {
+                    Session::write('adaptive_quiz_level', $categoryInfo['name']);
+
+                    echo "exercise_result.php?$params";
+                    break;
+                }
+
+                if ($allowAdaptiveTimeControlByCategory) {
+                    $categoriesInExercise = TestCategory::getListOfCategoriesIDForTestObject($objExercise);
+                    $timeLeft = $objExercise->expired_time / (count($categoriesInExercise) ?: 1) * 60;
+
+                    $currentUtcTime->add(new DateInterval("PT{$timeLeft}S"));
+                    $_SESSION['expired_time'][$currentExpiredTimeKey] = $currentUtcTime->format('Y-m-d H:i:s');
+                }
             }
 
-            if (!empty($categoryList[$destinationCategory])) {
-                $categoryInfo = $objExercise->categoryWithQuestionList[$destinationCategory]['category'];
-
+            if (0 === $destinationCategory || !empty($categoryList[$destinationCategory])) {
                 Session::write('adaptive_quiz_level', $categoryInfo['name']);
 
                 echo "exercise_result.php?$params";

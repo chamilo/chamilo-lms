@@ -1984,7 +1984,9 @@ class Tracking
                 // fin de acceso a la sesión
                 $sessionInfo = SessionManager::fetch($session_id);
                 $last_access = $sessionInfo['access_end_date'];
-                $where_condition = ' AND logout_course_date < "'.$last_access.'" ';
+                if (!empty($last_access)) {
+                    $where_condition = ' AND logout_course_date < "'.$last_access.'" ';
+                }
             }
             $sql = "SELECT logout_course_date
                     FROM $table

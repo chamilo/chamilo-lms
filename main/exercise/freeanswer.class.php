@@ -12,8 +12,8 @@
  */
 class FreeAnswer extends Question
 {
-    public static $typePicture = 'open_answer.png';
-    public static $explanationLangVar = 'FreeAnswer';
+    public $typePicture = 'open_answer.png';
+    public $explanationLangVar = 'FreeAnswer';
 
     /**
      * Constructor.

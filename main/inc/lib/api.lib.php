@@ -7256,7 +7256,7 @@ function api_get_bootstrap_and_font_awesome($returnOnlyPath = false)
  */
 function api_get_jquery_js()
 {
-    return api_get_asset('jquery/dist/jquery.min.js');
+    return api_get_asset('jquery/jquery.min.js');
 }
 
 /**
@@ -7266,7 +7266,7 @@ function api_get_jquery_js()
  */
 function api_get_jquery_web_path()
 {
-    return api_get_path(WEB_PUBLIC_PATH).'assets/jquery/dist/jquery.min.js';
+    return api_get_path(WEB_PUBLIC_PATH).'assets/jquery/jquery.min.js';
 }
 
 /**

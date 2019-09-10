@@ -1,14 +1,9 @@
 <?php
-/**
- * SetupThemeListener.php
- * publisher
- * Date: 01.05.14.
- */
 
 namespace Chamilo\ThemeBundle\EventListener;
 
 use Chamilo\ThemeBundle\Theme\ThemeManager;
-use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
+use Symfony\Component\HttpKernel\Event\ControllerEvent;
 
 class SetupThemeListener
 {
@@ -28,7 +23,7 @@ class SetupThemeListener
         $this->manager = $manager;
     }
 
-    public function onKernelController(FilterControllerEvent $event)
+    public function onKernelController(ControllerEvent $event)
     {
         $css = rtrim($this->cssBase, '/').'/'.trim($this->lteAdmin, '/');
         $mng = $this->manager;

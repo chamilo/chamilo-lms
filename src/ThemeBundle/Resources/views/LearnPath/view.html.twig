@@ -242,6 +242,7 @@
         document.querySelector('.menu-button').onclick = function(e) {
             e.preventDefault(); document.querySelector('.circle').classList.toggle('open');
         }
+
         var LPViewUtils = {
             setHeightLPToc: function () {
                 var scormInfoHeight = $('#scorm-info').outerHeight(true);
@@ -265,39 +266,38 @@
             }
 
             {% if lp_mode == 'embedframe' %}
-            //$('#learning_path_main').addClass('lp-view-collapsed');
-            $('#lp-view-expand-button, #lp-view-expand-toggle').on('click', function (e) {
-                e.preventDefault();
-                $('#learning_path_main').toggleClass('lp-view-collapsed');
-                $('#lp-view-expand-toggle span.fa').toggleClass('fa-compress');
-                $('#lp-view-expand-toggle span.fa').toggleClass('fa-expand');
-                var className = $('#lp-view-expand-toggle span.fa').attr('class');
-                if (className == 'fa fa-expand') {
-                    $(this).attr('title', '{{ "Expand" | get_lang }}');
-                } else {
-                    $(this).attr('title', '{{ "Collapse" | get_lang }}');
-                }
+                $('#lp-view-expand-button, #lp-view-expand-toggle').on('click', function (e) {
+                    e.preventDefault();
+                    $('#learning_path_main').toggleClass('lp-view-collapsed');
+                    $('#lp-view-expand-toggle span.fa').toggleClass('fa-compress');
+                    $('#lp-view-expand-toggle span.fa').toggleClass('fa-expand');
+                    var className = $('#lp-view-expand-toggle span.fa').attr('class');
+                    if (className == 'fa fa-expand') {
+                        $(this).attr('title', '{{ "Expand" | get_lang }}');
+                    } else {
+                        $(this).attr('title', '{{ "Collapse" | get_lang }}');
+                    }
 
-                if($('#navTabsbar').is(':hidden')){
-                    $('#navTabsbar').show();
-                } else {
-                    $('#navTabsbar').hide();
-                }
-            });
+                    if($('#navTabsbar').is(':hidden')){
+                        $('#navTabsbar').show();
+                    } else {
+                        $('#navTabsbar').hide();
+                    }
+                });
             {% else %}
-            $('#lp-view-expand-button, #lp-view-expand-toggle').on('click', function (e) {
-                e.preventDefault();
-                $('#learning_path_main').toggleClass('lp-view-collapsed');
-                $('#lp-view-expand-toggle span.fa').toggleClass('fa-expand');
-                $('#lp-view-expand-toggle span.fa').toggleClass('fa-compress');
+                $('#lp-view-expand-button, #lp-view-expand-toggle').on('click', function (e) {
+                    e.preventDefault();
+                    $('#learning_path_main').toggleClass('lp-view-collapsed');
+                    $('#lp-view-expand-toggle span.fa').toggleClass('fa-expand');
+                    $('#lp-view-expand-toggle span.fa').toggleClass('fa-compress');
 
-                var className = $('#lp-view-expand-toggle span.fa').attr('class');
-                if (className == 'fa fa-expand') {
-                    $(this).attr('title', '{{ "Expand" | get_lang }}');
-                } else {
-                    $(this).attr('title', '{{ "Collapse" | get_lang }}');
-                }
-            });
+                    var className = $('#lp-view-expand-toggle span.fa').attr('class');
+                    if (className == 'fa fa-expand') {
+                        $(this).attr('title', '{{ "Expand" | get_lang }}');
+                    } else {
+                        $(this).attr('title', '{{ "Collapse" | get_lang }}');
+                    }
+                });
             {% endif %}
 
             $('.lp-view-tabs').on('click', '.disabled', function (e) {
@@ -317,7 +317,7 @@
 
             LPViewUtils.setHeightLPToc();
 
-            $('.image-avatar img').load(function () {
+            $('.image-avatar img').on('load', function () {
                 LPViewUtils.setHeightLPToc();
             });
 

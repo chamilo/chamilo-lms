@@ -6,6 +6,9 @@
  *
  * @package chamilo.document
  */
+
+use Chamilo\CoreBundle\Framework\Container;
+
 require_once __DIR__.'/../inc/global.inc.php';
 
 api_protect_course_script(true);
@@ -37,7 +40,8 @@ $user_name = $userInfo['complete_name'];
 $course_list = SessionManager::get_course_list_by_session_id($sessionId);
 $session_list = SessionManager::get_session_by_course($courseId);
 $total_quota_bytes = DocumentManager::get_course_quota();
-$quota_bytes = DocumentManager::documents_total_space($courseId, 0, 0);
+$repo = Container::$container->get('Chamilo\CourseBundle\Repository\CDocumentRepository');
+$quota_bytes = $repo->getTotalSpace($courseId);
 $quotaPercentage = round($quota_bytes / $total_quota_bytes, 2) * 100;
 
 $session[] = [get_lang('Course').' ('.format_file_size($quota_bytes).')', $quotaPercentage];
@@ -47,7 +51,7 @@ $used_quota_bytes = $quota_bytes;
 if (!empty($session_list)) {
     foreach ($session_list as $session_data) {
         $quotaPercentage = 0;
-        $quota_bytes = DocumentManager::documents_total_space($courseId, null, $session_data['id']);
+        $quota_bytes = $repo->getTotalSpace($courseId, null, $session_data['id']);
         if (!empty($quota_bytes)) {
             $quotaPercentage = round($quota_bytes / $total_quota_bytes, 2) * 100;
         }
@@ -67,7 +71,9 @@ if (!empty($group_list)) {
     foreach ($group_list as $group_data) {
         $quotaPercentage = 0;
         $my_group_id = $group_data['id'];
-        $quota_bytes = DocumentManager::documents_total_space($courseId, $my_group_id, 0);
+        $repo = Container::$container->get('Chamilo\CourseBundle\Repository\CDocumentRepository');
+        $quota_bytes = $repo->getTotalSpace($courseId, $my_group_id, 0);
+
         if (!empty($quota_bytes)) {
             $quotaPercentage = round($quota_bytes / $total_quota_bytes, 2) * 100;
         }

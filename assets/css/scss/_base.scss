@@ -1435,12 +1435,6 @@ hr {
     ._jsPlumb_endpoint {
       z-index: 50;
     }
-    .data_table{
-      border: none;
-      td{
-        border: none;
-      }
-    }
     .window {
       border: 1px solid #dddddd;
       border-radius: 10px;
@@ -1881,7 +1875,7 @@ hr {
     top: 0;
     display: block;
     content: ' ';
-    background: url(#{$svg-path}/coursestudent_na.svg);
+    background: url('#{$svg-path}/coursestudent_na.svg');
     width: 132px;
     height: 132px;
     border-radius: 0;
@@ -2365,12 +2359,12 @@ hr {
 }
 
 .border-sequence {
-  background: url("../../public/img/line.png") repeat-x 0 35px;
+  background: url("#{$img-path}line.png") repeat-x 0 35px;
 }
 
 .arrow-sequence {
   height: 68px;
-  background: url("../../public/img/icons/48/sequence-arrow.png") no-repeat center 15px;
+  background: url("#{$img-path}icons/48/sequence-arrow.png") no-repeat center 15px;
   margin-top: 10px;
   padding-top: 10px;
 }
@@ -2579,7 +2573,7 @@ hr {
       text-indent: -9999px;
       overflow: hidden;
       right: 0;
-      background: url('../img/timeline/next.png') no-repeat 0 0;
+      background: url('#{$img-path}timeline/next.png') no-repeat 0 0;
       &:hover{
         background-position: 0 -76px;
       }
@@ -2593,7 +2587,7 @@ hr {
       height: 38px;
       text-indent: -9999px;
       overflow: hidden;
-      background: url('../img/timeline/prev.png') no-repeat 0 0;
+      background: url('#{$img-path}timeline/prev.png') no-repeat 0 0;
       &:hover{
         background-position: 0 -76px;
       }
@@ -2607,7 +2601,7 @@ hr {
   overflow: hidden;
   margin: 20px auto;
   position: relative;
-  background: url('../../public/img/timeline/dot.gif') left 45px repeat-x;
+  background: url('#{$img-path}timeline/dot.gif') left 45px repeat-x;
   #dates {
     width: 800px;
     height: 60px;
@@ -2619,7 +2613,7 @@ hr {
       height: 50px;
       font-size: 16px;
       text-align: center;
-      background: url('../../public/img/timeline/biggerdot.png') center bottom no-repeat;
+      background: url('#{$img-path}timeline/biggerdot.png') center bottom no-repeat;
     }
     a {
       line-height: 38px;
@@ -2809,7 +2803,7 @@ hr {
       margin-right: 1em;
       padding-bottom: 1em;
       a {
-        background: url("../../public/img/icons/16/winner.png") no-repeat;
+        background: url("#{$img-path}icons/16/winner.png") no-repeat;
         padding-left: 1.5em;
         padding-bottom: 1em;
       }
@@ -3334,7 +3328,7 @@ hr {
   height: 25px;
   position: relative;
   overflow: hidden;
-  background: url(../../public/img/alt_star.png) top left repeat-x;
+  background: url('#{$img-path}alt_star.png') top left repeat-x;
   li{
     padding: 0;
     margin: 0;
@@ -3353,7 +3347,7 @@ hr {
       padding: 0;
       overflow: hidden;
       &:hover{
-        background: url(../../public/img/alt_star.png) left bottom;
+        background: url('#{$img-path}alt_star.png') left bottom;
         z-index: 2;
         left: 0;
         border: none;
@@ -3390,7 +3384,7 @@ hr {
       }
     }
     .current-rating {
-      background: url(../../public/img/alt_star.png) left center;
+      background: url('#{$img-path}alt_star.png') left center;
       position: absolute;
       height: 25px;
       display: block;
@@ -3408,7 +3402,7 @@ hr {
     font-size: 10px;
     font-weight: normal;
     width: 100%;
-    background: url("../../public/img/icons/64/file_upload.png") no-repeat center 20px;
+    background: url("#{$img-path}icons/64/file_upload.png") no-repeat center 20px;
     padding-top: 70px;
   }
   .file_upload_small {
@@ -3454,19 +3448,19 @@ table.certaintyTable {
   padding: 5px;
   text-align: center;
   margin-bottom: 10px;
-  background: url(../../public/img/clock-exercise.png) no-repeat center center #FFF;
+  background: url(#{$img-path}clock-exercise.png) no-repeat center center #FFF;
   border: 1px solid #DDD;
   border-radius: 5px;
 }
 
 .time_warning_two {
-  background: url(../../public/img/clock-exercise.png) no-repeat center center #FFD700;
+  background: url(#{$img-path}clock-exercise.png) no-repeat center center #FFD700;
   border: 1px solid #FFCC00;
   color: #C00;
 }
 
 .time_warning_one {
-  background: url(../../public/img/clock-exercise.png) no-repeat center center #FB3A35;
+  background: url(#{$img-path}clock-exercise.png) no-repeat center center #FB3A35;
   border: 1px solid #FB3A35;
   color: #FFF;
 }
@@ -3543,9 +3537,9 @@ table.certaintyTable {
     display: block;
   }
   .arrow {
-    background: url("../img/icons/22/arrow-up-collapse.png") no-repeat 99% center;
+    background: url("#{$img-path}icons/22/arrow-up-collapse.png") no-repeat 99% center;
     &.collapsed{
-      background: url("../img/icons/22/arrow-down-collapse.png") no-repeat 99% center;
+      background: url("#{$img-path}icons/22/arrow-down-collapse.png") no-repeat 99% center;
     }
   }
   .thematic-advance {
@@ -3689,7 +3683,7 @@ table.certaintyTable {
 /****** VIDEO CHAT ******/
 
 #chat-video-panel .thumbnail video {
-  background: #FFF url("../../public/img/icons/128/camera-webrtc.png") no-repeat center center;
+  background: #FFF url("#{$img-path}icons/128/camera-webrtc.png") no-repeat center center;
   display: block;
   min-width: 100%;
   width: 100%;
@@ -3855,49 +3849,49 @@ table.certaintyTable {
     background-repeat: no-repeat;
   }
   select#question_type_hidden option[value="1"] {
-    background-image: url(../../public/img/icons/32/mcua.png);
+    background-image: url(#{$img-path}icons/32/mcua.png);
   }
   select#question_type_hidden option[value="2"] {
-    background-image: url(../../public/img/icons/32/mcma.png);
+    background-image: url(#{$img-path}icons/32/mcma.png);
   }
   select#question_type_hidden option[value="3"] {
-    background-image: url(../../public/img/icons/32/fill_in_blanks.png);
+    background-image: url(#{$img-path}icons/32/fill_in_blanks.png);
   }
   select#question_type_hidden option[value="4"] {
-    background-image: url(../../public/img/icons/32/matching.png);
+    background-image: url(#{$img-path}icons/32/matching.png);
   }
   select#question_type_hidden option[value="5"] {
-    background-image: url(../../public/img/icons/32/open_answer.png);
+    background-image: url(#{$img-path}icons/32/open_answer.png);
   }
   select#question_type_hidden option[value="6"] {
-    background-image: url(../../public/img/icons/32/hotspot.png);
+    background-image: url(#{$img-path}icons/32/hotspot.png);
   }
   select#question_type_hidden option[value="7"] {
-    background-image: url(../../public/img/icons/32/mcma.png);
+    background-image: url(#{$img-path}icons/32/mcma.png);
   }
   select#question_type_hidden option[value="8"] {
-    background-image: url(../../public/img/icons/32/mcma.png);
+    background-image: url(#{$img-path}icons/32/mcma.png);
   }
   select#question_type_hidden option[value="9"] {
-    background-image: url(../../public/img/icons/32/mcmac.png);
+    background-image: url(#{$img-path}icons/32/mcmac.png);
   }
   select#question_type_hidden option[value="10"] {
-    background-image: url(../../public/img/icons/32/mcuao.png);
+    background-image: url(#{$img-path}icons/32/mcuao.png);
   }
   select#question_type_hidden option[value="11"] {
-    background-image: url(../../public/img/icons/32/mcmao.png);
+    background-image: url(#{$img-path}icons/32/mcmao.png);
   }
   select#question_type_hidden option[value="12"] {
-    background-image: url(../../public/img/icons/32/mcmaco.png);
+    background-image: url(#{$img-path}icons/32/mcmaco.png);
   }
   select#question_type_hidden option[value="13"] {
-    background-image: url(../../public/img/icons/32/audio_question.png);
+    background-image: url(#{$img-path}icons/32/audio_question.png);
   }
   select#question_type_hidden option[value="14"] {
-    background-image: url(../../public/img/icons/32/mcmagl.png);
+    background-image: url(#{$img-path}icons/32/mcmagl.png);
   }
   select#question_type_hidden option[value="16"] {
-    background-image: url(../../public/img/icons/32/calculated_answer.png);
+    background-image: url(#{$img-path}icons/32/calculated_answer.png);
   }
 }
 /****** EXERCISE MATFDC ******/
@@ -4071,8 +4065,13 @@ table.certaintyTable {
   vertical-align: top;
 }
 
-// Aliases from 1.11.x
+// Convert classic 1.11.x styles into a v2 format.
 
+.data_table {
+  @extend .table;
+  @extend .table-bordered;
+  @extend .table-striped;
+}
 .pull-right {
   @extend .float-right;
 }

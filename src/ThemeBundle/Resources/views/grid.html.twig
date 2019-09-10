@@ -19,7 +19,7 @@
             </a>
             <span class="mass-actions-selected" id="{{ grid.hash }}_mass_action_selected"></span>
         </div>
-        {% spaceless %}
+        {% apply spaceless %}
             <div style="float:right;" class="grid_massactions">
                 {{ 'Action'|trans }}
                 <input type="hidden" id="{{ grid.hash }}_mass_action_all"
@@ -33,7 +33,7 @@
                 </select>
                 <input class="btn btn-secondary" type="submit" value="{{ 'Submit Action'|trans }}"/>
             </div>
-        {% endspaceless %}
+        {% endapply %}
     </div>
 {% endblock grid_actions %}
 

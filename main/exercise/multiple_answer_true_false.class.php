@@ -14,8 +14,8 @@ use ChamiloSession as Session;
  */
 class MultipleAnswerTrueFalse extends Question
 {
-    public static $typePicture = 'mcmao.png';
-    public static $explanationLangVar = 'MultipleAnswerTrueFalse';
+    public $typePicture = 'mcmao.png';
+    public $explanationLangVar = 'MultipleAnswerTrueFalse';
     public $options;
 
     /**

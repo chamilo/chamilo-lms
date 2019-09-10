@@ -472,105 +472,6 @@ class Display
     }
 
     /**
-     * Displays a normal message. It is recommended to use this public function
-     * to display any normal information messages.
-     *
-     * @param string $message
-     * @param bool   $filter      (true) or not (false)
-     * @param bool   $returnValue
-     *
-     * @deprecated Use <code>Display::addFlash(Display::return_message($message, 'normal'));</code>
-     *  Or <code>echo Display::return_message($message, 'normal')</code>
-     */
-    public static function display_normal_message(
-        $message,
-        $filter = true,
-        $returnValue = false
-    ) {
-        $message = self::return_message($message, 'normal', $filter);
-        if ($returnValue) {
-            return $message;
-        } else {
-            echo $message;
-        }
-    }
-
-    /**
-     * Displays an warning message. Use this if you want to draw attention to something
-     * This can also be used for instance with the hint in the exercises.
-     *
-     * @deprecated use Display::addFlash(Display::return_message($message, 'warning'));
-     */
-    public static function display_warning_message(
-        $message,
-        $filter = true,
-        $returnValue = false
-    ) {
-        $message = self::return_message($message, 'warning', $filter);
-        if ($returnValue) {
-            return $message;
-        } else {
-            echo $message;
-        }
-    }
-
-    /**
-     * Displays an confirmation message. Use this if something has been done successfully.
-     *
-     * @param bool    Filter (true) or not (false)
-     *
-     * @deprecated use Display::addFlash(Display::return_message($message, 'confirm'));
-     */
-    public static function display_confirmation_message(
-        $message,
-        $filter = true,
-        $returnValue = false
-    ) {
-        $message = self::return_message($message, 'confirm', $filter);
-        if ($returnValue) {
-            return $message;
-        } else {
-            echo $message;
-        }
-    }
-
-    /**
-     * Displays an error message. It is recommended to use this public function if an error occurs.
-     *
-     * @param string $message - include any additional html
-     *                        tags if you need them
-     * @param bool    Filter (true) or not (false)
-     *
-     * @deprecated use Display::addFlash(Display::return_message($message, 'error'));
-     */
-    public static function display_error_message(
-        $message,
-        $filter = true,
-        $returnValue = false
-    ) {
-        $message = self::return_message($message, 'error', $filter);
-        if ($returnValue) {
-            return $message;
-        } else {
-            echo $message;
-        }
-    }
-
-    /**
-     * @param string $message
-     * @param string $type
-     * @param bool   $filter
-     */
-    public static function return_message_and_translate(
-        $message,
-        $type = 'normal',
-        $filter = true
-    ) {
-        $message = get_lang($message);
-        echo self::return_message($message, $type, $filter);
-    }
-
-    /**
      * Returns a div html string with.
      *
      * @param string $message
@@ -2962,24 +2863,21 @@ HTML;
         "'.$frameName.'",
         [
             {type:"script", src:"'.api_get_jquery_web_path().'", deps: [
-                {type:"script", src:"'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.highlight.js"},
-                {type:"script", src:"'.api_get_path(WEB_CODE_PATH).'glossary/glossary.js.php?'.api_get_cidreq().'"},
-                {type:"script", src:"'.$webPublicPath.'assets/jquery-ui/jquery-ui.min.js"},
-                {type:"script", src: "'.$webPublicPath.'assets/mediaelement/build/mediaelement-and-player.min.js", 
-                    deps: [
-                    {type:"script", src: "'.$webPublicPath.'assets/mediaelement/plugins/vrview/vrview.js"},
-                    {type:"script", src: "'.$webPublicPath.'assets/mediaelement/plugins/markersrolls/markersrolls.js"},
-                    '.$videoPluginFiles.'
-                ]},                
-                '.$translateHtml.'
+            {type:"script", src:"'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.highlight.js"},
+            {type:"script", src:"'.api_get_path(WEB_CODE_PATH).'glossary/glossary.js.php?'.api_get_cidreq().'"},
+            {type:"script", src:"'.api_get_jquery_ui_js_web_path().'"},
+            {type:"script", src: "'.$webPublicPath.'build/libs/mediaelement/mediaelement-and-player.min.js", 
+                deps: [
+                {type:"script", src: "'.$webPublicPath.'build/libs/mediaelement/plugins/vrview/vrview.js"},
+                {type:"script", src: "'.$webPublicPath.'build/libs/mediaelement/plugins/markersrolls/markersrolls.js"},
+                '.$videoPluginFiles.'
+            ]},                
+            '.$translateHtml.'
             ]},
             '.$videoPluginCssFiles.'
-            {type:"script", src:"'.$webPublicPath.'assets/MathJax/MathJax.js?config=AM_HTMLorMML"},
+            {type:"script", src:"'.$webPublicPath.'build/libs/mathjax/MathJax.js?config=AM_HTMLorMML"},
             {type:"stylesheet", src:"'.$webPublicPath.'assets/jquery-ui/themes/smoothness/jquery-ui.min.css"},
-            {type:"stylesheet", src:"'.$webPublicPath.'assets/jquery-ui/themes/smoothness/theme.css"},                
-            {type:"stylesheet", src:"'.$webPublicPath.'css/dialog.css"},
-            {type:"stylesheet", src: "'.$webPublicPath.'assets/mediaelement/build/mediaelementplayer.min.css"},                
-            {type:"stylesheet", src: "'.$webPublicPath.'assets/mediaelement/plugins/vrview/vrview.css"},
+            {type:"stylesheet", src:"'.$webPublicPath.'assets/jquery-ui/themes/smoothness/theme.css"},       
         ]);';
 
         return $frameReady;

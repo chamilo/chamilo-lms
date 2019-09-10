@@ -165,6 +165,12 @@ $(function () {
                 <div class="dropdown-header text-center">
                     <strong>Settings</strong>
                 </div>
+
+                <a class="dropdown-item" href="{{ url('legacy_main', { 'name' : 'auth/profile.php' }) }}">
+                    <i class="fa fa-user"></i>
+                    {{ "My profile"|trans }}
+                </a>
+
                 <a class="dropdown-item" href="{{ url('legacy_main', { 'name' : 'survey/pending.php' }) }}">
                     <i class="fa fa-chart-pie"></i> {{ 'PendingSurveys'|trans }}
                 </a>
@@ -173,17 +179,14 @@ $(function () {
                     <i class="fa fa-graduation-cap" aria-hidden="true"></i>
                      {{ "MyCertificates"|trans }}
                 </a>
-                <a class="dropdown-item" href="{{ url('legacy_main', { 'name' : 'messages/inbox.php' }) }}">
-                    <i class="fa fa-envelope" aria-hidden="true"></i>
-                     {{ "Inbox"|trans }}
-                    <span class="badge badge-success">42</span>
-                </a>
-                <a class="dropdown-item" href="{{ url('legacy_main', { 'name' : 'auth/profile.php' }) }}">
-                    <i class="fa fa-user"></i>
-                     {{ "Edit profile"|trans }}
-                </a>
+{#                <a class="dropdown-item" href="{{ url('legacy_main', { 'name' : 'messages/inbox.php' }) }}">#}
+{#                    <i class="fa fa-envelope" aria-hidden="true"></i>#}
+{#                     {{ "Inbox"|trans }}#}
+{#                    <span class="badge badge-success">42</span>#}
+{#                </a>#}
+
                 <a class="dropdown-item" href="#">
-                    <i class="fa fa-wrench"></i> {{ "Configuration"|trans }}
+                    <i class="fa fa-wrench"></i> {{ "Administration"|trans }}
                 </a>
 
                 <a class="dropdown-item" id="logout_button" title="{{ "Logout"|trans }}"

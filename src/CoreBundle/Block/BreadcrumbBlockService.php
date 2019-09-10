@@ -11,7 +11,6 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 /**
  * Class BreadcrumbBlockService.
  *
- * @package Chamilo\CoreBundle\Block
  */
 class BreadcrumbBlockService extends BaseBreadcrumbMenuBlockService
 {
@@ -99,7 +98,7 @@ class BreadcrumbBlockService extends BaseBreadcrumbMenuBlockService
                     continue;
                 }
                 $url = $data['url'];
-                if ($url == '#') {
+                if ($url === '#') {
                     $menu->addChild($data['name']);
                 } else {
                     $menu->addChild($data['name'], ['uri' => $url]);

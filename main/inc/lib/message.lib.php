@@ -15,9 +15,9 @@ use ChamiloSession as Session;
  */
 class MessageManager
 {
-    const MESSAGE_TYPE_INBOX = 1;
-    const MESSAGE_TYPE_OUTBOX = 2;
-    const MESSAGE_TYPE_PROMOTED = 3;
+    public const MESSAGE_TYPE_INBOX = 1;
+    public const MESSAGE_TYPE_OUTBOX = 2;
+    public const MESSAGE_TYPE_PROMOTED = 3;
 
     /**
      * Get count new messages for the current user from the database.

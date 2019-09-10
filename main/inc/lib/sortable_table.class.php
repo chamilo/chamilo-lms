@@ -132,7 +132,7 @@ class SortableTable extends HTML_Table
             $table_id = $table_name.uniqid('table', true);
         }
         if (isset($parameters) && empty($parameters)) {
-            $parameters = ['class' => 'table data_table', 'id' => $table_id];
+            $parameters = ['class' => 'table table-bordered table-striped', 'id' => $table_id];
         }
 
         $this->table_id = $table_id;
@@ -717,7 +717,7 @@ class SortableTable extends HTML_Table
         foreach ($param as $key => &$value) {
             $result[] = '<input type="hidden" name="'.$key.'" value="'.$value.'"/>';
         }
-        $result[] = '<select class="custom-select" name="'.$this->param_prefix.'per_page" onchange="javascript: this.form.submit();">';
+        $result[] = '<select style="width: auto;" class="form-control" name="'.$this->param_prefix.'per_page" onchange="javascript: this.form.submit();">';
         $list = [10, 20, 50, 100, 500, 1000];
 
         $rowList = api_get_configuration_value('table_row_list');

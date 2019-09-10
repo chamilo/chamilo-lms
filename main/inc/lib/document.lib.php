@@ -10,6 +10,7 @@ use Chamilo\CourseBundle\Entity\CDocument;
 use Chamilo\CourseBundle\Entity\CGroupInfo;
 use Chamilo\UserBundle\Entity\User;
 use ChamiloSession as Session;
+use Sonata\MediaBundle\Extra\ApiMediaFile;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /**
@@ -3054,65 +3055,6 @@ class DocumentManager
     }
 
     /**
-     * Calculates the total size of all documents in a course.
-     *
-     * @author Bert vanderkimpen
-     *
-     * @param int $course_id
-     * @param int $group_id   (to calculate group document space)
-     * @param int $session_id
-     *
-     * @deprecated use CDocumentRepository::getTotalSpace
-     *
-     * @return int total size
-     */
-    public static function documents_total_space($course_id = null, $group_id = null, $session_id = null)
-    {
-        $TABLE_ITEMPROPERTY = Database::get_course_table(TABLE_ITEM_PROPERTY);
-        $TABLE_DOCUMENT = Database::get_course_table(TABLE_DOCUMENT);
-
-        $session_id = (int) $session_id;
-        $group_id = (int) $group_id;
-        $course_id = (int) $course_id;
-
-        if (!$course_id) {
-            $course_id = api_get_course_int_id();
-        }
-
-        $group_condition = '';
-        if ($group_id) {
-            $group_condition = " AND props.to_group_id='".$group_id."' ";
-        }
-
-        $session_condition = '';
-        if ($session_id) {
-            $session_condition = " AND props.session_id='".$session_id."' ";
-        }
-
-        $sql = "SELECT SUM(size)
-                FROM $TABLE_ITEMPROPERTY AS props
-                INNER JOIN $TABLE_DOCUMENT AS docs
-                ON (docs.id = props.ref AND props.c_id = docs.c_id)
-                WHERE
-                    props.c_id = $course_id AND
-                    docs.c_id = $course_id AND
-                    props.tool = '".TOOL_DOCUMENT."' AND
-                    props.visibility <> 2
-                    $group_condition
-                    $session_condition
-                ";
-        $result = Database::query($sql);
-
-        if ($result && Database::num_rows($result) != 0) {
-            $row = Database::fetch_row($result);
-
-            return (int) $row[0];
-        } else {
-            return 0;
-        }
-    }
-
-    /**
      * Display the document quota in a simple way.
      *
      *  Here we count 1 Kilobyte = 1024 Bytes, 1 Megabyte = 1048576 Bytes
@@ -3140,13 +3082,14 @@ class DocumentManager
      *
      * @return bool true if there is enough space, false otherwise
      *
-     * @see enough_space() uses  documents_total_space() function
      */
     public static function enough_space($file_size, $max_dir_space)
     {
         if ($max_dir_space) {
-            $already_filled_space = self::documents_total_space();
-            if (($file_size + $already_filled_space) > $max_dir_space) {
+            $repo = Container::$container->get('Chamilo\CourseBundle\Repository\CDocumentRepository');
+            $total = $repo->getTotalSpace(api_get_course_int_id());
+
+            if (($file_size + $total) > $max_dir_space) {
                 return false;
             }
         }
@@ -6194,64 +6137,6 @@ class DocumentManager
     }
 
     /**
-     * Calculates the total size of a directory by adding the sizes (that
-     * are stored in the database) of all files & folders in this directory.
-     *
-     * @param string $path
-     * @param bool   $can_see_invisible
-     *
-     * @deprecated use CDocumentRepository::getFolderSize
-     *
-     * @return int Total size
-     */
-    public static function getTotalFolderSize($path, $can_see_invisible = false)
-    {
-        $table_itemproperty = Database::get_course_table(TABLE_ITEM_PROPERTY);
-        $table_document = Database::get_course_table(TABLE_DOCUMENT);
-        $tool_document = TOOL_DOCUMENT;
-
-        $course_id = api_get_course_int_id();
-        $session_id = api_get_session_id();
-        $session_condition = api_get_session_condition(
-            $session_id,
-            true,
-            true,
-            'props.session_id'
-        );
-
-        if (empty($course_id)) {
-            return 0;
-        }
-
-        $path = Database::escape_string($path);
-        $visibility_rule = ' props.visibility '.($can_see_invisible ? '<> 2' : '= 1');
-
-        $sql = "SELECT SUM(table1.size) FROM (
-                SELECT props.ref, size
-                FROM $table_itemproperty AS props 
-                INNER JOIN $table_document AS docs
-                ON (docs.id = props.ref AND docs.c_id = props.c_id)
-                WHERE
-                    docs.c_id = $course_id AND                    
-                    docs.path LIKE '$path/%' AND
-                    props.c_id = $course_id AND
-                    props.tool = '$tool_document' AND
-                    $visibility_rule
-                    $session_condition
-                GROUP BY ref
-            ) as table1";
-
-        $result = Database::query($sql);
-        if ($result && Database::num_rows($result) != 0) {
-            $row = Database::fetch_row($result);
-
-            return $row[0] == null ? 0 : $row[0];
-        } else {
-            return 0;
-        }
-    }
-
-    /**
      * Adds a cloud link to the database.
      *
      * @author - Aquilino Blanco Cores <aqblanco@gmail.com>
@@ -6455,17 +6340,18 @@ class DocumentManager
     }
 
     /**
-     * @param CDocument  $document
-     * @param string     $path
-     * @param string     $realPath
-     * @param            $content
-     * @param int        $visibility
-     * @param CGroupInfo $group
+     * @param CDocument           $document
+     * @param string              $path
+     * @param string              $realPath
+     * @param string|UploadedFile $content
+     * @param int                 $visibility
+     * @param CGroupInfo          $group
      *
      * @return bool|CDocument
      */
     public static function addFileToDocument(CDocument $document, $path, $realPath, $content, $visibility, $group)
     {
+        $debug = true;
         $fileType = $document->getFiletype();
         $resourceNode = $document->getResourceNode();
 
@@ -6475,6 +6361,7 @@ class DocumentManager
 
         $em = Database::getManager();
         $title = $document->getTitle();
+        var_dump($title, $document->getId());
 
         // Only create a ResourceFile and Media if there's a file involved
         if ($fileType === 'file') {
@@ -6505,7 +6392,7 @@ class DocumentManager
             $media->setEnabled(true);
 
             if ($content instanceof UploadedFile) {
-                //error_log('UploadedFile');
+                error_log('UploadedFile');
                 $file = $content;
                 $media->setSize($file->getSize());
             } else {
@@ -6518,16 +6405,20 @@ class DocumentManager
                         $media->setHeight($size[1]);
                     }
                     $file = $realPath;
-                //error_log("file exists: $realPath");
+                    if ($debug) {
+                        error_log("file exists: $realPath");
+                    }
                 } else {
                     // We get the content and create a file
                     $handle = tmpfile();
                     fwrite($handle, $content);
-                    $file = new \Sonata\MediaBundle\Extra\ApiMediaFile($handle);
+                    $file = new ApiMediaFile($handle);
                     $file->setMimetype($media->getContentType());
-                    /*error_log('We get content and create a file from handle');
-                    error_log('Size: '.$file->getSize());
-                    error_log('Content type: '.$media->getContentType());*/
+                    if ($debug) {
+                        error_log('We get content and create a file from handle');
+                        error_log('Size: '.$file->getSize());
+                        error_log('Content type: '.$media->getContentType());
+                    }
                 }
             }
 
@@ -6576,7 +6467,6 @@ class DocumentManager
                     ->setRole(ResourceNodeVoter::ROLE_CURRENT_COURSE_TEACHER)
                 ;
                 $rights[] = $resourceRight;
-
                 break;
         }
 
@@ -6591,6 +6481,11 @@ class DocumentManager
         $em->flush();
 
         $documentId = $document->getIid();
+
+        if ($debug) {
+            error_log($documentId);
+        }
+
         if ($documentId) {
             $table = Database::get_course_table(TABLE_DOCUMENT);
             $sql = "UPDATE $table SET id = iid WHERE iid = $documentId";
@@ -6659,8 +6554,6 @@ class DocumentManager
         $session = api_get_session_entity($sessionId);
         $group = api_get_group_entity($groupId);
         $readonly = (int) $readonly;
-
-        $em = Database::getManager();
         $documentRepo = Container::$container->get('Chamilo\CourseBundle\Repository\CDocumentRepository');
 
         $parentNode = null;
@@ -6690,14 +6583,13 @@ class DocumentManager
             ->setReadonly($readonly)
             ->setSession($session)
         ;
-
+        $em = $documentRepo->getEntityManager();
         $em->persist($document);
         $em->flush();
 
         $resourceNode = $documentRepo->addResourceNode($document, $userEntity);
         $resourceNode->setParent($parentNode);
         $document->setResourceNode($resourceNode);
-
         $document = self::addFileToDocument($document, $path, $realPath, $content, $visibility, $group);
 
         if ($document) {

@@ -6871,8 +6871,9 @@ $YouHaveBeenSubscribedToCourseXTheStartDateXAndCommentX = "<br />Je bent ingesch
 Indien je nog geen toegang hebt tot onze ELO, zal je bij de eerste les de nodige info ontvangen van jouw lesgever.<br /> <br />
 Het eerstvolgende moment dat voor deze module werd ingevuld is: <br />
 %s <br /> %s";
-$WelcomeToPortalXInCourseSessionXCoursePartOfCareerX = "Welkom bij %s. Je bent ingeschreven voor de module %s 
-Deze module maakt deel uit van de opleiding  %s";
-$YourNextModule = "Jouw eerstvolgende lesmoment voor deze module";
+$WelcomeToPortalXInCourseSessionX = "Welkom bij %s: informatie over de module %s";
+$WelcomeToPortalXInCourseSessionXCoursePartOfCareerX = "Welkom bij %s. Je bent ingeschreven voor de module %s.
+Deze module maakt deel uit van de opleiding %s.";
+$YourNextModule = "Jouw eerstvolgende lesmoment voor deze module:";
 $FirstLesson = "Eerste lesmoment";
 ?>

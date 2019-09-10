@@ -4,7 +4,11 @@
 {% set buttons %}
     {% if is_granted('ROLE_ADMIN') and show_edit_page_link %}
     <div class="d-block text-right">
-        <a title="{{ "header.edit_page"|trans({}, 'SonataPageBundle') }}" href="{{ _p.web_public ~ 'internal_page/edit/' ~ slug }}" class="btn btn-primary btn-sm" >
+        <a
+                title="{{ "header.edit_page"|trans({}, 'SonataPageBundle') }}"
+                href="{{ _p.web_public ~ 'internal_page/edit/' ~ slug ~ '/?_locale=' ~ app.request.getLocale()  }}"
+                class="btn btn-primary btn-sm"
+        >
             <i class="fas fa-pencil-alt"></i> {{ "Edit this section"|trans }}
         </a>
     </div>

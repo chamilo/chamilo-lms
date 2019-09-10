@@ -331,7 +331,7 @@ if ($displayMode == "viewDefEdit") {
             }
         }
     } else {
-        Display :: display_normal_message(get_lang('ThisStudentIsSubscribeThroughASession'));
+        echo Display::return_message(get_lang('ThisStudentIsSubscribeThroughASession'));
     }
 } elseif ($displayMode == "viewContentList") {
     // default display

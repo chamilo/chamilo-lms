@@ -427,7 +427,6 @@ class UserGroup extends Model
     public function getUserGroupInCourse($options = [], $type = -1)
     {
         if ($this->getUseMultipleUrl()) {
-            $urlId = api_get_current_access_url_id();
             $sql = "SELECT u.* FROM {$this->usergroup_rel_course_table} usergroup
                     INNER JOIN {$this->table} u
                     ON (u.id = usergroup.usergroup_id)
@@ -473,7 +472,6 @@ class UserGroup extends Model
                 $sql .= ' LIMIT '.$limits[0].', '.$limits[1];
             }
         }
-
         $result = Database::query($sql);
         $array = Database::store_result($result, 'ASSOC');
 

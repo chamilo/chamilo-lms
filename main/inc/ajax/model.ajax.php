@@ -819,7 +819,7 @@ switch ($action) {
         exit;
 }
 
-//3. Calculating first, end, etc
+// 3. Calculating first, end, etc
 $total_pages = 0;
 if ($count > 0) {
     if (!empty($limit)) {
@@ -2194,7 +2194,7 @@ switch ($action) {
         $obj = new ExtraFieldOption($type);
         $columns = ['display_text', 'option_value', 'option_order'];
         $result = $obj->get_all([
-            'where' => ["field_id = ? " => $field_id],
+            'where' => ['field_id = ? ' => $field_id],
             'order' => "$sidx $sord",
             'LIMIT' => "$start , $limit",
         ]);
@@ -2219,12 +2219,12 @@ switch ($action) {
         if (!empty($result)) {
             $urlUserGroup = api_get_path(WEB_CODE_PATH).'admin/usergroup_users.php?'.api_get_cidreq();
             foreach ($result as $group) {
-                $count = count($obj->get_users_by_usergroup($group['id']));
-                $group['users'] = $count;
+                $countUsers = count($obj->get_users_by_usergroup($group['id']));
+                $group['users'] = $countUsers;
 
                 if ($obj->allowTeachers()) {
                     $group['users'] = Display::url(
-                        $count,
+                        $countUsers,
                         $urlUserGroup.'&id='.$group['id']
                     );
                 }

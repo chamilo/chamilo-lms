@@ -5870,6 +5870,7 @@ class learnpath
                         'ref' => $ref,
                         'item_type' => $array[$i]['item_type'],
                         'title' => $array[$i]['title'],
+                        'title_raw' => $array[$i]['title_raw'],
                         'path' => $path,
                         'description' => $array[$i]['description'],
                         'parent_item_id' => $array[$i]['parent_item_id'],
@@ -6021,10 +6022,22 @@ class learnpath
             [],
             ICON_SIZE_TINY
         );
+
+        $show = api_get_configuration_value('show_full_lp_item_title_in_edition');
+
+        $pluginCalendar = api_get_plugin_setting('learning_calendar', 'enabled') === 'true';
+        $plugin = null;
+        if ($pluginCalendar) {
+            $plugin = LearningCalendarPlugin::create();
+        }
+
         for ($i = 0; $i < $countItems; $i++) {
             $parent_id = $arrLP[$i]['parent_item_id'];
             $title = $arrLP[$i]['title'];
-            $title_cut = cut($arrLP[$i]['title'], self::MAX_LP_ITEM_TITLE_LENGTH);
+            $title_cut = $arrLP[$i]['title_raw'];
+            if ($show === false) {
+                $title_cut = cut($arrLP[$i]['title'], self::MAX_LP_ITEM_TITLE_LENGTH);
+            }
             // Link for the documents
             if ($arrLP[$i]['item_type'] === 'document' || $arrLP[$i]['item_type'] == TOOL_READOUT_TEXT) {
                 $url = $mainUrl.'&action=view_item&mode=preview_document&id='.$arrLP[$i]['id'].'&lp_id='.$this->lp_id;
@@ -6100,13 +6113,6 @@ class learnpath
             $previewIcon = '';
             $pluginCalendarIcon = '';
             $orderIcons = '';
-
-            $pluginCalendar = api_get_plugin_setting('learning_calendar', 'enabled') === 'true';
-            $plugin = null;
-            if ($pluginCalendar) {
-                $plugin = LearningCalendarPlugin::create();
-            }
-
             $pluginUrl = api_get_path(WEB_PLUGIN_PATH).'learning_calendar/start.php?';
 
             if ($is_allowed_to_edit) {
@@ -6367,7 +6373,7 @@ class learnpath
             } else {
                 $parent_arrays = [];
                 if ($arrLP[$i]['depth'] > 1) {
-                    //Getting list of parents
+                    // Getting list of parents
                     for ($j = 0; $j < $arrLP[$i]['depth']; $j++) {
                         foreach ($arrLP as $item) {
                             if ($item['id'] == $parent_id) {
@@ -8193,6 +8199,7 @@ class learnpath
                 'id' => $row['iid'],
                 'item_type' => $row['item_type'],
                 'title' => $this->cleanItemTitle($row['title']),
+                'title_raw' => $row['title'],
                 'path' => $row['path'],
                 'description' => $row['description'],
                 'parent_item_id' => $row['parent_item_id'],
@@ -10174,7 +10181,7 @@ class learnpath
                      ORDER BY title ASC";
 
         $sql_hot = "SELECT * FROM $tbl_doc
-                     WHERE 
+                    WHERE 
                         c_id = $course_id AND 
                         path LIKE '".$uploadPath."/%/%htm%'  
                         $condition_session
@@ -13604,6 +13611,7 @@ EOD;
                 'id' => $row['iid'],
                 'item_type' => $row['item_type'],
                 'title' => $this->cleanItemTitle($row['title']),
+                'title_raw' => $row['title'],
                 'path' => $row['path'],
                 'description' => Security::remove_XSS($row['description']),
                 'parent_item_id' => $row['parent_item_id'],

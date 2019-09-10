@@ -84,7 +84,7 @@ if (isset($_POST['save_audio'])) {
     if (count($lp_items_to_remove_audio) > 0) {
         $sql = "UPDATE $tbl_lp_item SET audio = '' 
                 WHERE iid IN (".$in.")";
-        $result = Database::query($sql);
+        Database::query($sql);
     }
 
     // Uploading the audio files.

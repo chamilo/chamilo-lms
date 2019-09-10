@@ -496,6 +496,9 @@ if (isset($_POST['title'])) {
         !empty($_POST['title'])
     ) {
         $post_title = Exercise::format_title_variable($_POST['title']);
+        if (api_get_configuration_value('save_titles_as_html')) {
+            $post_title = $_POST['title'];
+        }
     }
 }
 
@@ -603,7 +606,7 @@ switch ($action) {
                             }
                         }
 
-                        $new_item_id = $_SESSION['oLP']->add_item(
+                        $_SESSION['oLP']->add_item(
                             $parent,
                             $previous,
                             $type,
@@ -624,7 +627,7 @@ switch ($action) {
                             );
                         }
 
-                        $new_item_id = $_SESSION['oLP']->add_item(
+                        $_SESSION['oLP']->add_item(
                             $parent,
                             $previous,
                             TOOL_READOUT_TEXT,
@@ -636,7 +639,7 @@ switch ($action) {
                     } else {
                         // For all other item types than documents,
                         // load the item using the item type and path rather than its ID.
-                        $new_item_id = $_SESSION['oLP']->add_item(
+                        $_SESSION['oLP']->add_item(
                             $parent,
                             $previous,
                             $type,

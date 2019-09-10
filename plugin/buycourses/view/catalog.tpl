@@ -196,6 +196,7 @@
                             {% endfor %}
                         {% endif %}
                     </div>
+                    {{ pagination }}
                 </div>
             </div>
         </div>

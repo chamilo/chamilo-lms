@@ -565,22 +565,6 @@ class BuyCoursesPlugin extends Plugin
     public function getCourseList($first, $maxResults)
     {
         return $this->getCourses($first, $maxResults);
-
-        if (empty($courses)) {
-            return [];
-        }
-
-        $currency = $this->getSelectedCurrency();
-
-        $courseList = [];
-        foreach ($courses as $course) {
-            $courseList[] = $this->getCourseForConfiguration(
-                $course,
-                $currency
-            );
-        }
-
-        return $courseList;
     }
 
     /**
@@ -592,9 +576,13 @@ class BuyCoursesPlugin extends Plugin
      *
      * @return array
      */
-    public function getCatalogSessionList($name = null, $min = 0, $max = 0)
+    public function getCatalogSessionList($start, $end, $name = null, $min = 0, $max = 0, $typeResult = 'all')
     {
-        $sessions = $this->filterSessionList($name, $min, $max);
+        $sessions = $this->filterSessionList($start, $end, $name, $min, $max, $typeResult);
+
+        if ($typeResult === 'count') {
+            return $sessions;
+        }
 
         $sessionCatalog = [];
         // loop through all sessions
@@ -657,9 +645,13 @@ class BuyCoursesPlugin extends Plugin
      *
      * @return array
      */
-    public function getCatalogCourseList($name = null, $min = 0, $max = 0)
+    public function getCatalogCourseList($first, $pageSize, $name = null, $min = 0, $max = 0, $typeResult = 'all')
     {
-        $courses = $this->filterCourseList($name, $min, $max);
+        $courses = $this->filterCourseList($first, $pageSize, $name, $min, $max, $typeResult);
+
+        if ($typeResult === 'count') {
+            return $courses;
+        }
 
         if (empty($courses)) {
             return [];
@@ -2114,7 +2106,7 @@ class BuyCoursesPlugin extends Plugin
         $start = (int) $start;
         $end = (int) $end;
 
-        $conditions = ['LIMIT' => "$start, $end"];
+        $conditions = ['limit' => "$start, $end"];
         $innerJoins = "INNER JOIN $userTable u ON s.owner_id = u.id";
         $return = Database::select(
             's.id',
@@ -2365,7 +2357,7 @@ class BuyCoursesPlugin extends Plugin
      *
      * @return array
      */
-    public function getCatalogServiceList($name = null, $min = 0, $max = 0, $appliesTo = '')
+    public function getCatalogServiceList($start, $end, $name = null, $min = 0, $max = 0, $appliesTo = '', $typeResult = 'all')
     {
         $servicesTable = Database::get_main_table(self::TABLE_SERVICES);
         $userTable = Database::get_main_table(TABLE_MAIN_USER);
@@ -2390,12 +2382,20 @@ class BuyCoursesPlugin extends Plugin
             $whereConditions['AND s.applies_to = ?'] = $appliesTo;
         }
 
+        $start = (int) $start;
+        $end = (int) $end;
+
         $innerJoins = "INNER JOIN $userTable u ON s.owner_id = u.id";
         $return = Database::select(
             's.*',
             "$servicesTable s $innerJoins",
-            ['WHERE' => $whereConditions]
+            ['WHERE' => $whereConditions, 'limit' => "$start, $end"],
+            $typeResult
         );
+
+        if ($typeResult === 'count') {
+            return $return;
+        }
 
         $services = [];
         foreach ($return as $index => $service) {
@@ -2858,12 +2858,8 @@ class BuyCoursesPlugin extends Plugin
      *
      * @return array
      */
-    private function filterSessionList($name = null, $min = 0, $max = 0)
+    private function filterSessionList($start, $end, $name = null, $min = 0, $max = 0, $typeResult = 'all')
     {
-        if (empty($name) && empty($min) && empty($max)) {
-            return CoursesAndSessionsCatalog::browseSessions();
-        }
-
         $itemTable = Database::get_main_table(self::TABLE_ITEM);
         $sessionTable = Database::get_main_table(TABLE_MAIN_SESSION);
 
@@ -2887,11 +2883,19 @@ class BuyCoursesPlugin extends Plugin
             $whereConditions['AND i.price <= ?'] = $max;
         }
 
+        $start = (int) $start;
+        $end = (int) $end;
+
         $sessionIds = Database::select(
             's.id',
             "$sessionTable s INNER JOIN $innerJoin",
-            ['where' => $whereConditions]
+            ['where' => $whereConditions, 'limit' => "$start, $end"],
+            $typeResult
         );
+
+        if ($typeResult === 'count') {
+            return $sessionIds;
+        }
 
         if (!$sessionIds) {
             return [];
@@ -2918,12 +2922,8 @@ class BuyCoursesPlugin extends Plugin
      *
      * @return array
      */
-    private function filterCourseList($name = null, $min = 0, $max = 0)
+    private function filterCourseList($start, $end, $name = '', $min = 0, $max = 0, $typeResult = 'all')
     {
-        if (empty($name) && empty($min) && empty($max)) {
-            return $this->getCourses();
-        }
-
         $itemTable = Database::get_main_table(self::TABLE_ITEM);
         $courseTable = Database::get_main_table(TABLE_MAIN_COURSE);
         $urlTable = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
@@ -2950,6 +2950,8 @@ class BuyCoursesPlugin extends Plugin
         }
 
         $whereConditions['AND url.access_url_id = ?'] = $urlId;
+        $start = (int) $start;
+        $end = (int) $end;
 
         $courseIds = Database::select(
             'c.id',
@@ -2959,8 +2961,13 @@ class BuyCoursesPlugin extends Plugin
             INNER JOIN $urlTable url 
             ON c.id = url.c_id
             ",
-            ['where' => $whereConditions]
+            ['where' => $whereConditions, 'limit' => "$start, $end"],
+            $typeResult
         );
+
+        if ($typeResult === 'count') {
+            return $courseIds;
+        }
 
         if (!$courseIds) {
             return [];

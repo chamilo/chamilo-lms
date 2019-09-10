@@ -2460,7 +2460,7 @@ class Display
     public static function getPagination($url, $currentPage, $pagesCount, $totalItems)
     {
         $pagination = '';
-        if ($totalItems > 1) {
+        if ($totalItems > 1 && $pagesCount > 1) {
             $pagination .= '<ul class="pagination">';
             for ($i = 0; $i < $pagesCount; $i++) {
                 $newPage = $i + 1;

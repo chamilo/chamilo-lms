@@ -55,7 +55,14 @@ $form->addElement(
 $form->addHtml('<hr>');
 $form->addButtonFilter(get_lang('Search'));
 
-$sessionList = $plugin->getCatalogSessionList($nameFilter, $minFilter, $maxFilter);
+$pageSize = BuyCoursesPlugin::PAGINATION_PAGE_SIZE;
+$currentPage = isset($_GET['page']) ? (int) $_GET['page'] : 1;
+$first = $pageSize * ($currentPage - 1);
+$sessionList = $plugin->getCatalogSessionList($first, $pageSize,$nameFilter, $minFilter, $maxFilter);
+$totalItems = $plugin->getCatalogSessionList($first, $pageSize, $nameFilter, $minFilter, $maxFilter, 'count');
+$pagesCount = ceil($totalItems / $pageSize);
+$url = api_get_self().'?';
+$pagination = Display::getPagination($url, $currentPage, $pagesCount, $totalItems);
 
 // View
 if (api_is_platform_admin()) {
@@ -77,6 +84,7 @@ $template->assign('sessions_are_included', $includeSessions);
 $template->assign('services_are_included', $includeServices);
 $template->assign('showing_sessions', true);
 $template->assign('sessions', $sessionList);
+$template->assign('pagination', $pagination);
 
 $content = $template->fetch('buycourses/view/catalog.tpl');
 

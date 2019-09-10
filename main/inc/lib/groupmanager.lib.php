@@ -2166,8 +2166,20 @@ class GroupManager
             return true;
         }
 
-        if (api_is_allowed_to_edit(false, true)) {
+        if (api_is_allowed_to_edit(false, true, true)) {
             return true;
+        }
+
+        if (!empty($sessionId)) {
+            if (api_is_coach($sessionId, api_get_course_int_id())) {
+                return true;
+            }
+
+            if (api_is_drh()) {
+                if (SessionManager::isUserSubscribedAsHRM($sessionId, $userId)) {
+                    return true;
+                }
+            }
         }
 
         $groupId = $groupInfo['iid'];

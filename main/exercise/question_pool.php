@@ -312,7 +312,6 @@ echo '</div>';
 
 if ($displayMessage != '') {
     echo Display::return_message($displayMessage, 'confirm');
-    $displayMessage = '';
 }
 
 // Form
@@ -395,8 +394,6 @@ if (empty($selected_course) || $selected_course == '-1') {
 if ($course_id_changed) {
     reset_menu_exo_lvl_type();
 }
-
-$course_id = $course_info['real_id'];
 
 // Get category list for the course $selected_course
 $categoryList = TestCategory::getCategoriesIdAndName($selected_course);
@@ -532,7 +529,8 @@ function getQuestions(
     $exerciseLevel,
     $answerType,
     $questionId,
-    $description
+    $description,
+    $fromExercise = 0
 ) {
     $start = (int) $start;
     $length = (int) $length;
@@ -543,12 +541,23 @@ function getQuestions(
     $exerciseLevel = (int) $exerciseLevel;
     $answerType = (int) $answerType;
     $questionId = (int) $questionId;
+    $fromExercise = (int) $fromExercise;
     $description = Database::escape_string($description);
 
     $TBL_EXERCISE_QUESTION = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
     $TBL_EXERCISES = Database::get_course_table(TABLE_QUIZ_TEST);
     $TBL_QUESTIONS = Database::get_course_table(TABLE_QUIZ_QUESTION);
     $TBL_COURSE_REL_CATEGORY = Database::get_course_table(TABLE_QUIZ_QUESTION_REL_CATEGORY);
+
+    $currentExerciseCondition = '';
+    if (!empty($fromExercise)) {
+        $currentCourseId = api_get_course_int_id();
+        $currentExerciseCondition = " 
+            AND qu.id NOT IN (
+                SELECT question_id FROM $TBL_EXERCISE_QUESTION 
+                WHERE exercice_id = $fromExercise AND c_id = $currentCourseId
+            )";
+    }
 
     // if we have selected an exercise in the list-box 'Filter'
     if ($exerciseId > 0) {
@@ -587,15 +596,16 @@ function getQuestions(
         }
         $sql = "SELECT $select
                 FROM
-                    $TBL_EXERCISE_QUESTION qt,
-                    $TBL_QUESTIONS qu
+                    $TBL_EXERCISE_QUESTION qt
+                    INNER JOIN $TBL_QUESTIONS qu
+                    ON qt.question_id = qu.id
                     $from
                 WHERE
-                    qt.question_id = qu.id AND 
                     qt.exercice_id = $exerciseId AND 
                     qt.c_id = $selected_course  AND 
                     qu.c_id = $selected_course
                     $where
+                    $currentExerciseCondition                    
                 ORDER BY question_order";
     } elseif ($exerciseId == -1) {
         // If we have selected the option 'Orphan questions' in the list-box 'Filter'
@@ -727,6 +737,7 @@ function getQuestions(
                     $sessionCondition AND
                     q.id = qt.exercice_id
                     $filter
+                    $currentExerciseCondition
                 ORDER BY session_id ASC";
     }
 
@@ -760,7 +771,8 @@ $nbrQuestions = getQuestions(
     $exerciseLevel,
     $answerType,
     $questionId,
-    $description
+    $description,
+    $fromExercise
 );
 
 $length = api_get_configuration_value('question_pagination_length');
@@ -804,7 +816,8 @@ $mainQuestionList = getQuestions(
     $exerciseLevel,
     $answerType,
     $questionId,
-    $description
+    $description,
+    $fromExercise
 );
 
 // build the line of the array to display questions

@@ -9008,7 +9008,29 @@ function api_protect_course_group($tool, $showHeader = true)
 {
     $groupId = api_get_group_id();
     if (!empty($groupId)) {
+
+        if (api_is_platform_admin()) {
+            return true;
+        }
+
+        if (api_is_allowed_to_edit(false, true, true)) {
+            return true;
+        }
+
         $userId = api_get_user_id();
+        $sessionId = api_get_session_id();
+        if (!empty($sessionId)) {
+            if (api_is_coach($sessionId, api_get_course_int_id())) {
+                return true;
+            }
+
+            if (api_is_drh()) {
+                if (SessionManager::isUserSubscribedAsHRM($sessionId, $userId)) {
+                    return true;
+                }
+            }
+        }
+
         $groupInfo = GroupManager::get_group_properties($groupId);
 
         // Group doesn't exists

@@ -1966,8 +1966,8 @@ class GroupManager
             return false;
         }
 
-        $user_id = intval($user_id);
-        $group_id = intval($groupInfo['id']);
+        $user_id = (int) $user_id;
+        $group_id = (int) $groupInfo['id'];
 
         $table = Database::get_course_table(TABLE_GROUP_TUTOR);
 
@@ -1979,9 +1979,9 @@ class GroupManager
         $result = Database::query($sql);
         if (Database::num_rows($result) > 0) {
             return true;
-        } else {
-            return false;
         }
+
+        return false;
     }
 
     /**
@@ -2002,12 +2002,16 @@ class GroupManager
     public static function is_user_in_group($user_id, $groupInfo)
     {
         $member = self::is_subscribed($user_id, $groupInfo);
-        $tutor = self::is_tutor_of_group($user_id, $groupInfo);
-        if ($member || $tutor) {
+        if ($member) {
             return true;
-        } else {
-            return false;
         }
+
+        $tutor = self::is_tutor_of_group($user_id, $groupInfo);
+        if ($tutor) {
+            return true;
+        }
+
+        return false;
     }
 
     /**
@@ -2073,7 +2077,7 @@ class GroupManager
         }
 
         // Course admin also have access to everything
-        if (api_is_allowed_to_edit()) {
+        if (api_is_allowed_to_edit(false, true, true)) {
             return true;
         }
 
@@ -2116,10 +2120,6 @@ class GroupManager
 
         if (!isset($groupInfo[$key])) {
             return false;
-        }
-
-        if (api_is_allowed_to_edit(false, true)) {
-            return true;
         }
 
         $status = $groupInfo[$key];
@@ -2183,9 +2183,7 @@ class GroupManager
         }
 
         $groupId = $groupInfo['iid'];
-        $tutors = self::get_subscribed_tutors($groupInfo, true);
-
-        if (in_array($userId, $tutors)) {
+        if (self::is_tutor_of_group($userId, $groupInfo)) {
             return true;
         }
 

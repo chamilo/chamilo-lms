@@ -512,7 +512,6 @@ switch ($action) {
         }
         $html .= "<li><b>{$plugin->get_lang('Total')}:</b> {$serviceSale['price']} {$serviceSale['currency']}</li> ";
 
-
         //$html .= "<li><b>{$plugin->get_lang('SalePrice')}:</b> {$serviceSale['price_without_tax']} {$serviceSale['currency']}</li> ";
         $orderDate = api_format_date($serviceSale['buy_date'], DATE_FORMAT_LONG);
         $html .= "<li><b>{$plugin->get_lang('OrderDate')}:</b> $orderDate</li> ";

@@ -5,7 +5,6 @@
  *
  * @package chamilo.plugin.buycourses
  */
-
 use Doctrine\ORM\Tools\Pagination\Paginator;
 
 $cidReset = true;

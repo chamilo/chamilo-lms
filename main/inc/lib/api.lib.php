@@ -9008,7 +9008,6 @@ function api_protect_course_group($tool, $showHeader = true)
 {
     $groupId = api_get_group_id();
     if (!empty($groupId)) {
-
         if (api_is_platform_admin()) {
             return true;
         }

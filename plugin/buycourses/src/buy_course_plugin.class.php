@@ -2676,7 +2676,6 @@ class BuyCoursesPlugin extends Plugin
 
     /**
      * Filter the registered courses for show in plugin catalog.
-     *
      */
     private function getCourses($first, $maxResults)
     {

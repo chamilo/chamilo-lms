@@ -6900,7 +6900,7 @@ SQL;
         $sessionRelUserTable = Database::get_main_table(TABLE_MAIN_SESSION_USER);
 
         $sessionId = (int) $sessionId;
-        $userId =   (int) $userId;
+        $userId = (int) $userId;
 
         // COUNT(1) actually returns the number of rows from the table (as if
         // counting the results from the first column)

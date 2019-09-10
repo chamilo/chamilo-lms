@@ -31,7 +31,7 @@ if ($commissionsEnable == 'true') {
 
 $includeSession = $plugin->get('include_sessions') === 'true';
 $editingCourse = $type === BuyCoursesPlugin::PRODUCT_TYPE_COURSE;
-$editingSession =  $type === BuyCoursesPlugin::PRODUCT_TYPE_SESSION;
+$editingSession = $type === BuyCoursesPlugin::PRODUCT_TYPE_SESSION;
 
 $entityManager = Database::getManager();
 $userRepo = UserManager::getRepository();

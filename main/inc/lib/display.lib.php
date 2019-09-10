@@ -2476,7 +2476,6 @@ class Display
         return $pagination;
     }
 
-
     /**
      * Adds a message in the queue.
      *

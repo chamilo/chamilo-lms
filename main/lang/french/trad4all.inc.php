@@ -8361,4 +8361,5 @@ $RealisationCertificate = "Certificat de réalisation";
 $SurveysReport = "Rapport d'enquêtes";
 $EnterYourNewPassword = "Saisissez votre nouveau mot de passe ici.";
 $RepeatYourNewPassword = "Saisissez votre nouveau mot de passe une fois de plus ici, pour éviter les erreurs.";
+$ExtractionFromX = "Extraction du: %s";
 ?>

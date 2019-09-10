@@ -240,7 +240,8 @@ if ($form->validate()) {
     $table->setRowAttributes($row, ['style' => 'font-weight:bold']);
 
     $table->setCellContents($row, $column++, api_format_time($totalDuration, 'js'));
-    $totalTable = Display::page_subheader3(get_lang('Total')).$table->toHtml();
+    $totalTable = Display::page_subheader3(sprintf(get_lang('ExtractionFromX'), api_get_local_time()));
+    $totalTable .= $table->toHtml();
 
     $courseSessionTable = '';
     $courseSessionTableData = [];

@@ -8429,4 +8429,5 @@ $RealisationCertificate = "Certificate of achievement";
 $SurveysReport = "Surveys report";
 $EnterYourNewPassword = "Enter your new password here.";
 $RepeatYourNewPassword = "Type your new password once again, to reduce the likeliness of typing errors.";
+$ExtractionFromX = "Extraction from %s";
 ?>

@@ -58,7 +58,7 @@ $form->addButtonFilter(get_lang('Search'));
 $pageSize = BuyCoursesPlugin::PAGINATION_PAGE_SIZE;
 $currentPage = isset($_GET['page']) ? (int) $_GET['page'] : 1;
 $first = $pageSize * ($currentPage - 1);
-$sessionList = $plugin->getCatalogSessionList($first, $pageSize,$nameFilter, $minFilter, $maxFilter);
+$sessionList = $plugin->getCatalogSessionList($first, $pageSize, $nameFilter, $minFilter, $maxFilter);
 $totalItems = $plugin->getCatalogSessionList($first, $pageSize, $nameFilter, $minFilter, $maxFilter, 'count');
 $pagesCount = ceil($totalItems / $pageSize);
 $url = api_get_self().'?';

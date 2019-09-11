@@ -21,12 +21,12 @@ $htmlHeadXtra[] = api_get_jqgrid_js();
 
 // Extra entries in breadcrumb
 $interbreadcrumb[] = [
-    "url" => "user.php?".api_get_cidreq(),
-    "name" => get_lang('ToolUser'),
+    'url' => 'user.php?'.api_get_cidreq(),
+    'name' => get_lang('ToolUser'),
 ];
 
 $type = isset($_GET['type']) ? Security::remove_XSS($_GET['type']) : 'registered';
-$groupFilter = isset($_GET['group_filter']) ? intval($_GET['group_filter']) : 0;
+$groupFilter = isset($_GET['group_filter']) ? (int) $_GET['group_filter'] : 0;
 
 $htmlHeadXtra[] = '
 <script>
@@ -70,10 +70,8 @@ if (api_is_allowed_to_edit()) {
         $form->setDefaults(['group_filter' => $groupFilter]);
         $actionsRight = $form->returnForm();
     }
-    $actions = Display::toolbarAction('actions-class', [$actionsLeft, $actionsRight]);
-}
 
-if (api_is_allowed_to_edit()) {
+    $actions = Display::toolbarAction('actions-class', [$actionsLeft, $actionsRight]);
     $action = isset($_GET['action']) ? $_GET['action'] : null;
     switch ($action) {
         case 'add_class_to_course':

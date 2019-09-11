@@ -1700,7 +1700,6 @@ if (!empty($error)) {
                     $myRemindList
                 );
                 break;
-            case ONE_CATEGORY_PER_PAGE:
             case ALL_ON_ONE_PAGE:
                 if (api_is_allowed_to_session_edit()) {
                     $button = [

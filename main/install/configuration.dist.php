@@ -1312,6 +1312,9 @@ requires extension "php-soap"  sudo apt-get install php-soap
 // Show full lp item title
 // $_configuration['show_full_lp_item_title_in_edition'] = false;
 
+// Hide course catalog welcome message
+//$_configuration['hide_course_catalog_welcome'] = true;
+
 // KEEP THIS AT THE END
 // -------- Custom DB changes
 // Add user activation by confirmation email

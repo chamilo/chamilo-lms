@@ -191,10 +191,9 @@ class UserGroup extends Model
      *
      * @return int
      */
-    public function get_count($type = -1)
+    public function get_count()
     {
         $authorCondition = '';
-        $type = (int) $type;
 
         if ($this->allowTeachers()) {
             if (!api_is_platform_admin()) {
@@ -218,17 +217,10 @@ class UserGroup extends Model
 
                 return $row['count'];
             }
-
-            return 0;
         } else {
-            $typeCondition = '';
-            if ($type != -1) {
-                $typeCondition = " AND group_type = $type ";
-            }
             $sql = "SELECT count(a.id) as count
                     FROM {$this->table} a
-                    WHERE 1 =1 
-                    $typeCondition
+                    WHERE 1 = 1
                     $authorCondition
             ";
             $result = Database::query($sql);
@@ -238,56 +230,8 @@ class UserGroup extends Model
                 return $row['count'];
             }
         }
-    }
 
-    /**
-     * @param int $course_id
-     * @param int $type
-     *
-     * @return mixed
-     */
-    public function getUserGroupByCourseWithDataCount($course_id, $type = -1)
-    {
-        if ($this->getUseMultipleUrl()) {
-            $course_id = (int) $course_id;
-            $urlId = api_get_current_access_url_id();
-            $sql = "SELECT count(c.usergroup_id) as count
-                    FROM {$this->usergroup_rel_course_table} c
-                    INNER JOIN {$this->access_url_rel_usergroup} a
-                    ON (c.usergroup_id = a.usergroup_id)
-                    WHERE access_url_id = $urlId AND course_id = $course_id
-            ";
-            $result = Database::query($sql);
-            if (Database::num_rows($result)) {
-                $row = Database::fetch_array($result);
-
-                return $row['count'];
-            }
-
-            return 0;
-        } else {
-            $typeCondition = '';
-            if ($type != -1) {
-                $type = (int) $type;
-                $typeCondition = " AND group_type = $type ";
-            }
-            $sql = "SELECT count(c.usergroup_id) as count
-                    FROM {$this->usergroup_rel_course_table} c
-                    INNER JOIN {$this->table} a
-                    ON (c.usergroup_id = a.id)
-                    WHERE
-                        course_id = $course_id
-                        $typeCondition
-            ";
-            $result = Database::query($sql);
-            if (Database::num_rows($result)) {
-                $row = Database::fetch_array($result);
-
-                return $row['count'];
-            }
-
-            return 0;
-        }
+        return 0;
     }
 
     /**
@@ -424,10 +368,16 @@ class UserGroup extends Model
      *
      * @return array
      */
-    public function getUserGroupInCourse($options = [], $type = -1)
+    public function getUserGroupInCourse($options = [], $type = -1, $getCount = false)
     {
+        $select = 'DISTINCT u.*';
+        if ($getCount) {
+            $select = 'count(u.id) as count';
+        }
+
         if ($this->getUseMultipleUrl()) {
-            $sql = "SELECT u.* FROM {$this->usergroup_rel_course_table} usergroup
+            $sql = "SELECT $select
+                    FROM {$this->usergroup_rel_course_table} usergroup
                     INNER JOIN {$this->table} u
                     ON (u.id = usergroup.usergroup_id)
                     INNER JOIN {$this->table_course} c
@@ -436,43 +386,37 @@ class UserGroup extends Model
                     ON (a.usergroup_id = u.id)
                    ";
         } else {
-            $sql = "SELECT u.* FROM {$this->usergroup_rel_course_table} usergroup
-                    INNER JOIN  {$this->table} u
+            $sql = "SELECT $select 
+                    FROM {$this->usergroup_rel_course_table} usergroup
+                    INNER JOIN {$this->table} u
                     ON (u.id = usergroup.usergroup_id)
                     INNER JOIN {$this->table_course} c
                     ON (usergroup.course_id = c.id)
                    ";
         }
 
-        $conditions = Database::parse_conditions($options);
-
-        $typeCondition = '';
         if ($type != -1) {
             $type = (int) $type;
-            $typeCondition = " AND group_type = $type ";
+            $options['where']['AND group_type = ? '] = $type;
         }
-
-        if (empty($conditions)) {
-            $conditions .= "WHERE 1 = 1 $typeCondition ";
-        } else {
-            $conditions .= " $typeCondition ";
-        }
-
-        $sql .= $conditions;
-
         if ($this->getUseMultipleUrl()) {
             $urlId = api_get_current_access_url_id();
-            $sql .= " AND access_url_id = $urlId ";
+            $options['where']['AND access_url_id = ? '] = $urlId;
         }
 
-        if (isset($options['LIMIT'])) {
-            $limits = explode(',', $options['LIMIT']);
-            $limits = array_map('intval', $limits);
-            if (isset($limits[0]) && isset($limits[1])) {
-                $sql .= ' LIMIT '.$limits[0].', '.$limits[1];
+        $conditions = Database::parse_conditions($options);
+        $sql .= $conditions;
+
+        $result = Database::query($sql);
+
+        if ($getCount) {
+            if (Database::num_rows($result)) {
+                $row = Database::fetch_array($result);
+
+                return $row['count'];
             }
         }
-        $result = Database::query($sql);
+
         $array = Database::store_result($result, 'ASSOC');
 
         return $array;
@@ -484,7 +428,7 @@ class UserGroup extends Model
      *
      * @return array|bool
      */
-    public function getUserGroupNotInCourse($options = [], $type = -1)
+    public function getUserGroupNotInCourse($options = [], $type = -1, $getCount = false)
     {
         $course_id = null;
         if (isset($options['course_id'])) {
@@ -496,14 +440,13 @@ class UserGroup extends Model
             return false;
         }
 
-        $typeCondition = '';
-        if ($type != -1) {
-            $type = (int) $type;
-            $typeCondition = " AND group_type = $type ";
+        $select = 'DISTINCT u.*';
+        if ($getCount) {
+            $select = 'count(u.id) as count';
         }
 
         if ($this->getUseMultipleUrl()) {
-            $sql = "SELECT DISTINCT u.*
+            $sql = "SELECT $select
                     FROM {$this->table} u
                     INNER JOIN {$this->access_url_rel_usergroup} a
                     ON (a.usergroup_id = u.id)
@@ -511,33 +454,38 @@ class UserGroup extends Model
                     ON (u.id = urc.usergroup_id AND course_id = $course_id)
             ";
         } else {
-            $sql = "SELECT DISTINCT u.*
+            $sql = "SELECT $select
                     FROM {$this->table} u
                     LEFT OUTER JOIN {$this->usergroup_rel_course_table} urc
                     ON (u.id = urc.usergroup_id AND course_id = $course_id)
             ";
         }
-        $conditions = Database::parse_conditions($options);
 
-        if (empty($conditions)) {
-            $conditions .= "WHERE 1 = 1 $typeCondition ";
-        } else {
-            $conditions .= " $typeCondition ";
+        if ($type != -1) {
+            $type = (int) $type;
+            $options['where']['AND group_type = ? '] = $type;
         }
+        if ($this->getUseMultipleUrl()) {
+            $urlId = api_get_current_access_url_id();
+            $options['where']['AND access_url_id = ? '] = $urlId;
+        }
+
+        /*if ($this->allowTeachers()) {
+            if (!api_is_platform_admin()) {
+                $userId = api_get_user_id();
+                $options['where']['AND author_id = ? '] = $userId;
+            }
+        }*/
+
+        $conditions = Database::parse_conditions($options);
 
         $sql .= $conditions;
 
-        if ($this->getUseMultipleUrl()) {
-            $urlId = api_get_current_access_url_id();
-            $sql .= " AND access_url_id = $urlId";
-        }
+        if ($getCount) {
+            $result = Database::query($sql);
+            $array = Database::fetch_array($result, 'ASSOC');
 
-        if (isset($options['LIMIT'])) {
-            $limits = explode(',', $options['LIMIT']);
-            $limits = array_map('intval', $limits);
-            if (isset($limits[0]) && isset($limits[1])) {
-                $sql .= ' LIMIT '.$limits[0].', '.$limits[1];
-            }
+            return $array['count'];
         }
 
         $result = Database::query($sql);
@@ -2929,7 +2877,7 @@ class UserGroup extends Model
         api_block_anonymous_users();
 
         if (!api_is_platform_admin()) {
-            if ($this->allowTeachers() && api_is_teacher()) {
+            if (api_is_teacher()) {
                 if (!empty($userGroupInfo)) {
                     if ($userGroupInfo['author_id'] != api_get_user_id()) {
                         api_not_allowed(true);

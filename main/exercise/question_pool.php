@@ -738,7 +738,9 @@ function getQuestions(
                     q.id = qt.exercice_id
                     $filter
                     $currentExerciseCondition
-                ORDER BY session_id ASC";
+                GROUP BY qu.iid
+                ORDER BY session_id ASC
+                ";
     }
 
     if ($getCount) {
@@ -880,7 +882,7 @@ if (is_array($mainQuestionList)) {
             continue;
         }
         $sessionId = isset($question['session_id']) ? $question['session_id'] : null;
-        $exerciseName = isset($question['exercise_name']) ? '<br />('.$question['exercise_id'].') ' : null;
+        //$exerciseName = isset($question['exercise_name']) ? '<br />('.$question['exercise_id'].') ' : null;
 
         if (!$objExercise->hasQuestion($question['id'])) {
             $row[] = Display::input(
@@ -901,7 +903,7 @@ if (is_array($mainQuestionList)) {
             $question['question'],
             $sessionId,
             $question['exerciseId']
-        ).$exerciseName;
+        );
 
         $row[] = $question_type;
         $row[] = TestCategory::getCategoryNameForQuestion($question['id'], $selected_course);

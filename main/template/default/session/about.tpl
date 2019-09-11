@@ -85,7 +85,12 @@
                                         {{ 'SalePrice'|get_lang }}
                                     </div>
                                     <div class="price-text">
-                                        {{ is_premium.iso_code }} {{ is_premium.total_price }}
+                                        {% if is_premium.iso_code == 'EUR' %}
+                                            €
+                                        {% else %}
+                                            {{ is_premium.iso_code }}
+                                        {% endif %}
+                                        {{ is_premium.total_price }}
                                     </div>
                                     <div class="buy-box">
                                         <a href="{{ _p.web }}plugin/buycourses/src/process.php?i={{ is_premium.product_id }}&t={{ is_premium.product_type }}"
@@ -248,7 +253,6 @@
                                         </div>
                                     {% endfor %}
                                 {% endif %}
-
                                 {% if course_data.custom %}
                                     {% for custom in course_data.custom %}
                                         <div class="topics">

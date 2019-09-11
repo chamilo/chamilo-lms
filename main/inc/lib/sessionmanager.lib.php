@@ -4440,8 +4440,13 @@ class SessionManager
         $create_new_courses = false,
         $set_exercises_lp_invisible = false
     ) {
-        $id = intval($id);
+        $id = (int) $id;
         $s = self::fetch($id);
+
+        if (empty($s)) {
+            return false;
+        }
+
         // Check all dates before copying
         // Get timestamp for now in UTC - see http://php.net/manual/es/function.time.php#117251
         $now = time() - date('Z');
@@ -4466,6 +4471,17 @@ class SessionManager
         if (api_strtotime($s['coach_access_end_date']) < $now) {
             $s['coach_access_end_date'] = $inOneMonth;
         }
+
+        $extraFieldValue = new ExtraFieldValue('session');
+        $extraFieldsValues = $extraFieldValue->getAllValuesByItem($id);
+        $extraFieldsValuesToCopy = [];
+        if (!empty($extraFieldsValues)) {
+            foreach ($extraFieldsValues as $extraFieldValue) {
+                //$extraFieldsValuesToCopy['extra_'.$extraFieldValue['variable']] = $extraFieldValue['value'];
+                $extraFieldsValuesToCopy['extra_'.$extraFieldValue['variable']]['extra_'.$extraFieldValue['variable']] = $extraFieldValue['value'];
+            }
+        }
+
         // Now try to create the session
         $sid = self::create_session(
             $s['name'].' '.get_lang('CopyLabelSuffix'),
@@ -4478,7 +4494,11 @@ class SessionManager
             (int) $s['id_coach'],
             $s['session_category_id'],
             (int) $s['visibility'],
-            true
+            true,
+            $s['duration'],
+            $s['description'],
+            $s['show_description'],
+            $extraFieldsValuesToCopy
         );
 
         if (!is_numeric($sid) || empty($sid)) {
@@ -4557,24 +4577,38 @@ class SessionManager
                 $short_courses = null;
             }
         }
+
         if ($copy_users) {
             // Register users from the original session to the new session
             $users = self::get_users_by_session($id);
-            $short_users = [];
-            if (is_array($users) && count($users) > 0) {
-                foreach ($users as $user) {
-                    $short_users[] = $user['user_id'];
+            if (!empty($users)) {
+                $userListByStatus = [];
+                foreach ($users as $userData) {
+                    $userData['relation_type'] = (int) $userData['relation_type'];
+                    $userListByStatus[$userData['relation_type']][] = $userData;
+                }
+
+                foreach ($userListByStatus as $status => $userList) {
+                    $userList = array_column($userList, 'user_id');
+                    switch ($status) {
+                        case 0:
+                            self::subscribeUsersToSession(
+                                $sid,
+                                $userList,
+                                SESSION_VISIBLE_READ_ONLY,
+                                false,
+                                true
+                            );
+                            break;
+                        case 1:
+                            foreach ($userList as $drhId) {
+                                $drhId = api_get_user_info($drhId);
+                                self::subscribeSessionsToDrh($drhId, [$sid], false);
+                            }
+                            break;
+                    }
                 }
             }
-            $users = null;
-            //Subscribing in read only mode
-            self::subscribeUsersToSession(
-                $sid,
-                $short_users,
-                SESSION_VISIBLE_READ_ONLY,
-                true
-            );
-            $short_users = null;
         }
 
         return $sid;
@@ -6867,8 +6901,8 @@ SQL;
     public static function isUserSubscribedAsStudent($sessionId, $userId)
     {
         $sessionRelUserTable = Database::get_main_table(TABLE_MAIN_SESSION_USER);
-        $sessionId = intval($sessionId);
-        $userId = intval($userId);
+        $sessionId = (int) $sessionId;
+        $userId = (int) $userId;
 
         // COUNT(1) actually returns the number of rows from the table (as if
         // counting the results from the first column)

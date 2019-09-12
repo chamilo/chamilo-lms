@@ -16,8 +16,6 @@ switch ($action) {
     case 'get_count_message':
         $userId = api_get_user_id();
         $invitations = [];
-        $group_pending_invitations = 0;
-
         // Setting notifications
         $count_unread_message = 0;
         if (api_get_setting('allow_message_tool') === 'true') {
@@ -50,6 +48,8 @@ switch ($action) {
         echo json_encode($invitations);
         break;
     case 'send_message':
+        api_block_anonymous_users(false);
+
         $subject = isset($_REQUEST['subject']) ? trim($_REQUEST['subject']) : null;
         $messageContent = isset($_REQUEST['content']) ? trim($_REQUEST['content']) : null;
 
@@ -89,6 +89,8 @@ switch ($action) {
         }
         break;
     case 'send_invitation':
+        api_block_anonymous_users(false);
+
         $subject = isset($_REQUEST['subject']) ? trim($_REQUEST['subject']) : null;
         $invitationContent = isset($_REQUEST['content']) ? trim($_REQUEST['content']) : null;
 

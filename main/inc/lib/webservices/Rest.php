@@ -14,7 +14,7 @@ use Chamilo\UserBundle\Entity\User;
  */
 class Rest extends WebService
 {
-    const SERVIVE_NAME = 'MsgREST';
+    const SERVICE_NAME = 'MsgREST';
     const EXTRA_FIELD_GCM_REGISTRATION = 'gcm_registration_id';
 
     const GET_AUTH = 'authenticate';
@@ -133,7 +133,7 @@ class Rest extends WebService
      */
     public static function validate($username, $apiKeyToValidate)
     {
-        $apiKey = self::findUserApiKey($username, self::SERVIVE_NAME);
+        $apiKey = self::findUserApiKey($username, self::SERVICE_NAME);
 
         if ($apiKey != $apiKeyToValidate) {
             throw new Exception(get_lang('InvalidApiKey'));

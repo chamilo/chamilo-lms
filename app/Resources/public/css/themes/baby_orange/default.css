@@ -56,9 +56,6 @@ background: linear-gradient(to bottom, #ffffff 0%,#e5e5e5 100%); /* W3C */
 filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#e5e5e5',GradientType=0 ); /* IE6-9 */
   border-color: #E5E5E5;
 }
-.navbar-default .navbar-brand {
-  color: #ffffff;
-}
 .navbar-default .navbar-brand:hover, .navbar-default .navbar-brand:focus {
   color: #ededed;
 }

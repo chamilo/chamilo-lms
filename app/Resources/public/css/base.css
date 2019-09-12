@@ -8895,6 +8895,13 @@ main[dir="rtl"] .radio-inline input[type=radio]{
         right: 10px;
         top: 25px;
     }
+    .header-ol{
+        padding: 0;
+        margin: 0;
+    }
+    .section-notifications ul li.user-online a{
+        padding: 0;
+    }
 }
 
 @-moz-keyframes wobblebar-loader {

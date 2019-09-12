@@ -160,9 +160,6 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#01a1ff', end
     background-color: #F99D1C;
 }
 @media (max-width: 767px) {
-  .navbar-default .navbar-nav .open .dropdown-menu > li > a {
-    color: #ffffff;
-  }
   .navbar-default .navbar-nav .open .dropdown-menu > li > a:hover, .navbar-default .navbar-nav .open .dropdown-menu > li > a:focus {
     color: #ededed;
     background: #fc8a00;

@@ -125,9 +125,6 @@ background: #FF650D;
     background-color: #50B387;
 }
 @media (max-width: 767px) {
-  .navbar-default .navbar-nav .open .dropdown-menu > li > a {
-    color: #ffffff;
-  }
   .navbar-default .navbar-nav .open .dropdown-menu > li > a:hover, .navbar-default .navbar-nav .open .dropdown-menu > li > a:focus {
     color: #ededed;
     background-color: #6D0019;

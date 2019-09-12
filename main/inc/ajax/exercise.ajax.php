@@ -431,7 +431,7 @@ switch ($action) {
             $question_id = isset($_REQUEST['question_id']) ? (int) $_REQUEST['question_id'] : null;
             $question_list = Session::read('questionList');
 
-            $categoryId = $type === 'category' && isset($_REQUEST['category']) ? (int) $_REQUEST['category'] : 0;
+            $currentCategoryId = $type === 'category' && isset($_REQUEST['category']) ? (int) $_REQUEST['category'] : 0;
 
             // If exercise or question is not set then exit.
             if (empty($question_list) || empty($objExercise)) {
@@ -515,7 +515,7 @@ switch ($action) {
                 if ($type == 'simple' && $question_id != $my_question_id) {
                     continue;
                 } elseif ($type === 'category' && $objExercise->type == ONE_CATEGORY_PER_PAGE) {
-                    $questionsInCategory = $objExercise->getQuestionsInCategory($categoryId);
+                    $questionsInCategory = $objExercise->getQuestionsInCategory($currentCategoryId);
 
                     if (!in_array($my_question_id, $questionsInCategory)) {
                         continue;
@@ -734,10 +734,8 @@ switch ($action) {
             );
 
             $categoryList = Session::read('track_e_adaptive', []);
-            $destinationCategory = $objExercise->findCategoryDestination($exeId, $categoryId);
-            $categoryInfo = 0 === $destinationCategory
-                ? $objExercise->categoryWithQuestionList[$categoryId]['category']
-                : $objExercise->categoryWithQuestionList[$destinationCategory]['category'];
+            $destinationCategory = $objExercise->findCategoryDestination($exeId, $currentCategoryId);
+            $previousCategoryId = end($categoryList);
 
             if ($objExercise->expired_time != 0) {
                 $currentExpiredTimeKey = ExerciseLib::get_time_control_key(
@@ -750,6 +748,10 @@ switch ($action) {
                 $expiredTime = new DateTime($_SESSION['expired_time'][$currentExpiredTimeKey], new DateTimeZone('UTC'));
 
                 if ($expiredTime <= $currentUtcTime) {
+                    $categoryInfo = 0 === $destinationCategory
+                        ? $objExercise->categoryWithQuestionList[$currentCategoryId]['category']
+                        : $objExercise->categoryWithQuestionList[$destinationCategory]['category'];
+
                     Session::write('adaptive_quiz_level', $categoryInfo['name']);
 
                     echo "exercise_result.php?$params";
@@ -765,22 +767,41 @@ switch ($action) {
                 }
             }
 
-            if (0 === $destinationCategory || !empty($categoryList[$destinationCategory])) {
+            if (0 === $destinationCategory) {
+                $categoryInfo = $objExercise->categoryWithQuestionList[$currentCategoryId]['category'];
+
                 Session::write('adaptive_quiz_level', $categoryInfo['name']);
 
                 echo "exercise_result.php?$params";
                 break;
             }
 
-            $destinationQuestionId = $objExercise->getFirstQuestionInCategory($destinationCategory);
-            $destinationPosition = $objExercise->getPositionInCompressedQuestionList(
-                $destinationQuestionId
-            );
+            if (!in_array($destinationCategory, $categoryList)) {
+                $destinationQuestionId = $objExercise->getFirstQuestionInCategory($destinationCategory);
+                $destinationPosition = $objExercise->getPositionInCompressedQuestionList(
+                    $destinationQuestionId
+                );
 
-            $categoryList[$categoryId] = true;
-            Session::write('track_e_adaptive', $categoryList);
+                $categoryList[] = $currentCategoryId;
+                Session::write('track_e_adaptive', $categoryList);
 
-            echo "exercise_submit.php?$params&num=".($destinationPosition - 1);
+                echo "exercise_submit.php?$params&num=".($destinationPosition - 1);
+                break;
+            }
+
+            $isDestinationInLastRange = $objExercise->isDestinationInLastRange($currentCategoryId, $destinationCategory);
+
+            if ($isDestinationInLastRange) {
+                $categoryInfo = $objExercise->categoryWithQuestionList[$previousCategoryId]['category'];
+            }
+
+            $categoryInfo = $isDestinationInLastRange
+                ? $objExercise->categoryWithQuestionList[$previousCategoryId]['category']
+                : $objExercise->categoryWithQuestionList[$currentCategoryId]['category'];
+
+            Session::write('adaptive_quiz_level', $categoryInfo['name']);
+
+            echo "exercise_result.php?$params";
             break;
         }
 

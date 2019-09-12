@@ -106,8 +106,7 @@ if (isset($_GET['u']) && is_numeric($_GET['u']) && $_GET['u'] != api_get_user_id
 Session::write('social_user_id', (int) $user_id);
 
 // Setting some course info
-//$course_list_code = [];
-/*
+/*$course_list_code = [];
 $personal_course_list = UserManager::get_personal_session_course_list($friendId, 50);
 $i = 1;
 $list = [];
@@ -135,7 +134,8 @@ $menu = SocialManager::show_social_menu(
 
 //Setting some session info
 $user_info = api_get_user_info($friendId);
-$sessionList = SessionManager::getSessionsFollowedByUser($friendId, $user_info['status']);
+//$sessionList = SessionManager::getSessionsFollowedByUser($friendId, $user_info['status']);
+$sessionList = [];
 
 // My friends
 $friend_html = SocialManager::listMyFriendsBlock($user_id, $link_shared);
@@ -152,16 +152,11 @@ $listInvitations = '';
 
 if ($show_full_profile) {
     $social_group_info_block = SocialManager::getGroupBlock($friendId);
-
-    // Block Social Course
+    /*
     $my_courses = null;
-
     // COURSES LIST
     if (is_array($list)) {
-        // Courses without sessions
-        $my_course = '';
         $i = 1;
-
         foreach ($list as $key => $value) {
             if (empty($value[2])) { //if out of any session
                 $my_courses .= $value[1];
@@ -169,7 +164,7 @@ if ($show_full_profile) {
             }
         }
         $social_course_block .= $my_courses;
-    }
+    }*/
 
     // Block Social Sessions
     if (count($sessionList) > 0) {
@@ -188,12 +183,13 @@ if ($show_full_profile) {
 
     // Images uploaded by course
     $file_list = '';
-    /*if (is_array($course_list_code) && count($course_list_code) > 0) {
+    /*
+    if (is_array($course_list_code) && count($course_list_code) > 0) {
         foreach ($course_list_code as $course) {
             $file_list .= UserManager::get_user_upload_files_by_course(
                 $user_id,
                 $course['code'],
-                $resourcetype = 'images'
+                'images'
             );
         }
     }*/

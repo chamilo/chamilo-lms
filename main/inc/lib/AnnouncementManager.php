@@ -1016,64 +1016,49 @@ class AnnouncementManager
     }
 
     /**
-     * Gets all announcements from a user by course.
+     * @param int $user_id
      *
-     * @param string course db
-     * @param int user id
-     *
-     * @return array html with the content and count of announcements or false otherwise
+     * @return array|bool
      */
-    public static function get_all_annoucement_by_user_course($course_code, $user_id)
+    public static function getAnnoucementCourseTotalByUser($user_id)
     {
-        $course_info = api_get_course_info($course_code);
-        $courseId = $course_info['real_id'];
+        $user_id = (int) $user_id;
 
         if (empty($user_id)) {
             return false;
         }
+
         $tbl_announcement = Database::get_course_table(TABLE_ANNOUNCEMENT);
         $tbl_item_property = Database::get_course_table(TABLE_ITEM_PROPERTY);
-        if (!empty($user_id) && is_numeric($user_id)) {
-            $user_id = (int) $user_id;
-            $sql = "SELECT DISTINCT 
-                        announcement.title, 
-                        announcement.content, 
-                        display_order
-					FROM $tbl_announcement announcement 
-					INNER JOIN $tbl_item_property ip
-					ON (announcement.id = ip.ref AND announcement.c_id = ip.c_id)
-					WHERE
-						announcement.c_id = $courseId AND
-						ip.c_id = $courseId AND						
-						ip.tool='announcement' AND
-						(
-						  ip.insert_user_id='$user_id' AND
-						  (ip.to_group_id='0' OR ip.to_group_id IS NULL)
-						)
-						AND ip.visibility='1'
-						AND announcement.session_id  = 0
-					ORDER BY display_order DESC";
-            $rs = Database::query($sql);
-            $num_rows = Database::num_rows($rs);
-            $content = '';
-            $i = 0;
-            $result = [];
-            if ($num_rows > 0) {
-                while ($myrow = Database::fetch_array($rs)) {
-                    $content .= '<strong>'.$myrow['title'].'</strong><br /><br />';
-                    $content .= $myrow['content'];
-                    $i++;
+
+        $sql = "SELECT DISTINCT 
+                    announcement.c_id,
+                    count(announcement.id) count
+                FROM $tbl_announcement announcement 
+                INNER JOIN $tbl_item_property ip
+                ON (announcement.id = ip.ref AND announcement.c_id = ip.c_id)
+                WHERE			
+                    ip.tool='announcement' AND
+                    (
+                      ip.to_user_id = '$user_id' AND
+                      (ip.to_group_id='0' OR ip.to_group_id IS NULL)
+                    )
+                    AND ip.visibility='1'
+                    AND announcement.session_id  = 0
+                GROUP BY announcement.c_id";
+        $rs = Database::query($sql);
+        $num_rows = Database::num_rows($rs);
+        $result = [];
+        if ($num_rows > 0) {
+            while ($row = Database::fetch_array($rs, 'ASSOC')) {
+                if (empty($row['c_id'])) {
+                    continue;
                 }
-                $result['content'] = $content;
-                $result['count'] = $i;
-
-                return $result;
+                $result[] = ['course' => api_get_course_info_by_id($row['c_id']), 'count' => $row['count']];
             }
-
-            return false;
         }
 
-        return false;
+        return $result;
     }
 
     /**

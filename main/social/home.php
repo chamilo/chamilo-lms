@@ -55,7 +55,6 @@ if (api_get_setting('profile', 'picture') == 'true') {
     $form->addButtonSave(get_lang('SaveSettings'), 'apply_change');
 
     if ($form->validate()) {
-        $user_data = $form->getSubmitValues();
         // upload picture if a new one is provided
         if ($_FILES['picture']['size']) {
             if ($new_picture = UserManager::update_user_picture(
@@ -67,8 +66,8 @@ if (api_get_setting('profile', 'picture') == 'true') {
                 $sql = "UPDATE $table_user
                         SET 
                             picture_uri = '$new_picture' 
-                        WHERE user_id =  ".api_get_user_id();
-                $result = Database::query($sql);
+                        WHERE user_id =  ".$user_id;
+                Database::query($sql);
             }
         }
     }
@@ -102,8 +101,9 @@ $friend_html = SocialManager::listMyFriendsBlock($user_id);
 
 // Block Social Sessions
 $social_session_block = null;
-$user_info = api_get_user_info($user_id);
-$sessionList = SessionManager::getSessionsFollowedByUser($user_id, $user_info['status']);
+//$user_info = api_get_user_info($user_id);
+//$sessionList = SessionManager::getSessionsFollowedByUser($user_id, $user_info['status']);
+$sessionList = [];
 
 if (count($sessionList) > 0) {
     $social_session_block = $sessionList;

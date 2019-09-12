@@ -721,8 +721,6 @@ class BuyCoursesPlugin extends Plugin
         return $result;
     }
 
-
-
     /**
      * Get course info.
      *
@@ -841,7 +839,7 @@ class BuyCoursesPlugin extends Plugin
             'image' => null,
             'nbrCourses' => $session->getNbrCourses(),
             'nbrUsers' => $session->getNbrUsers(),
-            'item' => $item
+            'item' => $item,
         ];
 
         $fieldValue = new ExtraFieldValue('session');
@@ -2160,10 +2158,10 @@ class BuyCoursesPlugin extends Plugin
     /**
      * List services sales.
      *
-     * @param int  $buyerId  buyer id
-     * @param int  $status   status
-     * @param int  $nodeType The node Type ( User = 1 , Course = 2 , Session = 3 )
-     * @param int  $nodeId   the nodeId
+     * @param int $buyerId  buyer id
+     * @param int $status   status
+     * @param int $nodeType The node Type ( User = 1 , Course = 2 , Session = 3 )
+     * @param int $nodeId   the nodeId
      *
      * @return array
      */

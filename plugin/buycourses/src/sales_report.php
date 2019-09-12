@@ -6,7 +6,6 @@
  *
  * @package chamilo.plugin.buycourses
  */
-
 $cidReset = true;
 
 require_once '../config.php';

@@ -270,7 +270,7 @@ $form->addHtmlEditor(
     [
         'ToolbarSet' => 'TestProposedAnswer',
         'Height' => '120',
-        'id' => 'content'
+        'id' => 'content',
     ]
 );
 

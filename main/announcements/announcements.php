@@ -43,7 +43,6 @@ if (!empty($sessionId) && $drhHasAccessToSessionContent) {
     $allowToEdit = $allowToEdit || api_is_drh();
 }
 
-
 // Database Table Definitions
 $tbl_announcement = Database::get_course_table(TABLE_ANNOUNCEMENT);
 $tbl_item_property = Database::get_course_table(TABLE_ITEM_PROPERTY);

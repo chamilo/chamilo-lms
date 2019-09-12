@@ -3192,7 +3192,7 @@ class Exercise
                 } elseif ($this->type == ONE_CATEGORY_PER_PAGE) {
                     $buttonList[] = Display::button(
                         'save_category_now',
-                        get_lang('Next'),
+                        get_lang('SaveForNow'),
                         ['type' => 'button', 'class' => $class, 'data-category' => $questionCategoryId]
                     );
                     $buttonList[] = Display::span(

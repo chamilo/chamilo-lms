@@ -69,7 +69,6 @@ foreach ($currencies as $currency) {
         ]
     );
     $currencyValue = $currency['id'];
-
     $currencySelect->addOption($currencyText, $currencyValue);
 
     if ($currency['status']) {
@@ -79,9 +78,10 @@ foreach ($currencies as $currency) {
 
 $globalSettingForm->addTextarea(
     'terms_and_conditions',
-    [get_lang('TermsAndConditions'),
-            $plugin->get_lang('WriteHereTheTermsAndConditionsOfYourECommerce'), ],
-    []
+    [
+        get_lang('TermsAndConditions'),
+        $plugin->get_lang('WriteHereTheTermsAndConditionsOfYourECommerce'),
+    ]
 );
 
 $globalSettingForm->addElement(

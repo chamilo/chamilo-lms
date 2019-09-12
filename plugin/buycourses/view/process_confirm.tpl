@@ -27,8 +27,7 @@
                             </ul>
                             <p id="n-price" class="lead text-right" style="color: white;">
                                 <span class="label label-primary">
-                                    {{ course.currency == 'BRL' ? 'R$' : course.currency }}
-                                    {{ course.price }}
+                                    {{ course.item.total_price_formatted }}
                                 </span>
                             </p>
                             <p id="s-price" class="lead text-right"></p>
@@ -61,8 +60,7 @@
                             </ul>
                             <p id="n-price" class="lead text-right" style="color: white;">
                                 <span class="label label-primary">
-                                    {{ session.currency == 'BRL' ? 'R$' : session.currency }}
-                                    {{ session.price }}
+                                    {{ session.item.total_price_formatted }}
                                 </span>
                             </p>
                             <p id="s-price" class="lead text-right"></p>
@@ -107,7 +105,7 @@
                                 <li>
                                     <em class="fa fa-money"></em>
                                     {{ 'Price'|get_plugin_lang('BuyCoursesPlugin') }}
-                                    : {{ service.currency == 'BRL' ? 'R$' : service.currency }} {{ price }}
+                                    : {{ service_item.total_price_formatted }}
                                     / {{ service.duration_days == 0 ? 'NoLimit'|get_lang  : service.duration_days ~ ' ' ~ 'Days'|get_lang }}
                                 </li>
                                 <li><em class="fa fa-user"></em> {{ service.owner.name }}</li>
@@ -117,7 +115,7 @@
                             </ul>
                             <p id="n-price" class="lead text-right" style="color: white;">
                                 <span class="label label-primary">
-                                    {{ service.currency == 'BRL' ? 'R$' : service.currency }} {{ price }}
+                                    {{ service_item.total_price_formatted }}
                                 </span>
                             </p>
                             <p id="s-price" class="lead text-right"></p>
@@ -185,9 +183,8 @@
         {{ form }}
     </div>
 </div>
-
 <script>
-    $(document).ready(function () {
+    $(function () {
         {% if terms %}
             $("#confirm").prop("disabled", true);
 

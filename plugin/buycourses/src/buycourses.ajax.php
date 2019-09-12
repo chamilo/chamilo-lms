@@ -31,15 +31,13 @@ switch ($action) {
             break;
         }
 
-        $userId = isset($_POST['id']) ? intval($_POST['id']) : '';
+        $userId = isset($_POST['id']) ? (int) $_POST['id'] : '';
         $isUserHavePaypalAccount = $plugin->verifyPaypalAccountByBeneficiary($userId);
-
         if ($isUserHavePaypalAccount) {
             echo '';
         } else {
             echo '<b style="color: red; font-size: 70%;">* '.$plugin->get_lang('NoPayPalAccountDetected').'</b>';
         }
-
         break;
     case 'saleInfo':
         if (api_is_anonymous()) {
@@ -249,9 +247,7 @@ switch ($action) {
                 false
             );
         }
-
         break;
-
     case 'cancelPayout':
         if (api_is_anonymous()) {
             break;
@@ -278,16 +274,14 @@ switch ($action) {
         if (!$tokenId || !$saleId) {
             break;
         }
-
         $sale = $plugin->getSale($saleId);
-
         if (!$sale) {
             break;
         }
 
-        require_once "Requests.php";
+        require_once 'Requests.php';
         Requests::register_autoloader();
-        require_once "culqi.php";
+        require_once 'culqi.php';
 
         $culqiParams = $plugin->getCulqiParams();
 
@@ -374,10 +368,9 @@ switch ($action) {
             break;
         }
 
-        require_once "Requests.php";
+        require_once 'Requests.php';
         Requests::register_autoloader();
-        require_once "culqi.php";
-
+        require_once 'culqi.php';
         $culqiParams = $plugin->getCulqiParams();
 
         // API Key y autenticación
@@ -451,7 +444,7 @@ switch ($action) {
         }
         break;
     case 'service_sale_info':
-        $id = isset($_POST['id']) ? intval($_POST['id']) : 0;
+        $id = isset($_POST['id']) ? (int) $_POST['id'] : 0;
         $serviceSale = $plugin->getServiceSale($id);
         $isAdmin = api_is_platform_admin();
         if (!$serviceSale) {
@@ -464,7 +457,6 @@ switch ($action) {
         $html .= "<br />";
         $html .= "<legend>{$plugin->get_lang('ServiceInformation')}</legend>";
         $html .= "<ul>";
-        $html .= "<li><b>{$plugin->get_lang('ServiceId')}:</b> {$serviceSale['id']}</li> ";
         $html .= "<li><b>{$plugin->get_lang('ServiceName')}:</b> {$serviceSale['service']['name']}</li> ";
         $html .= "<li><b>{$plugin->get_lang('Description')}:</b> {$serviceSale['service']['description']}</li> ";
         $nodeType = $serviceSale['node_type'];
@@ -496,23 +488,13 @@ switch ($action) {
                 }
             }
         }
-        //$html .= "<li><b>{$plugin->get_lang('AppliesTo')}:</b> $nodeType</li> ";
-      //  $html .= "<li><b>{$plugin->get_lang('Price')}:</b> {$serviceSale['service']['price']} {$serviceSale['currency']}</li> ";
-        //$duration = $serviceSale['service']['duration_days'].' '.$plugin->get_lang('Days');
+
         $html .= "</ul>";
         $html .= "<legend>{$plugin->get_lang('SaleInfo')}</legend>";
         $html .= "<ul>";
         $html .= "<li><b>{$plugin->get_lang('BoughtBy')}:</b> {$serviceSale['buyer']['name']}</li> ";
         $html .= "<li><b>{$plugin->get_lang('PurchaserUser')}:</b> {$serviceSale['buyer']['username']}</li> ";
-
-        $taxEnable = $plugin->get('tax_enable') === 'true';
-        if ($taxEnable) {
-            //$html .= "<li><b>{$plugin->get_lang('Price')}:</b> {$serviceSale['price_without_tax']} {$serviceSale['currency']}</li> ";
-            //$html .= "<li><b>{$plugin->get_lang('Price')}:</b> {$serviceSale['tax_amount']} {$serviceSale['currency']}</li> ";
-        }
-        $html .= "<li><b>{$plugin->get_lang('Total')}:</b> {$serviceSale['price']} {$serviceSale['currency']}</li> ";
-
-        //$html .= "<li><b>{$plugin->get_lang('SalePrice')}:</b> {$serviceSale['price_without_tax']} {$serviceSale['currency']}</li> ";
+        $html .= "<li><b>{$plugin->get_lang('Total')}:</b> {$serviceSale['service']['total_price']}</li> ";
         $orderDate = api_format_date($serviceSale['buy_date'], DATE_FORMAT_LONG);
         $html .= "<li><b>{$plugin->get_lang('OrderDate')}:</b> $orderDate</li> ";
         $paymentType = $serviceSale['payment_type'];
@@ -528,7 +510,6 @@ switch ($action) {
             }
         }
         $html .= "<li><b>{$plugin->get_lang('PaymentMethod')}:</b> $paymentType</li> ";
-        //$html .= "<li><b>$nodeType:</b> $nodeName</li> ";
         $status = $serviceSale['status'];
         $buttons = '';
         if ($status == BuyCoursesPlugin::SERVICE_STATUS_COMPLETED) {
@@ -581,11 +562,10 @@ switch ($action) {
         echo $html;
         break;
     case 'service_sale_confirm':
-        $id = isset($_POST['id']) ? intval($_POST['id']) : 0;
+        $id = isset($_POST['id']) ? (int) $_POST['id'] : 0;
         $serviceSale = $plugin->getServiceSale($id);
         $response = $plugin->completeServiceSale($id);
-        $html = "";
-        $html .= "<div class='text-center'>";
+        $html = "<div class='text-center'>";
 
         if ($response) {
             $html .= Display::return_message(
@@ -606,9 +586,7 @@ switch ($action) {
         echo $html;
         break;
     case 'service_sale_cancel':
-        $id = isset($_POST['id']) ? intval($_POST['id']) : 0;
-
-        $serviceSale = $plugin->getServiceSale($id);
+        $id = isset($_POST['id']) ? (int) $_POST['id'] : 0;
         $response = $plugin->cancelServiceSale($id);
         $html = '';
         $html .= "<div class='text-center'>";

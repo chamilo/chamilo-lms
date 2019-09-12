@@ -81,8 +81,6 @@ if (api_is_multiple_url_enabled()) {
 
 $result = Database::query($sql);
 $coaches = Database::store_result($result);
-$thisYear = date('Y');
-
 $coachesOption = [
     '' => '----- '.get_lang('None').' -----',
 ];

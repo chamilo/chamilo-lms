@@ -214,6 +214,7 @@ switch ($serviceSale['payment_type']) {
         $template->assign('buying_service', $serviceSale);
         $template->assign('user', $userInfo);
         $template->assign('service', $serviceSale['service']);
+        $template->assign('service_item', $serviceSale['item']);
         $template->assign('transfer_accounts', $transferAccounts);
         $template->assign('form', $form->returnForm());
 
@@ -282,6 +283,7 @@ switch ($serviceSale['payment_type']) {
         $template->assign('buying_service', $serviceSale);
         $template->assign('user', $userInfo);
         $template->assign('service', $serviceSale['service']);
+        $template->assign('service_item', $serviceSale['item']);
         $template->assign('form', $form->returnForm());
         $template->assign('is_culqi_payment', true);
         $template->assign('culqi_params', $culqiParams = $plugin->getCulqiParams());

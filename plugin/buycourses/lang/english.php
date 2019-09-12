@@ -188,3 +188,4 @@ $strings['AdditionalInfoRequired'] = 'More information needed';
 $strings['SubscriptionToServiceXSuccessful'] = "Subscription to service %s completed.";
 $strings['ClickHereToFinish'] = "Click here to finish";
 $strings['OrderCancelled'] = "Order cancelled";
+$strings['use_currency_symbol'] = "Use currency symbol";

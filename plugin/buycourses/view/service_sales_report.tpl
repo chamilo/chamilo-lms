@@ -28,7 +28,7 @@
                     <th class="text-center">{{ 'OrderStatus'|get_plugin_lang('BuyCoursesPlugin') }}</th>
                     <th class="text-center">{{ 'OrderDate'|get_plugin_lang('BuyCoursesPlugin') }}</th>
                     <th class="text-right">{{ 'Price'|get_plugin_lang('BuyCoursesPlugin') }}</th>
-                    {% if sale.invoice == 1 and invoicing_enable %}
+                    {% if invoicing_enable %}
                         <th class="text-right">{{ 'Invoice'|get_plugin_lang('BuyCoursesPlugin') }}</th>
                     {% endif %}
                     <th class="text-center">{{ 'ServiceSaleInfo'|get_plugin_lang('BuyCoursesPlugin') }}</th>
@@ -37,7 +37,7 @@
                 <tbody>
                 {% for sale in sale_list %}
                     <tr>
-                        <td class="text-center">{{ sale.service_name }}</td>
+                        <td class="text-center">{{ sale.name }}</td>
                         <td class="text-center">{{ sale.reference }}</td>
                         <td class="text-center">
                             {% if sale.status == sale_status_cancelled %}
@@ -48,8 +48,8 @@
                                 {{ 'SaleStatusCompleted'|get_plugin_lang('BuyCoursesPlugin') }}
                             {% endif %}
                         </td>
-                        <td class="text-center">{{ sale.date }}</td>
-                        <td class="text-right">{{ sale.currency ~ ' ' ~ sale.price }}</td>
+                        <td class="text-center">{{ sale.buy_date | api_get_local_time}}</td>
+                        <td class="text-right">{{ sale.service.total_price }}</td>
                         {% if invoicing_enable %}
                             <td class="text-center">
                             {% if sale.invoice == 1 %}
@@ -62,7 +62,9 @@
                         {% endif %}
                         <td class="text-center">
                             <a id="service_sale_info" tag="{{ sale.id }}" name="s_{{ sale.id }}"
-                               class="btn btn-info btn-sm">{{ 'Info'|get_lang }}</a>
+                               class="btn btn-info btn-sm">
+                                {{ 'Info'|get_lang }}
+                            </a>
                         </td>
                     </tr>
                 {% endfor %}

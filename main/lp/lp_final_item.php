@@ -36,8 +36,7 @@ $plugin = BuyCoursesPlugin::create();
 $checker = $plugin->isEnabled() && $plugin->get('include_services');
 
 if ($checker) {
-    $userServiceSale = $plugin->getServiceSale(
-        null,
+    $userServiceSale = $plugin->getServiceSales(
         $userId,
         BuyCoursesPlugin::SERVICE_STATUS_COMPLETED,
         BuyCoursesPlugin::SERVICE_TYPE_LP_FINAL_ITEM,

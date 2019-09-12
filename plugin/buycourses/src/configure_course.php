@@ -25,7 +25,6 @@ $commissionsEnable = $plugin->get('commissions_enable');
 if ($commissionsEnable == 'true') {
     $htmlHeadXtra[] = '<script type="text/javascript" src="'.api_get_path(WEB_PLUGIN_PATH)
         .'buycourses/resources/js/commissions.js"></script>';
-    $defaultCommissions = [];
     $commissions = '';
 }
 
@@ -263,7 +262,9 @@ $form->freeze(['product_type', 'name']);
 if ($form->validate()) {
     $formValues = $form->exportValues();
     $id = $formValues['id'];
-    $productItem = $plugin->getItemByProduct($id, $formValues['type']);
+    $type = $formValues['type'];
+
+    $productItem = $plugin->getItemByProduct($id, $type);
     if (isset($formValues['visible'])) {
         $taxPerc = $formValues['tax_perc'] != '' ? (int) $formValues['tax_perc'] : null;
         if (!empty($productItem)) {
@@ -272,13 +273,13 @@ if ($form->validate()) {
                     'price' => floatval($formValues['price']),
                     'tax_perc' => $taxPerc,
                 ],
-                $formValues['i'],
-                $formValues['t']
+                $id,
+                $type
             );
         } else {
             $itemId = $plugin->registerItem([
                 'currency_id' => (int) $currency['id'],
-                'product_type' => $formValues['type'],
+                'product_type' => $type,
                 'product_id' => $id,
                 'price' => floatval($_POST['price']),
                 'tax_perc' => $taxPerc,

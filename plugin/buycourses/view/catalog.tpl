@@ -47,7 +47,7 @@
                                             </ul>
                                             <p class="text-right">
                                                 <span class="label label-primary">
-                                                    {{ course.currency }} {{ course.price }}
+                                                    {{ course.item.total_price_formatted }}
                                                 </span>
                                             </p>
                                             {% if course.enrolled == "YES" %}
@@ -93,7 +93,7 @@
                                             <p><em class="fa fa-calendar fa-fw"></em> {{ session.dates.display }}</p>
                                             <p class="text-right">
                                                 <span class="label label-primary">
-                                                    {{ session.currency }} {{ session.price }}
+                                                    {{ session.item.total_price_formatted }}
                                                 </span>
                                             </p>
                                             <ul class="list-unstyled">
@@ -177,7 +177,7 @@
                                             </ul>
                                             <p class="text-right">
                                                 <span class="label label-primary">
-                                                    {{ service.currency == 'BRL' ? 'R$' : service.currency }} {{ service.total_price_formatted }}
+                                                     {{ service.total_price_formatted }}
                                                 </span>
                                             </p>
                                             <div class="toolbar">

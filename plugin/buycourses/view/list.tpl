@@ -75,15 +75,11 @@
                             {% endif %}
                         </td>
                         <td width="200" class="text-right">
-                            {{ "#{item.buyCourseData.price} #{item.buyCourseData.currency ?: item.buyCourseData.currency}" }}
+                            {{ item.buyCourseData.price_formatted }}
                         </td>
                         {% if tax_enable and (tax_applies_to == 1 or tax_applies_to == 2) %}
                             <td class="text-center">
-                                {% if item.tax_perc is null %}
-                                    {{ global_tax_perc }} %
-                                {% else %}
-                                    {{ item.buyCourseData.tax_perc }} %
-                                {% endif %}
+                                {{ item.buyCourseData.tax_perc_show }} %
                             </td>
                         {% endif %}
                         <td class="text-right">
@@ -137,15 +133,11 @@
                                 {% endif %}
                             </td>
                             <td class="text-right" width="200">
-                                {{ "#{item.buyCourseData.price} #{tem.currency ?: item.buyCourseData.currency}" }}
+                                {{ item.buyCourseData.price_formatted }}
                             </td>
                             {% if tax_enable and (tax_applies_to == 1 or tax_applies_to == 3) %}
                                 <td class="text-center">
-                                    {% if item.buyCourseData.tax_perc is null %}
-                                        {{ global_tax_perc }} %
-                                    {% else %}
-                                        {{ item.buyCourseData.tax_perc }} %
-                                    {% endif %}
+                                    {{ item.buyCourseData.tax_perc_show }} %
                                 </td>
                             {% endif %}
                             <td class="text-right">
@@ -213,7 +205,7 @@
                                 {{ item.owner_name }}
                             </td>
                             <td class="text-right" width="200">
-                                {{ "#{item.price} #{tem.currency ?: item.currency}" }}
+                                {{ item.price_formatted }}
                             </td>
                             {% if tax_enable and (tax_applies_to == 1 or tax_applies_to == 4) %}
                                 <td class="text-center">

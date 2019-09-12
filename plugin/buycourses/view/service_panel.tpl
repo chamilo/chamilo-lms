@@ -1,9 +1,7 @@
 <link rel="stylesheet" type="text/css" href="../resources/css/style.css"/>
 <script type="text/javascript" src="../resources/js/modals.js"></script>
 
-
 <div id="buy-courses-tabs">
-
     <ul class="nav nav-tabs buy-courses-tabs" role="tablist">
         <li id="buy-courses-tab" class="" role="presentation">
             <a href="course_panel.php" aria-controls="buy-courses" role="tab">{{ 'MyCourses'| get_lang }}</a>
@@ -24,8 +22,6 @@
                role="tab">{{ 'MyPayouts'| get_plugin_lang('BuyCoursesPlugin') }}</a>
         </li>
     </ul>
-
-
     <table class="table table-striped table-hover">
         <thead>
         <tr>
@@ -43,7 +39,7 @@
                 <td>{{ sale.name }}</td>
                 <td class="text-center">{{ sale.service_type }}</td>
                 <td class="text-center">{{ sale.currency ~ ' ' ~ sale.price }}</td>
-                <td class="text-center">{{ sale.date }}</td>
+                <td class="text-center">{{ sale.date | api_get_local_time }}</td>
                 <td class="text-center">{{ sale.reference }}</td>
                 <td class="text-center">
                     <a id="service_sale_info" tag="{{ sale.id }}" name="s_{{ sale.id }}"

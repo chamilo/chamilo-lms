@@ -345,7 +345,6 @@ SocialManager::setSocialUserBlock(
 );
 
 $tpl->assign('social_friend_block', $friend_html);
-$tpl->assign('social_menu_block', $menu);
 $tpl->assign('add_post_form', $addPostForm);
 $tpl->assign('posts', $posts);
 $tpl->assign('social_course_block', $social_course_block);

@@ -32,6 +32,7 @@ class Auth
         $TABLECOURS = Database::get_main_table(TABLE_MAIN_COURSE);
         $TABLECOURSUSER = Database::get_main_table(TABLE_MAIN_COURSE_USER);
         $avoidCoursesCondition = CoursesAndSessionsCatalog::getAvoidCourseCondition();
+        $visibilityCondition = CourseManager::getCourseVisibilitySQLCondition('course', true);
 
         // Secondly we select the courses that are in a category (user_course_cat<>0) and
         // sort these according to the sort of the category
@@ -54,7 +55,9 @@ class Auth
                     course_rel_user.relation_type <> ".COURSE_RELATION_TYPE_RRHH." AND
                     course_rel_user.user_id = '".$user_id."' 
                     $avoidCoursesCondition
+                    $visibilityCondition
                 ORDER BY course_rel_user.sort ASC";
+
         $result = Database::query($sql);
         $courses = [];
         while ($row = Database::fetch_array($result)) {
@@ -78,7 +81,7 @@ class Auth
     }
 
     /**
-     * This function get all the courses in the particular user category;.
+     * This function get all the courses in the particular user category.
      *
      * @return array
      */
@@ -90,6 +93,7 @@ class Auth
         $TABLECOURS = Database::get_main_table(TABLE_MAIN_COURSE);
         $TABLECOURSUSER = Database::get_main_table(TABLE_MAIN_COURSE_USER);
         $avoidCoursesCondition = CoursesAndSessionsCatalog::getAvoidCourseCondition();
+        $visibilityCondition = CourseManager::getCourseVisibilitySQLCondition('course', true);
 
         $sql = "SELECT
                     course.code, course.visual_code, course.subscribe subscr, course.unsubscribe unsubscr,
@@ -102,6 +106,7 @@ class Auth
                     course_rel_user.user_id = '".$user_id."' AND
                     course_rel_user.relation_type <> ".COURSE_RELATION_TYPE_RRHH."
                     $avoidCoursesCondition
+                    $visibilityCondition
                 ORDER BY course_rel_user.user_course_cat, course_rel_user.sort ASC";
         $result = Database::query($sql);
         $data = [];

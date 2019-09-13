@@ -8525,9 +8525,8 @@ class Exercise
 
         $total = $total_exercises + $hp_count;
         $exerciseList = [];
-        $list_ordered = null;
         while ($row = Database::fetch_array($result, 'ASSOC')) {
-            $exerciseList[$row['iid']] = $row;
+            $exerciseList[] = $row;
         }
 
         if (!empty($exerciseList) &&
@@ -8572,16 +8571,6 @@ class Exercise
                     }
                 }
             }
-        }
-
-        if (isset($list_ordered) && !empty($list_ordered)) {
-            $new_question_list = [];
-            foreach ($list_ordered as $exercise_id) {
-                if (isset($exerciseList[$exercise_id])) {
-                    $new_question_list[] = $exerciseList[$exercise_id];
-                }
-            }
-            $exerciseList = $new_question_list;
         }
 
         if (!empty($exerciseList)) {
@@ -9205,7 +9194,7 @@ class Exercise
 
         $result = Database::query($sql);
         $attributes = [];
-        while ($row = Database :: fetch_array($result, 'ASSOC')) {
+        while ($row = Database::fetch_array($result, 'ASSOC')) {
             $attributes[$row['iid']] = $row;
         }
 
@@ -9366,17 +9355,15 @@ class Exercise
             if (empty($tableRows)) {
                 return '';
             }
+
             $table = new SortableTableFromArrayConfig(
                 $tableRows,
-                0,
+                1,
                 20,
-                'exercises_cat'.$categoryId,
-                [],
-                []
+                'exercises_cat'.$categoryId
             );
 
             $table->setTotalNumberOfItems($total);
-
             $table->set_additional_parameters([
                 'cidReq' => api_get_course_id(),
                 'id_session' => api_get_session_id(),

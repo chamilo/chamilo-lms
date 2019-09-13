@@ -323,7 +323,7 @@ class BuyCoursesPlugin extends Plugin
             $html = '<div class="buycourses-price">';
             if ($item) {
                 $html .= '<span class="label label-primary label-price">
-                            <strong>'.$item['iso_code'].' '.$item['total_price_formatted'].'</strong>
+                            <strong>'.$item['total_price_formatted'].'</strong>
                           </span>';
                 $return['verificator'] = true;
             } else {

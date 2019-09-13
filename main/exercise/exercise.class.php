@@ -3392,7 +3392,7 @@ class Exercise
 
         // Creates a temporary Question object
         $course_id = $this->course_id;
-        $objQuestionTmp = Question::read($questionId, $this->course);
+        $objQuestionTmp = Question::read($questionId, $this->course, false);
 
         if ($objQuestionTmp === false) {
             return false;

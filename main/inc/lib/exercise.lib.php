@@ -4579,7 +4579,7 @@ EOT;
         if (!empty($question_list)) {
             foreach ($question_list as $questionId) {
                 // Creates a temporary Question object
-                $objQuestionTmp = Question::read($questionId, $objExercise->course);
+                $objQuestionTmp = Question::read($questionId, $objExercise->course, false);
                 // This variable came from exercise_submit_modal.php
                 ob_start();
                 $choice = null;

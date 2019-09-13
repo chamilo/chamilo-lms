@@ -2240,10 +2240,10 @@ function get_work_user_list(
                     } else {
                         $workDirectory = api_get_path(SYS_COURSE_PATH).$course_info['directory'];
                         if (!Compilatio::verifiFileType($dbTitle)) {
-                            $actionCompilatio = get_lang('CompilatioFileIsNotSupported');
+                            $actionCompilatio = get_lang('FileFormatNotSupported');
                         } elseif (filesize($workDirectory.'/'.$work['url']) > $compilation->getMaxFileSize()) {
                             $sizeFile = round(filesize($workDirectory.'/'.$work['url']) / 1000000);
-                            $actionCompilatio = get_lang('CompilatioFileIsTooBig').': '.format_file_size($sizeFile).'<br />';
+                            $actionCompilatio = get_lang('UplFileTooBig').': '.format_file_size($sizeFile).'<br />';
                         } else {
                             $actionCompilatio = "<div id='id_avancement".$item_id."' class='compilation_block'>";
                             $actionCompilatio .= Display::url(

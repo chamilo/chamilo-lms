@@ -55,7 +55,7 @@ class Exercise
     public $exercise_was_added_in_lp = false;
     public $lpList = [];
     public $force_edit_exercise_in_lp = false;
-    public $categories;
+    public $categories = [];
     public $categories_grouping = true;
     public $endButton = 0;
     public $categoryWithQuestionList;
@@ -122,6 +122,7 @@ class Exercise
         $this->scoreTypeModel = 0;
         $this->globalCategoryId = null;
         $this->notifications = [];
+        $this->categories = [];
 
         if (!empty($courseId)) {
             $courseInfo = api_get_course_info_by_id($courseId);

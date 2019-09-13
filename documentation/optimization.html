@@ -219,6 +219,12 @@ ALTER TABLE c_lp_item_view ADD INDEX idx_clpiv_c_i_v (c_id, id, view_count);
         ALTER TABLE extra_field_values ADD INDEX idx_efv_item (item_id);
         ALTER TABLE c_item_property ADD INDEX idx_cip_lasteditu (lastedit_user_id);
     </pre>
+
+    Improvements after 1.11.10
+    <pre>
+        ALTER TABLE message ADD INDEX idx_message_status (msg_status);
+        ALTER TABLE track_e_default ADD INDEX idx_default_user_id (default_user_id);
+    </pre>
 <hr />
 <h2><a name="3.Indexes-caching"></a>3. Indexes caching</h2>
 One good reference: <a href="http://dev.mysql.com/doc/refman/5.6/en/multiple-key-caches.html">MySQL documentation on multiple key caches</a><br />

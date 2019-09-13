@@ -1030,6 +1030,10 @@ EOT;
         $attributes['class'] = isset($config['class']) ? $config['class'] : [];
         $attributes['id'] = isset($config['id']) ? $config['id'] : '';
 
+        if (empty($attributes['id'])) {
+            $attributes['id'] = $name;
+        }
+
         $this->addElement('html_editor', $name, $label, $attributes, $config);
         $this->applyFilter($name, 'trim');
         if ($required) {

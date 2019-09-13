@@ -304,6 +304,24 @@ class FeatureContext extends MinkContext
     }
 
     /**
+     * @Then /^I fill the only ckeditor in the page with "([^"]*)"$/
+     */
+    public function iFillTheOnlyEditorInThePage($value)
+    {
+        // Just in case wait that ckeditor is loaded
+        $this->getSession()->wait(2000);
+
+
+        $this->getSession()->executeScript(
+            "
+                var textarea = $('textarea');
+                var id = textarea.attr('id'); 
+                CKEDITOR.instances[id].setData(\"$value\");
+                "
+        );
+    }
+
+    /**
      * @Given /^I fill hidden field "([^"]*)" with "([^"]*)"$/
      */
     public function iFillHiddenFieldWith($field, $value)

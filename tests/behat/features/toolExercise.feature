@@ -291,7 +291,8 @@ Feature: Exercise tool
     Then I select "B" from "choice_id_4_2"
     Then I press "Next question"
     # Question 5 - Open question
-    #Then I fill in ckeditor field "<string>" with "<string>"
+    Then wait for the page to be loaded
+    Then I fill the only ckeditor in the page with "Hello you"
     Then wait for the page to be loaded
     Then I press "Next question"
     # Question 6 - Oral question
@@ -314,6 +315,7 @@ Feature: Exercise tool
     # Question 11 - Global multiple answer
     Then I check "Answer true"
     Then I press "End test"
+    Then I should see "Hello you"
     Then I should see "Score for the test: 83 / 117"
 
   Scenario: Check exercise result

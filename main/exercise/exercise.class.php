@@ -8441,7 +8441,7 @@ class Exercise
             if (!empty($categoryId)) {
                 $categoryCondition = " AND exercise_category_id = $categoryId ";
             } else {
-                $categoryCondition = " AND exercise_category_id IS NULL ";
+                $categoryCondition = ' AND exercise_category_id IS NULL ';
             }
         }
 
@@ -8487,9 +8487,11 @@ class Exercise
                           active = 1
                           $condition_session
                           $categoryCondition
-                          $keywordCondition ";
-            // ORDER BY title LIMIT $from , $limit";
+                          $keywordCondition 
+                    ORDER BY title ";
+            // LIMIT $from , $limit";
         }
+
         $result = Database::query($sql);
         $result_total = Database::query($total_sql);
 

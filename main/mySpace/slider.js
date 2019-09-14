@@ -31,7 +31,7 @@ function sliderClose()
     $(".slider").animate({"height": sliderHeight}, {duration: "fast" });
 }
 
-$(document).ready(function () {
+$(function() {
     // Show the slider content
     $('.slider').show();
     $('.slider').each(function () {

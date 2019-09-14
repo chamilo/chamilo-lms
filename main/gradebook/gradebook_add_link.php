@@ -39,7 +39,7 @@ if ($session_id == 0) {
 $category = Category :: load($selectCat);
 $url = api_get_self().'?selectcat='.$selectCat.'&newtypeselected='.$typeSelected.'&course_code='.api_get_course_id().'&'.api_get_cidreq();
 $typeform = new LinkForm(
-    LinkForm :: TYPE_CREATE,
+    LinkForm::TYPE_CREATE,
     $category[0],
     null,
     'create_link',
@@ -131,6 +131,16 @@ if (isset($typeSelected) && $typeSelected != '0') {
         }
 
         $link->add();
+
+        $logInfo = [
+            'tool' => TOOL_GRADEBOOK,
+            'tool_id' => 0,
+            'tool_id_detail' => 0,
+            'action' => 'new-link',
+            'action_details' => 'selectcat='.$selectCat,
+        ];
+        Event::registerLog($logInfo);
+
         $addvalue_result = !empty($addvalues['addresult']) ? $addvalues['addresult'] : [];
         if ($addvalue_result == 1) {
             header('Location: gradebook_add_result.php?selecteval='.$link->get_ref_id().'&'.api_get_cidreq());
@@ -142,6 +152,22 @@ if (isset($typeSelected) && $typeSelected != '0') {
     }
 }
 
+$action_details = '';
+$current_id = 0;
+if (isset($_GET['selectcat'])) {
+    $action_details = 'selectcat';
+    $current_id = (int) $_GET['selectcat'];
+}
+
+$logInfo = [
+    'tool' => TOOL_GRADEBOOK,
+    'tool_id' => 0,
+    'tool_id_detail' => 0,
+    'action' => 'add-link',
+    'action_details' => 'selectcat='.$selectCat,
+];
+Event::registerLog($logInfo);
+
 $interbreadcrumb[] = [
     'url' => Category::getUrl().'selectcat='.$selectCat,
     'name' => get_lang('Gradebook'),
@@ -149,7 +175,7 @@ $interbreadcrumb[] = [
 $this_section = SECTION_COURSES;
 
 $htmlHeadXtra[] = '<script>
-$(document).ready( function() {
+$(function() {
     $("#hide_category_id").change(function() {
        $("#hide_category_id option:selected").each(function () {
            var cat_id = $(this).val();

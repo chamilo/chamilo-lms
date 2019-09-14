@@ -32,6 +32,7 @@ $document_data = DocumentManager::get_document_data_by_id(
     true,
     $session_id
 );
+
 if ($session_id != 0 && !$document_data) {
     $document_data = DocumentManager::get_document_data_by_id(
         $document_id,
@@ -75,7 +76,7 @@ if ($is_allowed_in_course == false) {
 // Check user visibility
 $is_visible = DocumentManager::check_visibility_tree(
     $document_id,
-    api_get_course_id(),
+    api_get_course_info(),
     api_get_session_id(),
     api_get_user_id(),
     api_get_group_id()

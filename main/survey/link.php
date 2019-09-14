@@ -40,7 +40,7 @@ if ($hashIsValid && $courseInfo) {
     $invitation_id = SurveyUtil::save_invitation($params);
 
     if ($invitation_id) {
-        $link = api_get_path(WEB_CODE_PATH).'survey/fillsurvey.php?invitationcode='.$invitation_code.'&course='.$courseInfo['code'].'&id_session='.$sessionId;
+        $link = SurveyUtil::generateFillSurveyLink($invitation_code, $courseInfo['code'], $sessionId);
         header('Location: '.$link);
         exit;
     }

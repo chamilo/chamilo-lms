@@ -1,6 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\ExtraField as ExtraFieldEntity;
 use Chamilo\CoreBundle\Entity\ExtraFieldValues;
 use Chamilo\CourseBundle\Entity\CAnnouncement;
 use Chamilo\CourseBundle\Entity\CItemProperty;
@@ -125,7 +126,7 @@ class AnnouncementManager
                         $value = $extra['value'];
                         if ($value instanceof ExtraFieldValues) {
                             $field = $value->getField();
-                            if ($field) {
+                            if ($field instanceof ExtraFieldEntity) {
                                 $data['extra_'.$field->getVariable()] = $value->getValue();
                             }
                         }
@@ -134,7 +135,7 @@ class AnnouncementManager
             }
         }
 
-        if (!empty(api_get_session_id())) {
+        if (!empty($sessionId)) {
             $data['coaches'] = $coaches;
             $data['general_coach'] = $generalCoachName;
             $data['general_coach_email'] = $generalCoachEmail;
@@ -160,7 +161,7 @@ class AnnouncementManager
      */
     public static function get_all_annoucement_by_course($course_info, $session_id = 0)
     {
-        $session_id = intval($session_id);
+        $session_id = (int) $session_id;
         $courseId = $course_info['real_id'];
 
         $tbl_announcement = Database::get_course_table(TABLE_ANNOUNCEMENT);
@@ -316,13 +317,15 @@ class AnnouncementManager
      * @param int $announcementId
      * @param int $courseId
      * @param int $userId
+     * @param int $groupId
      *
      * @return array
      */
     public static function getAnnouncementInfoById(
         $announcementId,
         $courseId,
-        $userId
+        $userId,
+        $groupId = 0
     ) {
         if (api_is_allowed_to_edit(false, true) ||
             (api_get_course_setting('allow_user_edit_announcement') && !api_is_anonymous())
@@ -337,13 +340,22 @@ class AnnouncementManager
                         a.cId = :course
                     ORDER BY a.displayOrder DESC";
         } else {
-            $group_list = GroupManager::get_group_ids($courseId, api_get_user_id());
-
-            if (empty($group_list)) {
-                $group_list[] = 0;
-            }
+            $groupId = (int) $groupId;
+            $groupList[] = $groupId;
 
             if (api_get_user_id() != 0) {
+                $extraGroupCondition = '';
+                if (!empty($groupId)) {
+                    $groupProperties = GroupManager::get_group_properties($groupId);
+                    if ($groupProperties['announcements_state'] == GroupManager::TOOL_PRIVATE_BETWEEN_USERS) {
+                        $extraGroupCondition = " AND (
+                            ip.toUser = $userId AND ip.group = $groupId OR
+                            (ip.group IN ('0') OR ip.group IS NULL) OR
+                            (ip.group = $groupId AND (ip.toUser IS NULL OR ip.toUser = 0))
+                        )";
+                    }
+                }
+
                 $dql = "SELECT a, ip
                         FROM ChamiloCourseBundle:CAnnouncement a 
                         JOIN ChamiloCourseBundle:CItemProperty ip
@@ -353,11 +365,12 @@ class AnnouncementManager
                             ip.tool='announcement' AND
                             (
                                 ip.toUser = $userId OR
-                                ip.group IN ('0', '".implode("', '", $group_list)."') OR
+                                ip.group IN ('0', '".$groupId."') OR
                                 ip.group IS NULL
                             ) AND
                             ip.visibility = '1' AND                       
                             ip.course = :course
+                            $extraGroupCondition
                         ORDER BY a.displayOrder DESC";
             } else {
                 $dql = "SELECT a, ip
@@ -381,10 +394,14 @@ class AnnouncementManager
             ]
         );
 
-        return [
-            'announcement' => $result[0],
-            'item_property' => $result[1],
-        ];
+        if (!empty($result)) {
+            return [
+                'announcement' => $result[0],
+                'item_property' => $result[1],
+            ];
+        }
+
+        return [];
     }
 
     /**
@@ -396,8 +413,10 @@ class AnnouncementManager
      */
     public static function displayAnnouncement($id)
     {
-        if ($id != strval(intval($id))) {
-            return null;
+        $id = (int) $id;
+
+        if (empty($id)) {
+            return '';
         }
 
         global $charset;
@@ -406,8 +425,14 @@ class AnnouncementManager
         $result = self::getAnnouncementInfoById(
             $id,
             api_get_course_int_id(),
-            api_get_user_id()
+            api_get_user_id(),
+            api_get_group_id()
         );
+
+        if (empty($result)) {
+            return '';
+        }
+
         /** @var CAnnouncement $announcement */
         $announcement = $result['announcement'];
         /** @var CItemProperty $itemProperty */
@@ -464,7 +489,7 @@ class AnnouncementManager
         $html .= "</td></tr>";
 
         $allow = !api_get_configuration_value('hide_announcement_sent_to_users_info');
-        if (api_is_allowed_to_edit(false, true) && $allow) {
+        if ($allow && api_is_allowed_to_edit(false, true)) {
             $sent_to = self::sent_to('announcement', $id);
             $sentToForm = self::sent_to_form($sent_to);
             $html .= Display::tag(
@@ -499,7 +524,7 @@ class AnnouncementManager
             }
             $html .= '</td></tr>';
         }
-        $html .= "</table>";
+        $html .= '</table>';
 
         return $html;
     }
@@ -1214,7 +1239,7 @@ class AnnouncementManager
             // outputting the name of the groups
             if (is_array($sent_to_array['groups'])) {
                 foreach ($sent_to_array['groups'] as $group_id) {
-                    $users = GroupManager::getStudents($group_id);
+                    $users = GroupManager::getStudents($group_id, true);
                     $userToArray = [];
                     foreach ($users as $student) {
                         $userToArray[] = $student['complete_name_with_username'];
@@ -1249,7 +1274,7 @@ class AnnouncementManager
             ) {
                 $group_id = $sent_to_array['groups'][0];
 
-                $users = GroupManager::getStudents($group_id);
+                $users = GroupManager::getStudents($group_id, true);
                 $userToArray = [];
                 foreach ($users as $student) {
                     $userToArray[] = $student['complete_name_with_username'];
@@ -1337,7 +1362,7 @@ class AnnouncementManager
     public static function get_attachment($announcementId)
     {
         $table = Database::get_course_table(TABLE_ANNOUNCEMENT_ATTACHMENT);
-        $announcementId = intval($announcementId);
+        $announcementId = (int) $announcementId;
         $courseId = api_get_course_int_id();
         $row = [];
         $sql = 'SELECT id, path, filename, comment 
@@ -1624,6 +1649,11 @@ class AnnouncementManager
 
         $allowDrhAccess = api_get_configuration_value('allow_drh_access_announcement');
 
+        if ($allowDrhAccess && api_is_drh()) {
+            // DRH only can see visible
+            $searchCondition .= ' AND (ip.visibility = 1)';
+        }
+
         if (api_is_allowed_to_edit(false, true) ||
             ($allowUserEditSetting && !api_is_anonymous()) ||
             ($allowDrhAccess && api_is_drh())
@@ -1819,7 +1849,7 @@ class AnnouncementManager
                                 $searchCondition  AND
                                 ip.visibility='1' AND
                                 announcement.session_id IN ( 0,".api_get_session_id().")
-                            $groupBy
+                                $groupBy
                             ";
                 }
             }

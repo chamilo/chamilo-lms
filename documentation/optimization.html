@@ -200,6 +200,7 @@ ALTER TABLE c_lp_item_view ADD INDEX idx_clpiv_c_i_v (c_id, id, view_count);
         CREATE INDEX idx_survey_code ON c_survey (code);
         CREATE INDEX idx_survey_inv_code ON c_survey_invitation (survey_code);
         CREATE INDEX idx_survey_qo_qid ON c_survey_question_option (question_id);
+        CREATE INDEX idx_c_survey_answerucsq ON c_survey_answer (user, c_id, survey_id, question_id);
     </pre>
     Also by adding a index on access_url_rel_session to improve the course/session list
     <pre>
@@ -208,6 +209,9 @@ ALTER TABLE c_lp_item_view ADD INDEX idx_clpiv_c_i_v (c_id, id, view_count);
     If you have lots of gradebook stuff, add this
     <pre>
         ALTER TABLE gradebook_result ADD INDEX idx_gb_uid_eid (user_id, evaluation_id);
+        ALTER TABLE gradebook_category ADD INDEX idx_gb_cat_parent (parent_id);
+        ALTER TABLE gradebook_evaluation ADD INDEX idx_ge_cat (category_id);
+        ALTER TABLE gradebook_link ADD INDEX idx_gl_cat (category_id);
     </pre>
     If you have to delete a lot of users, you'll realize deleting users is a slow operation.
     Using the following queries might help:

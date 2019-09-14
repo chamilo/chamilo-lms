@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Symfony\Component\DomCrawler\Crawler;
+
 /**
  * Defines the scorm class, which is meant to contain the scorm items (nuclear elements).
  *
@@ -94,9 +96,13 @@ class scorm extends learnpath
 
             // UTF-8 is supported by DOMDocument class, this is for sure.
             $xml = api_utf8_encode_xml($xml, $this->manifest_encoding);
-            $doc = new DOMDocument();
-            $res = @$doc->loadXML($xml);
-            if ($res === false) {
+
+            $crawler = new Crawler();
+            $crawler->addXmlContent($xml);
+
+            $xmlErrors = libxml_get_errors();
+
+            if (!empty($xmlErrors)) {
                 if ($this->debug > 0) {
                     error_log('New LP - In scorm::parse_manifest() - Exception thrown when loading '.$file.' in DOMDocument');
                 }
@@ -105,10 +111,11 @@ class scorm extends learnpath
             }
 
             if ($this->debug > 1) {
-                error_log('New LP - Called  (encoding:'.$doc->xmlEncoding.' - saved: '.$this->manifest_encoding.')', 0);
+                error_log('New LP - Called  (encoding:'.$this->manifest_encoding.' - saved: '.$this->manifest_encoding.')', 0);
             }
 
-            $root = $doc->documentElement;
+            $root = $crawler->getNode(0);
+
             if ($root->hasAttributes()) {
                 $attributes = $root->attributes;
                 if ($attributes->length !== 0) {
@@ -220,8 +227,7 @@ class scorm extends learnpath
                     }
                 }
             }
-            unset($doc);
-        // End parsing using PHP5 DOMXML methods.
+            // End parsing using PHP5 DOMXML methods.
         } else {
             if ($this->debug > 1) {
                 error_log('New LP - Could not open/read file '.$file);
@@ -586,8 +592,8 @@ class scorm extends learnpath
     /**
      * Imports a zip file into the Chamilo structure.
      *
-     * @param string    $zip_file_info     Zip file info as given by $_FILES['userFile']
-     * @param string    $current_dir
+     * @param string    $zipFileInfo       Zip file info as given by $_FILES['userFile']
+     * @param string    $currentDir
      * @param array     $courseInfo
      * @param bool      $updateDirContents
      * @param learnpath $lpToCheck
@@ -595,55 +601,58 @@ class scorm extends learnpath
      * @return string $current_dir Absolute path to the imsmanifest.xml file or empty string on error
      */
     public function import_package(
-        $zip_file_info,
-        $current_dir = '',
+        $zipFileInfo,
+        $currentDir = '',
         $courseInfo = [],
         $updateDirContents = false,
         $lpToCheck = null
     ) {
         if ($this->debug > 0) {
             error_log(
-                'In scorm::import_package('.print_r($zip_file_info, true).',"'.$current_dir.'") method'
+                'In scorm::import_package('.print_r($zipFileInfo, true).',"'.$currentDir.'") method'
             );
         }
 
         $courseInfo = empty($courseInfo) ? api_get_course_info() : $courseInfo;
         $maxFilledSpace = DocumentManager::get_course_quota($courseInfo['code']);
 
-        $zip_file_path = $zip_file_info['tmp_name'];
-        $zip_file_name = $zip_file_info['name'];
+        $zipFilePath = $zipFileInfo['tmp_name'];
+        $zipFileName = $zipFileInfo['name'];
 
         if ($this->debug > 1) {
-            error_log('New LP - import_package() - zip file path = '.$zip_file_path.', zip file name = '.$zip_file_name, 0);
+            error_log(
+                'New LP - import_package() - zip file path = '.$zipFilePath.', zip file name = '.$zipFileName,
+                0
+            );
         }
 
-        $course_rel_dir = api_get_course_path($courseInfo['code']).'/scorm'; // scorm dir web path starting from /courses
-        $course_sys_dir = api_get_path(SYS_COURSE_PATH).$course_rel_dir; // Absolute system path for this course.
-        $current_dir = api_replace_dangerous_char(trim($current_dir)); // Current dir we are in, inside scorm/
+        $courseRelDir = api_get_course_path($courseInfo['code']).'/scorm'; // scorm dir web path starting from /courses
+        $courseSysDir = api_get_path(SYS_COURSE_PATH).$courseRelDir; // Absolute system path for this course.
+        $currentDir = api_replace_dangerous_char(trim($currentDir)); // Current dir we are in, inside scorm/
 
         if ($this->debug > 1) {
-            error_log('New LP - import_package() - current_dir = '.$current_dir, 0);
+            error_log('New LP - import_package() - current_dir = '.$currentDir, 0);
         }
 
         // Get name of the zip file without the extension.
-        $file_info = pathinfo($zip_file_name);
-        $filename = $file_info['basename'];
-        $extension = $file_info['extension'];
-        $file_base_name = str_replace('.'.$extension, '', $filename); // Filename without its extension.
-        $this->zipname = $file_base_name; // Save for later in case we don't have a title.
-        $new_dir = api_replace_dangerous_char(trim($file_base_name));
-        $this->subdir = $new_dir;
+        $fileInfo = pathinfo($zipFileName);
+        $filename = $fileInfo['basename'];
+        $extension = $fileInfo['extension'];
+        $fileBaseName = str_replace('.'.$extension, '', $filename); // Filename without its extension.
+        $this->zipname = $fileBaseName; // Save for later in case we don't have a title.
+        $newDir = api_replace_dangerous_char(trim($fileBaseName));
+        $this->subdir = $newDir;
         if ($this->debug > 1) {
-            error_log('New LP - Received zip file name: '.$zip_file_path);
+            error_log('New LP - Received zip file name: '.$zipFilePath);
             error_log("New LP - subdir is first set to : ".$this->subdir);
-            error_log("New LP - base file name is : ".$file_base_name);
+            error_log("New LP - base file name is : ".$fileBaseName);
         }
 
-        $zipFile = new PclZip($zip_file_path);
+        $zipFile = new PclZip($zipFilePath);
         // Check the zip content (real size and file extension).
         $zipContentArray = $zipFile->listContent();
-        $package_type = '';
-        $manifest_list = [];
+        $packageType = '';
+        $manifestList = [];
         // The following loop should be stopped as soon as we found the right imsmanifest.xml (how to recognize it?).
         $realFileSize = 0;
         foreach ($zipContentArray as $thisContent) {
@@ -657,29 +666,29 @@ class scorm extends learnpath
                         error_log("New LP - subdir is now ".$this->subdir);
                     }
                 }
-                $package_type = 'scorm';
-                $manifest_list[] = $thisContent['filename'];
+                $packageType = 'scorm';
+                $manifestList[] = $thisContent['filename'];
             }
             $realFileSize += $thisContent['size'];
         }
 
         // Now get the shortest path (basically, the imsmanifest that is the closest to the root).
-        $shortest_path = $manifest_list[0];
-        $slash_count = substr_count($shortest_path, '/');
-        foreach ($manifest_list as $manifest_path) {
-            $tmp_slash_count = substr_count($manifest_path, '/');
-            if ($tmp_slash_count < $slash_count) {
-                $shortest_path = $manifest_path;
-                $slash_count = $tmp_slash_count;
+        $shortestPath = $manifestList[0];
+        $slashCount = substr_count($shortestPath, '/');
+        foreach ($manifestList as $manifestPath) {
+            $tmpSlashCount = substr_count($manifestPath, '/');
+            if ($tmpSlashCount < $slashCount) {
+                $shortestPath = $manifestPath;
+                $slashCount = $tmpSlashCount;
             }
         }
 
-        $this->subdir .= '/'.dirname($shortest_path); // Do not concatenate because already done above.
-        $manifest = $shortest_path;
+        $this->subdir .= '/'.dirname($shortestPath); // Do not concatenate because already done above.
+        $manifest = $shortestPath;
         if ($this->debug) {
-            error_log("New LP - Package type is now: '$package_type'");
+            error_log("New LP - Package type is now: '$packageType'");
         }
-        if ($package_type == '') {
+        if ($packageType == '') {
             Display::addFlash(
                 Display::return_message(get_lang('NotScormContent'))
             );
@@ -687,7 +696,7 @@ class scorm extends learnpath
             return false;
         }
 
-        if (!enough_size($realFileSize, $course_sys_dir, $maxFilledSpace)) {
+        if (!enough_size($realFileSize, $courseSysDir, $maxFilledSpace)) {
             if ($this->debug > 1) {
                 error_log('New LP - Not enough space to store package');
             }
@@ -700,20 +709,20 @@ class scorm extends learnpath
 
         if ($updateDirContents && $lpToCheck) {
             $originalPath = str_replace('/.', '', $lpToCheck->path);
-            if ($originalPath != $new_dir) {
+            if ($originalPath != $newDir) {
                 Display::addFlash(Display::return_message(get_lang('FileError')));
 
                 return false;
             }
         }
 
-        // It happens on Linux that $new_dir sometimes doesn't start with '/'
-        if ($new_dir[0] != '/') {
-            $new_dir = '/'.$new_dir;
+        // It happens on Linux that $newDir sometimes doesn't start with '/'
+        if ($newDir[0] != '/') {
+            $newDir = '/'.$newDir;
         }
 
-        if ($new_dir[strlen($new_dir) - 1] == '/') {
-            $new_dir = substr($new_dir, 0, -1);
+        if ($newDir[strlen($newDir) - 1] == '/') {
+            $newDir = substr($newDir, 0, -1);
         }
 
         /* Uncompressing phase */
@@ -723,92 +732,33 @@ class scorm extends learnpath
             - parse & change relative html links
             - make sure the filenames are secure (filter funny characters or php extensions)
         */
-        if (is_dir($course_sys_dir.$new_dir) ||
-            @mkdir($course_sys_dir.$new_dir, api_get_permissions_for_new_directories())
+        if (is_dir($courseSysDir.$newDir) ||
+            @mkdir(
+                $courseSysDir.$newDir,
+                api_get_permissions_for_new_directories()
+            )
         ) {
             // PHP method - slower...
             if ($this->debug >= 1) {
-                error_log('New LP - Changing dir to '.$course_sys_dir.$new_dir);
-            }
-            $saved_dir = getcwd();
-            chdir($course_sys_dir.$new_dir);
-            $unzippingState = $zipFile->extract();
-
-            for ($j = 0; $j < count($unzippingState); $j++) {
-                $state = $unzippingState[$j];
-                // TODO: Fix relative links in html files (?)
-                $extension = strrchr($state['stored_filename'], '.');
-                if ($this->debug >= 1) {
-                    error_log('New LP - found extension '.$extension.' in '.$state['stored_filename']);
-                }
+                error_log('New LP - Changing dir to '.$courseSysDir.$newDir);
             }
 
-            if (!empty($new_dir)) {
-                $new_dir = $new_dir.'/';
+            chdir($courseSysDir.$newDir);
+
+            $zipFile->extract(
+                PCLZIP_CB_PRE_EXTRACT,
+                'clean_up_files_in_zip'
+            );
+
+            if (!empty($newDir)) {
+                $newDir = $newDir.'/';
             }
-
-            // Rename files, for example with \\ in it.
-            if ($this->debug >= 1) {
-                error_log('New LP - try to open: '.$course_sys_dir.$new_dir);
-            }
-
-            if ($dir = @opendir($course_sys_dir.$new_dir)) {
-                if ($this->debug >= 1) {
-                    error_log('New LP - Opened dir '.$course_sys_dir.$new_dir);
-                }
-                while ($file = readdir($dir)) {
-                    if ($file != '.' && $file != '..') {
-                        // TODO: RENAMING FILES CAN BE VERY DANGEROUS SCORM-WISE, avoid that as much as possible!
-                        //$safe_file = api_replace_dangerous_char($file, 'strict');
-                        $find_str = ['\\', '.php', '.phtml'];
-                        $repl_str = ['/', '.txt', '.txt'];
-                        $safe_file = str_replace($find_str, $repl_str, $file);
-
-                        if ($this->debug >= 1) {
-                            error_log('Comparing:  '.$safe_file);
-                            error_log('and:  '.$file);
-                        }
-
-                        if ($safe_file != $file) {
-                            $mydir = dirname($course_sys_dir.$new_dir.$safe_file);
-                            if (!is_dir($mydir)) {
-                                $mysubdirs = explode('/', $mydir);
-                                $mybasedir = '/';
-                                foreach ($mysubdirs as $mysubdir) {
-                                    if (!empty($mysubdir)) {
-                                        $mybasedir = $mybasedir.$mysubdir.'/';
-                                        if (!is_dir($mybasedir)) {
-                                            @mkdir($mybasedir, api_get_permissions_for_new_directories());
-                                            if ($this->debug >= 1) {
-                                                error_log('New LP - Dir '.$mybasedir.' doesnt exist. Creating.');
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                            @rename($course_sys_dir.$new_dir.$file, $course_sys_dir.$new_dir.$safe_file);
-                            if ($this->debug >= 1) {
-                                error_log(
-                                    'New LP - Renaming '.$course_sys_dir.$new_dir.$file.' to '.$course_sys_dir.$new_dir.$safe_file
-                                );
-                            }
-                        }
-                    }
-                }
-
-                closedir($dir);
-                chdir($saved_dir);
-
-                api_chmod_R($course_sys_dir.$new_dir, api_get_permissions_for_new_directories());
-                if ($this->debug > 1) {
-                    error_log('New LP - changed back to init dir: '.$course_sys_dir.$new_dir);
-                }
-            }
+            api_chmod_R($courseSysDir.$newDir, api_get_permissions_for_new_directories());
         } else {
             return false;
         }
 
-        return $course_sys_dir.$new_dir.$manifest;
+        return $courseSysDir.$newDir.$manifest;
     }
 
     /**

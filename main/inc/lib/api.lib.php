@@ -249,6 +249,8 @@ define('LOG_USER_ID', 'user_id');
 define('LOG_USER_OBJECT', 'user_object');
 define('LOG_USER_FIELD_VARIABLE', 'user_field_variable');
 define('LOG_SESSION_ID', 'session_id');
+
+define('LOG_QUESTION_ID', 'question_id');
 define('LOG_SESSION_CATEGORY_ID', 'session_category_id');
 define('LOG_CONFIGURATION_SETTINGS_CATEGORY', 'settings_category');
 define('LOG_CONFIGURATION_SETTINGS_VARIABLE', 'settings_variable');
@@ -277,6 +279,9 @@ define('LOG_USER_CONFIRMED_EMAIL', 'user_confirmed_email');
 define('LOG_USER_REMOVED_LEGAL_ACCEPT', 'user_removed_legal_accept');
 
 define('LOG_USER_DELETE_ACCOUNT_REQUEST', 'user_delete_account_request');
+
+define('LOG_QUESTION_CREATED', 'question_created');
+define('LOG_QUESTION_UPDATED', 'question_updated');
 
 define('USERNAME_PURIFIER', '/[^0-9A-Za-z_\.]/');
 
@@ -402,6 +407,7 @@ define('SCORE_CUSTOM', 10); // Good!
 define('SCORE_DIV_SIMPLE_WITH_CUSTOM', 11); // X - Good!
 define('SCORE_DIV_SIMPLE_WITH_CUSTOM_LETTERS', 12); // X - Good!
 define('SCORE_ONLY_SCORE', 13); // X - Good!
+define('SCORE_NUMERIC', 14);
 
 define('SCORE_BOTH', 1);
 define('SCORE_ONLY_DEFAULT', 2);
@@ -469,7 +475,11 @@ define('RESULT_DISABLE_NO_SCORE_AND_EXPECTED_ANSWERS', 1); //Do not show score n
 define('RESULT_DISABLE_SHOW_SCORE_ONLY', 2); //Show score only
 define('RESULT_DISABLE_SHOW_FINAL_SCORE_ONLY_WITH_CATEGORIES', 3); //Show final score only with categories
 define('RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT', 4);
-// 4: Show final score only with categories and show expected answers only on the last attempt
+define('RESULT_DISABLE_DONT_SHOW_SCORE_ONLY_IF_USER_FINISHES_ATTEMPTS_SHOW_ALWAYS_FEEDBACK', 5);
+define('RESULT_DISABLE_RANKING', 6);
+define('RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER', 7);
+
+// 4: Show final score only with  and show expected answers only on the last attempt
 
 define('EXERCISE_MAX_NAME_SIZE', 80);
 
@@ -576,6 +586,7 @@ define('MESSAGE_STATUS_WALL', '8');
 define('MESSAGE_STATUS_WALL_DELETE', '9');
 define('MESSAGE_STATUS_WALL_POST', '10');
 define('MESSAGE_STATUS_CONVERSATION', '11');
+define('MESSAGE_STATUS_FORUM', '12');
 
 // Images
 define('IMAGE_WALL_SMALL_SIZE', 200);
@@ -1139,16 +1150,15 @@ function api_valid_email($address)
  */
 function api_protect_course_script($print_headers = false, $allow_session_admins = false, $allow_drh = false)
 {
-    $is_allowed_in_course = api_is_allowed_in_course();
-
-    $is_visible = false;
     $course_info = api_get_course_info();
-
     if (empty($course_info)) {
         api_not_allowed($print_headers);
 
         return false;
     }
+
+    $is_allowed_in_course = api_is_allowed_in_course();
+    $is_visible = false;
 
     if (api_is_drh()) {
         return true;
@@ -1515,6 +1525,17 @@ function _api_format_user($user, $add_password = false, $loadAvatars = true)
     // Maintain the user_id index for backwards compatibility
     $result['user_id'] = $result['id'] = $user_id;
 
+    $hasCertificates = Certificate::getCertificateByUser($user_id);
+    $result['has_certificates'] = 0;
+    if (!empty($hasCertificates)) {
+        $result['has_certificates'] = 1;
+    }
+
+    $result['icon_status'] = '';
+    $result['icon_status_medium'] = '';
+
+    $result['is_admin'] = UserManager::is_admin($user_id);
+
     // Getting user avatar.
     if ($loadAvatars) {
         $result['avatar'] = '';
@@ -1561,6 +1582,38 @@ function _api_format_user($user, $add_password = false, $loadAvatars = true)
         } else {
             $result['avatar_medium'] = $user['avatar_medium'];
         }
+
+        $urlImg = api_get_path(WEB_IMG_PATH);
+        $iconStatus = '';
+        $iconStatusMedium = '';
+
+        switch ($result['status']) {
+            case STUDENT:
+                if ($result['has_certificates']) {
+                    $iconStatus = $urlImg.'icons/svg/identifier_graduated.svg';
+                } else {
+                    $iconStatus = $urlImg.'icons/svg/identifier_student.svg';
+                }
+                break;
+            case COURSEMANAGER:
+                if ($result['is_admin']) {
+                    $iconStatus = $urlImg.'icons/svg/identifier_admin.svg';
+                } else {
+                    $iconStatus = $urlImg.'icons/svg/identifier_teacher.svg';
+                }
+                break;
+            case STUDENT_BOSS:
+                $iconStatus = $urlImg.'icons/svg/identifier_teacher.svg';
+                break;
+        }
+
+        if (!empty($iconStatus)) {
+            $iconStatusMedium = '<img src="'.$iconStatus.'" width="32px" height="32px">';
+            $iconStatus = '<img src="'.$iconStatus.'" width="22px" height="22px">';
+        }
+
+        $result['icon_status'] = $iconStatus;
+        $result['icon_status_medium'] = $iconStatusMedium;
     }
 
     if (isset($user['user_is_online'])) {
@@ -1631,7 +1684,12 @@ function api_get_user_info(
         $userFromSession = Session::read('_user');
 
         if (isset($userFromSession)) {
-            if ($cacheAvailable === true) {
+            if ($cacheAvailable === true &&
+                (
+                    empty($userFromSession['is_anonymous']) &&
+                    (isset($userFromSession['status']) && $userFromSession['status'] != ANONYMOUS)
+                )
+            ) {
                 $apcVar = api_get_configuration_value('apc_prefix').'userinfo_'.$userFromSession['user_id'];
                 if (apcu_exists($apcVar)) {
                     if ($updateCache) {
@@ -1678,11 +1736,11 @@ function api_get_user_info(
     $result = Database::query($sql);
     if (Database::num_rows($result) > 0) {
         $result_array = Database::fetch_array($result);
+        $result_array['user_is_online_in_chat'] = 0;
         if ($checkIfUserOnline) {
             $use_status_in_platform = user_is_online($user_id);
             $result_array['user_is_online'] = $use_status_in_platform;
             $user_online_in_chat = 0;
-
             if ($use_status_in_platform) {
                 $user_status = UserManager::get_extra_user_data_by_field(
                     $user_id,
@@ -1839,9 +1897,8 @@ function api_get_course_path($course_code = null)
 /**
  * Gets a course setting from the current course_setting table. Try always using integer values.
  *
- * @param string    The name of the setting we want from the table
- * @param string    Optional: course code
- * @param string $setting_name
+ * @param string $setting_name The name of the setting we want from the table
+ * @param string $course_code
  *
  * @return mixed The value of that setting in that table. Return -1 if not found.
  */
@@ -1886,7 +1943,7 @@ function api_get_anonymous_id()
     $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
     $tableU = Database::get_main_table(TABLE_MAIN_USER);
     $ip = Database::escape_string(api_get_real_ip());
-    $max = api_get_configuration_value('max_anonymous_users');
+    $max = (int) api_get_configuration_value('max_anonymous_users');
     if ($max >= 2) {
         $sql = "SELECT * FROM $table as TEL 
                 JOIN $tableU as U
@@ -1899,7 +1956,7 @@ function api_get_anonymous_id()
         if (empty(Database::num_rows($result))) {
             $login = uniqid('anon_');
             $anonList = UserManager::get_user_list(['status' => ANONYMOUS], ['registration_date ASC']);
-            if (count($anonList) == $max) {
+            if (count($anonList) >= $max) {
                 foreach ($anonList as $userToDelete) {
                     UserManager::delete_user($userToDelete['user_id']);
                     break;
@@ -2228,9 +2285,10 @@ function api_format_course_array($course_data)
             null,
             null,
             true,
-            false
+            true
         );
     }
+
     $_course['course_image_large'] = $url_image;
 
     return $_course;
@@ -2756,8 +2814,11 @@ function api_get_plugin_setting($plugin, $variable)
 
     if (isset($result[$plugin])) {
         $value = $result[$plugin];
-        if (@unserialize($value) !== false) {
-            $value = unserialize($value);
+
+        $unserialized = UnserializeApi::unserialize('not_allowed_classes', $value, true);
+
+        if (false !== $unserialized) {
+            $value = $unserialized;
         }
 
         return $value;
@@ -3303,8 +3364,9 @@ function api_is_allowed_to_edit(
     $session_coach = false,
     $check_student_view = true
 ) {
+    $allowSessionAdminEdit = api_get_configuration_value('session_admins_edit_courses_content') === true;
     // Admins can edit anything.
-    if (api_is_platform_admin(false)) {
+    if (api_is_platform_admin($allowSessionAdminEdit)) {
         //The student preview was on
         if ($check_student_view && api_is_student_view_active()) {
             return false;
@@ -4605,7 +4667,7 @@ function api_get_languages_combo($name = 'language')
     $languages = $language_list['name'];
     $folder = $language_list['folder'];
 
-    $ret .= '<select name="'.$name.'" id="language_chosen" class="selectpicker show-tick form-control">';
+    $ret .= '<select name="'.$name.'" id="language_chosen" class="selectpicker form-control">';
     foreach ($languages as $key => $value) {
         if ($folder[$key] == $default) {
             $selected = ' selected="selected"';
@@ -4626,7 +4688,7 @@ function api_get_languages_combo($name = 'language')
  * @param  bool Hide form if only one language available (defaults to false = show the box anyway)
  * @param bool $showAsButton
  *
- * @return null|string Display the box directly
+ * @return string|null Display the box directly
  */
 function api_display_language_form($hide_if_no_choice = false, $showAsButton = false)
 {
@@ -4894,8 +4956,12 @@ function api_get_language_from_type($lang_type)
  */
 function api_get_language_info($languageId)
 {
+    if (empty($languageId)) {
+        return [];
+    }
+
     $language = Database::getManager()
-        ->find('ChamiloCoreBundle:Language', intval($languageId));
+        ->find('ChamiloCoreBundle:Language', $languageId);
 
     if (!$language) {
         return [];
@@ -5079,7 +5145,7 @@ function api_max_sort_value($user_course_category, $user_id)
  *
  * @return string the formated time
  */
-function api_time_to_hms($seconds)
+function api_time_to_hms($seconds, $space = ':')
 {
     // $seconds = -1 means that we have wrong data in the db.
     if ($seconds == -1) {
@@ -5101,6 +5167,10 @@ function api_time_to_hms($seconds)
     // How many seconds
     $sec = floor($seconds - ($hours * 3600) - ($min * 60));
 
+    if ($hours < 10) {
+        $hours = "0$hours";
+    }
+
     if ($sec < 10) {
         $sec = "0$sec";
     }
@@ -5109,7 +5179,7 @@ function api_time_to_hms($seconds)
         $min = "0$min";
     }
 
-    return "$hours:$min:$sec";
+    return $hours.$space.$min.$space.$sec;
 }
 
 /* FILE SYSTEM RELATED FUNCTIONS */
@@ -6197,7 +6267,6 @@ function api_is_course_visible_for_user($userid = null, $cid = null)
  * @param string the tool of the element
  * @param int the element id in database
  * @param int the session_id to compare with element session id
- * @param string $tool
  *
  * @return bool true if the element is in the session, false else
  */
@@ -6205,6 +6274,12 @@ function api_is_element_in_the_session($tool, $element_id, $session_id = null)
 {
     if (is_null($session_id)) {
         $session_id = api_get_session_id();
+    }
+
+    $element_id = (int) $element_id;
+
+    if (empty($element_id)) {
+        return false;
     }
 
     // Get information to build query depending of the tool.
@@ -6230,8 +6305,8 @@ function api_is_element_in_the_session($tool, $element_id, $session_id = null)
     }
     $course_id = api_get_course_int_id();
 
-    $sql = "SELECT session_id FROM $table_tool 
-            WHERE c_id = $course_id AND $key_field =  ".intval($element_id);
+    $sql = "SELECT session_id FROM $table_tool
+            WHERE c_id = $course_id AND $key_field =  ".$element_id;
     $rs = Database::query($sql);
     if ($element_session_id = Database::result($rs, 0, 0)) {
         if ($element_session_id == intval($session_id)) {
@@ -7520,8 +7595,6 @@ function api_user_is_login($user_id = null)
  */
 function api_get_real_ip()
 {
-    // Guess the IP if behind a reverse proxy
-    global $debug;
     $ip = trim($_SERVER['REMOTE_ADDR']);
     if (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
         if (preg_match('/,/', $_SERVER['HTTP_X_FORWARDED_FOR'])) {
@@ -7530,9 +7603,6 @@ function api_get_real_ip()
             $ip1 = $_SERVER['HTTP_X_FORWARDED_FOR'];
         }
         $ip = trim($ip1);
-    }
-    if (!empty($debug)) {
-        error_log('Real IP: '.$ip);
     }
 
     return $ip;
@@ -8027,7 +8097,7 @@ function api_get_user_info_from_official_code($officialCode)
  * @param string $usernameInputId
  * @param string $passwordInputId
  *
- * @return null|string
+ * @return string|null
  */
 function api_get_password_checker_js($usernameInputId, $passwordInputId)
 {
@@ -8055,13 +8125,13 @@ function api_get_password_checker_js($usernameInputId, $passwordInputId)
     ];
 
     $js = api_get_asset('pwstrength-bootstrap/dist/pwstrength-bootstrap.min.js');
-    $js .= "<script>    
+    $js .= "<script>
     var errorMessages = {
         password_to_short : \"".get_lang('PasswordIsTooShort')."\",
         same_as_username : \"".get_lang('YourPasswordCannotBeTheSameAsYourUsername')."\"
     };
 
-    $(document).ready(function() {
+    $(function() {
         var lang = ".json_encode($translations).";     
         var options = {        
             onLoad : function () {
@@ -8269,7 +8339,7 @@ function api_can_login_as($loginAsUserId, $userId = null)
         }
     }
 
-    $userInfo = api_get_user_info($userId);
+    $userInfo = api_get_user_info($loginAsUserId);
     $isDrh = function () use ($loginAsUserId) {
         if (api_is_drh()) {
             if (api_drh_can_access_all_session_content()) {
@@ -8298,7 +8368,15 @@ function api_can_login_as($loginAsUserId, $userId = null)
         return false;
     };
 
-    return api_is_platform_admin() || (api_is_session_admin() && $userInfo['status'] == 5) || $isDrh();
+    $loginAsStatusForSessionAdmins = [STUDENT];
+
+    if (api_get_configuration_value('allow_session_admin_login_as_teacher')) {
+        $loginAsStatusForSessionAdmins[] = COURSEMANAGER;
+    }
+
+    return api_is_platform_admin() ||
+        (api_is_session_admin() && in_array($userInfo['status'], $loginAsStatusForSessionAdmins)) ||
+        $isDrh();
 }
 
 /**
@@ -8317,11 +8395,11 @@ function api_is_allowed_in_course()
  * Set the cookie to go directly to the course code $in_firstpage
  * after login.
  *
- * @param string $in_firstpage is the course code of the course to go
+ * @param string $value is the course code of the course to go
  */
-function api_set_firstpage_parameter($in_firstpage)
+function api_set_firstpage_parameter($value)
 {
-    setcookie('GotoCourse', $in_firstpage);
+    setcookie('GotoCourse', $value);
 }
 
 /**
@@ -8739,41 +8817,14 @@ function api_mail_html(
     $mail->Priority = 3;
     $mail->SMTPKeepAlive = true;
 
-    // Default values
-    $notification = new Notification();
-    $defaultEmail = $notification->getDefaultPlatformSenderEmail();
-    $defaultName = $notification->getDefaultPlatformSenderName();
+    api_set_noreply_and_from_address_to_mailer(
+        $mail,
+        ['name' => $senderName, 'email' => $senderEmail],
+        !empty($extra_headers['reply_to']) ? $extra_headers['reply_to'] : []
+    );
 
-    // If the parameter is set don't use the admin.
-    $senderName = !empty($senderName) ? $senderName : $defaultName;
-    $senderEmail = !empty($senderEmail) ? $senderEmail : $defaultEmail;
+    unset($extra_headers['reply_to']);
 
-    // Reply to first
-    if (isset($extra_headers['reply_to']) && empty($platform_email['SMTP_UNIQUE_REPLY_TO'])) {
-        $mail->AddReplyTo(
-            $extra_headers['reply_to']['mail'],
-            $extra_headers['reply_to']['name']
-        );
-        // Errors to sender
-        $mail->AddCustomHeader('Errors-To: '.$extra_headers['reply_to']['mail']);
-        $mail->Sender = $extra_headers['reply_to']['mail'];
-        unset($extra_headers['reply_to']);
-    } else {
-        $mail->AddCustomHeader('Errors-To: '.$defaultEmail);
-    }
-
-    //If the SMTP configuration only accept one sender
-    if (isset($platform_email['SMTP_UNIQUE_SENDER']) && $platform_email['SMTP_UNIQUE_SENDER']) {
-        $senderName = $platform_email['SMTP_FROM_NAME'];
-        $senderEmail = $platform_email['SMTP_FROM_EMAIL'];
-        $valid = PHPMailer::validateAddress($senderEmail);
-        if ($valid) {
-            //force-set Sender to $senderEmail, otherwise SetFrom only does it if it is currently empty
-            $mail->Sender = $senderEmail;
-        }
-    }
-
-    $mail->SetFrom($senderEmail, $senderName);
     $mail->Subject = $subject;
     $mail->AltBody = strip_tags(
         str_replace('<br />', "\n", api_html_entity_decode($message))
@@ -8931,11 +8982,17 @@ function api_mail_html(
  */
 function api_protect_course_group($tool, $showHeader = true)
 {
-    $userId = api_get_user_id();
     $groupId = api_get_group_id();
-    $groupInfo = GroupManager::get_group_properties($groupId);
+    if (!empty($groupId)) {
+        $userId = api_get_user_id();
+        $groupInfo = GroupManager::get_group_properties($groupId);
 
-    if (!empty($groupInfo)) {
+        // Group doesn't exists
+        if (empty($groupInfo)) {
+            api_not_allowed($showHeader);
+        }
+
+        // Check group access
         $allow = GroupManager::user_has_access(
             $userId,
             $groupInfo['iid'],
@@ -9266,4 +9323,254 @@ function api_get_relative_path($from, $to)
     }
 
     return implode('/', $relPath);
+}
+
+/**
+ * Unserialize content using Brummann\Polyfill\Unserialize.
+ *
+ * @param string $type
+ * @param string $serialized
+ * @param bool   $ignoreErrors. Optional.
+ *
+ * @return mixed
+ */
+function api_unserialize_content($type, $serialized, $ignoreErrors = false)
+{
+    switch ($type) {
+        case 'career':
+        case 'sequence_graph':
+            $allowedClasses = [Graph::class, VerticesMap::class, Vertices::class, Edges::class];
+            break;
+        case 'lp':
+            $allowedClasses = [
+                learnpath::class,
+                learnpathItem::class,
+                aicc::class,
+                aiccBlock::class,
+                aiccItem::class,
+                aiccObjective::class,
+                aiccResource::class,
+                scorm::class,
+                scormItem::class,
+                scormMetadata::class,
+                scormOrganization::class,
+                scormResource::class,
+                Link::class,
+                LpItem::class,
+            ];
+            break;
+        case 'course':
+            $allowedClasses = [
+                Course::class,
+                Announcement::class,
+                Attendance::class,
+                CalendarEvent::class,
+                CourseCopyLearnpath::class,
+                CourseCopyTestCategory::class,
+                CourseDescription::class,
+                CourseSession::class,
+                Document::class,
+                Forum::class,
+                ForumCategory::class,
+                ForumPost::class,
+                ForumTopic::class,
+                Glossary::class,
+                GradeBookBackup::class,
+                Link::class,
+                LinkCategory::class,
+                Quiz::class,
+                QuizQuestion::class,
+                QuizQuestionOption::class,
+                ScormDocument::class,
+                Survey::class,
+                SurveyInvitation::class,
+                SurveyQuestion::class,
+                Thematic::class,
+                ToolIntro::class,
+                Wiki::class,
+                Work::class,
+                stdClass::class,
+            ];
+            break;
+        case 'not_allowed_classes':
+        default:
+            $allowedClasses = false;
+    }
+
+    if ($ignoreErrors) {
+        return @Unserialize::unserialize(
+            $serialized,
+            ['allowed_classes' => $allowedClasses]
+        );
+    }
+
+    return Unserialize::unserialize(
+        $serialized,
+        ['allowed_classes' => $allowedClasses]
+    );
+}
+
+/**
+ * Set the From and ReplyTo properties to PHPMailer instance.
+ *
+ * @param PHPMailer $mailer
+ * @param array     $sender
+ * @param array     $replyToAddress
+ *
+ * @throws phpmailerException
+ */
+function api_set_noreply_and_from_address_to_mailer(PHPMailer $mailer, array $sender, array $replyToAddress = [])
+{
+    $platformEmail = $GLOBALS['platform_email'];
+
+    $noReplyAddress = api_get_setting('noreply_email_address');
+    $avoidReplyToAddress = false;
+
+    if (!empty($noReplyAddress)) {
+        $avoidReplyToAddress = api_get_configuration_value('mail_no_reply_avoid_reply_to');
+    }
+
+    $notification = new Notification();
+
+    // If the parameter is set don't use the admin.
+    $senderName = !empty($sender['name']) ? $sender['name'] : $notification->getDefaultPlatformSenderName();
+    $senderEmail = !empty($sender['email']) ? $sender['email'] : $notification->getDefaultPlatformSenderEmail();
+
+    // Reply to first
+    if (!$avoidReplyToAddress) {
+        $mailer->AddCustomHeader('Errors-To: '.$notification->getDefaultPlatformSenderEmail());
+
+        if (
+            !empty($replyToAddress) &&
+            $platformEmail['SMTP_UNIQUE_REPLY_TO'] &&
+            PHPMailer::ValidateAddress($replyToAddress['mail'])
+        ) {
+            $mailer->AddReplyTo($replyToAddress['email'], $replyToAddress['name']);
+            // Errors to sender
+            $mailer->AddCustomHeader('Errors-To: '.$replyToAddress['mail']);
+            $mailer->Sender = $replyToAddress['mail'];
+        }
+    }
+
+    //If the SMTP configuration only accept one sender
+    if (
+        isset($platformEmail['SMTP_UNIQUE_SENDER']) &&
+        $platformEmail['SMTP_UNIQUE_SENDER']
+    ) {
+        $senderName = $platformEmail['SMTP_FROM_NAME'];
+        $senderEmail = $platformEmail['SMTP_FROM_EMAIL'];
+
+        if (PHPMailer::ValidateAddress($senderEmail)) {
+            //force-set Sender to $senderEmail, otherwise SetFrom only does it if it is currently empty
+            $mailer->Sender = $senderEmail;
+        }
+    }
+
+    $mailer->SetFrom($senderEmail, $senderName, !$avoidReplyToAddress);
+}
+
+/**
+ * @param string $template
+ *
+ * @return string
+ */
+function api_find_template($template)
+{
+    return Template::findTemplateFilePath($template);
+}
+
+/**
+ * @return array
+ */
+function api_get_language_list_for_flag()
+{
+    $table = Database::get_main_table(TABLE_MAIN_LANGUAGE);
+    $sql = "SELECT english_name, isocode FROM $table 
+            ORDER BY original_name ASC";
+    static $languages = [];
+    if (empty($languages)) {
+        $result = Database::query($sql);
+        while ($row = Database::fetch_array($result)) {
+            $languages[$row['english_name']] = $row['isocode'];
+        }
+        $languages['english'] = 'gb';
+    }
+
+    return $languages;
+}
+
+/**
+ * @return string
+ */
+function api_get_language_translate_html()
+{
+    $translate = api_get_configuration_value('translate_html');
+
+    if (!$translate) {
+        return '';
+    }
+
+    $languageList = api_get_languages();
+    $hideAll = '';
+    foreach ($languageList['all'] as $language) {
+        $hideAll .= '
+        $("span:lang('.$language['isocode'].')").filter(
+            function(e, val) {
+                // Only find the spans if they have set the lang                
+                if ($(this).attr("lang") == null) {                
+                    return false;
+                }
+                
+                // Ignore ckeditor classes
+                return !this.className.match(/cke(.*)/);
+        }).hide();'."\n";
+    }
+
+    $userInfo = api_get_user_info();
+    $languageId = api_get_language_id($userInfo['language']);
+    $languageInfo = api_get_language_info($languageId);
+    $isoCode = 'en';
+
+    if (!empty($languageInfo)) {
+        $isoCode = $languageInfo['isocode'];
+    }
+
+    return '
+            $(function() {
+                '.$hideAll.'                 
+                var defaultLanguageFromUser = "'.$isoCode.'";   
+                                             
+                $("span:lang('.$isoCode.')").filter(
+                    function() {
+                        // Ignore ckeditor classes
+                        return !this.className.match(/cke(.*)/);
+                }).show();
+                
+                var defaultLanguage = "";
+                var langFromUserFound = false;
+                
+                $(this).find("span").filter(
+                    function() {
+                        // Ignore ckeditor classes
+                        return !this.className.match(/cke(.*)/);
+                }).each(function() {
+                    defaultLanguage = $(this).attr("lang");                            
+                    if (defaultLanguage) {
+                        $(this).before().next("br").remove();                
+                        if (defaultLanguageFromUser == defaultLanguage) {
+                            langFromUserFound = true;
+                        }
+                    }
+                });
+                
+                // Show default language
+                if (langFromUserFound == false && defaultLanguage) {
+                    $("span:lang("+defaultLanguage+")").filter(
+                    function() {
+                            // Ignore ckeditor classes
+                            return !this.className.match(/cke(.*)/);
+                    }).show();
+                }
+            });
+    ';
 }

@@ -9,7 +9,7 @@
   ],
   "dependencies": {
     "bootstrap": "3.*",
-    "bootstrap-select": "1.12.*",
+    "bootstrap-select": "1.13.*",
     "fontawesome": "4.7.*",
     "jquery": "2.2.*",
     "jquery-ui": "1.11.*",
@@ -38,8 +38,8 @@
     "multiselect-two-sides": "2.5.*",
     "bootstrap-year-calendar": "1.1.*",
     "datepair": "*",
-    "jt.timepicker": "*"
-
+    "jt.timepicker": "*",
+    "keyboard": "^1.28.7"
   },
   "resolutions": {
     "jquery": "2.1.4"

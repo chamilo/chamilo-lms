@@ -919,7 +919,7 @@ class HTML_QuickForm_advmultiselect extends HTML_QuickForm_select
         '<input type="text" name="q" class="form-control" placeholder="'.addslashes(get_lang('Search')).'" /><br />';
 
         $js .= '<script>
-                $(document).ready(function() {
+                $(function() {
                     $(\'#'.$name.'\').multiselect({
                         search: {
                             left: \''.$search.'\',

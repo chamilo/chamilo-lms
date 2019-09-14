@@ -33,8 +33,6 @@
  */
 class HTML_QuickForm_text extends HTML_QuickForm_input
 {
-    private $inputSize;
-
     /**
      * Class constructor
      *
@@ -101,28 +99,8 @@ class HTML_QuickForm_text extends HTML_QuickForm_input
      */
     public function getTemplate($layout)
     {
-        $size = $this->getColumnsSize();
-
-        if (empty($size)) {
-            $sizeTemp = $this->getInputSize();
-            if (empty($size)) {
-                $sizeTemp = 8;
-            }
-            $size = array(2, $sizeTemp, 2);
-        } else {
-            if (is_array($size)) {
-                if (count($size) != 3) {
-                    $sizeTemp = $this->getInputSize();
-                    if (empty($size)) {
-                        $sizeTemp = 8;
-                    }
-                    $size = array(2, $sizeTemp, 2);
-                }
-                // else just keep the $size array as received
-            } else {
-                $size = array(2, intval($size), 2);
-            }
-        }
+        $size = $this->calculateSize();
+        $attributes = $this->getAttributes();
 
         switch ($layout) {
             case FormValidator::LAYOUT_INLINE:
@@ -162,31 +140,32 @@ class HTML_QuickForm_text extends HTML_QuickForm_input
                 </div>';
                 break;
             case FormValidator::LAYOUT_BOX_NO_LABEL:
-                return '
+                if (isset($attributes['custom']) && $attributes['custom'] == true) {
+                    $template = '
                         <label {label-for}>{label}</label>
                         <div class="input-group">
-                            
+                            {icon}
+                            {element}
+                            <div class="input-group-btn">
+                                <button class="btn btn-default" type="submit">
+                                    <em class="fa fa-search"></em>
+                                </button>
+                            </div>
+                        </div>  
+                    ';
+                } else {
+                    $template = '
+                        <label {label-for}>{label}</label>
+                        <div class="input-group">
                             {icon}
                             {element}
                         </div>';
+                }
+
+
+                return $template;
                 break;
         }
-    }
-
-    /**
-     * @return null
-     */
-    public function getInputSize()
-    {
-        return $this->inputSize;
-    }
-
-    /**
-     * @param null $inputSize
-     */
-    public function setInputSize($inputSize)
-    {
-        $this->inputSize = $inputSize;
     }
 
     /**

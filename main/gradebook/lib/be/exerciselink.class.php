@@ -57,10 +57,10 @@ class ExerciseLink extends AbstractLink
         // @todo
         $uploadPath = null;
 
-        $sql = 'SELECT id,title FROM '.$exerciseTable.'
+        $sql = 'SELECT iid, title FROM '.$exerciseTable.'
 				WHERE c_id = '.$this->course_id.' AND active=1  '.$session_condition;
 
-        $sqlLp = "SELECT e.id, e.title 
+        $sqlLp = "SELECT e.iid, e.title 
                   FROM $exerciseTable e 
                   INNER JOIN $lpItemTable i
                   ON (e.c_id = i.c_id AND e.id = i.path)
@@ -85,8 +85,8 @@ class ExerciseLink extends AbstractLink
                 ";
 
         require_once api_get_path(SYS_CODE_PATH).'exercise/hotpotatoes.lib.php';
-        $exerciseInLP = [];
 
+        $exerciseInLP = [];
         if (!$this->is_hp) {
             $result = Database::query($sql);
             $resultLp = Database::query($sqlLp);
@@ -99,7 +99,7 @@ class ExerciseLink extends AbstractLink
         if (isset($result)) {
             if (Database::num_rows($result) > 0) {
                 while ($data = Database::fetch_array($result)) {
-                    $cats[] = [$data['id'], $data['title']];
+                    $cats[] = [$data['iid'], $data['title']];
                 }
             }
         }
@@ -134,7 +134,7 @@ class ExerciseLink extends AbstractLink
         if (!empty($exerciseInLP)) {
             foreach ($exerciseInLP as $exercise) {
                 $cats[] = [
-                    $exercise['id'],
+                    $exercise['iid'],
                     $exercise['title'].' ('.get_lang('ToolLearnpath').')',
                 ];
             }
@@ -176,6 +176,60 @@ class ExerciseLink extends AbstractLink
      */
     public function calc_score($stud_id = null, $type = null)
     {
+        $allowStats = api_get_configuration_value('allow_gradebook_stats');
+
+        if ($allowStats) {
+            $link = $this->entity;
+            if (!empty($link)) {
+                $weight = $link->getScoreWeight();
+
+                switch ($type) {
+                    case 'best':
+                        $bestResult = $link->getBestScore();
+                        $result = [$bestResult, $weight];
+
+                        return $result;
+                        break;
+                    case 'average':
+                        $count = count($this->getStudentList());
+                        if (empty($count)) {
+                            $result = [0, $weight];
+
+                            return $result;
+                        }
+                        $sumResult = array_sum($link->getUserScoreList());
+                        $result = [$sumResult / $count, $weight];
+
+                        return $result;
+                        break;
+                    case 'ranking':
+                        return '';
+                        /*
+                        $newList = [];
+                        $ranking = AbstractLink::getCurrentUserRanking($stud_id, $link->getUserScoreList());
+                        return $ranking;*/
+                        break;
+                    default:
+                        if (!empty($stud_id)) {
+                            $scoreList = $link->getUserScoreList();
+                            $result = [0, $weight];
+                            if (isset($scoreList[$stud_id])) {
+                                $result = [$scoreList[$stud_id], $weight];
+                            }
+
+                            return $result;
+                        } else {
+                            $studentCount = count($this->getStudentList());
+                            $sumResult = array_sum($link->getUserScoreList());
+                            $result = [$sumResult, $studentCount];
+                        }
+
+                        return $result;
+                        break;
+                }
+            }
+        }
+
         $tblStats = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
         $tblHp = Database::get_main_table(TABLE_STATISTIC_TRACK_E_HOTPOTATOES);
         $tblDoc = Database::get_course_table(TABLE_DOCUMENT);
@@ -185,15 +239,30 @@ class ExerciseLink extends AbstractLink
         $sessionId = $this->get_session_id();
         $courseId = $this->getCourseId();
         $exerciseData = $this->get_exercise_data();
+
         $exerciseId = isset($exerciseData['id']) ? $exerciseData['id'] : 0;
+        $stud_id = (int) $stud_id;
 
         if (empty($exerciseId)) {
             return null;
         }
+
+        $key = 'exercise_link_id:'.
+            $this->get_id().
+            'exerciseId:'.$exerciseId.'student:'.$stud_id.'session:'.$sessionId.'courseId:'.$courseId.'type:'.$type;
+
+        $useCache = api_get_configuration_value('gradebook_use_apcu_cache');
+        $cacheAvailable = api_get_configuration_value('apc') && $useCache;
+        $cacheDriver = null;
+        if ($cacheAvailable) {
+            $cacheDriver = new \Doctrine\Common\Cache\ApcuCache();
+            if ($cacheDriver->contains($key)) {
+                return $cacheDriver->fetch($key);
+            }
+        }
+
         $exercise = new Exercise($courseId);
         $exercise->read($exerciseData['id']);
-
-        $stud_id = (int) $stud_id;
 
         if (!$this->is_hp) {
             if ($exercise->exercise_was_added_in_lp == false) {
@@ -246,8 +315,17 @@ class ExerciseLink extends AbstractLink
         if (isset($stud_id) && empty($type)) {
             // for 1 student
             if ($data = Database::fetch_array($scores)) {
-                return [$data['exe_result'], $data['exe_weighting']];
+                $result = [$data['exe_result'], $data['exe_weighting']];
+                if ($cacheAvailable) {
+                    $cacheDriver->save($key, $result);
+                }
+
+                return $result;
             } else {
+                if ($cacheAvailable) {
+                    $cacheDriver->save($key, null);
+                }
+
                 return null;
             }
         } else {
@@ -290,25 +368,55 @@ class ExerciseLink extends AbstractLink
             }
 
             if ($student_count == 0) {
+                if ($cacheAvailable) {
+                    $cacheDriver->save($key, null);
+                }
+
                 return null;
             } else {
                 switch ($type) {
                     case 'best':
-                        return [$bestResult, $weight];
+                        $result = [$bestResult, $weight];
+                        if ($cacheAvailable) {
+                            $cacheDriver->save($key, $result);
+                        }
+
+                        return $result;
                         break;
                     case 'average':
                         $count = count($this->getStudentList());
                         if (empty($count)) {
-                            return [0, $weight];
+                            $result = [0, $weight];
+                            if ($cacheAvailable) {
+                                $cacheDriver->save($key, $result);
+                            }
+
+                            return $result;
                         }
 
-                        return [$sumResult / $count, $weight];
+                        $result = [$sumResult / $count, $weight];
+
+                        if ($cacheAvailable) {
+                            $cacheDriver->save($key, $result);
+                        }
+
+                        return $result;
                         break;
                     case 'ranking':
-                        return AbstractLink::getCurrentUserRanking($stud_id, $students);
+                        $ranking = AbstractLink::getCurrentUserRanking($stud_id, $students);
+                        if ($cacheAvailable) {
+                            $cacheDriver->save($key, $ranking);
+                        }
+
+                        return $ranking;
                         break;
                     default:
-                        return [$sum, $student_count];
+                        $result = [$sum, $student_count];
+                        if ($cacheAvailable) {
+                            $cacheDriver->save($key, $result);
+                        }
+
+                        return $result;
                         break;
                 }
             }
@@ -334,10 +442,17 @@ class ExerciseLink extends AbstractLink
         $exerciseId = $data['id'];
         $path = isset($data['path']) ? $data['path'] : '';
 
-        $url = api_get_path(WEB_CODE_PATH).'gradebook/exercise_jump.php?path='.$path.'&session_id='.$sessionId.'&cidReq='.$this->get_course_code().'&gradebook=view&exerciseId='.$exerciseId.'&type='.$this->get_type();
-        if ((!api_is_allowed_to_edit() && $this->calc_score($user_id) == null) || $status_user != 1) {
-            $url .= '&doexercise='.$exerciseId;
-        }
+        $url = api_get_path(WEB_CODE_PATH).'gradebook/exercise_jump.php?'
+            .http_build_query(
+                [
+                    'path' => $path,
+                    'session_id' => $sessionId,
+                    'cidReq' => $this->get_course_code(),
+                    'gradebook' => 'view',
+                    'exerciseId' => $exerciseId,
+                    'type' => $this->get_type(),
+                ]
+            );
 
         return $url;
     }
@@ -431,6 +546,20 @@ class ExerciseLink extends AbstractLink
     public function setHp($hp)
     {
         $this->hp = $hp;
+    }
+
+    public function getBestScore()
+    {
+        return $this->getStats('best');
+    }
+
+    public function getStats($type)
+    {
+        switch ($type) {
+            case 'best':
+
+                break;
+        }
     }
 
     /**

@@ -47,11 +47,6 @@
             <!-- START CONTENT -->
             <section id="cm-content">
                 <div class="container">
-                    {% block breadcrumb %}
-                        {{ breadcrumb }}
-                    {% endblock %}
-
-                    <!-- END HEADER -->
                     {% if show_course_shortcut is not null %}
                         <!-- TOOLS SHOW COURSE -->
                         <div id="cm-tools" class="nav-tools">
@@ -59,6 +54,10 @@
                         </div>
                         <!-- END TOOLS SHOW COURSE -->
                     {% endif %}
+
+                    {% block breadcrumb %}
+                        {{ breadcrumb }}
+                    {% endblock %}
 
                     {% block body %}
                         {{ content }}
@@ -77,5 +76,7 @@
 
         </main>
     <!-- END MAIN -->
+
+    {% include 'layout/modals.tpl'|get_template %}
 </body>
 </html>

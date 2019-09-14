@@ -179,10 +179,13 @@ function aiken_import_exercise($file)
     $exercise->exercise = $exercise_info['name'];
     $exercise->save();
     $last_exercise_id = $exercise->selectId();
+    $tableQuestion = Database::get_course_table(TABLE_QUIZ_QUESTION);
+    $tableAnswer = Database::get_course_table(TABLE_QUIZ_ANSWER);
     if (!empty($last_exercise_id)) {
         // For each question found...
+        $courseId = api_get_course_int_id();
         foreach ($exercise_info['question'] as $key => $question_array) {
-            //2.create question
+            // 2.create question
             $question = new Aiken2Question();
             $question->type = $question_array['type'];
             $question->setAnswer();
@@ -195,15 +198,22 @@ function aiken_import_exercise($file)
             $question->type = constant($type);
             $question->save($exercise);
             $last_question_id = $question->selectId();
-            //3. Create answer
-            $answer = new Answer($last_question_id);
+
+            // 3. Create answer
+            $answer = new Answer($last_question_id, $courseId, $exercise, false);
             $answer->new_nbrAnswers = count($question_array['answer']);
             $max_score = 0;
+
+            $scoreFromFile = 0;
+            if (isset($question_array['score']) && !empty($question_array['score'])) {
+                $scoreFromFile = $question_array['score'];
+            }
 
             foreach ($question_array['answer'] as $key => $answers) {
                 $key++;
                 $answer->new_answer[$key] = $answers['value'];
                 $answer->new_position[$key] = $key;
+                $answer->new_comment[$key] = '';
                 // Correct answers ...
                 if (in_array($key, $question_array['correct_answers'])) {
                     $answer->new_correct[$key] = 1;
@@ -218,12 +228,45 @@ function aiken_import_exercise($file)
                     $answer->new_weighting[$key] = $question_array['weighting'][$key - 1];
                     $max_score += $question_array['weighting'][$key - 1];
                 }
+
+                if (!empty($scoreFromFile) && $answer->new_correct[$key]) {
+                    $answer->new_weighting[$key] = $scoreFromFile;
+                }
+
+                $params = [
+                    'c_id' => $courseId,
+                    'question_id' => $last_question_id,
+                    'answer' => $answer->new_answer[$key],
+                    'correct' => $answer->new_correct[$key],
+                    'comment' => $answer->new_comment[$key],
+                    'ponderation' => isset($answer->new_weighting[$key]) ? $answer->new_weighting[$key] : '',
+                    'position' => $answer->new_position[$key],
+                    'hotspot_coordinates' => '',
+                    'hotspot_type' => '',
+                ];
+
+                $answerId = Database::insert($tableAnswer, $params);
+                if ($answerId) {
+                    $params = [
+                        'id_auto' => $answerId,
+                        'id' => $answerId,
+                    ];
+                    Database::update($tableAnswer, $params, ['iid = ?' => [$answerId]]);
+                }
             }
 
-            $answer->save();
-            // Now that we know the question score, set it!
-            $question->updateWeighting($max_score);
-            $question->save($exercise);
+            if (!empty($scoreFromFile)) {
+                $max_score = $scoreFromFile;
+            }
+
+            //$answer->save();
+
+            $params = ['ponderation' => $max_score];
+            Database::update(
+                $tableQuestion,
+                $params,
+                ['iid = ?' => [$last_question_id]]
+            );
         }
 
         // Delete the temp dir where the exercise was unzipped
@@ -260,7 +303,6 @@ function aiken_parse_file(&$exercise_info, $exercisePath, $file, $questionFile)
     $data = file($questionFilePath);
 
     $question_index = 0;
-    $correct_answer = '';
     $answers_array = [];
     $new_question = true;
     foreach ($data as $line => $info) {
@@ -284,6 +326,10 @@ function aiken_parse_file(&$exercise_info, $exercisePath, $file, $questionFile)
             $exercise_info['question'][$question_index]['correct_answers'][] = $correct_answer_index + 1;
             //weight for correct answer
             $exercise_info['question'][$question_index]['weighting'][$correct_answer_index] = 1;
+        } elseif (preg_match('/^SCORE:\s?(.*)/', $info, $matches)) {
+            $exercise_info['question'][$question_index]['score'] = (float) $matches[1];
+        } elseif (preg_match('/^DESCRIPTION:\s?(.*)/', $info, $matches)) {
+            $exercise_info['question'][$question_index]['description'] = $matches[1];
         } elseif (preg_match('/^ANSWER_EXPLANATION:\s?(.*)/', $info, $matches)) {
             //Comment of correct answer
             $correct_answer_index = array_search($matches[1], $answers_array);
@@ -320,15 +366,7 @@ function aiken_parse_file(&$exercise_info, $exercisePath, $file, $questionFile)
             $new_question = true;
         } else {
             if (empty($exercise_info['question'][$question_index]['title'])) {
-                if (strlen($info) < 100) {
-                    $exercise_info['question'][$question_index]['title'] = $info;
-                } else {
-                    //Question itself (use a 100-chars long title and a larger description)
-                    $exercise_info['question'][$question_index]['title'] = trim(substr($info, 0, 100)).'...';
-                    $exercise_info['question'][$question_index]['description'] = $info;
-                }
-            } else {
-                $exercise_info['question'][$question_index]['description'] = $info;
+                $exercise_info['question'][$question_index]['title'] = $info;
             }
         }
     }

@@ -345,13 +345,8 @@ class FlatViewDataGenerator
         $scoreDisplay = ScoreDisplay::instance();
 
         $data = [];
-        $displaytype = SCORE_DIV;
-        if ($ignore_score_color) {
-            $displaytype |= SCORE_IGNORE_SPLIT;
-        }
         //@todo move these in a function
         $sum_categories_weight_array = [];
-
         $mainCategoryId = null;
         $mainCourseCategory = $this->getMainCourseCategory();
         if (!empty($mainCourseCategory)) {
@@ -396,6 +391,9 @@ class FlatViewDataGenerator
         if (isset($this->params['export_pdf']) && $this->params['export_pdf']) {
             $export_to_pdf = true;
         }
+
+        $course_code = api_get_course_id();
+        $session_id = api_get_session_id();
 
         foreach ($selected_users as $user) {
             $row = [];
@@ -452,8 +450,7 @@ class FlatViewDataGenerator
             $item_value_total = 0;
             $item_total = 0;
             $convert_using_the_global_weight = true;
-            $course_code = api_get_course_id();
-            $session_id = api_get_session_id();
+
             $allcat = $this->category->get_subcategories(
                 null,
                 $course_code,
@@ -500,16 +497,21 @@ class FlatViewDataGenerator
                     $percentage = $sub_cat->get_weight() / ($sub_cat_percentage) * $sub_cat_percentage / $this->category->get_weight();
                     $item_value = $percentage * $item_value;
                     $item_total += $sub_cat->get_weight();
-                    /*
-                        if ($convert_using_the_global_weight) {
-                            $score[0] = $score[0]/$main_weight*$sub_cat->get_weight();
-                            $score[1] = $main_weight ;
-                        }
-                    */
+
+                    $style = api_get_configuration_value('gradebook_report_score_style');
+                    $defaultStyle = SCORE_DIV_SIMPLE_WITH_CUSTOM;
+                    if (!empty($style)) {
+                        $defaultStyle = (int) $style;
+                    }
+
                     if (api_get_setting('gradebook_show_percentage_in_reports') === 'false') {
+                        $defaultShowPercentageValue = SCORE_SIMPLE;
+                        if (!empty($style)) {
+                            $defaultShowPercentageValue = $style;
+                        }
                         $real_score = $scoreDisplay->display_score(
                             $real_score,
-                            SCORE_SIMPLE,
+                            $defaultShowPercentageValue,
                             true
                         );
                         $temp_score = $scoreDisplay->display_score(
@@ -526,7 +528,7 @@ class FlatViewDataGenerator
                         );
                         $temp_score = $scoreDisplay->display_score(
                             $score,
-                            SCORE_DIV_SIMPLE_WITH_CUSTOM,
+                            $defaultStyle,
                             null
                         );
                         $temp_score = Display::tip($temp_score, $real_score);
@@ -556,10 +558,6 @@ class FlatViewDataGenerator
                         }
                     }
                     $item_value_total += $item_value;
-                }
-
-                if ($convert_using_the_global_weight) {
-                    //$item_total = $main_weight;
                 }
             } else {
                 // All evaluations
@@ -594,6 +592,12 @@ class FlatViewDataGenerator
             $item_value_total += $result['item_value_total'];
             $total_score = [$item_value_total, $item_total];
 
+            $style = api_get_configuration_value('gradebook_report_score_style');
+            $defaultStyle = SCORE_DIV_SIMPLE_WITH_CUSTOM_LETTERS;
+            if (!empty($style)) {
+                $defaultStyle = (int) $style;
+            }
+
             if (!$show_all) {
                 if ($export_to_pdf) {
                     $row['total'] = $scoreDisplay->display_score($total_score);
@@ -604,12 +608,12 @@ class FlatViewDataGenerator
                 if ($export_to_pdf) {
                     $row['total'] = $scoreDisplay->display_score(
                         $total_score,
-                        SCORE_DIV_SIMPLE_WITH_CUSTOM_LETTERS
+                        $defaultStyle
                     );
                 } else {
                     $row[] = $scoreDisplay->display_score(
                         $total_score,
-                        SCORE_DIV_SIMPLE_WITH_CUSTOM_LETTERS
+                        $defaultStyle
                     );
                 }
             }
@@ -672,7 +676,6 @@ class FlatViewDataGenerator
             $divide = isset($score[1]) && !empty($score[1]) && $score[1] > 0 ? $score[1] : 1;
 
             // Sub cat weight
-            //$sub_cat_percentage = $sum_categories_weight_array[$item->get_category_id()];
             $item_value = isset($score[0]) ? $score[0] / $divide : 0;
 
             // Fixing total when using one or multiple gradebooks.
@@ -691,6 +694,13 @@ class FlatViewDataGenerator
             }
 
             $item_total += $item->get_weight();
+
+            $style = api_get_configuration_value('gradebook_report_score_style');
+            $defaultStyle = SCORE_DIV_SIMPLE_WITH_CUSTOM;
+            if (!empty($style)) {
+                $defaultStyle = (int) $style;
+            }
+
             $complete_score = $scoreDisplay->display_score(
                 $score,
                 SCORE_DIV_PERCENT,
@@ -698,9 +708,13 @@ class FlatViewDataGenerator
             );
 
             if (api_get_setting('gradebook_show_percentage_in_reports') == 'false') {
+                $defaultShowPercentageValue = SCORE_SIMPLE;
+                if (!empty($style)) {
+                    $defaultShowPercentageValue = $style;
+                }
                 $real_score = $scoreDisplay->display_score(
                     $real_score,
-                    SCORE_SIMPLE
+                    $defaultShowPercentageValue
                 );
                 $temp_score = $scoreDisplay->display_score(
                     [$item_value, null],
@@ -710,7 +724,7 @@ class FlatViewDataGenerator
             } else {
                 $temp_score = $scoreDisplay->display_score(
                     $real_score,
-                    SCORE_DIV_PERCENT_WITH_CUSTOM
+                    $defaultStyle
                 );
                 $temp_score = Display::tip($temp_score, $complete_score);
             }

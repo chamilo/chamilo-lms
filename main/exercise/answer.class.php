@@ -43,6 +43,8 @@ class Answer
     public $iid;
     public $questionJSId;
     public $standalone;
+    /** @var Exercise|null */
+    private $exercise;
 
     /**
      * constructor of the class.
@@ -52,8 +54,9 @@ class Answer
      * @param int      $questionId that answers belong to
      * @param int      $course_id
      * @param Exercise $exercise
+     * @param bool     $readAnswer
      */
-    public function __construct($questionId, $course_id = 0, $exercise = null)
+    public function __construct($questionId, $course_id = 0, $exercise = null, $readAnswer = true)
     {
         $this->questionId = (int) $questionId;
         $this->answer = [];
@@ -80,15 +83,18 @@ class Answer
             // fills arrays
             $objExercise = new Exercise($this->course_id);
             $exerciseId = isset($_REQUEST['exerciseId']) ? $_REQUEST['exerciseId'] : null;
-            $objExercise->read($exerciseId);
+            $objExercise->read($exerciseId, false);
         } else {
             $objExercise = $exercise;
         }
+        $this->exercise = $objExercise;
 
-        if ($objExercise->random_answers == '1' && $this->getQuestionType() != CALCULATED_ANSWER) {
-            $this->readOrderedBy('rand()', ''); // randomize answers
-        } else {
-            $this->read(); // natural order
+        if ($readAnswer) {
+            if ($objExercise->random_answers == '1' && $this->getQuestionType() != CALCULATED_ANSWER) {
+                $this->readOrderedBy('rand()', ''); // randomize answers
+            } else {
+                $this->read(); // natural order
+            }
         }
     }
 
@@ -670,7 +676,6 @@ class Answer
         $questionId = (int) $this->questionId;
 
         $courseId = $this->course['real_id'];
-        $correctList = [];
         $answerList = [];
 
         for ($i = 1; $i <= $this->new_nbrAnswers; $i++) {
@@ -710,16 +715,13 @@ class Answer
                         ->setId($iid)
                         ->setIdAuto($iid);
 
-                    $em->merge($quizAnswer);
-                    $em->flush();
-
                     $questionType = $this->getQuestionType();
 
                     if (in_array(
                         $questionType,
                         [MATCHING, MATCHING_DRAGGABLE]
                     )) {
-                        $answer = new Answer($this->questionId);
+                        $answer = new Answer($this->questionId, $courseId, $this->exercise, false);
                         $answer->read();
                         $correctAnswerId = $answer->selectAnswerIdByPosition($correct);
 
@@ -728,13 +730,12 @@ class Answer
                         if ($questionType == MATCHING && !$correctAnswerId) {
                             continue;
                         }
-
                         $correctAnswerAutoId = $answer->selectAutoId($correct);
                         $quizAnswer->setCorrect($correctAnswerAutoId ? $correctAnswerAutoId : 0);
-
-                        $em->merge($quizAnswer);
-                        $em->flush();
                     }
+
+                    $em->merge($quizAnswer);
+                    $em->flush();
                 }
             } else {
                 // https://support.chamilo.org/issues/6558
@@ -754,13 +755,9 @@ class Answer
             }
 
             $answerList[$i] = $iid;
-
-            if ($correct) {
-                $correctList[$iid] = true;
-            }
         }
 
-        $questionType = self::getQuestionType();
+        $questionType = $this->getQuestionType();
 
         switch ($questionType) {
             case MATCHING_DRAGGABLE:
@@ -845,7 +842,6 @@ class Answer
         $tableAnswer = Database::get_course_table(TABLE_QUIZ_ANSWER);
 
         if (self::getQuestionType() == MULTIPLE_ANSWER_TRUE_FALSE ||
-            self::getQuestionType() == MULTIPLE_ANSWER_TRUE_FALSE ||
             self::getQuestionType() == MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY
         ) {
             // Selecting origin options
@@ -965,7 +961,6 @@ class Answer
 
                     $correct = $this->correct[$i];
                     if ($newQuestion->type == MULTIPLE_ANSWER_TRUE_FALSE ||
-                        $newQuestion->type == MULTIPLE_ANSWER_TRUE_FALSE ||
                         $newQuestion->type == MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY
                     ) {
                         $correct = $fixed_list[intval($correct)];

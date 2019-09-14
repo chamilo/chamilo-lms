@@ -39,6 +39,7 @@ api_protect_course_script(true);
 $origin = api_get_origin();
 $is_allowedToEdit = api_is_allowed_to_edit(null, true);
 $courseId = api_get_course_int_id();
+$sessionId = api_get_session_id();
 $glossaryExtraTools = api_get_setting('show_glossary_in_extra_tools');
 
 $showGlossary = in_array($glossaryExtraTools, ['true', 'exercise', 'exercise_and_lp']);
@@ -49,6 +50,9 @@ if ($showGlossary) {
     $htmlHeadXtra[] = '<script type="text/javascript" src="'.api_get_path(WEB_CODE_PATH).'glossary/glossary.js.php?add_ready=1&'.api_get_cidreq().'"></script>';
     $htmlHeadXtra[] = api_get_js('jquery.highlight.js');
 }
+
+$js = '<script>'.api_get_language_translate_html().'</script>';
+$htmlHeadXtra[] = $js;
 
 $htmlHeadXtra[] = api_get_js('jqueryui-touch-punch/jquery.ui.touch-punch.min.js');
 $htmlHeadXtra[] = api_get_js('jquery.jsPlumb.all.js');
@@ -63,6 +67,9 @@ $htmlHeadXtra[] = api_get_js('epiclock/renderers/minute/epiclock.minute.js');
 $htmlHeadXtra[] = '<link rel="stylesheet" href="'.api_get_path(WEB_LIBRARY_JS_PATH).'hotspot/css/hotspot.css">';
 $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_JS_PATH).'hotspot/js/hotspot.js"></script>';
 $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_JS_PATH).'annotation/js/annotation.js"></script>';
+if (api_get_configuration_value('quiz_prevent_copy_paste')) {
+    $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_JS_PATH).'jquery.nocopypaste.js"></script>';
+}
 
 if (api_get_setting('enable_record_audio') === 'true') {
     $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_JS_PATH).'rtc/RecordRTC.js"></script>';
@@ -75,27 +82,35 @@ if (api_get_setting('enable_record_audio') === 'true') {
 $template = new Template();
 
 // General parameters passed via POST/GET
-$learnpath_id = isset($_REQUEST['learnpath_id']) ? intval($_REQUEST['learnpath_id']) : 0;
-$learnpath_item_id = isset($_REQUEST['learnpath_item_id']) ? intval($_REQUEST['learnpath_item_id']) : 0;
-$learnpath_item_view_id = isset($_REQUEST['learnpath_item_view_id']) ? intval($_REQUEST['learnpath_item_view_id']) : 0;
+$learnpath_id = isset($_REQUEST['learnpath_id']) ? (int) $_REQUEST['learnpath_id'] : 0;
+$learnpath_item_id = isset($_REQUEST['learnpath_item_id']) ? (int) $_REQUEST['learnpath_item_id'] : 0;
+$learnpath_item_view_id = isset($_REQUEST['learnpath_item_view_id']) ? (int) $_REQUEST['learnpath_item_view_id'] : 0;
 
-$reminder = isset($_REQUEST['reminder']) ? intval($_REQUEST['reminder']) : 0;
-$remind_question_id = isset($_REQUEST['remind_question_id']) ? intval($_REQUEST['remind_question_id']) : 0;
-$exerciseId = isset($_REQUEST['exerciseId']) ? intval($_REQUEST['exerciseId']) : 0;
+$reminder = isset($_REQUEST['reminder']) ? (int) $_REQUEST['reminder'] : 0;
+$remind_question_id = isset($_REQUEST['remind_question_id']) ? (int) $_REQUEST['remind_question_id'] : 0;
+$exerciseId = isset($_REQUEST['exerciseId']) ? (int) $_REQUEST['exerciseId'] : 0;
 $formSent = isset($_REQUEST['formSent']) ? $_REQUEST['formSent'] : null;
 $exerciseResult = isset($_REQUEST['exerciseResult']) ? $_REQUEST['exerciseResult'] : null;
 $exerciseResultCoordinates = isset($_REQUEST['exerciseResultCoordinates']) ? $_REQUEST['exerciseResultCoordinates'] : null;
 $choice = isset($_REQUEST['choice']) ? $_REQUEST['choice'] : null;
 $choice = empty($choice) ? isset($_REQUEST['choice2']) ? $_REQUEST['choice2'] : null : null;
 
-//From submit modal
-$current_question = isset($_REQUEST['num']) ? intval($_REQUEST['num']) : null;
-$currentAnswer = isset($_REQUEST['num_answer']) ? intval($_REQUEST['num_answer']) : null;
+// From submit modal
+$current_question = isset($_REQUEST['num']) ? (int) $_REQUEST['num'] : null;
+$currentAnswer = isset($_REQUEST['num_answer']) ? (int) $_REQUEST['num_answer'] : null;
 $endExercise = isset($_REQUEST['end_exercise']) && $_REQUEST['end_exercise'] == 1 ? true : false;
+
+$logInfo = [
+    'tool' => TOOL_QUIZ,
+    'tool_id' => $exerciseId,
+    'tool_id_detail' => 0,
+    'action' => ((int) $_REQUEST['learnpath_id'] > 0) ? 'learnpath_id' : '',
+    'action_details' => ((int) $_REQUEST['learnpath_id'] > 0) ? (int) $_REQUEST['learnpath_id'] : '',
+];
+Event::registerLog($logInfo);
 
 // Error message
 $error = '';
-
 $exercise_attempt_table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
 
 /*  Teacher takes an exam and want to see a preview,
@@ -121,7 +136,7 @@ if (!isset($exerciseInSession) || isset($exerciseInSession) && ($exerciseInSessi
 
     // if the specified exercise doesn't exist or is disabled
     if (!$objExercise->read($exerciseId) ||
-        (!$objExercise->selectStatus() && !$is_allowedToEdit && $origin != 'learnpath')
+        (!$objExercise->selectStatus() && !$is_allowedToEdit && !in_array($origin, ['learnpath', 'embeddable']))
     ) {
         if ($debug) {
             error_log('1.1. Error while reading the exercise');
@@ -162,7 +177,8 @@ $exercise_sound = $objExercise->selectSound();
 // If reminder ends we jump to the exercise_reminder
 if ($objExercise->review_answers) {
     if ($remind_question_id == -1) {
-        header('Location: exercise_reminder.php?exerciseId='.$exerciseId.'&'.api_get_cidreq());
+        header('Location: '.api_get_path(WEB_CODE_PATH).
+            'exercise/exercise_reminder.php?exerciseId='.$exerciseId.'&'.api_get_cidreq());
         exit;
     }
 }
@@ -204,6 +220,12 @@ if ($time_control) {
 $show_clock = true;
 $user_id = api_get_user_id();
 if ($objExercise->selectAttempts() > 0) {
+    $messageReachedMax = Display::return_message(
+        sprintf(get_lang('ReachedMaxAttempts'), $exercise_title, $objExercise->selectAttempts()),
+        'warning',
+        false
+    );
+
     $attempt_html = '';
     $attempt_count = Event::get_attempt_count(
         $user_id,
@@ -216,7 +238,7 @@ if ($objExercise->selectAttempts() > 0) {
     if ($attempt_count >= $objExercise->selectAttempts()) {
         $show_clock = false;
         if (!api_is_allowed_to_edit(null, true)) {
-            if ($objExercise->results_disabled == 0 && $origin != 'learnpath') {
+            if ($objExercise->results_disabled == 0 && !in_array($origin, ['learnpath', 'embeddable'])) {
                 // Showing latest attempt according with task BT#1628
                 $exercise_stat_info = Event::getExerciseResultsByUser(
                     $user_id,
@@ -226,6 +248,35 @@ if ($objExercise->selectAttempts() > 0) {
                 );
 
                 if (!empty($exercise_stat_info)) {
+                    $isQuestionsLimitReached = ExerciseLib::isQuestionsLimitPerDayReached(
+                        $user_id,
+                        count($objExercise->get_validated_question_list()),
+                        $courseId,
+                        $sessionId
+                    );
+
+                    if ($isQuestionsLimitReached) {
+                        $maxQuestionsAnswered = (int) api_get_course_setting('quiz_question_limit_per_day');
+
+                        Display::addFlash(
+                            Display::return_message(
+                                sprintf(get_lang('QuizQuestionsLimitPerDayXReached'), $maxQuestionsAnswered),
+                                'warning',
+                                false
+                            )
+                        );
+
+                        if (in_array($origin, ['learnpath', 'embeddable'])) {
+                            Display::display_reduced_header();
+                            Display::display_reduced_footer();
+                        } else {
+                            Display::display_header(get_lang('Exercises'));
+                            Display::display_footer();
+                        }
+
+                        exit;
+                    }
+
                     $max_exe_id = max(array_keys($exercise_stat_info));
                     $last_attempt_info = $exercise_stat_info[$max_exe_id];
                     $attempt_html .= Display::div(
@@ -233,15 +284,7 @@ if ($objExercise->selectAttempts() > 0) {
                         ['id' => '']
                     );
 
-                    $attempt_html .= Display::return_message(
-                        sprintf(
-                            get_lang('ReachedMaxAttempts'),
-                            $exercise_title,
-                            $objExercise->selectAttempts()
-                        ),
-                        'warning',
-                        false
-                    );
+                    $attempt_html .= $messageReachedMax;
 
                     if (!empty($last_attempt_info['question_list'])) {
                         foreach ($last_attempt_info['question_list'] as $questions) {
@@ -270,40 +313,16 @@ if ($objExercise->selectAttempts() > 0) {
                         ['id' => 'question_score']
                     );
                 } else {
-                    $attempt_html .= Display::return_message(
-                        sprintf(
-                            get_lang('ReachedMaxAttempts'),
-                            $exercise_title,
-                            $objExercise->selectAttempts()
-                        ),
-                        'warning',
-                        false
-                    );
+                    $attempt_html .= $messageReachedMax;
                 }
             } else {
-                $attempt_html .= Display::return_message(
-                    sprintf(
-                        get_lang('ReachedMaxAttempts'),
-                        $exercise_title,
-                        $objExercise->selectAttempts()
-                    ),
-                    'warning',
-                    false
-                );
+                $attempt_html .= $messageReachedMax;
             }
         } else {
-            $attempt_html .= Display::return_message(
-                sprintf(
-                    get_lang('ReachedMaxAttempts'),
-                    $exercise_title,
-                    $objExercise->selectAttempts()
-                ),
-                'warning',
-                false
-            );
+            $attempt_html .= $messageReachedMax;
         }
 
-        if ($origin == 'learnpath') {
+        if (in_array($origin, ['learnpath', 'embeddable'])) {
             Display::display_reduced_header();
         } else {
             Display::display_header(get_lang('Exercises'));
@@ -311,7 +330,7 @@ if ($objExercise->selectAttempts() > 0) {
 
         echo $attempt_html;
 
-        if ($origin != 'learnpath') {
+        if (!in_array($origin, ['learnpath', 'embeddable'])) {
             Display::display_footer();
         }
         exit;
@@ -331,6 +350,11 @@ $questionListUncompressed = $objExercise->getQuestionListWithMediasUncompressed(
 Session::write('question_list_uncompressed', $questionListUncompressed);
 $clock_expired_time = null;
 if (empty($exercise_stat_info)) {
+    $disable = api_get_configuration_value('exercises_disable_new_attempts');
+    if ($disable) {
+        api_not_allowed(true);
+    }
+
     if ($debug) {
         error_log('5  $exercise_stat_info is empty ');
     }
@@ -703,7 +727,7 @@ if ($formSent && isset($_POST)) {
                             'warning',
                             false
                         );
-                        if ($origin != 'learnpath') {
+                        if (!in_array($origin, ['learnpath', 'embeddable'])) {
                             //so we are not in learnpath tool
                             echo '</div>'; //End glossary div
                             Display::display_footer();
@@ -716,7 +740,7 @@ if ($formSent && isset($_POST)) {
                 exit;
             } else {
                 if ($debug) {
-                    error_log('10. Redirecting to exercise_show.php');
+                    error_log('10. Redirecting to exercise_result.php');
                 }
                 header("Location: exercise_result.php?".api_get_cidreq()."&exe_id=$exe_id&learnpath_id=$learnpath_id&learnpath_item_id=$learnpath_item_id&learnpath_item_view_id=$learnpath_item_view_id");
                 exit;
@@ -776,7 +800,7 @@ if ($question_count != 0) {
                             'warning',
                             false
                         );
-                        if ($origin != 'learnpath') {
+                        if (!in_array($origin, ['learnpath', 'embeddable'])) {
                             //so we are not in learnpath tool
                             echo '</div>'; //End glossary div
                             Display::display_footer();
@@ -839,7 +863,7 @@ $interbreadcrumb[] = [
 ];
 $interbreadcrumb[] = ["url" => "#", "name" => $objExercise->selectTitle(true)];
 
-if ($origin != 'learnpath') { //so we are not in learnpath tool
+if (!in_array($origin, ['learnpath', 'embeddable'])) { //so we are not in learnpath tool
     if (!api_is_allowed_to_session_edit()) {
         Display::addFlash(
             Display::return_message(get_lang('SessionIsReadOnly'), 'warning')
@@ -856,7 +880,7 @@ if ($origin != 'learnpath') { //so we are not in learnpath tool
 $show_quiz_edition = $objExercise->added_in_lp();
 
 // I'm in a preview mode
-if (api_is_course_admin() && $origin != 'learnpath') {
+if (api_is_course_admin() && !in_array($origin, ['learnpath', 'embeddable'])) {
     echo '<div class="actions">';
     if ($show_quiz_edition == false) {
         echo '<a href="exercise_admin.php?'.api_get_cidreq().'&modifyExercise=yes&exerciseId='.$objExercise->id.'">'.
@@ -876,7 +900,7 @@ $is_visible_return = $objExercise->is_visible(
 
 if ($is_visible_return['value'] == false) {
     echo $is_visible_return['message'];
-    if ($origin != 'learnpath') {
+    if (!in_array($origin, ['learnpath', 'embeddable'])) {
         Display :: display_footer();
     }
     exit;
@@ -912,7 +936,7 @@ if ($limit_time_exists) {
                 ),
                 'warning'
             );
-            if ($origin != 'learnpath') {
+            if (!in_array($origin, ['learnpath', 'embeddable'])) {
                 Display::display_footer();
             }
             exit;
@@ -944,8 +968,9 @@ if (isset($_custom['exercises_hidden_when_no_start_date']) &&
             ),
             'warning'
         );
-        if ($origin != 'learnpath') {
-            Display :: display_footer();
+        if (!in_array($origin, ['learnpath', 'embeddable'])) {
+            Display::display_footer();
+            exit;
         }
     }
 }
@@ -957,7 +982,7 @@ if ($time_control) {
         get_lang('ExerciseExpiredTimeMessage').'</div>';
 }
 
-if ($origin != 'learnpath') {
+if (!in_array($origin, ['learnpath', 'embeddable'])) {
     echo '<div id="highlight-plugin" class="glossary-content">';
 }
 
@@ -1525,9 +1550,9 @@ if (!empty($error)) {
     echo '</form>';
 }
 
-if ($origin != 'learnpath') {
+if (!in_array($origin, ['learnpath', 'embeddable'])) {
     // So we are not in learnpath tool
     echo '</div>'; //End glossary div
 }
 
-Display :: display_footer();
+Display::display_footer();

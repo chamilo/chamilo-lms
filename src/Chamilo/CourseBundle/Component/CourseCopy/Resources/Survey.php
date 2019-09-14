@@ -92,6 +92,8 @@ class Survey extends Resource
      * @param int    $answered
      * @param string $invite_mail
      * @param string $reminder_mail
+     * @param int    $oneQuestionPerPage
+     * @param int    $shuffle
      */
     public function __construct(
         $id,
@@ -110,7 +112,9 @@ class Survey extends Resource
         $invited,
         $answered,
         $invite_mail,
-        $reminder_mail
+        $reminder_mail,
+        $oneQuestionPerPage,
+        $shuffle
     ) {
         parent::__construct($id, RESOURCE_SURVEY);
         $this->code = $code;
@@ -131,6 +135,8 @@ class Survey extends Resource
         $this->reminder_mail = $reminder_mail;
         $this->question_ids = [];
         $this->invitation_ids = [];
+        $this->one_question_per_page = $oneQuestionPerPage;
+        $this->shuffle = $shuffle;
     }
 
     /**

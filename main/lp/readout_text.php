@@ -30,7 +30,6 @@ $documentRepo = $em->getRepository('ChamiloCourseBundle:CDocument');
 // This page can only be shown from inside a learning path
 if (!$id && !$lpId) {
     api_not_allowed(true);
-    exit;
 }
 
 /** @var CDocument $document */
@@ -48,9 +47,6 @@ if (empty($document)) {
 }
 
 $documentPathInfo = pathinfo($document->getPath());
-$jplayer_supported_files = ['mp4', 'ogv', 'flv', 'm4v'];
-$extension = isset($documentPathInfo['extension']) ? $documentPathInfo['extension'] : '';
-
 $coursePath = api_get_path(SYS_COURSE_PATH).$courseInfo['directory'];
 $documentPath = '/document'.$document->getPath();
 $documentText = file_get_contents($coursePath.$documentPath);

@@ -9,6 +9,7 @@ use ChamiloSession as Session;
 use CpChart\Cache as pCache;
 use CpChart\Data as pData;
 use CpChart\Image as pImage;
+use ExtraField as ExtraFieldModel;
 
 /**
  *  Class Tracking.
@@ -171,7 +172,7 @@ class Tracking
         // Extend all button
         $output = '';
         $extend_all = 0;
-        if ($origin == 'tracking') {
+        if ($origin === 'tracking') {
             $url_suffix = '&session_id='.$session_id.'&course='.$courseCode.'&student_id='.$user_id.'&lp_id='.$lp_id.'&origin='.$origin;
         } else {
             $url_suffix = '&lp_id='.$lp_id;
@@ -325,7 +326,7 @@ class Tracking
                 if (($extend_this || $extend_all) && $num > 0) {
                     $row = Database::fetch_array($result);
                     $result_disabled_ext_all = false;
-                    if ($row['item_type'] == 'quiz') {
+                    if ($row['item_type'] === 'quiz') {
                         // Check results_disabled in quiz table.
                         $my_path = Database::escape_string($row['path']);
                         $sql = "SELECT results_disabled
@@ -352,7 +353,7 @@ class Tracking
                     if (!empty($inter_num)) {
                         $extend_link = Display::url(
                             Display::return_icon(
-                                'visible.gif',
+                                'visible.png',
                                 get_lang('HideAttemptView')
                             ),
                             api_get_self().'?action=stats&fold_id='.$my_item_id.$url_suffix
@@ -372,7 +373,7 @@ class Tracking
                     $counter++;
 
                     $action = null;
-                    if ($type == 'classic') {
+                    if ($type === 'classic') {
                         $action = '<td></td>';
                     }
 
@@ -391,9 +392,7 @@ class Tracking
                     } else {
                         $output .= '<tr class="'.$oddclass.'">
                                 <td>'.$extend_link.'</td>
-                                <td colspan="4">
-                                   '.$title.'
-                                </td>
+                                <td colspan="4">'.$title.'</td>
                                 <td colspan="2"></td>
                                 <td colspan="2"></td>
                                 <td colspan="2"></td>
@@ -407,23 +406,41 @@ class Tracking
                         $extend_attempt_link = '';
                         $extend_this_attempt = 0;
 
-                        if ((learnpath::get_interactions_count_from_db($row['iv_id'], $course_id) > 0 ||
-                            learnpath::get_objectives_count_from_db($row['iv_id'], $course_id) > 0) &&
+                        if ((
+                            learnpath::get_interactions_count_from_db($row['iv_id'], $course_id) > 0 ||
+                            learnpath::get_objectives_count_from_db($row['iv_id'], $course_id) > 0
+                            ) &&
                             !$extend_all
                         ) {
                             if ($extendAttemptId == $row['iv_id']) {
                                 // The extend button for this attempt has been clicked.
                                 $extend_this_attempt = 1;
                                 $extend_attempt_link = Display::url(
-                                    Display::return_icon('visible.gif', get_lang('HideAttemptView')),
+                                    Display::return_icon('visible.png', get_lang('HideAttemptView')),
                                     api_get_self().'?action=stats&extend_id='.$my_item_id.'&fold_attempt_id='.$row['iv_id'].$url_suffix
                                 );
+                                if (api_is_allowed_to_edit()) {
+                                    $extend_attempt_link .= '&nbsp;'.
+                                        Display::url(
+                                            Display::return_icon('pdf.png', get_lang('ExportToPdf')),
+                                            api_get_self(
+                                            ).'?action=export_stats&extend_id='.$my_item_id.'&extend_attempt_id='.$row['iv_id'].$url_suffix
+                                        );
+                                }
                             } else { // Same case if fold_attempt_id is set, so not implemented explicitly.
                                 // The extend button for this attempt has not been clicked.
                                 $extend_attempt_link = Display::url(
-                                    Display::return_icon('invisible.gif', get_lang('ExtendAttemptView')),
+                                    Display::return_icon('invisible.png', get_lang('ExtendAttemptView')),
                                     api_get_self().'?action=stats&extend_id='.$my_item_id.'&extend_attempt_id='.$row['iv_id'].$url_suffix
                                 );
+                                if (api_is_allowed_to_edit()) {
+                                    $extend_attempt_link .= '&nbsp;'.
+                                        Display::url(
+                                            Display::return_icon('pdf.png', get_lang('ExportToPdf')),
+                                            api_get_self(
+                                            ).'?action=export_stats&extend_id='.$my_item_id.'&extend_attempt_id='.$row['iv_id'].$url_suffix
+                                        );
+                                }
                             }
                         }
 
@@ -435,12 +452,21 @@ class Tracking
                         $lesson_status = $row['mystatus'];
                         $score = $row['myscore'];
                         $time_for_total = $row['mytime'];
+
+                        if (self::minimunTimeAvailable($session_id, $course_id)) {
+                            $timeCourse = self::getCalculateTime($user_id, $course_id, $session_id);
+                            Session::write('trackTimeCourse', $timeCourse);
+                            $lp_time = $timeCourse[TOOL_LEARNPATH];
+                            $lpTime = (int) $lp_time[$lp_id];
+                            $time_for_total = $lpTime;
+                        }
+
                         $time = learnpathItem::getScormTimeFromParameter('js', $row['mytime']);
 
                         if ($score == 0) {
                             $maxscore = $row['mymaxscore'];
                         } else {
-                            if ($row['item_type'] == 'sco') {
+                            if ($row['item_type'] === 'sco') {
                                 if (!empty($row['myviewmaxscore']) && $row['myviewmaxscore'] > 0) {
                                     $maxscore = $row['myviewmaxscore'];
                                 } elseif ($row['myviewmaxscore'] === '') {
@@ -459,7 +485,7 @@ class Tracking
                         if ($row['item_type'] != 'dir') {
                             if (!$is_allowed_to_edit && $result_disabled_ext_all) {
                                 $view_score = Display::return_icon(
-                                    'invisible.gif',
+                                    'invisible.png',
                                     get_lang('ResultsHiddenByExerciseSetting')
                                 );
                             } else {
@@ -498,7 +524,7 @@ class Tracking
                             }
                             $output .= '<tr class="'.$oddclass.'">
                                     <td></td>
-                                    <td>'.$extend_attempt_link.'</td>
+                                    <td style="width:70px;float:left;">'.$extend_attempt_link.'</td>
                                     <td colspan="3">'.get_lang('Attempt').' '.$attemptCount.'</td>
                                     <td colspan="2">'.learnpathItem::humanize_status($lesson_status, true, $type).'</td>
                                     <td colspan="2">'.$view_score.'</td>
@@ -513,7 +539,7 @@ class Tracking
                                     learnpathItem::humanize_status($lesson_status, false, $type)
                                 );
 
-                                if ($row['item_type'] == 'quiz') {
+                                if ($row['item_type'] === 'quiz') {
                                     if (!$is_allowed_to_edit && $result_disabled_ext_all) {
                                         $temp[] = '/';
                                     } else {
@@ -537,23 +563,12 @@ class Tracking
                         }
 
                         if ($extend_this_attempt || $extend_all) {
-                            $list1 = learnpath::get_iv_interactions_array($row['iv_id']);
+                            $list1 = learnpath::get_iv_interactions_array($row['iv_id'], $course_id);
                             foreach ($list1 as $id => $interaction) {
                                 $oddclass = 'row_even';
                                 if (($counter % 2) == 0) {
                                     $oddclass = 'row_odd';
                                 }
-                                $student_response = urldecode($interaction['student_response']);
-                                $content_student_response = explode('__|', $student_response);
-
-                                if (count($content_student_response) > 0) {
-                                    if (count($content_student_response) >= 3) {
-                                        // Pop the element off the end of array.
-                                        array_pop($content_student_response);
-                                    }
-                                    $student_response = implode(',', $content_student_response);
-                                }
-
                                 $timeRow = '<td class="lp_time">'.$interaction['time'].'</td>';
                                 if ($hideTime) {
                                     $timeRow = '';
@@ -564,9 +579,11 @@ class Tracking
                                         <td></td>
                                         <td></td>
                                         <td>'.$interaction['order_id'].'</td>
-                                        <td>'.$interaction['id'].'</td>
+                                        <td>'.$interaction['id'].'</td>';
+
+                                $output .= '
                                         <td colspan="2">'.$interaction['type'].'</td>
-                                        <td>'.$student_response.'</td>
+                                        <td>'.$interaction['student_response_formatted'].'</td>
                                         <td>'.$interaction['result'].'</td>
                                         <td>'.$interaction['latency'].'</td>
                                         '.$timeRow.'
@@ -574,7 +591,7 @@ class Tracking
                                     </tr>';
                                 $counter++;
                             }
-                            $list2 = learnpath::get_iv_objectives_array($row['iv_id']);
+                            $list2 = learnpath::get_iv_objectives_array($row['iv_id'], $course_id);
                             foreach ($list2 as $id => $interaction) {
                                 if (($counter % 2) == 0) {
                                     $oddclass = 'row_odd';
@@ -631,14 +648,14 @@ class Tracking
                             // The extend button for this attempt has been clicked.
                             $extend_this_attempt = 1;
                             $extend_attempt_link = Display::url(
-                                Display::return_icon('visible.gif', get_lang('HideAttemptView')),
+                                Display::return_icon('visible.png', get_lang('HideAttemptView')),
                                 api_get_self().'?action=stats&extend_id='.$my_item_id.'&fold_attempt_id='.$row['iv_id'].$url_suffix
                             );
                         } else {
                             // Same case if fold_attempt_id is set, so not implemented explicitly.
                             // The extend button for this attempt has not been clicked.
                             $extend_attempt_link = Display::url(
-                                Display::return_icon('invisible.gif', get_lang('ExtendAttemptView')),
+                                Display::return_icon('invisible.png', get_lang('ExtendAttemptView')),
                                 api_get_self().'?action=stats&extend_id='.$my_item_id.'&extend_attempt_id='.$row['iv_id'].$url_suffix
                             );
                         }
@@ -652,7 +669,7 @@ class Tracking
                     $extend_link = '';
                     if ($inter_num > 1) {
                         $extend_link = Display::url(
-                            Display::return_icon('invisible.gif', get_lang('ExtendAttemptView')),
+                            Display::return_icon('invisible.png', get_lang('ExtendAttemptView')),
                             api_get_self().'?action=stats&extend_id='.$my_item_id.'&extend_attempt_id='.$row['iv_id'].$url_suffix
                         );
                     }
@@ -934,7 +951,7 @@ class Tracking
                     }
 
                     if ($extend_this_attempt || $extend_all) {
-                        $list1 = learnpath::get_iv_interactions_array($row['iv_id']);
+                        $list1 = learnpath::get_iv_interactions_array($row['iv_id'], $course_id);
                         foreach ($list1 as $id => $interaction) {
                             if (($counter % 2) == 0) {
                                 $oddclass = 'row_odd';
@@ -962,7 +979,8 @@ class Tracking
                                </tr>';
                             $counter++;
                         }
-                        $list2 = learnpath::get_iv_objectives_array($row['iv_id']);
+                        $list2 = learnpath::get_iv_objectives_array($row['iv_id'], $course_id);
+
                         foreach ($list2 as $id => $interaction) {
                             if (($counter % 2) == 0) {
                                 $oddclass = 'row_odd';
@@ -1027,7 +1045,7 @@ class Tracking
                                         }
                                         if (!$is_allowed_to_edit && $result_disabled_ext_all) {
                                             $view_score = Display::return_icon(
-                                                'invisible.gif',
+                                                'invisible.png',
                                                 get_lang(
                                                     'ResultsHiddenByExerciseSetting'
                                                 )
@@ -1152,7 +1170,7 @@ class Tracking
         $total_time = str_replace('NaN', '00'.$h.'00\'00"', $total_time);
 
         if (!$is_allowed_to_edit && $result_disabled_ext_all) {
-            $final_score = Display::return_icon('invisible.gif', get_lang('ResultsHiddenByExerciseSetting'));
+            $final_score = Display::return_icon('invisible.png', get_lang('ResultsHiddenByExerciseSetting'));
             $finalScoreToCsv = get_lang('ResultsHiddenByExerciseSetting');
         } else {
             if (is_numeric($total_score)) {
@@ -1541,12 +1559,12 @@ class Tracking
     /**
      * Calculates the time spent on the platform by a user.
      *
-     * @param   int|array User id
-     * @param string $timeFilter type of time filter: 'last_week' or 'custom'
-     * @param string $start_date start date date('Y-m-d H:i:s')
-     * @param string $end_date   end date date('Y-m-d H:i:s')
+     * @param int|array $userId
+     * @param string    $timeFilter type of time filter: 'last_week' or 'custom'
+     * @param string    $start_date start date date('Y-m-d H:i:s')
+     * @param string    $end_date   end date date('Y-m-d H:i:s')
      *
-     * @return int $nb_seconds
+     * @return int
      */
     public static function get_time_spent_on_the_platform(
         $userId,
@@ -1599,9 +1617,43 @@ class Tracking
 
         if ($diff >= 0) {
             return $diff;
-        } else {
-            return -1;
         }
+
+        return -1;
+    }
+
+    /**
+     * Checks if the "lp_minimum_time" feature is available for the course.
+     *
+     * @param int $sessionId
+     * @param int $courseId
+     *
+     * @return bool
+     */
+    public static function minimunTimeAvailable($sessionId, $courseId)
+    {
+        if (!api_get_configuration_value('lp_minimum_time')) {
+            return false;
+        }
+
+        if (!empty($sessionId)) {
+            $extraFieldValue = new ExtraFieldValue('session');
+            $value = $extraFieldValue->get_values_by_handler_and_field_variable($sessionId, 'new_tracking_system');
+
+            if ($value && isset($value['value']) && $value['value'] == 1) {
+                return true;
+            }
+        } else {
+            if ($courseId) {
+                $extraFieldValue = new ExtraFieldValue('course');
+                $value = $extraFieldValue->get_values_by_handler_and_field_variable($courseId, 'new_tracking_system');
+                if ($value && isset($value['value']) && $value['value'] == 1) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 
     /**
@@ -1622,6 +1674,13 @@ class Tracking
 
         if (empty($courseId) || empty($user_id)) {
             return 0;
+        }
+
+        if (self::minimunTimeAvailable($session_id, $courseId)) {
+            $courseTime = self::getCalculateTime($user_id, $courseId, $session_id);
+            $time = isset($courseTime['total_time']) ? $courseTime['total_time'] : 0;
+
+            return $time;
         }
 
         $session_id = (int) $session_id;
@@ -1746,7 +1805,7 @@ class Tracking
         if (empty($studentList)) {
             return 0;
         }
-        $days = intval($days);
+        $days = (int) $days;
         $date = api_get_utc_datetime(strtotime($days.' days ago'));
         $studentList = array_map('intval', $studentList);
 
@@ -1791,29 +1850,54 @@ class Tracking
         $session_id = 0,
         $convert_date = true
     ) {
-        $student_id = intval($student_id);
-        $courseId = intval($courseId);
-        $session_id = intval($session_id);
+        $student_id = (int) $student_id;
+        $courseId = (int) $courseId;
+        $session_id = (int) $session_id;
 
-        $tbl_track_login = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
-        $sql = 'SELECT login_course_date
-                FROM '.$tbl_track_login.'
-                WHERE
-                    user_id = '.$student_id.' AND
-                    c_id = '.$courseId.' AND
-                    session_id = '.$session_id.'
-                ORDER BY login_course_date ASC 
-                LIMIT 0,1';
-        $rs = Database::query($sql);
-        if (Database::num_rows($rs) > 0) {
-            if ($first_login_date = Database::result($rs, 0, 0)) {
-                if ($convert_date) {
-                    return api_convert_and_format_date(
-                        $first_login_date,
-                        DATE_FORMAT_SHORT
-                    );
-                } else {
-                    return $first_login_date;
+        if (self::minimunTimeAvailable($session_id, $courseId)) {
+            $tbl_track_e_access = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ACCESS);
+            $sql = 'SELECT access_date
+                    FROM '.$tbl_track_e_access.'
+                    WHERE   access_user_id = '.$student_id.' AND
+                            c_id = "'.$courseId.'" AND
+                            access_session_id = '.$session_id.'
+                    ORDER BY access_date ASC
+                    LIMIT 0,1';
+
+            $rs = Database::query($sql);
+            if (Database::num_rows($rs) > 0) {
+                if ($last_login_date = Database::result($rs, 0, 0)) {
+                    if (empty($last_login_date)) {
+                        return false;
+                    }
+                    if ($convert_date) {
+                        return api_convert_and_format_date($last_login_date, DATE_FORMAT_SHORT);
+                    } else {
+                        return $last_login_date;
+                    }
+                }
+            }
+        } else {
+            $tbl_track_login = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
+            $sql = 'SELECT login_course_date
+                    FROM '.$tbl_track_login.'
+                    WHERE
+                        user_id = '.$student_id.' AND
+                        c_id = '.$courseId.' AND
+                        session_id = '.$session_id.'
+                    ORDER BY login_course_date ASC 
+                    LIMIT 0,1';
+            $rs = Database::query($sql);
+            if (Database::num_rows($rs) > 0) {
+                if ($first_login_date = Database::result($rs, 0, 0)) {
+                    if ($convert_date) {
+                        return api_convert_and_format_date(
+                            $first_login_date,
+                            DATE_FORMAT_SHORT
+                        );
+                    } else {
+                        return $first_login_date;
+                    }
                 }
             }
         }
@@ -1841,44 +1925,105 @@ class Tracking
         $student_id = (int) $student_id;
         $session_id = (int) $session_id;
         $courseId = $courseInfo['real_id'];
-        $tbl_track_e_access = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ACCESS);
-        $sql = 'SELECT access_date
-                FROM '.$tbl_track_e_access.'
-                WHERE   access_user_id = '.$student_id.' AND
-                        c_id = "'.$courseId.'" AND
-                        access_session_id = '.$session_id.'
-                ORDER BY access_date DESC
-                LIMIT 0,1';
 
-        $rs = Database::query($sql);
-        if (Database::num_rows($rs) > 0) {
-            if ($last_login_date = Database::result($rs, 0, 0)) {
-                if (empty($last_login_date)) {
-                    return false;
-                }
-                //see #5736
-                $last_login_date_timestamp = api_strtotime($last_login_date);
-                $now = time();
-                //If the last connection is > than 7 days, the text is red
-                //345600 = 7 days in seconds
-                if ($now - $last_login_date_timestamp > 604800) {
-                    if ($convert_date) {
-                        $last_login_date = api_convert_and_format_date($last_login_date, DATE_FORMAT_SHORT);
-                        $icon = api_is_allowed_to_edit() ?
-                            '<a href="'.api_get_path(WEB_CODE_PATH).'announcements/announcements.php?action=add&remind_inactive='.$student_id.'&cidReq='.$courseInfo['code'].'" title="'.get_lang('RemindInactiveUser').'">
-                              '.Display::return_icon('messagebox_warning.gif').'
-                             </a>'
-                            : null;
+        if (self::minimunTimeAvailable($session_id, $courseId)) {
+            // Show the last date on which the user acceed the session when it was active
+            $where_condition = '';
+            $userInfo = api_get_user_info($student_id);
+            if ($userInfo['status'] == 5 && $session_id > 0) {
+                // fin de acceso a la sesión
+                $sessionInfo = SessionManager::fetch($session_id);
+                $last_access = $sessionInfo['access_end_date'];
+                $where_condition = ' AND logout_course_date < "'.$last_access.'" ';
+            }
 
-                        return $icon.Display::label($last_login_date, 'warning');
-                    } else {
-                        return $last_login_date;
+            $tbl_track_e_course_access = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
+            $sql = "SELECT logout_course_date
+                FROM $tbl_track_e_course_access
+                WHERE   user_id = $student_id AND
+                        c_id = $courseId AND
+                        session_id = $session_id $where_condition
+                ORDER BY logout_course_date DESC
+                LIMIT 0,1";
+
+            $rs = Database::query($sql);
+            if (Database::num_rows($rs) > 0) {
+                if ($last_login_date = Database::result($rs, 0, 0)) {
+                    if (empty($last_login_date)) {
+                        return false;
                     }
-                } else {
+                    //see #5736
+                    $last_login_date_timestamp = api_strtotime($last_login_date);
+                    $now = time();
+                    //If the last connection is > than 7 days, the text is red
+                    //345600 = 7 days in seconds
+                    /*
+                    if ($now - $last_login_date_timestamp > 604800) {
+                        if ($convert_date) {
+                            $last_login_date = api_convert_and_format_date($last_login_date, DATE_FORMAT_SHORT);
+                            $icon = api_is_allowed_to_edit() ?
+                                '<a href="'.api_get_path(WEB_CODE_PATH).'announcements/announcements.php?action=add&remind_inactive='.$student_id.'&cidReq='.$courseInfo['code'].'" title="'.get_lang('RemindInactiveUser').'">
+                                  '.Display::return_icon('messagebox_warning.gif').'
+                                 </a>'
+                                : null;
+                            return $icon.Display::label($last_login_date, 'warning');
+                        } else {
+                            return $last_login_date;
+                        }
+                    } else {
+                    */
                     if ($convert_date) {
                         return api_convert_and_format_date($last_login_date, DATE_FORMAT_SHORT);
                     } else {
                         return $last_login_date;
+                    }
+                    //}
+                }
+            }
+        } else {
+            $tbl_track_e_course_access = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
+            $sql = "SELECT logout_course_date
+                    FROM $tbl_track_e_course_access
+                    WHERE   user_id = $student_id AND
+                            c_id = $courseId AND
+                            session_id = $session_id
+                    ORDER BY logout_course_date DESC
+                    LIMIT 0,1";
+
+            $rs = Database::query($sql);
+            if (Database::num_rows($rs) > 0) {
+                if ($last_login_date = Database::result($rs, 0, 0)) {
+                    if (empty($last_login_date)) {
+                        return false;
+                    }
+                    //see #5736
+                    $last_login_date_timestamp = api_strtotime($last_login_date);
+                    $now = time();
+                    //If the last connection is > than 7 days, the text is red
+                    //345600 = 7 days in seconds
+                    if ($now - $last_login_date_timestamp > 604800) {
+                        if ($convert_date) {
+                            $last_login_date = api_convert_and_format_date($last_login_date, DATE_FORMAT_SHORT);
+                            $icon = api_is_allowed_to_edit() ?
+                                '<a href="'.api_get_path(
+                                    WEB_CODE_PATH
+                                ).'announcements/announcements.php?action=add&remind_inactive='.$student_id.'&cidReq='.$courseInfo['code'].'" title="'.get_lang(
+                                    'RemindInactiveUser'
+                                ).'">
+                                  '.Display::return_icon('messagebox_warning.gif').'
+                                 </a>'
+                                : null;
+
+                            return $icon.Display::label($last_login_date, 'warning');
+                        } else {
+                            return $last_login_date;
+                        }
+                    } else {
+                        if ($convert_date) {
+                            return api_convert_and_format_date($last_login_date, DATE_FORMAT_SHORT);
+                        } else {
+                            return $last_login_date;
+                        }
                     }
                 }
             }
@@ -1906,7 +2051,7 @@ class Tracking
         if ($start < 0) {
             $start = 0;
         }
-        if (!isset($stop) or ($stop < 0)) {
+        if (!isset($stop) || $stop < 0) {
             $stop = api_get_utc_datetime();
         }
 
@@ -1917,8 +2062,8 @@ class Tracking
         $roundedStart = Database::escape_string($roundedStart);
         $roundedStop = Database::escape_string($roundedStop);
         $month_filter = " AND login_course_date > '$roundedStart' AND login_course_date < '$roundedStop' ";
-        $courseId = intval($courseId);
-        $session_id = intval($session_id);
+        $courseId = (int) $courseId;
+        $session_id = (int) $session_id;
         $count = 0;
         $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
         $sql = "SELECT count(*) as count_connections
@@ -1970,7 +2115,7 @@ class Tracking
      */
     public static function count_course_per_student($user_id, $include_sessions = true)
     {
-        $user_id = intval($user_id);
+        $user_id = (int) $user_id;
         $tbl_course_rel_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
         $tbl_session_course_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 
@@ -2227,9 +2372,9 @@ class Tracking
         $courseId,
         $session_id
     ) {
-        $courseId = intval($courseId);
-        $user_id = intval($user_id);
-        $session_id = intval($session_id);
+        $courseId = (int) $courseId;
+        $user_id = (int) $user_id;
+        $session_id = (int) $session_id;
 
         if (empty($exercise_list)) {
             return '0%';
@@ -2500,7 +2645,7 @@ class Tracking
             return false;
         }
 
-        $sessionId = intval($sessionId);
+        $sessionId = (int) $sessionId;
         $courseInfo = api_get_course_info($courseCode);
 
         if (empty($courseInfo)) {
@@ -2543,7 +2688,7 @@ class Tracking
 
         $conditions = [
             " c_id = {$courseInfo['real_id']} ",
-            " lp_view.lp_id IN(".implode(', ', $filteredLP).") ",
+            " lp_view.lp_id IN (".implode(', ', $filteredLP).") ",
         ];
 
         $groupBy = 'GROUP BY lp_id';
@@ -2552,7 +2697,7 @@ class Tracking
             $studentId = array_map('intval', $studentId);
             $conditions[] = " lp_view.user_id IN (".implode(',', $studentId).")  ";
         } else {
-            $studentId = intval($studentId);
+            $studentId = (int) $studentId;
             $conditions[] = " lp_view.user_id = '$studentId' ";
 
             if (empty($lpIdList)) {
@@ -2578,7 +2723,7 @@ class Tracking
         if (!empty($sessionId)) {
             $conditions[] = " session_id = $sessionId ";
         } else {
-            $conditions[] = " (session_id = 0 OR session_id IS NULL) ";
+            $conditions[] = ' (session_id = 0 OR session_id IS NULL) ';
         }
 
         $conditionToString = implode('AND', $conditions);
@@ -2741,10 +2886,6 @@ class Tracking
                             $condition_user1 AND
                             session_id = $session_id
                         GROUP BY lp_id, user_id";
-                if ($debug) {
-                    echo 'get LP results';
-                    var_dump($sql);
-                }
 
                 $rs_last_lp_view_id = Database::query($sql);
                 $global_result = 0;
@@ -3053,13 +3194,11 @@ class Tracking
      * 3. And finally it will return the average between 1. and 2.
      * This function does not take the results of a Test out of a LP.
      *
-     * @param   int|array   Array of user ids or an user id
-     * @param string $course_code Course code
-     * @param array  $lp_ids      List of LP ids
-     * @param int    $session_id  Session id (optional), if param $session_id is 0(default)
-     *                            it'll return results including sessions, 0 = session is not filtered
-     * @param   bool        Returns an array of the type [sum_score, num_score] if set to true
-     * @param   bool        get only the latest attempts or ALL attempts
+     * @param int|array $student_id  Array of user ids or an user id
+     * @param string    $course_code Course code
+     * @param array     $lp_ids      List of LP ids
+     * @param int       $session_id  Session id (optional), if param $session_id is 0(default)
+     *                               it'll return results including sessions, 0 = session is not filtered
      *
      * @return string value (number %) Which represents a round integer explain in got in 3
      */
@@ -3088,11 +3227,11 @@ class Tracking
 
         // Compose a filter based on optional learning paths list given
         if (!empty($lp_ids) && count($lp_ids) > 0) {
-            $conditions[] = " id IN(".implode(',', $lp_ids).") ";
+            $conditions[] = ' id IN ('.implode(',', $lp_ids).') ';
         }
 
         // Compose a filter based on optional session id
-        $session_id = intval($session_id);
+        $session_id = (int) $session_id;
         if (!empty($session_id)) {
             $conditions[] = " session_id = $session_id ";
         }
@@ -3101,6 +3240,7 @@ class Tracking
             array_walk($student_id, 'intval');
             $conditions[] = " lp_view.user_id IN (".implode(',', $student_id).") ";
         } else {
+            $student_id = (int) $student_id;
             $conditions[] = " lp_view.user_id = $student_id ";
         }
 
@@ -3110,11 +3250,11 @@ class Tracking
                     SUM(lp_i.max_score) sum_max_score
                 FROM $lp_table as lp
                 INNER JOIN $lp_item_table as lp_i
-                ON lp.id = lp_id AND lp.c_id = lp_i.c_id
+                ON lp.iid = lp_id AND lp.c_id = lp_i.c_id
                 INNER JOIN $lp_view_table as lp_view
                 ON lp_view.lp_id = lp_i.lp_id AND lp_view.c_id = lp_i.c_id
                 INNER JOIN $lp_item_view_table as lp_iv
-                ON lp_i.id = lp_iv.lp_item_id AND lp_view.c_id = lp_iv.c_id AND lp_iv.lp_view_id = lp_view.id
+                ON lp_i.iid = lp_iv.lp_item_id AND lp_view.c_id = lp_iv.c_id AND lp_iv.lp_view_id = lp_view.iid
                 WHERE (lp_i.item_type='sco' OR lp_i.item_type='".TOOL_QUIZ."') AND
                 $conditionsToString
         ";
@@ -3636,12 +3776,15 @@ class Tracking
     /**
      * Get sessions coached by user.
      *
-     * @param $coach_id
+     * @param int    $coach_id
      * @param int    $start
      * @param int    $limit
      * @param bool   $getCount
      * @param string $keyword
      * @param string $description
+     * @param string $orderByName
+     * @param string $orderByDirection
+     * @param array  $options
      *
      * @return mixed
      */
@@ -3651,16 +3794,19 @@ class Tracking
         $limit = 0,
         $getCount = false,
         $keyword = '',
-        $description = ''
+        $description = '',
+        $orderByName = '',
+        $orderByDirection = '',
+        $options = []
     ) {
         // table definition
         $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
         $tbl_session_course_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
-        $coach_id = intval($coach_id);
+        $coach_id = (int) $coach_id;
 
-        $select = " SELECT * FROM ";
+        $select = ' SELECT * FROM ';
         if ($getCount) {
-            $select = " SELECT count(DISTINCT id) as count FROM ";
+            $select = ' SELECT count(DISTINCT id) as count FROM ';
         }
 
         $limitCondition = null;
@@ -3669,7 +3815,6 @@ class Tracking
         }
 
         $keywordCondition = null;
-
         if (!empty($keyword)) {
             $keyword = Database::escape_string($keyword);
             $keywordCondition = " AND (name LIKE '%$keyword%' ) ";
@@ -3680,42 +3825,66 @@ class Tracking
             }
         }
 
+        $extraFieldModel = new ExtraFieldModel('session');
+        $conditions = $extraFieldModel->parseConditions($options);
+        $sqlInjectJoins = $conditions['inject_joins'];
+        $extraFieldsConditions = $conditions['where'];
+        $sqlInjectWhere = $conditions['inject_where'];
+        $injectExtraFields = $conditions['inject_extra_fields'];
+
         $tbl_session_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
         $access_url_id = api_get_current_access_url_id();
+
+        $orderBy = '';
+        if (!empty($orderByName)) {
+            if (in_array($orderByName, ['name', 'access_start_date'])) {
+                $orderByDirection = in_array(strtolower($orderByDirection), ['asc', 'desc']) ? $orderByDirection : 'asc';
+                $orderByName = Database::escape_string($orderByName);
+                $orderBy .= " ORDER BY $orderByName $orderByDirection";
+            }
+        }
 
         $sql = "
             $select
             (
                 SELECT DISTINCT
-                    session.id,
+                    s.id,
                     name,
+                    $injectExtraFields
                     access_start_date,
                     access_end_date
-                FROM $tbl_session session
+                FROM $tbl_session s
                 INNER JOIN $tbl_session_rel_access_url session_rel_url
-                ON (session.id = session_rel_url.session_id)
+                ON (s.id = session_rel_url.session_id)
+                $sqlInjectJoins
                 WHERE
                     id_coach = $coach_id AND
                     access_url_id = $access_url_id
                     $keywordCondition
+                    $extraFieldsConditions
+                    $sqlInjectWhere
             UNION
                 SELECT DISTINCT
-                    session.id,
-                    session.name,
-                    session.access_start_date,
-                    session.access_end_date
-                FROM $tbl_session as session
+                    s.id,
+                    s.name,
+                    $injectExtraFields
+                    s.access_start_date,
+                    s.access_end_date
+                FROM $tbl_session as s
                 INNER JOIN $tbl_session_course_user as session_course_user
                 ON
-                    session.id = session_course_user.session_id AND
+                    s.id = session_course_user.session_id AND
                     session_course_user.user_id = $coach_id AND
                     session_course_user.status = 2
-                INNER JOIN $tbl_session_rel_access_url session_rel_url
-                ON (session.id = session_rel_url.session_id)
+                INNER JOIN $tbl_session_rel_access_url session_rel_url                
+                ON (s.id = session_rel_url.session_id)
+                $sqlInjectJoins
                 WHERE
                     access_url_id = $access_url_id
                     $keywordCondition
-            ) as sessions $limitCondition
+                    $extraFieldsConditions
+                    $sqlInjectWhere
+            ) as sessions $limitCondition $orderBy
             ";
 
         $rs = Database::query($sql);
@@ -3727,7 +3896,7 @@ class Tracking
 
         $sessions = [];
         while ($row = Database::fetch_array($rs)) {
-            if ($row['access_start_date'] == '0000-00-00 00:00:00') {
+            if ($row['access_start_date'] === '0000-00-00 00:00:00') {
                 $row['access_start_date'] = null;
             }
 
@@ -3736,8 +3905,7 @@ class Tracking
 
         if (!empty($sessions)) {
             foreach ($sessions as &$session) {
-                if (empty($session['access_start_date'])
-                ) {
+                if (empty($session['access_start_date'])) {
                     $session['status'] = get_lang('SessionActive');
                 } else {
                     $time_start = api_strtotime($session['access_start_date'], 'UTC');
@@ -3769,7 +3937,7 @@ class Tracking
      */
     public static function get_courses_list_from_session($session_id)
     {
-        $session_id = intval($session_id);
+        $session_id = (int) $session_id;
 
         // table definition
         $tbl_session_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
@@ -3818,20 +3986,20 @@ class Tracking
                 $studentList = array_map('intval', $student_id);
                 $condition_user = " AND ip.insert_user_id IN ('".implode(',', $studentList)."') ";
             } else {
-                $student_id = intval($student_id);
+                $student_id = (int) $student_id;
                 $condition_user = " AND ip.insert_user_id = '$student_id' ";
             }
 
             $condition_session = null;
             if (isset($session_id)) {
-                $session_id = intval($session_id);
+                $session_id = (int) $session_id;
                 $condition_session = " AND pub.session_id = $session_id ";
             }
 
             $sql = "SELECT count(ip.tool) AS count
                     FROM $tbl_item_property ip
                     INNER JOIN $tbl_document pub
-                    ON (ip.ref = pub.id AND ip.c_id = pub.c_id)
+                    ON (ip.ref = pub.iid AND ip.c_id = pub.c_id)
                     WHERE
                         ip.c_id  = $course_id AND
                         pub.c_id  = $course_id AND
@@ -3850,17 +4018,12 @@ class Tracking
     /**
      * Count assignments per student.
      *
-     * @param $student_id
-     * @param null $course_code
-     * @param null $session_id
+     * @param array|int $student_id
+     * @param string    $course_code
+     * @param int       $session_id  if param is null(default) return count of assignments including sessions,
+     *                               0 = session is not filtered
      *
      * @return int Count of assignments
-     *
-     * @internal param array|int $Student id(s)
-     * @internal param Course $string code
-     * @internal param Session $int id (optional),
-     * if param $session_id is null(default) return count of assignments
-     * including sessions, 0 = session is not filtered
      */
     public static function count_student_assignments(
         $student_id,
@@ -3888,7 +4051,7 @@ class Tracking
             $studentList = array_map('intval', $student_id);
             $conditions[] = " ip.insert_user_id IN ('".implode("','", $studentList)."') ";
         } else {
-            $student_id = intval($student_id);
+            $student_id = (int) $student_id;
             $conditions[] = " ip.insert_user_id = '$student_id' ";
         }
 
@@ -3900,7 +4063,7 @@ class Tracking
         $sql = "SELECT count(ip.tool) as count
                 FROM $tbl_item_property ip
                 INNER JOIN $tbl_student_publication pub
-                ON (ip.ref = pub.id AND ip.c_id = pub.c_id)
+                ON (ip.ref = pub.iid AND ip.c_id = pub.c_id)
                 WHERE
                     ip.tool='work' AND
                     $conditionToString";
@@ -3934,7 +4097,7 @@ class Tracking
             $studentList = array_map('intval', $student_id);
             $conditions[] = " post.poster_id IN ('".implode("','", $studentList)."') ";
         } else {
-            $student_id = intval($student_id);
+            $student_id = (int) $student_id;
             $conditions[] = " post.poster_id = '$student_id' ";
         }
 
@@ -3953,7 +4116,6 @@ class Tracking
             return $row['count'];
         }
 
-        require_once api_get_path(SYS_CODE_PATH).'forum/forumconfig.inc.php';
         require_once api_get_path(SYS_CODE_PATH).'forum/forumfunction.inc.php';
 
         $courseInfo = api_get_course_info($courseCode);
@@ -4002,7 +4164,7 @@ class Tracking
 
             $condition_session = '';
             if (isset($session_id)) {
-                $session_id = intval($session_id);
+                $session_id = (int) $session_id;
                 $condition_session = api_get_session_condition(
                     $session_id,
                     true,
@@ -4012,11 +4174,11 @@ class Tracking
             }
 
             $course_id = $courseInfo['real_id'];
-            $groupId = intval($groupId);
+            $groupId = (int) $groupId;
             if (!empty($groupId)) {
-                $groupCondition = " i.to_group_id = $groupId  ";
+                $groupCondition = " i.to_group_id = $groupId ";
             } else {
-                $groupCondition = " (i.to_group_id = 0 OR i.to_group_id IS NULL) ";
+                $groupCondition = ' (i.to_group_id = 0 OR i.to_group_id IS NULL) ';
             }
 
             $item = Database::get_course_table(TABLE_ITEM_PROPERTY);
@@ -4072,7 +4234,7 @@ class Tracking
             $condition_session = ' AND f.session_id = '.$session_id;
         }
 
-        $groupId = intval($groupId);
+        $groupId = (int) $groupId;
 
         if (!empty($groupId)) {
             $groupCondition = " i.to_group_id = $groupId ";
@@ -5686,6 +5848,10 @@ class Tracking
 
             if (!empty($lp_list) > 0) {
                 foreach ($lp_list as $lp_id => $learnpath) {
+                    if (!$learnpath['lp_visibility']) {
+                        continue;
+                    }
+
                     $progress = self::get_avg_student_progress(
                         $user_id,
                         $course,
@@ -5816,24 +5982,23 @@ class Tracking
      */
     public static function generate_session_exercise_graph($names, $my_results, $average)
     {
-        $cdnChartJs = 'https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.min.js';
-        $html .= Display::tag('script', '', array('src' => $cdnChartJs));
-        $canvas = Display::tag('canvas', '', array('id' => 'session_graph_chart'));
-        $html .=  Display::tag('div',$canvas, array('style' => 'width:100%'));
+        $html = api_get_js('chartjs/Chart.js');
+        $canvas = Display::tag('canvas', '', ['id' => 'session_graph_chart']);
+        $html .= Display::tag('div', $canvas, ['style' => 'width:100%']);
         $jsStr = " var data = {
-                       labels:".  json_encode($names).",
+                       labels:".json_encode($names).",
                        datasets: [
                        {
                          label: '".get_lang('MyResults')."',
                          backgroundColor: 'rgb(255, 99, 132)',
                          stack: 'Stack1',
-                         data: ".  json_encode($my_results).",
+                         data: ".json_encode($my_results).",
                         },
                         {
                          label: '".get_lang('AverageScore')."',
                          backgroundColor: 'rgb(75, 192, 192)',
                          stack: 'Stack2',
-                         data: ".  json_encode($average).",
+                         data: ".json_encode($average).",
                         },
                         ],  
                     };
@@ -5864,6 +6029,7 @@ class Tracking
                     }
                 });";
         $html .= Display::tag('script', $jsStr);
+
         return $html;
     }
 
@@ -6236,7 +6402,7 @@ class Tracking
             $myCache->saveFromCache($chartHash, $imgPath);
             $imgPath = api_get_path(WEB_ARCHIVE_PATH).$chartHash;
         }
-        
+
         return $imgPath;
     }
 
@@ -6575,6 +6741,158 @@ class Tracking
         $html = $skillManager->getUserSkillsTable($userId, $courseId, $sessionId)['table'];
 
         return $html;
+    }
+
+    /**
+     * @param int $userId
+     * @param int $courseId
+     * @param int $sessionId
+     *
+     * @return array
+     */
+    public static function getCalculateTime($userId, $courseId, $sessionId)
+    {
+        $userId = (int) $userId;
+        $courseId = (int) $courseId;
+        $sessionId = (int) $sessionId;
+
+        if (empty($userId) || empty($courseId)) {
+            return [];
+        }
+
+        $lpTime = [];
+        $sql = "SELECT MIN(date_reg) min, MAX(date_reg) max
+                FROM track_e_access_complete
+                WHERE
+                    user_id = $userId AND
+                    c_id = $courseId AND
+                    session_id = $sessionId AND                    
+                    login_as = 0
+                ORDER BY date_reg ASC
+                LIMIT 1";
+        $rs = Database::query($sql);
+
+        $firstConnection = '';
+        $lastConnection = '';
+        if (Database::num_rows($rs) > 0) {
+            $value = Database::fetch_array($rs);
+            $firstConnection = $value['min'];
+            $lastConnection = $value['max'];
+        }
+
+        $sql = "SELECT * FROM track_e_access_complete 
+                WHERE
+                    user_id = $userId AND
+                    c_id = $courseId AND                      
+                    session_id = $sessionId AND      
+                    login_as = 0 AND current_id <> 0";
+
+        $res = Database::query($sql);
+        $reg = [];
+        while ($row = Database::fetch_assoc($res)) {
+            $reg[$row['id']] = $row;
+            $reg[$row['id']]['date_reg'] = strtotime($row['date_reg']);
+        }
+
+        $sessions = [];
+        foreach ($reg as $key => $value) {
+            $sessions[$value['current_id']][$value['tool']][] = $value;
+        }
+
+        $quizTime = 0;
+        $result = [];
+        $totalTime = 0;
+
+        foreach ($sessions as $listPerTool) {
+            $min = 0;
+            $max = 0;
+            $sessionDiff = 0;
+            foreach ($listPerTool as $tool => $results) {
+                $beforeItem = [];
+                foreach ($results as $item) {
+                    if (empty($beforeItem)) {
+                        $beforeItem = $item;
+                        continue;
+                    }
+
+                    $partialTime = $item['date_reg'] - $beforeItem['date_reg'];
+
+                    if ($item['date_reg'] > $max) {
+                        $max = $item['date_reg'];
+                    }
+
+                    if (empty($min)) {
+                        $min = $item['date_reg'];
+                    }
+
+                    if ($item['date_reg'] < $min) {
+                        $min = $item['date_reg'];
+                    }
+
+                    switch ($tool) {
+                        case TOOL_AGENDA:
+                        case TOOL_FORUM:
+                        case TOOL_ANNOUNCEMENT:
+                        case TOOL_COURSE_DESCRIPTION:
+                        case TOOL_SURVEY:
+                        case TOOL_NOTEBOOK:
+                        case TOOL_GRADEBOOK:
+                        case TOOL_DROPBOX:
+                        case 'Reports':
+                        case 'Videoconference':
+                        case TOOL_LINK:
+                        case TOOL_CHAT:
+                        case 'course-main':
+                            if (!isset($result[$tool])) {
+                                $result[$tool] = 0;
+                            }
+                            $result[$tool] += $partialTime;
+                            break;
+                        case TOOL_LEARNPATH:
+                            if ($item['tool_id'] != $beforeItem['tool_id']) {
+                                break;
+                            }
+                            if (!isset($lpTime[$item['tool_id']])) {
+                                $lpTime[$item['tool_id']] = 0;
+                            }
+                            $lpTime[$item['tool_id']] += $partialTime;
+
+                            break;
+                        case TOOL_QUIZ:
+                            if (!isset($lpTime[$item['action_details']])) {
+                                $lpTime[$item['action_details']] = 0;
+                            }
+                            if ($beforeItem['action'] == 'learnpath_id') {
+                                $lpTime[$item['action_details']] += $partialTime;
+                            } else {
+                                $quizTime += $partialTime;
+                            }
+                            break;
+                    }
+                    $beforeItem = $item;
+                }
+            }
+
+            $sessionDiff += $max - $min;
+            if ($sessionDiff > 0) {
+                $totalTime += $sessionDiff;
+            }
+        }
+
+        $totalLp = 0;
+        foreach ($lpTime as $value) {
+            $totalLp += $value;
+        }
+
+        $result[TOOL_LEARNPATH] = $lpTime;
+        $result[TOOL_QUIZ] = $quizTime;
+        $result['total_learnpath'] = $totalLp;
+        $result['total_time'] = $totalTime;
+        $result['number_connections'] = count($sessions);
+        $result['first'] = $firstConnection;
+        $result['last'] = $lastConnection;
+
+        return $result;
     }
 
     /**
@@ -7359,7 +7677,7 @@ class TrackingCourseLog
             $user_ids = array_map('intval', $user_ids);
             $condition_user = " WHERE user.user_id IN (".implode(',', $user_ids).") ";
         } else {
-            $user_ids = intval($user_ids);
+            $user_ids = (int) $user_ids;
             $condition_user = " WHERE user.user_id = $user_ids ";
         }
 
@@ -7397,9 +7715,9 @@ class TrackingCourseLog
             $direction = 'ASC';
         }
 
-        $column = intval($column);
-        $from = intval($from);
-        $number_of_items = intval($number_of_items);
+        $column = (int) $column;
+        $from = (int) $from;
+        $number_of_items = (int) $number_of_items;
 
         $sql .= " ORDER BY col$column $direction ";
         $sql .= " LIMIT $from,$number_of_items";

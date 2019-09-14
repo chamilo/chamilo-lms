@@ -38,33 +38,36 @@
                         <em class="fa fa-external-link-square fa-fw"></em> {{ 'ExportBadge'|get_lang }}
                     </a>
                 </p>
+                {% if not 'hide_social_media_links'|api_get_configuration_value %}
                 <div class='col-md-12 text-center'>
                     <h5><b> {{ 'ShareWithYourFriends' | get_lang }} </b></h5>
                     <a href="http://www.facebook.com/sharer.php?u={{ _p.web }}badge/{{ badge.issue_info.id }}" target="_new">
                         <em class='fa fa-facebook-square fa-3x text-info' aria-hidden='true'></em>
                     </a>
-                    <a href="https://twitter.com/home?status={{ 'IHaveObtainedSkillXOnY' | get_lang |format(skill_info.name, _s.site_name)}} - {{ _p.web }}badge/{{ badge.issue_info.id }}" target="_new">
+                    <a href="https://twitter.com/home?status={{ 'IHaveObtainedSkillXOnY' | get_lang |format(badge.issue_info.skill_name, _s.site_name)}} - {{ _p.web }}badge/{{ badge.issue_info.id }}" target="_new">
                         <em class='fa fa-twitter-square fa-3x text-light' aria-hidden='true'></em>
                     </a>
                 </div>
+                {% endif %}
             {% endif %}
         </div>
         <div class="col-md-7">
-            <h3>{{ 'RecipientDetails'|get_lang }}</h3>
+            <h5>{{ 'RecipientDetails'|get_lang }}</h5>
             <p class="lead">{{ badge.issue_info.user_complete_name }}</p>
-            <h4>{{ 'SkillAcquiredAt'|get_lang }}</h4>
+            <h4 class="bage-username">{{ 'SkillAcquiredAt'|get_lang }}</h4>
             <ul class="fa-ul">
-                <li>
+                <li class="badge-item">
                     {% if badge.issue_info.source_name %}
-                        <em class="fa-li fa fa-clock-o fa-fw"></em> {{ 'TimeXThroughCourseY'|get_lang|format(badge.issue_info.datetime, badge.issue_info.source_name) }}
+                        <em class="fa fa-clock-o fa-fw"></em> {{ 'TimeXThroughCourseY'|get_lang|format(badge.issue_info.datetime, badge.issue_info.source_name) }}
                     {% else %}
-                        <em class="fa-li fa fa-clock-o fa-fw"></em> {{ badge.issue_info.datetime }}
+                        <em class="fa fa-clock-o fa-fw"></em> {{ badge.issue_info.datetime }}
                     {% endif %}
                     {% if badge.issue_info.argumentation %}
                         {% if badge.issue_info.argumentation %}
-                            <b><p style="font-style: italic;">{{ 'UserXIndicated'|get_lang|format(badge.issue_info.argumentation_author_name) }} </p></b>
+                            <br>
+                            <p>{{ 'UserXIndicated'|get_lang|format(badge.issue_info.argumentation_author_name) }} </p>
                         {% endif %}
-                        <p>{{ badge.issue_info.argumentation }}</p>
+                        <p class="msg">{{ badge.issue_info.argumentation }}</p>
                     {% endif %}
                 </li>
             </ul>

@@ -1,4 +1,4 @@
-<div id="learning_path_main" class="{{ is_allowed_to_edit ? 'lp-view-include-breadcrumb' }} {{ lp_mode == 'embedframe' ? 'lp-view-collapsed' }}">
+<div id="learning_path_main" class="{{ is_allowed_to_edit ? 'lp-view-include-breadcrumb' }} {{ lp_mode == 'embedframe' ? 'lp-view-collapsed' : '' }}">
     {% if show_left_column == 1 %}
     <div id="learning_path_left_zone" class="sidebar-scorm">
         <div class="lp-view-zone-container">
@@ -10,22 +10,103 @@
                                 {{ lp_preview_image }}
                             </div>
                         {% else %}
-                            <div class="media">
-                                <div class="media-left">
+                            <div class="media-author">
+                                <div class="media-author-avatar">
                                     {{ lp_preview_image }}
                                 </div>
-                                <div class="media-body">
-                                    <div class="description-autor"> {{ lp_author }} </div>
+                                <div class="media-author-description">
+                                    {{ lp_author }}
                                 </div>
                             </div>
                         {% endif %}
                     </div>
-
                     {% if show_audio_player %}
                         <div id="lp_media_file" class="audio-scorm">
                             {{ media_player }}
                         </div>
                     {% endif %}
+
+                    {% if lp_accumulate_work_time != '' %}
+                        {% set lp_progress %}
+                        <style>
+                            #timer .container{display:table;background:#777;color:#eee;font-weight:bold;width:100%;text-align:center;text-shadow:1px 1px 4px #999;}
+                            #timer .container div{display:table-cell;font-size:24px;padding:0px;width:20px;}
+                            #timer .container .divider{width:10px;color:#ddd;}
+                            #btn-comenzar{box-sizing:border-box;background:#eee;border:none;margin:0 auto;padding:20px;width:100%;font-size:30px;color:#777;}
+                            #btn-comenzar:hover{background:#fff;}
+                        </style>
+                        <script>
+                            $(function() {
+                                var timerData = {
+                                    hour: parseInt($("#hour").text()),
+                                    minute: parseInt($("#minute").text()),
+                                    second:  parseInt($("#second").text())
+                                };
+                                //window.timerInterval = null;
+                                clearInterval(window.timerInterval);
+                                window.timerInterval = setInterval(function(){
+                                    // Seconds
+                                    timerData.second++;
+                                    if (timerData.second >= 60) {
+                                        timerData.second = 0;
+                                        timerData.minute++;
+                                    }
+
+                                    // Minutes
+                                    if (timerData.minute >= 60) {
+                                        timerData.minute = 0;
+                                        timerData.hour++;
+                                    }
+
+                                    $("#hour").text(timerData.hour < 10 ? '0' + timerData.hour : timerData.hour);
+                                    $("#minute").text(timerData.minute < 10 ? '0' + timerData.minute : timerData.minute);
+                                    $("#second").text(timerData.second < 10 ? '0' + timerData.second : timerData.second);
+                                }, 1000);
+                            })
+                        </script>
+                        <div class="row">
+                            <div class="col-xs-4">
+                                <b>
+                                    {{ "ProgressSpentInLp"|get_lang|format(lp_accumulate_work_time) }}
+                                </b>
+                            </div>
+                            <div class="col-xs-8">
+                                <div id="progress_bar">
+                                    {{ progress_bar }}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-xs-4">
+                                <b>
+                                    {{ "TimeSpentInLp"|get_lang|format(lp_accumulate_work_time) }}
+                                </b>
+                            </div>
+                            <div class="col-xs-8">
+                                <div id="timer">
+                                    <div class="container">
+                                        <div id="hour">{{ hour }}</div>
+                                        <div class="divider">:</div>
+                                        <div id="minute">{{ minute }}</div>
+                                        <div class="divider">:</div>
+                                        <div id="second">{{ second }}</div>
+
+                                        <div id="slash"> / </div>
+                                        <div>{{ hour_min }}</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endset %}
+                    {% else %}
+                        {% set lp_progress %}
+                            <div id="progress_bar">
+                                {{ progress_bar }}
+                            </div>
+                        {% endset %}
+                    {% endif %}
+
                     {% if gamification_mode == 1 %}
                         <!--- gamification -->
                         <div id="scorm-gamification">
@@ -49,77 +130,99 @@
                             </div>
                             <div class="row">
                                 <div class="col-xs-12 navegation-bar">
-                                    <div id="progress_bar">
-                                        {{ progress_bar }}
-                                    </div>
+                                   {{ lp_progress }}
                                 </div>
                             </div>
                         </div>
-                       <!--- end gamification -->
+                        <!--- end gamification -->
                     {% else %}
-                        <div id="progress_bar">
-                            {{ progress_bar }}
-                        </div>
+                       {{ lp_progress }}
                     {% endif %}
+
                     {{ teacher_toc_buttons }}
                 </div>
             </div>
-        {# TOC layout #}
-        <div id="toc_id" class="scorm-body" name="toc_name">
+            {# TOC layout #}
+            <div id="toc_id" class="scorm-body" name="toc_name">
                 {% include 'learnpath/scorm_list.tpl'|get_template %}
             </div>
-        {# end TOC layout #}
+            {# end TOC layout #}
         </div>
     </div>
     {# end left zone #}
     {% endif %}
 
-    <div id="lp_navigation_elem" class="navegation-bar">
-        {% if show_left_column == 1 %}
-        <a href="#" title = "{{ 'Expand'|get_lang }}" id="lp-view-expand-toggle" class="icon-toolbar expand" role="button">
-            {% if lp_mode == 'embedframe' %}
-                <span class="fa fa-compress" aria-hidden="true"></span>
-                <span class="sr-only">{{ 'Expand'|get_lang }}</span>
-            {% else %}
-                <span class="fa fa-expand" aria-hidden="true"></span>
-                <span class="sr-only">{{ 'Expand'|get_lang }}</span>
-            {% endif %}
-        </a>
-        {% endif %}
-
-        <a id="home-course" title = "{{ 'Home'|get_lang }}" href="{{ button_home_url }}" class="icon-toolbar" target="_self" onclick="javascript: window.parent.API.save_asset();">
-            <em class="fa fa-home"></em> <span class="hidden-xs hidden-sm"></span>
-        </a>
-        {{ navigation_bar }}
-    </div>
-
-    {# right zone #}
+    {# Right zone #}
     <div id="learning_path_right_zone" class="{{ show_left_column == 1 ? 'content-scorm' : 'no-right-col' }}">
         <div class="lp-view-zone-container">
             <div class="lp-view-tabs">
                 <div id="navTabsbar" class="nav-tabs-bar">
-                    <ul id="navTabs" class="nav nav-tabs" role="tablist">
+                    <ul id="navTabs" class="nav nav-tabs tabs-right" role="tablist">
                         <li role="presentation" class="active">
-                            <a href="#lp-view-content" title="{{ 'Lesson'|get_lang }}" aria-controls="lp-view-content" role="tab" data-toggle="tab">
+                            <a href="#lp-view-content" title="{{ 'Lesson'|get_lang }}"
+                               aria-controls="lp-view-content" role="tab" data-toggle="tab">
                                 <span class="fa fa-book fa-2x fa-fw" aria-hidden="true"></span>
                                 <span class="sr-only">{{ 'Lesson'|get_lang }}</span>
                             </a>
                         </li>
                         <li role="presentation">
-                            <a href="#lp-view-forum" title="{{ 'Forum'|get_lang }}" aria-controls="lp-view-forum" role="tab" data-toggle="tab">
+                            <a href="#lp-view-forum" title="{{ 'Forum'|get_lang }}"
+                               aria-controls="lp-view-forum" role="tab" data-toggle="tab">
                                 <span class="fa fa-commenting-o fa-2x fa-fw" aria-hidden="true"></span>
                                 <span class="sr-only">{{ 'Forum'|get_lang }}</span>
                             </a>
                         </li>
                     </ul>
                 </div>
-                <div class="tab-content">
+                <nav id="btn-menu-float" class="circular-menu">
+                    <div class="circle">
+                        {% if show_left_column == 1 %}
+                            <a href="#" title = "{{ 'Expand'|get_lang }}" id="lp-view-expand-toggle"
+                               class="icon-toolbar expand" role="button">
+                                {% if lp_mode == 'embedframe' %}
+                                    <span class="fa fa-compress" aria-hidden="true"></span>
+                                    <span class="sr-only">{{ 'Expand'|get_lang }}</span>
+                                {% else %}
+                                    <span class="fa fa-expand" aria-hidden="true"></span>
+                                    <span class="sr-only">{{ 'Expand'|get_lang }}</span>
+                                {% endif %}
+                            </a>
+                        {% endif %}
+                        <a id="home-course"
+                           title = "{{ 'Home'|get_lang }}"
+                           href="{{ button_home_url }}"
+                           class="icon-toolbar" target="_self"
+                           onclick="javascript: window.parent.API.save_asset();">
+                            <em class="fa fa-home"></em> <span class="hidden-xs hidden-sm"></span>
+                        </a>
+                        {{ navigation_bar }}
+                    </div>
+                    <a class="menu-button fa fa-bars icons" href="#"></a>
+                </nav>
+
+                <div id="tab-iframe" class="tab-content">
                     <div role="tabpanel" class="tab-pane active" id="lp-view-content">
                         <div id="wrapper-iframe">
                         {% if lp_mode == 'fullscreen' %}
-                            <iframe id="content_id_blank" name="content_name_blank" src="blank.php" style="width:100%; height:100%" border="0" frameborder="0" allowfullscreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"></iframe>
+                            <iframe
+                                id="content_id_blank"
+                                name="content_name_blank"
+                                src="blank.php"
+                                style="width:100%; height:100%"
+                                border="0"
+                                frameborder="0"
+                                allowfullscreen="true"
+                                webkitallowfullscreen="true" mozallowfullscreen="true"></iframe>
                         {% else %}
-                            <iframe id="content_id" name="content_name" src="{{ iframe_src }}" style="width:100%; height:100%" border="0" frameborder="0" allowfullscreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"></iframe>
+                            <iframe
+                                id="content_id"
+                                name="content_name"
+                                src="{{ iframe_src }}"
+                                style="width:100%; height:100%"
+                                border="0"
+                                frameborder="0"
+                                allowfullscreen="true"
+                                webkitallowfullscreen="true" mozallowfullscreen="true"></iframe>
                         {% endif %}
                         </div>
                     </div>
@@ -133,79 +236,65 @@
 </div>
 
 <script>
+    document.querySelector('.menu-button').onclick = function(e) {
+        e.preventDefault(); document.querySelector('.circle').classList.toggle('open');
+    }
     var LPViewUtils = {
         setHeightLPToc: function () {
             var scormInfoHeight = $('#scorm-info').outerHeight(true);
-
             $('#learning_path_toc').css({
                 top: scormInfoHeight
             });
         }
     };
 
-    $(document).ready(function () {
+    $(function() {
         if (/iPhone|iPod|iPad/.test(navigator.userAgent)) {
             // Fix an issue where you cannot scroll below first screen in
             // learning paths on Apple devices
-            document.getElementById('wrapper-iframe')
-                .setAttribute(
-                    'style',
-                    'width:100%; overflow:auto; position:auto; -webkit-overflow-scrolling:touch !important;'
-                );
+            document.getElementById('wrapper-iframe').setAttribute(
+                'style',
+                'width:100%; overflow:auto; position:auto; -webkit-overflow-scrolling:touch !important;'
+            );
             // Fix another issue whereby buttons do not react to click below
             // second screen in learning paths on Apple devices
-            document.getElementById('content_id')
-                .setAttribute(
-                    'style',
-                    'overflow: auto;'
-                );
-
+            document.getElementById('content_id').setAttribute('style', 'overflow: auto;');
         }
 
         {% if lp_mode == 'embedframe' %}
             //$('#learning_path_main').addClass('lp-view-collapsed');
             $('#lp-view-expand-button, #lp-view-expand-toggle').on('click', function (e) {
-            e.preventDefault();
+                e.preventDefault();
+                $('#learning_path_main').toggleClass('lp-view-collapsed');
+                $('#lp-view-expand-toggle span.fa').toggleClass('fa-compress');
+                $('#lp-view-expand-toggle span.fa').toggleClass('fa-expand');
+                var className = $('#lp-view-expand-toggle span.fa').attr('class');
+                if (className == 'fa fa-expand') {
+                    $(this).attr('title', '{{ "Expand" | get_lang }}');
+                } else {
+                    $(this).attr('title', '{{ "Collapse" | get_lang }}');
+                }
 
-            $('#learning_path_main').toggleClass('lp-view-collapsed');
-            $('#lp-view-expand-toggle span.fa').toggleClass('fa-compress');
-            $('#lp-view-expand-toggle span.fa').toggleClass('fa-expand');
-            var className = $('#lp-view-expand-toggle span.fa').attr('class');
-            if (className == 'fa fa-expand') {
-                $(this).attr('title', '{{ "Expand" | get_lang }}');
-            } else {
-                $(this).attr('title', '{{ "Collapse" | get_lang }}');
-            }
-
-            if($('#navTabsbar').is(':hidden')){
-                $('#navTabsbar').show();
-            } else {
-                $('#navTabsbar').hide();
-            }
-
-        });
+                if($('#navTabsbar').is(':hidden')) {
+                    $('#navTabsbar').show();
+                } else {
+                    $('#navTabsbar').hide();
+                }
+            });
         {% else %}
-        $('#lp-view-expand-button, #lp-view-expand-toggle').on('click', function (e) {
-            e.preventDefault();
+            $('#lp-view-expand-button, #lp-view-expand-toggle').on('click', function (e) {
+                e.preventDefault();
+                $('#learning_path_main').toggleClass('lp-view-collapsed');
+                $('#lp-view-expand-toggle span.fa').toggleClass('fa-expand');
+                $('#lp-view-expand-toggle span.fa').toggleClass('fa-compress');
 
-            $('#learning_path_main').toggleClass('lp-view-collapsed');
-
-            $('#lp-view-expand-toggle span.fa').toggleClass('fa-expand');
-            $('#lp-view-expand-toggle span.fa').toggleClass('fa-compress');
-
-            var className = $('#lp-view-expand-toggle span.fa').attr('class');
-            if (className == 'fa fa-expand') {
-                $(this).attr('title', '{{ "Expand" | get_lang }}');
-            } else {
-                $(this).attr('title', '{{ "Collapse" | get_lang }}');
-            }
-
-            if($('#navTabsbar').is(':hidden')){
-                $('#navTabsbar').show();
-            } else {
-                $('#navTabsbar').hide();
-            }
-        });
+                var className = $('#lp-view-expand-toggle span.fa').attr('class');
+                if (className == 'fa fa-expand') {
+                    $(this).attr('title', '{{ "Expand" | get_lang }}');
+                } else {
+                    $(this).attr('title', '{{ "Collapse" | get_lang }}');
+                }
+            });
         {% endif %}
 
         $('.lp-view-tabs').on('click', '.disabled', function (e) {
@@ -214,15 +303,12 @@
 
         $('a#ui-option').on('click', function (e) {
             e.preventDefault();
-
             var icon = $(this).children('.fa');
-
             if (icon.is('.fa-chevron-up')) {
                 icon.removeClass('fa-chevron-up').addClass('fa-chevron-down');
 
                 return;
             }
-
             icon.removeClass('fa-chevron-down').addClass('fa-chevron-up');
         });
 
@@ -238,7 +324,6 @@
 
         $('#learning_path_right_zone #lp-view-content iframe').on('load', function () {
             $('.lp-view-tabs a[href="#lp-view-content"]').tab('show');
-
             $('.lp-view-tabs').animate({opacity: 1}, 500);
         });
 
@@ -253,58 +338,54 @@
                         function(){
                             //  $("<div>I am a div courses</div>").prependTo("body");
                         },
-                        "top.content_name",
-                        {
-                            load: [
-                                { type:"script", id:"_fr1", src:"{{ jquery_web_path }}"},
+                        "#content_id",
+                        [
+                            { type:"script", id:"_fr1", src:"{{ jquery_web_path }}", deps: [
                                 { type:"script", id:"_fr4", src:"{{ jquery_ui_js_web_path }}"},
-                                { type:"stylesheet", id:"_fr5", src:"{{ jquery_ui_css_web_path }}"},
                                 { type:"script", id:"_fr2", src:"{{ _p.web_lib }}javascript/jquery.highlight.js"},
                                 {{ fix_link }}
-                            ]
-                        }
+                            ]},
+                            { type:"stylesheet", id:"_fr5", src:"{{ jquery_ui_css_web_path }}"},
+                        ]
                     );
                 {% elseif show_glossary_in_documents == 'isautomatic' %}
                     $.frameReady(
                         function(){
                             //  $("<div>I am a div courses</div>").prependTo("body");
                         },
-                        "top.content_name",
-                        {
-                            load: [
-                                { type:"script", id:"_fr1", src:"{{ jquery_web_path }}"},
+                        "#content_id",
+                        [
+                            { type:"script", id:"_fr1", src:"{{ jquery_web_path }}", deps: [
                                 { type:"script", id:"_fr4", src:"{{ jquery_ui_js_web_path }}"},
-                                { type:"stylesheet", id:"_fr5", src:"{{ jquery_ui_css_web_path }}"},
                                 { type:"script", id:"_fr2", src:"{{ _p.web_lib }}javascript/jquery.highlight.js"},
                                 {{ fix_link }}
-                            ]
-                        }
+                            ]},
+                            { type:"stylesheet", id:"_fr5", src:"{{ jquery_ui_css_web_path }}"},
+                        ]
                     );
                 {% elseif fix_link != '' %}
                     $.frameReady(
                         function(){
                             //  $("<div>I am a div courses</div>").prependTo("body");
                         },
-                        "top.content_name",
-                        {
-                            load: [
-                                { type:"script", id:"_fr1", src:"{{ jquery_web_path }}"},
+                        "#content_id",
+                        [
+                            { type:"script", id:"_fr1", src:"{{ jquery_web_path }}", deps: [
                                 { type:"script", id:"_fr4", src:"{{ jquery_ui_js_web_path }}"},
-                                { type:"stylesheet", id:"_fr5", src:"{{ jquery_ui_css_web_path }}"},
                                 {{ fix_link }}
-                            ]
-                        }
+                            ]},
+                            { type:"stylesheet", id:"_fr5", src:"{{ jquery_ui_css_web_path }}"},
+                        ]
                     );
                 {% endif %}
             })();
         {% endif %}
-
         {% if disable_js_in_lp_view == 0 %}
-            $('iframe#content_id').on('load', function () {
+            $(function() {
                 var arr = ['link', 'sco'];
 
-                if (!$.inArray(olms.lms_item_type, arr)) {
-                    setFrameReady('content_name');
+                if ($.inArray(olms.lms_item_type, arr) == -1) {
+                    {{ frame_ready }}
                 }
             });
         {% endif %}

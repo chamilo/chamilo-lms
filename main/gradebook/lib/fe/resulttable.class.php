@@ -22,7 +22,7 @@ class ResultTable extends SortableTable
      *
      * @param string      $evaluation
      * @param array       $results
-     * @param null|string $iscourse
+     * @param string|null $iscourse
      * @param array       $addparams
      * @param bool        $forprint
      */

@@ -20,12 +20,11 @@
  */
 require_once __DIR__.'/../inc/global.inc.php';
 $current_course_tool = TOOL_LINK;
-
 $this_section = SECTION_COURSES;
 api_protect_course_script(true);
 
 $htmlHeadXtra[] = '<script>
-    $(document).ready( function() {
+    $(function() {
         for (i=0;i<$(".actions").length;i++) {
             if ($(".actions:eq("+i+")").html()=="<table border=\"0\"></table>" || $(".actions:eq("+i+")").html()=="" || $(".actions:eq("+i+")").html()==null) {
                 $(".actions:eq("+i+")").hide();
@@ -93,7 +92,7 @@ Event::event_access_tool(TOOL_LINK);
 $id = isset($_REQUEST['id']) ? $_REQUEST['id'] : null;
 $scope = isset($_REQUEST['scope']) ? $_REQUEST['scope'] : null;
 $show = isset($_REQUEST['show']) && in_array(trim($_REQUEST['show']), ['all', 'none']) ? $_REQUEST['show'] : '';
-$categoryId = isset($_REQUEST['category_id']) ? intval($_REQUEST['category_id']) : '';
+$categoryId = isset($_REQUEST['category_id']) ? (int) $_REQUEST['category_id'] : '';
 $linkListUrl = api_get_self().'?'.api_get_cidreq().'&category_id='.$categoryId.'&show='.$show;
 $content = '';
 $token = Security::get_existing_token();
@@ -212,11 +211,24 @@ switch ($action) {
         header('Location: '.$linkListUrl);
         exit;
         break;
+    case 'export':
+        $content = Link::listLinksAndCategories($course_id, $session_id, $categoryId, $show, null, false);
+        $pdf = new PDF();
+        $pdf->content_to_pdf(
+            $content,
+            null,
+            $courseInfo['code'].get_lang('Link'),
+            $courseInfo['code'],
+            'D',
+            false,
+            null,
+            false,
+            true
+        );
+        break;
     case 'list':
     default:
-        ob_start();
-        Link::listLinksAndCategories($course_id, $session_id, $categoryId, $show);
-        $content = ob_get_clean();
+        $content = Link::listLinksAndCategories($course_id, $session_id, $categoryId, $show);
         break;
 }
 

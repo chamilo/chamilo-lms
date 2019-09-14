@@ -14,12 +14,15 @@ api_block_anonymous_users();
 GradebookUtils::block_students();
 
 $select_cat = isset($_GET['selectcat']) ? (int) $_GET['selectcat'] : 0;
-$is_allowedToEdit = $is_courseAdmin;
+$is_allowedToEdit = api_is_course_admin();
+
+$userId = api_get_user_id();
+
 $evaladd = new Evaluation();
-$evaladd->set_user_id($_user['user_id']);
+$evaladd->set_user_id($userId);
 if (!empty($select_cat)) {
     $evaladd->set_category_id($_GET['selectcat']);
-    $cat = Category :: load($_GET['selectcat']);
+    $cat = Category::load($_GET['selectcat']);
     $evaladd->set_course_code($cat[0]->get_course_code());
 } else {
     $evaladd->set_category_id(0);
@@ -49,21 +52,29 @@ if ($form->validate()) {
     $eval->set_course_code(api_get_course_id());
     $eval->set_category_id($values['hid_category_id']);
 
-    $parent_cat = Category :: load($values['hid_category_id']);
+    $parent_cat = Category::load($values['hid_category_id']);
     $global_weight = $cat[0]->get_weight();
     //$values['weight'] = $values['weight_mask']/$global_weight*$parent_cat[0]->get_weight();
     $values['weight'] = $values['weight_mask'];
 
     $eval->set_weight($values['weight']);
     $eval->set_max($values['max']);
-
+    $visible = 1;
     if (empty($values['visible'])) {
         $visible = 0;
-    } else {
-        $visible = 1;
     }
     $eval->set_visible($visible);
     $eval->add();
+
+    $logInfo = [
+        'tool' => TOOL_GRADEBOOK,
+        'tool_id' => 0,
+        'tool_id_detail' => 0,
+        'action' => 'new-eval',
+        'action_details' => 'selectcat='.$eval->get_category_id(),
+    ];
+    Event::registerLog($logInfo);
+
     if ($eval->get_course_code() == null) {
         if ($values['adduser'] == 1) {
             //Disabling code when course code is null see issue #2705
@@ -85,6 +96,15 @@ if ($form->validate()) {
     }
 }
 
+$logInfo = [
+    'tool' => TOOL_GRADEBOOK,
+    'tool_id' => 0,
+    'tool_id_detail' => 0,
+    'action' => 'add-eval',
+    'action_details' => 'selectcat='.$select_cat,
+];
+Event::registerLog($logInfo);
+
 $interbreadcrumb[] = [
     'url' => Category::getUrl().'selectcat='.$select_cat,
     'name' => get_lang('Gradebook'), ]
@@ -92,7 +112,7 @@ $interbreadcrumb[] = [
 $this_section = SECTION_COURSES;
 
 $htmlHeadXtra[] = '<script>
-$(document).ready( function() {
+$(function() {
     $("#hid_category_id").change(function() {
        $("#hid_category_id option:selected").each(function () {
            var cat_id = $(this).val();

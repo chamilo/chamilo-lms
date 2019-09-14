@@ -36,7 +36,7 @@ if (!empty($infoQuiz['description'])) {
 }
 
 // Select all questions of the supported types from the given course
-$questionsList = getQuestions($courseId, $quizId, $sessionId);
+$questionsList = getQuestionsFromCourse($courseId, $quizId, $sessionId);
 
 // Go through all questions and get the answers
 if ($_GET['type'] == 'question' || $_GET['type'] == 'all') {

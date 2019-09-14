@@ -41,7 +41,7 @@
 </div>
 
 <script>
-$(document).on('ready', function () {
+$(function() {
     $('tr td button').on('click', function (e) {
         e.preventDefault();
         var self = $(this);

@@ -27,7 +27,7 @@ class GlobalMultipleAnswer extends Question
     public function createAnswersForm($form)
     {
         $nb_answers = isset($_POST['nb_answers']) ? $_POST['nb_answers'] : 4;
-        $nb_answers += (isset($_POST['lessAnswers']) ? -1 : (isset($_POST['moreAnswers']) ? 1 : 0));
+        $nb_answers += isset($_POST['lessAnswers']) ? -1 : (isset($_POST['moreAnswers']) ? 1 : 0);
 
         $obj_ex = Session::read('objExercise');
 
@@ -74,8 +74,8 @@ class GlobalMultipleAnswer extends Question
         }
 
         //D�but affichage score global dans la modification d'une question
-        $scoreA = "0"; //par reponse
-        $scoreG = "0"; //Global
+        $scoreA = 0; //par reponse
+        $scoreG = 0; //Global
 
         /* boucle pour sauvegarder les donn�es dans le tableau defaults */
         for ($i = 1; $i <= $nb_answers; $i++) {
@@ -174,11 +174,13 @@ class GlobalMultipleAnswer extends Question
 
         global $text;
 
-        if ($obj_ex->edit_exercise_in_lp == true) {
+        if ($obj_ex->edit_exercise_in_lp ||
+            (empty($this->exerciseList) && empty($obj_ex->id))
+        ) {
+            // setting the save button here and not in the question class.php
             $form->addButtonDelete(get_lang('LessAnswer'), 'lessAnswers');
             $form->addButtonCreate(get_lang('PlusAnswer'), 'moreAnswers');
             $form->addButtonSave($text, 'submitQuestion');
-            // setting the save button here and not in the question class.php
         }
 
         $renderer->setElementTemplate('{element}&nbsp;', 'lessAnswers');
@@ -225,7 +227,7 @@ class GlobalMultipleAnswer extends Question
         $nbr_corrects = $nbr_corrects == 0 ? 1 : $nbr_corrects;
         $answer_score = $nbr_corrects == 0 ? 0 : $answer_score;
 
-        $answer_score = ($answer_score / $nbr_corrects);
+        $answer_score = $answer_score / $nbr_corrects;
 
         //$answer_score �quivaut � la valeur d'une bonne r�ponse
         // cr�ation variable pour r�cuperer la valeur de la coche pour la prise en compte des n�gatifs
@@ -267,8 +269,11 @@ class GlobalMultipleAnswer extends Question
         $header = parent::return_header($exercise, $counter, $score);
         $header .= '<table class="'.$this->question_table_class.'"><tr>';
 
-        $header .= '<th>'.get_lang('Choice').'</th>';
-        $header .= '<th>'.get_lang('ExpectedChoice').'</th>';
+        if ($exercise->results_disabled != RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER) {
+            $header .= '<th>'.get_lang('Choice').'</th>';
+            $header .= '<th>'.get_lang('ExpectedChoice').'</th>';
+        }
+
         $header .= '<th>'.get_lang('Answer').'</th>';
         if ($exercise->showExpectedChoice()) {
             $header .= '<th>'.get_lang('Status').'</th>';

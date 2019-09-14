@@ -59,13 +59,13 @@
         </div>
     </div>
 </div>
-<audio id="chat-alert">
+<audio id="chat-alert" class="skip">
     <source src="{{ _p.web_main }}chat/sound/notification.wav" type="audio/wav"></source>
     <source src="{{ _p.web_main }}chat/sound/notification.ogg" type="audio/ogg"></source>
     <source src="{{ _p.web_main }}chat/sound/notification.mp3" type="audio/mpeg"></source>
 </audio>
 <script>
-$(document).on('ready', function () {
+$(function () {
     var ChChat = {
         _ajaxUrl: '{{ _p.web_ajax }}course_chat.ajax.php?{{ _p.web_cid_query }}',
         _historySize: -1,

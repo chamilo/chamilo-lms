@@ -25,9 +25,12 @@ require_once __DIR__.'/../inc/global.inc.php';
 
 $this_section = SECTION_COURSES;
 
+api_protect_course_script(true);
+
 if (!api_is_allowed_to_edit()) {
     api_not_allowed(true);
 }
+
 $category = new TestCategory();
 $courseId = api_get_course_int_id();
 $sessionId = api_get_session_id();
@@ -132,15 +135,15 @@ function edit_category_form($action)
             get_lang('CategoryDescription'),
             false,
             false,
-            ['ToolbarSet' => 'test_category', 'Height' => '200']
+            ['ToolbarSet' => 'TestQuestionDescription', 'Height' => '200']
         );
         $form->addButtonSave(get_lang('ModifyCategory'), 'SubmitNote');
 
         // setting the defaults
         $defaults = [];
-        $defaults["category_id"] = $objcat->id;
-        $defaults["category_name"] = $objcat->name;
-        $defaults["category_description"] = $objcat->description;
+        $defaults['category_id'] = $objcat->id;
+        $defaults['category_name'] = $objcat->name;
+        $defaults['category_description'] = $objcat->description;
         $form->setDefaults($defaults);
 
         // setting the rules
@@ -213,7 +216,7 @@ function add_category_form($action)
         get_lang('CategoryDescription'),
         false,
         false,
-        ['ToolbarSet' => 'test_category', 'Height' => '200']
+        ['ToolbarSet' => 'TestQuestionDescription', 'Height' => '200']
     );
     $form->addButtonCreate(get_lang('AddTestCategory'), 'SubmitNote');
     // setting the rules

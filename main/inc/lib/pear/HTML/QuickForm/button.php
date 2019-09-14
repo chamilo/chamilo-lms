@@ -210,22 +210,8 @@ class HTML_QuickForm_button extends HTML_QuickForm_input
      */
     public function getTemplate($layout)
     {
-        $size = $this->getColumnsSize();
-
-        if (empty($size)) {
-            $size = array(2, 8, 2);
-        } else {
-            if (is_array($size)) {
-                if (count($size) == 1) {
-                    $size = array(2, intval($size[0]), 2);
-                } elseif (count($size) != 3) {
-                    $size = array(2, 8, 2);
-                }
-                // else just keep the $size array as received
-            } else {
-                $size = array(2, intval($size), 2);
-            }
-        }
+        $size = $this->calculateSize();
+        $attributes = $this->getAttributes();
 
         switch ($layout) {
             case FormValidator::LAYOUT_INLINE:
@@ -234,7 +220,13 @@ class HTML_QuickForm_button extends HTML_QuickForm_input
                 ';
                 break;
             case FormValidator::LAYOUT_HORIZONTAL:
-                return '
+                if (isset($attributes['custom']) && $attributes['custom'] == true) {
+                    $template = '
+                        {icon}
+                        {element}
+                    ';
+                } else {
+                    $template = '
                 <div class="form-group {error_class}">
                     <label {label-for} class="col-sm-'.$size[0].' control-label" >
                         <!-- BEGIN required --><span class="form_required">*</span><!-- END required -->
@@ -258,6 +250,8 @@ class HTML_QuickForm_button extends HTML_QuickForm_input
                         <!-- END label_3 -->
                     </div>
                 </div>';
+                }
+                return $template;
                 break;
             case FormValidator::LAYOUT_BOX:
             case FormValidator::LAYOUT_BOX_NO_LABEL:

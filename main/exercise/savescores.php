@@ -7,6 +7,9 @@
  * @package chamilo.exercise
  */
 require_once __DIR__.'/../inc/global.inc.php';
+
+api_protect_course_script(true);
+
 $courseInfo = api_get_course_info();
 $_user = api_get_user_info();
 
@@ -70,7 +73,7 @@ function save_scores($file, $score)
         global $jscript2run;
         //record the results in the learning path, using the SCORM interface (API)
         $jscript2run .= "<script>
-            $(document).ready(function() {
+            $(function() {
                 //API_obj = window.frames.window.content.API;
                 //API_obj = $('content_id').context.defaultView.content.API; //works only in FF
                 //API_obj = window.parent.frames.window.top.API;

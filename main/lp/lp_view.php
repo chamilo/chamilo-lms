@@ -126,7 +126,7 @@ $htmlHeadXtra[] = api_get_css_asset('qtip2/jquery.qtip.min.css');
 $htmlHeadXtra[] = api_get_asset('qtip2/jquery.qtip.min.js');
 $htmlHeadXtra[] = '<script type="text/javascript" src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.frameready.js"></script>';
 $htmlHeadXtra[] = '<script>
-$(document).ready(function() {    
+$(function() {   
     $("div#log_content_cleaner").bind("click", function() {
         $("div#log_content").empty();
     });
@@ -137,7 +137,7 @@ var chamilo_xajax_handler = window.oxajax;
 $allowLpItemTip = api_get_configuration_value('hide_accessibility_label_on_lp_item') === false;
 if ($allowLpItemTip) {
     $htmlHeadXtra[] = '<script>
-    $(document).ready(function() {    
+    $(function() {   
          $(".scorm_item_normal").qtip({
             content: {
                 text: function(event, api) {
@@ -244,7 +244,7 @@ if (!isset($src)) {
                 }
 
                 if (isset($file_info['extension']) &&
-                    api_strtolower(substr($file_info['extension'], 0, 3) == 'pdf')
+                    api_strtolower(substr($file_info['extension'], 0, 3)) == 'pdf'
                 ) {
                     $src = api_get_path(WEB_CODE_PATH).'lp/lp_view_item.php?lp_item_id='.$lp_item_id.'&'.api_get_cidreq();
                 }
@@ -401,7 +401,6 @@ if ($lp->mode == 'fullscreen') {
         window.open('$src','content_id','toolbar=0,location=0,status=0,scrollbars=1,resizable=1');
     </script>";
 }
-
 // Set flag to ensure lp_header.php is loaded by this script (flag is unset in lp_header.php).
 Session::write('loaded_lp_view', true);
 $display_none = '';
@@ -424,7 +423,7 @@ if (!api_is_invitee()) {
     $progress_bar = $lp->getProgressBar();
 }
 $navigation_bar = $lp->get_navigation_bar();
-$navigation_bar_bottom = $lp->get_navigation_bar("control-bottom", "display:none");
+$navigation_bar_bottom = $lp->get_navigation_bar('control-bottom', 'display:none');
 $mediaplayer = $lp->get_mediaplayer($lp->current, $autostart);
 
 $tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
@@ -460,10 +459,6 @@ if ($is_allowed_to_edit) {
         'url' => '#',
         'name' => get_lang('Preview'),
     ];
-}
-
-// Return to course home.
-if ($is_allowed_to_edit) {
     $buttonHomeUrl = 'lp_controller.php?'.api_get_cidreq(true, true, 'course').'&'.http_build_query([
         'isStudentView' => 'false',
         'action' => 'return_to_course_homepage',
@@ -535,6 +530,7 @@ $template->assign('glossary_tool_available_list', ['true', 'lp', 'exercise_and_l
 $gamificationMode = api_get_setting('gamification_mode');
 // ...AND this learning path is set in gamification mode, then change the display
 $gamificationMode = $gamificationMode && $lp->seriousgame_mode;
+
 $template->assign('gamification_mode', $gamificationMode);
 $template->assign('glossary_extra_tools', api_get_setting('show_glossary_in_extra_tools'));
 $template->assign('show_glossary_in_documents', api_get_setting('show_glossary_in_documents'));
@@ -560,6 +556,51 @@ if ($gamificationMode == 1) {
 }
 
 $template->assign('lp_author', $lp->get_author());
+
+$lpMinTime = '';
+if (Tracking::minimunTimeAvailable(api_get_session_id(), api_get_course_int_id())) {
+    // Calulate minimum and accumulated time
+    $timeLp = $_SESSION['oLP']->getAccumulateWorkTime();
+    $timeTotalCourse = $_SESSION['oLP']->getAccumulateWorkTimeTotalCourse();
+    // Minimum connection percentage
+    $perc = 100;
+    // Time from the course
+    $tc = $timeTotalCourse;
+    // Percentage of the learning paths
+    $pl = 0;
+    if (!empty($timeTotalCourse)) {
+        $pl = $timeLp / $timeTotalCourse;
+    }
+
+    // Minimum time for each learning path
+    $time_min = intval($pl * $tc * $perc / 100);
+
+    if ($_SESSION['oLP']->getAccumulateWorkTime() > 0) {
+        $lpMinTime = '('.$time_min.' min)';
+    }
+
+    $lpTimeList = Tracking::getCalculateTime($user_id, api_get_course_int_id(), api_get_session_id());
+    $lpTime = isset($lpTimeList[TOOL_LEARNPATH][$lp_id]) ? (int) $lpTimeList[TOOL_LEARNPATH][$lp_id] : 0;
+
+    if ($lpTime >= ($time_min * 60)) {
+        $time_progress_perc = '100%';
+        $time_progress_value = 100;
+    } else {
+        $time_progress_value = intval(($lpTime * 100) / ($time_min * 60));
+        $time_progress_perc = $time_progress_value.'%';
+    }
+
+    $template->assign('time_progress_perc', $time_progress_perc);
+    $template->assign('time_progress_value', $time_progress_value);
+    // Cronometro
+    $hour = (intval($lpTime / 3600)) < 10 ? '0'.intval($lpTime / 3600) : intval($lpTime / 3600);
+    $template->assign('hour', $hour);
+    $template->assign('minute', date('i', $lpTime));
+    $template->assign('second', date('s', $lpTime));
+    $template->assign('hour_min', api_time_to_hms($timeLp * 60, '</div><div class="divider">:</div><div>'));
+}
+
+$template->assign('lp_accumulate_work_time', $lpMinTime);
 $template->assign('lp_mode', $lp->mode);
 $template->assign('lp_title_scorm', $lp->name);
 if (api_get_configuration_value('lp_view_accordion') === true && $lpType == 1) {
@@ -580,6 +621,8 @@ $template->assign(
     )
 );
 
+$frameReady = Display::getFrameReadyBlock('#content_id, #content_id_blank');
+$template->assign('frame_ready', $frameReady);
 $view = $template->get_template('learnpath/view.tpl');
 $content = $template->fetch($view);
 

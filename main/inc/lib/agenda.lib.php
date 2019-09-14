@@ -2705,10 +2705,14 @@ class Agenda
      */
     public function getAttachment($attachmentId, $eventId, $courseInfo)
     {
+        if (empty($courseInfo) || empty($attachmentId) || empty($eventId)) {
+            return [];
+        }
+
         $tableAttachment = Database::get_course_table(TABLE_AGENDA_ATTACHMENT);
-        $courseId = intval($courseInfo['real_id']);
-        $eventId = intval($eventId);
-        $attachmentId = intval($attachmentId);
+        $courseId = (int) $courseInfo['real_id'];
+        $eventId = (int) $eventId;
+        $attachmentId = (int) $attachmentId;
 
         $row = [];
         $sql = "SELECT id, path, filename, comment
@@ -2743,7 +2747,7 @@ class Agenda
         $courseInfo
     ) {
         $agenda_table_attachment = Database::get_course_table(TABLE_AGENDA_ATTACHMENT);
-        $eventId = intval($eventId);
+        $eventId = (int) $eventId;
 
         // Storing the attachments
         $upload_ok = false;
@@ -2880,6 +2884,8 @@ class Agenda
     public function getAllRepeatEvents($eventId)
     {
         $events = [];
+        $eventId = (int) $eventId;
+
         switch ($this->type) {
             case 'personal':
                 break;
@@ -2936,62 +2942,41 @@ class Agenda
      */
     public function displayActions($view, $filter = 0)
     {
-        $courseInfo = api_get_course_info();
         $groupInfo = GroupManager::get_group_properties(api_get_group_id());
         $groupIid = isset($groupInfo['iid']) ? $groupInfo['iid'] : 0;
 
-        $courseCondition = '';
-        if (!empty($courseInfo)) {
-            $courseCondition = api_get_cidreq();
-        }
+        $codePath = api_get_path(WEB_CODE_PATH);
+
+        $currentUserId = api_get_user_id();
+        $cidReq = api_get_cidreq();
 
         $actionsLeft = '';
-        $actionsLeft .= "<a href='".api_get_path(WEB_CODE_PATH)."calendar/agenda_js.php?type={$this->type}&".$courseCondition."'>".
-            Display::return_icon(
-                'calendar.png',
-                get_lang('Calendar'),
-                '',
-                ICON_SIZE_MEDIUM
-            )."</a>";
-
-        $actionsLeft .= "<a href='".api_get_path(WEB_CODE_PATH)."calendar/agenda_list.php?type={$this->type}&".$courseCondition."'>".
-            Display::return_icon(
-                'week.png',
-                get_lang('AgendaList'),
-                '',
-                ICON_SIZE_MEDIUM
-            )."</a>";
+        $actionsLeft .= Display::url(
+            Display::return_icon('calendar.png', get_lang('Calendar'), [], ICON_SIZE_MEDIUM),
+            $codePath."calendar/agenda_js.php?type={$this->type}&$cidReq"
+        );
+        $actionsLeft .= Display::url(
+            Display::return_icon('week.png', get_lang('AgendaList'), [], ICON_SIZE_MEDIUM),
+            $codePath."calendar/agenda_list.php?type={$this->type}&$cidReq"
+        );
 
         $form = '';
         if (api_is_allowed_to_edit(false, true) ||
-            (api_get_course_setting('allow_user_edit_agenda') == '1' &&
-                !api_is_anonymous()) &&
-            api_is_allowed_to_session_edit(false, true) ||
-            (GroupManager::user_has_access(
-                api_get_user_id(),
-                $groupIid,
-                GroupManager::GROUP_TOOL_CALENDAR
-            ) &&
-            GroupManager::is_tutor_of_group(api_get_user_id(), $groupInfo))
+            (api_get_course_setting('allow_user_edit_agenda') == '1' && !api_is_anonymous()) &&
+            api_is_allowed_to_session_edit(false, true)
+            || (
+                GroupManager::user_has_access($currentUserId, $groupIid, GroupManager::GROUP_TOOL_CALENDAR)
+                && GroupManager::is_tutor_of_group($currentUserId, $groupInfo)
+            )
         ) {
             $actionsLeft .= Display::url(
-                Display::return_icon(
-                    'new_event.png',
-                    get_lang('AgendaAdd'),
-                    '',
-                    ICON_SIZE_MEDIUM
-                ),
-                api_get_path(WEB_CODE_PATH)."calendar/agenda.php?".api_get_cidreq()."&action=add&type=".$this->type
+                Display::return_icon('new_event.png', get_lang('AgendaAdd'), [], ICON_SIZE_MEDIUM),
+                $codePath."calendar/agenda.php?action=add&type={$this->type}&$cidReq"
             );
 
             $actionsLeft .= Display::url(
-                Display::return_icon(
-                    'import_calendar.png',
-                    get_lang('ICalFileImport'),
-                    '',
-                    ICON_SIZE_MEDIUM
-                ),
-                api_get_path(WEB_CODE_PATH)."calendar/agenda.php?".api_get_cidreq()."&action=importical&type=".$this->type
+                Display::return_icon('import_calendar.png', get_lang('ICalFileImport'), [], ICON_SIZE_MEDIUM),
+                $codePath."calendar/agenda.php?action=importical&type={$this->type}&$cidReq"
             );
 
             if ($this->type === 'course') {
@@ -3015,6 +3000,13 @@ class Agenda
             }
         }
 
+        if ($this->type == 'personal' && !api_is_anonymous()) {
+            $actionsLeft .= Display::url(
+                Display::return_icon('1day.png', get_lang('SessionsPlanCalendar'), [], ICON_SIZE_MEDIUM),
+                $codePath."calendar/planification.php"
+            );
+        }
+
         if (api_is_platform_admin() ||
             api_is_teacher() ||
             api_is_student_boss() ||
@@ -3034,26 +3026,20 @@ class Agenda
                         FormValidator::LAYOUT_INLINE
                     );
 
+                    $sessions = [];
+
                     if (api_is_drh()) {
-                        $sessionList = SessionManager::get_sessions_followed_by_drh(
-                            api_get_user_id()
-                        );
+                        $sessionList = SessionManager::get_sessions_followed_by_drh($currentUserId);
                         if (!empty($sessionList)) {
-                            $sessions = [];
                             foreach ($sessionList as $sessionItem) {
                                 $sessions[$sessionItem['id']] = strip_tags($sessionItem['name']);
                             }
                         }
                     } else {
-                        $sessions = SessionManager::get_sessions_by_user(
-                            api_get_user_id()
-                        );
-                        $sessions = array_column(
-                            $sessions,
-                            'session_name',
-                            'session_id'
-                        );
+                        $sessions = SessionManager::get_sessions_by_user($currentUserId);
+                        $sessions = array_column($sessions, 'session_name', 'session_id');
                     }
+
                     $form->addHidden('type', 'personal');
                     $sessions = ['0' => get_lang('SelectAnOption')] + $sessions;
 
@@ -3094,7 +3080,7 @@ class Agenda
             api_get_self().'?action=importical&type='.$this->type,
             ['enctype' => 'multipart/form-data']
         );
-        $form->addElement('header', get_lang('ICalFileImport'));
+        $form->addHeader(get_lang('ICalFileImport'));
         $form->addElement('file', 'ical_import', get_lang('ICalFileImport'));
         $form->addRule(
             'ical_import',
@@ -4057,30 +4043,6 @@ class Agenda
         }
 
         return $items;
-    }
-
-    /**
-     * This function retrieves one personal agenda item returns it.
-     *
-     * @param int $id The agenda item ID
-     *
-     * @return array The results of the database query, or null if not found
-     */
-    public static function get_personal_agenda_item($id)
-    {
-        $table = Database::get_main_table(TABLE_PERSONAL_AGENDA);
-        $id = intval($id);
-        // make sure events of the personal agenda can only be seen by the user himself
-        $user = api_get_user_id();
-        $sql = " SELECT * FROM ".$table." WHERE id=".$id." AND user = ".$user;
-        $result = Database::query($sql);
-        if (Database::num_rows($result) == 1) {
-            $item = Database::fetch_array($result);
-        } else {
-            $item = null;
-        }
-
-        return $item;
     }
 
     /**

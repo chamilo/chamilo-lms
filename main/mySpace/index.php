@@ -12,17 +12,17 @@ $cidReset = true;
 
 require_once __DIR__.'/../inc/global.inc.php';
 
+// Access control
+api_block_anonymous_users();
+
 $htmlHeadXtra[] = api_get_jqgrid_js();
-$htmlHeadXtra[] = '<script type="text/javascript" src="'
-    .api_get_path(WEB_PUBLIC_PATH).'assets/jquery.easy-pie-chart/dist/jquery.easypiechart.js"></script>';
-// the section (for the tabs)
+$htmlHeadXtra[] = '<script type="text/javascript" src="'.api_get_path(WEB_PUBLIC_PATH).'assets/jquery.easy-pie-chart/dist/jquery.easypiechart.js"></script>';
+
 $this_section = SECTION_TRACKING;
-//for HTML editor repository
-//Session::erase('this_section');
 
 ob_start();
 $nameTools = get_lang('MySpace');
-$export_csv = isset($_GET['export']) && $_GET['export'] == 'csv' ? true : false;
+$export_csv = isset($_GET['export']) && $_GET['export'] === 'csv' ? true : false;
 $display = isset($_GET['display']) ? Security::remove_XSS($_GET['display']) : null;
 $csv_content = [];
 $user_id = api_get_user_id();
@@ -31,11 +31,14 @@ $is_coach = api_is_coach($session_id);
 $is_platform_admin = api_is_platform_admin();
 $is_drh = api_is_drh();
 $is_session_admin = api_is_session_admin();
-$title = '';
 $skipData = api_get_configuration_value('tracking_skip_generic_data');
 
-// Access control
-api_block_anonymous_users();
+$logInfo = [
+    'tool' => SECTION_TRACKING,
+    'tool_id' => 0,
+    'tool_id_detail' => 0,
+];
+Event::registerLog($logInfo);
 
 $allowToTrack = api_is_platform_admin(true, true) || api_is_teacher();
 
@@ -61,7 +64,6 @@ $calendarMenuAdded = false;
 
 if ($is_platform_admin) {
     if ($view == 'admin') {
-        $title = get_lang('CoachList');
         $menu_items[] = Display::url(
             Display::return_icon('teacher.png', get_lang('TeacherInterface'), [], ICON_SIZE_MEDIUM),
             api_get_self().'?view=teacher'
@@ -303,13 +305,12 @@ $form = new FormValidator(
     api_get_path(WEB_CODE_PATH).'mySpace/student.php'
 );
 $form = Tracking::setUserSearchForm($form);
-$skipData = api_get_configuration_value('tracking_skip_generic_data');
 
 $totalTimeSpent = null;
 $averageScore = null;
 $posts = null;
 
-if ($skipData == false) {
+if ($skipData === false) {
     if (!empty($students)) {
         // Students
         $studentIds = array_values($students);

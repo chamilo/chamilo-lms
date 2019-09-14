@@ -1,6 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
 use Chamilo\CoreBundle\Entity\ExtraField;
 use ChamiloSession as Session;
 
@@ -67,7 +68,11 @@ class Display
             $showHeader = false;
         }
 
-        self::$global_template = new Template($tool_name, $showHeader, $showHeader);
+        /* USER_IN_ANON_SURVEY is defined in fillsurvey.php when survey is marked as anonymous survey */
+        $userInAnonSurvey = defined('USER_IN_ANON_SURVEY') && USER_IN_ANON_SURVEY;
+
+        self::$global_template = new Template($tool_name, $showHeader, $showHeader, false, $userInAnonSurvey);
+        self::$global_template->assign('user_in_anon_survey', $userInAnonSurvey);
 
         // Fixing tools with any help it takes xxx part of main/xxx/index.php
         if (empty($help)) {
@@ -606,37 +611,68 @@ class Display
      * @param string  e-mail
      * @param string  clickable text
      * @param string  optional, class from stylesheet
+     * @param bool $addExtraContent
      *
      * @return string encrypted mailto hyperlink
      */
     public static function encrypted_mailto_link(
         $email,
         $clickable_text = null,
-        $style_class = ''
+        $style_class = '',
+        $addExtraContent = false
     ) {
         if (is_null($clickable_text)) {
             $clickable_text = $email;
         }
+
         // "mailto:" already present?
         if (substr($email, 0, 7) != 'mailto:') {
             $email = 'mailto:'.$email;
         }
+
         // Class (stylesheet) defined?
         if ($style_class != '') {
             $style_class = ' class="'.$style_class.'"';
         }
+
         // Encrypt email
         $hmail = '';
         for ($i = 0; $i < strlen($email); $i++) {
-            $hmail .= '&#'.ord($email[
-            $i]).';';
+            $hmail .= '&#'.ord($email[$i]).';';
         }
-        $hclickable_text = null;
+
+        $value = api_get_configuration_value('add_user_course_information_in_mailto');
+
+        if ($value) {
+            $hmail .= '?';
+            if (!api_is_anonymous()) {
+                $hmail .= '&subject='.Security::remove_XSS(api_get_setting('siteName'));
+            }
+            if ($addExtraContent) {
+                $content = '';
+                if (!api_is_anonymous()) {
+                    $userInfo = api_get_user_info();
+                    $content .= get_lang('User').': '.$userInfo['complete_name']."\n";
+
+                    $courseInfo = api_get_course_info();
+                    if (!empty($courseInfo)) {
+                        $content .= get_lang('Course').': ';
+                        $content .= $courseInfo['name'];
+                        $sessionInfo = api_get_session_info(api_get_session_id());
+                        if (!empty($sessionInfo)) {
+                            $content .= ' '.$sessionInfo['name'].' <br />';
+                        }
+                    }
+                }
+                $hmail .= '&body='.rawurlencode($content);
+            }
+        }
+
+        $hclickable_text = '';
         // Encrypt clickable text if @ is present
         if (strpos($clickable_text, '@')) {
             for ($i = 0; $i < strlen($clickable_text); $i++) {
-                $hclickable_text .= '&#'.ord($clickable_text[
-                $i]).';';
+                $hclickable_text .= '&#'.ord($clickable_text[$i]).';';
             }
         } else {
             $hclickable_text = @htmlspecialchars(
@@ -1063,6 +1099,7 @@ class Display
         $html = '';
         $extra = '';
         $default_id = 'id="'.$name.'" ';
+        $extra_attributes = array_merge(['class' => 'form-control'], $extra_attributes);
         foreach ($extra_attributes as $key => $parameter) {
             if ($key == 'id') {
                 $default_id = '';
@@ -1264,10 +1301,10 @@ class Display
      */
     public static function form_row($label, $form_item)
     {
-        $label = self::span($label, ['class' => 'control-label']);
-        $form_item = self::div($form_item, ['class' => 'controls']);
+        $label = self::tag('label', $label, ['class' => 'col-sm-2 control-label']);
+        $form_item = self::div($form_item, ['class' => 'col-sm-10']);
 
-        return self::div($label.$form_item, ['class' => 'control-group']);
+        return self::div($label.$form_item, ['class' => 'form-group']);
     }
 
     /**
@@ -1320,9 +1357,23 @@ class Display
         $obj->viewrecords = 'true';
         $all_value = 10000000;
 
+        // Sets how many records we want to view in the grid
+        $obj->rowNum = 20;
+
         // Default row quantity
         if (!isset($extra_params['rowList'])) {
             $extra_params['rowList'] = [20, 50, 100, 500, 1000, $all_value];
+            $rowList = api_get_configuration_value('table_row_list');
+            if (!empty($rowList) && isset($rowList['options'])) {
+                $rowList = $rowList['options'];
+                $rowList[] = $all_value;
+            }
+            $extra_params['rowList'] = $rowList;
+        }
+
+        $defaultRow = api_get_configuration_value('table_default_row');
+        if (!empty($defaultRow)) {
+            $obj->rowNum = (int) $defaultRow;
         }
 
         $json = '';
@@ -1348,8 +1399,6 @@ class Display
             $obj->rowList = $extra_params['rowList'];
         }
 
-        // Sets how many records we want to view in the grid
-        $obj->rowNum = 20;
         if (!empty($extra_params['rowNum'])) {
             $obj->rowNum = $extra_params['rowNum'];
         } else {
@@ -1376,6 +1425,24 @@ class Display
         if (isset($extra_params['beforeSelectRow'])) {
             $beforeSelectRow = "beforeSelectRow: ".$extra_params['beforeSelectRow'].", ";
             unset($extra_params['beforeSelectRow']);
+        }
+
+        $beforeProcessing = '';
+        if (isset($extra_params['beforeProcessing'])) {
+            $beforeProcessing = 'beforeProcessing : function() { '.$extra_params['beforeProcessing'].' },';
+            unset($extra_params['beforeProcessing']);
+        }
+
+        $beforeRequest = '';
+        if (isset($extra_params['beforeRequest'])) {
+            $beforeRequest = 'beforeRequest : function() { '.$extra_params['beforeRequest'].' },';
+            unset($extra_params['beforeRequest']);
+        }
+
+        $gridComplete = '';
+        if (isset($extra_params['gridComplete'])) {
+            $gridComplete = 'gridComplete : function() { '.$extra_params['gridComplete'].' },';
+            unset($extra_params['gridComplete']);
         }
 
         // Adding extra params
@@ -1419,6 +1486,9 @@ class Display
         // Creating the jqgrid element.
         $json .= '$("#'.$div_id.'").jqGrid({';
         //$json .= $beforeSelectRow;
+        $json .= $gridComplete;
+        $json .= $beforeProcessing;
+        $json .= $beforeRequest;
         $json .= $json_encode;
         $json .= '});';
 
@@ -1691,27 +1761,20 @@ class Display
         }
         $output = [];
         if (!$nosession) {
-            $main_user_table = Database::get_main_table(TABLE_MAIN_USER);
-            $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
-            // Request for the name of the general coach
-            $sql = 'SELECT tu.lastname, tu.firstname, ts.*
-                    FROM '.$tbl_session.' ts
-                    LEFT JOIN '.$main_user_table.' tu
-                    ON ts.id_coach = tu.user_id
-                    WHERE ts.id = '.intval($session_id);
-            $rs = Database::query($sql);
-            $session_info = Database::store_result($rs, 'ASSOC');
-            $session_info = $session_info[0];
+            $session_info = api_get_session_info($session_id);
+            $coachInfo = [];
+            if (!empty($session['id_coach'])) {
+                $coachInfo = api_get_user_info($session['id_coach']);
+            }
 
             $session = [];
             $session['category_id'] = $session_info['session_category_id'];
             $session['title'] = $session_info['name'];
             $session['id_coach'] = $session_info['id_coach'];
-            $session['coach'] = '';
             $session['dates'] = '';
-
-            if (api_get_setting('show_session_coach') === 'true') {
-                $session['coach'] = get_lang('GeneralCoach').': '.api_get_person_name($session_info['firstname'], $session_info['lastname']);
+            $session['coach'] = '';
+            if (api_get_setting('show_session_coach') === 'true' && isset($coachInfo['complete_name'])) {
+                $session['coach'] = get_lang('GeneralCoach').': '.$coachInfo['complete_name'];
             }
 
             if (($session_info['access_end_date'] == '0000-00-00 00:00:00' &&
@@ -1728,11 +1791,8 @@ class Display
             } else {
                 $dates = SessionManager::parseSessionDates($session_info, true);
                 $session['dates'] = $dates['access'];
-                if (api_get_setting('show_session_coach') === 'true') {
-                    $session['coach'] = api_get_person_name(
-                        $session_info['firstname'],
-                        $session_info['lastname']
-                    );
+                if (api_get_setting('show_session_coach') === 'true' && isset($coachInfo['complete_name'])) {
+                    $session['coach'] = $coachInfo['complete_name'];
                 }
                 $active = $date_start <= $now && $date_end >= $now;
             }
@@ -1860,14 +1920,15 @@ class Display
         return self::page_subheader($title, $second_title);
     }
 
-    public static function page_subheader($title, $second_title = null, $size = 'h3')
+    public static function page_subheader($title, $second_title = null, $size = 'h3', $attributes = [])
     {
         if (!empty($second_title)) {
             $second_title = Security::remove_XSS($second_title);
             $title .= "<small> $second_title<small>";
         }
+        $subTitle = self::tag($size, Security::remove_XSS($title), $attributes);
 
-        return '<'.$size.'>'.Security::remove_XSS($title).'</'.$size.'>';
+        return $subTitle;
     }
 
     public static function page_subheader2($title, $second_title = null)
@@ -1883,7 +1944,7 @@ class Display
     /**
      * @param array $list
      *
-     * @return null|string
+     * @return string|null
      */
     public static function description($list)
     {
@@ -1901,15 +1962,15 @@ class Display
     }
 
     /**
-     * @param $percentage
-     * @param bool $show_percentage
-     * @param null $extra_info
+     * @param int    $percentage
+     * @param bool   $show_percentage
+     * @param string $extra_info
      *
      * @return string
      */
-    public static function bar_progress($percentage, $show_percentage = true, $extra_info = null)
+    public static function bar_progress($percentage, $show_percentage = true, $extra_info = '')
     {
-        $percentage = intval($percentage);
+        $percentage = (int) $percentage;
         $div = '<div class="progress">
                 <div
                     class="progress-bar progress-bar-striped"
@@ -1926,7 +1987,7 @@ class Display
                 $div .= $extra_info;
             }
         }
-        $div .= '</div>';
+        $div .= '</div></div>';
 
         return $div;
     }
@@ -1935,7 +1996,7 @@ class Display
      * @param string $count
      * @param string $type
      *
-     * @return null|string
+     * @return string|null
      */
     public static function badge($count, $type = "warning")
     {
@@ -2026,7 +2087,7 @@ class Display
      * @param array  $items
      * @param string $class
      *
-     * @return null|string
+     * @return string|null
      */
     public static function actions($items, $class = 'new_actions')
     {
@@ -2079,7 +2140,7 @@ class Display
      * @param string $type
      * @param null   $id
      *
-     * @return null|string
+     * @return string|null
      */
     public static function generate_accordion($items, $type = 'jquery', $id = null)
     {
@@ -2160,23 +2221,20 @@ class Display
      * @param string $file
      * @param array  $params
      *
-     * @return null|string
+     * @return string|null
      */
     public static function getMediaPlayer($file, $params = [])
     {
         $fileInfo = pathinfo($file);
 
+        $autoplay = isset($params['autoplay']) && 'true' === $params['autoplay'] ? 'autoplay' : '';
+        $id = isset($params['id']) ? $params['id'] : $fileInfo['basename'];
+        $width = isset($params['width']) ? 'width="'.$params['width'].'"' : null;
+        $class = isset($params['class']) ? ' class="'.$params['class'].'"' : null;
+
         switch ($fileInfo['extension']) {
             case 'mp3':
             case 'webm':
-                $autoplay = null;
-                if (isset($params['autoplay']) && $params['autoplay'] == 'true') {
-                    $autoplay = 'autoplay';
-                }
-                $width = isset($params['width']) ? 'width="'.$params['width'].'"' : null;
-                $id = isset($params['id']) ? $params['id'] : $fileInfo['basename'];
-                $class = isset($params['class']) ? ' class="'.$params['class'].'"' : null;
-
                 $html = '<audio id="'.$id.'" '.$class.' controls '.$autoplay.' '.$width.' src="'.$params['url'].'" >';
                 $html .= '<object width="'.$width.'" height="50" type="application/x-shockwave-flash" data="'.api_get_path(WEB_LIBRARY_PATH).'javascript/mediaelement/flashmediaelement.swf">
                             <param name="movie" value="'.api_get_path(WEB_LIBRARY_PATH).'javascript/mediaelement/flashmediaelement.swf" />
@@ -2188,7 +2246,7 @@ class Display
                 break;
             case 'wav':
             case 'ogg':
-                $html = '<audio width="300px" controls src="'.$params['url'].'" >';
+                $html = '<audio width="300px" controls id="'.$id.'" '.$autoplay.' src="'.$params['url'].'" >';
 
                 return $html;
                 break;
@@ -2587,7 +2645,7 @@ class Display
     /**
      * Get a HTML code for a icon by Font Awesome.
      *
-     * @param string     $name            The icon name
+     * @param string     $name            The icon name. Example: "mail-reply"
      * @param int|string $size            Optional. The size for the icon. (Example: lg, 2, 3, 4, 5)
      * @param bool       $fixWidth        Optional. Whether add the fw class
      * @param string     $additionalClass Optional. Additional class
@@ -2637,7 +2695,7 @@ class Display
      * @param bool|true  $open
      * @param bool|false $fullClickable
      *
-     * @return null|string
+     * @return string|null
      *
      * @todo rework function to easy use
      */
@@ -2753,5 +2811,153 @@ HTML;
                     </div>
                     <hr />
               </div>';
+    }
+
+    /**
+     * @param string $fileName
+     * @param string $fileUrl
+     *
+     * @return string
+     */
+    public static function fileHtmlGuesser($fileName, $fileUrl)
+    {
+        $data = pathinfo($fileName);
+
+        //$content = self::url($data['basename'], $fileUrl);
+        $content = '';
+        switch ($data['extension']) {
+            case 'webm':
+            case 'mp4':
+            case 'ogg':
+                $content = '<video style="width: 400px; height:100%;" src="'.$fileUrl.'"></video>';
+                // Allows video to play when loading during an ajax call
+                $content .= "<script>jQuery('video:not(.skip), audio:not(.skip)').mediaelementplayer();</script>";
+                break;
+            case 'jpg':
+            case 'jpeg':
+            case 'gif':
+            case 'png':
+                $content = '<img class="img-responsive" src="'.$fileUrl.'" />';
+                break;
+            default:
+                //$html = self::url($data['basename'], $fileUrl);
+                break;
+        }
+        //$html = self::url($content, $fileUrl, ['ajax']);
+
+        return $content;
+    }
+
+    /**
+     * @param string $frameName
+     *
+     * @return string
+     */
+    public static function getFrameReadyBlock($frameName)
+    {
+        $webPublicPath = api_get_path(WEB_PUBLIC_PATH);
+
+        $videoFeatures = [
+            'playpause',
+            'current',
+            'progress',
+            'duration',
+            'tracks',
+            'volume',
+            'fullscreen',
+            'vrview',
+            'markersrolls',
+        ];
+        $features = api_get_configuration_value('video_features');
+        $videoPluginsJS = [];
+        $videoPluginCSS = [];
+        if (!empty($features) && isset($features['features'])) {
+            foreach ($features['features'] as $feature) {
+                if ($feature === 'vrview') {
+                    continue;
+                }
+                $defaultFeatures[] = $feature;
+                $videoPluginsJS[] = "mediaelement/plugins/$feature/$feature.js";
+                $videoPluginCSS[] = "mediaelement/plugins/$feature/$feature.css";
+            }
+        }
+
+        $videoPluginFiles = '';
+        foreach ($videoPluginsJS as $file) {
+            $videoPluginFiles .= '{type: "script", src: "'.$webPublicPath.'assets/'.$file.'"},';
+        }
+
+        $videoPluginCssFiles = '';
+        foreach ($videoPluginCSS as $file) {
+            $videoPluginCssFiles .= '{type: "stylesheet", src: "'.$webPublicPath.'assets/'.$file.'"},';
+        }
+
+        $translateHtml = '';
+        $translate = api_get_configuration_value('translate_html');
+        if ($translate) {
+            $translateHtml = '{type:"script", src:"'.api_get_path(WEB_AJAX_PATH).'lang.ajax.php?a=translate_html&'.api_get_cidreq().'"},';
+        }
+
+        $videoFeatures = implode("','", $videoFeatures);
+        $frameReady = '
+        $.frameReady(function() {
+             $(function () {
+                $("video:not(.skip), audio:not(.skip)").mediaelementplayer({
+                    pluginPath: "'.$webPublicPath.'assets/mediaelement/plugins/",            
+                    features: [\''.$videoFeatures.'\'],
+                    success: function(mediaElement, originalNode, instance) {
+                        '.ChamiloApi::getQuizMarkersRollsJS().'
+                    },
+                    vrPath: "'.$webPublicPath.'assets/vrview/build/vrview.js"
+                });
+            });
+        }, 
+        "'.$frameName.'",
+        [
+            {type:"script", src:"'.api_get_jquery_web_path().'", deps: [
+                {type:"script", src:"'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.highlight.js"},
+                {type:"script", src:"'.api_get_path(WEB_CODE_PATH).'glossary/glossary.js.php?'.api_get_cidreq().'"},
+                {type:"script", src:"'.$webPublicPath.'assets/jquery-ui/jquery-ui.min.js"},
+                {type:"script", src: "'.$webPublicPath.'assets/mediaelement/build/mediaelement-and-player.min.js", 
+                    deps: [
+                    {type:"script", src: "'.$webPublicPath.'assets/mediaelement/plugins/vrview/vrview.js"},
+                    {type:"script", src: "'.$webPublicPath.'assets/mediaelement/plugins/markersrolls/markersrolls.js"},
+                    '.$videoPluginFiles.'
+                ]},                
+                '.$translateHtml.'
+            ]},
+            '.$videoPluginCssFiles.'
+            {type:"script", src:"'.$webPublicPath.'assets/MathJax/MathJax.js?config=AM_HTMLorMML"},
+            {type:"stylesheet", src:"'.$webPublicPath.'assets/jquery-ui/themes/smoothness/jquery-ui.min.css"},
+            {type:"stylesheet", src:"'.$webPublicPath.'assets/jquery-ui/themes/smoothness/theme.css"},                
+            {type:"stylesheet", src:"'.$webPublicPath.'css/dialog.css"},
+            {type:"stylesheet", src: "'.$webPublicPath.'assets/mediaelement/build/mediaelementplayer.min.css"},                
+            {type:"stylesheet", src: "'.$webPublicPath.'assets/mediaelement/plugins/vrview/vrview.css"},
+        ]);';
+
+        return $frameReady;
+    }
+
+    /**
+     * @param string $image
+     * @param int    $size
+     *
+     * @return string
+     */
+    public static function get_icon_path($image, $size = ICON_SIZE_SMALL)
+    {
+        return self::return_icon($image, '', [], $size, false, true);
+    }
+
+    /**
+     * @param string $image
+     * @param int    $size
+     * @param string $name
+     *
+     * @return string
+     */
+    public static function get_image($image, $size = ICON_SIZE_SMALL, $name = '')
+    {
+        return self::return_icon($image, $name, [], $size);
     }
 }

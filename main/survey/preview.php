@@ -29,6 +29,8 @@ $surveyId = (int) $_GET['survey_id'];
 $userInvited = 0;
 $userAnonymous = 0;
 
+$allowRequiredSurveyQuestions = api_get_configuration_value('allow_required_survey_questions');
+
 //query to ask if logged user is allowed to see the preview (if he is invited of he is a teacher)
 $sql = "SELECT survey_invitation.user
         FROM $table_survey_invitation survey_invitation
@@ -164,6 +166,7 @@ if (api_is_course_admin() ||
                         survey_question_option.question_option_id,
                         survey_question_option.option_text,
                         survey_question_option.sort as option_sort
+                        ".($allowRequiredSurveyQuestions ? ', survey_question.is_required' : '')."
                     FROM $table_survey_question survey_question
                     LEFT JOIN $table_survey_question_option survey_question_option
                     ON
@@ -189,6 +192,7 @@ if (api_is_course_admin() ||
                     //$questions[$sort]['options'][intval($row['option_sort'])] = $row['option_text'];
                     $questions[$sort]['options'][$row['question_option_id']] = $row['option_text'];
                     $questions[$sort]['maximum_score'] = $row['max_value'];
+                    $questions[$row['sort']]['is_required'] = $allowRequiredSurveyQuestions && $row['is_required'];
                 } else {
                     // If the type is a pagebreak we are finished loading the questions for this page
                     //break;
@@ -237,7 +241,8 @@ if (api_is_course_admin() ||
             /** @var survey_question $display */
             $display = new $ch_type();
             $form->addHtml('<div class="survey_question '.$ch_type.'">');
-            $form->addHtml('<h5 class="title">'.$counter.'. '.strip_tags($question['survey_question']).'</h5>');
+            $form->addHtml('<div style="float:left; font-weight: bold; margin-right: 5px;"> '.$counter.'. </div>');
+            $form->addHtml('<div>'.Security::remove_XSS($question['survey_question']).'</div> ');
             $display->render($form, $question);
             $form->addHtml('</div>');
             $counter++;
@@ -245,7 +250,7 @@ if (api_is_course_admin() ||
     }
     $form->addHtml('<div class="start-survey">');
 
-    if (($show < $numberOfPages)) {
+    if ($show < $numberOfPages) {
         if ($show == 0) {
             $form->addButton(
                 'next_survey_page',

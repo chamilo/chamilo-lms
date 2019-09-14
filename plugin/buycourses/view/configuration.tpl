@@ -1,13 +1,15 @@
 <link rel="stylesheet" type="text/css" href="../resources/css/style.css"/>
 
-{% if sessions_are_included %}
+{% if sessions_are_included or services_are_included %}
     <ul class="nav nav-tabs buy-courses-tabs" role="tablist">
         <li role="presentation" class="active">
             <a href="#courses" aria-controls="courses" role="tab" data-toggle="tab">{{ 'Courses'|get_lang }}</a>
         </li>
+        {% if sessions_are_included %}
         <li role="presentation">
             <a href="#sessions" aria-controls="sessions" role="tab" data-toggle="tab">{{ 'Sessions'|get_lang }}</a>
         </li>
+        {% endif %}
         {% if services_are_included %}
             <li role="presentation">
                 <a href="#services" aria-controls="services" role="tab"
@@ -27,6 +29,9 @@
                     <th class="text-center">{{ 'OfficialCode'|get_lang }}</th>
                     <th class="text-center">{{ 'VisibleInCatalog'|get_plugin_lang('BuyCoursesPlugin') }}</th>
                     <th class="text-right" width="200">{{ 'Price'|get_plugin_lang('BuyCoursesPlugin') }}</th>
+                    {% if tax_enable and (tax_applies_to == 1 or tax_applies_to == 2) %}
+                        <th class="text-center" width="100">{{ tax_name }}</th>
+                    {% endif %}
                     <th class="text-right">{{ 'Options'|get_lang }}</th>
                 </tr>
                 </thead>
@@ -70,6 +75,15 @@
                         <td width="200" class="text-right">
                             {{ "#{item.price} #{tem.currency ?: item.currency}" }}
                         </td>
+                        {% if tax_enable and (tax_applies_to == 1 or tax_applies_to == 2) %}
+                            <td class="text-center">
+                                {% if item.tax_perc is null %}
+                                    {{ global_tax_perc }} %
+                                {% else %}
+                                    {{ item.tax_perc }} %
+                                {% endif %}
+                            </td>
+                        {% endif %}
                         <td class="text-right">
                             <a href="{{ _p.web_plugin ~ 'buycourses/src/configure_course.php?' ~ {'i': item.course_id, 't':product_type_course}|url_encode() }}"
                                class="btn btn-info btn-sm">
@@ -94,6 +108,9 @@
                         <th class="text-center">{{ 'EndDate'|get_lang }}</th>
                         <th class="text-center">{{ 'VisibleInCatalog'|get_plugin_lang('BuyCoursesPlugin') }}</th>
                         <th class="text-right">{{ 'Price'|get_plugin_lang('BuyCoursesPlugin') }}</th>
+                        {% if tax_enable and (tax_applies_to == 1 or tax_applies_to == 3) %}
+                            <th class="text-center" width="100">{{ tax_name }}</th>
+                        {% endif %}
                         <th class="text-right">{{ 'Options'|get_lang }}</th>
                     </tr>
                     </thead>
@@ -101,25 +118,6 @@
                     {% for item in sessions %}
                         <tr data-item="{{ item.session_id }}" data-type="session">
                             <td>
-                                {% if item.session_visibility == 0 %}
-                                    <img src="{{ 'bullet_red.png'|icon() }}"
-                                         alt="{{ 'CourseVisibilityClosed'|get_lang }}"
-                                         title="{{ 'CourseVisibilityClosed'|get_lang }}">
-                                {% elseif item.session_visibility == 1 %}
-                                    <img src="{{ 'bullet_orange.png'|icon() }}" alt="{{ 'Private'|get_lang }}"
-                                         title="{{ 'Private'|get_lang }}">
-                                {% elseif item.session_visibility == 2 %}
-                                    <img src="{{ 'bullet_green.png'|icon() }}" alt="{{ 'OpenToThePlatform'|get_lang }}"
-                                         title="{{ 'OpenToThePlatform'|get_lang }}">
-                                {% elseif item.session_visibility == 3 %}
-                                    <img src="{{ 'bullet_blue.png'|icon() }}" alt="{{ 'OpenToTheWorld'|get_lang }}"
-                                         title="{{ 'OpenToTheWorld'|get_lang }}">
-                                {% elseif item.session_visibility == 4 %}
-                                    <img src="{{ 'bullet_gray.png'|icon() }}"
-                                         alt="{{ 'CourseVisibilityHidden'|get_lang }}"
-                                         title="{{ 'CourseVisibilityHidden'|get_lang }}">
-                                {% endif %}
-
                                 <a href="{{ _p.web_main ~ 'session/index.php?' ~ {'session_id': item.session_id}|url_encode() }}">{{ item.session_name }}</a>
                             </td>
                             <td class="text-center">
@@ -138,6 +136,15 @@
                             <td class="text-right" width="200">
                                 {{ "#{item.price} #{tem.currency ?: item.currency}" }}
                             </td>
+                            {% if tax_enable and (tax_applies_to == 1 or tax_applies_to == 3) %}
+                                <td class="text-center">
+                                    {% if item.tax_perc is null %}
+                                        {{ global_tax_perc }} %
+                                    {% else %}
+                                        {{ item.tax_perc }} %
+                                    {% endif %}
+                                </td>
+                            {% endif %}
                             <td class="text-right">
                                 <a href="{{ _p.web_plugin ~ 'buycourses/src/configure_course.php?' ~ {'i': item.session_id, 't': product_type_session}|url_encode() }}"
                                    class="btn btn-info btn-sm">
@@ -168,6 +175,9 @@
                         <th class="text-center">{{ 'VisibleInCatalog'|get_plugin_lang('BuyCoursesPlugin') }}</th>
                         <th class="text-center">{{ 'Owner'|get_lang }}</th>
                         <th class="text-right">{{ 'Price'|get_plugin_lang('BuyCoursesPlugin') }}</th>
+                        {% if tax_enable and (tax_applies_to == 1 or tax_applies_to == 4) %}
+                            <th class="text-center" width="100">{{ tax_name }}</th>
+                        {% endif %}
                         <th class="text-right">{{ 'Options'|get_lang }}</th>
                     </tr>
                     </thead>
@@ -200,6 +210,15 @@
                             <td class="text-right" width="200">
                                 {{ "#{item.price} #{tem.currency ?: item.currency}" }}
                             </td>
+                            {% if tax_enable and (tax_applies_to == 1 or tax_applies_to == 4) %}
+                                <td class="text-center">
+                                    {% if item.tax_perc is null %}
+                                        {{ global_tax_perc }} %
+                                    {% else %}
+                                        {{ item.tax_perc }} %
+                                    {% endif %}
+                                </td>
+                            {% endif %}
                             <td class="text-right">
                                 <a href="{{ _p.web_plugin ~ 'buycourses/src/services_edit.php?' ~ {'id': item.id}|url_encode() }}"
                                    class="btn btn-info btn-sm">

@@ -22,7 +22,7 @@
                 {% if categories|length > 1 and lp_data.category.id %}
                     {% if is_allowed_to_edit %}
                         <h3 class="page-header">
-                            {{ lp_data.category.getName() }}
+                            {{ lp_data.category.getName() | trim }}
 
                             {% if lp_data.category.getId() > 0 %}
                                 {% if not _c.session_id %}
@@ -103,15 +103,23 @@
                         <table class="table table-hover table-striped">
                             <thead>
                             <tr>
-                                <th>{{ "Title"|get_lang }}</th>
+                                <th>
+                                    {{ "Title"|get_lang }}
+                                </th>
                                 {% if is_allowed_to_edit %}
                                     <th>{{ "PublicationDate"|get_lang }}</th>
                                     <th>{{ "ExpirationDate"|get_lang }}</th>
                                     <th>{{ "Progress"|get_lang }}</th>
+                                    {% if allow_min_time %}
+                                        <th>{{ "TimeSpentTimeRequired"|get_lang }}</th>
+                                    {% endif %}
                                     <th>{{ "AuthoringOptions"|get_lang }}</th>
                                 {% else %}
                                     {% if not is_invitee %}
                                         <th>{{ "Progress"|get_lang }}</th>
+                                    {% endif %}
+                                    {% if allow_min_time %}
+                                        <th>{{ "TimeSpentTimeRequired"|get_lang }}</th>
                                     {% endif %}
                                     <th>{{ "Actions"|get_lang }}</th>
                                 {% endif %}
@@ -140,10 +148,24 @@
                                         <td>
                                             {{ row.dsp_progress }}
                                         </td>
+                                        {% if allow_min_time %}
+                                            <td>
+                                            {% if row.info_time_prerequisite %}
+                                                {{ row.info_time_prerequisite }}
+                                            {% endif %}
+                                            </td>
+                                        {% endif %}
                                     {% else %}
                                         {% if not is_invitee %}
                                             <td>
                                                 {{ row.dsp_progress }}
+                                            </td>
+                                        {% endif %}
+                                        {% if allow_min_time %}
+                                            <td>
+                                                {% if row.info_time_prerequisite %}
+                                                    {{ row.info_time_prerequisite }}
+                                                {% endif %}
                                             </td>
                                         {% endif %}
                                     {% endif %}
@@ -371,8 +393,8 @@
                                 </a>
                             </h4>
                         </div>
-
-                        <div id="collapse-{{ lp_data.category.getId() }}" class="panel-collapse collapse {{ (categories|length > 1 ? 'in':'') }}"
+                        {% set number = number + 1 %}
+                        <div id="collapse-{{ lp_data.category.getId() }}" class="panel-collapse collapse {{ (number == 1 ? 'in':'') }}"
                              role="tabpanel" aria-labelledby="heading-{{ lp_data.category.getId() }}">
                             <div class="panel-body">
                                 {% if lp_data.lp_list %}
@@ -485,6 +507,21 @@
         {% endif %}
     {% endfor %}
 </div>
+
+{% if not is_invitee and lp_is_shown and allow_min_time %}
+    <div class="controls text-center">
+        {% if not is_ending %}
+            <button class="btn btn-primary" type="button" disabled>
+                {{ 'IHaveFinishedTheLessonsNotifyTheTeacher'|get_lang }}
+            </button>
+        {% else %}
+            <a href="{{ web_self ~ "?" ~ _p.web_cid_query ~ "&action=send_notify_teacher" }}" class="btn btn-primary">
+                {{ 'IHaveFinishedTheLessonsNotifyTheTeacher'|get_lang }}
+            </a>
+        {% endif %}
+    </div>
+{% endif %}
+
 {% if is_allowed_to_edit and not lp_is_shown %}
     <div id="no-data-view">
         <h2>{{ "LearningPaths"|get_lang }}</h2>

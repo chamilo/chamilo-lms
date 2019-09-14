@@ -104,10 +104,8 @@ class UniqueAnswer extends Question
                     continue;
                 }
                 $question = Question::read($questionid);
-                $select_question[$questionid] = 'Q'.$key.' :'.cut(
-                    $question->selectTitle(),
-                    20
-                );
+                $questionTitle = strip_tags($question->selectTitle());
+                $select_question[$questionid] = "Q$key: $questionTitle";
             }
         }
         $select_question[-1] = get_lang('ExitTest');
@@ -122,7 +120,6 @@ class UniqueAnswer extends Question
         }
 
         $temp_scenario = [];
-
         if ($nb_answers < 1) {
             $nb_answers = 1;
             echo Display::return_message(
@@ -277,8 +274,10 @@ class UniqueAnswer extends Question
 
         global $text;
         $buttonGroup = [];
-        //ie6 fix
-        if ($obj_ex->edit_exercise_in_lp == true) {
+
+        if ($obj_ex->edit_exercise_in_lp == true ||
+            (empty($this->exerciseList) && empty($obj_ex->id))
+        ) {
             //setting the save button here and not in the question class.php
             $buttonGroup[] = $form->addButtonDelete(get_lang('LessAnswer'), 'lessAnswers', true);
             $buttonGroup[] = $form->addButtonCreate(get_lang('PlusAnswer'), 'moreAnswers', true);
@@ -334,7 +333,7 @@ class UniqueAnswer extends Question
             //$list_destination = $form -> getSubmitValue('destination'.$i);
             //$destination_str = $form -> getSubmitValue('destination'.$i);
 
-            $try = $scenario['try'.$i];
+            $try = !empty($scenario['try'.$i]);
             $lp = $scenario['lp'.$i];
             $destination = $scenario['destination'.$i];
             $url = trim($scenario['url'.$i]);
@@ -416,8 +415,12 @@ class UniqueAnswer extends Question
     ) {
         $header = parent::return_header($exercise, $counter, $score);
         $header .= '<table class="'.$this->question_table_class.'"><tr>';
-        $header .= '<th>'.get_lang('Choice').'</th>';
-        $header .= '<th>'.get_lang('ExpectedChoice').'</th>';
+
+        if ($exercise->results_disabled != RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER) {
+            $header .= '<th>'.get_lang('Choice').'</th>';
+            $header .= '<th>'.get_lang('ExpectedChoice').'</th>';
+        }
+
         $header .= '<th>'.get_lang('Answer').'</th>';
         if ($exercise->showExpectedChoice()) {
             $header .= '<th>'.get_lang('Status').'</th>';

@@ -12,7 +12,7 @@ $toolTable = Database::get_course_table(TABLE_TOOL_LIST);
 $quizTable = Database::get_course_table(TABLE_QUIZ_TEST);
 
 $this_section = SECTION_TRACKING;
-$is_allowedToTrack = $is_courseAdmin || api_is_platform_admin(true) || $is_session_general_coach;
+$is_allowedToTrack = api_is_course_admin() || api_is_platform_admin(true) || $is_session_general_coach;
 
 if (!$is_allowedToTrack) {
     api_not_allowed(true);
@@ -118,7 +118,7 @@ if (!$exportToXLS) {
     } else {
         $actionsLeft = TrackingCourseLog::actionsLeft('exams', api_get_session_id());
 
-        $actionsLeft .= Display::url(
+        $actionsRight .= Display::url(
             Display::return_icon('export_excel.png', get_lang('ExportAsXLS'), [], 32),
             api_get_self().'?'.api_get_cidreq().'&export=1&score='.$filter_score.'&exercise_id='.$exerciseId
         );

@@ -1,4 +1,4 @@
-$(document).on('ready', function () {
+$(function () {
     $('.check-meeting-video').on('click', function (e) {
         e.preventDefault();
 

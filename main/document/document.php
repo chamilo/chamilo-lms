@@ -217,6 +217,7 @@ switch ($action) {
     case 'delete_item':
         if ($isAllowedToEdit ||
             $groupMemberWithUploadRights ||
+            DocumentManager::isBasicCourseFolder($curdirpath, $sessionId) ||
             DocumentManager::is_my_shared_folder(api_get_user_id(), $curdirpath, $sessionId) ||
             DocumentManager::is_my_shared_folder(api_get_user_id(), $moveTo, $sessionId)
         ) {
@@ -612,7 +613,7 @@ if (isset($document_id) && empty($action)) {
 
         $visibility = DocumentManager::check_visibility_tree(
             $document_id,
-            api_get_course_id(),
+            $courseInfo,
             $sessionId,
             api_get_user_id(),
             $groupIid
@@ -777,7 +778,7 @@ function confirmation (name) {
     }
 }
 
-$(document).ready(function() {
+$(function() {
     $(".convertAction").click(function() {
         var id = $(this).attr("data-documentId");
         var format = $(this).attr("data-formatType");
@@ -822,8 +823,7 @@ if (!$isAllowedToEdit && api_is_coach()) {
 
 /* Create shared folders */
 DocumentManager::createUserSharedFolder(api_get_user_id(), $courseInfo, $sessionId);
-Session::write('image_files_only', '');
-$image_files_only = '';
+
 if ($is_certificate_mode) {
     $interbreadcrumb[] = [
         'url' => '../gradebook/index.php?'.api_get_cidreq(),
@@ -944,7 +944,7 @@ if (!empty($documentAndFolders)) {
 
 $htmlHeadXtra[] = '
     <script>
-        $(document).ready( function() {
+        $(function() {
             //Experimental changes to preview mp3, ogg files'
             .$jquery.'
         });
@@ -1771,11 +1771,10 @@ if ($isAllowedToEdit ||
         );
     }
 }
-require 'document_slideshow.inc.php';
 if (!isset($_GET['keyword']) && !$is_certificate_mode) {
     $actionsLeft .= Display::url(
         Display::return_icon('slideshow.png', get_lang('ViewSlideshow'), '', ICON_SIZE_MEDIUM),
-        api_get_path(WEB_CODE_PATH).'document/slideshow.php?'.api_get_cidreq().'&curdirpath='.$curdirpathurl
+        api_get_path(WEB_CODE_PATH).'document/slideshow.php?'.api_get_cidreq().'&curdirpath='.$curdirpathurl.'&id='.$document_id
     );
 }
 
@@ -2163,7 +2162,7 @@ $ajaxURL = api_get_path(WEB_AJAX_PATH).'document.ajax.php?a=get_document_quota&'
 
 if (count($documentAndFolders) > 1) {
     echo '<script>
-    $(document).ready(function() {
+    $(function() {
         $.ajax({
             url:"'.$ajaxURL.'",
             success:function(data){
@@ -2231,4 +2230,5 @@ echo '
     </div>
 ';
 
+Session::erase('slideshow_'.api_get_course_id().api_get_session_id());
 Display::display_footer();

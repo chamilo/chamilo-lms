@@ -8,14 +8,12 @@
  *
  * @package chamilo.badge
  */
-header('Content-Type: application/json');
-
 require_once __DIR__.'/../inc/global.inc.php';
 
-$userId = isset($_GET['user']) ? intval($_GET['user']) : 0;
-$skillId = isset($_GET['skill']) ? intval($_GET['skill']) : 0;
-$courseId = isset($_GET['course']) ? intval($_GET['course']) : 0;
-$sessionId = isset($_GET['session']) ? intval($_GET['session']) : 0;
+$userId = isset($_GET['user']) ? (int) $_GET['user'] : 0;
+$skillId = isset($_GET['skill']) ? (int) $_GET['skill'] : 0;
+$courseId = isset($_GET['course']) ? (int) $_GET['course'] : 0;
+$sessionId = isset($_GET['session']) ? (int) $_GET['session'] : 0;
 
 if ($userId === 0 || $skillId === 0) {
     exit;
@@ -59,5 +57,7 @@ $json = [
         ]),
     ],
 ];
+
+header('Content-Type: application/json');
 
 echo json_encode($json);

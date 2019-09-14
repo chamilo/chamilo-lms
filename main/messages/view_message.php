@@ -47,6 +47,15 @@ if (empty($_GET['id'])) {
 
 $message = '';
 
+$logInfo = [
+    'tool' => 'Messages',
+    'tool_id' => 0,
+    'tool_id_detail' => 0,
+    'action' => $source,
+    'action_details' => 'view-message',
+];
+Event::registerLog($logInfo);
+
 // LEFT COLUMN
 if (api_get_setting('allow_social_tool') === 'true') {
     // Block Social Menu

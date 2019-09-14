@@ -16,11 +16,14 @@ use ChamiloSession as Session;
 $this_section = SECTION_COURSES;
 //@todo who turns on $lp_controller_touched?
 if (empty($lp_controller_touched) || $lp_controller_touched != 1) {
-    header('location: lp_controller.php?action=list');
+    header('Location: lp_controller.php?action=list&'.api_get_cidreq());
     exit;
 }
 
 require_once __DIR__.'/../inc/global.inc.php';
+
+api_protect_course_script();
+
 $courseDir = api_get_course_path().'/scorm';
 $baseWordDir = $courseDir;
 
@@ -28,8 +31,7 @@ $baseWordDir = $courseDir;
  * Display initialisation and security checks.
  */
 // Extra javascript functions for in html head:
-$htmlHeadXtra[]
-    = "<script>
+$htmlHeadXtra[] = "<script>
 function confirmation(name) {
     if (confirm(\" ".trim(get_lang('AreYouSureToDeleteJS'))." \"+name+\"?\")) {
         return true;
@@ -40,7 +42,6 @@ function confirmation(name) {
 </script>";
 $nameTools = get_lang('LearningPaths');
 Event::event_access_tool(TOOL_LEARNPATH);
-api_protect_course_script();
 
 /**
  * Display.
@@ -51,6 +52,8 @@ if (api_get_setting('search_enabled') === 'true') {
     search_widget_prepare($htmlHeadXtra);
 }
 $sessionId = api_get_session_id();
+$is_allowed_to_edit = api_is_allowed_to_edit(null, true);
+$courseInfo = api_get_course_info();
 
 $subscriptionSettings = learnpath::getSubscriptionSettings();
 
@@ -67,41 +70,10 @@ $introduction = Display::return_introduction_section(
     ]
 );
 
-$is_allowed_to_edit = api_is_allowed_to_edit(null, true);
-$courseInfo = api_get_course_info();
 $message = '';
 $actions = '';
-
 if ($is_allowed_to_edit) {
-    if (!empty($dialog_box)) {
-        switch ($_GET['dialogtype']) {
-            case 'confirmation':
-                $message = Display::return_message($dialog_box, 'success');
-                break;
-            case 'error':
-                $message = Display::return_message($dialog_box, 'danger');
-                break;
-            case 'warning':
-                $message = Display::return_message($dialog_box, 'warning');
-                break;
-            default:
-                $message = Display::return_message($dialog_box);
-                break;
-        }
-    }
     $actionLeft = '';
-    if (!$sessionId) {
-        $actionLeft .= Display::url(
-            Display::return_icon(
-                'new_folder.png',
-                get_lang('AddCategory'),
-                [],
-                ICON_SIZE_MEDIUM
-            ),
-            api_get_self().'?'.api_get_cidreq().'&action=add_lp_category'
-        );
-    }
-
     $actionLeft .= Display::url(
         Display::return_icon(
             'new_learnpath.png',
@@ -130,6 +102,18 @@ if ($is_allowed_to_edit) {
                 ICON_SIZE_MEDIUM
             ),
             '../upload/upload_ppt.php?'.api_get_cidreq().'&curdirpath=/&tool='.TOOL_LEARNPATH
+        );
+    }
+
+    if (!$sessionId) {
+        $actionLeft .= Display::url(
+            Display::return_icon(
+                'new_folder.png',
+                get_lang('AddCategory'),
+                [],
+                ICON_SIZE_MEDIUM
+            ),
+            api_get_self().'?'.api_get_cidreq().'&action=add_lp_category'
         );
     }
     $actions = Display::toolbarAction('actions-lp', [$actionLeft]);
@@ -169,7 +153,11 @@ if ($filteredCategoryId) {
 }
 
 $test_mode = api_get_setting('server_type');
+$showBlockedPrerequisite = api_get_configuration_value('show_prerequisite_as_blocked');
+$allowLpChamiloExport = api_get_configuration_value('allow_lp_chamilo_export');
+$allowMinTime = Tracking::minimunTimeAvailable(api_get_session_id(), api_get_course_int_id());
 $user = api_get_user_entity($userId);
+$ending = true;
 
 $data = [];
 /** @var CLpCategory $item */
@@ -212,15 +200,24 @@ foreach ($categories as $item) {
         continue;
     }
 
-    $showBlockedPrerequisite = api_get_configuration_value('show_prerequisite_as_blocked');
-    $allowLpChamiloExport = api_get_configuration_value('allow_lp_chamilo_export');
     $listData = [];
+    $lpTimeList = [];
+    if ($allowMinTime) {
+        $lpTimeList = Tracking::getCalculateTime($userId, api_get_course_int_id(), api_get_session_id());
+    }
+
+    $options = learnpath::getIconSelect();
 
     if (!empty($flat_list)) {
         $max = count($flat_list);
         $counter = 0;
         $current = 0;
         $autolaunch_exists = false;
+        $accumulateWorkTimeTotal = 0;
+        if ($allowMinTime) {
+            $accumulateWorkTimeTotal = learnpath::getAccumulateWorkTimeTotal(api_get_course_int_id());
+        }
+
         foreach ($flat_list as $id => $details) {
             $id = $details['lp_old_id'];
             // Validation when belongs to a session.
@@ -347,6 +344,13 @@ foreach ($categories as $item) {
                 );
             }
 
+            if (!empty($options)) {
+                $icon = learnpath::getSelectedIconHtml($id);
+                if (!empty($icon)) {
+                    $icon_learnpath = $icon;
+                }
+            }
+
             // Students can see the lp but is inactive
             if (!$is_allowed_to_edit && $lpVisibility == false &&
                 $showBlockedPrerequisite == true
@@ -392,6 +396,64 @@ foreach ($categories as $item) {
                 }
             }
 
+            if ($progress < 100) {
+                $ending = false;
+            }
+
+            $dsp_time = '';
+            $linkMinTime = '';
+            if ($allowMinTime) {
+                // Minimum time (in minutes) to pass the learning path
+                $accumulateWorkTime = learnpath::getAccumulateWorkTimePrerequisite($id, api_get_course_int_id());
+                if ($accumulateWorkTime > 0) {
+                    $lpTime = isset($lpTimeList[TOOL_LEARNPATH][$id]) ? $lpTimeList[TOOL_LEARNPATH][$id] : 0;
+
+                    // Connect with the plugin_licences_course_session table
+                    // which indicates what percentage of the time applies
+                    $perc = 100;
+
+                    // Percentage of the learning paths
+                    $pl = 0;
+                    if (!empty($accumulateWorkTimeTotal)) {
+                        $pl = $accumulateWorkTime / $accumulateWorkTimeTotal;
+                    }
+
+                    // Minimum time for each learning path
+                    $accumulateWorkTime = ($pl * $accumulateWorkTimeTotal * $perc / 100);
+
+                    // If the time spent is less than necessary, then we show an icon in the actions column indicating the warning
+                    if ($lpTime < ($accumulateWorkTime * 60)) {
+                        $linkMinTime = Display::return_icon(
+                            'warning.png',
+                            get_lang('LpMinTimeWarning').' - '.api_time_to_hms($lpTime).' / '.api_time_to_hms(
+                                $accumulateWorkTime * 60
+                            )
+                        );
+                    } else {
+                        $linkMinTime = Display::return_icon(
+                            'check.png',
+                            get_lang('LpMinTimeWarning').' - '.api_time_to_hms($lpTime).' / '.api_time_to_hms(
+                                $accumulateWorkTime * 60
+                            )
+                        );
+                    }
+                    $linkMinTime .= '&nbsp;<b>'.api_time_to_hms($lpTime).' / '.api_time_to_hms($accumulateWorkTime * 60).'</b>';
+
+                    // Calculate the percentage exceeded of the time for the "exceeding the minimum time" bar
+                    if ($lpTime >= ($accumulateWorkTime * 60)) {
+                        $time_progress_perc = '100%';
+                        $time_progress_value = 100;
+                    } else {
+                        $time_progress_value = intval(($lpTime * 100) / ($accumulateWorkTime * 60));
+                    }
+
+                    if ($time_progress_value < 100) {
+                        $ending = false;
+                    }
+                    $dsp_time = learnpath::get_progress_bar($time_progress_value, '%');
+                }
+            }
+
             $token_parameter = "&sec_token=$token";
             $dsp_edit_lp = null;
             $dsp_publish = null;
@@ -404,7 +466,7 @@ foreach ($categories as $item) {
             $actionUpdateScormFile = '';
             $actionExportToCourseBuild = '';
             // Only for "Chamilo" packages
-            $allowExportCourseFormat = $allowLpChamiloExport && $details['lp_maker'] == 'Chamilo';
+            $allowExportCourseFormat = $allowLpChamiloExport && $details['lp_maker'] === 'Chamilo';
 
             if ($is_allowed_to_edit) {
                 // EDIT LP
@@ -744,11 +806,9 @@ foreach ($categories as $item) {
                             'delete.png',
                             get_lang('LearnpathDeleteLearnpath')
                         ),
-                        'lp_controller.php?'.api_get_cidreq()
-                        ."&action=delete&lp_id=$id",
+                        'lp_controller.php?'.api_get_cidreq()."&action=delete&lp_id=$id",
                         [
-                            'onclick' => "javascript: return confirmation('"
-                                .addslashes($name)."');",
+                            'onclick' => "javascript: return confirmation('".addslashes($name)."');",
                         ]
                     );
                 } else {
@@ -893,6 +953,7 @@ foreach ($categories as $item) {
                 'action_subscribe_users' => $subscribeUsers,
                 'action_update_scorm' => $actionUpdateScormFile,
                 'action_export_to_course_build' => $actionExportToCourseBuild,
+                'info_time_prerequisite' => $linkMinTime,
             ];
 
             $lpIsShown = true;
@@ -933,6 +994,7 @@ $template = new Template($nameTools);
 $template->assign('subscription_settings', $subscriptionSettings);
 $template->assign('is_allowed_to_edit', $is_allowed_to_edit);
 $template->assign('is_invitee', api_is_invitee());
+$template->assign('is_ending', $ending);
 $template->assign('actions', $actions);
 $template->assign('categories', $categories);
 $template->assign('message', $message);
@@ -940,6 +1002,7 @@ $template->assign('introduction', $introduction);
 $template->assign('data', $data);
 $template->assign('lp_is_shown', $lpIsShown);
 $template->assign('filtered_category', $filteredCategoryId);
+$template->assign('allow_min_time', $allowMinTime);
 $templateName = $template->get_template('learnpath/list.tpl');
 $content = $template->fetch($templateName);
 $template->assign('content', $content);

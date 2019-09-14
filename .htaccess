@@ -9,7 +9,7 @@
 RewriteEngine on
 
 # Prevent execution of PHP from directories used for different types of uploads
-RedirectMatch 403 ^/app/(cache|courses|home|logs|upload|Resources/public/css)/.*\.ph(p[3457]?|t|tml|ar)$
+RedirectMatch 403 ^/app/(?!courses/proxy)(cache|courses|home|logs|upload|Resources/public/css)/.*\.ph(p[3457]?|t|tml|ar)$
 RedirectMatch 403 ^/main/default_course_document/images/.*\.ph(p[3457]?|t|tml|ar)$
 RedirectMatch 403 ^/main/lang/.*\.ph(p[3457]?|t|tml|ar)$
 RedirectMatch 403 ^/web/css/.*\.ph(p[3457]?|t|tml|ar)$
@@ -32,6 +32,8 @@ RewriteRule ^courses/([^/]+)/scorm/(.*)$ main/document/download_scorm.php?doc_ur
 RewriteRule ^courses/([^/]+)/document/certificates/(.*)$ app/courses/$1/document/certificates/$2 [QSA,L]
 RewriteRule ^courses/([^/]+)/document/(.*)$ main/document/download.php?doc_url=/$2&cDir=$1 [QSA,L]
 
+# Optimize load of custom per-course icons in courses (avoid download_uploaded_files.php)
+RewriteRule ^courses/([^/]+)/upload/course_home_icons/(.*([\.js|\.css|\.png|\.jpg|\.jpeg|\.gif]))$ app/courses/$1/upload/course_home_icons/$2 [QSA,L]
 # Course upload files
 RewriteRule ^courses/([^/]+)/upload/([^/]+)/(.*)$ main/document/download_uploaded_files.php?code=$1&type=$2&file=$3 [QSA,L]
 
@@ -40,9 +42,6 @@ RewriteRule ^courses/([^/]+)/work/(.*)$ main/work/download.php?file=work/$2&cDir
 
 RewriteRule ^courses/([^/]+)/course-pic85x85.png$ main/inc/ajax/course.ajax.php?a=get_course_image&code=$1&image=course_image_source [QSA,L]
 RewriteRule ^courses/([^/]+)/course-pic.png$ main/inc/ajax/course.ajax.php?a=get_course_image&code=$1&image=course_image_large_source [QSA,L]
-
-# Optimize load of custom per-course icons in courses (avoid download.php)
-RewriteRule ^courses/([^/]+)/upload/course_home_icons/(.*([\.js|\.css]))$ app/courses/$1/upload/course_home_icons/$2 [QSA,L]
 
 # Redirect all courses/ to app/courses/
 RewriteRule ^courses/([^/]+)/(.*)$ app/courses/$1/$2 [QSA,L]
@@ -54,12 +53,12 @@ RewriteRule ^session/(\d{1,})/about/?$ main/session/about.php?session_id=$1 [L]
 RewriteRule ^course/(\d{1,})/about/?$ main/course_info/about.php?course_id=$1 [L]
 
 # Issued individual badge friendly URL
-RewriteRule ^badge/(\d{1,}) main/badge/issued.php?issue=$1 [L]
+RewriteRule ^badge/(\d{1,})/?$ main/badge/issued.php?issue=$1 [L]
 
 # Issued badges friendly URL
-RewriteRule ^skill/(\d{1,})/user/(\d{1,}) main/badge/issued_all.php?skill=$1&user=$2 [L]
+RewriteRule ^skill/(\d{1,})/user/(\d{1,})/?$ main/badge/issued_all.php?skill=$1&user=$2 [L]
 # Support deprecated URL (avoid 404)
-RewriteRule ^badge/(\d{1,})/user/(\d{1,}) main/badge/issued_all.php?skill=$1&user=$2 [L]
+RewriteRule ^badge/(\d{1,})/user/(\d{1,})/?$ main/badge/issued_all.php?skill=$1&user=$2 [L]
 
 # Support old URLs using the exercice (with a c) folder rather than exercise
 RewriteRule ^main/exercice/(.*)$ main/exercise/$1 [QSA,L]
@@ -75,6 +74,9 @@ RewriteRule ^lti/os$ plugin/ims_lti/outcome_service.php [L]
 # This rule is very generic and should always remain at the bottom of .htaccess
 # http://my.chamilo.net/jdoe to http://my.chamilo.net/user.php?jdoe
 RewriteRule ^([^/.]+)/?$ user.php?$1 [L]
+
+# Deny direct access to user my files
+RewriteRule ^app/upload/users/([^/]+)/([^/]+)/my_files/(.*)$ main/social/download_my_files.php?user_id=$2&file=$3 [QSA,L]
 
 # Deny access
 RewriteRule ^(tests|.git) - [F,L,NC]

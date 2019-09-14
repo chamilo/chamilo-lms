@@ -6,7 +6,7 @@ $current_course_tool = TOOL_STUDENTPUBLICATION;
 
 require_once 'work.lib.php';
 
-$id = isset($_GET['id']) ? intval($_GET['id']) : null;
+$id = isset($_GET['id']) ? (int) $_GET['id'] : null;
 $work = get_work_data_by_id($id);
 
 if (empty($id) || empty($work)) {

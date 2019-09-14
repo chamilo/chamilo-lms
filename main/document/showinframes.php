@@ -91,10 +91,11 @@ if ($is_allowed_in_course == false) {
 // Check user visibility.
 $is_visible = DocumentManager::check_visibility_tree(
     $document_id,
-    api_get_course_id(),
+    api_get_course_info(),
     api_get_session_id(),
     api_get_user_id(),
-    api_get_group_id()
+    api_get_group_id(),
+    false
 );
 
 if (!$is_allowed_to_edit && !$is_visible) {
@@ -102,7 +103,7 @@ if (!$is_allowed_to_edit && !$is_visible) {
 }
 
 $pathinfo = pathinfo($header_file);
-$playerSupportedFiles = ['mp4', 'ogv', 'flv', 'm4v', 'webm'];
+$playerSupportedFiles = ['mp3', 'mp4', 'ogv', 'flv', 'm4v', 'webm'];
 $playerSupported = false;
 if (in_array(strtolower($pathinfo['extension']), $playerSupportedFiles)) {
     $playerSupported = true;
@@ -173,9 +174,7 @@ if (api_is_course_admin()) {
     $frameheight = 165;
 }
 
-$js_glossary_in_documents = '
-    setFrameReady("mainFrame");
-';
+$frameReady = Display::getFrameReadyBlock('#mainFrame');
 
 $web_odf_supported_files = DocumentManager::get_web_odf_extension_list();
 // PDF should be displayed with viewerJS
@@ -189,7 +188,7 @@ if (in_array(strtolower($pathinfo['extension']), $web_odf_supported_files)) {
             var topbarHeight = $("#topbar").height();
             $("#viewerJSContent").height((bodyHeight - topbarHeight));
         }
-        $(document).ready(function() {
+        $(function() {
             $(window).resize(resizeIframe());
         });
     </script>'
@@ -208,9 +207,7 @@ if (isset($document_data['parents']) && isset($document_data['parents'][0])) {
 if ($isChatFolder) {
     $htmlHeadXtra[] = api_get_js('highlight/highlight.pack.js');
     $htmlHeadXtra[] = api_get_css(api_get_path(WEB_CSS_PATH).'chat.css');
-    $htmlHeadXtra[] = api_get_css(
-        api_get_path(WEB_LIBRARY_PATH).'javascript/highlight/styles/github.css'
-    );
+    $htmlHeadXtra[] = api_get_css(api_get_path(WEB_LIBRARY_PATH).'javascript/highlight/styles/github.css');
     $htmlHeadXtra[] = '
     <script>
         hljs.initHighlightingOnLoad();
@@ -240,36 +237,28 @@ if (!$playerSupported && $execute_iframe) {
     </script>';
     $htmlHeadXtra[] = '<script type="text/javascript" src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.frameready.js"></script>';
     $htmlHeadXtra[] = '<script>
-        var updateContentHeight = function() {
-            my_iframe = document.getElementById("mainFrame");
-            if (my_iframe) {
-                //this doesnt seem to work in IE 7,8,9
-                new_height = my_iframe.contentWindow.document.body.scrollHeight;
-                my_iframe.height = my_iframe.contentWindow.document.body.scrollHeight + "px";
-            }
-        };
-
         // Fixes the content height of the frame
-        window.onload = function() {
-            updateContentHeight();
-            '.$js_glossary_in_documents.'
-
-        }
+        $(function() {
+            $(\'#mainFrame\').on(\'load\', function () {
+                this.style.height = (this.contentWindow.document.body.scrollHeight + 50) + \'px\';
+            });
+            
+            '.$frameReady.'
+        });
     </script>';
 }
 
 if ($originIsLearnpath) {
     Display::display_reduced_header();
 } else {
-    Display::display_header('');
+    Display::display_header();
 }
-
-echo '<div class="text-center">';
 
 $file_url = api_get_path(WEB_COURSE_PATH).$courseInfo['path'].'/document'.$header_file;
 $file_url_web = $file_url.'?'.api_get_cidreq();
 
 if ($show_web_odf) {
+    echo '<div class="text-center">';
     $browser = api_get_navigator();
     $pdfUrl = api_get_path(WEB_LIBRARY_PATH).'javascript/ViewerJS/index.html#'.$file_url;
     if ($browser['name'] == 'Mozilla' && preg_match('|.*\.pdf|i', $header_file)) {
@@ -280,12 +269,11 @@ if ($show_web_odf) {
             src="'.$pdfUrl.'">
         </iframe>';
     echo '</div>';
+    echo '</div>';
 }
 
-echo '</div>';
-
 if ($playerSupported) {
-    echo DocumentManager::generateVideoPreview($file_url_web, $extension);
+    echo DocumentManager::generateMediaPreview($file_url_web, $extension);
 }
 
 if ($is_freemind_available) {
@@ -358,7 +346,78 @@ if ($execute_iframe) {
         $content = Security::remove_XSS(file_get_contents($file_url_sys));
         echo $content;
     } else {
-        echo '<iframe id="mainFrame" name="mainFrame" border="0" frameborder="0" scrolling="no" style="width:100%;" height="600" src="'.$file_url_web.'&rand='.mt_rand(1, 10000).'" height="500" allowfullscreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"></iframe>';
+        $parentId = $document_data['parent_id'];
+        $url = api_get_path(WEB_CODE_PATH).'document/document.php?'.api_get_cidreq().'&id='.$parentId;
+        $actionsLeft = Display::url(
+            Display::return_icon('back.png', get_lang('Back'), '', ICON_SIZE_MEDIUM),
+            $url
+        );
+
+        $groupMemberWithEditRights = false;
+        $groupId = api_get_group_id();
+        if (!empty($groupId)) {
+            $groupInfo = GroupManager::get_group_properties($groupId);
+            if ($groupInfo) {
+                $groupMemberWithEditRights = GroupManager::allowUploadEditDocument(
+                    api_get_user_id(),
+                    api_get_course_int_id(),
+                    $groupInfo,
+                        $document_data
+                );
+            }
+        }
+
+        $allowToEdit = api_is_allowed_to_edit(null, true) || $groupMemberWithEditRights;
+
+        if ($allowToEdit) {
+            $actionsLeft .= Display::url(
+                Display::return_icon(
+                    'edit.png',
+                    get_lang('Modify'),
+                    '',
+                    ICON_SIZE_MEDIUM
+                ),
+                api_get_path(WEB_CODE_PATH).'document/edit_document.php?'.api_get_cidreq().'&id='.$document_id
+            );
+
+            $titleToShow = addslashes(basename($document_data['title']));
+
+            $urlDeleteParams = http_build_query(
+                [
+                    'action' => 'delete_item',
+                    'id' => $parentId,
+                    'deleteid' => $document_data['id'],
+                ]
+            );
+            $actionsLeft .= Display::url(
+                Display::return_icon('delete.png', get_lang('Delete'), '', ICON_SIZE_MEDIUM),
+                '#',
+                [
+                    'data-item-title' => $titleToShow,
+                    'data-href' => api_get_path(WEB_CODE_PATH).'document/document.php?'.api_get_cidreq(
+                        ).'&'.$urlDeleteParams,
+                    'data-toggle' => 'modal',
+                    'data-target' => '#confirm-delete',
+                ]
+            );
+            $actionsLeft .= Display::url(
+                Display::return_icon('pdf.png', get_lang('Export2PDF'), [], ICON_SIZE_MEDIUM),
+                api_get_path(WEB_CODE_PATH).'document/document.php?'.api_get_cidreq(
+                ).'&action=export_to_pdf&id='.$document_id
+            );
+        }
+
+        echo $toolbar = Display::toolbarAction('actions-documents', [$actionsLeft]);
+
+        echo '<iframe 
+            id="mainFrame" 
+            name="mainFrame" 
+            border="0" 
+            frameborder="0" 
+            scrolling="no" 
+            style="width:100%;" height="600" 
+            src="'.$file_url_web.'&rand='.mt_rand(1, 10000).'" 
+            height="500" allowfullscreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"></iframe>';
     }
 }
 Display::display_footer();

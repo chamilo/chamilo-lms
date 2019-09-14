@@ -15,7 +15,7 @@ if (!empty($course_info)) {
     api_protect_course_script(true);
 }
 
-$action = isset($_GET['action']) ? $_GET['action'] : null;
+$action = isset($_GET['action']) ? Security::remove_XSS($_GET['action']) : null;
 
 $this_section = SECTION_COURSES;
 $url = null;
@@ -28,6 +28,15 @@ if (empty($action)) {
     header("Location: $url");
     exit;
 }
+
+$logInfo = [
+    'tool' => TOOL_CALENDAR_EVENT,
+    'tool_id' => 0,
+    'tool_id_detail' => 0,
+    'action' => $action,
+    'info' => '',
+];
+Event::registerLog($logInfo);
 
 $group_id = api_get_group_id();
 $groupInfo = GroupManager::get_group_properties($group_id);
@@ -81,7 +90,12 @@ $nameTools = get_lang('Agenda');
 Event::event_access_tool(TOOL_CALENDAR_EVENT);
 
 if ($type === 'fromjs') {
-    $id_list = explode('_', $eventId);
+    // split the "id" parameter only if string and there are _ separators
+    if (preg_match('/_/', $eventId)) {
+        $id_list = explode('_', $eventId);
+    } else {
+        $id_list = $eventId;
+    }
     $eventId = $id_list[1];
     $event_type = $id_list[0];
     $event_type = $event_type === 'platform' ? 'admin' : $event_type;
@@ -306,6 +320,8 @@ if (!empty($actionName)) {
         "url" => $url,
         "name" => get_lang('Agenda'),
     ];
+} else {
+    $actionName = '';
 }
 
 // Tool introduction

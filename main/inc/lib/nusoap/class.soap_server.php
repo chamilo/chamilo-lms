@@ -207,7 +207,7 @@ class nusoap_server extends nusoap_base
 		}
 
 		// wsdl
-		if($wsdl){
+		if ($wsdl){
 			$this->debug("In nusoap_server, WSDL is specified");
 			if (is_object($wsdl) && (get_class($wsdl) == 'wsdl')) {
 				$this->wsdl = $wsdl;
@@ -1124,5 +1124,6 @@ class nusoap_server extends nusoap_base
 /**
  * Backward compatibility
  */
-class soap_server extends nusoap_server {
+class soap_server extends nusoap_server
+{
 }

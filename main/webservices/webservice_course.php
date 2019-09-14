@@ -713,7 +713,7 @@ class WSCourse extends WS
                     return true;
                 } else {
                     // Subscribe user
-                    if (CourseManager::subscribe_user(
+                    if (CourseManager::subscribeUser(
                         $user_id,
                         $course_code,
                         $status

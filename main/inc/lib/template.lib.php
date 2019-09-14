@@ -139,6 +139,7 @@ class Template
 
         // Twig filters setup
         $filters = [
+            'var_dump',
             'get_plugin_lang',
             'get_lang',
             'api_get_path',
@@ -162,19 +163,19 @@ class Template
             ],
             [
                 'name' => 'icon',
-                'callable' => 'Template::get_icon_path',
+                'callable' => 'Display::get_icon_path',
             ],
             [
                 'name' => 'img',
-                'callable' => 'Template::get_image',
+                'callable' => 'Display::get_image',
             ],
             [
                 'name' => 'format_date',
-                'callable' => 'Template::format_date',
+                'callable' => 'api_format_date',
             ],
             [
                 'name' => 'get_template',
-                'callable' => 'Template::findTemplateFilePath',
+                'callable' => 'api_find_template',
             ],
             [
                 'name' => 'date_to_time_ago',
@@ -252,40 +253,6 @@ class Template
                 }
             }
         }
-    }
-
-    /**
-     * @param string $image
-     * @param int    $size
-     *
-     * @return string
-     */
-    public static function get_icon_path($image, $size = ICON_SIZE_SMALL)
-    {
-        return Display::return_icon($image, '', [], $size, false, true);
-    }
-
-    /**
-     * @param string $image
-     * @param int    $size
-     * @param string $name
-     *
-     * @return string
-     */
-    public static function get_image($image, $size = ICON_SIZE_SMALL, $name = '')
-    {
-        return Display::return_icon($image, $name, [], $size);
-    }
-
-    /**
-     * @param string $timestamp
-     * @param string $format
-     *
-     * @return string
-     */
-    public static function format_date($timestamp, $format = null)
-    {
-        return api_format_date($timestamp, $format);
     }
 
     /**
@@ -469,19 +436,19 @@ class Template
         $this->assign('show_toolbar', $show_toolbar);
 
         // Only if course is available
-        $show_course_shortcut = '';
+        $courseToolBar = '';
         $show_course_navigation_menu = '';
         if (!empty($this->course_id) && $this->user_is_logged_in) {
             if (api_get_setting('show_toolshortcuts') != 'false') {
                 // Course toolbar
-                $show_course_shortcut = CourseHome::show_navigation_tool_shortcuts();
+                $courseToolBar = CourseHome::show_navigation_tool_shortcuts();
             }
             if (api_get_setting('show_navigation_menu') != 'false') {
                 // Course toolbar
                 $show_course_navigation_menu = CourseHome::show_navigation_menu();
             }
         }
-        $this->assign('show_course_shortcut', $show_course_shortcut);
+        $this->assign('show_course_shortcut', $courseToolBar);
         $this->assign('show_course_navigation_menu', $show_course_navigation_menu);
     }
 
@@ -530,7 +497,7 @@ class Template
      */
     public function get_template($name)
     {
-        return self::findTemplateFilePath($name);
+        return api_find_template($name);
     }
 
     /**
@@ -621,7 +588,17 @@ class Template
         }
 
         $features = api_get_configuration_value('video_features');
-        $defaultFeatures = ['playpause', 'current', 'progress', 'duration', 'tracks', 'volume', 'fullscreen', 'vrview'];
+        $defaultFeatures = [
+            'playpause',
+            'current',
+            'progress',
+            'duration',
+            'tracks',
+            'volume',
+            'fullscreen',
+            'vrview',
+            'markersrolls',
+        ];
 
         if (!empty($features) && isset($features['features'])) {
             foreach ($features['features'] as $feature) {
@@ -715,7 +692,9 @@ class Template
 
         // Logo
         $logo = return_logo($this->theme);
+        $logoPdf = return_logo($this->theme, false);
         $this->assign('logo', $logo);
+        $this->assign('logo_pdf', $logoPdf);
         $this->assign('show_media_element', 1);
     }
 
@@ -736,18 +715,6 @@ class Template
         $js_files = [
             'chosen/chosen.jquery.min.js',
         ];
-
-        $viewBySession = api_get_setting('my_courses_view_by_session') === 'true';
-
-        if (api_is_global_chat_enabled() || $viewBySession) {
-            // Do not include the global chat in LP
-            if ($this->show_learnpath == false &&
-                $this->show_footer == true &&
-                $this->hide_global_chat == false
-            ) {
-                $js_files[] = 'chat/js/chat.js';
-            }
-        }
 
         if (api_get_setting('accessibility_font_resize') === 'true') {
             $js_files[] = 'fontresize.js';
@@ -773,7 +740,23 @@ class Template
             'select2/dist/js/select2.min.js',
             "select2/dist/js/i18n/$isoCode.js",
             'mediaelement/plugins/vrview/vrview.js',
+            'js-cookie/src/js.cookie.js',
+            'mediaelement/plugins/markersrolls/markersrolls.min.js',
         ];
+
+        $viewBySession = api_get_setting('my_courses_view_by_session') === 'true';
+
+        if ($viewBySession || api_is_global_chat_enabled()) {
+            // Do not include the global chat in LP
+            if ($this->show_learnpath == false &&
+                $this->show_footer == true &&
+                $this->hide_global_chat == false
+            ) {
+                $js_files[] = 'chat/js/chat.js';
+                $bowerJsFiles[] = 'linkifyjs/linkify.js';
+                $bowerJsFiles[] = 'linkifyjs/linkify-jquery.js';
+            }
+        }
 
         $features = api_get_configuration_value('video_features');
         if (!empty($features) && isset($features['features'])) {
@@ -793,9 +776,13 @@ class Template
             $bowerJsFiles[] = 'MathJax/MathJax.js?config=TeX-MML-AM_HTMLorMML';
         }
 
+        // If not English and the language is supported by timepicker, localize
+        $assetsPath = api_get_path(SYS_PUBLIC_PATH).'assets/';
         if ($isoCode != 'en') {
-            $bowerJsFiles[] = 'jqueryui-timepicker-addon/dist/i18n/jquery-ui-timepicker-'.$isoCode.'.js';
-            $bowerJsFiles[] = 'jquery-ui/ui/minified/i18n/datepicker-'.$isoCode.'.min.js';
+            if (is_file($assetsPath.'jqueryui-timepicker-addon/dist/i18n/jquery-ui-timepicker-'.$isoCode.'.js') && is_file($assetsPath.'jquery-ui/ui/minified/i18n/datepicker-'.$isoCode.'.min.js')) {
+                $bowerJsFiles[] = 'jqueryui-timepicker-addon/dist/i18n/jquery-ui-timepicker-'.$isoCode.'.js';
+                $bowerJsFiles[] = 'jquery-ui/ui/minified/i18n/datepicker-'.$isoCode.'.min.js';
+            }
         }
 
         foreach ($bowerJsFiles as $file) {
@@ -864,10 +851,13 @@ class Template
     {
         global $disable_js_and_css_files;
         $js_files = [];
+        $bower = '';
         if (api_is_global_chat_enabled()) {
             //Do not include the global chat in LP
             if ($this->show_learnpath == false && $this->show_footer == true && $this->hide_global_chat == false) {
                 $js_files[] = 'chat/js/chat.js';
+                $bower .= '<script type="text/javascript" src="'.api_get_path(WEB_PUBLIC_PATH).'assets/linkifyjs/linkify.js"></script>';
+                $bower .= '<script type="text/javascript" src="'.api_get_path(WEB_PUBLIC_PATH).'assets/linkifyjs/linkify-jquery.js"></script>';
             }
         }
         $js_file_to_string = '';
@@ -875,7 +865,7 @@ class Template
             $js_file_to_string .= api_get_js($js_file);
         }
         if (!$disable_js_and_css_files) {
-            $this->assign('js_file_to_string_post', $js_file_to_string);
+            $this->assign('js_file_to_string_post', $js_file_to_string.$bower);
         }
     }
 
@@ -1189,6 +1179,16 @@ class Template
             $html .= '<div>'.openid_form().'</div>';
         }
 
+        $pluginKeycloak = api_get_plugin_setting('keycloak', 'tool_enable') === 'true';
+        $plugin = null;
+        if ($pluginKeycloak) {
+            $pluginUrl = api_get_path(WEB_PLUGIN_PATH).'keycloak/start.php?sso';
+            $pluginUrl = Display::url('Keycloak', $pluginUrl, ['class' => 'btn btn-primary']);
+            $html .= '<div>'.$pluginUrl.'</div>';
+        }
+
+        $html .= '<div></div>';
+
         return $html;
     }
 
@@ -1309,13 +1309,17 @@ class Template
             if (!empty($courseInfo)) {
                 $courseParams = api_get_cidreq();
             }
-            $url = api_get_path(WEB_CODE_PATH).
-                'ticket/tickets.php?project_id='.$defaultProjectId.'&'.$courseParams;
-            $rightFloatMenu .= '<div class="help">
-                <a href="'.$url.'" target="_blank">
-                    '.$iconTicket.'
-                </a>
-            </div>';
+            $url = api_get_path(WEB_CODE_PATH).'ticket/tickets.php?project_id='.$defaultProjectId.'&'.$courseParams;
+
+            $allow = TicketManager::userIsAllowInProject(api_get_user_info(), $defaultProjectId);
+
+            if ($allow) {
+                $rightFloatMenu .= '<div class="help">
+                    <a href="'.$url.'" target="_blank">
+                        '.$iconTicket.'
+                    </a>
+                </div>';
+            }
         }
 
         $this->assign('bug_notification', $rightFloatMenu);
@@ -1403,6 +1407,7 @@ class Template
             'web_lib' => api_get_path(WEB_LIBRARY_PATH),
             'web_upload' => api_get_path(WEB_UPLOAD_PATH),
             'web_self' => api_get_self(),
+            'self_basename' => basename(api_get_self()),
             'web_query_vars' => api_htmlentities($queryString),
             'web_self_query_vars' => api_htmlentities($requestURI),
             'web_cid_query' => api_get_cidreq(),
@@ -1485,8 +1490,7 @@ class Template
         $this->assign('prefetch', $prefetch);
         $this->assign('text_direction', api_get_text_direction());
         $this->assign('section_name', 'section-'.$this_section);
-
-        $this->assignFavIcon(); //Set a 'favico' var for the template
+        $this->assignFavIcon();
         $this->setHelp();
 
         $this->assignBugNotification(); //Prepare the 'bug_notification' var for the template
@@ -1609,11 +1613,13 @@ class Template
             $adminName = '';
             // Administrator name
             if (!empty($name)) {
-                $adminName = get_lang('Manager').' : '.
-                    Display::encrypted_mailto_link(
-                        api_get_setting('emailAdministrator'),
-                        $name
-                    );
+                $adminName = get_lang('Manager').' : ';
+                $adminName .= Display::encrypted_mailto_link(
+                    api_get_setting('emailAdministrator'),
+                    $name,
+                    '',
+                    true
+                );
             }
             $this->assign('administrator_name', $adminName);
         }
@@ -1777,7 +1783,7 @@ class Template
                 $clean_url = api_replace_dangerous_char($url);
                 $clean_url = str_replace('/', '-', $clean_url);
                 $clean_url .= '/';
-                $homep = api_get_path(REL_PATH).'home/'.$clean_url; //homep for Home Path
+                $homep = api_get_path(WEB_HOME_PATH).$clean_url; //homep for Home Path
                 $icon_real_homep = api_get_path(SYS_APP_PATH).'home/'.$clean_url;
                 //we create the new dir for the new sites
                 if (is_file($icon_real_homep.'favicon.ico')) {

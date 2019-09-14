@@ -84,7 +84,8 @@ switch ($action) {
         }
 
         if (!empty($operation)) {
-            $fileName = !empty($action) ? get_lang('PortalUserSessionStats').'_'.api_get_local_time() : 'report';
+            $fileName = !empty($action) ? api_get_setting('siteName').
+                '_'.get_lang('PortalUserSessionStats').'_'.api_get_local_time() : 'report';
             switch ($exportFormat) {
                 case 'xls':
                     Export::arrayToXls($list, $fileName);
@@ -145,18 +146,76 @@ switch ($action) {
         echo json_encode($list);
         break;
     case 'tools_usage':
+    case 'courses':
+    case 'courses_by_language':
+    case 'users':
+    case 'users_teachers':
+    case 'users_students':
         // Give a JSON array to the stats page main/admin/statistics/index.php
         // for global tools usage (number of clicks)
         header('Content-type: application/json');
         $list = [];
-        $all = Statistics::getToolsStats();
+        $palette = ChamiloApi::getColorPalette(true, true);
+        if ($action == 'tools_usage') {
+            $statsName = 'Tools';
+            $all = Statistics::getToolsStats();
+        } elseif ($action == 'courses') {
+            $statsName = 'CountCours';
+            $course_categories = Statistics::getCourseCategories();
+            // total amount of courses
+            $all = [];
+            foreach ($course_categories as $code => $name) {
+                $all[$name] = Statistics::countCourses($code);
+            }
+        } elseif ($action == 'courses_by_language') {
+            $statsName = 'CountCourseByLanguage';
+            $all = Statistics::printCourseByLanguageStats();
+            // use slightly different colors than previous chart
+            for ($k = 0; $k < 3; $k++) {
+                $item = array_shift($palette);
+                array_push($palette, $item);
+            }
+        } elseif ($action == 'users') {
+            $statsName = 'NumberOfUsers';
+            $countInvisible = isset($_GET['count_invisible']) ? (int) $_GET['count_invisible'] : null;
+            $all = [
+                get_lang('Teachers') => Statistics::countUsers(COURSEMANAGER, null, $countInvisible),
+                get_lang('Students') => Statistics::countUsers(STUDENT, null, $countInvisible),
+            ];
+        } elseif ($action == 'users_teachers') {
+            $statsName = 'Teachers';
+            $course_categories = Statistics::getCourseCategories();
+            $countInvisible = isset($_GET['count_invisible']) ? (int) $_GET['count_invisible'] : null;
+            $all = [];
+            foreach ($course_categories as $code => $name) {
+                $name = str_replace(get_lang('Department'), "", $name);
+                $all[$name] = Statistics::countUsers(COURSEMANAGER, $code, $countInvisible);
+            }
+            // use slightly different colors than previous chart
+            for ($k = 0; $k < 3; $k++) {
+                $item = array_shift($palette);
+                array_push($palette, $item);
+            }
+        } elseif ($action == 'users_students') {
+            $statsName = 'Students';
+            $course_categories = Statistics::getCourseCategories();
+            $countInvisible = isset($_GET['count_invisible']) ? (int) $_GET['count_invisible'] : null;
+            $all = [];
+            foreach ($course_categories as $code => $name) {
+                $name = str_replace(get_lang('Department'), "", $name);
+                $all[$name] = Statistics::countUsers(STUDENT, $code, $countInvisible);
+            }
+            // use slightly different colors than previous chart
+            for ($k = 0; $k < 6; $k++) {
+                $item = array_shift($palette);
+                array_push($palette, $item);
+            }
+        }
         foreach ($all as $tick => $tock) {
             $list['labels'][] = $tick;
         }
 
-        $palette = ChamiloApi::getColorPalette(true, true);
-
-        $list['datasets'][0]['label'] = get_lang('Tools');
+        $list['datasets'][0]['label'] = get_lang($statsName);
         $list['datasets'][0]['borderColor'] = 'rgba(255,255,255,1)';
 
         $i = 0;

@@ -16,6 +16,8 @@ use ChamiloSession as Session;
 $use_anonymous = true;
 require_once __DIR__.'/../inc/global.inc.php';
 
+api_protect_course_script();
+
 /**
  * Writes an item's new values into the database and returns the operation result.
  *
@@ -38,7 +40,7 @@ require_once __DIR__.'/../inc/global.inc.php';
  * @param int    $userNavigatesAway    Whether the user is moving to another item
  * @param int    $statusSignalReceived Whether the SCO called SetValue(lesson_status)
  *
- * @return bool|null|string The resulting JS string
+ * @return bool|string|null The resulting JS string
  */
 function save_item(
     $lp_id,
@@ -490,6 +492,15 @@ function save_item(
     if ($myLP->get_type() == 2) {
         $return .= "update_stats();";
     }
+
+    $logInfo = [
+        'tool' => TOOL_LEARNPATH,
+        'tool_id' => $myLP->get_id(),
+        'tool_id_detail' => $myLP->get_current_item_id(),
+        'action' => 'save_item',
+        'info' => '',
+    ];
+    Event::registerLog($logInfo);
 
     // To be sure progress is updated.
     $myLP->save_last();

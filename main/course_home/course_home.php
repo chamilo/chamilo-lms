@@ -2,6 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 use ChamiloSession as Session;
+use Fhaculty\Graph\Graph;
 
 /**
  * HOME PAGE FOR EACH COURSE.
@@ -31,9 +32,12 @@ use ChamiloSession as Session;
 $use_anonymous = true;
 require_once __DIR__.'/../inc/global.inc.php';
 
+$js = '<script>'.api_get_language_translate_html().'</script>';
+$htmlHeadXtra[] = $js;
+
 $htmlHeadXtra[] = '<script>
 /* option show/hide thematic-block */
-$(document).ready(function(){
+$(function() {
     $("#thematic-show").click(function(){
         $(".btn-hide-thematic").hide();
         $(".btn-show-thematic").show(); //show using class
@@ -132,27 +136,25 @@ $isSpecialCourse = CourseManager::isSpecialCourse($courseId);
 
 if ($isSpecialCourse) {
     if (isset($_GET['autoreg']) && $_GET['autoreg'] == 1) {
-        if (CourseManager::subscribe_user($user_id, $course_code, STUDENT)) {
+        if (CourseManager::subscribeUser($user_id, $course_code, STUDENT)) {
             Session::write('is_allowed_in_course', true);
         }
     }
 }
 
-if (isset($_GET['action']) && $_GET['action'] == 'subscribe') {
+$action = !empty($_GET['action']) ? Security::remove_XSS($_GET['action']) : '';
+
+if ($action == 'subscribe') {
     if (Security::check_token('get')) {
         Security::clear_token();
-        $auth = new Auth();
-        $msg = $auth->subscribe_user($course_code);
-        if (CourseManager::is_user_subscribed_in_course($user_id, $course_code)) {
-            Session::write('is_allowed_in_course', true);
+        $result = CourseManager::autoSubscribeToCourse($course_code);
+        if ($result) {
+            if (CourseManager::is_user_subscribed_in_course($user_id, $course_code)) {
+                Session::write('is_allowed_in_course', true);
+            }
         }
-        if (!empty($msg)) {
-            $show_message .= Display::return_message(
-                get_lang($msg['message']),
-                'info',
-                false
-            );
-        }
+        header('Location: '.api_get_self());
+        exit;
     }
 }
 
@@ -166,16 +168,27 @@ if (!isset($coursesAlreadyVisited[$course_code])) {
     Session::write('coursesAlreadyVisited', $coursesAlreadyVisited);
 }
 
-/*Auto launch code */
+$logInfo = [
+    'tool' => 'course-main',
+    'tool_id' => 0,
+    'tool_id_detail' => 0,
+    'action' => $action,
+    'info' => '',
+];
+Event::registerLog($logInfo);
+
+/* Auto launch code */
 $autoLaunchWarning = '';
 $showAutoLaunchLpWarning = false;
 $course_id = api_get_course_int_id();
 $lpAutoLaunch = api_get_course_setting('enable_lp_auto_launch');
 $session_id = api_get_session_id();
+$allowAutoLaunchForCourseAdmins = api_is_platform_admin() || api_is_allowed_to_edit(true, true) || api_is_coach();
+
 if (!empty($lpAutoLaunch)) {
     if ($lpAutoLaunch == 2) {
         // LP list
-        if (api_is_platform_admin() || api_is_allowed_to_edit()) {
+        if ($allowAutoLaunchForCourseAdmins) {
             $showAutoLaunchLpWarning = true;
         } else {
             $session_key = 'lp_autolaunch_'.$session_id.'_'.api_get_course_int_id().'_'.api_get_user_id();
@@ -209,7 +222,7 @@ if (!empty($lpAutoLaunch)) {
         if (Database::num_rows($result) > 0) {
             $lp_data = Database::fetch_array($result, 'ASSOC');
             if (!empty($lp_data['id'])) {
-                if (api_is_platform_admin() || api_is_allowed_to_edit()) {
+                if ($allowAutoLaunchForCourseAdmins) {
                     $showAutoLaunchLpWarning = true;
                 } else {
                     $session_key = 'lp_autolaunch_'.$session_id.'_'.api_get_course_int_id().'_'.api_get_user_id();
@@ -233,7 +246,7 @@ if ($showAutoLaunchLpWarning) {
 
 $forumAutoLaunch = api_get_course_setting('enable_forum_auto_launch');
 if ($forumAutoLaunch == 1) {
-    if (api_is_platform_admin() || api_is_allowed_to_edit()) {
+    if ($allowAutoLaunchForCourseAdmins) {
         if (empty($autoLaunchWarning)) {
             $autoLaunchWarning = get_lang('TheForumAutoLaunchSettingIsOnStudentsWillBeRedirectToTheForumTool');
         }
@@ -247,7 +260,7 @@ if ($forumAutoLaunch == 1) {
 if (api_get_configuration_value('allow_exercise_auto_launch')) {
     $exerciseAutoLaunch = (int) api_get_course_setting('enable_exercise_auto_launch');
     if ($exerciseAutoLaunch == 2) {
-        if (api_is_platform_admin() || api_is_allowed_to_edit()) {
+        if ($allowAutoLaunchForCourseAdmins) {
             if (empty($autoLaunchWarning)) {
                 $autoLaunchWarning = get_lang(
                     'TheExerciseAutoLaunchSettingIsONStudentsWillBeRedirectToTheExerciseList'
@@ -260,7 +273,7 @@ if (api_get_configuration_value('allow_exercise_auto_launch')) {
             exit;
         }
     } elseif ($exerciseAutoLaunch == 1) {
-        if (api_is_platform_admin() || api_is_allowed_to_edit()) {
+        if ($allowAutoLaunchForCourseAdmins) {
             if (empty($autoLaunchWarning)) {
                 $autoLaunchWarning = get_lang(
                     'TheExerciseAutoLaunchSettingIsONStudentsWillBeRedirectToAnSpecificExercise'
@@ -300,7 +313,7 @@ if (api_get_configuration_value('allow_exercise_auto_launch')) {
 
 $documentAutoLaunch = api_get_course_setting('enable_document_auto_launch');
 if ($documentAutoLaunch == 1) {
-    if (api_is_platform_admin() || api_is_allowed_to_edit()) {
+    if ($allowAutoLaunchForCourseAdmins) {
         if (empty($autoLaunchWarning)) {
             $autoLaunchWarning = get_lang('TheDocumentAutoLaunchSettingIsOnStudentsWillBeRedirectToTheDocumentTool');
         }
@@ -385,7 +398,11 @@ if ($allow === true) {
                 );
 
                 if (!empty($item) && isset($item['value']) && !empty($item['value'])) {
-                    $graph = unserialize($item['value']);
+                    /** @var Graph $graph */
+                    $graph = UnserializeApi::unserialize(
+                        'career',
+                        $item['value']
+                    );
                     $diagram = Career::renderDiagram($careerInfo, $graph);
                 }
             }

@@ -52,6 +52,14 @@ class ReadingComprehension extends UniqueAnswer
     public $refreshTime = 3;
 
     /**
+     * Indicates how show the question list.
+     * 1 = all in one page; 2 = one per page (default).
+     *
+     * @var int
+     */
+    private $exerciseType = 2;
+
+    /**
      * Constructor.
      */
     public function __construct()
@@ -147,10 +155,8 @@ class ReadingComprehension extends UniqueAnswer
         }
 
         // hidden values
-        $my_id = isset($_REQUEST['myid']) ? intval($_REQUEST['myid']) : null;
-        $form->addElement('hidden', 'myid', $my_id);
         $form->addRule('questionName', get_lang('GiveQuestion'), 'required');
-        $isContent = isset($_REQUEST['isContent']) ? intval($_REQUEST['isContent']) : null;
+        $isContent = isset($_REQUEST['isContent']) ? (int) $_REQUEST['isContent'] : null;
 
         // default values
         $defaults = [];
@@ -164,12 +170,8 @@ class ReadingComprehension extends UniqueAnswer
             $form->setDefaults($defaults);
         }
 
-        if (!empty($_REQUEST['myid'])) {
+        if (!isset($_GET['newQuestion']) || $isContent) {
             $form->setDefaults($defaults);
-        } else {
-            if ($isContent == 1) {
-                $form->setDefaults($defaults);
-            }
         }
     }
 
@@ -190,6 +192,18 @@ class ReadingComprehension extends UniqueAnswer
     }
 
     /**
+     * @param int $type
+     *
+     * @return ReadingComprehension
+     */
+    public function setExerciseType($type)
+    {
+        $this->exerciseType = (int) $type;
+
+        return $this;
+    }
+
+    /**
      * @param $wordsCount
      * @param $turns
      * @param $text
@@ -205,6 +219,7 @@ class ReadingComprehension extends UniqueAnswer
         $view->assign('words_count', $wordsCount);
         $view->assign('turns', $turns);
         $view->assign('refresh_time', $this->refreshTime);
+        $view->assign('exercise_type', $this->exerciseType);
         $view->display($template);
     }
 }

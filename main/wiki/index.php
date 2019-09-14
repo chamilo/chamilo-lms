@@ -34,7 +34,7 @@ function setFocus() {
     $("#search_title").focus();
 }
 
-$(document).ready(function() {
+$(function() {
     setFocus();
     $("#start_date_toggle").click(function() {
         $("#start_date").toggle();

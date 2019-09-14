@@ -721,7 +721,7 @@ class ExtraFieldOption extends Model
     /**
      * @param $priority
      *
-     * @return null|string
+     * @return string|null
      */
     public function getPriorityMessageType($priority)
     {
@@ -921,6 +921,28 @@ class ExtraFieldOption extends Model
         foreach ($result as &$row) {
             $row['display_text'] = self::translateDisplayName($row['display_text']);
         }
+
+        return $result;
+    }
+
+    /**
+     * @param string $variable
+     *
+     * @return array|\Chamilo\CoreBundle\Entity\ExtraFieldOptions[]
+     */
+    public function getOptionsByFieldVariable($variable)
+    {
+        $extraFieldType = $this->getExtraField()->getExtraFieldType();
+
+        $dql = "SELECT o FROM ChamiloCoreBundle:ExtraFieldOptions o
+            INNER JOIN ChamiloCoreBundle:ExtraField f WITH o.field = f.id
+            WHERE f.variable = :variable AND f.extraFieldType = :extra_field_type
+            ORDER BY o.value ASC";
+
+        $result = Database::getManager()
+            ->createQuery($dql)
+            ->setParameters(['variable' => $variable, 'extra_field_type' => $extraFieldType])
+            ->getResult();
 
         return $result;
     }

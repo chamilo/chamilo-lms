@@ -11,7 +11,7 @@ require_once 'work.lib.php';
 
 $this_section = SECTION_COURSES;
 
-$work_id = isset($_REQUEST['id']) ? intval($_REQUEST['id']) : null;
+$work_id = isset($_REQUEST['id']) ? (int) $_REQUEST['id'] : null;
 
 $is_allowed_to_edit = api_is_allowed_to_edit();
 $course_id = api_get_course_int_id();
@@ -50,15 +50,6 @@ if ($onlyOnePublication) {
     $count = get_work_count_by_student($user_id, $work_id);
     if ($count >= 1) {
         api_not_allowed(true);
-
-        /*Display::display_header();
-        if (api_get_course_setting('student_delete_own_publication') == '1') {
-            echo Display::return_message(get_lang('CantUploadDeleteYourPaperFirst'), 'warning');
-        } else {
-            echo Display::return_message(get_lang('YouAlreadySentAPaperYouCantUpload'), 'warning');
-        }
-        Display::display_footer();
-        exit;*/
     }
 }
 

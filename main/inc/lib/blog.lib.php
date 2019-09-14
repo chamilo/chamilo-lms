@@ -3212,7 +3212,7 @@ class Blog
      * @param string $fullText
      * @param int    $length
      *
-     * @return null|string
+     * @return string|null
      */
     private static function getPostExtract($fullText, $length = BLOG_MAX_PREVIEW_CHARS)
     {

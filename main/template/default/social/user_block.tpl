@@ -3,17 +3,70 @@
         <div class="panel panel-default">
             <div class="panel-heading" role="tab" id="heading-sn">
                 <h4 class="panel-title">
-                    <a role="button" data-toggle="collapse" data-parent="#sn-avatar" href="#sn-avatar-one" aria-expanded="true" aria-controls="sn-avatar-one">
+                    <a role="button" data-toggle="collapse" data-parent="#sn-avatar"
+                       href="#sn-avatar-one" aria-expanded="true" aria-controls="sn-avatar-one">
                     {{ "Profile" | get_lang }}
                     </a>
                 </h4>
             </div>
             <div id="sn-avatar-one" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="heading-sn">
                 <div class="panel-body">
+                    <div class="area-avatar">
                     {{ social_avatar_block }}
+                        {% if user.icon_status %}
+                            <!-- User icon -->
+                            <div class="avatar-icon">
+                                {{ user.icon_status_medium }}
+                            </div>
+                            <!-- End user icon -->
+                        {% endif %}
+
+                        {% if show_language_flag %}
+                        <!-- Language flag -->
+                        <div class="avatar-lm">
+                            {% if user.language %}
+                                {% if user.language.code == 'fr' %}
+                                    <img src="{{ _p.web }}web/assets/flag-icon-css/flags/4x3/fr.svg" width="36px">
+                                {% elseif user.language.code == 'de' %}
+                                    <img src="{{ _p.web }}web/assets/flag-icon-css/flags/4x3/de.svg" width="36px">
+                                {% elseif user.language.code == 'es' %}
+                                    <img src="{{ _p.web }}web/assets/flag-icon-css/flags/4x3/es.svg" width="36px">
+                                {% elseif user.language.code == 'it' %}
+                                    <img src="{{ _p.web }}web/assets/flag-icon-css/flags/4x3/it.svg" width="36px">
+                                {% elseif user.language.code == 'pl' %}
+                                    <img src="{{ _p.web }}web/assets/flag-icon-css/flags/4x3/pl.svg" width="36px">
+                                {% endif %}
+                            {% endif %}
+                        </div>
+                        <!-- End language flag -->
+
+                        <!-- Language cible -->
+                        <div class="avatar-lc">
+                            {% for item in extra_info %}
+                                {% if item.variable == 'langue_cible' %}
+                                    {% if item.value == 'French2' %}
+                                        <img src="{{ _p.web }}web/assets/flag-icon-css/flags/4x3/fr.svg" width="36px">
+                                    {% elseif item.value == 'German2' %}
+                                        <img src="{{ _p.web }}web/assets/flag-icon-css/flags/4x3/de.svg" width="36px">
+                                    {% elseif item.value == 'Spanish' %}
+                                        <img src="{{ _p.web }}web/assets/flag-icon-css/flags/4x3/es.svg" width="36px">
+                                    {% elseif item.value == 'Italian' %}
+                                        <img src="{{ _p.web }}web/assets/flag-icon-css/flags/4x3/it.svg" width="36px">
+                                    {% elseif item.value == 'Polish' %}
+                                        <img src="{{ _p.web }}web/assets/flag-icon-css/flags/4x3/pl.svg" width="36px">
+                                    {% elseif item.value == 'English' %}
+                                        <img src="{{ _p.web }}web/assets/flag-icon-css/flags/4x3/gb.svg" width="36px">
+                                    {% endif %}
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                        <!-- End language cible ->
+                        {% endif %}
+                    </div>
+                    {# Ofaj #}
                     <ul class="list-user-data">
-                        <li class="item">
-                            {{ user.complete_name }}
+                        <li class="item item-name">
+                            <h5>{{ user.complete_name }} </h5>
                         </li>
                         {% if _u.is_admin == 1 %}
                             <li class="item">
@@ -23,18 +76,23 @@
                             </li>
                         {% endif %}
                         {% if show_full_profile %}
+                            {% if user.email %}
                             <li class="item">
                                 <a href="{{ _p.web }}main/messages/new_message.php">
                                 <img src="{{ "instant_message.png" | icon }}" alt="{{ "Email" | get_lang }}">
-                                {{ user.email}}
+                                    <div class="email-overflow">{{ user.email }}</div>
                                 </a>
                             </li>
-                            <li class="item">
-                                <a href="{{ vcard_user_link }}">
-                                <img src="{{ "vcard.png" | icon(16) }}" alt="{{ "BusinessCard" | get_lang }}" width="16" height="16">
-                                {{ "BusinessCard" | get_lang }}
-                                </a>
-                            </li>
+                            {% endif %}
+
+                            {% if vcard_user_link %}
+                                <li class="item">
+                                    <a href="{{ vcard_user_link }}">
+                                    <img src="{{ "vcard.png" | icon(16) }}" alt="{{ "BusinessCard" | get_lang }}" width="16" height="16">
+                                    {{ "BusinessCard" | get_lang }}
+                                    </a>
+                                </li>
+                            {% endif %}
 
                             {% set skype_account = '' %}
                             {% set linkedin_url = '' %}
@@ -73,12 +131,17 @@
                                             {{ "Chat" | get_lang }} ({{ "Online" | get_lang }})
                                         </a>
                                     </li>
-                                {# else #}
-                                    {# <img src="{{ "offline.png" | icon }}" alt="{{ "Online" | get_lang }}"> #}
-                                    {# {{ "Chat" | get_lang }} ({{ "Offline" | get_lang }}) #}
                                 {% endif %}
                             {% endif %}
                         {% endif %}
+                    <dl class="list-info">
+                        {% for item in extra_info %}
+                            {% if item.variable != 'langue_cible' %}
+                            <dt>{{ item.label }}:</dt>
+                            <dd>{{ item.value }}</dd>
+                            {% endif %}
+                        {% endfor %}
+                    </dl>
 
                     {% if not profile_edition_link is empty %}
                     <li class="item">

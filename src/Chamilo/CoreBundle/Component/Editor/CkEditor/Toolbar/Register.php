@@ -40,7 +40,7 @@ class Register extends Basic
             ['Maximize', '-', 'PasteFromWord', '-', 'Undo', 'Redo'],
             ['Font', 'FontSize'],
             ['Bold', 'Italic', 'Underline'],
-            ['JustifyLeft', 'JustifyCenter', '-', 'NumberedList', 'BulletedList', '-', 'TextColor', 'BGColor'],
+            ['JustifyLeft', 'JustifyCenter', 'JustifyRight', '-', 'NumberedList', 'BulletedList', '-', 'TextColor', 'BGColor'],
         ];
     }
 
@@ -55,7 +55,7 @@ class Register extends Basic
             ['Toolbarswitch', 'PasteFromWord', '-', 'Undo', 'Redo'],
             ['Font', 'FontSize'],
             ['Bold', 'Italic', 'Underline'],
-            ['JustifyLeft', 'JustifyCenter', '-', 'NumberedList', 'BulletedList', '-', 'TextColor', 'BGColor'],
+            ['JustifyLeft', 'JustifyCenter', 'JustifyRight', '-', 'NumberedList', 'BulletedList', '-', 'TextColor', 'BGColor'],
         ];
     }
 }

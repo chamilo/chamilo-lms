@@ -84,10 +84,7 @@ class HTML_QuickForm_image extends HTML_QuickForm_input
     function setBorder($border)
     {
         $this->updateAttributes(array('border' => $border));
-    } // end func setBorder
-
-    // }}}
-    // {{{ setAlign()
+    }
 
     /**
      * Sets alignment for image element
@@ -100,10 +97,7 @@ class HTML_QuickForm_image extends HTML_QuickForm_input
     function setAlign($align)
     {
         $this->updateAttributes(array('align' => $align));
-    } // end func setAlign
-
-    // }}}
-    // {{{ freeze()
+    }
 
     /**
      * Freeze the element so that only its value is returned
@@ -114,9 +108,5 @@ class HTML_QuickForm_image extends HTML_QuickForm_input
     function freeze()
     {
         return false;
-    } //end func freeze
-
-    // }}}
-
-} // end class HTML_QuickForm_image
-?>
+    }
+}

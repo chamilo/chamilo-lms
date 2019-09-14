@@ -205,7 +205,7 @@ $form->display();
 ?>
 
 <script>
-$(document).ready( function() {
+$(function() {
 
 <?php
     if (!empty($sessionInfo['duration'])) {
@@ -239,7 +239,7 @@ function emptyDuration() {
     }
 }
 
-$(document).on('ready', function (){
+$(function() {
     $('#show-options').on('click', function (e) {
         e.preventDefault();
         var display = $('#options').css('display');

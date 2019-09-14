@@ -7,9 +7,13 @@
 class DateTimePicker extends HTML_QuickForm_text
 {
     /**
-     * Constructor.
+     * DateTimePicker constructor.
+     *
+     * @param string       $elementName
+     * @param string|array $elementLabel
+     * @param array        $attributes
      */
-    public function __construct($elementName = null, $elementLabel = null, $attributes = null)
+    public function __construct($elementName, $elementLabel = null, $attributes = null)
     {
         if (!isset($attributes['id'])) {
             $attributes['id'] = $elementName;
@@ -33,8 +37,9 @@ class DateTimePicker extends HTML_QuickForm_text
         $id = $this->getAttribute('id');
         $value = $this->getValue();
 
+        $formattedValue = '';
         if (!empty($value)) {
-            $value = api_format_date($value, DATE_TIME_FORMAT_LONG_24H);
+            $formattedValue = api_format_date($value, DATE_TIME_FORMAT_LONG_24H);
         }
 
         $label = $this->getLabel();
@@ -49,7 +54,7 @@ class DateTimePicker extends HTML_QuickForm_text
                 <span class="input-group-addon cursor-pointer">
                     <input '.$this->_getAttrString($this->_attributes).'>
                 </span>
-                <p class="form-control disabled" id="'.$id.'_alt_text">'.$value.'</p>
+                <p class="form-control disabled" id="'.$id.'_alt_text">'.$formattedValue.'</p>
                 <input class="form-control" type="hidden" id="'.$id.'_alt" value="'.$value.'">
                 <span class="input-group-btn">
                     <button class="btn btn-default" type="button"
@@ -78,28 +83,7 @@ class DateTimePicker extends HTML_QuickForm_text
      */
     public function getTemplate($layout)
     {
-        $size = $this->getColumnsSize();
-        $value = $this->getValue();
-        if (empty($size)) {
-            $sizeTemp = $this->getInputSize();
-            if (empty($size)) {
-                $sizeTemp = 8;
-            }
-            $size = [2, $sizeTemp, 2];
-        } else {
-            if (is_array($size)) {
-                if (count($size) != 3) {
-                    $sizeTemp = $this->getInputSize();
-                    if (empty($size)) {
-                        $sizeTemp = 8;
-                    }
-                    $size = [2, $sizeTemp, 2];
-                }
-                // else just keep the $size array as received
-            } else {
-                $size = [2, intval($size), 2];
-            }
-        }
+        $size = $this->calculateSize();
 
         switch ($layout) {
             case FormValidator::LAYOUT_INLINE:

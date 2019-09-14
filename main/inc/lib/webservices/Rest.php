@@ -203,7 +203,7 @@ class Rest extends WebService
 
         return $messages;
     }
-    
+
      /**
      *
      * @return array
@@ -216,7 +216,7 @@ class Rest extends WebService
         foreach ($lastMessages as $message) {
             $hasAttachments = MessageManager::hasAttachments($message['id']);
             $attachmentList = [] ;
-            if($hasAttachments) {
+            if ($hasAttachments) {
                 $attachmentList = MessageManager::getAttachmentList($message['id']);
             }
             $messages[] = [
@@ -240,7 +240,7 @@ class Rest extends WebService
 
         return $messages;
     }
-    
+
     /**
      *
      * @return array

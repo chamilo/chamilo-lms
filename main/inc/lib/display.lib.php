@@ -472,105 +472,6 @@ class Display
     }
 
     /**
-     * Displays a normal message. It is recommended to use this public function
-     * to display any normal information messages.
-     *
-     * @param string $message
-     * @param bool   $filter      (true) or not (false)
-     * @param bool   $returnValue
-     *
-     * @deprecated Use <code>Display::addFlash(Display::return_message($message, 'normal'));</code>
-     *  Or <code>echo Display::return_message($message, 'normal')</code>
-     */
-    public static function display_normal_message(
-        $message,
-        $filter = true,
-        $returnValue = false
-    ) {
-        $message = self::return_message($message, 'normal', $filter);
-        if ($returnValue) {
-            return $message;
-        } else {
-            echo $message;
-        }
-    }
-
-    /**
-     * Displays an warning message. Use this if you want to draw attention to something
-     * This can also be used for instance with the hint in the exercises.
-     *
-     * @deprecated use Display::addFlash(Display::return_message($message, 'warning'));
-     */
-    public static function display_warning_message(
-        $message,
-        $filter = true,
-        $returnValue = false
-    ) {
-        $message = self::return_message($message, 'warning', $filter);
-        if ($returnValue) {
-            return $message;
-        } else {
-            echo $message;
-        }
-    }
-
-    /**
-     * Displays an confirmation message. Use this if something has been done successfully.
-     *
-     * @param bool    Filter (true) or not (false)
-     *
-     * @deprecated use Display::addFlash(Display::return_message($message, 'confirm'));
-     */
-    public static function display_confirmation_message(
-        $message,
-        $filter = true,
-        $returnValue = false
-    ) {
-        $message = self::return_message($message, 'confirm', $filter);
-        if ($returnValue) {
-            return $message;
-        } else {
-            echo $message;
-        }
-    }
-
-    /**
-     * Displays an error message. It is recommended to use this public function if an error occurs.
-     *
-     * @param string $message - include any additional html
-     *                        tags if you need them
-     * @param bool    Filter (true) or not (false)
-     *
-     * @deprecated use Display::addFlash(Display::return_message($message, 'error'));
-     */
-    public static function display_error_message(
-        $message,
-        $filter = true,
-        $returnValue = false
-    ) {
-        $message = self::return_message($message, 'error', $filter);
-        if ($returnValue) {
-            return $message;
-        } else {
-            echo $message;
-        }
-    }
-
-    /**
-     * @param string $message
-     * @param string $type
-     * @param bool   $filter
-     */
-    public static function return_message_and_translate(
-        $message,
-        $type = 'normal',
-        $filter = true
-    ) {
-        $message = get_lang($message);
-        echo self::return_message($message, $type, $filter);
-    }
-
-    /**
      * Returns a div html string with.
      *
      * @param string $message
@@ -1473,7 +1374,7 @@ class Display
 
         $beforeSelectRow = null;
         if (isset($extra_params['beforeSelectRow'])) {
-            $beforeSelectRow = "beforeSelectRow: ".$extra_params['beforeSelectRow'].", ";
+            $beforeSelectRow = 'beforeSelectRow: '.$extra_params['beforeSelectRow'].', ';
             unset($extra_params['beforeSelectRow']);
         }
 
@@ -1533,6 +1434,16 @@ class Display
         $json_encode = str_replace('"formatter":"extra_formatter"', 'formatter:extra_formatter', $json_encode);
         $json_encode = str_replace(['{"first":"first",', '"end":"end"}'], '', $json_encode);
 
+        if (api_get_configuration_value('allow_compilatio_tool') &&
+            (strpos($_SERVER['REQUEST_URI'], 'work/work.php') !== false ||
+             strpos($_SERVER['REQUEST_URI'], 'work/work_list_all.php') != false
+            )
+        ) {
+            $json_encode = str_replace('"function () { compilatioInit() }"',
+                'function () { compilatioInit() }',
+                $json_encode
+            );
+        }
         // Creating the jqgrid element.
         $json .= '$("#'.$div_id.'").jqGrid({';
         //$json .= $beforeSelectRow;
@@ -1751,7 +1662,7 @@ class Display
             }
 
             if ($notification['tool'] == TOOL_LEARNPATH) {
-                if (!learnpath::is_lp_visible_for_student($notification['ref'], $user_id, $course_code)) {
+                if (!learnpath::is_lp_visible_for_student($notification['ref'], $user_id, $courseInfo)) {
                     continue;
                 }
             }
@@ -1797,7 +1708,7 @@ class Display
     /**
      * Get the session box details as an array.
      *
-     * @param int       Session ID
+     * @param int $session_id
      *
      * @return array Empty array or session array
      *               ['title'=>'...','category'=>'','dates'=>'...','coach'=>'...','active'=>true/false,'session_category_id'=>int]
@@ -1820,7 +1731,7 @@ class Display
             $session = [];
             $session['category_id'] = $session_info['session_category_id'];
             $session['title'] = $session_info['name'];
-            $session['id_coach'] = $session_info['id_coach'];
+            $session['coach_id'] = $session['id_coach'] = $session_info['id_coach'];
             $session['dates'] = '';
             $session['coach'] = '';
             if (api_get_setting('show_session_coach') === 'true' && isset($coachInfo['complete_name'])) {
@@ -1919,15 +1830,6 @@ class Display
         ';
         $html .= '</ul></div>';
         $html .= '</section>';
-        /*$html.= '<ul id="'.$id.'" class="star-rating">
-                    <li class="current-rating" style="width:'.$percentage.'px;"></li>
-                    <li><a href="javascript:void(0);" data-link="'.$url.'&amp;star=1" title="'.$star_label.'" class="one-star">1</a></li>
-                    <li><a href="javascript:void(0);" data-link="'.$url.'&amp;star=2" title="'.$star_label.'" class="two-stars">2</a></li>
-                    <li><a href="javascript:void(0);" data-link="'.$url.'&amp;star=3" title="'.$star_label.'" class="three-stars">3</a></li>
-                    <li><a href="javascript:void(0);" data-link="'.$url.'&amp;star=4" title="'.$star_label.'" class="four-stars">4</a></li>
-                    <li><a href="javascript:void(0);" data-link="'.$url.'&amp;star=5" title="'.$star_label.'" class="five-stars">5</a></li>
-                </ul>';*/
-
         $labels = [];
 
         $labels[] = $number_of_users_who_voted == 1 ? $number_of_users_who_voted.' '.get_lang('Vote') : $number_of_users_who_voted.' '.get_lang('Votes');
@@ -2031,15 +1933,18 @@ class Display
      * @param int    $percentage      int value between 0 and 100
      * @param bool   $show_percentage
      * @param string $extra_info
+     * @param string $class           danger/success/infowarning
      *
      * @return string
      */
-    public static function bar_progress($percentage, $show_percentage = true, $extra_info = '')
+    public static function bar_progress($percentage, $show_percentage = true, $extra_info = '', $class = '')
     {
         $percentage = (int) $percentage;
+        $class = empty($class) ? '' : "progress-bar-$class";
+
         $div = '<div class="progress">
                 <div
-                    class="progress-bar progress-bar-striped"
+                    class="progress-bar progress-bar-striped '.$class.'"
                     role="progressbar"
                     aria-valuenow="'.$percentage.'"
                     aria-valuemin="0"
@@ -2958,24 +2863,21 @@ HTML;
         "'.$frameName.'",
         [
             {type:"script", src:"'.api_get_jquery_web_path().'", deps: [
-                {type:"script", src:"'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.highlight.js"},
-                {type:"script", src:"'.api_get_path(WEB_CODE_PATH).'glossary/glossary.js.php?'.api_get_cidreq().'"},
-                {type:"script", src:"'.$webPublicPath.'assets/jquery-ui/jquery-ui.min.js"},
-                {type:"script", src: "'.$webPublicPath.'assets/mediaelement/build/mediaelement-and-player.min.js", 
-                    deps: [
-                    {type:"script", src: "'.$webPublicPath.'assets/mediaelement/plugins/vrview/vrview.js"},
-                    {type:"script", src: "'.$webPublicPath.'assets/mediaelement/plugins/markersrolls/markersrolls.js"},
-                    '.$videoPluginFiles.'
-                ]},                
-                '.$translateHtml.'
+            {type:"script", src:"'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.highlight.js"},
+            {type:"script", src:"'.api_get_path(WEB_CODE_PATH).'glossary/glossary.js.php?'.api_get_cidreq().'"},
+            {type:"script", src:"'.api_get_jquery_ui_js_web_path().'"},
+            {type:"script", src: "'.$webPublicPath.'build/libs/mediaelement/mediaelement-and-player.min.js", 
+                deps: [
+                {type:"script", src: "'.$webPublicPath.'build/libs/mediaelement/plugins/vrview/vrview.js"},
+                {type:"script", src: "'.$webPublicPath.'build/libs/mediaelement/plugins/markersrolls/markersrolls.js"},
+                '.$videoPluginFiles.'
+            ]},                
+            '.$translateHtml.'
             ]},
             '.$videoPluginCssFiles.'
-            {type:"script", src:"'.$webPublicPath.'assets/MathJax/MathJax.js?config=AM_HTMLorMML"},
+            {type:"script", src:"'.$webPublicPath.'build/libs/mathjax/MathJax.js?config=AM_HTMLorMML"},
             {type:"stylesheet", src:"'.$webPublicPath.'assets/jquery-ui/themes/smoothness/jquery-ui.min.css"},
-            {type:"stylesheet", src:"'.$webPublicPath.'assets/jquery-ui/themes/smoothness/theme.css"},                
-            {type:"stylesheet", src:"'.$webPublicPath.'css/dialog.css"},
-            {type:"stylesheet", src: "'.$webPublicPath.'assets/mediaelement/build/mediaelementplayer.min.css"},                
-            {type:"stylesheet", src: "'.$webPublicPath.'assets/mediaelement/plugins/vrview/vrview.css"},
+            {type:"stylesheet", src:"'.$webPublicPath.'assets/jquery-ui/themes/smoothness/theme.css"},       
         ]);';
 
         return $frameReady;

@@ -393,7 +393,8 @@ class DisplayGradebook
                 isset($_GET['selectcat']) && $_GET['selectcat'] != 0) &&
                 isset($_GET['studentoverview'])
             ) {
-                $header .= '<td style="vertical-align: top;"><a href="'.api_get_self().'?'.api_get_cidreq().'&studentoverview=&exportpdf=&selectcat='.$catobj->get_id().'" target="_blank">
+                $header .= '<td style="vertical-align: top;">
+                                <a href="'.api_get_self().'?'.api_get_cidreq().'&studentoverview=&exportpdf=&selectcat='.$catobj->get_id().'" target="_blank">
 							 '.Display::return_icon('pdf.png', get_lang('ExportPDF'), [], ICON_SIZE_MEDIUM).'
 							'.get_lang('ExportPDF').'</a>';
             }
@@ -522,7 +523,7 @@ class DisplayGradebook
                         }
                         $score_display_custom = api_get_setting('gradebook_score_display_custom');
                         if (api_get_setting('teachers_can_change_score_settings') == 'true' &&
-                            $score_display_custom['my_display_custom'] == 'true'
+                            $score_display_custom == 'true'
                         ) {
                             $actionsRight .= '<a href="gradebook_scoring_system.php?'.$my_api_cidreq.'&selectcat='.$catobj->get_id().'">'.
                                 Display::return_icon('ranking.png', get_lang('ScoreEdit'), '', ICON_SIZE_MEDIUM).'</a>';
@@ -550,17 +551,16 @@ class DisplayGradebook
                 '</a>';
         }
 
-        if (api_is_allowed_to_edit(null, true) || $isCoach) {
+        if ($isCoach || api_is_allowed_to_edit(null, true)) {
             echo $toolbar = Display::toolbarAction(
                 'gradebook-actions',
                 [$actionsLeft, $actionsRight]
             );
         }
 
-        if (api_is_allowed_to_edit(null, true) || $accessToEdit) {
+        if ($accessToEdit || api_is_allowed_to_edit(null, true)) {
             $weight = intval($catobj->get_weight()) > 0 ? $catobj->get_weight() : 0;
             $weight = '<strong>'.get_lang('TotalWeight').' : </strong>'.$weight;
-
             $min_certification = intval($catobj->getCertificateMinScore() > 0) ? $catobj->getCertificateMinScore() : 0;
 
             if (!empty($min_certification)) {

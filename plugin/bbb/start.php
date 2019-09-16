@@ -13,10 +13,6 @@ require_once __DIR__.'/config.php';
 
 $logInfo = [
     'tool' => 'Videoconference',
-    'tool_id' => 0,
-    'tool_id_detail' => 0,
-    'action' => '',
-    'action_details' => '',
 ];
 Event::registerLog($logInfo);
 
@@ -68,7 +64,6 @@ if ($bbb->pluginEnabled) {
             $meetingParams = [];
             $meetingParams['meeting_name'] = $bbb->getCurrentVideoConferenceName();
             $meetingParams['interface'] = $interface;
-
             if ($bbb->meetingExists($meetingParams['meeting_name'])) {
                 $joinUrl = $bbb->joinMeeting($meetingParams['meeting_name']);
                 if ($joinUrl) {

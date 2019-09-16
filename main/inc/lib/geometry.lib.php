@@ -6,6 +6,7 @@
  * @package chamilo.include.geometry
  */
 define('DEBUG', false);
+
 /**
  * poly_init -    build the array which will store the image of the polygone.
  *
@@ -52,7 +53,6 @@ function poly_compile($poly, $max, $test = false)
     // looking for EDGES
     // may be optimized by a dynamic choice
     // between Y and X based on max[y]<max[x]
-
     /*
      * bords    cointains the edges of the polygone
      *        it is an array of array,
@@ -66,7 +66,6 @@ function poly_compile($poly, $max, $test = false)
         $bord_lenght = $max['y'];
     }
 
-    //$bords = array_fill(0, $bord_lenght-1, array()); // building this array
     $bords = array_fill(0, $bord_lenght, []); // building this array
 
     /* adding the first point of the polygone */
@@ -78,7 +77,7 @@ function poly_compile($poly, $max, $test = false)
     $i = 1; // we re-use $i and $old_pente bellow the loop
     $old_pente = 0;
     // for each points of the polygon but the first
-    for (; $i < sizeof($poly) && (!empty($poly[$i]['x']) && !empty($poly[$i]['y'])); $i++) {
+    for (; $i < count($poly) && (!empty($poly[$i]['x']) && !empty($poly[$i]['y'])); $i++) {
         /* special cases */
         if ($poly[$i - 1]['y'] == $poly[$i]['y']) {
             if ($poly[$i - 1]['x'] == $poly[$i]['x']) {
@@ -95,9 +94,15 @@ function poly_compile($poly, $max, $test = false)
 
         //echo 'point:'.$poly[$i]['y']; bug here
         // adding the point as a part of an edge
-        if (is_array($bords[$poly[$i]['y']])) { //avoid warning
-        array_push($bords[$poly[$i]['y']], $poly[$i]['x']);
+        if (isset($poly[$i]) &&
+            isset($poly[$i]['y']) &&
+            isset($bords[$poly[$i]['y']]) &&
+            is_array($bords[$poly[$i]['y']])
+        ) {
+            // Avoid warning
+            array_push($bords[$poly[$i]['y']], $poly[$i]['x']);
         }
+
         if (DEBUG) {
             echo '('.$poly[$i]['x'].';'.$poly[$i]['y'].')   ';
         }
@@ -113,7 +118,10 @@ function poly_compile($poly, $max, $test = false)
         if ($i > 1) {
             if (($old_pente < 0 && $pente > 0)
                 || ($old_pente > 0 && $pente < 0)) {
-                if (is_array($bords[$poly[$i]['y']])) { //avoid warning
+                if (isset($poly[$i]) && isset($poly[$i]['y']) &&
+                    isset($bords[$poly[$i]['y']]) &&
+                    is_array($bords[$poly[$i]['y']])
+                ) {
                     array_push($bords[$poly[$i]['y']], $poly[$i]['x']);
                 }
 
@@ -127,9 +135,6 @@ function poly_compile($poly, $max, $test = false)
         /* detect the direction of the elevation in Y */
         $dy_inc = ($poly[$i]['y'] - $poly[$i - 1]['y']) > 0 ? 1 : -1;
         $x = $poly[$i - 1]['x'];
-//        if (DEBUG) echo "init: ".$poly[$i-1]['y']."  dy_inc: ".$dy_inc.
-//            "   end: ".$poly[$i]['y']."   pente:".$pente;
-
         /* computing points between $poly[$i-1]['y'] and $poly[$i-1]['y'] */
 
         // we iterate w/ $dy in ]$poly[$i-1]['y'],$poly[$i-1]['y'][
@@ -139,13 +144,13 @@ function poly_compile($poly, $max, $test = false)
             $dy += $dy_inc) {
             $x += $pente * $dy_inc;
             array_push($bords[$dy], $x);
-//            if (DEBUG) echo '/('.$x.';'.$dy.')   ';
         }
         $old_pente = $pente;
     }
 
     // closing the polygone (the edge between $poly[$i-1] and $poly[0])
-    if ($poly[$i - 1]['y'] != $poly[0]['y']) {// droite--> rien à faire
+    if ($poly[$i - 1]['y'] != $poly[0]['y']) {
+        // droite--> rien à faire
         // elevation between $poly[0]['x'] and $poly[1]['x'])
         $rest = $poly[0]['y'] - $poly[1]['y'];
         if ($rest != 0) {
@@ -193,12 +198,11 @@ function poly_compile($poly, $max, $test = false)
         For each pair of point, we color the points in between */
     $n = count($bords);
     for ($i = 0; $i < $n; $i++) {  // Y
-        //error_log(__FILE__.' - Border Num '.$i,0);
         if (is_array($bords[$i])) {
             sort($bords[$i]);
         }
 
-        for ($j = 0; $j < sizeof($bords[$i]); $j += 2) { // bords
+        for ($j = 0; $j < count($bords[$i]); $j += 2) { // bords
             if (!isset($bords[$i][$j + 1])) {
                 continue;
             }

@@ -4,7 +4,6 @@
 namespace Chamilo\ThemeBundle\Controller;
 
 use Chamilo\ThemeBundle\Form\FormDemoModelType;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 /**
@@ -15,19 +14,11 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class DefaultController extends AbstractController
 {
     /**
-     * @Template()
-     */
-    public function indexAction()
-    {
-        return [];
-    }
-
-    /**
      * @return \Symfony\Component\HttpFoundation\Response
      */
     public function dashboardAction()
     {
-        return    $this->render('ChamiloThemeBundle:Default:index.html.twig');
+        return $this->render('ChamiloThemeBundle:Default:index.html.twig');
     }
 
     /**

@@ -13,9 +13,9 @@ file that was distributed with this source code.
 {% block label %}{{ item.label|trans(item.getExtra('translation_params', {}), item.getExtra('translation_domain', 'SonataSeoBundle')) }}{% endblock %}
 
 {% block list %}
-    {% spaceless %}
+    {% apply spaceless %}
         <div class="sonata_breadcrumb">
             {{ parent() }}
         </div>
-    {% endspaceless %}
+    {% endapply %}
 {% endblock %}

@@ -4,14 +4,11 @@
 namespace Chamilo\CoreBundle\EventListener;
 
 use Chamilo\CoreBundle\Entity\Course;
-use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\SettingsBundle\Manager\SettingsManager;
-use Chamilo\UserBundle\Entity\User;
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Event\GetResponseEvent;
+use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 
 /**
@@ -19,7 +16,6 @@ use Symfony\Component\HttpKernel\KernelEvents;
  * Checks the portal listener depending of different settings:
  * platform, user, course.
  *
- * @package Chamilo\CoreBundle\EventListener
  */
 class LocaleListener implements EventSubscriberInterface
 {
@@ -40,12 +36,11 @@ class LocaleListener implements EventSubscriberInterface
     }
 
     /**
-     * @param GetResponseEvent $event
+     * @param RequestEvent $event
      */
-    public function onKernelRequest(GetResponseEvent $event)
+    public function onKernelRequest(RequestEvent $event)
     {
         $request = $event->getRequest();
-
         if (!$request->hasPreviousSession()) {
             return;
         }
@@ -121,7 +116,6 @@ class LocaleListener implements EventSubscriberInterface
                 'language_priority_1',
             ];
 
-            //var_dump($localeList);exit;
             $locale = '';
             foreach ($priorityList as $setting) {
                 $priority = $settings->getSetting("language.$setting");
@@ -149,6 +143,11 @@ class LocaleListener implements EventSubscriberInterface
 
             if (empty($locale)) {
                 $locale = $this->defaultLocale;
+            }
+
+            // Force locale if it was selected from the URL
+            if (!empty($localeFromUrl)) {
+                //$locale = $localeFromUrl;
             }
 
             // if no explicit locale has been set on this request, use one from the session

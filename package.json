@@ -6,7 +6,7 @@
   "devDependencies": {
     "@coreui/coreui": "^2.1.7",
     "@fortawesome/fontawesome-free": "^5.7.2",
-    "@symfony/webpack-encore": "^0.23.0",
+    "@symfony/webpack-encore": "~0.28",
     "babel-preset-react": "^6.24.1",
     "bootstrap": "^4.3.1",
     "copy-webpack-plugin": "^4.5",
@@ -21,7 +21,7 @@
     "vue-template-compiler": "^2.6.10"
   },
   "dependencies": {
-    "blueimp-file-upload": "^9.19.2",
+    "blueimp-file-upload": "^10.0",
     "bootstrap-daterangepicker": "^3.0",
     "bootstrap-select": "^1.13.6",
     "chosen-js": "^1.8.7",
@@ -40,8 +40,9 @@
     "js-cookie": "^2.2.0",
     "jsplumb": "^2.6.9",
     "linkifyjs": "^2.1.8",
-    "mathjax": "^2.7.4",
-    "mediaelement": "^4.2.9",
+    "mathjax": "^2.7",
+    "mediaelement": "^4.2",
+    "mediaelement-plugins": "https://github.com/chamilo/mediaelement-plugins",
     "moment": "^2.22",
     "multiselect-two-sides": "^2.5.5",
     "mxgraph": "^4.0",
@@ -52,7 +53,7 @@
     "pwstrength-bootstrap": "^3.0.4",
     "qtip2": "^3.0.3",
     "readmore-js": "^2.2.1",
-    "select2": "^4.0.6-rc.1",
+    "select2": "^4.0",
     "sweetalert": "^2.1.2",
     "timeago": "^1.6.7",
     "timepicker": "^1.11.14",

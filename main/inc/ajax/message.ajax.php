@@ -17,18 +17,24 @@ switch ($action) {
         $userId = api_get_user_id();
         $listInbox = [];
         if (api_get_setting('allow_message_tool') == 'true') {
-            $list = MessageManager::getNumberOfMessages(true, true);
+            $list = MessageManager::getMessageData(
+                0,
+                10,
+                null,
+                null,
+                ['actions' => ['read'], 'type' => MessageManager::MESSAGE_TYPE_INBOX]
+            );
             foreach ($list as $row) {
-                $user = api_get_user_info($row['user_sender_id']);
-                $temp['title'] = $row['title'];
-                $temp['date'] = $row['send_date'];
+                $user = api_get_user_info($row['0']);
+                $temp['title'] = $row['1'];
+                $temp['date'] = $row['2'];
                 $temp['fullname'] = $user['complete_name'];
                 $temp['email'] = $user['email'];
-                $temp['url'] = api_get_path(WEB_PATH).'main/messages/view_message.php?id='.$row['id'];
+                $temp['url'] = $row['1'];
                 $listInbox[] = $temp;
             }
         }
-        header("Content-type:application/json");
+        header('Content-type:application/json');
         echo json_encode($listInbox);
         break;
     case 'get_notifications_friends':
@@ -50,7 +56,7 @@ switch ($action) {
                 $listInvitations[] = $temp;
             }
         }
-        header("Content-type:application/json");
+        header('Content-type:application/json');
         echo json_encode($listInvitations);
         break;
     case 'get_count_message':
@@ -60,12 +66,12 @@ switch ($action) {
 
         // Setting notifications
         $count_unread_message = 0;
-        if (api_get_setting('allow_message_tool') == 'true') {
+        if (api_get_setting('allow_message_tool') === 'true') {
             // get count unread message and total invitations
-            $count_unread_message = MessageManager::getNumberOfMessages(true);
+            $count_unread_message = MessageManager::getCountNewMessagesFromDB($userId);
         }
 
-        if (api_get_setting('allow_social_tool') == 'true') {
+        if (api_get_setting('allow_social_tool') === 'true') {
             $number_of_new_messages_of_friend = SocialManager::get_message_number_invitation_by_user_id(
                 $userId
             );
@@ -163,7 +169,7 @@ switch ($action) {
                 'id' => $user->getId(),
             ];
         }
-        header("Content-type:application/json");
+        header('Content-type:application/json');
         echo json_encode($return);
         break;
     default:

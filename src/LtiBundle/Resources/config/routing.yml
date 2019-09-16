@@ -11,4 +11,4 @@ chamilo_lti_teacher_controller:
 chamilo_lti_service_controller:
   path: /lti/os
   defaults:
-    _controller: 'ChamiloLtiBundle:Service:outcomeService'
+    _controller: Chamilo\LtiBundle\Controller\ServiceController::outcomeServiceAction

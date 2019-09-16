@@ -461,7 +461,7 @@ class UserPortalController extends BaseController
         }
 
         /** @var \Chamilo\SettingsBundle\Manager\SettingsManager $settingManager */
-        $settingManager = $this->get('chamilo.settings.manager');
+        //$settingManager = $this->get('chamilo.settings.manager');
         /*var_dump($settingManager->getSetting('platform.institution'));
         $settings = $settingManager->loadSettings('platform');
         var_dump($settings->get('institution'));
@@ -475,7 +475,7 @@ class UserPortalController extends BaseController
         $countCourses = \CourseManager::count_courses();
 
         return $this->render(
-            'ChamiloCoreBundle:Index:userportal.html.twig',
+            'ChamiloThemeBundle:Index:userportal.html.twig',
             [
                 'content' => $items,
                 'count_courses' => $countCourses,

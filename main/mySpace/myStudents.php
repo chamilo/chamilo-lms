@@ -1,7 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use Chamilo\CoreBundle\Entity\Message;
 use Chamilo\CourseBundle\Entity\CLpCategory;
 use ChamiloSession as Session;
 
@@ -1338,7 +1337,7 @@ if (empty($details)) {
     ];
 
     $timeCourse = null;
-    if (Tracking::minimunTimeAvailable($sessionId, $courseInfo['real_id'])) {
+    if (Tracking::minimumTimeAvailable($sessionId, $courseInfo['real_id'])) {
         $timeCourse = Tracking::getCalculateTime($student_id, $courseInfo['real_id'], $sessionId);
     }
 

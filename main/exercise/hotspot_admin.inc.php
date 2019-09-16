@@ -12,7 +12,6 @@ use ChamiloSession as Session;
  * @author  Toon Keppens
  */
 $modifyAnswers = (int) $_GET['hotspotadmin'];
-
 if (!is_object($objQuestion)) {
     $objQuestion = Question::read($modifyAnswers);
 }
@@ -120,7 +119,7 @@ if ($submitAnswers || $buttonBack) {
 
                 $reponse[$i] = trim($reponse[$i]);
                 $comment[$i] = trim($comment[$i]);
-                $weighting[$i] = ($weighting[$i]); //it can be float
+                $weighting[$i] = $weighting[$i]; // It can be float.
 
                 if ($weighting[$i]) {
                     $questionWeighting += $weighting[$i];
@@ -360,7 +359,6 @@ if (isset($modifyAnswers)) {
 
     if (!$nbrAnswers) {
         $nbrAnswers = $objAnswer->selectNbrAnswers();
-
         if ($answerType == HOT_SPOT_DELINEATION) {
             // the magic happens here ...
             // we do this to not count the if no error section
@@ -412,7 +410,6 @@ if (isset($modifyAnswers)) {
 
     if ($answerType == HOT_SPOT_DELINEATION) {
         //added the noerror answer
-        $reponse_noerror = 'noerror';
         $comment_noerror = $objAnswer->selectComment($nbrAnswers + 1);
         $destination_noerror_list = $objAnswer->selectDestination($nbrAnswers + 1);
 
@@ -421,7 +418,6 @@ if (isset($modifyAnswers)) {
         }
 
         $destination_items = explode('@@', $destination_noerror_list);
-
         $try_noerror = $destination_items[1];
         $lp_noerror = $destination_items[2];
         $selectQuestionNoError = $destination_items[3];
@@ -1091,8 +1087,7 @@ if (isset($modifyAnswers)) {
         <div class="row">
             <div class="col-xs-12">
                 <?php
-                $swf_loaded = $answerType == HOT_SPOT_DELINEATION ? 'hotspot_delineation_admin' : 'hotspot_admin';
-    $height = 450;
+
     $relPath = api_get_path(WEB_CODE_PATH); ?>
                 <div id="hotspot-container" class="center-block"></div>
             </div>

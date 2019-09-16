@@ -15,10 +15,7 @@ require_once __DIR__.'/../inc/global.inc.php';
 $current_course_tool = TOOL_QUIZ;
 
 // Clear the exercise session just in case
-Session::erase('objExercise');
-Session::erase('calculatedAnswerId');
-Session::erase('duration_time_previous');
-Session::erase('duration_time');
+Exercise::cleanSessionVariables();
 
 $this_section = SECTION_COURSES;
 
@@ -218,8 +215,8 @@ if (!empty($attempts)) {
     foreach ($attempts as $attempt_result) {
         if (empty($certificateBlock)) {
             $certificateBlock = ExerciseLib::generateAndShowCertificateBlock(
-                $attempt_result['exe_result'],
-                $attempt_result['exe_weighting'],
+                $attempt_result['score'],
+                $attempt_result['max_score'],
                 $objExercise,
                 $attempt_result['exe_user_id'],
                 $courseCode,
@@ -227,7 +224,7 @@ if (!empty($attempts)) {
             );
         }
 
-        $score = ExerciseLib::show_score($attempt_result['exe_result'], $attempt_result['exe_weighting']);
+        $score = ExerciseLib::show_score($attempt_result['score'], $attempt_result['max_score']);
         $attempt_url = api_get_path(WEB_CODE_PATH).'exercise/result.php?';
         $attempt_url .= api_get_cidreq().'&show_headers=1&';
         $attempt_url .= http_build_query(['id' => $attempt_result['exe_id']]);
@@ -391,10 +388,11 @@ if (!empty($attempts)) {
     $table_content = $table->toHtml();
 }
 
-if ($objExercise->selectAttempts()) {
-    $attempt_message = get_lang('Attempts').' '.$counter.' / '.$objExercise->selectAttempts();
+$selectAttempts = $objExercise->selectAttempts();
+if ($selectAttempts) {
+    $attempt_message = get_lang('Attempts').' '.$counter.' / '.$selectAttempts;
 
-    if ($counter == $objExercise->selectAttempts()) {
+    if ($counter == $selectAttempts) {
         $attempt_message = Display::return_message($attempt_message, 'error');
     } else {
         $attempt_message = Display::return_message($attempt_message, 'info');

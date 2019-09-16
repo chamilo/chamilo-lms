@@ -2,56 +2,79 @@
 /* For license terms, see /license.txt */
 
 require __DIR__.'/../../../main/inc/global.inc.php';
-require_once __DIR__.'/../../../main/auth/external_login/functions.inc.php';
 
-if (isset($_POST['error']) || empty($_REQUEST)) {
-    header('Location: '.api_get_path(WEB_PATH).'index.php?logout=logout');
+$plugin = AzureActiveDirectory::create();
+
+$provider = $plugin->getProvider();
+
+if (!isset($_GET['code'])) {
+    // If we don't have an authorization code then get one
+    $authUrl = $provider->getAuthorizationUrl();
+
+    ChamiloSession::write('oauth2state', $provider->getState());
+
+    header('Location: '.$authUrl);
     exit;
 }
 
-list($jwtHeader, $jwtPayload, $jwtSignature) = explode('.', $_REQUEST['id_token']);
+// Check given state against previously stored one to mitigate CSRF attack
+if (empty($_GET['state']) || ($_GET['state'] !== ChamiloSession::read('oauth2state'))) {
+    ChamiloSession::erase('oauth2state');
 
-$jwtHeader = json_decode(
-    base64_decode($jwtHeader)
-);
-
-$jwtPayload = json_decode(
-    base64_decode($jwtPayload)
-);
-
-$u = [
-    'firstname' => $jwtPayload->given_name,
-    'lastname' => $jwtPayload->family_name,
-    'status' => STUDENT,
-    'email' => $jwtPayload->emails[0],
-    'username' => $jwtPayload->emails[0],
-    'language' => 'en',
-    'password' => 'azure_active_directory',
-    'auth_source' => 'azure_active_directory '.$jwtPayload->idp,
-    'extra' => [],
-];
-
-$userInfo = api_get_user_info_from_email($jwtPayload->emails[0]);
-
-if ($userInfo === false) {
-    // we have to create the user
-    $chamilo_uid = external_add_user($u);
-
-    if ($chamilo_uid !== false) {
-        $_user['user_id'] = $chamilo_uid;
-        $_user['uidReset'] = true;
-        $_SESSION['_user'] = $_user;
-    }
-} else {
-    // User already exists, update info and login
-    $chamilo_uid = $userInfo['user_id'];
-    $u['user_id'] = $chamilo_uid;
-    external_update_user($u);
-
-    $_user['user_id'] = $chamilo_uid;
-    $_user['uidReset'] = true;
-    $_SESSION['_user'] = $_user;
+    exit;
 }
+
+// Try to get an access token (using the authorization code grant)
+$token = $provider->getAccessToken('authorization_code', [
+    'code' => $_GET['code'],
+    'resource' => 'https://graph.windows.net',
+]);
+
+$me = null;
+
+try {
+    $me = $provider->get("me", $token);
+} catch (Exception $e) {
+    exit;
+}
+
+$userInfo = [];
+
+if (!empty($me['email'])) {
+    $userInfo = api_get_user_info_from_email($me['email']);
+}
+
+if (empty($userInfo) && !empty($me['email'])) {
+    $extraFieldValue = new ExtraFieldValue('user');
+    $itemValue = $extraFieldValue->get_item_id_from_field_variable_and_field_value(
+        'organisationemail',
+        $me['email']
+    );
+
+    $userInfo = api_get_user_info($itemValue['item_id']);
+}
+
+if (empty($userInfo) && !empty($me['mailNickname'])) {
+    $extraFieldValue = new ExtraFieldValue('user');
+    $itemValue = $extraFieldValue->get_item_id_from_field_variable_and_field_value(
+        'azure_id',
+        $me['mailNickname']
+    );
+
+    $userInfo = api_get_user_info($itemValue['item_id']);
+}
+
+if (empty($userInfo)) {
+    header('Location: '.api_get_path(WEB_PATH).'index.php?loginFailed=1&error=user_password_incorrect');
+
+    exit;
+}
+
+$_user['user_id'] = $userInfo['user_id'];
+$_user['uidReset'] = true;
+
+ChamiloSession::write('_user', $_user);
+ChamiloSession::write('_user_auth_source', 'azure_active_directory');
 
 header('Location: '.api_get_path(WEB_PATH));
 exit;

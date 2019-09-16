@@ -15,8 +15,8 @@
  */
 class Matching extends Question
 {
-    public static $typePicture = 'matching.png';
-    public static $explanationLangVar = 'Matching';
+    public $typePicture = 'matching.png';
+    public $explanationLangVar = 'Matching';
 
     /**
      * Constructor.

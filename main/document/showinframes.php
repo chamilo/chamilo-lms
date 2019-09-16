@@ -236,10 +236,10 @@ if (!$playerSupported && $execute_iframe) {
         };
 
         // Fixes the content height of the frame
-        window.onload = function() {
+        $(window).on("load", function() {
             updateContentHeight();
             '.$frameReady.'
-        }
+        )}
     </script>';
 }
 

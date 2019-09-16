@@ -1,4 +1,5 @@
 <?php
+/* For licensing terms, see /license.txt */
 
 namespace Chamilo\ThemeBundle\DependencyInjection;
 
@@ -17,8 +18,7 @@ class Configuration implements ConfigurationInterface
      */
     public function getConfigTreeBuilder()
     {
-        $treeBuilder = new TreeBuilder();
-        $treeBuilder->root('theme_bundle');
+        $treeBuilder = new TreeBuilder('theme_bundle');
 
         return $treeBuilder;
     }

@@ -178,10 +178,6 @@ class SettingsController extends SyliusSettingsController
             if (!empty($keywordFromGet)) {
                 return $this->redirect($request->headers->get('referer'));
             }
-
-            /*if ($request->headers->has('referer')) {
-                return $this->redirect($request->headers->get('referer'));
-            }*/
         }
         $schemas = $manager->getSchemas();
 

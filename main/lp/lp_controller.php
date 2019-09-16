@@ -95,6 +95,56 @@ $htmlHeadXtra[] = '
                 $(ui.item).css("width", "100%");
             }
         });
+                
+        $(".li_container .order_items").click(function(e) {            
+            var dir = $(this).data("dir");
+            var itemId = $(this).data("id");             
+            var jItems = $("#lp_item_list li.li_container");            
+            var jItem = $("#"+ itemId);          
+            var index = jItems.index(jItem);
+            var total = jItems.length;
+            switch (dir) {
+                case "up":
+                    if (index != 0 && jItems[index - 1]) {
+                        var subItems = $(jItems[index - 1]).find("li.sub_item");
+                        if (subItems.length >= 0) {
+                            index = index - 1;
+                        }
+                        jItem.detach().insertBefore(jItems[index - 1]);
+                    }                                        
+                    break;
+                case "down":
+                     if (index != jItems.length - 1) {                        
+                        var subItems = jItem.find("li.li_container");  
+                        if (subItems.length >= 0) { 
+                            index = subItems.length + index;
+                        }                  
+                        
+                        // is a chapter?
+                        var subItems = $(jItems[index + 1]).find("li.sub_item");
+                        if (subItems.length >= 0) {
+                            index = index + 1; 
+                        }
+                        if ((index + 1) < total) {
+                            jItem.detach().insertAfter(jItems[index + 1]);
+                        }
+                     }
+                     break;
+            }   
+            
+            buildLPtree($("#lp_item_list"), 0);
+            
+            var order = "new_order="+ newOrderData + "&a=update_lp_item_order";
+            $.post(
+                "'.$ajax_url.'",
+                order,
+                function(reponse) {
+                    $("#message").html(reponse);
+                    order = "";
+                    newOrderData = "";
+                }
+            );            
+        });
 
         $("#lp_item_list").sortable({
             items: "li",
@@ -1201,24 +1251,11 @@ switch ($action) {
         }
         break;
     case 'content':
-        if ($debug > 0) {
-            error_log('lp_controller: action: content');
-            error_log('Item id is '.intval($_GET['item_id']));
-        }
         if (!$lp_found) {
             require 'lp_list.php';
         } else {
-            if ($debug > 0) {
-                error_log('save_last()');
-            }
             $_SESSION['oLP']->save_last();
-            if ($debug > 0) {
-                error_log('set_current_item('.$_GET['item_id'].')');
-            }
             $_SESSION['oLP']->set_current_item($_GET['item_id']);
-            if ($debug > 0) {
-                error_log('start_current_item()');
-            }
             $_SESSION['oLP']->start_current_item();
             require 'lp_content.php';
         }
@@ -1227,9 +1264,6 @@ switch ($action) {
         if (!$lp_found) {
             require 'lp_list.php';
         } else {
-            if ($debug > 0) {
-                error_log('Trying to set current item to '.$_REQUEST['item_id'], 0);
-            }
             if (!empty($_REQUEST['item_id'])) {
                 $_SESSION['oLP']->set_current_item($_REQUEST['item_id']);
             }

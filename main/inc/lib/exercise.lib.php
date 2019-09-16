@@ -14,7 +14,6 @@ use ChamiloSession as Session;
  * @author Hubert Borderiou 2011-10-21
  * @author ivantcholakov2009-07-20
  * @author Julio Montoya
- *
  */
 class ExerciseLib
 {
@@ -50,6 +49,7 @@ class ExerciseLib
         $show_icon = false
     ) {
         $course_id = $exercise->course_id;
+        $exerciseId = $exercise->iId;
 
         if (empty($course_id)) {
             return '';
@@ -200,7 +200,7 @@ class ExerciseLib
                     // Add nanog
                     if (api_get_setting('enable_record_audio') === 'true') {
                         //@todo pass this as a parameter
-                        global $exercise_stat_info, $exerciseId;
+                        global $exercise_stat_info;
                         if (!empty($exercise_stat_info)) {
                             $objQuestionTmp->initFile(
                                 api_get_session_id(),
@@ -341,8 +341,7 @@ class ExerciseLib
                              $('.question-validate-btn').attr('disabled', 'disabled');
                         } else {
                             $('.question-validate-btn').removeAttr('disabled');
-                        }
-                    
+                        }                    
                     });
                 </script>";
 
@@ -361,6 +360,7 @@ class ExerciseLib
                         $header .= Display::tag('th', $item);
                     }
                 }
+
                 if ($show_comment) {
                     $header .= Display::tag('th', get_lang('Feedback'));
                 }
@@ -374,15 +374,18 @@ class ExerciseLib
                 foreach ($objQuestionTmp->options as $item) {
                     $colorBorder1 = ($cpt1 == (count($objQuestionTmp->options) - 1))
                         ? '' : 'border-right: solid #FFFFFF 1px;';
-                    if ($item == 'True' || $item == 'False') {
-                        $header1 .= Display::tag('th',
+                    if ($item === 'True' || $item === 'False') {
+                        $header1 .= Display::tag(
+                            'th',
                             get_lang($item),
                             ['style' => 'background-color: #F7C9B4; color: black;'.$colorBorder1]
                         );
                     } else {
-                        $header1 .= Display::tag('th',
+                        $header1 .= Display::tag(
+                            'th',
                             $item,
-                            ['style' => 'background-color: #e6e6ff; color: black;padding:5px; '.$colorBorder1]);
+                            ['style' => 'background-color: #e6e6ff; color: black;padding:5px; '.$colorBorder1]
+                        );
                     }
                     $cpt1++;
                 }
@@ -403,7 +406,6 @@ class ExerciseLib
                     get_lang('DegreeOfCertaintyIAmVerySure'),
                 ];
                 $counter2 = 0;
-
                 foreach ($objQuestionTmp->options as $item) {
                     if ($item == 'True' || $item == 'False') {
                         $header2 .= Display::tag('td',
@@ -1387,7 +1389,7 @@ HTML;
             }
             echo $s;
         } elseif ($answerType == HOT_SPOT || $answerType == HOT_SPOT_DELINEATION) {
-            global $exerciseId, $exe_id;
+            global $exe_id;
             // Question is a HOT_SPOT
             // Checking document/images visibility
             if (api_is_platform_admin() || api_is_course_admin()) {
@@ -1464,14 +1466,14 @@ HTML;
                             </div>
                         </div>
                         <script>
-                                new ".($answerType == HOT_SPOT ? "HotspotQuestion" : "DelineationQuestion")."({
-                                    questionId: $questionId,
-                                    exerciseId: $exerciseId,
-                                    exeId: 0,
-                                    selector: '#hotspot-preview-$questionId',
-                                    for: 'preview',
-                                    relPath: '$relPath'
-                                });
+                            new ".($answerType == HOT_SPOT ? "HotspotQuestion" : "DelineationQuestion")."({
+                                questionId: $questionId,
+                                exerciseId: $exerciseId,
+                                exeId: 0,
+                                selector: '#hotspot-preview-$questionId',
+                                for: 'preview',
+                                relPath: '$relPath'
+                            });
                         </script>
                     ";
 
@@ -1502,7 +1504,7 @@ HOTSPOT;
                         $(function() {
                             new ".($answerType == HOT_SPOT_DELINEATION ? 'DelineationQuestion' : 'HotspotQuestion')."({
                                 questionId: $questionId,
-                                exerciseId: $exe_id,
+                                exerciseId: $exerciseId,
                                 selector: '#question_div_' + $questionId + ' .hotspot-image',
                                 for: 'user',
                                 relPath: '$relPath'
@@ -1567,7 +1569,7 @@ HOTSPOT;
                                 <script>
                                     AnnotationQuestion({
                                         questionId: '.$questionId.',
-                                        exerciseId: '.$exe_id.',
+                                        exerciseId: '.$exerciseId.',
                                         relPath: \''.$relPath.'\',
                                         courseId: '.$course_id.',
                                     });
@@ -1971,14 +1973,15 @@ HOTSPOT;
         $roundValues = false
     ) {
         //@todo replace all this globals
-        global $documentPath, $filter;
-
+        global $filter;
         $courseCode = empty($courseCode) ? api_get_course_id() : $courseCode;
         $courseInfo = api_get_course_info($courseCode);
 
         if (empty($courseInfo)) {
             return [];
         }
+
+        $documentPath = api_get_path(SYS_COURSE_PATH).$courseInfo['path'].'/document';
 
         $course_id = $courseInfo['real_id'];
         $sessionId = api_get_session_id();
@@ -2133,7 +2136,7 @@ HOTSPOT;
             $first_and_last_name = api_is_western_name_order() ? "firstname, lastname" : "lastname, firstname";
 
             if ($get_count) {
-                $sql_select = "SELECT count(te.exe_id) ";
+                $sql_select = 'SELECT count(te.exe_id) ';
             } else {
                 $sql_select = "SELECT DISTINCT
                     user_id,
@@ -2199,8 +2202,8 @@ HOTSPOT;
                     AND tth.c_id = $course_id
                     $hotpotatoe_where
                     $sqlWhereOption
-                    AND user.status NOT IN(".api_get_users_status_ignored_in_reports('string').")
-                ORDER BY tth.c_id ASC, tth.exe_date DESC";
+                    AND user.status NOT IN (".api_get_users_status_ignored_in_reports('string').")
+                ORDER BY tth.c_id ASC, tth.exe_date DESC ";
         }
 
         if (empty($sql)) {
@@ -2214,9 +2217,7 @@ HOTSPOT;
             return $rowx[0];
         }
 
-        $teacher_list = CourseManager::get_teacher_list_from_course_code(
-            $courseCode
-        );
+        $teacher_list = CourseManager::get_teacher_list_from_course_code($courseCode);
         $teacher_id_list = [];
         if (!empty($teacher_list)) {
             foreach ($teacher_list as $teacher) {
@@ -2270,7 +2271,6 @@ HOTSPOT;
                     $from_gradebook = true;
                 }
                 $sizeof = count($results);
-                $user_list_id = [];
                 $locked = api_resource_is_locked_by_gradebook(
                     $exercise_id,
                     LINK_EXERCISE
@@ -2349,7 +2349,6 @@ HOTSPOT;
                     }
 
                     $results[$i]['exe_duration'] = !empty($results[$i]['exe_duration']) ? round($results[$i]['exe_duration'] / 60) : 0;
-                    $user_list_id[] = $results[$i]['exe_user_id'];
                     $id = $results[$i]['exe_id'];
                     $dt = api_convert_and_format_date($results[$i]['max_score']);
 
@@ -2829,6 +2828,7 @@ HOTSPOT;
             $score = $result['score'];
             $weight = $result['weight'];
         }
+
         $percentage = (100 * $score) / ($weight != 0 ? $weight : 1);
         // Formats values
         $percentage = float_format($percentage, 1);
@@ -2884,6 +2884,13 @@ HOTSPOT;
         $scoreBasedInModel = self::convertScoreToModel($percentage);
         if (!empty($scoreBasedInModel)) {
             $html = $scoreBasedInModel;
+        }
+
+        // Ignore other formats and use the configuratio['exercise_score_format'] value
+        // But also keep the round values settings.
+        $format = api_get_configuration_value('exercise_score_format');
+        if (!empty($format)) {
+            $html = ScoreDisplay::instance()->display_score([$score, $weight], $format);
         }
 
         $html = Display::span($html, ['class' => 'score_exercise']);
@@ -3185,17 +3192,16 @@ EOT;
         }
 
         $now = api_get_utc_datetime();
-        $time_conditions = '';
-
+        $timeConditions = '';
         if ($check_publication_dates) {
-            //start and end are set
-            $time_conditions = " AND ((start_time <> '' AND start_time < '$now' AND end_time <> '' AND end_time > '$now' )  OR ";
+            // Start and end are set
+            $timeConditions = " AND ((start_time <> '' AND start_time < '$now' AND end_time <> '' AND end_time > '$now' )  OR ";
             // only start is set
-            $time_conditions .= " (start_time <> '' AND start_time < '$now' AND end_time is NULL) OR ";
+            $timeConditions .= " (start_time <> '' AND start_time < '$now' AND end_time is NULL) OR ";
             // only end is set
-            $time_conditions .= " (start_time IS NULL AND end_time <> '' AND end_time > '$now') OR ";
+            $timeConditions .= " (start_time IS NULL AND end_time <> '' AND end_time > '$now') OR ";
             // nothing is set
-            $time_conditions .= ' (start_time IS NULL AND end_time IS NULL)) ';
+            $timeConditions .= ' (start_time IS NULL AND end_time IS NULL)) ';
         }
 
         $needle_where = !empty($search) ? " AND title LIKE '?' " : '';
@@ -3214,7 +3220,7 @@ EOT;
         if ($search_all_sessions == true) {
             $conditions = [
                 'where' => [
-                    $active_sql.' c_id = ? '.$needle_where.$time_conditions => [
+                    $active_sql.' c_id = ? '.$needle_where.$timeConditions => [
                         $course_id,
                         $needle,
                     ],
@@ -3225,7 +3231,7 @@ EOT;
             if (empty($session_id)) {
                 $conditions = [
                     'where' => [
-                        $active_sql.' (session_id = 0 OR session_id IS NULL) AND c_id = ? '.$needle_where.$time_conditions => [
+                        $active_sql.' (session_id = 0 OR session_id IS NULL) AND c_id = ? '.$needle_where.$timeConditions => [
                             $course_id,
                             $needle,
                         ],
@@ -3235,7 +3241,7 @@ EOT;
             } else {
                 $conditions = [
                     'where' => [
-                        $active_sql.' (session_id = 0 OR session_id IS NULL OR session_id = ? ) AND c_id = ? '.$needle_where.$time_conditions => [
+                        $active_sql.' (session_id = 0 OR session_id IS NULL OR session_id = ? ) AND c_id = ? '.$needle_where.$timeConditions => [
                             $session_id,
                             $course_id,
                             $needle,
@@ -3247,32 +3253,6 @@ EOT;
         }
 
         $table = Database::get_course_table(TABLE_QUIZ_TEST);
-
-        return Database::select('*', $table, $conditions);
-    }
-
-    /**
-     * Get exercise information by id.
-     *
-     * @param int $exerciseId Exercise Id
-     * @param int $courseId   The course ID (necessary as c_quiz.id is not unique)
-     *
-     * @return array Exercise info
-     */
-    public static function get_exercise_by_id($exerciseId = 0, $courseId = 0)
-    {
-        $table = Database::get_course_table(TABLE_QUIZ_TEST);
-        if (empty($courseId)) {
-            $courseId = api_get_course_int_id();
-        } else {
-            $courseId = intval($courseId);
-        }
-        $conditions = [
-            'where' => [
-                'id = ?' => [$exerciseId],
-                ' AND c_id = ? ' => $courseId,
-            ],
-        ];
 
         return Database::select('*', $table, $conditions);
     }
@@ -3791,10 +3771,10 @@ EOT;
         $track_exercises = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
         $track_attempt = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
 
-        $question_id = intval($question_id);
-        $exercise_id = intval($exercise_id);
+        $question_id = (int) $question_id;
+        $exercise_id = (int) $exercise_id;
         $course_code = Database::escape_string($course_code);
-        $session_id = intval($session_id);
+        $session_id = (int) $session_id;
         $courseId = api_get_course_int_id($course_code);
 
         $sql = "SELECT MAX(marks) as max, MIN(marks) as min, AVG(marks) as average
@@ -3982,7 +3962,6 @@ EOT;
         $track_hotspot = Database::get_main_table(TABLE_STATISTIC_TRACK_E_HOTSPOT);
         $courseUser = Database::get_main_table(TABLE_MAIN_COURSE_USER);
         $courseTable = Database::get_main_table(TABLE_MAIN_COURSE);
-
         $courseUserSession = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 
         $question_id = (int) $question_id;
@@ -4437,7 +4416,6 @@ EOT;
         // Hide results
         $show_results = false;
         $show_only_score = false;
-
         if (in_array($objExercise->results_disabled,
             [
                 RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER,
@@ -4987,8 +4965,8 @@ EOT;
         usort(
             $data,
             function ($a, $b) {
-                if ($a['exe_result'] != $b['exe_result']) {
-                    return $a['exe_result'] > $b['exe_result'] ? -1 : 1;
+                if ($a['score'] != $b['score']) {
+                    return $a['score'] > $b['score'] ? -1 : 1;
                 }
 
                 if ($a['exe_date'] != $b['exe_date']) {
@@ -5000,21 +4978,21 @@ EOT;
         );
 
         // flags to display the same position in case of tie
-        $lastScore = $data[0]['exe_result'];
+        $lastScore = $data[0]['score'];
         $position = 1;
 
         $data = array_map(
             function ($item) use (&$lastScore, &$position) {
-                if ($item['exe_result'] < $lastScore) {
+                if ($item['score'] < $lastScore) {
                     $position++;
                 }
 
-                $lastScore = $item['exe_result'];
+                $lastScore = $item['score'];
 
                 return [
                     $position,
                     api_get_user_entity($item['exe_user_id']),
-                    self::show_score($item['exe_result'], $item['exe_weighting'], true, true, true),
+                    self::show_score($item['score'], $item['max_score'], true, true, true),
                     api_convert_and_format_date($item['exe_date'], DATE_TIME_FORMAT_SHORT),
                 ];
             },
@@ -5062,7 +5040,6 @@ EOT;
             $ribbon .= '<h3>'.get_lang('YourTotalScore').':&nbsp;';
             $ribbon .= self::show_score($score, $weight, false, true);
             $ribbon .= '</h3>';
-
             $ribbon .= '</div>';
         }
 

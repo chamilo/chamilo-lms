@@ -8,10 +8,7 @@ use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Resource\AbstractResource;
 use Chamilo\CoreBundle\Entity\Resource\ResourceInterface;
 use Chamilo\CoreBundle\Entity\Resource\ResourceLink;
-use Chamilo\CoreBundle\Entity\Resource\ResourceNode;
-use Chamilo\CoreBundle\Entity\Resource\ResourceRight;
 use Chamilo\CoreBundle\Entity\Session;
-use Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Mapping as ORM;
@@ -356,7 +353,7 @@ class CDocument extends AbstractResource implements ResourceInterface
     }
 
     /**
-     * Visiblity types ResourceLink::VISIBILITY_DELETED
+     * Visiblity types ResourceLink::VISIBILITY_DELETED.
      *
      * @return int
      */
@@ -364,7 +361,6 @@ class CDocument extends AbstractResource implements ResourceInterface
     {
         return $this->getCourseSessionResourceLink()->getVisibility();
     }
-
 
     public function isVisible()
     {
@@ -382,7 +378,7 @@ class CDocument extends AbstractResource implements ResourceInterface
         $em = $args->getEntityManager();
         $this->setId($this->iid);
         $em->persist($this);
-        $em->flush($this);
+        $em->flush();
     }
 
     /**

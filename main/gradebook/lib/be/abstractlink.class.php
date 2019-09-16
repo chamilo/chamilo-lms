@@ -721,6 +721,8 @@ abstract class AbstractLink implements GradebookItem
         $itemId = (int) $itemId;
         $linkType = (int) $linkType;
         $sessionId = (int) $sessionId;
+
+        $sessionCondition = api_get_session_condition($sessionId, true, false, 'c.session_id');
         $courseCode = Database::escape_string($courseCode);
 
         $sql = "SELECT DISTINCT l.* 
@@ -729,8 +731,8 @@ abstract class AbstractLink implements GradebookItem
                 WHERE 
                     ref_id = $itemId AND 
                     type = $linkType AND 
-                    l.course_code = '$courseCode' AND 
-                    c.session_id = $sessionId";
+                    l.course_code = '$courseCode' 
+                    $sessionCondition ";
 
         $result = Database::query($sql);
         if (Database::num_rows($result)) {

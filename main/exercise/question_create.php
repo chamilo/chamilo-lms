@@ -31,7 +31,7 @@ $form = new FormValidator('add_question', 'post', api_get_self().'?'.api_get_cid
 // form title
 $form->addElement('header', '', get_lang('AddQuestionToExercise'));
 
-$question_list = Question::get_question_type_list();
+$question_list = Question::getQuestionTypeList();
 $question_list_options = [];
 foreach ($question_list as $key => $value) {
     $question_list_options[$key] = addslashes(get_lang($value[1]));
@@ -117,7 +117,7 @@ if ($form->validate()) {
 
 function check_question_type($parameter)
 {
-    $question_list = Question::get_question_type_list();
+    $question_list = Question::getQuestionTypeList();
     foreach ($question_list as $key => $value) {
         $valid_question_types[] = $key;
     }

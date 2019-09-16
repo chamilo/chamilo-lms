@@ -1046,7 +1046,7 @@ class IndexManager
         $loadHistory = false
     ) {
         $gameModeIsActive = api_get_setting('gamification_mode');
-
+        $viewGridCourses = api_get_configuration_value('view_grid_courses');
         $showSimpleSessionInfo = api_get_configuration_value('show_simple_session_info');
         $coursesTemplate = '/user_portal/list_courses.html.twig';
         $showAllSessions = api_get_configuration_value('show_all_sessions_on_my_course_page') === true;
@@ -1065,7 +1065,6 @@ class IndexManager
         // Student info code check (shows student progress information on
         // courses list
         $studentInfo = api_get_configuration_value('course_student_info');
-        $viewGrid = api_get_configuration_value('view_grid_courses');
 
         $studentInfoProgress = !empty($studentInfo['progress']) && $studentInfo['progress'] === true;
         $studentInfoScore = !empty($studentInfo['score']) && $studentInfo['score'] === true;
@@ -1077,7 +1076,7 @@ class IndexManager
         $specialCourseList = '';
 
         // If we're not in the history view...
-        if ($loadHistory == false) {
+        if ($loadHistory === false) {
             // Display special courses.
             $specialCourses = CourseManager::returnSpecialCourses(
                 $user_id,
@@ -1145,10 +1144,11 @@ class IndexManager
                     foreach ($courses['in_category'] as $key1 => $value) {
                         if (isset($courses['in_category'][$key1]['courses'])) {
                             foreach ($courses['in_category'][$key1]['courses'] as $key2 => $courseInCatInfo) {
+                                $courseCode = $courseInCatInfo['course_code'];
                                 if ($studentInfoProgress) {
                                     $progress = Tracking::get_avg_student_progress(
                                         $user_id,
-                                        $courseInCatInfo['course_code']
+                                        $courseCode
                                     );
                                     $courses['in_category'][$key1]['courses'][$key2]['student_info']['progress'] = $progress === false ? null : $progress;
                                 }
@@ -1156,7 +1156,7 @@ class IndexManager
                                 if ($studentInfoScore) {
                                     $percentage_score = Tracking::get_avg_student_score(
                                         $user_id,
-                                        $specialCourseInfo['course_code'],
+                                        $courseCode,
                                         []
                                     );
                                     $courses['in_category'][$key1]['courses'][$key2]['student_info']['score'] = $percentage_score;
@@ -1166,7 +1166,7 @@ class IndexManager
                                     $category = Category::load(
                                         null,
                                         null,
-                                        $courseInCatInfo['course_code'],
+                                        $courseCode,
                                         null,
                                         null,
                                         null
@@ -1174,7 +1174,7 @@ class IndexManager
                                     $courses['in_category'][$key1]['student_info']['certificate'] = null;
                                     $isCertificateAvailable = $category[0]->is_certificate_available($user_id);
                                     if (isset($category[0])) {
-                                        if ($viewGrid) {
+                                        if ($viewGridCourses) {
                                             if ($isCertificateAvailable) {
                                                 $courses['in_category'][$key1]['student_info']['certificate'] = get_lang(
                                                     'Yes'
@@ -1206,10 +1206,11 @@ class IndexManager
 
                 if (isset($courses['not_category'])) {
                     foreach ($courses['not_category'] as $key => $courseNotInCatInfo) {
+                        $courseCode = $courseNotInCatInfo['course_code'];
                         if ($studentInfoProgress) {
                             $progress = Tracking::get_avg_student_progress(
                                 $user_id,
-                                $courseNotInCatInfo['course_code']
+                                $courseCode
                             );
                             $courses['not_category'][$key]['student_info']['progress'] = $progress === false ? null : $progress;
                         }
@@ -1217,7 +1218,7 @@ class IndexManager
                         if ($studentInfoScore) {
                             $percentage_score = Tracking::get_avg_student_score(
                                 $user_id,
-                                $courseNotInCatInfo['course_code'],
+                                $courseCode,
                                 []
                             );
                             $courses['not_category'][$key]['student_info']['score'] = $percentage_score;
@@ -1227,7 +1228,7 @@ class IndexManager
                             $category = Category::load(
                                 null,
                                 null,
-                                $courseNotInCatInfo['course_code'],
+                                $courseCode,
                                 null,
                                 null,
                                 null
@@ -1236,7 +1237,7 @@ class IndexManager
 
                             if (isset($category[0])) {
                                 $certificateAvailable = $category[0]->is_certificate_available($user_id);
-                                if ($viewGrid) {
+                                if ($viewGridCourses) {
                                     if ($certificateAvailable) {
                                         $courses['not_category'][$key]['student_info']['certificate'] = get_lang('Yes');
                                     } else {
@@ -1486,8 +1487,8 @@ class IndexManager
                             $params['courses'] = $list_courses_session;
                             $params['is_old'] = $markAsOld;
                             $params['is_future'] = $markAsFuture;
-                            $params['category'] = $session_box['category'];
-                            $params['color'] = Display::randomColor($session_box['category']['id']);
+                            //$params['category'] = $session_box['category'];
+                           //$params['color'] = Display::randomColor($session_box['category']['id']);
 
                             if ($showSimpleSessionInfo) {
                                 $params['subtitle'] = self::getSimpleSessionDetails(

@@ -157,7 +157,7 @@ See https://support.chamilo.org/issues/6976
 }
 
 .inner_lp_toc .scorm_item_section .scorm_item:before {
-    content: url('../../public/img/lp_section.png'); /* path from main/lp/lp_controller.php file */
+    content: url('#{$img-path}lp_section.png'); /* path from main/lp/lp_controller.php file */
     vertical-align: text-top;
     margin-right: 5px;
 }
@@ -298,12 +298,12 @@ See https://support.chamilo.org/issues/6976
 }
 
 .scorm_item_section .section {
-    background: url("../../public/img/scorm/folder-item-closed.png") no-repeat 10px center;
+    background: url("#{$img-path}scorm/folder-item-closed.png") no-repeat 10px center;
     padding: 10px 20px 10px 35px;
 }
 
 .scorm_item_section.scorm_completed .section {
-    background: url("../../public/img/scorm/folder-item-open.png") no-repeat 10px center;
+    background: url("#{$img-path}scorm/folder-item-open.png") no-repeat 10px center;
     padding-right: 1.5em;
 }
 
@@ -327,7 +327,7 @@ See https://support.chamilo.org/issues/6976
 }
 
 .scorm_completed .item {
-    background: url("../../public/img/scorm/scorm_completed.png") no-repeat 10px center;
+    background: url("#{$img-path}scorm/scorm_completed.png") no-repeat 10px center;
 }
 
 .scorm_completed .item a {
@@ -335,24 +335,24 @@ See https://support.chamilo.org/issues/6976
 }
 
 .scorm_failed .item {
-    background: url("../../public/img/scorm/scorm_failed.png") no-repeat 10px center;
+    background: url("#{$img-path}scorm/scorm_failed.png") no-repeat 10px center;
 }
 
 .scorm_not_attempted .item {
-    background: url("../../public/img/scorm/scorm_not_attempted.png") no-repeat 10px center;
+    background: url("#{$img-path}scorm/scorm_not_attempted.png") no-repeat 10px center;
 }
 
 .scorm_highlight .item {
-    background: url("../../public/img/scorm/scorm_highlight.png") no-repeat 10px center !important;
+    background: url("#{$img-path}scorm/scorm_highlight.png") no-repeat 10px center !important;
     color: #009AB8;
 }
 
 .scorm_highlight.scorm_completed .item {
-    background: url("../../public/img/scorm/scorm_current.png") no-repeat 10px center !important;
+    background: url("#{$img-path}scorm/scorm_current.png") no-repeat 10px center !important;
 }
 
 .scorm_highlight.scorm_failed .item {
-    background: url("../../public/img/scorm/scorm_failed.png") no-repeat 10px center !important;
+    background: url("#{$img-path}scorm/scorm_failed.png") no-repeat 10px center !important;
 }
 
 .scorm_highlight a {
@@ -577,7 +577,7 @@ See https://support.chamilo.org/issues/6976
 }
 
 .scorm-collapse .panel-default .panel-heading {
-    background: url(../../public/img/icons/svg/arrow-down.svg) #FFF right center no-repeat;
+    background: url(#{$img-path}icons/svg/arrow-down.svg) #FFF right center no-repeat;
     padding-top: 0;
     padding-bottom: 0;
 }
@@ -623,19 +623,19 @@ See https://support.chamilo.org/issues/6976
 }
 
 .scorm_item_normal.scorm_completed {
-    background: url(../../public/img/icons/svg/check-completed.svg) #F5F5F5 right center no-repeat;
+    background: url(#{$img-path}icons/svg/check-completed.svg) #F5F5F5 right center no-repeat;
 }
 
 .scorm_item_normal.scorm_not_attempted {
-    background: url(../../public/img/icons/svg/check-not-attempted.svg) #FFFFFF right center no-repeat;
+    background: url(#{$img-path}icons/svg/check-not-attempted.svg) #FFFFFF right center no-repeat;
 }
 
 .scorm_item_normal.scorm_highlight.scorm_not_attempted {
-    background: url(../../public/img/icons/svg/check-not-attempted.svg) #00829C right center no-repeat;
+    background: url(#{$img-path}icons/svg/check-not-attempted.svg) #00829C right center no-repeat;
 }
 
 .scorm_item_normal.scorm_highlight.scorm_completed {
-    background: url(../../public/img/icons/svg/check-highlight.svg) #00829C right center no-repeat;
+    background: url(#{$img-path}icons/svg/check-highlight.svg) #00829C right center no-repeat;
 }
 
 .sidebar-scorm {

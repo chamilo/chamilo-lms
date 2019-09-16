@@ -21,6 +21,8 @@ class ScoreDisplay
 
     /**
      * Protected constructor - call instance() to instantiate.
+     *
+     * @param int $category_id
      */
     public function __construct($category_id = 0)
     {
@@ -53,7 +55,7 @@ class ScoreDisplay
                 foreach ($displays as $display) {
                     $data = explode('::', $display['selected_value']);
                     if (empty($data[1])) {
-                        $data[1] = "";
+                        $data[1] = '';
                     }
                     $portal_displays[$data[0]] = [
                         'score' => $data[0],

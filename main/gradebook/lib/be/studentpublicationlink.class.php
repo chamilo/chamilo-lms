@@ -10,8 +10,8 @@
  */
 class StudentPublicationLink extends AbstractLink
 {
-    private $studpub_table = null;
-    private $itemprop_table = null;
+    private $studpub_table;
+    private $itemprop_table;
 
     /**
      * Constructor.

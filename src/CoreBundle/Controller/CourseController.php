@@ -7,7 +7,6 @@ use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Form\Type\CourseType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -16,7 +15,7 @@ use Symfony\Component\Routing\Annotation\Route;
 /**
  * Class CourseController.
  *
- * @Route("/course")
+ * @Route("/courses")
  *
  * @package Chamilo\CoreBundle\Controller
  */
@@ -26,8 +25,6 @@ class CourseController extends AbstractController
      * @Route("/add")
      *
      * @Security("has_role('ROLE_TEACHER')")
-     *
-     * @Template
      *
      * @return Response
      */
@@ -51,9 +48,10 @@ class CourseController extends AbstractController
             );
         }
 
-        return [
+        /*return [
             'form' => $form->createView(),
-        ];
+        ];*/
+        //return $this->render('ChamiloThemeBundle:Default:index.html.twig');
     }
 
     /**
@@ -64,10 +62,9 @@ class CourseController extends AbstractController
      *      class="ChamiloCoreBundle:Course",
      *      options={"repository_method" = "findOneByCode"}
      * )
-     * @Template
      */
     public function welcomeAction(Course $course)
     {
-        return ['course' => $course];
+        return $this->render('@ChamiloTheme/Course/welcome.html.twig', ['course' => $course]);
     }
 }

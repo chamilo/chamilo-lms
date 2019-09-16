@@ -116,8 +116,8 @@ if (!$useEvaluationPlugin) {
 $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
 
 $sql = "UPDATE $table SET
-          exe_result = '$totalScore',
-          exe_weighting = '$totalWeight'
+          score = '$totalScore',
+          max_score = '$totalWeight'
         WHERE exe_id = $exeId";
 Database::query($sql);
 

@@ -18,8 +18,8 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
     const LEVEL_LIGHTRED = 4;
     const LEVEL_DARKRED = 5;
 
-    public static $typePicture = 'mccert.png';
-    public static $explanationLangVar = 'MultipleAnswerTrueFalseDegreeCertainty';
+    public $typePicture = 'mccert.png';
+    public $explanationLangVar = 'MultipleAnswerTrueFalseDegreeCertainty';
     public $optionsTitle;
     public $options;
 

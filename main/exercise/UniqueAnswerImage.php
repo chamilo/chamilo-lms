@@ -10,8 +10,8 @@ use ChamiloSession as Session;
  */
 class UniqueAnswerImage extends UniqueAnswer
 {
-    public static $typePicture = 'uaimg.png';
-    public static $explanationLangVar = 'UniqueAnswerImage';
+    public $typePicture = 'uaimg.png';
+    public $explanationLangVar = 'UniqueAnswerImage';
 
     /**
      * UniqueAnswerImage constructor.
@@ -119,7 +119,6 @@ class UniqueAnswerImage extends UniqueAnswer
         }
 
         $tempScenario = [];
-
         if ($numberAnswers < 1) {
             $numberAnswers = 1;
             echo Display::return_message(get_lang('YouHaveToCreateAtLeastOneAnswer'));

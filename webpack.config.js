@@ -53,8 +53,28 @@ Encore
             pattern: /(js.cookie.js)$/,
             to: 'libs/js-cookie/src/js.cookie.js'
         },
+        {
+            from: './node_modules/mathjax/',
+            pattern: /(MathJax.js)$/,
+            to: 'libs/mathjax/MathJax.js'
+        },
     ])
 ;
+
+Encore.addPlugin(new copyWebpackPlugin([
+    {
+        from: './node_modules/mediaelement/build',
+        to: 'libs/mediaelement'
+    },
+    {
+        from: './node_modules/mediaelement-plugins/dist',
+        to: 'libs/mediaelement/plugins'
+    },
+    {
+        from: './node_modules/mathjax/config',
+        to: 'libs/mathjax/config'
+    },
+]));
 
 // Encore.addPlugin(new copyWebpackPlugin([{
 //     from: 'assets/css/themes/' + theme + '/images',
@@ -77,7 +97,7 @@ themes.forEach(function (theme) {
     ]));
 });
 
-// Fix free-jqgrid langiages files
+// Fix free-jqgrid languages files
 Encore.addPlugin(new fileManagerPlugin({
     onEnd: {
         move: [

@@ -3,7 +3,6 @@
 
 namespace Chamilo\CoreBundle\Controller;
 
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -19,15 +18,11 @@ class UserController extends BaseController
      * @Route("/{username}", methods={"GET"})
      *
      * @param string $username
-     *
-     * @Template("ChamiloCoreBundle:User:profile.html.twig")
-     *
-     * @return array
      */
     public function profileAction($username): array
     {
         $user = $this->container->get('fos_user.user_manager')->findUserByUsername($username);
 
-        return ['user' => $user];
+        return $this->render('@ChamiloCore/User/profile.html.twig', ['user' => $user]);
     }
 }

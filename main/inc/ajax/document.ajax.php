@@ -6,7 +6,6 @@ use Chamilo\CoreBundle\Framework\Container;
 /**
  * Responses to AJAX calls for the document upload.
  */
-
 require_once __DIR__.'/../global.inc.php';
 
 $action = $_REQUEST['a'];
@@ -18,8 +17,7 @@ switch ($action) {
 
         $repo = Container::$container->get('Chamilo\CourseBundle\Repository\CDocumentRepository');
         $size = $repo->getFolderSize(api_get_course_int_id(), $path);
-        //var_dump($size);
-        //$size = DocumentManager::getTotalFolderSize($path, $isAllowedToEdit);
+
         echo format_file_size($size);
         break;
     case 'get_document_quota':
@@ -27,7 +25,6 @@ switch ($action) {
         $courseQuota = DocumentManager::get_course_quota();
 
         // Calculating the total space
-        //$total = DocumentManager::getTotalSpace(api_get_course_int_id());
         $repo = Container::$container->get('Chamilo\CourseBundle\Repository\CDocumentRepository');
         $total = $repo->getTotalSpace(api_get_course_int_id());
 

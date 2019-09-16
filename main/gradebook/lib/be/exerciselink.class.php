@@ -362,11 +362,11 @@ class ExerciseLink extends AbstractLink
                     if ($data['max_score'] != 0) {
                         $students[$data['exe_user_id']] = $data['score'];
                         $student_count++;
-                        if ($data['exe_result'] > $bestResult) {
-                            $bestResult = $data['exe_result'];
+                        if ($data['score'] > $bestResult) {
+                            $bestResult = $data['score'];
                         }
                         $sum += $data['score'] / $data['max_score'];
-                        $sumResult += $data['exe_result'];
+                        $sumResult += $data['score'];
                         $weight = $data['max_score'];
                     }
                 }

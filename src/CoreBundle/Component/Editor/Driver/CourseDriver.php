@@ -435,9 +435,13 @@ class CourseDriver extends Driver implements DriverInterface
         return false;
     }
 
+    public function mount(array $opts)
+    {
+    }
+
     protected function getParents($path)
     {
-        $parents = array();
+        $parents = [];
 
         while ($path) {
             if ($file = $this->stat($path)) {
@@ -449,6 +453,7 @@ class CourseDriver extends Driver implements DriverInterface
         if (count($parents)) {
             array_pop($parents);
         }
+
         return $parents;
     }
 
@@ -462,15 +467,10 @@ class CourseDriver extends Driver implements DriverInterface
         $path = '';
         foreach ($parentsIds as $id) {
             $dir = $this->stat($id);
-            $path .= $dir['name'] . $this->separator;
+            $path .= $dir['name'].$this->separator;
         }
-        return $path . $file['name'];
-    }
 
-
-    public function mount(array $opts)
-    {
-
+        return $path.$file['name'];
     }
 
     /**

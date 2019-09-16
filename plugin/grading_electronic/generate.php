@@ -110,7 +110,7 @@ try {
 
     $fileData = [];
     $fileData[] = sprintf(
-        "1 %s %s%s",
+        '1 %s %s%s',
         $fieldProvider ? $fieldProvider['value'] : null,
         $values['course'],
         $dateStart->format('m/d/Y')

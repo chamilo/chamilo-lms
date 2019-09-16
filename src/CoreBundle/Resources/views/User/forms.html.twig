@@ -11,7 +11,7 @@
 {% endblock textarea_widget %}
 
 {% block form_widget_simple %}
-    {% spaceless %}
+    {% apply spaceless %}
         {% set attr = attr|merge({'class': attr.class|default('') ~ ' form-control'}) %}
         {% set type = type|default('text') %}
 
@@ -20,36 +20,36 @@
                         class="icon-folder-open"></i> {{ 'sylius.form.choose_file'|trans }}</span>
         {% endif %}
         {{ parent() }}
-    {% endspaceless %}
+    {% endapply %}
 {% endblock form_widget_simple %}
 
 {% block form_label %}
-    {% spaceless %}
+    {% apply spaceless %}
         {% set label_attr = label_attr|merge({'class': label_attr.class|default('col-lg-2') ~ ' control-label'}) %}
         {{ parent() }}
-    {% endspaceless %}
+    {% endapply %}
 {% endblock form_label %}
 
 {% block money_widget %}
-    {% spaceless %}
+    {% apply spaceless %}
         <div class="input-group">
             <span class="input-group-addon">{{ money_pattern|replace({'{{ widget }}': ''}) }}</span>
             {{ block('form_widget_simple') }}
         </div>
-    {% endspaceless %}
+    {% endapply %}
 {% endblock money_widget %}
 
 {% block percent_widget %}
-    {% spaceless %}
+    {% apply spaceless %}
         <div class="input-group">
             <span class="input-group-addon">%</span>
             {{ block('form_widget_simple') }}
         </div>
-    {% endspaceless %}
+    {% endapply %}
 {% endblock percent_widget %}
 
 {% block datetime_widget %}
-    {% spaceless %}
+    {% apply spaceless %}
         {% if widget == 'single_text' %}
             {{ block('form_widget_simple') }}
         {% else %}
@@ -58,11 +58,11 @@
                 {{ form_widget(form.time) }}
             </div>
         {% endif %}
-    {% endspaceless %}
+    {% endapply %}
 {% endblock datetime_widget %}
 
 {% block date_widget %}
-    {% spaceless %}
+    {% apply spaceless %}
         {% if widget == 'single_text' %}
             {{ block('form_widget_simple') }}
         {% else %}
@@ -72,22 +72,22 @@
                 '{{ day }}':   form_widget(form.day, {'attr': {'style': 'display: inline; width: 100px;'}}),
             })|raw }}
         {% endif %}
-    {% endspaceless %}
+    {% endapply %}
 {% endblock date_widget %}
 
 {% block time_widget %}
-    {% spaceless %}
+    {% apply spaceless %}
         {% if widget == 'single_text' %}
             {{ block('form_widget_simple') }}
         {% else %}
             {% set vars = widget == 'text' ? { 'attr': { 'size': 1, 'style': 'width: 60px; display: inline;' }} : {} %}
             &nbsp;{{ form_widget(form.hour, vars) }}{% if with_minutes %}:{{ form_widget(form.minute, vars) }}{% endif %}{% if with_seconds %} {{ form_widget(form.second, vars) }}{% endif %}
         {% endif %}
-    {% endspaceless %}
+    {% endapply %}
 {% endblock time_widget %}
 
 {% block form_row %}
-    {% spaceless %}
+    {% apply spaceless %}
         <div class="form-group{% if errors|length > 0 %} has-error{% endif %}">
             {{ form_label(form) }}
             <div class="col-lg-10">
@@ -101,7 +101,7 @@
                 {% endfor %}
             </div>
         </div>
-    {% endspaceless %}
+    {% endapply %}
 {% endblock form_row %}
 
 {% block sonata_media_type_widget %}

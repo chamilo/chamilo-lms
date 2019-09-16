@@ -1,4 +1,4 @@
-
+{% extends '@ChamiloTheme/Layout/layout_one_col.html.twig' %}
 {% import '@ChamiloTheme/Macros/box.html.twig' as macro %}
 
 {% block content %}
@@ -7,9 +7,6 @@
     <div class="col-md-3">
         {% include '@ChamiloTheme/Social/user_block.html.twig' %}
         {{ social_extra_info_block }}
-        <div class="social-network-menu">
-            {{ social_menu_block }}
-        </div>
     </div>
     <div id="wallMessages" class="col-md-6">
         {{ social_wall_block }}

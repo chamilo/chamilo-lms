@@ -33,7 +33,6 @@ if (isset($_REQUEST['origin']) && $_REQUEST['origin'] === 'learnpath') {
 }
 
 // To prevent the template class
-$show_learnpath = true;
 $lp_id = !empty($_GET['lp_id']) ? (int) $_GET['lp_id'] : 0;
 $sessionId = api_get_session_id();
 $course_code = api_get_course_id();
@@ -169,7 +168,7 @@ if ($allowLpItemTip) {
 }
 
 // Impress js
-if ($lp->mode == 'impress') {
+if ($lp->mode === 'impress') {
     $lp_id = $lp->get_id();
     $url = api_get_path(WEB_CODE_PATH)."lp/lp_impress.php?lp_id=$lp_id&".api_get_cidreq();
     header("Location: $url");
@@ -194,14 +193,14 @@ $htmlHeadXtra[] = '<script>
 chamilo_courseCode = "'.$course_code.'";
 </script>';
 // Document API
-$htmlHeadXtra[] = '<script src="js/documentapi.js" type="text/javascript" language="javascript"></script>';
+//$htmlHeadXtra[] = '<script src="js/documentapi.js" type="text/javascript" language="javascript"></script>';
 // Storage API
 $htmlHeadXtra[] = '<script>
 var sv_user = \''.api_get_user_id().'\';
 var sv_course = chamilo_courseCode;
 var sv_sco = \''.$lp_id.'\';
 </script>'; // FIXME fetch sco and userid from a more reliable source directly in sotrageapi.js
-$htmlHeadXtra[] = '<script type="text/javascript" src="js/storageapi.js"></script>';
+//$htmlHeadXtra[] = '<script type="text/javascript" src="js/storageapi.js"></script>';
 
 /**
  * Get a link to the corresponding document.
@@ -247,7 +246,6 @@ if (!isset($src)) {
                 ) {
                     $src = api_get_path(WEB_CODE_PATH).'lp/lp_view_item.php?lp_item_id='.$lp_item_id.'&'.api_get_cidreq();
                 }
-
                 $src = $lp->fixBlockedLinks($src);
                 $lp->start_current_item(); // starts time counter manually if asset
             } else {
@@ -419,7 +417,7 @@ if (!api_is_invitee()) {
     $progress_bar = $lp->getProgressBar();
 }
 $navigation_bar = $lp->get_navigation_bar();
-$navigation_bar_bottom = $lp->get_navigation_bar('control-bottom', 'display:none');
+$navigation_bar_bottom = $lp->get_navigation_bar('control-bottom');
 $mediaplayer = $lp->get_mediaplayer($lp->current, $autostart);
 
 $tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
@@ -546,6 +544,15 @@ $template->assign('iframe_src', $src);
 $template->assign('navigation_bar_bottom', $navigation_bar_bottom);
 $template->assign('show_left_column', $lp->getHideTableOfContents() == 0);
 
+$showMenu = 0;
+$settings = api_get_configuration_value('lp_view_settings');
+$display = isset($settings['display']) ? $settings['display'] : false;
+if (!empty($display)) {
+    $showMenu = isset($display['show_toolbar_by_default']) && $display['show_toolbar_by_default'] ? 1 : 0;
+}
+
+$template->assign('show_toolbar_by_default', $showMenu);
+
 if ($gamificationMode == 1) {
     $template->assign('gamification_stars', $lp->getCalculateStars($sessionId));
     $template->assign('gamification_points', $lp->getCalculateScore($sessionId));
@@ -554,7 +561,7 @@ if ($gamificationMode == 1) {
 $template->assign('lp_author', $lp->get_author());
 
 $lpMinTime = '';
-if (Tracking::minimunTimeAvailable(api_get_session_id(), api_get_course_int_id())) {
+if (Tracking::minimumTimeAvailable(api_get_session_id(), api_get_course_int_id())) {
     // Calulate minimum and accumulated time
     $timeLp = $_SESSION['oLP']->getAccumulateWorkTime();
     $timeTotalCourse = $_SESSION['oLP']->getAccumulateWorkTimeTotalCourse();

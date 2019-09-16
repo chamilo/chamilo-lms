@@ -1501,6 +1501,8 @@ if (!empty($error)) {
         }
         
         function save_category_now (categoryId) {
+            $(\'button[name="save_category_now"]\').prop(\'disabled\', true);
+
             var loader = $("#save_for_now_" + categoryId);
 
             loader.html(\''.Display::returnFontAwesomeIcon('spinner', null, true, 'fa-spin').'\');
@@ -1534,6 +1536,8 @@ if (!empty($error)) {
                 success: function (response) {
                     if (response === \'error\') {
                         loader.html(\''.Display::return_icon('wrong.gif').'\');
+
+                        $(\'button[name="save_category_now"]\').prop(\'disabled\', false);
                         
                         return;
                     }

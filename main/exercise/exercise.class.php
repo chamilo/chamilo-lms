@@ -3314,20 +3314,21 @@ class Exercise
     /**
      * This function was originally found in the exercise_show.php.
      *
-     * @param int    $exeId
-     * @param int    $questionId
-     * @param mixed  $choice                                    the user-selected option
-     * @param string $from                                      function is called from 'exercise_show' or
-     *                                                          'exercise_result'
-     * @param array  $exerciseResultCoordinates                 the hotspot coordinates $hotspot[$question_id] =
-     *                                                          coordinates
-     * @param bool   $saved_results                             save results in the DB or just show the reponse
-     * @param bool   $from_database                             gets information from DB or from the current selection
-     * @param bool   $show_result                               show results or not
-     * @param int    $propagate_neg
-     * @param array  $hotspot_delineation_result
-     * @param bool   $showTotalScoreAndUserChoicesInLastAttempt
-     * @param bool   $updateResults
+     * @param int          $exeId
+     * @param Question|int $question
+     * @param mixed        $choice                                    the user-selected option
+     * @param string       $from                                      function is called from 'exercise_show' or
+     *                                                                'exercise_result'
+     * @param array        $exerciseResultCoordinates                 the hotspot coordinates $hotspot[$question_id] =
+     *                                                                coordinates
+     * @param bool         $saved_results                             save results in the DB or just show the reponse
+     * @param bool         $from_database                             gets information from DB or from the current
+     *                                                                selection
+     * @param bool         $show_result                               show results or not
+     * @param int          $propagate_neg
+     * @param array        $hotspot_delineation_result
+     * @param bool         $showTotalScoreAndUserChoicesInLastAttempt
+     * @param bool         $updateResults
      *
      * @todo    reduce parameters of this function
      *
@@ -3335,7 +3336,7 @@ class Exercise
      */
     public function manage_answer(
         $exeId,
-        $questionId,
+        $question,
         $choice,
         $from = 'exercise_show',
         $exerciseResultCoordinates = [],
@@ -3385,18 +3386,26 @@ class Exercise
         $expectedAnswer = '';
         $calculatedChoice = '';
         $calculatedStatus = '';
-        $questionId = (int) $questionId;
+
+        if (is_object($question)) {
+            /** @var Question $objQuestionTmp */
+            $objQuestionTmp = $question;
+            $questionId = $objQuestionTmp->iid;
+        } else {
+            $questionId = (int) $question;
+            $objQuestionTmp = Question::read($questionId, $this->course, false);
+
+            if ($objQuestionTmp === false) {
+                return false;
+            }
+        }
+
         $exeId = (int) $exeId;
         $TBL_TRACK_ATTEMPT = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
         $table_ans = Database::get_course_table(TABLE_QUIZ_ANSWER);
 
         // Creates a temporary Question object
         $course_id = $this->course_id;
-        $objQuestionTmp = Question::read($questionId, $this->course, false);
-
-        if ($objQuestionTmp === false) {
-            return false;
-        }
 
         $questionName = $objQuestionTmp->selectTitle();
         $questionWeighting = $objQuestionTmp->selectWeighting();

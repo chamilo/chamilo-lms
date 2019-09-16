@@ -4602,7 +4602,7 @@ EOT;
                 // We're inside *one* question. Go through each possible answer for this question
                 $result = $objExercise->manage_answer(
                     $exeId,
-                    $questionId,
+                    $objQuestionTmp,
                     $choice,
                     'exercise_result',
                     $exerciseResultCoordinates,

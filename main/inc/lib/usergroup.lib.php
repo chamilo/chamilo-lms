@@ -425,6 +425,7 @@ class UserGroup extends Model
     /**
      * @param array $options
      * @param int   $type
+     * @param bool  $getCount
      *
      * @return array|bool
      */
@@ -487,7 +488,6 @@ class UserGroup extends Model
 
             return $array['count'];
         }
-
         $result = Database::query($sql);
         $array = Database::store_result($result, 'ASSOC');
 

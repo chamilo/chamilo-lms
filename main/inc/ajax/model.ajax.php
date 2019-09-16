@@ -805,6 +805,8 @@ switch ($action) {
         $obj->protectScript();
         $type = isset($_REQUEST['type']) ? $_REQUEST['type'] : 'registered';
         $groupFilter = isset($_REQUEST['group_filter']) ? (int) $_REQUEST['group_filter'] : 0;
+        $keyword = isset($_REQUEST['keyword']) ? $_REQUEST['keyword'] : '';
+
         $course_id = api_get_course_int_id();
         $options = [];
         $options['course_id'] = $course_id;
@@ -812,6 +814,9 @@ switch ($action) {
         switch ($type) {
             case 'not_registered':
                 $options['where'] = [' (course_id IS NULL OR course_id != ?) ' => $course_id];
+                if (!empty($keyword)) {
+                    $options['where']['AND name like %?% '] = $keyword;
+                }
                 $count = $obj->getUserGroupNotInCourse($options, $groupFilter, true);
                 break;
             case 'registered':

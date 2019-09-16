@@ -27,6 +27,7 @@ $interbreadcrumb[] = [
 
 $type = isset($_GET['type']) ? Security::remove_XSS($_GET['type']) : 'registered';
 $groupFilter = isset($_GET['group_filter']) ? (int) $_GET['group_filter'] : 0;
+$keyword = isset($_GET['keyword']) ? Security::remove_XSS($_GET['keyword']) : '';
 
 $htmlHeadXtra[] = '
 <script>
@@ -50,8 +51,8 @@ if (api_is_allowed_to_edit()) {
 
         $form = new FormValidator(
             'groups',
-            'post',
-            api_get_self(),
+            'get',
+            api_get_self().'?type='.$type,
             '',
             [],
             FormValidator::LAYOUT_INLINE
@@ -65,10 +66,15 @@ if (api_is_allowed_to_edit()) {
             'group_filter',
             get_lang('Groups'),
             $options,
-            ['id' => 'group_filter']
+            ['id' => 'group_filter', 'disable_js' => 'disable_js']
         );
+        $form->addHidden('type', $type);
+        $form->addText('keyword', '', false);
         $form->setDefaults(['group_filter' => $groupFilter]);
-        $actionsRight = $form->returnForm();
+        $form->addCourseHiddenParams();
+        $form->addButtonSearch(get_lang('SearchButton'));
+
+        $actionsRight .= $form->returnForm();
     }
 
     $actions = Display::toolbarAction('actions-class', [$actionsLeft, $actionsRight]);
@@ -101,7 +107,7 @@ if (api_is_allowed_to_edit()) {
 }
 
 // jqgrid will use this URL to do the selects
-$url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_usergroups_teacher&type='.$type.'&group_filter='.$groupFilter;
+$url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_usergroups_teacher&type='.$type.'&group_filter='.$groupFilter.'&keyword='.$keyword;
 
 // The order is important you need to check the the $column variable in the model.ajax.php file
 $columns = [
@@ -174,5 +180,6 @@ $(function() {
 
 echo $actions;
 echo UserManager::getUserSubscriptionTab(4);
+echo Display::return_message(get_lang('UserClassExplanation'));
 $usergroup->display_teacher_view();
 Display::display_footer();

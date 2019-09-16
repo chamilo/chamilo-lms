@@ -15,6 +15,7 @@
                 {% endif %}
 
                 {#{{ sniff_notification }}#}
+                <h3 class="title-video-ofaj">{{ 'HomepageVideoTitle' | get_lang }}</h3>
 
                 {% if home_welcome %}
                     <article id="home-welcome">
@@ -162,6 +163,7 @@
     <div class="container">
         <div class="row">
             <div class="col-md-12">
+
                 {% if home_page_block %}
                     <section id="homepage-home">
                         {{ home_page_block }}

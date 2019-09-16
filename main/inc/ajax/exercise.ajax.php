@@ -388,6 +388,9 @@ switch ($action) {
         $course_info = api_get_course_info_by_id($course_id);
         $course_id = $course_info['real_id'];
 
+        $exerciseIsProgressiveAdaptive = false;
+        $adaptiveQuestionsAnswered = [];
+
         // Use have permissions?
         if (api_is_allowed_to_session_edit()) {
             // "all" or "simple" strings means that there's one or all questions exercise type
@@ -426,6 +429,12 @@ switch ($action) {
             // Exercise information.
             /** @var Exercise $objExercise */
             $objExercise = Session::read('objExercise');
+
+            $exerciseIsProgressiveAdaptive = EXERCISE_FEEDBACK_TYPE_PROGRESSIVE_ADAPTIVE == $objExercise->selectFeedbackType();
+
+            if ($exerciseIsProgressiveAdaptive) {
+                $adaptiveQuestionsAnswered = Session::read('adaptive_questions_answered', []);
+            }
 
             // Question info.
             $question_id = isset($_REQUEST['question_id']) ? (int) $_REQUEST['question_id'] : null;
@@ -520,6 +529,12 @@ switch ($action) {
                     if (!in_array($my_question_id, $questionsInCategory)) {
                         continue;
                     }
+                }
+
+                if ($exerciseIsProgressiveAdaptive) {
+                    $adaptiveQuestionsAnswered["q_{$objExercise->iId}"][] = $my_question_id;
+
+                    Session::write('adaptive_questions_answered', $adaptiveQuestionsAnswered);
                 }
 
                 $my_choice = isset($choice[$my_question_id]) ? $choice[$my_question_id] : null;
@@ -707,8 +722,6 @@ switch ($action) {
             echo 'ok';
             exit;
         }
-
-        $exerciseIsProgressiveAdaptive = EXERCISE_FEEDBACK_TYPE_PROGRESSIVE_ADAPTIVE == $objExercise->selectFeedbackType();
 
         if ($objExercise->type == ONE_PER_PAGE) {
             if ($debug) {

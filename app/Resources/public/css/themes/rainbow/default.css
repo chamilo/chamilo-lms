@@ -394,6 +394,12 @@ footer #footer_right{
 .form-horizontal .progress{
     margin-top: 10px;
 }
+.title-video-ofaj{
+    font-weight: bold;
+    color: #96BD0D;
+    text-align: center;
+    margin-bottom: 2rem;
+}
 .navbar{
     border-radius: 0;
 }
@@ -490,6 +496,13 @@ footer #footer_right{
 }
 #extra_terms_datedenaissance_alt{
     background: #FFF;
+}
+.carousel-indicators {
+    bottom: 0;
+    display: none;
+}
+.carousel-content{
+    padding: 0 7rem;
 }
 .navbar-inverse li a{
     line-height: 30px;

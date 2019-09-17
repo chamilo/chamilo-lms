@@ -1,7 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-
 /**
  * Sortable table which can be used for data available in an array.
  *

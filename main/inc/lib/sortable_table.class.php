@@ -101,7 +101,6 @@ class SortableTable extends HTML_Table
      */
     public $table_data;
     /**
-     *
      * @var array Columns to hide
      */
     private $columnsToHide = [];

@@ -224,6 +224,14 @@ ALTER TABLE c_lp_item_view ADD INDEX idx_clpiv_c_i_v (c_id, id, view_count);
     <pre>
         ALTER TABLE message ADD INDEX idx_message_status (msg_status);
         ALTER TABLE track_e_default ADD INDEX idx_default_user_id (default_user_id);
+        ALTER TABLE c_document ADD INDEX idx_cdoc_path (path);
+        ALTER TABLE c_document ADD INDEX idx_cdoc_size (size);
+        ALTER TABLE c_document ADD INDEX idx_cdoc_id (id);
+        ALTER TABLE c_document add index idx_cdoc_type (filetype);
+        ALTER TABLE c_document add index idx_cdoc_sid (session_id);
+
+        ALTER TABLE c_item_property ADD INDEX idx_item_property_visibility (visibility);
+        ALTER TABLE track_e_default ADD INDEX idx_track_e_default_user_id(default_user_id);
     </pre>
 <hr />
 <h2><a name="3.Indexes-caching"></a>3. Indexes caching</h2>

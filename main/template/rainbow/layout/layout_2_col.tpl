@@ -15,7 +15,6 @@
                 {% endif %}
 
                 {#{{ sniff_notification }}#}
-                <h3 class="title-video-ofaj">{{ 'HomepageVideoTitle' | get_lang }}</h3>
 
                 {% if home_welcome %}
                     <article id="home-welcome">

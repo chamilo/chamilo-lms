@@ -201,7 +201,8 @@ class Rest extends WebService
                 'sendDate' => $message['send_date'],
                 'content' => $message['content'],
                 'hasAttachments' => $hasAttachments,
-                'url' => '',
+                'url' => api_get_path(WEB_CODE_PATH).'messages/view_message.php?'
+                    .http_build_query(['type' => 1, 'id' => $message['id']]),
             ];
         }
 

@@ -2256,7 +2256,6 @@ class MessageManager
                 $messages[] = $row;
             }
         }
-
         return $messages;
     }
     /**
@@ -2267,7 +2266,7 @@ class MessageManager
      *
      * @return array
      */
-    public static function getReceivedMessages($userId, $lastId = 0)
+    public static function getReceivedMessages($userId, $lastId =0)
     {
         $userId = intval($userId);
         $lastId = intval($lastId);
@@ -2275,10 +2274,8 @@ class MessageManager
         if (empty($userId)) {
             return [];
         }
-
         $messagesTable = Database::get_main_table(TABLE_MESSAGE);
         $userTable = Database::get_main_table(TABLE_MAIN_USER);
-
         $sql = "SELECT m.*, u.user_id, u.lastname, u.firstname, u.picture_uri 
                 FROM $messagesTable as m
                 INNER JOIN $userTable as u
@@ -2299,7 +2296,6 @@ class MessageManager
                 $messages[] = $row;
             }
         }
-
         return $messages;
     }
     /**
@@ -2310,7 +2306,7 @@ class MessageManager
      *
      * @return array
      */
-    public static function getSentMessages($userId, $lastId = 0)
+    public static function getSentMessages($userId, $lastId =0)
     {
         $userId = intval($userId);
         $lastId = intval($lastId);
@@ -2342,7 +2338,6 @@ class MessageManager
                 $messages[] = $row;
             }
         }
-
         return $messages;
     }
     /**

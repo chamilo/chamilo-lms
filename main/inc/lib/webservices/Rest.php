@@ -213,17 +213,16 @@ class Rest extends WebService
     }
 
      /**
-     *
      * @return array
      */
     public function getUserReceivedMessages()
     {
-        $lastMessages = MessageManager::getReceivedMessages($this->user->getId(), $lastMessageId);
+        $lastMessages = MessageManager::getReceivedMessages($this->user->getId(), 0);
         $messages = [];
 
         foreach ($lastMessages as $message) {
             $hasAttachments = MessageManager::hasAttachments($message['id']);
-            $attachmentList = [] ;
+            $attachmentList = [];
             if ($hasAttachments) {
                 $attachmentList = MessageManager::getAttachmentList($message['id']);
             }
@@ -250,12 +249,11 @@ class Rest extends WebService
     }
 
     /**
-     *
      * @return array
      */
     public function getUserSentMessages()
     {
-        $lastMessages = MessageManager::getSentMessages($this->user->getId(), $lastMessageId);
+        $lastMessages = MessageManager::getSentMessages($this->user->getId(), 0);
         $messages = [];
 
         foreach ($lastMessages as $message) {
@@ -1399,7 +1397,7 @@ class Rest extends WebService
 
         return [true];
     }
-    
+
     public function deleteUserMessage($messageId, $messageType)
     {
         if ($messageType === "sent") {
@@ -1407,9 +1405,8 @@ class Rest extends WebService
         } else {
             return MessageManager::delete_message_by_user_receiver($this->user->getId(), $messageId);
         }
-        
     }
-    
+
     public function setMessageRead($messageId)
     {
         MessageManager::update_message($this->user->getId(), $messageId);

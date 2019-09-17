@@ -1099,7 +1099,7 @@ function get_count_work($work_id, $onlyMeUserId = null, $notMeUserId = null)
     $iprop_table = Database::get_course_table(TABLE_ITEM_PROPERTY);
     $user_table = Database::get_main_table(TABLE_MAIN_USER);
 
-    $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
+    $is_allowed_to_edit = api_is_allowed_to_edit(null, true) || api_is_coach();
     $session_id = api_get_session_id();
     $condition_session = api_get_session_condition(
         $session_id,
@@ -1111,17 +1111,19 @@ function get_count_work($work_id, $onlyMeUserId = null, $notMeUserId = null)
     $group_id = api_get_group_id();
     $course_info = api_get_course_info();
     $course_id = $course_info['real_id'];
-    $work_id = intval($work_id);
+    $work_id = (int) $work_id;
 
     $groupIid = 0;
     if ($group_id) {
         $groupInfo = GroupManager::get_group_properties($group_id);
-        $groupIid = $groupInfo['iid'];
+        if ($groupInfo && isset($groupInfo['iid'])) {
+            $groupIid = (int) $groupInfo['iid'];
+        }
     }
 
     if (!empty($group_id)) {
         // set to select only messages posted by the user's group
-        $extra_conditions = " work.post_group_id = '".intval($groupIid)."' ";
+        $extra_conditions = " work.post_group_id = '".$groupIid."' ";
     } else {
         $extra_conditions = " (work.post_group_id = '0' or work.post_group_id IS NULL) ";
     }

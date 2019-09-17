@@ -23,41 +23,7 @@ class PageController extends Controller
      */
     public function getLatestPages($number, Request $request)
     {
-        $locale = $request->get('_locale');
-        $site = $this->container->get('sonata.page.manager.site')->findOneBy(['locale' => $locale]);
-
-        $criteria = [
-            'enabled' => 1,
-            'site' => $site,
-            'decorate' => 1,
-            'routeName' => 'page_slug',
-            'metaKeyword' => 'news',
-        ];
-        $order = ['position' => 'asc'];
-        // Get latest pages
-        $pages = $this->container->get('sonata.page.manager.page')->findBy($criteria, $order, $number);
-        $pagesToShow = [];
-
-        /** @var Page $page */
-        foreach ($pages as $page) {
-            // Skip homepage
-            if ($page->getUrl() === '/') {
-                continue;
-            }
-
-            $criteria = ['pageId' => $page];
-            /** @var Snapshot $snapshot */
-            // Check if page has a valid snapshot
-            $snapshot = $this->container->get('sonata.page.manager.snapshot')->findEnableSnapshot($criteria);
-            if ($snapshot) {
-                $pagesToShow[] = $page;
-            }
-        }
-
-        return $this->render(
-            '@ChamiloPage/latest.html.twig',
-            ['pages' => $pagesToShow]
-        );
+        return $this->getBlocks('news', $number, $request);
     }
 
     /**
@@ -67,6 +33,40 @@ class PageController extends Controller
      */
     public function getLatestBlocks($number, Request $request)
     {
+        return $this->getBlocks('block', $number, $request);
+    }
+
+    /**
+     * @Route("/cms/page/courses/{number}")
+     *
+     * @param int $number
+     */
+    public function getLatestCourses($number, Request $request)
+    {
+        return $this->getBlocks('course', $number, $request);
+    }
+
+    /**
+     * @param string  $type
+     * @param int     $number
+     * @param Request $request
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function getBlocks($type, $number, Request $request)
+    {
+        switch ($type) {
+            case 'block':
+                $template = '@ChamiloPage/blocks.html.twig';
+                break;
+            case 'news':
+                $template = '@ChamiloPage/latest.html.twig';
+                break;
+            case 'course':
+                $template = '@ChamiloPage/course.html.twig';
+                break;
+        }
+
         $locale = $request->get('_locale');
         $site = $this->container->get('sonata.page.manager.site')->findOneBy(['locale' => $locale]);
 
@@ -75,9 +75,11 @@ class PageController extends Controller
             'site' => $site,
             'decorate' => 1,
             'routeName' => 'page_slug',
-            'metaKeyword' => 'block',
+            'metaKeyword' => $type,
         ];
+
         $order = ['position' => 'asc'];
+
         // Get latest pages
         $pages = $this->container->get('sonata.page.manager.page')->findBy($criteria, $order, $number);
 
@@ -98,7 +100,7 @@ class PageController extends Controller
         }
 
         return $this->render(
-            '@ChamiloPage/blocks.html.twig',
+            $template,
             ['pages' => $pagesToShow]
         );
     }

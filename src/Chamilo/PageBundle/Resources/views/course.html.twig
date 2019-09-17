@@ -1,0 +1,24 @@
+<div class="container section-notice">
+    <h2 class="section-title">{{ "SomeCourseExamples"| trans }}</h2>
+    <div class="row">
+        {% for page in pages %}
+            <div class="col-md-4">
+                <div class="items">
+                    <div class="description">
+                        <h2 class="title">
+                            <a href="{{ url(page.routeName, {'path' : page.site.relativePath ~ page.url, '_locale' : app.request.getLocale() }) }}">{{ page.name }}</a>
+                        </h2>
+                        <div class="date">
+                            <i class="fa fa-calendar" aria-hidden="true"></i>
+                            {{ page.createdAt | format_datetime }}
+                        </div>
+                        {{ sonata_page_render_container('image_preview', page)  }}
+                        <p>
+                            {{ page.metaDescription | nl2br }}
+                        </p>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>

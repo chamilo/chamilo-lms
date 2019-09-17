@@ -4577,15 +4577,17 @@ EOT;
         $result = [];
         // Loop over all question to show results for each of them, one by one
         if (!empty($question_list)) {
+            $questionsAnswered = [];
+
+            if ($exerciseIsAdaptive) {
+                $adaptiveQuestionAnswered = Session::read('adaptive_questions_answered', []);
+
+                $questionsAnswered = $adaptiveQuestionAnswered["q_{$objExercise->iId}"];
+            }
+
             foreach ($question_list as $questionId) {
-                if ($exerciseIsAdaptive) {
-                    $adaptiveQuestionAnswered = Session::read('adaptive_questions_answered', []);
-
-                    $questionsAnswered = $adaptiveQuestionAnswered["q_{$objExercise->iId}"];
-
-                    if (!in_array($questionId, $questionsAnswered)) {
-                        continue;
-                    }
+                if ($exerciseIsAdaptive && !empty($questionsAnswered) && !in_array($questionId, $questionsAnswered)) {
+                    continue;
                 }
 
                 // Creates a temporary Question object
@@ -4760,6 +4762,10 @@ EOT;
                     }
                 }
             } // end foreach() block that loops over all questions
+
+            if ($exerciseIsAdaptive && !empty($questionsAnswered)) {
+                Session::erase('adaptive_questions_answered');
+            }
         }
 
         $totalScoreText = null;

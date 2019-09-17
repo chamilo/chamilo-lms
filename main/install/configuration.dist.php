@@ -917,7 +917,7 @@ INSERT INTO settings_current(variable, subkey, type, category, selected_value, t
 // Disable token verification when sending a message
 // $_configuration['disable_token_in_new_message'] = false;
 
-// My courses session order. Possible field values: "start_date" or "end_date". Order values: "asc" or "desc"
+// My courses session order. Possible field values: "start_date", "end_date", "name" Order values: "asc" or "desc"
 // $_configuration['my_courses_session_order'] = ['field' => 'end_date', 'order' => 'desc'];
 
 // Allow set courses in session in read-only mode. Require DB changes:
@@ -1315,6 +1315,11 @@ requires extension "php-soap"  sudo apt-get install php-soap
 // Hide course catalog welcome message
 //$_configuration['hide_course_catalog_welcome'] = true;
 
+// Survey
+// ALTER TABLE c_survey_question ADD parent_id INT(11) DEFAULT 0 NOT NULL;
+// ALTER TABLE c_survey_question ADD parent_option_id INT(11) DEFAULT 0 NOT NULL;
+//$_configuration['survey_question_dependency'] = true;
+
 // KEEP THIS AT THE END
 // -------- Custom DB changes
 // Add user activation by confirmation email
@@ -1322,3 +1327,4 @@ requires extension "php-soap"  sudo apt-get install php-soap
 // You need add a new option called "confirmation" to the registration settings
 //INSERT INTO settings_options (variable, value, display_text) VALUES ('allow_registration', 'confirmation', 'MailConfirmation');
 // ------ (End) Custom DB changes
+

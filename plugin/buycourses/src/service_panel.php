@@ -17,16 +17,12 @@ $userInfo = api_get_user_info();
 if (!$userInfo) {
     api_not_allowed(true);
 }
-
-$em = Database::getManager();
-$paymentTypes = $plugin->getPaymentTypes();
 $serviceTypes = $plugin->getServiceTypes();
-
 $serviceSaleStatuses['status_cancelled'] = BuyCoursesPlugin::SERVICE_STATUS_CANCELLED;
 $serviceSaleStatuses['status_pending'] = BuyCoursesPlugin::SERVICE_STATUS_PENDING;
 $serviceSaleStatuses['status_completed'] = BuyCoursesPlugin::SERVICE_STATUS_COMPLETED;
 
-$serviceSales = $plugin->getServiceSale(null, $userInfo['user_id']);
+$serviceSales = $plugin->getServiceSales($userInfo['user_id']);
 $saleList = [];
 
 foreach ($serviceSales as $sale) {

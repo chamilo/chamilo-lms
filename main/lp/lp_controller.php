@@ -103,35 +103,123 @@ $htmlHeadXtra[] = '
             var jItem = $("#"+ itemId);          
             var index = jItems.index(jItem);
             var total = jItems.length;
+               
             switch (dir) {
                 case "up":
                     if (index != 0 && jItems[index - 1]) {
-                        var subItems = $(jItems[index - 1]).find("li.sub_item");
+                        /*var subItems = $(jItems[index - 1]).find("li.sub_item");
                         if (subItems.length >= 0) {
                             index = index - 1;
+                        }*/
+                        var subItems = $(jItems[index - 1]).find("li.sub_item");                        
+                        var parentClass = $(jItems[index - 1]).parent().parent().attr("class");                        
+                        var parentId = $(jItems[index]).parent().parent().attr("id");                        
+                        var myParentId = $(jItems[index - 1]).parent().parent().attr("id");
+                        //console.log(parentId + " - " + myParentId);
+                        
+                        // We are brothers!
+                        if (parentId == myParentId) {
+                            console.log("Brothers");
+                            console.log(subItems.length);
+                            if (subItems.length > 0) {
+                                var lastItem = $(jItems[index - 1]).find("li.sub_item");    
+                                parentIndex = jItems.index(lastItem);                         
+                                console.log(parentIndex);
+                                jItem.detach().insertAfter(lastItem);    
+                                //console.log("not classic");
+                            } else {
+                                //console.log("classic");
+                                jItem.detach().insertBefore(jItems[index - 1]);  
                         }
+                            break;
+                        }
+                        
+                        //console.log(parentClass);
+                        if (parentClass == "record li_container") {
+                            // previous is a chapter
+                            var lastItem = $(jItems[index - 1]).parent().parent().find("li.li_container").last();    
+                            parentIndex = jItems.index(lastItem);                         
+                            //console.log(parentIndex);
+                            jItem.detach().insertAfter(jItems[parentIndex]);                            
+                        } else {
                         jItem.detach().insertBefore(jItems[index - 1]);
+                    }                                        
                     }                                        
                     break;
                 case "down":
-                     if (index != jItems.length - 1) {                        
+                     if (index != total - 1) {   
+                        const originIndex = index;
+                        // The element is a chapter with items
                         var subItems = jItem.find("li.li_container");  
-                        if (subItems.length >= 0) { 
+                        if (subItems.length > 0) { 
                             index = subItems.length + index;
+                            //console.log("element is a chapter with items");                            
+                            //console.log("new index = " + index);
                         }                  
                         
-                        // is a chapter?
                         var subItems = $(jItems[index + 1]).find("li.sub_item");
-                        if (subItems.length >= 0) {
-                            index = index + 1; 
+                        // is a chapter?
+                        // This is an element entering in a chapter
+                        if (subItems.length > 0) {   
+                            // Check if im a child
+                            var parentClass = jItem.parent().parent().attr("class");                            
+                            //console.log(parentClass);
+                            if (parentClass == "record li_container") {
+                                // Parent position
+                                var parentIndex = jItems.index(jItem.parent().parent());
+                                //console.log(jItem.parent().parent().attr("id"));
+                                //console.log(parentIndex);
+                                jItem.detach().insertAfter(jItems[parentIndex]);
+                            } else {
+                                jItem.detach().insertAfter(subItems);    
                         }
+                            break;
+                        }     
+                                                                       
+                        var currentSubItems = $(jItems[index]).parent().find("li.sub_item");
+                        //console.log("currentSubItems"+currentSubItems.length);
+                        
+                        var parentId = $(jItems[originIndex]).parent().parent().attr("id");                        
+                        var myParentId = $(jItems[index + 1]).parent().parent().attr("id");
+                        //console.log("parent ids: "+ parentId + " - " + myParentId);
+                        
+                        // We are brothers!
+                        if (parentId == myParentId) {
                         if ((index + 1) < total) {
+                                //console.log(index + 1);
+                                //console.log("We are brothers");
+                            jItem.detach().insertAfter(jItems[index + 1]);
+                        }
+                            break;
+                     }
+                        
+                        if (currentSubItems.length > 0) {                     
+                            var parentIndex = jItems.index(jItem.parent().parent());
+                            //console.log("has currentSubItems");
+                            //console.log("id " + jItem.parent().parent().attr("id"));
+                            //console.log("parentIndex: " + parentIndex);
+                            if (parentIndex >= 0) {
+                                jItem.detach().insertAfter(jItems[parentIndex]);
+                     break;
+            }   
+            
+                        }   
+                        
+                        //var lastItem = $(jItems[index + 1]).parent().parent().find("li.li_container").last();                                              
+                        if (subItems.length > 0) {
+                            index = originIndex;
+                        }
+                        
+                        if ((index + 1) < total) {
+                            //console.log(index + 1);
+                            //console.log("changed");
                             jItem.detach().insertAfter(jItems[index + 1]);
                         }
                      }
                      break;
             }   
             
+            //console.log("rebuild");
             buildLPtree($("#lp_item_list"), 0);
             
             var order = "new_order="+ newOrderData + "&a=update_lp_item_order";
@@ -405,6 +493,9 @@ if (isset($_POST['title'])) {
         !empty($_POST['title'])
     ) {
         $post_title = Exercise::format_title_variable($_POST['title']);
+        if (api_get_configuration_value('save_titles_as_html')) {
+            $post_title = $_POST['title'];
+        }
     }
 }
 
@@ -512,7 +603,7 @@ switch ($action) {
                             }
                         }
 
-                        $new_item_id = $_SESSION['oLP']->add_item(
+                        $_SESSION['oLP']->add_item(
                             $parent,
                             $previous,
                             $type,
@@ -533,7 +624,7 @@ switch ($action) {
                             );
                         }
 
-                        $new_item_id = $_SESSION['oLP']->add_item(
+                        $_SESSION['oLP']->add_item(
                             $parent,
                             $previous,
                             TOOL_READOUT_TEXT,
@@ -545,7 +636,7 @@ switch ($action) {
                     } else {
                         // For all other item types than documents,
                         // load the item using the item type and path rather than its ID.
-                        $new_item_id = $_SESSION['oLP']->add_item(
+                        $_SESSION['oLP']->add_item(
                             $parent,
                             $previous,
                             $type,
@@ -1096,6 +1187,7 @@ switch ($action) {
             }
             $_SESSION['oLP']->set_theme($_REQUEST['lp_theme']);
 
+            $hide_toc_frame = null;
             if (isset($_REQUEST['hide_toc_frame']) && $_REQUEST['hide_toc_frame'] == 1) {
                 $hide_toc_frame = $_REQUEST['hide_toc_frame'];
             } else {
@@ -1105,6 +1197,7 @@ switch ($action) {
             $_SESSION['oLP']->set_prerequisite(isset($_POST['prerequisites']) ? (int) $_POST['prerequisites'] : 0);
             $_SESSION['oLP']->setAccumulateWorkTime(isset($_REQUEST['accumulate_work_time']) ? $_REQUEST['accumulate_work_time'] : 0);
             $_SESSION['oLP']->set_use_max_score(isset($_POST['use_max_score']) ? 1 : 0);
+
             $subscribeUsers = isset($_REQUEST['subscribe_users']) ? 1 : 0;
             $_SESSION['oLP']->setSubscribeUsers($subscribeUsers);
 
@@ -1120,6 +1213,7 @@ switch ($action) {
             if (isset($_REQUEST['activate_end_date_check']) && $_REQUEST['activate_end_date_check'] == 1) {
                 $expired_on = $_REQUEST['expired_on'];
             }
+
             $_SESSION['oLP']->setCategoryId($_REQUEST['category_id']);
             $_SESSION['oLP']->set_modified_on();
             $_SESSION['oLP']->set_publicated_on($publicated_on);

@@ -42,7 +42,7 @@ try {
 
             $restResponse->setData([
                 'url' => api_get_path(WEB_PATH),
-                'apiKey' => Rest::findUserApiKey($username, Rest::SERVIVE_NAME),
+                'apiKey' => Rest::findUserApiKey($username, Rest::SERVICE_NAME),
                 'gcmSenderId' => api_get_setting('messaging_gdc_project_number'),
             ]);
             break;

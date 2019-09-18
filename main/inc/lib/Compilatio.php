@@ -601,12 +601,12 @@ class Compilatio
                     $actionCompilatio .= $loading.'&nbsp;'.get_lang('CompilatioAwaitingAnalysis');
                     break;
                 case 'BAD_FILETYPE':
-                    $actionCompilatio .= get_lang('CompilatioFileIsNotSupported')
+                    $actionCompilatio .= get_lang('FileFormatNotSupported')
                         .'<br/>'
                         .get_lang('CompilatioProtectedPdfVerification');
                     break;
                 case 'BAD_FILESIZE':
-                    $actionCompilatio .= get_lang('CompilatioFileIsTooBig');
+                    $actionCompilatio .= get_lang('UplFileTooBig');
                     break;
             }
         }

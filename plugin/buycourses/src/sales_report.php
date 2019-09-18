@@ -6,7 +6,6 @@
  *
  * @package chamilo.plugin.buycourses
  */
-//Initialization
 $cidReset = true;
 
 require_once '../config.php';
@@ -114,35 +113,19 @@ switch ($selectedFilterType) {
         break;
 }
 
-$saleList = [];
-
-foreach ($sales as $sale) {
-    $saleList[] = [
-        'id' => $sale['id'],
-        'reference' => $sale['reference'],
-        'status' => $sale['status'],
-        'date' => api_convert_and_format_date($sale['date'], DATE_TIME_FORMAT_LONG_24H),
-        'currency' => $sale['iso_code'],
-        'price' => $sale['price'],
-        'product_name' => $sale['product_name'],
-        'product_type' => $productTypes[$sale['product_type']],
-        'complete_user_name' => api_get_person_name($sale['firstname'], $sale['lastname']),
-        'payment_type' => $paymentTypes[$sale['payment_type']],
-        'invoice' => $sale['invoice'],
-        'num_invoice' => $plugin->getNumInvoice($sale['id'], 0),
-    ];
+foreach ($sales as &$sale) {
+    $sale['product_type'] = $productTypes[$sale['product_type']];
+    $sale['payment_type'] = $paymentTypes[$sale['payment_type']];
+    $sale['complete_user_name'] = api_get_person_name($sale['firstname'], $sale['lastname']);
+    $sale['num_invoice'] = $plugin->getNumInvoice($sale['id'], 0);
+    $sale['total_price'] = $plugin->getPriceWithCurrencyFromIsoCode($sale['price'], $sale['iso_code']);
 }
 
-//View
 $interbreadcrumb[] = ['url' => '../index.php', 'name' => $plugin->get_lang('plugin_title')];
-
 $templateName = $plugin->get_lang('SalesReport');
-
 $template = new Template($templateName);
-
-$toolbar = "";
-
-if ($paypalEnable == "true" && $commissionsEnable == "true") {
+$toolbar = '';
+if ($paypalEnable === 'true' && $commissionsEnable === 'true') {
     $toolbar .= Display::toolbarButton(
         $plugin->get_lang('PaypalPayoutCommissions'),
         api_get_path(WEB_PLUGIN_PATH).'buycourses/src/paypal_payout.php',
@@ -157,7 +140,7 @@ if ($paypalEnable == "true" && $commissionsEnable == "true") {
     );
 }
 
-if ($commissionsEnable == "true") {
+if ($commissionsEnable === 'true') {
     $toolbar .= Display::toolbarButton(
         $plugin->get_lang('PayoutReport'),
         api_get_path(WEB_PLUGIN_PATH).'buycourses/src/payout_report.php',
@@ -175,7 +158,7 @@ $template->assign('form', $form->returnForm());
 $template->assign('selected_sale', $selectedSale);
 $template->assign('selected_status', $selectedStatus);
 $template->assign('services_are_included', $includeServices);
-$template->assign('sale_list', $saleList);
+$template->assign('sale_list', $sales);
 $template->assign('sale_status_canceled', BuyCoursesPlugin::SALE_STATUS_CANCELED);
 $template->assign('sale_status_pending', BuyCoursesPlugin::SALE_STATUS_PENDING);
 $template->assign('sale_status_completed', BuyCoursesPlugin::SALE_STATUS_COMPLETED);

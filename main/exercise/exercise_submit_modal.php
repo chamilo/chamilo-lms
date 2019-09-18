@@ -16,6 +16,7 @@ require_once api_get_path(LIBRARY_PATH).'geometry.lib.php';
 
 /** @var Exercise $objExercise */
 $objExercise = Session::read('objExercise');
+$exerciseResult = Session::read('exerciseResult');
 
 if (empty($objExercise)) {
     api_not_allowed();
@@ -27,19 +28,20 @@ if (!in_array($feedbackType, [EXERCISE_FEEDBACK_TYPE_DIRECT, EXERCISE_FEEDBACK_T
     api_not_allowed();
 }
 
-$exerciseResult = Session::read('exerciseResult');
 $learnpath_id = isset($_REQUEST['learnpath_id']) ? (int) $_REQUEST['learnpath_id'] : 0;
 $learnpath_item_id = isset($_REQUEST['learnpath_item_id']) ? (int) $_REQUEST['learnpath_item_id'] : 0;
 $questionList = Session::read('questionList');
 
 $exerciseId = (int) $_GET['exerciseId'];
-//$exerciseType = (int) $_GET['exerciseType'];
 $questionNum = (int) $_GET['num'];
-//$nbrQuestions = isset($_GET['nbrQuestions']) ? (int) $_GET['nbrQuestions'] : null;
 $questionId = $questionList[$questionNum];
-
 $choiceValue = isset($_GET['choice']) ? $_GET['choice'] : '';
 $hotSpot = isset($_GET['hotspot']) ? $_GET['hotspot'] : '';
+$loaded = isset($_GET['loaded']);
+
+if (empty($choiceValue) && isset($exerciseResult[$questionId])) {
+    $choiceValue = $exerciseResult[$questionId];
+}
 
 if (!empty($hotSpot)) {
     if (isset($hotSpot[$questionId])) {
@@ -53,8 +55,61 @@ if (!empty($choiceValue)) {
     }
 }
 
+echo '<script>
+function tryAgain() {
+    $(function () {
+        $("#global-modal").modal("hide");
+    });
+}
+
+function SendEx(num) {
+    if (num == -1) {
+        window.location.href = "exercise_result.php?'.api_get_cidreq().'&take_session=1&exerciseId='.$exerciseId.'&num="+num+"&learnpath_item_id='.$learnpath_item_id.'&learnpath_id='.$learnpath_id.'";
+    } else {
+        num -= 1;
+        window.location.href = "exercise_submit.php?'.api_get_cidreq().'&tryagain=1&exerciseId='.$exerciseId.'&num="+num+"&learnpath_item_id='.$learnpath_item_id.'&learnpath_id='.$learnpath_id.'";
+    }    
+    return false;
+}
+</script>';
+
 echo '<div id="delineation-container">';
 // Getting the options by js
+if (empty($choiceValue) && empty($hotSpot) && $loaded) {
+    $nextQuestion = $questionNum + 1;
+    $destinationId = isset($questionList[$nextQuestion]) ? $questionList[$nextQuestion] : -1;
+    $icon = Display::return_icon(
+        'reload.png',
+        '',
+        ['style' => 'width:22px; height:22px; padding-left:0px;padding-right:5px;']
+    );
+    $links = '<a onclick="tryAgain();" href="#">'.get_lang('TryAgain').'</a>&nbsp;'.$icon.'&nbsp;';
+
+    // the link to finish the test
+    if ($destinationId == -1) {
+        $links .= Display::return_icon(
+                'finish.gif',
+                '',
+                ['style' => 'width:22px; height:22px; padding-left:0px;padding-right:5px;']
+            ).'<a onclick="SendEx(-1);" href="#">'.get_lang('EndActivity').'</a><br /><br />';
+    } else {
+        // the link to other question
+        if (in_array($destinationId, $questionList)) {
+            $num_value_array = array_keys($questionList, $destinationId);
+            $icon = Display::return_icon(
+                'quiz.png',
+                '',
+                ['style' => 'padding-left:0px;padding-right:5px;']
+            );
+            $links .= '<a onclick="SendEx('.$num_value_array[0].');" href="#">'.
+                get_lang('Question').' '.$num_value_array[0].'</a>&nbsp;';
+            $links .= $icon;
+        }
+    }
+    echo '<div class="row"><div class="col-md-5 col-md-offset-7"><h5 class="pull-right">'.$links.'</h5></div></div>';
+    exit;
+}
+
 if (empty($choiceValue) && empty($hotSpot)) {
     echo "<script>
         // this works for only radio buttons
@@ -89,16 +144,16 @@ if (empty($choiceValue) && empty($hotSpot)) {
         }
         
         var my_choice = $('*[name*=\"choice[".$questionId."]\"]').serialize();
-        var hotspot = $('*[name*=\"hotspot[".$questionId."]\"]').serialize();
-        //var my_choiceDc = $('*[name*=\"choiceDegreeCertainty['+question_id+']\"]').serialize();        
+        var hotspot = $('*[name*=\"hotspot[".$questionId."]\"]').serialize();     
     ";
 
     // IMPORTANT
     // This is the real redirect function
-    $extraUrl = '&exerciseId='.$exerciseId.'&num='.$questionNum.'&learnpath_id='.$learnpath_id.'&learnpath_item_id='.$learnpath_item_id;
+    $extraUrl = '&loaded=1&exerciseId='.$exerciseId.'&num='.$questionNum.'&learnpath_id='.$learnpath_id.'&learnpath_item_id='.$learnpath_item_id;
     $url = api_get_path(WEB_CODE_PATH).'exercise/exercise_submit_modal.php?'.api_get_cidreq().$extraUrl;
     echo ' url = "'.addslashes($url).'&hotspotcoord="+ hotspotcoord + "&"+ hotspot + "&"+ my_choice;';
     echo "$('#global-modal .modal-body').load(url);";
+
     echo '</script>';
     exit;
 }
@@ -131,8 +186,6 @@ Session::write('exerciseResult', $exerciseResult);
 
 $objQuestionTmp = Question::read($questionId);
 $answerType = $objQuestionTmp->selectType();
-$objAnswerTmp = new Answer($questionId);
-$nbrAnswers = $objAnswerTmp->selectNbrAnswers();
 $showResult = false;
 
 $objAnswerTmp = new Answer($questionId, api_get_course_int_id());
@@ -295,18 +348,6 @@ if ($destinationId == -1) {
         $links .= $icon;
     }
 }
-
-echo '<script>
-function SendEx(num) {
-    if (num == -1) {
-        window.location.href = "exercise_result.php?'.api_get_cidreq().'&take_session=1&exerciseId='.$exerciseId.'&num="+num+"&learnpath_item_id='.$learnpath_item_id.'&learnpath_id='.$learnpath_id.'";
-    } else {
-        num -= 1;
-        window.location.href = "exercise_submit.php?'.api_get_cidreq().'&tryagain=1&exerciseId='.$exerciseId.'&num="+num+"&learnpath_item_id='.$learnpath_item_id.'&learnpath_id='.$learnpath_id.'";
-    }    
-    return false;
-}
-</script>';
 
 if (!empty($links)) {
     echo '<div>'.$contents.'</div>';

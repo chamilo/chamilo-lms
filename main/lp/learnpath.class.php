@@ -252,11 +252,6 @@ class learnpath
                         ORDER BY parent_item_id, display_order";
                 $res = Database::query($sql);
 
-                if ($debug) {
-                    error_log('learnpath::__construct() '.__LINE__.' - query lp items: '.$sql);
-                    error_log('-- Start while--');
-                }
-
                 $lp_item_id_list = [];
                 while ($row = Database::fetch_array($res)) {
                     $lp_item_id_list[] = $row['iid'];
@@ -341,10 +336,6 @@ class learnpath
                     }
                 }
 
-                if ($debug) {
-                    error_log('learnpath::__construct() '.__LINE__.' ----- end while ----');
-                }
-
                 if (!empty($lp_item_id_list)) {
                     $lp_item_id_list_to_string = implode("','", $lp_item_id_list);
                     if (!empty($lp_item_id_list_to_string)) {
@@ -358,14 +349,6 @@ class learnpath
                                     lp_view_id = ".$this->get_view_id()." AND
                                     lp_item_id IN ('".$lp_item_id_list_to_string."')
                                 ORDER BY view_count DESC ";
-
-                        if ($debug) {
-                            error_log(
-                                'learnpath::__construct() - Selecting item_views: '.$sql,
-                                0
-                            );
-                        }
-
                         $status_list = [];
                         $res = Database::query($sql);
                         while ($row = Database:: fetch_array($res)) {
@@ -523,7 +506,7 @@ class learnpath
                 WHERE
                     c_id = $course_id AND
                     lp_id = ".$this->get_id()." AND
-                    parent_item_id = ".$parent;
+                    parent_item_id = $parent ";
 
         $res_count = Database::query($sql);
         $row = Database::fetch_array($res_count);
@@ -1139,6 +1122,7 @@ class learnpath
     public function delete_children_items($id)
     {
         $course_id = $this->course_info['real_id'];
+
         $num = 0;
         $id = (int) $id;
         if (empty($id) || empty($course_id)) {
@@ -1190,7 +1174,7 @@ class learnpath
         $parent = $row['parent_item_id'];
         $lp = $row['lp_id'];
         // Delete children items.
-        $num = $this->delete_children_items($id);
+        $this->delete_children_items($id);
         // Now delete the item.
         $sql_del = "DELETE FROM $lp_item WHERE iid = $id";
         Database::query($sql_del);
@@ -3152,7 +3136,7 @@ class learnpath
         }
 
         $dirTypes = self::getChapterTypes();
-        $mycurrentitemid = $this->get_current_item_id();
+        $currentItemId = $this->get_current_item_id();
         $list = [];
         $classStatus = [
             'not attempted' => 'scorm_not_attempted',
@@ -3196,7 +3180,7 @@ class learnpath
                     $subtree['title'] = $title;
                     $subtree['class'] = $classStyle.' '.$cssStatus;
                     $subtree['url'] = $this->get_link('http', $subtree['id'], $tree);
-                    $subtree['current_id'] = $mycurrentitemid;
+                    $subtree['current_id'] = $currentItemId;
                 }
                 $list[] = $subtree;
             }
@@ -3218,7 +3202,7 @@ class learnpath
             $toc_list = $this->get_toc();
         }
         // Temporary variables.
-        $mycurrentitemid = $this->get_current_item_id();
+        $currentItemId = $this->get_current_item_id();
         $list = [];
         $arrayList = [];
         $classStatus = [
@@ -3282,7 +3266,7 @@ class learnpath
             } else {
                 $list['title'] = stripslashes($title);
                 $list['url'] = $this->get_link('http', $item['id'], $toc_list);
-                $list['current_id'] = $mycurrentitemid;
+                $list['current_id'] = $currentItemId;
             }
             $arrayList[] = $list;
         }
@@ -3345,6 +3329,14 @@ class learnpath
         }
 
         return 'N/A';
+    }
+
+    /**
+     * @return string
+     */
+    public function getNameNoTags()
+    {
+        return strip_tags($this->get_name());
     }
 
     /**
@@ -5728,6 +5720,7 @@ class learnpath
                         'ref' => $ref,
                         'item_type' => $array[$i]['item_type'],
                         'title' => $array[$i]['title'],
+                        'title_raw' => $array[$i]['title_raw'],
                         'path' => $path,
                         'description' => $array[$i]['description'],
                         'parent_item_id' => $array[$i]['parent_item_id'],
@@ -5839,34 +5832,7 @@ class learnpath
     public function processBuildMenuElements($update_audio = 'false')
     {
         $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
-        $course_id = api_get_course_int_id();
-        $table = Database::get_course_table(TABLE_LP_ITEM);
-
-        $sql = "SELECT * FROM $table
-                WHERE c_id = $course_id AND lp_id = ".$this->lp_id;
-
-        $result = Database::query($sql);
-        $arrLP = [];
-        while ($row = Database::fetch_array($result)) {
-            $arrLP[] = [
-                'id' => $row['iid'],
-                'item_type' => $row['item_type'],
-                'title' => Security::remove_XSS($row['title']),
-                'path' => $row['path'],
-                'description' => Security::remove_XSS($row['description']),
-                'parent_item_id' => $row['parent_item_id'],
-                'previous_item_id' => $row['previous_item_id'],
-                'next_item_id' => $row['next_item_id'],
-                'max_score' => $row['max_score'],
-                'min_score' => $row['min_score'],
-                'mastery_score' => $row['mastery_score'],
-                'prerequisite' => $row['prerequisite'],
-                'display_order' => $row['display_order'],
-                'audio' => $row['audio'],
-                'prerequisite_max_score' => $row['prerequisite_max_score'],
-                'prerequisite_min_score' => $row['prerequisite_min_score'],
-            ];
-        }
+        $arrLP = $this->getItemsForForm();
 
         $this->tree_array($arrLP);
         $arrLP = isset($this->arrMenu) ? $this->arrMenu : [];
@@ -5906,10 +5872,22 @@ class learnpath
             [],
             ICON_SIZE_TINY
         );
+
+        $show = api_get_configuration_value('show_full_lp_item_title_in_edition');
+
+        $pluginCalendar = api_get_plugin_setting('learning_calendar', 'enabled') === 'true';
+        $plugin = null;
+        if ($pluginCalendar) {
+            $plugin = LearningCalendarPlugin::create();
+        }
+
         for ($i = 0; $i < $countItems; $i++) {
             $parent_id = $arrLP[$i]['parent_item_id'];
             $title = $arrLP[$i]['title'];
-            $title_cut = cut($arrLP[$i]['title'], self::MAX_LP_ITEM_TITLE_LENGTH);
+            $title_cut = $arrLP[$i]['title_raw'];
+            if ($show === false) {
+                $title_cut = cut($arrLP[$i]['title'], self::MAX_LP_ITEM_TITLE_LENGTH);
+            }
             // Link for the documents
             if ($arrLP[$i]['item_type'] === 'document' || $arrLP[$i]['item_type'] == TOOL_READOUT_TEXT) {
                 $url = $mainUrl.'&action=view_item&mode=preview_document&id='.$arrLP[$i]['id'].'&lp_id='.$this->lp_id;
@@ -5985,13 +5963,6 @@ class learnpath
             $previewIcon = '';
             $pluginCalendarIcon = '';
             $orderIcons = '';
-
-            $pluginCalendar = api_get_plugin_setting('learning_calendar', 'enabled') === 'true';
-            $plugin = null;
-            if ($pluginCalendar) {
-                $plugin = LearningCalendarPlugin::create();
-            }
-
             $pluginUrl = api_get_path(WEB_PLUGIN_PATH).'learning_calendar/start.php?';
 
             if ($is_allowed_to_edit) {
@@ -6332,7 +6303,6 @@ class learnpath
      */
     public function return_new_tree($update_audio = 'false', $drop_element_here = false)
     {
-        $return = '';
         $result = $this->processBuildMenuElements($update_audio);
 
         $list = '<ul id="lp_item_list">';
@@ -6351,7 +6321,7 @@ class learnpath
         }
         $list .= '</ul>';
 
-        $return .= Display::panelCollapse(
+        $return = Display::panelCollapse(
             $this->name,
             $list,
             'scorm-list',
@@ -6383,9 +6353,9 @@ class learnpath
                 $item['type'] = $default_content[$item['load_data']]['item_type'];
             }
             $sub_list = '';
-            if (isset($item['type']) && $item['type'] == 'dir') {
+            if (isset($item['type']) && $item['type'] === 'dir') {
                 // empty value
-                $sub_list = Display::tag('li', '', ['class' => 'sub_item empty record li_container']);
+                $sub_list = Display::tag('li', '', ['class' => 'sub_item empty']);
             }
             if (empty($item['children'])) {
                 $sub_list = Display::tag('ul', $sub_list, ['id' => 'UL_'.$key, 'class' => 'record li_container']);
@@ -6634,6 +6604,11 @@ class learnpath
             if ($folder) {
                 $filepath = api_get_path(SYS_COURSE_PATH).$course['path'].'/document'.$dir;
             }
+        }
+
+        if (empty($documentId)) {
+            $dir = api_remove_trailing_slash($dir);
+            $documentId = DocumentManager::get_document_id($course, $dir, 0);
         }
 
         $array = [
@@ -7262,7 +7237,6 @@ class learnpath
     {
         $course_id = api_get_course_int_id();
         $id = (int) $id;
-        $tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
         $tbl_quiz = Database::get_course_table(TABLE_QUIZ_TEST);
 
         if ($id != 0 && is_array($extra_info)) {
@@ -7289,30 +7263,7 @@ class learnpath
             $parent = $extra_info['parent_item_id'];
         }
 
-        $sql = "SELECT * FROM $tbl_lp_item 
-                WHERE c_id = $course_id AND lp_id = ".$this->lp_id;
-
-        $result = Database::query($sql);
-        $arrLP = [];
-        while ($row = Database::fetch_array($result)) {
-            $arrLP[] = [
-                'id' => $row['iid'],
-                'item_type' => $row['item_type'],
-                'title' => $row['title'],
-                'path' => $row['path'],
-                'description' => $row['description'],
-                'parent_item_id' => $row['parent_item_id'],
-                'previous_item_id' => $row['previous_item_id'],
-                'next_item_id' => $row['next_item_id'],
-                'display_order' => $row['display_order'],
-                'max_score' => $row['max_score'],
-                'min_score' => $row['min_score'],
-                'mastery_score' => $row['mastery_score'],
-                'prerequisite' => $row['prerequisite'],
-                'max_time_allowed' => $row['max_time_allowed'],
-            ];
-        }
-
+        $arrLP = $this->getItemsForForm();
         $this->tree_array($arrLP);
         $arrLP = isset($this->arrMenu) ? $this->arrMenu : [];
         unset($this->arrMenu);
@@ -7339,7 +7290,7 @@ class learnpath
         $form->addHeader($legend);
 
         if ($action != 'move') {
-            $form->addText('title', get_lang('Title'), true, ['id' => 'idTitle']);
+            $this->setItemTitle($form);
             $defaults['title'] = $item_title;
         }
 
@@ -7429,13 +7380,13 @@ class learnpath
             }
         }
 
-        if ($action == 'add') {
+        if ($action === 'add') {
             $form->addButtonSave(get_lang('AddExercise'), 'submit_button');
         } else {
             $form->addButtonSave(get_lang('EditCurrentExecice'), 'submit_button');
         }
 
-        if ($action == 'move') {
+        if ($action === 'move') {
             $form->addHidden('title', $item_title);
             $form->addHidden('description', $item_description);
         }
@@ -7466,7 +7417,6 @@ class learnpath
     {
         $course_id = api_get_course_int_id();
         $uploadPath = DIR_HOTPOTATOES; //defined in main_api
-        $tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
 
         if ($id != 0 && is_array($extra_info)) {
             $item_title = stripslashes($extra_info['title']);
@@ -7474,9 +7424,9 @@ class learnpath
         } elseif (is_numeric($extra_info)) {
             $TBL_DOCUMENT = Database::get_course_table(TABLE_DOCUMENT);
 
-            $sql = "SELECT * FROM ".$TBL_DOCUMENT."
+            $sql = "SELECT * FROM $TBL_DOCUMENT
                     WHERE
-                        c_id = ".$course_id." AND
+                        c_id = $course_id AND
                         path LIKE '".$uploadPath."/%/%htm%' AND
                         iid = ".(int) $extra_info."
                     ORDER BY iid ASC";
@@ -7495,35 +7445,12 @@ class learnpath
             $item_description = '';
         }
 
+        $parent = 0;
         if ($id != 0 && is_array($extra_info)) {
             $parent = $extra_info['parent_item_id'];
-        } else {
-            $parent = 0;
         }
 
-        $sql = "SELECT * FROM $tbl_lp_item
-                WHERE c_id = $course_id AND lp_id = ".$this->lp_id;
-        $result = Database::query($sql);
-        $arrLP = [];
-        while ($row = Database::fetch_array($result)) {
-            $arrLP[] = [
-                'id' => $row['id'],
-                'item_type' => $row['item_type'],
-                'title' => $row['title'],
-                'path' => $row['path'],
-                'description' => $row['description'],
-                'parent_item_id' => $row['parent_item_id'],
-                'previous_item_id' => $row['previous_item_id'],
-                'next_item_id' => $row['next_item_id'],
-                'display_order' => $row['display_order'],
-                'max_score' => $row['max_score'],
-                'min_score' => $row['min_score'],
-                'mastery_score' => $row['mastery_score'],
-                'prerequisite' => $row['prerequisite'],
-                'max_time_allowed' => $row['max_time_allowed'],
-            ];
-        }
-
+        $arrLP = $this->getItemsForForm();
         $legend = '<legend>';
         if ($action == 'add') {
             $legend .= get_lang('CreateTheExercise');
@@ -7547,9 +7474,7 @@ class learnpath
         $return .= '<td class="input">';
         $return .= '<select id="idParent" name="parent" onChange="javascript: load_cbo(this.value);" size="1">';
         $return .= '<option class="top" value="0">'.$this->name.'</option>';
-        $arrHide = [
-            $id,
-        ];
+        $arrHide = [$id];
 
         if (count($arrLP) > 0) {
             for ($i = 0; $i < count($arrLP); $i++) {
@@ -7590,7 +7515,8 @@ class learnpath
                     $selected = '';
                 }
 
-                $return .= '<option '.$selected.'value="'.$arrLP[$i]['id'].'">'.get_lang('After').' "'.$arrLP[$i]['title'].'"</option>';
+                $return .= '<option '.$selected.'value="'.$arrLP[$i]['id'].'">'.
+                    get_lang('After').' "'.$arrLP[$i]['title'].'"</option>';
             }
         }
 
@@ -7658,8 +7584,10 @@ class learnpath
     public function display_forum_form($action = 'add', $id = 0, $extra_info = '')
     {
         $course_id = api_get_course_int_id();
-        $tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
         $tbl_forum = Database::get_course_table(TABLE_FORUM);
+
+        $item_title = '';
+        $item_description = '';
 
         if ($id != 0 && is_array($extra_info)) {
             $item_title = stripslashes($extra_info['title']);
@@ -7673,41 +7601,12 @@ class learnpath
 
             $item_title = $row['title'];
             $item_description = $row['comment'];
-        } else {
-            $item_title = '';
-            $item_description = '';
         }
-
+        $parent = 0;
         if ($id != 0 && is_array($extra_info)) {
             $parent = $extra_info['parent_item_id'];
-        } else {
-            $parent = 0;
         }
-
-        $sql = "SELECT * FROM $tbl_lp_item
-                WHERE
-                    c_id = $course_id AND
-                    lp_id = ".$this->lp_id;
-        $result = Database::query($sql);
-        $arrLP = [];
-        while ($row = Database::fetch_array($result)) {
-            $arrLP[] = [
-                'id' => $row['iid'],
-                'item_type' => $row['item_type'],
-                'title' => $row['title'],
-                'path' => $row['path'],
-                'description' => $row['description'],
-                'parent_item_id' => $row['parent_item_id'],
-                'previous_item_id' => $row['previous_item_id'],
-                'next_item_id' => $row['next_item_id'],
-                'display_order' => $row['display_order'],
-                'max_score' => $row['max_score'],
-                'min_score' => $row['min_score'],
-                'mastery_score' => $row['mastery_score'],
-                'prerequisite' => $row['prerequisite'],
-            ];
-        }
-
+        $arrLP = $this->getItemsForForm();
         $this->tree_array($arrLP);
         $arrLP = isset($this->arrMenu) ? $this->arrMenu : [];
         unset($this->arrMenu);
@@ -7730,12 +7629,7 @@ class learnpath
         $form->addHeader($legend);
 
         if ($action != 'move') {
-            $form->addText(
-                'title',
-                get_lang('Title'),
-                true,
-                ['id' => 'idTitle', 'class' => 'learnpath_item_form']
-            );
+            $this->setItemTitle($form);
             $defaults['title'] = $item_title;
         }
 
@@ -7879,9 +7773,10 @@ class learnpath
         if (empty($course_id)) {
             return null;
         }
-        $tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
         $tbl_forum = Database::get_course_table(TABLE_FORUM_THREAD);
 
+        $item_title = '';
+        $item_description = '';
         if ($id != 0 && is_array($extra_info)) {
             $item_title = stripslashes($extra_info['title']);
         } elseif (is_numeric($extra_info)) {
@@ -7893,40 +7788,14 @@ class learnpath
 
             $item_title = $row['title'];
             $item_description = '';
-        } else {
-            $item_title = '';
-            $item_description = '';
         }
 
+        $parent = 0;
         if ($id != 0 && is_array($extra_info)) {
             $parent = $extra_info['parent_item_id'];
-        } else {
-            $parent = 0;
         }
 
-        $sql = "SELECT * FROM $tbl_lp_item
-                WHERE c_id = $course_id AND lp_id = ".$this->lp_id;
-        $result = Database::query($sql);
-
-        $arrLP = [];
-        while ($row = Database::fetch_array($result)) {
-            $arrLP[] = [
-                'id' => $row['iid'],
-                'item_type' => $row['item_type'],
-                'title' => $row['title'],
-                'path' => $row['path'],
-                'description' => $row['description'],
-                'parent_item_id' => $row['parent_item_id'],
-                'previous_item_id' => $row['previous_item_id'],
-                'next_item_id' => $row['next_item_id'],
-                'display_order' => $row['display_order'],
-                'max_score' => $row['max_score'],
-                'min_score' => $row['min_score'],
-                'mastery_score' => $row['mastery_score'],
-                'prerequisite' => $row['prerequisite'],
-            ];
-        }
-
+        $arrLP = $this->getItemsForForm();
         $this->tree_array($arrLP);
         $arrLP = isset($this->arrMenu) ? $this->arrMenu : [];
         unset($this->arrMenu);
@@ -8021,12 +7890,7 @@ class learnpath
         }
 
         if ($action != 'move') {
-            $form->addText(
-                'title',
-                get_lang('Title'),
-                true,
-                ['id' => 'idTitle']
-            );
+            $this->setItemTitle($form);
             $defaults['title'] = $item_title;
 
             $id_prerequisite = 0;
@@ -8148,7 +8012,8 @@ class learnpath
             $arrLP[] = [
                 'id' => $row['iid'],
                 'item_type' => $row['item_type'],
-                'title' => $row['title'],
+                'title' => $this->cleanItemTitle($row['title']),
+                'title_raw' => $row['title'],
                 'path' => $row['path'],
                 'description' => $row['description'],
                 'parent_item_id' => $row['parent_item_id'],
@@ -8168,7 +8033,7 @@ class learnpath
 
         $url = api_get_self().'?'.api_get_cidreq().'&action='.$action.'&type='.$item_type.'&lp_id='.$this->lp_id;
 
-        $form = new FormValidator('form', 'POST', $url);
+        $form = new FormValidator('form_'.$item_type, 'POST', $url);
         $defaults['title'] = api_html_entity_decode(
             $item_title,
             ENT_QUOTES,
@@ -8182,7 +8047,7 @@ class learnpath
         $charset = api_get_system_encoding();
         for ($i = 0; $i < count($arrLP); $i++) {
             if ($action != 'add') {
-                if ($arrLP[$i]['item_type'] == 'dir' && !in_array($arrLP[$i]['id'], $arrHide) &&
+                if ($arrLP[$i]['item_type'] === 'dir' && !in_array($arrLP[$i]['id'], $arrHide) &&
                     !in_array($arrLP[$i]['parent_item_id'], $arrHide)
                 ) {
                     $arrHide[$arrLP[$i]['id']]['value'] = $arrLP[$i]['title'];
@@ -8192,7 +8057,7 @@ class learnpath
                     }
                 }
             } else {
-                if ($arrLP[$i]['item_type'] == 'dir') {
+                if ($arrLP[$i]['item_type'] === 'dir') {
                     $arrHide[$arrLP[$i]['id']]['value'] = $arrLP[$i]['title'];
                     $arrHide[$arrLP[$i]['id']]['padding'] = 20 + $arrLP[$i]['depth'] * 20;
                     if ($parent == $arrLP[$i]['id']) {
@@ -8203,9 +8068,7 @@ class learnpath
         }
 
         if ($action != 'move') {
-            $form->addElement('text', 'title', get_lang('Title'));
-            $form->applyFilter('title', 'html_filter');
-            $form->addRule('title', get_lang('ThisFieldIsRequired'), 'required');
+            $this->setItemTitle($form);
         } else {
             $form->addElement('hidden', 'title');
         }
@@ -8217,7 +8080,7 @@ class learnpath
             '',
             [
                 'id' => 'idParent',
-                'onchange' => "javascript: load_cbo(this.value);",
+                'onchange' => 'javascript: load_cbo(this.value);',
             ]
         );
 
@@ -8237,6 +8100,7 @@ class learnpath
         if (is_array($arrLP)) {
             reset($arrLP);
         }
+
         $arrHide = [];
         // POSITION
         for ($i = 0; $i < count($arrLP); $i++) {
@@ -8276,7 +8140,7 @@ class learnpath
         }
 
         // When new chapter add at the end
-        if ($action == 'add_item') {
+        if ($action === 'add_item') {
             $position->setSelected($lastPosition);
         }
 
@@ -8287,7 +8151,7 @@ class learnpath
         $form->addButtonSave(get_lang('SaveSection'), 'submit_button');
 
         //fix in order to use the tab
-        if ($item_type == 'dir') {
+        if ($item_type === 'dir') {
             $form->addElement('hidden', 'type', 'dir');
         }
 
@@ -8312,7 +8176,6 @@ class learnpath
             );
 
             $relative_prefix = '';
-
             $editor_config = [
                 'ToolbarSet' => 'LearningPathDocuments',
                 'Width' => '100%',
@@ -8371,7 +8234,6 @@ class learnpath
     {
         $course_id = api_get_course_int_id();
         $_course = api_get_course_info();
-        $tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
         $tbl_doc = Database::get_course_table(TABLE_DOCUMENT);
 
         $no_display_edit_textarea = false;
@@ -8403,6 +8265,9 @@ class learnpath
                 }
             }
         }
+
+        $item_title = '';
+        $item_description = '';
         if ($id != 0 && is_array($extra_info)) {
             $item_title = stripslashes($extra_info['title']);
             $item_description = stripslashes($extra_info['description']);
@@ -8423,39 +8288,15 @@ class learnpath
                 $path_parts = pathinfo($row['path']);
                 $item_title = stripslashes($path_parts['filename']);
             }
-        } else {
-            $item_title = '';
-            $item_description = '';
         }
+
         $return = '<legend>';
         $parent = 0;
         if ($id != 0 && is_array($extra_info)) {
             $parent = $extra_info['parent_item_id'];
         }
 
-        $sql = "SELECT * FROM $tbl_lp_item
-                WHERE c_id = $course_id AND lp_id = ".$this->lp_id;
-        $result = Database::query($sql);
-        $arrLP = [];
-
-        while ($row = Database::fetch_array($result)) {
-            $arrLP[] = [
-                'id' => $row['iid'],
-                'item_type' => $row['item_type'],
-                'title' => $row['title'],
-                'path' => $row['path'],
-                'description' => $row['description'],
-                'parent_item_id' => $row['parent_item_id'],
-                'previous_item_id' => $row['previous_item_id'],
-                'next_item_id' => $row['next_item_id'],
-                'display_order' => $row['display_order'],
-                'max_score' => $row['max_score'],
-                'min_score' => $row['min_score'],
-                'mastery_score' => $row['mastery_score'],
-                'prerequisite' => $row['prerequisite'],
-            ];
-        }
-
+        $arrLP = $this->getItemsForForm();
         $this->tree_array($arrLP);
         $arrLP = isset($this->arrMenu) ? $this->arrMenu : [];
         unset($this->arrMenu);
@@ -8510,14 +8351,7 @@ class learnpath
             if (isset($data['id'])) {
                 $defaults['directory_parent_id'] = $data['id'];
             }
-
-            $form->addElement(
-                'text',
-                'title',
-                get_lang('Title'),
-                ['id' => 'idTitle', 'class' => 'col-md-4']
-            );
-            $form->applyFilter('title', 'html_filter');
+            $this->setItemTitle($form);
         }
 
         $arrHide[0]['value'] = $this->name;
@@ -8760,7 +8594,6 @@ class learnpath
     {
         $course_id = api_get_course_int_id();
         $_course = api_get_course_info();
-        $tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
         $tbl_doc = Database::get_course_table(TABLE_DOCUMENT);
 
         $no_display_edit_textarea = false;
@@ -8777,6 +8610,8 @@ class learnpath
         }
         $no_display_add = false;
 
+        $item_title = '';
+        $item_description = '';
         if ($id != 0 && is_array($extra_info)) {
             $item_title = stripslashes($extra_info['title']);
             $item_description = stripslashes($extra_info['description']);
@@ -8795,44 +8630,19 @@ class learnpath
                 $path_parts = pathinfo($row['path']);
                 $item_title = stripslashes($path_parts['filename']);
             }
-        } else {
-            $item_title = '';
-            $item_description = '';
         }
 
+        $parent = 0;
         if ($id != 0 && is_array($extra_info)) {
             $parent = $extra_info['parent_item_id'];
-        } else {
-            $parent = 0;
         }
 
-        $sql = "SELECT * FROM $tbl_lp_item WHERE c_id = $course_id AND lp_id = ".$this->lp_id;
-        $result = Database::query($sql);
-        $arrLP = [];
-
-        while ($row = Database::fetch_array($result)) {
-            $arrLP[] = [
-                'id' => $row['iid'],
-                'item_type' => $row['item_type'],
-                'title' => $row['title'],
-                'path' => $row['path'],
-                'description' => $row['description'],
-                'parent_item_id' => $row['parent_item_id'],
-                'previous_item_id' => $row['previous_item_id'],
-                'next_item_id' => $row['next_item_id'],
-                'display_order' => $row['display_order'],
-                'max_score' => $row['max_score'],
-                'min_score' => $row['min_score'],
-                'mastery_score' => $row['mastery_score'],
-                'prerequisite' => $row['prerequisite'],
-            ];
-        }
-
+        $arrLP = $this->getItemsForForm();
         $this->tree_array($arrLP);
         $arrLP = isset($this->arrMenu) ? $this->arrMenu : [];
         unset($this->arrMenu);
 
-        if ($action == 'add') {
+        if ($action === 'add') {
             $formHeader = get_lang('CreateTheDocument');
         } else {
             $formHeader = get_lang('EditTheCurrentDocument');
@@ -8883,14 +8693,7 @@ class learnpath
         if (isset($data['id'])) {
             $defaults['directory_parent_id'] = $data['id'];
         }
-
-        $form->addElement(
-            'text',
-            'title',
-            get_lang('Title')
-        );
-        $form->applyFilter('title', 'trim');
-        $form->applyFilter('title', 'html_filter');
+        $this->setItemTitle($form);
 
         $arrHide[0]['value'] = $this->name;
         $arrHide[0]['padding'] = 20;
@@ -9212,7 +9015,6 @@ class learnpath
     public function display_link_form($action = 'add', $id = 0, $extra_info = '')
     {
         $course_id = api_get_course_int_id();
-        $tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
         $tbl_link = Database::get_course_table(TABLE_LINK);
 
         $item_title = '';
@@ -9246,28 +9048,7 @@ class learnpath
             $parent = $extra_info['parent_item_id'];
         }
 
-        $sql = "SELECT * FROM $tbl_lp_item
-                WHERE c_id = $course_id AND lp_id = ".$this->lp_id;
-        $result = Database::query($sql);
-        $arrLP = [];
-
-        while ($row = Database::fetch_array($result)) {
-            $arrLP[] = [
-                'id' => $row['id'],
-                'item_type' => $row['item_type'],
-                'title' => $row['title'],
-                'path' => $row['path'],
-                'description' => $row['description'],
-                'parent_item_id' => $row['parent_item_id'],
-                'previous_item_id' => $row['previous_item_id'],
-                'next_item_id' => $row['next_item_id'],
-                'display_order' => $row['display_order'],
-                'max_score' => $row['max_score'],
-                'min_score' => $row['min_score'],
-                'mastery_score' => $row['mastery_score'],
-                'prerequisite' => $row['prerequisite'],
-            ];
-        }
+        $arrLP = $this->getItemsForForm();
 
         $this->tree_array($arrLP);
         $arrLP = isset($this->arrMenu) ? $this->arrMenu : [];
@@ -9284,7 +9065,7 @@ class learnpath
         $form->addHeader($legend);
 
         if ($action != 'move') {
-            $form->addText('title', get_lang('Title'), true, ['class' => 'learnpath_item_form']);
+            $this->setItemTitle($form);
             $defaults['title'] = $item_title;
         }
 
@@ -9419,7 +9200,6 @@ class learnpath
         $extra_info = ''
     ) {
         $course_id = api_get_course_int_id();
-        $tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
         $tbl_publication = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
 
         $item_title = get_lang('Student_publication');
@@ -9444,28 +9224,7 @@ class learnpath
             $parent = $extra_info['parent_item_id'];
         }
 
-        $sql = "SELECT * FROM $tbl_lp_item 
-                WHERE c_id = $course_id AND lp_id = ".$this->lp_id;
-        $result = Database::query($sql);
-        $arrLP = [];
-
-        while ($row = Database::fetch_array($result)) {
-            $arrLP[] = [
-                'id' => $row['iid'],
-                'item_type' => $row['item_type'],
-                'title' => $row['title'],
-                'path' => $row['path'],
-                'description' => $row['description'],
-                'parent_item_id' => $row['parent_item_id'],
-                'previous_item_id' => $row['previous_item_id'],
-                'next_item_id' => $row['next_item_id'],
-                'display_order' => $row['display_order'],
-                'max_score' => $row['max_score'],
-                'min_score' => $row['min_score'],
-                'mastery_score' => $row['mastery_score'],
-                'prerequisite' => $row['prerequisite'],
-            ];
-        }
+        $arrLP = $this->getItemsForForm();
 
         $this->tree_array($arrLP);
         $arrLP = isset($this->arrMenu) ? $this->arrMenu : [];
@@ -9482,12 +9241,7 @@ class learnpath
         }
 
         if ($action != 'move') {
-            $form->addText(
-                'title',
-                get_lang('Title'),
-                true,
-                ['class' => 'learnpath_item_form', 'id' => 'idTitle']
-            );
+            $this->setItemTitle($form);
         }
 
         $parentSelect = $form->addSelect(
@@ -9709,6 +9463,7 @@ class learnpath
         $return .= 'var child_value = new Array();'."\n\n";
         $return .= 'child_name[0] = new Array();'."\n";
         $return .= 'child_value[0] = new Array();'."\n\n";
+
         $tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
         $sql = "SELECT * FROM ".$tbl_lp_item."
                 WHERE 
@@ -9719,7 +9474,9 @@ class learnpath
         $res_zero = Database::query($sql);
         $i = 0;
 
-        while ($row_zero = Database::fetch_array($res_zero)) {
+        $list = $this->getItemsForForm(true);
+
+        foreach ($list as $row_zero) {
             if ($row_zero['item_type'] !== TOOL_LP_FINAL_ITEM) {
                 if ($row_zero['item_type'] == TOOL_QUIZ) {
                     $row_zero['title'] = Exercise::get_formated_title_variable($row_zero['title']);
@@ -9729,6 +9486,7 @@ class learnpath
                 $return .= 'child_value[0]['.$i++.'] = "'.$row_zero['iid'].'";'."\n";
             }
         }
+
         $return .= "\n";
         $sql = "SELECT * FROM $tbl_lp_item
                 WHERE c_id = $course_id AND lp_id = ".$this->lp_id;
@@ -9745,7 +9503,7 @@ class learnpath
             $return .= 'child_value['.$row['iid'].'] = new Array();'."\n\n";
 
             while ($row_parent = Database::fetch_array($res_parent)) {
-                $js_var = json_encode(get_lang('After').' '.$row_parent['title']);
+                $js_var = json_encode(get_lang('After').' '.$this->cleanItemTitle($row_parent['title']));
                 $return .= 'child_name['.$row['iid'].']['.$i.'] =   '.$js_var.' ;'."\n";
                 $return .= 'child_value['.$row['iid'].']['.$i++.'] = "'.$row_parent['iid'].'";'."\n";
             }
@@ -9895,7 +9653,6 @@ class learnpath
         $sql = "SELECT * FROM $tbl_lp_item
                 WHERE c_id = $course_id AND lp_id = ".$this->lp_id;
         $result = Database::query($sql);
-        $arrLP = [];
 
         $selectedMinScore = [];
         $selectedMaxScore = [];
@@ -9906,26 +9663,9 @@ class learnpath
                 $selectedMaxScore[$row['prerequisite']] = $row['prerequisite_max_score'];
             }
             $masteryScore[$row['iid']] = $row['mastery_score'];
-
-            $arrLP[] = [
-                'id' => $row['iid'],
-                'item_type' => $row['item_type'],
-                'title' => $row['title'],
-                'ref' => $row['ref'],
-                'description' => $row['description'],
-                'parent_item_id' => $row['parent_item_id'],
-                'previous_item_id' => $row['previous_item_id'],
-                'next_item_id' => $row['next_item_id'],
-                'max_score' => $row['max_score'],
-                'min_score' => $row['min_score'],
-                'mastery_score' => $row['mastery_score'],
-                'prerequisite' => $row['prerequisite'],
-                'display_order' => $row['display_order'],
-                'prerequisite_min_score' => $row['prerequisite_min_score'],
-                'prerequisite_max_score' => $row['prerequisite_max_score'],
-            ];
         }
 
+        $arrLP = $this->getItemsForForm();
         $this->tree_array($arrLP);
         $arrLP = isset($this->arrMenu) ? $this->arrMenu : [];
         unset($this->arrMenu);
@@ -13619,6 +13359,82 @@ EOD;
         $path = api_get_path(WEB_PUBLIC_PATH).'css/themes/'.$theme.'/lp_icons/'.$icon;
 
         return Display::img($path);
+    }
+
+    /**
+     * @param string $value
+     *
+     * @return string
+     */
+    public function cleanItemTitle($value)
+    {
+        $value = Security::remove_XSS(strip_tags($value));
+
+        return $value;
+    }
+
+    /**
+     * @param FormValidator $form
+     */
+    public function setItemTitle(FormValidator $form)
+    {
+        if (api_get_configuration_value('save_titles_as_html')) {
+            $form->addHtmlEditor(
+                'title',
+                get_lang('Title'),
+                true,
+                false,
+                ['ToolbarSet' => 'TitleAsHtml']
+            );
+        } else {
+            $form->addText('title', get_lang('Title'), true, ['id' => 'idTitle', 'class' => 'learnpath_item_form']);
+            $form->applyFilter('title', 'trim');
+            $form->applyFilter('title', 'html_filter');
+        }
+    }
+
+    /**
+     * @return array
+     */
+    public function getItemsForForm($addParentCondition = false)
+    {
+        $tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
+        $course_id = api_get_course_int_id();
+
+        $sql = "SELECT * FROM $tbl_lp_item 
+                WHERE c_id = $course_id AND lp_id = ".$this->lp_id;
+
+        if ($addParentCondition) {
+            $sql .= ' AND parent_item_id = 0 ';
+        }
+        $sql .= ' ORDER BY display_order ASC';
+
+        $result = Database::query($sql);
+        $arrLP = [];
+        while ($row = Database::fetch_array($result)) {
+            $arrLP[] = [
+                'iid' => $row['iid'],
+                'id' => $row['iid'],
+                'item_type' => $row['item_type'],
+                'title' => $this->cleanItemTitle($row['title']),
+                'title_raw' => $row['title'],
+                'path' => $row['path'],
+                'description' => Security::remove_XSS($row['description']),
+                'parent_item_id' => $row['parent_item_id'],
+                'previous_item_id' => $row['previous_item_id'],
+                'next_item_id' => $row['next_item_id'],
+                'display_order' => $row['display_order'],
+                'max_score' => $row['max_score'],
+                'min_score' => $row['min_score'],
+                'mastery_score' => $row['mastery_score'],
+                'prerequisite' => $row['prerequisite'],
+                'max_time_allowed' => $row['max_time_allowed'],
+                'prerequisite_min_score' => $row['prerequisite_min_score'],
+                'prerequisite_max_score' => $row['prerequisite_max_score'],
+            ];
+        }
+
+        return $arrLP;
     }
 
     /**

@@ -44,7 +44,7 @@ if (api_is_in_gradebook()) {
     ];
 }
 $interbreadcrumb[] = ['url' => 'lp_controller.php?action=list&'.api_get_cidreq(), 'name' => get_lang('LearningPaths')];
-$interbreadcrumb[] = ['url' => '#', "name" => $learnPath->get_name()];
+$interbreadcrumb[] = ['url' => '#', 'name' => $learnPath->getNameNoTags()];
 
 // Theme calls.
 $lp_theme_css = $learnPath->get_theme();

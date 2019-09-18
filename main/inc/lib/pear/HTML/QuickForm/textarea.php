@@ -58,6 +58,14 @@ class HTML_QuickForm_textarea extends HTML_QuickForm_element
         $columnsSize = isset($attributes['cols-size']) ? $attributes['cols-size'] : null;
         $this->setColumnsSize($columnsSize);
         parent::__construct($elementName, $label, $attributes);
+
+        $id = $this->getAttribute('id');
+
+        if (empty($id)) {
+            $name = $this->getAttribute('name');
+            $this->setAttribute('id', uniqid($name.'_'));
+        }
+
         $this->_persistantFreeze = true;
         $this->_type = 'textarea';
         $this->_value = null;

@@ -57,8 +57,9 @@ $friend_html = SocialManager::listMyFriendsBlock($user_id);
 
 // Block Social Sessions
 $social_session_block = null;
-$user_info = api_get_user_info($user_id);
-$sessionList = SessionManager::getSessionsFollowedByUser($user_id, $user_info['status']);
+//$user_info = api_get_user_info($user_id);
+//$sessionList = SessionManager::getSessionsFollowedByUser($user_id, $user_info['status']);
+$sessionList = [];
 
 if (count($sessionList) > 0) {
     $social_session_block = $sessionList;

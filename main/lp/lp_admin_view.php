@@ -48,7 +48,7 @@ $interbreadcrumb[] = [
 ];
 $interbreadcrumb[] = [
     'url' => api_get_self()."?action=build&lp_id=$learnpath_id&".api_get_cidreq(),
-    "name" => Security::remove_XSS($learnPath->get_name()),
+    "name" => Security::remove_XSS($learnPath->getNameNoTags()),
 ];
 $interbreadcrumb[] = [
     'url' => api_get_self()."?action=add_item&type=step&lp_id=$learnpath_id&".api_get_cidreq(),
@@ -84,7 +84,7 @@ if (isset($_POST['save_audio'])) {
     if (count($lp_items_to_remove_audio) > 0) {
         $sql = "UPDATE $tbl_lp_item SET audio = '' 
                 WHERE iid IN (".$in.")";
-        $result = Database::query($sql);
+        Database::query($sql);
     }
 
     // Uploading the audio files.

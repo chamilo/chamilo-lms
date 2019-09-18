@@ -4,6 +4,10 @@
 use Chamilo\CourseBundle\Entity\CLpCategory;
 use ChamiloSession as Session;
 
+if (!isset($_GET['course'])) {
+    $cidReset = true;
+}
+
 /**
  * Implements the tracking of students in the Reporting pages.
  *
@@ -101,7 +105,6 @@ if (isset($_GET['from']) && $_GET['from'] === 'myspace') {
 }
 
 $nameTools = get_lang('StudentDetails');
-$em = Database::getManager();
 
 if (!empty($details)) {
     if ($origin === 'user_course') {
@@ -205,7 +208,6 @@ if (!empty($details)) {
 // Database Table Definitions
 $tbl_course_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
 $tbl_stats_exercices = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
-$user_id = isset($_GET['user_id']) && !empty($_GET['user_id']) ? (int) $_GET['user_id'] : api_get_user_id();
 $action = isset($_GET['action']) ? $_GET['action'] : '';
 
 switch ($action) {
@@ -242,8 +244,6 @@ switch ($action) {
 
         $first = Tracking::get_first_connection_date($student_id);
         $last = Tracking::get_last_connection_date($student_id);
-
-        $attendance = new Attendance();
 
         $table = new HTML_Table(['class' => 'data_table']);
         $column = 0;
@@ -663,7 +663,7 @@ echo '<a href="'.api_get_self().'?'.Security::remove_XSS($_SERVER['QUERY_STRING'
     .Display::return_icon('export_excel.png', get_lang('ExportAsXLS'), '', ICON_SIZE_MEDIUM).'</a> ';
 
 echo Display::url(
-    Display::return_icon('export.png', get_lang('Export'), '', ICON_SIZE_MEDIUM),
+    Display::return_icon('attendance.png', get_lang('AccessDetails'), '', ICON_SIZE_MEDIUM),
     api_get_path(WEB_CODE_PATH).'mySpace/access_details_session.php?user_id='.$student_id
 );
 
@@ -1093,7 +1093,6 @@ if (empty($details)) {
             $totalScore = 0;
             $totalProgress = 0;
             $gradeBookTotal = [0, 0];
-            $totalEvaluations = '0/0 (0%)';
             $totalCourses = count($courses);
             $scoreDisplay = ScoreDisplay::instance();
 
@@ -1306,7 +1305,6 @@ if (empty($details)) {
         echo '</div>';
     }
 } else {
-    $trackingColumns = api_get_configuration_value('tracking_columns');
     $columnHeaders = [
         'lp' => get_lang('LearningPath'),
         'time' => get_lang('Time').
@@ -1666,6 +1664,7 @@ if (empty($details)) {
                     0
                 );
 
+                $lp_name = '-';
                 if (!isset($score_percentage) && $count_attempts > 0) {
                     $scores_lp = Tracking::get_avg_student_exercise_score(
                         $student_id,
@@ -1677,8 +1676,6 @@ if (empty($details)) {
                     );
                     $score_percentage = $scores_lp[0];
                     $lp_name = $scores_lp[1];
-                } else {
-                    $lp_name = '-';
                 }
                 $lp_name = !empty($lp_name) ? $lp_name : get_lang('NoLearnpath');
 
@@ -1687,7 +1684,7 @@ if (empty($details)) {
                     $css_class = 'row_odd';
                 }
 
-                echo '<tr class="'.$css_class.'"><td>'.$exercices['title'].'</td>';
+                echo '<tr class="'.$css_class.'"><td>'.Exercise::get_formated_title_variable($exercices['title']).'</td>';
                 echo '<td>';
 
                 if (!empty($lp_name)) {

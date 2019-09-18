@@ -91,12 +91,22 @@ $form = new FormValidator(
 $form->addHeader(get_lang('AddLpToStart'));
 
 // Title
+if (api_get_configuration_value('save_titles_as_html')) {
+    $form->addHtmlEditor(
+        'lp_name',
+        get_lang('LPName'),
+        true,
+        false,
+        ['ToolbarSet' => 'TitleAsHtml']
+    );
+} else {
 $form->addElement(
     'text',
     'lp_name',
     api_ucfirst(get_lang('LPName')),
     ['autofocus' => 'autofocus']
 );
+}
 $form->applyFilter('lp_name', 'html_filter');
 $form->addRule('lp_name', get_lang('ThisFieldIsRequired'), 'required');
 

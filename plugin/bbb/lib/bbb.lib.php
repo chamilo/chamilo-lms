@@ -802,9 +802,9 @@ class bbb
                             $this->updateMeetingVideoUrl($meetingDB['id'], $record['playbackFormatUrl']);
                         }
 
-                        if (!$this->isConferenceManager()) {
+                        /*if (!$this->isConferenceManager()) {
                             $record = [];
-                        }
+                        }*/
                     }
                 }
 
@@ -1270,6 +1270,12 @@ class bbb
      */
     public function isServerRunning()
     {
+        $host = $this->plugin->get('host');
+
+        if (empty($host)) {
+            return false;
+        }
+
         return true;
         //return BigBlueButtonBN::isServerRunning($this->protocol.$this->url);
     }

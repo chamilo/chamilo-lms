@@ -3060,6 +3060,9 @@ class UserManager
                         $order = ' ORDER BY _isFieldNull asc, s.accessEndDate asc';
                     }
                     break;
+                case 'name':
+                    $order = " ORDER BY s.name $orderSetting ";
+                    break;
             }
         }
 

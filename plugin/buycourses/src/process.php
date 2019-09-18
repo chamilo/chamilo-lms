@@ -47,10 +47,7 @@ if ($buyingCourse) {
     $item = $plugin->getItemByProduct($_REQUEST['i'], BuyCoursesPlugin::PRODUCT_TYPE_SESSION);
 }
 
-$userInfo = api_get_user_info();
-
 $form = new FormValidator('confirm_sale');
-
 if ($form->validate()) {
     $formValues = $form->getSubmitValues();
 
@@ -92,7 +89,6 @@ if ($count === 0) {
     $form->addHtml('<br />');
     $form->addHtml('<br />');
 } elseif ($count === 1) {
-    $text = '';
     // get the only array item
     foreach ($paymentTypesOptions as $type => $value) {
         $form->addHtml(sprintf($plugin->get_lang('XIsOnlyPaymentMethodAvailable'), $value));
@@ -116,7 +112,7 @@ $form->addButton('submit', $plugin->get_lang('ConfirmOrder'), 'check', 'success'
 
 // View
 $templateName = $plugin->get_lang('PaymentMethods');
-$interbreadcrumb[] = ["url" => "course_catalog.php", "name" => $plugin->get_lang('CourseListOnSale')];
+$interbreadcrumb[] = ['url' => 'course_catalog.php', 'name' => $plugin->get_lang('CourseListOnSale')];
 
 $tpl = new Template($templateName);
 $tpl->assign('buying_course', $buyingCourse);

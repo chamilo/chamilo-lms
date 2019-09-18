@@ -24,9 +24,6 @@ if (api_get_setting('allow_social_tool') != 'true') {
 
 $user_id = api_get_user_id();
 $friendId = isset($_GET['u']) ? (int) $_GET['u'] : api_get_user_id();
-$isAdmin = api_is_platform_admin($user_id);
-$userGroup = new UserGroup();
-
 $show_full_profile = true;
 //social tab
 $this_section = SECTION_SOCIAL;
@@ -41,7 +38,7 @@ SocialManager::handlePosts(api_get_self().'?u='.$friendId);
 
 if (isset($_GET['u'])) {
     //I'm your friend? I can see your profile?
-    $user_id = intval($_GET['u']);
+    $user_id = (int) $_GET['u'];
     if (api_is_anonymous($user_id, true)) {
         api_not_allowed(true);
     }
@@ -83,34 +80,15 @@ if (isset($_GET['u'])) {
                 $show_full_profile = false;
             }
         }
-    } else {
-        $user_info = api_get_user_info($user_id);
     }
-} else {
-    $user_info = api_get_user_info($user_id);
 }
 
-$isSelfUser = false;
-if ($user_info['user_id'] == api_get_user_id()) {
-    $isSelfUser = true;
-}
-
-$userIsOnline = user_is_online($user_id);
-$ajax_url = api_get_path(WEB_AJAX_PATH).'message.ajax.php';
-$socialAjaxUrl = api_get_path(WEB_AJAX_PATH).'social.ajax.php';
-$javascriptDir = api_get_path(LIBRARY_PATH).'javascript/';
 api_block_anonymous_users();
 $countPost = SocialManager::getCountWallMessagesByUser($friendId);
 SocialManager::getScrollJs($countPost, $htmlHeadXtra);
 $link_shared = '';
-
-$nametool = get_lang('ViewMySharedProfile');
 if (isset($_GET['shared'])) {
-    $my_link = '../social/profile.php';
     $link_shared = 'shared='.Security::remove_XSS($_GET['shared']);
-} else {
-    $my_link = '../social/profile.php';
-    $link_shared = '';
 }
 $interbreadcrumb[] = [
     'url' => 'home.php',
@@ -123,23 +101,13 @@ if (isset($_GET['u']) && is_numeric($_GET['u']) && $_GET['u'] != api_get_user_id
         'url' => '#',
         'name' => $info_user['complete_name'],
     ];
-    $nametool = '';
-}
-if (isset($_GET['u'])) {
-    $param_user = 'u='.Security::remove_XSS($_GET['u']);
-} else {
-    $info_user = api_get_user_info(api_get_user_id());
-    $param_user = '';
 }
 
 Session::write('social_user_id', (int) $user_id);
 
 // Setting some course info
-$personal_course_list = UserManager::get_personal_session_course_list(
-    $friendId,
-    50
-);
-$course_list_code = [];
+/*$course_list_code = [];
+$personal_course_list = UserManager::get_personal_session_course_list($friendId, 50);
 $i = 1;
 $list = [];
 if (is_array($personal_course_list)) {
@@ -154,7 +122,7 @@ if (is_array($personal_course_list)) {
     }
     //to avoid repeted courses
     $course_list_code = array_unique_dimensional($course_list_code);
-}
+}*/
 
 // Social Block Menu
 $menu = SocialManager::show_social_menu(
@@ -166,10 +134,8 @@ $menu = SocialManager::show_social_menu(
 
 //Setting some session info
 $user_info = api_get_user_info($friendId);
-$sessionList = SessionManager::getSessionsFollowedByUser(
-    $friendId,
-    $user_info['status']
-);
+//$sessionList = SessionManager::getSessionsFollowedByUser($friendId, $user_info['status']);
+$sessionList = [];
 
 // My friends
 $friend_html = SocialManager::listMyFriendsBlock($user_id, $link_shared);
@@ -182,21 +148,15 @@ $socialAutoExtendLink = SocialManager::getAutoExtendLink($user_id, $countPost);
 $htmlHeadXtra[] = SocialManager::getScriptToGetOpenGraph();
 
 $socialRightInformation = '';
-$social_right_content = '';
 $listInvitations = '';
 
 if ($show_full_profile) {
     $social_group_info_block = SocialManager::getGroupBlock($friendId);
-
-    // Block Social Course
+    /*
     $my_courses = null;
-
     // COURSES LIST
     if (is_array($list)) {
-        // Courses without sessions
-        $my_course = '';
         $i = 1;
-
         foreach ($list as $key => $value) {
             if (empty($value[2])) { //if out of any session
                 $my_courses .= $value[1];
@@ -204,7 +164,7 @@ if ($show_full_profile) {
             }
         }
         $social_course_block .= $my_courses;
-    }
+    }*/
 
     // Block Social Sessions
     if (count($sessionList) > 0) {
@@ -223,15 +183,16 @@ if ($show_full_profile) {
 
     // Images uploaded by course
     $file_list = '';
+    /*
     if (is_array($course_list_code) && count($course_list_code) > 0) {
         foreach ($course_list_code as $course) {
             $file_list .= UserManager::get_user_upload_files_by_course(
                 $user_id,
                 $course['code'],
-                $resourcetype = 'images'
+                'images'
             );
         }
-    }
+    }*/
 
     $count_pending_invitations = 0;
     if (!isset($_GET['u']) ||
@@ -297,13 +258,13 @@ if ($show_full_profile) {
 
         $images_uploaded = null;
         // Images uploaded by course
-        if (!empty($file_list)) {
+        /*if (!empty($file_list)) {
             $images_uploaded .= '<div><h3>'.get_lang('ImagesUploaded').'</h3></div>';
             $images_uploaded .= '<div class="social-content-information">';
             $images_uploaded .= $file_list;
             $images_uploaded .= '</div>';
             $socialRightInformation .= SocialManager::social_wrapper_div($images_uploaded, 4);
-        }
+        }*/
     }
 
     if (!empty($user_info['competences']) || !empty($user_info['diplomas'])
@@ -345,6 +306,7 @@ SocialManager::setSocialUserBlock(
 );
 
 $tpl->assign('social_friend_block', $friend_html);
+$tpl->assign('social_menu_block', $menu);
 $tpl->assign('add_post_form', $addPostForm);
 $tpl->assign('posts', $posts);
 $tpl->assign('social_course_block', $social_course_block);

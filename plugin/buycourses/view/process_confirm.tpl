@@ -26,7 +26,9 @@
                                 {% endfor %}
                             </ul>
                             <p id="n-price" class="lead text-right" style="color: white;">
-                                <span class="label label-primary">{{ course.currency == 'BRL' ? 'R$' : course.currency }} {{ course.price }}</span>
+                                <span class="label label-primary">
+                                    {{ course.item.total_price_formatted }}
+                                </span>
                             </p>
                             <p id="s-price" class="lead text-right"></p>
                         </div>
@@ -57,7 +59,9 @@
                                 {% endfor %}
                             </ul>
                             <p id="n-price" class="lead text-right" style="color: white;">
-                                <span class="label label-primary">{{ session.currency == 'BRL' ? 'R$' : session.currency }} {{ session.price }}</span>
+                                <span class="label label-primary">
+                                    {{ session.item.total_price_formatted }}
+                                </span>
                             </p>
                             <p id="s-price" class="lead text-right"></p>
                         </div>
@@ -98,8 +102,10 @@
                                         <em class="fa fa-hand-o-right"></em> {{ 'AppliesTo'|get_plugin_lang('BuyCoursesPlugin') }} {{ 'TemplateTitleCertificate'|get_lang }}
                                     </li>
                                 {% endif %}
-                                <li><em class="fa fa-money"></em> {{ 'Price'|get_plugin_lang('BuyCoursesPlugin') }}
-                                    : {{ service.currency == 'BRL' ? 'R$' : service.currency }} {{ service.price }}
+                                <li>
+                                    <em class="fa fa-money"></em>
+                                    {{ 'Price'|get_plugin_lang('BuyCoursesPlugin') }}
+                                    : {{ service_item.total_price_formatted }}
                                     / {{ service.duration_days == 0 ? 'NoLimit'|get_lang  : service.duration_days ~ ' ' ~ 'Days'|get_lang }}
                                 </li>
                                 <li><em class="fa fa-user"></em> {{ service.owner.name }}</li>
@@ -107,8 +113,10 @@
                                     <li><em class="fa fa-align-justify"></em> {{ service.description }}</li>
                                 {% endif %}
                             </ul>
-                            <p id="n-price" class="lead text-right" style="color: white;"><span
-                                        class="label label-primary">{{ service.currency == 'BRL' ? 'R$' : service.currency }} {{ service.price }}</span>
+                            <p id="n-price" class="lead text-right" style="color: white;">
+                                <span class="label label-primary">
+                                    {{ service_item.total_price_formatted }}
+                                </span>
                             </p>
                             <p id="s-price" class="lead text-right"></p>
                         </div>
@@ -175,9 +183,8 @@
         {{ form }}
     </div>
 </div>
-
 <script>
-    $(document).ready(function () {
+    $(function () {
         {% if terms %}
             $("#confirm").prop("disabled", true);
 

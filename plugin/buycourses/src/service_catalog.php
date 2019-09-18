@@ -60,12 +60,19 @@ $form->addSelect('applies_to', $plugin->get_lang('AppliesTo'), $appliesToOptions
 $form->addHtml('<hr>');
 $form->addButtonFilter(get_lang('Search'));
 
-$serviceList = $plugin->getCatalogServiceList($nameFilter, $minFilter, $maxFilter, $appliesToFilter);
+$pageSize = BuyCoursesPlugin::PAGINATION_PAGE_SIZE;
+$currentPage = isset($_GET['page']) ? (int) $_GET['page'] : 1;
+$first = $pageSize * ($currentPage - 1);
+$serviceList = $plugin->getCatalogServiceList($first, $pageSize, $nameFilter, $minFilter, $maxFilter, $appliesToFilter);
+$totalItems = $plugin->getCatalogServiceList($first, $pageSize, $nameFilter, $minFilter, $maxFilter, $appliesToFilter, 'count');
+$pagesCount = ceil($totalItems / $pageSize);
+$url = api_get_self().'?';
+$pagination = Display::getPagination($url, $currentPage, $pagesCount, $totalItems);
 
-//View
+// View
 if (api_is_platform_admin()) {
     $interbreadcrumb[] = [
-        'url' => 'configuration.php',
+        'url' => 'list.php',
         'name' => $plugin->get_lang('AvailableCoursesConfiguration'),
     ];
     $interbreadcrumb[] = [
@@ -86,6 +93,7 @@ $tpl->assign('showing_services', true);
 $tpl->assign('services', $serviceList);
 $tpl->assign('sessions_are_included', $includeSessions);
 $tpl->assign('services_are_included', $includeServices);
+$tpl->assign('pagination', $pagination);
 
 $content = $tpl->fetch('buycourses/view/catalog.tpl');
 

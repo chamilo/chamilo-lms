@@ -74,7 +74,11 @@ class Display
             $showHeader = false;
         }
 
-        self::$global_template = new Template($tool_name, $showHeader, $showHeader);
+        /* USER_IN_ANON_SURVEY is defined in fillsurvey.php when survey is marked as anonymous survey */
+        $userInAnonSurvey = defined('USER_IN_ANON_SURVEY') && USER_IN_ANON_SURVEY;
+
+        self::$global_template = new Template($tool_name, $showHeader, $showHeader, false, $userInAnonSurvey);
+        self::$global_template->assign('user_in_anon_survey', $userInAnonSurvey);
 
         // Fixing tools with any help it takes xxx part of main/xxx/index.php
         if (empty($help)) {
@@ -539,12 +543,12 @@ class Display
         }
 
         // "mailto:" already present?
-        if (substr($email, 0, 7) != 'mailto:') {
+        if (substr($email, 0, 7) !== 'mailto:') {
             $email = 'mailto:'.$email;
         }
 
         // Class (stylesheet) defined?
-        if ($style_class != '') {
+        if ($style_class !== '') {
             $style_class = ' class="'.$style_class.'"';
         }
 
@@ -557,7 +561,10 @@ class Display
         $value = api_get_configuration_value('add_user_course_information_in_mailto');
 
         if ($value) {
-            $hmail .= '?';
+            if (api_get_setting('allow_email_editor') === 'false') {
+                $hmail .= '?';
+            }
+
             if (!api_is_anonymous()) {
                 $hmail .= '&subject='.Security::remove_XSS(api_get_setting('siteName'));
             }

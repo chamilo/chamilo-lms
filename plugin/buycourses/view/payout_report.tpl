@@ -65,12 +65,12 @@
 
 <div>
     <button id="stats" type="button" class="btn btn-primary fa fa-line-chart" data-toggle="modal"
-            data-target="#reportStats"> {{ 'Stats'|get_plugin_lang('BuyCoursesPlugin') }}</button>
+            data-target="#reportStats"> {{ 'Stats'|get_plugin_lang('BuyCoursesPlugin') }}
+    </button>
 </div>
 
 <script>
-    $(document).ready(function () {
-
+    $(function () {
         $(".saleInfo").click(function () {
             var id = this.id;
             $.ajax({

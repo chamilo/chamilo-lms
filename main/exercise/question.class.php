@@ -1606,7 +1606,7 @@ abstract class Question
 
         // question name
         if (api_get_configuration_value('save_titles_as_html')) {
-            $editorConfig = ['ToolbarSet' => 'Minimal'];
+            $editorConfig = ['ToolbarSet' => 'TitleAsHtml'];
             $form->addHtmlEditor(
                 'questionName',
                 get_lang('Question'),

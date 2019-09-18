@@ -20,24 +20,24 @@
                                      src="{{ service.image ? service.image : 'session_default.png'|icon() }}">
                             </a>
                             {% if service.tax_enable %}
-                            <div class="price-details-tax">
-                                {{ 'Price'|get_plugin_lang('BuyCoursesPlugin')}} :
-                                {{ service.currency == 'BRL' ? 'R$' : service.currency }} {{ service.price_without_tax }}
-                                <br>
-                                {{ service.tax_name }} ({{ service.tax_perc_show }}%):
-                                {{ service.currency == 'BRL' ? 'R$' : service.currency }} {{ service.tax_amount }}
-                            </div>
-                            <div class="price">
-                                {{ 'Total'|get_plugin_lang('BuyCoursesPlugin')}} :
-                                {{ service.currency == 'BRL' ? 'R$' : service.currency }} {{ service.price_with_tax }}
-                            </div>
+                                <div class="price-details-tax">
+                                    {{ 'Price'|get_plugin_lang('BuyCoursesPlugin')}} :
+                                    {{ service.price_formatted }}
+                                    <br>
+                                    {{ service.tax_name }} ({{ service.tax_perc_show }}%):
+                                    {{ service.tax_amount_formatted }}
+                                </div>
+                                <div class="price">
+                                    {{ 'Total'|get_plugin_lang('BuyCoursesPlugin')}} :
+                                    {{ service.total_price_formatted }}
+                                </div>
                             {% else %}
                             <div class="price">
                                 {{ 'Total'|get_plugin_lang('BuyCoursesPlugin')}} :
-                                {{ service.currency == 'BRL' ? 'R$' : service.currency }} {{ service.price }}
+                                 {{ service.total_price_formatted }}
                             </div>
                             {% endif %}
-                            
+
                         </div>
                         <div class="col-md-9">
                             <div class="buy-item">
@@ -67,14 +67,8 @@
                                     </li>
                                     {% endif %}
                                     <li>
-                                        <em class="fa-li fa fa-money" aria-hidden="true"></em>
-                                        {{ 'Price'|get_plugin_lang('BuyCoursesPlugin') }}
-                                        {% if service.tax_enable %}
-                                            : {{ service.currency == 'BRL' ? 'R$' : service.currency }} {{ service.price_with_tax }}
-                                        {% else %}
-                                            : {{ service.currency == 'BRL' ? 'R$' : service.currency }} {{ service.price }}
-                                        {% endif %}
-                                        / {{ service.duration_days == 0 ? 'NoLimit'|get_lang  : service.duration_days ~ ' ' ~ 'Days'|get_lang }}
+                                        <em class="fa-li fa fa-clock-o" aria-hidden="true"></em>
+                                        {{ service.duration_days == 0 ? 'NoLimit'|get_lang  : service.duration_days ~ ' ' ~ 'Days'|get_lang }}
                                     </li>
                                     <li><em class="fa-li fa fa-user" aria-hidden="true"></em> {{ service.owner_name }}</li>
 
@@ -93,7 +87,7 @@
     </div>
 </div>
 <script>
-    $(document).ready(function () {
+    $(function () {
         $("label").removeClass('control-label');
         $('.form_required').remove();
         $("small").remove();

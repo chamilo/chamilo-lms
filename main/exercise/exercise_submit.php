@@ -151,6 +151,7 @@ if (!isset($exerciseInSession) || isset($exerciseInSession) && ($exerciseInSessi
     Session::write('firstTime', false);
 }
 //2. Checking if $objExercise is set
+/** @var |Exercise $objExercise */
 if (!isset($objExercise) && isset($exerciseInSession)) {
     if ($debug) {
         error_log('2. Loading $objExercise from session');
@@ -1123,6 +1124,16 @@ if (!empty($error)) {
                 return event.keyCode != 13;
             });
 
+            $(".checkCalculatedQuestionOnEnter").keypress(function(event) {
+                if (event.keyCode === 13) {
+                    event.preventDefault();
+                    var id = $(this).attr("id");
+                    var parts = id.split("_");
+                    var buttonId = "button_" + parts[1];
+                    document.getElementById(buttonId).click();                    
+                }
+            });
+
             $(".main_question").mouseover(function() {
                 //$(this).find(".exercise_save_now_button").show();
                 //$(this).addClass("question_highlight");
@@ -1462,21 +1473,33 @@ if (!empty($error)) {
 
         echo '<div id="question_div_'.$questionId.'" class="main-question '.$remind_highlight.'" >';
 
+        $showQuestion = true;
+        $exerciseResultFromSession = Session::read('exerciseResult');
+        if ($objExercise->getFeedbackType() === EXERCISE_FEEDBACK_TYPE_POPUP &&
+            isset($exerciseResultFromSession[$questionId])
+        ) {
+            $showQuestion = false;
+        }
         // Shows the question and its answers
-        ExerciseLib::showQuestion(
-            $objExercise,
-            $questionId,
-            false,
-            $origin,
-            $i,
-            $objExercise->getHideQuestionTitle() ? false : true,
-            false,
-            $user_choice,
-            false,
-            null,
-            false,
-            true
-        );
+        // Shows the question and its answers
+        if ($showQuestion) {
+            ExerciseLib::showQuestion(
+                $objExercise,
+                $questionId,
+                false,
+                $origin,
+                $i,
+                $objExercise->getHideQuestionTitle() ? false : true,
+                false,
+                $user_choice,
+                false,
+                null,
+                false,
+                true
+            );
+        } else {
+            echo Display::return_message(get_lang('AlreadyAnswered'));
+        }
 
         // Button save and continue
         switch ($objExercise->type) {

@@ -58,10 +58,12 @@ if (!empty($event)) {
         case 'public':
             $vevent->setClass('PUBLIC');
             break;
+        case 'private':
+            $vevent->setClass('PRIVATE');
+            break;
         case 'confidential':
             $vevent->setClass('CONFIDENTIAL');
             break;
-        case 'private':
         default:
             $vevent->setClass('PRIVATE');
             break;

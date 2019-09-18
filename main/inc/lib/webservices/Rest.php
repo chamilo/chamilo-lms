@@ -14,7 +14,7 @@ use Chamilo\UserBundle\Entity\User;
  */
 class Rest extends WebService
 {
-    const SERVIVE_NAME = 'MsgREST';
+    const SERVICE_NAME = 'MsgREST';
     const EXTRA_FIELD_GCM_REGISTRATION = 'gcm_registration_id';
 
     const GET_AUTH = 'authenticate';

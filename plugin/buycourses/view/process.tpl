@@ -21,17 +21,17 @@
                                      src="{{ course.course_img ? course.course_img : 'session_default.png'|icon() }}">
                             </a>
                             {% if course.tax_enable %}
-                            <div class="price-details-tax">
-                                {{ 'Price'|get_plugin_lang('BuyCoursesPlugin')}} :
-                                {{ course.currency == 'BRL' ? 'R$' : course.currency }} {{ course.price_without_tax }}
-                                <br>
-                                {{ course.tax_name }} ({{ course.tax_perc }}%):
-                                {{ course.currency == 'BRL' ? 'R$' : course.currency }} {{ course.tax_amount }}
-                            </div>
+                                <div class="price-details-tax">
+                                    {{ 'Price'|get_plugin_lang('BuyCoursesPlugin')}} :
+                                    {{ course.item.price_formatted }}
+                                    <br>
+                                    {{ course.tax_name }} ({{ course.item.tax_perc_show }}%):
+                                    {{ course.item.tax_amount_formatted }}
+                                </div>
                             {% endif %}
                             <div class="price">
                                 {{ 'Total'|get_plugin_lang('BuyCoursesPlugin')}} :
-                                {{ course.currency == 'BRL' ? 'R$' : course.currency }} {{ course.price }}
+                                {{ course.item.total_price_formatted }}
                             </div>
                         </div>
                         <div class="col-md-9">
@@ -43,40 +43,45 @@
                                     </a>
                                 </h3>
                                 {% if course.description %}
-                                <div class="description">
-                                    {{ course.description }}
-                                </div>
+                                    <div class="description">
+                                        {{ course.description }}
+                                    </div>
                                 {% endif %}
-                                <div class="coaches">
-                                    <p>
-                                        {{ 'Teachers'|get_plugin_lang('BuyCoursesPlugin')}} :
-                                        {% for teacher in course.teachers %}
-                                        <em class="fa fa-user" aria-hidden="true"></em>
-                                        <a href="{{ _p.web }}main/social/profile.php?u={{ teacher.id }}"
-                                           class="teacher-item"> {{ teacher.name }}</a>,
-                                        {% endfor %}
-                                    </p>
-                                </div>
+
+                                {% if course.teachers %}
+                                    <div class="coaches">
+                                        <p>
+                                            {{ 'Teachers'|get_plugin_lang('BuyCoursesPlugin')}} :
+                                            {% for teacher in course.teachers %}
+                                                <em class="fa fa-user" aria-hidden="true"></em>
+                                                <a href="{{ _p.web }}main/social/profile.php?u={{ teacher.id }}"
+                                                   class="teacher-item"> {{ teacher.name }}</a>,
+                                            {% endfor %}
+                                        </p>
+                                    </div>
+                                {% endif %}
                             </div>
                         </div>
                     </div>
                     {% elseif buying_session %}
                     <div class="row">
                         <div class="col-md-3">
-                            <img alt="{{ session.name }}" class="img-rounded img-responsive""
-                            src="{{ session.image ? session.image : 'session_default.png'|icon() }}">
+                            <img
+                                alt="{{ session.name }}"
+                                class="img-rounded img-responsive"
+                                src="{{ session.image ? session.image : 'session_default.png'|icon() }}">
                             {% if session.tax_enable %}
-                            <div class="price-details-tax">
-                                {{ 'Price'|get_plugin_lang('BuyCoursesPlugin')}} :
-                                {{ session.currency == 'BRL' ? 'R$' : session.currency }} {{ session.price_without_tax }}
-                                <br>
-                                {{ session.tax_name }} ({{ session.tax_perc }}%):
-                                {{ session.currency == 'BRL' ? 'R$' : session.currency }} {{ session.tax_amount }}
-                            </div>
+                                <div class="price-details-tax">
+                                    {{ 'Price'|get_plugin_lang('BuyCoursesPlugin')}} :
+                                    {{ session.item.price_formatted }}
+                                    <br>
+                                    {{ session.tax_name }} ({{ session.item.tax_perc_show }}%):
+                                    {{ session.item.tax_amount_formatted }}
+                                </div>
                             {% endif %}
                             <div class="price">
                                 {{ 'Total'|get_plugin_lang('BuyCoursesPlugin')}} :
-                                {{ session.currency == 'BRL' ? 'R$' : session.currency }} {{ session.price }}
+                                {{ session.item.total_price_formatted }}
                             </div>
                         </div>
                         <div class="col-md-9">
@@ -120,7 +125,7 @@
     </div>
 </div>
 <script>
-    $(document).ready(function () {
+    $(function () {
         $("label").removeClass('control-label');
         $('.form_required').remove();
         $("small").remove();

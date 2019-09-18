@@ -1984,7 +1984,9 @@ class Tracking
                 // fin de acceso a la sesión
                 $sessionInfo = SessionManager::fetch($session_id);
                 $last_access = $sessionInfo['access_end_date'];
-                $where_condition = ' AND logout_course_date < "'.$last_access.'" ';
+                if (!empty($last_access)) {
+                    $where_condition = ' AND logout_course_date < "'.$last_access.'" ';
+                }
             }
             $sql = "SELECT logout_course_date
                     FROM $table
@@ -4817,7 +4819,7 @@ class Tracking
         $extraInnerJoin = null;
 
         if (SessionManager::orderCourseIsEnabled() && !empty($session_id)) {
-            $orderBy = ' ORDER BY s.id, position ';
+            $orderBy = ' ORDER BY s.id, src.position ';
             $tableSessionRelCourse = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
             $extraInnerJoin = " INNER JOIN $tableSessionRelCourse src
                                 ON (cu.c_id = src.c_id AND src.session_id = $session_id) ";

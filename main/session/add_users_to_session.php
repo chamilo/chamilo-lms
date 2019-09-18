@@ -22,13 +22,10 @@ SessionManager::protectSession($id_session);
 // setting breadcrumbs
 $interbreadcrumb[] = ['url' => 'session_list.php', 'name' => get_lang('SessionList')];
 $interbreadcrumb[] = [
-    'url' => "resume_session.php?id_session=".$id_session,
-    "name" => get_lang('SessionOverview'),
+    'url' => 'resume_session.php?id_session='.$id_session,
+    'name' => get_lang('SessionOverview'),
 ];
 
-// Database Table Definitions
-$tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
-$tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
 $tbl_user = Database::get_main_table(TABLE_MAIN_USER);
 $tbl_session_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_USER);
 
@@ -320,8 +317,6 @@ $UserList = $SessionList = [];
 $sessions = [];
 if (isset($_POST['form_sent']) && $_POST['form_sent']) {
     $form_sent = $_POST['form_sent'];
-    $firstLetterUser = isset($_POST['firstLetterUser']) ? $_POST['firstLetterUser'] : '';
-    $firstLetterSession = isset($_POST['firstLetterSession']) ? $_POST['firstLetterSession'] : '';
     $UserList = isset($_POST['sessionUsersList']) ? $_POST['sessionUsersList'] : [];
 
     if (!is_array($UserList)) {

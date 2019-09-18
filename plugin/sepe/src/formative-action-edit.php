@@ -154,11 +154,11 @@ if (api_is_platform_admin()) {
         $tpl->assign('new_action', '1');
         $tpl->assign('course_id', intval($_GET['cid']));
     } else {
-        $courseId = getCourse(intval($_GET['action_id']));
+        $courseId = getCourse($_GET['action_id']);
         $interbreadcrumb[] = ["url" => "/plugin/sepe/src/sepe-administration-menu.php", "name" => $plugin->get_lang('MenuSepe')];
         $interbreadcrumb[] = ["url" => "formative-actions-list.php", "name" => $plugin->get_lang('FormativesActionsList')];
         $interbreadcrumb[] = ["url" => "formative-action.php?cid=".$courseId, "name" => $plugin->get_lang('FormativeAction')];
-        $info = getActionInfo(intval($_GET['action_id']));
+        $info = getActionInfo($_GET['action_id']);
         $templateName = $plugin->get_lang('formativeActionEdit');
         $tpl = new Template($templateName);
         $tpl->assign('info', $info);

@@ -130,10 +130,7 @@ if ($form->validate()) {
                     $to
                 );
 
-                $partialMinLogin = 0;
-                $partialMaxLogin = 0;
                 $partialDuration = 0;
-
                 foreach ($result as $item) {
                     $record = [
                         customDate($item['login'], true),
@@ -155,24 +152,14 @@ if ($form->validate()) {
 
                     // Partials
                     $partialDuration += $item['duration'];
-                    if (empty($partialMinLogin)) {
-                        $partialMinLogin = api_strtotime($item['login'], 'UTC');
-                    }
-                    if ($partialMinLogin > api_strtotime($item['login'], 'UTC')) {
-                        $partialMinLogin = api_strtotime($item['login'], 'UTC');
-                    }
-                    if (api_strtotime($item['logout'], 'UTC') > $partialMaxLogin) {
-                        $partialMaxLogin = api_strtotime($item['logout'], 'UTC');
-                    }
-
                     $report[$sessionId]['courses'][$course['real_id']][] = $record;
                     $report[$sessionId]['name'][$course['real_id']] = $courseInfo['title'].'&nbsp; ('.$session['session_name'].')';
                 }
 
                 if (!empty($result)) {
                     $record = [
-                        customDate($partialMinLogin, true),
-                        customDate($partialMaxLogin, true),
+                        '',
+                        '',
                         api_format_time($partialDuration, 'js'),
                     ];
                     $report[$sessionId]['courses'][$course['real_id']][] = $record;
@@ -194,8 +181,6 @@ if ($form->validate()) {
             $to
         );
 
-        $partialMinLogin = 0;
-        $partialMaxLogin = 0;
         $partialDuration = 0;
 
         foreach ($result as $item) {
@@ -221,21 +206,12 @@ if ($form->validate()) {
 
             // Partials
             $partialDuration += $item['duration'];
-            if (empty($partialMinLogin)) {
-                $partialMinLogin = api_strtotime($item['login'], 'UTC');
-            }
-            if ($partialMinLogin > api_strtotime($item['login'], 'UTC')) {
-                $partialMinLogin = api_strtotime($item['login'], 'UTC');
-            }
-            if (api_strtotime($item['logout'], 'UTC') > $partialMaxLogin) {
-                $partialMaxLogin = api_strtotime($item['logout'], 'UTC');
-            }
         }
 
         if (!empty($result)) {
             $record = [
-                customDate($partialMinLogin, true),
-                customDate($partialMaxLogin, true),
+                '',
+                '',
                 api_format_time($partialDuration, 'js'),
             ];
 
@@ -244,7 +220,7 @@ if ($form->validate()) {
         }
     }
 
-    $table = new HTML_Table(['class' => 'data_table_pdf']);
+    $table = new HTML_Table(['class' => 'data_table']);
     $headers = [
         get_lang('MinStartDate'),
         get_lang('MaxEndDate'),
@@ -259,13 +235,19 @@ if ($form->validate()) {
     $row++;
     $column = 0;
     $table->setCellContents($row, $column++, customDate($minLogin));
-    $table->setCellContents($row, $column++, customDate($maxLogin));
-    $table->setCellContents($row, $column++, api_format_time($totalDuration, 'js'));
-    $content = Display::page_subheader3(get_lang('Total')).$table->toHtml();
 
+    $table->setCellContents($row, $column++, customDate($maxLogin));
+    $table->setRowAttributes($row, ['style' => 'font-weight:bold']);
+
+    $table->setCellContents($row, $column++, api_format_time($totalDuration, 'js'));
+    $totalTable = Display::page_subheader3(sprintf(get_lang('ExtractionFromX'), api_get_local_time()));
+    $totalTable .= $table->toHtml();
+
+    $courseSessionTable = '';
+    $courseSessionTableData = [];
     foreach ($report as $sessionId => $data) {
         foreach ($data['courses'] as $courseId => $courseData) {
-            $content .= Display::page_subheader3($data['name'][$courseId]);
+            $courseSessionTable .= Display::page_subheader3($data['name'][$courseId]);
             $table = new HTML_Table(['class' => 'data_table']);
             $headers = [
                 get_lang('StartDate'),
@@ -285,19 +267,40 @@ if ($form->validate()) {
                 foreach ($record as $item) {
                     $table->setCellContents($row, $column++, $item);
                     if ($row == $countData) {
+                        $courseSessionTableData[$data['name'][$courseId]] = $item;
                         $table->setRowAttributes($row, ['style' => 'font-weight:bold']);
                     }
                 }
                 $row++;
             }
-            $content .= $table->toHtml();
+            $courseSessionTable .= $table->toHtml();
         }
     }
 
+    $table = new HTML_Table(['class' => 'data_table']);
+    $headers = [
+        get_lang('Course'),
+        get_lang('TotalDuration'),
+    ];
+    $row = 0;
+    $column = 0;
+    foreach ($headers as $header) {
+        $table->setHeaderContents($row, $column, $header);
+        $column++;
+    }
+    $row++;
+    foreach ($courseSessionTableData as $name => $duration) {
+        $column = 0;
+        $table->setCellContents($row, $column++, $name);
+        $table->setCellContents($row, $column++, $duration);
+        $row++;
+    }
+    $totalCourseSessionTable = $table->toHtml();
+
     $tpl = new Template('', false, false, false, true, false, false);
-    $tpl->assign('title', get_lang('AttestationOfAttendance'));
+    $tpl->assign('title', get_lang('RealisationCertificate'));
     $tpl->assign('student', $userInfo['complete_name']);
-    $tpl->assign('table_progress', $content);
+    $tpl->assign('table_progress', $totalTable.$totalCourseSessionTable.'<pagebreak>'.$courseSessionTable);
 
     $content = $tpl->fetch($tpl->get_template('my_space/pdf_export_student.tpl'));
     $params = [
@@ -334,7 +337,6 @@ $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('AccessDetails')];
 
 Display::display_header('');
 $userInfo = api_get_user_info($userId);
-$result_to_print = '';
 echo Display::page_header(get_lang('DetailsStudentInCourse'));
 echo Display::page_subheader(
     get_lang('User').': '.$userInfo['complete_name']

@@ -11,8 +11,8 @@
         </li>
     {% endif %}
 </ul>
-</br>
-</br>
+<br />
+<br />
 {{ form }}
 
 <div class="table-responsive">
@@ -46,9 +46,9 @@
                         {{ 'SaleStatusCompleted'|get_plugin_lang('BuyCoursesPlugin') }}
                     {% endif %}
                 </td>
-                <td class="text-center">{{ sale.date }}</td>
+                <td class="text-center">{{ sale.date | api_get_local_time }}</td>
                 <td class="text-center">{{ sale.payment_type }}</td>
-                <td class="text-right">{{ sale.currency ~ ' ' ~ sale.price }}</td>
+                <td class="text-right">{{ sale.total_price }}</td>
                 <td class="text-center">{{ sale.product_type }}</td>
                 <td>{{ sale.product_name }}</td>
                 <td>{{ sale.complete_user_name }}</td>

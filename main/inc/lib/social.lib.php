@@ -293,13 +293,19 @@ class SocialManager extends UserManager
         } else {
             // invitation already exist
             $sql = 'SELECT COUNT(*) AS count, id FROM '.$tbl_message.'
-                    WHERE user_sender_id='.$user_id.' AND user_receiver_id='.$friend_id.' AND msg_status = 7';
+                    WHERE 
+                        user_sender_id='.$user_id.' AND 
+                        user_receiver_id='.$friend_id.' AND 
+                        msg_status = 7';
             $res_if_exist = Database::query($sql);
             $row_if_exist = Database::fetch_array($res_if_exist, 'ASSOC');
             if ($row_if_exist['count'] == 1) {
                 $sql = 'UPDATE '.$tbl_message.' SET
                         msg_status=5, content = "'.$clean_message_content.'"
-                        WHERE user_sender_id='.$user_id.' AND user_receiver_id='.$friend_id.' AND msg_status = 7 ';
+                        WHERE 
+                            user_sender_id='.$user_id.' AND 
+                            user_receiver_id='.$friend_id.' AND 
+                            msg_status = 7 ';
                 Database::query($sql);
 
                 return true;
@@ -1227,44 +1233,22 @@ class SocialManager extends UserManager
             );
 
             if ($show_full_profile && $user_id == api_get_user_id()) {
-                $personal_course_list = UserManager::get_personal_session_course_list($user_id);
-                $course_list_code = [];
-                $i = 1;
-                if (is_array($personal_course_list)) {
-                    foreach ($personal_course_list as $my_course) {
-                        if ($i <= 10) {
-                            $course_list_code[] = ['code' => $my_course['code']];
-                        } else {
-                            break;
-                        }
-                        $i++;
-                    }
-                    // To avoid repeated courses
-                    $course_list_code = array_unique_dimensional($course_list_code);
-                }
-
                 // Announcements
                 $announcements = [];
-                foreach ($course_list_code as $course) {
-                    $course_info = api_get_course_info($course['code']);
-                    if (!empty($course_info)) {
-                        $content = AnnouncementManager::get_all_annoucement_by_user_course(
-                            $course_info['code'],
-                            $user_id
+                $announcementsByCourse = AnnouncementManager::getAnnoucementCourseTotalByUser($user_id);
+                if (!empty($announcementsByCourse)) {
+                    foreach ($announcementsByCourse as $announcement) {
+                        $url = Display::url(
+                            Display::return_icon(
+                                'announcement.png',
+                                get_lang('Announcements')
+                        ).$announcement['course']['name'].' ('.$announcement['count'].')',
+                        api_get_path(WEB_CODE_PATH).'announcements/announcements.php?cidReq='.$announcement['course']['code']
                         );
-
-                        if (!empty($content)) {
-                            $url = Display::url(
-                                Display::return_icon(
-                                    'announcement.png',
-                                    get_lang('Announcements')
-                                ).$course_info['name'].' ('.$content['count'].')',
-                                api_get_path(WEB_CODE_PATH).'announcements/announcements.php?cidReq='.$course['code']
-                            );
-                            $announcements[] = Display::tag('li', $url);
-                        }
+                        $announcements[] = Display::tag('li', $url);
                     }
                 }
+
                 if (!empty($announcements)) {
                     $html .= '<div class="social_menu_items">';
                     $html .= '<ul>';
@@ -1656,7 +1640,7 @@ class SocialManager extends UserManager
                   ";
 
         if ($getCount) {
-            $select = ' SELECT count(id) count ';
+            $select = ' SELECT count(id) as count_items ';
         }
 
         $sql = "$select                    

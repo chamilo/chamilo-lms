@@ -22,7 +22,7 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
  */
 
 // PHP version requirement.
-define('REQUIRED_PHP_VERSION', '7.1.3');
+define('REQUIRED_PHP_VERSION', '7.2');
 define('REQUIRED_MIN_MEMORY_LIMIT', '128');
 define('REQUIRED_MIN_UPLOAD_MAX_FILESIZE', '10');
 define('REQUIRED_MIN_POST_MAX_SIZE', '10');

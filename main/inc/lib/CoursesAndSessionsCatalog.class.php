@@ -566,46 +566,55 @@ class CoursesAndSessionsCatalog
      *
      * @return array The session list
      */
-    public static function browseSessions($date = null, $limit = [])
+    public static function browseSessions($date = null, $limit = [], $returnQueryBuilder = false)
     {
-        $em = Database::getManager();
         $urlId = api_get_current_access_url_id();
 
-        $sql = "SELECT s.id FROM session s 
-                INNER JOIN access_url_rel_session ars
-                ON s.id = ars.session_id
-                WHERE 
-                      s.nbr_courses > 0 AND 
-                      ars.access_url_id = $urlId";
+        $dql = "SELECT s
+                FROM ChamiloCoreBundle:Session s
+                WHERE EXISTS 
+                    (
+                        SELECT url.sessionId FROM ChamiloCoreBundle:AccessUrlRelSession url 
+                        WHERE url.sessionId = s.id AND url.accessUrlId = $urlId
+                    ) AND
+                    s.nbrCourses > 0
+                ";
+
 
         if (!is_null($date)) {
             $date = Database::escape_string($date);
-            $sql .= "
+            $dql .= "
                 AND (
-                    ('$date' BETWEEN DATE(s.access_start_date) AND DATE(s.access_end_date)) OR 
-                    (s.access_end_date IS NULL) OR 
+                    (s.accessEndDate IS NULL) 
+                    OR
                     (
-                        s.access_start_date IS NULL AND 
-                        s.access_end_date IS NOT NULL AND 
-                        DATE(s.access_end_date) >= '$date'
+                    s.accessStartDate IS NOT NULL AND  
+                    s.accessEndDate IS NOT NULL AND
+                    s.accessStartDate >= '$date' AND s.accessEndDate <= '$date')                    
+                    OR 
+                    (
+                        s.accessStartDate IS NULL AND 
+                        s.accessEndDate IS NOT NULL AND 
+                        s.accessStartDate >= '$date'
                     )
                 )
             ";
         }
 
+        $qb = Database::getManager()->createQuery($dql);
+
         if (!empty($limit)) {
-            $limit['start'] = (int) $limit['start'];
-            $limit['length'] = (int) $limit['length'];
-            $sql .= "LIMIT {$limit['start']}, {$limit['length']} ";
+            $qb
+                ->setFirstResult($limit['start'])
+                ->setMaxResults($limit['length'])
+            ;
         }
 
-        $list = Database::store_result(Database::query($sql), 'ASSOC');
-        $sessions = [];
-        foreach ($list as $sessionData) {
-            $sessions[] = $em->find('ChamiloCoreBundle:Session', $sessionData['id']);
+        if ($returnQueryBuilder) {
+            return $qb;
         }
 
-        return $sessions;
+        return $qb->getResult();
     }
 
     /**
@@ -683,7 +692,7 @@ class CoursesAndSessionsCatalog
                 'frt.fieldId = f.id'
             )
             ->where(
-                $qb->expr()->like('t.tag', ":tag")
+                $qb->expr()->like('t.tag', ':tag')
             )
             ->andWhere(
                 $qb->expr()->eq('f.extraFieldType', ExtraField::COURSE_FIELD_TYPE)

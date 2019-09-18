@@ -1,5 +1,6 @@
 <?php
 /* For license terms, see /license.txt */
+
 use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
 
 /**
@@ -96,14 +97,27 @@ $row = [
     $infoSale['reference'],
     $infoSale['product_name'],
 ];
+
+//var_dump($infoSale);exit;
+$isoCode = $plugin->getCurrency($infoSale['currency_id'])['iso_code'];
+
 if ($taxEnable) {
-    $row[] = $plugin->getCurrency($infoSale['currency_id'])['iso_code'].' '.$infoSale['price_without_tax'];
-    $row[] = $plugin->getCurrency($infoSale['currency_id'])['iso_code'].
-        ' '.$infoSale['tax_amount'].
-        ' ('.(int) $infoSale['tax_perc'].'%)';
+    $row[] = $plugin->getPriceWithCurrencyFromIsoCode($infoSale['price_without_tax'], $isoCode);
+    $row[] = $plugin->getPriceWithCurrencyFromIsoCode($infoSale['tax_amount'], $isoCode).' ('.(int) $infoSale['tax_perc'].'%)';
 }
-$row[] = $plugin->getCurrency($infoSale['currency_id'])['iso_code'].' '.$infoSale['price'];
+
+$totalPrice = $plugin->getPriceWithCurrencyFromIsoCode(
+    $infoSale['price'],
+    $plugin->getCurrency($infoSale['currency_id'])['iso_code']
+);
+
+$row[] = $totalPrice;
 $data[] = $row;
+
+$totalPrice = $plugin->getPriceWithCurrencyFromIsoCode(
+    $infoSale['price'],
+    $plugin->getCurrency($infoSale['currency_id'])['iso_code']
+);
 
 if ($taxEnable) {
     $row = [
@@ -111,19 +125,19 @@ if ($taxEnable) {
         '',
         '',
         $plugin->get_lang('TotalPayout'),
-        $plugin->getCurrency($infoSale['currency_id'])['iso_code'].' '.$infoSale['price'],
+        $totalPrice,
     ];
 } else {
     $row = [
         '',
         $plugin->get_lang('TotalPayout'),
-        $plugin->getCurrency($infoSale['currency_id'])['iso_code'].' '.$infoSale['price'],
+        $totalPrice,
     ];
 }
 $data[] = $row;
 $attr = [];
-$attr['class'] = "table data_table";
-$attr['width'] = "100%";
+$attr['class'] = 'table data_table';
+$attr['width'] = '100%';
 $htmlText .= Display::table($header, $data, $attr);
 $htmlText .= '</body></html>';
 
@@ -137,5 +151,5 @@ $params = [
     'orientation' => 'P',
 ];
 $pdf = new PDF($params['format'], $params['orientation'], $params);
-$pdf->content_to_pdf($htmlText, '', $fileName, null, 'D', false, null, false, false, false);
+@$pdf->content_to_pdf($htmlText, '', $fileName, null, 'D', false, null, false, false, false);
 exit;

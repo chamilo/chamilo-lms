@@ -801,14 +801,28 @@ switch ($action) {
         $obj->protectScript();
         $type = isset($_REQUEST['type']) ? $_REQUEST['type'] : 'registered';
         $groupFilter = isset($_REQUEST['group_filter']) ? (int) $_REQUEST['group_filter'] : 0;
+        $keyword = isset($_REQUEST['keyword']) ? $_REQUEST['keyword'] : '';
+
         $course_id = api_get_course_int_id();
-        if ($type === 'registered') {
-            $count = $obj->getUserGroupByCourseWithDataCount(
-                $course_id,
-                $groupFilter
-            );
-        } else {
-            $count = $obj->get_count($groupFilter);
+        $options = [];
+        $options['course_id'] = $course_id;
+
+        switch ($type) {
+            case 'not_registered':
+                $options['where'] = [' (course_id IS NULL OR course_id != ?) ' => $course_id];
+                if (!empty($keyword)) {
+                    $options['where']['AND name like %?% '] = $keyword;
+                }
+                $count = $obj->getUserGroupNotInCourse($options, $groupFilter, true);
+                break;
+            case 'registered':
+                $options['where'] = [' usergroup.course_id = ? ' => $course_id];
+                $count = $obj->getUserGroupInCourse(
+                    $options,
+                    $groupFilter,
+                    true
+                );
+                break;
         }
         break;
     default:
@@ -2166,37 +2180,35 @@ switch ($action) {
         $obj = new ExtraFieldOption($type);
         $columns = ['display_text', 'option_value', 'option_order'];
         $result = $obj->get_all([
-            'where' => ["field_id = ? " => $field_id],
+            'where' => ['field_id = ? ' => $field_id],
             'order' => "$sidx $sord",
             'LIMIT' => "$start , $limit",
         ]);
         break;
     case 'get_usergroups_teacher':
         $columns = ['name', 'users', 'status', 'group_type', 'actions'];
-        $options = ['order' => "name $sord", 'LIMIT' => "$start , $limit"];
-        $options['course_id'] = $course_id;
-
+        $options['order'] = "name $sord";
+        $options['limit'] = "$start , $limit";
         switch ($type) {
             case 'not_registered':
-                $options['where'] = [' (course_id IS NULL OR course_id != ?) ' => $course_id];
                 $result = $obj->getUserGroupNotInCourse($options, $groupFilter);
                 break;
             case 'registered':
-                $options['where'] = [' usergroup.course_id = ? ' => $course_id];
                 $result = $obj->getUserGroupInCourse($options, $groupFilter);
                 break;
         }
 
         $new_result = [];
+        $currentUserId = api_get_user_id();
         if (!empty($result)) {
             $urlUserGroup = api_get_path(WEB_CODE_PATH).'admin/usergroup_users.php?'.api_get_cidreq();
             foreach ($result as $group) {
-                $count = count($obj->get_users_by_usergroup($group['id']));
-                $group['users'] = $count;
+                $countUsers = count($obj->get_users_by_usergroup($group['id']));
+                $group['users'] = $countUsers;
 
                 if ($obj->allowTeachers()) {
                     $group['users'] = Display::url(
-                        $count,
+                        $countUsers,
                         $urlUserGroup.'&id='.$group['id']
                     );
                 }
@@ -2221,10 +2233,9 @@ switch ($action) {
                 $role = $obj->getUserRoleToString(api_get_user_id(), $group['id']);
                 $group['status'] = $role;
                 $group['actions'] = '';
-
-                if ($obj->allowTeachers()) {
+                if ($obj->allowTeachers() && $group['author_id'] == $currentUserId) {
                     $group['actions'] .= Display::url(
-                        Display::return_icon('statistics.png'),
+                        Display::return_icon('statistics.png', get_lang('Stats')),
                         $urlUserGroup.'&id='.$group['id']
                     ).'&nbsp;';
                 }

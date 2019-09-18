@@ -3,7 +3,6 @@
 
 namespace Chamilo\CoreBundle\Entity\Resource;
 
-use Alchemy\Zippy\Adapter\Resource\ResourceInterface;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\Usergroup;
@@ -16,7 +15,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity
  * @ORM\Table(name="resource_link")
  */
-class ResourceLink implements ResourceInterface
+class ResourceLink
 {
     public const VISIBILITY_DRAFT = 0;
     public const VISIBILITY_PENDING = 1;

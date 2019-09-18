@@ -442,6 +442,10 @@ switch ($action) {
 
             $currentCategoryId = $type === 'category' && isset($_REQUEST['category']) ? (int) $_REQUEST['category'] : 0;
 
+            if ($type === 'category' && $objExercise->type == ONE_CATEGORY_PER_PAGE) {
+                $question_list = $objExercise->getQuestionsInCategory($currentCategoryId);
+            }
+
             // If exercise or question is not set then exit.
             if (empty($question_list) || empty($objExercise)) {
                 echo 'error';
@@ -523,12 +527,6 @@ switch ($action) {
 
                 if ($type == 'simple' && $question_id != $my_question_id) {
                     continue;
-                } elseif ($type === 'category' && $objExercise->type == ONE_CATEGORY_PER_PAGE) {
-                    $questionsInCategory = $objExercise->getQuestionsInCategory($currentCategoryId);
-
-                    if (!in_array($my_question_id, $questionsInCategory)) {
-                        continue;
-                    }
                 }
 
                 if ($exerciseIsProgressiveAdaptive) {

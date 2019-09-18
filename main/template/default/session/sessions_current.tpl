@@ -35,7 +35,6 @@
                                 <div class="buycourses-price">
                                     <span class="label label-primary label-price">
                                         <strong>
-                                            {{ session.on_sale.iso_code }}
                                             {{ session.on_sale.total_price_formatted }}
                                         </strong>
                                     </span>

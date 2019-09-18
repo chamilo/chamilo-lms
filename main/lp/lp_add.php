@@ -100,7 +100,7 @@ if (api_get_configuration_value('save_titles_as_html')) {
         ['ToolbarSet' => 'TitleAsHtml']
     );
 } else {
-$form->addElement(
+    $form->addElement(
     'text',
     'lp_name',
     api_ucfirst(get_lang('LPName')),

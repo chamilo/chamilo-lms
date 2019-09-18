@@ -1031,7 +1031,7 @@ class AnnouncementManager
         $tbl_announcement = Database::get_course_table(TABLE_ANNOUNCEMENT);
         $tbl_item_property = Database::get_course_table(TABLE_ITEM_PROPERTY);
 
-            $sql = "SELECT DISTINCT 
+        $sql = "SELECT DISTINCT 
                     announcement.c_id,
                     count(announcement.id) count
 					FROM $tbl_announcement announcement 
@@ -1046,10 +1046,10 @@ class AnnouncementManager
 						AND ip.visibility='1'
 						AND announcement.session_id  = 0
                 GROUP BY announcement.c_id";
-            $rs = Database::query($sql);
-            $num_rows = Database::num_rows($rs);
-            $result = [];
-            if ($num_rows > 0) {
+        $rs = Database::query($sql);
+        $num_rows = Database::num_rows($rs);
+        $result = [];
+        if ($num_rows > 0) {
             while ($row = Database::fetch_array($rs, 'ASSOC')) {
                 if (empty($row['c_id'])) {
                     continue;

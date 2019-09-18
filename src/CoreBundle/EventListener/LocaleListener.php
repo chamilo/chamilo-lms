@@ -15,7 +15,6 @@ use Symfony\Component\HttpKernel\KernelEvents;
  * Class LocaleListener
  * Checks the portal listener depending of different settings:
  * platform, user, course.
- *
  */
 class LocaleListener implements EventSubscriberInterface
 {

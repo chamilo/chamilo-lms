@@ -6,7 +6,6 @@
  *
  * @package chamilo.document
  */
-
 use Chamilo\CoreBundle\Framework\Container;
 
 require_once __DIR__.'/../inc/global.inc.php';

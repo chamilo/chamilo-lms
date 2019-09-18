@@ -1076,11 +1076,11 @@ class SortableTable extends HTML_Table
         return $data;
     }
 
-/**
+    /**
      * @param array $data
- */
+     */
     public function setTableData($data)
-{
+    {
         $this->table_data = $data;
     }
 }

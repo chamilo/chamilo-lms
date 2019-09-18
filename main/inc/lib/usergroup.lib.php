@@ -231,7 +231,7 @@ class UserGroup extends Model
             }
         }
 
-            return 0;
+        return 0;
     }
 
     /**

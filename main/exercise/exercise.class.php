@@ -8655,7 +8655,7 @@ class Exercise
                             // in the base course, it is included in a LP
                             // *and* the setting to show it is *not*
                             // specifically set to true, then hide it.
-                                    if ($visibility == 0) {
+                            if ($visibility == 0) {
                                 if (!$visibilitySetting) {
                                     if ($exercise->exercise_was_added_in_lp == true) {
                                         continue;

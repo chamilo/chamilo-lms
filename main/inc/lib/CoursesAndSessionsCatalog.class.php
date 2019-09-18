@@ -580,7 +580,6 @@ class CoursesAndSessionsCatalog
                     s.nbrCourses > 0
                 ";
 
-
         if (!is_null($date)) {
             $date = Database::escape_string($date);
             $dql .= "

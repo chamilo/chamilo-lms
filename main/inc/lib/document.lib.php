@@ -3081,7 +3081,6 @@ class DocumentManager
      * @param int $max_dir_space maximum size
      *
      * @return bool true if there is enough space, false otherwise
-     *
      */
     public static function enough_space($file_size, $max_dir_space)
     {

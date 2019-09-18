@@ -1459,7 +1459,7 @@ class ImportCsv
                         );
                         $career = $career->find($careerValue['item_id']);
                         $careerName .= $career['name'].', ';
-                            }
+                    }
                     // Remove trailing comma
                     $careerName = substr($careerName, 0, -2);
 

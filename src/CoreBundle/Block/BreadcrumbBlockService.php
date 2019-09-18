@@ -10,7 +10,6 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
  * Class BreadcrumbBlockService.
- *
  */
 class BreadcrumbBlockService extends BaseBreadcrumbMenuBlockService
 {

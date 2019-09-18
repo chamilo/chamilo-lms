@@ -4599,7 +4599,7 @@ class SessionManager
                     $userData['relation_type'] = (int) $userData['relation_type'];
                     $userListByStatus[$userData['relation_type']][] = $userData;
                 }
-            //Subscribing in read only mode
+                //Subscribing in read only mode
                 foreach ($userListByStatus as $status => $userList) {
                     $userList = array_column($userList, 'user_id');
                     switch ($status) {

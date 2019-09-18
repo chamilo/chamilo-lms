@@ -571,6 +571,8 @@ class BuyCoursesPlugin extends Plugin
     /**
      * Lists current user session details, including each session course details.
      *
+     * @param int    $start
+     * @param int    $end
      * @param string $name Optional. The name filter
      * @param int    $min  Optional. The minimum price filter
      * @param int    $max  Optional. The maximum price filter
@@ -2833,6 +2835,8 @@ class BuyCoursesPlugin extends Plugin
     /**
      * Search filtered sessions by name, and range of price.
      *
+     * @param int    $start
+     * @param int    $end
      * @param string $name Optional. The name filter
      * @param int    $min  Optional. The minimun price filter
      * @param int    $max  Optional. The maximum price filter

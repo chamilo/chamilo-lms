@@ -2,7 +2,7 @@
 
 {% block body %}
     <script>
-        $(document).ready(function () {
+        $(function () {
             $('#date').datepicker({
                 dateFormat: 'yy-mm-dd'
             });

@@ -1583,10 +1583,6 @@ if (!empty($error)) {
     }
 
     foreach ($questionList as $questionId) {
-        $categoryId = $objExercise->getCategoryByQuestion(
-            $objExercise->questionList[$currentQuestion - 1]
-        );
-
         // for sequential exercises
         if ($objExercise->type == ONE_PER_PAGE) {
             // if it is not the right question, goes to the next loop iteration
@@ -1609,15 +1605,16 @@ if (!empty($error)) {
                 }
             }
         } elseif ($objExercise->type == ONE_CATEGORY_PER_PAGE) {
+            $categoryId = $objExercise->getCategoryByQuestion(
+                $objExercise->questionList[$currentQuestion - 1]
+            );
             $questionsInCategory = $objExercise->getQuestionsInCategory($categoryId);
 
             if (!in_array($questionId, $questionsInCategory)) {
                 $i++;
                 continue;
             }
-        }
 
-        if ($categoryId) {
             $categoryInfo = $objExercise->getCategoryInfo($categoryId);
 
             if ($exerciseIsProgressiveAdaptive) {
@@ -1760,7 +1757,7 @@ if (!empty($error)) {
                 $questionId,
                 $currentQuestion,
                 [],
-                $categoryId
+                $objExercise->type == ONE_CATEGORY_PER_PAGE ? $categoryId : 0
             );
             echo Display::div($exerciseActions, ['class' => 'exercise_actions']);
             echo '<br>';

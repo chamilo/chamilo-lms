@@ -71,8 +71,8 @@ class Course
      * Does this course has resources?
      *
      * @param int $type Check if this course has resources of the
-     *                           given type. If no type is given, check if course has resources of any
-     *                           type.
+     *                  given type. If no type is given, check if course has resources of any
+     *                  type.
      *
      * @return bool
      */

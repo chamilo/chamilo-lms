@@ -16,7 +16,6 @@ use Doctrine\ORM\Mapping as ORM;
  *     @ORM\Index(name="idx_item_property_visibility", columns={"visibility"}),
  * })
  * @ORM\Entity(repositoryClass="Chamilo\CoreBundle\Repository\ItemPropertyRepository")
- *
  */
 class CItemProperty
 {

@@ -1,6 +1,5 @@
 doctrine:
     dbal:
-        server_version: 5.6
         dbname: '%env(DATABASE_NAME)%'
         user: '%env(DATABASE_USER)%'
         password: '%env(DATABASE_PASSWORD)%'

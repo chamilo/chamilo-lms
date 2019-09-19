@@ -14,6 +14,7 @@ use Sylius\Component\Attribute\Model\AttributeValue as BaseAttributeValue;
  *     name="extra_field_values",
  *     indexes={
  *         @ORM\Index(name="idx_efv_fiii", columns={"field_id", "item_id"}),
+ *         @ORM\Index(name="idx_efv_item", columns={"item_id"})
  *     }
  * )
  * @ORM\Entity(repositoryClass="Chamilo\CoreBundle\Repository\ExtraFieldValuesRepository")

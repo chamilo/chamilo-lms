@@ -10,7 +10,10 @@ use Gedmo\Mapping\Annotation as Gedmo;
 /**
  * GradebookEvaluation.
  *
- * @ORM\Table(name="gradebook_evaluation")
+ * @ORM\Table(name="gradebook_evaluation",
+ *  indexes={
+ *     @ORM\Index(name="idx_ge_cat", columns={"category_id"}),
+ *  })
  * @ORM\Entity
  */
 class GradebookEvaluation

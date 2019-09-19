@@ -12,7 +12,8 @@ use Doctrine\ORM\Mapping as ORM;
  *  name="track_e_default",
  *  indexes={
  *      @ORM\Index(name="course", columns={"c_id"}),
- *      @ORM\Index(name="session", columns={"session_id"})
+ *      @ORM\Index(name="session", columns={"session_id"}),
+ *      @ORM\Index(name="idx_default_user_id", columns={"default_user_id"})
  *  }
  * )
  * @ORM\Entity

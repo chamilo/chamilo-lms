@@ -154,9 +154,73 @@ class Version20 extends AbstractMigrationChamilo
         $this->addSql('ALTER TABLE message ADD CONSTRAINT FK_B6BD307FF6C43E79 FOREIGN KEY (user_sender_id) REFERENCES user (id)');
         $this->addSql('ALTER TABLE message ADD CONSTRAINT FK_B6BD307F64482423 FOREIGN KEY (user_receiver_id) REFERENCES user (id)');
 
+        $table = $schema->getTable('c_document');
+        if (!$table->hasIndex('idx_cdoc_path')) {
+            $this->addSql('CREATE INDEX idx_cdoc_path ON c_document (path)');
+        }
+        if (!$table->hasIndex('idx_cdoc_size')) {
+            $this->addSql('CREATE INDEX idx_cdoc_size ON c_document (size)');
+        }
+        if (!$table->hasIndex('idx_cdoc_id')) {
+            $this->addSql('CREATE INDEX idx_cdoc_id ON c_document (id)');
+        }
+        if (!$table->hasIndex('idx_cdoc_type')) {
+            $this->addSql('CREATE INDEX idx_cdoc_type ON c_document (filetype)');
+        }
+        if (!$table->hasIndex('idx_cdoc_sid')) {
+            $this->addSql('CREATE INDEX idx_cdoc_sid ON c_document (session_id)');
+        }
+
+        $table = $schema->getTable('c_item_property');
+        if (!$table->hasIndex('idx_cip_lasteditu')) {
+            $this->addSql('CREATE INDEX idx_cip_lasteditu ON c_item_property (lastedit_user_id)');
+        }
+        if (!$table->hasIndex('idx_item_property_visibility')) {
+            $this->addSql('CREATE INDEX idx_item_property_visibility ON c_item_property (visibility)');
+        }
+
+        $table = $schema->getTable('extra_field_values');
+        if (!$table->hasIndex('idx_efv_item')) {
+            $this->addSql('CREATE INDEX idx_efv_item ON extra_field_values (item_id)');
+        }
+
+        $table = $schema->getTable('gradebook_link');
+        if (!$table->hasIndex('idx_gl_cat')) {
+            $this->addSql('CREATE INDEX idx_gl_cat ON gradebook_link (category_id)');
+        }
+
+        $table = $schema->getTable('gradebook_category');
+        if (!$table->hasIndex('idx_gb_cat_parent')) {
+            $this->addSql('CREATE INDEX idx_gb_cat_parent ON gradebook_category (parent_id)');
+        }
+
+        $table = $schema->getTable('access_url_rel_session');
+        if (!$table->hasIndex('idx_accessurs_sid')) {
+            $this->addSql('CREATE INDEX idx_accessurs_sid ON access_url_rel_session (session_id)');
+        }
+
+        $table = $schema->getTable('gradebook_result');
+        if (!$table->hasIndex('idx_gb_uid_eid')) {
+            $this->addSql('CREATE INDEX idx_gb_uid_eid ON gradebook_result (user_id, evaluation_id)');
+        }
+
+        $table = $schema->getTable('gradebook_evaluation');
+        if (!$table->hasIndex('idx_ge_cat')) {
+            $this->addSql('CREATE INDEX idx_ge_cat ON gradebook_evaluation (category_id)');
+        }
+
+        $table = $schema->getTable('track_e_default');
+        if (!$table->hasIndex('idx_message_user_receiver_status')) {
+            $this->addSql('CREATE INDEX idx_default_user_id ON track_e_default (default_user_id)');
+        }
+
         $table = $schema->getTable('message');
         if (!$table->hasIndex('idx_message_user_receiver_status')) {
             $this->addSql('CREATE INDEX idx_message_user_receiver_status ON message (user_receiver_id, msg_status)');
+        }
+
+        if (!$table->hasIndex('idx_message_status')) {
+            $this->addSql('CREATE INDEX idx_message_status ON message (msg_status)');
         }
 
         if (!$table->hasIndex('idx_message_receiver_status_send_date')) {

@@ -9,7 +9,10 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * GradebookCategory.
  *
- * @ORM\Table(name="gradebook_category")
+ * @ORM\Table(name="gradebook_category",
+ *  indexes={
+ *     @ORM\Index(name="idx_gb_cat_parent", columns={"parent_id"}),
+ *  }))
  * @ORM\Entity
  */
 class GradebookCategory

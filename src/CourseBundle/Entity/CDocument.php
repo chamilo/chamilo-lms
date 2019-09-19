@@ -19,7 +19,12 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(
  *  name="c_document",
  *  indexes={
- *      @ORM\Index(name="course", columns={"c_id"})
+ *      @ORM\Index(name="course", columns={"c_id"}),
+ *      @ORM\Index(name="idx_cdoc_path", columns={"path"}),
+ *      @ORM\Index(name="idx_cdoc_size", columns={"size"}),
+ *      @ORM\Index(name="idx_cdoc_id", columns={"id"}),
+ *      @ORM\Index(name="idx_cdoc_type", columns={"filetype"}),
+ *      @ORM\Index(name="idx_cdoc_sid", columns={"session_id"}),
  *  }
  * )
  * @GRID\Source(columns="iid, id, title, filetype", filterable=false)

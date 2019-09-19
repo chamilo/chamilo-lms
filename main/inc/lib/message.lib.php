@@ -1076,7 +1076,9 @@ class MessageManager
                 WHERE
                     user_receiver_id = ".$user_id." AND
                     id = '".$message_id."'";
-        Database::query($sql);
+        $result = Database::query($sql);
+
+        return Database::affected_rows($result) > 0;
     }
 
     /**

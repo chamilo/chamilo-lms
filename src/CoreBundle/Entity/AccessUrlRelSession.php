@@ -10,7 +10,6 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Table(name="access_url_rel_session",
  *  indexes={
- *     @ORM\Index(name="idx_accessurs_sid", columns={"session_id"}),
  * }))
  * @ORM\Entity
  */

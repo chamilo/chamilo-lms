@@ -194,11 +194,6 @@ class Version20 extends AbstractMigrationChamilo
             $this->addSql('CREATE INDEX idx_gb_cat_parent ON gradebook_category (parent_id)');
         }
 
-        $table = $schema->getTable('access_url_rel_session');
-        if (!$table->hasIndex('idx_accessurs_sid')) {
-            $this->addSql('CREATE INDEX idx_accessurs_sid ON access_url_rel_session (session_id)');
-        }
-
         $table = $schema->getTable('gradebook_result');
         if (!$table->hasIndex('idx_gb_uid_eid')) {
             $this->addSql('CREATE INDEX idx_gb_uid_eid ON gradebook_result (user_id, evaluation_id)');

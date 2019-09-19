@@ -43,20 +43,30 @@ class Attendance
      *
      * @see SortableTable#get_total_number_of_items()
      */
-    public static function getNumberOfAttendances($active = -1)
+    public static function getNumberOfAttendances()
     {
         $tbl_attendance = Database::get_course_table(TABLE_ATTENDANCE);
         $session_id = api_get_session_id();
         $condition_session = api_get_session_condition($session_id);
         $course_id = api_get_course_int_id();
+
+        $active_plus = '';
+
+        if ((isset($_GET['isStudentView']) && $_GET['isStudentView'] == 'true') ||
+            !api_is_allowed_to_edit(null, true)
+        ) {
+            $active_plus = ' AND att.active = 1';
+        }
+
         $sql = "SELECT COUNT(att.id) AS total_number_of_items
                 FROM $tbl_attendance att
-                WHERE c_id = $course_id $condition_session ";
-
-        $active = (int) $active;
+                WHERE 
+                      c_id = $course_id AND 
+                      active <> 2 $active_plus $condition_session  ";
+        /*$active = (int) $active;
         if ($active === 1 || $active === 0) {
             $sql .= "AND att.active = $active";
-        }
+        }*/
         $res = Database::query($sql);
         $obj = Database::fetch_object($res);
 

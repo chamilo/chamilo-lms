@@ -1069,7 +1069,7 @@ class DocumentManager
 
         // Deleting from the DB
         $user_id = api_get_user_id();
-        $document_id = intval($document_id);
+        $document_id = (int) $document_id;
 
         if (empty($course_info)) {
             $course_info = api_get_course_info();
@@ -1135,12 +1135,13 @@ class DocumentManager
     ) {
         $TABLE_DOCUMENT = Database::get_course_table(TABLE_DOCUMENT);
 
-        $groupId = intval($groupId);
+        $documentId = (int) $documentId;
+        $groupId = (int) $groupId;
         if (empty($groupId)) {
             $groupId = api_get_group_id();
         }
 
-        $sessionId = intval($sessionId);
+        $sessionId = (int) $sessionId;
         if (empty($sessionId)) {
             $sessionId = api_get_session_id();
         }
@@ -1176,8 +1177,6 @@ class DocumentManager
             }
             $path = $docInfo['path'];
         }
-
-        $documentId = intval($documentId);
 
         if (empty($path) || empty($docInfo) || empty($documentId)) {
             return false;
@@ -5721,9 +5720,9 @@ class DocumentManager
             return true;
         } elseif ($clean_curdirpath == '/shared_folder_session_'.$sessionId) {
             return true;
-        } else {
-            return false;
         }
+
+        return false;
     }
 
     /**
@@ -5741,9 +5740,9 @@ class DocumentManager
             return true;
         } elseif (strpos($clean_path, 'shared_folder_session_'.$sessionId.'/sf_user_')) {
             return true;
-        } else {
-            return false;
         }
+
+        return false;
     }
 
     /**
@@ -5872,9 +5871,9 @@ class DocumentManager
     {
         if (api_strripos($document_name, $keyword) !== false) {
             return true;
-        } else {
-            return false;
         }
+
+        return false;
     }
 
     /**
@@ -5991,6 +5990,7 @@ class DocumentManager
 
         $table = Database::get_course_table(TABLE_DOCUMENT);
         $courseId = $courseInfo['real_id'];
+        $id = (int) $id;
         $sessionCondition = api_get_session_condition($sessionId);
         $sql = "SELECT * FROM $table
                 WHERE
@@ -6057,7 +6057,7 @@ class DocumentManager
             $coursePath = api_get_path(SYS_COURSE_PATH).$courseInfo['path'].'/document/';
 
             if (Security::check_abs_path($coursePath.$document['path'], $coursePath)) {
-                self::file_send_for_download($coursePath.$document['path']);
+                self::file_send_for_download($coursePath.$document['path'], true);
                 exit;
             }
         }
@@ -6080,7 +6080,7 @@ class DocumentManager
         $coursePath = api_get_path(SYS_COURSE_PATH).$courseInfo['path'].'/document';
 
         // Creating a ZIP file.
-        $tempZipFile = api_get_path(SYS_ARCHIVE_PATH).api_get_unique_id().".zip";
+        $tempZipFile = api_get_path(SYS_ARCHIVE_PATH).api_get_unique_id().'.zip';
         $zip = new PclZip($tempZipFile);
         foreach ($files as $file) {
             $zip->add(

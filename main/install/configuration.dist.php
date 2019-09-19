@@ -1327,4 +1327,3 @@ requires extension "php-soap"  sudo apt-get install php-soap
 // You need add a new option called "confirmation" to the registration settings
 //INSERT INTO settings_options (variable, value, display_text) VALUES ('allow_registration', 'confirmation', 'MailConfirmation');
 // ------ (End) Custom DB changes
-

@@ -4,11 +4,11 @@
 namespace Chamilo\CoreBundle\Component\Editor\CkEditor\Toolbar;
 
 /**
- * CKEditor Minimal toolbar.
+ * Toolbar used to allow titles to have an HTML format.
  *
- * @package Chamilo\CoreBundle\Component\Editor\CkEditor\Toolbar *
+ * @package Chamilo\CoreBundle\Component\Editor\CkEditor\Toolbar
  */
-class Minimal extends Basic
+class TitleAsHtml extends Basic
 {
     /**
      * @return mixed
@@ -24,18 +24,20 @@ class Minimal extends Basic
             [
                 'name' => 'basicstyles',
                 'groups' => ['basicstyles', 'cleanup'],
-                'items' => ['Bold', 'Italic', 'Underline', 'Strike', 'TextColor'],
+                'items' => ['Bold', 'Italic', 'Underline', 'Strike', 'TextColor', 'BGColor'],
             ],
-            [
-                'name' => 'paragraph',
-                'groups' => ['list', 'indent', 'blocks', 'align', 'bidi'],
-                'items' => ['NumberedList', 'BulletedList', '-', 'Outdent', 'Indent'],
-            ],
+//            [
+//                'name' => 'paragraph',
+//                'groups' => ['list', 'indent', 'blocks', 'align', 'bidi'],
+//                'items' => ['NumberedList', 'BulletedList', '-', 'Outdent', 'Indent'],
+//            ],
             [
                 'name' => 'links',
-                'items' => ['Link', 'Unlink', 'Anchor', 'Source'],
+                'items' => ['Link', 'Unlink', 'Source'],
             ],
         ];
+
+        $config['height'] = '100';
 
         return $config;
     }

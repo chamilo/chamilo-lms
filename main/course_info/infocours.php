@@ -836,9 +836,15 @@ $groupNotification = [
     $form->createElement('radio', 'hide_forum_notifications', null, get_lang('No'), 2),
 ];
 
+$addUsers = [
+    $form->createElement('radio', 'subscribe_users_to_forum_notifications', null, get_lang('Yes'), 1),
+    $form->createElement('radio', 'subscribe_users_to_forum_notifications', null, get_lang('No'), 2),
+];
+
 $globalGroup = [
     get_lang('EnableForumAutoLaunch') => $group,
     get_lang('HideForumNotifications') => $groupNotification,
+    get_lang('SubscribeUsersToAllForumNotifications') => $addUsers,
     '' => $myButton,
 ];
 

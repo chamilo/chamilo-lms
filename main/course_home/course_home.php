@@ -325,6 +325,7 @@ if ($documentAutoLaunch == 1) {
     }
 }
 
+
 $tool_table = Database::get_course_table(TABLE_TOOL_LIST);
 
 /*	Introduction section (editable by course admins) */

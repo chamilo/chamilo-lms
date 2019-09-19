@@ -211,6 +211,13 @@ class CQuiz
     protected $hideQuestionTitle;
 
     /**
+     * @var int
+     *
+     * @ORM\Column(name="exercise_category_id", type="integer", nullable=true)
+     */
+    protected $exerciseCategoryId;
+
+    /**
      * @var bool
      *
      * @ORM\Column(name="show_previous_button", type="boolean", nullable=true, options={"default":1})

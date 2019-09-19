@@ -916,6 +916,7 @@ class Rest extends WebService
                         'code' => $courseInfo['code'],
                         'directory' => $courseInfo['directory'],
                         'pictureUrl' => $courseInfo['course_image_large'],
+                        'urlPicture' => $courseInfo['course_image_large'],
                         'teachers' => $teachers,
                     ];
                 }

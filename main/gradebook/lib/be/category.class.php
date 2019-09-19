@@ -2114,7 +2114,10 @@ class Category implements GradebookItem
                 $sessionId
             );
             $userHasSkills = !empty($userSkills);
+        }
 
+        // Block certification links depending gradebook configuration (generate certifications)
+        if (empty($category->getGenerateCertificates())) {
             if ($userHasSkills) {
                 return [
                     'badge_link' => Display::toolbarButton(
@@ -2124,10 +2127,7 @@ class Category implements GradebookItem
                     ),
                 ];
             }
-        }
 
-        // Block certification links depending gradebook configuration (generate certifications)
-        if (empty($category->getGenerateCertificates())) {
             return false;
         }
 
@@ -2208,14 +2208,14 @@ class Category implements GradebookItem
                     'pdf_link' => $exportToPDF,
                     'pdf_url' => "$url&action=export",
                 ];
+            }
 
-                if ($skillToolEnabled && $userHasSkills) {
-                    $html['badge_link'] = Display::toolbarButton(
-                        get_lang('ExportBadges'),
-                        api_get_path(WEB_CODE_PATH)."gradebook/get_badges.php?user=$user_id",
-                        'external-link'
-                    );
-                }
+            if ($skillToolEnabled && $userHasSkills) {
+                $html['badge_link'] = Display::toolbarButton(
+                    get_lang('ExportBadges'),
+                    api_get_path(WEB_CODE_PATH)."gradebook/get_badges.php?user=$user_id",
+                    'external-link'
+                );
             }
 
             return $html;

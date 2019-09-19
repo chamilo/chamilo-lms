@@ -808,6 +808,11 @@ class Version20 extends AbstractMigrationChamilo
             $this->addSql('CREATE INDEX idx_track_e_attempt_tms ON track_e_attempt (tms)');
         }
 
+        $table = $schema->getTable('track_e_login');
+        if (!$table->hasIndex('idx_track_e_login_date')) {
+            $this->addSql('CREATE INDEX idx_track_e_login_date ON track_e_login (login_date)');
+        }
+
         $this->addSql('ALTER TABLE c_group_info ADD CONSTRAINT FK_CE06532491D79BD3 FOREIGN KEY (c_id) REFERENCES course (id);');
 
         $this->addSql('ALTER TABLE course_category CHANGE auth_course_child auth_course_child VARCHAR(40) DEFAULT NULL');

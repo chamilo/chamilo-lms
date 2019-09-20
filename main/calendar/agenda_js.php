@@ -279,6 +279,9 @@ if ($agenda->type === 'course') {
     $form->addElement('checkbox', 'add_as_annonuncement', null, get_lang('AddAsAnnouncement'));
     $form->addHtml('</div>');
     $form->addElement('textarea', 'comment', get_lang('Comment'), ['id' => 'comment']);
+    $form->addHtml('<div id="attachment_block" style="display: none">');
+    $form->addLabel(get_lang('Attachment'), '<div id="attachment_text" style="display: none"></div>');
+    $form->addHtml('</div>');
 }
 
 $tpl->assign('form_add', $form->returnForm());

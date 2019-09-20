@@ -1640,12 +1640,13 @@ class SocialManager extends UserManager
                   ";
 
         if ($getCount) {
-            $select = ' SELECT count(id) as count_items ';
+            $select = ' SELECT count(id) count ';
         }
 
-        $sqlBase = "$select FROM $tblMessage m WHERE ";
-        $sql = [];
-        $sql[1] = $sqlBase."msg_status <> ".MESSAGE_STATUS_WALL_DELETE.' AND ';
+        $sql = "$select                    
+                    FROM $tblMessage m
+                WHERE
+                    msg_status <> ".MESSAGE_STATUS_WALL_DELETE.' AND ';
 
         // Get my own posts
         $userReceiverCondition = ' (
@@ -1654,25 +1655,22 @@ class SocialManager extends UserManager
             parent_id = '.$parentId.'
         )';
 
-        $sql[1] .= $userReceiverCondition;
+        $sql .= $userReceiverCondition;
 
-        $sql[2] = $sqlBase.' msg_status = '.MESSAGE_STATUS_PROMOTED.' ';
+        $sql .= ' OR ( msg_status = '.MESSAGE_STATUS_PROMOTED.' ) ';
 
         // Get my group posts
         $groupCondition = '';
         if (!empty($groupId)) {
             if (is_array($groupId)) {
                 $groupId = array_map('intval', $groupId);
-                $groupId = implode(",", $groupId);
-                $groupCondition = " ( group_id IN ($groupId) ";
+                $groupId = implode("','", $groupId);
+                $groupCondition = " OR ( group_id IN ('$groupId') ";
             } else {
                 $groupId = (int) $groupId;
-                $groupCondition = " ( group_id = $groupId ";
+                $groupCondition = " OR ( group_id = '$groupId' ";
             }
-            $groupCondition .= ' AND (msg_status = '.MESSAGE_STATUS_NEW.' OR msg_status = '.MESSAGE_STATUS_UNREAD.')) ';
-        }
-        if (!empty($groupCondition)) {
-            $sql[3] = $sqlBase.$groupCondition;
+            $groupCondition .= ' AND msg_status IN ('.MESSAGE_STATUS_NEW.', '.MESSAGE_STATUS_UNREAD.')) ';
         }
 
         // Get my friend posts
@@ -1680,16 +1678,17 @@ class SocialManager extends UserManager
         if (!empty($friendId)) {
             if (is_array($friendId)) {
                 $friendId = array_map('intval', $friendId);
-                $friendId = implode(",", $friendId);
-                $friendCondition = " ( user_receiver_id IN ($friendId) ";
+                $friendId = implode("','", $friendId);
+                $friendCondition = " OR ( user_receiver_id IN ('$friendId') ";
             } else {
                 $friendId = (int) $friendId;
-                $friendCondition = " ( user_receiver_id = $friendId ";
+                $friendCondition = " OR ( user_receiver_id = '$friendId' ";
             }
             $friendCondition .= ' AND msg_status = '.MESSAGE_STATUS_WALL_POST.' AND parent_id = 0) ';
         }
-        if (!empty($friendCondition)) {
-            $sql[4] = $sqlBase.$friendCondition;
+
+        if (!empty($groupCondition) || !empty($friendCondition)) {
+            $sql .= " $groupCondition $friendCondition ";
         }
 
         if (!empty($threadList)) {
@@ -1714,81 +1713,72 @@ class SocialManager extends UserManager
             $threadList = array_map('intval', $threadList);
             $threadList = implode("','", $threadList);
             $condition = " thread_id IN ('$threadList') ";
-            $sql[5] = "$select
+            $sql .= "                
+                UNION (
+                    $select
                     FROM c_forum_post  
                     WHERE $condition                                         
+                )
                 ";
         }
 
         if ($getCount) {
-            $count = 0;
-            foreach ($sql as $oneQuery) {
-                if (!empty($oneQuery)) {
-                    $res = Database::query($oneQuery);
-                    $row = Database::fetch_array($res);
-                    $count += (int) $row['count_items'];
-                }
-            }
+            $res = Database::query($sql);
+            $row = Database::fetch_array($res);
 
-            return $count;
+            return (int) $row['count'];
         }
 
-        $sqlOrder = ' ORDER BY send_date DESC ';
-        $sqlLimit = " LIMIT $start, $length ";
+        $sql .= ' ORDER BY send_date DESC ';
+        $sql .= " LIMIT $start, $length ";
+
         $messages = [];
-        foreach ($sql as $oneQuery) {
-            $oneQuery .= $sqlOrder.$sqlLimit;
-            $res = Database::query($oneQuery);
-            $em = Database::getManager();
-            if (Database::num_rows($res) > 0) {
-                $repo = $em->getRepository('ChamiloCourseBundle:CForumPost');
-                $repoThread = $em->getRepository('ChamiloCourseBundle:CForumThread');
-                $groups = [];
-                $userGroup = new UserGroup();
-                $urlGroup = api_get_path(WEB_CODE_PATH).'social/group_view.php?id=';
-                while ($row = Database::fetch_array($res, 'ASSOC')) {
-                    $row['group_info'] = [];
-                    if (!empty($row['group_id'])) {
-                        if (!in_array($row['group_id'], $groups)) {
-                            $group = $userGroup->get($row['group_id']);
-                            $group['url'] = $urlGroup.$group['id'];
-                            $groups[$row['group_id']] = $group;
-                            $row['group_info'] = $group;
-                        } else {
-                            $row['group_info'] = $groups[$row['group_id']];
-                        }
+        $res = Database::query($sql);
+        $em = Database::getManager();
+        if (Database::num_rows($res) > 0) {
+            $repo = $em->getRepository('ChamiloCourseBundle:CForumPost');
+            $repoThread = $em->getRepository('ChamiloCourseBundle:CForumThread');
+            $groups = [];
+            $userGroup = new UserGroup();
+            $urlGroup = api_get_path(WEB_CODE_PATH).'social/group_view.php?id=';
+            while ($row = Database::fetch_array($res, 'ASSOC')) {
+                $row['group_info'] = [];
+                if (!empty($row['group_id'])) {
+                    if (!in_array($row['group_id'], $groups)) {
+                        $group = $userGroup->get($row['group_id']);
+                        $group['url'] = $urlGroup.$group['id'];
+                        $groups[$row['group_id']] = $group;
+                        $row['group_info'] = $group;
+                    } else {
+                        $row['group_info'] = $groups[$row['group_id']];
                     }
-
-                    // Forums
-                    $row['post_title'] = '';
-                    $row['forum_title'] = '';
-                    $row['thread_url'] = '';
-                    if ($row['msg_status'] == MESSAGE_STATUS_FORUM) {
-                        /** @var CForumPost $post */
-                        $post = $repo->find($row['id']);
-                        /** @var CForumThread $thread */
-                        $thread = $repoThread->find($row['thread_id']);
-                        if ($post && $thread) {
-                            $courseInfo = api_get_course_info_by_id($post->getCId());
-                            $row['post_title'] = $post->getForumId();
-                            $row['forum_title'] = $thread->getThreadTitle();
-                            $row['thread_url'] = api_get_path(WEB_CODE_PATH).'forum/viewthread.php?'.http_build_query([
-                                    'cidReq' => $courseInfo['code'],
-                                    'forum' => $post->getForumId(),
-                                    'thread' => $post->getThreadId(),
-                                    'post_id' => $post->getIid(),
-                                ]).'#post_id_'.$post->getIid();
-                        }
-                    }
-
-                    $messages[$row['id']] = $row;
                 }
+
+                // Forums
+                $row['post_title'] = '';
+                $row['forum_title'] = '';
+                $row['thread_url'] = '';
+                if ($row['msg_status'] == MESSAGE_STATUS_FORUM) {
+                    /** @var CForumPost $post */
+                    $post = $repo->find($row['id']);
+                    /** @var CForumThread $thread */
+                    $thread = $repoThread->find($row['thread_id']);
+                    if ($post && $thread) {
+                        $courseInfo = api_get_course_info_by_id($post->getCId());
+                        $row['post_title'] = $post->getForumId();
+                        $row['forum_title'] = $thread->getThreadTitle();
+                        $row['thread_url'] = api_get_path(WEB_CODE_PATH).'forum/viewthread.php?'.http_build_query([
+                            'cidReq' => $courseInfo['code'],
+                            'forum' => $post->getForumId(),
+                            'thread' => $post->getThreadId(),
+                            'post_id' => $post->getIid(),
+                        ]).'#post_id_'.$post->getIid();
+                    }
+                }
+
+                $messages[] = $row;
             }
         }
-        // Reordering messages by ID (reverse order) is enough to have the
-        // latest first, as there is currently no option to edit messages
-        // afterwards
-        krsort($messages);
 
         return $messages;
     }

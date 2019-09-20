@@ -38,16 +38,16 @@ $(document).ready(function() {
 	$("#dialog-form").dialog({
 		autoOpen : false,
 		modal : false,
-		width : 580,
-		height : 480,
+		width : 600,
+		height : 580,
         zIndex : 20000 // added because of qtip2
    	});
 
     $("#simple-dialog-form").dialog({
 		autoOpen : false,
 		modal : false,
-		width : 580,
-		height : 480,
+		width : 600,
+		height : 550,
         zIndex : 20000 // added because of qtip2
    	});
 
@@ -531,10 +531,20 @@ $(document).ready(function() {
                     $("#calendar_session_info").html('');
                 }
 
-                $("#comment_edit").html(calEvent.comment);
+                if (calEvent.comment != '') {
+                    $("#comment_edit").html(calEvent.comment);
+                    $("#comment_edit").show();
+                }
+
+                if (calEvent.attachment != '') {
+                    $("#attachment_text").html(calEvent.attachment);
+                    $("#attachment_block").show();
+                    $("#attachment_text").show();
+                }
+
                 $("#title_edit").show();
                 $("#content_edit").show();
-                $("#comment_edit").show();
+
                 $("#title").hide();
                 $("#content").hide();
                 $("#comment").hide();
@@ -659,6 +669,8 @@ $(document).ready(function() {
                         $("#title_edit").hide();
                         $("#content_edit").hide();
                         $("#comment_edit").hide();
+                        $("#attachment_block").hide();
+                        $("#attachment_text").hide();
 
                         $("#title").show();
                         $("#content").show();
@@ -667,6 +679,7 @@ $(document).ready(function() {
 						$("#title_edit").html('');
 						$("#content_edit").html('');
                         $("#comment_edit").html('');
+                        $("#attachment_text").html('');
 
                         $("#title").val('');
                         $("#content").val('');
@@ -709,6 +722,8 @@ $(document).ready(function() {
                 $("#simple_title").html(calEvent.title);
                 $("#simple_content").html(calEvent.description);
                 $("#simple_comment").html(calEvent.comment);
+                $("#simple_attachment").html(calEvent.attachment);
+
                 $("#simple-dialog-form").dialog("open");
                 $("#simple-dialog-form").dialog({
 					buttons: {
@@ -768,7 +783,7 @@ $(document).ready(function() {
 {{ toolbar }}
 
 <div id="simple-dialog-form" style="display:none;">
-    <div style="width:500px">
+    <div style="width:500px;">
         <form name="form-simple" class="form-horizontal">
             <span id="calendar_course_info_simple"></span>
             <span id="calendar_session_info"></span>
@@ -803,6 +818,15 @@ $(document).ready(function() {
                 </label>
                 <div class="col-sm-9">
                     <div id="simple_comment"></div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-3 control-label">
+                    <b>{{ "Attachment" |get_lang}}</b>
+                </label>
+                <div class="col-sm-9">
+                    <div id="simple_attachment"></div>
                 </div>
             </div>
         </form>

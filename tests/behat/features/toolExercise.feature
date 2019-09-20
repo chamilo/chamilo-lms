@@ -324,9 +324,18 @@ Feature: Exercise tool
     And I follow "Edit"
     And I follow "Results and feedback"
     Then I should see "Learner score"
-    And wait for the page to be loaded
+    And wait very long for the page to be loaded
     And I follow "Grade activity"
     Then I should see "Score for the test: 83 / 117"
+    And I press "Edit individual feedback and grade the open question"
+    And I should see "Assign a grade"
+    And I fill the only ckeditor in the page with "open question teacher answer"
+    And I fill in select "select[name=marks]" with option value "10" with class ".grade_select"
+    Then I press "Correct test"
+    And wait very long for the page to be loaded
+    And I follow "Edit"
+    Then I should see "open question teacher answer"
+    And I should see "Score for the test: 93 / 117"
 
   Scenario: Create a session "Session Exercise" and add user "acostea"
     Given I am on "/main/session/session_add.php"

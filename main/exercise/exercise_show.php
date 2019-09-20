@@ -620,22 +620,24 @@ foreach ($questionList as $questionId) {
             $renderer->setFormTemplate('<form{attributes}><div>{content}</div></form>');
             $renderer->setCustomElementTemplate('<div>{element}</div>');
             $comnt = Event::get_comments($id, $questionId);
-            $default = ['comments_'.$questionId => $comnt];
+
+            $textareaId = 'comments_'.$questionId;
+            $default = [$textareaId => $comnt];
 
             if ($useAdvancedEditor) {
                 $feedback_form->addElement(
                     'html_editor',
-                    'comments_'.$questionId,
+                    $textareaId,
                     null,
-                    null,
+                    ['id' => $textareaId],
                     [
                         'ToolbarSet' => 'TestAnswerFeedback',
                         'Width' => '100%',
-                        'Height' => '120',
+                        'Height' => '120'
                     ]
                 );
             } else {
-                $feedback_form->addElement('textarea', 'comments_'.$questionId);
+                $feedback_form->addElement('textarea', $textareaId, ['id' => $textareaId]);
             }
             $feedback_form->setDefaults($default);
             $feedback_form->display();
@@ -667,7 +669,12 @@ foreach ($questionList as $questionId) {
 
                 $formMark = new FormValidator('marksform_'.$questionId, 'post');
                 $formMark->addHeader(get_lang('AssignMarks'));
-                $select = $formMark->addSelect('marks', get_lang('AssignMarks'), [], ['disable_js' => true]);
+                $select = $formMark->addSelect(
+                    'marks',
+                    get_lang('AssignMarks'),
+                    [],
+                    ['disable_js' => true, 'extra_class' => 'grade_select']
+                );
                 $model = ExerciseLib::getCourseScoreModel();
                 if (empty($model)) {
                     for ($i = 0; $i <= $questionWeighting; $i++) {

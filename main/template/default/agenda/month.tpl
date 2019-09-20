@@ -47,7 +47,7 @@ $(document).ready(function() {
 		autoOpen : false,
 		modal : false,
 		width : 600,
-		height : 600,
+		height : 550,
         zIndex : 20000 // added because of qtip2
    	});
 
@@ -722,6 +722,8 @@ $(document).ready(function() {
                 $("#simple_title").html(calEvent.title);
                 $("#simple_content").html(calEvent.description);
                 $("#simple_comment").html(calEvent.comment);
+                $("#simple_attachment").html(calEvent.attachment);
+
                 $("#simple-dialog-form").dialog("open");
                 $("#simple-dialog-form").dialog({
 					buttons: {
@@ -816,6 +818,15 @@ $(document).ready(function() {
                 </label>
                 <div class="col-sm-9">
                     <div id="simple_comment"></div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-3 control-label">
+                    <b>{{ "Attachment" |get_lang}}</b>
+                </label>
+                <div class="col-sm-9">
+                    <div id="simple_attachment"></div>
                 </div>
             </div>
         </form>

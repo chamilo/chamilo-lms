@@ -291,10 +291,9 @@ footer #footer_right{
     margin-bottom: 10px;
 }
 .section-notice{
-    padding-top: 20px;
-    padding-bottom: 20px;
     margin-top: 10px;
     margin-bottom: 10px;
+    padding: 20px 0;
 }
 .section-notice .items{
     padding-left: 10px;
@@ -332,10 +331,13 @@ footer #footer_right{
     min-height: 230px;
     border: 1px solid #19BF69;
 }
+#demo-home .demostration{
+    text-align: center;
+}
 .section-title{
     font-size: 28px;
     color: #96BD0D;
-    text-align: center;
+    text-align: left;
 }
 .statistics .icon-color{
     color: #96BD0D;

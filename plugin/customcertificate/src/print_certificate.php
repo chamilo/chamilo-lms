@@ -46,7 +46,7 @@ if (empty($courseCode)) {
 }
 
 if (empty($sessionId)) {
-    $sessionId = isset($_REQUEST['session_id']) ? (int) $_REQUEST['session_id'] : '';
+    $sessionId = isset($_REQUEST['session_id']) ? (int) $_REQUEST['session_id'] : 0;
 }
 
 $accessUrlId = api_get_current_access_url_id();
@@ -83,28 +83,14 @@ $useDefault = false;
 $path = api_get_path(SYS_UPLOAD_PATH).'certificates/';
 
 // Get info certificate
-$infoCertificate = Database::select(
-    '*',
-    $table,
-    ['where' => ['access_url_id = ? AND c_id = ? AND session_id = ?' => [$accessUrlId, $courseId, $sessionId]]],
-    'first'
-);
+$infoCertificate = CustomCertificatePlugin::getInfoCertificate($courseId, $sessionId, $accessUrlId);
 
 if (!is_array($infoCertificate)) {
     $infoCertificate = [];
 }
 
 if (empty($infoCertificate)) {
-    $infoCertificate = Database::select(
-        '*',
-        Database::get_main_table(CustomCertificatePlugin::TABLE_CUSTOMCERTIFICATE),
-        ['where' => ['access_url_id = ? AND certificate_default = ? ' => [$accessUrlId, 1]]],
-        'first'
-    );
-
-    if (!is_array($infoCertificate)) {
-        $infoCertificate = [];
-    }
+    $infoCertificate = CustomCertificatePlugin::getInfoCertificateDefault($accessUrlId);
 
     if (empty($infoCertificate)) {
         Display::display_header($plugin->get_lang('PrintCertificate'));

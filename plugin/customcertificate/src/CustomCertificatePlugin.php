@@ -285,4 +285,48 @@ class CustomCertificatePlugin extends Plugin
             }
         }
     }
+
+    /**
+     * Get certificate info.
+     *
+     * @param int $courseId
+     * @param int $sessionId
+     * @param int $accessUrlId
+     *
+     * @return array
+     */
+    public static function getInfoCertificate($courseId, $sessionId = 0, $accessUrlId = 1)
+    {
+        $table = Database::get_main_table(self::TABLE_CUSTOMCERTIFICATE);
+        $sql = "SELECT * FROM $table
+                WHERE c_id=$courseId AND session_id=$sessionId AND access_url_id=$accessUrlId";
+        $result = Database::query($sql);
+        $result_array = [];
+        if (Database::num_rows($result) > 0) {
+            $result_array = Database::fetch_array($result);
+        }
+        
+        return $result_array;
+    }
+
+    /**
+     * Get default certificate info.
+     *
+     * @param int $accessUrlId
+     *
+     * @return array
+     */
+    public static function getInfoCertificateDefault($accessUrlId)
+    {
+        $table = Database::get_main_table(self::TABLE_CUSTOMCERTIFICATE);
+        $sql = "SELECT * FROM $table
+        WHERE certificate_default=1 AND access_url_id=$accessUrlId";
+        $result = Database::query($sql);
+        $result_array = [];
+        if (Database::num_rows($result) > 0) {
+            $result_array = Database::fetch_array($result);
+        }
+        
+        return $result_array;
+    }
 }

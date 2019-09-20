@@ -185,7 +185,7 @@
 
                     <!-- MESSAGE -->
                     <section id="demo-home">
-                        <h3>{{ 'Curieuse/curieux ? Essaye la démo' | get_lang  }}  </h3>
+                        <h2 class="section-title">{{ 'TestDemoTitle' | get_lang  }}  </h2>
                         <div class="demostration">
                             <a href="{{ _p.web }}web/page-de-dmo-francais" class="btn btn-primary btn-demo">
                                 {{ 'demo' | get_lang }}

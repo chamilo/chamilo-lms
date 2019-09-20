@@ -19,6 +19,8 @@ class Rest extends WebService
 
     const GET_AUTH = 'authenticate';
     const GET_USER_MESSAGES = 'user_messages';
+    const POST_USER_MESSAGE_READ = 'user_message_read';
+    const POST_USER_MESSAGE_UNREAD = 'user_message_unread';
     const SAVE_GCM_ID = 'gcm_id';
     const GET_USER_COURSES = 'user_courses';
     const GET_PROFILE = 'user_profile';
@@ -201,7 +203,8 @@ class Rest extends WebService
                 'sendDate' => $message['send_date'],
                 'content' => $message['content'],
                 'hasAttachments' => $hasAttachments,
-                'url' => '',
+                'url' => api_get_path(WEB_CODE_PATH).'messages/view_message.php?'
+                    .http_build_query(['type' => 1, 'id' => $message['id']]),
             ];
         }
 
@@ -915,6 +918,7 @@ class Rest extends WebService
                         'code' => $courseInfo['code'],
                         'directory' => $courseInfo['directory'],
                         'pictureUrl' => $courseInfo['course_image_large'],
+                        'urlPicture' => $courseInfo['course_image_large'],
                         'teachers' => $teachers,
                     ];
                 }

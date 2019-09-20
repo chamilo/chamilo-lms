@@ -58,6 +58,32 @@ try {
             $messages = $restApi->getUserMessages($lastMessageId);
             $restResponse->setData($messages);
             break;
+        case Rest::POST_USER_MESSAGE_READ:
+        case Rest::POST_USER_MESSAGE_UNREAD:
+            $messagesId = isset($_POST['messages']) && is_array($_POST['messages'])
+                ? array_map('intval', $_POST['messages'])
+                : [];
+
+            $messagesId = array_filter($messagesId);
+
+            if (empty($messagesId)) {
+                throw new Exception(get_lang('NoData'));
+            }
+
+            $messageStatus = $action === Rest::POST_USER_MESSAGE_READ ? MESSAGE_STATUS_NEW : MESSAGE_STATUS_UNREAD;
+
+            $data = array_flip($messagesId);
+
+            foreach ($messagesId as $messageId) {
+                $data[$messageId] = MessageManager::update_message_status(
+                    $restApi->getUser()->getId(),
+                    $messageId,
+                    $messageStatus
+                );
+            }
+
+            $restResponse->setData($data);
+            break;
         case Rest::GET_USER_COURSES:
             $courses = $restApi->getUserCourses();
             $restResponse->setData($courses);

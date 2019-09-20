@@ -504,7 +504,7 @@ function get_user_data($from, $number_of_items, $column, $direction)
  */
 function email_filter($email)
 {
-    return Display::encrypted_mailto_link($email, $email);
+    return Display::encrypted_mailto_link($email, cut($email, 26));
 }
 
 /**
@@ -518,6 +518,8 @@ function email_filter($email)
  */
 function user_filter($name, $params, $row)
 {
+    $name = cut($name, 26);
+
     return '<a href="'.api_get_path(WEB_CODE_PATH).'admin/user_information.php?user_id='.$row[0].'">'.$name.'</a>';
 }
 

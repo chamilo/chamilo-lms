@@ -4425,7 +4425,7 @@ class SessionManager
      *
      * @param   int     Session ID
      * @param   bool    Whether to copy the relationship with courses
-     * @param   bool    Whether to copy the relationship with users
+     * @param   bool    $copyTeachersAndDrh
      * @param   bool    New courses will be created
      * @param   bool    Whether to set exercises and learning paths in the new session to invisible by default
      *
@@ -4436,7 +4436,7 @@ class SessionManager
     public static function copy(
         $id,
         $copy_courses = true,
-        $copy_users = true,
+        $copyTeachersAndDrh = true,
         $create_new_courses = false,
         $set_exercises_lp_invisible = false
     ) {
@@ -4508,7 +4508,6 @@ class SessionManager
         if ($copy_courses) {
             // Register courses from the original session to the new session
             $courses = self::get_course_list_by_session_id($id);
-
             $short_courses = $new_short_courses = [];
             if (is_array($courses) && count($courses) > 0) {
                 foreach ($courses as $course) {
@@ -4516,7 +4515,6 @@ class SessionManager
                 }
             }
 
-            $courses = null;
             // We will copy the current courses of the session to new courses
             if (!empty($short_courses)) {
                 if ($create_new_courses) {
@@ -4574,11 +4572,19 @@ class SessionManager
 
                 $short_courses = $new_short_courses;
                 self::add_courses_to_session($sid, $short_courses, true);
-                $short_courses = null;
+
+                if ($create_new_courses === false && $copyTeachersAndDrh) {
+                    foreach ($short_courses as $course) {
+                        $coachList = self::getCoachesByCourseSession($id, $course['id']);
+                        foreach ($coachList as $userId) {
+                            self::set_coach_to_course_session($userId, $sid, $course['id']);
+                        }
+                    }
+                }
             }
         }
 
-        if ($copy_users) {
+        if ($copyTeachersAndDrh) {
             // Register users from the original session to the new session
             $users = self::get_users_by_session($id);
             if (!empty($users)) {
@@ -4592,18 +4598,19 @@ class SessionManager
                     $userList = array_column($userList, 'user_id');
                     switch ($status) {
                         case 0:
-                            self::subscribeUsersToSession(
+                            /*self::subscribeUsersToSession(
                                 $sid,
                                 $userList,
                                 SESSION_VISIBLE_READ_ONLY,
                                 false,
                                 true
-                            );
+                            );*/
                             break;
                         case 1:
+                            // drh users
                             foreach ($userList as $drhId) {
-                                $drhId = api_get_user_info($drhId);
-                                self::subscribeSessionsToDrh($drhId, [$sid], false);
+                                $userInfo = api_get_user_info($drhId);
+                                self::subscribeSessionsToDrh($userInfo, [$sid], false, false);
                             }
                             break;
                     }

@@ -1902,52 +1902,32 @@ class Tracking
         $courseId = (int) $courseId;
         $session_id = (int) $session_id;
 
-        if (self::minimumTimeAvailable($session_id, $courseId)) {
-            $tbl_track_e_access = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ACCESS);
-            $sql = 'SELECT access_date
-                    FROM '.$tbl_track_e_access.'
-                    WHERE   access_user_id = '.$student_id.' AND
-                            c_id = "'.$courseId.'" AND
-                            access_session_id = '.$session_id.'
-                    ORDER BY access_date ASC
-                    LIMIT 0,1';
+        $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
+        $sql = 'SELECT login_course_date
+                FROM '.$table.'
+                WHERE
+                    user_id = '.$student_id.' AND
+                    c_id = '.$courseId.' AND
+                    session_id = '.$session_id.'
+                ORDER BY login_course_date ASC 
+                LIMIT 0,1';
+        $rs = Database::query($sql);
+        if (Database::num_rows($rs) > 0) {
+            if ($first_login_date = Database::result($rs, 0, 0)) {
+                if (empty($first_login_date)) {
+                    return false;
+                }
 
-            $rs = Database::query($sql);
-            if (Database::num_rows($rs) > 0) {
-                if ($last_login_date = Database::result($rs, 0, 0)) {
-                    if (empty($last_login_date)) {
-                        return false;
-                    }
-                    if ($convert_date) {
-                        return api_convert_and_format_date($last_login_date, DATE_FORMAT_SHORT);
-                    } else {
-                        return $last_login_date;
-                    }
+                if ($convert_date) {
+                    return api_convert_and_format_date(
+                        $first_login_date,
+                        DATE_FORMAT_SHORT
+                    );
                 }
+
+                return $first_login_date;
             }
-        } else {
-            $tbl_track_login = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
-            $sql = 'SELECT login_course_date
-                    FROM '.$tbl_track_login.'
-                    WHERE
-                        user_id = '.$student_id.' AND
-                        c_id = '.$courseId.' AND
-                        session_id = '.$session_id.'
-                    ORDER BY login_course_date ASC 
-                    LIMIT 0,1';
-            $rs = Database::query($sql);
-            if (Database::num_rows($rs) > 0) {
-                if ($first_login_date = Database::result($rs, 0, 0)) {
-                    if ($convert_date) {
-                        return api_convert_and_format_date(
-                            $first_login_date,
-                            DATE_FORMAT_SHORT
-                        );
-                    } else {
-                        return $first_login_date;
-                    }
-                }
-            }
+
         }
 
         return false;

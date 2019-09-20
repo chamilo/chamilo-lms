@@ -22,7 +22,7 @@ use Doctrine\DBAL\Types\Type;
  */
 class Exercise
 {
-    const PAGINATION_ITEMS_PER_PAGE = 5;
+    const PAGINATION_ITEMS_PER_PAGE = 20;
     public $iId;
     public $id;
     public $name;

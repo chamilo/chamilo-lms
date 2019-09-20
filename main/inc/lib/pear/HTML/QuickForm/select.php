@@ -87,6 +87,11 @@ class HTML_QuickForm_select extends HTML_QuickForm_element
                 $attributes['data-live-search'] = '';
             }
 
+            if (isset($attributes['extra_class']) && $attributes['extra_class']) {
+                $attributes['class'] .= ' '.$attributes['extra_class'];
+                unset($attributes['extra_class']);
+            }
+
             if (isset($attributes['placeholder'])) {
                 $addBlank =  $attributes['placeholder'];
             }

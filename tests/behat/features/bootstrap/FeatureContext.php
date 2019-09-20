@@ -414,6 +414,19 @@ class FeatureContext extends MinkContext
         ");
     }
 
+    /**
+     * @When /^(?:|I )fill in select "(?P<field>(?:[^"]|\\")*)" with option value "(?P<value>(?:[^"]|\\")*)" with class "(?P<id>(?:[^"]|\\")*)"$/
+     */
+    public function iFillInSelectWithOptionValue($field, $value, $class)
+    {
+        $this->getSession()->wait(1000);
+        $this->getSession()->executeScript("
+            var input = $('$field').filter('$class');
+            var id = input.attr('id');
+            var input = $('#'+id);            
+            input.val($value);
+        ");
+    }
 
     /**
      * @When /^wait for the page to be loaded$/

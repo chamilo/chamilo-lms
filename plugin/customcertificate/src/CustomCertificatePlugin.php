@@ -301,12 +301,12 @@ class CustomCertificatePlugin extends Plugin
         $sql = "SELECT * FROM $table
                 WHERE c_id=$courseId AND session_id=$sessionId AND access_url_id=$accessUrlId";
         $result = Database::query($sql);
-        $result_array = [];
+        $resultArray = [];
         if (Database::num_rows($result) > 0) {
-            $result_array = Database::fetch_array($result);
+            $resultArray = Database::fetch_array($result);
         }
-        
-        return $result_array;
+
+        return $resultArray;
     }
 
     /**
@@ -320,13 +320,13 @@ class CustomCertificatePlugin extends Plugin
     {
         $table = Database::get_main_table(self::TABLE_CUSTOMCERTIFICATE);
         $sql = "SELECT * FROM $table
-        WHERE certificate_default=1 AND access_url_id=$accessUrlId";
+                WHERE certificate_default=1 AND access_url_id=$accessUrlId";
         $result = Database::query($sql);
-        $result_array = [];
+        $resultArray = [];
         if (Database::num_rows($result) > 0) {
-            $result_array = Database::fetch_array($result);
+            $resultArray = Database::fetch_array($result);
         }
-        
-        return $result_array;
+
+        return $resultArray;
     }
 }

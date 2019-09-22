@@ -1694,14 +1694,14 @@ class SocialManager extends UserManager
 
         if (!empty($threadList)) {
             if ($getCount) {
-                $select = ' SELECT count(iid) count ';
+                $select = ' SELECT count(iid) count_items ';
             } else {
                 $select = " SELECT 
                                 iid as id,
-                                poster_id,
+                                poster_id as user_sender_id,
                                 '' as user_receiver_id,
-                                post_date,
-                                post_text,
+                                post_date as send_date,
+                                post_text as content,
                                 '' as parent_id,
                                 ".MESSAGE_STATUS_FORUM." as msg_status,
                                 '' as group_id,

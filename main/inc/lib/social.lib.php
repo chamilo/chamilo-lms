@@ -1697,13 +1697,13 @@ class SocialManager extends UserManager
                 $select = ' SELECT count(iid) count ';
             } else {
                 $select = " SELECT 
-                                iid,
+                                iid as id,
                                 poster_id,
                                 '' as user_receiver_id,
                                 post_date,
                                 post_text,
                                 '' as parent_id,
-                                ".MESSAGE_STATUS_FORUM.",
+                                ".MESSAGE_STATUS_FORUM." as msg_status,
                                 '' as group_id,
                                 forum_id,
                                 thread_id,

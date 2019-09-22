@@ -1134,7 +1134,7 @@ $AdminLogin = "Identifiant de l'administrateur";
 $AdminPass = "Mot de passe de l'administrateur (<font color=\"red\">en choisir un autre pourrait être une bonne idée</font>)";
 $EducationManager = "Responsable du contenu";
 $CampusName = "Nom du campus";
-$DBSettingIntro = "Le script d'installation créera les bases de données principales de Chamilo. Veuillez prendre en compte que Chamilo devra créer plusieurs bases de données. Si vous êtes restreint à une seule base de données par votre hébergeur, Chamilo ne fonctionnera pas, à moins que vous ne choisissiez l'option \"Une seule base de données\".";
+$DBSettingIntro = "Le script d'installation créera (ou utilisera) la base de données de Chamilo avec le nom donné ici. Merci de vous assurer que l'utilisateur indiqué dispose des droits suffisants pour créer la base de données. Si une base de données de ce nom existe déjà, ses données seront écrasées. N'utilisez pas l'utilisateur root comme utilisateur de base de données pour Chamilo: cela peut ouvrir la porte à de sérieux problèmes de sécurité.";
 $TimeSpentByStudentsInCourses = "Temps passé par les étudiants dans les cours";
 $Step3 = "Étape 3 sur 6";
 $Step4 = "Étape 4 sur 6";
@@ -8377,4 +8377,5 @@ $CompilatioStartAnalysis = "lancer l'analyse Compilatio";
 $CompilatioSeeReport = "Voir le rapport";
 $CompilatioNonToAnalyse = "Votre sélection ne contient aucun travaux à analyser. Seul les travaux gérés par Compilatio et non déjà analysés peuvent être envoyés.";
 $CompilatioComunicationAjaxImpossible = "Communication AJAX avec le serveur Compilatio impossible. Veuillez reessayer ultérieurement.";
+$UserClassExplanation = "Information : La liste des classes ci-dessous contient la liste des classes que vous avez déjà inscrits à votre cours. Si cette liste est vide, utilisez le + vert ci-dessus pour ajouter des classes.";
 ?>

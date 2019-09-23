@@ -810,7 +810,6 @@ function return_breadcrumb($interbreadcrumb, $language_file, $nameTools)
         $i = 0;
         $final_navigation_count = count($final_navigation);
         if (!empty($final_navigation)) {
-            // $home_link.= '<span class="divider">/</span>';
             if (!empty($home_link)) {
                 $lis .= Display::tag('li', $home_link);
             }

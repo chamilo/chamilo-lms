@@ -3,11 +3,11 @@
 
 /**
  * @package chamilo.survey
-
- * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University
- * @author Julio Montoya <gugli100@gmail.com>
  *
- **/
+ * @author  Patrick Cool <patrick.cool@UGent.be>, Ghent University
+ * @author  Julio Montoya <gugli100@gmail.com>
+ */
+
 require_once __DIR__.'/../inc/global.inc.php';
 
 api_protect_course_script(true);
@@ -31,13 +31,8 @@ if (empty($survey_data)) {
 
 $this_section = SECTION_COURSES;
 
-// Database table definitions
-$table_survey = Database::get_course_table(TABLE_SURVEY);
 $table_survey_question = Database::get_course_table(TABLE_SURVEY_QUESTION);
 $table_survey_question_option = Database::get_course_table(TABLE_SURVEY_QUESTION_OPTION);
-$table_course = Database::get_main_table(TABLE_MAIN_COURSE);
-$table_user = Database::get_main_table(TABLE_MAIN_USER);
-$table_survey_invitation = Database::get_course_table(TABLE_SURVEY_INVITATION);
 
 $course_id = api_get_course_int_id();
 $courseInfo = api_get_course_info();
@@ -58,7 +53,6 @@ Display::display_header(get_lang('SurveyPreview'));
 
 // We exit here is the first or last question is a pagebreak (which causes errors)
 SurveyUtil::check_first_last_question($surveyId, false);
-$counter_question = 0;
 
 // Survey information
 echo '<div class="page-header"><h2>'.$survey_data['survey_title'].'</h2></div>';
@@ -134,7 +128,7 @@ if (isset($_GET['show'])) {
                 LEFT JOIN $table_survey_question_option survey_question_option
                 ON
                     survey_question.question_id = survey_question_option.question_id AND
-                    survey_question_option.c_id = $course_id
+                    survey_question_option.c_id = survey_question.c_id
                 WHERE
                     survey_question.survey_id = '".$surveyId."' AND
                     survey_question.question_id IN (".Database::escape_string(implode(',', $paged_questions[$_GET['show']]), null, false).") AND
@@ -156,7 +150,6 @@ if (isset($_GET['show'])) {
                 $questions[$sort]['maximum_score'] = $row['max_value'];
                 $questions[$row['sort']]['is_required'] = $allowRequiredSurveyQuestions && $row['is_required'];
             }
-            $counter_question++;
         }
     }
 }
@@ -227,19 +220,20 @@ if ($show < $numberOfPages) {
     }
 }
 
-if ($show >= $numberOfPages && isset($_GET['show']) ||
-    (isset($_GET['show']) && count($questions) == 0)
-) {
-    if ($questions_exists == false) {
-        echo '<p>'.get_lang('ThereAreNotQuestionsForthisSurvey').'</p>';
+if (isset($_GET['show'])) {
+    if ($show >= $numberOfPages || count($questions) == 0) {
+        if ($questions_exists == false) {
+            echo '<p>'.get_lang('ThereAreNotQuestionsForthisSurvey').'</p>';
+        }
+        $form->addButton(
+            'finish_survey',
+            get_lang('FinishSurvey'),
+            'arrow-right',
+            'success'
+        );
     }
-    $form->addButton(
-        'finish_survey',
-        get_lang('FinishSurvey'),
-        'arrow-right',
-        'success'
-    );
 }
+
 $form->addHtml('</div>');
 $form->display();
 

@@ -105,6 +105,8 @@ class SortableTable extends HTML_Table
      */
     private $columnsToHide = [];
     private $dataFunctionParams;
+    private $defaultColumn;
+    private $defaultItemsPerPage;
 
     /**
      * Create a new SortableTable.
@@ -145,16 +147,23 @@ class SortableTable extends HTML_Table
         $this->table_name = $table_name;
         $this->additional_parameters = [];
         $this->param_prefix = $table_name.'_';
+        $this->defaultColumn = (int) $default_column;
+        $this->defaultItemsPerPage = $default_items_per_page;
+
+        $defaultRow = api_get_configuration_value('table_default_row');
+        if (!empty($defaultRow)) {
+            $this->defaultItemsPerPage = $default_items_per_page = $defaultRow;
+        }
+
+        $cleanSessionData = Session::read('clean_sortable_table');
+        if ($cleanSessionData === true) {
+            $this->cleanUrlSessionParams();
+        }
 
         $this->page_nr = Session::read($this->param_prefix.'page_nr', 1);
         $this->page_nr = isset($_GET[$this->param_prefix.'page_nr']) ? (int) $_GET[$this->param_prefix.'page_nr'] : $this->page_nr;
         $this->column = Session::read($this->param_prefix.'column', $default_column);
         $this->column = isset($_GET[$this->param_prefix.'column']) ? (int) $_GET[$this->param_prefix.'column'] : $this->column;
-
-        $defaultRow = api_get_configuration_value('table_default_row');
-        if (!empty($defaultRow)) {
-            $default_items_per_page = $defaultRow;
-        }
 
         // Default direction.
         if (in_array(strtoupper($default_order_direction), ['ASC', 'DESC'])) {
@@ -210,6 +219,26 @@ class SortableTable extends HTML_Table
         $this->th_attributes = [];
         $this->other_tables = [];
         $this->dataFunctionParams = [];
+    }
+
+    /**
+     * Clean URL params when changing student view
+     */
+    public function cleanUrlSessionParams()
+    {
+        Session::erase('clean_sortable_table');
+
+        $prefix = $this->param_prefix;
+
+        Session::erase($prefix.'page_nr');
+        Session::erase($prefix.'column');
+        Session::erase($prefix.'direction');
+        Session::erase($prefix.'per_page');
+
+        $_GET[$this->param_prefix.'per_page'] = $this->default_items_per_page;
+        $_GET[$this->param_prefix.'page_nr'] = 1;
+        $_GET[$this->param_prefix.'column'] = $this->defaultColumn;
+        $_GET[$this->param_prefix.'direction'] = $this->direction;
     }
 
     /**

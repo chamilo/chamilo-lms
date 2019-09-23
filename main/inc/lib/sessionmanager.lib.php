@@ -4421,15 +4421,18 @@ class SessionManager
 
     /**
      * Copies a session with the same data to a new session.
-     * The new copy is not assigned to the same promotion. @see subscribe_sessions_to_promotions() for that.
+     * The new copy is not assigned to the same promotion.
      *
-     * @param   int     Session ID
-     * @param   bool    Whether to copy the relationship with courses
-     * @param   bool    $copyTeachersAndDrh
-     * @param   bool    New courses will be created
-     * @param   bool    Whether to set exercises and learning paths in the new session to invisible by default
+     *
+     * @param int  $id                         Session ID
+     * @param bool $copy_courses               Whether to copy the relationship with courses
+     * @param bool $copyTeachersAndDrh
+     * @param bool $create_new_courses         New courses will be created
+     * @param bool $set_exercises_lp_invisible Set exercises and LPs in the new session to invisible by default
      *
      * @return int The new session ID on success, 0 otherwise
+     *
+     * @see subscribe_sessions_to_promotions() for that.
      *
      * @todo make sure the extra session fields are copied too
      */

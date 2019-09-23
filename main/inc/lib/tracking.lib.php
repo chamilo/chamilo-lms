@@ -1927,7 +1927,6 @@ class Tracking
 
                 return $first_login_date;
             }
-
         }
 
         return false;

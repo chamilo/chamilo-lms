@@ -1729,6 +1729,7 @@ class SocialManager extends UserManager
                     $count += (int) $row['count_items'];
                 }
             }
+
             return $count;
         }
 
@@ -1796,7 +1797,6 @@ class SocialManager extends UserManager
 
         return $messages;
     }
-
 
     /**
      * Gets all messages from someone's wall (within specific limits), formatted.

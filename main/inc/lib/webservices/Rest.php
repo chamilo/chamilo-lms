@@ -214,15 +214,11 @@ class Rest extends WebService
     /**
      * Get the user courses.
      *
-     * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      * @throws \Doctrine\ORM\TransactionRequiredException
+     * @throws \Doctrine\ORM\ORMException
      *
      * @return array
-     *
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
-     * @throws \Doctrine\ORM\TransactionRequiredException
      */
     public function getUserCourses()
     {

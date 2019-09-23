@@ -633,7 +633,7 @@ foreach ($questionList as $questionId) {
                     [
                         'ToolbarSet' => 'TestAnswerFeedback',
                         'Width' => '100%',
-                        'Height' => '120'
+                        'Height' => '120',
                     ]
                 );
             } else {

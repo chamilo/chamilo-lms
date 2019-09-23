@@ -291,10 +291,9 @@ footer #footer_right{
     margin-bottom: 10px;
 }
 .section-notice{
-    padding-top: 20px;
-    padding-bottom: 20px;
     margin-top: 10px;
     margin-bottom: 10px;
+    padding: 20px 0;
 }
 .section-notice .items{
     padding-left: 10px;
@@ -332,10 +331,13 @@ footer #footer_right{
     min-height: 230px;
     border: 1px solid #19BF69;
 }
+#demo-home .demostration{
+    text-align: center;
+}
 .section-title{
     font-size: 28px;
     color: #96BD0D;
-    text-align: center;
+    text-align: left;
 }
 .statistics .icon-color{
     color: #96BD0D;
@@ -393,6 +395,12 @@ footer #footer_right{
 }
 .form-horizontal .progress{
     margin-top: 10px;
+}
+.title-video-ofaj{
+    font-weight: bold;
+    color: #96BD0D;
+    text-align: center;
+    margin-bottom: 2rem;
 }
 .navbar{
     border-radius: 0;
@@ -490,6 +498,13 @@ footer #footer_right{
 }
 #extra_terms_datedenaissance_alt{
     background: #FFF;
+}
+.carousel-indicators {
+    bottom: 0;
+    display: none;
+}
+.carousel-content{
+    padding: 0 7rem;
 }
 .navbar-inverse li a{
     line-height: 30px;

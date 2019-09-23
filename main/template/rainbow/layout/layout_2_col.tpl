@@ -162,6 +162,7 @@
     <div class="container">
         <div class="row">
             <div class="col-md-12">
+
                 {% if home_page_block %}
                     <section id="homepage-home">
                         {{ home_page_block }}
@@ -169,52 +170,57 @@
                 {% endif %}
 
                 {% if section_name == 'section-mycampus' %}
+                    <div id="latest_blocks"></div>
+                    {% if announcements_block %}
+                        <article id="homepage-announcements">
+                            {{ announcements_block }}
+                        </article>
+                    {% endif %}
 
-                <div id="latest_blocks"></div>
-                {% if announcements_block %}
-                    <article id="homepage-announcements">
-                        {{ announcements_block }}
-                    </article>
-                {% endif %}
+                    <!-- HOT COURSE -->
+                    {% include 'layout/hot_courses.tpl'|get_template %}
+                    <!-- END HOT COURSE -->
 
-                <!-- HOT COURSE -->
-                {% include 'layout/hot_courses.tpl'|get_template %}
+                    <div id="latest_courses"></div>
 
-                <!-- END HOT COURSE -->
-
-                <!-- MESSAGE -->
+                    <!-- MESSAGE -->
                     <section id="demo-home">
-                        <h3>{{ 'Curieuse/curieux ? Essaye la démo' | get_lang  }}  </h3>
+                        <h2 class="section-title">{{ 'TestDemoTitle' | get_lang  }}  </h2>
                         <div class="demostration">
                             <a href="{{ _p.web }}web/page-de-dmo-francais" class="btn btn-primary btn-demo">
                                 {{ 'demo' | get_lang }}
                             </a>
                         </div>
                     </section>
-                <!-- CMS -->
+                    <!-- CMS -->
 
-                {#{% include template ~ "/layout/cms.tpl" %}#}
-                <script>
-                $(document).ready(function() {
-                    $.ajax({
-                        url: "{{ _p.web_url }}{{ document_language }}-{{ document_language }}/cms/page/latest/3?_locale={{ document_language }}",
-                        success: function (data) {
-                            $('#latest_pages').html(data);
-                        }
-                    });
-                });
+                    {#{% include template ~ "/layout/cms.tpl" %}#}
+                    <script>
+                    $(function () {
+                        $.ajax({
+                            url: "{{ _p.web_url }}{{ document_language }}-{{ document_language }}/cms/page/latest/3?_locale={{ document_language }}",
+                            success: function (data) {
+                                $('#latest_pages').html(data);
+                            }
+                        });
 
-                $(document).ready(function() {
-                    $.ajax({
-                        url: "{{ _p.web_url }}{{ document_language }}-{{ document_language }}/cms/page/blocks/4?_locale={{ document_language }}",
-                        success: function (data) {
-                            $('#latest_blocks').html(data);
-                        }
+                        $.ajax({
+                            url: "{{ _p.web_url }}{{ document_language }}-{{ document_language }}/cms/page/blocks/4?_locale={{ document_language }}",
+                            success: function (data) {
+                                $('#latest_blocks').html(data);
+                            }
+                        });
+
+                        $.ajax({
+                            url: "{{ _p.web_url }}{{ document_language }}-{{ document_language }}/cms/page/courses/3?_locale={{ document_language }}",
+                            success: function (data) {
+                                $('#latest_courses').html(data);
+                            }
+                        });
                     });
-                });
-                </script>
-                <div id="latest_pages"></div>
-                <!-- END CSS -->
+                    </script>
+                    <div id="latest_pages"></div>
+                    <!-- END CSS -->
                 {% endif %}
             </div>
         </div>

@@ -2661,6 +2661,7 @@ JAVASCRIPT;
                         [
                             'title' => $field['display_text'],
                             'target' => '_blank',
+                            'class' => 'download_extra_field',
                         ]
                     );
                     break;

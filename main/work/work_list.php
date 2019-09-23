@@ -105,7 +105,33 @@ if (!empty($my_folder_data['description'])) {
     $content .= Display::panel($contentWork, get_lang('Description'));
 }
 
-$content .= workGetExtraFieldData($workId);
+$extraFieldWorkData = workGetExtraFieldData($workId);
+
+if (!empty($extraFieldWorkData)) {
+    $forceDownload = api_get_configuration_value('force_download_doc_before_upload_work');
+    if ($forceDownload) {
+        // Force to download documents first.
+        $downloadDocumentsFirst = addslashes(get_lang('DownloadDocumentsFirst'));
+        $content .= "<script>
+            $(function() {
+                var clicked = 0;
+                $('#upload_button').on('click', function(e) {
+                    if (clicked == 0) {
+                        alert('$downloadDocumentsFirst');
+                        e.preventDefault();
+                    }
+                });
+                
+                $('.download_extra_field').on('click', function(e){      
+                    clicked = 1;
+                });
+            });
+            </script>";
+    }
+}
+
+$content .= $extraFieldWorkData;
+
 $action = isset($_REQUEST['action']) ? $_REQUEST['action'] : null;
 $item_id = isset($_REQUEST['item_id']) ? (int) $_REQUEST['item_id'] : null;
 
@@ -258,30 +284,6 @@ if (!api_is_invitee()) {
     ';
 
     $documents = getAllDocumentsFromWorkToString($workId, $courseInfo);
-
-    if (!empty($documents)) {
-        $forceDownload = api_get_configuration_value('force_download_doc_before_upload_work');
-        if ($forceDownload) {
-            // Force to download documents first.
-            $downloadDocumentsFirst = addslashes(get_lang('DownloadDocumentsFirst'));
-            $content .= "<script>
-            $(function() {
-                var clicked = 0;
-                $('#upload_button').on('click', function(e) {
-                    if (clicked == 0) {
-                        alert('$downloadDocumentsFirst');
-                        e.preventDefault();
-                    }
-                });
-                
-                $('.link_to_download').on('click', function(e){      
-                    clicked = 1;
-                });
-            });
-            </script>";
-        }
-    }
-
     $content .= $documents;
 
     $tableWork = Display::grid_html('results');

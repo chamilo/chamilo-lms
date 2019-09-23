@@ -3667,6 +3667,13 @@ class UserManager
 
         if (!empty($myCourseList)) {
             ksort($myCourseList);
+            $checkPosition = array_filter(array_column($myCourseList, 'position'));
+            if (empty($checkPosition)) {
+                // The session course list doesn't have any position,
+                // then order the course list by course code
+                $list = array_column($myCourseList, 'course_code');
+                array_multisort($myCourseList, SORT_ASC, $list);
+            }
         }
 
         return $myCourseList;

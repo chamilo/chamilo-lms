@@ -1269,8 +1269,10 @@ svg circle{
     background-position: 0 -200px;
 }
 .mejs__container.mejs__video{
-    margin-top: 20px;
-    margin-bottom: 20px;
+    margin: 20px auto;
+}
+#home-welcome{
+    line-height: 20px;
 }
 .mejs__container .mejs__controls {
     position: absolute;

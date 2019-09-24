@@ -2926,7 +2926,7 @@ form .formw .freeze {
 }
 
 .label_tag {
-    padding: 1px 3px 2px;
+    padding: 4px;
     margin: 2px 3px 2px 0;
     background-color: #bfbfbf;
     font-size: 10px;
@@ -2934,7 +2934,7 @@ form .formw .freeze {
     color: #ffffff;
     border-radius: 3px;
     text-align: center;
-    width: 155px;
+    float:left;
 }
 
 .label_tag.personal_event {

@@ -19,6 +19,8 @@ class Rest extends WebService
 
     const GET_AUTH = 'authenticate';
     const GET_USER_MESSAGES = 'user_messages';
+    const POST_USER_MESSAGE_READ = 'user_message_read';
+    const POST_USER_MESSAGE_UNREAD = 'user_message_unread';
     const SAVE_GCM_ID = 'gcm_id';
     const GET_USER_COURSES = 'user_courses';
     const GET_PROFILE = 'user_profile';
@@ -213,15 +215,19 @@ class Rest extends WebService
      * Get the user courses.
      *
      * @return array
+     *
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws \Doctrine\ORM\TransactionRequiredException
      */
     public function getUserCourses()
     {
         $courses = CourseManager::get_courses_list_by_user_id($this->user->getId());
         $data = [];
 
-        foreach ($courses as $courseId) {
+        foreach ($courses as $courseInfo) {
             /** @var Course $course */
-            $course = Database::getManager()->find('ChamiloCoreBundle:Course', $courseId['real_id']);
+            $course = Database::getManager()->find('ChamiloCoreBundle:Course', $courseInfo['real_id']);
             $teachers = CourseManager::getTeacherListFromCourseCodeToString($course->getCode());
 
             $data[] = [
@@ -231,6 +237,7 @@ class Rest extends WebService
                 'directory' => $course->getDirectory(),
                 'urlPicture' => CourseManager::getPicturePath($course, true),
                 'teachers' => $teachers,
+                'isSpecial' => !empty($courseInfo['special_course']),
             ];
         }
 
@@ -916,6 +923,7 @@ class Rest extends WebService
                         'code' => $courseInfo['code'],
                         'directory' => $courseInfo['directory'],
                         'pictureUrl' => $courseInfo['course_image_large'],
+                        'urlPicture' => $courseInfo['course_image_large'],
                         'teachers' => $teachers,
                     ];
                 }

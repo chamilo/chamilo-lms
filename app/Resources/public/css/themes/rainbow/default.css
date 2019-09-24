@@ -291,10 +291,9 @@ footer #footer_right{
     margin-bottom: 10px;
 }
 .section-notice{
-    padding-top: 20px;
-    padding-bottom: 20px;
     margin-top: 10px;
     margin-bottom: 10px;
+    padding: 20px 0;
 }
 .section-notice .items{
     padding-left: 10px;
@@ -332,10 +331,14 @@ footer #footer_right{
     min-height: 230px;
     border: 1px solid #19BF69;
 }
+.demostration{
+    text-align: left;
+}
 .section-title{
-    font-size: 28px;
+    font-size: 18px;
     color: #96BD0D;
-    text-align: center;
+    text-align: left;
+    font-weight: bold;
 }
 .statistics .icon-color{
     color: #96BD0D;
@@ -1266,8 +1269,10 @@ svg circle{
     background-position: 0 -200px;
 }
 .mejs__container.mejs__video{
-    margin-top: 20px;
-    margin-bottom: 20px;
+    margin: 20px auto;
+}
+#home-welcome{
+    line-height: 20px;
 }
 .mejs__container .mejs__controls {
     position: absolute;

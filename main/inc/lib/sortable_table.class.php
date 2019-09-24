@@ -107,6 +107,7 @@ class SortableTable extends HTML_Table
     private $dataFunctionParams;
     private $defaultColumn;
     private $defaultItemsPerPage;
+    public $hideItemSelector;
 
     /**
      * Create a new SortableTable.
@@ -149,6 +150,7 @@ class SortableTable extends HTML_Table
         $this->param_prefix = $table_name.'_';
         $this->defaultColumn = (int) $default_column;
         $this->defaultItemsPerPage = $default_items_per_page;
+        $this->hideItemSelector = false;
 
         $defaultRow = api_get_configuration_value('table_default_row');
         if (!empty($defaultRow)) {
@@ -160,8 +162,25 @@ class SortableTable extends HTML_Table
             $this->cleanUrlSessionParams();
         }
 
+        // Allow to change paginate in multiples tabs
+        //Session::erase($this->param_prefix.'per_page');
+        $this->per_page = Session::read($this->param_prefix.'per_page', $default_items_per_page);
+
+        // If per page changed, then reset the page to 1
+        if (!empty($this->per_page) && isset($_GET[$this->param_prefix.'per_page']) && $this->per_page != $_GET[$this->param_prefix.'per_page']) {
+            Session::erase($this->param_prefix.'page_nr');
+            $_GET[$this->param_prefix.'page_nr'] = 1;
+        }
+
+        $this->per_page = isset($_GET[$this->param_prefix.'per_page']) ? (int) $_GET[$this->param_prefix.'per_page'] : $this->per_page;
+
+        if (isset($_GET[$this->param_prefix.'per_page'])) {
+            Session::erase($this->param_prefix.'page_nr');
+        }
+
         $this->page_nr = Session::read($this->param_prefix.'page_nr', 1);
         $this->page_nr = isset($_GET[$this->param_prefix.'page_nr']) ? (int) $_GET[$this->param_prefix.'page_nr'] : $this->page_nr;
+
         $this->column = Session::read($this->param_prefix.'column', $default_column);
         $this->column = isset($_GET[$this->param_prefix.'column']) ? (int) $_GET[$this->param_prefix.'column'] : $this->column;
 
@@ -196,11 +215,7 @@ class SortableTable extends HTML_Table
             }
         }
 
-        // Allow to change paginate in multiples tabs
-        Session::erase($this->param_prefix.'per_page');
 
-        $this->per_page = Session::read($this->param_prefix.'per_page', $default_items_per_page);
-        $this->per_page = isset($_GET[$this->param_prefix.'per_page']) ? (int) $_GET[$this->param_prefix.'per_page'] : $this->per_page;
 
         Session::write($this->param_prefix.'per_page', $this->per_page);
         Session::write($this->param_prefix.'direction', $this->direction);
@@ -222,7 +237,7 @@ class SortableTable extends HTML_Table
     }
 
     /**
-     * Clean URL params when changing student view
+     * Clean URL params when changing student view.
      */
     public function cleanUrlSessionParams()
     {
@@ -729,6 +744,10 @@ class SortableTable extends HTML_Table
         if ($total_number_of_items <= $this->default_items_per_page) {
             return '';
         }
+
+        if ($this->hideItemSelector === true) {
+            return '';
+        }
         $result[] = '<form method="GET" action="'.api_get_self().'" style="display:inline;">';
         $param[$this->param_prefix.'direction'] = $this->direction;
         $param[$this->param_prefix.'page_nr'] = $this->page_nr;
@@ -755,8 +774,7 @@ class SortableTable extends HTML_Table
             }
             $result[] = '<option value="'.$nr.'" '.($nr == $this->per_page ? 'selected="selected"' : '').'>'.$nr.'</option>';
         }
-        // @todo no limits
-        //if ($total_number_of_items < 500) {
+
         $result[] = '<option value="'.$total_number_of_items.'" '.($total_number_of_items == $this->per_page ? 'selected="selected"' : '').'>'.api_ucfirst(get_lang('All')).'</option>';
         //}
         $result[] = '</select>';
@@ -932,7 +950,7 @@ class SortableTable extends HTML_Table
     }
 
     /**
-     * Add a filter to a column. If another filter was allready defined for the
+     * Add a filter to a column. If another filter was already defined for the
      * given column, it will be overwritten.
      *
      * @param int    $column   The number of the column

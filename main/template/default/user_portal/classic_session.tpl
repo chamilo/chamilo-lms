@@ -30,7 +30,13 @@
                            aria-expanded="false">
                             {{ session_image }} {{ row.title }}
                         </a>
-                        {% set collapsable = 'collapse' %}
+                        {% if row.collapsable_link %}
+                            {% if row.collapsed == 1 %}
+                                {% set collapsable = 'collapse' %}
+                            {% endif %}
+                        {% else %}
+                            {% set collapsable = 'collapse' %}
+                        {% endif %}
                     {% endif %}
                     {% if row.show_actions %}
                         <div class="pull-right">

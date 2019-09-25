@@ -4884,17 +4884,26 @@ function api_get_languages_to_array()
  */
 function api_get_language_id($language)
 {
-    $tbl_language = Database::get_main_table(TABLE_MAIN_LANGUAGE);
     if (empty($language)) {
         return null;
     }
-    $language = Database::escape_string($language);
-    $sql = "SELECT id FROM $tbl_language
-            WHERE dokeos_folder = '$language' LIMIT 1";
-    $result = Database::query($sql);
-    $row = Database::fetch_array($result);
 
-    return $row['id'];
+    static $staticResult;
+
+    if (isset($staticResult[$language])) {
+        return $staticResult[$language];
+    } else {
+        $table = Database::get_main_table(TABLE_MAIN_LANGUAGE);
+        $language = Database::escape_string($language);
+        $sql = "SELECT id FROM $table
+                WHERE dokeos_folder = '$language' LIMIT 1";
+        $result = Database::query($sql);
+        $row = Database::fetch_array($result);
+
+        $staticResult[$language] = $row['id'];
+
+        return $row['id'];
+    }
 }
 
 /**

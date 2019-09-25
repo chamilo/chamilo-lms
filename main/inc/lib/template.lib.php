@@ -902,7 +902,7 @@ class Template
                 $this->force_plugin_load
             );
 
-            $pluginList = $this->plugin->get_installed_plugins();
+            $pluginList = $this->plugin->getInstalledPlugins(false);
             foreach ($pluginList as $plugin_name) {
                 // The plugin_info variable is available inside the plugin index
                 $pluginInfo = $this->plugin->getPluginInfo($plugin_name);

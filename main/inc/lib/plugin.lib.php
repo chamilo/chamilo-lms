@@ -64,27 +64,10 @@ class AppPlugin
     /**
      * @return array
      */
-    public function get_installed_plugins_by_region()
-    {
-        $plugins = [];
-        /* We retrieve all the active plugins. */
-        $result = api_get_settings('Plugins');
-        if (!empty($result)) {
-            foreach ($result as $row) {
-                $plugins[$row['variable']][] = $row['selected_value'];
-            }
-        }
-
-        return $plugins;
-    }
-
-    /**
-     * @return array
-     */
     public function getInstalledPluginListName()
     {
         if (empty($this->installedPluginListName)) {
-            $this->installedPluginListName = $this->get_installed_plugins();
+            $this->installedPluginListName = $this->getInstalledPlugins();
         }
 
         return $this->installedPluginListName;
@@ -118,22 +101,34 @@ class AppPlugin
     }
 
     /**
+     * @param bool $fromDatabase
+     *
      * @return array
      */
-    public function get_installed_plugins()
+    public function getInstalledPlugins($fromDatabase = true)
     {
-        $installedPlugins = [];
-        $plugins = api_get_settings_params(
-            [
-                "variable = ? AND selected_value = ? AND category = ? " => ['status', 'installed', 'Plugins'],
-            ]
-        );
+        static $installedPlugins = null;
 
-        if (!empty($plugins)) {
-            foreach ($plugins as $row) {
-                $installedPlugins[$row['subkey']] = true;
+        if ($fromDatabase === false) {
+            if (is_array($installedPlugins)) {
+                return $installedPlugins;
             }
-            $installedPlugins = array_keys($installedPlugins);
+        }
+
+        if ($fromDatabase || $installedPlugins === null) {
+            $installedPlugins = [];
+            $plugins = api_get_settings_params(
+                [
+                    'variable = ? AND selected_value = ? AND category = ? ' => ['status', 'installed', 'Plugins'],
+                ]
+            );
+
+            if (!empty($plugins)) {
+                foreach ($plugins as $row) {
+                    $installedPlugins[$row['subkey']] = true;
+                }
+                $installedPlugins = array_keys($installedPlugins);
+            }
         }
 
         return $installedPlugins;

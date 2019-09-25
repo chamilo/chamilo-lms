@@ -73,6 +73,12 @@ $interbreadcrumb[] = ['url' => '#', 'name' => $objExercise->selectTitle(true)];
 $time_control = false;
 $clock_expired_time = ExerciseLib::get_session_time_control_key($objExercise->id, $learnpath_id, $learnpath_item_id);
 
+if ($objExercise->expired_time != 0 && empty($clock_expired_time) && $categoryIdToStart) {
+    $timeControlKey = ExerciseLib::get_time_control_key($objExercise->id, $learnpath_id, $learnpath_item_id);
+
+    Session::write('category_to_start', [$timeControlKey => $categoryIdToStart]);
+}
+
 if ($objExercise->expired_time != 0 && !empty($clock_expired_time)) {
     $time_control = true;
 }

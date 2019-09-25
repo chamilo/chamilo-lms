@@ -68,6 +68,26 @@ $htmlHeadXtra[] = '<script>
         }
     }
 
+    $(function () {
+        var allowTimeControlPerCategory = '.(int) api_get_configuration_value('quiz_allow_time_control_per_category').';
+
+        $(\'[name="exerciseType"]\').on(\'change\', function () {
+            switch (parseInt(this.value)) {
+                case 3:
+                    if (allowTimeControlPerCategory) {
+                        $(\'#divtimecontrol\').hide();
+                        $(\'#chkenabletimercontrol\').prop(\'checked\', false);
+                        $(\'#enabletimercontroltotalminutes\').val(\'\');
+                        $(\'#timercontrol\').hide();
+                    }
+                    break;
+                default:
+                    $(\'#divtimecontrol\').show();
+                    break;
+            }
+        });
+    });
+
     function check_feedback() {
         if (document.getElementById(\'result_disabled_1\').checked == true) {
             document.getElementById(\'result_disabled_0\').checked = true;

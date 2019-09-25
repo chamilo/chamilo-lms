@@ -59,6 +59,14 @@ class CQuizCategory
     protected $destinations;
 
     /**
+     * @var int
+     *
+     * Add @ to the next line if $_configuration['quiz_allow_time_control_per_category'] is true
+     * ORM\Column(name="expired_time", type="integer", nullable=false, options={"default": 0})
+     */
+    protected $expiredTime;
+
+    /**
      * @return int
      */
     public function getIid()
@@ -172,5 +180,25 @@ class CQuizCategory
     public function setDestinations($destinations)
     {
         $this->destinations = $destinations;
+    }
+
+    /**
+     * @return int
+     */
+    public function getExpiredTime()
+    {
+        return $this->expiredTime;
+    }
+
+    /**
+     * @param int $expiredTime
+     *
+     * @return CQuizCategory
+     */
+    public function setExpiredTime($expiredTime)
+    {
+        $this->expiredTime = $expiredTime;
+
+        return $this;
     }
 }

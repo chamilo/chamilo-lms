@@ -1710,6 +1710,9 @@ HOTSPOT;
             $lp_id,
             $lp_item_id
         );
+        if (isset($_SESSION['category_to_start'][$current_expired_time_key])) {
+            unset($_SESSION['category_to_start'][$current_expired_time_key]);
+        }
         unset($_SESSION['expired_time'][$current_expired_time_key]);
     }
 

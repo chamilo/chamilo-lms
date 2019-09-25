@@ -611,8 +611,12 @@ $_configuration['quiz_adaptive_show_extrafields'] = [
     'user' => [],
 ];
 */
-// Allow divide the amount of minutes set for time control into equal minutes for each category in adaptive quizzes.
-//$_configuration['quiz_allow_adaptive_time_control_by_category'] = false;
+// Allow set time control for each category when ONE_CATEGORY_PER_PAGE mode is enabled in the quiz.
+// Requires DB changes:
+/*
+ALTER TABLE c_quiz_rel_category ADD expired_time INT DEFAULT 0 NOT NULL;
+*/
+//$_configuration['quiz_allow_time_control_per_category'] = false;
 
 // Score model
 // Allow to convert a score into a text/color label

@@ -2254,8 +2254,6 @@ class Exercise
                 ['onclick' => 'activate_start_date()']
             );
 
-            $var = self::selectTimeLimit();
-
             if (!empty($this->start_time)) {
                 $form->addElement('html', '<div id="start_date_div" style="display:block;">');
             } else {
@@ -2281,7 +2279,6 @@ class Exercise
             $form->addElement('date_time_picker', 'end_time');
             $form->addElement('html', '</div>');
 
-            $display = 'block';
             $form->addElement(
                 'checkbox',
                 'propagate_neg',
@@ -2293,8 +2290,13 @@ class Exercise
                 null,
                 get_lang('SaveTheCorrectAnswersForTheNextAttempt')
             );
-            $form->addElement('html', '<div class="clear">&nbsp;</div>');
             $form->addElement('checkbox', 'review_answers', null, get_lang('ReviewAnswers'));
+            $display = 'block';
+            if ((int) $this->type === ONE_CATEGORY_PER_PAGE &&
+                api_get_configuration_value('quiz_allow_time_control_per_category')
+            ) {
+                $display = 'none';
+            }
             $form->addElement('html', '<div id="divtimecontrol"  style="display:'.$display.';">');
 
             // Timer control
@@ -2305,7 +2307,7 @@ class Exercise
                 get_lang('EnableTimerControl'),
                 [
                     'onclick' => 'option_time_expired()',
-                    'id' => 'enabletimercontrol',
+                    'id' => 'chkenabletimercontrol',
                     'onload' => 'check_load_time()',
                 ]
             );
@@ -2326,6 +2328,7 @@ class Exercise
                     'cols-size' => [2, 2, 8],
                 ]
             );
+            $form->addElement('html', '</div>');
             $form->addElement('html', '</div>');
             $form->addElement(
                 'text',
@@ -2398,7 +2401,6 @@ class Exercise
             $skillList = Skill::addSkillsToForm($form, ITEM_TYPE_EXERCISE, $this->iId);
 
             $form->addElement('html', '</div>'); //End advanced setting
-            $form->addElement('html', '</div>');
         }
 
         // submit
@@ -6958,6 +6960,7 @@ class Exercise
      */
     public function save_categories_in_exercise($categories)
     {
+        $allowTimeControlPerCategory = api_get_configuration_value('quiz_allow_time_control_per_category');
         $categoriesId = array_keys($categories);
 
         $em = Database::getManager();
@@ -6965,12 +6968,19 @@ class Exercise
 
         $currentQuizCategories = $quizCategoryRepo->findBy(['exerciseId' => $this->iId, 'cId' => $this->course_id]);
 
+        $totalExpiredTime = 0;
+
         /** @var CQuizCategory $currentQuizCategory */
         foreach ($currentQuizCategories as $currentQuizCategory) {
             $currentQuizCategoryId = $currentQuizCategory->getCategoryId();
 
             if (in_array($currentQuizCategoryId, $categoriesId)) {
                 $currentQuizCategory->setCountQuestions($categories[$currentQuizCategoryId]);
+
+                if ($allowTimeControlPerCategory && isset($_POST['time'][$currentQuizCategoryId])) {
+                    $currentQuizCategory->setExpiredTime((int) $_POST['time'][$currentQuizCategoryId]);
+                    $totalExpiredTime += $currentQuizCategory->getExpiredTime();
+                }
 
                 $em->persist($currentQuizCategory);
 
@@ -6990,10 +7000,23 @@ class Exercise
                 ->setExerciseId($this->iId)
                 ->setCId($this->course_id);
 
+            if ($allowTimeControlPerCategory && isset($_POST['time'][$categoryId])) {
+                $quizCategory->setExpiredTime((int) $_POST['time'][$categoryId]);
+                $totalExpiredTime += $quizCategory->getExpiredTime();
+            }
+
             $em->persist($quizCategory);
         }
 
         $em->flush();
+
+        if ($allowTimeControlPerCategory) {
+            Database::update(
+                Database::get_course_table(TABLE_QUIZ_TEST),
+                ['expired_time' => $totalExpiredTime],
+                ['c_id = ? AND id = ?' => [$this->course_id, $this->id]]
+            );
+        }
     }
 
     /**

@@ -731,8 +731,6 @@ switch ($action) {
         }
 
         if ($objExercise->type == ONE_CATEGORY_PER_PAGE && $type === 'category' && $exerciseIsProgressiveAdaptive) {
-            $allowAdaptiveTimeControlByCategory = api_get_configuration_value('quiz_allow_adaptive_time_control_by_category');
-
             $params = api_get_cidreq().'&'.http_build_query(
                 [
                     'exe_id' => $exeId,
@@ -769,9 +767,11 @@ switch ($action) {
                     break;
                 }
 
-                if ($allowAdaptiveTimeControlByCategory) {
-                    $categoriesInExercise = TestCategory::getListOfCategoriesIDForTestObject($objExercise);
-                    $timeLeft = $objExercise->expired_time / (count($categoriesInExercise) ?: 1) * 60;
+                $allowTimeControlPerCategory = api_get_configuration_value('quiz_allow_time_control_per_category');
+
+                if ($allowTimeControlPerCategory) {
+                    $categoryExpiredTime = TestCategory::getExpiredTime($destinationCategory, $objExercise);
+                    $timeLeft = $categoryExpiredTime * 60;
 
                     $currentUtcTime->add(new DateInterval("PT{$timeLeft}S"));
                     $_SESSION['expired_time'][$currentExpiredTimeKey] = $currentUtcTime->format('Y-m-d H:i:s');

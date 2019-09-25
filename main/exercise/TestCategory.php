@@ -1079,6 +1079,8 @@ class TestCategory
             $nbQuestionsTotal = $exercise->getNumberQuestionExerciseCategory();
             $exercise->setCategoriesGrouping(true);
             $real_question_count = count($exercise->getQuestionList());
+            $allowTimeControlPerCategory = $exercise->type == ONE_CATEGORY_PER_PAGE &&
+                api_get_configuration_value('quiz_allow_time_control_per_category');
 
             $warning = null;
             if ($nbQuestionsTotal != $real_question_count) {
@@ -1092,7 +1094,13 @@ class TestCategory
             $return .= '<table class="data_table">';
             $return .= '<tr>';
             $return .= '<th height="24">'.get_lang('Categories').'</th>';
-            $return .= '<th width="70" height="24">'.get_lang('Number').'</th></tr>';
+            $return .= '<th width="70" height="24">'.get_lang('Number').'</th>';
+
+            if ($allowTimeControlPerCategory) {
+                $return .= Display::tag('th', get_lang('QuizCategoryDurationInMinutes'), ['width' => '50']);
+            }
+
+            $return .= '</tr>';
 
             $emptyCategory = [
                 'id' => '0',
@@ -1114,6 +1122,26 @@ class TestCategory
                 $value = isset($saved_categories) && isset($saved_categories[$cat_id]) ? $saved_categories[$cat_id]['count_questions'] : -1;
                 $return .= '<input name="category['.$cat_id.']" value="'.$value.'" />';
                 $return .= '</td>';
+
+                if ($allowTimeControlPerCategory) {
+                    if (!empty($cat_id)) {
+                        $time = isset($saved_categories) && isset($saved_categories[$cat_id])
+                            ? $saved_categories[$cat_id]['expired_time']
+                            : 0;
+                        $return .= Display::tag(
+                            'td',
+                            Display::input(
+                                'number',
+                                "time[$cat_id]",
+                                $time,
+                                ['class' => 'form-control', 'step' => '1', 'min' => 0]
+                            )
+                        );
+                    } else {
+                        $return .= Display::tag('td', '&nbsp;');
+                    }
+                }
+
                 $return .= '</tr>';
             }
 
@@ -1318,5 +1346,27 @@ class TestCategory
         $res = str_replace('"', "\'\'", $res);
 
         return $res;
+    }
+
+    /**
+     * @param int      $categoryId
+     * @param Exercise $exercise
+     *
+     * @return int
+     *
+     * @throws \Doctrine\ORM\NoResultException
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     */
+    public static function getExpiredTime($categoryId = 0, Exercise $exercise)
+    {
+        $result = Database::getManager()
+            ->createQuery(
+                'SELECT qc.expiredTime FROM ChamiloCourseBundle:CQuizCategory qc
+                    WHERE qc.cId = :course AND qc.categoryId = :category AND qc.exerciseId = :exercise'
+            )
+            ->setParameters(['course' => $exercise->course_id, 'category' => $categoryId, 'exercise' => $exercise->iId])
+            ->getSingleResult();
+
+        return $result['expiredTime'];
     }
 }

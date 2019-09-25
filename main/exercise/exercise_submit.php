@@ -216,18 +216,28 @@ if (!empty($durationTime) && isset($durationTime[$current_expired_time_key])) {
 }
 Session::write('duration_time', [$current_expired_time_key => $current_timestamp]);
 
-$allowAdaptiveTimeControlByCategory = api_get_configuration_value('quiz_allow_adaptive_time_control_by_category');
+$allowTimeControlPerCategory = $time_control &&
+    $objExercise->type == ONE_CATEGORY_PER_PAGE &&
+    api_get_configuration_value('quiz_allow_time_control_per_category');
 
 if ($time_control) {
     // Get the expired time of the current exercise in track_e_exercises
     $total_seconds = $objExercise->expired_time * 60;
 
-    if ($exerciseIsProgressiveAdaptive && $allowAdaptiveTimeControlByCategory) {
-        $categoriesInExercise = TestCategory::getListOfCategoriesIDForTestObject($objExercise);
-        $countCategoriesInExercise = count($categoriesInExercise) ?: 1;
+    if ($allowTimeControlPerCategory) {
+        $sessionCategoryToStart = Session::read('category_to_start', []);
 
-        // Total time (in seconds) for each category in quiz
-        $total_seconds = $objExercise->expired_time / $countCategoriesInExercise * 60;
+        if (!empty($sessionCategoryToStart[$current_expired_time_key])) {
+            $categoryToStart = $sessionCategoryToStart[$current_expired_time_key];
+
+            try {
+                $categoryExpiredTime = TestCategory::getExpiredTime($categoryToStart, $objExercise);
+
+                $total_seconds = $categoryExpiredTime * 60;
+            } catch (Exception $exception) {
+                $total_seconds = 0;
+            }
+        }
     }
 }
 
@@ -805,15 +815,6 @@ if ($question_count != 0) {
                     );
 
                     if ($previousQuestionIsLastInCategory) {
-                        if ($time_control && $allowAdaptiveTimeControlByCategory) {
-                            $time_left = $total_seconds;
-
-                            /** @var DateTime $currentUtcTime */
-                            $currentUtcTime = api_get_utc_datetime(null, false, true);
-                            $currentUtcTime->add(new DateInterval("PT{$total_seconds}S"));
-                            $_SESSION['expired_time'][$current_expired_time_key] = $currentUtcTime->format('Y-m-d H:i:s');
-                        }
-
                         $destinationCategory = $objExercise->findCategoryDestination(
                             $exe_id,
                             $previousCategoryId
@@ -1582,6 +1583,16 @@ if (!empty($error)) {
         $remind_list = explode(',', $exercise_stat_info['questions_to_check']);
     }
 
+    $categoryId = 0;
+    $questionsInCategory = [];
+
+    if ($objExercise->type == ONE_CATEGORY_PER_PAGE) {
+        $categoryId = $objExercise->getCategoryByQuestion(
+            $objExercise->questionList[$currentQuestion - 1]
+        );
+        $questionsInCategory = $objExercise->getQuestionsInCategory($categoryId);
+    }
+
     foreach ($questionList as $questionId) {
         // for sequential exercises
         if ($objExercise->type == ONE_PER_PAGE) {
@@ -1605,11 +1616,6 @@ if (!empty($error)) {
                 }
             }
         } elseif ($objExercise->type == ONE_CATEGORY_PER_PAGE) {
-            $categoryId = $objExercise->getCategoryByQuestion(
-                $objExercise->questionList[$currentQuestion - 1]
-            );
-            $questionsInCategory = $objExercise->getQuestionsInCategory($categoryId);
-
             if (!in_array($questionId, $questionsInCategory)) {
                 $i++;
                 continue;

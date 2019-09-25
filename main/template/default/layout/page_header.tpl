@@ -9,20 +9,19 @@
 {% if header_extra_content is not null %}
     {{ header_extra_content }}
 {% endif %}
-
     <div class="container">
         <div class="row">
             <div class="col-xs-12 col-md-3">
                 {% if _u.logged != 1 %}
-                <div class="key-login">
-                    <a href="#login-block" id="btn-login" class="btn btn-default">
-                        <img src="{{ 'key.png'|icon(22) }}"> {{ 'LoginAsThisUser'|get_lang }}
-                    </a>
-                </div>
+                    <div class="key-login">
+                        <a href="#login-block" id="btn-login" class="btn btn-default">
+                            <img src="{{ 'key.png'|icon(22) }}"> {{ 'LoginAsThisUser'|get_lang }}
+                        </a>
+                    </div>
+                {% endif %}
                 <div class="logo">
                     {{ logo }}
                 </div>
-                {% endif %}
             </div>
             <div class="col-xs-12 col-md-9">
                 <div class="row">

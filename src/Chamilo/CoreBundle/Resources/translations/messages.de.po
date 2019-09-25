@@ -29,7 +29,7 @@ msgid "Contact"
 msgstr "Kontakt"
 
 msgid "Latest publications"
-msgstr "Aktuelle Veröffentlichungen"
+msgstr "Neuigkeiten"
 
 msgid "Subscription"
 msgstr "Registrierung"
@@ -67,3 +67,5 @@ msgstr "Nutzungsbedingungen"
 msgid "CGULink"
 msgstr "https://parkur.ofaj.org/doc/AllgemeineNutzungsbedingungenParkur.pdf"
 
+msgid "SomeCourseExamples"
+msgstr "Einige Inselbeispiele"

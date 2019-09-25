@@ -829,10 +829,10 @@ class IndexManager
             $content = null;
 
             if (api_get_setting('allow_social_tool') == 'true') {
-                $content .= '<a style="text-align:center" href="'.api_get_path(WEB_PATH).'main/social/home.php">
+                $content .= '<a style="text-align:center" href="'.api_get_path(WEB_CODE_PATH).'social/home.php">
                 <img class="img-circle" src="'.$userPicture.'"></a>';
             } else {
-                $content .= '<a style="text-align:center" href="'.api_get_path(WEB_PATH).'main/auth/profile.php">
+                $content .= '<a style="text-align:center" href="'.api_get_path(WEB_CODE_PATH).'auth/profile.php">
                 <img class="img-circle" title="'.get_lang('EditProfile').'" src="'.$userPicture.'"></a>';
             }
 
@@ -882,14 +882,14 @@ class IndexManager
             $items[] = [
                 'class' => 'inbox-message-social',
                 'icon' => Display::return_icon('inbox.png', get_lang('Inbox')),
-                'link' => api_get_path(WEB_PATH).'main/messages/inbox.php',
+                'link' => api_get_path(WEB_CODE_PATH).'messages/inbox.php',
                 'title' => get_lang('Inbox').$cant_msg,
             ];
 
             $items[] = [
                 'class' => 'new-message-social',
                 'icon' => Display::return_icon('new-message.png', get_lang('Compose')),
-                'link' => api_get_path(WEB_PATH).'main/messages/new_message.php',
+                'link' => api_get_path(WEB_CODE_PATH).'messages/new_message.php',
                 'title' => get_lang('Compose'),
             ];
 
@@ -898,7 +898,7 @@ class IndexManager
                 $items[] = [
                     'class' => 'invitations-social',
                     'icon' => Display::return_icon('invitations.png', get_lang('PendingInvitations')),
-                    'link' => api_get_path(WEB_PATH).'main/social/invitations.php',
+                    'link' => api_get_path(WEB_CODE_PATH).'social/invitations.php',
                     'title' => get_lang('PendingInvitations').$total_invitations,
                 ];
             }
@@ -916,7 +916,7 @@ class IndexManager
                 $items[] = [
                     'class' => 'myfiles-social',
                     'icon' => Display::return_icon('sn-files.png', get_lang('Files')),
-                    'link' => api_get_path(WEB_PATH).'main/social/myfiles.php',
+                    'link' => api_get_path(WEB_CODE_PATH).'social/myfiles.php',
                     'title' => get_lang('MyFiles'),
                 ];
             }
@@ -1026,14 +1026,14 @@ class IndexManager
                 $items[] = [
                     'class' => 'add-course',
                     'icon' => Display::return_icon('new-course.png', get_lang('CreateCourseRequest')),
-                    'link' => 'main/create_course/add_course.php',
+                    'link' => api_get_path(WEB_CODE_PATH).'create_course/add_course.php',
                     'title' => get_lang('CreateCourseRequest'),
                 ];
             } else {
                 $items[] = [
                     'class' => 'add-course',
                     'icon' => Display::return_icon('new-course.png', get_lang('CourseCreate')),
-                    'link' => 'main/create_course/add_course.php',
+                    'link' => api_get_path(WEB_CODE_PATH).'create_course/add_course.php',
                     'title' => get_lang('CourseCreate'),
                 ];
             }
@@ -1042,7 +1042,7 @@ class IndexManager
                 $items[] = [
                     'class' => 'add-session',
                     'icon' => Display::return_icon('session.png', get_lang('AddSession')),
-                    'link' => 'main/session/session_add.php',
+                    'link' => api_get_path(WEB_CODE_PATH).'session/session_add.php',
                     'title' => get_lang('AddSession'),
                 ];
             }
@@ -1063,14 +1063,14 @@ class IndexManager
             $items[] = [
                 'class' => 'history-course',
                 'icon' => Display::return_icon('history-course.png', get_lang('DisplayTrainingList')),
-                'link' => 'user_portal.php',
+                'link' => api_get_path(WEB_PATH).'user_portal.php',
                 'title' => get_lang('DisplayTrainingList'),
             ];
         } else {
             $items[] = [
                 'class' => 'history-course',
                 'icon' => Display::return_icon('history-course.png', get_lang('HistoryTrainingSessions')),
-                'link' => 'user_portal.php?history=1',
+                'link' => api_get_path(WEB_PATH).'user_portal.php?history=1',
                 'title' => get_lang('HistoryTrainingSessions'),
             ];
         }
@@ -1088,12 +1088,12 @@ class IndexManager
                 $items[] = [
                     'class' => 'list-course',
                     'icon' => Display::return_icon('catalog-course.png', get_lang('CourseCatalog')),
-                    'link' => 'main/auth/courses.php',
+                    'link' => api_get_path(WEB_CODE_PATH).'auth/courses.php',
                     'title' => get_lang('CourseCatalog'),
                 ];
             } else {
                 $items[] = [
-                    'link' => 'main/dashboard/index.php',
+                    'link' => api_get_path(WEB_CODE_PATH).'dashboard/index.php',
                     'title' => get_lang('Dashboard'),
                 ];
             }

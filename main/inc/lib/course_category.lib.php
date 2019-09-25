@@ -16,7 +16,7 @@ class CourseCategory
     public static function getCategoryById($categoryId)
     {
         $table = Database::get_main_table(TABLE_MAIN_CATEGORY);
-        $categoryId = intval($categoryId);
+        $categoryId = (int) $categoryId;
         $sql = "SELECT * FROM $table WHERE id = $categoryId";
         $result = Database::query($sql);
         if (Database::num_rows($result)) {
@@ -29,7 +29,7 @@ class CourseCategory
     /**
      * Get category details from a simple category code.
      *
-     * @param string $category The literal category code
+     * @param string $categoryCode The literal category code
      *
      * @return array
      */
@@ -41,16 +41,18 @@ class CourseCategory
         $result = Database::query($sql);
         if (Database::num_rows($result)) {
             $category = Database::fetch_array($result, 'ASSOC');
-            // Get access url id
-            $table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE_CATEGORY);
-            $sql = "SELECT * FROM $table WHERE course_category_id = ".$category['id'];
-            $result = Database::query($sql);
-            $result = Database::fetch_array($result);
-            if ($result) {
-                $category['access_url_id'] = $result['access_url_id'];
-            }
+            if ($category) {
+                // Get access url id
+                $table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE_CATEGORY);
+                $sql = "SELECT * FROM $table WHERE course_category_id = ".$category['id'];
+                $result = Database::query($sql);
+                $result = Database::fetch_array($result);
+                if ($result) {
+                    $category['access_url_id'] = $result['access_url_id'];
+                }
 
-            return $category;
+                return $category;
+            }
         }
 
         return [];
@@ -901,21 +903,14 @@ class CourseCategory
      */
     public static function getCourseCatalogNameTools($action)
     {
-        $nameTools = get_lang('SortMyCourses');
+        $nameTools = get_lang('MyCourses');
         if (empty($action)) {
             return $nameTools; //should never happen
         }
 
         switch ($action) {
-            case 'createcoursecategory':
-                $nameTools = get_lang('CreateCourseCategory');
-                break;
             case 'subscribe':
-                $nameTools = get_lang('CourseManagement');
-                break;
             case 'subscribe_user_with_password':
-                $nameTools = get_lang('CourseManagement');
-                break;
             case 'display_random_courses':
             case 'display_courses':
                 $nameTools = get_lang('CourseManagement');

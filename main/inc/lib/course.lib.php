@@ -3650,7 +3650,7 @@ class CourseManager
             $collapsableLink = '';
             if ($collapsable) {
                 $url = api_get_path(WEB_CODE_PATH).
-                    'auth/courses.php?categoryid='.$row['id'].'&sec_token='.$stok.'&redirect=home';
+                    'auth/sort_my_courses.php?categoryid='.$row['id'].'&sec_token='.$stok.'&redirect=home';
                 $collapsed = isset($row['collapsed']) && $row['collapsed'] ? 1 : 0;
                 if ($collapsed === 0) {
                     $collapsableLink = Display::url(

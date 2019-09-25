@@ -1053,7 +1053,7 @@ class IndexManager
             $items[] = [
                 'class' => 'order-course',
                 'icon' => Display::return_icon('order-course.png', get_lang('SortMyCourses')),
-                'link' => api_get_path(WEB_CODE_PATH).'auth/courses.php?action=sortmycourses',
+                'link' => api_get_path(WEB_CODE_PATH).'auth/sort_my_courses.php',
                 'title' => get_lang('SortMyCourses'),
             ];
         }

@@ -34,57 +34,6 @@ class CoursesController
     }
 
     /**
-     * It's used for listing courses,
-     * render to courses_list view.
-     *
-     * @param string $action
-     * @param string $message confirmation message(optional)
-     */
-    public function courseList($action, $message = '')
-    {
-        $data = [];
-        $data['user_courses'] = $this->model->get_courses_of_user(api_get_user_id());
-        $data['user_course_categories'] = CourseManager::get_user_course_categories(api_get_user_id());
-        $data['courses_in_category'] = $this->model->get_courses_in_category();
-        $data['action'] = $action;
-        $data['message'] = $message;
-
-        // render to the view
-        $this->view->set_data($data);
-        $this->view->set_layout('catalog_layout');
-        $this->view->set_template('courses_list');
-        $this->view->render();
-    }
-
-    /**
-     * It's used for listing categories, render to categories_list view.
-     */
-    public function categoryList()
-    {
-        api_block_anonymous_users();
-        $stok = Security::get_token();
-        $actions = Display::url(
-            Display::return_icon('back.png', get_lang('Back'), '', '32'),
-            api_get_path(WEB_CODE_PATH).'auth/courses.php?action=sortmycourses'
-        );
-        $actions = Display::toolbarAction('toolbar-forum', [$actions]);
-
-        $form = new FormValidator(
-            'create_course_category',
-            'post',
-            api_get_path(WEB_CODE_PATH).'auth/courses.php?action=createcoursecategory'
-        );
-        $form->addHidden('sec_token', $stok);
-        $form->addText('title_course_category', get_lang('Name'));
-        $form->addButtonSave(get_lang('AddCategory'), 'create_course_category');
-
-        $tpl = new Template();
-        $tpl->assign('content', $form->returnForm());
-        $tpl->assign('actions', $actions);
-        $tpl->display_one_col_template();
-    }
-
-    /**
      * It's used for listing courses with categories,
      * render to courses_categories view.
      *
@@ -216,129 +165,6 @@ class CoursesController
         $this->view->set_layout('catalog_layout');
         $this->view->set_template('courses_categories');
         $this->view->render();
-    }
-
-    /**
-     * Create a category
-     * render to listing view.
-     *
-     * @param string $title
-     */
-    public function addCourseCategory($title)
-    {
-        $result = $this->model->store_course_category($title);
-        if ($result) {
-            Display::addFlash(
-                Display::return_message(get_lang('CourseCategoryStored'))
-            );
-        } else {
-            Display::addFlash(
-                Display::return_message(
-                    get_lang('ACourseCategoryWithThisNameAlreadyExists'),
-                    'error'
-                )
-            );
-        }
-        header('Location: '.api_get_path(WEB_CODE_PATH).'auth/courses.php?action=sortmycourses');
-        exit;
-    }
-
-    /**
-     * Change course category
-     * render to listing view.
-     *
-     * @param string $course_code
-     * @param int    $category_id
-     */
-    public function change_course_category($course_code, $category_id)
-    {
-        $courseInfo = api_get_course_info($course_code);
-        $courseId = $courseInfo['real_id'];
-
-        $result = $this->model->updateCourseCategory($courseId, $category_id);
-        if ($result) {
-            Display::addFlash(
-                Display::return_message(get_lang('EditCourseCategorySucces'))
-            );
-        }
-        $action = 'sortmycourses';
-        $this->courseList($action);
-    }
-
-    /**
-     * Move up/down courses inside a category
-     * render to listing view.
-     *
-     * @param string $move        move to up or down
-     * @param string $course_code
-     * @param int    $category_id Category id
-     */
-    public function move_course($move, $course_code, $category_id)
-    {
-        $result = $this->model->move_course($move, $course_code, $category_id);
-        if ($result) {
-            Display::addFlash(
-                Display::return_message(get_lang('CourseSortingDone'))
-            );
-        }
-        $action = 'sortmycourses';
-        $this->courseList($action);
-    }
-
-    /**
-     * Move up/down categories
-     * render to listing view.
-     *
-     * @param string $move        move to up or down
-     * @param int    $category_id Category id
-     */
-    public function move_category($move, $category_id)
-    {
-        $result = $this->model->move_category($move, $category_id);
-        if ($result) {
-            Display::addFlash(
-                Display::return_message(get_lang('CategorySortingDone'))
-            );
-        }
-        $action = 'sortmycourses';
-        $this->courseList($action);
-    }
-
-    /**
-     * Edit course category
-     * render to listing view.
-     *
-     * @param string $title    Category title
-     * @param int    $category Category id
-     */
-    public function edit_course_category($title, $category)
-    {
-        $result = $this->model->store_edit_course_category($title, $category);
-        if ($result) {
-            Display::addFlash(
-                Display::return_message(get_lang('CourseCategoryEditStored'))
-            );
-        }
-        $action = 'sortmycourses';
-        $this->courseList($action);
-    }
-
-    /**
-     * Delete a course category
-     * render to listing view.
-     *
-     * @param int    Category id
-     */
-    public function delete_course_category($category_id)
-    {
-        $result = $this->model->delete_course_category($category_id);
-        if ($result) {
-            Display::addFlash(
-                Display::return_message(get_lang('CourseCategoryDeleted'))
-            );
-        }
-        $action = 'sortmycourses';
-        $this->courseList($action);
     }
 
     /**
@@ -512,6 +338,7 @@ class CoursesController
         $includeText = false,
         $btnBing = false
     ) {
+        $sessionId = (int) $sessionId;
         if ($btnBing) {
             $btnBing = 'btn-lg btn-block';
         } else {
@@ -522,7 +349,7 @@ class CoursesController
             $url .= 'sequence.ajax.php?';
             $url .= http_build_query([
                 'a' => 'get_requirements',
-                'id' => intval($sessionId),
+                'id' => $sessionId,
                 'type' => SequenceResource::SESSION_TYPE,
             ]);
 
@@ -552,7 +379,7 @@ class CoursesController
             $url .= 'auth/courses.php?';
             $url .= http_build_query([
                 'action' => 'subscribe_to_session',
-                'session_id' => intval($sessionId),
+                'session_id' => $sessionId,
             ]);
 
             $result = Display::toolbarButton(
@@ -588,7 +415,7 @@ class CoursesController
         $hook = HookResubscribe::create();
         if (!empty($hook)) {
             $hook->setEventData([
-                'session_id' => intval($sessionId),
+                'session_id' => $sessionId,
             ]);
             try {
                 $hook->notifyResubscribe(HOOK_EVENT_TYPE_PRE);

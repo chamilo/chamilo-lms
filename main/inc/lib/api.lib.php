@@ -6409,18 +6409,25 @@ function api_request_uri()
  */
 function api_get_current_access_url_id()
 {
-    $access_url_table = Database::get_main_table(TABLE_MAIN_ACCESS_URL);
+    static $id;
+    if (!empty($id)) {
+        return $id;
+    }
+
+    $table = Database::get_main_table(TABLE_MAIN_ACCESS_URL);
     $path = Database::escape_string(api_get_path(WEB_PATH));
-    $sql = "SELECT id FROM $access_url_table WHERE url = '".$path."'";
+    $sql = "SELECT id FROM $table WHERE url = '".$path."'";
     $result = Database::query($sql);
     if (Database::num_rows($result) > 0) {
-        $access_url_id = Database::result($result, 0, 0);
-        if ($access_url_id === false) {
+        $id = Database::result($result, 0, 0);
+        if ($id === false) {
             return -1;
         }
 
-        return (int) $access_url_id;
+        return (int) $id;
     }
+
+    $id = 1;
 
     //if the url in WEB_PATH was not found, it can only mean that there is
     // either a configuration problem or the first URL has not been defined yet

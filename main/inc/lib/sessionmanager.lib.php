@@ -6855,9 +6855,9 @@ SQL;
      */
     public static function editUserSessionDuration($duration, $userId, $sessionId)
     {
-        $duration = intval($duration);
-        $userId = intval($userId);
-        $sessionId = intval($sessionId);
+        $duration = (int) $duration;
+        $userId = (int) $userId;
+        $sessionId = (int) $sessionId;
 
         if (empty($userId) || empty($sessionId)) {
             return false;
@@ -9083,6 +9083,7 @@ SQL;
         }
 
         $userRelSession = self::getUserSession($userId, $sessionId);
+
         if ($userRelSession) {
             if (isset($userRelSession['collapsed']) && $userRelSession['collapsed'] != '') {
                 $collapsed = $userRelSession['collapsed'];

@@ -100,6 +100,8 @@ class SortableTable extends HTML_Table
      * The array containing all data for this table.
      */
     public $table_data;
+    public $hideItemSelector;
+
     /**
      * @var array Columns to hide
      */
@@ -107,7 +109,6 @@ class SortableTable extends HTML_Table
     private $dataFunctionParams;
     private $defaultColumn;
     private $defaultItemsPerPage;
-    public $hideItemSelector;
 
     /**
      * Create a new SortableTable.

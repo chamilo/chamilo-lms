@@ -7,7 +7,6 @@
  * @author  Patrick Cool <patrick.cool@UGent.be>, Ghent University
  * @author  Julio Montoya <gugli100@gmail.com>
  */
-
 require_once __DIR__.'/../inc/global.inc.php';
 
 api_protect_course_script(true);

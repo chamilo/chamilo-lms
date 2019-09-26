@@ -31,12 +31,26 @@ class AppPlugin
 
     public $installedPluginListName = [];
     public $installedPluginListObject = [];
+    private static $instance;
+
 
     /**
      * Constructor.
      */
     public function __construct()
     {
+    }
+
+    /**
+     * @return  AppPlugin
+     */
+    public static function getInstance()
+    {
+        if (!isset(self::$instance)) {
+            self::$instance = new self();
+        }
+
+        return self::$instance;
     }
 
     /**
@@ -101,6 +115,18 @@ class AppPlugin
     }
 
     /**
+     * @param string $plugin
+     *
+     * @return bool
+     */
+    public function isInstalled($plugin)
+    {
+        $list = self::getInstalledPlugins(false);
+
+        return in_array($plugin, $list);
+    }
+
+    /**
      * @param bool $fromDatabase
      *
      * @return array
@@ -140,10 +166,9 @@ class AppPlugin
      */
     public function install($pluginName, $urlId = null)
     {
+        $urlId = (int) $urlId;
         if (empty($urlId)) {
             $urlId = api_get_current_access_url_id();
-        } else {
-            $urlId = intval($urlId);
         }
 
         api_add_setting(
@@ -175,10 +200,9 @@ class AppPlugin
      */
     public function uninstall($pluginName, $urlId = null)
     {
+        $urlId = (int) $urlId;
         if (empty($urlId)) {
             $urlId = api_get_current_access_url_id();
-        } else {
-            $urlId = intval($urlId);
         }
 
         // First call the custom uninstall to allow full access to global settings
@@ -188,6 +212,7 @@ class AppPlugin
 
             require $pluginPath;
         }
+
         // Second remove all remaining global settings
         api_delete_settings_params(
             ['category = ? AND access_url = ? AND subkey = ? ' => ['Plugins', $urlId, $pluginName]]
@@ -210,16 +235,6 @@ class AppPlugin
         }
 
         return $areas;
-    }
-
-    /**
-     * @param string $location
-     *
-     * @return bool
-     */
-    public function is_valid_plugin_location($location)
-    {
-        return in_array($location, $this->plugin_list);
     }
 
     /**
@@ -459,9 +474,9 @@ class AppPlugin
         $plugin_info = $this->getPluginInfo($pluginName);
         if (isset($plugin_info) && isset($plugin_info['templates'])) {
             return $plugin_info['templates'];
-        } else {
-            return false;
         }
+
+        return false;
     }
 
     /**

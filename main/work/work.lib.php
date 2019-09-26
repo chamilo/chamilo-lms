@@ -3432,7 +3432,7 @@ function addWorkComment($courseInfo, $userId, $parentWork, $work, $data)
             }
         }
 
-        $sendNotification = api_get_course_setting('email_to_teachers_on_new_work_feedback', api_get_course_id());
+        $sendNotification = api_get_course_setting('email_to_teachers_on_new_work_feedback');
         if ($sendNotification != 1) {
             $userIdListToSend = [];
         }

@@ -1905,16 +1905,20 @@ function api_get_course_path($course_code = null)
  * Gets a course setting from the current course_setting table. Try always using integer values.
  *
  * @param string $setting_name The name of the setting we want from the table
- * @param string $course_code
+ * @param array $course_info
  *
  * @return mixed The value of that setting in that table. Return -1 if not found.
  */
-function api_get_course_setting($setting_name, $course_code = null)
+function api_get_course_setting($setting_name, $course_info = [])
 {
-    $course_info = api_get_course_info($course_code);
-    $table = Database::get_course_table(TABLE_COURSE_SETTING);
-    $setting_name = Database::escape_string($setting_name);
-    if (!empty($course_info['real_id']) && !empty($setting_name)) {
+    if (empty($course_info)) {
+        $course_info = api_get_course_info();
+    }
+
+    if (isset($course_info['real_id']) && !empty($course_info['real_id']) && !empty($setting_name)) {
+        $table = Database::get_course_table(TABLE_COURSE_SETTING);
+        $setting_name = Database::escape_string($setting_name);
+
         $sql = "SELECT value FROM $table
                 WHERE c_id = {$course_info['real_id']} AND variable = '$setting_name'";
         $res = Database::query($sql);
@@ -2088,11 +2092,10 @@ function api_remove_in_gradebook()
  * particular course, if none given it gets the course info from the session.
  *
  * @param string $course_code
- * @param bool   $strict
  *
  * @return array
  */
-function api_get_course_info($course_code = null, $strict = false)
+function api_get_course_info($course_code = null)
 {
     if (!empty($course_code)) {
         $course_code = Database::escape_string($course_code);
@@ -5048,7 +5051,7 @@ function api_get_visual_theme()
         $course_id = api_get_course_id();
         if (!empty($course_id)) {
             if (api_get_setting('allow_course_theme') == 'true') {
-                $course_theme = api_get_course_setting('course_theme', $course_id);
+                $course_theme = api_get_course_setting('course_theme', api_get_course_info());
 
                 if (!empty($course_theme) && $course_theme != -1) {
                     if (!empty($course_theme)) {
@@ -7785,8 +7788,8 @@ function api_set_default_visibility(
         }
 
         // Read the portal and course default visibility
-        if ($tool_id == 'documents') {
-            $visibility = DocumentManager::getDocumentDefaultVisibility($courseCode);
+        if ($tool_id === 'documents') {
+            $visibility = DocumentManager::getDocumentDefaultVisibility($courseInfo);
         }
 
         api_item_property_update(

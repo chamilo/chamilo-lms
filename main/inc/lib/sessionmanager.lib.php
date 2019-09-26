@@ -2287,7 +2287,7 @@ class SessionManager
         $course_code = Database::escape_string($course_code);
         $courseInfo = api_get_course_info($course_code);
         $courseId = $courseInfo['real_id'];
-        $subscribe = (int) api_get_course_setting('subscribe_users_to_forum_notifications', $course_code);
+        $subscribe = (int) api_get_course_setting('subscribe_users_to_forum_notifications', $courseInfo);
         $forums = [];
         if ($subscribe === 1) {
             require_once api_get_path(SYS_CODE_PATH).'forum/forumfunction.inc.php';

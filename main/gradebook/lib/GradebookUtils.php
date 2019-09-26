@@ -1433,7 +1433,7 @@ class GradebookUtils
 
         foreach ($courses as $course) {
             if (!$includeNonPublicCertificates) {
-                $allowPublicCertificates = api_get_course_setting('allow_public_certificates', $course['code']);
+                $allowPublicCertificates = api_get_course_setting('allow_public_certificates', $course);
 
                 if (empty($allowPublicCertificates)) {
                     continue;
@@ -1505,7 +1505,7 @@ class GradebookUtils
 
             foreach ($sessionCourses as $course) {
                 if (!$includeNonPublicCertificates) {
-                    $allowPublicCertificates = api_get_course_setting('allow_public_certificates', $course['code']);
+                    $allowPublicCertificates = api_get_course_setting('allow_public_certificates');
 
                     if (empty($allowPublicCertificates)) {
                         continue;

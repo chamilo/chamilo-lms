@@ -3,7 +3,6 @@
 
 use Chamilo\CoreBundle\Entity\SkillRelUser;
 use Chamilo\CoreBundle\Entity\SkillRelUserComment;
-use Chamilo\UserBundle\Entity\User;
 use SkillRelUser as SkillRelUserManager;
 
 /**

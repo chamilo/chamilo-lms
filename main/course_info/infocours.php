@@ -25,7 +25,6 @@ $_course = api_get_course_info();
 
 /* Constants and variables */
 define('MODULE_HELP_NAME', 'Settings');
-define('COURSE_CHANGE_PROPERTIES', 'COURSE_CHANGE_PROPERTIES');
 
 $currentCourseRepository = $_course['path'];
 $is_allowedToEdit = api_is_course_admin() || api_is_platform_admin();

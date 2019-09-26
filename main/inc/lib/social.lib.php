@@ -54,25 +54,6 @@ class SocialManager extends UserManager
     }
 
     /**
-     * Get relation type contact by name.
-     *
-     * @param string names of the kind of relation
-     *
-     * @return int
-     *
-     * @author isaac flores paz
-     */
-    public static function get_relation_type_by_name($relation_type_name)
-    {
-        $list_type_friend = self::show_list_type_friends();
-        foreach ($list_type_friend as $value_type_friend) {
-            if (strtolower($value_type_friend['title']) == $relation_type_name) {
-                return $value_type_friend['id'];
-            }
-        }
-    }
-
-    /**
      * Get the kind of relation between contacts.
      *
      * @param int user id
@@ -2230,77 +2211,6 @@ class SocialManager extends UserManager
         }
 
         $template->assign('social_avatar_block', $template->fetch($templateName));
-    }
-
-    /**
-     * @param int $user_id
-     * @param $link_shared
-     * @param $show_full_profile
-     *
-     * @return string
-     */
-    public static function listMyFriends($user_id, $link_shared, $show_full_profile)
-    {
-        // SOCIALGOODFRIEND , USER_RELATION_TYPE_FRIEND, USER_RELATION_TYPE_PARENT
-        $friends = self::get_friends($user_id, USER_RELATION_TYPE_FRIEND);
-        $number_of_images = 30;
-        $number_friends = count($friends);
-        $friendHtml = '';
-        if ($number_friends != 0) {
-            if ($number_friends > $number_of_images) {
-                if (api_get_user_id() == $user_id) {
-                    $friendHtml .= ' <span><a href="friends.php">'.get_lang('SeeAll').'</a></span>';
-                } else {
-                    $friendHtml .= ' <span>'
-                        .'<a href="'.api_get_path(WEB_CODE_PATH).'social/profile_friends_and_groups.inc.php'
-                        .'?view=friends&height=390&width=610&user_id='.$user_id.'"'
-                        .'class="ajax" data-title="'.get_lang('SeeAll').'" title="'.get_lang('SeeAll').'" >'.get_lang('SeeAll').'</a></span>';
-                }
-            }
-
-            $friendHtml .= '<ul class="nav nav-list">';
-            $j = 1;
-            for ($k = 0; $k < $number_friends; $k++) {
-                if ($j > $number_of_images) {
-                    break;
-                }
-                if (isset($friends[$k])) {
-                    $friend = $friends[$k];
-                    $name_user = api_get_person_name($friend['firstName'], $friend['lastName']);
-                    $user_info_friend = api_get_user_info($friend['friend_user_id'], true);
-
-                    if ($user_info_friend['user_is_online']) {
-                        $statusIcon = Display::span('', ['class' => 'online_user_in_text']);
-                    } else {
-                        $statusIcon = Display::span('', ['class' => 'offline_user_in_text']);
-                    }
-
-                    $friendHtml .= '<li>';
-                    $friendHtml .= '<div>';
-
-                    // the height = 92 must be the same in the image_friend_network span style in default.css
-                    $friends_profile = UserManager::getUserPicture(
-                        $friend['friend_user_id'],
-                        USER_IMAGE_SIZE_SMALL
-                    );
-                    $friendHtml .= '<img src="'.$friends_profile.'" id="imgfriend_'.$friend['friend_user_id'].'" title="'.$name_user.'"/>';
-                    $link_shared = (empty($link_shared)) ? '' : '&'.$link_shared;
-                    $friendHtml .= $statusIcon.'<a href="profile.php?'.'u='.$friend['friend_user_id'].$link_shared.'">'.$name_user.'</a>';
-                    $friendHtml .= '</div>';
-                    $friendHtml .= '</li>';
-                }
-                $j++;
-            }
-            $friendHtml .= '</ul>';
-        } else {
-            $friendHtml .= '<div class="">'.get_lang('NoFriendsInYourContactList').'<br />
-                <a class="btn btn-primary" href="'.api_get_path(WEB_PATH).'whoisonline.php">
-                <em class="fa fa-search"></em> '.get_lang('TryAndFindSomeFriends').'</a></div>';
-        }
-
-        $friendHtml = Display::panel($friendHtml, get_lang('SocialFriend').' ('.$number_friends.')');
-
-        return $friendHtml;
     }
 
     /**

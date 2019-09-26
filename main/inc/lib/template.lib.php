@@ -94,7 +94,6 @@ class Template
         ];
 
         $urlId = api_get_current_access_url_id();
-
         $cache_folder = api_get_path(SYS_ARCHIVE_PATH).'twig/'.$urlId.'/';
 
         if (!is_dir($cache_folder)) {
@@ -1225,9 +1224,10 @@ class Template
         return implode(CourseManager::USER_SEPARATOR, $names);
     }
 
-    /*s
+    /**
      * Returns the teachers name for the current course
      * Function to use in Twig templates
+     *
      * @return string
      */
     public static function returnTeachersNames()

@@ -88,17 +88,6 @@ $tools['user'] = ['id' => 'user', 'name' => get_lang('User')];
 $tools['forum'] = ['id' => 'forum', 'name' => get_lang('Forum')];
 
 /**
- * Returns the escaped string.
- *
- * @param string $s
- *
- * @return string
- */
-function js_str($s)
-{
-    return '"'.addcslashes($s, "\0..\37\"\\").'"';
-}
-/**
  * This function is to show the ticket form.
  *
  * @global array $tools

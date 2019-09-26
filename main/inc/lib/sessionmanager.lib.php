@@ -3288,33 +3288,6 @@ class SessionManager
     }
 
     /**
-     * Get the session image.
-     *
-     * @param int $id
-     *
-     * @return image path
-     */
-    public static function getSessionImage($id)
-    {
-        $id = (int) $id;
-        $extraFieldValuesTable = Database::get_main_table(TABLE_EXTRA_FIELD_VALUES);
-        $sql = "SELECT value  FROM $extraFieldValuesTable WHERE field_id = 16 AND item_id = ".$id;
-        $result = Database::query($sql);
-        if (Database::num_rows($result) > 0) {
-            while ($row = Database::fetch_array($result, 'ASSOC')) {
-                $sessionImage = $row['value'];
-                $sessionImage = api_get_path(WEB_UPLOAD_PATH).$sessionImage;
-            }
-
-            return $sessionImage;
-        } else {
-            $sessionImage = api_get_path(WEB_IMG_PATH)."session_default.png";
-
-            return $sessionImage;
-        }
-    }
-
-    /**
      * Get Hot Sessions (limit 8).
      *
      * @return array with sessions

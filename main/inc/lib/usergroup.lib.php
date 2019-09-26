@@ -1364,7 +1364,8 @@ class UserGroup extends Model
      * @param string $source_file the full system name of the image from which user photos will be created
      *
      * @return mixed Returns the resulting common file name of created images which usually should be stored in database.
-     *               When an image is removed the function returns an empty string. In case of internal error or negative validation it returns FALSE.
+     *               When an image is removed the function returns an empty string.
+     *               In case of internal error or negative validation it returns FALSE.
      */
     public function update_group_picture($group_id, $file = null, $source_file = null)
     {
@@ -1512,10 +1513,6 @@ class UserGroup extends Model
         $sql = "DELETE FROM $this->usergroup_rel_session_table
                 WHERE usergroup_id = $id";
         Database::query($sql);
-
-        /*$sql = "DELETE FROM $this->usergroup_rel_
-                WHERE usergroup_id = $id";
-        Database::query($sql);*/
 
         parent::delete($id);
     }

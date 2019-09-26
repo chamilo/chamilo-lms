@@ -15,10 +15,6 @@ use Chamilo\CourseBundle\Entity\CGroupRelUser;
  */
 class GroupManager
 {
-    /* VIRTUAL_COURSE_CATEGORY:
-    in this category groups are created based on the virtual course of a course*/
-    const VIRTUAL_COURSE_CATEGORY = 1;
-
     /* DEFAULT_GROUP_CATEGORY:
     When group categories aren't available (platform-setting),
     all groups are created in this 'dummy'-category*/

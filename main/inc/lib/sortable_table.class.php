@@ -216,8 +216,6 @@ class SortableTable extends HTML_Table
             }
         }
 
-
-
         Session::write($this->param_prefix.'per_page', $this->per_page);
         Session::write($this->param_prefix.'direction', $this->direction);
         Session::write($this->param_prefix.'page_nr', $this->page_nr);

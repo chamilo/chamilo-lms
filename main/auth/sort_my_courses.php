@@ -92,7 +92,7 @@ if (isset($_GET['move'])) {
 
 switch ($action) {
     case 'edit_category':
-        $categoryId = isset($_GET['category_id']) ?  (int) $_GET['category_id'] : 0;
+        $categoryId = isset($_GET['category_id']) ? (int) $_GET['category_id'] : 0;
         $categoryInfo = $auth->getUserCourseCategory($categoryId);
         if ($categoryInfo) {
             $categoryName = $categoryInfo['title'];
@@ -111,7 +111,7 @@ switch ($action) {
         break;
     case 'edit_course_category':
         $edit_course = (int) $_GET['course_id'];
-        $defaultCategoryId = isset($_GET['category_id']) ?  (int) $_GET['category_id'] : 0;
+        $defaultCategoryId = isset($_GET['category_id']) ? (int) $_GET['category_id'] : 0;
         $courseInfo = api_get_course_info_by_id($edit_course);
 
         if (empty($courseInfo)) {
@@ -309,8 +309,7 @@ if (!empty($user_course_categories)) {
                 if (api_get_setting('display_teacher_in_courselist') === 'true') {
                     echo $course['tutor'];
                 }
-                echo '</td><td valign="top">';
-                ?>
+                echo '</td><td valign="top">'; ?>
                 <div style="float:left;width:110px;">
                 <?php
                     if (api_get_setting('show_courses_descriptions_in_catalog') == 'true') {
@@ -327,24 +326,24 @@ if (!empty($user_course_categories)) {
                         ['class' => 'ajax']
                     );
 
-                    if ($key > 0) {
-                        ?>
+                if ($key > 0) {
+                    ?>
                     <a href="<?php echo $currentUrl; ?>?action=<?php echo $action; ?>&amp;move=up&amp;course=<?php echo $course['code']; ?>&amp;category=<?php echo $course['user_course_cat']; ?>&amp;sec_token=<?php echo $stok; ?>">
                     <?php echo Display::display_icon('up.png', get_lang('Up'), '', 22); ?>
                     </a>
                 <?php
-                    } else {
-                        echo Display::display_icon('up_na.png', get_lang('Up'), '', 22);
-                    }
-                    if ($key < $number_of_courses - 1) {
-                        ?>
+                } else {
+                    echo Display::display_icon('up_na.png', get_lang('Up'), '', 22);
+                }
+                if ($key < $number_of_courses - 1) {
+                    ?>
                     <a href="<?php echo $currentUrl; ?>?action=<?php echo $action; ?>&amp;move=down&amp;course=<?php echo $course['code']; ?>&amp;category=<?php echo $course['user_course_cat']; ?>&amp;sec_token=<?php echo $stok; ?>">
                     <?php echo Display::return_icon('down.png', get_lang('Down'), '', 22); ?>
                     </a>
                 <?php
-                    } else {
-                       echo Display::return_icon('down_na.png', get_lang('Down'), '', 22);
-                    } ?>
+                } else {
+                    echo Display::return_icon('down_na.png', get_lang('Down'), '', 22);
+                } ?>
               </div>
               <div style="float:left; margin-right:10px;">
                 <?php
@@ -390,8 +389,7 @@ if (!empty($courses_without_category)) {
         if (api_get_setting('display_teacher_in_courselist') === 'true') {
             echo $course['tutor'];
         }
-        echo '</td><td valign="top">';
-        ?>
+        echo '</td><td valign="top">'; ?>
             <div style="float:left; width:110px">
             <?php
             if (api_get_setting('show_courses_descriptions_in_catalog') == 'true') {
@@ -401,7 +399,7 @@ if (!empty($courses_without_category)) {
             </a>
             <?php
             }
-            echo '';
+        echo '';
         if (isset($_GET['edit']) && $course['code'] == $_GET['edit']) {
             echo Display::return_icon('edit_na.png', get_lang('Edit'), '', 22);
         } else {
@@ -457,4 +455,3 @@ if (!empty($courses_without_category)) {
 </table>
 <?php
 Display::display_footer();
-

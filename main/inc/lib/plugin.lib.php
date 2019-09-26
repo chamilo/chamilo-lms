@@ -33,7 +33,6 @@ class AppPlugin
     public $installedPluginListObject = [];
     private static $instance;
 
-
     /**
      * Constructor.
      */
@@ -42,7 +41,7 @@ class AppPlugin
     }
 
     /**
-     * @return  AppPlugin
+     * @return AppPlugin
      */
     public static function getInstance()
     {

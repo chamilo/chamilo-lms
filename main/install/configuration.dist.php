@@ -615,6 +615,7 @@ $_configuration['quiz_adaptive_show_extrafields'] = [
 // Requires DB changes:
 /*
 ALTER TABLE c_quiz_rel_category ADD expired_time INT DEFAULT 0 NOT NULL;
+CREATE INDEX idx_course_category_exercise ON c_quiz_rel_category (c_id, category_id, exercise_id);
 */
 //$_configuration['quiz_allow_time_control_per_category'] = false;
 

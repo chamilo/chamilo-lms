@@ -8,7 +8,14 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * CQuizCategory.
  *
- * @ORM\Table(name="c_quiz_rel_category")
+ * Add @ to the ORM\Index line if $_configuration['quiz_allow_time_control_per_category'] is true.
+ *
+ * @ORM\Table(
+ *     name="c_quiz_rel_category",
+ *     indexes={
+ *          ORM\Index(name="idx_course_category_exercise", columns={"c_id", "category_id", "exercise_id"})
+ *     }
+ * )
  * @ORM\Entity
  */
 class CQuizCategory

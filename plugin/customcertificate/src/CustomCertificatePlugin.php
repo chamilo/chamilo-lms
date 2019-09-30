@@ -295,8 +295,12 @@ class CustomCertificatePlugin extends Plugin
      *
      * @return array
      */
-    public static function getInfoCertificate($courseId, $sessionId = 0, $accessUrlId = 1)
+    public static function getInfoCertificate($courseId, $sessionId = 0, $accessUrlId)
     {
+        $courseId = (int) $courseId;
+        $sessionId = (int) $sessionId;
+        $accessUrlId = !empty($accessUrlId) ? (int) $accessUrlId : 1;
+
         $table = Database::get_main_table(self::TABLE_CUSTOMCERTIFICATE);
         $sql = "SELECT * FROM $table
                 WHERE c_id=$courseId AND session_id=$sessionId AND access_url_id=$accessUrlId";
@@ -318,6 +322,8 @@ class CustomCertificatePlugin extends Plugin
      */
     public static function getInfoCertificateDefault($accessUrlId)
     {
+        $accessUrlId = !empty($accessUrlId) ? (int) $accessUrlId : 1;
+
         $table = Database::get_main_table(self::TABLE_CUSTOMCERTIFICATE);
         $sql = "SELECT * FROM $table
                 WHERE certificate_default=1 AND access_url_id=$accessUrlId";

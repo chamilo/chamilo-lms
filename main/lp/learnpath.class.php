@@ -756,16 +756,10 @@ class learnpath
         // Check course code exists.
         // Check lp_name doesn't exist, otherwise append something.
         $i = 0;
-        $name = Database::escape_string($name);
         $categoryId = (int) $categoryId;
-
         // Session id.
         $session_id = api_get_session_id();
         $userId = empty($userId) ? api_get_user_id() : $userId;
-        $check_name = "SELECT * FROM $tbl_lp
-                       WHERE c_id = $course_id AND name = '$name'";
-
-        $res_name = Database::query($check_name);
 
         if (empty($publicated_on)) {
             $publicated_on = null;
@@ -779,12 +773,16 @@ class learnpath
             $expired_on = Database::escape_string(api_get_utc_datetime($expired_on));
         }
 
+        $check_name = "SELECT * FROM $tbl_lp
+                       WHERE c_id = $course_id AND name = '".Database::escape_string($name)."'";
+        $res_name = Database::query($check_name);
+
         while (Database::num_rows($res_name)) {
             // There is already one such name, update the current one a bit.
             $i++;
             $name = $name.' - '.$i;
             $check_name = "SELECT * FROM $tbl_lp 
-                           WHERE c_id = $course_id AND name = '$name'";
+                           WHERE c_id = $course_id AND name = '".Database::escape_string($name)."' ";
             $res_name = Database::query($check_name);
         }
         // New name does not exist yet; keep it.
@@ -5051,12 +5049,15 @@ class learnpath
         if (empty($name)) {
             return false;
         }
-        $this->name = Database::escape_string($name);
         $lp_table = Database::get_course_table(TABLE_LP_MAIN);
+        $name = Database::escape_string($name);
+
+        $this->name = $name;
+
         $lp_id = $this->get_id();
         $course_id = $this->course_info['real_id'];
         $sql = "UPDATE $lp_table SET
-                name = '".Database::escape_string($this->name)."'
+                name = '$name'
                 WHERE iid = $lp_id";
         $result = Database::query($sql);
         // If the lp is visible on the homepage, change his name there.
@@ -5065,7 +5066,7 @@ class learnpath
             $session_condition = api_get_session_condition($session_id);
             $tbl_tool = Database::get_course_table(TABLE_TOOL_LIST);
             $link = 'lp/lp_controller.php?action=view&lp_id='.$lp_id.'&id_session='.$session_id;
-            $sql = "UPDATE $tbl_tool SET name = '$this->name'
+            $sql = "UPDATE $tbl_tool SET name = '$name'
             	    WHERE
             	        c_id = $course_id AND
             	        (link='$link' AND image='scormbuilder.gif' $session_condition)";

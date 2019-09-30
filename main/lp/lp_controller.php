@@ -769,7 +769,7 @@ switch ($action) {
 
                 $new_lp_id = learnpath::add_lp(
                     api_get_course_id(),
-                    Security::remove_XSS($_REQUEST['lp_name']),
+                    $_REQUEST['lp_name'],
                     '',
                     'chamilo',
                     'manual',
@@ -1160,8 +1160,7 @@ switch ($action) {
             require 'lp_list.php';
         } else {
             Session::write('refresh', 1);
-            $lp_name = Security::remove_XSS($_REQUEST['lp_name']);
-            $_SESSION['oLP']->set_name($lp_name);
+            $_SESSION['oLP']->set_name($_REQUEST['lp_name']);
             $author = $_REQUEST['lp_author'];
             // Fixing the author name (no body or html tags).
             $auth_init = stripos($author, '<p>');

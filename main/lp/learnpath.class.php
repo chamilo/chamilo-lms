@@ -11726,7 +11726,7 @@ EOD;
 
             if (filter_extension($new_file_name)) {
                 $file_extension = explode('.', $image_array['name']);
-                $file_extension = strtolower($file_extension[sizeof($file_extension) - 1]);
+                $file_extension = strtolower($file_extension[count($file_extension) - 1]);
                 $filename = uniqid('');
                 $new_file_name = $filename.'.'.$file_extension;
                 $new_path = $updir.'/'.$new_file_name;

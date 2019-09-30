@@ -1925,17 +1925,17 @@ class DocumentManager
     /**
      * Return all content to replace and all content to be replace.
      *
-     * @param int  $user_id
-     * @param int  $course_id
-     * @param bool $is_preview
+     * @param int    $user_id
+     * @param string $courseCode
+     * @param bool   $is_preview
      *
      * @return array
      */
-    public static function get_all_info_to_certificate($user_id, $course_id, $is_preview = false)
+    public static function get_all_info_to_certificate($user_id, $courseCode, $is_preview = false)
     {
         $info_list = [];
-        $user_id = intval($user_id);
-        $course_info = api_get_course_info($course_id);
+        $user_id = (int) $user_id;
+        $course_info = api_get_course_info($courseCode);
 
         // Portal info
         $organization_name = api_get_setting('Institution');
@@ -1968,7 +1968,7 @@ class DocumentManager
         $teacher_last_name = $teacher_info['lastname'];
 
         // info gradebook certificate
-        $info_grade_certificate = UserManager::get_info_gradebook_certificate($course_id, $user_id);
+        $info_grade_certificate = UserManager::get_info_gradebook_certificate($courseCode, $user_id);
         $date_certificate = $info_grade_certificate['created_at'];
         $date_long_certificate = '';
 
@@ -1990,6 +1990,32 @@ class DocumentManager
             $externalStyle = file_get_contents($externalStyleFile);
         }
 
+        $sessionId = api_get_session_id();
+
+        $timeInCourse = Tracking::get_time_spent_on_the_course($user_id, $course_info['real_id'], $sessionId);
+        $timeInCourse = api_time_to_hms($timeInCourse, ':', false, true);
+
+        $first = Tracking::get_first_connection_date_on_the_course($user_id, $course_info['real_id'], $sessionId, false);
+        $first = substr($first, 0, 10);
+        $last = Tracking::get_last_connection_date_on_the_course($user_id, $course_info, $sessionId, false);
+        $last = substr($last, 0, 10);
+
+        if ($first === $last) {
+            $startDateAndEndDate = get_lang('From').' '.$first;
+        } else {
+            $startDateAndEndDate = sprintf(
+                get_lang('FromDateXToDateY'),
+                $first,
+                $last
+            );
+        }
+        $courseDescription = new CourseDescription();
+        $description = $courseDescription->get_data_by_description_type(1, $course_info['real_id'], $sessionId);
+        $courseObjectives = '';
+        if ($description) {
+            $courseObjectives = $description['description_content'];
+        }
+
         // Replace content
         $info_to_replace_in_content_html = [
             $first_name,
@@ -2002,13 +2028,16 @@ class DocumentManager
             $official_code,
             $date_long_certificate,
             $date_no_time,
-            $course_id,
+            $courseCode,
             $course_info['name'],
             $info_grade_certificate['grade'],
             $url,
             '<a href="'.$url.'" target="_blank">'.get_lang('CertificateOnlineLink').'</a>',
             '((certificate_barcode))',
             $externalStyle,
+            $timeInCourse,
+            $startDateAndEndDate,
+            $courseObjectives
         ];
 
         $tags = [
@@ -2029,6 +2058,9 @@ class DocumentManager
             '((certificate_link_html))',
             '((certificate_barcode))',
             '((external_style))',
+            '((time_in_course))',
+            '((start_date_and_end_date))',
+            '((course_objectives))'
         ];
 
         if (!empty($extraFields)) {

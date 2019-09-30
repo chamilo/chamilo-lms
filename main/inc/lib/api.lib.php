@@ -5191,11 +5191,15 @@ function api_max_sort_value($user_course_category, $user_id)
  *
  * @author Julian Prud'homme
  *
- * @param int the number of seconds
+ * @param int    $seconds number of seconds
+ * @param string $space
+ * @param bool   $showSeconds
+ * @param bool   $roundMinutes
  *
- * @return string the formated time
+ *
+ * @return string the formatted time
  */
-function api_time_to_hms($seconds, $space = ':')
+function api_time_to_hms($seconds, $space = ':', $showSeconds = true, $roundMinutes = false)
 {
     // $seconds = -1 means that we have wrong data in the db.
     if ($seconds == -1) {
@@ -5214,6 +5218,24 @@ function api_time_to_hms($seconds, $space = ':')
     // How many minutes ?
     $min = floor(($seconds - ($hours * 3600)) / 60);
 
+    if ($roundMinutes) {
+        if ($min >= 45) {
+            $min = 45;
+        }
+
+        if ($min >= 30 && $min <= 44) {
+            $min = 30;
+        }
+
+        if ($min >= 15 && $min <= 29) {
+            $min = 15;
+        }
+
+        if ($min >= 0 && $min <= 14) {
+            $min = 0;
+        }
+    }
+
     // How many seconds
     $sec = floor($seconds - ($hours * 3600) - ($min * 60));
 
@@ -5229,7 +5251,12 @@ function api_time_to_hms($seconds, $space = ':')
         $min = "0$min";
     }
 
-    return $hours.$space.$min.$space.$sec;
+    $seconds = '';
+    if ($showSeconds) {
+        $seconds = $space.$sec;
+    }
+
+    return $hours.$space.$min.$seconds;
 }
 
 /* FILE SYSTEM RELATED FUNCTIONS */

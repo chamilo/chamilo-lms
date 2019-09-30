@@ -2234,7 +2234,7 @@ switch ($action) {
                 $countUsers = count($obj->get_users_by_usergroup($group['id']));
                 $group['users'] = $countUsers;
 
-                if ($obj->allowTeachers()) {
+                if ($obj->allowTeachers() && $group['author_id'] == $currentUserId) {
                     $group['users'] = Display::url(
                         $countUsers,
                         $urlUserGroup.'&id='.$group['id']

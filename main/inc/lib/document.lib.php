@@ -2037,7 +2037,7 @@ class DocumentManager
             $externalStyle,
             $timeInCourse,
             $startDateAndEndDate,
-            $courseObjectives
+            $courseObjectives,
         ];
 
         $tags = [
@@ -2060,7 +2060,7 @@ class DocumentManager
             '((external_style))',
             '((time_in_course))',
             '((start_date_and_end_date))',
-            '((course_objectives))'
+            '((course_objectives))',
         ];
 
         if (!empty($extraFields)) {

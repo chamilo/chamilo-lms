@@ -5191,11 +5191,10 @@ function api_max_sort_value($user_course_category, $user_id)
  *
  * @author Julian Prud'homme
  *
- * @param int    $seconds number of seconds
+ * @param int    $seconds      number of seconds
  * @param string $space
  * @param bool   $showSeconds
  * @param bool   $roundMinutes
- *
  *
  * @return string the formatted time
  */

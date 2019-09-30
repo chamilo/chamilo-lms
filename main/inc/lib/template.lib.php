@@ -1226,7 +1226,7 @@ class Template
 
     /**
      * Returns the teachers name for the current course
-     * Function to use in Twig templates
+     * Function to use in Twig templates.
      *
      * @return string
      */

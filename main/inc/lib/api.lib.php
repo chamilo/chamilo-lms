@@ -1906,7 +1906,8 @@ function api_get_course_path($course_code = null)
  *
  * @param string $settingName The name of the setting we want from the table
  * @param array  $courseInfo
- * @param bool   $force force checking the value in the database
+ * @param bool   $force       force checking the value in the database
+ *
  * @return mixed The value of that setting in that table. Return -1 if not found.
  */
 function api_get_course_setting($settingName, $courseInfo = [], $force = false)
@@ -4430,7 +4431,7 @@ function api_item_property_update(
 /**
  * Gets item property by tool.
  *
- * @param string $tool tool name, linked to 'rubrique' of the course tool_list (Warning: language sensitive !!)
+ * @param string $tool        tool name, linked to 'rubrique' of the course tool_list (Warning: language sensitive !!)
  * @param string $course_code
  * @param int    $session_id
  *

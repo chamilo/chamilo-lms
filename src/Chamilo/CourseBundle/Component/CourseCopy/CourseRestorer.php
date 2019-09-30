@@ -2652,13 +2652,14 @@ class CourseRestorer
                     }
                 }
 
-                // Adding the author's image
+                // Adding the LP image
                 if (!empty($lp->preview_image)) {
                     $new_filename = uniqid('').substr(
                         $lp->preview_image,
                         strlen($lp->preview_image) - 7,
                         strlen($lp->preview_image)
                     );
+
                     if (file_exists($origin_path.$lp->preview_image) &&
                         !is_dir($origin_path.$lp->preview_image)
                     ) {
@@ -2668,6 +2669,15 @@ class CourseRestorer
                         );
                         if ($copy_result) {
                             $lp->preview_image = $new_filename;
+                            // Create 64 version from original
+                            $temp = new \Image($destination_path.$new_filename);
+                            $temp->resize(64);
+                            $pathInfo = pathinfo($new_filename);
+                            if ($pathInfo) {
+                                $filename = $pathInfo['filename'];
+                                $extension = $pathInfo['extension'];
+                                $temp->send_image($destination_path.'/'.$filename.'.64.'.$extension);
+                            }
                         } else {
                             $lp->preview_image = '';
                         }

@@ -284,22 +284,6 @@ class TestCategory
     }
 
     /**
-     * true if question id has a category.
-     *
-     * @param int $questionId
-     *
-     * @return bool
-     */
-    public static function isQuestionHasCategory($questionId)
-    {
-        if (self::getCategoryForQuestion($questionId) > 0) {
-            return true;
-        }
-
-        return false;
-    }
-
-    /**
      * Return the category name for question with question_id = $questionId
      * In this version, a question has only 1 category.
      *
@@ -435,17 +419,6 @@ class TestCategory
         }
 
         return $result;
-    }
-
-    /**
-     * return the number of differents categories for a test
-     * input : test_id
-     * return : integer
-     * hubert.borderiou 07-04-2011.
-     */
-    public static function getNumberOfCategoriesForTest($id)
-    {
-        return count(self::getListOfCategoriesIDForTest($id));
     }
 
     /**
@@ -673,22 +646,6 @@ class TestCategory
     }
 
     /**
-     * Display signs [+] and/or (>0) after question title if question has options
-     * scoreAlwaysPositive and/or uncheckedMayScore.
-     *
-     * @param $objQuestion
-     */
-    public function displayQuestionOption($objQuestion)
-    {
-        if ($objQuestion->type == MULTIPLE_ANSWER && $objQuestion->scoreAlwaysPositive) {
-            echo "<span style='font-size:75%'> (>0)</span>";
-        }
-        if ($objQuestion->type == MULTIPLE_ANSWER && $objQuestion->uncheckedMayScore) {
-            echo "<span style='font-size:75%'> [+]</span>";
-        }
-    }
-
-    /**
      * sortTabByBracketLabel ($tabCategoryQuestions)
      * key of $tabCategoryQuestions are the category id (0 for not in a category)
      * value is the array of question id of this category
@@ -861,22 +818,6 @@ class TestCategory
         }
 
         return '';
-    }
-
-    /**
-     * @return array
-     */
-    public static function get_all_categories()
-    {
-        $table = Database::get_course_table(TABLE_QUIZ_CATEGORY);
-        $sql = "SELECT * FROM $table ORDER BY title ASC";
-        $res = Database::query($sql);
-        $array = [];
-        while ($row = Database::fetch_array($res, 'ASSOC')) {
-            $array[] = $row;
-        }
-
-        return $array;
     }
 
     /**
@@ -1071,25 +1012,6 @@ class TestCategory
         }
 
         return $return;
-    }
-
-    /**
-     * Sorts an array.
-     *
-     * @param array $array
-     *
-     * @return array
-     */
-    public function sort_tree_array($array)
-    {
-        foreach ($array as $key => $row) {
-            $parent[$key] = $row['parent_id'];
-        }
-        if (count($array) > 0) {
-            array_multisort($parent, SORT_ASC, $array);
-        }
-
-        return $array;
     }
 
     /**

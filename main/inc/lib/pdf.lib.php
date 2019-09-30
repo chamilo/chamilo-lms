@@ -276,14 +276,26 @@ class PDF
             }
 
             if (!file_exists($file)) {
-                //the file doesn't exist, skip
                 continue;
             }
 
             if ($addStyle) {
-                $css_file = api_get_path(SYS_CSS_PATH).'/print.css';
-                $css = file_exists($css_file) ? @file_get_contents($css_file) : '';
-                $this->pdf->WriteHTML($css, 1);
+                $basicStyles = [
+                    api_get_path(SYS_PATH).'web/assets/bootstrap/dist/css/bootstrap.min.css',
+                    api_get_path(SYS_PATH).'web/css/base.css',
+                    api_get_path(SYS_PATH).'web/css/themes/'.api_get_visual_theme().'/default.css',
+                    api_get_path(SYS_PATH).'web/css/themes/'.api_get_visual_theme().'/print.css',
+                ];
+                foreach ($basicStyles as $style) {
+                    if (file_exists($style)) {
+                        $cssContent = file_get_contents($style);
+                        try {
+                            $this->pdf->WriteHTML($cssContent, 1);
+                        } catch (MpdfException $e) {
+                            error_log($e);
+                        }
+                    }
+                }
             }
 
             // it's not a chapter but the file exists, print its title
@@ -333,7 +345,6 @@ class PDF
                 $title = api_get_title_html($document_html, 'UTF-8', 'UTF-8');
                 // $_GET[] too, as it is done with file name.
                 // At the moment the title is retrieved from the html document itself.
-                //echo $document_html;exit;
                 if (empty($title)) {
                     $title = $filename; // Here file name is expected to contain ASCII symbols only.
                 }
@@ -353,7 +364,7 @@ class PDF
             $output_file = $pdf_name.'.pdf';
         }
         // F to save the pdf in a file
-        $this->pdf->Output($output_file, 'D');
+        @$this->pdf->Output($output_file, 'D');
         exit;
     }
 
@@ -492,13 +503,16 @@ class PDF
                 api_get_path(SYS_PATH).'web/assets/bootstrap/dist/css/bootstrap.min.css',
                 api_get_path(SYS_PATH).'web/css/base.css',
                 api_get_path(SYS_PATH).'web/css/themes/'.api_get_visual_theme().'/default.css',
+                api_get_path(SYS_PATH).'web/css/themes/'.api_get_visual_theme().'/print.css',
             ];
             foreach ($basicStyles as $style) {
-                $cssContent = file_get_contents($style);
-                try {
-                    $this->pdf->WriteHTML($cssContent, 1);
-                } catch (MpdfException $e) {
-                    error_log($e);
+                if (file_exists($style)) {
+                    $cssContent = file_get_contents($style);
+                    try {
+                        $this->pdf->WriteHTML($cssContent, 1);
+                    } catch (MpdfException $e) {
+                        error_log($e);
+                    }
                 }
             }
         }
@@ -523,12 +537,12 @@ class PDF
         if ($saveInFile) {
             $fileToSave = !empty($fileToSave) ? $fileToSave : api_get_path(SYS_ARCHIVE_PATH).uniqid();
 
-            $this->pdf->Output(
+            @$this->pdf->Output(
                 $fileToSave,
                 $outputMode
             ); // F to save the pdf in a file
         } else {
-            $this->pdf->Output(
+            @$this->pdf->Output(
                 $output_file,
                 $outputMode
             ); // F to save the pdf in a file

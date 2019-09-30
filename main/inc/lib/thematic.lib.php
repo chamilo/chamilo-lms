@@ -716,8 +716,9 @@ class Thematic
         $tbl_thematic_advance = Database::get_course_table(TABLE_THEMATIC_ADVANCE);
         $data = [];
         $condition = '';
-        if (isset($thematic_advance_id)) {
-            $thematic_advance_id = intval($thematic_advance_id);
+        $thematic_advance_id = (int) $thematic_advance_id;
+
+        if (!empty($thematic_advance_id)) {
             $condition = " AND a.id = $thematic_advance_id ";
         }
 

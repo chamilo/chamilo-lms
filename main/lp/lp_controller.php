@@ -1190,8 +1190,6 @@ switch ($action) {
             $hide_toc_frame = null;
             if (isset($_REQUEST['hide_toc_frame']) && $_REQUEST['hide_toc_frame'] == 1) {
                 $hide_toc_frame = $_REQUEST['hide_toc_frame'];
-            } else {
-                $hide_toc_frame = null;
             }
             $_SESSION['oLP']->set_hide_toc_frame($hide_toc_frame);
             $_SESSION['oLP']->set_prerequisite(isset($_POST['prerequisites']) ? (int) $_POST['prerequisites'] : 0);

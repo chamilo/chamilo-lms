@@ -8437,7 +8437,7 @@ class Exercise
             'exercises_cat_'.$categoryId
         );
 
-        $limit = self::PAGINATION_ITEMS_PER_PAGE;
+        $limit = $table->per_page;
         $page = $table->page_nr;
         $from = $limit * ($page - 1);
 
@@ -9360,7 +9360,6 @@ class Exercise
             }
 
             $table->setTableData($tableRows);
-
             $table->setTotalNumberOfItems($total);
             $table->set_additional_parameters([
                 'cidReq' => api_get_course_id(),

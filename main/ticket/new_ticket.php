@@ -114,16 +114,6 @@ $htmlHeadXtra[] = '<script>
 '</script>';
 
 /**
- * @param $s
- *
- * @return string
- */
-function js_str($s)
-{
-    return '"'.addcslashes($s, "\0..\37\"\\").'"';
-}
-
-/**
  * @param $array
  * @param $name
  * @param $key

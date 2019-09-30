@@ -1904,31 +1904,57 @@ function api_get_course_path($course_code = null)
 /**
  * Gets a course setting from the current course_setting table. Try always using integer values.
  *
- * @param string $setting_name The name of the setting we want from the table
- * @param string $course_code
+ * @param string $settingName The name of the setting we want from the table
+ * @param array  $courseInfo
+ * @param bool   $force       force checking the value in the database
  *
  * @return mixed The value of that setting in that table. Return -1 if not found.
  */
-function api_get_course_setting($setting_name, $course_code = null)
+function api_get_course_setting($settingName, $courseInfo = [], $force = false)
 {
-    $course_info = api_get_course_info($course_code);
-    $table = Database::get_course_table(TABLE_COURSE_SETTING);
-    $setting_name = Database::escape_string($setting_name);
-    if (!empty($course_info['real_id']) && !empty($setting_name)) {
-        $sql = "SELECT value FROM $table
-                WHERE c_id = {$course_info['real_id']} AND variable = '$setting_name'";
+    if (empty($courseInfo)) {
+        $courseInfo = api_get_course_info();
+    }
+
+    if (empty($courseInfo) || empty($settingName)) {
+        return -1;
+    }
+
+    $courseId = isset($courseInfo['real_id']) && !empty($courseInfo['real_id']) ? $courseInfo['real_id'] : 0;
+
+    if (empty($courseId)) {
+        return -1;
+    }
+
+    static $courseSettingInfo = [];
+
+    if ($force) {
+        $courseSettingInfo = [];
+    }
+
+    if (!isset($courseSettingInfo[$courseId])) {
+        $table = Database::get_course_table(TABLE_COURSE_SETTING);
+        $settingName = Database::escape_string($settingName);
+
+        $sql = "SELECT variable, value FROM $table
+                WHERE c_id = $courseId ";
         $res = Database::query($sql);
         if (Database::num_rows($res) > 0) {
-            $row = Database::fetch_array($res);
-            if ($setting_name === 'email_alert_manager_on_new_quiz') {
-                if (!is_null($row['value'])) {
-                    $result = explode(',', $row['value']);
-                    $row['value'] = $result;
+            $result = Database::store_result($res, 'ASSOC');
+            $courseSettingInfo[$courseId] = array_column($result, 'value', 'variable');
+
+            if (isset($courseSettingInfo[$courseId]['email_alert_manager_on_new_quiz'])) {
+                $value = $courseSettingInfo[$courseId]['email_alert_manager_on_new_quiz'];
+                if (!is_null($value)) {
+                    $result = explode(',', $value);
+                    $courseSettingInfo[$courseId]['email_alert_manager_on_new_quiz'] = $result;
                 }
             }
-
-            return $row['value'];
         }
+    }
+
+    if (isset($courseSettingInfo[$courseId]) && isset($courseSettingInfo[$courseId][$settingName])) {
+        return $courseSettingInfo[$courseId][$settingName];
     }
 
     return -1;
@@ -2088,11 +2114,10 @@ function api_remove_in_gradebook()
  * particular course, if none given it gets the course info from the session.
  *
  * @param string $course_code
- * @param bool   $strict
  *
  * @return array
  */
-function api_get_course_info($course_code = null, $strict = false)
+function api_get_course_info($course_code = null)
 {
     if (!empty($course_code)) {
         $course_code = Database::escape_string($course_code);
@@ -4406,12 +4431,9 @@ function api_item_property_update(
 /**
  * Gets item property by tool.
  *
- * @param string    course code
- * @param string    tool name, linked to 'rubrique' of the course tool_list (Warning: language sensitive !!)
- * @param int       id of the item itself, linked to key of every tool ('id', ...), "*" = all items of the tool
- * @param int    $session_id
- * @param string $tool
+ * @param string $tool        tool name, linked to 'rubrique' of the course tool_list (Warning: language sensitive !!)
  * @param string $course_code
+ * @param int    $session_id
  *
  * @return array All fields from c_item_property (all rows found) or empty array
  */
@@ -4884,17 +4906,26 @@ function api_get_languages_to_array()
  */
 function api_get_language_id($language)
 {
-    $tbl_language = Database::get_main_table(TABLE_MAIN_LANGUAGE);
     if (empty($language)) {
         return null;
     }
-    $language = Database::escape_string($language);
-    $sql = "SELECT id FROM $tbl_language
-            WHERE dokeos_folder = '$language' LIMIT 1";
-    $result = Database::query($sql);
-    $row = Database::fetch_array($result);
 
-    return $row['id'];
+    static $staticResult;
+
+    if (isset($staticResult[$language])) {
+        return $staticResult[$language];
+    } else {
+        $table = Database::get_main_table(TABLE_MAIN_LANGUAGE);
+        $language = Database::escape_string($language);
+        $sql = "SELECT id FROM $table
+                WHERE dokeos_folder = '$language' LIMIT 1";
+        $result = Database::query($sql);
+        $row = Database::fetch_array($result);
+
+        $staticResult[$language] = $row['id'];
+
+        return $row['id'];
+    }
 }
 
 /**
@@ -5039,7 +5070,7 @@ function api_get_visual_theme()
         $course_id = api_get_course_id();
         if (!empty($course_id)) {
             if (api_get_setting('allow_course_theme') == 'true') {
-                $course_theme = api_get_course_setting('course_theme', $course_id);
+                $course_theme = api_get_course_setting('course_theme', api_get_course_info());
 
                 if (!empty($course_theme) && $course_theme != -1) {
                     if (!empty($course_theme)) {
@@ -6409,18 +6440,25 @@ function api_request_uri()
  */
 function api_get_current_access_url_id()
 {
-    $access_url_table = Database::get_main_table(TABLE_MAIN_ACCESS_URL);
+    static $id;
+    if (!empty($id)) {
+        return $id;
+    }
+
+    $table = Database::get_main_table(TABLE_MAIN_ACCESS_URL);
     $path = Database::escape_string(api_get_path(WEB_PATH));
-    $sql = "SELECT id FROM $access_url_table WHERE url = '".$path."'";
+    $sql = "SELECT id FROM $table WHERE url = '".$path."'";
     $result = Database::query($sql);
     if (Database::num_rows($result) > 0) {
-        $access_url_id = Database::result($result, 0, 0);
-        if ($access_url_id === false) {
+        $id = Database::result($result, 0, 0);
+        if ($id === false) {
             return -1;
         }
 
-        return (int) $access_url_id;
+        return (int) $id;
     }
+
+    $id = 1;
 
     //if the url in WEB_PATH was not found, it can only mean that there is
     // either a configuration problem or the first URL has not been defined yet
@@ -7769,8 +7807,8 @@ function api_set_default_visibility(
         }
 
         // Read the portal and course default visibility
-        if ($tool_id == 'documents') {
-            $visibility = DocumentManager::getDocumentDefaultVisibility($courseCode);
+        if ($tool_id === 'documents') {
+            $visibility = DocumentManager::getDocumentDefaultVisibility($courseInfo);
         }
 
         api_item_property_update(

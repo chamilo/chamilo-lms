@@ -633,7 +633,7 @@ foreach ($questionList as $questionId) {
                     [
                         'ToolbarSet' => 'TestAnswerFeedback',
                         'Width' => '100%',
-                        'Height' => '120'
+                        'Height' => '120',
                     ]
                 );
             } else {
@@ -669,7 +669,12 @@ foreach ($questionList as $questionId) {
 
                 $formMark = new FormValidator('marksform_'.$questionId, 'post');
                 $formMark->addHeader(get_lang('AssignMarks'));
-                $select = $formMark->addSelect('marks', get_lang('AssignMarks'), [], ['disable_js' => true]);
+                $select = $formMark->addSelect(
+                    'marks',
+                    get_lang('AssignMarks'),
+                    [],
+                    ['disable_js' => true, 'extra_class' => 'grade_select']
+                );
                 $model = ExerciseLib::getCourseScoreModel();
                 if (empty($model)) {
                     for ($i = 0; $i <= $questionWeighting; $i++) {

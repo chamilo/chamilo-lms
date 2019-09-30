@@ -1320,6 +1320,9 @@ requires extension "php-soap"  sudo apt-get install php-soap
 // ALTER TABLE c_survey_question ADD parent_option_id INT(11) DEFAULT 0 NOT NULL;
 //$_configuration['survey_question_dependency'] = true;
 
+// Student publication: force to download document before upload an assignment.
+// $_configuration['force_download_doc_before_upload_work' ] = true;
+
 // KEEP THIS AT THE END
 // -------- Custom DB changes
 // Add user activation by confirmation email

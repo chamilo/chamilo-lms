@@ -233,7 +233,7 @@ class CustomCertificatePlugin extends Plugin
             $courseCode = $row['course_code'];
             $sessionId = $row['session_id'];
             $userId = $row['user_id'];
-            if (api_get_course_setting('customcertificate_course_enable', $courseCode) == 1) {
+            if (api_get_course_setting('customcertificate_course_enable', api_get_course_info($courseCode)) == 1) {
                 return [
                     'course_code' => $courseCode,
                     'session_id' => $sessionId,

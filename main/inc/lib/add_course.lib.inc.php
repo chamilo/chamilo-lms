@@ -421,7 +421,7 @@ class AddCourse
         if (is_null($fill_with_exemplary_content)) {
             $fill_with_exemplary_content = api_get_setting('example_material_course_creation') != 'false';
         }
-        $course_id = intval($course_id);
+        $course_id = (int) $course_id;
 
         if (empty($course_id)) {
             return false;

@@ -155,6 +155,12 @@ function get_tabs($courseId = null)
  */
 function getCustomTabs()
 {
+    static $customTabs = null;
+
+    if ($customTabs !== null) {
+        return $customTabs;
+    }
+
     $urlId = api_get_current_access_url_id();
     $tableSettingsCurrent = Database::get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
     $sql = "SELECT * FROM $tableSettingsCurrent
@@ -385,22 +391,18 @@ function return_navigation_array()
             $menu_navigation['dashboard'] = isset($possible_tabs['dashboard']) ? $possible_tabs['dashboard'] : null;
         }
 
-        ///if (api_is_student()) {
-        if (true) {
-            $params = ['variable = ? AND subkey = ?' => ['status', 'studentfollowup']];
-            $result = api_get_settings_params_simple($params);
+        $installed = AppPlugin::getInstance()->isInstalled('studentfollowup');
+        if ($installed) {
             $plugin = StudentFollowUpPlugin::create();
-            if (!empty($result) && $result['selected_value'] === 'installed') {
-                // Students
-                $url = api_get_path(WEB_PLUGIN_PATH).'studentfollowup/posts.php';
-                if (api_is_platform_admin() || api_is_drh() || api_is_teacher()) {
-                    $url = api_get_path(WEB_PLUGIN_PATH).'studentfollowup/my_students.php';
-                }
-                $navigation['follow_up']['url'] = $url;
-                $navigation['follow_up']['title'] = $plugin->get_lang('CareDetailView');
-                $navigation['follow_up']['key'] = 'homepage';
-                $navigation['follow_up']['icon'] = 'homepage.png';
+            // Students
+            $url = api_get_path(WEB_PLUGIN_PATH).'studentfollowup/posts.php';
+            if (api_is_platform_admin() || api_is_drh() || api_is_teacher()) {
+                $url = api_get_path(WEB_PLUGIN_PATH).'studentfollowup/my_students.php';
             }
+            $navigation['follow_up']['url'] = $url;
+            $navigation['follow_up']['title'] = $plugin->get_lang('CareDetailView');
+            $navigation['follow_up']['key'] = 'homepage';
+            $navigation['follow_up']['icon'] = 'homepage.png';
         }
 
         // Administration
@@ -810,7 +812,6 @@ function return_breadcrumb($interbreadcrumb, $language_file, $nameTools)
         $i = 0;
         $final_navigation_count = count($final_navigation);
         if (!empty($final_navigation)) {
-            // $home_link.= '<span class="divider">/</span>';
             if (!empty($home_link)) {
                 $lis .= Display::tag('li', $home_link);
             }

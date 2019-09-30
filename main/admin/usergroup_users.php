@@ -13,7 +13,6 @@ $id = isset($_GET['id']) ? (int) $_GET['id'] : 0;
 
 $usergroup = new UserGroup();
 $userGroupInfo = $usergroup->get($id);
-
 if (empty($userGroupInfo)) {
     api_not_allowed(true);
 }
@@ -140,7 +139,7 @@ $column_model = [
     ],
 ];
 
-if (api_get_plugin_setting('learning_calendar', 'enabled') === 'true') {
+if ($calendarPlugin) {
     $columns = [
         get_lang('Name'),
         get_lang('Calendar'),
@@ -200,18 +199,21 @@ $extraParams['multiselect'] = true;
 $deleteIcon = Display::return_icon('delete.png', get_lang('Delete'), null, ICON_SIZE_SMALL);
 $urlStats = api_get_path(WEB_CODE_PATH);
 
-//$addCalendar = '<a href="'.$urlStats.'mySpace/myStudents.php?student=\'+options.rowId+\'">'.Display::return_icon('agenda.png', get_lang('Agenda'), '', ICON_SIZE_SMALL).'</a>';
-
 $reportingIcon = Display::return_icon('statistics.png', get_lang('Reporting'), '', ICON_SIZE_SMALL);
 $controlPoint = Display::return_icon('add.png', get_lang('ControlPoint'), '', ICON_SIZE_SMALL);
 
+$link = '';
+
+if ($calendarPlugin) {
+    $link = '<a href="'.$urlStats.'admin/usergroup_users.php?action=create_control_point&value=\'+value+\'&id='.$id.'&user_id=\'+options.rowId+\'">'.$controlPoint.'</a>';
+}
 //return \'<a href="session_edit.php?page=resume_session.php&id=\'+options.rowId+\'">'.Display::return_icon('edit.png', get_lang('Edit'), '', ICON_SIZE_SMALL).'</a>'.
 // With this function we can add actions to the jgrid
 $action_links = '
 function action_formatter(cellvalue, options, rowObject) {
     var value = rowObject[5];
     return \''.
-    '&nbsp;<a href="'.$urlStats.'admin/usergroup_users.php?action=create_control_point&value=\'+value+\'&id='.$id.'&user_id=\'+options.rowId+\'">'.$controlPoint.'</a>'.
+    '&nbsp;'.$link.
     '&nbsp;<a href="'.$urlStats.'mySpace/myStudents.php?student=\'+options.rowId+\'">'.$reportingIcon.'</a>'.
     ' <a onclick="javascript:if(!confirm('."\'".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES))."\'".')) return false;" href="?id='.$id.'&action=delete&user_id=\'+options.rowId+\'">'.$deleteIcon.'</a>\';
 }
@@ -237,31 +239,33 @@ function extra_formatter(cellvalue, options, rowObject) {
 
 $deleteUrl = api_get_path(WEB_AJAX_PATH).'usergroup.ajax.php?a=delete_user_in_usergroup&group_id='.$id;
 
-$form = new FormValidator(
-    'add_multiple_calendar',
-    'post',
-    api_get_self().'?id='.$id.'&action=add_multiple_users_to_calendar'
-);
-$calendarPlugin->getAddUserToCalendarForm($form);
-$form->addHidden('user_list', '');
-$form->addButtonSave(get_lang('Add'));
+if ($calendarPlugin) {
+    $form = new FormValidator(
+        'add_multiple_calendar',
+        'post',
+        api_get_self().'?id='.$id.'&action=add_multiple_users_to_calendar'
+    );
+    $calendarPlugin->getAddUserToCalendarForm($form);
+    $form->addHidden('user_list', '');
+    $form->addButtonSave(get_lang('Add'));
+}
 
 ?>
 <script>
 $(function() {
-<?php
-    // grid definition see the $usergroup>display() function
-    echo Display::grid_js(
-        'usergroups',
-        $url,
-        $columns,
-        $column_model,
-        $extraParams,
-        [],
-        $action_links,
-        true
-    );
-?>
+    <?php
+        // grid definition see the $usergroup>display() function
+        echo Display::grid_js(
+            'usergroups',
+            $url,
+            $columns,
+            $column_model,
+            $extraParams,
+            [],
+            $action_links,
+            true
+        );
+    ?>
     $("#usergroups").jqGrid(
         "navGrid",
         "#usergroups_pager",
@@ -271,6 +275,7 @@ $(function() {
         { reloadAfterSubmit:false, url: "<?php echo $deleteUrl; ?>" }, // del options
         { width:500 } // search options
     )
+    <?php if ($calendarPlugin) { ?>
     .navButtonAdd('#usergroups_pager',{
         caption:"<?php echo addslashes($calendarPlugin->get_lang('UpdateCalendar')); ?>",
         buttonicon:"ui-icon ui-icon-plus",
@@ -284,10 +289,12 @@ $(function() {
             }
         },
         position:"last"
-    });
+    })
+    <?php } ?>
+    ;
 });
 </script>
-
+<?php if ($calendarPlugin) { ?>
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -304,7 +311,7 @@ $(function() {
         </div>
     </div>
 </div>
-
+<?php } ?>
 <?php
 
 $usergroup->showGroupTypeSetting = true;
@@ -314,8 +321,8 @@ if ($action === 'delete' && is_numeric($_GET['id'])) {
     Display::addFlash(Display::return_message(get_lang('Deleted'), 'confirmation'));
     header('Location: '.api_get_self().'?id='.$id);
     exit;
-} else {
-    $usergroup->displayToolBarUserGroupUsers();
 }
+
+$usergroup->displayToolBarUserGroupUsers();
 
 Display::display_footer();

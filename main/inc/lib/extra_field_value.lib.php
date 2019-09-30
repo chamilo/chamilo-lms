@@ -1031,27 +1031,6 @@ class ExtraFieldValue extends Model
     }
 
     /**
-     * Deletes values of a specific field for a specific item.
-     *
-     * @param int $item_id  (session id, course id, etc)
-     * @param int $field_id
-     * @assert (-1,-1) == null
-     */
-    public function delete_values_by_handler_and_field_id($item_id, $field_id)
-    {
-        $field_id = (int) $field_id;
-        $item_id = (int) $item_id;
-        $extraFieldType = $this->getExtraField()->getExtraFieldType();
-
-        $sql = "DELETE FROM {$this->table}
-                WHERE
-                    item_id = '$item_id' AND
-                    field_id = '$field_id'
-                ";
-        Database::query($sql);
-    }
-
-    /**
      * Deletes all values from an item.
      *
      * @param int $itemId (session id, course id, etc)
@@ -1106,20 +1085,6 @@ class ExtraFieldValue extends Model
         }
 
         return false;
-    }
-
-    /**
-     * Not yet implemented - Compares the field values of two items.
-     *
-     * @param int $item_id         Item 1
-     * @param int $item_to_compare Item 2
-     *
-     * @todo
-     *
-     * @return mixed Differential array generated from the comparison
-     */
-    public function compareItemValues($item_id, $item_to_compare)
-    {
     }
 
     /**

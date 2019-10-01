@@ -1258,8 +1258,8 @@ svg circle{
 }
 .mejs__overlay-button {
     position: absolute;
-    top: 40%;
-    left: 45%;
+    top: 50%;
+    left: 50%;
     width: 200px;
     height: 200px;
     margin: -50px 0 0 -50px;
@@ -1270,6 +1270,9 @@ svg circle{
 }
 .mejs__container.mejs__video{
     margin: 20px auto;
+}
+.exercise_description .mejs__container.mejs__video {
+    margin: inherit;
 }
 #home-welcome{
     line-height: 20px;

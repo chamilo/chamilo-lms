@@ -211,13 +211,13 @@ if ($action != 'export') {
                 oHidn.type = "hidden";
                 var selname = oHidn.name = "marks_" + m_id[i];
 
-                var foo = document.forms['marksform_' + m_id[i]].marks;
+                var elMarks = document.forms['marksform_' + m_id[i]].marks;
 
-                if (foo.tagName.toLowerCase() === 'select') {
-                    var selid = document.forms['marksform_' + m_id[i]].marks.selectedIndex;
-                    oHidn.value = document.forms['marksform_' + m_id[i]].marks.options[selid].value;
-                } else if (foo.tagName.toLowerCase() === 'input') {
-                    oHidn.value = document.forms['marksform_' + m_id[i]].marks.value;
+                if (elMarks.tagName.toLowerCase() === 'select') {
+                    var selid = elMarks.selectedIndex;
+                    oHidn.value = elMarks.options[selid].value;
+                } else if (elMarks.tagName.toLowerCase() === 'input') {
+                    oHidn.value = elMarks.value;
                 }
 
                 f.appendChild(oHidn);

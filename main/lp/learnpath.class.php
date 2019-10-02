@@ -2380,13 +2380,22 @@ class learnpath
         // @todo remove this query and load the row info as a parameter
         $table = Database::get_course_table(TABLE_LP_MAIN);
         // Get current prerequisite
-        $sql = "SELECT id, prerequisite, subscribe_users, publicated_on, expired_on
+        $sql = "SELECT id, prerequisite, subscribe_users, publicated_on, expired_on, category_id
                 FROM $table
                 WHERE iid = $lp_id";
         $rs = Database::query($sql);
         $now = time();
         if (Database::num_rows($rs) > 0) {
             $row = Database::fetch_array($rs, 'ASSOC');
+
+            if (!empty($row['category_id'])) {
+                $em = Database::getManager();
+                $category = $em->getRepository('ChamiloCourseBundle:CLpCategory')->find($row['category_id']);
+                if (self::categoryIsVisibleForStudent($category, api_get_user_entity($student_id)) === false) {
+                    return false;
+                }
+            }
+
             $prerequisite = $row['prerequisite'];
             $is_visible = true;
 
@@ -4372,24 +4381,9 @@ class learnpath
     public static function toggleCategoryVisibility($id, $visibility = 1)
     {
         $action = 'visible';
-
         if ($visibility != 1) {
-            $action = 'invisible';
-            $list = new LearnpathList(
-                api_get_user_id(),
-                null,
-                null,
-                null,
-                false,
-                $id
-            );
-
-            $lpList = $list->get_flat_list();
-            foreach ($lpList as $lp) {
-                self::toggle_visibility($lp['iid'], 0);
-            }
-
             self::toggleCategoryPublish($id, 0);
+            $action = 'invisible';
         }
 
         return api_item_property_update(
@@ -4545,7 +4539,7 @@ class learnpath
                     $sessionCondition
             ")
             ->setParameters([
-                'course' => (int) $courseId,
+                'course' => $courseId,
                 'link1' => $link,
                 'link2' => "$link%",
             ])
@@ -4614,10 +4608,8 @@ class learnpath
         $courseId = 0,
         $sessionId = 0
     ) {
-        $subscriptionSettings = self::getSubscriptionSettings();
-
-        if ($subscriptionSettings['allow_add_users_to_lp_category'] == false) {
-            return true;
+        if (empty($category)) {
+            return false;
         }
 
         $isAllowedToEdit = api_is_allowed_to_edit(null, true);
@@ -4626,8 +4618,26 @@ class learnpath
             return true;
         }
 
-        if (empty($category)) {
+        $courseId = empty($courseId) ? api_get_course_int_id() : (int) $courseId;
+        $sessionId = empty($sessionId) ? api_get_session_id() : (int) $sessionId;
+
+        $courseInfo = api_get_course_info_by_id($courseId);
+
+        $categoryVisibility = api_get_item_visibility(
+            $courseInfo,
+            TOOL_LEARNPATH_CATEGORY,
+            $category->getId(),
+            $sessionId
+        );
+
+        if ($categoryVisibility !== 1 && $categoryVisibility != -1) {
             return false;
+        }
+
+        $subscriptionSettings = self::getSubscriptionSettings();
+
+        if ($subscriptionSettings['allow_add_users_to_lp_category'] == false) {
+            return true;
         }
 
         $users = $category->getUsers();
@@ -4635,9 +4645,6 @@ class learnpath
         if (empty($users) || !$users->count()) {
             return true;
         }
-
-        $courseId = empty($courseId) ? api_get_course_int_id() : (int) $courseId;
-        $sessionId = empty($sessionId) ? api_get_session_id() : (int) $sessionId;
 
         if ($category->hasUserAdded($user)) {
             return true;

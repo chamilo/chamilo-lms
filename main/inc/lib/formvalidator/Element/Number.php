@@ -20,7 +20,6 @@ class Number extends HTML_QuickForm_text
         }
 
         $attributes['type'] = 'number';
-        $attributes['class'] = 'form-control';
 
         parent::__construct($elementName, $elementLabel, $attributes);
         $this->_appendName = true;

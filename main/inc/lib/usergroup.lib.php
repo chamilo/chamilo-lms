@@ -293,9 +293,18 @@ class UserGroup extends Model
     {
         // action links
         echo '<div class="actions">';
-        echo '<a href="../admin/usergroups.php">'.
-            Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('PlatformAdmin'), '', '32').
-            '</a>';
+        $courseInfo = api_get_course_info();
+        if (empty($courseInfo)) {
+            echo '<a href="../admin/usergroups.php">'.
+                Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('PlatformAdmin'), '', '32').
+                '</a>';
+        } else {
+            echo Display::url(
+                Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('PlatformAdmin'), '', '32'),
+                api_get_path(WEB_CODE_PATH).'user/class.php?'.api_get_cidreq()
+            );
+        }
+
         echo '</div>';
         echo Display::grid_html('usergroups');
     }
@@ -2868,22 +2877,34 @@ class UserGroup extends Model
      * Check permissions and blocks the page.
      *
      * @param array $userGroupInfo
+     * @param bool  $checkAuthor
+     * @param bool  $checkCourseIsAllow
      */
-    public function protectScript($userGroupInfo = [])
+    public function protectScript($userGroupInfo = [], $checkAuthor = true, $checkCourseIsAllow = false)
     {
         api_block_anonymous_users();
 
-        if (!api_is_platform_admin()) {
-            if (api_is_teacher()) {
-                if (!empty($userGroupInfo)) {
-                    if ($userGroupInfo['author_id'] != api_get_user_id()) {
-                        api_not_allowed(true);
-                    }
-                }
-            } else {
-                api_protect_admin_script(true);
-                api_protect_limit_for_session_admin();
+        if (api_is_platform_admin()) {
+            return true;
+        }
+
+        if ($checkCourseIsAllow) {
+            if (api_is_allowed_to_edit()) {
+                return true;
             }
+        }
+
+        if ($this->allowTeachers() && api_is_teacher()) {
+            if ($checkAuthor && !empty($userGroupInfo)) {
+                if (isset($userGroupInfo['author_id']) && $userGroupInfo['author_id'] != api_get_user_id()) {
+                    api_not_allowed(true);
+                }
+            }
+
+            return true;
+        } else {
+            api_protect_admin_script(true);
+            api_protect_limit_for_session_admin();
         }
     }
 }

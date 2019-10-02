@@ -8314,7 +8314,6 @@ class Exercise
         $studentCount = 0;
         $sum = 0;
         $bestResult = 0;
-        $weight = 0;
         $sumResult = 0;
         $result = Database::query($sql);
         while ($data = Database::fetch_array($result, 'ASSOC')) {
@@ -8328,13 +8327,10 @@ class Exercise
             if (!isset($students[$data['exe_user_id']])) {
                 if ($data['exe_weighting'] != 0) {
                     $students[$data['exe_user_id']] = $data['exe_result'];
-                    $studentCount++;
                     if ($data['exe_result'] > $bestResult) {
                         $bestResult = $data['exe_result'];
                     }
-                    $sum += $data['exe_result'] / $data['exe_weighting'];
                     $sumResult += $data['exe_result'];
-                    $weight = $data['exe_weighting'];
                 }
             }
         }
@@ -8429,10 +8425,14 @@ class Exercise
         // Condition for the session
         $condition_session = api_get_session_condition($sessionId, true, true);
         $content = '';
+        $column = 0;
+        if ($is_allowedToEdit) {
+            $column = 1;
+        }
 
         $table = new SortableTableFromArrayConfig(
             [],
-            1,
+            $column,
             self::PAGINATION_ITEMS_PER_PAGE,
             'exercises_cat_'.$categoryId
         );
@@ -9358,7 +9358,6 @@ class Exercise
             if (empty($tableRows)) {
                 return '';
             }
-
             $table->setTableData($tableRows);
             $table->setTotalNumberOfItems($total);
             $table->set_additional_parameters([

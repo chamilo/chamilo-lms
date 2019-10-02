@@ -7477,14 +7477,21 @@ class TrackingCourseLog
             $user['first_connection'] = Tracking::get_first_connection_date_on_the_course(
                 $user['user_id'],
                 $courseId,
-                $session_id
+                $session_id,
+                $export_csv === false
             );
+
             $user['last_connection'] = Tracking::get_last_connection_date_on_the_course(
                 $user['user_id'],
                 $courseInfo,
                 $session_id,
                 $export_csv === false
             );
+
+            if ($export_csv) {
+                $user['first_connection'] = api_get_local_time($user['first_connection']);
+                $user['last_connection'] = api_get_local_time($user['last_connection']);
+            }
 
             if (empty($session_id)) {
                 $user['survey'] = (isset($survey_user_list[$user['user_id']]) ? $survey_user_list[$user['user_id']] : 0).' / '.$total_surveys;

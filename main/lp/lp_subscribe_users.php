@@ -68,12 +68,13 @@ if (!$session) {
         ->getQuery()
         ->getResult();
 } else {
-    $session->getUserCourseSubscriptionsByStatus($course, Session::STUDENT)
-        ->forAll(
-            function ($i, SessionRelCourseRelUser $sessionCourseUser) use (&$subscribedUsers) {
-                $subscribedUsers[$i] = $sessionCourseUser->getUser();
-            }
-        );
+    $list = $session->getUserCourseSubscriptionsByStatus($course, Session::STUDENT);
+    if ($list) {
+        /** @var SessionRelCourseRelUser $sessionCourseUser */
+        foreach ($list as $sessionCourseUser) {
+            $subscribedUsers[$sessionCourseUser->getUser()->getUserId()] = $sessionCourseUser->getUser();
+        }
+    }
 }
 
 // Getting all users in a nice format.

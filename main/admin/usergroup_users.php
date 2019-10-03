@@ -4,7 +4,6 @@
 /**
  *  @package chamilo.admin
  */
-
 require_once __DIR__.'/../inc/global.inc.php';
 
 $this_section = SECTION_PLATFORM_ADMIN;
@@ -36,7 +35,6 @@ if (empty($courseInfo)) {
     $interbreadcrumb[] = ['url' => 'usergroups.php', 'name' => get_lang('Classes')];
 } else {
     $interbreadcrumb[] = ['url' => api_get_path(WEB_CODE_PATH).'user/class.php?'.api_get_cidreq(), 'name' => get_lang('Classes')];
-
 }
 $interbreadcrumb[] = ['url' => '#', 'name' => $userGroupInfo['name']];
 

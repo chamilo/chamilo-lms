@@ -1771,7 +1771,7 @@ class Display
             $session['num_courses'] = $session_info['nbr_courses'];
             $session['description'] = $session_info['description'];
             $session['show_description'] = $session_info['show_description'];
-            $session['image'] = SessionManager::getSessionImage($session_info['id']);
+            //$session['image'] = SessionManager::getSessionImage($session_info['id']);
             $session['url'] = api_get_path(WEB_CODE_PATH).'session/index.php?session_id='.$session_info['id'];
 
             $entityManager = Database::getManager();

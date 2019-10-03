@@ -475,7 +475,7 @@ class UserPortalController extends BaseController
         $countCourses = \CourseManager::count_courses();
 
         return $this->render(
-            'ChamiloThemeBundle:Index:userportal.html.twig',
+            'ChamiloThemeBundle:Index:userportal_new.html.twig',
             [
                 'content' => $items,
                 'count_courses' => $countCourses,

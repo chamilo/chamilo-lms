@@ -255,7 +255,7 @@ class AppPlugin
     /**
      * @return array
      */
-    public function get_plugin_regions()
+    public function getPluginRegions()
     {
         sort($this->plugin_regions);
 

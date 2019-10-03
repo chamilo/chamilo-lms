@@ -44,7 +44,7 @@ if (!GroupManager::userHasAccessToBrowse($user_id, $current_group, api_get_sessi
  * User wants to register in this group
  */
 if (!empty($_GET['selfReg']) &&
-    GroupManager :: is_self_registration_allowed($user_id, $current_group)
+    GroupManager::is_self_registration_allowed($user_id, $current_group)
 ) {
     GroupManager::subscribe_users($user_id, $current_group);
     Display::addFlash(Display::return_message(get_lang('GroupNowMember')));
@@ -54,7 +54,7 @@ if (!empty($_GET['selfReg']) &&
  * User wants to unregister from this group
  */
 if (!empty($_GET['selfUnReg']) &&
-    GroupManager :: is_self_unregistration_allowed($user_id, $current_group)
+    GroupManager::is_self_unregistration_allowed($user_id, $current_group)
 ) {
     GroupManager::unsubscribe_users($user_id, $current_group);
     Display::addFlash(
@@ -84,7 +84,7 @@ echo '<a href="'.api_get_path(WEB_CODE_PATH).'group/group.php?'.api_get_cidreq()
  * Register to group
  */
 $subscribe_group = '';
-if (GroupManager :: is_self_registration_allowed($user_id, $current_group)) {
+if (GroupManager::is_self_registration_allowed($user_id, $current_group)) {
     $subscribe_group = '<a class="btn btn-default" href="'.api_get_self().'?selfReg=1&group_id='.$current_group['id'].'" onclick="javascript: if(!confirm('."'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"), ENT_QUOTES))."'".')) return false;">'.
         get_lang('RegIntoGroup').'</a>';
 }

@@ -636,8 +636,9 @@ if ($extraConditions && $extraFieldsLoaded) {
                 $element->setLabel(
                     [
                         '',
-                        //'<textarea rows="5" disabled cols="100%">'.get_lang($condition['text_area']).'</textarea>',
-                        '<div class="form-control" disabled=disabled style="height: 100px; overflow: auto;">'.get_lang($condition['text_area']).'</div>',
+                        '<div class="form-control" disabled=disabled style="height: 100px; overflow: auto;">'.
+                        get_lang(nl2br($condition['text_area'])).
+                        '</div>',
                     ]
                 );
             }

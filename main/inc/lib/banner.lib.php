@@ -534,7 +534,6 @@ function return_breadcrumb($interbreadcrumb, $language_file, $nameTools)
         $i = 0;
         $final_navigation_count = count($final_navigation);
         if (!empty($final_navigation)) {
-            // $home_link.= '<span class="divider">/</span>';
             if (!empty($home_link)) {
                 $lis .= Display::tag('li', $home_link);
             }
@@ -557,7 +556,7 @@ function return_breadcrumb($interbreadcrumb, $language_file, $nameTools)
 
         // View as student/teacher link
         if (!empty($view_as_student_link)) {
-            $html .= Display::tag('div', $view_as_student_link, ['id' => 'view_as_link', 'class' => 'float-right']);
+            $html .= Display::tag('div', $view_as_student_link, ['id' => 'view_as_link', 'class' => 'pull-right']);
         }
 
         if (!empty($navigation_right)) {
@@ -566,7 +565,7 @@ function return_breadcrumb($interbreadcrumb, $language_file, $nameTools)
                 $lis .= Display::tag(
                     'li',
                     $item['title'],
-                    ['class' => $extra_class.' float-right']
+                    ['class' => $extra_class.' pull-right']
                 );
             }
         }

@@ -22,7 +22,7 @@ use Doctrine\DBAL\Types\Type;
  */
 class Exercise
 {
-    const PAGINATION_ITEMS_PER_PAGE = 5;
+    const PAGINATION_ITEMS_PER_PAGE = 20;
     public $iId;
     public $id;
     public $name;
@@ -1720,9 +1720,6 @@ class Exercise
         }
 
         $this->save_categories_in_exercise($this->categories);
-
-        // Updates the question position
-        $this->update_question_positions();
 
         return $this->iId;
     }
@@ -8292,7 +8289,6 @@ class Exercise
         $studentCount = 0;
         $sum = 0;
         $bestResult = 0;
-        $weight = 0;
         $sumResult = 0;
         $result = Database::query($sql);
         while ($data = Database::fetch_array($result, 'ASSOC')) {
@@ -8306,13 +8302,10 @@ class Exercise
             if (!isset($students[$data['exe_user_id']])) {
                 if ($data['exe_weighting'] != 0) {
                     $students[$data['exe_user_id']] = $data['exe_result'];
-                    $studentCount++;
                     if ($data['exe_result'] > $bestResult) {
                         $bestResult = $data['exe_result'];
                     }
-                    $sum += $data['exe_result'] / $data['exe_weighting'];
                     $sumResult += $data['exe_result'];
-                    $weight = $data['exe_weighting'];
                 }
             }
         }
@@ -8407,15 +8400,19 @@ class Exercise
         // Condition for the session
         $condition_session = api_get_session_condition($sessionId, true, true);
         $content = '';
+        $column = 0;
+        if ($is_allowedToEdit) {
+            $column = 1;
+        }
 
         $table = new SortableTableFromArrayConfig(
             [],
-            1,
+            $column,
             self::PAGINATION_ITEMS_PER_PAGE,
             'exercises_cat_'.$categoryId
         );
 
-        $limit = self::PAGINATION_ITEMS_PER_PAGE;
+        $limit = $table->per_page;
         $page = $table->page_nr;
         $from = $limit * ($page - 1);
 
@@ -8469,7 +8466,7 @@ class Exercise
                           active = 1
                           $condition_session
                           $categoryCondition
-                          $keywordCondition
+                          $keywordCondition 
                     ORDER BY title
                     LIMIT $from , $limit";
         }
@@ -9132,7 +9129,7 @@ class Exercise
                         }
 
                         $currentRow = [
-                            $row['iid'],
+                            $row['id'],
                             $currentRow['title'],
                             $currentRow['count_questions'],
                             $actions,
@@ -9176,7 +9173,7 @@ class Exercise
 
         $result = Database::query($sql);
         $attributes = [];
-        while ($row = Database :: fetch_array($result, 'ASSOC')) {
+        while ($row = Database::fetch_array($result, 'ASSOC')) {
             $attributes[$row['iid']] = $row;
         }
 
@@ -9336,9 +9333,7 @@ class Exercise
             if (empty($tableRows)) {
                 return '';
             }
-
             $table->setTableData($tableRows);
-
             $table->setTotalNumberOfItems($total);
             $table->set_additional_parameters([
                 'cidReq' => api_get_course_id(),

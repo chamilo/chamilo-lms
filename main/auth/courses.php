@@ -42,10 +42,7 @@ if (api_is_platform_admin() || api_is_course_admin() || api_is_allowed_to_create
 
 // filter actions
 $actions = [
-    'sortmycourses',
-    'createcoursecategory',
     'subscribe',
-    'deletecoursecategory',
     'display_courses',
     'display_random_courses',
     'subscribe_user_with_password',
@@ -53,7 +50,6 @@ $actions = [
     'subscribe_to_session',
     'search_tag',
     'search_session',
-    'set_collapsable',
     'subscribe_course_validation',
     'subscribe_course',
 ];
@@ -72,18 +68,11 @@ if (empty($nameTools)) {
 } else {
     if (!in_array(
         $action,
-        ['sortmycourses', 'createcoursecategory', 'display_random_courses', 'display_courses', 'subscribe']
+        ['display_random_courses', 'display_courses', 'subscribe']
     )) {
         $interbreadcrumb[] = [
             'url' => api_get_path(WEB_CODE_PATH).'auth/courses.php',
             'name' => get_lang('CourseManagement'),
-        ];
-    }
-
-    if ($action === 'createcoursecategory') {
-        $interbreadcrumb[] = [
-            'url' => api_get_path(WEB_CODE_PATH).'auth/courses.php?action=sortmycourses',
-            'name' => get_lang('SortMyCourses'),
         ];
     }
     $interbreadcrumb[] = ['url' => '#', 'name' => $nameTools];
@@ -91,53 +80,6 @@ if (empty($nameTools)) {
 
 // course description controller object
 $courseController = new CoursesController();
-
-// We are moving a course or category of the user up/down the list (=Sort My Courses).
-if (isset($_GET['move'])) {
-    if (isset($_GET['course'])) {
-        $courseController->move_course(
-            $_GET['move'],
-            $_GET['course'],
-            $_GET['category']
-        );
-    }
-    if (isset($_GET['category']) && !isset($_GET['course'])) {
-        $courseController->move_category($_GET['move'], $_GET['category']);
-    }
-}
-
-// We are moving the course of the user to a different user defined course category (=Sort My Courses).
-if (isset($_POST['submit_change_course_category'])) {
-    if (!empty($_POST['sec_token']) && $ctok == $_POST['sec_token']) {
-        $courseController->change_course_category(
-            $_POST['course_2_edit_category'],
-            $_POST['course_categories']
-        );
-    }
-}
-
-// We edit course category
-if (isset($_POST['submit_edit_course_category']) &&
-    isset($_POST['title_course_category']) &&
-    strlen(trim($_POST['title_course_category'])) > 0
-) {
-    if (!empty($_POST['sec_token']) && $ctok == $_POST['sec_token']) {
-        $courseController->edit_course_category(
-            $_POST['title_course_category'],
-            $_POST['edit_course_category']
-        );
-    }
-}
-
-// We are creating a new user defined course category (= Create Course Category).
-if (isset($_POST['create_course_category']) &&
-    isset($_POST['title_course_category']) &&
-    strlen(trim($_POST['title_course_category'])) > 0
-) {
-    if (!empty($_POST['sec_token']) && $ctok == $_POST['sec_token']) {
-        $courseController->addCourseCategory($_POST['title_course_category']);
-    }
-}
 
 // search courses
 if (isset($_REQUEST['search_course'])) {
@@ -173,18 +115,6 @@ if (isset($_POST['unsubscribe'])) {
 }
 
 switch ($action) {
-    case 'deletecoursecategory':
-        // we are deleting a course category
-        if (isset($_GET['id'])) {
-            if (Security::check_token('get')) {
-                $courseController->delete_course_category($_GET['id']);
-                header('Location: '.api_get_self());
-                exit;
-            }
-        }
-
-        $courseController->courseList($action);
-        break;
     case 'subscribe_course':
         if (api_is_anonymous()) {
             header('Location: '.api_get_path(WEB_CODE_PATH).'auth/inscription.php?c='.$courseCodeToSubscribe);
@@ -236,12 +166,6 @@ switch ($action) {
         $template = new Template(get_lang('Subscribe'), true, true, false, false, false);
         $template->assign('content', $content);
         $template->display_one_col_template();
-        break;
-    case 'createcoursecategory':
-        $courseController->categoryList();
-        break;
-    case 'sortmycourses':
-        $courseController->courseList($action);
         break;
     case 'subscribe':
         if (!$user_can_view_page) {
@@ -365,38 +289,5 @@ switch ($action) {
         }
 
         $courseController->sessionListBySearch($limit);
-        break;
-    case 'set_collapsable':
-        api_block_anonymous_users();
-
-        if (!api_get_configuration_value('allow_user_course_category_collapsable')) {
-            api_not_allowed(true);
-        }
-
-        $userId = api_get_user_id();
-        $categoryId = isset($_REQUEST['categoryid']) ? (int) $_REQUEST['categoryid'] : 0;
-        $option = isset($_REQUEST['option']) ? (int) $_REQUEST['option'] : 0;
-        $redirect = isset($_REQUEST['redirect']) ? $_REQUEST['redirect'] : 0;
-
-        if (empty($userId) || empty($categoryId)) {
-            api_not_allowed(true);
-        }
-
-        $table = Database::get_main_table(TABLE_USER_COURSE_CATEGORY);
-        $sql = "UPDATE $table 
-                SET collapsed = $option
-                WHERE user_id = $userId AND id = $categoryId";
-        Database::query($sql);
-        Display::addFlash(Display::return_message(get_lang('Updated')));
-
-        if ($redirect === 'home') {
-            $url = api_get_path(WEB_PATH).'user_portal.php';
-            header('Location: '.$url);
-            exit;
-        }
-
-        $url = api_get_path(WEB_CODE_PATH).'auth/courses.php?action=sortmycourses';
-        header('Location: '.$url);
-        exit;
         break;
 }

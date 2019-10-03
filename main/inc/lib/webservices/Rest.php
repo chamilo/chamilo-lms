@@ -19,6 +19,8 @@ class Rest extends WebService
 
     const GET_AUTH = 'authenticate';
     const GET_USER_MESSAGES = 'user_messages';
+    const POST_USER_MESSAGE_READ = 'user_message_read';
+    const POST_USER_MESSAGE_UNREAD = 'user_message_unread';
     const SAVE_GCM_ID = 'gcm_id';
     const GET_USER_COURSES = 'user_courses';
     const GET_PROFILE = 'user_profile';
@@ -133,7 +135,7 @@ class Rest extends WebService
      */
     public static function validate($username, $apiKeyToValidate)
     {
-        $apiKey = self::findUserApiKey($username, self::SERVIVE_NAME);
+        $apiKey = self::findUserApiKey($username, self::SERVICE_NAME);
 
         if ($apiKey != $apiKeyToValidate) {
             throw new Exception(get_lang('InvalidApiKey'));
@@ -201,7 +203,8 @@ class Rest extends WebService
                 'sendDate' => $message['send_date'],
                 'content' => $message['content'],
                 'hasAttachments' => $hasAttachments,
-                'url' => '',
+                'url' => api_get_path(WEB_CODE_PATH).'messages/view_message.php?'
+                    .http_build_query(['type' => 1, 'id' => $message['id']]),
             ];
         }
 
@@ -211,6 +214,10 @@ class Rest extends WebService
     /**
      * Get the user courses.
      *
+     * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws \Doctrine\ORM\TransactionRequiredException
+     * @throws \Doctrine\ORM\ORMException
+     *
      * @return array
      */
     public function getUserCourses()
@@ -218,18 +225,21 @@ class Rest extends WebService
         $courses = CourseManager::get_courses_list_by_user_id($this->user->getId());
         $data = [];
 
-        foreach ($courses as $courseId) {
+        foreach ($courses as $courseInfo) {
             /** @var Course $course */
-            $course = Database::getManager()->find('ChamiloCoreBundle:Course', $courseId['real_id']);
+            $course = Database::getManager()->find('ChamiloCoreBundle:Course', $courseInfo['real_id']);
             $teachers = CourseManager::getTeacherListFromCourseCodeToString($course->getCode());
+            $picturePath = CourseManager::getPicturePath($course, true)
+                ?: Display::return_icon('session_default.png', null, null, null, null, true);
 
             $data[] = [
                 'id' => $course->getId(),
                 'title' => $course->getTitle(),
                 'code' => $course->getCode(),
                 'directory' => $course->getDirectory(),
-                'urlPicture' => CourseManager::getPicturePath($course, true),
+                'urlPicture' => $picturePath,
                 'teachers' => $teachers,
+                'isSpecial' => !empty($courseInfo['special_course']),
             ];
         }
 
@@ -915,6 +925,7 @@ class Rest extends WebService
                         'code' => $courseInfo['code'],
                         'directory' => $courseInfo['directory'],
                         'pictureUrl' => $courseInfo['course_image_large'],
+                        'urlPicture' => $courseInfo['course_image_large'],
                         'teachers' => $teachers,
                     ];
                 }

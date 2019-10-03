@@ -65,7 +65,7 @@ switch ($action) {
 
             if (api_get_setting('homepage_view') != 'activity_big') {
                 $toolImage = Display::return_icon(
-                    'tool_'.$toolImage,
+                    $toolImage,
                     null,
                     null,
                     null,
@@ -77,7 +77,7 @@ switch ($action) {
                 // Display::return_icon() also checks in the app/Resources/public/css/themes/{theme}/icons folder
                 $toolImage = (substr($toolImage, 0, strpos($toolImage, '.'))).'.png';
                 $toolImage = Display::return_icon(
-                    'tool_'.$toolImage,
+                    $toolImage,
                     get_lang(ucfirst($tool->getName())),
                     null,
                     ICON_SIZE_BIG,
@@ -204,7 +204,8 @@ switch ($action) {
         $count = 0;
         $temp = [];
         foreach ($course_list as $item) {
-            $list = new LearnpathList(api_get_user_id(), $item['code'], $session_id);
+            $courseInfo = api_get_course_info($item['code']);
+            $list = new LearnpathList(api_get_user_id(), $courseInfo, $session_id);
             $flat_list = $list->get_flat_list();
             $lps[$item['code']] = $flat_list;
             $course_url = api_get_path(WEB_COURSE_PATH).$item['directory'].'/?id_session='.$session_id;
@@ -342,7 +343,7 @@ switch ($action) {
 
             $list = new LearnpathList(
                 api_get_user_id(),
-                $item['code'],
+                api_get_course_info($item['code']),
                 $session_id,
                 'lp.publicatedOn DESC'
             );
@@ -485,7 +486,7 @@ switch ($action) {
 
             $list = new LearnpathList(
                 api_get_user_id(),
-                $item['code'],
+                api_get_course_info($item['code']),
                 $session_id
             );
             $flat_list = $list->get_flat_list();

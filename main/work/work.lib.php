@@ -2994,7 +2994,7 @@ function getAllDocumentsFromWorkToString($workId, $courseInfo)
         foreach ($documents as $doc) {
             $docData = DocumentManager::get_document_data_by_id($doc['document_id'], $courseInfo['code']);
             if ($docData) {
-                $content .= '<li><a target="_blank" href="'.$docData['url'].'">'.$docData['title'].'</a></li>';
+                $content .= '<li><a class="link_to_download" target="_blank" href="'.$docData['url'].'">'.$docData['title'].'</a></li>';
             }
         }
         $content .= '</ul><br />';
@@ -3457,7 +3457,7 @@ function addWorkComment($courseInfo, $userId, $parentWork, $work, $data)
             }
         }
 
-        $sendNotification = api_get_course_setting('email_to_teachers_on_new_work_feedback', api_get_course_id());
+        $sendNotification = api_get_course_setting('email_to_teachers_on_new_work_feedback');
         if ($sendNotification != 1) {
             $userIdListToSend = [];
         }

@@ -956,14 +956,14 @@ class IndexManager
                 $items[] = [
                     'class' => 'add-course',
                     'icon' => Display::return_icon('new-course.png', get_lang('CreateCourseRequest')),
-                    'link' => 'main/create_course/add_course.php',
+                    'link' => api_get_path(WEB_CODE_PATH).'create_course/add_course.php',
                     'title' => get_lang('CreateCourseRequest'),
                 ];
             } else {
                 $items[] = [
                     'class' => 'add-course',
                     'icon' => Display::return_icon('new-course.png', get_lang('CourseCreate')),
-                    'link' => 'main/create_course/add_course.php',
+                    'link' => api_get_path(WEB_CODE_PATH).'create_course/add_course.php',
                     'title' => get_lang('CourseCreate'),
                 ];
             }
@@ -972,7 +972,7 @@ class IndexManager
                 $items[] = [
                     'class' => 'add-session',
                     'icon' => Display::return_icon('session.png', get_lang('AddSession')),
-                    'link' => 'main/session/session_add.php',
+                    'link' => api_get_path(WEB_CODE_PATH).'session/session_add.php',
                     'title' => get_lang('AddSession'),
                 ];
             }
@@ -983,7 +983,7 @@ class IndexManager
             $items[] = [
                 'class' => 'order-course',
                 'icon' => Display::return_icon('order-course.png', get_lang('SortMyCourses')),
-                'link' => api_get_path(WEB_CODE_PATH).'auth/courses.php?action=sortmycourses',
+                'link' => api_get_path(WEB_CODE_PATH).'auth/sort_my_courses.php',
                 'title' => get_lang('SortMyCourses'),
             ];
         }
@@ -993,14 +993,14 @@ class IndexManager
             $items[] = [
                 'class' => 'history-course',
                 'icon' => Display::return_icon('history-course.png', get_lang('DisplayTrainingList')),
-                'link' => 'user_portal.php',
+                'link' => api_get_path(WEB_PATH).'user_portal.php',
                 'title' => get_lang('DisplayTrainingList'),
             ];
         } else {
             $items[] = [
                 'class' => 'history-course',
                 'icon' => Display::return_icon('history-course.png', get_lang('HistoryTrainingSessions')),
-                'link' => 'user_portal.php?history=1',
+                'link' => api_get_path(WEB_PATH).'user_portal.php?history=1',
                 'title' => get_lang('HistoryTrainingSessions'),
             ];
         }
@@ -1018,12 +1018,12 @@ class IndexManager
                 $items[] = [
                     'class' => 'list-course',
                     'icon' => Display::return_icon('catalog-course.png', get_lang('CourseCatalog')),
-                    'link' => 'main/auth/courses.php',
+                    'link' => api_get_path(WEB_CODE_PATH).'auth/courses.php',
                     'title' => get_lang('CourseCatalog'),
                 ];
             } else {
                 $items[] = [
-                    'link' => 'main/dashboard/index.php',
+                    'link' => api_get_path(WEB_CODE_PATH).'dashboard/index.php',
                     'title' => get_lang('Dashboard'),
                 ];
             }
@@ -1338,7 +1338,7 @@ class IndexManager
             if (is_array($session_categories)) {
                 foreach ($session_categories as $session_category) {
                     $session_category_id = $session_category['session_category']['id'];
-
+                    // Sessions and courses that are not in a session category
                     if (empty($session_category_id) &&
                         isset($session_category['sessions'])
                     ) {
@@ -1517,11 +1517,11 @@ class IndexManager
 
                                 if ($collapsable) {
                                     $collapsableData = SessionManager::getCollapsableData(
-                                                                    $user_id,
-                                                                    $session_id,
-                                                                    $extraFieldValue,
-                                                                    $collapsableLink
-                                                                );
+                                        $user_id,
+                                        $session_id,
+                                        $extraFieldValue,
+                                        $collapsableLink
+                                    );
                                     $params['collapsed'] = $collapsableData['collapsed'];
                                     $params['collapsable_link'] = $collapsableData['collapsable_link'];
                                 }
@@ -1767,11 +1767,11 @@ class IndexManager
                 $this->tpl->assign('show_tutor', (api_get_setting('show_session_coach') === 'true' ? true : false));
                 $this->tpl->assign('gamification_mode', $gameModeIsActive);
                 $this->tpl->assign('remove_session_url', api_get_configuration_value('remove_session_url'));
-                //$this->tpl->assign('remove_session_url', api_get_setting('session.remove_session_url'));
+
                 if ($viewGridCourses) {
                     $sessions_with_no_category = $this->tpl->fetch(
                         $this->tpl->get_template('/user_portal/grid_session.tpl')
-                );
+                    );
                 } else {
                     $sessions_with_no_category = $this->tpl->fetch(
                         $this->tpl->get_template('user_portal/classic_session.tpl')
@@ -2366,7 +2366,7 @@ class IndexManager
         }
 
         $icon = Display::return_icon(
-            'blackboard_blue.png',
+            'session.png',
             $title,
             ['class' => 'sessionView'],
             ICON_SIZE_LARGE

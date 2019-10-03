@@ -99,4 +99,12 @@ class WebService
             $user->getSalt()
         );
     }
+
+    /**
+     * @return User
+     */
+    public function getUser()
+    {
+        return $this->user;
+    }
 }

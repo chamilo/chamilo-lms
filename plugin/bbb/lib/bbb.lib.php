@@ -92,7 +92,7 @@ class bbb
                     // Course check
                     $courseInfo = api_get_course_info();
                     if ($courseInfo) {
-                        $this->groupSupport = api_get_course_setting('bbb_enable_conference_in_groups', $courseInfo['code']) === '1';
+                        $this->groupSupport = api_get_course_setting('bbb_enable_conference_in_groups', $courseInfo) === '1';
                     }
                 }
             }

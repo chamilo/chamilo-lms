@@ -1123,7 +1123,7 @@ if (!empty($error)) {
             $(".block_on_enter").keypress(function(event) {
                 return event.keyCode != 13;
             });
-
+            
             $(".checkCalculatedQuestionOnEnter").keypress(function(event) {
                 if (event.keyCode === 13) {
                     event.preventDefault();
@@ -1480,7 +1480,7 @@ if (!empty($error)) {
         ) {
             $showQuestion = false;
         }
-        // Shows the question and its answers
+
         // Shows the question and its answers
         if ($showQuestion) {
             ExerciseLib::showQuestion(

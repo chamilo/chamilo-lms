@@ -482,7 +482,7 @@ class Compilatio
      */
     public static function plagiarismDeleteDoc($courseId, $itemId)
     {
-        if (api_get_configuration_value('allow_compilatio_tool')) {
+        if (api_get_configuration_value('allow_compilatio_tool') === false) {
             return false;
         }
 

@@ -179,14 +179,17 @@ if ($session->getNbrCourses() === 0) {
             $course,
             $session
         );
+
         // Get coachs of the courses in session
         $namesOfCoaches = [];
-        $coachSubscriptions = $session->getUserCourseSubscriptionsByStatus($course, Session::COACH)
-            ->forAll(function ($index, SessionRelCourseRelUser $subscription) use (&$namesOfCoaches) {
-                $namesOfCoaches[] = UserManager::formatUserFullName($subscription->getUser(), true);
+        $coachSubscriptions = $session->getUserCourseSubscriptionsByStatus($course, Session::COACH);
 
-                return true;
-            });
+        if ($coachSubscriptions) {
+            /** @var SessionRelCourseRelUser $subscription */
+            foreach ($coachSubscriptions as $subscription) {
+                $namesOfCoaches[] = $subscription->getUser()->getCompleteNameWithUserName();
+            }
+        }
 
         $orderButtons = '';
         if (SessionManager::orderCourseIsEnabled()) {

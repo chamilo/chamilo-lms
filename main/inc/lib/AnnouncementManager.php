@@ -1034,17 +1034,17 @@ class AnnouncementManager
         $sql = "SELECT DISTINCT 
                     announcement.c_id,
                     count(announcement.id) count
-					FROM $tbl_announcement announcement 
-					INNER JOIN $tbl_item_property ip
-					ON (announcement.id = ip.ref AND announcement.c_id = ip.c_id)
-					WHERE
-						ip.tool='announcement' AND
-						(
+                FROM $tbl_announcement announcement 
+                INNER JOIN $tbl_item_property ip
+                ON (announcement.id = ip.ref AND announcement.c_id = ip.c_id)
+                WHERE			
+                    ip.tool='announcement' AND
+                    (
                       ip.to_user_id = '$user_id' AND
-						  (ip.to_group_id='0' OR ip.to_group_id IS NULL)
-						)
-						AND ip.visibility='1'
-						AND announcement.session_id  = 0
+                      (ip.to_group_id='0' OR ip.to_group_id IS NULL)
+                    )
+                    AND ip.visibility='1'
+                    AND announcement.session_id  = 0
                 GROUP BY announcement.c_id";
         $rs = Database::query($sql);
         $num_rows = Database::num_rows($rs);

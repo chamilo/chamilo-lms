@@ -227,7 +227,7 @@ if (!empty($lpAutoLaunch)) {
                 } else {
                     $session_key = 'lp_autolaunch_'.$session_id.'_'.api_get_course_int_id().'_'.api_get_user_id();
                     if (!isset($_SESSION[$session_key])) {
-                        //redirecting to the LP
+                        // Redirecting to the LP
                         $url = api_get_path(WEB_CODE_PATH).'lp/lp_controller.php?'.api_get_cidreq().'&action=view&lp_id='.$lp_data['id'];
 
                         $_SESSION[$session_key] = true;
@@ -325,6 +325,7 @@ if ($documentAutoLaunch == 1) {
     }
 }
 
+// Used in different pages
 $tool_table = Database::get_course_table(TABLE_TOOL_LIST);
 
 /*	Introduction section (editable by course admins) */

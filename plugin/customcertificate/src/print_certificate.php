@@ -31,8 +31,8 @@ if ($default == 1) {
     $courseId = api_get_course_int_id();
     $courseCode = api_get_course_id();
     $sessionId = api_get_session_id();
-    $enableCourse = api_get_course_setting('customcertificate_course_enable', $courseCode) == 1 ? true : false;
-    $useDefault = api_get_course_setting('use_certificate_default', $courseCode) == 1 ? true : false;
+    $enableCourse = api_get_course_setting('customcertificate_course_enable') == 1 ? true : false;
+    $useDefault = api_get_course_setting('use_certificate_default') == 1 ? true : false;
 }
 
 if (empty($courseCode)) {

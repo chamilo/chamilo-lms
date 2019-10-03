@@ -457,7 +457,6 @@ class GradebookTable extends SortableTable
                 }
 
                 $category_weight = $item->get_weight();
-                $mainCategoryWeight = $main_cat[0]->get_weight();
 
                 if ($this->teacherView) {
                     $weight_total_links += $data[3];
@@ -472,12 +471,10 @@ class GradebookTable extends SortableTable
                     }
                 } else {
                     $score = $item->calc_score($this->userId);
-                    $scoreToDisplay = '-';
                     if (!empty($score[1])) {
                         $completeScore = $scoredisplay->display_score($score, SCORE_DIV_PERCENT);
                         $score = $score[0] / $score[1] * $item->get_weight();
                         $score = $scoredisplay->display_score([$score, null], SCORE_SIMPLE);
-                        $scoreToDisplay = Display::tip($score, $completeScore);
                     } else {
                         $categoryScore = null;
                     }
@@ -492,9 +489,6 @@ class GradebookTable extends SortableTable
                         $data['result_score'][0],
                         $data['result_score'][1],
                     ];
-
-                    $totalUserResult[0] += $totalResult[0] / ($totalResult[1] ?: 1) * $data[3];
-                    $totalUserResult[1] += $data[3];
 
                     if (empty($model)) {
                         $totalBest = [
@@ -521,7 +515,6 @@ class GradebookTable extends SortableTable
                     $mode = SCORE_AVERAGE;
                     if ($userExerciseScoreInCategory) {
                         $mode = SCORE_SIMPLE;
-
                         $result = ExerciseLib::convertScoreToPlatformSetting($totalAverage[0], $totalAverage[1]);
                         $totalAverage[0] = $result['score'];
                         $totalAverage[1] = $result['weight'];
@@ -817,8 +810,8 @@ class GradebookTable extends SortableTable
                                 $score = $main_cat[0]->calc_score(
                                     $student['user_id'],
                                     null,
-                                    api_get_course_id(),
-                                    api_get_session_id()
+                                    $course_code,
+                                    $session_id
                                 );
                                 if (!empty($score[0])) {
                                     $invalidateRanking = false;
@@ -919,7 +912,7 @@ class GradebookTable extends SortableTable
 
                 $content_html = DocumentManager::replace_user_info_into_html(
                     api_get_user_id(),
-                    api_get_course_info(),
+                    $course_code,
                     api_get_session_id()
                 );
 

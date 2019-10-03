@@ -1840,49 +1840,6 @@ class Tracking
     }
 
     /**
-     * Get las connection date for a student.
-     *
-     * @param array $studentList Student id array
-     * @param int   $days
-     * @param bool  $getCount
-     *
-     * @return int
-     */
-    public static function getInactiveUsers($studentList, $days, $getCount = true)
-    {
-        if (empty($studentList)) {
-            return 0;
-        }
-        $days = (int) $days;
-        $date = api_get_utc_datetime(strtotime($days.' days ago'));
-        $studentList = array_map('intval', $studentList);
-
-        $tbl_track_login = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
-        $select = " SELECT login_user_id ";
-        if ($getCount) {
-            $select = " SELECT count(DISTINCT login_user_id) as count";
-        }
-        $sql = "$select
-                FROM $tbl_track_login
-                WHERE
-                    login_user_id IN (' ".implode("','", $studentList)."' ) AND
-                    login_date < '$date'
-                ";
-        $rs = Database::query($sql);
-        if (Database::num_rows($rs) > 0) {
-            if ($getCount) {
-                $count = Database::fetch_array($rs);
-
-                return $count['count'];
-            }
-
-            return Database::store_result($rs, 'ASSOC');
-        }
-
-        return false;
-    }
-
-    /**
      * Get first user's connection date on the course.
      *
      * @param int User id
@@ -1902,51 +1859,30 @@ class Tracking
         $courseId = (int) $courseId;
         $session_id = (int) $session_id;
 
-        if (self::minimumTimeAvailable($session_id, $courseId)) {
-            $tbl_track_e_access = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ACCESS);
-            $sql = 'SELECT access_date
-                    FROM '.$tbl_track_e_access.'
-                    WHERE   access_user_id = '.$student_id.' AND
-                            c_id = "'.$courseId.'" AND
-                            access_session_id = '.$session_id.'
-                    ORDER BY access_date ASC
-                    LIMIT 0,1';
+        $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
+        $sql = 'SELECT login_course_date
+                FROM '.$table.'
+                WHERE
+                    user_id = '.$student_id.' AND
+                    c_id = '.$courseId.' AND
+                    session_id = '.$session_id.'
+                ORDER BY login_course_date ASC 
+                LIMIT 0,1';
+        $rs = Database::query($sql);
+        if (Database::num_rows($rs) > 0) {
+            if ($first_login_date = Database::result($rs, 0, 0)) {
+                if (empty($first_login_date)) {
+                    return false;
+                }
 
-            $rs = Database::query($sql);
-            if (Database::num_rows($rs) > 0) {
-                if ($last_login_date = Database::result($rs, 0, 0)) {
-                    if (empty($last_login_date)) {
-                        return false;
-                    }
-                    if ($convert_date) {
-                        return api_convert_and_format_date($last_login_date, DATE_FORMAT_SHORT);
-                    } else {
-                        return $last_login_date;
-                    }
+                if ($convert_date) {
+                    return api_convert_and_format_date(
+                        $first_login_date,
+                        DATE_FORMAT_SHORT
+                    );
                 }
-            }
-        } else {
-            $tbl_track_login = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
-            $sql = 'SELECT login_course_date
-                    FROM '.$tbl_track_login.'
-                    WHERE
-                        user_id = '.$student_id.' AND
-                        c_id = '.$courseId.' AND
-                        session_id = '.$session_id.'
-                    ORDER BY login_course_date ASC 
-                    LIMIT 0,1';
-            $rs = Database::query($sql);
-            if (Database::num_rows($rs) > 0) {
-                if ($first_login_date = Database::result($rs, 0, 0)) {
-                    if ($convert_date) {
-                        return api_convert_and_format_date(
-                            $first_login_date,
-                            DATE_FORMAT_SHORT
-                        );
-                    } else {
-                        return $first_login_date;
-                    }
-                }
+
+                return $first_login_date;
             }
         }
 
@@ -2465,182 +2401,6 @@ class Tracking
         }
 
         return $result.'%';
-    }
-
-    /**
-     * get teacher progress by course and session.
-     *
-     * @param int course id
-     * @param int session id
-     *
-     * @return array
-     */
-    public static function get_teachers_progress_by_course($courseId, $sessionId)
-    {
-        $course = api_get_course_info_by_id($courseId);
-        $sessionId = intval($sessionId);
-        $courseId = intval($courseId);
-
-        $sessionCourseUserTable = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
-        $sessionTable = Database::get_main_table(TABLE_MAIN_SESSION);
-
-        //get teachers
-        $sql = "SELECT scu.session_id, scu.user_id, s.name
-                FROM $sessionCourseUserTable scu, $sessionTable s
-                WHERE
-                    scu.session_id = s.id
-                    AND scu.status = 2
-                    AND scu.visibility = 1
-                    AND scu.c_id = '%s'
-                    AND scu.session_id = %s";
-        $query = sprintf($sql, intval($courseId), $sessionId);
-        $rs = Database::query($query);
-        $teachers = [];
-        while ($teacher = Database::fetch_array($rs, 'ASSOC')) {
-            $teachers[] = $teacher;
-        }
-        $data = [];
-        foreach ($teachers as $teacher) {
-            //total documents added
-            $sql = "SELECT count(*) as total
-                    FROM c_item_property
-                    WHERE lastedit_type = 'DocumentAdded'
-                    AND c_id = %s
-                    AND insert_user_id = %s
-                    AND session_id = %s";
-            $query = sprintf(
-                $sql,
-                $courseId,
-                $teacher['user_id'],
-                $teacher['session_id']
-            );
-
-            $rs = Database::query($query);
-            $totalDocuments = 0;
-            if ($rs) {
-                $row = Database::fetch_row($rs);
-                $totalDocuments = $row[0];
-            }
-            // Total links added
-            $sql = "SELECT count(*) as total
-                    FROM c_item_property
-                    WHERE lastedit_type = 'LinkAdded'
-                    AND c_id = %s
-                    AND insert_user_id = %s
-                    AND session_id = %s";
-            $query = sprintf(
-                $sql,
-                $courseId,
-                $teacher['user_id'],
-                $teacher['session_id']
-            );
-            $rs = Database::query($query);
-
-            $totalLinks = 0;
-            if ($rs) {
-                $row = Database::fetch_row($rs);
-                $totalLinks = $row[0];
-            }
-            //total forums added
-            $sql = "SELECT count(*) as total
-                    FROM c_item_property
-                    WHERE lastedit_type = 'ForumthreadVisible'
-                    AND c_id = %s
-                    AND insert_user_id = %s
-                    AND session_id = %s";
-            $query = sprintf(
-                $sql,
-                $courseId,
-                $teacher['user_id'],
-                $teacher['session_id']
-            );
-            $rs = Database::query($query);
-
-            $totalForums = 0;
-            if ($rs) {
-                $row = Database::fetch_row($rs);
-                $totalForums = $row[0];
-            }
-
-            //total wikis added
-            $sql = "SELECT COUNT(DISTINCT(ref)) as total
-                    FROM c_item_property
-                    WHERE lastedit_type = 'WikiAdded'
-                    AND c_id = %s
-                    AND insert_user_id = %s
-                    AND session_id = %s";
-
-            $query = sprintf(
-                $sql,
-                $courseId,
-                $teacher['user_id'],
-                $teacher['session_id']
-            );
-
-            $rs = Database::query($query);
-
-            $totalWikis = 0;
-            if ($rs) {
-                $row = Database::fetch_row($rs);
-                $totalWikis = $row[0];
-            }
-
-            // Total works added
-            $sql = "SELECT COUNT(*) as total
-                    FROM c_item_property
-                    WHERE lastedit_type = 'DirectoryCreated'
-                    AND tool = 'work'
-                    AND c_id = %s
-                    AND insert_user_id = %s
-                    AND session_id = %s";
-            $query = sprintf(
-                $sql,
-                $courseId,
-                $teacher['user_id'],
-                $teacher['session_id']
-            );
-            $rs = Database::query($query);
-
-            $totalWorks = 0;
-            if ($rs) {
-                $row = Database::fetch_row($rs);
-                $totalWorks = $row[0];
-            }
-            //total announcements added
-            $sql = "SELECT COUNT(*) as total
-                    FROM c_item_property
-                    WHERE lastedit_type = 'AnnouncementAdded'
-                    AND c_id = %s
-                    AND insert_user_id = %s
-                    AND session_id = %s";
-            $query = sprintf(
-                $sql,
-                $courseId,
-                $teacher['user_id'],
-                $teacher['session_id']
-            );
-            $rs = Database::query($query);
-
-            $totalAnnouncements = 0;
-            if ($rs) {
-                $row = Database::fetch_row($rs);
-                $totalAnnouncements = $row[0];
-            }
-            $tutor = api_get_user_info($teacher['user_id']);
-            $data[] = [
-                'course' => $course['title'],
-                'session' => $teacher['name'],
-                'tutor' => $tutor['username'].' - '.$tutor['lastname'].' '.$tutor['firstname'],
-                'documents' => $totalDocuments,
-                'links' => $totalLinks,
-                'forums' => $totalForums,
-                'works' => $totalWorks,
-                'wikis' => $totalWikis,
-                'announcements' => $totalAnnouncements,
-            ];
-        }
-
-        return $data;
     }
 
     /**
@@ -3582,60 +3342,6 @@ class Tracking
         $result = Database::query($sql);
         while ($row = Database::fetch_array($result)) {
             $students[$row['user_id']] = $row['user_id'];
-        }
-
-        return $students;
-    }
-
-    /**
-     * Get student followed by a coach inside a session.
-     *
-     * @param    int        Session id
-     * @param    int        Coach id
-     *
-     * @return array students list
-     */
-    public static function get_student_followed_by_coach_in_a_session(
-        $id_session,
-        $coach_id
-    ) {
-        $coach_id = intval($coach_id);
-        $tbl_session_course_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
-        $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
-
-        $students = [];
-        // At first, courses where $coach_id is coach of the course
-        $sql = 'SELECT c_id FROM '.$tbl_session_course_user.'
-                WHERE session_id="'.$id_session.'" AND user_id='.$coach_id.' AND status=2';
-        $result = Database::query($sql);
-
-        while ($a_courses = Database::fetch_array($result)) {
-            $courseId = $a_courses['c_id'];
-            $sql = "SELECT DISTINCT srcru.user_id
-                    FROM $tbl_session_course_user AS srcru
-                    WHERE
-                        c_id = '$courseId' AND
-                        session_id = '".$id_session."'";
-            $rs = Database::query($sql);
-            while ($row = Database::fetch_array($rs)) {
-                $students[$row['user_id']] = $row['user_id'];
-            }
-        }
-
-        // Then, courses where $coach_id is coach of the session
-        $sql = 'SELECT id_coach FROM '.$tbl_session.'
-                WHERE id="'.$id_session.'" AND id_coach="'.$coach_id.'"';
-        $result = Database::query($sql);
-
-        //He is the session_coach so we select all the users in the session
-        if (Database::num_rows($result) > 0) {
-            $sql = 'SELECT DISTINCT srcru.user_id
-                    FROM '.$tbl_session_course_user.' AS srcru
-                    WHERE session_id="'.$id_session.'"';
-            $result = Database::query($sql);
-            while ($row = Database::fetch_array($result)) {
-                $students[$row['user_id']] = $row['user_id'];
-            }
         }
 
         return $students;
@@ -7016,32 +6722,6 @@ class Tracking
 
         return $allow;
     }
-
-    public function getCoursesAndSessions($userId)
-    {
-        $userId = (int) $userId;
-
-        // Get the list of sessions where the user is subscribed as student
-        $sql = 'SELECT session_id, c_id
-        FROM '.Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER).'
-        WHERE user_id='.$userId;
-        $rs = Database::query($sql);
-        $tmp_sessions = [];
-        while ($row = Database::fetch_array($rs, 'ASSOC')) {
-            $tmp_sessions[] = $row['session_id'];
-            if ($drh_can_access_all_courses) {
-                if (in_array($row['session_id'], $tmp_sessions)) {
-                    $courses_in_session[$row['session_id']][] = $row['c_id'];
-                }
-            } else {
-                if (isset($courses_in_session_by_coach[$row['session_id']])) {
-                    if (in_array($row['session_id'], $tmp_sessions)) {
-                        $courses_in_session[$row['session_id']][] = $row['c_id'];
-                    }
-                }
-            }
-        }
-    }
 }
 
 /**
@@ -7797,14 +7477,21 @@ class TrackingCourseLog
             $user['first_connection'] = Tracking::get_first_connection_date_on_the_course(
                 $user['user_id'],
                 $courseId,
-                $session_id
+                $session_id,
+                $export_csv === false
             );
+
             $user['last_connection'] = Tracking::get_last_connection_date_on_the_course(
                 $user['user_id'],
                 $courseInfo,
                 $session_id,
                 $export_csv === false
             );
+
+            if ($export_csv) {
+                $user['first_connection'] = api_get_local_time($user['first_connection']);
+                $user['last_connection'] = api_get_local_time($user['last_connection']);
+            }
 
             if (empty($session_id)) {
                 $user['survey'] = (isset($survey_user_list[$user['user_id']]) ? $survey_user_list[$user['user_id']] : 0).' / '.$total_surveys;

@@ -62,8 +62,6 @@ switch ($action) {
     case 'get_count_message':
         $userId = api_get_user_id();
         $invitations = [];
-        $group_pending_invitations = 0;
-
         // Setting notifications
         $count_unread_message = 0;
         if (api_get_setting('allow_message_tool') === 'true') {

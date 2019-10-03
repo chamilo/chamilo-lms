@@ -87,7 +87,7 @@ if (!empty($groupId)) {
         api_not_allowed(true);
     }
 } else {
-    //Course
+    // Course
     if (!api_is_allowed_to_edit(false, true) && (
         ($current_forum_category && $current_forum_category['visibility'] == 0) ||
         $current_forum['visibility'] == 0

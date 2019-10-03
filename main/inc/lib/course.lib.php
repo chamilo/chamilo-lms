@@ -769,7 +769,7 @@ class CourseManager
                     )
                 );
 
-                $send = api_get_course_setting('email_alert_to_teacher_on_new_user_in_course', $courseCode);
+                $send = api_get_course_setting('email_alert_to_teacher_on_new_user_in_course', $courseInfo);
 
                 if ($send == 1) {
                     self::email_to_tutor(
@@ -785,7 +785,7 @@ class CourseManager
                     );
                 }
 
-                $subscribe = (int) api_get_course_setting('subscribe_users_to_forum_notifications', $courseCode);
+                $subscribe = (int) api_get_course_setting('subscribe_users_to_forum_notifications', $courseInfo);
                 if ($subscribe === 1) {
                     require_once api_get_path(SYS_CODE_PATH).'forum/forumfunction.inc.php';
                     $forums = get_forums(0, $courseCode, true, $sessionId);
@@ -3698,7 +3698,7 @@ class CourseManager
             $collapsableLink = '';
             if ($collapsable) {
                 $url = api_get_path(WEB_CODE_PATH).
-                    'auth/courses.php?categoryid='.$row['id'].'&sec_token='.$stok.'&redirect=home';
+                    'auth/sort_my_courses.php?categoryid='.$row['id'].'&sec_token='.$stok.'&redirect=home';
                 $collapsed = isset($row['collapsed']) && $row['collapsed'] ? 1 : 0;
                 if ($collapsed === 0) {
                     $collapsableLink = Display::url(
@@ -3926,8 +3926,6 @@ class CourseManager
             $params['title_cut'] = $params['title'];
             $params['category'] = $course_info['categoryName'];
             $params['category_code'] = $course_info['categoryCode'];
-            //$params['category_id'] = $course_info['categoryId'];
-            //$params['color'] = Display::randomColor($params['category_id']);
             $params['teachers'] = $teachers;
             $params['real_id'] = $course_info['real_id'];
 
@@ -4081,7 +4079,7 @@ class CourseManager
         $session_url = '';
         $params = [];
         $params['icon'] = Display::return_icon(
-            'blackboard_blue.png',
+            'session.png',
             null,
             [],
             ICON_SIZE_LARGE,
@@ -4153,6 +4151,12 @@ class CourseManager
         }
         $params['thumbnails'] = $thumbnails;
         $params['image'] = $image;
+        $params['html_image'] = '';
+        if (!empty($thumbnails)) {
+            $params['html_image'] = Display::img($thumbnails, $course_info['name'], ['class' => 'img-responsive']);
+        } else {
+            $params['html_image'] = Display::return_icon('session.png', $course_info['name'], ['class' => 'img-responsive'], ICON_SIZE_LARGE, $course_info['name']);
+        }
         $params['link'] = $session_url;
         $params['title'] = $session_title;
         $params['name'] = $course_info['name'];
@@ -4168,7 +4172,7 @@ class CourseManager
                 if ($load_dirs) {
                     $params['document'] .= '<a 
                         id="document_preview_'.$course_info['real_id'].'_'.$course_info['id_session'].'" 
-                        class="document_preview btn btn-outline-secondary btn-sm" 
+                        class="document_preview btn btn-default btn-sm" 
                         href="javascript:void(0);">'.
                         Display::returnFontAwesomeIcon('folder-open').'</a>';
                     $params['document'] .= Display::div('', [

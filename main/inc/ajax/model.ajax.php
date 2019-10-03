@@ -275,7 +275,7 @@ switch ($action) {
         break;
     case 'get_usergroups_users':
         $usergroup = new UserGroup();
-        $usergroup->protectScript();
+        $usergroup->protectScript(null, true, true);
         $id = isset($_REQUEST['id']) ? $_REQUEST['id'] : 0;
         $count = $usergroup->getUserGroupUsers($id, true);
         break;
@@ -798,7 +798,7 @@ switch ($action) {
         break;
     case 'get_usergroups_teacher':
         $obj = new UserGroup();
-        $obj->protectScript();
+        $obj->protectScript(null, false, true);
         $type = isset($_REQUEST['type']) ? $_REQUEST['type'] : 'registered';
         $groupFilter = isset($_REQUEST['group_filter']) ? (int) $_REQUEST['group_filter'] : 0;
         $keyword = isset($_REQUEST['keyword']) ? $_REQUEST['keyword'] : '';
@@ -829,7 +829,7 @@ switch ($action) {
         exit;
 }
 
-//3. Calculating first, end, etc
+// 3. Calculating first, end, etc
 $total_pages = 0;
 if ($count > 0) {
     if (!empty($limit)) {
@@ -2205,12 +2205,20 @@ switch ($action) {
             foreach ($result as $group) {
                 $countUsers = count($obj->get_users_by_usergroup($group['id']));
                 $group['users'] = $countUsers;
-
-                if ($obj->allowTeachers()) {
-                    $group['users'] = Display::url(
-                        $countUsers,
-                        $urlUserGroup.'&id='.$group['id']
-                    );
+                if (!empty($countUsers)) {
+                    if ($obj->allowTeachers()) {
+                        if (isset($group['author_id']) && $group['author_id'] == $currentUserId) {
+                            $group['users'] = Display::url(
+                                $countUsers,
+                                $urlUserGroup.'&id='.$group['id']
+                            );
+                        }
+                    } else {
+                        $group['users'] = Display::url(
+                            $countUsers,
+                            $urlUserGroup.'&id='.$group['id']
+                        );
+                    }
                 }
 
                 if ($obj->usergroup_was_added_in_course($group['id'], $course_id)) {

@@ -2389,6 +2389,33 @@ class Display
     }
 
     /**
+     * @param $url
+     * @param $currentPage
+     * @param $pagesCount
+     * @param $totalItems
+     *
+     * @return string
+     */
+    public static function getPagination($url, $currentPage, $pagesCount, $totalItems)
+    {
+        $pagination = '';
+        if ($totalItems > 1 && $pagesCount > 1) {
+            $pagination .= '<ul class="pagination">';
+            for ($i = 0; $i < $pagesCount; $i++) {
+                $newPage = $i + 1;
+                if ($currentPage == $newPage) {
+                    $pagination .= '<li class="active"><a href="'.$url.'&page='.$newPage.'">'.$newPage.'</a></li>';
+                } else {
+                    $pagination .= '<li><a href="'.$url.'&page='.$newPage.'">'.$newPage.'</a></li>';
+                }
+            }
+            $pagination .= '</ul>';
+        }
+
+        return $pagination;
+    }
+
+    /**
      * Adds a message in the queue.
      *
      * @param string $message

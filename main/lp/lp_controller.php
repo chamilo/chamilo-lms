@@ -102,7 +102,7 @@ $htmlHeadXtra[] = '
             var jItems = $("#lp_item_list li.li_container");            
             var jItem = $("#"+ itemId);          
             var index = jItems.index(jItem);
-            var total = jItems.length;
+            var total = jItems.length;     
                
             switch (dir) {
                 case "up":
@@ -130,7 +130,7 @@ $htmlHeadXtra[] = '
                             } else {
                                 //console.log("classic");
                                 jItem.detach().insertBefore(jItems[index - 1]);  
-                        }
+                            }                            
                             break;
                         }
                         
@@ -142,8 +142,8 @@ $htmlHeadXtra[] = '
                             //console.log(parentIndex);
                             jItem.detach().insertAfter(jItems[parentIndex]);                            
                         } else {
-                        jItem.detach().insertBefore(jItems[index - 1]);
-                    }                                        
+                            jItem.detach().insertBefore(jItems[index - 1]);    
+                        }                       
                     }                                        
                     break;
                 case "down":
@@ -155,10 +155,10 @@ $htmlHeadXtra[] = '
                             index = subItems.length + index;
                             //console.log("element is a chapter with items");                            
                             //console.log("new index = " + index);
-                        }                  
+                        }            
                         
                         var subItems = $(jItems[index + 1]).find("li.sub_item");
-                        // is a chapter?
+                        //console.log("next subItems.length: "+subItems.length);
                         // This is an element entering in a chapter
                         if (subItems.length > 0) {   
                             // Check if im a child
@@ -172,7 +172,7 @@ $htmlHeadXtra[] = '
                                 jItem.detach().insertAfter(jItems[parentIndex]);
                             } else {
                                 jItem.detach().insertAfter(subItems);    
-                        }
+                            }                            
                             break;
                         }     
                                                                        
@@ -185,13 +185,13 @@ $htmlHeadXtra[] = '
                         
                         // We are brothers!
                         if (parentId == myParentId) {
-                        if ((index + 1) < total) {
+                            if ((index + 1) < total) {
                                 //console.log(index + 1);
                                 //console.log("We are brothers");
-                            jItem.detach().insertAfter(jItems[index + 1]);
-                        }
+                                jItem.detach().insertAfter(jItems[index + 1]);
+                            }                            
                             break;
-                     }
+                        }
                         
                         if (currentSubItems.length > 0) {                     
                             var parentIndex = jItems.index(jItem.parent().parent());
@@ -200,9 +200,9 @@ $htmlHeadXtra[] = '
                             //console.log("parentIndex: " + parentIndex);
                             if (parentIndex >= 0) {
                                 jItem.detach().insertAfter(jItems[parentIndex]);
-                     break;
-            }   
-            
+                                break;
+                            }
+                            //jItem.detach().insertAfter($(jItems[index]).parent().parent());                            
                         }   
                         
                         //var lastItem = $(jItems[index + 1]).parent().parent().find("li.li_container").last();                                              
@@ -769,7 +769,7 @@ switch ($action) {
 
                 $new_lp_id = learnpath::add_lp(
                     api_get_course_id(),
-                    Security::remove_XSS($_REQUEST['lp_name']),
+                    $_REQUEST['lp_name'],
                     '',
                     'chamilo',
                     'manual',
@@ -1160,8 +1160,7 @@ switch ($action) {
             require 'lp_list.php';
         } else {
             Session::write('refresh', 1);
-            $lp_name = Security::remove_XSS($_REQUEST['lp_name']);
-            $_SESSION['oLP']->set_name($lp_name);
+            $_SESSION['oLP']->set_name($_REQUEST['lp_name']);
             $author = $_REQUEST['lp_author'];
             // Fixing the author name (no body or html tags).
             $auth_init = stripos($author, '<p>');
@@ -1190,8 +1189,6 @@ switch ($action) {
             $hide_toc_frame = null;
             if (isset($_REQUEST['hide_toc_frame']) && $_REQUEST['hide_toc_frame'] == 1) {
                 $hide_toc_frame = $_REQUEST['hide_toc_frame'];
-            } else {
-                $hide_toc_frame = null;
             }
             $_SESSION['oLP']->set_hide_toc_frame($hide_toc_frame);
             $_SESSION['oLP']->set_prerequisite(isset($_POST['prerequisites']) ? (int) $_POST['prerequisites'] : 0);

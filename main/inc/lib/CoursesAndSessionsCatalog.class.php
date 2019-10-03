@@ -580,13 +580,14 @@ class CoursesAndSessionsCatalog
                     s.nbrCourses > 0
                 ";
 
+        //('$date' BETWEEN s.accessStartDate AND s.accessEndDate)
         if (!is_null($date)) {
             $date = Database::escape_string($date);
             $dql .= "
                 AND (
                     (s.accessEndDate IS NULL) 
                     OR
-                    (
+                    ( 
                     s.accessStartDate IS NOT NULL AND  
                     s.accessEndDate IS NOT NULL AND
                     s.accessStartDate >= '$date' AND s.accessEndDate <= '$date')                    

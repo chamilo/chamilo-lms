@@ -487,7 +487,7 @@ class DisplayGradebook
                             Display::return_icon('edit.png', get_lang('Edit'), '', ICON_SIZE_MEDIUM).'</a>';
 
                         if (api_get_plugin_setting('customcertificate', 'enable_plugin_customcertificate') == 'true' &&
-                            api_get_course_setting('customcertificate_course_enable', $courseCode) == 1
+                            api_get_course_setting('customcertificate_course_enable') == 1
                         ) {
                             $actionsRight .= '<a href="'.api_get_path(
                                     WEB_PLUGIN_PATH

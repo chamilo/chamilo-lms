@@ -488,7 +488,7 @@ class SessionManager
 
         if (!api_is_platform_admin()) {
             if (api_is_session_admin() &&
-                api_get_setting('allow_session_admins_to_manage_all_sessions') == 'false'
+                api_get_setting('allow_session_admins_to_manage_all_sessions') === 'false'
             ) {
                 $where .= " AND s.session_admin_id = $userId ";
             }
@@ -496,7 +496,7 @@ class SessionManager
 
         if (!api_is_platform_admin() &&
             api_is_teacher() &&
-            api_get_setting('allow_teachers_to_create_sessions') == 'true'
+            api_get_setting('allow_teachers_to_create_sessions') === 'true'
         ) {
             $where .= " AND s.id_coach = $userId ";
         }
@@ -2299,7 +2299,7 @@ class SessionManager
         $course_code = Database::escape_string($course_code);
         $courseInfo = api_get_course_info($course_code);
         $courseId = $courseInfo['real_id'];
-        $subscribe = (int) api_get_course_setting('subscribe_users_to_forum_notifications', $course_code);
+        $subscribe = (int) api_get_course_setting('subscribe_users_to_forum_notifications', $courseInfo);
         $forums = [];
         if ($subscribe === 1) {
             require_once api_get_path(SYS_CODE_PATH).'forum/forumfunction.inc.php';
@@ -3300,33 +3300,6 @@ class SessionManager
     }
 
     /**
-     * Get the session image.
-     *
-     * @param int $id
-     *
-     * @return image path
-     */
-    public static function getSessionImage($id)
-    {
-        $id = (int) $id;
-        $extraFieldValuesTable = Database::get_main_table(TABLE_EXTRA_FIELD_VALUES);
-        $sql = "SELECT value  FROM $extraFieldValuesTable WHERE field_id = 16 AND item_id = ".$id;
-        $result = Database::query($sql);
-        if (Database::num_rows($result) > 0) {
-            while ($row = Database::fetch_array($result, 'ASSOC')) {
-                $sessionImage = $row['value'];
-                $sessionImage = api_get_path(WEB_UPLOAD_PATH).$sessionImage;
-            }
-
-            return $sessionImage;
-        } else {
-            $sessionImage = api_get_path(WEB_PUBLIC_PATH)."img/session_default.png";
-
-            return $sessionImage;
-        }
-    }
-
-    /**
      * Get Hot Sessions (limit 8).
      *
      * @return array with sessions
@@ -3956,7 +3929,7 @@ class SessionManager
         $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
         $tbl_session_rel_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
         $session_id = (int) $session_id;
-        $sqlSelect = '*, c.id, c.id as real_id';
+        $sqlSelect = '*, c.id, c.id as real_id, c.code as course_code';
 
         if ($getCount) {
             $sqlSelect = 'COUNT(1) as count';
@@ -4433,22 +4406,25 @@ class SessionManager
 
     /**
      * Copies a session with the same data to a new session.
-     * The new copy is not assigned to the same promotion. @see subscribe_sessions_to_promotions() for that.
+     * The new copy is not assigned to the same promotion.
      *
-     * @param   int     Session ID
-     * @param   bool    Whether to copy the relationship with courses
-     * @param   bool    Whether to copy the relationship with users
-     * @param   bool    New courses will be created
-     * @param   bool    Whether to set exercises and learning paths in the new session to invisible by default
+     *
+     * @param int  $id                         Session ID
+     * @param bool $copy_courses               Whether to copy the relationship with courses
+     * @param bool $copyTeachersAndDrh
+     * @param bool $create_new_courses         New courses will be created
+     * @param bool $set_exercises_lp_invisible Set exercises and LPs in the new session to invisible by default
      *
      * @return int The new session ID on success, 0 otherwise
+     *
+     * @see subscribe_sessions_to_promotions() for that.
      *
      * @todo make sure the extra session fields are copied too
      */
     public static function copy(
         $id,
         $copy_courses = true,
-        $copy_users = true,
+        $copyTeachersAndDrh = true,
         $create_new_courses = false,
         $set_exercises_lp_invisible = false
     ) {
@@ -4483,7 +4459,7 @@ class SessionManager
         if (api_strtotime($s['coach_access_end_date']) < $now) {
             $s['coach_access_end_date'] = $inOneMonth;
         }
-        // Now try to create the session
+
         $extraFieldValue = new ExtraFieldValue('session');
         $extraFieldsValues = $extraFieldValue->getAllValuesByItem($id);
         $extraFieldsValuesToCopy = [];
@@ -4520,7 +4496,6 @@ class SessionManager
         if ($copy_courses) {
             // Register courses from the original session to the new session
             $courses = self::get_course_list_by_session_id($id);
-
             $short_courses = $new_short_courses = [];
             if (is_array($courses) && count($courses) > 0) {
                 foreach ($courses as $course) {
@@ -4528,7 +4503,6 @@ class SessionManager
                 }
             }
 
-            $courses = null;
             // We will copy the current courses of the session to new courses
             if (!empty($short_courses)) {
                 if ($create_new_courses) {
@@ -4586,11 +4560,19 @@ class SessionManager
 
                 $short_courses = $new_short_courses;
                 self::add_courses_to_session($sid, $short_courses, true);
-                $short_courses = null;
+
+                if ($create_new_courses === false && $copyTeachersAndDrh) {
+                    foreach ($short_courses as $course) {
+                        $coachList = self::getCoachesByCourseSession($id, $course['id']);
+                        foreach ($coachList as $userId) {
+                            self::set_coach_to_course_session($userId, $sid, $course['id']);
+                        }
+                    }
+                }
             }
         }
 
-        if ($copy_users) {
+        if ($copyTeachersAndDrh) {
             // Register users from the original session to the new session
             $users = self::get_users_by_session($id);
             if (!empty($users)) {
@@ -4599,23 +4581,24 @@ class SessionManager
                     $userData['relation_type'] = (int) $userData['relation_type'];
                     $userListByStatus[$userData['relation_type']][] = $userData;
                 }
-                //Subscribing in read only mode
+
                 foreach ($userListByStatus as $status => $userList) {
                     $userList = array_column($userList, 'user_id');
                     switch ($status) {
                         case 0:
-            self::subscribeUsersToSession(
-                $sid,
+                            /*self::subscribeUsersToSession(
+                                $sid,
                                 $userList,
-                SESSION_VISIBLE_READ_ONLY,
+                                SESSION_VISIBLE_READ_ONLY,
                                 false,
-                true
-            );
+                                true
+                            );*/
                             break;
                         case 1:
+                            // drh users
                             foreach ($userList as $drhId) {
-                                $drhId = api_get_user_info($drhId);
-                                self::subscribeSessionsToDrh($drhId, [$sid], false);
+                                $userInfo = api_get_user_info($drhId);
+                                self::subscribeSessionsToDrh($userInfo, [$sid], false, false);
                             }
                             break;
                     }
@@ -6857,9 +6840,9 @@ SQL;
      */
     public static function editUserSessionDuration($duration, $userId, $sessionId)
     {
-        $duration = intval($duration);
-        $userId = intval($userId);
-        $sessionId = intval($sessionId);
+        $duration = (int) $duration;
+        $userId = (int) $userId;
+        $sessionId = (int) $sessionId;
 
         if (empty($userId) || empty($sessionId)) {
             return false;
@@ -9085,6 +9068,7 @@ SQL;
         }
 
         $userRelSession = self::getUserSession($userId, $sessionId);
+
         if ($userRelSession) {
             if (isset($userRelSession['collapsed']) && $userRelSession['collapsed'] != '') {
                 $collapsed = $userRelSession['collapsed'];

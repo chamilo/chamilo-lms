@@ -154,7 +154,7 @@
                             {{ 'CloseMeeting'|get_plugin_lang('BBBPlugin') }}
                         </a>
                     {% endif %}
-                        {{ meeting.action_links }}
+                    {{ meeting.action_links }}
                     </td>
                 {% endif %}
 

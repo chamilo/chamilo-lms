@@ -559,12 +559,13 @@ class CoursesAndSessionsCatalog
     /**
      * List the sessions.
      *
-     * @param string $date  (optional) The date of sessions
+     * @param string $date (optional) The date of sessions
      * @param array  $limit
-     *
-     * @throws Exception
+     * @param bool   $returnQueryBuilder
      *
      * @return array The session list
+     * @throws Exception
+     *
      */
     public static function browseSessions($date = null, $limit = [], $returnQueryBuilder = false)
     {
@@ -579,8 +580,6 @@ class CoursesAndSessionsCatalog
                     ) AND
                     s.nbrCourses > 0
                 ";
-
-        //('$date' BETWEEN s.accessStartDate AND s.accessEndDate)
         if (!is_null($date)) {
             $date = Database::escape_string($date);
             $dql .= "

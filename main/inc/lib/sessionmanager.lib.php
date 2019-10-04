@@ -4665,19 +4665,19 @@ class SessionManager
         $dateFilter = '';
         if (!empty($date)) {
             $dateFilter = <<<SQL
-                AND ('$date' BETWEEN s.access_start_date AND s.access_end_date)
+                AND (('$date' BETWEEN s.access_start_date AND s.access_end_date)
                 OR (s.access_end_date IS NULL)
                 OR (
                     s.access_start_date IS NULL AND 
                     s.access_end_date IS NOT NULL AND s.access_end_date > '$date'
-                )
+                ))
 SQL;
         }
         $sql = "SELECT COUNT(*) 
                 FROM $sessionTable s
                 INNER JOIN $url u
                 ON (s.id = u.session_id)
-                WHERE u.access_url_id = $urlId $dateFilter";
+                WHERE u.access_url_id = $urlId AND s.nbr_courses > 0 $dateFilter";
         $res = Database::query($sql);
 
         $count = 0;

@@ -169,7 +169,8 @@ class SessionManager
             ? (empty($accessUrlId) ? api_get_current_access_url_id() : (int) $accessUrlId)
             : 1;
 
-        if (is_array($_configuration[$accessUrlId]) &&
+        if (isset($_configuration[$accessUrlId]) &&
+            is_array($_configuration[$accessUrlId]) &&
             isset($_configuration[$accessUrlId]['hosting_limit_sessions']) &&
             $_configuration[$accessUrlId]['hosting_limit_sessions'] > 0
         ) {
@@ -4458,6 +4459,13 @@ class SessionManager
             }
         }
 
+        if (isset($extraFieldsValuesToCopy['extra_image']) && isset($extraFieldsValuesToCopy['extra_image']['extra_image'])) {
+            $extraFieldsValuesToCopy['extra_image'] = [
+                'tmp_name' => api_get_path(SYS_UPLOAD_PATH).$extraFieldsValuesToCopy['extra_image']['extra_image'],
+                'error' => 0,
+            ];
+        }
+
         // Now try to create the session
         $sid = self::create_session(
             $s['name'].' '.get_lang('CopyLabelSuffix'),
@@ -4550,10 +4558,10 @@ class SessionManager
                 self::add_courses_to_session($sid, $short_courses, true);
 
                 if ($create_new_courses === false && $copyTeachersAndDrh) {
-                    foreach ($short_courses as $course) {
-                        $coachList = self::getCoachesByCourseSession($id, $course['id']);
+                    foreach ($short_courses as $courseItemId) {
+                        $coachList = self::getCoachesByCourseSession($id, $courseItemId);
                         foreach ($coachList as $userId) {
-                            self::set_coach_to_course_session($userId, $sid, $course['id']);
+                            self::set_coach_to_course_session($userId, $sid, $courseItemId);
                         }
                     }
                 }

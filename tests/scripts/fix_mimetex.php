@@ -30,9 +30,11 @@ foreach ($data as $row) {
     $items = Database::store_result($result, 'ASSOC');
     foreach ($items as $item) {
         $id = $item['iid'];
-        $content = fixText($item['answer']);
+        $answer = fixText($item['answer']);
+        $comment = fixText($item['comment']);
         $params = [
-            'answer' => $content
+            'answer' => $answer,
+            'comment' => $comment,
         ];
         Database::update('c_quiz_answer', $params, ['iid = ? ' => $id]);
     }
@@ -40,8 +42,17 @@ foreach ($data as $row) {
 
 function fixText($content)
 {
+    $debug = false;
+    if (strpos($content, 'mimetex.cgi') !== false) {
+        $content = preg_replace('/[\r\n]+/', '', $content);
+        //$debug = true;
+        if ($debug) {
+            var_dump($content);
+        }
+    }
+
     $matches = [];
-    if (preg_match_all('/<img alt="(.*)?" (.*)?mimetex.cgi\? (.*)?\/>/', $content, $matches)) {
+    if (preg_match_all('/<img alt="(.*?)" (.*?)mimetex.cgi\? (.*?)\/>/', $content, $matches)) {
         $count = count($matches[0]);
         for ($i = 0; $i <= $count; $i++) {
             if (isset($matches[0]) && isset($matches[0][$i])) {
@@ -49,6 +60,68 @@ function fixText($content)
                 $content = str_replace($matches[0][$i], $value, $content);
             }
         }
+    }
+
+    $matches = [];
+    /*<img (.*)mimetex.cgi\?(.*) title="(.*)?" alt="(.*)?" \/>
+    <img (.*)?mimetex.cgi\? (.*)? title="(.*)?" alt="(.*)?" \/>*/
+   // if       (preg_match_all('/<img (.*)?mimetex.cgi\? (.*)? title="(.*)?" alt="(.*)?" \/>/', $content, $matches)) {
+    if (preg_match_all('/<img (.*?)mimetex.cgi\?(.*?) title="(.*?)" alt="(.*?)"/', $content, $matches)) {
+        $count = count($matches[0]);
+        for ($i = 0; $i <= $count; $i++) {
+            if (isset($matches[0]) && isset($matches[0][$i])) {
+                $value = "<span class=\"math-tex\">`".$matches[3][$i]."`</span>";
+                $content = str_replace($matches[0][$i], $value, $content);
+            }
+        }
+    }
+
+    $matches = [];
+    if (preg_match_all('/<img (.*?)mimetex.cgi\? (.*?) alt="(.*?)" title="(.*?)" \/>/', $content, $matches)) {
+        $count = count($matches[0]);
+        for ($i = 0; $i <= $count; $i++) {
+            if (isset($matches[0]) && isset($matches[0][$i])) {
+                $value = "<span class=\"math-tex\">`".$matches[3][$i]."`</span>";
+                $content = str_replace($matches[0][$i], $value, $content);
+            }
+        }
+    }
+
+    $matches = [];
+    if (preg_match_all('/<img (.*?)mimetex.cgi\?(.*?)title="(.*?)" alt="(.*?)"/', $content, $matches)) {
+        $count = count($matches[0]);
+        for ($i = 0; $i <= $count; $i++) {
+            if (isset($matches[0]) && isset($matches[0][$i])) {
+                $value = "<span class=\"math-tex\">`".$matches[3][$i]."`</span>";
+                $content = str_replace($matches[0][$i], $value, $content);
+            }
+        }
+    }
+
+    $matches = [];
+    if (preg_match_all('/<img (.*?)mimetex.cgi\? (.*?) title="(.*?)" alt="(.*?)"\/>/', $content, $matches)) {
+        $count = count($matches[0]);
+        for ($i = 0; $i <= $count; $i++) {
+            if (isset($matches[0]) && isset($matches[0][$i])) {
+                $value = "<span class=\"math-tex\">`".$matches[3][$i]."`</span>";
+                $content = str_replace($matches[0][$i], $value, $content);
+            }
+        }
+    }
+
+    $matches = [];
+    if (preg_match_all('/<img title="(.*?)" (.*?)mimetex.cgi\? (.*?) \/>/', $content, $matches)) {
+        $count = count($matches[0]);
+        for ($i = 0; $i <= $count; $i++) {
+            if (isset($matches[0]) && isset($matches[0][$i])) {
+                $value = "<span class=\"math-tex\">`".$matches[3][$i]."`</span>";
+                $content = str_replace($matches[0][$i], $value, $content);
+            }
+        }
+    }
+
+    if ($debug) {
+        var_dump($content);
     }
 
     return $content;

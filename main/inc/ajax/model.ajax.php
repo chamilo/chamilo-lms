@@ -2234,20 +2234,12 @@ switch ($action) {
             foreach ($result as $group) {
                 $countUsers = count($obj->get_users_by_usergroup($group['id']));
                 $group['users'] = $countUsers;
+
                 if (!empty($countUsers)) {
-                    if ($obj->allowTeachers()) {
-                        if (isset($group['author_id']) && $group['author_id'] == $currentUserId) {
-                            $group['users'] = Display::url(
-                                $countUsers,
-                                $urlUserGroup.'&id='.$group['id']
-                            );
-                        }
-                    } else {
-                        $group['users'] = Display::url(
-                            $countUsers,
-                            $urlUserGroup.'&id='.$group['id']
-                        );
-                    }
+                    $group['users'] = Display::url(
+                        $countUsers,
+                        $urlUserGroup.'&id='.$group['id']
+                    );
                 }
 
                 if ($obj->usergroup_was_added_in_course($group['id'], $course_id)) {

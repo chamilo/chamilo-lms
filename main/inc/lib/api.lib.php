@@ -9554,10 +9554,9 @@ function api_set_noreply_and_from_address_to_mailer(PHPMailer $mailer, array $se
     if (!$avoidReplyToAddress) {
         if (
             !empty($replyToAddress) &&
-            isset($platformEmail['SMTP_UNIQUE_REPLY_TO']) && $platformEmail['SMTP_UNIQUE_REPLY_TO'] &&
             PHPMailer::ValidateAddress($replyToAddress['mail'])
         ) {
-            $mailer->AddReplyTo($replyToAddress['email'], $replyToAddress['name']);
+            $mailer->AddReplyTo($replyToAddress['mail'], $replyToAddress['name']);
             $mailer->Sender = $replyToAddress['mail'];
         }
     }

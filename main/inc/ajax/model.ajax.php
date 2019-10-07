@@ -2228,6 +2228,7 @@ switch ($action) {
 
         $new_result = [];
         $currentUserId = api_get_user_id();
+        $isAllow = api_is_allowed_to_edit();
         if (!empty($result)) {
             $urlUserGroup = api_get_path(WEB_CODE_PATH).'admin/usergroup_users.php?'.api_get_cidreq();
             foreach ($result as $group) {
@@ -2269,14 +2270,16 @@ switch ($action) {
                 $role = $obj->getUserRoleToString(api_get_user_id(), $group['id']);
                 $group['status'] = $role;
                 $group['actions'] = '';
-                if ($obj->allowTeachers() && $group['author_id'] == $currentUserId) {
-                    $group['actions'] .= Display::url(
-                        Display::return_icon('statistics.png', get_lang('Stats')),
-                        $urlUserGroup.'&id='.$group['id']
-                    ).'&nbsp;';
-                }
 
-                $group['actions'] .= Display::url($icon, $url);
+                if ($isAllow) {
+                    if ($obj->allowTeachers() && $group['author_id'] == $currentUserId) {
+                        $group['actions'] .= Display::url(
+                                Display::return_icon('statistics.png', get_lang('Stats')),
+                                $urlUserGroup.'&id='.$group['id']
+                            ).'&nbsp;';
+                    }
+                    $group['actions'] .= Display::url($icon, $url);
+                }
                 $new_result[] = $group;
             }
             $result = $new_result;

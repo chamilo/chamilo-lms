@@ -7,7 +7,7 @@
 require_once __DIR__.'/../inc/global.inc.php';
 $this_section = SECTION_COURSES;
 
-api_protect_course_script(true);
+api_protect_course_script(true, false, 'user');
 
 if (api_get_setting('allow_user_course_subscription_by_course_admin') == 'false') {
     if (!api_is_platform_admin()) {
@@ -41,6 +41,8 @@ $(function() {
 $actionsLeft = '';
 $actionsRight = '';
 $usergroup = new UserGroup();
+$actions = '';
+
 if (api_is_allowed_to_edit()) {
     if ($type === 'registered') {
         $actionsLeft .= '<a href="class.php?'.api_get_cidreq().'&type=not_registered">'.

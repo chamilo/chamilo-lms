@@ -362,7 +362,7 @@ class CoursesController
 
         $pageTotal = ceil($countSessions / $limit['length']);
         // Do NOT show pagination if only one page or less
-        $cataloguePagination = $pageTotal > 1 ? CourseCategory::getCatalogPagination($limit['current'], $limit['length'], $pageTotal) : '';
+        $pagination = $pageTotal > 1 ? CourseCategory::getCatalogPagination($limit['current'], $limit['length'], $pageTotal) : '';
         $sessionsBlocks = $this->getFormattedSessionsBlock($sessions);
 
         // Get session search catalogue URL
@@ -379,7 +379,7 @@ class CoursesController
         $tpl->assign('show_sessions', CoursesAndSessionsCatalog::showSessions());
         $tpl->assign('show_tutor', api_get_setting('show_session_coach') === 'true');
         $tpl->assign('course_url', $courseUrl);
-        $tpl->assign('catalog_pagination', $cataloguePagination);
+        $tpl->assign('catalog_pagination', $pagination);
         $tpl->assign('hidden_links', $hiddenLinks);
         $tpl->assign('search_token', Security::get_token());
         $tpl->assign('search_date', $date);

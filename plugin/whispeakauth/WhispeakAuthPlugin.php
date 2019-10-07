@@ -692,43 +692,7 @@ class WhispeakAuthPlugin extends Plugin implements HookPluginInterface
     }
 
     /**
-     * @param int $userId
-     * @param int $lpItemId
-     * @param int $lpId
-     *
-     * @throws \Doctrine\ORM\NonUniqueResultException
-     *
-     * @return LogEventLp|null
-     */
-    public function getLastRequiredAttemptInLearningPath($userId, $lpItemId, $lpId)
-    {
-        $query = Database::getManager()
-            ->createQuery(
-                'SELECT log FROM ChamiloPluginBundle:WhispeakAuth\LogEventLp log
-                WHERE
-                    log.user = :user AND
-                    log.lp = :lp AND
-                    log.lpItem = :lp_item AND
-                    log.actionStatus = :action_status
-                ORDER BY log.datetime DESC'
-            )
-            ->setMaxResults(1)
-            ->setParameters(
-                [
-                    'user' => $userId,
-                    'lp' => $lpId,
-                    'lp_item' => $lpItemId,
-                    'action_status' => LogEvent::STATUS_REQUIRED,
-                ]
-            );
-
-        /** @var LogEventLp|null $logEvent */
-        $logEvent = $query->getOneOrNullResult();
-
-        return $logEvent;
-    }
-
-    /**
+     * @param int $status
      * @param int $userId
      * @param int $lpItemId
      * @param int $lpId
@@ -739,7 +703,7 @@ class WhispeakAuthPlugin extends Plugin implements HookPluginInterface
      *
      * @return LogEventLp|null
      */
-    public function addAttemptInLearningPath($userId, $lpItemId, $lpId)
+    public function addAttemptInLearningPath($status, $userId, $lpItemId, $lpId)
     {
         $em = Database::getManager();
 
@@ -759,7 +723,7 @@ class WhispeakAuthPlugin extends Plugin implements HookPluginInterface
             ->setDatetime(
                 api_get_utc_datetime(null, false, true)
             )
-            ->setActionStatus($logEvent::STATUS_REQUIRED);
+            ->setActionStatus($status);
 
         $em->persist($logEvent);
         $em->flush();
@@ -770,73 +734,6 @@ class WhispeakAuthPlugin extends Plugin implements HookPluginInterface
     /**
      * @param int $status
      * @param int $userId
-     * @param int $lpItemId
-     * @param int $lpId
-     *
-     * @throws \Doctrine\ORM\NonUniqueResultException
-     * @throws \Doctrine\ORM\OptimisticLockException
-     *
-     * @return LogEventLp|null
-     */
-    public function updateAttemptInLearningPath($status, $userId, $lpItemId, $lpId)
-    {
-        $em = Database::getManager();
-
-        $logEvent = $this->getLastRequiredAttemptInLearningPath($userId, $lpItemId, $lpId);
-
-        if (empty($logEvent)) {
-            return null;
-        }
-
-        if ($logEvent->getActionStatus() !== $status) {
-            $logEvent->setActionStatus($status);
-
-            $em->persist($logEvent);
-            $em->flush();
-        }
-
-        return $logEvent;
-    }
-
-    /**
-     * @param int $userId
-     * @param int $questionId
-     * @param int $quizId
-     *
-     * @throws \Doctrine\ORM\NonUniqueResultException
-     *
-     * @return LogEventQuiz|null
-     */
-    public function getLastRequiredAttemptInQuiz($userId, $questionId, $quizId)
-    {
-        $query = Database::getManager()
-            ->createQuery(
-                'SELECT log FROM ChamiloPluginBundle:WhispeakAuth\LogEventQuiz log
-                WHERE
-                    log.user = :user AND
-                    log.quiz = :quiz AND
-                    log.question = :question AND
-                    log.actionStatus = :action_status
-                ORDER BY log.datetime DESC'
-            )
-            ->setMaxResults(1)
-            ->setParameters(
-                [
-                    'user' => $userId,
-                    'quiz' => $quizId,
-                    'question' => $questionId,
-                    'action_status' => LogEvent::STATUS_REQUIRED,
-                ]
-            );
-
-        /** @var LogEventQuiz|null $logEvent */
-        $logEvent = $query->getOneOrNullResult();
-
-        return $logEvent;
-    }
-
-    /**
-     * @param int $userId
      * @param int $questionId
      * @param int $quizId
      *
@@ -846,7 +743,7 @@ class WhispeakAuthPlugin extends Plugin implements HookPluginInterface
      *
      * @return LogEventQuiz|null
      */
-    public function addAttemptInQuiz($userId, $questionId, $quizId)
+    public function addAttemptInQuiz($status, $userId, $questionId, $quizId)
     {
         $em = Database::getManager();
 
@@ -866,40 +763,10 @@ class WhispeakAuthPlugin extends Plugin implements HookPluginInterface
             ->setDatetime(
                 api_get_utc_datetime(null, false, true)
             )
-            ->setActionStatus($logEvent::STATUS_REQUIRED);
+            ->setActionStatus($status);
 
         $em->persist($logEvent);
         $em->flush();
-
-        return $logEvent;
-    }
-
-    /**
-     * @param int $status
-     * @param int $userId
-     * @param int $questionId
-     * @param int $quizId
-     *
-     * @throws \Doctrine\ORM\NonUniqueResultException
-     * @throws \Doctrine\ORM\OptimisticLockException
-     *
-     * @return LogEventQuiz|null
-     */
-    public function updateAttemptInQuiz($status, $userId, $questionId, $quizId)
-    {
-        $logEvent = $this->getLastRequiredAttemptInQuiz($userId, $questionId, $quizId);
-
-        if (empty($logEvent)) {
-            return null;
-        }
-
-        if ($logEvent->getActionStatus() !== $status) {
-            $logEvent->setActionStatus($status);
-
-            $em = Database::getManager();
-            $em->persist($logEvent);
-            $em->flush();
-        }
 
         return $logEvent;
     }

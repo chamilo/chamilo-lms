@@ -44,20 +44,6 @@ if (ChamiloSession::read(WhispeakAuthPlugin::SESSION_AUTH_PASSWORD, false)) {
     exit;
 }
 
-if (!empty($lpItemInfo)) {
-    $plugin->addAttemptInLearningPath(
-        $userId,
-        $lpItemInfo['lp_item'],
-        $lpItemInfo['lp']
-    );
-} elseif (!empty($lpQuestionInfo)) {
-    $plugin->addAttemptInQuiz(
-        $userId,
-        $lpQuestionInfo['question'],
-        $lpQuestionInfo['quiz']
-    );
-}
-
 if ($userId) {
     $wsid = WhispeakAuthPlugin::getAuthUidValue($userId);
 

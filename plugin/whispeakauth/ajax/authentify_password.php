@@ -51,6 +51,22 @@ $isExpired = empty($user->getExpirationDate()) || $user->getExpirationDate() > a
 $userPass = true;
 
 if (!$isValidPassword || !$isActive || !$isExpired) {
+    if (!empty($lpItemInfo)) {
+        $plugin->addAttemptInLearningPath(
+            LogEvent::STATUS_FAILED,
+            $user->getId(),
+            $lpItemInfo['lp_item'],
+            $lpItemInfo['lp']
+        );
+    } elseif (!empty($quizQuestionInfo)) {
+        $plugin->addAttemptInQuiz(
+            LogEvent::STATUS_FAILED,
+            $user->getId(),
+            $quizQuestionInfo['question'],
+            $quizQuestionInfo['quiz']
+        );
+    }
+
     $userPass = false;
 
     $message = $plugin->get_lang('AuthentifyFailed');
@@ -76,34 +92,18 @@ if (!$isValidPassword || !$isActive || !$isExpired) {
     if (!$maxAttempts ||
         ($maxAttempts && $failedLogins >= $maxAttempts)
     ) {
-        if (!empty($lpItemInfo)) {
-            $plugin->updateAttemptInLearningPath(
-                LogEvent::STATUS_FAILED,
-                $user->getId(),
-                $lpItemInfo['lp_item'],
-                $lpItemInfo['lp']
-            );
-        } elseif (!empty($quizQuestionInfo)) {
-            $plugin->updateAttemptInQuiz(
-                LogEvent::STATUS_FAILED,
-                $user->getId(),
-                $quizQuestionInfo['question'],
-                $quizQuestionInfo['quiz']
-            );
-        }
-
         $userPass = true;
     }
 } elseif ($isValidPassword) {
     if (!empty($lpItemInfo)) {
-        $plugin->updateAttemptInLearningPath(
+        $plugin->addAttemptInLearningPath(
             LogEvent::STATUS_SUCCESS,
             $user->getId(),
             $lpItemInfo['lp_item'],
             $lpItemInfo['lp']
         );
     } elseif (!empty($quizQuestionInfo)) {
-        $plugin->updateAttemptInQuiz(
+        $plugin->addAttemptInQuiz(
             LogEvent::STATUS_SUCCESS,
             $user->getId(),
             $quizQuestionInfo['question'],

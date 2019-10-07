@@ -174,6 +174,24 @@ if ($isAuthentify) {
     $message = $plugin->get_lang('AuthentifySuccess');
 
     if (!$success) {
+        if (!empty($lpItemInfo)) {
+            $plugin->addAttemptInLearningPath(
+                LogEvent::STATUS_FAILED,
+                $user->getId(),
+                $lpItemInfo['lp_item'],
+                $lpItemInfo['lp']
+            );
+        }
+
+        if (!empty($quizQuestionInfo)) {
+            $plugin->addAttemptInQuiz(
+                LogEvent::STATUS_FAILED,
+                $user->getId(),
+                $quizQuestionInfo['question'],
+                $quizQuestionInfo['quiz']
+            );
+        }
+
         $message = $plugin->get_lang('AuthentifyFailed');
 
         ChamiloSession::write(WhispeakAuthPlugin::SESSION_FAILED_LOGINS, ++$failedLogins);
@@ -249,7 +267,7 @@ if ($isAuthentify) {
             ChamiloSession::erase(WhispeakAuthPlugin::SESSION_LP_ITEM);
             ChamiloSession::erase(WhispeakAuthPlugin::SESSION_2FA_USER);
 
-            $plugin->updateAttemptInLearningPath(
+            $plugin->addAttemptInLearningPath(
                 LogEvent::STATUS_SUCCESS,
                 $user->getId(),
                 $lpItemInfo['lp_item'],
@@ -267,7 +285,7 @@ if ($isAuthentify) {
 
             ChamiloSession::write(WhispeakAuthPlugin::SESSION_QUIZ_QUESTION, $quizQuestionInfo);
 
-            $plugin->updateAttemptInQuiz(
+            $plugin->addAttemptInQuiz(
                 LogEvent::STATUS_SUCCESS,
                 $user->getId(),
                 $quizQuestionInfo['question'],

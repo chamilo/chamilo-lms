@@ -9,10 +9,14 @@
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 
+api_block_anonymous_users();
+
+if (api_get_configuration_value('block_my_progress_page')) {
+    api_not_allowed(true);
+}
+
 $this_section = SECTION_TRACKING;
 $nameTools = get_lang('MyProgress');
-
-api_block_anonymous_users();
 
 $htmlHeadXtra[] = api_get_js('jquery.timelinr-0.9.54.js');
 $htmlHeadXtra[] = "<script>
@@ -29,10 +33,6 @@ $pluginCalendar = api_get_plugin_setting('learning_calendar', 'enabled') === 'tr
 if ($pluginCalendar) {
     $plugin = LearningCalendarPlugin::create();
     $plugin->setJavaScript($htmlHeadXtra);
-}
-
-if (api_get_configuration_value('block_my_progress_page')) {
-    api_not_allowed(true);
 }
 
 $user_id = api_get_user_id();
@@ -79,8 +79,8 @@ if (!empty($courseUserList)) {
     }
 }
 
-$content = Tracking::show_user_progress(api_get_user_id(), $sessionId);
-$content .= Tracking::show_course_detail(api_get_user_id(), $courseCode, $sessionId);
+$content = Tracking::show_user_progress($user_id, $sessionId);
+$content .= Tracking::show_course_detail($user_id, $courseCode, $sessionId);
 
 if (!empty($dates)) {
     if (!empty($content)) {

@@ -2998,7 +2998,7 @@ class Skill extends Model
 
         $entityManager = Database::getManager();
 
-        $skillUserRepo = $entityManager->getRepository('ChamiloSkillBundle:SkillRelUser');
+        $skillUserRepo = $entityManager->getRepository('ChamiloCoreBundle:SkillRelUser');
 
         $criteria = ['user' => $user, 'skill' => $skill];
         $result = $skillUserRepo->findOneBy($criteria);

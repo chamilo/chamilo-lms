@@ -566,7 +566,6 @@ class CoursesAndSessionsCatalog
      * @throws Exception
      *
      * @return array The session list
-     *
      */
     public static function browseSessions($date = null, $limit = [], $returnQueryBuilder = false)
     {
@@ -717,8 +716,9 @@ class CoursesAndSessionsCatalog
     /**
      * Build a recursive tree of course categories.
      *
-     * @param $categories
-     * @param $parentId
+     * @param array $categories
+     * @param int   $parentId
+     * @param int   $level
      *
      * @return array
      */
@@ -754,7 +754,7 @@ class CoursesAndSessionsCatalog
     /**
      * List Code Search Category.
      *
-     * @param $code
+     * @param string $code
      *
      * @return array
      */

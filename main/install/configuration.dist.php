@@ -1325,6 +1325,9 @@ requires extension "php-soap"  sudo apt-get install php-soap
 // Student publication: force to download document before upload an assignment.
 // $_configuration['force_download_doc_before_upload_work' ] = true;
 
+// Allow teachers to decide which skills are assigned through their courses
+// $_configuration['skills_teachers_can_assign_skills'] = false;
+
 // KEEP THIS AT THE END
 // -------- Custom DB changes
 // Add user activation by confirmation email

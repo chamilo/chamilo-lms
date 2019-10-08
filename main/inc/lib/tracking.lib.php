@@ -5257,10 +5257,10 @@ class Tracking
     {
         $html = '';
         if (isset($course_code)) {
-            $user_id = intval($user_id);
-            $session_id = intval($session_id);
+            $user_id = (int) $user_id;
+            $session_id = (int) $session_id;
             $course = Database::escape_string($course_code);
-            $course_info = api_get_course_info($course);
+            $course_info = api_get_course_info($course_code);
             if (empty($course_info)) {
                 return '';
             }

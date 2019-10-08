@@ -102,6 +102,6 @@ $interbreadcrumb[] = [
     'name' => get_lang('Gradebook'),
 ];
 $this_section = SECTION_COURSES;
-Display :: display_header(get_lang('EditCategory'));
+Display::display_header(get_lang('EditCategory'));
 $form->display();
-Display :: display_footer();
+Display::display_footer();

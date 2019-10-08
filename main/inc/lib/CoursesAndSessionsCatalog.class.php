@@ -559,12 +559,13 @@ class CoursesAndSessionsCatalog
     /**
      * List the sessions.
      *
-     * @param string $date (optional) The date of sessions
+     * @param string $date
      * @param array  $limit
      * @param bool   $returnQueryBuilder
      *
-     * @return array The session list
      * @throws Exception
+     *
+     * @return array The session list
      *
      */
     public static function browseSessions($date = null, $limit = [], $returnQueryBuilder = false)

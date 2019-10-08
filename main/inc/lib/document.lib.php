@@ -2010,7 +2010,7 @@ class DocumentManager
             );
         }
         $courseDescription = new CourseDescription();
-        $description = $courseDescription->get_data_by_description_type(1, $course_info['real_id'], $sessionId);
+        $description = $courseDescription->get_data_by_description_type(2, $course_info['real_id'], $sessionId);
         $courseObjectives = '';
         if ($description) {
             $courseObjectives = $description['description_content'];

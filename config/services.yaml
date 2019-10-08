@@ -30,6 +30,9 @@ services:
         exclude: '../src/PageBundle/{Entity,Migrations,Tests}'
         public: true
 
+    Vich\UploaderBundle\Naming\SubdirDirectoryNamer:
+        public: true
+
     Chamilo\ThemeBundle\:
         autowire: true
         resource: '../src/ThemeBundle/*'

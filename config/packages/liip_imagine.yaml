@@ -8,9 +8,9 @@ liip_imagine:
             web_path:
                 cache_prefix: '../var/cache/resource'
     loaders:
-        default:
+        resources:
             filesystem:
-                data_root: '%kernel.root_dir%/../var/upload/resource'
+                data_root: '%kernel.root_dir%/../var/upload/resource2'
     filter_sets:
         # Chamilo filters
         hotspot_question:

@@ -144,7 +144,8 @@ CKEDITOR.plugins.add( 'video',
 
 							var width = realElement.attributes.width,
 								height = realElement.attributes.height,
-								poster = realElement.attributes.poster;
+								poster = realElement.attributes.poster,
+								responsive = realElement.attributes.responsive;
 
 							if ( typeof width != 'undefined' )
 								fakeStyle = fakeElement.attributes.style = fakeStyle + 'width:' + CKEDITOR.tools.cssLength( width ) + ';';
@@ -154,6 +155,10 @@ CKEDITOR.plugins.add( 'video',
 
 							if ( poster )
 								fakeStyle = fakeElement.attributes.style = fakeStyle + 'background-image:url(' + poster + ');';
+
+							if (typeof responsive != 'undefined' && responsive && responsive !== 'null') {
+								fakeElement.addClass('embed-responsive-item');
+							}
 
 							return fakeElement;
 						}

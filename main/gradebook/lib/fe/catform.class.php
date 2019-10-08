@@ -246,7 +246,7 @@ class CatForm extends FormValidator
         );
 
         $skillsDefaults = [];
-        if (api_is_platform_admin() || api_is_drh()) {
+        if (api_is_platform_admin() || api_is_drh() || api_is_allowed_to_edit()) {
             if (Skill::isToolAvailable()) {
                 $skillSelect = $this->addElement(
                     'select_ajax',

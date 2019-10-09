@@ -6560,9 +6560,8 @@ class learnpath
         $isConfigPage = false,
         $allowExpand = true
     ) {
-        $actionsLeft = '';
         $actionsRight = '';
-        $actionsLeft .= Display::url(
+        $actionsLeft = Display::url(
             Display::return_icon(
                 'back.png',
                 get_lang('ReturnToLearningPaths'),
@@ -6599,6 +6598,8 @@ class learnpath
             ])
         );
 
+        $subscriptionSettings = self::getSubscriptionSettings();
+
         if (!$isConfigPage) {
             $actionsLeft .= Display::url(
                 Display::return_icon(
@@ -6612,6 +6613,19 @@ class learnpath
                     'lp_id' => $this->lp_id,
                 ])
             );
+
+            if ($this->subscribeUsers == 1  &&
+                $subscriptionSettings['allow_add_users_to_lp']) {
+                $actionsLeft .=  Display::url(
+                    Display::return_icon(
+                        'user.png',
+                        get_lang('SubscribeUsersToLp'),
+                        '',
+                        ICON_SIZE_MEDIUM
+                    ),
+                    api_get_path(WEB_CODE_PATH)."lp/lp_subscribe_users.php?lp_id=".$this->lp_id."&".api_get_cidreq()
+                );
+            }
         } else {
             $actionsLeft .= Display::url(
                 Display::return_icon(

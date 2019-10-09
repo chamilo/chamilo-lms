@@ -1328,6 +1328,9 @@ requires extension "php-soap"  sudo apt-get install php-soap
 // Allow teachers to decide which skills are assigned through their courses
 // $_configuration['skills_teachers_can_assign_skills'] = false;
 
+// Changes the ck editor enter mode value. Default: CKEDITOR.ENTER_P
+// $_configuration['ck_editor_enter_mode_value'] = 'CKEDITOR.ENTER_BR';
+
 // KEEP THIS AT THE END
 // -------- Custom DB changes
 // Add user activation by confirmation email

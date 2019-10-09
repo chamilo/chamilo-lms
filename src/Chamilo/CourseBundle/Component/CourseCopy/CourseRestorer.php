@@ -1951,7 +1951,13 @@ class CourseRestorer
                     $imageNewId = $documentsToRestore->destination_id;
                 }
             }
-
+            $question->question = DocumentManager::replaceUrlWithNewCourseCode(
+                $question->question,
+                $this->course->code,
+                $this->course->destination_path,
+                $this->course->backup_path,
+                $this->course->info['path']
+            );
             $params = [
                 'c_id' => $this->destination_course_id,
                 'question' => self::DBUTF8($question->question),
@@ -1978,7 +1984,17 @@ class CourseRestorer
             $onlyAnswers = [];
 
             if (in_array($question->quiz_type, [DRAGGABLE, MATCHING, MATCHING_DRAGGABLE])) {
-                $allAnswers = array_column($question->answers, 'answer', 'id');
+                $tempAnswerList = $question->answers;
+                foreach ($tempAnswerList as &$value) {
+                    $value['answer'] = DocumentManager::replaceUrlWithNewCourseCode(
+                        $value['answer'],
+                        $this->course->code,
+                        $this->course->destination_path,
+                        $this->course->backup_path,
+                        $this->course->info['path']
+                    );
+                }
+                $allAnswers = array_column($tempAnswerList, 'answer', 'id');
             }
 
             if (in_array($question->quiz_type, [MATCHING, MATCHING_DRAGGABLE])) {

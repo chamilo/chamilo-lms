@@ -8791,7 +8791,6 @@ class learnpath
         $tbl_doc = Database::get_course_table(TABLE_DOCUMENT);
 
         $no_display_edit_textarea = false;
-        $item_description = '';
         //If action==edit document
         //We don't display the document form if it's not an editable document (html or txt file)
         if ($action == 'edit') {
@@ -13586,7 +13585,7 @@ EOD;
                 get_lang('Title'),
                 true,
                 false,
-                ['ToolbarSet' => 'TitleAsHtml']
+                ['ToolbarSet' => 'TitleAsHtml', 'id' => uniqid('editor')]
             );
         } else {
             $form->addText('title', get_lang('Title'), true, ['id' => 'idTitle', 'class' => 'learnpath_item_form']);

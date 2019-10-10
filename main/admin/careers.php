@@ -155,6 +155,11 @@ switch ($action) {
                 $career->update_all_promotion_status_by_career_id($values['id'], $values['status']);
                 $old_status = $career->get_status($values['id']);
                 $res = $career->update($values);
+
+                $values['item_id'] = $values['id'];
+                $sessionFieldValue = new ExtraFieldValue('career');
+                $sessionFieldValue->saveFieldValues($values);
+
                 if ($res) {
                     Display::addFlash(
                         Display::return_message(get_lang('CareerUpdated'), 'confirmation')

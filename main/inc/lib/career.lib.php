@@ -616,6 +616,7 @@ class Career extends Model
         $graphHtml .= '<style>
              .panel-title {
                 font-size: 11px;
+                height: 40px;
              }
              </style>';
 

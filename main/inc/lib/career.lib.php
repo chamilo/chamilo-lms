@@ -685,7 +685,7 @@ class Career extends Model
                 $y = $data['min_y'] - $subGroupDiffX;
                 $width = $data['max_width'] + $subGroupDiffX * 2;
                 $height = $data['max_height'] + $subGroupDiffX * 2 + $spaceForSubGroupTitle;
-                $label = '<h4>'.$data['label'].'</h4>';
+                $label = '<h4 style="background: white">'.$data['label'].'</h4>';
                 $vertexData = "var sg$subGroupId = graph.insertVertex(parent, null, '$label', $x, $y, $width, $height, '$style');";
                 $subGroupList[] = $vertexData;
             }

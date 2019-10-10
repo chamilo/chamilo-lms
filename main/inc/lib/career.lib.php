@@ -601,8 +601,8 @@ class Career extends Model
 
         // Creates graph
         $graph = new stdClass();
-        $graph->blockWidth = 240;
-        $graph->blockHeight = 120;
+        $graph->blockWidth = 280;
+        $graph->blockHeight = 140;
         $graph->xGap = 70;
         $graph->yGap = 40;
         $graph->xDiff = 70;
@@ -623,7 +623,7 @@ class Career extends Model
         if (!empty($graph->groupList)) {
             $groupList = [];
             $groupDiffX = 20;
-            $groupDiffY = 10;
+            $groupDiffY = 40;
             $style = 'whiteSpace=wrap;rounded;html=1;strokeColor=red;fillColor=none;strokeWidth=2;align=left;verticalAlign=top;';
             foreach ($graph->groupList as $id => $data) {
                 if (empty($id)) {
@@ -678,11 +678,12 @@ class Career extends Model
 
             $style = 'whiteSpace=wrap;rounded;dashed=1;strokeColor=blue;fillColor=none;strokeWidth=2;align=left;verticalAlign=bottom;';
             $subGroupDiffX = 5;
+            $spaceForSubGroupTitle = 40;
             foreach ($subGroupListData as $subGroupId => $data) {
                 $x = $data['min_x'] - $subGroupDiffX;
                 $y = $data['min_y'] - $subGroupDiffX;
                 $width = $data['max_width'] + $subGroupDiffX * 2;
-                $height = $data['max_height'] + $subGroupDiffX * 2;
+                $height = $data['max_height'] + $subGroupDiffX * 2 + $spaceForSubGroupTitle;
                 $label = '<h4>'.$data['label'].'</h4>';
                 $vertexData = "var sg$subGroupId = graph.insertVertex(parent, null, '$label', $x, $y, $width, $height, '$style');";
                 $subGroupList[] = $vertexData;

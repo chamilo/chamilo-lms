@@ -49,7 +49,6 @@ $actions = [
     'display_sessions',
     'subscribe_to_session',
     'search_tag',
-    'search_session',
     'subscribe_course_validation',
     'subscribe_course',
 ];
@@ -274,7 +273,6 @@ switch ($action) {
             header('Location: '.$url);
             exit;
         }
-        //else show error message?
         break;
     case 'search_tag':
         if (!$user_can_view_page) {
@@ -282,12 +280,5 @@ switch ($action) {
         }
 
         $courseController->sessionsListByCoursesTag($limit);
-        break;
-    case 'search_session':
-        if (!$user_can_view_page) {
-            api_not_allowed(true);
-        }
-
-        $courseController->sessionListBySearch($limit);
         break;
 }

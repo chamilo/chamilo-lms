@@ -5343,7 +5343,7 @@ SQL;
                     $extraFieldValueCareer = new ExtraFieldValue('career');
                     $careerList = isset($enreg['extra_careerid']) && !empty($enreg['extra_careerid']) ? $enreg['extra_careerid'] : [];
                     $careerList = str_replace(['[', ']'], '', $careerList);
-                    $careerList = explode(',' , $careerList);
+                    $careerList = explode(',', $careerList);
                     $finalCareerIdList = [];
                     foreach ($careerList as $careerId) {
                         $realCareerIdList = $extraFieldValueCareer->get_item_id_from_field_variable_and_field_value(

@@ -6627,11 +6627,11 @@ class learnpath
                 ]).'&'.api_get_cidreq()
             );
         }
-        
+
         if (strpos(api_get_self(), 'lp_subscribe_users.php') === false) {
-            if ($this->subscribeUsers == 1  &&
+            if ($this->subscribeUsers == 1 &&
                 $subscriptionSettings['allow_add_users_to_lp']) {
-                $actionsLeft .=  Display::url(
+                $actionsLeft .= Display::url(
                     Display::return_icon(
                         'user.png',
                         get_lang('SubscribeUsersToLp'),

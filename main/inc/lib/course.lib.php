@@ -4954,8 +4954,9 @@ class CourseManager
     {
         $table_course = Database::get_main_table(TABLE_MAIN_COURSE);
         $table_course_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
-        $sql = "SELECT count(id) FROM $table_course c";
-        if (!empty($urlId) && $urlId == intval($urlId)) {
+        $sql = "SELECT count(c.id) FROM $table_course c";
+        if (!empty($urlId)) {
+            $urlId = (int) $urlId;
             $sql .= ", $table_course_rel_access_url u
                     WHERE
                         c.id = u.c_id AND

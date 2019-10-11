@@ -2,7 +2,6 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\ExtraField;
-use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Query\Expr\Join;
 
 /**
@@ -617,40 +616,6 @@ class CoursesAndSessionsCatalog
     }
 
     /**
-     * Search sessions by searched term by session name.
-     *
-     * @param string $queryTerm Term for search
-     * @param array  $limit     Limit info
-     *
-     * @return array The sessions
-     */
-    public static function browseSessionsBySearch($queryTerm, array $limit)
-    {
-        $sessionsToBrowse = [];
-
-        $criteria = Criteria::create()
-            ->where(
-                Criteria::expr()->contains('name', $queryTerm)
-            )
-            ->setFirstResult($limit['start'])
-            ->setMaxResults($limit['length']);
-
-        $sessions = Database::getManager()
-            ->getRepository('ChamiloCoreBundle:Session')
-            ->matching($criteria);
-
-        foreach ($sessions as $session) {
-            if ($session->getNbrCourses() === 0) {
-                continue;
-            }
-
-            $sessionsToBrowse[] = $session;
-        }
-
-        return $sessionsToBrowse;
-    }
-
-    /**
      * Search sessions by the tags in their courses.
      *
      * @param string $termTag Term for search in tags
@@ -663,14 +628,22 @@ class CoursesAndSessionsCatalog
         $em = Database::getManager();
         $qb = $em->createQueryBuilder();
 
+        $urlId = api_get_current_access_url_id();
+
         $sessions = $qb->select('s')
-            ->distinct(true)
+            ->distinct()
             ->from('ChamiloCoreBundle:Session', 's')
             ->innerJoin(
                 'ChamiloCoreBundle:SessionRelCourse',
                 'src',
                 Join::WITH,
                 's.id = src.session'
+            )
+            ->innerJoin(
+                'ChamiloCoreBundle:AccessUrlRelSession',
+                'url',
+                Join::WITH,
+                'url.sessionId = s.id'
             )
             ->innerJoin(
                 'ChamiloCoreBundle:ExtraFieldRelTag',
@@ -695,6 +668,8 @@ class CoursesAndSessionsCatalog
             )
             ->andWhere(
                 $qb->expr()->eq('f.extraFieldType', ExtraField::COURSE_FIELD_TYPE)
+            )->andWhere(
+                $qb->expr()->eq('url.accessUrlId', $urlId)
             )
             ->setFirstResult($limit['start'])
             ->setMaxResults($limit['length'])

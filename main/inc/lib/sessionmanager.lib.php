@@ -5340,9 +5340,30 @@ SQL;
                 // Adding the relationship "Session - User" for students
                 $userList = [];
                 if (is_array($users)) {
+                    $extraFieldValueCareer = new ExtraFieldValue('career');
+                    $careerList = isset($enreg['extra_careerid']) && !empty($enreg['extra_careerid']) ? $enreg['extra_careerid'] : [];
+                    $careerList = str_replace(['[', ']'], '', $careerList);
+                    $careerList = explode(',', $careerList);
+                    $finalCareerIdList = [];
+                    foreach ($careerList as $careerId) {
+                        $realCareerIdList = $extraFieldValueCareer->get_item_id_from_field_variable_and_field_value(
+                            'external_career_id',
+                            $careerId
+                        );
+                        if (isset($realCareerIdList['item_id'])) {
+                            $finalCareerIdList[] = $realCareerIdList['item_id'];
+                        }
+                    }
+
                     foreach ($users as $user) {
                         $user_id = UserManager::get_user_id_from_username($user);
                         if ($user_id !== false) {
+                            if (!empty($finalCareerIdList)) {
+                                foreach ($finalCareerIdList as $careerId) {
+                                    UserManager::addUserCareer($user_id, $careerId);
+                                }
+                            }
+
                             $userList[] = $user_id;
                             // Insert new users.
                             $sql = "INSERT IGNORE INTO $tbl_session_user SET

@@ -73,9 +73,8 @@ $column_model = [
         'sortable' => 'false',
     ],
 ];
-//Autowidth
+
 $extra_params['autowidth'] = 'true';
-//height auto
 $extra_params['height'] = 'auto';
 
 $diagramLink = '';
@@ -144,8 +143,13 @@ switch ($action) {
         break;
     case 'edit':
         api_protect_admin_script();
+        $id = isset($_GET['id']) ? (int) $_GET['id'] : null;
+        $careerInfo = $career->get($id);
+        if (empty($careerInfo)) {
+            api_not_allowed(true);
+        }
         // Action handling: Editing
-        $url = api_get_self().'?action='.Security::remove_XSS($_GET['action']).'&id='.intval($_GET['id']);
+        $url = api_get_self().'?action=edit&id='.$id;
         $form = $career->return_form($url, 'edit');
 
         // The validation or display
@@ -230,7 +234,6 @@ switch ($action) {
         break;
 }
 
-// The header.
 Display::display_header($tool_name);
 
 ?>

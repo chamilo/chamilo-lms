@@ -169,8 +169,6 @@ class Career extends Model
 
         $form->setDefaults($defaults);
 
-
-
         // Setting the rules
         $form->addRule('name', get_lang('ThisFieldIsRequired'), 'required');
 

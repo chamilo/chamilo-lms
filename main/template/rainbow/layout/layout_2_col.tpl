@@ -181,6 +181,21 @@
                     {% include 'layout/hot_courses.tpl'|get_template %}
                     <!-- END HOT COURSE -->
 
+                    <div id="download-app" class="download-app">
+                        <ul class="links">
+                            <li>
+                                <a href="https://play.google.com/store/apps/details?id=org.ofaj.parkur" target="_blank">
+                                    <img width="150px" src="{{ _p.web_css_theme }}images/googleplaystore.svg">
+                                </a>
+                            </li>
+                            <li>
+                                <a href="https://www.apple.com/fr/ios/app-store/" target="_blank">
+                                    <img width="150px" src="{{ _p.web_css_theme }}images/applestore.svg">
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+
                     <div id="latest_courses"></div>
 
                     <!-- MESSAGE -->

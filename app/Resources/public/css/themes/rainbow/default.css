@@ -95,6 +95,18 @@ hr{
     padding-top: 0;
     margin-top: 0;
 }
+.download-app .links{
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: inline-block;
+    width: 100%;
+    text-align: center;
+}
+.download-app .links li {
+    display: inline-block;
+    padding: 1rem;
+}
 #form-login label{
     display:none;
 }
@@ -403,6 +415,7 @@ footer #footer_right{
     text-align: center;
     margin-bottom: 2rem;
 }
+
 .navbar{
     border-radius: 0;
 }
@@ -1276,7 +1289,7 @@ svg circle{
 }
 #home-welcome{
     line-height: 20px;
-}
+}so
 .mejs__container .mejs__controls {
     position: absolute;
     list-style-type: none;

@@ -1437,7 +1437,6 @@ class ImportCsv
                         'careerid'
                     );
                     $externalCareerIdList = $externalCareerIdList['value'];
-                    $externalCareerIds = [];
                     if (substr($externalCareerIdList, 0, 1) === '[') {
                         $externalCareerIdList = substr($externalCareerIdList, 1, -1);
                         $externalCareerIds = preg_split('/,/', $externalCareerIdList);

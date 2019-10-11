@@ -1331,6 +1331,9 @@ requires extension "php-soap"  sudo apt-get install php-soap
 // Changes the ck editor enter mode value. Default: CKEDITOR.ENTER_P
 // $_configuration['ck_editor_enter_mode_value'] = 'CKEDITOR.ENTER_BR';
 
+// CREATE TABLE user_career (id INT AUTO_INCREMENT NOT NULL, user_id INT NOT NULL, career_id INT NOT NULL, created_at DATETIME NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;
+// $_configuration['allow_career_users'] = false;
+
 // KEEP THIS AT THE END
 // -------- Custom DB changes
 // Add user activation by confirmation email

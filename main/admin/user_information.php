@@ -708,6 +708,7 @@ echo Tracking::displayUserSkills(
 if (api_get_configuration_value('allow_career_users')) {
     $careers = UserManager::getUserCareers($userId);
     if (!empty($careers)) {
+        echo Display::page_subheader(get_lang('Careers'), null, 'h3', ['class' => 'section-title']);
         $table = new HTML_Table(['class' => 'data_table']);
         $table->setHeaderContents(0, 0, get_lang('Career'));
         $row = 1;

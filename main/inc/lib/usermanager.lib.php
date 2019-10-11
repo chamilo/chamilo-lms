@@ -6638,15 +6638,44 @@ SQL;
 
     /**
      * @param int $userId
+     *
+     * @return array
+     */
+    public function getUserCareers($userId)
+    {
+        $table = Database::get_main_table(TABLE_MAIN_USER_CAREER);
+        $tableCareer = Database::get_main_table(TABLE_CAREER);
+        $userId = (int) $userId;
+
+        $sql = "SELECT c.id, c.name 
+                FROM $table uc 
+                INNER JOIN $tableCareer c 
+                ON uc.career_id = c.id 
+                WHERE user_id = $userId 
+                ORDER BY uc.created_at
+                ";
+        $result = Database::query($sql);
+
+        return Database::store_result($result, 'ASSOC');
+    }
+
+    /**
+     * @param int $userId
      * @param int $careerId
      */
     public static function addUserCareer($userId, $careerId)
     {
+        if (!api_get_configuration_value('allow_career_users')) {
+            return false;
+        }
+
         if (self::userHasCareer($userId, $careerId) === false) {
             $params = ['user_id' => $userId, 'career_id' => $careerId, 'created_at' => api_get_utc_datetime()];
             $table = Database::get_main_table(TABLE_MAIN_USER_CAREER);
             Database::insert($table, $params);
         }
+
+        return true;
     }
 
     /**

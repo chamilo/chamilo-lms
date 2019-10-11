@@ -5346,13 +5346,12 @@ SQL;
                     $careerList = explode(',' , $careerList);
                     $finalCareerIdList = [];
                     foreach ($careerList as $careerId) {
-                        $careerId = (int) $careerId;
-                        $realCareerIdList = $extraFieldValueCareer->get_item_id_from_field_variable_and_field_value('external_career_id', $careerId);
-                        $realCareerIdList = $realCareerIdList['value'];
-                        if (!empty($realCareerIdList)) {
-                            foreach ($realCareerIdList as $realCareerId) {
-                                $finalCareerIdList[] = $realCareerId;
-                            }
+                        $realCareerIdList = $extraFieldValueCareer->get_item_id_from_field_variable_and_field_value(
+                            'external_career_id',
+                            $careerId
+                        );
+                        if (isset($realCareerIdList['item_id'])) {
+                            $finalCareerIdList[] = $realCareerIdList['item_id'];
                         }
                     }
 

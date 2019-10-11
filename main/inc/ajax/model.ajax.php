@@ -602,6 +602,17 @@ switch ($action) {
             }
         }
 
+        if (isset($_GET['group_id_in_toolbar']) && !empty($_GET['group_id_in_toolbar'])) {
+            $groupIdFromToolbar = (int) $_GET['group_id_in_toolbar'];
+            if (!empty($groupIdFromToolbar))  {
+                if (empty($whereCondition)) {
+                    $whereCondition .= " te.group_id  = '$groupIdFromToolbar'";
+                } else {
+                    $whereCondition .= " AND group_id  = '$groupIdFromToolbar'";
+                }
+            }
+        }
+
         if (!empty($whereCondition)) {
             $whereCondition = " AND $whereCondition";
         }

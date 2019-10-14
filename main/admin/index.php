@@ -545,6 +545,10 @@ if (api_is_platform_admin()) {
         'url' => 'special_exports.php',
         'label' => get_lang('SpecialExports'),
     ];
+    /*$items[] = [
+        'url' => 'periodic_export.php',
+        'label' => get_lang('PeriodicExport'),
+    ];*/
     $items[] = [
         'url' => 'system_status.php',
         'label' => get_lang('SystemStatus'),

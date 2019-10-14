@@ -515,15 +515,22 @@ See https://support.chamilo.org/issues/6976
 
 /** MENU FLOAT **/
 
-.circular-menu {
+.c-menu-left {
     height: auto;
     left: 0;
     top: 0;
     position: fixed;
     z-index: 5;
 }
-
-.circle {
+.c-menu-right {
+    display: inline-flex;
+    width: 100%;
+    position: relative;
+    top: 0;
+    left: 0;
+    z-index: 5;
+}
+.c-menu-left .circle {
     opacity: 0;
     margin-left: 50px;
     margin-top: 4px;
@@ -531,25 +538,34 @@ See https://support.chamilo.org/issues/6976
     border-radius: 20px;
     background-color: #ffffff;
     border: 1px solid #8dcbf3;
-
     -webkit-transform: translate(-100%);
     -moz-transform:  translate(-100%);
     -transform:  translate(-100%);
-
     -webkit-transition: all 0.4s ease-out;
     -moz-transition: all 0.4s ease-out;
     transition: all 0.4s ease-out;
 }
+.c-menu-right .circle {
+    opacity: 0;
+    margin-left: 50px;
+    margin-top: 4px;
+    padding: 2px;
+    border-radius: 20px;
+    background-color: #ffffff;
+    border: 1px solid #8dcbf3;
+}
 
-.open.circle {
+.c-menu-left .open.circle {
     opacity: 1;
-
     -webkit-transform:  translate(0%);
     -moz-transform: translate(0%);
     -transform: translate(0%);
 }
+.c-menu-right .open.circle {
+    opacity: 1;
+}
 
-.circle a {
+.c-menu-left .circle a, .c-menu-right .circle a {
     text-decoration: none;
     color: #fff;
     display: inline-block;
@@ -560,7 +576,7 @@ See https://support.chamilo.org/issues/6976
     border-radius: 100%;
 }
 
-.circle a:hover {
+.c-menu-left .circle a:hover {
     color: #eef;
 }
 

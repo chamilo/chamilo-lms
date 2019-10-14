@@ -507,7 +507,6 @@ class Career extends Model
             $list[$column]['column'] = $column;
         }
 
-        $connections = '';
         $groupDrawLine = [];
         $groupCourseList = [];
         $simpleConnectionList = [];
@@ -604,12 +603,12 @@ class Career extends Model
         // Creates graph
         $graph = new stdClass();
         $graph->blockWidth = 280;
-        $graph->blockHeight = 140;
+        $graph->blockHeight = 150;
+
         $graph->xGap = 70;
-        $graph->yGap = 40;
+        $graph->yGap = 50;
         $graph->xDiff = 70;
-        $graph->yDiff = 40;
-        $graph->groupXGap = 50;
+        $graph->yDiff = 50;
 
         foreach ($groupsBetweenColumns as $group => $items) {
             self::parseColumnList($groupCourseList, $items, '', $graph, $simpleConnectionList);

@@ -11,7 +11,7 @@ api_protect_course_script(true);
 require_once 'work.lib.php';
 $this_section = SECTION_COURSES;
 
-$workId = isset($_GET['id']) ? intval($_GET['id']) : null;
+$workId = isset($_GET['id']) ? (int) $_GET['id'] : null;
 $courseInfo = api_get_course_info();
 
 if (empty($workId) || empty($courseInfo)) {
@@ -20,7 +20,7 @@ if (empty($workId) || empty($courseInfo)) {
 
 // Student publications are saved with the iid in a LP
 $origin = api_get_origin();
-if ($origin == 'learnpath') {
+if ($origin === 'learnpath') {
     $em = Database::getManager();
     /** @var CStudentPublication $work */
     $work = $em->getRepository('ChamiloCourseBundle:CStudentPublication')->findOneBy(
@@ -73,14 +73,12 @@ $onlyOnePublication = api_get_configuration_value('allow_only_one_student_public
 if (api_is_allowed_to_session_edit(false, true) && !empty($workId) && !api_is_invitee()) {
     $url = api_get_path(WEB_CODE_PATH).'work/upload.php?'.api_get_cidreq().'&id='.$workId;
     $actionsRight = Display::url(
-        Display::return_icon(
-            'upload_file.png',
-            get_lang('UploadMyAssignment'),
-            null,
-            ICON_SIZE_MEDIUM
-        ).get_lang('UploadMyAssignment'),
+        Display::returnFontAwesomeIcon(
+            ' fa-upload'
+        ).
+        get_lang('UploadMyAssignment'),
         $url,
-        ['class' => 'btn-toolbar']
+        ['class' => 'btn btn-primary', 'id' => 'upload_button']
     );
 }
 
@@ -107,10 +105,35 @@ if (!empty($my_folder_data['description'])) {
     $content .= Display::panel($contentWork, get_lang('Description'));
 }
 
-$content .= workGetExtraFieldData($workId);
+$extraFieldWorkData = workGetExtraFieldData($workId);
+
+if (!empty($extraFieldWorkData)) {
+    $forceDownload = api_get_configuration_value('force_download_doc_before_upload_work');
+    if ($forceDownload) {
+        // Force to download documents first.
+        $downloadDocumentsFirst = addslashes(get_lang('DownloadDocumentsFirst'));
+        $content .= "<script>
+            $(function() {
+                var clicked = 0;
+                $('#upload_button').on('click', function(e) {
+                    if (clicked == 0) {
+                        alert('$downloadDocumentsFirst');
+                        e.preventDefault();
+                    }
+                });
+                
+                $('.download_extra_field').on('click', function(e){      
+                    clicked = 1;
+                });
+            });
+            </script>";
+    }
+}
+
+$content .= $extraFieldWorkData;
 
 $action = isset($_REQUEST['action']) ? $_REQUEST['action'] : null;
-$item_id = isset($_REQUEST['item_id']) ? intval($_REQUEST['item_id']) : null;
+$item_id = isset($_REQUEST['item_id']) ? (int) $_REQUEST['item_id'] : null;
 
 switch ($action) {
     case 'delete':
@@ -126,7 +149,7 @@ switch ($action) {
 
 $result = getWorkDateValidationStatus($work_data);
 $content .= $result['message'];
-$check_qualification = intval($my_folder_data['qualification']);
+$check_qualification = (int) $my_folder_data['qualification'];
 
 if (!api_is_invitee()) {
     if (!empty($work_data['enable_qualification']) && !empty($check_qualification)) {
@@ -215,7 +238,7 @@ if (!api_is_invitee()) {
                 'width' => '60',
                 'align' => 'left',
                 'search' => 'false',
-                'wrap_cell' => "true",
+                'wrap_cell' => 'true',
             ],
             [
                 'name' => 'qualification',
@@ -260,7 +283,9 @@ if (!api_is_invitee()) {
         </script>
     ';
 
-    $content .= getAllDocumentsFromWorkToString($workId, $courseInfo);
+    $documents = getAllDocumentsFromWorkToString($workId, $courseInfo);
+    $content .= $documents;
+
     $tableWork = Display::grid_html('results');
     $content .= Display::panel($tableWork);
 }

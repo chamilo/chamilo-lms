@@ -93,7 +93,7 @@ Session::erase('paint_dir');
 Session::erase('temp_audio_nanogong');
 
 $plugin = new AppPlugin();
-$pluginList = $plugin->get_installed_plugins();
+$pluginList = $plugin->getInstalledPlugins();
 $capturePluginInstalled = in_array('jcapture', $pluginList);
 
 if ($capturePluginInstalled) {
@@ -431,13 +431,15 @@ switch ($action) {
                 );
             }
 
-            GroupManager::allowUploadEditDocument(
-                $userId,
-                $courseId,
-                $group_properties,
-                $document_info,
-                true
-            );
+            if (!empty($groupId)) {
+                GroupManager::allowUploadEditDocument(
+                    $userId,
+                    $courseId,
+                    $group_properties,
+                    $document_info,
+                    true
+                );
+            }
 
             $parent_id = $document_info['parent_id'];
             $my_path = UserManager::getUserPathById(api_get_user_id(), 'system');
@@ -2158,18 +2160,24 @@ echo $dirForm;
 echo $selector;
 
 $table->display();
-$ajaxURL = api_get_path(WEB_AJAX_PATH).'document.ajax.php?a=get_document_quota&'.api_get_cidreq();
 
 if (count($documentAndFolders) > 1) {
-    echo '<script>
-    $(function() {
-        $.ajax({
-            url:"'.$ajaxURL.'",
-            success:function(data){
-                $("#course_quota").html(data);
-            }
+    $ajaxURL = api_get_path(WEB_AJAX_PATH).'document.ajax.php?a=get_document_quota&'.api_get_cidreq();
+    if ($isAllowedToEdit) {
+        echo '<script>
+        $(function() {        
+            $.ajax({
+                url:"'.$ajaxURL.'",
+                success:function(data){
+                    $("#course_quota").html(data);
+                }
+            });
         });
-        
+        </script>';
+    }
+
+    echo '<script>
+    $(function() {        
         $(".document_size").each(function(i, obj) {
             var path = obj.getAttribute("data-path");
                             
@@ -2182,6 +2190,7 @@ if (count($documentAndFolders) > 1) {
         });    
     });
     </script>';
+
     echo '<span id="course_quota"></span>';
 }
 

@@ -39,5 +39,10 @@ foreach ($languageList['all'] as $language) {
 
 $template->assign('language_list', implode("','", $list));
 
+$enterMode = api_get_configuration_value('ck_editor_enter_mode_value');
+if (!empty($enterMode)) {
+    $template->assign('enter_mode', $enterMode);
+}
+
 header('Content-type: application/x-javascript');
 $template->display($template->get_template('javascript/editor/ckeditor/config_js.tpl'));

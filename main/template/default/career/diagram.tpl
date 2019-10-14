@@ -4,6 +4,11 @@
     <script>
         mxBasePath = '{{ _p.web_lib }}mxgraph/src/';
     </script>
+    <style>
+        #graphContainer svg {
+            min-width: 100% !important;
+        }
+    </style>
     <script type="text/javascript" src="{{ _p.web_lib }}mxgraph/src/js/mxClient.js"></script>
     <script>
         // Overridden to define per-shape connection points
@@ -98,6 +103,14 @@
 
         $(document).ready(function () {
             main(document.getElementById('graphContainer'));
+
+            var svg1 = document.getElementsByTagName("svg")[0];
+            var data = svg1.getBBox();
+            var widthValue = data.width + 50;
+            var att = document.createAttributeNS(null, "viewBox");       // Create a "viewBox" attribute
+            att.value = '0 0 ' + widthValue + ' '+widthValue;                           // Set the value of the viewBox attribute
+            svg1.setAttributeNode(att);
+
         });
     </script>
 

@@ -103,13 +103,11 @@ if (!in_array($_GET['type'], $possible_types)) {
     Display::display_footer();
 }
 
-$error_message = '';
-
 // Displaying the form for adding or editing the question
-
 $ch_type = 'ch_'.$_GET['type'];
 /** @var survey_question $surveyQuestion */
 $surveyQuestion = new $ch_type();
+//$surveyQuestion = survey_question::createQuestion($_GET['type'])
 
 // The defaults values for the form
 $formData = [];

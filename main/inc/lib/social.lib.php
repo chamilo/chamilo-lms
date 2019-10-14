@@ -54,25 +54,6 @@ class SocialManager extends UserManager
     }
 
     /**
-     * Get relation type contact by name.
-     *
-     * @param string names of the kind of relation
-     *
-     * @return int
-     *
-     * @author isaac flores paz
-     */
-    public static function get_relation_type_by_name($relation_type_name)
-    {
-        $list_type_friend = self::show_list_type_friends();
-        foreach ($list_type_friend as $value_type_friend) {
-            if (strtolower($value_type_friend['title']) == $relation_type_name) {
-                return $value_type_friend['id'];
-            }
-        }
-    }
-
-    /**
      * Get the kind of relation between contacts.
      *
      * @param int user id
@@ -1640,13 +1621,12 @@ class SocialManager extends UserManager
                   ";
 
         if ($getCount) {
-            $select = ' SELECT count(id) count ';
+            $select = ' SELECT count(id) as count_items ';
         }
 
-        $sql = "$select                    
-                    FROM $tblMessage m
-                WHERE
-                    msg_status <> ".MESSAGE_STATUS_WALL_DELETE.' AND ';
+        $sqlBase = "$select FROM $tblMessage m WHERE ";
+        $sql = [];
+        $sql[1] = $sqlBase."msg_status <> ".MESSAGE_STATUS_WALL_DELETE.' AND ';
 
         // Get my own posts
         $userReceiverCondition = ' (
@@ -1655,22 +1635,25 @@ class SocialManager extends UserManager
             parent_id = '.$parentId.'
         )';
 
-        $sql .= $userReceiverCondition;
+        $sql[1] .= $userReceiverCondition;
 
-        $sql .= ' OR ( msg_status = '.MESSAGE_STATUS_PROMOTED.' ) ';
+        $sql[2] = $sqlBase.' msg_status = '.MESSAGE_STATUS_PROMOTED.' ';
 
         // Get my group posts
         $groupCondition = '';
         if (!empty($groupId)) {
             if (is_array($groupId)) {
                 $groupId = array_map('intval', $groupId);
-                $groupId = implode("','", $groupId);
-                $groupCondition = " OR ( group_id IN ('$groupId') ";
+                $groupId = implode(",", $groupId);
+                $groupCondition = " ( group_id IN ($groupId) ";
             } else {
                 $groupId = (int) $groupId;
-                $groupCondition = " OR ( group_id = '$groupId' ";
+                $groupCondition = " ( group_id = $groupId ";
             }
-            $groupCondition .= ' AND msg_status IN ('.MESSAGE_STATUS_NEW.', '.MESSAGE_STATUS_UNREAD.')) ';
+            $groupCondition .= ' AND (msg_status = '.MESSAGE_STATUS_NEW.' OR msg_status = '.MESSAGE_STATUS_UNREAD.')) ';
+        }
+        if (!empty($groupCondition)) {
+            $sql[3] = $sqlBase.$groupCondition;
         }
 
         // Get my friend posts
@@ -1678,31 +1661,30 @@ class SocialManager extends UserManager
         if (!empty($friendId)) {
             if (is_array($friendId)) {
                 $friendId = array_map('intval', $friendId);
-                $friendId = implode("','", $friendId);
-                $friendCondition = " OR ( user_receiver_id IN ('$friendId') ";
+                $friendId = implode(",", $friendId);
+                $friendCondition = " ( user_receiver_id IN ($friendId) ";
             } else {
                 $friendId = (int) $friendId;
-                $friendCondition = " OR ( user_receiver_id = '$friendId' ";
+                $friendCondition = " ( user_receiver_id = $friendId ";
             }
             $friendCondition .= ' AND msg_status = '.MESSAGE_STATUS_WALL_POST.' AND parent_id = 0) ';
         }
-
-        if (!empty($groupCondition) || !empty($friendCondition)) {
-            $sql .= " $groupCondition $friendCondition ";
+        if (!empty($friendCondition)) {
+            $sql[4] = $sqlBase.$friendCondition;
         }
 
         if (!empty($threadList)) {
             if ($getCount) {
-                $select = ' SELECT count(iid) count ';
+                $select = ' SELECT count(iid) count_items ';
             } else {
                 $select = " SELECT 
-                                iid,
-                                poster_id,
+                                iid as id,
+                                poster_id as user_sender_id,
                                 '' as user_receiver_id,
-                                post_date,
-                                post_text,
+                                post_date as send_date,
+                                post_text as content,
                                 '' as parent_id,
-                                ".MESSAGE_STATUS_FORUM.",
+                                ".MESSAGE_STATUS_FORUM." as msg_status,
                                 '' as group_id,
                                 forum_id,
                                 thread_id,
@@ -1713,72 +1695,86 @@ class SocialManager extends UserManager
             $threadList = array_map('intval', $threadList);
             $threadList = implode("','", $threadList);
             $condition = " thread_id IN ('$threadList') ";
-            $sql .= "                
-                UNION (
-                    $select
+            $sql[5] = "$select
                     FROM c_forum_post  
                     WHERE $condition                                         
-                )
                 ";
         }
 
         if ($getCount) {
-            $res = Database::query($sql);
-            $row = Database::fetch_array($res);
+            $count = 0;
+            foreach ($sql as $oneQuery) {
+                if (!empty($oneQuery)) {
+                    $res = Database::query($oneQuery);
+                    $row = Database::fetch_array($res);
+                    $count += (int) $row['count_items'];
+                }
+            }
 
-            return (int) $row['count'];
+            return $count;
         }
 
-        $sql .= ' ORDER BY send_date DESC ';
-        $sql .= " LIMIT $start, $length ";
-
+        $sqlOrder = ' ORDER BY send_date DESC ';
+        $sqlLimit = " LIMIT $start, $length ";
         $messages = [];
-        $res = Database::query($sql);
-        $em = Database::getManager();
-        if (Database::num_rows($res) > 0) {
-            $repo = $em->getRepository('ChamiloCourseBundle:CForumPost');
-            $repoThread = $em->getRepository('ChamiloCourseBundle:CForumThread');
-            $groups = [];
-            $userGroup = new UserGroup();
-            $urlGroup = api_get_path(WEB_CODE_PATH).'social/group_view.php?id=';
-            while ($row = Database::fetch_array($res, 'ASSOC')) {
-                $row['group_info'] = [];
-                if (!empty($row['group_id'])) {
-                    if (!in_array($row['group_id'], $groups)) {
-                        $group = $userGroup->get($row['group_id']);
-                        $group['url'] = $urlGroup.$group['id'];
-                        $groups[$row['group_id']] = $group;
-                        $row['group_info'] = $group;
-                    } else {
-                        $row['group_info'] = $groups[$row['group_id']];
+        foreach ($sql as $index => $oneQuery) {
+            if ($index === 5) {
+                // Exception only for the forum query above (field name change)
+                $oneQuery .= ' ORDER BY post_date DESC '.$sqlLimit;
+            } else {
+                $oneQuery .= $sqlOrder.$sqlLimit;
+            }
+            $res = Database::query($oneQuery);
+            $em = Database::getManager();
+            if (Database::num_rows($res) > 0) {
+                $repo = $em->getRepository('ChamiloCourseBundle:CForumPost');
+                $repoThread = $em->getRepository('ChamiloCourseBundle:CForumThread');
+                $groups = [];
+                $userGroup = new UserGroup();
+                $urlGroup = api_get_path(WEB_CODE_PATH).'social/group_view.php?id=';
+                while ($row = Database::fetch_array($res, 'ASSOC')) {
+                    $row['group_info'] = [];
+                    if (!empty($row['group_id'])) {
+                        if (!in_array($row['group_id'], $groups)) {
+                            $group = $userGroup->get($row['group_id']);
+                            $group['url'] = $urlGroup.$group['id'];
+                            $groups[$row['group_id']] = $group;
+                            $row['group_info'] = $group;
+                        } else {
+                            $row['group_info'] = $groups[$row['group_id']];
+                        }
                     }
-                }
 
-                // Forums
-                $row['post_title'] = '';
-                $row['forum_title'] = '';
-                $row['thread_url'] = '';
-                if ($row['msg_status'] == MESSAGE_STATUS_FORUM) {
-                    /** @var CForumPost $post */
-                    $post = $repo->find($row['id']);
-                    /** @var CForumThread $thread */
-                    $thread = $repoThread->find($row['thread_id']);
-                    if ($post && $thread) {
-                        $courseInfo = api_get_course_info_by_id($post->getCId());
-                        $row['post_title'] = $post->getForumId();
-                        $row['forum_title'] = $thread->getThreadTitle();
-                        $row['thread_url'] = api_get_path(WEB_CODE_PATH).'forum/viewthread.php?'.http_build_query([
-                            'cidReq' => $courseInfo['code'],
-                            'forum' => $post->getForumId(),
-                            'thread' => $post->getThreadId(),
-                            'post_id' => $post->getIid(),
-                        ]).'#post_id_'.$post->getIid();
+                    // Forums
+                    $row['post_title'] = '';
+                    $row['forum_title'] = '';
+                    $row['thread_url'] = '';
+                    if ($row['msg_status'] == MESSAGE_STATUS_FORUM) {
+                        /** @var CForumPost $post */
+                        $post = $repo->find($row['id']);
+                        /** @var CForumThread $thread */
+                        $thread = $repoThread->find($row['thread_id']);
+                        if ($post && $thread) {
+                            $courseInfo = api_get_course_info_by_id($post->getCId());
+                            $row['post_title'] = $post->getForumId();
+                            $row['forum_title'] = $thread->getThreadTitle();
+                            $row['thread_url'] = api_get_path(WEB_CODE_PATH).'forum/viewthread.php?'.http_build_query([
+                                    'cidReq' => $courseInfo['code'],
+                                    'forum' => $post->getForumId(),
+                                    'thread' => $post->getThreadId(),
+                                    'post_id' => $post->getIid(),
+                                ]).'#post_id_'.$post->getIid();
+                        }
                     }
-                }
 
-                $messages[] = $row;
+                    $messages[$row['id']] = $row;
+                }
             }
         }
+        // Reordering messages by ID (reverse order) is enough to have the
+        // latest first, as there is currently no option to edit messages
+        // afterwards
+        krsort($messages);
 
         return $messages;
     }
@@ -2215,77 +2211,6 @@ class SocialManager extends UserManager
         }
 
         $template->assign('social_avatar_block', $template->fetch($templateName));
-    }
-
-    /**
-     * @param int $user_id
-     * @param $link_shared
-     * @param $show_full_profile
-     *
-     * @return string
-     */
-    public static function listMyFriends($user_id, $link_shared, $show_full_profile)
-    {
-        // SOCIALGOODFRIEND , USER_RELATION_TYPE_FRIEND, USER_RELATION_TYPE_PARENT
-        $friends = self::get_friends($user_id, USER_RELATION_TYPE_FRIEND);
-        $number_of_images = 30;
-        $number_friends = count($friends);
-        $friendHtml = '';
-        if ($number_friends != 0) {
-            if ($number_friends > $number_of_images) {
-                if (api_get_user_id() == $user_id) {
-                    $friendHtml .= ' <span><a href="friends.php">'.get_lang('SeeAll').'</a></span>';
-                } else {
-                    $friendHtml .= ' <span>'
-                        .'<a href="'.api_get_path(WEB_CODE_PATH).'social/profile_friends_and_groups.inc.php'
-                        .'?view=friends&height=390&width=610&user_id='.$user_id.'"'
-                        .'class="ajax" data-title="'.get_lang('SeeAll').'" title="'.get_lang('SeeAll').'" >'.get_lang('SeeAll').'</a></span>';
-                }
-            }
-
-            $friendHtml .= '<ul class="nav nav-list">';
-            $j = 1;
-            for ($k = 0; $k < $number_friends; $k++) {
-                if ($j > $number_of_images) {
-                    break;
-                }
-                if (isset($friends[$k])) {
-                    $friend = $friends[$k];
-                    $name_user = api_get_person_name($friend['firstName'], $friend['lastName']);
-                    $user_info_friend = api_get_user_info($friend['friend_user_id'], true);
-
-                    if ($user_info_friend['user_is_online']) {
-                        $statusIcon = Display::span('', ['class' => 'online_user_in_text']);
-                    } else {
-                        $statusIcon = Display::span('', ['class' => 'offline_user_in_text']);
-                    }
-
-                    $friendHtml .= '<li>';
-                    $friendHtml .= '<div>';
-
-                    // the height = 92 must be the same in the image_friend_network span style in default.css
-                    $friends_profile = UserManager::getUserPicture(
-                        $friend['friend_user_id'],
-                        USER_IMAGE_SIZE_SMALL
-                    );
-                    $friendHtml .= '<img src="'.$friends_profile.'" id="imgfriend_'.$friend['friend_user_id'].'" title="'.$name_user.'"/>';
-                    $link_shared = (empty($link_shared)) ? '' : '&'.$link_shared;
-                    $friendHtml .= $statusIcon.'<a href="profile.php?'.'u='.$friend['friend_user_id'].$link_shared.'">'.$name_user.'</a>';
-                    $friendHtml .= '</div>';
-                    $friendHtml .= '</li>';
-                }
-                $j++;
-            }
-            $friendHtml .= '</ul>';
-        } else {
-            $friendHtml .= '<div class="">'.get_lang('NoFriendsInYourContactList').'<br />
-                <a class="btn btn-primary" href="'.api_get_path(WEB_PATH).'whoisonline.php">
-                <em class="fa fa-search"></em> '.get_lang('TryAndFindSomeFriends').'</a></div>';
-        }
-
-        $friendHtml = Display::panel($friendHtml, get_lang('SocialFriend').' ('.$number_friends.')');
-
-        return $friendHtml;
     }
 
     /**

@@ -715,7 +715,7 @@ class CourseManager
                     )
                 );
 
-                $send = api_get_course_setting('email_alert_to_teacher_on_new_user_in_course', $courseCode);
+                $send = api_get_course_setting('email_alert_to_teacher_on_new_user_in_course', $courseInfo);
 
                 if ($send == 1) {
                     self::email_to_tutor(
@@ -731,7 +731,7 @@ class CourseManager
                     );
                 }
 
-                $subscribe = (int) api_get_course_setting('subscribe_users_to_forum_notifications', $courseCode);
+                $subscribe = (int) api_get_course_setting('subscribe_users_to_forum_notifications', $courseInfo);
                 if ($subscribe === 1) {
                     require_once api_get_path(SYS_CODE_PATH).'forum/forumfunction.inc.php';
                     $forums = get_forums(0, $courseCode, true, $sessionId);
@@ -3650,7 +3650,7 @@ class CourseManager
             $collapsableLink = '';
             if ($collapsable) {
                 $url = api_get_path(WEB_CODE_PATH).
-                    'auth/courses.php?categoryid='.$row['id'].'&sec_token='.$stok.'&redirect=home';
+                    'auth/sort_my_courses.php?categoryid='.$row['id'].'&sec_token='.$stok.'&redirect=home';
                 $collapsed = isset($row['collapsed']) && $row['collapsed'] ? 1 : 0;
                 if ($collapsed === 0) {
                     $collapsableLink = Display::url(
@@ -4954,8 +4954,9 @@ class CourseManager
     {
         $table_course = Database::get_main_table(TABLE_MAIN_COURSE);
         $table_course_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
-        $sql = "SELECT count(id) FROM $table_course c";
-        if (!empty($urlId) && $urlId == intval($urlId)) {
+        $sql = "SELECT count(c.id) FROM $table_course c";
+        if (!empty($urlId)) {
+            $urlId = (int) $urlId;
             $sql .= ", $table_course_rel_access_url u
                     WHERE
                         c.id = u.c_id AND

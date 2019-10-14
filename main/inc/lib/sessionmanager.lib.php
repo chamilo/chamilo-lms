@@ -169,7 +169,8 @@ class SessionManager
             ? (empty($accessUrlId) ? api_get_current_access_url_id() : (int) $accessUrlId)
             : 1;
 
-        if (is_array($_configuration[$accessUrlId]) &&
+        if (isset($_configuration[$accessUrlId]) &&
+            is_array($_configuration[$accessUrlId]) &&
             isset($_configuration[$accessUrlId]['hosting_limit_sessions']) &&
             $_configuration[$accessUrlId]['hosting_limit_sessions'] > 0
         ) {
@@ -2287,7 +2288,7 @@ class SessionManager
         $course_code = Database::escape_string($course_code);
         $courseInfo = api_get_course_info($course_code);
         $courseId = $courseInfo['real_id'];
-        $subscribe = (int) api_get_course_setting('subscribe_users_to_forum_notifications', $course_code);
+        $subscribe = (int) api_get_course_setting('subscribe_users_to_forum_notifications', $courseInfo);
         $forums = [];
         if ($subscribe === 1) {
             require_once api_get_path(SYS_CODE_PATH).'forum/forumfunction.inc.php';
@@ -3288,33 +3289,6 @@ class SessionManager
     }
 
     /**
-     * Get the session image.
-     *
-     * @param int $id
-     *
-     * @return image path
-     */
-    public static function getSessionImage($id)
-    {
-        $id = (int) $id;
-        $extraFieldValuesTable = Database::get_main_table(TABLE_EXTRA_FIELD_VALUES);
-        $sql = "SELECT value  FROM $extraFieldValuesTable WHERE field_id = 16 AND item_id = ".$id;
-        $result = Database::query($sql);
-        if (Database::num_rows($result) > 0) {
-            while ($row = Database::fetch_array($result, 'ASSOC')) {
-                $sessionImage = $row['value'];
-                $sessionImage = api_get_path(WEB_UPLOAD_PATH).$sessionImage;
-            }
-
-            return $sessionImage;
-        } else {
-            $sessionImage = api_get_path(WEB_IMG_PATH)."session_default.png";
-
-            return $sessionImage;
-        }
-    }
-
-    /**
      * Get Hot Sessions (limit 8).
      *
      * @return array with sessions
@@ -3944,7 +3918,7 @@ class SessionManager
         $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
         $tbl_session_rel_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
         $session_id = (int) $session_id;
-        $sqlSelect = '*, c.id, c.id as real_id';
+        $sqlSelect = '*, c.id, c.id as real_id, c.code as course_code';
 
         if ($getCount) {
             $sqlSelect = 'COUNT(1) as count';
@@ -4421,15 +4395,18 @@ class SessionManager
 
     /**
      * Copies a session with the same data to a new session.
-     * The new copy is not assigned to the same promotion. @see subscribe_sessions_to_promotions() for that.
+     * The new copy is not assigned to the same promotion.
      *
-     * @param   int     Session ID
-     * @param   bool    Whether to copy the relationship with courses
-     * @param   bool    $copyTeachersAndDrh
-     * @param   bool    New courses will be created
-     * @param   bool    Whether to set exercises and learning paths in the new session to invisible by default
+     *
+     * @param int  $id                         Session ID
+     * @param bool $copy_courses               Whether to copy the relationship with courses
+     * @param bool $copyTeachersAndDrh
+     * @param bool $create_new_courses         New courses will be created
+     * @param bool $set_exercises_lp_invisible Set exercises and LPs in the new session to invisible by default
      *
      * @return int The new session ID on success, 0 otherwise
+     *
+     * @see subscribe_sessions_to_promotions() for that.
      *
      * @todo make sure the extra session fields are copied too
      */
@@ -4480,6 +4457,13 @@ class SessionManager
                 //$extraFieldsValuesToCopy['extra_'.$extraFieldValue['variable']] = $extraFieldValue['value'];
                 $extraFieldsValuesToCopy['extra_'.$extraFieldValue['variable']]['extra_'.$extraFieldValue['variable']] = $extraFieldValue['value'];
             }
+        }
+
+        if (isset($extraFieldsValuesToCopy['extra_image']) && isset($extraFieldsValuesToCopy['extra_image']['extra_image'])) {
+            $extraFieldsValuesToCopy['extra_image'] = [
+                'tmp_name' => api_get_path(SYS_UPLOAD_PATH).$extraFieldsValuesToCopy['extra_image']['extra_image'],
+                'error' => 0,
+            ];
         }
 
         // Now try to create the session
@@ -4574,10 +4558,10 @@ class SessionManager
                 self::add_courses_to_session($sid, $short_courses, true);
 
                 if ($create_new_courses === false && $copyTeachersAndDrh) {
-                    foreach ($short_courses as $course) {
-                        $coachList = self::getCoachesByCourseSession($id, $course['id']);
+                    foreach ($short_courses as $courseItemId) {
+                        $coachList = self::getCoachesByCourseSession($id, $courseItemId);
                         foreach ($coachList as $userId) {
-                            self::set_coach_to_course_session($userId, $sid, $course['id']);
+                            self::set_coach_to_course_session($userId, $sid, $courseItemId);
                         }
                     }
                 }
@@ -4681,19 +4665,19 @@ class SessionManager
         $dateFilter = '';
         if (!empty($date)) {
             $dateFilter = <<<SQL
-                AND ('$date' BETWEEN s.access_start_date AND s.access_end_date)
+                AND (('$date' BETWEEN s.access_start_date AND s.access_end_date)
                 OR (s.access_end_date IS NULL)
                 OR (
                     s.access_start_date IS NULL AND 
                     s.access_end_date IS NOT NULL AND s.access_end_date > '$date'
-                )
+                ))
 SQL;
         }
         $sql = "SELECT COUNT(*) 
                 FROM $sessionTable s
                 INNER JOIN $url u
                 ON (s.id = u.session_id)
-                WHERE u.access_url_id = $urlId $dateFilter";
+                WHERE u.access_url_id = $urlId AND s.nbr_courses > 0 $dateFilter";
         $res = Database::query($sql);
 
         $count = 0;
@@ -5356,9 +5340,30 @@ SQL;
                 // Adding the relationship "Session - User" for students
                 $userList = [];
                 if (is_array($users)) {
+                    $extraFieldValueCareer = new ExtraFieldValue('career');
+                    $careerList = isset($enreg['extra_careerid']) && !empty($enreg['extra_careerid']) ? $enreg['extra_careerid'] : [];
+                    $careerList = str_replace(['[', ']'], '', $careerList);
+                    $careerList = explode(',', $careerList);
+                    $finalCareerIdList = [];
+                    foreach ($careerList as $careerId) {
+                        $realCareerIdList = $extraFieldValueCareer->get_item_id_from_field_variable_and_field_value(
+                            'external_career_id',
+                            $careerId
+                        );
+                        if (isset($realCareerIdList['item_id'])) {
+                            $finalCareerIdList[] = $realCareerIdList['item_id'];
+                        }
+                    }
+
                     foreach ($users as $user) {
                         $user_id = UserManager::get_user_id_from_username($user);
                         if ($user_id !== false) {
+                            if (!empty($finalCareerIdList)) {
+                                foreach ($finalCareerIdList as $careerId) {
+                                    UserManager::addUserCareer($user_id, $careerId);
+                                }
+                            }
+
                             $userList[] = $user_id;
                             // Insert new users.
                             $sql = "INSERT IGNORE INTO $tbl_session_user SET
@@ -6852,9 +6857,9 @@ SQL;
      */
     public static function editUserSessionDuration($duration, $userId, $sessionId)
     {
-        $duration = intval($duration);
-        $userId = intval($userId);
-        $sessionId = intval($sessionId);
+        $duration = (int) $duration;
+        $userId = (int) $userId;
+        $sessionId = (int) $sessionId;
 
         if (empty($userId) || empty($sessionId)) {
             return false;
@@ -9080,6 +9085,7 @@ SQL;
         }
 
         $userRelSession = self::getUserSession($userId, $sessionId);
+
         if ($userRelSession) {
             if (isset($userRelSession['collapsed']) && $userRelSession['collapsed'] != '') {
                 $collapsed = $userRelSession['collapsed'];

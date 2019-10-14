@@ -769,7 +769,7 @@ switch ($action) {
 
                 $new_lp_id = learnpath::add_lp(
                     api_get_course_id(),
-                    Security::remove_XSS($_REQUEST['lp_name']),
+                    $_REQUEST['lp_name'],
                     '',
                     'chamilo',
                     'manual',
@@ -1160,8 +1160,7 @@ switch ($action) {
             require 'lp_list.php';
         } else {
             Session::write('refresh', 1);
-            $lp_name = Security::remove_XSS($_REQUEST['lp_name']);
-            $_SESSION['oLP']->set_name($lp_name);
+            $_SESSION['oLP']->set_name($_REQUEST['lp_name']);
             $author = $_REQUEST['lp_author'];
             // Fixing the author name (no body or html tags).
             $auth_init = stripos($author, '<p>');
@@ -1190,8 +1189,6 @@ switch ($action) {
             $hide_toc_frame = null;
             if (isset($_REQUEST['hide_toc_frame']) && $_REQUEST['hide_toc_frame'] == 1) {
                 $hide_toc_frame = $_REQUEST['hide_toc_frame'];
-            } else {
-                $hide_toc_frame = null;
             }
             $_SESSION['oLP']->set_hide_toc_frame($hide_toc_frame);
             $_SESSION['oLP']->set_prerequisite(isset($_POST['prerequisites']) ? (int) $_POST['prerequisites'] : 0);

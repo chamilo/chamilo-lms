@@ -1429,7 +1429,7 @@ class CourseBuilder
         $courseId = (int) $courseId;
 
         if (!empty($session_id) && !empty($courseId)) {
-            $session_id = intval($session_id);
+            $session_id = (int) $session_id;
             if ($withBaseContent) {
                 $sessionCondition = api_get_session_condition(
                     $session_id,
@@ -1527,7 +1527,7 @@ class CourseBuilder
                 $this->course->add_resource($lp);
 
                 if (!empty($obj->preview_image)) {
-                    // Add LP teacher image
+                    // Add LP image
                     $asset = new Asset(
                         $obj->preview_image,
                         '/upload/learning_path/images/'.$obj->preview_image,

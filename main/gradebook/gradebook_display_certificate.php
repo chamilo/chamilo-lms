@@ -81,7 +81,7 @@ $content = '';
 $courseCode = api_get_course_id();
 
 $allowExportToZip = api_get_plugin_setting('customcertificate', 'enable_plugin_customcertificate') == 'true' &&
-    api_get_course_setting('customcertificate_course_enable', $courseCode) == 1;
+    api_get_course_setting('customcertificate_course_enable', $courseInfo) == 1;
 
 $tags = Certificate::notificationTags();
 

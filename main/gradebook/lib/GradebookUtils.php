@@ -561,30 +561,6 @@ class GradebookUtils
     }
 
     /**
-     * Remove a resource from the unique gradebook of a given course.
-     *
-     * @param    int     Link/Resource ID
-     *
-     * @return bool false on error, true on success
-     */
-    public static function get_resource_from_course_gradebook($link_id)
-    {
-        if (empty($link_id)) {
-            return false;
-        }
-        // TODO find the corresponding category (the first one for this course, ordered by ID)
-        $l = Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
-        $sql = "SELECT * FROM $l WHERE id = ".(int) $link_id;
-        $res = Database::query($sql);
-        $row = [];
-        if (Database::num_rows($res) > 0) {
-            $row = Database::fetch_array($res, 'ASSOC');
-        }
-
-        return $row;
-    }
-
-    /**
      * Return the course id.
      *
      * @param    int
@@ -1433,7 +1409,7 @@ class GradebookUtils
 
         foreach ($courses as $course) {
             if (!$includeNonPublicCertificates) {
-                $allowPublicCertificates = api_get_course_setting('allow_public_certificates', $course['code']);
+                $allowPublicCertificates = api_get_course_setting('allow_public_certificates', $course);
 
                 if (empty($allowPublicCertificates)) {
                     continue;
@@ -1506,7 +1482,7 @@ class GradebookUtils
 
             foreach ($sessionCourses as $course) {
                 if (!$includeNonPublicCertificates) {
-                    $allowPublicCertificates = api_get_course_setting('allow_public_certificates', $course['code']);
+                    $allowPublicCertificates = api_get_course_setting('allow_public_certificates');
 
                     if (empty($allowPublicCertificates)) {
                         continue;

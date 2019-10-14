@@ -121,17 +121,14 @@ switch ($action) {
 
         if (!empty($htmlList)) {
             $counter = 0;
-            //error_log('Loading html list');
             $content = '';
             foreach ($htmlList as $value) {
                 $content .= $value.'<pagebreak>';
-                //error_log('Loading html: '.$counter);
                 $counter++;
             }
 
             $tempFile = api_get_path(SYS_ARCHIVE_PATH).uniqid('gradebook_export_all').'.html';
             file_put_contents($tempFile, $content);
-            //error_log('generating pdf');
             $pdf->html_to_pdf(
                 $tempFile,
                 null,
@@ -140,14 +137,12 @@ switch ($action) {
                 true,
                 true
             );
-            //error_log('End generating');
         }
 
         // Delete calc_score session data
         Session::erase('calc_score');
         break;
     case 'download':
-        //Session::write('use_gradebook_cache', true);
         $userId = isset($_GET['user_id']) && $_GET['user_id'] ? $_GET['user_id'] : null;
         $cats = Category::load($cat_id, null, null, null, null, null, false);
         GradebookUtils::generateTable($courseInfo, $userId, $cats);

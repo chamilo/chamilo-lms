@@ -1437,7 +1437,6 @@ class ImportCsv
                         'careerid'
                     );
                     $externalCareerIdList = $externalCareerIdList['value'];
-                    $externalCareerIds = [];
                     if (substr($externalCareerIdList, 0, 1) === '[') {
                         $externalCareerIdList = substr($externalCareerIdList, 1, -1);
                         $externalCareerIds = preg_split('/,/', $externalCareerIdList);
@@ -2560,17 +2559,17 @@ class ImportCsv
         $data = Import::csv_reader($file);
 
         if (!empty($data)) {
-            $this->logger->addInfo(count($data)." records found.");
+            $this->logger->addInfo(count($data).' records found.');
             $extraFieldValue = new ExtraFieldValue('career');
             $extraFieldName = $this->extraFieldIdNameList['career'];
             $externalEventId = null;
 
             $extraField = new ExtraField('career');
-            $extraFieldInfo = $extraField->get_handler_field_info_by_field_variable(
-                $extraFieldName
-            );
+            $extraFieldInfo = $extraField->get_handler_field_info_by_field_variable($extraFieldName);
 
             if (empty($extraFieldInfo)) {
+                $this->logger->addInfo("Extra field doesn't exists: $extraFieldName");
+
                 return false;
             }
 

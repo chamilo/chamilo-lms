@@ -16,7 +16,7 @@ class CourseCategory
     public static function getCategoryById($categoryId)
     {
         $table = Database::get_main_table(TABLE_MAIN_CATEGORY);
-        $categoryId = intval($categoryId);
+        $categoryId = (int) $categoryId;
         $sql = "SELECT * FROM $table WHERE id = $categoryId";
         $result = Database::query($sql);
         if (Database::num_rows($result)) {
@@ -29,7 +29,7 @@ class CourseCategory
     /**
      * Get category details from a simple category code.
      *
-     * @param string $category The literal category code
+     * @param string $categoryCode The literal category code
      *
      * @return array
      */
@@ -41,16 +41,18 @@ class CourseCategory
         $result = Database::query($sql);
         if (Database::num_rows($result)) {
             $category = Database::fetch_array($result, 'ASSOC');
-            // Get access url id
-            $table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE_CATEGORY);
-            $sql = "SELECT * FROM $table WHERE course_category_id = ".$category['id'];
-            $result = Database::query($sql);
-            $result = Database::fetch_array($result);
-            if ($result) {
-                $category['access_url_id'] = $result['access_url_id'];
-            }
+            if ($category) {
+                // Get access url id
+                $table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE_CATEGORY);
+                $sql = "SELECT * FROM $table WHERE course_category_id = ".$category['id'];
+                $result = Database::query($sql);
+                $result = Database::fetch_array($result);
+                if ($result) {
+                    $category['access_url_id'] = $result['access_url_id'];
+                }
 
-            return $category;
+                return $category;
+            }
         }
 
         return [];
@@ -197,11 +199,17 @@ class CourseCategory
         ];
 
         $categoryId = Database::insert($table, $params);
+        if ($categoryId) {
+            self::updateParentCategoryChildrenCount($parent_id, 1);
+            UrlManager::addCourseCategoryListToUrl(
+                [$categoryId],
+                [api_get_current_access_url_id()]
+            );
 
-        self::updateParentCategoryChildrenCount($parent_id, 1);
-        self::addToUrl($categoryId);
+            return $categoryId;
+        }
 
-        return $categoryId;
+        return false;
     }
 
     /**
@@ -214,7 +222,7 @@ class CourseCategory
     {
         $table = Database::get_main_table(TABLE_MAIN_CATEGORY);
         $categoryId = Database::escape_string($categoryId);
-        $delta = intval($delta);
+        $delta = (int) $delta;
         // First get to the highest level possible in the tree
         $result = Database::query("SELECT parent_id FROM $table WHERE code = '$categoryId'");
         $row = Database::fetch_array($result);
@@ -223,7 +231,6 @@ class CourseCategory
             self::updateParentCategoryChildrenCount($row['parent_id'], $delta);
         }
         // Now we're at the top, get back down to update each child
-        //$children_count = courseCategoryChildrenCount($categoryId);
         $sql = "UPDATE $table SET children_count = (children_count - ".abs($delta).") WHERE code = '$categoryId'";
         if ($delta >= 0) {
             $sql = "UPDATE $table SET children_count = (children_count + $delta) WHERE code = '$categoryId'";
@@ -328,7 +335,7 @@ class CourseCategory
     {
         $table = Database::get_main_table(TABLE_MAIN_CATEGORY);
         $code = Database::escape_string($code);
-        $tree_pos = intval($tree_pos);
+        $tree_pos = (int) $tree_pos;
         $parent_id = Database::escape_string($parent_id);
 
         $parentIdCondition = " AND (parent_id IS NULL OR parent_id = '' )";
@@ -382,7 +389,7 @@ class CourseCategory
     public static function courseCategoryChildrenCount($categoryId)
     {
         $table = Database::get_main_table(TABLE_MAIN_CATEGORY);
-        $categoryId = intval($categoryId);
+        $categoryId = (int) $categoryId;
         $count = 0;
         if (empty($categoryId)) {
             return 0;
@@ -576,19 +583,6 @@ class CourseCategory
                 ORDER BY tree_pos";
 
         return Database::store_result(Database::query($sql));
-    }
-
-    /**
-     * @param int $id
-     *
-     * @return bool
-     */
-    public static function addToUrl($id)
-    {
-        UrlManager::addCourseCategoryListToUrl(
-            [$id],
-            [api_get_current_access_url_id()]
-        );
     }
 
     /**
@@ -901,21 +895,14 @@ class CourseCategory
      */
     public static function getCourseCatalogNameTools($action)
     {
-        $nameTools = get_lang('SortMyCourses');
+        $nameTools = get_lang('MyCourses');
         if (empty($action)) {
             return $nameTools; //should never happen
         }
 
         switch ($action) {
-            case 'createcoursecategory':
-                $nameTools = get_lang('CreateCourseCategory');
-                break;
             case 'subscribe':
-                $nameTools = get_lang('CourseManagement');
-                break;
             case 'subscribe_user_with_password':
-                $nameTools = get_lang('CourseManagement');
-                break;
             case 'display_random_courses':
             case 'display_courses':
                 $nameTools = get_lang('CourseManagement');

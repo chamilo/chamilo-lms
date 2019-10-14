@@ -42,7 +42,7 @@ require_once 'hotpotatoes.lib.php';
 $_course = api_get_course_info();
 
 // document path
-$documentPath = api_get_path(SYS_COURSE_PATH).$_course['path']."/document";
+$documentPath = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document';
 $origin = api_get_origin();
 $is_allowedToEdit = api_is_allowed_to_edit(null, true) ||
     api_is_drh() ||
@@ -605,25 +605,45 @@ if ($is_allowedToEdit || $is_tutor) {
             'search' => 'true',
             'hidden' => api_get_configuration_value('exercise_attempts_report_show_username') ? 'false' : 'true',
         ],
-        ['name' => 'group_name', 'index' => 'group_id', 'width' => '40', 'align' => 'left', 'search' => 'true', 'stype' => 'select',
+        [
+            'name' => 'group_name',
+            'index' => 'group_id',
+            'width' => '40',
+            'align' => 'left',
+            'search' => 'true',
+            'stype' => 'select',
             //for the bottom bar
             'searchoptions' => [
                 'defaultValue' => 'group_all',
-                'value' => $group_parameters, ],
+                'value' => $group_parameters,
+            ],
             //for the top bar
-            'editoptions' => ['value' => $group_parameters], ],
+            'editoptions' => ['value' => $group_parameters],
+        ],
         ['name' => 'duration', 'index' => 'exe_duration', 'width' => '30', 'align' => 'left', 'search' => 'true'],
         ['name' => 'start_date', 'index' => 'start_date', 'width' => '60', 'align' => 'left', 'search' => 'true'],
         ['name' => 'exe_date', 'index' => 'exe_date', 'width' => '60', 'align' => 'left', 'search' => 'true'],
         ['name' => 'score', 'index' => 'exe_result', 'width' => '50', 'align' => 'center', 'search' => 'true'],
         ['name' => 'ip', 'index' => 'user_ip', 'width' => '40', 'align' => 'center', 'search' => 'true'],
-        ['name' => 'status', 'index' => 'revised', 'width' => '40', 'align' => 'left', 'search' => 'true', 'stype' => 'select',
+        [
+            'name' => 'status',
+            'index' => 'revised',
+            'width' => '40',
+            'align' => 'left',
+            'search' => 'true',
+            'stype' => 'select',
             //for the bottom bar
             'searchoptions' => [
                 'defaultValue' => '',
-                'value' => ':'.get_lang('All').';1:'.get_lang('Validated').';0:'.get_lang('NotValidated'), ],
+                'value' => ':'.get_lang('All').';1:'.get_lang('Validated').';0:'.get_lang('NotValidated'),
+            ],
             //for the top bar
-            'editoptions' => ['value' => ':'.get_lang('All').';1:'.get_lang('Validated').';0:'.get_lang('NotValidated')], ],
+            'editoptions' => [
+                'value' => ':'.get_lang('All').';1:'.get_lang('Validated').';0:'.get_lang(
+                        'NotValidated'
+                    ),
+            ],
+        ],
         ['name' => 'lp', 'index' => 'orig_lp_id', 'width' => '60', 'align' => 'left', 'search' => 'false'],
         ['name' => 'actions', 'index' => 'actions', 'width' => '60', 'align' => 'left', 'search' => 'false', 'sortable' => 'false'],
     ];
@@ -645,12 +665,8 @@ if ($is_allowedToEdit || $is_tutor) {
     }';
 }
 
-// Autowidth
 $extra_params['autowidth'] = 'true';
-
-// Height auto
 $extra_params['height'] = 'auto';
-
 $extra_params['gridComplete'] = "
     defaultGroupId = Cookies.get('default_group_".$exercise_id."');
     if (typeof defaultGroupId !== 'undefined') {
@@ -669,15 +685,15 @@ if (typeof defaultGroupId !== 'undefined') {
     defaultGroupId = Cookies.get('default_group_".$exercise_id."');
     $('#gs_group_name').val(defaultGroupId);    
 }
- 
+
 if (typeof defaultGroupId !== 'undefined') {
     var posted_data = $(\"#results\").jqGrid('getGridParam', 'postData');
-    var extraFilter = ',{\"field\":\"group_id\",\"op\":\"eq\",\"data\":\"'+ defaultGroupId +'\"}]}';        
-    // var defFilter = '{\"groupOp\":\"AND\",\"rules\": [{\"field\":\"group_id\",\"op\":\"eq\",\"data\":\"'+ defaultGroupId +'\"}] }';
-    // posted_data.filters = defFilter;    
+    var extraFilter = ',{\"field\":\"group_id\",\"op\":\"eq\",\"data\":\"'+ defaultGroupId +'\"}]}';       
     var filters = posted_data.filters;        
     var stringObj = new String(filters);    
     stringObj.replace(']}', extraFilter);         
+    
+    posted_data['group_id_in_toolbar'] = defaultGroupId;
     $(this).jqGrid('setGridParam', 'postData', posted_data);          
 }
 ";
@@ -755,11 +771,9 @@ $gridJs = Display::grid_js(
                 'searchOnEnter': false,
                 afterSearch: function () {
                     $('#gs_group_name').on('change', function() {
-                        //console.log('changed');
                         var defaultGroupId = $('#gs_group_name').val();
                         // Save default group id
                         Cookies.set('default_group_<?php echo $exercise_id; ?>', defaultGroupId);
-                        //console.log('cookie SET defaultGroupId ' + defaultGroupId );
                     });
                 }
             }

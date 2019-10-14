@@ -7,11 +7,11 @@
     <br /><br />
 {% endif %}
 
-<table align="center" width="100%" class="full-width border-thin">
+<table align="center" width="100%" class="table table-bordered data_table">
     {% if pdf_student_info %}
     <tr>
         <td style="background-color: #E5E5E5; text-align: left; width:130px; ">
-            <strong>{{ "Student" | get_lang }}:</strong>
+           <strong>{{ "Student" | get_lang }}:</strong>
         </td>
         <td>
             {{ pdf_student_info.complete_name }}
@@ -95,8 +95,7 @@
 {% if not add_signatures is empty %}
     <br />
     <br />
-
-    <table class="full-width">
+    <table class="table">
         <tr>
             {% for signature in add_signatures %}
                 <td class="text-center">

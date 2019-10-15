@@ -4630,16 +4630,17 @@ class SessionManager
     /**
      * Get the number of sessions.
      *
-     * @param  int ID of the URL we want to filter on (optional)
+     * @param  int $access_url_id ID of the URL we want to filter on (optional)
      *
      * @return int Number of sessions
      */
-    public static function count_sessions($access_url_id = null)
+    public static function count_sessions($access_url_id = 0)
     {
         $session_table = Database::get_main_table(TABLE_MAIN_SESSION);
         $access_url_rel_session_table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
+        $access_url_id = (int) $access_url_id;
         $sql = "SELECT count(s.id) FROM $session_table s";
-        if (!empty($access_url_id) && $access_url_id == intval($access_url_id)) {
+        if (!empty($access_url_id)) {
             $sql .= ", $access_url_rel_session_table u ".
                 " WHERE s.id = u.session_id AND u.access_url_id = $access_url_id";
         }
@@ -4647,45 +4648,6 @@ class SessionManager
         $row = Database::fetch_row($res);
 
         return $row[0];
-    }
-
-    /**
-     * Return a COUNT from Session table.
-     *
-     * @param string $date in Y-m-d format
-     *
-     * @return int
-     */
-    public static function countSessionsByEndDate($date = null)
-    {
-        $sessionTable = Database::get_main_table(TABLE_MAIN_SESSION);
-        $url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
-        $date = Database::escape_string($date);
-        $urlId = api_get_current_access_url_id();
-        $dateFilter = '';
-        if (!empty($date)) {
-            $dateFilter = <<<SQL
-                AND (('$date' BETWEEN s.access_start_date AND s.access_end_date)
-                OR (s.access_end_date IS NULL)
-                OR (
-                    s.access_start_date IS NULL AND 
-                    s.access_end_date IS NOT NULL AND s.access_end_date > '$date'
-                ))
-SQL;
-        }
-        $sql = "SELECT COUNT(*) 
-                FROM $sessionTable s
-                INNER JOIN $url u
-                ON (s.id = u.session_id)
-                WHERE u.access_url_id = $urlId AND s.nbr_courses > 0 $dateFilter";
-        $res = Database::query($sql);
-
-        $count = 0;
-        if ($res !== false && Database::num_rows($res) > 0) {
-            $count = (int) current(Database::fetch_row($res));
-        }
-
-        return $count;
     }
 
     /**

@@ -561,16 +561,21 @@ class CoursesAndSessionsCatalog
      * @param string $date
      * @param array  $limit
      * @param bool   $returnQueryBuilder
+     * @param bool   $getCount
      *
-     * @throws Exception
+     * @return array|\Doctrine\ORM\Query The session list
      *
-     * @return array The session list
      */
-    public static function browseSessions($date = null, $limit = [], $returnQueryBuilder = false)
+    public static function browseSessions($date = null, $limit = [], $returnQueryBuilder = false, $getCount = false)
     {
         $urlId = api_get_current_access_url_id();
 
-        $dql = "SELECT s
+        $select = 's';
+        if ($getCount) {
+            $select = 'count(s) ';
+        }
+
+        $dql = "SELECT $select
                 FROM ChamiloCoreBundle:Session s
                 WHERE EXISTS 
                     (
@@ -610,6 +615,10 @@ class CoursesAndSessionsCatalog
 
         if ($returnQueryBuilder) {
             return $qb;
+        }
+
+        if ($getCount) {
+            return $qb->getSingleScalarResult();
         }
 
         return $qb->getResult();

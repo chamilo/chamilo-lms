@@ -357,7 +357,8 @@ class CoursesController
         $date = isset($_POST['date']) ? $_POST['date'] : date('Y-m-d');
         $hiddenLinks = isset($_GET['hidden_links']) ? $_GET['hidden_links'] == 1 : false;
         $limit = isset($limit) ? $limit : self::getLimitArray();
-        $countSessions = SessionManager::countSessionsByEndDate($date);
+
+        $countSessions = CoursesAndSessionsCatalog::browseSessions($date, [], false, true);
         $sessions = CoursesAndSessionsCatalog::browseSessions($date, $limit);
 
         $pageTotal = ceil($countSessions / $limit['length']);
@@ -416,7 +417,7 @@ class CoursesController
         $tpl = new Template();
         $tpl->assign('show_courses', CoursesAndSessionsCatalog::showCourses());
         $tpl->assign('show_sessions', CoursesAndSessionsCatalog::showSessions());
-        $tpl->assign('show_tutor', (api_get_setting('show_session_coach') === 'true' ? true : false));
+        $tpl->assign('show_tutor', api_get_setting('show_session_coach') === 'true' ? true : false);
         $tpl->assign('course_url', $courseUrl);
         $tpl->assign('already_subscribed_label', $this->getAlreadyRegisteredInSessionLabel());
         $tpl->assign('hidden_links', $hiddenLinks);

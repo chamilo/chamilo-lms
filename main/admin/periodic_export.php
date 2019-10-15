@@ -47,14 +47,12 @@ if ($form->validate()) {
 
     $thisTrimester = Tracking::getTotalTimeSpentOnThePlatform($end, $now);
 
-
     $beforeDateEnd = new DateTime('-180 days', new DateTimeZone('UTC'));
     $start = $beforeDateEnd->format('Y-m-d H:i:s');
 
     $lastTrimester = Tracking::getTotalTimeSpentOnThePlatform($start, $end);
 
-
-   var_dump($countUsers, $connectedUsers, $activeCourses, $totalCourses, $total, $thisTrimester, $lastTrimester);
+    //var_dump($countUsers, $connectedUsers, $activeCourses, $totalCourses, $total, $thisTrimester, $lastTrimester);
 
     $courses = Statistics::getCoursesWithActivity($startDate, $endDate);
 

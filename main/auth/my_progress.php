@@ -119,10 +119,10 @@ if ($show) {
     $careers = UserManager::getUserCareers($user_id);
 
     if (!empty($careers)) {
-        echo Display::page_subheader(get_lang('Careers'), null, 'h3', ['class' => 'section-title']);
+        $title = Display::page_subheader(get_lang('Careers'), null, 'h3', ['class' => 'section-title']);
         $table = new HTML_Table(['class' => 'data_table']);
         $table->setHeaderContents(0, 0, get_lang('Career'));
-        $table->setHeaderContents(0, 0, get_lang('Diagram'));
+        $table->setHeaderContents(0, 1, get_lang('Diagram'));
 
         $row = 1;
         foreach ($careers as $careerData) {
@@ -132,7 +132,7 @@ if ($show) {
             $table->setCellContents($row, 1, $diagram);
             $row++;
         }
-        $content = $table->toHtml().$content;
+        $content = $title.$table->toHtml().$content;
     }
 }
 

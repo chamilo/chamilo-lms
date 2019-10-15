@@ -21,7 +21,7 @@ if (api_get_configuration_value('allow_career_diagram') == false) {
 
 $this_section = SECTION_PLATFORM_ADMIN;
 
-$careerId = isset($_GET['id']) ? $_GET['id'] : 0;
+$careerId = isset($_GET['career_id']) ? $_GET['career_id'] : 0;
 
 if (empty($careerId)) {
     api_not_allowed(true);

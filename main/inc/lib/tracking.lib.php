@@ -1672,6 +1672,47 @@ class Tracking
     }
 
     /**
+     * @param string $startDate
+     * @param string $endDate
+     *
+     * @return int
+     */
+    public static function getTotalTimeSpentOnThePlatform(
+        $startDate = '',
+        $endDate = ''
+    ) {
+        $tbl_track_login = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
+        $tbl_url_rel_user = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
+
+        $url_table = null;
+        $url_condition = null;
+        if (api_is_multiple_url_enabled()) {
+            $access_url_id = api_get_current_access_url_id();
+            $url_table = ", ".$tbl_url_rel_user." as url_users";
+            $url_condition = " AND u.login_user_id = url_users.user_id AND access_url_id='$access_url_id'";
+        }
+
+        if (!empty($startDate) && !empty($endDate)) {
+            $startDate = Database::escape_string($startDate);
+            $endDate = Database::escape_string($endDate);
+            $condition_time = ' (login_date >= "'.$startDate.'" AND logout_date <= "'.$endDate.'" ) ';
+        }
+
+        $sql = "SELECT SUM(TIMESTAMPDIFF(SECOND, login_date, logout_date)) diff
+    	        FROM $tbl_track_login u $url_table
+                WHERE $condition_time $url_condition";
+        $rs = Database::query($sql);
+        $row = Database::fetch_array($rs, 'ASSOC');
+        $diff = $row['diff'];
+
+        if ($diff >= 0) {
+            return $diff;
+        }
+
+        return -1;
+    }
+
+    /**
      * Checks if the "lp_minimum_time" feature is available for the course.
      *
      * @param int $sessionId

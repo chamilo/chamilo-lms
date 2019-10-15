@@ -2662,9 +2662,7 @@ class ImportCsv
         $externalEventId = null;
 
         $extraField = new ExtraField('career');
-        $extraFieldInfo = $extraField->get_handler_field_info_by_field_variable(
-            $extraFieldName
-        );
+        $extraFieldInfo = $extraField->get_handler_field_info_by_field_variable($extraFieldName);
 
         $careerDiagramExtraFieldName = $this->extraFieldIdNameList['career_diagram'];
         $extraFieldDiagramInfo = $extraField->get_handler_field_info_by_field_variable(
@@ -2676,7 +2674,7 @@ class ImportCsv
         }
 
         if (!empty($data)) {
-            $this->logger->addInfo(count($data)." records found.");
+            $this->logger->addInfo(count($data).' records found.');
             $values = [];
             foreach ($data as $row) {
                 if (empty($row)) {
@@ -2707,7 +2705,6 @@ class ImportCsv
                         false
                     );
 
-                    $chamiloCareerName = '';
                     if (empty($item)) {
                         $this->logger->addInfo("Career not found: $careerId");
                         continue;

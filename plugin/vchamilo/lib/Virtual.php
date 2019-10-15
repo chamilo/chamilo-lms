@@ -98,7 +98,6 @@ class Virtual
                 $data['WEB_HOME_PATH'] = self::addTrailingSlash($data['home_url']);
                 $data['WEB_UPLOAD_PATH'] = self::addTrailingSlash($data['upload_url']);
                 $data['WEB_ARCHIVE_PATH'] = self::addTrailingSlash($data['archive_url']);
-                //$data['WEB_COURSE_PATH'] = self::addTrailingSlash($data['course_url']);
 
                 if (!empty($passwordEncryption)) {
                     $_configuration['password_encryption'] = $passwordEncryption;

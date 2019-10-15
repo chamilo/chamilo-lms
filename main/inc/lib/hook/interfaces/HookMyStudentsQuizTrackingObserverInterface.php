@@ -13,7 +13,7 @@ interface HookMyStudentsQuizTrackingObserverInterface extends HookObserverInterf
      *     'value' => 'Users online',
      *     'attrs' => ['class' => 'text-center'],
      * ]
-     * </code>
+     * </code>.
      *
      * @param HookMyStudentsQuizTrackingEventInterface $hook
      *
@@ -28,7 +28,7 @@ interface HookMyStudentsQuizTrackingObserverInterface extends HookObserverInterf
      *     'value' => '5 connected users ',
      *     'attrs' => ['class' => 'text-center text-success'],
      * ]
-     * </code>
+     * </code>.
      *
      * @param HookMyStudentsQuizTrackingEventInterface $hook
      *

@@ -9,9 +9,7 @@ use Chamilo\CourseBundle\Component\CourseCopy\CourseSelectForm;
  *
  * @author Jhon Hinojosa
  * @author Julio Montoya Fixing pclzip folder + some clean <gugli100@gmail.com>
- *
  */
-
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 

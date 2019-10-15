@@ -2992,7 +2992,7 @@ class Tracking
             }
 
             if ($debug) {
-                    var_dump($global_result, $lp_with_quiz);
+                var_dump($global_result, $lp_with_quiz);
             }
 
             return [$global_result, $lp_with_quiz];

@@ -6543,7 +6543,7 @@ SQL;
      *
      * @return array
      */
-    public function getUserCareers($userId)
+    public static function getUserCareers($userId)
     {
         $table = Database::get_main_table(TABLE_MAIN_USER_CAREER);
         $tableCareer = Database::get_main_table(TABLE_CAREER);

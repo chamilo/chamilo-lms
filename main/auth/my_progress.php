@@ -113,6 +113,29 @@ if (empty($content)) {
     $message = Display::return_message(get_lang('NoDataAvailable'), 'warning');
 }
 
+$show = api_get_configuration_value('allow_career_users');
+
+if ($show) {
+    $careers = UserManager::getUserCareers($user_id);
+
+    if (!empty($careers)) {
+        echo Display::page_subheader(get_lang('Careers'), null, 'h3', ['class' => 'section-title']);
+        $table = new HTML_Table(['class' => 'data_table']);
+        $table->setHeaderContents(0, 0, get_lang('Career'));
+        $table->setHeaderContents(0, 0, get_lang('Diagram'));
+
+        $row = 1;
+        foreach ($careers as $careerData) {
+            $table->setCellContents($row, 0, $careerData['name']);
+            $url = api_get_path(WEB_CODE_PATH).'user/career_diagram.php?career_id='.$careerData['id'];
+            $diagram = Display::url(get_lang('Diagram'), $url);
+            $table->setCellContents($row, 1, $diagram);
+            $row++;
+        }
+        $content = $table->toHtml().$content;
+    }
+}
+
 $tpl = new Template($nameTools);
 $tpl->assign('message', $message);
 $tpl->assign('content', $content);

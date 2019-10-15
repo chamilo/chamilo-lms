@@ -625,7 +625,7 @@ class Career extends Model
         if (!empty($graph->groupList)) {
             $groupList = [];
             $groupDiffX = 20;
-            $groupDiffY = 55;
+            $groupDiffY = 50;
             $style = 'whiteSpace=wrap;rounded;html=1;strokeColor=red;fillColor=none;strokeWidth=2;align=left;verticalAlign=top;';
             foreach ($graph->groupList as $id => $data) {
                 if (empty($id)) {

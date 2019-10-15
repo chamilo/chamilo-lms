@@ -6572,12 +6572,49 @@ SQL;
         }
 
         if (self::userHasCareer($userId, $careerId) === false) {
-            $params = ['user_id' => $userId, 'career_id' => $careerId, 'created_at' => api_get_utc_datetime()];
+            $params = ['user_id' => $userId, 'career_id' => $careerId, 'created_at' => api_get_utc_datetime(), 'updated_at' => api_get_utc_datetime()];
             $table = Database::get_main_table(TABLE_MAIN_USER_CAREER);
             Database::insert($table, $params);
         }
 
         return true;
+    }
+
+    /**
+     * @param int   $userCareerId
+     * @param array $data
+     *
+     * @return bool
+     */
+    public static function updateUserCareer($userCareerId, $data)
+    {
+        if (!api_get_configuration_value('allow_career_users')) {
+            return false;
+        }
+
+        $params = ['extra_data' => $data, 'updated_at' => api_get_utc_datetime()];
+        $table = Database::get_main_table(TABLE_MAIN_USER_CAREER);
+        Database::update($table, $params, [   'where' => ['id = ?' => (int) $userCareerId], ]);
+
+        return true;
+    }
+
+    /**
+     * @param int $userId
+     * @param int $careerId
+     *
+     * @return array
+     */
+    public static function getUserCareer($userId, $careerId)
+    {
+        $userId = (int) $userId;
+        $careerId = (int) $careerId;
+        $table = Database::get_main_table(TABLE_MAIN_USER_CAREER);
+
+        $sql = "SELECT * FROM $table WHERE user_id = $userId AND career_id = $careerId";
+        $result = Database::query($sql);
+
+        return Database::fetch_array($result, 'ASSOC');
     }
 
     /**

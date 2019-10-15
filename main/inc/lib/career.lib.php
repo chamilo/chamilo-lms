@@ -492,7 +492,6 @@ class Career extends Model
             $subGroupLabel = isset($subGroupData[1]) ? $subGroupData[1] : '';
 
             if (!empty($subGroupId) && !in_array($subGroupId, $subGroups)) {
-                //$subGroups[$subGroupId][] = $vertex->getId();
                 $subGroups[$subGroupId]['items'][] = $vertex->getId();
                 $subGroups[$subGroupId]['label'] = $subGroupLabel;
             }
@@ -517,7 +516,6 @@ class Career extends Model
                 /** @var Vertex $vertex */
                 foreach ($subGroupList['items'] as $vertex) {
                     if ($vertex instanceof Vertex) {
-                        $rowId = $vertex->getId();
                         $groupCourseList[$vertex->getAttribute('Column')][] = $vertex->getId();
                         $connectionList = $vertex->getAttribute('Connections');
                         if (empty($connectionList)) {

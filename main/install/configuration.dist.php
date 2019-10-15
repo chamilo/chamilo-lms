@@ -1332,6 +1332,8 @@ requires extension "php-soap"  sudo apt-get install php-soap
 // $_configuration['ck_editor_enter_mode_value'] = 'CKEDITOR.ENTER_BR';
 
 // CREATE TABLE user_career (id INT AUTO_INCREMENT NOT NULL, user_id INT NOT NULL, career_id INT NOT NULL, created_at DATETIME NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;
+// ALTER TABLE user_career ADD COLUMN extra_data LONGTEXT;
+// ALTER TABLE user_career ADD COLUMN updated_at DATETIME NOT NULL;
 // $_configuration['allow_career_users'] = false;
 
 // LP view menu location. Options: "left" or "right"

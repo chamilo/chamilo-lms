@@ -606,9 +606,9 @@ class Career extends Model
         $graph->blockHeight = 150;
 
         $graph->xGap = 70;
-        $graph->yGap = 50;
+        $graph->yGap = 55;
         $graph->xDiff = 70;
-        $graph->yDiff = 50;
+        $graph->yDiff = 55;
 
         foreach ($groupsBetweenColumns as $group => $items) {
             self::parseColumnList($groupCourseList, $items, '', $graph, $simpleConnectionList);
@@ -625,7 +625,7 @@ class Career extends Model
         if (!empty($graph->groupList)) {
             $groupList = [];
             $groupDiffX = 20;
-            $groupDiffY = 40;
+            $groupDiffY = 55;
             $style = 'whiteSpace=wrap;rounded;html=1;strokeColor=red;fillColor=none;strokeWidth=2;align=left;verticalAlign=top;';
             foreach ($graph->groupList as $id => $data) {
                 if (empty($id)) {

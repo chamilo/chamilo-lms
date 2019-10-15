@@ -106,9 +106,11 @@
 
             var svg1 = document.getElementsByTagName("svg")[0];
             var data = svg1.getBBox();
-            var widthValue = data.width + 50;
+            var widthValue = data.width + 100;
+            var heightValue = data.height + 50;
+
             var att = document.createAttributeNS(null, "viewBox");       // Create a "viewBox" attribute
-            att.value = '0 0 ' + widthValue + ' '+widthValue;                           // Set the value of the viewBox attribute
+            att.value = '0 0 ' + widthValue + ' '+heightValue;                           // Set the value of the viewBox attribute
             svg1.setAttributeNode(att);
 
         });

@@ -1,11 +1,4 @@
-{% set ubication = false %}
-
-{% if ubication %}
-    <nav id="btn-menu-float" class="c-menu-left">
-{% else %}
-    <nav id="btn-menu-float" class="c-menu-right">
-{% endif %}
-
+<nav id="btn-menu-float" class="c-menu-{{ menu_location }}">
     <div class="circle {{ show_toolbar_by_default == 1 ? 'open' : '' }}">
         {% if show_left_column == 1 %}
             <a href="#" title = "{{ 'Expand'|get_lang }}" id="lp-view-expand-toggle"

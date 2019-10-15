@@ -6600,7 +6600,8 @@ class learnpath
 
         $subscriptionSettings = self::getSubscriptionSettings();
 
-        if (!$isConfigPage) {
+        $request = api_request_uri();
+        if (strpos($request, 'edit') === false) {
             $actionsLeft .= Display::url(
                 Display::return_icon(
                     'settings.png',
@@ -6613,7 +6614,9 @@ class learnpath
                     'lp_id' => $this->lp_id,
                 ])
             );
-        } else {
+        }
+
+        if (strpos($request, 'build') === false && strpos($request, 'add_item') === false) {
             $actionsLeft .= Display::url(
                 Display::return_icon(
                     'edit.png',

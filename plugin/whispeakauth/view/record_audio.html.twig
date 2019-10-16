@@ -39,14 +39,7 @@
     </div>
     <div class="col-sm-8 col-sm-offset-2 col-md-5 col-md-offset-1">
         <hr class="visible-sm">
-        <div id="messages-deck">
-            {% if is_authenticated %}
-                <div class="alert alert-info">
-                    <span class="fa fa-info-circle" aria-hidden="true"></span>
-                    <strong>{{ 'SpeechAuthAlreadyEnrolled'|get_plugin_lang('WhispeakAuthPlugin') }}</strong>
-                </div>
-            {% endif %}
-        </div>
+        <div id="messages-deck"></div>
         <div class="hidden" id="audio-wrapper">
             <p>
                 <audio class="center-block" controls id="record-preview"></audio>

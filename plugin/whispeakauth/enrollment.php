@@ -12,6 +12,15 @@ $plugin = WhispeakAuthPlugin::create();
 
 $plugin->protectTool();
 
+$isEnrolledAlready = WhispeakAuthPlugin::checkUserIsEnrolled($userId);
+
+if ($isEnrolledAlready) {
+    api_not_allowed(
+        true,
+        Display::return_message($plugin->get_lang('SpeechAuthAlreadyEnrolled'), 'warning')
+    );
+}
+
 try {
     $sampleText = WhispeakAuthRequest::enrollmentSentence($plugin);
 } catch (Exception $exception) {
@@ -27,7 +36,6 @@ $htmlHeadXtra[] = api_get_js('rtc/RecordRTC.js');
 $htmlHeadXtra[] = api_get_js_simple(api_get_path(WEB_PLUGIN_PATH).'whispeakauth/assets/js/RecordAudio.js');
 
 $template = new Template();
-$template->assign('is_authenticated', WhispeakAuthPlugin::checkUserIsEnrolled($userId));
 $template->assign('action', 'enrollment');
 $template->assign('sample_text', $sampleText);
 

@@ -169,7 +169,8 @@ class SessionManager
             ? (empty($accessUrlId) ? api_get_current_access_url_id() : (int) $accessUrlId)
             : 1;
 
-        if (is_array($_configuration[$accessUrlId]) &&
+        if (isset($_configuration[$accessUrlId]) &&
+            is_array($_configuration[$accessUrlId]) &&
             isset($_configuration[$accessUrlId]['hosting_limit_sessions']) &&
             $_configuration[$accessUrlId]['hosting_limit_sessions'] > 0
         ) {
@@ -3917,7 +3918,7 @@ class SessionManager
         $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
         $tbl_session_rel_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
         $session_id = (int) $session_id;
-        $sqlSelect = '*, c.id, c.id as real_id';
+        $sqlSelect = '*, c.id, c.id as real_id, c.code as course_code';
 
         if ($getCount) {
             $sqlSelect = 'COUNT(1) as count';
@@ -4458,6 +4459,13 @@ class SessionManager
             }
         }
 
+        if (isset($extraFieldsValuesToCopy['extra_image']) && isset($extraFieldsValuesToCopy['extra_image']['extra_image'])) {
+            $extraFieldsValuesToCopy['extra_image'] = [
+                'tmp_name' => api_get_path(SYS_UPLOAD_PATH).$extraFieldsValuesToCopy['extra_image']['extra_image'],
+                'error' => 0,
+            ];
+        }
+
         // Now try to create the session
         $sid = self::create_session(
             $s['name'].' '.get_lang('CopyLabelSuffix'),
@@ -4550,10 +4558,10 @@ class SessionManager
                 self::add_courses_to_session($sid, $short_courses, true);
 
                 if ($create_new_courses === false && $copyTeachersAndDrh) {
-                    foreach ($short_courses as $course) {
-                        $coachList = self::getCoachesByCourseSession($id, $course['id']);
+                    foreach ($short_courses as $courseItemId) {
+                        $coachList = self::getCoachesByCourseSession($id, $courseItemId);
                         foreach ($coachList as $userId) {
-                            self::set_coach_to_course_session($userId, $sid, $course['id']);
+                            self::set_coach_to_course_session($userId, $sid, $courseItemId);
                         }
                     }
                 }
@@ -4622,16 +4630,17 @@ class SessionManager
     /**
      * Get the number of sessions.
      *
-     * @param  int ID of the URL we want to filter on (optional)
+     * @param  int $access_url_id ID of the URL we want to filter on (optional)
      *
      * @return int Number of sessions
      */
-    public static function count_sessions($access_url_id = null)
+    public static function count_sessions($access_url_id = 0)
     {
         $session_table = Database::get_main_table(TABLE_MAIN_SESSION);
         $access_url_rel_session_table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
+        $access_url_id = (int) $access_url_id;
         $sql = "SELECT count(s.id) FROM $session_table s";
-        if (!empty($access_url_id) && $access_url_id == intval($access_url_id)) {
+        if (!empty($access_url_id)) {
             $sql .= ", $access_url_rel_session_table u ".
                 " WHERE s.id = u.session_id AND u.access_url_id = $access_url_id";
         }
@@ -4639,45 +4648,6 @@ class SessionManager
         $row = Database::fetch_row($res);
 
         return $row[0];
-    }
-
-    /**
-     * Return a COUNT from Session table.
-     *
-     * @param string $date in Y-m-d format
-     *
-     * @return int
-     */
-    public static function countSessionsByEndDate($date = null)
-    {
-        $sessionTable = Database::get_main_table(TABLE_MAIN_SESSION);
-        $url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_SESSION);
-        $date = Database::escape_string($date);
-        $urlId = api_get_current_access_url_id();
-        $dateFilter = '';
-        if (!empty($date)) {
-            $dateFilter = <<<SQL
-                AND ('$date' BETWEEN s.access_start_date AND s.access_end_date)
-                OR (s.access_end_date IS NULL)
-                OR (
-                    s.access_start_date IS NULL AND 
-                    s.access_end_date IS NOT NULL AND s.access_end_date > '$date'
-                )
-SQL;
-        }
-        $sql = "SELECT COUNT(*) 
-                FROM $sessionTable s
-                INNER JOIN $url u
-                ON (s.id = u.session_id)
-                WHERE u.access_url_id = $urlId $dateFilter";
-        $res = Database::query($sql);
-
-        $count = 0;
-        if ($res !== false && Database::num_rows($res) > 0) {
-            $count = (int) current(Database::fetch_row($res));
-        }
-
-        return $count;
     }
 
     /**
@@ -5332,9 +5302,30 @@ SQL;
                 // Adding the relationship "Session - User" for students
                 $userList = [];
                 if (is_array($users)) {
+                    $extraFieldValueCareer = new ExtraFieldValue('career');
+                    $careerList = isset($enreg['extra_careerid']) && !empty($enreg['extra_careerid']) ? $enreg['extra_careerid'] : [];
+                    $careerList = str_replace(['[', ']'], '', $careerList);
+                    $careerList = explode(',', $careerList);
+                    $finalCareerIdList = [];
+                    foreach ($careerList as $careerId) {
+                        $realCareerIdList = $extraFieldValueCareer->get_item_id_from_field_variable_and_field_value(
+                            'external_career_id',
+                            $careerId
+                        );
+                        if (isset($realCareerIdList['item_id'])) {
+                            $finalCareerIdList[] = $realCareerIdList['item_id'];
+                        }
+                    }
+
                     foreach ($users as $user) {
                         $user_id = UserManager::get_user_id_from_username($user);
                         if ($user_id !== false) {
+                            if (!empty($finalCareerIdList)) {
+                                foreach ($finalCareerIdList as $careerId) {
+                                    UserManager::addUserCareer($user_id, $careerId);
+                                }
+                            }
+
                             $userList[] = $user_id;
                             // Insert new users.
                             $sql = "INSERT IGNORE INTO $tbl_session_user SET

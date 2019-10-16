@@ -357,12 +357,13 @@ class CoursesController
         $date = isset($_POST['date']) ? $_POST['date'] : date('Y-m-d');
         $hiddenLinks = isset($_GET['hidden_links']) ? $_GET['hidden_links'] == 1 : false;
         $limit = isset($limit) ? $limit : self::getLimitArray();
-        $countSessions = SessionManager::countSessionsByEndDate($date);
+
+        $countSessions = CoursesAndSessionsCatalog::browseSessions($date, [], false, true);
         $sessions = CoursesAndSessionsCatalog::browseSessions($date, $limit);
 
         $pageTotal = ceil($countSessions / $limit['length']);
         // Do NOT show pagination if only one page or less
-        $cataloguePagination = $pageTotal > 1 ? CourseCategory::getCatalogPagination($limit['current'], $limit['length'], $pageTotal) : '';
+        $pagination = $pageTotal > 1 ? CourseCategory::getCatalogPagination($limit['current'], $limit['length'], $pageTotal) : '';
         $sessionsBlocks = $this->getFormattedSessionsBlock($sessions);
 
         // Get session search catalogue URL
@@ -379,7 +380,7 @@ class CoursesController
         $tpl->assign('show_sessions', CoursesAndSessionsCatalog::showSessions());
         $tpl->assign('show_tutor', api_get_setting('show_session_coach') === 'true');
         $tpl->assign('course_url', $courseUrl);
-        $tpl->assign('catalog_pagination', $cataloguePagination);
+        $tpl->assign('catalog_pagination', $pagination);
         $tpl->assign('hidden_links', $hiddenLinks);
         $tpl->assign('search_token', Security::get_token());
         $tpl->assign('search_date', $date);
@@ -416,51 +417,13 @@ class CoursesController
         $tpl = new Template();
         $tpl->assign('show_courses', CoursesAndSessionsCatalog::showCourses());
         $tpl->assign('show_sessions', CoursesAndSessionsCatalog::showSessions());
-        $tpl->assign('show_tutor', (api_get_setting('show_session_coach') === 'true' ? true : false));
-        $tpl->assign('course_url', $courseUrl);
-        $tpl->assign('already_subscribed_label', $this->getAlreadyRegisteredInSessionLabel());
-        $tpl->assign('hidden_links', $hiddenLinks);
-        $tpl->assign('search_token', Security::get_token());
-        $tpl->assign('search_date', Security::remove_XSS($searchDate));
-        $tpl->assign('search_tag', Security::remove_XSS($searchTag));
-        $tpl->assign('sessions', $sessionsBlocks);
-
-        $contentTemplate = $tpl->get_template('auth/session_catalog.tpl');
-
-        $tpl->display($contentTemplate);
-    }
-
-    /**
-     * Show the Session Catalogue with filtered session by a query term.
-     *
-     * @param array $limit
-     */
-    public function sessionListBySearch(array $limit)
-    {
-        $q = isset($_REQUEST['q']) ? Security::remove_XSS($_REQUEST['q']) : null;
-        $hiddenLinks = isset($_GET['hidden_links']) ? (int) $_GET['hidden_links'] == 1 : false;
-        $courseUrl = CourseCategory::getCourseCategoryUrl(
-            1,
-            $limit['length'],
-            null,
-            0,
-            'subscribe'
-        );
-        $searchDate = isset($_POST['date']) ? $_POST['date'] : date('Y-m-d');
-
-        $sessions = CoursesAndSessionsCatalog::browseSessionsBySearch($q, $limit);
-        $sessionsBlocks = $this->getFormattedSessionsBlock($sessions);
-
-        $tpl = new Template();
-        $tpl->assign('show_courses', CoursesAndSessionsCatalog::showCourses());
-        $tpl->assign('show_sessions', CoursesAndSessionsCatalog::showSessions());
         $tpl->assign('show_tutor', api_get_setting('show_session_coach') === 'true' ? true : false);
         $tpl->assign('course_url', $courseUrl);
         $tpl->assign('already_subscribed_label', $this->getAlreadyRegisteredInSessionLabel());
         $tpl->assign('hidden_links', $hiddenLinks);
         $tpl->assign('search_token', Security::get_token());
         $tpl->assign('search_date', Security::remove_XSS($searchDate));
-        $tpl->assign('search_tag', Security::remove_XSS($q));
+        $tpl->assign('search_tag', Security::remove_XSS($searchTag));
         $tpl->assign('sessions', $sessionsBlocks);
 
         $contentTemplate = $tpl->get_template('auth/session_catalog.tpl');

@@ -431,13 +431,15 @@ switch ($action) {
                 );
             }
 
-            GroupManager::allowUploadEditDocument(
-                $userId,
-                $courseId,
-                $group_properties,
-                $document_info,
-                true
-            );
+            if (!empty($groupId)) {
+                GroupManager::allowUploadEditDocument(
+                    $userId,
+                    $courseId,
+                    $group_properties,
+                    $document_info,
+                    true
+                );
+            }
 
             $parent_id = $document_info['parent_id'];
             $my_path = UserManager::getUserPathById(api_get_user_id(), 'system');

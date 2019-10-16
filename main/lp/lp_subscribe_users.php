@@ -18,7 +18,7 @@ if (!$is_allowed_to_edit) {
     api_not_allowed(true);
 }
 
-$lpId = isset($_GET['lp_id']) ? intval($_GET['lp_id']) : 0;
+$lpId = isset($_GET['lp_id']) ? (int) $_GET['lp_id'] : 0;
 
 if (empty($lpId)) {
     api_not_allowed(true);
@@ -68,12 +68,13 @@ if (!$session) {
         ->getQuery()
         ->getResult();
 } else {
-    $session->getUserCourseSubscriptionsByStatus($course, Session::STUDENT)
-        ->forAll(
-            function ($i, SessionRelCourseRelUser $sessionCourseUser) use (&$subscribedUsers) {
-                $subscribedUsers[$i] = $sessionCourseUser->getUser();
-            }
-        );
+    $list = $session->getUserCourseSubscriptionsByStatus($course, Session::STUDENT);
+    if ($list) {
+        /** @var SessionRelCourseRelUser $sessionCourseUser */
+        foreach ($list as $sessionCourseUser) {
+            $subscribedUsers[$sessionCourseUser->getUser()->getUserId()] = $sessionCourseUser->getUser();
+        }
+    }
 }
 
 // Getting all users in a nice format.
@@ -149,7 +150,6 @@ $groupMultiSelect = $form->addElement(
     $groupChoices
 );
 
-// submit button
 $form->addButtonSave(get_lang('Save'));
 
 $defaults = [];
@@ -197,14 +197,17 @@ if ($form->validate()) {
 
     header("Location: $url");
     exit;
-} else {
-    Display::addFlash(Display::return_message(get_lang('UserLpSubscriptionDescription')));
-    $headers = [
-        get_lang('SubscribeUsersToLp'),
-        get_lang('SubscribeGroupsToLp'),
-    ];
-    $tpl = new Template();
-    $tabs = Display::tabs($headers, [$formUsers->toHtml(), $form->toHtml()]);
-    $tpl->assign('content', $tabs);
-    $tpl->display_one_col_template();
 }
+
+$message = Display::return_message(get_lang('UserLpSubscriptionDescription'));
+$headers = [
+    get_lang('SubscribeUsersToLp'),
+    get_lang('SubscribeGroupsToLp'),
+];
+
+$menu = $oLP->build_action_menu(true, false, true, false);
+
+$tpl = new Template();
+$tabs = Display::tabs($headers, [$formUsers->toHtml(), $form->toHtml()]);
+$tpl->assign('content', $menu.$message.$tabs);
+$tpl->display_one_col_template();

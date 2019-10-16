@@ -1906,7 +1906,8 @@ function api_get_course_path($course_code = null)
  *
  * @param string $settingName The name of the setting we want from the table
  * @param array  $courseInfo
- * @param bool   $force force checking the value in the database
+ * @param bool   $force       force checking the value in the database
+ *
  * @return mixed The value of that setting in that table. Return -1 if not found.
  */
 function api_get_course_setting($settingName, $courseInfo = [], $force = false)
@@ -4430,7 +4431,7 @@ function api_item_property_update(
 /**
  * Gets item property by tool.
  *
- * @param string $tool tool name, linked to 'rubrique' of the course tool_list (Warning: language sensitive !!)
+ * @param string $tool        tool name, linked to 'rubrique' of the course tool_list (Warning: language sensitive !!)
  * @param string $course_code
  * @param int    $session_id
  *
@@ -5190,11 +5191,14 @@ function api_max_sort_value($user_course_category, $user_id)
  *
  * @author Julian Prud'homme
  *
- * @param int the number of seconds
+ * @param int    $seconds      number of seconds
+ * @param string $space
+ * @param bool   $showSeconds
+ * @param bool   $roundMinutes
  *
- * @return string the formated time
+ * @return string the formatted time
  */
-function api_time_to_hms($seconds, $space = ':')
+function api_time_to_hms($seconds, $space = ':', $showSeconds = true, $roundMinutes = false)
 {
     // $seconds = -1 means that we have wrong data in the db.
     if ($seconds == -1) {
@@ -5213,6 +5217,24 @@ function api_time_to_hms($seconds, $space = ':')
     // How many minutes ?
     $min = floor(($seconds - ($hours * 3600)) / 60);
 
+    if ($roundMinutes) {
+        if ($min >= 45) {
+            $min = 45;
+        }
+
+        if ($min >= 30 && $min <= 44) {
+            $min = 30;
+        }
+
+        if ($min >= 15 && $min <= 29) {
+            $min = 15;
+        }
+
+        if ($min >= 0 && $min <= 14) {
+            $min = 0;
+        }
+    }
+
     // How many seconds
     $sec = floor($seconds - ($hours * 3600) - ($min * 60));
 
@@ -5228,7 +5250,12 @@ function api_time_to_hms($seconds, $space = ':')
         $min = "0$min";
     }
 
-    return $hours.$space.$min.$space.$sec;
+    $seconds = '';
+    if ($showSeconds) {
+        $seconds = $space.$sec;
+    }
+
+    return $hours.$space.$min.$seconds;
 }
 
 /* FILE SYSTEM RELATED FUNCTIONS */
@@ -9527,10 +9554,9 @@ function api_set_noreply_and_from_address_to_mailer(PHPMailer $mailer, array $se
     if (!$avoidReplyToAddress) {
         if (
             !empty($replyToAddress) &&
-            isset($platformEmail['SMTP_UNIQUE_REPLY_TO']) && $platformEmail['SMTP_UNIQUE_REPLY_TO'] &&
             PHPMailer::ValidateAddress($replyToAddress['mail'])
         ) {
-            $mailer->AddReplyTo($replyToAddress['email'], $replyToAddress['name']);
+            $mailer->AddReplyTo($replyToAddress['mail'], $replyToAddress['name']);
             $mailer->Sender = $replyToAddress['mail'];
         }
     }

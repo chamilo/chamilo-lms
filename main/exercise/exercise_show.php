@@ -210,8 +210,16 @@ if ($action != 'export') {
                 var oHidn = document.createElement("input");
                 oHidn.type = "hidden";
                 var selname = oHidn.name = "marks_" + m_id[i];
-                var selid = document.forms['marksform_' + m_id[i]].marks.selectedIndex;
-                oHidn.value = document.forms['marksform_' + m_id[i]].marks.options[selid].value;
+
+                var elMarks = document.forms['marksform_' + m_id[i]].marks;
+
+                if (elMarks.tagName.toLowerCase() === 'select') {
+                    var selid = elMarks.selectedIndex;
+                    oHidn.value = elMarks.options[selid].value;
+                } else if (elMarks.tagName.toLowerCase() === 'input') {
+                    oHidn.value = elMarks.value;
+                }
+
                 f.appendChild(oHidn);
             }
 
@@ -667,34 +675,60 @@ foreach ($questionList as $questionId) {
 
                 echo '<div id="'.$marksname.'" class="hidden">';
 
+                $allowDecimalScore = api_get_configuration_value('quiz_open_question_decimal_score');
                 $formMark = new FormValidator('marksform_'.$questionId, 'post');
                 $formMark->addHeader(get_lang('AssignMarks'));
-                $select = $formMark->addSelect(
-                    'marks',
-                    get_lang('AssignMarks'),
-                    [],
-                    ['disable_js' => true, 'extra_class' => 'grade_select']
-                );
                 $model = ExerciseLib::getCourseScoreModel();
-                if (empty($model)) {
-                    for ($i = 0; $i <= $questionWeighting; $i++) {
-                        $attributes = [];
-                        if ($questionScore == $i) {
-                            $attributes['selected'] = 'selected';
-                        }
-                        $select->addOption($i, $i, $attributes);
-                    }
+
+                if ($allowDecimalScore && empty($model)) {
+                    $formMark->addElement(
+                        'number',
+                        'marks',
+                        get_lang('AssignMarks'),
+                        [
+                            'step' => 0.01,
+                            'min' => 0,
+                            'max' => $questionWeighting,
+                            'placeholder' => 0,
+                            'class' => 'grade_select',
+                            'id' => "select_marks_$questionId",
+                        ]
+                    );
+                    $formMark->setDefaults(['marks' => $questionScore]);
+                    $formMark->applyFilter('marks', 'stripslashes');
+                    $formMark->applyFilter('marks', 'trim');
+                    $formMark->applyFilter('marks', 'floatval');
+                    $formMark->addRule('marks', get_lang('Numeric'), 'numeric');
+                    $formMark->addRule('marks', get_lang('ValueTooSmall'), 'min_numeric_length', 0);
+                    $formMark->addRule('marks', get_lang('ValueTooBig'), 'max_numeric_length', $questionWeighting);
                 } else {
-                    foreach ($model['score_list'] as $item) {
-                        $i = api_number_format($item['score_to_qualify'] / 100 * $questionWeighting, 2);
-                        $model = ExerciseLib::getModelStyle($item, $i);
-                        $attributes = ['class' => $item['css_class']];
-                        if ($questionScore == $i) {
-                            $attributes['selected'] = 'selected';
+                    $select = $formMark->addSelect(
+                        'marks',
+                        get_lang('AssignMarks'),
+                        [],
+                        ['disable_js' => true, 'extra_class' => 'grade_select']
+                    );
+
+                    if (empty($model)) {
+                        for ($i = 0; $i <= $questionWeighting; $i++) {
+                            $attributes = [];
+                            if ($questionScore == $i) {
+                                $attributes['selected'] = 'selected';
+                            }
+                            $select->addOption($i, $i, $attributes);
                         }
-                        $select->addOption($model, $i, $attributes);
+                    } else {
+                        foreach ($model['score_list'] as $item) {
+                            $i = api_number_format($item['score_to_qualify'] / 100 * $questionWeighting, 2);
+                            $model = ExerciseLib::getModelStyle($item, $i);
+                            $attributes = ['class' => $item['css_class']];
+                            if ($questionScore == $i) {
+                                $attributes['selected'] = 'selected';
+                            }
+                            $select->addOption($model, $i, $attributes);
+                        }
+                        $select->updateSelectWithSelectedOption($formMark);
                     }
-                    $select->updateSelectWithSelectedOption($formMark);
                 }
 
                 $formMark->display();

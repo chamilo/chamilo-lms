@@ -584,6 +584,8 @@ $_configuration['send_all_emails_to'] = [
 // Generate certificate when ending a quiz.
 // The quiz needs to be linked to a gradebook category and have set the pass percentage.
 //$_configuration['quiz_generate_certificate_ending'] = false;
+// Allow the teacher to rate the open, oral expression and annotation question types with a decimal score.
+//$_configuration['quiz_open_question_decimal_score'] = false;
 
 // Hide search form in session list
 //$_configuration['hide_search_form_in_session_list'] = false;
@@ -1322,6 +1324,20 @@ requires extension "php-soap"  sudo apt-get install php-soap
 
 // Student publication: force to download document before upload an assignment.
 // $_configuration['force_download_doc_before_upload_work' ] = true;
+
+// Allow teachers to decide which skills are assigned through their courses
+// $_configuration['skills_teachers_can_assign_skills'] = false;
+
+// Changes the ck editor enter mode value. Default: CKEDITOR.ENTER_P
+// $_configuration['ck_editor_enter_mode_value'] = 'CKEDITOR.ENTER_BR';
+
+// CREATE TABLE user_career (id INT AUTO_INCREMENT NOT NULL, user_id INT NOT NULL, career_id INT NOT NULL, created_at DATETIME NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB;
+// ALTER TABLE user_career ADD COLUMN extra_data LONGTEXT;
+// ALTER TABLE user_career ADD COLUMN updated_at DATETIME NOT NULL;
+// $_configuration['allow_career_users'] = false;
+
+// LP view menu location. Options: "left" or "right"
+// $_configuration['lp_menu_location'] = 'left';
 
 // KEEP THIS AT THE END
 // -------- Custom DB changes

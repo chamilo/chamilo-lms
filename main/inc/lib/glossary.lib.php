@@ -359,7 +359,11 @@ class GlossaryManager
 
         if ($showMessage) {
             Display::addFlash(
-                Display::return_message(get_lang('TermDeleted').': '.$glossaryInfo['name'])
+                Display::return_message(
+                    get_lang('TermDeleted').': '.Security::remove_XSS($glossaryInfo['name']),
+                    'normal',
+                    false
+                )
             );
         }
 
@@ -637,7 +641,7 @@ class GlossaryManager
         $return = '<a href="'.api_get_self().'?action=edit_glossary&glossary_id='.$glossary_id.'&'.api_get_cidreq().'&msg=edit">'.
             Display::return_icon('edit.png', get_lang('Edit'), '', 22).'</a>';
         $glossary_data = self::get_glossary_information($glossary_id);
-        $glossary_term = $glossary_data['name'];
+        $glossary_term = Security::remove_XSS(strip_tags($glossary_data['name']));
         if (api_is_allowed_to_edit(null, true)) {
             if ($glossary_data['session_id'] == api_get_session_id()) {
                 $return .= '<a href="'.api_get_self().'?action=delete_glossary&glossary_id='.$glossary_id.'&'.api_get_cidreq().'" onclick="return confirmation(\''.$glossary_term.'\');">'.

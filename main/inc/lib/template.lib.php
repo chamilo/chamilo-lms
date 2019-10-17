@@ -94,7 +94,6 @@ class Template
         ];
 
         $urlId = api_get_current_access_url_id();
-
         $cache_folder = api_get_path(SYS_ARCHIVE_PATH).'twig/'.$urlId.'/';
 
         if (!is_dir($cache_folder)) {
@@ -902,7 +901,7 @@ class Template
                 $this->force_plugin_load
             );
 
-            $pluginList = $this->plugin->get_installed_plugins();
+            $pluginList = $this->plugin->getInstalledPlugins(false);
             foreach ($pluginList as $plugin_name) {
                 // The plugin_info variable is available inside the plugin index
                 $pluginInfo = $this->plugin->getPluginInfo($plugin_name);
@@ -1225,9 +1224,10 @@ class Template
         return implode(CourseManager::USER_SEPARATOR, $names);
     }
 
-    /*s
+    /**
      * Returns the teachers name for the current course
-     * Function to use in Twig templates
+     * Function to use in Twig templates.
+     *
      * @return string
      */
     public static function returnTeachersNames()

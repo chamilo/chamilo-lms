@@ -298,4 +298,4 @@ if (isset($_GET['isStudentView']) && $_GET['isStudentView'] == 'false') {
     echo '</div>';
 }
 
-Display :: display_footer();
+Display::display_footer();

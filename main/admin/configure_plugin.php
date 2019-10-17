@@ -15,7 +15,7 @@ api_protect_admin_script();
 
 $pluginName = $_GET['name'];
 $appPlugin = new AppPlugin();
-$installedPlugins = $appPlugin->get_installed_plugins();
+$installedPlugins = $appPlugin->getInstalledPlugins();
 $pluginInfo = $appPlugin->getPluginInfo($pluginName, true);
 
 if (!in_array($pluginName, $installedPlugins) || empty($pluginInfo)) {

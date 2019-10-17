@@ -604,7 +604,12 @@ class Certificate extends Model
             return false;
         }
 
-        if (api_get_course_setting('allow_public_certificates', $gradeBookInfo['course_code']) == 0) {
+        $setting = api_get_course_setting(
+            'allow_public_certificates',
+            api_get_course_info($gradeBookInfo['course_code'])
+        );
+
+        if ($setting == 0) {
             // Printing not allowed
             return false;
         }

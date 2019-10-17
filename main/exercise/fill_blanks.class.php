@@ -1052,45 +1052,6 @@ class FillBlanks extends Question
     }
 
     /**
-     * return $text protected for use in regexp.
-     *
-     * @param string $text
-     *
-     * @return string
-     */
-    public static function getRegexpProtected($text)
-    {
-        $listRegexpCharacters = [
-            "/",
-            ".",
-            "+",
-            "*",
-            "?",
-            "[",
-            "^",
-            "]",
-            "$",
-            "(",
-            ")",
-            "{",
-            "}",
-            "=",
-            "!",
-            ">",
-            "|",
-            ":",
-            "-",
-            ")",
-        ];
-        $result = $text;
-        for ($i = 0; $i < count($listRegexpCharacters); $i++) {
-            $result = str_replace($listRegexpCharacters[$i], "\\".$listRegexpCharacters[$i], $result);
-        }
-
-        return $result;
-    }
-
-    /**
      * This function must be the same than the js one getSeparatorFromNumber above.
      *
      * @return array
@@ -1151,29 +1112,6 @@ class FillBlanks extends Question
         }
 
         return $listResults;
-    }
-
-    /**
-     * return the code number of the separator for the question.
-     *
-     * @param string $startSeparator
-     * @param string $endSeparator
-     *
-     * @return int
-     */
-    public function getDefaultSeparatorNumber($startSeparator, $endSeparator)
-    {
-        $listSeparators = self::getAllowedSeparator();
-        $result = 0;
-        for ($i = 0; $i < count($listSeparators); $i++) {
-            if ($listSeparators[$i][0] == $startSeparator &&
-                $listSeparators[$i][1] == $endSeparator
-            ) {
-                $result = $i;
-            }
-        }
-
-        return $result;
     }
 
     /**

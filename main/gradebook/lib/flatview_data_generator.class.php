@@ -137,22 +137,6 @@ class FlatViewDataGenerator
             $mainCategoryId = $mainCourseCategory->get_id();
         }
 
-        if (isset($this->category) && !empty($this->category)) {
-            $categories = Category::load(
-                null,
-                null,
-                null,
-                $this->category->get_id()
-            );
-            if (!empty($categories)) {
-                foreach ($categories as $category) {
-                    $sum_categories_weight_array[$category->get_id()] = $category->get_weight();
-                }
-            } else {
-                $sum_categories_weight_array[$this->category->get_id()] = $this->category->get_weight();
-            }
-        }
-
         // No category was added
         $course_code = api_get_course_id();
         $session_id = api_get_session_id();
@@ -567,8 +551,6 @@ class FlatViewDataGenerator
                     $show_all,
                     $row
                 );
-
-                $item_total += $result['item_total'];
                 $item_value_total += $result['item_value_total'];
                 $evaluationsAdded = $result['evaluations_added'];
                 $item_total = $main_weight;
@@ -589,7 +571,6 @@ class FlatViewDataGenerator
             $item_total += $result['item_total'];
             $item_value_total += $result['item_value_total'];
             $total_score = [$item_value_total, $item_total];
-
             $style = api_get_configuration_value('gradebook_report_score_style');
 
             if (!$show_all) {
@@ -651,7 +632,6 @@ class FlatViewDataGenerator
         $item_total = 0;
         $item_value_total = 0;
         $evaluationsAdded = [];
-
         $model = ExerciseLib::getCourseScoreModel();
         for ($count = 0; $count < $items_count && ($items_start + $count < count($this->evals_links)); $count++) {
             /** @var AbstractLink $item */
@@ -692,7 +672,6 @@ class FlatViewDataGenerator
             } else {
                 $item_value = $score[0] / $divide * $item->get_weight();
             }
-
             $item_total += $item->get_weight();
 
             $style = api_get_configuration_value('gradebook_report_score_style');
@@ -728,7 +707,6 @@ class FlatViewDataGenerator
                 );
                 $temp_score = Display::tip($temp_score, $complete_score);
             }
-
             if (!empty($model)) {
                 $scoreToShow = '';
                 if (isset($score[0]) && isset($score[1])) {

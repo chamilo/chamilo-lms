@@ -1,7 +1,15 @@
 <?php
 /* For license terms, see /license.txt */
 
+exit;
+
 $spBaseUrl = api_get_path(WEB_PATH).'plugin/keycloak/';
+
+$url = 'http://localhost:8080/';
+$realm = 'master';
+$path = '/path';
+
+$certificate = file_get_contents($path);
 
 $settingsInfo = [
     'strict' => false,
@@ -17,14 +25,14 @@ $settingsInfo = [
         'NameIDFormat' => 'urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified',
     ],
     'idp' => [
-        'entityId' => '', // Example http://localhost:8080/auth/realms/master
+        'entityId' => $url.'auth/realms/'.$realm, // Example http://localhost:8080/auth/realms/master
         'singleSignOnService' => [
-            'url' => '', // example http://localhost:8080/auth/realms/master/protocol/saml
+            'url' => $url.'auth/realms/'.$realm.'/protocol/saml', // example http://localhost:8080/auth/realms/master/protocol/saml
         ],
         'singleLogoutService' => [
-            'url' => '', // example http://localhost:8080/auth/realms/master/protocol/saml
+            'url' => $url.'auth/realms/'.$realm.'/protocol/saml', // example http://localhost:8080/auth/realms/master/protocol/saml
         ],
-        'x509cert' => '',
+        'x509cert' => $certificate,
     ],
 ];
 

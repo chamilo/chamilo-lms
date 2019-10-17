@@ -133,7 +133,7 @@ if ($conferenceManager) {
             if ($plugin->get('allow_regenerate_recording') !== 'true') {
                 api_not_allowed(true);
             }
-            $allow = api_get_course_setting('bbb_force_record_generation', $courseCode) == 1 ? true : false;
+            $allow = api_get_course_setting('bbb_force_record_generation', $courseInfo) == 1 ? true : false;
             if ($allow) {
                 $result = $bbb->getMeetingByRemoteId($_GET['remote_id']);
                 if (!empty($result)) {

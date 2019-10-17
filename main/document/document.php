@@ -93,7 +93,7 @@ Session::erase('paint_dir');
 Session::erase('temp_audio_nanogong');
 
 $plugin = new AppPlugin();
-$pluginList = $plugin->get_installed_plugins();
+$pluginList = $plugin->getInstalledPlugins();
 $capturePluginInstalled = in_array('jcapture', $pluginList);
 
 if ($capturePluginInstalled) {
@@ -431,13 +431,15 @@ switch ($action) {
                 );
             }
 
-            GroupManager::allowUploadEditDocument(
-                $userId,
-                $courseId,
-                $group_properties,
-                $document_info,
-                true
-            );
+            if (!empty($groupId)) {
+                GroupManager::allowUploadEditDocument(
+                    $userId,
+                    $courseId,
+                    $group_properties,
+                    $document_info,
+                    true
+                );
+            }
 
             $parent_id = $document_info['parent_id'];
             $my_path = UserManager::getUserPathById(api_get_user_id(), 'system');

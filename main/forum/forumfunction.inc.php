@@ -928,7 +928,7 @@ function store_forum($values, $courseInfo = [], $returnId = false)
             $sql = "UPDATE $table_forums SET forum_id = iid WHERE iid = $forumId";
             Database::query($sql);
             $courseCode = $courseInfo['code'];
-            $subscribe = (int) api_get_course_setting('subscribe_users_to_forum_notifications', $courseCode);
+            $subscribe = (int) api_get_course_setting('subscribe_users_to_forum_notifications');
 
             $status = STUDENT;
             if (!empty($session_id)) {

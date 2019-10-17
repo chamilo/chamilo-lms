@@ -9,28 +9,22 @@ use Chamilo\CourseBundle\Component\CourseCopy\CourseSelectForm;
  *
  * @author Jhon Hinojosa
  * @author Julio Montoya Fixing pclzip folder + some clean <gugli100@gmail.com>
- *
- * @package chamilo.include.export
  */
-
-// including the global file
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 
-$this_section = SECTION_PLATFORM_ADMIN;
-$interbreadcrumb[] = ["url" => 'index.php', "name" => get_lang('PlatformAdmin')];
-// Access restrictions
 api_protect_admin_script(true);
+api_set_more_memory_and_time_limits();
+
+$this_section = SECTION_PLATFORM_ADMIN;
+$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('PlatformAdmin')];
+
 $nameTools = get_lang('SpecialExports');
 $export = '';
 $querypath = '';
 
-api_set_more_memory_and_time_limits();
-
-// Displaying the header
 Display::display_header($nameTools);
 
-// Display the tool title
 echo Display::page_header($nameTools);
 
 if (count($_POST) == 0) {
@@ -146,7 +140,6 @@ if ($export && $name) {
     }
 }
 
-/* FOOTER */
 Display::display_footer();
 
 function form_special_export()

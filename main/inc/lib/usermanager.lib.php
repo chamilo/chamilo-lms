@@ -2513,62 +2513,6 @@ class UserManager
     }
 
     /**
-     * Build a list of extra file already uploaded in $user_folder/{$extra_field}/.
-     *
-     * @param $user_id
-     * @param $extra_field
-     * @param bool $force
-     * @param bool $showDelete
-     *
-     * @return bool|string
-     */
-    public static function build_user_extra_file_list(
-        $user_id,
-        $extra_field,
-        $force = false,
-        $showDelete = false
-    ) {
-        if (!$force && !empty($_POST['remove_'.$extra_field])) {
-            return true; // postpone reading from the filesystem
-        }
-
-        $extra_files = self::get_user_extra_files($user_id, $extra_field);
-        if (empty($extra_files)) {
-            return false;
-        }
-
-        $path_info = self::get_user_picture_path_by_id($user_id, 'web');
-        $path = $path_info['dir'];
-        $del_image = Display::returnIconPath('delete.png');
-
-        $del_text = get_lang('Delete');
-        $extra_file_list = '';
-        if (count($extra_files) > 0) {
-            $extra_file_list = '<div class="files-production"><ul id="productions">';
-            foreach ($extra_files as $file) {
-                $filename = substr($file, strlen($extra_field) + 1);
-                $extra_file_list .= '<li>'.Display::return_icon('archive.png').
-                    '<a href="'.$path.$extra_field.'/'.urlencode($filename).'" target="_blank">
-                        '.htmlentities($filename).
-                    '</a> ';
-                if ($showDelete) {
-                    $extra_file_list .= '<input 
-                        style="width:16px;" 
-                        type="image" 
-                        name="remove_extra_'.$extra_field.'['.urlencode($file).']" 
-                        src="'.$del_image.'" 
-                        alt="'.$del_text.'"
-                        title="'.$del_text.' '.htmlentities($filename).'" 
-                        onclick="javascript: return confirmation(\''.htmlentities($filename).'\');" /></li>';
-                }
-            }
-            $extra_file_list .= '</ul></div>';
-        }
-
-        return $extra_file_list;
-    }
-
-    /**
      * Get valid filenames in $user_folder/{$extra_field}/.
      *
      * @param $user_id
@@ -2608,33 +2552,6 @@ class UserManager
         }
 
         return $files; // can be an empty array
-    }
-
-    /**
-     * Remove an {$extra_file} from the user folder $user_folder/{$extra_field}/.
-     *
-     * @param int    $user_id
-     * @param string $extra_field
-     * @param string $extra_file
-     *
-     * @return bool
-     */
-    public static function remove_user_extra_file($user_id, $extra_field, $extra_file)
-    {
-        $extra_file = Security::filter_filename($extra_file);
-        $path_info = self::get_user_picture_path_by_id($user_id, 'system');
-        if (strpos($extra_file, $extra_field) !== false) {
-            $path_extra_file = $path_info['dir'].$extra_file;
-        } else {
-            $path_extra_file = $path_info['dir'].$extra_field.'/'.$extra_file;
-        }
-        if (is_file($path_extra_file)) {
-            unlink($path_extra_file);
-
-            return true;
-        }
-
-        return false;
     }
 
     /**
@@ -2878,18 +2795,6 @@ class UserManager
         $extraField = new ExtraField('user');
 
         return $extraField->get_handler_field_info_by_tags($variable);
-    }
-
-    /**
-     * @param string $type
-     *
-     * @return array
-     */
-    public static function get_all_extra_field_by_type($type)
-    {
-        $extraField = new ExtraField('user');
-
-        return $extraField->get_all_extra_field_by_type($type);
     }
 
     /**
@@ -3969,12 +3874,13 @@ class UserManager
     /**
      * Get the total count of users.
      *
-     * @param   int     Status of users to be counted
-     * @param   int     Access URL ID (optional)
+     * @param int $status        Status of users to be counted
+     * @param int $access_url_id Access URL ID (optional)
+     * @param int $active
      *
      * @return mixed Number of users or false on error
      */
-    public static function get_number_of_users($status = 0, $access_url_id = 1)
+    public static function get_number_of_users($status = 0, $access_url_id = 1, $active = null)
     {
         $t_u = Database::get_main_table(TABLE_MAIN_USER);
         $t_a = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
@@ -3991,9 +3897,17 @@ class UserManager
                     FROM $t_u u
                     WHERE 1 = 1 ";
         }
+
         if (is_int($status) && $status > 0) {
+            $status = (int) $status;
             $sql .= " AND u.status = $status ";
         }
+
+        if ($active !== null) {
+            $active = (int) $active;
+            $sql .= " AND u.active = $active ";
+        }
+
         $res = Database::query($sql);
         if (Database::num_rows($res) === 1) {
             return (int) Database::result($res, 0, 0);
@@ -5419,42 +5333,6 @@ class UserManager
     }
 
     /**
-     * Gets the user path of user certificated.
-     *
-     * @param int The user id
-     *
-     * @return array containing path_certificate and cat_id
-     */
-    public static function get_user_path_certificate($user_id)
-    {
-        $my_certificate = [];
-        $table_certificate = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CERTIFICATE);
-        $table_gradebook_category = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
-
-        $session_id = api_get_session_id();
-        $user_id = (int) $user_id;
-        if ($session_id == 0 || is_null($session_id)) {
-            $sql_session = 'AND (session_id='.intval($session_id).' OR isnull(session_id)) ';
-        } elseif ($session_id > 0) {
-            $sql_session = 'AND session_id='.intval($session_id);
-        } else {
-            $sql_session = '';
-        }
-        $sql = "SELECT tc.path_certificate,tc.cat_id,tgc.course_code,tgc.name
-                FROM $table_certificate tc, $table_gradebook_category tgc
-                WHERE tgc.id = tc.cat_id AND tc.user_id = $user_id
-                ORDER BY tc.date_certificate DESC 
-                LIMIT 5";
-
-        $rs = Database::query($sql);
-        while ($row = Database::fetch_array($rs)) {
-            $my_certificate[] = $row;
-        }
-
-        return $my_certificate;
-    }
-
-    /**
      * This function check if the user is a coach inside session course.
      *
      * @param int $user_id    User id
@@ -5513,32 +5391,6 @@ class UserManager
         }
 
         return $icon_link;
-    }
-
-    /**
-     * Returns an array of the different types of user extra fields [id => title translation].
-     *
-     * @return array
-     */
-    public static function get_user_field_types()
-    {
-        $types = [];
-        $types[self::USER_FIELD_TYPE_TEXT] = get_lang('FieldTypeText');
-        $types[self::USER_FIELD_TYPE_TEXTAREA] = get_lang('FieldTypeTextarea');
-        $types[self::USER_FIELD_TYPE_RADIO] = get_lang('FieldTypeRadio');
-        $types[self::USER_FIELD_TYPE_SELECT] = get_lang('FieldTypeSelect');
-        $types[self::USER_FIELD_TYPE_SELECT_MULTIPLE] = get_lang('FieldTypeSelectMultiple');
-        $types[self::USER_FIELD_TYPE_DATE] = get_lang('FieldTypeDate');
-        $types[self::USER_FIELD_TYPE_DATETIME] = get_lang('FieldTypeDatetime');
-        $types[self::USER_FIELD_TYPE_DOUBLE_SELECT] = get_lang('FieldTypeDoubleSelect');
-        $types[self::USER_FIELD_TYPE_DIVIDER] = get_lang('FieldTypeDivider');
-        $types[self::USER_FIELD_TYPE_TAG] = get_lang('FieldTypeTag');
-        $types[self::USER_FIELD_TYPE_TIMEZONE] = get_lang('FieldTypeTimezone');
-        $types[self::USER_FIELD_TYPE_SOCIAL_PROFILE] = get_lang('FieldTypeSocialProfile');
-        $types[self::USER_FIELD_TYPE_FILE] = get_lang('FieldTypeFile');
-        $types[self::USER_FIELD_TYPE_MOBILE_PHONE_NUMBER] = get_lang('FieldTypeMobilePhoneNumber');
-
-        return $types;
     }
 
     /**
@@ -5740,34 +5592,6 @@ class UserManager
     }
 
     /**
-     * Get the teacher (users with COURSEMANGER status) list.
-     *
-     * @return array The list
-     */
-    public static function getTeachersList()
-    {
-        $userTable = Database::get_main_table(TABLE_MAIN_USER);
-        $resultData = Database::select(
-            'user_id, lastname, firstname, username',
-            $userTable,
-            [
-            'where' => [
-                'status = ?' => COURSEMANAGER,
-            ],
-        ]
-        );
-
-        foreach ($resultData as &$teacherData) {
-            $teacherData['completeName'] = api_get_person_name(
-                $teacherData['firstname'],
-                $teacherData['lastname']
-            );
-        }
-
-        return $resultData;
-    }
-
-    /**
      * @return array
      */
     public static function getOfficialCodeGrouped()
@@ -5960,21 +5784,6 @@ class UserManager
         }
 
         return get_lang('Anonymous');
-    }
-
-    /**
-     * Displays the name of the user and makes the link to the user profile.
-     *
-     * @param $userInfo
-     *
-     * @return string
-     */
-    public static function getUserProfileLinkWithPicture($userInfo)
-    {
-        return Display::url(
-            Display::img($userInfo['avatar']),
-            $userInfo['profile_url']
-        );
     }
 
     /**
@@ -6533,19 +6342,6 @@ SQL;
     }
 
     /**
-     * @return int
-     */
-    public static function getCountActiveUsers()
-    {
-        $table = Database::get_main_table(TABLE_MAIN_USER);
-        $sql = "SELECT count(id) count FROM $table WHERE active = 1 AND status <> ".ANONYMOUS;
-        $result = Database::query($sql);
-        $row = Database::fetch_array($result);
-
-        return (int) $row['count'];
-    }
-
-    /**
      * @param array $userInfo
      * @param int   $searchYear
      *
@@ -6740,6 +6536,103 @@ SQL;
         }
 
         return $fullName;
+    }
+
+    /**
+     * @param int $userId
+     *
+     * @return array
+     */
+    public static function getUserCareers($userId)
+    {
+        $table = Database::get_main_table(TABLE_MAIN_USER_CAREER);
+        $tableCareer = Database::get_main_table(TABLE_CAREER);
+        $userId = (int) $userId;
+
+        $sql = "SELECT c.id, c.name 
+                FROM $table uc 
+                INNER JOIN $tableCareer c 
+                ON uc.career_id = c.id 
+                WHERE user_id = $userId 
+                ORDER BY uc.created_at
+                ";
+        $result = Database::query($sql);
+
+        return Database::store_result($result, 'ASSOC');
+    }
+
+    /**
+     * @param int $userId
+     * @param int $careerId
+     */
+    public static function addUserCareer($userId, $careerId)
+    {
+        if (!api_get_configuration_value('allow_career_users')) {
+            return false;
+        }
+
+        if (self::userHasCareer($userId, $careerId) === false) {
+            $params = ['user_id' => $userId, 'career_id' => $careerId, 'created_at' => api_get_utc_datetime(), 'updated_at' => api_get_utc_datetime()];
+            $table = Database::get_main_table(TABLE_MAIN_USER_CAREER);
+            Database::insert($table, $params);
+        }
+
+        return true;
+    }
+
+    /**
+     * @param int   $userCareerId
+     * @param array $data
+     *
+     * @return bool
+     */
+    public static function updateUserCareer($userCareerId, $data)
+    {
+        if (!api_get_configuration_value('allow_career_users')) {
+            return false;
+        }
+
+        $params = ['extra_data' => $data, 'updated_at' => api_get_utc_datetime()];
+        $table = Database::get_main_table(TABLE_MAIN_USER_CAREER);
+        Database::update($table, $params, [   'where' => ['id = ?' => (int) $userCareerId], ]);
+
+        return true;
+    }
+
+    /**
+     * @param int $userId
+     * @param int $careerId
+     *
+     * @return array
+     */
+    public static function getUserCareer($userId, $careerId)
+    {
+        $userId = (int) $userId;
+        $careerId = (int) $careerId;
+        $table = Database::get_main_table(TABLE_MAIN_USER_CAREER);
+
+        $sql = "SELECT * FROM $table WHERE user_id = $userId AND career_id = $careerId";
+        $result = Database::query($sql);
+
+        return Database::fetch_array($result, 'ASSOC');
+    }
+
+    /**
+     * @param int $userId
+     * @param int $careerId
+     *
+     * @return bool
+     */
+    public static function userHasCareer($userId, $careerId)
+    {
+        $userId = (int) $userId;
+        $careerId = (int) $careerId;
+        $table = Database::get_main_table(TABLE_MAIN_USER_CAREER);
+
+        $sql = "SELECT id FROM $table WHERE user_id = $userId AND career_id = $careerId";
+        $result = Database::query($sql);
+
+        return Database::num_rows($result) > 0;
     }
 
     /**

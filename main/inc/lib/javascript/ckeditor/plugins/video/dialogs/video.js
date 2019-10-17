@@ -230,6 +230,7 @@ CKEDITOR.dialog.add( 'video', function ( editor )
             }
 
             if (responsive) {
+                newFakeImage.addClass('embed-responsive-item');
                 responsiveParent.addClass('embed-responsive');
 
                 switch (responsive) {

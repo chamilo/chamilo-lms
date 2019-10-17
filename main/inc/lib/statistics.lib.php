@@ -196,7 +196,6 @@ class Statistics
         return Database::store_result($result);
     }
 
-
     /**
      * Count activities from track_e_default_table.
      *

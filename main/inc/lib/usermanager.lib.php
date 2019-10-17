@@ -6594,7 +6594,7 @@ SQL;
 
         $params = ['extra_data' => $data, 'updated_at' => api_get_utc_datetime()];
         $table = Database::get_main_table(TABLE_MAIN_USER_CAREER);
-        Database::update($table, $params, [   'where' => ['id = ?' => (int) $userCareerId], ]);
+        Database::update($table, $params, ['where' => ['id = ?' => (int) $userCareerId],]);
 
         return true;
     }

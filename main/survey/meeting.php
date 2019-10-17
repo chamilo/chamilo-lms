@@ -250,10 +250,6 @@ foreach ($students as $studentId) {
     }
     $column = 0;
     $table->setCellContents($row, $column, $name);
-    $class = 'class="row_odd"';
-    if ($row % 2) {
-        $class = 'class="row_even"';
-    }
     $row++;
 }
 if ($action === 'edit') {

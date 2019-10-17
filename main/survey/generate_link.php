@@ -7,7 +7,7 @@ if (!api_is_allowed_to_edit(false, true)) {
     api_not_allowed(true);
 }
 
-$survey_id = isset($_REQUEST['survey_id']) ? intval($_REQUEST['survey_id']) : null;
+$survey_id = isset($_REQUEST['survey_id']) ? (int) $_REQUEST['survey_id'] : null;
 
 if (empty($survey_id)) {
     api_not_allowed(true);

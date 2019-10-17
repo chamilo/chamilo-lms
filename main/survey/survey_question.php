@@ -13,6 +13,89 @@ class survey_question
     private $form;
 
     /**
+     * @param FormValidator $form
+     * @param array         $surveyData
+     */
+    public function addParentMenu(FormValidator $form, $surveyData)
+    {
+        $surveyId = $surveyData['survey_id'];
+        $questions = SurveyManager::get_questions($surveyId);
+
+        $options = [];
+        foreach ($questions as $question) {
+            $options[$question['question_id']] = strip_tags($question['question']);
+        }
+        $form->addSelect(
+            'parent_id',
+            get_lang('Parent'),
+            $options,
+            ['id' => 'parent_id', 'placeholder' => get_lang('SelectAnOption')]
+        );
+        $url = api_get_path(WEB_AJAX_PATH).'survey.ajax.php?'.api_get_cidreq();
+        $form->addHtml('
+            <script>
+                $(function() {                    
+                    $("#parent_id").on("change", function() {
+                        var questionId = $(this).val()
+                        var params = {
+                            "a": "load_question_options",
+                            "survey_id": "'.$surveyId.'",
+                            "question_id": questionId,
+                        };    
+                            
+                          $.ajax({
+                            type: "GET",
+                            url: "'.$url.'",
+                            data: params,
+                            async: false,
+                            success: function(data) {
+                                $("#parent_options").html(data);
+                            }
+                        });        
+                        console.log(); 
+                    });
+                });
+            </script>
+        ');
+        $form->addHtml('<div id="parent_options"></div>');
+        $form->addHidden('option_id', 0);
+    }
+
+    /**
+     * @param string $type
+     *
+     * @return survey_question
+     */
+    public static function createQuestion($type)
+    {
+        switch ($type) {
+            case 'comment':
+                return new ch_comment();
+            case 'dropdown':
+                return new ch_dropdown();
+            case 'multiplechoice':
+                return new ch_multiplechoice();
+            case 'multipleresponse':
+                return new ch_multipleresponse();
+            case 'open':
+                return new ch_open();
+            case 'pagebreak':
+                return new ch_pagebreak();
+            case 'percentage':
+                return new ch_percentage();
+            case 'personality':
+                return new ch_personality();
+            case 'score':
+                return new ch_score();
+            case 'yesno':
+                return new ch_yesno();
+            default:
+                api_not_allowed(true);
+                break;
+        }
+    }
+
+    /**
      * Generic part of any survey question: the question field.
      *
      * @param array $surveyData

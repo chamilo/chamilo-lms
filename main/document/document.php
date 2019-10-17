@@ -1843,6 +1843,11 @@ if (!empty($documentAndFolders)) {
             } else {
                 $document_name = basename($document_data['path']);
             }
+
+            if (api_get_configuration_value('save_titles_as_html')) {
+                $document_name = strip_tags($document_name);
+            }
+
             $row['name'] = $document_name;
             // Data for checkbox
             if (($isAllowedToEdit || $groupMemberWithUploadRights) && count($documentAndFolders) > 1) {

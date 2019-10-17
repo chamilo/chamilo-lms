@@ -5051,6 +5051,10 @@ class DocumentManager
             $title = basename($document_data['path']);
         }
 
+        if (api_get_configuration_value('save_titles_as_html')) {
+            $title = strip_tags($title);
+        }
+
         $filetype = $document_data['filetype'];
         $path = $document_data['path'];
         $url_path = urlencode($document_data['path']);
@@ -6599,6 +6603,10 @@ class DocumentManager
         // If title is empty we try to use the path
         if (empty($my_file_title)) {
             $my_file_title = basename($path);
+        }
+
+        if (api_get_configuration_value('save_titles_as_html')) {
+            $my_file_title = strip_tags($my_file_title);
         }
 
         // Show the "image name" not the filename of the image.

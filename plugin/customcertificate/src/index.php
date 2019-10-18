@@ -1,6 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+$useDefault = false;
 $isDefault = isset($_GET['default']) ? (int) $_GET['default'] : null;
 
 if ($isDefault === 1) {
@@ -64,16 +65,34 @@ $htmlHeadXtra[] = api_get_asset('cropper/dist/cropper.min.js');
 $htmlHeadXtra[] = api_get_css(
     api_get_path(WEB_PLUGIN_PATH).'customcertificate/resources/css/form.css'
 );
+$htmlHeadXtra[] = '<script>
+    $(function () {
+        $("#delete_certificate").click(function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            if (confirm("'.$plugin->get_lang("QuestionDelete").'")) {
+                var courseId = '.$courseId.';
+                var sessionId = '.$sessionId.';
+                var accessUrlId = '.$accessUrlId.';
+                var plugin_path = "'.api_get_path(WEB_PLUGIN_PATH).'";
+                var ajax_path = plugin_path + "customcertificate/src/customcertificate.ajax.php?a=delete_certificate";
+                $.ajax({
+                    data: {courseId: courseId, sessionId: sessionId, accessUrlId: accessUrlId},
+                    url: ajax_path,
+                    type: "POST",
+                    success: function (response) {
+                        window.location.reload();
+                    }
+                }); 
+            }
+        });
+
+    });
+</script>';
 
 // Get info certificate
-$infoCertificate = Database::select(
-    '*',
-    $table,
-    ['where' => [
-        'access_url_id = ? AND c_id = ? AND session_id = ?' => [$accessUrlId, $courseId, $sessionId], ],
-    ],
-    'first'
-);
+$infoCertificate = CustomCertificatePlugin::getInfoCertificate($courseId, $sessionId, $accessUrlId);
 
 $form = new FormValidator(
     'formEdit',
@@ -172,12 +191,7 @@ if ($form->validate()) {
 
         // Certificate Default
         if (intval($formValues['use_default'] == 1)) {
-            $infoCertificateDefault = Database::select(
-                '*',
-                $table,
-                ['where' => ['access_url_id = ? AND certificate_default = ? ' => [$accessUrlId, 1]]],
-                'first'
-            );
+            $infoCertificateDefault = CustomCertificatePlugin::getInfoCertificateDefault($accessUrlId);
             if (!empty($infoCertificateDefault)) {
                 foreach ($fieldList as $field) {
                     if (!empty($infoCertificateDefault[$field]) && !$checkLogo[$field]) {
@@ -199,14 +213,9 @@ if ($form->validate()) {
 }
 
 if (empty($infoCertificate)) {
-    $infoCertificate = Database::select(
-        '*',
-        $table,
-        ['where' => ['access_url_id = ? AND certificate_default = ? ' => [$accessUrlId, 1]]],
-        'first'
-    );
+    $infoCertificate = CustomCertificatePlugin::getInfoCertificateDefault($accessUrlId);
 
-    if (!is_array($infoCertificate)) {
+    if (empty($infoCertificate)) {
         $infoCertificate = [
             'type_date_expediction' => '',
             'year' => '',
@@ -215,9 +224,7 @@ if (empty($infoCertificate)) {
             'date_change' => '',
         ];
     }
-    if (!empty($infoCertificate)) {
-        $useDefault = true;
-    }
+    $useDefault = true;
 }
 
 // Display the header
@@ -226,6 +233,13 @@ $actionsLeft = Display::url(
     Display::return_icon('certificate.png', get_lang('Certificate'), '', ICON_SIZE_MEDIUM),
     'print_certificate.php'.$urlParams
 );
+if (!empty($courseId) && !$useDefault) {
+    $actionsLeft .= Display::url(
+        Display::return_icon('delete.png', $plugin->get_lang('DeleteCertificate'), '', ICON_SIZE_MEDIUM),
+        'delete_certificate.php'.$urlParams,
+        ['id' => 'delete_certificate']
+    );
+}
 
 echo Display::toolbarAction(
     'toolbar-document',

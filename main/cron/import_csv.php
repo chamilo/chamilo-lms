@@ -2884,7 +2884,7 @@ class ImportCsv
                         continue;
                     }
 
-                    $currentCourseId = (int) $row['CourseId'];
+                    $currentCourseId = $row['CourseId'];
                     if ($graph->hasVertex($currentCourseId)) {
                         $current = $graph->getVertex($currentCourseId);
                     } else {

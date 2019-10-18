@@ -44,7 +44,6 @@ switch ($action) {
                 get_plugin_lang('ProblemDelete', 'CustomCertificatePlugin'),
                 'error',
                 false
-
             );
         }
 

@@ -413,7 +413,11 @@ class ExerciseShowFunctions
                 $status = Display::label(get_lang('Correct'), 'success');
             }
             echo '<td width="20%">';
-            echo $status;
+            // Show only status for the selected student answer BT#16256
+            if ($studentChoice) {
+                echo $status;
+            }
+
             echo '</td>';
         }
 

@@ -2667,7 +2667,6 @@ class ImportCsv
 
             $extraFieldValue = new ExtraFieldValue('career');
             $extraFieldName = $this->extraFieldIdNameList['career'];
-            $loadedStudentList = [];
 
             foreach ($data as $row) {
                 if (empty($row)) {
@@ -2681,6 +2680,11 @@ class ImportCsv
                 }
 
                 $studentId = $row['StudentId'];
+                $studentId = UserManager::get_user_id_from_original_id(
+                    $studentId,
+                    $this->extraFieldIdNameList['user']
+                );
+
                 $studentInfo = api_get_user_info($studentId);
                 if (empty($studentInfo)) {
                     $this->logger->addInfo("Student id not found: $studentId");

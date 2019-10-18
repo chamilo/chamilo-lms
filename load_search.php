@@ -348,7 +348,7 @@ $extra = $extraField->addElements(
 $fieldsToShow = [
     'heures_disponibilite_par_semaine',
     'moment_de_disponibilite',
-    //'langue_cible', not needed
+    //'langue_cible',
 ];
 
 $extra = $extraFieldUser->addElements(
@@ -407,7 +407,7 @@ $extra = $extraField->addElements(
 );
 
 // Commented because BT#15776
-/*$fieldsToShow = [
+$fieldsToShow = [
     'langue_cible',
 ];
 
@@ -422,7 +422,7 @@ $extra = $extraFieldUser->addElements(
     [],
     false,
     $forceShowFields //$forceShowFields = false
-);*/
+);
 
 $form->addHtml('</div></div></div>');
 $form->addHtml('<div class="panel panel-default">');
@@ -687,13 +687,13 @@ if ($form->validate()) {
         $userDataToSave = [
             'item_id' => $userToLoad,
             'extra_heures_disponibilite_par_semaine' => isset($userData['extra_heures_disponibilite_par_semaine']) ? $userData['extra_heures_disponibilite_par_semaine'] : '',
-            //'extra_langue_cible' => isset($userData['extra_langue_cible']) ? $userData['extra_langue_cible'] : '',
+            'extra_langue_cible' => isset($userData['extra_langue_cible']) ? $userData['extra_langue_cible'] : '',
         ];
         $extraFieldValue->saveFieldValues(
             $userDataToSave,
             true,
             false,
-            ['heures_disponibilite_par_semaine'] //, 'langue_cible'
+            ['heures_disponibilite_par_semaine' , 'langue_cible']
         );
 
         // Save session search
@@ -978,6 +978,7 @@ if (!empty($filterToSend)) {
     $filterToSend = json_encode($filterToSend);
     $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_sessions&_search=true&load_extra_field='.
         $extraFieldListToString.'&_force_search=true&rows=20&page=1&sidx=&sord=asc&filters2='.$filterToSend;
+    $url .= '&lang='.$lang;
 } else {
     $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_sessions&_search=true&load_extra_field='.
         $extraFieldListToString.'&_force_search=true&rows=20&page=1&sidx=&sord=asc';

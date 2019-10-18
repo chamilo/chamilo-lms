@@ -348,7 +348,7 @@ $extra = $extraField->addElements(
 $fieldsToShow = [
     'heures_disponibilite_par_semaine',
     'moment_de_disponibilite',
-    'langue_cible',
+    //'langue_cible',
 ];
 
 $extra = $extraFieldUser->addElements(

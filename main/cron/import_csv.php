@@ -2710,7 +2710,9 @@ class ImportCsv
                 }
 
                 if (UserManager::userHasCareer($studentId, $careerChamiloId) === false) {
-                    $this->logger->addInfo("User #$studentId has no career # $careerChamiloId");
+                    $this->logger->addInfo(
+                        "User $studentId (".$row['StudentId'].") has no career #$careerChamiloId (ext #$careerId)"
+                    );
                     continue;
                 }
 

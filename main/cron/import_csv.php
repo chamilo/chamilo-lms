@@ -2840,7 +2840,7 @@ class ImportCsv
                         $careerList[$careerId] = $graph;
                     }
 
-                    $currentCourseId = (int) $row['CourseId'];
+                    $currentCourseId = $row['CourseId'];
                     $name = $row['CourseName'];
                     $notes = $row['Notes'];
                     $groupValue = $row['Group'];

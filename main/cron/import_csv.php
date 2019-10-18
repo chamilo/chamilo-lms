@@ -2667,6 +2667,7 @@ class ImportCsv
 
             $extraFieldValue = new ExtraFieldValue('career');
             $extraFieldName = $this->extraFieldIdNameList['career'];
+            $loadedStudentList = [];
 
             foreach ($data as $row) {
                 if (empty($row)) {
@@ -2713,11 +2714,17 @@ class ImportCsv
 
                 $extraData = isset($userCareerData['extra_data']) && !empty($userCareerData['extra_data']) ? unserialize($userCareerData['extra_data']) : [];
 
-                $extraData[$row['CourseId']][] = [
+                $teacherInfo = api_get_user_info_from_username($row['TeacherUsername']);
+                $teacherName = $row['TeacherUsername'];
+                if ($teacherInfo) {
+                    $teacherName = $teacherInfo['complete_name'];
+                }
+
+                $extraData[$row['CourseId']][$row['ResultId']] = [
                     'Description' => $row['Description'],
                     'Period' => $row['Period'],
                     'TeacherText' => $row['TeacherText'],
-                    'TeacherUsername' => $row['TeacherUsername'],
+                    'TeacherUsername' => $teacherName,
                     'ScoreText' => $row['ScoreText'],
                     'ScoreValue' => $row['ScoreValue'],
                     'Info' => $row['Info'],
@@ -2727,10 +2734,11 @@ class ImportCsv
                     'Icon' => $row['Icon'],
                     'IconColor' => $row['IconColor'],
                 ];
-
                 $serializedValue = serialize($extraData);
 
                 UserManager::updateUserCareer($userCareerData['id'], $serializedValue);
+
+                //$loadedStudentList[] = $studentId;
             }
         }
     }

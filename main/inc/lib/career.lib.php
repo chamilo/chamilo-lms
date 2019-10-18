@@ -453,13 +453,34 @@ class Career extends Model
     }
 
     /**
-     * @param Graph    $graph
+     * @param array    $careerInfo
      * @param Template $tpl
+     * @param int      $loadUserIdData
      *
      * @return string
      */
-    public static function renderDiagramByColumn($graph, $tpl)
+    public static function renderDiagramByColumn($careerInfo, $tpl, $loadUserIdData = 0)
     {
+        $careerId = isset($careerInfo['id']) ? $careerInfo['id'] : 0;
+        if (empty($careerId)) {
+            return '';
+        }
+
+        $extraFieldValue = new ExtraFieldValue('career');
+        $item = $extraFieldValue->get_values_by_handler_and_field_variable(
+            $careerId,
+            'career_diagram',
+            false,
+            false,
+            false
+        );
+
+        $graph = null;
+        if (!empty($item) && isset($item['value']) && !empty($item['value'])) {
+            /** @var Graph $graph */
+            $graph = UnserializeApi::unserialize('career', $item['value']);
+        }
+
         if (!($graph instanceof Graph)) {
             return '';
         }
@@ -470,6 +491,14 @@ class Career extends Model
             $groupId = (int) $vertex->getGroup();
             if ($groupId > $maxColumn) {
                 $maxColumn = $groupId;
+            }
+        }
+
+        $userResult = [];
+        if (!empty($loadUserIdData)) {
+            $careerData = UserManager::getUserCareer($loadUserIdData, $careerId);
+            if (isset($careerData['extra_data']) && !empty($careerData['extra_data'])) {
+                $userResult = unserialize($careerData['extra_data']);
             }
         }
 
@@ -506,7 +535,6 @@ class Career extends Model
             $list[$column]['column'] = $column;
         }
 
-        $groupDrawLine = [];
         $groupCourseList = [];
         $simpleConnectionList = [];
 
@@ -535,7 +563,6 @@ class Career extends Model
                                     '',
                                     $explode[0]
                                 );
-                                $groupDrawLine[$groupValueId] = true;
                                 $simpleFirstConnection = 'g'.(int) $groupValueId;
                             } else {
                                 // Course block (row_123 id)
@@ -564,7 +591,6 @@ class Career extends Model
                                     $value
                                 );
                                 $simpleSecondConnection = 'g'.(int) $groupValueId;
-                                $groupDrawLine[$groupValueId] = true;
                             } else {
                                 // Course block (row_123 id)
                                 if (!empty($explode[0]) && isset($explode[1])) {
@@ -605,11 +631,18 @@ class Career extends Model
 
         $graph->xGap = 70;
         $graph->yGap = 55;
+
         $graph->xDiff = 70;
         $graph->yDiff = 55;
 
+        if (!empty($userResult)) {
+            $graph->blockHeight = 180;
+            $graph->yGap = 60;
+            $graph->yDiff = 60;
+        }
+
         foreach ($groupsBetweenColumns as $group => $items) {
-            self::parseColumnList($groupCourseList, $items, '', $graph, $simpleConnectionList);
+            self::parseColumnList($groupCourseList, $items, $graph, $simpleConnectionList, $userResult);
         }
 
         $graphHtml .= '<style>
@@ -690,7 +723,6 @@ class Career extends Model
                 $width = $data['max_width'] + $subGroupDiffX * 2;
                 $height = $data['max_height'] + $subGroupDiffX * 2 + $spaceForSubGroupTitle;
 
-
                 $label = '<h4 style="background: white">'.$data['label'].'</h4>';
                 $vertexData = "var sg$subGroupId = graph.insertVertex(parent, null, '$label', $x, $y, $width, $height, '$style');";
                 $subGroupList[] = $vertexData;
@@ -719,7 +751,16 @@ class Career extends Model
         return $graphHtml;
     }
 
-    public static function parseColumnList($groupCourseList, $columnList, $width, &$graph, &$connections)
+    /**
+     * @param $groupCourseList
+     * @param $columnList
+     * @param $graph
+     * @param $connections
+     * @param $userResult
+     *
+     * @return string
+     */
+    public static function parseColumnList($groupCourseList, $columnList, &$graph, &$connections, $userResult)
     {
         $graphHtml = '';
         $oldGroup = null;
@@ -796,7 +837,8 @@ class Career extends Model
                     $addRow,
                     $graph,
                     $newGroup,
-                    $connections
+                    $connections,
+                    $userResult
                 );
             }
 
@@ -815,10 +857,11 @@ class Career extends Model
      * @param stdClass $graph
      * @param int      $group
      * @param array    $connections
+     * @param array    $userResult
      *
      * @return string
      */
-    public static function parseVertexList($groupCourseList, $vertexList, $addRow = 0, &$graph, $group, &$connections)
+    public static function parseVertexList($groupCourseList, $vertexList, $addRow = 0, &$graph, $group, &$connections, $userResult)
     {
         if (empty($vertexList)) {
             return '';
@@ -848,6 +891,54 @@ class Career extends Model
             }
             $content = '<div class="pull-left">'.$vertex->getAttribute('Notes').'</div>';
             $content .= '<div class="pull-right">['.$id.']</div>';
+
+            if (!empty($userResult) && isset($userResult[$id])) {
+                $results = '';
+                $size = 2;
+                foreach ($userResult[$id] as $index => $iconData) {
+                    $icon = '';
+                    switch ($iconData['Icon']) {
+                        case 0:
+                            $icon = Display::returnFontAwesomeIcon('times-circle', $size);
+                            //$icon = Display::return_icon('delete.png', ' ');
+                            break;
+                        case 1:
+                            $icon = Display::returnFontAwesomeIcon('check-circle', $size);
+                            //$icon = Display::return_icon('check.png', ' ');
+                            break;
+                        case 2:
+                            $icon = Display::returnFontAwesomeIcon('info-circle', $size);
+                            //$icon = Display::return_icon('info3.gif', ' ');
+                            break;
+                    }
+
+                    if (!empty($icon)) {
+                        //data-toggle="popover" title="Popover title" data-content="And here's some amazing content. It's very engaging. Right?">
+                        $params = [
+                            'id' => 'course_'.$id.'_'.$index,
+                            'data-toggle' => 'popover',
+                            'title' => 'Popover title',
+                            'class' => 'popup',
+                            'data-description' => $iconData['Description'],
+                            'data-period' => $iconData['Period'],
+                            'data-teacher-text' => $iconData['TeacherText'],
+                            'data-teacher' => $iconData['TeacherUsername'],
+                            'data-score' => $iconData['ScoreText'],
+                            'data-score-value' => $iconData['ScoreValue'],
+                            'data-info' => $iconData['Info'],
+                            'data-background-color' => $iconData['BgColor'],
+                            'data-color' => $iconData['Color'],
+                            'data-border-color' => $iconData['BorderColor'],
+                            'style' => 'color:'.$iconData['IconColor'],
+                        ];
+                        $results .= Display::url($icon, 'javascript:void(0);', $params);
+                    }
+                }
+
+                if (!empty($results)) {
+                    $content .= '<div class="row"></div><div class="pull-right">'.$results.'</div>';
+                }
+            }
 
             $title = $vertex->getAttribute('graphviz.label');
             if (!empty($vertex->getAttribute('LinkedElement'))) {

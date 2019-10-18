@@ -107,10 +107,10 @@ if (!empty($itemUrls) && !empty($itemUrls['value'])) {
 
 $tpl = new Template(get_lang('Diagram'));
 $html = Display::page_subheader2($careerInfo['name'].$urlToString);
-if (!empty($item) && isset($item['value']) && !empty($item['value'])) {
-    /** @var Graph $graph */
-    $graph = UnserializeApi::unserialize('career', $item['value']);
-    $html .= Career::renderDiagramByColumn($graph, $tpl);
+$diagram = Career::renderDiagramByColumn($careerInfo, $tpl);
+
+if (!empty($diagram)) {
+    $html .= $diagram;
 } else {
     Display::addFlash(
         Display::return_message(

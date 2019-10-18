@@ -1,8 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use Fhaculty\Graph\Graph;
-
 /**
  *  @package chamilo.admin
  */
@@ -57,8 +55,6 @@ $interbreadcrumb[] = [
 ];
 
 $action = isset($_GET['action']) ? $_GET['action'] : '';
-$check = Security::check_token('request');
-$token = Security::get_token();
 
 if ($action == 'add') {
     $interbreadcrumb[] = ['url' => 'careers.php', 'name' => get_lang('Careers')];
@@ -72,13 +68,6 @@ if ($action == 'add') {
 }
 
 $extraFieldValue = new ExtraFieldValue('career');
-$item = $extraFieldValue->get_values_by_handler_and_field_variable(
-    $careerId,
-    'career_diagram',
-    false,
-    false,
-    false
-);
 
 // Check urls
 $itemUrls = $extraFieldValue->get_values_by_handler_and_field_variable(

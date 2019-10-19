@@ -144,7 +144,7 @@ function updateUsers($users)
         $inserted_in_course = [];
     }
     $usergroup = new UserGroup();
-    $send_mail = $_POST['sendMail'] ? true : false;
+    $send_mail = !empty($_POST['sendMail']) ? true : false;
     if (is_array($users)) {
         foreach ($users as $user) {
             $user = complete_missing_data($user);
@@ -193,10 +193,10 @@ function updateUsers($users)
                 '',
                 ''
             );
-            if (!is_array($user['Courses']) && !empty($user['Courses'])) {
+            if (!empty($user['Courses']) && !is_array($user['Courses'])) {
                 $user['Courses'] = [$user['Courses']];
             }
-            if (is_array($user['Courses'])) {
+            if (!empty($user['Courses']) && is_array($user['Courses'])) {
                 foreach ($user['Courses'] as $course) {
                     if (CourseManager::course_exists($course)) {
                         CourseManager::subscribeUser($user_id, $course, $user['Status']);
@@ -347,6 +347,7 @@ if (isset($_POST['formSent']) && $_POST['formSent'] && $_FILES['import_file']['s
         $see_message_import = get_lang('FileImported');
     }
 
+    $warning_message = '';
     if (count($errors) != 0) {
         $warning_message = '<ul>';
         foreach ($errors as $index => $error_user) {
@@ -360,7 +361,9 @@ if (isset($_POST['formSent']) && $_POST['formSent'] && $_FILES['import_file']['s
     }
 
     // if the warning message is too long then we display the warning message trough a session
-    Display::addFlash(Display::return_message($warning_message, 'warning', false));
+    if (!empty($warning_message)) {
+        Display::addFlash(Display::return_message($warning_message, 'warning', false));
+    }
 
     if ($error_kind_file) {
         Display::addFlash(Display::return_message(get_lang('YouMustImportAFileAccordingToSelectedOption'), 'error', false));

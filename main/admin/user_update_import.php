@@ -160,7 +160,7 @@ function updateUsers($users)
             $userName = isset($user['NewUserName']) ? $user['NewUserName'] : $userInfo['username'];
             $changePassMethod = 0;
             $password = isset($user['Password']) ? $user['Password'] : '';
-            if (!empty($password) && $password != $userInfo['password']) {
+            if (!empty($password)) {
                 $changePassMethod = 2;
             }
             $authSource = isset($user['AuthSource']) ? $user['AuthSource'] : '';

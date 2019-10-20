@@ -158,8 +158,15 @@ function updateUsers($users)
             $firstName = isset($user['FirstName']) ? $user['FirstName'] : $userInfo['firstname'];
             $lastName = isset($user['LastName']) ? $user['LastName'] : $userInfo['lastname'];
             $userName = isset($user['NewUserName']) ? $user['NewUserName'] : $userInfo['username'];
-            $password = isset($user['Password']) ? $user['Password'] : $userInfo['password'];
-            $authSource = isset($user['AuthSource']) ? $user['AuthSource'] : $userInfo['auth_source'];
+            $changePassMethod = 0;
+            $password = isset($user['Password']) ? $user['Password'] : '';
+            if (!empty($password) && $password != $userInfo['password']) {
+                $changePassMethod = 2;
+            }
+            $authSource = isset($user['AuthSource']) ? $user['AuthSource'] : '';
+            if ($changePassMethod === 2 && !empty($authSource) && $authSource != $userInfo['auth_source']) {
+                $changePassMethod = 3;
+            }
             $email = isset($user['Email']) ? $user['Email'] : $userInfo['email'];
             $status = isset($user['Status']) ? $user['Status'] : $userInfo['status'];
             $officialCode = isset($user['OfficialCode']) ? $user['OfficialCode'] : $userInfo['official_code'];
@@ -191,7 +198,7 @@ function updateUsers($users)
                 $language,
                 '',
                 '',
-                ''
+                $changePassMethod
             );
             if (!empty($user['Courses']) && !is_array($user['Courses'])) {
                 $user['Courses'] = [$user['Courses']];

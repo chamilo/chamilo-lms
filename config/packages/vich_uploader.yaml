@@ -1,0 +1,13 @@
+vich_uploader:
+    db_driver: orm
+    storage: flysystem
+
+    mappings:
+        resources:
+            uri_prefix: '/'
+            upload_destination: resources_fs
+            inject_on_load: true
+            namer: Vich\UploaderBundle\Naming\Base64Namer
+            directory_namer:
+                service: Vich\UploaderBundle\Naming\SubdirDirectoryNamer
+                options: {chars_per_dir: 1, dirs: 3}

@@ -567,7 +567,7 @@ class Career extends Model
                             } else {
                                 // Course block (row_123 id)
                                 if (!empty($explode[0])) {
-                                    $simpleFirstConnection = 'v'.(int) $explode[0];
+                                    $simpleFirstConnection = 'v'.$explode[0];
                                 }
                             }
                         } else {

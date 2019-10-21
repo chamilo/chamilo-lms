@@ -590,8 +590,8 @@ if (@$_POST['step2']) {
         migrateSwitch($my_old_version, $manager);
 
         // Create .env file
-        $envFile = api_get_path(SYS_PATH).'.env';
-        $distFile = api_get_path(SYS_PATH).'.env.dist';
+        $envFile = api_get_path(SYS_PATH).'.env.local';
+        $distFile = api_get_path(SYS_PATH).'.env';
 
         $params = [
             '{{DATABASE_HOST}}' => $dbHostForm,
@@ -654,8 +654,8 @@ if (@$_POST['step2']) {
 
         $manager = $database->getManager();
         // Create .env file
-        $envFile = api_get_path(SYS_PATH).'.env';
-        $distFile = api_get_path(SYS_PATH).'.env.dist';
+        $envFile = api_get_path(SYS_PATH).'.env.local';
+        $distFile = api_get_path(SYS_PATH).'.env';
 
         $params = [
             '{{DATABASE_HOST}}' => $dbHostForm,

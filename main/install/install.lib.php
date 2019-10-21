@@ -2866,7 +2866,7 @@ function updateEnvFile($distFile, $envFile, $params)
 
     foreach ($requirements as $requirement) {
         if (!isset($params['{{'.$requirement.'}}'])) {
-            throw new \Exception("The parameter $requirement is needed in order to edit the .env file");
+            throw new \Exception("The parameter $requirement is needed in order to edit the .env.local file");
         }
     }
 

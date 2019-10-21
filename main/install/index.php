@@ -591,7 +591,7 @@ if (@$_POST['step2']) {
         $perm_file = api_get_permissions_for_new_files();
         migrateSwitch($my_old_version, $manager);
 
-        // Create .env file
+        // Create .env.local file
         $envFile = api_get_path(SYS_PATH).'.env.local';
         $distFile = api_get_path(SYS_PATH).'.env';
 
@@ -655,7 +655,7 @@ if (@$_POST['step2']) {
         );
 
         $manager = $database->getManager();
-        // Create .env file
+        // Create .env.local file
         $envFile = api_get_path(SYS_PATH).'.env.local';
         $distFile = api_get_path(SYS_PATH).'.env';
 

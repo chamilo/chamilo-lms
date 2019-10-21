@@ -214,13 +214,13 @@ if (!empty($_POST['updatePath'])) {
     $proposedUpdatePath = $_POST['updatePath'];
 }
 
-if (@$_POST['step2_install'] || @$_POST['step2_update_8'] || @$_POST['step2_update_6']) {
-    if (@$_POST['step2_install']) {
+if (isset($_POST['step2_install']) || isset($_POST['step2_update_8']) || isset($_POST['step2_update_6'])) {
+    if (isset($_POST['step2_install'])) {
         $installType = 'new';
         $_POST['step2'] = 1;
     } else {
         $installType = 'update';
-        if (@$_POST['step2_update_8']) {
+        if (isset($_POST['step2_update_8'])) {
             $emptyUpdatePath = false;
             $proposedUpdatePath = api_add_trailing_slash(empty($_POST['updatePath']) ? api_get_path(SYS_PATH) : $_POST['updatePath']);
             if (file_exists($proposedUpdatePath)) {
@@ -234,7 +234,7 @@ if (@$_POST['step2_install'] || @$_POST['step2_update_8'] || @$_POST['step2_upda
             }
         }
     }
-} elseif (@$_POST['step1']) {
+} elseif (isset($_POST['step1'])) {
     $_POST['updatePath'] = '';
     $installType = '';
     $updateFromConfigFile = '';
@@ -310,7 +310,7 @@ if (!$_POST) {
     $current_step = 5;
 } elseif (!empty($_POST['step5'])) {
     $current_step = 6;
-} elseif (@$_POST['step6']) {
+} elseif (isset($_POST['step6'])) {
     $current_step = 7;
 }
 
@@ -374,13 +374,13 @@ $form .= '<input type="hidden" name="old_version"        value="'.api_htmlentiti
 $form .= '<input type="hidden" name="new_version"        value="'.api_htmlentities($new_version, ENT_QUOTES).'"/>';
 $form .= '<input type="hidden" name="installationProfile" value="'.api_htmlentities($installationProfile, ENT_QUOTES).'"/>';
 
-if (@$_POST['step2']) {
+if (isset($_POST['step2'])) {
     // STEP 3 : LICENSE
     ob_start();
     display_license_agreement();
     $form .= ob_get_contents();
     ob_end_clean();
-} elseif (@$_POST['step3']) {
+} elseif (isset($_POST['step3'])) {
     // STEP 4 : MYSQL DATABASE SETTINGS
     ob_start();
     display_database_settings_form(
@@ -394,7 +394,7 @@ if (@$_POST['step2']) {
     );
     $form .= ob_get_contents();
     ob_end_clean();
-} elseif (@$_POST['step4']) {
+} elseif (isset($_POST['step4'])) {
     //STEP 5 : CONFIGURATION SETTINGS
     //if update, try getting settings from the database...
     if ($installType === 'update') {
@@ -490,7 +490,7 @@ if (@$_POST['step2']) {
     );
     $form .= ob_get_contents();
     ob_end_clean();
-} elseif (@$_POST['step5']) {
+} elseif (isset($_POST['step5'])) {
     ob_start();
     //STEP 6 : LAST CHECK BEFORE INSTALL?>
     <div class="RequirementHeading">
@@ -555,7 +555,7 @@ if (@$_POST['step2']) {
     <?php
     $form .= ob_get_contents();
     ob_end_clean();
-} elseif (@$_POST['step6']) {
+} elseif (isset($_POST['step6'])) {
     ob_start();
     //STEP 6 : INSTALLATION PROCESS
     $current_step = 7;
@@ -720,7 +720,7 @@ if (@$_POST['step2']) {
     $form .= '<script>$(\'#pleasewait\').hide(\'fast\');</script>';
     $form .= ob_get_contents();
     ob_end_clean();
-} elseif (@$_POST['step1'] || $badUpdatePath) {
+} elseif (isset($_POST['step1']) || $badUpdatePath) {
     //STEP 1 : REQUIREMENTS
     //make sure that proposed path is set, shouldn't be necessary but...
     if (empty($proposedUpdatePath)) {

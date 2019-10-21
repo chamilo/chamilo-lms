@@ -2743,8 +2743,6 @@ class ImportCsv
                 $serializedValue = serialize($extraData);
 
                 UserManager::updateUserCareer($userCareerData['id'], $serializedValue);
-
-                //$loadedStudentList[] = $studentId;
             }
         }
     }

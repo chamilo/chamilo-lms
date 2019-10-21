@@ -895,27 +895,27 @@ class Career extends Model
             if (!empty($userResult) && isset($userResult[$id])) {
                 $results = '';
                 $size = 2;
-                foreach ($userResult[$id] as $index => $iconData) {
+                foreach ($userResult[$id] as $resultId => $iconData) {
                     $icon = '';
                     switch ($iconData['Icon']) {
                         case 0:
                             $icon = Display::returnFontAwesomeIcon('times-circle', $size);
-                            //$icon = Display::return_icon('delete.png', ' ');
                             break;
                         case 1:
                             $icon = Display::returnFontAwesomeIcon('check-circle', $size);
-                            //$icon = Display::return_icon('check.png', ' ');
                             break;
                         case 2:
                             $icon = Display::returnFontAwesomeIcon('info-circle', $size);
-                            //$icon = Display::return_icon('info3.gif', ' ');
                             break;
                     }
 
+                    if (substr($resultId, 0, 1) == 2) {
+                        $iconData['Description'] = 'Result Id = '.$resultId;
+                    }
+
                     if (!empty($icon)) {
-                        //data-toggle="popover" title="Popover title" data-content="And here's some amazing content. It's very engaging. Right?">
                         $params = [
-                            'id' => 'course_'.$id.'_'.$index,
+                            'id' => 'course_'.$id.'_'.$resultId,
                             'data-toggle' => 'popover',
                             'title' => 'Popover title',
                             'class' => 'popup',

@@ -743,6 +743,42 @@ function display_requirements(
     $update_from_version_8 = []
 ) {
     global $_setting, $originalMemoryLimit;
+
+    $dir = api_get_path(SYS_ARCHIVE_PATH).'temp/';
+    $fileToCreate = 'test';
+
+    $perms_dir = [0777, 0755, 0775, 0770, 0750, 0700];
+    $perms_fil = [0666, 0644, 0664, 0660, 0640, 0600];
+    $course_test_was_created = false;
+    $dir_perm_verified = 0777;
+
+    foreach ($perms_dir as $perm) {
+        $r = @mkdir($dir, $perm);
+        if ($r === true) {
+            $dir_perm_verified = $perm;
+            $course_test_was_created = true;
+            break;
+        }
+    }
+
+    $fil_perm_verified = 0666;
+    $file_course_test_was_created = false;
+    if (is_dir($dir)) {
+        foreach ($perms_fil as $perm) {
+            if ($file_course_test_was_created == true) {
+                break;
+            }
+            $r = @touch($dir.'/'.$fileToCreate, $perm);
+            if ($r === true) {
+                $fil_perm_verified = $perm;
+                $file_course_test_was_created = true;
+            }
+        }
+    }
+
+    @unlink($dir.'/'.$fileToCreate);
+    @rmdir($dir);
+
     echo '<h2 class="install-title">'.display_step_sequence().get_lang('Requirements')."</h2>";
     echo '<div class="RequirementText">';
     echo '<strong>'.get_lang('ReadThoroughly').'</strong><br />';
@@ -914,68 +950,11 @@ function display_requirements(
     echo '<div class="install-requirement">'.get_lang('DirectoryAndFilePermissionsInfo').'</div>';
     echo '<div class="table-responsive">';
 
-    $course_attempt_name = '__XxTestxX__';
-    $course_dir = api_get_path(SYS_COURSE_PATH).$course_attempt_name;
-    $fileToCreate = 'test.html';
-    //Just in case
-    @unlink($course_dir.'/'.$fileToCreate);
-    @rmdir($course_dir);
-
-    $perms_dir = [0777, 0755, 0775, 0770, 0750, 0700];
-    $perms_fil = [0666, 0644, 0664, 0660, 0640, 0600];
-    $course_test_was_created = false;
-    $dir_perm_verified = 0777;
-    foreach ($perms_dir as $perm) {
-        $r = @mkdir($course_dir, $perm);
-        if ($r === true) {
-            $dir_perm_verified = $perm;
-            $course_test_was_created = true;
-            break;
-        }
-    }
-
-    $fil_perm_verified = 0666;
-    $file_course_test_was_created = false;
-    if (is_dir($course_dir)) {
-        foreach ($perms_fil as $perm) {
-            if ($file_course_test_was_created == true) {
-                break;
-            }
-            $r = @touch($course_dir.'/'.$fileToCreate, $perm);
-            if ($r === true) {
-                $fil_perm_verified = $perm;
-                if (checkCourseScriptCreation($course_dir, $course_attempt_name, $fileToCreate)) {
-                    $file_course_test_was_created = true;
-                }
-            }
-        }
-    }
-
-    @unlink($course_dir.'/'.$fileToCreate);
-    @rmdir($course_dir);
-
     $_SESSION['permissions_for_new_directories'] = $_setting['permissions_for_new_directories'] = $dir_perm_verified;
     $_SESSION['permissions_for_new_files'] = $_setting['permissions_for_new_files'] = $fil_perm_verified;
 
     $dir_perm = Display::label('0'.decoct($dir_perm_verified), 'info');
     $file_perm = Display::label('0'.decoct($fil_perm_verified), 'info');
-
-    $courseTestLabel = Display::label(get_lang('No'), 'important');
-    if ($course_test_was_created && $file_course_test_was_created) {
-        $courseTestLabel = Display::label(get_lang('Yes'), 'success');
-    }
-
-    if ($course_test_was_created && !$file_course_test_was_created) {
-        $courseTestLabel = Display::label(get_lang('Warning'), 'warning');
-        $courseTestLabel .= '<br />'.sprintf(
-            get_lang('InstallWarningCouldNotInterpretPHP'),
-            api_get_path(WEB_COURSE_PATH).$course_attempt_name.'/'.$fileToCreate
-        );
-    }
-
-    if (!$course_test_was_created && !$file_course_test_was_created) {
-        $courseTestLabel = Display::label(get_lang('No'), 'important');
-    }
 
     $oldConf = '';
     if (file_exists(api_get_path(SYS_CODE_PATH).'inc/conf/configuration.php')) {
@@ -1002,11 +981,7 @@ function display_requirements(
             <tr>
                 <td class="requirements-item">'.api_get_path(SYS_PUBLIC_PATH).'</td>
                 <td class="requirements-value">'.check_writable(api_get_path(SYS_PUBLIC_PATH)).'</td>
-            </tr>
-            <tr>
-                <td class="requirements-item">'.get_lang('CourseTestWasCreated').'</td>
-                <td class="requirements-value">'.$courseTestLabel.' </td>
-            </tr>
+            </tr>           
             <tr>
                 <td class="requirements-item">'.get_lang('PermissionsForNewDirs').'</td>
                 <td class="requirements-value">'.$dir_perm.' </td>
@@ -1019,7 +994,7 @@ function display_requirements(
 
     echo '</div>';
 
-    if ($installType == 'update' && (empty($updatePath) || $badUpdatePath)) {
+    if ($installType === 'update' && (empty($updatePath) || $badUpdatePath)) {
         if ($badUpdatePath) {
             ?>
             <div class="alert alert-warning">
@@ -1048,7 +1023,6 @@ function display_requirements(
                     </p>
                 </div>
             </div>
-
         <?php
     } else {
         $error = false;
@@ -1080,7 +1054,6 @@ function display_requirements(
         }
 
         // Second, if this fails, report an error
-
         //--> The user would have to adjust the permissions manually
         if (count($notWritable) > 0) {
             $error = true; ?>
@@ -1129,7 +1102,6 @@ function display_requirements(
             </ul>
             <?php
         }
-
         if (!$properlyAccessUrl) {
             $error = true;
         }
@@ -1849,9 +1821,10 @@ function display_configuration_settings_form(
     <div class='btn-group'>
         <button type="submit" class="btn btn-secondary pull-right" name="step3" value="&lt; <?php echo get_lang('Previous'); ?>" ><em class="fa fa-backward"> </em> <?php echo get_lang('Previous'); ?></button>
         <input type="hidden" name="is_executable" id="is_executable" value="-" />
-        <button class="btn btn-success" type="submit" name="step5" value="<?php echo get_lang('Next'); ?> &gt;" ><em class="fa fa-forward"> </em> <?php echo get_lang('Next'); ?></button>
+        <button class="btn btn-success" type="submit" name="step5">
+            <em class="fa fa-forward"> </em> <?php echo get_lang('Next'); ?>
+        </button>
     </div>
-
     <?php
 }
 
@@ -1983,101 +1956,6 @@ function compare_setting_values($current_value, $wanted_value)
     } else {
         return Display::label($current_value_string, 'important');
     }
-}
-
-/**
- * @param string $course_dir
- * @param string $course_attempt_name
- * @param string $file
- *
- * @return bool
- */
-function checkCourseScriptCreation(
-    $course_dir,
-    $course_attempt_name,
-    $file
-) {
-    $output = false;
-    //Write in file
-    $file_name = $course_dir.'/'.$file;
-    $content = '123';
-
-    if (is_writable($file_name)) {
-        if ($handler = @fopen($file_name, 'w')) {
-            //write content
-            if (fwrite($handler, $content)) {
-                $sock_errno = '';
-                $sock_errmsg = '';
-                $url = api_get_path(WEB_PATH).'app/courses/'.$course_attempt_name.'/'.$file;
-
-                $parsed_url = parse_url($url);
-                //$scheme = isset($parsedUrl['scheme']) ? $parsedUrl['scheme'] : ''; //http
-                $host = isset($parsed_url['host']) ? $parsed_url['host'] : '';
-                // Patch if the host is the default host and is used through
-                // the IP address (sometimes the host is not taken correctly
-                // in this case)
-                if (empty($host) && !empty($_SERVER['HTTP_HOST'])) {
-                    $host = $_SERVER['HTTP_HOST'];
-                    $url = preg_replace('#:///#', '://'.$host.'/', $url);
-                }
-                $path = isset($parsed_url['path']) ? $parsed_url['path'] : '/';
-                $port = '';
-                $scheme = '';
-                switch ($parsed_url['scheme']) {
-                    case 'https':
-                        $scheme = 'ssl://';
-                        $port = 443;
-                        break;
-                    case 'http':
-                    default:
-                        $scheme = '';
-                        $port = 80;
-                }
-
-                //Check fsockopen (not sure it works with https). If that is your case, you might want to try the
-                // suggestion at https://support.chamilo.org/issues/8260#note-3 (although it ignores SSL peer checks)
-                if ($fp = @fsockopen(str_replace('http://', $scheme, $url), $port, $sock_errno, $sock_errmsg, 60)) {
-                    $out = "GET $path HTTP/1.1\r\n";
-                    $out .= "Host: $host\r\n";
-                    $out .= "Connection: Close\r\n\r\n";
-
-                    fwrite($fp, $out);
-                    while (!feof($fp)) {
-                        $result = str_replace("\r\n", '', fgets($fp, 128));
-                        if (!empty($result) && $result == '123') {
-                            $output = true;
-                        }
-                    }
-                    fclose($fp);
-                } elseif (ini_get('allow_url_fopen')) {
-                    // Check allow_url_fopen
-                    if ($fp = @fopen($url, 'r')) {
-                        while ($result = fgets($fp, 1024)) {
-                            if (!empty($result) && $result == '123') {
-                                $output = true;
-                            }
-                        }
-                        fclose($fp);
-                    }
-                } elseif (function_exists('curl_init')) {
-                    // Check if has support for cURL
-                    $ch = curl_init();
-                    curl_setopt($ch, CURLOPT_HEADER, 0);
-                    curl_setopt($ch, CURLOPT_URL, $url);
-                    //curl_setopt($ch, CURLOPT_TIMEOUT, 30);
-                    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-                    $result = curl_exec($ch);
-                    if (!empty($result) && $result == '123') {
-                        $output = true;
-                    }
-                    curl_close($ch);
-                }
-            }
-            @fclose($handler);
-        }
-    }
-
-    return $output;
 }
 
 /**

@@ -22,7 +22,6 @@ use Symfony\Component\Translation\Translator;
  * @todo reduce high level of duplication in this code
  * @todo (busy) organise code into functions
  *
- * @package chamilo.install
  */
 $originalDisplayErrors = ini_get('display_errors');
 $originalMemoryLimit = ini_get('memory_limit');
@@ -181,6 +180,9 @@ $update_from_version_8 = [
     '1.11.6',
     '1.11.8',
     '1.11.10',
+    '1.11.11',
+    '1.11.12',
+    '1.11.14',
 ];
 
 $my_old_version = '';
@@ -747,13 +749,17 @@ $poweredBy = 'Powered by <a href="http://www.chamilo.org" target="_blank"> Chami
 <!DOCTYPE html>
 <head>
     <title>&mdash; <?php echo get_lang('ChamiloInstallation').' &mdash; '.get_lang('Version').' '.$new_version; ?></title>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
     <style type="text/css" media="screen, projection">
         @import "../../public/build/css/app.css";
         @import "../../public/build/css/themes/chamilo/default.css";
     </style>
     <script type="text/javascript" src="../../public/build/runtime.js"></script>
     <script type="text/javascript" src="../../public/build/app.js"></script>
-    <script type="text/javascript">
+    <script>
         $(function() {
             $("#details_button").click(function() {
                 $( "#details" ).toggle("slow", function() {
@@ -776,10 +782,7 @@ $poweredBy = 'Powered by <a href="http://www.chamilo.org" target="_blank"> Chami
                 $("#button_please_wait").attr('disabled', true);
                 $("#is_executable").attr("value",'step6');
             });
-        });
 
-        init_visibility=0;
-        $(function() {
             $(".advanced_parameters").click(function() {
                 if ($("#id_contact_form").css("display") == "none") {
                     $("#id_contact_form").css("display","block");
@@ -836,8 +839,6 @@ $poweredBy = 'Powered by <a href="http://www.chamilo.org" target="_blank"> Chami
             }
         }
     </script>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 </head>
 <body class="bg-chamilo bg-install" dir="<?php echo api_get_text_direction(); ?>">
 <div class="install-box">

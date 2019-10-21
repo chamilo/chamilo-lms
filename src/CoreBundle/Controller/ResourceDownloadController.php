@@ -35,7 +35,7 @@ class ResourceDownloadController extends BaseController
         //$helper = $this->container->get('oneup_uploader.templating.uploader_helper');
         //$endpoint = $helper->endpoint('courses');
         return $this->render(
-            '@ChamiloTheme/Resource/upload.html.twig',
+            '@ChamiloCore/Resource/upload.html.twig',
             [
                 'identifier' => $id,
                 'type' => $type,
@@ -58,7 +58,7 @@ class ResourceDownloadController extends BaseController
     {
         try {
             /** @var Filesystem $fs */
-            $fs = $this->container->get('oneup_flysystem.courses_filesystem');
+            $fs = $this->container->get('oneup_flysystem.resources_filesystem');
             $file = $request->get('file');
 
             $path = $course.'/document/'.$file;
@@ -117,7 +117,7 @@ class ResourceDownloadController extends BaseController
     {
         try {
             /** @var Filesystem $fs */
-            $fs = $this->container->get('oneup_flysystem.courses_filesystem');
+            $fs = $this->container->get('oneup_flysystem.resources_filesystem');
             $file = $request->get('file');
 
             $path = $course.'/document/'.$file;

@@ -1,43 +1,11 @@
 oneup_flysystem:
     adapters:
-        courses_adapter:
-            local:
-                directory: '%kernel.project_dir%/var/courses'
-
-        home_adapter:
-            local:
-                directory: '%kernel.project_dir%/var/home'
-
         resource_adapter:
             local:
                 directory: '%kernel.project_dir%/var/upload/resource'
 
-#        resource_private_adapter:
-#            local:
-#                directory: '%kernel.project_dir%/var/upload/resource'
-#
-#        resource_public_adapter:
-#            local:
-#                directory: '%kernel.project_dir%/public/upload/resource'
-
     filesystems:
-        courses:
-            adapter: courses_adapter
-            visibility: private
-            cache: ~
-            alias: ~
-            mount: ~
-
-        home:
-            adapter: home_adapter
-            visibility: private
-            alias: home_filesystem
-
-        resource:
+        resources:
             adapter: resource_adapter
-
-#        resource_public:
-#            adapter: resource_public_adapter
-#
-#        resource_private:
-#            adapter: resource_private_adapter
+            mount: resources_fs
+            visibility: private

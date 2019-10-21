@@ -8,7 +8,7 @@ liip_imagine:
             web_path:
                 cache_prefix: '../var/cache/resource'
     loaders:
-        default:
+        resources:
             filesystem:
                 data_root: '%kernel.root_dir%/../var/upload/resource'
     filter_sets:

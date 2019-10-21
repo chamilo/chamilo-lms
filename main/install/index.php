@@ -21,7 +21,6 @@ use Symfony\Component\Translation\Translator;
  *
  * @todo reduce high level of duplication in this code
  * @todo (busy) organise code into functions
- *
  */
 $originalDisplayErrors = ini_get('display_errors');
 $originalMemoryLimit = ini_get('memory_limit');

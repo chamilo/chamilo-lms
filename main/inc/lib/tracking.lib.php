@@ -2709,9 +2709,9 @@ class Tracking
             return null;
         }
 
-                // Getting latest LP result for a student
-                //@todo problem when a  course have more than 1500 users
-                $sql = "SELECT MAX(view_count) as vc, id, progress, lp_id, user_id
+        // Getting latest LP result for a student
+        //@todo problem when a  course have more than 1500 users
+        $sql = "SELECT MAX(view_count) as vc, id, progress, lp_id, user_id
                         FROM $lp_view_table
                         WHERE
                             c_id = $course_id AND
@@ -2720,44 +2720,44 @@ class Tracking
                             session_id = $session_id
                         GROUP BY lp_id, user_id";
 
-                $rs_last_lp_view_id = Database::query($sql);
-                $global_result = 0;
+        $rs_last_lp_view_id = Database::query($sql);
+        $global_result = 0;
 
-                if (Database::num_rows($rs_last_lp_view_id) > 0) {
-                    // Cycle through each line of the results (grouped by lp_id, user_id)
-                    while ($row_lp_view = Database::fetch_array($rs_last_lp_view_id)) {
-                        $count_items = 0;
-                        $lpPartialTotal = 0;
-                        $list = [];
-                        $lp_view_id = $row_lp_view['id'];
-                        $lp_id = $row_lp_view['lp_id'];
-                        $user_id = $row_lp_view['user_id'];
+        if (Database::num_rows($rs_last_lp_view_id) > 0) {
+            // Cycle through each line of the results (grouped by lp_id, user_id)
+            while ($row_lp_view = Database::fetch_array($rs_last_lp_view_id)) {
+                $count_items = 0;
+                $lpPartialTotal = 0;
+                $list = [];
+                $lp_view_id = $row_lp_view['id'];
+                $lp_id = $row_lp_view['lp_id'];
+                $user_id = $row_lp_view['user_id'];
 
-                        if ($debug) {
-                            echo '<h2>LP id '.$lp_id.'</h2>';
-                            echo "get_only_latest_attempt_results: $get_only_latest_attempt_results <br />";
-                            echo "getOnlyBestAttempt: $getOnlyBestAttempt <br />";
-                        }
+                if ($debug) {
+                    echo '<h2>LP id '.$lp_id.'</h2>';
+                    echo "get_only_latest_attempt_results: $get_only_latest_attempt_results <br />";
+                    echo "getOnlyBestAttempt: $getOnlyBestAttempt <br />";
+                }
 
-                        if ($get_only_latest_attempt_results || $getOnlyBestAttempt) {
-                            // Getting lp_items done by the user
-                            $sql = "SELECT DISTINCT lp_item_id
+                if ($get_only_latest_attempt_results || $getOnlyBestAttempt) {
+                    // Getting lp_items done by the user
+                    $sql = "SELECT DISTINCT lp_item_id
                                     FROM $lp_item_view_table
                                     WHERE
                                         c_id = $course_id AND
                                         lp_view_id = $lp_view_id
                                     ORDER BY lp_item_id";
-                            $res_lp_item = Database::query($sql);
+                    $res_lp_item = Database::query($sql);
 
-                            while ($row_lp_item = Database::fetch_array($res_lp_item, 'ASSOC')) {
-                                $my_lp_item_id = $row_lp_item['lp_item_id'];
-                                $order = ' view_count DESC';
-                                if ($getOnlyBestAttempt) {
-                                    $order = ' lp_iv.score DESC';
-                                }
+                    while ($row_lp_item = Database::fetch_array($res_lp_item, 'ASSOC')) {
+                        $my_lp_item_id = $row_lp_item['lp_item_id'];
+                        $order = ' view_count DESC';
+                        if ($getOnlyBestAttempt) {
+                            $order = ' lp_iv.score DESC';
+                        }
 
-                                // Getting the most recent attempt
-                                $sql = "SELECT  
+                        // Getting the most recent attempt
+                        $sql = "SELECT  
                                             lp_iv.id as lp_item_view_id,
                                             lp_iv.score as score,
                                             lp_i.max_score,
@@ -2780,15 +2780,15 @@ class Tracking
                                         ORDER BY $order
                                         LIMIT 1";
 
-                                $res_lp_item_result = Database::query($sql);
-                                while ($row_max_score = Database::fetch_array($res_lp_item_result, 'ASSOC')) {
-                                    $list[] = $row_max_score;
-                                }
-                            }
-                        } else {
-                            // For the currently analysed view, get the score and
-                            // max_score of each item if it is a sco or a TOOL_QUIZ
-                            $sql = "SELECT
+                        $res_lp_item_result = Database::query($sql);
+                        while ($row_max_score = Database::fetch_array($res_lp_item_result, 'ASSOC')) {
+                            $list[] = $row_max_score;
+                        }
+                    }
+                } else {
+                    // For the currently analysed view, get the score and
+                    // max_score of each item if it is a sco or a TOOL_QUIZ
+                    $sql = "SELECT
                                         lp_iv.id as lp_item_view_id,
                                         lp_iv.score as score,
                                         lp_i.max_score,
@@ -2806,67 +2806,67 @@ class Tracking
                                         lp_view_id = $lp_view_id AND
                                         (lp_i.item_type='sco' OR lp_i.item_type='".TOOL_QUIZ."')
                                     ";
-                            $res_max_score = Database::query($sql);
-                            while ($row_max_score = Database::fetch_array($res_max_score, 'ASSOC')) {
-                                $list[] = $row_max_score;
+                    $res_max_score = Database::query($sql);
+                    while ($row_max_score = Database::fetch_array($res_max_score, 'ASSOC')) {
+                        $list[] = $row_max_score;
+                    }
+                }
+
+                // Go through each scorable element of this view
+                $score_of_scorm_calculate = 0;
+                foreach ($list as $row_max_score) {
+                    // Came from the original lp_item
+                    $max_score = $row_max_score['max_score'];
+                    // Came from the lp_item_view
+                    $max_score_item_view = $row_max_score['max_score_item_view'];
+                    $score = $row_max_score['score'];
+                    if ($debug) {
+                        echo '<h3>Item Type: '.$row_max_score['item_type'].'</h3>';
+                    }
+
+                    if ($row_max_score['item_type'] == 'sco') {
+                        /* Check if it is sco (easier to get max_score)
+                           when there's no max score, we assume 100 as the max score,
+                           as the SCORM 1.2 says that the value should always be between 0 and 100.
+                        */
+                        if ($max_score == 0 || is_null($max_score) || $max_score == '') {
+                            // Chamilo style
+                            if ($use_max_score[$lp_id]) {
+                                $max_score = 100;
+                            } else {
+                                // Overwrites max score = 100 to use the one that came in the lp_item_view see BT#1613
+                                $max_score = $max_score_item_view;
                             }
                         }
+                        // Avoid division by zero errors
+                        if (!empty($max_score)) {
+                            $lpPartialTotal += $score / $max_score;
+                        }
+                        if ($debug) {
+                            var_dump("lpPartialTotal: $lpPartialTotal");
+                            var_dump("score: $score");
+                            var_dump("max_score: $max_score");
+                        }
+                    } else {
+                        // Case of a TOOL_QUIZ element
+                        $item_id = $row_max_score['iid'];
+                        $item_path = $row_max_score['path'];
+                        $lp_item_view_id = (int) $row_max_score['lp_item_view_id'];
 
-                        // Go through each scorable element of this view
-                        $score_of_scorm_calculate = 0;
-                        foreach ($list as $row_max_score) {
-                            // Came from the original lp_item
-                            $max_score = $row_max_score['max_score'];
-                            // Came from the lp_item_view
-                            $max_score_item_view = $row_max_score['max_score_item_view'];
-                            $score = $row_max_score['score'];
-                            if ($debug) {
-                                echo '<h3>Item Type: '.$row_max_score['item_type'].'</h3>';
-                            }
+                        $lpItemCondition = '';
+                        if (empty($lp_item_view_id)) {
+                            $lpItemCondition = ' (orig_lp_item_view_id = 0 OR orig_lp_item_view_id IS NULL) ';
+                        } else {
+                            $lpItemCondition = " orig_lp_item_view_id = $lp_item_view_id ";
+                        }
 
-                            if ($row_max_score['item_type'] == 'sco') {
-                                /* Check if it is sco (easier to get max_score)
-                                   when there's no max score, we assume 100 as the max score,
-                                   as the SCORM 1.2 says that the value should always be between 0 and 100.
-                                */
-                                if ($max_score == 0 || is_null($max_score) || $max_score == '') {
-                                    // Chamilo style
-                                    if ($use_max_score[$lp_id]) {
-                                        $max_score = 100;
-                                    } else {
-                                        // Overwrites max score = 100 to use the one that came in the lp_item_view see BT#1613
-                                        $max_score = $max_score_item_view;
-                                    }
-                                }
-                                // Avoid division by zero errors
-                                if (!empty($max_score)) {
-                                    $lpPartialTotal += $score / $max_score;
-                                }
-                                if ($debug) {
-                                    var_dump("lpPartialTotal: $lpPartialTotal");
-                                    var_dump("score: $score");
-                                    var_dump("max_score: $max_score");
-                                }
-                            } else {
-                                // Case of a TOOL_QUIZ element
-                                $item_id = $row_max_score['iid'];
-                                $item_path = $row_max_score['path'];
-                                $lp_item_view_id = (int) $row_max_score['lp_item_view_id'];
-
-                                $lpItemCondition = '';
-                                if (empty($lp_item_view_id)) {
-                                    $lpItemCondition = ' (orig_lp_item_view_id = 0 OR orig_lp_item_view_id IS NULL) ';
-                                } else {
-                                    $lpItemCondition = " orig_lp_item_view_id = $lp_item_view_id ";
-                                }
-
-                                // Get last attempt to this exercise through
-                                // the current lp for the current user
-                                $order = 'exe_date DESC';
-                                if ($getOnlyBestAttempt) {
-                                    $order = 'score DESC';
-                                }
-                                $sql = "SELECT exe_id, score
+                        // Get last attempt to this exercise through
+                        // the current lp for the current user
+                        $order = 'exe_date DESC';
+                        if ($getOnlyBestAttempt) {
+                            $order = 'score DESC';
+                        }
+                        $sql = "SELECT exe_id, score
                                         FROM $tbl_stats_exercices
                                         WHERE
                                             exe_exo_id = '$item_path' AND
@@ -2879,26 +2879,26 @@ class Tracking
                                         ORDER BY $order
                                         LIMIT 1";
 
-                                $result_last_attempt = Database::query($sql);
-                                $num = Database::num_rows($result_last_attempt);
-                                if ($num > 0) {
-                                    $attemptResult = Database::fetch_array($result_last_attempt, 'ASSOC');
-                                    $id_last_attempt = $attemptResult['exe_id'];
-                                    // We overwrite the score with the best one not the one saved in the LP (latest)
-                                    if ($getOnlyBestAttempt && $get_only_latest_attempt_results == false) {
-                                        if ($debug) {
-                                            echo "Following score comes from the track_exercise table not in the LP because the score is the best<br />";
-                                        }
-                                        $score = $attemptResult['score'];
-                                    }
+                        $result_last_attempt = Database::query($sql);
+                        $num = Database::num_rows($result_last_attempt);
+                        if ($num > 0) {
+                            $attemptResult = Database::fetch_array($result_last_attempt, 'ASSOC');
+                            $id_last_attempt = $attemptResult['exe_id'];
+                            // We overwrite the score with the best one not the one saved in the LP (latest)
+                            if ($getOnlyBestAttempt && $get_only_latest_attempt_results == false) {
+                                if ($debug) {
+                                    echo "Following score comes from the track_exercise table not in the LP because the score is the best<br />";
+                                }
+                                $score = $attemptResult['score'];
+                            }
 
-                                    if ($debug) {
-                                        echo "Attempt id: $id_last_attempt with score $score<br />";
-                                    }
-                                    // Within the last attempt number tracking, get the sum of
-                                    // the max_scores of all questions that it was
-                                    // made of (we need to make this call dynamic because of random questions selection)
-                                    $sql = "SELECT SUM(t.ponderation) as maxscore FROM
+                            if ($debug) {
+                                echo "Attempt id: $id_last_attempt with score $score<br />";
+                            }
+                            // Within the last attempt number tracking, get the sum of
+                            // the max_scores of all questions that it was
+                            // made of (we need to make this call dynamic because of random questions selection)
+                            $sql = "SELECT SUM(t.ponderation) as maxscore FROM
                                             (
                                                 SELECT DISTINCT
                                                     question_id,
@@ -2913,97 +2913,97 @@ class Tracking
                                             )
                                             AS t";
 
-                                    $res_max_score_bis = Database::query($sql);
-                                    $row_max_score_bis = Database::fetch_array($res_max_score_bis);
+                            $res_max_score_bis = Database::query($sql);
+                            $row_max_score_bis = Database::fetch_array($res_max_score_bis);
 
-                                    if (!empty($row_max_score_bis['maxscore'])) {
-                                        $max_score = $row_max_score_bis['maxscore'];
-                                    }
-                                    if (!empty($max_score) && floatval($max_score) > 0) {
-                                        $lpPartialTotal += $score / $max_score;
-                                    }
-                                    if ($debug) {
-                                        var_dump("score: $score");
-                                        var_dump("max_score: $max_score");
-                                        var_dump("lpPartialTotal: $lpPartialTotal");
-                                    }
-                                }
+                            if (!empty($row_max_score_bis['maxscore'])) {
+                                $max_score = $row_max_score_bis['maxscore'];
                             }
-
-                            if (in_array($row_max_score['item_type'], ['quiz', 'sco'])) {
-                                // Normal way
-                                if ($use_max_score[$lp_id]) {
-                                    $count_items++;
-                                } else {
-                                    if ($max_score != '') {
-                                        $count_items++;
-                                    }
-                                }
-                                if ($debug) {
-                                    echo '$count_items: '.$count_items;
-                                }
+                            if (!empty($max_score) && floatval($max_score) > 0) {
+                                $lpPartialTotal += $score / $max_score;
                             }
-                        } //end for
-
-                        $score_of_scorm_calculate += $count_items ? (($lpPartialTotal / $count_items) * 100) : 0;
-                        $global_result += $score_of_scorm_calculate;
-
-                        if ($debug) {
-                            var_dump("count_items: $count_items");
-                            var_dump("score_of_scorm_calculate: $score_of_scorm_calculate");
-                            var_dump("global_result: $global_result");
+                            if ($debug) {
+                                var_dump("score: $score");
+                                var_dump("max_score: $max_score");
+                                var_dump("lpPartialTotal: $lpPartialTotal");
+                            }
                         }
-                    } // end while
-                }
+                    }
 
-                $lp_with_quiz = 0;
-                foreach ($lp_list as $lp_id) {
-                    // Check if LP have a score we assume that all SCO have an score
-                    $sql = "SELECT count(id) as count
+                    if (in_array($row_max_score['item_type'], ['quiz', 'sco'])) {
+                        // Normal way
+                        if ($use_max_score[$lp_id]) {
+                            $count_items++;
+                        } else {
+                            if ($max_score != '') {
+                                $count_items++;
+                            }
+                        }
+                        if ($debug) {
+                            echo '$count_items: '.$count_items;
+                        }
+                    }
+                } //end for
+
+                $score_of_scorm_calculate += $count_items ? (($lpPartialTotal / $count_items) * 100) : 0;
+                $global_result += $score_of_scorm_calculate;
+
+                if ($debug) {
+                    var_dump("count_items: $count_items");
+                    var_dump("score_of_scorm_calculate: $score_of_scorm_calculate");
+                    var_dump("global_result: $global_result");
+                }
+            } // end while
+        }
+
+        $lp_with_quiz = 0;
+        foreach ($lp_list as $lp_id) {
+            // Check if LP have a score we assume that all SCO have an score
+            $sql = "SELECT count(id) as count
                             FROM $lp_item_table
                             WHERE
                                 c_id = $course_id AND
                                 (item_type = 'quiz' OR item_type = 'sco') AND
                                 lp_id = ".$lp_id;
-                    $result_have_quiz = Database::query($sql);
-                    if (Database::num_rows($result_have_quiz) > 0) {
-                        $row = Database::fetch_array($result_have_quiz, 'ASSOC');
-                        if (is_numeric($row['count']) && $row['count'] != 0) {
-                            $lp_with_quiz++;
-                        }
+            $result_have_quiz = Database::query($sql);
+            if (Database::num_rows($result_have_quiz) > 0) {
+                $row = Database::fetch_array($result_have_quiz, 'ASSOC');
+                if (is_numeric($row['count']) && $row['count'] != 0) {
+                    $lp_with_quiz++;
+                }
+            }
+        }
+
+        if ($debug) {
+            echo '<h3>$lp_with_quiz '.$lp_with_quiz.' </h3>';
+        }
+        if ($debug) {
+            echo '<h3>Final return</h3>';
+        }
+
+        if ($lp_with_quiz != 0) {
+            if (!$return_array) {
+                $score_of_scorm_calculate = round(($global_result / $lp_with_quiz), 2);
+                if ($debug) {
+                    var_dump($score_of_scorm_calculate);
+                }
+                if (empty($lp_ids)) {
+                    if ($debug) {
+                        echo '<h2>All lps fix: '.$score_of_scorm_calculate.'</h2>';
                     }
                 }
 
-                if ($debug) {
-                    echo '<h3>$lp_with_quiz '.$lp_with_quiz.' </h3>';
-                }
-                if ($debug) {
-                    echo '<h3>Final return</h3>';
-                }
-
-                if ($lp_with_quiz != 0) {
-                    if (!$return_array) {
-                        $score_of_scorm_calculate = round(($global_result / $lp_with_quiz), 2);
-                        if ($debug) {
-                            var_dump($score_of_scorm_calculate);
-                        }
-                        if (empty($lp_ids)) {
-                            if ($debug) {
-                                echo '<h2>All lps fix: '.$score_of_scorm_calculate.'</h2>';
-                            }
-                        }
-
-                        return $score_of_scorm_calculate;
+                return $score_of_scorm_calculate;
             }
 
-                        if ($debug) {
-                            var_dump($global_result, $lp_with_quiz);
-                        }
+            if ($debug) {
+                var_dump($global_result, $lp_with_quiz);
+            }
 
-                        return [$global_result, $lp_with_quiz];
-                    }
+            return [$global_result, $lp_with_quiz];
+        }
 
-                    return '-';
+        return '-';
     }
 
     /**

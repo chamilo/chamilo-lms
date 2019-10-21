@@ -47,16 +47,16 @@ if (!empty($glossaryId)) {
     $glossaryInfo = GlossaryManager::get_glossary_term_by_glossary_name($glossaryName);
 
     if (!empty($glossaryInfo)) {
-    $description = str_replace(
+        $description = str_replace(
         $path_image_search,
         $path_image,
         $glossaryInfo['description']
     );
 
-    if (is_null($description) || strlen(trim($description)) == 0) {
-        $description = get_lang('NoResults');
-    } else {
-        $description = str_replace('class="glossary"', '', $description);
+        if (is_null($description) || strlen(trim($description)) == 0) {
+            $description = get_lang('NoResults');
+        } else {
+            $description = str_replace('class="glossary"', '', $description);
         }
     }
 }

@@ -2712,13 +2712,13 @@ class Tracking
         // Getting latest LP result for a student
         //@todo problem when a  course have more than 1500 users
         $sql = "SELECT MAX(view_count) as vc, id, progress, lp_id, user_id
-                        FROM $lp_view_table
-                        WHERE
-                            c_id = $course_id AND
-                            lp_id IN (".implode(',', $lp_list).")
-                            $condition_user1 AND
-                            session_id = $session_id
-                        GROUP BY lp_id, user_id";
+                FROM $lp_view_table
+                WHERE
+                    c_id = $course_id AND
+                    lp_id IN (".implode(',', $lp_list).")
+                    $condition_user1 AND
+                    session_id = $session_id
+                GROUP BY lp_id, user_id";
 
         $rs_last_lp_view_id = Database::query($sql);
         $global_result = 0;
@@ -2758,27 +2758,27 @@ class Tracking
 
                         // Getting the most recent attempt
                         $sql = "SELECT  
-                                            lp_iv.id as lp_item_view_id,
-                                            lp_iv.score as score,
-                                            lp_i.max_score,
-                                            lp_iv.max_score as max_score_item_view,
-                                            lp_i.path,
-                                            lp_i.item_type,
-                                            lp_i.id as iid
-                                        FROM $lp_item_view_table as lp_iv
-                                        INNER JOIN $lp_item_table as lp_i
-                                        ON (
-                                            lp_i.id = lp_iv.lp_item_id AND 
-                                            lp_iv.c_id = lp_i.c_id
-                                        )                                            
-                                        WHERE
-                                            lp_iv.c_id = $course_id AND
-                                            lp_i.c_id  = $course_id AND
-                                            lp_item_id = $my_lp_item_id AND
-                                            lp_view_id = $lp_view_id AND
-                                            (lp_i.item_type='sco' OR lp_i.item_type='".TOOL_QUIZ."')
-                                        ORDER BY $order
-                                        LIMIT 1";
+                                    lp_iv.id as lp_item_view_id,
+                                    lp_iv.score as score,
+                                    lp_i.max_score,
+                                    lp_iv.max_score as max_score_item_view,
+                                    lp_i.path,
+                                    lp_i.item_type,
+                                    lp_i.id as iid
+                                FROM $lp_item_view_table as lp_iv
+                                INNER JOIN $lp_item_table as lp_i
+                                ON (
+                                    lp_i.id = lp_iv.lp_item_id AND 
+                                    lp_iv.c_id = lp_i.c_id
+                                )                                            
+                                WHERE
+                                    lp_iv.c_id = $course_id AND
+                                    lp_i.c_id  = $course_id AND
+                                    lp_item_id = $my_lp_item_id AND
+                                    lp_view_id = $lp_view_id AND
+                                    (lp_i.item_type='sco' OR lp_i.item_type='".TOOL_QUIZ."')
+                                ORDER BY $order
+                                LIMIT 1";
 
                         $res_lp_item_result = Database::query($sql);
                         while ($row_max_score = Database::fetch_array($res_lp_item_result, 'ASSOC')) {
@@ -2789,23 +2789,23 @@ class Tracking
                     // For the currently analysed view, get the score and
                     // max_score of each item if it is a sco or a TOOL_QUIZ
                     $sql = "SELECT
-                                        lp_iv.id as lp_item_view_id,
-                                        lp_iv.score as score,
-                                        lp_i.max_score,
-                                        lp_iv.max_score as max_score_item_view,
-                                        lp_i.path,
-                                        lp_i.item_type,
-                                        lp_i.id as iid
-                                      FROM $lp_item_view_table as lp_iv
-                                      INNER JOIN $lp_item_table as lp_i
-                                      ON lp_i.id = lp_iv.lp_item_id AND
-                                         lp_iv.c_id = lp_i.c_id
-                                      WHERE 
-                                        lp_iv.c_id = $course_id AND 
-                                        lp_i.c_id  = $course_id AND
-                                        lp_view_id = $lp_view_id AND
-                                        (lp_i.item_type='sco' OR lp_i.item_type='".TOOL_QUIZ."')
-                                    ";
+                                lp_iv.id as lp_item_view_id,
+                                lp_iv.score as score,
+                                lp_i.max_score,
+                                lp_iv.max_score as max_score_item_view,
+                                lp_i.path,
+                                lp_i.item_type,
+                                lp_i.id as iid
+                              FROM $lp_item_view_table as lp_iv
+                              INNER JOIN $lp_item_table as lp_i
+                              ON lp_i.id = lp_iv.lp_item_id AND
+                                 lp_iv.c_id = lp_i.c_id
+                              WHERE 
+                                lp_iv.c_id = $course_id AND 
+                                lp_i.c_id  = $course_id AND
+                                lp_view_id = $lp_view_id AND
+                                (lp_i.item_type='sco' OR lp_i.item_type='".TOOL_QUIZ."')
+                            ";
                     $res_max_score = Database::query($sql);
                     while ($row_max_score = Database::fetch_array($res_max_score, 'ASSOC')) {
                         $list[] = $row_max_score;
@@ -2867,17 +2867,17 @@ class Tracking
                             $order = 'score DESC';
                         }
                         $sql = "SELECT exe_id, score
-                                        FROM $tbl_stats_exercices
-                                        WHERE
-                                            exe_exo_id = '$item_path' AND
-                                            exe_user_id = $user_id AND
-                                            orig_lp_item_id = $item_id AND
-                                            $lpItemCondition AND
-                                            c_id = $course_id AND
-                                            session_id = $session_id AND
-                                            status = ''
-                                        ORDER BY $order
-                                        LIMIT 1";
+                                FROM $tbl_stats_exercices
+                                WHERE
+                                    exe_exo_id = '$item_path' AND
+                                    exe_user_id = $user_id AND
+                                    orig_lp_item_id = $item_id AND
+                                    $lpItemCondition AND
+                                    c_id = $course_id AND
+                                    session_id = $session_id AND
+                                    status = ''
+                                ORDER BY $order
+                                LIMIT 1";
 
                         $result_last_attempt = Database::query($sql);
                         $num = Database::num_rows($result_last_attempt);

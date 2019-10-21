@@ -38,16 +38,18 @@ class ResourceFile
     protected $name;
 
     /**
-     * @ORM\Column(type="integer")
+     * @var int
      *
-     * @var integer
+     * @ORM\Column(type="integer")
      *
      */
     protected $size;
 
     /**
-     * @Vich\UploadableField(mapping="resources", fileNameProperty="name", size="size")
      * @var File
+     *
+     * @Vich\UploadableField(mapping="resources", fileNameProperty="name", size="size")
+     *
      */
     protected $file;
 
@@ -398,7 +400,6 @@ class ResourceFile
 
     /**
      * @param File|\Symfony\Component\HttpFoundation\File\UploadedFile $file
-     *
      */
     public function setFile(File $file = null): void
     {

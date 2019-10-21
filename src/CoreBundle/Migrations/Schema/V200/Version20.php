@@ -933,8 +933,7 @@ class Version20 extends AbstractMigrationChamilo
             $this->addSql("INSERT INTO settings_options (variable, value, display_text) VALUES ('exercise_invisible_in_session','false','No')");
         }
 
-        $result = $connection
-            ->executeQuery("SELECT COUNT(1) FROM settings_current WHERE variable = 'configure_exercise_visibility_in_course' AND category = 'Session'");
+        $result = $connection->executeQuery("SELECT COUNT(1) FROM settings_current WHERE variable = 'configure_exercise_visibility_in_course' AND category = 'Session'");
         $count = $result->fetch()[0];
 
         if (empty($count)) {
@@ -945,7 +944,6 @@ class Version20 extends AbstractMigrationChamilo
 
         //ALTER TABLE resource_file ADD name VARCHAR(255) NOT NULL, ADD size INT NOT NULL;
         //ALTER TABLE resource_file_audit ADD name VARCHAR(255) DEFAULT NULL, ADD size INT DEFAULT NULL;
-
     }
 
     /**

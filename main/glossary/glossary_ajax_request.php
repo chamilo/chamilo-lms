@@ -48,10 +48,10 @@ if (!empty($glossaryId)) {
 
     if (!empty($glossaryInfo)) {
         $description = str_replace(
-        $path_image_search,
-        $path_image,
-        $glossaryInfo['description']
-    );
+            $path_image_search,
+            $path_image,
+            $glossaryInfo['description']
+        );
 
         if (is_null($description) || strlen(trim($description)) == 0) {
             $description = get_lang('NoResults');

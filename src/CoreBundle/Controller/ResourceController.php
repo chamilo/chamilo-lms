@@ -445,7 +445,7 @@ class ResourceController extends BaseController implements CourseControllerInter
             switch ($type) {
                 case 'show':
                     return $downloadHandler->downloadObject($resourceFile, $fileField = 'file');
-                    $file =  $resourceFile->getFile();
+                    $file = $resourceFile->getFile();
 
                     var_dump($file);
 

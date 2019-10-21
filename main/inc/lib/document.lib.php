@@ -11,8 +11,8 @@ use Chamilo\CourseBundle\Entity\CGroupInfo;
 use Chamilo\UserBundle\Entity\User;
 use ChamiloSession as Session;
 use Sonata\MediaBundle\Extra\ApiMediaFile;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\File\File;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /**
  *  Class DocumentManager
@@ -6364,9 +6364,7 @@ class DocumentManager
 
         // Only create a ResourceFile and Media if there's a file involved
         if ($fileType === 'file') {
-            $mediaManager = Container::$container->get('sonata.media.manager.media');
-            //$mediaManager->create();
-            /** @var League\Flysystem\Adapter\Local  $mediaManager */
+            /** @var League\Flysystem\Adapter\Local $mediaManager */
             $mediaManager = Container::$container->get('oneup_flysystem.resources_filesystem');
             /** @var League\Flysystem\Adapter\Local $mediaManager */
             //$mediaManager = Container::$container->get('flysystem');
@@ -6379,8 +6377,6 @@ class DocumentManager
 
             if ($content instanceof UploadedFile) {
                 error_log('UploadedFile');
-                //$file = $content;
-                //$media->setSize($file->getSize());
             } else {
                 // $path points to a file in the directory
                 if (file_exists($realPath) && !is_dir($realPath)) {

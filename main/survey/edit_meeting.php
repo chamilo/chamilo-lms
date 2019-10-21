@@ -61,13 +61,13 @@ $text = $form->addText(
 $allowSurveyAvailabilityDatetime = api_get_configuration_value('allow_survey_availability_datetime');
 
 if ($allowSurveyAvailabilityDatetime) {
-    $startDateElement = $form->addDateTimePicker('start_date', get_lang('StartDate'));
-    $endDateElement = $form->addDateTimePicker('end_date', get_lang('EndDate'));
+    $form->addDateTimePicker('start_date', get_lang('StartDate'));
+    $form->addDateTimePicker('end_date', get_lang('EndDate'));
     $form->addRule('start_date', get_lang('InvalidDate'), 'datetime');
     $form->addRule('end_date', get_lang('InvalidDate'), 'datetime');
 } else {
-    $startDateElement = $form->addElement('date_picker', 'start_date', get_lang('StartDate'));
-    $endDateElement = $form->addElement('date_picker', 'end_date', get_lang('EndDate'));
+    $form->addElement('date_picker', 'start_date', get_lang('StartDate'));
+    $form->addElement('date_picker', 'end_date', get_lang('EndDate'));
     $form->addRule('start_date', get_lang('InvalidDate'), 'date');
     $form->addRule('end_date', get_lang('InvalidDate'), 'date');
 }
@@ -203,14 +203,8 @@ if ($form->validate()) {
     $questionTable = Database::get_course_table(TABLE_SURVEY_QUESTION);
     $counter = 1;
     if (!empty($surveyData['iid'])) {
-        $questions = SurveyManager::get_questions($surveyData['iid']);
-        if (!empty($questions)) {
-            $questions = array_column($questions, 'question');
-        }
-
         foreach ($dates as $date) {
             $formattedDate = $date['start'].'@@'.$date['end'];
-
             if (!empty($date['id'])) {
                 $questionId = $date['id'];
                 $sql = "UPDATE $questionTable SET survey_question = '$formattedDate'

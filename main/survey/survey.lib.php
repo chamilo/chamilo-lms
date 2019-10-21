@@ -965,9 +965,9 @@ class SurveyManager
 
         if (in_array($type, $possible_types)) {
             return $icon_question[$type];
-        } else {
-            return false;
         }
+
+        return false;
     }
 
     /**

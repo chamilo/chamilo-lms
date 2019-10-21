@@ -22,7 +22,7 @@ class CkEditor extends Editor
      */
     public function createHtml($value)
     {
-        $html = '<textarea id="'.$this->getName().'" name="'.$this->getName().'" class="ckeditor">
+        $html = '<textarea id="'.$this->getTextareaId().'" name="'.$this->getName().'" class="ckeditor">
                  '.$value.'
                  </textarea>';
         $html .= $this->editorReplace();
@@ -40,6 +40,7 @@ class CkEditor extends Editor
     public function createHtmlStyle($value): string
     {
         $style = '';
+
         $value = trim($value);
 
         if ($value === '' || $value === '<html><head><title></title></head><body></body></html>') {
@@ -47,7 +48,7 @@ class CkEditor extends Editor
             $style .= api_get_css(ChamiloApi::getEditorDocStylePath());
         }
 
-        $html = '<textarea id="'.$this->getName().'" name="'.$this->getName().'" class="ckeditor">
+        $html = '<textarea id="'.$this->getTextareaId().'" name="'.$this->getName().'" class="ckeditor">
                  '.$style.$value.'
                  </textarea>';
         $html .= $this->editorReplace();
@@ -72,7 +73,7 @@ class CkEditor extends Editor
         $javascript = $this->toJavascript($config);
 
         $html = "<script>
-           CKEDITOR.replace('".$this->getName()."',
+           CKEDITOR.replace('".$this->getTextareaId()."',
                $javascript
            );
            </script>";
@@ -81,11 +82,56 @@ class CkEditor extends Editor
     }
 
     /**
-     * Get the templates in JSON format.
+     * @param array $templates
      *
      * @return string
      */
-    public function simpleFormatTemplates(): string
+    public function formatTemplates($templates)
+    {
+        if (empty($templates)) {
+            return null;
+        }
+        /** @var \Chamilo\CoreBundle\Entity\SystemTemplate $template */
+        $templateList = [];
+        $cssTheme = api_get_path(WEB_CSS_PATH).'themes/'.api_get_visual_theme().'/';
+        $search = ['{CSS_THEME}', '{IMG_DIR}', '{REL_PATH}', '{COURSE_DIR}', '{CSS}'];
+        $replace = [
+            $cssTheme,
+            api_get_path(REL_CODE_PATH).'img/',
+            api_get_path(REL_PATH),
+            api_get_path(REL_DEFAULT_COURSE_DOCUMENT_PATH),
+            '',
+        ];
+
+        foreach ($templates as $template) {
+            $image = $template->getImage();
+            $image = !empty($image) ? $image : 'empty.gif';
+
+            /*$image = $this->urlGenerator->generate(
+                'get_document_template_action',
+                array('file' => $image),
+                UrlGenerator::ABSOLUTE_URL
+            );*/
+
+            $content = str_replace($search, $replace, $template->getContent());
+
+            $templateList[] = [
+                'title' => $this->translator->trans($template->getTitle()),
+                'description' => $this->translator->trans($template->getComment()),
+                'image' => $image,
+                'html' => $content,
+            ];
+        }
+
+        return json_encode($templateList);
+    }
+
+    /**
+     * Get the templates in JSON format.
+     *
+     * @return string|
+     */
+    public function simpleFormatTemplates()
     {
         $templates = $this->getEmptyTemplate();
 

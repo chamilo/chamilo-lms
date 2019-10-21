@@ -3002,7 +3002,7 @@ class Skill extends Model
 
         $entityManager = Database::getManager();
 
-        $skillUserRepo = $entityManager->getRepository('ChamiloSkillBundle:SkillRelUser');
+        $skillUserRepo = $entityManager->getRepository('ChamiloCoreBundle:SkillRelUser');
 
         $criteria = ['user' => $user, 'skill' => $skill];
         $result = $skillUserRepo->findOneBy($criteria);
@@ -3012,7 +3012,7 @@ class Skill extends Model
         }
         $skillLevelRepo = $entityManager->getRepository('ChamiloSkillBundle:Level');
 
-        $skillUser = new \Chamilo\CoreBundle\Entity\SkillRelUser();
+        $skillUser = new SkillRelUserEntity();
         $skillUser->setUser($user);
         $skillUser->setSkill($skill);
 

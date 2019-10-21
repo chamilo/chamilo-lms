@@ -602,6 +602,17 @@ switch ($action) {
             }
         }
 
+        if (isset($_GET['group_id_in_toolbar']) && !empty($_GET['group_id_in_toolbar'])) {
+            $groupIdFromToolbar = (int) $_GET['group_id_in_toolbar'];
+            if (!empty($groupIdFromToolbar)) {
+                if (empty($whereCondition)) {
+                    $whereCondition .= " te.group_id  = '$groupIdFromToolbar'";
+                } else {
+                    $whereCondition .= " AND group_id  = '$groupIdFromToolbar'";
+                }
+            }
+        }
+
         if (!empty($whereCondition)) {
             $whereCondition = " AND $whereCondition";
         }
@@ -2200,25 +2211,18 @@ switch ($action) {
 
         $new_result = [];
         $currentUserId = api_get_user_id();
+        $isAllow = api_is_allowed_to_edit();
         if (!empty($result)) {
             $urlUserGroup = api_get_path(WEB_CODE_PATH).'admin/usergroup_users.php?'.api_get_cidreq();
             foreach ($result as $group) {
                 $countUsers = count($obj->get_users_by_usergroup($group['id']));
                 $group['users'] = $countUsers;
+
                 if (!empty($countUsers)) {
-                    if ($obj->allowTeachers()) {
-                        if (isset($group['author_id']) && $group['author_id'] == $currentUserId) {
-                            $group['users'] = Display::url(
-                                $countUsers,
-                                $urlUserGroup.'&id='.$group['id']
-                            );
-                        }
-                    } else {
-                        $group['users'] = Display::url(
-                            $countUsers,
-                            $urlUserGroup.'&id='.$group['id']
-                        );
-                    }
+                    $group['users'] = Display::url(
+                        $countUsers,
+                        $urlUserGroup.'&id='.$group['id']
+                    );
                 }
 
                 if ($obj->usergroup_was_added_in_course($group['id'], $course_id)) {
@@ -2241,14 +2245,16 @@ switch ($action) {
                 $role = $obj->getUserRoleToString(api_get_user_id(), $group['id']);
                 $group['status'] = $role;
                 $group['actions'] = '';
-                if ($obj->allowTeachers() && $group['author_id'] == $currentUserId) {
-                    $group['actions'] .= Display::url(
-                        Display::return_icon('statistics.png', get_lang('Stats')),
-                        $urlUserGroup.'&id='.$group['id']
-                    ).'&nbsp;';
-                }
 
-                $group['actions'] .= Display::url($icon, $url);
+                if ($isAllow) {
+                    if ($obj->allowTeachers() && $group['author_id'] == $currentUserId) {
+                        $group['actions'] .= Display::url(
+                            Display::return_icon('statistics.png', get_lang('Stats')),
+                            $urlUserGroup.'&id='.$group['id']
+                        ).'&nbsp;';
+                    }
+                    $group['actions'] .= Display::url($icon, $url);
+                }
                 $new_result[] = $group;
             }
             $result = $new_result;

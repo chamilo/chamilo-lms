@@ -1136,7 +1136,6 @@ if ($form->validate()) {
         $tpl->assign('inscription_content', $content);
         $tpl->assign('form', $form->returnForm());
         $tpl->assign('hide_header', $hideHeaders);
-
         $page = Container::getPage('inscription');
         $tpl->assign('page', $page);
 

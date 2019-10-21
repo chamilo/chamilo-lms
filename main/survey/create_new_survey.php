@@ -21,11 +21,6 @@ $_course = api_get_course_info();
 $this_section = SECTION_COURSES;
 
 $allowSurveyAvailabilityDatetime = api_get_configuration_value('allow_survey_availability_datetime');
-
-// Database table definitions
-$table_survey = Database::get_course_table(TABLE_SURVEY);
-$table_user = Database::get_main_table(TABLE_MAIN_USER);
-$table_course = Database::get_main_table(TABLE_MAIN_COURSE);
 $table_gradebook_link = Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
 
 /** @todo this has to be moved to a more appropriate place (after the display_header of the code) */
@@ -240,7 +235,6 @@ if (Gradebook::is_active()) {
 
     // Loading Gradebook select
     GradebookUtils::load_gradebook_select_in_tool($form);
-
     if ($action == 'edit') {
         $element = $form->getElement('category_id');
         $element->freeze();

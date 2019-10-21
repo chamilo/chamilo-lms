@@ -13,7 +13,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  * SkillRelCourse.
  *
  * @ORM\Table(name="skill_rel_course")
- * @ORM\Entity // uncomment if api_get_configuration_value('allow_skill_rel_items')
+ * @ORM\Entity
  */
 class SkillRelCourse
 {

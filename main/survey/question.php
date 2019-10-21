@@ -28,15 +28,6 @@ if (empty($surveyData)) {
     api_not_allowed(true);
 }
 
-// Is valid request
-$is_valid_request = isset($_REQUEST['is_executable']) ? $_REQUEST['is_executable'] : null;
-
-// Database table definitions
-$table_survey = Database::get_course_table(TABLE_SURVEY);
-$table_survey_question = Database::get_course_table(TABLE_SURVEY_QUESTION);
-$table_survey_question_option = Database::get_course_table(TABLE_SURVEY_QUESTION_OPTION);
-$table_course = Database::get_main_table(TABLE_MAIN_COURSE);
-$table_user = Database::get_main_table(TABLE_MAIN_USER);
 $course_id = api_get_course_int_id();
 $urlname = api_substr(api_html_entity_decode($surveyData['title'], ENT_QUOTES), 0, 40);
 if (api_strlen(strip_tags($surveyData['title'])) > 40) {
@@ -104,10 +95,7 @@ if (!in_array($_GET['type'], $possible_types)) {
 }
 
 // Displaying the form for adding or editing the question
-$ch_type = 'ch_'.$_GET['type'];
-/** @var survey_question $surveyQuestion */
-$surveyQuestion = new $ch_type();
-//$surveyQuestion = survey_question::createQuestion($_GET['type'])
+$surveyQuestion = survey_question::createQuestion($_GET['type']);
 
 // The defaults values for the form
 $formData = [];

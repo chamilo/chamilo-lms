@@ -34,10 +34,6 @@ if (empty($survey_data)) {
 
 // Database table definitions
 $table_survey = Database::get_course_table(TABLE_SURVEY);
-$table_survey_question = Database::get_course_table(TABLE_SURVEY_QUESTION);
-$table_survey_question_option = Database::get_course_table(TABLE_SURVEY_QUESTION_OPTION);
-$table_course = Database::get_main_table(TABLE_MAIN_COURSE);
-$table_user = Database::get_main_table(TABLE_MAIN_USER);
 
 $urlname = strip_tags(api_substr(api_html_entity_decode($survey_data['title'], ENT_QUOTES), 0, 40));
 if (api_strlen(strip_tags($survey_data['title'])) > 40) {
@@ -161,14 +157,6 @@ $form->addElement('checkbox', 'hide_link', '', get_lang('HideSurveyInvitationLin
 
 // Submit button
 $form->addButtonSave(get_lang('PublishSurvey'));
-$portal_url = api_get_path(WEB_PATH);
-if (api_is_multiple_url_enabled()) {
-    $access_url_id = api_get_current_access_url_id();
-    if ($access_url_id != -1) {
-        $url = api_get_access_url($access_url_id);
-        $portal_url = $url['url'];
-    }
-}
 
 // Show the URL that can be used by users to fill a survey without invitation
 $auto_survey_link = SurveyUtil::generateFillSurveyLink(

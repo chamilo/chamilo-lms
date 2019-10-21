@@ -1429,7 +1429,7 @@ class CourseBuilder
         $courseId = (int) $courseId;
 
         if (!empty($session_id) && !empty($courseId)) {
-            $session_id = intval($session_id);
+            $session_id = (int) $session_id;
             if ($withBaseContent) {
                 $sessionCondition = api_get_session_condition(
                     $session_id,

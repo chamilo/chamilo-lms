@@ -156,14 +156,15 @@ $form->addElement('header', get_lang('Or'));
 $courseInfo = api_get_course_info();
 $documentTree = DocumentManager::get_document_preview(
     $courseInfo,
-    false,
+    $lp->get_id(),
     null,
     api_get_session_id(),
     false,
     '',
     api_get_path(WEB_CODE_PATH).'lp/lp_controller.php?action=add_audio&lp_id='.$lp->get_id().'&id='.$lp_item_id,
     false,
-    true
+    true,
+    $audioFolderId
 );
 
 $tpl->assign('pre_page', $page);

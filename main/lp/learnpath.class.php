@@ -6427,9 +6427,8 @@ class learnpath
         $isConfigPage = false,
         $allowExpand = true
     ) {
-        $actionsLeft = '';
         $actionsRight = '';
-        $actionsLeft .= Display::url(
+        $actionsLeft = Display::url(
             Display::return_icon(
                 'back.png',
                 get_lang('ReturnToLearningPaths'),
@@ -6466,7 +6465,10 @@ class learnpath
             ])
         );
 
-        if (!$isConfigPage) {
+        $subscriptionSettings = self::getSubscriptionSettings();
+
+        $request = api_request_uri();
+        if (strpos($request, 'edit') === false) {
             $actionsLeft .= Display::url(
                 Display::return_icon(
                     'settings.png',
@@ -6479,7 +6481,9 @@ class learnpath
                     'lp_id' => $this->lp_id,
                 ])
             );
-        } else {
+        }
+
+        if (strpos($request, 'build') === false && strpos($request, 'add_item') === false) {
             $actionsLeft .= Display::url(
                 Display::return_icon(
                     'edit.png',
@@ -6492,6 +6496,21 @@ class learnpath
                     'lp_id' => $this->lp_id,
                 ]).'&'.api_get_cidreq()
             );
+        }
+
+        if (strpos(api_get_self(), 'lp_subscribe_users.php') === false) {
+            if ($this->subscribeUsers == 1 &&
+                $subscriptionSettings['allow_add_users_to_lp']) {
+                $actionsLeft .= Display::url(
+                    Display::return_icon(
+                        'user.png',
+                        get_lang('SubscribeUsersToLp'),
+                        '',
+                        ICON_SIZE_MEDIUM
+                    ),
+                    api_get_path(WEB_CODE_PATH)."lp/lp_subscribe_users.php?lp_id=".$this->lp_id."&".api_get_cidreq()
+                );
+            }
         }
 
         if ($allowExpand) {
@@ -13409,7 +13428,7 @@ EOD;
                 get_lang('Title'),
                 true,
                 false,
-                ['ToolbarSet' => 'TitleAsHtml']
+                ['ToolbarSet' => 'TitleAsHtml', 'id' => uniqid('editor')]
             );
         } else {
             $form->addText('title', get_lang('Title'), true, ['id' => 'idTitle', 'class' => 'learnpath_item_form']);

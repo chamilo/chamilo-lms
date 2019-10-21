@@ -11,7 +11,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  * SkillRelItem.
  *
  * @ORM\Table(name="skill_rel_item")
- * @ORM\Entity // uncomment if api_get_configuration_value('allow_skill_rel_items')
+ * @ORM\Entity
  */
 class SkillRelItem
 {

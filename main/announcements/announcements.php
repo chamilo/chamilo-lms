@@ -431,7 +431,14 @@ switch ($action) {
             } elseif (isset($_GET['remindallinactives']) && $_GET['remindallinactives'] === 'true') {
                 // we want to remind inactive users. The $_GET['since'] parameter
                 // determines which users have to be warned (i.e the users who have been inactive for x days or more
-                $since = isset($_GET['since']) ? (int) $_GET['since'] : 6;
+                $since = 6;
+                if (isset($_GET['since'])) {
+                    if ($_GET['since'] === 'never') {
+                        $since = 'never';
+                    } else {
+                        $since = (int) $_GET['since'];
+                    }
+                }
 
                 // Getting the users who have to be reminded
                 $to = Tracking::getInactiveStudentsInCourse(

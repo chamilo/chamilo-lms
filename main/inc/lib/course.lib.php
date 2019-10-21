@@ -4957,6 +4957,31 @@ class CourseManager
         return $hotCourses;
     }
 
+    public function totalSubscribedUsersInCourses($urlId)
+    {
+        $table_course = Database::get_main_table(TABLE_MAIN_COURSE);
+        $table_course_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
+        $courseUsers = Database::get_main_table(TABLE_MAIN_COURSE_USER);
+
+        $urlId = (int) $urlId;
+
+        $sql = "SELECT count(cu.user_id) count 
+                FROM $courseUsers cu 
+                INNER JOIN $table_course_rel_access_url u 
+                ON cu.c_id = u.c_id                
+                WHERE
+                    relation_type <> ".COURSE_RELATION_TYPE_RRHH." AND
+                    u.access_url_id = $urlId AND 
+                    visibility <> ".COURSE_VISIBILITY_CLOSED." AND
+                    visibility <> ".COURSE_VISIBILITY_HIDDEN." 
+                     ";
+
+        $res = Database::query($sql);
+        $row = Database::fetch_array($res);
+
+        return $row['count'];
+    }
+
     /**
      * Get courses count.
      *
@@ -5002,8 +5027,9 @@ class CourseManager
     {
         $table_course = Database::get_main_table(TABLE_MAIN_COURSE);
         $table_course_rel_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
-        $sql = "SELECT count(id) FROM $table_course c";
-        if (!empty($urlId) && $urlId == intval($urlId)) {
+        $sql = "SELECT count(c.id) FROM $table_course c";
+        if (!empty($urlId)) {
+            $urlId = (int) $urlId;
             $sql .= ", $table_course_rel_access_url u
                     WHERE
                         c.id = u.c_id AND

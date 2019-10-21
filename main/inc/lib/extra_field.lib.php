@@ -2451,7 +2451,11 @@ JAVASCRIPT;
 
                 return " $col {$this->ops[$oper]} $val ";
             } else {
-                $val = '%'.$val.'%';
+                if (is_string($val)) {
+                    $val = '%'.$val.'%';
+                } else {
+                    $val = '';
+                }
             }
         }
         $val = \Database::escape_string($val);

@@ -801,6 +801,10 @@ class GradebookTable extends SortableTable
                         if (isset($defaultData[$categoryId]) && isset($defaultData[$categoryId]['ranking'])) {
                             $totalRanking = $defaultData[$categoryId]['ranking'];
                             $invalidateRanking = $defaultData[$categoryId]['ranking_invalidate'];
+                            $average = 0;
+                            foreach ($totalRanking as $ranking) {
+                                $average += $ranking;
+                            }
                         } else {
                             $totalRanking = [];
                             $invalidateRanking = true;

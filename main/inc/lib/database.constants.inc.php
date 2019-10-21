@@ -340,3 +340,5 @@ define('TABLE_STATISTIC_TRACK_E_EXERCICES_TEMP', 'track_e_exercices_temp');
 
 define('TABLE_USER_INFO_DEF', 'userinfo_def');
 define('TABLE_USER_INFO_CONTENT', 'userinfo_content');
+
+define('TABLE_MAIN_USER_CAREER', 'user_career');

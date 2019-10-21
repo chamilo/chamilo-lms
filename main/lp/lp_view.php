@@ -515,7 +515,7 @@ $template = new Template('', false, false, true, true, false);
 $fixLinkSetting = api_get_configuration_value('lp_fix_embed_content');
 $fixLink = '';
 if ($fixLinkSetting) {
-    $fixLink = '{type:"script", id:"_fr10", src:"'.api_get_path(WEB_LIBRARY_PATH).'javascript/fixlinks.js"}';
+    $fixLink = '{type:"script", id:"_fr10", src:"'.api_get_path(WEB_LIBRARY_PATH).'fixlinks.js"}';
 }
 
 $template->assign('fix_link', $fixLink);
@@ -614,6 +614,12 @@ if (api_get_configuration_value('lp_view_accordion') === true && $lpType == 1) {
 }
 $template->assign('lp_id', $lp->lp_id);
 $template->assign('lp_current_item_id', $lp->get_current_item_id());
+
+$menuLocation = 'left';
+if (!empty(api_get_configuration_value('lp_menu_location'))) {
+    $menuLocation = api_get_configuration_value('lp_menu_location');
+}
+$template->assign('menu_location', $menuLocation);
 $template->assign('disable_js_in_lp_view', (int) api_get_configuration_value('disable_js_in_lp_view'));
 $template->assign(
     'lp_preview_image',

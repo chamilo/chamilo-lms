@@ -1952,7 +1952,13 @@ class CourseRestorer
                     $imageNewId = $documentsToRestore->destination_id;
                 }
             }
-
+            $question->question = DocumentManager::replaceUrlWithNewCourseCode(
+                $question->question,
+                $this->course->code,
+                $this->course->destination_path,
+                $this->course->backup_path,
+                $this->course->info['path']
+            );
             $params = [
                 'c_id' => $this->destination_course_id,
                 'question' => self::DBUTF8($question->question),
@@ -1979,7 +1985,17 @@ class CourseRestorer
             $onlyAnswers = [];
 
             if (in_array($question->quiz_type, [DRAGGABLE, MATCHING, MATCHING_DRAGGABLE])) {
-                $allAnswers = array_column($question->answers, 'answer', 'id');
+                $tempAnswerList = $question->answers;
+                foreach ($tempAnswerList as &$value) {
+                    $value['answer'] = DocumentManager::replaceUrlWithNewCourseCode(
+                        $value['answer'],
+                        $this->course->code,
+                        $this->course->destination_path,
+                        $this->course->backup_path,
+                        $this->course->info['path']
+                    );
+                }
+                $allAnswers = array_column($tempAnswerList, 'answer', 'id');
             }
 
             if (in_array($question->quiz_type, [MATCHING, MATCHING_DRAGGABLE])) {
@@ -2660,6 +2676,7 @@ class CourseRestorer
                         strlen($lp->preview_image) - 7,
                         strlen($lp->preview_image)
                     );
+
                     if (file_exists($origin_path.$lp->preview_image) &&
                         !is_dir($origin_path.$lp->preview_image)
                     ) {
@@ -2669,6 +2686,15 @@ class CourseRestorer
                         );
                         if ($copy_result) {
                             $lp->preview_image = $new_filename;
+                            // Create 64 version from original
+                            $temp = new \Image($destination_path.$new_filename);
+                            $temp->resize(64);
+                            $pathInfo = pathinfo($new_filename);
+                            if ($pathInfo) {
+                                $filename = $pathInfo['filename'];
+                                $extension = $pathInfo['extension'];
+                                $temp->send_image($destination_path.'/'.$filename.'.64.'.$extension);
+                            }
                         } else {
                             $lp->preview_image = '';
                         }

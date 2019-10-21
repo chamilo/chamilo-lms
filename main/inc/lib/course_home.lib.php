@@ -812,11 +812,10 @@ class CourseHome
      * Displays the tools of a certain category.
      *
      * @param array $all_tools_list List of tools as returned by get_tools_category()
-     * @param bool  $rows
      *
      * @return array
      */
-    public static function show_tools_category($all_tools_list, $rows = false)
+    public static function show_tools_category($all_tools_list)
     {
         $_user = api_get_user_info();
         $theme = api_get_setting('homepage_view');
@@ -1343,7 +1342,7 @@ class CourseHome
      *
      * @return string
      */
-    public static function getCourseToolBar($orientation = SHORTCUTS_HORIZONTAL): string
+    public static function show_navigation_tool_shortcuts($orientation = SHORTCUTS_HORIZONTAL)
     {
         $origin = api_get_origin();
         $courseInfo = api_get_course_info();

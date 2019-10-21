@@ -79,7 +79,6 @@ if (isset($_GET['show'])) {
     // Getting all the questions for this page and add them to a
     // multidimensional array where the first index is the page.
     // as long as there is no pagebreak fount we keep adding questions to the page
-    $questions_displayed = [];
     $paged_questions = [];
     $counter = 0;
     $sql = "SELECT * FROM $table_survey_question
@@ -153,11 +152,6 @@ if (isset($_GET['show'])) {
     }
 }
 
-$before = 0;
-if (isset($_GET['show']) && isset($paged_questions[$_GET['show'] - 1])) {
-    $before = count($paged_questions[$_GET['show'] - 1]);
-}
-
 $numberOfPages = SurveyManager::getCountPages($survey_data);
 
 // Displaying the form with the questions
@@ -189,8 +183,7 @@ if (is_array($questions) && count($questions) > 0) {
     }
     foreach ($questions as $key => &$question) {
         $ch_type = 'ch_'.$question['type'];
-        /** @var survey_question $display */
-        $display = new $ch_type();
+        $display = survey_question::createQuestion($question['type']);
         $form->addHtml('<div class="survey_question '.$ch_type.'">');
         $form->addHtml('<div style="float:left; font-weight: bold; margin-right: 5px;"> '.$counter.'. </div>');
         $form->addHtml('<div>'.Security::remove_XSS($question['survey_question']).'</div> ');

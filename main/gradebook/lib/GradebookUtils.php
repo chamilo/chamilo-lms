@@ -448,6 +448,7 @@ class GradebookUtils
         $is_locked = $link->is_locked();
 
         $modify_icons = null;
+
         if (!api_is_allowed_to_edit(null, true)) {
             return null;
         }
@@ -740,6 +741,34 @@ class GradebookUtils
      */
     public static function get_list_users_certificates($cat_id = null, $userList = [])
     {
+        $table_certificate = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CERTIFICATE);
+        $table_user = Database::get_main_table(TABLE_MAIN_USER);
+        $sql = 'SELECT DISTINCT u.user_id, u.lastname, u.firstname, u.username
+                FROM '.$table_user.' u
+                INNER JOIN '.$table_certificate.' gc
+                ON u.user_id=gc.user_id ';
+        if (!is_null($cat_id) && $cat_id > 0) {
+            $sql .= ' WHERE cat_id='.intval($cat_id);
+        }
+        if (!empty($userList)) {
+            $userList = array_map('intval', $userList);
+            $userListCondition = implode("','", $userList);
+            $sql .= " AND u.user_id IN ('$userListCondition')";
+        }
+        $sql .= ' ORDER BY '.(api_sort_by_first_name() ? 'u.firstname' : 'u.lastname');
+        $rs = Database::query($sql);
+
+        $list_users = [];
+        while ($row = Database::fetch_array($rs)) {
+            $list_users[] = $row;
+        }
+
+        return $list_users;
+    }
+
+    public static function getTotalCertificates($urlId)
+    {
+        $urlId = (int) $urlId;
         $table_certificate = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CERTIFICATE);
         $table_user = Database::get_main_table(TABLE_MAIN_USER);
         $sql = 'SELECT DISTINCT u.user_id, u.lastname, u.firstname, u.username
@@ -1455,6 +1484,7 @@ class GradebookUtils
                 'score' => $certificateInfo['score_certificate'],
                 'date' => api_format_date($certificateInfo['created_at'], DATE_FORMAT_SHORT),
                 'link' => api_get_path(WEB_PATH)."certificates/index.php?id={$certificateInfo['id']}",
+                'pdf' => api_get_path(WEB_PATH)."certificates/index.php?id={$certificateInfo['id']}&user_id={$userId}&action=export",
             ];
         }
 
@@ -1640,6 +1670,7 @@ class GradebookUtils
             $graph.
             '<br />'.get_lang('Feedback').'<br />
             <textarea class="form-control" rows="5" cols="100">&nbsp;</textarea>';
+
         $result = $pdf->html_to_pdf_with_template(
             $content,
             $saveToFile,

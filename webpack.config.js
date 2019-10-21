@@ -1,6 +1,7 @@
 var Encore = require('@symfony/webpack-encore');
-var copyWebpackPlugin = require('copy-webpack-plugin');
-var fileManagerPlugin = require('filemanager-webpack-plugin');
+
+const CopyWebpackPlugin = require('copy-webpack-plugin');
+const FileManagerPlugin = require('filemanager-webpack-plugin');
 
 Encore
     .setOutputPath('public/build/')
@@ -36,11 +37,12 @@ Encore
     .copyFiles([
         {
             from: './node_modules/multiselect-two-sides/dist/js',
+            pattern: /(multiselect.js)$/,
             to: 'libs/multiselect-two-sides/dist/js/multiselect.js'
         },
         {
             from: './node_modules/pwstrength-bootstrap/dist/',
-            pattern: /\.(js)$/,
+            pattern: /(pwstrength-bootstrap.js)$/,
             to: 'libs/pwstrength-bootstrap/dist/pwstrength-bootstrap.js'
         },
         {
@@ -61,7 +63,7 @@ Encore
     ])
 ;
 
-Encore.addPlugin(new copyWebpackPlugin([
+Encore.addPlugin(new CopyWebpackPlugin([
     {
         from: './node_modules/mediaelement/build',
         to: 'libs/mediaelement'
@@ -90,7 +92,7 @@ themes.forEach(function (theme) {
     Encore.addStyleEntry('css/themes/' + theme + '/default', './assets/css/themes/' + theme + '/default.css');
 
     // Copy images from themes into public/build
-    Encore.addPlugin(new copyWebpackPlugin([{
+    Encore.addPlugin(new CopyWebpackPlugin([{
         from: 'assets/css/themes/' + theme + '/images',
         to: 'css/themes/' + theme + '/images'
     },
@@ -98,7 +100,7 @@ themes.forEach(function (theme) {
 });
 
 // Fix free-jqgrid languages files
-Encore.addPlugin(new fileManagerPlugin({
+Encore.addPlugin(new FileManagerPlugin({
     onEnd: {
         move: [
             {

@@ -32,7 +32,6 @@ class Level
 
     /**
      * @Gedmo\SortablePosition
-     *
      * @ORM\Column(name="position", type="integer")
      */
     protected $position;

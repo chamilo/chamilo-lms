@@ -132,16 +132,7 @@ $lp_theme_css = $learnPath->get_theme();
 Display::display_header(null, 'Path');
 
 $suredel = trim(get_lang('AreYouSureToDeleteJS'));
-//@todo move this somewhere else css/fix.css
 ?>
-<style>
-    #feedback { font-size: 1.4em; }
-    #resExercise .ui-selecting { background: #FECA40; }
-    #resExercise .ui-selected { background: #F39814; color: white; }
-    #resExercise { list-style-type: none; margin: 0; padding: 0; width: 60%; }
-    #resExercise li { margin: 3px; padding: 0.4em; font-size: 1.4em; height: 18px; }
-</style>
-
 <script>
 function stripslashes(str) {
     str=str.replace(/\\'/g,'\'');
@@ -202,7 +193,7 @@ $(document).on('shown.bs.tab', 'a[data-toggle="tab"]', function (e) {
 })
 </script>
 <?php
-/* DISPLAY SECTION */
+
 echo $learnPath->build_action_menu();
 echo '<div class="row">';
 echo '<div id="lp_sidebar" class="col-md-4">';

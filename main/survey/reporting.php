@@ -62,7 +62,7 @@ if (!empty($exportReport) && !empty($format)) {
     switch ($format) {
         case 'xls':
             $filename = 'survey_results_'.$survey_id.'.xlsx';
-            $data = SurveyUtil::export_complete_report_xls($survey_data, $filename, $userId);
+            SurveyUtil::export_complete_report_xls($survey_data, $filename, $userId);
             exit;
             break;
         case 'csv':

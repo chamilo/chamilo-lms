@@ -881,33 +881,6 @@ if ((isset($_GET['show']) && $_GET['show'] != '') ||
                 $count_result++;
             }
 
-            /*
-              //i.e 70% - 70% -70% 70%  $equal_count =3
-              while (1) {
-              if ($result[$i]['value']  == $result[$i+1]['value']) {
-              $equal_count++;
-              } else {
-              break;
-              }
-              $i++;
-              }
-              echo 'eq'. $equal_count;
-              echo '<br />';
-              if     ($equal_count == 0) {
-              //i.e 70% 70% -60% 60%  $equal_count = 1 only we get the first 2 options
-              if (($result[0]['value'] == $result[1]['value'])  &&  ($result[2]['value'] == $result[3]['value'])) {
-              $group_cant = 1;
-              } else {
-              // By default we chose the highest 3
-              $group_cant=2;
-              }
-              } elseif ($equal_count == 2) {
-              $group_cant = 2;
-              } else {
-              $group_cant = -1;
-              }
-             */
-
             // i.e 70% - 70% -70% 70%  $equal_count =3
             $i = 0;
             $group_cant = 0;
@@ -1263,7 +1236,7 @@ if (isset($questions) && is_array($questions)) {
     foreach ($questions as $key => &$question) {
         $ch_type = 'ch_'.$question['type'];
         $questionNumber = $questionCounter;
-        $display = new $ch_type();
+        $display = survey_question::createQuestion($question['type']);
         // @todo move this in a function.
         $form->addHtml('<div class="survey_question '.$ch_type.'">');
         $form->addHtml('<div style="float:left; font-weight: bold; margin-right: 5px;"> '.$questionNumber.'. </div>');
@@ -1279,13 +1252,11 @@ if (isset($questions) && is_array($questions)) {
                     $finalAnswer = [];
                     foreach ($userAnswer as $userChoice) {
                         list($choiceId, $choiceValue) = explode('*', $userChoice);
-
                         $finalAnswer[$choiceId] = $choiceValue;
                     }
                     break;
                 case 'percentage':
                     list($choiceId, $choiceValue) = explode('*', current($userAnswer));
-
                     $finalAnswer = $choiceId;
                     break;
                 default:

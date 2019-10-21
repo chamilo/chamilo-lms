@@ -37,12 +37,9 @@ if (!api_is_allowed_to_edit(false, true) ||
 }
 
 // Database table definitions
-$table_survey = Database::get_course_table(TABLE_SURVEY);
 $table_survey_question = Database::get_course_table(TABLE_SURVEY_QUESTION);
 $table_survey_question_option = Database::get_course_table(TABLE_SURVEY_QUESTION_OPTION);
 $table_survey_question_group = Database::get_course_table(TABLE_SURVEY_QUESTION_GROUP);
-$table_course = Database::get_main_table(TABLE_MAIN_COURSE);
-$table_user = Database::get_main_table(TABLE_MAIN_USER);
 
 $survey_id = (int) $_GET['survey_id'];
 $course_id = api_get_course_int_id();
@@ -81,7 +78,7 @@ if ($is_survey_type_1 && ($action == 'addgroup' || $action == 'deletegroup')) {
                              WHERE c_id = '.$course_id.' AND id = \''.Database::escape_string($_POST['group_id']).'\'');
             $sendmsg = 'GroupUpdatedSuccessfully';
         } elseif (!empty($_POST['name'])) {
-            Database::query('INSERT INTO '.$table_survey_question_group.' (c_id, name,description,survey_id) values ('.$course_id.', \''.Database::escape_string($_POST['name']).'\',\''.Database::escape_string($_POST['description']).'\',\''.Database::escape_string($survey_id).'\') ');
+            Database::query('INSERT INTO '.$table_survey_question_group.' (c_id, name,description,survey_id) values ('.$course_id.', \''.Database::escape_string($_POST['name']).'\',\''.Database::escape_string($_POST['description']).'\',\''.$survey_id.'\') ');
             $sendmsg = 'GroupCreatedSuccessfully';
         } else {
             $sendmsg = 'GroupNeedName';
@@ -90,7 +87,7 @@ if ($is_survey_type_1 && ($action == 'addgroup' || $action == 'deletegroup')) {
 
     if ($action == 'deletegroup') {
         $sql = 'DELETE FROM '.$table_survey_question_group.' 
-                WHERE c_id = '.$course_id.' AND id = '.intval($_GET['gid']).' AND survey_id = '.intval($survey_id);
+                WHERE c_id = '.$course_id.' AND id = '.intval($_GET['gid']).' AND survey_id = '.$survey_id;
         Database::query($sql);
         $sendmsg = 'GroupDeletedSuccessfully';
     }
@@ -105,7 +102,6 @@ Display::display_header($tool_name, 'Survey');
 $my_action_survey = Security::remove_XSS($action);
 $my_question_id_survey = isset($_GET['question_id']) ? Security::remove_XSS($_GET['question_id']) : null;
 $my_survey_id_survey = Security::remove_XSS($_GET['survey_id']);
-$message_information = isset($_GET['message']) ? Security::remove_XSS($_GET['message']) : null;
 
 if (isset($action)) {
     if (($action == 'moveup' || $action == 'movedown') && isset($_GET['question_id'])) {
@@ -248,9 +244,9 @@ $sql = "SELECT survey_question.*, count(survey_question_option.question_option_i
         LEFT JOIN $table_survey_question_option survey_question_option
         ON 
             survey_question.question_id = survey_question_option.question_id AND 
-            survey_question_option.c_id = $course_id
+            survey_question_option.c_id = survey_question.c_id
         WHERE
-            survey_question.survey_id 	= ".intval($survey_id)." AND
+            survey_question.survey_id 	= $survey_id AND
             survey_question.c_id 		= $course_id
         GROUP BY survey_question.question_id
         ORDER BY survey_question.sort ASC";
@@ -317,7 +313,6 @@ while ($row = Database::fetch_array($result, 'ASSOC')) {
     }
     echo '</tr>';
 }
-
 echo '</table>';
 
 if ($is_survey_type_1) {
@@ -345,7 +340,7 @@ if ($is_survey_type_1) {
     echo '<form action="'.api_get_path(WEB_CODE_PATH).'survey/survey.php?action=addgroup&survey_id='.$survey_id.'" method="post">';
     if ($_GET['action'] == 'editgroup') {
         $sql = 'SELECT name,description FROM '.$table_survey_question_group.' 
-                WHERE id = '.intval($_GET['gid']).' AND survey_id = '.intval($survey_id).' limit 1';
+                WHERE id = '.intval($_GET['gid']).' AND survey_id = '.$survey_id.' limit 1';
         $rs = Database::query($sql);
         $editedrow = Database::fetch_array($rs, 'ASSOC');
         echo '<input type="text" maxlength="20" name="name" value="'.$editedrow['name'].'" size="10" disabled>';

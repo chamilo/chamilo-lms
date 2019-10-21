@@ -156,6 +156,10 @@ class ImportCsv
                         $method = 'importCareersDiagram';
                     }
 
+                    if ($method == 'importCareersresults') {
+                        $method = 'importCareersResults';
+                    }
+
                     if ($method == 'importOpensessions') {
                         $method = 'importOpenSessions';
                     }
@@ -209,6 +213,7 @@ class ImportCsv
                 'care',
                 'careers',
                 'careersdiagram',
+                'careersresults',
             ];
 
             foreach ($sections as $section) {
@@ -1437,7 +1442,6 @@ class ImportCsv
                         'careerid'
                     );
                     $externalCareerIdList = $externalCareerIdList['value'];
-                    $externalCareerIds = [];
                     if (substr($externalCareerIdList, 0, 1) === '[') {
                         $externalCareerIdList = substr($externalCareerIdList, 1, -1);
                         $externalCareerIds = preg_split('/,/', $externalCareerIdList);
@@ -2560,17 +2564,17 @@ class ImportCsv
         $data = Import::csv_reader($file);
 
         if (!empty($data)) {
-            $this->logger->addInfo(count($data)." records found.");
+            $this->logger->addInfo(count($data).' records found.');
             $extraFieldValue = new ExtraFieldValue('career');
             $extraFieldName = $this->extraFieldIdNameList['career'];
             $externalEventId = null;
 
             $extraField = new ExtraField('career');
-            $extraFieldInfo = $extraField->get_handler_field_info_by_field_variable(
-                $extraFieldName
-            );
+            $extraFieldInfo = $extraField->get_handler_field_info_by_field_variable($extraFieldName);
 
             if (empty($extraFieldInfo)) {
+                $this->logger->addInfo("Extra field doesn't exists: $extraFieldName");
+
                 return false;
             }
 
@@ -2650,6 +2654,105 @@ class ImportCsv
      * @param array $teacherBackup
      * @param array $groupBackup
      */
+    private function importCareersResults(
+        $file,
+        $moveFile = false,
+        &$teacherBackup = [],
+        &$groupBackup = []
+    ) {
+        $data = Import::csv_reader($file);
+
+        if (!empty($data)) {
+            $this->logger->addInfo(count($data).' records found.');
+
+            $extraFieldValue = new ExtraFieldValue('career');
+            $extraFieldName = $this->extraFieldIdNameList['career'];
+
+            foreach ($data as $row) {
+                if (empty($row)) {
+                    continue;
+                }
+                foreach ($row as $key => $value) {
+                    $key = (string) trim($key);
+                    // Remove utf8 bom
+                    $key = preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $key);
+                    $row[$key] = $value;
+                }
+
+                $studentId = $row['StudentId'];
+                $studentId = UserManager::get_user_id_from_original_id(
+                    $studentId,
+                    $this->extraFieldIdNameList['user']
+                );
+
+                $studentInfo = api_get_user_info($studentId);
+                if (empty($studentInfo)) {
+                    $this->logger->addInfo("Student id not found: $studentId");
+                    continue;
+                }
+
+                $careerId = $row['CareerId'];
+                $item = $extraFieldValue->get_item_id_from_field_variable_and_field_value(
+                    $extraFieldName,
+                    $careerId
+                );
+
+                $careerChamiloId = null;
+                if (empty($item)) {
+                    $this->logger->addInfo("Career not found: $careerId");
+                    continue;
+                } else {
+                    if (isset($item['item_id'])) {
+                        $careerChamiloId = $item['item_id'];
+                    } else {
+                        continue;
+                    }
+                }
+
+                if (UserManager::userHasCareer($studentId, $careerChamiloId) === false) {
+                    $this->logger->addInfo(
+                        "User $studentId (".$row['StudentId'].") has no career #$careerChamiloId (ext #$careerId)"
+                    );
+                    continue;
+                }
+
+                $userCareerData = UserManager::getUserCareer($studentId, $careerChamiloId);
+
+                $extraData = isset($userCareerData['extra_data']) && !empty($userCareerData['extra_data']) ? unserialize($userCareerData['extra_data']) : [];
+
+                $teacherInfo = api_get_user_info_from_username($row['TeacherUsername']);
+                $teacherName = $row['TeacherUsername'];
+                if ($teacherInfo) {
+                    $teacherName = $teacherInfo['complete_name'];
+                }
+
+                $extraData[$row['CourseId']][$row['ResultId']] = [
+                    'Description' => $row['Description'],
+                    'Period' => $row['Period'],
+                    'TeacherText' => $row['TeacherText'],
+                    'TeacherUsername' => $teacherName,
+                    'ScoreText' => $row['ScoreText'],
+                    'ScoreValue' => $row['ScoreValue'],
+                    'Info' => $row['Info'],
+                    'BgColor' => $row['BgColor'],
+                    'Color' => $row['Color'],
+                    'BorderColor' => $row['BorderColor'],
+                    'Icon' => $row['Icon'],
+                    'IconColor' => $row['IconColor'],
+                ];
+                $serializedValue = serialize($extraData);
+
+                UserManager::updateUserCareer($userCareerData['id'], $serializedValue);
+            }
+        }
+    }
+
+    /**
+     * @param $file
+     * @param bool  $moveFile
+     * @param array $teacherBackup
+     * @param array $groupBackup
+     */
     private function importCareersDiagram(
         $file,
         $moveFile = false,
@@ -2663,9 +2766,7 @@ class ImportCsv
         $externalEventId = null;
 
         $extraField = new ExtraField('career');
-        $extraFieldInfo = $extraField->get_handler_field_info_by_field_variable(
-            $extraFieldName
-        );
+        $extraFieldInfo = $extraField->get_handler_field_info_by_field_variable($extraFieldName);
 
         $careerDiagramExtraFieldName = $this->extraFieldIdNameList['career_diagram'];
         $extraFieldDiagramInfo = $extraField->get_handler_field_info_by_field_variable(
@@ -2677,7 +2778,7 @@ class ImportCsv
         }
 
         if (!empty($data)) {
-            $this->logger->addInfo(count($data)." records found.");
+            $this->logger->addInfo(count($data).' records found.');
             $values = [];
             foreach ($data as $row) {
                 if (empty($row)) {
@@ -2708,7 +2809,6 @@ class ImportCsv
                         false
                     );
 
-                    $chamiloCareerName = '';
                     if (empty($item)) {
                         $this->logger->addInfo("Career not found: $careerId");
                         continue;
@@ -2738,7 +2838,7 @@ class ImportCsv
                         $careerList[$careerId] = $graph;
                     }
 
-                    $currentCourseId = (int) $row['CourseId'];
+                    $currentCourseId = $row['CourseId'];
                     $name = $row['CourseName'];
                     $notes = $row['Notes'];
                     $groupValue = $row['Group'];
@@ -2782,7 +2882,7 @@ class ImportCsv
                         continue;
                     }
 
-                    $currentCourseId = (int) $row['CourseId'];
+                    $currentCourseId = $row['CourseId'];
                     if ($graph->hasVertex($currentCourseId)) {
                         $current = $graph->getVertex($currentCourseId);
                     } else {

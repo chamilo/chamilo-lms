@@ -559,18 +559,23 @@ class CoursesAndSessionsCatalog
     /**
      * List the sessions.
      *
-     * @param string $date  (optional) The date of sessions
+     * @param string $date
      * @param array  $limit
+     * @param bool   $returnQueryBuilder
+     * @param bool   $getCount
      *
-     * @throws Exception
-     *
-     * @return array The session list
+     * @return array|\Doctrine\ORM\Query The session list
      */
-    public static function browseSessions($date = null, $limit = [], $returnQueryBuilder = false)
+    public static function browseSessions($date = null, $limit = [], $returnQueryBuilder = false, $getCount = false)
     {
         $urlId = api_get_current_access_url_id();
 
-        $dql = "SELECT s
+        $select = 's';
+        if ($getCount) {
+            $select = 'count(s) ';
+        }
+
+        $dql = "SELECT $select
                 FROM ChamiloCoreBundle:Session s
                 WHERE EXISTS 
                     (
@@ -579,8 +584,6 @@ class CoursesAndSessionsCatalog
                     ) AND
                     s.nbrCourses > 0
                 ";
-
-        //('$date' BETWEEN s.accessStartDate AND s.accessEndDate)
         if (!is_null($date)) {
             $date = Database::escape_string($date);
             $dql .= "
@@ -614,41 +617,11 @@ class CoursesAndSessionsCatalog
             return $qb;
         }
 
-        return $qb->getResult();
+        if ($getCount) {
+            return $qb->getSingleScalarResult();
     }
 
-    /**
-     * Search sessions by searched term by session name.
-     *
-     * @param string $queryTerm Term for search
-     * @param array  $limit     Limit info
-     *
-     * @return array The sessions
-     */
-    public static function browseSessionsBySearch($queryTerm, array $limit)
-    {
-        $sessionsToBrowse = [];
-
-        $criteria = Criteria::create()
-            ->where(
-                Criteria::expr()->contains('name', $queryTerm)
-            )
-            ->setFirstResult($limit['start'])
-            ->setMaxResults($limit['length']);
-
-        $sessions = Database::getManager()
-            ->getRepository('ChamiloCoreBundle:Session')
-            ->matching($criteria);
-
-        foreach ($sessions as $session) {
-            if ($session->getNbrCourses() === 0) {
-                continue;
-            }
-
-            $sessionsToBrowse[] = $session;
-        }
-
-        return $sessionsToBrowse;
+        return $qb->getResult();
     }
 
     /**
@@ -664,14 +637,22 @@ class CoursesAndSessionsCatalog
         $em = Database::getManager();
         $qb = $em->createQueryBuilder();
 
+        $urlId = api_get_current_access_url_id();
+
         $sessions = $qb->select('s')
-            ->distinct(true)
+            ->distinct()
             ->from('ChamiloCoreBundle:Session', 's')
             ->innerJoin(
                 'ChamiloCoreBundle:SessionRelCourse',
                 'src',
                 Join::WITH,
                 's.id = src.session'
+            )
+            ->innerJoin(
+                'ChamiloCoreBundle:AccessUrlRelSession',
+                'url',
+                Join::WITH,
+                'url.sessionId = s.id'
             )
             ->innerJoin(
                 'ChamiloCoreBundle:ExtraFieldRelTag',
@@ -696,6 +677,8 @@ class CoursesAndSessionsCatalog
             )
             ->andWhere(
                 $qb->expr()->eq('f.extraFieldType', ExtraField::COURSE_FIELD_TYPE)
+            )->andWhere(
+                $qb->expr()->eq('url.accessUrlId', $urlId)
             )
             ->setFirstResult($limit['start'])
             ->setMaxResults($limit['length'])
@@ -717,8 +700,9 @@ class CoursesAndSessionsCatalog
     /**
      * Build a recursive tree of course categories.
      *
-     * @param $categories
-     * @param $parentId
+     * @param array $categories
+     * @param int   $parentId
+     * @param int   $level
      *
      * @return array
      */
@@ -754,7 +738,7 @@ class CoursesAndSessionsCatalog
     /**
      * List Code Search Category.
      *
-     * @param $code
+     * @param string $code
      *
      * @return array
      */

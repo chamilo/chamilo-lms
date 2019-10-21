@@ -36,12 +36,12 @@ api_check_php_version(__DIR__.'/');
 
 try {
     // Get settings from .env file created when installation Chamilo
-    $envFile = __DIR__.'/../../.env';
+    $envFile = __DIR__.'/../../.env.local';
     if (file_exists($envFile)) {
         (new Dotenv())->load($envFile);
     } else {
         throw new \RuntimeException('APP_ENV environment variable is not defined.
-        You need to define environment variables for configuration to load variables from a .env file.');
+        You need to define environment variables for configuration to load variables from a .env.local file.');
     }
 
     $env = $_SERVER['APP_ENV'] ?? 'dev';

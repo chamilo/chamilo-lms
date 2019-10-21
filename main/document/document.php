@@ -97,7 +97,7 @@ Session::erase('paint_dir');
 Session::erase('temp_audio_nanogong');
 
 $plugin = new AppPlugin();
-$pluginList = $plugin->get_installed_plugins();
+$pluginList = $plugin->getInstalledPlugins();
 $capturePluginInstalled = in_array('jcapture', $pluginList);
 
 if ($capturePluginInstalled) {

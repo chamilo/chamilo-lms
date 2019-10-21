@@ -1672,6 +1672,47 @@ class Tracking
     }
 
     /**
+     * @param string $startDate
+     * @param string $endDate
+     *
+     * @return int
+     */
+    public static function getTotalTimeSpentOnThePlatform(
+        $startDate = '',
+        $endDate = ''
+    ) {
+        $tbl_track_login = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
+        $tbl_url_rel_user = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
+
+        $url_table = null;
+        $url_condition = null;
+        if (api_is_multiple_url_enabled()) {
+            $access_url_id = api_get_current_access_url_id();
+            $url_table = ", ".$tbl_url_rel_user." as url_users";
+            $url_condition = " AND u.login_user_id = url_users.user_id AND access_url_id='$access_url_id'";
+        }
+
+        if (!empty($startDate) && !empty($endDate)) {
+            $startDate = Database::escape_string($startDate);
+            $endDate = Database::escape_string($endDate);
+            $condition_time = ' (login_date >= "'.$startDate.'" AND logout_date <= "'.$endDate.'" ) ';
+        }
+
+        $sql = "SELECT SUM(TIMESTAMPDIFF(SECOND, login_date, logout_date)) diff
+    	        FROM $tbl_track_login u $url_table
+                WHERE $condition_time $url_condition";
+        $rs = Database::query($sql);
+        $row = Database::fetch_array($rs, 'ASSOC');
+        $diff = $row['diff'];
+
+        if ($diff >= 0) {
+            return $diff;
+        }
+
+        return -1;
+    }
+
+    /**
      * Checks if the "lp_minimum_time" feature is available for the course.
      *
      * @param int $sessionId
@@ -1908,6 +1949,11 @@ class Tracking
         // protect data
         $student_id = (int) $student_id;
         $session_id = (int) $session_id;
+
+        if (empty($courseInfo) || empty($student_id)) {
+            return false;
+        }
+
         $courseId = $courseInfo['real_id'];
 
         $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);
@@ -2601,61 +2647,68 @@ class Tracking
         $tbl_stats_exercices = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
         $tbl_stats_attempts = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
         $course = api_get_course_info($course_code);
-        if (!empty($course)) {
-            // Get course tables names
-            $tbl_quiz_questions = Database::get_course_table(TABLE_QUIZ_QUESTION);
-            $lp_table = Database::get_course_table(TABLE_LP_MAIN);
-            $lp_item_table = Database::get_course_table(TABLE_LP_ITEM);
-            $lp_view_table = Database::get_course_table(TABLE_LP_VIEW);
-            $lp_item_view_table = Database::get_course_table(TABLE_LP_ITEM_VIEW);
-            $course_id = $course['real_id'];
 
-            // Compose a filter based on optional learning paths list given
-            $condition_lp = '';
-            if (count($lp_ids) > 0) {
-                $condition_lp = " AND id IN(".implode(',', $lp_ids).") ";
-            }
+        if (empty($course)) {
+            return null;
+        }
 
-            // Compose a filter based on optional session id
-            $session_id = intval($session_id);
-            if (count($lp_ids) > 0) {
-                $condition_session = " AND session_id = $session_id ";
-            } else {
-                $condition_session = " WHERE session_id = $session_id ";
-            }
+        // Get course tables names
+        $tbl_quiz_questions = Database::get_course_table(TABLE_QUIZ_QUESTION);
+        $lp_table = Database::get_course_table(TABLE_LP_MAIN);
+        $lp_item_table = Database::get_course_table(TABLE_LP_ITEM);
+        $lp_view_table = Database::get_course_table(TABLE_LP_VIEW);
+        $lp_item_view_table = Database::get_course_table(TABLE_LP_ITEM_VIEW);
+        $course_id = $course['real_id'];
 
-            // Check the real number of LPs corresponding to the filter in the
-            // database (and if no list was given, get them all)
-            if (empty($session_id)) {
-                $sql = "SELECT DISTINCT(id), use_max_score
-                        FROM $lp_table
-                        WHERE 
-                            c_id = $course_id AND 
-                            (session_id = 0 OR session_id IS NULL) $condition_lp ";
-            } else {
-                $sql = "SELECT DISTINCT(id), use_max_score
-                        FROM $lp_table
-                        WHERE c_id = $course_id $condition_lp ";
-            }
+        // Compose a filter based on optional learning paths list given
+        $condition_lp = '';
+        if (count($lp_ids) > 0) {
+            $condition_lp = " AND id IN(".implode(',', $lp_ids).") ";
+        }
 
-            $res_row_lp = Database::query($sql);
-            $count_row_lp = Database::num_rows($res_row_lp);
+        // Compose a filter based on optional session id
+        $session_id = intval($session_id);
+        if (count($lp_ids) > 0) {
+            $condition_session = " AND session_id = $session_id ";
+        } else {
+            $condition_session = " WHERE session_id = $session_id ";
+        }
 
-            $lp_list = $use_max_score = [];
-            while ($row_lp = Database::fetch_array($res_row_lp)) {
-                $lp_list[] = $row_lp['id'];
-                $use_max_score[$row_lp['id']] = $row_lp['use_max_score'];
-            }
+        // Check the real number of LPs corresponding to the filter in the
+        // database (and if no list was given, get them all)
+        if (empty($session_id)) {
+            $sql = "SELECT DISTINCT(id), use_max_score
+                    FROM $lp_table
+                    WHERE 
+                        c_id = $course_id AND 
+                        (session_id = 0 OR session_id IS NULL) $condition_lp ";
+        } else {
+            $sql = "SELECT DISTINCT(id), use_max_score
+                    FROM $lp_table
+                    WHERE c_id = $course_id $condition_lp ";
+        }
 
-            // prepare filter on users
-            if (is_array($student_id)) {
-                array_walk($student_id, 'intval');
-                $condition_user1 = " AND user_id IN (".implode(',', $student_id).") ";
-            } else {
-                $condition_user1 = " AND user_id = $student_id ";
-            }
+        $res_row_lp = Database::query($sql);
+        $count_row_lp = Database::num_rows($res_row_lp);
 
-            if ($count_row_lp > 0 && !empty($student_id)) {
+        $lp_list = $use_max_score = [];
+        while ($row_lp = Database::fetch_array($res_row_lp)) {
+            $lp_list[] = $row_lp['id'];
+            $use_max_score[$row_lp['id']] = $row_lp['use_max_score'];
+        }
+
+        // prepare filter on users
+        if (is_array($student_id)) {
+            array_walk($student_id, 'intval');
+            $condition_user1 = " AND user_id IN (".implode(',', $student_id).") ";
+        } else {
+            $condition_user1 = " AND user_id = $student_id ";
+        }
+
+        if (empty($count_row_lp) || empty($student_id)) {
+            return null;
+        }
+
                 // Getting latest LP result for a student
                 //@todo problem when a  course have more than 1500 users
                 $sql = "SELECT MAX(view_count) as vc, id, progress, lp_id, user_id
@@ -2941,20 +2994,16 @@ class Tracking
                         }
 
                         return $score_of_scorm_calculate;
-                    } else {
+            }
+
                         if ($debug) {
                             var_dump($global_result, $lp_with_quiz);
                         }
 
                         return [$global_result, $lp_with_quiz];
                     }
-                } else {
-                    return '-';
-                }
-            }
-        }
 
-        return null;
+                    return '-';
     }
 
     /**
@@ -5257,8 +5306,8 @@ class Tracking
     {
         $html = '';
         if (isset($course_code)) {
-            $user_id = intval($user_id);
-            $session_id = intval($session_id);
+            $user_id = (int) $user_id;
+            $session_id = (int) $session_id;
             $course = Database::escape_string($course_code);
             $course_info = api_get_course_info($course);
             if (empty($course_info)) {

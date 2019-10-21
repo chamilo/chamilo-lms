@@ -68,12 +68,6 @@ if (!api_is_allowed_to_edit(false, true)) {
 $extend_rights_for_coachs = api_get_setting('extend_rights_for_coach_on_survey');
 
 // Database table definitions
-$table_survey = Database::get_course_table(TABLE_SURVEY);
-$table_survey_question = Database::get_course_table(TABLE_SURVEY_QUESTION);
-$table_course = Database::get_main_table(TABLE_MAIN_COURSE);
-$table_user = Database::get_main_table(TABLE_MAIN_USER);
-
-// Language variables
 if (isset($_GET['search']) && $_GET['search'] == 'advanced') {
     $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'survey/survey_list.php',
@@ -165,7 +159,6 @@ switch ($action) {
         break;
 }
 
-// Header
 Display::display_header($tool_name, 'Survey');
 // Tool introduction
 Display::display_introduction_section('survey', 'left');
@@ -205,6 +198,7 @@ if (!api_is_session_general_coach() || $extend_rights_for_coachs == 'true') {
 echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;search=advanced">'.
     Display::return_icon('search.png', get_lang('Search'), '', ICON_SIZE_MEDIUM).'</a>';
 echo '</div>';
+
 // Load main content
 if (api_is_session_general_coach() && $extend_rights_for_coachs == 'false') {
     SurveyUtil::display_survey_list_for_coach();

@@ -17,13 +17,6 @@ if (!api_is_allowed_to_edit(false, true)) {
     api_not_allowed(true);
 }
 
-// Database table definitions
-$table_survey = Database::get_course_table(TABLE_SURVEY);
-$table_survey_question = Database::get_course_table(TABLE_SURVEY_QUESTION);
-$table_survey_question_option = Database::get_course_table(TABLE_SURVEY_QUESTION_OPTION);
-$table_course = Database::get_main_table(TABLE_MAIN_COURSE);
-$table_user = Database::get_main_table(TABLE_MAIN_USER);
-$table_survey_invitation = Database::get_course_table(TABLE_SURVEY_INVITATION);
 $tool_name = get_lang('SurveyInvitations');
 $courseInfo = api_get_course_info();
 

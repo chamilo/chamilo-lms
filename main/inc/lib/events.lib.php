@@ -1518,6 +1518,8 @@ class Event
     }
 
     /**
+     * Get the last best result from all attempts in exercises per user (out of learning paths).
+     *
      * @param int $user_id
      * @param int $exercise_id
      * @param int $courseId

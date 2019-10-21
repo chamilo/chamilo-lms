@@ -75,7 +75,6 @@ $column_model = [
 ];
 //Autowidth
 $extra_params['autowidth'] = 'true';
-//height auto
 $extra_params['height'] = 'auto';
 
 $diagramLink = '';
@@ -144,8 +143,13 @@ switch ($action) {
         break;
     case 'edit':
         api_protect_admin_script();
+        $id = isset($_GET['id']) ? (int) $_GET['id'] : null;
+        $careerInfo = $career->get($id);
+        if (empty($careerInfo)) {
+            api_not_allowed(true);
+        }
         // Action handling: Editing
-        $url = api_get_self().'?action='.Security::remove_XSS($_GET['action']).'&id='.intval($_GET['id']);
+        $url = api_get_self().'?action=edit&id='.$id;
         $form = $career->return_form($url, 'edit');
 
         // The validation or display
@@ -155,6 +159,11 @@ switch ($action) {
                 $career->update_all_promotion_status_by_career_id($values['id'], $values['status']);
                 $old_status = $career->get_status($values['id']);
                 $res = $career->update($values);
+
+                $values['item_id'] = $values['id'];
+                $sessionFieldValue = new ExtraFieldValue('career');
+                $sessionFieldValue->saveFieldValues($values);
+
                 if ($res) {
                     Display::addFlash(
                         Display::return_message(get_lang('CareerUpdated'), 'confirmation')
@@ -224,7 +233,6 @@ switch ($action) {
         $content = $career->display();
         break;
 }
-
 // The header.
 Display::display_header($tool_name);
 

@@ -2,7 +2,6 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\Skill;
-use Chamilo\UserBundle\Entity\User;
 use Skill as SkillManager;
 
 /**

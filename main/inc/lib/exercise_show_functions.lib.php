@@ -390,7 +390,6 @@ class ExerciseShowFunctions
         echo '<td width="5%">';
         echo Display::return_icon($icon, null, null, ICON_SIZE_TINY);
         echo '</td>';
-
         if ($exercise->showExpectedChoiceColumn()) {
             if ($hide_expected_answer === false) {
                 echo '<td width="5%">';
@@ -413,7 +412,11 @@ class ExerciseShowFunctions
                 $status = Display::label(get_lang('Correct'), 'success');
             }
             echo '<td width="20%">';
-            echo $status;
+            // Show only status for the selected student answer BT#16256
+            if ($studentChoice) {
+                echo $status;
+            }
+
             echo '</td>';
         }
 

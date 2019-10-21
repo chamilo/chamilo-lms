@@ -8,6 +8,11 @@ import Vue from 'vue';
 import {VueConfig} from './VueConfig';
 import Example from './components/Example';
 
+import $ from 'jquery';
+
+window.jQuery = $;
+window.$ = $;
+
 Routing.setRoutingData(routes);
 
 const locale = document.querySelector('html').lang;
@@ -196,7 +201,7 @@ $(function () {
     );
 
     /* Make responsive image maps */
-    $('map').imageMapResize();
+    //$('map').imageMapResize();
 
     jQuery.fn.filterByText = function (textbox) {
         return this.each(function () {

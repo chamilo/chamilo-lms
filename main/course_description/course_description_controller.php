@@ -73,7 +73,7 @@ class CourseDescriptionController
             }
             // Add an escape version for the JS code of delete confirmation
             if ($description) {
-                $data['descriptions'][$id]['title_js'] = addslashes($description['title']);
+                $data['descriptions'][$id]['title_js'] = addslashes(strip_tags($description['title']));
             }
         }
         $actions = null;

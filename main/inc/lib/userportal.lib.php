@@ -419,10 +419,12 @@ class IndexManager
 
         $resCats = Database::query($sqlGetSubCatList);
         $thereIsSubCat = false;
+
+        $htmlTitre = '';
+        $htmlListCat = '';
         if (Database::num_rows($resCats) > 0) {
             $htmlListCat = Display::page_header(get_lang('CatList'));
             $htmlListCat .= '<ul>';
-            $htmlTitre = '';
             while ($catLine = Database::fetch_array($resCats)) {
                 $category_has_open_courses = self::category_has_open_courses($catLine['code']);
                 if ($category_has_open_courses) {

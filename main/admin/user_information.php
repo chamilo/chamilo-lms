@@ -251,26 +251,26 @@ foreach ($data as $label => $item) {
  * Show social activity.
  */
 if (api_get_setting('allow_social_tool') === 'true') {
-    $userObject = api_get_user_entity($user['user_id']);
+    $userObject = api_get_user_entity($userId);
     $data = [];
 
     // Calculate values
     if (api_get_setting('allow_message_tool') === 'true') {
-        $messagesSent = SocialManager::getCountMessagesSent($user['user_id']);
+        $messagesSent = SocialManager::getCountMessagesSent($userId);
         $data[] = [get_lang('MessagesSent'), $messagesSent];
-        $messagesReceived = SocialManager::getCountMessagesReceived($user['user_id']);
+        $messagesReceived = SocialManager::getCountMessagesReceived($userId);
         $data[] = [get_lang('MessagesReceived'), $messagesReceived];
     }
-    $wallMessagesPosted = SocialManager::getCountWallPostedMessages($user['user_id']);
+    $wallMessagesPosted = SocialManager::getCountWallPostedMessages($userId);
     $data[] = [get_lang('WallMessagesPosted'), $wallMessagesPosted];
 
-    $friends = SocialManager::getCountFriends($user['user_id']);
+    $friends = SocialManager::getCountFriends($userId);
     $data[] = [get_lang('Friends'), $friends];
 
-    $countSent = SocialManager::getCountInvitationSent($user['user_id']);
+    $countSent = SocialManager::getCountInvitationSent($userId);
     $data[] = [get_lang('InvitationSent'), $countSent];
 
-    $countReceived = SocialManager::get_message_number_invitation_by_user_id($user['user_id']);
+    $countReceived = SocialManager::get_message_number_invitation_by_user_id($userId);
     $data[] = [get_lang('InvitationReceived'), $countReceived];
 
     $userInfo['social'] = [
@@ -600,7 +600,7 @@ if (isset($_GET['action'])) {
         case 'export':
             Export::arrayToCsv(
                 $csvContent,
-                'user_information_'.$user['user_id']
+                'user_information_'.$userId
             );
             exit;
             break;
@@ -700,9 +700,24 @@ echo $courseInformation;
 echo $urlInformation;
 
 echo Tracking::displayUserSkills(
-    $user['user_id'],
+    $userId,
     0,
     0
 );
+
+if (api_get_configuration_value('allow_career_users')) {
+    $careers = UserManager::getUserCareers($userId);
+    if (!empty($careers)) {
+        echo Display::page_subheader(get_lang('Careers'), null, 'h3', ['class' => 'section-title']);
+        $table = new HTML_Table(['class' => 'data_table']);
+        $table->setHeaderContents(0, 0, get_lang('Career'));
+        $row = 1;
+        foreach ($careers as $carerData) {
+            $table->setCellContents($row, 0, $carerData['name']);
+            $row++;
+        }
+        echo $table->toHtml();
+    }
+}
 
 Display::display_footer();

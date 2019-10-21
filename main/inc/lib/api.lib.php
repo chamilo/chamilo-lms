@@ -284,7 +284,7 @@ define('LOG_USER_DELETE_ACCOUNT_REQUEST', 'user_delete_account_request');
 define('LOG_QUESTION_CREATED', 'question_created');
 define('LOG_QUESTION_UPDATED', 'question_updated');
 
-define('USERNAME_PURIFIER', '/[^0-9A-Za-z_\.]/');
+define('USERNAME_PURIFIER', '/[^0-9A-Za-z_\.-]/');
 
 //used when login_is_email setting is true
 define('USERNAME_PURIFIER_MAIL', '/[^0-9A-Za-z_\.@]/');
@@ -7782,8 +7782,8 @@ function api_set_default_visibility(
         }
 
         // Read the portal and course default visibility
-        if ($tool_id == 'documents') {
-            $visibility = DocumentManager::getDocumentDefaultVisibility($courseCode);
+        if ($tool_id === 'documents') {
+            $visibility = DocumentManager::getDocumentDefaultVisibility($courseInfo);
         }
 
         api_item_property_update(
@@ -8995,7 +8995,28 @@ function api_protect_course_group($tool, $showHeader = true)
 {
     $groupId = api_get_group_id();
     if (!empty($groupId)) {
+        if (api_is_platform_admin()) {
+            return true;
+        }
+
+        if (api_is_allowed_to_edit(false, true, true)) {
+            return true;
+        }
+
         $userId = api_get_user_id();
+        $sessionId = api_get_session_id();
+        if (!empty($sessionId)) {
+            if (api_is_coach($sessionId, api_get_course_int_id())) {
+                return true;
+            }
+
+            if (api_is_drh()) {
+                if (SessionManager::isUserSubscribedAsHRM($sessionId, $userId)) {
+                    return true;
+                }
+            }
+        }
+
         $groupInfo = GroupManager::get_group_properties($groupId);
 
         // Group doesn't exists
@@ -9456,10 +9477,9 @@ function api_set_noreply_and_from_address_to_mailer(PHPMailer $mailer, array $se
     if (!$avoidReplyToAddress) {
         if (
             !empty($replyToAddress) &&
-            isset($platformEmail['SMTP_UNIQUE_REPLY_TO']) && $platformEmail['SMTP_UNIQUE_REPLY_TO'] &&
             PHPMailer::ValidateAddress($replyToAddress['mail'])
         ) {
-            $mailer->AddReplyTo($replyToAddress['email'], $replyToAddress['name']);
+            $mailer->AddReplyTo($replyToAddress['mail'], $replyToAddress['name']);
             $mailer->Sender = $replyToAddress['mail'];
         }
     }

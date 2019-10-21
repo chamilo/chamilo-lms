@@ -2,7 +2,7 @@ oneup_flysystem:
     adapters:
         resource_adapter:
             local:
-                directory: '%kernel.project_dir%/var/upload/resource2'
+                directory: '%kernel.project_dir%/var/upload/resource'
 
     filesystems:
         resources:

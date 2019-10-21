@@ -126,6 +126,14 @@ class AppPlugin
     }
 
     /**
+     * @deprecated
+     */
+    public function get_installed_plugins($fromDatabase = true)
+    {
+        return $this->getInstalledPlugins($fromDatabase);
+    }
+
+    /**
      * @param bool $fromDatabase
      *
      * @return array

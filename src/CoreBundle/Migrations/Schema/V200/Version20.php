@@ -942,6 +942,10 @@ class Version20 extends AbstractMigrationChamilo
             $this->addSql("INSERT INTO settings_options (variable, value, display_text) VALUES ('configure_exercise_visibility_in_course','true','Yes')");
             $this->addSql("INSERT INTO settings_options (variable, value, display_text) VALUES ('configure_exercise_visibility_in_course','false','No')");
         }
+
+        //ALTER TABLE resource_file ADD name VARCHAR(255) NOT NULL, ADD size INT NOT NULL;
+        //ALTER TABLE resource_file_audit ADD name VARCHAR(255) DEFAULT NULL, ADD size INT DEFAULT NULL;
+
     }
 
     /**

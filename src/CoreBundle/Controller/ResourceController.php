@@ -28,6 +28,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Vich\UploaderBundle\Handler\DownloadHandler;
 
 /**
  * Class ResourceController.
@@ -406,7 +407,7 @@ class ResourceController extends BaseController implements CourseControllerInter
      *
      * @return Response
      */
-    public function showAction(Request $request, CDocumentRepository $documentRepo, FilterService $filterService): Response
+    public function showAction(Request $request, CDocumentRepository $documentRepo, DownloadHandler $downloadHandler): Response
     {
         $file = $request->get('file');
         $type = $request->get('type');
@@ -440,9 +441,16 @@ class ResourceController extends BaseController implements CourseControllerInter
         $media = $resourceFile->getMedia();
         $format = MediaProviderInterface::FORMAT_REFERENCE;
 
-        if ($media) {
+        if ($resourceFile) {
             switch ($type) {
                 case 'show':
+                    return $downloadHandler->downloadObject($resourceFile, $fileField = 'file');
+                    $file =  $resourceFile->getFile();
+
+                    var_dump($file);
+
+                    return new BinaryFileResponse($file);
+
                     /** @var ImageProvider $provider */
                     $provider = $this->get('sonata.media.pool')->getProvider($media->getProviderName());
                     $filename = sprintf(

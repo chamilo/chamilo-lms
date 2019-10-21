@@ -6,10 +6,12 @@ namespace Chamilo\CoreBundle\Entity\Resource;
 use Chamilo\MediaBundle\Entity\Media;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
+use Symfony\Component\HttpFoundation\File\File;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 /**
  * @ORM\Entity
- *
+ * @Vich\Uploadable
  * @ORM\Table(name="resource_file")
  */
 class ResourceFile
@@ -27,6 +29,27 @@ class ResourceFile
      * @ORM\OneToOne(targetEntity="Chamilo\MediaBundle\Entity\Media", cascade={"all"})
      */
     protected $media;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     *
+     * @var string
+     */
+    protected $name;
+
+    /**
+     * @ORM\Column(type="integer")
+     *
+     * @var integer
+     *
+     */
+    protected $size;
+
+    /**
+     * @Vich\UploadableField(mapping="resources", fileNameProperty="name", size="size")
+     * @var File
+     */
+    protected $file;
 
 //    /**
 //     * @var string
@@ -363,5 +386,28 @@ class ResourceFile
         $this->id = $id;
 
         return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getFile(): ?File
+    {
+        return $this->file;
+    }
+
+    /**
+     * @param File|\Symfony\Component\HttpFoundation\File\UploadedFile $file
+     *
+     */
+    public function setFile(File $file = null): void
+    {
+        $this->file = $file;
+
+        if (null !== $file) {
+            // It is required that at least one field changes if you are using doctrine
+            // otherwise the event listeners won't be called and the file is lost
+            $this->updatedAt = new \DateTimeImmutable();
+        }
     }
 }

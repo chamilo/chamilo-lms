@@ -12,6 +12,7 @@ use Chamilo\UserBundle\Entity\User;
 use ChamiloSession as Session;
 use Sonata\MediaBundle\Extra\ApiMediaFile;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\HttpFoundation\File\File;
 
 /**
  *  Class DocumentManager
@@ -6360,81 +6361,48 @@ class DocumentManager
 
         $em = Database::getManager();
         $title = $document->getTitle();
-        var_dump($title, $document->getId());
 
         // Only create a ResourceFile and Media if there's a file involved
         if ($fileType === 'file') {
             $mediaManager = Container::$container->get('sonata.media.manager.media');
+            //$mediaManager->create();
+            /** @var League\Flysystem\Adapter\Local  $mediaManager */
+            $mediaManager = Container::$container->get('oneup_flysystem.resources_filesystem');
+            /** @var League\Flysystem\Adapter\Local $mediaManager */
+            //$mediaManager = Container::$container->get('flysystem');
 
-            $resourceFile = $resourceNode->getResourceFile();
-            if (empty($resourceFile)) {
-                /** @var \Chamilo\MediaBundle\Entity\Media $media */
-                $media = $mediaManager->create();
-            } else {
-                // If file already exists then we updated it
-                $media = $resourceFile->getMedia();
-            }
-
-            $media->setName($title);
-
-            $fileName = basename($path);
-            $extension = pathinfo($fileName, PATHINFO_EXTENSION);
-            $media->setContext('default');
-
-            $provider = 'sonata.media.provider.file';
-            $isImage = in_array($extension, ['jpeg', 'jpg', 'gif', 'png']);
-            if ($isImage) {
-                $provider = 'sonata.media.provider.image';
-            }
-
-            $media->setProviderName($provider);
-            $media->setEnabled(true);
-
-            if ($content instanceof UploadedFile) {
-                error_log('UploadedFile');
-                $file = $content;
-                $media->setSize($file->getSize());
-            } else {
-                // $path points to a file in the directory
-                if (file_exists($realPath) && !is_dir($realPath)) {
-                    $media->setSize(filesize($realPath));
-                    if ($isImage) {
-                        $size = getimagesize($realPath);
-                        $media->setWidth($size[0]);
-                        $media->setHeight($size[1]);
-                    }
-                    $file = $realPath;
-                    if ($debug) {
-                        error_log("file exists: $realPath");
-                    }
-                } else {
-                    // We get the content and create a file
-                    $handle = tmpfile();
-                    fwrite($handle, $content);
-                    $file = new ApiMediaFile($handle);
-                    $file->setMimetype($media->getContentType());
-                    if ($debug) {
-                        error_log('We get content and create a file from handle');
-                        error_log('Size: '.$file->getSize());
-                        error_log('Content type: '.$media->getContentType());
-                    }
-                }
-            }
-
-            $media->setBinaryContent($file);
-            $mediaManager->save($media, true);
-
+            //$uploadFile = UploadedFile
             $resourceFile = $resourceNode->getResourceFile();
             if (empty($resourceFile)) {
                 $resourceFile = new ResourceFile();
-                $resourceFile->setMedia($media);
-            } else {
-                $resourceFile->setMedia($media);
             }
+
+            if ($content instanceof UploadedFile) {
+                error_log('UploadedFile');
+                //$file = $content;
+                //$media->setSize($file->getSize());
+            } else {
+                // $path points to a file in the directory
+                if (file_exists($realPath) && !is_dir($realPath)) {
+                    error_log('file_exists');
+                } else {
+                    error_log('Content');
+                    // We get the content and create a file
+                    $handle = tmpfile();
+                    fwrite($handle, $content);
+                    $meta = stream_get_meta_data($handle);
+                    //$file = new ApiMediaFile($handle);
+                    error_log($meta['uri']);
+                    $file = new UploadedFile($meta['uri'], $title, null, null, true);
+                    $resourceFile->setFile($file);
+                }
+            }
+
             $resourceFile->setName($title);
             $em->persist($resourceFile);
             $resourceNode->setResourceFile($resourceFile);
             $em->persist($resourceNode);
+            $em->flush();
         }
 
         // By default visibility is published
@@ -6480,6 +6448,7 @@ class DocumentManager
         $em->flush();
 
         $documentId = $document->getIid();
+
 
         if ($debug) {
             error_log($documentId);

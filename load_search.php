@@ -978,7 +978,9 @@ if (!empty($filterToSend)) {
     $filterToSend = json_encode($filterToSend);
     $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_sessions&_search=true&load_extra_field='.
         $extraFieldListToString.'&_force_search=true&rows=20&page=1&sidx=&sord=asc&filters2='.$filterToSend;
-    $url .= '&lang='.$lang;
+    if (isset($params['search_using_2'])) {
+        $url .= '&lang='.$lang;
+    }
 } else {
     $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_sessions&_search=true&load_extra_field='.
         $extraFieldListToString.'&_force_search=true&rows=20&page=1&sidx=&sord=asc';

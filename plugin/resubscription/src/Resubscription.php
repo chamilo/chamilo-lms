@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Hook\Interfaces\HookPluginInterface;
+
 /**
  * Limit session resubscriptions.
  *

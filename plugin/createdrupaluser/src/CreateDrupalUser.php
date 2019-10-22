@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Hook\Interfaces\HookPluginInterface;
+
 /**
  * Create a user in Drupal website when a user is registered in Chamilo LMS.
  *

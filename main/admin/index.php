@@ -2,6 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Hook\HookAdminBlock;
 use League\Flysystem\Filesystem;
 
 /**
@@ -45,7 +46,8 @@ if (api_is_platform_admin()) {
 $blocks = [];
 
 // Instantiate Hook Event for Admin Block
-$hook = HookAdminBlock::create();
+$hook = Container::$container->get('chamilo_core.hook_factory')->build(HookAdminBlock::class);
+
 if (!empty($hook)) {
     // If not empty, then notify Pre process to Hook Observers for Admin Block
     $hook->setEventData(['blocks' => $blocks]);

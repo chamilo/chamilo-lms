@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Hook\Interfaces\HookPluginInterface;
+
 /**
  * Class AdvancedSubscriptionPlugin
  * This class is used to add an advanced subscription allowing the admin to

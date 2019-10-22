@@ -273,46 +273,6 @@ class ResourceFile
     /**
      * @return string
      */
-    public function getWidth(): string
-    {
-        return $this->width;
-    }
-
-    /**
-     * @param string $width
-     *
-     * @return ResourceFile
-     */
-    public function setWidth(string $width): ResourceFile
-    {
-        $this->width = $width;
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getHeight(): string
-    {
-        return $this->height;
-    }
-
-    /**
-     * @param string $height
-     *
-     * @return ResourceFile
-     */
-    public function setHeight(string $height): ResourceFile
-    {
-        $this->height = $height;
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
     public function getCopyright(): string
     {
         return (string) $this->copyright;
@@ -516,6 +476,38 @@ class ResourceFile
         $this->dimensions = $dimensions;
 
         return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getWidth(): int
+    {
+        $data = $this->getDimensions();
+
+        if ($data) {
+            $data = explode(',', $data);
+
+            return (int) $data[0];
+        }
+
+        return 0;
+    }
+
+    /**
+     * @return int
+     */
+    public function getHeight(): int
+    {
+        $data = $this->getDimensions();
+
+        if ($data) {
+            $data = explode(',', $data);
+
+            return (int) $data[1];
+        }
+
+        return 0;
     }
 
     /**

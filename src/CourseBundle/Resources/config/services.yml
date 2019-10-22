@@ -14,7 +14,7 @@ services:
         autowire: true
         public: true
 
-    Sonata\MediaBundle\Provider\Pool: '@sonata.media.pool'
+    League\Flysystem\MountManager: '@oneup_flysystem.mount_manager'
 
     # Classic entity repositories
     Chamilo\CourseBundle\Repository\:

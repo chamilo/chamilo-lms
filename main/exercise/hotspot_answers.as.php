@@ -60,8 +60,8 @@ if (empty($objQuestion) || empty($objExercise)) {
 
 $em = Database::getManager();
 $picture = $objQuestion->getPicture();
-$pictureWidth = $picture->getResourceNode()->getResourceFile()->getMedia()->getWidth();
-$pictureHeight = $picture->getResourceNode()->getResourceFile()->getMedia()->getHeight();
+$pictureWidth = $picture->getResourceNode()->getResourceFile()->getWidth();
+$pictureHeight = $picture->getResourceNode()->getResourceFile()->getHeight();
 
 $data = [];
 $data['type'] = 'solution';

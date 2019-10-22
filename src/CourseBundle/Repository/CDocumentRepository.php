@@ -12,8 +12,9 @@ use Chamilo\CourseBundle\Entity\CDocument;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
 use Gaufrette\Exception\FileNotFound;
+use League\Flysystem\FilesystemInterface;
+use League\Flysystem\MountManager;
 use Sonata\MediaBundle\Provider\MediaProviderInterface;
-use Sonata\MediaBundle\Provider\Pool;
 
 /**
  * Class CDocumentRepository.
@@ -26,20 +27,19 @@ class CDocumentRepository extends ResourceRepository
     private $repository;
 
     /**
-     * @var Pool
+     * @var FilesystemInterface
      */
-    private $mediaPool;
+    private $fs;
 
     /**
      * CDocumentRepository constructor.
      *
      * @param EntityManager $entityManager
-     * @param Pool          $mediaPool
      */
-    public function __construct(EntityManager $entityManager, Pool $mediaPool)
+    public function __construct(EntityManager $entityManager, MountManager $mountManager)
     {
         $this->repository = $entityManager->getRepository(CDocument::class);
-        $this->mediaPool = $mediaPool;
+        $this->fs = $mountManager->getFilesystem('resources_fs');
         $this->entityManager = $entityManager;
     }
 
@@ -91,6 +91,39 @@ class CDocumentRepository extends ResourceRepository
         }
     }
 
+    public function getDocumentContent($id): string
+    {
+        try {
+            $document = $this->find($id);
+            $resourceNode = $document->getResourceNode();
+            $resourceFile = $resourceNode->getResourceFile();
+            $fileName = $resourceFile->getFile()->getPathname();
+
+            return $this->fs->read($fileName);
+        } catch (\Throwable $exception) {
+            throw new FileNotFound($id);
+        }
+    }
+
+    public function updateDocumentContent(CDocument $document, $content)
+    {
+        try {
+            //$document = $this->find($id);
+            $resourceNode = $document->getResourceNode();
+            $resourceFile = $resourceNode->getResourceFile();
+            $fileName = $resourceFile->getFile()->getPathname();
+
+            $this->fs->update($fileName, $content);
+            $size = $this->fs->getSize($fileName);
+            $document->setSize($size);
+            $this->entityManager->persist($document);
+
+            return true;
+        } catch (\Throwable $exception) {
+            throw new $exception;
+        }
+    }
+
     /**
      * @param CDocument $document
      *
@@ -100,7 +133,7 @@ class CDocumentRepository extends ResourceRepository
     {
         $resourceParent = $document->getResourceNode()->getParent();
 
-        if (!empty($resourceParent)) {
+        if ($resourceParent !== null) {
             $resourceParentId = $resourceParent->getId();
             $criteria = [
                 'resourceNode' => $resourceParentId,

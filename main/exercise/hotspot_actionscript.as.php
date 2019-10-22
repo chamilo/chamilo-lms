@@ -29,8 +29,8 @@ $answer_type = $objQuestion->selectType(); //very important
 $TBL_ANSWERS = Database::get_course_table(TABLE_QUIZ_ANSWER);
 $picture = $objQuestion->getPicture();
 $pictureName = $objQuestion->getPictureFilename();
-$pictureWidth = $picture->getResourceNode()->getResourceFile()->getMedia()->getWidth();
-$pictureHeight = $picture->getResourceNode()->getResourceFile()->getMedia()->getHeight();
+$pictureWidth = $picture->getResourceNode()->getResourceFile()->getWidth();
+$pictureHeight = $picture->getResourceNode()->getResourceFile()->getHeight();
 
 $course_id = api_get_course_int_id();
 

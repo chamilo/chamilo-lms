@@ -266,8 +266,9 @@ if (isset($_POST['comment'])) {
 }
 
 $em = Database::getManager();
+$documentRepository = Container::$container->get('Chamilo\CourseBundle\Repository\CDocumentRepository');
 /** @var CDocument $document */
-$document = $em->getRepository('ChamiloCourseBundle:CDocument')->find($document_data['iid']);
+$document = $documentRepository->find($document_data['iid']);
 
 if ($is_allowed_to_edit) {
     if (isset($_POST['formSent']) && $_POST['formSent'] == 1 && !empty($document_id)) {
@@ -282,20 +283,7 @@ if ($is_allowed_to_edit) {
 
         if ($read_only_flag == 0) {
             if (!empty($content)) {
-                $node = $document->getResourceNode();
-                $file = $node->getResourceFile();
-
-                if ($file) {
-                    $media = $node->getResourceFile()->getMedia();
-                    $provider = Container::$container->get('sonata.media.pool')->getProvider($media->getProviderName());
-                    $reference = $provider->getReferenceFile($media);
-                    //$node->setUpdatedAt(new \DateTime());
-                    $reference->setContent($content);
-                    $media->setSize($reference->getSize());
-                    $em->merge($media);
-                    $em->merge($node);
-                    $em->flush();
-                }
+                $documentRepository->updateDocumentContent($document, $content);
             }
         }
 
@@ -321,10 +309,7 @@ if (in_array($extension, ['html', 'htm'])) {
     $file = $node->getResourceFile();
 
     if ($file) {
-        $media = $node->getResourceFile()->getMedia();
-        $provider = Container::$container->get('sonata.media.pool')->getProvider($media->getProviderName());
-        $reference = $provider->getReferenceFile($media);
-        $content = $reference->getContent();
+        $content = $documentRepository->getDocumentContent($document_data['id']);
     }
 }
 

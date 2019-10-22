@@ -26,8 +26,8 @@ $questionId = isset($_GET['modifyAnswers']) ? (int) $_GET['modifyAnswers'] : 0;
 $objQuestion = Question::read($questionId);
 $picture = $objQuestion->getPicture();
 $pictureName = $objQuestion->getPictureFilename();
-$pictureWidth = $picture->getResourceNode()->getResourceFile()->getMedia()->getWidth();
-$pictureHeight = $picture->getResourceNode()->getResourceFile()->getMedia()->getHeight();
+$pictureWidth = $picture->getResourceNode()->getResourceFile()->getWidth();
+$pictureHeight = $picture->getResourceNode()->getResourceFile()->getHeight();
 
 $data = [];
 $data['type'] = 'admin';

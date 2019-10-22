@@ -457,3 +457,7 @@ services:
 
     Liip\ImagineBundle\Service\FilterService:
         alias: 'liip_imagine.service.filter'
+
+    chamilo_core.hook_factory:
+        class: Chamilo\CoreBundle\Hook\HookFactory
+        public: true

@@ -479,7 +479,7 @@ function handle_uploaded_document(
                     );
 
                     // Display success message to user
-                    if ($output) {
+                    if ($output && $document) {
                         Display::addFlash(
                             Display::return_message(
                                 get_lang('UplUploadSucceeded').'<br />'.

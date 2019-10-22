@@ -8,6 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Symfony\Component\HttpFoundation\File\File;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity
@@ -26,11 +27,9 @@ class ResourceFile
     protected $id;
 
     /**
-     * @ORM\OneToOne(targetEntity="Chamilo\MediaBundle\Entity\Media", cascade={"all"})
-     */
-    protected $media;
-
-    /**
+     *
+     * @Assert\NotBlank()
+     *
      * @ORM\Column(type="string", length=255)
      *
      * @var string
@@ -38,18 +37,67 @@ class ResourceFile
     protected $name;
 
     /**
+     * @var string
+     */
+    protected $description;
+
+    /**
+     * @var bool
+     */
+    protected $enabled = false;
+
+    /**
+     * @var int
+     */
+    protected $width;
+
+    /**
+     * @var int
+     */
+    protected $height;
+
+    /**
+     * @var float
+     */
+    protected $length;
+
+    /**
+     * @var string
+     */
+    protected $copyright;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(type="text", nullable=true)
+     */
+    protected $mimeType;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(type="text", nullable=true)
+     */
+    protected $originalName;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(type="simple_array", nullable=true)
+     */
+    protected $dimensions;
+
+    /**
      * @var int
      *
      * @ORM\Column(type="integer")
-     *
      */
     protected $size;
 
     /**
      * @var File
      *
-     * @Vich\UploadableField(mapping="resources", fileNameProperty="name", size="size")
-     *
+     * @Vich\UploadableField(mapping="resources", fileNameProperty="name", size="size", mimeType="mimeType", originalName="originalName", dimensions="dimensions")
      */
     protected $file;
 
@@ -391,7 +439,87 @@ class ResourceFile
     }
 
     /**
-     * @return mixed
+     * @return string
+     */
+    public function getDescription(): string
+    {
+        return $this->description;
+    }
+
+    /**
+     * @param string $description
+     *
+     * @return ResourceFile
+     */
+    public function setDescription(string $description): ResourceFile
+    {
+        $this->description = $description;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMimeType(): string
+    {
+        return $this->mimeType;
+    }
+
+    /**
+     * @param string $mimeType
+     *
+     * @return ResourceFile
+     */
+    public function setMimeType(string $mimeType): ResourceFile
+    {
+        $this->mimeType = $mimeType;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getOriginalName(): string
+    {
+        return $this->originalName;
+    }
+
+    /**
+     * @param string $originalName
+     *
+     * @return ResourceFile
+     */
+    public function setOriginalName(string $originalName): ResourceFile
+    {
+        $this->originalName = $originalName;
+
+        return $this;
+    }
+
+    /**
+     * @return array
+     */
+    public function getDimensions(): array
+    {
+        return $this->dimensions;
+    }
+
+    /**
+     * @param array $dimensions
+     *
+     * @return ResourceFile
+     */
+    public function setDimensions(array $dimensions): ResourceFile
+    {
+        $this->dimensions = $dimensions;
+
+        return $this;
+    }
+
+    /**
+     * @return File
      */
     public function getFile(): ?File
     {

@@ -10,8 +10,6 @@ use Chamilo\CourseBundle\Entity\CDocument;
 use Chamilo\CourseBundle\Entity\CGroupInfo;
 use Chamilo\UserBundle\Entity\User;
 use ChamiloSession as Session;
-use Sonata\MediaBundle\Extra\ApiMediaFile;
-use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /**
@@ -6365,10 +6363,9 @@ class DocumentManager
         // Only create a ResourceFile and Media if there's a file involved
         if ($fileType === 'file') {
             /** @var League\Flysystem\Adapter\Local $mediaManager */
-            $mediaManager = Container::$container->get('oneup_flysystem.resources_filesystem');
+            //$mediaManager = Container::$container->get('oneup_flysystem.resources_filesystem');
             /** @var League\Flysystem\Adapter\Local $mediaManager */
             //$mediaManager = Container::$container->get('flysystem');
-
             //$uploadFile = UploadedFile
             $resourceFile = $resourceNode->getResourceFile();
             if (empty($resourceFile)) {
@@ -6376,6 +6373,7 @@ class DocumentManager
             }
 
             if ($content instanceof UploadedFile) {
+                $resourceFile->setFile($content);
                 error_log('UploadedFile');
             } else {
                 // $path points to a file in the directory
@@ -6444,7 +6442,6 @@ class DocumentManager
         $em->flush();
 
         $documentId = $document->getIid();
-
 
         if ($debug) {
             error_log($documentId);

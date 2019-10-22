@@ -26,9 +26,14 @@ use Sylius\Component\Resource\ResourceActions;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\ResponseHeaderBag;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Vich\UploaderBundle\Handler\DownloadHandler;
+use Vich\UploaderBundle\Storage\FlysystemStorage;
+use Symfony\Component\HttpFoundation\File\File;
+use Vich\UploaderBundle\Util\Transliterator;
 
 /**
  * Class ResourceController.
@@ -407,8 +412,11 @@ class ResourceController extends BaseController implements CourseControllerInter
      *
      * @return Response
      */
-    public function showAction(Request $request, CDocumentRepository $documentRepo, DownloadHandler $downloadHandler): Response
-    {
+    public function showAction(
+        Request $request,
+        CDocumentRepository $documentRepo,
+        FilterService $filterService
+    ): Response {
         $file = $request->get('file');
         $type = $request->get('type');
         $filter = $request->get('filter'); // see list of filters in config/packages/liip_imagine.yaml
@@ -438,57 +446,78 @@ class ResourceController extends BaseController implements CourseControllerInter
         );
 
         $resourceFile = $resourceNode->getResourceFile();
-        $media = $resourceFile->getMedia();
-        $format = MediaProviderInterface::FORMAT_REFERENCE;
 
-        if ($resourceFile) {
-            switch ($type) {
-                case 'show':
-                    return $downloadHandler->downloadObject($resourceFile, $fileField = 'file');
-                    $file = $resourceFile->getFile();
-
-                    var_dump($file);
-
-                    return new BinaryFileResponse($file);
-
-                    /** @var ImageProvider $provider */
-                    $provider = $this->get('sonata.media.pool')->getProvider($media->getProviderName());
-                    $filename = sprintf(
-                        '%s/%s',
-                        $provider->getFilesystem()->getAdapter()->getDirectory(),
-                        $provider->generatePrivateUrl($media, $format)
-                    );
-
-                    if (!empty($filter)) {
-                        $resourcePath = $filterService->getUrlOfFilteredImage(
-                            $provider->generatePrivateUrl($media, $format),
-                            $filter
-                        );
-                        if ($resourcePath) {
-                            $cacheFolder = '/var/cache/resource/';
-                            $pos = strpos($resourcePath, $cacheFolder);
-                            $cacheValue = substr($resourcePath, $pos + strlen($cacheFolder), strlen($resourcePath));
-                            $cachedFile = $this->get('kernel')->getResourceCacheDir().$cacheValue;
-
-                            if (is_file($cachedFile)) {
-                                $filename = $cachedFile;
-                            }
-                        }
-                    }
-
-                    return new BinaryFileResponse($filename);
-
-                    break;
-                case 'download':
-                    $provider = $this->get('sonata.media.pool')->getProvider($media->getProviderName());
-                    $response = $provider->getDownloadResponse($media, $format, $this->get('sonata.media.pool')->getDownloadMode($media));
-
-                    return $response;
-                    break;
-            }
+        if (!$resourceFile) {
+            throw new NotFoundHttpException();
         }
 
-        throw new NotFoundHttpException();
+        //$media = $resourceFile->getMedia();
+        //$format = MediaProviderInterface::FORMAT_REFERENCE;
+
+        $fileName = $resourceNode->getName();
+        $filePath = $resourceFile->getFile()->getPathname();
+        $mimeType = $resourceFile->getMimeType();
+
+        $fs = $this->get('oneup_flysystem.mount_manager')->getFilesystem('resources_fs');
+
+        $stream = $fs->readStream($filePath);
+        $response = new StreamedResponse(function () use ($stream): void {
+            stream_copy_to_stream($stream, fopen('php://output', 'wb'));
+        });
+
+        switch ($type) {
+            case 'download':
+                $forceDownload = true;
+                //$provider = $this->get('sonata.media.pool')->getProvider($media->getProviderName());
+                //$response = $provider->getDownloadResponse($media, $format, $this->get('sonata.media.pool')->getDownloadMode($media));
+                break;
+            case 'show':
+            default:
+                $forceDownload = false;
+               // $resourceFile = $fs->readStream($resourceFile->getFile()->getPathname());
+                //var_dump($resourceFile->getFile()->getPathname());
+                //var_dump($fs->read($resourceFile->getFile()->getPathname()));
+                // $downloadHandler doesn't work with flysystem:
+                // https://github.com/dustin10/VichUploaderBundle/issues/827
+                //return $downloadHandler->downloadObject($resourceFile, 'file', ResourceFile::class, $name);
+
+                /** @var ImageProvider $provider */
+               /* $provider = $this->get('sonata.media.pool')->getProvider($media->getProviderName());
+                $filename = sprintf(
+                    '%s/%s',
+                    $provider->getFilesystem()->getAdapter()->getDirectory(),
+                    $provider->generatePrivateUrl($media, $format)
+                );
+
+                if (!empty($filter)) {
+                    $resourcePath = $filterService->getUrlOfFilteredImage(
+                        $provider->generatePrivateUrl($media, $format),
+                        $filter
+                    );
+                    if ($resourcePath) {
+                        $cacheFolder = '/var/cache/resource/';
+                        $pos = strpos($resourcePath, $cacheFolder);
+                        $cacheValue = substr($resourcePath, $pos + strlen($cacheFolder), strlen($resourcePath));
+                        $cachedFile = $this->get('kernel')->getResourceCacheDir().$cacheValue;
+
+                        if (is_file($cachedFile)) {
+                            $filename = $cachedFile;
+                        }
+                    }
+                }
+                return new BinaryFileResponse($filename);*/
+                break;
+        }
+
+        $disposition = $response->headers->makeDisposition(
+            $forceDownload ? ResponseHeaderBag::DISPOSITION_ATTACHMENT : ResponseHeaderBag::DISPOSITION_INLINE,
+            Transliterator::transliterate($fileName)
+        );
+        $response->headers->set('Content-Disposition', $disposition);
+        $response->headers->set('Content-Type', $mimeType ?: 'application/octet-stream');
+
+        return $response;
+
         /*
 
         $configuration = $this->requestConfigurationFactory->create($this->metadata, $request);

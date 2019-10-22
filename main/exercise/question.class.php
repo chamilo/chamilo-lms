@@ -1847,14 +1847,15 @@ abstract class Question
                 break;
         }
 
-        echo '<div class="panel panel-default">';
-        echo '<div class="panel-body">';
+        echo '<div class="card">';
+        echo '<div class="card-body">';
         echo '<ul class="question_menu">';
         foreach ($questionTypeList as $i => $type) {
             /** @var Question $type */
             $type = new $type[1]();
             $img = $type->getTypePicture();
             $explanation = get_lang($type->getExplanation());
+
             echo '<li>';
             echo '<div class="icon-image">';
             $icon = '<a href="admin.php?'.api_get_cidreq().'&newQuestion=yes&answerType='.$i.'">'.

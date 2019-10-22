@@ -72,6 +72,8 @@ class CkEditor extends Editor
         $config = $toolbar->getConfig();
         $javascript = $this->toJavascript($config);
 
+        //var_dump($this->getTextareaId());
+
         $html = "<script>
            CKEDITOR.replace('".$this->getTextareaId()."',
                $javascript

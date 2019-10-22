@@ -70,7 +70,8 @@ class EditorController extends BaseController
     /**
      * @Route("/filemanager/{parentId}", methods={"GET"}, name="editor_filemanager")
      *
-     * @param int $parentId
+     * @param int                 $parentId
+     * @param CDocumentRepository $documentRepository
      *
      * @return Response
      */
@@ -116,6 +117,7 @@ class EditorController extends BaseController
             );
 
             $url = $this->generateUrl('editor_filemanager');
+
             $data = DocumentManager::processDocumentAndFolders(
                 $documentAndFolders,
                 $courseInfo,
@@ -152,7 +154,7 @@ class EditorController extends BaseController
 
             $params = [
                 'table' => $table->return_table(),
-                'parent_id' => (int) $oldParentId,
+                'parent_id' => $oldParentId,
                 'allow_course' => true,
             ];
         }

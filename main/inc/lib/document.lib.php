@@ -4913,6 +4913,8 @@ class DocumentManager
             $title = basename($document_data['path']);
         }
 
+        $isAdmin = api_is_platform_admin();
+
         $filetype = $document_data['filetype'];
         $path = $document_data['path'];
         $url_path = urlencode($document_data['path']);
@@ -5010,23 +5012,23 @@ class DocumentManager
         $document_data['file_extension'] = $extension;
 
         if (!$show_as_icon) {
-            if ($filetype == 'folder') {
+            if ($filetype === 'folder') {
                 if ($isAllowedToEdit ||
-                    api_is_platform_admin() ||
+                    $isAdmin ||
                     api_get_setting('students_download_folders') == 'true'
                 ) {
                     // filter: when I am into a shared folder, I can only show "my shared folder" for donwload
                     if (self::is_shared_folder($curdirpath, $sessionId)) {
                         if (preg_match('/shared_folder\/sf_user_'.api_get_user_id().'$/', urldecode($forcedownload_link)) ||
                             preg_match('/shared_folder_session_'.$sessionId.'\/sf_user_'.api_get_user_id().'$/', urldecode($forcedownload_link)) ||
-                            $isAllowedToEdit || api_is_platform_admin()
+                            $isAllowedToEdit || $isAdmin
                         ) {
                             $force_download_html = ($size == 0) ? '' : '<a href="'.$forcedownload_link.'" style="float:right"'.$prevent_multiple_click.'>'.
                                 Display::return_icon($forcedownload_icon, get_lang('Download'), [], ICON_SIZE_SMALL).'</a>';
                         }
                     } elseif (!preg_match('/shared_folder/', urldecode($forcedownload_link)) ||
                         $isAllowedToEdit ||
-                        api_is_platform_admin()
+                        $isAdmin
                     ) {
                         $force_download_html = ($size == 0) ? '' : '<a href="'.$forcedownload_link.'" style="float:right"'.$prevent_multiple_click.'>'.
                             Display::return_icon($forcedownload_icon, get_lang('Download'), [], ICON_SIZE_SMALL).'</a>';
@@ -6229,7 +6231,7 @@ class DocumentManager
             if ($result && Database::num_rows($result)) {
                 $row = Database::fetch_array($result);
 
-                return intval($row[0]);
+                return (int) $row[0];
             }
         }
 
@@ -6379,13 +6381,14 @@ class DocumentManager
                 // $path points to a file in the directory
                 if (file_exists($realPath) && !is_dir($realPath)) {
                     error_log('file_exists');
+                    $file = new UploadedFile($realPath, $title, null, null, true);
+                    $resourceFile->setFile($file);
                 } else {
                     error_log('Content');
                     // We get the content and create a file
                     $handle = tmpfile();
                     fwrite($handle, $content);
                     $meta = stream_get_meta_data($handle);
-                    //$file = new ApiMediaFile($handle);
                     error_log($meta['uri']);
                     $file = new UploadedFile($meta['uri'], $title, null, null, true);
                     $resourceFile->setFile($file);

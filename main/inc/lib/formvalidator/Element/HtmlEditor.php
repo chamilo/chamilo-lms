@@ -36,6 +36,7 @@ class HtmlEditor extends HTML_QuickForm_textarea
 
         parent::__construct($name, $label, $attributes);
         $id = $this->getAttribute('id');
+        //var_dump($id);
         $this->_persistantFreeze = true;
         $this->_type = 'html_editor';
 
@@ -102,6 +103,7 @@ class HtmlEditor extends HTML_QuickForm_textarea
             $value = $this->getCleanValue();
 
             $this->editor->setName($this->getName());
+            $this->editor->setTextareaId($this->getAttribute('id'));
             if ($style === true) {
                 $result = $this->editor->createHtmlStyle($value);
             } else {

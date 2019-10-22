@@ -8055,6 +8055,7 @@ class Exercise
         ])
         ) {
             $hide = (int) $this->getPageConfigurationAttribute('hide_expected_answer');
+
             if ($hide === 1) {
                 return false;
             }

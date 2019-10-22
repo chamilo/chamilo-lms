@@ -6,8 +6,10 @@ use Chamilo\CoreBundle\Entity\Session as SessionEntity;
 use Chamilo\CoreBundle\Entity\SettingsCurrent;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CItemProperty;
+use Chamilo\ThemeBundle\Controller\ExceptionController;
 use Chamilo\UserBundle\Entity\User;
 use ChamiloSession as Session;
+use Symfony\Component\Debug\Exception\FlattenException;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
@@ -688,11 +690,6 @@ define('TOOL_STUDENT_VIEW', 'toolstudentview');
 define('TOOL_ADMIN_VISIBLE', 'tooladminvisible');
 
 /**
- * Inclusion of internationalization libraries.
- */
-require_once __DIR__.'/internationalization.lib.php';
-
-/**
  * Returns a path to a certain resource within the Chamilo area, specifyed through a parameter.
  * Also, this function provides conversion between path types, in this case the input path points inside the Chamilo area too.
  *
@@ -735,6 +732,7 @@ function api_get_path($path = '', $configuration = [])
     }
 
     $course_folder = 'courses/';
+    $code_folder = 'main/';
     $root_sys = Container::getRootDir();
     $root_web = '';
     // If no $root_web has been set so far *and* no custom config has been passed to the function
@@ -777,6 +775,7 @@ function api_get_path($path = '', $configuration = [])
             [],
             UrlGeneratorInterface::ABSOLUTE_URL
         );
+
         // Fix for php files inside main
         if (strpos($root_web, 'main') !== false) {
             $pos = (int) strpos($root_web, 'main');
@@ -789,8 +788,11 @@ function api_get_path($path = '', $configuration = [])
             $root_web = substr($root_web, 0, $pos);
         }
 
+
         $root_web = urldecode($root_web);
     }
+
+    $root_web = str_replace('public/../', '', $root_web);
 
     if (isset($configuration['multiple_access_urls']) &&
         $configuration['multiple_access_urls']
@@ -864,20 +866,10 @@ function api_get_path($path = '', $configuration = [])
 
     // Web server base and system server base.
     if (!array_key_exists($root_web, $isInitialized)) {
-        // process absolute global roots
-        $code_folder = 'main';
-
-        // Support for the installation process.
-        // Developers might use the function api_get_path() directly or indirectly (this is difficult to be traced),
-        // at the moment when configuration has not been created yet. This is why this function should be
-        // upgraded to return correct results in this case.
-
         // Dealing with trailing slashes.
         $rootWebWithSlash = api_add_trailing_slash($root_web);
         $root_sys = api_add_trailing_slash($root_sys);
         $root_rel = api_add_trailing_slash($root_rel);
-        $code_folder = api_add_trailing_slash($code_folder);
-        $course_folder = api_add_trailing_slash($course_folder);
 
         // Initialization of a table that contains common-purpose paths.
         $paths[$root_web][REL_PATH] = $root_rel;
@@ -960,30 +952,6 @@ function api_get_path($path = '', $configuration = [])
     // Let us check remove them from all types of paths.
     if (($pos = strpos($path, '?')) !== false) {
         $path = substr($path, 0, $pos);
-    }
-
-    // Detection of the input path type. Conversion to semi-absolute type ( /chamilo/main/inc/.... ).
-
-    if (preg_match(VALID_WEB_PATH, $path)) {
-        // A special case: When a URL points to the document download script directly, without
-        // mod-rewrite translation, we have to translate it into an "ordinary" web path.
-        // For example:
-        // http://localhost/chamilo/main/document/download.php?doc_url=/image.png&cDir=/
-        // becomes
-        // http://localhost/chamilo/courses/TEST/document/image.png
-        // TEST is a course directory name, so called "system course code".
-        if (strpos($path, 'download.php') !== false) { // Fast detection first.
-            $path = urldecode($path);
-            if (preg_match('/(.*)main\/document\/download.php\?doc_url=\/(.*)&cDir=\/(.*)?/', $path, $matches)) {
-                $sys_course_code =
-                    isset($_SESSION['_course']['sysCode'])  // User is inside a course?
-                        ? $_SESSION['_course']['sysCode']   // Yes, then use course's directory name.
-                        : '{SYS_COURSE_CODE}'; // No, then use a fake code, it may be processed later.
-                $path = $matches[1].'courses/'.$sys_course_code.'/document/'.str_replace('//', '/', $matches[3].'/'.$matches[2]);
-            }
-        }
-        // Replacement of the present web server base with a slash '/'.
-        $path = preg_replace(VALID_WEB_SERVER_BASE, '/', $path);
     }
 
     // Path now is semi-absolute. It is convenient at this moment repeated slashes to be removed.
@@ -3788,7 +3756,7 @@ function api_not_allowed(
     $message = null,
     $responseCode = 0
 ) {
-    $debug = api_get_setting('server_type') == 'test';
+    $debug = api_get_setting('server_type') === 'test';
 
     // Default code is 403 forbidden
     $responseCode = empty($responseCode) ? 403 : $responseCode;
@@ -3801,8 +3769,8 @@ function api_not_allowed(
     // src/ThemeBundle/Resources/views/Exception/error404.html.twig
     $exception = new Exception($message);
     $request = Container::getRequest();
-    $exception = \Symfony\Component\Debug\Exception\FlattenException::create($exception, $responseCode);
-    $controller = new \Chamilo\ThemeBundle\Controller\ExceptionController(Container::getTwig(), $debug);
+    $exception = FlattenException::create($exception, $responseCode);
+    $controller = new ExceptionController(Container::getTwig(), $debug);
     $response = $controller->showAction($request, $exception);
     $response->send();
     exit;

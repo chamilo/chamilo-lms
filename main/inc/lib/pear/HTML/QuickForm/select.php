@@ -88,6 +88,11 @@ class HTML_QuickForm_select extends HTML_QuickForm_element
                 $attributes['data-live-search'] = '';
             }
 
+            if (isset($attributes['extra_class']) && $attributes['extra_class']) {
+                $attributes['class'] .= ' '.$attributes['extra_class'];
+                unset($attributes['extra_class']);
+            }
+
             if (isset($attributes['placeholder'])) {
                 $addBlank =  $attributes['placeholder'];
             }
@@ -413,7 +418,6 @@ class HTML_QuickForm_select extends HTML_QuickForm_element
             $strValues = is_array($this->_values)? array_map('strval', $this->_values): array();
 
             foreach ($this->_options as $option) {
-
                 if (!empty($strValues) && in_array($option['attr']['value'], $strValues, true)) {
                     $option['attr']['selected'] = 'selected';
                 }

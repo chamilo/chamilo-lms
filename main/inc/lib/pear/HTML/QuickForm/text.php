@@ -113,7 +113,6 @@ class HTML_QuickForm_text extends HTML_QuickForm_input
 
         switch ($layout) {
             case FormValidator::LAYOUT_INLINE:
-                //<div class="input-group {error_class}">
                 return '                
                     <label class="sr-only"  {label-for} >
                         <!-- BEGIN required --><span class="form_required">*</span><!-- END required -->

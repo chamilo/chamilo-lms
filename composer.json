@@ -27,8 +27,7 @@
             "main/inc/lib",
             "plugin",
             "main/install",
-            "main/survey",
-            "main/inc/lib/hook"
+            "main/survey"
         ]
     },
     "require": {

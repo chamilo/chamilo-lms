@@ -17,6 +17,7 @@ use Chamilo\CourseBundle\Controller\CourseControllerTrait;
 use Chamilo\CourseBundle\Entity\CDocument;
 use Chamilo\CourseBundle\Repository\CDocumentRepository;
 use FOS\RestBundle\View\View;
+use League\Flysystem\MountManager;
 use Liip\ImagineBundle\Service\FilterService;
 use Sonata\MediaBundle\Provider\ImageProvider;
 use Sonata\MediaBundle\Provider\MediaProviderInterface;
@@ -415,7 +416,8 @@ class ResourceController extends BaseController implements CourseControllerInter
     public function showAction(
         Request $request,
         CDocumentRepository $documentRepo,
-        FilterService $filterService
+        FilterService $filterService,
+        MountManager $mountManager
     ): Response {
         $file = $request->get('file');
         $type = $request->get('type');
@@ -453,11 +455,10 @@ class ResourceController extends BaseController implements CourseControllerInter
 
         //$media = $resourceFile->getMedia();
         //$format = MediaProviderInterface::FORMAT_REFERENCE;
-
         $fileName = $resourceNode->getName();
         $filePath = $resourceFile->getFile()->getPathname();
         $mimeType = $resourceFile->getMimeType();
-
+        // @todo use $documentRepo
         $fs = $this->get('oneup_flysystem.mount_manager')->getFilesystem('resources_fs');
 
         $stream = $fs->readStream($filePath);

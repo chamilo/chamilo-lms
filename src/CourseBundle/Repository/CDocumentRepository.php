@@ -91,6 +91,11 @@ class CDocumentRepository extends ResourceRepository
         }
     }
 
+    /**
+     * @param int $id
+     *
+     * @return string
+     */
     public function getDocumentContent($id): string
     {
         try {
@@ -105,10 +110,15 @@ class CDocumentRepository extends ResourceRepository
         }
     }
 
+    /**
+     * @param CDocument $document
+     * @param string    $content
+     *
+     * @return bool
+     */
     public function updateDocumentContent(CDocument $document, $content)
     {
         try {
-            //$document = $this->find($id);
             $resourceNode = $document->getResourceNode();
             $resourceFile = $resourceNode->getResourceFile();
             $fileName = $resourceFile->getFile()->getPathname();
@@ -120,7 +130,6 @@ class CDocumentRepository extends ResourceRepository
 
             return true;
         } catch (\Throwable $exception) {
-            throw new $exception;
         }
     }
 

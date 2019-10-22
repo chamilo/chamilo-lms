@@ -281,10 +281,8 @@ if ($is_allowed_to_edit) {
         $read_only_flag = isset($_POST['readonly']) ? $_POST['readonly'] : null;
         $read_only_flag = empty($read_only_flag) ? 0 : 1;
 
-        if ($read_only_flag == 0) {
-            if (!empty($content)) {
-                $documentRepository->updateDocumentContent($document, $content);
-            }
+        if ($read_only_flag == 0 && !empty($content)) {
+            $documentRepository->updateDocumentContent($document, $content);
         }
 
         header('Location: document.php?id='.$document_data['parent_id'].'&'.api_get_cidreq().($is_certificate_mode ? '&curdirpath=/certificates&selectcat=1' : ''));
@@ -303,10 +301,11 @@ $extension = $path_info['extension'] ?? '';
 
 $em = Database::getManager();
 /** @var \Chamilo\CoreBundle\Entity\Resource\ResourceNode $node */
-$node = $em->getRepository('ChamiloCoreBundle:Resource\ResourceNode')->find($document_data['resource_node_id']);
+//$node = $em->getRepository('ChamiloCoreBundle:Resource\ResourceNode')->find($document_data['resource_node_id']);
+$node = $document->getResourceNode();
 
 if (in_array($extension, ['html', 'htm'])) {
-    $file = $node->getResourceFile();
+    $file = $document->getResourceNode()->getResourceFile();
 
     if ($file) {
         $content = $documentRepository->getDocumentContent($document_data['id']);

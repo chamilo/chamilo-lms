@@ -27,12 +27,11 @@ class ResourceFile
     protected $id;
 
     /**
-     *
      * @Assert\NotBlank()
      *
-     * @ORM\Column(type="string", length=255)
-     *
      * @var string
+     *
+     * @ORM\Column(type="string", length=255)
      */
     protected $name;
 

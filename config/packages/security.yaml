@@ -81,8 +81,8 @@ security:
                     facebook: "/login/check-facebook"
                     google: "/login/check-google"
                     github: "/login/check-github"
-                login_path: /login_oauth
-                failure_path: /login_oauth
+                login_path: /login
+                failure_path: /login
                 use_forward: false
                 oauth_user_provider:
                     service: chamilo_user.security.user_provider

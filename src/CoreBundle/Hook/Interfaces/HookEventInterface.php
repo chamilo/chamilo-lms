@@ -84,4 +84,11 @@ interface HookEventInterface
      * @return HookEventInterface
      */
     public function detachAll(): HookEventInterface;
+
+    /**
+     * Get the entity manager used.
+     *
+     * @return EntityManager|null
+     */
+    public function getEntityManager(): ? EntityManager;
 }

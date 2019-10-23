@@ -48,7 +48,7 @@ abstract class HookEvent implements HookEventInterface
     /**
      * @return mixed
      */
-    public function getEntityManager()
+    public function getEntityManager(): EntityManager
     {
         return $this->entityManager;
     }

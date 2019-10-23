@@ -35,12 +35,14 @@ class Question
 
     /**
      * @Gedmo\SortablePosition
-     * @ORM\Column(name="rank", type="integer")
+     *
+     * @ORM\Column(name="`rank`", type="integer")
      */
     protected $rank;
 
     /**
      * @Gedmo\Timestampable(on="create")
+     *
      * @ORM\Column(name="created_at", type="datetime")
      */
     protected $createdAt;

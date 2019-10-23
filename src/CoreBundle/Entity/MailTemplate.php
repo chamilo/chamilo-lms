@@ -70,7 +70,7 @@ class MailTemplate
     /**
      * @var bool
      *
-     * @ORM\Column(name="system", type="integer", nullable=false, options={"default":0})
+     * @ORM\Column(name="`system`", type="integer", nullable=false, options={"default":0})
      */
     protected $system;
 }

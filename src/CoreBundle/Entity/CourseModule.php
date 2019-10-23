@@ -46,14 +46,14 @@ class CourseModule
     /**
      * @var int
      *
-     * @ORM\Column(name="row", type="integer", nullable=false)
+     * @ORM\Column(name="`row`", type="integer", nullable=false)
      */
     protected $row;
 
     /**
      * @var int
      *
-     * @ORM\Column(name="column", type="integer", nullable=false)
+     * @ORM\Column(name="`column`", type="integer", nullable=false)
      */
     protected $column;
 

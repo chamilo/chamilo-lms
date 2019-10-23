@@ -36,7 +36,8 @@ class Category
 
     /**
      * @Gedmo\SortablePosition
-     * @ORM\Column(name="rank", type="integer")
+     *
+     * @ORM\Column(name="`rank`", type="integer")
      */
     protected $rank;
 
@@ -47,6 +48,7 @@ class Category
 
     /**
      * @Gedmo\Timestampable(on="create")
+     *
      * @ORM\Column(name="created_at", type="datetime")
      */
     protected $createdAt;

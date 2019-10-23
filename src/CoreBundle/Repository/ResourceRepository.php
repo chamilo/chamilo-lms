@@ -120,7 +120,6 @@ class ResourceRepository
      * @param Course       $course
      * @param Session      $session
      * @param CGroupInfo   $group
-     *
      */
     public function addResourceToCourse(ResourceNode $resourceNode, $visibility, $course, $session, $group): void
     {
@@ -172,7 +171,7 @@ class ResourceRepository
      *
      * @return ResourceLink
      */
-    private function addResourceToCourse2(ResourceNode $resourceNode, Course $course, ResourceRight $right): ResourceLink
+    public function addResourceToCourse2(ResourceNode $resourceNode, Course $course, ResourceRight $right): ResourceLink
     {
         $resourceLink = new ResourceLink();
         $resourceLink
@@ -191,20 +190,21 @@ class ResourceRepository
      *
      * @return ResourceLink
      */
-    private function addResourceToUser(ResourceNode $resourceNode, User $toUser): ResourceLink
+    public function addResourceToUser(ResourceNode $resourceNode, User $toUser): ResourceLink
     {
         $resourceLink = $this->addResourceNodeToUser($resourceNode, $toUser);
         $this->getEntityManager()->persist($resourceLink);
 
         return $resourceLink;
     }
+
     /**
      * @param ResourceNode $resourceNode
      * @param User         $toUser
      *
      * @return ResourceLink
      */
-    private function addResourceNodeToUser(ResourceNode $resourceNode, User $toUser): ResourceLink
+    public function addResourceNodeToUser(ResourceNode $resourceNode, User $toUser): ResourceLink
     {
         $resourceLink = new ResourceLink();
         $resourceLink
@@ -222,7 +222,7 @@ class ResourceRepository
      *
      * @return ResourceLink
      */
-    private function addResourceToSession(
+    public function addResourceToSession(
         ResourceNode $resourceNode,
         Course $course,
         Session $session,
@@ -247,7 +247,7 @@ class ResourceRepository
      *
      * @return ResourceLink
      */
-    private function addResourceToCourseGroup(
+    public function addResourceToCourseGroup(
         ResourceNode $resourceNode,
         Course $course,
         CGroupInfo $group,
@@ -271,7 +271,7 @@ class ResourceRepository
      *
      * @return ResourceLink
      */
-    private function addResourceToGroup(
+    public function addResourceToGroup(
         ResourceNode $resourceNode,
         Usergroup $group,
         ResourceRight $right

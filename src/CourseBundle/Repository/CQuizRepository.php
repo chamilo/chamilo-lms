@@ -3,15 +3,10 @@
 
 namespace Chamilo\CourseBundle\Repository;
 
-use Chamilo\CoreBundle\Entity\Resource\ResourceLink;
-use Chamilo\CoreBundle\Entity\Resource\ResourceNode;
-use Chamilo\CoreBundle\Entity\Resource\ResourceRight;
 use Chamilo\CoreBundle\Repository\ResourceRepository;
-use Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter;
 use Chamilo\CourseBundle\Entity\CQuiz;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
-use Gaufrette\Exception\FileNotFound;
 use League\Flysystem\FilesystemInterface;
 use League\Flysystem\MountManager;
 

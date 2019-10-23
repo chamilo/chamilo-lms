@@ -39,10 +39,9 @@ define('FORM_FIELD_DISPLAY_LENGTH', 40);
 define('DATABASE_FORM_FIELD_DISPLAY_LENGTH', 25);
 define('MAX_FORM_FIELD_LENGTH', 80);
 
-require_once '../inc/lib/api.lib.php';
-require_once '../inc/lib/text.lib.php';
+require_once __DIR__.'/../../public/legacy.php';
 
-api_check_php_version('../inc/');
+api_check_php_version();
 ob_implicit_flush(true);
 
 // Defaults settings
@@ -59,7 +58,6 @@ putenv('APP_DEBUG=1');
 
 session_start();
 
-require_once __DIR__.'/../../public/legacy.php';
 require_once 'install.lib.php';
 
 

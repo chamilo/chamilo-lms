@@ -330,7 +330,6 @@ class Container
         return self::$container->get('Chamilo\CourseBundle\Repository\CDocumentRepository');
     }
 
-
     /**
      * @return CQuizRepository
      */
@@ -340,7 +339,7 @@ class Container
     }
 
     /**
-     * @param UserManager
+     * @param $manager UserManager
      */
     public static function setUserManager($manager)
     {
@@ -356,7 +355,7 @@ class Container
     }
 
     /**
-     * @param UserManager
+     * @param $manager UserManager
      */
     public static function setSiteManager($manager)
     {

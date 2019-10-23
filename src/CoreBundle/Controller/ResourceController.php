@@ -20,20 +20,15 @@ use FOS\RestBundle\View\View;
 use League\Flysystem\MountManager;
 use Liip\ImagineBundle\Service\FilterService;
 use Sonata\MediaBundle\Provider\ImageProvider;
-use Sonata\MediaBundle\Provider\MediaProviderInterface;
 use Sylius\Bundle\ResourceBundle\Event\ResourceControllerEvent;
 use Sylius\Component\Resource\Exception\UpdateHandlingException;
 use Sylius\Component\Resource\ResourceActions;
-use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Vich\UploaderBundle\Handler\DownloadHandler;
-use Vich\UploaderBundle\Storage\FlysystemStorage;
-use Symfony\Component\HttpFoundation\File\File;
 use Vich\UploaderBundle\Util\Transliterator;
 
 /**

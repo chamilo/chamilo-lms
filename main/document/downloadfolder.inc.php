@@ -4,8 +4,6 @@
 use Chamilo\CoreBundle\Entity\Resource\ResourceLink;
 use Chamilo\CoreBundle\Framework\Container;
 use ChamiloSession as Session;
-use ZipStream\Option\Archive;
-use ZipStream\ZipStream;
 
 /**
  * Functions and main code for the download folder feature.

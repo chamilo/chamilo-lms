@@ -36,5 +36,4 @@ interface ResourceInterface
      * @return string
      */
     public function getToolName(): string;
-    //"getName()", "name()", "isName()", "hasName()", "__get()"
 }

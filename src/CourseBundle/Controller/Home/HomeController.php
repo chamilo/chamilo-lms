@@ -620,7 +620,7 @@ class HomeController extends ToolBaseController
                     $sessionData = Session::read($session_key);
                     if (!isset($sessionData)) {
                         //redirecting to the Exercise
-                        $url = api_get_path(WEB_CODE_PATH).'exercise/exercice.php?'.api_get_cidreq().'&id_session='.$session_id;
+                        $url = api_get_path(WEB_CODE_PATH).'exercise/exercise.php?'.api_get_cidreq().'&id_session='.$session_id;
                         $_SESSION[$session_key] = true;
 
                         header("Location: $url");

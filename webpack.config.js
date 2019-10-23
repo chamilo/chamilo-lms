@@ -12,6 +12,8 @@ Encore
     .addEntry('app', './assets/js/app.js')
     .addEntry('bootstrap', './assets/js/bootstrap.js')
 
+    .addEntry('exercise', './assets/js/exercise.js')
+
     .addEntry('free-jqgrid', './assets/js/free-jqgrid.js')
 
     .addStyleEntry('css/app', './assets/css/app.scss')

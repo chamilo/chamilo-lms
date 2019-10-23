@@ -666,7 +666,7 @@ if ($is_allowedToEdit || $is_tutor) {
         return "<span title=\""+tabLoginx[0]+rowObject[2]+tabLoginx[1]+"\">"+cellvalue+"</span>";
     }';
 }
-// Autowidth
+
 $extra_params['autowidth'] = 'true';
 $extra_params['height'] = 'auto';
 $extra_params['gridComplete'] = "
@@ -687,10 +687,10 @@ if (typeof defaultGroupId !== 'undefined') {
     defaultGroupId = Cookies.get('default_group_".$exercise_id."');
     $('#gs_group_name').val(defaultGroupId);    
 }
- 
+
 if (typeof defaultGroupId !== 'undefined') {
     var posted_data = $(\"#results\").jqGrid('getGridParam', 'postData');
-    var extraFilter = ',{\"field\":\"group_id\",\"op\":\"eq\",\"data\":\"'+ defaultGroupId +'\"}]}';        
+    var extraFilter = ',{\"field\":\"group_id\",\"op\":\"eq\",\"data\":\"'+ defaultGroupId +'\"}]}';       
     var filters = posted_data.filters;        
     var stringObj = new String(filters);    
     stringObj.replace(']}', extraFilter);         

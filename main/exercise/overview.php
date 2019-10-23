@@ -62,14 +62,15 @@ if ($objExercise->expired_time != 0 && !empty($clock_expired_time)) {
     $time_control = true;
 }
 
+$htmlHeadXtra[] = api_get_build_js('exercise.js');
 if ($time_control) {
     // Get time left for expiring time
     $time_left = api_strtotime($clock_expired_time, 'UTC') - time();
-    $htmlHeadXtra[] = api_get_css(api_get_path(WEB_LIBRARY_PATH).'javascript/epiclock/stylesheet/jquery.epiclock.css');
+    /*$htmlHeadXtra[] = api_get_css(api_get_path(WEB_LIBRARY_PATH).'javascript/epiclock/stylesheet/jquery.epiclock.css');
     $htmlHeadXtra[] = api_get_css(api_get_path(WEB_LIBRARY_PATH).'javascript/epiclock/renderers/minute/epiclock.minute.css');
     $htmlHeadXtra[] = api_get_js('epiclock/javascript/jquery.dateformat.min.js');
     $htmlHeadXtra[] = api_get_js('epiclock/javascript/jquery.epiclock.min.js');
-    $htmlHeadXtra[] = api_get_js('epiclock/renderers/minute/epiclock.minute.js');
+    $htmlHeadXtra[] = api_get_js('epiclock/renderers/minute/epiclock.minute.js');*/
     $htmlHeadXtra[] = $objExercise->showTimeControlJS($time_left);
 }
 

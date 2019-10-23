@@ -7175,6 +7175,11 @@ function api_get_js($file)
     return '<script type="text/javascript" src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/'.$file.'"></script>'."\n";
 }
 
+function api_get_build_js($file)
+{
+    return '<script type="text/javascript" src="'.api_get_path(WEB_PUBLIC_PATH).'build/'.$file.'"></script>'."\n";
+}
+
 /**
  * Returns the <script> HTML tag.
  *

@@ -974,13 +974,13 @@ abstract class Question
             $this->saveCategory($categoryId);
 
             if (!empty($exerciseId)) {
-                api_item_property_update(
+                /*api_item_property_update(
                     $this->course,
                     TOOL_QUIZ,
                     $id,
                     'QuizQuestionUpdated',
                     api_get_user_id()
-                );
+                );*/
             }
             if (api_get_setting('search_enabled') === 'true') {
                 $this->search_engine_edit($exerciseId);
@@ -1855,7 +1855,6 @@ abstract class Question
             $type = new $type[1]();
             $img = $type->getTypePicture();
             $explanation = get_lang($type->getExplanation());
-
             echo '<li>';
             echo '<div class="icon-image">';
             $icon = '<a href="admin.php?'.api_get_cidreq().'&newQuestion=yes&answerType='.$i.'">'.

@@ -1949,6 +1949,11 @@ class Tracking
         // protect data
         $student_id = (int) $student_id;
         $session_id = (int) $session_id;
+
+        if (empty($courseInfo) || empty($student_id)) {
+            return false;
+        }
+
         $courseId = $courseInfo['real_id'];
 
         $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_COURSE_ACCESS);

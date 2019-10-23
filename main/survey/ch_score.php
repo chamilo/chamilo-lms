@@ -8,7 +8,7 @@ class ch_score extends survey_question
 {
     /**
      * @param array $survey_data
-     * @param $form_content
+     * @param array $formData
      */
     public function createForm($survey_data, $formData)
     {

@@ -4630,7 +4630,7 @@ class SessionManager
     /**
      * Get the number of sessions.
      *
-     * @param  int $access_url_id ID of the URL we want to filter on (optional)
+     * @param int $access_url_id ID of the URL we want to filter on (optional)
      *
      * @return int Number of sessions
      */

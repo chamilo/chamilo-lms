@@ -564,7 +564,6 @@ class CoursesAndSessionsCatalog
      * @param bool   $getCount
      *
      * @return array|\Doctrine\ORM\Query The session list
-     *
      */
     public static function browseSessions($date = null, $limit = [], $returnQueryBuilder = false, $getCount = false)
     {

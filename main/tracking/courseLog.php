@@ -653,7 +653,6 @@ if ($export_csv) {
     array_unshift($csvContentInSession, $csv_headers);
 
     if ($sessionId) {
-        $sessionData = [];
         $sessionInfo = api_get_session_info($sessionId);
         $sessionDates = SessionManager::parseSessionDates($sessionInfo);
 

@@ -82,8 +82,6 @@ class ch_personality extends survey_question
                 $count++;
             }
         }
-        // The buttons for adding or removing
-        //$this->html .= parent :: add_remove_buttons($form_content);
     }
 
     /**

@@ -16,6 +16,7 @@ if (!isset($_GET['course'])) {
 require_once __DIR__.'/../inc/global.inc.php';
 
 api_block_anonymous_users();
+
 $htmlHeadXtra[] = '<script type="text/javascript" src="'.api_get_path(WEB_PUBLIC_PATH).'assets/jquery.easy-pie-chart/dist/jquery.easypiechart.js"></script>';
 
 $export = isset($_GET['export']) ? $_GET['export'] : false;
@@ -545,7 +546,7 @@ $courses_in_session = [];
 
 // See #4676
 $drh_can_access_all_courses = false;
-if (api_is_drh() || api_is_platform_admin() || api_is_student_boss()) {
+if (api_is_drh() || api_is_platform_admin() || api_is_student_boss() || api_is_session_admin()) {
     $drh_can_access_all_courses = true;
 }
 

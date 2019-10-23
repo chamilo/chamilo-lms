@@ -19,9 +19,7 @@ class CheckLoginCredentialsHook extends HookEvent implements CheckLoginCredentia
      */
     protected function __construct(EntityManager $entityManager)
     {
-        $this->entityManager = $entityManager;
-
-        parent::__construct('CheckLoginCredentialsHook');
+        parent::__construct('CheckLoginCredentialsHook', $entityManager);
     }
 
     /**

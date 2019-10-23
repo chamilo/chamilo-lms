@@ -5,6 +5,7 @@ namespace Chamilo\CoreBundle\Hook;
 
 use Chamilo\CoreBundle\Hook\Interfaces\HookUpdateUserEventInterface;
 use Chamilo\CoreBundle\Hook\Interfaces\HookUpdateUserObserverInterface;
+use Doctrine\ORM\EntityManager;
 
 /**
  * Class HookUpdateUser.
@@ -13,10 +14,12 @@ class HookUpdateUser extends HookEvent implements HookUpdateUserEventInterface
 {
     /**
      * HookUpdateUser constructor.
+     *
+     * @param EntityManager $entityManager
      */
-    public function __construct()
+    public function __construct(EntityManager $entityManager)
     {
-        parent::__construct('HookUpdateUser');
+        parent::__construct('HookUpdateUser', $entityManager);
     }
 
     /**

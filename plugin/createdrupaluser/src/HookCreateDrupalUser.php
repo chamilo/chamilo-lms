@@ -1,6 +1,10 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Hook\HookObserver;
+use Chamilo\CoreBundle\Hook\Interfaces\HookCreateUserEventInterface;
+use Chamilo\CoreBundle\Hook\Interfaces\HookCreateUserObserverInterface;
+
 /**
  * Class HookCreateDrupalUser
  * Hook to create an user in Drupal website.
@@ -26,6 +30,10 @@ class HookCreateDrupalUser extends HookObserver implements HookCreateUserObserve
      * Create a Drupal user when the Chamilo user is registered.
      *
      * @param HookCreateUserEventInterface $hook The hook
+     *
+     * @throws SoapFault
+     *
+     * @return bool
      */
     public function hookCreateUser(HookCreateUserEventInterface $hook)
     {

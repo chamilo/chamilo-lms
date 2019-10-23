@@ -1,6 +1,11 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Hook\HookAdminBlock;
+use Chamilo\CoreBundle\Hook\HookNotificationContent;
+use Chamilo\CoreBundle\Hook\HookNotificationTitle;
+use Chamilo\CoreBundle\Hook\HookWSRegistration;
 use Chamilo\CoreBundle\Hook\Interfaces\HookPluginInterface;
 
 /**
@@ -886,10 +891,12 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
     public function installHook()
     {
         $hookObserver = HookAdvancedSubscription::create();
-        HookAdminBlock::create()->attach($hookObserver);
-        HookWSRegistration::create()->attach($hookObserver);
-        HookNotificationContent::create()->attach($hookObserver);
-        HookNotificationTitle::create()->attach($hookObserver);
+
+        $hookFactory = Container::$container->get('chamilo_core.hook_factory');
+        $hookFactory->build(HookAdminBlock::class)->attach($hookObserver);
+        $hookFactory->build(HookWSRegistration::class)->attach($hookObserver);
+        $hookFactory->build(HookNotificationContent::class)->attach($hookObserver);
+        $hookFactory->build(HookNotificationTitle::class)->attach($hookObserver);
     }
 
     /**

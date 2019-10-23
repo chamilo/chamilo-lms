@@ -9,6 +9,7 @@ namespace Chamilo\CoreBundle\Hook;
 
 use Chamilo\CoreBundle\Hook\Interfaces\HookWSRegistrationEventInterface;
 use Chamilo\CoreBundle\Hook\Interfaces\HookWSRegistrationObserverInterface;
+use Doctrine\ORM\EntityManager;
 
 /**
  * Class HookWSRegistration.
@@ -21,10 +22,12 @@ class HookWSRegistration extends HookEvent implements HookWSRegistrationEventInt
 {
     /**
      * HookWSRegistration constructor.
+     *
+     * @param EntityManager $entityManager
      */
-    protected function __construct()
+    protected function __construct(EntityManager $entityManager)
     {
-        parent::__construct('HookWSRegistration');
+        parent::__construct('HookWSRegistration', $entityManager);
     }
 
     /**

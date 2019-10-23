@@ -5,6 +5,7 @@ namespace Chamilo\CoreBundle\Hook;
 
 use Chamilo\CoreBundle\Hook\Interfaces\HookMyStudentsQuizTrackingEventInterface;
 use Chamilo\CoreBundle\Hook\Interfaces\HookMyStudentsQuizTrackingObserverInterface;
+use Doctrine\ORM\EntityManager;
 
 /**
  * Class HookMyStudentsQuizTracking.
@@ -14,11 +15,11 @@ class HookMyStudentsQuizTracking extends HookEvent implements HookMyStudentsQuiz
     /**
      * HookMyStudentsQuizTracking constructor.
      *
-     * @throws Exception
+     * @param EntityManager $entityManager
      */
-    protected function __construct()
+    protected function __construct(EntityManager $entityManager)
     {
-        parent::__construct('HookMyStudentsQuizTracking');
+        parent::__construct('HookMyStudentsQuizTracking', $entityManager);
     }
 
     /**

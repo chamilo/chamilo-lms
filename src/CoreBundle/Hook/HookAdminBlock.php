@@ -28,9 +28,7 @@ class HookAdminBlock extends HookEvent implements HookAdminBlockEventInterface
      */
     protected function __construct(EntityManager $entityManager)
     {
-        $this->entityManager = $entityManager;
-
-        parent::__construct('HookAdminBlock');
+        parent::__construct('HookAdminBlock', $entityManager);
     }
 
     /**

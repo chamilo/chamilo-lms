@@ -4,6 +4,7 @@
 namespace Chamilo\CoreBundle\Hook;
 
 use Chamilo\CoreBundle\Hook\Interfaces\HookCreateUserEventInterface;
+use Doctrine\ORM\EntityManager;
 
 /**
  * Class HookCreateUser.
@@ -14,10 +15,12 @@ class HookCreateUser extends HookEvent implements HookCreateUserEventInterface
 {
     /**
      * Constructor.
+     *
+     * @param EntityManager $entityManager
      */
-    protected function __construct()
+    protected function __construct(EntityManager $entityManager)
     {
-        parent::__construct('HookCreateUser');
+        parent::__construct('HookCreateUser', $entityManager);
     }
 
     /**

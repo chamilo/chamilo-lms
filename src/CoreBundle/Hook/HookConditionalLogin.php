@@ -4,6 +4,7 @@
 namespace Chamilo\CoreBundle\Hook;
 
 use Chamilo\CoreBundle\Hook\Interfaces\HookConditionalLoginEventInterface;
+use Doctrine\ORM\EntityManager;
 
 /**
  * Class HookConditionalLogin.
@@ -15,11 +16,11 @@ class HookConditionalLogin extends HookEvent implements HookConditionalLoginEven
     /**
      * HookConditionalLogin constructor.
      *
-     * @throws Exception
+     * @param EntityManager $entityManager
      */
-    protected function __construct()
+    protected function __construct(EntityManager $entityManager)
     {
-        parent::__construct('HookConditionalLogin');
+        parent::__construct('HookConditionalLogin', $entityManager);
     }
 
     /**

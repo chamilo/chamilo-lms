@@ -4,6 +4,7 @@
 namespace Chamilo\CoreBundle\Hook;
 
 use Chamilo\CoreBundle\Hook\Interfaces\HookCreateCourseEventInterface;
+use Doctrine\ORM\EntityManager;
 
 /**
  * Class HookCreateCourse.
@@ -13,11 +14,11 @@ class HookCreateCourse extends HookEvent implements HookCreateCourseEventInterfa
     /**
      * HookCreateCourse constructor.
      *
-     * @throws Exception
+     * @param EntityManager $entityManager
      */
-    protected function __construct()
+    protected function __construct(EntityManager $entityManager)
     {
-        parent::__construct('HookCreateCourse');
+        parent::__construct('HookCreateCourse', $entityManager);
     }
 
     /**

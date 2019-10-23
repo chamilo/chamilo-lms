@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Hook\HookCreateUser;
 use Chamilo\CoreBundle\Hook\Interfaces\HookPluginInterface;
 
 /**
@@ -65,7 +67,8 @@ class CreateDrupalUser extends Plugin implements HookPluginInterface
     {
         /** @var HookCreateDrupalUser $observer */
         $observer = HookCreateDrupalUser::create();
-        HookCreateUser::create()->attach($observer);
+
+        Container::$container->get('chamilo_core.hook_factory')->build(HookCreateUser::class)->attach($observer);
     }
 
     /**
@@ -75,7 +78,8 @@ class CreateDrupalUser extends Plugin implements HookPluginInterface
     {
         /** @var HookCreateDrupalUser $observer */
         $observer = HookCreateDrupalUser::create();
-        $event = HookCreateUser::create();
+
+        $event = Container::$container->get('chamilo_core.hook_factory')->build(HookCreateUser::class);
 
         if ($event) {
             $event->detach($observer);

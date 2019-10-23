@@ -9,6 +9,7 @@
 namespace Chamilo\CoreBundle\Hook;
 
 use Chamilo\CoreBundle\Hook\Interfaces\HookNotificationTitleEventInterface;
+use Doctrine\ORM\EntityManager;
 
 /**
  * Class HookNotificationTitle.
@@ -17,10 +18,12 @@ class HookNotificationTitle extends HookEvent implements HookNotificationTitleEv
 {
     /**
      * Construct.
+     *
+     * @param EntityManager $entityManager
      */
-    protected function __construct()
+    protected function __construct(EntityManager $entityManager)
     {
-        parent::__construct('HookNotificationTitle');
+        parent::__construct('HookNotificationTitle', $entityManager);
     }
 
     /**

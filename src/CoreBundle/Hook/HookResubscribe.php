@@ -5,6 +5,7 @@ namespace Chamilo\CoreBundle\Hook;
 
 use Chamilo\CoreBundle\Hook\Interfaces\HookResubscribeEventInterface;
 use Chamilo\CoreBundle\Hook\Interfaces\HookResubscribeObserverInterface;
+use Doctrine\ORM\EntityManager;
 
 /**
  * Class HookResubscribe.
@@ -15,10 +16,12 @@ class HookResubscribe extends HookEvent implements HookResubscribeEventInterface
 {
     /**
      * Constructor.
+     *
+     * @param EntityManager $entityManager
      */
-    protected function __construct()
+    protected function __construct(EntityManager $entityManager)
     {
-        parent::__construct('HookResubscribe');
+        parent::__construct('HookResubscribe', $entityManager);
     }
 
     /**

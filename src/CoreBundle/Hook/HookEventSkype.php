@@ -5,20 +5,21 @@ namespace Chamilo\CoreBundle\Hook;
 
 use Chamilo\CoreBundle\Hook\Interfaces\HookSkypeEventInterface;
 use Chamilo\CoreBundle\Hook\Interfaces\HookSkypeObserverInterface;
+use Doctrine\ORM\EntityManager;
 
 /**
  * Class HookEventSkype.
- *
- * @var \SplObjectStorage
  */
 class HookEventSkype extends HookEvent implements HookSkypeEventInterface
 {
     /**
      * Constructor.
+     *
+     * @param EntityManager $entityManager
      */
-    protected function __construct()
+    protected function __construct(EntityManager $entityManager)
     {
-        parent::__construct('HookEventSkype');
+        parent::__construct('HookEventSkype', $entityManager);
     }
 
     /**

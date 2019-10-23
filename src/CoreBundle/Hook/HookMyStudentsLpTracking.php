@@ -4,6 +4,7 @@
 namespace Chamilo\CoreBundle\Hook;
 
 use Chamilo\CoreBundle\Hook\Interfaces\HookMyStudentsLpTrackingEventInterface;
+use Doctrine\ORM\EntityManager;
 
 /**
  * Class HookMyStudentsLpTracking.
@@ -13,11 +14,11 @@ class HookMyStudentsLpTracking extends HookEvent implements HookMyStudentsLpTrac
     /**
      * HookMyStudentsLpTracking constructor.
      *
-     * @throws Exception
+     * @param EntityManager $entityManager
      */
-    protected function __construct()
+    protected function __construct(EntityManager $entityManager)
     {
-        parent::__construct('HookMyStudentsLpTracking');
+        parent::__construct('HookMyStudentsLpTracking', $entityManager);
     }
 
     /**

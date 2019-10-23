@@ -4,6 +4,7 @@
 namespace Chamilo\CoreBundle\Hook;
 
 use Chamilo\CoreBundle\Hook\Interfaces\HookNotificationContentEventInterface;
+use Doctrine\ORM\EntityManager;
 
 /**
  * Class HookNotificationContent
@@ -15,10 +16,12 @@ class HookNotificationContent extends HookEvent implements HookNotificationConte
 {
     /**
      * Construct.
+     *
+     * @param EntityManager $entityManager
      */
-    protected function __construct()
+    protected function __construct(EntityManager $entityManager)
     {
-        parent::__construct('HookNotificationContent');
+        parent::__construct('HookNotificationContent', $entityManager);
     }
 
     /**

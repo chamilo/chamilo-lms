@@ -32,12 +32,13 @@ abstract class HookEvent implements HookEventInterface
     /**
      * Construct Method.
      *
-     * @param string $eventName
-     *
-     * @throws Exception
+     * @param string        $eventName
+     * @param EntityManager $entityManager
      */
-    protected function __construct($eventName)
+    protected function __construct($eventName, EntityManager $entityManager)
     {
+        $this->entityManager = $entityManager;
+
         $this->observers = new \SplObjectStorage();
         $this->eventName = $eventName;
         $this->eventData = [];
@@ -92,14 +93,14 @@ abstract class HookEvent implements HookEventInterface
 
         if ($result) {
             return $result;
-        } else {
-            try {
-                $class = get_called_class();
+        }
 
-                return new $class($entityManager);
-            } catch (Exception $e) {
-                return null;
-            }
+        try {
+            $class = get_called_class();
+
+            return new $class($entityManager);
+        } catch (Exception $e) {
+            return null;
         }
     }
 

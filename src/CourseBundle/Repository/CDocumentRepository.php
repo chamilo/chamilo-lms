@@ -34,6 +34,7 @@ class CDocumentRepository extends ResourceRepository
      * CDocumentRepository constructor.
      *
      * @param EntityManager $entityManager
+     * @param MountManager  $mountManager
      */
     public function __construct(EntityManager $entityManager, MountManager $mountManager)
     {

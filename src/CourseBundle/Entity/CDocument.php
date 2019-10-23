@@ -358,7 +358,7 @@ class CDocument extends AbstractResource implements ResourceInterface
     }
 
     /**
-     * Visiblity types ResourceLink::VISIBILITY_DELETED.
+     * Visibility types ResourceLink::VISIBILITY_DELETED.
      *
      * @return int
      */
@@ -367,7 +367,10 @@ class CDocument extends AbstractResource implements ResourceInterface
         return $this->getCourseSessionResourceLink()->getVisibility();
     }
 
-    public function isVisible()
+    /**
+     * @return bool
+     */
+    public function isVisible(): bool
     {
         return $this->getVisibility() === ResourceLink::VISIBILITY_PUBLISHED;
     }

@@ -19,11 +19,12 @@ services:
     # Classic entity repositories
     Chamilo\CourseBundle\Repository\:
         resource: ../../Repository
-        exclude: '../../Repository/{CDocumentRepository.php}'
+        exclude: '../../Repository/{CDocumentRepository.php|CQuizRepository.php}'
         tags: ['doctrine.repository_service']
 
     # Entity repository as a service
     Chamilo\CourseBundle\Repository\CDocumentRepository: ~
+    Chamilo\CourseBundle\Repository\CQuizRepository: ~
 
     # Managers
     chamilo_course.entity.manager.group_manager:

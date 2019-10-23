@@ -5,6 +5,7 @@ namespace Chamilo\CoreBundle\Framework;
 
 use Chamilo\CoreBundle\Component\Editor\Editor;
 use Chamilo\CourseBundle\Repository\CDocumentRepository;
+use Chamilo\CourseBundle\Repository\CQuizRepository;
 use Chamilo\PageBundle\Entity\Page;
 use Chamilo\SettingsBundle\Manager\SettingsManager;
 use Sonata\PageBundle\Entity\SiteManager;
@@ -327,6 +328,15 @@ class Container
     public static function getDocumentRepository()
     {
         return self::$container->get('Chamilo\CourseBundle\Repository\CDocumentRepository');
+    }
+
+
+    /**
+     * @return CQuizRepository
+     */
+    public static function getExerciseRepository()
+    {
+        return self::$container->get('Chamilo\CourseBundle\Repository\CQuizRepository');
     }
 
     /**

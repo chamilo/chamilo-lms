@@ -3,6 +3,9 @@
 
 namespace Chamilo\CourseBundle\Entity;
 
+use Chamilo\CoreBundle\Entity\Resource\AbstractResource;
+use Chamilo\CoreBundle\Entity\Resource\ResourceInterface;
+use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -17,7 +20,7 @@ use Doctrine\ORM\Mapping as ORM;
  * )
  * @ORM\Entity
  */
-class CQuiz
+class CQuiz extends AbstractResource implements ResourceInterface
 {
     /**
      * @var int
@@ -926,5 +929,45 @@ class CQuiz
         $this->iid = $iid;
 
         return $this;
+    }
+
+    /**
+     * @ORM\PostPersist()
+     *
+     * @param LifecycleEventArgs $args
+     */
+    public function postPersist(LifecycleEventArgs $args)
+    {
+        // Update id with iid value
+        $em = $args->getEntityManager();
+        $this->setId($this->iid);
+        $em->persist($this);
+        $em->flush();
+    }
+
+    /**
+     * Resource identifier.
+     *
+     * @return int
+     */
+    public function getResourceIdentifier(): int
+    {
+        return $this->getIid();
+    }
+
+    /**
+     * @return string
+     */
+    public function getResourceName(): string
+    {
+        return $this->getTitle();
+    }
+
+    /**
+     * @return string
+     */
+    public function getToolName(): string
+    {
+        return 'quiz';
     }
 }

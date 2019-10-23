@@ -3,6 +3,9 @@
 
 namespace Chamilo\CourseBundle\Entity;
 
+use Chamilo\CoreBundle\Entity\Resource\AbstractResource;
+use Chamilo\CoreBundle\Entity\Resource\ResourceInterface;
+use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -16,7 +19,7 @@ use Doctrine\ORM\Mapping as ORM;
  * )
  * @ORM\Entity
  */
-class CQuizQuestionCategory
+class CQuizQuestionCategory extends AbstractResource implements ResourceInterface
 {
     /**
      * @var int
@@ -60,6 +63,14 @@ class CQuizQuestionCategory
      * @ORM\JoinColumn(name="session_id", referencedColumnName="id", nullable=true)
      */
     protected $session;
+
+    /**
+     * @return int
+     */
+    public function getIid()
+    {
+        return $this->iid;
+    }
 
     /**
      * Set title.
@@ -155,5 +166,45 @@ class CQuizQuestionCategory
     public function getCId()
     {
         return $this->cId;
+    }
+
+    /**
+     * @ORM\PostPersist()
+     *
+     * @param LifecycleEventArgs $args
+     */
+    public function postPersist(LifecycleEventArgs $args)
+    {
+        // Update id with iid value
+        $em = $args->getEntityManager();
+        $this->setId($this->iid);
+        $em->persist($this);
+        $em->flush();
+    }
+
+    /**
+     * Resource identifier.
+     *
+     * @return int
+     */
+    public function getResourceIdentifier(): int
+    {
+        return $this->getIid();
+    }
+
+    /**
+     * @return string
+     */
+    public function getResourceName(): string
+    {
+        return $this->getTitle();
+    }
+
+    /**
+     * @return string
+     */
+    public function getToolName(): string
+    {
+        return 'exercise_category';
     }
 }

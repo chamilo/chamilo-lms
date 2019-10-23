@@ -11,6 +11,7 @@ use Chamilo\CoreBundle\Entity\Resource\ResourceRight;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\Tool;
 use Chamilo\CoreBundle\Entity\Usergroup;
+use Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter;
 use Chamilo\CourseBundle\Entity\CGroupInfo;
 use Chamilo\UserBundle\Entity\User;
 use Doctrine\ORM\EntityManager;
@@ -50,12 +51,14 @@ class ResourceRepository
         User $creator,
         AbstractResource $parent = null
     ): ResourceNode {
+        $em = $this->getEntityManager();
         $resourceNode = new ResourceNode();
 
-        $tool = $this->getTool($resource->getToolName());
-        $resourceType = $this->getEntityManager()->getRepository('ChamiloCoreBundle:Resource\ResourceType')->findOneBy(
+        //$tool = $this->getTool($resource->getToolName());
+        $resourceType = $em->getRepository('ChamiloCoreBundle:Resource\ResourceType')->findOneBy(
             ['name' => $resource->getToolName()]
         );
+
         $resourceNode
             ->setName($resource->getResourceName())
             ->setCreator($creator)
@@ -65,14 +68,12 @@ class ResourceRepository
             $resourceNode->setParent($parent->getResourceNode());
         }
 
-        $this->getEntityManager()->persist($resourceNode);
-        $this->getEntityManager()->flush();
+        $resource->setResourceNode($resourceNode);
+        $em->persist($resourceNode);
+        $em->persist($resource);
+        $em->flush();
 
         return $resourceNode;
-    }
-
-    public function addResourceMedia(ResourceNode $resourceNode, $file)
-    {
     }
 
     /**
@@ -80,7 +81,7 @@ class ResourceRepository
      *
      * @return ResourceLink
      */
-    public function addResourceOnlyToMe(ResourceNode $resourceNode): ResourceLink
+    public function addResourceToMe(ResourceNode $resourceNode): ResourceLink
     {
         $resourceLink = new ResourceLink();
         $resourceLink
@@ -114,13 +115,64 @@ class ResourceRepository
     }
 
     /**
+     * @param ResourceNode $resourceNode
+     * @param int          $visibility
+     * @param Course       $course
+     * @param Session      $session
+     * @param CGroupInfo   $group
+     *
+     */
+    public function addResourceToCourse(ResourceNode $resourceNode, $visibility, $course, $session, $group): void
+    {
+        $visibility = (int) $visibility;
+        if (empty($visibility)) {
+            $visibility = ResourceLink::VISIBILITY_PUBLISHED;
+        }
+
+        $link = new ResourceLink();
+        $link
+            ->setCourse($course)
+            ->setSession($session)
+            ->setGroup($group)
+            //->setUser($toUser)
+            ->setResourceNode($resourceNode)
+            ->setVisibility($visibility)
+        ;
+
+        $rights = [];
+        switch ($visibility) {
+            case ResourceLink::VISIBILITY_PENDING:
+            case ResourceLink::VISIBILITY_DRAFT:
+                $editorMask = ResourceNodeVoter::getEditorMask();
+                $resourceRight = new ResourceRight();
+                $resourceRight
+                    ->setMask($editorMask)
+                    ->setRole(ResourceNodeVoter::ROLE_CURRENT_COURSE_TEACHER)
+                ;
+                $rights[] = $resourceRight;
+                break;
+        }
+
+        if (!empty($rights)) {
+            foreach ($rights as $right) {
+                $link->addResourceRight($right);
+            }
+        }
+
+        $em = $this->getEntityManager();
+        $em->persist($link);
+        //$em->persist($document);
+        $em->flush();
+    }
+
+    /**
      * @param ResourceNode  $resourceNode
      * @param Course        $course
      * @param ResourceRight $right
      *
      * @return ResourceLink
      */
-    public function addResourceToCourse(ResourceNode $resourceNode, Course $course, ResourceRight $right): ResourceLink
+    private function addResourceToCourse2(ResourceNode $resourceNode, Course $course, ResourceRight $right): ResourceLink
     {
         $resourceLink = new ResourceLink();
         $resourceLink
@@ -139,39 +191,20 @@ class ResourceRepository
      *
      * @return ResourceLink
      */
-    public function addResourceToUser(ResourceNode $resourceNode, User $toUser): ResourceLink
+    private function addResourceToUser(ResourceNode $resourceNode, User $toUser): ResourceLink
     {
         $resourceLink = $this->addResourceNodeToUser($resourceNode, $toUser);
         $this->getEntityManager()->persist($resourceLink);
 
         return $resourceLink;
     }
-
-    /**
-     * @param ResourceNode $resourceNode
-     * @param array        $userList     User id list
-     */
-    public function addResourceToUserList(ResourceNode $resourceNode, array $userList)
-    {
-        $em = $this->getEntityManager();
-
-        if (!empty($userList)) {
-            foreach ($userList as $userId) {
-                $toUser = $em->getRepository('ChamiloUserBundle:User')->find($userId);
-
-                $resourceLink = $this->addResourceNodeToUser($resourceNode, $toUser);
-                $em->persist($resourceLink);
-            }
-        }
-    }
-
     /**
      * @param ResourceNode $resourceNode
      * @param User         $toUser
      *
      * @return ResourceLink
      */
-    public function addResourceNodeToUser(ResourceNode $resourceNode, User $toUser): ResourceLink
+    private function addResourceNodeToUser(ResourceNode $resourceNode, User $toUser): ResourceLink
     {
         $resourceLink = new ResourceLink();
         $resourceLink
@@ -189,7 +222,7 @@ class ResourceRepository
      *
      * @return ResourceLink
      */
-    public function addResourceToSession(
+    private function addResourceToSession(
         ResourceNode $resourceNode,
         Course $course,
         Session $session,
@@ -214,7 +247,7 @@ class ResourceRepository
      *
      * @return ResourceLink
      */
-    public function addResourceToCourseGroup(
+    private function addResourceToCourseGroup(
         ResourceNode $resourceNode,
         Course $course,
         CGroupInfo $group,
@@ -238,7 +271,7 @@ class ResourceRepository
      *
      * @return ResourceLink
      */
-    public function addResourceToGroup(
+    private function addResourceToGroup(
         ResourceNode $resourceNode,
         Usergroup $group,
         ResourceRight $right
@@ -250,6 +283,24 @@ class ResourceRepository
             ->addResourceRight($right);
 
         return $resourceLink;
+    }
+
+    /**
+     * @param ResourceNode $resourceNode
+     * @param array        $userList     User id list
+     */
+    private function addResourceToUserList(ResourceNode $resourceNode, array $userList)
+    {
+        $em = $this->getEntityManager();
+
+        if (!empty($userList)) {
+            foreach ($userList as $userId) {
+                $toUser = $em->getRepository('ChamiloUserBundle:User')->find($userId);
+
+                $resourceLink = $this->addResourceNodeToUser($resourceNode, $toUser);
+                $em->persist($resourceLink);
+            }
+        }
     }
 
     /**

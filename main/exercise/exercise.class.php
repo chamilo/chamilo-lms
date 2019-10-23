@@ -2,7 +2,9 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\GradebookLink;
+use Chamilo\CoreBundle\Entity\Resource\ResourceLink;
 use Chamilo\CoreBundle\Entity\TrackEHotspot;
+use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CExerciseCategory;
 use ChamiloSession as Session;
 use Doctrine\DBAL\Types\Type;
@@ -1493,11 +1495,9 @@ class Exercise
     /**
      * updates the exercise in the data base.
      *
-     * @param string $type_e
-     *
      * @author Olivier Brouckaert
      */
-    public function save($type_e = '')
+    public function save()
     {
         $_course = $this->course;
         $TBL_EXERCISES = Database::get_course_table(TABLE_QUIZ_TEST);
@@ -1528,6 +1528,8 @@ class Exercise
         }
         $expired_time = (int) $this->expired_time;
 
+        $repo = Container::getExerciseRepository();
+
         // Exercise already exists
         if ($id) {
             // we prepare date in the database using the api_get_utc_datetime() function
@@ -1546,53 +1548,50 @@ class Exercise
                 'description' => $description,
             ];
 
-            $paramsExtra = [];
-            if ($type_e != 'simple') {
-                $paramsExtra = [
-                    'sound' => $sound,
-                    'type' => $type,
-                    'random' => $random,
-                    'random_answers' => $random_answers,
-                    'active' => $active,
-                    'feedback_type' => $feedback_type,
-                    'start_time' => $start_time,
-                    'end_time' => $end_time,
-                    'max_attempt' => $attempts,
-                    'expired_time' => $expired_time,
-                    'propagate_neg' => $propagate_neg,
-                    'save_correct_answers' => $saveCorrectAnswers,
-                    'review_answers' => $review_answers,
-                    'random_by_category' => $randomByCat,
-                    'text_when_finished' => $text_when_finished,
-                    'display_category_name' => $display_category_name,
-                    'pass_percentage' => $pass_percentage,
-                    'results_disabled' => $results_disabled,
-                    'question_selection_type' => $this->getQuestionSelectionType(),
-                    'hide_question_title' => $this->getHideQuestionTitle(),
-                ];
+            $paramsExtra = [
+                'sound' => $sound,
+                'type' => $type,
+                'random' => $random,
+                'random_answers' => $random_answers,
+                'active' => $active,
+                'feedback_type' => $feedback_type,
+                'start_time' => $start_time,
+                'end_time' => $end_time,
+                'max_attempt' => $attempts,
+                'expired_time' => $expired_time,
+                'propagate_neg' => $propagate_neg,
+                'save_correct_answers' => $saveCorrectAnswers,
+                'review_answers' => $review_answers,
+                'random_by_category' => $randomByCat,
+                'text_when_finished' => $text_when_finished,
+                'display_category_name' => $display_category_name,
+                'pass_percentage' => $pass_percentage,
+                'results_disabled' => $results_disabled,
+                'question_selection_type' => $this->getQuestionSelectionType(),
+                'hide_question_title' => $this->getHideQuestionTitle(),
+            ];
 
-                $allow = api_get_configuration_value('allow_quiz_show_previous_button_setting');
-                if ($allow === true) {
-                    $paramsExtra['show_previous_button'] = $this->showPreviousButton();
-                }
+            $allow = api_get_configuration_value('allow_quiz_show_previous_button_setting');
+            if ($allow === true) {
+                $paramsExtra['show_previous_button'] = $this->showPreviousButton();
+            }
 
-                $allow = api_get_configuration_value('allow_exercise_categories');
-                if ($allow === true) {
-                    if (!empty($this->getExerciseCategoryId())) {
-                        $paramsExtra['exercise_category_id'] = $this->getExerciseCategoryId();
-                    }
+            $allow = api_get_configuration_value('allow_exercise_categories');
+            if ($allow === true) {
+                if (!empty($this->getExerciseCategoryId())) {
+                    $paramsExtra['exercise_category_id'] = $this->getExerciseCategoryId();
                 }
+            }
 
-                $allow = api_get_configuration_value('allow_notification_setting_per_exercise');
-                if ($allow === true) {
-                    $notifications = $this->getNotifications();
-                    $notifications = implode(',', $notifications);
-                    $paramsExtra['notifications'] = $notifications;
-                }
+            $allow = api_get_configuration_value('allow_notification_setting_per_exercise');
+            if ($allow === true) {
+                $notifications = $this->getNotifications();
+                $notifications = implode(',', $notifications);
+                $paramsExtra['notifications'] = $notifications;
+            }
 
-                if (!empty($this->pageResultConfiguration)) {
-                    $paramsExtra['page_result_configuration'] = $this->pageResultConfiguration;
-                }
+            if (!empty($this->pageResultConfiguration)) {
+                $paramsExtra['page_result_configuration'] = $this->pageResultConfiguration;
             }
 
             $params = array_merge($params, $paramsExtra);
@@ -1603,14 +1602,11 @@ class Exercise
                 ['c_id = ? AND id = ?' => [$this->course_id, $id]]
             );
 
-            // update into the item_property table
-            api_item_property_update(
-                $_course,
-                TOOL_QUIZ,
-                $id,
-                'QuizUpdated',
-                api_get_user_id()
-            );
+            $exerciseEntity = $repo->find($id);
+            $node = $exerciseEntity->getResourceNode();
+            $node->setName($exercise);
+            $repo->getEntityManager()->merge($node);
+            $repo->getEntityManager()->flush();
 
             if (api_get_setting('search_enabled') == 'true') {
                 $this->search_engine_edit();
@@ -1694,6 +1690,16 @@ class Exercise
                         SET question_selection_type= ".$this->getQuestionSelectionType()."
                         WHERE id = ".$this->id." AND c_id = ".$this->course_id;
                 Database::query($sql);
+
+                $exercise = $repo->find($this->id);
+                $node = $repo->addResourceNode($exercise, api_get_user_entity(api_get_user_id()));
+                $repo->addResourceToCourse(
+                    $node,
+                    ResourceLink::VISIBILITY_PUBLISHED,
+                    api_get_course_entity(),
+                    api_get_session_entity(),
+                    api_get_group_entity()
+                );
 
                 // insert into the item_property table
                 api_item_property_update(
@@ -2567,11 +2573,10 @@ class Exercise
      * function which process the creation of exercises.
      *
      * @param FormValidator $form
-     * @param string
      *
      * @return int c_quiz.iid
      */
-    public function processCreation($form, $type = '')
+    public function processCreation($form)
     {
         $this->updateTitle(self::format_title_variable($form->getSubmitValue('exerciseTitle')));
         $this->updateDescription($form->getSubmitValue('exerciseDescription'));
@@ -2655,7 +2660,7 @@ class Exercise
             }
         }
 
-        $iId = $this->save($type);
+        $iId = $this->save();
         if (!empty($iId)) {
             $values = $form->getSubmitValues();
             $values['item_id'] = $iId;

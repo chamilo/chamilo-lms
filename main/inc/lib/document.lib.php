@@ -6213,6 +6213,7 @@ class DocumentManager
      */
     public static function addFileToDocument(CDocument $document, $path, $realPath, $content, $visibility, $group)
     {
+        $repo = Container::getDocumentRepository();
         $debug = true;
         $fileType = $document->getFiletype();
         $resourceNode = $document->getResourceNode();
@@ -6224,13 +6225,8 @@ class DocumentManager
         $em = Database::getManager();
         $title = $document->getTitle();
 
-        // Only create a ResourceFile and Media if there's a file involved
+        // Only create a ResourceFile if there's a file involved
         if ($fileType === 'file') {
-            /** @var League\Flysystem\Adapter\Local $mediaManager */
-            //$mediaManager = Container::$container->get('oneup_flysystem.resources_filesystem');
-            /** @var League\Flysystem\Adapter\Local $mediaManager */
-            //$mediaManager = Container::$container->get('flysystem');
-            //$uploadFile = UploadedFile
             $resourceFile = $resourceNode->getResourceFile();
             if (empty($resourceFile)) {
                 $resourceFile = new ResourceFile();
@@ -6246,12 +6242,12 @@ class DocumentManager
                     $file = new UploadedFile($realPath, $title, null, null, true);
                     $resourceFile->setFile($file);
                 } else {
-                    error_log('Content');
                     // We get the content and create a file
+                    error_log('From content');
                     $handle = tmpfile();
                     fwrite($handle, $content);
                     $meta = stream_get_meta_data($handle);
-                    error_log($meta['uri']);
+                    //error_log($meta['uri']);
                     $file = new UploadedFile($meta['uri'], $title, null, null, true);
                     $resourceFile->setFile($file);
                 }
@@ -6272,47 +6268,14 @@ class DocumentManager
             $visibility = ResourceLink::VISIBILITY_PUBLISHED;
         }
 
-        $link = new ResourceLink();
-        $link
-            ->setCourse($document->getCourse())
-            ->setSession($document->getSession())
-            ->setGroup($group)
-            //->setUser($toUser)
-            ->setResourceNode($resourceNode)
-            ->setVisibility($visibility)
-        ;
-
-        $rights = [];
-        switch ($visibility) {
-            case ResourceLink::VISIBILITY_PENDING:
-            case ResourceLink::VISIBILITY_DRAFT:
-                $editorMask = ResourceNodeVoter::getEditorMask();
-                $resourceRight = new ResourceRight();
-                $resourceRight
-                    ->setMask($editorMask)
-                    ->setRole(ResourceNodeVoter::ROLE_CURRENT_COURSE_TEACHER)
-                ;
-                $rights[] = $resourceRight;
-                break;
-        }
-
-        if (!empty($rights)) {
-            foreach ($rights as $right) {
-                $link->addResourceRight($right);
-            }
-        }
-
-        $em->persist($link);
+        $repo->addResourceToCourse($resourceNode, $visibility, $document->getCourse(), $document->getSession(), $group);
         $em->persist($document);
         $em->flush();
 
         $documentId = $document->getIid();
 
-        if ($debug) {
-            error_log($documentId);
-        }
-
         if ($documentId) {
+            error_log($documentId);
             $table = Database::get_course_table(TABLE_DOCUMENT);
             $sql = "UPDATE $table SET id = iid WHERE iid = $documentId";
             Database::query($sql);
@@ -6413,9 +6376,7 @@ class DocumentManager
         $em->persist($document);
         $em->flush();
 
-        $resourceNode = $documentRepo->addResourceNode($document, $userEntity);
-        $resourceNode->setParent($parentNode);
-        $document->setResourceNode($resourceNode);
+        $documentRepo->addResourceNode($document, $userEntity, $parentNode);
         $document = self::addFileToDocument($document, $path, $realPath, $content, $visibility, $group);
 
         if ($document) {

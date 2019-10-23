@@ -905,10 +905,12 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
     public function uninstallHook()
     {
         $hookObserver = HookAdvancedSubscription::create();
-        HookAdminBlock::create()->detach($hookObserver);
-        HookWSRegistration::create()->detach($hookObserver);
-        HookNotificationContent::create()->detach($hookObserver);
-        HookNotificationTitle::create()->detach($hookObserver);
+
+        $hookFactory = Container::$container->get('chamilo_core.hook_factory');
+        $hookFactory->build(HookAdminBlock::class)->detach($hookObserver);
+        $hookFactory->build(HookWSRegistration::class)->detach($hookObserver);
+        $hookFactory->build(HookNotificationContent::class)->detach($hookObserver);
+        $hookFactory->build(HookNotificationTitle::class)->detach($hookObserver);
     }
 
     /**

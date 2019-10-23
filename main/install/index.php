@@ -59,11 +59,9 @@ putenv('APP_DEBUG=1');
 
 session_start();
 
-require_once api_get_path(LIBRARY_PATH).'database.constants.inc.php';
-require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
-require_once api_get_path(LIBRARY_PATH).'text.lib.php';
-require_once api_get_path(LIBRARY_PATH).'banner.lib.php';
+require_once __DIR__.'/../../public/legacy.php';
 require_once 'install.lib.php';
+
 
 $installationLanguage = 'en';
 // Determination of the language during the installation procedure.

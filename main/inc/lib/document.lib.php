@@ -1082,7 +1082,7 @@ class DocumentManager
 
         // Hard DB delete
         if ($remove_content_from_db) {
-            $repo = Container::$container->get('Chamilo\CourseBundle\Repository\CDocumentRepository');
+            $repo = Container::getDocumentRepository();
             /** @var CDocument $document */
             $document = $repo->find($document_id);
             $repo->softDelete($document);
@@ -1170,149 +1170,12 @@ class DocumentManager
             return false;
         }
 
-        $repo = Container::$container->get('Chamilo\CourseBundle\Repository\CDocumentRepository');
+        $repo = Container::getDocumentRepository();
         /** @var CDocument $document */
         $document = $repo->find($docInfo['iid']);
         $repo->softDelete($document);
 
         return true;
-
-        $itemInfo = api_get_item_property_info(
-            $_course['real_id'],
-            TOOL_DOCUMENT,
-            $documentId,
-            $sessionId,
-            $groupId
-        );
-
-        if (empty($itemInfo)) {
-            return false;
-        }
-
-        // File was already deleted.
-        if ($itemInfo['lastedit_type'] == 'DocumentDeleted' ||
-            $itemInfo['lastedit_type'] == 'delete' ||
-            $itemInfo['visibility'] == 2
-        ) {
-            return false;
-        }
-
-        // Filtering by group.
-        if ($itemInfo['to_group_id'] != $groupId) {
-            return false;
-        }
-
-        $document_exists_in_disk = file_exists($base_work_dir.$path);
-        $new_path = $path.'_DELETED_'.$documentId;
-
-        $file_deleted_from_db = false;
-        $file_deleted_from_disk = false;
-        $file_renamed_from_disk = false;
-
-        if ($documentId) {
-            // Deleting doc from the DB.
-            self::deleteDocumentFromDb($documentId, $_course, $sessionId);
-            // Checking
-            // $file_exists_in_db = self::get_document_data_by_id($documentId, $_course['code']);
-            $file_deleted_from_db = true;
-        }
-
-        // Looking for children.
-        if ($docInfo['filetype'] == 'folder') {
-            $cleanPath = Database::escape_string($path);
-
-            // Deleted files inside this folder.
-            $sql = "SELECT id FROM $TABLE_DOCUMENT
-                    WHERE
-                        c_id = $course_id AND
-                        session_id = $sessionId AND
-                        path LIKE BINARY '".$cleanPath."/%'";
-
-            // Get all id's of documents that are deleted.
-            $result = Database::query($sql);
-
-            if ($result && Database::num_rows($result) != 0) {
-                // Recursive delete.
-                while ($row = Database::fetch_array($result)) {
-                    self::delete_document(
-                        $_course,
-                        null,
-                        $base_work_dir,
-                        $sessionId,
-                        $row['id'],
-                        $groupId
-                    );
-                }
-            }
-        }
-
-        if ($document_exists_in_disk) {
-            if (api_get_setting('permanently_remove_deleted_files') === 'true') {
-                // Delete documents, do it like this so metadata gets deleted too
-                my_delete($base_work_dir.$path);
-                // Hard delete.
-                self::deleteDocumentFromDb($documentId, $_course, $sessionId, true);
-                $file_deleted_from_disk = true;
-            } else {
-                // Set visibility to 2 and rename file/folder to xxx_DELETED_#id (soft delete)
-                if (is_file($base_work_dir.$path) || is_dir($base_work_dir.$path)) {
-                    if (rename($base_work_dir.$path, $base_work_dir.$new_path)) {
-                        $new_path = Database::escape_string($new_path);
-
-                        $sql = "UPDATE $TABLE_DOCUMENT
-                                SET path = '".$new_path."'
-                                WHERE
-                                    c_id = $course_id AND
-                                    session_id = $sessionId AND
-                                    id = ".$documentId;
-                        Database::query($sql);
-
-                        // Soft delete.
-                        self::deleteDocumentFromDb($documentId, $_course, $sessionId);
-
-                        // Change path of sub folders and documents in database.
-                        $old_item_path = $docInfo['path'];
-                        $new_item_path = $new_path.substr($old_item_path, strlen($path));
-                        $new_item_path = Database::escape_string($new_item_path);
-
-                        $sql = "UPDATE $TABLE_DOCUMENT
-                                SET path = '".$new_item_path."'
-                                WHERE
-                                    c_id = $course_id AND
-                                    session_id = $sessionId AND
-                                    id = ".$documentId;
-                        Database::query($sql);
-
-                        $file_renamed_from_disk = true;
-                    } else {
-                        // Couldn't rename - file permissions problem?
-                        error_log(
-                            __FILE__.' '.__LINE__.': Error renaming '.$base_work_dir.$path.' to '.$base_work_dir.$new_path.'. This is probably due to file permissions',
-                            0
-                        );
-                    }
-                }
-            }
-        }
-        // Checking inconsistency
-        //error_log('Doc status: (1 del db :'.($file_deleted_from_db?'yes':'no').') - (2 del disk: '.($file_deleted_from_disk?'yes':'no').') - (3 ren disk: '.($file_renamed_from_disk?'yes':'no').')');
-        if ($file_deleted_from_db && $file_deleted_from_disk ||
-            $file_deleted_from_db && $file_renamed_from_disk
-        ) {
-            return true;
-        } else {
-            //Something went wrong
-            //The file or directory isn't there anymore (on the filesystem)
-            // This means it has been removed externally. To prevent a
-            // blocking error from happening, we drop the related items from the
-            // item_property and the document table.
-            error_log(
-                __FILE__.' '.__LINE__.': System inconsistency detected. The file or directory '.$base_work_dir.$path.' seems to have been removed from the filesystem independently from the web platform. To restore consistency, the elements using the same path will be removed from the database',
-                0
-            );
-
-            return false;
-        }
     }
 
     /**
@@ -2832,8 +2695,7 @@ class DocumentManager
         $orientation = 'landscape',
         $showHeaderAndFooter = true
     ) {
-        $course_data = api_get_course_info($courseCode);
-        $repo = Container::$container->get('Chamilo\CourseBundle\Repository\CDocumentRepository');
+        $repo = Container::getDocumentRepository();
         $document = $repo->find($documentId);
 
         if (empty($document)) {
@@ -3084,7 +2946,7 @@ class DocumentManager
     public static function enough_space($file_size, $max_dir_space)
     {
         if ($max_dir_space) {
-            $repo = Container::$container->get('Chamilo\CourseBundle\Repository\CDocumentRepository');
+            $repo = Container::getDocumentRepository();
             $total = $repo->getTotalSpace(api_get_course_int_id());
 
             if (($file_size + $total) > $max_dir_space) {
@@ -6518,7 +6380,7 @@ class DocumentManager
         $session = api_get_session_entity($sessionId);
         $group = api_get_group_entity($groupId);
         $readonly = (int) $readonly;
-        $documentRepo = Container::$container->get('Chamilo\CourseBundle\Repository\CDocumentRepository');
+        $documentRepo = Container::getDocumentRepository();
 
         $parentNode = null;
         if (!empty($parentId)) {

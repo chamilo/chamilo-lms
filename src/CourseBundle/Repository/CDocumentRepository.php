@@ -14,7 +14,6 @@ use Doctrine\ORM\EntityRepository;
 use Gaufrette\Exception\FileNotFound;
 use League\Flysystem\FilesystemInterface;
 use League\Flysystem\MountManager;
-use Sonata\MediaBundle\Provider\MediaProviderInterface;
 
 /**
  * Class CDocumentRepository.
@@ -62,33 +61,6 @@ class CDocumentRepository extends ResourceRepository
     public function findOneBy(array $criteria, array $orderBy = null): ?CDocument
     {
         return $this->repository->findOneBy($criteria, $orderBy);
-    }
-
-    /**
-     * @param int $id
-     *
-     * @return string
-     */
-    public function getDocumentPath($id): string
-    {
-        try {
-            $document = $this->find($id);
-            $resourceNode = $document->getResourceNode();
-            $resourceFile = $resourceNode->getResourceFile();
-            $media = $resourceFile->getMedia();
-            $provider = $this->mediaPool->getProvider($media->getProviderName());
-
-            $format = MediaProviderInterface::FORMAT_REFERENCE;
-            $filename = sprintf(
-                '%s/%s',
-                $provider->getFilesystem()->getAdapter()->getDirectory(),
-                $provider->generatePrivateUrl($media, $format)
-            );
-
-            return $filename;
-        } catch (\Throwable $exception) {
-            throw new FileNotFound($id);
-        }
     }
 
     /**
@@ -233,7 +205,7 @@ class CDocumentRepository extends ResourceRepository
      *
      * @return bool
      */
-    public function setVisibility($document, $visibility)
+    public function updateVisibility($document, $visibility): bool
     {
         if (empty($document)) {
             return false;

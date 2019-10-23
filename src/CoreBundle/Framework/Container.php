@@ -4,6 +4,7 @@
 namespace Chamilo\CoreBundle\Framework;
 
 use Chamilo\CoreBundle\Component\Editor\Editor;
+use Chamilo\CourseBundle\Repository\CDocumentRepository;
 use Chamilo\PageBundle\Entity\Page;
 use Chamilo\SettingsBundle\Manager\SettingsManager;
 use Sonata\PageBundle\Entity\SiteManager;
@@ -318,6 +319,14 @@ class Container
     public static function getUserManager()
     {
         return self::$userManager;
+    }
+
+    /**
+     * @return CDocumentRepository
+     */
+    public static function getDocumentRepository()
+    {
+        return self::$container->get('Chamilo\CourseBundle\Repository\CDocumentRepository');
     }
 
     /**

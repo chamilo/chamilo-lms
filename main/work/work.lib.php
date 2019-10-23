@@ -3723,7 +3723,7 @@ function uploadWork($my_folder_data, $_course, $isCorrection = false, $workInfo 
         ];
     }
 
-    $repo = Container::$container->get('Chamilo\CourseBundle\Repository\CDocumentRepository');
+    $repo = Container::getDocumentRepository();
     $totalSpace = $repo->getTotalSpace($_course['real_id']);
     $course_max_space = DocumentManager::get_course_quota($_course['code']);
     $total_size = $filesize + $totalSpace;

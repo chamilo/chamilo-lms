@@ -266,7 +266,7 @@ if (isset($_POST['comment'])) {
 }
 
 $em = Database::getManager();
-$documentRepository = Container::$container->get('Chamilo\CourseBundle\Repository\CDocumentRepository');
+$documentRepository = Container::getDocumentRepository();
 /** @var CDocument $document */
 $document = $documentRepository->find($document_data['iid']);
 

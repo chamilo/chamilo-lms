@@ -232,7 +232,7 @@ $form = new FormValidator(
 $form->addElement('hidden', 'id', $document_id);
 $form->addElement('hidden', 'curdirpath', $path);
 
-$repo = Container::$container->get('Chamilo\CourseBundle\Repository\CDocumentRepository');
+$repo = Container::getDocumentRepository();
 $total = $repo->getTotalSpace(api_get_course_int_id());
 $courseQuota = format_file_size(DocumentManager::get_course_quota() - $total);
 $label =

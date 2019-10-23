@@ -361,7 +361,7 @@ function handle_uploaded_document(
                 $sessionId
             );
 
-            $documentRepo = Container::$container->get('Chamilo\CourseBundle\Repository\CDocumentRepository');
+            $documentRepo = Container::getDocumentRepository();
             $document = $documentRepo->find($docId);
 
             if (!($content instanceof UploadedFile)) {

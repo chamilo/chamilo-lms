@@ -3,6 +3,7 @@
 
 use Chamilo\CoreBundle\Entity\Resource\ResourceLink;
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CourseBundle\Entity\CDocument;
 use ChamiloSession as Session;
 
 /**
@@ -40,6 +41,7 @@ $parent_id = null;
 $lib_path = api_get_path(LIBRARY_PATH);
 $actionsRight = '';
 $action = isset($_REQUEST['action']) ? $_REQUEST['action'] : '';
+$repo = Container::getDocumentRepository();
 
 $allowUseTool = false;
 $em = Database::getManager();
@@ -149,7 +151,7 @@ $userInfo = api_get_user_info();
 $sessionId = api_get_session_id();
 $course_code = api_get_course_id();
 $groupId = api_get_group_id();
-$isAllowedToEdit = api_is_allowed_to_edit(null, true);
+$isAllowedToEdit = api_is_allowed_to_edit(null, true) || api_is_platform_admin();
 $groupMemberWithUploadRights = false;
 
 // If the group id is set, we show them group documents
@@ -370,10 +372,7 @@ switch ($action) {
         exit;
         break;
     case 'downloadfolder':
-        if (api_get_setting('students_download_folders') == 'true' ||
-            $isAllowedToEdit ||
-            api_is_platform_admin()
-        ) {
+        if (api_get_setting('students_download_folders') == 'true' || $isAllowedToEdit) {
             // Get the document data from the ID
             $document_data = DocumentManager::get_document_data_by_id(
                 $document_id,
@@ -397,15 +396,13 @@ switch ($action) {
             //filter when I am into shared folder, I can download only my shared folder
             if (DocumentManager::is_any_user_shared_folder($document_data['path'], $sessionId)) {
                 if (DocumentManager::is_my_shared_folder(api_get_user_id(), $document_data['path'], $sessionId) ||
-                    $isAllowedToEdit || api_is_platform_admin()
+                    $isAllowedToEdit
                 ) {
                     require 'downloadfolder.inc.php';
                 }
             } else {
                 require 'downloadfolder.inc.php';
             }
-            // Launch event
-            Event::event_download($document_data['url']);
             exit;
         }
         break;
@@ -1070,7 +1067,7 @@ if ($isAllowedToEdit || $groupMemberWithUploadRights ||
         }
 
         if (api_is_coach()) {
-            if (!DocumentManager::is_visible_by_id($_POST['move_file'], $courseInfo, $sessionId, api_get_user_id())) {
+            if (!DocumentManager::is_visible_by_id($moveFile, $courseInfo, $sessionId, api_get_user_id())) {
                 api_not_allowed(true);
             }
         }
@@ -1093,29 +1090,14 @@ if ($isAllowedToEdit || $groupMemberWithUploadRights ||
 
         // Security fix: make sure they can't move files that are not in the document table
         if (!empty($document_to_move)) {
-            if ($document_to_move['filetype'] == 'link') {
+            if ($document_to_move['filetype'] === 'link') {
                 $real_path_target = $base_work_dir.$moveTo.'/';
                 if (!DocumentManager::cloudLinkExists($_course, $moveTo, $document_to_move['comment'])) {
                     $doc_id = $moveFile;
-                    //DocumentManager::updateDbInfo($document_to_move['path'], $moveTo.'/', $doc_id);
                     DocumentManager::updateDbInfo(
                         'update',
                         $document_to_move['path'],
                         $moveTo.'/'.basename($document_to_move['path'])
-                    );
-
-                    // Update database item property
-                    api_item_property_update(
-                        $_course,
-                        TOOL_DOCUMENT,
-                        $doc_id,
-                        'FileMoved',
-                        api_get_user_id(),
-                        $group_properties,
-                        null,
-                        null,
-                        null,
-                        $session_id
                     );
                     Display::addFlash(
                         Display::return_message(
@@ -1135,58 +1117,21 @@ if ($isAllowedToEdit || $groupMemberWithUploadRights ||
                 $curdirpath = $moveTo;
                 $curdirpathurl = urlencode($moveTo);
             } else {
-                $real_path_target = $base_work_dir.$moveTo.'/'.basename($document_to_move['path']);
-                $fileExist = false;
-                if (file_exists($real_path_target)) {
-                    $fileExist = true;
-                }
-                if (move($base_work_dir.$document_to_move['path'], $base_work_dir.$moveTo)) {
-                    DocumentManager::updateDbInfo(
-                        'update',
-                        $document_to_move['path'],
-                        $moveTo.'/'.basename($document_to_move['path'])
-                    );
+                // @todo resource node should be updated?
+                /*$moveTo = DocumentManager::get_document_id(
+                    $courseInfo,
+                    $moveTo
+                );*/
+                DocumentManager::updateDbInfo(
+                    'update',
+                    $document_to_move['path'],
+                    $moveTo.'/'.basename($document_to_move['path'])
+                );
 
-                    //update database item property
-                    $doc_id = $moveFile;
-                    if (is_dir($real_path_target)) {
-                        api_item_property_update(
-                            $courseInfo,
-                            TOOL_DOCUMENT,
-                            $doc_id,
-                            'FolderMoved',
-                            api_get_user_id(),
-                            $group_properties,
-                            null,
-                            null,
-                            null,
-                            $sessionId
-                        );
-                        Display::addFlash(Display::return_message(get_lang('DirMv'), 'confirmation'));
-                    } elseif (is_file($real_path_target)) {
-                        api_item_property_update(
-                            $courseInfo,
-                            TOOL_DOCUMENT,
-                            $doc_id,
-                            'DocumentMoved',
-                            api_get_user_id(),
-                            $group_properties,
-                            null,
-                            null,
-                            null,
-                            $sessionId
-                        );
-                        Display::addFlash(
-                            Display::return_message(
-                                get_lang('DocMv'),
-                                'confirmation'
-                            )
-                        );
-                    }
+                Display::addFlash(Display::return_message(get_lang('DirMv'), 'confirmation'));
 
-                    // Set the current path
-                    $curdirpath = $moveTo;
-                    $curdirpathurl = urlencode($moveTo);
+                /*if (move($base_work_dir.$document_to_move['path'], $base_work_dir.$moveTo)) {
+
                 } else {
                     if ($fileExist) {
                         if (is_dir($real_path_target)) {
@@ -1198,7 +1143,7 @@ if ($isAllowedToEdit || $groupMemberWithUploadRights ||
                     } else {
                         Display::addFlash(Display::return_message(get_lang('Impossible'), 'error'));
                     }
-                }
+                }*/
             }
         } else {
             Display::addFlash(Display::return_message(get_lang('Impossible'), 'error'));
@@ -1225,10 +1170,17 @@ if ($isAllowedToEdit ||
             '/chat_files',
             '/certificates',
         ];
+
+        $defaultVisibility = ResourceLink::VISIBILITY_DRAFT;
+        // Make visible or invisible?
+        if ($_POST['action'] === 'set_visible') {
+            $defaultVisibility = ResourceLink::VISIBILITY_PUBLISHED;
+        }
+
         foreach ($files as $documentId) {
             $data = DocumentManager::get_document_data_by_id($documentId, $courseInfo['code']);
-            /** @var \Chamilo\CourseBundle\Entity\CDocument $document */
-            $document = $em->getRepository('ChamiloCourseBundle:CDocument')->find($documentId);
+            /** @var CDocument $document */
+            $document = $repo->find($documentId);
 
             if (in_array($data['path'], $items)) {
                 // exclude system directories (do not allow deletion)
@@ -1236,51 +1188,14 @@ if ($isAllowedToEdit ||
             } else {
                 switch ($_POST['action']) {
                     case 'set_invisible':
-                        $visibilityCommand = 'invisible';
-
-                        $links = $document->getResourceNode()->getResourceLinks();
-                        exit;
-                        if (api_item_property_update(
-                            $courseInfo,
-                            TOOL_DOCUMENT,
-                            $documentId,
-                            $visibilityCommand,
-                            api_get_user_id(),
-                            null,
-                            null,
-                            null,
-                            null,
-                            $sessionId
-                        )) {
-                            $messages .= Display::return_message(
-                                get_lang('VisibilityChanged').': '.$data['title'],
-                                'confirmation'
-                            );
-                        } else {
-                            $messages .= Display::return_message(get_lang('ViModProb'), 'error');
-                        }
+                        $repo->updateVisibility($document, $defaultVisibility);
                         break;
                     case 'set_visible':
-                        $visibilityCommand = 'visible';
-                        if (api_item_property_update(
-                            $courseInfo,
-                            TOOL_DOCUMENT,
-                            $documentId,
-                            $visibilityCommand,
-                            api_get_user_id(),
-                            null,
-                            null,
-                            null,
-                            null,
-                            $sessionId
-                        )) {
-                            $messages .= Display::return_message(
-                                get_lang('VisibilityChanged').': '.$data['title'],
-                                'confirmation'
-                            );
-                        } else {
-                            $messages .= Display::return_message(get_lang('ViModProb'), 'error');
-                        }
+                        $repo->updateVisibility($document, $defaultVisibility);
+                        $messages .= Display::return_message(
+                            get_lang('VisibilityChanged').': '.$data['title'],
+                            'confirmation'
+                        );
                         break;
                     case 'delete':
                         // Check all documents scheduled for deletion
@@ -1455,10 +1370,10 @@ if ($isAllowedToEdit) {
                 api_not_allowed(true);
             }
         }
-        $repo = Container::$container->get('Chamilo\CourseBundle\Repository\CDocumentRepository');
-        /** @var \Chamilo\CourseBundle\Entity\CDocument $document */
+
+        /** @var CDocument $document */
         $document = $repo->find($update_id);
-        $total = $repo->setVisibility($document, $defaultVisibility);
+        $repo->updateVisibility($document, $defaultVisibility);
         Display::addFlash(Display::return_message(get_lang('VisibilityChanged'), 'confirmation'));
 
         header('Location: '.$currentUrl);

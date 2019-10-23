@@ -1,7 +1,11 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\Resource\ResourceLink;
+use Chamilo\CoreBundle\Framework\Container;
 use ChamiloSession as Session;
+use ZipStream\ZipStream;
+use ZipStream\Option\Archive;
 
 /**
  * Functions and main code for the download folder feature.
@@ -20,6 +24,7 @@ $courseId = api_get_course_int_id();
 $sessionId = api_get_session_id();
 $groupId = api_get_group_id();
 $courseCode = api_get_course_id();
+$repo = Container::getDocumentRepository();
 
 // Check if folder exists in current course.
 $documentInfo = DocumentManager::get_document_data_by_id(
@@ -32,7 +37,6 @@ $documentInfo = DocumentManager::get_document_data_by_id(
 if (!empty($sessionId)) {
     /* If no data found and session id exists
        try to look the file inside the session */
-
     if (empty($documentInfo)) {
         $documentInfo = DocumentManager::get_document_data_by_id(
             $_GET['id'],
@@ -60,7 +64,13 @@ if (($path == '/shared_folder' ||
 // Creating a ZIP file.
 $tempZipFile = api_get_path(SYS_ARCHIVE_PATH).api_get_unique_id().".zip";
 
-$zip = new PclZip($tempZipFile);
+$name = ($path == '/') ? 'documents.zip' : $documentInfo['title'].'.zip';
+
+$zipStreamOptions = new Archive();
+$zipStreamOptions->setSendHttpHeaders(true);
+$zipStreamOptions->setContentDisposition('attachment');
+$zipStreamOptions->setContentType('application/x-zip');
+$zip = new ZipStream($name, $zipStreamOptions);
 $doc_table = Database::get_course_table(TABLE_DOCUMENT);
 $prop_table = Database::get_course_table(TABLE_ITEM_PROPERTY);
 
@@ -122,10 +132,13 @@ if (!empty($groupId)) {
 }
 $tblDocument = Database::get_course_table(TABLE_DOCUMENT);
 
+// Launch event
+Event::event_download($name);
+
 // Admins are allowed to download invisible files
 if (api_is_allowed_to_edit()) {
     // Set the path that will be used in the query
-    if ($path == '/') {
+    if ($path === '/') {
         $querypath = ''; // To prevent ...path LIKE '//%'... in query
     } else {
         $querypath = $path;
@@ -146,17 +159,17 @@ if (api_is_allowed_to_edit()) {
             WHERE	
                 docs.c_id = $courseId AND
                 docs.path LIKE '".$querypath."/%' AND
-                docs.filetype = 'file'";
+                docs.filetype = 'file' AND
+                docs.path NOT LIKE '%_DELETED_%' AND
+                l.visibility NOT IN ('".ResourceLink::VISIBILITY_DELETED."')
+            ";
 
     $sql .= DocumentManager::getSessionFolderFilters($querypath, $sessionId);
-
     $result = Database::query($sql);
     $files = [];
     while ($row = Database::fetch_array($result, 'ASSOC')) {
         $files[$row['path']] = $row;
     }
-
-    Session::write('doc_files_to_download', $files);
 
     foreach ($files as $not_deleted_file) {
         // Filtering folders and
@@ -169,16 +182,21 @@ if (api_is_allowed_to_edit()) {
                 }
             }
         }
-        $zip->add(
+
+        $file = $courseInfo['path'].'/document'.$not_deleted_file['path'];
+        //$document = $repo->find($not_deleted_file['id']);
+        $data = $repo->getDocumentContent($not_deleted_file['id']);
+        $zip->addFile($not_deleted_file['path'], $data);
+
+        /*@$zip->add(
             $sysCoursePath.$courseInfo['path'].'/document'.$not_deleted_file['path'],
             PCLZIP_OPT_REMOVE_PATH,
             $sysCoursePath.$courseInfo['path'].'/document'.$remove_dir,
             PCLZIP_CB_PRE_ADD,
             'fixDocumentNameCallback'
-        );
+        );*/
     }
-
-    Session::erase('doc_files_to_download');
+    $zip->finish();
 } else {
     // For other users, we need to create a zip  file with only visible files and folders
     if ($path == '/') {
@@ -298,25 +316,8 @@ if (api_is_allowed_to_edit()) {
     }
     Session::erase('doc_files_to_download');
 }
+exit;
 
-// Launch event
-Event::event_download(
-    ($path == '/') ? 'documents.zip (folder)' : basename($path).'.zip (folder)'
-);
-
-// Start download of created file
-$name = ($path == '/') ? 'documents.zip' : $documentInfo['title'].'.zip';
-
-if (Security::check_abs_path($tempZipFile, api_get_path(SYS_ARCHIVE_PATH))) {
-    $result = DocumentManager::file_send_for_download($tempZipFile, true, $name);
-    if ($result === false) {
-        api_not_allowed(true);
-    }
-    @unlink($tempZipFile);
-    exit;
-} else {
-    api_not_allowed(true);
-}
 
 /**
  * Returns the difference between two arrays, as an array of those key/values

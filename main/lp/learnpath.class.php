@@ -11715,7 +11715,7 @@ EOD;
             $upl_max = intval(substr($upl_max, 0, -1)) * 1024 * 1024 * 1024;
         }
 
-        $repo = Container::$container->get('Chamilo\CourseBundle\Repository\CDocumentRepository');
+        $repo = Container::getDocumentRepository();
         $documents_total_space = $repo->getTotalSpace(api_get_course_int_id());
 
         $course_max_space = DocumentManager::get_course_quota();

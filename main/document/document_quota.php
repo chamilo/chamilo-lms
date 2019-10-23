@@ -39,7 +39,7 @@ $user_name = $userInfo['complete_name'];
 $course_list = SessionManager::get_course_list_by_session_id($sessionId);
 $session_list = SessionManager::get_session_by_course($courseId);
 $total_quota_bytes = DocumentManager::get_course_quota();
-$repo = Container::$container->get('Chamilo\CourseBundle\Repository\CDocumentRepository');
+$repo = Container::getDocumentRepository();
 $quota_bytes = $repo->getTotalSpace($courseId);
 $quotaPercentage = round($quota_bytes / $total_quota_bytes, 2) * 100;
 
@@ -67,10 +67,10 @@ if (!empty($session_list)) {
 $group_list = GroupManager::get_groups();
 
 if (!empty($group_list)) {
+    $repo = Container::getDocumentRepository();
     foreach ($group_list as $group_data) {
         $quotaPercentage = 0;
         $my_group_id = $group_data['id'];
-        $repo = Container::$container->get('Chamilo\CourseBundle\Repository\CDocumentRepository');
         $quota_bytes = $repo->getTotalSpace($courseId, $my_group_id, 0);
 
         if (!empty($quota_bytes)) {

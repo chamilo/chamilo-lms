@@ -788,7 +788,6 @@ function api_get_path($path = '', $configuration = [])
             $root_web = substr($root_web, 0, $pos);
         }
 
-
         $root_web = urldecode($root_web);
     }
 
@@ -7505,16 +7504,12 @@ function api_block_course_item_locked_by_gradebook($item_id, $link_type, $course
  *
  * @param string Include path (used to load the error page)
  */
-function api_check_php_version($my_inc_path = null)
+function api_check_php_version()
 {
-    if (!function_exists('version_compare') || version_compare(phpversion(), REQUIRED_PHP_VERSION, '<')) {
-        $global_error_code = 1;
-        // Incorrect PHP version
-        $global_page = $my_inc_path.'global_error_message.inc.php';
-        if (file_exists($global_page)) {
-            require $global_page;
-        }
-        exit;
+    if (!function_exists('version_compare') ||
+        version_compare(phpversion(), REQUIRED_PHP_VERSION, '<')
+    ) {
+        throw new Exception('Wrong PHP version');
     }
 }
 
@@ -9502,6 +9497,23 @@ function api_get_language_list_for_flag()
     }
 
     return $languages;
+}
+
+/**
+ * @param string $name
+ *
+ * @return \ZipStream\ZipStream
+ */
+function api_create_zip($name)
+{
+    $zipStreamOptions = new \ZipStream\Option\Archive();
+    $zipStreamOptions->setSendHttpHeaders(true);
+    $zipStreamOptions->setContentDisposition('attachment');
+    $zipStreamOptions->setContentType('application/x-zip');
+
+    $zip = new \ZipStream\ZipStream($name, $zipStreamOptions);
+
+    return $zip;
 }
 
 /**

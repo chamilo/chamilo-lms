@@ -140,6 +140,9 @@ if ($is_allowedToEdit) {
             require_once api_get_path(SYS_CODE_PATH).'exercise/export/qti2/qti2_export.php';
 
             $export = export_exercise_to_qti($exerciseId, true);
+
+
+
             $archive_path = api_get_path(SYS_ARCHIVE_PATH);
             $temp_dir_short = api_get_unique_id();
             $temp_zip_dir = $archive_path.$temp_dir_short;
@@ -156,14 +159,11 @@ if ($is_allowedToEdit) {
             $isValid = $xmlReader->isValid();
 
             if ($isValid) {
-                $zip_folder = new PclZip($temp_zip_file);
-                $zip_folder->add($temp_xml_file, PCLZIP_OPT_REMOVE_ALL_PATH);
                 $name = 'qti2_export_'.$exerciseId.'.zip';
-                DocumentManager::file_send_for_download($temp_zip_file, true, $name);
-                unlink($temp_zip_file);
-                unlink($temp_xml_file);
-                rmdir($temp_zip_dir);
-                exit; // otherwise following clicks may become buggy
+                $zip = api_create_zip($name);
+                $zip->addFile('qti2export_'.$exerciseId.'.xml', $export);
+                $zip->finish();
+                exit;
             } else {
                 Display::addFlash(Display::return_message(get_lang('ErrorWritingXMLFile'), 'error'));
                 header('Location: '.$currentUrl);

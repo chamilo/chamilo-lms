@@ -4,8 +4,8 @@
 use Chamilo\CoreBundle\Entity\Resource\ResourceLink;
 use Chamilo\CoreBundle\Framework\Container;
 use ChamiloSession as Session;
-use ZipStream\ZipStream;
 use ZipStream\Option\Archive;
+use ZipStream\ZipStream;
 
 /**
  * Functions and main code for the download folder feature.
@@ -65,12 +65,7 @@ if (($path == '/shared_folder' ||
 $tempZipFile = api_get_path(SYS_ARCHIVE_PATH).api_get_unique_id().".zip";
 
 $name = ($path == '/') ? 'documents.zip' : $documentInfo['title'].'.zip';
-
-$zipStreamOptions = new Archive();
-$zipStreamOptions->setSendHttpHeaders(true);
-$zipStreamOptions->setContentDisposition('attachment');
-$zipStreamOptions->setContentType('application/x-zip');
-$zip = new ZipStream($name, $zipStreamOptions);
+$zip = api_create_zip($name);
 $doc_table = Database::get_course_table(TABLE_DOCUMENT);
 $prop_table = Database::get_course_table(TABLE_ITEM_PROPERTY);
 
@@ -317,7 +312,6 @@ if (api_is_allowed_to_edit()) {
     Session::erase('doc_files_to_download');
 }
 exit;
-
 
 /**
  * Returns the difference between two arrays, as an array of those key/values

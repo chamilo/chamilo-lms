@@ -51,7 +51,7 @@
 
                                 intro.start();
                             }
-                        }).appendTo('#tour-button-cotainer');
+                        }).appendTo('#tour-button-container');
                     });
                 }
             };

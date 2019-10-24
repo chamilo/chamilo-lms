@@ -387,7 +387,6 @@ function handle_uploaded_document(
                         $document = DocumentManager::addFileToDocument(
                             $document,
                             $filePath,
-                            null,
                             $content,
                             null,
                             null,

@@ -6201,7 +6201,6 @@ class DocumentManager
 
     /**
      * @param CDocument           $document
-     * @param string              $path
      * @param string              $realPath
      * @param string|UploadedFile $content
      * @param int                 $visibility
@@ -6209,10 +6208,9 @@ class DocumentManager
      *
      * @return bool|CDocument
      */
-    public static function addFileToDocument(CDocument $document, $path, $realPath, $content, $visibility, $group)
+    public static function addFileToDocument(CDocument $document, $realPath, $content, $visibility, $group)
     {
         $repo = Container::getDocumentRepository();
-        $debug = true;
         $fileType = $document->getFiletype();
         $resourceNode = $document->getResourceNode();
 
@@ -6267,9 +6265,6 @@ class DocumentManager
         }
 
         $repo->addResourceToCourse($resourceNode, $visibility, $document->getCourse(), $document->getSession(), $group);
-        $em->persist($document);
-        $em->flush();
-
         $documentId = $document->getIid();
 
         if ($documentId) {
@@ -6375,7 +6370,7 @@ class DocumentManager
         $em->flush();
 
         $documentRepo->addResourceNode($document, $userEntity, $parentNode);
-        $document = self::addFileToDocument($document, $path, $realPath, $content, $visibility, $group);
+        $document = self::addFileToDocument($document, $realPath, $content, $visibility, $group);
 
         if ($document) {
             $allowNotification = api_get_configuration_value('send_notification_when_document_added');

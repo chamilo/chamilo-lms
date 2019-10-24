@@ -991,26 +991,6 @@ function api_get_cdn_path($web_path)
 }
 
 /**
- * @return bool Return true if LDAP authentification is activated
- */
-function api_is_ldap_activated()
-{
-    global $extAuthSource;
-
-    return is_array($extAuthSource[LDAP_AUTH_SOURCE]);
-}
-
-/**
- * @return bool Return true if Facebook authentification is activated
- */
-function api_is_facebook_auth_activated()
-{
-    global $_configuration;
-
-    return isset($_configuration['facebook_auth']) && $_configuration['facebook_auth'] == 1;
-}
-
-/**
  * Adds to a given path a trailing slash if it is necessary (adds "/" character at the end of the string).
  *
  * @param string $path the input path

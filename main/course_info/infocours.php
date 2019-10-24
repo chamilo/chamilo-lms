@@ -1040,7 +1040,7 @@ if ($form->validate() && $isEditable) {
     $cidReset = true;
     $cidReq = $course_code;
     Display::addFlash(Display::return_message(get_lang('Updated')));
-    require '../inc/local.inc.php';
+
     $url = api_get_path(WEB_CODE_PATH).'course_info/infocours.php?'.$courseParams;
     header("Location: $url");
     exit;

@@ -15,24 +15,77 @@ use Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter;
 use Chamilo\CourseBundle\Entity\CGroupInfo;
 use Chamilo\UserBundle\Entity\User;
 use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query\Expr\Join;
+use League\Flysystem\FilesystemInterface;
+use League\Flysystem\MountManager;
 
 /**
  * Class ResourceRepository.
- *
- * @package Chamilo\CoreBundle\Entity
  */
 class ResourceRepository
 {
+    /**
+     * @var EntityRepository
+     */
+    protected $repository;
+
+    /**
+     * @var FilesystemInterface
+     */
+    protected $fs;
+
     /**
      * @var EntityManager
      */
     protected $entityManager;
 
     /**
+     * The entity class FQN
+     *
+     * @var string
+     */
+    protected $className;
+
+    /**
+     * ResourceRepository constructor.
+     *
+     * @param EntityManager $entityManager
+     * @param MountManager  $mountManager
+     * @param string        $className
+     */
+    public function __construct(EntityManager $entityManager, MountManager $mountManager, string $className)
+    {
+        $this->repository = $entityManager->getRepository($className);
+        $this->fs = $mountManager->getFilesystem('resources_fs');
+        $this->entityManager = $entityManager;
+    }
+
+    /**
+     * @param int $id
+     *
+     * @return AbstractResource
+     */
+    public function find(int $id)
+    {
+        return $this->repository->find($id);
+    }
+
+    /**
+     * @param array      $criteria
+     * @param array|null $orderBy
+     *
+     * @return AbstractResource
+     */
+    public function findOneBy(array $criteria, array $orderBy = null)
+    {
+        return $this->repository->findOneBy($criteria, $orderBy);
+    }
+
+    /**
      * @return EntityManager
      */
-    public function getEntityManager()
+    public function getEntityManager(): EntityManager
     {
         return $this->entityManager;
     }
@@ -160,7 +213,6 @@ class ResourceRepository
 
         $em = $this->getEntityManager();
         $em->persist($link);
-        //$em->persist($document);
         $em->flush();
     }
 

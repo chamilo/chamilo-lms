@@ -5,6 +5,9 @@ namespace Chamilo\CoreBundle\Framework;
 
 use Chamilo\CoreBundle\Component\Editor\Editor;
 use Chamilo\CourseBundle\Repository\CDocumentRepository;
+use Chamilo\CourseBundle\Repository\CExerciseCategoryRepository;
+use Chamilo\CourseBundle\Repository\CQuizCategoryRepository;
+use Chamilo\CourseBundle\Repository\CQuizQuestionCategoryRepository;
 use Chamilo\CourseBundle\Repository\CQuizRepository;
 use Chamilo\PageBundle\Entity\Page;
 use Chamilo\SettingsBundle\Manager\SettingsManager;
@@ -336,6 +339,22 @@ class Container
     public static function getExerciseRepository()
     {
         return self::$container->get('Chamilo\CourseBundle\Repository\CQuizRepository');
+    }
+
+    /**
+     * @return CExerciseCategoryRepository
+     */
+    public static function getExerciseCategoryRepository()
+    {
+        return self::$container->get('Chamilo\CourseBundle\Repository\CExerciseCategoryRepository');
+    }
+
+    /**
+     * @return CQuizQuestionCategoryRepository
+     */
+    public static function getQuestionCategoryRepository()
+    {
+        return self::$container->get('Chamilo\CourseBundle\Repository\CQuizQuestionCategoryRepository');
     }
 
     /**

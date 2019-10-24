@@ -4,12 +4,11 @@
 namespace Chamilo\CourseBundle\Entity\Manager;
 
 use Chamilo\CourseBundle\Entity\CGroupInfo;
-use Sonata\CoreBundle\Model\BaseEntityManager;
+use Sonata\Doctrine\Entity\BaseEntityManager;
 
 /**
  * Class CourseManager.
  *
- * @package Chamilo\CoreBundle\Entity\Manager
  */
 class GroupManager extends BaseEntityManager
 {

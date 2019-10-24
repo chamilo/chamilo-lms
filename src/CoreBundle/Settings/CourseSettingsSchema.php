@@ -18,8 +18,6 @@ use Symfony\Component\Form\FormBuilderInterface;
 
 /**
  * Class CourseSettingsSchema.
- *
- * @package Chamilo\CoreBundle\Settings
  */
 class CourseSettingsSchema extends AbstractSettingsSchema
 {

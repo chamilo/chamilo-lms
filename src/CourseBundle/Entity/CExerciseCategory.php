@@ -3,8 +3,11 @@
 
 namespace Chamilo\CourseBundle\Entity;
 
+use Chamilo\CoreBundle\Entity\Resource\AbstractResource;
+use Chamilo\CoreBundle\Entity\Resource\ResourceInterface;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Gedmo\Timestampable\Traits\TimestampableEntity;
 
 /**
  * CExerciseCategory.
@@ -12,8 +15,10 @@ use Gedmo\Mapping\Annotation as Gedmo;
  * @ORM\Table(name="c_exercise_category")
  * @ORM\Entity(repositoryClass="Gedmo\Sortable\Entity\Repository\SortableRepository")
  */
-class CExerciseCategory
+class CExerciseCategory extends AbstractResource implements ResourceInterface
 {
+    use TimestampableEntity;
+
     /**
      * @var int
      *
@@ -27,6 +32,7 @@ class CExerciseCategory
      * @var int
      *
      * @Gedmo\SortableGroup
+     *
      * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CExerciseCategory", inversedBy="children")
      * @ORM\JoinColumn(referencedColumnName="id", onDelete="SET NULL")
      *
@@ -50,31 +56,16 @@ class CExerciseCategory
 
     /**
      * @Gedmo\SortablePosition
+     *
      * @ORM\Column(name="position", type="integer")
      */
     protected $position;
-
-    /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="created_at", type="datetime", nullable=false)
-     */
-    protected $createdAt;
-
-    /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="updated_at", type="datetime", nullable=false)
-     */
-    protected $updatedAt;
 
     /**
      * Project constructor.
      */
     public function __construct()
     {
-        $this->createdAt = new \DateTime();
-        $this->updatedAt = new \DateTime();
     }
 
     /**
@@ -215,5 +206,31 @@ class CExerciseCategory
         $this->position = $position;
 
         return $this;
+    }
+
+    /**
+     * Resource identifier.
+     *
+     * @return int
+     */
+    public function getResourceIdentifier(): int
+    {
+        return $this->getId();
+    }
+
+    /**
+     * @return string
+     */
+    public function getResourceName(): string
+    {
+        return $this->getName();
+    }
+
+    /**
+     * @return string
+     */
+    public function getToolName(): string
+    {
+        return 'test_category';
     }
 }

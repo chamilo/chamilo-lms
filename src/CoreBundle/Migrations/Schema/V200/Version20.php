@@ -949,6 +949,12 @@ class Version20 extends AbstractMigrationChamilo
         $this->addSql("ALTER TABLE c_quiz_question_category ADD resource_node_id INT DEFAULT NULL");
         $this->addSql("ALTER TABLE c_quiz_question_category ADD CONSTRAINT FK_1414369D1BAD783F FOREIGN KEY (resource_node_id) REFERENCES resource_node (id)");
         $this->addSql("CREATE UNIQUE INDEX UNIQ_1414369D1BAD783F ON c_quiz_question_category (resource_node_id)");
+
+        $this->addSql("ALTER TABLE c_exercise_category ADD resource_node_id INT DEFAULT NULL;");
+        $this->addSql("ALTER TABLE c_exercise_category ADD CONSTRAINT FK_B94C157E1BAD783F FOREIGN KEY (resource_node_id) REFERENCES resource_node (id);");
+        $this->addSql("CREATE UNIQUE INDEX UNIQ_B94C157E1BAD783F ON c_exercise_category (resource_node_id);");
+
+        //course_module drop ?
     }
 
     /**

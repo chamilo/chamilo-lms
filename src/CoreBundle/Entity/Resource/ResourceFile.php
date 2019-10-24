@@ -3,7 +3,6 @@
 
 namespace Chamilo\CoreBundle\Entity\Resource;
 
-use Chamilo\MediaBundle\Entity\Media;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Symfony\Component\HttpFoundation\File\File;
@@ -89,7 +88,10 @@ class ResourceFile
     protected $dimensions;
 
     /**
+     *
      * @var int
+     *
+     * @Assert\NotBlank()
      *
      * @ORM\Column(type="integer")
      */
@@ -252,19 +254,19 @@ class ResourceFile
     }
 
     /**
-     * @return string
+     * @return int
      */
-    public function getSize(): string
+    public function getSize(): int
     {
-        return $this->size;
+        return (int) $this->size;
     }
 
     /**
-     * @param string $size
+     * @param int $size
      *
      * @return ResourceFile
      */
-    public function setSize(string $size): ResourceFile
+    public function setSize(int $size): ResourceFile
     {
         $this->size = $size;
 
@@ -355,26 +357,6 @@ class ResourceFile
     public function setEnabled(bool $enabled): ResourceFile
     {
         $this->enabled = $enabled;
-
-        return $this;
-    }
-
-    /**
-     * @return Media
-     */
-    public function getMedia()
-    {
-        return $this->media;
-    }
-
-    /**
-     * @param Media $media
-     *
-     * @return ResourceFile
-     */
-    public function setMedia($media)
-    {
-        $this->media = $media;
 
         return $this;
     }

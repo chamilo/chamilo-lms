@@ -9,61 +9,13 @@ use Chamilo\CoreBundle\Entity\Resource\ResourceRight;
 use Chamilo\CoreBundle\Repository\ResourceRepository;
 use Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter;
 use Chamilo\CourseBundle\Entity\CDocument;
-use Doctrine\ORM\EntityManager;
-use Doctrine\ORM\EntityRepository;
 use Gaufrette\Exception\FileNotFound;
-use League\Flysystem\FilesystemInterface;
-use League\Flysystem\MountManager;
 
 /**
  * Class CDocumentRepository.
  */
-class CDocumentRepository extends ResourceRepository
+final class CDocumentRepository extends ResourceRepository
 {
-    /**
-     * @var EntityRepository
-     */
-    private $repository;
-
-    /**
-     * @var FilesystemInterface
-     */
-    private $fs;
-
-    /**
-     * CDocumentRepository constructor.
-     *
-     * @param EntityManager $entityManager
-     * @param MountManager  $mountManager
-     */
-    public function __construct(EntityManager $entityManager, MountManager $mountManager)
-    {
-        $this->repository = $entityManager->getRepository(CDocument::class);
-        $this->fs = $mountManager->getFilesystem('resources_fs');
-        $this->entityManager = $entityManager;
-    }
-
-    /**
-     * @param int $id
-     *
-     * @return CDocument|null
-     */
-    public function find(int $id): ?CDocument
-    {
-        return $this->repository->find($id);
-    }
-
-    /**
-     * @param array      $criteria
-     * @param array|null $orderBy
-     *
-     * @return CDocument|null
-     */
-    public function findOneBy(array $criteria, array $orderBy = null): ?CDocument
-    {
-        return $this->repository->findOneBy($criteria, $orderBy);
-    }
-
     /**
      * @param int $id
      *
@@ -72,6 +24,7 @@ class CDocumentRepository extends ResourceRepository
     public function getDocumentContent($id): string
     {
         try {
+            /** @var CDocument $document */
             $document = $this->find($id);
             $resourceNode = $document->getResourceNode();
             $resourceFile = $resourceNode->getResourceFile();

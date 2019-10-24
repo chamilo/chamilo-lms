@@ -6,8 +6,8 @@ namespace Chamilo\CourseBundle\Repository;
 use Chamilo\CoreBundle\Repository\ResourceRepository;
 
 /**
- * Class CQuizRepository.
+ * Class CExerciseCategoryRepository.
  */
-final class CQuizRepository extends ResourceRepository
+final class CExerciseCategoryRepository extends ResourceRepository
 {
 }

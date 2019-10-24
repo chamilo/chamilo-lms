@@ -22,7 +22,7 @@ services:
     # Classic entity repositories
     Chamilo\CoreBundle\Repository\:
         resource: ../../Repository
-        exclude: '../../Repository/{BranchSyncRepository.php,CourseRepository.php}'
+        exclude: '../../Repository/{BranchSyncRepository.php,CourseRepository.php,ResourceRepository.php}'
         tags: ['doctrine.repository_service']
 
     menu.voter.regex:

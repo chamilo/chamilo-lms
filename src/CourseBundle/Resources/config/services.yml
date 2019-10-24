@@ -4,10 +4,6 @@ parameters:
     chamilo_course.settings.form_factory.class: Chamilo\CourseBundle\Form\Factory\SettingsFormFactory
     chamilo_course.settings.manager.class: Chamilo\CourseBundle\Manager\SettingsManager
     chamilo_course.settings.schema_registry.class: Sylius\Component\Registry\ServiceRegistry
-    chamilo_course.entity.manager.group_manager.class: Chamilo\CourseBundle\Entity\Manager\GroupManager
-    chamilo_course.entity.manager.announcement_manager.class: Chamilo\CourseBundle\Entity\Manager\AnnouncementManager
-    chamilo_course.entity.group: Chamilo\CourseBundle\Entity\CGroupInfo
-    chamilo_course.entity.announcement: Chamilo\CourseBundle\Entity\CAnnouncement
 
 services:
     _defaults:
@@ -16,24 +12,33 @@ services:
 
     League\Flysystem\MountManager: '@oneup_flysystem.mount_manager'
 
-    # Classic entity repositories
     Chamilo\CourseBundle\Repository\:
         resource: ../../Repository
         exclude: '../../Repository/{CDocumentRepository.php|CQuizRepository.php}'
         tags: ['doctrine.repository_service']
 
     # Entity repository as a service
-    Chamilo\CourseBundle\Repository\CDocumentRepository: ~
-    Chamilo\CourseBundle\Repository\CQuizRepository: ~
+    Chamilo\CourseBundle\Repository\CDocumentRepository:
+        arguments:
+            $className: 'Chamilo\CourseBundle\Entity\CDocument'
+    Chamilo\CourseBundle\Repository\CQuizRepository:
+        arguments:
+            $className: 'Chamilo\CourseBundle\Entity\CQuiz'
+    Chamilo\CourseBundle\Repository\CQuizQuestionCategoryRepository:
+        arguments:
+            $className: 'Chamilo\CourseBundle\Entity\CQuizQuestionCategory'
+    Chamilo\CourseBundle\Repository\CExerciseCategoryRepository:
+        arguments:
+            $className: 'Chamilo\CourseBundle\Entity\CExerciseCategory'
 
     # Managers
     chamilo_course.entity.manager.group_manager:
-        class: '%chamilo_course.entity.manager.group_manager.class%'
-        arguments: ['%chamilo_course.entity.group%', '@doctrine']
+        class: 'Chamilo\CourseBundle\Entity\Manager\GroupManager'
+        arguments: ['Chamilo\CourseBundle\Entity\CGroupInfo', '@doctrine']
 
     chamilo_course.entity.manager.announcement_manager:
-        class: '%chamilo_course.entity.manager.announcement_manager.class%'
-        arguments: ['%chamilo_course.entity.announcement%', '@doctrine']
+        class: 'Chamilo\CourseBundle\Entity\Manager\AnnouncementManager'
+        arguments: ['Chamilo\CourseBundle\Entity\CAnnouncement', '@doctrine']
 
     # Event Listeners
     chamilo_course.listener.course:

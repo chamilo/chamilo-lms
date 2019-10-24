@@ -7,12 +7,10 @@ use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CourseBundle\Entity\CGroupInfo;
 use Chamilo\UserBundle\Entity\User;
-use Sonata\CoreBundle\Model\BaseEntityManager;
+use Sonata\Doctrine\Entity\BaseEntityManager;
 
 /**
  * Class AnnouncementManager.
- *
- * @package Chamilo\CourseBundle\Entity\Manager
  */
 class AnnouncementManager extends BaseEntityManager
 {

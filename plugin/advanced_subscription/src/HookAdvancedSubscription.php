@@ -1,5 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
  * Hook Observer for Advanced subscription plugin.
  *
@@ -7,6 +8,7 @@
  *
  * @package chamilo.plugin.advanced_subscription
  */
+
 use Chamilo\CoreBundle\Hook\HookObserver;
 use Chamilo\CoreBundle\Hook\Interfaces\HookAdminBlockEventInterface;
 use Chamilo\CoreBundle\Hook\Interfaces\HookAdminBlockObserverInterface;

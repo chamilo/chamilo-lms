@@ -289,7 +289,7 @@ class ResourceRepository
      * @param ResourceNode $resourceNode
      * @param array        $userList     User id list
      */
-    private function addResourceToUserList(ResourceNode $resourceNode, array $userList)
+    public function addResourceToUserList(ResourceNode $resourceNode, array $userList)
     {
         $em = $this->getEntityManager();
 

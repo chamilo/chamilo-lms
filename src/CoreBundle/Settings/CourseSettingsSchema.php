@@ -150,10 +150,10 @@ class CourseSettingsSchema extends AbstractSettingsSchema
                 ChoiceType::class,
                 [
                     'choices' => [
-                        'HomepageView2column' => '2column',
-                        'HomepageView3column' => '3column',
-                        'HomepageViewVerticalActivity' => 'vertical_activity',
-                        'HomepageViewActivity' => 'activity',
+                        //'HomepageView2column' => '2column',
+                        //'HomepageView3column' => '3column',
+                        //'HomepageViewVerticalActivity' => 'vertical_activity',
+                        //'HomepageViewActivity' => 'activity',
                         'HomepageViewActivityBig' => 'activity_big',
                     ],
                 ]

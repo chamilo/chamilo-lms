@@ -348,14 +348,14 @@ if (!empty($autoLaunchWarning)) {
     );
 }
 
-$homePageView = api_get_setting('homepage_view');
-
+/*$homePageView = api_get_setting('homepage_view');
 switch ($homePageView) {
     case 'activity':
     case 'activity_big':
         require 'activity.php';
         break;
-}
+}*/
+require 'activity.php';
 
 // Get session-career diagram
 $diagram = '';

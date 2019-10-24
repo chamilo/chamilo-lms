@@ -3035,7 +3035,6 @@ class ImportCsv
             Database::get_main_table(TABLE_MAIN_COURSE_USER),
             Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE),
             Database::get_main_table(TABLE_MAIN_CATEGORY),
-            Database::get_main_table(TABLE_MAIN_COURSE_MODULE),
             Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER),
             Database::get_main_table(TABLE_MAIN_SESSION),
             Database::get_main_table(TABLE_MAIN_SESSION_CATEGORY),

@@ -355,15 +355,6 @@ switch ($homePageView) {
     case 'activity_big':
         require 'activity.php';
         break;
-    case '2column':
-        require '2column.php';
-        break;
-    case '3column':
-        require '3column.php';
-        break;
-    case 'vertical_activity':
-        require 'vertical_activity.php';
-        break;
 }
 
 // Get session-career diagram

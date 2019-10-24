@@ -60,7 +60,6 @@ session_start();
 
 require_once 'install.lib.php';
 
-
 $installationLanguage = 'en';
 // Determination of the language during the installation procedure.
 if (!empty($_POST['language_list'])) {
@@ -120,34 +119,12 @@ $session_lifetime = 360000;
 //$installLanguage = isset($_SESSION['install_language']) ? $_SESSION['install_language'] : 'english';
 $installLanguage = '';
 $installationGuideLink = '../../documentation/installation_guide.html';
-/*
-// Loading language files.
-require api_get_path(SYS_LANG_PATH).'english/trad4all.inc.php';
-if ($installationLanguage != 'english') {
-    include_once api_get_path(SYS_LANG_PATH).$installationLanguage.'/trad4all.inc.php';
-    switch ($installationLanguage) {
-        case 'french':
-            $installationGuideLink = '../../documentation/installation_guide_fr_FR.html';
-            break;
-        case 'spanish':
-            $installationGuideLink = '../../documentation/installation_guide_es_ES.html';
-            break;
-        case 'italian':
-            $installationGuideLink = '../../documentation/installation_guide_it_IT.html';
-            break;
-        default:
-            break;
-    }
-}*/
 
 // Enables the portability layer and configures PHP for UTF-8
 \Patchwork\Utf8\Bootup::initAll();
 
 // Setting the error reporting levels.
 error_reporting(E_ALL);
-
-// Overriding the timelimit (for large campusses that have to be migrated).
-//@set_time_limit(0);
 
 // Upgrading from any subversion of 1.9
 $update_from_version_8 = [
@@ -529,7 +506,6 @@ if (isset($_POST['step2'])) {
             false
         );
     } ?>
-
     <table width="100%">
         <tr>
             <td>
@@ -609,10 +585,6 @@ if (isset($_POST['step2'])) {
         $kernel = new Kernel('dev', true);
         $application = new Application($kernel);
         error_log('Set Kernel');
-        // Create database
-        /*$input = new ArrayInput([]);
-        $command = $application->find('doctrine:schema:create');
-        $result = $command->run($input, new ConsoleOutput());*/
 
         session_unset();
         $_SESSION = [];

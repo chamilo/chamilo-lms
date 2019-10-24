@@ -25,8 +25,6 @@ use Knp\DoctrineBehaviors\Model as ORMBehaviors;
  *         )
  *     )
  * })
- *
- * @package Chamilo\FaqBundle\Entity
  */
 class QuestionTranslation
 {

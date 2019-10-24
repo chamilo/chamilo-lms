@@ -5,6 +5,7 @@ namespace Chamilo\FaqBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Knp\DoctrineBehaviors\Model as ORMBehaviors;
 
 /**
@@ -12,13 +13,12 @@ use Knp\DoctrineBehaviors\Model as ORMBehaviors;
  *
  * @ORM\Entity(repositoryClass="Chamilo\FaqBundle\Repository\QuestionRepository")
  * @ORM\Table(name="faq_question")
- * *
  *
- * @package Chamilo\FaqBundle\Entity
  */
 class Question
 {
     use ORMBehaviors\Translatable\Translatable;
+    use TimestampableEntity;
 
     /**
      * @ORM\Column(type="integer")
@@ -41,20 +41,8 @@ class Question
     protected $rank;
 
     /**
-     * @Gedmo\Timestampable(on="create")
-     *
-     * @ORM\Column(name="created_at", type="datetime")
-     */
-    protected $createdAt;
-
-    /**
-     * @Gedmo\Timestampable(on="update")
-     * @ORM\Column(name="updated_at", type="datetime")
-     */
-    protected $updatedAt;
-
-    /**
      * @var bool
+     *
      * @ORM\Column(name="only_auth_users", type="boolean", nullable=false)
      */
     protected $onlyAuthUsers;
@@ -117,54 +105,6 @@ class Question
         $this->rank = $rank;
 
         return $this;
-    }
-
-    /**
-     * Set createdAt.
-     *
-     * @param \DateTime $createdAt
-     *
-     * @return Question
-     */
-    public function setCreatedAt($createdAt)
-    {
-        $this->createdAt = $createdAt;
-
-        return $this;
-    }
-
-    /**
-     * Get createdAt.
-     *
-     * @return \DateTime
-     */
-    public function getCreatedAt()
-    {
-        return $this->createdAt;
-    }
-
-    /**
-     * Set updatedAt.
-     *
-     * @param \DateTime $updatedAt
-     *
-     * @return Question
-     */
-    public function setUpdatedAt($updatedAt)
-    {
-        $this->updatedAt = $updatedAt;
-
-        return $this;
-    }
-
-    /**
-     * Get updatedAt.
-     *
-     * @return \DateTime
-     */
-    public function getUpdatedAt()
-    {
-        return $this->updatedAt;
     }
 
     /**

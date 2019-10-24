@@ -16,7 +16,7 @@ api_protect_admin_script();
 // exit;
 
 $plugin = AdvancedSubscriptionPlugin::create();
-$hookPlugin = Container::$container->get('chamilo_core.hook_factory')->build(HookAdvancedSubscription::class);
+$hookPlugin = Container::instantiateHook(HookAdvancedSubscription::class);
 // Get params from request (GET or POST)
 $params = [];
 // Init result array

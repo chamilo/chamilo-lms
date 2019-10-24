@@ -2,6 +2,8 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\ExtraField as EntityExtraField;
+use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Hook\HookWSRegistration;
 use Chamilo\UserBundle\Entity\User;
 
 /**
@@ -124,7 +126,8 @@ function WSHelperVerifyKey($params)
 $server = new soap_server();
 
 /** @var HookWSRegistration $hook */
-$hook = HookWSRegistration::create();
+$hook = Container::instantiateHook(HookWSRegistration::class);
+
 if (!empty($hook)) {
     $hook->setEventData(['server' => $server]);
     $res = $hook->notifyWSRegistration(HOOK_EVENT_TYPE_PRE);

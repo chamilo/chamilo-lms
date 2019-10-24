@@ -5,6 +5,8 @@ use Chamilo\CoreBundle\Entity\ExtraField as EntityExtraField;
 use Chamilo\CoreBundle\Entity\SkillRelUser;
 use Chamilo\CoreBundle\Entity\SkillRelUserComment;
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Hook\HookCreateUser;
+use Chamilo\CoreBundle\Hook\HookUpdateUser;
 use Chamilo\CoreBundle\Repository\AccessUrlRepository;
 use Chamilo\UserBundle\Entity\User;
 use Chamilo\UserBundle\Repository\UserRepository;
@@ -189,7 +191,7 @@ class UserManager
         $creatorInfo = api_get_user_info($creatorId);
         $creatorEmail = isset($creatorInfo['email']) ? $creatorInfo['email'] : '';
 
-        $hook = HookCreateUser::create();
+        $hook = Container::instantiateHook(HookCreateUser::class);
         if (!empty($hook)) {
             $hook->notifyCreateUser(HOOK_EVENT_TYPE_PRE);
         }
@@ -1104,7 +1106,7 @@ class UserManager
         $address = null,
         $emailTemplate = []
     ) {
-        $hook = HookUpdateUser::create();
+        $hook = Container::instantiateHook(HookUpdateUser::class);
         if (!empty($hook)) {
             $hook->notifyUpdateUser(HOOK_EVENT_TYPE_PRE);
         }

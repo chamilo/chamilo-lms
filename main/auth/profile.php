@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Hook\HookUpdateUser;
 use Chamilo\UserBundle\Entity\User;
 use ChamiloSession as Session;
 
@@ -371,7 +373,7 @@ $form->setDefaults($user_data);
 $filtered_extension = false;
 
 if ($form->validate()) {
-    $hook = HookUpdateUser::create();
+    $hook = Container::instantiateHook(HookUpdateUser::class);
 
     if ($hook) {
         $hook->notifyUpdateUser(HOOK_EVENT_TYPE_PRE);

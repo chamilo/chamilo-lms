@@ -68,7 +68,7 @@ class CreateDrupalUser extends Plugin implements HookPluginInterface
         /** @var HookCreateDrupalUser $observer */
         $observer = HookCreateDrupalUser::create();
 
-        Container::$container->get('chamilo_core.hook_factory')->build(HookCreateUser::class)->attach($observer);
+        Container::instantiateHook(HookCreateUser::class)->attach($observer);
     }
 
     /**
@@ -79,7 +79,7 @@ class CreateDrupalUser extends Plugin implements HookPluginInterface
         /** @var HookCreateDrupalUser $observer */
         $observer = HookCreateDrupalUser::create();
 
-        $event = Container::$container->get('chamilo_core.hook_factory')->build(HookCreateUser::class);
+        $event = Container::instantiateHook(HookCreateUser::class);
 
         if ($event) {
             $event->detach($observer);

@@ -4,6 +4,8 @@
 use Chamilo\CoreBundle\Entity\SequenceResource;
 use Chamilo\CoreBundle\Entity\SessionRelCourse;
 use Chamilo\CoreBundle\Entity\Tag;
+use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Hook\HookResubscribe;
 use Chamilo\CoreBundle\Repository\SequenceRepository;
 
 /**
@@ -295,7 +297,7 @@ class CoursesController
             );
         }
 
-        $hook = HookResubscribe::create();
+        $hook = Container::instantiateHook(HookResubscribe::class);
         if (!empty($hook)) {
             $hook->setEventData([
                 'session_id' => $sessionId,

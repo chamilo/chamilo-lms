@@ -10,8 +10,6 @@ use Sonata\AdminBundle\Form\FormMapper;
 
 /**
  * Class AccessUrlAdmin.
- *
- * @package Chamilo\CoreBundle\Admin
  */
 class AccessUrlAdmin extends AbstractAdmin
 {

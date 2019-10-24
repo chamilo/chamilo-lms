@@ -8,11 +8,12 @@ use Symfony\Component\HttpKernel\Bundle\Bundle;
 
 /**
  * Class ChamiloCoreBundle.
- *
- * @package Chamilo\CoreBundle
  */
 class ChamiloCoreBundle extends Bundle
 {
+    /**
+     * @param ContainerBuilder $container
+     */
     public function build(ContainerBuilder $container)
     {
         parent::build($container);

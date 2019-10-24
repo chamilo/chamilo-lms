@@ -16,8 +16,6 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 
 /**
  * Class ContactType.
- *
- * @package Chamilo\ContactBundle\Form\Type
  */
 class ContactType extends AbstractType
 {

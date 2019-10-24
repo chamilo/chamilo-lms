@@ -8,8 +8,6 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Class Editor.
- *
- * @package Chamilo\CoreBundle\Component\Editor
  */
 class Editor
 {

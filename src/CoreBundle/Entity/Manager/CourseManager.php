@@ -8,8 +8,6 @@ use Sonata\CoreBundle\Model\BaseEntityManager;
 
 /**
  * Class CourseManager.
- *
- * @package Chamilo\CoreBundle\Entity\Manager
  */
 class CourseManager extends BaseEntityManager
 {

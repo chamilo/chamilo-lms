@@ -9,13 +9,16 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 /**
  * Class CurriculumItemRelUserType.
- *
- * @package Chamilo\CoreBundle\Form
  */
 class CurriculumItemRelUserType extends AbstractType
 {
     public $itemId;
 
+    /**
+     * CurriculumItemRelUserType constructor.
+     *
+     * @param null $itemId
+     */
     public function __construct($itemId = null)
     {
         $this->itemId = $itemId;

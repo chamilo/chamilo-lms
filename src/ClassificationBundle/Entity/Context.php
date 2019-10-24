@@ -7,8 +7,6 @@ use Sonata\ClassificationBundle\Entity\BaseContext;
 
 /**
  * Class Context.
- *
- * @package Chamilo\ClassificationBundle\Entity
  */
 class Context extends BaseContext
 {

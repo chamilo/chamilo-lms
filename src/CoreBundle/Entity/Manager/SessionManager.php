@@ -11,8 +11,6 @@ use Sonata\CoreBundle\Model\BaseEntityManager;
 
 /**
  * Class SessionManager.
- *
- * @package Chamilo\CoreBundle\Entity\Manager
  */
 class SessionManager extends BaseEntityManager
 {

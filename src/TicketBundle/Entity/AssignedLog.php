@@ -14,7 +14,6 @@ use Doctrine\ORM\Mapping as ORM;
  * )
  * @ORM\Entity
  *
- * @package Chamilo\TicketBundle\Entity
  */
 class AssignedLog
 {

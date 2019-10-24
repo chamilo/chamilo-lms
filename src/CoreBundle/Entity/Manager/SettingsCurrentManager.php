@@ -7,8 +7,6 @@ use Sonata\CoreBundle\Model\BaseEntityManager;
 
 /**
  * Class SettingsCurrentRepository.
- *
- * @package Chamilo\CoreBundle\Repository
  */
 class SettingsCurrentManager extends BaseEntityManager
 {

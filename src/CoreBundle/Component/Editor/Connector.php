@@ -17,8 +17,6 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Class elFinder Connector - editor + Chamilo repository.
- *
- * @package Chamilo\CoreBundle\Component\Editor
  */
 class Connector
 {

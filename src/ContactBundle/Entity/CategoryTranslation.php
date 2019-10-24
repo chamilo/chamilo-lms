@@ -14,8 +14,6 @@ use Knp\DoctrineBehaviors\Model as ORMBehaviors;
  *     name="contact_category_translation",
  *     options={"row_format":"DYNAMIC"}
  * )
- *
- * @package Chamilo\ContactBundle\Entity
  */
 class CategoryTranslation
 {
@@ -28,6 +26,7 @@ class CategoryTranslation
 
     /**
      * @var string
+     *
      * @ORM\Column(type="string", length=190, nullable=false)
      */
     protected $locale;

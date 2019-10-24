@@ -8,8 +8,6 @@ use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
 
 /**
  * Class CkEditor.
- *
- * @package Chamilo\CoreBundle\Component\Editor\CkEditor
  */
 class CkEditor extends Editor
 {

@@ -9,11 +9,13 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 /**
  * Class CurriculumItemType.
- *
- * @package Chamilo\CoreBundle\Form
  */
 class CurriculumItemType extends AbstractType
 {
+    /**
+     * @param FormBuilderInterface $builder
+     * @param array                $options
+     */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         //$builderData = $builder->getData();

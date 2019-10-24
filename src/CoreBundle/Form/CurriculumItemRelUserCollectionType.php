@@ -9,18 +9,25 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 /**
  * Class CurriculumItemRelUserCollectionType.
- *
- * @package Chamilo\CoreBundle\Form
  */
 class CurriculumItemRelUserCollectionType extends AbstractType
 {
     public $itemId;
 
+    /**
+     * CurriculumItemRelUserCollectionType constructor.
+     *
+     * @param null $itemId
+     */
     public function __construct($itemId = null)
     {
         $this->itemId = $itemId;
     }
 
+    /**
+     * @param FormBuilderInterface $builder
+     * @param array                $options
+     */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder->add(

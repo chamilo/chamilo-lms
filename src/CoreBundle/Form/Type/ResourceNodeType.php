@@ -9,8 +9,6 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
  * Class ResourceNodeType.
- *
- * @package Chamilo\CoreBundle\Form\Type
  */
 class ResourceNodeType extends AbstractType
 {

@@ -12,8 +12,6 @@ use Symfony\Component\Routing\RouteCollectionBuilder;
 
 /**
  * Class Kernel.
- *
- * @package Chamilo
  */
 class Kernel extends BaseKernel
 {

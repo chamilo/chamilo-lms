@@ -13,8 +13,6 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
  * Class CourseBlockService.
- *
- * @package Chamilo\CoreBundle\Block
  */
 class SkillBlockService extends AbstractBlockService
 {

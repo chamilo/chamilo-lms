@@ -10,8 +10,6 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
  * Class CourseType.
- *
- * @package Chamilo\CoreBundle\Form\type
  */
 class CourseType extends AbstractType
 {

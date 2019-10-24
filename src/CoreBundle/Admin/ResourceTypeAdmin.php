@@ -11,8 +11,6 @@ use Sonata\AdminBundle\Show\ShowMapper;
 
 /**
  * Class ResourceTypeAdmin.
- *
- * @package Chamilo\CoreBundle\Admin
  */
 class ResourceTypeAdmin extends AbstractAdmin
 {

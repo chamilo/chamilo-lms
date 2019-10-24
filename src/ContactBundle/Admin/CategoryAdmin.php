@@ -11,8 +11,6 @@ use Sonata\AdminBundle\Form\FormMapper;
 
 /**
  * Class UserAdmin.
- *
- * @package Chamilo\ContactBundle\Admin
  */
 class CategoryAdmin extends AbstractAdmin
 {

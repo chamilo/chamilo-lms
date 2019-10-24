@@ -43,6 +43,7 @@
         "ext-mbstring": "*",
         "ext-soap" : "*",
         "ext-xml": "*",
+        "ext-xmlreader": "*",
         "ext-zip": "*",
         "ext-zlib": "*",
         "doctrine/orm": "~2.6",

@@ -138,23 +138,10 @@ if ($is_allowedToEdit) {
                 api_not_allowed(true);
             }
             require_once api_get_path(SYS_CODE_PATH).'exercise/export/qti2/qti2_export.php';
-
             $export = export_exercise_to_qti($exerciseId, true);
 
-
-
-            $archive_path = api_get_path(SYS_ARCHIVE_PATH);
-            $temp_dir_short = api_get_unique_id();
-            $temp_zip_dir = $archive_path.$temp_dir_short;
-            if (!is_dir($temp_zip_dir)) {
-                mkdir($temp_zip_dir, api_get_permissions_for_new_directories());
-            }
-            $temp_zip_file = $temp_zip_dir.'/'.api_get_unique_id().'.zip';
-            $temp_xml_file = $temp_zip_dir.'/qti2export_'.$exerciseId.'.xml';
-            file_put_contents($temp_xml_file, $export);
-
             $xmlReader = new XMLReader();
-            $xmlReader->open($temp_xml_file);
+            $xmlReader->xml($export);
             $xmlReader->setParserProperty(XMLReader::VALIDATE, true);
             $isValid = $xmlReader->isValid();
 

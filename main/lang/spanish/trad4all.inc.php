@@ -1142,7 +1142,7 @@ $AdminLogin = "Nombre de usuario del administrador";
 $AdminPass = "Contraseña del administrador (<font color=\"red\">puede que desee cambiarla</font>)";
 $EducationManager = "Responsable educativo";
 $CampusName = "Nombre de su plataforma";
-$DBSettingIntro = "El script de instalación creará las principales bases de datos de Chamilo. Por favor, recuerde que  Chamilo necesitará crear varias bases de datos. Si sólo puede tener una base de datos en su proveedor,  Chamilo no funcionará.";
+$DBSettingIntro = "El script de instalación creará (o usará) la base de datos de Chamilo con el nombre dado aquí. Por favor, asegúrese que el usuario indicado tiene el permiso para crear la base de datos indicada. Si una base de este nombre ya existe, será sobrescrita. Por favor no use el usuario root como usuario de base de datos. Esto podría provocar serios problemas de seguridad.";
 $TimeSpentByStudentsInCourses = "Tiempo dedicado por los estudiantes en los cursos";
 $Step3 = "Paso 3 de 6";
 $Step4 = "Paso 4 de 6";
@@ -8457,4 +8457,5 @@ $RealisationCertificate = "Certificado de logro";
 $SurveysReport = "Reporte de encuestas";
 $EnterYourNewPassword = "Introduzca su nueva contraseña aquí.";
 $RepeatYourNewPassword = "Introduzca su nueva contraseña una vez más, para reducir la probabilidad de errores.";
+$UserClassExplanation = "Información: La lista de clases a continuación contiene la lista de clases que ya ha registrado en su clase. Si esta lista está vacía, use el + verde arriba para agregar clases.";
 ?>

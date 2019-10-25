@@ -865,9 +865,8 @@ class AddCourse
         $course_id = 0;
 
         if ($ok_to_register_course) {
-            $courseManager = Container::$container->get('chamilo_core.entity.manager.course_manager');
-            /** @var \Chamilo\CoreBundle\Entity\Course $course */
-            $course = $courseManager->create();
+            $repo = Container::getCourseRepository();
+            $course = new \Chamilo\CoreBundle\Entity\Course();
             $urlId = 1;
             if (api_get_current_access_url_id() !== -1) {
                 $urlId = api_get_current_access_url_id();
@@ -886,7 +885,6 @@ class AddCourse
                 ->setDiskQuota($disk_quota)
                 ->setCreationDate(new \DateTime())
                 ->setExpirationDate(new \DateTime($expiration_date))
-                //->setLastEdit()
                 ->setDepartmentName($department_name)
                 ->setDepartmentUrl($department_url)
                 ->setSubscribe($subscribe)
@@ -894,11 +892,16 @@ class AddCourse
                 ->setVisualCode($visual_code)
                 ->addUrl($url)
             ;
-
-            $courseManager->save($course, true);
+            $repo->getEntityManager()->persist($course);
+            $repo->getEntityManager()->flush();
             $course_id = $course->getId();
 
             if ($course_id) {
+                $repo->addResourceNode(
+                    $course,
+                    api_get_user_entity(api_get_user_id()),
+                    $url
+                );
                 $sort = api_max_sort_value('0', api_get_user_id());
                 // Default true
                 $addTeacher = isset($params['add_user_as_teacher']) ? $params['add_user_as_teacher'] : true;

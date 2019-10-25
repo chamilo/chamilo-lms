@@ -6338,7 +6338,7 @@ class DocumentManager
         $readonly = (int) $readonly;
         $documentRepo = Container::getDocumentRepository();
 
-        $parentNode = null;
+        $parentNode = $courseEntity;
         if (!empty($parentId)) {
             $parent = $documentRepo->find($parentId);
             if ($parent) {

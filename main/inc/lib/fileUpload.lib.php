@@ -1488,10 +1488,11 @@ function create_unexisting_directory(
             $session_id
         );
 
-        $em = Database::getManager();
-        $document = $em->getRepository('ChamiloCourseBundle:CDocument')->find($documentData['iid']);
+        if ($documentData) {
+            $document = Container::getDocumentRepository()->find($documentData['iid']);
 
-        return $document;
+            return $document;
+        }
     }
 
     return false;

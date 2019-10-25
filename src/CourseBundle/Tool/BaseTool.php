@@ -5,12 +5,9 @@ namespace Chamilo\CourseBundle\Tool;
 
 use Sonata\CoreBundle\Model\BaseEntityManager;
 use Sylius\Bundle\SettingsBundle\Schema\SchemaInterface;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 /**
  * Class BaseTool.
- *
- * @package Chamilo\CourseBundle\Tool
  */
 abstract class BaseTool implements ToolInterface
 {
@@ -20,7 +17,6 @@ abstract class BaseTool implements ToolInterface
     protected $image;
     protected $admin;
     protected $courseSettings;
-    protected $platformSettings;
     protected $manager;
     protected $types;
 
@@ -29,9 +25,10 @@ abstract class BaseTool implements ToolInterface
      * @param string $category
      * @param string $link
      * @param string $image
-     * @param $courseSettings
+     * @param        $courseSettings
+     * @param array  $types
      */
-    public function __construct($name, $category, $link, $image, $courseSettings, $types, $manager = null)
+    public function __construct($name, $category, $link, $image, $courseSettings, $types)
     {
         $this->name = $name;
         $this->category = $category;
@@ -138,12 +135,5 @@ abstract class BaseTool implements ToolInterface
     public function getTypes()
     {
         return $this->types;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setDefaultSettings(OptionsResolverInterface $resolver)
-    {
     }
 }

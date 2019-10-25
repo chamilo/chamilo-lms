@@ -5,8 +5,6 @@ namespace Chamilo\CourseBundle\Tool;
 
 /**
  * Interface ToolInterface.
- *
- * @package Chamilo\CourseBundle\Tool
  */
 interface ToolInterface
 {

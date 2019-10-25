@@ -5,8 +5,6 @@ namespace Chamilo\CourseBundle\Tool;
 
 /**
  * Class Exercise.
- *
- * @package Chamilo\CourseBundle\Tool
  */
 class Exercise extends BaseTool
 {

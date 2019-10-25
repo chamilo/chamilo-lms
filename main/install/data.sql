@@ -79,36 +79,6 @@ INSERT INTO course_category (name, code, parent_id, tree_pos, children_count, au
 ('PC Skills','PC',NULL,2,0,'TRUE','TRUE'),
 ('Projects','PROJ',NULL,3,0,'TRUE','TRUE');
 
-INSERT INTO course_module VALUES
-(1,'calendar_event','calendar/agenda.php','agenda.gif',1,1,'basic'),
-(2,'link','link/link.php','links.gif',4,1,'basic'),
-(3,'document','document/document.php','documents.gif',3,1,'basic'),
-(4,'student_publication','work/work.php','works.gif',3,2,'basic'),
-(5,'announcement','announcements/announcements.php','valves.gif',2,1,'basic'),
-(6,'user','user/user.php','members.gif',2,3,'basic'),
-(7,'forum','forum/index.php','forum.gif',1,2,'basic'),
-(8,'quiz','exercice/exercice.php','quiz.gif',2,2,'basic'),
-(9,'group','group/group.php','group.gif',3,3,'basic'),
-(10,'course_description','course_description/','info.gif',1,3,'basic'),
-(11,'chat','chat/chat.php','chat.gif',0,0,'external'),
-(12,'dropbox','dropbox/index.php','dropbox.gif',4,2,'basic'),
-(13,'tracking','tracking/courseLog.php','statistics.gif',1,3,'courseadmin'),
-(14,'homepage_link','link/link.php?action=addlink','npage.gif',1,1,'courseadmin'),
-(15,'course_setting','course_info/infocours.php','reference.gif',1,1,'courseadmin'),
-(16,'External','','external.gif',0,0,'external'),
-(17,'AddedLearnpath','','scormbuilder.gif',0,0,'external'),
-(18,'learnpath','lp/lp_controller.php','scorms.gif',5,1,'basic'),
-(19,'blog','blog/blog.php','blog.gif',1,2,'basic'),
-(20,'blog_management','blog/blog_admin.php','blog_admin.gif',1,2,'courseadmin'),
-(21,'course_maintenance','course_info/maintenance.php','backup.gif',2,3,'courseadmin'),
-(22,'survey','survey/survey_list.php','survey.gif',2,1,'basic'),
-(23,'wiki','wiki/index.php','wiki.gif',2,3,'basic'),
-(24,'gradebook','gradebook/index.php','gradebook.gif',2,2,'basic'),
-(25,'glossary','glossary/index.php','glossary.gif',2,1,'basic'),
-(26,'notebook','notebook/index.php','notebook.gif',2,1,'basic'),
-(27,'attendance','attendance/index.php','attendance.gif',2,1,'basic'),
-(28,'course_progress','course_progress/index.php','course_progress.gif',2,1,'basic');
-
 INSERT INTO extra_field (extra_field_type, field_type, variable, display_text, visible_to_self, changeable, created_at) VALUES (1, 1, 'legal_accept','Legal',0,0, NOW());
 INSERT INTO extra_field (extra_field_type, field_type, variable, display_text, visible_to_self, changeable, created_at) VALUES (1, 1, 'already_logged_in','Already logged in',0,0, NOW());
 INSERT INTO extra_field (extra_field_type, field_type, variable, display_text, visible_to_self, changeable, created_at) VALUES (1, 1, 'update_type','Update script type',0,0, NOW());

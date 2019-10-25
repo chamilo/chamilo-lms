@@ -146,23 +146,6 @@ function checkPhpSettingExists($phpSetting)
 }
 
 /**
- * Check if the current url is the same root_web when the multiple_access_url is enabled.
- *
- * @return bool
- */
-function checkAccessUrl()
-{
-    if (api_get_configuration_value('multiple_access_urls') !== true) {
-        return true;
-    }
-
-    $currentWebPath = api_get_path(WEB_PATH);
-    $rootWeb = api_get_configuration_value('root_web');
-
-    return $currentWebPath === $rootWeb;
-}
-
-/**
  * Returns a textual value ('ON' or 'OFF') based on a requester 2-state ini- configuration setting.
  *
  * @param string $val a php ini value
@@ -789,16 +772,6 @@ function display_requirements(
     }
     echo '</div>';
 
-    $properlyAccessUrl = checkAccessUrl();
-    if (!$properlyAccessUrl) {
-        echo '
-            <div class="alert alert-danger">
-            <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>&nbsp;'.
-            sprintf(get_lang('InstallMultiURLDetectedNotMainURL'), api_get_configuration_value('root_web')).'
-            </div>
-        ';
-    }
-
     //  SERVER REQUIREMENTS
     echo '<h4 class="install-subtitle">'.get_lang('ServerRequirements').'</h4>';
     $timezone = checkPhpSettingExists('date.timezone');
@@ -1101,9 +1074,6 @@ function display_requirements(
             } ?>
             </ul>
             <?php
-        }
-        if (!$properlyAccessUrl) {
-            $error = true;
         }
 
         // And now display the choice buttons (go back or install)?>
@@ -3052,8 +3022,15 @@ function installSchemas($container, $manager, $upgrade = false)
     error_log('installSchemas');
     $settingsManager = Container::getSettingsManager();
 
-    $accessUrl = $manager->getRepository('ChamiloCoreBundle:AccessUrl')->find(1);
+    // Install course tools (table "tool")
+    $toolChain = $container->get('chamilo_core.tool_chain');
+    $toolChain->createTools($manager);
+
+    $urlRepo = $container->get('Chamilo\CoreBundle\Repository\AccessUrlRepository');
+    $accessUrl = $urlRepo->find(1);
     if (!$accessUrl) {
+        $em = $urlRepo->getEntityManager();
+
         // Creating AccessUrl
         $accessUrl = new AccessUrl();
         $accessUrl
@@ -3061,13 +3038,9 @@ function installSchemas($container, $manager, $upgrade = false)
             ->setDescription('')
             ->setActive(1)
         ;
-        $manager->persist($accessUrl);
-        $manager->flush();
+        $em->persist($accessUrl);
+        $em->flush();
     }
-
-    // Install course tools (table "tool")
-    $toolChain = $container->get('chamilo_course.tool_chain');
-    $toolChain->createTools($manager);
 
     if ($upgrade) {
         $settingsManager->updateSchemas($accessUrl);
@@ -3088,7 +3061,8 @@ function upgradeWithContainer($container)
     $manager = Database::getManager();
     installGroups($container, $manager);
     error_log('installGroups');
-    installSchemas($container, $manager, true);
+    // @todo check if adminId = 1
+    installSchemas($container, $manager, 1, true);
     installPages($container);
     fixMedia($container);
 }
@@ -3175,6 +3149,7 @@ function finishInstallationWithContainer(
     $manager = Database::getManager();
     $connection = $manager->getConnection();
     $sql = getVersionTable();
+
     // Add version table
     $connection->executeQuery($sql);
 
@@ -3261,7 +3236,7 @@ function finishInstallationWithContainer(
     }
 
     installGroups($container, $manager);
-    installSchemas($container, $manager);
+    installSchemas($container, $manager, false);
     installPages($container);
 
     // Inserting default data
@@ -3273,7 +3248,7 @@ function finishInstallationWithContainer(
     UserManager::setPasswordEncryption($encryptPassForm);
 
     // Create admin user.
-    @UserManager::create_user(
+    $adminId = @UserManager::create_user(
         $adminFirstName,
         $adminLastName,
         1,
@@ -3330,6 +3305,12 @@ function finishInstallationWithContainer(
         ['available' => 1],
         ['dokeos_folder = ?' => $languageForm]
     );
+
+    $userManager = Container::getUserManager();
+    $urlRepo = $container->get('Chamilo\CoreBundle\Repository\AccessUrlRepository');
+    $accessUrl = $urlRepo->find(1);
+    $admin = $userManager->find($adminId);
+    $urlRepo->addResourceNode($accessUrl, $admin);
 
     // Install settings
     installSettings(

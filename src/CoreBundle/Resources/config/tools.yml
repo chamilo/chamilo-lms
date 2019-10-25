@@ -185,7 +185,7 @@ services:
             - document/document.php
             - folder_document.gif
             - '@chamilo_course.settings.document'
-            - [document]
+            - [CDocument]
             - 0
         tags:
             - {name: chamilo_core.tool}

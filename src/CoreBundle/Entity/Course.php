@@ -1066,7 +1066,7 @@ class Course extends AbstractResource implements ResourceInterface
      */
     public function setSubscribe($subscribe)
     {
-        $this->subscribe = boolval($subscribe);
+        $this->subscribe = (bool) $subscribe;
 
         return $this;
     }
@@ -1090,7 +1090,7 @@ class Course extends AbstractResource implements ResourceInterface
      */
     public function setUnsubscribe($unsubscribe)
     {
-        $this->unsubscribe = boolval($unsubscribe);
+        $this->unsubscribe = (bool) $unsubscribe;
 
         return $this;
     }

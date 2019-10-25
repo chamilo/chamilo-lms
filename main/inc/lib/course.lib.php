@@ -4,6 +4,7 @@
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ExtraField as EntityExtraField;
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Repository\CourseRepository;
 use Chamilo\CoreBundle\ToolChain;
 use Chamilo\CoreBundle\Hook\HookCreateCourse;
 use Chamilo\CourseBundle\Component\CourseCopy\CourseBuilder;
@@ -55,14 +56,6 @@ class CourseManager
     }
 
     /**
-     * @param $manager
-     */
-    public static function setCourseManager($manager)
-    {
-        self::$manager = $manager;
-    }
-
-    /**
      * @return SettingsManager
      */
     public static function getCourseSettingsManager()
@@ -79,11 +72,13 @@ class CourseManager
     }
 
     /**
-     * @return Chamilo\CoreBundle\Entity\Manager\CourseManager
+     * @deprecated
+     *
+     * @return CourseRepository
      */
     public static function getManager()
     {
-        return self::$manager;
+        return Container::getCourseRepository();
     }
 
     /**

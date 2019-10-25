@@ -24,8 +24,6 @@ use Symfony\Component\Security\Core\User\UserInterface;
 /**
  * Class CourseListener.
  * Sets the course and session objects in the controller that implements the CourseControllerInterface.
- *
- * @package Chamilo\CourseBundle\EventListener
  */
 class CourseListener
 {

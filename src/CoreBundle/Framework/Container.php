@@ -22,13 +22,10 @@ use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Security\Core\Authorization\AuthorizationChecker;
 use Symfony\Component\Security\Core\Role\RoleHierarchy;
 use Symfony\Contracts\Translation\TranslatorInterface;
-use Zend\EventManager\EventInterface;
 
 /**
  * Class Container
  * This class is a way to access Symfony2 services in legacy Chamilo code.
- *
- * @package Chamilo\CoreBundle\Framework
  */
 class Container
 {
@@ -215,6 +212,9 @@ class Container
         return self::$container->get('request_stack');
     }
 
+    /**
+     * @param $request
+     */
     public static function setRequest($request)
     {
         self::$request = $request;
@@ -369,6 +369,14 @@ class Container
     }
 
     /**
+     * @return AccessUrlRepository
+     */
+    public static function getCourseRepository()
+    {
+        return self::$container->get('Chamilo\CoreBundle\Repository\CourseRepository');
+    }
+
+    /**
      * @param $manager UserManager
      */
     public static function setUserManager($manager)
@@ -458,8 +466,6 @@ class Container
         self::setSiteManager($container->get('sonata.page.manager.site'));
 
         \CourseManager::setCourseSettingsManager($container->get('chamilo_course.settings.manager'));
-        \CourseManager::setCourseManager($container->get('chamilo_core.entity.manager.course_manager'));
-
         // Setting course tool chain (in order to create tools to a course)
         \CourseManager::setToolList($container->get('chamilo_core.tool_chain'));
 

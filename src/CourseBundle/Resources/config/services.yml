@@ -73,7 +73,7 @@ services:
         class: Chamilo\CoreBundle\Security\Authorization\Voter\GroupVoter
         arguments:
             - '@doctrine.orm.entity_manager'
-            - '@chamilo_core.entity.manager.course_manager'
+            - '@Chamilo\CoreBundle\Repository\CourseRepository'
             - '@chamilo_course.entity.manager.group_manager'
             - '@security.authorization_checker'
             - '@service_container'

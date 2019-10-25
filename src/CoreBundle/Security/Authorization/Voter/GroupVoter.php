@@ -4,6 +4,7 @@
 namespace Chamilo\CoreBundle\Security\Authorization\Voter;
 
 use Chamilo\CoreBundle\Entity\Manager\CourseManager;
+use Chamilo\CoreBundle\Repository\CourseRepository;
 use Chamilo\CourseBundle\Entity\CGroupInfo;
 use Chamilo\CourseBundle\Entity\Manager\GroupManager;
 use Chamilo\UserBundle\Entity\User;
@@ -41,7 +42,7 @@ class GroupVoter extends Voter
      */
     public function __construct(
         EntityManager $entityManager,
-        CourseManager $courseManager,
+        CourseRepository $courseManager,
         GroupManager $groupManager,
         AuthorizationCheckerInterface $authorizationChecker,
         ContainerInterface $container

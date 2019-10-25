@@ -144,7 +144,7 @@ class ResourceNodeVoter extends Voter
         $links = $resourceNode->getResourceLinks();
         $linkFound = false;
 
-        $courseManager = $this->container->get('chamilo_core.entity.manager.course_manager');
+        $courseManager = $this->container->get('Chamilo\CoreBundle\Repository\CourseRepository');
 
         /** @var ResourceLink $link */
         foreach ($links as $link) {

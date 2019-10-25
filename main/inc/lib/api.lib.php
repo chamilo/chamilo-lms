@@ -1,6 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\AccessUrl;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session as SessionEntity;
 use Chamilo\CoreBundle\Entity\SettingsCurrent;
@@ -2145,7 +2146,7 @@ function api_get_group_entity($id = 0)
 /**
  * @param int $id
  *
- * @return \Chamilo\CoreBundle\Entity\AccessUrl
+ * @return AccessUrl
  */
 function api_get_url_entity($id = 0)
 {
@@ -2153,7 +2154,7 @@ function api_get_url_entity($id = 0)
         $id = api_get_current_access_url_id();
     }
 
-    return Database::getManager()->getRepository('ChamiloCoreBundle:AccessUrl')->find($id);
+    return Container::getAccessUrlRepository()->find($id);
 }
 
 /**

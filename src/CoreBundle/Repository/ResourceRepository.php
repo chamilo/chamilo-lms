@@ -121,7 +121,6 @@ class ResourceRepository extends EntityRepository
         $resourceType = $em->getRepository('ChamiloCoreBundle:Resource\ResourceType')->findOneBy(
             ['name' => $resource->getToolName()]
         );
-
         $resourceNode
             ->setName($resource->getResourceName())
             ->setCreator($creator)

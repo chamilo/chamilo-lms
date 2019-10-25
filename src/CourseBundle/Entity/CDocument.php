@@ -412,6 +412,6 @@ class CDocument extends AbstractResource implements ResourceInterface
      */
     public function getToolName(): string
     {
-        return 'document';
+        return 'CDocument';
     }
 }

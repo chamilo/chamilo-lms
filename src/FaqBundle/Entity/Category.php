@@ -5,8 +5,8 @@ namespace Chamilo\FaqBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
-use Knp\DoctrineBehaviors\Model as ORMBehaviors;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
+use Knp\DoctrineBehaviors\Model as ORMBehaviors;
 
 /**
  * Class Category.

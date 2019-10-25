@@ -11,7 +11,6 @@ use Knp\DoctrineBehaviors\Model as ORMBehaviors;
  *
  * @ORM\Entity
  * @ORM\Table(name="contact_category")
- *
  */
 class Category
 {
@@ -28,12 +27,14 @@ class Category
 
     /**
      * @var string
+     *
      * @ORM\Column(name="name", type="string", nullable=false)
      */
     protected $name;
 
     /**
      * @var string
+     *
      * @ORM\Column(name="email", type="string")
      */
     protected $email;

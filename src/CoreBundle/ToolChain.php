@@ -41,8 +41,7 @@ use Doctrine\Common\Persistence\ObjectManager;
 
  * 1. Create a new tool class here: src/Chamilo/CoreBundle/Tool
  * 2. Add the class as a service here: src/Chamilo/CoreBundle/Resources/config/tools.yml  (see examples there)
- * 3. Create a new course. When you create a new course the new tool will be created
- *
+ * 3. Create a new course. When you create a new course the new tool will be created.
  */
 class ToolChain
 {

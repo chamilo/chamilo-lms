@@ -3,7 +3,6 @@
 
 namespace Chamilo\CoreBundle\Settings;
 
-use Chamilo\CoreBundle\Entity\Manager\CourseManager;
 use Sylius\Bundle\SettingsBundle\Schema\AbstractSettingsBuilder;
 use Sylius\Bundle\SettingsBundle\Schema\SchemaInterface;
 

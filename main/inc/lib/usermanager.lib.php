@@ -7,7 +7,6 @@ use Chamilo\CoreBundle\Entity\SkillRelUserComment;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Hook\HookCreateUser;
 use Chamilo\CoreBundle\Hook\HookUpdateUser;
-use Chamilo\CoreBundle\Repository\AccessUrlRepository;
 use Chamilo\UserBundle\Entity\User;
 use Chamilo\UserBundle\Repository\UserRepository;
 use ChamiloSession as Session;
@@ -17,8 +16,6 @@ use ChamiloSession as Session;
  *
  * This library provides functions for user management.
  * Include/require it in your code to use its functionality.
- *
- * @package chamilo.library
  *
  * @author Julio Montoya <gugli100@gmail.com> Social network groups added 2009/12
  */

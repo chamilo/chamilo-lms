@@ -8,7 +8,6 @@ use Sonata\CoreBundle\Model\BaseEntityManager;
 /**
  * Class SequenceResourceManager
  * CRUD for the course.
- *
  */
 class SequenceResourceManager extends BaseEntityManager
 {

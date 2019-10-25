@@ -13,7 +13,6 @@ use Doctrine\ORM\Mapping as ORM;
  *  name="ticket_assigned_log",
  * )
  * @ORM\Entity
- *
  */
 class AssignedLog
 {

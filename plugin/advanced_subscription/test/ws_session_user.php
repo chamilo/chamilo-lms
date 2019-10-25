@@ -1,16 +1,13 @@
 <?php
 /* For license terms, see /license.txt */
 
-/**
- * A script to test session details by user web service.
- *
- * @package chamilo.plugin.advanced_subscription
- */
-
 use Chamilo\CoreBundle\Framework\Container;
 
+/**
+ * A script to test session details by user web service.
+ */
 require_once __DIR__.'/../config.php';
-// Protect test
+
 api_protect_admin_script();
 
 // exit;

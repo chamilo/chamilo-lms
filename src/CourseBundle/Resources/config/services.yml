@@ -126,5 +126,3 @@ services:
             - '@chamilo_course.repository.parameter'
             - '@sylius.factory.settings'
             - '@event_dispatcher'
-
-

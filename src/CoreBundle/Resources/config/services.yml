@@ -293,4 +293,3 @@ services:
 
     Liip\ImagineBundle\Service\FilterService:
         alias: 'liip_imagine.service.filter'
-

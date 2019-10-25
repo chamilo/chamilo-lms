@@ -24,7 +24,6 @@ use Knp\DoctrineBehaviors\Model as ORMBehaviors;
  *         )
  *     )
  * })
- *
  */
 class CategoryTranslation
 {

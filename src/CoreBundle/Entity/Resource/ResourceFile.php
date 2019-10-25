@@ -88,7 +88,6 @@ class ResourceFile
     protected $dimensions;
 
     /**
-     *
      * @var int
      *
      * @Assert\NotBlank()

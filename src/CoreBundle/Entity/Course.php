@@ -1333,7 +1333,7 @@ class Course extends AbstractResource implements ResourceInterface
      *
      * @return bool
      */
-    protected function hasSubscription(CourseRelUser $subscription)
+    public function hasSubscription(CourseRelUser $subscription)
     {
         if ($this->getUsers()->count()) {
             $criteria = Criteria::create()->where(
@@ -1358,7 +1358,7 @@ class Course extends AbstractResource implements ResourceInterface
      * @param string $role
      * @param string $status
      */
-    protected function addUser(User $user, $relationType, $role, $status)
+    public function addUser(User $user, $relationType, $role, $status)
     {
         $courseRelUser = new CourseRelUser();
         $courseRelUser->setCourse($this);

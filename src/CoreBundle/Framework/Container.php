@@ -9,7 +9,6 @@ use Chamilo\CoreBundle\Repository\AccessUrlRepository;
 use Chamilo\CoreBundle\ToolChain;
 use Chamilo\CourseBundle\Repository\CDocumentRepository;
 use Chamilo\CourseBundle\Repository\CExerciseCategoryRepository;
-use Chamilo\CourseBundle\Repository\CQuizCategoryRepository;
 use Chamilo\CourseBundle\Repository\CQuizQuestionCategoryRepository;
 use Chamilo\CourseBundle\Repository\CQuizRepository;
 use Chamilo\PageBundle\Entity\Page;

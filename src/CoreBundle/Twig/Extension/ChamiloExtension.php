@@ -8,8 +8,6 @@ use Twig\TwigFilter;
 
 /**
  * Class ChamiloExtension.
- *
- * @package Chamilo\CoreBundle\Twig\Extension
  */
 class ChamiloExtension extends AbstractExtension
 {

@@ -19,7 +19,7 @@ services:
 
     Chamilo\CoreBundle\:
         resource: '../../*'
-        exclude: '../../{Repository,Tool,Admin,Block,Component,Composer,DependencyInjection,EventListener,Form,Framework,Menu,Migrations,Security,Settings,Twig,Controller,ChamiloCoreBundle.php,Entity,Tests}'
+        exclude: '../../{Repository,Tool,Admin,Block,Component,Composer,DependencyInjection,EventListener,Form,Framework,Menu,Migrations,Security,Settings,Controller,ChamiloCoreBundle.php,Entity,Tests}'
         public: true
 
     Chamilo\CoreBundle\Controller\:

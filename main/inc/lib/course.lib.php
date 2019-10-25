@@ -3,6 +3,8 @@
 
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ExtraField as EntityExtraField;
+use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Hook\HookCreateCourse;
 use Chamilo\CourseBundle\Component\CourseCopy\CourseBuilder;
 use Chamilo\CourseBundle\Component\CourseCopy\CourseRestorer;
 use Chamilo\CourseBundle\Manager\SettingsManager;
@@ -97,7 +99,7 @@ class CourseManager
     {
         global $_configuration;
 
-        $hook = HookCreateCourse::create();
+        $hook = Container::instantiateHook(HookCreateCourse::class);
 
         // Check portal limits
         $accessUrlId = empty($accessUrlId)

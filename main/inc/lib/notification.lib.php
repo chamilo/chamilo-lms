@@ -1,6 +1,10 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Hook\HookNotificationContent;
+use Chamilo\CoreBundle\Hook\HookNotificationTitle;
+
 /**
  * Notification class
  * This class provides methods for the Notification management.
@@ -149,7 +153,7 @@ class Notification extends Model
      */
     public function formatTitle($title, $senderInfo, $forceTitleWhenSendingEmail = false)
     {
-        $hook = HookNotificationTitle::create();
+        $hook = Container::instantiateHook(HookNotificationTitle::class);
         if (!empty($hook)) {
             $hook->setEventData(['title' => $title]);
             $data = $hook->notifyNotificationTitle(HOOK_EVENT_TYPE_PRE);
@@ -368,7 +372,7 @@ class Notification extends Model
      * */
     public function formatContent($messageId, $content, $senderInfo)
     {
-        $hook = HookNotificationContent::create();
+        $hook = Container::instantiateHook(HookNotificationContent::class);
         if (!empty($hook)) {
             $hook->setEventData(['content' => $content]);
             $data = $hook->notifyNotificationContent(HOOK_EVENT_TYPE_PRE);

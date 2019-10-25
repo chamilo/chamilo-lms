@@ -4,6 +4,7 @@
 namespace Chamilo\CoreBundle\Framework;
 
 use Chamilo\CoreBundle\Component\Editor\Editor;
+use Chamilo\CoreBundle\Hook\Interfaces\HookEventInterface;
 use Chamilo\CoreBundle\Repository\AccessUrlRepository;
 use Chamilo\CoreBundle\ToolChain;
 use Chamilo\CourseBundle\Repository\CDocumentRepository;
@@ -22,6 +23,7 @@ use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Security\Core\Authorization\AuthorizationChecker;
 use Symfony\Component\Security\Core\Role\RoleHierarchy;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use Zend\EventManager\EventInterface;
 
 /**
  * Class Container
@@ -503,5 +505,17 @@ class Container
         }
 
         return $page;
+    }
+
+    /**
+     * @param string $class
+     *
+     * @throws \Exception
+     *
+     * @return HookEventInterface
+     */
+    public static function instantiateHook(string $class): HookEventInterface
+    {
+        return self::$container->get('chamilo_core.hook_factory')->build($class);
     }
 }

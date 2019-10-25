@@ -4,6 +4,10 @@
 /**
  * @package chamilo.webservices
  */
+
+use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Hook\HookWSRegistration;
+
 require_once __DIR__.'/../inc/global.inc.php';
 $debug = true;
 
@@ -118,7 +122,7 @@ function WSHelperVerifyKey($params)
 $server = new soap_server();
 
 /** @var HookWSRegistration $hook */
-$hook = HookWSRegistration::create();
+$hook = Container::instantiateHook(HookWSRegistration::class);
 if (!empty($hook)) {
     $hook->setEventData(['server' => $server]);
     $res = $hook->notifyWSRegistration(HOOK_EVENT_TYPE_PRE);

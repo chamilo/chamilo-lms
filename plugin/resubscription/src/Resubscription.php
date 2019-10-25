@@ -69,7 +69,7 @@ class Resubscription extends Plugin implements HookPluginInterface
     {
         $hookObserver = HookResubscription::create();
 
-        Container::$container->get('chamilo_core.hook_factory')->build(HookResubscribe::class)->attach($hookObserver);
+        Container::instantiateHook(HookResubscribe::class)->attach($hookObserver);
     }
 
     /**
@@ -79,6 +79,6 @@ class Resubscription extends Plugin implements HookPluginInterface
     {
         $hookObserver = HookResubscription::create();
 
-        Container::$container->get('chamilo_core.hook_factory')->build(HookResubscribe::class)->detach($hookObserver);
+        Container::instantiateHook(HookResubscribe::class)->detach($hookObserver);
     }
 }

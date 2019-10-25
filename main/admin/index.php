@@ -46,7 +46,7 @@ if (api_is_platform_admin()) {
 $blocks = [];
 
 // Instantiate Hook Event for Admin Block
-$hook = Container::$container->get('chamilo_core.hook_factory')->build(HookAdminBlock::class);
+$hook = Container::instantiateHook(HookAdminBlock::class);
 
 if (!empty($hook)) {
     // If not empty, then notify Pre process to Hook Observers for Admin Block

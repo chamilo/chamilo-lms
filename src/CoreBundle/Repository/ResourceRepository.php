@@ -15,15 +15,15 @@ use Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter;
 use Chamilo\CourseBundle\Entity\CGroupInfo;
 use Chamilo\UserBundle\Entity\User;
 use Doctrine\ORM\EntityManager;
-use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query\Expr\Join;
 use League\Flysystem\FilesystemInterface;
 use League\Flysystem\MountManager;
+use Sylius\Bundle\ResourceBundle\Doctrine\ORM\EntityRepository;
 
 /**
  * Class ResourceRepository.
  */
-class ResourceRepository
+class ResourceRepository extends EntityRepository
 {
     /**
      * @var EntityRepository
@@ -41,7 +41,7 @@ class ResourceRepository
     protected $entityManager;
 
     /**
-     * The entity class FQN
+     * The entity class FQN.
      *
      * @var string
      */
@@ -62,13 +62,23 @@ class ResourceRepository
     }
 
     /**
-     * @param int $id
-     *
-     * @return AbstractResource
+     * @return EntityRepository
      */
-    public function find(int $id)
+    public function getRepository()
     {
-        return $this->repository->find($id);
+        return $this->repository;
+    }
+
+    /**
+     * @param mixed $id
+     * @param null  $lockMode
+     * @param null  $lockVersion
+     *
+     * @return object|null
+     */
+    public function find($id, $lockMode = null, $lockVersion = null)
+    {
+        return $this->getRepository()->find($id);
     }
 
     /**
@@ -79,7 +89,7 @@ class ResourceRepository
      */
     public function findOneBy(array $criteria, array $orderBy = null)
     {
-        return $this->repository->findOneBy($criteria, $orderBy);
+        return $this->getRepository()->findOneBy($criteria, $orderBy);
     }
 
     /**

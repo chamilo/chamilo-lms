@@ -2,6 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Framework\Container;
+use Patchwork\Utf8\Bootup;
 use Symfony\Component\Dotenv\Dotenv;
 
 /**
@@ -17,24 +18,19 @@ use Symfony\Component\Dotenv\Dotenv;
  * @todo remove the code that displays the button that links to the install page
  */
 
-// Showing/hiding error codes in global error messages.
-define('SHOW_ERROR_CODES', false);
-
 // Specification for usernames:
 // 1. ASCII-letters, digits, "." (dot), "_" (underscore) are acceptable, 40 characters maximum length.
 // 2. Empty username is formally valid, but it is reserved for the anonymous user.
 // 3. Checking the login_is_email portal setting in order to accept 100 chars maximum
 define('USERNAME_MAX_LENGTH', 100);
-//define('_MPDF_TEMP_PATH', __DIR__.'/../../var/cache/mpdf/');
-//define('_MPDF_TTFONTDATAPATH', __DIR__.'/../../var/cache/mpdf/');
 
 require_once __DIR__.'/../../vendor/autoload.php';
 require_once __DIR__.'/../../public/legacy.php';
 
-// Check the PHP version
-api_check_php_version(__DIR__.'/');
-
 try {
+    // Check the PHP version
+    api_check_php_version();
+
     // Get settings from .env file created when installation Chamilo
     $envFile = __DIR__.'/../../.env.local';
     if (file_exists($envFile)) {
@@ -77,22 +73,14 @@ try {
     $container = $kernel->getContainer();
 
     if ($kernel->isInstalled()) {
-        //require_once $kernel->getConfigurationFile();
+        require_once $kernel->getConfigurationFile();
     } else {
-        $_configuration = [];
-        // Redirects to the main/install/ page
-        $global_error_code = 2;
-        // The system has not been installed yet.
-        require_once __DIR__.'/../inc/global_error_message.inc.php';
-        exit;
+        throw new Exception('Chamilo is not installed');
     }
 
     //$kernel->setApi($_configuration);
-
-    // Ensure that _configuration is in the global scope before loading
-    // main_api.lib.php. This is particularly helpful for unit tests
     if (!isset($GLOBALS['_configuration'])) {
-        //$GLOBALS['_configuration'] = $_configuration;
+        $GLOBALS['_configuration'] = $_configuration;
     }
 
     // Do not over-use this variable. It is only for this script's local use.
@@ -190,9 +178,8 @@ try {
     }*/
 
     $charset = 'UTF-8';
-
     // Enables the portability layer and configures PHP for UTF-8
-    \Patchwork\Utf8\Bootup::initAll();
+    Bootup::initAll();
 
     // access_url == 1 is the default chamilo location
     /*if ($_configuration['access_url'] != 1) {
@@ -480,20 +467,6 @@ try {
             }
         }
     }*/
-
-    // Add language_measure_frequency to your main/inc/conf/configuration.php in
-    // order to generate language variables frequency measurements (you can then
-    // see them through main/cron/lang/langstats.php)
-    // The langstat object will then be used in the get_lang() function.
-    // This block can be removed to speed things up a bit as it should only ever
-    // be used in development versions.
-    if (isset($_configuration['language_measure_frequency']) &&
-        $_configuration['language_measure_frequency'] == 1
-    ) {
-        //require_once api_get_path(SYS_CODE_PATH).'/cron/lang/langstats.class.php';
-        //$langstats = new langstats();
-    }
-
     //Default quota for the course documents folder
     /*$default_quota = api_get_setting('default_document_quotum');
     //Just in case the setting is not correctly set
@@ -504,7 +477,11 @@ try {
     // Forcing PclZip library to use a custom temporary folder.
     //define('PCLZIP_TEMPORARY_DIR', api_get_path(SYS_ARCHIVE_PATH));
 } catch (Exception $e) {
-    error_log($e->getMessage()); /*
+    var_dump($e->getMessage());
+    var_dump($e->getCode());
+    var_dump($e->getLine());
+    /*echo $e->getMessage();    exit;
+
     var_dump($e->getMessage());
     var_dump($e->getCode());
     var_dump($e->getLine());

@@ -1,4 +1,11 @@
 services:
+    # default configuration for services in *this* file
+    _defaults:
+        # automatically injects dependencies in your services
+        autowire: false
+        # automatically registers your services as commands, event subscribers, etc.
+        autoconfigure: false
+
     sonata.admin.session:
         class: Chamilo\CoreBundle\Admin\SessionAdmin
         tags:

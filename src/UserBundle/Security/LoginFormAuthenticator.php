@@ -1,4 +1,5 @@
 <?php
+/* For licensing terms, see /license.txt */
 
 namespace Chamilo\UserBundle\Security;
 
@@ -22,8 +23,6 @@ use Symfony\Component\Security\Guard\Authenticator\AbstractFormLoginAuthenticato
 
 /**
  * Class LoginFormAuthenticator.
- *
- * @package Chamilo\UserBundle\Security
  */
 class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
 {

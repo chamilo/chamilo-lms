@@ -1,11 +1,11 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-namespace Chamilo\CourseBundle\Tool;
+namespace Chamilo\CoreBundle\Tool;
 
 /**
  * Class Maintenance.
  */
-class Maintenance extends BaseTool
+class Maintenance extends AbstractTool
 {
 }

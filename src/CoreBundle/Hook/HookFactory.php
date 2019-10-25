@@ -8,8 +8,6 @@ use Doctrine\ORM\EntityManager;
 
 /**
  * Class HookFactory.
- *
- * @package Chamilo\CoreBundle\Hook
  */
 class HookFactory
 {

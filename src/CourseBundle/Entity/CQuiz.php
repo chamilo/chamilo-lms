@@ -968,6 +968,6 @@ class CQuiz extends AbstractResource implements ResourceInterface
      */
     public function getToolName(): string
     {
-        return 'quiz';
+        return 'CQuiz';
     }
 }

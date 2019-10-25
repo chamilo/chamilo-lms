@@ -1,15 +1,15 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-namespace Chamilo\CourseBundle;
+namespace Chamilo\CoreBundle;
 
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Resource\ResourceType;
 use Chamilo\CoreBundle\Entity\Tool;
 use Chamilo\CoreBundle\Entity\ToolResourceRight;
 use Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter;
+use Chamilo\CoreBundle\Tool\AbstractTool;
 use Chamilo\CourseBundle\Entity\CTool;
-use Chamilo\CourseBundle\Tool\BaseTool;
 use Chamilo\SettingsBundle\Manager\SettingsManager;
 use Doctrine\Common\Persistence\ObjectManager;
 
@@ -20,13 +20,13 @@ use Doctrine\Common\Persistence\ObjectManager;
  *
  * src/Chamilo/CourseBundle/Tool
  *
- * All this classes are registered as a service with the tag "chamilo_course.tool" here:
+ * All this classes are registered as a service with the tag "chamilo_core.tool" here:
 
- * src/Chamilo/CourseBundle/Resources/config/services.yml
+ * src/Chamilo/CoreBundle/Resources/config/tools.yml
  *
  * The register process is made using the class ToolCompilerClass:
  *
- * src/Chamilo/CourseBundle/DependencyInjection/Compiler/ToolCompilerClass.php
+ * src/Chamilo/CoreBundle/DependencyInjection/Compiler/ToolCompilerClass.php
 
  * The tool chain is just an array that includes all the tools registered in services.yml
  *
@@ -37,13 +37,12 @@ use Doctrine\Common\Persistence\ObjectManager;
  * After a course is created this function is called: CourseListener::prePersist()
  * This function includes the called to the function "addToolsInCourse" inside the tool chain.
 
- * This allows to create course tools more easily. Steps:
+ * This allows to tools more easily. Steps:
 
- * 1. Create a new tool class here: src/Chamilo/CourseBundle/Tool
- * 2. Add the class as a service here: src/Chamilo/CourseBundle/Resources/config/services.yml  (see examples there)
+ * 1. Create a new tool class here: src/Chamilo/CoreBundle/Tool
+ * 2. Add the class as a service here: src/Chamilo/CoreBundle/Resources/config/tools.yml  (see examples there)
  * 3. Create a new course. When you create a new course the new tool will be created
  *
- * @package Chamilo\CourseBundle
  */
 class ToolChain
 {
@@ -58,9 +57,9 @@ class ToolChain
     }
 
     /**
-     * @param BaseTool $tool
+     * @param AbstractTool $tool
      */
-    public function addTool(BaseTool $tool): void
+    public function addTool(AbstractTool $tool): void
     {
         $this->tools[$tool->getName()] = $tool;
     }
@@ -76,19 +75,25 @@ class ToolChain
     /**
      * @param ObjectManager $manager
      */
-    public function createTools(ObjectManager $manager)
+    public function createTools(ObjectManager $manager): void
     {
         $tools = $this->getTools();
 
-        /** @var BaseTool $tool */
+        /** @var AbstractTool $tool */
         foreach ($tools as $tool) {
             $toolEntity = new Tool();
             $toolEntity
                 ->setName($tool->getName())
                 ->setImage($tool->getImage())
-                ->setDescription($tool->getName().' - description')
+                ->setDescription('')
             ;
-            $this->setToolPermissions($toolEntity);
+
+            if ($tool->getAdmin() === 1) {
+                // Only check ROLE_ADMIN
+            } else {
+                $this->setToolPermissions($toolEntity);
+            }
+
             $manager->persist($toolEntity);
 
             $types = $tool->getTypes();
@@ -108,7 +113,7 @@ class ToolChain
     /**
      * @param Tool $tool
      */
-    public function setToolPermissions(Tool $tool)
+    public function setToolPermissions(Tool $tool): void
     {
         $toolResourceRight = new ToolResourceRight();
         $toolResourceRight
@@ -132,12 +137,12 @@ class ToolChain
      *
      * @return Course
      */
-    public function addToolsInCourse(Course $course, SettingsManager $settingsManager)
+    public function addToolsInCourse(Course $course, SettingsManager $settingsManager): Course
     {
         $tools = $this->getTools();
 
         $toolVisibility = $settingsManager->getSetting('course.active_tools_on_create');
-        /** @var BaseTool $tool */
+        /** @var AbstractTool $tool */
         foreach ($tools as $tool) {
             $toolEntity = new CTool();
             $visibility = in_array($tool->getName(), $toolVisibility);
@@ -160,7 +165,7 @@ class ToolChain
     /**
      * @param string $name
      *
-     * @return BaseTool
+     * @return AbstractTool|false
      */
     public function getToolFromName($name)
     {

@@ -1,11 +1,11 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-namespace Chamilo\CourseBundle\Tool;
+namespace Chamilo\CoreBundle\Tool;
 
 /**
  * Class Dropbox.
  */
-class Dropbox extends BaseTool
+class Dropbox extends AbstractTool
 {
 }

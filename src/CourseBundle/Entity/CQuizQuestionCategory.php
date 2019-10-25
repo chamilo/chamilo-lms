@@ -205,6 +205,6 @@ class CQuizQuestionCategory extends AbstractResource implements ResourceInterfac
      */
     public function getToolName(): string
     {
-        return 'exercise_category';
+        return 'CQuizQuestionCategory';
     }
 }

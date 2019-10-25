@@ -9,8 +9,6 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * Class FOSUBUserProvider.
- *
- * @package Chamilo\UserBundle\Security
  */
 class FOSUBUserProvider extends BaseFOSUBProvider
 {

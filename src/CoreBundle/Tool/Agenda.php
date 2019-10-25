@@ -1,11 +1,11 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-namespace Chamilo\CourseBundle\Tool;
+namespace Chamilo\CoreBundle\Tool;
 
 /**
  * Class Agenda.
  */
-class Agenda extends BaseTool
+class Agenda extends AbstractTool
 {
 }

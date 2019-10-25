@@ -3,13 +3,12 @@
 
 namespace Chamilo\CoreBundle\Settings;
 
+use Chamilo\CoreBundle\Entity\Manager\CourseManager;
 use Sylius\Bundle\SettingsBundle\Schema\AbstractSettingsBuilder;
 use Sylius\Bundle\SettingsBundle\Schema\SchemaInterface;
 
 /**
  * Class AbstractSettingsSchema.
- *
- * @package Chamilo\CoreBundle\Settings
  */
 abstract class AbstractSettingsSchema implements SchemaInterface
 {
@@ -22,5 +21,21 @@ abstract class AbstractSettingsSchema implements SchemaInterface
         foreach ($allowedTypes as $name => $type) {
             $builder->setAllowedTypes($name, $type);
         }
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getRepository()
+    {
+        return $this->repository;
+    }
+
+    /**
+     * @param $repo
+     */
+    public function setRepository($repo)
+    {
+        $this->repository = $repo;
     }
 }

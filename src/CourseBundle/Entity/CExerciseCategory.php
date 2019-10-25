@@ -231,6 +231,6 @@ class CExerciseCategory extends AbstractResource implements ResourceInterface
      */
     public function getToolName(): string
     {
-        return 'test_category';
+        return 'CExerciseCategory';
     }
 }

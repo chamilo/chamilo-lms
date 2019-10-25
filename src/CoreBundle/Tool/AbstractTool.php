@@ -1,15 +1,15 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-namespace Chamilo\CourseBundle\Tool;
+namespace Chamilo\CoreBundle\Tool;
 
 use Sonata\CoreBundle\Model\BaseEntityManager;
 use Sylius\Bundle\SettingsBundle\Schema\SchemaInterface;
 
 /**
- * Class BaseTool.
+ * Class AbstractTool.
  */
-abstract class BaseTool implements ToolInterface
+abstract class AbstractTool implements ToolInterface
 {
     protected $name;
     protected $category;
@@ -27,14 +27,15 @@ abstract class BaseTool implements ToolInterface
      * @param string $image
      * @param        $courseSettings
      * @param array  $types
+     * @param array  $admin
      */
-    public function __construct($name, $category, $link, $image, $courseSettings, $types)
+    public function __construct($name, $category, $link, $image, $courseSettings, $types, $admin)
     {
         $this->name = $name;
         $this->category = $category;
         $this->link = $link;
         $this->image = $image;
-        $this->admin = 0;
+        $this->admin = (int) $admin;
         $this->courseSettings = $courseSettings;
         $this->types = $types;
     }
@@ -90,9 +91,9 @@ abstract class BaseTool implements ToolInterface
     /**
      * @return int
      */
-    public function getAdmin()
+    public function getAdmin(): int
     {
-        return $this->admin;
+        return (int) $this->admin;
     }
 
     /**

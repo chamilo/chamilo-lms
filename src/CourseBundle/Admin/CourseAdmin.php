@@ -4,8 +4,8 @@
 namespace Chamilo\CourseBundle\Admin;
 
 use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\ToolChain;
 use Chamilo\CourseBundle\Entity\CTool;
-use Chamilo\CourseBundle\ToolChain;
 use FOS\CKEditorBundle\Form\Type\CKEditorType;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
@@ -19,8 +19,6 @@ use Symfony\Component\Form\Extension\Core\Type\UrlType;
 
 /**
  * Class CourseAdmin.
- *
- * @package Chamilo\CoreBundle\Admin
  */
 class CourseAdmin extends AbstractAdmin
 {
@@ -42,7 +40,7 @@ class CourseAdmin extends AbstractAdmin
     /**
      * Very important in order to save the related entities while updating.
      *
-     * @param \Chamilo\CoreBundle\Entity\Course $course
+     * @param Course $course
      *
      * @return mixed|void
      */

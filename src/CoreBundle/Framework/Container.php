@@ -4,6 +4,8 @@
 namespace Chamilo\CoreBundle\Framework;
 
 use Chamilo\CoreBundle\Component\Editor\Editor;
+use Chamilo\CoreBundle\Repository\AccessUrlRepository;
+use Chamilo\CoreBundle\ToolChain;
 use Chamilo\CourseBundle\Repository\CDocumentRepository;
 use Chamilo\CourseBundle\Repository\CExerciseCategoryRepository;
 use Chamilo\CourseBundle\Repository\CQuizCategoryRepository;
@@ -358,6 +360,14 @@ class Container
     }
 
     /**
+     * @return AccessUrlRepository
+     */
+    public static function getAccessUrlRepository()
+    {
+        return self::$container->get('Chamilo\CoreBundle\Repository\AccessUrlRepository');
+    }
+
+    /**
      * @param $manager UserManager
      */
     public static function setUserManager($manager)
@@ -424,11 +434,11 @@ class Container
     }
 
     /**
-     * @return \Chamilo\CourseBundle\ToolChain
+     * @return ToolChain
      */
     public static function getToolChain()
     {
-        return self::$container->get('chamilo_course.tool_chain');
+        return self::$container->get('chamilo_core.tool_chain');
     }
 
     /**
@@ -450,7 +460,7 @@ class Container
         \CourseManager::setCourseManager($container->get('chamilo_core.entity.manager.course_manager'));
 
         // Setting course tool chain (in order to create tools to a course)
-        \CourseManager::setToolList($container->get('chamilo_course.tool_chain'));
+        \CourseManager::setToolList($container->get('chamilo_core.tool_chain'));
 
         if ($setSession) {
             self::$session = $container->get('session');

@@ -6,7 +6,7 @@ use Chamilo\CoreBundle\Entity\ExtraField as EntityExtraField;
 use Chamilo\CourseBundle\Component\CourseCopy\CourseBuilder;
 use Chamilo\CourseBundle\Component\CourseCopy\CourseRestorer;
 use Chamilo\CourseBundle\Manager\SettingsManager;
-use Chamilo\CourseBundle\ToolChain;
+use Chamilo\CoreBundle\ToolChain;
 use ChamiloSession as Session;
 
 /**
@@ -22,15 +22,14 @@ use ChamiloSession as Session;
  *
  * There are probably some places left with the wrong code.
  *
- * @package chamilo.library
  */
 class CourseManager
 {
-    const MAX_COURSE_LENGTH_CODE = 40;
+    public const MAX_COURSE_LENGTH_CODE = 40;
     /** This constant is used to show separate user names in the course
      * list (userportal), footer, etc */
-    const USER_SEPARATOR = ' |';
-    const COURSE_FIELD_TYPE_CHECKBOX = 10;
+    public const USER_SEPARATOR = ' |';
+    public const COURSE_FIELD_TYPE_CHECKBOX = 10;
     public $columns = [];
     public static $em;
     public static $toolList;

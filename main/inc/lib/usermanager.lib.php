@@ -213,9 +213,7 @@ class UserManager
             // In some cases, the first access_url ID might be different from 1
             // for example when using a DB cluster or hacking the DB manually.
             // In this case, we want the first row, not necessarily "1".
-            $dbm = Database::getManager();
-            /** @var AccessUrlRepository $accessUrlRepository */
-            $accessUrlRepository = $dbm->getRepository('ChamiloCoreBundle:AccessUrl');
+            $accessUrlRepository = Container::getAccessUrlRepository();
             $accessUrl = $accessUrlRepository->getFirstId();
             if (!empty($accessUrl[0]) && !empty($accessUrl[0][1])) {
                 $access_url_id = $accessUrl[0][1];

@@ -3,6 +3,8 @@
 
 namespace Chamilo\CoreBundle\Entity;
 
+use Chamilo\CoreBundle\Entity\Resource\AbstractResource;
+use Chamilo\CoreBundle\Entity\Resource\ResourceInterface;
 use Chamilo\CoreBundle\Traits\CourseTrait;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -10,9 +12,9 @@ use Doctrine\ORM\Mapping as ORM;
  * AccessUrl.
  *
  * @ORM\Table(name="access_url")
- * @ORM\Entity(repositoryClass="Chamilo\CoreBundle\Repository\AccessUrlRepository")
+ * @ORM\Entity
  */
-class AccessUrl
+class AccessUrl extends AbstractResource implements ResourceInterface
 {
     use CourseTrait;
 
@@ -485,5 +487,31 @@ class AccessUrl
         $this->limitCourses = $limitCourses;
 
         return $this;
+    }
+
+    /**
+     * Resource identifier.
+     *
+     * @return int
+     */
+    public function getResourceIdentifier(): int
+    {
+        return $this->getId();
+    }
+
+    /**
+     * @return string
+     */
+    public function getResourceName(): string
+    {
+        return $this->getUrl();
+    }
+
+    /**
+     * @return string
+     */
+    public function getToolName(): string
+    {
+        return 'AccessUrl';
     }
 }

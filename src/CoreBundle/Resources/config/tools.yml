@@ -27,12 +27,12 @@ services:
     chamilo_core.tool.agenda:
         class: Chamilo\CoreBundle\Tool\Agenda
         arguments:
-            - 'calendar_event'
+            - 'agenda'
             - 'authoring'
             - 'calendar/agenda.php'
             - 'agenda.gif'
             - chamilo_course.settings.agenda
-            - [calendar_event, calendar_event_attachment]
+            - [CCalendarEvent, CCalendarEventAttachment]
             - 0
         tags:
             - {name: chamilo_core.tool}
@@ -52,7 +52,7 @@ services:
             - 'announcements/announcements.php'
             - 'valves.gif'
             - chamilo_course.settings.announcement
-            - [announcement]
+            - [CAnnouncement, CAnnouncementAttachment]
             - 0
         tags:
             - {name: chamilo_core.tool}
@@ -71,7 +71,7 @@ services:
             - 'work/work.php'
             - 'works.gif'
             - chamilo_course.settings.assignment
-            - [work]
+            - [CStudentPublication, CStudentPublicationAssignment]
             - 0
         tags:
             - {name: chamilo_core.tool}
@@ -90,7 +90,7 @@ services:
             - 'attendance/index.php'
             - 'attendance.gif'
             - '@chamilo_course.settings.attendance'
-            - [attendance]
+            - [CAttendance]
             - 0
         tags:
             - {name: chamilo_core.tool}
@@ -109,7 +109,7 @@ services:
             - 'blog/blog_admin.php'
             - 'blog_admin.gif'
             - '@chamilo_course.settings.blog'
-            - [blog_management]
+            - [CBlog]
             - 0
         tags:
             - {name: chamilo_core.tool}
@@ -128,7 +128,7 @@ services:
             - course_description/index.php
             - info.gif
             - '@chamilo_course.settings.course_description'
-            - [course_description]
+            - [CCourseDescription]
             - 0
         tags:
             - {name: chamilo_core.tool}
@@ -166,7 +166,7 @@ services:
             - course_progress/index.php
             - course_progress.gif
             - '@chamilo_course.settings.course_progress'
-            - [thematic, thematic_advance, thematic_plan]
+            - [CThematic, CThematicAdvance, CThematicPlan]
             - 0
         tags:
             - {name: chamilo_core.tool}
@@ -204,7 +204,7 @@ services:
             - dropbox/index.php
             - dropbox.gif
             - '@chamilo_course.settings.dropbox'
-            - [dropbox]
+            - [CDropbox]
             - 0
         tags:
             - {name: chamilo_core.tool}
@@ -242,7 +242,7 @@ services:
             - forum/index.php
             - forum.gif
             - '@chamilo_course.settings.forum'
-            - [forum, forum_attachment, forum_category, forum_post, forum_thread]
+            - [CForum, CForumAttachment, CForumCategory, CForumPost, CForumThread]
             - 0
         tags:
             - {name: chamilo_core.tool}
@@ -261,7 +261,7 @@ services:
             - glossary/index.php
             - glossary.gif
             - '@chamilo_course.settings.glossary'
-            - [glossary]
+            - [CGlossary]
             - 0
         tags:
             - {name: chamilo_core.tool}
@@ -280,7 +280,7 @@ services:
             - gradebook/index.php
             - gradebook.gif
             - '@chamilo_course.settings.gradebook'
-            - ~
+            - [CGradebookCategory, CGradebookLink, CGradebookEvaluation]
             - 0
         tags:
             - {name: chamilo_core.tool}
@@ -299,7 +299,7 @@ services:
             - group/group.php
             - group.gif
             - '@chamilo_course.settings.group'
-            - ~
+            - [CGroupInfo, CGroupCategory]
             - 0
         tags:
             - {name: chamilo_core.tool}
@@ -318,7 +318,7 @@ services:
             - lp/lp_controller.php
             - scorms.gif
             - '@chamilo_course.settings.learning_path'
-            - [learnpath, learnpath_category]
+            - [CLp, CLpCategory]
             - 0
         tags:
             - {name: chamilo_core.tool}
@@ -337,7 +337,7 @@ services:
             - link/link.php
             - links.gif
             - '@chamilo_course.settings.link'
-            - [link, link_category]
+            - [CLink, CLinkCategory]
             - 0
         tags:
             - {name: chamilo_core.tool}
@@ -380,7 +380,7 @@ services:
             - notebook/index.php
             - notebook.gif
             - '@chamilo_course.settings.notebook'
-            - [notebook]
+            - [CNotebook]
             - 0
         tags:
             - {name: chamilo_core.tool}
@@ -412,7 +412,7 @@ services:
             - survey/survey_list.php
             - survey.gif
             - '@chamilo_course.settings.survey'
-            - [survey]
+            - [CSurvey, CSurveyQuestion]
             - 0
         tags:
             - {name: chamilo_core.tool}
@@ -467,7 +467,7 @@ services:
             - wiki/index.php
             - wiki.gif
             - '@chamilo_course.settings.wiki'
-            - [wiki]
+            - [CWiki]
             - 0
         tags:
             - {name: chamilo_core.tool}

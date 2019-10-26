@@ -24,7 +24,6 @@ use ChamiloSession as Session;
  * but not available in standard Chamilo).
  *
  * There are probably some places left with the wrong code.
- *
  */
 class CourseManager
 {

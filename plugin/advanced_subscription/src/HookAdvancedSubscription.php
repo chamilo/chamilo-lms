@@ -15,17 +15,13 @@ use Chamilo\CoreBundle\Hook\Interfaces\HookWSRegistrationObserverInterface;
  *
  * @author Daniel Alejandro Barreto Alva <daniel.barreto@beeznest.com>
  */
-
 require_once __DIR__.'/../config.php';
 
 /**
  * Class HookAdvancedSubscription extends the HookObserver to implements
  * specific behaviour when the AdvancedSubscription plugin is enabled.
  */
-class HookAdvancedSubscription extends HookObserver implements
-    HookAdminBlockObserverInterface,
-    HookWSRegistrationObserverInterface,
-    HookNotificationContentObserverInterface
+class HookAdvancedSubscription extends HookObserver implements HookAdminBlockObserverInterface, HookWSRegistrationObserverInterface, HookNotificationContentObserverInterface
 {
     public static $plugin;
 

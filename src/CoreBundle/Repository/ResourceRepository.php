@@ -113,8 +113,7 @@ class ResourceRepository extends EntityRepository
         AbstractResource $resource,
         User $creator,
         AbstractResource $parent = null
-    ): ResourceNode
-    {
+    ): ResourceNode {
         $em = $this->getEntityManager();
         $resourceNode = new ResourceNode();
 
@@ -442,6 +441,6 @@ class ResourceRepository extends EntityRepository
      */
     public function create()
     {
-        return new $this->className;
+        return new $this->className();
     }
 }

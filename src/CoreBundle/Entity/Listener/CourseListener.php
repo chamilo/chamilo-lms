@@ -14,6 +14,7 @@ use Doctrine\ORM\Event\LifecycleEventArgs;
 /**
  * Class CourseListener.
  * Course entity listener, when a course is created/edited and when the tool chain is loaded.
+ *
  * @todo check hosting course limits
  */
 class CourseListener

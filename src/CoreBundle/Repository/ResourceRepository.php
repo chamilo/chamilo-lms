@@ -435,4 +435,12 @@ class ResourceRepository extends EntityRepository
             ->getRepository('ChamiloCoreBundle:Tool')
             ->findOneBy(['name' => $tool]);
     }
+
+    /**
+     * @return mixed
+     */
+    public function create()
+    {
+        return new $this->className;
+    }
 }

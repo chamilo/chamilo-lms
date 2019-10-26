@@ -1,18 +1,18 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-namespace Chamilo\CourseBundle\Entity\Manager;
+namespace Chamilo\CourseBundle\Repository;
 
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CoreBundle\Repository\ResourceRepository;
 use Chamilo\CourseBundle\Entity\CGroupInfo;
 use Chamilo\UserBundle\Entity\User;
-use Sonata\Doctrine\Entity\BaseEntityManager;
 
 /**
- * Class AnnouncementManager.
+ * Class CAnnouncementRepository.
  */
-class AnnouncementManager extends BaseEntityManager
+final class CAnnouncementRepository extends ResourceRepository
 {
     /**
      * @param User            $user

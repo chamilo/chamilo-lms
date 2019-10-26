@@ -3,15 +3,12 @@
 
 namespace Chamilo\CoreBundle\Security\Authorization\Voter;
 
-use Chamilo\CoreBundle\Entity\Manager\CourseManager;
 use Chamilo\CoreBundle\Repository\CourseRepository;
 use Chamilo\CourseBundle\Entity\CGroupInfo;
-use Chamilo\CourseBundle\Entity\Manager\GroupManager;
-use Chamilo\UserBundle\Entity\User;
+use Chamilo\CourseBundle\Repository\CGroupInfoRepository;
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
-use Symfony\Component\Security\Core\Authorization\AuthorizationChecker;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -35,15 +32,15 @@ class GroupVoter extends Voter
 
     /**
      * @param EntityManager                 $entityManager
-     * @param CourseManager                 $courseManager
-     * @param GroupManager                  $groupManager
+     * @param CourseRepository              $courseManager
+     * @param CGroupInfoRepository          $groupManager
      * @param AuthorizationCheckerInterface $authorizationChecker
      * @param ContainerInterface            $container
      */
     public function __construct(
         EntityManager $entityManager,
         CourseRepository $courseManager,
-        GroupManager $groupManager,
+        CGroupInfoRepository $groupManager,
         AuthorizationCheckerInterface $authorizationChecker,
         ContainerInterface $container
     ) {

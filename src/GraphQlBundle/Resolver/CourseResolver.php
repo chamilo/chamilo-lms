@@ -24,8 +24,6 @@ use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 
 /**
  * Class CourseResolver.
- *
- * @package Chamilo\GraphQlBundle\Resolver
  */
 class CourseResolver implements ContainerAwareInterface
 {
@@ -167,7 +165,7 @@ class CourseResolver implements ContainerAwareInterface
      */
     public function getAnnouncements(CTool $tool, \ArrayObject $context): array
     {
-        $announcementManager = $this->container->get('chamilo_course.entity.manager.announcement_manager');
+        $announcementManager = $this->container->get('Chamilo\CourseBundle\Repository\CAnnouncementRepository');
         $announcementsInfo = $announcementManager->getAnnouncements(
             $this->getCurrentUser(),
             $tool->getCourse(),

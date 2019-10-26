@@ -16,27 +16,29 @@ services:
         tags: ['doctrine.repository_service']
 
     # Entity repository as a service
-    Chamilo\CourseBundle\Repository\CDocumentRepository:
-        arguments:
-            $className: 'Chamilo\CourseBundle\Entity\CDocument'
-    Chamilo\CourseBundle\Repository\CQuizRepository:
-        arguments:
-            $className: 'Chamilo\CourseBundle\Entity\CQuiz'
-    Chamilo\CourseBundle\Repository\CQuizQuestionCategoryRepository:
-        arguments:
-            $className: 'Chamilo\CourseBundle\Entity\CQuizQuestionCategory'
-    Chamilo\CourseBundle\Repository\CExerciseCategoryRepository:
+    Chamilo\CourseBundle\Repository\CAnnouncementRepository:
         arguments:
             $className: 'Chamilo\CourseBundle\Entity\CExerciseCategory'
 
-    # Managers
-    chamilo_course.entity.manager.group_manager:
-        class: 'Chamilo\CourseBundle\Entity\Manager\GroupManager'
-        arguments: ['Chamilo\CourseBundle\Entity\CGroupInfo', '@doctrine']
+    Chamilo\CourseBundle\Repository\CDocumentRepository:
+        arguments:
+            $className: 'Chamilo\CourseBundle\Entity\CDocument'
 
-    chamilo_course.entity.manager.announcement_manager:
-        class: 'Chamilo\CourseBundle\Entity\Manager\AnnouncementManager'
-        arguments: ['Chamilo\CourseBundle\Entity\CAnnouncement', '@doctrine']
+    Chamilo\CourseBundle\Repository\CGroupInfoRepository:
+        arguments:
+            $className: 'Chamilo\CourseBundle\Entity\CGroupInfo'
+
+    Chamilo\CourseBundle\Repository\CQuizRepository:
+        arguments:
+            $className: 'Chamilo\CourseBundle\Entity\CQuiz'
+
+    Chamilo\CourseBundle\Repository\CQuizQuestionCategoryRepository:
+        arguments:
+            $className: 'Chamilo\CourseBundle\Entity\CQuizQuestionCategory'
+
+    Chamilo\CourseBundle\Repository\CExerciseCategoryRepository:
+        arguments:
+            $className: 'Chamilo\CourseBundle\Entity\CExerciseCategory'
 
     # Event Listeners
     chamilo_course.listener.course:
@@ -74,7 +76,7 @@ services:
         arguments:
             - '@doctrine.orm.entity_manager'
             - '@Chamilo\CoreBundle\Repository\CourseRepository'
-            - '@chamilo_course.entity.manager.group_manager'
+            - '@Chamilo\CourseBundle\Repository\CGroupInfoRepository'
             - '@security.authorization_checker'
             - '@service_container'
         public: false

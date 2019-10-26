@@ -1,16 +1,15 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-namespace Chamilo\CourseBundle\Entity\Manager;
+namespace Chamilo\CourseBundle\Repository;
 
+use Chamilo\CoreBundle\Repository\ResourceRepository;
 use Chamilo\CourseBundle\Entity\CGroupInfo;
-use Sonata\Doctrine\Entity\BaseEntityManager;
 
 /**
- * Class CourseManager.
- *
+ * Class CGroupInfoRepository.
  */
-class GroupManager extends BaseEntityManager
+final class CGroupInfoRepository extends ResourceRepository
 {
     /**
      * @return CGroupInfo

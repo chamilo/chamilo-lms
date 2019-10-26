@@ -1874,32 +1874,57 @@ function api_get_course_path($course_code = null)
 /**
  * Gets a course setting from the current course_setting table. Try always using integer values.
  *
- * @param string    The name of the setting we want from the table
- * @param string    Optional: course code
- * @param string $setting_name
+ * @param string $settingName The name of the setting we want from the table
+ * @param array  $courseInfo
+ * @param bool   $force       force checking the value in the database
  *
  * @return mixed The value of that setting in that table. Return -1 if not found.
  */
-function api_get_course_setting($setting_name, $course_code = null)
+function api_get_course_setting($settingName, $courseInfo = [], $force = false)
 {
-    $course_info = api_get_course_info($course_code);
-    $table = Database::get_course_table(TABLE_COURSE_SETTING);
-    $setting_name = Database::escape_string($setting_name);
-    if (!empty($course_info['real_id']) && !empty($setting_name)) {
-        $sql = "SELECT value FROM $table
-                WHERE c_id = {$course_info['real_id']} AND variable = '$setting_name'";
+    if (empty($courseInfo)) {
+        $courseInfo = api_get_course_info();
+    }
+
+    if (empty($courseInfo) || empty($settingName)) {
+        return -1;
+    }
+
+    $courseId = isset($courseInfo['real_id']) && !empty($courseInfo['real_id']) ? $courseInfo['real_id'] : 0;
+
+    if (empty($courseId)) {
+        return -1;
+    }
+
+    static $courseSettingInfo = [];
+
+    if ($force) {
+        $courseSettingInfo = [];
+    }
+
+    if (!isset($courseSettingInfo[$courseId])) {
+        $table = Database::get_course_table(TABLE_COURSE_SETTING);
+        $settingName = Database::escape_string($settingName);
+
+        $sql = "SELECT variable, value FROM $table
+                WHERE c_id = $courseId ";
         $res = Database::query($sql);
         if (Database::num_rows($res) > 0) {
-            $row = Database::fetch_array($res);
-            if ($setting_name === 'email_alert_manager_on_new_quiz') {
-                if (!is_null($row['value'])) {
-                    $result = explode(',', $row['value']);
-                    $row['value'] = $result;
+            $result = Database::store_result($res, 'ASSOC');
+            $courseSettingInfo[$courseId] = array_column($result, 'value', 'variable');
+
+            if (isset($courseSettingInfo[$courseId]['email_alert_manager_on_new_quiz'])) {
+                $value = $courseSettingInfo[$courseId]['email_alert_manager_on_new_quiz'];
+                if (!is_null($value)) {
+                    $result = explode(',', $value);
+                    $courseSettingInfo[$courseId]['email_alert_manager_on_new_quiz'] = $result;
                 }
             }
-
-            return $row['value'];
         }
+    }
+
+    if (isset($courseSettingInfo[$courseId]) && isset($courseSettingInfo[$courseId][$settingName])) {
+        return $courseSettingInfo[$courseId][$settingName];
     }
 
     return -1;

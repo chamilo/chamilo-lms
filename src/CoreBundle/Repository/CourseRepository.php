@@ -16,6 +16,16 @@ use Doctrine\ORM\QueryBuilder;
 class CourseRepository extends ResourceRepository
 {
     /**
+     * @param string $code
+     *
+     * @return Course
+     */
+    public function findOneByCode($code)
+    {
+        return $this->findOneBy(['code' => $code]);
+    }
+
+    /**
      * Get all users that are registered in the course. No matter the status.
      *
      * @param Course $course

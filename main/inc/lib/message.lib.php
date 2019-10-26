@@ -2256,8 +2256,10 @@ class MessageManager
                 $messages[] = $row;
             }
         }
+
         return $messages;
     }
+
     /**
      * Get the data of the last received messages for a user.
      *
@@ -2266,7 +2268,7 @@ class MessageManager
      *
      * @return array
      */
-    public static function getReceivedMessages($userId, $lastId =0)
+    public static function getReceivedMessages($userId, $lastId = 0)
     {
         $userId = intval($userId);
         $lastId = intval($lastId);
@@ -2296,8 +2298,10 @@ class MessageManager
                 $messages[] = $row;
             }
         }
+
         return $messages;
     }
+
     /**
      * Get the data of the last received messages for a user.
      *
@@ -2306,7 +2310,7 @@ class MessageManager
      *
      * @return array
      */
-    public static function getSentMessages($userId, $lastId =0)
+    public static function getSentMessages($userId, $lastId = 0)
     {
         $userId = intval($userId);
         $lastId = intval($lastId);
@@ -2338,8 +2342,10 @@ class MessageManager
                 $messages[] = $row;
             }
         }
+
         return $messages;
     }
+
     /**
      * Check whether a message has attachments.
      *
@@ -2347,7 +2353,6 @@ class MessageManager
      *
      * @return bool Whether the message has attachments return true. Otherwise return false
      */
-
     public static function hasAttachments($messageId)
     {
         $messageId = (int) $messageId;

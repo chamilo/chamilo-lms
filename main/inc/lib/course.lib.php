@@ -4,9 +4,9 @@
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ExtraField as EntityExtraField;
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Hook\HookCreateCourse;
 use Chamilo\CoreBundle\Repository\CourseRepository;
 use Chamilo\CoreBundle\ToolChain;
-use Chamilo\CoreBundle\Hook\HookCreateCourse;
 use Chamilo\CourseBundle\Component\CourseCopy\CourseBuilder;
 use Chamilo\CourseBundle\Component\CourseCopy\CourseRestorer;
 use Chamilo\CourseBundle\Manager\SettingsManager;

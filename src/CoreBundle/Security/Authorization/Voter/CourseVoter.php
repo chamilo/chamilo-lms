@@ -33,7 +33,7 @@ class CourseVoter extends Voter
 
     /**
      * @param EntityManagerInterface        $entityManager
-     * @param CourseRepository                 $courseManager
+     * @param CourseRepository              $courseManager
      * @param AuthorizationCheckerInterface $authorizationChecker
      * @param ContainerInterface            $container
      */

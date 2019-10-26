@@ -361,6 +361,14 @@ class ResourceNode
     }
 
     /**
+     * @return bool
+     */
+    public function hasResourceFile()
+    {
+        return $this->resourceFile !== null;
+    }
+
+    /**
      * @return ResourceFile
      */
     public function getResourceFile()

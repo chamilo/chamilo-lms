@@ -29,7 +29,6 @@ use ChamiloSession as Session;
  * 3) Read files and directories from the directory defined in part 2
  * 4) Display all of that on an HTML page
  *
- * @package chamilo.document
  */
 require_once __DIR__.'/../inc/global.inc.php';
 
@@ -41,10 +40,9 @@ $parent_id = null;
 $lib_path = api_get_path(LIBRARY_PATH);
 $actionsRight = '';
 $action = isset($_REQUEST['action']) ? $_REQUEST['action'] : '';
-$repo = Container::getDocumentRepository();
-
-$allowUseTool = false;
 $em = Database::getManager();
+$repo = Container::getDocumentRepository();
+$allowUseTool = false;
 $charset = 'utf-8';
 
 if ($allowDownloadDocumentsByApiKey) {
@@ -1093,12 +1091,12 @@ if ($isAllowedToEdit || $groupMemberWithUploadRights ||
             if ($document_to_move['filetype'] === 'link') {
                 $real_path_target = $base_work_dir.$moveTo.'/';
                 if (!DocumentManager::cloudLinkExists($_course, $moveTo, $document_to_move['comment'])) {
-                    $doc_id = $moveFile;
                     DocumentManager::updateDbInfo(
                         'update',
                         $document_to_move['path'],
                         $moveTo.'/'.basename($document_to_move['path'])
                     );
+
                     Display::addFlash(
                         Display::return_message(
                             get_lang('CloudLinkMoved'),
@@ -1117,33 +1115,35 @@ if ($isAllowedToEdit || $groupMemberWithUploadRights ||
                 $curdirpath = $moveTo;
                 $curdirpathurl = urlencode($moveTo);
             } else {
-                // @todo resource node should be updated?
-                /*$moveTo = DocumentManager::get_document_id(
-                    $courseInfo,
-                    $moveTo
-                );*/
-                DocumentManager::updateDbInfo(
-                    'update',
-                    $document_to_move['path'],
-                    $moveTo.'/'.basename($document_to_move['path'])
-                );
-
-                Display::addFlash(Display::return_message(get_lang('DirMv'), 'confirmation'));
-
-                /*if (move($base_work_dir.$document_to_move['path'], $base_work_dir.$moveTo)) {
-
+                if ($moveTo === '/') {
+                    // Move to course root
+                    $newParent = api_get_course_entity();
                 } else {
-                    if ($fileExist) {
-                        if (is_dir($real_path_target)) {
-                            $message = Display::return_message(get_lang('DirExists'), 'error');
-                        } elseif (is_file($real_path_target)) {
-                            $message = Display::return_message(get_lang('FileExists'), 'v');
-                        }
-                        Display::addFlash($message);
-                    } else {
-                        Display::addFlash(Display::return_message(get_lang('Impossible'), 'error'));
-                    }
-                }*/
+                    // Move to folder
+                    $moveTo = DocumentManager::get_document_id(
+                        $courseInfo,
+                        $moveTo
+                    );
+                    /** @var CDocument $newParent */
+                    $newParent = $repo->find($moveTo);
+                }
+
+                /** @var CDocument $document */
+                $document = $repo->find($document_to_move['iid']);
+
+                if ($moveTo && $document && $newParent) {
+                    DocumentManager::updateDbInfo(
+                        'update',
+                        $document_to_move['path'],
+                        $moveTo.'/'.basename($document_to_move['path'])
+                    );
+
+                    $document->getResourceNode()->setParent($newParent->getResourceNode());
+                    $em->persist($document);
+                    $em->flush();
+
+                    Display::addFlash(Display::return_message(get_lang('DirMv'), 'confirmation'));
+                }
             }
         } else {
             Display::addFlash(Display::return_message(get_lang('Impossible'), 'error'));

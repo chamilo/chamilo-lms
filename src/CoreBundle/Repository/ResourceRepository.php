@@ -74,7 +74,7 @@ class ResourceRepository extends EntityRepository
      * @param null  $lockMode
      * @param null  $lockVersion
      *
-     * @return object|null
+     * @return AbstractResource|null
      */
     public function find($id, $lockMode = null, $lockVersion = null)
     {
@@ -113,7 +113,8 @@ class ResourceRepository extends EntityRepository
         AbstractResource $resource,
         User $creator,
         AbstractResource $parent = null
-    ): ResourceNode {
+    ): ResourceNode
+    {
         $em = $this->getEntityManager();
         $resourceNode = new ResourceNode();
 
@@ -121,6 +122,7 @@ class ResourceRepository extends EntityRepository
         $resourceType = $em->getRepository('ChamiloCoreBundle:Resource\ResourceType')->findOneBy(
             ['name' => $resource->getToolName()]
         );
+
         $resourceNode
             ->setName($resource->getResourceName())
             ->setCreator($creator)
@@ -131,9 +133,9 @@ class ResourceRepository extends EntityRepository
         }
 
         $resource->setResourceNode($resourceNode);
+
         $em->persist($resourceNode);
         $em->persist($resource);
-        $em->flush();
 
         return $resourceNode;
     }
@@ -222,7 +224,6 @@ class ResourceRepository extends EntityRepository
 
         $em = $this->getEntityManager();
         $em->persist($link);
-        $em->flush();
     }
 
     /**

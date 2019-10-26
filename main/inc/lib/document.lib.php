@@ -16,8 +16,6 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
  *  It is / will be used to provide a service layer to all document-using tools.
  *  and eliminate code duplication fro group documents, scorm documents, main documents.
  *  Include/require it in your code to use its functionality.
- *
- * @package chamilo.library
  */
 class DocumentManager
 {
@@ -6206,7 +6204,7 @@ class DocumentManager
      * @param int                 $visibility
      * @param CGroupInfo          $group
      *
-     * @return bool|CDocument
+     * @return CDocument
      */
     public static function addFileToDocument(CDocument $document, $realPath, $content, $visibility, $group)
     {
@@ -6253,7 +6251,6 @@ class DocumentManager
             $em->persist($resourceFile);
             $resourceNode->setResourceFile($resourceFile);
             $em->persist($resourceNode);
-            $em->flush();
         }
 
         // By default visibility is published
@@ -6265,10 +6262,11 @@ class DocumentManager
         }
 
         $repo->addResourceToCourse($resourceNode, $visibility, $document->getCourse(), $document->getSession(), $group);
+        $em->flush();
+
         $documentId = $document->getIid();
 
         if ($documentId) {
-            error_log($documentId);
             $table = Database::get_course_table(TABLE_DOCUMENT);
             $sql = "UPDATE $table SET id = iid WHERE iid = $documentId";
             Database::query($sql);
@@ -6342,7 +6340,7 @@ class DocumentManager
         if (!empty($parentId)) {
             $parent = $documentRepo->find($parentId);
             if ($parent) {
-                $parentNode = $parent->getResourceNode();
+                $parentNode = $parent;
             }
         }
 
@@ -6365,9 +6363,9 @@ class DocumentManager
             ->setReadonly($readonly)
             ->setSession($session)
         ;
+
         $em = $documentRepo->getEntityManager();
         $em->persist($document);
-        $em->flush();
 
         $documentRepo->addResourceNode($document, $userEntity, $parentNode);
         $document = self::addFileToDocument($document, $realPath, $content, $visibility, $group);

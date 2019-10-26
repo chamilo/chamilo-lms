@@ -384,7 +384,7 @@ class CDocument extends AbstractResource implements ResourceInterface
     {
         // Update id with iid value
         $em = $args->getEntityManager();
-        $this->setId($this->iid);
+        $this->setId($this->getIid());
         $em->persist($this);
         $em->flush();
     }

@@ -100,6 +100,11 @@ if (api_is_in_group()) {
 
 $is_certificate_mode = DocumentManager::is_certificate_mode($dir);
 
+$em = Database::getManager();
+$documentRepository = Container::getDocumentRepository();
+/** @var CDocument $document */
+$document = $documentRepository->find($document_data['iid']);
+
 //Call from
 $call_from_tool = api_get_origin();
 $slide_id = isset($_GET['origin_opt']) ? Security::remove_XSS($_GET['origin_opt']) : null;
@@ -244,18 +249,15 @@ if (isset($_POST['comment'])) {
         }
 
         if (!$linkExists || $linkExists == $document_id) {
-            $params = [
-                'comment' => $comment,
-                'title' => $title,
-            ];
-            Database::update(
-                $dbTable,
-                $params,
-                ['c_id = ? AND id = ?' => [$course_id, $document_id]]
-            );
+            $document
+                ->setTitle($title)
+                ->setComment($comment)
+            ;
+            $em->persist($document);
+            $em->flush();
 
             if ($file_type != 'link') {
-                Display::addFlash(Display::return_message(get_lang('fileModified')));
+                Display::addFlash(Display::return_message(get_lang('Updated')));
             } else {
                 Display::addFlash(Display::return_message(get_lang('CloudLinkModified')));
             }
@@ -264,11 +266,6 @@ if (isset($_POST['comment'])) {
         }
     }
 }
-
-$em = Database::getManager();
-$documentRepository = Container::getDocumentRepository();
-/** @var CDocument $document */
-$document = $documentRepository->find($document_data['iid']);
 
 if ($is_allowed_to_edit) {
     if (isset($_POST['formSent']) && $_POST['formSent'] == 1 && !empty($document_id)) {

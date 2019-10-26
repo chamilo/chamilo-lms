@@ -9,18 +9,6 @@ namespace Chamilo\CoreBundle\Entity\Resource;
 interface ResourceInterface
 {
     /**
-     * @param ResourceNode $resourceNode
-     *
-     * @return mixed
-     */
-    public function setResourceNode(ResourceNode $resourceNode);
-
-    /**
-     * @return mixed
-     */
-    public function getResourceNode();
-
-    /**
      * Returns the resource id.
      *
      * @return int

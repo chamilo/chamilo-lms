@@ -3,6 +3,7 @@
 
 namespace Chamilo\CoreBundle\Entity\Resource;
 
+use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Mapping as ORM;
 use Sylius\Component\Resource\Model\ResourceInterface;
 
@@ -19,18 +20,39 @@ abstract class AbstractResource implements ResourceInterface
     public $resourceNode;
 
     /**
-     * @ORM\PrePersist()
-     * @ORM\PreUpdate()
+     * @return string
      */
-    public function preUpdate()
+    abstract public function getResourceName(): string;
+
+    /**
+     * @ORM\PreUpdate()
+     *
+     * @param LifecycleEventArgs $args
+     */
+    public function preUpdate(LifecycleEventArgs $args): void
     {
     }
 
     /**
-     * @ORM\PostRemove()
+     * @ORM\PostUpdate()
+     *
+     * @param LifecycleEventArgs $args
      */
-    public function postRemove()
+    public function postUpdate(LifecycleEventArgs $args)
     {
+        $em = $args->getEntityManager();
+        // Updates resource node name with the resource name.
+        $node = $this->getResourceNode();
+        $name = $this->getResourceName();
+        $node->setName($name);
+
+        if ($node->hasResourceFile()) {
+            // Update file name if exists too.
+            $node->getResourceFile()->setOriginalName($name);
+        }
+
+        $em->persist($node);
+        $em->flush();
     }
 
     /**

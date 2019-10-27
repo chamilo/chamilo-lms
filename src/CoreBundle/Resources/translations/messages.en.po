@@ -12390,7 +12390,7 @@ msgid "Percentage of your quota that is still free"
 msgstr "Percentage of your quota that is still free"
 
 msgid "Current folder"
-msgstr "Current folder en"
+msgstr "Current folder"
 
 msgid "Upload documents"
 msgstr "Upload documents"

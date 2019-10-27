@@ -1,8 +1,10 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CDocument;
 use Chamilo\CourseBundle\Entity\CQuizAnswer;
+use Chamilo\CourseBundle\Entity\CQuizQuestionCategory;
 
 /**
  * Class Question.
@@ -328,7 +330,7 @@ abstract class Question
     public function selectPicturePath()
     {
         if (!empty($this->picture)) {
-            $router = \Chamilo\CoreBundle\Framework\Container::getRouter();
+            $router = Container::getRouter();
             // this "filter" param is used to resize the image to width 800px see config/packages/liip_imagine.yaml
             $params = [
                 'file' => 'images/'.$this->getPictureFilename(),
@@ -944,6 +946,8 @@ abstract class Question
         $c_id = $this->course['real_id'];
         $categoryId = $this->category;
 
+        $repo = Container::getQuestionCategoryRepository();
+
         // question already exists
         if (!empty($id)) {
             $params = [
@@ -982,6 +986,13 @@ abstract class Question
                     api_get_user_id()
                 );*/
             }
+
+            /** @var CQuizQuestionCategory $questionCategory */
+            /*$questionCategory = $repo->find($this->iid);
+            $questionCategory->setTitle('');
+            $repo->addResourceNode($questionCategory, api_get_user_entity(api_get_user_id()));
+            $repo->addResourceToCourse($questionCategory->getResourceNode());*/
+
             if (api_get_setting('search_enabled') === 'true') {
                 $this->search_engine_edit($exerciseId);
             }
@@ -1027,13 +1038,18 @@ abstract class Question
                     $this->id
                 );
 
-                api_item_property_update(
+                /** @var CQuizQuestionCategory $questionCategory */
+                /*$questionCategory = $repo->find($this->id);
+                $repo->addResourceNode($questionCategory, api_get_user_entity(api_get_user_id()));
+                $repo->addResourceToCourse($questionCategory->getResourceNode());*/
+
+                /*api_item_property_update(
                     $this->course,
                     TOOL_QUIZ,
                     $this->id,
                     'QuizQuestionAdded',
                     api_get_user_id()
-                );
+                );*/
 
                 // If hotspot, create first answer
                 if ($type == HOT_SPOT || $type == HOT_SPOT_ORDER) {

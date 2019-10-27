@@ -1,13 +1,11 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
  * Script to switch all PHP files in Chamilo to a more Gettext-like syntax.
  *
- * @package chamilo.cron.lang
  */
-/**
- * Includes and declarations.
- */
+
 die();
 require_once __DIR__.'/../../../main/inc/global.inc.php';
 $path = api_get_path(SYS_LANG_PATH).'english';
@@ -66,7 +64,6 @@ foreach ($files as $file) {
                 }
             }
         } else {
-            $res = 0;
             $res = preg_match_all('/\{\s*([\'"](\\w*)[\'"])\s*\|get_lang\}/m', $line, $myTerms);
             if ($res > 0) {
                 foreach ($myTerms[2] as $term) {

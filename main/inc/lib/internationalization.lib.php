@@ -81,7 +81,7 @@ function get_lang($variable)
         $defaultDomain
     );
 
-    if ($translated == $variable) {
+    if ($translated === $variable) {
         // Check the langVariable for BC
         $translated = Container::getTranslator()->trans(
             "lang$variable",
@@ -89,7 +89,7 @@ function get_lang($variable)
             $defaultDomain
         );
 
-        if ($translated == "lang$variable") {
+        if ($translated === "lang$variable") {
             return $variable;
         }
     }

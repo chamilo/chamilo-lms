@@ -281,7 +281,7 @@ class ExtraFieldValue extends Model
                     }
 
                     if (!empty($value['tmp_name']) && isset($value['error']) && $value['error'] == 0) {
-                        //Crop the image to adjust 16:9 ratio
+                        // Crop the image to adjust 16:9 ratio
                         if (isset($params['extra_'.$field_variable.'_crop_result'])) {
                             $crop = new Image($value['tmp_name']);
                             $crop->crop($params['extra_'.$field_variable.'_crop_result']);

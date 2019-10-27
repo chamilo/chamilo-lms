@@ -4762,6 +4762,7 @@ class DocumentManager
 
         $sessionId = api_get_session_id();
         $courseParams = api_get_cidreq();
+        $courseCode = api_get_course_id();
         $webODFList = self::get_web_odf_extension_list();
 
         // Get the title or the basename depending on what we're using
@@ -4950,6 +4951,10 @@ class DocumentManager
                         $class = $classAddToEditor;
                         $url = $documentWebPath.str_replace('%2F', '/', $url_path).'?'.$courseParams;
                     }
+                    $url = $documentWebPath.str_replace('%2F', '/', $url_path).'?'.$courseParams;
+                    $url_path = str_replace('%2F', '/', $url_path);
+                    $url = api_get_path(WEB_PUBLIC_PATH)."courses/$courseCode/document$url_path?type=show";
+
                     if ($visibility == false) {
                         $class = ' ajax text-muted ';
                         if ($addToEditor) {

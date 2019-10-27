@@ -73,7 +73,7 @@ $column_model = [
         'sortable' => 'false',
     ],
 ];
-//Autowidth
+
 $extra_params['autowidth'] = 'true';
 $extra_params['height'] = 'auto';
 
@@ -233,7 +233,7 @@ switch ($action) {
         $content = $career->display();
         break;
 }
-// The header.
+
 Display::display_header($tool_name);
 
 ?>

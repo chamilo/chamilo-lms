@@ -2043,8 +2043,7 @@ class IndexManager
 
         return [
             'courses' => $courseList,
-            'html_courses' => $template->fetch($layout),
-            'html_sessions' => null,
+            'html' => $template->fetch($layout),
             'course_count' => count($courseList),
             'session_count' => $sessionCount,
         ];

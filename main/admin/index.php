@@ -361,6 +361,10 @@ if (api_is_platform_admin()) {
         'url' => api_get_path(WEB_CODE_PATH).'mySpace/company_reports.php',
         'label' => get_lang('Reports'),
     ];
+    $items[] = [
+        'url' => api_get_path(WEB_CODE_PATH).'admin/teacher_time_report.php',
+        'label' => get_lang('TeacherTimeReport'),
+    ];
 
     if (api_get_configuration_value('chamilo_cms')) {
         $items[] = [
@@ -417,6 +421,10 @@ if (api_is_platform_admin()) {
         'url' => 'special_exports.php',
         'label' => get_lang('SpecialExports'),
     ];
+    /*$items[] = [
+        'url' => 'periodic_export.php',
+        'label' => get_lang('PeriodicExport'),
+    ];*/
     $items[] = [
         'url' => 'system_status.php',
         'label' => get_lang('SystemStatus'),

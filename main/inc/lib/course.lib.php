@@ -2436,6 +2436,7 @@ class CourseManager
 
             $app_plugin = new AppPlugin();
             $app_plugin->performActionsWhenDeletingItem('course', $courseId);
+
             // Delete the course from the database
             Database::getManager()->remove($courseEntity);
             Database::getManager()->flush();

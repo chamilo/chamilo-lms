@@ -7,6 +7,8 @@ use ChamiloSession as Session;
 /**
  * Class Login.
  *
+ * @deprecated
+ *
  * @author Olivier Cauberghe <olivier.cauberghe@UGent.be>, Ghent University
  * @author Julio Montoya <gugli100@gmail.com>
  *

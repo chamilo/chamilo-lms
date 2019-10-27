@@ -568,21 +568,6 @@ class Template
     }
 
     /**
-     * Sets the "styles" menu in ckEditor.
-     *
-     * Reads css/themes/xxx/editor.css if exists and shows it in the menu, otherwise it
-     * will take the default web/editor.css file
-     */
-    public function setStyleMenuInCkEditor()
-    {
-        $cssEditor = api_get_cdn_path(api_get_path(WEB_CSS_PATH).'editor.css');
-        if (is_file(api_get_path(SYS_CSS_PATH).$this->themeDir.'editor.css')) {
-            $cssEditor = api_get_path(WEB_CSS_PATH).$this->themeDir.'editor.css';
-        }
-        $this->assign('css_editor', $cssEditor);
-    }
-
-    /**
      * Prepare custom CSS to be added at the very end of the <head> section.
      *
      * @see setCssFiles() for the mainstream CSS files
@@ -590,20 +575,13 @@ class Template
     public function setCssCustomFiles()
     {
         global $disable_js_and_css_files;
-        // chamilo CSS
-        //$css[] = api_get_cdn_path(api_get_path(WEB_CSS_PATH).'../chamilo.css');
-
-        // Base CSS
-        //$css[] = api_get_cdn_path(api_get_path(WEB_CSS_PATH).'base.css');
         $css = [];
         if ($this->show_learnpath) {
-            $css[] = api_get_cdn_path(api_get_path(WEB_CSS_PATH).'scorm.css');
             if (is_file(api_get_path(SYS_CSS_PATH).$this->themeDir.'learnpath.css')) {
                 $css[] = api_get_path(WEB_CSS_PATH).$this->themeDir.'learnpath.css';
             }
         }
 
-        //$css[] = api_get_cdn_path(api_get_path(WEB_CSS_PATH).$this->themeDir.'default.css');
         $css_file_to_string = '';
         foreach ($css as $file) {
             $css_file_to_string .= api_get_css($file);
@@ -635,7 +613,7 @@ class Template
             $style_print = '';
             if (is_readable(api_get_path(SYS_CSS_PATH).$this->theme.'/print.css')) {
                 $style_print = api_get_css(
-                    api_get_cdn_path(api_get_path(WEB_CSS_PATH).$this->theme.'/print.css'),
+                    api_get_path(WEB_CSS_PATH).$this->theme.'/print.css',
                     'print'
                 );
             }

@@ -1645,7 +1645,7 @@ class MessageManager
      *
      * @return string
      */
-    public static function display_message_for_group($groupId, $topic_id, $is_member, $messageId)
+    public static function display_message_for_group($groupId, $topic_id)
     {
         global $my_group_role;
         $main_message = self::get_message_by_id($topic_id);

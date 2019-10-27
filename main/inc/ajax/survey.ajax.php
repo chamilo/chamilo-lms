@@ -43,7 +43,8 @@ switch ($action) {
         break;
     case 'save_question':
         if (api_is_anonymous()) {
-            exit;
+            echo '';
+            break;
         }
         $status = isset($_GET['status']) ? (int) $_GET['status'] : null;
         $userId = api_get_user_id();

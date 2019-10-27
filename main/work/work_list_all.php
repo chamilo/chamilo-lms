@@ -33,18 +33,14 @@ if (!($is_allowed_to_edit || $isDrhOfCourse)) {
     api_not_allowed(true);
 }
 
-$tool_name = get_lang('StudentPublications');
 $group_id = api_get_group_id();
 $courseInfo = api_get_course_info();
-$courseCode = $courseInfo['code'];
 $sessionId = api_get_session_id();
 $htmlHeadXtra[] = api_get_jqgrid_js();
 $user_id = api_get_user_id();
 
 if (!empty($group_id)) {
     $group_properties = GroupManager::get_group_properties($group_id);
-    $show_work = false;
-
     if (api_is_allowed_to_edit(false, true)) {
         $show_work = true;
     } else {

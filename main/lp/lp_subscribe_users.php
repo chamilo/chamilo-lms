@@ -149,7 +149,7 @@ $groupMultiSelect = $form->addElement(
     get_lang('Groups'),
     $groupChoices
 );
-// submit button
+
 $form->addButtonSave(get_lang('Save'));
 
 $defaults = [];
@@ -200,10 +200,10 @@ if ($form->validate()) {
 }
 
 $message = Display::return_message(get_lang('UserLpSubscriptionDescription'));
-    $headers = [
-        get_lang('SubscribeUsersToLp'),
-        get_lang('SubscribeGroupsToLp'),
-    ];
+$headers = [
+    get_lang('SubscribeUsersToLp'),
+    get_lang('SubscribeGroupsToLp'),
+];
 
 $menu = $oLP->build_action_menu(true, false, true, false);
 

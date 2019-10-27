@@ -821,8 +821,6 @@ class Display
             }
         }
 
-        $icon = api_get_cdn_path($icon);
-
         if ($return_only_path) {
             return $icon;
         }

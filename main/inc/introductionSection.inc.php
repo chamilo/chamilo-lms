@@ -182,14 +182,12 @@ if ($tool == TOOL_COURSE_HOMEPAGE && !isset($_GET['intro_cmdEdit'])) {
     $class1 = '';
     if ($displayMode == '1') {
         // Show only the current course progress step
-        // $information_title = get_lang('InfoAboutLastDoneAdvance');
         $last_done_advance = $thematic->get_last_done_thematic_advance();
         $thematic_advance_info = $thematic->get_thematic_advance_list($last_done_advance);
         $subTitle1 = get_lang('CurrentTopic');
         $class1 = ' current';
     } elseif ($displayMode == '2') {
         // Show only the two next course progress steps
-        // $information_title = get_lang('InfoAboutNextAdvanceNotDone');
         $last_done_advance = $thematic->get_next_thematic_advance_not_done();
         $next_advance_not_done = $thematic->get_next_thematic_advance_not_done(2);
         $thematic_advance_info = $thematic->get_thematic_advance_list($last_done_advance);
@@ -197,7 +195,6 @@ if ($tool == TOOL_COURSE_HOMEPAGE && !isset($_GET['intro_cmdEdit'])) {
         $subTitle1 = $subTitle2 = get_lang('NextTopic');
     } elseif ($displayMode == '3') {
         // Show the current and next course progress steps
-        // $information_title = get_lang('InfoAboutLastDoneAdvanceAndNextAdvanceNotDone');
         $last_done_advance = $thematic->get_last_done_thematic_advance();
         $next_advance_not_done = $thematic->get_next_thematic_advance_not_done();
         $thematic_advance_info = $thematic->get_thematic_advance_list($last_done_advance);
@@ -211,9 +208,7 @@ if ($tool == TOOL_COURSE_HOMEPAGE && !isset($_GET['intro_cmdEdit'])) {
         $thematic_advance = get_lang('CourseThematicAdvance');
         $thematicScore = $thematic->get_total_average_of_thematic_advances().'%';
         $thematicUrl = api_get_path(WEB_CODE_PATH).'course_progress/index.php?action=thematic_details&'.api_get_cidreq();
-        $thematic_info = $thematic->get_thematic_list(
-            $thematic_advance_info['thematic_id']
-        );
+        $thematic_info = $thematic->get_thematic_list($thematic_advance_info['thematic_id']);
 
         $thematic_advance_info['start_date'] = api_get_local_time(
             $thematic_advance_info['start_date']
@@ -226,7 +221,7 @@ if ($tool == TOOL_COURSE_HOMEPAGE && !isset($_GET['intro_cmdEdit'])) {
         $courseInfo = api_get_course_info();
         $titleThematic = $thematic_advance.' : '.$courseInfo['name'].' <b>( '.$thematicScore.' )</b>';
 
-        $infoUser = '<div class="thematic-avatar"><img src="'.$userInfo['avatar'].'" class="img-circle img-fluid"></div>';
+        $infoUser = '<div class="thematic-avatar"><img src="'.$userInfo['avatar'].'" class="img-circle img-responsive"></div>';
         $infoUser .= '<div class="progress">
                         <div class="progress-bar progress-bar-primary" role="progressbar" style="width: '.$thematicScore.';">
                         '.$thematicScore.'
@@ -247,8 +242,7 @@ if ($tool == TOOL_COURSE_HOMEPAGE && !isset($_GET['intro_cmdEdit'])) {
         if (!empty($thematic_advance_info2)) {
             $thematic_info2 = $thematic->get_thematic_list($thematic_advance_info2['thematic_id']);
             $thematic_advance_info2['start_date'] = api_get_local_time($thematic_advance_info2['start_date']);
-            $thematic_advance_info2['start_date'] = api_format_date($thematic_advance_info2['start_date'],
-                DATE_TIME_FORMAT_LONG);
+            $thematic_advance_info2['start_date'] = api_format_date($thematic_advance_info2['start_date'], DATE_TIME_FORMAT_LONG);
 
             $thematicItemTwo = '
                 <div class="col-md-6 items-progress">

@@ -18,13 +18,13 @@ api_set_more_memory_and_time_limits();
 
 $this_section = SECTION_PLATFORM_ADMIN;
 $interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('PlatformAdmin')];
-// Access restrictions
+
 $nameTools = get_lang('SpecialExports');
 $export = '';
 $querypath = '';
-// Displaying the header
+
 Display::display_header($nameTools);
-// Display the tool title
+
 echo Display::page_header($nameTools);
 
 if (count($_POST) == 0) {

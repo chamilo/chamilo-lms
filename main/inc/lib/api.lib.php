@@ -961,37 +961,6 @@ function api_get_path($path = '', $configuration = [])
 }
 
 /**
- * Gets a modified version of the path for the CDN, if defined in
- * configuration.php.
- *
- * @param string $web_path The path of the resource without CDN
- *
- * @return string The path of the resource converted to CDN
- *
- * @author Yannick Warnier <ywarnier@beeznst.org>
- */
-function api_get_cdn_path($web_path)
-{
-    global $_configuration;
-    $web_root = api_get_path(WEB_PATH);
-    $ext = substr($web_path, strrpos($web_path, '.'));
-    if (isset($ext[2])) { // faster version of strlen to check if len>2
-        // Check for CDN definitions
-        if (!empty($_configuration['cdn_enable']) && !empty($ext)) {
-            foreach ($_configuration['cdn'] as $host => $exts) {
-                if (in_array($ext, $exts)) {
-                    //Use host as defined in $_configuration['cdn'], without
-                    // trailing slash
-                    return str_replace($web_root, $host.'/', $web_path);
-                }
-            }
-        }
-    }
-
-    return $web_path;
-}
-
-/**
  * Adds to a given path a trailing slash if it is necessary (adds "/" character at the end of the string).
  *
  * @param string $path the input path
@@ -2084,11 +2053,10 @@ function api_remove_in_gradebook()
  * particular course, if none given it gets the course info from the session.
  *
  * @param string $course_code
- * @param bool   $strict
  *
  * @return array
  */
-function api_get_course_info($course_code = null, $strict = false)
+function api_get_course_info($course_code = null)
 {
     if (!empty($course_code)) {
         $course_code = Database::escape_string($course_code);
@@ -5156,11 +5124,14 @@ function api_max_sort_value($user_course_category, $user_id)
  *
  * @author Julian Prud'homme
  *
- * @param int the number of seconds
+ * @param int    $seconds      number of seconds
+ * @param string $space
+ * @param bool   $showSeconds
+ * @param bool   $roundMinutes
  *
- * @return string the formated time
+ * @return string the formatted time
  */
-function api_time_to_hms($seconds, $space = ':')
+function api_time_to_hms($seconds, $space = ':', $showSeconds = true, $roundMinutes = false)
 {
     // $seconds = -1 means that we have wrong data in the db.
     if ($seconds == -1) {
@@ -5179,6 +5150,24 @@ function api_time_to_hms($seconds, $space = ':')
     // How many minutes ?
     $min = floor(($seconds - ($hours * 3600)) / 60);
 
+    if ($roundMinutes) {
+        if ($min >= 45) {
+            $min = 45;
+        }
+
+        if ($min >= 30 && $min <= 44) {
+            $min = 30;
+        }
+
+        if ($min >= 15 && $min <= 29) {
+            $min = 15;
+        }
+
+        if ($min >= 0 && $min <= 14) {
+            $min = 0;
+        }
+    }
+
     // How many seconds
     $sec = floor($seconds - ($hours * 3600) - ($min * 60));
 
@@ -5194,7 +5183,12 @@ function api_time_to_hms($seconds, $space = ':')
         $min = "0$min";
     }
 
-    return $hours.$space.$min.$space.$sec;
+    $seconds = '';
+    if ($showSeconds) {
+        $seconds = $space.$sec;
+    }
+
+    return $hours.$space.$min.$seconds;
 }
 
 /* FILE SYSTEM RELATED FUNCTIONS */
@@ -6407,18 +6401,25 @@ function api_request_uri()
  */
 function api_get_current_access_url_id()
 {
+    static $id;
+    if (!empty($id)) {
+        return $id;
+    }
+
     $table = Database::get_main_table(TABLE_MAIN_ACCESS_URL);
     $path = Database::escape_string(api_get_path(WEB_PATH));
     $sql = "SELECT id FROM $table WHERE url = '".$path."'";
     $result = Database::query($sql);
     if (Database::num_rows($result) > 0) {
-        $access_url_id = Database::result($result, 0, 0);
-        if ($access_url_id === false) {
+        $id = Database::result($result, 0, 0);
+        if ($id === false) {
             return -1;
         }
 
-        return (int) $access_url_id;
+        return (int) $id;
     }
+
+    $id = 1;
 
     //if the url in WEB_PATH was not found, it can only mean that there is
     // either a configuration problem or the first URL has not been defined yet

@@ -41,7 +41,7 @@ function handleRegions()
     }
 
     $plugin_obj = new AppPlugin();
-    $installed_plugins = $plugin_obj->get_installed_plugins();
+    $installed_plugins = $plugin_obj->getInstalledPlugins();
 
     echo '<form name="plugins" method="post" action="'.api_get_self().'?category='.Security::remove_XSS($_GET['category']).'">';
     echo '<table class="data_table">';
@@ -146,7 +146,7 @@ function handlePlugins()
     }
 
     $all_plugins = $plugin_obj->read_plugins_from_path();
-    $installed_plugins = $plugin_obj->get_installed_plugins();
+    $installed_plugins = $plugin_obj->getInstalledPlugins();
 
     // Plugins NOT installed
     echo Display::page_subheader(get_lang('Plugins'));
@@ -646,7 +646,7 @@ function storeRegions()
     $plugin_obj = new AppPlugin();
 
     // Get a list of all current 'Plugins' settings
-    $installed_plugins = $plugin_obj->get_installed_plugins();
+    $installed_plugins = $plugin_obj->getInstalledPlugins();
     $shortlist_installed = [];
     if (!empty($installed_plugins)) {
         foreach ($installed_plugins as $plugin) {
@@ -1117,6 +1117,7 @@ function addEditTemplate()
 
     // Setting the form elements: the title of the template.
     $form->addText('title', get_lang('Title'), false);
+    $form->addText('comment', get_lang('Description'), false);
 
     // Setting the form elements: the content of the template (wysiwyg editor).
     $form->addHtmlEditor(
@@ -1128,7 +1129,9 @@ function addEditTemplate()
     );
 
     // Setting the form elements: the form to upload an image to be used with the template.
-    $form->addElement('file', 'template_image', get_lang('Image'), '');
+    if (empty($template->getImage())) {
+        $form->addElement('file', 'template_image', get_lang('Image'), '');
+    }
 
     // Setting the form elements: a little bit information about the template image.
     $form->addElement('static', 'file_comment', '', get_lang('TemplateImageComment100x70'));
@@ -1138,12 +1141,14 @@ function addEditTemplate()
         $defaults['template_id'] = $id;
         $defaults['template_text'] = $template->getContent();
         // Forcing get_lang().
-        $defaults['title'] = get_lang($template->getTitle());
+        $defaults['title'] = $template->getTitle();
+        $defaults['comment'] = $template->getComment();
 
         // Adding an extra field: a hidden field with the id of the template we are editing.
         $form->addElement('hidden', 'template_id');
 
         // Adding an extra field: a preview of the image that is currently used.
+
         if (!empty($template->getImage())) {
             $form->addElement(
                 'static',
@@ -1153,6 +1158,7 @@ function addEditTemplate()
                     .'" alt="'.get_lang('TemplatePreview')
                     .'"/>'
             );
+            $form->addCheckBox('delete_image', null, get_lang('DeletePicture'));
         } else {
             $form->addElement(
                 'static',
@@ -1169,20 +1175,28 @@ function addEditTemplate()
     $form->addButtonSave(get_lang('Ok'), 'submit');
 
     // Setting the rules: the required fields.
-    $form->addRule(
-        'template_image',
-        get_lang('ThisFieldIsRequired'),
-        'required'
-    );
-    $form->addRule('title', get_lang('ThisFieldIsRequired'), 'required');
+    if (empty($template->getImage())) {
+        $form->addRule(
+            'template_image',
+            get_lang('ThisFieldIsRequired'),
+            'required'
+        );
+        $form->addRule('title', get_lang('ThisFieldIsRequired'), 'required');
+    }
 
     // if the form validates (complies to all rules) we save the information,
     // else we display the form again (with error message if needed)
     if ($form->validate()) {
         $check = Security::check_token('post');
+
         if ($check) {
             // Exporting the values.
             $values = $form->exportValues();
+            $isDelete = null;
+            if (isset($values['delete_image'])) {
+                $isDelete = $values['delete_image'];
+            }
+
             // Upload the file.
             if (!empty($_FILES['template_image']['name'])) {
                 $upload_ok = process_uploaded_file($_FILES['template_image']);
@@ -1222,6 +1236,7 @@ function addEditTemplate()
                     .$values['template_text'];
                 $template
                     ->setTitle($values['title'])
+                    ->setComment(Security::remove_XSS($values['comment']))
                     ->setContent(Security::remove_XSS($templateContent, COURSEMANAGERLOWSECURITY))
                     ->setImage($new_file_name);
                 $em->persist($template);

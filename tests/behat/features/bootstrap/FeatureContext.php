@@ -275,6 +275,24 @@ class FeatureContext extends MinkContext
     }
 
     /**
+     * @Then /^I fill the only ckeditor in the page with "([^"]*)"$/
+     */
+    public function iFillTheOnlyEditorInThePage($value)
+    {
+        // Just in case wait that ckeditor is loaded
+        $this->getSession()->wait(2000);
+
+
+        $this->getSession()->executeScript(
+            "
+                var textarea = $('textarea');
+                var id = textarea.attr('id'); 
+                CKEDITOR.instances[id].setData(\"$value\");
+                "
+        );
+    }
+
+    /**
      * @Given /^I fill hidden field "([^"]*)" with "([^"]*)"$/
      */
     public function iFillHiddenFieldWith($field, $value)
@@ -367,6 +385,19 @@ class FeatureContext extends MinkContext
         ");
     }
 
+    /**
+     * @When /^(?:|I )fill in select "(?P<field>(?:[^"]|\\")*)" with option value "(?P<value>(?:[^"]|\\")*)" with class "(?P<id>(?:[^"]|\\")*)"$/
+     */
+    public function iFillInSelectWithOptionValue($field, $value, $class)
+    {
+        $this->getSession()->wait(1000);
+        $this->getSession()->executeScript("
+            var input = $('$field').filter('$class');
+            var id = input.attr('id');
+            var input = $('#'+id);            
+            input.val($value);
+        ");
+    }
 
     /**
      * @When /^wait for the page to be loaded$/

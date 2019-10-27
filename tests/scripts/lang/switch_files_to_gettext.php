@@ -59,7 +59,8 @@ foreach ($files as $file) {
                     $translation = $terms[$term];
                     $quotedTerm = $myTerms[1][0];
                     //echo "Would do sed -i \"s#$quotedTerm#'$translation'#g\" $file here\n";
-                    system("sed -i \"s#$term#'$translation'#g\" $file");
+                    //system("sed -i \"s#$term#'$translation'#g\" $file");
+                    system("sed -i \"s#$term#$translation#g\" $file");
                     $countReplaces++;
                 }
             }

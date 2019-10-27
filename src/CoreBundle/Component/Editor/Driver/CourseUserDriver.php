@@ -20,7 +20,7 @@ class CourseUserDriver extends CourseDriver
         if (!empty($this->connector->course)) {
             $userId = api_get_user_id();
             $path = 'shared_folder/sf_user_'.$userId;
-            $alias = $this->connector->course['code'].' '.get_lang('CourseUserDocument');
+            $alias = $this->connector->course['code'].' '.get_lang('Course user document');
 
             if (!empty($userId)) {
                 return [

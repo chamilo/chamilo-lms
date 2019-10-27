@@ -56,7 +56,7 @@ if ($collapsable) {
                     $table = Database::get_main_table(TABLE_MAIN_SESSION_USER);
                     $sql = "UPDATE $table SET collapsed = $value WHERE id = ".$userRelSession['id'];
                     Database::query($sql);
-                    Display::addFlash(Display::return_message(get_lang('Updated')));
+                    Display::addFlash(Display::return_message(get_lang('Update successful')));
                 }
                 header('Location: user_portal.php');
                 exit;
@@ -68,7 +68,7 @@ if ($collapsable) {
 /* Constants and CONFIGURATION parameters */
 $load_dirs = api_get_setting('show_documents_preview');
 $displayMyCourseViewBySessionLink = api_get_setting('my_courses_view_by_session') === 'true';
-$nameTools = get_lang('MyCourses');
+$nameTools = get_lang('My courses');
 $loadHistory = isset($_GET['history']) && intval($_GET['history']) == 1 ? true : false;
 
 // Load course notification by ajax
@@ -159,7 +159,7 @@ if ($displayMyCourseViewBySessionLink) {
 
 $myCourseListAsCategory = api_get_configuration_value('my_courses_list_as_category');
 
-$controller = new IndexManager(get_lang('MyCourses'));
+$controller = new IndexManager(get_lang('My courses'));
 
 if (!$myCourseListAsCategory) {
     // Main courses and session list
@@ -298,7 +298,7 @@ if (!empty($_GET['history'])) {
 }
 $controller->tpl->assign('course_history_page', $historyClass);
 if ($myCourseListAsCategory) {
-    $controller->tpl->assign('header', get_lang('MyCourses'));
+    $controller->tpl->assign('header', get_lang('My courses'));
 }
 
 $controller->setGradeBookDependencyBar($userId);

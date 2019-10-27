@@ -45,7 +45,7 @@ class PageController
         if (!empty($home_menu)) {
             $home_menu_content = api_to_system_encoding($home_menu, api_detect_encoding(strip_tags($home_menu)));
             $this->show_right_block(
-                get_lang('MenuGeneral'),
+                get_lang('Help'),
                 null,
                 'help_block',
                 ['content' => $home_menu_content]
@@ -63,14 +63,14 @@ class PageController
         if (api_get_setting('skill.allow_skills_tool') == 'true') {
             $content = [];
             $content[] = [
-                'title' => get_lang('MySkills'),
+                'title' => get_lang('My skills'),
                 'href' => api_get_path(WEB_CODE_PATH).'social/skills_wheel.php',
             ];
 
             if (api_get_setting('skill.allow_hr_skills_management') == 'true'
                 || api_is_platform_admin()) {
                 $content[] = [
-                    'title' => get_lang('ManageSkills'),
+                    'title' => get_lang('Manage skills'),
                     'href' => api_get_path(WEB_CODE_PATH).'admin/skills_wheel.php',
                 ];
             }
@@ -192,7 +192,7 @@ class PageController
             }
 
             if (empty($home_top_temp) && api_is_platform_admin()) {
-                $home_top_temp = get_lang('PortalHomepageDefaultIntroduction');
+                //$home_top_temp = get_lang('<h2>Congratulations! You have successfully installed your e-learning portal!</h2>  <p>You can now complete the installation by following three easy steps:<br /> <ol>     <li>Configure you portal by going to the administration section, and select the Portal -> <a href="main/admin/settings.php">Configuration settings</a> entry.</li>     <li>Add some life to your portal by creating users and/or training. You can do that by inviting new people to create their accounts or creating them yourself through the <a href="main/admin/">administration</a>'s Users and Training sections.</li>     <li>Edit this page through the <a href="main/admin/configure_homepage.php">Edit portal homepage</a> entry in the administration section.</li> </ol> <p>You can always find more information about this software on our website: <a href="http://www.chamilo.org">http://www.chamilo.org</a>.</p> <p>Have fun, and don't hesitate to join the community and give us feedback through <a href="http://www.chamilo.org/forum">our forum</a>.</p>');
             }
             $open = str_replace('{rel_path}', api_get_path(REL_PATH), $home_top_temp);
             if (!empty($open)) {
@@ -228,7 +228,7 @@ class PageController
             if (api_is_platform_admin()) {
                 $classes .= Display::tag(
                     'li',
-                    Display::url(get_lang('AddClasses'), api_get_path(WEB_CODE_PATH).'admin/usergroups.php?action=add')
+                    Display::url(get_lang('Add classes'), api_get_path(WEB_CODE_PATH).'admin/usergroups.php?action=add')
                 );
             }
             if (!empty($classes)) {
@@ -373,7 +373,7 @@ class PageController
         $resCats = Database::query($sqlGetSubCatList);
         $thereIsSubCat = false;
         if (Database::num_rows($resCats) > 0) {
-            $htmlListCat = Display::page_header(get_lang('CatList'));
+            $htmlListCat = Display::page_header(get_lang('Categories'));
             $htmlListCat .= '<ul>';
             while ($catLine = Database::fetch_array($resCats)) {
                 if ($catLine['code'] != $category) {
@@ -405,7 +405,7 @@ class PageController
                 } else {
                     $htmlTitre = '<p>';
                     if (api_get_setting('show_back_link_on_top_of_tree') == 'true') {
-                        $htmlTitre .= '<a href="'.api_get_self().'">&lt;&lt; '.get_lang('BackToHomePage').'</a>';
+                        $htmlTitre .= '<a href="'.api_get_self().'">&lt;&lt; '.get_lang('Categories Overview').'</a>';
                     }
                     if (!is_null($catLine['parent_id']) ||
                         (api_get_setting('show_back_link_on_top_of_tree') != 'true' &&
@@ -435,7 +435,7 @@ class PageController
         $courses_list_string = '';
         $courses_shown = 0;
         if ($numrows > 0) {
-            $courses_list_string .= Display::page_header(get_lang('CourseList'));
+            $courses_list_string .= Display::page_header(get_lang('Course list'));
             $courses_list_string .= "<ul>";
 
             if (api_get_user_id()) {
@@ -543,7 +543,7 @@ class PageController
                             $courses_list_string .= '<input type="image" name="unsub" src="'.api_get_path(WEB_IMG_PATH).'enroll.gif" alt="'.get_lang('Subscribe').'" />'.get_lang('Subscribe').'
                             </form>';
                         } else {
-                            $courses_list_string .= '<br />'.get_lang('SubscribingNotAllowed');
+                            $courses_list_string .= '<br />'.get_lang('Subscribing not allowed');
                         }
                     }
                     $courses_list_string .= "</li>";
@@ -557,7 +557,7 @@ class PageController
             $result .= $courses_list_string;
         }
         if ($category != '') {
-            $result .= '<p><a href="'.api_get_self().'"> '.Display :: return_icon('back.png', get_lang('BackToHomePage')).get_lang('BackToHomePage').'</a></p>';
+            $result .= '<p><a href="'.api_get_self().'"> '.Display :: return_icon('back.png', get_lang('Categories Overview')).get_lang('Categories Overview').'</a></p>';
         }
 
         return $result;
@@ -726,9 +726,9 @@ class PageController
         $html = null;
         //Showing history title
         if ($load_history) {
-            $html .= Display::page_subheader(get_lang('HistoryTrainingSession'));
+            $html .= Display::page_subheader(get_lang('Courses history'));
             if (empty($session_categories)) {
-                $html .= get_lang('YouDoNotHaveAnySessionInItsHistory');
+                $html .= get_lang('You have no session in your sessions history');
             }
         }
 
@@ -840,7 +840,7 @@ class PageController
 
                     if (!empty($session_category_start_date) && $session_category_start_date != '0000-00-00' && !empty($session_category_end_date) && $session_category_end_date != '0000-00-00') {
                         $params['subtitle'] = sprintf(
-                            get_lang('FromDateXToDateY'),
+                            get_lang('From %s to %s'),
                             $session_category['session_category']['date_start'],
                             $session_category['session_category']['date_end']
                         );
@@ -914,7 +914,7 @@ class PageController
                 )
             );
             $history = $menu->addChild(
-                get_lang('HistoryTrainingSession'),
+                get_lang('Courses history'),
                 array(
                     'route'           => 'userportal',
                     'routeParameters' => array(
@@ -986,9 +986,9 @@ class PageController
 
         // Showing history title
         if ($loadHistory) {
-            // $html .= Display::page_subheader(get_lang('HistoryTrainingSession'));
+            // $html .= Display::page_subheader(get_lang('Courses history'));
             if (empty($session_categories)) {
-                $html .= get_lang('YouDoNotHaveAnySessionInItsHistory');
+                $html .= get_lang('You have no session in your sessions history');
             }
         }
 
@@ -1168,7 +1168,7 @@ class PageController
                 $content .= '</li>';
             }
             $content .= '</ul>';
-            $this->show_right_block(get_lang('MainNavigation'), null, 'navigation_block', ['content' => $content]);
+            $this->show_right_block(get_lang('Main navigation'), null, 'navigation_block', ['content' => $content]);
         }
     }
 }

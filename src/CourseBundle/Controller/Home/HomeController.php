@@ -195,7 +195,7 @@ class HomeController extends ToolBaseController
         }
         $entityManager->persist($tool);
         //$entityManager->flush();
-        return Display::return_message(get_lang('ToolIsNowHidden'), 'confirmation');
+        return Display::return_message(get_lang('The tool is now invisible.'), 'confirmation');
     }
 
     /**
@@ -458,7 +458,7 @@ class HomeController extends ToolBaseController
             $content .= '<div class="alert alert-success" style="border:0px; margin-top: 0px;padding:0px;">
                 <div class="normal-message" id="id_normal_message" style="display:none">';
             $content .= '<img src="'.api_get_path(WEB_PATH).'main/inc/lib/javascript/indicator.gif"/>&nbsp;&nbsp;';
-            $content .= get_lang('PleaseStandBy');
+            $content .= get_lang('Please stand by...');
             $content .= '</div>
                 <div class="alert alert-success" id="id_confirmation_message" style="display:none"></div>
             </div>';
@@ -469,7 +469,7 @@ class HomeController extends ToolBaseController
                 $content .= '
                 <div class="row">
                     <div class="col-xs-12 col-md-12">
-                        <span class="viewcaption">'.get_lang('SessionData').'</span>
+                        <span class="viewcaption">'.get_lang('Session\'s data').'</span>
                         <table class="course_activity_home">'.
                             CourseHome::show_session_data($session_id).'
                         </table>
@@ -507,7 +507,7 @@ class HomeController extends ToolBaseController
             if (api_get_setting('show_session_data') === 'true' && $session_id > 0) {
                 $content .= '<div class="row">
                     <div class="col-xs-12 col-md-12">
-                    <span class="viewcaption">'.get_lang('SessionData').'</span>
+                    <span class="viewcaption">'.get_lang('Session\'s data').'</span>
                     <table class="course_activity_home">';
                 $content .= CourseHome::show_session_data($session_id);
                 $content .= '</table></div></div>';

@@ -14,8 +14,6 @@ use Symfony\Component\HttpKernel\KernelEvents;
 
 /**
  * Class TwigListener.
- *
- * @package Chamilo\ThemeBundle\EventListener
  */
 class TwigListener implements EventSubscriberInterface
 {
@@ -69,7 +67,7 @@ class TwigListener implements EventSubscriberInterface
             $adminName = '';
             // Administrator name
             if (!empty($name)) {
-                $adminName = get_lang('Manager').' : ';
+                $adminName = get_lang('Administrator').' : ';
                 $adminName .= \Display::encrypted_mailto_link($email, $name);
             }
             $twig->addGlobal('administrator_name', $adminName);
@@ -131,9 +129,9 @@ class TwigListener implements EventSubscriberInterface
                         $teachersParsed[] = api_get_user_info($userId);
                     }
                     $links = array_column($teachersParsed, 'complete_name_with_message_link');
-                    $label = get_lang('Teacher');
+                    $label = get_lang('Trainer');
                     if (count($links) > 1) {
-                        $label = get_lang('Teachers');
+                        $label = get_lang('Trainers');
                     }
                     $teacherData .= $label.' : '.array_to_string($links, CourseManager::USER_SEPARATOR);
                 }

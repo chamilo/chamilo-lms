@@ -166,7 +166,7 @@ class LegacyListener
             $rightFloatMenu = '';
             $iconBug = \Display::return_icon(
                 'bug.png',
-                get_lang('ReportABug'),
+                get_lang('Report a bug'),
                 [],
                 ICON_SIZE_LARGE
             );

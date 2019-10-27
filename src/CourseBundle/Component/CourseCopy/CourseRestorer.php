@@ -2702,7 +2702,7 @@ class CourseRestorer
                 }
 
                 if ($this->add_text_in_items) {
-                    $lp->name = $lp->name.' '.get_lang('CopyLabelSuffix');
+                    $lp->name = $lp->name.' '.get_lang('Copy');
                 }
 
                 if (isset($this->tool_copy_settings['learnpaths'])) {
@@ -2997,7 +2997,7 @@ class CourseRestorer
                     if (is_file($path)) {
                         /* if (!is_file($dest . '/' . $file) || $overwrite)
                          if (!@copy($path, $dest . '/' . $file)) {
-                             echo '<font color="red">File ('.$path.') '.get_lang('NotHavePermission').'</font>';
+                             echo '<font color="red">File ('.$path.') '.get_lang('The user doesn't have permissions to do the requested operation.').'</font>';
                          }*/
                     } elseif (is_dir($path)) {
                         if (!is_dir($dest.'/'.$file)) {

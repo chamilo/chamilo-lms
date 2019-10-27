@@ -155,7 +155,7 @@ class CkEditor extends Editor
     {
         return [
             [
-                'title' => get_lang('EmptyTemplate'),
+                'title' => get_lang('Blank template'),
                 'description' => null,
                 'image' => api_get_path(WEB_PUBLIC_PATH).'img/template_thumb/empty.gif',
                 'html' => '

@@ -420,7 +420,7 @@ class CourseController extends BaseController
 
             if (!empty($categories)) {
                 $actions .= \Display::url(
-                    \Display::return_icon('gradebook.png', get_lang('MakeQualifiable'), [], ICON_SIZE_MEDIUM),
+                    \Display::return_icon('gradebook.png', get_lang('Add to gradebook'), [], ICON_SIZE_MEDIUM),
                     $this->generateUrl(
                         'chamilo_lti_grade',
                         ['catId' => $categories[0]->get_id(), 'code' => $course->getCode()]
@@ -532,7 +532,7 @@ class CourseController extends BaseController
         /** @var \HTML_QuickForm_select $slcLtiTools */
         $slcLtiTools = $form->createElement('select', 'name', $this->trans('External tool'));
         $form->insertElementBefore($slcLtiTools, 'hid_category_id');
-        $form->addRule('name', get_lang('ThisFieldIsRequired'), 'required');
+        $form->addRule('name', get_lang('Required field'), 'required');
 
         $tools = $toolRepo->findBy(['course' => $course, 'gradebookEval' => null]);
 

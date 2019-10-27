@@ -31,7 +31,7 @@ if (!$allow) {
 $maxNumberItems = 20;
 $sessionInfo = api_get_session_info($sessionId);
 
-Display::display_header(get_lang('UsersOnLineList'));
+Display::display_header(get_lang('Online users list'));
 echo Display::page_header($sessionInfo['name']);
 
 function getUsers(
@@ -116,7 +116,7 @@ $table = new SortableTable(
     $maxNumberItems
 );
 $table->set_header(0, get_lang('Name'), false);
-$table->set_header(1, get_lang('InCourse'), false);
+$table->set_header(1, get_lang('In course'), false);
 
 $table->set_column_filter(0, 'user_filter');
 $table->set_column_filter(1, 'course_filter');

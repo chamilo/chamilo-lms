@@ -572,7 +572,7 @@ class UserRepository extends EntityRepository
                 foreach ($fs as $file) {
                     $chatFiles[] =
                         $course->getCourse()->getDirectory().'/document/chat_files/'.$file->getFilename().' - '.
-                        get_lang('ContentNotAccessibleRequestFromDataPrivacyOfficer');
+                        get_lang('This content is not accessible to you directly because of course-related access rules. If you require access to that data, please contact the Data Privacy Officer as defined in our privacy terms.');
                 }
             }
         }

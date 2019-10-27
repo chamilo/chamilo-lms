@@ -6,6 +6,7 @@ use Chamilo\CoreBundle\Entity\Resource\ResourceLink;
 use Chamilo\CoreBundle\Entity\TrackEHotspot;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CExerciseCategory;
+use Chamilo\CourseBundle\Entity\CQuizCategory;
 use ChamiloSession as Session;
 use Doctrine\DBAL\Types\Type;
 
@@ -981,7 +982,7 @@ class Exercise
                 $categoryParentInfo = null;
                 // Parent is not set no loop here
                 if (isset($cat['parent_id']) && !empty($cat['parent_id'])) {
-                    /** @var \Chamilo\CourseBundle\Entity\CQuizCategory $categoryEntity */
+                    /** @var CQuizCategory $categoryEntity */
                     if (!isset($parentsLoaded[$cat['parent_id']])) {
                         $categoryEntity = $em->find('ChamiloCoreBundle:CQuizCategory', $cat['parent_id']);
                         $parentsLoaded[$cat['parent_id']] = $categoryEntity;
@@ -996,7 +997,7 @@ class Exercise
                         //$index = 1;
                     }
 
-                    /** @var \Chamilo\CourseBundle\Entity\CQuizCategory $categoryParent */
+                    /** @var CQuizCategory $categoryParent */
                     foreach ($path as $categoryParent) {
                         $visibility = $categoryParent->getVisibility();
                         if ($visibility == 0) {
@@ -1499,7 +1500,6 @@ class Exercise
      */
     public function save()
     {
-        $_course = $this->course;
         $TBL_EXERCISES = Database::get_course_table(TABLE_QUIZ_TEST);
 
         $id = $this->id;

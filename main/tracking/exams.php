@@ -68,7 +68,7 @@ if ($global) {
     while ($row = Database::fetch_array($result)) {
         $exerciseList[$row['id']] = $row['title'];
     }
-    $form->addElement('select', 'exercise_id', get_lang('Exercise'), $exerciseList);
+    $form->addElement('select', 'exercise_id', get_lang('Test'), $exerciseList);
 }
 
 $form->addButtonFilter(get_lang('Filter'));
@@ -83,31 +83,31 @@ if (!$exportToXLS) {
     $actionsLeft = $actionsRight = '';
     if ($global) {
         $actionsLeft .= '<a href="'.api_get_path(WEB_CODE_PATH).'auth/my_progress.php">'.
-        Display::return_icon('statistics.png', get_lang('MyStats'), '', ICON_SIZE_MEDIUM);
+        Display::return_icon('statistics.png', get_lang('View my progress'), '', ICON_SIZE_MEDIUM);
         $actionsLeft .= '</a>';
         $courseInfo = api_get_course_info();
 
         $actionsRight .= '<a href="'.api_get_self().'?export=1&score='.$filter_score.'&exercise_id='.$exerciseId.'">'.
-            Display::return_icon('export_excel.png', get_lang('ExportAsXLS'), '', ICON_SIZE_MEDIUM).'</a>';
+            Display::return_icon('export_excel.png', get_lang('Excel export'), '', ICON_SIZE_MEDIUM).'</a>';
         $actionsRight .= '<a href="javascript: void(0);" onclick="javascript: window.print()">'.
             Display::return_icon('printer.png', get_lang('Print'), '', ICON_SIZE_MEDIUM).'</a>';
 
         $menuItems[] = Display::url(
-            Display::return_icon('teacher.png', get_lang('TeacherInterface'), [], 32),
+            Display::return_icon('teacher.png', get_lang('Trainer View'), [], 32),
             api_get_path(WEB_CODE_PATH).'mySpace/?view=teacher'
         );
         if (api_is_platform_admin()) {
             $menuItems[] = Display::url(
-                Display::return_icon('star.png', get_lang('AdminInterface'), [], 32),
+                Display::return_icon('star.png', get_lang('Admin view'), [], 32),
                 api_get_path(WEB_CODE_PATH).'mySpace/admin_view.php'
             );
         } else {
             $menuItems[] = Display::url(
-                Display::return_icon('star.png', get_lang('CoachInterface'), [], 32),
+                Display::return_icon('star.png', get_lang('Coach interface'), [], 32),
                 api_get_path(WEB_CODE_PATH).'mySpace/index.php?view=coach'
             );
         }
-        $menuItems[] = '<a href="#">'.Display::return_icon('quiz_na.png', get_lang('ExamTracking'), [], 32).'</a>';
+        $menuItems[] = '<a href="#">'.Display::return_icon('quiz_na.png', get_lang('Exam tracking'), [], 32).'</a>';
 
         $nb_menu_items = count($menuItems);
         if ($nb_menu_items > 1) {
@@ -119,7 +119,7 @@ if (!$exportToXLS) {
         $actionsLeft = TrackingCourseLog::actionsLeft('exams', api_get_session_id());
 
         $actionsRight .= Display::url(
-            Display::return_icon('export_excel.png', get_lang('ExportAsXLS'), [], 32),
+            Display::return_icon('export_excel.png', get_lang('Excel export'), [], 32),
             api_get_self().'?'.api_get_cidreq().'&export=1&score='.$filter_score.'&exercise_id='.$exerciseId
         );
     }
@@ -128,26 +128,26 @@ if (!$exportToXLS) {
     echo $toolbar;
 
     $form->display();
-    echo '<h3>'.sprintf(get_lang('FilteringWithScoreX'), $filter_score).'%</h3>';
+    echo '<h3>'.sprintf(get_lang('Filtering with score %s'), $filter_score).'%</h3>';
 }
 
 $html = '<table  class="data_table">';
 if ($global) {
     $html .= '<tr>';
     $html .= '<th>'.get_lang('Courses').'</th>';
-    $html .= '<th>'.get_lang('Quiz').'</th>';
-    $html .= '<th>'.get_lang('ExamTaken').'</th>';
-    $html .= '<th>'.get_lang('ExamNotTaken').'</th>';
-    $html .= '<th>'.sprintf(get_lang('ExamPassX'), $filter_score).'%</th>';
-    $html .= '<th>'.get_lang('ExamFail').'</th>';
-    $html .= '<th>'.get_lang('TotalStudents').'</th>';
+    $html .= '<th>'.get_lang('Tests').'</th>';
+    $html .= '<th>'.get_lang('Taken').'</th>';
+    $html .= '<th>'.get_lang('Not taken').'</th>';
+    $html .= '<th>'.sprintf(get_lang('Pass minimum %s'), $filter_score).'%</th>';
+    $html .= '<th>'.get_lang('Fail').'</th>';
+    $html .= '<th>'.get_lang('Total learners').'</th>';
     $html .= '</tr>';
 } else {
     $html .= '<tr>';
-    $html .= '<th>'.get_lang('Quiz').'</th>';
+    $html .= '<th>'.get_lang('Tests').'</th>';
     $html .= '<th>'.get_lang('User').'</th>';
     $html .= '<th>'.get_lang('Username').'</th>';
-    //$html .= '<th>'.sprintf(get_lang('ExamPassX'), $filter_score).'</th>';
+    //$html .= '<th>'.sprintf(get_lang('Pass minimum %s'), $filter_score).'</th>';
     $html .= '<th>'.get_lang('Percentage').' %</th>';
     $html .= '<th>'.get_lang('Status').'</th>';
     $html .= '<th>'.get_lang('Attempts').'</th>';
@@ -324,7 +324,7 @@ if (!empty($courseList) && is_array($courseList)) {
             } else {
                 $html .= "<tr>
                             <td colspan='6'>
-                                ".get_lang('NoExercise')."
+                                ".get_lang('NoTest')."
                             </td>
                         </tr>
                      ";
@@ -332,7 +332,7 @@ if (!empty($courseList) && is_array($courseList)) {
         } else {
             $html .= "<tr>
                         <td colspan='6'>
-                            ".get_lang('NoExercise')."
+                            ".get_lang('NoTest')."
                         </td>
                     </tr>
                  ";
@@ -389,17 +389,17 @@ function export_complete_report_xls($filename, $array)
     if ($global) {
         $worksheet->setCellValueByColumnAndRow($column, $line, get_lang('Courses'));
         $column++;
-        $worksheet->setCellValueByColumnAndRow($column, $line, get_lang('Exercises'));
+        $worksheet->setCellValueByColumnAndRow($column, $line, get_lang('Tests'));
         $column++;
-        $worksheet->setCellValueByColumnAndRow($column, $line, get_lang('ExamTaken'));
+        $worksheet->setCellValueByColumnAndRow($column, $line, get_lang('Taken'));
         $column++;
-        $worksheet->setCellValueByColumnAndRow($column, $line, get_lang('ExamNotTaken'));
+        $worksheet->setCellValueByColumnAndRow($column, $line, get_lang('Not taken'));
         $column++;
-        $worksheet->setCellValueByColumnAndRow($column, $line, sprintf(get_lang('ExamPassX'), $filter_score).'%');
+        $worksheet->setCellValueByColumnAndRow($column, $line, sprintf(get_lang('Pass minimum %s'), $filter_score).'%');
         $column++;
-        $worksheet->setCellValueByColumnAndRow($column, $line, get_lang('ExamFail'));
+        $worksheet->setCellValueByColumnAndRow($column, $line, get_lang('Fail'));
         $column++;
-        $worksheet->setCellValueByColumnAndRow($column, $line, get_lang('TotalStudents'));
+        $worksheet->setCellValueByColumnAndRow($column, $line, get_lang('Total learners'));
         $column++;
 
         $line++;
@@ -413,7 +413,7 @@ function export_complete_report_xls($filename, $array)
         }
         $line++;
     } else {
-        $worksheet->setCellValueByColumnAndRow(0, $line, get_lang('Exercises'));
+        $worksheet->setCellValueByColumnAndRow(0, $line, get_lang('Tests'));
         $worksheet->setCellValueByColumnAndRow(1, $line, get_lang('User'));
         $worksheet->setCellValueByColumnAndRow(2, $line, get_lang('Username'));
         $worksheet->setCellValueByColumnAndRow(3, $line, get_lang('Percentage'));
@@ -605,12 +605,12 @@ function processStudentList($filter_score, $global, $exercise, $courseInfo, $ses
 
                 if ($percentageScore >= $filter_score) {
                     $userRow .= '<td style="background-color:#DFFFA8">';
-                    $userRow .= get_lang('PassExam').'</td>';
-                    $tempArray[] = get_lang('PassExam');
+                    $userRow .= get_lang('Pass').'</td>';
+                    $tempArray[] = get_lang('Pass');
                 } else {
                     $userRow .= '<td style="background-color:#FC9A9E"  >';
-                    $userRow .= get_lang('ExamFail').'</td>';
-                    $tempArray[] = get_lang('ExamFail');
+                    $userRow .= get_lang('Fail').'</td>';
+                    $tempArray[] = get_lang('Fail');
                 }
 
                 $userRow .= '<td>';
@@ -625,8 +625,8 @@ function processStudentList($filter_score, $global, $exercise, $courseInfo, $ses
                 $userRow .= '</td>';
 
                 $userRow .= '<td style="background-color:#FCE89A">';
-                $userRow .= get_lang('NoAttempt');
-                $tempArray[] = get_lang('NoAttempt');
+                $userRow .= get_lang('No attempts');
+                $tempArray[] = get_lang('No attempts');
                 $userRow .= '</td>';
                 $userRow .= '<td>';
                 $userRow .= 0;

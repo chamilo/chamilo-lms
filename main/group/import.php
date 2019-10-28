@@ -24,20 +24,20 @@ $form = new FormValidator(
     'post',
     api_get_self().'?'.api_get_cidreq()
 );
-$form->addElement('header', get_lang('ImportGroups'));
-$form->addElement('file', 'file', get_lang('ImportCSVFileLocation'));
-$form->addRule('file', get_lang('ThisFieldIsRequired'), 'required');
+$form->addElement('header', get_lang('Import groups'));
+$form->addElement('file', 'file', get_lang('CSV file import location'));
+$form->addRule('file', get_lang('Required field'), 'required');
 $form->addElement(
     'checkbox',
     'delete_not_in_file',
     null,
-    get_lang('DeleteItemsNotInFile')
+    get_lang('Delete items not in file')
 );
 $form->addElement(
     'label',
     null,
     Display::url(
-        get_lang('ExampleCSVFile'),
+        get_lang('Example CSV file'),
         api_get_path(WEB_CODE_PATH).'group/example.csv',
         ['download' => true]
     )

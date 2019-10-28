@@ -22,7 +22,7 @@ api_protect_course_script(true);
 $group_id = api_get_group_id();
 $current_group = GroupManager::get_group_properties($group_id);
 
-$nameTools = get_lang('EditGroup');
+$nameTools = get_lang('Edit this group');
 $interbreadcrumb[] = ['url' => 'group.php?'.api_get_cidreq(), 'name' => get_lang('Groups')];
 $interbreadcrumb[] = ['url' => 'group_space.php?'.api_get_cidreq(), 'name' => $current_group['name']];
 
@@ -153,13 +153,13 @@ if (!empty($complete_user_list)) {
 $group_tutors_element = $form->addElement(
     'advmultiselect',
     'group_tutors',
-    get_lang('GroupTutors'),
+    get_lang('Coaches'),
     $possible_users,
     'style="width: 280px;"'
 );
 
 // submit button
-$form->addButtonSave(get_lang('SaveSettings'));
+$form->addButtonSave(get_lang('Save settings'));
 
 if ($form->validate()) {
     $values = $form->exportValues();
@@ -177,10 +177,10 @@ if ($form->validate()) {
         count($_POST['group_members']) > $max_member &&
         $max_member != GroupManager::MEMBER_PER_GROUP_NO_LIMIT
     ) {
-        Display::addFlash(Display::return_message(get_lang('GroupTooMuchMembers'), 'warning'));
+        Display::addFlash(Display::return_message(get_lang('Number proposed exceeds max. that you allowed (you can modify in the group settings). Group composition has not been modified'), 'warning'));
         header('Location: group.php?'.api_get_cidreq(true, false));
     } else {
-        Display::addFlash(Display::return_message(get_lang('GroupSettingsModified'), 'success'));
+        Display::addFlash(Display::return_message(get_lang('Group settings modified'), 'success'));
         header('Location: group.php?'.api_get_cidreq(true, false).'&category='.$cat['id']);
     }
     exit;
@@ -193,7 +193,7 @@ $defaults['action'] = $action;
 
 if (!empty($_GET['keyword']) && !empty($_GET['submit'])) {
     $keyword_name = Security::remove_XSS($_GET['keyword']);
-    echo '<br/>'.get_lang('SearchResultsFor').' <span style="font-style: italic ;"> '.$keyword_name.' </span><br>';
+    echo '<br/>'.get_lang('Search results for:').' <span style="font-style: italic ;"> '.$keyword_name.' </span><br>';
 }
 
 Display :: display_header($nameTools, 'Group');

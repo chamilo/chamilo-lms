@@ -496,7 +496,7 @@ class TestCategory
             $courseId = api_get_course_int_id();
         }
         $categories = self::getCategoryListInfo('', $courseId);
-        $result = ['0' => get_lang('NoCategorySelected')];
+        $result = ['0' => get_lang('GeneralSelected')];
         for ($i = 0; $i < count($categories); $i++) {
             $result[$categories[$i]->id] = $categories[$i]->name;
         }
@@ -725,8 +725,8 @@ class TestCategory
 
         $table = new HTML_Table(['class' => 'table table-bordered', 'id' => 'category_results']);
         $table->setHeaderContents(0, 0, get_lang('Categories'));
-        $table->setHeaderContents(0, 1, get_lang('AbsoluteScore'));
-        $table->setHeaderContents(0, 2, get_lang('RelativeScore'));
+        $table->setHeaderContents(0, 1, get_lang('Absolute score'));
+        $table->setHeaderContents(0, 2, get_lang('Relative score'));
         $row = 1;
 
         $none_category = [];
@@ -767,7 +767,7 @@ class TestCategory
             }
 
             if (!empty($none_category)) {
-                $table->setCellContents($row, 0, get_lang('None'));
+                $table->setCellContents($row, 0, get_lang('none'));
                 $table->setCellContents(
                     $row,
                     1,
@@ -865,7 +865,7 @@ class TestCategory
                     }
                 }
                 if (empty($row['title']) && empty($row['category_id'])) {
-                    $row['title'] = get_lang('NoCategory');
+                    $row['title'] = get_lang('General');
                 }
                 $categories[$row['category_id']] = $row;
             }
@@ -886,12 +886,12 @@ class TestCategory
     {
         switch ($action) {
             case 'new':
-                $header = get_lang('AddACategory');
-                $submit = get_lang('AddTestCategory');
+                $header = get_lang('Add category');
+                $submit = get_lang('Add test category');
                 break;
             case 'edit':
-                $header = get_lang('EditCategory');
-                $submit = get_lang('ModifyCategory');
+                $header = get_lang('Edit this category');
+                $submit = get_lang('Edit category');
                 break;
         }
 
@@ -901,12 +901,12 @@ class TestCategory
         $form->addElement(
             'text',
             'category_name',
-            get_lang('CategoryName'),
+            get_lang('Category name'),
             ['class' => 'span6']
         );
         $form->add_html_editor(
             'category_description',
-            get_lang('CategoryDescription'),
+            get_lang('Category description'),
             false,
             false,
             [
@@ -949,7 +949,7 @@ class TestCategory
         $form->setDefaults($defaults);
 
         // setting the rules
-        $form->addRule('category_name', get_lang('ThisFieldIsRequired'), 'required');
+        $form->addRule('category_name', get_lang('Required field'), 'required');
     }
 
     /**
@@ -973,7 +973,7 @@ class TestCategory
             $warning = null;
             if ($nbQuestionsTotal != $real_question_count) {
                 $warning = Display::return_message(
-                    get_lang('CheckThatYouHaveEnoughQuestionsInYourCategories'),
+                    get_lang('Make sure you have enough questions in your categories.'),
                     'warning'
                 );
             }
@@ -982,14 +982,14 @@ class TestCategory
             $return .= '<table class="data_table">';
             $return .= '<tr>';
             $return .= '<th height="24">'.get_lang('Categories').'</th>';
-            $return .= '<th width="70" height="24">'.get_lang('Number').'</th></tr>';
+            $return .= '<th width="70" height="24">'.get_lang('N°').'</th></tr>';
 
             $emptyCategory = [
                 'id' => '0',
-                'name' => get_lang('NoCategory'),
+                'name' => get_lang('General'),
                 'description' => '',
                 'iid' => '0',
-                'title' => get_lang('NoCategory'),
+                'title' => get_lang('General'),
             ];
 
             $categories[] = $emptyCategory;
@@ -1008,7 +1008,7 @@ class TestCategory
             }
 
             $return .= '</table>';
-            $return .= get_lang('ZeroMeansNoQuestionWillBeSelectedMinusOneMeansThatAllQuestionsWillBeSelected');
+            $return .= get_lang('-1 = All questions will be selected.');
         }
 
         return $return;
@@ -1163,7 +1163,7 @@ class TestCategory
                 $links .= '<a href="'.api_get_self().'?action=editcategory&category_id='.$category['id'].'&'.api_get_cidreq().'">'.
                     Display::return_icon('edit.png', get_lang('Edit'), [], ICON_SIZE_SMALL).'</a>';
                 $links .= ' <a href="'.api_get_self().'?'.api_get_cidreq().'&action=deletecategory&category_id='.$category['id'].'" ';
-                $links .= 'onclick="return confirmDelete(\''.self::protectJSDialogQuote(get_lang('DeleteCategoryAreYouSure').'['.$rowname).'] ?\', \'id_cat'.$category['id'].'\');">';
+                $links .= 'onclick="return confirmDelete(\''.self::protectJSDialogQuote(get_lang('Are you sure you want to delete this category?').'['.$rowname).'] ?\', \'id_cat'.$category['id'].'\');">';
                 $links .= Display::return_icon('delete.png', get_lang('Delete'), [], ICON_SIZE_SMALL).'</a>';
             }
 

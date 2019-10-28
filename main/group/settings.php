@@ -25,7 +25,7 @@ if (empty($current_group)) {
     api_not_allowed(true);
 }
 
-$nameTools = get_lang('EditGroup');
+$nameTools = get_lang('Edit this group');
 $interbreadcrumb[] = ['url' => 'group.php?'.api_get_cidreq(), 'name' => get_lang('Groups')];
 $interbreadcrumb[] = ['url' => 'group_space.php?'.api_get_cidreq(), 'name' => $current_group['name']];
 $groupMember = GroupManager::is_tutor_of_group(api_get_user_id(), $current_group);
@@ -43,7 +43,7 @@ $form->addElement('html', '</div>');
 $form->addElement('html', '<div class="col-md-6">');
 
 // Group name
-$form->addElement('text', 'name', get_lang('GroupName'));
+$form->addElement('text', 'name', get_lang('Group name'));
 
 if (api_get_setting('allow_group_categories') == 'true') {
     $groupCategories = GroupManager::get_categories();
@@ -74,23 +74,23 @@ $group = [
     $form->createElement(
         'radio',
         'max_member_no_limit',
-        get_lang('GroupLimit'),
-        get_lang('NoLimit'),
+        get_lang('Limit'),
+        get_lang('No limitation'),
         GroupManager::MEMBER_PER_GROUP_NO_LIMIT
     ),
     $form->createElement(
         'radio',
         'max_member_no_limit',
         null,
-        get_lang('MaximumOfParticipants'),
+        get_lang('Maximum number of members'),
         1,
         ['id' => 'max_member_selected']
     ),
     $form->createElement('text', 'max_member', null, ['class' => 'span1', 'id' => 'max_member']),
-    $form->createElement('static', null, null, ' '.get_lang('GroupPlacesThis')),
+    $form->createElement('static', null, null, ' '.get_lang('seats (optional)')),
 ];
-$form->addGroup($group, 'max_member_group', get_lang('GroupLimit'), null, false);
-$form->addRule('max_member_group', get_lang('InvalidMaxNumberOfMembers'), 'callback', 'check_max_number_of_members');
+$form->addGroup($group, 'max_member_group', get_lang('Limit'), null, false);
+$form->addRule('max_member_group', get_lang('Please enter a valid number for the maximum number of members.'), 'callback', 'check_max_number_of_members');
 
 $form->addElement('html', '</div>');
 
@@ -101,23 +101,23 @@ $group = [
     $form->createElement(
         'checkbox',
         'self_registration_allowed',
-        get_lang('GroupSelfRegistration'),
-        get_lang('GroupAllowStudentRegistration'),
+        get_lang('Registration'),
+        get_lang('Learners are allowed to self-register in groups'),
         1
     ),
     $form->createElement(
         'checkbox',
         'self_unregistration_allowed',
         null,
-        get_lang('GroupAllowStudentUnregistration'),
+        get_lang('Learners are allowed to unregister themselves from groups'),
         1
     ),
 ];
 $form->addGroup(
     $group,
     '',
-    Display::return_icon('user.png', get_lang('GroupSelfRegistration')).
-    '<span>'.get_lang('GroupSelfRegistration').'</span>',
+    Display::return_icon('user.png', get_lang('Registration')).
+    '<span>'.get_lang('Registration').'</span>',
     null,
     false
 );
@@ -125,20 +125,20 @@ $form->addGroup(
 $form->addElement('html', '</div>');
 
 $form->addElement('html', '<div class="col-md-12">');
-$form->addElement('header', get_lang('DefaultSettingsForNewGroups'));
+$form->addElement('header', get_lang('Default settings for new groups'));
 $form->addElement('html', '</div>');
 
 $form->addElement('html', '<div class="col-md-6">');
 // Documents settings
 $group = [
-    $form->createElement('radio', 'doc_state', get_lang('GroupDocument'), get_lang('NotAvailable'), GroupManager::TOOL_NOT_AVAILABLE),
-    $form->createElement('radio', 'doc_state', null, get_lang('Public'), GroupManager::TOOL_PUBLIC),
-    $form->createElement('radio', 'doc_state', null, get_lang('Private'), GroupManager::TOOL_PRIVATE),
+    $form->createElement('radio', 'doc_state', get_lang('Documents'), get_lang('Not available'), GroupManager::TOOL_NOT_AVAILABLE),
+    $form->createElement('radio', 'doc_state', null, get_lang('Public access (access authorized to any member of the course) access (access authorized to any member of the course) access (access authorized to any member of the course) access (access authorized to any member of the course) access (access authorized to any member of the course) access (access authorized to any member of the course) access (access authorized to any member of the course)'), GroupManager::TOOL_PUBLIC),
+    $form->createElement('radio', 'doc_state', null, get_lang('Private access (access authorized to group members only) access (access authorized to group members only) access (access authorized to group members only) access (access authorized to group members only) access (access authorized to group members only) access (access authorized to group members only) access (access authorized to group members only)'), GroupManager::TOOL_PRIVATE),
 ];
 $form->addGroup(
     $group,
     '',
-    Display::return_icon('folder.png', get_lang('GroupDocument')).'<span>'.get_lang('GroupDocument').'</span>',
+    Display::return_icon('folder.png', get_lang('Documents')).'<span>'.get_lang('Documents').'</span>',
     null,
     false
 );
@@ -152,21 +152,21 @@ if ($allowDocumentGroupAccess) {
             'radio',
             'document_access',
             null,
-            get_lang('DocumentGroupShareMode'),
+            get_lang('Share mode'),
             GroupManager::DOCUMENT_MODE_SHARE
         ),
         $form->createElement(
             'radio',
             'document_access',
-            get_lang('GroupDocument'),
-            get_lang('DocumentGroupCollaborationMode'),
+            get_lang('Documents'),
+            get_lang('Collaboration mode'),
             GroupManager::DOCUMENT_MODE_COLLABORATION
         ),
         $form->createElement(
             'radio',
             'document_access',
             null,
-            get_lang('DocumentGroupReadOnlyMode'),
+            get_lang('Read only mode'),
             GroupManager::DOCUMENT_MODE_READ_ONLY
         ),
     ];
@@ -175,8 +175,8 @@ if ($allowDocumentGroupAccess) {
         '',
         Display::return_icon(
             'folder.png',
-            get_lang('GroupDocumentAccess')
-        ).'<span>'.get_lang('GroupDocumentAccess').'</span>',
+            get_lang('DocumentsAccess')
+        ).'<span>'.get_lang('DocumentsAccess').'</span>',
         null,
         false
     );
@@ -194,12 +194,12 @@ $group = [
     $form->createElement(
         'radio',
         'work_state',
-        get_lang('GroupWork'),
-        get_lang('NotAvailable'),
+        get_lang('Assignments'),
+        get_lang('Not available'),
         GroupManager::TOOL_NOT_AVAILABLE
     ),
-    $form->createElement('radio', 'work_state', null, get_lang('Public'), GroupManager::TOOL_PUBLIC),
-    $form->createElement('radio', 'work_state', null, get_lang('Private'), GroupManager::TOOL_PRIVATE),
+    $form->createElement('radio', 'work_state', null, get_lang('Public access (access authorized to any member of the course) access (access authorized to any member of the course) access (access authorized to any member of the course) access (access authorized to any member of the course) access (access authorized to any member of the course) access (access authorized to any member of the course) access (access authorized to any member of the course)'), GroupManager::TOOL_PUBLIC),
+    $form->createElement('radio', 'work_state', null, get_lang('Private access (access authorized to group members only) access (access authorized to group members only) access (access authorized to group members only) access (access authorized to group members only) access (access authorized to group members only) access (access authorized to group members only) access (access authorized to group members only)'), GroupManager::TOOL_PRIVATE),
 ];
 $form->addElement('html', '</div>');
 
@@ -211,16 +211,16 @@ $form->addElement('html', '<div class="col-md-6">');
 $form->addGroup(
     $group,
     '',
-    Display::return_icon('works.png', get_lang('GroupWork')).'<span>'.get_lang('GroupWork').'</span>',
+    Display::return_icon('works.png', get_lang('Assignments')).'<span>'.get_lang('Assignments').'</span>',
     null,
     false
 );
 
 // Calendar settings
 $group = [
-    $form->createElement('radio', 'calendar_state', get_lang('GroupCalendar'), get_lang('NotAvailable'), GroupManager::TOOL_NOT_AVAILABLE),
-    $form->createElement('radio', 'calendar_state', null, get_lang('Public'), GroupManager::TOOL_PUBLIC),
-    $form->createElement('radio', 'calendar_state', null, get_lang('Private'), GroupManager::TOOL_PRIVATE),
+    $form->createElement('radio', 'calendar_state', get_lang('Agenda'), get_lang('Not available'), GroupManager::TOOL_NOT_AVAILABLE),
+    $form->createElement('radio', 'calendar_state', null, get_lang('Public access (access authorized to any member of the course) access (access authorized to any member of the course) access (access authorized to any member of the course) access (access authorized to any member of the course) access (access authorized to any member of the course) access (access authorized to any member of the course) access (access authorized to any member of the course)'), GroupManager::TOOL_PUBLIC),
+    $form->createElement('radio', 'calendar_state', null, get_lang('Private access (access authorized to group members only) access (access authorized to group members only) access (access authorized to group members only) access (access authorized to group members only) access (access authorized to group members only) access (access authorized to group members only) access (access authorized to group members only)'), GroupManager::TOOL_PRIVATE),
 ];
 
 $form->addElement('html', '</div>');
@@ -229,7 +229,7 @@ $form->addElement('html', '<div class="col-md-6">');
 $form->addGroup(
     $group,
     '',
-    Display::return_icon('agenda.png', get_lang('GroupCalendar')).'<span>'.get_lang('GroupCalendar').'</span>',
+    Display::return_icon('agenda.png', get_lang('Agenda')).'<span>'.get_lang('Agenda').'</span>',
     null,
     false
 );
@@ -244,16 +244,16 @@ $form->addElement('html', '<div class="col-md-6">');
 
 // Announcements settings
 $group = [
-    $form->createElement('radio', 'announcements_state', get_lang('GroupAnnouncements'), get_lang('NotAvailable'), GroupManager::TOOL_NOT_AVAILABLE),
-    $form->createElement('radio', 'announcements_state', null, get_lang('Public'), GroupManager::TOOL_PUBLIC),
-    $form->createElement('radio', 'announcements_state', null, get_lang('Private'), GroupManager::TOOL_PRIVATE),
-    $form->createElement('radio', 'announcements_state', null, get_lang('PrivateBetweenUsers'), GroupManager::TOOL_PRIVATE_BETWEEN_USERS),
+    $form->createElement('radio', 'announcements_state', get_lang('Announcements'), get_lang('Not available'), GroupManager::TOOL_NOT_AVAILABLE),
+    $form->createElement('radio', 'announcements_state', null, get_lang('Public access (access authorized to any member of the course) access (access authorized to any member of the course) access (access authorized to any member of the course) access (access authorized to any member of the course) access (access authorized to any member of the course) access (access authorized to any member of the course) access (access authorized to any member of the course)'), GroupManager::TOOL_PUBLIC),
+    $form->createElement('radio', 'announcements_state', null, get_lang('Private access (access authorized to group members only) access (access authorized to group members only) access (access authorized to group members only) access (access authorized to group members only) access (access authorized to group members only) access (access authorized to group members only) access (access authorized to group members only)'), GroupManager::TOOL_PRIVATE),
+    $form->createElement('radio', 'announcements_state', null, get_lang('Private access (access authorized to group members only) access (access authorized to group members only) access (access authorized to group members only) access (access authorized to group members only) access (access authorized to group members only) access (access authorized to group members only) access (access authorized to group members only)BetweenUsers'), GroupManager::TOOL_PRIVATE_BETWEEN_USERS),
 ];
 
 $form->addGroup(
     $group,
     '',
-    Display::return_icon('announce.png', get_lang('GroupAnnouncements')).'<span>'.get_lang('GroupAnnouncements').'</span>',
+    Display::return_icon('announce.png', get_lang('Announcements')).'<span>'.get_lang('Announcements').'</span>',
     null,
     false
 );
@@ -264,14 +264,14 @@ $form->addElement('html', '<div class="col-md-6">');
 
 // Forum settings
 $group = [
-    $form->createElement('radio', 'forum_state', get_lang('GroupForum'), get_lang('NotAvailable'), GroupManager::TOOL_NOT_AVAILABLE),
-    $form->createElement('radio', 'forum_state', null, get_lang('Public'), GroupManager::TOOL_PUBLIC),
-    $form->createElement('radio', 'forum_state', null, get_lang('Private'), GroupManager::TOOL_PRIVATE),
+    $form->createElement('radio', 'forum_state', get_lang('Group Forum'), get_lang('Not available'), GroupManager::TOOL_NOT_AVAILABLE),
+    $form->createElement('radio', 'forum_state', null, get_lang('Public access (access authorized to any member of the course) access (access authorized to any member of the course) access (access authorized to any member of the course) access (access authorized to any member of the course) access (access authorized to any member of the course) access (access authorized to any member of the course) access (access authorized to any member of the course)'), GroupManager::TOOL_PUBLIC),
+    $form->createElement('radio', 'forum_state', null, get_lang('Private access (access authorized to group members only) access (access authorized to group members only) access (access authorized to group members only) access (access authorized to group members only) access (access authorized to group members only) access (access authorized to group members only) access (access authorized to group members only)'), GroupManager::TOOL_PRIVATE),
 ];
 $form->addGroup(
     $group,
     '',
-    Display::return_icon('forum.png', get_lang('GroupForum')).'<span>'.get_lang('GroupForum').'</span>',
+    Display::return_icon('forum.png', get_lang('Group Forum')).'<span>'.get_lang('Group Forum').'</span>',
     null,
     false
 );
@@ -286,14 +286,14 @@ $form->addElement('html', '<div class="col-md-6">');
 
 // Wiki settings
 $group = [
-    $form->createElement('radio', 'wiki_state', get_lang('GroupWiki'), get_lang('NotAvailable'), GroupManager::TOOL_NOT_AVAILABLE),
-    $form->createElement('radio', 'wiki_state', null, get_lang('Public'), GroupManager::TOOL_PUBLIC),
-    $form->createElement('radio', 'wiki_state', null, get_lang('Private'), GroupManager::TOOL_PRIVATE),
+    $form->createElement('radio', 'wiki_state', get_lang('Wiki'), get_lang('Not available'), GroupManager::TOOL_NOT_AVAILABLE),
+    $form->createElement('radio', 'wiki_state', null, get_lang('Public access (access authorized to any member of the course) access (access authorized to any member of the course) access (access authorized to any member of the course) access (access authorized to any member of the course) access (access authorized to any member of the course) access (access authorized to any member of the course) access (access authorized to any member of the course)'), GroupManager::TOOL_PUBLIC),
+    $form->createElement('radio', 'wiki_state', null, get_lang('Private access (access authorized to group members only) access (access authorized to group members only) access (access authorized to group members only) access (access authorized to group members only) access (access authorized to group members only) access (access authorized to group members only) access (access authorized to group members only)'), GroupManager::TOOL_PRIVATE),
 ];
 $form->addGroup(
     $group,
     '',
-    Display::return_icon('wiki.png', get_lang('GroupWiki')).'<span>'.get_lang('GroupWiki').'</span>',
+    Display::return_icon('wiki.png', get_lang('Wiki')).'<span>'.get_lang('Wiki').'</span>',
     '',
     false
 );
@@ -303,9 +303,9 @@ $form->addElement('html', '<div class="col-md-6">');
 
 // Chat settings
 $group = [
-    $form->createElement('radio', 'chat_state', get_lang('Chat'), get_lang('NotAvailable'), GroupManager::TOOL_NOT_AVAILABLE),
-    $form->createElement('radio', 'chat_state', null, get_lang('Public'), GroupManager::TOOL_PUBLIC),
-    $form->createElement('radio', 'chat_state', null, get_lang('Private'), GroupManager::TOOL_PRIVATE),
+    $form->createElement('radio', 'chat_state', get_lang('Chat'), get_lang('Not available'), GroupManager::TOOL_NOT_AVAILABLE),
+    $form->createElement('radio', 'chat_state', null, get_lang('Public access (access authorized to any member of the course) access (access authorized to any member of the course) access (access authorized to any member of the course) access (access authorized to any member of the course) access (access authorized to any member of the course) access (access authorized to any member of the course) access (access authorized to any member of the course)'), GroupManager::TOOL_PUBLIC),
+    $form->createElement('radio', 'chat_state', null, get_lang('Private access (access authorized to group members only) access (access authorized to group members only) access (access authorized to group members only) access (access authorized to group members only) access (access authorized to group members only) access (access authorized to group members only) access (access authorized to group members only)'), GroupManager::TOOL_PRIVATE),
 ];
 $form->addGroup(
     $group,
@@ -318,7 +318,7 @@ $form->addGroup(
 $form->addElement('html', '</div>');
 $form->addElement('html', '<div class="col-md-12">');
 // Submit button
-$form->addButtonSave(get_lang('SaveSettings'));
+$form->addButtonSave(get_lang('Save settings'));
 $form->addElement('html', '</div>');
 
 if ($form->validate()) {
@@ -353,10 +353,10 @@ if ($form->validate()) {
         count($_POST['group_members']) > $max_member &&
         $max_member != GroupManager::MEMBER_PER_GROUP_NO_LIMIT
     ) {
-        Display::addFlash(Display::return_message(get_lang('GroupTooMuchMembers'), 'warning'));
+        Display::addFlash(Display::return_message(get_lang('Number proposed exceeds max. that you allowed (you can modify in the group settings). Group composition has not been modified'), 'warning'));
         header('Location: group.php?'.api_get_cidreq(true, false).'&category='.$categoryId);
     } else {
-        Display::addFlash(Display::return_message(get_lang('GroupSettingsModified'), 'success'));
+        Display::addFlash(Display::return_message(get_lang('Group settings modified'), 'success'));
         header('Location: group.php?'.api_get_cidreq(true, false).'&category='.$categoryId);
     }
     exit;
@@ -379,7 +379,7 @@ if ($defaults['maximum_number_of_students'] == GroupManager::MEMBER_PER_GROUP_NO
 
 if (!empty($_GET['keyword']) && !empty($_GET['submit'])) {
     $keyword_name = Security::remove_XSS($_GET['keyword']);
-    echo '<br/>'.get_lang('SearchResultsFor').' <span style="font-style: italic ;"> '.$keyword_name.' </span><br>';
+    echo '<br/>'.get_lang('Search results for:').' <span style="font-style: italic ;"> '.$keyword_name.' </span><br>';
 }
 
 Display::display_header($nameTools, 'Group');

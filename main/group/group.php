@@ -39,7 +39,7 @@ $(function() {
 	}
 });
  </script>';
-$nameTools = get_lang('GroupManagement');
+$nameTools = get_lang('Groups management');
 
 /*
  * Self-registration and un-registration
@@ -58,7 +58,7 @@ if (isset($_GET['action']) && $is_allowed_in_course) {
         case 'set_visible':
             if (api_is_allowed_to_edit()) {
                 GroupManager::setVisible($my_get_id);
-                Display::addFlash(Display::return_message(get_lang('ItemUpdated')));
+                Display::addFlash(Display::return_message(get_lang('Item updated')));
                 header("Location: $currentUrl");
                 exit;
             }
@@ -66,7 +66,7 @@ if (isset($_GET['action']) && $is_allowed_in_course) {
         case 'set_invisible':
             if (api_is_allowed_to_edit()) {
                 GroupManager::setInvisible($my_get_id);
-                Display::addFlash(Display::return_message(get_lang('ItemUpdated')));
+                Display::addFlash(Display::return_message(get_lang('Item updated')));
                 header("Location: $currentUrl");
                 exit;
             }
@@ -74,7 +74,7 @@ if (isset($_GET['action']) && $is_allowed_in_course) {
         case 'self_reg':
             if (GroupManager::is_self_registration_allowed($userId, $groupInfo)) {
                 GroupManager::subscribe_users($userId, $groupInfo);
-                Display::addFlash(Display::return_message(get_lang('GroupNowMember')));
+                Display::addFlash(Display::return_message(get_lang('You are now a member of this group.')));
                 header("Location: $currentUrl");
                 exit;
             } else {
@@ -86,7 +86,7 @@ if (isset($_GET['action']) && $is_allowed_in_course) {
         case 'self_unreg':
             if (GroupManager::is_self_unregistration_allowed($userId, $groupInfo)) {
                 GroupManager::unsubscribe_users($userId, $groupInfo);
-                Display::addFlash(Display::return_message(get_lang('StudentDeletesHimself')));
+                Display::addFlash(Display::return_message(get_lang('You\'re now unsubscribed.')));
                 header("Location: $currentUrl");
                 exit;
             }
@@ -108,7 +108,7 @@ if (api_is_allowed_to_edit(false, true)) {
                         GroupManager::deleteGroup($groupInfo);
                     }
 
-                    Display::addFlash(Display::return_message(get_lang('SelectedGroupsDeleted')));
+                    Display::addFlash(Display::return_message(get_lang('All selected groups have been deleted')));
                     header("Location: $currentUrl");
                     exit;
                 }
@@ -120,7 +120,7 @@ if (api_is_allowed_to_edit(false, true)) {
                         GroupManager::unsubscribe_all_users($groupInfo);
                     }
 
-                    Display::addFlash(Display::return_message(get_lang('SelectedGroupsEmptied')));
+                    Display::addFlash(Display::return_message(get_lang('All selected groups are now empty')));
                     header("Location: $currentUrl");
                     exit;
                 }
@@ -131,7 +131,7 @@ if (api_is_allowed_to_edit(false, true)) {
                         $groupInfo = GroupManager::get_group_properties($myGroupId);
                         GroupManager::fillGroupWithUsers($groupInfo);
                     }
-                    Display::addFlash(Display::return_message(get_lang('SelectedGroupsFilled')));
+                    Display::addFlash(Display::return_message(get_lang('All selected groups have been filled')));
                     header("Location: $currentUrl");
                     exit;
                 }
@@ -144,21 +144,21 @@ if (api_is_allowed_to_edit(false, true)) {
         switch ($_GET['action']) {
             case 'swap_cat_order':
                 GroupManager::swap_category_order($my_get_id1, $my_get_id2);
-                Display::addFlash(Display::return_message(get_lang('CategoryOrderChanged')));
+                Display::addFlash(Display::return_message(get_lang('The category order was changed')));
                 header("Location: $currentUrl");
                 exit;
                 break;
             case 'delete_one':
                 $groupInfo = GroupManager::get_group_properties($my_get_id);
                 GroupManager::deleteGroup($groupInfo);
-                Display::addFlash(Display::return_message(get_lang('GroupDel')));
+                Display::addFlash(Display::return_message(get_lang('Group deleted')));
                 header("Location: $currentUrl");
                 exit;
                 break;
             case 'fill_one':
                 $groupInfo = GroupManager::get_group_properties($my_get_id);
                 GroupManager::fillGroupWithUsers($groupInfo);
-                Display::addFlash(Display::return_message(get_lang('GroupFilledGroups')));
+                Display::addFlash(Display::return_message(get_lang('Groups have been filled (or completed) by users present in the \'Users\' list.')));
                 header("Location: $currentUrl");
                 exit;
                 break;
@@ -166,7 +166,7 @@ if (api_is_allowed_to_edit(false, true)) {
                 if (empty($sessionId)) {
                     GroupManager::delete_category($my_get_id);
                     Display::addFlash(
-                        Display::return_message(get_lang('CategoryDeleted'))
+                        Display::return_message(get_lang('The category has been deleted.'))
                     );
                     header("Location: $currentUrl");
                     exit;
@@ -186,30 +186,30 @@ $actionsLeft = '';
 
 if (api_is_allowed_to_edit(false, true)) {
     $actionsLeft .= '<a href="group_creation.php?'.api_get_cidreq().'">'.
-        Display::return_icon('add-groups.png', get_lang('NewGroupCreate'), '', ICON_SIZE_MEDIUM).'</a>';
+        Display::return_icon('add-groups.png', get_lang('Create new group(s)'), '', ICON_SIZE_MEDIUM).'</a>';
 
     if (api_get_setting('allow_group_categories') === 'true' && empty($sessionId)) {
         $actionsLeft .= '<a href="group_category.php?'.api_get_cidreq().'&action=add_category">'.
-            Display::return_icon('new_folder.png', get_lang('AddCategory'), '', ICON_SIZE_MEDIUM).'</a>';
+            Display::return_icon('new_folder.png', get_lang('Add category'), '', ICON_SIZE_MEDIUM).'</a>';
     } else {
         $actionsLeft .= '<a href="group_category.php?'.api_get_cidreq().'&id=2">'.
-            Display::return_icon('settings.png', get_lang('PropModify'), '', ICON_SIZE_MEDIUM).'</a>';
+            Display::return_icon('settings.png', get_lang('Edit settings'), '', ICON_SIZE_MEDIUM).'</a>';
     }
 
     $actionsLeft .= '<a href="import.php?'.api_get_cidreq().'&action=import">'.
         Display::return_icon('import_csv.png', get_lang('Import'), '', ICON_SIZE_MEDIUM).'</a>';
 
     $actionsLeft .= '<a href="group_overview.php?'.api_get_cidreq().'&action=export_all&type=csv">'.
-        Display::return_icon('export_csv.png', get_lang('ExportAsCSV'), '', ICON_SIZE_MEDIUM).'</a>';
+        Display::return_icon('export_csv.png', get_lang('CSV export'), '', ICON_SIZE_MEDIUM).'</a>';
 
     $actionsLeft .= '<a href="group_overview.php?'.api_get_cidreq().'&action=export_all&type=xls">'.
-        Display::return_icon('export_excel.png', get_lang('ExportAsXLS'), '', ICON_SIZE_MEDIUM).'</a>';
+        Display::return_icon('export_excel.png', get_lang('Excel export'), '', ICON_SIZE_MEDIUM).'</a>';
 
     $actionsLeft .= '<a href="group_overview.php?'.api_get_cidreq().'&action=export_pdf">'.
-        Display::return_icon('pdf.png', get_lang('ExportToPDF'), '', ICON_SIZE_MEDIUM).'</a>';
+        Display::return_icon('pdf.png', get_lang('Export to PDF'), '', ICON_SIZE_MEDIUM).'</a>';
 
     $actionsLeft .= '<a href="group_overview.php?'.api_get_cidreq().'">'.
-        Display::return_icon('group_summary.png', get_lang('GroupOverview'), '', ICON_SIZE_MEDIUM).'</a>';
+        Display::return_icon('group_summary.png', get_lang('Groups overview'), '', ICON_SIZE_MEDIUM).'</a>';
 }
 
 $actionsRight = GroupManager::getSearchForm();
@@ -224,7 +224,7 @@ if (api_get_setting('allow_group_categories') === 'true') {
         'id' => 0,
         'iid' => 0,
         'description' => '',
-        'title' => get_lang('DefaultGroupCategory'),
+        'title' => get_lang('Default groups'),
     ];
     $group_cats = array_merge([$defaultCategory], $group_cats);
 
@@ -241,19 +241,19 @@ if (api_get_setting('allow_group_categories') === 'true') {
             continue;
         }
 
-        $label = Display::label(count($group_list).' '.get_lang('ExistingGroups'), 'info');
+        $label = Display::label(count($group_list).' '.get_lang('Groups'), 'info');
         $actions = null;
         if (api_is_allowed_to_edit(false, true) && !empty($categoryId) && empty($sessionId)) {
             // Edit
             $actions .= '<a href="group_category.php?'.api_get_cidreq().'&id='.$categoryId.'" title="'.get_lang('Edit').'">'.
-                Display::return_icon('edit.png', get_lang('EditCategory'), '', ICON_SIZE_SMALL).'</a>';
+                Display::return_icon('edit.png', get_lang('Edit this category'), '', ICON_SIZE_SMALL).'</a>';
 
             // Delete
             $actions .= Display::url(
                 Display::return_icon('delete.png', get_lang('Delete'), '', ICON_SIZE_SMALL),
                 'group.php?'.api_get_cidreq().'&action=delete_category&id='.$categoryId,
                 [
-                    'onclick' => 'javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES))."'".')) return false;',
+                    'onclick' => 'javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang('Please confirm your choice'), ENT_QUOTES))."'".')) return false;',
                 ]
             );
             // Move

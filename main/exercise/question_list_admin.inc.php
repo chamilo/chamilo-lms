@@ -37,10 +37,10 @@ if ($deleteQuestion) {
 $ajax_url = api_get_path(WEB_AJAX_PATH).'exercise.ajax.php?'.api_get_cidreq().'&exercise_id='.intval($exerciseId);
 ?>
 <div id="dialog-confirm"
-     title="<?php echo get_lang('ConfirmYourChoice'); ?>"
+     title="<?php echo get_lang('Please confirm your choice'); ?>"
      style="display:none;">
     <p>
-        <?php echo get_lang('AreYouSureToDelete'); ?>
+        <?php echo get_lang('Are you sure you want to delete'); ?>
     </p>
 </div>
 <script>
@@ -158,7 +158,7 @@ Session::erase('less_answer');
 // If we are in a test
 $inATest = isset($exerciseId) && $exerciseId > 0;
 if (!$inATest) {
-    echo Display::return_message(get_lang('ChoiceQuestionType'), 'warning');
+    echo Display::return_message(get_lang('Choose question type'), 'warning');
 } else {
     if ($nbrQuestions) {
         // In the building exercise mode show question list ordered as is.
@@ -206,8 +206,8 @@ if (!$inATest) {
                 <div class="col-sm-1 text-center"><strong>'.get_lang('Type').'</strong></div>
                 <div class="col-sm-2"><strong>'.get_lang('Category').'</strong></div>
                 <div class="col-sm-1 text-right"><strong>'.get_lang('Difficulty').'</strong></div>
-                <div class="col-sm-1 text-right"><strong>'.get_lang('MaximumScore').'</strong></div>
-                <div class="col-sm-2 text-right"><strong>'.get_lang('Actions').'</strong></div>
+                <div class="col-sm-1 text-right"><strong>'.get_lang('Score').'</strong></div>
+                <div class="col-sm-2 text-right"><strong>'.get_lang('Detail').'</strong></div>
             </div>
             <div id="question_list">
         ';
@@ -242,7 +242,7 @@ if (!$inATest) {
                     ? Display::span(
                         Display::return_icon(
                             'edit_na.png',
-                            get_lang('QuestionEditionNotAvailableBecauseItIsAlreadyAnsweredHoweverYouCanCopyItAndModifyTheCopy'),
+                            get_lang('Question edition is not available because the question has been already answered. However, you can copy and modify it.'),
                             [],
                             ICON_SIZE_TINY
                         ),
@@ -251,7 +251,7 @@ if (!$inATest) {
                     : Display::url(
                         Display::return_icon(
                             'edit.png',
-                            get_lang('Modify'),
+                            get_lang('Edit'),
                             [],
                             ICON_SIZE_TINY
                         ),
@@ -268,7 +268,7 @@ if (!$inATest) {
                     $delete_link = Display::url(
                         Display::return_icon(
                             'delete.png',
-                            get_lang('RemoveFromTest'),
+                            get_lang('Remove from test'),
                             [],
                             ICON_SIZE_TINY
                         ),
@@ -289,7 +289,7 @@ if (!$inATest) {
                     $delete_link = '';
                 }
 
-                $btnActions = implode(
+                $btnDetail = implode(
                     PHP_EOL,
                     [$edit_link, $clone_link, $delete_link]
                 );
@@ -355,7 +355,7 @@ if (!$inATest) {
                                     .$questionScore.'
                                 </div>
                                 <div class="btn-actions text-right col-sm-2 col-xs-6">
-                                    <div class="edition">'.$btnActions.'</div>
+                                    <div class="edition">'.$btnDetail.'</div>
                                 </div>
                             </div>
                         </div>
@@ -369,6 +369,6 @@ if (!$inATest) {
 
         echo '</div>'; //question list div
     } else {
-        echo Display::return_message(get_lang('NoQuestion'), 'warning');
+        echo Display::return_message(get_lang('Questions list (there is no question so far).'), 'warning');
     }
 }

@@ -146,7 +146,7 @@ echo '<script>
             $("#message").addClass("warning-message");
             $("#message").html("'.addslashes(get_lang('Select a question to revise')).'");
         } else {
-            window.location = "exercise_submit.php?'.api_get_cidreq().'&exerciseId='.$objTest->id.'&reminder=2&" + lp_data;
+            window.location = "exercise_submit.php?'.api_get_cidreq().'&exerciseId='.$objExercise->id.'&reminder=2&" + lp_data;
         }
     }
 

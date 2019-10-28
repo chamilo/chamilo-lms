@@ -58,16 +58,16 @@ class UniqueAnswerImage extends UniqueAnswer
         }
 
         $html = '<div class="alert alert-success" role="alert">'.
-                get_lang('UniqueAnswerImagePreferredSize200x150').'</div>';
+                get_lang('Images will be resized (up or down) to 200x150 pixels. For a better rendering of the question, we recommend you upload only images of this size.').'</div>';
         $html .= '<table class="table table-striped table-hover">
             <thead>
                 <tr style="text-align: center;">
-                    <th width="10">'.get_lang('Number').'</th>
+                    <th width="10">'.get_lang('N°').'</th>
                     <th>'.get_lang('True').'</th>
                     <th>'.get_lang('Answer').'</th>
                         '.$commentTitle.'
                         '.$feedbackTitle.'
-                    <th width="15">'.get_lang('Weighting').'</th>
+                    <th width="15">'.get_lang('Score').'</th>
                 </tr>
             </thead>
             <tbody>';
@@ -92,7 +92,7 @@ class UniqueAnswerImage extends UniqueAnswer
         //Feedback SELECT
         $questionList = $objExercise->selectQuestionList();
         $selectQuestion = [];
-        $selectQuestion[0] = get_lang('SelectTargetQuestion');
+        $selectQuestion[0] = get_lang('Select target question');
 
         if (is_array($questionList)) {
             foreach ($questionList as $key => $questionid) {
@@ -107,12 +107,12 @@ class UniqueAnswerImage extends UniqueAnswer
             }
         }
 
-        $selectQuestion[-1] = get_lang('ExitTest');
+        $selectQuestion[-1] = get_lang('Exit test');
 
         $list = new LearnpathList(api_get_user_id());
         $flatList = $list->get_flat_list();
         $selectLpId = [];
-        $selectLpId[0] = get_lang('SelectTargetLP');
+        $selectLpId[0] = get_lang('Select target course');
 
         foreach ($flatList as $id => $details) {
             $selectLpId[$id] = cut($details['lp_name'], 20);
@@ -121,7 +121,7 @@ class UniqueAnswerImage extends UniqueAnswer
         $tempScenario = [];
         if ($numberAnswers < 1) {
             $numberAnswers = 1;
-            echo Display::return_message(get_lang('YouHaveToCreateAtLeastOneAnswer'));
+            echo Display::return_message(get_lang('You have to create at least one answer'));
         }
 
         for ($i = 1; $i <= $numberAnswers; $i++) {
@@ -160,9 +160,9 @@ class UniqueAnswerImage extends UniqueAnswer
                 $tempScenario['lp'.$i] = $lp;
                 $tempScenario['destination'.$i] = $listDestination;
             } else {
-                $defaults['answer[1]'] = get_lang('DefaultUniqueAnswer1');
+                $defaults['answer[1]'] = get_lang('A then B then C');
                 $defaults['weighting[1]'] = 10;
-                $defaults['answer[2]'] = get_lang('DefaultUniqueAnswer2');
+                $defaults['answer[2]'] = get_lang('A then C then B');
                 $defaults['weighting[2]'] = 0;
 
                 $tempScenario['destination'.$i] = ['0'];
@@ -198,7 +198,7 @@ class UniqueAnswerImage extends UniqueAnswer
             $form->addElement('radio', 'correct', null, null, $i, 'class="checkbox"');
             $form->addHtmlEditor('answer['.$i.']', null, null, false, $editorConfig);
 
-            $form->addRule('answer['.$i.']', get_lang('ThisFieldIsRequired'), 'required');
+            $form->addRule('answer['.$i.']', get_lang('Required field'), 'required');
 
             switch ($objExercise->getFeedbackType()) {
                 case EXERCISE_FEEDBACK_TYPE_DIRECT:
@@ -223,8 +223,8 @@ class UniqueAnswerImage extends UniqueAnswer
             (empty($this->exerciseList) && empty($objExercise->id))
         ) {
             //setting the save button here and not in the question class.php
-            $buttonGroup[] = $form->addButtonDelete(get_lang('LessAnswer'), 'lessAnswers', true);
-            $buttonGroup[] = $form->addButtonCreate(get_lang('PlusAnswer'), 'moreAnswers', true);
+            $buttonGroup[] = $form->addButtonDelete(get_lang('Remove answer option'), 'lessAnswers', true);
+            $buttonGroup[] = $form->addButtonCreate(get_lang('Add answer option'), 'moreAnswers', true);
             $buttonGroup[] = $form->addButtonSave($text, 'submitQuestion', true);
             $form->addGroup($buttonGroup);
         }
@@ -350,9 +350,9 @@ class UniqueAnswerImage extends UniqueAnswer
         if ($exercise->showExpectedChoice()) {
             $header = '<table class="'.$this->question_table_class.'">
 			<tr>
-				<th>'.get_lang('Choice').'</th>';
+				<th>'.get_lang('Your choice').'</th>';
             if ($exercise->showExpectedChoiceColumn()) {
-                $header .= '<th>'.get_lang('ExpectedChoice').'</th>';
+                $header .= '<th>'.get_lang('ExpectedYour choice').'</th>';
             }
             $header .= '<th>'.get_lang('Answer').'</th>';
             $header .= '<th>'.get_lang('Status').'</th>';

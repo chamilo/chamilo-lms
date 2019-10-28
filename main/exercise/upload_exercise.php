@@ -5,13 +5,9 @@ use ChamiloSession as Session;
 
 /**
  * Upload quiz: This script shows the upload quiz feature.
- *
- * @package chamilo.exercise
  */
 
-// setting the help
 $help_content = 'exercise_upload';
-
 require_once __DIR__.'/../inc/global.inc.php';
 
 api_protect_course_script(true);
@@ -37,13 +33,11 @@ lp_upload_quiz_action_handling();
 
 $interbreadcrumb[] = [
     'url' => 'exercise.php?'.api_get_cidreq(),
-    'name' => get_lang('Exercises'),
+    'name' => get_lang('Tests'),
 ];
 
-// Display the header
-Display :: display_header(get_lang('ImportExcelQuiz'), 'Exercises');
+Display::display_header(get_lang('Import quiz from Excel'), 'Exercises');
 
-// display the actions
 echo '<div class="actions">';
 echo lp_upload_quiz_actions();
 echo '</div>';
@@ -56,7 +50,7 @@ function lp_upload_quiz_actions()
     $return = '<a href="exercise.php?'.api_get_cidreq().'">'.
         Display::return_icon(
             'back.png',
-            get_lang('BackToExercisesList'),
+            get_lang('BackToTestsList'),
             '',
             ICON_SIZE_MEDIUM
         ).'</a>';
@@ -75,25 +69,25 @@ function lp_upload_quiz_main()
         '',
         ['enctype' => 'multipart/form-data']
     );
-    $form->addElement('header', get_lang('ImportExcelQuiz'));
-    $form->addElement('file', 'user_upload_quiz', get_lang('FileUpload'));
+    $form->addElement('header', get_lang('Import quiz from Excel'));
+    $form->addElement('file', 'user_upload_quiz', get_lang('File upload'));
 
     $link = '<a href="../exercise/quiz_template.xls">'.
-        Display::return_icon('export_excel.png', get_lang('DownloadExcelTemplate')).get_lang('DownloadExcelTemplate').'</a>';
+        Display::return_icon('export_excel.png', get_lang('Download the Excel Template')).get_lang('Download the Excel Template').'</a>';
     $form->addElement('label', '', $link);
 
     $table = new HTML_Table(['class' => 'table']);
 
     $tableList = [
-        UNIQUE_ANSWER => get_lang('UniqueSelect'),
-        MULTIPLE_ANSWER => get_lang('MultipleSelect'),
-        FILL_IN_BLANKS => get_lang('FillBlanks'),
+        UNIQUE_ANSWER => get_lang('Multiple choice'),
+        MULTIPLE_ANSWER => get_lang('Multiple answers'),
+        FILL_IN_BLANKS => get_lang('Fill blanks or form'),
         MATCHING => get_lang('Matching'),
-        FREE_ANSWER => get_lang('FreeAnswer'),
-        GLOBAL_MULTIPLE_ANSWER => get_lang('GlobalMultipleAnswer'),
+        FREE_ANSWER => get_lang('Open question'),
+        GLOBAL_MULTIPLE_ANSWER => get_lang('Global multiple answer'),
     ];
 
-    $table->setHeaderContents(0, 0, get_lang('QuestionType'));
+    $table->setHeaderContents(0, 0, get_lang('Question type'));
     $table->setHeaderContents(0, 1, '#');
 
     $row = 1;
@@ -104,20 +98,20 @@ function lp_upload_quiz_main()
     }
     $table = $table->toHtml();
 
-    $form->addElement('label', get_lang('QuestionType'), $table);
+    $form->addElement('label', get_lang('Question type'), $table);
     $form->addElement(
         'checkbox',
         'user_custom_score',
         null,
-        get_lang('UseCustomScoreForAllQuestions'),
+        get_lang('Use custom score for all questions'),
         ['id' => 'user_custom_score']
     );
     $form->addElement('html', '<div id="options" style="display:none">');
-    $form->addElement('text', 'correct_score', get_lang('CorrectScore'));
-    $form->addElement('text', 'incorrect_score', get_lang('IncorrectScore'));
+    $form->addElement('text', 'correct_score', get_lang('Correct score'));
+    $form->addElement('text', 'incorrect_score', get_lang('Incorrect score'));
     $form->addElement('html', '</div>');
 
-    $form->addRule('user_upload_quiz', get_lang('ThisFieldIsRequired'), 'required');
+    $form->addRule('user_upload_quiz', get_lang('Required field'), 'required');
 
     $form->addProgress();
     $form->addButtonUpload(get_lang('Upload'), 'submit_upload_quiz');

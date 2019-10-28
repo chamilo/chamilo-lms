@@ -78,7 +78,7 @@ class ReadingComprehension extends UniqueAnswer
         if (empty($text)) {
             // We have an issue here... how do we treat this case?
             // For now, let's define a default case
-            $text = get_lang('NoExercise');
+            $text = get_lang('No tests');
         }
         $words = str_word_count($text, 2, '0..9');
         $indexes = array_keys($words);
@@ -155,7 +155,7 @@ class ReadingComprehension extends UniqueAnswer
         }
 
         // hidden values
-        $form->addRule('questionName', get_lang('GiveQuestion'), 'required');
+        $form->addRule('questionName', get_lang('Please type the question'), 'required');
         $isContent = isset($_REQUEST['isContent']) ? (int) $_REQUEST['isContent'] : null;
 
         // default values
@@ -181,11 +181,11 @@ class ReadingComprehension extends UniqueAnswer
     public static function get_default_levels()
     {
         $select_level = [
-            1 => sprintf(get_lang('ReadingComprehensionLevelX'), self::$speeds[1]),
-            2 => sprintf(get_lang('ReadingComprehensionLevelX'), self::$speeds[2]),
-            3 => sprintf(get_lang('ReadingComprehensionLevelX'), self::$speeds[3]),
-            4 => sprintf(get_lang('ReadingComprehensionLevelX'), self::$speeds[4]),
-            5 => sprintf(get_lang('ReadingComprehensionLevelX'), self::$speeds[5]),
+            1 => sprintf(get_lang('%s words per minute'), self::$speeds[1]),
+            2 => sprintf(get_lang('%s words per minute'), self::$speeds[2]),
+            3 => sprintf(get_lang('%s words per minute'), self::$speeds[3]),
+            4 => sprintf(get_lang('%s words per minute'), self::$speeds[4]),
+            5 => sprintf(get_lang('%s words per minute'), self::$speeds[5]),
         ];
 
         return $select_level;

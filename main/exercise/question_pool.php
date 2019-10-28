@@ -9,8 +9,6 @@ use Knp\Component\Pager\Paginator;
  * This script allows administrators to manage questions and add them into their exercises.
  * One question can be in several exercises.
  *
- * @package chamilo.exercise
- *
  * @author Olivier Brouckaert
  * @author Julio Montoya adding support to query all questions from all session, courses, exercises
  * @author Modify by hubert borderiou 2011-10-21 Question's category
@@ -52,8 +50,8 @@ if (!empty($fromExercise)) {
     $objExercise->read($fromExercise, false);
 }
 
-$nameTools = get_lang('QuestionPool');
-$interbreadcrumb[] = ['url' => 'exercise.php?'.api_get_cidreq(), 'name' => get_lang('Exercises')];
+$nameTools = get_lang('Recycle existing questions');
+$interbreadcrumb[] = ['url' => 'exercise.php?'.api_get_cidreq(), 'name' => get_lang('Tests')];
 
 if (!empty($objExercise->id)) {
     $interbreadcrumb[] = [
@@ -94,7 +92,7 @@ if ($is_allowedToEdit) {
             $objExercise->read($fromExercise);
             Session::write('objExercise', $objExercise);
         }
-        $displayMessage = get_lang('ItemAdded');
+        $displayMessage = get_lang('Item added');
     }
 
     // Deletes a question from the database and all exercises
@@ -178,7 +176,7 @@ if ($is_allowedToEdit) {
 if (api_is_in_gradebook()) {
     $interbreadcrumb[] = [
         'url' => Category::getUrl(),
-        'name' => get_lang('ToolGradebook'),
+        'name' => get_lang('Assessments'),
     ];
 }
 
@@ -187,7 +185,7 @@ if (!$is_allowedToEdit) {
     api_not_allowed(true);
 }
 
-$confirmYourChoice = addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES, $charset));
+$confirmYourChoice = addslashes(api_htmlentities(get_lang('Please confirm your choice'), ENT_QUOTES, $charset));
 $htmlHeadXtra[] = "
 <script>
     function submit_form(obj) {
@@ -299,14 +297,14 @@ Display::display_header($nameTools, 'Exercise');
 echo '<div class="actions">';
 if (isset($fromExercise) && $fromExercise > 0) {
     echo '<a href="admin.php?'.api_get_cidreq().'&exerciseId='.$fromExercise.'">'.
-            Display::return_icon('back.png', get_lang('GoBackToQuestionList'), '', ICON_SIZE_MEDIUM).'</a>';
-    $titleAdd = get_lang('AddQuestionToTest');
+            Display::return_icon('back.png', get_lang('Go back to the questions list'), '', ICON_SIZE_MEDIUM).'</a>';
+    $titleAdd = get_lang('Add question to test');
 } else {
     echo '<a href="exercise.php?'.api_get_cidreq().'">'.
-        Display::return_icon('back.png', get_lang('BackToExercisesList'), '', ICON_SIZE_MEDIUM).'</a>';
+        Display::return_icon('back.png', get_lang('BackToTestsList'), '', ICON_SIZE_MEDIUM).'</a>';
     echo "<a href='admin.php?exerciseId=0'>".
-        Display::return_icon('add_question.gif', get_lang('NewQu'), '', ICON_SIZE_MEDIUM).'</a>';
-    $titleAdd = get_lang('ManageAllQuestions');
+        Display::return_icon('add_question.gif', get_lang('New question'), '', ICON_SIZE_MEDIUM).'</a>';
+    $titleAdd = get_lang('Manage all questions');
 }
 echo '</div>';
 
@@ -404,7 +402,7 @@ $selectCourseCategory = Display::select(
     ['onchange' => 'submit_form(this);'],
     false
 );
-echo Display::form_row(get_lang('QuestionCategory'), $selectCourseCategory);
+echo Display::form_row(get_lang('Questions category'), $selectCourseCategory);
 
 // Get exercise list for this course
 $exercise_list = ExerciseLib::get_all_exercises_for_course_id(
@@ -420,8 +418,8 @@ if ($exercise_id_changed == 1) {
 
 // Exercise List
 $my_exercise_list = [];
-$my_exercise_list['0'] = get_lang('AllExercises');
-$my_exercise_list['-1'] = get_lang('OrphanQuestions');
+$my_exercise_list['0'] = get_lang('AllTests');
+$my_exercise_list['-1'] = get_lang('Orphan questions');
 $titleSavedAsHtml = api_get_configuration_value('save_titles_as_html');
 if (is_array($exercise_list)) {
     foreach ($exercise_list as $row) {
@@ -446,7 +444,7 @@ $exerciseListToString = Display::select(
     false
 );
 
-echo Display::form_row(get_lang('Exercise'), $exerciseListToString);
+echo Display::form_row(get_lang('Test'), $exerciseListToString);
 
 // Difficulty list (only from 0 to 5)
 $levels = [
@@ -501,7 +499,7 @@ $select_answer_html = Display::select(
     false
 );
 
-echo Display::form_row(get_lang('AnswerType'), $select_answer_html);
+echo Display::form_row(get_lang('Answer type'), $select_answer_html);
 echo Display::form_row(get_lang('Id'), Display::input('text', 'question_id', $questionId));
 echo Display::form_row(
     get_lang('Description'),
@@ -842,14 +840,14 @@ $mainQuestionList = getQuestions(
 
 if ($fromExercise <= 0) {
     // NOT IN A TEST - NOT IN THE COURSE
-    $actionLabel = get_lang('Reuse');
-    $actionIcon1 = get_lang('MustBeInATest');
+    $actionLabel = get_lang('Re-use in current test');
+    $actionIcon1 = get_lang('Must be in a test');
     $actionIcon2 = '';
     // We are not in this course, to messy if we link to the question in another course
     $questionTagA = 0;
     if ($selected_course == api_get_course_int_id()) {
         // NOT IN A TEST - IN THE COURSE
-        $actionLabel = get_lang('Modify');
+        $actionLabel = get_lang('Edit');
         $actionIcon1 = 'edit';
         $actionIcon2 = 'delete';
         // We are in the course, question title can be a link to the question edit page
@@ -857,14 +855,14 @@ if ($fromExercise <= 0) {
     }
 } else {
     // IN A TEST - NOT IN THE COURSE
-    $actionLabel = get_lang('ReUseACopyInCurrentTest');
+    $actionLabel = get_lang('Re-use a copy inside the current test');
     $actionIcon1 = 'clone';
     $actionIcon2 = '';
     $questionTagA = 0;
 
     if ($selected_course == api_get_course_int_id()) {
         // IN A TEST - IN THE COURSE
-        $actionLabel = get_lang('Reuse');
+        $actionLabel = get_lang('Re-use in current test');
         $actionIcon1 = 'add';
         $actionIcon2 = '';
         $questionTagA = 1;
@@ -950,7 +948,7 @@ $header = [
         '',
     ],
     [
-        get_lang('QuestionUpperCaseFirstLetter'),
+        get_lang('Question'),
         false,
         ['style' => 'text-align:center'],
         '',
@@ -963,7 +961,7 @@ $header = [
         '',
     ],
     [
-        get_lang('QuestionCategory'),
+        get_lang('Questions category'),
         false,
         ['style' => 'text-align:center'],
         ['style' => 'text-align:center'],
@@ -1004,20 +1002,20 @@ $tableId = 'question_pool_id';
 $html = '<div class="btn-toolbar">';
 $html .= '<div class="btn-group">';
 $html .= '<a class="btn btn-default" href="?'.$url.'selectall=1" onclick="javascript: setCheckbox(true, \''.$tableId.'\'); return false;">'.
-    get_lang('SelectAll').'</a>';
-$html .= '<a class="btn btn-default" href="?'.$url.'" onclick="javascript: setCheckbox(false, \''.$tableId.'\'); return false;">'.get_lang('UnSelectAll').'</a> ';
+    get_lang('Select all').'</a>';
+$html .= '<a class="btn btn-default" href="?'.$url.'" onclick="javascript: setCheckbox(false, \''.$tableId.'\'); return false;">'.get_lang('UnSelect all').'</a> ';
 $html .= '</div>';
 $html .= '<div class="btn-group">
-            <button class="btn btn-default" onclick="javascript:return false;">'.get_lang('Actions').'</button>
+            <button class="btn btn-default" onclick="javascript:return false;">'.get_lang('Detail').'</button>
             <button class="btn btn-default dropdown-toggle" data-toggle="dropdown">
                 <span class="caret"></span>
             </button>';
 $html .= '<ul class="dropdown-menu">';
 
-$actionLabel = get_lang('ReUseACopyInCurrentTest');
-$actions = ['clone' => get_lang('ReUseACopyInCurrentTest')];
+$actionLabel = get_lang('Re-use a copy inside the current test');
+$actions = ['clone' => get_lang('Re-use a copy inside the current test')];
 if ($selected_course == api_get_course_int_id()) {
-    $actions = ['reuse' => get_lang('ReuseQuestion')];
+    $actions = ['reuse' => get_lang('Re-use in current testQuestion')];
 }
 
 foreach ($actions as $action => &$label) {
@@ -1154,7 +1152,7 @@ function get_action_icon_for_question(
                 $from_exercise,
                 $in_questionid,
                 $in_questiontype,
-                Display::return_icon('edit.png', get_lang('Modify')),
+                Display::return_icon('edit.png', get_lang('Edit')),
                 $in_session_id,
                 $in_exercise_id
             );
@@ -1172,7 +1170,7 @@ function get_action_icon_for_question(
             $url = api_get_self().'?'.api_get_cidreq().$getParams.
                 "&question_copy=$in_questionid&course_id=$in_selected_course&fromExercise=$from_exercise";
             $res = Display::url(
-                Display::return_icon('cd.png', get_lang('ReUseACopyInCurrentTest')),
+                Display::return_icon('cd.png', get_lang('Re-use a copy inside the current test')),
                 $url
             );
             break;

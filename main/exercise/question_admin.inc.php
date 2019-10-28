@@ -24,11 +24,11 @@ if (is_object($objQuestion)) {
     $form = new FormValidator('question_admin_form', 'post', $action);
     if (isset($_GET['editQuestion'])) {
         $class = 'btn btn-default';
-        $text = get_lang('ModifyQuestion');
+        $text = get_lang('Save the question');
         $type = isset($_GET['type']) ? Security::remove_XSS($_GET['type']) : null;
     } else {
         $class = 'btn btn-default';
-        $text = get_lang('AddQuestionToExercise');
+        $text = get_lang('Add this question to the test');
         $type = $_REQUEST['answerType'];
     }
 
@@ -66,12 +66,12 @@ if (is_object($objQuestion)) {
         ) {
             if (isset($_GET['editQuestion'])) {
                 if (empty($exerciseId)) {
-                    Display::addFlash(Display::return_message(get_lang('ItemUpdated')));
+                    Display::addFlash(Display::return_message(get_lang('Item updated')));
                     $url = 'admin.php?exerciseId='.$exerciseId.'&'.api_get_cidreq().'&editQuestion='.$objQuestion->id;
                     echo '<script type="text/javascript">window.location.href="'.$url.'"</script>';
                     exit;
                 }
-                echo '<script type="text/javascript">window.location.href="admin.php?exerciseId='.$exerciseId.'&'.api_get_cidreq().'&page='.$page.'&message=ItemUpdated"</script>';
+                echo '<script type="text/javascript">window.location.href="admin.php?exerciseId='.$exerciseId.'&'.api_get_cidreq().'&page='.$page.'&message=Item updated"</script>';
             } else {
                 // New question
                 $page = 1;

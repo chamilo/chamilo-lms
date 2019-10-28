@@ -13,8 +13,6 @@ use ChamiloSession as Session;
  *
  * @author Eric Marguin
  * @author Julio Montoya
- *
- * @package chamilo.exercise
  */
 class UniqueAnswer extends Question
 {
@@ -69,12 +67,12 @@ class UniqueAnswer extends Question
         $html = '<table class="table table-striped table-hover">
             <thead>
                 <tr style="text-align: center;">
-                    <th width="5%">'.get_lang('Number').'</th>
+                    <th width="5%">'.get_lang('N°').'</th>
                     <th width="5%"> '.get_lang('True').'</th>
                     <th width="40%">'.get_lang('Answer').'</th>
                         '.$comment_title.'
                         '.$feedback_title.'
-                    <th width="10%">'.get_lang('Weighting').'</th>
+                    <th width="10%">'.get_lang('Score').'</th>
                 </tr>
             </thead>
             <tbody>';
@@ -96,7 +94,7 @@ class UniqueAnswer extends Question
         $obj_ex->setQuestionList(true);
         $question_list = $obj_ex->getQuestionList();
         $select_question = [];
-        $select_question[0] = get_lang('SelectTargetQuestion');
+        $select_question[0] = get_lang('Select target question');
         if (is_array($question_list)) {
             foreach ($question_list as $key => $questionid) {
                 //To avoid warning messages
@@ -108,12 +106,12 @@ class UniqueAnswer extends Question
                 $select_question[$questionid] = "Q$key: $questionTitle";
             }
         }
-        $select_question[-1] = get_lang('ExitTest');
+        $select_question[-1] = get_lang('Exit test');
 
         $list = new LearnpathList(api_get_user_id());
         $flat_list = $list->get_flat_list();
         $select_lp_id = [];
-        $select_lp_id[0] = get_lang('SelectTargetLP');
+        $select_lp_id[0] = get_lang('Select target course');
 
         foreach ($flat_list as $id => $details) {
             $select_lp_id[$id] = cut($details['lp_name'], 20);
@@ -123,7 +121,7 @@ class UniqueAnswer extends Question
         if ($nb_answers < 1) {
             $nb_answers = 1;
             echo Display::return_message(
-                get_lang('YouHaveToCreateAtLeastOneAnswer')
+                get_lang('You have to create at least one answer')
             );
         }
 
@@ -161,9 +159,9 @@ class UniqueAnswer extends Question
                 $temp_scenario['lp'.$i] = $lp;
                 $temp_scenario['destination'.$i] = $list_dest;
             } else {
-                $defaults['answer[1]'] = get_lang('DefaultUniqueAnswer1');
+                $defaults['answer[1]'] = get_lang('A then B then C');
                 $defaults['weighting[1]'] = 10;
-                $defaults['answer[2]'] = get_lang('DefaultUniqueAnswer2');
+                $defaults['answer[2]'] = get_lang('A then C then B');
                 $defaults['weighting[2]'] = 0;
 
                 $temp_scenario['destination'.$i] = ['0'];
@@ -214,7 +212,7 @@ class UniqueAnswer extends Question
 
             $form->addRule(
                 'answer['.$i.']',
-                get_lang('ThisFieldIsRequired'),
+                get_lang('Required field'),
                 'required'
             );
 
@@ -241,8 +239,8 @@ class UniqueAnswer extends Question
             (empty($this->exerciseList) && empty($obj_ex->id))
         ) {
             //setting the save button here and not in the question class.php
-            $buttonGroup[] = $form->addButtonDelete(get_lang('LessAnswer'), 'lessAnswers', true);
-            $buttonGroup[] = $form->addButtonCreate(get_lang('PlusAnswer'), 'moreAnswers', true);
+            $buttonGroup[] = $form->addButtonDelete(get_lang('Remove answer option'), 'lessAnswers', true);
+            $buttonGroup[] = $form->addButtonCreate(get_lang('Add answer option'), 'moreAnswers', true);
             $buttonGroup[] = $form->addButton(
                 'submitQuestion',
                 $text,
@@ -298,18 +296,18 @@ class UniqueAnswer extends Question
             'checkbox',
             'try'.$i,
             null,
-            get_lang('TryAgain')
+            get_lang('Try again')
         );
         $group['lp'.$i] = $form->createElement(
             'select',
             'lp'.$i,
-            get_lang('SeeTheory').': ',
+            get_lang('Theory link').': ',
             $select_lp_id
         );
         $group['destination'.$i] = $form->createElement(
             'select',
             'destination'.$i,
-            get_lang('GoToQuestion').': ',
+            get_lang('Go to question').': ',
             $select_question
         );
         $group['url'.$i] = $form->createElement(
@@ -428,9 +426,9 @@ class UniqueAnswer extends Question
         $header = parent::return_header($exercise, $counter, $score);
         $header .= '<table class="'.$this->question_table_class.'"><tr>';
 
-        $header .= '<th>'.get_lang('Choice').'</th>';
+        $header .= '<th>'.get_lang('Your choice').'</th>';
         if ($exercise->showExpectedChoiceColumn()) {
-            $header .= '<th>'.get_lang('ExpectedChoice').'</th>';
+            $header .= '<th>'.get_lang('ExpectedYour choice').'</th>';
         }
 
         $header .= '<th>'.get_lang('Answer').'</th>';

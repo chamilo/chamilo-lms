@@ -108,7 +108,7 @@ $htmlHeadXtra[] = <<<HTML
     </script>
 HTML;
 
-$interbreadcrumb[] = ["url" => './exercise.php?'.api_get_cidreq(), 'name' => get_lang('Exercises')];
+$interbreadcrumb[] = ["url" => './exercise.php?'.api_get_cidreq(), 'name' => get_lang('Tests')];
 if ($origin == 'learnpath') {
     Display::display_reduced_header($nameTools, "Exercise");
 } else {

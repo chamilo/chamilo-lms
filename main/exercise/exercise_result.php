@@ -101,7 +101,7 @@ if (api_is_course_admin() && !in_array($origin, ['learnpath', 'embeddable'])) {
     echo '<div class="actions">';
     echo '<a href="admin.php?'.api_get_cidreq().'&exerciseId='.$objExercise->id.'">'.
         Display::return_icon('back.png', get_lang('Go back to the questions list'), [], 32).'</a>';
-    echo '<a href="exercise_admin.php?'.api_get_cidreq().'&modifyTest=yes&exerciseId='.$objTest->id.'">'.
+    echo '<a href="exercise_admin.php?'.api_get_cidreq().'&modifyTest=yes&exerciseId='.$objExercise->id.'">'.
         Display::return_icon('edit.png', get_lang('ModifyTest'), [], 32).'</a>';
     echo '</div>';
 }
@@ -229,7 +229,7 @@ if (!in_array($origin, ['learnpath', 'embeddable'])) {
     Display::display_reduced_footer();
 } else {
     $lp_mode = Session::read('lp_mode');
-    $url = '../lp/lp_controller.php?'.api_get_cidreq().'&action=view&lp_id='.$learnpath_id.'&lp_item_id='.$learnpath_item_id.'&exeId='.$exercise_stat_info['exe_id'].'&fb_type='.$objTest->getFeedbackType().'#atoc_'.$learnpath_item_id;
+    $url = '../lp/lp_controller.php?'.api_get_cidreq().'&action=view&lp_id='.$learnpath_id.'&lp_item_id='.$learnpath_item_id.'&exeId='.$exercise_stat_info['exe_id'].'&fb_type='.$objExercise->getFeedbackType().'#atoc_'.$learnpath_item_id;
     $href = $lp_mode === 'fullscreen' ? ' window.opener.location.href="'.$url.'" ' : ' top.location.href="'.$url.'"';
 
     if (api_is_allowed_to_session_edit()) {

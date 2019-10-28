@@ -70,7 +70,7 @@ $htmlHeadXtra[] = api_get_build_js('exercise.js');
 if ($show_headers) {
     $interbreadcrumb[] = [
         'url' => 'exercise.php?'.api_get_cidreq(),
-        'name' => get_lang('Exercises'),
+        'name' => get_lang('Tests'),
     ];
     $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Result')];
     $this_section = SECTION_COURSES;

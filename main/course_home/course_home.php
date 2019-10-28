@@ -26,8 +26,6 @@ use Fhaculty\Graph\Graph;
  * Show message to confirm that a tools must be hide from available tools
  *
  *   visibility 0,1
- *
- * @package chamilo.course_home
  */
 $use_anonymous = true;
 require_once __DIR__.'/../inc/global.inc.php';
@@ -241,14 +239,14 @@ if (!empty($lpAutoLaunch)) {
 }
 
 if ($showAutoLaunchLpWarning) {
-    $autoLaunchWarning = get_lang('TheLPAutoLaunchSettingIsONStudentsWillBeRedirectToAnSpecificLP');
+    $autoLaunchWarning = get_lang('The learning path auto-launch setting is ON. When learners enter this course, they will be automatically redirected to the learning path marked as auto-launch.');
 }
 
 $forumAutoLaunch = api_get_course_setting('enable_forum_auto_launch');
 if ($forumAutoLaunch == 1) {
     if ($allowAutoLaunchForCourseAdmins) {
         if (empty($autoLaunchWarning)) {
-            $autoLaunchWarning = get_lang('TheForumAutoLaunchSettingIsOnStudentsWillBeRedirectToTheForumTool');
+            $autoLaunchWarning = get_lang('The forum\'s auto-launch setting is on. Students will be redirected to the forum tool when entering this course.');
         }
     } else {
         $url = api_get_path(WEB_CODE_PATH).'forum/index.php?'.api_get_cidreq().'&id_session='.$session_id;
@@ -315,7 +313,7 @@ $documentAutoLaunch = api_get_course_setting('enable_document_auto_launch');
 if ($documentAutoLaunch == 1) {
     if ($allowAutoLaunchForCourseAdmins) {
         if (empty($autoLaunchWarning)) {
-            $autoLaunchWarning = get_lang('TheDocumentAutoLaunchSettingIsOnStudentsWillBeRedirectToTheDocumentTool');
+            $autoLaunchWarning = get_lang('The document auto-launch feature configuration is enabled. Learners will be automatically redirected to document tool.');
         }
     } else {
         // Redirecting to the document

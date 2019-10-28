@@ -161,10 +161,10 @@ if ($allowToEdit) {
                         $values['users_to_send']
                     );
                 }
-                $message = Display::return_message(get_lang('AddSuccess'), 'confirmation');
+                $message = Display::return_message(get_lang('Event added'), 'confirmation');
                 if ($sendEmail) {
                     $message .= Display::return_message(
-                        get_lang('AdditionalMailWasSentToSelectedUsers'),
+                        get_lang('Additionally, a new announcement has been created and sent to selected users'),
                         'confirmation'
                     );
                 }
@@ -219,7 +219,7 @@ if ($allowToEdit) {
                         $comment
                     );
 
-                    $message = Display::return_message(get_lang('Updated'), 'confirmation');
+                    $message = Display::return_message(get_lang('Update successful'), 'confirmation');
                     Display::addFlash($message);
                     header("Location: $agendaUrl");
                     exit;
@@ -265,7 +265,7 @@ if ($allowToEdit) {
                     }
                 }
 
-                $message = Display::return_message(get_lang('Updated'), 'confirmation');
+                $message = Display::return_message(get_lang('Update successful'), 'confirmation');
                 Display::addFlash($message);
                 header("Location: $agendaUrl");
                 exit;
@@ -283,9 +283,9 @@ if ($allowToEdit) {
 
                 if (in_array($ext, ['ics', 'ical', 'icalendar', 'ifb'])) {
                     $content = $agenda->importEventFile($course_info, $_FILES['ical_import']);
-                    $message = Display::return_message(get_lang('AddSuccess'));
+                    $message = Display::return_message(get_lang('Event added'));
                 } else {
-                    $message = Display::return_message(get_lang('IsNotiCalFormatFile'), 'error');
+                    $message = Display::return_message(get_lang('This file is not in iCal format'), 'error');
                 }
                 Display::addFlash($message);
                 $url = api_get_self().'?action=importical&type='.$agenda->type;
@@ -313,7 +313,7 @@ if (!empty($group_id)) {
     ];
     $interbreadcrumb[] = [
         "url" => api_get_path(WEB_CODE_PATH)."group/group_space.php?".api_get_cidreq(),
-        "name" => get_lang('GroupSpace').' '.$group_properties['name'],
+        "name" => get_lang('Group area').' '.$group_properties['name'],
     ];
 }
 if (!empty($actionName)) {

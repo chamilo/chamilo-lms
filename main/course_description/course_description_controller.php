@@ -56,7 +56,7 @@ class CourseDescriptionController
         global $htmlHeadXtra;
         $htmlHeadXtra[] = "<script>
         function confirmation(name) {
-            if (confirm(\" ".trim(get_lang('AreYouSureToDeleteJS'))." \"+name+\"?\")) {
+            if (confirm(\" ".trim(get_lang('Are you sure to delete'))." \"+name+\"?\")) {
                 return true;
             } else {
                 return false;
@@ -84,7 +84,7 @@ class CourseDescriptionController
             foreach ($data['default_description_titles'] as $id => $title) {
                 $categories[$id] = $title;
             }
-            $categories[ADD_BLOCK] = get_lang('NewBloc');
+            $categories[ADD_BLOCK] = get_lang('Other');
             $i = 1;
 
             ksort($categories);
@@ -114,7 +114,7 @@ class CourseDescriptionController
             $actions = Display::toolbarAction('toolbar', [0 => $actionLeft]);
         }
 
-        $tpl = new Template(get_lang('CourseProgram'));
+        $tpl = new Template(get_lang('Description'));
         $tpl->assign('listing', $data);
         $tpl->assign('is_allowed_to_edit', $is_allowed_to_edit);
         $tpl->assign('actions', $actions);
@@ -173,7 +173,7 @@ class CourseDescriptionController
 
                     Display::addFlash(
                         Display::return_message(
-                            get_lang('CourseDescriptionUpdated')
+                            get_lang('The description has been updated')
                         )
                     );
                 }
@@ -266,7 +266,7 @@ class CourseDescriptionController
 
                     Display::addFlash(
                         Display::return_message(
-                            get_lang('CourseDescriptionUpdated')
+                            get_lang('The description has been updated')
                         )
                     );
                 }
@@ -316,7 +316,7 @@ class CourseDescriptionController
             $course_description->set_id($id);
             $course_description->delete();
             Display::addFlash(
-                Display::return_message(get_lang('CourseDescriptionDeleted'))
+                Display::return_message(get_lang('Description has been deleted'))
             );
         }
         $this->listing(false);

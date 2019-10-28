@@ -42,7 +42,7 @@ if ($skill) {
 }
 
 Display::addFlash(
-    Display::return_message(get_lang('SkillNotFound'), 'error')
+    Display::return_message(get_lang('Skill not found'), 'error')
 );
 
 header('Location: '.api_get_path(WEB_PATH));

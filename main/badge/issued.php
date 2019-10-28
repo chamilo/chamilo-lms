@@ -28,7 +28,7 @@ $skillIssue = $entityManager->find('ChamiloCoreBundle:SkillRelUser', $issue);
 if (!$skillIssue) {
     Display::addFlash(
         Display::return_message(
-            get_lang('SkillNotFound'),
+            get_lang('Skill not found'),
             'warning'
         )
     );
@@ -44,7 +44,7 @@ $skill = $skillIssue->getSkill();
 
 if (!$user || !$skill) {
     Display::addFlash(
-        Display::return_message(get_lang('NoResults'), 'warning')
+        Display::return_message(get_lang('No results found'), 'warning')
     );
 
     header('Location: '.api_get_path(WEB_PATH));
@@ -67,7 +67,7 @@ $skillInfo = [
     'courses' => [],
 ];
 
-$titleContent = sprintf(get_lang('IHaveObtainedSkillXOnY'), $skillInfo['name'], api_get_setting('siteName'));
+$titleContent = sprintf(get_lang('I have achieved skill %s on %s'), $skillInfo['name'], api_get_setting('siteName'));
 
 // Open Graph Markup
 $htmlHeadXtra[] = "
@@ -84,7 +84,7 @@ $allowExport = $currentUser ? $currentUser->getId() === $user->getId() : false;
 
 $allowComment = $currentUser ? Skill::userCanAddFeedbackToUser($currentUser, $user) : false;
 $skillIssueDate = api_get_local_time($skillIssue->getAcquiredSkillAt());
-$currentSkillLevel = get_lang('NoLevelAcquiredYet');
+$currentSkillLevel = get_lang('No level acquired yet');
 if ($skillIssue->getAcquiredLevel()) {
     $currentSkillLevel = $skillLevelRepo->find(['id' => $skillIssue->getAcquiredLevel()])->getName();
 }
@@ -176,7 +176,7 @@ $allowToEdit = Skill::isAllowed($user->getId(), false);
 
 if ($showLevels && $allowToEdit) {
     $formAcquiredLevel = new FormValidator('acquired_level');
-    $formAcquiredLevel->addSelect('acquired_level', get_lang('AcquiredLevel'), $acquiredLevel);
+    $formAcquiredLevel->addSelect('acquired_level', get_lang('Level acquired'), $acquiredLevel);
     $formAcquiredLevel->addHidden('user', $skillIssue->getUser()->getId());
     $formAcquiredLevel->addHidden('issue', $skillIssue->getId());
     $formAcquiredLevel->addButtonSave(get_lang('Save'));
@@ -196,17 +196,17 @@ if ($showLevels && $allowToEdit) {
 }
 
 $form = new FormValidator('comment');
-$form->addTextarea('comment', get_lang('NewComment'), ['rows' => 4]);
+$form->addTextarea('comment', get_lang('New comment'), ['rows' => 4]);
 $form->applyFilter('comment', 'trim');
-$form->addRule('comment', get_lang('ThisFieldIsRequired'), 'required');
+$form->addRule('comment', get_lang('Required field'), 'required');
 $form->addSelect(
     'value',
-    [get_lang('Value'), get_lang('RateTheSkillInPractice')],
+    [get_lang('Value'), get_lang('On a grade of 1 to 10, how well did you observe that this person could put this skill in practice?')],
     ['-', 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
 );
 $form->addHidden('user', $skillIssue->getUser()->getId());
 $form->addHidden('issue', $skillIssue->getId());
-$form->addButtonSend(get_lang('Send'));
+$form->addButtonSend(get_lang('Send message'));
 
 if ($form->validate() && $allowComment && $allowToEdit) {
     $values = $form->exportValues();
@@ -277,7 +277,7 @@ if ($allowExport) {
     }
 }
 
-$template = new Template(get_lang('IssuedBadgeInformation'));
+$template = new Template(get_lang('Issued badge information'));
 $template->assign('issue_info', $skillIssueInfo);
 $template->assign('allow_comment', $allowComment);
 $template->assign('allow_export', $allowExport);
@@ -297,6 +297,6 @@ $template->assign('badge_error', $badgeInfoError);
 $template->assign('personal_badge', $personalBadge);
 $template->assign('show_level', $showLevels);
 $content = $template->fetch($template->get_template('skill/issued.tpl'));
-$template->assign('header', get_lang('IssuedBadgeInformation'));
+$template->assign('header', get_lang('Issued badge information'));
 $template->assign('content', $content);
 $template->display_one_col_template();

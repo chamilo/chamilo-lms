@@ -17,7 +17,7 @@ $this_section = SECTION_MYAGENDA;
 api_block_anonymous_users();
 
 // setting the name of the tool
-$nameTools = get_lang('MyAgenda');
+$nameTools = get_lang('Personal agenda');
 
 // the variables for the days and the months
 // Defining the shorts for the days

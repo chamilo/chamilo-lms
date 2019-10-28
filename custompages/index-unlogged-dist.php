@@ -15,22 +15,22 @@ if (isset($_GET['loginFailed'])) {
     if (isset($_GET['error'])) {
         switch ($_GET['error']) {
             case 'account_expired':
-                $error_message = custompages_get_lang('AccountExpired');
+                $error_message = custompages_get_lang('Account expired');
                 break;
             case 'account_inactive':
-                $error_message = custompages_get_lang('AccountInactive');
+                $error_message = custompages_get_lang('Account inactive');
                 break;
             case 'user_password_incorrect':
-                $error_message = custompages_get_lang('InvalidId');
+                $error_message = custompages_get_lang('Login failed - incorrect login or password.');
                 break;
             case 'access_url_inactive':
-                $error_message = custompages_get_lang('AccountURLInactive');
+                $error_message = custompages_get_lang('Account inactive for this URL');
                 break;
             default:
-                $error_message = custompages_get_lang('InvalidId');
+                $error_message = custompages_get_lang('Login failed - incorrect login or password.');
         }
     } else {
-        $error_message = get_lang('InvalidId');
+        $error_message = get_lang('Login failed - incorrect login or password.');
     }
 }
 
@@ -88,7 +88,7 @@ $rootWeb = api_get_path('WEB_PATH');
                 </div>
             </form>
             <div id="login-form-submit" class="form-submit" onclick="document.forms['login-form'].submit();">
-                <span><?php echo custompages_get_lang('LoginEnter'); ?></span>
+                <span><?php echo custompages_get_lang('Login'); ?></span>
             </div> <!-- #form-submit -->
 			<div id="links">
 
@@ -101,7 +101,7 @@ $rootWeb = api_get_path('WEB_PATH');
             } ?>
 
                 <a href="<?php echo api_get_path(WEB_CODE_PATH); ?>auth/lostPassword.php?language=<?php echo api_get_interface_language(); ?>">
-                    <?php echo custompages_get_lang('LostPassword'); ?>
+                    <?php echo custompages_get_lang('I lost my password'); ?>
                 </a>
 			</div>
 		</div> <!-- #form -->

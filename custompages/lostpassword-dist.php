@@ -12,7 +12,7 @@ $rootWeb = api_get_path('WEB_PATH');
 ?>
 <html>
 <head>
-	<title><?php echo custompages_get_lang('LostPassword'); ?></title>
+	<title><?php echo custompages_get_lang('I lost my password'); ?></title>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 	<script type="text/javascript" src="<?php echo $rootWeb; ?>web/assets/jquery/dist/jquery.min.js"></script>
 

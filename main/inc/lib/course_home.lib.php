@@ -695,16 +695,16 @@ class CourseHome
 
         $output = '';
         if (!empty($session_category)) {
-            $output .= '<tr><td>'.get_lang('SessionCategory').': '.'<b>'.$session_category.'</b></td></tr>';
+            $output .= '<tr><td>'.get_lang('Sessions categories').': '.'<b>'.$session_category.'</b></td></tr>';
         }
         $dateInfo = SessionManager::parseSessionDates($sessionInfo);
 
         $msgDate = $dateInfo['access'];
         $output .= '<tr>
-                    <td style="width:50%">'.get_lang('SessionName').': '.'<b>'.$sessionInfo['name'].'</b></td>
-                    <td>'.get_lang('GeneralCoach').': '.'<b>'.$coachInfo['complete_name'].'</b></td></tr>';
+                    <td style="width:50%">'.get_lang('Session name').': '.'<b>'.$sessionInfo['name'].'</b></td>
+                    <td>'.get_lang('General coach').': '.'<b>'.$coachInfo['complete_name'].'</b></td></tr>';
         $output .= '<tr>
-                        <td>'.get_lang('SessionIdentifier').': '.
+                        <td>'.get_lang('Identifier of session').': '.
                             Display::return_icon('star.png', ' ', ['align' => 'absmiddle']).'
                         </td>
                         <td>'.get_lang('Date').': '.'<b>'.$msgDate.'</b>
@@ -881,7 +881,7 @@ class CourseHome
             $html .= '<div id="'.$styleId.'">';
 
             $html .= Display::url(
-                Display::return_icon('home.png', get_lang('CourseHomepageLink'), '', ICON_SIZE_MEDIUM),
+                Display::return_icon('home.png', get_lang('Course home'), '', ICON_SIZE_MEDIUM),
                 $courseInfo['course_public_url'],
                 ['class' => 'items-icon']
             );

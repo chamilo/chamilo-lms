@@ -51,7 +51,7 @@ switch ($action) {
                     echo $courseInfo['title'].'<br />';
                 }
             } else {
-                echo get_lang('UserHasNoCourse');
+                echo get_lang('This user is not subscribed to any course');
             }
         }
         break;

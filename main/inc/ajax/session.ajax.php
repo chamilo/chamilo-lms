@@ -20,7 +20,7 @@ switch ($action) {
                     echo $session_item['session_name'].'<br />';
                 }
             } else {
-                echo get_lang('NoSessionsForThisUser');
+                echo get_lang('This user isn\'t subscribed in a session');
             }
             unset($list_sessions);
         }
@@ -169,7 +169,7 @@ switch ($action) {
             $sessionInfo = api_get_session_info($_GET['session']);
             echo '<h2>'.$sessionInfo['name'].'</h2>';
             echo '<div class="home-course-intro"><div class="page-course"><div class="page-course-intro">';
-            echo $sessionInfo['show_description'] == 1 ? $sessionInfo['description'] : get_lang('None');
+            echo $sessionInfo['show_description'] == 1 ? $sessionInfo['description'] : get_lang('none');
             echo '</div></div></div>';
         }
         break;
@@ -282,7 +282,7 @@ switch ($action) {
                     0,
                     $baseWorkDir,
                     '/basic-course-documents',
-                    get_lang('BasicCourseDocuments'),
+                    get_lang('Basic course documents'),
                     1
                 );
 
@@ -358,7 +358,7 @@ switch ($action) {
             $table->set_header(1, get_lang('Name'), false);
             $table->set_header(2, get_lang('Size'), false, [], ['class' => 'text-right', 'style' => 'width: 80px;']);
             $table->set_header(3, get_lang('Date'), false, [], ['class' => 'text-center', 'style' => 'width: 200px;']);
-            $table->set_header(4, get_lang('Actions'), false, [], ['class' => 'text-center']);
+            $table->set_header(4, get_lang('Detail'), false, [], ['class' => 'text-center']);
             $table->display();
         }
 

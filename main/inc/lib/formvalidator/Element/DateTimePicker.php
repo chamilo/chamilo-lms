@@ -47,7 +47,7 @@ class DateTimePicker extends HTML_QuickForm_text
             $label = $label[0];
         }
 
-        $resetFieldX = sprintf(get_lang('ResetFieldX'), $label);
+        $resetFieldX = sprintf(get_lang('Reset %s'), $label);
 
         return '
             <div class="input-group mb-3" id="date_time_wrapper_'.$id.'">
@@ -154,14 +154,14 @@ class DateTimePicker extends HTML_QuickForm_text
                         dateFormat: 'yy-mm-dd',
                         timeFormat: 'HH:mm',
                         altField: '#{$id}_alt',
-                        altFormat: \"".get_lang('DateFormatLongNoDayJS')."\",
-                        altTimeFormat: \"".get_lang('TimeFormatNoSecJS')."\",
-                        altSeparator: \" ".get_lang('AtTime')." \",
+                        altFormat: \"".get_lang('MM dd, yy')."\",
+                        altTimeFormat: \"".get_lang('HH:mm')."\",
+                        altSeparator: \" ".get_lang(' at')." \",
                         altFieldTimeOnly: false,
                         showOn: 'both',
                         buttonImage: '".Display::return_icon('attendance.png', null, [], ICON_SIZE_TINY, true, true)."',
                         buttonImageOnly: true,
-                        buttonText: '".get_lang('SelectDate')."',
+                        buttonText: '".get_lang('Select date')."',
                         changeMonth: true,
                         changeYear: true
                     })

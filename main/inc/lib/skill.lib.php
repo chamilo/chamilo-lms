@@ -1469,7 +1469,7 @@ class Skill extends Model
         }
 
         if ($addTitle) {
-            $tableResult .= '<h3 class="section-title">'.get_lang('AchievedSkills').'</h3>
+            $tableResult .= '<h3 class="section-title">'.get_lang('Achieved skills').'</h3>
                     <div class="skills-badges">
                    ';
         }
@@ -1567,7 +1567,7 @@ class Skill extends Model
                 $tableResult .= $table;
             }
         } else {
-            $tableResult .= get_lang('WithoutAchievedSkills');
+            $tableResult .= get_lang('WithoutAchieved skills');
         }
 
         if ($addTitle) {
@@ -1613,7 +1613,7 @@ class Skill extends Model
                     // Default root node
                     $skills[1] = [
                         'id' => '1',
-                        'name' => get_lang('Root'),
+                        'name' => get_lang('root'),
                         'parent_id' => '0',
                         'status' => 1,
                     ];
@@ -1722,7 +1722,7 @@ class Skill extends Model
             }
 
             $skills_tree = [
-                'name' => get_lang('SkillRootName'),
+                'name' => get_lang('SkillrootName'),
                 'id' => 'root',
                 'children' => $refs['root']['children'],
                 'data' => [],
@@ -2428,13 +2428,13 @@ class Skill extends Model
             $translateNameUrl = $translateUrl.http_build_query(['skill' => $skillId, 'action' => 'name']);
             $translateCodeUrl = $translateUrl.http_build_query(['skill' => $skillId, 'action' => 'code']);
             $translateNameButton = Display::toolbarButton(
-                get_lang('TranslateThisTerm'),
+                get_lang('Translate this term'),
                 $translateNameUrl,
                 'language',
                 'link'
             );
             $translateCodeButton = Display::toolbarButton(
-                get_lang('TranslateThisTerm'),
+                get_lang('Translate this term'),
                 $translateCodeUrl,
                 'language',
                 'link'
@@ -2442,7 +2442,7 @@ class Skill extends Model
         }
 
         $form->addText('name', [get_lang('Name'), $translateNameButton], true, ['id' => 'name']);
-        $form->addText('short_code', [get_lang('ShortCode'), $translateCodeButton], false, ['id' => 'short_code']);
+        $form->addText('short_code', [get_lang('Short code'), $translateCodeButton], false, ['id' => 'short_code']);
 
         // Cannot change parent of root
         if ($skillId != 1) {
@@ -2451,12 +2451,12 @@ class Skill extends Model
 
         $form->addSelect(
             'gradebook_id',
-            [get_lang('Gradebook'), get_lang('WithCertificate')],
+            [get_lang('Assessments'), get_lang('With Certificate')],
             $gradeBookList,
             ['id' => 'gradebook_id', 'multiple' => 'multiple', 'size' => 10]
         );
         $form->addTextarea('description', get_lang('Description'), ['id' => 'description', 'rows' => 7]);
-        $form->addTextarea('criteria', get_lang('CriteriaToEarnTheBadge'), ['id' => 'criteria', 'rows' => 7]);
+        $form->addTextarea('criteria', get_lang('Criteria to earn the badge'), ['id' => 'criteria', 'rows' => 7]);
 
         // EXTRA FIELDS
         $extraField = new ExtraField('skill');
@@ -2480,7 +2480,7 @@ class Skill extends Model
         $toolbar = Display::url(
             Display::return_icon(
                 'back.png',
-                get_lang('ManageSkills'),
+                get_lang('Manage skills'),
                 null,
                 ICON_SIZE_MEDIUM
             ),

@@ -168,7 +168,7 @@ class CoursesAndSessionsCatalog
 
         $categories['ALL'] = [
             'id' => 0,
-            'name' => get_lang('DisplayAll'),
+            'name' => get_lang('Display all'),
             'code' => 'ALL',
             'parent_id' => null,
             'tree_pos' => 0,
@@ -196,7 +196,7 @@ class CoursesAndSessionsCatalog
         $countCourses = CourseCategory::countCoursesInCategory();
         $categories['NONE'] = [
             'id' => 0,
-            'name' => get_lang('WithoutCategory'),
+            'name' => get_lang('Without category'),
             'code' => 'NONE',
             'parent_id' => null,
             'tree_pos' => 0,
@@ -227,7 +227,7 @@ class CoursesAndSessionsCatalog
         $categories = [];
         $categories[0][0] = [
             'id' => 0,
-            'name' => get_lang('DisplayAll'),
+            'name' => get_lang('Display all'),
             'code' => 'ALL',
             'parent_id' => null,
             'tree_pos' => 0,
@@ -250,7 +250,7 @@ class CoursesAndSessionsCatalog
         $countCourses = CourseCategory::countCoursesInCategory();
         $categories[0][count($categories[0]) + 1] = [
             'id' => 0,
-            'name' => get_lang('None'),
+            'name' => get_lang('none'),
             'code' => 'NONE',
             'parent_id' => null,
             'tree_pos' => $row['tree_pos'] + 1,
@@ -431,7 +431,7 @@ class CoursesAndSessionsCatalog
             );
 
             if ($row['tutor_name'] == '0') {
-                $row['tutor_name'] = get_lang('NoManager');
+                $row['tutor_name'] = get_lang('No administrator');
             }
             $point_info = CourseManager::get_course_ranking($row['id'], 0);
             $courses[] = [

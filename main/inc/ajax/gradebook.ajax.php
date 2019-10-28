@@ -32,8 +32,8 @@ switch ($action) {
                 'get',
                 api_get_path(WEB_CODE_PATH).'gradebook/index.php?'.api_get_cidreq().'&action=generate_custom_report'
             );
-            $form->addText('custom_course_id', get_lang('CourseId'));
-            $form->addDateRangePicker('range', get_lang('DateRange'));
+            $form->addText('custom_course_id', get_lang('Course ID'));
+            $form->addDateRangePicker('range', get_lang('Date range'));
             $form->addHidden('action', 'generate_custom_report');
             $form->addButtonSearch();
             $form->display();

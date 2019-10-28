@@ -561,8 +561,8 @@ class Compilatio
                 // if the compilatio's hash is not a valide hash md5,
                 // we return à specific status (cf : IsInCompilatio() )
                 $status = 'NOT_IN_COMPILATIO';
-                $actionCompilatio = get_lang('CompilatioDocumentTextNotImage').'<br/>'.
-                    get_lang('CompilatioDocumentNotCorrupt');
+                $actionCompilatio = get_lang('Verify that it contains text (and not only images)').'<br/>'.
+                    get_lang('and that it is not corrupted');
             }
 
             switch ($status) {
@@ -574,21 +574,21 @@ class Compilatio
                             35
                         )
                         .Display::url(
-                            get_lang('CompilatioAnalysis'),
+                            get_lang('Analyse'),
                             $urlRapport,
                             ['class' => 'btn btn-primary btn-xs', 'target' => '_blank']
                         );
                     break;
                 case 'ANALYSE_PROCESSING':
                     $actionCompilatio .= "<div style='font-weight:bold;text-align:left'>"
-                        .get_lang('CompilatioAnalysisInProgress')
+                        .get_lang('AnalyseInProgress')
                         ."</div>";
                     $actionCompilatio .= "<div style='font-size:80%;font-style:italic;margin-bottom:5px;'>"
-                        .get_lang('CompilatioAnalysisPercentage')
+                        .get_lang('AnalysePercentage')
                         ."</div>";
                     $text = [];
-                    $text['analysisinqueue'] = get_lang('CompilatioWaitingAnalysis');
-                    $text['analysisinfinalization'] = get_lang('CompilatioAnalysisEnding');
+                    $text['analysisinqueue'] = get_lang('Pending Analysis');
+                    $text['analysisinfinalization'] = get_lang('AnalyseEnding');
                     $text['refresh'] = get_lang('Refresh');
                     $actionCompilatio .= self::getProgressionAnalyseDocv31(
                         $status,
@@ -598,15 +598,15 @@ class Compilatio
                     break;
                 case 'ANALYSE_IN_QUEUE':
                     $loading = Display::returnFontAwesomeIcon('spinner', null, true, 'fa-spin');
-                    $actionCompilatio .= $loading.'&nbsp;'.get_lang('CompilatioAwaitingAnalysis');
+                    $actionCompilatio .= $loading.'&nbsp;'.get_lang('Waiting for analysis');
                     break;
                 case 'BAD_FILETYPE':
-                    $actionCompilatio .= get_lang('FileFormatNotSupported')
+                    $actionCompilatio .= get_lang('File format not supported')
                         .'<br/>'
-                        .get_lang('CompilatioProtectedPdfVerification');
+                        .get_lang('If the file is in pdf format, check that it is not protected by modification.');
                     break;
                 case 'BAD_FILESIZE':
-                    $actionCompilatio .= get_lang('UplFileTooBig');
+                    $actionCompilatio .= get_lang('The file is too big to upload.');
                     break;
             }
         }

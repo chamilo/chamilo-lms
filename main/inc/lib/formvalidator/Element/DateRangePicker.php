@@ -127,7 +127,7 @@ class DateRangePicker extends HTML_QuickForm_text
         $validateFormat = $this->getAttribute('validate_format');
 
         if (!$this->validateDates($parsedDates, $validateFormat)) {
-            $errors[$elementName] = get_lang('CheckDates');
+            $errors[$elementName] = get_lang('Validate dates');
         }
         $submitValues[$elementName.'_start'] = $parsedDates['start'];
         $submitValues[$elementName.'_end'] = $parsedDates['end'];
@@ -195,21 +195,21 @@ class DateRangePicker extends HTML_QuickForm_text
                     ranges: {
                          '".addslashes(get_lang('Today'))."': [moment(), moment()],
                          '".addslashes(get_lang('Yesterday'))."': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],                                                  
-                         '".addslashes(get_lang('ThisMonth'))."': [moment().startOf('month'), moment().endOf('month')],
-                         '".addslashes(get_lang('LastMonth'))."': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')],                      
-                         '".addslashes(get_lang('ThisWeek'))."': [moment().weekday(1), moment().weekday(5)],
-                         '".addslashes(get_lang('NextWeek'))."': [moment().weekday(8), moment().weekday(12)]
+                         '".addslashes(get_lang('This month'))."': [moment().startOf('month'), moment().endOf('month')],
+                         '".addslashes(get_lang('Last month'))."': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')],                      
+                         '".addslashes(get_lang('This week'))."': [moment().weekday(1), moment().weekday(5)],
+                         '".addslashes(get_lang('Next Week'))."': [moment().weekday(8), moment().weekday(12)]
                     },
                     //showDropdowns : true,
                     
                     locale: {
                         separator: ' / ',
                         format: '$format',
-                        applyLabel: '".addslashes(get_lang('Ok'))."',
+                        applyLabel: '".addslashes(get_lang('Validate'))."',
                         cancelLabel: '".addslashes(get_lang('Cancel'))."',
                         fromLabel: '".addslashes(get_lang('From'))."',
                         toLabel: '".addslashes(get_lang('Until'))."',
-                        customRangeLabel: '".addslashes(get_lang('CustomRange'))."',
+                        customRangeLabel: '".addslashes(get_lang('Custom range'))."',
                     }
                 });
                 

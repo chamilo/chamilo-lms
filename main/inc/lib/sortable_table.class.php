@@ -291,22 +291,22 @@ class SortableTable extends HTML_Table
             $icon_attributes = ['style' => 'vertical-align: middle;'];
             $params['prevImg'] = Display:: return_icon(
                 'action_prev.png',
-                get_lang('PreviousPage'),
+                get_lang('Previous page'),
                 $icon_attributes
             );
             $params['nextImg'] = Display:: return_icon(
                 'action_next.png',
-                get_lang('NextPage'),
+                get_lang('Next page'),
                 $icon_attributes
             );
             $params['firstPageText'] = Display:: return_icon(
                 'action_first.png',
-                get_lang('FirstPage'),
+                get_lang('First page'),
                 $icon_attributes
             );
             $params['lastPageText'] = Display:: return_icon(
                 'action_last.png',
-                get_lang('LastPage'),
+                get_lang('Last page'),
                 $icon_attributes
             );
             $params['firstPagePre'] = '';
@@ -358,7 +358,7 @@ class SortableTable extends HTML_Table
                 0,
                 'style="font-style: italic;text-align:center;" colspan='.$cols
             );
-            $message_empty = api_xml_http_response_encode(get_lang('TheListIsEmpty'));
+            $message_empty = api_xml_http_response_encode(get_lang('Empty'));
             $this->setCellContents(1, 0, $message_empty);
             $empty_table = true;
         }
@@ -410,18 +410,18 @@ class SortableTable extends HTML_Table
                 $html .= '<a 
                     class="btn btn-outline-primary" 
                     href="?'.$params.'&amp;'.$this->param_prefix.'selectall=1" 
-                    onclick="javascript: setCheckbox(true, \''.$table_id.'\'); return false;">'.get_lang('SelectAll').'</a>';
+                    onclick="javascript: setCheckbox(true, \''.$table_id.'\'); return false;">'.get_lang('Select all').'</a>';
                 $html .= '<a 
                     class="btn btn-outline-primary" 
                     href="?'.$params.'" 
-                    onclick="javascript: setCheckbox(false, \''.$table_id.'\'); return false;">'.get_lang('UnSelectAll').'</a> ';
+                    onclick="javascript: setCheckbox(false, \''.$table_id.'\'); return false;">'.get_lang('UnSelect all').'</a> ';
                 $html .= '<div class="btn-group" role="group">
                             <button 
                                 id="'.$table_id.'_actions" 
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
                                 class="btn btn-outline-primary dropdown-toggle" 
                                 onclick="javascript:return false;">'.
-                                get_lang('Actions').'
+                                get_lang('Detail').'
                             </button>
                           ';
                 $html .= '<div class="dropdown-menu" aria-labelledby="'.$table_id.'_actions" >';
@@ -466,7 +466,7 @@ class SortableTable extends HTML_Table
     {
         $empty_table = false;
         if ($this->get_total_number_of_items() == 0) {
-            $message_empty = api_xml_http_response_encode(get_lang('TheListIsEmpty'));
+            $message_empty = api_xml_http_response_encode(get_lang('Empty'));
             $this->setCellContents(1, 0, $message_empty);
             $empty_table = true;
         }
@@ -553,7 +553,7 @@ class SortableTable extends HTML_Table
     ) {
         $empty_table = false;
         if ($this->get_total_number_of_items() == 0) {
-            $message_empty = api_xml_http_response_encode(get_lang('TheListIsEmpty'));
+            $message_empty = api_xml_http_response_encode(get_lang('Empty'));
             $this->setCellContents(1, 0, $message_empty);
             $empty_table = true;
         }

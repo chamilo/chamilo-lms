@@ -337,12 +337,12 @@ class CourseDescription
     public function get_default_description_title()
     {
         $default_description_titles = [];
-        $default_description_titles[1] = get_lang('GeneralDescription');
+        $default_description_titles[1] = get_lang('Description');
         $default_description_titles[2] = get_lang('Objectives');
         $default_description_titles[3] = get_lang('Topics');
         $default_description_titles[4] = get_lang('Methodology');
-        $default_description_titles[5] = get_lang('CourseMaterial');
-        $default_description_titles[6] = get_lang('HumanAndTechnicalResources');
+        $default_description_titles[5] = get_lang('Course material');
+        $default_description_titles[6] = get_lang('Resources');
         $default_description_titles[7] = get_lang('Assessment');
         $default_description_titles[8] = get_lang('Other');
 
@@ -397,14 +397,14 @@ class CourseDescription
     public function get_default_question()
     {
         $question = [];
-        $question[1] = get_lang('GeneralDescriptionQuestions');
-        $question[2] = get_lang('ObjectivesQuestions');
-        $question[3] = get_lang('TopicsQuestions');
-        $question[4] = get_lang('MethodologyQuestions');
-        $question[5] = get_lang('CourseMaterialQuestions');
-        $question[6] = get_lang('HumanAndTechnicalResourcesQuestions');
-        $question[7] = get_lang('AssessmentQuestions');
-        //$question[8]= get_lang('ThematicAdvanceQuestions');
+        $question[1] = get_lang('DescriptionQuestions');
+        $question[2] = get_lang('What should the end results be when the learner has completed the course? What are the activities performed during the course?');
+        $question[3] = get_lang('How does the course progress? Where should the learner pay special care? Are there identifiable problems in understanding different areas? How much time should one dedicate to the different areas of the course?');
+        $question[4] = get_lang('What methods and activities help achieve the objectives of the course?  What would the schedule be?');
+        $question[5] = get_lang('Course materialQuestions');
+        $question[6] = get_lang('ResourcesQuestions');
+        $question[7] = get_lang('How will learners be assessed? Are there strategies to develop in order to master the topic?');
+        //$question[8]= get_lang('What is the current progress you have reached with your learners inside your course? How much do you think is remaining in comparison to the complete program?');
 
         return $question;
     }
@@ -417,14 +417,14 @@ class CourseDescription
     public function get_default_information()
     {
         $information = [];
-        $information[1] = get_lang('GeneralDescriptionInformation');
-        $information[2] = get_lang('ObjectivesInformation');
-        $information[3] = get_lang('TopicsInformation');
-        $information[4] = get_lang('MethodologyInformation');
-        $information[5] = get_lang('CourseMaterialInformation');
-        $information[6] = get_lang('HumanAndTechnicalResourcesInformation');
-        $information[7] = get_lang('AssessmentInformation');
-        //$information[8]= get_lang('ThematicAdvanceInformation');
+        $information[1] = get_lang('DescriptionInformation');
+        $information[2] = get_lang('What are the objectives of the course (competences, skills, outcomes)?');
+        $information[3] = get_lang('List of topics included in the training. Importance of each topic. Level of difficulty. Structure and inter-dependence of the different parts.');
+        $information[4] = get_lang('Presentation of the activities (conference, papers, group research, labs...).');
+        $information[5] = get_lang('Course materialInformation');
+        $information[6] = get_lang('ResourcesInformation');
+        $information[7] = get_lang('Criteria for skills acquisition.');
+        //$information[8]= get_lang('The thematic advance tool allows you to organize your course through time.');
 
         return $information;
     }

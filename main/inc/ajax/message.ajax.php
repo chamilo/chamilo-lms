@@ -100,7 +100,7 @@ switch ($action) {
         $messageContent = isset($_REQUEST['content']) ? trim($_REQUEST['content']) : null;
 
         if (empty($subject) || empty($messageContent)) {
-            echo Display::return_message(get_lang('ErrorSendingMessage'), 'error');
+            echo Display::return_message(get_lang('There was an error while trying to send the message.'), 'error');
             exit;
         }
 
@@ -112,12 +112,12 @@ switch ($action) {
             $courseInfo = api_get_course_info_by_id($courseId);
             if (!empty($courseInfo)) {
                 if (empty($sessionId)) {
-                    $courseNotification = sprintf(get_lang('ThisEmailWasSentViaCourseX'), $courseInfo['title']);
+                    $courseNotification = sprintf(get_lang('This e-mail was sent via course %s'), $courseInfo['title']);
                 } else {
                     $sessionInfo = api_get_session_info($sessionId);
                     if (!empty($sessionInfo)) {
                         $courseNotification = sprintf(
-                            get_lang('ThisEmailWasSentViaCourseXInSessionX'),
+                            get_lang('This e-mail was sent via course %sInSessionX'),
                             $courseInfo['title'],
                             $sessionInfo['name']
                         );
@@ -129,9 +129,9 @@ switch ($action) {
 
         $result = MessageManager::send_message($_REQUEST['user_id'], $subject, $messageContent);
         if ($result) {
-            echo Display::return_message(get_lang('MessageHasBeenSent'), 'confirmation');
+            echo Display::return_message(get_lang('Your message has been sent.'), 'confirmation');
         } else {
-            echo Display::return_message(get_lang('ErrorSendingMessage'), 'confirmation');
+            echo Display::return_message(get_lang('There was an error while trying to send the message.'), 'confirmation');
         }
         break;
     case 'send_invitation':

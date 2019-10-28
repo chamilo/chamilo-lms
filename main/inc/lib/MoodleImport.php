@@ -23,7 +23,7 @@ class MoodleImport
     public function import($uploadedFile)
     {
         if (UPLOAD_ERR_OK !== $uploadedFile['error']) {
-            throw new Exception(get_lang('UploadError'));
+            throw new Exception(get_lang('Upload failed, please check maximum file size limits and folder rights.'));
         }
 
         $cachePath = api_get_path(SYS_ARCHIVE_PATH);
@@ -33,13 +33,13 @@ class MoodleImport
         $name = basename($tempPath).".$extension";
 
         if (!move_uploaded_file($tempPath, api_get_path(SYS_ARCHIVE_PATH).$name)) {
-            throw new Exception(get_lang('UploadError'));
+            throw new Exception(get_lang('Upload failed, please check maximum file size limits and folder rights.'));
         }
 
         $filePath = $cachePath.$name;
 
         if (!is_readable($filePath)) {
-            throw new Exception(get_lang('UploadError'));
+            throw new Exception(get_lang('Upload failed, please check maximum file size limits and folder rights.'));
         }
 
         $mimeType = mime_content_type($filePath);
@@ -54,11 +54,11 @@ class MoodleImport
                 $backUpFile = new PharData($filePath);
 
                 if (false === $backUpFile->extractTo($destinationDir)) {
-                    throw new Exception(get_lang('ErrorImportingFile'));
+                    throw new Exception(get_lang('Error importing file'));
                 }
 
                 if (!file_exists($destinationDir.'/moodle_backup.xml')) {
-                    throw new Exception(get_lang('FailedToImportThisIsNotAMoodleFile'));
+                    throw new Exception(get_lang('Failed to import: this doesn\'t seem to be a Moodle course backup file (.mbz)'));
                 }
 
                 break;
@@ -77,7 +77,7 @@ class MoodleImport
                 }
 
                 if (!$mainFileKey) {
-                    throw new Exception(get_lang('FailedToImportThisIsNotAMoodleFile'));
+                    throw new Exception(get_lang('Failed to import: this doesn\'t seem to be a Moodle course backup file (.mbz)'));
                 }
 
                 $package->extract(PCLZIP_OPT_PATH, $destinationDir);
@@ -154,7 +154,7 @@ class MoodleImport
             removeDir($destinationDir);
             unlink($filePath);
 
-            throw new Exception(get_lang('FailedToImportThisIsNotAMoodleFile'));
+            throw new Exception(get_lang('Failed to import: this doesn\'t seem to be a Moodle course backup file (.mbz)'));
         }
         $activities = $doc->getElementsByTagName('activity');
         foreach ($activities as $activity) {
@@ -836,7 +836,7 @@ class MoodleImport
             case 'ddmatch':
                 $questionWeighting = $currentQuestion['defaultmark'];
                 $questionInstance->updateWeighting($questionWeighting);
-                $questionInstance->updateDescription(get_lang('ThisQuestionIsNotSupportedYet'));
+                $questionInstance->updateDescription(get_lang('This question type is not supported yet'));
                 $questionInstance->save($exercise);
 
                 return false;

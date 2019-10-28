@@ -66,7 +66,7 @@ class Promotion extends Model
                     case 'updated_at':
                         break;
                     case 'name':
-                        $val .= ' '.get_lang('CopyLabelSuffix');
+                        $val .= ' '.get_lang('Copy');
                         $new[$key] = $val;
                         break;
                     case 'created_at':
@@ -152,8 +152,8 @@ class Promotion extends Model
     public function get_status_list()
     {
         return [
-            PROMOTION_STATUS_ACTIVE => get_lang('Active'),
-            PROMOTION_STATUS_INACTIVE => get_lang('Inactive'),
+            PROMOTION_STATUS_ACTIVE => get_lang('active'),
+            PROMOTION_STATUS_INACTIVE => get_lang('inactive'),
         ];
     }
 
@@ -184,7 +184,7 @@ class Promotion extends Model
         echo '<a href="'.api_get_path(WEB_CODE_PATH).'session/session_add.php">'.
             Display::return_icon(
                 'new_session.png',
-                get_lang('AddSession'),
+                get_lang('Add a training session'),
                 '',
                 '32'
             ).'</a>';
@@ -224,7 +224,7 @@ class Promotion extends Model
         // Setting the form elements
         $header = get_lang('Add');
         if ($action == 'edit') {
-            $header = get_lang('Modify');
+            $header = get_lang('Edit');
         }
 
         $id = isset($_GET['id']) ? (int) $_GET['id'] : '';
@@ -263,11 +263,11 @@ class Promotion extends Model
         $status_list = $this->get_status_list();
         $form->addElement('select', 'status', get_lang('Status'), $status_list);
         if ($action == 'edit') {
-            $form->addElement('text', 'created_at', get_lang('CreatedAt'));
+            $form->addElement('text', 'created_at', get_lang('Created at'));
             $form->freeze('created_at');
         }
         if ($action == 'edit') {
-            $form->addButtonSave(get_lang('Modify'), 'submit');
+            $form->addButtonSave(get_lang('Edit'), 'submit');
         } else {
             $form->addButtonCreate(get_lang('Add'), 'submit');
         }
@@ -283,7 +283,7 @@ class Promotion extends Model
         $form->setDefaults($defaults);
 
         // Setting the rules
-        $form->addRule('name', get_lang('ThisFieldIsRequired'), 'required');
+        $form->addRule('name', get_lang('Required field'), 'required');
 
         return $form;
     }

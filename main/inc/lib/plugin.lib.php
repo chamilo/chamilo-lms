@@ -651,7 +651,7 @@ class AppPlugin
                 foreach ($groups as $k => $v) {
                     $form->addGroup($groups[$k], $k, [$obj->get_lang($k)]);
                 }
-                $form->addButtonSave(get_lang('SaveSettings'));
+                $form->addButtonSave(get_lang('Save settings'));
                 $form->addHtml('
                         </div>
                     </div>

@@ -498,9 +498,9 @@ class CourseCategory
             $row = 0;
             $headers = [
                 get_lang('Category'),
-                get_lang('SubCat'),
+                get_lang('Sub-categories'),
                 get_lang('Courses'),
-                get_lang('Actions'),
+                get_lang('Detail'),
             ];
             foreach ($headers as $header) {
                 $table->setHeaderContents($row, $column, $header);
@@ -511,19 +511,19 @@ class CourseCategory
 
             $editIcon = Display::return_icon(
                 'edit.png',
-                get_lang('EditNode'),
+                get_lang('Edit this category'),
                 null,
                 ICON_SIZE_SMALL
             );
             $deleteIcon = Display::return_icon(
                 'delete.png',
-                get_lang('DeleteNode'),
+                get_lang('Delete this category'),
                 null,
                 ICON_SIZE_SMALL
             );
             $moveIcon = Display::return_icon(
                 'up.png',
-                get_lang('UpInSameLevel'),
+                get_lang('Up in same level'),
                 null,
                 ICON_SIZE_SMALL
             );
@@ -546,7 +546,7 @@ class CourseCategory
                 $title = Display::url(
                     Display::return_icon(
                         'folder_document.gif',
-                        get_lang('OpenNode'),
+                        get_lang('Open this category'),
                         null,
                         ICON_SIZE_SMALL
                     ).' '.$category['name'].' ('.$category['code'].')',
@@ -568,7 +568,7 @@ class CourseCategory
 
             return $table->toHtml();
         } else {
-            return Display::return_message(get_lang('NoCategories'), 'warning');
+            return Display::return_message(get_lang('There are no categories here'), 'warning');
         }
     }
 
@@ -896,7 +896,7 @@ class CourseCategory
      */
     public static function getCourseCatalogNameTools($action)
     {
-        $nameTools = get_lang('MyCourses');
+        $nameTools = get_lang('My courses');
         if (empty($action)) {
             return $nameTools; //should never happen
         }
@@ -906,10 +906,10 @@ class CourseCategory
             case 'subscribe_user_with_password':
             case 'display_random_courses':
             case 'display_courses':
-                $nameTools = get_lang('CourseManagement');
+                $nameTools = get_lang('Courses catalog');
                 break;
             case 'display_sessions':
-                $nameTools = get_lang('Sessions');
+                $nameTools = get_lang('Course sessions');
                 break;
             default:
                 // Nothing to do

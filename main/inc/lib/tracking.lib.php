@@ -194,29 +194,29 @@ class Tracking
         $extend_all = 0;
         if (!empty($extendedAll)) {
             $extend_all_link = Display::url(
-                Display::return_icon('view_less_stats.gif', get_lang('HideAllAttempts')),
+                Display::return_icon('view_less_stats.gif', get_lang('Hide all attempts')),
                 api_get_self().'?action=stats'.$url_suffix
             );
             $extend_all = 1;
         } else {
             $extend_all_link = Display::url(
-                Display::return_icon('view_more_stats.gif', get_lang('ShowAllAttempts')),
+                Display::return_icon('view_more_stats.gif', get_lang('Show all attempts')),
                 api_get_self().'?action=stats&extend_all=1'.$url_suffix
             );
         }
 
         if ($origin != 'tracking') {
             $output .= '<div class="section-status">';
-            $output .= Display::page_header(get_lang('ScormMystatus'));
+            $output .= Display::page_header(get_lang('My progress'));
             $output .= '</div>';
         }
 
         $actionColumn = null;
         if ($type === 'classic') {
-            $actionColumn = ' <th>'.get_lang('Actions').'</th>';
+            $actionColumn = ' <th>'.get_lang('Detail').'</th>';
         }
 
-        $timeHeader = '<th class="lp_time" colspan="2">'.get_lang('ScormTime').'</th>';
+        $timeHeader = '<th class="lp_time" colspan="2">'.get_lang('Time').'</th>';
         if ($hideTime) {
             $timeHeader = '';
         }
@@ -226,13 +226,13 @@ class Tracking
             <tr class="table-header">
                 <th width="16">'.($allowExtend == true ? $extend_all_link : '&nbsp;').'</th>
                 <th colspan="4">
-                    '.get_lang('ScormLessonTitle').'
+                    '.get_lang('Learning object name').'
                 </th>
                 <th colspan="2">
-                    '.get_lang('ScormStatus').'
+                    '.get_lang('Status').'
                 </th>
                 <th colspan="2">
-                    '.get_lang('ScormScore').'
+                    '.get_lang('Score').'
                 </th>
                 '.$timeHeader.'
                 '.$actionColumn.'
@@ -272,13 +272,13 @@ class Tracking
 
         if (!empty($export_csv)) {
             $csvHeaders = [
-                get_lang('ScormLessonTitle'),
-                get_lang('ScormStatus'),
-                get_lang('ScormScore'),
+                get_lang('Learning object name'),
+                get_lang('Status'),
+                get_lang('Score'),
             ];
 
             if ($hideTime === false) {
-                $csvHeaders[] = get_lang('ScormTime');
+                $csvHeaders[] = get_lang('Time');
             }
 
             $csv_content[] = $csvHeaders;
@@ -386,7 +386,7 @@ class Tracking
                         $extend_link = Display::url(
                             Display::return_icon(
                                 'visible.png',
-                                get_lang('HideAttemptView')
+                                get_lang('Hide attempt view')
                             ),
                             api_get_self().'?action=stats&fold_id='.$my_item_id.$url_suffix
                         );
@@ -457,13 +457,13 @@ class Tracking
                                 // The extend button for this attempt has been clicked.
                                 $extend_this_attempt = 1;
                                 $extend_attempt_link = Display::url(
-                                    Display::return_icon('visible.png', get_lang('HideAttemptView')),
+                                    Display::return_icon('visible.png', get_lang('Hide attempt view')),
                                     api_get_self().'?action=stats&extend_id='.$my_item_id.'&fold_attempt_id='.$row['iv_id'].$url_suffix
                                 );
                                 if ($accessToPdfExport) {
                                     $extend_attempt_link .= '&nbsp;'.
                                         Display::url(
-                                            Display::return_icon('pdf.png', get_lang('ExportToPdf')),
+                                            Display::return_icon('pdf.png', get_lang('Export to PDF')),
                                             api_get_self(
                                             ).'?action=export_stats&extend_id='.$my_item_id.'&extend_attempt_id='.$row['iv_id'].$url_suffix
                                         );
@@ -471,13 +471,13 @@ class Tracking
                             } else { // Same case if fold_attempt_id is set, so not implemented explicitly.
                                 // The extend button for this attempt has not been clicked.
                                 $extend_attempt_link = Display::url(
-                                    Display::return_icon('invisible.png', get_lang('ExtendAttemptView')),
+                                    Display::return_icon('invisible.png', get_lang('Extend attempt view')),
                                     api_get_self().'?action=stats&extend_id='.$my_item_id.'&extend_attempt_id='.$row['iv_id'].$url_suffix
                                 );
                                 if ($accessToPdfExport) {
                                     $extend_attempt_link .= '&nbsp;'.
                                         Display::url(
-                                            Display::return_icon('pdf.png', get_lang('ExportToPdf')),
+                                            Display::return_icon('pdf.png', get_lang('Export to PDF')),
                                             api_get_self(
                                             ).'?action=export_stats&extend_id='.$my_item_id.'&extend_attempt_id='.$row['iv_id'].$url_suffix
                                         );
@@ -534,7 +534,7 @@ class Tracking
                             if (!$is_allowed_to_edit && $result_disabled_ext_all) {
                                 $view_score = Display::return_icon(
                                     'invisible.png',
-                                    get_lang('ResultsHiddenByExerciseSetting')
+                                    get_lang('Results hidden by the exercise setting')
                                 );
                             } else {
                                 switch ($row['item_type']) {
@@ -695,14 +695,14 @@ class Tracking
                             // The extend button for this attempt has been clicked.
                             $extend_this_attempt = 1;
                             $extend_attempt_link = Display::url(
-                                Display::return_icon('visible.png', get_lang('HideAttemptView')),
+                                Display::return_icon('visible.png', get_lang('Hide attempt view')),
                                 api_get_self().'?action=stats&extend_id='.$my_item_id.'&fold_attempt_id='.$row['iv_id'].$url_suffix
                             );
                         } else {
                             // Same case if fold_attempt_id is set, so not implemented explicitly.
                             // The extend button for this attempt has not been clicked.
                             $extend_attempt_link = Display::url(
-                                Display::return_icon('invisible.png', get_lang('ExtendAttemptView')),
+                                Display::return_icon('invisible.png', get_lang('Extend attempt view')),
                                 api_get_self().'?action=stats&extend_id='.$my_item_id.'&extend_attempt_id='.$row['iv_id'].$url_suffix
                             );
                         }
@@ -716,7 +716,7 @@ class Tracking
                     $extend_link = '';
                     if ($inter_num > 1) {
                         $extend_link = Display::url(
-                            Display::return_icon('invisible.png', get_lang('ExtendAttemptView')),
+                            Display::return_icon('invisible.png', get_lang('Extend attempt view')),
                             api_get_self().'?action=stats&extend_id='.$my_item_id.'&extend_attempt_id='.$row['iv_id'].$url_suffix
                         );
                     }
@@ -899,7 +899,7 @@ class Tracking
                                     $correct_test_link = Display::url(
                                         Display::return_icon(
                                             'view_less_stats.gif',
-                                            get_lang('HideAllAttempts')
+                                            get_lang('Hide all attempts')
                                         ),
                                         api_get_self().'?action=stats'.$my_url_suffix.'&session_id='.$session_id.'&lp_item_id='.$my_id.'#'.$linkId,
                                         ['id' => $linkId]
@@ -909,7 +909,7 @@ class Tracking
                                         Display::return_icon(
                                             'view_more_stats.gif',
                                             get_lang(
-                                                'ShowAllAttemptsByExercise'
+                                                'Show all attemptsByExercise'
                                             )
                                         ),
                                         api_get_self().'?action=stats&extend_attempt=1'.$my_url_suffix.'&session_id='.$session_id.'&lp_item_id='.$my_id.'#'.$linkId,
@@ -947,7 +947,7 @@ class Tracking
                                 if (!$is_allowed_to_edit && $result_disabled_ext_all) {
                                     $scoreItem .= Display::return_icon(
                                         'invisible.png',
-                                        get_lang('ResultsHiddenByExerciseSetting')
+                                        get_lang('Results hidden by the exercise setting')
                                     );
                                 } else {
                                     $scoreItem .= ExerciseLib::show_score($score, $maxscore, false);
@@ -1096,7 +1096,7 @@ class Tracking
                                             $view_score = Display::return_icon(
                                                 'invisible.png',
                                                 get_lang(
-                                                    'ResultsHiddenByExerciseSetting'
+                                                    'Results hidden by the exercise setting'
                                                 )
                                             );
                                         } else {
@@ -1142,22 +1142,22 @@ class Tracking
                                             if ($origin != 'tracking') {
                                                 if (!$is_allowed_to_edit && $result_disabled_ext_all) {
                                                     $output .= '<td>
-                                                            <img src="'.Display::returnIconPath('quiz_na.gif').'" alt="'.get_lang('ShowAttempt').'" title="'.get_lang('ShowAttempt').'">
+                                                            <img src="'.Display::returnIconPath('quiz_na.gif').'" alt="'.get_lang('Show attempt').'" title="'.get_lang('Show attempt').'">
                                                             </td>';
                                                 } else {
                                                     $output .= '<td>
                                                             <a href="../exercise/exercise_show.php?origin='.$origin.'&id='.$my_exe_id.'&cidReq='.$courseCode.'" target="_parent">
-                                                            <img src="'.Display::returnIconPath('quiz.png').'" alt="'.get_lang('ShowAttempt').'" title="'.get_lang('ShowAttempt').'">
+                                                            <img src="'.Display::returnIconPath('quiz.png').'" alt="'.get_lang('Show attempt').'" title="'.get_lang('Show attempt').'">
                                                             </a></td>';
                                                 }
                                             } else {
                                                 if (!$is_allowed_to_edit && $result_disabled_ext_all) {
                                                     $output .= '<td>
-                                                                <img src="'.Display::returnIconPath('quiz_na.gif').'" alt="'.get_lang('ShowAndQualifyAttempt').'" title="'.get_lang('ShowAndQualifyAttempt').'"></td>';
+                                                                <img src="'.Display::returnIconPath('quiz_na.gif').'" alt="'.get_lang('Show and grade attempt').'" title="'.get_lang('Show and grade attempt').'"></td>';
                                                 } else {
                                                     $output .= '<td>
                                                                     <a href="../exercise/exercise_show.php?cidReq='.$courseCode.'&origin=correct_exercise_in_lp&id='.$my_exe_id.'" target="_parent">
-                                                                    <img src="'.Display::returnIconPath('quiz.gif').'" alt="'.get_lang('ShowAndQualifyAttempt').'" title="'.get_lang('ShowAndQualifyAttempt').'"></a></td>';
+                                                                    <img src="'.Display::returnIconPath('quiz.gif').'" alt="'.get_lang('Show and grade attempt').'" title="'.get_lang('Show and grade attempt').'"></a></td>';
                                                 }
                                             }
                                         }
@@ -1219,8 +1219,8 @@ class Tracking
         $total_time = str_replace('NaN', '00'.$h.'00\'00"', $total_time);
 
         if (!$is_allowed_to_edit && $result_disabled_ext_all) {
-            $final_score = Display::return_icon('invisible.png', get_lang('ResultsHiddenByExerciseSetting'));
-            $finalScoreToCsv = get_lang('ResultsHiddenByExerciseSetting');
+            $final_score = Display::return_icon('invisible.png', get_lang('Results hidden by the exercise setting'));
+            $finalScoreToCsv = get_lang('Results hidden by the exercise setting');
         } else {
             if (is_numeric($total_score)) {
                 $final_score = $total_score.'%';
@@ -1249,7 +1249,7 @@ class Tracking
         $output .= '<tr class="'.$oddclass.'">
                 <td></td>
                 <td colspan="4">
-                    <i>'.get_lang('AccomplishedStepsTotal').'</i>
+                    <i>'.get_lang('Total of completed learning objects').'</i>
                 </td>
                 <td colspan="2">'.$progress.'%</td>
                 <td colspan="2">'.$final_score.'</td>
@@ -1272,7 +1272,7 @@ class Tracking
             ];
             $csv_content[] = $temp;
             $temp = [
-                get_lang('AccomplishedStepsTotal'),
+                get_lang('Total of completed learning objects'),
                 '',
                 $finalScoreToCsv,
             ];
@@ -2018,7 +2018,7 @@ class Tracking
                             if (api_is_allowed_to_edit()) {
                                 $url = api_get_path(WEB_CODE_PATH).
                                     'announcements/announcements.php?action=add&remind_inactive='.$student_id.'&cidReq='.$courseInfo['code'];
-                                $icon = '<a href="'.$url.'" title="'.get_lang('RemindInactiveUser').'">
+                                $icon = '<a href="'.$url.'" title="'.get_lang('Remind inactive user').'">
                                   '.Display::return_icon('messagebox_warning.gif').'
                                  </a>';
                             }
@@ -3671,18 +3671,18 @@ class Tracking
         if (!empty($sessions)) {
             foreach ($sessions as &$session) {
                 if (empty($session['access_start_date'])) {
-                    $session['status'] = get_lang('SessionActive');
+                    $session['status'] = get_lang('active');
                 } else {
                     $time_start = api_strtotime($session['access_start_date'], 'UTC');
                     $time_end = api_strtotime($session['access_end_date'], 'UTC');
                     if ($time_start < time() && time() < $time_end) {
-                        $session['status'] = get_lang('SessionActive');
+                        $session['status'] = get_lang('active');
                     } else {
                         if (time() < $time_start) {
-                            $session['status'] = get_lang('SessionFuture');
+                            $session['status'] = get_lang('Not yet begun');
                         } else {
                             if (time() > $time_end) {
-                                $session['status'] = get_lang('SessionPast');
+                                $session['status'] = get_lang('Past');
                             }
                         }
                     }
@@ -4658,19 +4658,19 @@ class Tracking
                 $html .= Display::page_subheader(
                     Display::return_icon(
                         'course.png',
-                        get_lang('MyCourses'),
+                        get_lang('My courses'),
                         [],
                         ICON_SIZE_SMALL
-                    ).' '.get_lang('MyCourses')
+                    ).' '.get_lang('My courses')
                 );
 
                 $columns = [
                     'course_title' => get_lang('Course'),
-                    'time_spent' => get_lang('TimeSpentInTheCourse'),
+                    'time_spent' => get_lang('Time spent in the course'),
                     'progress' => get_lang('Progress'),
-                    'best_score_in_lp' => get_lang('BestScoreInLearningPath'),
-                    'best_score_not_in_lp' => get_lang('BestScoreNotInLearningPath'),
-                    'latest_login' => get_lang('LastConnexion'),
+                    'best_score_in_lp' => get_lang('Best score in learning path'),
+                    'best_score_not_in_lp' => get_lang('Best score not in learning path'),
+                    'latest_login' => get_lang('Latest login'),
                     'details' => get_lang('Details'),
                 ];
                 $availableColumns = [];
@@ -4920,14 +4920,14 @@ class Tracking
 
             $sessionIcon = Display::return_icon(
                 'session.png',
-                get_lang('Sessions'),
+                get_lang('Course sessions'),
                 [],
                 ICON_SIZE_SMALL
             );
 
             $anchor = Display::url('', '', ['name' => 'course_session_header']);
             $html .= $anchor.Display::page_subheader(
-                $sessionIcon.' '.get_lang('Sessions')
+                $sessionIcon.' '.get_lang('Course sessions')
             );
 
             $html .= '<div class="table-responsive">';
@@ -4935,9 +4935,9 @@ class Tracking
             $html .= '<thead>';
             $html .= '<tr>
                   '.Display::tag('th', get_lang('Session'), ['width' => '300px']).'
-                  '.Display::tag('th', get_lang('PublishedExercises'), ['width' => '300px']).'
-                  '.Display::tag('th', get_lang('NewExercises')).'
-                  '.Display::tag('th', get_lang('AverageExerciseResult')).'
+                  '.Display::tag('th', get_lang('Tests available'), ['width' => '300px']).'
+                  '.Display::tag('th', get_lang('New exercises')).'
+                  '.Display::tag('th', get_lang('Average exercise result')).'
                   '.Display::tag('th', get_lang('Details')).'
                   </tr>';
             $html .= '</thead>';
@@ -5050,7 +5050,7 @@ class Tracking
                 $course_list = $session_data['course_list'];
 
                 $html .= '<a name= "course_session_list"></a>';
-                $html .= Display::tag('h3', $session_data['name'].' - '.get_lang('CourseList'));
+                $html .= Display::tag('h3', $session_data['name'].' - '.get_lang('Course list'));
 
                 $html .= '<div class="table-responsive">';
                 $html .= '<table class="table table-hover table-striped">';
@@ -5061,36 +5061,36 @@ class Tracking
                         ['width' => '300px'],
                     ],
                     'published_exercises' => [
-                        get_lang('PublishedExercises'),
+                        get_lang('Tests available'),
                     ],
                     'new_exercises' => [
-                        get_lang('NewExercises'),
+                        get_lang('New exercises'),
                     ],
                     'my_average' => [
-                        get_lang('MyAverage'),
+                        get_lang('My average'),
                     ],
                     'average_exercise_result' => [
-                        get_lang('AverageExerciseResult'),
+                        get_lang('Average exercise result'),
                     ],
                     'time_spent' => [
-                        get_lang('TimeSpentInTheCourse'),
+                        get_lang('Time spent in the course'),
                     ],
                     'lp_progress' => [
-                        get_lang('LPProgress'),
+                        get_lang('Learning path progress'),
                     ],
                     'score' => [
                         get_lang('Score').
                         Display::return_icon(
                             'info3.gif',
-                            get_lang('ScormAndLPTestTotalAverage'),
+                            get_lang('Average of tests in Learning Paths'),
                             ['align' => 'absmiddle', 'hspace' => '3px']
                         ),
                     ],
                     'best_score' => [
-                        get_lang('BestScore'),
+                        get_lang('Best score'),
                     ],
                     'last_connection' => [
-                        get_lang('LastConnexion'),
+                        get_lang('Latest login'),
                     ],
                     'details' => [
                         get_lang('Details'),
@@ -5323,12 +5323,12 @@ class Tracking
             $html .= '
                 <thead>
                 <tr>
-                <th>'.get_lang('Exercises').'</th>
+                <th>'.get_lang('Tests').'</th>
                 <th>'.get_lang('Attempts').'</th>
-                <th>'.get_lang('BestAttempt').'</th>
+                <th>'.get_lang('Best attempt').'</th>
                 <th>'.get_lang('Ranking').'</th>
-                <th>'.get_lang('BestResultInCourse').'</th>
-                <th>'.get_lang('Statistics').' '.Display::return_icon('info3.gif', get_lang('OnlyBestResultsPerStudent'), ['align' => 'absmiddle', 'hspace' => '3px']).'</th>
+                <th>'.get_lang('Best result in course').'</th>
+                <th>'.get_lang('Statistics').' '.Display::return_icon('info3.gif', get_lang('In case of multiple attempts, only shows the best result of each learner'), ['align' => 'absmiddle', 'hspace' => '3px']).'</th>
                 </tr>
                 </thead>
                 <tbody>';
@@ -5388,7 +5388,7 @@ class Tracking
                             ['target' => SESSION_LINK_TARGET]
                         );
                     } elseif ($exercices['active'] == -1) {
-                        $exercices['title'] = sprintf(get_lang('XParenthesisDeleted'), $exercices['title']);
+                        $exercices['title'] = sprintf(get_lang('%s (deleted)'), $exercices['title']);
                     }
 
                     $html .= Display::tag('td', $exercices['title']);
@@ -5507,17 +5507,17 @@ class Tracking
                     $html .= '</tr>';
                 }
             } else {
-                $html .= '<tr><td colspan="5">'.get_lang('NoEx').'</td></tr>';
+                $html .= '<tr><td colspan="5">'.get_lang('There is no test for the moment').'</td></tr>';
             }
             $html .= '</tbody></table></div>';
 
             $columnHeaders = [
-                'lp' => get_lang('LearningPath'),
-                'time' => get_lang('LatencyTimeSpent'),
+                'lp' => get_lang('Learning paths'),
+                'time' => get_lang('Time spent'),
                 'progress' => get_lang('Progress'),
                 'score' => get_lang('Score'),
-                'best_score' => get_lang('BestScore'),
-                'last_connection' => get_lang('LastConnexion'),
+                'best_score' => get_lang('Best score'),
+                'last_connection' => get_lang('Latest login'),
             ];
 
             $headers = '';
@@ -5672,7 +5672,7 @@ class Tracking
             } else {
                 $html .= '<tr>
                         <td colspan="4" align="center">
-                            '.get_lang('NoLearnpath').'
+                            '.get_lang('No learning path').'
                         </td>
                       </tr>';
             }
@@ -5702,13 +5702,13 @@ class Tracking
                        labels:".json_encode($names).",
                        datasets: [
                        {
-                         label: '".get_lang('MyResults')."',
+                         label: '".get_lang('My results')."',
                          backgroundColor: 'rgb(255, 99, 132)',
                          stack: 'Stack1',
                          data: ".json_encode($my_results).",
                         },
                         {
-                         label: '".get_lang('AverageScore')."',
+                         label: '".get_lang('Average score')."',
                          backgroundColor: 'rgb(75, 192, 192)',
                          stack: 'Stack2',
                          data: ".json_encode($average).",
@@ -5722,7 +5722,7 @@ class Tracking
                     options: {
                             title: {
                                     display: true,
-                                    text: '".get_lang('ExercisesInTimeProgressChart')."'
+                                    text: '".get_lang('TestsInTimeProgressChart')."'
                             },
                             tooltips: {
                                     mode: 'index',
@@ -6014,7 +6014,7 @@ class Tracking
         $dataSet->addPoints($x_axis, 'Serie3');
 
         $dataSet->setSerieDescription('Serie1', get_lang('Score'));
-        $dataSet->setSerieDescription('Serie2', get_lang('MyResults'));
+        $dataSet->setSerieDescription('Serie2', get_lang('My results'));
         $dataSet->setAbscissa('Serie3');
 
         $dataSet->setXAxisName(get_lang('Score'));
@@ -6132,13 +6132,13 @@ class Tracking
             'select',
             'active',
             get_lang('Status'),
-            [1 => get_lang('Active'), 0 => get_lang('Inactive')]
+            [1 => get_lang('active'), 0 => get_lang('inactive')]
         );
 
         $form->addElement(
             'select',
             'sleeping_days',
-            get_lang('InactiveDays'),
+            get_lang('inactiveDays'),
             [
                 '',
                 1 => 1,
@@ -6223,7 +6223,7 @@ class Tracking
         }
         // Now we have two arrays of courses and sessions with enough data to proceed
         // If no course could be found, we shouldn't return anything.
-        // Sessions can be empty (then we only return the pure-course-context results)
+        // Course sessions can be empty (then we only return the pure-course-context results)
         if (count($courses) < 1) {
             return [];
         }
@@ -6653,7 +6653,7 @@ class Tracking
                 $ip = Display::url(
                     (empty($body_replace) ? $row_ip[1] : $body_replace),
                     'http://www.whatsmyip.org/ip-geo-location/?ip='.$row_ip[1],
-                    ['title' => get_lang('TraceIP'), 'target' => '_blank']
+                    ['title' => get_lang('Trace IP'), 'target' => '_blank']
                 );
             } else {
                 $ip = $row_ip[1];
@@ -6679,8 +6679,8 @@ class Tracking
         $courseToolInformation = '';
         $headerTool = [
             [get_lang('Title')],
-            [get_lang('CreatedAt')],
-            [get_lang('UpdatedAt')],
+            [get_lang('Created at')],
+            [get_lang('Updated at')],
         ];
 
         $headerListForCSV = [];
@@ -6719,7 +6719,7 @@ class Tracking
 
         if (!empty($courseWorkInformationArray)) {
             $csvContent[] = null;
-            $csvContent[] = [get_lang('Works')];
+            $csvContent[] = [get_lang('Assignments')];
             $csvContent[] = $headerListForCSV;
 
             foreach ($courseWorkInformationArray as $row) {
@@ -6728,7 +6728,7 @@ class Tracking
             $csvContent[] = null;
 
             $courseToolInformation .= Display::page_subheader2(
-                get_lang('Works')
+                get_lang('Assignments')
             );
             $courseToolInformation .= Display::return_sortable_table(
                 $headerTool,
@@ -7170,7 +7170,7 @@ class TrackingCourseLog
         // the select field with the additional user profile fields (= this is where we select the field of which we want to see
         // the information the users have entered or selected.
         $return .= '<select class="chzn-select" name="additional_profile_field[]" multiple>';
-        $return .= '<option value="-">'.get_lang('SelectFieldToAdd').'</option>';
+        $return .= '<option value="-">'.get_lang('Select user profile field to add').'</option>';
         $extra_fields_to_show = 0;
         foreach ($extra_fields as $key => $field) {
             // show only extra fields that are visible + and can be filtered, added by J.Montoya
@@ -7193,7 +7193,7 @@ class TrackingCourseLog
             }
         }
         // the submit button
-        $return .= '<button class="save" type="submit">'.get_lang('AddAdditionalProfileField').'</button>';
+        $return .= '<button class="save" type="submit">'.get_lang('Add user profile field').'</button>';
         $return .= '</form>';
         if ($extra_fields_to_show > 0) {
             return $return;
@@ -7723,7 +7723,7 @@ class TrackingCourseLog
             $user['total_lp_time'] = $totalLpTime;
             $warning = '';
             if ($totalLpTime > $totalCourseTime) {
-                $warning = '&nbsp;'.Display::label(get_lang('TimeDifference'), 'danger');
+                $warning = '&nbsp;'.Display::label(get_lang('Time difference'), 'danger');
             }
 
             $user['total_lp_time'] = api_time_to_hms($totalLpTime).$warning;
@@ -7775,32 +7775,32 @@ class TrackingCourseLog
     public static function actionsLeft($current, $sessionId = 0)
     {
         $usersLink = Display::url(
-            Display::return_icon('user.png', get_lang('StudentsTracking'), [], ICON_SIZE_MEDIUM),
+            Display::return_icon('user.png', get_lang('Report on learners'), [], ICON_SIZE_MEDIUM),
             'courseLog.php?'.api_get_cidreq(true, false)
         );
 
         $groupsLink = Display::url(
-            Display::return_icon('group.png', get_lang('GroupReporting'), [], ICON_SIZE_MEDIUM),
+            Display::return_icon('group.png', get_lang('Group reporting'), [], ICON_SIZE_MEDIUM),
             'course_log_groups.php?'.api_get_cidreq()
         );
 
         $resourcesLink = Display::url(
-            Display::return_icon('tools.png', get_lang('ResourcesTracking'), [], ICON_SIZE_MEDIUM),
+            Display::return_icon('tools.png', get_lang('Report on resource'), [], ICON_SIZE_MEDIUM),
             'course_log_resources.php?'.api_get_cidreq(true, false)
         );
 
         $courseLink = Display::url(
-            Display::return_icon('course.png', get_lang('CourseTracking'), [], ICON_SIZE_MEDIUM),
+            Display::return_icon('course.png', get_lang('Course report'), [], ICON_SIZE_MEDIUM),
             'course_log_tools.php?'.api_get_cidreq(true, false)
         );
 
         $examLink = Display::url(
-            Display::return_icon('quiz.png', get_lang('ExamTracking'), [], ICON_SIZE_MEDIUM),
+            Display::return_icon('quiz.png', get_lang('Exam tracking'), [], ICON_SIZE_MEDIUM),
             api_get_path(WEB_CODE_PATH).'tracking/exams.php?'.api_get_cidreq()
         );
 
         $eventsLink = Display::url(
-            Display::return_icon('security.png', get_lang('EventsReport'), [], ICON_SIZE_MEDIUM),
+            Display::return_icon('security.png', get_lang('Audit report'), [], ICON_SIZE_MEDIUM),
             api_get_path(WEB_CODE_PATH).'tracking/course_log_events.php?'.api_get_cidreq()
         );
 
@@ -7817,7 +7817,7 @@ class TrackingCourseLog
                 $usersLink = Display::url(
                         Display::return_icon(
                         'user_na.png',
-                        get_lang('StudentsTracking'),
+                        get_lang('Report on learners'),
                         [],
                         ICON_SIZE_MEDIUM
                     ),
@@ -7826,13 +7826,13 @@ class TrackingCourseLog
                 break;
             case 'groups':
                 $groupsLink = Display::url(
-                    Display::return_icon('group_na.png', get_lang('GroupReporting'), [], ICON_SIZE_MEDIUM),
+                    Display::return_icon('group_na.png', get_lang('Group reporting'), [], ICON_SIZE_MEDIUM),
                     '#'
                 );
                 break;
             case 'courses':
                 $courseLink = Display::url(
-                    Display::return_icon('course_na.png', get_lang('CourseTracking'), [], ICON_SIZE_MEDIUM),
+                    Display::return_icon('course_na.png', get_lang('Course report'), [], ICON_SIZE_MEDIUM),
                     '#'
                 );
                 break;
@@ -7840,7 +7840,7 @@ class TrackingCourseLog
                 $resourcesLink = Display::url(
                     Display::return_icon(
                     'tools_na.png',
-                    get_lang('ResourcesTracking'),
+                    get_lang('Report on resource'),
                     [],
                     ICON_SIZE_MEDIUM
                     ),
@@ -7849,13 +7849,13 @@ class TrackingCourseLog
                 break;
             case 'exams':
                 $examLink = Display::url(
-                    Display::return_icon('quiz_na.png', get_lang('ExamTracking'), [], ICON_SIZE_MEDIUM),
+                    Display::return_icon('quiz_na.png', get_lang('Exam tracking'), [], ICON_SIZE_MEDIUM),
                     '#'
                 );
                 break;
             case 'logs':
                 $eventsLink = Display::url(
-                    Display::return_icon('security_na.png', get_lang('EventsReport'), [], ICON_SIZE_MEDIUM),
+                    Display::return_icon('security_na.png', get_lang('Audit report'), [], ICON_SIZE_MEDIUM),
                     '#'
                 );
                 break;

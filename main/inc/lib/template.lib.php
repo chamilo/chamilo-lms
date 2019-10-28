@@ -884,48 +884,48 @@ class Template
      */
     public function handleLoginFailed()
     {
-        $message = get_lang('InvalidId');
+        $message = get_lang('Login failed - incorrect login or password.');
 
         if (!isset($_GET['error'])) {
             if (api_is_self_registration_allowed()) {
-                $message = get_lang('InvalidForSelfRegistration');
+                $message = get_lang('Login failed - if you are not registered, you can do so using the <a href=claroline/auth/inscription.php>registration form</a>');
             }
         } else {
             switch ($_GET['error']) {
                 case '':
                     if (api_is_self_registration_allowed()) {
-                        $message = get_lang('InvalidForSelfRegistration');
+                        $message = get_lang('Login failed - if you are not registered, you can do so using the <a href=claroline/auth/inscription.php>registration form</a>');
                     }
                     break;
                 case 'account_expired':
-                    $message = get_lang('AccountExpired');
+                    $message = get_lang('Account expired');
                     break;
                 case 'account_inactive':
-                    $message = get_lang('AccountInactive');
+                    $message = get_lang('Account inactive');
 
                     if (api_get_setting('allow_registration') === 'confirmation') {
-                        $message = get_lang('AccountNotConfirmed').PHP_EOL;
+                        $message = get_lang('Your account is inactive because you have not confirmed it yet. Check your email and follow the instructions or click the following link to resend the email').PHP_EOL;
                         $message .= Display::url(
-                            get_lang('ReSendConfirmationMail'),
+                            get_lang('Send confirmation mail again'),
                             api_get_path(WEB_PATH).'main/auth/resend_confirmation_mail.php',
                             ['class' => 'alert-link']
                         );
                     }
                     break;
                 case 'user_password_incorrect':
-                    $message = get_lang('InvalidId');
+                    $message = get_lang('Login failed - incorrect login or password.');
                     break;
                 case 'access_url_inactive':
-                    $message = get_lang('AccountURLInactive');
+                    $message = get_lang('Account inactive for this URL');
                     break;
                 case 'wrong_captcha':
-                    $message = get_lang('TheTextYouEnteredDoesNotMatchThePicture');
+                    $message = get_lang('The text you entered doesn\'t match the picture.');
                     break;
                 case 'blocked_by_captcha':
-                    $message = get_lang('AccountBlockedByCaptcha');
+                    $message = get_lang('Account blocked by captcha.');
                     break;
                 case 'multiple_connection_not_allowed':
-                    $message = get_lang('MultipleConnectionsAreNotAllow');
+                    $message = get_lang('This user is already logged in');
                     break;
             }
         }
@@ -950,7 +950,7 @@ class Template
             'id' => '_username',
             'autofocus' => 'autofocus',
             'icon' => 'user fa-fw',
-            'placeholder' => get_lang('UserName'),
+            'placeholder' => get_lang('Username'),
         ];
         $browserAutoCapitalize = false;
         // Avoid showing the autocapitalize option if the browser doesn't
@@ -961,7 +961,7 @@ class Template
         }
         $form->addText(
             '_username',
-            get_lang('UserName'),
+            get_lang('Username'),
             true,
             $params
         );
@@ -1007,23 +1007,23 @@ class Template
                 // Minimum options using all defaults (including defaults for Image_Text):
                 //$options = array('callback' => 'qfcaptcha_image.php');
                 $captcha_question = $form->addElement('CAPTCHA_Image', 'captcha_question', '', $options);
-                $form->addHtml(get_lang('ClickOnTheImageForANewOne'));
+                $form->addHtml(get_lang('Click on the image to load a new one.'));
 
                 $form->addElement(
                     'text',
                     'captcha',
-                    get_lang('EnterTheLettersYouSee')
+                    get_lang('Enter the letters you see.')
                 );
                 $form->addRule(
                     'captcha',
-                    get_lang('EnterTheCharactersYouReadInTheImage'),
+                    get_lang('Enter the characters you see on the image'),
                     'required',
                     null,
                     'client'
                 );
                 $form->addRule(
                     'captcha',
-                    get_lang('TheTextYouEnteredDoesNotMatchThePicture'),
+                    get_lang('The text you entered doesn\'t match the picture.'),
                     'CAPTCHA',
                     $captcha_question
                 );
@@ -1032,7 +1032,7 @@ class Template
 
         $form->addButton(
             'submitAuth',
-            get_lang('LoginEnter'),
+            get_lang('Login'),
             null,
             'primary',
             null,
@@ -1133,7 +1133,7 @@ class Template
         $rightFloatMenu = '';
         $iconBug = Display::return_icon(
             'bug.png',
-            get_lang('ReportABug'),
+            get_lang('Report a bug'),
             [],
             ICON_SIZE_LARGE
         );
@@ -1382,7 +1382,7 @@ class Template
         if ($allow === false) {
             $certificateUrl = api_get_path(WEB_CODE_PATH).'gradebook/my_certificates.php';
             $certificateLink = Display::url(
-                get_lang('MyCertificates'),
+                get_lang('My certificates'),
                 $certificateUrl
             );
             $this->assign('certificate_link', $certificateLink);
@@ -1596,9 +1596,9 @@ class Template
         if (api_get_setting('accessibility_font_resize') == 'true') {
             $resize .= '<div class="resize_font">';
             $resize .= '<div class="btn-group">';
-            $resize .= '<a title="'.get_lang('DecreaseFontSize').'" href="#" class="decrease_font btn btn-default"><em class="fa fa-font"></em></a>';
-            $resize .= '<a title="'.get_lang('ResetFontSize').'" href="#" class="reset_font btn btn-default"><em class="fa fa-font"></em></a>';
-            $resize .= '<a title="'.get_lang('IncreaseFontSize').'" href="#" class="increase_font btn btn-default"><em class="fa fa-font"></em></a>';
+            $resize .= '<a title="'.get_lang('Decrease the font size').'" href="#" class="decrease_font btn btn-default"><em class="fa fa-font"></em></a>';
+            $resize .= '<a title="'.get_lang('Reset the font size').'" href="#" class="reset_font btn btn-default"><em class="fa fa-font"></em></a>';
+            $resize .= '<a title="'.get_lang('Increase the font size').'" href="#" class="increase_font btn btn-default"><em class="fa fa-font"></em></a>';
             $resize .= '</div>';
             $resize .= '</div>';
         }

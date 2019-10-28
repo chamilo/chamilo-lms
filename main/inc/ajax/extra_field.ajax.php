@@ -155,7 +155,7 @@ switch ($action) {
                             }
                         });
                         
-                        alert("'.get_lang('Saved').'");
+                        alert("'.get_lang('Saved.').'");
                         
                         location.reload();
                         

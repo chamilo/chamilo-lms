@@ -469,7 +469,7 @@ class AnnouncementManager
                 Display::return_icon($image_visibility.'.png', $alt_visibility, '', ICON_SIZE_SMALL)."</a>";
 
             if (api_is_allowed_to_edit(false, true)) {
-                $modify_icons .= "<a href=\"".api_get_self()."?".api_get_cidreq()."&action=delete&id=".$id."&sec_token=".$stok."\" onclick=\"javascript:if(!confirm('".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES, $charset))."')) return false;\">".
+                $modify_icons .= "<a href=\"".api_get_self()."?".api_get_cidreq()."&action=delete&id=".$id."&sec_token=".$stok."\" onclick=\"javascript:if(!confirm('".addslashes(api_htmlentities(get_lang('Please confirm your choice'), ENT_QUOTES, $charset))."')) return false;\">".
                     Display::return_icon('delete.png', get_lang('Delete'), '', ICON_SIZE_SMALL).
                     "</a>";
             }
@@ -487,7 +487,7 @@ class AnnouncementManager
 
         $html .= "<tr><td>$content</td></tr>";
         $html .= "<tr>";
-        $html .= "<td class=\"announcements_datum\">".get_lang('LastUpdateDate')." : ";
+        $html .= "<td class=\"announcements_datum\">".get_lang('Latest update')." : ";
         $lastEdit = $itemProperty->getLasteditDate();
         $html .= Display::dateToStringAgoAndLongDate($lastEdit);
         $html .= "</td></tr>";
@@ -498,7 +498,7 @@ class AnnouncementManager
             $sentToForm = self::sent_to_form($sent_to);
             $html .= Display::tag(
                 'td',
-                get_lang('SentTo').': '.$sentToForm,
+                get_lang('Visible to').': '.$sentToForm,
                 ['class' => 'announcements_datum']
             );
         }
@@ -1274,7 +1274,7 @@ class AnnouncementManager
                     '&nbsp;'.implode(', ', $userToArray);
             }
             if (empty($sent_to_array['groups']) && empty($sent_to_array['users'])) {
-                $output[] = "&nbsp;".get_lang('Everybody');
+                $output[] = "&nbsp;".get_lang('All');
             }
         }
 
@@ -1398,7 +1398,7 @@ class AnnouncementManager
 
             if (!filter_extension($new_file_name)) {
                 $return = -1;
-                echo Display::return_message(get_lang('UplUnableToSaveFileFilteredExtension'), 'error');
+                echo Display::return_message(get_lang('File upload failed: this file extension or file type is prohibited'), 'error');
             } else {
                 $new_file_name = uniqid('');
                 $new_path = $updir.'/'.$new_file_name;
@@ -1465,7 +1465,7 @@ class AnnouncementManager
             if (!filter_extension($new_file_name)) {
                 $return = -1;
                 echo Display::return_message(
-                    get_lang('UplUnableToSaveFileFilteredExtension'),
+                    get_lang('File upload failed: this file extension or file type is prohibited'),
                     'error'
                 );
             } else {
@@ -1486,7 +1486,7 @@ class AnnouncementManager
                 if ($result === false) {
                     $return = -1;
                     echo Display::return_message(
-                        get_lang('UplUnableToSaveFile'),
+                        get_lang('The uploaded file could not be saved (perhaps a permission problem?)'),
                         'error'
                     );
                 } else {
@@ -1864,7 +1864,7 @@ class AnnouncementManager
         $displayed = [];
         $results = [];
         $actionUrl = api_get_path(WEB_CODE_PATH).'announcements/announcements.php?'.api_get_cidreq();
-        $emailIcon = '<i class="fa fa-envelope-o" title="'.get_lang('AnnounceSentByEmail').'"></i>';
+        $emailIcon = '<i class="fa fa-envelope-o" title="'.get_lang('Announcement sent by e-mail').'"></i>';
         $attachmentIcon = '<i class="fa fa-paperclip" title="'.get_lang('Attachment').'"></i>';
 
         $editIcon = Display::return_icon(
@@ -1955,7 +1955,7 @@ class AnnouncementManager
 
                 /* TITLE */
                 $user_info = api_get_user_info($row['insert_user_id']);
-                $username = sprintf(get_lang('LoginX'), $user_info['username']);
+                $username = sprintf(get_lang('Login: %s'), $user_info['username']);
 
                 $username_span = Display::tag(
                     'span',
@@ -2001,9 +2001,9 @@ class AnnouncementManager
                     }
                     if ($iterator < $bottomAnnouncement) {
                         $modify_icons .= "<a href=\"".$actionUrl."&action=move&down=".$row["id"]."&sec_token=".$stok."\">".
-                            Display::return_icon('down.gif', get_lang('Down'))."</a>";
+                            Display::return_icon('down.gif', get_lang('down'))."</a>";
                     } else {
-                        $modify_icons .= Display::return_icon('down_na.gif', get_lang('Down'));
+                        $modify_icons .= Display::return_icon('down_na.gif', get_lang('down'));
                     }
                     if (api_is_allowed_to_edit(false, true)) {
                         if ($disableEdit === true) {
@@ -2011,7 +2011,7 @@ class AnnouncementManager
                         } else {
                             $modify_icons .= "<a href=\"".$actionUrl."&action=delete&id=".$row['id']."&sec_token=".$stok."\" onclick=\"javascript:if(!confirm('".addslashes(
                                     api_htmlentities(
-                                        get_lang('ConfirmYourChoice'),
+                                        get_lang('Please confirm your choice'),
                                         ENT_QUOTES,
                                         api_get_system_encoding()
                                     )

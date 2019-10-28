@@ -979,11 +979,11 @@ switch ($action) {
 
         $column_names = [
             get_lang('Company'),
-            get_lang('TrainingHoursAccumulated'),
-            get_lang('CountOfSubscriptions'),
-            get_lang('CountOfUsers'),
-            get_lang('AverageHoursPerStudent'),
-            get_lang('CountCertificates'),
+            get_lang('Hours of accumulated training'),
+            get_lang('Subscriptions count'),
+            get_lang('Users count'),
+            get_lang('Avg hours/student'),
+            get_lang('Certificates count'),
         ];
 
         $extra_fields = UserManager::get_extra_fields(
@@ -1053,11 +1053,11 @@ switch ($action) {
         $column_names = [
             get_lang('Course'),
             get_lang('User'),
-            get_lang('Email'),
-            get_lang('ManHours'),
-            get_lang('CertificateGenerated'),
+            get_lang('e-mail'),
+            get_lang('Man hours'),
+            get_lang('Generated certificate'),
             get_lang('Approved'),
-            get_lang('CourseAdvance'),
+            get_lang('Course progress'),
         ];
 
         $extra_fields = UserManager::get_extra_fields(
@@ -1431,11 +1431,11 @@ switch ($action) {
             $columns[] = 'only_score';
             $columns[] = 'total';
 
-            $overwriteColumnHeaderExport['session_access_start_date'] = get_lang('SessionStartDate');
-            $overwriteColumnHeaderExport['exe_date'] = get_lang('StartDate');
+            $overwriteColumnHeaderExport['session_access_start_date'] = get_lang('Access start date');
+            $overwriteColumnHeaderExport['exe_date'] = get_lang('Start Date');
             $overwriteColumnHeaderExport['score_percentage'] = get_lang('Score').' - '.get_lang('Percentage');
-            $overwriteColumnHeaderExport['only_score'] = get_lang('Score').' - '.get_lang('ScoreNote');
-            $overwriteColumnHeaderExport['total'] = get_lang('Score').' - '.get_lang('ScoreTest');
+            $overwriteColumnHeaderExport['only_score'] = get_lang('Score').' - '.get_lang('Note');
+            $overwriteColumnHeaderExport['total'] = get_lang('Score').' - '.get_lang('Test');
         }
         $categoryList = TestCategory::getListOfCategoriesIDForTest($exerciseId, $courseId);
 
@@ -1450,9 +1450,9 @@ switch ($action) {
                     $overwriteColumnHeaderExport[$label.'_score_percentage'] = $categoryInfo['title'].
                         ' - '.get_lang('Percentage');
                     $overwriteColumnHeaderExport[$label.'_only_score'] = $categoryInfo['title'].
-                        ' - '.get_lang('ScoreNote');
+                        ' - '.get_lang('Note');
                     $overwriteColumnHeaderExport[$label.'_total'] = $categoryInfo['title'].
-                        ' - '.get_lang('ScoreTest');
+                        ' - '.get_lang('Test');
                 } else {
                     $columns[] = $label;
                 }
@@ -1605,7 +1605,7 @@ switch ($action) {
 
                 $detailButtons = [];
                 $detailButtons[] = Display::url(
-                    Display::return_icon('works.png', get_lang('WorksReport')),
+                    Display::return_icon('works.png', get_lang('Assignments report')),
                     api_get_path(WEB_CODE_PATH).'mySpace/works_in_session_report.php?session='.$session['id']
                 );
                 $detailButtons[] = Display::url(
@@ -1893,7 +1893,7 @@ switch ($action) {
                 $item['name'] = '<font style="color:#AAA">'.$item['name'].'</font>';
             }
             $item['headline'] = Display::url($item['headline'], api_get_path(WEB_CODE_PATH).'timeline/view.php?id='.$item['id']);
-            $item['actions'] = Display::url(Display::return_icon('add.png', get_lang('AddItems')), api_get_path(WEB_CODE_PATH).'timeline/?action=add_item&parent_id='.$item['id']);
+            $item['actions'] = Display::url(Display::return_icon('add.png', get_lang('Add items')), api_get_path(WEB_CODE_PATH).'timeline/?action=add_item&parent_id='.$item['id']);
             $item['actions'] .= Display::url(Display::return_icon('edit.png', get_lang('Edit')), api_get_path(WEB_CODE_PATH).'timeline/?action=edit&id='.$item['id']);
             $item['actions'] .= Display::url(Display::return_icon('delete.png', get_lang('Delete')), api_get_path(WEB_CODE_PATH).'timeline/?action=delete&id='.$item['id']);
 
@@ -1933,7 +1933,7 @@ switch ($action) {
             if (!empty($item['certif_min_score']) && !empty($item['document_id'])) {
                 $item['certificates'] = Display::return_icon(
                     'accept.png',
-                    get_lang('WithCertificate'),
+                    get_lang('With Certificate'),
                     [],
                     ICON_SIZE_SMALL
                 );
@@ -1941,7 +1941,7 @@ switch ($action) {
             } else {
                 $item['certificates'] = Display::return_icon(
                     'warning.png',
-                    get_lang('NoCertificate'),
+                    get_lang('No certificate'),
                     [],
                     ICON_SIZE_SMALL
                 );
@@ -2114,7 +2114,7 @@ switch ($action) {
                     break;
                 case $cntExer:
                     $columns[] = 'finalScore';
-                    $column_names[] = get_lang('FinalScore');
+                    $column_names[] = get_lang('Final score');
                     break;
                 default:
                     $title = '';
@@ -2249,7 +2249,7 @@ switch ($action) {
                 if ($isAllow) {
                     if ($obj->allowTeachers() && $group['author_id'] == $currentUserId) {
                         $group['actions'] .= Display::url(
-                            Display::return_icon('statistics.png', get_lang('Stats')),
+                            Display::return_icon('statistics.png', get_lang('Statistics')),
                             $urlUserGroup.'&id='.$group['id']
                         ).'&nbsp;';
                     }

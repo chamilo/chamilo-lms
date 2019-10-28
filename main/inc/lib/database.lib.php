@@ -311,7 +311,7 @@ class Database
             exit;
         } else {
             error_log($e->getMessage());
-            api_not_allowed(false, get_lang('GeneralError'));
+            api_not_allowed(false, get_lang('An error has occured. Please contact your system administrator.'));
             exit;
         }
     }

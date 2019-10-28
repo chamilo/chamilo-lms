@@ -169,7 +169,7 @@ class UserManager
         $language = '',
         $phone = '',
         $picture_uri = '',
-        $authSource = PLATFORM_AUTH_SOURCE,
+        $authSource = null,
         $expirationDate = null,
         $active = 1,
         $hr_dept_id = 0,
@@ -184,6 +184,7 @@ class UserManager
         $emailTemplate = [],
         $redirectToURLAfterLogin = ''
     ) {
+        $authSource = !empty($authSource) ? $authSource : PLATFORM_AUTH_SOURCE;
         $creatorId = empty($creatorId) ? api_get_user_id() : 0;
         $creatorInfo = api_get_user_info($creatorId);
         $creatorEmail = isset($creatorInfo['email']) ? $creatorInfo['email'] : '';
@@ -196,7 +197,7 @@ class UserManager
         // First check wether the login already exists
         if (!self::is_username_available($loginName)) {
             Display::addFlash(
-                Display::return_message(get_lang('LoginAlreadyTaken'))
+                Display::return_message(get_lang('This login is already taken !'))
             );
 
             return false;
@@ -228,7 +229,7 @@ class UserManager
                 api_warn_hosting_contact('hosting_limit_users');
                 Display::addFlash(
                     Display::return_message(
-                        get_lang('PortalUsersLimitReached'),
+                        get_lang('Sorry, this installation has a users limit, which has now been reached. To increase the number of users allowed on this Chamilo installation, please contact your hosting provider or, if available, upgrade to a superior hosting plan.'),
                         'warning'
                     )
                 );
@@ -247,7 +248,7 @@ class UserManager
             if ($num >= $_configuration[$access_url_id]['hosting_limit_teachers']) {
                 Display::addFlash(
                     Display::return_message(
-                        get_lang('PortalTeachersLimitReached'),
+                        get_lang('Sorry, this installation has a teachers limit, which has now been reached. To increase the number of teachers allowed on this Chamilo installation, please contact your hosting provider or, if available, upgrade to a superior hosting plan.'),
                         'warning'
                     )
                 );
@@ -261,7 +262,7 @@ class UserManager
             if ($authSource === PLATFORM_AUTH_SOURCE) {
                 Display::addFlash(
                     Display::return_message(
-                        get_lang('ThisFieldIsRequired').': '.get_lang(
+                        get_lang('Required field').': '.get_lang(
                             'Password'
                         ),
                         'warning'
@@ -578,7 +579,7 @@ class UserManager
                 $notification = api_get_configuration_value('send_notification_when_user_added');
                 if (!empty($notification) && isset($notification['admins']) && is_array($notification['admins'])) {
                     foreach ($notification['admins'] as $adminId) {
-                        $emailSubjectToAdmin = get_lang('UserAdded').': '.api_get_person_name($firstName, $lastName);
+                        $emailSubjectToAdmin = get_lang('The user has been added').': '.api_get_person_name($firstName, $lastName);
                         MessageManager::send_message_simple($adminId, $emailSubjectToAdmin, $emailBody, $userId);
                     }
                 }
@@ -622,7 +623,7 @@ class UserManager
                         );
                     }
 
-                    $subject = get_lang('UserAdded');
+                    $subject = get_lang('The user has been added');
 
                     foreach ($adminList as $adminId => $data) {
                         MessageManager::send_message_simple(
@@ -646,7 +647,7 @@ class UserManager
             Event::addEvent(LOG_USER_CREATE, LOG_USER_ID, $userId, null, $creatorId);
         } else {
             Display::addFlash(
-                Display::return_message(get_lang('ErrorContactPlatformAdmin'))
+                Display::return_message(get_lang('There happened an unknown error. Please contact the platform administrator.'))
             );
 
             return false;
@@ -1212,7 +1213,7 @@ class UserManager
 
         if (!empty($email) && $send_email) {
             $recipient_name = api_get_person_name($firstname, $lastname, null, PERSON_NAME_EMAIL_ADDRESS);
-            $emailsubject = '['.api_get_setting('siteName').'] '.get_lang('YourReg').' '.api_get_setting('siteName');
+            $emailsubject = '['.api_get_setting('siteName').'] '.get_lang('Your registration on').' '.api_get_setting('siteName');
             $sender_name = api_get_person_name(
                 api_get_setting('administratorName'),
                 api_get_setting('administratorSurname'),
@@ -4422,12 +4423,12 @@ class UserManager
         $query = Security::remove_XSS($query);
 
         if (!empty($query)) {
-            $form->addHeader(get_lang('Results').' "'.$query.'"');
+            $form->addHeader(get_lang('Results and feedback').' "'.$query.'"');
         }
 
         $form->addText(
             'q',
-            get_lang('UsersGroups'),
+            get_lang('Users, Groups'),
             false,
             [
                 'id' => 'q',
@@ -4497,7 +4498,7 @@ class UserManager
     {
         echo '<div class="actions">';
         echo '<a href="/main/auth/profile.php">'.
-            Display::return_icon('profile.png').' '.get_lang('PersonalData').'</a>';
+            Display::return_icon('profile.png').' '.get_lang('Profile').'</a>';
         echo '<a href="/main/messages/inbox.php">'.
             Display::return_icon('inbox.png').' '.get_lang('Inbox').'</a>';
         echo '<a href="/main/messages/outbox.php">'.
@@ -5471,8 +5472,8 @@ class UserManager
                         $name = $studentInfo['complete_name'];
                         $url = api_get_path(WEB_CODE_PATH).'mySpace/myStudents.php?student='.$studentId;
                         $url = Display::url($url, $url);
-                        $subject = sprintf(get_lang('UserXHasBeenAssignedToBoss'), $name);
-                        $message = sprintf(get_lang('UserXHasBeenAssignedToBossWithUrlX'), $name, $url);
+                        $subject = sprintf(get_lang('You have been assigned the learner %s'), $name);
+                        $message = sprintf(get_lang('You have been assigned the learner %sWithUrlX'), $name, $url);
                         MessageManager::send_message_simple(
                             $bossId,
                             $subject,
@@ -5776,19 +5777,19 @@ SQL;
             $headers = [
                 [
                     'url' => $userPath.'user.php?'.api_get_cidreq().'&type='.STUDENT,
-                    'content' => get_lang('Students'),
+                    'content' => get_lang('Learners'),
                 ],
                 [
                     'url' => $userPath.'user.php?'.api_get_cidreq().'&type='.COURSEMANAGER,
-                    'content' => get_lang('Teachers'),
+                    'content' => get_lang('Trainers'),
                 ],
                 /*[
                     'url' => $userPath.'subscribe_user.php?'.api_get_cidreq(),
-                    'content' => get_lang('Students'),
+                    'content' => get_lang('Learners'),
                 ],
                 [
                     'url' => $userPath.'subscribe_user.php?type=teacher&'.api_get_cidreq(),
-                    'content' => get_lang('Teachers'),
+                    'content' => get_lang('Trainers'),
                 ],*/
                 [
                     'url' => api_get_path(WEB_CODE_PATH).'group/group.php?'.api_get_cidreq(),
@@ -6000,8 +6001,8 @@ SQL;
         if (!empty($sessionToRedirect)) {
             $url .= '&s='.$sessionToRedirect;
         }
-        $mailSubject = get_lang('RegistrationConfirmation');
-        $mailBody = get_lang('RegistrationConfirmationEmailMessage')
+        $mailSubject = get_lang('Registration confirmation');
+        $mailBody = get_lang('Registration confirmationEmailMessage')
             .PHP_EOL
             .Display::url($url, $url);
 
@@ -6011,7 +6012,7 @@ SQL;
             $mailSubject,
             $mailBody
         );
-        Display::addFlash(Display::return_message(get_lang('CheckYourEmailAndFollowInstructions')));
+        Display::addFlash(Display::return_message(get_lang('Check your e-mail and follow the instructions.')));
     }
 
     /**
@@ -6156,18 +6157,18 @@ SQL;
                     self::anonymize($userId)
                 ) {
                     $message = Display::return_message(
-                        sprintf(get_lang('UserXAnonymized'), $userToUpdateInfo['complete_name_with_username']),
+                        sprintf(get_lang('User %s information anonymized.'), $userToUpdateInfo['complete_name_with_username']),
                         'confirmation'
                     );
                 } else {
                     $message = Display::return_message(
-                        sprintf(get_lang('CannotAnonymizeUserX'), $userToUpdateInfo['complete_name_with_username']),
+                        sprintf(get_lang('We could not anonymize user %s information. Please try again or check the logs.'), $userToUpdateInfo['complete_name_with_username']),
                         'error'
                     );
                 }
             } else {
                 $message = Display::return_message(
-                    sprintf(get_lang('NoPermissionToAnonymizeUserX'), $userToUpdateInfo['complete_name_with_username']),
+                    sprintf(get_lang('You don\'t have permissions to anonymize user %s. You need the same permissions as to delete users.'), $userToUpdateInfo['complete_name_with_username']),
                     'error'
                 );
             }
@@ -6186,7 +6187,7 @@ SQL;
     public static function deleteUserWithVerification($userId)
     {
         $allowDelete = api_get_configuration_value('allow_delete_user_for_session_admin');
-        $message = Display::return_message(get_lang('CannotDeleteUser'), 'error');
+        $message = Display::return_message(get_lang('You cannot delete this user'), 'error');
         $userToUpdateInfo = api_get_user_info($userId);
 
         // User must exist.
@@ -6207,11 +6208,11 @@ SQL;
             if (api_global_admin_can_edit_admin($userId, null, $allowDelete)) {
                 if (self::delete_user($userId)) {
                     $message = Display::return_message(
-                        get_lang('UserDeleted').': '.$userToUpdateInfo['complete_name_with_username'],
+                        get_lang('The user has been deleted').': '.$userToUpdateInfo['complete_name_with_username'],
                         'confirmation'
                     );
                 } else {
-                    $message = Display::return_message(get_lang('CannotDeleteUserBecauseOwnsCourse'), 'error');
+                    $message = Display::return_message(get_lang('You cannot delete this userBecauseOwnsCourse'), 'error');
                 }
             }
         }

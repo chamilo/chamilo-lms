@@ -74,7 +74,7 @@ switch ($action) {
 
             if ($createdRoom === false) {
                 echo Display::return_message(
-                    get_lang('ChatRoomNotCreated'),
+                    get_lang('Chatroom could not be created'),
                     'error'
                 );
                 break;
@@ -85,7 +85,7 @@ switch ($action) {
 
         $videoChatUrl = api_get_path(WEB_LIBRARY_JS_PATH)."chat/video.php?room={$room['id']}";
         $videoChatLink = Display::url(
-            Display::returnFontAwesomeIcon('video-camera').get_lang('StartVideoChat'),
+            Display::returnFontAwesomeIcon('video-camera').get_lang('Start video call'),
             $videoChatUrl
         );
 
@@ -126,7 +126,7 @@ switch ($action) {
         $chat->send(
             $currentUserId,
             $toUserId,
-            get_lang('TheXUserBrowserDoesNotSupportWebRTC')
+            get_lang('The browser of %s does not support native video transmission. Sorry.')
         );
         break;
     case 'sendchat':

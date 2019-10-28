@@ -130,7 +130,7 @@ switch ($action) {
                     $json['type'] = '';
                     $json['result'] = Display::return_icon(
                         'accept.png',
-                        get_lang('Uploaded')
+                        get_lang('Uploaded.')
                     );
                 } else {
                     $json['name'] = isset($file['name']) ? $file['name'] : get_lang('Unknown');

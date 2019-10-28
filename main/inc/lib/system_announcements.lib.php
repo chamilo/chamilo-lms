@@ -19,13 +19,13 @@ class SystemAnnouncementManager
     public static function getVisibilityList(): array
     {
         $visibleToUsers = [
-            self::VISIBLE_TEACHER => get_lang('Teacher'),
-            self::VISIBLE_STUDENT => get_lang('Student'),
+            self::VISIBLE_TEACHER => get_lang('Trainer'),
+            self::VISIBLE_STUDENT => get_lang('Learner'),
             self::VISIBLE_GUEST => get_lang('Guest'),
         ];
-        $visibleToUsers[self::VISIBLE_DRH] = get_lang('DRH');
-        $visibleToUsers[self::VISIBLE_SESSION_ADMIN] = get_lang('SessionAdministrator');
-        $visibleToUsers[self::VISIBLE_STUDENT_BOSS] = get_lang('StudentBoss');
+        $visibleToUsers[self::VISIBLE_DRH] = get_lang('Human Resources Manager');
+        $visibleToUsers[self::VISIBLE_SESSION_ADMIN] = get_lang('Session administrator');
+        $visibleToUsers[self::VISIBLE_STUDENT_BOSS] = get_lang('LearnerBoss');
 
         return $visibleToUsers;
     }
@@ -98,7 +98,7 @@ class SystemAnnouncementManager
             $query_string = ereg_replace('&$', '', $query_string);
             $url = api_get_self();
             echo '<div class="system_announcements">';
-            echo '<h3>'.get_lang('SystemAnnouncements').'</h3>';
+            echo '<h3>'.get_lang('Portal news').'</h3>';
             echo '<div style="margin:10px;text-align:right;"><a href="news_list.php">'.get_lang('More').'</a></div>';
 
             while ($announcement = Database::fetch_object($announcements)) {
@@ -191,7 +191,7 @@ class SystemAnnouncementManager
         $content = '';
         if (Database::num_rows($announcements) > 0) {
             $content .= '<div class="system_announcements">';
-            $content .= '<h3>'.get_lang('SystemAnnouncements').'</h3>';
+            $content .= '<h3>'.get_lang('Portal news').'</h3>';
             $content .= '<table align="center">';
             $content .= '<tr>';
             $content .= '<td>';
@@ -243,12 +243,12 @@ class SystemAnnouncementManager
         $content = '';
         if (!isset($_GET['start']) || $_GET['start'] == 0) {
             if ($nb_announcement > 20) {
-                $content .= '<a href="news_list.php?start='.$next.'">'.get_lang('NextBis').' >> </a>';
+                $content .= '<a href="news_list.php?start='.$next.'">'.get_lang('Next').' >> </a>';
             }
         } else {
             echo '<a href="news_list.php?start='.$prev.'"> << '.get_lang('Prev').'</a>';
             if ($nb_announcement > 20) {
-                $content .= '<a href="news_list.php?start='.$next.'">'.get_lang('NextBis').' >> </a>';
+                $content .= '<a href="news_list.php?start='.$next.'">'.get_lang('Next').' >> </a>';
             }
         }
 
@@ -409,7 +409,7 @@ class SystemAnnouncementManager
 
         if (!checkdate($date_start_to_compare[1], $date_start_to_compare[2], $date_start_to_compare[0])) {
             Display::addFlash(
-                Display::return_message(get_lang('InvalidStartDate'), 'warning')
+                Display::return_message(get_lang('Invalid start date was given.'), 'warning')
             );
 
             return false;
@@ -421,7 +421,7 @@ class SystemAnnouncementManager
             !checkdate($date_end_to_compare[1], $date_end_to_compare[2], $date_end_to_compare[0])
         ) {
             Display::addFlash(
-                Display::return_message(get_lang('InvalidEndDate'), 'warning')
+                Display::return_message(get_lang('Invalid end date was given.'), 'warning')
             );
 
             return false;
@@ -429,7 +429,7 @@ class SystemAnnouncementManager
 
         if (strlen(trim($title)) == 0) {
             Display::addFlash(
-                Display::return_message(get_lang('InvalidTitle'), 'warning')
+                Display::return_message(get_lang('Please enter a title'), 'warning')
             );
 
             return false;
@@ -618,7 +618,7 @@ class SystemAnnouncementManager
         $lang = is_null($lang) ? '' : $lang;
 
         if (!checkdate($date_start_to_compare[1], $date_start_to_compare[2], $date_start_to_compare[0])) {
-            echo Display::return_message(get_lang('InvalidStartDate'));
+            echo Display::return_message(get_lang('Invalid start date was given.'));
 
             return false;
         }
@@ -628,13 +628,13 @@ class SystemAnnouncementManager
             $date_end_to_compare[0]) &&
             !checkdate($date_end_to_compare[1], $date_end_to_compare[2], $date_end_to_compare[0])
         ) {
-            echo Display::return_message(get_lang('InvalidEndDate'));
+            echo Display::return_message(get_lang('Invalid end date was given.'));
 
             return false;
         }
 
         if (strlen(trim($title)) == 0) {
-            echo Display::return_message(get_lang('InvalidTitle'));
+            echo Display::return_message(get_lang('Please enter a title'));
 
             return false;
         }

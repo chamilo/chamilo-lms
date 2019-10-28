@@ -131,7 +131,7 @@ switch ($action) {
                     ]
                 );
             }
-            echo Display::return_message(get_lang('Saved'), 'confirm');
+            echo Display::return_message(get_lang('Saved.'), 'confirm');
         }
         break;
     case 'record_audio':
@@ -226,7 +226,7 @@ switch ($action) {
         if (empty($forum)) {
             require_once '../../forum/forumfunction.inc.php';
             $forumCategory = getForumCategoryByTitle(
-                get_lang('LearningPaths'),
+                get_lang('Learning paths'),
                 $courseId,
                 $sessionId
             );
@@ -235,7 +235,7 @@ switch ($action) {
                 $forumCategoryId = store_forumcategory(
                     [
                         'lp_id' => 0,
-                        'forum_category_title' => get_lang('LearningPaths'),
+                        'forum_category_title' => get_lang('Learning paths'),
                         'forum_category_comment' => null,
                     ],
                     [],
@@ -284,7 +284,7 @@ switch ($action) {
         if ($lp) {
             $score = $lp->getCalculateScore($sessionId);
             $jsonGamification['stars'] = $lp->getCalculateStars($sessionId);
-            $jsonGamification['score'] = sprintf(get_lang('XPoints'), $score);
+            $jsonGamification['score'] = sprintf(get_lang('%s points'), $score);
         }
 
         echo json_encode($jsonGamification);
@@ -328,7 +328,7 @@ switch ($action) {
             if (!empty($lp->error)) {
                 echo $lp->error;
             } else {
-                echo get_lang('LearnpathPrereqNotCompleted');
+                echo get_lang('This learning object cannot display because the course prerequisites are not completed. This happens when a course imposes that you follow it step by step or get a minimum score in tests before you reach the next steps.');
             }
         }
         $lp->error = '';

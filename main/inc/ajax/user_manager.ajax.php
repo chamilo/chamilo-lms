@@ -103,7 +103,7 @@ switch ($action) {
                 <div class="row">
                     <div class="col-sm-10 col-sm-offset-2">
                         <a class="btn btn-primary" id="send_message_link">
-                            <em class="fa fa-envelope"></em> '.get_lang('Send').'
+                            <em class="fa fa-envelope"></em> '.get_lang('Send message').'
                         </a>
                     </div>
                 </div>
@@ -149,7 +149,7 @@ switch ($action) {
             $num = UserManager::update_api_key($user_id, $api_service);
             $array_list_key = UserManager::get_api_keys($user_id, $api_service); ?>
             <div class="form-group">
-                <label class="col-sm-2 control-label"><?php echo get_lang('MyApiKey'); ?></label>
+                <label class="col-sm-2 control-label"><?php echo get_lang('My API key'); ?></label>
                 <div class="col-sm-8">
                     <input type="text" name="api_key_generate" id="id_api_key_generate" class="form-control" value="<?php echo $array_list_key[$num]; ?>"/>
                 </div>
@@ -186,7 +186,7 @@ switch ($action) {
                         PERSON_NAME_EMAIL_ADDRESS
                     );
 
-                    $subject = '['.api_get_setting('siteName').'] '.get_lang('YourReg').' '.api_get_setting('siteName');
+                    $subject = '['.api_get_setting('siteName').'] '.get_lang('Your registration on').' '.api_get_setting('siteName');
                     $emailAdmin = api_get_setting('emailAdministrator');
                     $sender_name = api_get_person_name(
                         api_get_setting('administratorName'),
@@ -196,22 +196,22 @@ switch ($action) {
                     );
                     $body = get_lang('Dear')." ".stripslashes($recipientName).",\n\n";
                     $body .= sprintf(
-                        get_lang('YourAccountOnXHasJustBeenApprovedByOneOfOurAdministrators'),
+                        get_lang('Your account on %s has just been approved by one of our administrators.'),
                         api_get_setting('siteName')
                     )."\n";
                     $body .= sprintf(
-                        get_lang('YouCanNowLoginAtXUsingTheLoginAndThePasswordYouHaveProvided'),
+                        get_lang('You can now login at %s using the login and the password you have provided.'),
                         api_get_path(WEB_PATH)
                     ).",\n\n";
-                    $body .= get_lang('HaveFun')."\n\n";
-                    //$body.=get_lang('Problem'). "\n\n". get_lang('SignatureFormula');
+                    $body .= get_lang('Have fun,')."\n\n";
+                    //$body.=get_lang('In case of trouble, contact us.'). "\n\n". get_lang('Sincerely');
                     $body .= api_get_person_name(
                         api_get_setting('administratorName'),
                         api_get_setting('administratorSurname')
                     )."\n".
-                    get_lang('Manager')." ".
+                    get_lang('Administrator')." ".
                     api_get_setting('siteName')."\nT. ".api_get_setting('administratorTelephone')."\n".
-                    get_lang('Email')." : ".api_get_setting('emailAdministrator');
+                    get_lang('e-mail')." : ".api_get_setting('emailAdministrator');
 
                     $additionalParameters = [
                         'smsType' => SmsPlugin::ACCOUNT_APPROVED_CONNECT,

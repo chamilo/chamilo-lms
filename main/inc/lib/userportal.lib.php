@@ -143,6 +143,7 @@ class IndexManager
      */
     public function return_home_page($getIncludedFile = false)
     {
+        return '';
         $userId = api_get_user_id();
         // Including the page for the news
         $html = '';
@@ -184,7 +185,7 @@ class IndexManager
             }
 
             if (trim($home_top_temp) == '' && api_is_platform_admin()) {
-                $home_top_temp = get_lang('PortalHomepageDefaultIntroduction');
+                //$home_top_temp = get_lang('<h2>Congratulations! You have successfully installed your e-learning portal!</h2>  <p>You can now complete the installation by following three easy steps:<br /> <ol>     <li>Configure you portal by going to the administration section, and select the Portal -> <a href="main/admin/settings.php">Configuration settings</a> entry.</li>     <li>Add some life to your portal by creating users and/or training. You can do that by inviting new people to create their accounts or creating them yourself through the <a href="main/admin/">administration</a>\'s Users and Training sections.</li>     <li>Edit this page through the <a href="main/admin/configure_homepage.php">Edit portal homepage</a> entry in the administration section.</li> </ol> <p>You can always find more information about this software on our website: <a href="http://www.chamilo.org">http://www.chamilo.org</a>.</p> <p>Have fun, and don't hesitate to join the community and give us feedback through <a href="http://www.chamilo.org/forum">our forum</a>.</p>');
             } else {
                 $home_top_temp;
             }
@@ -249,9 +250,9 @@ class IndexManager
             api_get_setting('certificate.hide_my_certificate_link') === 'false'
         ) {
             $items[] = [
-                'icon' => Display::return_icon('graduation.png', get_lang('MyCertificates')),
+                'icon' => Display::return_icon('graduation.png', get_lang('My certificates')),
                 'link' => api_get_path(WEB_CODE_PATH).'gradebook/my_certificates.php',
-                'title' => get_lang('MyCertificates'),
+                'title' => get_lang('My certificates'),
             ];
         }
         if (api_get_setting('allow_public_certificates') == 'true') {
@@ -271,27 +272,27 @@ class IndexManager
             $items[] = [
                 'icon' => Display::return_icon(
                     'skill-badges.png',
-                    get_lang('MyGeneralCertificate'),
+                    get_lang('My global certificate'),
                     null,
                     ICON_SIZE_SMALL
                 ),
                 'link' => api_get_path(WEB_CODE_PATH).'social/my_skills_report.php?a=generate_custom_skill',
-                'title' => get_lang('MyGeneralCertificate'),
+                'title' => get_lang('My global certificate'),
             ];
         }
 
         if (Skill::isAllowed(api_get_user_id(), false)) {
             $items[] = [
-                'icon' => Display::return_icon('skill-badges.png', get_lang('MySkills')),
+                'icon' => Display::return_icon('skill-badges.png', get_lang('My skills')),
                 'link' => api_get_path(WEB_CODE_PATH).'social/my_skills_report.php',
-                'title' => get_lang('MySkills'),
+                'title' => get_lang('My skills'),
             ];
             $allowSkillsManagement = api_get_setting('allow_hr_skills_management') == 'true';
             if (($allowSkillsManagement && api_is_drh()) || api_is_platform_admin()) {
                 $items[] = [
-                    'icon' => Display::return_icon('edit-skill.png', get_lang('MySkills')),
+                    'icon' => Display::return_icon('edit-skill.png', get_lang('My skills')),
                     'link' => api_get_path(WEB_CODE_PATH).'admin/skills_wheel.php',
-                    'title' => get_lang('ManageSkills'),
+                    'title' => get_lang('Manage skills'),
                 ];
             }
         }
@@ -423,7 +424,7 @@ class IndexManager
         $htmlTitre = '';
         $htmlListCat = '';
         if (Database::num_rows($resCats) > 0) {
-            $htmlListCat = Display::page_header(get_lang('CatList'));
+            $htmlListCat = Display::page_header(get_lang('Categories'));
             $htmlListCat .= '<ul>';
             while ($catLine = Database::fetch_array($resCats)) {
                 $category_has_open_courses = self::category_has_open_courses($catLine['code']);
@@ -455,7 +456,7 @@ class IndexManager
                 if (empty($htmlTitre)) {
                     $htmlTitre = '<p>';
                     if (api_get_setting('show_back_link_on_top_of_tree') == 'true') {
-                        $htmlTitre .= '<a href="'.api_get_self().'">&lt;&lt; '.get_lang('BackToHomePage').'</a>';
+                        $htmlTitre .= '<a href="'.api_get_self().'">&lt;&lt; '.get_lang('Categories Overview').'</a>';
                     }
                     $htmlTitre .= "</p>";
                 }
@@ -473,7 +474,7 @@ class IndexManager
         $courses_list_string = '';
         $courses_shown = 0;
         if ($numRows > 0) {
-            $courses_list_string .= Display::page_header(get_lang('CourseList'));
+            $courses_list_string .= Display::page_header(get_lang('Course list'));
             $courses_list_string .= "<ul>";
             if (api_get_user_id()) {
                 $courses_of_user = self::get_courses_of_user(api_get_user_id());
@@ -564,7 +565,7 @@ class IndexManager
                                     $_GET['category']
                                 ).'">'.get_lang('Subscribe').'</a><br />';
                         } else {
-                            $courses_list_string .= '<br />'.get_lang('SubscribingNotAllowed');
+                            $courses_list_string .= '<br />'.get_lang('Subscribing not allowed');
                         }
                     }
                     $courses_list_string .= "</li>";
@@ -579,8 +580,8 @@ class IndexManager
         }
         if ($category != '') {
             $result .= '<p><a href="'.api_get_self().'">'
-                .Display:: return_icon('back.png', get_lang('BackToHomePage'))
-                .get_lang('BackToHomePage').'</a></p>';
+                .Display:: return_icon('back.png', get_lang('Categories Overview'))
+                .get_lang('Categories Overview').'</a></p>';
         }
 
         return $result;
@@ -719,13 +720,13 @@ class IndexManager
         if (api_is_platform_admin()) {
             $items[] = [
                 'link' => api_get_path(WEB_CODE_PATH).'admin/usergroups.php?action=add',
-                'title' => get_lang('AddClasses'),
+                'title' => get_lang('Add classes'),
             ];
         } else {
             if (api_is_teacher() && $usergroup->allowTeachers()) {
                 $items[] = [
                     'link' => api_get_path(WEB_CODE_PATH).'admin/usergroups.php',
-                    'title' => get_lang('ClassList'),
+                    'title' => get_lang('Class list'),
                 ];
             }
         }
@@ -765,7 +766,7 @@ class IndexManager
                 <img class="img-circle" src="'.$userPicture.'"></a>';
             } else {
                 $content .= '<a style="text-align:center" href="'.api_get_path(WEB_CODE_PATH).'auth/profile.php">
-                <img class="img-circle" title="'.get_lang('EditProfile').'" src="'.$userPicture.'"></a>';
+                <img class="img-circle" title="'.get_lang('Edit profile').'" src="'.$userPicture.'"></a>';
             }
 
             $html = $this->showRightBlock(
@@ -829,18 +830,18 @@ class IndexManager
                 $total_invitations = Display::badge($total_invitations);
                 $items[] = [
                     'class' => 'invitations-social',
-                    'icon' => Display::return_icon('invitations.png', get_lang('PendingInvitations')),
+                    'icon' => Display::return_icon('invitations.png', get_lang('Pending invitations')),
                     'link' => api_get_path(WEB_CODE_PATH).'social/invitations.php',
-                    'title' => get_lang('PendingInvitations').$total_invitations,
+                    'title' => get_lang('Pending invitations').$total_invitations,
                 ];
             }
         }
 
         $items[] = [
             'class' => 'personal-data',
-            'icon' => Display::return_icon('database.png', get_lang('PersonalDataReport')),
+            'icon' => Display::return_icon('database.png', get_lang('Personal data')),
             'link' => api_get_path(WEB_CODE_PATH).'social/personal_data.php',
-            'title' => get_lang('PersonalDataReport'),
+            'title' => get_lang('Personal data'),
         ];
 
         if (api_get_configuration_value('allow_my_files_link_in_homepage')) {
@@ -849,22 +850,22 @@ class IndexManager
                     'class' => 'myfiles-social',
                     'icon' => Display::return_icon('sn-files.png', get_lang('Files')),
                     'link' => api_get_path(WEB_CODE_PATH).'social/myfiles.php',
-                    'title' => get_lang('MyFiles'),
+                    'title' => get_lang('My files'),
                 ];
             }
         }
 
         $items[] = [
             'class' => 'profile-social',
-            'icon' => Display::return_icon('edit-profile.png', get_lang('EditProfile')),
+            'icon' => Display::return_icon('edit-profile.png', get_lang('Edit profile')),
             'link' => Display::getProfileEditionLink($userId),
-            'title' => get_lang('EditProfile'),
+            'title' => get_lang('Edit profile'),
         ];
 
         if (api_get_configuration_value('show_link_request_hrm_user') &&
             api_is_drh()
         ) {
-            $label = get_lang('RequestLinkingToUser');
+            $label = get_lang('Request linking to student');
             $items[] = [
                 'icon' => Display::return_icon('new_group.png', $label),
                 'link' => api_get_path(WEB_CODE_PATH).'social/require_user_linking.php',
@@ -879,10 +880,10 @@ class IndexManager
                 'class' => 'video-conference',
                 'icon' => Display::return_icon(
                     'bbb.png',
-                    get_lang('VideoConference')
+                    get_lang('Videoconference')
                 ),
                 'link' => $url,
-                'title' => get_lang('VideoConference'),
+                'title' => get_lang('Videoconference'),
             ];
         }
 
@@ -957,25 +958,25 @@ class IndexManager
             if (api_get_setting('course_validation') == 'true' && !api_is_platform_admin()) {
                 $items[] = [
                     'class' => 'add-course',
-                    'icon' => Display::return_icon('new-course.png', get_lang('CreateCourseRequest')),
+                    'icon' => Display::return_icon('new-course.png', get_lang('Create a course request')),
                     'link' => api_get_path(WEB_CODE_PATH).'create_course/add_course.php',
-                    'title' => get_lang('CreateCourseRequest'),
+                    'title' => get_lang('Create a course request'),
                 ];
             } else {
                 $items[] = [
                     'class' => 'add-course',
-                    'icon' => Display::return_icon('new-course.png', get_lang('CourseCreate')),
+                    'icon' => Display::return_icon('new-course.png', get_lang('Create a course')),
                     'link' => api_get_path(WEB_CODE_PATH).'create_course/add_course.php',
-                    'title' => get_lang('CourseCreate'),
+                    'title' => get_lang('Create a course'),
                 ];
             }
 
             if (SessionManager::allowToManageSessions()) {
                 $items[] = [
                     'class' => 'add-session',
-                    'icon' => Display::return_icon('session.png', get_lang('AddSession')),
+                    'icon' => Display::return_icon('session.png', get_lang('Add a training session')),
                     'link' => api_get_path(WEB_CODE_PATH).'session/session_add.php',
-                    'title' => get_lang('AddSession'),
+                    'title' => get_lang('Add a training session'),
                 ];
             }
         }
@@ -984,9 +985,9 @@ class IndexManager
         if (api_get_configuration_value('view_grid_courses') != true) {
             $items[] = [
                 'class' => 'order-course',
-                'icon' => Display::return_icon('order-course.png', get_lang('SortMyCourses')),
+                'icon' => Display::return_icon('order-course.png', get_lang('Sort courses')),
                 'link' => api_get_path(WEB_CODE_PATH).'auth/sort_my_courses.php',
-                'title' => get_lang('SortMyCourses'),
+                'title' => get_lang('Sort courses'),
             ];
         }
 
@@ -994,23 +995,23 @@ class IndexManager
         if (isset($_GET['history']) && intval($_GET['history']) == 1) {
             $items[] = [
                 'class' => 'history-course',
-                'icon' => Display::return_icon('history-course.png', get_lang('DisplayTrainingList')),
+                'icon' => Display::return_icon('history-course.png', get_lang('Display courses list')),
                 'link' => api_get_path(WEB_PATH).'user_portal.php',
-                'title' => get_lang('DisplayTrainingList'),
+                'title' => get_lang('Display courses list'),
             ];
         } else {
             $items[] = [
                 'class' => 'history-course',
-                'icon' => Display::return_icon('history-course.png', get_lang('HistoryTrainingSessions')),
+                'icon' => Display::return_icon('history-course.png', get_lang('Courses history')),
                 'link' => api_get_path(WEB_PATH).'user_portal.php?history=1',
-                'title' => get_lang('HistoryTrainingSessions'),
+                'title' => get_lang('Courses history'),
             ];
         }
 
         if ($isHrm) {
             $items[] = [
                 'link' => api_get_path(WEB_CODE_PATH).'auth/hrm_courses.php',
-                'title' => get_lang('HrmAssignedUsersCourseList'),
+                'title' => get_lang('HrmAssignedUsersCourse list'),
             ];
         }
 
@@ -1019,9 +1020,9 @@ class IndexManager
             if (!api_is_drh()) {
                 $items[] = [
                     'class' => 'list-course',
-                    'icon' => Display::return_icon('catalog-course.png', get_lang('CourseCatalog')),
+                    'icon' => Display::return_icon('catalog-course.png', get_lang('Course catalog')),
                     'link' => api_get_path(WEB_CODE_PATH).'auth/courses.php',
-                    'title' => get_lang('CourseCatalog'),
+                    'title' => get_lang('Course catalog'),
                 ];
             } else {
                 $items[] = [
@@ -1733,7 +1734,7 @@ class IndexManager
                                 !empty($session_category_end_date)
                             ) {
                                 $categoryParams['subtitle'] = sprintf(
-                                    get_lang('FromDateXToDateY'),
+                                    get_lang('From %s to %s'),
                                     $session_category_start_date,
                                     $session_category_end_date
                                 );
@@ -1803,8 +1804,8 @@ class IndexManager
 
         $this->tpl->assign('course_catalog_url', $course_catalog_url);
         $this->tpl->assign('course_list_url', $course_list_url);
-        $this->tpl->assign('course_catalog_link', Display::url(get_lang('Here'), $course_catalog_url));
-        $this->tpl->assign('course_list_link', Display::url(get_lang('Here'), $course_list_url));
+        $this->tpl->assign('course_catalog_link', Display::url(get_lang('here'), $course_catalog_url));
+        $this->tpl->assign('course_list_link', Display::url(get_lang('here'), $course_list_url));
         $this->tpl->assign('count_courses', $count_courses);
     }
 
@@ -2377,7 +2378,7 @@ class IndexManager
 
         $html .= "<span class='$class1 session-view-session'>$icon$title</span>";
         $html .= '<div class="'.$class2.' session-view-session-go-to-course-in-session">
-                  <a class="" href="'.$courseLink.'">'.get_lang('GoToCourseInsideSession').'</a></div>';
+                  <a class="" href="'.$courseLink.'">'.get_lang('Go to course within session').'</a></div>';
 
         return '<div>'.$html.'</div>';
     }

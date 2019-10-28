@@ -31,7 +31,7 @@ switch ($action) {
                 'URL',
                 get_lang('Session'),
                 get_lang('Course'),
-                get_lang('CountUsers'),
+                get_lang('Number of users'),
             ];
         }
 
@@ -85,7 +85,7 @@ switch ($action) {
 
         if (!empty($operation)) {
             $fileName = !empty($action) ? api_get_setting('siteName').
-                '_'.get_lang('PortalUserSessionStats').'_'.api_get_local_time() : 'report';
+                '_'.get_lang('Portal user session stats').'_'.api_get_local_time() : 'report';
             switch ($exportFormat) {
                 case 'xls':
                     Export::arrayToXls($list, $fileName);
@@ -130,7 +130,7 @@ switch ($action) {
             $list['datasets'][0]['data'][] = $tock;
         }
 
-        $list['datasets'][1]['label'] = get_lang('DistinctUsersLogins');
+        $list['datasets'][1]['label'] = get_lang('Distinct users logins');
         $list['datasets'][1]['backgroundColor'] = 'rgba(0,204,0,0.2)';
         $list['datasets'][1]['borderColor'] = 'rgba(0,204,0,1)';
         $list['datasets'][1]['pointBackgroundColor'] = 'rgba(0,204,0,1)';
@@ -179,8 +179,8 @@ switch ($action) {
             $statsName = 'NumberOfUsers';
             $countInvisible = isset($_GET['count_invisible']) ? (int) $_GET['count_invisible'] : null;
             $all = [
-                get_lang('Teachers') => Statistics::countUsers(COURSEMANAGER, null, $countInvisible),
-                get_lang('Students') => Statistics::countUsers(STUDENT, null, $countInvisible),
+                get_lang('Trainers') => Statistics::countUsers(COURSEMANAGER, null, $countInvisible),
+                get_lang('Learners') => Statistics::countUsers(STUDENT, null, $countInvisible),
             ];
         } elseif ($action == 'users_teachers') {
             $statsName = 'Teachers';

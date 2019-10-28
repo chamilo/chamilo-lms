@@ -125,7 +125,7 @@ class Career extends Model
         // Setting the form elements
         $header = get_lang('Add');
         if ($action == 'edit') {
-            $header = get_lang('Modify');
+            $header = get_lang('Edit');
         }
 
         $id = isset($_GET['id']) ? (int) $_GET['id'] : '';
@@ -150,9 +150,9 @@ class Career extends Model
             $extraField = new ExtraField('career');
             $extraField->addElements($form, $id);
 
-            $form->addElement('text', 'created_at', get_lang('CreatedAt'));
+            $form->addElement('text', 'created_at', get_lang('Created at'));
             $form->freeze('created_at');
-            $form->addButtonSave(get_lang('Modify'));
+            $form->addButtonSave(get_lang('Edit'));
         } else {
             $form->addButtonCreate(get_lang('Add'));
         }
@@ -170,7 +170,7 @@ class Career extends Model
         $form->setDefaults($defaults);
 
         // Setting the rules
-        $form->addRule('name', get_lang('ThisFieldIsRequired'), 'required');
+        $form->addRule('name', get_lang('Required field'), 'required');
 
         return $form;
     }
@@ -193,7 +193,7 @@ class Career extends Model
                 case 'updated_at':
                     break;
                 case 'name':
-                    $val .= ' '.get_lang('CopyLabelSuffix');
+                    $val .= ' '.get_lang('Copy');
                     $new[$key] = $val;
                     break;
                 case 'created_at':

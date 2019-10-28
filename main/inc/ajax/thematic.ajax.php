@@ -109,7 +109,7 @@ switch ($action) {
 
             $attendance_calendar = $attendance->get_attendance_calendar($attendance_id);
 
-            $label = get_lang('StartDate');
+            $label = get_lang('Start Date');
             if (!empty($attendance_calendar)) {
                 $input_select .= '<select id="start_date_select_calendar" name="start_date_by_attendance" size="7" class="form-control">';
                 foreach ($attendance_calendar as $calendar) {
@@ -132,7 +132,7 @@ switch ($action) {
                 }
                 $input_select .= '</select>';
             } else {
-                $input_select .= '<em>'.get_lang('ThereAreNoRegisteredDatetimeYet').'</em>';
+                $input_select .= '<em>'.get_lang('There is no date/time registered yet').'</em>';
             }
         }
         ?>

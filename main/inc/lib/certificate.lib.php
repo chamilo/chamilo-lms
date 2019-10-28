@@ -304,8 +304,8 @@ class Certificate extends Model
                                         );
 
                                         if ($sendNotification) {
-                                            $subject = get_lang('NotificationCertificateSubject');
-                                            $message = nl2br(get_lang('NotificationCertificateTemplate'));
+                                            $subject = get_lang('Certificate notification');
+                                            $message = nl2br(get_lang('((user_first_name)),'));
                                             $score = $this->certificate_data['score_certificate'];
                                             self::sendNotification(
                                                 $subject,
@@ -572,8 +572,8 @@ class Certificate extends Model
             $final_content['gradebook_institution'].' - '.
             $final_content['gradebook_sitename'].' - '.
             get_lang('Certification').$break_space.
-            get_lang('Student').': '.$final_content['user_firstname'].' '.$final_content['user_lastname'].$break_space.
-            get_lang('Teacher').': '.$final_content['teacher_firstname'].' '.$final_content['teacher_lastname'].$break_space.
+            get_lang('Learner').': '.$final_content['user_firstname'].' '.$final_content['user_lastname'].$break_space.
+            get_lang('Trainer').': '.$final_content['teacher_firstname'].' '.$final_content['teacher_lastname'].$break_space.
             get_lang('Date').': '.$final_content['date_certificate'].$break_space.
             get_lang('Score').': '.$final_content['gradebook_grade'].$break_space.
             'URL'.': '.$final_content['certificate_link'];
@@ -872,7 +872,7 @@ class Certificate extends Model
      */
     public static function generateUserSkills($userId)
     {
-        $controller = new IndexManager(get_lang('MyCourses'));
+        $controller = new IndexManager(get_lang('My courses'));
         $courseAndSessions = $controller->returnCoursesAndSessions($userId, true, null, true, false);
 
         if (isset($courseAndSessions['courses']) && !empty($courseAndSessions['courses'])) {

@@ -126,7 +126,7 @@ class GlossaryManager
             // display the feedback message
             if ($showMessage) {
                 Display::addFlash(
-                    Display::return_message(get_lang('GlossaryTermAlreadyExistsYouShouldEditIt'), 'error')
+                    Display::return_message(get_lang('This glossary term already exists. Please change the term name.'), 'error')
                 );
             }
 
@@ -158,7 +158,7 @@ class GlossaryManager
             // display the feedback message
             if ($showMessage) {
                 Display::addFlash(
-                    Display::return_message(get_lang('TermAdded'))
+                    Display::return_message(get_lang('Term added'))
                 );
             }
 
@@ -184,7 +184,7 @@ class GlossaryManager
             // display the feedback message
             if ($showMessage) {
                 Display::addFlash(
-                    Display::return_message(get_lang('GlossaryTermAlreadyExistsYouShouldEditIt'), 'error')
+                    Display::return_message(get_lang('This glossary term already exists. Please change the term name.'), 'error')
                 );
             }
 
@@ -213,7 +213,7 @@ class GlossaryManager
             if ($showMessage) {
                 // display the feedback message
                 Display::addFlash(
-                    Display::return_message(get_lang('TermUpdated'))
+                    Display::return_message(get_lang('Term updated'))
                 );
             }
         }
@@ -360,7 +360,7 @@ class GlossaryManager
         if ($showMessage) {
             Display::addFlash(
                 Display::return_message(
-                    get_lang('TermDeleted').': '.Security::remove_XSS($glossaryInfo['name']),
+                    get_lang('Term removed').': '.Security::remove_XSS($glossaryInfo['name']),
                     'normal',
                     false
                 )
@@ -404,12 +404,12 @@ class GlossaryManager
         $actionsLeft = '';
         if (api_is_allowed_to_edit(null, true)) {
             $actionsLeft .= '<a href="index.php?'.api_get_cidreq().'&action=addglossary&msg=add?'.api_get_cidreq().'">'.
-                Display::return_icon('new_glossary_term.png', get_lang('TermAddNew'), '', ICON_SIZE_MEDIUM).'</a>';
+                Display::return_icon('new_glossary_term.png', get_lang('Add new glossary term'), '', ICON_SIZE_MEDIUM).'</a>';
         }
 
         if (api_is_allowed_to_edit(null, true)) {
             $actionsLeft .= '<a href="index.php?'.api_get_cidreq().'&action=import">'.
-                Display::return_icon('import.png', get_lang('ImportGlossary'), '', ICON_SIZE_MEDIUM).'</a>';
+                Display::return_icon('import.png', get_lang('Import glossary'), '', ICON_SIZE_MEDIUM).'</a>';
         }
 
         if (!api_is_anonymous()) {
@@ -419,15 +419,15 @@ class GlossaryManager
 
         if ($view === 'table' || !isset($view)) {
             $actionsLeft .= '<a href="index.php?'.api_get_cidreq().'&action=changeview&view=list">'.
-                Display::return_icon('view_detailed.png', get_lang('ListView'), '', ICON_SIZE_MEDIUM).'</a>';
+                Display::return_icon('view_detailed.png', get_lang('List view'), '', ICON_SIZE_MEDIUM).'</a>';
         } else {
             $actionsLeft .= '<a href="index.php?'.api_get_cidreq().'&action=changeview&view=table">'.
-                Display::return_icon('view_text.png', get_lang('TableView'), '', ICON_SIZE_MEDIUM).'</a>';
+                Display::return_icon('view_text.png', get_lang('Table view'), '', ICON_SIZE_MEDIUM).'</a>';
         }
 
         if (api_is_allowed_to_edit(true, true, true)) {
             $actionsLeft .= Display::url(
-                Display::return_icon('export_to_documents.png', get_lang('ExportToDocArea'), [], ICON_SIZE_MEDIUM),
+                Display::return_icon('export_to_documents.png', get_lang('Export latest version of this page to Documents'), [], ICON_SIZE_MEDIUM),
                 api_get_self().'?'.api_get_cidreq().'&'.http_build_query(['action' => 'export_documents'])
             );
         }
@@ -479,10 +479,10 @@ class GlossaryManager
                 ['GlossaryManager', 'get_glossary_data'],
                 0
             );
-            $table->set_header(0, get_lang('TermName'), true);
-            $table->set_header(1, get_lang('TermDefinition'), true);
+            $table->set_header(0, get_lang('Term'), true);
+            $table->set_header(1, get_lang('Term definition'), true);
             if (api_is_allowed_to_edit(null, true)) {
-                $table->set_header(2, get_lang('Actions'), false, 'width=90px', ['class' => 'td_actions']);
+                $table->set_header(2, get_lang('Detail'), false, 'width=90px', ['class' => 'td_actions']);
                 $table->set_column_filter(2, ['GlossaryManager', 'actions_filter']);
             }
             $content .= $table->return_table();
@@ -665,7 +665,7 @@ class GlossaryManager
                 $return .= '<a href="'.api_get_self().'?action=delete_glossary&glossary_id='.$glossary_id.'&'.api_get_cidreq().'" onclick="return confirmation(\''.$glossary_term.'\');">'.
                     Display::return_icon('delete.png', get_lang('Delete'), '', 22).'</a>';
             } else {
-                $return = get_lang('EditionNotAvailableFromSession');
+                $return = get_lang('Edition not available from the session, please edit from the basic course.');
             }
         }
 
@@ -681,7 +681,7 @@ class GlossaryManager
     {
         return "<script>
             function confirmation (name) {
-                if (confirm(\" ".get_lang("TermConfirmDelete")." \"+ name + \" ?\")) {
+                if (confirm(\" ".get_lang("Do you really want to delete this term")." \"+ name + \" ?\")) {
                     return true;
                 } else {
                     return false;
@@ -756,7 +756,7 @@ class GlossaryManager
         Database::query($sql1);
         Database::query($sql2);
 
-        Display::addFlash(Display::return_message(get_lang('TermMoved')));
+        Display::addFlash(Display::return_message(get_lang('The term has moved')));
     }
 
     /**
@@ -820,7 +820,7 @@ class GlossaryManager
 
             return true;
         } else {
-            Display::addFlash(Display::return_message(get_lang('NothingToAdd')));
+            Display::addFlash(Display::return_message(get_lang('Nothing to add')));
         }
 
         return false;

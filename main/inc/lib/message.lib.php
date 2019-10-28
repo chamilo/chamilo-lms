@@ -227,18 +227,18 @@ class MessageManager
                         Display::url(
                             Display::returnFontAwesomeIcon('reply', 2),
                             $newMessageLink.'?re_id='.$messageId,
-                            ['title' => get_lang('ReplyToMessage')]
+                            ['title' => get_lang('Reply to this message')]
                         );
                 }
             } else {
                 $message[1] = '<a '.$class.' href="'.$viewUrl.'&id='.$messageId.'">'.$title.'</a><br />';
-                $message[1] .= get_lang('UnknownUser');
+                $message[1] .= get_lang('Unknown user');
                 if (in_array('reply', $actions)) {
                     $message[3] =
                         Display::url(
                             Display::returnFontAwesomeIcon('reply', 2),
                             '#',
-                            ['title' => get_lang('ReplyToMessage')]
+                            ['title' => get_lang('Reply to this message')]
                         );
                 }
             }
@@ -253,7 +253,7 @@ class MessageManager
                     Display::url(
                         Display::returnFontAwesomeIcon('pencil', 2),
                         $newMessageLink.'?action=edit&id='.$messageId,
-                        ['title' => get_lang('ForwardMessage')]
+                        ['title' => get_lang('Forward message')]
                     );
             }
 
@@ -264,15 +264,15 @@ class MessageManager
                     Display::url(
                         Display::returnFontAwesomeIcon('share', 2),
                         $newMessageLink.'?forward_id='.$messageId,
-                        ['title' => get_lang('ForwardMessage')]
+                        ['title' => get_lang('Forward message')]
                     );
             }
 
             if (in_array('delete', $actions)) {
                 $message[3] .= '&nbsp;&nbsp;<a title="'.addslashes(
-                    get_lang('DeleteMessage')
+                    get_lang('Delete message')
                 ).'" onclick="javascript:if(!confirm('."'".addslashes(
-                    api_htmlentities(get_lang('ConfirmDeleteMessage'))
+                    api_htmlentities(get_lang('ConfirmDelete message'))
                 )."'".')) return false;" href="'.$url.'?action=deleteone&id='.$messageId.'">'.
                 Display::returnFontAwesomeIcon('trash', 2).'</a>';
             }
@@ -490,7 +490,7 @@ class MessageManager
 
         $user_sender_id = empty($sender_id) ? api_get_user_id() : (int) $sender_id;
         if (empty($user_sender_id)) {
-            Display::addFlash(Display::return_message(get_lang('UserDoesNotExist'), 'warning'));
+            Display::addFlash(Display::return_message(get_lang('This user doesn\'t exist'), 'warning'));
 
             return false;
         }
@@ -538,7 +538,7 @@ class MessageManager
         if (empty($subject) && empty($group_id)) {
             Display::addFlash(
                 Display::return_message(
-                    get_lang('YouShouldWriteASubject'),
+                    get_lang('You should write a subject'),
                     'warning'
                 )
             );
@@ -546,7 +546,7 @@ class MessageManager
             return false;
         } elseif ($totalFileSize > intval(api_get_setting('message_max_upload_filesize'))) {
             $warning = sprintf(
-                get_lang('FilesSizeExceedsX'),
+                get_lang('Files size exceeds'),
                 format_file_size(api_get_setting('message_max_upload_filesize'))
             );
 
@@ -696,7 +696,7 @@ class MessageManager
                 );
 
                 // Adding more sense to the message group
-                $subject = sprintf(get_lang('ThereIsANewMessageInTheGroupX'), $group_info['name']);
+                $subject = sprintf(get_lang('There is a new message in group %s'), $group_info['name']);
                 $new_user_list = [];
                 foreach ($user_list as $user_data) {
                     $new_user_list[] = $user_data['id'];
@@ -777,7 +777,7 @@ class MessageManager
             if (!empty($drhList)) {
                 foreach ($drhList as $drhInfo) {
                     $message = sprintf(
-                        get_lang('CopyOfMessageSentToXUser'),
+                        get_lang('Copy of message sent to %s'),
                         $userInfo['complete_name']
                     ).' <br />'.$message;
 
@@ -946,7 +946,7 @@ class MessageManager
         // user's file name
         $file_name = $file_attach['name'];
         if (!filter_extension($new_file_name)) {
-            Display::addFlash(Display::return_message(get_lang('UplUnableToSaveFileFilteredExtension'), 'error'));
+            Display::addFlash(Display::return_message(get_lang('File upload failed: this file extension or file type is prohibited'), 'error'));
         } else {
             $new_file_name = uniqid('');
             if (!empty($receiver_user_id)) {
@@ -1285,16 +1285,16 @@ class MessageManager
                 //date stays the same
                 $message[3] = api_convert_and_format_date($sendDate, DATE_TIME_FORMAT_LONG);
                 $message[4] = '&nbsp;&nbsp;<a title="'.addslashes(
-                        get_lang('DeleteMessage')
+                        get_lang('Delete message')
                     ).'" onclick="delete_one_message_outbox('.$messageId.')" href="javascript:void(0)"  >'.
                     Display::returnFontAwesomeIcon('trash', 2).'</a>';
             } else {
                 $message[1] = '<a '.$class.' onclick="show_sent_message('.$messageId.')" href="../messages/view_message.php?id_send='.$messageId.'">'.$title.'</a><br />'.$userInfo['complete_name_with_username'];
                 $message[2] = api_convert_and_format_date($sendDate, DATE_TIME_FORMAT_LONG);
                 $message[3] = '<a title="'.addslashes(
-                        get_lang('DeleteMessage')
+                        get_lang('Delete message')
                     ).'" href="outbox.php?action=deleteone&id='.$messageId.'"  onclick="javascript:if(!confirm('."'".addslashes(
-                        api_htmlentities(get_lang('ConfirmDeleteMessage'))
+                        api_htmlentities(get_lang('ConfirmDelete message'))
                     )."'".')) return false;" >'.
                     Display::returnFontAwesomeIcon('trash', 2).'</a>';
             }
@@ -1375,7 +1375,7 @@ class MessageManager
         $title = Security::remove_XSS($row['title'], STUDENT, true);
         $content = Security::remove_XSS($row['content'], STUDENT, true);
 
-        $name = get_lang('UnknownUser');
+        $name = get_lang('Unknown user');
         $fromUser = api_get_user_info($user_sender_id);
         $userImage = '';
         if (!empty($user_sender_id) && !empty($fromUser)) {
@@ -1463,17 +1463,17 @@ class MessageManager
         switch ($type) {
             case self::MESSAGE_TYPE_OUTBOX:
                 $message_content .= '<a href="outbox.php?'.$social_link.'">'.
-                    Display::return_icon('back.png', get_lang('ReturnToOutbox')).'</a> &nbsp';
+                    Display::return_icon('back.png', get_lang('Return to outbox')).'</a> &nbsp';
                 $message_content .= '<a href="outbox.php?action=deleteone&id='.$messageId.'&'.$social_link.'" >'.
-                    Display::return_icon('delete.png', get_lang('DeleteMessage')).'</a>&nbsp';
+                    Display::return_icon('delete.png', get_lang('Delete message')).'</a>&nbsp';
                 break;
             case self::MESSAGE_TYPE_INBOX:
                 $message_content .= '<a href="inbox.php?'.$social_link.'">'.
-                    Display::return_icon('back.png', get_lang('ReturnToInbox')).'</a> &nbsp';
+                    Display::return_icon('back.png', get_lang('Return to inbox')).'</a> &nbsp';
                 $message_content .= '<a href="new_message.php?re_id='.$messageId.'&'.$social_link.'">'.
-                    Display::return_icon('message_reply.png', get_lang('ReplyToMessage')).'</a> &nbsp';
+                    Display::return_icon('message_reply.png', get_lang('Reply to this message')).'</a> &nbsp';
                 $message_content .= '<a href="inbox.php?action=deleteone&id='.$messageId.'&'.$social_link.'" >'.
-                    Display::return_icon('delete.png', get_lang('DeleteMessage')).'</a>&nbsp';
+                    Display::return_icon('delete.png', get_lang('Delete message')).'</a>&nbsp';
                 break;
         }
 
@@ -1557,7 +1557,7 @@ class MessageManager
                 $html .= '<div class="row">';
 
                 $items = $topic['count'];
-                $reply_label = ($items == 1) ? get_lang('GroupReply') : get_lang('GroupReplies');
+                $reply_label = ($items == 1) ? get_lang('Reply') : get_lang('Replies');
                 $label = '<i class="fa fa-envelope"></i> '.$items.' '.$reply_label;
                 $topic['title'] = trim($topic['title']);
 
@@ -2134,7 +2134,7 @@ class MessageManager
         $form = new FormValidator('send_invitation');
         $form->addTextarea(
             'content',
-            get_lang('AddPersonalMessage'),
+            get_lang('Add a personal message'),
             ['id' => 'content_invitation_id', 'rows' => 5]
         );
 
@@ -2167,7 +2167,7 @@ class MessageManager
         $table->set_header(0, '', false, ['style' => 'width:15px;']);
         $table->set_header(1, get_lang('Messages'), false);
         $table->set_header(2, get_lang('Date'), true, ['style' => 'width:180px;']);
-        $table->set_header(3, get_lang('Modify'), false, ['style' => 'width:120px;']);
+        $table->set_header(3, get_lang('Edit'), false, ['style' => 'width:120px;']);
 
         if (isset($_REQUEST['f']) && $_REQUEST['f'] === 'social') {
             $parameters['f'] = 'social';
@@ -2175,9 +2175,9 @@ class MessageManager
         }
 
         $defaultActions = [
-            'delete' => get_lang('DeleteSelectedMessages'),
-            'mark_as_unread' => get_lang('MailMarkSelectedAsUnread'),
-            'mark_as_read' => get_lang('MailMarkSelectedAsRead'),
+            'delete' => get_lang('Delete selected messages'),
+            'mark_as_unread' => get_lang('Mark as unread'),
+            'mark_as_read' => get_lang('Mark as read'),
         ];
 
         if (!in_array('delete', $actions)) {
@@ -2204,9 +2204,9 @@ class MessageManager
      */
     public static function inboxDisplay($keyword = '')
     {
-        $success = get_lang('SelectedMessagesDeleted');
-        $success_read = get_lang('SelectedMessagesRead');
-        $success_unread = get_lang('SelectedMessagesUnRead');
+        $success = get_lang('The selected messages have been deleted');
+        $success_read = get_lang('Selected messages have been marked as read');
+        $success_unread = get_lang('Selected messages have been marked as unread');
         $currentUserId = api_get_user_id();
 
         if (isset($_REQUEST['action'])) {
@@ -2286,7 +2286,7 @@ class MessageManager
         $actions = ['delete'];
         $currentUserId = api_get_user_id();
 
-        $success = get_lang('SelectedMessagesDeleted');
+        $success = get_lang('The selected messages have been deleted');
         if (isset($_REQUEST['action'])) {
             switch ($_REQUEST['action']) {
                 case 'delete':
@@ -2327,7 +2327,7 @@ class MessageManager
     {
         $actions = ['delete'];
 
-        $success = get_lang('SelectedMessagesDeleted');
+        $success = get_lang('The selected messages have been deleted');
         $currentUserId = api_get_user_id();
         if (isset($_REQUEST['action'])) {
             switch ($_REQUEST['action']) {
@@ -2369,8 +2369,8 @@ class MessageManager
     public static function outbox_display($keyword = '')
     {
         Session::write('message_sent_search_keyword', $keyword);
-        $success = get_lang('SelectedMessagesDeleted').'&nbsp</b><br />
-                    <a href="outbox.php">'.get_lang('BackToOutbox').'</a>';
+        $success = get_lang('The selected messages have been deleted').'&nbsp</b><br />
+                    <a href="outbox.php">'.get_lang('Back to outbox').'</a>';
 
         $html = '';
         if (isset($_REQUEST['action'])) {
@@ -2411,9 +2411,9 @@ class MessageManager
         $table->set_header(0, '', false, ['style' => 'width:15px;']);
         $table->set_header(1, get_lang('Messages'), false);
         $table->set_header(2, get_lang('Date'), true, ['style' => 'width:180px;']);
-        $table->set_header(3, get_lang('Modify'), false, ['style' => 'width:70px;']);
+        $table->set_header(3, get_lang('Edit'), false, ['style' => 'width:70px;']);
 
-        $table->set_form_actions(['delete' => get_lang('DeleteSelectedMessages')]);
+        $table->set_form_actions(['delete' => get_lang('Delete selected messages')]);
         $html .= $table->return_table();
 
         return $html;
@@ -2589,7 +2589,7 @@ class MessageManager
 
         $layoutContent = $tplMailBody->get_template('mail/new_user_mail_to_admin.tpl');
 
-        $emailsubject = '['.get_lang('UserRegistered').'] '.$user->getUsername();
+        $emailsubject = '['.get_lang('The user has been registered').'] '.$user->getUsername();
         $emailbody = $tplMailBody->fetch($layoutContent);
 
         $admins = UserManager::get_all_administrators();
@@ -2875,7 +2875,7 @@ class MessageManager
             Display::returnFontAwesomeIcon('thumbs-up', '', true)
                 .PHP_EOL.'<span>'.$countLikes['likes'].'</span>',
             [
-                'title' => get_lang('VoteLike'),
+                'title' => get_lang('Like'),
                 'class' => 'btn  social-like '.$class,
                 'data-status' => 'like',
                 'data-message' => $messageId,
@@ -2892,7 +2892,7 @@ class MessageManager
                 Display::returnFontAwesomeIcon('thumbs-down', '', true)
                 .PHP_EOL.'<span>'.$countLikes['dislikes'].'</span>',
                 [
-                    'title' => get_lang('VoteDislike'),
+                    'title' => get_lang('Dislike'),
                     'class' => 'btn social-like '.$disabled,
                     'data-status' => 'dislike',
                     'data-message' => $messageId,

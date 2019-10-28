@@ -316,7 +316,7 @@ switch ($action) {
                 );
                 $counter++;
             }
-            echo Display::return_message(get_lang('Saved'), 'confirmation');
+            echo Display::return_message(get_lang('Saved..'), 'confirmation');
         }
         break;
     case 'update_question_order':
@@ -346,7 +346,7 @@ switch ($action) {
                 ;
                 $counter++;
             }
-            echo Display::return_message(get_lang('Saved'), 'confirmation');
+            echo Display::return_message(get_lang('Saved..'), 'confirmation');
         }
         break;
     case 'add_question_to_reminder':

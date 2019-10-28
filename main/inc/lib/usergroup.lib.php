@@ -262,7 +262,7 @@ class UserGroup extends Model
             $html .= '<a href="../admin/index.php">'.
                 Display::return_icon(
                     'back.png',
-                    get_lang('BackTo').' '.get_lang('PlatformAdmin'),
+                    get_lang('Back to').' '.get_lang('Administration'),
                     '',
                     ICON_SIZE_MEDIUM
                 ).
@@ -270,7 +270,7 @@ class UserGroup extends Model
         }
 
         $html .= '<a href="'.api_get_self().'?action=add">'.
-            Display::return_icon('new_class.png', get_lang('AddClasses'), '', ICON_SIZE_MEDIUM).
+            Display::return_icon('new_class.png', get_lang('Add classes'), '', ICON_SIZE_MEDIUM).
             '</a>';
         $html .= Display::url(
             Display::return_icon('import_csv.png', get_lang('Import'), [], ICON_SIZE_MEDIUM),
@@ -296,11 +296,11 @@ class UserGroup extends Model
         $courseInfo = api_get_course_info();
         if (empty($courseInfo)) {
             echo '<a href="../admin/usergroups.php">'.
-                Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('PlatformAdmin'), '', '32').
+                Display::return_icon('back.png', get_lang('Back to').' '.get_lang('Administration'), '', '32').
                 '</a>';
         } else {
             echo Display::url(
-                Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('PlatformAdmin'), '', '32'),
+                Display::return_icon('back.png', get_lang('Back to').' '.get_lang('Administration'), '', '32'),
                 api_get_path(WEB_CODE_PATH).'user/class.php?'.api_get_cidreq()
             );
         }
@@ -384,7 +384,7 @@ class UserGroup extends Model
             $select = 'count(u.id) as count';
         }
 
-        if ($this->getUseMultipleUrl()) {
+        if ($this->getUseMultipleURL()) {
             $sql = "SELECT $select
                     FROM {$this->usergroup_rel_course_table} usergroup
                     INNER JOIN {$this->table} u
@@ -1593,7 +1593,7 @@ class UserGroup extends Model
         $form->addElement('text', 'name', get_lang('Name'), ['maxlength' => 255]);
         $form->applyFilter('name', 'trim');
 
-        $form->addRule('name', get_lang('ThisFieldIsRequired'), 'required');
+        $form->addRule('name', get_lang('Required field'), 'required');
         $form->addRule('name', '', 'maxlength', 255);
 
         // Description
@@ -1613,12 +1613,12 @@ class UserGroup extends Model
                 'checkbox',
                 'group_type',
                 null,
-                get_lang('SocialGroup')
+                get_lang('Social group')
             );
         }
 
         // url
-        $form->addElement('text', 'url', get_lang('Url'));
+        $form->addElement('text', 'url', get_lang('URL'));
         $form->applyFilter('url', 'trim');
 
         // Picture
@@ -1627,7 +1627,7 @@ class UserGroup extends Model
         // Picture
         $form->addFile(
             'picture',
-            get_lang('AddPicture'),
+            get_lang('Add a picture'),
             ['id' => 'picture', 'class' => 'picture-form', 'crop_image' => true, 'crop_ratio' => '1 / 1']
         );
 
@@ -1635,12 +1635,12 @@ class UserGroup extends Model
             $picture = $this->get_picture_group($data['id'], $data['picture'], 80);
             $img = '<img src="'.$picture.'" />';
             $form->addElement('label', null, $img);
-            $form->addElement('checkbox', 'delete_picture', '', get_lang('DelImage'));
+            $form->addElement('checkbox', 'delete_picture', '', get_lang('Remove picture'));
         }
 
-        $form->addElement('select', 'visibility', get_lang('GroupPermissions'), $this->getGroupStatusList());
-        $form->setRequiredNote('<span class="form_required">*</span> <small>'.get_lang('ThisFieldIsRequired').'</small>');
-        $form->addElement('checkbox', 'allow_members_leave_group', '', get_lang('AllowMemberLeaveGroup'));
+        $form->addElement('select', 'visibility', get_lang('Group Permissions'), $this->getGroupStatusList());
+        $form->setRequiredNote('<span class="form_required">*</span> <small>'.get_lang('Required field').'</small>');
+        $form->addElement('checkbox', 'allow_members_leave_group', '', get_lang('Allow members to leave group'));
 
         // Setting the form elements
         if ($type === 'add') {
@@ -1928,13 +1928,13 @@ class UserGroup extends Model
                 $roleToString = get_lang('Reader');
                 break;
             case GROUP_USER_PERMISSION_PENDING_INVITATION:
-                $roleToString = get_lang('PendingInvitation');
+                $roleToString = get_lang('Pending invitation');
                 break;
             case GROUP_USER_PERMISSION_MODERATOR:
                 $roleToString = get_lang('Moderator');
                 break;
             case GROUP_USER_PERMISSION_HRM:
-                $roleToString = get_lang('Drh');
+                $roleToString = get_lang('Human Resources Manager');
                 break;
         }
 
@@ -2406,64 +2406,64 @@ class UserGroup extends Model
         switch ($my_group_role) {
             case GROUP_USER_PERMISSION_READER:
                 // I'm just a reader
-                $relation_group_title = get_lang('IAmAReader');
+                $relation_group_title = get_lang('I am a reader');
                 $links .= '<li class="'.($show == 'invite_friends' ? 'active' : '').'"><a href="group_invitation.php?id='.$group_id.'">'.
-                            Display::return_icon('invitation_friend.png', get_lang('InviteFriends')).get_lang('InviteFriends').'</a></li>';
+                            Display::return_icon('invitation_friend.png', get_lang('Invite friends')).get_lang('Invite friends').'</a></li>';
                 if (self::canLeave($group_info)) {
                     $links .= '<li><a href="group_view.php?id='.$group_id.'&action=leave&u='.api_get_user_id().'">'.
-                        Display::return_icon('group_leave.png', get_lang('LeaveGroup')).get_lang('LeaveGroup').'</a></li>';
+                        Display::return_icon('group_leave.png', get_lang('Leave group')).get_lang('Leave group').'</a></li>';
                 }
                 break;
             case GROUP_USER_PERMISSION_ADMIN:
-                $relation_group_title = get_lang('IAmAnAdmin');
+                $relation_group_title = get_lang('I am an admin');
                 $links .= '<li class="'.($show == 'group_edit' ? 'active' : '').'"><a href="group_edit.php?id='.$group_id.'">'.
-                            Display::return_icon('group_edit.png', get_lang('EditGroup')).get_lang('EditGroup').'</a></li>';
+                            Display::return_icon('group_edit.png', get_lang('Edit this group')).get_lang('Edit this group').'</a></li>';
                 $links .= '<li class="'.($show == 'member_list' ? 'active' : '').'"><a href="group_waiting_list.php?id='.$group_id.'">'.
-                            Display::return_icon('waiting_list.png', get_lang('WaitingList')).get_lang('WaitingList').'</a></li>';
+                            Display::return_icon('waiting_list.png', get_lang('Waiting list')).get_lang('Waiting list').'</a></li>';
                 $links .= '<li class="'.($show == 'invite_friends' ? 'active' : '').'"><a href="group_invitation.php?id='.$group_id.'">'.
-                            Display::return_icon('invitation_friend.png', get_lang('InviteFriends')).get_lang('InviteFriends').'</a></li>';
+                            Display::return_icon('invitation_friend.png', get_lang('Invite friends')).get_lang('Invite friends').'</a></li>';
                 if (self::canLeave($group_info)) {
                     $links .= '<li><a href="group_view.php?id='.$group_id.'&action=leave&u='.api_get_user_id().'">'.
-                        Display::return_icon('group_leave.png', get_lang('LeaveGroup')).get_lang('LeaveGroup').'</a></li>';
+                        Display::return_icon('group_leave.png', get_lang('Leave group')).get_lang('Leave group').'</a></li>';
                 }
                 break;
             case GROUP_USER_PERMISSION_PENDING_INVITATION:
-//				$links .=  '<li><a href="groups.php?id='.$group_id.'&action=join&u='.api_get_user_id().'">'.Display::return_icon('addd.gif', get_lang('YouHaveBeenInvitedJoinNow'), array('hspace'=>'6')).'<span class="social-menu-text4" >'.get_lang('YouHaveBeenInvitedJoinNow').'</span></a></li>';
+//				$links .=  '<li><a href="groups.php?id='.$group_id.'&action=join&u='.api_get_user_id().'">'.Display::return_icon('addd.gif', get_lang('You have been invited to join now'), array('hspace'=>'6')).'<span class="social-menu-text4" >'.get_lang('You have been invited to join now').'</span></a></li>';
                 break;
             case GROUP_USER_PERMISSION_PENDING_INVITATION_SENT_BY_USER:
-                $relation_group_title = get_lang('WaitingForAdminResponse');
+                $relation_group_title = get_lang('Waiting for admin response');
                 break;
             case GROUP_USER_PERMISSION_MODERATOR:
-                $relation_group_title = get_lang('IAmAModerator');
-                //$links .=  '<li><a href="'.api_get_path(WEB_CODE_PATH).'social/message_for_group_form.inc.php?view_panel=1&height=400&width=610&&user_friend='.api_get_user_id().'&group_id='.$group_id.'&action=add_message_group" class="thickbox" title="'.get_lang('ComposeMessage').'">'.Display::return_icon('compose_message.png', get_lang('NewTopic'), array('hspace'=>'6')).'<span class="social-menu-text4" >'.get_lang('NewTopic').'</span></a></li>';
-                //$links .=  '<li><a href="groups.php?id='.$group_id.'">'.				Display::return_icon('message_list.png', get_lang('MessageList'), array('hspace'=>'6')).'<span class="'.($show=='messages_list'?'social-menu-text-active':'social-menu-text4').'" >'.get_lang('MessageList').'</span></a></li>';
-                //$links .=  '<li><a href="group_members.php?id='.$group_id.'">'.		Display::return_icon('member_list.png', get_lang('MemberList'), array('hspace'=>'6')).'<span class="'.($show=='member_list'?'social-menu-text-active':'social-menu-text4').'" >'.get_lang('MemberList').'</span></a></li>';
+                $relation_group_title = get_lang('I am a moderator');
+                //$links .=  '<li><a href="'.api_get_path(WEB_CODE_PATH).'social/message_for_group_form.inc.php?view_panel=1&height=400&width=610&&user_friend='.api_get_user_id().'&group_id='.$group_id.'&action=add_message_group" class="thickbox" title="'.get_lang('Compose message').'">'.Display::return_icon('compose_message.png', get_lang('Create thread'), array('hspace'=>'6')).'<span class="social-menu-text4" >'.get_lang('Create thread').'</span></a></li>';
+                //$links .=  '<li><a href="groups.php?id='.$group_id.'">'.				Display::return_icon('message_list.png', get_lang('Messages list'), array('hspace'=>'6')).'<span class="'.($show=='messages_list'?'social-menu-text-active':'social-menu-text4').'" >'.get_lang('Messages list').'</span></a></li>';
+                //$links .=  '<li><a href="group_members.php?id='.$group_id.'">'.		Display::return_icon('member_list.png', get_lang('Members list'), array('hspace'=>'6')).'<span class="'.($show=='member_list'?'social-menu-text-active':'social-menu-text4').'" >'.get_lang('Members list').'</span></a></li>';
                 if ($group_info['visibility'] == GROUP_PERMISSION_CLOSED) {
                     $links .= '<li><a href="group_waiting_list.php?id='.$group_id.'">'.
-                                Display::return_icon('waiting_list.png', get_lang('WaitingList')).get_lang('WaitingList').'</a></li>';
+                                Display::return_icon('waiting_list.png', get_lang('Waiting list')).get_lang('Waiting list').'</a></li>';
                 }
                 $links .= '<li><a href="group_invitation.php?id='.$group_id.'">'.
-                            Display::return_icon('invitation_friend.png', get_lang('InviteFriends')).get_lang('InviteFriends').'</a></li>';
+                            Display::return_icon('invitation_friend.png', get_lang('Invite friends')).get_lang('Invite friends').'</a></li>';
                 if (self::canLeave($group_info)) {
                     $links .= '<li><a href="group_view.php?id='.$group_id.'&action=leave&u='.api_get_user_id().'">'.
-                        Display::return_icon('group_leave.png', get_lang('LeaveGroup')).get_lang('LeaveGroup').'</a></li>';
+                        Display::return_icon('group_leave.png', get_lang('Leave group')).get_lang('Leave group').'</a></li>';
                 }
                 break;
             case GROUP_USER_PERMISSION_HRM:
-                $relation_group_title = get_lang('IAmAHRM');
-                $links .= '<li><a href="'.api_get_path(WEB_CODE_PATH).'social/message_for_group_form.inc.php?view_panel=1&height=400&width=610&&user_friend='.api_get_user_id().'&group_id='.$group_id.'&action=add_message_group" class="ajax" title="'.get_lang('ComposeMessage').'" data-size="lg" data-title="'.get_lang('ComposeMessage').'">'.
-                            Display::return_icon('new-message.png', get_lang('NewTopic')).get_lang('NewTopic').'</a></li>';
+                $relation_group_title = get_lang('I am a human resources manager');
+                $links .= '<li><a href="'.api_get_path(WEB_CODE_PATH).'social/message_for_group_form.inc.php?view_panel=1&height=400&width=610&&user_friend='.api_get_user_id().'&group_id='.$group_id.'&action=add_message_group" class="ajax" title="'.get_lang('Compose message').'" data-size="lg" data-title="'.get_lang('Compose message').'">'.
+                            Display::return_icon('new-message.png', get_lang('Create thread')).get_lang('Create thread').'</a></li>';
                 $links .= '<li><a href="group_view.php?id='.$group_id.'">'.
-                            Display::return_icon('message_list.png', get_lang('MessageList')).get_lang('MessageList').'</a></li>';
+                            Display::return_icon('message_list.png', get_lang('Messages list')).get_lang('Messages list').'</a></li>';
                 $links .= '<li><a href="group_invitation.php?id='.$group_id.'">'.
-                            Display::return_icon('invitation_friend.png', get_lang('InviteFriends')).get_lang('InviteFriends').'</a></li>';
+                            Display::return_icon('invitation_friend.png', get_lang('Invite friends')).get_lang('Invite friends').'</a></li>';
                 $links .= '<li><a href="group_members.php?id='.$group_id.'">'.
-                            Display::return_icon('member_list.png', get_lang('MemberList')).get_lang('MemberList').'</a></li>';
+                            Display::return_icon('member_list.png', get_lang('Members list')).get_lang('Members list').'</a></li>';
                 $links .= '<li><a href="group_view.php?id='.$group_id.'&action=leave&u='.api_get_user_id().'">'.
-                            Display::return_icon('delete_data.gif', get_lang('LeaveGroup')).get_lang('LeaveGroup').'</a></li>';
+                            Display::return_icon('delete_data.gif', get_lang('Leave group')).get_lang('Leave group').'</a></li>';
                 break;
             default:
-                //$links .=  '<li><a href="groups.php?id='.$group_id.'&action=join&u='.api_get_user_id().'">'.Display::return_icon('addd.gif', get_lang('JoinGroup'), array('hspace'=>'6')).'<span class="social-menu-text4" >'.get_lang('JoinGroup').'</a></span></li>';
+                //$links .=  '<li><a href="groups.php?id='.$group_id.'&action=join&u='.api_get_user_id().'">'.Display::return_icon('addd.gif', get_lang('Join group'), array('hspace'=>'6')).'<span class="social-menu-text4" >'.get_lang('Join group').'</a></span></li>';
                 break;
         }
         if (!empty($links)) {
@@ -2471,7 +2471,7 @@ class UserGroup extends Model
             $list .= $links;
             $list .= '</ul>';
             $html .= Display::panelCollapse(
-                get_lang('SocialGroups'),
+                get_lang('Social groups'),
                 $list,
                 'sm-groups',
                 [],

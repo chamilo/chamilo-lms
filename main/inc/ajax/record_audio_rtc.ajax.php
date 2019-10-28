@@ -24,7 +24,7 @@ if (!isset($_FILES['audio_blob'], $_REQUEST['audio_dir'])) {
         header('Content-Type: application/json');
         echo json_encode([
             'error' => true,
-            'message' => Display::return_message(get_lang('UploadError'), 'error'),
+            'message' => Display::return_message(get_lang('Upload failed, please check maximum file size limits and folder rights.'), 'error'),
         ]);
 
         Display::cleanFlashMessages();
@@ -32,7 +32,7 @@ if (!isset($_FILES['audio_blob'], $_REQUEST['audio_dir'])) {
     }
 
     Display::addFlash(
-        Display::return_message(get_lang('UploadError'), 'error')
+        Display::return_message(get_lang('Upload failed, please check maximum file size limits and folder rights.'), 'error')
     );
     exit;
 }

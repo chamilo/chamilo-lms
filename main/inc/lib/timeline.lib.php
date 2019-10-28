@@ -94,8 +94,8 @@ class Timeline extends Model
     public function get_status_list()
     {
         return [
-            TIMELINE_STATUS_ACTIVE => get_lang('Active'),
-            TIMELINE_STATUS_INACTIVE => get_lang('Inactive'),
+            TIMELINE_STATUS_ACTIVE => get_lang('active'),
+            TIMELINE_STATUS_INACTIVE => get_lang('inactive'),
         ];
     }
 
@@ -115,7 +115,7 @@ class Timeline extends Model
         // Setting the form elements
         $header = get_lang('Add');
         if ($action == 'edit') {
-            $header = get_lang('Modify');
+            $header = get_lang('Edit');
         }
         $form->addElement('header', $header);
         $id = isset($_GET['id']) ? intval($_GET['id']) : '';
@@ -125,16 +125,16 @@ class Timeline extends Model
         $status_list = $this->get_status_list();
         $form->addElement('select', 'status', get_lang('Status'), $status_list);
         if ($action == 'edit') {
-            //$form->addElement('text', 'created_at', get_lang('CreatedAt'));
+            //$form->addElement('text', 'created_at', get_lang('Created at'));
             //$form->freeze('created_at');
         }
         if ($action == 'edit') {
-            $form->addButtonSave(get_lang('Modify'), 'submit');
+            $form->addButtonSave(get_lang('Edit'), 'submit');
         } else {
             $form->addButtonCreate(get_lang('Add'), 'submit');
         }
 
-        $form->addRule('headline', get_lang('ThisFieldIsRequired'), 'required');
+        $form->addRule('headline', get_lang('Required field'), 'required');
 
         // Setting the defaults
         $defaults = $this->get($id);
@@ -148,7 +148,7 @@ class Timeline extends Model
         $form->setDefaults($defaults);
 
         // Setting the rules
-        $form->addRule('headline', get_lang('ThisFieldIsRequired'), 'required');
+        $form->addRule('headline', get_lang('Required field'), 'required');
 
         return $form;
     }
@@ -165,7 +165,7 @@ class Timeline extends Model
         // Setting the form elements
         $header = get_lang('Add');
         if ($action == 'edit') {
-            $header = get_lang('Modify');
+            $header = get_lang('Edit');
         }
         $form->addElement('header', $header);
         $id = isset($_GET['id']) ? intval($_GET['id']) : '';
@@ -175,28 +175,28 @@ class Timeline extends Model
         $form->addElement('text', 'headline', get_lang('Name'));
 
         //@todo fix this
-        $form->addElement('text', 'start_date', get_lang('StartDate'), ['size' => '70']);
-        $form->addElement('text', 'end_date', get_lang('EndDate'), ['size' => '70']);
-        $form->addElement('textarea', 'text', get_lang('TimelineItemText'));
-        $form->addElement('text', 'media', get_lang('TimelineItemMedia'), ['size' => '70']);
-        $form->addElement('text', 'media_caption', get_lang('TimelineItemMediaCaption'), ['size' => '70']);
-        $form->addElement('text', 'media_credit', get_lang('TimelineItemMediaCredit'), ['size' => '70']);
-        $form->addElement('text', 'title_slide', get_lang('TimelineItemTitleSlide'), ['size' => '70']);
+        $form->addElement('text', 'start_date', get_lang('Start Date'), ['size' => '70']);
+        $form->addElement('text', 'end_date', get_lang('End Date'), ['size' => '70']);
+        $form->addElement('textarea', 'text', get_lang('Text'));
+        $form->addElement('text', 'media', get_lang('Media'), ['size' => '70']);
+        $form->addElement('text', 'media_caption', get_lang('MediaCaption'), ['size' => '70']);
+        $form->addElement('text', 'media_credit', get_lang('MediaCredit'), ['size' => '70']);
+        $form->addElement('text', 'title_slide', get_lang('Slider title'), ['size' => '70']);
 
-        $form->addRule('headline', get_lang('ThisFieldIsRequired'), 'required');
-        $form->addRule('start_date', get_lang('ThisFieldIsRequired'), 'required');
+        $form->addRule('headline', get_lang('Required field'), 'required');
+        $form->addRule('start_date', get_lang('Required field'), 'required');
 
         if ($action == 'edit') {
             // Setting the defaults
             $defaults = $this->get($id);
-            $form->addButtonSave(get_lang('Modify'), 'submit');
+            $form->addButtonSave(get_lang('Edit'), 'submit');
         } else {
             $form->addButtonCreate(get_lang('Add'), 'submit');
         }
         $form->setDefaults($defaults);
 
         // Setting the rules
-        $form->addRule('headline', get_lang('ThisFieldIsRequired'), 'required');
+        $form->addRule('headline', get_lang('Required field'), 'required');
 
         return $form;
     }

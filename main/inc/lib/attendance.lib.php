@@ -250,18 +250,18 @@ class Attendance
                     $locked = $attendance[4];
                     if ($locked == 0) {
                         if (api_is_platform_admin()) {
-                            $message_alert = get_lang('AreYouSureToLockTheAttendance');
+                            $message_alert = get_lang('Are you sure you want to lock the attendance?');
                         } else {
-                            $message_alert = get_lang('UnlockMessageInformation');
+                            $message_alert = get_lang('The attendance is not locked, which means your teacher is still able to modify it.');
                         }
                         $actions .= '&nbsp;<a onclick="javascript:if(!confirm(\''.$message_alert.'\')) return false;" href="index.php?'.api_get_cidreq().'&action=lock_attendance&attendance_id='.$attendance[0].'">'.
-                            Display::return_icon('unlock.png', get_lang('LockAttendance')).'</a>';
+                            Display::return_icon('unlock.png', get_lang('Lock attendance')).'</a>';
                     } else {
                         if (api_is_platform_admin()) {
-                            $actions .= '&nbsp;<a onclick="javascript:if(!confirm(\''.get_lang('AreYouSureToUnlockTheAttendance').'\')) return false;" href="index.php?'.api_get_cidreq().'&action=unlock_attendance&attendance_id='.$attendance[0].'">'.
-                                    Display::return_icon('locked.png', get_lang('UnlockAttendance')).'</a>';
+                            $actions .= '&nbsp;<a onclick="javascript:if(!confirm(\''.get_lang('Are you sure you want to unlock the attendance?').'\')) return false;" href="index.php?'.api_get_cidreq().'&action=unlock_attendance&attendance_id='.$attendance[0].'">'.
+                                    Display::return_icon('locked.png', get_lang('Unlock attendance')).'</a>';
                         } else {
-                            $actions .= '&nbsp;'.Display::return_icon('locked_na.png', get_lang('LockedAttendance'));
+                            $actions .= '&nbsp;'.Display::return_icon('locked_na.png', get_lang('Locked attendance'));
                         }
                     }
                 }

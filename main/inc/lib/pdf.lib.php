@@ -858,7 +858,7 @@ class PDF
             $userId
         );
 
-        Display::addFlash(Display::return_message(get_lang('ItemAdded')));
+        Display::addFlash(Display::return_message(get_lang('Item added')));
     }
 
     /**

@@ -202,7 +202,7 @@ class Link extends Model
             // If the URL is invalid, an error occurs.
             if (!api_valid_url($urllink, true)) {
                 // A check against an absolute URL
-                Display::addFlash(Display::return_message(get_lang('GiveURL'), 'error'));
+                Display::addFlash(Display::return_message(get_lang('Please give the link URL, it should be valid.'), 'error'));
 
                 return false;
             } else {
@@ -321,7 +321,7 @@ class Link extends Model
                         Database:: query($sql);
                     }
                 }
-                Display::addFlash(Display::return_message(get_lang('LinkAdded')));
+                Display::addFlash(Display::return_message(get_lang('The link has been added.')));
 
                 return $link_id;
             }
@@ -332,7 +332,7 @@ class Link extends Model
             $description = trim($_POST['description']);
 
             if (empty($category_title)) {
-                echo Display::return_message(get_lang('GiveCategoryName'), 'error');
+                echo Display::return_message(get_lang('Please give the category name'), 'error');
                 $ok = false;
             } else {
                 // Looking for the largest order number for this category.
@@ -372,7 +372,7 @@ class Link extends Model
                     api_set_default_visibility($linkId, TOOL_LINK_CATEGORY);
                 }
 
-                Display::addFlash(Display::return_message(get_lang('CategoryAdded')));
+                Display::addFlash(Display::return_message(get_lang('Category added')));
 
                 return $linkId;
             }
@@ -423,7 +423,7 @@ class Link extends Model
                 );
                 self::delete_link_from_search_engine(api_get_course_id(), $id);
                 Skill::deleteSkillsFromItem($id, ITEM_TYPE_LINK);
-                Display::addFlash(Display::return_message(get_lang('LinkDeleted')));
+                Display::addFlash(Display::return_message(get_lang('The link has been deleted')));
                 $result = true;
                 break;
             case 'category':
@@ -444,7 +444,7 @@ class Link extends Model
                     api_get_user_id()
                 );
 
-                Display::addFlash(Display::return_message(get_lang('CategoryDeleted')));
+                Display::addFlash(Display::return_message(get_lang('The category has been deleted.')));
                 $result = true;
                 break;
         }
@@ -542,7 +542,7 @@ class Link extends Model
         // If the URL is invalid, an error occurs.
         if (!api_valid_url($values['url'], true)) {
             Display::addFlash(
-                Display::return_message(get_lang('GiveURL'), 'error')
+                Display::return_message(get_lang('Please give the link URL, it should be valid.'), 'error')
             );
 
             return false;
@@ -734,7 +734,7 @@ class Link extends Model
             'LinkUpdated',
             api_get_user_id()
         );
-        Display::addFlash(Display::return_message(get_lang('LinkModded')));
+        Display::addFlash(Display::return_message(get_lang('The link has been modified.')));
     }
 
     /**
@@ -759,7 +759,7 @@ class Link extends Model
             $params,
             ['c_id = ? AND id = ?' => [$course_id, $id]]
         );
-        Display::addFlash(Display::return_message(get_lang('CategoryModded')));
+        Display::addFlash(Display::return_message(get_lang('The category has been modified.')));
 
         return true;
     }
@@ -783,7 +783,7 @@ class Link extends Model
                 $_GET['action'],
                 $_user['user_id']
             );
-            Display::addFlash(Display::return_message(get_lang('VisibilityChanged')));
+            Display::addFlash(Display::return_message(get_lang('The visibility has been changed.')));
         } elseif ($scope == TOOL_LINK_CATEGORY) {
             api_item_property_update(
                 $_course,
@@ -792,7 +792,7 @@ class Link extends Model
                 $_GET['action'],
                 $_user['user_id']
             );
-            Display::addFlash(Display::return_message(get_lang('VisibilityChanged')));
+            Display::addFlash(Display::return_message(get_lang('The visibility has been changed.')));
         }
     }
 
@@ -1015,7 +1015,7 @@ class Link extends Model
                         'secondary btn-sm',
                         [
                             'onclick' => "check_url('".$linkId."', '".addslashes($myrow['url'])."');",
-                            'title' => get_lang('CheckURL'),
+                            'title' => get_lang('Check link'),
                         ]
                     );
 
@@ -1049,7 +1049,7 @@ class Link extends Model
                     switch ($myrow['visibility']) {
                         case '1':
                             $urlVisibility .= '&action=invisible';
-                            $title = get_lang('MakeInvisible');
+                            $title = get_lang('Make invisible');
                             $toolbar .= Display::toolbarButton(
                                 '',
                                 $urlVisibility,
@@ -1062,7 +1062,7 @@ class Link extends Model
                             break;
                         case '0':
                             $urlVisibility .= '&action=visible';
-                            $title = get_lang('MakeVisible');
+                            $title = get_lang('Make Visible');
                             $toolbar .= Display::toolbarButton(
                                 '',
                                 $urlVisibility,
@@ -1084,8 +1084,8 @@ class Link extends Model
                         ];
 
                         $toolbar .= Display::toolbarButton(
-                            get_lang('MoveUp'),
-                            api_get_self().'?'.api_get_cidreq().'&'.http_build_query($moveLinkParams),
+                            get_lang('Move up'),
+                            api_get_self().'?'.api_get_cidreq().'&'.http_build_query($moveLinksParams),
                             'level-up-alt',
                             'secondary',
                             ['class' => 'btn-sm '.($i === 1 ? 'disabled' : '')],
@@ -1094,8 +1094,8 @@ class Link extends Model
 
                         $moveLinkParams['action'] = 'move_link_down';
                         $toolbar .= Display::toolbarButton(
-                            get_lang('MoveDown'),
-                            api_get_self().'?'.api_get_cidreq().'&'.http_build_query($moveLinkParams),
+                            get_lang('Move down'),
+                            api_get_self().'?'.api_get_cidreq().'&'.http_build_query($moveLinksParams),
                             'level-down-alt',
                             'secondary',
                             ['class' => 'btn-sm '.($i === $numberOfLinks ? 'disabled' : '')],
@@ -1103,7 +1103,7 @@ class Link extends Model
                         );
 
                         $url = api_get_self().'?'.api_get_cidreq().'&sec_token='.$token.'&action=deletelink&id='.$linkId.'&category_id='.$categoryId;
-                        $event = "javascript: if(!confirm('".get_lang('LinkDelconfirm')."'))return false;";
+                        $event = "javascript: if(!confirm('".get_lang('Do you want to delete this link?')."'))return false;";
                         $title = get_lang('Delete');
 
                         $toolbar .= Display::toolbarButton(
@@ -1182,10 +1182,10 @@ class Link extends Model
     {
         $categoryId = $category['id'];
         $token = null;
-        $tools = '<a href="'.api_get_self().'?'.api_get_cidreq().'&sec_token='.$token.'&action=editcategory&id='.$categoryId.'&category_id='.$categoryId.'" title='.get_lang('Modify').'">'.
+        $tools = '<a href="'.api_get_self().'?'.api_get_cidreq().'&sec_token='.$token.'&action=editcategory&id='.$categoryId.'&category_id='.$categoryId.'" title='.get_lang('Edit').'">'.
             Display:: return_icon(
                 'edit.png',
-                get_lang('Modify'),
+                get_lang('Edit'),
                 [],
                 ICON_SIZE_SMALL
             ).'</a>';
@@ -1213,21 +1213,22 @@ class Link extends Model
             $tools .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&sec_token='.$token.'&action=down&down='.$categoryId.'&category_id='.$categoryId.'">'.
                 Display:: return_icon(
                     'down.png',
-                    get_lang('Down'),
+                    get_lang('down'),
                     [],
                     ICON_SIZE_SMALL
                 ).'</a>';
         } else {
             $tools .= Display:: return_icon(
                 'down_na.png',
-                get_lang('Down'),
+                get_lang('down'),
                 [],
                 ICON_SIZE_SMALL
             ).'</a>';
         }
 
         $tools .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&sec_token='.$token.'&action=deletecategory&id='.$categoryId."&category_id=$categoryId\"
-            onclick=\"javascript: if(!confirm('".get_lang('CategoryDelconfirm')."')) return false;\">".
+            onclick=\"javascript: if(!confirm('".get_lang('When deleting a category, all links of this category are also deleted.
+Do you really want to delete this category and its links ?')."')) return false;\">".
             Display:: return_icon(
                 'delete.png',
                 get_lang('Delete'),
@@ -1311,7 +1312,7 @@ class Link extends Model
             }
         }
 
-        Display::addFlash(Display::return_message(get_lang('LinkMoved')));
+        Display::addFlash(Display::return_message(get_lang('LinksMoved')));
     }
 
     /**
@@ -1467,17 +1468,17 @@ class Link extends Model
             if (api_is_allowed_to_edit(null, true)) {
                 $content .= '<a href="'.api_get_self().'?'.api_get_cidreq(
                     ).'&action=addlink&category_id='.$categoryId.'">'.
-                    Display::return_icon('new_link.png', get_lang('LinkAdd'), '', ICON_SIZE_MEDIUM).'</a>';
+                    Display::return_icon('new_link.png', get_lang('LinksAdd'), '', ICON_SIZE_MEDIUM).'</a>';
                 $content .= '<a href="'.api_get_self().'?'.api_get_cidreq(
                     ).'&action=addcategory&category_id='.$categoryId.'">'.
-                    Display::return_icon('new_folder.png', get_lang('CategoryAdd'), '', ICON_SIZE_MEDIUM).'</a>';
+                    Display::return_icon('new_folder.png', get_lang('Add a category'), '', ICON_SIZE_MEDIUM).'</a>';
             }
 
             if (!empty($countCategories)) {
                 $content .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&action=list&show=none">';
                 $content .= Display::return_icon(
                         'forum_listview.png',
-                        get_lang('FlatView'),
+                        get_lang('List View'),
                         '',
                         ICON_SIZE_MEDIUM
                     ).' </a>';
@@ -1485,14 +1486,14 @@ class Link extends Model
                 $content .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&action=list&show=all">';
                 $content .= Display::return_icon(
                         'forum_nestedview.png',
-                        get_lang('NestedView'),
+                        get_lang('Nested View'),
                         '',
                         ICON_SIZE_MEDIUM
                     ).'</a>';
             }
 
             $content .= Display::url(
-                Display::return_icon('pdf.png', get_lang('ExportToPdf'), '', ICON_SIZE_MEDIUM),
+                Display::return_icon('pdf.png', get_lang('Export to PDF'), '', ICON_SIZE_MEDIUM),
                 api_get_self().'?'.api_get_cidreq().'&action=export'
             );
             $content .= '</div>';
@@ -1502,7 +1503,7 @@ class Link extends Model
             $content .= $linksPerCategory;
         } else {
             if (!empty($linksPerCategory)) {
-                $content .= Display::panel($linksPerCategory, get_lang('NoCategory'));
+                $content .= Display::panel($linksPerCategory, get_lang('General'));
             }
         }
 
@@ -1548,7 +1549,7 @@ class Link extends Model
                         $header .= $strVisibility;
                         $header .= self::showCategoryAdminTools($myrow, $counter, count($categories));
                     } else {
-                        $header .= get_lang('EditionNotAvailableFromSession');
+                        $header .= get_lang('Edition not available from the session, please edit from the basic course.');
                     }
                 }
             }
@@ -1596,9 +1597,9 @@ class Link extends Model
         );
 
         if ($action == 'addlink') {
-            $form->addHeader(get_lang('LinkAdd'));
+            $form->addHeader(get_lang('LinksAdd'));
         } else {
-            $form->addHeader(get_lang('LinkMod'));
+            $form->addHeader(get_lang('LinksMod'));
         }
 
         $target_link = '_blank';
@@ -1620,8 +1621,8 @@ class Link extends Model
 
         $form->addHidden('id', $linkId);
         $form->addText('url', 'URL');
-        $form->addRule('url', get_lang('GiveURL'), 'url');
-        $form->addText('title', get_lang('LinkName'));
+        $form->addRule('url', get_lang('Please give the link URL, it should be valid.'), 'url');
+        $form->addText('title', get_lang('LinksName'));
         $form->addHtmlEditor('description', get_lang('Description'), true, false, ['ToolbarSet' => 'Profile', 'Width' => '100%', 'Height' => '130']);
 
         $resultcategories = self::getLinkCategories($course_id, $session_id);
@@ -1633,20 +1634,20 @@ class Link extends Model
         }
 
         $form->addSelect('category_id', get_lang('Category'), $options);
-        $form->addCheckBox('on_homepage', null, get_lang('OnHomepage'));
+        $form->addCheckBox('on_homepage', null, get_lang('Show link on course homepage'));
 
         $targets = [
-            '_self' => get_lang('LinkOpenSelf'),
-            '_blank' => get_lang('LinkOpenBlank'),
-            '_parent' => get_lang('LinkOpenParent'),
-            '_top' => get_lang('LinkOpenTop'),
+            '_self' => get_lang('LinksOpenSelf'),
+            '_blank' => get_lang('LinksOpenBlank'),
+            '_parent' => get_lang('LinksOpenParent'),
+            '_top' => get_lang('LinksOpenTop'),
         ];
 
         $form->addSelect(
             'target',
             [
-                get_lang('LinkTarget'),
-                get_lang('AddTargetOfLinkOnHomepage'),
+                get_lang('LinksTarget'),
+                get_lang('AddTargetOfLinksShow link on course homepage'),
             ],
             $targets
         );
@@ -1663,7 +1664,7 @@ class Link extends Model
         if (api_get_setting('search_enabled') == 'true') {
             require_once api_get_path(LIBRARY_PATH).'specific_fields_manager.lib.php';
             $specific_fields = get_specific_field_list();
-            $form->addCheckBox('index_document', get_lang('SearchFeatureDoIndexLink'), get_lang('Yes'));
+            $form->addCheckBox('index_document', get_lang('Index link title and description?s'), get_lang('Yes'));
 
             foreach ($specific_fields as $specific_field) {
                 $default_values = '';
@@ -1689,7 +1690,7 @@ class Link extends Model
 
         $skillList = Skill::addSkillsToForm($form, ITEM_TYPE_LINK, $linkId);
         $form->addHidden('lp_id', $lpId);
-        $form->addButtonSave(get_lang('SaveLink'), 'submitLink');
+        $form->addButtonSave(get_lang('Save links'), 'submitLinks');
         $defaults['skills'] = array_keys($skillList);
         $form->setDefaults($defaults);
 
@@ -1715,15 +1716,15 @@ class Link extends Model
 
         $defaults = [];
         if ($action == 'addcategory') {
-            $form->addHeader(get_lang('CategoryAdd'));
-            $my_cat_title = get_lang('CategoryAdd');
+            $form->addHeader(get_lang('Add a category'));
+            $my_cat_title = get_lang('Add a category');
         } else {
-            $form->addHeader(get_lang('CategoryMod'));
-            $my_cat_title = get_lang('CategoryMod');
+            $form->addHeader(get_lang('Edit Category'));
+            $my_cat_title = get_lang('Edit Category');
             $defaults = self::getCategory($id);
         }
         $form->addHidden('id', $id);
-        $form->addText('category_title', get_lang('CategoryName'));
+        $form->addText('category_title', get_lang('Category name'));
         $form->addHtmlEditor('description', get_lang('Description'), true, false, ['ToolbarSet' => 'Profile', 'Width' => '100%', 'Height' => '130']);
         $form->addButtonSave($my_cat_title, 'submitCategory');
         $form->setDefaults($defaults);

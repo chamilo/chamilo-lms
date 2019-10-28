@@ -116,7 +116,7 @@ switch ($action) {
                     $json['type'] = api_htmlentities($result['filetype']);
                     $json['result'] = Display::return_icon(
                         'accept.png',
-                        get_lang('Uploaded')
+                        get_lang('Uploaded..')
                     );
                 } else {
                     $json['url'] = '';
@@ -191,7 +191,7 @@ switch ($action) {
             if (isset($result['url'])) {
                 $json['result'] = Display::return_icon(
                     'accept.png',
-                    get_lang('Uploaded'),
+                    get_lang('Uploaded..'),
                     [],
                     ICON_SIZE_TINY
                 );

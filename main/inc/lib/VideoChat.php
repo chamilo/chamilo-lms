@@ -54,7 +54,7 @@ class VideoChat
         $toUserInfo = api_get_user_info($toUser);
 
         $chatName = vsprintf(
-            get_lang('VideoChatBetweenUserXAndUserY'),
+            get_lang('Video chat between %s and %s'),
             [$fromUserInfo['firstname'], $toUserInfo['firstname']]
         );
 

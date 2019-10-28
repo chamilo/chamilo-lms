@@ -27,7 +27,7 @@ $errorMsg = '';
 
 $interbreadcrumb[] = [
     'url' => 'session_list.php',
-    'name' => get_lang('SessionList'),
+    'name' => get_lang('Session list'),
 ];
 
 function search_coachs($needle)
@@ -121,7 +121,7 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
     $formSent = 1;
 }
 
-$tool_name = get_lang('AddSession');
+$tool_name = get_lang('Add a training session');
 
 $urlAction = api_get_self();
 
@@ -355,7 +355,7 @@ $(function() {
 })
 </script>";
 
-$form->addButtonNext(get_lang('NextStep'));
+$form->addButtonNext(get_lang('Next step'));
 
 if (!$formSent) {
     $formDefaults['access_start_date'] = $formDefaults['display_start_date'] = api_get_local_time();
@@ -456,7 +456,7 @@ if (!empty($return)) {
 
 echo '<div class="actions">';
 echo '<a href="../session/session_list.php">'.
-    Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('PlatformAdmin'), '', ICON_SIZE_MEDIUM).'</a>';
+    Display::return_icon('back.png', get_lang('Back to').' '.get_lang('Administration'), '', ICON_SIZE_MEDIUM).'</a>';
 echo '</div>';
 
 $form->display();

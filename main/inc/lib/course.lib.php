@@ -599,7 +599,7 @@ class CourseManager
         ) {
             Display::addFlash(
                 Display::return_message(
-                    get_lang('SubscribingNotAllowed'),
+                    get_lang('Subscribing not allowed'),
                     'warning'
                 )
             );
@@ -643,7 +643,7 @@ class CourseManager
         $courseInfo = api_get_course_info($courseCode);
 
         if (empty($courseInfo)) {
-            Display::addFlash(Display::return_message(get_lang('CourseDoesNotExist'), 'warning'));
+            Display::addFlash(Display::return_message(get_lang('This course doesn\'t exist'), 'warning'));
 
             return false;
         }
@@ -651,7 +651,7 @@ class CourseManager
         $userInfo = api_get_user_info($userId);
 
         if (empty($userInfo)) {
-            Display::addFlash(Display::return_message(get_lang('UserDoesNotExist'), 'warning'));
+            Display::addFlash(Display::return_message(get_lang('This user doesn\'t exist'), 'warning'));
 
             return false;
         }
@@ -701,7 +701,7 @@ class CourseManager
                         c_id = $courseId
                     ";
             if (Database::num_rows(Database::query($sql)) > 0) {
-                Display::addFlash(Display::return_message(get_lang('AlreadyRegisteredToCourse'), 'warning'));
+                Display::addFlash(Display::return_message(get_lang('Already registered in course'), 'warning'));
 
                 return false;
             }
@@ -734,7 +734,7 @@ class CourseManager
                         );
 
                         if ($count >= $maxStudents) {
-                            Display::addFlash(Display::return_message(get_lang('MaxNumberSubscribedStudentsReached'), 'warning'));
+                            Display::addFlash(Display::return_message(get_lang('The maximum number of student has already been reached, it is not possible to subscribe more student.'), 'warning'));
 
                             return false;
                         }
@@ -757,7 +757,7 @@ class CourseManager
                 Display::addFlash(
                     Display::return_message(
                         sprintf(
-                            get_lang('UserXAddedToCourseX'),
+                            get_lang('User %s has been registered to course %s'),
                             $userInfo['complete_name_with_username'],
                             $courseInfo['title']
                         )
@@ -2422,7 +2422,7 @@ class CourseManager
 
             // Skills
             $table = Database::get_main_table(TABLE_MAIN_SKILL_REL_USER);
-            $argumentation = Database::escape_string(sprintf(get_lang('SkillFromCourseXDeletedSinceThen'), $course['code']));
+            $argumentation = Database::escape_string(sprintf(get_lang('This skill was obtained through course %s which has been removed since then.'), $course['code']));
             $sql = "UPDATE $table SET course_id = NULL, session_id = NULL, argumentation = '$argumentation' 
                     WHERE course_id = $courseId";
             Database::query($sql);
@@ -2649,18 +2649,18 @@ class CourseManager
         while ($row = Database::fetch_array($result)) {
             $tutor = api_get_user_info($row['user_id']);
             $emailto = $tutor['email'];
-            $emailsubject = get_lang('NewUserInTheCourse').': '.$name_course;
+            $emailsubject = get_lang('New user in the course').': '.$name_course;
             $emailbody = get_lang('Dear').': '.api_get_person_name($tutor['firstname'], $tutor['lastname'])."\n";
-            $emailbody .= get_lang('MessageNewUserInTheCourse').': '.$name_course."\n";
-            $emailbody .= get_lang('UserName').': '.$student['username']."\n";
+            $emailbody .= get_lang('MessageNew user in the course').': '.$name_course."\n";
+            $emailbody .= get_lang('Username').': '.$student['username']."\n";
             if (api_is_western_name_order()) {
-                $emailbody .= get_lang('FirstName').': '.$student['firstname']."\n";
-                $emailbody .= get_lang('LastName').': '.$student['lastname']."\n";
+                $emailbody .= get_lang('First name').': '.$student['firstname']."\n";
+                $emailbody .= get_lang('Last name').': '.$student['lastname']."\n";
             } else {
-                $emailbody .= get_lang('LastName').': '.$student['lastname']."\n";
-                $emailbody .= get_lang('FirstName').': '.$student['firstname']."\n";
+                $emailbody .= get_lang('Last name').': '.$student['lastname']."\n";
+                $emailbody .= get_lang('First name').': '.$student['firstname']."\n";
             }
-            $emailbody .= get_lang('Email').': <a href="mailto:'.$student['email'].'">'.$student['email']."</a>\n\n";
+            $emailbody .= get_lang('e-mail').': <a href="mailto:'.$student['email'].'">'.$student['email']."</a>\n\n";
             $recipient_name = api_get_person_name(
                 $tutor['firstname'],
                 $tutor['lastname'],
@@ -3146,7 +3146,7 @@ class CourseManager
                 if (api_is_allowed_to_edit() && $action_show) {
                     //delete
                     $data .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&action=delete&description_id='.$description->id.'" onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(
-                        get_lang('ConfirmYourChoice'),
+                        get_lang('Please confirm your choice'),
                                 ENT_QUOTES,
                         $charset
                     )).'\')) return false;">';
@@ -3173,7 +3173,7 @@ class CourseManager
                 $data .= '</div>';
             }
         } else {
-            $data .= '<em>'.get_lang('ThisCourseDescriptionIsEmpty').'</em>';
+            $data .= '<em>'.get_lang('There is no course description so far.').'</em>';
         }
 
         return $data;
@@ -4121,7 +4121,7 @@ class CourseManager
             } else {
                 $session_title =
                     $course_info['name'].' '.
-                    Display::tag('span', get_lang('CourseClosed'), ['class' => 'item_closed']);
+                    Display::tag('span', get_lang('(the course is currently closed)'), ['class' => 'item_closed']);
             }
         } else {
             $session_title = $course_info['name'];
@@ -4224,7 +4224,7 @@ class CourseManager
                 ) {
                     $session['dates'] = '';
                     if (api_get_setting('show_session_coach') === 'true') {
-                        $session['coach'] = get_lang('GeneralCoach').': '.$sessionCoachName;
+                        $session['coach'] = get_lang('General coach').': '.$sessionCoachName;
                     }
                     $active = true;
                 } else {
@@ -4232,7 +4232,7 @@ class CourseManager
                         get_lang('From').' '.$session['access_start_date'].' '.
                         get_lang('To').' '.$session['access_end_date'];
                     if (api_get_setting('show_session_coach') === 'true') {
-                        $session['coach'] = get_lang('GeneralCoach').': '.$sessionCoachName;
+                        $session['coach'] = get_lang('General coach').': '.$sessionCoachName;
                     }
                     $date_start = $session['access_start_date'];
                     $date_end = $session['access_end_date'];
@@ -4890,27 +4890,27 @@ class CourseManager
                 $course_info['visibility'] == COURSE_VISIBILITY_OPEN_WORLD
             ) {
                 $my_course['go_to_course_button'] = Display::url(
-                    get_lang('GoToCourse').' '.
+                    get_lang('Go to the course').' '.
                     Display::returnFontAwesomeIcon('share'),
                     api_get_path(WEB_COURSE_PATH).$course_info['path'].'/index.php',
                     [
                         'class' => 'btn btn-default btn-sm',
-                        'title' => get_lang('GoToCourse'),
-                        'aria-label' => get_lang('GoToCourse'),
+                        'title' => get_lang('Go to the course'),
+                        'aria-label' => get_lang('Go to the course'),
                     ]
                 );
             }
 
             if ($access_link && in_array('unsubscribe', $access_link)) {
                 $my_course['unsubscribe_button'] = Display::url(
-                    get_lang('Unreg').' '.
+                    get_lang('Unsubscribe').' '.
                     Display::returnFontAwesomeIcon('sign-out'),
                     api_get_path(WEB_CODE_PATH).'auth/courses.php?action=unsubscribe&unsubscribe='.$courseCode
                     .'&sec_token='.$stok.'&category_code='.$categoryCode,
                     [
                         'class' => 'btn btn-danger btn-sm',
-                        'title' => get_lang('Unreg'),
-                        'aria-label' => get_lang('Unreg'),
+                        'title' => get_lang('Unsubscribe'),
+                        'aria-label' => get_lang('Unsubscribe'),
                     ]
                 );
             }
@@ -5833,7 +5833,7 @@ class CourseManager
                             $userCount = isset($thisGroup['count_users']) ? $thisGroup['count_users'] : 0;
                         }
                         // $alreadySelected is the array containing the groups (and users) that are already selected
-                        $user_label = ($userCount > 0) ? get_lang('Users') : get_lang('LowerCaseUser');
+                        $user_label = ($userCount > 0) ? get_lang('Users') : get_lang('user');
                         $user_disabled = ($userCount > 0) ? "" : "disabled=disabled";
                         $result[] = [
                             'disabled' => $user_disabled,
@@ -6011,10 +6011,10 @@ class CourseManager
                 ) {
                     if (self::is_user_subscribed_in_course($userId, $course_info['code'])) {
                         $form_data['action'] = $course_info['course_public_url'];
-                        $form_data['message'] = sprintf(get_lang('YouHaveBeenRegisteredToCourseX'), $course_info['title']);
+                        $form_data['message'] = sprintf(get_lang('You have been registered to course %s'), $course_info['title']);
                         $form_data['button'] = Display::button(
                             'next',
-                            get_lang('GoToCourse', null, $_user['language']),
+                            get_lang('Go to the course', null, $_user['language']),
                             ['class' => 'btn btn-primary btn-large']
                         );
 
@@ -6027,7 +6027,7 @@ class CourseManager
                         if (!empty($exercise_redirect) && !empty($result)) {
                             $form_data['action'] = api_get_path(WEB_CODE_PATH).
                                 'exercise/overview.php?exerciseId='.$exercise_redirect.'&cidReq='.$course_info['code'];
-                            $form_data['message'] .= '<br />'.get_lang('YouCanAccessTheExercise');
+                            $form_data['message'] .= '<br />'.get_lang('Go to the test');
                             $form_data['button'] = Display::button(
                                 'next',
                                 get_lang('Go', null, $_user['language']),
@@ -6181,7 +6181,7 @@ class CourseManager
         } else {
             $course_title = $course_info['title'].' '.Display::tag(
                 'span',
-                get_lang('CourseClosed'),
+                get_lang('(the course is currently closed)'),
                 ['class' => 'item_closed']
             );
         }

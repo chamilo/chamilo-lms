@@ -1882,7 +1882,7 @@ class DocumentManager
             $course_info['name'],
             $info_grade_certificate['grade'],
             $url,
-            '<a href="'.$url.'" target="_blank">'.get_lang('CertificateOnlineLink').'</a>',
+            '<a href="'.$url.'" target="_blank">'.get_lang('Online link to certificate').'</a>',
             '((certificate_barcode))',
             $externalStyle,
         ];
@@ -1967,7 +1967,7 @@ class DocumentManager
             $sys_course_path = api_get_path(SYS_COURSE_PATH);
             $base_work_dir = $sys_course_path.$course_dir;
             $dir_name = '/certificates';
-            $post_dir_name = get_lang('CertificatesFiles');
+            $post_dir_name = get_lang('Certificates');
             $visibility_command = 'invisible';
 
             $id = self::get_document_id_of_directory_certificate();
@@ -2804,7 +2804,7 @@ class DocumentManager
                 if ($document && $unzip == 1) {
                     if ($show_output) {
                         echo Display::return_message(
-                            get_lang('UplUploadSucceeded').'<br />',
+                            get_lang('File upload succeeded!').'<br />',
                             'confirm',
                             false
                         );
@@ -2922,7 +2922,7 @@ class DocumentManager
         $already_consumed_space_m = round($already_consumed_space / 1048576, 2);
         $percentage = $already_consumed_space / $course_quota * 100;
         $percentage = round($percentage, 1);
-        $message = get_lang('YouAreCurrentlyUsingXOfYourX');
+        $message = get_lang('You are currently using %s MB (%s) of your %s MB.');
         $message = sprintf($message, $already_consumed_space_m, $percentage.'%', $course_quota_m.' ');
 
         return Display::div($message, ['id' => 'document_quota', 'class' => 'card-quota']);
@@ -4281,7 +4281,7 @@ class DocumentManager
         $codePath = api_get_path(REL_CODE_PATH);
         $dir = '/certificates';
         $comment = null;
-        $title = get_lang('DefaultCertificate');
+        $title = get_lang('Default certificate');
         $fileName = api_replace_dangerous_char($title);
         $filePath = api_get_path(SYS_COURSE_PATH)."{$courseData['directory']}/document$dir";
 
@@ -4681,7 +4681,7 @@ class DocumentManager
 
         $parent_select = $form->addSelect(
             $selectName,
-            get_lang('CurrentDirectory'),
+            get_lang('Current folder'),
             '',
             $attributes
         );
@@ -4841,16 +4841,16 @@ class DocumentManager
         }
 
         if ($path === '/shared_folder') {
-            $tooltip_title_alt = get_lang('UserFolders');
+            $tooltip_title_alt = get_lang('Folders of users');
         } elseif (strstr($path, 'shared_folder_session_')) {
-            $tooltip_title_alt = get_lang('UserFolders').' ('.api_get_session_name($sessionId).')';
+            $tooltip_title_alt = get_lang('Folders of users').' ('.api_get_session_name($sessionId).')';
         } elseif (strstr($tooltip_title, 'sf_user_')) {
             $userinfo = api_get_user_info(substr($tooltip_title, 8));
-            $tooltip_title_alt = get_lang('UserFolder').' '.$userinfo['complete_name'];
+            $tooltip_title_alt = get_lang('User folder').' '.$userinfo['complete_name'];
         } elseif ($path == '/chat_files') {
-            $tooltip_title_alt = get_lang('ChatFiles');
+            $tooltip_title_alt = get_lang('Chat conversations history');
         } elseif ($path == '/learning_path') {
-            $tooltip_title_alt = get_lang('LearningPaths');
+            $tooltip_title_alt = get_lang('Learning paths');
         } elseif ($path == '/video') {
             $tooltip_title_alt = get_lang('Video');
         } elseif ($path == '/audio') {
@@ -4860,7 +4860,7 @@ class DocumentManager
         } elseif ($path == '/images') {
             $tooltip_title_alt = get_lang('Images');
         } elseif ($path == '/images/gallery') {
-            $tooltip_title_alt = get_lang('DefaultCourseImages');
+            $tooltip_title_alt = get_lang('Gallery');
         }
 
         $copyToMyFiles = $open_in_new_window_link = '';
@@ -4905,12 +4905,12 @@ class DocumentManager
                 in_array($extension, ['html', 'htm'])
             ) {
                 $pdf_icon = ' <a style="float:right".'.$prevent_multiple_click.' href="'.$pageUrl.'?'.$courseParams.'&action=export_to_pdf&id='.$document_data['id'].'&curdirpath='.$curdirpath.'">'.
-                    Display::return_icon('pdf.png', get_lang('Export2PDF'), [], ICON_SIZE_SMALL).'</a> ';
+                    Display::return_icon('pdf.png', get_lang('Export to PDF format'), [], ICON_SIZE_SMALL).'</a> ';
             }
 
             if ($is_browser_viewable_file) {
                 $open_in_new_window_link = '<a href="'.$documentWebPath.str_replace('%2F', '/', $url_path).'?'.$courseParams.'" style="float:right"'.$prevent_multiple_click.' target="_blank">'.
-                    Display::return_icon('open_in_new_window.png', get_lang('OpenInANewWindow'), [], ICON_SIZE_SMALL).'&nbsp;&nbsp;</a>';
+                    Display::return_icon('open_in_new_window.png', get_lang('Open in a new window'), [], ICON_SIZE_SMALL).'&nbsp;&nbsp;</a>';
             }
 
             if ($addToEditor) {
@@ -5024,18 +5024,18 @@ class DocumentManager
 
                         return '<a href="'.$url.'" title="'.$tooltip_title_alt.'" '.$visibility_class.' style="float:left">'.
                             self::build_document_icon_tag($filetype, $path, $isAllowedToEdit).
-                            Display::return_icon('shared.png', get_lang('ResourceShared'), []).
+                            Display::return_icon('shared.png', get_lang('Resource shared'), []).
                         '</a>';
                     } else {
                         return '<a href="'.$url.'" title="'.$tooltip_title_alt.'" '.$visibility_class.' style="float:left">'.
                             self::build_document_icon_tag($filetype, $path, $isAllowedToEdit).
-                            Display::return_icon('shared.png', get_lang('ResourceShared'), []).
+                            Display::return_icon('shared.png', get_lang('Resource shared'), []).
                         '</a>';
                     }
                 } else {
                     return '<a href="'.$url.'" title="'.$tooltip_title_alt.'" target="'.$target.'"'.$visibility_class.' style="float:left">'.
                         self::build_document_icon_tag($filetype, $path, $isAllowedToEdit).
-                        Display::return_icon('shared.png', get_lang('ResourceShared'), []).
+                        Display::return_icon('shared.png', get_lang('Resource shared'), []).
                     '</a>';
                 }
             } else {
@@ -5099,26 +5099,28 @@ class DocumentManager
             $basename = substr(strrchr($basename, '.'), 1);
         } elseif ($type == 'link') {
             $icon = 'clouddoc.png';
-            $basename = get_lang('CloudFileLink');
+            $basename = get_lang('Cloud file link');
         } else {
             if ($path == '/shared_folder') {
                 $icon = 'folder_users.png';
                 if ($isAllowedToEdit) {
-                    $basename = get_lang('HelpUsersFolder');
+                    $basename = get_lang('INFORMATION VISIBLE TO THE TEACHER ONLY:
+The users folder contains a folder for each user who has accessed it through the documents tool, or when any file has been sent in the course through the online editor. If neither circumstances has occurred, then no user folder will have been created. In the case of groups, files that are sent through the editor will be added in the folder of each group, which is only accessible by students from this group.');
                 } else {
-                    $basename = get_lang('UserFolders');
+                    $basename = get_lang('Folders of users');
                 }
             } elseif (strstr($basename, 'sf_user_')) {
                 $userInfo = api_get_user_info(substr($basename, 8));
                 $icon = $userInfo['avatar_small'];
-                $basename = get_lang('UserFolder').' '.$userInfo['complete_name'];
+                $basename = get_lang('User folder').' '.$userInfo['complete_name'];
                 $user_image = true;
             } elseif (strstr($path, 'shared_folder_session_')) {
                 $sessionName = api_get_session_name($sessionId);
                 if ($isAllowedToEdit) {
-                    $basename = '***('.$sessionName.')*** '.get_lang('HelpUsersFolder');
+                    $basename = '***('.$sessionName.')*** '.get_lang('INFORMATION VISIBLE TO THE TEACHER ONLY:
+The users folder contains a folder for each user who has accessed it through the documents tool, or when any file has been sent in the course through the online editor. If neither circumstances has occurred, then no user folder will have been created. In the case of groups, files that are sent through the editor will be added in the folder of each group, which is only accessible by students from this group.');
                 } else {
-                    $basename = get_lang('UserFolders').' ('.$sessionName.')';
+                    $basename = get_lang('Folders of users').' ('.$sessionName.')';
                 }
                 $icon = 'folder_users.png';
             } else {
@@ -5127,51 +5129,57 @@ class DocumentManager
                 if ($path == '/audio') {
                     $icon = 'folder_audio.png';
                     if ($isAllowedToEdit) {
-                        $basename = get_lang('HelpDefaultDirDocuments');
+                        $basename = get_lang('INFORMATION VISIBLE TO THE TEACHER ONLY:
+This folder contains the default archives. You can clear files or add new ones, but if a file is hidden when it is inserted in a web document, the students will not be able to see it in this document. When inserting a file in a web document, first make sure it is visible. The folders can remain hidden.');
                     } else {
                         $basename = get_lang('Audio');
                     }
                 } elseif ($path == '/flash') {
                     $icon = 'folder_flash.png';
                     if ($isAllowedToEdit) {
-                        $basename = get_lang('HelpDefaultDirDocuments');
+                        $basename = get_lang('INFORMATION VISIBLE TO THE TEACHER ONLY:
+This folder contains the default archives. You can clear files or add new ones, but if a file is hidden when it is inserted in a web document, the students will not be able to see it in this document. When inserting a file in a web document, first make sure it is visible. The folders can remain hidden.');
                     } else {
                         $basename = get_lang('Flash');
                     }
                 } elseif ($path == '/images') {
                     $icon = 'folder_images.png';
                     if ($isAllowedToEdit) {
-                        $basename = get_lang('HelpDefaultDirDocuments');
+                        $basename = get_lang('INFORMATION VISIBLE TO THE TEACHER ONLY:
+This folder contains the default archives. You can clear files or add new ones, but if a file is hidden when it is inserted in a web document, the students will not be able to see it in this document. When inserting a file in a web document, first make sure it is visible. The folders can remain hidden.');
                     } else {
                         $basename = get_lang('Images');
                     }
                 } elseif ($path == '/video') {
                     $icon = 'folder_video.png';
                     if ($isAllowedToEdit) {
-                        $basename = get_lang('HelpDefaultDirDocuments');
+                        $basename = get_lang('INFORMATION VISIBLE TO THE TEACHER ONLY:
+This folder contains the default archives. You can clear files or add new ones, but if a file is hidden when it is inserted in a web document, the students will not be able to see it in this document. When inserting a file in a web document, first make sure it is visible. The folders can remain hidden.');
                     } else {
                         $basename = get_lang('Video');
                     }
                 } elseif ($path == '/images/gallery') {
                     $icon = 'folder_gallery.png';
                     if ($isAllowedToEdit) {
-                        $basename = get_lang('HelpDefaultDirDocuments');
+                        $basename = get_lang('INFORMATION VISIBLE TO THE TEACHER ONLY:
+This folder contains the default archives. You can clear files or add new ones, but if a file is hidden when it is inserted in a web document, the students will not be able to see it in this document. When inserting a file in a web document, first make sure it is visible. The folders can remain hidden.');
                     } else {
                         $basename = get_lang('Gallery');
                     }
                 } elseif ($path == '/chat_files') {
                     $icon = 'folder_chat.png';
                     if ($isAllowedToEdit) {
-                        $basename = get_lang('HelpFolderChat');
+                        $basename = get_lang('INFORMATION VISIBLE TO THE TEACHER ONLY:
+This folder contains all sessions that have been opened in the chat. Although the chat sessions can often be trivial, others can be really interesting and worthy of being incorporated as an additional work document. To do this without changing the visibility of this folder, make the file visible and link it from where you deem appropriate. It is not recommended to make this folder visible to all.');
                     } else {
-                        $basename = get_lang('ChatFiles');
+                        $basename = get_lang('Chat conversations history');
                     }
                 } elseif ($path == '/learning_path') {
                     $icon = 'folder_learningpath.png';
                     if ($isAllowedToEdit) {
-                        $basename = get_lang('HelpFolderLearningPaths');
+                        $basename = get_lang('HelpFolderLearning paths');
                     } else {
-                        $basename = get_lang('LearningPaths');
+                        $basename = get_lang('Learning paths');
                     }
                 }
             }
@@ -5272,7 +5280,7 @@ class DocumentManager
             if ($is_template == 0) {
                 if ((isset($_GET['curdirpath']) && $_GET['curdirpath'] != '/certificates') || !isset($_GET['curdirpath'])) {
                     $modify_icons[] = Display::url(
-                        Display::return_icon('wizard.png', get_lang('AddAsTemplate')),
+                        Display::return_icon('wizard.png', get_lang('Add as a template')),
                         api_get_self()."?$courseParams&curdirpath=$curdirpath&add_as_template=$id"
                     );
                 }
@@ -5280,12 +5288,12 @@ class DocumentManager
                     $visibility_icon_certificate = 'nocertificate';
                     if (self::get_default_certificate_id(api_get_course_int_id()) == $id) {
                         $visibility_icon_certificate = 'certificate';
-                        $certificate = get_lang('DefaultCertificate');
-                        $preview = get_lang('PreviewCertificate');
+                        $certificate = get_lang('Default certificate');
+                        $preview = get_lang('Preview certificate');
                         $is_preview = true;
                     } else {
                         $is_preview = false;
-                        $certificate = get_lang('NoDefaultCertificate');
+                        $certificate = get_lang('NoDefault certificate');
                     }
                     if (isset($_GET['selectcat'])) {
                         $modify_icons[] = Display::url(
@@ -5302,13 +5310,13 @@ class DocumentManager
                 }
             } else {
                 $modify_icons[] = Display::url(
-                    Display::return_icon('wizard_na.png', get_lang('RemoveAsTemplate')),
+                    Display::return_icon('wizard_na.png', get_lang('Remove template')),
                     api_get_self()."?$courseParams&curdirpath=$curdirpath&remove_as_template=$id"
                 );
             }
 
             $modify_icons[] = Display::url(
-                Display::return_icon('pdf.png', get_lang('Export2PDF')),
+                Display::return_icon('pdf.png', get_lang('Export to PDF format')),
                 api_get_self()."?$courseParams&action=export_to_pdf&id=$id&curdirpath=$curdirpath"
             );
         }
@@ -5406,8 +5414,8 @@ class DocumentManager
                 }
             }
         }
-        $form->addElement('select', 'move_to', get_lang('MoveTo'), $options);
-        $form->addButtonNext(get_lang('MoveElement'), 'move_file_submit');
+        $form->addElement('select', 'move_to', get_lang('Move to'), $options);
+        $form->addButtonNext(get_lang('Move element'), 'move_file_submit');
 
         return $form->returnForm();
     }
@@ -5464,9 +5472,9 @@ class DocumentManager
         $form->addElement('hidden', 'create_dir', 1);
         $form->addElement('hidden', 'dir_id', intval($document_id));
         $form->addElement('hidden', 'id', intval($dirId));
-        $form->addElement('header', get_lang('CreateDir'));
-        $form->addText('dirname', get_lang('NewDir'), ['autofocus' => 'autofocus']);
-        $form->addButtonCreate(get_lang('CreateFolder'));
+        $form->addElement('header', get_lang('Create folder'));
+        $form->addText('dirname', get_lang('Name of the new folder'), ['autofocus' => 'autofocus']);
+        $form->addButtonCreate(get_lang('Create the folder'));
 
         return $form->returnForm();
     }
@@ -5534,7 +5542,7 @@ class DocumentManager
                     0,
                     $documentDirectory,
                     '/shared_folder',
-                    get_lang('UserFolders'),
+                    get_lang('Folders of users'),
                     0,
                     false,
                     false
@@ -5570,7 +5578,7 @@ class DocumentManager
                 0,
                 $documentDirectory,
                 '/shared_folder_session_'.$sessionId,
-                get_lang('UserFolders').' ('.api_get_session_name($sessionId).')',
+                get_lang('Folders of users').' ('.api_get_session_name($sessionId).')',
                 0,
                 false,
                 false
@@ -6390,12 +6398,12 @@ class DocumentManager
                 $userInfo = api_get_user_info($userId);
 
                 $message = sprintf(
-                    get_lang('DocumentXHasBeenAddedToDocumentInYourCourseXByUserX'),
+                    get_lang('A new document %s has been added to the document tool in your course %s by %s.'),
                     $link,
                     $courseTitle,
                     $userInfo['complete_name']
                 );
-                $subject = sprintf(get_lang('NewDocumentAddedToCourseX'), $courseTitle);
+                $subject = sprintf(get_lang('New document added to course %s'), $courseTitle);
                 MessageManager::sendMessageToAllUsersInCourse($subject, $message, $courseInfo, $sessionId);
             }
 
@@ -6788,8 +6796,8 @@ class DocumentManager
     private static function getButtonEdit($isReadOnly, array $documentData, $extension, $isCertificateMode)
     {
         $extension = strtolower($extension);
-        $iconEn = Display::return_icon('edit.png', get_lang('Modify'));
-        $iconDis = Display::return_icon('edit_na.png', get_lang('Modify'));
+        $iconEn = Display::return_icon('edit.png', get_lang('Edit'));
+        $iconDis = Display::return_icon('edit_na.png', get_lang('Edit'));
         $courseParams = api_get_cidreq();
         $webOdfExtensionList = self::get_web_odf_extension_list();
         $path = $documentData['path'];
@@ -6928,14 +6936,14 @@ class DocumentManager
 
         if ($isReadOnly) {
             if (api_is_allowed_to_edit() || api_is_platform_admin()) {
-                return Display::return_icon($visibility_icon.'.png', get_lang('VisibilityCannotBeChanged'));
+                return Display::return_icon($visibility_icon.'.png', get_lang('The visibility cannot be changed'));
             }
 
             return null;
         }
 
         if ($isCertificateMode) {
-            return Display::return_icon($visibility_icon.'.png', get_lang('VisibilityCannotBeChanged'));
+            return Display::return_icon($visibility_icon.'.png', get_lang('The visibility cannot be changed'));
         }
 
         if (api_is_allowed_to_edit() || api_is_platform_admin()) {
@@ -6969,7 +6977,7 @@ class DocumentManager
         $parentId
     ) {
         $iconEn = Display::return_icon('delete.png', get_lang('Delete'));
-        $iconDis = Display::return_icon('delete_na.png', get_lang('ThisFolderCannotBeDeleted'));
+        $iconDis = Display::return_icon('delete_na.png', get_lang('This folder cannot be deleted'));
         $path = $documentData['path'];
         $id = $documentData['id'];
         $courseParams = api_get_cidreq();

@@ -21,10 +21,10 @@ $tbl_session_user = Database::get_main_table(TABLE_MAIN_SESSION_USER);
 $tbl_session_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
 $tbl_session_course_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 
-$tool_name = get_lang('ImportSessionListXMLCSV');
+$tool_name = get_lang('Import sessions list');
 
-//$interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
-$interbreadcrumb[] = ['url' => 'session_list.php', 'name' => get_lang('SessionList')];
+//$interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('Administration'));
+$interbreadcrumb[] = ['url' => 'session_list.php', 'name' => get_lang('Session list')];
 
 set_time_limit(0);
 
@@ -79,7 +79,7 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
                                     break;
                                 default:
                                     $status = 5;
-                                    $error_message .= get_lang('StudentStatusWasGivenTo').' : '.$username.'<br />';
+                                    $error_message .= get_lang('Learner status has been given to').' : '.$username.'<br />';
                             }
 
                             $result = UserManager::create_user(
@@ -118,7 +118,7 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
                                     break;
                                 default:
                                     $status = 5;
-                                    $error_message .= get_lang('StudentStatusWasGivenTo').' : '.$username.'<br />';
+                                    $error_message .= get_lang('Learner status has been given to').' : '.$username.'<br />';
                             }
 
                             $userId = UserManager::get_user_id_from_username($username);
@@ -192,7 +192,7 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
                         if (!empty($coach)) {
                             $coach_id = UserManager::get_user_id_from_username($coach);
                             if ($coach_id === false) {
-                                $error_message .= get_lang('UserDoesNotExist').' : '.$coach.'<br />';
+                                $error_message .= get_lang('This user doesn\'t exist').' : '.$coach.'<br />';
                                 // Forcing the coach id if user does not exist.
                                 $coach_id = api_get_user_id();
                             }
@@ -207,7 +207,7 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
                         if (!empty($date_start)) {
                             list($year_start, $month_start, $day_start) = explode('/', $date_start);
                             if (empty($year_start) || empty($month_start) || empty($day_start)) {
-                                $error_message .= get_lang('WrongDate').' : '.$date_start.'<br />';
+                                $error_message .= get_lang('Wrong date format (yyyy-mm-dd)').' : '.$date_start.'<br />';
                                 break;
                             } else {
                                 $time_start = mktime(0, 0, 0, $month_start, $day_start, $year_start);
@@ -224,7 +224,7 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
                                 }
                             }
                             if ($time_end - $time_start < 0) {
-                                $error_message .= get_lang('StartDateShouldBeBeforeEndDate').' : '.$date_end.'<br />';
+                                $error_message .= get_lang('The first date should be before the end date').' : '.$date_end.'<br />';
                             }
                         }
 
@@ -352,7 +352,7 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
                                                 status = 2 ";
                                         $rs_coachs = Database::query($sql);
                                     } else {
-                                        $error_message .= get_lang('UserDoesNotExist').' : '.$user.'<br />';
+                                        $error_message .= get_lang('This user doesn\'t exist').' : '.$user.'<br />';
                                     }
                                 }
 
@@ -378,7 +378,7 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
                                         $rs_users = Database::query($sql);
                                         $users_in_course_counter++;
                                     } else {
-                                        $error_message .= get_lang('UserDoesNotExist').' : '.$username.'<br />';
+                                        $error_message .= get_lang('This user doesn\'t exist').' : '.$username.'<br />';
                                     }
                                 }
                                 $sql = "UPDATE $tbl_session_course SET nbr_users='$users_in_course_counter' WHERE c_id='$courseId'";
@@ -390,10 +390,10 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
                     }
                 }
                 if (empty($root->Users->User) && empty($root->Courses->Course) && empty($root->Session)) {
-                    $error_message = get_lang('NoNeededData');
+                    $error_message = get_lang('The specified file doesn\'t contain all needed data !');
                 }
             } else {
-                $error_message .= get_lang('XMLNotValid');
+                $error_message .= get_lang('XML document is not valid');
             }
         } else {
             // CSV
@@ -423,11 +423,11 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
         }
 
         if (!empty($error_message)) {
-            $error_message = get_lang('ButProblemsOccured').' :<br />'.$error_message;
+            $error_message = get_lang('but problems occured').' :<br />'.$error_message;
         }
 
         if (count($inserted_in_course) > 1) {
-            $warn = get_lang('SeveralCoursesSubscribedToSessionBecauseOfSameVisualCode').': ';
+            $warn = get_lang('Several courses were subscribed to the session because of a duplicate course code').': ';
             foreach ($inserted_in_course as $code => $title) {
                 $warn .= ' '.$title.' ('.$code.'),';
             }
@@ -441,12 +441,12 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
             header('Location: resume_session.php?id_session='.$session_id);
             exit;
         } else {
-            Display::addFlash(Display::return_message(get_lang('FileImported').' '.$error_message));
+            Display::addFlash(Display::return_message(get_lang('File imported').' '.$error_message));
             header('Location: session_list.php');
             exit;
         }
     } else {
-        $error_message = get_lang('NoInputFile');
+        $error_message = get_lang('No file was sent');
     }
 }
 
@@ -454,7 +454,7 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
 Display::display_header($tool_name);
 
 if (count($inserted_in_course) > 1) {
-    $msg = get_lang('SeveralCoursesSubscribedToSessionBecauseOfSameVisualCode').': ';
+    $msg = get_lang('Several courses were subscribed to the session because of a duplicate course code').': ';
     foreach ($inserted_in_course as $code => $title) {
         $msg .= ' '.$title.' ('.$title.'),';
     }
@@ -464,7 +464,7 @@ if (count($inserted_in_course) > 1) {
 
 echo '<div class="actions">';
 echo '<a href="../session/session_list.php">'.
-    Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('PlatformAdmin'), '', ICON_SIZE_MEDIUM).'</a>';
+    Display::return_icon('back.png', get_lang('Back to').' '.get_lang('Administration'), '', ICON_SIZE_MEDIUM).'</a>';
 echo '</div>';
 
 if (!empty($error_message)) {
@@ -473,14 +473,14 @@ if (!empty($error_message)) {
 
 $form = new FormValidator('import_sessions', 'post', api_get_self(), null, ['enctype' => 'multipart/form-data']);
 $form->addElement('hidden', 'formSent', 1);
-$form->addElement('file', 'import_file', get_lang('ImportFileLocation'));
+$form->addElement('file', 'import_file', get_lang('Import marks in an assessment'));
 $form->addElement(
     'radio',
     'file_type',
     [
-        get_lang('FileType'),
+        get_lang('File type'),
         Display::url(
-            get_lang('ExampleCSVFile'),
+            get_lang('Example CSV file'),
             api_get_path(WEB_CODE_PATH).'admin/example_session.csv',
             ['target' => '_blank', 'download' => null]
         ),
@@ -494,7 +494,7 @@ $form->addElement(
     [
         null,
         Display::url(
-            get_lang('ExampleXMLFile'),
+            get_lang('Example XML file'),
             api_get_path(WEB_CODE_PATH).'admin/example_session.xml',
             ['target' => '_blank', 'download' => null]
         ),
@@ -503,12 +503,12 @@ $form->addElement(
     'xml'
 );
 
-$form->addElement('checkbox', 'overwrite', null, get_lang('IfSessionExistsUpdate'));
-$form->addElement('checkbox', 'delete_users_not_in_list', null, get_lang('DeleteUsersNotInList'));
-$form->addElement('checkbox', 'update_course_coaches', null, get_lang('CleanAndUpdateCourseCoaches'));
-$form->addElement('checkbox', 'add_me_as_coach', null, get_lang('AddMeAsCoach'));
-$form->addElement('checkbox', 'sendMail', null, get_lang('SendMailToUsers'));
-$form->addButtonImport(get_lang('ImportSession'));
+$form->addElement('checkbox', 'overwrite', null, get_lang('If a session exists, update it'));
+$form->addElement('checkbox', 'delete_users_not_in_list', null, get_lang('Unsubscribe students which are not in the imported list'));
+$form->addElement('checkbox', 'update_course_coaches', null, get_lang('Clean and update course coaches'));
+$form->addElement('checkbox', 'add_me_as_coach', null, get_lang('Add me as coach'));
+$form->addElement('checkbox', 'sendMail', null, get_lang('Send a mail to users'));
+$form->addButtonImport(get_lang('Import session(s)'));
 
 $defaults = ['sendMail' => 'true', 'file_type' => 'csv'];
 
@@ -524,18 +524,18 @@ if (!empty($options) && isset($options['options'])) {
 
 $form->setDefaults($defaults);
 
-Display::return_message(get_lang('TheXMLImportLetYouAddMoreInfoAndCreateResources'));
+Display::return_message(get_lang('The XML import lets you add more info and create resources (courses, users). The CSV import will only create sessions and let you assign existing resources to them.'));
 $form->display();
 
 ?>
-<p><?php echo get_lang('CSVMustLookLike').' ('.get_lang('MandatoryFields').')'; ?> :</p>
+<p><?php echo get_lang('The CSV file must look like this').' ('.get_lang('Fields in <strong>bold</strong> are mandatory.').')'; ?> :</p>
 <pre>
 <strong>SessionName</strong>;Coach;<strong>DateStart</strong>;<strong>DateEnd</strong>;Users;Courses;VisibilityAfterExpiration;DisplayStartDate;DisplayEndDate;CoachStartDate;CoachEndDate;Classes
 <strong>Example 1</strong>;username;<strong>yyyy/mm/dd;yyyy/mm/dd</strong>;username1|username2;course1[coach1][username1,...]|course2[coach1][username1,...];read_only;yyyy/mm/dd;yyyy/mm/dd;yyyy/mm/dd;yyyy/mm/dd;class1|class2
 <strong>Example 2</strong>;username;<strong>yyyy/mm/dd;yyyy/mm/dd</strong>;username1|username2;course1[coach1][username1,...]|course2[coach1][username1,...];accessible;yyyy/mm/dd;yyyy/mm/dd;yyyy/mm/dd;yyyy/mm/dd;class3|class4
 <strong>Example 3</strong>;username;<strong>yyyy/mm/dd;yyyy/mm/dd</strong>;username1|username2;course1[coach1][username1,...]|course2[coach1][username1,...];not_accessible;yyyy/mm/dd;yyyy/mm/dd;yyyy/mm/dd;yyyy/mm/dd;class5|class6
 </pre>
-<p><?php echo get_lang('XMLMustLookLike').' ('.get_lang('MandatoryFields').')'; ?> :</p>
+<p><?php echo get_lang('The XML file must look like this').' ('.get_lang('Fields in <strong>bold</strong> are mandatory.').')'; ?> :</p>
 <pre>
 &lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
 &lt;Sessions&gt;

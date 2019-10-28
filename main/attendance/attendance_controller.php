@@ -10,7 +10,6 @@
  *
  * @author Christian Fasanando <christian1827@gmail.com>
  * @author Julio Montoya <gugli100@gmail.com> lot of bugfixes + improvements
- *
  */
 class AttendanceController
 {

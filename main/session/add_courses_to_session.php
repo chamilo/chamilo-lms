@@ -24,11 +24,11 @@ $this_section = SECTION_PLATFORM_ADMIN;
 // setting breadcrumbs
 $interbreadcrumb[] = [
     'url' => 'session_list.php',
-    'name' => get_lang('SessionList'),
+    'name' => get_lang('Session list'),
 ];
 $interbreadcrumb[] = [
     'url' => "resume_session.php?id_session=$sessionId",
-    'name' => get_lang('SessionOverview'),
+    'name' => get_lang('Session overview'),
 ];
 
 // Database Table Definitions
@@ -38,7 +38,7 @@ $tbl_session_rel_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
 $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
 
 // setting the name of the tool
-$tool_name = get_lang('SubscribeCoursesToSession');
+$tool_name = get_lang('Add courses to this session');
 
 $add_type = 'multiple';
 if (isset($_GET['add_type']) && $_GET['add_type'] != '') {
@@ -93,7 +93,7 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
         $copyCourseTeachersAsCoach
     );
 
-    Display::addFlash(Display::return_message(get_lang('Updated')));
+    Display::addFlash(Display::return_message(get_lang('Update successful')));
 
     $url = api_get_path(WEB_CODE_PATH).'session/';
     if (isset($add)) {
@@ -110,12 +110,12 @@ Display::display_header($tool_name);
 
 if ($add_type === 'multiple') {
     $link_add_type_unique = '<a href="'.api_get_self().'?id_session='.$sessionId.'&add='.$add.'&add_type=unique">'.
-        Display::return_icon('single.gif').get_lang('SessionAddTypeUnique').'</a>';
-    $link_add_type_multiple = Display::return_icon('multiple.gif').get_lang('SessionAddTypeMultiple').' ';
+        Display::return_icon('single.gif').get_lang('Single registration').'</a>';
+    $link_add_type_multiple = Display::return_icon('multiple.gif').get_lang('Multiple registration').' ';
 } else {
-    $link_add_type_unique = Display::return_icon('single.gif').get_lang('SessionAddTypeUnique').'&nbsp;&nbsp;&nbsp;';
+    $link_add_type_unique = Display::return_icon('single.gif').get_lang('Single registration').'&nbsp;&nbsp;&nbsp;';
     $link_add_type_multiple = '<a href="'.api_get_self().'?id_session='.$sessionId.'&add='.$add.'&add_type=multiple">'.
-        Display::return_icon('multiple.gif').get_lang('SessionAddTypeMultiple').'</a>';
+        Display::return_icon('multiple.gif').get_lang('Multiple registration').'</a>';
 }
 
 // the form header
@@ -218,7 +218,7 @@ unset($Courses);
     <input type="hidden" name="formSent" value="1" />
     <div id="multiple-add-session" class="row">
         <div class="col-md-4">
-            <label><?php echo get_lang('CourseListInPlatform'); ?> :</label>
+            <label><?php echo get_lang('Courses list'); ?> :</label>
             <?php
             if (!($add_type == 'multiple')) {
                 ?>
@@ -250,7 +250,7 @@ unset($Courses);
             <?php if ($add_type == 'multiple') {
                 ?>
                 <div class="code-course">
-                    <?php echo get_lang('FirstLetterCourse'); ?> :
+                    <?php echo get_lang('First letter (code)'); ?> :
 
                     <select name="firstLetterCourse" onchange = "xajax_search_courses(this.value,'multiple', <?php echo $sessionId; ?>)" class="selectpicker form-control">
                         <option value="%">--</option>
@@ -288,26 +288,26 @@ unset($Courses);
                 <div class="separate-action">
                     <label>
                         <input type="checkbox" name="copy_evaluation">
-                        <?php echo get_lang('ImportGradebookInCourse'); ?>
+                        <?php echo get_lang('Import gradebook from base course'); ?>
                     </label>
                     <label>
                         <input type="checkbox" name="import_teachers_as_course_coach">
-                        <?php echo get_lang('ImportCourseTeachersAsCourseCoach'); ?>
+                        <?php echo get_lang('Import course teachers as course coach in the session'); ?>
                     </label>
                 </div>
             <?php
             echo '<div class="separate-action">';
             if (isset($_GET['add'])) {
-                echo '<button name="next" class="btn btn-success" type="button" value="" onclick="valide()" >'.get_lang('NextStep').'</button>';
+                echo '<button name="next" class="btn btn-success" type="button" value="" onclick="valide()" >'.get_lang('Next step').'</button>';
             } else {
-                echo '<button name="next" class="btn btn-success" type="button" value="" onclick="valide()" >'.get_lang('SubscribeCoursesToSession').'</button>';
+                echo '<button name="next" class="btn btn-success" type="button" value="" onclick="valide()" >'.get_lang('Add courses to this session').'</button>';
             }
             echo '</div>';
             ?>
             </div>
         </div>
         <div class="col-md-4">
-            <label><?php echo get_lang('CourseListInSession'); ?> :</label>
+            <label><?php echo get_lang('Courses in this session'); ?> :</label>
             <select id='destination' name="SessionCoursesList[]" multiple="multiple" size="20" class="form-control">
                 <?php
                 foreach ($sessionCourses as $enreg) {

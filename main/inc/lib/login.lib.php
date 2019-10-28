@@ -46,9 +46,9 @@ class Login
                 } else {
                     $reset_link = get_lang('Pass')." : $user[password]";
                 }
-                $user_account_list = get_lang('YourRegistrationData')." : \n".
-                    get_lang('UserName').' : '.$user['loginName']."\n".
-                    get_lang('ResetLink').' : '.$reset_link;
+                $user_account_list = get_lang('Your registration data')." : \n".
+                    get_lang('Username').' : '.$user['loginName']."\n".
+                    get_lang('Click here to recover your password').' : '.$reset_link;
 
                 if ($user_account_list) {
                     $user_account_list = "\n-----------------------------------------------\n".$user_account_list;
@@ -63,9 +63,9 @@ class Login
                         $reset_link = get_lang('Pass')." : $this_user[password]";
                     }
                     $user_account_list[] =
-                        get_lang('YourRegistrationData')." : \n".
-                        get_lang('UserName').' : '.$this_user['loginName']."\n".
-                        get_lang('ResetLink').' : '.$reset_link;
+                        get_lang('Your registration data')." : \n".
+                        get_lang('Username').' : '.$this_user['loginName']."\n".
+                        get_lang('Click here to recover your password').' : '.$reset_link;
                 }
                 if ($user_account_list) {
                     $user_account_list = implode("\n-----------------------------------------------\n", $user_account_list);
@@ -77,8 +77,8 @@ class Login
             }
             $reset_link = get_lang('Pass')." : $user[password]";
             $user_account_list =
-                get_lang('YourRegistrationData')." : \n".
-                get_lang('UserName').' : '.$user['loginName']."\n".
+                get_lang('Your registration data')." : \n".
+                get_lang('Username').' : '.$user['loginName']."\n".
                 $reset_link.'';
         }
 
@@ -96,7 +96,7 @@ class Login
      */
     public static function send_password_to_user($user, $by_username = false)
     {
-        $email_subject = "[".api_get_setting('siteName')."] ".get_lang('LoginRequest'); // SUBJECT
+        $email_subject = "[".api_get_setting('siteName')."] ".get_lang('Login request'); // SUBJECT
 
         if ($by_username) { // Show only for lost password
             $user_account_list = self::get_user_account_list($user, false, $by_username); // BODY
@@ -115,7 +115,7 @@ class Login
             }
         }
 
-        $email_body = get_lang('YourAccountParam')." ".$portal_url."\n\n$user_account_list";
+        $email_body = get_lang('This is your information to connect to')." ".$portal_url."\n\n$user_account_list";
         // SEND MESSAGE
         $sender_name = api_get_person_name(
             api_get_setting('administratorName'),
@@ -126,7 +126,7 @@ class Login
         $email_admin = api_get_setting('emailAdministrator');
 
         if (api_mail_html('', $email_to, $email_subject, $email_body, $sender_name, $email_admin) == 1) {
-            return get_lang('YourPasswordHasBeenReset');
+            return get_lang('Your password has been reset');
         } else {
             $admin_email = Display:: encrypted_mailto_link(
                 api_get_setting('emailAdministrator'),
@@ -137,7 +137,7 @@ class Login
             );
 
             return sprintf(
-                get_lang('ThisPlatformWasUnableToSendTheEmailPleaseContactXForMoreInformation'),
+                get_lang('This platform was unable to send the email. Please contact %s for more information.'),
                 $admin_email
             );
         }
@@ -155,7 +155,7 @@ class Login
      */
     public static function handle_encrypted_password($user, $by_username = false)
     {
-        $email_subject = "[".api_get_setting('siteName')."] ".get_lang('LoginRequest'); // SUBJECT
+        $email_subject = "[".api_get_setting('siteName')."] ".get_lang('Login request'); // SUBJECT
 
         if ($by_username) {
             // Show only for lost password
@@ -165,14 +165,14 @@ class Login
             $user_account_list = self::get_user_account_list($user, true); // BODY
             $email_to = $user[0]['email'];
         }
-        $email_body = get_lang('DearUser')." :\n".get_lang('password_request')."\n";
+        $email_body = get_lang('Dear user')." :\n".get_lang('You have asked to reset your password. If you did not ask, then ignore this mail.')."\n";
         $email_body .= $user_account_list."\n-----------------------------------------------\n\n";
-        $email_body .= get_lang('PasswordEncryptedForSecurity');
+        $email_body .= get_lang('Your password is encrypted for security reasons. Thus, after pressing the link an e-mail will be sent to you again with your password.');
         $email_body .= "\n\n".
-            get_lang('SignatureFormula').",\n".
+            get_lang('Sincerely').",\n".
             api_get_setting('administratorName')." ".
             api_get_setting('administratorSurname')."\n".
-            get_lang('PlataformAdmin')." - ".
+            get_lang('Portal Admin')." - ".
             api_get_setting('siteName');
 
         $sender_name = api_get_person_name(
@@ -194,7 +194,7 @@ class Login
         );
 
         if ($result == 1) {
-            return get_lang('YourPasswordHasBeenEmailed');
+            return get_lang('Your password has been emailed to you.');
         } else {
             $admin_email = Display:: encrypted_mailto_link(
                 api_get_setting('emailAdministrator'),
@@ -204,7 +204,7 @@ class Login
                 )
             );
             $message = sprintf(
-                get_lang('ThisPlatformWasUnableToSendTheEmailPleaseContactXForMoreInformation'),
+                get_lang('This platform was unable to send the email. Please contact %s for more information.'),
                 $admin_email
             );
 
@@ -225,9 +225,9 @@ class Login
         Database::getManager()->flush();
 
         $url = api_get_path(WEB_CODE_PATH).'auth/reset.php?token='.$uniqueId;
-        $mailSubject = get_lang('ResetPasswordInstructions');
+        $mailSubject = get_lang('Instructions for the password change procedure');
         $mailBody = sprintf(
-            get_lang('ResetPasswordCommentWithUrl'),
+            get_lang('You are receiving this message because you (or someone pretending to be you) have requested a new password to be generated for you.<br/>'),
             $url
         );
 
@@ -237,7 +237,7 @@ class Login
             $mailSubject,
             $mailBody
         );
-        Display::addFlash(Display::return_message(get_lang('CheckYourEmailAndFollowInstructions')));
+        Display::addFlash(Display::return_message(get_lang('Check your e-mail and follow the instructions.')));
     }
 
     /**
@@ -276,10 +276,10 @@ class Login
             $user = Database::fetch_array($result);
 
             if ($user['auth_source'] == 'extldap') {
-                return get_lang('CouldNotResetPassword');
+                return get_lang('Could not reset password');
             }
         } else {
-            return get_lang('CouldNotResetPassword');
+            return get_lang('Could not reset password');
         }
 
         if (self::get_secret_word($user['email']) == $secret) {
@@ -290,7 +290,7 @@ class Login
 
             return self::send_password_to_user($user, $by_username);
         } else {
-            return get_lang('NotAllowed');
+            return get_lang('You are not allowed to see this page. Either your connection has expired or you are trying to access a page for which you do not have the sufficient privileges.');
         }
     }
 

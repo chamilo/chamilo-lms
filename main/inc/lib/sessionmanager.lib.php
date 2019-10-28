@@ -21,8 +21,6 @@ use Monolog\Logger;
  * All main sessions functions should be placed here.
  * This class provides methods for sessions management.
  * Include/require it in your code to use its features.
- *
- * @package chamilo.library
  */
 class SessionManager
 {
@@ -185,7 +183,7 @@ class SessionManager
             if ($num >= $_configuration[$accessUrlId]['hosting_limit_sessions']) {
                 api_warn_hosting_contact('hosting_limit_sessions');
 
-                return get_lang('PortalSessionsLimitReached');
+                return get_lang('The number of sessions limit for this portal has been reached');
             }
         }
 
@@ -198,23 +196,23 @@ class SessionManager
         $endDate = Database::escape_string($endDate);
 
         if (empty($name)) {
-            $msg = get_lang('SessionNameIsRequired');
+            $msg = get_lang('A name is required for the session');
 
             return $msg;
         } elseif (!empty($startDate) && !api_is_valid_date($startDate, 'Y-m-d H:i') &&
             !api_is_valid_date($startDate, 'Y-m-d H:i:s')
         ) {
-            $msg = get_lang('InvalidStartDate');
+            $msg = get_lang('Invalid start date was given.');
 
             return $msg;
         } elseif (!empty($endDate) && !api_is_valid_date($endDate, 'Y-m-d H:i') &&
             !api_is_valid_date($endDate, 'Y-m-d H:i:s')
         ) {
-            $msg = get_lang('InvalidEndDate');
+            $msg = get_lang('Invalid end date was given.');
 
             return $msg;
         } elseif (!empty($startDate) && !empty($endDate) && $startDate >= $endDate) {
-            $msg = get_lang('StartDateShouldBeBeforeEndDate');
+            $msg = get_lang('The first date should be before the end date');
 
             return $msg;
         } else {
@@ -224,14 +222,14 @@ class SessionManager
                 if ($name) {
                     $ready_to_create = true;
                 } else {
-                    $msg = get_lang('SessionNameAlreadyExists');
+                    $msg = get_lang('Session name already exists');
 
                     return $msg;
                 }
             } else {
                 $rs = Database::query("SELECT 1 FROM $tbl_session WHERE name='".$name."'");
                 if (Database::num_rows($rs)) {
-                    $msg = get_lang('SessionNameAlreadyExists');
+                    $msg = get_lang('Session name already exists');
 
                     return $msg;
                 }
@@ -309,8 +307,8 @@ class SessionManager
 
                       $user_info = api_get_user_info(1);
                       $complete_name = $user_info['firstname'].' '.$user_info['lastname'];
-                      $subject = api_get_setting('siteName').' - '.get_lang('ANewSessionWasCreated');
-                      $message = get_lang('ANewSessionWasCreated')." <br /> ".get_lang('NameOfTheSession').' : '.$name;
+                      $subject = api_get_setting('siteName').' - '.get_lang('A new session has been created');
+                      $message = get_lang('A new session has been created')." <br /> ".get_lang('Session name').' : '.$name;
                       api_mail_html($complete_name, $user_info['email'], $subject, $message);
                      *
                      */
@@ -648,8 +646,8 @@ class SessionManager
             }
         }
 
-        $activeIcon = Display::return_icon('accept.png', get_lang('Active'));
-        $inactiveIcon = Display::return_icon('error.png', get_lang('Inactive'));
+        $activeIcon = Display::return_icon('accept.png', get_lang('active'));
+        $inactiveIcon = Display::return_icon('error.png', get_lang('inactive'));
 
         foreach ($sessions as $session) {
             if ($showCountUsers) {
@@ -691,14 +689,14 @@ class SessionManager
 
             switch ($session['visibility']) {
                 case SESSION_VISIBLE_READ_ONLY: //1
-                    $session['visibility'] = get_lang('ReadOnly');
+                    $session['visibility'] = get_lang('Read only');
                     break;
                 case SESSION_VISIBLE:           //2
                 case SESSION_AVAILABLE:         //4
                     $session['visibility'] = get_lang('Visible');
                     break;
                 case SESSION_INVISIBLE:         //3
-                    $session['visibility'] = api_ucfirst(get_lang('Invisible'));
+                    $session['visibility'] = api_ucfirst(get_lang('invisible'));
                     break;
             }
 
@@ -1566,13 +1564,13 @@ class SessionManager
 
         if (empty($name)) {
             Display::addFlash(
-                Display::return_message(get_lang('SessionNameIsRequired'), 'warning')
+                Display::return_message(get_lang('A name is required for the session'), 'warning')
             );
 
             return false;
         } elseif (empty($coachId)) {
             Display::addFlash(
-                Display::return_message(get_lang('CoachIsRequired'), 'warning')
+                Display::return_message(get_lang('You must select a coach'), 'warning')
             );
 
             return false;
@@ -1581,7 +1579,7 @@ class SessionManager
             !api_is_valid_date($startDate, 'Y-m-d H:i:s')
         ) {
             Display::addFlash(
-                Display::return_message(get_lang('InvalidStartDate'), 'warning')
+                Display::return_message(get_lang('Invalid start date was given.'), 'warning')
             );
 
             return false;
@@ -1590,13 +1588,13 @@ class SessionManager
             !api_is_valid_date($endDate, 'Y-m-d H:i:s')
         ) {
             Display::addFlash(
-                Display::return_message(get_lang('InvalidEndDate'), 'warning')
+                Display::return_message(get_lang('Invalid end date was given.'), 'warning')
             );
 
             return false;
         } elseif (!empty($startDate) && !empty($endDate) && $startDate >= $endDate) {
             Display::addFlash(
-                Display::return_message(get_lang('StartDateShouldBeBeforeEndDate'), 'warning')
+                Display::return_message(get_lang('The first date should be before the end date'), 'warning')
             );
 
             return false;
@@ -1612,7 +1610,7 @@ class SessionManager
 
             if ($exists) {
                 Display::addFlash(
-                    Display::return_message(get_lang('SessionNameAlreadyExists'), 'warning')
+                    Display::return_message(get_lang('Session name already exists'), 'warning')
                 );
 
                 return false;
@@ -1735,7 +1733,7 @@ class SessionManager
         if ($sequenceResource) {
             Display::addFlash(
                 Display::return_message(
-                    get_lang('ThereIsASequenceResourceLinkedToThisSessionYouNeedToDeleteItFirst'),
+                    get_lang('There is a sequence resource linked to this session. You must delete this link first.'),
                     'error'
                 )
             );
@@ -2992,21 +2990,21 @@ class SessionManager
         $date_end = "$year_end-".(($month_end < 10) ? "0$month_end" : $month_end)."-".(($day_end < 10) ? "0$day_end" : $day_end);
 
         if (empty($name)) {
-            $msg = get_lang('SessionCategoryNameIsRequired');
+            $msg = get_lang('Please give a name to the sessions category');
 
             return $msg;
         } elseif (!$month_start || !$day_start || !$year_start || !checkdate($month_start, $day_start, $year_start)) {
-            $msg = get_lang('InvalidStartDate');
+            $msg = get_lang('Invalid start date was given.');
 
             return $msg;
         } elseif (!$month_end && !$day_end && !$year_end) {
             $date_end = '';
         } elseif (!$month_end || !$day_end || !$year_end || !checkdate($month_end, $day_end, $year_end)) {
-            $msg = get_lang('InvalidEndDate');
+            $msg = get_lang('Invalid end date was given.');
 
             return $msg;
         } elseif ($date_start >= $date_end) {
-            $msg = get_lang('StartDateShouldBeBeforeEndDate');
+            $msg = get_lang('The first date should be before the end date');
 
             return $msg;
         }
@@ -3077,21 +3075,21 @@ class SessionManager
         $date_end = "$year_end-".(($month_end < 10) ? "0$month_end" : $month_end)."-".(($day_end < 10) ? "0$day_end" : $day_end);
 
         if (empty($name)) {
-            $msg = get_lang('SessionCategoryNameIsRequired');
+            $msg = get_lang('Please give a name to the sessions category');
 
             return $msg;
         } elseif (!$month_start || !$day_start || !$year_start || !checkdate($month_start, $day_start, $year_start)) {
-            $msg = get_lang('InvalidStartDate');
+            $msg = get_lang('Invalid start date was given.');
 
             return $msg;
         } elseif (!$month_end && !$day_end && !$year_end) {
             $date_end = null;
         } elseif (!$month_end || !$day_end || !$year_end || !checkdate($month_end, $day_end, $year_end)) {
-            $msg = get_lang('InvalidEndDate');
+            $msg = get_lang('Invalid end date was given.');
 
             return $msg;
         } elseif ($date_start >= $date_end) {
-            $msg = get_lang('StartDateShouldBeBeforeEndDate');
+            $msg = get_lang('The first date should be before the end date');
 
             return $msg;
         }
@@ -4480,7 +4478,7 @@ class SessionManager
 
         // Now try to create the session
         $sid = self::create_session(
-            $s['name'].' '.get_lang('CopyLabelSuffix'),
+            $s['name'].' '.get_lang('Copy'),
             $s['access_start_date'],
             $s['access_end_date'],
             $s['display_start_date'],
@@ -4521,7 +4519,7 @@ class SessionManager
                     foreach ($short_courses as $course_data) {
                         $course_info = CourseManager::copy_course_simple(
                             $course_data['title'].' '.get_lang(
-                                'CopyLabelSuffix'
+                                'Copy'
                             ),
                             $course_data['course_code'],
                             $id,
@@ -4892,7 +4890,7 @@ class SessionManager
         $tbl_session_course_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
         $sessions = [];
         if (!api_strstr($content[0], ';')) {
-            $error_message = get_lang('NotCSV');
+            $error_message = get_lang('The specified file is not CSV format !');
         } else {
             $tag_names = [];
             foreach ($content as $key => $enreg) {
@@ -4911,7 +4909,7 @@ class SessionManager
                         !in_array('DateStart', $tag_names) ||
                         !in_array('DateEnd', $tag_names)
                     ) {
-                        $error_message = get_lang('NoNeededData');
+                        $error_message = get_lang('The specified file doesn\'t contain all needed data !');
                         break;
                     }
                 }
@@ -5468,7 +5466,7 @@ class SessionManager
                                         }
                                         $savedCoaches[] = $coach_id;
                                     } else {
-                                        $error_message .= get_lang('UserDoesNotExist').' : '.$course_coach.$eol;
+                                        $error_message .= get_lang('This user doesn\'t exist').' : '.$course_coach.$eol;
                                     }
                                 }
                             }
@@ -5752,7 +5750,7 @@ class SessionManager
                                             }
                                             $savedCoaches[] = $coach_id;
                                         } else {
-                                            $error_message .= get_lang('UserDoesNotExist').' : '.$course_coach.$eol;
+                                            $error_message .= get_lang('This user doesn\'t exist').' : '.$course_coach.$eol;
                                         }
                                     }
                                 }
@@ -5775,7 +5773,7 @@ class SessionManager
                                         $logger->addInfo("Adding student: user #$user_id ($user) to course: '$course_code' and session #$session_id");
                                     }
                                 } else {
-                                    $error_message .= get_lang('UserDoesNotExist').': '.$user.$eol;
+                                    $error_message .= get_lang('This user doesn\'t exist').': '.$user.$eol;
                                 }
                             }
                         }
@@ -6235,7 +6233,7 @@ class SessionManager
                             if ($sessionId == $sessionDestinationId) {
                                 $messages[] = Display::return_message(
                                     sprintf(
-                                        get_lang('SessionXSkipped'),
+                                        get_lang('Session %s skipped'),
                                         $sessionDestinationId
                                     ),
                                     'warning',
@@ -6243,7 +6241,7 @@ class SessionManager
                                 );
                                 continue;
                             }
-                            $messages[] = Display::return_message(get_lang('StudentList').'<br />'.$userToString, 'info', false);
+                            $messages[] = Display::return_message(get_lang('Learners list').'<br />'.$userToString, 'info', false);
                             self::subscribeUsersToSession(
                                 $sessionDestinationId,
                                 $newUserList,
@@ -6252,17 +6250,17 @@ class SessionManager
                             );
                         }
                     } else {
-                        $messages[] = Display::return_message(get_lang('NoDestinationSessionProvided'), 'warning');
+                        $messages[] = Display::return_message(get_lang('No destination session provided'), 'warning');
                     }
                 } else {
                     $messages[] = Display::return_message(
-                        get_lang('NoStudentsFoundForSession').' #'.$sessionInfo['name'],
+                        get_lang('No student found for the session').' #'.$sessionInfo['name'],
                         'warning'
                     );
                 }
             }
         } else {
-            $messages[] = Display::return_message(get_lang('NoData'), 'warning');
+            $messages[] = Display::return_message(get_lang('No data available'), 'warning');
         }
 
         return $messages;
@@ -6308,7 +6306,7 @@ class SessionManager
             foreach ($result as $courseCode => $data) {
                 $url = api_get_course_url($courseCode);
                 $htmlResult .= sprintf(
-                    get_lang('CoachesSubscribedAsATeacherInCourseX'),
+                    get_lang('Coaches subscribed as teachers in course %s'),
                     Display::url($courseCode, $url, ['target' => '_blank'])
                 );
                 foreach ($data as $sessionId => $coachList) {
@@ -6327,7 +6325,7 @@ class SessionManager
                     if (!empty($teacherList)) {
                         $htmlResult .= implode(', ', $teacherList);
                     } else {
-                        $htmlResult .= get_lang('NothingToAdd');
+                        $htmlResult .= get_lang('Nothing to add');
                     }
                 }
                 $htmlResult .= '<br />';
@@ -6610,15 +6608,15 @@ class SessionManager
                     $message .= $userInfo['complete_name_with_username'].' <br />';
 
                     if (!in_array($userInfo['status'], [DRH]) && !api_is_platform_admin_by_id($userInfo['user_id'])) {
-                        $message .= get_lang('UserMustHaveTheDrhRole').'<br />';
+                        $message .= get_lang('Users must have the HR director role').'<br />';
                         continue;
                     }
 
                     if (!empty($sessionList)) {
-                        $message .= '<strong>'.get_lang('Sessions').':</strong> <br />';
+                        $message .= '<strong>'.get_lang('Course sessions').':</strong> <br />';
                         $message .= implode(', ', $sessionList).'<br /><br />';
                     } else {
-                        $message .= get_lang('NoSessionProvided').' <br /><br />';
+                        $message .= get_lang('No session provided').' <br /><br />';
                     }
                 }
             }
@@ -6645,11 +6643,11 @@ class SessionManager
                 $sessionInfo = self::get_session_by_name($data['SessionName']);
 
                 if (empty($sessionInfo)) {
-                    Display::addFlash(Display::return_message(get_lang('NoSessionId').' - '.$data['SessionName'], 'warning'));
+                    Display::addFlash(Display::return_message(get_lang('The session was not identified').' - '.$data['SessionName'], 'warning'));
                 }
 
                 if (empty($userInfo)) {
-                    Display::addFlash(Display::return_message(get_lang('UserDoesNotExist').' - '.$data['Username'], 'warning'));
+                    Display::addFlash(Display::return_message(get_lang('This user doesn\'t exist').' - '.$data['Username'], 'warning'));
                 }
 
                 if (!empty($userInfo) && !empty($sessionInfo)) {
@@ -7260,7 +7258,7 @@ class SessionManager
     public static function getSessionCategoryIdByName($categoryName, $force = false)
     {
         // Start error result
-        $errorResult = ['error' => true, 'errorMessage' => get_lang('ThereWasAnError')];
+        $errorResult = ['error' => true, 'errorMessage' => get_lang('There was an error.')];
         $categoryName = Database::escape_string($categoryName);
         // Check if is not empty category name
         if (!empty($categoryName)) {
@@ -7309,7 +7307,7 @@ class SessionManager
         // Start error result
         $errorResult = [
             'error' => true,
-            'errorMessage' => get_lang('ThereWasAnError'),
+            'errorMessage' => get_lang('There was an error.'),
         ];
 
         $sessionCategoryId = intval($sessionCategoryId);
@@ -7659,11 +7657,11 @@ class SessionManager
     {
         switch ($sessionInfo['visibility']) {
             case 1:
-                return get_lang('ReadOnly');
+                return get_lang('Read only');
             case 2:
                 return get_lang('Visible');
             case 3:
-                return api_ucfirst(get_lang('Invisible'));
+                return api_ucfirst(get_lang('invisible'));
         }
     }
 
@@ -7726,7 +7724,7 @@ class SessionManager
         $userInfo = api_get_user_info();
 
         $categoriesOptions = [
-            '0' => get_lang('None'),
+            '0' => get_lang('none'),
         ];
 
         if ($categoriesList != false) {
@@ -7740,17 +7738,17 @@ class SessionManager
 
         $form->addText(
             'name',
-            get_lang('SessionName'),
+            get_lang('Session name'),
             true,
-            ['maxlength' => 150, 'aria-label' => get_lang('SessionName')]
+            ['maxlength' => 150, 'aria-label' => get_lang('Session name')]
         );
-        $form->addRule('name', get_lang('SessionNameAlreadyExists'), 'callback', 'check_session_name');
+        $form->addRule('name', get_lang('Session name already exists'), 'callback', 'check_session_name');
 
         if (!api_is_platform_admin() && api_is_teacher()) {
             $form->addElement(
                 'select',
                 'coach_username',
-                get_lang('CoachName'),
+                get_lang('Coach name'),
                 [api_get_user_id() => $userInfo['complete_name']],
                 [
                     'id' => 'coach_username',
@@ -7799,7 +7797,7 @@ class SessionManager
                 $form->addElement(
                     'select',
                     'coach_username',
-                    get_lang('CoachName'),
+                    get_lang('Coach name'),
                     $coachesOptions,
                     [
                         'id' => 'coach_username',
@@ -7810,7 +7808,7 @@ class SessionManager
                 $form->addElement(
                     'select_ajax',
                     'coach_username',
-                    get_lang('CoachName'),
+                    get_lang('Coach name'),
                     $coachInfo ? [$coachInfo['id'] => $coachInfo['complete_name_with_username']] : [],
                     [
                         'url' => api_get_path(WEB_AJAX_PATH).'session.ajax.php?a=search_general_coach',
@@ -7821,7 +7819,7 @@ class SessionManager
             }
         }
 
-        $form->addRule('coach_username', get_lang('ThisFieldIsRequired'), 'required');
+        $form->addRule('coach_username', get_lang('Required field'), 'required');
         $form->addHtml('<div id="ajax_list_coachs"></div>');
 
         $form->addButtonAdvancedSettings('advanced_params');
@@ -7837,7 +7835,7 @@ class SessionManager
 
             $form->addSelect(
                 'session_template',
-                get_lang('SessionTemplate'),
+                get_lang('Session template'),
                 $sessionList,
                 ['id' => 'system_template']
             );
@@ -7845,7 +7843,7 @@ class SessionManager
 
         $form->addSelect(
             'session_category',
-            get_lang('SessionCategory'),
+            get_lang('Sessions categories'),
             $categoriesOptions,
             [
                 'id' => 'session_category',
@@ -7862,7 +7860,7 @@ class SessionManager
             ]
         );
 
-        $form->addElement('checkbox', 'show_description', null, get_lang('ShowDescription'));
+        $form->addElement('checkbox', 'show_description', null, get_lang('Show description'));
 
         $visibilityGroup = [];
         $visibilityGroup[] = $form->createElement(
@@ -7870,22 +7868,22 @@ class SessionManager
             'session_visibility',
             null,
             [
-                SESSION_VISIBLE_READ_ONLY => get_lang('SessionReadOnly'),
-                SESSION_VISIBLE => get_lang('SessionAccessible'),
-                SESSION_INVISIBLE => api_ucfirst(get_lang('SessionNotAccessible')),
+                SESSION_VISIBLE_READ_ONLY => get_lang('SessionRead only'),
+                SESSION_VISIBLE => get_lang('Accessible'),
+                SESSION_INVISIBLE => api_ucfirst(get_lang('Not accessible')),
             ]
         );
         $form->addGroup(
             $visibilityGroup,
             'visibility_group',
-            get_lang('SessionVisibility'),
+            get_lang('Visibility after end date'),
             null,
             false
         );
 
         $options = [
-            0 => get_lang('ByDuration'),
-            1 => get_lang('ByDates'),
+            0 => get_lang('By duration'),
+            1 => get_lang('By dates'),
         ];
 
         $form->addSelect('access', get_lang('Access'), $options, [
@@ -7898,8 +7896,8 @@ class SessionManager
             'number',
             'duration',
             [
-                get_lang('SessionDurationTitle'),
-                get_lang('SessionDurationDescription'),
+                get_lang('Session duration'),
+                get_lang('The session duration allows you to set a number of days of access starting from the first access date of the user to the session. This way, you can set a session to last for 15 days instead of starting at a fixed date for all students.'),
             ],
             [
                 'maxlength' => 50,
@@ -7912,19 +7910,19 @@ class SessionManager
         // Dates
         $form->addDateTimePicker(
             'access_start_date',
-            [get_lang('SessionStartDate'), get_lang('SessionStartDateComment')],
+            [get_lang('Access start date'), get_lang('Access start dateComment')],
             ['id' => 'access_start_date']
         );
 
         $form->addDateTimePicker(
             'access_end_date',
-            [get_lang('SessionEndDate'), get_lang('SessionEndDateComment')],
+            [get_lang('Access end date'), get_lang('Access end dateComment')],
             ['id' => 'access_end_date']
         );
 
         $form->addRule(
             ['access_start_date', 'access_end_date'],
-            get_lang('StartDateMustBeBeforeTheEndDate'),
+            get_lang('Start date must be before the end date'),
             'compare_datetime_text',
             '< allow_empty'
         );
@@ -7932,8 +7930,8 @@ class SessionManager
         $form->addDateTimePicker(
             'display_start_date',
             [
-                get_lang('SessionDisplayStartDate'),
-                get_lang('SessionDisplayStartDateComment'),
+                get_lang('Start date to display'),
+                get_lang('Start date to displayComment'),
             ],
             ['id' => 'display_start_date']
         );
@@ -7941,15 +7939,15 @@ class SessionManager
         $form->addDateTimePicker(
             'display_end_date',
             [
-                get_lang('SessionDisplayEndDate'),
-                get_lang('SessionDisplayEndDateComment'),
+                get_lang('End date to display'),
+                get_lang('End date to displayComment'),
             ],
             ['id' => 'display_end_date']
         );
 
         $form->addRule(
             ['display_start_date', 'display_end_date'],
-            get_lang('StartDateMustBeBeforeTheEndDate'),
+            get_lang('Start date must be before the end date'),
             'compare_datetime_text',
             '< allow_empty'
         );
@@ -7957,8 +7955,8 @@ class SessionManager
         $form->addDateTimePicker(
             'coach_access_start_date',
             [
-                get_lang('SessionCoachStartDate'),
-                get_lang('SessionCoachStartDateComment'),
+                get_lang('Access start date for coaches'),
+                get_lang('Access start date for coachesComment'),
             ],
             ['id' => 'coach_access_start_date']
         );
@@ -7966,15 +7964,15 @@ class SessionManager
         $form->addDateTimePicker(
             'coach_access_end_date',
             [
-                get_lang('SessionCoachEndDate'),
-                get_lang('SessionCoachEndDateComment'),
+                get_lang('Access end date for coaches'),
+                get_lang('Access end date for coachesComment'),
             ],
             ['id' => 'coach_access_end_date']
         );
 
         $form->addRule(
             ['coach_access_start_date', 'coach_access_end_date'],
-            get_lang('StartDateMustBeBeforeTheEndDate'),
+            get_lang('Start date must be before the end date'),
             'compare_datetime_text',
             '< allow_empty'
         );
@@ -7984,8 +7982,8 @@ class SessionManager
         $form->addCheckBox(
             'send_subscription_notification',
             [
-                get_lang('SendSubscriptionNotification'),
-                get_lang('SendAnEmailWhenAUserBeingSubscribed'),
+                get_lang('Send mail notification to students to inform of subscription'),
+                get_lang('Send an email when a user being subscribed to session'),
             ]
         );
 
@@ -8130,8 +8128,8 @@ class SessionManager
                 $columns = [
                     get_lang('Title'),
                     get_lang('Date'),
-                    get_lang('NbCoursesPerSession'),
-                    get_lang('NbStudentPerSession'),
+                    get_lang('Number of courses per session'),
+                    get_lang('Number of learners by session'),
                     get_lang('Details'),
                 ];
 
@@ -8160,8 +8158,8 @@ class SessionManager
                     '#',
                     get_lang('Name'),
                     get_lang('Category'),
-                    get_lang('SessionDisplayStartDate'),
-                    get_lang('SessionDisplayEndDate'),
+                    get_lang('Start date to display'),
+                    get_lang('End date to display'),
                     get_lang('Visibility'),
                 ];
 
@@ -8233,12 +8231,12 @@ class SessionManager
             case 'complete':
                 $columns = [
                     get_lang('Name'),
-                    get_lang('SessionDisplayStartDate'),
-                    get_lang('SessionDisplayEndDate'),
+                    get_lang('Start date to display'),
+                    get_lang('End date to display'),
                     get_lang('Coach'),
                     get_lang('Status'),
                     get_lang('Visibility'),
-                    get_lang('CourseTitle'),
+                    get_lang('Course title'),
                 ];
                 $columnModel = [
                     ['name' => 'name', 'index' => 's.name', 'width' => '200', 'align' => 'left', 'search' => 'true', 'searchoptions' => ['sopt' => $operators]],
@@ -8249,9 +8247,9 @@ class SessionManager
                         // for the bottom bar
                         'searchoptions' => [
                             'defaultValue' => '1',
-                            'value' => '1:'.get_lang('Active').';0:'.get_lang('Inactive'), ],
+                            'value' => '1:'.get_lang('active').';0:'.get_lang('inactive'), ],
                         // for the top bar
-                        'editoptions' => ['value' => '" ":'.get_lang('All').';1:'.get_lang('Active').';0:'.get_lang('Inactive')],
+                        'editoptions' => ['value' => '" ":'.get_lang('All').';1:'.get_lang('active').';0:'.get_lang('inactive')],
                     ],
                     ['name' => 'visibility', 'index' => 'visibility', 'width' => '40', 'align' => 'left', 'search' => 'false'],
                     ['name' => 'course_title', 'index' => 'course_title', 'width' => '50', 'hidden' => 'true', 'search' => 'true', 'searchoptions' => ['searchhidden' => 'true', 'sopt' => $operators]],
@@ -8286,7 +8284,7 @@ class SessionManager
                 'sortable' => 'false',
                 'search' => 'false',
             ];
-            $columns[] = get_lang('Actions');
+            $columns[] = get_lang('Detail');
         }
 
         $columnName = [];
@@ -8543,14 +8541,14 @@ class SessionManager
 
         $acceptIcon = Display::return_icon(
             'accept.png',
-            get_lang('Active'),
+            get_lang('active'),
             [],
             ICON_SIZE_SMALL
         );
 
         $errorIcon = Display::return_icon(
             'error.png',
-            get_lang('Inactive'),
+            get_lang('inactive'),
             [],
             ICON_SIZE_SMALL
         );
@@ -8572,14 +8570,14 @@ class SessionManager
 
                 switch ($session['visibility']) {
                     case SESSION_VISIBLE_READ_ONLY: //1
-                        $session['visibility'] = get_lang('ReadOnly');
+                        $session['visibility'] = get_lang('Read only');
                         break;
                     case SESSION_VISIBLE:           //2
                     case SESSION_AVAILABLE:         //4
                         $session['visibility'] = get_lang('Visible');
                         break;
                     case SESSION_INVISIBLE:         //3
-                        $session['visibility'] = api_ucfirst(get_lang('Invisible'));
+                        $session['visibility'] = api_ucfirst(get_lang('invisible'));
                         break;
                 }
 
@@ -9118,7 +9116,7 @@ class SessionManager
         $result = '';
         if (!empty($startDateToLocal) && !empty($endDateToLocal)) {
             $result = sprintf(
-                get_lang('FromDateXToDateY'),
+                get_lang('From %s to %s'),
                 api_format_date($startDateToLocal, $format),
                 api_format_date($endDateToLocal, $format)
             );
@@ -9131,7 +9129,7 @@ class SessionManager
             }
         }
         if (empty($result)) {
-            $result = get_lang('NoTimeLimits');
+            $result = get_lang('No time limits');
         }
 
         return $result;

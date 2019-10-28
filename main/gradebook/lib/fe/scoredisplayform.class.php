@@ -46,14 +46,14 @@ class ScoreDisplayForm extends FormValidator
             }
         }
         // Settings for the colored score
-        $this->addElement('header', get_lang('ScoreEdit'));
+        $this->addElement('header', get_lang('Skills ranking'));
 
         if ($displayscore->is_coloring_enabled()) {
-            $this->addElement('html', '<b>'.get_lang('ScoreColor').'</b>');
+            $this->addElement('html', '<b>'.get_lang('Competence thresholds colouring').'</b>');
             $this->addElement(
                 'text',
                 'scorecolpercent',
-                [get_lang('Below'), get_lang('WillColorRed'), '%'],
+                [get_lang('Below'), get_lang('The mark will be coloured in red'), '%'],
                 [
                     'size' => 5,
                     'maxlength' => 5,
@@ -65,15 +65,15 @@ class ScoreDisplayForm extends FormValidator
                 $this->freeze('scorecolpercent');
             }
 
-            $this->addRule('scorecolpercent', get_lang('OnlyNumbers'), 'numeric');
-            $this->addRule(['scorecolpercent', 'maxvalue'], get_lang('Over100'), 'compare', '<=');
-            $this->addRule(['scorecolpercent', 'minvalue'], get_lang('UnderMin'), 'compare', '>');
+            $this->addRule('scorecolpercent', get_lang('Only numbers'), 'numeric');
+            $this->addRule(['scorecolpercent', 'maxvalue'], get_lang('Over 100'), 'compare', '<=');
+            $this->addRule(['scorecolpercent', 'minvalue'], get_lang('Under the minimum.'), 'compare', '>');
         }
 
         // Settings for the scoring system
         if ($displayscore->is_custom()) {
-            $this->addElement('html', '<br /><b>'.get_lang('ScoringSystem').'</b>');
-            $this->addElement('static', null, null, get_lang('ScoreInfo'));
+            $this->addElement('html', '<br /><b>'.get_lang('Skills ranking').'</b>');
+            $this->addElement('static', null, null, get_lang('Score info'));
             $this->setDefaults([
                 'beginscore' => '0',
             ]);
@@ -95,7 +95,7 @@ class ScoreDisplayForm extends FormValidator
                 </label>    
                 <div class="col-sm-1">
                 <!-- BEGIN error --><span class="form_error">{error}</span><br />
-                <!-- END error -->&nbsp<b>'.get_lang('And').'</b>
+                <!-- END error -->&nbsp<b>'.get_lang('and').'</b>
                 </div>
                     
                 <div class="col-sm-2">
@@ -144,14 +144,14 @@ class ScoreDisplayForm extends FormValidator
                 );
                 $renderer->setElementTemplate($elementTemplateTwoLabel, 'endscore['.$counter.']');
                 $renderer->setElementTemplate($elementTemplateTwoLabel2, 'displaytext['.$counter.']');
-                $this->addRule('endscore['.$counter.']', get_lang('OnlyNumbers'), 'numeric');
-                $this->addRule(['endscore['.$counter.']', 'maxvalue'], get_lang('Over100'), 'compare', '<=');
-                $this->addRule(['endscore['.$counter.']', 'minvalue'], get_lang('UnderMin'), 'compare', '>');
+                $this->addRule('endscore['.$counter.']', get_lang('Only numbers'), 'numeric');
+                $this->addRule(['endscore['.$counter.']', 'maxvalue'], get_lang('Over 100'), 'compare', '<=');
+                $this->addRule(['endscore['.$counter.']', 'minvalue'], get_lang('Under the minimum.'), 'compare', '>');
             }
         }
 
         if ($displayscore->is_custom()) {
-            $this->addButtonSave(get_lang('Ok'));
+            $this->addButtonSave(get_lang('Validate'));
         }
     }
 

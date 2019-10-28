@@ -148,11 +148,11 @@ if (!empty($courseList)) {
             if (empty($item['modified_on'])) {
                 $lp_date_original = $item['created_on'];
                 $image = 'new.gif';
-                $label = get_lang('LearnpathAdded');
+                $label = get_lang('Course added');
             } else {
                 $lp_date_original = $item['modified_on'];
                 $image = 'moderator_star.png';
-                $label = get_lang('LearnpathUpdated');
+                $label = get_lang('Learning path updated');
             }
 
             $mutation_date = api_strtotime($item['publicated_on']) > api_strtotime($lp_date_original) ? $item['publicated_on'] : $lp_date_original;
@@ -165,7 +165,7 @@ if (!empty($courseList)) {
                 if (empty($icons)) {
                     $icons .= ' '.Display::return_icon(
                         $image,
-                        get_lang('TitleNotification').': '.$label.' - '.$lp_date_original
+                        get_lang('Since your latest visit').': '.$label.' - '.$lp_date_original
                     ).' ';
                 }
             }
@@ -222,7 +222,7 @@ if (count($session_select) > 1) {
     $form->addElement(
         'select',
         'session_id',
-        get_lang('SessionList'),
+        get_lang('Session list'),
         $session_select,
         'onchange="javascript:change_session()"'
     );
@@ -385,7 +385,7 @@ if (!empty($session_info['access_start_date'])) {
 }
 
 if (!empty($start) && !empty($end)) {
-    $dates = Display::tag('i', sprintf(get_lang('FromDateXToDateY'), $start, $end));
+    $dates = Display::tag('i', sprintf(get_lang('From %s to %s'), $start, $end));
 } else {
     $dates = Display::tag('i', $start_only.' '.$end_only);
 }
@@ -417,7 +417,7 @@ if ($session_info['show_description'] == 1 && $allow) {
 // All Learnpaths grid settings (First tab, first subtab)
 $columns_courses = [
     get_lang('Title'),
-    get_lang('NumberOfPublishedExercises'),
+    get_lang('NumberOfPublishedTests'),
     get_lang('NumberOfPublishedLps'),
 ];
 $column_model_courses = [
@@ -433,9 +433,9 @@ $extra_params_courses['autowidth'] = 'true'; //use the width of the parent
 
 $url = api_get_path(WEB_AJAX_PATH).'course_home.ajax.php?a=session_courses_lp_default&session_id='.$session_id.'&course_id='.$course_id;
 $columns = [
-    get_lang('PublicationDate'),
+    get_lang('Publication date'),
     get_lang('Course'),
-    get_lang('LearningPaths'),
+    get_lang('Learning paths'),
 ];
 
 $column_model = [
@@ -465,10 +465,10 @@ $extra_params_course['height'] = "100%";
 //Per Week grid
 $url_week = api_get_path(WEB_AJAX_PATH).'course_home.ajax.php?a=session_courses_lp_by_week&session_id='.$session_id.'&course_id='.$course_id;
 $column_week = [
-    get_lang('PeriodWeek'),
-    get_lang('PublicationDate'),
+    get_lang('Week'),
+    get_lang('Publication date'),
     get_lang('Course'),
-    get_lang('LearningPaths'),
+    get_lang('Learning paths'),
 ];
 
 $column_week_model = [
@@ -487,7 +487,7 @@ $extra_params_week['groupingView'] = [
     'groupField' => ['week'],
     'groupOrder' => ['desc'],
     'groupColumnShow' => 'false',
-    'groupText' => ['<b>'.get_lang('PeriodWeek').' {0}</b>'],
+    'groupText' => ['<b>'.get_lang('Week').' {0}</b>'],
 ];
 $extra_params_week['autowidth'] = 'true'; //use the width of the parent
 $extra_params_week['height'] = '100%';
@@ -496,12 +496,12 @@ $extra_params_week['height'] = '100%';
 if (!api_is_anonymous()) {
     $column_exercise = [
         get_lang('Status'),
-        get_lang('ExerciseStartDate'),
+        get_lang('Publication date'),
         get_lang('Course'),
-        get_lang('Exercise'),
+        get_lang('Test'),
         get_lang('Attempts'),
         get_lang('Result'),
-        get_lang('BestResultInCourse'),
+        get_lang('Best result in course'),
         get_lang('Ranking'),
     ];
     $column_exercise_model = [
@@ -634,7 +634,7 @@ if (!api_is_anonymous()) {
         );
     }
     if (empty($reportingTab)) {
-        $reportingTab = Display::return_message(get_lang('NoDataAvailable'), 'warning');
+        $reportingTab = Display::return_message(get_lang('No data available'), 'warning');
     }
 }
 
@@ -642,12 +642,12 @@ if (!api_is_anonymous()) {
 $headers = [
     Display::return_icon('moderator_star.png'),
     get_lang('Courses'),
-    get_lang('LearningPaths'),
+    get_lang('Learning paths'),
 ];
 
 if (!api_is_anonymous()) {
-    $headers[] = get_lang('MyQCM');
-    $headers[] = get_lang('MyStatistics');
+    $headers[] = get_lang('My MCQ');
+    $headers[] = get_lang('My statistics');
 }
 
 $coursesTab = Display::grid_html('courses');

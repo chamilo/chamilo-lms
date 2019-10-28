@@ -38,24 +38,24 @@ $keyword = isset($_REQUEST['keyword']) ? Security::remove_XSS($_REQUEST['keyword
 if ($action === 'delete_on_session' || $action === 'delete_off_session') {
     $delete_session = $action == 'delete_on_session' ? true : false;
     SessionManager::delete_session_category($idChecked, $delete_session);
-    Display::addFlash(Display::return_message(get_lang('SessionCategoryDelete')));
+    Display::addFlash(Display::return_message(get_lang('The selected categories have been deleted')));
     header('Location: '.api_get_self().'?sort='.$sort);
     exit();
 }
 
-$interbreadcrumb[] = ['url' => 'session_list.php', 'name' => get_lang('SessionList')];
+$interbreadcrumb[] = ['url' => 'session_list.php', 'name' => get_lang('Session list')];
 
 if (isset($_GET['search']) && $_GET['search'] === 'advanced') {
-    $interbreadcrumb[] = ['url' => 'session_category_list.php', 'name' => get_lang('ListSessionCategory')];
-    $tool_name = get_lang('SearchASession');
+    $interbreadcrumb[] = ['url' => 'session_category_list.php', 'name' => get_lang('Sessions categories list')];
+    $tool_name = get_lang('Find a training session');
     Display::display_header($tool_name);
     $form = new FormValidator('advanced_search', 'get');
     $form->addElement('header', '', $tool_name);
     $active_group = [];
-    $active_group[] = $form->createElement('checkbox', 'active', '', get_lang('Active'));
-    $active_group[] = $form->createElement('checkbox', 'inactive', '', get_lang('Inactive'));
-    $form->addGroup($active_group, '', get_lang('ActiveSession'), null, false);
-    $form->addButtonSearch(get_lang('SearchUsers'));
+    $active_group[] = $form->createElement('checkbox', 'active', '', get_lang('active'));
+    $active_group[] = $form->createElement('checkbox', 'inactive', '', get_lang('inactive'));
+    $form->addGroup($active_group, '', get_lang('activeSession'), null, false);
+    $form->addButtonSearch(get_lang('Search users'));
     $defaults['active'] = 1;
     $defaults['inactive'] = 1;
     $form->setDefaults($defaults);
@@ -99,18 +99,18 @@ if (isset($_GET['search']) && $_GET['search'] === 'advanced') {
     $result = Database::query($query);
     $Sessions = Database::store_result($result);
     $nbr_results = sizeof($Sessions);
-    $tool_name = get_lang('ListSessionCategory');
+    $tool_name = get_lang('Sessions categories list');
     Display::display_header($tool_name); ?>
     <div class="actions">
         <div class="row">
             <div class="col-md-6">
                 <?php
                 echo Display::url(
-                    Display::return_icon('new_folder.png', get_lang('AddSessionCategory'), [], ICON_SIZE_MEDIUM),
+                    Display::return_icon('new_folder.png', get_lang('Add category'), [], ICON_SIZE_MEDIUM),
                     api_get_path(WEB_CODE_PATH).'session/session_category_add.php'
                 );
     echo Display::url(
-                    Display::return_icon('session.png', get_lang('ListSession'), [], ICON_SIZE_MEDIUM),
+                    Display::return_icon('session.png', get_lang('Training sessions list'), [], ICON_SIZE_MEDIUM),
                     api_get_path(WEB_CODE_PATH).'session/session_list.php'
                 ); ?>
             </div>
@@ -123,7 +123,7 @@ if (isset($_GET['search']) && $_GET['search'] === 'advanced') {
                             <button class="btn btn-default" type="submit" name="name"
                                     value="<?php echo get_lang('Search'); ?>"><em
                                         class="fa fa-search"></em> <?php echo get_lang('Search'); ?></button>
-                            <!-- <a href="session_list.php?search=advanced"><?php echo get_lang('AdvancedSearch'); ?></a> -->
+                            <!-- <a href="session_list.php?search=advanced"><?php echo get_lang('Advanced search'); ?></a> -->
                         </div>
                     </form>
                 </div>
@@ -131,10 +131,10 @@ if (isset($_GET['search']) && $_GET['search'] === 'advanced') {
         </div>
     </div>
     <form method="post" action="<?php echo api_get_self(); ?>?action=delete&sort=<?php echo $sort; ?>"
-          onsubmit="if(!confirm('<?php echo get_lang('ConfirmYourChoice'); ?>')) return false;">
+          onsubmit="if(!confirm('<?php echo get_lang('Please confirm your choice'); ?>')) return false;">
         <?php
         if (count($Sessions) == 0 && isset($_POST['keyword'])) {
-            echo Display::return_message(get_lang('NoSearchResults'), 'warning');
+            echo Display::return_message(get_lang('No search results'), 'warning');
         } else {
             if ($num > $limit) {
                 ?>
@@ -174,14 +174,14 @@ if (isset($_GET['search']) && $_GET['search'] === 'advanced') {
                 <tr>
                     <th>&nbsp;</th>
                     <th><a href="<?php echo api_get_self(); ?>?sort=name&order=<?php echo ($sort == 'name') ? $order
-                            : 'ASC'; ?>"><?php echo get_lang('SessionCategoryName'); ?></a></th>
+                            : 'ASC'; ?>"><?php echo get_lang('Category name'); ?></a></th>
                     <th><a href="<?php echo api_get_self(); ?>?sort=nbr_session&order=<?php echo ($sort
-                            == 'nbr_session') ? $order : 'ASC'; ?>"><?php echo get_lang('NumberOfSession'); ?></a></th>
+                            == 'nbr_session') ? $order : 'ASC'; ?>"><?php echo get_lang('Number sessions'); ?></a></th>
                     <th><a href="<?php echo api_get_self(); ?>?sort=date_start&order=<?php echo ($sort == 'date_start')
-                            ? $order : 'ASC'; ?>"><?php echo get_lang('StartDate'); ?></a></th>
+                            ? $order : 'ASC'; ?>"><?php echo get_lang('Start Date'); ?></a></th>
                     <th><a href="<?php echo api_get_self(); ?>?sort=date_end&order=<?php echo ($sort == 'date_end')
-                            ? $order : 'ASC'; ?>"><?php echo get_lang('EndDate'); ?></a></th>
-                    <th><?php echo get_lang('Actions'); ?></th>
+                            ? $order : 'ASC'; ?>"><?php echo get_lang('End Date'); ?></a></th>
+                    <th><?php echo get_lang('Detail'); ?></th>
                 </tr>
 
                 <?php
@@ -223,7 +223,7 @@ if (isset($_GET['search']) && $_GET['search'] === 'advanced') {
                             <a href="<?php echo api_get_self(
                             ); ?>?sort=<?php echo $sort; ?>&action=delete_off_session&idChecked=<?php echo $enreg['id']; ?>"
                                onclick="if(!confirm('<?php echo get_lang(
-                                   'ConfirmYourChoice'
+                                   'Please confirm your choice'
                                ); ?>')) return false;">
                                 <?php Display::display_icon('delete.png', get_lang('Delete'), [], ICON_SIZE_SMALL); ?>
                             </a>
@@ -271,26 +271,26 @@ if (isset($_GET['search']) && $_GET['search'] === 'advanced') {
                 <div class="col-sm-4">
                     <div class="btn-group">
                         <button type="button" class="btn btn-default" onclick="selectAll('idChecked',<?php echo $x; ?>,'true');">
-                            <?php echo get_lang('SelectAll'); ?>
+                            <?php echo get_lang('Select all'); ?>
                         </button>
                         <button type="button" class="btn btn-default" onclick="selectAll('idChecked',<?php echo $x; ?>,'false');">
-                            <?php echo get_lang('UnSelectAll'); ?>
+                            <?php echo get_lang('UnSelect all'); ?>
                         </button>
                     </div>
                 </div>
                 <div class="col-sm-6">
                     <select class="selectpicker form-control" name="action">
                         <option value="delete_off_session" selected="selected">
-                            <?php echo get_lang('DeleteSelectedSessionCategory'); ?>
+                            <?php echo get_lang('Delete only the selected categories without sessions'); ?>
                         </option>
                         <option value="delete_on_session">
-                            <?php echo get_lang('DeleteSelectedFullSessionCategory'); ?>
+                            <?php echo get_lang('Delete the selected categories to sessions'); ?>
                         </option>
                     </select>
                 </div>
                 <div class="col-sm-2">
-                    <button class="btn btn-success" type="submit" name="name" value="<?php echo get_lang('Ok'); ?>">
-                        <?php echo get_lang('Ok'); ?>
+                    <button class="btn btn-success" type="submit" name="name" value="<?php echo get_lang('Validate'); ?>">
+                        <?php echo get_lang('Validate'); ?>
                     </button>
                 </div>
             </div>

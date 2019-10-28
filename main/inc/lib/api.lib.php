@@ -20,8 +20,6 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
  * This library is in process of being transferred to src/Chamilo/CoreBundle/Component/Utils/ChamiloApi.
  * Whenever a function is transferred to the ChamiloApi class, the places where it is used should include
  * the "use Chamilo\CoreBundle\Component\Utils\ChamiloApi;" statement.
- *
- * @package chamilo.library
  */
 
 // PHP version requirement.
@@ -2422,7 +2420,7 @@ function api_check_password($password)
     }
 
     if ($isPasswordOk === false) {
-        $output = get_lang('NewPasswordRequirementsNotMatched').'<br />';
+        $output = get_lang('The new password does not match the minimum security requirements').'<br />';
         $output .= Security::getPasswordRequirementsToString($conditions);
 
         Display::addFlash(Display::return_message($output, 'warning', false));
@@ -2644,7 +2642,7 @@ function api_get_session_image($sessionId, $statusId)
         if ($sessionId > 0) {
             $image = '&nbsp;&nbsp;'.Display::return_icon(
                 'star.png',
-                get_lang('SessionSpecificResource'),
+                get_lang('Session-specific resource'),
                 ['align' => 'absmiddle'],
                 ICON_SIZE_SMALL
             );
@@ -3374,17 +3372,17 @@ function api_display_tool_view_option()
             $sourceurl = str_replace('&isStudentView=true', '', $sourceurl);
             $sourceurl = str_replace('&isStudentView=false', '', $sourceurl);
             $output_string .= '<a class="btn btn-primary btn-sm" href="'.$sourceurl.'&isStudentView=false" target="_self">'.
-                Display::returnFontAwesomeIcon('eye').' '.get_lang('SwitchToTeacherView').'</a>';
+                Display::returnFontAwesomeIcon('eye').' '.get_lang('Switch to teacher view').'</a>';
         } elseif ($_SESSION['studentview'] == 'teacherview') {
             // Switching to teacherview
             $sourceurl = str_replace('&isStudentView=true', '', $sourceurl);
             $sourceurl = str_replace('&isStudentView=false', '', $sourceurl);
             $output_string .= '<a class="btn btn-default btn-sm" href="'.$sourceurl.'&isStudentView=true" target="_self">'.
-                Display::returnFontAwesomeIcon('eye').' '.get_lang('SwitchToStudentView').'</a>';
+                Display::returnFontAwesomeIcon('eye').' '.get_lang('Switch to student view').'</a>';
         }
     } else {
         $output_string .= '<a class="btn btn-default btn-sm" href="'.$sourceurl.'&isStudentView=true" target="_self">'.
-            Display::returnFontAwesomeIcon('eye').' '.get_lang('SwitchToStudentView').'</a>';
+            Display::returnFontAwesomeIcon('eye').' '.get_lang('Switch to student view').'</a>';
     }
     $output_string = Security::remove_XSS($output_string);
     $html = Display::tag('div', $output_string, ['class' => 'view-options']);
@@ -3733,7 +3731,7 @@ function api_not_allowed(
 
     // Default code is 403 forbidden
     $responseCode = empty($responseCode) ? 403 : $responseCode;
-    $message = empty($message) ? get_lang('NotAuthorized') : $message;
+    $message = empty($message) ? get_lang('Not authorized') : $message;
 
     // Create new exception rendered by template:
     // src/ThemeBundle/Resources/views/Exception/error.html.twig
@@ -3769,13 +3767,13 @@ function api_not_allowed(
         $msg = $message;
     } else {
         $msg = Display::return_message(
-            get_lang('NotAllowedClickBack').'
+            get_lang('Sorry, you are not allowed to access this page, or maybe your connection has expired. Please click your browser\'s "Back" button or follow the link below to return to the previous page.').'
             <script>function goBack(){window.history.back();}</script>',
             'error',
             false
         );
         $msg .= '<p class="text-center">
-             <a onclick="goBack();" class="btn btn-default" href="'.$home_url.'">'.get_lang('GoBack').'</a>
+             <a onclick="goBack();" class="btn btn-default" href="'.$home_url.'">'.get_lang('Go back').'</a>
              </p>';
     }
 
@@ -3825,10 +3823,10 @@ function api_not_allowed(
         $form = api_get_not_allowed_login_form();
 
         // see same text in auth/gotocourse.php and main_api.lib.php function api_not_allowed (above)
-        $content = Display::return_message(get_lang('NotAllowed'), 'error', false);
+        $content = Display::return_message(get_lang('You are not allowed to see this page. Either your connection has expired or you are trying to access a page for which you do not have the sufficient privileges.'), 'error', false);
 
         if (!empty($courseCode)) {
-            $content .= '<h4>'.get_lang('LoginToGoToThisCourse').'</h4>';
+            $content .= '<h4>'.get_lang('Please login to go to this course').'</h4>';
         }
 
         $content .= '<div class="well">';
@@ -3836,10 +3834,10 @@ function api_not_allowed(
         $content .= '</div>';
         if (!empty($courseCode)) {
             $content .= '<hr/><p style="text-align:center"><a href="'.$home_url.'">'.
-                get_lang('ReturnToCourseHomepage').'</a></p>';
+                get_lang('Return to Course Homepage').'</a></p>';
         } else {
             $content .= '<hr/><p style="text-align:center"><a href="'.$home_url.'">'.
-                get_lang('BackHome').'</a></p>';
+                get_lang('Back to Home Page.').'</a></p>';
         }
 
         $tpl->setLoginBodyClass();
@@ -3862,8 +3860,8 @@ function api_not_allowed(
         $tpl->setLoginBodyClass();
 
         // see same text in auth/gotocourse.php and main_api.lib.php function api_not_allowed (bellow)
-        $msg = Display::return_message(get_lang('NotAllowed'), 'error', false);
-        $msg .= '<h4>'.get_lang('LoginToGoToThisCourse').'</h4>';
+        $msg = Display::return_message(get_lang('You are not allowed to see this page. Either your connection has expired or you are trying to access a page for which you do not have the sufficient privileges.'), 'error', false);
+        $msg .= '<h4>'.get_lang('Please login to go to this course').'</h4>';
         $form = api_get_not_allowed_login_form();
         $msg .= '<div class="well">';
         $msg .= $form->returnForm();
@@ -3874,13 +3872,13 @@ function api_not_allowed(
     } else {
         // we were not in a course, return to home page
         $msg = Display::return_message(
-            get_lang('NotAllowed'),
+            get_lang('You are not allowed to see this page. Either your connection has expired or you are trying to access a page for which you do not have the sufficient privileges.'),
             'error',
             false
         );
 
         $msg .= '<p class="text-center">
-                 <a class="btn btn-default" href="'.$home_url.'">'.get_lang('BackHome').'</a>
+                 <a class="btn btn-default" href="'.$home_url.'">'.get_lang('Back to Home Page.').'</a>
                  </p>';
 
         if (!empty($message)) {
@@ -3918,7 +3916,7 @@ function api_get_not_allowed_login_form()
         ['class' => 'form-stacked']
     );
     $params = [
-        'placeholder' => get_lang('UserName'),
+        'placeholder' => get_lang('Username'),
         'class' => 'col-md-3',
     ];
     if (api_browser_support('autocapitalize')) {
@@ -3937,7 +3935,7 @@ function api_get_not_allowed_login_form()
         null,
         ['placeholder' => get_lang('Password'), 'class' => 'col-md-3']
     ); //new
-    $form->addButtonNext(get_lang('LoginEnter'), 'submitAuth');
+    $form->addButtonNext(get_lang('Login'), 'submitAuth');
 
     return $form;
 }
@@ -5139,7 +5137,7 @@ function api_time_to_hms($seconds, $space = ':', $showSeconds = true, $roundMinu
             get_lang('Unknown').
             Display::return_icon(
                 'info2.gif',
-                get_lang('WrongDatasForTimeSpentOnThePlatform'),
+                get_lang('The datas about this user were registered when the calculation of time spent on the platform wasn\'t possible.'),
                 ['align' => 'absmiddle', 'hspace' => '3px']
             );
     }
@@ -7501,7 +7499,7 @@ function api_block_course_item_locked_by_gradebook($item_id, $link_type, $course
     }
 
     if (api_resource_is_locked_by_gradebook($item_id, $link_type, $course_code)) {
-        $message = Display::return_message(get_lang('ResourceLockedByGradebook'), 'warning');
+        $message = Display::return_message(get_lang('This option is not available because this activity is contained by an assessment, which is currently locked. To unlock the assessment, ask your platform administrator.'), 'warning');
         api_not_allowed(true, $message);
     }
 }
@@ -7527,7 +7525,7 @@ function api_check_php_version()
 function api_check_archive_dir()
 {
     if (is_dir(api_get_path(SYS_ARCHIVE_PATH)) && !is_writable(api_get_path(SYS_ARCHIVE_PATH))) {
-        $message = Display::return_message(get_lang('ArchivesDirectoryNotWriteableContactAdmin'), 'warning');
+        $message = Display::return_message(get_lang('The app/cache/ directory, used by this tool, is not writeable. Please contact your platform administrator.'), 'warning');
         api_not_allowed(true, $message);
     }
 }
@@ -8116,26 +8114,26 @@ function api_get_password_checker_js($usernameInputId, $passwordInputId)
     }
 
     $translations = [
-        'wordLength' => get_lang('PasswordIsTooShort'),
-        'wordNotEmail' => get_lang('YourPasswordCannotBeTheSameAsYourEmail'),
-        'wordSimilarToUsername' => get_lang('YourPasswordCannotContainYourUsername'),
-        'wordTwoCharacterClasses' => get_lang('WordTwoCharacterClasses'),
-        'wordRepetitions' => get_lang('TooManyRepetitions'),
-        'wordSequences' => get_lang('YourPasswordContainsSequences'),
-        'errorList' => get_lang('ErrorsFound'),
-        'veryWeak' => get_lang('PasswordVeryWeak'),
-        'weak' => get_lang('PasswordWeak'),
-        'normal' => get_lang('PasswordNormal'),
-        'medium' => get_lang('PasswordMedium'),
-        'strong' => get_lang('PasswordStrong'),
-        'veryStrong' => get_lang('PasswordVeryStrong'),
+        'wordLength' => get_lang('The password is too short'),
+        'wordNotEmail' => get_lang('Your password cannot be the same as your email'),
+        'wordSimilarToUsername' => get_lang('Your password cannot contain your username'),
+        'wordTwoCharacterClasses' => get_lang('Use different character classes'),
+        'wordRepetitions' => get_lang('Too many repetitions'),
+        'wordSequences' => get_lang('Your password contains sequences'),
+        'errorList' => get_lang('errors found'),
+        'veryWeak' => get_lang('Very weak'),
+        'weak' => get_lang('Weak'),
+        'normal' => get_lang('Normal'),
+        'medium' => get_lang('Medium'),
+        'strong' => get_lang('Strong'),
+        'veryStrong' => get_lang('Very strong'),
     ];
 
     $js = api_get_asset('pwstrength-bootstrap/dist/pwstrength-bootstrap.min.js');
     $js .= "<script>
     var errorMessages = {
-        password_to_short : \"".get_lang('PasswordIsTooShort')."\",
-        same_as_username : \"".get_lang('YourPasswordCannotBeTheSameAsYourUsername')."\"
+        password_to_short : \"".get_lang('The password is too short')."\",
+        same_as_username : \"".get_lang('Your password cannot be the same as your username')."\"
     };
 
     $(function() {
@@ -8527,9 +8525,9 @@ function api_warn_hosting_contact($limitName)
     }
 
     if (!empty($email)) {
-        $subject = get_lang('HostingWarningReached');
-        $body = get_lang('PortalName').': '.api_get_path(WEB_PATH)." \n ";
-        $body .= get_lang('PortalLimitType').': '.$limitName." \n ";
+        $subject = get_lang('Hosting warning reached');
+        $body = get_lang('Portal name').': '.api_get_path(WEB_PATH)." \n ";
+        $body .= get_lang('Portal\'s limit type').': '.$limitName." \n ";
         if (isset($hostingParams[$limitName])) {
             $body .= get_lang('Value').': '.$hostingParams[$limitName];
         }
@@ -8896,7 +8894,7 @@ function api_mail_html(
         $noReply = api_get_setting('noreply_email_address');
         $automaticEmailText = '';
         if (!empty($noReply)) {
-            $automaticEmailText = '<br />'.get_lang('ThisIsAutomaticEmailNoReply');
+            $automaticEmailText = '<br />'.get_lang('This is an automatic email message. Please do not reply to it.');
         }
 
         $params = [
@@ -9415,65 +9413,6 @@ function api_unserialize_content($type, $serialized, $ignoreErrors = false)
         $serialized,
         ['allowed_classes' => $allowedClasses]
     );
-}
-
-/**
- * Set the From and ReplyTo properties to PHPMailer instance.
- *
- * @param PHPMailer $mailer
- * @param array     $sender
- * @param array     $replyToAddress
- *
- * @throws phpmailerException
- */
-function api_set_noreply_and_from_address_to_mailer(PHPMailer $mailer, array $sender, array $replyToAddress = [])
-{
-    $platformEmail = $GLOBALS['platform_email'];
-
-    $noReplyAddress = api_get_setting('noreply_email_address');
-    $avoidReplyToAddress = false;
-
-    if (!empty($noReplyAddress)) {
-        $avoidReplyToAddress = api_get_configuration_value('mail_no_reply_avoid_reply_to');
-    }
-
-    $notification = new Notification();
-    // If the parameter is set don't use the admin.
-    $senderName = !empty($sender['name']) ? $sender['name'] : $notification->getDefaultPlatformSenderName();
-    $senderEmail = !empty($sender['email']) ? $sender['email'] : $notification->getDefaultPlatformSenderEmail();
-
-    // Send errors to the platform admin
-    $adminEmail = api_get_setting('emailAdministrator');
-    if (PHPMailer::ValidateAddress($adminEmail)) {
-        $mailer->AddCustomHeader('Errors-To: '.$adminEmail);
-    }
-
-    // Reply to first
-    if (!$avoidReplyToAddress) {
-        if (
-            !empty($replyToAddress) &&
-            PHPMailer::ValidateAddress($replyToAddress['mail'])
-        ) {
-            $mailer->AddReplyTo($replyToAddress['mail'], $replyToAddress['name']);
-            $mailer->Sender = $replyToAddress['mail'];
-        }
-    }
-
-    //If the SMTP configuration only accept one sender
-    if (
-        isset($platformEmail['SMTP_UNIQUE_SENDER']) &&
-        $platformEmail['SMTP_UNIQUE_SENDER']
-    ) {
-        $senderName = $platformEmail['SMTP_FROM_NAME'];
-        $senderEmail = $platformEmail['SMTP_FROM_EMAIL'];
-
-        if (PHPMailer::ValidateAddress($senderEmail)) {
-            //force-set Sender to $senderEmail, otherwise SetFrom only does it if it is currently empty
-            $mailer->Sender = $senderEmail;
-        }
-    }
-
-    $mailer->SetFrom($senderEmail, $senderName, !$avoidReplyToAddress);
 }
 
 /**

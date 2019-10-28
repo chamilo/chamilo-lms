@@ -13,9 +13,9 @@ api_protect_admin_script(true);
 api_protect_limit_for_session_admin();
 
 $form_sent = 0;
-$tool_name = get_lang('ImportSessionDrhList');
+$tool_name = get_lang('Import list of HR directors into sessions');
 
-$interbreadcrumb[] = ['url' => 'session_list.php', 'name' => get_lang('SessionList')];
+$interbreadcrumb[] = ['url' => 'session_list.php', 'name' => get_lang('Session list')];
 
 set_time_limit(0);
 
@@ -26,7 +26,7 @@ Display::display_header($tool_name);
 
 echo '<div class="actions">';
 echo '<a href="../session/session_list.php">'.
-    Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('PlatformAdmin'), '', ICON_SIZE_MEDIUM).'</a>';
+    Display::return_icon('back.png', get_lang('Back to').' '.get_lang('Administration'), '', ICON_SIZE_MEDIUM).'</a>';
 echo '</div>';
 
 if (!empty($error_message)) {
@@ -41,10 +41,10 @@ $form = new FormValidator(
     ['enctype' => 'multipart/form-data']
 );
 
-$form->addElement('file', 'import_file', get_lang('ImportFileLocation'));
-$form->addElement('checkbox', 'remove_old_relationships', null, get_lang('RemoveOldRelationships'));
-//$form->addElement('checkbox', 'send_email', null, get_lang('SendMailToUsers'));
-$form->addButtonImport(get_lang('ImportSession'));
+$form->addElement('file', 'import_file', get_lang('Import marks in an assessment'));
+$form->addElement('checkbox', 'remove_old_relationships', null, get_lang('Remove previous relationships'));
+//$form->addElement('checkbox', 'send_email', null, get_lang('Send a mail to users'));
+$form->addButtonImport(get_lang('Import session(s)'));
 
 if ($form->validate()) {
     if (isset($_FILES['import_file']['tmp_name']) && !empty($_FILES['import_file']['tmp_name'])) {
@@ -61,14 +61,14 @@ if ($form->validate()) {
         header('Location: '.api_get_self());
         exit;
     } else {
-        $error_message = get_lang('NoInputFile');
+        $error_message = get_lang('No file was sent');
     }
 }
 
 $form->display();
 
 ?>
-<p><?php echo get_lang('CSVMustLookLike').' ('.get_lang('MandatoryFields').')'; ?> :</p>
+<p><?php echo get_lang('The CSV file must look like this').' ('.get_lang('Fields in <strong>bold</strong> are mandatory.').')'; ?> :</p>
 
 <blockquote>
 <pre>

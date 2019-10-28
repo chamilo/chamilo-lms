@@ -17,14 +17,14 @@ $errorMsg = '';
 
 // Database Table Definitions
 $tbl_session_category = Database::get_main_table(TABLE_MAIN_SESSION_CATEGORY);
-$tool_name = get_lang('EditSessionCategory');
+$tool_name = get_lang('Edit session category');
 $interbreadcrumb[] = [
     'url' => 'session_list.php',
-    "name" => get_lang('SessionList'),
+    "name" => get_lang('Session list'),
 ];
 $interbreadcrumb[] = [
     'url' => "session_category_list.php",
-    "name" => get_lang('ListSessionCategory'),
+    "name" => get_lang('Sessions categories list'),
 ];
 
 $sql = "SELECT * FROM $tbl_session_category WHERE id='".$id."' ORDER BY name";
@@ -61,7 +61,7 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
         $day_end
     );
     if ($return == strval(intval($return))) {
-        Display::addFlash(Display::return_message(get_lang('SessionCategoryUpdate')));
+        Display::addFlash(Display::return_message(get_lang('Category update')));
         header('Location: session_category_list.php');
         exit();
     }
@@ -95,13 +95,13 @@ if (!empty($return)) {
         </div>
         <div class="form-group">
             <div class="col-sm-offset-3 col-sm-6">
-                <?php echo get_lang('TheTimeLimitsAreReferential'); ?>
-                <a href="javascript://" onclick="if(document.getElementById('options').style.display == 'none'){document.getElementById('options').style.display = 'block';}else{document.getElementById('options').style.display = 'none';}"><?php echo get_lang('EditTimeLimit'); ?></a>
+                <?php echo get_lang('The time limit of a category is referential, will not affect the boundaries of a training session'); ?>
+                <a href="javascript://" onclick="if(document.getElementById('options').style.display == 'none'){document.getElementById('options').style.display = 'block';}else{document.getElementById('options').style.display = 'none';}"><?php echo get_lang('Edit time limit'); ?></a>
             </div>
         </div>
         <div style="display: <?php echo $formSent ? 'display' : 'none'; ?>;" id="options">
             <div class="form-group">
-                <label class="col-sm-3 control-label"><?php echo get_lang('DateStart'); ?></label>
+                <label class="col-sm-3 control-label"><?php echo get_lang('Start date'); ?></label>
                 <div class="col-sm-6">
                     <select name="day_start">
                         <option value="1">01</option>
@@ -248,7 +248,7 @@ if (!empty($return)) {
                 <div class="col-sm-3"></div>
             </div>
             <div class="form-group">
-                <label class="col-sm-3 control-label"><?php echo get_lang('DateEnd'); ?></label>
+                <label class="col-sm-3 control-label"><?php echo get_lang('End date'); ?></label>
                 <div class="col-sm-6">
                     <select name="day_end">
                         <option value="0">--</option>

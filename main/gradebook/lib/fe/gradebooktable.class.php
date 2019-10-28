@@ -124,7 +124,7 @@ class GradebookTable extends SortableTable
                 $this->set_header($column++, get_lang('Ranking'), false);
             }
             if (in_array(2, $this->loadStats)) {
-                $this->set_header($column++, get_lang('BestScore'), false);
+                $this->set_header($column++, get_lang('Best score'), false);
             }
             if (in_array(3, $this->loadStats)) {
                 $this->set_header($column++, get_lang('Average'), false);
@@ -135,7 +135,7 @@ class GradebookTable extends SortableTable
         } else {
             if (!empty($cats)) {
                 if ($this->exportToPdf == false) {
-                    $this->set_header($column++, get_lang('Actions'), false);
+                    $this->set_header($column++, get_lang('Detail'), false);
                 }
             }
         }
@@ -145,13 +145,13 @@ class GradebookTable extends SortableTable
 
         // Admins get an edit column.
         if ($this->teacherView) {
-            $this->set_header($column++, get_lang('Modify'), false, 'width="195px"');
-            // Actions on multiple selected documents.
+            $this->set_header($column++, get_lang('Edit'), false, 'width="195px"');
+            // Detail on multiple selected documents.
             $this->set_form_actions(
                 [
-                    'setvisible' => get_lang('SetVisible'),
-                    'setinvisible' => get_lang('SetInvisible'),
-                    'deleted' => get_lang('DeleteSelected'),
+                    'setvisible' => get_lang('Set visible'),
+                    'setinvisible' => get_lang('Set invisible'),
+                    'deleted' => get_lang('Delete selected'),
                 ]
             );
         } else {
@@ -706,14 +706,14 @@ class GradebookTable extends SortableTable
                                 } else {
                                     $label = Display::return_icon(
                                         'warning.png',
-                                        sprintf(get_lang('TotalWeightMustBeX'), $category_weight)
+                                        sprintf(get_lang('The sum of all weights of activities must be %s'), $category_weight)
                                     );
                                     $total = Display::badge($total_weight.' / '.$category_weight, 'warning');
                                 }
                                 $row = [
                                     null,
                                     null,
-                                    "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<h5>".get_lang('SubTotal').'</h5>',
+                                    "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<h5>".get_lang('Subtotal').'</h5>',
                                     null,
                                     $total.' '.$label,
                                     'child_of' => $parent_id,
@@ -906,7 +906,7 @@ class GradebookTable extends SortableTable
                     $weight_total_links < $weight_category ||
                     $weight_total_links > $weight_category
                 ) {
-                    $warning_message = sprintf(get_lang('TotalWeightMustBeX'), $weight_category);
+                    $warning_message = sprintf(get_lang('The sum of all weights of activities must be %s'), $weight_category);
                     $modify_icons =
                         '<a href="gradebook_edit_cat.php?editcat='.$id_cat.'&cidReq='.$course_code.'&id_session='.api_get_session_id().'">'.
                         Display::return_icon('edit.png', $warning_message, [], ICON_SIZE_SMALL).'</a>';
@@ -964,7 +964,7 @@ class GradebookTable extends SortableTable
                             ($certificate_min_score > $weight_category)
                         ) {
                             $warning_message .= $course_code.
-                                '&nbsp;-&nbsp;'.get_lang('CertificateMinimunScoreIsRequiredAndMustNotBeMoreThan').
+                                '&nbsp;-&nbsp;'.get_lang('Certificate minimum score is required and must not be more than').
                                 '&nbsp;'.$weight_category.'<br />';
                         }
                     }
@@ -1014,7 +1014,7 @@ class GradebookTable extends SortableTable
             $pChart->drawText(
                 80,
                 16,
-                get_lang('Results'),
+                get_lang('Results and feedback'),
                 ["FontSize" => 11, "Align" => TEXT_ALIGN_BOTTOMMIDDLE]
             );
             $pChart->setGraphArea(50, 30, $xSize - 50, $ySize - 70);
@@ -1196,7 +1196,7 @@ class GradebookTable extends SortableTable
                             .$item->get_name()
                             .'</a>';
                     } else {
-                        $extra = Display::label(get_lang('Evaluation'));
+                        $extra = Display::label(get_lang('Score'));
                         if ($type == 'simple') {
                             $extra = '';
                         }
@@ -1218,7 +1218,7 @@ class GradebookTable extends SortableTable
                         .$item->get_name()
                         .'</a>';
                 } else {
-                    return '['.get_lang('Evaluation').']&nbsp;&nbsp;'.$item->get_name().$show_message;
+                    return '['.get_lang('Score').']&nbsp;&nbsp;'.$item->get_name().$show_message;
                 }
                 // no break because of return
             case 'L':

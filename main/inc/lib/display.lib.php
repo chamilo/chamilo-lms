@@ -1687,7 +1687,7 @@ class Display
             if ($type == 'CalendareventVisible') {
                 $type = 'Visible';
             }
-            $label = get_lang('TitleNotification').": ".get_lang($type)." ($lastDate)";
+            $label = get_lang('Since your latest visit').": ".get_lang($type)." ($lastDate)";
 
             if (strpos($notification['link'], '?') === false) {
                 $notification['link'] = $notification['link'].'?notification=1';
@@ -1740,7 +1740,7 @@ class Display
             $session['dates'] = '';
             $session['coach'] = '';
             if (api_get_setting('show_session_coach') === 'true' && isset($coachInfo['complete_name'])) {
-                $session['coach'] = get_lang('GeneralCoach').': '.$coachInfo['complete_name'];
+                $session['coach'] = get_lang('General coach').': '.$coachInfo['complete_name'];
             }
 
             if (($session_info['access_end_date'] == '0000-00-00 00:00:00' &&
@@ -1750,8 +1750,8 @@ class Display
                 if (isset($session_info['duration']) && !empty($session_info['duration'])) {
                     $daysLeft = SessionManager::getDayLeftInSession($session_info, api_get_user_id());
                     $session['duration'] = $daysLeft >= 0
-                        ? sprintf(get_lang('SessionDurationXDaysLeft'), $daysLeft)
-                        : get_lang('YourSessionTimeHasExpired');
+                        ? sprintf(get_lang('This session has a maximum duration. Only %s days to go.'), $daysLeft)
+                        : get_lang('You are already registered but your allowed access time has expired.');
                 }
                 $active = true;
             } else {
@@ -1823,7 +1823,7 @@ class Display
             $percentage = $percentage * 125 / 100;
         }
         $accesses = isset($point_info['accesses']) ? $point_info['accesses'] : 0;
-        $star_label = sprintf(get_lang('XStarsOutOf5'), $point_info['point_average_star']);
+        $star_label = sprintf(get_lang('%s stars out of 5'), $point_info['point_average_star']);
 
         $html = '<section class="rating-widget">';
         $html .= '<div class="rating-stars"><ul id="stars">';
@@ -1839,10 +1839,10 @@ class Display
 
         $labels[] = $number_of_users_who_voted == 1 ? $number_of_users_who_voted.' '.get_lang('Vote') : $number_of_users_who_voted.' '.get_lang('Votes');
         $labels[] = $accesses == 1 ? $accesses.' '.get_lang('Visit') : $accesses.' '.get_lang('Visits');
-        $labels[] = $point_info['user_vote'] ? get_lang('YourVote').' ['.$point_info['user_vote'].']' : get_lang('YourVote').' [?] ';
+        $labels[] = $point_info['user_vote'] ? get_lang('Your vote').' ['.$point_info['user_vote'].']' : get_lang('Your vote').' [?] ';
 
         if (!$add_div_wrapper && api_is_anonymous()) {
-            $labels[] = self::tag('span', get_lang('LoginToVote'), ['class' => 'error']);
+            $labels[] = self::tag('span', get_lang('Login to vote'), ['class' => 'error']);
         }
 
         $html .= self::div(implode(' | ', $labels), ['id' => 'vote_label_'.$id, 'class' => 'vote_label_info']);
@@ -2379,7 +2379,7 @@ class Display
     {
         $html = null;
         if (!empty($current) && !empty($total)) {
-            $label = sprintf(get_lang('PaginationXofY'), $current, $total);
+            $label = sprintf(get_lang('%s of %s'), $current, $total);
             $html = self::url($label, '#', ['class' => 'btn disabled']);
         }
 

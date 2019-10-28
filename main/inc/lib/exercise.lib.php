@@ -88,7 +88,7 @@ class ExerciseLib
                         // contains the question itself, which can only be
                         // shown at the end of the given time, so hide for now
                         $titleToDisplay = Display::div(
-                            $current_item.'. '.get_lang('ReadingComprehension'),
+                            $current_item.'. '.get_lang('Reading comprehension'),
                             ['class' => 'question_title']
                         );
                     }
@@ -399,12 +399,12 @@ class ExerciseLib
                 // add explanation
                 $header2 = Display::tag('th', '&nbsp;');
                 $descriptionList = [
-                    get_lang('DegreeOfCertaintyIDeclareMyIgnorance'),
-                    get_lang('DegreeOfCertaintyIAmVeryUnsure'),
-                    get_lang('DegreeOfCertaintyIAmUnsure'),
-                    get_lang('DegreeOfCertaintyIAmPrettySure'),
-                    get_lang('DegreeOfCertaintyIAmSure'),
-                    get_lang('DegreeOfCertaintyIAmVerySure'),
+                    get_lang('I don\'t know the answer and I\'ve picked at random'),
+                    get_lang('I am very unsure'),
+                    get_lang('I am unsure'),
+                    get_lang('I am pretty sure'),
+                    get_lang('I am almost 100% sure'),
+                    get_lang('I am totally sure'),
                 ];
                 $counter2 = 0;
                 foreach ($objQuestionTmp->options as $item) {
@@ -1405,7 +1405,7 @@ HTML;
                     if (!$images_folder_visibility) {
                         // Show only to the course/platform admin if the image is set to visibility = false
                         echo Display::return_message(
-                            get_lang('ChangeTheVisibilityOfTheCurrentImage'),
+                            get_lang('Change the visibility of the current image'),
                             'warning'
                         );
                     }
@@ -1433,7 +1433,7 @@ HTML;
             if ($answerType != HOT_SPOT_DELINEATION) {
                 $answerList = '
                     <div class="well well-sm">
-                        <h5 class="page-header">'.get_lang('HotspotZones').'</h5>
+                        <h5 class="page-header">'.get_lang('Image zones').'</h5>
                         <ol>
                 ';
 
@@ -1537,7 +1537,7 @@ HOTSPOT;
                     );
 
                     if (!$images_folder_visibility) {
-                        echo Display::return_message(get_lang('ChangeTheVisibilityOfTheCurrentImage'), 'warning');
+                        echo Display::return_message(get_lang('Change the visibility of the current image'), 'warning');
                     }
                 }
 
@@ -1581,14 +1581,14 @@ HOTSPOT;
                                     <div class="btn-toolbar">
                                         <div class="btn-group" data-toggle="buttons">
                                             <label class="btn btn-default active"
-                                                aria-label="'.get_lang('AddAnnotationPath').'">
+                                                aria-label="'.get_lang('Add annotation path').'">
                                                 <input 
                                                     type="radio" value="0" 
                                                     name="'.$questionId.'-options" autocomplete="off" checked>
                                                 <span class="fa fa-pencil" aria-hidden="true"></span>
                                             </label>
                                             <label class="btn btn-default"
-                                                aria-label="'.get_lang('AddAnnotationText').'">
+                                                aria-label="'.get_lang('Add annotation text').'">
                                                 <input 
                                                     type="radio" value="1" 
                                                     name="'.$questionId.'-options" autocomplete="off">
@@ -2387,7 +2387,7 @@ HOTSPOT;
                                     $results[$i]['exe_user_id'],
                                     $teacher_id_list
                                 )) {
-                                    $actions .= Display::return_icon('teacher.png', get_lang('Teacher'));
+                                    $actions .= Display::return_icon('teacher.png', get_lang('Trainer'));
                                 }
                             }
                             $revisedLabel = '';
@@ -2396,11 +2396,11 @@ HOTSPOT;
                                     $actions .= "<a href='exercise_show.php?".api_get_cidreq()."&action=qualify&id=$id'>".
                                         Display:: return_icon(
                                             'quiz.png',
-                                            get_lang('Qualify')
+                                            get_lang('Grade activity')
                                         );
                                     $actions .= '</a>';
                                     $revisedLabel = Display::label(
-                                        get_lang('NotValidated'),
+                                        get_lang('Not validated'),
                                         'info'
                                     );
                                     break;
@@ -2428,7 +2428,7 @@ HOTSPOT;
                                         .'">'.
                                         Display:: return_icon(
                                             'lock.png',
-                                            get_lang('MarkAttemptAsClosed'),
+                                            get_lang('Mark attempt as closed'),
                                             [],
                                             ICON_SIZE_SMALL
                                         );
@@ -2441,7 +2441,7 @@ HOTSPOT;
                                 case 3: //still ongoing
                                     $actions .= Display:: return_icon(
                                         'clock.png',
-                                        get_lang('AttemptStillOngoingPleaseWait'),
+                                        get_lang('Attempt still going on. Please wait.'),
                                         [],
                                         ICON_SIZE_SMALL
                                     );
@@ -2457,7 +2457,7 @@ HOTSPOT;
                                 $actions .= ' <a href="exercise_history.php?'.api_get_cidreq().'&exe_id='.$id.'">'.
                                     Display:: return_icon(
                                         'history.png',
-                                        get_lang('ViewHistoryChange')
+                                        get_lang('View changes history')
                                     ).'</a>';
                             }
 
@@ -2480,7 +2480,7 @@ HOTSPOT;
                                         'user' => $results[$i]['exe_user_id'],
                                     ]);
                                 $actions .= Display::url(
-                                    Display::return_icon('reload.png', get_lang('RecalculateResults')),
+                                    Display::return_icon('reload.png', get_lang('Recalculate results')),
                                     $recalculateUrl,
                                     [
                                         'data-exercise' => $exercise_id,
@@ -2493,7 +2493,7 @@ HOTSPOT;
                                 $filterByUser = isset($_GET['filter_by_user']) ? (int) $_GET['filter_by_user'] : 0;
                                 $delete_link = '<a href="exercise_report.php?'.api_get_cidreq().'&filter_by_user='.$filterByUser.'&filter='.$filter.'&exerciseId='.$exercise_id.'&delete=delete&did='.$id.'"
                                 onclick="javascript:if(!confirm(\''.sprintf(
-                                    addslashes(get_lang('DeleteAttempt')),
+                                    addslashes(get_lang('Delete attempt?')),
                                     $results[$i]['username'],
                                     $dt
                                 ).'\')) return false;">';
@@ -3018,7 +3018,7 @@ HOTSPOT;
         $element = $form->createElement(
             'select',
             $name,
-            get_lang('Qualification'),
+            get_lang('Score'),
             [],
             ['class' => 'exercise_mark_select']
         );
@@ -3097,7 +3097,7 @@ EOT;
             );
 
             if ($isSuccess) {
-                $html = get_lang('CongratulationsYouPassedTheTest');
+                $html = get_lang('Congratulations you passed the test!');
                 $icon = Display::return_icon(
                     'completed.png',
                     get_lang('Correct'),
@@ -3105,7 +3105,7 @@ EOT;
                     ICON_SIZE_MEDIUM
                 );
             } else {
-                $html = get_lang('YouDidNotReachTheMinimumScore');
+                $html = get_lang('You didn\'t reach the minimum score');
                 $icon = Display::return_icon(
                     'warning.png',
                     get_lang('Wrong'),
@@ -4728,7 +4728,7 @@ EOT;
         $certificateBlock = '';
         if (($show_results || $show_only_score) && $showTotalScore) {
             if ($result['answer_type'] == MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY) {
-                echo '<h1 style="text-align : center; margin : 20px 0;">'.get_lang('YourResults').'</h1><br />';
+                echo '<h1 style="text-align : center; margin : 20px 0;">'.get_lang('Your results').'</h1><br />';
             }
             $totalScoreText .= '<div class="question_row_score">';
             if ($result['answer_type'] == MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY) {
@@ -4793,7 +4793,7 @@ EOT;
         }
 
         if ($show_all_but_expected_answer) {
-            $exercise_content .= Display::return_message(get_lang('ExerciseWithFeedbackWithoutCorrectionComment'));
+            $exercise_content .= Display::return_message(get_lang('Note: This test has been setup to hide the expected answers.'));
         }
 
         // Remove audio auto play from questions on results page - refs BT#7939
@@ -5038,7 +5038,7 @@ EOT;
         }
 
         if ($displayChartDegree) {
-            $ribbon .= '<h3>'.get_lang('YourTotalScore').':&nbsp;';
+            $ribbon .= '<h3>'.get_lang('Score for the test').':&nbsp;';
             $ribbon .= self::show_score($score, $weight, false, true);
             $ribbon .= '</h3>';
             $ribbon .= '</div>';
@@ -5099,7 +5099,7 @@ EOT;
         } else {
             $ribbon .= '<div class="total">';
         }
-        $ribbon .= '<h3>'.get_lang('YourTotalScore').':&nbsp;';
+        $ribbon .= '<h3>'.get_lang('Score for the test').':&nbsp;';
         $ribbon .= self::show_score($score, $weight, false, true);
         $ribbon .= '</h3>';
         $ribbon .= '</div>';
@@ -5116,7 +5116,7 @@ EOT;
             $ribbon .= '<br />';
             $ribbon .= Display::return_message(
                 sprintf(
-                    get_lang('TempScoreXQuestionsNotCorrectedYet'),
+                    get_lang('Temporary score: %s open question(s) not corrected yet.'),
                     $countPendingQuestions
                 ),
                 'warning'
@@ -5189,7 +5189,7 @@ EOT;
      */
     public static function getNotCorrectedYetText()
     {
-        return Display::return_message(get_lang('notCorrectedYet'), 'warning');
+        return Display::return_message(get_lang('This answer has not yet been corrected. Meanwhile, your score for this question is set to 0, affecting the total score.'), 'warning');
     }
 
     /**
@@ -5269,10 +5269,10 @@ EOT;
     public static function getNotificationSettings()
     {
         $emailAlerts = [
-            2 => get_lang('SendEmailToTeacherWhenStudentStartQuiz'),
-            1 => get_lang('SendEmailToTeacherWhenStudentEndQuiz'), // default
-            3 => get_lang('SendEmailToTeacherWhenStudentEndQuizOnlyIfOpenQuestion'),
-            4 => get_lang('SendEmailToTeacherWhenStudentEndQuizOnlyIfOralQuestion'),
+            2 => get_lang('SendEmailToTrainerWhenStudentStartQuiz'),
+            1 => get_lang('SendEmailToTrainerWhenStudentEndQuiz'), // default
+            3 => get_lang('SendEmailToTrainerWhenStudentEndQuizOnlyIfOpenQuestion'),
+            4 => get_lang('SendEmailToTrainerWhenStudentEndQuizOnlyIfOralQuestion'),
         ];
 
         return $emailAlerts;

@@ -110,10 +110,10 @@ $nbr_results = sizeof($users);
 
 $tool_name = get_lang('Session').': '.$session_name.' - '.get_lang('Course').': '.$course_title;
 
-$interbreadcrumb[] = ['url' => 'session_list.php', 'name' => get_lang('SessionList')];
+$interbreadcrumb[] = ['url' => 'session_list.php', 'name' => get_lang('Session list')];
 $interbreadcrumb[] = [
     'url' => "resume_session.php?id_session=".$id_session,
-    'name' => get_lang('SessionOverview'),
+    'name' => get_lang('Session overview'),
 ];
 
 Display::display_header($tool_name);
@@ -121,7 +121,7 @@ echo Display::page_header($tool_name);
 ?>
     <form method="post"
           action="<?php echo api_get_self(); ?>?id_session=<?php echo $id_session; ?>&course_code=<?php echo urlencode($course_code); ?>&sort=<?php echo $sort; ?>"
-          onsubmit="javascript:if(!confirm('<?php echo get_lang('ConfirmYourChoice'); ?>')) return false;">
+          onsubmit="javascript:if(!confirm('<?php echo get_lang('Please confirm your choice'); ?>')) return false;">
         <div align="right">
             <?php
             if ($page) {
@@ -153,22 +153,22 @@ echo Display::page_header($tool_name);
                 ?>
                     <th>
                         <a href="<?php echo api_get_self(); ?>?id_session=<?php echo $id_session; ?>&course_code=<?php echo urlencode($course_code); ?>&sort=firstname&direction=<?php echo urlencode($direction); ?>">
-                            <?php echo get_lang('FirstName'); ?></a>
+                            <?php echo get_lang('First name'); ?></a>
                     </th>
                     <th>
                         <a href="<?php echo api_get_self(); ?>?id_session=<?php echo $id_session; ?>&course_code=<?php echo urlencode($course_code); ?>&sort=lastname&direction=<?php echo urlencode($direction); ?>">
-                            <?php echo get_lang('LastName'); ?></a>
+                            <?php echo get_lang('Last name'); ?></a>
                     </th>
                 <?php
             } else {
                 ?>
                     <th>
                         <a href="<?php echo api_get_self(); ?>?id_session=<?php echo $id_session; ?>&course_code=<?php echo urlencode($course_code); ?>&sort=lastname&direction=<?php echo urlencode($direction); ?>">
-                            <?php echo get_lang('LastName'); ?></a>
+                            <?php echo get_lang('Last name'); ?></a>
                     </th>
                     <th>
                         <a href="<?php echo api_get_self(); ?>?id_session=<?php echo $id_session; ?>&course_code=<?php echo urlencode($course_code); ?>&sort=firstname&direction=<?php echo urlencode($direction); ?>">
-                            <?php echo get_lang('FirstName'); ?></a>
+                            <?php echo get_lang('First name'); ?></a>
                     </th>
                 <?php
             } ?>
@@ -176,7 +176,7 @@ echo Display::page_header($tool_name);
                     <a href="<?php echo api_get_self(); ?>?id_session=<?php echo $id_session; ?>&course_code=<?php echo urlencode($course_code); ?>&sort=username&direction=<?php echo urlencode($direction); ?>">
                         <?php echo get_lang('Login'); ?></a>
                 </th>
-                <th><?php echo get_lang('Actions'); ?></th>
+                <th><?php echo get_lang('Detail'); ?></th>
             </tr>
             <?php
             $i = 0;
@@ -202,14 +202,14 @@ echo Display::page_header($tool_name);
                         <?php if ($enreg['is_subscribed']) {
                     ?>
                             <a href="<?php echo api_get_self(); ?>?id_session=<?php echo $id_session; ?>&course_code=<?php echo urlencode($course_code); ?>&sort=<?php echo $sort; ?>&action=delete&idChecked[]=<?php echo $enreg['user_id']; ?>"
-                               onclick="javascript:if(!confirm('<?php echo get_lang('ConfirmYourChoice'); ?>')) return false;">
+                               onclick="javascript:if(!confirm('<?php echo get_lang('Please confirm your choice'); ?>')) return false;">
                                 <?php Display::display_icon('delete.png', get_lang('Delete')); ?>
                             </a>
                         <?php
                 } else {
                     ?>
                             <a href="<?php echo api_get_self(); ?>?id_session=<?php echo $id_session; ?>&course_code=<?php echo urlencode($course_code); ?>&sort=<?php echo $sort; ?>&action=add&idChecked[]=<?php echo $enreg['user_id']; ?>"
-                               onclick="javascript:if(!confirm('<?php echo get_lang('ConfirmYourChoice'); ?>')) return false;">
+                               onclick="javascript:if(!confirm('<?php echo get_lang('Please confirm your choice'); ?>')) return false;">
                                 <?php Display::display_icon('add.png', get_lang('Add'), [], ICON_SIZE_SMALL); ?>
                             </a>
                         <?php
@@ -249,10 +249,10 @@ echo Display::page_header($tool_name);
         </div>
         <br/>
         <select name="action">
-            <option value="delete"><?php echo get_lang('UnsubscribeSelectedUsersFromSession'); ?></option>
-            <option value="add"><?php echo get_lang('AddUsers'); ?></option>
+            <option value="delete"><?php echo get_lang('Unsubscribe selected users from session'); ?></option>
+            <option value="add"><?php echo get_lang('Add a user'); ?></option>
         </select>
-        <button class="save" type="submit"> <?php echo get_lang('Ok'); ?></button>
+        <button class="save" type="submit"> <?php echo get_lang('Validate'); ?></button>
     </form>
 <?php
 Display::display_footer();

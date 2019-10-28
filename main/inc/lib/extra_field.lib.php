@@ -440,33 +440,33 @@ class ExtraField extends Model
     public static function get_extra_fields_by_handler($handler)
     {
         $types = [];
-        $types[self::FIELD_TYPE_TEXT] = get_lang('FieldTypeText');
-        $types[self::FIELD_TYPE_TEXTAREA] = get_lang('FieldTypeTextarea');
-        $types[self::FIELD_TYPE_RADIO] = get_lang('FieldTypeRadio');
-        $types[self::FIELD_TYPE_SELECT] = get_lang('FieldTypeSelect');
-        $types[self::FIELD_TYPE_SELECT_MULTIPLE] = get_lang('FieldTypeSelectMultiple');
-        $types[self::FIELD_TYPE_DATE] = get_lang('FieldTypeDate');
-        $types[self::FIELD_TYPE_DATETIME] = get_lang('FieldTypeDatetime');
-        $types[self::FIELD_TYPE_DOUBLE_SELECT] = get_lang('FieldTypeDoubleSelect');
-        $types[self::FIELD_TYPE_DIVIDER] = get_lang('FieldTypeDivider');
-        $types[self::FIELD_TYPE_TAG] = get_lang('FieldTypeTag');
-        $types[self::FIELD_TYPE_TIMEZONE] = get_lang('FieldTypeTimezone');
-        $types[self::FIELD_TYPE_SOCIAL_PROFILE] = get_lang('FieldTypeSocialProfile');
-        $types[self::FIELD_TYPE_MOBILE_PHONE_NUMBER] = get_lang('FieldTypeMobilePhoneNumber');
-        $types[self::FIELD_TYPE_CHECKBOX] = get_lang('FieldTypeCheckbox');
-        $types[self::FIELD_TYPE_INTEGER] = get_lang('FieldTypeInteger');
-        $types[self::FIELD_TYPE_FILE_IMAGE] = get_lang('FieldTypeFileImage');
-        $types[self::FIELD_TYPE_FLOAT] = get_lang('FieldTypeFloat');
-        $types[self::FIELD_TYPE_FILE] = get_lang('FieldTypeFile');
-        $types[self::FIELD_TYPE_VIDEO_URL] = get_lang('FieldTypeVideoUrl');
-        $types[self::FIELD_TYPE_LETTERS_ONLY] = get_lang('FieldTypeOnlyLetters');
-        $types[self::FIELD_TYPE_ALPHANUMERIC] = get_lang('FieldTypeAlphanumeric');
-        $types[self::FIELD_TYPE_LETTERS_SPACE] = get_lang('FieldTypeLettersSpaces');
-        $types[self::FIELD_TYPE_ALPHANUMERIC_SPACE] = get_lang('FieldTypeAlphanumericSpaces');
+        $types[self::FIELD_TYPE_TEXT] = get_lang('Text');
+        $types[self::FIELD_TYPE_TEXTAREA] = get_lang('Textarea');
+        $types[self::FIELD_TYPE_RADIO] = get_lang('Radio buttons');
+        $types[self::FIELD_TYPE_SELECT] = get_lang('Select drop-down');
+        $types[self::FIELD_TYPE_SELECT_MULTIPLE] = get_lang('Select drop-downMultiple');
+        $types[self::FIELD_TYPE_DATE] = get_lang('Date');
+        $types[self::FIELD_TYPE_DATETIME] = get_lang('Datetime');
+        $types[self::FIELD_TYPE_DOUBLE_SELECT] = get_lang('Double select');
+        $types[self::FIELD_TYPE_DIVIDER] = get_lang('Visual divider');
+        $types[self::FIELD_TYPE_TAG] = get_lang('User tag');
+        $types[self::FIELD_TYPE_TIMEZONE] = get_lang('Timezone');
+        $types[self::FIELD_TYPE_SOCIAL_PROFILE] = get_lang('Social network link');
+        $types[self::FIELD_TYPE_MOBILE_PHONE_NUMBER] = get_lang('Mobile phone number');
+        $types[self::FIELD_TYPE_CHECKBOX] = get_lang('Checkbox options');
+        $types[self::FIELD_TYPE_INTEGER] = get_lang('Integer value');
+        $types[self::FIELD_TYPE_FILE_IMAGE] = get_lang('Image file');
+        $types[self::FIELD_TYPE_FLOAT] = get_lang('Float value');
+        $types[self::FIELD_TYPE_FILE] = get_lang('File upload');
+        $types[self::FIELD_TYPE_VIDEO_URL] = get_lang('Video URL');
+        $types[self::FIELD_TYPE_LETTERS_ONLY] = get_lang('Text only letters');
+        $types[self::FIELD_TYPE_ALPHANUMERIC] = get_lang('Text only alphanumeric characters');
+        $types[self::FIELD_TYPE_LETTERS_SPACE] = get_lang('Text letters and spaces');
+        $types[self::FIELD_TYPE_ALPHANUMERIC_SPACE] = get_lang('Text only alphanumeric charactersSpaces');
         $types[self::FIELD_TYPE_GEOLOCALIZATION] = get_lang('Geolocalization');
-        $types[self::FIELD_TYPE_GEOLOCALIZATION_COORDINATES] = get_lang('GeolocalizationCoordinates');
-        $types[self::FIELD_TYPE_SELECT_WITH_TEXT_FIELD] = get_lang('FieldTypeSelectWithTextField');
-        $types[self::FIELD_TYPE_TRIPLE_SELECT] = get_lang('FieldTypeTripleSelect');
+        $types[self::FIELD_TYPE_GEOLOCALIZATION_COORDINATES] = get_lang('Geolocalization by coordinates');
+        $types[self::FIELD_TYPE_SELECT_WITH_TEXT_FIELD] = get_lang('Select drop-downWithTextField');
+        $types[self::FIELD_TYPE_TRIPLE_SELECT] = get_lang('Triple select');
 
         switch ($handler) {
             case 'course':
@@ -1248,7 +1248,7 @@ class ExtraField extends Model
                     case self::FIELD_TYPE_SELECT_MULTIPLE:
                         $options = [];
                         if (empty($defaultValueId)) {
-                            $options[''] = get_lang('SelectAnOption');
+                            $options[''] = get_lang('Please select an option');
                         }
                         foreach ($field_details['options'] as $optionDetails) {
                             $options[$optionDetails['option_value']] = $optionDetails['display_text'];
@@ -1494,7 +1494,7 @@ class ExtraField extends Model
                                     cache: false,
                                     tags: true,
                                     tokenSeparators: [','],
-                                    placeholder: '".get_lang('StartToType')."'
+                                    placeholder: '".get_lang('Start to type, then click on this bar to validate tag')."'
                                 });
                             ";
                             }
@@ -1561,7 +1561,7 @@ class ExtraField extends Model
                         $form->addElement(
                             'text',
                             'extra_'.$field_details['variable'],
-                            $field_details['display_text']." (".get_lang('CountryDialCode').")",
+                            $field_details['display_text']." (".get_lang('Include the country dial code').")",
                             ['size' => 40, 'placeholder' => '(xx)xxxxxxxxx']
                         );
                         $form->applyFilter('extra_'.$field_details['variable'], 'stripslashes');
@@ -1569,7 +1569,7 @@ class ExtraField extends Model
                         $form->applyFilter('extra_'.$field_details['variable'], 'mobile_phone_number_filter');
                         $form->addRule(
                             'extra_'.$field_details['variable'],
-                            get_lang('MobilePhoneNumberWrong'),
+                            get_lang('Mobile phone number is incomplete or contains invalid characters'),
                             'mobile_phone_number'
                         );
                         if ($freezeElement) {
@@ -1624,7 +1624,7 @@ class ExtraField extends Model
                         $allowedPictureTypes = ['jpg', 'jpeg', 'png', 'gif'];
                         $form->addRule(
                             'extra_'.$field_details['variable'],
-                            get_lang('OnlyImagesAllowed').' ('.implode(',', $allowedPictureTypes).')',
+                            get_lang('Only PNG, JPG or GIF images allowed').' ('.implode(',', $allowedPictureTypes).')',
                             'filetype',
                             $allowedPictureTypes
                         );
@@ -1858,7 +1858,7 @@ class ExtraField extends Model
         echo '<a href="../admin/index.php">';
         echo Display::return_icon(
             'back.png',
-            get_lang('BackTo').' '.get_lang('PlatformAdmin'),
+            get_lang('Back to').' '.get_lang('Administration'),
             '',
             ICON_SIZE_MEDIUM
         );
@@ -1882,14 +1882,14 @@ class ExtraField extends Model
     {
         return [
             get_lang('Name'),
-            get_lang('FieldLabel'),
+            get_lang('Field label'),
             get_lang('Type'),
-            get_lang('FieldChangeability'),
-            get_lang('VisibleToSelf'),
-            get_lang('VisibleToOthers'),
+            get_lang('Can change'),
+            get_lang('Visible to self'),
+            get_lang('Visible to others'),
             get_lang('Filter'),
-            get_lang('FieldOrder'),
-            get_lang('Actions'),
+            get_lang('Order'),
+            get_lang('Detail'),
         ];
     }
 
@@ -1984,7 +1984,7 @@ class ExtraField extends Model
         $defaults = [];
 
         if ($action === 'edit') {
-            $header = get_lang('Modify');
+            $header = get_lang('Edit');
             // Setting the defaults
             $defaults = $this->get($id, false);
         }
@@ -1994,7 +1994,7 @@ class ExtraField extends Model
         if ($action === 'edit') {
             $translateUrl = api_get_path(WEB_CODE_PATH).'extrafield/translate.php?'
                 .http_build_query(['extra_field' => $id]);
-            $translateButton = Display::toolbarButton(get_lang('TranslateThisTerm'), $translateUrl, 'language', 'link');
+            $translateButton = Display::toolbarButton(get_lang('Translate this term'), $translateUrl, 'language', 'link');
 
             $form->addText(
                 'display_text',
@@ -2012,16 +2012,16 @@ class ExtraField extends Model
         $form->addElement(
             'select',
             'field_type',
-            get_lang('FieldType'),
+            get_lang('Field type'),
             $types,
             ['id' => 'field_type']
         );
         $form->addElement('label', get_lang('Example'), '<div id="example">-</div>');
-        $form->addElement('text', 'variable', get_lang('FieldLabel'), ['class' => 'span5']);
+        $form->addElement('text', 'variable', get_lang('Field label'), ['class' => 'span5']);
         $form->addElement(
             'text',
             'field_options',
-            get_lang('FieldPossibleValues'),
+            get_lang('Possible values'),
             ['id' => 'field_options', 'class' => 'span6']
         );
 
@@ -2038,14 +2038,14 @@ class ExtraField extends Model
         if ($action == 'edit') {
             if (in_array($defaults['field_type'], $fieldWithOptions)) {
                 $url = Display::url(
-                    get_lang('EditExtraFieldOptions'),
+                    get_lang('Edit extra field options'),
                     'extra_field_options.php?type='.$this->type.'&field_id='.$id
                 );
                 $form->addElement('label', null, $url);
 
                 if ($defaults['field_type'] == self::FIELD_TYPE_SELECT) {
                     $urlWorkFlow = Display::url(
-                        get_lang('EditExtraFieldWorkFlow'),
+                        get_lang('Edit this field\'s workflow'),
                         'extra_field_workflow.php?type='.$this->type.'&field_id='.$id
                     );
                     $form->addElement('label', null, $urlWorkFlow);
@@ -2057,43 +2057,43 @@ class ExtraField extends Model
         $form->addElement(
             'text',
             'default_value',
-            get_lang('FieldDefaultValue'),
+            get_lang('Default value'),
             ['id' => 'default_value']
         );
 
         $group = [];
         $group[] = $form->createElement('radio', 'visible_to_self', null, get_lang('Yes'), 1);
         $group[] = $form->createElement('radio', 'visible_to_self', null, get_lang('No'), 0);
-        $form->addGroup($group, '', get_lang('VisibleToSelf'), null, false);
+        $form->addGroup($group, '', get_lang('Visible to self'), null, false);
 
         $group = [];
         $group[] = $form->createElement('radio', 'visible_to_others', null, get_lang('Yes'), 1);
         $group[] = $form->createElement('radio', 'visible_to_others', null, get_lang('No'), 0);
-        $form->addGroup($group, '', get_lang('VisibleToOthers'), null, false);
+        $form->addGroup($group, '', get_lang('Visible to others'), null, false);
 
         $group = [];
         $group[] = $form->createElement('radio', 'changeable', null, get_lang('Yes'), 1);
         $group[] = $form->createElement('radio', 'changeable', null, get_lang('No'), 0);
-        $form->addGroup($group, '', get_lang('FieldChangeability'), null, false);
+        $form->addGroup($group, '', get_lang('Can change'), null, false);
 
         $group = [];
         $group[] = $form->createElement('radio', 'filter', null, get_lang('Yes'), 1);
         $group[] = $form->createElement('radio', 'filter', null, get_lang('No'), 0);
-        $form->addGroup($group, '', get_lang('FieldFilter'), null, false);
+        $form->addGroup($group, '', get_lang('Filter'), null, false);
 
         /* Enable this when field_loggeable is introduced as a table field (2.0)
         $group   = array();
         $group[] = $form->createElement('radio', 'field_loggeable', null, get_lang('Yes'), 1);
         $group[] = $form->createElement('radio', 'field_loggeable', null, get_lang('No'), 0);
-        $form->addGroup($group, '', get_lang('FieldLoggeable'), '', false);
+        $form->addGroup($group, '', get_lang('Field changes should be logged'), '', false);
         */
 
-        $form->addElement('text', 'field_order', get_lang('FieldOrder'));
+        $form->addElement('text', 'field_order', get_lang('Order'));
 
         if ($action == 'edit') {
             $option = new ExtraFieldOption($this->type);
             $defaults['field_options'] = $option->get_field_options_by_field_to_string($id);
-            $form->addButtonUpdate(get_lang('Modify'));
+            $form->addButtonUpdate(get_lang('Edit'));
         } else {
             $defaults['visible_to_self'] = 0;
             $defaults['visible_to_others'] = 0;
@@ -2111,8 +2111,8 @@ class ExtraField extends Model
         $form->setDefaults($defaults);
 
         // Setting the rules
-        $form->addRule('display_text', get_lang('ThisFieldIsRequired'), 'required');
-        $form->addRule('field_type', get_lang('ThisFieldIsRequired'), 'required');
+        $form->addRule('display_text', get_lang('Required field'), 'required');
+        $form->addRule('field_type', get_lang('Required field'), 'required');
 
         return $form;
     }
@@ -2128,7 +2128,7 @@ class ExtraField extends Model
         $editIcon = Display::return_icon('edit.png', get_lang('Edit'), '', ICON_SIZE_SMALL);
         $deleteIcon = Display::return_icon('delete.png', get_lang('Delete'), '', ICON_SIZE_SMALL);
         $confirmMessage = addslashes(
-            api_htmlentities(get_lang("ConfirmYourChoice"), ENT_QUOTES)
+            api_htmlentities(get_lang("Please confirm your choice"), ENT_QUOTES)
         );
 
         $editButton = <<<JAVASCRIPT
@@ -2609,7 +2609,7 @@ JAVASCRIPT;
                 continue;
             }
 
-            $displayedValue = get_lang('None');
+            $displayedValue = get_lang('none');
 
             switch ($field['field_type']) {
                 case self::FIELD_TYPE_CHECKBOX:
@@ -2861,7 +2861,7 @@ JAVASCRIPT;
     
                 $('#map_extra_{$variable}')
                     .html('<div class=\"alert alert-info\">"
-                .addslashes(get_lang('YouNeedToActivateTheGoogleMapsPluginInAdminPlatformToSeeTheMap'))
+                .addslashes(get_lang('The GoogleMaps plugin needs to be enabled by the platform administrator in order to show the map.'))
                 ."</div>');
             });
     
@@ -2956,10 +2956,10 @@ JAVASCRIPT;
                                     infowindow.open(map_{$variable}, marker);
                                 });
                             } else {
-                                alert('".get_lang('NotFound')."');
+                                alert('".get_lang('Not found')."');
                             }
                         } else {
-                            alert('Geocode ".get_lang('Error').": ".get_lang("AddressField")." ".get_lang('NotFound')."');
+                            alert('Geocode ".get_lang('Error').": ".get_lang("Address")." ".get_lang('Not found')."');
                         }
                     });
                 }
@@ -2986,12 +2986,12 @@ JAVASCRIPT;
                             id="geolocalization_extra_'.$variable.'"
                             name="geolocalization_extra_'.$variable.'"
                             type="submit">
-                            <em class="fa fa-map-marker"></em> '.get_lang('SearchGeolocalization').'
+                            <em class="fa fa-map-marker"></em> '.get_lang('Search for this location').'
                         </button>
                         <button class="btn btn-default" id="myLocation_extra_'.$variable.'"
                             name="myLocation_extra_'.$variable.'"
                             type="submit">
-                            <em class="fa fa-crosshairs"></em> '.get_lang('MyLocation').'
+                            <em class="fa fa-crosshairs"></em> '.get_lang('My location').'
                         </button>
                     </div>
                 </div>                   
@@ -3100,7 +3100,7 @@ JAVASCRIPT;
         );
 
         if (empty($defaultValueId)) {
-            $slct->addOption(get_lang('SelectAnOption'), '');
+            $slct->addOption(get_lang('Please select an option'), '');
         }
 
         foreach ($options as $value => $text) {
@@ -3137,12 +3137,12 @@ JAVASCRIPT;
             if ($newEntity) {
                 $logs = $repoLog->getLogEntries($newEntity);
                 if (!empty($logs)) {
-                    $html = '<b>' . get_lang('LatestChanges') . '</b><br /><br />';
+                    $html = '<b>' . get_lang('Latest changes') . '</b><br /><br />';
 
                     $table = new HTML_Table(array('class' => 'data_table'));
                     $table->setHeaderContents(0, 0, get_lang('Value'));
                     $table->setHeaderContents(0, 1, get_lang('Comment'));
-                    $table->setHeaderContents(0, 2, get_lang('ModifyDate'));
+                    $table->setHeaderContents(0, 2, get_lang('EditDate'));
                     $table->setHeaderContents(0, 3, get_lang('Username'));
                     $row = 1;
                     foreach ($logs as $log) {

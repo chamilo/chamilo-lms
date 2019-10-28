@@ -177,7 +177,7 @@ function export_pdf_with_html($headers_table, $data_table, $headers_pdf, $footer
                 }
             }
         } else {
-            $content_table .= '<tr colspan="'.$i.'"><td>'.get_lang('Empty').'</td></tr>';
+            $content_table .= '<tr colspan="'.$i.'"><td>'.get_lang('You left some fields empty.<br>Use the <b>Back</b> button on your browser and try again.<br>If you ignore your training code, see the Training Program').'</td></tr>';
         }
         $content_table .= '</table>';
         if ($x < ($count_pages - 1)) {

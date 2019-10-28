@@ -476,117 +476,35 @@ class ExtraFieldValue extends Model
                 /* Enable this when field_loggeable is introduced as a table field (2.0)
                 if ($extraFieldInfo['field_loggeable'] == 1) {
                 */
-                if (false) {
-                    global $app;
-                    switch ($this->type) {
-                        case 'question':
-                            $extraFieldValue = new ChamiloLMS\Entity\QuestionFieldValues();
-                            $extraFieldValue->setUserId(api_get_user_id());
-                            $extraFieldValue->setQuestionId($params[$this->handler_id]);
-                            break;
-                        case 'course':
-                            $extraFieldValue = new ChamiloLMS\Entity\CourseFieldValues();
-                            $extraFieldValue->setUserId(api_get_user_id());
-                            $extraFieldValue->setQuestionId($params[$this->handler_id]);
-                            break;
-                        case 'user':
-                            $extraFieldValue = new ChamiloLMS\Entity\UserFieldValues();
-                            $extraFieldValue->setUserId($params[$this->handler_id]);
-                            $extraFieldValue->setAuthorId(api_get_user_id());
-                            break;
-                        case 'session':
-                            $extraFieldValue = new ChamiloLMS\Entity\SessionFieldValues();
-                            $extraFieldValue->setUserId(api_get_user_id());
-                            $extraFieldValue->setSessionId($params[$this->handler_id]);
-                            break;
-                    }
-                    if (isset($extraFieldValue)) {
-                        if (!empty($params['value'])) {
-                            $extraFieldValue->setComment($params['comment']);
-                            $extraFieldValue->setFieldValue($params['value']);
-                            $extraFieldValue->setFieldId($params['field_id']);
-                            $extraFieldValue->setTms(api_get_utc_datetime(null, false, true));
-                            $app['orm.ems']['db_write']->persist($extraFieldValue);
-                            $app['orm.ems']['db_write']->flush();
-                        }
-                    }
-                } else {
-                    if ($extraFieldInfo['field_type'] == ExtraField::FIELD_TYPE_TAG) {
-                        $option = new ExtraFieldOption($this->type);
-                        $optionExists = $option->get($params['value']);
-                        if (empty($optionExists)) {
-                            $optionParams = [
-                                'field_id' => $params['field_id'],
-                                'option_value' => $params['value'],
-                            ];
-                            $optionId = $option->saveOptions($optionParams);
-                        } else {
-                            $optionId = $optionExists['id'];
-                        }
-
-                        $params['value'] = $optionId;
-                        if ($optionId) {
-                            return parent::save($params, $showQuery);
-                        }
+                if ($extraFieldInfo['field_type'] == ExtraField::FIELD_TYPE_TAG) {
+                    $option = new ExtraFieldOption($this->type);
+                    $optionExists = $option->get($params['value']);
+                    if (empty($optionExists)) {
+                        $optionParams = [
+                            'field_id' => $params['field_id'],
+                            'option_value' => $params['value'],
+                        ];
+                        $optionId = $option->saveOptions($optionParams);
                     } else {
+                        $optionId = $optionExists['id'];
+                    }
+
+                    $params['value'] = $optionId;
+                    if ($optionId) {
                         return parent::save($params, $showQuery);
                     }
+                } else {
+                    return parent::save($params, $showQuery);
                 }
+
             } else {
                 // Update
                 /* Enable this when field_loggeable is introduced as a table field (2.0)
                 if ($extraFieldInfo['field_loggeable'] == 1) {
                 */
-                if (false) {
-                    global $app;
-                    switch ($this->type) {
-                        case 'question':
-                            $extraFieldValue = $app['orm.ems']['db_write']->getRepository('ChamiloLMS\Entity\QuestionFieldValues')->find($field_values['id']);
-                            $extraFieldValue->setUserId(api_get_user_id());
-                            $extraFieldValue->setQuestionId($params[$this->handler_id]);
-                            break;
-                        case 'course':
-                            $extraFieldValue = $app['orm.ems']['db_write']->getRepository('ChamiloLMS\Entity\CourseFieldValues')->find($field_values['id']);
-                            $extraFieldValue->setUserId(api_get_user_id());
-                            $extraFieldValue->setCourseCode($params[$this->handler_id]);
-                            break;
-                        case 'user':
-                            $extraFieldValue = $app['orm.ems']['db_write']->getRepository('ChamiloLMS\Entity\UserFieldValues')->find($field_values['id']);
-                            $extraFieldValue->setUserId(api_get_user_id());
-                            $extraFieldValue->setAuthorId(api_get_user_id());
-                            break;
-                        case 'session':
-                            $extraFieldValue = $app['orm.ems']['db_write']->getRepository('ChamiloLMS\Entity\SessionFieldValues')->find($field_values['id']);
-                            $extraFieldValue->setUserId(api_get_user_id());
-                            $extraFieldValue->setSessionId($params[$this->handler_id]);
-                            break;
-                    }
 
-                    if (isset($extraFieldValue)) {
-                        if (!empty($params['value'])) {
-                            /*
-                             *  If the field value is similar to the previous value then the comment will be the same
-                                in order to no save in the log an empty record
-                            */
-                            if ($extraFieldValue->getFieldValue() == $params['value']) {
-                                if (empty($params['comment'])) {
-                                    $params['comment'] = $extraFieldValue->getComment();
-                                }
-                            }
-
-                            $extraFieldValue->setComment($params['comment']);
-                            $extraFieldValue->setFieldValue($params['value']);
-                            $extraFieldValue->setFieldId($params['field_id']);
-                            $extraFieldValue->setTms(api_get_utc_datetime(null, false, true));
-                            $app['orm.ems']['db_write']->persist($extraFieldValue);
-                            $app['orm.ems']['db_write']->flush();
-                        }
-                    }
-                } else {
-                    $params['id'] = $field_values['id'];
-
-                    return parent::update($params, $showQuery);
-                }
+                $params['id'] = $field_values['id'];
+                return parent::update($params, $showQuery);
             }
         }
     }

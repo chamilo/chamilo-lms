@@ -72,7 +72,7 @@ class CatForm extends FormValidator
             null,
             '"'.$this->category_object->get_name().'" '
         );
-        $this->addElement('static', null, null, get_lang('MoveTo').' : ');
+        $this->addElement('static', null, null, get_lang('Move to').' : ');
         $select = $this->addElement('select', 'move_cat', null, null);
         $line = null;
         foreach ($this->category_object->get_target_categories() as $cat) {
@@ -86,7 +86,7 @@ class CatForm extends FormValidator
             }
             $line = '';
         }
-        $this->addElement('submit', null, get_lang('Ok'));
+        $this->addElement('submit', null, get_lang('Validate'));
     }
 
     /**
@@ -194,7 +194,7 @@ class CatForm extends FormValidator
         $select = $this->addElement(
             'select',
             'select_course',
-            [get_lang('PickACourse'), 'test'],
+            [get_lang('Pick a course'), 'test'],
             null
         );
         $courses = Category::get_all_courses(api_get_user_id());
@@ -208,18 +208,18 @@ class CatForm extends FormValidator
         ]);
         $this->addElement('hidden', 'hid_user_id');
         $this->addElement('hidden', 'hid_parent_id');
-        $this->addElement('submit', null, get_lang('Ok'));
+        $this->addElement('submit', null, get_lang('Validate'));
     }
 
     private function build_basic_form()
     {
         $this->addText(
             'name',
-            get_lang('CategoryName'),
+            get_lang('Category name'),
             true,
             ['maxlength' => '50']
         );
-        $this->addRule('name', get_lang('ThisFieldIsRequired'), 'required');
+        $this->addRule('name', get_lang('Required field'), 'required');
 
         if (isset($this->category_object) &&
             $this->category_object->get_parent_id() == 0
@@ -238,8 +238,8 @@ class CatForm extends FormValidator
         $this->addFloat(
             'weight',
             [
-                get_lang('TotalWeight'),
-                get_lang('TotalSumOfWeights'),
+                get_lang('Total weight'),
+                get_lang('The sum of all weights of activities inside this assessment has to be equivalent to this number.'),
             ],
             true,
             ['value' => $value, 'maxlength' => '5']
@@ -259,7 +259,7 @@ class CatForm extends FormValidator
                     'skills',
                     [
                         get_lang('Skills'),
-                        get_lang('SkillsAchievedWhenAchievingThisGradebook'),
+                        get_lang('Skills obtained when achieving this assessment'),
                     ],
                     null,
                     [
@@ -290,7 +290,7 @@ class CatForm extends FormValidator
             if (empty($model)) {
                 $this->addText(
                     'certif_min_score',
-                    get_lang('CertificateMinScore'),
+                    get_lang('Minimum certification score'),
                     true,
                     ['maxlength' => '5']
                 );
@@ -299,7 +299,7 @@ class CatForm extends FormValidator
                 $defaultCertification = api_number_format($this->category_object->getCertificateMinScore(), 2);
                 $select = $this->addSelect(
                     'certif_min_score',
-                    get_lang('CertificateMinScore'),
+                    get_lang('Minimum certification score'),
                     [],
                     ['disable_js' => true]
                 );
@@ -318,12 +318,12 @@ class CatForm extends FormValidator
 
             $this->addRule(
                 'certif_min_score',
-                get_lang('OnlyNumbers'),
+                get_lang('Only numbers'),
                 'numeric'
             );
             $this->addRule(
                 'certif_min_score',
-                get_lang('NegativeValue'),
+                get_lang('Negative value'),
                 'compare',
                 '>=',
                 'server',
@@ -387,7 +387,7 @@ class CatForm extends FormValidator
                 'checkbox',
                 'generate_certificates',
                 null,
-                get_lang('GenerateCertificates'),
+                get_lang('Generate certificates'),
                 $generateCertificatesParams
             );
         }
@@ -397,9 +397,9 @@ class CatForm extends FormValidator
                 'is_requirement',
                 [
                     null,
-                    get_lang('ConsiderThisGradebookAsRequirementForASessionSequence'),
+                    get_lang('Consider this gradebook as a requirement to complete the course (influences the sessions sequences)'),
                 ],
-                get_lang('IsRequirement')
+                get_lang('Is requirement')
             );
         }
 
@@ -417,10 +417,10 @@ class CatForm extends FormValidator
         }
 
         if ($this->form_type == self::TYPE_ADD) {
-            $this->addButtonCreate(get_lang('AddCategory'));
+            $this->addButtonCreate(get_lang('Add category'));
         } else {
             $this->addElement('hidden', 'editcat', intval($_GET['editcat']));
-            $this->addButtonUpdate(get_lang('EditCategory'));
+            $this->addButtonUpdate(get_lang('Edit this category'));
         }
 
         $setting = api_get_setting('tool_visible_by_default_at_creation');

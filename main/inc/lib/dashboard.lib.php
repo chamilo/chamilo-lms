@@ -4,8 +4,6 @@
 /**
  * DashboardManager can be used to manage dashboard
  * author Christian Fasanando <christian1827@gmail.com>.
- *
- * @package chamilo.dashboard
  */
 class DashboardManager
 {
@@ -29,7 +27,7 @@ class DashboardManager
         $possiblePlugins = self::getPossibleDashboardPluginsPath();
 
         $table_cols = ['name', 'version', 'description'];
-        echo Display::page_subheader(get_lang('DashboardPlugins'));
+        echo Display::page_subheader(get_lang('Dashboard plugins'));
         echo '<form name="plugins" method="post" action="'.api_get_self().'?category='.Security::remove_XSS($_GET['category']).$tokenCondition.'">';
         echo '<table class="table table-hover">';
         echo '<tr>';
@@ -68,7 +66,7 @@ class DashboardManager
                         'tr',
                         Display::tag(
                             'td',
-                            get_lang('CheckFilePermissions').' '.Security::remove_XSS($plugin_info_file),
+                            get_lang('Check file permissions').' '.Security::remove_XSS($plugin_info_file),
                             ['colspan' => '3']
                         )
                     );
@@ -86,7 +84,7 @@ class DashboardManager
                         if ($j == 2) {
                             echo '<td>';
                             echo '<font color="#aaa">'.$disabled_block[$table_cols[$j]].'</font><br />';
-                            echo '<font color="red">'.get_lang('ThisPluginHasbeenDeletedFromDashboardPluginDirectory').'</font>';
+                            echo '<font color="red">'.get_lang('This plugin has been deleted from the dashboard plugin directory').'</font>';
                             echo '</td>';
                         } else {
                             echo '<td>';
@@ -103,8 +101,8 @@ class DashboardManager
 
         echo '</table>';
         echo '<br />';
-        echo '<button class="btn btn-default" type="submit" name="submit_dashboard_plugins" value="'.get_lang('EnableDashboardPlugins').'">'.
-            get_lang('EnableDashboardPlugins').'</button></form>';
+        echo '<button class="btn btn-default" type="submit" name="submit_dashboard_plugins" value="'.get_lang('EnableDashboard plugins').'">'.
+            get_lang('EnableDashboard plugins').'</button></form>';
     }
 
     /**
@@ -353,7 +351,7 @@ class DashboardManager
         $html = '';
         if (count($enabled_dashboard_plugins) > 0) {
             $html .= '<div style="margin-top:20px">';
-            $html .= '<div><strong>'.get_lang('SelectBlockForDisplayingInsideBlocksDashboardView').'</strong></div><br />';
+            $html .= '<div><strong>'.get_lang('Select blocks to display in the dashboard blocks view').'</strong></div><br />';
             $html .= '<form name="dashboard_list" method="post" action="index.php?action=store_user_block">';
             $html .= '<table class="data_table">';
             $html .= '<tr>';
@@ -367,7 +365,7 @@ class DashboardManager
             $html .= get_lang('Description');
             $html .= '</th>';
             $html .= '<th>';
-            $html .= get_lang('ColumnPosition');
+            $html .= get_lang('Position (column)');
             $html .= '</th>';
             $html .= '</tr>';
 
@@ -408,14 +406,14 @@ class DashboardManager
 
             $html .= '</table>';
             $html .= '<div class="row"><div class="col-md-12">';
-            $html .= '<button class="btn btn-default" type="submit" name="submit_dashboard_list" value="'.get_lang('EnableDashboardBlock').'"><em class="fa fa-check-square"></em> '.
-                get_lang('EnableDashboardBlock').'</button></form>';
+            $html .= '<button class="btn btn-default" type="submit" name="submit_dashboard_list" value="'.get_lang('Enable dashboard block').'"><em class="fa fa-check-square"></em> '.
+                get_lang('Enable dashboard block').'</button></form>';
             $html .= '</div></div>';
         } else {
-            $html .= '<div style="margin-top:20px">'.get_lang('ThereAreNoEnabledDashboardPlugins').'</div>';
+            $html .= '<div style="margin-top:20px">'.get_lang('ThereAreNoEnabledDashboard plugins').'</div>';
             if (api_is_platform_admin()) {
                 $html .= '<a class="btn btn-default" href="'.api_get_path(WEB_CODE_PATH).'admin/settings.php?category=Plugins">'.
-                    get_lang('ConfigureDashboardPlugin').'</a>';
+                    get_lang('Configure Dashboard Plugin').'</a>';
             }
         }
 

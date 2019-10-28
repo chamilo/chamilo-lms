@@ -241,7 +241,7 @@ class GradebookUtils
                 $modify_icons .= Display::url(
                     Display::return_icon(
                         'statistics.png',
-                        get_lang('FlatView'),
+                        get_lang('List View'),
                         '',
                         ICON_SIZE_SMALL
                     ),
@@ -250,7 +250,7 @@ class GradebookUtils
                     ]).'&'.api_get_cidreq(),
                     [
                         'class' => 'ajax',
-                        'data-title' => get_lang('FlatView'),
+                        'data-title' => get_lang('List View'),
                     ]
                 );
             }
@@ -265,18 +265,18 @@ class GradebookUtils
                 if (api_get_setting('gradebook_locking_enabled') == 'true') {
                     if ($cat->is_locked()) {
                         if (api_is_platform_admin()) {
-                            $modify_icons .= '&nbsp;<a onclick="javascript:if (!confirm(\''.addslashes(get_lang('ConfirmToUnlockElement')).'\')) return false;" href="'.api_get_self().'?'.api_get_cidreq().'&category_id='.$cat->get_id().'&action=unlock">'.
-                                Display::return_icon('lock.png', get_lang('UnLockEvaluation'), '', ICON_SIZE_SMALL).'</a>';
+                            $modify_icons .= '&nbsp;<a onclick="javascript:if (!confirm(\''.addslashes(get_lang('Are you sure you want to unlock this element?')).'\')) return false;" href="'.api_get_self().'?'.api_get_cidreq().'&category_id='.$cat->get_id().'&action=unlock">'.
+                                Display::return_icon('lock.png', get_lang('Unlock evaluation.'), '', ICON_SIZE_SMALL).'</a>';
                         } else {
                             $modify_icons .= '&nbsp;<a href="#">'.
-                                Display::return_icon('lock_na.png', get_lang('GradebookLockedAlert'), '', ICON_SIZE_SMALL).'</a>';
+                                Display::return_icon('lock_na.png', get_lang('This assessment has been locked. You cannot unlock it. If you really need to unlock it, please contact the platform administrator, explaining the reason why you would need to do that (it might otherwise be considered as fraud attempt).'), '', ICON_SIZE_SMALL).'</a>';
                         }
-                        $modify_icons .= '&nbsp;<a href="gradebook_flatview.php?export_pdf=category&selectcat='.$cat->get_id().'" >'.Display::return_icon('pdf.png', get_lang('ExportToPDF'), '', ICON_SIZE_SMALL).'</a>';
+                        $modify_icons .= '&nbsp;<a href="gradebook_flatview.php?export_pdf=category&selectcat='.$cat->get_id().'" >'.Display::return_icon('pdf.png', get_lang('Export to PDF'), '', ICON_SIZE_SMALL).'</a>';
                     } else {
-                        $modify_icons .= '&nbsp;<a onclick="javascript:if (!confirm(\''.addslashes(get_lang('ConfirmToLockElement')).'\')) return false;" href="'.api_get_self().'?'.api_get_cidreq().'&category_id='.$cat->get_id().'&action=lock">'.
-                            Display::return_icon('unlock.png', get_lang('LockEvaluation'), '', ICON_SIZE_SMALL).'</a>';
+                        $modify_icons .= '&nbsp;<a onclick="javascript:if (!confirm(\''.addslashes(get_lang('Are you sure you want to lock this item? After locking this item you can\'t edit the user results. To unlock it, you need to contact the platform administrator.')).'\')) return false;" href="'.api_get_self().'?'.api_get_cidreq().'&category_id='.$cat->get_id().'&action=lock">'.
+                            Display::return_icon('unlock.png', get_lang('Lock evaluation'), '', ICON_SIZE_SMALL).'</a>';
                         $modify_icons .= '&nbsp;<a href="#" >'.
-                            Display::return_icon('pdf_na.png', get_lang('ExportToPDF'), '', ICON_SIZE_SMALL).'</a>';
+                            Display::return_icon('pdf_na.png', get_lang('Export to PDF'), '', ICON_SIZE_SMALL).'</a>';
                     }
                 }
 
@@ -284,7 +284,7 @@ class GradebookUtils
                     if ($cat->is_locked() && !api_is_platform_admin()) {
                         $modify_icons .= Display::return_icon(
                             'edit_na.png',
-                            get_lang('Modify'),
+                            get_lang('Edit'),
                             '',
                             ICON_SIZE_SMALL
                         );
@@ -292,7 +292,7 @@ class GradebookUtils
                         $modify_icons .= '<a href="gradebook_edit_cat.php?editcat='.$cat->get_id().'&'.$courseParams.'">'.
                             Display::return_icon(
                                 'edit.png',
-                                get_lang('Modify'),
+                                get_lang('Edit'),
                                 '',
                                 ICON_SIZE_SMALL
                             ).'</a>';
@@ -302,7 +302,7 @@ class GradebookUtils
                 $modify_icons .= '<a href="gradebook_edit_all.php?selectcat='.$cat->get_id().'&'.$courseParams.'">'.
                     Display::return_icon(
                         'percentage.png',
-                        get_lang('EditAllWeights'),
+                        get_lang('Weight in Report'),
                         '',
                         ICON_SIZE_SMALL
                     ).'</a>';
@@ -310,7 +310,7 @@ class GradebookUtils
                 $modify_icons .= '<a href="gradebook_flatview.php?selectcat='.$cat->get_id().'&'.$courseParams.'">'.
                     Display::return_icon(
                         'statistics.png',
-                        get_lang('FlatView'),
+                        get_lang('List View'),
                         '',
                         ICON_SIZE_SMALL
                     ).'</a>';
@@ -325,7 +325,7 @@ class GradebookUtils
                 if ($cat->is_locked() && !api_is_platform_admin()) {
                     $modify_icons .= Display::return_icon(
                         'delete_na.png',
-                        get_lang('DeleteAll'),
+                        get_lang('Delete all'),
                         '',
                         ICON_SIZE_SMALL
                     );
@@ -333,7 +333,7 @@ class GradebookUtils
                     $modify_icons .= '&nbsp;<a href="'.api_get_self().'?deletecat='.$cat->get_id().'&selectcat='.$selectcat.'&'.$courseParams.'" onclick="return confirmation();">'.
                         Display::return_icon(
                             'delete.png',
-                            get_lang('DeleteAll'),
+                            get_lang('Delete all'),
                             '',
                             ICON_SIZE_SMALL
                         ).
@@ -367,7 +367,7 @@ class GradebookUtils
             if ($is_locked && !api_is_platform_admin()) {
                 $modify_icons = Display::return_icon(
                     'edit_na.png',
-                    get_lang('Modify'),
+                    get_lang('Edit'),
                     '',
                     ICON_SIZE_SMALL
                 );
@@ -375,7 +375,7 @@ class GradebookUtils
                 $modify_icons = '<a href="gradebook_edit_eval.php?editeval='.$eval->get_id().'&'.$courseParams.'">'.
                     Display::return_icon(
                         'edit.png',
-                        get_lang('Modify'),
+                        get_lang('Edit'),
                         '',
                         ICON_SIZE_SMALL
                     ).
@@ -395,7 +395,7 @@ class GradebookUtils
                 $modify_icons .= '&nbsp;<a href="gradebook_showlog_eval.php?visiblelog='.$eval->get_id().'&selectcat='.$selectcat.' &'.$courseParams.'">'.
                     Display::return_icon(
                         'history.png',
-                        get_lang('GradebookQualifyLog'),
+                        get_lang('Assessment history'),
                         '',
                         ICON_SIZE_SMALL
                     ).
@@ -404,7 +404,7 @@ class GradebookUtils
                 $allowStats = api_get_configuration_value('allow_gradebook_stats');
                 if ($allowStats) {
                     $modify_icons .= Display::url(
-                        Display::return_icon('reload.png', get_lang('GenerateStats')),
+                        Display::return_icon('reload.png', get_lang('Generate statistics')),
                         api_get_self().'?itemId='.$eval->get_id().'&action=generate_eval_stats&selectcat='.$selectcat.'&'.$courseParams
                     );
                 }
@@ -465,7 +465,7 @@ class GradebookUtils
             if ($is_locked && !api_is_platform_admin()) {
                 $modify_icons = Display::return_icon(
                     'edit_na.png',
-                    get_lang('Modify'),
+                    get_lang('Edit'),
                     '',
                     ICON_SIZE_SMALL
                 );
@@ -473,7 +473,7 @@ class GradebookUtils
                 $modify_icons = '<a href="gradebook_edit_link.php?editlink='.$link->get_id().'&'.$courseParams.'">'.
                     Display::return_icon(
                         'edit.png',
-                        get_lang('Modify'),
+                        get_lang('Edit'),
                         '',
                         ICON_SIZE_SMALL
                     ).
@@ -491,7 +491,7 @@ class GradebookUtils
             $modify_icons .= '&nbsp;<a href="gradebook_showlog_link.php?visiblelink='.$link->get_id().'&selectcat='.$selectcat.'&'.$courseParams.'">'.
                 Display::return_icon(
                     'history.png',
-                    get_lang('GradebookQualifyLog'),
+                    get_lang('Assessment history'),
                     '',
                     ICON_SIZE_SMALL
                 ).
@@ -500,7 +500,7 @@ class GradebookUtils
             $allowStats = api_get_configuration_value('allow_gradebook_stats');
             if ($allowStats && $link->get_type() == LINK_EXERCISE) {
                 $modify_icons .= Display::url(
-                    Display::return_icon('reload.png', get_lang('GenerateStats')),
+                    Display::return_icon('reload.png', get_lang('Generate statistics')),
                     api_get_self().'?itemId='.$link->get_id().'&action=generate_link_stats&selectcat='.$selectcat.'&'.$courseParams
                 );
             }
@@ -979,7 +979,7 @@ class GradebookUtils
         $select_gradebook = $form->addElement(
             'select',
             'category_id',
-            get_lang('SelectGradebook')
+            get_lang('Select assessment')
         );
 
         if (!empty($all_categories)) {
@@ -1085,7 +1085,7 @@ class GradebookUtils
         $table = new HTML_Table(['class' => 'data_table']);
         $row = 0;
         $column = 0;
-        $table->setHeaderContents($row, $column, get_lang('NumberAbbreviation'));
+        $table->setHeaderContents($row, $column, get_lang('N°'));
         $column++;
         foreach ($printable_data[0] as $printable_data_cell) {
             if (!is_array($printable_data_cell)) {
@@ -1125,12 +1125,12 @@ class GradebookUtils
             }
         } else {
             $column = 0;
-            $table->setCellContents($row, $column, get_lang('NoResults'));
+            $table->setCellContents($row, $column, get_lang('No results found'));
             $table->updateCellAttributes($row, $column, 'colspan="'.$columns.'" align="center" class="row_odd"');
         }
 
         $pdfParams = [
-            'filename' => get_lang('FlatView').'_'.api_get_local_time(),
+            'filename' => get_lang('List View').'_'.api_get_local_time(),
             'pdf_title' => $title,
             'course_code' => $course_code,
             'add_signatures' => ['Drh', 'Teacher', 'Date'],
@@ -1646,7 +1646,7 @@ class GradebookUtils
             $graph = $gradebooktable->getGraph();
         }
         $params = [
-            'pdf_title' => sprintf(get_lang('GradeFromX'), $courseInfo['name']),
+            'pdf_title' => sprintf(get_lang('Grades from course: %s'), $courseInfo['name']),
             'session_info' => '',
             'course_info' => '',
             'pdf_date' => '',

@@ -8,8 +8,6 @@ use CpChart\Image as pImage;
 
 /**
  * Class MySpace.
- *
- * @package chamilo.reporting
  */
 class MySpace
 {
@@ -23,35 +21,35 @@ class MySpace
         $actions = [
             [
                 'url' => api_get_path(WEB_CODE_PATH).'mySpace/admin_view.php?display=coaches',
-                'content' => get_lang('DisplayCoaches'),
+                'content' => get_lang('Trainers Overview'),
             ],
             [
                 'url' => api_get_path(WEB_CODE_PATH).'mySpace/admin_view.php?display=user',
-                'content' => get_lang('DisplayUserOverview'),
+                'content' => get_lang('User overview'),
             ],
             [
                 'url' => api_get_path(WEB_CODE_PATH).'mySpace/admin_view.php?display=session',
-                'content' => get_lang('DisplaySessionOverview'),
+                'content' => get_lang('Course sessions overview'),
             ],
             [
                 'url' => api_get_path(WEB_CODE_PATH).'mySpace/admin_view.php?display=course',
-                'content' => get_lang('DisplayCourseOverview'),
+                'content' => get_lang('Courses overview'),
             ],
             [
                 'url' => api_get_path(WEB_CODE_PATH).'tracking/question_course_report.php?view=admin',
-                'content' => get_lang('LPQuestionListResults'),
+                'content' => get_lang('Learning paths exercises results list'),
             ],
             [
                 'url' => api_get_path(WEB_CODE_PATH).'tracking/course_session_report.php?view=admin',
-                'content' => get_lang('LPExerciseResultsBySession'),
+                'content' => get_lang('Results of learning paths exercises by session'),
             ],
             [
                 'url' => api_get_path(WEB_CODE_PATH).'mySpace/admin_view.php?display=accessoverview',
-                'content' => get_lang('DisplayAccessOverview').' ('.get_lang('Beta').')',
+                'content' => get_lang('Accesses by user overview').' ('.get_lang('Beta').')',
             ],
             [
                 'url' => api_get_path(WEB_CODE_PATH).'mySpace/exercise_category_report.php',
-                'content' => get_lang('ExerciseCategoryAllSessionsReport'),
+                'content' => get_lang('Exercise report by category for all sessions'),
             ],
             [
                 'url' => api_get_path(WEB_CODE_PATH).'mySpace/survey_report.php',
@@ -71,7 +69,7 @@ class MySpace
         $menuItems[] = Display::url(
             Display::return_icon(
                 'statistics.png',
-                get_lang('MyStats'),
+                get_lang('View my progress'),
                 '',
                 ICON_SIZE_MEDIUM
             ),
@@ -80,7 +78,7 @@ class MySpace
         $menuItems[] = Display::url(
             Display::return_icon(
                 'teacher.png',
-                get_lang('TeacherInterface'),
+                get_lang('Trainer View'),
                 [],
                 32
             ),
@@ -89,14 +87,14 @@ class MySpace
         $menuItems[] = Display::url(
             Display::return_icon(
                 'star_na.png',
-                get_lang('AdminInterface'),
+                get_lang('Admin view'),
                 [],
                 32
             ),
             '#'
         );
         $menuItems[] = Display::url(
-            Display::return_icon('quiz.png', get_lang('ExamTracking'), [], 32),
+            Display::return_icon('quiz.png', get_lang('Exam tracking'), [], 32),
             api_get_path(WEB_CODE_PATH).'tracking/exams.php'
         );
         $menu = '';
@@ -123,7 +121,7 @@ class MySpace
         $archive_url = api_get_path(WEB_CODE_PATH).'course_info/download.php?archive_path=&archive=';
         $message = '';
         if (!$open = fopen($archive_path.$file_name, 'w+')) {
-            $message = get_lang('noOpen');
+            $message = get_lang('Could not open');
         } else {
             $info = '';
 
@@ -432,38 +430,38 @@ class MySpace
         $parameters['view'] = 'admin';
         $table->set_additional_parameters($parameters);
         if ($is_western_name_order) {
-            $table->set_header(0, get_lang('FirstName'), true);
-            $table->set_header(1, get_lang('LastName'), true);
+            $table->set_header(0, get_lang('First name'), true);
+            $table->set_header(1, get_lang('Last name'), true);
         } else {
-            $table->set_header(0, get_lang('LastName'), true);
-            $table->set_header(1, get_lang('FirstName'), true);
+            $table->set_header(0, get_lang('Last name'), true);
+            $table->set_header(1, get_lang('First name'), true);
         }
-        $table->set_header(2, get_lang('TimeSpentOnThePlatform'), false);
-        $table->set_header(3, get_lang('LastConnexion'), false);
-        $table->set_header(4, get_lang('NbStudents'), false);
-        $table->set_header(5, get_lang('CountCours'), false);
-        $table->set_header(6, get_lang('NumberOfSessions'), false);
-        $table->set_header(7, get_lang('Sessions'), false);
+        $table->set_header(2, get_lang('Time spent in portal'), false);
+        $table->set_header(3, get_lang('Latest login'), false);
+        $table->set_header(4, get_lang('Learners'), false);
+        $table->set_header(5, get_lang('Courses'), false);
+        $table->set_header(6, get_lang('Number of sessions'), false);
+        $table->set_header(7, get_lang('Course sessions'), false);
 
         if ($is_western_name_order) {
             $csv_header[] = [
-                get_lang('FirstName'),
-                get_lang('LastName'),
-                get_lang('TimeSpentOnThePlatform'),
-                get_lang('LastConnexion'),
-                get_lang('NbStudents'),
-                get_lang('CountCours'),
-                get_lang('NumberOfSessions'),
+                get_lang('First name'),
+                get_lang('Last name'),
+                get_lang('Time spent in portal'),
+                get_lang('Latest login'),
+                get_lang('Learners'),
+                get_lang('Courses'),
+                get_lang('Number of sessions'),
             ];
         } else {
             $csv_header[] = [
-                get_lang('LastName'),
-                get_lang('FirstName'),
-                get_lang('TimeSpentOnThePlatform'),
-                get_lang('LastConnexion'),
-                get_lang('NbStudents'),
-                get_lang('CountCours'),
-                get_lang('NumberOfSessions'),
+                get_lang('Last name'),
+                get_lang('First name'),
+                get_lang('Time spent in portal'),
+                get_lang('Latest login'),
+                get_lang('Learners'),
+                get_lang('Courses'),
+                get_lang('Number of sessions'),
             ];
         }
 
@@ -691,7 +689,7 @@ class MySpace
                 foreach ($extrafields as $key => $extra) {
                     $form->addElement('checkbox', 'extra_export_field'.$extra[0], '', $extra[3]);
                 }
-                $form->addButtonSave(get_lang('Ok'), 'submit');
+                $form->addButtonSave(get_lang('Validate'), 'submit');
 
                 // setting the default values for the form that contains all the extra fields
                 $exportFields = Session::read('additional_export_fields');
@@ -702,7 +700,7 @@ class MySpace
                 }
                 $form->setDefaults($defaults);
             } else {
-                $form->addElement('html', Display::return_message(get_lang('ThereAreNotExtrafieldsAvailable'), 'warning'));
+                $form->addElement('html', Display::return_message(get_lang('There are not extra fields available'), 'warning'));
             }
 
             if ($form->validate()) {
@@ -733,13 +731,13 @@ class MySpace
                 // Displaying a feedback message
                 if (!empty($additionalExportFields)) {
                     echo Display::return_message(
-                        get_lang('FollowingFieldsWillAlsoBeExported').': <br /><ul>'.$message.'</ul>',
+                        get_lang('The following fields will also be exported').': <br /><ul>'.$message.'</ul>',
                         'confirm',
                         false
                     );
                 } else {
                     echo Display::return_message(
-                        get_lang('NoAdditionalFieldsWillBeExported'),
+                        get_lang('No additional fields will be exported'),
                         'confirm',
                         false
                     );
@@ -758,7 +756,7 @@ class MySpace
                 }
 
                 echo Display::return_message(
-                    get_lang('FollowingFieldsWillAlsoBeExported').': <br /><ul>'.$message.'</ul>',
+                    get_lang('The following fields will also be exported').': <br /><ul>'.$message.'</ul>',
                     'normal',
                     false
                 );
@@ -1031,16 +1029,16 @@ class MySpace
         // the first line of the csv file with the column headers
         $csv_row = [];
         $csv_row[] = get_lang('Course');
-        $csv_row[] = get_lang('AvgTimeSpentInTheCourse');
-        $csv_row[] = get_lang('AvgStudentsProgress');
-        $csv_row[] = get_lang('AvgCourseScore');
-        $csv_row[] = get_lang('TotalNumberOfMessages');
-        $csv_row[] = get_lang('TotalNumberOfAssignments');
-        $csv_row[] = get_lang('TotalExercisesScoreObtained');
-        $csv_row[] = get_lang('TotalExercisesScorePossible');
-        $csv_row[] = get_lang('TotalExercisesAnswered');
-        $csv_row[] = get_lang('TotalExercisesScorePercentage');
-        $csv_row[] = get_lang('LatestLogin');
+        $csv_row[] = get_lang('Time');
+        $csv_row[] = get_lang('Progress');
+        $csv_row[] = get_lang('Average score in learning paths');
+        $csv_row[] = get_lang('Total number of messages');
+        $csv_row[] = get_lang('Total number of assignments');
+        $csv_row[] = get_lang('Total score obtained for tests');
+        $csv_row[] = get_lang('Total possible score for tests');
+        $csv_row[] = get_lang('Number of tests answered');
+        $csv_row[] = get_lang('Total score percentage for tests');
+        $csv_row[] = get_lang('Latest login');
         $csv_content[] = $csv_row;
 
         // the other lines (the data)
@@ -1186,14 +1184,14 @@ class MySpace
         $head = '<table style="width: 100%;border:0;padding:0;border-collapse:collapse;table-layout: fixed">';
         $head .= '<tr>';
         $head .= '<th width="155px" style="border-left:0;border-bottom:0"><span>'.get_lang('Course').'</span></th>';
-        $head .= '<th style="padding:0;border-bottom:0"><span>'.cut(get_lang('AvgTimeSpentInTheCourse'), 6, true).'</span></th>';
-        $head .= '<th style="padding:0;border-bottom:0"><span>'.cut(get_lang('AvgStudentsProgress'), 6, true).'</span></th>';
-        $head .= '<th style="padding:0;border-bottom:0"><span>'.cut(get_lang('AvgCourseScore'), 6, true).'</span></th>';
-        $head .= '<th style="padding:0;border-bottom:0"><span>'.cut(get_lang('TotalNumberOfMessages'), 6, true).'</span></th>';
-        $head .= '<th style="padding:0;border-bottom:0"><span>'.cut(get_lang('TotalNumberOfAssignments'), 6, true).'</span></th>';
-        $head .= '<th width="105px" style="border-bottom:0"><span>'.get_lang('TotalExercisesScoreObtained').'</span></th>';
-        $head .= '<th style="padding:0;border-bottom:0"><span>'.cut(get_lang('TotalExercisesAnswered'), 6, true).'</span></th>';
-        $head .= '<th style="padding:0;border-bottom:0;border-right:0;"><span>'.get_lang('LatestLogin').'</span></th>';
+        $head .= '<th style="padding:0;border-bottom:0"><span>'.cut(get_lang('Time'), 6, true).'</span></th>';
+        $head .= '<th style="padding:0;border-bottom:0"><span>'.cut(get_lang('Progress'), 6, true).'</span></th>';
+        $head .= '<th style="padding:0;border-bottom:0"><span>'.cut(get_lang('Average score in learning paths'), 6, true).'</span></th>';
+        $head .= '<th style="padding:0;border-bottom:0"><span>'.cut(get_lang('Total number of messages'), 6, true).'</span></th>';
+        $head .= '<th style="padding:0;border-bottom:0"><span>'.cut(get_lang('Total number of assignments'), 6, true).'</span></th>';
+        $head .= '<th width="105px" style="border-bottom:0"><span>'.get_lang('Total score obtained for tests').'</span></th>';
+        $head .= '<th style="padding:0;border-bottom:0"><span>'.cut(get_lang('Number of tests answered'), 6, true).'</span></th>';
+        $head .= '<th style="padding:0;border-bottom:0;border-right:0;"><span>'.get_lang('Latest login').'</span></th>';
         $head .= '</tr></table>';
 
         $params = ['view' => 'admin', 'display' => 'sessionoverview'];
@@ -1448,16 +1446,16 @@ class MySpace
         $csv_row = [];
         $csv_row[] = get_lang('Session');
         $csv_row[] = get_lang('Course');
-        $csv_row[] = get_lang('AvgTimeSpentInTheCourse');
-        $csv_row[] = get_lang('AvgStudentsProgress');
-        $csv_row[] = get_lang('AvgCourseScore');
-        $csv_row[] = get_lang('TotalNumberOfMessages');
-        $csv_row[] = get_lang('TotalNumberOfAssignments');
-        $csv_row[] = get_lang('TotalExercisesScoreObtained');
-        $csv_row[] = get_lang('TotalExercisesScorePossible');
-        $csv_row[] = get_lang('TotalExercisesAnswered');
-        $csv_row[] = get_lang('TotalExercisesScorePercentage');
-        $csv_row[] = get_lang('LatestLogin');
+        $csv_row[] = get_lang('Time');
+        $csv_row[] = get_lang('Progress');
+        $csv_row[] = get_lang('Average score in learning paths');
+        $csv_row[] = get_lang('Total number of messages');
+        $csv_row[] = get_lang('Total number of assignments');
+        $csv_row[] = get_lang('Total score obtained for tests');
+        $csv_row[] = get_lang('Total possible score for tests');
+        $csv_row[] = get_lang('Number of tests answered');
+        $csv_row[] = get_lang('Total score percentage for tests');
+        $csv_row[] = get_lang('Latest login');
         $csv_content[] = $csv_row;
 
         // the other lines (the data)
@@ -1708,16 +1706,16 @@ class MySpace
 
         // the first line of the csv file with the column headers
         $csv_row = [];
-        $csv_row[] = get_lang('OfficialCode');
+        $csv_row[] = get_lang('Code');
         if ($is_western_name_order) {
-            $csv_row[] = get_lang('FirstName');
-            $csv_row[] = get_lang('LastName');
+            $csv_row[] = get_lang('First name');
+            $csv_row[] = get_lang('Last name');
         } else {
-            $csv_row[] = get_lang('LastName');
-            $csv_row[] = get_lang('FirstName');
+            $csv_row[] = get_lang('Last name');
+            $csv_row[] = get_lang('First name');
         }
-        $csv_row[] = get_lang('LoginName');
-        $csv_row[] = get_lang('CourseCode');
+        $csv_row[] = get_lang('Login');
+        $csv_row[] = get_lang('Code');
 
         // the additional user defined fields (only those that were selected to be exported)
         $fields = UserManager::get_extra_fields(0, 50, 5, 'ASC');
@@ -1730,18 +1728,18 @@ class MySpace
                 $field_names_to_be_exported[] = 'extra_'.$fields[$extra_field_export][1];
             }
         }
-        $csv_row[] = get_lang('AvgTimeSpentInTheCourse', '');
-        $csv_row[] = get_lang('AvgStudentsProgress', '');
-        $csv_row[] = get_lang('AvgCourseScore', '');
-        $csv_row[] = get_lang('AvgExercisesScore', '');
-        $csv_row[] = get_lang('AvgMessages', '');
-        $csv_row[] = get_lang('AvgAssignments', '');
-        $csv_row[] = get_lang('TotalExercisesScoreObtained', '');
-        $csv_row[] = get_lang('TotalExercisesScorePossible', '');
-        $csv_row[] = get_lang('TotalExercisesAnswered', '');
-        $csv_row[] = get_lang('TotalExercisesScorePercentage', '');
-        $csv_row[] = get_lang('FirstLogin', '');
-        $csv_row[] = get_lang('LatestLogin', '');
+        $csv_row[] = get_lang('Time');
+        $csv_row[] = get_lang('Progress');
+        $csv_row[] = get_lang('Average score in learning paths');
+        $csv_row[] = get_lang('AvgExercisesScore');
+        $csv_row[] = get_lang('AvgMessages');
+        $csv_row[] = get_lang('AvgAssignments');
+        $csv_row[] = get_lang('Total score obtained for tests');
+        $csv_row[] = get_lang('Total possible score for tests');
+        $csv_row[] = get_lang('Number of tests answered');
+        $csv_row[] = get_lang('Total score percentage for tests');
+        $csv_row[] = get_lang('FirstLogin');
+        $csv_row[] = get_lang('Latest login');
         $csv_content[] = $csv_row;
 
         // the other lines (the data)
@@ -2177,7 +2175,7 @@ class MySpace
             // check if we are the creators or not
             if ($creator_id != '') {
                 if ($creator_id != api_get_user_id()) {
-                    $user['error'] = get_lang('UserAlreadyRegisteredByOtherCreator');
+                    $user['error'] = get_lang('User already register by other coach.');
                     $errors[] = $user;
                 }
             }
@@ -2321,27 +2319,27 @@ class MySpace
         }
 
         $users = $new_users;
-        $registered_users = get_lang('FileImported').'<br /> Import file results : <br />';
+        $registered_users = get_lang('File imported').'<br /> Import file results : <br />';
         // Sending emails.
         $addedto = '';
         if ($sendMail) {
             foreach ($users as $index => $user) {
-                $emailsubject = '['.api_get_setting('siteName').'] '.get_lang('YourReg').' '.api_get_setting('siteName');
+                $emailsubject = '['.api_get_setting('siteName').'] '.get_lang('Your registration on').' '.api_get_setting('siteName');
                 $emailbody = get_lang('Dear').' '.
-                    api_get_person_name($user['FirstName'], $user['LastName']).",\n\n".
-                    get_lang('YouAreReg')." ".api_get_setting('siteName')." ".get_lang('WithTheFollowingSettings')."\n\n".
+                    api_get_person_name($user['First name'], $user['Last name']).",\n\n".
+                    get_lang('You are registered to')." ".api_get_setting('siteName')." ".get_lang('with the following settings:')."\n\n".
                     get_lang('Username')." : $user[UserName]\n".
                     get_lang('Pass')." : $user[Password]\n\n".
-                    get_lang('Address')." ".api_get_setting('siteName')." ".get_lang('Is')." : ".api_get_path(WEB_PATH)." \n\n".
-                    get_lang('Problem')."\n\n".
-                    get_lang('SignatureFormula').",\n\n".
+                    get_lang('The address of')." ".api_get_setting('siteName')." ".get_lang('is')." : ".api_get_path(WEB_PATH)." \n\n".
+                    get_lang('In case of trouble, contact us.')."\n\n".
+                    get_lang('Sincerely').",\n\n".
                     api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'))."\n".
-                    get_lang('Manager')." ".api_get_setting('siteName')."\nT. ".
-                    api_get_setting('administratorTelephone')."\n".get_lang('Email')." : ".api_get_setting('emailAdministrator');
+                    get_lang('Administrator')." ".api_get_setting('siteName')."\nT. ".
+                    api_get_setting('administratorTelephone')."\n".get_lang('e-mail')." : ".api_get_setting('emailAdministrator');
 
                 api_mail_html(
-                    api_get_person_name($user['FirstName'], $user['LastName'], null, PERSON_NAME_EMAIL_ADDRESS),
-                    $user['Email'],
+                    api_get_person_name($user['First name'], $user['Last name'], null, PERSON_NAME_EMAIL_ADDRESS),
+                    $user['e-mail'],
                     $emailsubject,
                     $emailbody
                 );
@@ -2349,16 +2347,16 @@ class MySpace
 
                 if (($user['added_at_platform'] == 1 && $user['added_at_session'] == 1) || $user['added_at_session'] == 1) {
                     if ($user['added_at_platform'] == 1) {
-                        $addedto = get_lang('UserCreatedPlatform');
+                        $addedto = get_lang('User created in portal');
                     } else {
                         $addedto = '          ';
                     }
 
                     if ($user['added_at_session'] == 1) {
-                        $addedto .= get_lang('UserInSession');
+                        $addedto .= get_lang('User added into the session');
                     }
                 } else {
-                    $addedto = get_lang('UserNotAdded');
+                    $addedto = get_lang('User not added.');
                 }
 
                 $registered_users .= UserManager::getUserProfileLink($userInfo).' - '.$addedto.'<br />';
@@ -2368,16 +2366,16 @@ class MySpace
                 $userInfo = api_get_user_info($user['id']);
                 if (($user['added_at_platform'] == 1 && $user['added_at_session'] == 1) || $user['added_at_session'] == 1) {
                     if ($user['added_at_platform'] == 1) {
-                        $addedto = get_lang('UserCreatedPlatform');
+                        $addedto = get_lang('User created in portal');
                     } else {
                         $addedto = '          ';
                     }
 
                     if ($user['added_at_session'] == 1) {
-                        $addedto .= ' '.get_lang('UserInSession');
+                        $addedto .= ' '.get_lang('User added into the session');
                     }
                 } else {
-                    $addedto = get_lang('UserNotAdded');
+                    $addedto = get_lang('User not added.');
                 }
                 $registered_users .= "<a href=\"../user/userInfo.php?uInfo=".$user['id']."\">".
                     Security::remove_XSS($userInfo['complete_user_name'])."</a> - ".$addedto.'<br />';
@@ -2476,7 +2474,7 @@ class MySpace
         $form->addElement(
             'select_ajax',
             'course_id',
-            get_lang('SearchCourse'),
+            get_lang('Search courses'),
             $courseList,
             [
                 'url' => api_get_path(WEB_AJAX_PATH).'course.ajax.php?'.http_build_query([
@@ -2490,7 +2488,7 @@ class MySpace
         $form->addElement(
             'select_ajax',
             'session_id',
-            get_lang('SearchSession'),
+            get_lang('Search sessions'),
             $sessionList,
             [
                 'url_function' => "
@@ -2511,9 +2509,9 @@ class MySpace
             get_lang('Profile'),
             [
                 '' => get_lang('Select'),
-                STUDENT => get_lang('Student'),
-                COURSEMANAGER => get_lang('CourseManager'),
-                DRH => get_lang('Drh'),
+                STUDENT => get_lang('Learner'),
+                COURSEMANAGER => get_lang('CourseAdministrator'),
+                DRH => get_lang('Human Resources Manager'),
             ],
             ['id' => 'profile']
         );
@@ -2521,7 +2519,7 @@ class MySpace
         $form->addElement(
             'select_ajax',
             'student_id',
-            get_lang('SearchUsers'),
+            get_lang('Search users'),
             $studentList,
             [
                 'placeholder' => get_lang('All'),
@@ -2540,7 +2538,7 @@ class MySpace
         );
         $form->addDateRangePicker(
             'date',
-            get_lang('DateRange'),
+            get_lang('Date range'),
             true,
             [
                 'id' => 'date_range',
@@ -2563,18 +2561,18 @@ class MySpace
                 ['MySpace', 'getUserDataAccessTrackingOverview'],
                 0
             );
-            $table->set_header(0, get_lang('LoginDate'), true);
+            $table->set_header(0, get_lang('Login date'), true);
             $table->set_header(1, get_lang('Username'), true);
             if (api_is_western_name_order()) {
-                $table->set_header(2, get_lang('FirstName'), true);
-                $table->set_header(3, get_lang('LastName'), true);
+                $table->set_header(2, get_lang('First name'), true);
+                $table->set_header(3, get_lang('Last name'), true);
             } else {
-                $table->set_header(2, get_lang('LastName'), true);
-                $table->set_header(3, get_lang('FirstName'), true);
+                $table->set_header(2, get_lang('Last name'), true);
+                $table->set_header(3, get_lang('First name'), true);
             }
-            $table->set_header(4, get_lang('Clicks'), false);
+            $table->set_header(4, get_lang('clicks'), false);
             $table->set_header(5, get_lang('IP'), false);
-            $table->set_header(6, get_lang('TimeLoggedIn'), false);
+            $table->set_header(6, get_lang('Time connected (hh:mm)'), false);
         }
 
         $template = new Template(
@@ -2975,7 +2973,7 @@ function grapher($sql_result, $start_date, $end_date, $type = '')
             $myData->setAbscissa('Labels');
         }
         $myData->setSerieWeight('Serie1', 1);
-        $myData->setSerieDescription('Serie1', get_lang('MyResults'));
+        $myData->setSerieDescription('Serie1', get_lang('My results'));
         $myData->setAxisName(0, get_lang('Minutes'));
         $myData->loadPalette(api_get_path(SYS_CODE_PATH).'palettes/pchart/default.color', true);
 
@@ -3023,7 +3021,7 @@ function grapher($sql_result, $start_date, $end_date, $type = '')
             $myPicture->drawText(
                 $mainWidth / 2,
                 30,
-                get_lang('TimeSpentInTheCourse'),
+                get_lang('Time spent in the course'),
                 [
                     "FontSize" => 12,
                     "Align" => TEXT_ALIGN_BOTTOMMIDDLE,
@@ -3103,7 +3101,7 @@ function grapher($sql_result, $start_date, $end_date, $type = '')
         return $html;
     } else {
         $foo_img = api_convert_encoding(
-            '<div id="messages" class="warning-message">'.get_lang('GraphicNotAvailable').'</div>',
+            '<div id="messages" class="warning-message">'.get_lang('Graphic not available').'</div>',
             'UTF-8'
         );
 

@@ -1,5 +1,6 @@
 <?php
 /* See license terms in /license.txt */
+
 /**
  * EVENTS LIBRARY.
  *
@@ -8,14 +9,7 @@
  * of event occur. Each event has his own types of informations then each event
  * use its own function.
  *
- * @package chamilo.library
- *
  * @todo convert queries to use Database API
- */
-/**
- * Class.
- *
- * @package chamilo.library
  */
 class ExerciseShowFunctions
 {

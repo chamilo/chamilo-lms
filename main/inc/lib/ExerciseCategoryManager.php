@@ -162,7 +162,7 @@ class ExerciseCategoryManager extends Model
         $editIcon = Display::return_icon('edit.png', get_lang('Edit'), '', ICON_SIZE_SMALL);
         $deleteIcon = Display::return_icon('delete.png', get_lang('Delete'), '', ICON_SIZE_SMALL);
         $confirmMessage = addslashes(
-            api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES)
+            api_htmlentities(get_lang('Please confirm your choice'), ENT_QUOTES)
         );
 
         $courseParams = api_get_cidreq();
@@ -203,7 +203,7 @@ JAVASCRIPT;
         $defaults = [];
 
         if ($action === 'edit') {
-            $header = get_lang('Modify');
+            $header = get_lang('Edit');
             // Setting the defaults
             $defaults = $this->get($id, false);
         }
@@ -218,7 +218,7 @@ JAVASCRIPT;
         $form->addHtmlEditor('description', get_lang('Description'));
 
         if ($action === 'edit') {
-            $form->addButtonUpdate(get_lang('Modify'));
+            $form->addButtonUpdate(get_lang('Edit'));
         } else {
             $form->addButtonCreate(get_lang('Add'));
         }
@@ -232,7 +232,7 @@ JAVASCRIPT;
         $form->setDefaults($defaults);
 
         // Setting the rules
-        $form->addRule('name', get_lang('ThisFieldIsRequired'), 'required');
+        $form->addRule('name', get_lang('Required field'), 'required');
 
         return $form;
     }
@@ -247,7 +247,7 @@ JAVASCRIPT;
         $content .= '<a href="'.api_get_path(WEB_CODE_PATH).'exercise/exercise.php?'.api_get_cidreq().'">';
         $content .= Display::return_icon(
             'back.png',
-            get_lang('BackTo').' '.get_lang('PlatformAdmin'),
+            get_lang('Back to').' '.get_lang('Administration'),
             '',
             ICON_SIZE_MEDIUM
         );

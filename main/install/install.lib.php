@@ -85,9 +85,9 @@ function checkExtension(
                 return Display::label($returnSuccess, 'success');
             } else {
                 if ($optional) {
-                    return Display::label(get_lang('ExtensionInstalledButNotEnabled'), 'warning');
+                    return Display::label(get_lang('Extension installed but not enabled'), 'warning');
                 } else {
-                    return Display::label(get_lang('ExtensionInstalledButNotEnabled'), 'important');
+                    return Display::label(get_lang('Extension installed but not enabled'), 'important');
                 }
             }
         } else {
@@ -300,9 +300,9 @@ function check_writable($folder, $suggestion = false)
         return Display::label(get_lang('Writable'), 'success');
     } else {
         if ($suggestion) {
-            return Display::label(get_lang('NotWritable'), 'info');
+            return Display::label(get_lang('Not writable'), 'info');
         } else {
-            return Display::label(get_lang('NotWritable'), 'important');
+            return Display::label(get_lang('Not writable'), 'important');
         }
     }
 }
@@ -321,9 +321,9 @@ function checkReadable($folder, $suggestion = false)
         return Display::label(get_lang('Readable'), 'success');
     } else {
         if ($suggestion) {
-            return Display::label(get_lang('NotReadable'), 'info');
+            return Display::label(get_lang('Not readable'), 'info');
         } else {
-            return Display::label(get_lang('NotReadable'), 'important');
+            return Display::label(get_lang('Not readable'), 'important');
         }
     }
 }
@@ -690,7 +690,7 @@ function display_language_selection()
         </div>
         <h2 class="install-title">
             <?php echo display_step_sequence(); ?>
-            <?php echo get_lang('InstallationLanguage'); ?>
+            <?php echo get_lang('Installation Language'); ?>
         </h2>
         <label for="language_list"><?php echo get_lang('Please select installation language'); ?></label>
         <div class="form-group">
@@ -702,7 +702,7 @@ function display_language_selection()
         </button>
         <input type="hidden" name="is_executable" id="is_executable" value="-" />
         <div class="RequirementHeading">
-            <?php echo get_lang('YourLanguageNotThereContactUs'); ?>
+            <?php echo get_lang('Cannot find your language in the list? Contact us at info@chamilo.org to contribute as a translator.'); ?>
         </div>
 <?php
 }
@@ -764,55 +764,55 @@ function display_requirements(
 
     echo '<h2 class="install-title">'.display_step_sequence().get_lang('Requirements')."</h2>";
     echo '<div class="RequirementText">';
-    echo '<strong>'.get_lang('ReadThoroughly').'</strong><br />';
-    echo get_lang('MoreDetails').' <a href="../../documentation/installation_guide.html" target="_blank">'.get_lang('ReadTheInstallationGuide').'</a>.<br />'."\n";
+    echo '<strong>'.get_lang('Please read the following requirements thoroughly.').'</strong><br />';
+    echo get_lang('For more details').' <a href="../../documentation/installation_guide.html" target="_blank">'.get_lang('Read the installation guide').'</a>.<br />'."\n";
 
     if ($installType == 'update') {
-        echo get_lang('IfYouPlanToUpgradeFromOlderVersionYouMightWantToHaveAlookAtTheChangelog').'<br />';
+        echo get_lang('If you plan to upgrade from an older version of Chamilo, you might want to <a href="../../documentation/changelog.html" target="_blank">have a look at the changelog</a> to know what\'s new and what has been changed').'<br />';
     }
     echo '</div>';
 
     //  SERVER REQUIREMENTS
-    echo '<h4 class="install-subtitle">'.get_lang('ServerRequirements').'</h4>';
+    echo '<h4 class="install-subtitle">'.get_lang('Server requirements').'</h4>';
     $timezone = checkPhpSettingExists('date.timezone');
     if (!$timezone) {
         echo "<div class='alert alert-warning'>
             <i class=\"fa fa-exclamation-triangle\" aria-hidden=\"true\"></i>&nbsp;".
-            get_lang('DateTimezoneSettingNotSet')."</div>";
+            get_lang('We have detected that your PHP installation does not define the date.timezone setting. This is a requirement of Chamilo. Please make sure it is configured by checking your php.ini configuration, otherwise you will run into problems. We warned you!')."</div>";
     }
 
-    echo '<div class="install-requirement">'.get_lang('ServerRequirementsInfo').'</div>';
+    echo '<div class="install-requirement">'.get_lang('Server requirementsInfo').'</div>';
     echo '<div class="table-responsive">';
     echo '<table class="table table-bordered">
             <tr>
-                <td class="requirements-item">'.get_lang('PHPVersion').' >= '.REQUIRED_PHP_VERSION.'</td>
+                <td class="requirements-item">'.get_lang('PHP version').' >= '.REQUIRED_PHP_VERSION.'</td>
                 <td class="requirements-value">';
     if (version_compare(phpversion(), REQUIRED_PHP_VERSION, '>=') > 1) {
-        echo '<strong class="text-danger">'.get_lang('PHPVersionError').'</strong>';
+        echo '<strong class="text-danger">'.get_lang('PHP versionError').'</strong>';
     } else {
-        echo '<strong class="text-success">'.get_lang('PHPVersionOK').' '.phpversion().'</strong>';
+        echo '<strong class="text-success">'.get_lang('PHP versionOK').' '.phpversion().'</strong>';
     }
     echo '</td>
             </tr>
             <tr>
                 <td class="requirements-item"><a href="http://php.net/manual/en/book.session.php" target="_blank">Session</a> '.get_lang('Support').'</td>
-                <td class="requirements-value">'.checkExtension('session', get_lang('Yes'), get_lang('ExtensionSessionsNotAvailable')).'</td>
+                <td class="requirements-value">'.checkExtension('session', get_lang('Yes'), get_lang('Sessions extension not available')).'</td>
             </tr>
             <tr>
                 <td class="requirements-item"><a href="http://php.net/manual/en/book.mysql.php" target="_blank">pdo_mysql</a> '.get_lang('Support').'</td>
-                <td class="requirements-value">'.checkExtension('pdo_mysql', get_lang('Yes'), get_lang('ExtensionMySQLNotAvailable')).'</td>
+                <td class="requirements-value">'.checkExtension('pdo_mysql', get_lang('Yes'), get_lang('MySQL extension not available')).'</td>
             </tr>
             <tr>
                 <td class="requirements-item"><a href="http://php.net/manual/en/book.zip.php" target="_blank">Zip</a> '.get_lang('Support').'</td>
-                <td class="requirements-value">'.checkExtension('zip', get_lang('Yes'), get_lang('ExtensionNotAvailable')).'</td>
+                <td class="requirements-value">'.checkExtension('zip', get_lang('Yes'), get_lang('Extension not available')).'</td>
             </tr>
             <tr>
                 <td class="requirements-item"><a href="http://php.net/manual/en/book.zlib.php" target="_blank">Zlib</a> '.get_lang('Support').'</td>
-                <td class="requirements-value">'.checkExtension('zlib', get_lang('Yes'), get_lang('ExtensionZlibNotAvailable')).'</td>
+                <td class="requirements-value">'.checkExtension('zlib', get_lang('Yes'), get_lang('Zlib extension not available')).'</td>
             </tr>
             <tr>
                 <td class="requirements-item"><a href="http://php.net/manual/en/book.pcre.php" target="_blank">Perl-compatible regular expressions</a> '.get_lang('Support').'</td>
-                <td class="requirements-value">'.checkExtension('pcre', get_lang('Yes'), get_lang('ExtensionPCRENotAvailable')).'</td>
+                <td class="requirements-value">'.checkExtension('pcre', get_lang('Yes'), get_lang('PCRE extension not available')).'</td>
             </tr>
             <tr>
                 <td class="requirements-item"><a href="http://php.net/manual/en/book.xml.php" target="_blank">XML</a> '.get_lang('Support').'</td>
@@ -828,7 +828,7 @@ function display_requirements(
             </tr>
              <tr>
                 <td class="requirements-item"><a href="http://php.net/manual/en/book.image.php" target="_blank">GD</a> '.get_lang('Support').'</td>
-                <td class="requirements-value">'.checkExtension('gd', get_lang('Yes'), get_lang('ExtensionGDNotAvailable')).'</td>
+                <td class="requirements-value">'.checkExtension('gd', get_lang('Yes'), get_lang('GD Extension not available')).'</td>
             </tr>
             <tr>
                 <td class="requirements-item"><a href="http://php.net/manual/en/book.curl.php" target="_blank">cURL</a>'.get_lang('Support').'</td>
@@ -837,7 +837,7 @@ function display_requirements(
 
             <tr>
                 <td class="requirements-item"><a href="http://php.net/manual/en/book.mbstring.php" target="_blank">Multibyte string</a> '.get_lang('Support').' ('.get_lang('Optional').')</td>
-                <td class="requirements-value">'.checkExtension('mbstring', get_lang('Yes'), get_lang('ExtensionMBStringNotAvailable'), true).'</td>
+                <td class="requirements-value">'.checkExtension('mbstring', get_lang('Yes'), get_lang('MBString extension not available'), true).'</td>
             </tr>
             <tr>
                 <td class="requirements-item"><a href="http://php.net/opcache" target="_blank">Zend OpCache</a> '.get_lang('Support').' ('.get_lang('Optional').')</td>
@@ -853,7 +853,7 @@ function display_requirements(
             </tr>
             <tr>
                 <td class="requirements-item"><a href="http://php.net/manual/en/book.ldap.php" target="_blank">LDAP</a> '.get_lang('Support').' ('.get_lang('Optional').')</td>
-                <td class="requirements-value">'.checkExtension('ldap', get_lang('Yes'), get_lang('ExtensionLDAPNotAvailable'), true).'</td>
+                <td class="requirements-value">'.checkExtension('ldap', get_lang('Yes'), get_lang('LDAP Extension not available'), true).'</td>
             </tr>
             <tr>
                 <td class="requirements-item"><a href="http://xapian.org/" target="_blank">Xapian</a> '.get_lang('Support').' ('.get_lang('Optional').')</td>
@@ -865,14 +865,14 @@ function display_requirements(
     // RECOMMENDED SETTINGS
     // Note: these are the settings for Joomla, does this also apply for Chamilo?
     // Note: also add upload_max_filesize here so that large uploads are possible
-    echo '<h4 class="install-subtitle">'.get_lang('RecommendedSettings').'</h4>';
-    echo '<div class="install-requirement">'.get_lang('RecommendedSettingsInfo').'</div>';
+    echo '<h4 class="install-subtitle">'.get_lang('(recommended) settings').'</h4>';
+    echo '<div class="install-requirement">'.get_lang('(recommended) settingsInfo').'</div>';
     echo '<div class="table-responsive">';
     echo '<table class="table table-bordered">
             <tr>
                 <th>'.get_lang('Setting').'</th>
-                <th>'.get_lang('Recommended').'</th>
-                <th>'.get_lang('Actual').'</th>
+                <th>'.get_lang('(recommended)').'</th>
+                <th>'.get_lang('Currently').'</th>
             </tr>
             
             <tr>
@@ -919,8 +919,8 @@ function display_requirements(
     echo '</div>';
 
     // DIRECTORY AND FILE PERMISSIONS
-    echo '<h4 class="install-subtitle">'.get_lang('DirectoryAndFilePermissions').'</h4>';
-    echo '<div class="install-requirement">'.get_lang('DirectoryAndFilePermissionsInfo').'</div>';
+    echo '<h4 class="install-subtitle">'.get_lang('Directory and files permissions').'</h4>';
+    echo '<div class="install-requirement">'.get_lang('Directory and files permissionsInfo').'</div>';
     echo '<div class="table-responsive">';
 
     $_SESSION['permissions_for_new_directories'] = $_setting['permissions_for_new_directories'] = $dir_perm_verified;
@@ -956,11 +956,11 @@ function display_requirements(
                 <td class="requirements-value">'.check_writable(api_get_path(SYS_PUBLIC_PATH)).'</td>
             </tr>           
             <tr>
-                <td class="requirements-item">'.get_lang('PermissionsForNewDirs').'</td>
+                <td class="requirements-item">'.get_lang('Permissions for new directories').'</td>
                 <td class="requirements-value">'.$dir_perm.' </td>
             </tr>
             <tr>
-                <td class="requirements-item">'.get_lang('PermissionsForNewFiles').'</td>
+                <td class="requirements-item">'.get_lang('Permissions for new files').'</td>
                 <td class="requirements-value">'.$file_perm.' </td>
             </tr>
         </table>';
@@ -972,7 +972,7 @@ function display_requirements(
             ?>
             <div class="alert alert-warning">
                 <?php echo get_lang('Error'); ?>!<br />
-                Chamilo <?php echo implode('|', $update_from_version_8).' '.get_lang('HasNotBeenFoundInThatDir'); ?>.
+                Chamilo <?php echo implode('|', $update_from_version_8).' '.get_lang('has not been found in that directory'); ?>.
             </div>
         <?php
         } else {
@@ -980,7 +980,7 @@ function display_requirements(
         } ?>
             <div class="row">
                 <div class="col-md-12">
-                    <p><?php echo get_lang('OldVersionRootPath'); ?>:
+                    <p><?php echo get_lang('Old version\'s root path'); ?>:
                         <input type="text" name="updatePath" size="50" value="<?php echo ($badUpdatePath && !empty($updatePath)) ? htmlentities($updatePath) : ''; ?>" />
                     </p>
                     <p>
@@ -1031,9 +1031,9 @@ function display_requirements(
         if (count($notWritable) > 0) {
             $error = true; ?>
             <div class="text-danger">
-                <h3 class="text-center"><?php echo get_lang('Warning'); ?></h3>
+                <h3 class="text-center"><?php echo get_lang('Warning !'); ?></h3>
                 <p>
-                    <?php printf(get_lang('NoWritePermissionPleaseReadInstallGuide'), '<a href="../../documentation/installation_guide.html" target="blank">', '</a>'); ?>
+                    <?php printf(get_lang('Some files or folders don\'t have writing permission. To be able to install Chamilo you should first change their permissions (using CHMOD). Please read the %s installation guide %s'), '<a href="../../documentation/installation_guide.html" target="blank">', '</a>'); ?>
                 </p>
             </div>
             <?php
@@ -1045,7 +1045,7 @@ function display_requirements(
         } elseif (file_exists(api_get_path(CONFIGURATION_PATH).'configuration.php')) {
             // Check wether a Chamilo configuration file already exists.
             echo '<div class="alert alert-warning"><h4><center>';
-            echo get_lang('WarningExistingLMSInstallationDetected');
+            echo get_lang('Warning !ExistingLMSInstallationDetected');
             echo '</center></h4></div>';
         }
 
@@ -1065,7 +1065,7 @@ function display_requirements(
 
         if (count($deprecatedToRemove) > 0) {
             ?>
-            <p class="text-danger"><?php echo get_lang('WarningForDeprecatedDirectoriesForUpgrade'); ?></p>
+            <p class="text-danger"><?php echo get_lang('Warning !ForDeprecatedDirectoriesForUpgrade'); ?></p>
             <ul>
                 <?php foreach ($deprecatedToRemove as $deprecatedDirectory) {
                 ?>
@@ -1081,14 +1081,14 @@ function display_requirements(
             <button type="submit" name="step1" class="btn btn-default" onclick="javascript: window.location='index.php'; return false;" value="<?php echo get_lang('Previous'); ?>" >
                 <em class="fa fa-backward"> </em> <?php echo get_lang('Previous'); ?>
             </button>
-            <button type="submit" name="step2_install" class="btn btn-success" value="<?php echo get_lang("NewInstallation"); ?>" <?php if ($error) {
+            <button type="submit" name="step2_install" class="btn btn-success" value="<?php echo get_lang("New installation"); ?>" <?php if ($error) {
             echo 'disabled="disabled"';
         } ?> >
-                <em class="fa fa-forward"> </em> <?php echo get_lang('NewInstallation'); ?>
+                <em class="fa fa-forward"> </em> <?php echo get_lang('New installation'); ?>
             </button>
         <input type="hidden" name="is_executable" id="is_executable" value="-" />
             <button type="submit" class="btn btn-default" <?php echo !$error ?: 'disabled="disabled"'; ?> name="step2_update_8" value="Upgrade from Chamilo 1.9.x">
-                <em class="fa fa-forward" aria-hidden="true"></em> <?php echo get_lang('UpgradeVersion'); ?>
+                <em class="fa fa-forward" aria-hidden="true"></em> <?php echo get_lang('Upgrade Chamilo LMS version'); ?>
             </button>
             </p>
         <?php
@@ -1103,8 +1103,8 @@ function display_requirements(
 function display_license_agreement()
 {
     echo '<div class="RequirementHeading"><h2>'.display_step_sequence().get_lang('Licence').'</h2>';
-    echo '<p>'.get_lang('LMSLicenseInfo').'</p>';
-    echo '<p><a href="../../documentation/license.html" target="_blank">'.get_lang('PrintVers').'</a></p>';
+    echo '<p>'.get_lang('Chamilo is free software distributed under the GNU General Public licence (GPL).').'</p>';
+    echo '<p><a href="../../documentation/license.html" target="_blank">'.get_lang('Printable version').'</a></p>';
     echo '</div>'; ?>
     <div class="form-group">
         <pre style="overflow: auto; height: 200px; margin-top: 5px;">
@@ -1113,23 +1113,23 @@ function display_license_agreement()
     </div>
     <div class="form-group form-check">
         <input type="checkbox" name="accept" id="accept_licence" value="1">
-        <label for="accept_licence"><?php echo get_lang('IAccept'); ?></label>
+        <label for="accept_licence"><?php echo get_lang('I Accept'); ?></label>
     </div>
     <div class="row">
         <div class="col-md-12">
-            <p class="alert alert-info"><?php echo get_lang('LMSMediaLicense'); ?></p>
+            <p class="alert alert-info"><?php echo get_lang('The images and media galleries of Chamilo use images from Nuvola, Crystal Clear and Tango icon galleries. Other images and media like diagrams and Flash animations are borrowed from Wikimedia and Ali Pakdel\'s and Denis Hoa\'s courses with their agreement and released under BY-SA Creative Commons license. You may find the license details at <a href="http://creativecommons.org/licenses/by-sa/3.0/">the CC website</a>, where a link to the full text of the license is provided at the bottom of the page.'); ?></p>
         </div>
     </div>
 
     <!-- Contact information form -->
     <div class="section-parameters">
         <a href="javascript://" class = "advanced_parameters" >
-        <span id="img_plus_and_minus">&nbsp;<i class="fa fa-eye" aria-hidden="true"></i>&nbsp;<?php echo get_lang('ContactInformation'); ?></span>
+        <span id="img_plus_and_minus">&nbsp;<i class="fa fa-eye" aria-hidden="true"></i>&nbsp;<?php echo get_lang('Contact information'); ?></span>
         </a>
     </div>
 
     <div id="id_contact_form" style="display:block">
-        <div class="normal-message"><?php echo get_lang('ContactInformationDescription'); ?></div>
+        <div class="normal-message"><?php echo get_lang('Contact informationDescription'); ?></div>
         <div id="contact_registration">
             <p><?php echo get_contact_registration_form(); ?></p><br />
         </div>
@@ -1139,7 +1139,7 @@ function display_license_agreement()
         <em class="fa fa-backward"> </em> <?php echo get_lang('Previous'); ?>
     </button>
     <input type="hidden" name="is_executable" id="is_executable" value="-" />
-    <button type="submit" id="license-next" class="btn btn-success" name="step3" onclick="javascript: if(!document.getElementById('accept_licence').checked) { alert('<?php echo get_lang('YouMustAcceptLicence'); ?>');return false;}" value="<?php echo get_lang('Next'); ?> &gt;" >
+    <button type="submit" id="license-next" class="btn btn-success" name="step3" onclick="javascript: if(!document.getElementById('accept_licence').checked) { alert('<?php echo get_lang('You must accept the licence'); ?>');return false;}" value="<?php echo get_lang('Next'); ?> &gt;" >
         <em class="fa fa-forward"> </em> <?php echo get_lang('Next'); ?>
     </button>
     </div>
@@ -1161,18 +1161,18 @@ function get_contact_registration_form()
             <div class="col-sm-9"><input id="person_name" class="form-control" type="text" name="person_name" size="30" /></div>
     </div>
     <div class="form-group row">
-            <label class="col-sm-3"><span class="form_required">*</span>'.get_lang('Email').'</label>
+            <label class="col-sm-3"><span class="form_required">*</span>'.get_lang('e-mail').'</label>
             <div class="col-sm-9"><input id="person_email" class="form-control" type="text" name="person_email" size="30" /></div>
     </div>
     <div class="form-group row">
-            <label class="col-sm-3"><span class="form_required">*</span>'.get_lang('CompanyName').'</label>
+            <label class="col-sm-3"><span class="form_required">*</span>'.get_lang('Your company\'s name').'</label>
             <div class="col-sm-9"><input id="company_name" class="form-control" type="text" name="company_name" size="30" /></div>
     </div>
     <div class="form-group row">
-        <label class="col-sm-3"><span class="form_required">*</span>'.get_lang('CompanyActivity').'</label>
+        <label class="col-sm-3"><span class="form_required">*</span>'.get_lang('Your company\'s activity').'</label>
         <div class="col-sm-9">
             <select class="selectpicker show-tick" name="company_activity" id="company_activity" >
-                <option value="">--- '.get_lang('SelectOne').' ---</option>
+                <option value="">--- '.get_lang('Select one').' ---</option>
                 <Option value="Advertising/Marketing/PR">Advertising/Marketing/PR</Option><Option value="Agriculture/Forestry">Agriculture/Forestry</Option>
                 <Option value="Architecture">Architecture</Option><Option value="Banking/Finance">Banking/Finance</Option>
                 <Option value="Biotech/Pharmaceuticals">Biotech/Pharmaceuticals</Option><Option value="Business Equipment">Business Equipment</Option>
@@ -1193,10 +1193,10 @@ function get_contact_registration_form()
     </div>
 
     <div class="form-group row">
-        <label class="col-sm-3"><span class="form_required">*</span>'.get_lang('PersonRole').'</label>
+        <label class="col-sm-3"><span class="form_required">*</span>'.get_lang('Your job\'s description').'</label>
         <div class="col-sm-9">
             <select class="selectpicker show-tick" name="person_role" id="person_role" >
-                <option value="">--- '.get_lang('SelectOne').' ---</option>
+                <option value="">--- '.get_lang('Select one').' ---</option>
                 <Option value="Administration">Administration</Option><Option value="CEO/President/ Owner">CEO/President/ Owner</Option>
                 <Option value="CFO">CFO</Option><Option value="CIO/CTO">CIO/CTO</Option>
                 <Option value="Consultant">Consultant</Option><Option value="Customer Service">Customer Service</Option>
@@ -1213,17 +1213,17 @@ function get_contact_registration_form()
     </div>
 
     <div class="form-group row">
-        <label class="col-sm-3"><span class="form_required">*</span>'.get_lang('CompanyCountry').'</label>
+        <label class="col-sm-3"><span class="form_required">*</span>'.get_lang('Your company\'s home country').'</label>
         <div class="col-sm-9">'.get_countries_list_from_array(true).'</div>
     </div>
     <div class="form-group row">
-        <label class="col-sm-3">'.get_lang('CompanyCity').'</label>
+        <label class="col-sm-3">'.get_lang('Company city').'</label>
         <div class="col-sm-9">
                 <input type="text" class="form-control" id="company_city" name="company_city" size="30" />
         </div>
     </div>
     <div class="form-group row">
-        <label class="col-sm-3">'.get_lang('WhichLanguageWouldYouLikeToUseWhenContactingYou').'</label>
+        <label class="col-sm-3">'.get_lang('Preferred contact language').'</label>
         <div class="col-sm-9">
             <select class="selectpicker show-tick" id="language" name="language">
                 <option value="bulgarian">Bulgarian</option>
@@ -1244,7 +1244,7 @@ function get_contact_registration_form()
     </div>
 
     <div class="form-group row">
-        <label class="col-sm-3">'.get_lang('HaveYouThePowerToTakeFinancialDecisions').'</label>
+        <label class="col-sm-3">'.get_lang('Do you have the power to take financial decisions on behalf of your company?').'</label>
         <div class="col-sm-9">
             <div class="radio">
                 <label>
@@ -1261,11 +1261,11 @@ function get_contact_registration_form()
     <div class="clear"></div>
     <div class="form-group row">
             <div class="col-sm-3">&nbsp;</div>
-            <div class="col-sm-9"><button type="button" class="btn btn-default" onclick="javascript:send_contact_information();" value="'.get_lang('SendInformation').'" ><em class="fa fa-floppy-o"></em> '.get_lang('SendInformation').'</button> <span id="loader-button"></span></div>
+            <div class="col-sm-9"><button type="button" class="btn btn-default" onclick="javascript:send_contact_information();" value="'.get_lang('Send information').'" ><em class="fa fa-floppy-o"></em> '.get_lang('Send information').'</button> <span id="loader-button"></span></div>
     </div>
     <div class="form-group row">
             <div class="col-sm-3">&nbsp;</div>
-            <div class="col-sm-9"><span class="form_required">*</span><small>'.get_lang('FieldRequired').'</small></div>
+            <div class="col-sm-9"><span class="form_required">*</span><small>'.get_lang('Mandatory field').'</small></div>
     </div></div></div>
     </div>';
 
@@ -1345,18 +1345,18 @@ function display_database_settings_form(
 
         echo '<div class="RequirementHeading"><h2>'.display_step_sequence().get_lang('Database settings').'</h2></div>';
         echo '<div class="RequirementContent">';
-        echo get_lang('DBSettingUpgradeIntro');
+        echo get_lang('The upgrade script will recover and update the Chamilo database(s). In order to do this, this script will use the databases and settings defined below. Because our software runs on a wide range of systems and because all of them might not have been tested, we strongly recommend you do a full backup of your databases before you proceed with the upgrade!');
         echo '</div>';
     } else {
         echo '<div class="RequirementHeading"><h2>'.display_step_sequence().get_lang('Database settings').'</h2></div>';
         echo '<div class="RequirementContent">';
-        echo get_lang('DBSettingIntro');
+        echo get_lang('The install script will create (or use) the Chamilo database using the database name given here. Please make sure the user you give has the right to create the database by the name given here. If a database with this name exists, it will be overwritten. Please do not use the root user as the Chamilo database user. This can lead to serious security issues.');
         echo '</div>';
     } ?>
     <div class="panel panel-default">
         <div class="panel-body">
         <div class="form-group row">
-            <label class="col-sm-4"><?php echo get_lang('DBHost'); ?> </label>
+            <label class="col-sm-4"><?php echo get_lang('Database Host'); ?> </label>
             <?php if ($installType == 'update') {
         ?>
             <div class="col-sm-5">
@@ -1369,12 +1369,12 @@ function display_database_settings_form(
             <div class="col-sm-5">
                 <input type="text" class="form-control" size="25" maxlength="50" name="dbHostForm" value="<?php echo htmlentities($dbHostForm); ?>" />
             </div>
-            <div class="col-sm-3"><?php echo get_lang('EG').' localhost'; ?></div>
+            <div class="col-sm-3"><?php echo get_lang('ex.').' localhost'; ?></div>
             <?php
     } ?>
         </div>
         <div class="form-group row">
-            <label class="col-sm-4"><?php echo get_lang('DBPort'); ?> </label>
+            <label class="col-sm-4"><?php echo get_lang('Port'); ?> </label>
             <?php if ($installType == 'update') {
         ?>
             <div class="col-sm-5">
@@ -1387,21 +1387,21 @@ function display_database_settings_form(
             <div class="col-sm-5">
                 <input type="text" class="form-control" size="25" maxlength="50" name="dbPortForm" value="<?php echo htmlentities($dbPortForm); ?>" />
             </div>
-            <div class="col-sm-3"><?php echo get_lang('EG').' 3306'; ?></div>
+            <div class="col-sm-3"><?php echo get_lang('ex.').' 3306'; ?></div>
             <?php
     } ?>
         </div>
         <div class="form-group row">
             <?php
                 //database user username
-                $example_login = get_lang('EG').' root';
-    displayDatabaseParameter($installType, get_lang('DBLogin'), 'dbUsernameForm', $dbUsernameForm, $example_login); ?>
+                $example_login = get_lang('ex.').' root';
+    displayDatabaseParameter($installType, get_lang('Database Login'), 'dbUsernameForm', $dbUsernameForm, $example_login); ?>
         </div>
         <div class="form-group row">
             <?php
             //database user password
-            $example_password = get_lang('EG').' '.api_generate_password();
-    displayDatabaseParameter($installType, get_lang('DBPassword'), 'dbPassForm', $dbPassForm, $example_password); ?>
+            $example_password = get_lang('ex.').' '.api_generate_password();
+    displayDatabaseParameter($installType, get_lang('Database Password'), 'dbPassForm', $dbPassForm, $example_password); ?>
         </div>
         <div class="form-group row">
             <?php
@@ -1412,7 +1412,7 @@ function display_database_settings_form(
 
     displayDatabaseParameter(
                 $installType,
-                get_lang('MainDB'),
+                get_lang('Main Chamilo database (DB)'),
                 'dbNameForm',
                 $dbNameForm,
                 '&nbsp;',
@@ -1427,7 +1427,7 @@ function display_database_settings_form(
             <div class="col-sm-8">
             <button type="submit" class="btn btn-primary" name="step3" value="step3">
                 <em class="fa fa-refresh"> </em>
-                <?php echo get_lang('CheckDatabaseConnection'); ?>
+                <?php echo get_lang('Check database connection'); ?>
             </button>
             </div>
         </div>
@@ -1479,7 +1479,7 @@ function display_database_settings_form(
             $schemaManager = $manager->getConnection()->getSchemaManager();
             $databases = $schemaManager->listDatabases();
             if (in_array($dbNameForm, $databases)) {
-                $database_exists_text = '<div class="alert alert-warning">'.get_lang('ADatabaseWithTheSameNameAlreadyExists').'</div>';
+                $database_exists_text = '<div class="alert alert-warning">'.get_lang('A database with the same name <b>already exists</b>.').'</div>';
             }
         }
     } catch (Exception $e) {
@@ -1504,7 +1504,7 @@ function display_database_settings_form(
         </div>
     <?php else: ?>
         <div id="db_status" class="alert alert-danger">
-            <p><?php echo get_lang('FailedConectionDatabase'); ?></strong></p>
+            <p><?php echo get_lang('The database connection has failed. This is generally due to the wrong user, the wrong password or the wrong database prefix being set above. Please review these settings and try again.'); ?></strong></p>
             <code><?php echo $database_exists_text; ?></code>
         </div>
     <?php endif; ?>
@@ -1631,7 +1631,7 @@ function display_configuration_settings_form(
     $html = '';
     $html .= display_configuration_parameter(
         $installType,
-        get_lang('AdminLogin'),
+        get_lang('Administrator login'),
         'loginForm',
         $loginForm,
         $installType == 'update'
@@ -1639,29 +1639,29 @@ function display_configuration_settings_form(
 
     // Parameter 2: administrator's password
     if ($installType != 'update') {
-        $html .= display_configuration_parameter($installType, get_lang('AdminPass'), 'passForm', $passForm, false);
+        $html .= display_configuration_parameter($installType, get_lang('Administrator password (<font color="red">you may want to change this</font>)'), 'passForm', $passForm, false);
     }
 
     // Parameters 3 and 4: administrator's names
 
     $html .= display_configuration_parameter(
         $installType,
-        get_lang('AdminFirstName'),
+        get_lang('Administrator first name'),
         'adminFirstName',
         $adminFirstName
     );
-    $html .= display_configuration_parameter($installType, get_lang('AdminLastName'), 'adminLastName', $adminLastName);
+    $html .= display_configuration_parameter($installType, get_lang('Administrator last name'), 'adminLastName', $adminLastName);
 
     //Parameter 3: administrator's email
-    $html .= display_configuration_parameter($installType, get_lang('AdminEmail'), 'emailForm', $emailForm);
+    $html .= display_configuration_parameter($installType, get_lang('Admine-mail'), 'emailForm', $emailForm);
 
     //Parameter 6: administrator's telephone
-    $html .= display_configuration_parameter($installType, get_lang('AdminPhone'), 'adminPhoneForm', $adminPhoneForm);
+    $html .= display_configuration_parameter($installType, get_lang('Administrator telephone'), 'adminPhoneForm', $adminPhoneForm);
     echo panel($html, get_lang('Administrator'), 'administrator');
 
     //First parameter: language
     $html = '<div class="form-group row">';
-    $html .= '<label class="col-sm-6 control-label">'.get_lang('MainLang')."</label>";
+    $html .= '<label class="col-sm-6 control-label">'.get_lang('Main language')."</label>";
     if ($installType == 'update') {
         $html .= '<input type="hidden" name="languageForm" value="'.api_htmlentities($languageForm, ENT_QUOTES).'" />'.$languageForm;
     } else { // new installation
@@ -1673,7 +1673,7 @@ function display_configuration_settings_form(
 
     //Second parameter: Chamilo URL
     $html .= '<div class="form-group row">';
-    $html .= '<label class="col-sm-6 control-label">'.get_lang('ChamiloURL').get_lang('ThisFieldIsRequired').'</label>';
+    $html .= '<label class="col-sm-6 control-label">'.get_lang('Chamilo URL').get_lang('Required field').'</label>';
 
     if ($installType == 'update') {
         $html .= api_htmlentities($urlForm, ENT_QUOTES)."\n";
@@ -1687,7 +1687,7 @@ function display_configuration_settings_form(
     //Parameter 9: campus name
     $html .= display_configuration_parameter(
         $installType,
-        get_lang('CampusName'),
+        get_lang('Your portal name'),
         'campusForm',
         $campusForm
     );
@@ -1695,7 +1695,7 @@ function display_configuration_settings_form(
     //Parameter 10: institute (short) name
     $html .= display_configuration_parameter(
         $installType,
-        get_lang('InstituteShortName'),
+        get_lang('Your company short name'),
         'institutionForm',
         $institutionForm
     );
@@ -1703,13 +1703,13 @@ function display_configuration_settings_form(
     //Parameter 11: institute (short) name
     $html .= display_configuration_parameter(
         $installType,
-        get_lang('InstituteURL'),
+        get_lang('URL of this company'),
         'institutionUrlForm',
         $institutionUrlForm
     );
 
     $html .= '<div class="form-group row">
-            <label class="col-sm-6 control-label">'.get_lang("EncryptMethodUserPass").'</label>
+            <label class="col-sm-6 control-label">'.get_lang("Encryption method").'</label>
         <div class="col-sm-6">';
     if ($installType == 'update') {
         $html .= '<input type="hidden" name="encryptPassForm" value="'.$encryptPassForm.'" />'.$encryptPassForm;
@@ -1728,14 +1728,14 @@ function display_configuration_settings_form(
                     </label>';
 
         $html .= '<label>
-                        <input type="radio" name="encryptPassForm" value="none" id="encryptPass2" '.($encryptPassForm == 'none' ? 'checked="checked" ' : '').'/>'.get_lang('None').'
+                        <input type="radio" name="encryptPassForm" value="none" id="encryptPass2" '.($encryptPassForm == 'none' ? 'checked="checked" ' : '').'/>'.get_lang('none').'
                     </label>';
         $html .= '</div>';
     }
     $html .= '</div></div>';
 
     $html .= '<div class="form-group row">
-            <label class="col-sm-6 control-label">'.get_lang('AllowSelfReg').'</label>
+            <label class="col-sm-6 control-label">'.get_lang('Allow self-registration').'</label>
             <div class="col-sm-6">';
     if ($installType == 'update') {
         if ($allowSelfReg == 'true') {
@@ -1743,7 +1743,7 @@ function display_configuration_settings_form(
         } elseif ($allowSelfReg == 'false') {
             $label = get_lang('No');
         } else {
-            $label = get_lang('AfterApproval');
+            $label = get_lang('After approval');
         }
         $html .= '<input type="hidden" name="allowSelfReg" value="'.$allowSelfReg.'" />'.$label;
     } else {
@@ -1755,7 +1755,7 @@ function display_configuration_settings_form(
                         <input type="radio" name="allowSelfReg" value="false" id="allowSelfReg0" '.($allowSelfReg == 'false' ? '' : 'checked="checked" ').' /> '.get_lang('No').'
                     </label>';
         $html .= '<label class="checkbox-inline">
-                    <input type="radio" name="allowSelfReg" value="approval" id="allowSelfReg2" '.($allowSelfReg == 'approval' ? '' : 'checked="checked" ').' /> '.get_lang('AfterApproval').'
+                    <input type="radio" name="allowSelfReg" value="approval" id="allowSelfReg2" '.($allowSelfReg == 'approval' ? '' : 'checked="checked" ').' /> '.get_lang('After approval').'
                 </label>';
         $html .= '</div>';
     }
@@ -1763,7 +1763,7 @@ function display_configuration_settings_form(
     $html .= '</div>';
 
     $html .= '<div class="form-group row">';
-    $html .= '<label class="col-sm-6 control-label">'.get_lang('AllowSelfRegProf').'</label>
+    $html .= '<label class="col-sm-6 control-label">'.get_lang('Allow self-registrationProf').'</label>
         <div class="col-sm-6">';
     if ($installType == 'update') {
         if ($allowSelfRegProf == 'true') {
@@ -1787,7 +1787,7 @@ function display_configuration_settings_form(
     $html .= '</div>
     </div>';
 
-    echo panel($html, get_lang('Platform'), 'platform'); ?>
+    echo panel($html, get_lang('Portal'), 'platform'); ?>
     <div class='btn-group'>
         <button type="submit" class="btn btn-secondary pull-right" name="step3" value="&lt; <?php echo get_lang('Previous'); ?>" ><em class="fa fa-backward"> </em> <?php echo get_lang('Previous'); ?></button>
         <input type="hidden" name="is_executable" id="is_executable" value="-" />
@@ -1803,15 +1803,15 @@ function display_configuration_settings_form(
  */
 function display_after_install_message()
 {
-    $html = '<div class="RequirementContent">'.get_lang('FirstUseTip').'</div>';
+    $html = '<div class="RequirementContent">'.get_lang('When you enter your portal for the first time, the best way to understand it is to create a course with the \'Create course\' link in the menu and play around a little.').'</div>';
     $html .= '<div class="alert alert-warning">';
-    $html .= '<strong>'.get_lang('SecurityAdvice').'</strong>';
+    $html .= '<strong>'.get_lang('Security advice').'</strong>';
     $html .= ': ';
-    $html .= sprintf(get_lang('ToProtectYourSiteMakeXReadOnlyAndDeleteY'), 'app/config/', 'main/install/');
+    $html .= sprintf(get_lang('To protect your site, make the whole %s directory read-only (chmod -R 0555 on Linux) and delete the %s directory.'), 'app/config/', 'main/install/');
     $html .= '</div></form>
     <br />
     <a class="btn btn-success btn-block" href="../../index.php">
-        '.get_lang('GoToYourNewlyCreatedPortal').'
+        '.get_lang('Go to your newly created portal.').'
     </a>';
 
     return $html;
@@ -1854,7 +1854,7 @@ function get_countries_list_from_array($combo = false)
     ];
     if ($combo) {
         $country_select = '<select class="selectpicker show-tick" id="country" name="country">';
-        $country_select .= '<option value="">--- '.get_lang('SelectOne').' ---</option>';
+        $country_select .= '<option value="">--- '.get_lang('Select one').' ---</option>';
         foreach ($a_countries as $country) {
             $country_select .= '<option value="'.$country.'">'.$country.'</option>';
         }
@@ -3164,12 +3164,12 @@ function finishInstallationWithContainer(
     $manager->flush();
 
     $categories = [
-        get_lang('TicketEnrollment') => get_lang('TicketsAboutEnrollment'),
-        get_lang('TicketGeneralInformation') => get_lang('TicketsAboutGeneralInformation'),
-        get_lang('TicketRequestAndPapework') => get_lang('TicketsAboutRequestAndPapework'),
-        get_lang('TicketAcademicIncidence') => get_lang('TicketsAboutAcademicIncidence'),
-        get_lang('TicketVirtualCampus') => get_lang('TicketsAboutVirtualCampus'),
-        get_lang('TicketOnlineEvaluation') => get_lang('TicketsAboutOnlineEvaluation'),
+        get_lang('Enrollment') => get_lang('Tickets about enrollment'),
+        get_lang('General information') => get_lang('Tickets about general information'),
+        get_lang('Requests and paperwork') => get_lang('Tickets about requests and paperwork'),
+        get_lang('Academic Incidents') => get_lang('Tickets about academic incidents, like exams, practices, tasks, etc.'),
+        get_lang('Virtual campus') => get_lang('Tickets about virtual campus'),
+        get_lang('Online evaluation') => get_lang('Tickets about online evaluation'),
     ];
 
     $i = 1;
@@ -3194,9 +3194,9 @@ function finishInstallationWithContainer(
 
     // Default Priorities
     $defaultPriorities = [
-        TicketManager::PRIORITY_NORMAL => get_lang('PriorityNormal'),
-        TicketManager::PRIORITY_HIGH => get_lang('PriorityHigh'),
-        TicketManager::PRIORITY_LOW => get_lang('PriorityLow'),
+        TicketManager::PRIORITY_NORMAL => get_lang('Normal'),
+        TicketManager::PRIORITY_HIGH => get_lang('High'),
+        TicketManager::PRIORITY_LOW => get_lang('Low'),
     ];
 
     $i = 1;
@@ -3217,11 +3217,11 @@ function finishInstallationWithContainer(
 
     // Default status
     $defaultStatus = [
-        TicketManager::STATUS_NEW => get_lang('StatusNew'),
-        TicketManager::STATUS_PENDING => get_lang('StatusPending'),
-        TicketManager::STATUS_UNCONFIRMED => get_lang('StatusUnconfirmed'),
-        TicketManager::STATUS_CLOSE => get_lang('StatusClose'),
-        TicketManager::STATUS_FORWARDED => get_lang('StatusForwarded'),
+        TicketManager::STATUS_NEW => get_lang('New'),
+        TicketManager::STATUS_PENDING => get_lang('Pending'),
+        TicketManager::STATUS_UNCONFIRMED => get_lang('Unconfirmed'),
+        TicketManager::STATUS_CLOSE => get_lang('Close'),
+        TicketManager::STATUS_FORWARDED => get_lang('Forwarded'),
     ];
 
     $i = 1;

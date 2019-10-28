@@ -90,22 +90,22 @@ class FlatViewDataGenerator
     {
         $headers = [];
         if (isset($this->params['show_official_code']) && $this->params['show_official_code']) {
-            $headers[] = get_lang('OfficialCode');
+            $headers[] = get_lang('Code');
         }
 
         if (isset($this->params['join_firstname_lastname']) && $this->params['join_firstname_lastname']) {
             if (api_is_western_name_order()) {
-                $headers[] = get_lang('FirstnameAndLastname');
+                $headers[] = get_lang('First Name and Last Name');
             } else {
-                $headers[] = get_lang('LastnameAndFirstname');
+                $headers[] = get_lang('Last Name and First Name');
             }
         } else {
             if (api_is_western_name_order()) {
-                $headers[] = get_lang('FirstName');
-                $headers[] = get_lang('LastName');
+                $headers[] = get_lang('First name');
+                $headers[] = get_lang('Last name');
             } else {
-                $headers[] = get_lang('LastName');
-                $headers[] = get_lang('FirstName');
+                $headers[] = get_lang('Last name');
+                $headers[] = get_lang('First name');
             }
         }
 
@@ -227,7 +227,7 @@ class FlatViewDataGenerator
             }
         }
 
-        $headers[] = '<span class="text-center">'.api_strtoupper(get_lang('GradebookQualificationTotal')).'</span>';
+        $headers[] = '<span class="text-center">'.api_strtoupper(get_lang('Total')).'</span>';
 
         return $headers;
     }

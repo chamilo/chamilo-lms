@@ -15,3 +15,5 @@ cat /etc/apache2/sites-available/000-default.conf
 sudo service apache2 restart
 
 echo "* Apache restarted";
+
+sudo journalctl | tail

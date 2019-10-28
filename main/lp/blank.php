@@ -23,21 +23,21 @@ $message = '';
 if (isset($_GET['error'])) {
     switch ($_GET['error']) {
         case 'document_deleted':
-            $message = Display::return_message(get_lang('DocumentHasBeenDeleted'), 'error');
+            $message = Display::return_message(get_lang('The document cannot be displayed because it has been deleted'), 'error');
             break;
         case 'prerequisites':
             $prerequisiteMessage = isset($_GET['prerequisite_message']) ? $_GET['prerequisite_message'] : '';
-            $message = Display::return_message(get_lang('LearnpathPrereqNotCompleted'), 'warning');
+            $message = Display::return_message(get_lang('This learning object cannot display because the course prerequisites are not completed. This happens when a course imposes that you follow it step by step or get a minimum score in tests before you reach the next steps.'), 'warning');
             if (!empty($prerequisiteMessage)) {
                 $message = Display::return_message(Security::remove_XSS($prerequisiteMessage), 'warning');
             }
 
             break;
         case 'document_not_found':
-            $message = Display::return_message(get_lang('FileNotFound'), 'warning');
+            $message = Display::return_message(get_lang('The file was not found'), 'warning');
             break;
         case 'reached_one_attempt':
-            $message = Display::return_message(get_lang('ReachedOneAttempt'), 'warning');
+            $message = Display::return_message(get_lang('You can not take this test because you have already reached one attempt'), 'warning');
             break;
         case 'x_frames_options':
             $src = Session::read('x_frame_source');
@@ -59,7 +59,7 @@ if (isset($_GET['error'])) {
             break;
     }
 } elseif (isset($_GET['msg']) && $_GET['msg'] == 'exerciseFinished') {
-    $message = Display::return_message(get_lang('ExerciseFinished'));
+    $message = Display::return_message(get_lang('Test Finished'));
 }
 
 $template = new Template();

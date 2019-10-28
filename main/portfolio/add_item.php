@@ -44,14 +44,14 @@ if ($form->validate()) {
     $em->flush();
 
     Display::addFlash(
-        Display::return_message(get_lang('PortfolioItemAdded'), 'success')
+        Display::return_message(get_lang('Portfolio item added'), 'success')
     );
 
     header("Location: $baseUrl");
     exit;
 }
 
-$toolName = get_lang('AddPortfolioItem');
+$toolName = get_lang('Add item to portfolio');
 $interbreadcrumb[] = [
     'name' => get_lang('Portfolio'),
     'url' => $baseUrl,

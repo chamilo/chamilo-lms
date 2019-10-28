@@ -27,7 +27,7 @@ class WSCMCourses extends WSCM
 
             return $courses_id;
         } else {
-            return get_lang('InvalidId');
+            return get_lang('Login failed - incorrect login or password.');
         }
     }
 
@@ -38,7 +38,7 @@ class WSCMCourses extends WSCM
 
             return $course_info['title'];
         } else {
-            return get_lang('InvalidId');
+            return get_lang('Login failed - incorrect login or password.');
         }
     }
 }

@@ -39,7 +39,7 @@ $url = 'document.php?curdirpath='.$pathurl.'&'.api_get_cidreq();
 $originaltoolname = get_lang('Documents');
 $_course = api_get_course_info();
 $interbreadcrumb[] = ['url' => Security::remove_XSS($url), 'name' => $originaltoolname];
-$originaltoolname = get_lang('SlideShow');
+$originaltoolname = get_lang('Slideshow');
 $sessionId = api_get_session_id();
 
 $groupIid = 0;
@@ -93,7 +93,7 @@ if ($slide_id != 'all') {
         } else {
             $imgp = 'action_prev.png';
             $first = '<a href="slideshow.php?slide_id=0&curdirpath='.$pathurl.'&'.api_get_cidreq().'">
-                      '.Display::return_icon('action_first.png', get_lang('FirstSlide')).'
+                      '.Display::return_icon('action_first.png', get_lang('First slide')).'
                       </a>';
         }
 
@@ -120,11 +120,11 @@ if ($slide_id != 'all') {
         }
         if ($slide == $total_slides - 1) {
             $imgn = 'action_next_na.png';
-            $last = Display::return_icon('action_last_na.png', get_lang('LastSlide'));
+            $last = Display::return_icon('action_last_na.png', get_lang('Last slide'));
         } else {
             $imgn = 'action_next.png';
             $last = '<a href="slideshow.php?slide_id='.($total_slides - 1).'&curdirpath='.$pathurl.'&'.api_get_cidreq().'">
-                    '.Display::return_icon('action_last.png', get_lang('LastSlide')).'
+                    '.Display::return_icon('action_last.png', get_lang('Last slide')).'
                 </a>';
         }
         echo Display::return_icon($imgn, get_lang('Next'));
@@ -146,13 +146,13 @@ echo Display::url(
 // Show thumbnails
 if ($slide_id != 'all') {
     echo '<a href="slideshow.php?slide_id=all&curdirpath='.$pathurl.'&'.api_get_cidreq().'">'.
-        Display::return_icon('thumbnails.png', get_lang('ShowThumbnails'), '', ICON_SIZE_MEDIUM).'</a>';
+        Display::return_icon('thumbnails.png', get_lang('Show Thumbnails'), '', ICON_SIZE_MEDIUM).'</a>';
 } else {
-    echo Display::return_icon('thumbnails_na.png', get_lang('ShowThumbnails'), '', ICON_SIZE_MEDIUM);
+    echo Display::return_icon('thumbnails_na.png', get_lang('Show Thumbnails'), '', ICON_SIZE_MEDIUM);
 }
 // Slideshow options
 echo '<a href="slideshowoptions.php?curdirpath='.$pathurl.'&'.api_get_cidreq().'">'.
-    Display::return_icon('settings.png', get_lang('SetSlideshowOptions'), '', ICON_SIZE_MEDIUM).'</a>';
+    Display::return_icon('settings.png', get_lang('Gallery settings'), '', ICON_SIZE_MEDIUM).'</a>';
 echo '</div>';
 echo '<br />';
 
@@ -490,15 +490,15 @@ if ($slide_id != 'all' && !empty($image_files_only)) {
             $aux = explode('.', htmlspecialchars($image_files_only[$slide]));
             $ext = $aux[count($aux) - 1];
             if ($imageResize == 'resizing') {
-                $resize_info = get_lang('Resizing').'<br />';
+                $resize_info = get_lang('RESIZE').'<br />';
                 $resize_width = Session::read('image_resizing_width').' x ';
                 $resize_height = Session::read('image_resizing_height');
             } elseif ($imageResize != 'noresizing') {
-                $resize_info = get_lang('Resizing').'<br />';
+                $resize_info = get_lang('RESIZE').'<br />';
                 $resize_width = get_lang('Auto').' x ';
                 $resize_height = get_lang('Auto');
             } else {
-                $resize_info = get_lang('NoResizing').'<br />';
+                $resize_info = get_lang('NoRESIZE').'<br />';
                 $resize_width = '';
                 $resize_height = '';
             }
@@ -506,7 +506,7 @@ if ($slide_id != 'all' && !empty($image_files_only)) {
             echo '<li class="text-center">';
             echo $image_files_only[$slide].' ';
             echo Display::toolbarButton(
-                get_lang('Modify'),
+                get_lang('Edit'),
                 'edit_document.php?'.api_get_cidreq().'&'.http_build_query([
                     'id' => $row['id'],
                     'origin' => 'slideshow',
@@ -527,11 +527,11 @@ if ($slide_id != 'all' && !empty($image_files_only)) {
             echo '</ul>';
         }
     } else {
-        echo Display::return_message(get_lang('FileNotFound'), 'warning');
+        echo Display::return_message(get_lang('The file was not found'), 'warning');
     }
 } else {
     if ($slide_id != 'all') {
-        echo Display::return_message(get_lang('NoDataAvailable'), 'warning');
+        echo Display::return_message(get_lang('No data available'), 'warning');
     }
 }
 

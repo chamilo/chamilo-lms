@@ -114,7 +114,7 @@ switch ($action) {
         $em->flush();
 
         Display::addFlash(
-            Display::return_message(get_lang('VisibilityChanged'), 'success')
+            Display::return_message(get_lang('The visibility has been changed.'), 'success')
         );
 
         header("Location: $baseUrl");
@@ -137,7 +137,7 @@ switch ($action) {
         $em->flush();
 
         Display::addFlash(
-            Display::return_message(get_lang('CategoryDeleted'), 'success')
+            Display::return_message(get_lang('The category has been deleted.'), 'success')
         );
 
         header("Location: $baseUrl");
@@ -182,7 +182,7 @@ switch ($action) {
         $em->flush();
 
         Display::addFlash(
-            Display::return_message(get_lang('VisibilityChanged'), 'success')
+            Display::return_message(get_lang('The visibility has been changed.'), 'success')
         );
 
         header("Location: $baseUrl");
@@ -205,7 +205,7 @@ switch ($action) {
         $em->flush();
 
         Display::addFlash(
-            Display::return_message(get_lang('ItemDeleted'), 'success')
+            Display::return_message(get_lang('Item deleted'), 'success')
         );
 
         header("Location: $baseUrl");

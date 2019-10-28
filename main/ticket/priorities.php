@@ -37,7 +37,7 @@ $action = isset($_GET['action']) ? $_GET['action'] : '';
 
 $interbreadcrumb[] = [
     'url' => api_get_path(WEB_CODE_PATH).'ticket/tickets.php',
-    'name' => get_lang('MyTickets'),
+    'name' => get_lang('My tickets'),
 ];
 
 $interbreadcrumb[] = [
@@ -52,7 +52,7 @@ switch ($action) {
             TicketManager::deletePriority($id);
             Display::addFlash(Display::return_message(get_lang('Deleted')));
         } else {
-            Display::addFlash(Display::return_message(get_lang('ThisItemIsRelatedToOtherTickets'), 'warning'));
+            Display::addFlash(Display::return_message(get_lang('This item is related to other tickets.'), 'warning'));
         }
         header("Location: ".api_get_self());
         exit;
@@ -103,7 +103,7 @@ switch ($action) {
                 'description' => $values['description'],
             ];
             $cat = TicketManager::updatePriority($_GET['id'], $params);
-            Display::addFlash(Display::return_message(get_lang('Updated')));
+            Display::addFlash(Display::return_message(get_lang('Update successful')));
             header("Location: ".api_get_self());
             exit;
         }
@@ -146,7 +146,7 @@ function modify_filter($id, $params, $row)
 $table->set_header(0, '', false);
 $table->set_header(1, get_lang('Title'), false);
 $table->set_header(2, get_lang('Description'), true, ["style" => "width:200px"]);
-$table->set_header(3, get_lang('Actions'), true);
+$table->set_header(3, get_lang('Detail'), true);
 $table->set_column_filter('3', 'modify_filter');
 
 Display::display_header($toolName);
@@ -154,7 +154,7 @@ Display::display_header($toolName);
 $items = [
     'icon' => 'new_folder.png',
     'url' => 'priorities.php?action=add',
-    'content' => get_lang('AddPriority'),
+    'content' => get_lang('Add priority'),
 ];
 echo '<div class="actions">';
 echo Display::url(

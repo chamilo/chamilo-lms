@@ -168,13 +168,13 @@ function save_ticket()
         header('Location:'.api_get_path(WEB_CODE_PATH).'ticket/tickets.php');
         exit;
     } else {
-        Display::addFlash(Display::return_message(get_lang('ThereWasAnErrorRegisteringTheTicket')));
+        Display::addFlash(Display::return_message(get_lang('There was an error registering your ticket')));
     }
 }
 
 $interbreadcrumb[] = [
     'url' => api_get_path(WEB_CODE_PATH).'ticket/tickets.php',
-    'name' => get_lang('MyTickets'),
+    'name' => get_lang('My tickets'),
 ];
 
 $userId = api_get_user_id();
@@ -201,15 +201,15 @@ $sourceAttributes = [
     'id' => 'source_id',
     'for' => 'source_id',
 ];
-$sourceList[TicketManager::SOURCE_PLATFORM] = get_lang('SrcPlatform');
+$sourceList[TicketManager::SOURCE_PLATFORM] = get_lang('Platform');
 if (api_is_platform_admin()) {
     $sourceAttributes = [
         'id' => 'source_id',
         'for' => 'source_id',
     ];
-    $sourceList[TicketManager::SOURCE_EMAIL] = get_lang('SrcEmail');
-    $sourceList[TicketManager::SOURCE_PHONE] = get_lang('SrcPhone');
-    $sourceList[TicketManager::SOURCE_PRESENTIAL] = get_lang('SrcPresential');
+    $sourceList[TicketManager::SOURCE_EMAIL] = get_lang('E-mail');
+    $sourceList[TicketManager::SOURCE_PHONE] = get_lang('Phone');
+    $sourceList[TicketManager::SOURCE_PRESENTIAL] = get_lang('Presential');
 }
 
 // Priority List
@@ -303,7 +303,7 @@ if (api_is_platform_admin()) {
 $form->addElement(
     'text',
     'personal_email',
-    get_lang('PersonalEmail'),
+    get_lang('Personal e-mail'),
     [
         'id' => 'personal_email',
     ]
@@ -387,15 +387,15 @@ if (!empty($courseInfo)) {
 
 $form->setDefaults($params);
 
-$form->addElement('file', 'attach_1', get_lang('FilesAttachment'));
+$form->addElement('file', 'attach_1', get_lang('Files attachments'));
 $form->addLabel('', '<span id="filepaths"><div id="filepath_1"></div></span>');
 
 $form->addLabel(
     '',
     '<span id="link-more-attach">
-         <span class="btn btn-success" onclick="return add_image_form()">'.get_lang('AddOneMoreFile').'</span>
+         <span class="btn btn-success" onclick="return add_image_form()">'.get_lang('Add one more file').'</span>
          </span>
-         ('.sprintf(get_lang('MaximunFileSizeX'), format_file_size(api_get_setting('message_max_upload_filesize'))).')
+         ('.sprintf(get_lang('Maximun file size: %s'), format_file_size(api_get_setting('message_max_upload_filesize'))).')
     '
 );
 
@@ -403,7 +403,7 @@ $form->addElement('html', '<br/>');
 $form->addElement(
     'button',
     'compose',
-    get_lang('SendMessage'),
+    get_lang('Send message'),
     null,
     null,
     null,
@@ -413,15 +413,15 @@ $form->addElement(
     ]
 );
 
-$form->addRule('content', get_lang('ThisFieldIsRequired'), 'required');
-$form->addRule('category_id', get_lang('ThisFieldIsRequired'), 'required');
-$form->addRule('subject', get_lang('ThisFieldIsRequired'), 'required');
+$form->addRule('content', get_lang('Required field'), 'required');
+$form->addRule('category_id', get_lang('Required field'), 'required');
+$form->addRule('subject', get_lang('Required field'), 'required');
 
 if ($form->validate()) {
     save_ticket();
 }
 
-Display::display_header(get_lang('ComposeMessage'));
+Display::display_header(get_lang('Compose message'));
 
 echo '<div class="actions">';
 echo Display::url(

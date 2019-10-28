@@ -43,10 +43,10 @@ $(function() {
 function display_advanced_search_form () {
     if ($("#advanced_search_form").css("display") == "none") {
         $("#advanced_search_form").css("display","block");
-        $("#img_plus_and_minus").html(\'&nbsp;'.Display::returnFontAwesomeIcon('arrow-down').' '.get_lang('AdvancedSearch').'\');
+        $("#img_plus_and_minus").html(\'&nbsp;'.Display::returnFontAwesomeIcon('arrow-down').' '.get_lang('Advanced search').'\');
     } else {
         $("#advanced_search_form").css("display","none");
-        $("#img_plus_and_minus").html(\'&nbsp;'.Display::returnFontAwesomeIcon('arrow-right').' '.get_lang('AdvancedSearch').'\');
+        $("#img_plus_and_minus").html(\'&nbsp;'.Display::returnFontAwesomeIcon('arrow-right').' '.get_lang('Advanced search').'\');
     }
 }
 </script>';
@@ -83,11 +83,11 @@ switch ($action) {
             [
                 '#',
                 get_lang('Date'),
-                get_lang('LastUpdate'),
+                get_lang('Last update'),
                 get_lang('Category'),
                 get_lang('User'),
-                get_lang('Program'),
-                get_lang('AssignedTo'),
+                get_lang('Course Program</a>. If your course has no code, whatever the reason, invent one. For instance <i>INNOVATION</i> if the course is about Innovation Management'),
+                get_lang('Assigned to'),
                 get_lang('Status'),
                 get_lang('Description'),
             ],
@@ -132,7 +132,7 @@ $isAllow = TicketManager::userIsAllowInProject(api_get_user_info(), $projectId);
 $isAdmin = api_is_platform_admin();
 $actionRight = '';
 
-Display::display_header(get_lang('MyTickets'));
+Display::display_header(get_lang('My tickets'));
 
 if (!empty($projectId)) {
     $getParameters = [];
@@ -198,10 +198,10 @@ if (!empty($projectId)) {
     }
 
     $selectPriority = TicketManager::getPriorityList();
-    $selectStatusUnread = [
-        '' => get_lang('StatusAll'),
-        'yes' => get_lang('StatusUnread'),
-        'no' => get_lang('StatusRead'),
+    $selectUnread = [
+        '' => get_lang('All'),
+        'yes' => get_lang('Unread'),
+        'no' => get_lang('Read'),
     ];
 
     // Create a search-box
@@ -219,7 +219,7 @@ if (!empty($projectId)) {
 
     $advancedSearch = Display::url(
         '<span id="img_plus_and_minus">&nbsp;'.
-        Display::returnFontAwesomeIcon('arrow-right').' '.get_lang('AdvancedSearch'),
+        Display::returnFontAwesomeIcon('arrow-right').' '.get_lang('Advanced search'),
         'javascript://',
         [
             'class' => 'btn btn-default advanced-parameters',
@@ -274,11 +274,11 @@ if (!empty($projectId)) {
         ]
     );
 
-    $ticketLabel = get_lang('AllTickets');
+    $ticketLabel = get_lang('All tickets');
     $url = api_get_path(WEB_CODE_PATH).'ticket/tickets.php?project_id='.$projectId;
 
     if (!isset($_GET['keyword_assigned_to'])) {
-        $ticketLabel = get_lang('MyTickets');
+        $ticketLabel = get_lang('My tickets');
         $url = api_get_path(WEB_CODE_PATH).'ticket/tickets.php?project_id='.$projectId.'&keyword_assigned_to='.api_get_user_id();
     }
 
@@ -324,7 +324,7 @@ if (!empty($projectId)) {
     );
 
     $advancedSearchForm->addHidden('project_id', $projectId);
-    $advancedSearchForm->addHeader(get_lang('AdvancedSearch'));
+    $advancedSearchForm->addHeader(get_lang('Advanced search'));
     $advancedSearchForm->addSelect(
         'keyword_category',
         get_lang('Category'),
@@ -335,7 +335,7 @@ if (!empty($projectId)) {
     $advancedSearchForm->addDateTimePicker('keyword_start_date_end', get_lang('Until'));
     $advancedSearchForm->addSelect(
         'keyword_assigned_to',
-        get_lang('AssignedTo'),
+        get_lang('Assigned to'),
         $selectAdmins,
         ['placeholder' => get_lang('All')]
     );
@@ -352,7 +352,7 @@ if (!empty($projectId)) {
         ['placeholder' => get_lang('All')]
     );
     $advancedSearchForm->addText('keyword_course', get_lang('Course'), false);
-    $advancedSearchForm->addButtonSearch(get_lang('AdvancedSearch'), 'submit_advanced');
+    $advancedSearchForm->addButtonSearch(get_lang('Advanced search'), 'submit_advanced');
     $advancedSearchForm->display();
 } else {
     if (api_get_setting('ticket_allow_student_add') === 'true') {
@@ -368,20 +368,20 @@ if ($isAdmin) {
     $table->set_header(0, '#', true);
     $table->set_header(1, get_lang('Status'), true);
     $table->set_header(2, get_lang('Date'), true);
-    $table->set_header(3, get_lang('LastUpdate'), true);
+    $table->set_header(3, get_lang('Last update'), true);
     $table->set_header(4, get_lang('Category'), true);
-    $table->set_header(5, get_lang('CreatedBy'), true);
-    $table->set_header(6, get_lang('AssignedTo'), true);
+    $table->set_header(5, get_lang('Created by'), true);
+    $table->set_header(6, get_lang('Assigned to'), true);
     $table->set_header(7, get_lang('Message'), true);
 } else {
     if ($isAllow == false) {
-        echo Display::page_subheader(get_lang('MyTickets'));
-        echo Display::return_message(get_lang('TicketMsgWelcome'));
+        echo Display::page_subheader(get_lang('My tickets'));
+        echo Display::return_message(get_lang('Welcome to YOUR tickets section. Here, you\'ll be able to track the state of all the tickets you created in the main tickets section.'));
     }
     $table->set_header(0, '#', true);
     $table->set_header(1, get_lang('Status'), false);
     $table->set_header(2, get_lang('Date'), true);
-    $table->set_header(3, get_lang('LastUpdate'), true);
+    $table->set_header(3, get_lang('Last update'), true);
     $table->set_header(4, get_lang('Category'));
 }
 

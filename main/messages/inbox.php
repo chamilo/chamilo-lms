@@ -27,7 +27,7 @@ if ($allowSocial) {
     $this_section = SECTION_SOCIAL;
     $interbreadcrumb[] = [
         'url' => api_get_path(WEB_PATH).'main/social/home.php',
-        'name' => get_lang('SocialNetwork'),
+        'name' => get_lang('Social network'),
     ];
 } else {
     $this_section = SECTION_MYPROFILE;
@@ -47,7 +47,7 @@ $actions = '';
 // Comes from normal profile
 if ($allowSocial === false && $allowMessage) {
     $actions .= '<a href="'.api_get_path(WEB_PATH).'main/messages/new_message.php">'.
-        Display::return_icon('message_new.png', get_lang('ComposeMessage')).'</a>';
+        Display::return_icon('message_new.png', get_lang('Compose message')).'</a>';
     $actions .= '<a href="'.api_get_path(WEB_PATH).'main/messages/inbox.php">'.
         Display::return_icon('inbox.png', get_lang('Inbox')).'</a>';
     $actions .= '<a href="'.api_get_path(WEB_PATH).'main/messages/outbox.php">'.
@@ -66,7 +66,7 @@ $social_right_content = '';
 $keyword = '';
 if ($allowSocial) {
     $actionsLeft = '<a href="'.api_get_path(WEB_PATH).'main/messages/new_message.php">'.
-        Display::return_icon('new-message.png', get_lang('ComposeMessage'), [], 32).'</a>';
+        Display::return_icon('new-message.png', get_lang('Compose message'), [], 32).'</a>';
     $actionsLeft .= '<a href="'.api_get_path(WEB_PATH).'main/messages/outbox.php">'.
         Display::return_icon('outbox.png', get_lang('Outbox'), [], 32).'</a>';
 

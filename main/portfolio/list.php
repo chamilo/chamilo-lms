@@ -8,7 +8,7 @@ if ($currentUserId == $user->getId()) {
             $baseUrl.'action=add_item'
         );
         $actions[] = Display::url(
-            Display::return_icon('folder.png', get_lang('AddCategory'), [], ICON_SIZE_MEDIUM),
+            Display::return_icon('folder.png', get_lang('Add category'), [], ICON_SIZE_MEDIUM),
             $baseUrl.'action=add_category'
         );
         $actions[] = Display::url(

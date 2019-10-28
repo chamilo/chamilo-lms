@@ -66,7 +66,7 @@ $style .='</style>';
 <?php echo $style ?>
 <body>
 <?php
-echo '<h2>'.get_lang('GroupSingle').': '.$group_properties['name'].'</h2>';
+echo '<h2>'.get_lang('Group').': '.$group_properties['name'].'</h2>';
 
 if ((
     $group_properties['doc_state'] == 2 &&
@@ -75,7 +75,7 @@ if ((
 ){
 
 	if (!empty($png_svg_files)) {
-		echo '<h3>'.get_lang('SelectSVGEditImage').'</h3>';
+		echo '<h3>'.get_lang('Select a picture (SVG, PNG)').'</h3>';
 		echo '<ul>';
 		foreach($png_svg_files as $filename) {
 			$image = $group_disk_path.$filename;
@@ -93,7 +93,7 @@ if ((
 		echo '</ul>';
 	}
 } else {
-	echo Display::return_message(get_lang('OnlyAccessFromYourGroup'), 'warning');
+	echo Display::return_message(get_lang('Only accessible from your group'), 'warning');
 }
 ?>
 </body>

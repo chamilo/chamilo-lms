@@ -14,13 +14,13 @@ $sessionId = api_get_session_id();
 $files = DocumentManager::getDeletedDocuments($courseInfo, $sessionId);
 
 $actions = Display::url(
-    get_lang('DownloadAll'),
+    get_lang('Download all'),
     api_get_self().'?'.api_get_cidreq().'&action=download_all',
     ['class' => 'btn btn-default']
 );
 
 $actions .= Display::url(
-    get_lang('DeleteAll'),
+    get_lang('Delete all'),
     api_get_self().'?'.api_get_cidreq().'&action=delete_all',
     ['class' => 'btn btn-danger']
 );
@@ -54,7 +54,7 @@ $interbreadcrumb[] = [
     'url' => api_get_path(WEB_CODE_PATH).'document/document.php?'.api_get_cidreq(),
     'name' => get_lang('Documents'),
 ];
-$template = new Template(get_lang('DeletedDocuments'));
+$template = new Template(get_lang('Deleted documents'));
 $template->assign('files', $files);
 $template->assign(
     'actions',

@@ -25,15 +25,15 @@ api_set_more_memory_and_time_limits();
 // Breadcrumbs
 $interbreadcrumb[] = [
     'url' => api_get_path(WEB_CODE_PATH).'course_info/maintenance.php?'.api_get_cidreq(),
-    'name' => get_lang('Maintenance'),
+    'name' => get_lang('Backup'),
 ];
 
 // The section (for the tabs)
 $this_section = SECTION_COURSES;
 
 // Display the header
-Display::display_header(get_lang('CopyCourse'));
-echo Display::page_header(get_lang('CopyCourse'));
+Display::display_header(get_lang('Copy course'));
+echo Display::page_header(get_lang('Copy course'));
 
 $action = isset($_POST['action']) ? $_POST['action'] : '';
 
@@ -55,7 +55,7 @@ if (Security::check_token('post') && (
     $cr->set_file_option($_POST['same_file_name_option']);
     $cr->restore($_POST['destination_course']);
     echo Display::return_message(
-        get_lang('CopyFinished').': <a href="'.api_get_course_url($_POST['destination_course']).'">'.
+        get_lang('Copying is finished').': <a href="'.api_get_course_url($_POST['destination_course']).'">'.
         Security::remove_XSS($_POST['destination_course']).
         '</a>',
         'normal',
@@ -92,7 +92,7 @@ if (Security::check_token('post') && (
     );
 
     if (empty($courseList)) {
-        echo Display::return_message(get_lang('NoDestinationCoursesAvailable'), 'normal');
+        echo Display::return_message(get_lang('No destination course available'), 'normal');
     } else {
         $options = [];
         foreach ($courseList as $courseItem) {
@@ -105,38 +105,38 @@ if (Security::check_token('post') && (
             'post',
             api_get_path(WEB_CODE_PATH).'coursecopy/copy_course.php?'.api_get_cidreq()
         );
-        $form->addElement('select', 'destination_course', get_lang('SelectDestinationCourse'), $options);
+        $form->addElement('select', 'destination_course', get_lang('Select target course'), $options);
 
         $group = [];
-        $group[] = $form->createElement('radio', 'copy_option', null, get_lang('FullCopy'), 'full_copy');
-        $group[] = $form->createElement('radio', 'copy_option', null, get_lang('LetMeSelectItems'), 'select_items');
-        $form->addGroup($group, '', get_lang('SelectOptionForBackup'));
+        $group[] = $form->createElement('radio', 'copy_option', null, get_lang('Full copy'), 'full_copy');
+        $group[] = $form->createElement('radio', 'copy_option', null, get_lang('Let me select learning objects'), 'select_items');
+        $form->addGroup($group, '', get_lang('Please select a backup option'));
 
         $group = [];
         $group[] = $form->createElement(
             'radio',
             'same_file_name_option',
             null,
-            get_lang('SameFilenameSkip'),
+            get_lang('Skip same file name'),
             FILE_SKIP
         );
         $group[] = $form->createElement(
             'radio',
             'same_file_name_option',
             null,
-            get_lang('SameFilenameRename'),
+            get_lang('Rename file (eg file.pdf becomes file_1.pdf)'),
             FILE_RENAME
         );
         $group[] = $form->createElement(
             'radio',
             'same_file_name_option',
             null,
-            get_lang('SameFilenameOverwrite'),
+            get_lang('Overwrite file'),
             FILE_OVERWRITE
         );
-        $form->addGroup($group, '', get_lang('SameFilename'));
+        $form->addGroup($group, '', get_lang('What should be done with imported files with the same file name as existing files?'));
         $form->addProgress();
-        $form->addButtonSave(get_lang('CopyCourse'));
+        $form->addButtonSave(get_lang('Copy course'));
         $form->setDefaults(['copy_option' => 'select_items', 'same_file_name_option' => FILE_OVERWRITE]);
 
         // Add Security token

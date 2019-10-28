@@ -39,14 +39,14 @@ if ($form->validate()) {
     $em->flush();
 
     Display::addFlash(
-        Display::return_message(get_lang('ItemUpdated'), 'success')
+        Display::return_message(get_lang('Item updated'), 'success')
     );
 
     header("Location: $baseUrl");
     exit;
 }
 
-$toolName = get_lang('EditPortfolioItem');
+$toolName = get_lang('Edit portfolio item');
 $interbreadcrumb[] = [
     'name' => get_lang('Portfolio'),
     'url' => $baseUrl,

@@ -54,6 +54,6 @@ if ($lp) {
     }
 }
 
-echo Display::return_message(get_lang('ProtectedDocument'), 'error');
+echo Display::return_message(get_lang('Protected Document'), 'error');
 //api_not_allowed backbutton won't work.
 exit;

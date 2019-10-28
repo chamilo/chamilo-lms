@@ -28,7 +28,7 @@ class WSCMForum extends WSCM
 
             return $foruns_id;
         } else {
-            return get_lang('InvalidId');
+            return get_lang('Login failed - incorrect login or password.');
         }
     }
 
@@ -55,7 +55,7 @@ class WSCMForum extends WSCM
 
             return $forum_title;
         } else {
-            return get_lang('InvalidId');
+            return get_lang('Login failed - incorrect login or password.');
         }
     }
 
@@ -76,7 +76,7 @@ class WSCMForum extends WSCM
 
             return $threads_id;
         } else {
-            return get_lang('InvalidId');
+            return get_lang('Login failed - incorrect login or password.');
         }
     }
 
@@ -122,7 +122,7 @@ class WSCMForum extends WSCM
 
             return $thread_info[$field_table];
         } else {
-            return get_lang('InvalidId');
+            return get_lang('Login failed - incorrect login or password.');
         }
     }
 
@@ -149,7 +149,7 @@ class WSCMForum extends WSCM
 
             return $thread_info[$field_table];
         } else {
-            return get_lang('InvalidId');
+            return get_lang('Login failed - incorrect login or password.');
         }
     }
 
@@ -192,7 +192,7 @@ class WSCMForum extends WSCM
 
             return $posts_id;
         } else {
-            return get_lang('InvalidId');
+            return get_lang('Login failed - incorrect login or password.');
         }
     }
 
@@ -238,7 +238,7 @@ class WSCMForum extends WSCM
 
             return ($htmlcode) ? html_entity_decode($post_info[$field_table]) : $post_info[$field_table];
         } else {
-            return get_lang('InvalidId');
+            return get_lang('Login failed - incorrect login or password.');
         }
     }
 
@@ -288,7 +288,7 @@ class WSCMForum extends WSCM
 
             return "Post enviado!";
         } else {
-            return get_lang('InvalidId');
+            return get_lang('Login failed - incorrect login or password.');
         }
     }
 }

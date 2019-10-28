@@ -26,14 +26,14 @@ if ($form->validate()) {
     $em->flush();
 
     Display::addFlash(
-        Display::return_message(get_lang('CategoryAdded'), 'success')
+        Display::return_message(get_lang('Category added'), 'success')
     );
 
     header("Location: $baseUrl");
     exit;
 }
 
-$toolName = get_lang('AddCategory');
+$toolName = get_lang('Add category');
 $interbreadcrumb[] = [
     'name' => get_lang('Portfolio'),
     'url' => $baseUrl,

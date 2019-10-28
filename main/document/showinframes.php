@@ -112,7 +112,7 @@ if (isset($group_id) && $group_id != '') {
     ];
     $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'group/group_space.php?'.api_get_cidreq(),
-        'name' => get_lang('GroupSpace').' '.$current_group_name,
+        'name' => get_lang('Group area').' '.$current_group_name,
     ];
     $name_to_show = explode('/', $name_to_show);
     unset($name_to_show[1]);
@@ -297,7 +297,7 @@ if ($execute_iframe) {
             $actionsLeft .= Display::url(
                 Display::return_icon(
                     'edit.png',
-                    get_lang('Modify'),
+                    get_lang('Edit'),
                     '',
                     ICON_SIZE_MEDIUM
                 ),
@@ -325,7 +325,7 @@ if ($execute_iframe) {
                 ]
             );
             $actionsLeft .= Display::url(
-                Display::return_icon('pdf.png', get_lang('Export2PDF'), [], ICON_SIZE_MEDIUM),
+                Display::return_icon('pdf.png', get_lang('Export to PDF format'), [], ICON_SIZE_MEDIUM),
                 api_get_path(WEB_CODE_PATH).'document/document.php?'.api_get_cidreq(
                 ).'&action=export_to_pdf&id='.$document_id
             );

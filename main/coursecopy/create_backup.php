@@ -31,11 +31,11 @@ $this_section = SECTION_COURSES;
 // Breadcrumbs
 $interbreadcrumb[] = [
     'url' => api_get_path(WEB_CODE_PATH).'course_info/maintenance.php',
-    'name' => get_lang('Maintenance'),
+    'name' => get_lang('Backup'),
 ];
 
 // Displaying the header
-$nameTools = get_lang('CreateBackup');
+$nameTools = get_lang('Create a backup');
 Display::display_header($nameTools);
 
 // Display the tool title
@@ -58,7 +58,7 @@ if (Security::check_token('post') &&
         $course = $cb->build();
     }
     $zipFile = CourseArchiver::createBackup($course);
-    echo Display::return_message(get_lang('BackupCreated'), 'confirm');
+    echo Display::return_message(get_lang('The backup has been created. The download of this file will start in a few moments. If your download does not start, click the following link'), 'confirm');
     echo '<br />';
     echo Display::url(
         get_lang('Download'),
@@ -75,7 +75,7 @@ if (Security::check_token('post') &&
         $hiddenFields['sec_token'] = Security::get_token();
         CourseSelectForm::display_form($course, $hiddenFields, false, true);
     } else {
-        echo Display::return_message(get_lang('NoResourcesToBackup'), 'warning');
+        echo Display::return_message(get_lang('There are no resources to backup'), 'warning');
     }
 } else {
     $form = new FormValidator(
@@ -83,10 +83,10 @@ if (Security::check_token('post') &&
         'post',
         api_get_self().'?'.api_get_cidreq()
     );
-    $form->addElement('header', get_lang('SelectOptionForBackup'));
-    $form->addElement('radio', 'backup_option', '', get_lang('CreateFullBackup'), 'full_backup');
-    $form->addElement('radio', 'backup_option', '', get_lang('LetMeSelectItems'), 'select_items');
-    $form->addButtonSave(get_lang('CreateBackup'));
+    $form->addElement('header', get_lang('Please select a backup option'));
+    $form->addElement('radio', 'backup_option', '', get_lang('Create a complete backup of this course'), 'full_backup');
+    $form->addElement('radio', 'backup_option', '', get_lang('Let me select learning objects'), 'select_items');
+    $form->addButtonSave(get_lang('Create a backup'));
     $form->addProgress();
     // When progress bar appears we have to hide the title "Please select a backup-option".
     $form->updateAttributes(

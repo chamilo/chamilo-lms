@@ -55,7 +55,7 @@ class WSCMInbox extends WSCM
 
             return $message;
         } else {
-            return get_lang('InvalidId');
+            return get_lang('Login failed - incorrect login or password.');
         }
     }
 
@@ -97,7 +97,7 @@ class WSCMInbox extends WSCM
 
             return $htmlcode ? html_entity_decode($result[0]) : $result[0];
         } else {
-            return get_lang('InvalidId');
+            return get_lang('Login failed - incorrect login or password.');
         }
     }
 
@@ -123,7 +123,7 @@ class WSCMInbox extends WSCM
 
             return $message;
         } else {
-            return get_lang('InvalidId');
+            return get_lang('Login failed - incorrect login or password.');
         }
     }
 
@@ -161,7 +161,7 @@ class WSCMInbox extends WSCM
 
             return $htmlcode ? html_entity_decode($result[0]) : $result[0];
         } else {
-            return get_lang('InvalidId');
+            return get_lang('Login failed - incorrect login or password.');
         }
     }
 
@@ -197,7 +197,7 @@ class WSCMInbox extends WSCM
 
             return $inbox_last_id;
         } else {
-            return get_lang('InvalidId');
+            return get_lang('Login failed - incorrect login or password.');
         }
     }
 

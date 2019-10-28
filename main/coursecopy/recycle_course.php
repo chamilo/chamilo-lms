@@ -27,11 +27,11 @@ $this_section = SECTION_COURSES;
 // Breadcrumbs
 $interbreadcrumb[] = [
     'url' => api_get_path(WEB_CODE_PATH).'course_info/maintenance.php',
-    'name' => get_lang('Maintenance'),
+    'name' => get_lang('Backup'),
 ];
 
 // Displaying the header
-$nameTools = get_lang('RecycleCourse');
+$nameTools = get_lang('Empty this course');
 Display::display_header($nameTools);
 
 // Display the tool title
@@ -62,7 +62,7 @@ if (Security::check_token('post') && (
     }
     $cr = new CourseRecycler($course);
     $cr->recycle($recycle_type);
-    echo Display::return_message(get_lang('RecycleFinished'), 'confirm');
+    echo Display::return_message(get_lang('Recycle is finished'), 'confirm');
 } elseif (Security::check_token('post') && (
         isset($_POST['recycle_option']) &&
         $_POST['recycle_option'] === 'select_items'
@@ -80,14 +80,14 @@ if (Security::check_token('post') && (
     $cb = new CourseBuilder();
     $course = $cb->build();
     if (!$course->has_resources()) {
-        echo get_lang('NoResourcesToRecycle');
+        echo get_lang('No resource to recycle');
     } else {
-        echo Display::return_message(get_lang('RecycleWarning'), 'warning', false);
+        echo Display::return_message(get_lang('Warning: using this tool, you will delete learning objects in your course. There is no UNDO possible. We advise you to create a <a href="create_backup.php">backup</a> before.'), 'warning', false);
         $form = new FormValidator('recycle_course', 'post', api_get_self().'?'.api_get_cidreq());
-        $form->addElement('header', get_lang('SelectOptionForBackup'));
-        $form->addElement('radio', 'recycle_option', null, get_lang('FullRecycle'), 'full_backup');
-        $form->addElement('radio', 'recycle_option', null, get_lang('LetMeSelectItems'), 'select_items');
-        $form->addButtonSave(get_lang('RecycleCourse'));
+        $form->addElement('header', get_lang('Please select a backup option'));
+        $form->addElement('radio', 'recycle_option', null, get_lang('Delete everything'), 'full_backup');
+        $form->addElement('radio', 'recycle_option', null, get_lang('Let me select learning objects'), 'select_items');
+        $form->addButtonSave(get_lang('Empty this course'));
         $form->setDefaults(['recycle_option' => 'select_items']);
         // Add Security token
         $token = Security::get_token();

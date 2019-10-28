@@ -37,7 +37,7 @@ class ZombieReport implements Countable
             'items' => [
                 [
                     'name' => 'ceiling',
-                    'label' => get_lang('LastAccess'),
+                    'label' => get_lang('Latest access'),
                     'type' => 'date_picker',
                     'default' => $this->get_ceiling('Y-m-d'),
                     'rules' => [
@@ -49,7 +49,7 @@ class ZombieReport implements Countable
                 ],
                 [
                     'name' => 'active_only',
-                    'label' => get_lang('ActiveOnly'),
+                    'label' => get_lang('active only'),
                     'type' => 'checkbox',
                     'default' => $this->get_active_only(),
                 ],
@@ -78,8 +78,8 @@ class ZombieReport implements Countable
             ['class' => 'well form-horizontal form-search']
         );
 
-        $form->addDatePicker('ceiling', get_lang('LastAccess'));
-        $form->addCheckBox('active_only', get_lang('ActiveOnly'));
+        $form->addDatePicker('ceiling', get_lang('Latest access'));
+        $form->addCheckBox('active_only', get_lang('active only'));
         $form->addButtonSearch(get_lang('Search'));
 
         $params = [
@@ -228,16 +228,16 @@ class ZombieReport implements Countable
 
         $col = 0;
         $table->set_header($col++, '', false);
-        $table->set_header($col++, get_lang('OfficialCode'));
-        $table->set_header($col++, get_lang('FirstName'));
-        $table->set_header($col++, get_lang('LastName'));
-        $table->set_header($col++, get_lang('LoginName'));
-        $table->set_header($col++, get_lang('Email'));
+        $table->set_header($col++, get_lang('Code'));
+        $table->set_header($col++, get_lang('First name'));
+        $table->set_header($col++, get_lang('Last name'));
+        $table->set_header($col++, get_lang('Login'));
+        $table->set_header($col++, get_lang('e-mail'));
         $table->set_header($col++, get_lang('Profile'));
-        $table->set_header($col++, get_lang('AuthenticationSource'));
-        $table->set_header($col++, get_lang('RegisteredDate'));
-        $table->set_header($col++, get_lang('LastAccess'), false);
-        $table->set_header($col, get_lang('Active'), false);
+        $table->set_header($col++, get_lang('Authentication source'));
+        $table->set_header($col++, get_lang('Registered date'));
+        $table->set_header($col++, get_lang('Latest access'), false);
+        $table->set_header($col, get_lang('active'), false);
 
         $table->set_column_filter(5, [$this, 'format_email']);
         $table->set_column_filter(6, [$this, 'format_status']);
@@ -297,7 +297,7 @@ class ZombieReport implements Countable
         $valid = $this->perform_action();
 
         if ($valid) {
-            echo Display::return_message(get_lang('Updated'), 'confirmation');
+            echo Display::return_message(get_lang('Update successful'), 'confirmation');
         }
 
         $result .= $this->display_data($return);

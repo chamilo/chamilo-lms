@@ -44,20 +44,20 @@ $result_forum = Database::query($sql_forum);
 
 echo '<div class="row">
         <input type="hidden" id="rs_id" name ="rs_id" value="'.$id.'">
-        <div class="formw">'.get_lang('PleaseSelectTasks').'</div>
+        <div class="formw">'.get_lang('Please select tasks').'</div>
     </div>';
 echo '<div class="row"><div class="formw"><select name ="work_id" id="work_id">';
-echo '<option value="0"'.(($row['colid'] == $rs->work_id) ? "selected" : "").'>'.get_lang('PleaseSelect').'</option>';
+echo '<option value="0"'.(($row['colid'] == $rs->work_id) ? "selected" : "").'>'.get_lang('Please select').'</option>';
 while ($row = Database::fetch_assoc($result_tasks)) {
     echo '<option value="'.$row['colid'].'"'.(($row['colid'] == $rs->work_id) ? "selected" : "").'>'.
         $row['coltitle'].'</option>';
 }
 echo '</select></div><div>';
 echo '<div class="row">
-        <div class="formw">'.get_lang('PleaseSelectThread').'</div>
+        <div class="formw">'.get_lang('Please selectThread').'</div>
     </div>';
 echo '<div class="row"><div class="formw"><select name ="forum_id" id="forum_id">';
-echo '<option value="0"'.(($row['colid'] == $rs->work_id) ? "forum_id" : "").'>'.get_lang('PleaseSelect').'</option>';
+echo '<option value="0"'.(($row['colid'] == $rs->work_id) ? "forum_id" : "").'>'.get_lang('Please select').'</option>';
 while ($row = Database::fetch_assoc($result_forum)) {
     echo '<option value="'.$row['colid'].'"'.(($row['colid'] == $rs->forum_id) ? "selected" : "").'>'.
         $row['coltitle'].'</option>';

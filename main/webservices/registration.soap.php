@@ -3588,14 +3588,14 @@ function WSCourseDescription($params)
     $result = Database::query($sql);
 
     $default_titles = [
-        get_lang('GeneralDescription'),
+        get_lang('Description'),
         get_lang('Objectives'),
         get_lang('Topics'),
         get_lang('Methodology'),
-        get_lang('CourseMaterial'),
-        get_lang('HumanAndTechnicalResources'),
+        get_lang('Course material'),
+        get_lang('Resources'),
         get_lang('Assessment'),
-        get_lang('AddCategory'),
+        get_lang('Add category'),
     ];
 
     for ($x = 1; $x < 9; $x++) {

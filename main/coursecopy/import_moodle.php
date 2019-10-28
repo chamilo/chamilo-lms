@@ -26,11 +26,11 @@ $this_section = SECTION_COURSES;
 // Breadcrumbs
 $interbreadcrumb[] = [
     'url' => api_get_path(WEB_CODE_PATH).'course_info/maintenance.php?'.api_get_cidreq(),
-    'name' => get_lang('Maintenance'),
+    'name' => get_lang('Backup'),
 ];
 
 $form = new FormValidator('import_moodle', 'post', api_get_self().'?'.api_get_cidreq());
-$form->addFile('moodle_file', get_lang('MoodleFile'));
+$form->addFile('moodle_file', get_lang('Moodle course file'));
 $form->addButtonImport(get_lang('Import'));
 
 if ($form->validate()) {
@@ -43,7 +43,7 @@ if ($form->validate()) {
 
         Display::addFlash(
             Display::return_message(
-                get_lang('MoodleFileImportedSuccessfully'),
+                get_lang('Moodle course fileImportedSuccessfully'),
                 'success'
             )
         );
@@ -54,14 +54,14 @@ if ($form->validate()) {
     }
 }
 
-$template = new Template(get_lang('ImportFromMoodle'));
-$infoMsg = Display::return_message(get_lang('ImportFromMoodleInstructions'), 'normal', false);
+$template = new Template(get_lang('Import from Moodle'));
+$infoMsg = Display::return_message(get_lang('Import from MoodleInstructions'), 'normal', false);
 $template->assign('info_msg', $infoMsg);
 $template->assign('form', $form->returnForm());
 $templateName = $template->get_template('coursecopy/import_moodle.tpl');
 $content = $template->fetch($templateName);
 
-$template->assign('header', get_lang('ImportFromMoodle'));
+$template->assign('header', get_lang('Import from Moodle'));
 $template->assign('content', $content);
 
 $template->display_one_col_template();

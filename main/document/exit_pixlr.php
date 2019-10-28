@@ -33,7 +33,7 @@ if (empty($exit)) {
     echo '<script>window.parent.location.href="'.$location.'"</script>';
     api_not_allowed(true);
 } else {
-    echo '<div align="center" style="padding-top:150; font-family:Arial, Helvetica, Sans-serif;font-size:25px;color:#aaa;font-weight:bold;">'.get_lang('PleaseStandBy').'</div>';
+    echo '<div align="center" style="padding-top:150; font-family:Arial, Helvetica, Sans-serif;font-size:25px;color:#aaa;font-weight:bold;">'.get_lang('Please stand by...').'</div>';
     $location = api_get_path(WEB_CODE_PATH).'document/document.php?id='.Security::remove_XSS($exit).'&'.api_get_cidreq();
     echo '<script>window.parent.location.href="'.$location.'"</script>';
     Session::erase('exit_pixlr');

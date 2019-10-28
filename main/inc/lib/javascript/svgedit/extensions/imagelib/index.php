@@ -64,7 +64,7 @@ $style .='</style>';
 <?php
 echo '<h2>'.get_lang('Course').': '.$course_info['name'].'</h2>';
 if (!empty($png_svg_files)) {
-	echo '<h3>'.get_lang('SelectSVGEditImage').'</h3>';
+	echo '<h3>'.get_lang('Select a picture (SVG, PNG)').'</h3>';
 	echo '<ul>';
 	foreach($png_svg_files as $filename) {
 		$image=$disk_path.$filename;
@@ -81,7 +81,7 @@ if (!empty($png_svg_files)) {
 	}
 	echo '</ul>';
 } else {
-	echo Display::return_message(get_lang('NoSVGImagesInImagesGalleryPath'), 'warning');
+	echo Display::return_message(get_lang('There are no SVG images in your images gallery directory'), 'warning');
 }
 ?>
 </body>

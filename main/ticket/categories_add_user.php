@@ -48,14 +48,14 @@ if ($form->validate()) {
     $values = $form->exportValues();
     TicketManager::deleteAllUserInCategory($categoryId);
     TicketManager::addUsersToCategory($categoryId, $values['users']);
-    Display::addFlash(Display::return_message(get_lang('Updated')));
+    Display::addFlash(Display::return_message(get_lang('Update successful')));
     header('Location: '.api_get_self().'?id='.$categoryId.'&project_id='.$projectId);
     exit;
 }
 
 $interbreadcrumb[] = [
     'url' => api_get_path(WEB_CODE_PATH).'ticket/tickets.php?project_id='.$projectId,
-    'name' => get_lang('MyTickets'),
+    'name' => get_lang('My tickets'),
 ];
 
 $interbreadcrumb[] = [

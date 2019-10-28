@@ -11,7 +11,7 @@ use ChamiloSession as Session;
 require_once __DIR__.'/../inc/global.inc.php';
 $this_section = SECTION_COURSES;
 $groupRights = Session::read('group_member_with_upload_rights');
-$nameTools = get_lang('VoiceRecord');
+$nameTools = get_lang('Voice record');
 
 api_protect_course_script();
 api_block_anonymous_users();
@@ -76,7 +76,7 @@ if (!is_dir($filepath)) {
 
 //groups //TODO: clean
 if (!empty($groupId)) {
-    $interbreadcrumb[] = ["url" => "../group/group_space.php?".api_get_cidreq(), "name" => get_lang('GroupSpace')];
+    $interbreadcrumb[] = ["url" => "../group/group_space.php?".api_get_cidreq(), "name" => get_lang('Group area')];
     $group = GroupManager :: get_group_properties($groupId);
     $path = explode('/', $dir);
     if ('/'.$path[1] != $group['directory']) {
@@ -141,7 +141,7 @@ $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'swfobject/swfo
 $htmlHeadXtra[] = api_get_js('record_audio/record_audio.js');
 
 $actions = Display::toolbarButton(
-    get_lang('BackTo').' '.get_lang('DocumentsOverview'),
+    get_lang('Back to').' '.get_lang('Documents overview'),
     'document.php?'.api_get_cidreq()."&id=$document_id",
     'arrow-left',
     'default',

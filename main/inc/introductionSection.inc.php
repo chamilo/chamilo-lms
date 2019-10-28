@@ -90,7 +90,7 @@ if ($intro_editAllowed) {
 
                 $em->persist($toolIntro);
                 $em->flush();
-                Display::addFlash(Display::return_message(get_lang('IntroductionTextUpdated'), 'confirmation', false));
+                Display::addFlash(Display::return_message(get_lang('Intro was updated'), 'confirmation', false));
             } else {
                 // got to the delete command
                 $intro_cmdDel = true;
@@ -105,7 +105,7 @@ if ($intro_editAllowed) {
         $em->remove($toolIntro);
         $em->flush();
 
-        Display::addFlash(Display::return_message(get_lang('IntroductionTextDeleted'), 'confirmation'));
+        Display::addFlash(Display::return_message(get_lang('Intro was deleted'), 'confirmation'));
     }
 }
 
@@ -184,7 +184,7 @@ if ($tool == TOOL_COURSE_HOMEPAGE && !isset($_GET['intro_cmdEdit'])) {
         // Show only the current course progress step
         $last_done_advance = $thematic->get_last_done_thematic_advance();
         $thematic_advance_info = $thematic->get_thematic_advance_list($last_done_advance);
-        $subTitle1 = get_lang('CurrentTopic');
+        $subTitle1 = get_lang('Current topic');
         $class1 = ' current';
     } elseif ($displayMode == '2') {
         // Show only the two next course progress steps
@@ -192,20 +192,20 @@ if ($tool == TOOL_COURSE_HOMEPAGE && !isset($_GET['intro_cmdEdit'])) {
         $next_advance_not_done = $thematic->get_next_thematic_advance_not_done(2);
         $thematic_advance_info = $thematic->get_thematic_advance_list($last_done_advance);
         $thematic_advance_info2 = $thematic->get_thematic_advance_list($next_advance_not_done);
-        $subTitle1 = $subTitle2 = get_lang('NextTopic');
+        $subTitle1 = $subTitle2 = get_lang('Next topic');
     } elseif ($displayMode == '3') {
         // Show the current and next course progress steps
         $last_done_advance = $thematic->get_last_done_thematic_advance();
         $next_advance_not_done = $thematic->get_next_thematic_advance_not_done();
         $thematic_advance_info = $thematic->get_thematic_advance_list($last_done_advance);
         $thematic_advance_info2 = $thematic->get_thematic_advance_list($next_advance_not_done);
-        $subTitle1 = get_lang('CurrentTopic');
-        $subTitle2 = get_lang('NextTopic');
+        $subTitle1 = get_lang('Current topic');
+        $subTitle2 = get_lang('Next topic');
         $class1 = ' current';
     }
 
     if (!empty($thematic_advance_info)) {
-        $thematic_advance = get_lang('CourseThematicAdvance');
+        $thematic_advance = get_lang('Course progress');
         $thematicScore = $thematic->get_total_average_of_thematic_advances().'%';
         $thematicUrl = api_get_path(WEB_CODE_PATH).'course_progress/index.php?action=thematic_details&'.api_get_cidreq();
         $thematic_info = $thematic->get_thematic_list($thematic_advance_info['thematic_id']);
@@ -235,7 +235,7 @@ if ($tool == TOOL_COURSE_HOMEPAGE && !isset($_GET['intro_cmdEdit'])) {
             <h4 class="title-topics">'.Display::returnFontAwesomeIcon('book').strip_tags($thematic_info['title']).'</h4>
             <p class="date">'.Display::returnFontAwesomeIcon('calendar-o').$thematic_advance_info['start_date'].'</p>
             <div class="views">'.Display::returnFontAwesomeIcon('file-text-o').strip_tags($thematic_advance_info['content']).'</div>
-            <p class="time">'.Display::returnFontAwesomeIcon('clock-o').get_lang('DurationInHours').' : '.$thematic_advance_info['duration'].' - <a href="'.$thematicUrl.'">'.get_lang('SeeDetail').'</a></p>
+            <p class="time">'.Display::returnFontAwesomeIcon('clock-o').get_lang('Duration in hours').' : '.$thematic_advance_info['duration'].' - <a href="'.$thematicUrl.'">'.get_lang('See detail').'</a></p>
             </div>
         </div>';
 
@@ -251,7 +251,7 @@ if ($tool == TOOL_COURSE_HOMEPAGE && !isset($_GET['intro_cmdEdit'])) {
                     <h4 class="title-topics">'.Display::returnFontAwesomeIcon('book').$thematic_info2['title'].'</h4>
                     <p class="date">'.Display::returnFontAwesomeIcon('calendar-o').$thematic_advance_info2['start_date'].'</p>
                     <div class="views">'.Display::returnFontAwesomeIcon('file-text-o').strip_tags($thematic_advance_info2['content']).'</div>
-                    <p class="time">'.Display::returnFontAwesomeIcon('clock-o').get_lang('DurationInHours').' : '.$thematic_advance_info2['duration'].' - <a href="'.$thematicUrl.'">'.get_lang('SeeDetail').'</a></p>
+                    <p class="time">'.Display::returnFontAwesomeIcon('clock-o').get_lang('Duration in hours').' : '.$thematic_advance_info2['duration'].' - <a href="'.$thematicUrl.'">'.get_lang('See detail').'</a></p>
                     </div>
                 </div>';
         }
@@ -260,7 +260,7 @@ if ($tool == TOOL_COURSE_HOMEPAGE && !isset($_GET['intro_cmdEdit'])) {
         $thematicPanel .= '<div class="col-md-10"><div class="row">'.$thematicItemOne.$thematicItemTwo.'</div></div>';
         $thematicPanel .= '</div>';
         $thematicPanel .= '<div class="separate">
-                        <a href="'.$thematicUrl.'" class="btn btn-default btn-block">'.get_lang('ShowFullCourseAdvance').'</a>
+                        <a href="'.$thematicUrl.'" class="btn btn-default btn-block">'.get_lang('Show course planning').'</a>
                     </div>';
 
         $thematicProgress = Display::panelCollapse(
@@ -285,7 +285,7 @@ $toolbar = [];
 
 /*if (api_is_allowed_to_edit() && empty($session_id)) {
     $tool = [
-        'name' => get_lang('CustomizeIcons'),
+        'name' => get_lang('Customize icons'),
         'url' => api_get_path(WEB_CODE_PATH).'course_info/tools.php?'.api_get_cidreq(),
         'icon' => 'fas fa-cog',
     ];
@@ -316,14 +316,14 @@ if ($intro_dispCommand) {
 
         if (!empty($courseId)) {
             $tool = [
-                'name' => get_lang('Modify'),
+                'name' => get_lang('Edit'),
                 'url' => api_get_self().'?'.api_get_cidreq().$blogParam.'&intro_cmdEdit=1',
                 'icon' => 'fas fa-pencil-alt',
             ];
             $toolbar[] = $tool;
 
             $tool = [
-                'name' => addslashes(api_htmlentities(get_lang('ConfirmYourChoice'))),
+                'name' => addslashes(api_htmlentities(get_lang('Please confirm your choice'))),
                 'url' => api_get_self()."?".api_get_cidreq().$blogParam."&intro_cmdDel=1",
                 'icon' => 'fas fa-trash-alt',
                 'class' => 'delete-swal',
@@ -331,14 +331,14 @@ if ($intro_dispCommand) {
             $toolbar[] = $tool;
         } else {
             $tool = [
-                'name' => get_lang('Modify'),
+                'name' => get_lang('Edit'),
                 'url' => api_get_self().'?intro_cmdEdit=1',
                 'icon' => 'fas fa-pencil-alt',
             ];
             $toolbar[] = $tool;
 
             $tool = [
-                'name' => addslashes(api_htmlentities(get_lang('ConfirmYourChoice'))),
+                'name' => addslashes(api_htmlentities(get_lang('Please confirm your choice'))),
                 'url' => api_get_self()."?".api_get_cidreq()."&intro_cmdDel=1",
                 'icon' => 'fas fa-trash-alt',
                 'class' => 'delete-swal',

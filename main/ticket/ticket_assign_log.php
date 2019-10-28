@@ -1,9 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-/**
- * @package chamilo.plugin.ticket
- */
 require_once __DIR__.'/../inc/global.inc.php';
 
 api_protect_admin_script();
@@ -20,7 +17,7 @@ $history = TicketManager::get_assign_log($ticket_id);
 if (count($history) == 0) {
     ?>
     <tr>
-        <td colspan="2"><?php echo api_ucfirst(get_lang('TicketNoHistory')); ?></td>
+        <td colspan="2"><?php echo api_ucfirst(get_lang('No history')); ?></td>
     </tr>
     <?php
 }

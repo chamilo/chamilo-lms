@@ -108,7 +108,7 @@ if (Security::check_abs_path($sys_course_path.$doc_url, $sys_course_path.'/')) {
     }
 
     if (!api_is_allowed_to_edit() && !$is_visible) {
-        echo Display::return_message(get_lang('ProtectedDocument'), 'error'); //api_not_allowed backbutton won't work.
+        echo Display::return_message(get_lang('Protected Document'), 'error'); //api_not_allowed backbutton won't work.
         exit; // You shouldn't be here anyway.
     }
     // Launch event

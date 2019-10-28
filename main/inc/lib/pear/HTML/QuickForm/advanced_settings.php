@@ -14,7 +14,7 @@ class HTML_QuickForm_advanced_settings extends HTML_QuickForm_static
     public function __construct($name = '', $label = '')
     {
         if (empty($label)) {
-            $label = get_lang('AdvancedParameters');
+            $label = get_lang('Advanced settings');
         }
         $this->updateAttributes(
             array(

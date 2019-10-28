@@ -74,7 +74,7 @@ $drawFileNameFromSession = Session::read('draw_file');
 if (file_exists($saveDir.'/'.$filename.'.'.$extension) &&
     empty($drawFileNameFromSession)
 ) {
-    $message = get_lang('FileExistsChangeToSave');
+    $message = get_lang('This file name already exists, choose another to save your image.');
     $params = array(
         'message' => $message,
         'url' => ''
@@ -145,10 +145,10 @@ if ($suffix != 'png') {
         $relativeUrlPath = '/';
     };
     $url = api_get_path(WEB_CODE_PATH).'document/document.php?'.api_get_cidreq().'&curdirpath='.urlencode($relativeUrlPath);
-    $message = get_lang('FileSavedAs').': '.$title;
+    $message = get_lang('File saved as').': '.$title;
 } else {
     $url = '';
-    $message = get_lang('FileExportAs').': '.$title;
+    $message = get_lang('File export as').': '.$title;
 }
 
 $params = array(

@@ -47,7 +47,7 @@ $charset = 'utf-8';
 if ($allowDownloadDocumentsByApiKey) {
     try {
         if ($action !== 'download') {
-            throw new Exception(get_lang('SelectAnAction'));
+            throw new Exception(get_lang('Select an action'));
         }
 
         $username = isset($_GET['username']) ? Security::remove_XSS($_GET['username']) : null;
@@ -186,7 +186,7 @@ if (!empty($groupId)) {
             ];
             $interbreadcrumb[] = [
                 'url' => api_get_path(WEB_CODE_PATH).'group/group_space.php?'.api_get_cidreq(),
-                'name' => get_lang('GroupSpace').' '.$group_properties['name'],
+                'name' => get_lang('Group area').' '.$group_properties['name'],
             ];
             //they are allowed to upload
             $groupMemberWithUploadRights = true;
@@ -201,7 +201,7 @@ if (!empty($groupId)) {
         ];
         $interbreadcrumb[] = [
             'url' => api_get_path(WEB_CODE_PATH).'group/group_space.php?'.api_get_cidreq(),
-            'name' => get_lang('GroupSpace').' '.$group_properties['name'],
+            'name' => get_lang('Group area').' '.$group_properties['name'],
         ];
 
         // Allowed to upload?
@@ -223,7 +223,7 @@ if (!empty($groupId)) {
     Session::write('group_member_with_upload_rights', false);
 }
 
-// Actions.
+// Detail.
 $document_id = isset($_REQUEST['id']) ? (int) $_REQUEST['id'] : null;
 $currentUrl = api_get_self().'?'.api_get_cidreq().'&id='.$document_id;
 $curdirpath = isset($_GET['curdirpath']) ? Security::remove_XSS($_GET['curdirpath']) : null;
@@ -289,30 +289,30 @@ switch ($action) {
                             );
                             Display::addFlash(
                                 Display::return_message(
-                                    get_lang('DocDeleted').': '.$documentInfo['title'],
+                                    get_lang('Document deleted').': '.$documentInfo['title'],
                                     'success'
                                 )
                             );
                         } else {
-                            Display::addFlash(Display::return_message(get_lang('DocDeleteError'), 'warning'));
+                            Display::addFlash(Display::return_message(get_lang('Error during the delete of document'), 'warning'));
                         }
                     } else {
                         // Cloud Links
                         $deleteDocument = DocumentManager::deleteCloudLink($courseInfo, $_GET['deleteid']);
                         if ($deleteDocument) {
                             Display::addFlash(Display::return_message(
-                                get_lang('CloudLinkDeleted').': '.$documentInfo['title'],
+                                get_lang('Cloud link deleted').': '.$documentInfo['title'],
                                 'success'
                             ));
                         } else {
                             Display::addFlash(Display::return_message(
-                                get_lang('CloudLinkDeleteError').': '.$documentInfo['title'],
+                                get_lang('Error deleting the cloud link.').': '.$documentInfo['title'],
                                 'error'
                             ));
                         }
                     }
                 } else {
-                    Display::addFlash(Display::return_message(get_lang('FileNotFound'), 'warning'));
+                    Display::addFlash(Display::return_message(get_lang('The file was not found'), 'warning'));
                 }
                 header("Location: $currentUrl");
                 exit;
@@ -475,7 +475,7 @@ switch ($action) {
                 $parent_id = 0;
             }
             $file_link = Display::url(
-                get_lang('SeeFile'),
+                get_lang('See file'),
                 api_get_path(WEB_CODE_PATH).'social/myfiles.php?'
                 .api_get_cidreq_params($cidReq, $id_session, $gidReq).
                 '&parent_id='.$parent_id
@@ -486,7 +486,7 @@ switch ($action) {
             }
 
             if (file_exists($copyfile)) {
-                $message = get_lang('CopyAlreadyDone').'</p><p>';
+                $message = get_lang('There are a file with the same name in your private user file area. Do you want replace it?').'</p><p>';
                 $message .= '<a class = "btn btn-default" '
                     .'href="'.api_get_self().'?'.api_get_cidreq().'&amp;id='
                     .$parent_id.'">'
@@ -504,10 +504,10 @@ switch ($action) {
                 }
                 if (isset($_GET['copy']) && $_GET['copy'] === 'yes') {
                     if (!copy($file, $copyfile)) {
-                        Display::addFlash(Display::return_message(get_lang('CopyFailed'), 'error'));
+                        Display::addFlash(Display::return_message(get_lang('Copy failed'), 'error'));
                     } else {
                         Display::addFlash(Display::return_message(
-                            get_lang('OverwritenFile').' '.$file_link,
+                            get_lang('File replaced').' '.$file_link,
                             'confirmation',
                             false
                         ));
@@ -515,10 +515,10 @@ switch ($action) {
                 }
             } else {
                 if (!copy($file, $copyfile)) {
-                    Display::addFlash(Display::return_message(get_lang('CopyFailed'), 'error'));
+                    Display::addFlash(Display::return_message(get_lang('Copy failed'), 'error'));
                 } else {
                     Display::addFlash(
-                        Display::return_message(get_lang('CopyMade').' '.$file_link, 'confirmation', false)
+                        Display::return_message(get_lang('The copy has been made').' '.$file_link, 'confirmation', false)
                     );
                 }
             }
@@ -543,7 +543,7 @@ switch ($action) {
         $fileInfo = pathinfo($file);
         if ($fileInfo['extension'] == $formatTarget) {
             Display::addFlash(Display::return_message(
-                get_lang('ConversionToSameFileFormat'),
+                get_lang('Conversion to same file format. Please choose another.'),
                 'warning'
             ));
         } elseif (
@@ -551,7 +551,7 @@ switch ($action) {
             !(in_array($formatTarget, DocumentManager::getJodconverterExtensionList('to', $formatType)))
         ) {
             Display::addFlash(Display::return_message(
-                get_lang('FileFormatNotSupported'),
+                get_lang('File format not supported'),
                 'warning'
             ));
         } else {
@@ -562,7 +562,7 @@ switch ($action) {
             $obj = new OpenofficePresentation(true);
             if (file_exists($convertedFile)) {
                 Display::addFlash(Display::return_message(
-                    get_lang('FileExists'),
+                    get_lang('The operation is impossible, a file with this name already exists.'),
                     'error'
                 ));
             } else {
@@ -573,7 +573,7 @@ switch ($action) {
                 );
                 if (empty($result)) {
                     Display::addFlash(Display::return_message(
-                        get_lang('CopyFailed'),
+                        get_lang('Copy failed'),
                         'error'
                     ));
                 } else {
@@ -581,14 +581,14 @@ switch ($action) {
                     $id_session = api_get_session_id();
                     $gidReq = Security::remove_XSS($_GET['gidReq']);
                     $file_link = Display::url(
-                        get_lang('SeeFile'),
+                        get_lang('See file'),
                         api_get_path(WEB_CODE_PATH)
                         .'document/showinframes.php?'
                         .api_get_cidreq_params($cidReq, $id_session, $gidReq)
                         .'&id='.current($result)
                     );
                     Display::addFlash(Display::return_message(
-                        get_lang('CopyMade').' '.$file_link,
+                        get_lang('The copy has been made').' '.$file_link,
                         'confirmation',
                         false
                     ));
@@ -787,7 +787,7 @@ if (isset($_GET['curdirpath']) && $_GET['curdirpath'] == '/certificates' &&
 
 $htmlHeadXtra[] = '<script>
 function confirmation (name) {
-    if (confirm(" '.addslashes(get_lang('AreYouSureToDeleteJS')).' "+ name + " ?")) {
+    if (confirm(" '.addslashes(get_lang('Are you sure to delete')).' "+ name + " ?")) {
         return true;
     } else {
         return false;
@@ -843,7 +843,7 @@ DocumentManager::createUserSharedFolder(api_get_user_id(), $courseInfo, $session
 if ($is_certificate_mode) {
     $interbreadcrumb[] = [
         'url' => '../gradebook/index.php?'.api_get_cidreq(),
-        'name' => get_lang('Gradebook'),
+        'name' => get_lang('Assessments'),
     ];
 } else {
     if ((isset($_GET['id']) && $_GET['id'] != 0) || isset($_GET['curdirpath']) || isset($_GET['createdir'])) {
@@ -897,7 +897,7 @@ if (empty($document_data['parents'])) {
 }
 
 if (isset($_GET['createdir'])) {
-    $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('CreateDir')];
+    $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Create folder')];
 }
 
 $documentAndFolders = DocumentManager::getAllDocumentData(
@@ -1098,14 +1098,14 @@ if ($isAllowedToEdit || $groupMemberWithUploadRights ||
 
                     Display::addFlash(
                         Display::return_message(
-                            get_lang('CloudLinkMoved'),
+                            get_lang('Cloud link moved'),
                             'success'
                         )
                     );
                 } else {
                     Display::addFlash(
                         Display::return_message(
-                            get_lang('UrlAlreadyExists'),
+                            get_lang('This URL already exists'),
                             'error'
                         )
                     );
@@ -1141,11 +1141,11 @@ if ($isAllowedToEdit || $groupMemberWithUploadRights ||
                     $em->persist($document);
                     $em->flush();
 
-                    Display::addFlash(Display::return_message(get_lang('DirMv'), 'confirmation'));
+                    Display::addFlash(Display::return_message(get_lang('Element moved'), 'confirmation'));
                 }
             }
         } else {
-            Display::addFlash(Display::return_message(get_lang('Impossible'), 'error'));
+            Display::addFlash(Display::return_message(get_lang('Operation impossible'), 'error'));
         }
     }
 }
@@ -1192,7 +1192,7 @@ if ($isAllowedToEdit ||
                     case 'set_visible':
                         $repo->updateVisibility($document, $defaultVisibility);
                         $messages .= Display::return_message(
-                            get_lang('VisibilityChanged').': '.$data['title'],
+                            get_lang('The visibility has been changed.').': '.$data['title'],
                             'confirmation'
                         );
                         break;
@@ -1212,7 +1212,7 @@ if ($isAllowedToEdit ||
                                         $sessionId
                                     )) {
                                         $messages .= Display::return_message(
-                                            get_lang('CantDeleteReadonlyFiles'),
+                                            get_lang('Cannot delete files that are configured in read-only mode.'),
                                             'error'
                                         );
                                         break 2;
@@ -1233,7 +1233,7 @@ if ($isAllowedToEdit ||
                             );
                             if (!empty($deleteDocument)) {
                                 $messages .= Display::return_message(
-                                    get_lang('DocDeleted').': '.$data['title'],
+                                    get_lang('Document deleted').': '.$data['title'],
                                     'confirmation'
                                 );
                             }
@@ -1241,12 +1241,12 @@ if ($isAllowedToEdit ||
                             // Cloud Links
                             if (DocumentManager::deleteCloudLink($_course, $documentId)) {
                                 $messages .= Display::return_message(
-                                    get_lang('CloudLinkDeleted'),
+                                    get_lang('Cloud link deleted'),
                                     'confirmation'
                                 );
                             } else {
                                 $messages .= Display::return_message(
-                                    get_lang('CloudLinkDeleteError'),
+                                    get_lang('Error deleting the cloud link.'),
                                     'error'
                                 );
                             }
@@ -1274,7 +1274,7 @@ if ($isAllowedToEdit ||
         // Needed for directory creation
         $post_dir_name = $_POST['dirname'];
         if ($post_dir_name == '../' || $post_dir_name == '.' || $post_dir_name == '..') {
-            $message = Display::return_message(get_lang('CannotCreateDir'), 'error');
+            $message = Display::return_message(get_lang('CannotCreate folder'), 'error');
         } else {
             // dir_id is the parent folder id.
             if (!empty($_POST['dir_id'])) {
@@ -1321,12 +1321,12 @@ if ($isAllowedToEdit ||
 
             if (!empty($newFolderData)) {
                 $message = Display::return_message(
-                    get_lang('DirCr').' '.$newFolderData->getTitle(),
+                    get_lang('Folder created').' '.$newFolderData->getTitle(),
                     'confirmation'
                 );
             } else {
                 $message = Display::return_message(
-                    get_lang('CannotCreateDir'),
+                    get_lang('CannotCreate folder'),
                     'error'
                 );
             }
@@ -1373,7 +1373,7 @@ if ($isAllowedToEdit) {
         /** @var CDocument $document */
         $document = $repo->find($update_id);
         $repo->updateVisibility($document, $defaultVisibility);
-        Display::addFlash(Display::return_message(get_lang('VisibilityChanged'), 'confirmation'));
+        Display::addFlash(Display::return_message(get_lang('The visibility has been changed.'), 'confirmation'));
 
         header('Location: '.$currentUrl);
         exit;
@@ -1394,15 +1394,15 @@ if ($isAllowedToEdit ||
             <form name="set_document_as_new_template" class="form-horizontal" enctype="multipart/form-data"
                 action="'.api_get_self().'?add_as_template='.$document_id_for_template.'" method="post">
                 <fieldset>
-                    <legend>'.get_lang('AddAsTemplate').'</legend>
+                    <legend>'.get_lang('Add as a template').'</legend>
                     <div class="form-group">
-                        <label for="template_title" class="col-sm-2 control-label">'.get_lang('TemplateName').'</label>
+                        <label for="template_title" class="col-sm-2 control-label">'.get_lang('Template name').'</label>
                         <div class="col-sm-10">
                             <input type="text" class="form-control" id="template_title" name="template_title">
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="template_image" class="col-sm-2 control-label">'.get_lang('TemplateImage').'</label>
+                        <label for="template_image" class="col-sm-2 control-label">'.get_lang("Template's icon").'</label>
                         <div class="col-sm-10">
                             <input type="file" name="template_image" id="template_image">
                         </div>
@@ -1410,7 +1410,7 @@ if ($isAllowedToEdit ||
                     <div class="form-group">
                         <div class="col-sm-offset-2 col-sm-10">
                             <button type="submit" name="create_template" class="btn btn-primary">'
-                                .get_lang('CreateTemplate').'
+                                .get_lang('Create template').'
                             </button>
                         </div>
                     </div>
@@ -1467,7 +1467,7 @@ if ($isAllowedToEdit ||
             $new_file_name
         );
         Display::addFlash(
-            Display::return_message(get_lang('DocumentSetAsTemplate'), 'confirmation')
+            Display::return_message(get_lang('Document set as a new template'), 'confirmation')
         );
     }
 
@@ -1480,7 +1480,7 @@ if ($isAllowedToEdit ||
         );
 
         Display::addFlash(
-            Display::return_message(get_lang('DocumentUnsetAsTemplate'), 'confirmation')
+            Display::return_message(get_lang('Document unset as template'), 'confirmation')
         );
     }
 }
@@ -1497,7 +1497,7 @@ if (isset($_GET['curdirpath']) &&
         $document_id = Security::remove_XSS($_GET['set_certificate']); // document id
         $courseInfoTemp = api_get_course_info($course_id);
         DocumentManager::attach_gradebook_certificate($courseInfoTemp['real_id'], $document_id);
-        $message = Display::return_message(get_lang('IsDefaultCertificate'), 'normal');
+        $message = Display::return_message(get_lang('Certificate set to default'), 'normal');
         Display::addFlash(
             $message
         );
@@ -1585,7 +1585,7 @@ if ($isAllowedToEdit ||
         $actionsLeft .= Display::url(
             Display::return_icon(
                 'new_document.png',
-                get_lang('CreateDoc'),
+                get_lang('Create a rich media page / activity'),
                 '',
                 ICON_SIZE_MEDIUM
             ),
@@ -1603,7 +1603,7 @@ if ($isAllowedToEdit ||
             } else {
                 $actionsLeft .= Display::return_icon(
                     'new_draw_na.png',
-                    get_lang('BrowserDontSupportsSVG'),
+                    get_lang('Your browser does not support SVG files. To use the drawing tool you must have an advanced browser such as Firefox or Chrome'),
                     '',
                     ICON_SIZE_MEDIUM
                 );
@@ -1615,7 +1615,7 @@ if ($isAllowedToEdit ||
             $actionsLeft .= Display::url(
                 Display::return_icon(
                     'new_paint.png',
-                    get_lang('PhotoRetouching'),
+                    get_lang('Photo retouching'),
                     '',
                     ICON_SIZE_MEDIUM
                 ),
@@ -1627,7 +1627,7 @@ if ($isAllowedToEdit ||
         // Record an image clip from my webcam
         if (api_get_setting('enable_webcam_clip') == 'true') {
             $actionsLeft .= Display::url(
-                Display::return_icon('webcam.png', get_lang('WebCamClip'), '', ICON_SIZE_MEDIUM),
+                Display::return_icon('webcam.png', get_lang('Webcam Clip'), '', ICON_SIZE_MEDIUM),
                 api_get_path(WEB_CODE_PATH).'document/webcam_clip.php?'.api_get_cidreq().'&id='.$document_id
             );
         }
@@ -1635,7 +1635,7 @@ if ($isAllowedToEdit ||
         // Record audio (nanogong)
         if (api_get_setting('enable_record_audio') === 'true') {
             $actionsLeft .= Display::url(
-                Display::return_icon('new_recording.png', get_lang('RecordMyVoice'), '', ICON_SIZE_MEDIUM),
+                Display::return_icon('new_recording.png', get_lang('Record my voice'), '', ICON_SIZE_MEDIUM),
                 api_get_path(WEB_CODE_PATH).'document/record_audio.php?'.api_get_cidreq().'&id='.$document_id
             );
         }
@@ -1643,7 +1643,7 @@ if ($isAllowedToEdit ||
         // Create new audio from text
         if (api_get_setting('enabled_text2audio') == 'true') {
             $actionsLeft .= Display::url(
-                Display::return_icon('new_sound.png', get_lang('CreateAudio'), '', ICON_SIZE_MEDIUM),
+                Display::return_icon('new_sound.png', get_lang('Create audio'), '', ICON_SIZE_MEDIUM),
                 api_get_path(WEB_CODE_PATH).'document/create_audio.php?'.api_get_cidreq().'&id='.$document_id
             );
         }
@@ -1654,7 +1654,7 @@ if ($isAllowedToEdit ||
         $actionsLeft .= Display::url(
             Display::return_icon(
                 'new_certificate.png',
-                get_lang('CreateCertificate'),
+                get_lang('Create certificate'),
                 '',
                 ICON_SIZE_MEDIUM
             ),
@@ -1666,13 +1666,13 @@ if ($isAllowedToEdit ||
     // File upload link
     if ($is_certificate_mode) {
         $actionsLeft .= Display::url(
-            Display::return_icon('upload_certificate.png', get_lang('UploadCertificate'), '', ICON_SIZE_MEDIUM),
+            Display::return_icon('upload_certificate.png', get_lang('Upload certificate'), '', ICON_SIZE_MEDIUM),
             api_get_path(WEB_CODE_PATH).'document/upload.php?'.api_get_cidreq()
                 .'&id='.$current_folder_id.'&certificate=true'
         );
     } else {
         $actionsLeft .= Display::url(
-            Display::return_icon('upload_file.png', get_lang('UplUploadDocument'), '', ICON_SIZE_MEDIUM),
+            Display::return_icon('upload_file.png', get_lang('Upload documents'), '', ICON_SIZE_MEDIUM),
             api_get_path(WEB_CODE_PATH).'document/upload.php?'.api_get_cidreq().'&id='.$current_folder_id
         );
     }
@@ -1680,7 +1680,7 @@ if ($isAllowedToEdit ||
     if ($capturePluginInstalled && !$is_certificate_mode) {
         $actionsLeft .= '<span id="appletplace"></span>';
         $actionsLeft .= Display::url(
-            Display::return_icon('capture.png', get_lang('CatchScreenCasts'), '', ICON_SIZE_MEDIUM),
+            Display::return_icon('capture.png', get_lang('Capture screenshot/screencast'), '', ICON_SIZE_MEDIUM),
             '#',
             ['id' => 'jcapture']
         );
@@ -1689,7 +1689,7 @@ if ($isAllowedToEdit ||
     // Create directory
     if (!$is_certificate_mode) {
         $actionsLeft .= Display::url(
-            Display::return_icon('new_folder.png', get_lang('CreateDir'), '', ICON_SIZE_MEDIUM),
+            Display::return_icon('new_folder.png', get_lang('Create folder'), '', ICON_SIZE_MEDIUM),
             api_get_path(WEB_CODE_PATH).'document/document.php?'.api_get_cidreq().'&id='.$document_id.'&createdir=1'
         );
     }
@@ -1698,21 +1698,21 @@ if ($isAllowedToEdit ||
     $fileLinkEnabled = api_get_configuration_value('enable_add_file_link');
     if ($fileLinkEnabled && !$is_certificate_mode) {
         $actionsLeft .= Display::url(
-            Display::return_icon('clouddoc_new.png', get_lang('AddCloudLink'), '', ICON_SIZE_MEDIUM),
+            Display::return_icon('clouddoc_new.png', get_lang('Add link to Cloud file'), '', ICON_SIZE_MEDIUM),
             api_get_path(WEB_CODE_PATH).'document/add_link.php?'.api_get_cidreq().'&id='.$document_id
         );
     }
 }
 if (!isset($_GET['keyword']) && !$is_certificate_mode) {
     $actionsLeft .= Display::url(
-        Display::return_icon('slideshow.png', get_lang('ViewSlideshow'), '', ICON_SIZE_MEDIUM),
+        Display::return_icon('slideshow.png', get_lang('View Slideshow'), '', ICON_SIZE_MEDIUM),
         api_get_path(WEB_CODE_PATH).'document/slideshow.php?'.api_get_cidreq().'&curdirpath='.$curdirpathurl
     );
 }
 
 if ($isAllowedToEdit && !$is_certificate_mode) {
     $actionsLeft .= Display::url(
-        Display::return_icon('percentage.png', get_lang('DocumentQuota'), '', ICON_SIZE_MEDIUM),
+        Display::return_icon('percentage.png', get_lang('Space Available'), '', ICON_SIZE_MEDIUM),
         api_get_path(WEB_CODE_PATH).'document/document_quota.php?'.api_get_cidreq()
     );
 }
@@ -1778,7 +1778,7 @@ if (!empty($documentAndFolders)) {
 
 if (api_is_platform_admin() && api_get_configuration_value('document_manage_deleted_files')) {
     $actionsLeft .= Display::url(
-        get_lang('Recycle'),
+        get_lang('Recycle course'),
         api_get_path(WEB_CODE_PATH).'document/recycle.php?'.api_get_cidreq(),
         ['class' => 'btn btn-default']
     );
@@ -1878,17 +1878,17 @@ if (!empty($documentAndFolders)) {
         $groupMemberWithUploadRights ||
         DocumentManager::is_my_shared_folder(api_get_user_id(), $curdirpath, $sessionId)
     ) {
-        $table->set_header($column++, get_lang('Actions'), false, ['class' => 'td_actions']);
+        $table->set_header($column++, get_lang('Detail'), false, ['class' => 'td_actions']);
     }
 
-    // Actions on multiple selected documents
+    // Detail on multiple selected documents
     // TODO: Currently only delete action -> take only DELETE permission into account
 
     if (count($documentAndFolders) > 1) {
         if ($isAllowedToEdit || $groupMemberWithEditRights) {
             $form_actions = [];
-            $form_action['set_invisible'] = get_lang('SetInvisible');
-            $form_action['set_visible'] = get_lang('SetVisible');
+            $form_action['set_invisible'] = get_lang('Set invisible');
+            $form_action['set_visible'] = get_lang('Set visible');
             $form_action['delete'] = get_lang('Delete');
             $table->set_form_actions($form_action, 'ids');
         }
@@ -1945,7 +1945,7 @@ if (count($documentAndFolders) > 1) {
 }
 
 if (empty($documentAndFolders)) {
-    echo Display::return_message(get_lang('NoDocsInFolder'), 'warning');
+    echo Display::return_message(get_lang('There are no documents to be displayed.'), 'warning');
 }
 echo '
     <div id="convertModal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
@@ -1960,7 +1960,7 @@ echo '
             <div class="modal-body">
                 <form action="#" class="form-horizontal">
                     <div class="form-group">
-                        <label class="col-sm-4 control-label" for="convertSelect">'.get_lang('ConvertFormats').'</label>
+                        <label class="col-sm-4 control-label" for="convertSelect">'.get_lang('Convert format').'</label>
                         <div class="col-sm-8">
                             <select id="convertSelect">
                                 <option value="">'.get_lang('Select').'</option>

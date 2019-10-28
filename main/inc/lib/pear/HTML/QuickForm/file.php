@@ -320,7 +320,7 @@ class HTML_QuickForm_file extends HTML_QuickForm_input
 
                     if (inputFile.setCustomValidity) {
                         inputFile.setCustomValidity(
-                            inputFile.title ? inputFile.title : \''.get_lang('OnlyImagesAllowed').'\'
+                            inputFile.title ? inputFile.title : \''.get_lang('Only PNG, JPG or GIF images allowed').'\'
                         );
                     }
 

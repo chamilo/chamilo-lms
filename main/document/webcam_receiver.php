@@ -84,4 +84,4 @@ $doc_id = DocumentManager::addDocument(
     $title_to_save
 );
 $url = 'http://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['REQUEST_URI']).'/'.$documentPath;
-echo get_lang('ClipSent');
+echo get_lang('Clip sent');

@@ -135,7 +135,7 @@ function showResults($courseInfo, $weeksCount, $page)
 
     $html = '<form action="tutor.php" name="semanas" id="semanas" method="POST">
             <div class="row">
-            '.get_lang('SelectWeeksSpan').'
+            '.get_lang('Select the timespan in weeks').'
             <select name="weeksNumber" id="weeksNumber" onChange="submit();">
             <option value="7" '.(($weeksCount == 7) ? 'selected="selected"' : "").'>7 weeks</option>
             <option value="14" '.(($weeksCount == 14) ? 'selected="selected"' : "").'>14 weeks</option>

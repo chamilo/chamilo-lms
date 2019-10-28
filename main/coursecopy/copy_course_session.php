@@ -32,10 +32,10 @@ if (!api_is_allowed_to_edit() && !api_is_session_admin()) {
 $action = isset($_POST['action']) ? $_POST['action'] : '';
 $this_section = SECTION_PLATFORM_ADMIN;
 
-$nameTools = get_lang('CopyCourse');
+$nameTools = get_lang('Copy course');
 $interbreadcrumb[] = [
     'url' => api_get_path(WEB_CODE_PATH).'admin/index.php',
-    'name' => get_lang('PlatformAdmin'),
+    'name' => get_lang('Administration'),
 ];
 
 // Database Table Definitions
@@ -63,9 +63,9 @@ function make_select_session_list($name, $sessions, $attr = [])
     $output = '<select id="session" class="form-control" name="'.$name.'" '.$attributes.'>';
 
     if (count($sessions) == 0) {
-        $output .= '<option value = "0">'.get_lang('ThereIsNotStillASession').'</option>';
+        $output .= '<option value = "0">'.get_lang('There are no sessions available').'</option>';
     } else {
-        $output .= '<option value = "0">'.get_lang('SelectASession').'</option>';
+        $output .= '<option value = "0">'.get_lang('Select a session').'</option>';
     }
 
     if (is_array($sessions)) {
@@ -95,18 +95,18 @@ function display_form()
 
     // Link back to the documents overview
     $actionsLeft = '<a href="../admin/index.php">'.
-        Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('PlatformAdmin'), '', ICON_SIZE_MEDIUM).
+        Display::return_icon('back.png', get_lang('Back to').' '.get_lang('Administration'), '', ICON_SIZE_MEDIUM).
         '</a>';
 
     $html .= Display::toolbarAction('toolbar-copysession', [$actionsLeft]);
 
-    $html .= Display::return_message(get_lang('CopyCourseFromSessionToSessionExplanation'), 'warning');
+    $html .= Display::return_message(get_lang('Copy courseFromSessionToSessionExplanation'), 'warning');
 
     $html .= '<form class="form-horizontal" name="formulaire" method="post" action="'.api_get_self().'" >';
     $html .= '<div class="form-group">';
 
     // origin
-    $html .= '<label class="col-sm-2 control-label">'.get_lang('OriginCoursesFromSession').': </label>';
+    $html .= '<label class="col-sm-2 control-label">'.get_lang('Courses from the original session').': </label>';
     $html .= '<div class="col-sm-5">';
     $html .= make_select_session_list(
         'sessions_list_origin',
@@ -120,26 +120,26 @@ function display_form()
 
     //destination
     $html .= '<div class="form-group">';
-    $html .= '<label class="col-sm-2 control-label">'.get_lang('DestinationCoursesFromSession').': </label>';
+    $html .= '<label class="col-sm-2 control-label">'.get_lang('Courses from the destination session').': </label>';
     $html .= '<div class="col-sm-5" id="ajax_sessions_list_destination">';
     $html .= '<select class="form-control" name="sessions_list_destination" onchange="javascript: xajax_search_courses(this.value,\'destination\');">';
-    $html .= '<option value = "0">'.get_lang('ThereIsNotStillASession').'</option></select ></div>';
+    $html .= '<option value = "0">'.get_lang('There are no sessions available').'</option></select ></div>';
 
     $html .= '<div class="col-sm-5" id="ajax_list_courses_destination">';
     $html .= '<select id="destination" class="form-control" name="SessionCoursesListDestination[]" ></select>';
     $html .= '</div></div>';
 
     $options = '<div class="radio"><label><input type="radio" id="copy_option_1" name="copy_option" value="full_copy" checked="checked"/>';
-    $options .= get_lang('FullCopy').'</label></div>';
+    $options .= get_lang('Full copy').'</label></div>';
     $options .= '<div class="radio"><label><input type="radio" id="copy_option_2" name="copy_option" value="select_items" disabled="disabled"/>';
-    $options .= ' '.get_lang('LetMeSelectItems').'</label></div>';
+    $options .= ' '.get_lang('Let me select learning objects').'</label></div>';
 
-    $options .= '<div class="checkbox"><label><input type="checkbox" id="copy_base_content_id" name="copy_only_session_items" />'.get_lang('CopyOnlySessionItems').'</label></div>';
+    $options .= '<div class="checkbox"><label><input type="checkbox" id="copy_base_content_id" name="copy_only_session_items" />'.get_lang('Copy only session items').'</label></div>';
 
-    $html .= Display::panel($options, get_lang('TypeOfCopy'));
+    $html .= Display::panel($options, get_lang('Type of copy'));
 
     $html .= '<div class="form-group"><div class="col-sm-12">';
-    $html .= '<button class="btn btn-success" type="submit" onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES))."'".')) return false;"><em class="fa fa-files-o"></em> '.get_lang('CopyCourse').'</button>';
+    $html .= '<button class="btn btn-success" type="submit" onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang('Please confirm your choice'), ENT_QUOTES))."'".')) return false;"><em class="fa fa-files-o"></em> '.get_lang('Copy course').'</button>';
 
     // Add Security token
     $html .= '<input type="hidden" value="'.Security::get_token().'" name="sec_token">';
@@ -182,7 +182,7 @@ function search_courses($id_session, $type)
             if (!empty($id_session)) {
                 $sessions = SessionManager::get_sessions_list([], ['name', 'ASC']);
                 $select_destination .= '<select name="sessions_list_destination" class="form-control" onchange = "javascript: xajax_search_courses(this.value,\'destination\');">';
-                $select_destination .= '<option value = "0">-- '.get_lang('SelectASession').' --</option>';
+                $select_destination .= '<option value = "0">-- '.get_lang('Select a session').' --</option>';
                 foreach ($sessions as $session) {
                     if ($id_session == $session['id']) {
                         continue;
@@ -196,7 +196,7 @@ function search_courses($id_session, $type)
                 $xajax_response->addAssign('ajax_sessions_list_destination', 'innerHTML', api_utf8_encode($select_destination));
             } else {
                 $select_destination .= '<select name="sessions_list_destination" class="form-control" onchange = "javascript: xajax_search_courses(this.value,\'destination\');">';
-                $select_destination .= '<option value = "0">'.get_lang('ThereIsNotStillASession').'</option>';
+                $select_destination .= '<option value = "0">'.get_lang('There are no sessions available').'</option>';
                 $select_destination .= '</select>';
                 $xajax_response->addAssign('ajax_sessions_list_destination', 'innerHTML', api_utf8_encode($select_destination));
             }
@@ -304,10 +304,10 @@ if (Security::check_token('post') && (
             $cr = new CourseRestorer($course);
             //$cr->set_file_option($_POST['same_file_name_option']);
             $cr->restore($destination_course, $destination_session);
-            echo Display::return_message(get_lang('CopyFinished'), 'confirmation');
+            echo Display::return_message(get_lang('Copying is finished'), 'confirmation');
             display_form();
         } else {
-            echo Display::return_message(get_lang('PleaseSelectACourse'), 'confirm');
+            echo Display::return_message(get_lang('Please select a course'), 'confirm');
             display_form();
         }
     } else {
@@ -332,7 +332,7 @@ if (Security::check_token('post') && (
         if ((is_array($arr_course_origin) && count($arr_course_origin) > 0) && !empty($destination_session)) {
             //We need only one value
             if (count($arr_course_origin) > 1 || count($arr_course_destination) > 1) {
-                echo Display::return_message(get_lang('YouMustSelectACourseFromOriginalSession'), 'error');
+                echo Display::return_message(get_lang('You must select a course from original session'), 'error');
             } else {
                 //first element of the array
                 $course_code = $arr_course_origin[0];
@@ -345,15 +345,15 @@ if (Security::check_token('post') && (
                     $cr = new CourseRestorer($course);
                     $cr->restore($course_destinatination, $destination_session);
 
-                    echo Display::return_message(get_lang('CopyFinished'), 'confirm');
+                    echo Display::return_message(get_lang('Copying is finished'), 'confirm');
                     display_form();
                 } else {
-                    echo Display::return_message(get_lang('PleaseSelectACourse'), 'confirm');
+                    echo Display::return_message(get_lang('Please select a course'), 'confirm');
                     display_form();
                 }
             }
         } else {
-            echo Display::return_message(get_lang('YouMustSelectACourseFromOriginalSession'), 'error');
+            echo Display::return_message(get_lang('You must select a course from original session'), 'error');
             display_form();
         }
     }
@@ -367,7 +367,7 @@ if (Security::check_token('post') && (
 
     // Else, if a CourseSelectForm is requested, show it
     if (api_get_setting('show_glossary_in_documents') != 'none') {
-        echo Display::return_message(get_lang('ToExportDocumentsWithGlossaryYouHaveToSelectGlossary'), 'normal');
+        echo Display::return_message(get_lang('To export a document that has glossary terms with its references to the glossary, you have to make sure you include the glossary tool in the export'), 'normal');
     }
 
     $arr_course_origin = [];
@@ -389,7 +389,7 @@ if (Security::check_token('post') && (
     }
 
     if ((is_array($arr_course_origin) && count($arr_course_origin) > 0) && !empty($destination_session)) {
-        echo Display::return_message(get_lang('ToExportLearnpathWithQuizYouHaveToSelectQuiz'), 'normal');
+        echo Display::return_message(get_lang('If you want to export a course containing a test, you have to make sure the corresponding tests are included in the export, so you have to select them in the list of tests.'), 'normal');
         $course_origin = api_get_course_info($arr_course_origin[0]);
         $cb = new CourseBuilder('', $course_origin);
         $course = $cb->build($origin_session, $arr_course_origin[0], $with_base_content);
@@ -403,7 +403,7 @@ if (Security::check_token('post') && (
         echo '<div style="float:right"><a href="javascript:window.history.go(-1);">'.
             Display::return_icon(
                 'back.png',
-                get_lang('Back').' '.get_lang('To').' '.get_lang('PlatformAdmin'),
+                get_lang('Back').' '.get_lang('To').' '.get_lang('Administration'),
                 ['style' => 'vertical-align:middle']
             ).
             get_lang('Back').'</a></div>';

@@ -23,7 +23,7 @@ if (empty($messageId)) {
 
 if ($allowSocial) {
     $this_section = SECTION_SOCIAL;
-    $interbreadcrumb[] = ['url' => api_get_path(WEB_PATH).'main/social/home.php', 'name' => get_lang('SocialNetwork')];
+    $interbreadcrumb[] = ['url' => api_get_path(WEB_PATH).'main/social/home.php', 'name' => get_lang('Social network')];
 } else {
     $this_section = SECTION_MYPROFILE;
     $interbreadcrumb[] = ['url' => api_get_path(WEB_PATH).'main/auth/profile.php', 'name' => get_lang('Profile')];
@@ -33,7 +33,7 @@ $interbreadcrumb[] = ['url' => 'inbox.php', 'name' => get_lang('Messages')];
 $social_right_content = '<div class="actions">';
 if ($allowMessage) {
     $social_right_content .= '<a href="'.api_get_path(WEB_PATH).'main/messages/new_message.php">'.
-        Display::return_icon('new-message.png', get_lang('ComposeMessage')).'</a>';
+        Display::return_icon('new-message.png', get_lang('Compose message')).'</a>';
     $social_right_content .= '<a href="'.api_get_path(WEB_PATH).'main/messages/inbox.php">'.
         Display::return_icon('inbox.png', get_lang('Inbox')).'</a>';
     $social_right_content .= '<a href="'.api_get_path(WEB_PATH).'main/messages/outbox.php">'.

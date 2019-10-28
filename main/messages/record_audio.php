@@ -12,7 +12,7 @@ $htmlHeadXtra[] = '<script type="text/javascript" src="'.api_get_path(WEB_LIBRAR
 $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_PATH).'swfobject/swfobject.js"></script>';
 $htmlHeadXtra[] = api_get_js('record_audio/record_audio.js');
 
-$tpl = new Template(get_lang('ComposeMessage'), false, false, false, true);
+$tpl = new Template(get_lang('Compose message'), false, false, false, true);
 $record = $tpl->get_template('message/record_audio.tpl');
 
 $tpl->assign('user_id', api_get_user_id());

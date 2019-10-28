@@ -95,7 +95,7 @@ class Rest extends WebService
         $course = $em->find('ChamiloCoreBundle:Course', $id);
 
         if (!$course) {
-            throw new Exception(get_lang('NoCourse'));
+            throw new Exception(get_lang('This course could not be found'));
         }
 
         $this->course = $course;
@@ -119,7 +119,7 @@ class Rest extends WebService
         $session = $em->find('ChamiloCoreBundle:Session', $id);
 
         if (!$session) {
-            throw new Exception(get_lang('NoSession'));
+            throw new Exception(get_lang('The session could not be found'));
         }
 
         $this->session = $session;
@@ -138,7 +138,7 @@ class Rest extends WebService
         $apiKey = self::findUserApiKey($username, self::SERVICE_NAME);
 
         if ($apiKey != $apiKeyToValidate) {
-            throw new Exception(get_lang('InvalidApiKey'));
+            throw new Exception(get_lang('Invalid API key'));
         }
 
         return new self($username, $apiKey);
@@ -434,7 +434,7 @@ class Rest extends WebService
         );
 
         if (!$announcement) {
-            throw new Exception(get_lang('NoAnnouncement'));
+            throw new Exception(get_lang('No announcement'));
         }
 
         return [
@@ -625,7 +625,7 @@ class Rest extends WebService
         $forumInfo = get_forums($forumId, $this->course->getCode(), true, $sessionId);
 
         if (!isset($forumInfo['iid'])) {
-            throw new Exception(get_lang('NoForum'));
+            throw new Exception(get_lang('No forum'));
         }
 
         $webCoursePath = api_get_path(WEB_COURSE_PATH).$this->course->getDirectory().'/upload/forum/images/';
@@ -737,7 +737,7 @@ class Rest extends WebService
 
         $categoryNone = new CLpCategory();
         $categoryNone->setId(0);
-        $categoryNone->setName(get_lang('WithOutCategory'));
+        $categoryNone->setName(get_lang('Without category'));
         $categoryNone->setPosition(0);
 
         $categories = array_merge([$categoryNone], $categoriesTempList);
@@ -1420,7 +1420,7 @@ class Rest extends WebService
         if ($result) {
             return [
                 'status' => true,
-                'message' => get_lang('URLDeleted'),
+                'message' => get_lang('URL deleted.'),
             ];
         } else {
             return [

@@ -1,9 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-/**
- * @package chamilo.plugin.ticket
- */
 $cidReset = true;
 
 require_once __DIR__.'/../inc/global.inc.php';
@@ -14,9 +11,9 @@ $user_id = api_get_user_id();
 $isAdmin = api_is_platform_admin();
 $interbreadcrumb[] = [
     'url' => api_get_path(WEB_CODE_PATH).'ticket/tickets.php',
-    'name' => get_lang('MyTickets'),
+    'name' => get_lang('My tickets'),
 ];
-$interbreadcrumb[] = ['url' => '#', 'name' => get_lang('TicketDetail')];
+$interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Ticket details')];
 
 $disableReponseButtons = '';
 $htmlHeadXtra[] = '<script>
@@ -41,13 +38,13 @@ $(function() {
         });
 
         $(".responseyes").click(function () {
-            if(!confirm("'.get_lang('AreYouSure').' : '.strtoupper(get_lang('Yes')).'. '.get_lang('IfYouAreSureTheTicketWillBeClosed').'")){
+            if(!confirm("'.get_lang('Are you sure').' : '.strtoupper(get_lang('Yes')).'. '.get_lang('If you are certain, the ticket will be closed.').'")){
                 return false;
             }
         });
 
         $(".responseno").click(function () {
-            if(!confirm("'.get_lang('AreYouSure').' : '.strtoupper(get_lang('No')).'")){
+            if(!confirm("'.get_lang('Are you sure').' : '.strtoupper(get_lang('No')).'")){
                 return false;
             }
         });     
@@ -146,7 +143,7 @@ if (!isset($_REQUEST['ticket_id'])) {
             $ticket_id,
             $user_id
         );
-        Display::addFlash(Display::return_message(get_lang('Updated')));
+        Display::addFlash(Display::return_message(get_lang('Update successful')));
         header("Location:".api_get_self()."?ticket_id=".$ticket_id);
         exit;
     }
@@ -195,7 +192,7 @@ foreach ($messages as $message) {
     $counterLink = Display::url('#'.$counter, api_get_self().'?ticket_id='.$ticket_id.'#note-'.$counter);
 
     $messageToShow .= '<a id="note-'.$counter.'"> </a><h4>'.sprintf(
-        get_lang('UpdatedByX'),
+        get_lang('Update successfulByX'),
         $message['user_info']['complete_name_with_message_link']
     );
 
@@ -211,7 +208,7 @@ foreach ($messages as $message) {
     $counter++;
 }
 
-$subject = get_lang('ReplyShort').': '.Security::remove_XSS($ticket['ticket']['subject']);
+$subject = get_lang('Re:').': '.Security::remove_XSS($ticket['ticket']['subject']);
 
 if ($ticket['ticket']['status_id'] != TicketManager::STATUS_FORWARDED &&
     $ticket['ticket']['status_id'] != TicketManager::STATUS_CLOSE
@@ -253,7 +250,7 @@ if ($ticket['ticket']['status_id'] != TicketManager::STATUS_FORWARDED &&
                     }
 
                     $messageToSend .= sprintf(
-                        get_lang('AssignedChangeFromXToY'),
+                        get_lang('Assignee changed from %s to %s'),
                         $oldUserName,
                         $userCompleteName
                     ).'<br />';
@@ -284,7 +281,7 @@ if ($ticket['ticket']['status_id'] != TicketManager::STATUS_FORWARDED &&
                         $oldPriorityTitle = $oldPriority->getName();
                     }
                     $messageToSend .= sprintf(
-                        get_lang('PriorityChangeFromXToY'),
+                        get_lang('Priority changed from %s to %s'),
                         $oldPriorityTitle,
                         $newPriorityTitle
                     ).'<br />';
@@ -307,7 +304,7 @@ if ($ticket['ticket']['status_id'] != TicketManager::STATUS_FORWARDED &&
                     }
 
                     $messageToSend .= sprintf(
-                        get_lang('StatusChangeFromXToY'),
+                        get_lang('Status changed from %s to %s'),
                         $oldStatusTitle,
                         $newTitle
                     ).'<br />';
@@ -328,11 +325,11 @@ if ($ticket['ticket']['status_id'] != TicketManager::STATUS_FORWARDED &&
 
             TicketManager::sendNotification(
                 $ticket_id,
-                get_lang('TicketUpdated'),
+                get_lang('TicketUpdate successful'),
                 $messageToSend
             );
 
-            Display::addFlash(Display::return_message(get_lang('Saved')));
+            Display::addFlash(Display::return_message(get_lang('Saved.')));
             header("Location:".api_get_self()."?ticket_id=".$ticket_id);
             exit;
         }
@@ -350,7 +347,7 @@ $bold = '';
 if ($ticket['ticket']['status_id'] == TicketManager::STATUS_CLOSE) {
     $bold = 'style = "font-weight: bold;"';
 }
-$senderData = get_lang('AddedBy').' '.$ticket['usuario']['complete_name_with_message_link'];
+$senderData = get_lang('added by').' '.$ticket['usuario']['complete_name_with_message_link'];
 
 echo '<table width="100%" >
         <tr>
@@ -365,7 +362,7 @@ echo '<table width="100%" >
                 '#',
                 ['title' => $ticket['ticket']['start_date'], 'class' => 'boot-tooltip']
             ).'. '.
-            get_lang('TicketUpdated').' '.
+            get_lang('TicketUpdate successful').' '.
             Display::url(
                 date_to_str_ago($ticket['ticket']['sys_lastedit_datetime_from_db']),
                 '#',
@@ -387,11 +384,11 @@ echo '<table width="100%" >
 if (!empty($ticket['ticket']['assigned_last_user'])) {
     $assignedUser = api_get_user_info($ticket['ticket']['assigned_last_user']);
     echo '<tr>
-            <td><p><b>'.get_lang('AssignedTo').': </b>'.$assignedUser['complete_name_with_message_link'].'<p></td>
+            <td><p><b>'.get_lang('Assigned to').': </b>'.$assignedUser['complete_name_with_message_link'].'<p></td>
         </tr>';
 } else {
     echo '<tr>
-            <td><p><b>'.get_lang('AssignedTo').': </b>-<p></td>
+            <td><p><b>'.get_lang('Assigned to').': </b>-<p></td>
         </tr>';
 }
 if ($ticket['ticket']['course_url'] != null) {
@@ -516,11 +513,11 @@ function getForm($ticket)
             'checkbox',
             'confirmation',
             null,
-            get_lang('RequestConfirmation')
+            get_lang('Request confirmation')
         );
     }
 
-    $form->addElement('file', 'attach_1', get_lang('FilesAttachment'));
+    $form->addElement('file', 'attach_1', get_lang('Files attachments'));
     $form->addLabel(
         '',
         '<span id="filepaths"><div id="filepath_1"></div></span>'
@@ -528,13 +525,13 @@ function getForm($ticket)
     $form->addLabel(
         '',
         '<span id="link-more-attach">
-         <span class="btn btn-success" onclick="return add_image_form()">'.get_lang('AddOneMoreFile').'</span>
+         <span class="btn btn-success" onclick="return add_image_form()">'.get_lang('Add one more file').'</span>
          </span>
-         ('.sprintf(get_lang('MaximunFileSizeX'), format_file_size(api_get_setting('message_max_upload_filesize'))).')'
+         ('.sprintf(get_lang('Maximun file size: %s'), format_file_size(api_get_setting('message_max_upload_filesize'))).')'
     );
 
     $form->addElement('html', '<br/>');
-    $form->addButtonSend(get_lang('Send'));
+    $form->addButtonSend(get_lang('Send message'));
 
     return $form;
 }

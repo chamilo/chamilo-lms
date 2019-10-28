@@ -19,7 +19,7 @@ if (!api_is_allowed_to_edit(null, true)) {
 $current_course_tool = TOOL_DOCUMENT;
 $this_section = SECTION_COURSES;
 
-$tool_name = get_lang('DocumentQuota');
+$tool_name = get_lang('Space Available');
 
 $interbreadcrumb[] = ['url' => 'document.php', 'name' => get_lang('Documents')];
 
@@ -99,7 +99,7 @@ if (!empty($document_list)) {
     }
 
     $session[] = [
-        addslashes(get_lang('Teacher').': '.$user_name).' ('.format_file_size($quota_bytes).')',
+        addslashes(get_lang('Trainer').': '.$user_name).' ('.format_file_size($quota_bytes).')',
         $quotaPercentage,
     ];
     //if a sesson is active
@@ -116,13 +116,13 @@ if (!empty($document_list)) {
                 $quotaPercentage = round($quota_bytes / $total_quota_bytes, 2) * 100;
             }
         }
-        $session[] = [addslashes(sprintf(get_lang('TeacherXInSession'), $user_name)), $quotaPercentage];
+        $session[] = [addslashes(sprintf(get_lang('TrainerXInSession'), $user_name)), $quotaPercentage];
     }
 }
 
 $quotaPercentage = round(($total_quota_bytes - $used_quota_bytes) / $total_quota_bytes, 2) * 100;
 $session[] = [
-    addslashes(get_lang('ShowCourseQuotaUse')).' ('.format_file_size(
+    addslashes(get_lang('Space Available')).' ('.format_file_size(
         $total_quota_bytes - $used_quota_bytes
     ).') ',
     $quotaPercentage,
@@ -148,6 +148,6 @@ $(function() {
 </script>";
 
 $tpl = new Template($tool_name);
-$content = Display::page_subheader(get_lang('ShowCourseQuotaUse')).'<div id="chart1"></div>';
+$content = Display::page_subheader(get_lang('Space Available')).'<div id="chart1"></div>';
 $tpl->assign('content', $content);
 $tpl->display_one_col_template();

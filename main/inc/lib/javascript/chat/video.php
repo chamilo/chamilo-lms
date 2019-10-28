@@ -41,7 +41,7 @@ $htmlHeadXtra[] = '<script type="text/javascript" src="'
 $navigator = api_get_navigator();
 
 Display::addFlash(
-    Display::return_message(get_lang('FeatureDisabledBecauseOfUnmaintainedThirdPartyLibraries'), 'error')
+    Display::return_message(get_lang('This feature has been disabled because the libraries it depends on are no longer unmaintained.'), 'error')
 );
 
 $template = new Template();
@@ -61,6 +61,6 @@ $template->assign('header', $templateHeader);
 $template->assign('content', $content);
 $template->assign(
     'message',
-    Display::return_message(get_lang('YourBroswerDoesNotSupportWebRTC'), 'warning')
+    Display::return_message(get_lang('Your browser does not support native video transmission.'), 'warning')
 );
 $template->display_one_col_template();

@@ -59,11 +59,11 @@ $htmlHeadXtra[] = '<script>
 
 $interbreadcrumb[] = [
     'url' => api_get_path(WEB_PATH).'user_portal.php',
-    'name' => get_lang('MyCourses'),
+    'name' => get_lang('My courses'),
 ];
 
 // Displaying the header.
-$tool_name = $course_validation_feature ? get_lang('CreateCourseRequest') : get_lang('CreateSite');
+$tool_name = $course_validation_feature ? get_lang('Create a course request') : get_lang('Add a new course');
 
 $tpl = new Template($tool_name);
 
@@ -93,7 +93,7 @@ $form->addElement(
 $form->addFile(
     'picture',
     [
-        get_lang('AddPicture'),
+        get_lang('Add a picture'),
     ],
     [
         'id' => 'picture',
@@ -106,7 +106,7 @@ $allowed_picture_types = api_get_supported_image_extensions(false);
 
 $form->addRule(
     'picture',
-    get_lang('OnlyImagesAllowed').' ('.implode(',', $allowed_picture_types).')',
+    get_lang('Only PNG, JPG or GIF images allowed').' ('.implode(',', $allowed_picture_types).')',
     'filetype',
     $allowed_picture_types
 );
@@ -122,7 +122,7 @@ if ($countCategories >= 100) {
     $form->addElement(
         'select_ajax',
         'category_code',
-        get_lang('CourseFaculty'),
+        get_lang('Category'),
         null,
         ['url' => $url]
     );
@@ -131,7 +131,7 @@ if ($countCategories >= 100) {
         $accessUrlId,
         api_get_configuration_value('allow_base_course_category')
     );
-    $categoriesOptions = [null => get_lang('None')];
+    $categoriesOptions = [null => get_lang('none')];
 
     /** @var CourseCategory $category */
     foreach ($categories as $category) {
@@ -140,7 +140,7 @@ if ($countCategories >= 100) {
 
     $form->addSelect(
         'category_code',
-        get_lang('CourseFaculty'),
+        get_lang('Category'),
         $categoriesOptions
     );
 }
@@ -149,20 +149,20 @@ if ($countCategories >= 100) {
 $form->addText(
     'wanted_code',
     [
-        get_lang('Code'),
-        get_lang('OnlyLettersAndNumbers'),
+        get_lang('Course code'),
+        get_lang('Only letters (a-z) and numbers (0-9)'),
     ],
     '',
     [
         'maxlength' => CourseManager::MAX_COURSE_LENGTH_CODE,
         'pattern' => '[a-zA-Z0-9]+',
-        'title' => get_lang('OnlyLettersAndNumbers'),
+        'title' => get_lang('Only letters (a-z) and numbers (0-9)'),
     ]
 );
 $form->applyFilter('wanted_code', 'html_filter');
 $form->addRule(
     'wanted_code',
-    get_lang('Max'),
+    get_lang('max. 20 characters, e.g. <i>INNOV21</i>'),
     'maxlength',
     CourseManager::MAX_COURSE_LENGTH_CODE
 );
@@ -190,7 +190,7 @@ if ($course_validation_feature) {
     $form->addElement(
         'textarea',
         'target_audience',
-        get_lang('TargetAudience'),
+        get_lang('Target audience'),
         ['rows' => '3']
     );
 }
@@ -203,7 +203,7 @@ if (count($languages) === 1) {
 } else {
     $form->addSelectLanguage(
         'course_language',
-        get_lang('Ln'),
+        get_lang('Language'),
         [],
         ['style' => 'width:150px']
     );
@@ -214,7 +214,7 @@ $form->addElement(
     'checkbox',
     'exemplary_content',
     null,
-    get_lang('FillWithExemplaryContent')
+    get_lang('Fill with demo content')
 );
 
 if ($course_validation_feature) {
@@ -239,13 +239,13 @@ if ($course_validation_feature) {
             'checkbox',
             'legal',
             null,
-            get_lang('IAcceptTermsAndConditions'),
+            get_lang('I have read and I accept the Terms and Conditions'),
             1
         );
 
         $form->addRule(
             'legal',
-            get_lang('YouHaveToAcceptTermsAndConditions'),
+            get_lang('You have to accept our Terms and Conditions to proceed.'),
             'required'
         );
         // Link to terms and conditions.
@@ -257,7 +257,7 @@ if ($course_validation_feature) {
             </script>
         ';
         $link_terms_and_conditions .= Display::url(
-            get_lang('ReadTermsAndConditions'),
+            get_lang('Read the Terms and Conditions'),
             '#',
             ['onclick' => "javascript:MM_openBrWindow('$terms_and_conditions_url', 'Conditions', 'scrollbars=yes, width=800');"]
         );
@@ -273,8 +273,8 @@ if (api_get_setting('teacher_can_select_course_template') === 'true') {
         'select_ajax',
         'course_template',
         [
-            get_lang('CourseTemplate'),
-            get_lang('PickACourseAsATemplateForThisNewCourse'),
+            get_lang('Course template'),
+            get_lang('Pick a course as template for this new course'),
         ],
         null,
         ['url' => api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=search_course']
@@ -284,7 +284,7 @@ if (api_get_setting('teacher_can_select_course_template') === 'true') {
 $form->addElement('html', '</div>');
 
 // Submit button.
-$form->addButtonCreate($course_validation_feature ? get_lang('CreateThisCourseRequest') : get_lang('CreateCourseArea'));
+$form->addButtonCreate($course_validation_feature ? get_lang('Create this course request') : get_lang('Create this course'));
 
 // The progress bar of this form.
 $form->addProgress();
@@ -388,7 +388,7 @@ if ($form->validate()) {
                 }
             } else {
                 $message = Display::return_message(
-                    get_lang('CourseCreationFailed'),
+                    get_lang('The course has not been created due to an internal error.'),
                     'error',
                     false
                 );
@@ -411,7 +411,7 @@ if ($form->validate()) {
 
             if ($request_id) {
                 $course_request_info = CourseRequestManager::get_course_request_info($request_id);
-                $message = (is_array($course_request_info) ? '<strong>'.$course_request_info['code'].'</strong> : ' : '').get_lang('CourseRequestCreated');
+                $message = (is_array($course_request_info) ? '<strong>'.$course_request_info['code'].'</strong> : ' : '').get_lang('Your request for a new course has been sent successfully. You may receive a reply soon, within one or two days.');
                 $message = Display::return_message(
                     $message,
                     'confirmation',
@@ -420,7 +420,7 @@ if ($form->validate()) {
                 $message .= Display::tag(
                     'div',
                     Display::url(
-                        get_lang('Enter'),
+                        get_lang('Back to courses list'),
                         api_get_path(WEB_PATH).'user_portal.php',
                         ['class' => 'btn btn-primary']
                     ),
@@ -428,7 +428,7 @@ if ($form->validate()) {
                 );
             } else {
                 $message = Display::return_message(
-                    get_lang('CourseRequestCreationFailed'),
+                    get_lang('The course request has not been created due to an internal error.'),
                     'error',
                     false
                 );
@@ -438,7 +438,7 @@ if ($form->validate()) {
         }
     } else {
         $message = Display::return_message(
-            get_lang('CourseCodeAlreadyExists'),
+            get_lang('CourseCourse codeAlreadyExists'),
             'error',
             false
         );
@@ -447,7 +447,7 @@ if ($form->validate()) {
     }
 } else {
     if (!$course_validation_feature) {
-        $message = Display::return_message(get_lang('Explanation'));
+        $message = Display::return_message(get_lang('Once you click on "Create a course", a course is created with a section for Tests, Project based learning, Assessments, Courses, Dropbox, Agenda and much more. Logging in as teacher provides you with editing privileges for this course.'));
     }
     // Display the form.
     $formContent = $form->returnForm();

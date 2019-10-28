@@ -7,8 +7,6 @@ use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
  * Action controller for the upload process. The display scripts (web forms) redirect
  * the process here to do what needs to be done with each file.
  *
- * @package chamilo.upload
- *
  * @author Yannick Warnier <ywarnier@beeznest.org>
  */
 require_once __DIR__.'/../inc/global.inc.php';
@@ -50,11 +48,11 @@ if (isset($_POST['convert'])) {
                 if (!empty($o_ppt->error)) {
                     $errorMessage = $o_ppt->error;
                 } else {
-                    $errorMessage = get_lang('OogieUnknownError');
+                    $errorMessage = get_lang('The conversion failed for an unknown reason.<br />Please contact your administrator to get more information.');
                 }
             }
         } else {
-            $errorMessage = get_lang('OogieBadExtension');
+            $errorMessage = get_lang('Please upload presentations only. Filename extension should be .ppt or .odp');
         }
     }
 }
@@ -68,36 +66,36 @@ if (!$is_allowed_to_edit) {
     api_not_allowed(true);
 }
 
-$interbreadcrumb[] = ["url" => "../lp/lp_controller.php?action=list", "name" => get_lang("Doc")];
+$interbreadcrumb[] = ["url" => "../lp/lp_controller.php?action=list", "name" => get_lang("Document")];
 
-$nameTools = get_lang("OogieConversionPowerPoint");
+$nameTools = get_lang("Chamilo RAPID : PowerPoint conversion");
 Display :: display_header($nameTools);
-$message = get_lang("WelcomeOogieConverter");
+$message = get_lang('Welcome to Chamilo RAPID<ul type="1"><li>Browse your hard disk to find any .ppt or .odp file<li>Upload it to Oogie. It will convert it into a SCORM course.<li>You will then be allowed to add audio comments on each slide and insert test and activities between slides.');
 
 if (!empty($errorMessage)) {
     echo Display::return_message($errorMessage, 'warning', false);
 }
 
-$div_upload_limit = get_lang('UploadMaxSize').' : '.ini_get('post_max_size');
+$div_upload_limit = get_lang('Upload max size').' : '.ini_get('post_max_size');
 
 $form = new FormValidator('upload_ppt', 'POST', '?'.api_get_cidreq(), '');
-$form->addElement('header', get_lang("WelcomeOogieSubtitle"));
+$form->addElement('header', get_lang("A PowerPoint to SCORM Courses converter"));
 $form->addElement('html', Display::return_message($message, 'info', false));
 $form->addElement('file', 'user_file', [Display::return_icon('powerpoint_big.gif'), $div_upload_limit]);
-$form->addElement('checkbox', 'take_slide_name', '', get_lang('TakeSlideName'));
-$options = ChamiloApi::getDocumentConversionSizes();
-$form->addElement('select', 'slide_size', get_lang('SlideSize'), $options);
+$form->addElement('checkbox', 'take_slide_name', '', get_lang('Use the slides names as course learning object names'));
+$options = ChamiloApi::getDocumentumentConversionSizes();
+$form->addElement('select', 'slide_size', get_lang('Size of the slides'), $options);
 if (api_get_setting('search_enabled') === 'true') {
     require_once api_get_path(LIBRARY_PATH).'specific_fields_manager.lib.php';
     $specific_fields = get_specific_field_list();
-    $form->addElement('checkbox', 'index_document', '', get_lang('SearchFeatureDoIndexDocument'));
-    $form->addSelectLanguage('language', get_lang('SearchFeatureDocumentLanguage'));
+    $form->addElement('checkbox', 'index_document', '', get_lang('Index document text?ument'));
+    $form->addSelectLanguage('language', get_lang('SearchFeatureDocumentumentLanguage'));
     foreach ($specific_fields as $specific_field) {
         $form->addElement('text', $specific_field['code'], $specific_field['name'].' : ');
     }
 }
 
-$form->addButtonUpload(get_lang('ConvertToLP'), 'convert');
+$form->addButtonUpload(get_lang('Convert to course'), 'convert');
 $form->addElement('hidden', 'ppt2lp', 'true');
 $form->addProgress();
 $size = api_get_setting('service_ppt2lp', 'size');
@@ -108,6 +106,5 @@ $defaults = [
 ];
 $form->setDefaults($defaults);
 
-// display the form
 $form->display();
 Display::display_footer();

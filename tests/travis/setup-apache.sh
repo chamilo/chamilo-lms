@@ -1,6 +1,6 @@
 #!/bin/bash
 
-echo "* Preparing Apache ...";
+echo "* Start setup-apache.sh ...";
 
 sudo a2enmod rewrite actions fastcgi alias
 
@@ -16,4 +16,8 @@ sudo service apache2 restart
 
 echo "* Apache restarted";
 
+sudo cat /var/log/apache2/error.log
+
 sudo journalctl | tail
+
+echo "* End setup-apache.sh ...";

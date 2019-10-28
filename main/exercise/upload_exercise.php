@@ -6,7 +6,6 @@ use ChamiloSession as Session;
 /**
  * Upload quiz: This script shows the upload quiz feature.
  */
-
 $help_content = 'exercise_upload';
 require_once __DIR__.'/../inc/global.inc.php';
 

@@ -123,7 +123,7 @@ class UrlManager
     }
 
     /**
-     * @param string $urlId
+     * @param int $urlId
      *
      * @return int
      */

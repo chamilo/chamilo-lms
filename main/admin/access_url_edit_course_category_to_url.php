@@ -27,9 +27,9 @@ if (!api_get_multiple_access_url()) {
 }
 
 // Setting breadcrumbs
-$tool_name = get_lang('EditUserGroupToURL');
-$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('PlatformAdmin')];
-$interbreadcrumb[] = ['url' => 'access_urls.php', 'name' => get_lang('MultipleAccessURLs')];
+$tool_name = get_lang('Edit groups for one URL');
+$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('Administration')];
+$interbreadcrumb[] = ['url' => 'access_urls.php', 'name' => get_lang('Multiple access URL / Branding')];
 
 $add_type = 'multiple';
 if (isset($_REQUEST['add_type']) && $_REQUEST['add_type'] != '') {
@@ -86,11 +86,11 @@ if (isset($_POST['form_sent']) && $_POST['form_sent']) {
 
     if ($form_sent == 1) {
         if ($access_url_id == 0) {
-            Display::addFlash(Display::return_message(get_lang('SelectURL')));
+            Display::addFlash(Display::return_message(get_lang('Select a URL')));
             header('Location: access_url_edit_users_to_url.php?');
         } elseif (is_array($list)) {
             UrlManager::updateUrlRelCourseCategory($list, $access_url_id);
-            Display::addFlash(Display::return_message(get_lang('Updated')));
+            Display::addFlash(Display::return_message(get_lang('Update successful')));
             header('Location: access_urls.php');
         }
         exit;
@@ -121,12 +121,12 @@ if ($ajax_search) {
 
 if ($add_type == 'multiple') {
     $link_add_type_unique = '<a href="'.api_get_self().'?add_type=unique&access_url_id='.$access_url_id.'">'.
-        get_lang('SessionAddTypeUnique').'</a>';
-    $link_add_type_multiple = get_lang('SessionAddTypeMultiple');
+        get_lang('Single registration').'</a>';
+    $link_add_type_multiple = get_lang('Multiple registration');
 } else {
-    $link_add_type_unique = get_lang('SessionAddTypeUnique');
+    $link_add_type_unique = get_lang('Single registration');
     $link_add_type_multiple = '<a href="'.api_get_self().'?add_type=multiple&access_url_id='.$access_url_id.'">'.
-        get_lang('SessionAddTypeMultiple').'</a>';
+        get_lang('Multiple registration').'</a>';
 }
 
 $url_list = UrlManager::get_url_data();
@@ -143,9 +143,9 @@ $url_list = UrlManager::get_url_data();
     echo ' onsubmit="valide();"';
 } ?>
 >
-<?php echo get_lang('SelectUrl').' : '; ?>
+<?php echo get_lang('Select URL').' : '; ?>
 <select name="access_url_id" onchange="javascript:send();">
-<option value="0">-- <?php echo get_lang('SelectUrl'); ?> -- </option>
+<option value="0">-- <?php echo get_lang('Select URL'); ?> -- </option>
 	<?php
     $url_selected = '';
     foreach ($url_list as $url_obj) {
@@ -171,10 +171,10 @@ $url_list = UrlManager::get_url_data();
 <table border="0" cellpadding="5" cellspacing="0" width="100%">
 <!-- Users -->
 <tr>
-  <td align="center"><b><?php echo get_lang('CourseCategoryInPlatform'); ?> :</b>
+  <td align="center"><b><?php echo get_lang('Course categories available'); ?> :</b>
   </td>
   <td></td>
-  <td align="center"><b><?php printf(get_lang('CourseCategoryListInX'), $url_selected); ?></b></td>
+  <td align="center"><b><?php printf(get_lang('Course categories in %s site:'), $url_selected); ?></b></td>
 </tr>
 
 <tr>

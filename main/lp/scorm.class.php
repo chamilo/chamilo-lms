@@ -692,7 +692,7 @@ class scorm extends learnpath
         }
         if ($packageType == '') {
             Display::addFlash(
-                Display::return_message(get_lang('NotScormContent'))
+                Display::return_message(get_lang('This is not a valid SCORM ZIP file !'))
             );
 
             return false;
@@ -703,7 +703,7 @@ class scorm extends learnpath
                 error_log('New LP - Not enough space to store package');
             }
             Display::addFlash(
-                Display::return_message(get_lang('NoSpace'))
+                Display::return_message(get_lang('The upload has failed. Either you have exceeded your maximum quota, or there is not enough disk space.'))
             );
 
             return false;
@@ -712,7 +712,7 @@ class scorm extends learnpath
         if ($updateDirContents && $lpToCheck) {
             $originalPath = str_replace('/.', '', $lpToCheck->path);
             if ($originalPath != $newDir) {
-                Display::addFlash(Display::return_message(get_lang('FileError')));
+                Display::addFlash(Display::return_message(get_lang('The file to upload is not valid.')));
 
                 return false;
             }

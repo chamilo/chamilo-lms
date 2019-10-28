@@ -42,13 +42,13 @@ if (!$category) {
 
 $interbreadcrumb[] = [
     'url' => 'lp_controller.php?action=list&'.api_get_cidreq(),
-    'name' => get_lang('LearningPaths'),
+    'name' => get_lang('Learning paths'),
 ];
 $interbreadcrumb[] = ['url' => '#', 'name' => strip_tags($category->getName())];
 
 $url = api_get_self().'?'.api_get_cidreq().'&action=add_users_to_category&id='.$categoryId;
 
-$message = Display::return_message(get_lang('UserLpCategorySubscriptionDescription'));
+$message = Display::return_message(get_lang('Note that the inscription of users in a category will override the inscription of users in the Learning Path'));
 
 // Building the form for Groups
 $form = new FormValidator('lp_edit', 'post', $url);
@@ -178,7 +178,7 @@ if ($formUsers->validate()) {
 
         $em->merge($category);
         $em->flush();
-        Display::addFlash(Display::return_message(get_lang('Updated')));
+        Display::addFlash(Display::return_message(get_lang('Update successful')));
     }
 
     // Subscribing groups
@@ -194,15 +194,15 @@ if ($formUsers->validate()) {
             $categoryId,
             $groups
         );
-        Display::addFlash(Display::return_message(get_lang('Updated')));
+        Display::addFlash(Display::return_message(get_lang('Update successful')));
     }
 
     header("Location: $url");
     exit;
 } else {
     $headers = [
-        get_lang('SubscribeUsersToLpCategory'),
-        get_lang('SubscribeGroupsToLpCategory'),
+        get_lang('Subscribe users to category'),
+        get_lang('Subscribe groups to category'),
     ];
     $tabs = Display::tabs($headers, [$formUsers->toHtml(), $form->toHtml()]);
     $tpl->assign('content', $tabs);

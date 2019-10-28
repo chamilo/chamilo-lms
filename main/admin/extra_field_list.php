@@ -5,15 +5,15 @@ require_once __DIR__.'/../inc/global.inc.php';
 
 api_protect_global_admin_script();
 
-$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('PlatformAdmin')];
+$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('Administration')];
 
-$template = new Template(get_lang('ExtraFields'));
+$template = new Template(get_lang('Extra fields'));
 
 $types = ExtraField::getValidExtraFieldTypes();
 
 $table = new HTML_Table(['class' => 'table']);
 $table->setHeaderContents(0, 0, get_lang('Type'));
-$table->setHeaderContents(0, 1, get_lang('Actions'));
+$table->setHeaderContents(0, 1, get_lang('Detail'));
 $url = api_get_path(WEB_CODE_PATH).'admin/extra_fields.php?type=';
 $row = 1;
 foreach ($types as $key => $label) {

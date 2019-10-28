@@ -35,7 +35,7 @@ function validate_data($users_courses)
                         WHERE code = '".Database::escape_string($user_course['CourseCode'])."'";
                 $res = Database::query($sql);
                 if (Database::num_rows($res) == 0) {
-                    $user_course['error'] = get_lang('CodeDoesNotExists');
+                    $user_course['error'] = get_lang('This code does not exist');
                     $errors[] = $user_course;
                 } else {
                     $coursecodes[$user_course['CourseCode']] = 1;
@@ -47,7 +47,7 @@ function validate_data($users_courses)
         if (isset($user_course['Email']) && strlen($user_course['Email']) != 0) {
             $user = api_get_user_info_from_email($user_course['Email']);
             if (empty($user)) {
-                $user_course['error'] = get_lang('UnknownUser');
+                $user_course['error'] = get_lang('Unknown user');
                 $errors[] = $user_course;
             }
         }
@@ -55,7 +55,7 @@ function validate_data($users_courses)
         // 4. Check whether status is valid.
         if (isset($user_course['Status']) && strlen($user_course['Status']) != 0) {
             if ($user_course['Status'] != COURSEMANAGER && $user_course['Status'] != STUDENT) {
-                $user_course['error'] = get_lang('UnknownStatus');
+                $user_course['error'] = get_lang('Unknown status');
                 $errors[] = $user_course;
             }
         }
@@ -155,18 +155,18 @@ $this_section = SECTION_PLATFORM_ADMIN;
 // Protecting the admin section.
 api_protect_admin_script();
 
-$tool_name = get_lang('AddUsersToACourse').' CSV';
+$tool_name = get_lang('Add users to course').' CSV';
 
-$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('PlatformAdmin')];
+$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('Administration')];
 
 set_time_limit(0);
 
 // Creating the form.
 $form = new FormValidator('course_user_import');
 $form->addElement('header', '', $tool_name);
-$form->addElement('file', 'import_file', get_lang('ImportFileLocation'));
-$form->addElement('checkbox', 'subscribe', get_lang('Action'), get_lang('SubscribeUserIfNotAllreadySubscribed'));
-$form->addElement('checkbox', 'unsubscribe', '', get_lang('UnsubscribeUserIfSubscriptionIsNotInFile'));
+$form->addElement('file', 'import_file', get_lang('Import marks in an assessment'));
+$form->addElement('checkbox', 'subscribe', get_lang('Action'), get_lang('Add user in the course only if not yet in'));
+$form->addElement('checkbox', 'unsubscribe', '', get_lang('Remove user from course if his name is not in the list'));
 $form->addButtonImport(get_lang('Import'));
 $form->setDefaults(['subscribe' => '1', 'unsubscribe' => 1]);
 $errors = [];
@@ -178,19 +178,19 @@ if ($form->validate()) {
         $inserted_in_course = save_data($users_courses);
         // Build the alert message in case there were visual codes subscribed to.
         if ($_POST['subscribe']) {
-            $warn = get_lang('UsersSubscribedToBecauseVisualCode').': ';
+            $warn = get_lang('The users have been subscribed to the following courses because several courses share the same visual code').': ';
         } else {
-            $warn = get_lang('UsersUnsubscribedFromBecauseVisualCode').': ';
+            $warn = get_lang('The users have been unsubscribed from the following courses because several courses share the same visual code').': ';
         }
 
         if (!empty($inserted_in_course)) {
-            $warn = $warn.' '.get_lang('FileImported');
+            $warn = $warn.' '.get_lang('File imported');
             // The users have been inserted in more than one course.
             foreach ($inserted_in_course as $code => $info) {
                 $warn .= ' '.$info.' ('.$code.') ';
             }
         } else {
-            $warn = get_lang('ErrorsWhenImportingFile');
+            $warn = get_lang('Errors when importing file');
         }
 
         Security::clear_token();
@@ -218,7 +218,7 @@ if (count($errors) != 0) {
 // Displaying the form.
 $form->display();
 ?>
-<p><?php echo get_lang('CSVMustLookLike').' ('.get_lang('MandatoryFields').')'; ?> :</p>
+<p><?php echo get_lang('The CSV file must look like this').' ('.get_lang('Fields in <strong>bold</strong> are mandatory.').')'; ?> :</p>
 <blockquote>
 <pre>
 <b>Email</b>;<b>CourseCode</b>;<b>Status</b>
@@ -227,8 +227,8 @@ example1@example.org;course01;<?php echo COURSEMANAGER; ?>
 example2@example.org;course01;<?php echo STUDENT; ?>
 </pre>
 <?php
-echo COURSEMANAGER.': '.get_lang('Teacher').'<br />';
-echo STUDENT.': '.get_lang('Student').'<br />';
+echo COURSEMANAGER.': '.get_lang('Trainer').'<br />';
+echo STUDENT.': '.get_lang('Learner').'<br />';
 ?>
 </blockquote>
 <?php

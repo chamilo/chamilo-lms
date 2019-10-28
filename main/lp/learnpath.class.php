@@ -1784,9 +1784,9 @@ class learnpath
         $mycurrentitemid = $this->get_current_item_id();
 
         $reportingText = get_lang('Reporting');
-        $previousText = get_lang('ScormPrevious');
-        $nextText = get_lang('ScormNext');
-        $fullScreenText = get_lang('ScormExitFullScreen');
+        $previousText = get_lang('Previous');
+        $nextText = get_lang('Next');
+        $fullScreenText = get_lang('Back to normal screen');
 
         $settings = api_get_configuration_value('lp_view_settings');
         $display = isset($settings['display']) ? $settings['display'] : false;
@@ -2813,13 +2813,13 @@ class learnpath
         if ($num > 0) {
             $list[] = [
                 'order_id' => api_htmlentities(get_lang('Order'), ENT_QUOTES),
-                'id' => api_htmlentities(get_lang('InteractionID'), ENT_QUOTES),
+                'id' => api_htmlentities(get_lang('Interaction ID'), ENT_QUOTES),
                 'type' => api_htmlentities(get_lang('Type'), ENT_QUOTES),
-                'time' => api_htmlentities(get_lang('TimeFinished'), ENT_QUOTES),
-                'correct_responses' => api_htmlentities(get_lang('CorrectAnswers'), ENT_QUOTES),
-                'student_response' => api_htmlentities(get_lang('StudentResponse'), ENT_QUOTES),
+                'time' => api_htmlentities(get_lang('Time (finished at...)'), ENT_QUOTES),
+                'correct_responses' => api_htmlentities(get_lang('Correct answers'), ENT_QUOTES),
+                'student_response' => api_htmlentities(get_lang('Learner answers'), ENT_QUOTES),
                 'result' => api_htmlentities(get_lang('Result'), ENT_QUOTES),
-                'latency' => api_htmlentities(get_lang('LatencyTimeSpent'), ENT_QUOTES),
+                'latency' => api_htmlentities(get_lang('Time spent'), ENT_QUOTES),
                 'student_response_formatted' => '',
             ];
             while ($row = Database::fetch_array($res)) {
@@ -2907,11 +2907,11 @@ class learnpath
         if ($num > 0) {
             $list[] = [
                 'order_id' => api_htmlentities(get_lang('Order'), ENT_QUOTES),
-                'objective_id' => api_htmlentities(get_lang('ObjectiveID'), ENT_QUOTES),
-                'score_raw' => api_htmlentities(get_lang('ObjectiveRawScore'), ENT_QUOTES),
-                'score_max' => api_htmlentities(get_lang('ObjectiveMaxScore'), ENT_QUOTES),
-                'score_min' => api_htmlentities(get_lang('ObjectiveMinScore'), ENT_QUOTES),
-                'status' => api_htmlentities(get_lang('ObjectiveStatus'), ENT_QUOTES),
+                'objective_id' => api_htmlentities(get_lang('Objective ID'), ENT_QUOTES),
+                'score_raw' => api_htmlentities(get_lang('Objective raw score'), ENT_QUOTES),
+                'score_max' => api_htmlentities(get_lang('Objective max score'), ENT_QUOTES),
+                'score_min' => api_htmlentities(get_lang('Objective min score'), ENT_QUOTES),
+                'status' => api_htmlentities(get_lang('Objective status'), ENT_QUOTES),
             ];
             while ($row = Database::fetch_array($res)) {
                 $list[] = [
@@ -5808,7 +5808,7 @@ class learnpath
         }
         $return .= '<div id="message"></div>';
         if (count($this->items) == 0) {
-            $return .= Display::return_message(get_lang('YouShouldAddItemsBeforeAttachAudio'), 'normal');
+            $return .= Display::return_message(get_lang('You should add some items to your learning path, otherwise you won\'t be able to attach audio files to them'), 'normal');
         } else {
             $return_audio = '<table class="data_table">';
             $return_audio .= '<tr>';
@@ -5834,7 +5834,7 @@ class learnpath
                 $return .= '<div class="footer-audio">';
                 $return .= Display::button(
                     'save_audio',
-                    '<em class="fa fa-file-audio-o"></em> '.get_lang('SaveAudioAndOrganization'),
+                    '<em class="fa fa-file-audio-o"></em> '.get_lang('Save audio and organization'),
                     ['class' => 'btn btn-primary', 'type' => 'submit']
                 );
                 $return .= '</div>';
@@ -5966,7 +5966,7 @@ class learnpath
                     $audio .= '<input type="file" name="mp3file'.$arrLP[$i]['id'].'" id="mp3file" />';
                     if (!empty($arrLP[$i]['audio'])) {
                         $audio .= '<br />'.Security::remove_XSS($arrLP[$i]['audio']).'<br />
-                        <input type="checkbox" name="removemp3'.$arrLP[$i]['id'].'" id="checkbox'.$arrLP[$i]['id'].'" />'.get_lang('RemoveAudio');
+                        <input type="checkbox" name="removemp3'.$arrLP[$i]['id'].'" id="checkbox'.$arrLP[$i]['id'].'" />'.get_lang('Remove audio');
                     }
                 }
             }
@@ -6010,7 +6010,7 @@ class learnpath
                         $edit_icon .= '<a href="'.$mainUrl.'&action=edit_item&view=build&id='.$arrLP[$i]['id'].'&lp_id='.$this->lp_id.'&path_item='.$arrLP[$i]['path'].'" class="btn btn-default">';
                         $edit_icon .= Display::return_icon(
                             'edit.png',
-                            get_lang('LearnpathEditModule'),
+                            get_lang('Edit section description/name'),
                             [],
                             ICON_SIZE_TINY
                         );
@@ -6033,7 +6033,7 @@ class learnpath
                                 $forumIcon = Display::url(
                                     Display::return_icon(
                                         'forum.png',
-                                        get_lang('DissociateForumToLPItem'),
+                                        get_lang('Dissociate the forum of this learning path item'),
                                         [],
                                         ICON_SIZE_TINY
                                     ),
@@ -6049,7 +6049,7 @@ class learnpath
                                 $forumIcon = Display::url(
                                     Display::return_icon(
                                         'forum.png',
-                                        get_lang('AssociateForumToLPItem'),
+                                        get_lang('Associate a forum to this learning path item'),
                                         [],
                                         ICON_SIZE_TINY
                                     ),
@@ -6062,7 +6062,7 @@ class learnpath
                         $edit_icon .= '<a href="'.$mainUrl.'&action=edit_item&id='.$arrLP[$i]['id'].'&lp_id='.$this->lp_id.'&path_item='.$arrLP[$i]['path'].'" class="btn btn-default">';
                         $edit_icon .= Display::return_icon(
                             'edit.png',
-                            get_lang('LearnpathEditModule'),
+                            get_lang('Edit section description/name'),
                             [],
                             ICON_SIZE_TINY
                         );
@@ -6084,10 +6084,10 @@ class learnpath
                 if ($pluginCalendar) {
                     $pluginLink = $pluginUrl.
                         '&action=toggle_visibility&lp_item_id='.$arrLP[$i]['id'].'&lp_id='.$this->lp_id;
-                    $iconCalendar = Display::return_icon('agenda_na.png', get_lang('OneDay'), [], ICON_SIZE_TINY);
+                    $iconCalendar = Display::return_icon('agenda_na.png', get_lang('1 day'), [], ICON_SIZE_TINY);
                     $itemInfo = $plugin->getItemVisibility($arrLP[$i]['id']);
                     if ($itemInfo && $itemInfo['value'] == 1) {
-                        $iconCalendar = Display::return_icon('agenda.png', get_lang('OneDay'), [], ICON_SIZE_TINY);
+                        $iconCalendar = Display::return_icon('agenda.png', get_lang('1 day'), [], ICON_SIZE_TINY);
                     }
                     $pluginCalendarIcon = Display::url(
                         $iconCalendar,
@@ -6115,7 +6115,7 @@ class learnpath
                     class="btn btn-default">';
                 $delete_icon .= Display::return_icon(
                     'delete.png',
-                    get_lang('LearnpathDeleteModule'),
+                    get_lang('Delete section'),
                     [],
                     ICON_SIZE_TINY
                 );
@@ -6183,7 +6183,7 @@ class learnpath
                     $prerequisities_icon = Display::url(
                         Display::return_icon(
                             'accept.png',
-                            get_lang('LearnpathPrerequisites'),
+                            get_lang('Prerequisites'),
                             [],
                             ICON_SIZE_TINY
                         ),
@@ -6205,7 +6205,7 @@ class learnpath
                     $audio_icon = Display::url(
                         Display::return_icon(
                             'audio.png',
-                            get_lang('UplUpload'),
+                            get_lang('Upload'),
                             [],
                             ICON_SIZE_TINY
                         ),
@@ -6314,7 +6314,7 @@ class learnpath
         );
 
         if (!empty($html)) {
-            $html .= Display::return_message(get_lang('DragAndDropAnElementHere'));
+            $html .= Display::return_message(get_lang('Drag and drop an element here'));
         }
 
         return $html;
@@ -6341,7 +6341,7 @@ class learnpath
             $list .= $tree;
         } else {
             if ($drop_element_here) {
-                $list .= Display::return_message(get_lang('DragAndDropAnElementHere'));
+                $list .= Display::return_message(get_lang('Drag and drop an element here'));
             }
         }
         $list .= '</ul>';
@@ -6431,7 +6431,7 @@ class learnpath
         $actionsLeft = Display::url(
             Display::return_icon(
                 'back.png',
-                get_lang('ReturnToLearningPaths'),
+                get_lang('Back to learning paths'),
                 '',
                 ICON_SIZE_MEDIUM
             ),
@@ -6454,7 +6454,7 @@ class learnpath
         $actionsLeft .= Display::url(
             Display::return_icon(
                 'upload_audio.png',
-                get_lang('UpdateAllAudioFragments'),
+                get_lang('Add audio'),
                 '',
                 ICON_SIZE_MEDIUM
             ),
@@ -6472,7 +6472,7 @@ class learnpath
             $actionsLeft .= Display::url(
                 Display::return_icon(
                     'settings.png',
-                    get_lang('CourseSettings'),
+                    get_lang('Course settings'),
                     '',
                     ICON_SIZE_MEDIUM
                 ),
@@ -6504,7 +6504,7 @@ class learnpath
                 $actionsLeft .= Display::url(
                     Display::return_icon(
                         'user.png',
-                        get_lang('SubscribeUsersToLp'),
+                        get_lang('Subscribe users to learning path'),
                         '',
                         ICON_SIZE_MEDIUM
                     ),
@@ -6535,14 +6535,14 @@ class learnpath
         if ($showRequirementButtons) {
             $buttons = [
                 [
-                    'title' => get_lang('SetPrerequisiteForEachItem'),
+                    'title' => get_lang('Set previous step as prerequisite for each step'),
                     'href' => 'lp_controller.php?'.api_get_cidreq().'&'.http_build_query([
                         'action' => 'set_previous_step_as_prerequisite',
                         'lp_id' => $this->lp_id,
                     ]),
                 ],
                 [
-                    'title' => get_lang('ClearAllPrerequisites'),
+                    'title' => get_lang('Clear all prerequisites'),
                     'href' => 'lp_controller.php?'.api_get_cidreq().'&'.http_build_query([
                         'action' => 'clear_prerequisites',
                         'lp_id' => $this->lp_id,
@@ -6550,7 +6550,7 @@ class learnpath
                 ],
             ];
             $actionsRight = Display::groupButtonWithDropDown(
-                get_lang('PrerequisitesOptions'),
+                get_lang('Prerequisites options'),
                 $buttons,
                 true
             );
@@ -6592,7 +6592,7 @@ class learnpath
             0,
             $filepath,
             $dir,
-            get_lang('LearningPaths'),
+            get_lang('Learning paths'),
             0
         );
 
@@ -6958,14 +6958,14 @@ class learnpath
                             0
                         );
                         $return .= Display::url(
-                            get_lang('GoToThread'),
+                            get_lang('Go to thread'),
                             $link,
                             ['class' => 'btn btn-primary']
                         );
                         break;
                     case TOOL_FORUM:
                         $return .= Display::url(
-                            get_lang('GoToForum'),
+                            get_lang('Go to the forum'),
                             api_get_path(WEB_CODE_PATH).'forum/viewforum.php?'.api_get_cidreq().'&forum='.$row['path'],
                             ['class' => 'btn btn-primary']
                         );
@@ -6976,7 +6976,7 @@ class learnpath
                             $exercise->read($row['path']);
                             $return .= $exercise->description.'<br />';
                             $return .= Display::url(
-                                get_lang('GoToExercise'),
+                                get_lang('Go to exercise'),
                                 api_get_path(WEB_CODE_PATH).'exercise/overview.php?'.api_get_cidreq().'&exerciseId='.$exercise->id,
                                 ['class' => 'btn btn-primary']
                             );
@@ -7054,7 +7054,7 @@ class learnpath
                     $return .= $this->display_manipulate($item_id, $row['item_type']);
                     $return .= $this->display_item_form(
                         $row['item_type'],
-                        get_lang('EditCurrentChapter').' :',
+                        get_lang('Edit the current section').' :',
                         'edit',
                         $item_id,
                         $row
@@ -7062,7 +7062,7 @@ class learnpath
                 } else {
                     $return .= $this->display_item_form(
                         $row['item_type'],
-                        get_lang('EditCurrentChapter').' :',
+                        get_lang('Edit the current section').' :',
                         'edit_item',
                         $item_id,
                         $row
@@ -7187,16 +7187,16 @@ class learnpath
 
         $headers = [
             Display::return_icon('folder_document.png', get_lang('Documents'), [], ICON_SIZE_BIG),
-            Display::return_icon('quiz.png', get_lang('Quiz'), [], ICON_SIZE_BIG),
+            Display::return_icon('quiz.png', get_lang('Tests'), [], ICON_SIZE_BIG),
             Display::return_icon('links.png', get_lang('Links'), [], ICON_SIZE_BIG),
-            Display::return_icon('works.png', get_lang('Works'), [], ICON_SIZE_BIG),
+            Display::return_icon('works.png', get_lang('Assignments'), [], ICON_SIZE_BIG),
             Display::return_icon('forum.png', get_lang('Forums'), [], ICON_SIZE_BIG),
-            Display::return_icon('add_learnpath_section.png', get_lang('NewChapter'), [], ICON_SIZE_BIG),
+            Display::return_icon('add_learnpath_section.png', get_lang('Add section'), [], ICON_SIZE_BIG),
             Display::return_icon('certificate.png', get_lang('Certificate'), [], ICON_SIZE_BIG),
         ];
 
-        echo Display::return_message(get_lang('ClickOnTheLearnerViewToSeeYourLearningPath'), 'normal');
-        $dir = $this->display_item_form('dir', get_lang('EnterDataNewChapter'), 'add_item');
+        echo Display::return_message(get_lang('Click on the [Learner view] button to see your learning path'), 'normal');
+        $dir = $this->display_item_form('dir', get_lang('EnterDataAdd section'), 'add_item');
 
         $selected = isset($_REQUEST['lp_build_selected']) ? (int) $_REQUEST['lp_build_selected'] : 0;
 
@@ -7320,15 +7320,15 @@ class learnpath
         $defaults = [];
 
         if ($action === 'add') {
-            $legend = get_lang('CreateTheExercise');
+            $legend = get_lang('Adding a test to the course');
         } elseif ($action === 'move') {
-            $legend = get_lang('MoveTheCurrentExercise');
+            $legend = get_lang('Move the current test');
         } else {
-            $legend = get_lang('EditCurrentExecice');
+            $legend = get_lang('Edit the current test');
         }
 
         if (isset($_GET['edit']) && $_GET['edit'] == 'true') {
-            $legend .= Display::return_message(get_lang('Warning').' ! '.get_lang('WarningEditingDocument'));
+            $legend .= Display::return_message(get_lang('Warning ! ! !').' ! '.get_lang('Warning ! ! !EditingDocument'));
         }
 
         $form->addHeader($legend);
@@ -7394,7 +7394,7 @@ class learnpath
             [],
             ['id' => 'previous']
         );
-        $selectPrevious->addOption(get_lang('FirstPosition'), 0);
+        $selectPrevious->addOption(get_lang('First position'), 0);
 
         for ($i = 0; $i < count($arrLP); $i++) {
             if ($arrLP[$i]['parent_item_id'] == $parent &&
@@ -7425,9 +7425,9 @@ class learnpath
         }
 
         if ($action === 'add') {
-            $form->addButtonSave(get_lang('AddExercise'), 'submit_button');
+            $form->addButtonSave(get_lang('Add test to course'), 'submit_button');
         } else {
-            $form->addButtonSave(get_lang('EditCurrentExecice'), 'submit_button');
+            $form->addButtonSave(get_lang('Edit the current test'), 'submit_button');
         }
 
         if ($action === 'move') {
@@ -7497,15 +7497,15 @@ class learnpath
         $arrLP = $this->getItemsForForm();
         $legend = '<legend>';
         if ($action == 'add') {
-            $legend .= get_lang('CreateTheExercise');
+            $legend .= get_lang('Adding a test to the course');
         } elseif ($action == 'move') {
-            $legend .= get_lang('MoveTheCurrentExercise');
+            $legend .= get_lang('Move the current test');
         } else {
-            $legend .= get_lang('EditCurrentExecice');
+            $legend .= get_lang('Edit the current test');
         }
         if (isset($_GET['edit']) && $_GET['edit'] == 'true') {
             $legend .= Display:: return_message(
-                get_lang('Warning').' ! '.get_lang('WarningEditingDocument')
+                get_lang('Warning ! ! !').' ! '.get_lang('Warning ! ! !EditingDocument')
             );
         }
         $legend .= '</legend>';
@@ -7547,7 +7547,7 @@ class learnpath
         $return .= '<td class="label"><label for="previous">'.get_lang('Position').' :</label></td>';
         $return .= '<td class="input">';
         $return .= '<select id="previous" name="previous" size="1">';
-        $return .= '<option class="top" value="0">'.get_lang('FirstPosition').'</option>';
+        $return .= '<option class="top" value="0">'.get_lang('First position').'</option>';
 
         for ($i = 0; $i < count($arrLP); $i++) {
             if ($arrLP[$i]['parent_item_id'] == $parent && $arrLP[$i]['id'] != $id) {
@@ -7593,7 +7593,7 @@ class learnpath
 
         $return .= '<tr>';
         $return .= '<td>&nbsp; </td><td><button class="save" name="submit_button" action="edit" type="submit">'.
-            get_lang('SaveHotpotatoes').'</button></td>';
+            get_lang('Save hotpotatoes').'</button></td>';
         $return .= '</tr>';
         $return .= '</table>';
 
@@ -7656,11 +7656,11 @@ class learnpath
         unset($this->arrMenu);
 
         if ($action == 'add') {
-            $legend = get_lang('CreateTheForum');
+            $legend = get_lang('Adding a forum to the course');
         } elseif ($action == 'move') {
-            $legend = get_lang('MoveTheCurrentForum');
+            $legend = get_lang('Move the current forum');
         } else {
-            $legend = get_lang('EditCurrentForum');
+            $legend = get_lang('Edit the current forum');
         }
 
         $form = new FormValidator(
@@ -7730,7 +7730,7 @@ class learnpath
             [],
             ['id' => 'previous', 'class' => 'learnpath_item_form']
         );
-        $selectPrevious->addOption(get_lang('FirstPosition'), 0);
+        $selectPrevious->addOption(get_lang('First position'), 0);
 
         for ($i = 0; $i < count($arrLP); $i++) {
             if ($arrLP[$i]['parent_item_id'] == $parent &&
@@ -7778,9 +7778,9 @@ class learnpath
         }
 
         if ($action == 'add') {
-            $form->addButtonSave(get_lang('AddForumToCourse'), 'submit_button');
+            $form->addButtonSave(get_lang('Add forum to course'), 'submit_button');
         } else {
-            $form->addButtonSave(get_lang('EditCurrentForum'), 'submit_button');
+            $form->addButtonSave(get_lang('Edit the current forum'), 'submit_button');
         }
 
         if ($action == 'move') {
@@ -7852,11 +7852,11 @@ class learnpath
         $defaults = [];
 
         if ($action == 'add') {
-            $legend = get_lang('CreateTheForum');
+            $legend = get_lang('Adding a forum to the course');
         } elseif ($action == 'move') {
-            $legend = get_lang('MoveTheCurrentForum');
+            $legend = get_lang('Move the current forum');
         } else {
-            $legend = get_lang('EditCurrentForum');
+            $legend = get_lang('Edit the current forum');
         }
 
         $form->addHeader($legend);
@@ -7916,7 +7916,7 @@ class learnpath
             [],
             ['id' => 'previous']
         );
-        $selectPrevious->addOption(get_lang('FirstPosition'), 0);
+        $selectPrevious->addOption(get_lang('First position'), 0);
 
         for ($i = 0; $i < count($arrLP); $i++) {
             if ($arrLP[$i]['parent_item_id'] == $parent && $arrLP[$i]['id'] != $id) {
@@ -7962,11 +7962,11 @@ class learnpath
 
             $selectPrerequisites = $form->addSelect(
                 'prerequisites',
-                get_lang('LearnpathPrerequisites'),
+                get_lang('Prerequisites'),
                 [],
                 ['id' => 'prerequisites']
             );
-            $selectPrerequisites->addOption(get_lang('NoPrerequisites'), 0);
+            $selectPrerequisites->addOption(get_lang('No prerequisites'), 0);
 
             foreach ($arrHide as $key => $value) {
                 $selectPrerequisites->addOption($value['value'], $key);
@@ -7979,7 +7979,7 @@ class learnpath
             }
         }
 
-        $form->addButtonSave(get_lang('Ok'), 'submit_button');
+        $form->addButtonSave(get_lang('Validate'), 'submit_button');
 
         if ($action == 'move') {
             $form->addHidden('title', $item_title);
@@ -8171,7 +8171,7 @@ class learnpath
             ['id' => 'previous']
         );
         $padding = isset($value['padding']) ? $value['padding'] : 0;
-        $position->addOption(get_lang('FirstPosition'), 0, 'style="padding-left:'.$padding.'px;"');
+        $position->addOption(get_lang('First position'), 0, 'style="padding-left:'.$padding.'px;"');
 
         $lastPosition = null;
         foreach ($arrHide as $key => $value) {
@@ -8192,7 +8192,7 @@ class learnpath
             reset($arrLP);
         }
 
-        $form->addButtonSave(get_lang('SaveSection'), 'submit_button');
+        $form->addButtonSave(get_lang('Save section'), 'submit_button');
 
         //fix in order to use the tab
         if ($item_type === 'dir') {
@@ -8210,7 +8210,7 @@ class learnpath
             if ($item_type == 'sco') {
                 $form->addElement(
                     'html',
-                    '<script>alert("'.get_lang('WarningWhenEditingScorm').'")</script>'
+                    '<script>alert("'.get_lang('Warning ! ! !WhenEditingScorm').'")</script>'
                 );
             }
             $renderer = $form->defaultRenderer();
@@ -8346,17 +8346,17 @@ class learnpath
         unset($this->arrMenu);
 
         if ($action == 'add') {
-            $return .= get_lang('CreateTheDocument');
+            $return .= get_lang('Create a new document');
         } elseif ($action == 'move') {
-            $return .= get_lang('MoveTheCurrentDocument');
+            $return .= get_lang('Move the current document');
         } else {
-            $return .= get_lang('EditTheCurrentDocument');
+            $return .= get_lang('Edit the current document');
         }
         $return .= '</legend>';
 
         if (isset($_GET['edit']) && $_GET['edit'] == 'true') {
             $return .= Display::return_message(
-                '<strong>'.get_lang('Warning').' !</strong><br />'.get_lang('WarningEditingDocument'),
+                '<strong>'.get_lang('Warning ! ! !').' !</strong><br />'.get_lang('Warning ! ! !EditingDocument'),
                 false
             );
         }
@@ -8479,7 +8479,7 @@ class learnpath
             ['id' => 'previous']
         );
 
-        $position->addOption(get_lang('FirstPosition'), 0);
+        $position->addOption(get_lang('First position'), 0);
         foreach ($arrHide as $key => $value) {
             $padding = isset($value['padding']) ? $value['padding'] : 20;
             $position->addOption(
@@ -8573,11 +8573,11 @@ class learnpath
 
                         if ($_GET['action'] == 'add_item') {
                             $class = 'add';
-                            $text = get_lang('LPCreateDocument');
+                            $text = get_lang('Add this document to the course');
                         } else {
                             if ($_GET['action'] == 'edit_item') {
                                 $class = 'save';
-                                $text = get_lang('SaveDocument');
+                                $text = get_lang('Save document');
                             }
                         }
 
@@ -8590,7 +8590,7 @@ class learnpath
                         $defaults['content_lp'] = $content;
                     }
                 } elseif (is_numeric($extra_info)) {
-                    $form->addButtonSave(get_lang('SaveDocument'), 'submit_button');
+                    $form->addButtonSave(get_lang('Save document'), 'submit_button');
 
                     $return = $this->display_document($extra_info, true, true, true);
                     $form->addElement('html', $return);
@@ -8609,10 +8609,10 @@ class learnpath
             $form->addElement('hidden', 'description', $item_description);
         }
         if (is_numeric($extra_info)) {
-            $form->addButtonSave(get_lang('SaveDocument'), 'submit_button');
+            $form->addButtonSave(get_lang('Save document'), 'submit_button');
             $form->addElement('hidden', 'path', $extra_info);
         } elseif (is_array($extra_info)) {
-            $form->addButtonSave(get_lang('SaveDocument'), 'submit_button');
+            $form->addButtonSave(get_lang('Save document'), 'submit_button');
             $form->addElement('hidden', 'path', $extra_info['path']);
         }
         $form->addElement('hidden', 'type', TOOL_DOCUMENT);
@@ -8687,19 +8687,19 @@ class learnpath
         unset($this->arrMenu);
 
         if ($action === 'add') {
-            $formHeader = get_lang('CreateTheDocument');
+            $formHeader = get_lang('Create a new document');
         } else {
-            $formHeader = get_lang('EditTheCurrentDocument');
+            $formHeader = get_lang('Edit the current document');
         }
 
         if ('edit' === $action) {
             $urlAudioIcon = Display::url(
-                Display::return_icon('audio.png', get_lang('CreateReadOutText'), [], ICON_SIZE_TINY),
+                Display::return_icon('audio.png', get_lang('Create read-out text'), [], ICON_SIZE_TINY),
                 api_get_path(WEB_CODE_PATH).'lp/lp_controller.php?'.api_get_cidreq().'&lp_id='.$this->lp_id.'&'
                     .http_build_query(['view' => 'build', 'id' => $id, 'action' => 'add_audio'])
             );
         } else {
-            $urlAudioIcon = Display::return_icon('audio.png', get_lang('CreateReadOutText'), [], ICON_SIZE_TINY);
+            $urlAudioIcon = Display::return_icon('audio.png', get_lang('Create read-out text'), [], ICON_SIZE_TINY);
         }
 
         $form = new FormValidator(
@@ -8712,7 +8712,7 @@ class learnpath
         $form->addHeader($formHeader);
         $form->addHtml(
             Display::return_message(
-                sprintf(get_lang('FrmReadOutTextIntro'), $urlAudioIcon),
+                sprintf(get_lang('You need attach a audio file according to the text, clicking on the %s icon.'), $urlAudioIcon),
                 'normal',
                 false
             )
@@ -8827,7 +8827,7 @@ class learnpath
             get_lang('Position'),
             []
         );
-        $position->addOption(get_lang('FirstPosition'), 0);
+        $position->addOption(get_lang('First position'), 0);
 
         foreach ($arrHide as $key => $value) {
             $padding = isset($value['padding']) ? $value['padding'] : 20;
@@ -8876,9 +8876,9 @@ class learnpath
                     }
 
                     if ($_GET['action'] == 'add_item') {
-                        $text = get_lang('LPCreateDocument');
+                        $text = get_lang('Add this document to the course');
                     } else {
-                        $text = get_lang('SaveDocument');
+                        $text = get_lang('Save document');
                     }
 
                     $form->addTextarea('content_lp', get_lang('Content'), ['rows' => 20]);
@@ -8889,7 +8889,7 @@ class learnpath
                     $defaults['content_lp'] = $content;
                 }
             } elseif (is_numeric($extra_info)) {
-                $form->addButtonSave(get_lang('SaveDocument'), 'submit_button');
+                $form->addButtonSave(get_lang('Save document'), 'submit_button');
 
                 $return = $this->display_document($extra_info, true, true, true);
                 $form->addElement('html', $return);
@@ -9099,11 +9099,11 @@ class learnpath
         unset($this->arrMenu);
 
         if ($action == 'add') {
-            $legend = get_lang('CreateTheLink');
+            $legend = get_lang('Adding a link to the course');
         } elseif ($action == 'move') {
-            $legend = get_lang('MoveCurrentLink');
+            $legend = get_lang('Move the current link');
         } else {
-            $legend = get_lang('EditCurrentLink');
+            $legend = get_lang('Edit the current link');
         }
 
         $form->addHeader($legend);
@@ -9170,7 +9170,7 @@ class learnpath
             [],
             ['id' => 'previous', 'class' => 'learnpath_item_form']
         );
-        $selectPrevious->addOption(get_lang('FirstPosition'), 0);
+        $selectPrevious->addOption(get_lang('First position'), 0);
 
         for ($i = 0; $i < count($arrLP); $i++) {
             if ($arrLP[$i]['parent_item_id'] == $parent && $arrLP[$i]['id'] != $id) {
@@ -9194,7 +9194,7 @@ class learnpath
                 $urlAttributes['disabled'] = 'disabled';
             }
 
-            $form->addElement('url', 'url', get_lang('Url'), $urlAttributes);
+            $form->addElement('url', 'url', get_lang('URL'), $urlAttributes);
             $defaults['url'] = $item_url;
             $arrHide = [];
             for ($i = 0; $i < count($arrLP); $i++) {
@@ -9205,9 +9205,9 @@ class learnpath
         }
 
         if ($action == 'add') {
-            $form->addButtonSave(get_lang('AddLinkToCourse'), 'submit_button');
+            $form->addButtonSave(get_lang('Add link to course'), 'submit_button');
         } else {
-            $form->addButtonSave(get_lang('EditCurrentLink'), 'submit_button');
+            $form->addButtonSave(get_lang('Edit the current link'), 'submit_button');
         }
 
         if ($action == 'move') {
@@ -9246,7 +9246,7 @@ class learnpath
         $course_id = api_get_course_int_id();
         $tbl_publication = Database::get_course_table(TABLE_STUDENT_PUBLICATION);
 
-        $item_title = get_lang('Student_publication');
+        $item_title = get_lang('Assignments');
         if ($id != 0 && is_array($extra_info)) {
             $item_title = stripslashes($extra_info['title']);
             $item_description = stripslashes($extra_info['description']);
@@ -9277,11 +9277,11 @@ class learnpath
         $form = new FormValidator('frm_student_publication', 'post', '#');
 
         if ($action == 'add') {
-            $form->addHeader(get_lang('Student_publication'));
+            $form->addHeader(get_lang('Assignments'));
         } elseif ($action == 'move') {
-            $form->addHeader(get_lang('MoveCurrentStudentPublication'));
+            $form->addHeader(get_lang('Move the current assignment'));
         } else {
-            $form->addHeader(get_lang('EditCurrentStudentPublication'));
+            $form->addHeader(get_lang('Edit the current assignment'));
         }
 
         if ($action != 'move') {
@@ -9341,7 +9341,7 @@ class learnpath
         $previousSelect = $form->addSelect(
             'previous',
             get_lang('Position'),
-            ['0' => get_lang('FirstPosition')],
+            ['0' => get_lang('First position')],
             ['id' => 'previous', 'class' => 'learnpath_item_form']
         );
 
@@ -9361,9 +9361,9 @@ class learnpath
         }
 
         if ($action == 'add') {
-            $form->addButtonCreate(get_lang('AddAssignmentToCourse'), 'submit_button');
+            $form->addButtonCreate(get_lang('Add assignment to course'), 'submit_button');
         } else {
-            $form->addButtonCreate(get_lang('EditCurrentStudentPublication'), 'submit_button');
+            $form->addButtonCreate(get_lang('Edit the current assignment'), 'submit_button');
         }
 
         if ($action == 'move') {
@@ -9448,7 +9448,7 @@ class learnpath
             $return .= Display::url(
                 Display::return_icon(
                     'accept.png',
-                    get_lang('LearnpathPrerequisites'),
+                    get_lang('Prerequisites'),
                     [],
                     ICON_SIZE_SMALL
                 ),
@@ -9608,7 +9608,7 @@ class learnpath
                     $return .= $this->display_manipulate($item_id, $row['item_type']);
                     $return .= $this->display_item_form(
                         $row['item_type'],
-                        get_lang('MoveCurrentChapter'),
+                        get_lang('Move the current section'),
                         'move',
                         $item_id,
                         $row
@@ -9671,16 +9671,16 @@ class learnpath
         $row = Database::fetch_array($result);
         $prerequisiteId = $row['prerequisite'];
         $return = '<legend>';
-        $return .= get_lang('AddEditPrerequisites');
+        $return .= get_lang('Add/edit prerequisites');
         $return .= '</legend>';
         $return .= '<form method="POST">';
         $return .= '<div class="table-responsive">';
         $return .= '<table class="table table-hover">';
         $return .= '<thead>';
         $return .= '<tr>';
-        $return .= '<th>'.get_lang('LearnpathPrerequisites').'</th>';
-        $return .= '<th width="140">'.get_lang('Minimum').'</th>';
-        $return .= '<th width="140">'.get_lang('Maximum').'</th>';
+        $return .= '<th>'.get_lang('Prerequisites').'</th>';
+        $return .= '<th width="140">'.get_lang('minimum').'</th>';
+        $return .= '<th width="140">'.get_lang('maximum').'</th>';
         $return .= '</tr>';
         $return .= '</thead>';
 
@@ -9688,9 +9688,9 @@ class learnpath
         $return .= '<tbody>';
         $return .= '<tr>';
         $return .= '<td colspan="3">';
-        $return .= '<div class="radio learnpath"><label for="idNone">';
-        $return .= '<input checked="checked" id="idNone" name="prerequisites" type="radio" />';
-        $return .= get_lang('None').'</label>';
+        $return .= '<div class="radio learnpath"><label for="idnone">';
+        $return .= '<input checked="checked" id="idnone" name="prerequisites" type="radio" />';
+        $return .= get_lang('none').'</label>';
         $return .= '</div>';
         $return .= '</tr>';
 
@@ -9748,7 +9748,7 @@ class learnpath
             $return .= '</td>';
 
             if ($item['item_type'] == TOOL_QUIZ) {
-                // lets update max_score Quiz information depending of the Quiz Advanced properties
+                // lets update max_score Tests information depending of the Tests Advanced properties
                 $lpItemObj = new LpItem($course_id, $item['id']);
                 $exercise = new Exercise($course_id);
                 $exercise->read($lpItemObj->path);
@@ -9823,7 +9823,7 @@ class learnpath
         $return .= '</div>';
         $return .= '<div class="form-group">';
         $return .= '<button class="btn btn-primary" name="submit_button" type="submit">'.
-            get_lang('ModifyPrerequisites').'</button>';
+            get_lang('Save prerequisites settings').'</button>';
         $return .= '</form>';
 
         return $return;
@@ -9853,7 +9853,7 @@ class learnpath
         $rs = Database::query($sql);
         $return = '';
         $return .= '<select name="prerequisites" class="form-control">';
-        $return .= '<option value="0">'.get_lang('None').'</option>';
+        $return .= '<option value="0">'.get_lang('none').'</option>';
         if (Database::num_rows($rs) > 0) {
             while ($row = Database::fetch_array($rs)) {
                 if ($row['id'] == $lp_id) {
@@ -9895,8 +9895,8 @@ class learnpath
 
         $headers = [
             get_lang('Files'),
-            get_lang('CreateTheDocument'),
-            get_lang('CreateReadOutText'),
+            get_lang('Create a new document'),
+            get_lang('Create read-out text'),
             get_lang('Upload'),
         ];
 
@@ -9929,26 +9929,26 @@ class learnpath
             $form->createElement(
                 'radio',
                 'if_exists',
-                get_lang('UplWhatIfFileExists'),
-                get_lang('UplDoNothing'),
+                get_lang('If file exists:'),
+                get_lang('Do nothing'),
                 'nothing'
             ),
             $form->createElement(
                 'radio',
                 'if_exists',
                 null,
-                get_lang('UplOverwriteLong'),
+                get_lang('Overwrite the existing file'),
                 'overwrite'
             ),
             $form->createElement(
                 'radio',
                 'if_exists',
                 null,
-                get_lang('UplRenameLong'),
+                get_lang('Rename the uploaded file if it exists'),
                 'rename'
             ),
         ];
-        $form->addGroup($group, null, get_lang('UplWhatIfFileExists'));
+        $form->addGroup($group, null, get_lang('If file exists:'));
 
         $fileExistsOption = api_get_setting('document_if_file_exists_option');
         $defaultFileExistsOption = 'rename';
@@ -9962,7 +9962,7 @@ class learnpath
             'checkbox',
             'unzip',
             get_lang('Options'),
-            get_lang('Uncompress')
+            get_lang('Uncompress zip')
         );
 
         $url = api_get_path(WEB_AJAX_PATH).'document.ajax.php?'.api_get_cidreq().'&a=upload_file&curdirpath=';
@@ -10061,7 +10061,7 @@ class learnpath
                     'category_id',
                     get_lang('Category'),
                     $options,
-                    ['placeholder' => get_lang('SelectAnOption')]
+                    ['placeholder' => get_lang('Please select an option')]
                 );
             }
         }
@@ -10074,7 +10074,7 @@ class learnpath
         $return .= '<li class="lp_resource_element">';
         $return .= Display::return_icon('new_exercice.png');
         $return .= '<a href="'.api_get_path(WEB_CODE_PATH).'exercise/exercise_admin.php?'.api_get_cidreq().'&lp_id='.$this->lp_id.'">'.
-            get_lang('NewExercise').'</a>';
+            get_lang('New test').'</a>';
         $return .= '</li>';
 
         $previewIcon = Display::return_icon(
@@ -10216,8 +10216,8 @@ class learnpath
         <ul class="lp_resource">
             <li class="lp_resource_element">
                 '.Display::return_icon('linksnew.gif').'
-                <a href="'.api_get_path(WEB_CODE_PATH).'link/link.php?'.$courseIdReq.'&action=addlink&lp_id='.$this->lp_id.'" title="'.get_lang('LinkAdd').'">'.
-                get_lang('LinkAdd').'
+                <a href="'.api_get_path(WEB_CODE_PATH).'link/link.php?'.$courseIdReq.'&action=addlink&lp_id='.$this->lp_id.'" title="'.get_lang('Add a link').'">'.
+                get_lang('Add a link').'
                 </a>
             </li>';
 
@@ -10274,7 +10274,7 @@ class learnpath
         $return .= '<li class="lp_resource_element">';
         $return .= Display::return_icon('works_new.gif');
         $return .= ' <a href="'.api_get_self().'?'.api_get_cidreq().'&action=add_item&type='.TOOL_STUDENTPUBLICATION.'&lp_id='.$this->lp_id.'">'.
-            get_lang('AddAssignmentPage').'</a>';
+            get_lang('Add the Assignments tool to the course').'</a>';
         $return .= '</li>';
 
         require_once api_get_path(SYS_CODE_PATH).'work/work.lib.php';
@@ -10358,13 +10358,13 @@ class learnpath
         $return .= '<li class="lp_resource_element">';
         $return .= Display::return_icon('new_forum.png');
         $return .= Display::url(
-            get_lang('CreateANewForum'),
+            get_lang('Create a new forum'),
             api_get_path(WEB_CODE_PATH).'forum/index.php?'.api_get_cidreq().'&'.http_build_query([
                 'action' => 'add',
                 'content' => 'forum',
                 'lp_id' => $this->lp_id,
             ]),
-            ['title' => get_lang('CreateANewForum')]
+            ['title' => get_lang('Create a new forum')]
         );
         $return .= '</li>';
 
@@ -11354,7 +11354,7 @@ class learnpath
         }
 
         // Add non exportable message explanation.
-        $lang_not_exportable = get_lang('ThisItemIsNotExportable');
+        $lang_not_exportable = get_lang('This learning object or activity is not SCORM compliant. That\'s why it is not exportable.');
         $file_content = '<!DOCTYPE html><head>
                         <meta charset="'.api_get_language_isocode().'" />
                         <title>'.$lang_not_exportable.'</title>
@@ -12016,7 +12016,7 @@ EOD;
         $items = self::getCategoryByCourse($courseId);
         $cats = [];
         if ($addSelectOption) {
-            $cats = [get_lang('SelectACategory')];
+            $cats = [get_lang('Select a category')];
         }
 
         if (!empty($items)) {
@@ -12546,7 +12546,7 @@ EOD;
             $buttonText = get_lang('Save');
             $content = $this->getSavedFinalItem();
         } else {
-            $buttonText = get_lang('LPCreateDocument');
+            $buttonText = get_lang('Add this document to the course');
             $content = $this->getFinalItemTemplate();
         }
 
@@ -13352,7 +13352,7 @@ EOD;
     {
         $theme = api_get_visual_theme();
         $path = api_get_path(SYS_PUBLIC_PATH).'css/themes/'.$theme.'/lp_icons/';
-        $icons = ['' => get_lang('SelectAnOption')];
+        $icons = ['' => get_lang('Please select an option')];
 
         if (is_dir($path)) {
             $finder = new Finder();

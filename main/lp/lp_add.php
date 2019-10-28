@@ -50,32 +50,32 @@ if ((!$is_allowed_to_edit) || $isStudentView) {
 if (api_is_in_gradebook()) {
     $interbreadcrumb[] = [
         'url' => Category::getUrl(),
-        'name' => get_lang('ToolGradebook'),
+        'name' => get_lang('Assessments'),
     ];
 }
 
 $interbreadcrumb[] = [
     'url' => 'lp_controller.php?action=list&'.api_get_cidreq(),
-    'name' => get_lang('LearningPaths'),
+    'name' => get_lang('Learning paths'),
 ];
 
-Display::display_header(get_lang('LearnpathAddLearnpath'), 'Path');
+Display::display_header(get_lang('Create new learning path'), 'Path');
 
 echo '<div class="actions">';
 echo '<a href="lp_controller.php?'.api_get_cidreq().'">'.
     Display::return_icon(
         'back.png',
-        get_lang('ReturnToLearningPaths'),
+        get_lang('ReturnToLearning paths'),
         '',
         ICON_SIZE_MEDIUM
     ).'</a>';
 echo '</div>';
 
-echo Display::return_message(get_lang('AddLpIntro'), 'normal', false);
+echo Display::return_message(get_lang('<strong>Welcome</strong> to the Chamilo Course authoring tool.<br />Create your courses step-by-step. The table of contents will appear to the left.'), 'normal', false);
 
 if ($_POST && empty($_REQUEST['lp_name'])) {
     echo Display::return_message(
-        get_lang('FormHasErrorsPleaseComplete'),
+        get_lang('The form contains incorrect or incomplete data. Please check your input.'),
         'error',
         false
     );
@@ -88,13 +88,13 @@ $form = new FormValidator(
 );
 
 // Form title
-$form->addHeader(get_lang('AddLpToStart'));
+$form->addHeader(get_lang('To start, give a title to your course'));
 
 // Title
 if (api_get_configuration_value('save_titles_as_html')) {
     $form->addHtmlEditor(
         'lp_name',
-        get_lang('LPName'),
+        get_lang('Learning path name'),
         true,
         false,
         ['ToolbarSet' => 'TitleAsHtml']
@@ -103,12 +103,12 @@ if (api_get_configuration_value('save_titles_as_html')) {
     $form->addElement(
         'text',
         'lp_name',
-        api_ucfirst(get_lang('LPName')),
+        api_ucfirst(get_lang('Learning path name')),
         ['autofocus' => 'autofocus']
     );
 }
 $form->applyFilter('lp_name', 'html_filter');
-$form->addRule('lp_name', get_lang('ThisFieldIsRequired'), 'required');
+$form->addRule('lp_name', get_lang('Required field'), 'required');
 
 $form->addElement('hidden', 'post_time', time());
 $form->addElement('hidden', 'action', 'add_lp');
@@ -126,8 +126,8 @@ $form->addElement('select', 'category_id', get_lang('Category'), $items);
 $form->addElement(
     'checkbox',
     'accumulate_scorm_time',
-    [null, get_lang('AccumulateScormTimeInfo')],
-    get_lang('AccumulateScormTime')
+    [null, get_lang('When enabled, the session time for SCORM Learning Paths will be cumulative, otherwise, it will only be counted from the last update time.')],
+    get_lang('Accumulate SCORM session time')
 );
 
 // Start date
@@ -135,11 +135,11 @@ $form->addElement(
     'checkbox',
     'activate_start_date_check',
     null,
-    get_lang('EnableStartTime'),
+    get_lang('Enable start time'),
     ['onclick' => 'activate_start_date()']
 );
 $form->addElement('html', '<div id="start_date_div" style="display:block;">');
-$form->addDatePicker('publicated_on', get_lang('PublicationDate'));
+$form->addDatePicker('publicated_on', get_lang('Publication date'));
 $form->addElement('html', '</div>');
 
 //End date
@@ -147,11 +147,11 @@ $form->addElement(
     'checkbox',
     'activate_end_date_check',
     null,
-    get_lang('EnableEndTime'),
+    get_lang('Enable end time'),
     ['onclick' => 'activate_end_date()']
 );
 $form->addElement('html', '<div id="end_date_div" style="display:none;">');
-$form->addDatePicker('expired_on', get_lang('ExpirationDate'));
+$form->addDatePicker('expired_on', get_lang('Expiration date'));
 $form->addElement('html', '</div>');
 
 $extraField = new ExtraField('lp');
@@ -173,7 +173,7 @@ $defaults['publicated_on'] = date('Y-m-d 08:00:00');
 $defaults['expired_on'] = date('Y-m-d 08:00:00', time() + 86400);
 
 $form->setDefaults($defaults);
-$form->addButtonCreate(get_lang('CreateLearningPath'));
+$form->addButtonCreate(get_lang('Continue'));
 $form->display();
 
 Display::display_footer();

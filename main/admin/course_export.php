@@ -13,8 +13,8 @@ require_once __DIR__.'/../inc/global.inc.php';
 $this_section = SECTION_PLATFORM_ADMIN;
 api_protect_admin_script();
 
-$tool_name = get_lang('ExportCourses');
-$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('PlatformAdmin')];
+$tool_name = get_lang('Export courses');
+$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('Administration')];
 
 set_time_limit(0);
 
@@ -104,7 +104,7 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
     } else {
         Display::addFlash(
             Display::return_message(
-                get_lang('ThereAreNotSelectedCoursesOrCoursesListIsEmpty')
+                get_lang('There are no selected courses or the courses list is empty.')
             )
         );
     }
@@ -119,7 +119,7 @@ $form->addElement(
     'radio',
     'select_type',
     get_lang('Option'),
-    get_lang('ExportAllCoursesList'),
+    get_lang('Export all courses'),
     '1',
     ['onclick' => "javascript: if(this.checked){document.getElementById('div-course-list').style.display='none';}"]
 );
@@ -128,7 +128,7 @@ $form->addElement(
     'radio',
     'select_type',
     '',
-    get_lang('ExportSelectedCoursesFromCoursesList'),
+    get_lang('Export selected courses from the following list'),
     '2',
     ['onclick' => "javascript: if(this.checked){document.getElementById('div-course-list').style.display='block';}"]
 );
@@ -142,7 +142,7 @@ if (!empty($course_list)) {
 
     $form->addSelect(
         'course_code',
-        get_lang('WhichCoursesToExport'),
+        get_lang('Courses to export'),
         $coursesInList,
         ['multiple' => 'multiple']
     );
@@ -150,13 +150,13 @@ if (!empty($course_list)) {
     $form->addHtml('</div>');
 }
 
-$form->addElement('radio', 'file_type', get_lang('OutputFileType'), 'CSV', 'csv', null);
+$form->addElement('radio', 'file_type', get_lang('Output file type'), 'CSV', 'csv', null);
 $form->addElement('radio', 'file_type', '', 'XLS', 'xls', null);
 $form->addElement('radio', 'file_type', null, 'XML', 'xml', null, ['id' => 'file_type_xml']);
 
 $form->setDefaults(['select_type' => '1', 'file_type' => 'csv']);
 
-$form->addButtonExport(get_lang('ExportCourses'));
+$form->addButtonExport(get_lang('Export courses'));
 $form->display();
 
 Display :: display_footer();

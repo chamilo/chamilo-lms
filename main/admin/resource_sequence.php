@@ -10,9 +10,9 @@ require_once __DIR__.'/../inc/global.inc.php';
 api_protect_global_admin_script();
 
 // setting breadcrumbs
-$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('PlatformAdmin')];
+$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('Administration')];
 
-$tpl = new Template(get_lang('ResourcesSequencing'));
+$tpl = new Template(get_lang('Resources sequencing'));
 
 $sessionListFromDatabase = SessionManager::get_sessions_list();
 $sessionList = [];
@@ -24,7 +24,7 @@ if (!empty($sessionListFromDatabase)) {
 
 $formSequence = new FormValidator('sequence_form', 'post', api_get_self(), null, null, 'inline');
 $formSequence->addText('name', get_lang('Sequence'), true, ['cols-size' => [3, 8, 1]]);
-$formSequence->addButtonCreate(get_lang('AddSequence'), 'submit_sequence', false, ['cols-size' => [3, 8, 1]]);
+$formSequence->addButtonCreate(get_lang('Add new sequence'), 'submit_sequence', false, ['cols-size' => [3, 8, 1]]);
 
 $em = Database::getManager();
 
@@ -82,11 +82,11 @@ $form->addHtml("<div class='col-md-6'>");
 $form->addHidden('sequence_type', 'session');
 $form->addSelect(
     'sessions',
-    get_lang('Sessions'),
+    get_lang('Course sessions'),
     $sessionList,
     ['id' => 'item', 'cols-size' => [4, 7, 1], 'disabled' => 'disabled']
 );
-$form->addButtonNext(get_lang('UseAsReference'), 'use_as_reference', ['cols-size' => [4, 7, 1], 'disabled' => 'disabled']);
+$form->addButtonNext(get_lang('Use as reference'), 'use_as_reference', ['cols-size' => [4, 7, 1], 'disabled' => 'disabled']);
 $form->addHtml("</div>");
 $form->addHtml("<div class='col-md-6'>");
 $form->addSelect(
@@ -96,14 +96,14 @@ $form->addSelect(
     ['id' => 'requirements', 'cols-size' => [3, 7, 2], 'disabled' => 'disabled']
 );
 
-$form->addButtonCreate(get_lang('SetAsRequirement'), 'set_requirement', false, ['cols-size' => [3, 7, 2], 'disabled' => 'disabled']);
+$form->addButtonCreate(get_lang('Set as a requirement'), 'set_requirement', false, ['cols-size' => [3, 7, 2], 'disabled' => 'disabled']);
 $form->addHtml("</div>");
 
 $formSave = new FormValidator('');
 $formSave->addHidden('sequence_type', 'session');
 $formSave->addButton(
     'save_resource',
-    get_lang('SaveSettings'),
+    get_lang('Save settings'),
     'floppy-o',
     'success',
     null,

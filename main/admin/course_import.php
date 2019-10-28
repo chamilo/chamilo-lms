@@ -4,8 +4,6 @@
 /**
  * This tool allows platform admins to create courses by uploading a CSV file
  * Copyright (c) 2005 Bart Mollet <bart.mollet@hogent.be>.
- *
- * @package chamilo.admin
  */
 
 /**
@@ -35,13 +33,13 @@ function validate_courses_data($courses)
         if (!empty($course['Code'])) {
             // 2.1 Check whether code has been already used by this CVS-file.
             if (isset($coursecodes[$course['Code']])) {
-                $course['error'] = get_lang('CodeTwiceInFile');
+                $course['error'] = get_lang('A code has been used twice in the file. This is not authorized. Courses codes should be unique.');
                 $errors[] = $course;
             } else {
                 // 2.2 Check whether course code has been occupied.
                 $courseInfo = api_get_course_info($course['Code']);
                 if (!empty($courseInfo)) {
-                    $course['error'] = get_lang('CodeExists');
+                    $course['error'] = get_lang('This code exists');
                     $errors[] = $course;
                 }
             }
@@ -55,7 +53,7 @@ function validate_courses_data($courses)
             foreach ($teacherList as $teacher) {
                 $teacherInfo = api_get_user_info_from_username($teacher);
                 if (empty($teacherInfo)) {
-                    $course['error'] = get_lang('UnknownTeacher').' ('.$teacher.')';
+                    $course['error'] = get_lang('Unknown trainer').' ('.$teacher.')';
                     $errors[] = $course;
                 }
             }
@@ -72,7 +70,7 @@ function validate_courses_data($courses)
                 );
             }
         } else {
-            $course['error'] = get_lang('NoCourseCategorySupplied');
+            $course['error'] = get_lang('No course category was provided');
             $errors[] = $course;
         }
     }
@@ -177,16 +175,16 @@ if (isset($extAuthSource) && is_array($extAuthSource)) {
     $defined_auth_sources = array_merge($defined_auth_sources, array_keys($extAuthSource));
 }
 
-$tool_name = get_lang('ImportCourses').' CSV';
+$tool_name = get_lang('Import courses list').' CSV';
 
-$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('PlatformAdmin')];
+$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('Administration')];
 
 set_time_limit(0);
 Display::display_header($tool_name);
 
 if (isset($_POST['formSent']) && $_POST['formSent']) {
     if (empty($_FILES['import_file']['tmp_name'])) {
-        $error_message = get_lang('UplUploadFailed');
+        $error_message = get_lang('The file upload has failed.');
         echo Display::return_message($error_message, 'error', false);
     } else {
         $allowed_file_mimetype = ['csv'];
@@ -194,7 +192,7 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
         $ext_import_file = substr($_FILES['import_file']['name'], (strrpos($_FILES['import_file']['name'], '.') + 1));
 
         if (!in_array($ext_import_file, $allowed_file_mimetype)) {
-            echo Display::return_message(get_lang('YouMustImportAFileAccordingToSelectedOption'), 'error');
+            echo Display::return_message(get_lang('You must import a file corresponding to the selected format'), 'error');
         } else {
             $courses = parse_csv_courses_data($_FILES['import_file']['tmp_name']);
 
@@ -225,15 +223,15 @@ $form = new FormValidator(
     ['enctype' => 'multipart/form-data']
 );
 $form->addHeader($tool_name);
-$form->addElement('file', 'import_file', get_lang('ImportCSVFileLocation'));
-$form->addElement('checkbox', 'add_me_as_teacher', null, get_lang('AddMeAsTeacherInCourses'));
+$form->addElement('file', 'import_file', get_lang('CSV file import location'));
+$form->addElement('checkbox', 'add_me_as_teacher', null, get_lang('Add me as teacher in the imported courses.'));
 $form->addButtonImport(get_lang('Import'), 'save');
 $form->addElement('hidden', 'formSent', 1);
 $form->display();
 
 ?>
 <div style="clear: both;"></div>
-<p><?php echo get_lang('CSVMustLookLike').' ('.get_lang('MandatoryFields').')'; ?> :</p>
+<p><?php echo get_lang('The CSV file must look like this').' ('.get_lang('Fields in <strong>bold</strong> are mandatory.').')'; ?> :</p>
 
 <blockquote>
 <pre>

@@ -17,8 +17,8 @@ $this_section = SECTION_PLATFORM_ADMIN;
 api_protect_admin_script();
 Skill::isAllowed();
 
-$interbreadcrumb[] = ["url" => 'index.php', "name" => get_lang('PlatformAdmin')];
-$interbreadcrumb[] = ['url' => 'skill_list.php', 'name' => get_lang('ManageSkills')];
+$interbreadcrumb[] = ["url" => 'index.php', "name" => get_lang('Administration')];
+$interbreadcrumb[] = ['url' => 'skill_list.php', 'name' => get_lang('Manage skills')];
 
 /* Process data */
 $skillParentId = isset($_GET['parent']) ? intval($_GET['parent']) : 0;
@@ -40,7 +40,7 @@ if ($skillParentId > 0) {
 
 /* Form */
 $createForm = new FormValidator('skill_create');
-$createForm->addHeader(get_lang('CreateSkill'));
+$createForm->addHeader(get_lang('Create skill'));
 $returnParams = $objSkill->setForm($createForm, []);
 $jquery_ready_content = $returnParams['jquery_ready_content'];
 
@@ -66,11 +66,11 @@ if ($createForm->validate()) {
         $url = api_get_path(WEB_CODE_PATH).'admin/skill_edit.php?id='.$created;
         $link = Display::url($skillValues['name'], $url);
         Display::addFlash(
-            Display::return_message(get_lang('TheSkillHasBeenCreated').': '.$link, 'success', false)
+            Display::return_message(get_lang('The skill has been created').': '.$link, 'success', false)
         );
     } else {
         Display::addFlash(
-            Display::return_message(get_lang('CannotCreateSkill'), 'error')
+            Display::return_message(get_lang('CannotCreate skill'), 'error')
         );
     }
 
@@ -80,6 +80,6 @@ if ($createForm->validate()) {
 
 $toolbar = $objSkill->getToolbar();
 
-$tpl = new Template(get_lang('CreateSkill'));
+$tpl = new Template(get_lang('Create skill'));
 $tpl->assign('content', $toolbar.$createForm->returnForm());
 $tpl->display_one_col_template();

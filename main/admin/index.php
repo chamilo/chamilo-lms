@@ -22,7 +22,7 @@ $this_section = SECTION_PLATFORM_ADMIN;
 // Access restrictions.
 api_protect_admin_script(true);
 
-$nameTools = get_lang('PlatformAdmin');
+$nameTools = get_lang('Administration');
 $accessUrlId = 0;
 
 // Displaying the header
@@ -31,14 +31,14 @@ if (api_is_platform_admin()) {
         !is_writable(api_get_path(SYS_ARCHIVE_PATH))
     ) {
         Display::addFlash(
-            Display::return_message(get_lang('ArchivesDirectoryNotWriteableContactAdmin'), 'warning')
+            Display::return_message(get_lang('The app/cache/ directory, used by this tool, is not writeable. Please contact your platform administrator.'), 'warning')
         );
     }
 
     /* ACTION HANDLING */
     if (!empty($_POST['Register'])) {
         api_register_campus(!$_POST['donotlistcampus']);
-        $message = Display:: return_message(get_lang('VersionCheckEnabled'), 'confirmation');
+        $message = Display:: return_message(get_lang('Version check enabled'), 'confirmation');
         Display::addFlash($message);
     }
     $keyword_url = Security::remove_XSS((empty($_GET['keyword']) ? '' : $_GET['keyword']));
@@ -86,29 +86,29 @@ $blocks['users']['search_form'] = $search_form;
 if (api_is_platform_admin()) {
     $blocks['users']['editable'] = true;
     $items = [
-        ['url' => 'user_list.php', 'label' => get_lang('UserList')],
-        ['url' => 'user_add.php', 'label' => get_lang('AddUsers')],
-        ['url' => 'user_export.php', 'label' => get_lang('ExportUserListXMLCSV')],
-        ['url' => 'user_import.php', 'label' => get_lang('ImportUserListXMLCSV')],
-        ['url' => 'user_update_import.php', 'label' => get_lang('EditUserListCSV')],
+        ['url' => 'user_list.php', 'label' => get_lang('User list')],
+        ['url' => 'user_add.php', 'label' => get_lang('Add a user')],
+        ['url' => 'user_export.php', 'label' => get_lang('ExportUser listXMLCSV')],
+        ['url' => 'user_import.php', 'label' => get_lang('ImportUser listXMLCSV')],
+        ['url' => 'user_update_import.php', 'label' => get_lang('EditUser listCSV')],
     ];
 
     if (isset($extAuthSource) && isset($extAuthSource['extldap']) && count($extAuthSource['extldap']) > 0) {
-        $items[] = ['url' => 'ldap_users_list.php', 'label' => get_lang('ImportLDAPUsersIntoPlatform')];
+        $items[] = ['url' => 'ldap_users_list.php', 'label' => get_lang('Import LDAP users into the platform')];
     }
-    $items[] = ['url' => 'extra_fields.php?type=user', 'label' => get_lang('ManageUserFields')];
+    $items[] = ['url' => 'extra_fields.php?type=user', 'label' => get_lang('Profiling')];
     $items[] = ['url' => 'usergroups.php', 'label' => get_lang('Classes')];
     if (!api_get_configuration_value('disable_gdpr')) {
         $items[] = ['url' => 'user_list_consent.php', 'label' => get_lang('Users in consents list')];
     }
     if (api_get_configuration_value('show_link_request_hrm_user')) {
-        $items[] = ['url' => 'user_linking_requests.php', 'label' => get_lang('UserLinkingRequests')];
+        $items[] = ['url' => 'user_linking_requests.php', 'label' => get_lang('Student linking requests')];
     }
 } else {
     $items = [
-        ['url' => 'user_list.php', 'label' => get_lang('UserList')],
-        ['url' => 'user_add.php', 'label' => get_lang('AddUsers')],
-        ['url' => 'user_import.php', 'label' => get_lang('ImportUserListXMLCSV')],
+        ['url' => 'user_list.php', 'label' => get_lang('User list')],
+        ['url' => 'user_add.php', 'label' => get_lang('Add a user')],
+        ['url' => 'user_import.php', 'label' => get_lang('ImportUser listXMLCSV')],
         ['url' => 'usergroups.php', 'label' => get_lang('Classes')],
     ];
 
@@ -163,29 +163,29 @@ if (api_is_platform_admin()) {
     $items[] = ['url' => 'course_add.php', 'label' => get_lang('Add course')];
 
     if (api_get_setting('course_validation') == 'true') {
-        $items[] = ['url' => 'course_request_review.php', 'label' => get_lang('ReviewCourseRequests')];
-        $items[] = ['url' => 'course_request_accepted.php', 'label' => get_lang('AcceptedCourseRequests')];
-        $items[] = ['url' => 'course_request_rejected.php', 'label' => get_lang('RejectedCourseRequests')];
+        $items[] = ['url' => 'course_request_review.php', 'label' => get_lang('Review incoming course requests')];
+        $items[] = ['url' => 'course_request_accepted.php', 'label' => get_lang('Accepted course requests')];
+        $items[] = ['url' => 'course_request_rejected.php', 'label' => get_lang('Rejected course requests')];
     }
 
-    $items[] = ['url' => 'course_export.php', 'label' => get_lang('ExportCourses')];
-    $items[] = ['url' => 'course_import.php', 'label' => get_lang('ImportCourses')];
-    $items[] = ['url' => 'course_category.php', 'label' => get_lang('AdminCategories')];
-    $items[] = ['url' => 'subscribe_user2course.php', 'label' => get_lang('AddUsersToACourse')];
-    $items[] = ['url' => 'course_user_import.php', 'label' => get_lang('ImportUsersToACourse')];
+    $items[] = ['url' => 'course_export.php', 'label' => get_lang('Export courses')];
+    $items[] = ['url' => 'course_import.php', 'label' => get_lang('Import courses list')];
+    $items[] = ['url' => 'course_category.php', 'label' => get_lang('Courses categories')];
+    $items[] = ['url' => 'subscribe_user2course.php', 'label' => get_lang('Add a userToACourse')];
+    $items[] = ['url' => 'course_user_import.php', 'label' => get_lang('Import users list')];
 
     if (api_get_setting('gradebook_enable_grade_model') == 'true') {
-        $items[] = ['url' => 'grade_models.php', 'label' => get_lang('GradeModel')];
+        $items[] = ['url' => 'grade_models.php', 'label' => get_lang('Grading model')];
     }
 
     if (isset($extAuthSource) && isset($extAuthSource['ldap']) && count($extAuthSource['ldap']) > 0) {
-        $items[] = ['url' => 'ldap_import_students.php', 'label' => get_lang('ImportLDAPUsersIntoCourse')];
+        $items[] = ['url' => 'ldap_import_students.php', 'label' => get_lang('Import LDAP users into a course')];
     }
 
-    $items[] = ['url' => 'extra_fields.php?type=course', 'label' => get_lang('ManageCourseFields')];
+    $items[] = ['url' => 'extra_fields.php?type=course', 'label' => get_lang('Manage extra fields for courses')];
     $items[] = [
         'url' => api_get_path(WEB_CODE_PATH).'admin/teacher_time_report.php',
-        'label' => get_lang('TeacherTimeReport'),
+        'label' => get_lang('Teachers time report'),
     ];
 
     $blocks['courses']['items'] = $items;
@@ -223,26 +223,26 @@ if (api_is_platform_admin()) {
                 </form>';
     $blocks['sessions']['search_form'] = $search_form;
     $items = [];
-    $items[] = ['url' => $sessionPath.'session_list.php', 'label' => get_lang('ListSession')];
-    $items[] = ['url' => $sessionPath.'session_add.php', 'label' => get_lang('AddSession')];
-    $items[] = ['url' => $sessionPath.'session_category_list.php', 'label' => get_lang('ListSessionCategory')];
-    $items[] = ['url' => $sessionPath.'session_import.php', 'label' => get_lang('ImportSessionListXMLCSV')];
-    $items[] = ['url' => $sessionPath.'session_import_drh.php', 'label' => get_lang('ImportSessionDrhList')];
+    $items[] = ['url' => $sessionPath.'session_list.php', 'label' => get_lang('Training sessions list')];
+    $items[] = ['url' => $sessionPath.'session_add.php', 'label' => get_lang('Add a training session')];
+    $items[] = ['url' => $sessionPath.'session_category_list.php', 'label' => get_lang('Training sessions listCategory')];
+    $items[] = ['url' => $sessionPath.'session_import.php', 'label' => get_lang('Import sessions list')];
+    $items[] = ['url' => $sessionPath.'session_import_drh.php', 'label' => get_lang('Import list of HR directors into sessions')];
     if (isset($extAuthSource) && isset($extAuthSource['ldap']) && count($extAuthSource['ldap']) > 0) {
         $items[] = [
             'url' => 'ldap_import_students_to_session.php',
-            'label' => get_lang('ImportLDAPUsersIntoSession'),
+            'label' => get_lang('Import LDAP users into a session'),
         ];
     }
     $items[] = [
         'url' => $sessionPath.'session_export.php',
-        'label' => get_lang('ExportSessionListXMLCSV'),
+        'label' => get_lang('Export sessions list'),
     ];
 
     if (api_is_global_platform_admin()) {
         $items[] = [
             'url' => '../coursecopy/copy_course_session.php',
-            'label' => get_lang('CopyFromCourseInSessionToAnotherSession'),
+            'label' => get_lang('Copy from course in session to another session'),
         ];
     }
 
@@ -251,10 +251,10 @@ if (api_is_platform_admin()) {
     if (api_is_platform_admin() || ($allowCareer && api_is_session_admin())) {
         // option only visible in development mode. Enable through code if required
         if (is_dir(api_get_path(SYS_TEST_PATH).'datafiller/')) {
-            $items[] = ['url' => 'user_move_stats.php', 'label' => get_lang('MoveUserStats')];
+            $items[] = ['url' => 'user_move_stats.php', 'label' => get_lang('Move users results from/to a session')];
         }
-        $items[] = ['url' => 'career_dashboard.php', 'label' => get_lang('CareersAndPromotions')];
-        $items[] = ['url' => 'extra_fields.php?type=session', 'label' => get_lang('ManageSessionFields')];
+        $items[] = ['url' => 'career_dashboard.php', 'label' => get_lang('Careers and promotions')];
+        $items[] = ['url' => 'extra_fields.php?type=session', 'label' => get_lang('Manage session fields')];
     }
 
     $blocks['sessions']['items'] = $items;
@@ -276,28 +276,28 @@ if (api_is_platform_admin()) {
         $items = [];
         $items[] = [
             'url' => 'skills_wheel.php',
-            'label' => get_lang('SkillsWheel'),
+            'label' => get_lang('Skills wheel'),
         ];
         $items[] = [
             'url' => 'skills_import.php',
-            'label' => get_lang('SkillsImport'),
+            'label' => get_lang('Skills import'),
         ];
         $items[] = [
             'url' => 'skill_list.php',
-            'label' => get_lang('ManageSkills'),
+            'label' => get_lang('Manage skills'),
         ];
         $items[] = [
             'url' => 'skill.php',
-            'label' => get_lang('ManageSkillsLevels'),
+            'label' => get_lang('Manage skillsLevels'),
         ];
 
         $items[] = [
             'url' => api_get_path(WEB_CODE_PATH).'social/skills_ranking.php',
-            'label' => get_lang('SkillsRanking'),
+            'label' => get_lang('Skills ranking'),
         ];
         $items[] = [
             'url' => 'skills_gradebook.php',
-            'label' => get_lang('SkillsAndGradebooks'),
+            'label' => get_lang('Skills and assessments'),
         ];
         /*$items[] = array(
             'url' => api_get_path(WEB_CODE_PATH).'admin/skill_badge.php',
@@ -344,18 +344,18 @@ if (api_is_platform_admin()) {
     //$url = Container::getRouter()->generate('chamilo_platform_settings', ['namespace' => 'platform']);
     $url = api_get_path(WEB_PUBLIC_PATH).'admin/settings/platform';
     $items = [];
-    $items[] = ['url' => $url, 'label' => get_lang('PlatformConfigSettings')];
+    $items[] = ['url' => $url, 'label' => get_lang('Configuration settings')];
     $items[] = ['url' => 'languages.php', 'label' => get_lang('Languages')];
     $items[] = ['url' => 'settings.php?category=Plugins', 'label' => get_lang('Plugins')];
     $items[] = ['url' => 'settings.php?category=Regions', 'label' => get_lang('Regions')];
-    $items[] = ['url' => 'system_announcements.php', 'label' => get_lang('SystemAnnouncements')];
+    $items[] = ['url' => 'system_announcements.php', 'label' => get_lang('Portal news')];
     $items[] = [
         'url' => api_get_path(WEB_CODE_PATH).'calendar/agenda_js.php?type=admin',
-        'label' => get_lang('GlobalAgenda'),
+        'label' => get_lang('Global agenda'),
     ];
     // Replaced by page blocks
-    //$items[] = ['url' => 'configure_homepage.php', 'label' => get_lang('ConfigureHomePage')];
-    $items[] = ['url' => 'configure_inscription.php', 'label' => get_lang('ConfigureInscription')];
+    //$items[] = ['url' => 'configure_homepage.php', 'label' => get_lang('Edit portal homepage')];
+    $items[] = ['url' => 'configure_inscription.php', 'label' => get_lang('Setting the registration page')];
     $items[] = ['url' => 'statistics/index.php', 'label' => get_lang('Statistics')];
     $items[] = [
         'url' => api_get_path(WEB_CODE_PATH).'mySpace/company_reports.php',
@@ -363,7 +363,7 @@ if (api_is_platform_admin()) {
     ];
     $items[] = [
         'url' => api_get_path(WEB_CODE_PATH).'admin/teacher_time_report.php',
-        'label' => get_lang('TeacherTimeReport'),
+        'label' => get_lang('Teachers time report'),
     ];
 
     if (api_get_configuration_value('chamilo_cms')) {
@@ -373,11 +373,11 @@ if (api_is_platform_admin()) {
         ];
     }
 
-    $items[] = ['url' => 'extra_field_list.php', 'label' => get_lang('ExtraFields')];
+    $items[] = ['url' => 'extra_field_list.php', 'label' => get_lang('Extra fields')];
 
     if (!empty($_configuration['multiple_access_urls'])) {
         if (api_is_global_platform_admin()) {
-            $items[] = ['url' => 'access_urls.php', 'label' => get_lang('ConfigureMultipleAccessURLs')];
+            $items[] = ['url' => 'access_urls.php', 'label' => get_lang('Configure multiple access URL')];
         }
     }
 
@@ -389,7 +389,7 @@ if (api_is_platform_admin()) {
     }
 
     if (api_get_setting('allow_terms_conditions') == 'true') {
-        $items[] = ['url' => 'legal_add.php', 'label' => get_lang('TermsAndConditions')];
+        $items[] = ['url' => 'legal_add.php', 'label' => get_lang('Terms and Conditions')];
     }
 
     $items[] = ['url' => api_get_path(WEB_PUBLIC_PATH).'admin/lti/', 'label' => get_lang('External tools')];
@@ -414,12 +414,12 @@ if (api_is_platform_admin()) {
     $items = [];
     $items[] = [
         'url' => 'archive_cleanup.php',
-        'label' => get_lang('ArchiveDirCleanup'),
+        'label' => get_lang('Cleanup of cache and temporary files'),
     ];
 
     $items[] = [
         'url' => 'special_exports.php',
-        'label' => get_lang('SpecialExports'),
+        'label' => get_lang('Special exports'),
     ];
     /*$items[] = [
         'url' => 'periodic_export.php',
@@ -427,29 +427,29 @@ if (api_is_platform_admin()) {
     ];*/
     $items[] = [
         'url' => 'system_status.php',
-        'label' => get_lang('SystemStatus'),
+        'label' => get_lang('System status'),
     ];
     if (is_dir(api_get_path(SYS_TEST_PATH).'datafiller/')) {
         $items[] = [
             'url' => 'filler.php',
-            'label' => get_lang('DataFiller'),
+            'label' => get_lang('Data filler'),
         ];
     }
 
     $items[] = [
         'url' => 'resource_sequence.php',
-        'label' => get_lang('ResourcesSequencing'),
+        'label' => get_lang('Resources sequencing'),
     ];
     if (is_dir(api_get_path(SYS_TEST_PATH))) {
         $items[] = [
             'url' => 'email_tester.php',
-            'label' => get_lang('EMailTester'),
+            'label' => get_lang('E-mail tester'),
         ];
     }
 
     $items[] = [
         'url' => api_get_path(WEB_CODE_PATH).'ticket/tickets.php',
-        'label' => get_lang('TicketSystem'),
+        'label' => get_lang('Tickets'),
     ];
 
     if (api_get_configuration_value('db_manager_enabled') == true &&
@@ -461,7 +461,7 @@ if (api_is_platform_admin()) {
 
         $items[] = [
             'url' => "db.php?username=$username&db=$databaseName&server=$host",
-            'label' => get_lang('DatabaseManager'),
+            'label' => get_lang('Database manager'),
         ];
     }
 
@@ -527,18 +527,18 @@ if (api_is_platform_admin()) {
     $blocks['chamilo']['class'] = 'block-admin-chamilo';
 
     $items = [];
-    $items[] = ['url' => 'http://www.chamilo.org/', 'label' => get_lang('ChamiloHomepage')];
-    $items[] = ['url' => 'http://www.chamilo.org/forum', 'label' => get_lang('ChamiloForum')];
+    $items[] = ['url' => 'http://www.chamilo.org/', 'label' => get_lang('Chamilo homepage')];
+    $items[] = ['url' => 'http://www.chamilo.org/forum', 'label' => get_lang('Chamilo forum')];
 
-    $items[] = ['url' => '../../documentation/installation_guide.html', 'label' => get_lang('InstallationGuide')];
-    $items[] = ['url' => '../../documentation/changelog.html', 'label' => get_lang('ChangesInLastVersion')];
-    $items[] = ['url' => '../../documentation/credits.html', 'label' => get_lang('ContributorsList')];
-    $items[] = ['url' => '../../documentation/security.html', 'label' => get_lang('SecurityGuide')];
-    $items[] = ['url' => '../../documentation/optimization.html', 'label' => get_lang('OptimizationGuide')];
-    $items[] = ['url' => 'http://www.chamilo.org/extensions', 'label' => get_lang('ChamiloExtensions')];
+    $items[] = ['url' => '../../documentation/installation_guide.html', 'label' => get_lang('Installation guide')];
+    $items[] = ['url' => '../../documentation/changelog.html', 'label' => get_lang('Changes in last version')];
+    $items[] = ['url' => '../../documentation/credits.html', 'label' => get_lang('Contributors list')];
+    $items[] = ['url' => '../../documentation/security.html', 'label' => get_lang('Security guide')];
+    $items[] = ['url' => '../../documentation/optimization.html', 'label' => get_lang('Optimization guide')];
+    $items[] = ['url' => 'http://www.chamilo.org/extensions', 'label' => get_lang('Chamilo extensions')];
     $items[] = [
         'url' => 'http://www.chamilo.org/en/providers',
-        'label' => get_lang('ChamiloOfficialServicesProviders'),
+        'label' => get_lang('Chamilo official services providers'),
     ];
 
     $blocks['chamilo']['items'] = $items;

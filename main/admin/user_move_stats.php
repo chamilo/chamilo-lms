@@ -12,7 +12,7 @@ $this_section = SECTION_PLATFORM_ADMIN;
 
 api_protect_admin_script();
 
-$interbreadcrumb[] = ["url" => 'index.php', "name" => get_lang('PlatformAdmin')];
+$interbreadcrumb[] = ["url" => 'index.php', "name" => get_lang('Administration')];
 $debug = 0;
 
 function compare_data($result_message)
@@ -20,11 +20,11 @@ function compare_data($result_message)
     foreach ($result_message as $table => $data) {
         $title = $table;
         if ($table == 'TRACK_E_EXERCISES') {
-            $title = get_lang('Exercises');
+            $title = get_lang('Tests');
         } elseif ($table == 'TRACK_E_EXERCISES_IN_LP') {
-            $title = get_lang('ExercisesInLp');
+            $title = get_lang('TestsInLp');
         } elseif ($table == 'LP_VIEW') {
-            $title = get_lang('LearningPaths');
+            $title = get_lang('Learning paths');
         }
         echo '<br / ><h3>'.get_lang($title).' </h3><hr />';
 
@@ -33,18 +33,18 @@ function compare_data($result_message)
                 if ($table == 'TRACK_E_EXERCISES' || $table == 'TRACK_E_EXERCISES_IN_LP') {
                     echo "<br /><h3>".get_lang('Attempt')." #$id</h3>";
                     echo '<h3>';
-                    echo get_lang('Exercise').' #'.$item['exe_exo_id'];
+                    echo get_lang('Test').' #'.$item['exe_exo_id'];
                     echo '</h3>';
                     if (!empty($item['orig_lp_id'])) {
                         echo '<h3>';
-                        echo get_lang('LearningPath').' #'.$item['orig_lp_id'];
+                        echo get_lang('Learning paths').' #'.$item['orig_lp_id'];
                         echo '</h3>';
                     }
                     //Process data
                     $array = [
                         'exe_date' => get_lang('Date'),
                         'score' => get_lang('Score'),
-                        'max_score' => get_lang('Weighting'),
+                        'max_score' => get_lang('Score'),
                     ];
                     foreach ($item as $key => $value) {
                         if (in_array($key, array_keys($array))) {
@@ -61,7 +61,7 @@ function compare_data($result_message)
                 }
             }
         } else {
-            echo get_lang('NoResults');
+            echo get_lang('No results found');
         }
     }
 }
@@ -74,7 +74,7 @@ if (isset($_REQUEST['load_ajax'])) {
         $combinations = $_SESSION['combination'];
         $combination_result = $combinations[$_REQUEST['unique_id']];
         if (empty($combination_result)) {
-            echo get_lang('ThereWasAnError');
+            echo get_lang('There was an error.');
         } else {
             $origin_course_code = $combination_result['course_code'];
             $origin_session_id = intval($combination_result['session_id']);
@@ -83,7 +83,7 @@ if (isset($_REQUEST['load_ajax'])) {
 
             //if (!isset($_REQUEST['view_stat'])) {
             if ($origin_session_id == $new_session_id) {
-                echo get_lang('CantMoveToTheSameSession');
+                echo get_lang('Cannot move this to the same session.');
                 exit;
             }
             //}
@@ -596,14 +596,14 @@ if (isset($_REQUEST['load_ajax'])) {
                 }
 
                 if ($update_database) {
-                    echo '<h2>'.get_lang('StatsMoved').'</h2>';
+                    echo '<h2>'.get_lang('Stats moved.').'</h2>';
                     if (is_array($result_message)) {
                         foreach ($result_message as $table => $times) {
                             echo 'Table '.$table.' - '.$times.' records updated <br />';
                         }
                     }
                 } else {
-                    echo '<h2>'.get_lang('UserInformationOfThisCourse').'</h2>';
+                    echo '<h2>'.get_lang('User information for this course').'</h2>';
 
                     echo '<br />';
                     echo '<table width="100%">';
@@ -611,17 +611,17 @@ if (isset($_REQUEST['load_ajax'])) {
                     echo '<td width="50%" valign="top">';
 
                     if ($origin_session_id == 0) {
-                        echo '<h4>'.get_lang('OriginCourse').'</h4>';
+                        echo '<h4>'.get_lang('Original course').'</h4>';
                     } else {
-                        echo '<h4>'.get_lang('OriginSession').' #'.$origin_session_id.'</h4>';
+                        echo '<h4>'.get_lang('Original session').' #'.$origin_session_id.'</h4>';
                     }
                     compare_data($result_message);
                     echo '</td>';
                     echo '<td width="50%" valign="top">';
                     if ($new_session_id == 0) {
-                        echo '<h4>'.get_lang('DestinyCourse').'</h4>';
+                        echo '<h4>'.get_lang('Destination course').'</h4>';
                     } else {
-                        echo '<h4>'.get_lang('DestinySession').' #'.$new_session_id.'</h4>';
+                        echo '<h4>'.get_lang('Destination session').' #'.$new_session_id.'</h4>';
                     }
                     compare_data($result_message_compare);
                     echo '</td>';
@@ -629,11 +629,11 @@ if (isset($_REQUEST['load_ajax'])) {
                     echo '</table>';
                 }
             } else {
-                echo get_lang('CourseDoesNotExistInThisSession');
+                echo get_lang('The course does not exist in this session. The copy will work only from one course in one session to the same course in another session.');
             }
         }
     } else {
-        echo get_lang('ThereWasAnError');
+        echo get_lang('There was an error.');
     }
     exit;
 }
@@ -691,14 +691,14 @@ function get_courses_list_by_user_id_based_in_exercises($user_id)
 
 Display::addFlash(
     Display::return_message(
-        get_lang('CompareUserResultsBetweenCoursesAndCoursesInASession'),
+        get_lang('This advanced tool allows you to manually improve the tracking of users results when moving from courses methodology to sessions methodology. In most cases, you won\'t need to use it.<br />'),
         'normal',
         false
     )
 );
-Display::display_header(get_lang('MoveUserStats'));
+Display::display_header(get_lang('Move users results from/to a session'));
 echo  '<div class="actions">';
-echo '<a href="../admin/index.php">'.Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('PlatformAdmin'), '', ICON_SIZE_MEDIUM).'</a>';
+echo '<a href="../admin/index.php">'.Display::return_icon('back.png', get_lang('Back to').' '.get_lang('Administration'), '', ICON_SIZE_MEDIUM).'</a>';
 echo '</div>';
 
 // Some pagination
@@ -730,7 +730,7 @@ echo $navigation;
 $user_list = UserManager::get_user_list([], [], $begin, $default);
 $session_list = SessionManager::get_sessions_list([], ['name']);
 $options = '';
-$options .= '<option value="0">--'.get_lang('SelectASession').'--</option>';
+$options .= '<option value="0">--'.get_lang('Select a session').'--</option>';
 foreach ($session_list as $session_data) {
     $my_session_list[$session_data['id']] = $session_data['name'];
     $options .= '<option value="'.$session_data['id'].'">'.$session_data['name'].'</option>';
@@ -796,12 +796,12 @@ if (!empty($user_list)) {
             foreach ($course_list as $course) {
                 echo '<td>';
                 if (isset($course['id_session']) && !empty($course['id_session'])) {
-                    echo '<b>'.get_lang('SessionName').'</b> '.$my_session_list[$course['id_session']].'<br />';
+                    echo '<b>'.get_lang('Session name').'</b> '.$my_session_list[$course['id_session']].'<br />';
                 }
                 echo $course['name'];
                 echo ' ('.$course['code'].') ';
                 if (isset($course['not_registered']) && !empty($course['not_registered'])) {
-                    echo ' <i>'.get_lang('UserNotRegistered').'</i>';
+                    echo ' <i>'.get_lang('User not registered.').'</i>';
                 }
                 echo '</td>';
             }
@@ -816,7 +816,7 @@ if (!empty($user_list)) {
                     $session_id = $course['id_session'];
                 }
                 echo '<td>';
-                echo get_lang('MoveTo');
+                echo get_lang('Move to');
                 echo '<br />';
                 $unique_id = uniqid();
                 $combinations[$unique_id] = ['course_code' => $course_code, 'session_id' => $session_id];
@@ -825,7 +825,7 @@ if (!empty($user_list)) {
                 echo $options;
                 echo '</select>';
                 echo '<br />';
-                echo '<button type="submit" class="btn btn-success" onclick="view_stat(\''.$unique_id.'\', \''.$user_id.'\');"> '.get_lang('CompareStats').'</button>';
+                echo '<button type="submit" class="btn btn-success" onclick="view_stat(\''.$unique_id.'\', \''.$user_id.'\');"> '.get_lang('Compare stats').'</button>';
                 echo '<button type="submit" class="btn btn-success" onclick="moveto(\''.$unique_id.'\', \''.$user_id.'\');"> '.get_lang('Move').'</button>';
                 echo '<div id ="reponse_'.$unique_id.'"></div>';
                 echo '</td>';
@@ -833,7 +833,7 @@ if (!empty($user_list)) {
             echo '</tr>';
         } else {
             echo '<td>';
-            echo get_lang('NoCoursesForThisUser');
+            echo get_lang('This user isn\'t subscribed in a course');
             echo '</td>';
         }
         echo '</table>';

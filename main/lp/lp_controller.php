@@ -519,7 +519,7 @@ switch ($action) {
             $courseUrl .= '?id_session='.$sessionId;
         }
 
-        $url = Display::url($courseName, $courseUrl, ['title' => get_lang('GoToCourse')]);
+        $url = Display::url($courseName, $courseUrl, ['title' => get_lang('Go to the course')]);
         $coachList = CourseManager::get_coachs_from_course($sessionId, api_get_course_int_id());
         foreach ($coachList as $coach_course) {
             $recipientName = $coach_course['full_name'];
@@ -541,14 +541,14 @@ switch ($action) {
             api_mail_html(
                 $recipientName,
                 $email,
-                sprintf(get_lang('StudentXFinishedLp'), $studentInfo['complete_name']),
+                sprintf(get_lang('Student %s has completed his/her learning paths.'), $studentInfo['complete_name']),
                 $emailBody,
                 $studentInfo['complete_name'],
                 $studentInfo['email'],
                 true
             );
         }
-        Display::addFlash(Display::return_message(get_lang('MessageSent')));
+        Display::addFlash(Display::return_message(get_lang('Message Sent')));
         $url = api_get_self().'?action=list&'.api_get_cidreq();
         header('Location: '.$url);
         exit;
@@ -885,7 +885,7 @@ switch ($action) {
                 if (isset($_POST['content_lp'])) {
                     $_SESSION['oLP']->edit_document($_course);
                 }
-                Display::addFlash(Display::return_message(get_lang('Updated')));
+                Display::addFlash(Display::return_message(get_lang('Update successful')));
                 $url = api_get_self().'?action=add_item&type=step&lp_id='.intval($_SESSION['oLP']->lp_id).'&'.api_get_cidreq();
                 header('Location: '.$url);
                 exit;
@@ -918,7 +918,7 @@ switch ($action) {
                     $max
                 );
 
-                Display::addFlash(Display::return_message(get_lang('Updated')));
+                Display::addFlash(Display::return_message(get_lang('Update successful')));
                 $url = api_get_self().'?action=add_item&type=step&lp_id='.intval($_SESSION['oLP']->lp_id).'&'.api_get_cidreq();
                 header('Location: '.$url);
                 exit;
@@ -1075,7 +1075,7 @@ switch ($action) {
         }
 
         learnpath::toggleCategoryVisibility($_REQUEST['id'], $_REQUEST['new_status']);
-        Display::addFlash(Display::return_message(get_lang('Updated')));
+        Display::addFlash(Display::return_message(get_lang('Update successful')));
         header('Location: '.api_get_self().'?'.api_get_cidreq());
         exit;
     case 'toggle_visible':
@@ -1088,7 +1088,7 @@ switch ($action) {
             require 'lp_list.php';
         } else {
             learnpath::toggle_visibility($_REQUEST['lp_id'], $_REQUEST['new_status']);
-            Display::addFlash(Display::return_message(get_lang('Updated')));
+            Display::addFlash(Display::return_message(get_lang('Update successful')));
             require 'lp_list.php';
         }
         break;
@@ -1098,7 +1098,7 @@ switch ($action) {
         }
 
         learnpath::toggleCategoryPublish($_REQUEST['id'], $_REQUEST['new_status']);
-        Display::addFlash(Display::return_message(get_lang('Updated')));
+        Display::addFlash(Display::return_message(get_lang('Update successful')));
         require 'lp_list.php';
         break;
     case 'toggle_publish':
@@ -1110,7 +1110,7 @@ switch ($action) {
             require 'lp_list.php';
         } else {
             learnpath::toggle_publish($_REQUEST['lp_id'], $_REQUEST['new_status']);
-            Display::addFlash(Display::return_message(get_lang('Updated')));
+            Display::addFlash(Display::return_message(get_lang('Update successful')));
             require 'lp_list.php';
         }
         break;
@@ -1123,7 +1123,7 @@ switch ($action) {
             require 'lp_list.php';
         } else {
             learnpath::move_up($_REQUEST['lp_id'], $_REQUEST['category_id']);
-            Display::addFlash(Display::return_message(get_lang('Updated')));
+            Display::addFlash(Display::return_message(get_lang('Update successful')));
             require 'lp_list.php';
         }
         break;
@@ -1136,7 +1136,7 @@ switch ($action) {
             require 'lp_list.php';
         } else {
             learnpath::move_down($_REQUEST['lp_id'], $_REQUEST['category_id']);
-            Display::addFlash(Display::return_message(get_lang('Updated')));
+            Display::addFlash(Display::return_message(get_lang('Update successful')));
             require 'lp_list.php';
         }
         break;
@@ -1261,7 +1261,7 @@ switch ($action) {
                     }
                 }
             }
-            Display::addFlash(Display::return_message(get_lang('Updated')));
+            Display::addFlash(Display::return_message(get_lang('Update successful')));
             $url = api_get_self().'?action=add_item&type=step&lp_id='.intval($_SESSION['oLP']->lp_id).'&'.api_get_cidreq();
             header('Location: '.$url);
             exit;
@@ -1483,14 +1483,14 @@ switch ($action) {
     case 'set_previous_step_as_prerequisite':
         $_SESSION['oLP']->set_previous_step_as_prerequisite_for_all_items();
         $url = api_get_self().'?action=add_item&type=step&lp_id='.intval($_SESSION['oLP']->lp_id)."&".api_get_cidreq();
-        Display::addFlash(Display::return_message(get_lang('ItemUpdated')));
+        Display::addFlash(Display::return_message(get_lang('ItemUpdate successful')));
         header('Location: '.$url);
         exit;
         break;
     case 'clear_prerequisites':
         $_SESSION['oLP']->clear_prerequisites();
         $url = api_get_self().'?action=add_item&type=step&lp_id='.intval($_SESSION['oLP']->lp_id)."&".api_get_cidreq();
-        Display::addFlash(Display::return_message(get_lang('ItemUpdated')));
+        Display::addFlash(Display::return_message(get_lang('ItemUpdate successful')));
         header('Location: '.$url);
         exit;
         break;
@@ -1530,7 +1530,7 @@ switch ($action) {
                 require '../forum/forumfunction.inc.php';
 
                 $forumCategory = getForumCategoryByTitle(
-                    get_lang('LearningPaths'),
+                    get_lang('Learning paths'),
                     $_SESSION['oLP']->course_int_id,
                     $_SESSION['oLP']->lp_session_id
                 );
@@ -1541,7 +1541,7 @@ switch ($action) {
                     $forumCategoryId = store_forumcategory(
                         [
                             'lp_id' => 0,
-                            'forum_category_title' => get_lang('LearningPaths'),
+                            'forum_category_title' => get_lang('Learning paths'),
                             'forum_category_comment' => null,
                         ],
                         [],
@@ -1602,7 +1602,7 @@ switch ($action) {
 
                 if ($dissociated) {
                     Display::addFlash(
-                        Display::return_message(get_lang('ForumDissociate'), 'success')
+                        Display::return_message(get_lang('Dissociate forum'), 'success')
                     );
                 }
             }
@@ -1618,7 +1618,7 @@ switch ($action) {
     case 'add_final_item':
         if (!$lp_found) {
             Display::addFlash(
-                Display::return_message(get_lang('NoLPFound'), 'error')
+                Display::return_message(get_lang('No learning path found'), 'error')
             );
             break;
         }

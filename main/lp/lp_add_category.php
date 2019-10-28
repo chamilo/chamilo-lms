@@ -18,7 +18,7 @@ if (!$is_allowed_to_edit) {
 
 $interbreadcrumb[] = [
     'url' => 'lp_controller.php?action=list&'.api_get_cidreq(),
-    'name' => get_lang('LearningPaths'),
+    'name' => get_lang('Learning paths'),
 ];
 
 $form = new FormValidator(
@@ -28,7 +28,7 @@ $form = new FormValidator(
 );
 
 // Form title
-$form->addElement('header', null, get_lang('AddLPCategory'));
+$form->addElement('header', null, get_lang('Add learning path category'));
 
 // Title
 if (api_get_configuration_value('save_titles_as_html')) {
@@ -54,7 +54,7 @@ if ($form->validate()) {
     if (!empty($values['id'])) {
         learnpath::updateCategory($values);
         $url = api_get_self().'?action=list&'.api_get_cidreq();
-        Display::addFlash(Display::return_message(get_lang('Updated')));
+        Display::addFlash(Display::return_message(get_lang('Update successful')));
         header('Location: '.$url);
         exit;
     } else {
@@ -77,13 +77,13 @@ if ($form->validate()) {
     }
 }
 
-Display::display_header(get_lang('LearnpathAddLearnpath'), 'Path');
+Display::display_header(get_lang('Create new learning path'), 'Path');
 
 echo '<div class="actions">';
 echo '<a href="lp_controller.php?'.api_get_cidreq().'">'.
     Display::return_icon(
         'back.png',
-        get_lang('ReturnToLearningPaths'),
+        get_lang('ReturnToLearning paths'),
         '',
         ICON_SIZE_MEDIUM
     ).

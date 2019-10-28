@@ -5,12 +5,8 @@
  * Class aicc
  * Defines the AICC class, which is meant to contain the aicc items (nuclear elements).
  *
- * @package chamilo.learnpath
- *
  * @author Yannick Warnier <ywarnier@beeznest.org>
  * @license GNU/GPL
- *
- * @package chamilo.learnpath
  */
 class aicc extends learnpath
 {
@@ -420,7 +416,7 @@ class aicc extends learnpath
 
         /*
         if (check_name_exist($course_sys_dir.$current_dir.'/'.$new_dir)) {
-            $dialogBox = get_lang('FileExists');
+            $dialogBox = get_lang('The operation is impossible, a file with this name already exists.');
             $stopping_error = true;
         }
         */
@@ -445,7 +441,7 @@ class aicc extends learnpath
                     );
                 }
                 Display::addFlash(
-                    Display::return_message(get_lang('ZipNoPhp'))
+                    Display::return_message(get_lang('The zip file can not contain .PHP files'))
                 );
 
                 return false;
@@ -535,7 +531,7 @@ class aicc extends learnpath
 
         if ($package_type == '' || !$mandatory) {
             Display::addFlash(
-                Display::return_message(get_lang('FileError'))
+                Display::return_message(get_lang('The file to upload is not valid.'))
             );
 
             return false;
@@ -543,7 +539,7 @@ class aicc extends learnpath
 
         if (!enough_size($realFileSize, $course_sys_dir, $maxFilledSpace)) {
             Display::addFlash(
-                Display::return_message(get_lang('NoSpace'))
+                Display::return_message(get_lang('The upload has failed. Either you have exceeded your maximum quota, or there is not enough disk space.'))
             );
 
             return false;
@@ -1017,7 +1013,7 @@ class aicc extends learnpath
                     break;
                 case "\r":
                     if (!$enclosed && $data[$i + 1] == "\n") {
-                        continue;
+                        break;
                     }
                     // no break
                 case "\n":
@@ -1031,7 +1027,7 @@ class aicc extends learnpath
                     break;
                 case "\\r":
                     if (!$enclosed && $data[$i + 1] == "\\n") {
-                        continue;
+                        break;
                     }
                     // no break
                 case "\\n":

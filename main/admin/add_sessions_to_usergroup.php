@@ -21,11 +21,11 @@ $xajax->registerFunction('search_usergroup_sessions');
 $this_section = SECTION_PLATFORM_ADMIN;
 
 // setting breadcrumbs
-$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('PlatformAdmin')];
+$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('Administration')];
 $interbreadcrumb[] = ['url' => 'usergroups.php', 'name' => get_lang('Classes')];
 
 // setting the name of the tool
-$tool_name = get_lang('SubscribeClassToSessions');
+$tool_name = get_lang('Subscribe class to sessions');
 
 $add_type = 'multiple';
 if (isset($_REQUEST['add_type']) && $_REQUEST['add_type'] != '') {
@@ -59,10 +59,10 @@ function remove_item(origin) {
 function display_advanced_search () {
     if ($("#advancedSearch").css("display") == "none") {
         $("#advancedSearch").css("display","block");
-        $("#img_plus_and_minus").html(\'&nbsp;'.Display::return_icon('div_hide.gif', get_lang('Hide'), ['style' => 'vertical-align:middle']).'&nbsp;'.get_lang('AdvancedSearch').'\');
+        $("#img_plus_and_minus").html(\'&nbsp;'.Display::return_icon('div_hide.gif', get_lang('Hide'), ['style' => 'vertical-align:middle']).'&nbsp;'.get_lang('Advanced search').'\');
     } else {
         $("#advancedSearch").css("display","none");
-        $("#img_plus_and_minus").html(\'&nbsp;'.Display::return_icon('div_show.gif', get_lang('Show'), ['style' => 'vertical-align:middle']).'&nbsp;'.get_lang('AdvancedSearch').'\');
+        $("#img_plus_and_minus").html(\'&nbsp;'.Display::return_icon('div_show.gif', get_lang('Show'), ['style' => 'vertical-align:middle']).'&nbsp;'.get_lang('Advanced search').'\');
     }
 }
 
@@ -153,21 +153,21 @@ Display::display_header($tool_name);
 $add = (empty($_GET['add']) ? '' : Security::remove_XSS($_GET['add']));
 if ($add_type == 'multiple') {
     $link_add_type_unique = '<a href="'.api_get_self().'?add='.$add.'&add_type=unique">'.
-        Display::return_icon('single.gif').get_lang('SessionAddTypeUnique').'</a>';
-    $link_add_type_multiple = Display::return_icon('multiple.gif').get_lang('SessionAddTypeMultiple');
+        Display::return_icon('single.gif').get_lang('Single registration').'</a>';
+    $link_add_type_multiple = Display::return_icon('multiple.gif').get_lang('Multiple registration');
 } else {
-    $link_add_type_unique = Display::return_icon('single.gif').get_lang('SessionAddTypeUnique');
+    $link_add_type_unique = Display::return_icon('single.gif').get_lang('Single registration');
     $link_add_type_multiple = '<a href="'.api_get_self().'?add='.$add.'&add_type=multiple">'.
-        Display::return_icon('multiple.gif').get_lang('SessionAddTypeMultiple').'</a>';
+        Display::return_icon('multiple.gif').get_lang('Multiple registration').'</a>';
 }
 
 echo '<div class="actions">';
 echo '<a href="usergroups.php">'.
     Display::return_icon('back.png', get_lang('Back'), '', ICON_SIZE_MEDIUM).'</a>';
 echo '<a href="javascript://" class="advanced_parameters" style="margin-top: 8px" onclick="display_advanced_search();"><span id="img_plus_and_minus">&nbsp;'.
-    Display::return_icon('div_show.gif', get_lang('Show'), ['style' => 'vertical-align:middle']).' '.get_lang('AdvancedSearch').'</span></a>';
+    Display::return_icon('div_show.gif', get_lang('Show'), ['style' => 'vertical-align:middle']).' '.get_lang('Advanced search').'</span></a>';
 echo '</div>';
-echo '<div id="advancedSearch" style="display: none">'.get_lang('SearchSessions'); ?> :
+echo '<div id="advancedSearch" style="display: none">'.get_lang('Session Search'); ?> :
      <input name="SearchSession" onchange = "xajax_search_usergroup_sessions(this.value,'searchbox')" onkeyup="this.onchange()">
      </div>
 <form name="formulaire" method="post" action="<?php echo api_get_self(); ?>?id=<?php echo $id; if (!empty($_GET['add'])) {
@@ -187,17 +187,17 @@ if (!empty($errorMsg)) {
 
 <table border="0" cellpadding="5" cellspacing="0" width="100%">
 <tr>
-  <td align="center"><b><?php echo get_lang('SessionsInPlatform'); ?> :</b>
+  <td align="center"><b><?php echo get_lang('Sessions not subscribed'); ?> :</b>
   </td>
   <td></td>
-  <td align="center"><b><?php echo get_lang('SessionsInGroup'); ?> :</b></td>
+  <td align="center"><b><?php echo get_lang('Sessions in group'); ?> :</b></td>
 </tr>
 
 <?php if ($add_type == 'multiple') {
     ?>
 <tr>
 <td align="center">
-<?php echo get_lang('FirstLetterSessions'); ?> :
+<?php echo get_lang('First letter of session name'); ?> :
      <select name="firstLetterUser" onchange = "xajax_search_usergroup_sessions(this.value,'multiple')" >
       <option value = "%">--</option>
       <?php
@@ -273,7 +273,7 @@ echo Display::select(
     <td colspan="3" align="center">
         <br />
         <?php
-        echo '<button class="btn btn-primary" type="button" value="" onclick="valide()" >'.get_lang('SubscribeClassToSessions').'</button>';
+        echo '<button class="btn btn-primary" type="button" value="" onclick="valide()" >'.get_lang('Subscribe class to sessions').'</button>';
         ?>
     </td>
 </tr>

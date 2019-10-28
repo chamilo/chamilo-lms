@@ -67,7 +67,7 @@ class LinkForm extends FormValidator
             null,
             '"'.$this->link_object->get_name().'" '
         );
-        $this->addElement('static', null, null, get_lang('MoveTo').' : ');
+        $this->addElement('static', null, null, get_lang('Move to').' : ');
         $select = $this->addElement('select', 'move_cat', null, null);
         $line = '';
         foreach ($this->link_object->get_target_categories() as $cat) {
@@ -77,7 +77,7 @@ class LinkForm extends FormValidator
             $select->addoption($line.' '.$cat[1], $cat[0]);
             $line = '';
         }
-        $this->addElement('submit', null, get_lang('Ok'));
+        $this->addElement('submit', null, get_lang('Validate'));
     }
 
     /**
@@ -85,18 +85,18 @@ class LinkForm extends FormValidator
      */
     protected function build_create()
     {
-        $this->addElement('header', get_lang('MakeLink'));
+        $this->addElement('header', get_lang('Add online activity'));
         $select = $this->addElement(
             'select',
             'select_link',
-            get_lang('ChooseLink'),
+            get_lang('Choose type of activity to assess'),
             null,
             ['onchange' => 'document.create_link.submit()']
         );
 
         $linkTypes = LinkFactory::get_all_types();
 
-        $select->addoption('['.get_lang('ChooseLink').']', 0);
+        $select->addoption('['.get_lang('Choose type of activity to assess').']', 0);
 
         $courseCode = $this->category_object->get_course_code();
 

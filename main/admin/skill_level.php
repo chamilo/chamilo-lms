@@ -38,7 +38,7 @@ if (!empty($id)) {
 
 $form = new FormValidator('level', 'GET', api_get_self().'?action='.$action.'&id='.$id);
 $form->addText('name', get_lang('Name'));
-$form->addText('short_name', get_lang('ShortName'));
+$form->addText('short_name', get_lang('Short name'));
 $form->addSelectFromCollection('profile_id', get_lang('Profile'), $profiles);
 $form->addHidden('action', $action);
 $form->addHidden('id', $id);
@@ -54,9 +54,9 @@ if (!empty($item)) {
 
 $formToDisplay = '';
 
-$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('PlatformAdmin')];
-$interbreadcrumb[] = ['url' => api_get_path(WEB_CODE_PATH).'admin/skill.php', 'name' => get_lang('ManageSkillsLevels')];
-$interbreadcrumb[] = ['url' => api_get_self(), 'name' => get_lang('SkillLevel')];
+$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('Administration')];
+$interbreadcrumb[] = ['url' => api_get_path(WEB_CODE_PATH).'admin/skill.php', 'name' => get_lang('Manage skills levels')];
+$interbreadcrumb[] = ['url' => api_get_self(), 'name' => get_lang('Skill level')];
 
 switch ($action) {
     case 'add':
@@ -77,7 +77,7 @@ switch ($action) {
                     Display::addFlash(Display::return_message(get_lang('Added')));
                 }
             } else {
-                Display::addFlash(Display::return_message(get_lang('YouNeedToCreateASkillProfile')));
+                Display::addFlash(Display::return_message(get_lang('You need to create a skill profile')));
             }
             header('Location: '.$listAction);
             exit;

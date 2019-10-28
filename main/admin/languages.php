@@ -59,11 +59,11 @@ $htmlHeadXtra[] = '<script>
     var disabledLang = "'.$disabledLang.'"
 
     if (msgLang == 1) {
-        $("#id_content_message").html("<div class=\"warning-message alert alert-warning\">'.get_lang('ThereAreUsersUsingThisLanguagesDisableItManually').' <br /> " + disabledLang + "</div");
+        $("#id_content_message").html("<div class=\"warning-message alert alert-warning\">'.get_lang('There are users currently using the following language. Please disable manually.').' <br /> " + disabledLang + "</div");
     }
 
     $("#disable_all_except_default").click(function () {
-        if(confirm("'.get_lang('ConfirmYourChoice').'")) {
+        if(confirm("'.get_lang('Please confirm your choice').'")) {
             $.ajax({
                 contentType: "application/x-www-form-urlencoded",
                 beforeSend: function(myObject) {
@@ -120,26 +120,26 @@ $htmlHeadXtra[] = '<script>
                     $("#"+id_img_link_tool).attr("src",path_name_of_imglinktool);
 
                     if (my_image_tool=="visible.png") {
-                        $("#"+id_img_link_tool).attr("alt","'.get_lang('MakeAvailable', '').'");
-                        $("#"+id_img_link_tool).attr("title","'.get_lang('MakeAvailable', '').'");
+                        $("#"+id_img_link_tool).attr("alt","'.get_lang('Make available').'");
+                        $("#"+id_img_link_tool).attr("title","'.get_lang('Make available').'");
                     } else {
-                        $("#"+id_img_link_tool).attr("alt","'.get_lang('MakeUnavailable', '').'");
-                        $("#"+id_img_link_tool).attr("title","'.get_lang('MakeUnavailable', '').'");
+                        $("#"+id_img_link_tool).attr("alt","'.get_lang('Make unavailable').'");
+                        $("#"+id_img_link_tool).attr("title","'.get_lang('Make unavailable').'");
                     }
 
                     if (datos=="set_visible") {
-                        $("#id_content_message").html("<div class=\"confirmation-message alert alert-success\">'.get_lang('LanguageIsNowVisible', '').'</div>");
+                        $("#id_content_message").html("<div class=\"confirmation-message alert alert-success\">'.get_lang('LanguageIsNowVisible').'</div>");
                     }
 
                     if (datos=="set_hidden") {
-                        $("#id_content_message").html("<div class=\"confirmation-message alert alert-success\">'.get_lang('LanguageIsNowHidden', '').'</div>");
+                        $("#id_content_message").html("<div class=\"confirmation-message alert alert-success\">'.get_lang('The language has been hidden. It will not be possible to use it until it becomes visible again.').'</div>");
                     }
                 }
 
                 var action = datos.split(":")[0];
                 if (action && action == "confirm") {
                     var id = datos.split(":")[1];
-                    var sure = "<div class=\"warning-message alert alert-warning\">'.get_lang('ThereAreUsersUsingThisLanguageYouWantToDisableThisLanguageAndSetUsersWithTheDefaultPortalLanguage').'<br /><br /><a href=\"languages.php?action=make_unavailable_confirmed&id="+id+"\" class=\"btn btn-default\"><em class=\"fa fa-eye\"></em> '.get_lang('MakeUnavailable').'</a></div>";
+                    var sure = "<div class=\"warning-message alert alert-warning\">'.get_lang('There are users using this language. Do you want to disable this language and set all this users with the default portal language?').'<br /><br /><a href=\"languages.php?action=make_unavailable_confirmed&id="+id+"\" class=\"btn btn-default\"><em class=\"fa fa-eye\"></em> '.get_lang('Make unavailable').'</a></div>";
                     $("#id_content_message").html(sure);
                     $("html, body").animate({ scrollTop: 0 }, 200);
 				}
@@ -164,7 +164,7 @@ switch ($action) {
     case 'makeunavailable':
         if (!empty($id)) {
             SubLanguageManager::make_unavailable_language($id);
-            Display::addFlash(Display::return_message(get_lang('Updated'), 'success'));
+            Display::addFlash(Display::return_message(get_lang('Update successful'), 'success'));
         }
         header("Location: $url");
         exit;
@@ -172,14 +172,14 @@ switch ($action) {
     case 'makeavailable':
         if (!empty($id)) {
             SubLanguageManager::make_available_language($id);
-            Display::addFlash(Display::return_message(get_lang('Updated'), 'success'));
+            Display::addFlash(Display::return_message(get_lang('Update successful'), 'success'));
         }
         header("Location: $url");
         exit;
     case 'setplatformlanguage':
         if (!empty($id)) {
             SubLanguageManager::set_platform_language($id);
-            Display::addFlash(Display::return_message(get_lang('Updated'), 'success'));
+            Display::addFlash(Display::return_message(get_lang('Update successful'), 'success'));
         }
         header("Location: $url");
         exit;
@@ -201,7 +201,7 @@ switch ($action) {
         if ($checkFailed) {
             $_SESSION['disabled_languages'] = $failedDisabledLanguages;
         }
-        Display::addFlash(Display::return_message(get_lang('Updated'), 'success'));
+        Display::addFlash(Display::return_message(get_lang('Update successful'), 'success'));
         header("Location: $url");
         exit;
         break;
@@ -211,7 +211,7 @@ switch ($action) {
             SubLanguageManager::make_unavailable_language($id);
             $platform_language = api_get_setting('platformLanguage');
             UserManager::update_all_user_languages($language_info['english_name'], $platform_language);
-            Display::addFlash(Display::return_message(get_lang('LanguageIsNowHidden'), 'confirm'));
+            Display::addFlash(Display::return_message(get_lang('The language has been hidden. It will not be possible to use it until it becomes visible again.'), 'confirm'));
             header("Location: $url");
             exit;
         }
@@ -261,19 +261,19 @@ if (isset($_POST['Submit']) && $_POST['Submit']) {
 }
 
 // setting the name of the tool
-$tool_name = get_lang('PlatformLanguages');
+$tool_name = get_lang('Chamilo Portal Languages');
 
 // setting breadcrumbs
-$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('PlatformAdmin')];
+$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('Administration')];
 
 // displaying the explanation for this tool
-Display::addFlash(Display::return_message(get_lang('PlatformLanguagesExplanation'), 'normal'));
+Display::addFlash(Display::return_message(get_lang('Chamilo Portal LanguagesExplanation'), 'normal'));
 
 // including the header file (which includes the banner itself)
 Display::display_header($tool_name);
 
 echo '<a id="disable_all_except_default" href="javascript:void(0)" class="btn btn-primary">
-<em class="fa fa-eye"></em> '.get_lang('LanguagesDisableAllExceptDefault').'</a><br /><br />';
+<em class="fa fa-eye"></em> '.get_lang('Disable all languages except the platform default').'</a><br /><br />';
 
 // selecting all the languages
 $sql_select = "SELECT * FROM $tbl_admin_languages";
@@ -296,8 +296,8 @@ while ($row = Database::fetch_array($result_select)) {
             <input type="hidden" name="edit_id" value="'.$id.'" />
             <input type="text" name="txt_name" value="'.$row['original_name'].'" />
             <input type="checkbox" '.$checked.'name="platformlanguage" id="platformlanguage" value="'.$row['english_name'].'" />
-            <label for="platformlanguage">'.$row['original_name'].' '.get_lang('AsPlatformLanguage').'</label> 
-            <input type="submit" name="Submit" value="'.get_lang('Ok').'" />
+            <label for="platformlanguage">'.$row['original_name'].' '.get_lang('as platformlanguage').'</label> 
+            <input type="submit" name="Submit" value="'.get_lang('Validate').'" />
             <a name="value" />';
     } else {
         $row_td[] = $row['original_name'];
@@ -309,14 +309,14 @@ while ($row = Database::fetch_array($result_select)) {
     if ($row['isocode'] == $currentLanguage) {
         $setplatformlanguage = Display::return_icon(
             'languages.png',
-            get_lang('CurrentLanguagesPortal'),
+            get_lang('Current portal\'s language'),
             '',
             ICON_SIZE_SMALL
         );
     } else {
         $setplatformlanguage =
-            "<a href=\"javascript:if (confirm('".addslashes(get_lang('AreYouSureYouWantToSetThisLanguageAsThePortalDefault'))."')) { location.href='".api_get_self()."?action=setplatformlanguage&id=".$row['id']."'; }\">".
-            Display::return_icon('languages_na.png', get_lang('SetLanguageAsDefault'), '', ICON_SIZE_SMALL)."</a>";
+            "<a href=\"javascript:if (confirm('".addslashes(get_lang('Are you sure you want to set this language as the portal\'s default?'))."')) { location.href='".api_get_self()."?action=setplatformlanguage&id=".$row['id']."'; }\">".
+            Display::return_icon('languages_na.png', get_lang('Set language as default'), ICON_SIZE_SMALL)."</a>";
     }
 
     $allow_delete_sub_language = null;
@@ -328,7 +328,7 @@ while ($row = Database::fetch_array($result_select)) {
         if ($verified_if_is_sub_language === false) {
             $verified_if_is_father = SubLanguageManager::check_if_language_is_father($row['id']);
             $allow_use_sub_language = "&nbsp;<a href='sub_language_add.php?action=definenewsublanguage&id=".$row['id']."'>".
-                Display::return_icon('new_language.png', get_lang('CreateSubLanguage'), [], ICON_SIZE_SMALL)."</a>";
+                Display::return_icon('new_language.png', get_lang('Create sub-language'), [], ICON_SIZE_SMALL)."</a>";
             if ($verified_if_is_father === true) {
                 $allow_add_term_sub_language = '';
             } else {
@@ -337,8 +337,8 @@ while ($row = Database::fetch_array($result_select)) {
         } else {
             $allow_use_sub_language = '';
             $all_information_of_sub_language = SubLanguageManager::get_all_information_of_language($row['id']);
-            $allow_add_term_sub_language = "&nbsp;<a href='sub_language.php?action=registersublanguage&id=".Security::remove_XSS($all_information_of_sub_language['parent_id'])."&sub_language_id=".Security::remove_XSS($row['id'])."'>".Display::return_icon('2rightarrow.png', get_lang('AddWordForTheSubLanguage'), ['width' => ICON_SIZE_SMALL, 'height' => ICON_SIZE_SMALL])."</a>";
-            $allow_delete_sub_language = "&nbsp;<a href='sub_language_add.php?action=deletesublanguage&id=".Security::remove_XSS($all_information_of_sub_language['parent_id'])."&sub_language_id=".Security::remove_XSS($row['id'])."'>".Display::return_icon('delete.png', get_lang('DeleteSubLanguage'), ['width' => ICON_SIZE_SMALL, 'height' => ICON_SIZE_SMALL])."</a>";
+            $allow_add_term_sub_language = "&nbsp;<a href='sub_language.php?action=registersublanguage&id=".Security::remove_XSS($all_information_of_sub_language['parent_id'])."&sub_language_id=".Security::remove_XSS($row['id'])."'>".Display::return_icon('2rightarrow.png', get_lang('Add terms to the sub-language'), ['width' => ICON_SIZE_SMALL, 'height' => ICON_SIZE_SMALL])."</a>";
+            $allow_delete_sub_language = "&nbsp;<a href='sub_language_add.php?action=deletesublanguage&id=".Security::remove_XSS($all_information_of_sub_language['parent_id'])."&sub_language_id=".Security::remove_XSS($row['id'])."'>".Display::return_icon('delete.png', get_lang('Delete sub-language'), ['width' => ICON_SIZE_SMALL, 'height' => ICON_SIZE_SMALL])."</a>";
         }
     }
 
@@ -350,10 +350,10 @@ while ($row = Database::fetch_array($result_select)) {
     } else {
         if ($row['available'] == 1) {
             $row_td[] = "<a class=\"make_visible_and_invisible\" id=\"linktool_".$row['id']."\" href='".api_get_self()."?action=makeunavailable&id=".$row['id']."'>".
-                Display::return_icon('visible.png', get_lang('MakeUnavailable'), ['id' => 'imglinktool_'.$row['id']], ICON_SIZE_SMALL)."</a> <a href='".api_get_self()."?action=edit&id=".$row['id']."#value'>".Display::return_icon('edit.png', get_lang('Edit'), '', ICON_SIZE_SMALL)."</a>&nbsp;".$setplatformlanguage.$allow_use_sub_language.$allow_add_term_sub_language.$allow_delete_sub_language;
+                Display::return_icon('visible.png', get_lang('Make unavailable'), ['id' => 'imglinktool_'.$row['id']], ICON_SIZE_SMALL)."</a> <a href='".api_get_self()."?action=edit&id=".$row['id']."#value'>".Display::return_icon('edit.png', get_lang('Edit'), '', ICON_SIZE_SMALL)."</a>&nbsp;".$setplatformlanguage.$allow_use_sub_language.$allow_add_term_sub_language.$allow_delete_sub_language;
         } else {
             $row_td[] = "<a class=\"make_visible_and_invisible\" id=\"linktool_".$row['id']."\" href='".api_get_self()."?action=makeavailable&id=".$row['id']."'>".
-                Display::return_icon('invisible.png', get_lang('MakeAvailable'), ['id' => 'imglinktool_'.$row['id']], ICON_SIZE_SMALL)."</a> <a href='".api_get_self()."?action=edit&id=".$row['id']."#value'>".Display::return_icon('edit.png', get_lang('Edit'), '', ICON_SIZE_SMALL)."</a>&nbsp;".$setplatformlanguage.$allow_use_sub_language.$allow_add_term_sub_language.$allow_delete_sub_language;
+                Display::return_icon('invisible.png', get_lang('Make available'), ['id' => 'imglinktool_'.$row['id']], ICON_SIZE_SMALL)."</a> <a href='".api_get_self()."?action=edit&id=".$row['id']."#value'>".Display::return_icon('edit.png', get_lang('Edit'), '', ICON_SIZE_SMALL)."</a>&nbsp;".$setplatformlanguage.$allow_use_sub_language.$allow_add_term_sub_language.$allow_delete_sub_language;
         }
     }
     $language_data[] = $row_td;
@@ -361,13 +361,13 @@ while ($row = Database::fetch_array($result_select)) {
 
 $table = new SortableTableFromArrayConfig($language_data, 1, count($language_data));
 $table->set_header(0, '');
-$table->set_header(1, get_lang('OriginalName'));
-$table->set_header(2, get_lang('EnglishName'));
-//$table->set_header(3, get_lang('LMSFolder'));
+$table->set_header(1, get_lang('Original name'));
+$table->set_header(2, get_lang('English name'));
+//$table->set_header(3, get_lang('Chamilo folder'));
 $table->set_header(4, get_lang('Properties'));
 $form_actions = [];
-$form_actions['makeavailable'] = get_lang('MakeAvailable');
-$form_actions['makeunavailable'] = get_lang('MakeUnavailable');
+$form_actions['makeavailable'] = get_lang('Make available');
+$form_actions['makeunavailable'] = get_lang('Make unavailable');
 $table->set_form_actions($form_actions);
 echo '<div id="id_content_message">&nbsp;</div>';
 $table->display();

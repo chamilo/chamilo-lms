@@ -29,7 +29,7 @@ api_protect_admin_script();
  // Submit stylesheets.
 if (isset($_POST['save']) && isset($_GET['category']) && $_GET['category'] === 'Stylesheets') {
     storeStylesheets();
-    Display::addFlash(Display::return_message(get_lang('Saved')));
+    Display::addFlash(Display::return_message(get_lang('Saved.')));
 }
 
 // Settings to avoid
@@ -55,17 +55,17 @@ if (isset($_POST['style'])) {
 $table_settings_current = Database::get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
 
 // Setting breadcrumbs.
-$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('PlatformAdmin')];
+$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('Administration')];
 
 // Setting the name of the tool.
-$tool_name = get_lang('PlatformConfigSettings');
+$tool_name = get_lang('Configuration settings');
 if (empty($_GET['category'])) {
     $_GET['category'] = 'Platform';
 }
 $watermark_deleted = false;
 if (isset($_GET['delete_watermark'])) {
     $watermark_deleted = PDF::delete_watermark();
-    Display::addFlash(Display::return_message(get_lang('FileDeleted')));
+    Display::addFlash(Display::return_message(get_lang('File deleted')));
 }
 
 if (isset($_GET['action']) && $_GET['action'] == 'delete_grading') {
@@ -151,9 +151,9 @@ if (!empty($_GET['category']) &&
                 $pdf_export_watermark_path['tmp_name']
             );
             if ($pdf_export_watermark_path_result) {
-                Display::addFlash(Display::return_message(get_lang('UplUploadSucceeded')));
+                Display::addFlash(Display::return_message(get_lang('File upload succeeded!')));
             } else {
-                $message = get_lang('UplUnableToSaveFile').' '.get_lang('Folder').': '.api_get_path(SYS_CODE_PATH).'default_course_document/images';
+                $message = get_lang('The uploaded file could not be saved (perhaps a permission problem?)').' '.get_lang('Folder').': '.api_get_path(SYS_CODE_PATH).'default_course_document/images';
                 Display::addFlash(Display::return_message($message), 'warning');
             }
             unset($update_values['pdf_export_watermark_path']);
@@ -297,7 +297,7 @@ if (!empty($_GET['category']) &&
             }
         }
 
-        Display::addFlash(Display::return_message(get_lang('Updated')));
+        Display::addFlash(Display::return_message(get_lang('Update successful')));
 
         header('Location: '.api_get_self().'?category='.Security::remove_XSS($my_category));
         exit;
@@ -427,15 +427,15 @@ if (!empty($_GET['category'])) {
                         api_get_utc_datetime(),
                         $user_id
                     );
-                    echo Display::return_message(get_lang('DashboardPluginsUpdatedSuccessfully'), 'confirmation');
+                    echo Display::return_message(get_lang('Dashboard pluginsUpdate successfulSuccessfully'), 'confirmation');
                 }
             }
 
             echo '<div class="tab_wrapper">';
             echo '<ul class="nav nav-tabs" id="tabs" role="tablist">';
             echo '<li class="nav-item"><a id="plugin-tab-1" class="nav-link active" href="#tab1" aria-controls="tab1" aria-selected="true">'.get_lang('Plugins').'</a></li>';
-            echo '<li class="nav-item"><a id="plugin-tab-2" class="nav-link" href="#tab2" aria-controls="tab2" aria-selected="false">'.get_lang('DashboardPlugins').'</a></li>';
-            echo '<li class="nav-item"><a id="plugin-tab-3" class="nav-link" href="#tab3" aria-controls="tab3" aria-selected="false">'.get_lang('ConfigureExtensions').'</a></li>';
+            echo '<li class="nav-item"><a id="plugin-tab-2" class="nav-link" href="#tab2" aria-controls="tab2" aria-selected="false">'.get_lang('Dashboard plugins').'</a></li>';
+            echo '<li class="nav-item"><a id="plugin-tab-3" class="nav-link" href="#tab3" aria-controls="tab3" aria-selected="false">'.get_lang('Configure extensions').'</a></li>';
             echo '</ul>';
 
             echo '<div class="tab-content" id="tabs-content">';

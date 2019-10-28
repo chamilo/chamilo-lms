@@ -20,11 +20,11 @@ $htmlHeadXtra[] = api_get_jqgrid_js();
 // setting breadcrumbs
 $interbreadcrumb[] = [
     'url' => 'index.php',
-    'name' => get_lang('PlatformAdmin'),
+    'name' => get_lang('Administration'),
 ];
 $interbreadcrumb[] = [
     'url' => 'career_dashboard.php',
-    'name' => get_lang('CareersAndPromotions'),
+    'name' => get_lang('Careers and promotions'),
 ];
 
 $action = isset($_GET['action']) ? $_GET['action'] : null;
@@ -47,7 +47,7 @@ if ($action == 'add') {
 $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_careers';
 
 //The order is important you need to check the the $column variable in the model.ajax.php file
-$columns = [get_lang('Name'), get_lang('Description'), get_lang('Actions')];
+$columns = [get_lang('Name'), get_lang('Description'), get_lang('Detail')];
 
 // Column config
 $column_model = [
@@ -88,8 +88,8 @@ if (api_is_platform_admin()) {
     $actionLinks = 'function action_formatter(cellvalue, options, rowObject) {
         return \'<a href="?action=edit&id=\'+options.rowId+\'">'.Display::return_icon('edit.png', get_lang('Edit'), '', ICON_SIZE_SMALL).'</a>'.
             $diagramLink.
-            '&nbsp;<a onclick="javascript:if(!confirm('."\'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"), ENT_QUOTES))."\'".')) return false;"  href="?sec_token='.$token.'&action=copy&id=\'+options.rowId+\'">'.Display::return_icon('copy.png', get_lang('Copy'), '', ICON_SIZE_SMALL).'</a>'.
-            '&nbsp;<a onclick="javascript:if(!confirm('."\'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"), ENT_QUOTES))."\'".')) return false;"  href="?sec_token='.$token.'&action=delete&id=\'+options.rowId+\'">'.Display::return_icon('delete.png', get_lang('Delete'), '', ICON_SIZE_SMALL).'</a>'.
+            '&nbsp;<a onclick="javascript:if(!confirm('."\'".addslashes(api_htmlentities(get_lang("Please confirm your choice"), ENT_QUOTES))."\'".')) return false;"  href="?sec_token='.$token.'&action=copy&id=\'+options.rowId+\'">'.Display::return_icon('copy.png', get_lang('Copy'), '', ICON_SIZE_SMALL).'</a>'.
+            '&nbsp;<a onclick="javascript:if(!confirm('."\'".addslashes(api_htmlentities(get_lang("Please confirm your choice"), ENT_QUOTES))."\'".')) return false;"  href="?sec_token='.$token.'&action=delete&id=\'+options.rowId+\'">'.Display::return_icon('delete.png', get_lang('Delete'), '', ICON_SIZE_SMALL).'</a>'.
             '\';
     }';
 } else {
@@ -125,7 +125,7 @@ switch ($action) {
                 $res = $career->save($values);
                 if ($res) {
                     Display::addFlash(
-                        Display::return_message(get_lang('ItemAdded'), 'confirmation')
+                        Display::return_message(get_lang('Item added'), 'confirmation')
                     );
                 }
             }
@@ -166,12 +166,12 @@ switch ($action) {
 
                 if ($res) {
                     Display::addFlash(
-                        Display::return_message(get_lang('CareerUpdated'), 'confirmation')
+                        Display::return_message(get_lang('Career updated successfully'), 'confirmation')
                     );
                     if ($values['status'] && !$old_status) {
                         Display::addFlash(
                             Display::return_message(
-                                sprintf(get_lang('CareerXUnarchived'), $values['name']),
+                                sprintf(get_lang('The <i>%s</i> career has been unarchived. This action has the consequence of making visible the career, its promotions and all the sessions registered into this promotion. You can undo this by archiving the career.'), $values['name']),
                                 'confirmation',
                                 false
                             )
@@ -179,7 +179,7 @@ switch ($action) {
                     } elseif (!$values['status'] && $old_status) {
                         Display::addFlash(
                             Display::return_message(
-                                sprintf(get_lang('CareerXArchived'), $values['name']),
+                                sprintf(get_lang('The <i>%s</i> career has been archived. This action has the consequence of making invisible the career, its promotions and all the sessions registered into this promotion. You can undo this by unarchiving the career.'), $values['name']),
                                 'confirmation',
                                 false
                             )
@@ -205,7 +205,7 @@ switch ($action) {
             $res = $career->delete($_GET['id']);
             if ($res) {
                 Display::addFlash(
-                    Display::return_message(get_lang('ItemDeleted'), 'confirmation')
+                    Display::return_message(get_lang('Item deleted'), 'confirmation')
                 );
             }
         }
@@ -221,7 +221,7 @@ switch ($action) {
             $res = $career->copy($_GET['id'], true); //copy career and promotions inside
             if ($res) {
                 Display::addFlash(
-                    Display::return_message(get_lang('ItemCopied'), 'confirmation')
+                    Display::return_message(get_lang('Item copied'), 'confirmation')
                 );
             }
         }

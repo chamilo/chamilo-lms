@@ -41,7 +41,7 @@ if (empty($document)) {
     $document = $documentRepo->findOneBy(['cId' => $courseId, 'id' => $id]);
 
     if (empty($document)) {
-        Display::return_message(get_lang('FileNotFound'), 'error');
+        Display::return_message(get_lang('The file was not found'), 'error');
         exit;
     }
 }

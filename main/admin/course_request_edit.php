@@ -11,7 +11,7 @@
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 $this_section = SECTION_PLATFORM_ADMIN;
-$tool_name = get_lang('CourseRequestEdit');
+$tool_name = get_lang('Edit a course request');
 
 api_protect_admin_script();
 
@@ -29,7 +29,7 @@ if ($course_validation_feature) {
         // Prepare an error message notifying that the course request has not been found or does not exist.
         Display::addFlash(
             Display::return_message(
-                get_lang('CourseRequestHasNotBeenFound'),
+                get_lang('The course request you wanted to access has not been found or it does not exist.'),
                 'warning',
                 false
             )
@@ -49,9 +49,9 @@ if ($course_validation_feature) {
         $form->addElement('header', $tool_name);
 
         // Title.
-        $form->addElement('text', 'title', get_lang('CourseName'), ['size' => '60', 'id' => 'title']);
+        $form->addElement('text', 'title', get_lang('Course name'), ['size' => '60', 'id' => 'title']);
         $form->applyFilter('title', 'html_filter');
-        $form->addRule('title', get_lang('ThisFieldIsRequired'), 'required');
+        $form->addRule('title', get_lang('Required field'), 'required');
 
         // Course category.
         $url = api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=search_category';
@@ -59,7 +59,7 @@ if ($course_validation_feature) {
         $courseSelect = $form->addElement(
             'select_ajax',
             'category_code',
-            get_lang('CourseFaculty'),
+            get_lang('Category'),
             null,
             ['url' => $url]
         );
@@ -70,36 +70,36 @@ if ($course_validation_feature) {
         }
 
         // Course code.
-        $form->addText('wanted_code', get_lang('Code'), false, ['size' => '$maxlength', 'maxlength' => $maxlength]);
+        $form->addText('wanted_code', get_lang('Course code'), false, ['size' => '$maxlength', 'maxlength' => $maxlength]);
         $form->applyFilter('wanted_code', 'html_filter');
-        $form->addRule('wanted_code', get_lang('Max'), 'maxlength', $maxlength);
-        $form->addRule('wanted_code', get_lang('ThisFieldIsRequired'), 'required');
+        $form->addRule('wanted_code', get_lang('max. 20 characters, e.g. <i>INNOV21</i>'), 'maxlength', $maxlength);
+        $form->addRule('wanted_code', get_lang('Required field'), 'required');
 
         // The teacher.
         $titular = $form->addText(
             'tutor_name',
-            get_lang('Professor'),
+            get_lang('Trainer'),
             null,
             ['size' => '60', 'disabled' => 'disabled']
         );
 
         // Description of the requested course.
         $form->addElement('textarea', 'description', get_lang('Description'));
-        $form->addRule('description', get_lang('ThisFieldIsRequired'), 'required');
+        $form->addRule('description', get_lang('Required field'), 'required');
 
         // Objectives of the requested course.
         $form->addElement('textarea', 'objetives', get_lang('Objectives'));
-        $form->addRule('objetives', get_lang('ThisFieldIsRequired'), 'required');
+        $form->addRule('objetives', get_lang('Required field'), 'required');
 
         // Target audience of the requested course.
-        $form->addElement('textarea', 'target_audience', get_lang('TargetAudience'));
-        $form->addRule('target_audience', get_lang('ThisFieldIsRequired'), 'required');
+        $form->addElement('textarea', 'target_audience', get_lang('Target audience'));
+        $form->addRule('target_audience', get_lang('Required field'), 'required');
 
         // Course language.
-        $form->addSelectLanguage('course_language', get_lang('Ln'));
+        $form->addSelectLanguage('course_language', get_lang('Language'));
 
         // Exemplary content checkbox.
-        $form->addElement('checkbox', 'exemplary_content', get_lang('FillWithExemplaryContent'));
+        $form->addElement('checkbox', 'exemplary_content', get_lang('Fill with demo content'));
 
         // Submit buttons.
         $submit_buttons[] = $form->addButtonSave(get_lang('Save'), 'save_button', true);
@@ -112,7 +112,7 @@ if ($course_validation_feature) {
             $submit_buttons[] = $form->addButtonCancel(get_lang('Reject'), 'reject_button', true);
         }
         if ($course_request_info['status'] != COURSE_REQUEST_ACCEPTED && intval($course_request_info['info']) <= 0) {
-            $submit_buttons[] = $form->addButtonPreview(get_lang('AskAdditionalInfo'), 'ask_info_button', true);
+            $submit_buttons[] = $form->addButtonPreview(get_lang('Ask for additional information'), 'ask_info_button', true);
         }
         $form->addGroup($submit_buttons);
 
@@ -179,7 +179,7 @@ if ($course_validation_feature) {
                     Display::addFlash(
                         Display::return_message(
                             sprintf(
-                                get_lang('CourseRequestUpdated'),
+                                get_lang('The course request %s has been updated.'),
                                 $course_request_values['wanted_code']
                             ),
                             'normal',
@@ -193,7 +193,7 @@ if ($course_validation_feature) {
                                 Display::addFlash(
                                     Display::return_message(
                                         sprintf(
-                                            get_lang('CourseRequestAccepted'),
+                                            get_lang('The course request %s has been accepted. A new course %s has been created.'),
                                             $course_request_values['wanted_code'],
                                             $course_request_values['wanted_code']
                                         ),
@@ -205,7 +205,7 @@ if ($course_validation_feature) {
                                 Display::addFlash(
                                     Display::return_message(
                                         sprintf(
-                                            get_lang('CourseRequestAcceptanceFailed'),
+                                            get_lang('The course request %s has not been accepted due to internal error.'),
                                             $course_request_values['wanted_code']
                                         )
                                     ),
@@ -219,7 +219,7 @@ if ($course_validation_feature) {
                                 Display::addFlash(
                                     Display::return_message(
                                         sprintf(
-                                            get_lang('CourseRequestRejected'),
+                                            get_lang('The course request %s has been rejected.'),
                                             $course_request_values['wanted_code']
                                         )
                                     ),
@@ -230,7 +230,7 @@ if ($course_validation_feature) {
                                 Display::addFlash(
                                     Display::return_message(
                                         sprintf(
-                                            get_lang('CourseRequestRejectionFailed'),
+                                            get_lang('The course request %s has not been rejected due to internal error.'),
                                             $course_request_values['wanted_code']
                                         )
                                     ),
@@ -244,7 +244,7 @@ if ($course_validation_feature) {
                                 Display::addFlash(
                                     Display::return_message(
                                         sprintf(
-                                            get_lang('CourseRequestInfoAsked'),
+                                            get_lang('Additional information about the course request %s has been asked.'),
                                             $course_request_values['wanted_code']
                                         )
                                     ),
@@ -255,7 +255,7 @@ if ($course_validation_feature) {
                                 Display::addFlash(
                                     Display::return_message(
                                         sprintf(
-                                            get_lang('CourseRequestInfoFailed'),
+                                            get_lang('Additional information about the course request %s has not been asked due to internal error.'),
                                             $course_request_values['wanted_code']
                                         )
                                     ),
@@ -269,7 +269,7 @@ if ($course_validation_feature) {
                     Display::addFlash(
                         Display::return_message(
                             sprintf(
-                                get_lang('CourseRequestUpdateFailed'),
+                                get_lang('The course request %s has not been updated due to internal error.'),
                                 $course_request_values['wanted_code']
                             )
                         ),
@@ -284,7 +284,7 @@ if ($course_validation_feature) {
             } else {
                 Display::addFlash(
                     Display::return_message(
-                        $course_request_values['wanted_code'].' - '.get_lang('CourseCodeAlreadyExists')
+                        $course_request_values['wanted_code'].' - '.get_lang('CourseCourse codeAlreadyExists')
                     ),
                     'error',
                     false
@@ -296,11 +296,11 @@ if ($course_validation_feature) {
     // Prepare an error message notifying that the course validation feature has not been enabled.
     $link_to_setting = api_get_path(WEB_CODE_PATH).'admin/settings.php?search_field=course_validation&submit_button=&category=search_setting';
     $message = sprintf(
-        get_lang('PleaseActivateCourseValidationFeature'),
+        get_lang('The "Course validation" feature is not enabled at the moment. In order to use this feature, please, enable it by using the  %s setting.'),
         sprintf(
             '<strong><a href="%s">%s</a></strong>',
             $link_to_setting,
-            get_lang('EnableCourseValidation')
+            get_lang('Courses validation')
         )
     );
     Display::addFlash(
@@ -326,8 +326,8 @@ function get_caller_name($caller_id)
 }
 
 // The header.
-$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('PlatformAdmin')];
-$interbreadcrumb[] = ['url' => 'course_list.php', 'name' => get_lang('CourseList')];
+$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('Administration')];
+$interbreadcrumb[] = ['url' => 'course_list.php', 'name' => get_lang('Course list')];
 
 Display :: display_header($tool_name);
 
@@ -340,15 +340,15 @@ if (!$course_validation_feature) {
 // The action bar.
 echo '<div class="actions">';
 echo '<a href="course_list.php">'.
-    Display::return_icon('courses.gif', get_lang('CourseList')).get_lang('CourseList').'</a>';
+    Display::return_icon('courses.gif', get_lang('Course list')).get_lang('Course list').'</a>';
 echo '<a href="course_request_review.php">'.
-    Display::return_icon('course_request_pending.png', get_lang('ReviewCourseRequests')).get_lang('ReviewCourseRequests').
+    Display::return_icon('course_request_pending.png', get_lang('Review incoming course requests')).get_lang('Review incoming course requests').
     '</a>';
 echo '<a href="course_request_accepted.php">'.
-    Display::return_icon('course_request_accepted.gif', get_lang('AcceptedCourseRequests')).get_lang('AcceptedCourseRequests').
+    Display::return_icon('course_request_accepted.gif', get_lang('Accepted course requests')).get_lang('Accepted course requests').
     '</a>';
 echo '<a href="course_request_rejected.php">'.
-    Display::return_icon('course_request_rejected.gif', get_lang('RejectedCourseRequests')).get_lang('RejectedCourseRequests').
+    Display::return_icon('course_request_rejected.gif', get_lang('Rejected course requests')).get_lang('Rejected course requests').
     '</a>';
 echo '</div>';
 

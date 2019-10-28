@@ -17,8 +17,8 @@ $this_section = SECTION_PLATFORM_ADMIN;
 api_protect_admin_script();
 Skill::isAllowed();
 
-$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('PlatformAdmin')];
-$interbreadcrumb[] = ['url' => 'skill_list.php', 'name' => get_lang('ManageSkills')];
+$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('Administration')];
+$interbreadcrumb[] = ['url' => 'skill_list.php', 'name' => get_lang('Manage skills')];
 
 /* Process data */
 $skillId = isset($_REQUEST['id']) ? (int) $_REQUEST['id'] : 0;
@@ -54,7 +54,7 @@ foreach ($allGradebooks as $gradebook) {
 
 /* Form */
 $editForm = new FormValidator('skill_edit');
-$editForm->addHeader(get_lang('SkillEdit'));
+$editForm->addHeader(get_lang('Edit skill'));
 $returnParams = $objSkill->setForm($editForm, $skillInfo);
 
 $jquery_ready_content = $returnParams['jquery_ready_content'];
@@ -80,14 +80,14 @@ if ($editForm->validate()) {
     if ($updated) {
         Display::addFlash(
             Display::return_message(
-                get_lang('TheSkillHasBeenUpdated'),
+                get_lang('The skill has been updated'),
                 'success'
             )
         );
     } else {
         Display::addFlash(
             Display::return_message(
-                get_lang('CannotUpdateSkill'),
+                get_lang('Cannot update skill'),
                 'error'
             )
         );
@@ -100,6 +100,6 @@ if ($editForm->validate()) {
 $toolbar = $objSkill->getToolBar();
 
 /* view */
-$tpl = new Template(get_lang('SkillEdit'));
+$tpl = new Template(get_lang('Edit skill'));
 $tpl->assign('content', $toolbar.$editForm->returnForm());
 $tpl->display_one_col_template();

@@ -150,7 +150,7 @@ if ($allowLpItemTip) {
                     })
                     .then(function(content) {                    
                         if (content == 1) {
-                            textToShow = "'.addslashes(get_lang('LPItemCanBeAccessed')).'";
+                            textToShow = "'.addslashes(get_lang('Item can be viewed - Prerequisites completed')).'";
                             api.set("style.classes", "qtip-green qtip-shadow");                        
                         } else {
                             textToShow = content;                        
@@ -443,7 +443,7 @@ global $interbreadcrumb;
 if ($is_allowed_to_edit) {
     $interbreadcrumb[] = [
         'url' => api_get_self().'?action=list&isStudentView=false&'.api_get_cidreq(true, true, 'course'),
-        'name' => get_lang('LearningPaths'),
+        'name' => get_lang('Learning paths'),
     ];
     $interbreadcrumb[] = [
         'url' => api_get_self()."?action=add_item&type=step&lp_id={$lp->lp_id}&isStudentView=false&".api_get_cidreq(true, true, 'course'),
@@ -464,16 +464,16 @@ if ($is_allowed_to_edit) {
     ]);
 }
 
-$buttonHomeText = get_lang('CourseHomepageLink');
+$buttonHomeText = get_lang('Course home');
 $returnLink = api_get_course_setting('lp_return_link');
 switch ($returnLink) {
     case 1: // lp list
         $buttonHomeUrl .= '&redirectTo=lp_list';
-        $buttonHomeText = get_lang('LearningPathList');
+        $buttonHomeText = get_lang('Learning path list');
         break;
     case 2: // user portal
         $buttonHomeUrl .= '&redirectTo=my_courses';
-        $buttonHomeText = get_lang('MyCourses');
+        $buttonHomeText = get_lang('My courses');
         break;
 }
 

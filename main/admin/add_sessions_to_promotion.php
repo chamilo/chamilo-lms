@@ -19,11 +19,11 @@ $this_section = SECTION_PLATFORM_ADMIN;
 api_protect_admin_script(true);
 
 // setting breadcrumbs
-$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('PlatformAdmin')];
-$interbreadcrumb[] = ['url' => 'career_dashboard.php', 'name' => get_lang('CareersAndPromotions')];
+$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('Administration')];
+$interbreadcrumb[] = ['url' => 'career_dashboard.php', 'name' => get_lang('Careers and promotions')];
 
 // Setting the name of the tool
-$tool_name = get_lang('SubscribeSessionsToPromotions');
+$tool_name = get_lang('Subscribe sessions to promotions');
 $add_type = 'multiple';
 if (isset($_REQUEST['add_type']) && $_REQUEST['add_type'] != '') {
     $add_type = Security::remove_XSS($_REQUEST['add_type']);
@@ -110,11 +110,11 @@ $xajax->processRequests();
 Display::display_header($tool_name);
 
 if ($add_type == 'multiple') {
-    $link_add_type_unique = '<a href="'.api_get_self().'?id='.$id.'&add_type=unique">'.Display::return_icon('single.gif').get_lang('SessionAddTypeUnique').'</a>';
-    $link_add_type_multiple = Display::return_icon('multiple.gif').get_lang('SessionAddTypeMultiple');
+    $link_add_type_unique = '<a href="'.api_get_self().'?id='.$id.'&add_type=unique">'.Display::return_icon('single.gif').get_lang('Single registration').'</a>';
+    $link_add_type_multiple = Display::return_icon('multiple.gif').get_lang('Multiple registration');
 } else {
-    $link_add_type_unique = Display::return_icon('single.gif').get_lang('SessionAddTypeUnique');
-    $link_add_type_multiple = '<a href="'.api_get_self().'?id='.$id.'&add_type=multiple">'.Display::return_icon('multiple.gif').get_lang('SessionAddTypeMultiple').'</a>';
+    $link_add_type_unique = Display::return_icon('single.gif').get_lang('Single registration');
+    $link_add_type_multiple = '<a href="'.api_get_self().'?id='.$id.'&add_type=multiple">'.Display::return_icon('multiple.gif').get_lang('Multiple registration').'</a>';
 }
 
 echo '<div class="actions">';
@@ -134,7 +134,7 @@ if ($add_type == 'multiple') {
     $extra_field_list = $extraField->get_all_extra_field_by_type(ExtraField::FIELD_TYPE_SELECT);
     $new_field_list = [];
     if (is_array($extra_field_list) && (count($extra_field_list) > 0)) {
-        echo '<h3>'.get_lang('FilterSessions').'</h3>';
+        echo '<h3>'.get_lang('Filter sessions').'</h3>';
         foreach ($extra_field_list as $new_field) {
             echo $new_field['name'];
             $varname = 'field_'.$new_field['variable'];
@@ -166,17 +166,17 @@ if (!empty($errorMsg)) {
 
 <table border="0" cellpadding="5" cellspacing="0" width="100%">
 <tr>
-  <td align="center"><b><?php echo get_lang('SessionsInPlatform'); ?> :</b>
+  <td align="center"><b><?php echo get_lang('Sessions not subscribed'); ?> :</b>
   </td>
   <td></td>
-  <td align="center"><b><?php echo get_lang('SessionsInPromotion'); ?> :</b></td>
+  <td align="center"><b><?php echo get_lang('Sessions in this promotion'); ?> :</b></td>
 </tr>
 
 <?php if ($add_type == 'multiple') {
     ?>
 <tr>
 <td align="center">
-<?php echo get_lang('FirstLetterSessions'); ?> :
+<?php echo get_lang('First letter of session name'); ?> :
      <select name="firstLetterUser" onchange = "xajax_search_sessions(this.value,'multiple')" >
       <option value = "%">--</option>
       <?php
@@ -245,7 +245,7 @@ if (!empty($errorMsg)) {
     <td colspan="3" align="center">
         <br />
         <?php
-        echo '<button class="btn btn-primary" type="button" value="" onclick="valide()" >'.get_lang('SubscribeSessionsToPromotion').'</button>';
+        echo '<button class="btn btn-primary" type="button" value="" onclick="valide()" >'.get_lang('Subscribe sessions to promotion').'</button>';
         ?>
     </td>
 </tr>

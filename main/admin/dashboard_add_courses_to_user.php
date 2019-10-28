@@ -21,8 +21,8 @@ $this_section = SECTION_PLATFORM_ADMIN;
 api_protect_admin_script(true);
 
 // setting breadcrumbs
-$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('PlatformAdmin')];
-$interbreadcrumb[] = ['url' => 'user_list.php', 'name' => get_lang('UserList')];
+$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('Administration')];
+$interbreadcrumb[] = ['url' => 'user_list.php', 'name' => get_lang('User list')];
 
 // Database Table Definitions
 $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
@@ -37,11 +37,11 @@ $current_user_id = api_get_user_id();
 
 // setting the name of the tool
 if (UserManager::is_admin($user_id)) {
-    $tool_name = get_lang('AssignCoursesToPlatformAdministrator');
+    $tool_name = get_lang('AssignCoursesToAdministrationistrator');
 } elseif ($user_info['status'] == SESSIONADMIN) {
-    $tool_name = get_lang('AssignCoursesToSessionsAdministrator');
+    $tool_name = get_lang('Assign courses to session\'s administrator');
 } else {
-    $tool_name = get_lang('AssignCoursesToHumanResourcesManager');
+    $tool_name = get_lang('Assign courses to HR manager');
 }
 
 $add_type = 'multiple';
@@ -162,7 +162,7 @@ if (isset($_POST['formSent']) && intval($_POST['formSent']) == 1) {
     $courses_list = isset($_POST['CoursesList']) ? $_POST['CoursesList'] : [];
     $affected_rows = CourseManager::subscribeCoursesToDrhManager($user_id, $courses_list);
     if ($affected_rows) {
-        $msg = get_lang('AssignedCoursesHaveBeenUpdatedSuccessfully');
+        $msg = get_lang('The assigned courses have been updated');
     }
 }
 
@@ -171,14 +171,14 @@ Display::display_header($tool_name);
 
 // actions
 $actionsLeft = '<a href="dashboard_add_users_to_user.php?user='.$user_id.'">'.
-    Display::return_icon('add-user.png', get_lang('AssignUsers'), null, ICON_SIZE_MEDIUM).'</a>';
+    Display::return_icon('add-user.png', get_lang('Assign users'), null, ICON_SIZE_MEDIUM).'</a>';
 $actionsLeft .= '<a href="dashboard_add_sessions_to_user.php?user='.$user_id.'">'.
-    Display::return_icon('session-add.png', get_lang('AssignSessions'), null, ICON_SIZE_MEDIUM).'</a>';
+    Display::return_icon('session-add.png', get_lang('Assign sessions'), null, ICON_SIZE_MEDIUM).'</a>';
 
 echo $html = Display::toolbarAction('toolbar-dashboard', [$actionsLeft]);
 
 echo Display::page_header(
-    sprintf(get_lang('AssignCoursesToX'), api_get_person_name($user_info['firstname'], $user_info['lastname'])),
+    sprintf(get_lang('Assign courses to %s'), api_get_person_name($user_info['firstname'], $user_info['lastname'])),
     null,
     'h3'
 );
@@ -230,7 +230,7 @@ if (!empty($msg)) {
 
 <div class="row">
     <div class="col-md-4">
-        <h5><?php echo get_lang('CoursesListInPlatform'); ?> :</h5>
+        <h5><?php echo get_lang('Platform courses list'); ?> :</h5>
 
         <div id="ajax_list_courses_multiple">
     <select id="origin" name="NoAssignedCoursesList[]" multiple="multiple" size="20" style="width:340px;">
@@ -247,7 +247,7 @@ if (!empty($msg)) {
         <div class="code-course">
         <?php if ($add_type == 'multiple') {
         ?>
-        <p><?php echo get_lang('FirstLetterCourse'); ?> :</p>
+        <p><?php echo get_lang('First letter (code)'); ?> :</p>
         <select name="firstLetterCourse" class="selectpicker form-control" onchange = "xajax_search_courses(this.value,'multiple')">
             <option value="%">--</option>
             <?php  echo Display :: get_alphabet_options($firstLetter); ?>
@@ -274,11 +274,11 @@ if (!empty($msg)) {
     <div class="col-md-4">
         <h5><?php
         if (UserManager::is_admin($user_id)) {
-            echo get_lang('AssignedCoursesListToPlatformAdministrator');
+            echo get_lang('AssignedCoursesListToAdministrationistrator');
         } elseif ($user_info['status'] == SESSIONADMIN) {
-            echo get_lang('AssignedCoursesListToSessionsAdministrator');
+            echo get_lang('Assigned courses list to sessions administrator');
         } else {
-            echo get_lang('AssignedCoursesListToHumanResourcesManager');
+            echo get_lang('Courses assigned to the HR manager');
         }
             ?>: </h5>
 

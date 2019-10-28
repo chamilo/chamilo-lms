@@ -19,7 +19,7 @@ if (!api_is_platform_admin(true) && !api_is_teacher()) {
     api_not_allowed(true);
 }
 
-$toolName = get_lang('TeacherTimeReportBySession');
+$toolName = get_lang('Teachers time report by session');
 
 $em = Database::getManager();
 $sessionsInfo = api_is_platform_admin()
@@ -31,7 +31,7 @@ $form = new FormValidator('teacher_time_report_by_session', 'GET');
 $selectSession = $form->addSelect(
     'session',
     get_lang('Session'),
-    [0 => get_lang('None')]
+    [0 => get_lang('none')]
 );
 $form->addButtonFilter(get_lang('Filter'));
 
@@ -107,23 +107,23 @@ if ($session) {
 }
 
 if (isset($_GET['export']) && $session && ($coursesInfo && $usersInfo)) {
-    $fileName = get_lang('TeacherTimeReport').' '.api_get_local_time();
+    $fileName = get_lang('Teachers time report').' '.api_get_local_time();
 
     $dataToExport = [];
     $dataToExport[] = [$toolName, $session->getName()];
     $dataToExport['headers'] = [
-        get_lang('OfficialCode'),
-        get_lang('CoachName'),
-        get_lang('TimeSpentOnThePlatform'),
-        get_lang('FirstLoginInPlatform'),
-        get_lang('LatestLoginInPlatform'),
+        get_lang('Code'),
+        get_lang('Coach name'),
+        get_lang('Time spent in portal'),
+        get_lang('First login in platform'),
+        get_lang('Latest login in platform'),
     ];
 
     foreach ($coursesInfo as $courseCode) {
         $dataToExport['headers'][] = $courseCode;
-        $dataToExport['headers'][] = get_lang('NumberOfWorks');
-        $dataToExport['headers'][] = get_lang('LastWork');
-        $dataToExport['headers'][] = sprintf(get_lang('TimeReportForCourseX'), $courseCode);
+        $dataToExport['headers'][] = get_lang('Number of works');
+        $dataToExport['headers'][] = get_lang('Last work');
+        $dataToExport['headers'][] = sprintf(get_lang('Time report for course %s'), $courseCode);
     }
 
     foreach ($usersInfo as $user) {
@@ -141,9 +141,9 @@ if (isset($_GET['export']) && $session && ($coursesInfo && $usersInfo)) {
 
         foreach ($row['courses'] as $course) {
             $headers[] = $course['code'];
-            $headers[] = get_lang('NumberOfWorks');
-            $headers[] = get_lang('LastWork');
-            $headers[] = sprintf(get_lang('TimeReportForCourseX'), $course['code']);
+            $headers[] = get_lang('Number of works');
+            $headers[] = get_lang('Last work');
+            $headers[] = sprintf(get_lang('Time report for course %s'), $course['code']);
             $contents[] = $course['number_of_students'];
             $contents[] = $course['number_of_works'];
             $contents[] = $course['last_work'];
@@ -170,7 +170,7 @@ $this_section = SECTION_PLATFORM_ADMIN;
 $interbreadcrumb[] = ['url' => api_get_path(WEB_CODE_PATH).'mySpace/', 'name' => get_lang('Reporting')];
 $interbreadcrumb[] = [
     'url' => api_get_path(WEB_CODE_PATH).'mySpace/session.php',
-    'name' => get_lang('FollowedSessions'),
+    'name' => get_lang('Followed sessions'),
 ];
 
 $view = new Template($toolName);
@@ -182,11 +182,11 @@ if ($session) {
     $view->assign('users', $usersInfo);
 
     $actions = Display::url(
-        Display::return_icon('export_csv.png', get_lang('ExportAsCSV'), [], ICON_SIZE_MEDIUM),
+        Display::return_icon('export_csv.png', get_lang('CSV export'), [], ICON_SIZE_MEDIUM),
         api_get_self().'?'.http_build_query(['export' => 'csv', 'session' => $session->getId()])
     );
     $actions .= Display::url(
-        Display::return_icon('export_excel.png', get_lang('ExportAsXLS'), [], ICON_SIZE_MEDIUM),
+        Display::return_icon('export_excel.png', get_lang('Excel export'), [], ICON_SIZE_MEDIUM),
         api_get_self().'?'.http_build_query(['export' => 'xls', 'session' => $session->getId()])
     );
 

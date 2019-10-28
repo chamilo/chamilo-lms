@@ -15,7 +15,7 @@ api_protect_admin_script();
 
 // Setting the section (for the tabs).
 $this_section = SECTION_PLATFORM_ADMIN;
-$toolName = get_lang('EMailTester');
+$toolName = get_lang('E-mail tester');
 
 $form = new FormValidator('email_tester');
 $form->addText('smtp_host', get_lang('Host'), false, ['cols-size' => [2, 8, 2]]);
@@ -29,7 +29,7 @@ $form->addHtmlEditor(
     false,
     ['ToolbarSet' => 'Minimal', 'cols-size' => [2, 8, 2]]
 );
-$form->addButtonSend(get_lang('SendMessage'), 'submit', false, ['cols-size' => [2, 8, 2]]);
+$form->addButtonSend(get_lang('Send message'), 'submit', false, ['cols-size' => [2, 8, 2]]);
 
 $errorsInfo = MessageManager::failedSentMailErrors();
 
@@ -39,7 +39,7 @@ if ($form->validate()) {
     $user = api_get_user_entity(api_get_user_id());
 
     $mailIsSent = api_mail_html(
-        get_lang('UserTestingEMailConf'),
+        get_lang('User testing of e-mail configuration'),
         $values['destination'],
         $values['subject'],
         $values['content'],
@@ -48,7 +48,7 @@ if ($form->validate()) {
     );
 
     Display::addFlash(
-        Display::return_message(get_lang('MailingTestSent'), 'success')
+        Display::return_message(get_lang('E-mail sent. This procedure works in all aspects similarly to the normal e-mail sending of Chamilo, but allows for more flexibility in terms of destination e-mail and message body.'), 'success')
     );
 
     header('Location: '.api_get_self());

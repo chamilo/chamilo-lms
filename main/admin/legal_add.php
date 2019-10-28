@@ -76,9 +76,9 @@ if ($form->validate()) {
             } elseif ($submit === 'save') {
                 $id = LegalManager::add($lang, $content, $type, $changes, $values);
                 if (!empty($id)) {
-                    Display::addFlash(Display::return_message(get_lang('TermAndConditionSaved'), 'success'));
+                    Display::addFlash(Display::return_message(get_lang('Term and condition saved'), 'success'));
                 } else {
-                    Display::addFlash(Display::return_message(get_lang('TermAndConditionNotSaved'), 'warning'));
+                    Display::addFlash(Display::return_message(get_lang('Term and condition not saved'), 'warning'));
                 }
                 Security::clear_token();
                 $tok = Security::get_token();
@@ -119,7 +119,7 @@ $token = Security::get_token();
 
 $form->addElement('hidden', 'sec_token');
 $defaults['sec_token'] = $token;
-$form->addElement('header', get_lang('DisplayTermsConditions'));
+$form->addElement('header', get_lang('Display a Terms DisplayTermsConditions Conditions statement on the registration page, require visitor to accept the TDisplayTermsConditionsC to register.'));
 $jqueryReady = '';
 
 if (isset($_POST['language'])) {
@@ -133,8 +133,8 @@ if (isset($_POST['language'])) {
         ['ToolbarSet' => 'terms_and_conditions', 'Width' => '100%', 'Height' => '250']
     );
 
-    $form->addElement('radio', 'type', '', get_lang('HTMLText'), '0');
-    $form->addElement('radio', 'type', '', get_lang('PageLink'), '1');
+    $form->addElement('radio', 'type', '', get_lang('HTML'), '0');
+    $form->addElement('radio', 'type', '', get_lang('Page Link'), '1');
 
     $preview = LegalManager::show_last_condition($term_preview);
 
@@ -166,7 +166,7 @@ if (isset($_POST['language'])) {
 
     $jqueryReady = $returnParams['jquery_ready_content'];
 
-    $form->addElement('textarea', 'changes', get_lang('ExplainChanges'), ['width' => '20']);
+    $form->addElement('textarea', 'changes', get_lang('Explain changes'), ['width' => '20']);
 
     // Submit & preview button
     $buttons = '<div class="row" align="center">
@@ -182,8 +182,8 @@ if (isset($_POST['language'])) {
     $form->addButtonSearch(get_lang('Load'), 'send');
 }
 
-$tool_name = get_lang('AddTermsAndConditions');
-$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('PlatformAdmin')];
+$tool_name = get_lang('Add terms and conditions');
+$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('Administration')];
 
 // the $jquery_ready_content variable collects all functions that will be load in the $(document).ready javascript function
 $htmlHeadXtra[] = '<script>
@@ -204,8 +204,8 @@ function sendlang() {
 // action menu
 echo '<div class="actions">';
 echo '<a href="'.api_get_path(WEB_CODE_PATH).'admin/legal_list.php">'.
-    Display::return_icon('search.gif', get_lang('EditTermsAndConditions'), '').
-    get_lang('AllVersions').'</a>';
+    Display::return_icon('search.gif', get_lang('Edit terms and conditions'), '').
+    get_lang('All versions').'</a>';
 echo '</div>';
 
 $form->setDefaults($defaults);

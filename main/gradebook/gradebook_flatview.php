@@ -133,7 +133,7 @@ if (isset($_GET['export_pdf']) && $_GET['export_pdf'] == 'category') {
     $params['show_official_code'] = true;
     $params['export_pdf'] = true;
     if ($cat[0]->is_locked() == true || api_is_platform_admin()) {
-        Display::set_header(null, false, false);
+        //Display::set_header(null, false, false);
         GradebookUtils::export_pdf_flatview(
             $flatViewTable,
             $cat,
@@ -173,7 +173,7 @@ if (isset($_GET['exportpdf'])) {
 
     if ($export_pdf_form->validate()) {
         $params = $export_pdf_form->exportValues();
-        Display::set_header();
+        //Display::set_header();
         $params['join_firstname_lastname'] = true;
         $params['show_official_code'] = true;
         $params['export_pdf'] = true;

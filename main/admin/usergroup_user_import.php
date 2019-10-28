@@ -38,7 +38,7 @@ function validate_data($user_classes)
                 // 2.1.1 Check whether code exists in DB
                 $exists = $usergroup->usergroup_exists($user_class['ClassName']);
                 if (!$exists) {
-                    $user_class['error'] = get_lang('CodeDoesNotExists').': '.$user_class['ClassName'];
+                    $user_class['error'] = get_lang('This code does not exist').': '.$user_class['ClassName'];
                     $errors[] = $user_class;
                 } else {
                     $classcodes[$user_class['CourseCode']] = 1;
@@ -50,14 +50,14 @@ function validate_data($user_classes)
         if (!UserManager::is_username_empty($user_class['UserName'])) {
             // 3.1. Check whether username is too long.
             if (UserManager::is_username_too_long($user_class['UserName'])) {
-                $user_class['error'] = get_lang('UserNameTooLong').': '.$user_class['UserName'];
+                $user_class['error'] = get_lang('This login is too long').': '.$user_class['UserName'];
                 $errors[] = $user_class;
             }
 
             $username = UserManager::purify_username($user_class['UserName'], $purification_option_for_usernames);
             // 3.2. Check whether username exists.
             if (UserManager::is_username_available($username)) {
-                $user_class['error'] = get_lang('UnknownUser').': '.$username;
+                $user_class['error'] = get_lang('Unknown user').': '.$username;
                 $errors[] = $user_class;
             }
         }
@@ -137,7 +137,7 @@ $this_section = SECTION_PLATFORM_ADMIN;
 $usergroup = new UserGroup();
 $usergroup->protectScript();
 
-$tool_name = get_lang('AddUsersToAClass').' CSV';
+$tool_name = get_lang('Add users to a class').' CSV';
 
 $interbreadcrumb[] = ['url' => 'usergroups.php', 'name' => get_lang('Classes')];
 
@@ -148,9 +148,9 @@ set_time_limit(0);
 
 $form = new FormValidator('class_user_import');
 $form->addElement('header', $tool_name);
-$form->addElement('file', 'import_file', get_lang('ImportCSVFileLocation'));
-//$form->addElement('checkbox', 'subscribe', get_lang('Action'), get_lang('SubscribeUserIfNotAllreadySubscribed'));
-$form->addElement('checkbox', 'unsubscribe', '', get_lang('UnsubscribeUserIfSubscriptionIsNotInFile'));
+$form->addElement('file', 'import_file', get_lang('CSV file import location'));
+//$form->addElement('checkbox', 'subscribe', get_lang('Action'), get_lang('Add user in the course only if not yet in'));
+$form->addElement('checkbox', 'unsubscribe', '', get_lang('Remove user from course if his name is not in the list'));
 $form->addButtonImport(get_lang('Import'));
 
 $errors = [];
@@ -180,7 +180,7 @@ if (count($errors) != 0) {
 }
 $form->display();
 ?>
-<p><?php echo get_lang('CSVMustLookLike').' ('.get_lang('MandatoryFields').')'; ?> :</p>
+<p><?php echo get_lang('The CSV file must look like this').' ('.get_lang('Fields in <strong>bold</strong> are mandatory.').')'; ?> :</p>
 <pre>
 <b>UserName</b>;<b>ClassName</b>
 jdoe;class01

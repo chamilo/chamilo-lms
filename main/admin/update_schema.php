@@ -59,6 +59,6 @@ if (!empty($sqlList)) {
     Display::addFlash(Display::return_message(get_lang('Nothing else to update')));
 }
 
-Display::display_header(get_lang('SyncDatabaseWithSchema'));
+Display::display_header(get_lang('Synchronize the database with the schema'));
 echo $content;
 Display::display_footer();

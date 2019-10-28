@@ -2004,7 +2004,7 @@ class learnpathItem
 
         if ($prereqs_string == '_false_') {
             if (empty($this->prereq_alert)) {
-                $this->prereq_alert = get_lang('LearnpathPrereqNotCompleted');
+                $this->prereq_alert = get_lang('This learning object cannot display because the course prerequisites are not completed. This happens when a course imposes that you follow it step by step or get a minimum score in tests before you reach the next steps.');
             }
 
             return false;
@@ -2073,7 +2073,7 @@ class learnpathItem
                     }
 
                     if (empty($this->prereq_alert) && !$andstatus) {
-                        $this->prereq_alert = get_lang('LearnpathPrereqNotCompleted');
+                        $this->prereq_alert = get_lang('This learning object cannot display because the course prerequisites are not completed. This happens when a course imposes that you follow it step by step or get a minimum score in tests before you reach the next steps.');
                     }
 
                     return $andstatus;
@@ -2082,12 +2082,12 @@ class learnpathItem
                         $status = $items[$refs_list[$list[0]]]->get_status(true);
                         $returnstatus = ($status == $this->possible_status[2]) || ($status == $this->possible_status[3]);
                         if (empty($this->prereq_alert) && !$returnstatus) {
-                            $this->prereq_alert = get_lang('LearnpathPrereqNotCompleted');
+                            $this->prereq_alert = get_lang('This learning object cannot display because the course prerequisites are not completed. This happens when a course imposes that you follow it step by step or get a minimum score in tests before you reach the next steps.');
                         }
 
                         return $returnstatus;
                     }
-                    $this->prereq_alert = get_lang('LearnpathPrereqNotCompleted');
+                    $this->prereq_alert = get_lang('This learning object cannot display because the course prerequisites are not completed. This happens when a course imposes that you follow it step by step or get a minimum score in tests before you reach the next steps.');
 
                     return false;
                 }
@@ -2109,12 +2109,12 @@ class learnpathItem
                             $status = $items[$refs_list[$params[0]]]->get_status(true);
                             $returnstatus = $status == $params[1];
                             if (empty($this->prereq_alert) && !$returnstatus) {
-                                $this->prereq_alert = get_lang('LearnpathPrereqNotCompleted');
+                                $this->prereq_alert = get_lang('This learning object cannot display because the course prerequisites are not completed. This happens when a course imposes that you follow it step by step or get a minimum score in tests before you reach the next steps.');
                             }
 
                             return $returnstatus;
                         }
-                        $this->prereq_alert = get_lang('LearnpathPrereqNotCompleted');
+                        $this->prereq_alert = get_lang('This learning object cannot display because the course prerequisites are not completed. This happens when a course imposes that you follow it step by step or get a minimum score in tests before you reach the next steps.');
 
                         return false;
                     }
@@ -2139,12 +2139,12 @@ class learnpathItem
                                 $status = $items[$refs_list[$params[0]]]->get_status(true);
                                 $returnstatus = $status != $params[1];
                                 if (empty($this->prereq_alert) && !$returnstatus) {
-                                    $this->prereq_alert = get_lang('LearnpathPrereqNotCompleted');
+                                    $this->prereq_alert = get_lang('This learning object cannot display because the course prerequisites are not completed. This happens when a course imposes that you follow it step by step or get a minimum score in tests before you reach the next steps.');
                                 }
 
                                 return $returnstatus;
                             }
-                            $this->prereq_alert = get_lang('LearnpathPrereqNotCompleted');
+                            $this->prereq_alert = get_lang('This learning object cannot display because the course prerequisites are not completed. This happens when a course imposes that you follow it step by step or get a minimum score in tests before you reach the next steps.');
 
                             return false;
                         }
@@ -2179,7 +2179,7 @@ class learnpathItem
                                     $user_id
                                 );
                                 if (empty($this->prereq_alert) && !$returnstatus) {
-                                    $this->prereq_alert = get_lang('LearnpathPrereqNotCompleted');
+                                    $this->prereq_alert = get_lang('This learning object cannot display because the course prerequisites are not completed. This happens when a course imposes that you follow it step by step or get a minimum score in tests before you reach the next steps.');
                                 }
 
                                 return $returnstatus;
@@ -2326,7 +2326,7 @@ class learnpathItem
                                         }
                                     }
                                     if (!$mycond && empty($this->prereq_alert)) {
-                                        $this->prereq_alert = get_lang('LearnpathPrereqNotCompleted');
+                                        $this->prereq_alert = get_lang('This learning object cannot display because the course prerequisites are not completed. This happens when a course imposes that you follow it step by step or get a minimum score in tests before you reach the next steps.');
                                     }
 
                                     return $mycond;
@@ -2347,7 +2347,7 @@ class learnpathItem
 
                                         if (!$returnstatus) {
                                             $explanation = sprintf(
-                                                get_lang('ItemXBlocksThisElement'),
+                                                get_lang('Item %s blocks this step'),
                                                 $itemToCheck->get_title()
                                             );
                                             $this->prereq_alert = $explanation;
@@ -2383,7 +2383,7 @@ class learnpathItem
                                                             $returnstatus = true;
                                                         } else {
                                                             $explanation = sprintf(
-                                                                get_lang('YourResultAtXBlocksThisElement'),
+                                                                get_lang('Your result at %s blocks this step'),
                                                                 $itemToCheck->get_title()
                                                             );
                                                             $this->prereq_alert = $explanation;
@@ -2397,7 +2397,7 @@ class learnpathItem
                                                             $returnstatus = true;
                                                         } else {
                                                             $explanation = sprintf(
-                                                                get_lang('YourResultAtXBlocksThisElement'),
+                                                                get_lang('Your result at %s blocks this step'),
                                                                 $itemToCheck->get_title()
                                                             );
                                                             $this->prereq_alert = $explanation;
@@ -2405,7 +2405,7 @@ class learnpathItem
                                                         }
                                                     }
                                                 } else {
-                                                    $this->prereq_alert = get_lang('LearnpathPrereqNotCompleted');
+                                                    $this->prereq_alert = get_lang('This learning object cannot display because the course prerequisites are not completed. This happens when a course imposes that you follow it step by step or get a minimum score in tests before you reach the next steps.');
                                                     $returnstatus = false;
                                                 }
                                             }
@@ -2444,7 +2444,7 @@ class learnpathItem
                                                             break;
                                                         } else {
                                                             $explanation = sprintf(
-                                                                get_lang('YourResultAtXBlocksThisElement'),
+                                                                get_lang('Your result at %s blocks this step'),
                                                                 $itemToCheck->get_title()
                                                             );
                                                             $this->prereq_alert = $explanation;
@@ -2457,13 +2457,13 @@ class learnpathItem
                                                             $returnstatus = true;
                                                             break;
                                                         } else {
-                                                            $this->prereq_alert = get_lang('LearnpathPrereqNotCompleted');
+                                                            $this->prereq_alert = get_lang('This learning object cannot display because the course prerequisites are not completed. This happens when a course imposes that you follow it step by step or get a minimum score in tests before you reach the next steps.');
                                                             $returnstatus = false;
                                                         }
                                                     }
                                                 }
                                             } else {
-                                                $this->prereq_alert = get_lang('LearnpathPrereqNotCompleted');
+                                                $this->prereq_alert = get_lang('This learning object cannot display because the course prerequisites are not completed. This happens when a course imposes that you follow it step by step or get a minimum score in tests before you reach the next steps.');
                                                 $returnstatus = false;
                                             }
                                         }
@@ -2489,7 +2489,7 @@ class learnpathItem
                                             $returnstatus = true;
                                         } else {
                                             $returnstatus = false;
-                                            $this->prereq_alert = get_lang('LearnpathPrereqNotCompleted');
+                                            $this->prereq_alert = get_lang('This learning object cannot display because the course prerequisites are not completed. This happens when a course imposes that you follow it step by step or get a minimum score in tests before you reach the next steps.');
                                         }
 
                                         return $returnstatus;
@@ -2509,7 +2509,7 @@ class learnpathItem
 
                                         if (!$returnstatus) {
                                             $explanation = sprintf(
-                                                get_lang('ItemXBlocksThisElement'),
+                                                get_lang('Item %s blocks this step'),
                                                 $itemToCheck->get_title()
                                             );
                                             $this->prereq_alert = $explanation;
@@ -2543,7 +2543,7 @@ class learnpathItem
 
                                                 $returnstatus = $status == $this->possible_status[2] || $status == $this->possible_status[3];
                                                 if (!$returnstatus && empty($this->prereq_alert)) {
-                                                    $this->prereq_alert = get_lang('LearnpathPrereqNotCompleted');
+                                                    $this->prereq_alert = get_lang('This learning object cannot display because the course prerequisites are not completed. This happens when a course imposes that you follow it step by step or get a minimum score in tests before you reach the next steps.');
                                                 }
                                             }
 
@@ -2596,7 +2596,7 @@ class learnpathItem
                     }
                 }
                 if (!$orstatus && empty($this->prereq_alert)) {
-                    $this->prereq_alert = get_lang('LearnpathPrereqNotCompleted');
+                    $this->prereq_alert = get_lang('This learning object cannot display because the course prerequisites are not completed. This happens when a course imposes that you follow it step by step or get a minimum score in tests before you reach the next steps.');
                 }
 
                 return $orstatus;
@@ -2611,7 +2611,7 @@ class learnpathItem
                     $status = $items[$refs_list[$list[0]]]->get_status(true);
                     $returnstatus = $status == 'completed' || $status == 'passed';
                     if (!$returnstatus && empty($this->prereq_alert)) {
-                        $this->prereq_alert = get_lang('LearnpathPrereqNotCompleted');
+                        $this->prereq_alert = get_lang('This learning object cannot display because the course prerequisites are not completed. This happens when a course imposes that you follow it step by step or get a minimum score in tests before you reach the next steps.');
                     }
 
                     return $returnstatus;
@@ -2619,7 +2619,7 @@ class learnpathItem
             }
         }
         if (empty($this->prereq_alert)) {
-            $this->prereq_alert = get_lang('LearnpathPrereqNotCompleted');
+            $this->prereq_alert = get_lang('This learning object cannot display because the course prerequisites are not completed. This happens when a course imposes that you follow it step by step or get a minimum score in tests before you reach the next steps.');
         }
 
         if (self::DEBUG > 1) {
@@ -4223,7 +4223,7 @@ class learnpathItem
 
         if ($type == 'simple') {
             if (in_array($status, ['failed', 'passed', 'browsed'])) {
-                $myLessonStatus = get_lang('ScormIncomplete');
+                $myLessonStatus = get_lang('Incomplete');
 
                 $classStatus = 'warning';
             }

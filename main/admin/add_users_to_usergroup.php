@@ -21,11 +21,11 @@ $groupInfo = $usergroup->get($id);
 $usergroup->protectScript($groupInfo);
 
 // setting breadcrumbs
-$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('PlatformAdmin')];
+$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('Administration')];
 $interbreadcrumb[] = ['url' => 'usergroups.php', 'name' => get_lang('Classes')];
 
 // setting the name of the tool
-$tool_name = get_lang('SubscribeUsersToClass');
+$tool_name = get_lang('Subscribe users to class');
 
 $htmlHeadXtra[] = '
 <script>
@@ -117,13 +117,13 @@ if (isset($_POST['form_sent']) && $_POST['form_sent']) {
 
     // If "social group" you need to select a role
     if ($groupInfo['group_type'] == 1 && empty($relation)) {
-        Display::addFlash(Display::return_message(get_lang('SelectRole'), 'warning'));
+        Display::addFlash(Display::return_message(get_lang('Select role'), 'warning'));
         header('Location: '.api_get_self().'?id='.$id);
         exit;
     }
 
     if ($form_sent == 1) {
-        Display::addFlash(Display::return_message(get_lang('Updated')));
+        Display::addFlash(Display::return_message(get_lang('Update successful')));
         // Added a parameter to send emails when registering a user
         $usergroup->subscribe_users_to_usergroup(
             $id,
@@ -186,14 +186,14 @@ if ($use_extra_fields) {
 // Filters
 $filters = [
     ['type' => 'text', 'name' => 'username', 'label' => get_lang('Username')],
-    ['type' => 'text', 'name' => 'firstname', 'label' => get_lang('FirstName')],
-    ['type' => 'text', 'name' => 'lastname', 'label' => get_lang('LastName')],
-    ['type' => 'text', 'name' => 'official_code', 'label' => get_lang('OfficialCode')],
-    ['type' => 'text', 'name' => 'email', 'label' => get_lang('Email')],
+    ['type' => 'text', 'name' => 'firstname', 'label' => get_lang('First name')],
+    ['type' => 'text', 'name' => 'lastname', 'label' => get_lang('Last name')],
+    ['type' => 'text', 'name' => 'official_code', 'label' => get_lang('Code')],
+    ['type' => 'text', 'name' => 'email', 'label' => get_lang('e-mail')],
 ];
 
 $searchForm = new FormValidator('search', 'get', api_get_self().'?id='.$id);
-$searchForm->addHeader(get_lang('AdvancedSearch'));
+$searchForm->addHeader(get_lang('Advanced search'));
 $renderer = &$searchForm->defaultRenderer();
 
 $searchForm->addElement('hidden', 'id', $id);
@@ -328,7 +328,7 @@ echo '<div class="actions">';
 echo '<a href="usergroups.php">'.
     Display::return_icon('back.png', get_lang('Back'), [], ICON_SIZE_MEDIUM).'</a>';
 
-echo Display::url(get_lang('AdvancedSearch'), '#', ['class' => 'advanced_options', 'id' => 'advanced_search']);
+echo Display::url(get_lang('Advanced search'), '#', ['class' => 'advanced_options', 'id' => 'advanced_search']);
 
 echo '<a href="usergroup_user_import.php">'.
     Display::return_icon('import_csv.png', get_lang('Import'), [], ICON_SIZE_MEDIUM).'</a>';
@@ -349,7 +349,7 @@ echo '<legend>'.$tool_name.': '.$data['name'].'</legend>';
 
 if (is_array($extra_field_list)) {
     if (is_array($new_field_list) && count($new_field_list) > 0) {
-        echo '<h3>'.get_lang('FilterByUser').'</h3>';
+        echo '<h3>'.get_lang('Filter by user').'</h3>';
         foreach ($new_field_list as $new_field) {
             echo $new_field['name'];
             $varname = 'field_'.$new_field['variable'];
@@ -382,24 +382,24 @@ echo Display::input('hidden', 'add_type', null);
         <?php if ($data['group_type'] == UserGroup::SOCIAL_CLASS) {
     ?>
         <select name="relation" id="relation">
-            <option value=""><?php echo get_lang('SelectARelationType'); ?></option>
+            <option value=""><?php echo get_lang('Relation type selection'); ?></option>
             <option value="<?php echo GROUP_USER_PERMISSION_ADMIN; ?>" <?php echo (isset($relation) && $relation == GROUP_USER_PERMISSION_ADMIN) ? 'selected=selected' : ''; ?> >
                 <?php echo get_lang('Admin'); ?></option>
             <option value="<?php echo GROUP_USER_PERMISSION_READER; ?>" <?php echo (isset($relation) && $relation == GROUP_USER_PERMISSION_READER) ? 'selected=selected' : ''; ?> >
                 <?php echo get_lang('Reader'); ?></option>
             <option value="<?php echo GROUP_USER_PERMISSION_PENDING_INVITATION; ?>" <?php echo (isset($relation) && $relation == GROUP_USER_PERMISSION_PENDING_INVITATION) ? 'selected=selected' : ''; ?> >
-                <?php echo get_lang('PendingInvitation'); ?></option>
+                <?php echo get_lang('Pending invitation'); ?></option>
             <option value="<?php echo GROUP_USER_PERMISSION_MODERATOR; ?>" <?php echo (isset($relation) && $relation == GROUP_USER_PERMISSION_MODERATOR) ? 'selected=selected' : ''; ?> >
                 <?php echo get_lang('Moderator'); ?></option>
             <option value="<?php echo GROUP_USER_PERMISSION_HRM; ?>" <?php echo (isset($relation) && $relation == GROUP_USER_PERMISSION_HRM) ? 'selected=selected' : ''; ?> >
-                <?php echo get_lang('Drh'); ?></option>
+                <?php echo get_lang('Human Resources Manager'); ?></option>
         </select>
         <?php
 } ?>
 
         <div class="multiple_select_header">
-        <b><?php echo get_lang('UsersInPlatform'); ?> :</b>
-        <?php echo get_lang('FirstLetterUser'); ?> :
+        <b><?php echo get_lang('Users on platform'); ?> :</b>
+        <?php echo get_lang('First letter (last name)'); ?> :
         <select id="first_letter_user" name="firstLetterUser" onchange="change_select();">
             <option value = "%">--</option>
             <?php
@@ -426,7 +426,7 @@ echo Display::input('hidden', 'add_type', null);
           <input type="checkbox" <?php if ($user_with_any_group) {
         echo 'checked="checked"';
     } ?> onchange="checked_in_no_group(this.checked);" name="user_with_any_group" id="user_with_any_group_id">
-          <?php echo get_lang('UsersRegisteredInAnyGroup'); ?>
+          <?php echo get_lang('Users registered in any group'); ?>
       </label>
     </div>
     <div class="col-md-2">
@@ -442,7 +442,7 @@ echo Display::input('hidden', 'add_type', null);
     </div>
     <div class="col-md-5">
         <div class="multiple_select_header">
-            <b><?php echo get_lang('UsersInGroup'); ?> :</b>
+            <b><?php echo get_lang('Users in group'); ?> :</b>
         </div>
     <?php
         echo Display::select(
@@ -463,7 +463,7 @@ echo Display::input('hidden', 'add_type', null);
 </div>
 <?php
     echo '<button class="btn btn-primary" type="button" value="" onclick="valide()" ><em class="fa fa-check"></em>'.
-        get_lang('SubscribeUsersToClass').'</button>';
+        get_lang('Subscribe users to class').'</button>';
 ?>
 </form>
 <script>

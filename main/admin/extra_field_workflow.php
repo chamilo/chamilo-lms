@@ -15,7 +15,7 @@ $type = isset($_REQUEST['type']) ? $_REQUEST['type'] : null;
 api_protect_admin_script();
 
 // setting breadcrumbs
-$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('PlatformAdmin')];
+$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('Administration')];
 
 $tool_name = null;
 
@@ -43,7 +43,7 @@ if ($action == 'add') {
     ];
     $interbreadcrumb[] = [
         'url' => 'extra_field_options.php?type='.$extraField->type.'&field_id='.$extraFieldInfo['id'],
-        'name' => get_lang('EditExtraFieldOptions'),
+        'name' => get_lang('Edit extra field options'),
     ];
     $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Add')];
 } elseif ($action == 'edit') {
@@ -57,7 +57,7 @@ if ($action == 'add') {
     ];
     $interbreadcrumb[] = [
         'url' => 'extra_field_options.php?type='.$extraField->type.'&field_id='.$extraFieldInfo['id'],
-        'name' => get_lang('EditExtraFieldOptions'),
+        'name' => get_lang('Edit extra field options'),
     ];
 
     $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Edit')];
@@ -72,7 +72,7 @@ if ($action == 'add') {
     ];
     $interbreadcrumb[] = [
         'url' => '#',
-        'name' => get_lang('EditExtraFieldOptions'),
+        'name' => get_lang('Edit extra field options'),
     ];
 }
 
@@ -83,7 +83,7 @@ $params = 'field_id='.$field_id.'&type='.$extraField->type.'&roleId='.$roleId;
 $paramsNoRole = 'field_id='.$field_id.'&type='.$extraField->type;
 
 // The order is important you need to check the the $column variable in the model.ajax.php file
-$columns = [get_lang('Name'), get_lang('Value'), get_lang('Order'), get_lang('Actions')];
+$columns = [get_lang('Name'), get_lang('Value'), get_lang('Order'), get_lang('Detail')];
 
 $htmlHeadXtra[] = '<script>
     function setHidden(obj) {
@@ -132,7 +132,7 @@ $result = Database::select(
 $table = new HTML_Table(['class' => 'data_table']);
 $column = 0;
 $row = 0;
-$table->setHeaderContents($row, $column, get_lang('CurrentStatus'));
+$table->setHeaderContents($row, $column, get_lang('Current status'));
 $column++;
 foreach ($result as $item) {
     $table->setHeaderContents($row, $column, $item['display_text']);
@@ -142,12 +142,12 @@ $row++;
 
 $form = new FormValidator('workflow', 'post', api_get_self().'?'.$params);
 //$options = api_get_user_roles();
-$options[0] = get_lang('SelectAnOption');
-$options[STUDENT] = get_lang('Student');
-$options[COURSEMANAGER] = get_lang('Teacher');
+$options[0] = get_lang('Please select an option');
+$options[STUDENT] = get_lang('Learner');
+$options[COURSEMANAGER] = get_lang('Trainer');
 
 ksort($options);
-$form->addElement('select', 'status', get_lang('SelectRole'), $options);
+$form->addElement('select', 'status', get_lang('Select role'), $options);
 
 $em = Database::getManager();
 $repo = $em->getRepository('ChamiloCoreBundle:ExtraFieldOptionRelFieldOption');
@@ -193,7 +193,7 @@ if (!empty($roleId)) {
     $group[] = $form->addButtonSave(get_lang('Save'), 'submit', true);
     $group[] = $form->addButton(
         'select_all',
-        get_lang('SelectAll'),
+        get_lang('Select all'),
         'check',
         'default',
         'default',
@@ -203,7 +203,7 @@ if (!empty($roleId)) {
     );
     $group[] = $form->addButton(
         'unselect_all',
-        get_lang('UnSelectAll'),
+        get_lang('UnSelect all'),
         'check',
         'default',
         'default',
@@ -255,7 +255,7 @@ if ($form->validate()) {
         }
         $em->flush();
 
-        Display::addFlash(Display::return_message(get_lang('Updated')));
+        Display::addFlash(Display::return_message(get_lang('Update successful')));
         header('Location:'.api_get_self().'?'.$params);
         exit;
     }

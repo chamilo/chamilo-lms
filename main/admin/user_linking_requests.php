@@ -35,7 +35,7 @@ if (!empty($action) && $hrm && $assignedId) {
                 $em->flush();
 
                 Display::addFlash(
-                    Display::return_message(get_lang('UserLinkingRequestAccepted'), 'success')
+                    Display::return_message(get_lang('Student linking request accepted'), 'success')
                 );
             }
 
@@ -55,7 +55,7 @@ if (!empty($action) && $hrm && $assignedId) {
                 $em->flush();
 
                 Display::addFlash(
-                    Display::return_message(get_lang('UserLinkingRequestRejected'), 'success')
+                    Display::return_message(get_lang('Student linking request rejected'), 'success')
                 );
             }
             /** Todo: notify the HRM that the request was rejected */
@@ -75,7 +75,7 @@ if (!empty($action) && $hrm && $assignedId) {
                 $em->flush();
 
                 Display::addFlash(
-                    Display::return_message(get_lang('UserLinkRemoved'), 'success')
+                    Display::return_message(get_lang('Student link removed'), 'success')
                 );
             }
             /** Todo: notify the HRM that the request was rejected */
@@ -146,7 +146,7 @@ function getData(User $hrm, $status = HRM_REQUEST)
 $form = new FormValidator('user_linking_requests', 'get');
 $form->addSelectAjax(
     'hrm',
-    get_lang('DRH'),
+    get_lang('Human Resources Manager'),
     $hrm ? [$hrm->getId() => UserManager::formatUserFullName($hrm)] : [],
     ['url' => api_get_path(WEB_AJAX_PATH).'user_manager.ajax.php?a=user_by_role']
 );
@@ -159,33 +159,33 @@ if ($hrm) {
 
     if ($requests) {
         $content .= Display::table(
-            [get_lang('UserLinkingRequests'), get_lang('Actions')],
+            [get_lang('Student linking requests'), get_lang('Detail')],
             $requests
         );
     } else {
         $content .= Display::table(
-            [get_lang('UserLinkingRequests')],
-            [get_lang('NoResults')]
+            [get_lang('Student linking requests')],
+            [get_lang('No results found')]
         );
     }
 
     $approved = getData($hrm, DRH);
     if ($approved) {
         $content .= Display::table(
-            [get_lang('UserLinkingTo'), get_lang('Actions')],
+            [get_lang('Linked to student'), get_lang('Detail')],
             $approved
         );
     } else {
         $content .= Display::table(
-            [get_lang('UserLinkingTo')],
-            [get_lang('NoResults')]
+            [get_lang('Linked to student')],
+            [get_lang('No results found')]
         );
     }
 }
 
-$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('PlatformAdmin')];
+$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('Administration')];
 
-$toolName = get_lang('UserLinkingRequests');
+$toolName = get_lang('Student linking requests');
 
 $view = new Template($toolName);
 $view->assign('header', $toolName);

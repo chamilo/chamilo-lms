@@ -26,15 +26,15 @@ if (isset($_GET['user_id']) && $action == 'login_as') {
             $userInfo = api_get_user_info();
             $userId = $userInfo['id'];
             $message = sprintf(
-                get_lang('AttemptingToLoginAs'),
+                get_lang('Attempting to login as %s %s (id %s)'),
                 $userInfo['complete_name_with_username'],
                 '',
                 $userId
             );
 
             $url = api_get_path(WEB_PATH).'user_portal.php';
-            $goTo = sprintf(get_lang('LoginSuccessfulGoToX'), Display::url($url, $url));
-            Display::display_header(get_lang('UserList'));
+            $goTo = sprintf(get_lang('Login successful. Go to %s'), Display::url($url, $url));
+            Display::display_header(get_lang('User list'));
             echo Display::return_message($message, 'normal', false);
             echo Display::return_message($goTo, 'normal', false);
             Display::display_footer();
@@ -131,7 +131,7 @@ function active_user(element_div) {
                 }
                 if (data == -1) {
                     $(ident).attr("src", "'.Display::returnIconPath('warning.png').'");
-                    $(ident).attr("title","'.get_lang('ActionNotAllowed').'");
+                    $(ident).attr("title","'.get_lang('Action not allowed').'");
                 }
             }
         });
@@ -150,10 +150,10 @@ function clear_session_list(div_session) {
 function display_advanced_search_form () {
     if ($("#advanced_search_form").css("display") == "none") {
         $("#advanced_search_form").css("display","block");
-        $("#img_plus_and_minus").html(\'&nbsp;'.Display::returnFontAwesomeIcon('arrow-down').' '.get_lang('AdvancedSearch').'\');
+        $("#img_plus_and_minus").html(\'&nbsp;'.Display::returnFontAwesomeIcon('arrow-down').' '.get_lang('Advanced search').'\');
     } else {
         $("#advanced_search_form").css("display","none");
-        $("#img_plus_and_minus").html(\'&nbsp;'.Display::returnFontAwesomeIcon('arrow-right').' '.get_lang('AdvancedSearch').'\');
+        $("#img_plus_and_minus").html(\'&nbsp;'.Display::returnFontAwesomeIcon('arrow-right').' '.get_lang('Advanced search').'\');
     }
 }
 
@@ -559,7 +559,7 @@ function modify_filter($user_id, $url_params, $row)
 
         $icon = Display::return_icon(
             'session.png',
-            get_lang('Sessions'),
+            get_lang('Course sessions'),
             ['onmouseout' => 'clear_session_list (\'div_s_'.$user_id.'\')']
         );
         $result .= '<a href="javascript:void(0)" onclick="load_session_list(\'div_s_'.$user_id.'\','.$user_id.')" >
@@ -568,15 +568,15 @@ function modify_filter($user_id, $url_params, $row)
                     </a>';
     } else {
         $result .= Display::return_icon('course_na.png', get_lang('Courses')).'&nbsp;&nbsp;';
-        $result .= Display::return_icon('course_na.png', get_lang('Sessions')).'&nbsp;&nbsp;';
+        $result .= Display::return_icon('course_na.png', get_lang('Course sessions')).'&nbsp;&nbsp;';
     }
 
     if (api_is_platform_admin()) {
         if (!$user_is_anonymous) {
             $result .= '<a href="user_information.php?user_id='.$user_id.'">'.
-                        Display::return_icon('info2.png', get_lang('Info')).'</a>&nbsp;&nbsp;';
+                        Display::return_icon('info2.png', get_lang('Informationrmation')).'</a>&nbsp;&nbsp;';
         } else {
-            $result .= Display::return_icon('info2_na.png', get_lang('Info')).'&nbsp;&nbsp;';
+            $result .= Display::return_icon('info2_na.png', get_lang('Informationrmation')).'&nbsp;&nbsp;';
         }
     }
 
@@ -595,15 +595,15 @@ function modify_filter($user_id, $url_params, $row)
         if (!$user_is_anonymous) {
             if (api_global_admin_can_edit_admin($user_id, null, $sessionAdminCanLoginAs)) {
                 $result .= '<a href="user_list.php?action=login_as&user_id='.$user_id.'&sec_token='.Security::getTokenFromSession().'">'.
-                    Display::return_icon('login_as.png', get_lang('LoginAs')).'</a>&nbsp;';
+                    Display::return_icon('login_as.png', get_lang('Login as')).'</a>&nbsp;';
             } else {
-                $result .= Display::return_icon('login_as_na.png', get_lang('LoginAs')).'&nbsp;';
+                $result .= Display::return_icon('login_as_na.png', get_lang('Login as')).'&nbsp;';
             }
         } else {
-            $result .= Display::return_icon('login_as_na.png', get_lang('LoginAs')).'&nbsp;';
+            $result .= Display::return_icon('login_as_na.png', get_lang('Login as')).'&nbsp;';
         }
     } else {
-        $result .= Display::return_icon('login_as_na.png', get_lang('LoginAs')).'&nbsp;';
+        $result .= Display::return_icon('login_as_na.png', get_lang('Login as')).'&nbsp;';
     }
 
     if ($current_user_status_label != $statusname[STUDENT]) {
@@ -646,7 +646,7 @@ function modify_filter($user_id, $url_params, $row)
         $result .= Display::url(
             Display::return_icon(
                 'skill-badges.png',
-                get_lang('AssignSkill'),
+                get_lang('Assign skill'),
                 null,
                 ICON_SIZE_SMALL
             ),
@@ -657,13 +657,13 @@ function modify_filter($user_id, $url_params, $row)
     if ($is_admin) {
         $result .= Display::return_icon(
             'admin_star.png',
-            get_lang('IsAdministrator'),
+            get_lang('Is administrator'),
             ['width' => ICON_SIZE_SMALL, 'heigth' => ICON_SIZE_SMALL]
         );
     } else {
         $result .= Display::return_icon(
             'admin_star_na.png',
-            get_lang('IsNotAdministrator')
+            get_lang('Is not administrator')
         );
     }
 
@@ -673,7 +673,7 @@ function modify_filter($user_id, $url_params, $row)
             $result .= Display::url(
                 Display::return_icon(
                     'view_more_stats.gif',
-                    get_lang('AssignSessions')
+                    get_lang('AssignCourse sessions')
                 ),
                 "dashboard_add_sessions_to_user.php?user={$user_id}"
             );
@@ -685,7 +685,7 @@ function modify_filter($user_id, $url_params, $row)
                 $result .= Display::url(
                     Display::return_icon(
                         'user_subscribe_course.png',
-                        get_lang('AssignUsers'),
+                        get_lang('Assign users'),
                         '',
                         ICON_SIZE_SMALL
                     ),
@@ -697,7 +697,7 @@ function modify_filter($user_id, $url_params, $row)
                 $result .= Display::url(
                     Display::return_icon(
                         'add.png',
-                        get_lang('AssignCourses')
+                        get_lang('Assign courses')
                     ),
                     "dashboard_add_courses_to_user.php?user={$user_id}"
                 );
@@ -705,7 +705,7 @@ function modify_filter($user_id, $url_params, $row)
                 $result .= Display::url(
                     Display::return_icon(
                         'view_more_stats.gif',
-                        get_lang('AssignSessions')
+                        get_lang('AssignCourse sessions')
                     ),
                     "dashboard_add_sessions_to_user.php?user={$user_id}"
                 );
@@ -721,7 +721,7 @@ function modify_filter($user_id, $url_params, $row)
             api_global_admin_can_edit_admin($user_id, null, true)
         ) {
             // you cannot lock yourself out otherwise you could disable all the accounts including your own => everybody is locked out and nobody can change it anymore.
-            $result .= ' <a href="user_list.php?action=delete_user&user_id='.$user_id.'&'.$url_params.'&sec_token='.Security::getTokenFromSession().'"  title="'.addslashes(api_htmlentities(get_lang('ConfirmYourChoice'))).'" class="delete-swal">'.
+            $result .= ' <a href="user_list.php?action=delete_user&user_id='.$user_id.'&'.$url_params.'&sec_token='.Security::getTokenFromSession().'"  title="'.addslashes(api_htmlentities(get_lang('Please confirm your choice'))).'" class="delete-swal">'.
                 Display::return_icon(
                     'delete.png',
                     get_lang('Delete'),
@@ -732,10 +732,10 @@ function modify_filter($user_id, $url_params, $row)
         }
     }
     if (api_is_platform_admin()) {
-        $result .= ' <a data-title="'.get_lang('FreeBusyCalendar').'" href="'.api_get_path(WEB_AJAX_PATH).'agenda.ajax.php?a=get_user_agenda&user_id='.$user_id.'&modal_size=lg" class="agenda_opener ajax">'.
+        $result .= ' <a data-title="'.get_lang('Free/Busy calendar').'" href="'.api_get_path(WEB_AJAX_PATH).'agenda.ajax.php?a=get_user_agenda&user_id='.$user_id.'&modal_size=lg" class="agenda_opener ajax">'.
             Display::return_icon(
                 'calendar.png',
-                get_lang('FreeBusyCalendar'),
+                get_lang('Free/Busy calendar'),
                 [],
                 ICON_SIZE_SMALL
             ).
@@ -745,7 +745,7 @@ function modify_filter($user_id, $url_params, $row)
             !$user_is_anonymous &&
             api_global_admin_can_edit_admin($user_id)
         ) {
-            $result .= ' <a href="user_list.php?action=anonymize&user_id='.$user_id.'&'.$url_params.'&sec_token='.Security::getTokenFromSession().'"  class="delete-swal" title="'.addslashes(api_htmlentities(get_lang("ConfirmYourChoice"))).'" >'.
+            $result .= ' <a href="user_list.php?action=anonymize&user_id='.$user_id.'&'.$url_params.'&sec_token='.Security::getTokenFromSession().'"  class="delete-swal" title="'.addslashes(api_htmlentities(get_lang("Please confirm your choice"))).'" >'.
                 Display::return_icon(
                     'anonymous.png',
                     get_lang('Anonymize'),
@@ -763,7 +763,7 @@ function modify_filter($user_id, $url_params, $row)
             ) {
                 // you cannot lock yourself out otherwise you could disable all the accounts
                 // including your own => everybody is locked out and nobody can change it anymore.
-                $result .= ' <a href="user_list.php?action=delete_user&user_id='.$user_id.'&'.$url_params.'&sec_token='.Security::getTokenFromSession().'"  title="'.addslashes(api_htmlentities(get_lang("ConfirmYourChoice"))).'" class="delete-swal">'.
+                $result .= ' <a href="user_list.php?action=delete_user&user_id='.$user_id.'&'.$url_params.'&sec_token='.Security::getTokenFromSession().'"  title="'.addslashes(api_htmlentities(get_lang("Please confirm your choice"))).'" class="delete-swal">'.
                     Display::return_icon(
                         'delete.png',
                         get_lang('Delete'),
@@ -817,7 +817,7 @@ function active_filter($active, $params, $row)
     if ($action === 'edit') {
         $result = Display::return_icon(
             $image.'.png',
-            get_lang('AccountExpired'),
+            get_lang('Account expired'),
             [],
             16
         );
@@ -855,12 +855,12 @@ function status_filter($status)
 }
 
 if (isset($_GET['keyword']) || isset($_GET['keyword_firstname'])) {
-    $interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('PlatformAdmin')];
-    $interbreadcrumb[] = ['url' => 'user_list.php', 'name' => get_lang('UserList')];
-    $tool_name = get_lang('SearchUsers');
+    $interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('Administration')];
+    $interbreadcrumb[] = ['url' => 'user_list.php', 'name' => get_lang('User list')];
+    $tool_name = get_lang('Search users');
 } else {
-    $interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('PlatformAdmin')];
-    $tool_name = get_lang('UserList');
+    $interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('Administration')];
+    $tool_name = get_lang('User list');
 }
 
 $message = '';
@@ -874,7 +874,7 @@ if (!empty($action)) {
                 $result = UrlManager::add_user_to_url($user_id, $urlId);
                 if ($result) {
                     $user_info = api_get_user_info($user_id);
-                    $message = get_lang('UserAdded').' '.$user_info['complete_name_with_username'];
+                    $message = get_lang('The user has been added').' '.$user_info['complete_name_with_username'];
                     $message = Display::return_message($message, 'confirmation');
                 }
                 break;
@@ -899,12 +899,12 @@ if (!empty($action)) {
                     }
                     if ($number_of_selected_users == $number_of_affected_users) {
                         $message = Display::return_message(
-                            get_lang('SelectedUsersDeleted'),
+                            get_lang('Selected users deleted'),
                             'confirmation'
                         );
                     } else {
                         $message = Display::return_message(
-                            get_lang('SomeUsersNotDeleted'),
+                            get_lang('Some of the selected users have not been deleted. We recommend you confirm which, by using the advanced search.'),
                             'error'
                         );
                     }
@@ -925,12 +925,12 @@ if (!empty($action)) {
                     }
                     if ($number_of_selected_users == $number_of_affected_users) {
                         $message = Display::return_message(
-                            get_lang('SelectedUsersDisabled'),
+                            get_lang('The selected users have all been disabled'),
                             'confirmation'
                         );
                     } else {
                         $message = Display::return_message(
-                            get_lang('SomeUsersNotDisabled'),
+                            get_lang('Some of the selected users have not been disabled. We recommend you confirm which, by using the advanced search.'),
                             'error'
                         );
                     }
@@ -951,12 +951,12 @@ if (!empty($action)) {
                     }
                     if ($number_of_selected_users == $number_of_affected_users) {
                         $message = Display::return_message(
-                            get_lang('SelectedUsersEnabled'),
+                            get_lang('The selected users were all enabled.'),
                             'confirmation'
                         );
                     } else {
                         $message = Display::return_message(
-                            get_lang('SomeUsersNotEnabled'),
+                            get_lang('Some of the selected users have not been enabled. We recommend you confirm which, by using the advanced search.'),
                             'error'
                         );
                     }
@@ -980,7 +980,7 @@ $form->addText(
     get_lang('Search'),
     false,
     [
-        'aria-label' => get_lang('SearchUsers'),
+        'aria-label' => get_lang('Search users'),
     ]
 );
 $form->addButtonSearch(get_lang('Search'));
@@ -989,7 +989,7 @@ $searchAdvanced = '
 <a id="advanced_params" href="javascript://" 
     class="btn btn-default advanced_options" onclick="display_advanced_search_form();">
     <span id="img_plus_and_minus">&nbsp;
-    '.Display::returnFontAwesomeIcon('arrow-right').' '.get_lang('AdvancedSearch').'
+    '.Display::returnFontAwesomeIcon('arrow-right').' '.get_lang('Advanced search').'
     </span>
 </a>';
 $actionsLeft = '';
@@ -997,7 +997,7 @@ $actionsCenter = '';
 $actionsRight = '';
 if (api_is_platform_admin()) {
     $actionsRight .= '<a class="pull-right" href="'.api_get_path(WEB_CODE_PATH).'admin/user_add.php">'.
-         Display::return_icon('new_user.png', get_lang('AddUsers'), '', ICON_SIZE_MEDIUM).'</a>';
+         Display::return_icon('new_user.png', get_lang('Add a user'), '', ICON_SIZE_MEDIUM).'</a>';
 }
 
 $actionsLeft .= $form->returnForm();
@@ -1031,19 +1031,19 @@ $form = new FormValidator(
 );
 
 $form->addElement('html', '<div id="advanced_search_form" style="display:none;">');
-$form->addElement('header', get_lang('AdvancedSearch'));
-$form->addText('keyword_firstname', get_lang('FirstName'), false);
-$form->addText('keyword_lastname', get_lang('LastName'), false);
-$form->addText('keyword_username', get_lang('LoginName'), false);
-$form->addText('keyword_email', get_lang('Email'), false);
-$form->addText('keyword_officialcode', get_lang('OfficialCode'), false);
+$form->addElement('header', get_lang('Advanced search'));
+$form->addText('keyword_firstname', get_lang('First name'), false);
+$form->addText('keyword_lastname', get_lang('Last name'), false);
+$form->addText('keyword_username', get_lang('Login'), false);
+$form->addText('keyword_email', get_lang('e-mail'), false);
+$form->addText('keyword_officialcode', get_lang('Code'), false);
 
 $status_options = [];
 $status_options['%'] = get_lang('All');
-$status_options[STUDENT] = get_lang('Student');
-$status_options[COURSEMANAGER] = get_lang('Teacher');
-$status_options[DRH] = get_lang('Drh');
-$status_options[SESSIONADMIN] = get_lang('SessionsAdmin');
+$status_options[STUDENT] = get_lang('Learner');
+$status_options[COURSEMANAGER] = get_lang('Trainer');
+$status_options[DRH] = get_lang('Human Resources Manager');
+$status_options[SESSIONADMIN] = get_lang('Course sessionsAdmin');
 $status_options[PLATFORM_ADMIN] = get_lang('Administrator');
 
 $form->addElement(
@@ -1054,10 +1054,10 @@ $form->addElement(
 );
 
 $active_group = [];
-$active_group[] = $form->createElement('checkbox', 'keyword_active', '', get_lang('Active'));
-$active_group[] = $form->createElement('checkbox', 'keyword_inactive', '', get_lang('Inactive'));
-$form->addGroup($active_group, '', get_lang('ActiveAccount'), null, false);
-$form->addElement('checkbox', 'check_easy_passwords', null, get_lang('CheckEasyPasswords'));
+$active_group[] = $form->createElement('checkbox', 'keyword_active', '', get_lang('active'));
+$active_group[] = $form->createElement('checkbox', 'keyword_inactive', '', get_lang('inactive'));
+$form->addGroup($active_group, '', get_lang('activeAccount'), null, false);
+$form->addElement('checkbox', 'check_easy_passwords', null, get_lang('Check passwords too easy to guess'));
 $data = $extraField->addElements($form, 0, [], true, false, $variablesToShow);
 
 $htmlHeadXtra[] = '
@@ -1068,7 +1068,7 @@ $htmlHeadXtra[] = '
     </script>
 ';
 
-$form->addButtonSearch(get_lang('SearchUsers'));
+$form->addButtonSearch(get_lang('Search users'));
 
 $defaults = [];
 $defaults['keyword_active'] = 1;
@@ -1087,21 +1087,21 @@ $table = new SortableTable(
 $table->set_additional_parameters($parameters);
 $table->set_header(0, '', false, 'width="18px"');
 $table->set_header(1, get_lang('Photo'), false);
-$table->set_header(2, get_lang('OfficialCode'));
+$table->set_header(2, get_lang('Code'));
 
 if (api_is_western_name_order()) {
-    $table->set_header(3, get_lang('FirstName'));
-    $table->set_header(4, get_lang('LastName'));
+    $table->set_header(3, get_lang('First name'));
+    $table->set_header(4, get_lang('Last name'));
 } else {
-    $table->set_header(3, get_lang('LastName'));
-    $table->set_header(4, get_lang('FirstName'));
+    $table->set_header(3, get_lang('Last name'));
+    $table->set_header(4, get_lang('First name'));
 }
-$table->set_header(5, get_lang('LoginName'));
-$table->set_header(6, get_lang('Email'));
+$table->set_header(5, get_lang('Login'));
+$table->set_header(6, get_lang('e-mail'));
 $table->set_header(7, get_lang('Profile'));
-$table->set_header(8, get_lang('Active'), true, 'width="15px"');
-$table->set_header(9, get_lang('RegistrationDate'), true, 'width="90px"');
-$table->set_header(10, get_lang('LatestLogin'), true, 'width="90px"');
+$table->set_header(8, get_lang('active'), true, 'width="15px"');
+$table->set_header(9, get_lang('Registration date'), true, 'width="90px"');
+$table->set_header(10, get_lang('Latest login'), true, 'width="90px"');
 $table->set_header(11, get_lang('Action'), false, 'width="220px"');
 
 $table->set_column_filter(3, 'user_filter');
@@ -1121,7 +1121,7 @@ $actionsList = [];
 if (api_is_platform_admin() &&
     !api_get_configuration_value('deny_delete_users')
 ) {
-    $actionsList['delete'] = get_lang('DeleteFromPlatform');
+    $actionsList['delete'] = get_lang('Remove from portal');
 }
 $actionsList['disable'] = get_lang('Disable');
 $actionsList['enable'] = get_lang('Enable');
@@ -1142,12 +1142,12 @@ if ($table->get_total_number_of_items() == 0) {
             ' OR '
         );
         if (!empty($user_list)) {
-            $extra_search_options = Display::page_subheader(get_lang('UsersFoundInOtherPortals'));
+            $extra_search_options = Display::page_subheader(get_lang('Users found in other portals'));
 
             $table = new HTML_Table(['class' => 'data_table']);
             $column = 0;
             $row = 0;
-            $headers = [get_lang('User'), 'URL', get_lang('Actions')];
+            $headers = [get_lang('User'), 'URL', get_lang('Detail')];
             foreach ($headers as $header) {
                 $table->setHeaderContents($row, $column, $header);
                 $column++;
@@ -1173,7 +1173,7 @@ if ($table->get_total_number_of_items() == 0) {
                     $row_table[] = $access_info_to_string;
                     $url = api_get_self().'?action=add_user_to_my_url&user_id='.$user['id'].'&sec_token='.Security::getTokenFromSession();
                     $row_table[] = Display::url(
-                        get_lang('AddUserToMyURL'),
+                        get_lang('Add user to my portal'),
                         $url,
                         ['class' => 'btn']
                     );

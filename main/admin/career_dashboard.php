@@ -21,13 +21,13 @@ $htmlHeadXtra[] = api_get_jqgrid_js();
 // setting breadcrumbs
 $interbreadcrumb[] = [
     'url' => 'index.php',
-    'name' => get_lang('PlatformAdmin'),
+    'name' => get_lang('Administration'),
 ];
 $interbreadcrumb[] = [
     'url' => 'career_dashboard.php',
-    'name' => get_lang('CareersAndPromotions'),
+    'name' => get_lang('Careers and promotions'),
 ];
-$tpl = new Template(get_lang('CareersAndPromotions'));
+$tpl = new Template(get_lang('Careers and promotions'));
 
 $html = null;
 $form = new FormValidator('filter_form', 'GET', api_get_self());
@@ -62,7 +62,7 @@ $form->addButtonSearch(get_lang('Filter'));
 $actionLeft = Display::url(
     Display::return_icon(
         'back.png',
-        get_lang('BackTo').' '.get_lang('PlatformAdmin'),
+        get_lang('Back to').' '.get_lang('Administration'),
         null,
         ICON_SIZE_MEDIUM
     ),

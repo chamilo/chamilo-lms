@@ -40,17 +40,17 @@ if ($learnpath_id == 0) {
 if (api_is_in_gradebook()) {
     $interbreadcrumb[] = [
         'url' => Category::getUrl(),
-        'name' => get_lang('ToolGradebook'),
+        'name' => get_lang('Assessments'),
     ];
 }
-$interbreadcrumb[] = ['url' => 'lp_controller.php?action=list&'.api_get_cidreq(), 'name' => get_lang('LearningPaths')];
+$interbreadcrumb[] = ['url' => 'lp_controller.php?action=list&'.api_get_cidreq(), 'name' => get_lang('Learning paths')];
 $interbreadcrumb[] = ['url' => '#', 'name' => $learnPath->getNameNoTags()];
 
 // Theme calls.
 $lp_theme_css = $learnPath->get_theme();
 $show_learn_path = true;
 Display::display_header('', 'Path');
-$suredel = trim(get_lang('AreYouSureToDeleteJS'));
+$suredel = trim(get_lang('Are you sure to delete'));
 
 ?>
 <script>
@@ -84,23 +84,23 @@ echo '</div>';
 echo '<div class="col-md-8">';
 
 if (isset($is_success) && $is_success === true) {
-    echo Display::return_message(get_lang('ItemRemoved'), 'confirmation');
+    echo Display::return_message(get_lang('The learning object has been removed'), 'confirmation');
 } else {
     if ($is_new) {
-        echo Display::return_message(get_lang('LearnpathAdded'), 'normal', false);
+        echo Display::return_message(get_lang('Course added'), 'normal', false);
     }
-    echo Display::page_subheader(get_lang('LearnPathAddedTitle'));
+    echo Display::page_subheader(get_lang('Welcome to the Chamilo course authoring tool !'));
     echo '<ul id="lp_overview" class="thumbnails">';
     echo show_block(
         'lp_controller.php?'.api_get_cidreq().'&action=add_item&type=step&lp_id='.$learnPath->get_id(),
-        get_lang("NewStep"),
-        get_lang('NewStepComment'),
+        get_lang("Add learning object or activity"),
+        get_lang('Add learning object or activityComment'),
         'tools.png'
     );
     echo show_block(
         'lp_controller.php?'.api_get_cidreq().'&action=view&lp_id='.$learnPath->get_id(),
-        get_lang("Display"),
-        get_lang('DisplayComment'),
+        get_lang("Ranking"),
+        get_lang('RankingComment'),
         'view.png'
     );
     echo '</ul>';

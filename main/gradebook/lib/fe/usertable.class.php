@@ -28,15 +28,15 @@ class UserTable extends SortableTable
         }
         $column = 0;
         $this->set_header($column++, get_lang('Type'));
-        $this->set_header($column++, get_lang('Evaluation'));
+        $this->set_header($column++, get_lang('Score'));
         $this->set_header($column++, get_lang('Course'));
         $this->set_header($column++, get_lang('Category'));
-        $this->set_header($column++, get_lang('EvaluationAverage'));
+        $this->set_header($column++, get_lang('ScoreAverage'));
         $this->set_header($column++, get_lang('Result'));
 
         $scoredisplay = ScoreDisplay::instance();
         if ($scoredisplay->is_custom()) {
-            $this->set_header($column++, get_lang('Display'));
+            $this->set_header($column++, get_lang('Ranking'));
         }
     }
 

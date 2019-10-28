@@ -22,11 +22,11 @@ $xajax->registerFunction('search');
 $this_section = SECTION_PLATFORM_ADMIN;
 
 // Setting breadcrumbs.
-$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('PlatformAdmin')];
+$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('Administration')];
 $interbreadcrumb[] = ['url' => 'usergroups.php', 'name' => get_lang('Classes')];
 
 // Setting the name of the tool.
-$tool_name = get_lang('SubscribeClassToCourses');
+$tool_name = get_lang('Subscribe class to courses');
 
 $add_type = 'multiple';
 if (isset($_REQUEST['add_type']) && $_REQUEST['add_type'] != '') {
@@ -56,7 +56,7 @@ if (isset($_POST['form_sent']) && $_POST['form_sent']) {
     }
     if ($form_sent == 1) {
         $usergroup->subscribe_courses_to_usergroup($id, $elements_posted);
-        Display::addFlash(Display::return_message(get_lang('Updated')));
+        Display::addFlash(Display::return_message(get_lang('Update successful')));
         header('Location: usergroups.php');
         exit;
     }
@@ -64,12 +64,12 @@ if (isset($_POST['form_sent']) && $_POST['form_sent']) {
 
 // Filters
 $filters = [
-    ['type' => 'text', 'name' => 'code', 'label' => get_lang('CourseCode')],
+    ['type' => 'text', 'name' => 'code', 'label' => get_lang('Code')],
     ['type' => 'text', 'name' => 'title', 'label' => get_lang('Title')],
 ];
 
 $searchForm = new FormValidator('search', 'get', api_get_self().'?id='.$id);
-$searchForm->addHeader(get_lang('AdvancedSearch'));
+$searchForm->addHeader(get_lang('Advanced search'));
 $renderer = &$searchForm->defaultRenderer();
 $searchForm->addElement('hidden', 'id', $id);
 foreach ($filters as $param) {
@@ -172,18 +172,18 @@ Display::display_header($tool_name);
 
 if ($add_type == 'multiple') {
     $link_add_type_unique = '<a href="'.api_get_self().'?add='.$add.'&add_type=unique">'.
-        Display::return_icon('single.gif').get_lang('SessionAddTypeUnique').'</a>';
-    $link_add_type_multiple = Display::return_icon('multiple.gif').get_lang('SessionAddTypeMultiple');
+        Display::return_icon('single.gif').get_lang('Single registration').'</a>';
+    $link_add_type_multiple = Display::return_icon('multiple.gif').get_lang('Multiple registration');
 } else {
-    $link_add_type_unique = Display::return_icon('single.gif').get_lang('SessionAddTypeUnique');
+    $link_add_type_unique = Display::return_icon('single.gif').get_lang('Single registration');
     $link_add_type_multiple = '<a href="'.api_get_self().'?add='.$add.'&add_type=multiple">'.
-        Display::return_icon('multiple.gif').get_lang('SessionAddTypeMultiple').'</a>';
+        Display::return_icon('multiple.gif').get_lang('Multiple registration').'</a>';
 }
 
 echo '<div class="actions">';
 echo '<a href="usergroups.php">';
 echo Display::return_icon('back.png', get_lang('Back'), [], ICON_SIZE_MEDIUM).'</a>';
-echo Display::url(get_lang('AdvancedSearch'), '#', ['class' => 'advanced_options', 'id' => 'advanced_search']);
+echo Display::url(get_lang('Advanced search'), '#', ['class' => 'advanced_options', 'id' => 'advanced_search']);
 echo '</div>';
 
 echo '<div id="advanced_search_options" style="display:none">';
@@ -206,17 +206,17 @@ if (!empty($errorMsg)) {
 
 <table border="0" cellpadding="5" cellspacing="0" width="100%">
 <tr>
-  <td align="center"><b><?php echo get_lang('CoursesInPlatform'); ?> :</b>
+  <td align="center"><b><?php echo get_lang('Courses on the platform.'); ?> :</b>
   </td>
   <td></td>
-  <td align="center"><b><?php echo get_lang('CoursesInGroup'); ?> :</b></td>
+  <td align="center"><b><?php echo get_lang('Courses in group'); ?> :</b></td>
 </tr>
 
 <?php if ($add_type == 'multiple') {
     ?>
 <tr>
 <td align="center">
-<?php echo get_lang('FirstLetterCourseTitle'); ?> :
+<?php echo get_lang('First letter of course title'); ?> :
     <select name="firstLetterUser" onchange = "xajax_search(this.value,'multiple')" >
     <option value = "%">--</option>
     <?php
@@ -292,7 +292,7 @@ unset($sessionUsersList);
     <td colspan="3" align="center">
         <br />
         <?php
-        echo '<button class="btn btn-primary" type="button" value="" onclick="valide()" >'.get_lang('SubscribeClassToCourses').'</button>';
+        echo '<button class="btn btn-primary" type="button" value="" onclick="valide()" >'.get_lang('Subscribe class to courses').'</button>';
         ?>
     </td>
 </tr>

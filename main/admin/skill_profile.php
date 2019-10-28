@@ -44,9 +44,9 @@ if (!empty($item)) {
 }
 $formToDisplay = $form->returnForm();
 
-$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('PlatformAdmin')];
-$interbreadcrumb[] = ['url' => api_get_path(WEB_CODE_PATH).'admin/skill.php', 'name' => get_lang('ManageSkillsLevels')];
-$interbreadcrumb[] = ['url' => api_get_self(), 'name' => get_lang('SkillProfile')];
+$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('Administration')];
+$interbreadcrumb[] = ['url' => api_get_path(WEB_CODE_PATH).'admin/skill.php', 'name' => get_lang('Manage skills levels')];
+$interbreadcrumb[] = ['url' => api_get_self(), 'name' => get_lang('Skill profile')];
 
 $toolbar = null;
 
@@ -62,7 +62,7 @@ switch ($action) {
             }
             $em->persist($item);
             $em->flush();
-            Display::addFlash(Display::return_message(get_lang('Updated')));
+            Display::addFlash(Display::return_message(get_lang('Update successful')));
         }
 
         header('Location: '.$listAction);
@@ -76,7 +76,7 @@ switch ($action) {
             $item->setPosition($position + 1);
             $em->persist($item);
             $em->flush();
-            Display::addFlash(Display::return_message(get_lang('Updated')));
+            Display::addFlash(Display::return_message(get_lang('Update successful')));
         }
 
         header('Location: '.$listAction);
@@ -124,7 +124,7 @@ switch ($action) {
             $item->setName($values['name']);
             $em->persist($item);
             $em->flush();
-            Display::addFlash(Display::return_message(get_lang('Updated')));
+            Display::addFlash(Display::return_message(get_lang('Update successful')));
             header('Location: '.$listAction);
             exit;
         }
@@ -147,7 +147,7 @@ switch ($action) {
             $em->flush();
             Display::addFlash(Display::return_message(get_lang('Deleted')));
         } catch (Exception $e) {
-            Display::addFlash(Display::return_message(get_lang('DeleteError'), 'error'));
+            Display::addFlash(Display::return_message(get_lang('Delete error'), 'error'));
         }
         header('Location: '.$listAction);
         exit;

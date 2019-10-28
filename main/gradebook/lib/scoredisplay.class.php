@@ -227,12 +227,12 @@ class ScoreDisplay
 
         //Get this from DB settings
         $display = [
-            50 => get_lang('GradebookFailed'),
-            60 => get_lang('GradebookPoor'),
-            70 => get_lang('GradebookFair'),
-            80 => get_lang('GradebookGood'),
-            90 => get_lang('GradebookOutstanding'),
-            100 => get_lang('GradebookExcellent'),
+            50 => get_lang('Failed'),
+            60 => get_lang('Poor'),
+            70 => get_lang('Fair'),
+            80 => get_lang('Good'),
+            90 => get_lang('Outstanding'),
+            100 => get_lang('Excellent'),
         ];
 
         $table = Database::get_main_table(TABLE_MAIN_GRADEBOOK_SCORE_DISPLAY);

@@ -27,8 +27,8 @@ if (($_GET['action']=="add_user") && ($_GET['id_session'] == strval(intval($_GET
 }
 */
 
-$interbreadcrumb[] = ["url" => 'index.php', "name" => get_lang('PlatformAdmin')];
-$tool_name = get_lang('SearchLDAPUsers');
+$interbreadcrumb[] = ["url" => 'index.php', "name" => get_lang('Administration')];
+$tool_name = get_lang('Search for LDAP users');
 //Display::display_header($tool_name); //cannot display now as we need to redirect
 //api_display_tool_title($tool_name);
 
@@ -42,9 +42,9 @@ if (isset($_GET['action'])) {
                 break;
             case 'delete_user':
                 if ($user_id != $_user['user_id'] && UserManager::delete_user($_GET['user_id'])) {
-                    Display::addFlash(Display::return_message(get_lang('UserDeleted'), 'normal'));
+                    Display::addFlash(Display::return_message(get_lang('The user has been deleted'), 'normal'));
                 } else {
-                    Display::addFlash(Display::return_message(get_lang('CannotDeleteUser'), 'error'));
+                    Display::addFlash(Display::return_message(get_lang('You cannot delete this user'), 'error'));
                 }
                 Display::display_header($tool_name);
                 break;
@@ -72,12 +72,12 @@ if (isset($_GET['action'])) {
                     header('Location: resume_session.php?id_session='.intval($_GET['id_session']));
                 } else {
                     if (count($userid_match_login) > 0) {
-                        $message = get_lang('LDAPUsersAddedOrUpdated').':<br />';
+                        $message = get_lang('LDAP users added or updated').':<br />';
                         foreach ($userid_match_login as $user_id => $login) {
                             $message .= '- '.$login.'<br />';
                         }
                     } else {
-                        $message = get_lang('NoUserAdded');
+                        $message = get_lang('No user added');
                     }
                     Display::addFlash(Display::return_message($message, 'normal', false));
                     Display::display_header($tool_name);
@@ -109,9 +109,9 @@ if (isset($_POST['action'])) {
                     }
                 }
                 if ($number_of_selected_users == $number_of_deleted_users) {
-                    echo Display::return_message(get_lang('SelectedUsersDeleted'), 'normal');
+                    echo Display::return_message(get_lang('Selected users deleted'), 'normal');
                 } else {
-                    echo Display::return_message(get_lang('SomeUsersNotDeleted'), 'error');
+                    echo Display::return_message(get_lang('Some of the selected users have not been deleted. We recommend you confirm which, by using the advanced search.'), 'error');
                 }
                 break;
             case 'add_user':
@@ -128,10 +128,10 @@ if (isset($_POST['action'])) {
                 }
                 if (count($UserList) > 0) {
                     echo Display::return_message(
-                        count($UserList)." ".get_lang('LDAPUsersAdded')
+                        count($UserList)." ".get_lang('LDAP users added')
                     );
                 } else {
-                    echo Display::return_message(get_lang('NoUserAdded'));
+                    echo Display::return_message(get_lang('No user added'));
                 }
                 break;
         }
@@ -140,13 +140,13 @@ if (isset($_POST['action'])) {
 }
 
 $form = new FormValidator('advanced_search', 'get');
-$form->addText('keyword_username', get_lang('LoginName'), false);
+$form->addText('keyword_username', get_lang('Login'), false);
 if (api_is_western_name_order()) {
-    $form->addText('keyword_firstname', get_lang('FirstName'), false);
-    $form->addText('keyword_lastname', get_lang('LastName'), false);
+    $form->addText('keyword_firstname', get_lang('First name'), false);
+    $form->addText('keyword_lastname', get_lang('Last name'), false);
 } else {
-    $form->addText('keyword_lastname', get_lang('LastName'), false);
-    $form->addText('keyword_firstname', get_lang('FirstName'), false);
+    $form->addText('keyword_lastname', get_lang('Last name'), false);
+    $form->addText('keyword_firstname', get_lang('First name'), false);
 }
 if (isset($_GET['id_session'])) {
     $form->addElement('hidden', 'id_session', $_GET['id_session']);
@@ -154,12 +154,12 @@ if (isset($_GET['id_session'])) {
 
 $type = [];
 $type["all"] = get_lang('All');
-$type["employee"] = get_lang('Teacher');
-$type["student"] = get_lang('Student');
+$type["employee"] = get_lang('Trainer');
+$type["student"] = get_lang('Learner');
 
 $form->addElement('select', 'keyword_type', get_lang('Status'), $type);
 // Structure a rajouer ??
-$form->addElement('submit', 'submit', get_lang('Ok'));
+$form->addElement('submit', 'submit', get_lang('Validate'));
 //$defaults['keyword_active'] = 1;
 //$defaults['keyword_inactive'] = 1;
 //$form->setDefaults($defaults);
@@ -182,20 +182,20 @@ $table = new SortableTable(
 );
 $table->set_additional_parameters($parameters);
 $table->set_header(0, '', false);
-$table->set_header(1, get_lang('LoginName'));
+$table->set_header(1, get_lang('Login'));
 if (api_is_western_name_order()) {
-    $table->set_header(2, get_lang('FirstName'));
-    $table->set_header(3, get_lang('LastName'));
+    $table->set_header(2, get_lang('First name'));
+    $table->set_header(3, get_lang('Last name'));
 } else {
-    $table->set_header(2, get_lang('LastName'));
-    $table->set_header(3, get_lang('FirstName'));
+    $table->set_header(2, get_lang('Last name'));
+    $table->set_header(3, get_lang('First name'));
 }
-$table->set_header(4, get_lang('Email'));
-$table->set_header(5, get_lang('Actions'));
+$table->set_header(4, get_lang('e-mail'));
+$table->set_header(5, get_lang('Detail'));
 //$table->set_column_filter(5, 'email_filter');
 //$table->set_column_filter(5, 'active_filter');
 $table->set_column_filter(5, 'modify_filter');
-$table->set_form_actions(['add_user' => get_lang('AddLDAPUsers')]);
+$table->set_form_actions(['add_user' => get_lang('Add LDAP users')]);
 $table->display();
 
 Display::display_footer();

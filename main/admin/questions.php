@@ -21,7 +21,7 @@ Session::erase('objExercise');
 Session::erase('objQuestion');
 Session::erase('objAnswer');
 
-$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('PlatformAdmin')];
+$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('Administration')];
 
 $form = new FormValidator('admin_questions', 'get');
 $form->addHeader(get_lang('Questions'));
@@ -129,7 +129,7 @@ if ($formSent) {
             $exerciseId = 0;
             if (!empty($questionObject->exerciseList)) {
                 // Question exists in a valid exercise
-                $exerciseData .= get_lang('Exercises').'<br />';
+                $exerciseData .= get_lang('Tests').'<br />';
                 foreach ($questionObject->exerciseList as $exerciseId) {
                     $exercise = new Exercise();
                     $exercise->course_id = $question->getCId();
@@ -173,19 +173,19 @@ if ($formSent) {
                 if ($questionObject->getCountExercise() > 0) {
                     $exerciseList = $questionObject->getExerciseListWhereQuestionExists();
                     if (!empty($exerciseList)) {
-                        $question->questionData .= '<br />'.get_lang('Exercises').'<br />';
+                        $question->questionData .= '<br />'.get_lang('Tests').'<br />';
                         /** @var CQuiz $exercise */
                         foreach ($exerciseList as $exercise) {
                             $question->questionData .= $exercise->getTitle();
                             if ($exercise->getActive() == -1) {
-                                $question->questionData .= '- ('.get_lang('ExerciseDeleted').' #'.$exercise->getIid().') ';
+                                $question->questionData .= '- ('.get_lang('The test has been deleted').' #'.$exercise->getIid().') ';
                             }
                             $question->questionData .= '<br />';
                         }
                     }
                 } else {
                     // This question is orphan :(
-                    $question->questionData .= '&nbsp;'.get_lang('OrphanQuestion');
+                    $question->questionData .= '&nbsp;'.get_lang('Orphan question');
                 }
             }
             ob_end_clean();

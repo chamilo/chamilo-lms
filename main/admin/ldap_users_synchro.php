@@ -19,8 +19,8 @@ $this_section = SECTION_PLATFORM_ADMIN;
 api_protect_admin_script();
 
 // setting breadcrumbs
-$interbreadcrumb[] = ['url' => 'index.php', "name" => get_lang('PlatformAdmin')];
-$interbreadcrumb[] = ['url' => api_get_self(), "name" => get_lang('SessionsList')];
+$interbreadcrumb[] = ['url' => 'index.php', "name" => get_lang('Administration')];
+$interbreadcrumb[] = ['url' => api_get_self(), "name" => get_lang('Sessions list')];
 
 // Database Table Definitions
 $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
@@ -49,11 +49,11 @@ Display::display_header($tool_name);
 //api_display_tool_title($tool_name);
 
 ?>
-		<form method="get" action="<?php echo api_get_self(); ?>" onsubmit="javascript:if(!confirm('<?php echo get_lang('ConfirmYourChoice'); ?>')) return false;">
+		<form method="get" action="<?php echo api_get_self(); ?>" onsubmit="javascript:if(!confirm('<?php echo get_lang('Please confirm your choice'); ?>')) return false;">
 			<select name="action">
 			<option value="synchro"><?php echo get_lang('Synchro LDAP : Import Etudiants/Etapes dans toutes les sessions'); ?></option>
 			</select>
-			<input type="submit" value="<?php echo get_lang('Ok'); ?>">
+			<input type="submit" value="<?php echo get_lang('Validate'); ?>">
 		</form>
 
 <?php

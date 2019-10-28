@@ -47,18 +47,18 @@ function validate_data($users)
             if (!UserManager::is_username_empty($user['NewUserName'])) {
                 // 2.1. Check whether username is too long.
                 if (UserManager::is_username_too_long($user['NewUserName'])) {
-                    $user['error'] = get_lang('UserNameTooLong');
+                    $user['error'] = get_lang('This login is too long');
                     $errors[] = $user;
                 }
                 // 2.2. Check whether the username was used twice in import file.
                 if (isset($usernames[$user['NewUserName']])) {
-                    $user['error'] = get_lang('UserNameUsedTwice');
+                    $user['error'] = get_lang('Login is used twice');
                     $errors[] = $user;
                 }
                 $usernames[$user['UserName']] = 1;
                 // 2.3. Check whether username is allready occupied.
                 if (!UserManager::is_username_available($user['NewUserName']) && $user['NewUserName'] != $user['UserName']) {
-                    $user['error'] = get_lang('UserNameNotAvailable');
+                    $user['error'] = get_lang('This login is not available');
                     $errors[] = $user;
                 }
             }
@@ -66,7 +66,7 @@ function validate_data($users)
 
         // 3. Check status.
         if (isset($user['Status']) && !api_status_exists($user['Status'])) {
-            $user['error'] = get_lang('WrongStatus');
+            $user['error'] = get_lang('This status doesn\'t exist');
             $errors[] = $user;
         }
 
@@ -79,7 +79,7 @@ function validate_data($users)
                 }
                 $info = $usergroup->get($id);
                 if (empty($info)) {
-                    $user['error'] = sprintf(get_lang('ClassIdDoesntExists'), $id);
+                    $user['error'] = sprintf(get_lang('Class ID does not exist'), $id);
                     $errors[] = $user;
                 } else {
                     $classExistList[] = $info['id'];
@@ -90,7 +90,7 @@ function validate_data($users)
         // 5. Check authentication source
         if (!empty($user['AuthSource'])) {
             if (!in_array($user['AuthSource'], $defined_auth_sources)) {
-                $user['error'] = get_lang('AuthSourceNotAvailable');
+                $user['error'] = get_lang('Authentication source unavailable.');
                 $errors[] = $user;
             }
         }
@@ -292,8 +292,8 @@ if (isset($extAuthSource) && is_array($extAuthSource)) {
     $defined_auth_sources = array_merge($defined_auth_sources, array_keys($extAuthSource));
 }
 
-$tool_name = get_lang('ImportUserListXMLCSV');
-$interbreadcrumb[] = ["url" => 'index.php', "name" => get_lang('PlatformAdmin')];
+$tool_name = get_lang('Import users list');
+$interbreadcrumb[] = ["url" => 'index.php', "name" => get_lang('Administration')];
 
 set_time_limit(0);
 $extra_fields = UserManager::get_extra_fields(0, 0, 5, 'ASC', true);
@@ -349,9 +349,9 @@ if (isset($_POST['formSent']) && $_POST['formSent'] && $_FILES['import_file']['s
     }
 
     if (count($errors) > 0) {
-        $see_message_import = get_lang('FileImportedJustUsersThatAreNotRegistered');
+        $see_message_import = get_lang('The users that were not registered on the platform have been imported');
     } else {
-        $see_message_import = get_lang('FileImported');
+        $see_message_import = get_lang('File imported');
     }
 
     $warning_message = '';
@@ -373,7 +373,7 @@ if (isset($_POST['formSent']) && $_POST['formSent'] && $_FILES['import_file']['s
     }
 
     if ($error_kind_file) {
-        Display::addFlash(Display::return_message(get_lang('YouMustImportAFileAccordingToSelectedOption'), 'error', false));
+        Display::addFlash(Display::return_message(get_lang('You must import a file corresponding to the selected format'), 'error', false));
     } else {
         header('Location: '.api_get_path(WEB_CODE_PATH).'admin/user_list.php?sec_token='.$tok);
         exit;
@@ -388,7 +388,7 @@ if (!empty($error_message)) {
 $form = new FormValidator('user_update_import', 'post', api_get_self());
 $form->addElement('header', $tool_name);
 $form->addElement('hidden', 'formSent');
-$form->addElement('file', 'import_file', get_lang('ImportFileLocation'));
+$form->addElement('file', 'import_file', get_lang('Import marks in an assessment'));
 
 $group = [];
 
@@ -418,7 +418,7 @@ if ($count_fields > 0) {
 }
 
 ?>
-<p><?php echo get_lang('CSVMustLookLike').' ('.get_lang('MandatoryFields').')'; ?> :</p>
+<p><?php echo get_lang('The CSV file must look like this').' ('.get_lang('Fields in <strong>bold</strong> are mandatory.').')'; ?> :</p>
 <blockquote>
     <pre>
         <b>UserName</b>;LastName;FirstName;Email;NewUserName;Password;AuthSource;OfficialCode;PhoneNumber;Status;ExpiryDate;Active;Language;Courses;ClassId;

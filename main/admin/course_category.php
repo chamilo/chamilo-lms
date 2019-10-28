@@ -56,10 +56,10 @@ if (!empty($action)) {
                 CourseCategory::deletePictureCategory($ret);
             }
 
-            $errorMsg = Display::return_message(get_lang('Updated'));
+            $errorMsg = Display::return_message(get_lang('Update successful'));
         }
         if (!$ret) {
-            $errorMsg = Display::return_message(get_lang('CatCodeAlreadyUsed'), 'error');
+            $errorMsg = Display::return_message(get_lang('This category is already used'), 'error');
         } else {
             if ($myCourseListAsCategory) {
                 if (isset($_FILES['image'])) {
@@ -75,15 +75,15 @@ if (!empty($action)) {
     } elseif ($action == 'moveUp') {
         CourseCategory::moveNodeUp($categoryId, $_GET['tree_pos'], $category);
         header('Location: '.api_get_self().'?category='.Security::remove_XSS($category));
-        Display::addFlash(Display::return_message(get_lang('Updated')));
+        Display::addFlash(Display::return_message(get_lang('Update successful')));
         exit();
     }
 }
 
-$tool_name = get_lang('AdminCategories');
+$tool_name = get_lang('Courses categories');
 $interbreadcrumb[] = [
     'url' => 'index.php',
-    'name' => get_lang('PlatformAdmin'),
+    'name' => get_lang('Administration'),
 ];
 
 Display::display_header($tool_name);
@@ -97,7 +97,7 @@ if ($action == 'add' || $action == 'edit') {
     );
     echo '</div>';
 
-    $form_title = ($action == 'add') ? get_lang('AddACategory') : get_lang('EditNode');
+    $form_title = ($action == 'add') ? get_lang('Add category') : get_lang('Edit this category');
     if (!empty($category)) {
         $form_title .= ' '.get_lang('Into').' '.Security::remove_XSS($category);
     }
@@ -105,27 +105,27 @@ if ($action == 'add' || $action == 'edit') {
     $form = new FormValidator('course_category', 'post', $url);
     $form->addElement('header', '', $form_title);
     $form->addElement('hidden', 'formSent', 1);
-    $form->addElement('text', 'code', get_lang("CategoryCode"));
+    $form->addElement('text', 'code', get_lang("Category code"));
 
     if (api_get_configuration_value('save_titles_as_html')) {
         $form->addHtmlEditor(
             'name',
-            get_lang('CategoryName'),
+            get_lang('Category name'),
             true,
             false,
             ['ToolbarSet' => 'TitleAsHtml']
         );
     } else {
-        $form->addElement('text', 'name', get_lang("CategoryName"));
-        $form->addRule('name', get_lang('PleaseEnterCategoryInfo'), 'required');
+        $form->addElement('text', 'name', get_lang("Category name"));
+        $form->addRule('name', get_lang('Please enter a code and a name for the category'), 'required');
     }
 
-    $form->addRule('code', get_lang('PleaseEnterCategoryInfo'), 'required');
+    $form->addRule('code', get_lang('Please enter a code and a name for the category'), 'required');
     $group = [
         $form->createElement(
             'radio',
             'auth_course_child',
-            get_lang('AllowCoursesInCategory'),
+            get_lang('Allow adding courses in this category?'),
             get_lang('Yes'),
             'TRUE'
         ),
@@ -137,7 +137,7 @@ if ($action == 'add' || $action == 'edit') {
             'FALSE'
         ),
     ];
-    $form->addGroup($group, null, get_lang('AllowCoursesInCategory'));
+    $form->addGroup($group, null, get_lang('Allow adding courses in this category?'));
 
     if ($myCourseListAsCategory) {
         $form->addHtmlEditor(
@@ -150,7 +150,7 @@ if ($action == 'add' || $action == 'edit') {
         $form->addFile('image', get_lang('Image'), ['id' => 'picture', 'class' => 'picture-form', 'accept' => 'image/*', 'crop_image' => true]);
 
         if ($action == 'edit' && !empty($categoryInfo['image'])) {
-            $form->addElement('checkbox', 'delete_picture', null, get_lang('DeletePicture'));
+            $form->addElement('checkbox', 'delete_picture', null, get_lang('Delete picture'));
             $form->addHtml('
                 <div class="form-group row">
                     <div class="offset-md-2 col-sm-8">'.
@@ -171,7 +171,7 @@ if ($action == 'add' || $action == 'edit') {
         $form->addButtonSave($text);
     } else {
         $class = 'add';
-        $text = get_lang('AddCategory');
+        $text = get_lang('Add category');
         $form->setDefaults(['auth_course_child' => 'TRUE']);
         $form->addButtonCreate($text);
     }
@@ -179,7 +179,7 @@ if ($action == 'add' || $action == 'edit') {
 } else {
     // If multiple URLs and not main URL, prevent deletion and inform user
     if ($action == 'delete' && api_get_multiple_access_url() && $urlId != 1) {
-        echo Display::return_message(get_lang('CourseCategoriesAreGlobal'), 'warning');
+        echo Display::return_message(get_lang('Course categories are global over multiple portals configurations. Changes are only allowed in the main administrative portal.'), 'warning');
     }
     echo '<div class="actions">';
     $link = null;
@@ -193,7 +193,7 @@ if ($action == 'add' || $action == 'edit') {
 
     if (empty($parentInfo) || $parentInfo['auth_cat_child'] == 'TRUE') {
         $newCategoryLink = Display::url(
-            Display::return_icon('new_folder.png', get_lang('AddACategory'), '', ICON_SIZE_MEDIUM),
+            Display::return_icon('new_folder.png', get_lang('Add category'), '', ICON_SIZE_MEDIUM),
             api_get_path(WEB_CODE_PATH).'admin/course_category.php?action=add&category='.Security::remove_XSS($category)
         );
 

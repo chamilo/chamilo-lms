@@ -53,12 +53,12 @@ $course_id = api_get_course_int_id();
 if (api_is_in_gradebook()) {
     $interbreadcrumb[] = [
         'url' => Category::getUrl(),
-        'name' => get_lang('ToolGradebook'),
+        'name' => get_lang('Assessments'),
     ];
 }
 $interbreadcrumb[] = [
     'url' => 'lp_controller.php?action=list&'.api_get_cidreq(),
-    'name' => get_lang('LearningPaths'),
+    'name' => get_lang('Learning paths'),
 ];
 $interbreadcrumb[] = [
     'url' => api_get_self()."?action=build&lp_id=$learnpath_id&".api_get_cidreq(),
@@ -66,7 +66,7 @@ $interbreadcrumb[] = [
 ];
 $interbreadcrumb[] = [
     'url' => api_get_self()."?action=add_item&type=step&lp_id=$learnpath_id&".api_get_cidreq(),
-    'name' => get_lang('NewStep'),
+    'name' => get_lang('Add learning object or activity'),
 ];
 
 // Theme calls.
@@ -74,7 +74,7 @@ $show_learn_path = true;
 $lp_theme_css = $learnPath->get_theme();
 
 Display::display_header(get_lang('Edit'), 'Path');
-$suredel = trim(get_lang('AreYouSureToDeleteJS'));
+$suredel = trim(get_lang('Are you sure to delete'));
 ?>
 <script>
 function stripslashes(str) {
@@ -102,7 +102,7 @@ $(function() {
     });
 
     $('.lp-btn-associate-forum').on('click', function (e) {
-        var associate = confirm('<?php echo get_lang('ConfirmAssociateForumToLPItem'); ?>');
+        var associate = confirm('<?php echo get_lang('This action will associate a forum thread to this learning path item. Do you want to proceed?'); ?>');
 
         if (!associate) {
             e.preventDefault();
@@ -110,7 +110,7 @@ $(function() {
     });
 
     $('.lp-btn-dissociate-forum').on('click', function (e) {
-        var dissociate = confirm('<?php echo get_lang('ConfirmDissociateForumToLPItem'); ?>');
+        var dissociate = confirm('<?php echo get_lang('This action will dissociate the forum thread of this learning path item. Do you want to proceed?'); ?>');
 
         if (!dissociate) {
             e.preventDefault();

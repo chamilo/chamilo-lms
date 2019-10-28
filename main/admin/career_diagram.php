@@ -42,11 +42,11 @@ if (empty($careerInfo)) {
 // setting breadcrumbs
 $interbreadcrumb[] = [
     'url' => 'index.php',
-    'name' => get_lang('PlatformAdmin'),
+    'name' => get_lang('Administration'),
 ];
 $interbreadcrumb[] = [
     'url' => 'career_dashboard.php',
-    'name' => get_lang('CareersAndPromotions'),
+    'name' => get_lang('Careers and promotions'),
 ];
 
 $interbreadcrumb[] = [
@@ -103,7 +103,7 @@ if (!empty($diagram)) {
 } else {
     Display::addFlash(
         Display::return_message(
-            sprintf(get_lang('CareerXDoesntHaveADiagram'), $careerInfo['name']),
+            sprintf(get_lang('Career %s doesn\'t have a diagram.'), $careerInfo['name']),
             'warning'
         )
     );

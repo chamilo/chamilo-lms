@@ -68,9 +68,9 @@ if (!empty($_GET['message'])) {
     $message = urldecode($_GET['message']);
 }
 
-$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('PlatformAdmin')];
-$interbreadcrumb[] = ["url" => 'user_list.php', "name" => get_lang('UserList')];
-$tool_name = get_lang('AddUsers');
+$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('Administration')];
+$interbreadcrumb[] = ["url" => 'user_list.php', "name" => get_lang('User list')];
+$tool_name = get_lang('Add a user');
 
 // Create the form
 $form = new FormValidator('user_add');
@@ -80,57 +80,57 @@ if (api_is_western_name_order()) {
     $form->addElement(
         'text',
         'firstname',
-        get_lang('FirstName'),
+        get_lang('First name'),
         [
             'id' => 'firstname',
         ]
     );
     $form->applyFilter('firstname', 'html_filter');
     $form->applyFilter('firstname', 'trim');
-    $form->addRule('firstname', get_lang('ThisFieldIsRequired'), 'required');
+    $form->addRule('firstname', get_lang('Required field'), 'required');
     // Lastname
     $form->addElement(
         'text',
         'lastname',
-        get_lang('LastName'),
+        get_lang('Last name'),
         [
             'id' => 'lastname',
         ]
     );
     $form->applyFilter('lastname', 'html_filter');
     $form->applyFilter('lastname', 'trim');
-    $form->addRule('lastname', get_lang('ThisFieldIsRequired'), 'required');
+    $form->addRule('lastname', get_lang('Required field'), 'required');
 } else {
     // Lastname
     $form->addElement(
         'text',
         'lastname',
-        get_lang('LastName'),
+        get_lang('Last name'),
         [
             'id' => 'lastname',
         ]
     );
     $form->applyFilter('lastname', 'html_filter');
     $form->applyFilter('lastname', 'trim');
-    $form->addRule('lastname', get_lang('ThisFieldIsRequired'), 'required');
+    $form->addRule('lastname', get_lang('Required field'), 'required');
     // Firstname
     $form->addElement(
         'text',
         'firstname',
-        get_lang('FirstName'),
+        get_lang('First name'),
         [
             'id' => 'firstname',
         ]
     );
     $form->applyFilter('firstname', 'html_filter');
     $form->applyFilter('firstname', 'trim');
-    $form->addRule('firstname', get_lang('ThisFieldIsRequired'), 'required');
+    $form->addRule('firstname', get_lang('Required field'), 'required');
 }
 // Official code
 $form->addElement(
     'text',
     'official_code',
-    get_lang('OfficialCode'),
+    get_lang('Code'),
     [
         'size' => '40',
         'id' => 'official_code',
@@ -138,37 +138,37 @@ $form->addElement(
 );
 $form->applyFilter('official_code', 'html_filter');
 $form->applyFilter('official_code', 'trim');
-// Email
-$form->addElement('text', 'email', get_lang('Email'), ['size' => '40', 'autocomplete' => 'off', 'id' => 'email']);
-$form->addRule('email', get_lang('EmailWrong'), 'email');
+// e-mail
+$form->addElement('text', 'email', get_lang('e-mail'), ['size' => '40', 'autocomplete' => 'off', 'id' => 'email']);
+$form->addRule('email', get_lang('e-mailWrong'), 'email');
 if (api_get_setting('registration', 'email') == 'true') {
-    $form->addRule('email', get_lang('EmailWrong'), 'required');
+    $form->addRule('email', get_lang('e-mailWrong'), 'required');
 }
 
 if (api_get_setting('login_is_email') == 'true') {
-    $form->addRule('email', sprintf(get_lang('UsernameMaxXCharacters'), (string) USERNAME_MAX_LENGTH), 'maxlength', USERNAME_MAX_LENGTH);
-    $form->addRule('email', get_lang('UserTaken'), 'username_available');
+    $form->addRule('email', sprintf(get_lang('The login needs to be maximum %s characters long'), (string) USERNAME_MAX_LENGTH), 'maxlength', USERNAME_MAX_LENGTH);
+    $form->addRule('email', get_lang('This login is already in use'), 'username_available');
 }
 
 // Phone
-$form->addElement('text', 'phone', get_lang('PhoneNumber'), ['autocomplete' => 'off', 'id' => 'phone']);
+$form->addElement('text', 'phone', get_lang('Phone number'), ['autocomplete' => 'off', 'id' => 'phone']);
 // Picture
 $form->addFile(
     'picture',
-    get_lang('AddImage'),
+    get_lang('Add image'),
     ['id' => 'picture', 'class' => 'picture-form', 'crop_image' => true, 'crop_ratio' => '1 / 1']
 );
 $allowed_picture_types = api_get_supported_image_extensions(false);
 
-$form->addRule('picture', get_lang('OnlyImagesAllowed').' ('.implode(',', $allowed_picture_types).')', 'filetype', $allowed_picture_types);
+$form->addRule('picture', get_lang('Only PNG, JPG or GIF images allowed').' ('.implode(',', $allowed_picture_types).')', 'filetype', $allowed_picture_types);
 
 // Username
 if (api_get_setting('login_is_email') != 'true') {
-    $form->addElement('text', 'username', get_lang('LoginName'), ['id' => 'username', 'maxlength' => USERNAME_MAX_LENGTH, 'autocomplete' => 'off']);
-    $form->addRule('username', get_lang('ThisFieldIsRequired'), 'required');
-    $form->addRule('username', sprintf(get_lang('UsernameMaxXCharacters'), (string) USERNAME_MAX_LENGTH), 'maxlength', USERNAME_MAX_LENGTH);
-    $form->addRule('username', get_lang('OnlyLettersAndNumbersAllowed'), 'username');
-    $form->addRule('username', get_lang('UserTaken'), 'username_available');
+    $form->addElement('text', 'username', get_lang('Login'), ['id' => 'username', 'maxlength' => USERNAME_MAX_LENGTH, 'autocomplete' => 'off']);
+    $form->addRule('username', get_lang('Required field'), 'required');
+    $form->addRule('username', sprintf(get_lang('The login needs to be maximum %s characters long'), (string) USERNAME_MAX_LENGTH), 'maxlength', USERNAME_MAX_LENGTH);
+    $form->addRule('username', get_lang('Only letters and numbers allowed'), 'username');
+    $form->addRule('username', get_lang('This login is already in use'), 'username_available');
 }
 
 // Password
@@ -188,7 +188,7 @@ if (isset($extAuthSource) && count($extAuthSource) > 0) {
         }
     }
     if ($nb_ext_auth_source_added > 0) {
-        $group[] = $form->createElement('radio', 'password_auto', null, get_lang('ExternalAuthentication').' ', 2);
+        $group[] = $form->createElement('radio', 'password_auto', null, get_lang('External authentification').' ', 2);
         $group[] = $form->createElement('select', 'auth_source', null, $auth_sources);
         $group[] = $form->createElement('static', '', '', '<br />');
     }
@@ -198,14 +198,14 @@ $group[] = $form->createElement(
     'radio',
     'password_auto',
     get_lang('Password'),
-    get_lang('AutoGeneratePassword').'<br />',
+    get_lang('Automatically generate a new password').'<br />',
     1
 );
 $group[] = $form->createElement(
     'radio',
     'password_auto',
     'id="radio_user_password"',
-    get_lang('EnterPassword'),
+    get_lang('Enter password'),
     0
 );
 $group[] = $form->createElement(
@@ -222,15 +222,15 @@ $group[] = $form->createElement(
 
 $form->addGroup($group, 'password', get_lang('Password'));
 $form->addPasswordRule('password', 'password');
-$form->addGroupRule('password', get_lang('EnterPassword'), 'required', null, 1);
+$form->addGroupRule('password', get_lang('Enter password'), 'required', null, 1);
 
 // Status
 $status = [];
-$status[COURSEMANAGER] = get_lang('Teacher');
+$status[COURSEMANAGER] = get_lang('Trainer');
 $status[STUDENT] = get_lang('Learner');
-$status[DRH] = get_lang('Drh');
-$status[SESSIONADMIN] = get_lang('SessionsAdmin');
-$status[STUDENT_BOSS] = get_lang('RoleStudentBoss');
+$status[DRH] = get_lang('Human Resources Manager');
+$status[SESSIONADMIN] = get_lang('Sessions administrator');
+$status[STUDENT_BOSS] = get_lang('Student\'s superior');
 $status[INVITEE] = get_lang('Invitee');
 
 $form->addElement(
@@ -266,7 +266,7 @@ if (api_is_platform_admin()) {
     $group[] = $form->createElement('radio', 'platform_admin', 'id="id_platform_admin"', get_lang('Yes'), 1);
     $group[] = $form->createElement('radio', 'platform_admin', 'id="id_platform_admin"', get_lang('No'), 0);
     $form->addElement('html', '<div id="id_platform_admin" style="display:'.$display.';">');
-    $form->addGroup($group, 'admin', get_lang('PlatformAdmin'));
+    $form->addGroup($group, 'admin', get_lang('Administration'));
     $form->addElement('html', '</div>');
 }
 
@@ -276,9 +276,9 @@ $form->addSelectLanguage('language', get_lang('Language'), null);
 $group = [];
 $group[] = $form->createElement('radio', 'send_mail', null, get_lang('Yes'), 1);
 $group[] = $form->createElement('radio', 'send_mail', null, get_lang('No'), 0);
-$form->addGroup($group, 'mail', get_lang('SendMailToNewUser'));
+$form->addGroup($group, 'mail', get_lang('Send mail to new user'));
 // Expiration Date
-$form->addElement('radio', 'radio_expiration_date', get_lang('ExpirationDate'), get_lang('NeverExpires'), 0);
+$form->addElement('radio', 'radio_expiration_date', get_lang('Expiration date'), get_lang('Never expires'), 0);
 $group = [];
 $group[] = $form->createElement('radio', 'radio_expiration_date', null, get_lang('Enabled'), 1);
 $group[] = $form->createElement(
@@ -290,9 +290,9 @@ $group[] = $form->createElement(
     ]
 );
 $form->addGroup($group, 'max_member_group', null, null, false);
-// Active account or inactive account
-$form->addElement('radio', 'active', get_lang('ActiveAccount'), get_lang('Active'), 1);
-$form->addElement('radio', 'active', '', get_lang('Inactive'), 0);
+// active account or inactive account
+$form->addElement('radio', 'active', get_lang('Account'), get_lang('active'), 1);
+$form->addElement('radio', 'active', '', get_lang('inactive'), 0);
 
 $extraField = new ExtraField('user');
 $returnParams = $extraField->addElements(
@@ -458,7 +458,7 @@ if ($form->validate()) {
             $extraFieldValues = new ExtraFieldValue('user');
             $user['item_id'] = $user_id;
             $extraFieldValues->saveFieldValues($user);
-            $message = get_lang('UserAdded').': '.
+            $message = get_lang('The user has been added').': '.
                 Display::url(
                     api_get_person_name($firstname, $lastname),
                     api_get_path(WEB_CODE_PATH).'admin/user_edit.php?user_id='.$user_id

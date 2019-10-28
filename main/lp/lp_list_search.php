@@ -19,7 +19,7 @@ Event::event_access_tool(TOOL_SEARCH);
 if (api_is_in_gradebook()) {
     $interbreadcrumb[] = [
         'url' => Category::getUrl(),
-        'name' => get_lang('ToolGradebook'),
+        'name' => get_lang('Assessments'),
     ];
 }
 
@@ -28,7 +28,7 @@ search_widget_prepare($htmlHeadXtra);
 Display::display_header(null, 'Path');
 
 if (api_get_setting('search_enabled') !== 'true') {
-    echo Display::return_message(get_lang('SearchFeatureNotEnabledComment'), 'error');
+    echo Display::return_message(get_lang('The full-text search feature is not enabled in Chamilo. Please contact the Chamilo administrator.'), 'error');
 } else {
     if (!empty($_GET['action'])) {
         search_widget_show($_GET['action']);

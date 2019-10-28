@@ -55,7 +55,7 @@ if ($is_allowed_to_edit) {
     global $interbreadcrumb;
     $interbreadcrumb[] = [
         'url' => 'lp_controller.php?action=list&isStudentView=false&'.api_get_cidreq(),
-        'name' => get_lang('LearningPaths'),
+        'name' => get_lang('Learning paths'),
     ];
     $interbreadcrumb[] = [
         'url' => api_get_self()."?action=add_item&type=step&lp_id=".$lp->lp_id."&isStudentView=false&".api_get_cidreq(),
@@ -88,7 +88,7 @@ foreach ($list as $toc) {
 }
 
 //Setting the template
-$tool_name = get_lang('ViewModeImpress');
+$tool_name = get_lang('Current view mode: Impress');
 $tpl = new Template($tool_name, false, false, true);
 $tpl->assign('html', $html);
 $templateName = $tpl->get_template('learnpath/impress.tpl');

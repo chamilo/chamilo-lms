@@ -33,7 +33,7 @@ $oLP = new learnpath(api_get_course_id(), $lpId, api_get_user_id());
 
 $interbreadcrumb[] = [
     'url' => 'lp_controller.php?action=list&'.api_get_cidreq(),
-    'name' => get_lang('LearningPaths'),
+    'name' => get_lang('Learning paths'),
 ];
 
 $interbreadcrumb[] = [
@@ -176,7 +176,7 @@ if ($form->validate()) {
             $lpId,
             $users
         );
-        Display::addFlash(Display::return_message(get_lang('Updated')));
+        Display::addFlash(Display::return_message(get_lang('Update successful')));
     }
 
     // Subscribing groups
@@ -192,17 +192,17 @@ if ($form->validate()) {
             $lpId,
             $groups
         );
-        Display::addFlash(Display::return_message(get_lang('Updated')));
+        Display::addFlash(Display::return_message(get_lang('Update successful')));
     }
 
     header("Location: $url");
     exit;
 }
 
-$message = Display::return_message(get_lang('UserLpSubscriptionDescription'));
+$message = Display::return_message(get_lang('Note that if the inscription of users in a category is available, then if you have already subscribe user to the category it will override the inscription of users here in the Learning Path'));
 $headers = [
-    get_lang('SubscribeUsersToLp'),
-    get_lang('SubscribeGroupsToLp'),
+    get_lang('Subscribe users to learning path'),
+    get_lang('Subscribe groups to learning path'),
 ];
 
 $menu = $oLP->build_action_menu(true, false, true, false);

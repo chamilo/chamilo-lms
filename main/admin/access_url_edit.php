@@ -61,7 +61,7 @@ if ($form->validate()) {
                 }
             }
             $url_to_go = 'access_urls.php';
-            $message = get_lang('URLEdited');
+            $message = get_lang('The URL has been edited');
         } else {
             $num = UrlManager::url_exist($url);
             if ($num == 0) {
@@ -72,11 +72,11 @@ if ($form->validate()) {
                     //create
                     UrlManager::add($url.'/', $description, $active);
                 }
-                $message = get_lang('URLAdded');
+                $message = get_lang('The URL has been added');
                 $url_to_go = 'access_urls.php';
             } else {
                 $url_to_go = 'access_url_edit.php';
-                $message = get_lang('URLAlreadyAdded');
+                $message = get_lang('This URL already exists, please select another URL');
             }
             // URL Images
             $url .= (substr($url, strlen($url) - 1, strlen($url)) == '/') ? '' : '/';
@@ -112,19 +112,19 @@ if ($form->validate()) {
 }
 
 $form->addElement('text', 'url', 'URL');
-$form->addRule('url', get_lang('ThisFieldIsRequired'), 'required');
+$form->addRule('url', get_lang('Required field'), 'required');
 $form->addRule('url', '', 'maxlength', 254);
 $form->addElement('textarea', 'description', get_lang('Description'));
 
 //the first url with id = 1 will be always active
 if (isset($_GET['url_id']) && $_GET['url_id'] != 1) {
-    $form->addElement('checkbox', 'active', null, get_lang('Active'));
+    $form->addElement('checkbox', 'active', null, get_lang('active'));
 }
 
 $defaults['url'] = 'http://';
 $form->setDefaults($defaults);
 
-$submit_name = get_lang('AddUrl');
+$submit_name = get_lang('Add URL');
 if (isset($_GET['url_id'])) {
     $url_id = (int) $_GET['url_id'];
     $num_url_id = UrlManager::url_id_exist($url_id);
@@ -135,7 +135,7 @@ if (isset($_GET['url_id'])) {
     $url_data = UrlManager::get_url_data_from_id($url_id);
     $form->addElement('hidden', 'id', $url_data['id']);
     $form->setDefaults($url_data);
-    $submit_name = get_lang('AddUrl');
+    $submit_name = get_lang('Add URL');
 }
 
 if (!api_is_multiple_url_enabled()) {
@@ -143,9 +143,9 @@ if (!api_is_multiple_url_enabled()) {
     exit;
 }
 
-$tool_name = get_lang('AddUrl');
-$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('PlatformAdmin')];
-$interbreadcrumb[] = ['url' => 'access_urls.php', 'name' => get_lang('MultipleAccessURLs')];
+$tool_name = get_lang('Add URL');
+$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('Administration')];
+$interbreadcrumb[] = ['url' => 'access_urls.php', 'name' => get_lang('Multiple access URL / Branding')];
 
 Display :: display_header($tool_name);
 

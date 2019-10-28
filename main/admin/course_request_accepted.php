@@ -33,10 +33,10 @@ if ($course_validation_feature) {
         $course_request_code = CourseRequestManager::get_course_request_code($delete_course_request);
         $result = CourseRequestManager::delete_course_request($delete_course_request);
         if ($result) {
-            $message = sprintf(get_lang('CourseRequestDeleted'), $course_request_code);
+            $message = sprintf(get_lang('The course request %s has been deleted.'), $course_request_code);
             $is_error_message = false;
         } else {
-            $message = sprintf(get_lang('CourseRequestDeletionFailed'), $course_request_code);
+            $message = sprintf(get_lang('The course request %s has not been deleted due to internal error.'), $course_request_code);
             $is_error_message = true;
         }
     } elseif (isset($_POST['action'])) {
@@ -52,7 +52,7 @@ if ($course_validation_feature) {
                     foreach ($_POST['course_request'] as $index => $course_request_id) {
                         $success &= CourseRequestManager::delete_course_request($course_request_id);
                     }
-                    $message = $success ? get_lang('SelectedCourseRequestsDeleted') : get_lang('SomeCourseRequestsNotDeleted');
+                    $message = $success ? get_lang('The selected course requests have been deleted.') : get_lang('Some of the selected course requests have not been deleted due to internal error.');
                     $is_error_message = !$success;
                 }
                 break;
@@ -61,8 +61,8 @@ if ($course_validation_feature) {
 } else {
     $link_to_setting = api_get_path(WEB_CODE_PATH).'admin/settings.php?category=Platform#course_validation';
     $message = sprintf(
-        get_lang('PleaseActivateCourseValidationFeature'),
-        sprintf('<strong><a href="%s">%s</a></strong>', $link_to_setting, get_lang('EnableCourseValidation'))
+        get_lang('The "Course validation" feature is not enabled at the moment. In order to use this feature, please, enable it by using the  %s setting.'),
+        sprintf('<strong><a href="%s">%s</a></strong>', $link_to_setting, get_lang('Courses validation'))
     );
     $is_error_message = true;
 }
@@ -130,10 +130,10 @@ function modify_filter($id)
         '&nbsp;<a href="?delete_course_request='.$id.'">'.
         Display::return_icon(
             'delete.png',
-            get_lang('DeleteThisCourseRequest'),
+            get_lang('Delete this course request'),
             [
                 'style' => 'vertical-align: middle;',
-                'onclick' => 'javascript: if (!confirm(\''.addslashes(api_htmlentities(sprintf(get_lang('ACourseRequestWillBeDeleted'), $code), ENT_QUOTES)).'\')) return false;',
+                'onclick' => 'javascript: if (!confirm(\''.addslashes(api_htmlentities(sprintf(get_lang('The course request %s is going to be deleted. Is it OK to proceed?'), $code), ENT_QUOTES)).'\')) return false;',
             ]
         ).
         '</a>';
@@ -141,9 +141,9 @@ function modify_filter($id)
     return $result;
 }
 
-$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('PlatformAdmin')];
-$interbreadcrumb[] = ['url' => 'course_list.php', 'name' => get_lang('CourseList')];
-$tool_name = get_lang('AcceptedCourseRequests');
+$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('Administration')];
+$interbreadcrumb[] = ['url' => 'course_list.php', 'name' => get_lang('Course list')];
+$tool_name = get_lang('Accepted course requests');
 
 // Display confirmation or error message.
 if (!empty($message)) {
@@ -171,9 +171,9 @@ $form->addButtonSearch(get_lang('Search'));
 // The action bar.
 echo '<div style="float: right; margin-top: 5px; margin-right: 5px;">';
 echo ' <a href="course_request_review.php">'.
-    Display::return_icon('course_request_pending.png', get_lang('ReviewCourseRequests')).get_lang('ReviewCourseRequests').'</a>';
+    Display::return_icon('course_request_pending.png', get_lang('Review incoming course requests')).get_lang('Review incoming course requests').'</a>';
 echo ' <a href="course_request_rejected.php">'.
-    Display::return_icon('course_request_rejected.gif', get_lang('RejectedCourseRequests')).get_lang('RejectedCourseRequests').'</a>';
+    Display::return_icon('course_request_rejected.gif', get_lang('Rejected course requests')).get_lang('Rejected course requests').'</a>';
 echo '</div>';
 echo '<div class="actions">';
 $form->display();
@@ -182,14 +182,14 @@ echo '</div>';
 // Create a sortable table with the course data.
 $table = new SortableTable('course_requests_accepted', 'get_number_of_requests', 'get_request_data', 5, 20, 'DESC');
 $table->set_header(0, '', false);
-$table->set_header(1, get_lang('Code'));
+$table->set_header(1, get_lang('Course code'));
 $table->set_header(2, get_lang('Title'));
 $table->set_header(3, get_lang('Category'));
-$table->set_header(4, get_lang('Teacher'));
-$table->set_header(5, get_lang('CourseRequestDate'));
+$table->set_header(4, get_lang('Trainer'));
+$table->set_header(5, get_lang('Request date'));
 $table->set_header(6, '', false);
 $table->set_column_filter(6, 'modify_filter');
-$table->set_form_actions(['delete_course_requests' => get_lang('DeleteCourseRequests')], 'course_request');
+$table->set_form_actions(['delete_course_requests' => get_lang('Delete selected course request(s)')], 'course_request');
 $table->display();
 
 /* FOOTER */

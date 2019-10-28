@@ -14,7 +14,7 @@ $nbre = 0;
 echo '<form name="form" method="post" action="'.api_get_self().'?annee='.Security::remove_XSS($annee).'">';
 if ($statut == 1) {
     echo get_lang(
-            'EmailNotifySubscription'
+            'e-mailNotifySubscription'
         ).': <input type="checkbox" name="mailling" value="1" checked="checked"><i>'.get_lang(
             'DontUnchek'
         ).'</i>';
@@ -30,13 +30,13 @@ $is_western_name_order = api_is_western_name_order();
 echo '<input type="hidden" name="confirmed" value="yes">';
 echo '<table border="0" cellspacing="0" width="100%">';
 echo '<tr align="center" id="header3">'.
-        '<td width="15%"><input type="button" value="'.get_lang('AllSlashNone').'" onClick="checkAll();"></td>'.
-        '<td width="40%"><b>'.get_lang('Email').'</b></td>'.
+        '<td width="15%"><input type="button" value="'.get_lang('All/None').'" onClick="checkAll();"></td>'.
+        '<td width="40%"><b>'.get_lang('e-mail').'</b></td>'.
         ($is_western_name_order
-            ? '<td width="15%"><b>'.get_lang('FirstName').'</b></td>'.
+            ? '<td width="15%"><b>'.get_lang('First name').'</b></td>'.
             '<td width="15%"><b>'.get_lang('Name').'</b></td>'
             : '<td width="15%"><b>'.get_lang('Name').'</b></td>'.
-            '<td width="15%"><b>'.get_lang('FirstName').'</b></td>').
+            '<td width="15%"><b>'.get_lang('First name').'</b></td>').
         '<td width="15%"><b>'.get_lang('Login').'</b></td>'.
       '</tr>'."\n";
 foreach ($nom_form as $key => $val) {

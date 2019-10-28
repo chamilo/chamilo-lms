@@ -12,7 +12,7 @@ $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 $this_section = SECTION_PLATFORM_ADMIN;
 api_protect_admin_script();
-$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('PlatformAdmin')];
+$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('Administration')];
 // Database Table Definitions
 $tbl_settings_current = Database::get_main_table(TABLE_MAIN_SETTINGS_CURRENT);
 $message = '';
@@ -28,7 +28,7 @@ if (isset($_POST['activeExtension'])) {
             $rs = Database::query($sql);
 
             if (Database::affected_rows($rs) > 0) {
-                $message = get_lang('ServiceActivated');
+                $message = get_lang('Service activated');
             }
 
             $sql = 'UPDATE '.$tbl_settings_current.' SET
@@ -130,7 +130,7 @@ function afficheContent(event){
 }
 </script>';
 
-$nameTool = get_lang('ConfigureExtensions');
+$nameTool = get_lang('Configure extensions');
 Display::display_header($nameTool);
 
 ?>
@@ -147,12 +147,12 @@ Display::display_header($nameTool);
     <div class="chamilo-rapid">
     <div class="row">
         <div class="col-md-12">
-            <?php echo Display::panel(get_lang('Ppt2lpDescription').' '.get_lang('Ppt2lpVoiceRecordingNeedsRed5'), get_lang('Ppt2lp')); ?>
+            <?php echo Display::panel(get_lang('Chamilo RAPID is a Rapid Learning tool available in Chamilo Pro and Chamilo Medical. It allows you to convert Powerpoint or LibreOffice presentations to SCORM-compliant courses. After the conversion, you end up in the Courses authoring tool and are able to add audio comments on slides and pages, tests and activities between the slides or pages and interaction activities like forum discussions or assignment upload. Every step becomes an independent and removable learning object. And the whole course generates accurate SCORM reporting for further coaching.').' '.get_lang('The voice recording feature in the course editor relies on a Red5 streaming server. This server\'s parameters can be configured in the videoconference section on the current page.'), get_lang('Chamilo RAPID')); ?>
         </div>
     </div>
         <div class="row">
             <div class="col-md-5">
-                <?php Display::display_icon('screenshot_ppt2lp.jpg', get_lang('Ppt2lp'), ['class' => 'img-responsive']); ?>
+                <?php Display::display_icon('screenshot_ppt2lp.jpg', get_lang('Chamilo RAPID'), ['class' => 'img-responsive']); ?>
             </div>
             <div class="col-md-7">
                 <form method="POST" class="form-horizontal" action="<?php echo api_get_self(); ?>">
@@ -162,14 +162,14 @@ Display::display_header($nameTool);
                     //$form -> addElement('html','<br /><br />');
                     $form->addElement('text', 'port', get_lang('Port'));
                     //$form -> addElement('html','<br /><br />');
-                    $form->addElement('text', 'user', get_lang('UserOnHost'));
+                    $form->addElement('text', 'user', get_lang('Login'));
                     //$form -> addElement('html','<br /><br />');
-                    $form->addElement('text', 'ftp_password', get_lang('FtpPassword'));
+                    $form->addElement('text', 'ftp_password', get_lang('FTP password'));
                     //$form -> addElement('html','<br /><br />');
-                    $form->addElement('text', 'path_to_lzx', get_lang('PathToLzx'));
+                    $form->addElement('text', 'path_to_lzx', get_lang('Path to LZX files'));
                     //$form -> addElement('html','<br /><br />');
                     $options = ChamiloApi::getDocumentConversionSizes();
-                    $form->addElement('select', 'size', get_lang('SlideSize'), $options);
+                    $form->addElement('select', 'size', get_lang('Size of the slides'), $options);
                     $form->addElement('hidden', 'extension_code', 'ppt2lp');
 
                     $defaults = [];
@@ -185,12 +185,12 @@ Display::display_header($nameTool);
                         while ($row = Database::fetch_array($rs, 'ASSOC')) {
                             $defaults[$row['subkey']] = $row['selected_value'];
                         }
-                        $form->addButtonSave(get_lang('ReconfigureExtension'), 'activeExtension');
+                        $form->addButtonSave(get_lang('Reconfigure extension'), 'activeExtension');
                     } else {
                         $defaults['host'] = 'localhost';
                         $defaults['port'] = '2002';
                         $defaults['size'] = '720x540';
-                        $form->addButtonSave(get_lang('ActivateExtension'), 'activeExtension');
+                        $form->addButtonSave(get_lang('Activate service'), 'activeExtension');
                     }
 
                     $form->setDefaults($defaults);
@@ -207,19 +207,19 @@ Display::display_header($nameTool);
     <!-- SEARCH -->
     <div id="main_search">
         <div id="extension_header_search" class="accordion_header">
-            <a href="#"><?php echo get_lang('SearchEngine') ?></a>
+            <a href="#"><?php echo get_lang('Chamilo LIBRARY') ?></a>
         </div>
         <div id="extension_content_search" style="display:none" class="accordion_content">
-            <?php echo get_lang('SearchEngineDescription') ?><br /><br />
+            <?php echo get_lang('Chamilo LIBRARYDescription') ?><br /><br />
             <table width="100%">
                 <tr>
                     <td width="50%">
-                        <?php Display::display_icon('screenshot_search.jpg', get_lang('SearchEngine')); ?>
+                        <?php Display::display_icon('screenshot_search.jpg', get_lang('Chamilo LIBRARY')); ?>
                     </td>
                     <td align="center" width="50%">
                         <form method="POST" action="<?php echo api_get_self(); ?>">
                         <input type="hidden" name="extension_code" value="search" />
-                        <button type="submit" class="save" name="activeExtension" value="<?php echo get_lang('ActivateExtension') ?>" ><?php echo get_lang('ActivateExtension') ?></button>
+                        <button type="submit" class="save" name="activeExtension" value="<?php echo get_lang('Activate service') ?>" ><?php echo get_lang('Activate service') ?></button>
                         </form>
                     </td>
                 </tr>

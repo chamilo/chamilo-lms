@@ -33,7 +33,7 @@ function validate_data($users_courses)
                 // 2.1.1 Check whether course with this code exists in the system.
                 $courseInfo = api_get_course_info($user_course['CourseCode']);
                 if (empty($courseInfo)) {
-                    $user_course['error'] = get_lang('CodeDoesNotExists');
+                    $user_course['error'] = get_lang('This code does not exist');
                     $errors[] = $user_course;
                 } else {
                     $coursecodes[$user_course['CourseCode']] = 1;
@@ -44,7 +44,7 @@ function validate_data($users_courses)
         // 3. Check whether username exists.
         if (isset($user_course['UserName']) && strlen($user_course['UserName']) != 0) {
             if (UserManager::is_username_available($user_course['UserName'])) {
-                $user_course['error'] = get_lang('UnknownUser');
+                $user_course['error'] = get_lang('Unknown user');
                 $errors[] = $user_course;
             }
         }
@@ -52,7 +52,7 @@ function validate_data($users_courses)
         // 4. Check whether status is valid.
         if (isset($user_course['Status']) && strlen($user_course['Status']) != 0) {
             if ($user_course['Status'] != COURSEMANAGER && $user_course['Status'] != STUDENT) {
-                $user_course['error'] = get_lang('UnknownStatus');
+                $user_course['error'] = get_lang('Unknown status');
                 $errors[] = $user_course;
             }
         }
@@ -157,18 +157,18 @@ $this_section = SECTION_PLATFORM_ADMIN;
 // Protecting the admin section.
 api_protect_admin_script();
 
-$tool_name = get_lang('AddUsersToACourse').' CSV';
+$tool_name = get_lang('Add users to course').' CSV';
 
-$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('PlatformAdmin')];
+$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('Administration')];
 
 set_time_limit(0);
 
 // Creating the form.
 $form = new FormValidator('course_user_import');
 $form->addElement('header', '', $tool_name);
-$form->addElement('file', 'import_file', get_lang('ImportFileLocation'));
-$form->addElement('checkbox', 'subscribe', get_lang('Action'), get_lang('SubscribeUserIfNotAllreadySubscribed'));
-$form->addElement('checkbox', 'unsubscribe', '', get_lang('UnsubscribeUserIfSubscriptionIsNotInFile'));
+$form->addElement('file', 'import_file', get_lang('Import marks in an assessment'));
+$form->addElement('checkbox', 'subscribe', get_lang('Action'), get_lang('Add user in the course only if not yet in'));
+$form->addElement('checkbox', 'unsubscribe', '', get_lang('Remove user from course if his name is not in the list'));
 $form->addButtonImport(get_lang('Import'));
 $form->setDefaults(['subscribe' => '1', 'unsubscribe' => 1]);
 $errors = [];
@@ -180,15 +180,15 @@ if ($form->validate()) {
         $inserted_in_course = save_data($users_courses);
         // Build the alert message in case there were visual codes subscribed to.
         if ($_POST['subscribe']) {
-            //$warn = get_lang('UsersSubscribedToBecauseVisualCode').': ';
+            //$warn = get_lang('The users have been subscribed to the following courses because several courses share the same visual code').': ';
         } else {
-            $warn = get_lang('UsersUnsubscribedFromBecauseVisualCode').': ';
+            $warn = get_lang('The users have been unsubscribed from the following courses because several courses share the same visual code').': ';
         }
 
         if (!empty($inserted_in_course)) {
-            $warn = get_lang('FileImported');
+            $warn = get_lang('File imported');
         } else {
-            $warn = get_lang('ErrorsWhenImportingFile');
+            $warn = get_lang('Errors when importing file');
         }
 
         Display::addFlash(Display::return_message($warn));
@@ -217,7 +217,7 @@ if (count($errors) != 0) {
 // Displaying the form.
 $form->display();
 ?>
-    <p><?php echo get_lang('CSVMustLookLike').' ('.get_lang('MandatoryFields').')'; ?> :</p>
+    <p><?php echo get_lang('The CSV file must look like this').' ('.get_lang('Fields in <strong>bold</strong> are mandatory.').')'; ?> :</p>
     <blockquote>
 <pre>
 <b>UserName</b>;<b>CourseCode</b>;<b>Status</b>
@@ -226,8 +226,8 @@ jdoe;course01;<?php echo COURSEMANAGER; ?>
 adam;course01;<?php echo STUDENT; ?>
 </pre>
         <?php
-        echo COURSEMANAGER.': '.get_lang('Teacher').'<br />';
-        echo STUDENT.': '.get_lang('Student').'<br />';
+        echo COURSEMANAGER.': '.get_lang('Trainer').'<br />';
+        echo STUDENT.': '.get_lang('Learner').'<br />';
         ?>
     </blockquote>
 <?php

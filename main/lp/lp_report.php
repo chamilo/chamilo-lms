@@ -107,13 +107,13 @@ if (!empty($users)) {
         ];
     }
 } else {
-    Display::addFlash(Display::return_message(get_lang('NoUserAdded'), 'warning'));
+    Display::addFlash(Display::return_message(get_lang('No user added'), 'warning'));
 }
 
 // View
 $interbreadcrumb[] = [
     'url' => api_get_path(WEB_CODE_PATH).'lp/lp_controller.php?'.api_get_cidreq(),
-    'name' => get_lang('LearningPaths'),
+    'name' => get_lang('Learning paths'),
 ];
 
 $actions = Display::url(
@@ -130,7 +130,7 @@ if (!empty($users)) {
     $actions .= Display::url(
         Display::return_icon(
             'pdf.png',
-            get_lang('ExportToPdf'),
+            get_lang('Export to PDF'),
             [],
             ICON_SIZE_MEDIUM
         ),
@@ -138,7 +138,7 @@ if (!empty($users)) {
     );
 }
 
-$template = new Template(get_lang('StudentScore'));
+$template = new Template(get_lang('Learner score'));
 $template->assign('user_list', $userList);
 $template->assign('session_id', api_get_session_id());
 $template->assign('course_code', api_get_course_id());
@@ -159,7 +159,7 @@ $template->assign('content', $result);
 
 if ($export) {
     $pdfParams = [
-        'filename' => get_lang('StudentScore').'_'.api_get_local_time(),
+        'filename' => get_lang('Learner score').'_'.api_get_local_time(),
         //'pdf_title' => $title,
         //'course_code' => $course_code
     ];

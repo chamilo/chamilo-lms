@@ -24,8 +24,8 @@ $this_section = SECTION_PLATFORM_ADMIN;
 api_protect_admin_script(true);
 
 // setting breadcrumbs
-$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('PlatformAdmin')];
-$interbreadcrumb[] = ['url' => 'user_list.php', 'name' => get_lang('UserList')];
+$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('Administration')];
+$interbreadcrumb[] = ['url' => 'user_list.php', 'name' => get_lang('User list')];
 
 // Database Table Definitions
 $tbl_user = Database::get_main_table(TABLE_MAIN_USER);
@@ -45,13 +45,13 @@ $firstLetterUser = isset($_POST['firstLetterUser']) ? $_POST['firstLetterUser'] 
 $isAdmin = UserManager::is_admin($user_id);
 if ($isAdmin) {
     $userStatus = PLATFORM_ADMIN;
-    $tool_name = get_lang('AssignUsersToPlatformAdministrator');
+    $tool_name = get_lang('AssignUsersToAdministrationistrator');
 } elseif ($user_info['status'] == SESSIONADMIN) {
-    $tool_name = get_lang('AssignUsersToSessionsAdministrator');
+    $tool_name = get_lang('Assign users to sessions administrator');
 } elseif ($user_info['status'] == STUDENT_BOSS) {
-    $tool_name = get_lang('AssignUsersToBoss');
+    $tool_name = get_lang('Assign users to superior');
 } else {
-    $tool_name = get_lang('AssignUsersToHumanResourcesManager');
+    $tool_name = get_lang('Assign users to Human Resources manager');
 }
 
 $add_type = 'multiple';
@@ -252,14 +252,14 @@ $UserList = [];
 // Filters
 $filters = [
     ['type' => 'text', 'name' => 'username', 'label' => get_lang('Username')],
-    ['type' => 'text', 'name' => 'firstname', 'label' => get_lang('FirstName')],
-    ['type' => 'text', 'name' => 'lastname', 'label' => get_lang('LastName')],
-    ['type' => 'text', 'name' => 'official_code', 'label' => get_lang('OfficialCode')],
-    ['type' => 'text', 'name' => 'email', 'label' => get_lang('Email')],
+    ['type' => 'text', 'name' => 'firstname', 'label' => get_lang('First name')],
+    ['type' => 'text', 'name' => 'lastname', 'label' => get_lang('Last name')],
+    ['type' => 'text', 'name' => 'official_code', 'label' => get_lang('Code')],
+    ['type' => 'text', 'name' => 'email', 'label' => get_lang('e-mail')],
 ];
 
 $searchForm = new FormValidator('search', 'get', api_get_self().'?user='.$user_id);
-$searchForm->addHeader(get_lang('AdvancedSearch'));
+$searchForm->addHeader(get_lang('Advanced search'));
 $renderer = &$searchForm->defaultRenderer();
 
 $searchForm->addElement('hidden', 'user', $user_id);
@@ -301,7 +301,7 @@ if (isset($_POST['formSent']) && intval($_POST['formSent']) == 1) {
 
     Display::addFlash(
         Display::return_message(
-            get_lang('AssignedUsersHaveBeenUpdatedSuccessfully'),
+            get_lang('The assigned users have been updated'),
             'normal'
         )
     );
@@ -314,18 +314,18 @@ Display::display_header($tool_name);
 $actionsLeft = '';
 if ($userStatus != STUDENT_BOSS) {
     $actionsLeft = Display::url(
-        Display::return_icon('course-add.png', get_lang('AssignCourses'), null, ICON_SIZE_MEDIUM),
+        Display::return_icon('course-add.png', get_lang('Assign courses'), null, ICON_SIZE_MEDIUM),
         "dashboard_add_courses_to_user.php?user=$user_id"
     );
 
     $actionsLeft .= Display::url(
-        Display::return_icon('session-add.png', get_lang('AssignSessions'), null, ICON_SIZE_MEDIUM),
+        Display::return_icon('session-add.png', get_lang('Assign sessions'), null, ICON_SIZE_MEDIUM),
         "dashboard_add_sessions_to_user.php?user=$user_id"
     );
 }
 
 $actionsRight = Display::url(
-    '<em class="fa fa-search"></em> '.get_lang('AdvancedSearch'),
+    '<em class="fa fa-search"></em> '.get_lang('Advanced search'),
     '#',
     ['class' => 'btn btn-default advanced_options', 'id' => 'advanced_search']
 );
@@ -339,7 +339,7 @@ echo '</div>';
 
 echo Display::page_header(
     sprintf(
-        get_lang('AssignUsersToX'),
+        get_lang('Assign users to %s'),
         api_get_person_name($user_info['firstname'], $user_info['lastname'])
     ),
     null,
@@ -418,7 +418,7 @@ $result = Database::query($sql);
 <input type="hidden" name="formSent" value="1" />
 <div class="row">
     <div class="col-md-4">
-        <?php echo get_lang('UserListInPlatform'); ?>
+        <?php echo get_lang('User listInPlatform'); ?>
         <div class="form-group">
             <div class="col-sm-12">
                 <div id="ajax_list_users_multiple">
@@ -440,7 +440,7 @@ $result = Database::query($sql);
         <div class="code-course">
             <?php if ($add_type == 'multiple') {
                             ?>
-                <p><?php echo get_lang('FirstLetterUser'); ?></p>
+                <p><?php echo get_lang('First letter (last name)'); ?></p>
                 <select class="selectpicker show-tick form-control" name="firstLetterUser" onchange = "xajax_search_users(this.value,'multiple')">
                     <option value="%">--</option>
                     <?php echo Display::get_alphabet_options($firstLetterUser); ?>
@@ -479,15 +479,15 @@ $result = Database::query($sql);
     <div class="col-md-4">
     <?php
     if (UserManager::is_admin($user_id)) {
-        echo get_lang('AssignedUsersListToPlatformAdministrator');
+        echo get_lang('AssignedUsersListToAdministrationistrator');
     } else {
         if ($user_info['status'] == SESSIONADMIN) {
-            echo get_lang('AssignedUsersListToSessionsAdministrator');
+            echo get_lang('Assign a users list to the sessions administrator');
         } else {
             if ($user_info['status'] == STUDENT_BOSS) {
-                echo get_lang('AssignedUsersListToStudentBoss');
+                echo get_lang('Users assigned to their superior');
             } else {
-                echo get_lang('AssignedUsersListToHumanResourcesManager');
+                echo get_lang('List of users assigned to Human Resources manager');
             }
         }
     }

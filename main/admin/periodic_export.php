@@ -8,7 +8,7 @@ api_protect_admin_script(true);
 api_set_more_memory_and_time_limits();
 
 $this_section = SECTION_PLATFORM_ADMIN;
-$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('PlatformAdmin')];
+$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('Administration')];
 
 $nameTools = get_lang('PeriodicExports');
 $export = '';

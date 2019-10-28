@@ -16,11 +16,11 @@ api_protect_admin_script();
  *        MAIN CODE.
  */
 // setting the name of the tool
-$tool_name = get_lang('CreateSubLanguage');
+$tool_name = get_lang('Create sub-language');
 
 // setting breadcrumbs
-$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('PlatformAdmin')];
-$interbreadcrumb[] = ['url' => 'languages.php', 'name' => get_lang('PlatformLanguages')];
+$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('Administration')];
+$interbreadcrumb[] = ['url' => 'languages.php', 'name' => get_lang('Chamilo Portal Languages')];
 
 /**
  * Add sub-language.
@@ -197,12 +197,12 @@ if ((isset($_GET['id']) && $_GET['id'] == strval(intval($_GET['id']))) &&
     }
 }
 
-$language_name = get_lang('CreateSubLanguageForLanguage').' ( '.strtolower($language_name).' )';
+$language_name = get_lang('Create sub-languageForLanguage').' ( '.strtolower($language_name).' )';
 
 if (ckeck_if_is_parent_of_sub_language($parent_id) === true &&
     isset($_GET['action']) && $_GET['action'] == 'deletesublanguage'
 ) {
-    $language_name = get_lang('DeleteSubLanguage');
+    $language_name = get_lang('Delete sub-language');
 }
 
 $msg = '';
@@ -221,18 +221,18 @@ if (isset($_POST['SubmitAddNewLanguage'])) {
         $allow_insert_info = false;
         if ($index_information == 'original_name') {
             $msg .= Display::return_message(
-                get_lang('AlreadyExists').' "'.get_lang('OriginalName').'" '.'('.$original_name.')',
+                get_lang('Already exists').' "'.get_lang('Original name').'" '.'('.$original_name.')',
                 'error'
             );
         }
         if ($index_information == 'english_name') {
             $msg .= Display::return_message(
-                get_lang('AlreadyExists').' "'.get_lang('EnglishName').'" '.'('.$english_name.')',
+                get_lang('Already exists').' "'.get_lang('English name').'" '.'('.$english_name.')',
                 'error'
             );
         }
         if ($index_information == 'isocode') {
-            $msg .= Display::return_message(get_lang('CodeDoesNotExists').': '.$isocode.'', 'error');
+            $msg .= Display::return_message(get_lang('This code does not exist').': '.$isocode.'', 'error');
         }
         if ($index_information == 'execute_add' && $value_information === true) {
             $allow_insert_info = true;
@@ -246,17 +246,17 @@ if (isset($_POST['SubmitAddNewLanguage'])) {
             $english_name = api_strtolower($english_name);
 
             $isocode = str_replace(' ', '_', $isocode);
-            $str_info = '<br/>'.get_lang('OriginalName').' : '.$original_name.'<br/>'.get_lang('EnglishName').' : '.$english_name.'<br/>'.get_lang('PlatformCharsetTitle').' : '.$isocode;
+            $str_info = '<br/>'.get_lang('Original name').' : '.$original_name.'<br/>'.get_lang('English name').' : '.$english_name.'<br/>'.get_lang('Character set').' : '.$isocode;
 
             $mkdir_result = SubLanguageManager::add_language_directory($english_name);
             if ($mkdir_result) {
                 $sl_id = add_sub_language($original_name, $english_name, $isocode, $sublanguage_available, $parent_id);
                 if ($sl_id === false) {
                     SubLanguageManager::remove_language_directory($english_name);
-                    $msg .= Display::return_message(get_lang('LanguageDirectoryNotWriteableContactAdmin'), 'error');
+                    $msg .= Display::return_message(get_lang('The /main/lang directory, used on this portal to store the languages, is not writable. Please contact your platform administrator and report this message.'), 'error');
                 } else {
                     Display::addFlash(
-                        Display::return_message(get_lang('TheNewSubLanguageHasBeenAdded').$str_info, null, false)
+                        Display::return_message(get_lang('The new sub-language has been added').$str_info, null, false)
                     );
                     unset($interbreadcrumb);
                     $_GET['sub_language_id'] = $_REQUEST['sub_language_id'] = $sl_id;
@@ -264,15 +264,15 @@ if (isset($_POST['SubmitAddNewLanguage'])) {
                     exit();
                 }
             } else {
-                $msg .= Display::return_message(get_lang('LanguageDirectoryNotWriteableContactAdmin'), 'error');
+                $msg .= Display::return_message(get_lang('The /main/lang directory, used on this portal to store the languages, is not writable. Please contact your platform administrator and report this message.'), 'error');
             }
         } else {
             if ($language_id_exist === false) {
-                $msg .= Display::return_message(get_lang('LanguageParentNotExist'), 'error');
+                $msg .= Display::return_message(get_lang('The parent language does not exist.'), 'error');
             }
         }
     } else {
-        $msg .= Display::return_message(get_lang('FormHasErrorsPleaseComplete'), 'error');
+        $msg .= Display::return_message(get_lang('The form contains incorrect or incomplete data. Please check your input.'), 'error');
     }
 }
 
@@ -283,9 +283,9 @@ echo $msg;
 if (isset($_POST['SubmitAddDeleteLanguage'])) {
     $rs = SubLanguageManager::remove_sub_language($_GET['id'], $_GET['sub_language_id']);
     if ($rs === true) {
-        echo Display::return_message(get_lang('TheSubLanguageHasBeenRemoved'), 'confirm');
+        echo Display::return_message(get_lang('The sub language has been removed'), 'confirm');
     } else {
-        echo Display::return_message(get_lang('TheSubLanguageHasNotBeenRemoved'), 'error');
+        echo Display::return_message(get_lang('The sub-language has not been removed.'), 'error');
     }
 }
 // ckeck_if_is_parent_of_sub_language($parent_id)===false
@@ -298,15 +298,15 @@ if (isset($_GET['action']) && $_GET['action'] == 'definenewsublanguage') {
     );
     $class = 'add';
     $form->addElement('header', '', $text);
-    $form->addElement('text', 'original_name', get_lang('OriginalName'), 'class="input_titles"');
-    $form->addRule('original_name', get_lang('ThisFieldIsRequired'), 'required');
-    $form->addElement('text', 'english_name', get_lang('EnglishName'), 'class="input_titles"');
-    $form->addRule('english_name', get_lang('ThisFieldIsRequired'), 'required');
-    $form->addElement('text', 'isocode', get_lang('ISOCode'), 'class="input_titles"');
-    $form->addRule('isocode', get_lang('ThisFieldIsRequired'), 'required');
+    $form->addElement('text', 'original_name', get_lang('Original name'), 'class="input_titles"');
+    $form->addRule('original_name', get_lang('Required field'), 'required');
+    $form->addElement('text', 'english_name', get_lang('English name'), 'class="input_titles"');
+    $form->addRule('english_name', get_lang('Required field'), 'required');
+    $form->addElement('text', 'isocode', get_lang('ISO code'), 'class="input_titles"');
+    $form->addRule('isocode', get_lang('Required field'), 'required');
     $form->addElement('static', null, '&nbsp;', '<i>en, es, fr</i>');
     $form->addElement('checkbox', 'sub_language_is_visible', '', get_lang('Visibility'));
-    $form->addButtonCreate(get_lang('CreateSubLanguage'), 'SubmitAddNewLanguage');
+    $form->addButtonCreate(get_lang('Create sub-language'), 'SubmitAddNewLanguage');
     //$values['original_name'] = $language_details['original_name'].'...'; -> cannot be used because of quickform filtering (freeze)
     $values['english_name'] = $language_details['english_name'].'2';
     $values['isocode'] = $language_details['isocode'];
@@ -322,14 +322,14 @@ if (isset($_GET['action']) && $_GET['action'] == 'definenewsublanguage') {
         );
         $class = 'minus';
         $form->addElement('header', '', $text);
-        $form->addElement('static', '', get_lang('OriginalName'), $original_name);
-        $form->addElement('static', '', get_lang('EnglishName'), $english_name);
-        $form->addElement('static', '', get_lang('PlatformCharsetTitle'), $isocode);
-        $form->addButtonCreate(get_lang('DeleteSubLanguage'), 'SubmitAddDeleteLanguage');
+        $form->addElement('static', '', get_lang('Original name'), $original_name);
+        $form->addElement('static', '', get_lang('English name'), $english_name);
+        $form->addElement('static', '', get_lang('Character set'), $isocode);
+        $form->addButtonCreate(get_lang('Delete sub-language'), 'SubmitAddDeleteLanguage');
         $form->display();
     }
     if (isset($_GET['action']) && $_GET['action'] == 'definenewsublanguage') {
-        echo Display::return_message(get_lang('TheSubLanguageForThisLanguageHasBeenAdded'));
+        echo Display::return_message(get_lang('The sub-language of this language has been added'));
     }
 }
 /**

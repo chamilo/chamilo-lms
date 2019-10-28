@@ -1,9 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-/**
- *  @package chamilo.admin
- */
 require_once __DIR__.'/../inc/global.inc.php';
 
 $this_section = SECTION_PLATFORM_ADMIN;
@@ -101,7 +98,7 @@ switch ($action) {
         $value = isset($_GET['value']) ? (int) $_GET['value'] : 0;
         $calendarPlugin->addControlPoint($userId, $value);
         Display::addFlash(
-            Display::return_message($calendarPlugin->get_lang('ControlPointAdded'), 'confirmation')
+            Display::return_message($calendarPlugin->get_lang('Control point added'), 'confirmation')
         );
         header('Location: '.api_get_self().'?id='.$id);
         exit;
@@ -131,7 +128,7 @@ $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_usergroups_users&id='.$
 // The order is important you need to check the the $column variable in the model.ajax.php file
 $columns = [
     get_lang('Name'),
-    get_lang('Actions'),
+    get_lang('Detail'),
 ];
 
 // Column config
@@ -151,11 +148,11 @@ if ($calendarPlugin) {
     $columns = [
         get_lang('Name'),
         get_lang('Calendar'),
-        get_lang('ClassroomActivity'),
-        get_lang('TimeSpentByStudentsInCourses'),
-        $calendarPlugin->get_lang('NumberDaysAccumulatedInCalendar'),
-        $calendarPlugin->get_lang('DifferenceOfDaysAndCalendar'),
-        get_lang('Actions'),
+        get_lang('Classroom activity'),
+        get_lang('Time spent by students in courses'),
+        $calendarPlugin->get_lang('Number of days accumulated in calendar'),
+        $calendarPlugin->get_lang('Difference between days and calendar'),
+        get_lang('Detail'),
     ];
 
     // Column config
@@ -208,7 +205,7 @@ $deleteIcon = Display::return_icon('delete.png', get_lang('Delete'), null, ICON_
 $urlStats = api_get_path(WEB_CODE_PATH);
 
 $reportingIcon = Display::return_icon('statistics.png', get_lang('Reporting'), '', ICON_SIZE_SMALL);
-$controlPoint = Display::return_icon('add.png', get_lang('ControlPoint'), '', ICON_SIZE_SMALL);
+$controlPoint = Display::return_icon('add.png', get_lang('Control point'), '', ICON_SIZE_SMALL);
 
 $link = '';
 
@@ -218,7 +215,7 @@ if ($calendarPlugin) {
 
 $deleteButton = '';
 if ($allowEdit) {
-    $deleteButton = '<a onclick="javascript:if(!confirm('."\'".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES))."\'".')) return false;" href="?id='.$id.'&action=delete&user_id=\'+options.rowId+\'">'.$deleteIcon.'</a>';
+    $deleteButton = '<a onclick="javascript:if(!confirm('."\'".addslashes(api_htmlentities(get_lang('Please confirm your choice'), ENT_QUOTES))."\'".')) return false;" href="?id='.$id.'&action=delete&user_id=\'+options.rowId+\'">'.$deleteIcon.'</a>';
 }
 //return \'<a href="session_edit.php?page=resume_session.php&id=\'+options.rowId+\'">'.Display::return_icon('edit.png', get_lang('Edit'), '', ICON_SIZE_SMALL).'</a>'.
 // With this function we can add actions to the jgrid
@@ -247,7 +244,7 @@ function extra_formatter(cellvalue, options, rowObject) {
 
     return \''.
     '&nbsp;<a href="'.$urlStats.'mySpace/myStudents.php?student=\'+options.rowId+\'">'.Display::return_icon('statistics.png', get_lang('Reporting'), '', ICON_SIZE_SMALL).'</a>'.
-    ' <a onclick="javascript:if(!confirm('."\'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"), ENT_QUOTES))."\'".')) return false;"  href="?id='.$id.'&action=delete&user_id=\'+options.rowId+\'">'.$deleteIcon.'</a>\';
+    ' <a onclick="javascript:if(!confirm('."\'".addslashes(api_htmlentities(get_lang("Please confirm your choice"), ENT_QUOTES))."\'".')) return false;"  href="?id='.$id.'&action=delete&user_id=\'+options.rowId+\'">'.$deleteIcon.'</a>\';
 }';
 
 $deleteUrl = api_get_path(WEB_AJAX_PATH).'usergroup.ajax.php?a=delete_user_in_usergroup&group_id='.$id;
@@ -290,7 +287,7 @@ $(function() {
     )
     <?php if ($calendarPlugin) { ?>
     .navButtonAdd('#usergroups_pager',{
-        caption:"<?php echo addslashes($calendarPlugin->get_lang('UpdateCalendar')); ?>",
+        caption:"<?php echo addslashes($calendarPlugin->get_lang('Update calendar')); ?>",
         buttonicon:"ui-icon ui-icon-plus",
         onClickButton: function(a) {
             var userIdList = $("#usergroups").jqGrid('getGridParam', 'selarrrow');
@@ -298,7 +295,7 @@ $(function() {
                 $(".modal-body #add_multiple_calendar_user_list").val(userIdList);
                 $('#myModal').modal();
             } else {
-                alert("<?php echo addslashes(get_lang('SelectStudents')); ?>");
+                alert("<?php echo addslashes(get_lang('Select learners')); ?>");
             }
         },
         position:"last"
@@ -315,7 +312,7 @@ $(function() {
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title" id="myModalLabel">
-                    <?php echo $calendarPlugin->get_lang('AddMultipleUsersToCalendar'); ?>
+                    <?php echo $calendarPlugin->get_lang('Add multiple users to calendar'); ?>
                 </h4>
             </div>
             <div class="modal-body">

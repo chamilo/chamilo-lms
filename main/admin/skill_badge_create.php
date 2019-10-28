@@ -79,11 +79,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             $params['icon'] = sprintf("%s.png", $fileName);
         } else {
-            Display::addFlash(Display::return_message(get_lang('UplUnableToSaveFile')), 'warning');
+            Display::addFlash(Display::return_message(get_lang('The uploaded file could not be saved (perhaps a permission problem?)')), 'warning');
         }
     }
 
-    Display::addFlash(Display::return_message(get_lang('Updated')));
+    Display::addFlash(Display::return_message(get_lang('Update successful')));
     $objSkill->update($params);
     header('Location: '.api_get_path(WEB_CODE_PATH).'admin/skill_list.php');
     exit;
@@ -93,11 +93,11 @@ $interbreadcrumb[] = [
     'url' => api_get_path(WEB_CODE_PATH).'admin/index.php',
     'name' => get_lang('Administration'),
 ];
-$interbreadcrumb[] = ['url' => 'skill_list.php', 'name' => get_lang('ManageSkills')];
+$interbreadcrumb[] = ['url' => 'skill_list.php', 'name' => get_lang('Manage skills')];
 
 $toolbar = $objSkill->getToolBar();
 
-$tpl = new Template(get_lang('CreateBadge'));
+$tpl = new Template(get_lang('Create badge'));
 $tpl->assign('platformAdminEmail', api_get_setting('emailAdministrator'));
 $tpl->assign('skill', $skill);
 $tpl->assign('badge_studio', $badgeStudio);

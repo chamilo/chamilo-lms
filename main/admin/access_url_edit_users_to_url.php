@@ -26,9 +26,9 @@ if (!api_get_multiple_access_url()) {
 // Database Table Definitions
 $tbl_user = Database::get_main_table(TABLE_MAIN_USER);
 // setting breadcrumbs
-$tool_name = get_lang('EditUsersToURL');
-$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('PlatformAdmin')];
-$interbreadcrumb[] = ['url' => 'access_urls.php', 'name' => get_lang('MultipleAccessURLs')];
+$tool_name = get_lang('Edit users and URLs');
+$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('Administration')];
+$interbreadcrumb[] = ['url' => 'access_urls.php', 'name' => get_lang('Multiple access URL / Branding')];
 
 $add_type = 'multiple';
 if (isset($_REQUEST['add_type']) && $_REQUEST['add_type'] != '') {
@@ -82,7 +82,7 @@ if (isset($_POST['form_sent']) && $_POST['form_sent']) {
     }
     if ($form_sent == 1) {
         if ($access_url_id == 0) {
-            Display::addFlash(Display::return_message(get_lang('SelectURL')));
+            Display::addFlash(Display::return_message(get_lang('Select a URL')));
             header('Location: access_url_edit_users_to_url.php');
             exit;
         } elseif (is_array($UserList)) {
@@ -93,7 +93,7 @@ if (isset($_POST['form_sent']) && $_POST['form_sent']) {
             }
 
             if (!empty($result['users_added'])) {
-                $message .= '<h4>'.get_lang('UsersAdded').':</h4>';
+                $message .= '<h4>'.get_lang('Users added').':</h4>';
                 $i = 1;
                 $user_added_list = [];
                 foreach ($result['users_added'] as $user) {
@@ -109,7 +109,7 @@ if (isset($_POST['form_sent']) && $_POST['form_sent']) {
             }
 
             if (!empty($result['users_deleted'])) {
-                $message .= '<br /><h4>'.get_lang('UsersDeleted').': </h4>';
+                $message .= '<br /><h4>'.get_lang('Users deleted').': </h4>';
                 $user_deleted_list = [];
                 $i = 1;
                 foreach ($result['users_deleted'] as $user) {
@@ -135,7 +135,7 @@ if (!empty($message)) {
 
 echo '<div class="actions">';
 echo Display::url(
-    Display::return_icon('view_more_stats.gif', get_lang('AddUserToURL'), ''),
+    Display::return_icon('view_more_stats.gif', get_lang('Add user to this URL'), ''),
     api_get_path(WEB_CODE_PATH).'admin/access_url_add_users_to_url.php'
 );
 echo '</div>';
@@ -174,11 +174,11 @@ if ($ajax_search) {
 }
 
 if ($add_type == 'multiple') {
-    $link_add_type_unique = '<a href="'.api_get_self().'?add_type=unique&access_url_id='.$access_url_id.'">'.get_lang('SessionAddTypeUnique').'</a>';
-    $link_add_type_multiple = get_lang('SessionAddTypeMultiple');
+    $link_add_type_unique = '<a href="'.api_get_self().'?add_type=unique&access_url_id='.$access_url_id.'">'.get_lang('Single registration').'</a>';
+    $link_add_type_multiple = get_lang('Multiple registration');
 } else {
-    $link_add_type_unique = get_lang('SessionAddTypeUnique');
-    $link_add_type_multiple = '<a href="'.api_get_self().'?add_type=multiple&access_url_id='.$access_url_id.'">'.get_lang('SessionAddTypeMultiple').'</a>';
+    $link_add_type_unique = get_lang('Single registration');
+    $link_add_type_multiple = '<a href="'.api_get_self().'?add_type=multiple&access_url_id='.$access_url_id.'">'.get_lang('Multiple registration').'</a>';
 }
 $url_list = UrlManager::get_url_data();
 ?>
@@ -190,9 +190,9 @@ $url_list = UrlManager::get_url_data();
 <form name="formulaire" method="post" action="<?php echo api_get_self(); ?>" style="margin:0px;" <?php if ($ajax_search) {
     echo ' onsubmit="valide();"';
 } ?> >
-    <?php echo get_lang('SelectUrl').' : '; ?>
+    <?php echo get_lang('Select URL').' : '; ?>
 <select name="access_url_id" onchange="javascript:send();">
-<option value="0"> <?php echo get_lang('SelectUrl'); ?></option>
+<option value="0"> <?php echo get_lang('Select URL'); ?></option>
         <?php
         $url_selected = '';
         foreach ($url_list as $url_obj) {
@@ -227,16 +227,16 @@ if (!empty($errorMsg)) {
     <h3>
     <?php
         $total_users = count($nosessionUsersList) + count($sessionUsersList);
-        echo get_lang('TotalAvailableUsers').' '.$total_users;
+        echo get_lang('Total available users').' '.$total_users;
     ?>
     </h3>
     </td>
 </tr>
 <tr>
-  <td align="center"><b><?php echo get_lang('UserListInPlatform'); ?> : <?php echo count($nosessionUsersList); ?></b>
+  <td align="center"><b><?php echo get_lang('Portal users list'); ?> : <?php echo count($nosessionUsersList); ?></b>
   </td>
   <td></td>
-  <td align="center"><b><?php echo get_lang('UserListIn').' '.$url_selected; ?> : <?php echo count($sessionUsersList); ?></b></td>
+  <td align="center"><b><?php echo get_lang('Users of').' '.$url_selected; ?> : <?php echo count($sessionUsersList); ?></b></td>
 </tr>
 <tr>
   <td align="center">
@@ -302,9 +302,9 @@ if (!empty($errorMsg)) {
 		<br />
         <?php
         if (isset($_GET['add'])) {
-            echo '<button class="save" type="button" onclick="valide()" >'.get_lang('AddUsersToURL').'</button>';
+            echo '<button class="save" type="button" onclick="valide()" >'.get_lang('Add users to an URL').'</button>';
         } else {
-            echo '<button class="save" type="button" onclick="valide()" >'.get_lang('EditUsersToURL').'</button>';
+            echo '<button class="save" type="button" onclick="valide()" >'.get_lang('Edit users and URLs').'</button>';
         }
         ?>
 	</td>

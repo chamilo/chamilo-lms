@@ -26,9 +26,9 @@ if (!api_get_multiple_access_url()) {
 }
 
 // setting breadcrumbs
-$tool_name = get_lang('EditUserGroupToURL');
-$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('PlatformAdmin')];
-$interbreadcrumb[] = ['url' => 'access_urls.php', 'name' => get_lang('MultipleAccessURLs')];
+$tool_name = get_lang('Edit groups for one URL');
+$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('Administration')];
+$interbreadcrumb[] = ['url' => 'access_urls.php', 'name' => get_lang('Multiple access URL / Branding')];
 
 $add_type = 'multiple';
 if (isset($_REQUEST['add_type']) && $_REQUEST['add_type'] != '') {
@@ -82,11 +82,11 @@ if (isset($_POST['form_sent']) && $_POST['form_sent']) {
 
     if ($form_sent == 1) {
         if ($access_url_id == 0) {
-            Display::addFlash(Display::return_message(get_lang('SelectURL')));
+            Display::addFlash(Display::return_message(get_lang('Select a URL')));
             header('Location: access_url_edit_users_to_url.php');
         } elseif (is_array($course_list)) {
             UrlManager::update_urls_rel_usergroup($course_list, $access_url_id);
-            Display::addFlash(Display::return_message(get_lang('Updated')));
+            Display::addFlash(Display::return_message(get_lang('Update successful')));
             header('Location: access_urls.php');
         }
         exit;
@@ -97,7 +97,7 @@ Display::display_header($tool_name);
 
 echo '<div class="actions">';
 echo Display::url(
-    Display::return_icon('view_more_stats.gif', get_lang('AddUserGroupToURL'), ''),
+    Display::return_icon('view_more_stats.gif', get_lang('Add group to URL'), ''),
     api_get_path(WEB_CODE_PATH).'admin/access_url_add_usergroup_to_url.php'
 );
 echo '</div>';
@@ -135,7 +135,7 @@ if ($add_type === 'multiple') {
         <div class="btn-group">
             <?php
             echo Display::toolbarButton(
-                get_lang('SessionAddTypeUnique'),
+                get_lang('Single registration'),
                 api_get_self().'?'.http_build_query([
                     'add_type' => 'unique',
                     'access_url_id' => $access_url_id,
@@ -145,7 +145,7 @@ if ($add_type === 'multiple') {
                 $link_add_type_unique
             );
             echo Display::toolbarButton(
-                get_lang('SessionAddTypeMultiple'),
+                get_lang('Multiple registration'),
                 api_get_self().'?'.http_build_query([
                     'add_type' => 'multiple',
                     'access_url_id' => $access_url_id,
@@ -170,11 +170,11 @@ $url_list = UrlManager::get_url_data();
     >
         <div class="row">
             <div class="col-xs-2">
-                <label for="access_url_id"><?php echo get_lang('SelectUrl'); ?></label>
+                <label for="access_url_id"><?php echo get_lang('Select URL'); ?></label>
             </div>
             <div class="col-xs-5">
                 <select name="access_url_id" id="access_url_id" onchange="javascript:send();" class="form-control">
-                    <option value="0">-- <?php echo get_lang('SelectUrl'); ?> --</option>
+                    <option value="0">-- <?php echo get_lang('Select URL'); ?> --</option>
                     <?php
                     $url_selected = '';
                     foreach ($url_list as $url_obj) {
@@ -206,7 +206,7 @@ $url_list = UrlManager::get_url_data();
         ?>
         <div class="row">
             <div class="col-sm-5">
-                <label for="<?php echo $ajax_search ? 'course_to_add' : 'origin_users'; ?>"><?php echo get_lang('UserGroupListInPlatform'); ?></label>
+                <label for="<?php echo $ajax_search ? 'course_to_add' : 'origin_users'; ?>"><?php echo get_lang('Platform groups list'); ?></label>
                 <div id="content_source">
                     <?php if ($ajax_search) {
             ?>
@@ -251,7 +251,7 @@ $url_list = UrlManager::get_url_data();
         } ?>
             </div>
             <div class="col-sm-5">
-                <label for="destination_users"><?php printf(get_lang('UserGroupListInX'), $url_selected); ?></label>
+                <label for="destination_users"><?php printf(get_lang('Groups in %s'), $url_selected); ?></label>
                 <select id="destination_users" name="course_list[]" multiple="multiple" size="15" class="form-control">
                     <?php foreach ($userGroupList as $item) {
             ?>
@@ -267,7 +267,7 @@ $url_list = UrlManager::get_url_data();
             <div class="col-xs-12 text-center">
                 <button class="save btn btn-primary" onclick="valide()">
                     <span class="fa fa-save fa-fw" aria-hidden="true"></span>
-                    <?php echo isset($_GET['add']) ? get_lang('AddUserGroupToURL') : get_lang('EditUserGroupToURL'); ?>
+                    <?php echo isset($_GET['add']) ? get_lang('Add group to URL') : get_lang('Edit groups for one URL'); ?>
                 </button>
             </div>
         </div>

@@ -20,7 +20,7 @@ Event::registerLog($logInfo);
 $this_section = SECTION_SOCIAL;
 $interbreadcrumb[] = [
     'url' => api_get_path(WEB_CODE_PATH).'social/home.php',
-    'name' => get_lang('SocialNetwork'),
+    'name' => get_lang('Social network'),
 ];
 
 $interbreadcrumb[] = [
@@ -34,7 +34,7 @@ $menu = SocialManager::show_social_menu('messages');
 $social_right_content = '';
 $keyword = '';
 $actionsLeft = '<a href="'.api_get_path(WEB_CODE_PATH).'social/new_promoted_message.php">'.
-    Display::return_icon('new-message.png', get_lang('ComposeMessage'), [], 32).'</a>';
+    Display::return_icon('new-message.png', get_lang('Compose message'), [], 32).'</a>';
 
 $form = MessageManager::getSearchForm(api_get_self());
 if ($form->validate()) {

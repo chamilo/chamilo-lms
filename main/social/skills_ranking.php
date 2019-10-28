@@ -23,10 +23,10 @@ $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_user_skill_ranking';
 //The order is important you need to check the the $column variable in the model.ajax.php file
 $columns = [
     get_lang('Photo'),
-    get_lang('FirstName'),
-    get_lang('LastName'),
-    get_lang('SkillsAcquired'),
-    get_lang('CurrentlyLearning'),
+    get_lang('First name'),
+    get_lang('Last name'),
+    get_lang('Skills acquired'),
+    get_lang('Currently learning'),
     get_lang('Rank'),
 ];
 

@@ -23,7 +23,7 @@ $content = null;
 if (isset($_GET['view']) && in_array($_GET['view'], $allowed_views)) {
     if ($_GET['view'] === 'mygroups') {
         $interbreadcrumb[] = ['url' => 'groups.php', 'name' => get_lang('Groups')];
-        $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('MyGroups')];
+        $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('My groups')];
     } elseif ($_GET['view'] === 'newest') {
         $interbreadcrumb[] = ['url' => 'groups.php', 'name' => get_lang('Groups')];
         $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Newest')];
@@ -34,7 +34,7 @@ if (isset($_GET['view']) && in_array($_GET['view'], $allowed_views)) {
 } else {
     $interbreadcrumb[] = ['url' => 'groups.php', 'name' => get_lang('Groups')];
     if (!isset($_GET['id'])) {
-        $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('GroupList')];
+        $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Groups list')];
     }
 }
 
@@ -174,7 +174,7 @@ foreach ($results as $result) {
     // Avoiding my groups
     if (!in_array($id, $my_group_list)) {
         $html .= '<a class="btn btn-primary" href="group_view.php?id='.$id.'&action=join&u='.api_get_user_id().'">'.
-            get_lang('JoinGroup').'</a> ';
+            get_lang('Join group').'</a> ';
     }
 
     $html .= '<div class="group-actions" >'.$join_url.'</div>';
@@ -236,7 +236,7 @@ if (is_array($results) && count($results) > 0) {
         // Avoiding my groups
         if (!in_array($id, $my_group_list)) {
             $html .= '<a class="btn btn-primary" href="group_view.php?id='.$id.'&action=join&u='.api_get_user_id().'">'.
-                get_lang('JoinGroup').'</a> ';
+                get_lang('Join group').'</a> ';
         }
 
         $html .= '<div class="group-actions" >'.$join_url.'</div>';
@@ -269,12 +269,12 @@ if (isset($_GET['view']) && in_array($_GET['view'], $allowed_views)) {
             if (api_get_setting('allow_students_to_create_groups_in_social') == 'true') {
                 $create_group_item =
                     '<a class="btn btn-default" href="'.api_get_path(WEB_PATH).'main/social/group_add.php">'.
-                    get_lang('CreateASocialGroup').'</a>';
+                    get_lang('Create a social group').'</a>';
             } else {
                 if (api_is_allowed_to_edit(null, true)) {
                     $create_group_item =
                         '<a class="btn btn-default" href="'.api_get_path(WEB_PATH).'main/social/group_add.php">'.
-                        get_lang('CreateASocialGroup').'</a>';
+                        get_lang('Create a social group').'</a>';
                 }
             }
             break;
@@ -318,17 +318,17 @@ if (isset($_GET['view']) && in_array($_GET['view'], $allowed_views)) {
             [true, true, true, false]
         );
     } else {
-        $my_group_content = '<span class="muted">'.get_lang('GroupNone').'</span>';
+        $my_group_content = '<span class="muted">'.get_lang('(none)').'</span>';
     }
     if (api_get_setting('allow_students_to_create_groups_in_social') == 'true') {
         $create_group_item =
             '<a class="btn btn-default" href="'.api_get_path(WEB_PATH).'main/social/group_add.php">'.
-            get_lang('CreateASocialGroup').'</a>';
+            get_lang('Create a social group').'</a>';
     } else {
         if (api_is_allowed_to_edit(null, true)) {
             $create_group_item =
                 '<a class="btn btn-default" href="'.api_get_path(WEB_PATH).'main/social/group_add.php">'.
-                get_lang('CreateASocialGroup').'</a>';
+                get_lang('Create a social group').'</a>';
         }
     }
     if (count($grid_newest_groups) > 0) {
@@ -342,7 +342,7 @@ if (isset($_GET['view']) && in_array($_GET['view'], $allowed_views)) {
             [true, true, true, false]
         );
     } else {
-        $newest_content = '<div class="muted">'.get_lang('GroupNone').'</div>';
+        $newest_content = '<div class="muted">'.get_lang('(none)').'</div>';
     }
     if (count($grid_pop_groups) > 0) {
         $popular_content = Display::return_sortable_grid(
@@ -355,14 +355,14 @@ if (isset($_GET['view']) && in_array($_GET['view'], $allowed_views)) {
             [true, true, true, true, true]
         );
     } else {
-        $popular_content = '<div class="muted">'.get_lang('GroupNone').'</div>';
+        $popular_content = '<div class="muted">'.get_lang('(none)').'</div>';
     }
 }
 
 if (!empty($create_group_item)) {
     $social_right_content .= Display::page_subheader($create_group_item);
 }
-$headers = [get_lang('Newest'), get_lang('Popular'), get_lang('MyGroups')];
+$headers = [get_lang('Newest'), get_lang('Popular'), get_lang('My groups')];
 $social_right_content .= Display::tabs(
     $headers,
     [$newest_content, $popular_content, $my_group_content],

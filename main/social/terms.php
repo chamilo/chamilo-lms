@@ -30,7 +30,7 @@ foreach ($values as $value) {
     }
 }
 
-$term['date_text'] = get_lang('PublicationDate').': '.
+$term['date_text'] = get_lang('Publication date').': '.
     api_get_local_time(
         $term['date'],
         null,

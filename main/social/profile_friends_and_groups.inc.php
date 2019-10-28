@@ -32,7 +32,7 @@ if (isset($_GET['view']) && in_array($_GET['view'], $views)) {
         );
         $number_friends = count($friends);
         $friend_html = '';
-        $friend_html .= '<div><h3>'.get_lang('SocialFriend').'</h3></div>';
+        $friend_html .= '<div><h3>'.get_lang('My friends').'</h3></div>';
         $friend_html .= '<div id="friend-container" class="social-friend-container">';
         $friend_html .= '<div id="friend-header" >';
 
@@ -115,7 +115,7 @@ if (isset($_GET['view']) && in_array($_GET['view'], $views)) {
                 $item_actions = '';
                 if (api_get_user_id() == $user_id) {
                     $item_actions = '<div class="box_shared_profile_group_actions"><a href="group_view.php?id='.$id.'">'.
-                        get_lang('SeeMore').$url_close.'</div>';
+                        get_lang('See more').$url_close.'</div>';
                 }
                 $grid_my_groups[] = [
                     $item_name,
@@ -128,7 +128,7 @@ if (isset($_GET['view']) && in_array($_GET['view'], $views)) {
 
         if (count($grid_my_groups) > 0) {
             echo '<div style="margin-top:20px">';
-            echo '<div><h3>'.get_lang('MyGroups').'</h3></div>';
+            echo '<div><h3>'.get_lang('My groups').'</h3></div>';
             $count_groups = 0;
             if (count($results) == 1) {
                 $count_groups = count($results).' '.get_lang('Group');

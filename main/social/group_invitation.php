@@ -22,7 +22,7 @@ $tbl_user = Database::get_main_table(TABLE_MAIN_USER);
 $tbl_group_rel_user = Database::get_main_table(TABLE_USERGROUP_REL_USER);
 
 // setting the name of the tool
-$tool_name = get_lang('SubscribeUsersToGroup');
+$tool_name = get_lang('Subscribe users to group');
 $group_id = intval($_REQUEST['id']);
 
 $usergroup = new UserGroup();
@@ -43,7 +43,7 @@ if (empty($group_id)) {
 
 $interbreadcrumb[] = ['url' => 'groups.php', 'name' => get_lang('Groups')];
 $interbreadcrumb[] = ['url' => 'group_view.php?id='.$group_id, 'name' => $group_info['name']];
-$interbreadcrumb[] = ['url' => '#', 'name' => get_lang('SubscribeUsersToGroup')];
+$interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Subscribe users to group')];
 
 $form_sent = 0;
 $errorMsg = $firstLetterUser = $firstLetterSession = '';
@@ -67,9 +67,9 @@ if (isset($_POST['form_sent']) && $_POST['form_sent']) {
             [$group_id],
             GROUP_USER_PERMISSION_PENDING_INVITATION
         );
-        $title = get_lang('YouAreInvitedToGroup').' '.$group_info['name'];
-        $content = get_lang('YouAreInvitedToGroupContent').' '.$group_info['name'].' <br />';
-        $content .= get_lang('ToSubscribeClickInTheLinkBelow').' <br />';
+        $title = get_lang('You are invited to group').' '.$group_info['name'];
+        $content = get_lang('You are invited to groupContent').' '.$group_info['name'].' <br />';
+        $content .= get_lang('To subscribe, click the link below').' <br />';
         $content .= '<a href="'.api_get_path(WEB_CODE_PATH).'social/invitations.php?accept='.$group_id.'">'.
             get_lang('Subscribe').'</a>';
 
@@ -82,7 +82,7 @@ if (isset($_POST['form_sent']) && $_POST['form_sent']) {
                     $content
                 );
             }
-            Display::addFlash(Display::return_message(get_lang('InvitationSent')));
+            Display::addFlash(Display::return_message(get_lang('Invitation sent')));
         }
 
         header('Location: '.api_get_self().'?id='.$group_id);
@@ -149,12 +149,12 @@ $social_right_content = '<h3 class="group-title">'.Security::remove_XSS($group_i
 if (count($nosessionUsersList) == 0) {
     $friends = SocialManager::get_friends(api_get_user_id());
     if ($friends == 0) {
-        $social_right_content .= Display::return_message(get_lang('YouNeedToHaveFriendsInYourSocialNetwork'), 'warning');
+        $social_right_content .= Display::return_message(get_lang('You need to have friends in your social network'), 'warning');
     } else {
-        $social_right_content .= Display::return_message(get_lang('YouAlreadyInviteAllYourContacts'), 'info');
+        $social_right_content .= Display::return_message(get_lang('You already invite all your contacts'), 'info');
     }
     $social_right_content .= '<div>';
-    $social_right_content .= '<a href="search.php" class="btn btn-default btn-sm">'.Display::returnFontAwesomeIcon('search').' '.get_lang('TryAndFindSomeFriends').'</a>';
+    $social_right_content .= '<a href="search.php" class="btn btn-default btn-sm">'.Display::returnFontAwesomeIcon('search').' '.get_lang('Try and find some friends').'</a>';
     $social_right_content .= '</div>';
     $social_right_content .= '<br />';
 }
@@ -170,7 +170,7 @@ $group_members_element = $form->addElement(
     $nosessionUsersList
 );
 
-$form->addButtonSave(get_lang('InviteUsersToGroup'));
+$form->addButtonSave(get_lang('Invite users to group'));
 $social_right_content .= $form->returnForm();
 
 // Current group members
@@ -196,7 +196,7 @@ if (is_array($members) && count($members) > 0) {
         [true, false, true, false]
     );
 
-    $social_right_content .= Display::panel($userList, get_lang('UsersAlreadyInvited'));
+    $social_right_content .= Display::panel($userList, get_lang('Users already invited'));
 }
 
 $tpl = new Template(null);

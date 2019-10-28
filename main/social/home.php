@@ -47,7 +47,7 @@ $menu = SocialManager::show_social_menu('home');
 
 $social_search_block = Display::panel(
     UserManager::get_search_form(''),
-    get_lang('SearchUsers')
+    get_lang('Search users')
 );
 
 $social_group_block = SocialManager::getGroupBlock($user_id);
@@ -82,16 +82,16 @@ $formSearch->addText(
     get_lang('Search'),
     false,
     [
-        'aria-label' => get_lang('SearchUsers'),
+        'aria-label' => get_lang('Search users'),
         'custom' => true,
-        'placeholder' => get_lang('SearchUsersByName'),
+        'placeholder' => get_lang('Search usersByName'),
     ]
 );
 
 // Added a Jquery Function to return the Preview of OpenGraph URL Content
 $htmlHeadXtra[] = SocialManager::getScriptToGetOpenGraph();
 
-$tpl = new Template(get_lang('SocialNetwork'));
+$tpl = new Template(get_lang('Social network'));
 SocialManager::setSocialUserBlock($tpl, $user_id, 'home');
 $tpl->assign('add_post_form', $wallSocialAddPost);
 $tpl->assign('posts', $posts);

@@ -92,7 +92,7 @@ if (isset($_GET['shared'])) {
 }
 $interbreadcrumb[] = [
     'url' => 'home.php',
-    'name' => get_lang('SocialNetwork'),
+    'name' => get_lang('Social network'),
 ];
 
 if (isset($_GET['u']) && is_numeric($_GET['u']) && $_GET['u'] != api_get_user_id()) {
@@ -175,7 +175,7 @@ if ($show_full_profile) {
     $user_feeds = SocialManager::getUserRssFeed($user_id);
 
     if (!empty($user_feeds)) {
-        $social_rss_block = Display::panel($user_feeds, get_lang('RSSFeeds'));
+        $social_rss_block = Display::panel($user_feeds, get_lang('RSS feed'));
     }
 
     // Productions
@@ -220,7 +220,7 @@ if ($show_full_profile) {
 
                     $invitations .= '<div class="pull-right">';
                     $invitations .= Display::toolbarButton(
-                        get_lang('SocialAddToFriends'),
+                        get_lang('Add to my contacts'),
                         api_get_path(WEB_AJAX_PATH).'social.ajax.php?'.http_build_query([
                             'a' => 'add_friend',
                             'friend_id' => $user_invitation_id,
@@ -237,7 +237,7 @@ if ($show_full_profile) {
                 }
                 $invitations .= '</ul>';
                 $listInvitations = Display::panelCollapse(
-                    get_lang('PendingInvitations'),
+                    get_lang('Pending invitations'),
                     $invitations,
                     'invitations',
                     null,
@@ -251,7 +251,7 @@ if ($show_full_profile) {
         $production_list = UserManager::build_production_list($user_id);
         $product_content = '';
         if (!empty($production_list)) {
-            $product_content .= '<div><h3>'.get_lang('MyProductions').'</h3></div>';
+            $product_content .= '<div><h3>'.get_lang('My productions').'</h3></div>';
             $product_content .= $production_list;
             $socialRightInformation .= SocialManager::social_wrapper_div($product_content, 4);
         }
@@ -259,7 +259,7 @@ if ($show_full_profile) {
         $images_uploaded = null;
         // Images uploaded by course
         /*if (!empty($file_list)) {
-            $images_uploaded .= '<div><h3>'.get_lang('ImagesUploaded').'</h3></div>';
+            $images_uploaded .= '<div><h3>'.get_lang('Uploaded images').'</h3></div>';
             $images_uploaded .= '<div class="social-content-information">';
             $images_uploaded .= $file_list;
             $images_uploaded .= '</div>';
@@ -269,25 +269,25 @@ if ($show_full_profile) {
 
     if (!empty($user_info['competences']) || !empty($user_info['diplomas'])
         || !empty($user_info['openarea']) || !empty($user_info['teach'])) {
-        $more_info .= '<div><h3>'.get_lang('MoreInformation').'</h3></div>';
+        $more_info .= '<div><h3>'.get_lang('More information').'</h3></div>';
         if (!empty($user_info['competences'])) {
             $more_info .= '<br />';
-            $more_info .= '<div class="social-actions-message"><strong>'.get_lang('MyCompetences').'</strong></div>';
+            $more_info .= '<div class="social-actions-message"><strong>'.get_lang('My competences').'</strong></div>';
             $more_info .= '<div class="social-profile-extended">'.$user_info['competences'].'</div>';
             $more_info .= '<br />';
         }
         if (!empty($user_info['diplomas'])) {
-            $more_info .= '<div class="social-actions-message"><strong>'.get_lang('MyDiplomas').'</strong></div>';
+            $more_info .= '<div class="social-actions-message"><strong>'.get_lang('My diplomas').'</strong></div>';
             $more_info .= '<div class="social-profile-extended">'.$user_info['diplomas'].'</div>';
             $more_info .= '<br />';
         }
         if (!empty($user_info['openarea'])) {
-            $more_info .= '<div class="social-actions-message"><strong>'.get_lang('MyPersonalOpenArea').'</strong></div>';
+            $more_info .= '<div class="social-actions-message"><strong>'.get_lang('My personal open area').'</strong></div>';
             $more_info .= '<div class="social-profile-extended">'.$user_info['openarea'].'</div>';
             $more_info .= '<br />';
         }
         if (!empty($user_info['teach'])) {
-            $more_info .= '<div class="social-actions-message"><strong>'.get_lang('MyTeach').'</strong></div>';
+            $more_info .= '<div class="social-actions-message"><strong>'.get_lang('What I am able to teach').'</strong></div>';
             $more_info .= '<div class="social-profile-extended">'.$user_info['teach'].'</div>';
             $more_info .= '<br />';
         }

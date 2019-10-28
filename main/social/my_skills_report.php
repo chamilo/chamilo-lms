@@ -30,7 +30,7 @@ switch ($action) {
         break;
     case 'generate':
         $certificate = Certificate::generateUserSkills(api_get_user_id());
-        Display::addFlash(Display::return_message(get_lang('Updated')));
+        Display::addFlash(Display::return_message(get_lang('Update successful')));
         header('Location: '.api_get_self());
         exit;
         break;
@@ -59,7 +59,7 @@ if ($isStudent) {
     $frmStudents = new FormValidator('students', 'get');
     $slcStudent = $frmStudents->addSelect(
         'student',
-        get_lang('Student'),
+        get_lang('Learner'),
         ['0' => get_lang('Select')]
     );
     $frmStudents->addButtonSearch(get_lang('Search'));
@@ -146,12 +146,12 @@ if ($isStudent) {
     switch ($action) {
         case 'filterByCourse':
             $course = api_get_course_info_by_id($selectedCourse);
-            $reportTitle = sprintf(get_lang('AchievedSkillInCourseX'), $course['name']);
+            $reportTitle = sprintf(get_lang('Skills acquired in course %s'), $course['name']);
             $tableRows = $objSkill->listAchievedByCourse($selectedCourse);
             break;
         case 'filterBySkill':
             $skill = $objSkill->get($selectedSkill);
-            $reportTitle = sprintf(get_lang('StudentsWhoAchievedTheSkillX'), $skill['name']);
+            $reportTitle = sprintf(get_lang('LearnersWhoAchievedTheSkillX'), $skill['name']);
             $students = UserManager::getUsersFollowedByUser(
                 $userId,
                 STUDENT,
@@ -214,7 +214,7 @@ if ($isStudent) {
 }
 
 if (empty($tableRows)) {
-    Display::addFlash(Display::return_message(get_lang('NoResults')));
+    Display::addFlash(Display::return_message(get_lang('No results found')));
 }
 $tpl->assign('rows', $tableRows);
 $templateName = $tpl->get_template($tplPath);

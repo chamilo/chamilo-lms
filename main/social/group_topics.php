@@ -121,7 +121,7 @@ function remove_image_form(id_elem1) {
 	if (filepaths.childNodes.length < 3) {
 		var link_attach = document.getElementById("link-more-attach");
 		if (link_attach) {
-			link_attach.innerHTML=\'<a href="javascript://" onclick="return add_image_form()">'.get_lang('AddOneMoreFile').'</a>\';
+			link_attach.innerHTML=\'<a href="javascript://" onclick="return add_image_form()">'.get_lang('Add one more file').'</a>\';
 		}
 	}
 }

@@ -34,7 +34,7 @@ function add_image_form() {
     filepaths.appendChild(elem1);
     id_elem1 = "filepath_"+counter_image;
     id_elem1 = "\'"+id_elem1+"\'";
-    document.getElementById("filepath_"+counter_image).innerHTML = "<div class=\"form-group\" ><label class=\"col-sm-4\">'.get_lang('FilesAttachment').'</label><input class=\"col-sm-8\" type=\"file\" name=\"attach_"+counter_image+"\" /></div><div class=\"form-group\" ><label class=\"col-sm-4\">'.get_lang('Description').'</label><div class=\"col-sm-8\"><input style=\"width:100%\" type=\"text\" name=\"legend[]\" /></div></div>";
+    document.getElementById("filepath_"+counter_image).innerHTML = "<div class=\"form-group\" ><label class=\"col-sm-4\">'.get_lang('Files attachments').'</label><input class=\"col-sm-8\" type=\"file\" name=\"attach_"+counter_image+"\" /></div><div class=\"form-group\" ><label class=\"col-sm-4\">'.get_lang('Description').'</label><div class=\"col-sm-8\"><input style=\"width:100%\" type=\"text\" name=\"legend[]\" /></div></div>";
     if (filepaths.childNodes.length == 6) {
         var link_attach = document.getElementById("link-more-attach");
         if (link_attach) {
@@ -43,8 +43,8 @@ function add_image_form() {
     }
 }
 </script>';
-$nameTools = get_lang('ComposeMessage');
-$tpl = new Template(get_lang('ComposeMessage'));
+$nameTools = get_lang('Compose message');
+$tpl = new Template(get_lang('Compose message'));
 
 /**
  * Shows the compose area + a list of users to select from.
@@ -70,7 +70,7 @@ function show_compose_reply_to_message($message_id, $receiver_id, $tpl)
     $row = Database::fetch_array($result, 'ASSOC');
     $userInfo = api_get_user_info($row['user_sender_id']);
     if (empty($row['user_sender_id']) || empty($userInfo)) {
-        $html = get_lang('InvalidMessageId');
+        $html = get_lang('The id of the message to reply to is not valid.');
 
         return $html;
     }
@@ -85,7 +85,7 @@ function show_compose_to_user($receiver_id, $tpl)
 {
     $userInfo = api_get_user_info($receiver_id);
     $html = get_lang('To').':&nbsp;<strong>'.$userInfo['complete_name'].'</strong>';
-    $default['title'] = api_xml_http_response_encode(get_lang('EnterTitle'));
+    $default['title'] = api_xml_http_response_encode(get_lang('Please enter a title'));
     $default['users'] = [$receiver_id];
     $html .= manageForm($default, null, '', $tpl);
 
@@ -124,7 +124,7 @@ function manageForm($default, $select_from_user_list = null, $sent_to = '', $tpl
         '<div id="file_uploads"><div id="filepath_1">
             <div id="filepaths" class="form-horizontal">
                 <div id="paths-file" class="form-group">
-                <label class="col-sm-4">'.get_lang('FilesAttachment').'</label>
+                <label class="col-sm-4">'.get_lang('Files attachments').'</label>
                 <input class="col-sm-8" type="file" name="attach_1"/>
                 </div>
             </div>
@@ -141,15 +141,15 @@ function manageForm($default, $select_from_user_list = null, $sent_to = '', $tpl
     $form->addLabel(
         '',
         '<span id="link-more-attach"><a class="btn btn-default" href="javascript://" onclick="return add_image_form()">'.
-        get_lang('AddOneMoreFile').'</a></span>&nbsp;('.
+        get_lang('Add one more file').'</a></span>&nbsp;('.
         sprintf(
-            get_lang('MaximunFileSizeX'),
+            get_lang('Maximun file size: %s'),
             format_file_size(api_get_setting('message_max_upload_filesize'))
         ).')'
     );
 
-    $form->addButtonSend(get_lang('SendMessage'), 'compose');
-    $form->setRequiredNote('<span class="form_required">*</span> <small>'.get_lang('ThisFieldIsRequired').'</small>');
+    $form->addButtonSend(get_lang('Send message'), 'compose');
+    $form->setRequiredNote('<span class="form_required">*</span> <small>'.get_lang('Required field').'</small>');
 
     $form->setDefaults($default);
     $html = '';
@@ -181,7 +181,7 @@ function manageForm($default, $select_from_user_list = null, $sent_to = '', $tpl
 
             if ($res) {
                 Display::addFlash(Display::return_message(
-                    get_lang('MessageSent'),
+                    get_lang('Message Sent'),
                     'confirmation',
                     false
                 ));
@@ -205,7 +205,7 @@ function manageForm($default, $select_from_user_list = null, $sent_to = '', $tpl
 $this_section = SECTION_SOCIAL;
 $interbreadcrumb[] = [
     'url' => api_get_path(WEB_PATH).'main/social/home.php',
-    'name' => get_lang('SocialNetwork'),
+    'name' => get_lang('Social network'),
 ];
 
 $interbreadcrumb[] = [

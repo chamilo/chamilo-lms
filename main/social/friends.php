@@ -66,7 +66,7 @@ function hide_icon_delete(element_html)  {
 
 </script>';
 
-$interbreadcrumb[] = ['url' => 'profile.php', 'name' => get_lang('SocialNetwork')];
+$interbreadcrumb[] = ['url' => 'profile.php', 'name' => get_lang('Social network')];
 $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Friends')];
 
 //Block Social Menu
@@ -85,12 +85,12 @@ $social_right_content = '<div class="col-md-12">';
 
 if (count($friends) == 0) {
     $social_right_content .= Display::return_message(
-        Display::tag('p', get_lang('NoFriendsInYourContactList')),
+        Display::tag('p', get_lang('No friends in your contact list')),
         'warning',
         false
     );
     $social_right_content .= Display::toolbarButton(
-        get_lang('TryAndFindSomeFriends'),
+        get_lang('Try and find some friends'),
         'search.php',
         'search',
         'success'

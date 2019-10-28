@@ -91,10 +91,10 @@ if (api_get_setting('allow_message_tool') === 'true') {
 
     $form->addElement(
         'label',
-        get_lang('AttachmentFiles'),
+        get_lang('Attachments'),
         '<div id="link-more-attach">
             <a class="btn btn-default" href="javascript://" onclick="return add_image_form()">
-                '.get_lang('AddOneMoreFile').'
+                '.get_lang('Add one more file').'
             </a>
         </div>'
     );
@@ -104,11 +104,11 @@ if (api_get_setting('allow_message_tool') === 'true') {
         'file',
         'attach_1',
         sprintf(
-            get_lang('MaximunFileSizeX'),
+            get_lang('Maximun file size: %s'),
             format_file_size(api_get_setting('message_max_upload_filesize'))
         )
     );
-    $form->addButtonSend(get_lang('SendMessage'));
+    $form->addButtonSend(get_lang('Send message'));
 
     $form->setDefaults(['content' => $message, 'title' => $subject]);
     $tpl->assign('content', $form->returnForm());

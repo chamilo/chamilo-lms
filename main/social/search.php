@@ -20,7 +20,7 @@ $this_section = SECTION_SOCIAL;
 $tool_name = get_lang('Search');
 $interbreadcrumb[] = [
     'url' => api_get_path(WEB_CODE_PATH).'social/profile.php',
-    'name' => get_lang('SocialNetwork'),
+    'name' => get_lang('Social network'),
 ];
 
 $query = isset($_GET['q']) ? Security::remove_XSS($_GET['q']) : null;
@@ -78,7 +78,7 @@ if ($query != '' || ($query_vars['search_type'] == '1' && count($query_vars) > 2
     }
 
     if (empty($users) && empty($groups)) {
-        Display::addFlash(Display::return_message(get_lang('SorryNoResults')));
+        Display::addFlash(Display::return_message(get_lang('Sorry no results')));
     }
 
     $results = '<div id="whoisonline">';
@@ -88,14 +88,14 @@ if ($query != '' || ($query_vars['search_type'] == '1' && count($query_vars) > 2
         foreach ($users as $user) {
             $user_info = api_get_user_info($user['id'], true);
             $sendInvitation = '<button class="'.$buttonClass.' disabled ">
-                <em class="fa fa-user"></em> '.get_lang('SendInvitation').'</button>';
+                <em class="fa fa-user"></em> '.get_lang('Send invitation').'</button>';
             $relation_type = SocialManager::get_relation_between_contacts(api_get_user_id(), $user_info['user_id']);
             $url = api_get_path(WEB_PATH).'main/social/profile.php?u='.$user_info['user_id'];
 
             // Show send invitation icon if they are not friends yet
             if ($relation_type != 3 && $relation_type != 4 && $user_info['user_id'] != api_get_user_id()) {
                 $sendInvitation = '<a href="#" class="'.$buttonClass.' btn-to-send-invitation" data-send-to="'.$user_info['user_id'].'">
-                             <em class="fa fa-user"></em> '.get_lang('SendInvitation').'</a>';
+                             <em class="fa fa-user"></em> '.get_lang('Send invitation').'</a>';
             }
 
             $sendMessageUrl = api_get_path(WEB_AJAX_PATH).'user_manager.ajax.php?'.http_build_query([
@@ -104,26 +104,26 @@ if ($query != '' || ($query_vars['search_type'] == '1' && count($query_vars) > 2
             ]);
 
             $sendMessage = Display::toolbarButton(
-                get_lang('SendMessage'),
+                get_lang('Send message'),
                 $sendMessageUrl,
                 'envelope',
                 'default',
                 [
                     'class' => 'ajax btn-sm',
-                    'data-title' => get_lang('SendMessage'),
+                    'data-title' => get_lang('Send message'),
                 ]
             );
 
             if (!empty($user_info['user_is_online'])) {
-                $status_icon = Display::return_icon('online.png', get_lang('OnLine'), null, ICON_SIZE_TINY);
+                $status_icon = Display::return_icon('online.png', get_lang('Online'), null, ICON_SIZE_TINY);
             } else {
                 $status_icon = Display::return_icon('offline.png', get_lang('Disconnected'), null, ICON_SIZE_TINY);
             }
 
             if ($user_info['status'] == 5) {
-                $user_icon = Display::return_icon('user.png', get_lang('Student'), null, ICON_SIZE_TINY);
+                $user_icon = Display::return_icon('user.png', get_lang('Learner'), null, ICON_SIZE_TINY);
             } else {
-                $user_icon = Display::return_icon('teacher.png', get_lang('Teacher'), null, ICON_SIZE_TINY);
+                $user_icon = Display::return_icon('teacher.png', get_lang('Trainer'), null, ICON_SIZE_TINY);
             }
 
             $user_info['complete_name'] = Display::url($user_info['complete_name'], $url);
@@ -204,7 +204,7 @@ if ($query != '' || ($query_vars['search_type'] == '1' && count($query_vars) > 2
                             <p>'.$members.'</p>    
                             <p>'.$group['description'].'</p>
                             <p>'.$tags.'</p>
-                            <p>'.$url_open.get_lang('SeeMore').$url_close.'</p>
+                            <p>'.$url_open.get_lang('See more').$url_close.'</p>
                         </div>
                     </div>
                 </div>';

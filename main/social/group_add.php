@@ -30,12 +30,12 @@ if ($form->validate()) {
     $values['relation_type'] = GROUP_USER_PERMISSION_ADMIN;
 
     $groupId = $usergroup->save($values);
-    Display::addFlash(Display::return_message(get_lang('GroupAdded')));
+    Display::addFlash(Display::return_message(get_lang('Group added')));
     header('Location: group_view.php?id='.$groupId);
     exit();
 }
 
-$nameTools = get_lang('AddGroup');
+$nameTools = get_lang('Add group');
 $this_section = SECTION_SOCIAL;
 
 $interbreadcrumb[] = ['url' => 'home.php', 'name' => get_lang('Social')];

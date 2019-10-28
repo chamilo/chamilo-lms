@@ -253,21 +253,21 @@ function display_xapian_error($xapian_error_message)
     $message = explode(':', $xapian_error_message);
     $type_error_message = $message[0];
     if ($type_error_message == 'DatabaseOpeningError') {
-        $message_error = get_lang('SearchDatabaseOpeningError');
+        $message_error = get_lang('Failed to open the search database');
     } elseif ($type_error_message == 'DatabaseVersionError') {
-        $message_error = get_lang('SearchDatabaseVersionError');
+        $message_error = get_lang('The search database uses an unsupported format');
     } elseif ($type_error_message == 'DatabaseModifiedError') {
-        $message_error = get_lang('SearchDatabaseModifiedError');
+        $message_error = get_lang('The search database has been modified/broken');
     } elseif ($type_error_message == 'DatabaseLockError') {
-        $message_error = get_lang('SearchDatabaseLockError');
+        $message_error = get_lang('Failed to lock the search database');
     } elseif ($type_error_message == 'DatabaseCreateError') {
-        $message_error = get_lang('SearchDatabaseCreateError');
+        $message_error = get_lang('Failed to create the search database');
     } elseif ($type_error_message == 'DatabaseCorruptError') {
-        $message_error = get_lang('SearchDatabaseCorruptError');
+        $message_error = get_lang('The search database has suffered corruption');
     } elseif ($type_error_message == 'NetworkTimeoutError') {
-        $message_error = get_lang('SearchNetworkTimeoutError');
+        $message_error = get_lang('Connection timed out while communicating with the remote search database');
     } else {
-        $message_error = get_lang('SearchOtherXapianError');
+        $message_error = get_lang('Error in search engine');
     }
     $display_message = get_lang('Error').' : '.$message_error;
     echo Display::return_message($display_message, 'error');

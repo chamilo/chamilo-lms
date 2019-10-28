@@ -42,13 +42,13 @@ $validationStatus = getWorkDateValidationStatus($homework);
 
 $interbreadcrumb[] = [
     'url' => api_get_path(WEB_CODE_PATH).'work/work.php?'.api_get_cidreq(),
-    'name' => get_lang('StudentPublications'),
+    'name' => get_lang('Assignments'),
 ];
 $interbreadcrumb[] = [
     'url' => api_get_path(WEB_CODE_PATH).'work/work_list.php?'.api_get_cidreq().'&id='.$workId,
     'name' => $workInfo['title'],
 ];
-$interbreadcrumb[] = ['url' => '#', 'name' => get_lang('UploadCorrections')];
+$interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Upload corrections')];
 
 $downloadLink = api_get_path(WEB_CODE_PATH).'work/downloadfolder.inc.php?id='.$workId.'&'.api_get_cidreq();
 
@@ -60,18 +60,18 @@ $form = new FormValidator(
     ['enctype' => "multipart/form-data"]
 );
 
-$form->addElement('header', get_lang('UploadCorrections'));
+$form->addElement('header', get_lang('Upload corrections'));
 $form->addHtml(Display::return_message(
     sprintf(
-        get_lang('UploadCorrectionsExplanationWithDownloadLinkX'),
+        get_lang('Upload correctionsExplanationWithDownloadLinkX'),
         $downloadLink
     ),
     'normal',
     false
 ));
-$form->addElement('file', 'file', get_lang('UploadADocument'));
+$form->addElement('file', 'file', get_lang('Upload a document'));
 $form->addProgress();
-$form->addRule('file', get_lang('ThisFieldIsRequired'), 'required');
+$form->addRule('file', get_lang('Required field'), 'required');
 $form->addElement('hidden', 'id', $workId);
 $form->addButtonUpload(get_lang('Upload'));
 
@@ -95,7 +95,7 @@ if ($form->validate()) {
         if (!DocumentManager::enough_space($realSize, $maxSpace)) {
             Display::addFlash(
                 Display::return_message(
-                    get_lang('UplNotEnoughSpace'),
+                    get_lang('There is not enough space to upload this file.'),
                     'warning'
                 )
             );
@@ -120,7 +120,7 @@ if ($form->validate()) {
         if (empty($result)) {
             Display::addFlash(
                 Display::return_message(
-                    get_lang('NoDataAvailable'),
+                    get_lang('No data available'),
                     'warning'
                 )
             );
@@ -188,7 +188,7 @@ if ($form->validate()) {
 
         Display::addFlash(
             Display::return_message(
-                get_lang('Uploaded')
+                get_lang('Uploaded.')
             )
         );
     }

@@ -35,7 +35,7 @@ protectWork($courseInfo, $workId);
 
 $my_folder_data = get_work_data_by_id($workId);
 $work_data = get_work_assignment_by_id($workId);
-$tool_name = get_lang('StudentPublications');
+$tool_name = get_lang('Assignments');
 
 $group_id = api_get_group_id();
 
@@ -50,13 +50,13 @@ if (!empty($group_id)) {
     ];
     $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'group/group_space.php?'.api_get_cidreq(),
-        'name' => get_lang('GroupSpace').' '.$group_properties['name'],
+        'name' => get_lang('Group area').' '.$group_properties['name'],
     ];
 }
 
 $interbreadcrumb[] = [
     'url' => api_get_path(WEB_CODE_PATH).'work/work.php?'.api_get_cidreq(),
-    'name' => get_lang('StudentPublications'),
+    'name' => get_lang('Assignments'),
 ];
 $interbreadcrumb[] = [
     'url' => api_get_path(WEB_CODE_PATH).'work/work_list.php?'.api_get_cidreq().'&id='.$workId,
@@ -66,7 +66,7 @@ $interbreadcrumb[] = [
 $documentsAddedInWork = getAllDocumentsFromWorkToString($workId, $courseInfo);
 
 $actionsLeft = '<a href="'.api_get_path(WEB_CODE_PATH).'work/work.php?'.api_get_cidreq().'">'.
-    Display::return_icon('back.png', get_lang('BackToWorksList'), '', ICON_SIZE_MEDIUM).'</a>';
+    Display::return_icon('back.png', get_lang('Back to Assignments list'), '', ICON_SIZE_MEDIUM).'</a>';
 
 $actionsRight = '';
 $onlyOnePublication = api_get_configuration_value('allow_only_one_student_publication_per_user');
@@ -76,7 +76,7 @@ if (api_is_allowed_to_session_edit(false, true) && !empty($workId) && !api_is_in
         Display::returnFontAwesomeIcon(
             ' fa-upload'
         ).
-        get_lang('UploadMyAssignment'),
+        get_lang('Upload my assignment'),
         $url,
         ['class' => 'btn btn-primary', 'id' => 'upload_button']
     );
@@ -140,9 +140,9 @@ switch ($action) {
         $fileDeleted = deleteWorkItem($item_id, $courseInfo);
 
         if (!$fileDeleted) {
-            Display::addFlash(Display::return_message(get_lang('YouAreNotAllowedToDeleteThisDocument')));
+            Display::addFlash(Display::return_message(get_lang('You are not allowed to delete this document')));
         } else {
-            Display::addFlash(Display::return_message(get_lang('TheDocumentHasBeenDeleted')));
+            Display::addFlash(Display::return_message(get_lang('The document has been deleted.')));
         }
         break;
 }
@@ -158,10 +158,10 @@ if (!api_is_invitee()) {
         $columns = [
             get_lang('Type'),
             get_lang('Title'),
-            get_lang('Qualification'),
+            get_lang('Score'),
             get_lang('Date'),
             get_lang('Status'),
-            get_lang('Actions'),
+            get_lang('Detail'),
         ];
 
         $columnModel = [
@@ -220,7 +220,7 @@ if (!api_is_invitee()) {
             get_lang('Title'),
             get_lang('Feedback'),
             get_lang('Date'),
-            get_lang('Actions'),
+            get_lang('Detail'),
         ];
 
         $columnModel = [

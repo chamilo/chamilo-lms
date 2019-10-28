@@ -1,14 +1,9 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-/**
- * @package chamilo.admin
- */
 $cidReset = true;
 
-// including some necessary files
 require_once __DIR__.'/../inc/global.inc.php';
-require_once '../inc/lib/xajax/xajax.inc.php';
 
 $xajax = new xajax();
 $xajax->registerFunction('search_users');
@@ -23,15 +18,15 @@ SessionManager::protect_teacher_session_edit($id_session);
 if (api_is_platform_admin()) {
     $interbreadcrumb[] = [
         'url' => 'index.php',
-        'name' => get_lang('PlatformAdmin'),
+        'name' => get_lang('Administration'),
     ];
     $interbreadcrumb[] = [
         'url' => 'session_list.php',
-        'name' => get_lang('SessionList'),
+        'name' => get_lang('Session list'),
     ];
     $interbreadcrumb[] = [
         'url' => "resume_session.php?id_session=".$id_session,
-        "name" => get_lang('SessionOverview'),
+        "name" => get_lang('Session overview'),
     ];
 }
 $allowTutors = api_get_setting('allow_tutors_to_assign_students_to_session');
@@ -44,7 +39,7 @@ if ($allowTutors == 'true') {
     $tbl_session_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_USER);
 
     // setting the name of the tool
-    $tool_name = get_lang('SubscribeUsersToSession');
+    $tool_name = get_lang('Subscribe users to this session');
     $add_type = 'unique';
 
     if (isset($_REQUEST['add_type']) && $_REQUEST['add_type'] != '') {
@@ -467,15 +462,15 @@ if ($allowTutors == 'true') {
 
     if ($add_type === 'multiple') {
         $link_add_type_unique = '<a href="'.api_get_self().'?id_session='.$id_session.'&add='.Security::remove_XSS($_GET['add']).'&add_type=unique">'.
-            Display::return_icon('single.gif').get_lang('SessionAddTypeUnique').'</a>';
-        $link_add_type_multiple = Display::return_icon('multiple.gif').get_lang('SessionAddTypeMultiple');
+            Display::return_icon('single.gif').get_lang('Single registration').'</a>';
+        $link_add_type_multiple = Display::return_icon('multiple.gif').get_lang('Multiple registration');
     } else {
-        $link_add_type_unique = Display::return_icon('single.gif').get_lang('SessionAddTypeUnique');
+        $link_add_type_unique = Display::return_icon('single.gif').get_lang('Single registration');
         $link_add_type_multiple = '<a href="'.api_get_self().'?id_session='.$id_session.'&add='.Security::remove_XSS($_GET['add']).'&add_type=multiple">'.
-            Display::return_icon('multiple.gif').get_lang('SessionAddTypeMultiple').'</a>';
+            Display::return_icon('multiple.gif').get_lang('Multiple registration').'</a>';
     }
     $link_add_group = '<a href="usergroups.php">'.
-            Display::return_icon('multiple.gif', get_lang('RegistrationByUsersGroups')).get_lang('RegistrationByUsersGroups').'</a>'; ?>
+            Display::return_icon('multiple.gif', get_lang('Enrolment by classes')).get_lang('Enrolment by classes').'</a>'; ?>
     <div class="actions">
         <?php echo $link_add_type_unique; ?>&nbsp;|&nbsp;<?php echo $link_add_type_multiple; ?>&nbsp;|&nbsp;<?php echo $link_add_group; ?>
     </div>
@@ -490,7 +485,7 @@ if ($allowTutors == 'true') {
     if ($add_type === 'multiple') {
         if (is_array($extra_field_list)) {
             if (is_array($new_field_list) && count($new_field_list) > 0) {
-                echo '<h3>'.get_lang('FilterUsers').'</h3>';
+                echo '<h3>'.get_lang('Filter users').'</h3>';
                 foreach ($new_field_list as $new_field) {
                     echo $new_field['name'];
                     $varname = 'field_'.$new_field['variable'];
@@ -518,10 +513,10 @@ if ($allowTutors == 'true') {
     <div class="row">
         <div class="span5">
             <div class="multiple_select_header">
-                <b><?php echo get_lang('UserListInPlatform'); ?> :</b>
+                <b><?php echo get_lang('Portal users list'); ?> :</b>
             <?php if ($add_type == 'multiple') {
         ?>
-                <?php echo get_lang('FirstLetterUser'); ?> :
+                <?php echo get_lang('First letter (last name)'); ?> :
                     <select id="first_letter_user" name="firstLetterUser" onchange = "change_select(this.value);" >
                     <option value = "%">--</option>
                     <?php
@@ -552,7 +547,7 @@ if ($allowTutors == 'true') {
                 </select>
                 </div>
                     <input type="checkbox" onchange="checked_in_no_session(this.checked);" name="user_with_any_session" id="user_with_any_session_id">
-                    <label for="user_with_any_session_id"><?php echo get_lang('UsersRegisteredInNoSession'); ?></label>
+                    <label for="user_with_any_session_id"><?php echo get_lang('Users not registered in any session'); ?></label>
                 <?php
                 }
     unset($nosessionUsersList); ?>
@@ -582,15 +577,15 @@ if ($allowTutors == 'true') {
             <br />
             <?php
             if (isset($_GET['add'])) {
-                echo '<button class="btn btn-primary" type="button" value="" onclick="valide()" >'.get_lang('FinishSessionCreation').'</button>';
+                echo '<button class="btn btn-primary" type="button" value="" onclick="valide()" >'.get_lang('Finish session creation').'</button>';
             } else {
                 //@todo see that the call to "valide()" doesn't duplicate the onsubmit of the form (necessary to avoid delete on "enter" key pressed)
-                echo '<button class="save" type="button" value="" onclick="valide()" >'.get_lang('SubscribeUsersToSession').'</button>';
+                echo '<button class="save" type="button" value="" onclick="valide()" >'.get_lang('Subscribe users to this session').'</button>';
             } ?>
         </div>
         <div class="span5">
             <div class="multiple_select_header">
-                <b><?php echo get_lang('UserListInSession'); ?> :</b>
+                <b><?php echo get_lang('List of users registered in this session'); ?> :</b>
             </div>
             <select id="destination_users" name="sessionUsersList[]" multiple="multiple" size="15" class="span5">
             <?php

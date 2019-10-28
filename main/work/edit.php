@@ -107,7 +107,7 @@ if (!empty($my_folder_data)) {
 
 $interbreadcrumb[] = [
     'url' => api_get_path(WEB_CODE_PATH).'work/work.php?'.api_get_cidreq(),
-    'name' => get_lang('StudentPublications'),
+    'name' => get_lang('Assignments'),
 ];
 
 if (api_is_allowed_to_edit()) {
@@ -176,14 +176,14 @@ if ($is_allowed_to_edit && !empty($item_id)) {
     $row = Database::fetch_array($result);
     $qualification_over = $row['qualification'];
     if (!empty($qualification_over) && intval($qualification_over) > 0) {
-        $form->addText('qualification', array(get_lang('Qualification'), " / ".$qualification_over), false, 'size="10"');
+        $form->addText('qualification', array(get_lang('Score'), " / ".$qualification_over), false, 'size="10"');
         $form->addElement('hidden', 'qualification_over', $qualification_over);
     }*/
 
     $form->addCheckBox(
         'send_email',
         null,
-        get_lang('SendMailToStudent')
+        get_lang('Send mail to student')
     );
 
     // Check if user to qualify has some DRHs
@@ -192,7 +192,7 @@ if ($is_allowed_to_edit && !empty($item_id)) {
         $form->addCheckBox(
             'send_to_drh_users',
             null,
-            get_lang('SendMailToHR')
+            get_lang('Send mail to HR manager')
         );
     }
 }
@@ -202,7 +202,7 @@ $form->addElement('hidden', 'accepted', 1);
 $form->addElement('hidden', 'item_to_edit', $item_id);
 $form->addElement('hidden', 'sec_token', $token);
 
-$text = get_lang('UpdateWork');
+$text = get_lang('Update this task');
 $class = 'save';
 
 // fix the Ok button when we see the tool in the learn path
@@ -238,8 +238,8 @@ if ($form->validate()) {
 
                 if (isset($_POST['send_email'])) {
                     $url = api_get_path(WEB_CODE_PATH).'work/view.php?'.api_get_cidreq().'&id='.$item_to_edit_id;
-                    $subject = sprintf(get_lang('ThereIsANewWorkFeedback'), $work_item['title']);
-                    $message = sprintf(get_lang('ThereIsANewWorkFeedbackInWorkXHere'), $work_item['title'], $url);
+                    $subject = sprintf(get_lang('There\'s a new feedback in work: %s'), $work_item['title']);
+                    $message = sprintf(get_lang('There\'s a new feedback in work: %sInWorkXHere'), $work_item['title'], $url);
 
                     MessageManager::send_message_simple(
                         $work_item['user_id'],
@@ -253,7 +253,7 @@ if ($form->validate()) {
 
             if ($_POST['qualification'] > $_POST['qualification_over']) {
                 Display::addFlash(Display::return_message(
-                    get_lang('QualificationMustNotBeMoreThanQualificationOver'),
+                    get_lang('ScoreMustNotBeMoreThanScoreOver'),
                     'error'
                 ));
             } else {
@@ -274,12 +274,12 @@ if ($form->validate()) {
             );
 
             $succeed = true;
-            Display::addFlash(Display::return_message(get_lang('ItemUpdated')));
+            Display::addFlash(Display::return_message(get_lang('Item updated')));
         }
         Security::clear_token();
     } else {
         // Bad token or can't add works
-        Display::addFlash(Display::return_message(get_lang('ImpossibleToSaveTheDocument'), 'error'));
+        Display::addFlash(Display::return_message(get_lang('Impossible to save the document'), 'error'));
     }
 
     $script = 'work_list.php';
@@ -297,7 +297,7 @@ $content = null;
 if (!empty($work_id)) {
     if ($is_allowed_to_edit) {
         if (api_resource_is_locked_by_gradebook($work_id, LINK_STUDENTPUBLICATION)) {
-            echo Display::return_message(get_lang('ResourceLockedByGradebook'), 'warning');
+            echo Display::return_message(get_lang('This option is not available because this activity is contained by an assessment, which is currently locked. To unlock the assessment, ask your platform administrator.'), 'warning');
         } else {
             $content .= $form->returnForm();
         }
@@ -305,15 +305,15 @@ if (!empty($work_id)) {
         if (empty($work_item['qualificator_id']) || $work_item['qualificator_id'] == 0) {
             $content .= $form->returnForm();
         } else {
-            $content .= Display::return_message(get_lang('ActionNotAllowed'), 'error');
+            $content .= Display::return_message(get_lang('Action not allowed'), 'error');
         }
     } elseif ($student_can_edit_in_session && $has_ended == false) {
         $content .= $form->returnForm();
     } else {
-        $content .= Display::return_message(get_lang('ActionNotAllowed'), 'error');
+        $content .= Display::return_message(get_lang('Action not allowed'), 'error');
     }
 } else {
-    $content .= Display::return_message(get_lang('ActionNotAllowed'), 'error');
+    $content .= Display::return_message(get_lang('Action not allowed'), 'error');
 }
 
 $tpl->assign('content', $content);

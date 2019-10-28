@@ -88,7 +88,7 @@ if (!empty($diagram)) {
 } else {
     Display::addFlash(
         Display::return_message(
-            sprintf(get_lang('CareerXDoesntHaveADiagram'), $careerInfo['name']),
+            sprintf(get_lang('Career %s doesn\'t have a diagram.'), $careerInfo['name']),
             'warning'
         )
     );

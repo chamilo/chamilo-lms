@@ -30,13 +30,13 @@ $courseInfo = api_get_course_info();
 
 $interbreadcrumb[] = [
     'url' => api_get_path(WEB_CODE_PATH).'work/work.php?'.api_get_cidreq(),
-    'name' => get_lang('StudentPublications'),
+    'name' => get_lang('Assignments'),
 ];
 $interbreadcrumb[] = [
     'url' => api_get_path(WEB_CODE_PATH).'work/work_list_all.php?'.api_get_cidreq().'&id='.$workId,
     'name' => $my_folder_data['title'],
 ];
-$interbreadcrumb[] = ['url' => '#', 'name' => get_lang('AddUsers')];
+$interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Add a user')];
 
 switch ($action) {
     case 'add':
@@ -66,7 +66,7 @@ Display::display_header(null);
 $items = getAllUserToWork($workId, api_get_course_int_id());
 $usersAdded = [];
 if (!empty($items)) {
-    echo Display::page_subheader(get_lang('UsersAdded'));
+    echo Display::page_subheader(get_lang('Users added'));
     echo '<ul class="list-group">';
     foreach ($items as $data) {
         $myUserId = $data['user_id'];
@@ -105,7 +105,7 @@ foreach ($userList as $user) {
 }
 
 if (!empty($userToAddList)) {
-    echo Display::page_subheader(get_lang('UsersToAdd'));
+    echo Display::page_subheader(get_lang('Users to add'));
     echo '<ul class="list-group">';
     foreach ($userToAddList as $user) {
         $userName = api_get_person_name($user['firstname'], $user['lastname']).' ('.$user['username'].') ';
@@ -119,7 +119,7 @@ if (!empty($userToAddList)) {
     }
     echo '</ul>';
 } else {
-    echo Display::return_message(get_lang('NoUsersToAdd'), 'warning');
+    echo Display::return_message(get_lang('NoUsers to add'), 'warning');
 }
 
 echo '<hr /><div class="clear"></div>';

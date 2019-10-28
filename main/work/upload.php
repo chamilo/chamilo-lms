@@ -58,13 +58,13 @@ $validationStatus = getWorkDateValidationStatus($homework);
 
 $interbreadcrumb[] = [
     'url' => api_get_path(WEB_CODE_PATH).'work/work.php?'.api_get_cidreq(),
-    'name' => get_lang('StudentPublications'),
+    'name' => get_lang('Assignments'),
 ];
 $interbreadcrumb[] = [
     'url' => api_get_path(WEB_CODE_PATH).'work/work_list.php?'.api_get_cidreq().'&id='.$work_id,
     'name' => $workInfo['title'],
 ];
-$interbreadcrumb[] = ['url' => '#', 'name' => get_lang('UploadADocument')];
+$interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Upload a document')];
 
 $form = new FormValidator(
     'form-work',
@@ -115,7 +115,7 @@ if ($form->validate()) {
     } else {
         // Bad token or can't add works
         Display::addFlash(
-            Display::return_message(get_lang('ImpossibleToSaveTheDocument'), 'error')
+            Display::return_message(get_lang('Impossible to save the document'), 'error')
         );
     }
 }
@@ -149,17 +149,17 @@ if (!empty($work_id)) {
     echo $validationStatus['message'];
     if ($is_allowed_to_edit) {
         if (api_resource_is_locked_by_gradebook($work_id, LINK_STUDENTPUBLICATION)) {
-            echo Display::return_message(get_lang('ResourceLockedByGradebook'), 'warning');
+            echo Display::return_message(get_lang('This option is not available because this activity is contained by an assessment, which is currently locked. To unlock the assessment, ask your platform administrator.'), 'warning');
         } else {
             echo $tabs;
         }
     } elseif ($student_can_edit_in_session && $validationStatus['has_ended'] == false) {
         echo $tabs;
     } else {
-        Display::addFlash(Display::return_message(get_lang('ActionNotAllowed'), 'error'));
+        Display::addFlash(Display::return_message(get_lang('Action not allowed'), 'error'));
     }
 } else {
-    Display::addFlash(Display::return_message(get_lang('ActionNotAllowed'), 'error'));
+    Display::addFlash(Display::return_message(get_lang('Action not allowed'), 'error'));
 }
 
 Display :: display_footer();

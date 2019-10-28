@@ -22,7 +22,7 @@ $htmlHeadXtra[] = api_get_jqgrid_js();
 // Extra entries in breadcrumb
 $interbreadcrumb[] = [
     'url' => 'user.php?'.api_get_cidreq(),
-    'name' => get_lang('ToolUser'),
+    'name' => get_lang('Users'),
 ];
 
 $type = isset($_GET['type']) ? Security::remove_XSS($_GET['type']) : 'registered';
@@ -46,7 +46,7 @@ $actions = '';
 if (api_is_allowed_to_edit()) {
     if ($type === 'registered') {
         $actionsLeft .= '<a href="class.php?'.api_get_cidreq().'&type=not_registered">'.
-            Display::return_icon('add-class.png', get_lang('AddClassesToACourse'), [], ICON_SIZE_MEDIUM).'</a>';
+            Display::return_icon('add-class.png', get_lang('Add classes to a course'), [], ICON_SIZE_MEDIUM).'</a>';
     } else {
         $actionsLeft .= '<a href="class.php?'.api_get_cidreq().'&type=registered">'.
             Display::return_icon('back.png', get_lang('Classes'), [], ICON_SIZE_MEDIUM).'</a>';
@@ -61,7 +61,7 @@ if (api_is_allowed_to_edit()) {
         );
         $options = [
             -1 => get_lang('All'),
-            1 => get_lang('SocialGroups'),
+            1 => get_lang('Social groups'),
             0 => get_lang('Classes'),
         ];
         $form->addSelect(
@@ -74,7 +74,7 @@ if (api_is_allowed_to_edit()) {
         $form->addText('keyword', '', false);
         $form->setDefaults(['group_filter' => $groupFilter]);
         $form->addCourseHiddenParams();
-        $form->addButtonSearch(get_lang('SearchButton'));
+        $form->addButtonSearch(get_lang('Search'));
 
         $actionsRight .= $form->returnForm();
     }
@@ -117,7 +117,7 @@ $columns = [
     get_lang('Users'),
     get_lang('Status'),
     get_lang('Type'),
-    get_lang('Actions'),
+    get_lang('Detail'),
 ];
 
 // Column config
@@ -182,6 +182,6 @@ $(function() {
 
 echo $actions;
 echo UserManager::getUserSubscriptionTab(4);
-echo Display::return_message(get_lang('UserClassExplanation'));
+echo Display::return_message(get_lang('Information: The list of classes below contains the list of classes you have already registered in your course. If this list is empty, use the + green above to add classes.'));
 $usergroup->display_teacher_view();
 Display::display_footer();

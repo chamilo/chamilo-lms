@@ -14,7 +14,7 @@ $this_section = SECTION_PLATFORM_ADMIN;
 $id_session = (int) $_GET['id_session'];
 SessionManager::protect_teacher_session_edit($id_session);
 
-$tool_name = get_lang('SessionOverview');
+$tool_name = get_lang('Session overview');
 
 $allowTutors = api_get_setting('allow_tutors_to_assign_students_to_session');
 if ($allowTutors === 'true') {
@@ -77,7 +77,7 @@ if ($allowTutors === 'true') {
             if ($result) {
                 Display::addFlash(
                     Display::return_message(
-                        get_lang('UserAdded').' '.api_get_person_name(
+                        get_lang('The user has been added').' '.api_get_person_name(
                             $user_info['firstname'],
                             $user_info['lastname']
                         ),
@@ -130,17 +130,17 @@ if ($allowTutors === 'true') {
             get_lang('Session')
         ).' '.$session['name']
     );
-    echo Display::page_subheader(get_lang('GeneralProperties').$url); ?>
+    echo Display::page_subheader(get_lang('General properties').$url); ?>
     <!-- General properties -->
     <table class="data_table">
     <tr>
-        <td><?php echo get_lang('GeneralCoach'); ?> :</td>
+        <td><?php echo get_lang('General coach'); ?> :</td>
         <td><?php echo api_get_person_name($session['firstname'], $session['lastname']).' ('.$session['username'].')'; ?></td>
     </tr>
     <?php if (!empty($session_category)) {
         ?>
     <tr>
-        <td><?php echo get_lang('SessionCategory'); ?></td>
+        <td><?php echo get_lang('Sessions categories'); ?></td>
         <td><?php echo $session_category; ?></td>
     </tr>
     <?php
@@ -150,10 +150,10 @@ if ($allowTutors === 'true') {
         <td>
         <?php
         if ($session['access_start_date'] == '00-00-0000' && $session['access_end_date'] == '00-00-0000') {
-            echo get_lang('NoTimeLimits');
+            echo get_lang('No time limits');
         } else {
             if ($session['access_start_date'] != '00-00-0000') {
-                //$session['date_start'] = Display::tag('i', get_lang('NoTimeLimits'));
+                //$session['date_start'] = Display::tag('i', get_lang('No time limits'));
                 $session['access_start_date'] = get_lang('From').' '.$session['access_start_date'];
             } else {
                 $session['access_start_date'] = '';
@@ -170,7 +170,7 @@ if ($allowTutors === 'true') {
     <!-- show nb_days_before and nb_days_after only if they are different from 0 -->
     <tr>
         <td>
-            <?php echo api_ucfirst(get_lang('SessionCoachStartDate')); ?> :
+            <?php echo api_ucfirst(get_lang('Access start date for coaches')); ?> :
         </td>
         <td>
             <?php echo intval($session['coach_access_start_date']); ?>
@@ -178,7 +178,7 @@ if ($allowTutors === 'true') {
     </tr>
     <tr>
         <td>
-            <?php echo api_ucfirst(get_lang('SessionCoachEndDate')); ?> :
+            <?php echo api_ucfirst(get_lang('Access end date for coaches')); ?> :
         </td>
         <td>
             <?php echo intval($session['coach_session_access_end_date']); ?>
@@ -186,15 +186,15 @@ if ($allowTutors === 'true') {
     </tr>
     <tr>
         <td>
-            <?php echo api_ucfirst(get_lang('SessionVisibility')); ?> :
+            <?php echo api_ucfirst(get_lang('Visibility after end date')); ?> :
         </td>
         <td>
             <?php if ($session['visibility'] == 1) {
-            echo get_lang('ReadOnly');
+            echo get_lang('Read only');
         } elseif ($session['visibility'] == 2) {
             echo get_lang('Visible');
         } elseif ($session['visibility'] == 3) {
-            echo api_ucfirst(get_lang('Invisible'));
+            echo api_ucfirst(get_lang('invisible'));
         } ?>
         </td>
     </tr>
@@ -215,18 +215,18 @@ if ($allowTutors === 'true') {
     </table>
     <br />
     <?php
-    echo Display::page_subheader(get_lang('CourseList').$url); ?>
+    echo Display::page_subheader(get_lang('Course list').$url); ?>
     <!--List of courses -->
     <table class="data_table">
     <tr>
-      <th width="35%"><?php echo get_lang('CourseTitle'); ?></th>
-      <th width="30%"><?php echo get_lang('CourseCoach'); ?></th>
-      <th width="20%"><?php echo get_lang('UsersNumber'); ?></th>
+      <th width="35%"><?php echo get_lang('Course title'); ?></th>
+      <th width="30%"><?php echo get_lang('Course coach'); ?></th>
+      <th width="20%"><?php echo get_lang('Users number'); ?></th>
     </tr>
     <?php
     if ($session['nbr_courses'] == 0) {
         echo '<tr>
-            <td colspan="4">'.get_lang('NoCoursesForThisSession').'</td>
+            <td colspan="4">'.get_lang('No course for this session').'</td>
             </tr>';
     } else {
         // select the courses
@@ -270,13 +270,13 @@ if ($allowTutors === 'true') {
                     ).' ('.$info_coach['username'].')';
                 }
             } else {
-                $coach = get_lang('None');
+                $coach = get_lang('none');
             }
 
             if (count($coachs) > 0) {
                 $coach = implode('<br />', $coachs);
             } else {
-                $coach = get_lang('None');
+                $coach = get_lang('none');
             }
 
             $orig_param = '&origin=resume_session';
@@ -294,7 +294,7 @@ if ($allowTutors === 'true') {
     </table>
     <br />
     <?php
-    echo Display::page_subheader(get_lang('UserList').$url); ?>
+    echo Display::page_subheader(get_lang('User list').$url); ?>
     <!--List of users -->
     <table class="data_table">
         <tr>
@@ -302,14 +302,14 @@ if ($allowTutors === 'true') {
                 <?php echo get_lang('User'); ?>
             </th>
             <th>
-                <?php echo get_lang('Actions'); ?>
+                <?php echo get_lang('Detail'); ?>
             </th>
         </tr>
     <?php
 
     if ($session['nbr_users'] == 0) {
         echo '<tr>
-                <td colspan="2">'.get_lang('NoUsersForThisSession').'</td>
+                <td colspan="2">'.get_lang('No Users for this session').'</td>
             </tr>';
     } else {
         $order_clause = api_sort_by_first_name() ? ' ORDER BY firstname, lastname' : ' ORDER BY lastname, firstname';
@@ -345,8 +345,8 @@ if ($allowTutors === 'true') {
 
             if ($multiple_url_is_on) {
                 if ($user['access_url_id'] != $url_id) {
-                    $user_link .= ' '.Display::return_icon('warning.png', get_lang('UserNotAddedInURL'), [], ICON_SIZE_SMALL);
-                    $add = Display::return_icon('add.png', get_lang('AddUsersToURL'), [], ICON_SIZE_SMALL);
+                    $user_link .= ' '.Display::return_icon('warning.png', get_lang('Users not added to the URL'), [], ICON_SIZE_SMALL);
+                    $add = Display::return_icon('add.png', get_lang('Add users to an URL'), [], ICON_SIZE_SMALL);
                     $link_to_add_user_in_url = '<a href="resume_session.php?action=add_user_to_url&id_session='.$id_session.'&user_id='.$user['user_id'].'">'.$add.'</a>';
                 }
             }
@@ -359,8 +359,8 @@ if ($allowTutors === 'true') {
                         <a href="../mySpace/myStudents.php?student='.$user['user_id'].''.$orig_param.'">'.
                         Display::return_icon('statistics.gif', get_lang('Reporting')).'</a>&nbsp;
                         <a href="session_course_user.php?id_user='.$user['user_id'].'&id_session='.$id_session.'">'.
-                        Display::return_icon('course.png', get_lang('BlockCoursesForThisUser')).'</a>&nbsp;
-                        <a href="'.api_get_self().'?id_session='.$id_session.'&action=delete&user='.$user['user_id'].'" onclick="javascript:if(!confirm(\''.get_lang('ConfirmYourChoice').'\')) return false;">'.
+                        Display::return_icon('course.png', get_lang('Block user from courses in this session')).'</a>&nbsp;
+                        <a href="'.api_get_self().'?id_session='.$id_session.'&action=delete&user='.$user['user_id'].'" onclick="javascript:if(!confirm(\''.get_lang('Please confirm your choice').'\')) return false;">'.
                         Display::return_icon('delete.png', get_lang('Delete')).'</a>
                         '.$link_to_add_user_in_url.'
                     </td>

@@ -54,13 +54,13 @@ $validationStatus = getWorkDateValidationStatus($homework);
 
 $interbreadcrumb[] = [
     'url' => api_get_path(WEB_CODE_PATH).'work/work.php?'.api_get_cidreq(),
-    'name' => get_lang('StudentPublications'),
+    'name' => get_lang('Assignments'),
 ];
 $interbreadcrumb[] = [
     'url' => api_get_path(WEB_CODE_PATH).'work/work_list.php?'.api_get_cidreq().'&id='.$work_id,
     'name' => $workInfo['title'],
 ];
-$interbreadcrumb[] = ['url' => '#', 'name' => get_lang('UploadFromTemplate')];
+$interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Upload from template')];
 
 $form = new FormValidator(
     'form',
@@ -109,7 +109,7 @@ if ($form->validate()) {
         exit;
     } else {
         // Bad token or can't add works
-        Display::addFlash(Display::return_message(get_lang('ImpossibleToSaveTheDocument'), 'error'));
+        Display::addFlash(Display::return_message(get_lang('Impossible to save the document'), 'error'));
     }
 }
 
@@ -120,7 +120,7 @@ if (!empty($work_id)) {
     echo $validationStatus['message'];
     if ($is_allowed_to_edit) {
         if (api_resource_is_locked_by_gradebook($work_id, LINK_STUDENTPUBLICATION)) {
-            echo Display::return_message(get_lang('ResourceLockedByGradebook'), 'warning');
+            echo Display::return_message(get_lang('This option is not available because this activity is contained by an assessment, which is currently locked. To unlock the assessment, ask your platform administrator.'), 'warning');
         } else {
             $form->display();
         }

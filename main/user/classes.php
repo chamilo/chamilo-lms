@@ -22,7 +22,7 @@ $content = '';
 $usergroup = new UserGroup();
 $usergroup_list = $usergroup->get_usergroup_by_user(api_get_user_id());
 if (!empty($usergroup_list)) {
-    $content .= Display::tag('h1', get_lang('MyClasses'));
+    $content .= Display::tag('h1', get_lang('My classes'));
     foreach ($usergroup_list as $group_id) {
         if (isset($_GET['id']) && $_GET['id'] != $group_id) {
             continue;
@@ -36,7 +36,7 @@ if (!empty($usergroup_list)) {
         Display::addFlash(
             Display::return_message(
                 Display::url(
-                    get_lang('AddClasses'),
+                    get_lang('Add classes'),
                     api_get_path(WEB_CODE_PATH).'admin/usergroups.php?action=add'
                 ),
                 'normal',

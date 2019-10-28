@@ -19,15 +19,15 @@ if (!empty($_REQUEST['type']) && $_REQUEST['type'] == COURSEMANAGER) {
     $userType = COURSEMANAGER;
 }
 
-$tool_name = get_lang('ImportUsersToACourse');
+$tool_name = get_lang('Import users list');
 
 $interbreadcrumb[] = ["url" => "user.php", "name" => get_lang("Users")];
-$interbreadcrumb[] = ["url" => "#", "name" => get_lang("ImportUsersToACourse")];
+$interbreadcrumb[] = ["url" => "#", "name" => get_lang("Import users list")];
 
 $form = new FormValidator('user_import', 'post', 'user_import.php');
 $form->addElement('header', $tool_name);
-$form->addElement('file', 'import_file', get_lang('ImportCSVFileLocation'));
-$form->addElement('checkbox', 'unsubscribe_users', null, get_lang('UnsubscribeUsersAlreadyAddedInCourse'));
+$form->addElement('file', 'import_file', get_lang('CSV file import location'));
+$form->addElement('checkbox', 'unsubscribe_users', null, get_lang('Unsubscribe users already added'));
 $form->addElement('hidden', 'type', $userType);
 $form->addButtonImport(get_lang('Import'));
 
@@ -75,7 +75,7 @@ if ($form->validate()) {
 
             if (empty($invalid_users)) {
                 $type = 'confirmation';
-                $message = get_lang('ListOfUsersSubscribedToCourse');
+                $message = get_lang('List of users subscribed to course');
 
                 if ($unsubscribe_users) {
                     $current_user_list = CourseManager::get_user_list_from_course_code(
@@ -118,7 +118,7 @@ if ($form->validate()) {
                     }
                 }
             } else {
-                $message = get_lang('CheckUsersWithId');
+                $message = get_lang('Use user\'s IDs from the file to subscribe them');
                 $type = 'warning';
                 foreach ($invalid_users as $invalid_user) {
                     $user_to_show[] = $invalid_user;
@@ -146,14 +146,14 @@ if (!empty($message)) {
             echo Display::return_message($message.':  <br />'.$userMessage, 'warning', false);
         }
     } else {
-        $empty_line_msg = ($empty_line == 0) ? get_lang('ErrorsWhenImportingFile') : get_lang('ErrorsWhenImportingFile').': '.get_lang('EmptyHeaderLine');
+        $empty_line_msg = ($empty_line == 0) ? get_lang('Errors when importing file') : get_lang('Errors when importing file').': '.get_lang('There are empty lines in the header of selected file');
         echo Display::return_message($empty_line_msg, 'error');
     }
 }
 
 $form->display();
 
-echo get_lang('CSVMustLookLike');
+echo get_lang('The CSV file must look like this');
 echo '<blockquote><pre>
     username
     jdoe
@@ -161,7 +161,7 @@ echo '<blockquote><pre>
 </pre>
 </blockquote>';
 
-echo get_lang('Or');
+echo get_lang('or');
 echo '<blockquote><pre>
     id
     23

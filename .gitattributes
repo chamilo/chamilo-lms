@@ -11,6 +11,7 @@
 .php_cs export-ignore
 codesize.xml export-ignore
 phpcs.xml export-ignore
+phpstan.neon export-ignore
 
 /tests export-ignore
 .editorconfig export-ignore

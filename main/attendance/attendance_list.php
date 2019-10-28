@@ -15,7 +15,7 @@ api_protect_course_script(true);
 if (api_is_allowed_to_edit(null, true)) {
     echo '<div class="actions">';
     echo '<a href="index.php?'.api_get_cidreq().'&action=attendance_add">'.
-        Display::return_icon('new_attendance_list.png', get_lang('CreateANewAttendance'), '', ICON_SIZE_MEDIUM).'</a>';
+        Display::return_icon('new_attendance_list.png', get_lang('Create a new attendance list'), '', ICON_SIZE_MEDIUM).'</a>';
     echo '</div>';
 }
 $attendance = new Attendance();
@@ -39,15 +39,15 @@ $table->set_header(2, get_lang('Description'), true);
 $table->set_header(3, get_lang('CountDoneAttendance'), true, ['style' => 'width:90px;']);
 
 if (api_is_allowed_to_edit(null, true)) {
-    $table->set_header(4, get_lang('Actions'), false, ['style' => 'text-align:center']);
+    $table->set_header(4, get_lang('Detail'), false, ['style' => 'text-align:center']);
     $actions = [
-        'attendance_set_invisible_select' => get_lang('SetInvisible'),
-        'attendance_set_visible_select' => get_lang('SetVisible'),
+        'attendance_set_invisible_select' => get_lang('Set invisible'),
+        'attendance_set_visible_select' => get_lang('Set visible'),
     ];
 
     $allow = api_get_setting('allow_delete_attendance');
     if ($allow === 'true') {
-        $actions['attendance_delete_select'] = get_lang('DeleteAllSelectedAttendances');
+        $actions['attendance_delete_select'] = get_lang('Delete all selected attendances');
     }
     $table->set_form_actions($actions);
 }

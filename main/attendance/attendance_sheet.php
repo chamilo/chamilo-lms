@@ -35,8 +35,8 @@ if (api_is_allowed_to_edit(null, true) ||
     $values = [
         'all' => get_lang('All'),
         'today' => get_lang('Today'),
-        'all_done' => get_lang('AllDone'),
-        'all_not_done' => get_lang('AllNotDone'),
+        'all_done' => get_lang('All done'),
+        'all_not_done' => get_lang('All not done'),
     ];
     $today = api_convert_and_format_date(null, DATE_FORMAT_SHORT);
     $exists_attendance_today = false;
@@ -67,7 +67,7 @@ if (api_is_allowed_to_edit(null, true) ||
 
     if (!$exists_attendance_today) {
         echo Display::return_message(
-            get_lang('ThereIsNoClassScheduledTodayTryPickingAnotherDay'),
+            get_lang('There is no class scheduled today, try picking another day or add your attendance entry yourself using the action icons.'),
             'warning'
         );
     }
@@ -109,16 +109,16 @@ if (api_is_allowed_to_edit(null, true) ||
 
     if (!$is_locked_attendance || api_is_platform_admin()) {
         $actionsLeft = '<a style="float:left;" href="index.php?'.api_get_cidreq().'&action=calendar_list&attendance_id='.$attendance_id.'">'.
-            Display::return_icon('attendance_calendar.png', get_lang('AttendanceCalendar'), '', ICON_SIZE_MEDIUM).'</a>';
+            Display::return_icon('attendance_calendar.png', get_lang('Attendance calendar'), '', ICON_SIZE_MEDIUM).'</a>';
         $actionsLeft .= '<a id="pdf_export" style="float:left;"  href="index.php?'.api_get_cidreq().'&action=attendance_sheet_export_to_pdf&attendance_id='.$attendance_id.'&filter='.$default_filter.'&group_id='.$groupId.'">'.
-            Display::return_icon('pdf.png', get_lang('ExportToPDF'), '', ICON_SIZE_MEDIUM).'</a>';
+            Display::return_icon('pdf.png', get_lang('Export to PDF'), '', ICON_SIZE_MEDIUM).'</a>';
 
         $actionsRight = $form->returnForm();
         $toolbar = Display::toolbarAction('toolbar-attendance', [$actionsLeft, $actionsRight]);
         echo $toolbar;
     }
 
-    $message_information = get_lang('AttendanceSheetDescription');
+    $message_information = get_lang('The attendance sheets allow you to specify a list of dates in which you will report attendance to your courses');
     if (!empty($message_information)) {
         $message = '<strong>'.get_lang('Information').'</strong><br />';
         $message .= $message_information;
@@ -126,7 +126,7 @@ if (api_is_allowed_to_edit(null, true) ||
     }
 
     if ($is_locked_attendance) {
-        echo Display::return_message(get_lang('TheAttendanceSheetIsLocked'), 'warning', false);
+        echo Display::return_message(get_lang('The attendance sheet is locked.'), 'warning', false);
     }
 
     $param_filter = '&filter='.Security::remove_XSS($default_filter).'&group_id='.$groupId;
@@ -213,16 +213,16 @@ if (api_is_allowed_to_edit(null, true) ||
                         <tr class="tableFloatingHeader" style="position: absolute; top: 0px; left: 0px; visibility: hidden; margin:0px;padding:0px" >
                             <th width="10px"><?php echo '#'; ?></th>
                             <th width="10px"><?php echo get_lang('Photo'); ?></th>
-                            <th width="100px"><?php echo get_lang('LastName'); ?></th>
-                            <th width="100px"><?php echo get_lang('FirstName'); ?></th>
-                            <th width="100px"><?php echo get_lang('AttendancesFaults'); ?></th>
+                            <th width="100px"><?php echo get_lang('Last name'); ?></th>
+                            <th width="100px"><?php echo get_lang('First name'); ?></th>
+                            <th width="100px"><?php echo get_lang('Not attended'); ?></th>
                         </tr>
                         <tr class="tableFloatingHeaderOriginal" >
                             <th width="10px"><?php echo '#'; ?></th>
                             <th width="10px"><?php echo get_lang('Photo'); ?></th>
-                            <th width="150px"><?php echo get_lang('LastName'); ?></th>
-                            <th width="140px"><?php echo get_lang('FirstName'); ?></th>
-                            <th width="100px"><?php echo get_lang('AttendancesFaults'); ?></th>
+                            <th width="150px"><?php echo get_lang('Last name'); ?></th>
+                            <th width="140px"><?php echo get_lang('First name'); ?></th>
+                            <th width="100px"><?php echo get_lang('Not attended'); ?></th>
                         </tr>
                         </thead>
                         <tbody>
@@ -237,7 +237,7 @@ if (api_is_allowed_to_edit(null, true) ||
                 $class = 'row_even';
             }
             $username = api_htmlentities(
-                                sprintf(get_lang('LoginX'), $data['username']),
+                                sprintf(get_lang('Login: %s'), $data['username']),
                                 ENT_QUOTES
                             ); ?>
                             <tr class="<?php echo $class; ?>">
@@ -271,7 +271,7 @@ if (api_is_allowed_to_edit(null, true) ||
 
                 $img_lock = Display::return_icon(
                             'lock-closed.png',
-                            get_lang('DateUnLock'),
+                            get_lang('Unlock date'),
                             ['class' => 'img_lock', 'id' => 'datetime_column_'.$calendar['id']]
                         );
 
@@ -283,7 +283,7 @@ if (api_is_allowed_to_edit(null, true) ||
                 if ($next_attendance_calendar_id == $calendar['id']) {
                     $input_hidden = '<input type="hidden" id="hidden_input_'.$calendar['id'].'" name="hidden_input[]" value="'.$calendar['id'].'" />';
                     $disabled_check = '';
-                    $img_lock = Display::return_icon('lock-closed.png', get_lang('DateLock'), ['class' => 'img_unlock', 'id' => 'datetime_column_'.$calendar['id']]);
+                    $img_lock = Display::return_icon('lock-closed.png', get_lang('Lock date'), ['class' => 'img_unlock', 'id' => 'datetime_column_'.$calendar['id']]);
                 }
 
                 $result .= '<th>';
@@ -300,7 +300,7 @@ if (api_is_allowed_to_edit(null, true) ||
             }
         } else {
             $result = '<th width="2000px"><span><a href="index.php?'.api_get_cidreq().'&action=calendar_list&attendance_id='.$attendance_id.'">';
-            $result .= Display::return_icon('attendance_calendar.png', get_lang('AttendanceCalendar'), '', ICON_SIZE_MEDIUM).' '.get_lang('GoToAttendanceCalendar').'</a></span></th>';
+            $result .= Display::return_icon('attendance_calendar.png', get_lang('Attendance calendar'), '', ICON_SIZE_MEDIUM).' '.get_lang('GoTo attendance calendar').'</a></span></th>';
         }
 
         echo '<tr class="tableFloatingHeader row_odd" style="position: absolute; top: 0px; left: 0px; visibility: hidden; margin:0px;padding:0px">';
@@ -361,7 +361,7 @@ if (api_is_allowed_to_edit(null, true) ||
                             echo '<input type="checkbox" name="check_presence['.$calendar['id'].'][]" value="'.$user['user_id'].'" '.$disabled.' '.$checked.' />';
                             echo '<span class="anchor_'.$calendar['id'].'"></span>';
                         } else {
-                            echo $presence ? Display::return_icon('checkbox_on.png', get_lang('Presence'), null, ICON_SIZE_TINY) : Display::return_icon('checkbox_off.png', get_lang('Presence'), null, ICON_SIZE_TINY);
+                            echo $presence ? Display::return_icon('checkbox_on.png', get_lang('Assistance'), null, ICON_SIZE_TINY) : Display::return_icon('checkbox_off.png', get_lang('Assistance'), null, ICON_SIZE_TINY);
                         }
                     } else {
                         switch ($presence) {
@@ -369,10 +369,10 @@ if (api_is_allowed_to_edit(null, true) ||
                                         echo Display::return_icon('accept.png', get_lang('Attended'));
                                         break;
                                     case 0:
-                                        echo Display::return_icon('exclamation.png', get_lang('NotAttended'));
+                                        echo Display::return_icon('exclamation.png', get_lang('Not attended'));
                                         break;
                                     case -1:
-                                        //echo Display::return_icon('warning.png',get_lang('NotAttended'));
+                                        //echo Display::return_icon('warning.png',get_lang('Not attended'));
                                         break;
                                 }
                     }
@@ -413,20 +413,20 @@ if (api_is_allowed_to_edit(null, true) ||
     } else {
         echo Display::return_message(
             '<a href="'.api_get_path(WEB_CODE_PATH).'user/user.php?'.api_get_cidreq().'">'.
-            get_lang('ThereAreNoRegisteredLearnersInsidetheCourse').'</a>',
+            get_lang('There are no registered learners inside the course').'</a>',
             'warning',
             false
         );
     }
 } else {
-    echo Display::page_header(get_lang('AttendanceSheetReport'));
+    echo Display::page_header(get_lang('Report of attendance sheets'));
     // View for students?>
     <?php if (!empty($users_presence)) {
         ?>
         <div>
             <table width="250px;">
                 <tr>
-                    <td><?php echo get_lang('ToAttend').': '; ?></td>
+                    <td><?php echo get_lang('To attend').': '; ?></td>
                     <td>
                         <center><div class="attendance-faults-bar" style="background-color:<?php echo !empty($faults['color_bar']) ? $faults['color_bar'] : 'none'; ?>">
                         <?php echo $faults['faults'].'/'.$faults['total'].' ('.$faults['faults_porcent'].'%)'; ?></div></center>
@@ -453,7 +453,7 @@ if (api_is_allowed_to_edit(null, true) ||
                 } ?>
                 <tr class="<?php echo $class; ?>">
                     <td>
-                        <?php echo $presence['presence'] ? Display::return_icon('checkbox_on.png', get_lang('Presence'), null, ICON_SIZE_TINY) : Display::return_icon('checkbox_off.png', get_lang('Presence'), null, ICON_SIZE_TINY); ?>
+                        <?php echo $presence['presence'] ? Display::return_icon('checkbox_on.png', get_lang('Assistance'), null, ICON_SIZE_TINY) : Display::return_icon('checkbox_off.png', get_lang('Assistance'), null, ICON_SIZE_TINY); ?>
                         <?php echo "&nbsp; ".$presence['date_time']; ?>
                     </td>
                 </tr>
@@ -462,7 +462,7 @@ if (api_is_allowed_to_edit(null, true) ||
         } else {
             ?>
             <tr><td>
-                <center><?php echo get_lang('YouDoNotHaveDoneAttendances'); ?></center></td>
+                <center><?php echo get_lang('You do not have attendances'); ?></center></td>
             </tr>
         <?php
         } ?>

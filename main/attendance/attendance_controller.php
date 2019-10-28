@@ -127,7 +127,7 @@ class AttendanceController
 
                     $form = new FormValidator('attendance_edit');
                     Skill::saveSkills($form, ITEM_TYPE_ATTENDANCE, $attendance_id);
-                    Display::addFlash(Display::return_message(get_lang('Updated')));
+                    Display::addFlash(Display::return_message(get_lang('Update successful')));
 
                     Security::clear_token();
                     header('Location:index.php?action=attendance_list&'.api_get_cidreq());
@@ -597,9 +597,9 @@ class AttendanceController
                 foreach ($data_array['attendant_calendar'] as $class_day) {
                     if ($class_day['done_attendance'] == 1) {
                         if ($data_users_presence[$user['user_id']][$class_day['id']]['presence'] == 1) {
-                            $result[$class_day['id']] = get_lang('UserAttendedSymbol');
+                            $result[$class_day['id']] = get_lang('P');
                         } else {
-                            $result[$class_day['id']] = '<span style="color:red">'.get_lang('UserNotAttendedSymbol').'</span>';
+                            $result[$class_day['id']] = '<span style="color:red">'.get_lang('NP').'</span>';
                         }
                     } else {
                         $result[$class_day['id']] = ' ';
@@ -693,7 +693,7 @@ class AttendanceController
                 'post',
                 api_get_self().'?'.api_get_cidreq().'&action=calendar_logins'
             );
-            $form->addDateRangePicker('range', get_lang('DateRange'));
+            $form->addDateRangePicker('range', get_lang('Date range'));
             $form->addButton('submit', get_lang('Submit'));
 
             if ($form->validate()) {
@@ -715,7 +715,7 @@ class AttendanceController
         if ($exportToPdf) {
             $result = $attendance->exportAttendanceLogin($startDate, $endDate);
             if (empty($result)) {
-                api_not_allowed(true, get_lang('NoDataAvailable'));
+                api_not_allowed(true, get_lang('No data available'));
             }
         }
         $table = $attendance->getAttendanceLoginTable($startDate, $endDate);

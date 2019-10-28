@@ -80,7 +80,7 @@ if (!$allowed_to_download) {
     api_not_allowed(
         true,
         Display::return_message(
-            get_lang('YouAreNotAllowedToDownloadThisFile'),
+            get_lang('You are not allowed to download this file.'),
             'error'
         )
     );

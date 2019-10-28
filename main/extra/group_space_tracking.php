@@ -75,13 +75,13 @@ $tutors = GroupManager::get_subscribed_tutors($current_group['id']);
 
 $tutor_info = '';
 if (count($tutors) == 0) {
-    $tutor_info = get_lang('GroupNoneMasc');
+    $tutor_info = get_lang('(none)');
 } else {
     isset($origin) ? $my_origin = $origin : $my_origin = '';
     $tutor_info .= '<ul class="thumbnails">';
     foreach ($tutors as $index => $tutor) {
         $tab_user_info = api_get_user_info($tutor['user_id']);
-        $username = api_htmlentities(sprintf(get_lang('LoginX'), $tab_user_info['username']), ENT_QUOTES);
+        $username = api_htmlentities(sprintf(get_lang('Login: %s'), $tab_user_info['username']), ENT_QUOTES);
         $image_path = UserManager::get_user_picture_path_by_id($tutor['user_id'], 'web', false, true);
         $image_repository = $image_path['dir'];
         $existing_image = $image_path['file'];
@@ -95,7 +95,7 @@ if (count($tutors) == 0) {
     $tutor_info .= '</ul>';
 }
 
-echo Display::page_subheader(get_lang('GroupTutors'));
+echo Display::page_subheader(get_lang('Coaches'));
 if (!empty($tutor_info)) {
     echo $tutor_info;
 }
@@ -126,13 +126,13 @@ $my_gidreq = isset($_GET['gidReq']) ? Security::remove_XSS($_GET['gidReq']) : ''
 $parameters = ['cidReq' => $my_cidreq, 'origin' => $my_origin, 'gidReq' => $my_gidreq];
 $table->set_additional_parameters($parameters);
 
-$table->set_header(1, get_lang('OfficialCode'), false, 'align="center"');
+$table->set_header(1, get_lang('Code'), false, 'align="center"');
 if (api_is_western_name_order()) {
-    $table->set_header(2, get_lang('LastName'));
-    $table->set_header(3, get_lang('FirstName'));
+    $table->set_header(2, get_lang('Last name'));
+    $table->set_header(3, get_lang('First name'));
 } else {
-    $table->set_header(2, get_lang('LastName'));
-    $table->set_header(3, get_lang('FirstName'));
+    $table->set_header(2, get_lang('Last name'));
+    $table->set_header(3, get_lang('First name'));
 }
 //the order of these calls is important
 $table->set_column_filter(2, 'user_name_filter');
@@ -142,12 +142,12 @@ $table->set_header(4, get_lang('Examen'), false);
 $table->set_column_filter(2, 'user_name_filter');
 $table->set_column_filter(3, 'user_name_filter');
 $table->set_header(4, get_lang('Examen'), false);
-$table->set_header(5, get_lang('LatestLogin'), false, 'align="center"');
+$table->set_header(5, get_lang('Latest login'), false, 'align="center"');
 $table->set_header(6, get_lang('time_tot'), false, 'align="center"');
 $table->set_header(7, get_lang('jours_complet'), false, 'align="center"');
 $table->set_header(8, get_lang('diff_horaire'), false, 'align="center"');
 $table->set_header(9, get_lang('save_diff'), false, 'align="center"');
-$table->set_header(10, get_lang('GroupCalendar'), false, 'align="center"');
+$table->set_header(10, get_lang('Agenda'), false, 'align="center"');
 $table->set_header(11, get_lang('Details'), false);
 
 // Database table definition
@@ -368,7 +368,7 @@ while ($resulta = Database::fetch_array($result)) {
     $diff = abs($diff);
     $last_connection_date = Tracking:: get_last_connection_date($user_in_groupe, true);
     if ($last_connection_date == '') {
-        $last_connection_date = get_lang('NoConnexion');
+        $last_connection_date = get_lang('No connection');
     }
     // on présente tous les résultats
     $row = [];
@@ -414,7 +414,7 @@ echo $precision_time;
 function user_name_filter($name, $url_params, $row)
 {
     $tab_user_info = api_get_user_info($row[0]);
-    $username = api_htmlentities(sprintf(get_lang('LoginX'), $tab_user_info['username']), ENT_QUOTES);
+    $username = api_htmlentities(sprintf(get_lang('Login: %s'), $tab_user_info['username']), ENT_QUOTES);
 
     return '<a href="../user/userInfo.php?uInfo='.$row[0].'&amp;'.$url_params.'" title="'.$username.'">'.$name.'</a>';
 }

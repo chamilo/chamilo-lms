@@ -325,7 +325,7 @@ class Dropbox_SentWork extends Dropbox_Work
         }
 
         if (!is_array($recipient_ids) || count($recipient_ids) == 0) {
-            die(get_lang('GeneralError').' (code 209)');
+            die(get_lang('An error has occured. Please contact your system administrator.').' (code 209)');
         }
 
         foreach ($recipient_ids as $rec) {
@@ -557,7 +557,7 @@ class Dropbox_Person
 
         if (!$found) {
             if (!$this->deleteReceivedWorkFolder($id)) {
-                die(get_lang('GeneralError').' (code 216)');
+                die(get_lang('An error has occured. Please contact your system administrator.').' (code 216)');
             }
         }
         // Delete entries in person table concerning received works
@@ -607,7 +607,7 @@ class Dropbox_Person
         }
         if (!$found) {
             if (!$this->deleteReceivedWorkFolder($id)) {
-                die(get_lang('GeneralError').' (code 219)');
+                die(get_lang('An error has occured. Please contact your system administrator.').' (code 219)');
             }
         }
         //$file_id = $this->sentWork[$index]->id;

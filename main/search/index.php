@@ -13,7 +13,7 @@ if (extension_loaded('xapian')) {
     require '../lp/lp_list_search.php';
 } else {
     Display::display_header(get_lang('Search'));
-    echo Display::return_message(get_lang('SearchXapianModuleNotInstalled'), 'error');
+    echo Display::return_message(get_lang('The Xapian search module is not installed'), 'error');
     Display::display_footer();
     exit;
 }

@@ -51,7 +51,7 @@ echo "<form method=\"post\" action=\"".str_replace('&', '&amp;', $_SERVER['REQUE
 // 		DISPLAYING THE ROLES LIST
 if (api_get_setting('group_roles') == 'true') {
     // the list of the roles for the user
-    echo '<strong>'.get_lang('GroupRoles').'</strong><br />';
+    echo '<strong>'.get_lang('Group roles').'</strong><br />';
     $current_group_course_roles = get_roles('group', $group_id);
     $current_group_platform_roles = get_roles('group', $group_id, 'platform');
     display_role_list($current_group_course_roles, $current_group_platform_roles);
@@ -111,12 +111,12 @@ foreach ($tool_rights as $tool => $rights) { // $tool_rights contains all the po
 
 echo "</table>\n";
 if ($setting_visualisation == 'checkbox') {
-    echo "<input type=\"Submit\" name=\"StoreGroupPermissions\" value=\"".get_lang('StorePermissions')."\">";
+    echo "<input type=\"Submit\" name=\"StoreGroupPermissions\" value=\"".get_lang('Store permissions')."\">";
 }
 echo "</form>";
 
 // 			LEGEND
 echo '<strong>'.get_lang('Legend').'</strong><br />';
-echo '<img src="../img/wrong.gif" /> '.get_lang('UserHasPermissionNot').'<br />';
-echo '<img src="../img/checkbox_on2.gif" /> '.get_lang('UserHasPermission').'<br />';
-echo '<img src="../img/checkbox_on3.gif" /> '.get_lang('UserHasPermissionByRoleGroup').'<br />';
+echo '<img src="../img/wrong.gif" /> '.get_lang('The user hasn\'t rights').'<br />';
+echo '<img src="../img/checkbox_on2.gif" /> '.get_lang('The user has rights').'<br />';
+echo '<img src="../img/checkbox_on3.gif" /> '.get_lang('The user has rightsByRoleGroup').'<br />';

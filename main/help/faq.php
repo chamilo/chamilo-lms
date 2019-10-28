@@ -9,13 +9,13 @@
 require_once __DIR__.'/../inc/global.inc.php';
 $help_name = isset($_GET['open']) ? Security::remove_XSS($_GET['open']) : null;
 
-Display::display_header(get_lang('Faq'));
+Display::display_header(get_lang('Frequently Asked Question'));
 
 if (api_is_platform_admin()) {
     echo '&nbsp;<a href="faq.php?edit=true">'.Display::return_icon('edit.png').'</a>';
 }
 
-echo Display::page_header(get_lang('Faq'));
+echo Display::page_header(get_lang('Frequently Asked Question'));
 
 $faq_file = 'faq.html';
 if (!empty($_GET['edit']) && $_GET['edit'] == 'true' && api_is_platform_admin()) {
@@ -27,7 +27,7 @@ if (!empty($_GET['edit']) && $_GET['edit'] == 'true' && api_is_platform_admin())
         false,
         ['ToolbarSet' => 'FAQ', 'Width' => '100%', 'Height' => '300']
     );
-    $form->addButtonSave(get_lang('Ok'), 'faq_submit');
+    $form->addButtonSave(get_lang('Validate'), 'faq_submit');
     $faq_content = @(string) file_get_contents(api_get_path(SYS_APP_PATH).'home/faq.html');
     $faq_content = api_to_system_encoding($faq_content, api_detect_encoding(strip_tags($faq_content)));
     $form->setDefaults(['faq_content' => $faq_content]);
@@ -39,7 +39,7 @@ if (!empty($_GET['edit']) && $_GET['edit'] == 'true' && api_is_platform_admin())
             fwrite($fp, $content);
             fclose($fp);
         } else {
-            echo Display::return_message(get_lang('WarningFaqFileNonWriteable'), 'warning');
+            echo Display::return_message(get_lang('File not writeable'), 'warning');
         }
         echo $content;
     } else {

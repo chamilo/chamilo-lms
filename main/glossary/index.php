@@ -86,29 +86,29 @@ switch ($action) {
             api_get_self().'?action=addglossary&'.api_get_cidreq()
         );
         // Setting the form elements
-        $form->addElement('header', get_lang('TermAddNew'));
+        $form->addElement('header', get_lang('Add new glossary term'));
         if (api_get_configuration_value('save_titles_as_html')) {
             $form->addHtmlEditor(
                 'name',
-                get_lang('TermName'),
+                get_lang('Term'),
                 false,
                 false,
                 ['ToolbarSet' => 'TitleAsHtml']
             );
         } else {
-            $form->addElement('text', 'name', get_lang('TermName'), ['id' => 'glossary_title']);
+            $form->addElement('text', 'name', get_lang('Term'), ['id' => 'glossary_title']);
         }
 
         $form->addElement(
             'html_editor',
             'description',
-            get_lang('TermDefinition'),
+            get_lang('Term definition'),
             null,
             ['ToolbarSet' => 'Glossary', 'Height' => '300']
         );
-        $form->addButtonCreate(get_lang('TermAddButton'), 'SubmitGlossary');
+        $form->addButtonCreate(get_lang('Save term'), 'SubmitGlossary');
         // setting the rules
-        $form->addRule('name', get_lang('ThisFieldIsRequired'), 'required');
+        $form->addRule('name', get_lang('Required field'), 'required');
         // The validation or display
         if ($form->validate()) {
             $check = Security::check_token('post');
@@ -149,24 +149,24 @@ switch ($action) {
                 api_get_self().'?action=edit_glossary&glossary_id='.$glossaryId.'&'.api_get_cidreq()
             );
             // Setting the form elements
-            $form->addElement('header', get_lang('TermEdit'));
+            $form->addElement('header', get_lang('Edit term'));
             $form->addElement('hidden', 'glossary_id');
             if (api_get_configuration_value('save_titles_as_html')) {
                 $form->addHtmlEditor(
                     'name',
-                    get_lang('TermName'),
+                    get_lang('Term'),
                     false,
                     false,
                     ['ToolbarSet' => 'TitleAsHtml']
                 );
             } else {
-                $form->addElement('text', 'name', get_lang('TermName'), ['id' => 'glossary_title']);
+                $form->addElement('text', 'name', get_lang('Term'), ['id' => 'glossary_title']);
             }
 
             $form->addElement(
                 'html_editor',
                 'description',
-                get_lang('TermDefinition'),
+                get_lang('Term definition'),
                 null,
                 ['ToolbarSet' => 'Glossary', 'Height' => '300']
             );
@@ -187,14 +187,14 @@ switch ($action) {
                 $glossary_data['update_date'] = '';
             }
 
-            $form->addLabel(get_lang('CreationDate'), $glossary_data['insert_date']);
-            $form->addLabel(get_lang('UpdateDate'), $glossary_data['update_date']);
+            $form->addLabel(get_lang('Creation date'), $glossary_data['insert_date']);
+            $form->addLabel(get_lang('Updated'), $glossary_data['update_date']);
 
-            $form->addButtonUpdate(get_lang('TermUpdateButton'), 'SubmitGlossary');
+            $form->addButtonUpdate(get_lang('Update term'), 'SubmitGlossary');
             $form->setDefaults($glossary_data);
 
             // setting the rules
-            $form->addRule('name', get_lang('ThisFieldIsRequired'), 'required');
+            $form->addRule('name', get_lang('Required field'), 'required');
 
             // The validation or display
             if ($form->validate()) {
@@ -244,13 +244,13 @@ switch ($action) {
         if (!api_is_allowed_to_edit(null, true)) {
             api_not_allowed(true);
         }
-        $tool_name = get_lang('ImportGlossary');
+        $tool_name = get_lang('Import glossary');
         $form = new FormValidator(
             'glossary',
             'post',
             api_get_self().'?action=import&'.api_get_cidreq()
         );
-        $form->addHeader(get_lang('ImportGlossary'));
+        $form->addHeader(get_lang('Import glossary'));
         $form->addElement('file', 'file', get_lang('File'));
         $group = [];
         $group[] = $form->createElement(
@@ -267,14 +267,14 @@ switch ($action) {
             'XLS',
             'xls'
         );
-        $form->addGroup($group, '', get_lang('FileType'), null);
-        $form->addElement('checkbox', 'replace', null, get_lang('DeleteAllGlossaryTerms'));
-        $form->addElement('checkbox', 'update', null, get_lang('UpdateExistingGlossaryTerms'));
+        $form->addGroup($group, '', get_lang('File type'), null);
+        $form->addElement('checkbox', 'replace', null, get_lang('Delete all terms before import.'));
+        $form->addElement('checkbox', 'update', null, get_lang('Update existing terms.'));
         $form->addButtonImport(get_lang('Import'), 'SubmitImport');
         $form->setDefaults(['file_type' => 'csv']);
         $content = $form->returnForm();
 
-        $content .= get_lang('CSVMustLookLike').' ('.get_lang('MandatoryFields').')';
+        $content .= get_lang('The CSV file must look like this').' ('.get_lang('Fields in <strong>bold</strong> are mandatory.').')';
         $content .= '<pre>
                 <strong>term</strong>;<strong>definition</strong>;
                 "Hello";"Hola";
@@ -290,7 +290,7 @@ switch ($action) {
                 foreach (GlossaryManager::get_glossary_terms() as $term) {
                     if (!GlossaryManager::delete_glossary($term['id'], false)) {
                         Display::addFlash(
-                            Display::return_message(get_lang('CannotDeleteGlossary').':'.$term['id'], 'error')
+                            Display::return_message(get_lang('Cannot delete glossary').':'.$term['id'], 'error')
                         );
                     } else {
                         $termsDeleted[] = $term['name'];
@@ -334,7 +334,7 @@ switch ($action) {
 
                 if (empty($termsToAdd)) {
                     Display::addFlash(
-                        Display::return_message(get_lang('NothingToAdd'), 'warning')
+                        Display::return_message(get_lang('Nothing to add'), 'warning')
                     );
                     header('Location: '.$currentUrl);
                     exit;
@@ -380,26 +380,26 @@ switch ($action) {
 
             if (count($termsDeleted) > 0) {
                 Display::addFlash(
-                    Display::return_message(get_lang('TermDeleted').': '.implode(', ', $termsDeleted))
+                    Display::return_message(get_lang('Term removed').': '.implode(', ', $termsDeleted))
                 );
             }
 
             if (count($updatedList) > 0) {
                 Display::addFlash(
-                    Display::return_message(get_lang('TermsUpdated').': '.implode(', ', $updatedList))
+                    Display::return_message(get_lang('Terms updated').': '.implode(', ', $updatedList))
                 );
             }
 
             if (count($addedList) > 0) {
                 Display::addFlash(
-                    Display::return_message(get_lang('TermsAdded').': '.implode(', ', $addedList))
+                    Display::return_message(get_lang('Terms added').': '.implode(', ', $addedList))
                 );
             }
 
             if (count($badList) > 0) {
                 Display::addFlash(
                     Display::return_message(
-                        get_lang('GlossaryTermAlreadyExists').': '.implode(', ', $badList),
+                        get_lang('Term already exists').': '.implode(', ', $badList),
                         'error'
                     )
                 );
@@ -408,7 +408,7 @@ switch ($action) {
             if (count($doubles) > 0) {
                 Display::addFlash(
                     Display::return_message(
-                        get_lang('TermsDuplicatedInFile').': '.implode(', ', $doubles),
+                        get_lang('Terms duplicated in file').': '.implode(', ', $doubles),
                         'warning'
                     )
                 );
@@ -460,7 +460,7 @@ Display::display_introduction_section(TOOL_GLOSSARY);
 
 echo $content;
 
-$extra = '<div id="dialog-confirm" title="'.get_lang('ConfirmYourChoice').'">';
+$extra = '<div id="dialog-confirm" title="'.get_lang('Please confirm your choice').'">';
 $form = new FormValidator(
     'report',
     'post',
@@ -472,7 +472,7 @@ $form->addElement(
     'radio',
     'export_format',
     null,
-    get_lang('ExportAsCSV'),
+    get_lang('CSV export'),
     'csv',
     ['id' => 'export_format_csv_label']
 );
@@ -480,7 +480,7 @@ $form->addElement(
     'radio',
     'export_format',
     null,
-    get_lang('ExportAsXLS'),
+    get_lang('Excel export'),
     'xls',
     ['id' => 'export_format_xls_label']
 );
@@ -488,7 +488,7 @@ $form->addElement(
     'radio',
     'export_format',
     null,
-    get_lang('ExportToPDF'),
+    get_lang('Export to PDF'),
     'pdf',
     ['id' => 'export_format_pdf_label']
 );

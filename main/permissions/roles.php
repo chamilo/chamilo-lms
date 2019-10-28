@@ -21,7 +21,7 @@ if ($_POST['StoreRolePermissions']) {
         $role_id = Database::insert_id();
         $result_message = store_permissions('role', $role_id);
     } else {
-        $result_message = get_lang('ErrorPleaseGiveRoleName');
+        $result_message = get_lang('ErrorPleaseGiveRole name');
     }
 }
 // storing a permission for a given role when the image approach is used
@@ -68,7 +68,7 @@ if ($_GET['action'] == 'add') {
     echo "\n<table>";
     echo "\n\t<tr>";
     echo "\n\t\t<td>";
-    echo get_lang('RoleName');
+    echo get_lang('Role name');
     echo "\n\t\t</td>";
     echo "\n\t\t<td>";
     echo "\n\t\t\t<input type='text' name='role_name'>";
@@ -123,7 +123,7 @@ if ($_GET['action'] == 'add') {
     }
 
     echo "</table>\n";
-    echo "<input type=\"Submit\" name=\"StoreRolePermissions\" value=\"".get_lang('StorePermissions')."\">";
+    echo "<input type=\"Submit\" name=\"StoreRolePermissions\" value=\"".get_lang('Store permissions')."\">";
     echo "</form>";
 }
 
@@ -219,7 +219,7 @@ if ($_GET['role_id']) {
 
     echo "</table>\n";
     if ($setting_visualisation == 'checkbox') {
-        echo "<input type=\"Submit\" name=\"StoreRolePermissions\" value=\"".get_lang('StorePermissions')."\">";
+        echo "<input type=\"Submit\" name=\"StoreRolePermissions\" value=\"".get_lang('Store permissions')."\">";
     }
     echo "</form>";
 }

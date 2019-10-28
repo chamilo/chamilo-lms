@@ -17,12 +17,12 @@
  */
 function aiken_display_form()
 {
-    $name_tools = get_lang('ImportAikenQuiz');
+    $name_tools = get_lang('Import Aiken quiz');
     $form = '<div class="actions">';
     $form .= '<a href="exercise.php?show=test&'.api_get_cidreq().'">'.
         Display::return_icon(
             'back.png',
-            get_lang('BackToExercisesList'),
+            get_lang('Back to Tests tool'),
             '',
             ICON_SIZE_MEDIUM
         ).'</a>';
@@ -35,11 +35,11 @@ function aiken_display_form()
         ['enctype' => 'multipart/form-data']
     );
     $form_validator->addElement('header', $name_tools);
-    $form_validator->addElement('text', 'total_weight', get_lang('TotalWeight'));
+    $form_validator->addElement('text', 'total_weight', get_lang('Total weight'));
     $form_validator->addElement('file', 'userFile', get_lang('File'));
     $form_validator->addButtonUpload(get_lang('Upload'), 'submit');
     $form .= $form_validator->returnForm();
-    $form .= '<blockquote>'.get_lang('ImportAikenQuizExplanation').'<br /><pre>'.get_lang('ImportAikenQuizExplanationExample').'</pre></blockquote>';
+    $form .= '<blockquote>'.get_lang('Import Aiken quizExplanation').'<br /><pre>'.get_lang('Import Aiken quizExplanationExample').'</pre></blockquote>';
     echo $form;
 }
 
@@ -398,7 +398,7 @@ function aiken_import_file($array_file)
     if ($process && $unzip == 1) {
         $imported = aiken_import_exercise($array_file['name']);
         if (is_numeric($imported) && !empty($imported)) {
-            Display::addFlash(Display::return_message(get_lang('Uploaded')));
+            Display::addFlash(Display::return_message(get_lang('Uploaded.')));
 
             return $imported;
         } else {

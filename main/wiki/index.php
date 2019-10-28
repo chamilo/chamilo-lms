@@ -47,7 +47,7 @@ $(function() {
 </script>';
 
 /* Constants and variables */
-$tool_name = get_lang('ToolWiki');
+$tool_name = get_lang('Wiki');
 
 /* ACCESS */
 api_protect_course_script();
@@ -64,7 +64,7 @@ if ($groupId) {
     ];
     $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'group/group_space.php?'.api_get_cidreq(),
-        'name' => get_lang('GroupSpace').' '.Security::remove_XSS($group_properties['name']),
+        'name' => get_lang('Group area').' '.Security::remove_XSS($group_properties['name']),
     ];
 }
 

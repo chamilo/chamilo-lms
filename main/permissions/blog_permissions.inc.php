@@ -119,7 +119,7 @@ echo "<form method=\"post\" action=\"".str_replace('&', '&amp;', $_SERVER['REQUE
 
 if (api_get_setting('user_roles') == 'true') {
     // the list of the roles for the user
-    echo '<strong>'.get_lang('UserRoles').'</strong><br />';
+    echo '<strong>'.get_lang('User roles').'</strong><br />';
     $current_user_course_roles = get_roles('user', $user_id);
     $current_user_platform_roles = get_roles('user', $user_id, 'platform');
     display_role_list($current_user_course_roles, $current_user_platform_roles);
@@ -134,9 +134,9 @@ echo "<table class=\"data_table\">\n";
 // the header
 echo "\t<tr>\n";
 echo "\t\t<th rowspan=\"2\">".get_lang('Module')."</th>\n";
-echo "\t\t<th colspan=\"4\">".get_lang('ArticleManager')."</th>\n";
-echo "\t\t<th colspan=\"3\">".get_lang('CommentManager')."</th>\n";
-echo "\t\t<th colspan=\"3\">".get_lang('BlogManager')."</th>\n";
+echo "\t\t<th colspan=\"4\">".get_lang('Tasks manager')."</th>\n";
+echo "\t\t<th colspan=\"3\">".get_lang('Comment manager')."</th>\n";
+echo "\t\t<th colspan=\"3\">".get_lang('Project manager')."</th>\n";
 echo "\t</tr>\n";
 
 // Subheader
@@ -192,6 +192,6 @@ echo "</form><br />";
 
 // 			LEGEND
 echo '<strong>'.get_lang('Legend').'</strong><br />';
-echo '<img src="../img/wrong.gif" /> '.get_lang('UserHasPermissionNot').'<br />';
-echo '<img src="../img/checkbox_on2.gif" /> '.get_lang('UserHasPermission').'<br />';
-echo '<img src="../img/checkbox_on3.gif" /> '.get_lang('UserHasPermissionByRoleGroup').'<br />';
+echo '<img src="../img/wrong.gif" /> '.get_lang('The user hasn\'t rights').'<br />';
+echo '<img src="../img/checkbox_on2.gif" /> '.get_lang('The user has rights').'<br />';
+echo '<img src="../img/checkbox_on3.gif" /> '.get_lang('The user has rightsByRoleGroup').'<br />';

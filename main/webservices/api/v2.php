@@ -37,7 +37,7 @@ try {
             $password = isset($_POST['password']) ? $_POST['password'] : null;
             $isValid = Rest::isValidUser($username, $password);
             if (!$isValid) {
-                throw new Exception(get_lang('InvalideUserDetected'));
+                throw new Exception(get_lang('Invalid user detected.'));
             }
 
             $restResponse->setData([
@@ -67,7 +67,7 @@ try {
             $messagesId = array_filter($messagesId);
 
             if (empty($messagesId)) {
-                throw new Exception(get_lang('NoData'));
+                throw new Exception(get_lang('No data available'));
             }
 
             $messageStatus = $action === Rest::POST_USER_MESSAGE_READ ? MESSAGE_STATUS_NEW : MESSAGE_STATUS_UNREAD;
@@ -193,7 +193,7 @@ try {
             if (
                 empty($_POST['title']) || empty($_POST['text']) || empty($_POST['thread']) || empty($_POST['forum'])
             ) {
-                throw new Exception(get_lang('NoData'));
+                throw new Exception(get_lang('No data available'));
             }
 
             $forumId = isset($_POST['forum']) ? intval($_POST['forum']) : 0;
@@ -226,7 +226,7 @@ try {
         case Rest::GET_MESSAGE_USERS:
             $search = !empty($_REQUEST['q']) ? $_REQUEST['q'] : null;
             if (!$search || strlen($search) < 2) {
-                throw new Exception(get_lang('TooShort'));
+                throw new Exception(get_lang('Too short'));
             }
 
             $data = $restApi->getMessageUsers($search);
@@ -242,7 +242,7 @@ try {
             if (
                 empty($_POST['title']) || empty($_POST['text']) || empty($_POST['forum'])
             ) {
-                throw new Exception(get_lang('NoData'));
+                throw new Exception(get_lang('No data available'));
             }
 
             $forumId = isset($_POST['forum']) ? intval($_POST['forum']) : 0;
@@ -259,7 +259,7 @@ try {
             $restResponse->setData($data);
             break;
         default:
-            throw new Exception(get_lang('InvalidAction'));
+            throw new Exception(get_lang('Invalid action'));
     }
 } catch (Exception $exeption) {
     $restResponse->setErrorMessage(

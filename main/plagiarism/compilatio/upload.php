@@ -122,7 +122,7 @@ function sendDocument($documentId, $courseInfo)
     if (Compilatio::isMd5($compilatioId)) {
         $compilatio->saveDocument($courseId, $doc->id, $compilatioId);
         $compilatio->startAnalyse($compilatioId);
-        echo Display::return_message(get_lang('Uploaded'));
+        echo Display::return_message(get_lang('Uploaded.'));
     } else {
         echo Display::return_message(get_lang('Error'), 'error');
     }

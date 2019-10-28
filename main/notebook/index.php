@@ -50,17 +50,17 @@ Event::registerLog($logInfo);
 
 // Tool name
 if ($action === 'addnote') {
-    $tool = 'NoteAddNew';
+    $tool = 'Add new note in my personal notebook';
     $interbreadcrumb[] = [
         'url' => 'index.php?'.api_get_cidreq(),
-        'name' => get_lang('ToolNotebook'),
+        'name' => get_lang('Notebook'),
     ];
 }
 if ($action === 'editnote') {
-    $tool = 'ModifyNote';
+    $tool = 'Edit my personal note';
     $interbreadcrumb[] = [
         'url' => 'index.php?'.api_get_cidreq(),
-        'name' => get_lang('ToolNotebook'),
+        'name' => get_lang('Notebook'),
     ];
 }
 
@@ -89,19 +89,19 @@ if ($action === 'addnote') {
         api_get_self().'?action='.Security::remove_XSS($_GET['action']).'&'.api_get_cidreq()
     );
     // Setting the form elements
-    $form->addElement('header', '', get_lang('NoteAddNew'));
-    $form->addElement('text', 'note_title', get_lang('NoteTitle'), ['id' => 'note_title']);
+    $form->addElement('header', '', get_lang('Add new note in my personal notebook'));
+    $form->addElement('text', 'note_title', get_lang('Note title'), ['id' => 'note_title']);
     $form->addElement(
         'html_editor',
         'note_comment',
-        get_lang('NoteComment'),
+        get_lang('Note details'),
         null,
         api_is_allowed_to_edit() ? ['ToolbarSet' => 'Notebook', 'Width' => '100%', 'Height' => '300'] : ['ToolbarSet' => 'NotebookStudent', 'Width' => '100%', 'Height' => '300', 'UserStatus' => 'student']
     );
-    $form->addButtonCreate(get_lang('AddNote'), 'SubmitNote');
+    $form->addButtonCreate(get_lang('Create note'), 'SubmitNote');
 
     // Setting the rules
-    $form->addRule('note_title', get_lang('ThisFieldIsRequired'), 'required');
+    $form->addRule('note_title', get_lang('Required field'), 'required');
 
     // The validation or display
     if ($form->validate()) {
@@ -110,7 +110,7 @@ if ($action === 'addnote') {
             $values = $form->exportValues();
             $res = NotebookManager::save_note($values);
             if ($res) {
-                echo Display::return_message(get_lang('NoteAdded'), 'confirmation');
+                echo Display::return_message(get_lang('Note added'), 'confirmation');
             }
         }
         Security::clear_token();
@@ -145,26 +145,26 @@ if ($action === 'addnote') {
         api_get_self().'?action='.Security::remove_XSS($_GET['action']).'&notebook_id='.intval($_GET['notebook_id']).'&'.api_get_cidreq()
     );
     // Setting the form elements
-    $form->addElement('header', '', get_lang('ModifyNote'));
+    $form->addElement('header', '', get_lang('Edit my personal note'));
     $form->addElement('hidden', 'notebook_id');
-    $form->addElement('text', 'note_title', get_lang('NoteTitle'), ['size' => '100']);
+    $form->addElement('text', 'note_title', get_lang('Note title'), ['size' => '100']);
     $form->addElement(
         'html_editor',
         'note_comment',
-        get_lang('NoteComment'),
+        get_lang('Note details'),
         null,
         api_is_allowed_to_edit()
         ? ['ToolbarSet' => 'Notebook', 'Width' => '100%', 'Height' => '300']
         : ['ToolbarSet' => 'NotebookStudent', 'Width' => '100%', 'Height' => '300', 'UserStatus' => 'student']
     );
-    $form->addButtonUpdate(get_lang('ModifyNote'), 'SubmitNote');
+    $form->addButtonUpdate(get_lang('Edit my personal note'), 'SubmitNote');
 
     // Setting the defaults
     $defaults = NotebookManager::get_note_information(Security::remove_XSS($_GET['notebook_id']));
     $form->setDefaults($defaults);
 
     // Setting the rules
-    $form->addRule('note_title', get_lang('ThisFieldIsRequired'), 'required');
+    $form->addRule('note_title', get_lang('Required field'), 'required');
 
     // The validation or display
     if ($form->validate()) {
@@ -173,7 +173,7 @@ if ($action === 'addnote') {
             $values = $form->exportValues();
             $res = NotebookManager::update_note($values);
             if ($res) {
-                echo Display::return_message(get_lang('NoteUpdated'), 'confirmation');
+                echo Display::return_message(get_lang('Note updated'), 'confirmation');
             }
         }
         Security::clear_token();
@@ -197,7 +197,7 @@ if ($action === 'addnote') {
     // Action handling: deleting a note
     $res = NotebookManager::delete_note($_GET['notebook_id']);
     if ($res) {
-        echo Display::return_message(get_lang('NoteDeleted'), 'confirmation');
+        echo Display::return_message(get_lang('Note deleted'), 'confirmation');
     }
 
     NotebookManager::display_notes();
@@ -209,12 +209,12 @@ if ($action === 'addnote') {
         case 'creation_date':
             if (!$_GET['direction'] || $_GET['direction'] == 'ASC') {
                 echo Display::return_message(
-                    get_lang('NotesSortedByCreationDateAsc'),
+                    get_lang('Notes sorted by creation date ascendant'),
                     'confirmation'
                 );
             } else {
                 echo Display::return_message(
-                    get_lang('NotesSortedByCreationDateDESC'),
+                    get_lang('Notes sorted by creation date downward'),
                     'confirmation'
                 );
             }
@@ -222,12 +222,12 @@ if ($action === 'addnote') {
         case 'update_date':
             if (!$_GET['direction'] || $_GET['direction'] == 'ASC') {
                 echo Display::return_message(
-                    get_lang('NotesSortedByUpdateDateAsc'),
+                    get_lang('Notes sorted by update date ascendant'),
                     'confirmation'
                 );
             } else {
                 echo Display::return_message(
-                    get_lang('NotesSortedByUpdateDateDESC'),
+                    get_lang('Notes sorted by update date downward'),
                     'confirmation'
                 );
             }
@@ -235,12 +235,12 @@ if ($action === 'addnote') {
         case 'title':
             if (!$_GET['direction'] || $_GET['direction'] == 'ASC') {
                 echo Display::return_message(
-                    get_lang('NotesSortedByTitleAsc'),
+                    get_lang('Notes sorted by title ascendant'),
                     'confirmation'
                 );
             } else {
                 echo Display::return_message(
-                    get_lang('NotesSortedByTitleDESC'),
+                    get_lang('Notes sorted by title downward'),
                     'confirmation'
                 );
             }

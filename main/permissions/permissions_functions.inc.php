@@ -247,10 +247,10 @@ function display_checkbox_matrix($permission_array, $tool, $permission, $inherit
 function display_image_matrix($permission_array, $tool, $permission, $inherited_permissions = [], $course_admin = false, $editable = true)
 {
     if ($course_admin) {
-        echo "\t\t\t<img src=\"../img/checkbox_on3.gif\" border=\"0\"/ title=\"".get_lang('PermissionGrantedByGroupOrRole')."\">";
+        echo "\t\t\t<img src=\"../img/checkbox_on3.gif\" border=\"0\"/ title=\"".get_lang('Permission granted by group or role')."\">";
     } else {
         if (in_array($permission, $inherited_permissions[$tool])) {
-            echo "\t\t\t<img src=\"../img/checkbox_on3.gif\" border=\"0\"/ title=\"".get_lang('PermissionGrantedByGroupOrRole')."\">";
+            echo "\t\t\t<img src=\"../img/checkbox_on3.gif\" border=\"0\"/ title=\"".get_lang('Permission granted by group or role')."\">";
         } else {
             if (is_array($permission_array[$tool]) and in_array($permission, $permission_array[$tool])) {
                 if ($editable) {
@@ -317,10 +317,10 @@ function display_image_matrix($permission_array, $tool, $permission, $inherited_
 function display_image_matrix_for_blogs($permission_array, $user_id, $tool, $permission, $inherited_permissions = [], $course_admin = false, $editable = true)
 {
     if ($course_admin) {
-        echo "\t\t\t<img src=\"../img/checkbox_on3.gif\" border=\"0\"/ title=\"".get_lang('PermissionGrantedByGroupOrRole')."\">";
+        echo "\t\t\t<img src=\"../img/checkbox_on3.gif\" border=\"0\"/ title=\"".get_lang('Permission granted by group or role')."\">";
     } else {
         if (!empty($inherited_permissions) and in_array($permission, $inherited_permissions[$tool])) {
-            echo "\t\t\t<img src=\"../img/checkbox_on3.gif\" border=\"0\"/ title=\"".get_lang('PermissionGrantedByGroupOrRole')."\">";
+            echo "\t\t\t<img src=\"../img/checkbox_on3.gif\" border=\"0\"/ title=\"".get_lang('Permission granted by group or role')."\">";
         } else {
             if (is_array($permission_array[$tool]) and in_array($permission, $permission_array[$tool])) {
                 if ($editable) {
@@ -341,7 +341,7 @@ function display_image_matrix_for_blogs($permission_array, $user_id, $tool, $per
 
                     echo "\t\t\t <a href=\"".$url."\">";
                 }
-                echo "<img src=\"../img/checkbox_on2.gif\" border=\"0\"/ title=\"".get_lang('UserHasPermission')."\">";
+                echo "<img src=\"../img/checkbox_on2.gif\" border=\"0\"/ title=\"".get_lang('The user has rights')."\">";
                 if ($editable) {
                     echo "</a>";
                 }
@@ -365,7 +365,7 @@ function display_image_matrix_for_blogs($permission_array, $user_id, $tool, $per
                     //echo "\t\t\t <a href=\"".str_replace('&', '&amp;', $_SERVER['REQUEST_URI'])."&amp;action=grant&amp;permission=$permission&amp;tool=$tool\">";
                     echo "\t\t\t <a href=\"".$url."\">";
                 }
-                echo "<img src=\"../img/wrong.gif\" border=\"0\"/ title=\"".get_lang('UserHasPermissionNot')."\">";
+                echo "<img src=\"../img/wrong.gif\" border=\"0\"/ title=\"".get_lang('The user has rightsNot')."\">";
                 if ($editable) {
                     echo "</a>";
                 }

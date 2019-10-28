@@ -64,7 +64,7 @@ if (isset($_GET['from']) && $_GET['from'] == 'myspace') {
     $this_section = SECTION_COURSES;
 }
 
-$nameTools = get_lang('StudentDetails');
+$nameTools = get_lang('Learner details');
 $em = Database::getManager();
 
 if (isset($_GET['details'])) {
@@ -83,79 +83,79 @@ if (isset($_GET['details'])) {
         if ($origin === 'tracking_course') {
             $interbreadcrumb[] = [
                 "url" => "../tracking/courseLog.php?cidReq=".$course_code.'&id_session='.api_get_session_id(),
-                "name" => get_lang('Tracking'),
+                "name" => get_lang('Reporting'),
             ];
         } else {
             if ($origin === 'resume_session') {
                 $interbreadcrumb[] = [
                     'url' => "../session/session_list.php",
-                    "name" => get_lang('SessionList'),
+                    "name" => get_lang('Session list'),
                 ];
                 $interbreadcrumb[] = [
                     'url' => "../session/resume_session.php?id_session=".$sessionId,
-                    "name" => get_lang('SessionOverview'),
+                    "name" => get_lang('Session overview'),
                 ];
             } else {
                 $interbreadcrumb[] = [
                     "url" => api_is_student_boss() ? "#" : "index.php",
-                    "name" => get_lang('MySpace'),
+                    "name" => get_lang('Reporting'),
                 ];
                 if (!empty($coachId)) {
                     $interbreadcrumb[] = [
                         "url" => "student.php?id_coach=$coachId",
-                        "name" => get_lang('CoachStudents'),
+                        "name" => get_lang('Learners of trainer'),
                     ];
                     $interbreadcrumb[] = [
                         "url" => "myStudents.php?student=$studentId&id_coach=$coachId",
-                        "name" => get_lang("StudentDetails"),
+                        "name" => get_lang("Learner details"),
                     ];
                 } else {
                     $interbreadcrumb[] = [
                         "url" => "student.php",
-                        "name" => get_lang("MyStudents"),
+                        "name" => get_lang("My learners"),
                     ];
                     $interbreadcrumb[] = [
                         "url" => "myStudents.php?student=".$studentId,
-                        "name" => get_lang("StudentDetails"),
+                        "name" => get_lang("Learner details"),
                     ];
                 }
             }
         }
     }
-    $nameTools = get_lang("DetailsStudentInCourse");
+    $nameTools = get_lang("Learner details in course");
 } else {
     if ($origin == 'resume_session') {
         $interbreadcrumb[] = [
             'url' => "../session/session_list.php",
-            "name" => get_lang('SessionList'),
+            "name" => get_lang('Session list'),
         ];
         if (!empty($sessionId)) {
             $interbreadcrumb[] = [
                 'url' => "../session/resume_session.php?id_session=$sessionId",
-                "name" => get_lang('SessionOverview'),
+                "name" => get_lang('Session overview'),
             ];
         }
     } else {
         $interbreadcrumb[] = [
             "url" => api_is_student_boss() ? "#" : "index.php",
-            "name" => get_lang('MySpace'),
+            "name" => get_lang('Reporting'),
         ];
         if (!empty($coachId)) {
             if ($sessionId) {
                 $interbreadcrumb[] = [
                     "url" => "student.php?id_coach=$coachId&id_session=$sessionId",
-                    "name" => get_lang("CoachStudents"),
+                    "name" => get_lang("Learners of trainer"),
                 ];
             } else {
                 $interbreadcrumb[] = [
                     "url" => "student.php?id_coach=$coachId",
-                    "name" => get_lang("CoachStudents"),
+                    "name" => get_lang("Learners of trainer"),
                 ];
             }
         } else {
             $interbreadcrumb[] = [
                 "url" => "student.php",
-                "name" => get_lang("MyStudents"),
+                "name" => get_lang("My learners"),
             ];
         }
     }
@@ -199,9 +199,9 @@ $action = isset($_GET['action']) ? $_GET['action'] : '';
 
 switch ($action) {
     case 'send_legal':
-        $subject = get_lang('SendLegalSubject');
+        $subject = get_lang('Legal conditions');
         $content = sprintf(
-            get_lang('SendLegalDescriptionToUrlX'),
+            get_lang('Please accept our legal conditions here: %s'),
             api_get_path(WEB_PATH)
         );
         MessageManager::send_message_simple($studentId, $subject, $content);
@@ -232,7 +232,7 @@ switch ($action) {
             // @todo delete the stats.track_e_exercises records.
             // First implement this http://support.chamilo.org/issues/1334
             $message = Display::return_message(
-                get_lang('LPWasReset'),
+                get_lang('Learning path was reset for the learner'),
                 'success'
             );
         }
@@ -343,7 +343,7 @@ if (isset($message)) {
 
 $token = Security::get_token();
 if (!empty($studentId)) {
-    // Actions bar
+    // Detail bar
     echo '<div class="actions">';
     echo '<a href="javascript: window.history.go(-1);">'.
         Display::return_icon('back.png', get_lang('Back'), '', ICON_SIZE_MEDIUM).'</a>';
@@ -352,32 +352,32 @@ if (!empty($studentId)) {
         Display::return_icon('printer.png', get_lang('Print'), '', ICON_SIZE_MEDIUM).'</a>';
 
     echo '<a href="'.api_get_self().'?'.Security:: remove_XSS($_SERVER['QUERY_STRING']).'&export=csv">'.
-        Display::return_icon('export_csv.png', get_lang('ExportAsCSV'), '', ICON_SIZE_MEDIUM).'</a> ';
+        Display::return_icon('export_csv.png', get_lang('CSV export'), '', ICON_SIZE_MEDIUM).'</a> ';
 
     echo '<a href="'.api_get_self().'?'.Security:: remove_XSS($_SERVER['QUERY_STRING']).'&export=xls">'.
-        Display::return_icon('export_excel.png', get_lang('ExportAsXLS'), '', ICON_SIZE_MEDIUM).'</a> ';
+        Display::return_icon('export_excel.png', get_lang('Excel export'), '', ICON_SIZE_MEDIUM).'</a> ';
 
     if (!empty($user_info['email'])) {
         $send_mail = '<a href="mailto:'.$user_info['email'].'">'.
-            Display:: return_icon('mail_send.png', get_lang('SendMail'), '', ICON_SIZE_MEDIUM).'</a>';
+            Display:: return_icon('mail_send.png', get_lang('Send mail'), '', ICON_SIZE_MEDIUM).'</a>';
     } else {
-        $send_mail = Display:: return_icon('mail_send_na.png', get_lang('SendMail'), '', ICON_SIZE_MEDIUM);
+        $send_mail = Display:: return_icon('mail_send_na.png', get_lang('Send mail'), '', ICON_SIZE_MEDIUM);
     }
     echo $send_mail;
     if (!empty($studentId) && !empty($course_code)) {
         // Only show link to connection details if course and student were defined in the URL
         echo '<a href="access_details.php?student='.$studentId.'&course='.$course_code.'&origin='.$origin.'&cidReq='.$course_code.'&id_session='.$sessionId.'">'.
-            Display:: return_icon('statistics.png', get_lang('AccessDetails'), '', ICON_SIZE_MEDIUM).'</a>';
+            Display:: return_icon('statistics.png', get_lang('Access details'), '', ICON_SIZE_MEDIUM).'</a>';
     }
     if (api_can_login_as($studentId)) {
         echo '<a href="'.api_get_path(
                 WEB_CODE_PATH
             ).'admin/user_list.php?action=login_as&user_id='.$studentId.'&sec_token='.$token.'">'.
-            Display::return_icon('login_as.png', get_lang('LoginAs'), null, ICON_SIZE_MEDIUM).'</a>&nbsp;&nbsp;';
+            Display::return_icon('login_as.png', get_lang('Login as'), null, ICON_SIZE_MEDIUM).'</a>&nbsp;&nbsp;';
     }
 
     echo Display::url(
-        Display::return_icon('skill-badges.png', get_lang('AssignSkill'), null, ICON_SIZE_MEDIUM),
+        Display::return_icon('skill-badges.png', get_lang('Assign skill'), null, ICON_SIZE_MEDIUM),
         api_get_path(WEB_CODE_PATH).'badge/assign.php?'.http_build_query(['user' => $studentId])
     );
     echo '</div>';
@@ -423,12 +423,12 @@ if (!empty($studentId)) {
     // get information about connections on the platform by student
     $first_connection_date = Tracking:: get_first_connection_date($user_info['user_id']);
     if ($first_connection_date == '') {
-        $first_connection_date = get_lang('NoConnexion');
+        $first_connection_date = get_lang('No connection');
     }
 
     $last_connection_date = Tracking:: get_last_connection_date($user_info['user_id'], true);
     if ($last_connection_date == '') {
-        $last_connection_date = get_lang('NoConnexion');
+        $last_connection_date = get_lang('No connection');
     }
 
     // cvs information
@@ -437,7 +437,7 @@ if (!empty($studentId)) {
     ];
     $csv_content[] = [
         get_lang('Name'),
-        get_lang('Email'),
+        get_lang('e-mail'),
         get_lang('Tel'),
     ];
     $csv_content[] = [
@@ -450,12 +450,12 @@ if (!empty($studentId)) {
 
     // csv tracking
     $csv_content[] = [
-        get_lang('Tracking'),
+        get_lang('Reporting'),
     ];
     $csv_content[] = [
-        get_lang('FirstLoginInPlatform'),
-        get_lang('LatestLoginInPlatform'),
-        get_lang('TimeSpentInTheCourse'),
+        get_lang('First login in platform'),
+        get_lang('Latest login in platform'),
+        get_lang('Time spent in the course'),
         get_lang('Progress'),
         get_lang('Score'),
     ];
@@ -495,11 +495,11 @@ if (!empty($studentId)) {
                     <td><?php echo get_lang('Name').' : '.$user_info['complete_name']; ?></td>
                 </tr>
                 <tr>
-                    <td><?php echo get_lang('Email').' : ';
+                    <td><?php echo get_lang('e-mail').' : ';
     if (!empty($user_info['email'])) {
         echo '<a href="mailto:'.$user_info['email'].'">'.$user_info['email'].'</a>';
     } else {
-        echo get_lang('NoEmail');
+        echo get_lang('Noe-mail');
     } ?>
                     </td>
                 </tr>
@@ -508,21 +508,21 @@ if (!empty($studentId)) {
     if (!empty($user_info['phone'])) {
         echo $user_info['phone'];
     } else {
-        echo get_lang('NoTel');
+        echo get_lang('No tel');
     } ?>
                     </td>
                 </tr>
                 <tr>
-                    <td><?php echo get_lang('OfficialCode').' : ';
+                    <td><?php echo get_lang('Code').' : ';
     if (!empty($user_info['official_code'])) {
         echo $user_info['official_code'];
     } else {
-        echo get_lang('NoOfficialCode');
+        echo get_lang('NoCode');
     } ?>
                     </td>
                 </tr>
                 <tr>
-                    <td><?php echo get_lang('OnLine').' : '.$online; ?> </td>
+                    <td><?php echo get_lang('Online').' : '.$online; ?> </td>
                 </tr>
                 <?php
 
@@ -547,22 +547,22 @@ if (!empty($studentId)) {
             <table class="table table-striped table-hover">
                 <thead>
                 <tr>
-                    <th colspan="2" class="text-center"><?php echo get_lang('Tracking'); ?></th>
+                    <th colspan="2" class="text-center"><?php echo get_lang('Reporting'); ?></th>
                 </tr>
                 </thead>
                 <tbody>
                 <tr>
-                    <td align="right"><?php echo get_lang('FirstLoginInPlatform'); ?></td>
+                    <td align="right"><?php echo get_lang('First login in platform'); ?></td>
                     <td align="left"><?php echo $first_connection_date; ?></td>
                 </tr>
                 <tr>
-                    <td align="right"><?php echo get_lang('LatestLoginInPlatform'); ?></td>
+                    <td align="right"><?php echo get_lang('Latest login in platform'); ?></td>
                     <td align="left"><?php echo $last_connection_date; ?></td>
                 </tr>
                 <?php if (isset($_GET['details']) && $_GET['details'] == 'true') {
         ?>
                     <tr>
-                        <td align="right"><?php echo get_lang('TimeSpentInTheCourse'); ?></td>
+                        <td align="right"><?php echo get_lang('Time spent in the course'); ?></td>
                         <td align="left"><?php echo $time_spent_on_the_course; ?></td>
                     </tr>
                     <tr>
@@ -571,7 +571,7 @@ if (!empty($studentId)) {
                             echo get_lang('Progress').' ';
         Display:: display_icon(
                                 'info3.gif',
-                                get_lang('ScormAndLPProgressTotalAverage'),
+                                get_lang('Average progress in courses'),
                                 ['align' => 'absmiddle', 'hspace' => '3px']
                             ); ?>
                         </td>
@@ -583,7 +583,7 @@ if (!empty($studentId)) {
                             echo get_lang('Score').' ';
         Display:: display_icon(
                                 'info3.gif',
-                                get_lang('ScormAndLPTestTotalAverage'),
+                                get_lang('Average of tests in Learning Paths'),
                                 ['align' => 'absmiddle', 'hspace' => '3px']
                             ); ?>
                         </td>
@@ -611,20 +611,20 @@ if (!empty($studentId)) {
                 list($legalId, $legalLanguageId, $legalTime) = explode(':', $value['value']);
                 $icon = Display::return_icon('accept.png').' '.api_get_local_time($legalTime);
                 $icon .= ' '.Display::url(
-                                    get_lang('DeleteLegal'),
+                                    get_lang('Delete legal agreement'),
                                     api_get_self().'?action=delete_legal&student='.$studentId.'&course='.$course_code,
                                     ['class' => 'btn btn-danger btn-xs']
                                 );
             } else {
                 $icon .= ' '.Display::url(
-                                    get_lang('SendLegal'),
+                                    get_lang('Send legal agreement'),
                                     api_get_self().'?action=send_legal&student='.$studentId.'&course='.$course_code,
                                     ['class' => 'btn btn-primary btn-xs']
                                 );
             }
             echo '<tr>
                         <td align="right">';
-            echo get_lang('LegalAccepted').' </td>  <td align="left">'.$icon;
+            echo get_lang('Legal accepted').' </td>  <td align="left">'.$icon;
             echo '</td></tr>';
         }
     } ?>
@@ -662,7 +662,7 @@ if (!empty($studentId)) {
             get_lang('Time'),
             get_lang('Progress'),
             get_lang('Score'),
-            get_lang('AttendancesFaults'),
+            get_lang('Not attended'),
             get_lang('Evaluations'),
         ];
 
@@ -706,7 +706,7 @@ if (!empty($studentId)) {
                 <th>'.get_lang('Time').'</th>
                 <th>'.get_lang('Progress').'</th>
                 <th>'.get_lang('Score').'</th>
-                <th>'.get_lang('AttendancesFaults').'</th>
+                <th>'.get_lang('Not attended').'</th>
                 <th>'.get_lang('Evaluations').'</th>
                 <th>'.get_lang('Details').'</th>
             </tr>';
@@ -734,7 +734,7 @@ if (!empty($studentId)) {
                         if (!empty($results_faults_avg['total'])) {
                             if (api_is_drh()) {
                                 $attendances_faults_avg =
-                                    '<a title="'.get_lang('GoAttendance').'" href="'.api_get_path(
+                                    '<a title="'.get_lang('Go to attendances').'" href="'.api_get_path(
                                         WEB_CODE_PATH
                                     ).'attendance/index.php?cidReq='.$courseCodeItem.'&id_session='.$sId.'&student_id='.$studentId.'">'.
                                     $results_faults_avg['faults'].'/'.$results_faults_avg['total'].' ('.$results_faults_avg['porcent'].'%)</a>';
@@ -811,7 +811,7 @@ if (!empty($studentId)) {
                     }
                 }
             } else {
-                echo "<tr><td colspan='5'>".get_lang('NoCourse')."</td></tr>";
+                echo "<tr><td colspan='5'>".get_lang('This course could not be found')."</td></tr>";
             }
             echo '</tbody>';
             echo '</table>';
@@ -826,12 +826,12 @@ if (!empty($studentId)) {
             // csv export headers
             $csv_content[] = [];
             $csv_content[] = [
-                get_lang('Learnpath'),
+                get_lang('Courses'),
                 get_lang('Time'),
-                get_lang('AverageScore'),
-                get_lang('LatestAttemptAverageScore'),
+                get_lang('Average score'),
+                get_lang('Latest attemptAverage score'),
                 get_lang('Progress'),
-                get_lang('LastConnexion'),
+                get_lang('Latest login'),
             ];
 
             $query = $em
@@ -868,30 +868,30 @@ if (!empty($studentId)) {
                     <table class="table table-striped table-hover">
                         <thead>
                         <tr>
-                            <th><?php echo get_lang('LearningPath'); ?></th>
+                            <th><?php echo get_lang('Learning paths'); ?></th>
                             <th>
                                 <?php
                                 echo get_lang('Time').' ';
                 Display:: display_icon(
                                     'info3.gif',
-                                    get_lang('TotalTimeByCourse'),
+                                    get_lang('Total time in course'),
                                     ['align' => 'absmiddle', 'hspace' => '3px']
                                 ); ?>
                             </th>
                             <th>
                                 <?php
-                                echo get_lang('AverageScore').' ';
+                                echo get_lang('Average score').' ';
                 Display:: display_icon(
                                     'info3.gif',
-                                    get_lang('AverageIsCalculatedBasedInAllAttempts'),
+                                    get_lang('Average is calculated based on all test attempts'),
                                     ['align' => 'absmiddle', 'hspace' => '3px']
                                 ); ?>
                             </th>
                             <th><?php
-                                echo get_lang('LatestAttemptAverageScore').' ';
+                                echo get_lang('Latest attemptAverage score').' ';
                 Display::display_icon(
                                     'info3.gif',
-                                    get_lang('AverageIsCalculatedBasedInTheLatestAttempts'),
+                                    get_lang('Average is calculated based on the latest attempts'),
                                     ['align' => 'absmiddle', 'hspace' => '3px']
                                 ); ?>
                             </th>
@@ -899,22 +899,22 @@ if (!empty($studentId)) {
                                 echo get_lang('Progress').' ';
                 Display:: display_icon(
                                     'info3.gif',
-                                    get_lang('LPProgressScore'),
+                                    get_lang('% of learning objects visited'),
                                     ['align' => 'absmiddle', 'hspace' => '3px']
                                 ); ?>
                             </th>
                             <th><?php
-                                echo get_lang('LastConnexion').' ';
+                                echo get_lang('Latest login').' ';
                 Display:: display_icon(
                                     'info3.gif',
-                                    get_lang('LastTimeTheCourseWasUsed'),
+                                    get_lang('Last time learner entered the course'),
                                     ['align' => 'absmiddle', 'hspace' => '3px']
                                 ); ?>
                             </th>
                             <?php
                             echo '<th>'.get_lang('Details').'</th>';
                 if (api_is_allowed_to_edit()) {
-                    echo '<th>'.get_lang('ResetLP').'</th>';
+                    echo '<th>'.get_lang('Reset Learning path').'</th>';
                 } ?>
                         </tr>
                         </thead>
@@ -1087,25 +1087,25 @@ if (!empty($studentId)) {
                 <table class="table table-striped table-hover">
                     <thead>
                     <tr>
-                        <th><?php echo get_lang('Exercises'); ?></th>
-                        <th><?php echo get_lang('LearningPath'); ?></th>
-                        <th><?php echo get_lang('AvgCourseScore').' '.Display:: return_icon(
+                        <th><?php echo get_lang('Tests'); ?></th>
+                        <th><?php echo get_lang('Learning paths'); ?></th>
+                        <th><?php echo get_lang('Average score in learning paths').' '.Display:: return_icon(
                                     'info3.gif',
-                                    get_lang('AverageScore'),
+                                    get_lang('Average score'),
                                     ['align' => 'absmiddle', 'hspace' => '3px']
                                 ); ?></th>
                         <th><?php echo get_lang('Attempts'); ?></th>
-                        <th><?php echo get_lang('LatestAttempt'); ?></th>
-                        <th><?php echo get_lang('AllAttempts'); ?></th>
+                        <th><?php echo get_lang('Latest attempt'); ?></th>
+                        <th><?php echo get_lang('All attempts'); ?></th>
                     </tr>
                     </thead>
                     <tbody>
                     <?php
                     $csv_content[] = [];
             $csv_content[] = [
-                        get_lang('Exercises'),
-                        get_lang('LearningPath'),
-                        get_lang('AvgCourseScore'),
+                        get_lang('Tests'),
+                        get_lang('Learning paths'),
+                        get_lang('Average score in learning paths'),
                         get_lang('Attempts'),
                     ];
 
@@ -1161,7 +1161,7 @@ if (!empty($studentId)) {
                     } else {
                         $lp_name = '-';
                     }
-                    $lp_name = !empty($lp_name) ? $lp_name : get_lang('NoLearnpath');
+                    $lp_name = !empty($lp_name) ? $lp_name : get_lang('This course could not be founds');
 
                     if ($i % 2) {
                         $css_class = 'row_odd';
@@ -1221,7 +1221,7 @@ if (!empty($studentId)) {
                     echo Display::url(
                                 Display::return_icon(
                                     'test_results.png',
-                                    get_lang('AllAttempts'),
+                                    get_lang('All attempts'),
                                     [],
                                     ICON_SIZE_SMALL
                                 ),
@@ -1241,7 +1241,7 @@ if (!empty($studentId)) {
                     $i++;
                 }
             } else {
-                echo '<tr><td colspan="6">'.get_lang('NoExercise').'</td></tr>';
+                echo '<tr><td colspan="6">'.get_lang('No tests').'</td></tr>';
             } ?>
                     </tbody>
                 </table>
@@ -1259,7 +1259,7 @@ if (!empty($studentId)) {
                     false,
                     $courseInfo['real_id']
                 );
-                $survey_done = Display::return_icon("accept_na.png", get_lang('NoAnswer'), [], ICON_SIZE_SMALL);
+                $survey_done = Display::return_icon("accept_na.png", get_lang('There is no answer for the moment'), [], ICON_SIZE_SMALL);
                 if (in_array($studentId, $user_list)) {
                     $survey_done = Display::return_icon("accept.png", get_lang('Answered'), [], ICON_SIZE_SMALL);
                 }
@@ -1299,7 +1299,7 @@ if (!empty($studentId)) {
             <table class="table table-striped table-hover">
                 <thead>
                 <tr>
-                    <th colspan="2"><?php echo get_lang('OtherTools'); ?></th>
+                    <th colspan="2"><?php echo get_lang('OTI (Online Training Interaction) settings report'); ?></th>
                 </tr>
                 </thead>
                 <tbody>
@@ -1316,11 +1316,11 @@ if (!empty($studentId)) {
                 );
         $uploaded_documents = Tracking::count_student_uploaded_documents($studentId, $course_code, $sessionId);
         $csv_content[] = [
-                    get_lang('OtherTools'),
+                    get_lang('OTI (Online Training Interaction) settings report'),
                 ];
 
         $csv_content[] = [
-                    get_lang('Student_publication'),
+                    get_lang('Assignments'),
                     $nb_assignments,
                 ];
         $csv_content[] = [
@@ -1328,43 +1328,43 @@ if (!empty($studentId)) {
                     $messages,
                 ];
         $csv_content[] = [
-                    get_lang('LinksDetails'),
+                    get_lang('Links accessed'),
                     $links,
                 ];
         $csv_content[] = [
-                    get_lang('DocumentsDetails'),
+                    get_lang('Documents downloaded'),
                     $documents,
                 ];
         $csv_content[] = [
-                    get_lang('UploadedDocuments'),
+                    get_lang('Uploaded documents'),
                     $uploaded_documents,
                 ];
         $csv_content[] = [
-                    get_lang('ChatLastConnection'),
+                    get_lang('Latest chat connection'),
                     $chat_last_connection,
                 ]; ?>
                 <tr><!-- assignments -->
-                    <td width="40%"><?php echo get_lang('Student_publication'); ?></td>
+                    <td width="40%"><?php echo get_lang('Assignments'); ?></td>
                     <td><?php echo $nb_assignments; ?></td>
                 </tr>
                 <tr><!-- messages -->
-                    <td><?php echo get_lang('Forum').' - '.get_lang('NumberOfPostsForThisUser'); ?></td>
+                    <td><?php echo get_lang('Forum').' - '.get_lang('Number of posts for this user'); ?></td>
                     <td><?php echo $messages; ?></td>
                 </tr>
                 <tr><!-- links -->
-                    <td><?php echo get_lang('LinksDetails'); ?></td>
+                    <td><?php echo get_lang('Links accessed'); ?></td>
                     <td><?php echo $links; ?></td>
                 </tr>
                 <tr><!-- downloaded documents -->
-                    <td><?php echo get_lang('DocumentsDetails'); ?></td>
+                    <td><?php echo get_lang('Documents downloaded'); ?></td>
                     <td><?php echo $documents; ?></td>
                 </tr>
                 <tr><!-- uploaded documents -->
-                    <td><?php echo get_lang('UploadedDocuments'); ?></td>
+                    <td><?php echo get_lang('Uploaded documents'); ?></td>
                     <td><?php echo $uploaded_documents; ?></td>
                 </tr>
                 <tr><!-- Chats -->
-                    <td><?php echo get_lang('ChatLastConnection'); ?></td>
+                    <td><?php echo get_lang('Latest chat connection'); ?></td>
                     <td><?php echo $chat_last_connection; ?></td>
                 </tr>
                 </tbody>
@@ -1642,7 +1642,7 @@ if ($end_date < '2010-01-01') {
             <th><?php echo get_lang('level'); ?></th>
             <th><?php echo get_lang('lang_date'); ?></th>
             <th><?php echo get_lang('consignes_interventions'); ?></th>
-            <th><?php echo get_lang('Actions'); ?></th>
+            <th><?php echo get_lang('Detail'); ?></th>
         </tr>
         <tr>
             <td>
@@ -1676,7 +1676,7 @@ if ($end_date < '2010-01-01') {
                 <?php echo get_lang('interventions_commentaires'); ?>
             </th>
             <th>
-                <?php echo get_lang('Actions'); ?>
+                <?php echo get_lang('Detail'); ?>
             </th>
         </tr>
 
@@ -1753,7 +1753,7 @@ if (empty($_GET['details'])) {
         get_lang('Time', ''),
         get_lang('Progress', ''),
         get_lang('Score', ''),
-        get_lang('AttendancesFaults', ''),
+        get_lang('Not attended', ''),
         get_lang('Evaluations'),
     ];
 
@@ -1878,7 +1878,7 @@ if (empty($_GET['details'])) {
                     );
                     if (!empty($results_faults_avg['total'])) {
                         if (api_is_drh()) {
-                            $attendances_faults_avg = '<a title="'.get_lang('GoAttendance').'" href="'.api_get_path(
+                            $attendances_faults_avg = '<a title="'.get_lang('Go to attendances').'" href="'.api_get_path(
                                     WEB_CODE_PATH
                                 ).'attendance/index.php?cidReq='.$course_code.'&id_session='.$session_id.'&student_id='.$studentId.'">'.$results_faults_avg['faults'].'/'.$results_faults_avg['total'].' ('.$results_faults_avg['porcent'].'%)</a>';
                         } else {
@@ -1959,7 +1959,7 @@ if (empty($_GET['details'])) {
                 }
             }
         } else {
-            echo "<tr><td colspan='5'>".get_lang('NoCourse')."</td></tr>";
+            echo "<tr><td colspan='5'>".get_lang('This course could not be found')."</td></tr>";
         }
         echo '</table>';
     }
@@ -1971,12 +1971,12 @@ if (empty($_GET['details'])) {
     // csv export headers
     $csv_content[] = [];
     $csv_content[] = [
-        get_lang('Learnpath'),
+        get_lang('Courses'),
         get_lang('Time'),
-        get_lang('AverageScore'),
-        get_lang('LatestAttemptAverageScore'),
+        get_lang('Average score'),
+        get_lang('Latest attemptAverage score'),
         get_lang('Progress'),
-        get_lang('LastConnexion'),
+        get_lang('Latest login'),
     ];
 
     $sql8 = "SELECT * FROM course WHERE code = '$course_code'";
@@ -1999,42 +1999,42 @@ if (empty($_GET['details'])) {
         <!-- LPs-->
         <table class="data_table">
         <tr>
-            <th><?php echo get_lang('Learnpaths'); ?></th>
+            <th><?php echo get_lang('Coursess'); ?></th>
             <th><?php echo get_lang('FirstConnexion'); ?></th>
             <th><?php echo get_lang('Time').' ';
         Display:: display_icon(
                     'info3.gif',
-                    get_lang('TotalTimeByCourse'),
+                    get_lang('Total time in course'),
                     ['align' => 'absmiddle', 'hspace' => '3px']
                 ); ?></th>
-            <th><?php echo get_lang('AverageScore').' ';
+            <th><?php echo get_lang('Average score').' ';
         Display:: display_icon(
                     'info3.gif',
-                    get_lang('AverageIsCalculatedBasedInAllAttempts'),
+                    get_lang('Average is calculated based on all test attempts'),
                     ['align' => 'absmiddle', 'hspace' => '3px']
                 ); ?></th>
-            <th><?php echo get_lang('LatestAttemptAverageScore').' ';
+            <th><?php echo get_lang('Latest attemptAverage score').' ';
         Display:: display_icon(
                     'info3.gif',
-                    get_lang('AverageIsCalculatedBasedInTheLatestAttempts'),
+                    get_lang('Average is calculated based on the latest attempts'),
                     ['align' => 'absmiddle', 'hspace' => '3px']
                 ); ?></th>
             <th><?php echo get_lang('Progress').' ';
         Display:: display_icon(
                     'info3.gif',
-                    get_lang('LPProgressScore'),
+                    get_lang('% of learning objects visited'),
                     ['align' => 'absmiddle', 'hspace' => '3px']
                 ); ?></th>
-            <th><?php echo get_lang('LastConnexion').' ';
+            <th><?php echo get_lang('Latest login').' ';
         Display:: display_icon(
                     'info3.gif',
-                    get_lang('LastTimeTheCourseWasUsed'),
+                    get_lang('Last time learner entered the course'),
                     ['align' => 'absmiddle', 'hspace' => '3px']
                 ); ?></th>
             <?php
             echo '<th>'.get_lang('Details').'</th>';
         if (api_is_allowed_to_edit()) {
-            echo '<th>'.get_lang('ResetLP').'</th>';
+            echo '<th>'.get_lang('Reset Learning path').'</th>';
         } ?>
         </tr>
         <?php
@@ -2203,30 +2203,30 @@ if (empty($_GET['details'])) {
             $data_learnpath[$i][] = $progress.'%';
         }
     } else {
-        //echo '<tr><td colspan="6">'.get_lang('NoLearnpath').'</td></tr>';
+        //echo '<tr><td colspan="6">'.get_lang('This course could not be founds').'</td></tr>';
     } ?>
     </table>
     <!-- line about exercises -->
     <table class="data_table">
         <tr>
-            <th><?php echo get_lang('Exercises'); ?></th>
-            <th><?php echo get_lang('LearningPath'); ?></th>
-            <th><?php echo get_lang('AvgCourseScore').' '.Display:: return_icon(
+            <th><?php echo get_lang('Tests'); ?></th>
+            <th><?php echo get_lang('Learning paths'); ?></th>
+            <th><?php echo get_lang('Average score in learning paths').' '.Display:: return_icon(
                         'info3.gif',
-                        get_lang('AverageScore'),
+                        get_lang('Average score'),
                         ['align' => 'absmiddle', 'hspace' => '3px']
                     ); ?></th>
             <th><?php echo get_lang('Attempts'); ?></th>
-            <th><?php echo get_lang('LatestAttempt'); ?></th>
-            <th><?php echo get_lang('AllAttempts'); ?></th>
+            <th><?php echo get_lang('Latest attempt'); ?></th>
+            <th><?php echo get_lang('All attempts'); ?></th>
         </tr>
         <?php
 
         $csv_content[] = [];
     $csv_content[] = [
-            get_lang('Exercises'),
-            get_lang('LearningPath'),
-            get_lang('AvgCourseScore'),
+            get_lang('Tests'),
+            get_lang('Learning paths'),
+            get_lang('Average score in learning paths'),
             get_lang('Attempts'),
         ];
 
@@ -2274,7 +2274,7 @@ if (empty($_GET['details'])) {
             } else {
                 $lp_name = '-';
             }
-            $lp_name = !empty($lp_name) ? $lp_name : get_lang('NoLearnpath');
+            $lp_name = !empty($lp_name) ? $lp_name : get_lang('This course could not be founds');
 
             if ($i % 2) {
                 $css_class = 'row_odd';
@@ -2326,7 +2326,7 @@ if (empty($_GET['details'])) {
             echo '<td>';
             $all_attempt_url = "../exercice/exercise_report.php?exerciseId=$exercise_id&cidReq=$course_code&filter_by_user=$studentId&id_session=$session_id";
             echo Display::url(
-                    Display::return_icon('test_results.png', get_lang('AllAttempts'), [], ICON_SIZE_SMALL),
+                    Display::return_icon('test_results.png', get_lang('All attempts'), [], ICON_SIZE_SMALL),
                     $all_attempt_url
                 );
 
@@ -2344,7 +2344,7 @@ if (empty($_GET['details'])) {
             $i++;
         }
     } else {
-        echo '<tr><td colspan="6">'.get_lang('NoExercise').'</td></tr>';
+        echo '<tr><td colspan="6">'.get_lang('No tests').'</td></tr>';
     }
     echo '</table>';
 
@@ -2358,7 +2358,7 @@ if (empty($_GET['details'])) {
                     false,
                     $info_course['real_id']
                 );
-            $survey_done = Display::return_icon("accept_na.png", get_lang('NoAnswer'), [], ICON_SIZE_SMALL);
+            $survey_done = Display::return_icon("accept_na.png", get_lang('There is no answer for the moment'), [], ICON_SIZE_SMALL);
             if (in_array($studentId, $user_list)) {
                 $survey_done = Display::return_icon("accept.png", get_lang('Answered'), [], ICON_SIZE_SMALL);
             }
@@ -2405,11 +2405,11 @@ if (empty($_GET['details'])) {
     $uploaded_documents = Tracking::count_student_uploaded_documents($studentId, $course_code, $session_id);
 
     $csv_content[] = [
-            get_lang('OtherTools'),
+            get_lang('OTI (Online Training Interaction) settings report'),
         ];
 
     $csv_content[] = [
-            get_lang('StudentPublications'),
+            get_lang('Assignments'),
             $nb_assignments,
         ];
     $csv_content[] = [
@@ -2417,46 +2417,46 @@ if (empty($_GET['details'])) {
             $messages,
         ];
     $csv_content[] = [
-            get_lang('LinksDetails'),
+            get_lang('Links accessed'),
             $links,
         ];
     $csv_content[] = [
-            get_lang('DocumentsDetails'),
+            get_lang('Documents downloaded'),
             $documents,
         ];
     $csv_content[] = [
-            get_lang('UploadedDocuments'),
+            get_lang('Uploaded documents'),
             $uploaded_documents,
         ];
     $csv_content[] = [
-            get_lang('ChatLastConnection'),
+            get_lang('Latest chat connection'),
             $chat_last_connection,
         ]; ?>
         <tr>
-            <th colspan="2"><?php echo get_lang('OtherTools'); ?></th>
+            <th colspan="2"><?php echo get_lang('OTI (Online Training Interaction) settings report'); ?></th>
         </tr>
         <tr><!-- assignments -->
-            <td width="40%"><?php echo get_lang('StudentPublications'); ?></td>
+            <td width="40%"><?php echo get_lang('Assignments'); ?></td>
             <td><?php echo $nb_assignments; ?></td>
         </tr>
         <tr><!-- messages -->
-            <td><?php echo get_lang('Forum').' - '.get_lang('NumberOfPostsForThisUser'); ?></td>
+            <td><?php echo get_lang('Forum').' - '.get_lang('Number of posts for this user'); ?></td>
             <td><?php echo $messages; ?></td>
         </tr>
         <tr><!-- links -->
-            <td><?php echo get_lang('LinksDetails'); ?></td>
+            <td><?php echo get_lang('Links accessed'); ?></td>
             <td><?php echo $links; ?></td>
         </tr>
         <tr><!-- downloaded documents -->
-            <td><?php echo get_lang('DocumentsDetails'); ?></td>
+            <td><?php echo get_lang('Documents downloaded'); ?></td>
             <td><?php echo $documents; ?></td>
         </tr>
         <tr><!-- uploaded documents -->
-            <td><?php echo get_lang('UploadedDocuments'); ?></td>
+            <td><?php echo get_lang('Uploaded documents'); ?></td>
             <td><?php echo $uploaded_documents; ?></td>
         </tr>
         <tr><!-- Chats -->
-            <td><?php echo get_lang('ChatLastConnection'); ?></td>
+            <td><?php echo get_lang('Latest chat connection'); ?></td>
             <td><?php echo $chat_last_connection; ?></td>
         </tr>
     </table>
@@ -2487,7 +2487,7 @@ if ($export_csv) {
                 <?php echo get_lang('Module'); ?>
             </th>
             <th style="width: 120px">
-                <?php echo get_lang('Results'); ?>
+                <?php echo get_lang('Results and feedback and feedback'); ?>
             </th>
             <th style="width: 100px">
                 <?php echo get_lang('result_rep_1'); ?>
@@ -2499,7 +2499,7 @@ if ($export_csv) {
                 <?php echo get_lang('Comment'); ?>
             </th>
             <th style="width: 60px">
-                <?php echo get_lang('Actions'); ?>
+                <?php echo get_lang('Detail'); ?>
             </th>
         </tr>
         <tr>
@@ -2542,7 +2542,7 @@ if ($export_csv) {
         <tr>
             <th><?php echo get_lang('Module'); ?> </th>
             <th>
-                <?php echo get_lang('Results'); ?>
+                <?php echo get_lang('Results and feedback and feedback'); ?>
             </th>
             <th>
                 <?php echo get_lang('result_rep_1'); ?>
@@ -2554,7 +2554,7 @@ if ($export_csv) {
                 <?php echo get_lang('Comment'); ?>
             </th>
             <th>
-                <?php echo get_lang('Actions'); ?>
+                <?php echo get_lang('Detail'); ?>
             </th>
         </tr>
         <?php
@@ -2623,10 +2623,10 @@ echo '<a target="_blank"
             <?php echo get_lang('Module'); ?>
         </th>
         <th style="width: 17%">
-            <?php echo get_lang('FirstLogin'); ?>
+            <?php echo get_lang('First connection'); ?>
         </th>
         <th style="width: 16%">
-            <?php echo get_lang('ToDo'); ?>
+            <?php echo get_lang('To do'); ?>
         </th>
         <th style="width: 16%">
             <?php echo get_lang('realise'); ?>

@@ -286,7 +286,7 @@ $htmlHeadXtra[] = $javascript;
 $htmlHeadXtra[] = "<script>
 function confirmation (name)
 {
-	if (confirm(\" ".get_lang("AreYouSureToDeleteJS")." \"+ name + \" ?\"))
+	if (confirm(\" ".get_lang("Are you sure to delete")." \"+ name + \" ?\"))
 		{return true;}
 	else
 		{return false;}
@@ -347,14 +347,14 @@ if ($view == 'received') {
         'url' => api_get_path(WEB_CODE_PATH).'dropbox/index.php?'.api_get_cidreq(),
         'name' => get_lang('Dropbox', ''),
     ];
-    $nameTools = get_lang('ReceivedFiles');
+    $nameTools = get_lang('Received Files');
 
     if ($action == 'addreceivedcategory') {
         $interbreadcrumb[] = [
             'url' => api_get_path(WEB_CODE_PATH).'dropbox/index.php?view=received&'.api_get_cidreq(),
-            'name' => get_lang('ReceivedFiles'),
+            'name' => get_lang('Received Files'),
         ];
-        $nameTools = get_lang('AddNewCategory');
+        $nameTools = get_lang('Add a new folder');
     }
 }
 
@@ -363,25 +363,25 @@ if ($view == 'sent' || empty($view)) {
         'url' => api_get_path(WEB_CODE_PATH).'dropbox/index.php?'.api_get_cidreq(),
         'name' => get_lang('Dropbox'),
     ];
-    $nameTools = get_lang('SentFiles');
+    $nameTools = get_lang('Sent Files');
 
     if ($action == 'addsentcategory') {
         $interbreadcrumb[] = [
             'url' => api_get_path(WEB_CODE_PATH).'dropbox/index.php?view=sent&'.api_get_cidreq(),
-            'name' => get_lang('SentFiles'),
+            'name' => get_lang('Sent Files'),
         ];
-        $nameTools = get_lang('AddNewCategory');
+        $nameTools = get_lang('Add a new folder');
     }
     if ($action == 'add') {
-        $nameTools = get_lang('UploadNewFile');
+        $nameTools = get_lang('Share a new file');
     }
 
     if ($action == 'update') {
         $interbreadcrumb[] = [
             'url' => api_get_path(WEB_CODE_PATH).'dropbox/index.php?view=sent&'.api_get_cidreq(),
-            'name' => get_lang('SentFiles'),
+            'name' => get_lang('Sent Files'),
         ];
-        $nameTools = get_lang('UpdateFile');
+        $nameTools = get_lang('Update file');
     }
 }
 

@@ -111,7 +111,7 @@ if (isset($_POST['StoreCategory'])) {
     }
     if ($return_information['type'] == 'error') {
         echo Display::return_message(
-            get_lang('FormHasErrorsPleaseComplete').'<br />'.$return_information['message'],
+            get_lang('The form contains incorrect or incomplete data. Please check your input.').'<br />'.$return_information['message'],
             'error'
         );
         display_addcategory_form($_POST['category_name'], $_POST['edit_id'], $postAction);
@@ -157,11 +157,11 @@ if (($action == 'deletereceivedfile' || $action == 'deletesentfile') && isset($_
     );
     if ($action == 'deletereceivedfile') {
         $dropboxfile->deleteReceivedWork($_GET['id']);
-        $message = get_lang('ReceivedFileDeleted');
+        $message = get_lang('The received file has been deleted.');
     }
     if ($action == 'deletesentfile') {
         $dropboxfile->deleteSentWork($_GET['id']);
-        $message = get_lang('SentFileDeleted');
+        $message = get_lang('The sent file has been deleted.');
     }
     echo Display::return_message($message, 'confirmation');
 }
@@ -243,13 +243,13 @@ if ($action != 'add') {
             echo '<div class="actions">';
             if ($view_dropbox_category_received != 0 && api_is_allowed_to_session_edit(false, true)) {
                 echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&view_received_category=0&view_sent_category='.$viewSentCategory.'&view='.$view.'">'.
-                    Display::return_icon('folder_up.png', get_lang('Up').' '.get_lang('Root'), '', ICON_SIZE_MEDIUM).
+                    Display::return_icon('folder_up.png', get_lang('Up').' '.get_lang('root'), '', ICON_SIZE_MEDIUM).
                     "</a>";
                 echo get_lang('Category').': <strong>'.Security::remove_XSS($dropbox_categories[$view_dropbox_category_received]['cat_name']).'</strong> ';
                 $movelist[0] = 'Root'; // move_received selectbox content
             } else {
                 echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&action=addreceivedcategory&view='.$view.'">'.
-                    Display::return_icon('new_folder.png', get_lang('AddNewCategory'), '', ICON_SIZE_MEDIUM).'</a>';
+                    Display::return_icon('new_folder.png', get_lang('Add a new folder'), '', ICON_SIZE_MEDIUM).'</a>';
             }
             echo '</div>';
         } else {
@@ -257,12 +257,12 @@ if ($action != 'add') {
                 echo '<div class="actions">';
                 if ($view_dropbox_category_received != 0 && api_is_allowed_to_session_edit(false, true)) {
                     echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&view_received_category=0&view_sent_category='.$viewSentCategory.'&view='.$view.'">'.
-                        Display::return_icon('folder_up.png', get_lang('Up').' '.get_lang('Root'), '', ICON_SIZE_MEDIUM)."</a>";
+                        Display::return_icon('folder_up.png', get_lang('Up').' '.get_lang('root'), '', ICON_SIZE_MEDIUM)."</a>";
                     echo get_lang('Category').': <strong>'.Security::remove_XSS($dropbox_categories[$view_dropbox_category_received]['cat_name']).'</strong> ';
                     $movelist[0] = 'Root'; // move_received selectbox content
                 } else {
                     echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&action=addreceivedcategory&view='.$view.'">'.
-                        Display::return_icon('new_folder.png', get_lang('AddNewCategory'), '', ICON_SIZE_MEDIUM).
+                        Display::return_icon('new_folder.png', get_lang('Add a new folder'), '', ICON_SIZE_MEDIUM).
                         '</a>';
                 }
                 echo '</div>';
@@ -283,17 +283,17 @@ if ($action != 'add') {
             echo '<div class="actions">';
             if (empty($viewSentCategory)) {
                 echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&view=".$view."&action=add\">".
-                    Display::return_icon('upload_file.png', get_lang('UploadNewFile'), '', ICON_SIZE_MEDIUM).
+                    Display::return_icon('upload_file.png', get_lang('Share a new file'), '', ICON_SIZE_MEDIUM).
                     "</a>";
             }
             if ($view_dropbox_category_sent != 0) {
                 echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&view_received_category='.$viewReceivedCategory.'&view_sent_category=0&view='.$view.'">'.
-                    Display::return_icon('folder_up.png', get_lang('Up').' '.get_lang('Root'), '', ICON_SIZE_MEDIUM).
+                    Display::return_icon('folder_up.png', get_lang('Up').' '.get_lang('root'), '', ICON_SIZE_MEDIUM).
                     "</a>";
                 echo get_lang('Category').': <strong>'.Security::remove_XSS($dropbox_categories[$view_dropbox_category_sent]['cat_name']).'</strong> ';
             } else {
                 echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&view=".$view."&action=addsentcategory\">".
-                    Display::return_icon('new_folder.png', get_lang('AddNewCategory'), '', ICON_SIZE_MEDIUM)."</a>\n";
+                    Display::return_icon('new_folder.png', get_lang('Add a new folder'), '', ICON_SIZE_MEDIUM)."</a>\n";
             }
             echo '</div>';
         } else {
@@ -301,17 +301,17 @@ if ($action != 'add') {
                 echo '<div class="actions">';
                 if (empty($viewSentCategory)) {
                     echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&view=".$view."&action=add\">".
-                        Display::return_icon('upload_file.png', get_lang('UploadNewFile'), '', ICON_SIZE_MEDIUM).
+                        Display::return_icon('upload_file.png', get_lang('Share a new file'), '', ICON_SIZE_MEDIUM).
                     "</a>";
                 }
                 if ($view_dropbox_category_sent != 0) {
-                    echo get_lang('CurrentlySeeing').': <strong>'.Security::remove_XSS($dropbox_categories[$view_dropbox_category_sent]['cat_name']).'</strong> ';
+                    echo get_lang('You are in folder').': <strong>'.Security::remove_XSS($dropbox_categories[$view_dropbox_category_sent]['cat_name']).'</strong> ';
                     echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&view_received_category='.$viewReceivedCategory.'&view_sent_category=0&view='.$view.'">'.
-                        Display::return_icon('folder_up.png', get_lang('Up').' '.get_lang('Root'), '', ICON_SIZE_MEDIUM).
+                        Display::return_icon('folder_up.png', get_lang('Up').' '.get_lang('root'), '', ICON_SIZE_MEDIUM).
                         "</a>";
                 } else {
                     echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&view=".$view."&action=addsentcategory\">".
-                        Display::return_icon('new_folder.png', get_lang('AddNewCategory'), '', ICON_SIZE_MEDIUM)."</a>\n";
+                        Display::return_icon('new_folder.png', get_lang('Add a new folder'), '', ICON_SIZE_MEDIUM)."</a>\n";
                 }
                 echo '</div>';
             }
@@ -325,14 +325,14 @@ if ($action != 'add') {
             echo 'class="active"';
         } ?> >
         <a href="<?php echo api_get_path(WEB_CODE_PATH).'dropbox/'; ?>index.php?<?php echo api_get_cidreq(); ?>&view=sent" >
-            <?php echo get_lang('SentFiles'); ?>
+            <?php echo get_lang('Sent Files'); ?>
         </a>
     </li>
     <li <?php if ($view == 'received') {
             echo 'class="active"';
         } ?> >
         <a href="<?php echo api_get_path(WEB_CODE_PATH).'dropbox/'; ?>index.php?<?php echo api_get_cidreq(); ?>&view=received"  >
-            <?php echo get_lang('ReceivedFiles'); ?></a>
+            <?php echo get_lang('Received Files'); ?></a>
     </li>
 </ul>
 <?php
@@ -361,15 +361,15 @@ if ($action != 'add') {
         $column_header = [];
         $column_header[] = ['', false, ''];
         $column_header[] = [get_lang('Type'), true, 'style="width:40px"', 'style="text-align:center"'];
-        $column_header[] = [get_lang('ReceivedTitle'), true, ''];
+        $column_header[] = [get_lang('Title'), true, ''];
         $column_header[] = [get_lang('Size'), true, ''];
         $column_header[] = [get_lang('Authors'), true, ''];
-        $column_header[] = [get_lang('LastResent'), true];
+        $column_header[] = [get_lang('Latest sent on'), true];
 
         if (api_get_session_id() == 0) {
-            $column_header[] = [get_lang('Modify'), false, '', 'nowrap style="text-align: right"'];
+            $column_header[] = [get_lang('Edit'), false, '', 'nowrap style="text-align: right"'];
         } elseif (api_is_allowed_to_session_edit(false, true)) {
-            $column_header[] = [get_lang('Modify'), false, '', 'nowrap style="text-align: right"'];
+            $column_header[] = [get_lang('Edit'), false, '', 'nowrap style="text-align: right"'];
         }
 
         $column_header[] = ['RealDate', true];
@@ -391,7 +391,7 @@ if ($action != 'add') {
         $column_show[] = 0;
 
         // Here we change the way how the columns are going to be sort
-        // in this case the the column of LastResent ( 4th element in $column_header) we will be order like the column RealDate
+        // in this case the the column of Latest sent on ( 4th element in $column_header) we will be order like the column RealDate
         // because in the column RealDate we have the days in a correct format "2008-03-12 10:35:48"
         $column_order[3] = 8;
         $column_order[5] = 7;
@@ -559,15 +559,15 @@ if ($action != 'add') {
         $column_header = [];
         $column_header[] = ['', false, ''];
         $column_header[] = [get_lang('Type'), true, 'style="width:40px"', 'style="text-align:center"'];
-        $column_header[] = [get_lang('SentTitle'), true, ''];
+        $column_header[] = [get_lang('Sent Files'), true, ''];
         $column_header[] = [get_lang('Size'), true, ''];
-        $column_header[] = [get_lang('SentTo'), true, ''];
-        $column_header[] = [get_lang('LastResent'), true, ''];
+        $column_header[] = [get_lang('Visible to'), true, ''];
+        $column_header[] = [get_lang('Latest sent on'), true, ''];
 
         if (api_get_session_id() == 0) {
-            $column_header[] = [get_lang('Modify'), false, '', 'nowrap style="text-align: right"'];
+            $column_header[] = [get_lang('Edit'), false, '', 'nowrap style="text-align: right"'];
         } elseif (api_is_allowed_to_session_edit(false, true)) {
-            $column_header[] = [get_lang('Modify'), false, '', 'nowrap style="text-align: right"'];
+            $column_header[] = [get_lang('Edit'), false, '', 'nowrap style="text-align: right"'];
         }
 
         $column_header[] = ['RealDate', true];
@@ -591,7 +591,7 @@ if ($action != 'add') {
         $column_show[] = 0;
 
         // Here we change the way how the colums are going to be sort
-        // in this case the the column of LastResent ( 4th element in $column_header) we will be order like the column RealDate
+        // in this case the the column of Latest sent on ( 4th element in $column_header) we will be order like the column RealDate
         // because in the column RealDate we have the days in a correct format "2008-03-12 10:35:48"
         $column_order[3] = 8;
         $column_order[5] = 7;

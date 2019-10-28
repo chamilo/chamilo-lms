@@ -71,17 +71,17 @@ $condition_session = api_get_session_condition($session_id, true, true);
 if ($action === 'addlink') {
     $nameTools = '';
     $interbreadcrumb[] = ['url' => 'link.php', 'name' => get_lang('Links')];
-    $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('AddLink')];
+    $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Add a link')];
 }
 
 if ($action === 'addcategory') {
     $nameTools = '';
     $interbreadcrumb[] = ['url' => 'link.php', 'name' => get_lang('Links')];
-    $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('AddCategory')];
+    $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Add category')];
 }
 
 if ($action === 'editlink') {
-    $nameTools = get_lang('EditLink');
+    $nameTools = get_lang('Edit link');
     $interbreadcrumb[] = ['url' => 'link.php', 'name' => get_lang('Links')];
 }
 

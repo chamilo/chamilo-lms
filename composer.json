@@ -180,7 +180,8 @@
         "behat/mink": "dev-master",
         "behat/mink-extension": "@stable",
         "behat/mink-goutte-driver": "@stable",
-        "behat/mink-selenium2-driver": "@stable"
+        "behat/mink-selenium2-driver": "@stable",
+        "phpstan/phpstan": "^0.11.19"
     },
     "scripts": {
         "auto-scripts": {

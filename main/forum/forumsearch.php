@@ -35,12 +35,12 @@ include 'forumfunction.inc.php';
 $origin = api_get_origin();
 
 // Name of the tool
-$nameTools = get_lang('ToolForum');
+$nameTools = get_lang('Forums');
 
 if (api_is_in_gradebook()) {
     $interbreadcrumb[] = [
         'url' => Category::getUrl(),
-        'name' => get_lang('ToolGradebook'),
+        'name' => get_lang('Assessments'),
     ];
 }
 
@@ -54,7 +54,7 @@ if ($origin == 'group') {
     ];
     $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'group/group_space.php?'.api_get_cidreq(),
-        'name' => get_lang('GroupSpace').' ('.$group_properties['name'].')',
+        'name' => get_lang('Group area').' ('.$group_properties['name'].')',
     ];
     $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'forum/viewforum.php?origin='.$origin.'&forum='.intval($_GET['forum']).'&'.api_get_cidreq(),
@@ -62,14 +62,14 @@ if ($origin == 'group') {
     ];
     $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'forum/forumsearch.php?'.api_get_cidreq(),
-        'name' => get_lang('ForumSearch'),
+        'name' => get_lang('Search in the Forum'),
     ];
 } else {
     $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'forum/index.php?'.api_get_cidreq(),
         'name' => $nameTools,
     ];
-    $nameTools = get_lang('ForumSearch');
+    $nameTools = get_lang('Search in the Forum');
 }
 
 // Display the header.

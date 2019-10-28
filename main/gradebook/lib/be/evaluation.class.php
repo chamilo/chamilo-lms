@@ -671,7 +671,7 @@ class Evaluation implements GradebookItem
         $user = api_is_platform_admin() ? null : api_get_user_id();
         $targets = [];
         $level = 0;
-        $root = [0, get_lang('RootCat'), $level];
+        $root = [0, get_lang('Main folder'), $level];
         $targets[] = $root;
 
         if (isset($this->courseId) && !empty($this->courseId)) {

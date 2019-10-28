@@ -55,7 +55,7 @@ require_once 'forumfunction.inc.php';
 if (api_is_in_gradebook()) {
     $interbreadcrumb[] = [
         'url' => Category::getUrl(),
-        'name' => get_lang('ToolGradebook'),
+        'name' => get_lang('Assessments'),
     ];
 }
 
@@ -73,7 +73,7 @@ if ($action === 'add') {
             ];
             $interbreadcrumb[] = [
                 'url' => '#',
-                'name' => get_lang('AddForum'),
+                'name' => get_lang('Add a forum'),
             ];
             break;
         case 'forumcategory':
@@ -83,7 +83,7 @@ if ($action === 'add') {
             ];
             $interbreadcrumb[] = [
                 'url' => '#',
-                'name' => get_lang('AddForumCategory'),
+                'name' => get_lang('Add a forumCategory'),
             ];
             break;
         default:
@@ -92,7 +92,7 @@ if ($action === 'add') {
 } else {
     $interbreadcrumb[] = [
         'url' => '#',
-        'name' => get_lang('ForumCategories'),
+        'name' => get_lang('Forum Categories'),
     ];
 }
 
@@ -170,7 +170,7 @@ if (!empty($_GET['lp_id']) || !empty($_POST['lp_id'])) {
     $actionLeft .= Display::url(
         Display::return_icon(
             'back.png',
-            get_lang("BackTo").' '.get_lang("LearningPaths"),
+            get_lang("Back to").' '.get_lang("Learning paths"),
             null,
             ICON_SIZE_MEDIUM
         ),
@@ -183,7 +183,7 @@ if (api_is_allowed_to_edit(false, true)) {
         $actionLeft .= Display::url(
             Display::return_icon(
                 'new_forum.png',
-                get_lang('AddForum'),
+                get_lang('Add a forum'),
                 null,
                 ICON_SIZE_MEDIUM
             ),
@@ -194,7 +194,7 @@ if (api_is_allowed_to_edit(false, true)) {
     $actionLeft .= Display::url(
         Display::return_icon(
             'new_folder.png',
-            get_lang('AddForumCategory'),
+            get_lang('Add a forumCategory'),
             null,
             ICON_SIZE_MEDIUM
         ),
@@ -274,7 +274,7 @@ if (is_array($forumCategories)) {
     foreach ($forumCategories as $forumCategory) {
         $forumCategoryInfo['id'] = $forumCategory['cat_id'];
         if (empty($forumCategory['cat_title'])) {
-            $forumCategoryInfo['title'] = get_lang('WithoutCategory');
+            $forumCategoryInfo['title'] = get_lang('Without category');
         } else {
             $forumCategoryInfo['title'] = $forumCategory['cat_title'];
         }
@@ -310,7 +310,7 @@ if (is_array($forumCategories)) {
                     .'&action=delete&content=forumcategory&id='.$idCategory
                     ."\" onclick=\"javascript:if(!confirm('"
                     .addslashes(api_htmlentities(
-                        get_lang('DeleteForumCategory'),
+                        get_lang('Delete forum category ?'),
                         ENT_QUOTES
                     ))
                     ."')) return false;\">"
@@ -495,7 +495,7 @@ if (is_array($forumCategories)) {
                                 $poster_id = $forum['last_poster_id'];
                                 $userinfo = api_get_user_info($poster_id);
                                 $username = sprintf(
-                                    get_lang('LoginX'),
+                                    get_lang('Login: %s'),
                                     $userinfo['username']
                                 );
                             }
@@ -518,7 +518,7 @@ if (is_array($forumCategories)) {
                             $toolActions .= '<a href="'.api_get_self().'?'.api_get_cidreq()
                                 .'&action=delete&content=forum&id='.$forum['forum_id']
                                 ."\" onclick=\"javascript:if(!confirm('".addslashes(
-                                    api_htmlentities(get_lang('DeleteForum'), ENT_QUOTES)
+                                    api_htmlentities(get_lang('Delete forum ?'), ENT_QUOTES)
                                 )
                                 ."')) return false;\">"
                                 .Display::return_icon('delete.png', get_lang('Delete'), [], ICON_SIZE_SMALL)
@@ -557,7 +557,7 @@ if (is_array($forumCategories)) {
                         if ($hideNotifications == false && !api_is_anonymous() && api_is_allowed_to_session_edit(false, true)) {
                             $toolActions .= '<a href="'.api_get_self().'?'.api_get_cidreq()
                                 .'&action=notify&content=forum&id='.$forum['forum_id'].'">'
-                                .Display::return_icon($iconnotify, get_lang('NotifyMe'), null, ICON_SIZE_SMALL)
+                                .Display::return_icon($iconnotify, get_lang('Notify me'), null, ICON_SIZE_SMALL)
                                 .'</a>';
                         }
                         $forumInfo['tools'] = $toolActions;

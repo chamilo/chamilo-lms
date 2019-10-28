@@ -64,7 +64,7 @@ class StudentPublicationLink extends AbstractLink
      */
     public function get_type_name()
     {
-        return get_lang('Works');
+        return get_lang('Assignments');
     }
 
     public function is_allowed_to_change_name()

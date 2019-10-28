@@ -204,7 +204,7 @@ class LearnpathLink extends AbstractLink
 
     public function get_type_name()
     {
-        return get_lang('LearningPaths');
+        return get_lang('Learning paths');
     }
 
     public function needs_name_and_description()

@@ -11,7 +11,7 @@ require_once 'forumfunction.inc.php';
 
 api_protect_course_script(true);
 
-$nameTools = get_lang('ToolForum');
+$nameTools = get_lang('Forums');
 $this_section = SECTION_COURSES;
 $message = '';
 //are we in a lp ?
@@ -21,7 +21,7 @@ $currentUserId = api_get_user_id();
 $userIdToQualify = isset($_GET['user_id']) ? intval($_GET['user_id']) : null;
 $forumId = isset($_GET['forum']) ? intval($_GET['forum']) : 0;
 api_block_course_item_locked_by_gradebook($_GET['thread'], LINK_FORUM_THREAD);
-$nameTools = get_lang('ToolForum');
+$nameTools = get_lang('Forums');
 
 $allowed_to_edit = api_is_allowed_to_edit(null, true);
 $currentThread = get_thread_information($forumId, $_GET['thread']);
@@ -71,7 +71,7 @@ if (isset($_POST['idtextqualify'])) {
     }
 
     Display::addFlash(
-        Display::return_message(get_lang('QualificationCanNotBeGreaterThanMaxScore'), 'error')
+        Display::return_message(get_lang('Grade cannot exceed max score'), 'error')
     );
 }
 
@@ -94,7 +94,7 @@ $groupId = api_get_group_id();
 if (api_is_in_gradebook()) {
     $interbreadcrumb[] = [
         'url' => Category::getUrl(),
-        'name' => get_lang('ToolGradebook'),
+        'name' => get_lang('Assessments'),
     ];
 }
 
@@ -111,7 +111,7 @@ if ($origin == 'learnpath') {
         ];
         $interbreadcrumb[] = [
             "url" => "../group/group_space.php?".api_get_cidreq(),
-            "name" => get_lang('GroupSpace').' ('.$group_properties['name'].')',
+            "name" => get_lang('Group area').' ('.$group_properties['name'].')',
         ];
         $interbreadcrumb[] = [
             "url" => "viewforum.php?".api_get_cidreq()."&forum=".intval($_GET['forum'])."&search=".$search,
@@ -126,7 +126,7 @@ if ($origin == 'learnpath') {
 
         $interbreadcrumb[] = [
             "url" => "#",
-            "name" => get_lang('QualifyThread'),
+            "name" => get_lang('Grade thread'),
         ];
 
         // the last element of the breadcrumb navigation is already set in interbreadcrumb, so give empty string
@@ -156,7 +156,7 @@ if ($origin == 'learnpath') {
         // the last element of the breadcrumb navigation is already set in interbreadcrumb, so give empty string
         $interbreadcrumb[] = [
             "url" => "#",
-            "name" => get_lang('QualifyThread'),
+            "name" => get_lang('Grade thread'),
         ];
         Display::display_header('');
     }
@@ -219,16 +219,16 @@ $userToQualifyInfo = api_get_user_info($userIdToQualify);
 $form = new FormValidator('forum-thread-qualify', 'post', $url);
 $form->addHeader($userToQualifyInfo['complete_name']);
 $form->addLabel(get_lang('Thread'), $currentThread['thread_title']);
-$form->addLabel(get_lang('CourseUsers'), $result['user_course']);
-$form->addLabel(get_lang('PostsNumber'), $result['post']);
-$form->addLabel(get_lang('NumberOfPostsForThisUser'), $result['user_post']);
+$form->addLabel(get_lang('Users in course'), $result['user_course']);
+$form->addLabel(get_lang('Number of posts'), $result['post']);
+$form->addLabel(get_lang('Number of posts for this user'), $result['user_post']);
 $form->addLabel(
-    get_lang('AveragePostPerUser'),
+    get_lang('Posts by user'),
     round($result['user_post'] / $result['post'], 2)
 );
 $form->addText(
     'idtextqualify',
-    [get_lang('Qualification'), get_lang('MaxScore').' '.$maxQualify],
+    [get_lang('Score'), get_lang('Max score').' '.$maxQualify],
     $qualify
 );
 
@@ -299,28 +299,28 @@ if (isset($rows)) {
     }
 }
 
-$form->addButtonSave(get_lang('QualifyThisThread'));
+$form->addButtonSave(get_lang('Grade this thread'));
 $form->setDefaults(['idtextqualify' => $qualify]);
 $form->display();
 
 // Show past data
 if (api_is_allowed_to_edit() && $counter > 0) {
-    echo '<h4>'.get_lang('QualificationChangesHistory').'</h4>';
+    echo '<h4>'.get_lang('ScoreChangesHistory').'</h4>';
     if (isset($_GET['type']) && $_GET['type'] === 'false') {
         $buttons = '<a class="btn btn-default" href="forumqualify.php?'.api_get_cidreq().'&forum='.intval($_GET['forum']).'&origin='.$origin.'&thread='.$threadId.'&user='.intval($_GET['user']).'&user_id='.intval($_GET['user_id']).'&type=true&idtextqualify='.$score.'#history">'.
-            get_lang('MoreRecent').'</a> <a class="btn btn-default disabled" >'.get_lang('Older').'</a>';
+            get_lang('more recent').'</a> <a class="btn btn-default disabled" >'.get_lang('older').'</a>';
     } else {
-        $buttons = '<a class="btn btn-default">'.get_lang('MoreRecent').'</a>
+        $buttons = '<a class="btn btn-default">'.get_lang('more recent').'</a>
                         <a class="btn btn-default" href="forumqualify.php?'.api_get_cidreq().'&forum='.intval($_GET['forum']).'&origin='.$origin.'&thread='.$threadId.'&user='.intval($_GET['user']).'&user_id='.intval($_GET['user_id']).'&type=false&idtextqualify='.$score.'#history">'.
-            get_lang('Older').'</a>';
+            get_lang('older').'</a>';
     }
 
     $table_list = '<br /><div class="btn-group">'.$buttons.'</div>';
     $table_list .= '<br /><table class="table">';
     $table_list .= '<tr>';
-    $table_list .= '<th width="50%">'.get_lang('WhoChanged').'</th>';
-    $table_list .= '<th width="10%">'.get_lang('NoteChanged').'</th>';
-    $table_list .= '<th width="40%">'.get_lang('DateChanged').'</th>';
+    $table_list .= '<th width="50%">'.get_lang('Who changed').'</th>';
+    $table_list .= '<th width="10%">'.get_lang('Note changed').'</th>';
+    $table_list .= '<th width="40%">'.get_lang('Date changed').'</th>';
     $table_list .= '</tr>';
 
     for ($i = 0; $i < count($historyList); $i++) {

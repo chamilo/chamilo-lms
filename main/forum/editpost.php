@@ -29,7 +29,7 @@ $this_section = SECTION_COURSES;
 // Notification for unauthorized people.
 api_protect_course_script(true);
 
-$nameTools = get_lang('ToolForum');
+$nameTools = get_lang('Forums');
 
 // Unset the formElements in session before the includes function works
 unset($_SESSION['formelements']);
@@ -65,7 +65,7 @@ if (!$isEditable) {
 if (api_is_in_gradebook()) {
     $interbreadcrumb[] = [
         'url' => Category::getUrl(),
-        'name' => get_lang('ToolGradebook'),
+        'name' => get_lang('Assessments'),
     ];
 }
 
@@ -78,13 +78,13 @@ if ($origin == 'group') {
     ];
     $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'group/group_space.php?'.api_get_cidreq(),
-        'name' => get_lang('GroupSpace').' '.$group_properties['name'],
+        'name' => get_lang('Group area').' '.$group_properties['name'],
     ];
     $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'forum/viewforum.php?'.api_get_cidreq().'&forum='.$forumId,
         'name' => prepare4display($current_forum['forum_title']),
     ];
-    $interbreadcrumb[] = ['url' => 'javascript: void (0);', 'name' => get_lang('EditPost')];
+    $interbreadcrumb[] = ['url' => 'javascript: void (0);', 'name' => get_lang('Edit a post')];
 } else {
     $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'forum/index.php?'.api_get_cidreq(),
@@ -102,7 +102,7 @@ if ($origin == 'group') {
         'url' => api_get_path(WEB_CODE_PATH).'forum/viewthread.php?'.api_get_cidreq().'&forum='.$forumId.'&thread='.intval($_GET['thread']),
         'name' => prepare4display($current_thread['thread_title']),
     ];
-    $interbreadcrumb[] = ['url' => 'javascript: void (0);', 'name' => get_lang('EditPost')];
+    $interbreadcrumb[] = ['url' => 'javascript: void (0);', 'name' => get_lang('Edit a post')];
 }
 
 $table_link = Database::get_main_table(TABLE_MAIN_GRADEBOOK_LINK);
@@ -180,7 +180,7 @@ if ($origin != 'learnpath') {
         echo '<a href="../group/group_space.php?'.api_get_cidreq().'">'.
             Display::return_icon(
                 'back.png',
-                get_lang('BackTo').' '.get_lang('Groups'),
+                get_lang('Back to').' '.get_lang('Groups'),
                 '',
                 ICON_SIZE_MEDIUM
             ).
@@ -189,7 +189,7 @@ if ($origin != 'learnpath') {
         echo '<a href="index.php?'.api_get_cidreq().'">'.
             Display::return_icon(
                 'back.png',
-                get_lang('BackToForumOverview'),
+                get_lang('Back toForumOverview'),
                 '',
                 ICON_SIZE_MEDIUM
             ).
@@ -198,7 +198,7 @@ if ($origin != 'learnpath') {
     echo '<a href="viewforum.php?forum='.$forumId.'&'.api_get_cidreq().'">'.
         Display::return_icon(
             'forum.png',
-            get_lang('BackToForum'),
+            get_lang('Back toForum'),
             '',
             ICON_SIZE_MEDIUM
         ).

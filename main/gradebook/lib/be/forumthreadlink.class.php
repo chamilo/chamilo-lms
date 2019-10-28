@@ -27,7 +27,7 @@ class ForumThreadLink extends AbstractLink
      */
     public function get_type_name()
     {
-        return get_lang('ForumThreads');
+        return get_lang('Forum threads');
     }
 
     /**

@@ -25,7 +25,7 @@ require_once __DIR__.'/../inc/global.inc.php';
 // A notice for unauthorized people.
 api_protect_course_script(true);
 
-$nameTools = get_lang('ToolForum');
+$nameTools = get_lang('Forums');
 
 require_once 'forumfunction.inc.php';
 
@@ -79,7 +79,7 @@ $content = "<table width=\"100%\" height=\"100%\" cellspacing=\"5\" border=\"0\"
 while ($row = Database::fetch_array($result)) {
     $content .= "<tr>";
     $content .= "<td rowspan=\"2\" class=\"forum_message_left\">";
-    $username = api_htmlentities(sprintf(get_lang('LoginX'), $row['username']), ENT_QUOTES);
+    $username = api_htmlentities(sprintf(get_lang('Login: %s'), $row['username']), ENT_QUOTES);
     if ($row['user_id'] == '0') {
         $name = $row['poster_name'];
     } else {

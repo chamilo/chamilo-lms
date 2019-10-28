@@ -135,7 +135,7 @@ class ExerciseLink extends AbstractLink
             foreach ($exerciseInLP as $exercise) {
                 $cats[] = [
                     $exercise['iid'],
-                    $exercise['title'].' ('.get_lang('ToolLearnpath').')',
+                    $exercise['title'].' ('.get_lang('Learning path').')',
                 ];
             }
         }
@@ -503,7 +503,7 @@ class ExerciseLink extends AbstractLink
             return 'HotPotatoes';
         }
 
-        return get_lang('Quiz');
+        return get_lang('Tests');
     }
 
     public function needs_name_and_description()

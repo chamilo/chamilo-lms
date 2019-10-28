@@ -25,7 +25,6 @@ use Symfony\Component\Dotenv\Dotenv;
 define('USERNAME_MAX_LENGTH', 100);
 
 require_once __DIR__.'/../../vendor/autoload.php';
-require_once __DIR__.'/../../public/legacy.php';
 
 try {
     // Check the PHP version

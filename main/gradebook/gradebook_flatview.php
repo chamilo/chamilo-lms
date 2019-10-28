@@ -32,7 +32,7 @@ if (isset($_POST['submit']) && isset($_POST['keyword'])) {
 
 $interbreadcrumb[] = [
     'url' => Category::getUrl().'selectcat=1',
-    'name' => get_lang('ToolGradebook'),
+    'name' => get_lang('Assessments'),
 ];
 
 $showeval = isset($_POST['showeval']) ? '1' : '0';
@@ -149,7 +149,7 @@ if (isset($_GET['export_pdf']) && $_GET['export_pdf'] == 'category') {
 if (isset($_GET['exportpdf'])) {
     $interbreadcrumb[] = [
         'url' => api_get_self().'?selectcat='.$categoryId.'&'.api_get_cidreq(),
-        'name' => get_lang('FlatView'),
+        'name' => get_lang('List View'),
     ];
 
     $pageNum = isset($_GET['flatviewlist_page_nr']) ? intval($_GET['flatviewlist_page_nr']) : null;
@@ -188,7 +188,7 @@ if (isset($_GET['exportpdf'])) {
             $mainCourseCategory[0]
         );
     } else {
-        Display::display_header(get_lang('ExportPDF'));
+        Display::display_header(get_lang('Export to PDF'));
     }
 }
 
@@ -204,7 +204,7 @@ if (isset($_GET['print'])) {
     echo print_table(
         $printable_data[1],
         $printable_data[0],
-        get_lang('FlatView'),
+        get_lang('List View'),
         $cat[0]->get_name()
     );
     exit;
@@ -271,7 +271,7 @@ $this_section = SECTION_COURSES;
 if (isset($_GET['exportpdf'])) {
     $export_pdf_form->display();
 } else {
-    Display::display_header(get_lang('FlatView'));
+    Display::display_header(get_lang('List View'));
 }
 
 if (isset($_GET['isStudentView']) && $_GET['isStudentView'] == 'false') {

@@ -24,7 +24,7 @@ api_set_more_memory_and_time_limits();
 //extra javascript functions for in html head:
 $htmlHeadXtra[] = "<script>
 function confirmation() {
-	if (confirm(\" ".trim(get_lang('AreYouSureToDelete'))." ?\")) {
+	if (confirm(\" ".trim(get_lang('Are you sure you want to delete'))." ?\")) {
 	    return true;
 	} else {
 	    return false;
@@ -52,7 +52,7 @@ if ($filter === 'true') {
         'POST',
         api_get_self().'?'.api_get_cidreq().'&cat_id='.$categoryId
     );
-    $form->addElement('select', 'filter', get_lang('OfficialCode'), $options);
+    $form->addElement('select', 'filter', get_lang('Code'), $options);
     $form->addButton('submit', get_lang('Submit'));
     $filterForm = '<br />'.$form->returnForm();
 
@@ -89,7 +89,7 @@ switch ($action) {
     case 'send_notifications':
         $currentUserInfo = api_get_user_info();
         $message = isset($_POST['message']) ? $_POST['message'] : '';
-        $subject = get_lang('NotificationCertificateSubject');
+        $subject = get_lang('Certificate notification');
         if (!empty($message)) {
             foreach ($certificate_list as $index => $value) {
                 $userInfo = api_get_user_info($value['user_id']);
@@ -119,15 +119,15 @@ switch ($action) {
         break;
     case 'show_notification_form':
         $form = new FormValidator('notification', 'post', $url.'&action=send_notifications');
-        $form->addHeader(get_lang('SendNotification'));
+        $form->addHeader(get_lang('Notify'));
         $form->addHtmlEditor('message', get_lang('Message'));
         $form->addLabel(
             get_lang('Tags'),
             Display::return_message(implode('<br />', $tags), 'normal', false)
         );
-        $form->addButtonSend(get_lang('Send'));
+        $form->addButtonSend(get_lang('Send message'));
         $form->setDefaults(
-            ['message' => nl2br(get_lang('NotificationCertificateTemplate'))]
+            ['message' => nl2br(get_lang('((user_first_name)),'))]
         );
         $content = $form->returnForm();
         break;
@@ -182,9 +182,9 @@ switch ($action) {
 
 $interbreadcrumb[] = [
     'url' => Category::getUrl(),
-    'name' => get_lang('Gradebook'),
+    'name' => get_lang('Assessments'),
 ];
-$interbreadcrumb[] = ['url' => '#', 'name' => get_lang('GradebookListOfStudentsCertificates')];
+$interbreadcrumb[] = ['url' => '#', 'name' => get_lang('AssessmentsListOfLearnersCertificates')];
 
 $this_section = SECTION_COURSES;
 Display::display_header('');
@@ -196,15 +196,15 @@ if (isset($_GET['action']) && $_GET['action'] == 'delete') {
         $result = $certificate->delete(true);
         Security::clear_token();
         if ($result == true) {
-            echo Display::return_message(get_lang('CertificateRemoved'), 'confirmation');
+            echo Display::return_message(get_lang('Certificate removed'), 'confirmation');
         } else {
-            echo Display::return_message(get_lang('CertificateNotRemoved'), 'error');
+            echo Display::return_message(get_lang('Certificate can\'t be removed'), 'error');
         }
     }
 }
 
 $token = Security::get_token();
-echo Display::page_header(get_lang('GradebookListOfStudentsCertificates'));
+echo Display::page_header(get_lang('AssessmentsListOfLearnersCertificates'));
 
 if (!empty($content)) {
     echo $content;
@@ -255,7 +255,7 @@ if (!empty($cats)) {
 
     if ($total_resource_weight != $total_weight) {
         echo Display::return_message(
-            get_lang('SumOfActivitiesWeightMustBeEqualToTotalWeight'),
+            get_lang('The sum of all activity weights must be equal to the total weight indicated in your assessment settings, otherwise the learners will not be able to reach the sufficient score to achieve their certification.'),
             'warning'
         );
     }
@@ -263,11 +263,11 @@ if (!empty($cats)) {
 
 $actions = '';
 $actions .= Display::url(
-    Display::return_icon('tuning.png', get_lang('GenerateCertificates'), [], ICON_SIZE_MEDIUM),
+    Display::return_icon('tuning.png', get_lang('Generate certificates'), [], ICON_SIZE_MEDIUM),
     $url.'&action=generate_all_certificates'
 );
 $actions .= Display::url(
-    Display::return_icon('delete.png', get_lang('DeleteAllCertificates'), [], ICON_SIZE_MEDIUM),
+    Display::return_icon('delete.png', get_lang('Delete all certificates'), [], ICON_SIZE_MEDIUM),
     $url.'&action=delete_all_certificates'
 );
 
@@ -275,7 +275,7 @@ $hideCertificateExport = api_get_setting('hide_certificate_export_link');
 
 if (count($certificate_list) > 0 && $hideCertificateExport !== 'true') {
     $actions .= Display::url(
-        Display::return_icon('pdf.png', get_lang('ExportAllCertificatesToPDF'), [], ICON_SIZE_MEDIUM),
+        Display::return_icon('pdf.png', get_lang('Export all certificates to PDF'), [], ICON_SIZE_MEDIUM),
         $url.'&action=export_all_certificates'
     );
 
@@ -287,7 +287,7 @@ if (count($certificate_list) > 0 && $hideCertificateExport !== 'true') {
     }
 
     $actions .= Display::url(
-        Display::return_icon('notification_mail.png', get_lang('SendCertificateNotifications'), [], ICON_SIZE_MEDIUM),
+        Display::return_icon('notification_mail.png', get_lang('Send messageCertificateNotifications'), [], ICON_SIZE_MEDIUM),
         $url.'&action=show_notification_form'
     );
 }
@@ -297,12 +297,12 @@ echo Display::toolbarAction('actions', [$actions]);
 echo $filterForm;
 
 if (count($certificate_list) == 0) {
-    echo Display::return_message(get_lang('NoResultsAvailable'), 'warning');
+    echo Display::return_message(get_lang('No results available'), 'warning');
 } else {
     echo '<table class="data_table">';
     foreach ($certificate_list as $index => $value) {
         echo '<tr>
-                <td width="100%" class="actions">'.get_lang('Student').' : '.api_get_person_name($value['firstname'], $value['lastname']).' ('.$value['username'].')</td>';
+                <td width="100%" class="actions">'.get_lang('Learner').' : '.api_get_person_name($value['firstname'], $value['lastname']).' ('.$value['username'].')</td>';
         echo '</tr>';
         echo '<tr><td>
             <table class="data_table">';

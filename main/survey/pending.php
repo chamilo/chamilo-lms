@@ -51,7 +51,7 @@ foreach ($pending as $i => $item) {
     ];
 }
 
-$toolName = get_lang('PendingSurveys');
+$toolName = get_lang('Pending surveys');
 
 $template = new Template($toolName);
 $template->assign('user', $currentUser);

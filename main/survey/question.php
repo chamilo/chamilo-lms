@@ -42,7 +42,7 @@ if ($surveyData['survey_type'] == 1) {
     $rs = Database::query($sql);
     if (Database::num_rows($rs) === 0) {
         Display::addFlash(
-            Display::return_message(get_lang('YouNeedToCreateGroups'))
+            Display::return_message(get_lang('You need to create groups'))
         );
         header('Location: '.api_get_path(WEB_CODE_PATH).'survey/survey.php?survey_id='.(int) $_GET['survey_id']);
         exit;
@@ -52,7 +52,7 @@ if ($surveyData['survey_type'] == 1) {
 // Breadcrumbs
 $interbreadcrumb[] = [
     'url' => api_get_path(WEB_CODE_PATH).'survey/survey_list.php',
-    'name' => get_lang('SurveyList'),
+    'name' => get_lang('Survey list'),
 ];
 $interbreadcrumb[] = [
     'url' => api_get_path(WEB_CODE_PATH).'survey/survey.php?survey_id='.intval($_GET['survey_id']),
@@ -61,10 +61,10 @@ $interbreadcrumb[] = [
 
 // Tool name
 if ($_GET['action'] == 'add') {
-    $tool_name = get_lang('AddQuestion');
+    $tool_name = get_lang('Add a question');
 }
 if ($_GET['action'] == 'edit') {
-    $tool_name = get_lang('EditQuestion');
+    $tool_name = get_lang('Edit question');
 }
 
 // The possible question types
@@ -84,13 +84,13 @@ $possible_types = [
 // Actions
 $actions = '<div class="actions">';
 $actions .= '<a href="'.api_get_path(WEB_CODE_PATH).'survey/survey.php?survey_id='.intval($_GET['survey_id']).'">'.
-    Display::return_icon('back.png', get_lang('BackToSurvey'), '', ICON_SIZE_MEDIUM).'</a>';
+    Display::return_icon('back.png', get_lang('Back to survey'), '', ICON_SIZE_MEDIUM).'</a>';
 $actions .= '</div>';
 // Checking if it is a valid type
 if (!in_array($_GET['type'], $possible_types)) {
     Display :: display_header($tool_name, 'Survey');
     echo $actions;
-    echo Display::return_message(get_lang('TypeDoesNotExist'), 'error', false);
+    echo Display::return_message(get_lang('This type does not exist'), 'error', false);
     Display::display_footer();
 }
 
@@ -120,7 +120,7 @@ switch ($_GET['type']) {
         $formData['values'][4] = 3;
         break;
     case 'open':
-        Display::addFlash(Display::return_message(get_lang('QuestionTags')));
+        Display::addFlash(Display::return_message(get_lang('You can use the tags {{class_name}} and {{student_full_name}} in the question to be able to multiplicate questions.')));
         break;
 }
 

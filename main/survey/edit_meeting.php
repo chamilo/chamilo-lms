@@ -25,7 +25,7 @@ $htmlHeadXtra[] = api_get_asset('datepair.js/dist/jquery.datepair.js');
 
 $interbreadcrumb[] = [
     'url' => api_get_path(WEB_CODE_PATH).'survey/survey_list.php?'.api_get_cidreq(),
-    'name' => get_lang('SurveyList'),
+    'name' => get_lang('Survey list'),
 ];
 
 $surveyId = isset($_GET['survey_id']) ? (int) $_GET['survey_id'] : null;
@@ -61,20 +61,20 @@ $text = $form->addText(
 $allowSurveyAvailabilityDatetime = api_get_configuration_value('allow_survey_availability_datetime');
 
 if ($allowSurveyAvailabilityDatetime) {
-    $form->addDateTimePicker('start_date', get_lang('StartDate'));
-    $form->addDateTimePicker('end_date', get_lang('EndDate'));
-    $form->addRule('start_date', get_lang('InvalidDate'), 'datetime');
-    $form->addRule('end_date', get_lang('InvalidDate'), 'datetime');
+    $form->addDateTimePicker('start_date', get_lang('Start Date'));
+    $form->addDateTimePicker('end_date', get_lang('End Date'));
+    $form->addRule('start_date', get_lang('Invalid date'), 'datetime');
+    $form->addRule('end_date', get_lang('Invalid date'), 'datetime');
 } else {
-    $form->addElement('date_picker', 'start_date', get_lang('StartDate'));
-    $form->addElement('date_picker', 'end_date', get_lang('EndDate'));
-    $form->addRule('start_date', get_lang('InvalidDate'), 'date');
-    $form->addRule('end_date', get_lang('InvalidDate'), 'date');
+    $form->addElement('date_picker', 'start_date', get_lang('Start Date'));
+    $form->addElement('date_picker', 'end_date', get_lang('End Date'));
+    $form->addRule('start_date', get_lang('Invalid date'), 'date');
+    $form->addRule('end_date', get_lang('Invalid date'), 'date');
 }
 
 $form->addRule(
     ['start_date', 'end_date'],
-    get_lang('StartDateShouldBeBeforeEndDate'),
+    get_lang('Start DateShouldBeBeforeEnd Date'),
     'date_compare',
     'lte'
 );

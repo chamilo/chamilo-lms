@@ -170,7 +170,7 @@ Event::registerLog($logInfo);
 
 $interbreadcrumb[] = [
     'url' => Category::getUrl().'selectcat='.$selectCat,
-    'name' => get_lang('Gradebook'),
+    'name' => get_lang('Assessments'),
 ];
 $this_section = SECTION_COURSES;
 
@@ -193,9 +193,9 @@ $(function() {
 });
 </script>';
 
-Display::display_header(get_lang('MakeLink'));
+Display::display_header(get_lang('Add online activity'));
 if (isset($typeform)) {
-    echo Display::return_message(get_lang('LearningPathGradebookWarning'), 'warning');
+    echo Display::return_message(get_lang('LearningPathAssessmentsWarning'), 'warning');
     $typeform->display();
 }
 if (isset($addform)) {

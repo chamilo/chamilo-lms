@@ -24,7 +24,7 @@ if (!empty($invitationcode) || !api_is_allowed_to_edit()) {
                 invitation_code = '".Database::escape_string($invitationcode)."'";
     $result = Database::query($sql);
     if (Database::num_rows($result) < 1) {
-        api_not_allowed(true, get_lang('WrongInvitationCode'));
+        api_not_allowed(true, get_lang('Wrong invitation code'));
     }
 
     $survey_invitation = Database::fetch_array($result, 'ASSOC');
@@ -54,7 +54,7 @@ $content = Display::page_header($surveyData['title']);
 $interbreadcrumb[] = [
     'url' => api_get_path(WEB_CODE_PATH).
         'survey/survey_list.php?cidReq='.$courseInfo['code'].'&id_session='.$sessionId,
-    'name' => get_lang('SurveyList'),
+    'name' => get_lang('Survey list'),
 ];
 
 $questions = SurveyManager::get_questions($surveyData['iid']);
@@ -107,7 +107,7 @@ if (isset($_POST) && !empty($_POST)) {
         $survey_invitation['survey_code']
     );
 
-    Display::addFlash(Display::return_message(get_lang('Saved')));
+    Display::addFlash(Display::return_message(get_lang('Saved.')));
     header('Location: '.$url);
     exit;
 }
@@ -135,8 +135,8 @@ foreach ($questions as $item) {
     $endDate = explode(' ', $endDateTime);
     $mainDate = $date[0];
 
-    $startTime = isset($date[1]) && !empty($date[1]) ? sprintf(get_lang('FromTimeX'), $date[1]) : '';
-    $endTime = isset($endDate[1]) && !empty($endDate[1]) ? sprintf(get_lang('ToTimeX'), $endDate[1]) : '';
+    $startTime = isset($date[1]) && !empty($date[1]) ? sprintf(get_lang('From %s'), $date[1]) : '';
+    $endTime = isset($endDate[1]) && !empty($endDate[1]) ? sprintf(get_lang('To %s'), $endDate[1]) : '';
 
     if (isset($date[1]) && isset($endDate[1])) {
         if ($date[1] === $endDate[1]) {
@@ -157,7 +157,7 @@ $column = 0;
 $table->setHeaderContents(
     $row,
     0,
-    get_lang('NumberOfUsers').': '.count($students)
+    get_lang('Number of users').': '.count($students)
 );
 
 foreach ($questions as $item) {
@@ -183,7 +183,7 @@ foreach ($questions as $item) {
 $row = 2;
 $column = 0;
 $availableIcon = Display::return_icon('bullet_green.png', get_lang('Available'));
-$notAvailableIcon = Display::return_icon('bullet_red.png', get_lang('NotAvailable'));
+$notAvailableIcon = Display::return_icon('bullet_red.png', get_lang('Not available'));
 
 foreach ($students as $studentId) {
     $userInfo = api_get_user_info($studentId);
@@ -267,13 +267,13 @@ if ($action === 'edit') {
 $actions = '';
 if (api_is_allowed_to_edit()) {
     $actions .= Display::url(
-        Display::return_icon('edit.png', get_lang('EditSurvey'), '', ICON_SIZE_MEDIUM),
+        Display::return_icon('edit.png', get_lang('Edit survey'), '', ICON_SIZE_MEDIUM),
         api_get_path(WEB_CODE_PATH).'survey/edit_meeting.php?'.api_get_cidreq().'&action=edit&survey_id='.$surveyId
     );
     $actions .= Display::url(
-        Display::return_icon('delete.png', get_lang('DeleteSurvey'), '', ICON_SIZE_MEDIUM),
+        Display::return_icon('delete.png', get_lang('Delete survey'), '', ICON_SIZE_MEDIUM),
         api_get_path(WEB_CODE_PATH).'survey/survey_list.php?'.api_get_cidreq().'&action=delete&survey_id='.$surveyId,
-        ['onclick' => 'javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang('DeleteSurvey').'?', ENT_QUOTES)).'\')) return false;']
+        ['onclick' => 'javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang('Delete survey').'?', ENT_QUOTES)).'\')) return false;']
     );
     $actions .= Display::url(
         Display::return_icon('mail_send.png', get_lang('Publish'), '', ICON_SIZE_MEDIUM),

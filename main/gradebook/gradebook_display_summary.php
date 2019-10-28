@@ -92,7 +92,7 @@ switch ($action) {
 
         $tpl = new Template('', false, false, false);
         $params = [
-            'pdf_title' => sprintf(get_lang('GradeFromX'), $courseInfo['name']),
+            'pdf_title' => sprintf(get_lang('Grades from course: %s'), $courseInfo['name']),
             'session_info' => '',
             'course_info' => '',
             'pdf_date' => '',
@@ -153,33 +153,33 @@ $course_code = api_get_course_id();
 
 $interbreadcrumb[] = [
     'url' => Category::getUrl(),
-    'name' => get_lang('Gradebook'),
+    'name' => get_lang('Assessments'),
 ];
 $interbreadcrumb[] = [
     'url' => '#',
-    'name' => get_lang('GradebookListOfStudentsReports'),
+    'name' => get_lang('AssessmentsListOfLearnersReports'),
 ];
 
 $this_section = SECTION_COURSES;
 Display::display_header('');
 $token = Security::get_token();
-echo Display::page_header(get_lang('GradebookListOfStudentsReports'));
+echo Display::page_header(get_lang('AssessmentsListOfLearnersReports'));
 
 echo '<div class="btn-group">';
 if (count($userList) > 0) {
     $url = api_get_self().'?action=export_all&'.api_get_cidreq().'&selectcat='.$cat_id;
-    echo Display::url(get_lang('ExportAllToPDF'), $url, ['class' => 'btn btn-default']);
+    echo Display::url(get_lang('Export all to PDF'), $url, ['class' => 'btn btn-default']);
 }
 echo '</div>';
 
 $allowSkillRelItem = api_get_configuration_value('allow_skill_rel_items');
 
 if (count($userList) == 0) {
-    echo Display::return_message(get_lang('NoResultsAvailable'), 'warning');
+    echo Display::return_message(get_lang('No results available'), 'warning');
 } else {
     echo '<br /><br /><table class="data_table">';
     echo '<tr><th>';
-    echo get_lang('Student');
+    echo get_lang('Learner');
     echo '</th>';
     echo '<th>';
     echo get_lang('Action');
@@ -201,7 +201,7 @@ if (count($userList) == 0) {
 
         $url = api_get_self().'?'.api_get_cidreq().'&action=download&user_id='.$value['user_id'].'&selectcat='.$cat_id;
         $link .= Display::url(
-            get_lang('ExportToPDF'),
+            get_lang('Export to PDF'),
             $url,
             ['target' => '_blank', 'class' => 'btn btn-default']
         );

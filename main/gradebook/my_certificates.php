@@ -32,11 +32,11 @@ $sessionList = GradebookUtils::getUserCertificatesInSessions($userId);
 
 if (empty($courseList) && empty($sessionList)) {
     Display::addFlash(
-        Display::return_message(get_lang('YouNotYetAchievedCertificates'), 'warning')
+        Display::return_message(get_lang('You have not achieved any certificate just yet. Continue on your learning path to get one!'), 'warning')
     );
 }
 
-$template = new Template(get_lang('MyCertificates'));
+$template = new Template(get_lang('My certificates'));
 
 $template->assign('course_list', $courseList);
 $template->assign('session_list', $sessionList);
@@ -47,7 +47,7 @@ if (api_get_setting('allow_public_certificates') === 'true') {
     $template->assign(
         'actions',
         Display::toolbarButton(
-            get_lang('SearchCertificates'),
+            get_lang('Search certificates'),
             api_get_path(WEB_CODE_PATH).'gradebook/search.php',
             'search',
             'info'

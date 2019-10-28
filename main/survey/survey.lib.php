@@ -242,7 +242,7 @@ class SurveyManager
             if (Database::num_rows($rs) > 0) {
                 Display::addFlash(
                     Display::return_message(
-                        get_lang('ThisSurveyCodeSoonExistsInThisLanguage'),
+                        get_lang('This survey code soon exists in this language'),
                         'error'
                     )
                 );
@@ -395,7 +395,7 @@ class SurveyManager
 
             Display::addFlash(
                 Display::return_message(
-                    get_lang('SurveyCreatedSuccesfully'),
+                    get_lang('The survey has been created succesfully'),
                     'success'
                 )
             );
@@ -412,7 +412,7 @@ class SurveyManager
             if (Database::num_rows($rs) > 0) {
                 Display::addFlash(
                     Display::return_message(
-                        get_lang('ThisSurveyCodeSoonExistsInThisLanguage'),
+                        get_lang('This survey code soon exists in this language'),
                         'error'
                     )
                 );
@@ -499,7 +499,7 @@ class SurveyManager
 
             Display::addFlash(
                 Display::return_message(
-                    get_lang('SurveyUpdatedSuccesfully'),
+                    get_lang('The survey has been updated succesfully'),
                     'confirmation'
                 )
             );
@@ -1962,7 +1962,7 @@ class SurveyManager
         }
 
         Display::addFlash(
-            Display::return_message(get_lang('MandatorySurveyNoAnswered'), 'warning')
+            Display::return_message(get_lang('A mandatory survey is waiting your answer. To enter the course, you must first complete the survey.'), 'warning')
         );
 
         $url = SurveyUtil::generateFillSurveyLink(
@@ -2256,7 +2256,7 @@ class SurveyManager
                         'question_comment' => 'generated',
                         'type' => 'pagebreak',
                         'display' => 'horizontal',
-                        'question' => get_lang('QuestionForNextClass'),
+                        'question' => get_lang('Question for next class'),
                         'survey_id' => $surveyId,
                         'question_id' => 0,
                         'shared_question_id' => 0,
@@ -2341,7 +2341,7 @@ class SurveyManager
             api_not_allowed(
                 true,
                 Display:: return_message(
-                    get_lang('SurveyNotAvailableYet'),
+                    get_lang('This survey is not yet available. Please try again later. Thank you.'),
                     'warning',
                     false
                 )
@@ -2352,7 +2352,7 @@ class SurveyManager
             api_not_allowed(
                 true,
                 Display:: return_message(
-                    get_lang('SurveyNotAvailableAnymore'),
+                    get_lang('Sorry, this survey is not available anymore. Thank you for trying.'),
                     'warning',
                     false
                 )
@@ -2421,11 +2421,11 @@ class SurveyManager
 
         if (!empty($invitations)) {
             $table = new HTML_Table(['class' => 'table']);
-            $table->setHeaderContents(0, 0, get_lang('SurveyName'));
+            $table->setHeaderContents(0, 0, get_lang('Survey name'));
             $table->setHeaderContents(0, 1, get_lang('Course'));
 
             if (empty($answered)) {
-                $table->setHeaderContents(0, 2, get_lang('Survey').' - '.get_lang('EndDate'));
+                $table->setHeaderContents(0, 2, get_lang('Survey').' - '.get_lang('End Date'));
             }
 
             // Not answered
@@ -2510,7 +2510,7 @@ class SurveyManager
             }
             $content .= $table->toHtml();
         } else {
-            $content .= Display::return_message(get_lang('NoData'));
+            $content .= Display::return_message(get_lang('No data available'));
         }
 
         return $content;

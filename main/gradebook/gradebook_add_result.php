@@ -33,7 +33,7 @@ if ($add_result_form->validate()) {
     $values = $add_result_form->exportValues();
     $nr_users = $values['nr_users'];
     if ($nr_users == '0') {
-        Display::addFlash(Display::return_message(get_lang('AddResultNoStudents'), 'warning', false));
+        Display::addFlash(Display::return_message(get_lang('There are no learners to add results for'), 'warning', false));
         header('Location: gradebook_view_result.php?addresultnostudents=&selecteval='.$selectEval.'&'.api_get_cidreq());
         exit;
     }
@@ -56,15 +56,15 @@ if ($add_result_form->validate()) {
 
     Evaluation::generateStats($values['evaluation_id']);
 
-    Display::addFlash(Display::return_message(get_lang('ResultAdded'), 'confirmation', false));
+    Display::addFlash(Display::return_message(get_lang('Result added'), 'confirmation', false));
     header('Location: gradebook_view_result.php?addresult=&selecteval='.$selectEval.'&'.api_get_cidreq());
     exit;
 }
 $interbreadcrumb[] = [
     'url' => Category::getUrl(),
-    'name' => get_lang('Gradebook'),
+    'name' => get_lang('Assessments'),
 ];
-Display :: display_header(get_lang('AddResult'));
+Display::display_header(get_lang('Grade learners'));
 DisplayGradebook::display_header_result($evaluation[0], null, 0, 0);
 echo $table;
-Display :: display_footer();
+Display::display_footer();

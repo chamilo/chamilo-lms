@@ -82,16 +82,16 @@ $(function() {
 				$("#istooldesc_" + my_tool_id).attr("class", info.tclass);
 
 				if (image_link == "visible.png") {
-					$("#" + tool_id).attr("alt", "'.get_lang('Activate', '').'");
-					$("#" + tool_id).attr("title", "'.get_lang('Activate', '').'");
+					$("#" + tool_id).attr("alt", "'.get_lang('Activate').'");
+					$("#" + tool_id).attr("title", "'.get_lang('Activate').'");
 				} else {
-					$("#" + tool_id).attr("alt", "'.get_lang('Deactivate', '').'");
-					$("#" + tool_id).attr("title", "'.get_lang('Deactivate', '').'");
+					$("#" + tool_id).attr("alt", "'.get_lang('Deactivate').'");
+					$("#" + tool_id).attr("title", "'.get_lang('Deactivate').'");
 				}
 				if (info.message == "is_active") {
-					message = "'.get_lang('ToolIsNowVisible', '').'";
+					message = "'.get_lang('ToolIsNowVisible').'";
 				} else {
-					message = "'.get_lang('ToolIsNowHidden', '').'";
+					message = "'.get_lang('ToolIsNowHidden').'";
 				}
 				$(".normal-message").hide();
 				$("#id_confirmation_message").html(message);

@@ -7,8 +7,6 @@ use ChamiloSession as Session;
 
 /**
  * This class offers a series of general utility functions for survey querying and display.
- *
- * @package chamilo.survey
  */
 class SurveyUtil
 {
@@ -38,11 +36,11 @@ class SurveyUtil
         $error = false;
         while ($row = Database::fetch_array($result, 'ASSOC')) {
             if ($counter == 1 && $row['type'] == 'pagebreak') {
-                echo Display::return_message(get_lang('PagebreakNotFirst'), 'error', false);
+                echo Display::return_message(get_lang('The page break cannot be the first'), 'error', false);
                 $error = true;
             }
             if ($counter == $total && $row['type'] == 'pagebreak') {
-                echo Display::return_message(get_lang('PagebreakNotLast'), 'error', false);
+                echo Display::return_message(get_lang('The page break cannot be the last one'), 'error', false);
                 $error = true;
             }
             $counter++;
@@ -165,7 +163,7 @@ class SurveyUtil
 
         // $_GET['survey_id'] has to be numeric
         if (!is_numeric($_GET['survey_id'])) {
-            $error = get_lang('IllegalSurveyId');
+            $error = get_lang('Unknown survey id');
         }
 
         // $_GET['action']
@@ -178,7 +176,7 @@ class SurveyUtil
             'deleteuserreport',
         ];
         if (isset($_GET['action']) && !in_array($_GET['action'], $allowed_actions)) {
-            $error = get_lang('ActionNotAllowed');
+            $error = get_lang('Action not allowed');
         }
 
         // User report
@@ -192,14 +190,14 @@ class SurveyUtil
             }
 
             if (isset($_GET['user']) && !in_array($_GET['user'], $people_filled_userids)) {
-                $error = get_lang('UnknowUser');
+                $error = get_lang('Unknow user');
             }
         }
 
         // Question report
         if (isset($_GET['action']) && $_GET['action'] == 'questionreport') {
             if (isset($_GET['question']) && !is_numeric($_GET['question'])) {
-                $error = get_lang('UnknowQuestion');
+                $error = get_lang('Unknown question');
             }
         }
 
@@ -309,10 +307,10 @@ class SurveyUtil
         }
 
         if ($result !== false) {
-            $message = get_lang('SurveyUserAnswersHaveBeenRemovedSuccessfully').'<br />
+            $message = get_lang('The user\'s answers to the survey have been succesfully removed.').'<br />
 					<a href="'.api_get_path(WEB_CODE_PATH).'survey/reporting.php?action=userreport&survey_id='
                 .$survey_id.'">'.
-                get_lang('GoBack').'</a>';
+                get_lang('Go back').'</a>';
             echo Display::return_message($message, 'confirmation', false);
         }
     }
@@ -338,11 +336,11 @@ class SurveyUtil
             if (restore) selObj.selectedIndex=0;
         }
 		</script>";
-        echo get_lang('SelectUserWhoFilledSurvey').'<br />';
+        echo get_lang('Select user who filled the survey').'<br />';
         echo '<select name="user" onchange="jumpMenu(\'parent\',this,0)">';
         echo '<option value="'.api_get_path(WEB_CODE_PATH).'survey/reporting.php?action='
             .Security::remove_XSS($_GET['action']).'&survey_id='.$surveyId.'&'.api_get_cidreq().'">'
-            .get_lang('SelectUser').'</option>';
+            .get_lang('User').'</option>';
 
         foreach ($people_filled as $key => &$person) {
             if ($survey_data['anonymous'] == 0) {
@@ -387,7 +385,7 @@ class SurveyUtil
         if (!empty($userId)) {
             if ($addMessage) {
                 $content .= Display::return_message(
-                    get_lang('AllQuestionsOnOnePage'),
+                    get_lang('This screen displays an exact copy of the form as it was filled by the user'),
                     'normal',
                     false
                 );
@@ -505,7 +503,7 @@ class SurveyUtil
             echo '<a href="'.$reportingUrl.'">'.
                 Display::return_icon(
                     'back.png',
-                    get_lang('BackTo').' '.get_lang('ReportingOverview'),
+                    get_lang('Back to').' '.get_lang('Reporting overview'),
                     '',
                     ICON_SIZE_MEDIUM
                 )
@@ -519,9 +517,9 @@ class SurveyUtil
 
                 // Export the user report
                 echo '<a href="javascript: void(0);" onclick="document.form1a.submit();">'
-                    .Display::return_icon('export_csv.png', get_lang('ExportAsCSV'), '', ICON_SIZE_MEDIUM).'</a> ';
+                    .Display::return_icon('export_csv.png', get_lang('CSV export'), '', ICON_SIZE_MEDIUM).'</a> ';
                 echo '<a href="javascript: void(0);" onclick="document.form1b.submit();">'
-                    .Display::return_icon('export_excel.png', get_lang('ExportAsXLS'), '', ICON_SIZE_MEDIUM).'</a> ';
+                    .Display::return_icon('export_excel.png', get_lang('Excel export'), '', ICON_SIZE_MEDIUM).'</a> ';
                 echo '<form id="form1a" name="form1a" method="post" action="'.api_get_self().'?action='
                     .Security::remove_XSS($_GET['action']).'&survey_id='.$surveyId.'&'.api_get_cidreq().'&user_id='
                     .Security::remove_XSS($_GET['user']).'">';
@@ -588,7 +586,7 @@ class SurveyUtil
         echo '<a href="'.api_get_path(WEB_CODE_PATH).'survey/reporting.php?survey_id='.$surveyId.'&'.api_get_cidreq().'">'.
             Display::return_icon(
                 'back.png',
-                get_lang('BackTo').' '.get_lang('ReportingOverview'),
+                get_lang('Back to').' '.get_lang('Reporting overview'),
                 '',
                 ICON_SIZE_MEDIUM
             ).'</a>';
@@ -601,7 +599,7 @@ class SurveyUtil
                 if ($currentQuestion != 0) {
                     echo '<li><a href="'.api_get_path(WEB_CODE_PATH).'survey/reporting.php?action='.$action.'&'
                         .api_get_cidreq().'&survey_id='.$surveyId.'&question='.($offset - 1).'">'
-                        .get_lang('PreviousQuestion').'</a></li>';
+                        .get_lang('Previous question').'</a></li>';
                 }
 
                 for ($i = 1; $i <= $survey_data['number_of_questions']; $i++) {
@@ -615,7 +613,7 @@ class SurveyUtil
                 if ($currentQuestion < ($survey_data['number_of_questions'] - 1)) {
                     echo '<li><a href="'.api_get_path(WEB_CODE_PATH).'survey/reporting.php?action='.$action.'&'
                         .api_get_cidreq().'&survey_id='.$surveyId.'&question='.($offset + 1).'">'
-                        .get_lang('NextQuestion').'</li></a>';
+                        .get_lang('Next question').'</li></a>';
                 }
                 echo '</ul>';
                 echo '</div>';
@@ -703,9 +701,9 @@ class SurveyUtil
                 echo '<table class="display-survey table">';
                 echo '	<tr>';
                 echo '		<th>&nbsp;</th>';
-                echo '		<th>'.get_lang('AbsoluteTotal').'</th>';
+                echo '		<th>'.get_lang('Absolute total').'</th>';
                 echo '		<th>'.get_lang('Percentage').'</th>';
-                echo '		<th>'.get_lang('VisualRepresentation').'</th>';
+                echo '		<th>'.get_lang('Graphic').'</th>';
                 echo '	<tr>';
 
                 // Displaying the table: the content
@@ -745,7 +743,7 @@ class SurveyUtil
                             echo '<div style="border:1px solid #264269; background-color:#aecaf4; height:10px; width:'
                                 .$size.'px">&nbsp;</div>';
                         } else {
-                            echo '<div style="text-align: left;">'.get_lang("NoDataAvailable").'</div>';
+                            echo '<div style="text-align: left;">'.get_lang("No data available").'</div>';
                         }
                         echo ' </td>';
                         echo ' </tr>';
@@ -775,7 +773,7 @@ class SurveyUtil
 
         if (isset($_GET['viewoption'])) {
             echo '<div class="answered-people">';
-            echo '<h4>'.get_lang('PeopleWhoAnswered').': '
+            echo '<h4>'.get_lang('People who have chosen this answer').': '
                 .strip_tags($options[Security::remove_XSS($_GET['viewoption'])]['option_text']).'</h4>';
 
             if (is_numeric($_GET['value'])) {
@@ -870,9 +868,9 @@ class SurveyUtil
         echo '	<tr>';
         echo '		<th>&nbsp;</th>';
         echo '		<th>'.get_lang('Score').'</th>';
-        echo '		<th>'.get_lang('AbsoluteTotal').'</th>';
+        echo '		<th>'.get_lang('Absolute total').'</th>';
         echo '		<th>'.get_lang('Percentage').'</th>';
-        echo '		<th>'.get_lang('VisualRepresentation').'</th>';
+        echo '		<th>'.get_lang('Graphic').'</th>';
         echo '	<tr>';
         // Displaying the table: the content
         foreach ($options as $key => &$value) {
@@ -944,15 +942,15 @@ class SurveyUtil
                 href="'.api_get_path(WEB_CODE_PATH).'survey/reporting.php?survey_id='.$surveyId.'&'.api_get_cidreq().'">'
                 .Display::return_icon(
                     'back.png',
-                    get_lang('BackTo').' '.get_lang('ReportingOverview'),
+                    get_lang('Back to').' '.get_lang('Reporting overview'),
                     [],
                     ICON_SIZE_MEDIUM
                 )
                 .'</a>';
             $content .= '<a class="survey_export_link" href="javascript: void(0);" onclick="document.form1a.submit();">'
-                .Display::return_icon('export_csv.png', get_lang('ExportAsCSV'), '', ICON_SIZE_MEDIUM).'</a>';
+                .Display::return_icon('export_csv.png', get_lang('CSV export'), '', ICON_SIZE_MEDIUM).'</a>';
             $content .= '<a class="survey_export_link" href="javascript: void(0);" onclick="document.form1b.submit();">'
-                .Display::return_icon('export_excel.png', get_lang('ExportAsXLS'), '', ICON_SIZE_MEDIUM).'</a>';
+                .Display::return_icon('export_excel.png', get_lang('Excel export'), '', ICON_SIZE_MEDIUM).'</a>';
             $content .= '</div>';
 
             // The form
@@ -985,13 +983,13 @@ class SurveyUtil
             ) {
                 $content .= '<button class="cancel" 
                                 type="submit" 
-                                name="reset_question_filter" value="'.get_lang('ResetQuestionFilter').'">'.
-                                get_lang('ResetQuestionFilter').'</button>';
+                                name="reset_question_filter" value="'.get_lang('Reset filter').'">'.
+                                get_lang('Reset filter').'</button>';
             }
             $content .= '<button 
                             class = "save" 
-                            type="submit" name="submit_question_filter" value="'.get_lang('SubmitQuestionFilter').'">'.
-                            get_lang('SubmitQuestionFilter').'</button>';
+                            type="submit" name="submit_question_filter" value="'.get_lang('Filter').'">'.
+                            get_lang('Filter').'</button>';
             $content .= '</th>';
         }
 
@@ -1017,7 +1015,7 @@ class SurveyUtil
                     if ($addFilters) {
                         $content .= '<input type="checkbox" name="fields_filter" value="1" checked="checked"/> ';
                     }
-                    $content .= get_lang('UserFields');
+                    $content .= get_lang('Profile attributes');
                     $content .= '</label>';
                     $content .= '</th>';
                     $display_extra_user_fields = true;
@@ -1925,7 +1923,7 @@ class SurveyUtil
             .'">'
             .Display::return_icon(
                 'back.png',
-                get_lang('BackTo').' '.get_lang('ReportingOverview'),
+                get_lang('Back to').' '.get_lang('Reporting overview'),
                 [],
                 ICON_SIZE_MEDIUM
             )
@@ -1933,7 +1931,7 @@ class SurveyUtil
         echo '</div>';
 
         // Displaying an information message that only the questions with predefined answers can be used in a comparative report
-        echo Display::return_message(get_lang('OnlyQuestionsWithPredefinedAnswers'), 'normal', false);
+        echo Display::return_message(get_lang('Only questions with predefined answers can be used'), 'normal', false);
 
         $xAxis = isset($_GET['xaxis']) ? Security::remove_XSS($_GET['xaxis']) : '';
         $yAxis = isset($_GET['yaxis']) ? Security::remove_XSS($_GET['yaxis']) : '';
@@ -1971,10 +1969,10 @@ class SurveyUtil
             }
         }
 
-        $form->addSelect('xaxis', get_lang('SelectXAxis'), $optionsX);
-        $form->addSelect('yaxis', get_lang('SelectYAxis'), $optionsY);
+        $form->addSelect('xaxis', get_lang('Select the question on the X axis'), $optionsX);
+        $form->addSelect('yaxis', get_lang('Select the question on the Y axis'), $optionsY);
 
-        $form->addButtonSearch(get_lang('CompareQuestions'));
+        $form->addButtonSearch(get_lang('Compare questions'));
         $form->setDefaults($defaults);
         $form->display();
 
@@ -2494,8 +2492,8 @@ class SurveyUtil
         if ($hideLink) {
             $full_invitation_text = str_replace('**link**', '', $invitation_text);
         } else {
-            $text_link = '<a href="'.$link.'">'.get_lang('ClickHereToAnswerTheSurvey')."</a><br />\r\n<br />\r\n"
-                .get_lang('OrCopyPasteTheFollowingUrl')." <br /> \r\n <br /> \r\n ".$link;
+            $text_link = '<a href="'.$link.'">'.get_lang('Click here to answer the survey')."</a><br />\r\n<br />\r\n"
+                .get_lang('or copy paste the following url :')." <br /> \r\n <br /> \r\n ".$link;
 
             $replace_count = 0;
             $full_invitation_text = api_str_ireplace('**link**', $text_link, $invitation_text, $replace_count);
@@ -2733,9 +2731,9 @@ class SurveyUtil
     {
         $url = api_get_path(WEB_CODE_PATH).'survey/survey_list.php?search=advanced&'.api_get_cidreq();
         $form = new FormValidator('search', 'get', $url);
-        $form->addHeader(get_lang('SearchASurvey'));
+        $form->addHeader(get_lang('Search a survey'));
         $form->addText('keyword_title', get_lang('Title'));
-        $form->addText('keyword_code', get_lang('Code'));
+        $form->addText('keyword_code', get_lang('Course code'));
         $form->addSelectLanguage('keyword_language', get_lang('Language'));
         $form->addHidden('cidReq', api_get_course_id());
         $form->addButtonSearch(get_lang('Search'), 'do_search');
@@ -2759,22 +2757,22 @@ class SurveyUtil
         );
         $table->set_additional_parameters($parameters);
         $table->set_header(0, '', false);
-        $table->set_header(1, get_lang('SurveyName'));
-        $table->set_header(2, get_lang('SurveyCode'));
-        $table->set_header(3, get_lang('NumberOfQuestions'));
+        $table->set_header(1, get_lang('Survey name'));
+        $table->set_header(2, get_lang('SurveyCourse code'));
+        $table->set_header(3, get_lang('Questions'));
         $table->set_header(4, get_lang('Author'));
-        $table->set_header(5, get_lang('AvailableFrom'));
-        $table->set_header(6, get_lang('AvailableUntil'));
+        $table->set_header(5, get_lang('Available from'));
+        $table->set_header(6, get_lang('Until'));
         $table->set_header(7, get_lang('Invite'));
         $table->set_header(8, get_lang('Anonymous'));
 
         if (api_get_configuration_value('allow_mandatory_survey')) {
-            $table->set_header(9, get_lang('IsMandatory'));
-            $table->set_header(10, get_lang('Modify'), false, 'width="150"');
+            $table->set_header(9, get_lang('Mandatory?'));
+            $table->set_header(10, get_lang('Edit'), false, 'width="150"');
             $table->set_column_filter(9, 'anonymous_filter');
             $table->set_column_filter(10, 'modify_filter_drh');
         } else {
-            $table->set_header(9, get_lang('Modify'), false, 'width="150"');
+            $table->set_header(9, get_lang('Edit'), false, 'width="150"');
             $table->set_column_filter(9, 'modify_filter_drh');
         }
 
@@ -2795,8 +2793,8 @@ class SurveyUtil
         $parameters = [];
         $parameters['cidReq'] = api_get_course_id();
         if (isset($_GET['do_search']) && $_GET['do_search']) {
-            $message = get_lang('DisplaySearchResults').'<br />';
-            $message .= '<a href="'.api_get_self().'?'.api_get_cidreq().'">'.get_lang('DisplayAll').'</a>';
+            $message = get_lang('Display search results').'<br />';
+            $message .= '<a href="'.api_get_self().'?'.api_get_cidreq().'">'.get_lang('Display all').'</a>';
             echo Display::return_message($message, 'normal', false);
         }
 
@@ -2809,29 +2807,29 @@ class SurveyUtil
         );
         $table->set_additional_parameters($parameters);
         $table->set_header(0, '', false);
-        $table->set_header(1, get_lang('SurveyName'));
-        $table->set_header(2, get_lang('SurveyCode'));
-        $table->set_header(3, get_lang('NumberOfQuestions'));
+        $table->set_header(1, get_lang('Survey name'));
+        $table->set_header(2, get_lang('SurveyCourse code'));
+        $table->set_header(3, get_lang('Questions'));
         $table->set_header(4, get_lang('Author'));
         //$table->set_header(5, get_lang('Language'));
         //$table->set_header(6, get_lang('Shared'));
-        $table->set_header(5, get_lang('AvailableFrom'));
-        $table->set_header(6, get_lang('AvailableUntil'));
+        $table->set_header(5, get_lang('Available from'));
+        $table->set_header(6, get_lang('Until'));
         $table->set_header(7, get_lang('Invite'));
         $table->set_header(8, get_lang('Anonymous'));
 
         if (api_get_configuration_value('allow_mandatory_survey')) {
-            $table->set_header(9, get_lang('IsMandatory'));
-            $table->set_header(10, get_lang('Modify'), false, 'width="150"');
+            $table->set_header(9, get_lang('Mandatory?'));
+            $table->set_header(10, get_lang('Edit'), false, 'width="150"');
             $table->set_column_filter(8, 'anonymous_filter');
             $table->set_column_filter(10, 'modify_filter');
         } else {
-            $table->set_header(9, get_lang('Modify'), false, 'width="150"');
+            $table->set_header(9, get_lang('Edit'), false, 'width="150"');
             $table->set_column_filter(9, 'modify_filter');
         }
 
         $table->set_column_filter(8, 'anonymous_filter');
-        $table->set_form_actions(['delete' => get_lang('DeleteSurvey')]);
+        $table->set_form_actions(['delete' => get_lang('Delete survey')]);
         $table->display();
     }
 
@@ -2843,8 +2841,8 @@ class SurveyUtil
         $parameters = [];
         $parameters['cidReq'] = api_get_course_id();
         if (isset($_GET['do_search'])) {
-            $message = get_lang('DisplaySearchResults').'<br />';
-            $message .= '<a href="'.api_get_self().'?'.api_get_cidreq().'">'.get_lang('DisplayAll').'</a>';
+            $message = get_lang('Display search results').'<br />';
+            $message .= '<a href="'.api_get_self().'?'.api_get_cidreq().'">'.get_lang('Display all').'</a>';
             echo Display::return_message($message, 'normal', false);
         }
 
@@ -2857,22 +2855,22 @@ class SurveyUtil
         );
         $table->set_additional_parameters($parameters);
         $table->set_header(0, '', false);
-        $table->set_header(1, get_lang('SurveyName'));
-        $table->set_header(2, get_lang('SurveyCode'));
-        $table->set_header(3, get_lang('NumberOfQuestions'));
+        $table->set_header(1, get_lang('Survey name'));
+        $table->set_header(2, get_lang('SurveyCourse code'));
+        $table->set_header(3, get_lang('Questions'));
         $table->set_header(4, get_lang('Author'));
-        $table->set_header(5, get_lang('AvailableFrom'));
-        $table->set_header(6, get_lang('AvailableUntil'));
+        $table->set_header(5, get_lang('Available from'));
+        $table->set_header(6, get_lang('Until'));
         $table->set_header(7, get_lang('Invite'));
         $table->set_header(8, get_lang('Anonymous'));
 
         if (api_get_configuration_value('allow_mandatory_survey')) {
-            $table->set_header(9, get_lang('Modify'), false, 'width="130"');
-            $table->set_header(10, get_lang('Modify'), false, 'width="130"');
+            $table->set_header(9, get_lang('Edit'), false, 'width="130"');
+            $table->set_header(10, get_lang('Edit'), false, 'width="130"');
             $table->set_column_filter(8, 'anonymous_filter');
             $table->set_column_filter(10, 'modify_filter_for_coach');
         } else {
-            $table->set_header(9, get_lang('Modify'), false, 'width="130"');
+            $table->set_header(9, get_lang('Edit'), false, 'width="130"');
             $table->set_column_filter(9, 'modify_filter_for_coach');
         }
 
@@ -2972,38 +2970,38 @@ class SurveyUtil
 
             if (SurveyManager::survey_generation_hash_available()) {
                 $actions[] = Display::url(
-                    Display::return_icon('new_link.png', get_lang('GenerateSurveyAccessLink')),
+                    Display::return_icon('new_link.png', get_lang('Generate survey access link')),
                     $codePath.'survey/generate_link.php?'.http_build_query($params + ['survey_id' => $survey_id])
                 );
             }
 
             if ($type != 3) {
                 $actions[] = Display::url(
-                    Display::return_icon('backup.png', get_lang('CopySurvey')),
+                    Display::return_icon('backup.png', get_lang('Copy survey')),
                     $codePath.'survey/copy_survey.php?'.http_build_query($params + ['survey_id' => $survey_id])
                 );
 
                 $actions[] = Display::url(
-                    Display::return_icon('copy.png', get_lang('DuplicateSurvey')),
+                    Display::return_icon('copy.png', get_lang('Duplicate survey')),
                     $codePath.'survey/survey_list.php?'
                     .http_build_query($params + ['action' => 'copy_survey', 'survey_id' => $survey_id])
                 );
 
                 $actions[] = Display::url(
-                    Display::return_icon('multiplicate_survey.png', get_lang('MultiplicateQuestions')),
+                    Display::return_icon('multiplicate_survey.png', get_lang('Multiplicate questions')),
                     $codePath.'survey/survey_list.php?'
                     .http_build_query($params + ['action' => 'multiplicate', 'survey_id' => $survey_id])
                 );
 
                 $actions[] = Display::url(
-                    Display::return_icon('multiplicate_survey_na.png', get_lang('RemoveMultiplicateQuestions')),
+                    Display::return_icon('multiplicate_survey_na.png', get_lang('RemoveMultiplicate questions')),
                     $codePath.'survey/survey_list.php?'
                     .http_build_query($params + ['action' => 'remove_multiplicate', 'survey_id' => $survey_id])
                 );
 
-                $warning = addslashes(api_htmlentities(get_lang('EmptySurvey').'?', ENT_QUOTES));
+                $warning = addslashes(api_htmlentities(get_lang('Empty survey').'?', ENT_QUOTES));
                 $actions[] = Display::url(
-                    Display::return_icon('clean.png', get_lang('EmptySurvey')),
+                    Display::return_icon('clean.png', get_lang('Empty survey')),
                     $codePath.'survey/survey_list.php?'
                     .http_build_query($params + ['action' => 'empty', 'survey_id' => $survey_id]),
                     [
@@ -3034,7 +3032,7 @@ class SurveyUtil
         ) {
             $actions[] = self::getAdditionalTeacherActions($survey_id);
 
-            $warning = addslashes(api_htmlentities(get_lang('DeleteSurvey').'?', ENT_QUOTES));
+            $warning = addslashes(api_htmlentities(get_lang('Delete survey').'?', ENT_QUOTES));
             $actions[] = Display::url(
                 Display::return_icon('delete.png', get_lang('Delete')),
                 $codePath.'survey/survey_list.php?'
@@ -3095,9 +3093,9 @@ class SurveyUtil
             Display::return_icon('mail_send.png', get_lang('Publish')),
             $codePath.'survey/survey_invite.php?'.http_build_query($params + ['survey_id' => $survey_id])
         );
-        $warning = addslashes(api_htmlentities(get_lang('EmptySurvey').'?', ENT_QUOTES));
+        $warning = addslashes(api_htmlentities(get_lang('Empty survey').'?', ENT_QUOTES));
         $actions[] = Display::url(
-            Display::return_icon('clean.png', get_lang('EmptySurvey')),
+            Display::return_icon('clean.png', get_lang('Empty survey')),
             $codePath.'survey/survey_list.php?'
                 .http_build_query($params + ['action' => 'empty', 'survey_id' => $survey_id]),
             [
@@ -3469,10 +3467,10 @@ class SurveyUtil
         echo '<table id="list-survey" class="table ">';
         echo '<thead>';
         echo '<tr>';
-        echo '	<th>'.get_lang('SurveyName').'</th>';
+        echo '	<th>'.get_lang('Survey name').'</th>';
         echo '	<th class="text-center">'.get_lang('Anonymous').'</th>';
         if ($mandatoryAllowed) {
-            echo '<th class="text-center">'.get_lang('IsMandatory').'</th>';
+            echo '<th class="text-center">'.get_lang('Mandatory?').'</th>';
         }
         echo '</tr>';
         echo '</thead>';
@@ -3521,7 +3519,7 @@ class SurveyUtil
                 echo '<td>';
                 echo Display::return_icon(
                     'statistics.png',
-                    get_lang('CreateNewSurvey'),
+                    get_lang('Create survey'),
                     [],
                     ICON_SIZE_TINY
                 );
@@ -3586,8 +3584,8 @@ class SurveyUtil
     {
         //	LAST NAME and FIRST NAME
         $field_list_array = [];
-        $field_list_array['lastname']['name'] = get_lang('LastName');
-        $field_list_array['firstname']['name'] = get_lang('FirstName');
+        $field_list_array['lastname']['name'] = get_lang('Last name');
+        $field_list_array['firstname']['name'] = get_lang('First name');
 
         if (api_get_setting('profile', 'name') != 'true') {
             $field_list_array['firstname']['visibility'] = 0;
@@ -3601,7 +3599,7 @@ class SurveyUtil
         $field_list_array['username']['visibility'] = 0;
 
         //	OFFICIAL CODE
-        $field_list_array['official_code']['name'] = get_lang('OfficialCode');
+        $field_list_array['official_code']['name'] = get_lang('OfficialCourse code');
 
         if (api_get_setting('profile', 'officialcode') != 'true') {
             $field_list_array['official_code']['visibility'] = 1;
@@ -3610,7 +3608,7 @@ class SurveyUtil
         }
 
         // EMAIL
-        $field_list_array['email']['name'] = get_lang('Email');
+        $field_list_array['email']['name'] = get_lang('e-mail');
         if (api_get_setting('profile', 'email') != 'true') {
             $field_list_array['email']['visibility'] = 1;
         } else {

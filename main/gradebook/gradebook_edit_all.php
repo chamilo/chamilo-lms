@@ -46,7 +46,7 @@ $table_evaluated[LINK_EXERCISE] = [
     TABLE_QUIZ_TEST,
     'title',
     'id',
-    get_lang('Exercise'),
+    get_lang('Test'),
 ];
 $table_evaluated[LINK_DROPBOX] = [
     TABLE_DROPBOX_FILE,
@@ -58,13 +58,13 @@ $table_evaluated[LINK_STUDENTPUBLICATION] = [
     TABLE_STUDENT_PUBLICATION,
     'url',
     'id',
-    get_lang('Student_publication'),
+    get_lang('Assignments'),
 ];
 $table_evaluated[LINK_LEARNPATH] = [
     TABLE_LP_MAIN,
     'name',
     'id',
-    get_lang('Learnpath'),
+    get_lang('Courses'),
 ];
 $table_evaluated[LINK_FORUM_THREAD] = [
     TABLE_FORUM_THREAD,
@@ -87,7 +87,7 @@ $table_evaluated[LINK_SURVEY] = [
 
 $submitted = isset($_POST['submitted']) ? $_POST['submitted'] : '';
 if ($submitted == 1) {
-    Display::addFlash(Display::return_message(get_lang('GradebookWeightUpdated')));
+    Display::addFlash(Display::return_message(get_lang('Weights updated successfully')));
     if (isset($_POST['evaluation'])) {
         $eval_log = new Evaluation();
     }
@@ -175,7 +175,7 @@ foreach ($evaluations as $evaluationRow) {
 
     $output .= '<tr>
                 <td>'.GradebookUtils::build_type_icon_tag('evalnotempty').'</td>
-                <td>'.$evaluationRow['name'].' '.Display::label(get_lang('Evaluation')).'</td>';
+                <td>'.$evaluationRow['name'].' '.Display::label(get_lang('Score')).'</td>';
     $output .= '<td>
                     <input type="hidden" name="eval_'.$evaluationRow['id'].'" value="1" />
                     <input type="text" size="10" name="evaluation['.$evaluationRow['id'].']" value="'.$item_weight.'"/>
@@ -185,9 +185,9 @@ foreach ($evaluations as $evaluationRow) {
 $currentUrl = api_get_self().'?'.api_get_cidreq().'&selectcat='.$my_selectcat;
 
 $form = new FormValidator('auto_weight', 'post', $currentUrl);
-$form->addHeader(get_lang('AutoWeight'));
-$form->addLabel(null, get_lang('AutoWeightExplanation'));
-$form->addButtonUpdate(get_lang('AutoWeight'));
+$form->addHeader(get_lang('Automatic weight'));
+$form->addLabel(null, get_lang('Automatic weightExplanation'));
+$form->addButtonUpdate(get_lang('Automatic weight'));
 
 if ($form->validate()) {
     $itemCount = count($links) + count($evaluations);
@@ -232,7 +232,7 @@ if ($form->validate()) {
             $weightToApply
         );
     }
-    Display::addFlash(Display::return_message(get_lang('GradebookWeightUpdated')));
+    Display::addFlash(Display::return_message(get_lang('Weights updated successfully')));
 
     header('Location: '.$currentUrl);
     exit;
@@ -243,23 +243,23 @@ if (!isset($_GET['exportpdf']) and !isset($_GET['export_certificate'])) {
     if (isset($_GET['studentoverview'])) {
         $interbreadcrumb[] = [
             'url' => Category::getUrl().'selectcat='.$my_selectcat,
-            'name' => get_lang('Gradebook'),
+            'name' => get_lang('Assessments'),
         ];
-        Display:: display_header(get_lang('FlatView'));
+        Display:: display_header(get_lang('List View'));
     } elseif (isset($_GET['search'])) {
         $interbreadcrumb[] = [
             'url' => Category::getUrl().'selectcat='.$my_selectcat,
-            'name' => get_lang('Gradebook'),
+            'name' => get_lang('Assessments'),
         ];
-        Display:: display_header(get_lang('SearchResults'));
+        Display:: display_header(get_lang('Search results'));
     } else {
         $interbreadcrumb[] = [
             'url' => Category::getUrl().'selectcat=1',
-            'name' => get_lang('Gradebook'),
+            'name' => get_lang('Assessments'),
         ];
         $interbreadcrumb[] = [
             'url' => '#',
-            'name' => get_lang('EditAllWeights'),
+            'name' => get_lang('Weight in Report'),
         ];
         Display:: display_header('');
     }
@@ -269,7 +269,7 @@ if (!isset($_GET['exportpdf']) and !isset($_GET['export_certificate'])) {
         <a href="<?php echo Category::getUrl(); ?>selectcat=<?php echo $my_selectcat; ?>">
             <?php echo Display::return_icon(
                 'back.png',
-                get_lang('FolderView'),
+                get_lang('Assessment home'),
                 '',
                 ICON_SIZE_MEDIUM
             ); ?>
@@ -280,10 +280,10 @@ if (!isset($_GET['exportpdf']) and !isset($_GET['export_certificate'])) {
 $form->display();
 
 $formNormal = new FormValidator('normal_weight', 'post', $currentUrl);
-$formNormal->addHeader(get_lang('EditWeight'));
+$formNormal->addHeader(get_lang('Edit weight'));
 $formNormal->display();
 
-$warning_message = sprintf(get_lang('TotalWeightMustBeX'), $original_total);
+$warning_message = sprintf(get_lang('The sum of all weights of activities must be %s'), $original_total);
 echo Display::return_message($warning_message, 'warning', false);
 
 ?>
@@ -291,7 +291,7 @@ echo Display::return_message($warning_message, 'warning', false);
     <table class="data_table">
         <tr class="row_odd">
             <th style="width: 35px;"><?php echo get_lang('Type'); ?></th>
-            <th><?php echo get_lang('Resource'); ?></th>
+            <th><?php echo get_lang('Assessment'); ?></th>
             <th><?php echo get_lang('Weight'); ?></th>
         </tr>
         <?php echo $output; ?>
@@ -300,7 +300,7 @@ echo Display::return_message($warning_message, 'warning', false);
     <br/>
     <button class="btn btn-primary" type="submit" name="name"
             value="<?php echo get_lang('Save'); ?>">
-        <?php echo get_lang('SaveScoringRules'); ?>
+        <?php echo get_lang('Save weights in report'); ?>
     </button>
 </form>
 <?php

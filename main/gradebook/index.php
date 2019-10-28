@@ -3,8 +3,6 @@
 
 /**
  * Gradebook controller.
- *
- * @package chamilo.gradebook
  */
 
 // $cidReset : This is the main difference with gradebook.php, here we say,
@@ -30,7 +28,7 @@ switch ($action) {
     case 'generate_eval_stats':
         if (!empty($itemId)) {
             Evaluation::generateStats($itemId);
-            Display::addFlash(Display::return_message(get_lang('Updated')));
+            Display::addFlash(Display::return_message(get_lang('Update successful')));
         }
         header('Location: '.api_get_self().'?'.api_get_cidreq());
         exit;
@@ -55,7 +53,7 @@ switch ($action) {
                     $exercise->generateStats($exerciseId, api_get_course_info(), api_get_session_id());
                 }
             }
-            Display::addFlash(Display::return_message(get_lang('Updated')));
+            Display::addFlash(Display::return_message(get_lang('Update successful')));
         }
         header('Location: '.api_get_self().'?'.api_get_cidreq());
         exit;
@@ -63,13 +61,13 @@ switch ($action) {
     case 'lock':
         $category_to_lock = Category::load($_GET['category_id']);
         $category_to_lock[0]->lockAllItems(1);
-        $confirmation_message = get_lang('GradebookLockedAlert');
+        $confirmation_message = get_lang('This assessment has been locked. You cannot unlock it. If you really need to unlock it, please contact the platform administrator, explaining the reason why you would need to do that (it might otherwise be considered as fraud attempt).');
         break;
     case 'unlock':
         if (api_is_platform_admin()) {
             $category_to_lock = Category::load($_GET['category_id']);
             $category_to_lock[0]->lockAllItems(0);
-            $confirmation_message = get_lang('EvaluationHasBeenUnLocked');
+            $confirmation_message = get_lang('Evaluation has been unlocked');
         }
         break;
     case 'export_table':
@@ -97,7 +95,7 @@ var show_icon = "'.Display::returnIconPath('view_more_stats.gif').'";
 var hide_icon = "'.Display::returnIconPath('view_less_stats.gif').'";
 
 function confirmation() {
-	if (confirm("'.get_lang('DeleteAll').'?")) {
+	if (confirm("'.get_lang('Delete all').'?")) {
 		return true;
 	} else {
 		return false;
@@ -222,7 +220,7 @@ $isStudentView = api_is_student_view_active();
 if ($selectCat > 0 && $isStudentView) {
     $interbreadcrumb[] = [
         'url' => 'index.php?selectcat=0&isStudentView=true',
-        'name' => get_lang('ToolGradebook'),
+        'name' => get_lang('Assessments'),
     ];
 }
 
@@ -356,10 +354,10 @@ if (isset($_GET['visiblecat'])) {
     $cats[0]->apply_visibility_to_children();
     unset($cats);
     if ($visibility_command) {
-        $confirmation_message = get_lang('ViMod');
+        $confirmation_message = get_lang('Visibility modified');
         $filter_confirm_msg = false;
     } else {
-        $confirmation_message = get_lang('InViMod');
+        $confirmation_message = get_lang('InVisibility modified');
         $filter_confirm_msg = false;
     }
 }
@@ -376,7 +374,7 @@ if (isset($_GET['deletecat'])) {
             }
         }
     }
-    $confirmation_message = get_lang('CategoryDeleted');
+    $confirmation_message = get_lang('The category has been deleted.');
     $filter_confirm_msg = false;
 }
 
@@ -392,10 +390,10 @@ if (isset($_GET['visibleeval'])) {
     $eval[0]->save();
     unset($eval);
     if ($visibility_command) {
-        $confirmation_message = get_lang('ViMod');
+        $confirmation_message = get_lang('Visibility modified');
         $filter_confirm_msg = false;
     } else {
-        $confirmation_message = get_lang('InViMod');
+        $confirmation_message = get_lang('InVisibility modified');
         $filter_confirm_msg = false;
     }
 }
@@ -405,10 +403,10 @@ if (isset($_GET['lockedeval'])) {
     GradebookUtils::block_students();
     $locked = (int) $_GET['lockedeval'];
     $type_locked = 1;
-    $confirmation_message = get_lang('EvaluationHasBeenLocked');
+    $confirmation_message = get_lang('Evaluation has been locked');
     if (isset($_GET['typelocked']) && api_is_platform_admin()) {
         $type_locked = 0;
-        $confirmation_message = get_lang('EvaluationHasBeenUnLocked');
+        $confirmation_message = get_lang('Evaluation has been unlocked');
     }
     $eval = Evaluation::load($locked);
     if ($eval[0] != null) {
@@ -424,7 +422,7 @@ if (isset($_GET['deleteeval'])) {
     if ($eval[0] != null) {
         $eval[0]->delete_with_results();
     }
-    $confirmation_message = get_lang('GradebookEvaluationDeleted');
+    $confirmation_message = get_lang('Assessment deleted');
     $filter_confirm_msg = false;
 }
 
@@ -442,10 +440,10 @@ if (isset($_GET['visiblelink'])) {
     }
     unset($link);
     if ($visibility_command) {
-        $confirmation_message = get_lang('ViMod');
+        $confirmation_message = get_lang('Visibility modified');
         $filter_confirm_msg = false;
     } else {
-        $confirmation_message = get_lang('InViMod');
+        $confirmation_message = get_lang('InVisibility modified');
         $filter_confirm_msg = false;
     }
 }
@@ -479,7 +477,7 @@ if (isset($_GET['deletelink'])) {
             $link[0]->delete();
         }
         unset($link);
-        $confirmation_message = get_lang('LinkDeleted');
+        $confirmation_message = get_lang('The link has been deleted');
         $filter_confirm_msg = false;
     }
 }
@@ -492,9 +490,9 @@ if (!empty($course_to_crsind) && !isset($_GET['confirm'])) {
     $button = '<form name="confirm" method="post" action="'.api_get_self().'?confirm='
         .(isset($_GET['movecat']) ? '&movecat='.$moveCategoryId
             : '&moveeval='.intval($_GET['moveeval'])).'&selectcat='.$selectCat.'&targetcat='.intval($_GET['targetcat']).'">
-			   <input type="submit" value="'.get_lang('Ok').'">
+			   <input type="submit" value="'.get_lang('Validate').'">
 			   </form>';
-    $warning_message = get_lang('MoveWarning').'<br><br>'.$button;
+    $warning_message = get_lang('Warning: moving gradebook elements can be dangerous for the data inside your gradebook.').'<br><br>'.$button;
     $filter_warning_msg = false;
 }
 
@@ -504,7 +502,7 @@ if (isset($_POST['action'])) {
     $number_of_selected_items = count($_POST['id']);
 
     if ($number_of_selected_items == 0) {
-        $warning_message = get_lang('NoItemsSelected');
+        $warning_message = get_lang('No resource selected');
         $filter_warning_msg = false;
     } else {
         switch ($_POST['action']) {
@@ -542,10 +540,10 @@ if (isset($_POST['action'])) {
                 }
 
                 $confirmation_message =
-                    get_lang('DeletedCategories').' : <b>'.$number_of_deleted_categories.'</b><br />'.
-                    get_lang('DeletedEvaluations').' : <b>'.$number_of_deleted_evaluations.'</b><br />'.
-                    get_lang('DeletedLinks').' : <b>'.$number_of_deleted_links.'</b><br /><br />'.
-                    get_lang('TotalItems').' : <b>'.$number_of_selected_items.'</b>';
+                    get_lang('Deleted categories').' : <b>'.$number_of_deleted_categories.'</b><br />'.
+                    get_lang('Deleted evaluations').' : <b>'.$number_of_deleted_evaluations.'</b><br />'.
+                    get_lang('Deleted links').' : <b>'.$number_of_deleted_links.'</b><br /><br />'.
+                    get_lang('Total resources').' : <b>'.$number_of_selected_items.'</b>';
                 $filter_confirm_msg = false;
                 break;
             case 'setvisible':
@@ -567,7 +565,7 @@ if (isset($_POST['action'])) {
                         $link[0]->save();
                     }
                 }
-                $confirmation_message = get_lang('ItemsVisible');
+                $confirmation_message = get_lang('The resources became visible');
                 $filter_confirm_msg = false;
                 break;
             case 'setinvisible':
@@ -589,7 +587,7 @@ if (isset($_POST['action'])) {
                         $link[0]->save();
                     }
                 }
-                $confirmation_message = get_lang('ItemsInVisible');
+                $confirmation_message = get_lang('The resources became invisible');
                 $filter_confirm_msg = false;
                 break;
         }
@@ -602,37 +600,37 @@ if (isset($_POST['submit']) && isset($_POST['keyword'])) {
 }
 
 if (isset($_GET['categorymoved'])) {
-    Display::addFlash(Display::return_message(get_lang('CategoryMoved'), 'confirmation', false));
+    Display::addFlash(Display::return_message(get_lang('The gradebook has been moved.'), 'confirmation', false));
 }
 if (isset($_GET['evaluationmoved'])) {
-    Display::addFlash(Display::return_message(get_lang('EvaluationMoved'), 'confirmation', false));
+    Display::addFlash(Display::return_message(get_lang('The gradebook component has been moved.'), 'confirmation', false));
 }
 if (isset($_GET['linkmoved'])) {
-    Display::addFlash(Display::return_message(get_lang('LinkMoved'), 'confirmation', false));
+    Display::addFlash(Display::return_message(get_lang('The link has been moved'), 'confirmation', false));
 }
 if (isset($_GET['addcat'])) {
-    Display::addFlash(Display::return_message(get_lang('CategoryAdded'), 'confirmation', false));
+    Display::addFlash(Display::return_message(get_lang('Category added'), 'confirmation', false));
 }
 if (isset($_GET['linkadded'])) {
-    Display::addFlash(Display::return_message(get_lang('LinkAdded'), 'confirmation', false));
+    Display::addFlash(Display::return_message(get_lang('The link has been added.'), 'confirmation', false));
 }
 if (isset($_GET['addresult'])) {
-    Display::addFlash(Display::return_message(get_lang('ResultAdded'), 'confirmation', false));
+    Display::addFlash(Display::return_message(get_lang('Result added'), 'confirmation', false));
 }
 if (isset($_GET['editcat'])) {
-    Display::addFlash(Display::return_message(get_lang('CategoryEdited'), 'confirmation', false));
+    Display::addFlash(Display::return_message(get_lang('Category updated'), 'confirmation', false));
 }
 if (isset($_GET['editeval'])) {
-    Display::addFlash(Display::return_message(get_lang('EvaluationEdited'), 'confirmation', false));
+    Display::addFlash(Display::return_message(get_lang('The evaluation has been succesfully edited'), 'confirmation', false));
 }
 if (isset($_GET['linkedited'])) {
-    Display::addFlash(Display::return_message(get_lang('LinkEdited'), 'confirmation', false));
+    Display::addFlash(Display::return_message(get_lang('Assessment edited'), 'confirmation', false));
 }
 if (isset($_GET['nolinkitems'])) {
-    Display::addFlash(Display::return_message(get_lang('NoLinkItems'), 'warning', false));
+    Display::addFlash(Display::return_message(get_lang('There are not linked components.'), 'warning', false));
 }
 if (isset($_GET['addallcat'])) {
-    Display::addFlash(Display::return_message(get_lang('AddAllCat'), 'normal', false));
+    Display::addFlash(Display::return_message(get_lang('Added all categories'), 'normal', false));
 }
 if (isset($confirmation_message)) {
     Display::addFlash(Display::return_message($confirmation_message, 'confirmation', $filter_confirm_msg));
@@ -650,22 +648,22 @@ if (!isset($_GET['exportpdf'])) {
     if (isset($_GET['studentoverview'])) {
         $interbreadcrumb[] = [
             'url' => Category::getUrl().'selectcat='.$selectCat,
-            'name' => get_lang('ToolGradebook'),
+            'name' => get_lang('Assessments'),
         ];
-        $viewTitle = get_lang('FlatView');
+        $viewTitle = get_lang('List View');
     } elseif (isset($_GET['search'])) {
         $interbreadcrumb[] = [
             'url' => Category::getUrl().'selectcat='.$selectCat,
-            'name' => get_lang('ToolGradebook'),
+            'name' => get_lang('Assessments'),
         ];
-        $viewTitle = get_lang('SearchResults');
+        $viewTitle = get_lang('Search results');
     } elseif (!empty($selectCat)) {
         $interbreadcrumb[] = [
             'url' => '#',
-            'name' => get_lang('ToolGradebook'),
+            'name' => get_lang('Assessments'),
         ];
     } else {
-        $viewTitle = get_lang('ToolGradebook');
+        $viewTitle = get_lang('Assessments');
     }
 }
 
@@ -688,7 +686,7 @@ if (isset($_GET['studentoverview'])) {
             get_lang('Description'),
             get_lang('Weight'),
             get_lang('Date'),
-            get_lang('Results'),
+            get_lang('Results and feedback'),
         ];
         $data_array = $datagen->get_data(
             GradebookDataGenerator::GDG_SORT_NAME,
@@ -705,7 +703,7 @@ if (isset($_GET['studentoverview'])) {
         $pdf->ezSetMargins(30, 30, 50, 30);
         $pdf->ezSetY(810);
         $pdf->ezText(
-            get_lang('FlatView').' ('.api_convert_and_format_date(
+            get_lang('List View').' ('.api_convert_and_format_date(
                 null,
                 DATE_FORMAT_SHORT
             ).' '.api_convert_and_format_date(null, TIME_NO_SEC_FORMAT).')',
@@ -823,7 +821,7 @@ if (!empty($selectCat)) {
 
             if ($hideCertificateExport !== 'true' && isset($certificate['pdf_url'])) {
                 $actionsLeft .= Display::url(
-                    Display::returnFontAwesomeIcon('file-pdf-o').get_lang('DownloadCertificatePdf'),
+                    Display::returnFontAwesomeIcon('file-pdf-o').get_lang('Download certificate in PDF'),
                     $certificate['pdf_url'],
                     ['class' => 'btn btn-default']
                 );
@@ -843,7 +841,7 @@ if (!api_is_allowed_to_edit(null, true)) {
     $allowButton = api_get_configuration_value('gradebook_hide_pdf_report_button') === false;
     if ($allowButton) {
         $actionsLeft .= Display::url(
-            Display::returnFontAwesomeIcon('file-pdf-o').get_lang('DownloadReportPdf'),
+            Display::returnFontAwesomeIcon('file-pdf-o').get_lang('Download report in PDF'),
             api_get_self().'?action=export_table&'.api_get_cidreq().'&category_id='.$selectCat,
             ['class' => 'btn btn-default']
         );
@@ -973,7 +971,7 @@ if (isset($first_time) && $first_time == 1 && api_is_allowed_to_edit(null, true)
                     // Showing the grading system
                     if (!empty($grade_models[$grade_model_id])) {
                         echo Display::return_message(
-                            get_lang('GradeModel').': '.$grade_models[$grade_model_id]['name']
+                            get_lang('Grading model').': '.$grade_models[$grade_model_id]['name']
                         );
                     }
                 }
@@ -1023,7 +1021,7 @@ if (isset($first_time) && $first_time == 1 && api_is_allowed_to_edit(null, true)
                 if ($action === 'export_table') {
                     ob_clean();
                     $params = [
-                        'pdf_title' => sprintf(get_lang('GradeFromX'), $courseInfo['name']),
+                        'pdf_title' => sprintf(get_lang('Grades from course: %s'), $courseInfo['name']),
                         'course_code' => api_get_course_id(),
                         'session_info' => '',
                         'course_info' => '',

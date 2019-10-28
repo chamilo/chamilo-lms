@@ -40,7 +40,7 @@ $allowRequiredSurveyQuestions = api_get_configuration_value('allow_required_surv
 // Breadcrumbs
 $interbreadcrumb[] = [
     'url' => api_get_path(WEB_CODE_PATH).'survey/survey_list.php?'.api_get_cidreq(),
-    'name' => get_lang('SurveyList'),
+    'name' => get_lang('Survey list'),
 ];
 $interbreadcrumb[] = [
     'url' => api_get_path(WEB_CODE_PATH).'survey/survey.php?survey_id='.$surveyId.'&'.api_get_cidreq(),
@@ -48,7 +48,7 @@ $interbreadcrumb[] = [
 ];
 
 $show = 0;
-Display::display_header(get_lang('SurveyPreview'));
+Display::display_header(get_lang('Survey preview'));
 
 // We exit here is the first or last question is a pagebreak (which causes errors)
 SurveyUtil::check_first_last_question($surveyId, false);
@@ -68,7 +68,7 @@ if (!isset($_GET['show'])) {
 
 // Displaying the survey thanks message
 if (isset($_POST['finish_survey'])) {
-    echo Display::return_message(get_lang('SurveyFinished'), 'confirm');
+    echo Display::return_message(get_lang('You have finished this survey.'), 'confirm');
     echo $survey_data['survey_thanks'];
     Display::display_footer();
     exit;
@@ -198,14 +198,14 @@ if ($show < $numberOfPages) {
     if ($show == 0) {
         $form->addButton(
             'next_survey_page',
-            get_lang('StartSurvey'),
+            get_lang('Start the Survey'),
             'arrow-right',
             'success'
         );
     } else {
         $form->addButton(
             'next_survey_page',
-            get_lang('NextQuestion'),
+            get_lang('Next question'),
             'arrow-right',
             'success'
         );
@@ -215,11 +215,11 @@ if ($show < $numberOfPages) {
 if (isset($_GET['show'])) {
     if ($show >= $numberOfPages || count($questions) == 0) {
         if ($questions_exists == false) {
-            echo '<p>'.get_lang('ThereAreNotQuestionsForthisSurvey').'</p>';
+            echo '<p>'.get_lang('There are not questions for this survey').'</p>';
         }
         $form->addButton(
             'finish_survey',
-            get_lang('FinishSurvey'),
+            get_lang('Finish survey'),
             'arrow-right',
             'success'
         );
@@ -230,7 +230,7 @@ $form->addHtml('</div>');
 $form->display();
 
 echo Display::toolbarButton(
-    get_lang('ReturnToCourseHomepage'),
+    get_lang('Return to Course Homepage'),
     api_get_course_url($courseInfo['code']),
     'home'
 );

@@ -49,20 +49,20 @@ $urlname = isset($survey_data['title']) ? strip_tags($survey_data['title']) : nu
 if ($action == 'add') {
     $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'survey/survey_list.php?'.api_get_cidreq(),
-        'name' => get_lang('SurveyList'),
+        'name' => get_lang('Survey list'),
     ];
-    $tool_name = get_lang('CreateNewSurvey');
+    $tool_name = get_lang('Create survey');
 }
 if ($action == 'edit' && is_numeric($survey_id)) {
     $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'survey/survey_list.php?'.api_get_cidreq(),
-        'name' => get_lang('SurveyList'),
+        'name' => get_lang('Survey list'),
     ];
     $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'survey/survey.php?survey_id='.$survey_id.'&'.api_get_cidreq(),
         'name' => Security::remove_XSS($urlname),
     ];
-    $tool_name = get_lang('EditSurvey');
+    $tool_name = get_lang('Edit survey');
 }
 $gradebook_link_id = null;
 // Getting the default values
@@ -128,7 +128,7 @@ if ($action == 'edit' && isset($survey_id) && is_numeric($survey_id)) {
 $survey_code = $form->addElement(
     'text',
     'survey_code',
-    get_lang('SurveyCode'),
+    get_lang('Code'),
     ['size' => '20', 'maxlength' => '20', 'autofocus' => 'autofocus']
 );
 
@@ -140,14 +140,14 @@ if ($action == 'edit') {
 $form->addElement(
     'html_editor',
     'survey_title',
-    get_lang('SurveyTitle'),
+    get_lang('Survey title'),
     null,
     ['ToolbarSet' => 'Survey', 'Width' => '100%', 'Height' => '200']
 );
 $form->addElement(
     'html_editor',
     'survey_subtitle',
-    get_lang('SurveySubTitle'),
+    get_lang('Survey subtitle'),
     null,
     [
         'ToolbarSet' => 'Survey',
@@ -163,15 +163,15 @@ $form->addElement('hidden', 'survey_language');
 $allowSurveyAvailabilityDatetime = api_get_configuration_value('allow_survey_availability_datetime');
 
 if ($allowSurveyAvailabilityDatetime) {
-    $startDateElement = $form->addDateTimePicker('start_date', get_lang('StartDate'));
-    $endDateElement = $form->addDateTimePicker('end_date', get_lang('EndDate'));
-    $form->addRule('start_date', get_lang('InvalidDate'), 'datetime');
-    $form->addRule('end_date', get_lang('InvalidDate'), 'datetime');
+    $startDateElement = $form->addDateTimePicker('start_date', get_lang('Start Date'));
+    $endDateElement = $form->addDateTimePicker('end_date', get_lang('End Date'));
+    $form->addRule('start_date', get_lang('Invalid date'), 'datetime');
+    $form->addRule('end_date', get_lang('Invalid date'), 'datetime');
 } else {
-    $startDateElement = $form->addElement('date_picker', 'start_date', get_lang('StartDate'));
-    $endDateElement = $form->addElement('date_picker', 'end_date', get_lang('EndDate'));
-    $form->addRule('start_date', get_lang('InvalidDate'), 'date');
-    $form->addRule('end_date', get_lang('InvalidDate'), 'date');
+    $startDateElement = $form->addElement('date_picker', 'start_date', get_lang('Start Date'));
+    $endDateElement = $form->addElement('date_picker', 'end_date', get_lang('End Date'));
+    $form->addRule('start_date', get_lang('Invalid date'), 'date');
+    $form->addRule('end_date', get_lang('Invalid date'), 'date');
 }
 
 $form->setRequired($startDateElement);
@@ -180,27 +180,27 @@ $form->setRequired($endDateElement);
 $form->addElement('checkbox', 'anonymous', null, get_lang('Anonymous'));
 $visibleResults = [
     SURVEY_VISIBLE_TUTOR => get_lang('Coach'),
-    SURVEY_VISIBLE_TUTOR_STUDENT => get_lang('CoachAndStudent'),
+    SURVEY_VISIBLE_TUTOR_STUDENT => get_lang('Coach and student'),
     SURVEY_VISIBLE_PUBLIC => get_lang('Everyone'),
 ];
 
 if (api_get_configuration_value('hide_survey_reporting_button')) {
-    $form->addLabel(get_lang('ResultsVisibility'), get_lang('FeatureDisabledByAdministrator'));
+    $form->addLabel(get_lang('Results visibility'), get_lang('Feature disabled by administrator'));
 } else {
-    $form->addElement('select', 'visible_results', get_lang('ResultsVisibility'), $visibleResults);
+    $form->addElement('select', 'visible_results', get_lang('Results visibility'), $visibleResults);
 }
 //$defaults['visible_results'] = 0;
 $form->addElement(
     'html_editor',
     'survey_introduction',
-    get_lang('SurveyIntroduction'),
+    get_lang('Survey introduction'),
     null,
     ['ToolbarSet' => 'Survey', 'Width' => '100%', 'Height' => '130', 'ToolbarStartExpanded' => false]
 );
 $form->addElement(
     'html_editor',
     'survey_thanks',
-    get_lang('SurveyThanks'),
+    get_lang('Final thanks'),
     null,
     ['ToolbarSet' => 'Survey', 'Width' => '100%', 'Height' => '130', 'ToolbarStartExpanded' => false]
 );
@@ -218,7 +218,7 @@ if (Gradebook::is_active()) {
         'checkbox',
         'survey_qualify_gradebook',
         null,
-        get_lang('QualifyInGradebook'),
+        get_lang('Grade in the assessment tool'),
         'onclick="javascript: if (this.checked) { document.getElementById(\'gradebook_options\').style.display = \'block\'; } else { document.getElementById(\'gradebook_options\').style.display = \'none\'; }"'
     );
     $form->addElement(
@@ -228,7 +228,7 @@ if (Gradebook::is_active()) {
     $form->addElement(
         'text',
         'survey_weight',
-        get_lang('QualifyWeight'),
+        get_lang('Weight in Report'),
         'value="0.00" style="width: 40px;" onfocus="javascript: this.select();"'
     );
     $form->applyFilter('survey_weight', 'html_filter');
@@ -251,12 +251,12 @@ if ($action == 'add') {
     $survey_tree = new SurveyTree();
     $list_surveys = $survey_tree->createList($survey_tree->surveylist);
     $list_surveys[0] = '';
-    $form->addElement('select', 'parent_id', get_lang('ParentSurvey'), $list_surveys);
+    $form->addElement('select', 'parent_id', get_lang('Parent Survey'), $list_surveys);
     $defaults['parent_id'] = 0;
 }
 
-$form->addElement('checkbox', 'one_question_per_page', null, get_lang('OneQuestionPerPage'));
-$form->addElement('checkbox', 'shuffle', null, get_lang('ActivateShuffle'));
+$form->addElement('checkbox', 'one_question_per_page', null, get_lang('One question per page'));
+$form->addElement('checkbox', 'shuffle', null, get_lang('Enable shuffle mode'));
 
 $input_name_list = null;
 
@@ -266,7 +266,7 @@ if ($action == 'edit' && !empty($survey_id)) {
             'checkbox',
             'show_form_profile',
             null,
-            get_lang('ShowFormProfile'),
+            get_lang('Show profile form'),
             'onclick="javascript: if(this.checked){document.getElementById(\'options_field\').style.display = \'block\';}else{document.getElementById(\'options_field\').style.display = \'none\';}"'
         );
 
@@ -310,22 +310,22 @@ $skillList = Skill::addSkillsToForm($form, ITEM_TYPE_SURVEY, $survey_id);
 $form->addElement('html', '</div><br />');
 
 if (isset($_GET['survey_id']) && $action == 'edit') {
-    $form->addButtonUpdate(get_lang('ModifySurvey'), 'submit_survey');
+    $form->addButtonUpdate(get_lang('Edit survey'), 'submit_survey');
 } else {
-    $form->addButtonCreate(get_lang('CreateSurvey'), 'submit_survey');
+    $form->addButtonCreate(get_lang('Create survey'), 'submit_survey');
 }
 
 // Setting the rules
 if ($action == 'add') {
-    $form->addRule('survey_code', get_lang('ThisFieldIsRequired'), 'required');
+    $form->addRule('survey_code', get_lang('Required field'), 'required');
     $form->addRule('survey_code', '', 'maxlength', 20);
 }
-$form->addRule('survey_title', get_lang('ThisFieldIsRequired'), 'required');
-$form->addRule('start_date', get_lang('InvalidDate'), $allowSurveyAvailabilityDatetime ? 'datetime' : 'date');
-$form->addRule('end_date', get_lang('InvalidDate'), $allowSurveyAvailabilityDatetime ? 'datetime' : 'date');
+$form->addRule('survey_title', get_lang('Required field'), 'required');
+$form->addRule('start_date', get_lang('Invalid date'), $allowSurveyAvailabilityDatetime ? 'datetime' : 'date');
+$form->addRule('end_date', get_lang('Invalid date'), $allowSurveyAvailabilityDatetime ? 'datetime' : 'date');
 $form->addRule(
     ['start_date', 'end_date'],
-    get_lang('StartDateShouldBeBeforeEndDate'),
+    get_lang('Start DateShouldBeBeforeEnd Date'),
     'date_compare',
     'lte'
 );

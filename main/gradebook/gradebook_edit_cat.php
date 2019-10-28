@@ -99,9 +99,9 @@ Event::registerLog($logInfo);
 
 $interbreadcrumb[] = [
     'url' => Category::getUrl().'selectcat='.$selectcat,
-    'name' => get_lang('Gradebook'),
+    'name' => get_lang('Assessments'),
 ];
 $this_section = SECTION_COURSES;
-Display::display_header(get_lang('EditCategory'));
+Display::display_header(get_lang('Edit this category'));
 $form->display();
 Display::display_footer();

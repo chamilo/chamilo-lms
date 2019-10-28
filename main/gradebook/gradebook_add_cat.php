@@ -115,11 +115,11 @@ Event::registerLog($logInfo);
 if (!$_in_course) {
     $interbreadcrumb[] = [
         'url' => Category::getUrl().'selectcat='.$get_select_cat,
-        'name' => get_lang('Gradebook'),
+        'name' => get_lang('Assessments'),
     ];
 }
-$interbreadcrumb[] = ['url' => 'index.php?'.api_get_cidreq(), 'name' => get_lang('ToolGradebook')];
-Display :: display_header(get_lang('NewCategory'));
+$interbreadcrumb[] = ['url' => 'index.php?'.api_get_cidreq(), 'name' => get_lang('ToolAssessments')];
+Display :: display_header(get_lang('New category'));
 
 $display_form = true;
 if ($display_form) {

@@ -107,7 +107,7 @@ Event::registerLog($logInfo);
 
 $interbreadcrumb[] = [
     'url' => Category::getUrl().'selectcat='.$select_cat,
-    'name' => get_lang('Gradebook'), ]
+    'name' => get_lang('Assessments'), ]
 ;
 $this_section = SECTION_COURSES;
 
@@ -131,10 +131,10 @@ $(function() {
 </script>';
 
 if ($evaladd->get_course_code() == null) {
-    Display::addFlash(Display::return_message(get_lang('CourseIndependentEvaluation'), 'normal', false));
+    Display::addFlash(Display::return_message(get_lang('Course independent evaluation'), 'normal', false));
 }
 
-Display::display_header(get_lang('NewEvaluation'));
+Display::display_header(get_lang('Add classroom activity'));
 
 $form->display();
 Display :: display_footer();

@@ -2,8 +2,6 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * @package chamilo.social
- *
  * @author Julio Montoya <gugli100@gmail.com>
  */
 $cidReset = true;
@@ -20,7 +18,7 @@ $htmlHeadXtra[] = '<script>
 function delete_friend (element_div) {
 	id_image = $(element_div).attr("id");
 	user_id = id_image.split("_");
-	if (confirm("'.get_lang('Delete', '').'")) {
+	if (confirm("'.get_lang('Delete').'")) {
         $.ajax({
             contentType: "application/x-www-form-urlencoded",
 			type: "POST",
@@ -51,8 +49,8 @@ function show_icon_delete(element_html) {
 	id_elem=elem_id.split("_");
 	ident="#img_"+id_elem[1];
 	$(ident).attr("src","'.Display::returnIconPath('delete.png').'");
-	$(ident).attr("alt","'.get_lang('Delete', '').'");
-	$(ident).attr("title","'.get_lang('Delete', '').'");
+	$(ident).attr("alt","'.get_lang('Delete').'");
+	$(ident).attr("title","'.get_lang('Delete').'");
 }
 
 function hide_icon_delete(element_html)  {

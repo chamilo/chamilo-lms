@@ -2,10 +2,13 @@ parameters:
 	autoload_files:
 		- %rootDir%/../../../main/work/work.lib.php
 	excludes_analyse:
-		- %rootDir%/../../../tests/*
-		- %rootDir%/../../../main/webservices/*
+		- %rootDir%/../../../main/admin/db.php
+		- %rootDir%/../../../main/extra/*
+		- %rootDir%/../../../main/cron/*
 		- %rootDir%/../../../main/inc/lib/pear/*
 		- %rootDir%/../../../main/inc/lib/nusoap/*
 		- %rootDir%/../../../main/inc/lib/search/*
+		- %rootDir%/../../../main/webservices/*
 		- %rootDir%/../../../src/CoreBundle/Migrations/Schema/*
+		- %rootDir%/../../../tests/*
 	level: max

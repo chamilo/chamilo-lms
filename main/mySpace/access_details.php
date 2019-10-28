@@ -59,8 +59,8 @@ $form->addElement(
 );
 $form->addElement('hidden', 'student', $user_id);
 $form->addElement('hidden', 'course', $course_code);
-$form->addRule('from', get_lang('ThisFieldIsRequired'), 'required');
-$form->addRule('to', get_lang('ThisFieldIsRequired'), 'required');
+$form->addRule('from', get_lang('Required field'), 'required');
+$form->addRule('to', get_lang('Required field'), 'required');
 $group = [
     $form->createElement(
         'label',
@@ -103,7 +103,7 @@ function loadGraph() {
                 $('#cev_cont_stats').html(db.stats);
                 $('#graph' ).html(db.graph_result);
             } else {
-                $('#messages').text('".get_lang('NoDataAvailable')."');
+                $('#messages').text('".get_lang('No data available')."');
                 $('#messages').addClass('warning-message');
                 $('#cev_cont_stats').html('');
                 $('#graph').empty();
@@ -129,7 +129,7 @@ $(function() {
 });
 </script>';
 
-$interbreadcrumb[] = ['url' => '#', 'name' => get_lang('AccessDetails')];
+$interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Access details')];
 
 Display::display_header('');
 $userInfo = api_get_user_info($user_id);
@@ -137,7 +137,7 @@ $result_to_print = '';
 $sql_result = MySpace::get_connections_to_course($user_id, $courseInfo);
 $result_to_print = convert_to_string($sql_result);
 
-echo Display::page_header(get_lang('DetailsStudentInCourse'));
+echo Display::page_header(get_lang('Learner details in course'));
 echo Display::page_subheader(
     get_lang('User').': '.$userInfo['complete_name'].' - '.get_lang('Course').': '.$courseInfo['title'].' ('.$course_code.')'
 );
@@ -164,7 +164,7 @@ $form->display();
                 $foo_stats .= '<strong>'.get_lang('Quantity').' : </strong>'.$rst['times'].'<br />';
                 echo $foo_stats;
             } else {
-                echo Display::return_message(get_lang('NoDataAvailable'), 'warning');
+                echo Display::return_message(get_lang('No data available'), 'warning');
             }
             ?>
         </div>

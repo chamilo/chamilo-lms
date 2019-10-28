@@ -61,17 +61,17 @@ if (api_drh_can_access_all_session_content()) {
 }
 
 $url = api_get_self().'?user_id='.$userId;
-$tool_name = get_lang('ModifyUserInfo');
+$tool_name = get_lang('Edit user information');
 // Create the form
 $form = new FormValidator('user_edit', 'post', $url);
 // Username
-$usernameInput = $form->addElement('text', 'username', get_lang('LoginName'));
+$usernameInput = $form->addElement('text', 'username', get_lang('Login'));
 $usernameInput->freeze();
 
 // Password
 $group = [];
 $auth_sources = 0; //make available wider as we need it in case of form reset (see below)
-$group[] = &$form->createElement('radio', 'password_auto', get_lang('Password'), get_lang('AutoGeneratePassword').'<br />', 1);
+$group[] = &$form->createElement('radio', 'password_auto', get_lang('Password'), get_lang('Automatically generate a new password').'<br />', 1);
 $group[] = &$form->createElement('radio', 'password_auto', 'id="radio_user_password"', null, 0);
 $group[] = &$form->createElement('password', 'password', null, ['onkeydown' => 'javascript: password_switch_radio_button(document.user_add,"password[password_auto]");']);
 $form->addGroup($group, 'password', get_lang('Password'));
@@ -80,7 +80,7 @@ $form->addGroup($group, 'password', get_lang('Password'));
 $group = [];
 $group[] = &$form->createElement('radio', 'send_mail', null, get_lang('Yes'), 1);
 $group[] = &$form->createElement('radio', 'send_mail', null, get_lang('No'), 0);
-$form->addGroup($group, 'mail', get_lang('SendMailToNewUser'));
+$form->addGroup($group, 'mail', get_lang('Send mail to new user'));
 
 // Set default values
 $defaults = [];
@@ -130,7 +130,7 @@ if ($form->validate()) {
         );
 
         if (!empty($email) && $send_mail) {
-            $emailsubject = '['.api_get_setting('siteName').'] '.get_lang('YourReg').' '.api_get_setting('siteName');
+            $emailsubject = '['.api_get_setting('siteName').'] '.get_lang('Your registration on').' '.api_get_setting('siteName');
             $portal_url = api_get_path(WEB_PATH);
             if (api_is_multiple_url_enabled()) {
                 $access_url_id = api_get_current_access_url_id();
@@ -141,17 +141,17 @@ if ($form->validate()) {
             }
 
             $emailbody = get_lang('Dear')." ".stripslashes(api_get_person_name($userInfo['firstname'], $userInfo['lastname'])).",\n\n".
-                get_lang('YouAreReg')." ".api_get_setting('siteName')." ".get_lang('WithTheFollowingSettings')."\n\n".
+                get_lang('You are registered to')." ".api_get_setting('siteName')." ".get_lang('with the following settings:')."\n\n".
                 get_lang('Username')." : ".$username."\n".get_lang('Pass')." : ".stripslashes($password)."\n\n".
-                get_lang('Address')." ".api_get_setting('siteName')." ".
-                get_lang('Is')." : ".$portal_url."\n\n".
-                get_lang('Problem')."\n\n".
-                get_lang('SignatureFormula').",\n\n".
+                get_lang('The address of')." ".api_get_setting('siteName')." ".
+                get_lang('is')." : ".$portal_url."\n\n".
+                get_lang('In case of trouble, contact us.')."\n\n".
+                get_lang('Sincerely').",\n\n".
                 api_get_person_name(api_get_setting('administratorName'), api_get_setting('administratorSurname'))."\n".
-                get_lang('Manager')." ".
+                get_lang('Administrator')." ".
                 api_get_setting('siteName')."\nT. ".
                 api_get_setting('administratorTelephone')."\n".
-                get_lang('Email')." : ".api_get_setting('emailAdministrator');
+                get_lang('e-mail')." : ".api_get_setting('emailAdministrator');
             $emailbody = nl2br($emailbody);
 
             api_mail_html(
@@ -178,11 +178,11 @@ if ($form->validate()) {
 
 $interbreadcrumb[] = [
     'url' => api_get_path(WEB_CODE_PATH)."mySpace/student.php",
-    "name" => get_lang('UserList'),
+    "name" => get_lang('User list'),
 ];
 
 if (isset($_REQUEST['message'])) {
-    Display::addFlash(Display::return_message(get_lang('Updated'), 'normal'));
+    Display::addFlash(Display::return_message(get_lang('Update successful'), 'normal'));
 }
 
 Display::display_header($tool_name);

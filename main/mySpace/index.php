@@ -21,7 +21,7 @@ $htmlHeadXtra[] = '<script type="text/javascript" src="'.api_get_path(WEB_PUBLIC
 $this_section = SECTION_TRACKING;
 
 ob_start();
-$nameTools = get_lang('MySpace');
+$nameTools = get_lang('Reporting');
 $export_csv = isset($_GET['export']) && $_GET['export'] === 'csv' ? true : false;
 $display = isset($_GET['display']) ? Security::remove_XSS($_GET['display']) : null;
 $csv_content = [];
@@ -65,49 +65,49 @@ $calendarMenuAdded = false;
 if ($is_platform_admin) {
     if ($view == 'admin') {
         $menu_items[] = Display::url(
-            Display::return_icon('teacher.png', get_lang('TeacherInterface'), [], ICON_SIZE_MEDIUM),
+            Display::return_icon('teacher.png', get_lang('Trainer View'), [], ICON_SIZE_MEDIUM),
             api_get_self().'?view=teacher'
         );
         $menu_items[] = Display::url(
-            Display::return_icon('star_na.png', get_lang('AdminInterface'), [], ICON_SIZE_MEDIUM),
+            Display::return_icon('star_na.png', get_lang('Admin view'), [], ICON_SIZE_MEDIUM),
             api_get_path(WEB_CODE_PATH).'mySpace/admin_view.php'
         );
         $menu_items[] = Display::url(
-            Display::return_icon('quiz.png', get_lang('ExamTracking'), [], ICON_SIZE_MEDIUM),
+            Display::return_icon('quiz.png', get_lang('Exam tracking'), [], ICON_SIZE_MEDIUM),
             api_get_path(WEB_CODE_PATH).'tracking/exams.php'
         );
         $menu_items[] = Display::url(
-            Display::return_icon('statistics.png', get_lang('CurrentCoursesReport'), [], ICON_SIZE_MEDIUM),
+            Display::return_icon('statistics.png', get_lang('Current courses report'), [], ICON_SIZE_MEDIUM),
             api_get_path(WEB_CODE_PATH).'mySpace/current_courses.php'
         );
     } else {
         $menu_items[] = Display::url(
             Display::return_icon(
                 'teacher_na.png',
-                get_lang('TeacherInterface'),
+                get_lang('Trainer View'),
                 [],
                 ICON_SIZE_MEDIUM
             ),
             ''
         );
         $menu_items[] = Display::url(
-            Display::return_icon('star.png', get_lang('AdminInterface'), [], ICON_SIZE_MEDIUM),
+            Display::return_icon('star.png', get_lang('Admin view'), [], ICON_SIZE_MEDIUM),
             //api_get_path(WEB_CODE_PATH).'tracking/course_session_report.php?view=admin'
             api_get_path(WEB_CODE_PATH).'mySpace/admin_view.php'
         );
         $menu_items[] = Display::url(
-            Display::return_icon('quiz.png', get_lang('ExamTracking'), [], ICON_SIZE_MEDIUM),
+            Display::return_icon('quiz.png', get_lang('Exam tracking'), [], ICON_SIZE_MEDIUM),
             api_get_path(WEB_CODE_PATH).'tracking/exams.php'
         );
         $menu_items[] = Display::url(
-            Display::return_icon('statistics.png', get_lang('CurrentCoursesReport'), [], ICON_SIZE_MEDIUM),
+            Display::return_icon('statistics.png', get_lang('Current courses report'), [], ICON_SIZE_MEDIUM),
             api_get_path(WEB_CODE_PATH).'mySpace/current_courses.php'
         );
 
         if ($pluginCalendar) {
             $lpCalendar = LearningCalendarPlugin::create();
             $menu_items[] = Display::url(
-                Display::return_icon('agenda.png', $lpCalendar->get_lang('LearningCalendar'), [], ICON_SIZE_MEDIUM),
+                Display::return_icon('agenda.png', $lpCalendar->get_lang('Learning calendar'), [], ICON_SIZE_MEDIUM),
                 api_get_path(WEB_PLUGIN_PATH).'learning_calendar/start.php'
             );
             $calendarMenuAdded = true;
@@ -118,11 +118,11 @@ if ($is_platform_admin) {
 if ($is_drh) {
     $view = 'drh';
     $menu_items[] = Display::url(
-        Display::return_icon('user_na.png', get_lang('Students'), [], ICON_SIZE_MEDIUM),
+        Display::return_icon('user_na.png', get_lang('Learners'), [], ICON_SIZE_MEDIUM),
         '#'
     );
     $menu_items[] = Display::url(
-        Display::return_icon('teacher.png', get_lang('Trainers'), [], ICON_SIZE_MEDIUM),
+        Display::return_icon('teacher.png', get_lang('Teachers'), [], ICON_SIZE_MEDIUM),
         'teachers.php'
     );
     $menu_items[] = Display::url(
@@ -130,15 +130,15 @@ if ($is_drh) {
         'course.php'
     );
     $menu_items[] = Display::url(
-        Display::return_icon('session.png', get_lang('Sessions'), [], ICON_SIZE_MEDIUM),
+        Display::return_icon('session.png', get_lang('Course sessions'), [], ICON_SIZE_MEDIUM),
         'session.php'
     );
     $menu_items[] = Display::url(
-        Display::return_icon('empty_evaluation.png', get_lang('CompanyReport'), [], ICON_SIZE_MEDIUM),
+        Display::return_icon('empty_evaluation.png', get_lang('Corporate report'), [], ICON_SIZE_MEDIUM),
         'company_reports.php'
     );
     $menu_items[] = Display::url(
-        Display::return_icon('evaluation_rate.png', get_lang('CompanyReportResumed'), [], ICON_SIZE_MEDIUM),
+        Display::return_icon('evaluation_rate.png', get_lang('Corporate reportResumed'), [], ICON_SIZE_MEDIUM),
         'company_reports_resumed.php'
     );
 }
@@ -149,7 +149,7 @@ if ($display == 'useroverview' || $display == 'sessionoverview' || $display == '
     $actionsRight .= Display::url(
         Display::return_icon(
             'export_csv.png',
-            get_lang('ExportAsCSV'),
+            get_lang('CSV export'),
             null,
             ICON_SIZE_MEDIUM
         ),
@@ -189,7 +189,7 @@ if (!empty($session_id) &&
                 $actionsLeft .= Display::url(
                     Display::return_icon(
                         'excel.png',
-                        get_lang('ImportUserList'),
+                        get_lang('Import list of users'),
                         null,
                         ICON_SIZE_MEDIUM
                     ),
@@ -201,7 +201,7 @@ if (!empty($session_id) &&
         Display::url(
             Display::return_icon(
                 'excel.png',
-                get_lang('ImportUserList'),
+                get_lang('Import list of users'),
                 null,
                 ICON_SIZE_MEDIUM
             ),
@@ -212,7 +212,7 @@ if (!empty($session_id) &&
     $actionsLeft .= Display::url(
         Display::return_icon(
             'statistics.png',
-            get_lang('MyStats'),
+            get_lang('View my progress'),
             null,
             ICON_SIZE_MEDIUM
         ),
@@ -222,7 +222,7 @@ if (!empty($session_id) &&
     if ($pluginCalendar && api_is_teacher() && $calendarMenuAdded === false) {
         $lpCalendar = LearningCalendarPlugin::create();
         $actionsLeft .= Display::url(
-            Display::return_icon('agenda.png', $lpCalendar->get_lang('LearningCalendar'), [], ICON_SIZE_MEDIUM),
+            Display::return_icon('agenda.png', $lpCalendar->get_lang('Learning calendar'), [], ICON_SIZE_MEDIUM),
             api_get_path(WEB_PLUGIN_PATH).'learning_calendar/start.php'
         );
     }
@@ -231,7 +231,7 @@ if (!empty($session_id) &&
         $actionsLeft .= Display::url(
             Display::return_icon(
                 "certificate_list.png",
-                get_lang('GradebookSeeListOfStudentsCertificates'),
+                get_lang('GradebookSeeListOfLearnersCertificates'),
                 null,
                 ICON_SIZE_MEDIUM
             ),
@@ -328,24 +328,24 @@ if ($skipData === false) {
 
     if ($export_csv) {
         //csv part
-        $csv_content[] = [get_lang('Students')];
-        $csv_content[] = [get_lang('InactivesStudents'), $nb_inactive_students];
-        $csv_content[] = [get_lang('AverageTimeSpentOnThePlatform'), $totalTimeSpent];
-        $csv_content[] = [get_lang('AverageCoursePerStudent'), round($avg_courses_per_student, 3)];
+        $csv_content[] = [get_lang('Learners')];
+        $csv_content[] = [get_lang('InactivesLearners'), $nb_inactive_students];
+        $csv_content[] = [get_lang('Time spent on portal'), $totalTimeSpent];
+        $csv_content[] = [get_lang('Average number of courses to which my learners are subscribed'), round($avg_courses_per_student, 3)];
         $csv_content[] = [
-            get_lang('AverageProgressInLearnpath'),
+            get_lang('Progress in courses'),
             is_null($avgTotalProgress)
                 ? null
                 : round($avgTotalProgress, 2).'%',
         ];
         $csv_content[] = [
-            get_lang('AverageResultsToTheExercices'),
+            get_lang('Tests score'),
             is_null($averageScore)
                 ? null
                 : round($averageScore, 2).'%',
         ];
-        $csv_content[] = [get_lang('AveragePostsInForum'), $posts];
-        $csv_content[] = [get_lang('AverageAssignments'), $numberAssignments];
+        $csv_content[] = [get_lang('Posts in forum'), $posts];
+        $csv_content[] = [get_lang('Average assignments per learner'), $numberAssignments];
         $csv_content[] = [];
     } else {
         $lastConnectionDate = api_get_utc_datetime(strtotime('15 days ago'));

@@ -805,7 +805,7 @@ class Category implements GradebookItem
         $res = Database::query($sql);
         $option = Database::fetch_array($res, 'ASSOC');
         if ($option['num'] >= 1) {
-            return '&nbsp;&nbsp;<span class="resource-deleted">(&nbsp;'.get_lang('ResourceDeleted').'&nbsp;)</span>';
+            return '&nbsp;&nbsp;<span class="resource-deleted">(&nbsp;'.get_lang('The resource has been deleted').'&nbsp;)</span>';
         } else {
             return false;
         }
@@ -1414,7 +1414,7 @@ class Category implements GradebookItem
             $targets = [];
             $level = 0;
 
-            $root = [0, get_lang('RootCat'), $level];
+            $root = [0, get_lang('Main folder'), $level];
             $targets[] = $root;
 
             if (isset($this->course_code) && !empty($this->course_code)) {
@@ -1475,7 +1475,7 @@ class Category implements GradebookItem
     {
         $targets = [];
         $level = 0;
-        $root = [0, get_lang('RootCat'), $level];
+        $root = [0, get_lang('Main folder'), $level];
         $targets[] = $root;
 
         // course or platform admin
@@ -2166,7 +2166,7 @@ class Category implements GradebookItem
             if ($userHasSkills) {
                 return [
                     'badge_link' => Display::toolbarButton(
-                        get_lang('ExportBadges'),
+                        get_lang('Export badges'),
                         api_get_path(WEB_CODE_PATH)."gradebook/get_badges.php?user=$user_id",
                         'external-link'
                     ),
@@ -2225,7 +2225,7 @@ class Category implements GradebookItem
             if (!empty($fileWasGenerated)) {
                 $url = api_get_path(WEB_PATH).'certificates/index.php?id='.$my_certificate['id'].'&user_id='.$user_id;
                 $certificates = Display::toolbarButton(
-                    get_lang('DisplayCertificate'),
+                    get_lang('Display certificate'),
                     $url,
                     'eye',
                     'primary',
@@ -2235,7 +2235,7 @@ class Category implements GradebookItem
                 $exportToPDF = Display::url(
                     Display::return_icon(
                         'pdf.png',
-                        get_lang('ExportToPDF'),
+                        get_lang('Export to PDF'),
                         [],
                         ICON_SIZE_MEDIUM
                     ),
@@ -2257,7 +2257,7 @@ class Category implements GradebookItem
 
             if ($skillToolEnabled && $userHasSkills) {
                 $html['badge_link'] = Display::toolbarButton(
-                    get_lang('ExportBadges'),
+                    get_lang('Export badges'),
                     api_get_path(WEB_CODE_PATH)."gradebook/get_badges.php?user=$user_id",
                     'external-link'
                 );
@@ -2539,7 +2539,7 @@ class Category implements GradebookItem
         }
 
         $downloadLink = Display::toolbarButton(
-            get_lang('DownloadCertificatePdf'),
+            get_lang('Download certificate in PDF'),
             $certificate['pdf_url'],
             'file-pdf-o'
         );
@@ -2548,7 +2548,7 @@ class Category implements GradebookItem
         return "
             <div class='panel panel-default'>
                 <div class='panel-body'>
-                    <h3 class='text-center'>".get_lang('NowDownloadYourCertificateClickHere')."</h3>
+                    <h3 class='text-center'>".get_lang('You can now download your certificate by clicking here')."</h3>
                     <div class='text-center'>$downloadLink $viewLink</div>
                 </div>
             </div>
@@ -2627,7 +2627,7 @@ class Category implements GradebookItem
     {
         $cat = new Category();
         $cat->set_id(0);
-        $cat->set_name(get_lang('RootCat'));
+        $cat->set_name(get_lang('Main folder'));
         $cat->set_description(null);
         $cat->set_user_id(0);
         $cat->set_course_code(null);

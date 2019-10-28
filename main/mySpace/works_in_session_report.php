@@ -19,7 +19,7 @@ if (api_is_student()) {
     exit;
 }
 
-$toolName = get_lang('WorksInSessionReport');
+$toolName = get_lang('Works in session report');
 
 $em = Database::getManager();
 $session = null;
@@ -31,7 +31,7 @@ if (api_is_platform_admin()) {
     $sessionList = Tracking::get_sessions_coached_by_user(api_get_user_id());
 }
 $form = new FormValidator('work_report', 'GET');
-$selectSession = $form->addSelect('session', get_lang('Session'), [0 => get_lang('None')]);
+$selectSession = $form->addSelect('session', get_lang('Session'), [0 => get_lang('none')]);
 $form->addButtonFilter(get_lang('Filter'));
 
 foreach ($sessionList as $sessionInfo) {
@@ -120,16 +120,16 @@ if (isset($_GET['export']) && $session && ($coursesInfo && $usersInfo)) {
 
     $dataToExport = [];
     $dataToExport[] = [$toolName, $session->getName()];
-    $dataToExport['headers'][] = get_lang('OfficialCode');
-    $dataToExport['headers'][] = get_lang('StudentName');
-    $dataToExport['headers'][] = get_lang('TimeSpentOnThePlatform');
-    $dataToExport['headers'][] = get_lang('FirstLoginInPlatform');
-    $dataToExport['headers'][] = get_lang('LatestLoginInPlatform');
+    $dataToExport['headers'][] = get_lang('Code');
+    $dataToExport['headers'][] = get_lang('Learner name');
+    $dataToExport['headers'][] = get_lang('Time spent in portal');
+    $dataToExport['headers'][] = get_lang('First login in platform');
+    $dataToExport['headers'][] = get_lang('Latest login in platform');
 
     foreach ($coursesInfo as $courseCode) {
-        $dataToExport['headers'][] = $courseCode.' ('.get_lang('BestScore').')';
+        $dataToExport['headers'][] = $courseCode.' ('.get_lang('Best score').')';
         $dataToExport['headers'][] = get_lang('Progress');
-        $dataToExport['headers'][] = get_lang('LastSentWorkDate');
+        $dataToExport['headers'][] = get_lang('Last sent work date');
     }
 
     foreach ($usersInfo as $user) {
@@ -149,18 +149,18 @@ if (isset($_GET['export']) && $session && ($coursesInfo && $usersInfo)) {
 
 $interbreadcrumb[] = [
     'url' => api_get_path(WEB_CODE_PATH).'mySpace/index.php',
-    'name' => get_lang('MySpace'),
+    'name' => get_lang('Reporting'),
 ];
 
 $actions = null;
 
 if ($session) {
     $actions = Display::url(
-        Display::return_icon('export_csv.png', get_lang('ExportAsCSV'), [], ICON_SIZE_MEDIUM),
+        Display::return_icon('export_csv.png', get_lang('CSV export'), [], ICON_SIZE_MEDIUM),
         api_get_self().'?'.http_build_query(['export' => 'csv', 'session' => $session->getId()])
     );
     $actions .= Display::url(
-        Display::return_icon('export_excel.png', get_lang('ExportAsXLS'), [], ICON_SIZE_MEDIUM),
+        Display::return_icon('export_excel.png', get_lang('Excel export'), [], ICON_SIZE_MEDIUM),
         api_get_self().'?'.http_build_query(['export' => 'xls', 'session' => $session->getId()])
     );
 }

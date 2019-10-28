@@ -1,5 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
+
+// @deprecated
 require_once __DIR__.'/../global.inc.php';
 
 $id = isset($_REQUEST['id']) ? $_REQUEST['id'] : null;

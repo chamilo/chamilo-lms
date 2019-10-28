@@ -1,9 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
  * Progress report.
- *
- * @package chamilo.reporting
  *
  * @deprecated seems there's no link to this page
  * Created on 28 juil. 2006 by Elixir Interactive http://www.elixir-interactive.com
@@ -12,14 +11,14 @@
 // TODO: This file seems to be unfinished and unused.
 require_once __DIR__.'/../inc/global.inc.php';
 
-$nameTools = get_lang('Progression');
+$nameTools = get_lang('Progress');
 
 $cidReset = true;
 
 $this_section = SECTION_TRACKING;
 
 api_block_anonymous_users();
-$interbreadcrumb[] = ["url" => "index.php", "name" => get_lang('MySpace')];
+$interbreadcrumb[] = ["url" => "index.php", "name" => get_lang('Reporting')];
 Display :: display_header($nameTools);
 
 // Database Table Definitions
@@ -40,8 +39,8 @@ if (Database::num_rows($result_course) > 0) {
         $export_result = export_csv($header, $data, 'test.csv'); // TODO: There is no data for exporting yet.
         echo Display::return_message($export_result, 'error');
     }
-    echo '<table class="data_table"><tr><th>'.get_lang('Course').'</th><th>'.get_lang('TempsFrequentation').'</th><th>'.get_lang('Progression').'</th><th>'.get_lang('MoyenneTest').'</th></tr>';
-    $header = [get_lang('Course', ''), get_lang('TempsFrequentation', ''), get_lang('Progression', ''), get_lang('MoyenneTest', '')];
+    echo '<table class="data_table"><tr><th>'.get_lang('Course').'</th><th>'.get_lang('Frequentation time').'</th><th>'.get_lang('Progress').'</th><th>'.get_lang('Tests score').'</th></tr>';
+    $header = [get_lang('Course'), get_lang('Frequentation time'), get_lang('Progress'), get_lang('Tests score')];
     while ($a_course = Database::fetch_array($result_course)) {
         // TODO: This query is to be checked, there are no HotPotatoes tests results.
         $sql_moy_test = "SELECT score,max_score
@@ -63,9 +62,9 @@ if (Database::num_rows($result_course) > 0) {
     }
     echo '</table>';
     echo "<br /><br />";
-    echo "<form method='post'><input type='submit' name='export' value='".get_lang('ExportExcel')."'/><form>";
+    echo "<form method='post'><input type='submit' name='export' value='".get_lang('Excel export')."'/><form>";
 } else {
-    echo get_lang('NoCourse');
+    echo get_lang('This course could not be found');
 }
 
 Display :: display_footer();

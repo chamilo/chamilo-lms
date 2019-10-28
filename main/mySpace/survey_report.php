@@ -8,7 +8,7 @@ require_once __DIR__.'/../inc/global.inc.php';
 $this_section = SECTION_TRACKING;
 
 $csv_content = [];
-$nameTools = get_lang('MySpace');
+$nameTools = get_lang('Reporting');
 
 $allowToTrack = api_is_platform_admin(true, true);
 if (!$allowToTrack) {

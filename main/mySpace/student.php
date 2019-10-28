@@ -20,7 +20,7 @@ if (!$allowToTrack) {
     api_not_allowed(true);
 }
 
-$nameTools = get_lang('Students');
+$nameTools = get_lang('Learners');
 
 $export_csv = isset($_GET['export']) && $_GET['export'] == 'csv' ? true : false;
 $keyword = isset($_GET['keyword']) ? Security::remove_XSS($_GET['keyword']) : null;
@@ -32,7 +32,7 @@ $webCodePath = api_get_path(WEB_CODE_PATH);
 
 $interbreadcrumb[] = [
     "url" => api_is_student_boss() ? "#" : "index.php",
-    "name" => get_lang('MySpace'),
+    "name" => get_lang('Reporting'),
 ];
 
 if (isset($_GET["user_id"]) && $_GET["user_id"] != "" && !isset($_GET["type"])) {
@@ -43,7 +43,7 @@ if (isset($_GET["user_id"]) && $_GET["user_id"] != "" && !isset($_GET["type"])) 
 }
 
 if (isset($_GET["user_id"]) && $_GET["user_id"] != "" && isset($_GET["type"]) && $_GET["type"] == "coach") {
-    $interbreadcrumb[] = ["url" => "coaches.php", "name" => get_lang('Tutors')];
+    $interbreadcrumb[] = ["url" => "coaches.php", "name" => get_lang('Coaches')];
 }
 
 function get_count_users()
@@ -229,15 +229,15 @@ $actionsLeft = '';
 if (api_is_drh()) {
     $menu_items = [
         Display::url(
-            Display::return_icon('statistics.png', get_lang('MyStats'), '', ICON_SIZE_MEDIUM),
+            Display::return_icon('statistics.png', get_lang('View my progress'), '', ICON_SIZE_MEDIUM),
             $webCodePath.'auth/my_progress.php'
         ),
         Display::url(
-            Display::return_icon('user_na.png', get_lang('Students'), [], ICON_SIZE_MEDIUM),
+            Display::return_icon('user_na.png', get_lang('Learners'), [], ICON_SIZE_MEDIUM),
             '#'
         ),
         Display::url(
-            Display::return_icon('teacher.png', get_lang('Trainers'), [], ICON_SIZE_MEDIUM),
+            Display::return_icon('teacher.png', get_lang('Teachers'), [], ICON_SIZE_MEDIUM),
             'teachers.php'
         ),
         Display::url(
@@ -245,7 +245,7 @@ if (api_is_drh()) {
             'course.php'
         ),
         Display::url(
-            Display::return_icon('session.png', get_lang('Sessions'), [], ICON_SIZE_MEDIUM),
+            Display::return_icon('session.png', get_lang('Course sessions'), [], ICON_SIZE_MEDIUM),
             'session.php'
         ),
         Display::url(
@@ -257,11 +257,11 @@ if (api_is_drh()) {
     $actionsLeft .= implode('', $menu_items);
 } elseif (api_is_student_boss()) {
     $actionsLeft .= Display::url(
-        Display::return_icon('statistics.png', get_lang('MyStats'), '', ICON_SIZE_MEDIUM),
+        Display::return_icon('statistics.png', get_lang('View my progress'), '', ICON_SIZE_MEDIUM),
         $webCodePath.'auth/my_progress.php'
     );
     $actionsLeft .= Display::url(
-        Display::return_icon('user_na.png', get_lang('Students'), [], ICON_SIZE_MEDIUM),
+        Display::return_icon('user_na.png', get_lang('Learners'), [], ICON_SIZE_MEDIUM),
         '#'
     );
     $actionsLeft .= Display::url(
@@ -269,13 +269,13 @@ if (api_is_drh()) {
         $webCodePath.'social/my_skills_report.php'
     );
     $actionsLeft .= Display::url(
-        Display::return_icon('statistics.png', get_lang('CompanyReport'), [], ICON_SIZE_MEDIUM),
+        Display::return_icon('statistics.png', get_lang('Corporate report'), [], ICON_SIZE_MEDIUM),
         $webCodePath.'mySpace/company_reports.php'
     );
     $actionsLeft .= Display::url(
         Display::return_icon(
             'certificate_list.png',
-            get_lang('GradebookSeeListOfStudentsCertificates'),
+            get_lang('GradebookSeeListOfLearnersCertificates'),
             [],
             ICON_SIZE_MEDIUM
         ),
@@ -289,7 +289,7 @@ $actionsRight = Display::url(
     ['onclick' => 'javascript: window.print();']
 );
 $actionsRight .= Display::url(
-    Display::return_icon('export_csv.png', get_lang('ExportAsCSV'), [], ICON_SIZE_MEDIUM),
+    Display::return_icon('export_csv.png', get_lang('CSV export'), [], ICON_SIZE_MEDIUM),
     api_get_self().'?export=csv&keyword='.$keyword
 );
 
@@ -311,31 +311,31 @@ $params = [
 $table->set_additional_parameters($params);
 
 if ($is_western_name_order) {
-    $table->set_header(0, get_lang('FirstName'), false);
-    $table->set_header(1, get_lang('LastName'), false);
+    $table->set_header(0, get_lang('First name'), false);
+    $table->set_header(1, get_lang('Last name'), false);
 } else {
-    $table->set_header(0, get_lang('LastName'), false);
-    $table->set_header(1, get_lang('FirstName'), false);
+    $table->set_header(0, get_lang('Last name'), false);
+    $table->set_header(1, get_lang('First name'), false);
 }
 
-$table->set_header(2, get_lang('FirstLogin'), false);
-$table->set_header(3, get_lang('LastConnexion'), false);
+$table->set_header(2, get_lang('First connection'), false);
+$table->set_header(3, get_lang('Latest login'), false);
 $table->set_header(4, get_lang('Details'), false);
 
 if ($export_csv) {
     if ($is_western_name_order) {
         $csv_header[] = [
-            get_lang('FirstName'),
-            get_lang('LastName'),
-            get_lang('FirstLogin'),
-            get_lang('LastConnexion'),
+            get_lang('First name'),
+            get_lang('Last name'),
+            get_lang('First connection'),
+            get_lang('Latest login'),
         ];
     } else {
         $csv_header[] = [
-            get_lang('LastName'),
-            get_lang('FirstName'),
-            get_lang('FirstLogin'),
-            get_lang('LastConnexion'),
+            get_lang('Last name'),
+            get_lang('First name'),
+            get_lang('First connection'),
+            get_lang('Latest login'),
         ];
     }
 }
@@ -364,9 +364,9 @@ if ($export_csv) {
     echo Display::page_subheader($nameTools);
     if (isset($active)) {
         if ($active) {
-            $activeLabel = get_lang('ActiveUsers');
+            $activeLabel = get_lang('Users with an active account');
         } else {
-            $activeLabel = get_lang('InactiveUsers');
+            $activeLabel = get_lang('Users who\'s account has been disabled');
         }
         echo Display::page_subheader2($activeLabel);
     }

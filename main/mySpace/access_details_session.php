@@ -77,11 +77,11 @@ $form = new FormValidator(
 $form->addElement('text', 'from', get_lang('From'));
 $form->addElement('text', 'to', get_lang('Until'));
 $form->addElement('hidden', 'user_id', $userId);
-$form->addRule('from', get_lang('ThisFieldIsRequired'), 'required');
-$form->addRule('from', get_lang('ThisFieldIsRequired').' dd/mm/yyyy', 'callback', 'validateDate');
-$form->addRule('to', get_lang('ThisFieldIsRequired'), 'required');
-$form->addRule('to', get_lang('ThisFieldIsRequired').' dd/mm/yyyy', 'callback', 'validateDate');
-$form->addButtonSearch(get_lang('GenerateReport'));
+$form->addRule('from', get_lang('Required field'), 'required');
+$form->addRule('from', get_lang('Required field').' dd/mm/yyyy', 'callback', 'validateDate');
+$form->addRule('to', get_lang('Required field'), 'required');
+$form->addRule('to', get_lang('Required field').' dd/mm/yyyy', 'callback', 'validateDate');
+$form->addButtonSearch(get_lang('Generate report'));
 
 /**
  * @param string $value
@@ -222,9 +222,9 @@ if ($form->validate()) {
 
     $table = new HTML_Table(['class' => 'data_table']);
     $headers = [
-        get_lang('MinStartDate'),
-        get_lang('MaxEndDate'),
-        get_lang('TotalDuration'),
+        get_lang('First connection'),
+        get_lang('Last connection'),
+        get_lang('Total time spent'),
     ];
     $row = 0;
     $column = 0;
@@ -240,7 +240,7 @@ if ($form->validate()) {
     $table->setRowAttributes($row, ['style' => 'font-weight:bold']);
 
     $table->setCellContents($row, $column++, api_format_time($totalDuration, 'js'));
-    $totalTable = Display::page_subheader3(sprintf(get_lang('ExtractionFromX'), api_get_local_time()));
+    $totalTable = Display::page_subheader3(sprintf(get_lang('Extraction from %s'), api_get_local_time()));
     $totalTable .= $table->toHtml();
 
     $courseSessionTable = '';
@@ -250,8 +250,8 @@ if ($form->validate()) {
             $courseSessionTable .= Display::page_subheader3($data['name'][$courseId]);
             $table = new HTML_Table(['class' => 'data_table']);
             $headers = [
-                get_lang('StartDate'),
-                get_lang('EndDate'),
+                get_lang('Start Date'),
+                get_lang('End Date'),
                 get_lang('Duration'),
             ];
             $row = 0;
@@ -280,7 +280,7 @@ if ($form->validate()) {
     $table = new HTML_Table(['class' => 'data_table']);
     $headers = [
         get_lang('Course'),
-        get_lang('TotalDuration'),
+        get_lang('Total time spent'),
     ];
     $row = 0;
     $column = 0;
@@ -298,7 +298,7 @@ if ($form->validate()) {
     $totalCourseSessionTable = $table->toHtml();
 
     $tpl = new Template('', false, false, false, true, false, false);
-    $tpl->assign('title', get_lang('RealisationCertificate'));
+    $tpl->assign('title', get_lang('Certificate of achievement'));
     $tpl->assign('student', $userInfo['complete_name']);
     $tpl->assign('table_progress', $totalTable.$totalCourseSessionTable.'<pagebreak>'.$courseSessionTable);
 
@@ -333,11 +333,11 @@ if ($form->validate()) {
     exit;
 }
 
-$interbreadcrumb[] = ['url' => '#', 'name' => get_lang('AccessDetails')];
+$interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Access details')];
 
 Display::display_header('');
 $userInfo = api_get_user_info($userId);
-echo Display::page_header(get_lang('DetailsStudentInCourse'));
+echo Display::page_header(get_lang('Learner details in course'));
 echo Display::page_subheader(
     get_lang('User').': '.$userInfo['complete_name']
 );

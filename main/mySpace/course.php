@@ -22,18 +22,18 @@ if (!$allowToTrack) {
     api_not_allowed(true);
 }
 
-$interbreadcrumb[] = ["url" => "index.php", "name" => get_lang('MySpace')];
+$interbreadcrumb[] = ["url" => "index.php", "name" => get_lang('Reporting')];
 
 if (isset($_GET["id_session"]) && $_GET["id_session"] != "") {
-    $interbreadcrumb[] = ["url" => "session.php", "name" => get_lang('Sessions')];
+    $interbreadcrumb[] = ["url" => "session.php", "name" => get_lang('Course sessions')];
 }
 
 if (isset($_GET["user_id"]) && $_GET["user_id"] != "" && isset($_GET["type"]) && $_GET["type"] == "coach") {
-    $interbreadcrumb[] = ["url" => "coaches.php", "name" => get_lang('Tutors')];
+    $interbreadcrumb[] = ["url" => "coaches.php", "name" => get_lang('Coaches')];
 }
 
 if (isset($_GET["user_id"]) && $_GET["user_id"] != "" && isset($_GET["type"]) && $_GET["type"] == "student") {
-    $interbreadcrumb[] = ["url" => "student.php", "name" => get_lang('Students')];
+    $interbreadcrumb[] = ["url" => "student.php", "name" => get_lang('Learners')];
 }
 
 if (isset($_GET["user_id"]) && $_GET["user_id"] != "" && !isset($_GET["type"])) {
@@ -71,15 +71,15 @@ if (api_is_platform_admin(true, true)) {
         if (isset($_GET['user_id'])) {
             $user_id = intval($_GET['user_id']);
             $user_info = api_get_user_info($user_id);
-            $title = get_lang('AssignedCoursesTo').' '.api_get_person_name($user_info['firstname'], $user_info['lastname']);
+            $title = get_lang('Courses assigned to').' '.api_get_person_name($user_info['firstname'], $user_info['lastname']);
             $courses = CourseManager::get_course_list_of_user_as_course_admin($user_id);
         } else {
-            $title = get_lang('YourCourseList');
+            $title = get_lang('Your courses');
             $courses = CourseManager::get_courses_followed_by_drh(api_get_user_id());
         }
     } else {
         $session_name = api_get_session_name($sessionId);
-        $title = $session_name.' : '.get_lang('CourseListInSession');
+        $title = $session_name.' : '.get_lang('Courses in this session');
         $courses = Tracking::get_courses_list_from_session($sessionId);
     }
 
@@ -87,15 +87,15 @@ if (api_is_platform_admin(true, true)) {
 
     if (!api_is_session_admin()) {
         $menu_items[] = Display::url(
-            Display::return_icon('statistics.png', get_lang('MyStats'), '', ICON_SIZE_MEDIUM),
+            Display::return_icon('statistics.png', get_lang('View my progress'), '', ICON_SIZE_MEDIUM),
             api_get_path(WEB_CODE_PATH)."auth/my_progress.php"
         );
         $menu_items[] = Display::url(
-            Display::return_icon('user.png', get_lang('Students'), [], ICON_SIZE_MEDIUM),
+            Display::return_icon('user.png', get_lang('Learners'), [], ICON_SIZE_MEDIUM),
             "index.php?view=drh_students&amp;display=yourstudents"
         );
         $menu_items[] = Display::url(
-            Display::return_icon('teacher.png', get_lang('Trainers'), [], ICON_SIZE_MEDIUM),
+            Display::return_icon('teacher.png', get_lang('Teachers'), [], ICON_SIZE_MEDIUM),
             'teachers.php'
         );
         $menu_items[] = Display::url(
@@ -103,12 +103,12 @@ if (api_is_platform_admin(true, true)) {
             '#'
         );
         $menu_items[] = Display::url(
-            Display::return_icon('session.png', get_lang('Sessions'), [], ICON_SIZE_MEDIUM),
+            Display::return_icon('session.png', get_lang('Course sessions'), [], ICON_SIZE_MEDIUM),
             'session.php'
         );
         if (api_can_login_as($user_id)) {
             $link = '<a href="'.api_get_path(WEB_CODE_PATH).'admin/user_list.php?action=login_as&amp;user_id='.$user_id.'&amp;sec_token='.Security::get_existing_token().'">'.
-                    Display::return_icon('login_as.png', get_lang('LoginAs'), null, ICON_SIZE_MEDIUM).'</a>&nbsp;&nbsp;';
+                    Display::return_icon('login_as.png', get_lang('Login as'), null, ICON_SIZE_MEDIUM).'</a>&nbsp;&nbsp;';
             $menu_items[] = $link;
         }
     }
@@ -137,7 +137,7 @@ if (api_is_platform_admin(true, true)) {
 if ($showImportIcon) {
     echo "<div align=\"right\">";
     echo '<a href="user_import.php?id_session='.$sessionId.'&action=export&amp;type=xml">'.
-            Display::return_icon('excel.gif', get_lang('ImportUserListXMLCSV')).'&nbsp;'.get_lang('ImportUserListXMLCSV').'</a>';
+            Display::return_icon('excel.gif', get_lang('Import users list')).'&nbsp;'.get_lang('Import users list').'</a>';
     echo "</div><br />";
 }
 
@@ -314,7 +314,7 @@ function get_courses($from, $limit, $column, $direction)
             $tematic_advance = $thematic->get_total_average_of_thematic_advances($courseCode, $sessionId);
             $tematicAdvanceProgress = '-';
             if (!empty($tematic_advance)) {
-                $tematicAdvanceProgress = '<a title="'.get_lang('GoToThematicAdvance').'" href="'.api_get_path(WEB_CODE_PATH).'course_progress/index.php?cidReq='.$courseCode.'&id_session='.$sessionId.'">'.
+                $tematicAdvanceProgress = '<a title="'.get_lang('Go to thematic advance').'" href="'.api_get_path(WEB_CODE_PATH).'course_progress/index.php?cidReq='.$courseCode.'&id_session='.$sessionId.'">'.
                     $tematic_advance.'%</a>';
             }
 
@@ -357,14 +357,14 @@ $table = new SortableTable(
     10
 );
 
-$table->set_header(0, get_lang('CourseTitle'), false);
-$table->set_header(1, get_lang('NbStudents'), false);
-$table->set_header(2, get_lang('TimeSpentInTheCourse').Display::return_icon('info.png', get_lang('TimeOfActiveByTraining'), ['align' => 'absmiddle', 'hspace' => '3px']), false);
-$table->set_header(3, get_lang('ThematicAdvance'), false);
-$table->set_header(4, get_lang('AvgStudentsProgress').Display::return_icon('info.png', get_lang('AvgAllUsersInAllCourses'), ['align' => 'absmiddle', 'hspace' => '3px']), false);
-$table->set_header(5, get_lang('AvgCourseScore').Display::return_icon('info.png', get_lang('AvgAllUsersInAllCourses'), ['align' => 'absmiddle', 'hspace' => '3px']), false);
-$table->set_header(6, get_lang('AvgMessages'), false);
-$table->set_header(7, get_lang('AvgAssignments'), false);
+$table->set_header(0, get_lang('Course title'), false);
+$table->set_header(1, get_lang('NbLearners'), false);
+$table->set_header(2, get_lang('Time spent in the course').Display::return_icon('info.png', get_lang('Time in course'), ['align' => 'absmiddle', 'hspace' => '3px']), false);
+$table->set_header(3, get_lang('Thematic advance'), false);
+$table->set_header(4, get_lang('AvgLearnersProgress').Display::return_icon('info.png', get_lang('Average of all learners in all courses'), ['align' => 'absmiddle', 'hspace' => '3px']), false);
+$table->set_header(5, get_lang('Average score in learning paths').Display::return_icon('info.png', get_lang('Average of all learners in all courses'), ['align' => 'absmiddle', 'hspace' => '3px']), false);
+$table->set_header(6, get_lang('Messages per learner'), false);
+$table->set_header(7, get_lang('Assignments'), false);
 $table->set_header(8, get_lang('Attendances'), false);
 $table->set_header(9, get_lang('Details'), false);
 

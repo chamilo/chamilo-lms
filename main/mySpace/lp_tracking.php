@@ -59,20 +59,20 @@ if ($origin === 'user_course') {
 } elseif ($origin === 'tracking_course') {
     $interbreadcrumb[] = [
         'url' => "../tracking/courseLog.php?cidReq=$courseCode&id_session=$session_id",
-        'name' => get_lang('Tracking'),
+        'name' => get_lang('Reporting'),
     ];
 } else {
-    $interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('MySpace')];
-    $interbreadcrumb[] = ['url' => 'student.php', 'name' => get_lang('MyStudents')];
-    $interbreadcrumb[] = ['url' => "myStudents.php?student=$user_id", 'name' => get_lang('StudentDetails')];
-    $nameTools = get_lang('DetailsStudentInCourse');
+    $interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('Reporting')];
+    $interbreadcrumb[] = ['url' => 'student.php', 'name' => get_lang('My learners')];
+    $interbreadcrumb[] = ['url' => "myStudents.php?student=$user_id", 'name' => get_lang('Learner details')];
+    $nameTools = get_lang('Learner details in course');
 }
 
 $interbreadcrumb[] = [
     'url' => "myStudents.php?student=$user_id&course=$courseCode&details=true&origin=$origin",
-    'name' => get_lang('DetailsStudentInCourse'),
+    'name' => get_lang('Learner details in course'),
 ];
-$nameTools = get_lang('LearningPathDetails');
+$nameTools = get_lang('Learnpath details');
 $sql = 'SELECT name	FROM '.Database::get_course_table(TABLE_LP_MAIN).' 
         WHERE c_id = '.$courseInfo['real_id'].' AND id='.$lp_id;
 $rs = Database::query($sql);
@@ -283,7 +283,7 @@ $actions[] = Display::url(
     'javascript:window.print();'
 );
 $actions[] = Display::url(
-    Display::return_icon('export_csv.png', get_lang('ExportAsCSV'), '', ICON_SIZE_MEDIUM),
+    Display::return_icon('export_csv.png', get_lang('CSV export'), '', ICON_SIZE_MEDIUM),
     api_get_self().'?export=csv&'.Security::remove_XSS($_SERVER['QUERY_STRING'])
 );
 
@@ -301,7 +301,7 @@ $table_title .= Display::return_icon('course.png', get_lang('Course')).PHP_EOL.$
 
 echo Display::page_header($table_title);
 echo Display::page_subheader(
-    Display::return_icon('learnpath.png', get_lang('ToolLearnpath')).PHP_EOL.$lp_title
+    Display::return_icon('learnpath.png', get_lang('Learning path')).PHP_EOL.$lp_title
 );
 echo $output;
 Display::display_footer();

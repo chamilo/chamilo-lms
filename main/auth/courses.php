@@ -63,7 +63,7 @@ $searchTerm = isset($_REQUEST['search_term']) ? Security::remove_XSS($_REQUEST['
 
 $nameTools = CourseCategory::getCourseCatalogNameTools($action);
 if (empty($nameTools)) {
-    $nameTools = get_lang('CourseManagement');
+    $nameTools = get_lang('Courses catalog');
 } else {
     if (!in_array(
         $action,
@@ -71,7 +71,7 @@ if (empty($nameTools)) {
     )) {
         $interbreadcrumb[] = [
             'url' => api_get_path(WEB_CODE_PATH).'auth/courses.php',
-            'name' => get_lang('CourseManagement'),
+            'name' => get_lang('Courses catalog'),
         ];
     }
     $interbreadcrumb[] = ['url' => '#', 'name' => $nameTools];
@@ -133,7 +133,7 @@ switch ($action) {
             header('Location: '.api_get_self());
             exit;
         }
-        $message = get_lang('CourseRequiresPassword').' ';
+        $message = get_lang('This course requires a password').' ';
         $message .= $courseInfo['title'].' ('.$courseInfo['visual_code'].') ';
 
         $action = api_get_self().
@@ -147,7 +147,7 @@ switch ($action) {
         $form->addElement('hidden', 'sec_token', Security::getTokenFromSession());
         $form->addElement('hidden', 'subscribe_user_with_password', $courseInfo['code']);
         $form->addElement('text', 'course_registration_code');
-        $form->addButtonSave(get_lang('SubmitRegistrationCode'));
+        $form->addButtonSave(get_lang('Submit registration code'));
         $content = $form->returnForm();
 
         if ($form->validate()) {
@@ -156,7 +156,7 @@ switch ($action) {
                 header('Location: '.api_get_self());
                 exit;
             } else {
-                Display::addFlash(Display::return_message(get_lang('CourseRegistrationCodeIncorrect')), 'warning');
+                Display::addFlash(Display::return_message(get_lang('The course password is incorrect')), 'warning');
                 header('Location: '.$action);
                 exit;
             }

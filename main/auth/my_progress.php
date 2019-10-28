@@ -16,7 +16,7 @@ if (api_get_configuration_value('block_my_progress_page')) {
 }
 
 $this_section = SECTION_TRACKING;
-$nameTools = get_lang('MyProgress');
+$nameTools = get_lang('Progress');
 
 $htmlHeadXtra[] = api_get_js('jquery.timelinr-0.9.54.js');
 $htmlHeadXtra[] = "<script>
@@ -69,7 +69,7 @@ if (!empty($courseUserList)) {
 
         $issues .= '<div class="text-course">';
         $issues .= '<p>'.sprintf(
-            get_lang('YouHaveEnteredTheCourseXInY'),
+            get_lang('You have entered the course <b>%s</b> in <b>%s</b>'),
             '" '.$courseInfo['name'].' "',
             api_convert_and_format_date($login, DATE_TIME_FORMAT_LONG)
         ).'</p>';
@@ -110,7 +110,7 @@ if (api_get_configuration_value('private_messages_about_user_visible_to_user') =
 
 $message = null;
 if (empty($content)) {
-    $message = Display::return_message(get_lang('NoDataAvailable'), 'warning');
+    $message = Display::return_message(get_lang('No data available'), 'warning');
 }
 
 $show = api_get_configuration_value('allow_career_users');

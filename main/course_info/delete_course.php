@@ -24,7 +24,7 @@ if (!api_is_allowed_to_edit()) {
     api_not_allowed(true);
 }
 
-$tool_name = get_lang('DelCourse');
+$tool_name = get_lang('Completely delete this course');
 
 if (isset($_GET['delete']) && $_GET['delete'] === 'yes') {
     CourseManager::delete_course($_course['sysCode']);
@@ -33,18 +33,18 @@ if (isset($_GET['delete']) && $_GET['delete'] === 'yes') {
     Session::erase('_cid');
     Session::erase('_real_cid');
     $message = '<h2>'.get_lang('Course').' : '.$current_course_name.' ('.$current_course_code.') </h2>';
-    $message .= get_lang('HasDel');
-    $message .= '<br /><br /><a href="../../index.php">'.get_lang('BackHome').'</a>';
+    $message .= get_lang('has been deleted');
+    $message .= '<br /><br /><a href="../../index.php">'.get_lang('Back to Home Page.').'</a>';
 } else {
     $message = '<h3>'.get_lang('Course').' : '.$current_course_name.' ('.$current_course_code.') </h3>';
-    $message .= '<p>'.get_lang('ByDel').'</p>';
+    $message .= '<p>'.get_lang('Deleting this area will permanently delete all the content (documents, links...) it contains and unregister all its members (not remove them from other courses). <p>Do you really want to delete the course?').'</p>';
     $message .= '<p><a class="btn btn-primary" 
         href="'.api_get_path(WEB_CODE_PATH).'course_info/maintenance.php?'.api_get_cidreq().'">'.
         get_lang('No').'</a>&nbsp;<a class="btn btn-danger" href="'.api_get_self().'?delete=yes&'.api_get_cidreq().'">'.
         get_lang('Yes').'</a></p>';
     $interbreadcrumb[] = [
         'url' => 'maintenance.php',
-        'name' => get_lang('Maintenance'),
+        'name' => get_lang('Backup'),
     ];
 }
 

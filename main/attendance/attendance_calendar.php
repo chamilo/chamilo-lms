@@ -5,7 +5,6 @@
  * View (MVC patter) for attendance calendar (list, edit, add).
  *
  * @author Christian Fasanando <christian1827@gmail.com>
- *
  */
 
 // protect a course script

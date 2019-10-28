@@ -18,7 +18,7 @@ $title = $course_info['title'];
 // Preparing a confirmation message.
 $link = api_get_path(WEB_COURSE_PATH).$directory.'/';
 
-$tpl = new Template(get_lang('ThingsToDo'));
+$tpl = new Template(get_lang('Suggested steps to take next'));
 
 $tpl->assign('course_url', $link);
 $tpl->assign('course_title', $title);

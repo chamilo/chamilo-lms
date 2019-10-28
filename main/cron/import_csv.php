@@ -1468,7 +1468,7 @@ class ImportCsv
                     $careerName = substr($careerName, 0, -2);
 
                     $subject = sprintf(
-                        get_lang('WelcomeToPortalXInCourseSessionX'),
+                        get_lang('Welcome to portal %s Course session: %s'),
                         api_get_setting('Institution'),
                         $courseInfo['title']
                     );
@@ -2089,7 +2089,7 @@ class ImportCsv
                 if (!in_array('SessionName', $tag_names) ||
                     !in_array('DateStart', $tag_names) || !in_array('DateEnd', $tag_names)
                 ) {
-                    $error_message = get_lang('NoNeededData');
+                    $error_message = get_lang('The specified file doesn\'t contain all needed data !');
                     break;
                 }
             }
@@ -2573,7 +2573,7 @@ class ImportCsv
             $extraFieldInfo = $extraField->get_handler_field_info_by_field_variable($extraFieldName);
 
             if (empty($extraFieldInfo)) {
-                $this->logger->addInfo("Extra field doesn't exists: $extraFieldName");
+                $this->logger->addInfo("Extra field doesn\'t exists: $extraFieldName");
 
                 return false;
             }

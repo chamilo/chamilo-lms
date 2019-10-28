@@ -34,7 +34,7 @@ foreach ($assignedUsers as $assignedUserId => $assignedUserInfo) {
     $users[$assignedUser->getId()] = $userInfo;
 }
 
-$toolName = get_lang('HrmAssignedUsersCourseList');
+$toolName = get_lang('Human Resources Manager assigned users course list');
 
 $view = new Template($toolName);
 $view->assign('users', $users);

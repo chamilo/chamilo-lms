@@ -188,7 +188,7 @@ class CoursesController
 
         if ($result) {
             Display::addFlash(
-                Display::return_message(get_lang('YouAreNowUnsubscribed'))
+                Display::return_message(get_lang('You have been unsubscribed from this course'))
             );
         }
 
@@ -239,15 +239,15 @@ class CoursesController
             ]);
 
             return Display::toolbarButton(
-                get_lang('CheckRequirements'),
+                get_lang('Check requirements'),
                 $url,
                 'shield',
                 'info',
                 [
                     'class' => $btnBing.' ajax',
-                    'data-title' => get_lang('CheckRequirements'),
+                    'data-title' => get_lang('Check requirements'),
                     'data-size' => 'md',
-                    'title' => get_lang('CheckRequirements'),
+                    'title' => get_lang('Check requirements'),
                 ],
                 $includeText
             );
@@ -274,7 +274,7 @@ class CoursesController
                 'primary',
                 [
                     'class' => $btnBing.' ajax',
-                    'data-title' => get_lang('AreYouSureToSubscribe'),
+                    'data-title' => get_lang('Are you sure to subscribe?'),
                     'data-size' => 'md',
                     'title' => get_lang('Subscribe'),
                 ],
@@ -288,7 +288,7 @@ class CoursesController
             ]);
 
             $result = Display::toolbarButton(
-                get_lang('SubscribeToSessionRequest'),
+                get_lang('Request subscription'),
                 $url,
                 'pencil',
                 'primary',
@@ -325,7 +325,7 @@ class CoursesController
             $icon,
             [
                 'class' => 'btn btn-default btn-sm registered',
-                'title' => get_lang("AlreadyRegisteredToSession"),
+                'title' => get_lang("Already registered to session"),
             ]
         );
     }

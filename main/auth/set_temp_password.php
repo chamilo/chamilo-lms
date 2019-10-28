@@ -30,7 +30,7 @@ $form = new FormValidator(
     'POST',
     api_get_self().'?course_id='.$courseId.'&session_id='.$sessionId
 );
-$form->addElement('header', get_lang('CourseRequiresPassword'));
+$form->addElement('header', get_lang('This course requires a password'));
 $form->addElement('hidden', 'course_id', $courseId);
 $form->addElement('hidden', 'session_id', $sessionId);
 $form->addElement('password', 'course_password', get_lang('Password'));
@@ -45,7 +45,7 @@ if ($form->validate()) {
         exit;
     } else {
         Display::addFlash(
-            Display::return_message(get_lang('CourseRegistrationCodeIncorrect'), 'error')
+            Display::return_message(get_lang('The course password is incorrect'), 'error')
         );
     }
 }

@@ -11,8 +11,6 @@ use ChamiloSession as Session;
  * optionally it allows users to modify their profile as well.
  *
  * See inc/conf/profile.conf.php to modify settings
- *
- * @package chamilo.auth
  */
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
@@ -85,7 +83,7 @@ if (api_get_setting('allow_message_tool') === 'true') {
 EOF;
 }
 
-$tool_name = api_get_setting('profile.is_editable') === 'true' ? get_lang('ModifProfile') : get_lang('ViewProfile');
+$tool_name = api_get_setting('profile.is_editable') === 'true' ? get_lang('Edit Profile') : get_lang('View my e-portfolio');
 $table_user = Database::get_main_table(TABLE_MAIN_USER);
 
 /*
@@ -121,12 +119,12 @@ $form = new FormValidator('profile');
 
 if (api_is_western_name_order()) {
     //    FIRST NAME and LAST NAME
-    $form->addElement('text', 'firstname', get_lang('FirstName'), ['size' => 40]);
-    $form->addElement('text', 'lastname', get_lang('LastName'), ['size' => 40]);
+    $form->addElement('text', 'firstname', get_lang('First name'), ['size' => 40]);
+    $form->addElement('text', 'lastname', get_lang('Last name'), ['size' => 40]);
 } else {
     //    LAST NAME and FIRST NAME
-    $form->addElement('text', 'lastname', get_lang('LastName'), ['size' => 40]);
-    $form->addElement('text', 'firstname', get_lang('FirstName'), ['size' => 40]);
+    $form->addElement('text', 'lastname', get_lang('Last name'), ['size' => 40]);
+    $form->addElement('text', 'firstname', get_lang('First name'), ['size' => 40]);
 }
 if (!in_array('name', $profileList)) {
     $form->freeze(['lastname', 'firstname']);
@@ -134,14 +132,14 @@ if (!in_array('name', $profileList)) {
 $form->applyFilter(['lastname', 'firstname'], 'stripslashes');
 $form->applyFilter(['lastname', 'firstname'], 'trim');
 $form->applyFilter(['lastname', 'firstname'], 'html_filter');
-$form->addRule('lastname', get_lang('ThisFieldIsRequired'), 'required');
-$form->addRule('firstname', get_lang('ThisFieldIsRequired'), 'required');
+$form->addRule('lastname', get_lang('Required field'), 'required');
+$form->addRule('firstname', get_lang('Required field'), 'required');
 
 //    USERNAME
 $form->addElement(
     'text',
     'username',
-    get_lang('UserName'),
+    get_lang('Username'),
     [
         'id' => 'username',
         'maxlength' => USERNAME_MAX_LENGTH,
@@ -153,11 +151,11 @@ if (!in_array('login', $profileList) || api_get_setting('login_is_email') == 'tr
 }
 $form->applyFilter('username', 'stripslashes');
 $form->applyFilter('username', 'trim');
-$form->addRule('username', get_lang('ThisFieldIsRequired'), 'required');
-$form->addRule('username', get_lang('UsernameWrong'), 'username');
-$form->addRule('username', get_lang('UserTaken'), 'username_available', $user_data['username']);
+$form->addRule('username', get_lang('Required field'), 'required');
+$form->addRule('username', get_lang('Your login can only contain letters, numbers and _.-'), 'username');
+$form->addRule('username', get_lang('This login is already in use'), 'username_available', $user_data['username']);
 
-$form->addElement('text', 'official_code', get_lang('OfficialCode'), ['size' => 40]);
+$form->addElement('text', 'official_code', get_lang('Code'), ['size' => 40]);
 if (!in_array('officialcode', $profileList)) {
     $form->freeze('official_code');
 }
@@ -167,11 +165,11 @@ $form->applyFilter('official_code', 'html_filter');
 if (api_get_setting('registration', 'officialcode') === 'true' &&
     in_array('officialcode', $profileList)
 ) {
-    $form->addRule('official_code', get_lang('ThisFieldIsRequired'), 'required');
+    $form->addRule('official_code', get_lang('Required field'), 'required');
 }
 
 //    EMAIL
-$form->addElement('email', 'email', get_lang('Email'), ['size' => 40]);
+$form->addElement('email', 'email', get_lang('e-mail'), ['size' => 40]);
 if (!in_array('email', $profileList)) {
     $form->freeze('email');
 }
@@ -180,8 +178,8 @@ if (api_get_setting('registration', 'email') == 'true' && in_array('email', $pro
 ) {
     $form->applyFilter('email', 'stripslashes');
     $form->applyFilter('email', 'trim');
-    $form->addRule('email', get_lang('ThisFieldIsRequired'), 'required');
-    $form->addRule('email', get_lang('EmailWrong'), 'email');
+    $form->addRule('email', get_lang('Required field'), 'required');
+    $form->addRule('email', get_lang('e-mailWrong'), 'email');
 }
 
 //    PHONE
@@ -198,8 +196,8 @@ if (api_get_setting('profile.is_editable') === 'true' && in_array('picture', $pr
     $form->addFile(
         'picture',
         [
-            $user_data['picture_uri'] != '' ? get_lang('UpdateImage') : get_lang('AddImage'),
-            get_lang('OnlyImagesAllowed'),
+            $user_data['picture_uri'] != '' ? get_lang('Update Image') : get_lang('Add image'),
+            get_lang('Only PNG, JPG or GIF images allowed'),
         ],
         [
             'id' => 'picture',
@@ -212,12 +210,12 @@ if (api_get_setting('profile.is_editable') === 'true' && in_array('picture', $pr
 
     $form->addProgress();
     if (!empty($user_data['picture_uri'])) {
-        $form->addElement('checkbox', 'remove_picture', null, get_lang('DelImage'));
+        $form->addElement('checkbox', 'remove_picture', null, get_lang('Remove picture'));
     }
     $allowed_picture_types = api_get_supported_image_extensions(false);
     $form->addRule(
         'picture',
-        get_lang('OnlyImagesAllowed').' ('.implode(', ', $allowed_picture_types).')',
+        get_lang('Only PNG, JPG or GIF images allowed').' ('.implode(', ', $allowed_picture_types).')',
         'filetype',
         $allowed_picture_types
     );
@@ -231,7 +229,7 @@ if (!in_array('language', $profileList)) {
 
 // THEME
 if (api_get_setting('profile.is_editable') === 'true' && api_get_setting('user_selected_theme') === 'true') {
-    $form->addElement('SelectTheme', 'theme', get_lang('Theme'));
+    $form->addElement('SelectTheme', 'theme', get_lang('Graphical theme'));
     if (!in_array('theme', $profileList)) {
         $form->freeze('theme');
     }
@@ -244,7 +242,7 @@ if (api_get_setting('extended_profile') === 'true') {
     //    MY COMPETENCES
     $form->addHtmlEditor(
         'competences',
-        get_lang('MyCompetences'),
+        get_lang('My competences'),
         false,
         false,
         [
@@ -256,7 +254,7 @@ if (api_get_setting('extended_profile') === 'true') {
     //    MY DIPLOMAS
     $form->addHtmlEditor(
         'diplomas',
-        get_lang('MyDiplomas'),
+        get_lang('My diplomas'),
         false,
         false,
         [
@@ -268,7 +266,7 @@ if (api_get_setting('extended_profile') === 'true') {
     // WHAT I AM ABLE TO TEACH
     $form->addHtmlEditor(
         'teach',
-        get_lang('MyTeach'),
+        get_lang('What I am able to teach'),
         false,
         false,
         [
@@ -279,14 +277,14 @@ if (api_get_setting('extended_profile') === 'true') {
     );
 
     //    MY PRODUCTIONS
-    $form->addElement('file', 'production', get_lang('MyProductions'));
+    $form->addElement('file', 'production', get_lang('My productions'));
     if ($production_list = UserManager::build_production_list(api_get_user_id(), '', true)) {
         $form->addElement('static', 'productions_list', null, $production_list);
     }
     //    MY PERSONAL OPEN AREA
     $form->addHtmlEditor(
         'openarea',
-        get_lang('MyPersonalOpenArea'),
+        get_lang('My personal open area'),
         false,
         false,
         [
@@ -306,11 +304,11 @@ if ($user_data['auth_source'] == PLATFORM_AUTH_SOURCE &&
     in_array('password', $profileList)
 ) {
     $form->addElement('password', 'password0', [get_lang('Pass'), get_lang('Enter2passToChange')], ['size' => 40]);
-    $form->addElement('password', 'password1', get_lang('NewPass'), ['id' => 'password1', 'size' => 40]);
+    $form->addElement('password', 'password1', get_lang('New password'), ['id' => 'password1', 'size' => 40]);
 
-    $form->addElement('password', 'password2', get_lang('Confirmation'), ['size' => 40]);
+    $form->addElement('password', 'password2', get_lang('Confirm password'), ['size' => 40]);
     //    user must enter identical password twice so we can prevent some user errors
-    $form->addRule(['password1', 'password2'], get_lang('PassTwo'), 'compare');
+    $form->addRule(['password1', 'password2'], get_lang('You have typed two different passwords'), 'compare');
     $form->addPasswordRule('password1');
 }
 
@@ -335,13 +333,13 @@ if (in_array('apikeys', $profileList)) {
     $form->addElement(
         'text',
         'api_key_generate',
-        get_lang('MyApiKey'),
+        get_lang('My API key'),
         ['size' => 40, 'id' => 'id_api_key_generate']
     );
     $form->addElement('html', '</div>');
     $form->addButton(
         'generate_api_key',
-        get_lang('GenerateApiKey'),
+        get_lang('Generate API key'),
         'cogs',
         'default',
         'default',
@@ -407,7 +405,7 @@ if ($form->validate()) {
         } else {
             Display::addFlash(
                 Display:: return_message(
-                    get_lang('CurrentPasswordEmptyOrIncorrect'),
+                    get_lang('The current password is incorrect'),
                     'warning',
                     false
                 )
@@ -438,7 +436,7 @@ if ($form->validate()) {
             if (!empty($userFromEmail) && empty($user_data['password0'])) {
                 Display::addFlash(
                     Display:: return_message(
-                        get_lang('ToChangeYourEmailMustTypeYourPassword'),
+                        get_lang('ToChangeYoure-mailMustTypeYourPassword'),
                         'error',
                         false
                     )
@@ -461,7 +459,7 @@ if ($form->validate()) {
 
             Display::addFlash(
                 Display:: return_message(
-                    get_lang('PictureUploaded'),
+                    get_lang('Your picture has been uploaded'),
                     'normal',
                     false
                 )
@@ -488,7 +486,7 @@ if ($form->validate()) {
         }
         $form->removeElement('productions_list');
         Display::addFlash(
-            Display:: return_message(get_lang('FileDeleted'), 'normal', false)
+            Display:: return_message(get_lang('File deleted'), 'normal', false)
         );
     }
 
@@ -502,7 +500,7 @@ if ($form->validate()) {
         } else {
             Display::addFlash(
                 Display:: return_message(
-                    get_lang('ProductionUploaded'),
+                    get_lang('Your production file has been uploaded'),
                     'normal',
                     false
                 )
@@ -628,12 +626,12 @@ if ($form->validate()) {
 
     if ($passwordWasChecked == false) {
         Display::addFlash(
-            Display:: return_message(get_lang('ProfileReg'), 'normal', false)
+            Display:: return_message(get_lang('Your new profile has been saved'), 'normal', false)
         );
     } else {
         if ($validPassword) {
             Display::addFlash(
-                Display:: return_message(get_lang('ProfileReg'), 'normal', false)
+                Display:: return_message(get_lang('Your new profile has been saved'), 'normal', false)
             );
         }
     }
@@ -671,7 +669,7 @@ if ($allowSocialTool) {
     if (api_get_setting('extended_profile') === 'true') {
         if (api_get_setting('allow_message_tool') === 'true') {
             $actions .= '<a href="'.api_get_path(WEB_PATH).'main/social/profile.php">'.
-                Display::return_icon('shared_profile.png', get_lang('ViewSharedProfile')).'</a>';
+                Display::return_icon('shared_profile.png', get_lang('View shared profile')).'</a>';
             $actions .= '<a href="'.api_get_path(WEB_PATH).'main/messages/inbox.php">'.
                 Display::return_icon('inbox.png', get_lang('Messages')).'</a>';
         }
@@ -679,17 +677,17 @@ if ($allowSocialTool) {
 
         if (isset($_GET['type']) && $_GET['type'] === 'extended') {
             $actions .= '<a href="profile.php?type=reduced'.$show.'">'.
-                Display::return_icon('edit.png', get_lang('EditNormalProfile'), '', 16).'</a>';
+                Display::return_icon('edit.png', get_lang('Edit normal profile'), '', 16).'</a>';
         } else {
             $actions .= '<a href="profile.php?type=extended'.$show.'">'.
-                Display::return_icon('edit.png', get_lang('EditExtendProfile'), '', 16).'</a>';
+                Display::return_icon('edit.png', get_lang('Edit extended profile'), '', 16).'</a>';
         }
     }
 }
 
 $show_delete_account_button = api_get_setting('platform_unsubscribe_allowed') === 'true' ? true : false;
 
-$tpl = new Template(get_lang('ModifyProfile'));
+$tpl = new Template(get_lang('Profile'));
 
 if ($actions) {
     $tpl->assign(

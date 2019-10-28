@@ -16,7 +16,7 @@ $currentUrl = api_get_self();
 
 $interbreadcrumb[] = [
     'url' => api_get_self(),
-    'name' => get_lang('SortMyCourses'),
+    'name' => get_lang('Sort courses'),
 ];
 
 // We are moving the course of the user to a different user defined course category (=Sort My Courses).
@@ -24,7 +24,7 @@ if (isset($_POST['submit_change_course_category'])) {
     $result = $auth->updateCourseCategory($_POST['course_2_edit_category'], $_POST['course_categories']);
     if ($result) {
         Display::addFlash(
-            Display::return_message(get_lang('EditCourseCategorySucces'))
+            Display::return_message(get_lang('The course has been added to the category'))
         );
     }
     header('Location: '.api_get_self());
@@ -38,7 +38,7 @@ if (isset($_POST['submit_edit_course_category']) &&
     $result = $auth->store_edit_course_category($_POST['title_course_category'], $_POST['category_id']);
     if ($result) {
         Display::addFlash(
-            Display::return_message(get_lang('CourseCategoryEditStored'))
+            Display::return_message(get_lang('Category updated'))
         );
     }
 
@@ -54,12 +54,12 @@ if (isset($_POST['create_course_category']) &&
     $result = $auth->store_course_category($_POST['title_course_category']);
     if ($result) {
         Display::addFlash(
-            Display::return_message(get_lang('CourseCategoryStored'))
+            Display::return_message(get_lang('Course category is created'))
         );
     } else {
         Display::addFlash(
             Display::return_message(
-                get_lang('ACourseCategoryWithThisNameAlreadyExists'),
+                get_lang('A course category with the same name already exists.'),
                 'error'
             )
         );
@@ -74,7 +74,7 @@ if (isset($_GET['move'])) {
         $result = $auth->move_course($_GET['move'], $_GET['course'], $_GET['category']);
         if ($result) {
             Display::addFlash(
-                Display::return_message(get_lang('CourseSortingDone'))
+                Display::return_message(get_lang('Courses sorted'))
             );
         }
     }
@@ -82,7 +82,7 @@ if (isset($_GET['move'])) {
         $result = $auth->move_category($_GET['move'], $_GET['category']);
         if ($result) {
             Display::addFlash(
-                Display::return_message(get_lang('CategorySortingDone'))
+                Display::return_message(get_lang('Category sorting done'))
             );
         }
     }
@@ -136,7 +136,7 @@ switch ($action) {
             'course_categories',
             get_lang('Categories'),
             $options,
-            ['disable_js' => true, 'placeholder' => get_lang('SelectAnOption')]
+            ['disable_js' => true, 'placeholder' => get_lang('Please select an option')]
         );
         $form->addHidden('course_2_edit_category', $edit_course);
 
@@ -154,7 +154,7 @@ switch ($action) {
                 $result = $auth->delete_course_category($_GET['id']);
                 if ($result) {
                     Display::addFlash(
-                        Display::return_message(get_lang('CourseCategoryDeleted'))
+                        Display::return_message(get_lang('The category was deleted'))
                     );
                 }
             }
@@ -169,7 +169,7 @@ switch ($action) {
             $currentUrl.'?action=createcoursecategory'
         );
         $form->addText('title_course_category', get_lang('Name'));
-        $form->addButtonSave(get_lang('AddCategory'), 'create_course_category');
+        $form->addButtonSave(get_lang('Add category'), 'create_course_category');
         $form->display();
         exit;
         break;
@@ -192,7 +192,7 @@ switch ($action) {
                 SET collapsed = $option
                 WHERE user_id = $userId AND id = $categoryId";
         Database::query($sql);
-        Display::addFlash(Display::return_message(get_lang('Updated')));
+        Display::addFlash(Display::return_message(get_lang('Update successful')));
 
         if ($redirect === 'home') {
             $url = api_get_path(WEB_PATH).'user_portal.php';
@@ -213,7 +213,7 @@ $courses_without_category = isset($courses_in_category[0]) ? $courses_in_categor
 echo '<div id="actions" class="actions">';
 if ($action != 'createcoursecategory') {
     echo '<a class="ajax" href="'.$currentUrl.'?action=createcoursecategory">';
-    echo Display::return_icon('new_folder.png', get_lang('CreateCourseCategory'), '', '32');
+    echo Display::return_icon('new_folder.png', get_lang('Create a personal courses category'), '', '32');
     echo '</a>';
 }
 echo '</div>';
@@ -223,7 +223,7 @@ if (!empty($message)) {
 }
 
 $allowCollapsable = api_get_configuration_value('allow_user_course_category_collapsable');
-$teachersIcon = Display::return_icon('teacher.png', get_lang('Teachers'), null, ICON_SIZE_TINY);
+$teachersIcon = Display::return_icon('teacher.png', get_lang('Trainers'), null, ICON_SIZE_TINY);
 
 // COURSES WITH CATEGORIES
 if (!empty($user_course_categories)) {
@@ -263,11 +263,11 @@ if (!empty($user_course_categories)) {
         }
         if ($row['id'] != $last['id']) {
             echo Display::url(
-                Display::return_icon('down.png', get_lang('Down'), '', 22),
+                Display::return_icon('down.png', get_lang('down'), '', 22),
                 $currentUrl.'?move=down&category='.$row['id'].'&sec_token='.$stok
             );
         } else {
-            echo Display::return_icon('down_na.png', get_lang('Down'), '', 22);
+            echo Display::return_icon('down_na.png', get_lang('down'), '', 22);
         }
 
         echo Display::url(
@@ -277,7 +277,7 @@ if (!empty($user_course_categories)) {
                 [
                     'onclick' => "javascript: if (!confirm('".addslashes(
                             api_htmlentities(
-                                get_lang('CourseCategoryAbout2bedeleted'),
+                                get_lang('Are you sure you want to delete this courses category? Courses inside this category will be moved outside the categories'),
                                 ENT_QUOTES,
                                 api_get_system_encoding()
                             )
@@ -313,7 +313,7 @@ if (!empty($user_course_categories)) {
                 <div style="float:left;width:110px;">
                 <?php
                     if (api_get_setting('show_courses_descriptions_in_catalog') == 'true') {
-                        $icon_title = get_lang('CourseDetails').' - '.$course['title']; ?>
+                        $icon_title = get_lang('Course description').' - '.$course['title']; ?>
                 <a href="<?php echo api_get_path(WEB_CODE_PATH); ?>inc/ajax/course_home.ajax.php?a=show_course_information&code=<?php echo $course['code']; ?>" data-title="<?php echo $icon_title; ?>" title="<?php echo $icon_title; ?>" class="ajax">
                     <?php
                     echo Display::return_icon('info.png', $icon_title, '', '22');
@@ -338,11 +338,11 @@ if (!empty($user_course_categories)) {
                 if ($key < $number_of_courses - 1) {
                     ?>
                     <a href="<?php echo $currentUrl; ?>?action=<?php echo $action; ?>&amp;move=down&amp;course=<?php echo $course['code']; ?>&amp;category=<?php echo $course['user_course_cat']; ?>&amp;sec_token=<?php echo $stok; ?>">
-                    <?php echo Display::return_icon('down.png', get_lang('Down'), '', 22); ?>
+                    <?php echo Display::return_icon('down.png', get_lang('down'), '', 22); ?>
                     </a>
                 <?php
                 } else {
-                    echo Display::return_icon('down_na.png', get_lang('Down'), '', 22);
+                    echo Display::return_icon('down_na.png', get_lang('down'), '', 22);
                 } ?>
               </div>
               <div style="float:left; margin-right:10px;">
@@ -351,7 +351,7 @@ if (!empty($user_course_categories)) {
                         if ($course['unsubscr'] == 1) {
                             ?>
 
-                <form action="<?php echo api_get_self(); ?>" method="post" onsubmit="javascript: if (!confirm('<?php echo addslashes(api_htmlentities(get_lang("ConfirmUnsubscribeFromCourse"), ENT_QUOTES, api_get_system_encoding())); ?>')) return false">
+                <form action="<?php echo api_get_self(); ?>" method="post" onsubmit="javascript: if (!confirm('<?php echo addslashes(api_htmlentities(get_lang("Are you sure you want to unsubscribe?"), ENT_QUOTES, api_get_system_encoding())); ?>')) return false">
                     <input type="hidden" name="sec_token" value="<?php echo $stok; ?>">
                     <input type="hidden" name="unsubscribe" value="<?php echo $course['code']; ?>" />
                      <button class="btn btn-default" value="<?php echo get_lang('Unsubscribe'); ?>" name="unsub">
@@ -369,7 +369,7 @@ if (!empty($user_course_categories)) {
     }
 }
 
-echo Display::page_subheader(get_lang('NoCourseCategory'));
+echo Display::page_subheader(get_lang('No courses category'));
 echo '<table class="data_table">';
 // COURSES WITHOUT CATEGORY
 if (!empty($courses_without_category)) {
@@ -393,7 +393,7 @@ if (!empty($courses_without_category)) {
             <div style="float:left; width:110px">
             <?php
             if (api_get_setting('show_courses_descriptions_in_catalog') == 'true') {
-                $icon_title = get_lang('CourseDetails').' - '.$course['title']; ?>
+                $icon_title = get_lang('Course description').' - '.$course['title']; ?>
             <a href="<?php echo api_get_path(WEB_CODE_PATH); ?>inc/ajax/course_home.ajax.php?a=show_course_information&code=<?php echo $course['code']; ?>" data-title="<?php echo $icon_title; ?>" title="<?php echo $icon_title; ?>" class="ajax">
                 <?php echo Display::return_icon('info.png', $icon_title, '', '22'); ?>
             </a>
@@ -421,11 +421,11 @@ if (!empty($courses_without_category)) {
         if ($key < $number_of_courses - 1) {
             ?>
                 <a href="<?php echo $currentUrl; ?>?action=<?php echo $action; ?>&amp;move=down&amp;course=<?php echo $course['code']; ?>&amp;category=<?php echo $course['user_course_cat']; ?>&amp;sec_token=<?php echo $stok; ?>">
-                <?php echo Display::display_icon('down.png', get_lang('Down'), '', 22); ?>
+                <?php echo Display::display_icon('down.png', get_lang('down'), '', 22); ?>
                 </a>
             <?php
         } else {
-            echo Display::return_icon('down_na.png', get_lang('Down'), '', 22);
+            echo Display::return_icon('down_na.png', get_lang('down'), '', 22);
         } ?>
                 </div>
                  <div style="float:left; margin-right:10px;">
@@ -434,7 +434,7 @@ if (!empty($courses_without_category)) {
                     if ($course['unsubscr'] == 1) {
                         ?>
                 <!-- changed link to submit to avoid action by the search tool indexer -->
-                <form action="<?php echo api_get_self(); ?>" method="post" onsubmit="javascript: if (!confirm('<?php echo addslashes(api_htmlentities(get_lang("ConfirmUnsubscribeFromCourse"), ENT_QUOTES, api_get_system_encoding())); ?>')) return false;">
+                <form action="<?php echo api_get_self(); ?>" method="post" onsubmit="javascript: if (!confirm('<?php echo addslashes(api_htmlentities(get_lang("Are you sure you want to unsubscribe?"), ENT_QUOTES, api_get_system_encoding())); ?>')) return false;">
                     <input type="hidden" name="sec_token" value="<?php echo $stok; ?>">
                     <input type="hidden" name="unsubscribe" value="<?php echo $course['code']; ?>" />
                     <button class="btn btn-default" value="<?php echo get_lang('Unsubscribe'); ?>" name="unsub">

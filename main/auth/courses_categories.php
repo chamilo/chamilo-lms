@@ -71,7 +71,7 @@ $code = isset($code) ? $code : null;
 
 echo '<div class="row">
     <div class="col-md-12">
-        <h2 class="title-courses">'.get_lang('CourseManagement').'</h2>
+        <h2 class="title-courses">'.get_lang('Courses catalog').'</h2>
         <div class="search-courses">
             <div class="row">';
 
@@ -107,7 +107,7 @@ if ($showCourses) {
     $form .= '<input type="hidden" name="pageCurrent" value="'.$pageCurrent.'">';
     $form .= '<input type="hidden" name="pageLength" value="'.$pageLength.'">';
     $form .= '<div class="form-group">';
-    $form .= '<label>'.get_lang('CourseCategories').'</label>';
+    $form .= '<label>'.get_lang('Courses categories').'</label>';
     $form .= $categoriesSelect;
     $form .= '</div>';
     $form .= '</form>';
@@ -121,7 +121,7 @@ if ($showSessions) {
         <div class="return-catalog">
             <a class="btn btn-default btn-lg btn-block"
                href="'.$url.'">
-                <em class="fa fa-arrow-right"></em>'.get_lang('SessionList').'
+                <em class="fa fa-arrow-right"></em>'.get_lang('Session list').'
             </a>
         </div>
     </div>
@@ -143,7 +143,7 @@ if ($showCourses && $action != 'display_sessions') {
     }
 
     if (!empty($searchTerm)) {
-        echo "<p><strong>".get_lang('SearchResultsFor')." ".$searchTerm."</strong><br />";
+        echo "<p><strong>".get_lang('Search results for:')." ".$searchTerm."</strong><br />";
     }
 
     $showTeacher = api_get_setting('display_teacher_in_courselist') === 'true';
@@ -263,7 +263,7 @@ if ($showCourses && $action != 'display_sessions') {
             !isset($_REQUEST['subscribe_course'])
         ) {
             echo Display::return_message(
-                get_lang('ThereAreNoCoursesInThisCategory'),
+                get_lang('No course at this category level'),
                 'warning'
             );
         }
@@ -370,7 +370,7 @@ function return_teacher($courseInfo)
             tabindex="0" role="button" 
             class="btn btn-default panel_popover" 
             data-toggle="popover" 
-            title="'.addslashes(get_lang('CourseTeachers')).'" 
+            title="'.addslashes(get_lang('Trainers')).'" 
             data-html="true"
         >
             <i class="fa fa-graduation-cap" aria-hidden="true"></i>
@@ -380,7 +380,7 @@ function return_teacher($courseInfo)
             $name = $value['firstname'].' '.$value['lastname'];
             $html .= '<div class="popover-teacher">';
             $html .= '<a href="'.$value['url'].'" class="ajax" data-title="'.$name.'" title="'.$name.'">
-                        <img src="'.$value['avatar'].'" title="'.$name.'" alt="'.get_lang('UserPicture').'"/></a>';
+                        <img src="'.$value['avatar'].'" title="'.$name.'" alt="'.get_lang('Picture').'"/></a>';
             $html .= '<div class="teachers-details"><h5>
                         <a href="'.$value['url'].'" class="ajax" data-title="'.$name.'" title="'.$name.'">'
                         .$name.'</a></h5></div>';
@@ -392,13 +392,13 @@ function return_teacher($courseInfo)
             $name = $value['firstname'].' '.$value['lastname'];
             if ($length > 2) {
                 $html .= '<a href="'.$value['url'].'" class="ajax" data-title="'.$name.'" title="'.$name.'">
-                        <img src="'.$value['avatar'].'" title="'.$name.'" alt="'.get_lang('UserPicture').'"/></a>';
+                        <img src="'.$value['avatar'].'" title="'.$name.'" alt="'.get_lang('Picture').'"/></a>';
             } else {
                 $html .= '<a href="'.$value['url'].'" class="ajax" data-title="'.$name.'" title="'.$name.'">
-                        <img src="'.$value['avatar'].'" title="'.$name.'" alt="'.get_lang('UserPicture').'"/></a>';
+                        <img src="'.$value['avatar'].'" title="'.$name.'" alt="'.get_lang('Picture').'"/></a>';
                 $html .= '<div class="teachers-details"><h5>
                         <a href="'.$value['url'].'" class="ajax" data-title="'.$name.'">'
-                        .$name.'</a></h5><p>'.get_lang('Teacher').'</p></div>';
+                        .$name.'</a></h5><p>'.get_lang('Trainer').'</p></div>';
             }
         }
     }
@@ -445,7 +445,7 @@ function return_title($course, $registeredUser)
  */
 function return_goto_button($course)
 {
-    $title = get_lang('GoToCourse');
+    $title = get_lang('Go to the course');
     $html = Display::url(
         Display::returnFontAwesomeIcon('share'),
         api_get_course_url($course['code']),
@@ -469,10 +469,10 @@ function return_goto_button($course)
 function return_already_registered_label($in_status)
 {
     $icon = '<em class="fa fa-check"></em>';
-    $title = get_lang("YouAreATeacherOfThisCourse");
+    $title = get_lang("YouAreATrainerOfThisCourse");
     if ($in_status == 'student') {
         $icon = '<em class="fa fa-check"></em>';
-        $title = get_lang("AlreadySubscribed");
+        $title = get_lang("Already subscribed");
     }
 
     $html = Display::tag(
@@ -529,7 +529,7 @@ function return_register_button($course, $stok, $code, $search_term)
  */
 function return_unregister_button($course, $stok, $search_term, $code)
 {
-    $title = get_lang('Unsubscription');
+    $title = get_lang('Unsubscribe');
     $html = Display::url(
         Display::returnFontAwesomeIcon('sign-in').' '.$title,
         api_get_self().'?action=unsubscribe&sec_token='.$stok

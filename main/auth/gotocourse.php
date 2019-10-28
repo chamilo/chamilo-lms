@@ -25,7 +25,7 @@ if (isset($_GET['firstpage'])) {
     $action = str_replace('&amp;', '&', $action);
     $form = new FormValidator('formLogin', 'post', $action, null, ['class' => 'form-stacked']);
     $params = [
-        'placeholder' => get_lang('UserName'),
+        'placeholder' => get_lang('Username'),
     ];
     // Avoid showing the autocapitalize option if the browser doesn't
     // support it: this attribute is against the HTML5 standard
@@ -50,13 +50,13 @@ if (isset($_GET['firstpage'])) {
         null,
         $params
     );
-    $form->addButtonNext(get_lang('LoginEnter'), 'submitAuth');
+    $form->addButtonNext(get_lang('Login'), 'submitAuth');
     // see same text in main_api.lib.php function api_not_allowed
     if (api_is_cas_activated()) {
-        $msg .= Display::return_message(sprintf(get_lang('YouHaveAnInstitutionalAccount'), api_get_setting("Institution")), '', false);
-        $msg .= Display::div("<br/><a href='".get_cas_direct_URL(api_get_course_id())."'>".getCASLogoHTML()." ".sprintf(get_lang('LoginWithYourAccount'), api_get_setting("Institution"))."</a><br/><br/>", ['align' => 'center']);
-        $msg .= Display::return_message(get_lang('YouDontHaveAnInstitutionAccount'));
-        $msg .= "<p style='text-align:center'><a href='#' onclick='$(this).parent().next().toggle()'>".get_lang('LoginWithExternalAccount')."</a></p>";
+        $msg .= Display::return_message(sprintf(get_lang('You already have an institutional account'), api_get_setting("Institution")), '', false);
+        $msg .= Display::div("<br/><a href='".get_cas_direct_URL(api_get_course_id())."'>".getCASLogoHTML()." ".sprintf(get_lang('Login with your account'), api_get_setting("Institution"))."</a><br/><br/>", ['align' => 'center']);
+        $msg .= Display::return_message(get_lang('You don\'t have an institutional account'));
+        $msg .= "<p style='text-align:center'><a href='#' onclick='$(this).parent().next().toggle()'>".get_lang('Login without an institutional account')."</a></p>";
         $msg .= "<div style='display:none;'>";
     }
 
@@ -66,9 +66,9 @@ if (isset($_GET['firstpage'])) {
     if (api_is_cas_activated()) {
         $msg .= "</div>";
     }
-    $msg .= '<hr/><p style="text-align:center"><a href="'.api_get_path(WEB_PATH).'">'.get_lang('ReturnToCourseHomepage').'</a></p>';
+    $msg .= '<hr/><p style="text-align:center"><a href="'.api_get_path(WEB_PATH).'">'.get_lang('Return to Course Homepage').'</a></p>';
 
-    $tpl->assign('content', '<h4>'.get_lang('LoginToGoToThisCourse').'</h4>'.$msg);
+    $tpl->assign('content', '<h4>'.get_lang('Please login to go to this course').'</h4>'.$msg);
     $tpl->display_one_col_template();
 } else {
     api_delete_firstpage_parameter();

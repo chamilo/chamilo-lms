@@ -4,7 +4,6 @@
 /**
  * BLOG HOMEPAGE
  * This file takes care of all blog navigation and displaying.
- *
  */
 require_once __DIR__.'/../inc/global.inc.php';
 

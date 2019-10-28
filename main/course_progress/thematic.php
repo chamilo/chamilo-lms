@@ -18,7 +18,7 @@ $url_token = "&sec_token=".$token;
 $user_info = api_get_user_info();
 $params = '&'.api_get_cidreq();
 
-$tpl = new Template(get_lang('ThematicControl'));
+$tpl = new Template(get_lang('Thematic control'));
 $isTeacher = api_is_allowed_to_edit(null, true);
 
 $tpl->assign('token', $url_token);
@@ -32,7 +32,7 @@ if ($isTeacher) {
             $actionLeft = '<a href="index.php?'.api_get_cidreq().'">';
             $actionLeft .= Display::return_icon(
                 'back.png',
-                get_lang('BackTo').' '.get_lang('ThematicDetails'),
+                get_lang('Back to').' '.get_lang('Thematic view with details'),
                 '',
                 ICON_SIZE_MEDIUM
             );
@@ -40,19 +40,19 @@ if ($isTeacher) {
             break;
         case 'thematic_list':
             $actionLeft = '<a href="index.php?'.api_get_cidreq().'&action=thematic_add'.$url_token.'">'.
-                Display::return_icon('new_course_progress.png', get_lang('NewThematicSection'), '', ICON_SIZE_MEDIUM).'</a>';
+                Display::return_icon('new_course_progress.png', get_lang('New thematic section'), '', ICON_SIZE_MEDIUM).'</a>';
             break;
         case 'thematic_details':
             $actionLeft = '<a href="index.php?'.api_get_cidreq().'&action=thematic_add'.$url_token.'">'.
-                Display::return_icon('new_course_progress.png', get_lang('NewThematicSection'), '', ICON_SIZE_MEDIUM).'</a>';
+                Display::return_icon('new_course_progress.png', get_lang('New thematic section'), '', ICON_SIZE_MEDIUM).'</a>';
             $actionLeft .= '<a href="index.php?'.api_get_cidreq().'&action=thematic_import_select'.$url_token.'">'.
-                Display::return_icon('import_csv.png', get_lang('ImportThematic'), '', ICON_SIZE_MEDIUM).'</a>';
+                Display::return_icon('import_csv.png', get_lang('Import course progress'), '', ICON_SIZE_MEDIUM).'</a>';
             $actionLeft .= '<a href="index.php?'.api_get_cidreq().'&action=thematic_export'.$url_token.'">'.
-                Display::return_icon('export_csv.png', get_lang('ExportThematic'), '', ICON_SIZE_MEDIUM).'</a>';
+                Display::return_icon('export_csv.png', get_lang('Export course progress'), '', ICON_SIZE_MEDIUM).'</a>';
             $actionLeft .= '<a href="index.php?'.api_get_cidreq().'&action=thematic_export_pdf'.$url_token.'">'.
-                Display::return_icon('pdf.png', get_lang('ExportToPDF'), '', ICON_SIZE_MEDIUM).'</a>';
+                Display::return_icon('pdf.png', get_lang('Export to PDF'), '', ICON_SIZE_MEDIUM).'</a>';
             $actionLeft .= Display::url(
-                Display::return_icon('export_to_documents.png', get_lang('ExportToDocArea'), [], ICON_SIZE_MEDIUM),
+                Display::return_icon('export_to_documents.png', get_lang('Export latest version of this page to Documents'), [], ICON_SIZE_MEDIUM),
                 api_get_self().'?'.api_get_cidreq().'&'.http_build_query(['action' => 'export_documents']).$url_token
             );
             break;
@@ -60,7 +60,7 @@ if ($isTeacher) {
             $actionLeft = '<a href="index.php?'.api_get_cidreq().'&action=thematic_add'.$url_token.'">'.
                 Display::return_icon(
                     'new_course_progress.png',
-                    get_lang('NewThematicSection'),
+                    get_lang('New thematic section'),
                     '',
                     ICON_SIZE_MEDIUM
                 ).'</a>';
@@ -83,11 +83,11 @@ if ($action == 'thematic_list') {
     if (api_is_allowed_to_edit(null, true)) {
         $table->set_header(
             2,
-            get_lang('Actions'),
+            get_lang('Detail'),
             false,
             ['style' => 'text-align:center;width:40%;']
         );
-        $table->set_form_actions(['thematic_delete_select' => get_lang('DeleteAllThematics')]);
+        $table->set_form_actions(['thematic_delete_select' => get_lang('Delete all thematics')]);
     }
     $table->display();
 } elseif ($action == 'thematic_details') {
@@ -96,7 +96,7 @@ if ($action == 'thematic_list') {
     ) {
         Display::addFlash(
             Display::return_message(
-                get_lang('ThematicSectionHasBeenCreatedSuccessfull'),
+                get_lang('Thematic section has been created successfully'),
                 'confirmation',
                 false
             )
@@ -105,11 +105,11 @@ if ($action == 'thematic_list') {
 
     if (isset($last_id) && $last_id) {
         $link_to_thematic_plan = '<a href="index.php?'.api_get_cidreq().'&action=thematic_plan_list&thematic_id='.$last_id.'">'.
-            Display::return_icon('lesson_plan.png', get_lang('ThematicPlan'), ['style' => 'vertical-align:middle;float:none;'], ICON_SIZE_SMALL).'</a>';
+            Display::return_icon('lesson_plan.png', get_lang('Thematic plan'), ['style' => 'vertical-align:middle;float:none;'], ICON_SIZE_SMALL).'</a>';
         $link_to_thematic_advance = '<a href="index.php?'.api_get_cidreq().'&action=thematic_advance_list&thematic_id='.$last_id.'">'.
-            Display::return_icon('lesson_plan_calendar.png', get_lang('ThematicAdvance'), ['style' => 'vertical-align:middle;float:none;'], ICON_SIZE_SMALL).'</a>';
+            Display::return_icon('lesson_plan_calendar.png', get_lang('Thematic advance'), ['style' => 'vertical-align:middle;float:none;'], ICON_SIZE_SMALL).'</a>';
         Display::addFlash(Display::return_message(
-            get_lang('ThematicSectionHasBeenCreatedSuccessfull').'<br />'.sprintf(get_lang('NowYouShouldAddThematicPlanXAndThematicAdvanceX'), $link_to_thematic_plan, $link_to_thematic_advance),
+            get_lang('Thematic section has been created successfully').'<br />'.sprintf(get_lang('NowYouShouldAddThematic planXAndThematic advanceX'), $link_to_thematic_plan, $link_to_thematic_advance),
             'confirmation',
             false
         ));
@@ -117,7 +117,7 @@ if ($action == 'thematic_list') {
     if (empty($thematic_id)) {
         // display information
         $text = '<strong>'.get_lang('Information').': </strong>';
-        $text .= get_lang('ThematicDetailsDescription');
+        $text .= get_lang('Thematic view with detailsDescription');
         $message = Display::return_message($text, 'info', false);
     }
     $list = [];
@@ -168,7 +168,7 @@ if ($action == 'thematic_list') {
                     }
                     if (isset($thematic['max_thematic_item']) && $thematic['display_order'] < $thematic['max_thematic_item']) {
                         $toolbarThematic .= ' <a class="btn btn-default" href="'.api_get_self().'?action=movedown&a'.api_get_cidreq().'&thematic_id='.$my_thematic_id.$params.$url_token.'">'.
-                            Display::return_icon('down.png', get_lang('Down'), '', ICON_SIZE_TINY).'</a>';
+                            Display::return_icon('down.png', get_lang('down'), '', ICON_SIZE_TINY).'</a>';
                     } else {
                         $toolbarThematic .= '<div class="btn btn-default">'.
                             Display::return_icon('down_na.png', '&nbsp;', '', ICON_SIZE_TINY).'</div>';
@@ -176,7 +176,7 @@ if ($action == 'thematic_list') {
                 }
                 if (api_get_session_id() == $thematic['session_id']) {
                     $toolbarThematic .= Display::url(
-                        Display::return_icon('pdf.png', get_lang('ExportToPDF'), null, ICON_SIZE_TINY),
+                        Display::return_icon('pdf.png', get_lang('Export to PDF'), null, ICON_SIZE_TINY),
                         api_get_self().'?'.api_get_cidreq()."$url_token&".http_build_query([
                             'action' => 'export_single_thematic',
                             'thematic_id' => $my_thematic_id,
@@ -186,7 +186,7 @@ if ($action == 'thematic_list') {
                     $toolbarThematic .= Display::url(
                         Display::return_icon(
                             'export_to_documents.png',
-                            get_lang('ExportToDocArea'),
+                            get_lang('Export latest version of this page to Documents'),
                             [],
                             ICON_SIZE_TINY
                         ),
@@ -199,7 +199,7 @@ if ($action == 'thematic_list') {
                         .$my_thematic_id.$params.$url_token.'">'
                         .Display::return_icon('edit.png', get_lang('Edit'), '', ICON_SIZE_TINY).'</a>';
                     $toolbarThematic .= '<a class="btn btn-default" onclick="javascript:if(!confirm(\''
-                        .get_lang('AreYouSureToDelete')
+                        .get_lang('Are you sure you want to delete')
                         .'\')) return false;" href="index.php?'.api_get_cidreq().'&action=thematic_delete&thematic_id='
                         .$my_thematic_id.$params.$url_token.'">'
                         .Display::return_icon('delete.png', get_lang('Delete'), '', ICON_SIZE_TINY).'</a>';
@@ -227,7 +227,7 @@ if ($action == 'thematic_list') {
     // Display form
     $form = new FormValidator('thematic_add', 'POST', 'index.php?action=thematic_add&'.api_get_cidreq());
     if ($action == 'thematic_edit') {
-        $form->addElement('header', '', get_lang('EditThematicSection'));
+        $form->addElement('header', '', get_lang('Edit thematic section'));
     }
 
     $form->addElement('hidden', 'sec_token', $token);
@@ -263,7 +263,7 @@ if ($action == 'thematic_list') {
         if (api_get_session_id()) {
             if ($thematic_data['session_id'] != api_get_session_id()) {
                 $show_form = false;
-                echo Display::return_message(get_lang('NotAllowedClickBack'), 'error', false);
+                echo Display::return_message(get_lang('Sorry, you are not allowed to access this page, or maybe your connection has expired. Please click your browser\'s "Back" button or follow the link below to return to the previous page.'), 'error', false);
             }
         }
         // set default values
@@ -274,7 +274,7 @@ if ($action == 'thematic_list') {
 
     // error messages
     if (isset($error)) {
-        echo Display::return_message(get_lang('FormHasErrorsPleaseComplete'), 'error', false);
+        echo Display::return_message(get_lang('The form contains incorrect or incomplete data. Please check your input.'), 'error', false);
     }
     if ($show_form) {
         $html = $form->returnForm();
@@ -286,9 +286,9 @@ if ($action == 'thematic_list') {
         'POST',
         'index.php?action=thematic_import&'.api_get_cidreq().$url_token
     );
-    $form->addElement('header', get_lang('ImportThematic'));
+    $form->addElement('header', get_lang('Import course progress'));
     $form->addElement('file', 'file');
-    $form->addElement('checkbox', 'replace', null, get_lang('DeleteAllThematic'));
+    $form->addElement('checkbox', 'replace', null, get_lang('Delete all course progress'));
     $form->addButtonImport(get_lang('Import'), 'SubmitImport');
     $html = $form->returnForm();
 }

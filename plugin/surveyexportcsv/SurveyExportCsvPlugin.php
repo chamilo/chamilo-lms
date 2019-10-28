@@ -64,7 +64,7 @@ class SurveyExportCsvPlugin extends Plugin
         }
 
         return Display::url(
-            Display::return_icon('export_csv.png', get_lang('ExportAsCSV'), [], $iconSize),
+            Display::return_icon('export_csv.png', get_lang('CSV export'), [], $iconSize),
             api_get_path(WEB_PLUGIN_PATH).'surveyexportcsv/export.php?survey='.$surveyId.'&'.api_get_cidreq()
         );
     }

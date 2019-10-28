@@ -119,13 +119,13 @@ if ($conferenceManager) {
             break;
         case 'publish':
             $bbb->publishMeeting($_GET['id']);
-            Display::addFlash(Display::return_message(get_lang('Updated')));
+            Display::addFlash(Display::return_message(get_lang('Update successful')));
             header('Location: '.$bbb->getListingUrl());
             exit;
             break;
         case 'unpublish':
             $bbb->unpublishMeeting($_GET['id']);
-            Display::addFlash(Display::return_message(get_lang('Updated')));
+            Display::addFlash(Display::return_message(get_lang('Update successful')));
             header('Location: '.$bbb->getListingUrl());
             exit;
             break;
@@ -208,7 +208,7 @@ if ($bbb->isGlobalConference() === false &&
         foreach ($groups as &$groupData) {
             $itemGroupId = $groupData['id'];
             if (isset($meetingsGroup[$itemGroupId]) && $meetingsGroup[$itemGroupId] == 1) {
-                $groupData['name'] .= ' ('.get_lang('Active').')';
+                $groupData['name'] .= ' ('.get_lang('active').')';
             }
         }
 

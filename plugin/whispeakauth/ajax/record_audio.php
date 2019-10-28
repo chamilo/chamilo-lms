@@ -24,7 +24,7 @@ if ($isEnrollment) {
 }
 
 if (!$isAllowed) {
-    echo Display::return_message(get_lang('NotAllowed'), 'error');
+    echo Display::return_message(get_lang('You are not allowed to see this page. Either your connection has expired or you are trying to access a page for which you do not have the sufficient privileges.'), 'error');
 
     exit;
 }
@@ -43,7 +43,7 @@ if ($isAuthentify) {
 }
 
 if (empty($user)) {
-    echo Display::return_message(get_lang('NoUser'), 'error');
+    echo Display::return_message(get_lang('No user'), 'error');
 
     exit;
 }
@@ -51,7 +51,7 @@ if (empty($user)) {
 $path = api_upload_file('whispeakauth', $_FILES['audio'], $user->getId());
 
 if (false === $path) {
-    echo Display::return_message(get_lang('UploadError'), 'error');
+    echo Display::return_message(get_lang('Upload failed, please check maximum file size limits and folder rights.'), 'error');
 
     exit;
 }
@@ -115,7 +115,7 @@ if ($isAuthentify) {
     $success = (bool) $result['audio'][0]['result'];
 
     if (!$success) {
-        echo Display::return_message($plugin->get_lang('TryAgain'), 'warning');
+        echo Display::return_message($plugin->get_lang('Try again'), 'warning');
 
         exit;
     }

@@ -70,7 +70,7 @@ foreach ($questionsData as $questionData) {
 if (count($parts) < 2) {
     api_not_allowed(
         true,
-        Display::return_message(get_lang('NoData'), 'warning')
+        Display::return_message(get_lang('No data available'), 'warning')
     );
 }
 

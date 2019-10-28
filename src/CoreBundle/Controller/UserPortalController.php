@@ -14,8 +14,6 @@ use Symfony\Component\Routing\Annotation\Route;
  * author Julio Montoya <gugli100@gmail.com>.
  *
  * @Route("/userportal")
- *
- * @package Chamilo\CoreBundle\Controller
  */
 class UserPortalController extends BaseController
 {
@@ -39,7 +37,7 @@ class UserPortalController extends BaseController
         }
 
         // Displaying the header.
-        $tool_name = $courseValidation ? get_lang('CreateCourseRequest') : get_lang('CreateSite');
+        $tool_name = $courseValidation ? get_lang('Create a course request') : get_lang('Add a new course');
 
         if (api_get_setting('course.allow_users_to_create_courses') === 'false' &&
             !api_is_platform_admin()
@@ -65,15 +63,15 @@ class UserPortalController extends BaseController
             'text',
             'title',
             [
-                get_lang('CourseName'),
-                get_lang('Ex'),
+                get_lang('Course name'),
+                get_lang('e.g. <i>Innovation management</i>'),
             ],
             [
                 'id' => 'title',
             ]
         );
         $form->applyFilter('title', 'html_filter');
-        $form->addRule('title', get_lang('ThisFieldIsRequired'), 'required');
+        $form->addRule('title', get_lang('Required field'), 'required');
 
         $form->addButtonAdvancedSettings('advanced_params');
         $form->addElement(
@@ -87,7 +85,7 @@ class UserPortalController extends BaseController
         $form->addElement(
             'select_ajax',
             'category_code',
-            get_lang('CourseFaculty'),
+            get_lang('Category'),
             null,
             ['url' => $url]
         );
@@ -96,20 +94,20 @@ class UserPortalController extends BaseController
         $form->addText(
             'wanted_code',
             [
-                get_lang('Code'),
-                get_lang('OnlyLettersAndNumbers'),
+                get_lang('Course code'),
+                get_lang('Only letters (a-z) and numbers (0-9)'),
             ],
             '',
             [
                 'maxlength' => \CourseManager::MAX_COURSE_LENGTH_CODE,
                 'pattern' => '[a-zA-Z0-9]+',
-                'title' => get_lang('OnlyLettersAndNumbers'),
+                'title' => get_lang('Only letters (a-z) and numbers (0-9)'),
             ]
         );
         $form->applyFilter('wanted_code', 'html_filter');
         $form->addRule(
             'wanted_code',
-            get_lang('Max'),
+            get_lang('Maximum'),
             'maxlength',
             \CourseManager::MAX_COURSE_LENGTH_CODE
         );
@@ -136,7 +134,7 @@ class UserPortalController extends BaseController
             $form->addElement(
                 'textarea',
                 'target_audience',
-                get_lang('TargetAudience'),
+                get_lang('Target audience'),
                 ['rows' => '3']
             );
         }
@@ -145,7 +143,7 @@ class UserPortalController extends BaseController
         $form->addElement(
             'select_language',
             'course_language',
-            get_lang('Ln'),
+            get_lang('Language'),
             [],
             ['style' => 'width:150px']
         );
@@ -156,7 +154,7 @@ class UserPortalController extends BaseController
             'checkbox',
             'exemplary_content',
             null,
-            get_lang('FillWithExemplaryContent')
+            get_lang('FillWithe.g. <i>Innovation management</i>emplaryContent')
         );
 
         if ($courseValidation) {
@@ -182,12 +180,12 @@ class UserPortalController extends BaseController
                     'checkbox',
                     'legal',
                     null,
-                    get_lang('IAcceptTermsAndConditions'),
+                    get_lang('I have read and I accept the Terms and Conditions'),
                     1
                 );
                 $form->addRule(
                     'legal',
-                    get_lang('YouHaveToAcceptTermsAndConditions'),
+                    get_lang('You have to accept our Terms and Conditions to proceed.'),
                     'required'
                 );
                 // Link to terms and conditions.
@@ -199,7 +197,7 @@ class UserPortalController extends BaseController
                     </script>
                 ';
                 $link_terms_and_conditions .= \Display::url(
-                    get_lang('ReadTermsAndConditions'),
+                    get_lang('Read the Terms and Conditions'),
                     '#',
                     ['onclick' => "javascript:MM_openBrWindow('$terms_and_conditions_url', 'Conditions', 'scrollbars=yes, width=800');"]
                 );
@@ -215,8 +213,8 @@ class UserPortalController extends BaseController
                 'select_ajax',
                 'course_template',
                 [
-                    get_lang('CourseTemplate'),
-                    get_lang('PickACourseAsATemplateForThisNewCourse'),
+                    get_lang('Course template'),
+                    get_lang('Pick a course as template for this new course'),
                 ],
                 null,
                 ['url' => api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=search_course']
@@ -229,7 +227,7 @@ class UserPortalController extends BaseController
         $form->addButtonCreate(
             $courseValidation ? get_lang(
                 'CreateThisCourseRequest'
-            ) : get_lang('CreateCourseArea')
+            ) : get_lang('Create this course')
         );
 
         // Set default values.
@@ -338,7 +336,7 @@ class UserPortalController extends BaseController
                         \Display::return_message(
                             'div',
                             \Display::url(
-                                get_lang('Enter'),
+                                get_lang('Back to courses list'),
                                 api_get_path(WEB_PATH).'user_portal.php',
                                 ['class' => 'btn btn-default']
                             ),
@@ -346,7 +344,7 @@ class UserPortalController extends BaseController
                         );
                     } else {
                         \Display::return_message(
-                            get_lang('CourseRequestCreationFailed'),
+                            get_lang('The course request has not been created due to an internal error.'),
                             'error',
                             false
                         );
@@ -356,7 +354,7 @@ class UserPortalController extends BaseController
                 }
             } else {
                 \Display::return_message(
-                    get_lang('CourseCodeAlreadyExists'),
+                    get_lang('CourseCourse codeAlreadye.g. <i>Innovation management</i>ists'),
                     'error',
                     false
                 );
@@ -365,7 +363,7 @@ class UserPortalController extends BaseController
             }
         } else {
             if (!$courseValidation) {
-                $this->addFlash('warning', get_lang('Explanation'));
+                $this->addFlash('warning', get_lang('e.g. <i>Innovation management</i>planation'));
             }
             // Display the form.
             $content = $form->returnForm();

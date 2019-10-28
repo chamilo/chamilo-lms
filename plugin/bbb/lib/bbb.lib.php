@@ -1617,11 +1617,11 @@ class bbb
         $isVisible = $meetingInfo['visibility'] != 0;
         $linkVisibility = $isVisible
             ? Display::url(
-                Display::return_icon('visible.png', get_lang('MakeInvisible')),
+                Display::return_icon('visible.png', get_lang('Make invisible')),
                 $this->unPublishUrl($meetingInfo)
             )
             : Display::url(
-                Display::return_icon('invisible.png', get_lang('MakeVisible')),
+                Display::return_icon('invisible.png', get_lang('Make Visible')),
                 $this->publishUrl($meetingInfo)
             );
 
@@ -1653,7 +1653,7 @@ class bbb
                 return $links;
             } else {
                 $links[] = Display::url(
-                    Display::return_icon('course_home.png', get_lang('GoToCourse')),
+                    Display::return_icon('course_home.png', get_lang('Go to the course')),
                     $this->getListingUrl()
                 );
 
@@ -1667,7 +1667,7 @@ class bbb
                 $this->copyToRecordToLinkTool($meetingInfo)
             );
             $links[] = Display::url(
-                Display::return_icon('agenda.png', get_lang('AddToCalendar')),
+                Display::return_icon('agenda.png', get_lang('Add to calendar')),
                 $this->addToCalendarUrl($meetingInfo, $recordInfo)
             );
         }
@@ -1677,13 +1677,13 @@ class bbb
         if ($hide == false) {
             if ($meetingInfo['has_video_m4v']) {
                 $links[] = Display::url(
-                    Display::return_icon('save.png', get_lang('DownloadFile')),
+                    Display::return_icon('save.png', get_lang('Download file')),
                     $recordInfo['playbackFormatUrl'].'/capture.m4v',
                     ['target' => '_blank']
                 );
             } else {
                 $links[] = Display::url(
-                    Display::return_icon('save.png', get_lang('DownloadFile')),
+                    Display::return_icon('save.png', get_lang('Download file')),
                     '#',
                     [
                         'id' => "btn-check-meeting-video-{$meetingInfo['id']}",
@@ -1703,7 +1703,7 @@ class bbb
             $links[] = $linkVisibility;
         } else {
             $links[] = Display::url(
-                Display::return_icon('course_home.png', get_lang('GoToCourse')),
+                Display::return_icon('course_home.png', get_lang('Go to the course')),
                 $this->getListingUrl()
             );
         }
@@ -1771,7 +1771,7 @@ class bbb
         $setting = api_get_plugin_setting('bbb', 'enable_global_conference');
         $settingLink = api_get_plugin_setting('bbb', 'enable_global_conference_link');
         if ($setting === 'true' && $settingLink === 'true') {
-            //$content = Display::url(get_lang('LaunchVideoConferenceRoom'), $url);
+            //$content = Display::url(get_lang('Launch videoconference room'), $url);
             $allowedRoles = api_get_plugin_setting(
                 'bbb',
                 'global_conference_allow_roles'

@@ -32,8 +32,8 @@ $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_calendar_users&id='.$ca
 
 // The order is important you need to check the the $column variable in the model.ajax.php file
 $columns = [
-    get_lang('FirstName'),
-    get_lang('LastName'),
+    get_lang('First name'),
+    get_lang('Last name'),
     get_lang('Exam'),
 ];
 
@@ -100,7 +100,7 @@ Display::display_header();
 // action links
 echo '<div class="actions">';
 echo '<a href="'.api_get_path(WEB_CODE_PATH).'admin/usergroup_users.php?id='.$calendarId.'">'.
-    Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('PlatformAdmin'), '', '32').
+    Display::return_icon('back.png', get_lang('Back to').' '.get_lang('Administration'), '', '32').
     '</a>';
 echo '</div>';
 echo Display::grid_html('usergroups');

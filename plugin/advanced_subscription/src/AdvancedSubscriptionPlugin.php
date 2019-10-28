@@ -702,7 +702,7 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
                     $termsAndConditions = $courseLegal->getData($data['courseId'], $data['sessionId']);
                     $termsAndConditions = $termsAndConditions['content'];
                     $termsAndConditions = $this->renderTemplateString($termsAndConditions, $data);
-                    $tpl = new Template(get_lang('TermsAndConditions'));
+                    $tpl = new Template(get_lang('Terms and Conditions'));
                     $tpl->assign('session', $data['session']);
                     $tpl->assign('student', $data['student']);
                     $tpl->assign('sessionId', $data['sessionId']);
@@ -718,7 +718,7 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
                         'error' => UPLOAD_ERR_OK,
                         'size' => filesize(api_get_path(SYS_ARCHIVE_PATH).$filename.'.pdf'),
                     ];
-                    $fileAttachments['comments'][] = get_lang('TermsAndConditions');
+                    $fileAttachments['comments'][] = get_lang('Terms and Conditions');
                 }
                 // Mail to student
                 $mailIds[] = $this->sendMailMessage(

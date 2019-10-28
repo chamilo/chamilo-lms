@@ -75,7 +75,7 @@ class BlockDaily extends Block
         $data = [];
 
         $html = $this->getBlockCard(
-            get_lang('GradebookAndAttendances'),
+            get_lang('Assessments and attendances'),
             $this->getContent()
         );
 
@@ -93,15 +93,15 @@ class BlockDaily extends Block
     public function getContent()
     {
         $course_data = $this->get_course_information_data();
-        $content = '<h4>'.get_lang('YourCourseList').'</h4>';
+        $content = '<h4>'.get_lang('Your courses').'</h4>';
         $data_table = null;
         if (!empty($course_data)) {
             $data_table .= '<table class="data_table" width:"95%">';
             $data_table .= '<tr>
-	    						<th>'.get_lang('CourseTitle').'</th>
-	    						<th width="20%">'.get_lang('NbStudents').'</th>
-	    						<th width="20%">'.get_lang('Evaluation').'</th>
-	    						<th width="20%">'.get_lang('ToolAttendance').'</th>
+	    						<th>'.get_lang('Course title').'</th>
+	    						<th width="20%">'.get_lang('Learners').'</th>
+	    						<th width="20%">'.get_lang('Score').'</th>
+	    						<th width="20%">'.get_lang('Attendances').'</th>
 	    					</tr>';
             $i = 1;
             foreach ($course_data as $course) {
@@ -112,7 +112,7 @@ class BlockDaily extends Block
                 }
                 $data_table .= '<tr class="'.$class_tr.'">';
                 if (!isset($course[3])) {
-                    $course[3] = get_lang('NotAvailable');
+                    $course[3] = get_lang('Not available');
                 }
                 foreach ($course as $cell) {
                     $data_table .= '<td align="right">'.$cell.'</td>';
@@ -122,12 +122,12 @@ class BlockDaily extends Block
             }
             $data_table .= '</table>';
         } else {
-            $data_table .= get_lang('ThereIsNoInformationAboutYourCourses');
+            $data_table .= get_lang('There is no available information about your courses');
         }
         $content .= $data_table;
         if (!empty($course_data)) {
             $content .= '<div style="text-align:right;margin-top:10px;">
-            <a href="'.api_get_path(WEB_CODE_PATH).'mySpace/course.php">'.get_lang('SeeMore').'</a></div>';
+            <a href="'.api_get_path(WEB_CODE_PATH).'mySpace/course.php">'.get_lang('See more').'</a></div>';
         }
         //$content .= '</div>';
         return $content;
@@ -181,11 +181,11 @@ class BlockDaily extends Block
                 if ($attendance['done'] != '0') {
                     $attendances[] = '<a href="'.api_get_path(WEB_PATH).'main/attendance/index.php?cidReq='.$attendance['course_code'].'&action=attendance_sheet_print&attendance_id='.$attendance['id'].'">'.Display::return_icon('printmgr.gif', get_lang('Print')).'</a>';
                 } else {
-                    $attendances[] = get_lang("NotAvailable");
+                    $attendances[] = get_lang("Not available");
                 }
             }
             if (count($attendances) == 0) {
-                $attendances[] = get_lang("NotAvailable");
+                $attendances[] = get_lang("Not available");
             }
 
             // Number of students
@@ -236,10 +236,10 @@ class BlockDaily extends Block
                         $i++;
                     }
                 } else {
-                    $score = get_lang("NotAvailable");
+                    $score = get_lang("Not available");
                 }
             } else {
-                $score = get_lang("NotAvailable");
+                $score = get_lang("Not available");
             }
 
             $table_row = [];

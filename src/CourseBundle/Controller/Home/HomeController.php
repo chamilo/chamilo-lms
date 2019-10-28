@@ -14,9 +14,8 @@ use Symfony\Component\Routing\Annotation\Route;
 /**
  * Class HomeController.
  *
- * @package Chamilo\CourseBundle\Controller\Home
- *
  * @author Julio Montoya <gugli100@gmail.com>
+ *
  * @Route("/")
  */
 class HomeController extends ToolBaseController
@@ -73,7 +72,7 @@ class HomeController extends ToolBaseController
                 $userId = $this->getUser()->getId();
                 $autoreg = $request->get('autoreg');
                 if ($autoreg == 1) {
-                    \CourseManager::subscribe_user(
+                    \CourseManager::subscribeUser(
                         $userId,
                         $courseCode,
                         STUDENT
@@ -140,7 +139,7 @@ class HomeController extends ToolBaseController
             $isVisible = \DocumentManager::is_visible_by_id($docId, $courseInfo, $sessionId, api_get_user_id());
             $documentData = \DocumentManager::get_document_data_by_id($docId, $courseCode);
             $filePath = $documentData['absolute_path'];
-            event_download($filePath);
+            \Event::event_download($filePath);
         }
 
         if (!api_is_allowed_to_edit() && !$isVisible) {

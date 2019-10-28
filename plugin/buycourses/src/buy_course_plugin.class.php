@@ -273,7 +273,7 @@ class BuyCoursesPlugin extends Plugin
 
         Display::addFlash(
             Display::return_message(
-                $this->get_lang('Updated'),
+                $this->get_lang('Update successful'),
                 'info',
                 false
             )
@@ -293,7 +293,7 @@ class BuyCoursesPlugin extends Plugin
 
         $fieldlabel = 'buycourses_address';
         $fieldtype = '1';
-        $fieldtitle = $this->get_lang('Address');
+        $fieldtitle = $this->get_lang('The address of');
         $fielddefault = '';
         UserManager::create_extra_field($fieldlabel, $fieldtype, $fieldtitle, $fielddefault);
 
@@ -1330,7 +1330,7 @@ class BuyCoursesPlugin extends Plugin
             self::SERVICE_TYPE_USER => get_lang('User'),
             self::SERVICE_TYPE_COURSE => get_lang('Course'),
             self::SERVICE_TYPE_SESSION => get_lang('Session'),
-            self::SERVICE_TYPE_LP_FINAL_ITEM => get_lang('TemplateTitleCertificate'),
+            self::SERVICE_TYPE_LP_FINAL_ITEM => get_lang('Certificate of completion'),
         ];
     }
 

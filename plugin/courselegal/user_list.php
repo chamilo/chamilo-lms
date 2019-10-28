@@ -43,7 +43,7 @@ $table = new HTML_Table(['class' => 'data_table']);
 $table->setHeaderContents(0, 0, get_lang('User'));
 $table->setHeaderContents(0, 1, $legal->get_lang('WebAgreement'));
 $table->setHeaderContents(0, 2, $legal->get_lang('MailAgreement'));
-$table->setHeaderContents(0, 3, $legal->get_lang('Actions'));
+$table->setHeaderContents(0, 3, $legal->get_lang('Detail'));
 $row = 1;
 
 $pluginPath = api_get_path(WEB_PLUGIN_PATH).'courselegal/';
@@ -74,7 +74,7 @@ if (!empty($userList)) {
 $url = $pluginPath.'start.php?'.api_get_cidreq();
 
 $interbreadcrumb[] = ["url" => $url, "name" => $legal->get_lang('CourseLegal')];
-Display::display_header($legal->get_lang('UserList'));
+Display::display_header($legal->get_lang('User list'));
 
 $table->display();
 

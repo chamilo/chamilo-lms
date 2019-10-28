@@ -48,7 +48,7 @@ $toolbar = Display::toolbarButton(
     ['title' => $plugin->get_lang('CourseListOnSale')]
 );
 
-$templateName = $plugin->get_lang('TabsDashboard');
+$templateName = $plugin->get_lang('Dashboard');
 $tpl = new Template($templateName);
 $tpl->assign('showing_courses', true);
 $tpl->assign('services_are_included', $includeServices);

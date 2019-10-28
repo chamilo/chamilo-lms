@@ -16,7 +16,7 @@ $teachingHours = new ExtraField('session');
 $teachingHours->save([
     'field_type' => ExtraField::FIELD_TYPE_INTEGER,
     'variable' => 'teaching_hours',
-    'display_text' => get_lang('TeachingHours'),
+    'display_text' => get_lang('Lecture hours'),
     'visible_to_self' => 1,
     'changeable' => 1,
 ]);
@@ -43,7 +43,7 @@ $recommendedNumberOfParticipants = new ExtraField('session');
 $recommendedNumberOfParticipants->save([
     'field_type' => ExtraField::FIELD_TYPE_INTEGER,
     'variable' => 'recommended_number_of_participants',
-    'display_text' => get_lang('RecommendedNumberOfParticipants'),
+    'display_text' => get_lang('Recommended number of participants'),
     'visible_to_self' => 1,
     'changeable' => 1,
 ]);
@@ -52,7 +52,7 @@ $place = new ExtraField('session');
 $place->save([
     'field_type' => ExtraField::FIELD_TYPE_TEXT,
     'variable' => 'place',
-    'display_text' => get_lang('Place'),
+    'display_text' => get_lang('Place/Location'),
     'visible_to_self' => 1,
     'changeable' => 1,
 ]);
@@ -70,7 +70,7 @@ $allowVisitors = new ExtraField('session');
 $allowVisitors->save([
     'field_type' => ExtraField::FIELD_TYPE_CHECKBOX,
     'variable' => 'allow_visitors',
-    'display_text' => get_lang('AllowVisitors'),
+    'display_text' => get_lang('Allow visitors'),
     'visible_to_self' => 1,
     'changeable' => 1,
 ]);
@@ -95,7 +95,7 @@ $isInductionSession = new ExtraField('session');
 $isInductionSession->save([
     'field_type' => ExtraField::FIELD_TYPE_CHECKBOX,
     'variable' => 'is_induction_session',
-    'display_text' => get_lang('IsInductionSession'),
+    'display_text' => get_lang('Induction-type session'),
     'visible_to_self' => 1,
     'changeable' => 1,
 ]);
@@ -104,7 +104,7 @@ $isOpenSession = new ExtraField('session');
 $isOpenSession->save([
     'field_type' => ExtraField::FIELD_TYPE_CHECKBOX,
     'variable' => 'is_open_session',
-    'display_text' => get_lang('IsOpenSession'),
+    'display_text' => get_lang('Open session'),
     'visible_to_self' => 1,
     'changeable' => 1,
 ]);
@@ -113,14 +113,14 @@ $duration = new ExtraField('session');
 $duration->save([
     'field_type' => ExtraField::FIELD_TYPE_TEXT,
     'variable' => 'human_text_duration',
-    'display_text' => get_lang('DurationInWords'),
+    'display_text' => get_lang('Duration in words'),
     'visible_to_self' => 1,
     'changeable' => 1,
 ]);
 
 $showStatusOptions = [
     get_lang('Open'),
-    get_lang('InProcess'),
+    get_lang('In process'),
     get_lang('Closed'),
 ];
 
@@ -128,7 +128,7 @@ $showStatus = new ExtraField('session');
 $showStatus->save([
     'field_type' => ExtraField::FIELD_TYPE_SELECT,
     'variable' => 'show_status',
-    'display_text' => get_lang('ShowStatus'),
+    'display_text' => get_lang('Show status'),
     'visible_to_self' => 1,
     'changeable' => 1,
     'field_options' => implode('; ', $showStatusOptions),
@@ -138,7 +138,7 @@ $publicationStartDate = new ExtraField('session');
 $publicationStartDate->save([
     'field_type' => ExtraField::FIELD_TYPE_DATE,
     'variable' => 'publication_start_date',
-    'display_text' => get_lang('PublicationStartDate'),
+    'display_text' => get_lang('Published start date'),
     'visible_to_self' => 1,
     'changeable' => 1,
 ]);
@@ -147,7 +147,7 @@ $publicationEndDate = new ExtraField('session');
 $publicationEndDate->save([
     'field_type' => ExtraField::FIELD_TYPE_DATE,
     'variable' => 'publication_end_date',
-    'display_text' => get_lang('PublicationEndDate'),
+    'display_text' => get_lang('Published end date'),
     'visible_to_self' => 1,
     'changeable' => 1,
 ]);
@@ -156,7 +156,7 @@ $banner = new ExtraField('session');
 $banner->save([
     'field_type' => ExtraField::FIELD_TYPE_FILE_IMAGE,
     'variable' => 'banner',
-    'display_text' => get_lang('SessionBanner'),
+    'display_text' => get_lang('Session banner'),
     'visible_to_self' => 1,
     'changeable' => 1,
 ]);
@@ -179,7 +179,7 @@ $target = new ExtraField('session');
 $target->save([
     'field_type' => ExtraField::FIELD_TYPE_SELECT,
     'variable' => 'target',
-    'display_text' => get_lang('TargetAudience'),
+    'display_text' => get_lang('Target audience'),
     'visible_to_self' => 1,
     'changeable' => 1,
     'field_options' => implode('; ', $targetOptions),
@@ -189,7 +189,7 @@ $shortDescription = new ExtraField('session');
 $shortDescription->save([
     'field_type' => ExtraField::FIELD_TYPE_TEXT,
     'variable' => 'short_description',
-    'display_text' => get_lang('ShortDescription'),
+    'display_text' => get_lang('Short description'),
     'visible_to_self' => 1,
     'changeable' => 1,
 ]);
@@ -198,7 +198,7 @@ $id = new ExtraField('session');
 $id->save([
     'field_type' => ExtraField::FIELD_TYPE_TEXT,
     'variable' => 'code',
-    'display_text' => get_lang('Code'),
+    'display_text' => get_lang('Course code'),
     'visible_to_self' => 1,
     'changeable' => 1,
 ]);

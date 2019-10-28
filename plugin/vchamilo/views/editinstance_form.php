@@ -390,7 +390,7 @@ class InstanceForm extends ChamiloForm
             $encryptMethod = $form->addElement(
                 'select',
                 'password_encryption',
-                get_lang('EncryptMethodUserPass'),
+                get_lang('Encryption method'),
                 $encryptList
             );
             $encryptMethod->freeze();

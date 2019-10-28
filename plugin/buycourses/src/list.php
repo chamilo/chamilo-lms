@@ -20,7 +20,7 @@ api_protect_admin_script(true);
 
 Display::addFlash(
     Display::return_message(
-        get_lang('Info').' - '.$plugin->get_lang('CoursesInSessionsDoesntDisplayHere'),
+        get_lang('Information').' - '.$plugin->get_lang('CoursesInSessionsDoesntDisplayHere'),
         'info'
     )
 );

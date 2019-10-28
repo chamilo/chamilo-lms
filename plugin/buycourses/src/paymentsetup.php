@@ -24,7 +24,7 @@ if (isset($_GET['action'], $_GET['id'])) {
         $plugin->deleteTransferAccount($_GET['id']);
 
         Display::addFlash(
-            Display::return_message(get_lang('ItemRemoved'), 'success')
+            Display::return_message(get_lang('The learning object has been removed'), 'success')
         );
 
         header('Location: '.api_get_self());
@@ -42,7 +42,7 @@ if ($globalSettingForm->validate()) {
     $plugin->saveGlobalParameters($globalSettingFormValues);
 
     Display::addFlash(
-        Display::return_message(get_lang('Saved'), 'success')
+        Display::return_message(get_lang('Saved.....'), 'success')
     );
 
     header('Location:'.api_get_self());
@@ -79,8 +79,8 @@ foreach ($currencies as $currency) {
 $globalSettingForm->addTextarea(
     'terms_and_conditions',
     [
-        get_lang('TermsAndConditions'),
-        $plugin->get_lang('WriteHereTheTermsAndConditionsOfYourECommerce'),
+        get_lang('Terms and Conditions'),
+        $plugin->get_lang('WriteHereTheTerms and ConditionsOfYourECommerce'),
     ]
 );
 
@@ -180,7 +180,7 @@ if ($paypalForm->validate()) {
     $plugin->savePaypalParams($paypalFormValues);
 
     Display::addFlash(
-        Display::return_message(get_lang('Saved'), 'success')
+        Display::return_message(get_lang('Saved.....'), 'success')
     );
 
     header('Location:'.api_get_self());
@@ -219,7 +219,7 @@ if ($commissionForm->validate()) {
     $plugin->updateCommission($commissionFormValues);
 
     Display::addFlash(
-        Display::return_message(get_lang('Saved'), 'success')
+        Display::return_message(get_lang('Saved.....'), 'success')
     );
 
     header('Location:'.api_get_self());
@@ -244,7 +244,7 @@ if ($transferForm->validate()) {
     $plugin->saveTransferAccount($transferFormValues);
 
     Display::addFlash(
-        Display::return_message(get_lang('Saved'), 'success')
+        Display::return_message(get_lang('Saved.....'), 'success')
     );
 
     header('Location:'.api_get_self());
@@ -283,7 +283,7 @@ if ($culqiForm->validate()) {
     $plugin->saveCulqiParameters($culqiFormValues);
 
     Display::addFlash(
-        Display::return_message(get_lang('Saved'), 'success')
+        Display::return_message(get_lang('Saved.....'), 'success')
     );
 
     header('Location:'.api_get_self());

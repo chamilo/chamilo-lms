@@ -307,8 +307,8 @@ switch ($action) {
                 "descripcion" => $sale['product_name'],
                 "pedido" => $sale['reference'],
                 "codigo_pais" => "PE",
-                "direccion" => get_lang('None'),
-                "ciudad" => get_lang('None'),
+                "direccion" => get_lang('none'),
+                "ciudad" => get_lang('none'),
                 "telefono" => 0,
                 "nombres" => $user['firstname'],
                 "apellidos" => $user['lastname'],
@@ -334,7 +334,7 @@ switch ($action) {
             if (is_array($cargo)) {
                 Display::addFlash(
                     Display::return_message(
-                        sprintf($plugin->get_lang('ErrorOccurred'), $cargo['codigo'], $cargo['mensaje']),
+                        sprintf($plugin->get_lang('An error occurred.'), $cargo['codigo'], $cargo['mensaje']),
                         'error',
                         false
                     )
@@ -342,7 +342,7 @@ switch ($action) {
             } else {
                 Display::addFlash(
                     Display::return_message(
-                        $plugin->get_lang('ErrorContactPlatformAdmin'),
+                        $plugin->get_lang('There happened an unknown error. Please contact the platform administrator.'),
                         'error',
                         false
                     )
@@ -393,8 +393,8 @@ switch ($action) {
                 "descripcion" => $serviceSale['service']['name'],
                 "pedido" => $serviceSale['reference'],
                 "codigo_pais" => "PE",
-                "direccion" => get_lang('None'),
-                "ciudad" => get_lang('None'),
+                "direccion" => get_lang('none'),
+                "ciudad" => get_lang('none'),
                 "telefono" => 0,
                 "nombres" => $user['firstname'],
                 "apellidos" => $user['lastname'],
@@ -427,7 +427,7 @@ switch ($action) {
             if (is_array($cargo)) {
                 Display::addFlash(
                     Display::return_message(
-                        sprintf($plugin->get_lang('ErrorOccurred'), $cargo['codigo'], $cargo['mensaje']),
+                        sprintf($plugin->get_lang('An error occurred.'), $cargo['codigo'], $cargo['mensaje']),
                         'error',
                         false
                     )
@@ -435,7 +435,7 @@ switch ($action) {
             } else {
                 Display::addFlash(
                     Display::return_message(
-                        $plugin->get_lang('ErrorContactPlatformAdmin'),
+                        $plugin->get_lang('There happened an unknown error. Please contact the platform administrator.'),
                         'error',
                         false
                     )
@@ -480,7 +480,7 @@ switch ($action) {
                     $nodeName = $session ? $session->getName() : null;
                 } else {
                     if ($nodeType == BuyCoursesPlugin::SERVICE_TYPE_LP_FINAL_ITEM) {
-                        $nodeType = get_lang('TemplateTitleCertificate');
+                        $nodeType = get_lang('Certificate of completion');
                         /** @var CLp $lp */
                         $lp = $em->find('ChamiloCourseBundle:CLp', $serviceSale['node_id']);
                         $nodeName = $lp ? $lp->getName() : null;
@@ -513,7 +513,7 @@ switch ($action) {
         $status = $serviceSale['status'];
         $buttons = '';
         if ($status == BuyCoursesPlugin::SERVICE_STATUS_COMPLETED) {
-            $status = $plugin->get_lang('Active');
+            $status = $plugin->get_lang('active');
         } else {
             if ($status == BuyCoursesPlugin::SERVICE_STATUS_PENDING) {
                 $status = $plugin->get_lang('Pending');
@@ -573,7 +573,7 @@ switch ($action) {
                 'success'
             );
         } else {
-            $html .= Display::return_message('Error - '.$plugin->get_lang('ErrorContactPlatformAdmin'), 'error');
+            $html .= Display::return_message('Error - '.$plugin->get_lang('There happened an unknown error. Please contact the platform administrator.'), 'error');
         }
 
         $html .= "<a id='finish-button' class='btn btn-primary'>".$plugin->get_lang('ClickHereToFinish')."</a>";
@@ -597,7 +597,7 @@ switch ($action) {
                 'warning'
             );
         } else {
-            $html .= Display::return_message('Error - '.$plugin->get_lang('ErrorContactPlatformAdmin'), 'error');
+            $html .= Display::return_message('Error - '.$plugin->get_lang('There happened an unknown error. Please contact the platform administrator.'), 'error');
         }
 
         $html .= "<a id='finish-button' class='btn btn-primary'>".$plugin->get_lang('ClickHereToFinish')."</a>";

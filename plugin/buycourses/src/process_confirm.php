@@ -54,7 +54,7 @@ switch ($sale['payment_type']) {
 
         if ($expressCheckout["ACK"] !== 'Success') {
             $erroMessage = vsprintf(
-                $plugin->get_lang('ErrorOccurred'),
+                $plugin->get_lang('An error occurred.'),
                 [$expressCheckout['L_ERRORCODE0'], $expressCheckout['L_LONGMESSAGE0']]
             );
             Display::addFlash(

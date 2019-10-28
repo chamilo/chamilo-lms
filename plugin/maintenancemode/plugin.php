@@ -101,7 +101,7 @@ if ($editFile && $isPlatformAdmin) {
         $config
     );
 
-    $form->addCheckBox('active', null, get_lang('Active'));
+    $form->addCheckBox('active', null, get_lang('active'));
 
     $form->addButtonSave(get_lang('Save'));
     $content = '';
@@ -112,7 +112,7 @@ if ($editFile && $isPlatformAdmin) {
         $content = '<html><head><title></title></head><body></body></html>';
     }
 
-    $isActive = api_get_plugin_setting('maintenancemode', 'active');
+    $isactive = api_get_plugin_setting('maintenancemode', 'active');
 
     $ip = api_get_real_ip();
     if ($ip == '::1') {
@@ -135,7 +135,7 @@ RewriteRule \.*$ '.$append.'/maintenance.html [R=302,L]
         'text' => $block,
         'maintenance' => $content,
         'ip' => $ip,
-        'active' => $isActive,
+        'active' => $isactive,
     ]);
 
     if ($form->validate()) {

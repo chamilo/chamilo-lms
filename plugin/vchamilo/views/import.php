@@ -49,7 +49,7 @@ $encryptList = Virtual::getEncryptList();
 
 $form->addSelect(
     'password_encryption',
-    get_lang('EncryptMethodUserPass'),
+    get_lang('Encryption method'),
     $encryptList
 );
 

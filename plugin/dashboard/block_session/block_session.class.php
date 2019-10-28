@@ -64,7 +64,7 @@ class BlockSession extends Block
         $column = 2;
         $data = [];
         $html = $this->getBlockCard(
-            get_lang('YourSessionsList'),
+            get_lang('Your sessions'),
             $this->getContent()
         );
 
@@ -88,7 +88,7 @@ class BlockSession extends Block
             $sessions_table .= '<tr>
                                     <th >'.get_lang('Title').'</th>
                                     <th >'.get_lang('Date').'</th>
-                                    <th width="100px">'.get_lang('NbCoursesPerSession').'</th>
+                                    <th width="100px">'.get_lang('Number of courses per session').'</th>
                                 </tr>';
             $i = 1;
             foreach ($sessions as $session) {
@@ -107,7 +107,7 @@ class BlockSession extends Block
                         date_default_timezone_get()
                     );
 
-                    $date = vsprintf(get_lang('FromDateXToDateY'), [$dateFrom, $dateUntil]);
+                    $date = vsprintf(get_lang('From %s to %s'), [$dateFrom, $dateUntil]);
                 } else {
                     $date = ' - ';
                 }
@@ -130,11 +130,11 @@ class BlockSession extends Block
             $sessions_table .= '</table>';
             $content .= $sessions_table;
         } else {
-            $content .= get_lang('ThereIsNoInformationAboutYourSessions');
+            $content .= get_lang('There is no available information about your sessions');
         }
 
         if (count($sessions) > 0) {
-            $content .= '<div style="text-align:right;margin-top:10px;"><a href="'.api_get_path(WEB_CODE_PATH).'mySpace/session.php">'.get_lang('SeeMore').'</a></div>';
+            $content .= '<div style="text-align:right;margin-top:10px;"><a href="'.api_get_path(WEB_CODE_PATH).'mySpace/session.php">'.get_lang('See more').'</a></div>';
         }
 
         return $content;

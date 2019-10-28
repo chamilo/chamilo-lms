@@ -221,11 +221,11 @@ $beneficiariesSelect = $form->addSelect(
 
 if ($editingCourse) {
     $teachersOptions = api_unique_multidim_array($teachersOptions, 'value');
-    $beneficiariesSelect->addOptGroup($teachersOptions, get_lang('Teachers'));
+    $beneficiariesSelect->addOptGroup($teachersOptions, get_lang('Trainers'));
 } elseif ($editingSession) {
     $courseCoachesOptions = api_unique_multidim_array($courseCoachesOptions, 'value');
-    $beneficiariesSelect->addOptGroup([$generalCoachOption], get_lang('SessionGeneralCoach'));
-    $beneficiariesSelect->addOptGroup($courseCoachesOptions, get_lang('SessionCourseCoach'));
+    $beneficiariesSelect->addOptGroup([$generalCoachOption], get_lang('Session general coach'));
+    $beneficiariesSelect->addOptGroup($courseCoachesOptions, get_lang('Session course coach'));
 }
 
 if ($commissionsEnable === 'true') {

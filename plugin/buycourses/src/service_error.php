@@ -27,7 +27,7 @@ if (isset($_SESSION['bc_service_sale_id'])) {
 }
 
 Display::addFlash(
-    Display::return_message($plugin->get_lang('ErrorOccurred'), 'error', false)
+    Display::return_message($plugin->get_lang('An error occurred.'), 'error', false)
 );
 
 header('Location: '.api_get_path(WEB_PLUGIN_PATH).'buycourses/src/service_catalog.php');

@@ -67,7 +67,7 @@ class BlockCourse extends Block
         $column = 2;
         $data = [];
         $html = $this->getBlockCard(
-            get_lang('YourCourseList'),
+            get_lang('Your courses'),
             $this->getContent()
         );
         $data['column'] = $column;
@@ -89,10 +89,10 @@ class BlockCourse extends Block
         if (!empty($course_data)) {
             $data_table .= '<table class="data_table" width:"95%">';
             $data_table .= '<tr>
-	    						<th>'.get_lang('CourseTitle').'</th>
-	    						<th width="20%">'.get_lang('NbStudents').'</th>
-	    						<th width="20%">'.get_lang('AvgTimeSpentInTheCourse').'</th>
-	    						<th width="20%">'.get_lang('ThematicAdvance').'</th>
+	    						<th>'.get_lang('Course title').'</th>
+	    						<th width="20%">'.get_lang('Learners').'</th>
+	    						<th width="20%">'.get_lang('Time').'</th>
+	    						<th width="20%">'.get_lang('Thematic advance').'</th>
 	    					</tr>';
             $i = 1;
             foreach ($course_data as $course) {
@@ -113,12 +113,12 @@ class BlockCourse extends Block
             }
             $data_table .= '</table>';
         } else {
-            $data_table .= get_lang('ThereIsNoInformationAboutYourCourses');
+            $data_table .= get_lang('There is no available information about your courses');
         }
         $content .= $data_table;
         if (!empty($course_data)) {
             $content .= '<div style="text-align:right;margin-top:10px;">
-            <a href="'.api_get_path(WEB_CODE_PATH).'mySpace/course.php?follow">'.get_lang('SeeMore').'</a></div>';
+            <a href="'.api_get_path(WEB_CODE_PATH).'mySpace/course.php?follow">'.get_lang('See more').'</a></div>';
         }
 
         return $content;
@@ -174,7 +174,7 @@ class BlockCourse extends Block
             );
 
             if (!empty($tematic_advance)) {
-                $tematic_advance_progress = '<a title="'.get_lang('GoToThematicAdvance').'" href="'.api_get_path(WEB_CODE_PATH).'course_progress/index.php?cidReq='.$course_code.'&action=thematic_details">'.$tematic_advance.'%</a>';
+                $tematic_advance_progress = '<a title="'.get_lang('GoToThematic advance').'" href="'.api_get_path(WEB_CODE_PATH).'course_progress/index.php?cidReq='.$course_code.'&action=thematic_details">'.$tematic_advance.'%</a>';
             } else {
                 $tematic_advance_progress = '0%';
             }

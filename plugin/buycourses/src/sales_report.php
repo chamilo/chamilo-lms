@@ -96,7 +96,7 @@ $form->addHtml('<div id="report-by-status" '.($selectedFilterType !== '0' ? 'sty
 $form->addSelect('status', $plugin->get_lang('OrderStatus'), $saleStatuses);
 $form->addHtml('</div>');
 $form->addHtml('<div id="report-by-user" '.($selectedFilterType !== '1' ? 'style="display:none"' : '').'>');
-$form->addText('user', get_lang('UserName'), false);
+$form->addText('user', get_lang('Username'), false);
 $form->addHtml('</div>');
 $form->addButtonFilter(get_lang('Search'));
 $form->setDefaults([

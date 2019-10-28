@@ -159,13 +159,13 @@ $form->addText(
     get_lang('Search'),
     false,
     [
-        'aria-label' => get_lang('SearchUsers'),
+        'aria-label' => get_lang('Search users'),
     ]
 );
 
 if (!empty($fullSessionList)) {
     $options = array_column($fullSessionList, 'name', 'id');
-    $options[0] = get_lang('SelectAnOption');
+    $options[0] = get_lang('Please select an option');
     ksort($options);
     $form->addSelect('session_id', get_lang('Session'), $options);
 }
@@ -176,7 +176,7 @@ if (!empty($tagList)) {
     foreach ($tagList as $tag => $counter) {
         $tagOptions[$tag] = $tag.' ('.$counter.')';
     }
-    $form->addSelect('tag', get_lang('Tags'), $tagOptions, ['placeholder' => get_lang('SelectAnOption')]);
+    $form->addSelect('tag', get_lang('Tags'), $tagOptions, ['placeholder' => get_lang('Please select an option')]);
 }
 
 $form->addButtonSearch(get_lang('Search'));
@@ -197,7 +197,7 @@ $tpl->assign('post_url', $url);
 $url = api_get_path(WEB_CODE_PATH).'mySpace/myStudents.php?';
 $tpl->assign('my_students_url', $url);
 $tpl->assign('pagination', $pagination);
-$tpl->assign('care_title', $plugin->get_lang('CareDetailView'));
+$tpl->assign('care_title', $plugin->get_lang('Student care detail view'));
 $content = $tpl->fetch('/'.$plugin->get_name().'/view/my_students.html.twig');
 $tpl->assign('content', $content);
 $tpl->display_one_col_template();

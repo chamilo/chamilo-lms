@@ -82,7 +82,7 @@ class GradingElectronicPlugin extends Plugin
         $form = new FormValidator('frm_grading_electronic');
         $form->addDateRangePicker(
             'range',
-            get_lang('DateRange'),
+            get_lang('Date range'),
             true,
             [
                 'id' => 'range',
@@ -91,9 +91,9 @@ class GradingElectronicPlugin extends Plugin
                 'validate_format' => 'Y-m-d',
             ]
         );
-        $form->addText('course', $this->get_lang('CourseId'));
+        $form->addText('course', $this->get_lang('Course ID'));
         $form->addButtonDownload(get_lang('Generate'));
-        $form->addRule('course', get_lang('ThisFieldIsRequired'), 'required');
+        $form->addRule('course', get_lang('Required field'), 'required');
         $form->setDefaults([
             'course' => $courseIdValue ? $courseIdValue['value'] : null,
         ]);

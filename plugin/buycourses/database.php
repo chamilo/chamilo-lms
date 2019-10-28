@@ -715,6 +715,6 @@ $field_id = UserManager::create_extra_field($fieldlabel, $fieldtype, $fieldtitle
 
 $fieldlabel = 'buycourses_address';
 $fieldtype = '1';
-$fieldtitle = BuyCoursesPlugin::get_lang('Address');
+$fieldtitle = BuyCoursesPlugin::get_lang('The address of');
 $fielddefault = '';
 $field_id = UserManager::create_extra_field($fieldlabel, $fieldtype, $fieldtitle, $fielddefault);

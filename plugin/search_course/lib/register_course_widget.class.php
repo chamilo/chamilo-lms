@@ -74,12 +74,12 @@ class RegisterCourseWidget
         $registration_code = self::post(self::PARAM_PASSCODE);
 
         if ($this->subscribe_user($course_code, $registration_code)) {
-            echo Display::return_message(get_lang('EnrollToCourseSuccessful'), 'confirmation');
+            echo Display::return_message(get_lang('You have been registered to the course'), 'confirmation');
 
             return;
         }
         if (!empty($registration_code)) {
-            echo Display::return_message(get_lang('CourseRegistrationCodeIncorrect'), 'error');
+            echo Display::return_message(get_lang('The course password is incorrect'), 'error');
         }
         $this->display_form($course_code);
 
@@ -127,8 +127,8 @@ class RegisterCourseWidget
         $course_code = $course['code'];
         $course_visual_code = $course['visual_code'];
         $course_title = $course['title'];
-        $submit_registration_code_label = get_lang("SubmitRegistrationCode");
-        $course_requires_password_label = get_lang('CourseRequiresPassword');
+        $submit_registration_code_label = get_lang("Submit registration code");
+        $course_requires_password_label = get_lang('This course requires a password');
 
         $result = <<<EOT
             $course_requires_password_label<br/>

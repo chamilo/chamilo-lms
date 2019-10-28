@@ -122,7 +122,7 @@ class LearningCalendarPlugin extends Plugin
 
         $extraField = new ExtraField('lp_item');
         $params = [
-            'display_text' => $this->get_lang('LearningCalendarOneDayMarker'),
+            'display_text' => $this->get_lang('Learning calendarOneDayMarker'),
             'variable' => 'calendar',
             'visible_to_self' => 1,
             'changeable' => 1,
@@ -134,7 +134,7 @@ class LearningCalendarPlugin extends Plugin
 
         $extraField = new ExtraField('course');
         $params = [
-            'display_text' => $this->get_lang('CourseHoursDuration'),
+            'display_text' => $this->get_lang('Course duration (h)'),
             'variable' => 'course_hours_duration',
             'visible_to_self' => 1,
             'changeable' => 1,
@@ -583,8 +583,8 @@ class LearningCalendarPlugin extends Plugin
     public function getForm(FormValidator &$form)
     {
         $form->addText('title', get_lang('Title'));
-        $form->addText('total_hours', get_lang('TotalHours'));
-        $form->addText('minutes_per_day', get_lang('MinutesPerDay'));
+        $form->addText('total_hours', get_lang('Total hours'));
+        $form->addText('minutes_per_day', get_lang('Minutes per day'));
         $form->addHtmlEditor('description', get_lang('Description'), false);
     }
 
@@ -825,7 +825,7 @@ class LearningCalendarPlugin extends Plugin
         // @todo use translation
         // get events from this year to today
         $stats = $this->getUserStats($userId, $courseAndSessionList);
-        $html = $this->get_lang('NumberDaysAccumulatedInCalendar').$stats['user_event_count'];
+        $html = $this->get_lang('Number of days accumulated in calendar').$stats['user_event_count'];
         if (!empty($courseAndSessionList)) {
             $html .= '<br />';
             $html .= $this->get_lang('NumberDaysAccumulatedInLp').$stats['completed'];
@@ -880,7 +880,7 @@ class LearningCalendarPlugin extends Plugin
             </script>';
         }
 
-        $html = Display::panel($html, $this->get_lang('LearningCalendar'));
+        $html = Display::panel($html, $this->get_lang('Learning calendar'));
 
         return $html;
     }
@@ -1150,7 +1150,7 @@ class LearningCalendarPlugin extends Plugin
         $calendars = $this->getCalendars(0, 1000, '');
 
         if (empty($calendars)) {
-            echo Display::return_message(get_lang('NoData'), 'warning');
+            echo Display::return_message(get_lang('No data available'), 'warning');
             exit;
         }
         $calendars = array_column($calendars, 'title', 'id');

@@ -84,7 +84,7 @@ if ($typeUser || $typeCourse || $typeSession || $typeFinalLp) {
 }
 
 $selectOptions = [
-    0 => get_lang('None'),
+    0 => get_lang('none'),
 ];
 
 if ($typeUser) {
@@ -92,7 +92,7 @@ if ($typeUser) {
     $selectOptions[$userInfo['user_id']] = api_get_person_name(
         $userInfo['firstname'],
         $userInfo['lastname']
-    ).' ('.get_lang('Myself').')';
+    ).' ('.get_lang('myself').')';
 
     if (!empty($users)) {
         /** @var User $user */
@@ -199,12 +199,12 @@ if ($typeUser) {
     if (!$checker) {
         $form->addHtml(
             Display::return_message(
-                $plugin->get_lang('YourCoursesNeedAtLeastOneLearningPath'),
+                $plugin->get_lang('YourCoursesNeedAtLeastOneLearning paths'),
                 'error'
             )
         );
     }
-    $form->addSelect('info_select', get_lang('LearningPath'), $selectOptions);
+    $form->addSelect('info_select', get_lang('Learning paths'), $selectOptions);
 }
 
 $form->addHidden('t', intval($_GET['t']));

@@ -33,8 +33,8 @@ $dateRange = [
 ];
 
 $form = new FormValidator(get_lang('Search'));
-$form->addDatePicker('search_meeting_start', get_lang('DateStart'));
-$form->addDatePicker('search_meeting_end', get_lang('DateEnd'));
+$form->addDatePicker('search_meeting_start', get_lang('Start date'));
+$form->addDatePicker('search_meeting_end', get_lang('End date'));
 $form->addButtonSearch(get_lang('Search'));
 $form->setDefaults($dateRange);
 
@@ -45,7 +45,7 @@ if ($form->validate()) {
 $meetings = $bbb->getMeetings(0, 0, 0, true, $dateRange);
 
 foreach ($meetings as &$meeting) {
-    $participants = $bbb->findConnectedMeetingParticipants($meeting['id']);
+    $participants = $bbb->findConnectedMeetingMembers($meeting['id']);
 
     foreach ($participants as $meetingParticipant) {
         /** @var User $participant */
@@ -61,12 +61,12 @@ if ($action) {
                 [$tool_name, $plugin->get_lang('RecordList')],
                 [],
                 [
-                    get_lang('CreatedAt'),
+                    get_lang('Created at'),
                     get_lang('Status'),
                     $plugin->get_lang('Records'),
                     get_lang('Course'),
                     get_lang('Session'),
-                    get_lang('Participants'),
+                    get_lang('Members'),
                 ],
             ];
 
@@ -109,7 +109,7 @@ $content = $tpl->fetch('bbb/view/admin.tpl');
 
 if ($meetings) {
     $actions = Display::toolbarButton(
-        get_lang('ExportInExcel'),
+        get_lang('Export in Excel format'),
         api_get_self().'?'.http_build_query([
             'action' => 'export',
             'search_meeting_start' => $dateStart,

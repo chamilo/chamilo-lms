@@ -130,7 +130,7 @@ $tpl->assign(
 );
 $tpl->assign('information_icon', Display::return_icon('info.png'));
 $tpl->assign('student_info', api_get_user_info($studentId));
-$tpl->assign('care_title', $plugin->get_lang('CareDetailView'));
+$tpl->assign('care_title', $plugin->get_lang('Student care detail view'));
 
 $content = $tpl->fetch('/'.$plugin->get_name().'/view/post.html.twig');
 // Assign into content

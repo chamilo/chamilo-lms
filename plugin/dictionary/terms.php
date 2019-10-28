@@ -56,7 +56,7 @@ switch ($action) {
                 'definition' => $values['definition'],
             ];
             Database::update($table, $params, ['id = ?' => $id]);
-            Display::addFlash(Display::return_message(get_lang('Updated')));
+            Display::addFlash(Display::return_message(get_lang('Update successful')));
 
             header('Location: '.api_get_self());
             exit;

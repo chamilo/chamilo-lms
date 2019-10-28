@@ -62,9 +62,9 @@ class BBBPlugin extends Plugin
                     'type' => 'select',
                     'options' => [
                         PLATFORM_ADMIN => get_lang('Administrator'),
-                        COURSEMANAGER => get_lang('Teacher'),
-                        STUDENT => get_lang('Student'),
-                        STUDENT_BOSS => get_lang('StudentBoss')
+                        COURSEMANAGER => get_lang('Trainer'),
+                        STUDENT => get_lang('Learner'),
+                        STUDENT_BOSS => get_lang('LearnerBoss')
                     ],
                     'attributes' => ['multiple' => 'multiple']
                 ],
@@ -79,8 +79,8 @@ class BBBPlugin extends Plugin
                     'type' => 'select',
                     'options' => [
                         self::LAUNCH_TYPE_DEFAULT => 'SetByDefault',
-                        self::LAUNCH_TYPE_SET_BY_TEACHER => 'SetByTeacher',
-                        self::LAUNCH_TYPE_SET_BY_STUDENT => 'SetByStudent',
+                        self::LAUNCH_TYPE_SET_BY_TEACHER => 'SetByTrainer',
+                        self::LAUNCH_TYPE_SET_BY_STUDENT => 'SetByLearner',
                     ],
                     'translate_options' => true, // variables will be translated using the plugin->get_lang
                 ],

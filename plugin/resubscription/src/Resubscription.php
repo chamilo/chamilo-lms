@@ -20,8 +20,8 @@ class Resubscription extends Plugin implements HookPluginInterface
     protected function __construct()
     {
         $options = [
-            'calendar_year' => get_lang('CalendarYear'),
-            'natural_year' => get_lang('NaturalYear'),
+            'calendar_year' => get_lang('Calendar year'),
+            'natural_year' => get_lang('Natural year'),
         ];
         $parameters = [
             'resubscription_limit' => [

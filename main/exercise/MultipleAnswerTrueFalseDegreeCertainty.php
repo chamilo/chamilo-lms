@@ -52,7 +52,6 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
      * @param FormValidator $form
      *
      * @throws Exception
-     * @throws HTML_QuickForm_Error
      */
     public function createAnswersForm($form)
     {
@@ -67,7 +66,7 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
         $defaults = [];
 
         $html = '<table class="data_table"><tr style="text-align: center;"><th>'
-            .get_lang('Number')
+            .get_lang('N°')
             .'</th><th>'
             .get_lang('True')
             .'</th><th>'
@@ -98,7 +97,7 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
 
         if ($nbAnswers < 1) {
             $nbAnswers = 1;
-            echo Display::return_message(get_lang('YouHaveToCreateAtLeastOneAnswer'));
+            echo Display::return_message(get_lang('You have to create at least one answer'));
         }
 
         // Can be more options
@@ -170,7 +169,7 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
                 ['style' => 'vertical-align:middle;'],
                 ['ToolbarSet' => 'TestProposedAnswer', 'Width' => '100%', 'Height' => '100']
             );
-            $form->addRule('answer['.$i.']', get_lang('ThisFieldIsRequired'), 'required');
+            $form->addRule('answer['.$i.']', get_lang('Required field'), 'required');
 
             // show comment when feedback is enable
             if ($objEx->getFeedbackType() != EXERCISE_FEEDBACK_TYPE_EXAM) {
@@ -194,8 +193,8 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
 
         $form->addElement('hidden', 'option[3]', 0);
 
-        $form->addRule('option[1]', get_lang('ThisFieldIsRequired'), 'required');
-        $form->addRule('option[2]', get_lang('ThisFieldIsRequired'), 'required');
+        $form->addRule('option[1]', get_lang('Required field'), 'required');
+        $form->addRule('option[2]', get_lang('Required field'), 'required');
 
         $form->addElement('html', '</tr><table>');
         $form->addElement('hidden', 'options_count', 3);
@@ -214,8 +213,8 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
         if ($objEx->edit_exercise_in_lp === true ||
             (empty($this->exerciseList) && empty($objEx->id))
         ) {
-            $form->addElement('submit', 'lessAnswers', get_lang('LessAnswer'), 'class="btn btn-danger minus"');
-            $form->addElement('submit', 'moreAnswers', get_lang('PlusAnswer'), 'class="btn btn-primary plus"');
+            $form->addElement('submit', 'lessAnswers', get_lang('Remove answer option'), 'class="btn btn-danger minus"');
+            $form->addElement('submit', 'moreAnswers', get_lang('Add answer option'), 'class="btn btn-primary plus"');
             //$text and $class defined in calling script
             $form->addElement('submit', 'submitQuestion', $text, 'class = "btn btn-primary"');
         }
@@ -307,16 +306,16 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
     {
         $header = parent::return_header($exercise, $counter, $score);
         $header .= '<table class="'.$this->question_table_class.'"><tr>';
-        $header .= '<th>'.get_lang('Choice').'</th>';
+        $header .= '<th>'.get_lang('Your choice').'</th>';
 
         if ($exercise->showExpectedChoiceColumn()) {
-            $header .= '<th>'.get_lang('ExpectedChoice').'</th>';
+            $header .= '<th>'.get_lang('ExpectedYour choice').'</th>';
         }
 
         $header .= '<th>'
             .get_lang('Answer')
             .'</th><th colspan="2" style="text-align:center;">'
-            .get_lang('YourDegreeOfCertainty')
+            .get_lang('Your degree of certainty')
             .'</th>'
         ;
         if ($exercise->getFeedbackType() != EXERCISE_FEEDBACK_TYPE_EXAM) {
@@ -346,8 +345,8 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
                 'color' => '#000000',
                 'background-color' => '#F6BA2A',
                 'status' => self::LEVEL_WHITE,
-                'label' => get_lang('DegreeOfCertaintyDeclaredIgnorance'),
-                'description' => get_lang('DegreeOfCertaintyDeclaredIgnoranceDescription'),
+                'label' => get_lang('Declared ignorance'),
+                'description' => get_lang('Declared ignoranceDescription'),
             ];
         } else {
             $checkResult = $studentAnswer == $expectedAnswer ? true : false;
@@ -357,16 +356,16 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
                         'color' => '#FFFFFF',
                         'background-color' => '#1E9C55',
                         'status' => self::LEVEL_DARKGREEN,
-                        'label' => get_lang('DegreeOfCertaintyVerySure'),
-                        'description' => get_lang('DegreeOfCertaintyVerySureDescription'),
+                        'label' => get_lang('Very sure'),
+                        'description' => get_lang('Very sureDescription'),
                     ];
                 } elseif ($studentDegreeChoicePosition >= 4 && $studentDegreeChoicePosition <= 5) {
                     $result = [
                         'color' => '#000000',
                         'background-color' => '#B1E183',
                         'status' => self::LEVEL_LIGHTGREEN,
-                        'label' => get_lang('DegreeOfCertaintyPrettySure'),
-                        'description' => get_lang('DegreeOfCertaintyPrettySureDescription'),
+                        'label' => get_lang('Pretty sure'),
+                        'description' => get_lang('Pretty sureDescription'),
                     ];
                 }
             } else {
@@ -375,16 +374,16 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
                         'color' => '#FFFFFF',
                         'background-color' => '#ED4040',
                         'status' => self::LEVEL_DARKRED,
-                        'label' => get_lang('DegreeOfCertaintyVeryUnsure'),
-                        'description' => get_lang('DegreeOfCertaintyVeryUnsureDescription'),
+                        'label' => get_lang('Very unsure'),
+                        'description' => get_lang('Very unsureDescription'),
                     ];
                 } elseif ($studentDegreeChoicePosition >= 4 && $studentDegreeChoicePosition <= 5) {
                     $result = [
                         'color' => '#000000',
                         'background-color' => '#F79B88',
                         'status' => self::LEVEL_LIGHTRED,
-                        'label' => get_lang('DegreeOfCertaintyUnsure'),
-                        'description' => get_lang('DegreeOfCertaintyUnsureDescription'),
+                        'label' => get_lang('Unsure'),
+                        'description' => get_lang('UnsureDescription'),
                     ];
                 }
             }
@@ -406,8 +405,8 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
                     &nbsp;
                 </td>
                 <td style="padding-left:10px;">
-                    <b><?php echo get_lang('DegreeOfCertaintyVerySure'); ?> :</b>
-                    <?php echo get_lang('DegreeOfCertaintyVerySureDescription'); ?>
+                    <b><?php echo get_lang('Very sure'); ?> :</b>
+                    <?php echo get_lang('Very sureDescription'); ?>
                 </td>
             </tr>
             <tr style="border-bottom: 1px solid #A39E9E;">
@@ -415,8 +414,8 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
                     &nbsp;
                 </td>
                 <td style="padding-left:10px;">
-                    <b><?php echo get_lang('DegreeOfCertaintyPrettySure'); ?> :</b>
-                    <?php echo get_lang('DegreeOfCertaintyPrettySureDescription'); ?>
+                    <b><?php echo get_lang('Pretty sure'); ?> :</b>
+                    <?php echo get_lang('Pretty sureDescription'); ?>
                 </td>
             </tr>
             <tr style="border: 1px solid #A39E9E;">
@@ -424,8 +423,8 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
                     &nbsp;
                 </td>
                 <td style="padding-left:10px;">
-                    <b><?php echo get_lang('DegreeOfCertaintyDeclaredIgnorance'); ?> :</b>
-                    <?php echo get_lang('DegreeOfCertaintyDeclaredIgnoranceDescription'); ?>
+                    <b><?php echo get_lang('Declared ignorance'); ?> :</b>
+                    <?php echo get_lang('Declared ignoranceDescription'); ?>
                 </td>
             </tr>
             <tr style="border: 1px solid #A39E9E;">
@@ -433,8 +432,8 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
                     &nbsp;
                 </td>
                 <td style="padding-left:10px;">
-                    <b><?php echo get_lang('DegreeOfCertaintyUnsure'); ?> :</b>
-                    <?php echo get_lang('DegreeOfCertaintyUnsureDescription'); ?>
+                    <b><?php echo get_lang('Unsure'); ?> :</b>
+                    <?php echo get_lang('UnsureDescription'); ?>
                 </td>
             </tr>
             <tr style="border-bottom: 1px solid #A39E9E;">
@@ -442,8 +441,8 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
                     &nbsp;
                 </td>
                 <td style="padding-left:10px;">
-                    <b><?php echo get_lang('DegreeOfCertaintyVeryUnsure'); ?> :</b>
-                    <?php echo get_lang('DegreeOfCertaintyVeryUnsureDescription'); ?>
+                    <b><?php echo get_lang('Very unsure'); ?> :</b>
+                    <?php echo get_lang('Very unsureDescription'); ?>
                 </td>
             </tr>
         </table><br/>
@@ -532,11 +531,11 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
         $html .= '<h4 class="chart-title">'.$title.'</h4>';
 
         $legendTitle = [
-            'DegreeOfCertaintyVeryUnsure',
-            'DegreeOfCertaintyUnsure',
-            'DegreeOfCertaintyDeclaredIgnorance',
-            'DegreeOfCertaintyPrettySure',
-            'DegreeOfCertaintyVerySure',
+            'Very unsure',
+            'Unsure',
+            'Declared ignorance',
+            'Pretty sure',
+            'Very sure',
         ];
         $html .= '<ul class="chart-legend">';
         foreach ($legendTitle as $i => $item) {
@@ -555,7 +554,7 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
             }
 
             if ($categoryQuestionName === '') {
-                $categoryName = get_lang('WithoutCategory');
+                $categoryName = get_lang('Without category');
             } else {
                 $categoryName = $categoryQuestionName;
             }
@@ -672,9 +671,9 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
             $nbResponsesCor += (int) $scoreList[2];
         }
 
-        $IncorrectAnswers = sprintf(get_lang('IncorrectAnswersX'), $nbResponsesInc);
-        $IgnoranceAnswers = sprintf(get_lang('IgnoranceAnswersX'), $nbResponsesIng);
-        $CorrectAnswers = sprintf(get_lang('CorrectAnswersX'), $nbResponsesCor);
+        $IncorrectAnswers = sprintf(get_lang('Incorrect answers: %s'), $nbResponsesInc);
+        $IgnoranceAnswers = sprintf(get_lang('Ignorance: %s'), $nbResponsesIng);
+        $CorrectAnswers = sprintf(get_lang('Correct answers: %s'), $nbResponsesCor);
 
         $html .= '<div class="chart-grid">';
 
@@ -682,11 +681,11 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
         if ($displayExplanationText) {
             // Display of histogram text
             $explainHistoList = [
-                'DegreeOfCertaintyVeryUnsure',
-                'DegreeOfCertaintyUnsure',
-                'DegreeOfCertaintyDeclaredIgnorance',
-                'DegreeOfCertaintyPrettySure',
-                'DegreeOfCertaintyVerySure',
+                'Very unsure',
+                'Unsure',
+                'Declared ignorance',
+                'Pretty sure',
+                'Very sure',
             ];
         }
 
@@ -835,16 +834,16 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
                 <td class="firstLine borderRight '.$classGlobalChart.'" 
                     colspan="2" 
                     style="width:'.($colWidth * 2).'px; line-height: 15px; font-size:'.$textSize.'%;">'.
-            sprintf(get_lang('IncorrectAnswersX'), $nbResponsesInc).'
+            sprintf(get_lang('Incorrect answers: %s'), $nbResponsesInc).'
                 </td>
                 <td class="firstLine borderRight '.$classGlobalChart.'" 
                     style="width:'.$colWidth.'px; line-height: 15px; font-size :'.$textSize.'%;">'.
-            sprintf(get_lang('IgnoranceAnswersX'), $nbResponsesIng).'
+            sprintf(get_lang('Ignorance: %s'), $nbResponsesIng).'
                 </td>
                 <td class="firstLine '.$classGlobalChart.'" 
                     colspan="2" 
                     style="width:'.($colWidth * 2).'px; line-height: 15px; font-size:'.$textSize.'%;">'.
-            sprintf(get_lang('CorrectAnswersX'), $nbResponsesCor).'
+            sprintf(get_lang('Correct answers: %s'), $nbResponsesCor).'
                 </td>
             </tr>';
         $html .= '<tr>';
@@ -887,11 +886,11 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
         if ($displayExplanationText) {
             // Display of histogram text
             $explainHistoList = [
-                'DegreeOfCertaintyVeryUnsure',
-                'DegreeOfCertaintyUnsure',
-                'DegreeOfCertaintyDeclaredIgnorance',
-                'DegreeOfCertaintyPrettySure',
-                'DegreeOfCertaintyVerySure',
+                'Very unsure',
+                'Unsure',
+                'Declared ignorance',
+                'Pretty sure',
+                'Very sure',
             ];
             $html .= '<tr>';
             $i = 0;
@@ -1265,7 +1264,7 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
         $html = self::displayDegreeChart(
             $globalScoreList,
             600,
-            get_lang('YourOverallResultForTheTest'),
+            get_lang('Your overall results for the test'),
             2,
             0,
             true,
@@ -1283,7 +1282,7 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
             $html .= self::displayDegreeChart(
                 $previousAttemptScoreList,
                 600,
-                get_lang('ForComparisonYourLastResultToThisTest'),
+                get_lang('In comparison, your latest results for this test'),
                 2
             );
             $html .= '<br/>';
@@ -1292,7 +1291,7 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
         $list = self::getColorNumberListForAttemptByCategory($exeId);
         $html .= self::displayDegreeChartByCategory(
             $list,
-            get_lang('YourResultsByDiscipline'),
+            get_lang('Your results by discipline'),
             1,
             $objExercice
         );
@@ -1316,8 +1315,8 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
             null,
             PERSON_NAME_EMAIL_ADDRESS
         );
-        $subject = "[".get_lang('DoNotReply')."] "
-            .html_entity_decode(get_lang('ResultAccomplishedTest')." \"".$objExercise->title."\"");
+        $subject = "[".get_lang('Please do not reply')."] "
+            .html_entity_decode(get_lang('Results for the accomplished test')." \"".$objExercise->title."\"");
 
         // message sended to the student
         $message = get_lang('Dear').' '.$recipientName.",<br /><br />";
@@ -1327,7 +1326,7 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
         $exerciseTitle = $objExercise->title;
 
         $message .= sprintf(
-            get_lang('MessageQuestionCertainty'),
+            get_lang('Please follow the instructions below to check your results for test %s.<br /><br />'),
             $exerciseTitle,
             api_get_path(WEB_PATH),
             $exerciseLink
@@ -1335,7 +1334,7 @@ class MultipleAnswerTrueFalseDegreeCertainty extends Question
 
         // show histogram
         $message .= self::displayStudentsChartResults($exeId, $objExercise);
-        $message .= get_lang('KindRegards');
+        $message .= get_lang('Kind regards,');
         $message = api_preg_replace("/\\\n/", '', $message);
 
         MessageManager::send_message_simple($userId, $subject, $message);

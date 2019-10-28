@@ -25,7 +25,7 @@ if (!api_is_allowed_to_edit(null, true)) {
 // the breadcrumbs
 $interbreadcrumb[] = [
     'url' => api_get_path(WEB_CODE_PATH).'exercise/exercise.php?'.api_get_cidreq(),
-    'name' => get_lang('Exercises'),
+    'name' => get_lang('Tests'),
 ];
 $is_allowedToEdit = api_is_allowed_to_edit(null, true);
 
@@ -36,7 +36,7 @@ function displayForm()
 {
     $form = '<div class="actions">';
     $form .= '<a href="'.api_get_path(WEB_CODE_PATH).'exercise/exercise.php?show=test&'.api_get_cidreq().'">'.
-        Display::return_icon('back.png', get_lang('BackToExercisesList'), '', ICON_SIZE_MEDIUM).'</a>';
+        Display::return_icon('back.png', get_lang('BackToTestsList'), '', ICON_SIZE_MEDIUM).'</a>';
     $form .= '</div>';
     $formValidator = new FormValidator(
         'qti_upload',
@@ -45,8 +45,8 @@ function displayForm()
         null,
         ['enctype' => 'multipart/form-data']
     );
-    $formValidator->addHeader(get_lang('ImportQtiQuiz'));
-    $formValidator->addElement('file', 'userFile', get_lang('DownloadFile'));
+    $formValidator->addHeader(get_lang('Import exercises Qti2'));
+    $formValidator->addElement('file', 'userFile', get_lang('Download file'));
     $formValidator->addButtonImport(get_lang('Upload'));
     $form .= $formValidator->returnForm();
     echo $form;
@@ -96,7 +96,7 @@ if (api_is_allowed_to_edit(null, true)) {
     }
 }
 
-Display::display_header(get_lang('ImportQtiQuiz'), 'Exercises');
+Display::display_header(get_lang('Import exercises Qti2'), 'Exercises');
 
 echo $message;
 

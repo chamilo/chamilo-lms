@@ -248,7 +248,7 @@ if (isset($_REQUEST['comments']) &&
 
     if (isset($_POST['send_notification'])) {
         //@todo move this somewhere else
-        $subject = get_lang('ExamSheetVCC');
+        $subject = get_lang('Examsheet viewed/corrected/commented by the trainer');
         $message = isset($_POST['notification_content']) ? $_POST['notification_content'] : '';
 
         MessageManager::send_message_simple(
@@ -260,7 +260,7 @@ if (isset($_REQUEST['comments']) &&
 
         if ($allowCoachFeedbackExercises) {
             Display::addFlash(
-                Display::return_message(get_lang('MessageSent'))
+                Display::return_message(get_lang('Message Sent'))
             );
             header('Location: '.api_get_self().'?'.api_get_cidreq().'&exerciseId='.$exerciseId);
             exit;
@@ -298,7 +298,7 @@ if (isset($_REQUEST['comments']) &&
             } else {
                 $statusCondition = ', status = "failed" ';
             }
-            Display::addFlash(Display::return_message(get_lang('LearnpathUpdated')));
+            Display::addFlash(Display::return_message(get_lang('Learning path updated')));
         }
 
         $sql = "UPDATE $TBL_LP_ITEM_VIEW 
@@ -334,18 +334,18 @@ if ($is_allowedToEdit && $origin != 'learnpath') {
         api_is_course_tutor() || api_is_session_general_coach()
     ) {
         $actions .= '<a href="exercise.php?'.api_get_cidreq().'">'.
-            Display::return_icon('back.png', get_lang('GoBackToQuestionList'), '', ICON_SIZE_MEDIUM).'</a>';
+            Display::return_icon('back.png', get_lang('Go back to the questions list'), '', ICON_SIZE_MEDIUM).'</a>';
         $actions .= '<a href="live_stats.php?'.api_get_cidreq().'&exerciseId='.$exercise_id.'">'.
-            Display::return_icon('activity_monitor.png', get_lang('LiveResults'), '', ICON_SIZE_MEDIUM).'</a>';
+            Display::return_icon('activity_monitor.png', get_lang('Live results'), '', ICON_SIZE_MEDIUM).'</a>';
         $actions .= '<a href="stats.php?'.api_get_cidreq().'&exerciseId='.$exercise_id.'">'.
-            Display::return_icon('statistics.png', get_lang('ReportByQuestion'), '', ICON_SIZE_MEDIUM).'</a>';
+            Display::return_icon('statistics.png', get_lang('Report by question'), '', ICON_SIZE_MEDIUM).'</a>';
         $actions .= '<a id="export_opener" href="'.api_get_self().'?export_report=1&exerciseId='.$exercise_id.'" >'.
         Display::return_icon('save.png', get_lang('Export'), '', ICON_SIZE_MEDIUM).'</a>';
         // clean result before a selected date icon
         $actions .= Display::url(
             Display::return_icon(
                 'clean_before_date.png',
-                get_lang('CleanStudentsResultsBeforeDate'),
+                get_lang('Clean all results before a selected date'),
                 '',
                 ICON_SIZE_MEDIUM
             ),
@@ -357,7 +357,7 @@ if ($is_allowedToEdit && $origin != 'learnpath') {
             Display::input(
                 'input',
                 'datepicker_start',
-                get_lang('SelectADateOnTheCalendar'),
+                get_lang('Select a date from the calendar'),
                 [
                     'onmouseover' => 'datepicker_input_mouseover()',
                     'id' => 'datepicker_start',
@@ -377,7 +377,7 @@ if ($is_allowedToEdit && $origin != 'learnpath') {
     $actions .= '<a href="exercise.php">'.
         Display::return_icon(
             'back.png',
-            get_lang('GoBackToQuestionList'),
+            get_lang('Go back to the questions list'),
             '',
             ICON_SIZE_MEDIUM
         ).
@@ -410,10 +410,10 @@ if (($is_allowedToEdit || $is_tutor || api_is_coach()) &&
 if ($is_allowedToEdit || $is_tutor) {
     $interbreadcrumb[] = [
         'url' => 'exercise.php?'.api_get_cidreq(),
-        'name' => get_lang('Exercises'),
+        'name' => get_lang('Tests'),
     ];
 
-    $nameTools = get_lang('StudentScore');
+    $nameTools = get_lang('Learner score');
     if ($exerciseExists) {
         $interbreadcrumb[] = [
             'url' => '#',
@@ -423,10 +423,10 @@ if ($is_allowedToEdit || $is_tutor) {
 } else {
     $interbreadcrumb[] = [
         'url' => 'exercise.php?'.api_get_cidreq(),
-        'name' => get_lang('Exercises'),
+        'name' => get_lang('Tests'),
     ];
     if ($exerciseExists) {
-        $nameTools = get_lang('Results').': '.$objExerciseTmp->selectTitle(true);
+        $nameTools = get_lang('Results and feedback').': '.$objExerciseTmp->selectTitle(true);
     }
 }
 
@@ -457,7 +457,7 @@ if (($is_allowedToEdit || $is_tutor || api_is_coach()) &&
                 $_GET['delete_before_date'].' 23:59:59'
             );
             echo Display::return_message(
-                sprintf(get_lang('XResultsCleaned'), $count),
+                sprintf(get_lang('XResults and feedbackCleaned'), $count),
                 'confirm'
             );
         }
@@ -501,7 +501,7 @@ $extra = '<script>
     });
     </script>';
 
-$extra .= '<div id="dialog-confirm" title="'.get_lang('ConfirmYourChoice').'">';
+$extra .= '<div id="dialog-confirm" title="'.get_lang('Please confirm your choice').'">';
 $form = new FormValidator(
     'report',
     'post',
@@ -513,7 +513,7 @@ $form->addElement(
     'radio',
     'export_format',
     null,
-    get_lang('ExportAsCSV'),
+    get_lang('CSV export'),
     'csv',
     ['id' => 'export_format_csv_label']
 );
@@ -521,7 +521,7 @@ $form->addElement(
     'radio',
     'export_format',
     null,
-    get_lang('ExportAsXLS'),
+    get_lang('Excel export'),
     'xls',
     ['id' => 'export_format_xls_label']
 );
@@ -529,7 +529,7 @@ $form->addElement(
     'checkbox',
     'load_extra_data',
     null,
-    get_lang('LoadExtraData'),
+    get_lang('Load extra user fields data (have to be marked as \'Filter\' to appear).'),
     '0',
     ['id' => 'export_format_xls_label']
 );
@@ -537,14 +537,14 @@ $form->addElement(
     'checkbox',
     'include_all_users',
     null,
-    get_lang('IncludeAllUsers'),
+    get_lang('Include all users'),
     '0'
 );
 $form->addElement(
     'checkbox',
     'only_best_attempts',
     null,
-    get_lang('OnlyBestAttempts'),
+    get_lang('Only best attempts'),
     '0'
 );
 $form->setDefaults(['export_format' => 'csv']);
@@ -562,7 +562,7 @@ $action_links = '';
 $group_list = GroupManager::get_group_list();
 $group_parameters = [
     'group_all:'.get_lang('All'),
-    'group_none:'.get_lang('None'),
+    'group_none:'.get_lang('none'),
 ];
 
 foreach ($group_list as $group) {
@@ -577,22 +577,22 @@ $officialCodeInList = api_get_setting('show_official_code_exercise_result_list')
 if ($is_allowedToEdit || $is_tutor) {
     // The order is important you need to check the the $column variable in the model.ajax.php file
     $columns = [
-        get_lang('FirstName'),
-        get_lang('LastName'),
-        get_lang('LoginName'),
+        get_lang('First name'),
+        get_lang('Last name'),
+        get_lang('Login'),
         get_lang('Group'),
-        get_lang('Duration').' ('.get_lang('MinMinute').')',
-        get_lang('StartDate'),
-        get_lang('EndDate'),
+        get_lang('Duration').' ('.get_lang('minute').')',
+        get_lang('Start Date'),
+        get_lang('End Date'),
         get_lang('Score'),
         get_lang('IP'),
         get_lang('Status'),
-        get_lang('ToolLearnpath'),
-        get_lang('Actions'),
+        get_lang('Learning path'),
+        get_lang('Detail'),
     ];
 
     if ($officialCodeInList === 'true') {
-        $columns = array_merge([get_lang('OfficialCode')], $columns);
+        $columns = array_merge([get_lang('Code')], $columns);
     }
 
     // Column config
@@ -637,12 +637,12 @@ if ($is_allowedToEdit || $is_tutor) {
             //for the bottom bar
             'searchoptions' => [
                 'defaultValue' => '',
-                'value' => ':'.get_lang('All').';1:'.get_lang('Validated').';0:'.get_lang('NotValidated'),
+                'value' => ':'.get_lang('All').';1:'.get_lang('Validated').';0:'.get_lang('Not validated'),
             ],
             //for the top bar
             'editoptions' => [
                 'value' => ':'.get_lang('All').';1:'.get_lang('Validated').';0:'.get_lang(
-                        'NotValidated'
+                        'Not validated'
                     ),
             ],
         ],
@@ -659,7 +659,7 @@ if ($is_allowedToEdit || $is_tutor) {
     // add username as title in lastname filed - ref 4226
     function action_formatter(cellvalue, options, rowObject) {
         // rowObject is firstname,lastname,login,... get the third word
-        var loginx = "'.api_htmlentities(sprintf(get_lang('LoginX'), ':::'), ENT_QUOTES).'";
+        var loginx = "'.api_htmlentities(sprintf(get_lang('Login: %s'), ':::'), ENT_QUOTES).'";
         var tabLoginx = loginx.split(/:::/);
         // tabLoginx[0] is before and tabLoginx[1] is after :::
         // may be empty string but is defined
@@ -835,7 +835,7 @@ $gridJs = Display::grid_js(
             // Format the date for confirm box
             var dateFormat = $( "#datepicker_start" ).datepicker( "option", "dateFormat" );
             var selectedDate = $.datepicker.formatDate(dateFormat, dateTypeVar);
-            if (confirm("<?php echo convert_double_quote_to_single(get_lang('AreYouSureDeleteTestResultBeforeDateD')).' '; ?>" + selectedDate)) {
+            if (confirm("<?php echo convert_double_quote_to_single(get_lang('Are you sure you want to clean results for this test before the selected date ?')).' '; ?>" + selectedDate)) {
                 self.location.href = "exercise_report.php?<?php echo api_get_cidreq(); ?>&exerciseId=<?php echo $exercise_id; ?>&delete_before_date="+dateForBDD+"&sec_token=<?php echo $token; ?>";
             }
         }

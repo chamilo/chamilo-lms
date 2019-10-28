@@ -6,7 +6,6 @@ require_once __DIR__.'/../inc/global.inc.php';
 $this_section = SECTION_COURSES;
 $exercise_id = (isset($_GET['exerciseId']) && !empty($_GET['exerciseId'])) ? intval($_GET['exerciseId']) : 0;
 
-// Access control
 api_protect_course_script(true);
 
 if (!api_is_allowed_to_edit()) {
@@ -22,7 +21,7 @@ if (!$result) {
 
 $interbreadcrumb[] = [
     "url" => "exercise.php?".api_get_cidreq(),
-    "name" => get_lang('Exercises'),
+    "name" => get_lang('Tests'),
 ];
 $interbreadcrumb[] = [
     "url" => "admin.php?exerciseId=$exercise_id&".api_get_cidreq(),
@@ -33,7 +32,7 @@ $interbreadcrumb[] = [
 $htmlHeadXtra[] = api_get_jqgrid_js();
 
 // The header.
-Display::display_header(get_lang('StudentsWhoAreTakingTheExerciseRightNow'));
+Display::display_header(get_lang('Learners who\'re taking the exercise right now'));
 
 //jqgrid will use this URL to do the selects
 
@@ -41,7 +40,7 @@ $minutes = 60;
 $url = api_get_path(WEB_AJAX_PATH).'exercise.ajax.php?'.api_get_cidreq().'&a=get_live_stats&exercise_id='.$objExercise->id.'&minutes='.$minutes;
 
 //The order is important you need to check the the $column variable in the model.ajax.php file
-$columns = [get_lang('FirstName'), get_lang('LastName'), get_lang('Time'), get_lang('QuestionsAlreadyAnswered'), get_lang('Score')];
+$columns = [get_lang('First name'), get_lang('Last name'), get_lang('Time'), get_lang('Questions already answered'), get_lang('Score')];
 
 //Column config
 $column_model = [
@@ -110,7 +109,7 @@ $(function() {
 <?php
 
 $actions = '<a href="exercise_report.php?exerciseId='.intval($_GET['exerciseId']).'&'.api_get_cidreq().'">'.
-    Display::return_icon('back.png', get_lang('GoBackToQuestionList'), '', ICON_SIZE_MEDIUM).'</a>';
+    Display::return_icon('back.png', get_lang('Go back to the questions list'), '', ICON_SIZE_MEDIUM).'</a>';
 echo $actions = Display::div($actions, ['class' => 'actions']);
 
 echo Display::grid_html('live_stats');

@@ -140,7 +140,7 @@ if (!isset($exerciseInSession) || isset($exerciseInSession) && ($exerciseInSessi
             error_log('1.1. Error while reading the exercise');
         }
         unset($objExercise);
-        $error = get_lang('ExerciseNotFound');
+        $error = get_lang('Test not found or not visible');
     } else {
         // Saves the object into the session
         Session::write('objExercise', $objExercise);
@@ -220,7 +220,7 @@ $show_clock = true;
 $user_id = api_get_user_id();
 if ($objExercise->selectAttempts() > 0) {
     $messageReachedMax = Display::return_message(
-        sprintf(get_lang('ReachedMaxAttempts'), $exercise_title, $objExercise->selectAttempts()),
+        sprintf(get_lang('You cannot take test <b>%s</b> because you have already reached the maximum of %s attempts.'), $exercise_title, $objExercise->selectAttempts()),
         'warning',
         false
     );
@@ -259,7 +259,7 @@ if ($objExercise->selectAttempts() > 0) {
 
                         Display::addFlash(
                             Display::return_message(
-                                sprintf(get_lang('QuizQuestionsLimitPerDayXReached'), $maxQuestionsAnswered),
+                                sprintf(get_lang('Sorry, you have reached the maximum number of questions (%s) for the day. Please try again tomorrow.'), $maxQuestionsAnswered),
                                 'warning',
                                 false
                             )
@@ -269,7 +269,7 @@ if ($objExercise->selectAttempts() > 0) {
                             Display::display_reduced_header();
                             Display::display_reduced_footer();
                         } else {
-                            Display::display_header(get_lang('Exercises'));
+                            Display::display_header(get_lang('Tests'));
                             Display::display_footer();
                         }
 
@@ -308,7 +308,7 @@ if ($objExercise->selectAttempts() > 0) {
                         $last_attempt_info['max_score']
                     );
                     $attempt_html .= Display::div(
-                        get_lang('YourTotalScore').' '.$score,
+                        get_lang('Score for the test').' '.$score,
                         ['id' => 'question_score']
                     );
                 } else {
@@ -324,7 +324,7 @@ if ($objExercise->selectAttempts() > 0) {
         if (in_array($origin, ['learnpath', 'embeddable'])) {
             Display::display_reduced_header();
         } else {
-            Display::display_header(get_lang('Exercises'));
+            Display::display_header(get_lang('Tests'));
         }
 
         echo $attempt_html;
@@ -718,7 +718,7 @@ if ($formSent && isset($_POST)) {
                     );
                     if ($attempt_count >= $objExercise->selectAttempts()) {
                         echo Display::return_message(
-                            sprintf(get_lang('ReachedMaxAttempts'), $exercise_title, $objExercise->selectAttempts()),
+                            sprintf(get_lang('You cannot take test <b>%s</b> because you have already reached the maximum of %s attempts.'), $exercise_title, $objExercise->selectAttempts()),
                             'warning',
                             false
                         );
@@ -787,7 +787,7 @@ if ($question_count != 0) {
                     );
                     if ($attempt_count >= $objExercise->selectAttempts()) {
                         Display::return_message(
-                            sprintf(get_lang('ReachedMaxAttempts'), $exercise_title, $objExercise->selectAttempts()),
+                            sprintf(get_lang('You cannot take test <b>%s</b> because you have already reached the maximum of %s attempts.'), $exercise_title, $objExercise->selectAttempts()),
                             'warning',
                             false
                         );
@@ -834,34 +834,34 @@ if ($question_count != 0) {
         }
     }
 } else {
-    $error = get_lang('ThereAreNoQuestionsForThisExercise');
+    $error = get_lang('There are no questions for this exercise');
     // if we are in the case where user select random by category, but didn't choose the number of random question
     if ($objExercise->getRandomByCategory() > 0 && $objExercise->random <= 0) {
-        $error .= '<br/>'.get_lang('PleaseSelectSomeRandomQuestion');
+        $error .= '<br/>'.get_lang('Please select some random question');
     }
 }
 
 if (api_is_in_gradebook()) {
     $interbreadcrumb[] = [
         'url' => Category::getUrl(),
-        'name' => get_lang('ToolGradebook'),
+        'name' => get_lang('Assessments'),
     ];
 }
 
 $interbreadcrumb[] = [
     'url' => 'exercise.php?'.api_get_cidreq(),
-    'name' => get_lang('Exercises'),
+    'name' => get_lang('Tests'),
 ];
 $interbreadcrumb[] = ['url' => '#', 'name' => $objExercise->selectTitle(true)];
 
 if (!in_array($origin, ['learnpath', 'embeddable'])) { //so we are not in learnpath tool
     if (!api_is_allowed_to_session_edit()) {
         Display::addFlash(
-            Display::return_message(get_lang('SessionIsReadOnly'), 'warning')
+            Display::return_message(get_lang('The session is read only'), 'warning')
         );
     }
 
-    Display::display_header(null, 'Exercises');
+    Display::display_header(null, 'Tests');
 } else {
     $htmlHeadXtra[] = "<style> body { background: none;} </style> ";
     Display::display_reduced_header();
@@ -875,10 +875,10 @@ if (api_is_course_admin() && !in_array($origin, ['learnpath', 'embeddable'])) {
     echo '<div class="actions">';
     if ($show_quiz_edition == false) {
         echo '<a href="exercise_admin.php?'.api_get_cidreq().'&modifyExercise=yes&exerciseId='.$objExercise->id.'">'.
-            Display::return_icon('settings.png', get_lang('ModifyExercise'), '', ICON_SIZE_MEDIUM).'</a>';
+            Display::return_icon('settings.png', get_lang('Edit test name and settings'), '', ICON_SIZE_MEDIUM).'</a>';
     } else {
         echo '<a href="#">'.
-            Display::return_icon('settings_na.png', get_lang('ModifyExercise'), '', ICON_SIZE_MEDIUM).'</a>';
+            Display::return_icon('settings_na.png', get_lang('Edit test name and settings'), '', ICON_SIZE_MEDIUM).'</a>';
     }
     echo '</div>';
 }
@@ -918,7 +918,7 @@ if ($limit_time_exists) {
 
     if (!$permission_to_start || $exercise_timeover) {
         if (!api_is_allowed_to_edit(null, true)) {
-            $message_warning = $permission_to_start ? get_lang('ReachedTimeLimit') : get_lang('ExerciseNoStartedYet');
+            $message_warning = $permission_to_start ? get_lang('Time limit reached') : get_lang('The test did not start yet');
             echo Display::return_message(
                 sprintf(
                     $message_warning,
@@ -932,7 +932,7 @@ if ($limit_time_exists) {
             }
             exit;
         } else {
-            $message_warning = $permission_to_start ? get_lang('ReachedTimeLimitAdmin') : get_lang('ExerciseNoStartedAdmin');
+            $message_warning = $permission_to_start ? get_lang('Time limit reachedAdmin') : get_lang('The trainer did not allow the test to start yet');
             echo Display::return_message(
                 sprintf(
                     $message_warning,
@@ -953,7 +953,7 @@ if (isset($_custom['exercises_hidden_when_no_start_date']) &&
     if (empty($objExercise->start_time)) {
         echo Display:: return_message(
             sprintf(
-                get_lang('ExerciseNoStartedYet'),
+                get_lang('The test did not start yet'),
                 $exercise_title,
                 $objExercise->selectAttempts()
             ),
@@ -970,7 +970,7 @@ if (isset($_custom['exercises_hidden_when_no_start_date']) &&
 if ($time_control) {
     echo $objExercise->returnTimeLeftDiv();
     echo '<div style="display:none" class="warning-message" id="expired-message-id">'.
-        get_lang('ExerciseExpiredTimeMessage').'</div>';
+        get_lang('The exercise time limit has expired').'</div>';
 }
 
 if (!in_array($origin, ['learnpath', 'embeddable'])) {
@@ -1042,7 +1042,7 @@ if (!empty($error)) {
         echo "<a 
             href=\"../document/download.php?doc_url=%2Faudio%2F".Security::remove_XSS($exercise_sound)."\" 
             target=\"_blank\">";
-        echo "<img src=\"../img/sound.gif\" border=\"0\" align=\"absmiddle\" alt=", get_lang('Sound')."\" /></a>";
+        echo "<img src=\"../img/sound.gif\" border=\"0\" align=\"absmiddle\" alt=", get_lang('Audio or video file')."\" /></a>";
     }
     // Get number of hotspot questions for javascript validation
     $number_of_hotspot_questions = 0;
@@ -1078,7 +1078,7 @@ if (!empty($error)) {
 
     $saveIcon = Display::return_icon(
         'save.png',
-        get_lang('Saved'),
+        get_lang('Saved...'),
         [],
         ICON_SIZE_SMALL,
         false,
@@ -1275,7 +1275,7 @@ if (!empty($error)) {
                 success: function(return_value) {
                     if (return_value == "ok") {
                         $("#save_for_now_"+question_id).html(\''.
-                        Display::return_icon('save.png', get_lang('Saved'), [], ICON_SIZE_SMALL).'\');                                                    
+                        Display::return_icon('save.png', get_lang('Saved...'), [], ICON_SIZE_SMALL).'\');                                                    
                     } else if (return_value == "error") {
                         $("#save_for_now_"+question_id).html(\''.
                             Display::return_icon('error.png', get_lang('Error'), [], ICON_SIZE_SMALL).'\');
@@ -1296,7 +1296,7 @@ if (!empty($error)) {
                         }
 
                         $("#save_for_now_"+question_id).html(\''.
-                            Display::return_icon('save.png', get_lang('Saved'), [], ICON_SIZE_SMALL).'\');
+                            Display::return_icon('save.png', get_lang('Saved...'), [], ICON_SIZE_SMALL).'\');
 
                         window.location = url;
                     }
@@ -1403,7 +1403,7 @@ if (!empty($error)) {
                         $questionName = $objQuestionTmp->selectTitle();
                         // destruction of the Question object
                         unset($objQuestionTmp);
-                        echo Display::return_message(get_lang('AlreadyAnswered'));
+                        echo Display::return_message(get_lang('You already answered the question'));
                         $i++;
                         break;
                     }
@@ -1460,7 +1460,7 @@ if (!empty($error)) {
         if (!empty($objExercise->description)) {
             if ($objExercise->type == ONE_PER_PAGE || ($objExercise->type != ONE_PER_PAGE && $i == 1)) {
                 echo Display::panelCollapse(
-                    '<span>'.get_lang('ExerciseDescriptionLabel').'</span>',
+                    '<span>'.get_lang('Description').'</span>',
                     $objExercise->description,
                     'exercise-description',
                     [],
@@ -1499,7 +1499,7 @@ if (!empty($error)) {
                 true
             );
         } else {
-            echo Display::return_message(get_lang('AlreadyAnswered'));
+            echo Display::return_message(get_lang('You already answered the question'));
         }
 
         // Button save and continue
@@ -1518,7 +1518,7 @@ if (!empty($error)) {
                     $button = [
                         Display::button(
                             'save_now',
-                            get_lang('SaveForNow'),
+                            get_lang('Save and continue'),
                             ['type' => 'button', 'class' => 'btn btn-info', 'data-question' => $questionId]
                         ),
                         '<span id="save_for_now_'.$questionId.'"></span>&nbsp;',
@@ -1540,7 +1540,7 @@ if (!empty($error)) {
                     'remind_list['.$questionId.']',
                     '',
                     $attributes
-                ).get_lang('ReviewQuestionLater'),
+                ).get_lang('Revise question later'),
                 [
                     'class' => 'checkbox',
                     'for' => 'remind_list['.$questionId.']',

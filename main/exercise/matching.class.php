@@ -10,8 +10,6 @@
  * extending the class question
  *
  * @author Eric Marguin
- *
- * @package chamilo.exercise
  */
 class Matching extends Question
 {
@@ -80,11 +78,11 @@ class Matching extends Question
                 }
             }
         } else {
-            $defaults['answer[1]'] = get_lang('DefaultMakeCorrespond1');
-            $defaults['answer[2]'] = get_lang('DefaultMakeCorrespond2');
+            $defaults['answer[1]'] = get_lang('First step');
+            $defaults['answer[2]'] = get_lang('Second step');
             $defaults['matches[2]'] = '2';
-            $defaults['option[1]'] = get_lang('DefaultMatchingOptA');
-            $defaults['option[2]'] = get_lang('DefaultMatchingOptB');
+            $defaults['option[1]'] = get_lang('Note down the address');
+            $defaults['option[2]'] = get_lang('Contact the emergency services');
         }
 
         if (empty($matches)) {
@@ -106,21 +104,21 @@ class Matching extends Question
         $html = '<table class="table table-striped table-hover">
             <thead>
                 <tr>
-                    <th width="5%">'.get_lang('Number').'</th>
+                    <th width="5%">'.get_lang('N°').'</th>
                     <th width="70%">'.get_lang('Answer').'</th>
-                    <th width="15%">'.get_lang('MatchesTo').'</th>
-                    <th width="10%">'.get_lang('Weighting').'</th>
+                    <th width="15%">'.get_lang('Matches To').'</th>
+                    <th width="10%">'.get_lang('Score').'</th>
                 </tr>
             </thead>
             <tbody>';
 
-        $form->addHeader(get_lang('MakeCorrespond'));
+        $form->addHeader(get_lang('Match them'));
         $form->addHtml($html);
 
         if ($nb_matches < 1) {
             $nb_matches = 1;
             Display::addFlash(
-                Display::return_message(get_lang('YouHaveToCreateAtLeastOneAnswer'))
+                Display::return_message(get_lang('You have to create at least one answer'))
             );
         }
 
@@ -178,7 +176,7 @@ class Matching extends Question
         $html = '<table class="table table-striped table-hover">
             <thead>
                 <tr>
-                    <th width="15%">'.get_lang('Number').'</th>
+                    <th width="15%">'.get_lang('N°').'</th>
                     <th width="85%">'.get_lang('Answer').'</th>
                 </tr>
             </thead>
@@ -189,7 +187,7 @@ class Matching extends Question
         if ($nb_options < 1) {
             $nb_options = 1;
             Display::addFlash(
-                Display::return_message(get_lang('YouHaveToCreateAtLeastOneAnswer'))
+                Display::return_message(get_lang('You have to create at least one answer'))
             );
         }
 
@@ -218,8 +216,8 @@ class Matching extends Question
         global $text;
         $group = [];
         // setting the save button here and not in the question class.php
-        $group[] = $form->addButtonDelete(get_lang('DelElem'), 'lessOptions', true);
-        $group[] = $form->addButtonCreate(get_lang('AddElem'), 'moreOptions', true);
+        $group[] = $form->addButtonDelete(get_lang('Remove element'), 'lessOptions', true);
+        $group[] = $form->addButtonCreate(get_lang('Add element'), 'moreOptions', true);
         $group[] = $form->addButtonSave($text, 'submitQuestion', true);
         $form->addGroup($group);
 
@@ -286,14 +284,14 @@ class Matching extends Question
         $header .= '<table class="'.$this->question_table_class.'">';
         $header .= '<tr>';
 
-        $header .= '<th>'.get_lang('ElementList').'</th>';
+        $header .= '<th>'.get_lang('Elements list').'</th>';
         if (!in_array($exercise->results_disabled, [
             RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER,
         ])
         ) {
-            $header .= '<th>'.get_lang('Choice').'</th>';
-            //if ($exercise->showExpectedChoiceColumn()) {
-                //$header .= '<th>'.get_lang('ExpectedChoice').'</th>';
+            $header .= '<th>'.get_lang('Your choice').'</th>';
+            //if ($exercise->showExpectedYour choiceColumn()) {
+                //$header .= '<th>'.get_lang('ExpectedYour choice').'</th>';
             //}
         }
 
@@ -301,7 +299,7 @@ class Matching extends Question
             $header .= '<th>'.get_lang('Status').'</th>';
         } else {
             if ($exercise->showExpectedChoiceColumn()) {
-                $header .= '<th>'.get_lang('CorrespondsTo').'</th>';
+                $header .= '<th>'.get_lang('Corresponds to').'</th>';
             }
         }
         $header .= '</tr>';

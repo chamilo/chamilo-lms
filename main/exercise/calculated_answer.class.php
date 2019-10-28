@@ -8,8 +8,6 @@ use Webit\Util\EvalMath\EvalMath;
  *  This class contains calculated answer form and answer processing functions.
  *
  *  @author Imanol Losada
- *
- *  @package chamilo.exercise
  */
 class CalculatedAnswer extends Question
 {
@@ -32,6 +30,7 @@ class CalculatedAnswer extends Question
     public function createAnswersForm($form)
     {
         $defaults = [];
+        //$defaults['answer'] = get_lang('<table cellspacing="0" cellpadding="10" border="1" width="720" style="" height:="">    <tbody>        <tr>            <td colspan="2">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style="text-align: right;"><strong>Age</strong></td>            <td width="75%" style="">[25] years old</td>        </tr>        <tr>            <td style="text-align: right;"><strong>Sex</strong></td>            <td style="" text-align:="">[M] (M or F)</td>        </tr>        <tr>            <td style="text-align: right;"><strong>Weight</strong></td>            <td style="" text-align:="">95 Kg</td>        </tr>        <tr>            <td style="vertical-align: top; text-align: right;"><strong>Height</strong></td>            <td style="vertical-align: top;">1.81 m</td>        </tr>        <tr>            <td style="vertical-align: top; text-align: right;"><strong>Body Mass Index</strong></td>            <td style="vertical-align: top;">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href="http://en.wikipedia.org/wiki/Body_mass_index" onclick="window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false"> Wikipedia article</a>)</td>        </tr>    </tbody></table>');
         $defaults['answer'] = get_lang('DefaultTextInBlanks');
         if (!empty($this->id)) {
             $objAnswer = new Answer($this->id);
@@ -68,7 +67,7 @@ class CalculatedAnswer extends Question
                 } else {
                     result = parseInt(result);
                 }
-                document.getElementById("randomValue"+index).innerHTML = "'.get_lang("ExampleValue").': " + result;
+                document.getElementById("randomValue"+index).innerHTML = "'.get_lang("Range value").': " + result;
            }
 
             CKEDITOR.on("instanceCreated", function(e) {
@@ -86,7 +85,7 @@ class CalculatedAnswer extends Question
                     var answer = e.editor.getData();
                 }
                 var blanks = answer.match(/\[[^\]]*\]/g);
-                var fields = "<div class=\"form-group\"><label class=\"col-sm-2\">'.get_lang('VariableRanges').'</label><div class=\"col-sm-8\"><table>";
+                var fields = "<div class=\"form-group\"><label class=\"col-sm-2\">'.get_lang('Variable ranges').'</label><div class=\"col-sm-8\"><table>";
                 if (blanks!=null) {
                     if (typeof updateBlanks.randomValues === "undefined") {
                         updateBlanks.randomValues = [];
@@ -102,7 +101,7 @@ class CalculatedAnswer extends Question
                                 updateBlanks.randomValues[j] = parseFloat(Math.random() * (highestValue - lowestValue) + lowestValue).toFixed(2);
                             }
                         }
-                        fields += "<tr><td><label>"+blanks[i]+"</label></td><td><input class=\"span1\" style=\"margin-left: 0em;\" size=\"5\" value=\""+lowestValue+"\" type=\"text\" id=\"lowestValue["+i+"]\" name=\"lowestValue["+i+"]\" onblur=\"updateRandomValue(this)\"/></td><td><input class=\"span1\" style=\"margin-left: 0em; width:80px;\" size=\"5\" value=\""+highestValue+"\" type=\"text\" id=\"highestValue["+i+"]\" name=\"highestValue["+i+"]\" onblur=\"updateRandomValue(this)\"/></td><td><label class=\"span3\" id=\"randomValue["+i+"]\"/>'.get_lang('ExampleValue').': "+updateBlanks.randomValues[i]+"</label></td></tr>";
+                        fields += "<tr><td><label>"+blanks[i]+"</label></td><td><input class=\"span1\" style=\"margin-left: 0em;\" size=\"5\" value=\""+lowestValue+"\" type=\"text\" id=\"lowestValue["+i+"]\" name=\"lowestValue["+i+"]\" onblur=\"updateRandomValue(this)\"/></td><td><input class=\"span1\" style=\"margin-left: 0em; width:80px;\" size=\"5\" value=\""+highestValue+"\" type=\"text\" id=\"highestValue["+i+"]\" name=\"highestValue["+i+"]\" onblur=\"updateRandomValue(this)\"/></td><td><label class=\"span3\" id=\"randomValue["+i+"]\"/>'.get_lang('Range value').': "+updateBlanks.randomValues[i]+"</label></td></tr>";
                     }
                 }
                 document.getElementById("blanks_weighting").innerHTML = fields + "</table></div></div>";
@@ -116,7 +115,7 @@ class CalculatedAnswer extends Question
         </script>';
 
         // answer
-        $form->addElement('label', null, '<br /><br />'.get_lang('TypeTextBelow').', '.get_lang('And').' '.get_lang('UseTagForBlank'));
+        $form->addElement('label', null, '<br /><br />'.get_lang('Please type your text below').', '.get_lang('and').' '.get_lang('use square brackets [...] to define one or more blanks'));
         $form->addElement(
             'html_editor',
             'answer',
@@ -132,18 +131,18 @@ class CalculatedAnswer extends Question
             ]
         );
 
-        $form->addRule('answer', get_lang('GiveText'), 'required');
-        $form->addRule('answer', get_lang('DefineBlanks'), 'regex', '/\[.*\]/');
+        $form->addRule('answer', get_lang('Please type the text'), 'required');
+        $form->addRule('answer', get_lang('Please define at least one blank with square brackets [...]'), 'regex', '/\[.*\]/');
 
-        $form->addElement('label', null, get_lang('IfYouWantOnlyIntegerValuesWriteBothLimitsWithoutDecimals'));
+        $form->addElement('label', null, get_lang('If you want only integer values write both limits without decimals'));
         $form->addElement('html', '<div id="blanks_weighting"></div>');
 
         $notationListButton = Display::url(
-            get_lang('NotationList'),
+            get_lang('Formula notation'),
             api_get_path(WEB_CODE_PATH).'exercise/evalmathnotation.php',
             [
                 'class' => 'btn btn-info ajax',
-                'data-title' => get_lang('NotationList'),
+                'data-title' => get_lang('Formula notation'),
                 '_target' => '_blank',
             ]
         );
@@ -153,16 +152,16 @@ class CalculatedAnswer extends Question
             $notationListButton
         );
 
-        $form->addElement('text', 'formula', [get_lang('Formula'), get_lang('FormulaExample')], ['id' => 'formula']);
-        $form->addRule('formula', get_lang('GiveFormula'), 'required');
+        $form->addElement('text', 'formula', [get_lang('Formula'), get_lang('Formula sample: sqrt( [x] / [y] ) * ( e ^ ( ln(pi) ) )')], ['id' => 'formula']);
+        $form->addRule('formula', get_lang('Please, write the formula'), 'required');
 
-        $form->addElement('text', 'weighting', get_lang('Weighting'), ['id' => 'weighting']);
+        $form->addElement('text', 'weighting', get_lang('Score'), ['id' => 'weighting']);
         $form->setDefaults(['weighting' => '10']);
 
-        $form->addElement('text', 'answerVariations', get_lang('AnswerVariations'));
+        $form->addElement('text', 'answerVariations', get_lang('Question variations'));
         $form->addRule(
             'answerVariations',
-            get_lang('GiveAnswerVariations'),
+            get_lang('GiveQuestion variations'),
             'required'
         );
         $form->setDefaults(['answerVariations' => '1']);
@@ -251,9 +250,9 @@ class CalculatedAnswer extends Question
         $header .= '<table class="'.$this->question_table_class.'"><tr>';
         $header .= '<th>'.get_lang('Answer').'</th>';
         if ($exercise->showExpectedChoice()) {
-            $header .= '<th>'.get_lang('YourChoice').'</th>';
+            $header .= '<th>'.get_lang('Your choice').'</th>';
             if ($exercise->showExpectedChoiceColumn()) {
-                $header .= '<th>'.get_lang('ExpectedChoice').'</th>';
+                $header .= '<th>'.get_lang('Expected choice').'</th>';
             }
             $header .= '<th>'.get_lang('Status').'</th>';
         }

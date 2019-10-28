@@ -10,8 +10,6 @@ use ChamiloSession as Session;
  *
  * @version $Id: exercise_show.php 22256 2009-07-20 17:40:20Z ivantcholakov $
  *
- * @package chamilo.exercise
- *
  * @todo remove the debug code and use the general debug library
  * @todo small letters for table variables
  */
@@ -145,13 +143,13 @@ $htmlHeadXtra[] = $js;
 if (api_is_in_gradebook()) {
     $interbreadcrumb[] = [
         'url' => Category::getUrl(),
-        'name' => get_lang('ToolGradebook'),
+        'name' => get_lang('Assessments'),
     ];
 }
 
 $interbreadcrumb[] = [
     'url' => 'exercise.php?'.api_get_cidreq(),
-    'name' => get_lang('Exercises'),
+    'name' => get_lang('Tests'),
 ];
 $interbreadcrumb[] = [
     'url' => 'overview.php?exerciseId='.$exercise_id.'&'.api_get_cidreq(),
@@ -258,7 +256,7 @@ if (!empty($track_exercise_info)) {
             if ($origin != 'learnpath') {
                 if ($currentUserId == $student_id) {
                     echo Display::return_message(
-                        get_lang('ThankYouForPassingTheTest'),
+                        get_lang('Thank you for passing the test'),
                         'warning',
                         false
                     );
@@ -291,7 +289,7 @@ if (!empty($track_exercise_info)) {
             break;
     }
 } else {
-    echo Display::return_message(get_lang('CantViewResults'), 'warning');
+    echo Display::return_message(get_lang('Can\'t view results'), 'warning');
     $show_results = false;
 }
 
@@ -592,11 +590,11 @@ foreach ($questionList as $questionId) {
             $name = 'fckdiv'.$questionId;
             $marksname = 'marksName'.$questionId;
             if (in_array($answerType, [FREE_ANSWER, ORAL_EXPRESSION, ANNOTATION])) {
-                $url_name = get_lang('EditCommentsAndMarks');
+                $url_name = get_lang('Edit individual feedback and grade the open question');
             } else {
-                $url_name = get_lang('AddComments');
+                $url_name = get_lang('Add individual feedback');
                 if ($action === 'edit') {
-                    $url_name = get_lang('EditIndividualComment');
+                    $url_name = get_lang('Edit individual feedback');
                 }
             }
             echo '<p>';
@@ -677,14 +675,14 @@ foreach ($questionList as $questionId) {
 
                 $allowDecimalScore = api_get_configuration_value('quiz_open_question_decimal_score');
                 $formMark = new FormValidator('marksform_'.$questionId, 'post');
-                $formMark->addHeader(get_lang('AssignMarks'));
+                $formMark->addHeader(get_lang('Assign a grade'));
                 $model = ExerciseLib::getCourseScoreModel();
 
                 if ($allowDecimalScore && empty($model)) {
                     $formMark->addElement(
                         'number',
                         'marks',
-                        get_lang('AssignMarks'),
+                        get_lang('Assign a grade'),
                         [
                             'step' => 0.01,
                             'min' => 0,
@@ -698,13 +696,13 @@ foreach ($questionList as $questionId) {
                     $formMark->applyFilter('marks', 'stripslashes');
                     $formMark->applyFilter('marks', 'trim');
                     $formMark->applyFilter('marks', 'floatval');
-                    $formMark->addRule('marks', get_lang('Numeric'), 'numeric');
-                    $formMark->addRule('marks', get_lang('ValueTooSmall'), 'min_numeric_length', 0);
-                    $formMark->addRule('marks', get_lang('ValueTooBig'), 'max_numeric_length', $questionWeighting);
+                    $formMark->addRule('marks', get_lang('Numerical'), 'numeric');
+                    $formMark->addRule('marks', get_lang('Value is too small.'), 'min_numeric_length', 0);
+                    $formMark->addRule('marks', get_lang('Value is too big.'), 'max_numeric_length', $questionWeighting);
                 } else {
                     $select = $formMark->addSelect(
                         'marks',
-                        get_lang('AssignMarks'),
+                        get_lang('Assign a grade'),
                         [],
                         ['disable_js' => true, 'extra_class' => 'grade_select']
                     );
@@ -1010,8 +1008,8 @@ if ($isFeedbackAllowed && $origin != 'learnpath' && $origin != 'student_progress
     if ($objExercise->results_disabled != RESULT_DISABLE_NO_SCORE_AND_EXPECTED_ANSWERS) {
         $emailForm->addCheckBox(
             'send_notification',
-            get_lang('SendEmail'),
-            get_lang('SendEmail'),
+            get_lang('Send email'),
+            get_lang('Send email'),
             ['onclick' => 'openEmailWrapper();']
         );
         $emailForm->addHtml('<div id="email_content_wrapper" style="display:none; margin-bottom: 20px;">');
@@ -1051,7 +1049,7 @@ if ($isFeedbackAllowed && $origin != 'learnpath' && $origin != 'student_progress
     $emailForm->setDefaults(['notification_content' => $content]);
 
     $emailForm->addButtonSend(
-        get_lang('CorrectTest'),
+        get_lang('Correct test'),
         'submit',
         false,
         ['onclick' => "getFCK('$strids', '$marksid')"]
@@ -1070,8 +1068,8 @@ if ($origin == 'student_progress') {
         ?>
     <button type="button" class="save"
             onclick="top.location.href='../auth/my_progress.php?course=<?php echo api_get_course_id(); ?>'"
-            value="<?php echo get_lang('Finish'); ?>">
-        <?php echo get_lang('Finish'); ?>
+            value="<?php echo get_lang('Quit test'); ?>">
+        <?php echo get_lang('Quit test'); ?>
     </button>
     <?php
     }
@@ -1099,7 +1097,7 @@ if ($origin != 'learnpath') {
         echo '</body></html>';
     } else {
         echo Display::return_message(
-            get_lang('ExerciseFinished').' '.get_lang('ToContinueUseMenu'),
+            get_lang('ExerciseQuit tested').' '.get_lang('To continue this course, please use the side-menu.'),
             'normal'
         );
         echo '<br />';

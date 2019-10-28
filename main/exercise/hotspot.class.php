@@ -51,24 +51,24 @@ class HotSpot extends Question
                 'imageUpload',
                 [
                     '<img src="'.$icon.'" />',
-                    get_lang('UploadJpgPicture'),
+                    get_lang('Upload image (jpg, png or gif) to apply hotspots.'),
                 ]
             );
 
             // setting the save button here and not in the question class.php
             // Saving a question
-            $form->addButtonSave(get_lang('GoToQuestion'), 'submitQuestion');
+            $form->addButtonSave(get_lang('Go to question'), 'submitQuestion');
             $form->addRule(
                 'imageUpload',
-                get_lang('OnlyImagesAllowed'),
+                get_lang('Only PNG, JPG or GIF images allowed'),
                 'filetype',
                 ['jpg', 'jpeg', 'png', 'gif']
             );
-            $form->addRule('imageUpload', get_lang('NoImage'), 'uploadedfile');
+            $form->addRule('imageUpload', get_lang('Please select an image'), 'uploadedfile');
         } else {
             // setting the save button here and not in the question class.php
             // Editing a question
-            $form->addButtonUpdate(get_lang('ModifyQuestion'), 'submitQuestion');
+            $form->addButtonUpdate(get_lang('Save the question'), 'submitQuestion');
         }
     }
 

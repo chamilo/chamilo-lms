@@ -51,7 +51,7 @@ Event::registerLog($logInfo);
 
 $interbreadcrumb[] = [
     'url' => 'exercise.php?'.api_get_cidreq(),
-    'name' => get_lang('Exercises'),
+    'name' => get_lang('Tests'),
 ];
 $interbreadcrumb[] = ['url' => '#', 'name' => $objExercise->selectTitle(true)];
 
@@ -98,9 +98,9 @@ if ($is_allowed_to_edit) {
         );
     }
     $editLink .= Display::url(
-        Display::return_icon('test_results.png', get_lang('Results'), [], ICON_SIZE_SMALL),
+        Display::return_icon('test_results.png', get_lang('Results and feedback and feedback'), [], ICON_SIZE_SMALL),
         api_get_path(WEB_CODE_PATH).'exercise/exercise_report.php?'.api_get_cidreq().'&exerciseId='.$objExercise->id,
-        ['title' => get_lang('Results')]
+        ['title' => get_lang('Results and feedback and feedback')]
     );
 }
 
@@ -134,13 +134,13 @@ $exercise_stat_info = $objExercise->get_stat_track_exercise_info(
 );
 
 //1. Check if this is a new attempt or a previous
-$label = get_lang('StartTest');
+$label = get_lang('Start test');
 if ($time_control && !empty($clock_expired_time) || isset($exercise_stat_info['exe_id'])) {
-    $label = get_lang('ContinueTest');
+    $label = get_lang('Proceed with the test');
 }
 
 if (isset($exercise_stat_info['exe_id'])) {
-    $message = Display::return_message(get_lang('YouTriedToResolveThisExerciseEarlier'));
+    $message = Display::return_message(get_lang('You have tried to resolve this exercise earlier'));
 }
 
 // 2. Exercise button
@@ -163,7 +163,7 @@ $visible_return = $objExercise->is_visible(
 // Exercise is not visible remove the button
 if ($visible_return['value'] == false) {
     if ($is_allowed_to_edit) {
-        $message = Display::return_message(get_lang('ThisItemIsInvisibleForStudentsButYouHaveAccessAsTeacher'), 'warning');
+        $message = Display::return_message(get_lang('This item is invisible for learner but you have access as teacher.'), 'warning');
     } else {
         $message = $visible_return['message'];
         $exercise_url_button = null;
@@ -243,7 +243,7 @@ if (!empty($attempts)) {
 
         $teacher_revised = Display::label(get_lang('Validated'), 'success');
         if ($attempt_result['attempt_revised'] == 0) {
-            $teacher_revised = Display::label(get_lang('NotValidated'), 'info');
+            $teacher_revised = Display::label(get_lang('Not validated'), 'info');
         }
         $row = [
             'count' => $i,
@@ -318,11 +318,11 @@ if (!empty($attempts)) {
     switch ($objExercise->results_disabled) {
         case RESULT_DISABLE_DONT_SHOW_SCORE_ONLY_IF_USER_FINISHES_ATTEMPTS_SHOW_ALWAYS_FEEDBACK:
             if ($blockShowAnswers) {
-                $header_names = [get_lang('Attempt'), get_lang('StartDate'), get_lang('IP'), get_lang('Details')];
+                $header_names = [get_lang('Attempt'), get_lang('Start Date'), get_lang('IP'), get_lang('Details')];
             } else {
                 $header_names = [
                     get_lang('Attempt'),
-                    get_lang('StartDate'),
+                    get_lang('Start Date'),
                     get_lang('IP'),
                     get_lang('Score'),
                     get_lang('Details'),
@@ -331,11 +331,11 @@ if (!empty($attempts)) {
             break;
         case RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT:
             if ($blockShowAnswers) {
-                $header_names = [get_lang('Attempt'), get_lang('StartDate'), get_lang('IP'), get_lang('Score')];
+                $header_names = [get_lang('Attempt'), get_lang('Start Date'), get_lang('IP'), get_lang('Score')];
             } else {
                 $header_names = [
                     get_lang('Attempt'),
-                    get_lang('StartDate'),
+                    get_lang('Start Date'),
                     get_lang('IP'),
                     get_lang('Score'),
                     get_lang('Details'),
@@ -348,22 +348,22 @@ if (!empty($attempts)) {
         case RESULT_DISABLE_RANKING:
             $header_names = [
                 get_lang('Attempt'),
-                get_lang('StartDate'),
+                get_lang('Start Date'),
                 get_lang('IP'),
                 get_lang('Score'),
                 get_lang('Details'),
             ];
             break;
         case RESULT_DISABLE_NO_SCORE_AND_EXPECTED_ANSWERS:
-            $header_names = [get_lang('Attempt'), get_lang('StartDate'), get_lang('IP')];
+            $header_names = [get_lang('Attempt'), get_lang('Start Date'), get_lang('IP')];
             break;
         case RESULT_DISABLE_SHOW_SCORE_ONLY:
             if ($objExercise->getFeedbackType() != EXERCISE_FEEDBACK_TYPE_END) {
-                $header_names = [get_lang('Attempt'), get_lang('StartDate'), get_lang('IP'), get_lang('Score')];
+                $header_names = [get_lang('Attempt'), get_lang('Start Date'), get_lang('IP'), get_lang('Score')];
             } else {
                 $header_names = [
                     get_lang('Attempt'),
-                    get_lang('StartDate'),
+                    get_lang('Start Date'),
                     get_lang('IP'),
                     get_lang('Score'),
                     get_lang('Details'),
@@ -412,7 +412,7 @@ $html .= $message;
 $disable = api_get_configuration_value('exercises_disable_new_attempts');
 
 if ($disable && empty($exercise_stat_info)) {
-    $exercise_url_button = Display::return_message(get_lang('NewExerciseAttemptDisabled'));
+    $exercise_url_button = Display::return_message(get_lang('The portal do not allowed to start new test for the moment, please come back later.'));
 }
 
 $isLimitReached = ExerciseLib::isQuestionsLimitPerDayReached(
@@ -436,7 +436,7 @@ if ($isLimitReached) {
     $maxQuestionsAnswered = (int) api_get_course_setting('quiz_question_limit_per_day');
 
     $html .= Display::return_message(
-        sprintf(get_lang('QuizQuestionsLimitPerDayXReached'), $maxQuestionsAnswered),
+        sprintf(get_lang('Sorry, you have reached the maximum number of questions (%s) for the day. Please try again tomorrow.'), $maxQuestionsAnswered),
         'warning',
         false
     );

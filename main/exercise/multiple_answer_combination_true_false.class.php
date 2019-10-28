@@ -28,7 +28,7 @@ class MultipleAnswerCombinationTrueFalse extends MultipleAnswerCombination
         $this->options = [
             '1' => get_lang('True'),
             '0' => get_lang('False'),
-            '2' => get_lang('DontKnow'),
+            '2' => get_lang('Don\'t know'),
         ];
     }
 }

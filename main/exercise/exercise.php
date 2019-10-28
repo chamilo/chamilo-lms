@@ -85,11 +85,11 @@ $keyword = isset($_REQUEST['keyword']) ? Security::remove_XSS($_REQUEST['keyword
 if (api_is_in_gradebook()) {
     $interbreadcrumb[] = [
         'url' => Category::getUrl(),
-        'name' => get_lang('ToolGradebook'),
+        'name' => get_lang('Assessments'),
     ];
 }
 
-$nameTools = get_lang('Exercises');
+$nameTools = get_lang('Tests');
 
 // Simple actions
 if ($is_allowedToEdit) {
@@ -123,7 +123,7 @@ if ($is_allowedToEdit) {
 
                 Display::addFlash(Display::return_message(
                     sprintf(
-                        get_lang('XResultsCleaned'),
+                        get_lang('%d results cleaned'),
                         $quantity_results_deleted
                     ),
                     'confirm'
@@ -152,7 +152,7 @@ if ($is_allowedToEdit) {
                 $zip->finish();
                 exit;
             } else {
-                Display::addFlash(Display::return_message(get_lang('ErrorWritingXMLFile'), 'error'));
+                Display::addFlash(Display::return_message(get_lang('There was an error writing the XML file. Please ask the administrator to check the error logs.'), 'error'));
                 header('Location: '.$currentUrl);
                 exit;
             }
@@ -173,7 +173,7 @@ if ($is_allowedToEdit) {
             $category->setPosition($currentPosition);
             $em->persist($category);
             $em->flush();
-            Display::addFlash(Display::return_message(get_lang('Updated')));
+            Display::addFlash(Display::return_message(get_lang('Update successful')));
 
             header('Location: '.$currentUrl);
             exit;
@@ -250,7 +250,7 @@ if (!empty($action) && $is_allowedToEdit) {
                     break;
             }
         }
-        Display::addFlash(Display::return_message(get_lang('Updated')));
+        Display::addFlash(Display::return_message(get_lang('Update successful')));
         header('Location: '.$currentUrl);
         exit;
     }
@@ -347,20 +347,20 @@ if ($is_allowedToEdit) {
                             'invisible',
                             $userId
                         );
-                        Display::addFlash(Display::return_message(get_lang('VisibilityChanged'), 'confirmation'));
+                        Display::addFlash(Display::return_message(get_lang('The visibility has been changed.'), 'confirmation'));
                         break;
                     case 'disable_results':
                         //disable the results for the learners
                         $objExerciseTmp->disable_results();
                         $objExerciseTmp->save();
-                        Display::addFlash(Display::return_message(get_lang('ResultsDisabled'), 'confirmation'));
+                        Display::addFlash(Display::return_message(get_lang('Results disabled for learners'), 'confirmation'));
 
                         break;
                     case 'enable_results':
                         //disable the results for the learners
                         $objExerciseTmp->enable_results();
                         $objExerciseTmp->save();
-                        Display::addFlash(Display::return_message(get_lang('ResultsEnabled'), 'confirmation'));
+                        Display::addFlash(Display::return_message(get_lang('Results enabled for learners'), 'confirmation'));
 
                         break;
                     case 'clean_results':
@@ -377,7 +377,7 @@ if ($is_allowedToEdit) {
                             Display::addFlash(
                                 Display::return_message(
                                     $title.': '.sprintf(
-                                        get_lang('XResultsCleaned'),
+                                        get_lang('%d results cleaned'),
                                         $quantity_results_deleted
                                     ),
                                     'confirmation'
@@ -389,7 +389,7 @@ if ($is_allowedToEdit) {
                         api_set_more_memory_and_time_limits();
                         $objExerciseTmp->copyExercise();
                         Display::addFlash(Display::return_message(
-                            get_lang('ExerciseCopied'),
+                            get_lang('Test copied'),
                             'confirmation'
                         ));
                         break;
@@ -459,7 +459,7 @@ if ($is_allowedToEdit) {
                     $userId
                 );
 
-                Display::addFlash(Display::return_message(get_lang('Updated')));
+                Display::addFlash(Display::return_message(get_lang('Update successful')));
 
                 break;
             case 'disable': // disables an exercise
@@ -490,9 +490,9 @@ if ($is_allowedToEdit) {
 
 if ($origin !== 'learnpath') {
     //so we are not in learnpath tool
-    Display::display_header($nameTools, get_lang('Exercise'));
+    Display::display_header($nameTools, get_lang('Test'));
     if (isset($_GET['message']) && in_array($_GET['message'], ['ExerciseEdited'])) {
-        echo Display::return_message(get_lang('ExerciseEdited'), 'confirmation');
+        echo Display::return_message(get_lang('TestEdited'), 'confirmation');
     }
 } else {
     Display::display_reduced_header();
@@ -508,9 +508,9 @@ HotPotGCt($documentPath, 1, $userId);
 $token = Security::get_token();
 if ($is_allowedToEdit && $origin !== 'learnpath') {
     $actionsLeft = '<a href="'.api_get_path(WEB_CODE_PATH).'exercise/exercise_admin.php?'.api_get_cidreq().'">'.
-        Display::return_icon('new_exercice.png', get_lang('NewEx'), '', ICON_SIZE_MEDIUM).'</a>';
+        Display::return_icon('new_exercice.png', get_lang('Create a new test'), '', ICON_SIZE_MEDIUM).'</a>';
     $actionsLeft .= '<a href="'.api_get_path(WEB_CODE_PATH).'exercise/question_create.php?'.api_get_cidreq().'">'.
-        Display::return_icon('new_question.png', get_lang('AddQ'), '', ICON_SIZE_MEDIUM).'</a>';
+        Display::return_icon('new_question.png', get_lang('Add a question'), '', ICON_SIZE_MEDIUM).'</a>';
 
     if (api_get_configuration_value('allow_exercise_categories')) {
         $actionsLeft .= '<a href="'.api_get_path(WEB_CODE_PATH).'exercise/category.php?'.api_get_cidreq().'">';
@@ -520,34 +520,34 @@ if ($is_allowedToEdit && $origin !== 'learnpath') {
 
     // Question category
     $actionsLeft .= '<a href="'.api_get_path(WEB_CODE_PATH).'exercise/tests_category.php?'.api_get_cidreq().'">';
-    $actionsLeft .= Display::return_icon('green_open.png', get_lang('QuestionCategory'), '', ICON_SIZE_MEDIUM);
+    $actionsLeft .= Display::return_icon('green_open.png', get_lang('Questions category'), '', ICON_SIZE_MEDIUM);
     $actionsLeft .= '</a>';
     $actionsLeft .= '<a href="'.api_get_path(WEB_CODE_PATH).'exercise/question_pool.php?'.api_get_cidreq().'">';
-    $actionsLeft .= Display::return_icon('database.png', get_lang('QuestionPool'), '', ICON_SIZE_MEDIUM);
+    $actionsLeft .= Display::return_icon('database.png', get_lang('Recycle existing questions'), '', ICON_SIZE_MEDIUM);
     $actionsLeft .= '</a>';
 
     //echo Display::url(Display::return_icon('looknfeel.png', get_lang('Media')), 'media.php?' . api_get_cidreq());
     // end question category
     $actionsLeft .= '<a href="'.api_get_path(WEB_CODE_PATH).'exercise/hotpotatoes.php?'.api_get_cidreq().'">'.
-        Display::return_icon('import_hotpotatoes.png', get_lang('ImportHotPotatoesQuiz'), '', ICON_SIZE_MEDIUM).'</a>';
+        Display::return_icon('import_hotpotatoes.png', get_lang('Import Hotpotatoes'), '', ICON_SIZE_MEDIUM).'</a>';
     // link to import qti2 ...
     $actionsLeft .= '<a href="'.api_get_path(WEB_CODE_PATH).'exercise/qti2.php?'.api_get_cidreq().'">'.
-        Display::return_icon('import_qti2.png', get_lang('ImportQtiQuiz'), '', ICON_SIZE_MEDIUM).'</a>';
+        Display::return_icon('import_qti2.png', get_lang('Import exercises Qti2'), '', ICON_SIZE_MEDIUM).'</a>';
     $actionsLeft .= '<a href="'.api_get_path(WEB_CODE_PATH).'exercise/aiken.php?'.api_get_cidreq().'">'.
-        Display::return_icon('import_aiken.png', get_lang('ImportAikenQuiz'), '', ICON_SIZE_MEDIUM).'</a>';
+        Display::return_icon('import_aiken.png', get_lang('Import Aiken quiz'), '', ICON_SIZE_MEDIUM).'</a>';
     $actionsLeft .= '<a href="'.api_get_path(WEB_CODE_PATH).'exercise/upload_exercise.php?'.api_get_cidreq().'">'.
-        Display::return_icon('import_excel.png', get_lang('ImportExcelQuiz'), '', ICON_SIZE_MEDIUM).'</a>';
+        Display::return_icon('import_excel.png', get_lang('Import quiz from Excel'), '', ICON_SIZE_MEDIUM).'</a>';
 
     $cleanAll = Display::url(
         Display::return_icon(
             'clean_all.png',
-            get_lang('CleanAllStudentsResultsForAllTests'),
+            get_lang('Are you sure to delete all test\'s results ?'),
             '',
             ICON_SIZE_MEDIUM
         ),
         '#',
         [
-            'data-item-question' => addslashes(get_lang('AreYouSureToEmptyAllTestResults')),
+            'data-item-question' => addslashes(get_lang('Clear all learners results for every exercises ?')),
             'data-href' => api_get_path(WEB_CODE_PATH).'exercise/exercise.php?'.api_get_cidreq().'&action=clean_all_test&sec_token='.$token,
             'data-toggle' => 'modal',
             'data-target' => '#confirm-delete',
@@ -574,7 +574,7 @@ if ($is_allowedToEdit && $origin !== 'learnpath') {
                 'category_id',
                 get_lang('Category'),
                 $options,
-                ['placeholder' => get_lang('SelectAnOption'), 'disable_js' => true]
+                ['placeholder' => get_lang('Please select an option'), 'disable_js' => true]
             );
         }
     }
@@ -602,15 +602,15 @@ if (api_get_configuration_value('allow_exercise_categories') === false) {
     echo Exercise::exerciseGrid(0, $keyword);
 } else {
     if (empty($categoryId)) {
-        echo Display::page_subheader(get_lang('NoCategory'));
+        echo Display::page_subheader(get_lang('General'));
         echo Exercise::exerciseGrid(0, $keyword);
         $counter = 0;
         $manager = new ExerciseCategoryManager();
         $categories = $manager->getCategories($courseId);
         $modifyUrl = api_get_self().'?'.api_get_cidreq();
         $total = count($categories);
-        $upIcon = Display::return_icon('up.png', get_lang('MoveUp'));
-        $downIcon = Display::return_icon('down.png', get_lang('MoveDown'));
+        $upIcon = Display::return_icon('up.png', get_lang('Move up'));
+        $downIcon = Display::return_icon('down.png', get_lang('Move down'));
         /** @var \Chamilo\CourseBundle\Entity\CExerciseCategory $category */
         foreach ($categories as $category) {
             $categoryIdItem = $category->getId();

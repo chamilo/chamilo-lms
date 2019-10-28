@@ -4,8 +4,6 @@
 /**
  * Exercise list: This script shows the list of exercises for administrators and students.
  *
- * @package chamilo.exercise
- *
  * @author Olivier Brouckaert, original author
  * @author Denes Nagy, HotPotatoes integration
  * @author Wolfgang Schneider, code/html cleanup
@@ -27,11 +25,11 @@ if (!$is_allowedToEdit) {
 
 $interbreadcrumb[] = [
     'url' => 'exercise_report.php?'.api_get_cidreq(),
-    'name' => get_lang('Exercises'),
+    'name' => get_lang('Tests'),
 ];
 $interbreadcrumb[] = [
     'url' => 'exercise_report.php?filter=2&'.api_get_cidreq(),
-    'name' => get_lang('StudentScore'),
+    'name' => get_lang('Learner score'),
 ];
 $interbreadcrumb[] = [
     'url' => 'exercise_history.php?exe_id='.intval($_GET['exe_id']).'&'.api_get_cidreq(),
@@ -42,7 +40,7 @@ $TBL_USER = Database::get_main_table(TABLE_MAIN_USER);
 $TBL_EXERCISES = Database::get_course_table(TABLE_QUIZ_TEST);
 $TBL_EXERCISES_QUESTION = Database::get_course_table(TABLE_QUIZ_QUESTION);
 $TBL_TRACK_ATTEMPT_RECORDING = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT_RECORDING);
-Display::display_header($nameTools, get_lang('Exercise'));
+Display::display_header($nameTools, get_lang('Test'));
 
 if (isset($_GET['message'])) {
     if (in_array($_GET['message'], ['ExerciseEdited'])) {
@@ -53,7 +51,7 @@ if (isset($_GET['message'])) {
 
 echo '<div class="actions">';
 echo '<a href="exercise_report.php?'.api_get_cidreq().'&filter=2">'.
-    Display::return_icon('back.png', get_lang('BackToResultList'), '', ICON_SIZE_MEDIUM).'</a>';
+    Display::return_icon('back.png', get_lang('Back to result list'), '', ICON_SIZE_MEDIUM).'</a>';
 echo '</div>';
 
 ?>
@@ -90,9 +88,9 @@ while ($row = Database::fetch_array($query)) {
     if (!empty($row['teacher_comment'])) {
         echo '<td>'.$row['teacher_comment'].'</td>';
     } else {
-        echo '<td>'.get_lang('WithoutComment').'</td>';
+        echo '<td>'.get_lang('Without comment').'</td>';
     }
-    echo '<td>'.(empty($row['firstname']) && empty($row['lastname']) ? '<i>'.get_lang('OriginalValue').'</i>' : api_get_person_name($row['firstname'], $row['lastname'])).'</td>';
+    echo '<td>'.(empty($row['firstname']) && empty($row['lastname']) ? '<i>'.get_lang('Original value').'</i>' : api_get_person_name($row['firstname'], $row['lastname'])).'</td>';
     echo '<td>'.api_convert_and_format_date($row['insert_date'], DATE_TIME_FORMAT_LONG).'</td>';
     echo '</tr>';
 }

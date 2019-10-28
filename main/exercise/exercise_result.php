@@ -57,15 +57,15 @@ $htmlHeadXtra[] = $js;
 if (api_is_in_gradebook()) {
     $interbreadcrumb[] = [
         'url' => Category::getUrl(),
-        'name' => get_lang('ToolGradebook'),
+        'name' => get_lang('Assessments'),
     ];
 }
 
-$nameTools = get_lang('Exercises');
+$nameTools = get_lang('Tests');
 
 $interbreadcrumb[] = [
     'url' => 'exercise.php?'.api_get_cidreq(),
-    'name' => get_lang('Exercises'),
+    'name' => get_lang('Tests'),
 ];
 
 $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_JS_PATH).'hotspot/js/hotspot.js"></script>';
@@ -86,7 +86,7 @@ $htmlHeadXtra[] = api_get_build_js('exercise.js');
 
 if (!in_array($origin, ['learnpath', 'embeddable'])) {
     // So we are not in learnpath tool
-    Display::display_header($nameTools, get_lang('Exercise'));
+    Display::display_header($nameTools, get_lang('Test'));
 } else {
     $htmlHeadXtra[] = "
     <style>
@@ -100,9 +100,9 @@ if (!in_array($origin, ['learnpath', 'embeddable'])) {
 if (api_is_course_admin() && !in_array($origin, ['learnpath', 'embeddable'])) {
     echo '<div class="actions">';
     echo '<a href="admin.php?'.api_get_cidreq().'&exerciseId='.$objExercise->id.'">'.
-        Display::return_icon('back.png', get_lang('GoBackToQuestionList'), [], 32).'</a>';
-    echo '<a href="exercise_admin.php?'.api_get_cidreq().'&modifyExercise=yes&exerciseId='.$objExercise->id.'">'.
-        Display::return_icon('edit.png', get_lang('ModifyExercise'), [], 32).'</a>';
+        Display::return_icon('back.png', get_lang('Go back to the questions list'), [], 32).'</a>';
+    echo '<a href="exercise_admin.php?'.api_get_cidreq().'&modifyTest=yes&exerciseId='.$objTest->id.'">'.
+        Display::return_icon('edit.png', get_lang('ModifyTest'), [], 32).'</a>';
     echo '</div>';
 }
 $exercise_stat_info = $objExercise->get_stat_track_exercise_info_by_exe_id($exe_id);
@@ -126,7 +126,7 @@ $attemptButton = '';
 
 if ($origin !== 'embeddable') {
     $attemptButton = Display::toolbarButton(
-        get_lang('AnotherAttempt'),
+        get_lang('Another attempt'),
         api_get_path(WEB_CODE_PATH).'exercise/overview.php?'.api_get_cidreq().'&'.http_build_query([
             'exerciseId' => $objExercise->id,
             'learnpath_id' => $learnpath_id,
@@ -149,7 +149,7 @@ if ($objExercise->selectAttempts() > 0) {
     );
     if ($attempt_count >= $objExercise->selectAttempts()) {
         echo Display::return_message(
-            sprintf(get_lang('ReachedMaxAttempts'), $objExercise->selectTitle(), $objExercise->selectAttempts()),
+            sprintf(get_lang('You cannot take test <b>%s</b> because you have already reached the maximum of %s attempts.'), $objExercise->selectTitle(), $objExercise->selectAttempts()),
             'warning',
             false
         );
@@ -162,7 +162,7 @@ if ($objExercise->selectAttempts() > 0) {
         $attempt_count++;
         $remainingAttempts = $objExercise->selectAttempts() - $attempt_count;
         if ($remainingAttempts) {
-            $attemptMessage = sprintf(get_lang('RemainingXAttempts'), $remainingAttempts);
+            $attemptMessage = sprintf(get_lang('Remaining %d attempts'), $remainingAttempts);
             $remainingMessage = sprintf('<p>%s</p> %s', $attemptMessage, $attemptButton);
         }
     }
@@ -180,7 +180,7 @@ $max_score = $objExercise->get_max_score();
 if ($origin === 'embeddable') {
     showEmbeddableFinishButton();
 } else {
-    echo Display::return_message(get_lang('Saved').'<br />', 'normal', false);
+    echo Display::return_message(get_lang('Saved.').'<br />', 'normal', false);
 }
 
 $saveResults = true;
@@ -209,7 +209,7 @@ ExerciseLib::delete_chat_exercise_session($exe_id);
 if (!in_array($origin, ['learnpath', 'embeddable'])) {
     echo '<div class="question-return">';
     echo Display::url(
-        get_lang('ReturnToCourseHomepage'),
+        get_lang('Return to Course Homepage'),
         api_get_course_url(),
         ['class' => 'btn btn-primary']
     );
@@ -229,7 +229,7 @@ if (!in_array($origin, ['learnpath', 'embeddable'])) {
     Display::display_reduced_footer();
 } else {
     $lp_mode = Session::read('lp_mode');
-    $url = '../lp/lp_controller.php?'.api_get_cidreq().'&action=view&lp_id='.$learnpath_id.'&lp_item_id='.$learnpath_item_id.'&exeId='.$exercise_stat_info['exe_id'].'&fb_type='.$objExercise->getFeedbackType().'#atoc_'.$learnpath_item_id;
+    $url = '../lp/lp_controller.php?'.api_get_cidreq().'&action=view&lp_id='.$learnpath_id.'&lp_item_id='.$learnpath_item_id.'&exeId='.$exercise_stat_info['exe_id'].'&fb_type='.$objTest->getFeedbackType().'#atoc_'.$learnpath_item_id;
     $href = $lp_mode === 'fullscreen' ? ' window.opener.location.href="'.$url.'" ' : ' top.location.href="'.$url.'"';
 
     if (api_is_allowed_to_session_edit()) {
@@ -256,7 +256,7 @@ function showEmbeddableFinishButton()
     echo Display::tag(
         'p',
         Display::toolbarButton(
-            get_lang('EndTest'),
+            get_lang('End test'),
             '#',
             'times',
             'warning',

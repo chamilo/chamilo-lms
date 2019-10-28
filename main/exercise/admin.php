@@ -240,7 +240,7 @@ if (!empty($clone_question) && !empty($objExercise->id)) {
     // Reloading tne $objExercise obj
     $objExercise->read($objExercise->id, false);
 
-    Display::addFlash(Display::return_message(get_lang('ItemCopied')));
+    Display::addFlash(Display::return_message(get_lang('Item copied')));
 
     header('Location: admin.php?'.api_get_cidreq().'&exerciseId='.$objExercise->id.'&page='.$page);
     exit;
@@ -256,17 +256,17 @@ if ($cancelAnswers) {
 $nameTools = '';
 // modifies the query string that is used in the link of tool name
 if ($editQuestion || $modifyQuestion || $newQuestion || $modifyAnswers) {
-    $nameTools = get_lang('QuestionManagement');
+    $nameTools = get_lang('Question / Answer management');
 }
 
 if (api_is_in_gradebook()) {
     $interbreadcrumb[] = [
         'url' => Category::getUrl(),
-        'name' => get_lang('ToolGradebook'),
+        'name' => get_lang('Assessments'),
     ];
 }
 
-$interbreadcrumb[] = ['url' => 'exercise.php?'.api_get_cidreq(), 'name' => get_lang('Exercises')];
+$interbreadcrumb[] = ['url' => 'exercise.php?'.api_get_cidreq(), 'name' => get_lang('Tests')];
 if (isset($_GET['newQuestion']) || isset($_GET['editQuestion'])) {
     $interbreadcrumb[] = [
         'url' => 'admin.php?exerciseId='.$objExercise->id.'&'.api_get_cidreq(),
@@ -280,10 +280,10 @@ if (isset($_GET['newQuestion']) || isset($_GET['editQuestion'])) {
 }
 
 // shows a link to go back to the question pool
-if (!$exerciseId && $nameTools != get_lang('ExerciseManagement')) {
+if (!$exerciseId && $nameTools != get_lang('Tests management')) {
     $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH)."exercise/question_pool.php?fromExercise=$fromExercise&".api_get_cidreq(),
-        'name' => get_lang('QuestionPool'),
+        'name' => get_lang('Recycle existing questions'),
     ];
 }
 
@@ -319,23 +319,23 @@ if ($inATest) {
     echo '<div class="actions">';
     if (isset($_GET['hotspotadmin']) || isset($_GET['newQuestion'])) {
         echo '<a href="'.api_get_path(WEB_CODE_PATH).'exercise/admin.php?exerciseId='.$exerciseId.'&'.api_get_cidreq().'">'.
-            Display::return_icon('back.png', get_lang('GoBackToQuestionList'), '', ICON_SIZE_MEDIUM).'</a>';
+            Display::return_icon('back.png', get_lang('Go back to the questions list'), '', ICON_SIZE_MEDIUM).'</a>';
     }
 
     if (!isset($_GET['hotspotadmin']) && !isset($_GET['newQuestion']) && !isset($_GET['editQuestion'])) {
         echo '<a href="'.api_get_path(WEB_CODE_PATH).'exercise/exercise.php?'.api_get_cidreq().'">'.
-            Display::return_icon('back.png', get_lang('BackToExercisesList'), '', ICON_SIZE_MEDIUM).'</a>';
+            Display::return_icon('back.png', get_lang('BackToTestsList'), '', ICON_SIZE_MEDIUM).'</a>';
     }
     echo '<a href="'.api_get_path(WEB_CODE_PATH).'exercise/overview.php?'.api_get_cidreq().'&exerciseId='.$objExercise->id.'&preview=1">'.
         Display::return_icon('preview_view.png', get_lang('Preview'), '', ICON_SIZE_MEDIUM).'</a>';
 
     echo Display::url(
-        Display::return_icon('test_results.png', get_lang('Results'), '', ICON_SIZE_MEDIUM),
+        Display::return_icon('test_results.png', get_lang('Results and feedback'), '', ICON_SIZE_MEDIUM),
         api_get_path(WEB_CODE_PATH).'exercise/exercise_report.php?'.api_get_cidreq().'&exerciseId='.$objExercise->id
     );
 
     echo '<a href="'.api_get_path(WEB_CODE_PATH).'exercise/exercise_admin.php?'.api_get_cidreq().'&modifyExercise=yes&exerciseId='.$objExercise->id.'">'.
-        Display::return_icon('settings.png', get_lang('ModifyExercise'), '', ICON_SIZE_MEDIUM).'</a>';
+        Display::return_icon('settings.png', get_lang('Edit test name and settings'), '', ICON_SIZE_MEDIUM).'</a>';
 
     $maxScoreAllQuestions = 0;
     if ($showPagination === false) {
@@ -352,12 +352,12 @@ if ($inATest) {
 
     echo '</div>';
     if ($objExercise->added_in_lp()) {
-        echo Display::return_message(get_lang('AddedToLPCannotBeAccessed'), 'warning');
+        echo Display::return_message(get_lang('This exercise has been included in a learning path, so it cannot be accessed by students directly from here. If you want to put the same exercise available through the exercises tool, please make a copy of the current exercise using the copy icon.'), 'warning');
     }
     if ($editQuestion && $objQuestion->existsInAnotherExercise()) {
         echo Display::return_message(
             Display::returnFontAwesomeIcon('exclamation-triangle"')
-                .get_lang('ThisQuestionExistsInAnotherExercisesWarning'),
+                .get_lang('ThisQuestionExistsInAnotherTestsWarning'),
             'warning',
             false
         );
@@ -366,26 +366,26 @@ if ($inATest) {
     $alert = '';
     if ($showPagination === false) {
         $alert .= sprintf(
-            get_lang('XQuestionsWithTotalScoreY'),
+            get_lang('%d questions, for a total score (all questions) of %s.'),
             $nbrQuestions,
             $maxScoreAllQuestions
         );
     }
     if ($objExercise->random > 0) {
-        $alert .= '<br />'.sprintf(get_lang('OnlyXQuestionsPickedRandomly'), $objExercise->random);
+        $alert .= '<br />'.sprintf(get_lang('Only %s questions will be picked randomly following the quiz configuration.'), $objExercise->random);
     }
     echo Display::return_message($alert, 'normal', false);
 } elseif (isset($_GET['newQuestion'])) {
     // we are in create a new question from question pool not in a test
     echo '<div class="actions">';
     echo '<a href="'.api_get_path(WEB_CODE_PATH).'exercise/admin.php?'.api_get_cidreq().'">'.
-        Display::return_icon('back.png', get_lang('GoBackToQuestionList'), '', ICON_SIZE_MEDIUM).'</a>';
+        Display::return_icon('back.png', get_lang('Go back to the questions list'), '', ICON_SIZE_MEDIUM).'</a>';
     echo '</div>';
 } else {
     // If we are in question_pool but not in an test, go back to question create in pool
     echo '<div class="actions">';
     echo '<a href="'.api_get_path(WEB_CODE_PATH).'exercise/question_pool.php?'.api_get_cidreq().'">'.
-        Display::return_icon('back.png', get_lang('GoBackToQuestionList'), '', ICON_SIZE_MEDIUM).
+        Display::return_icon('back.png', get_lang('Go back to the questions list'), '', ICON_SIZE_MEDIUM).
         '</a>';
     echo '</div>';
 }
@@ -441,7 +441,7 @@ if (!$newQuestion && !$modifyQuestion && !$editQuestion && !isset($_GET['hotspot
 // if we are in question authoring, display warning to user is feedback not shown at the end of the test -ref #6619
 // this test to display only message in the question authoring page and not in the question list page too
 if ($objExercise->getFeedbackType() == EXERCISE_FEEDBACK_TYPE_EXAM) {
-    echo Display::return_message(get_lang('TestFeedbackNotShown'), 'normal');
+    echo Display::return_message(get_lang('This test is configured not to display feedback to learners. Comments will not be seen at the end of the test, but may be useful for you, as teacher, when reviewing the question details.'), 'normal');
 }
 
 Session::write('objExercise', $objExercise);

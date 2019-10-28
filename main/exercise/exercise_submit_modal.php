@@ -83,7 +83,7 @@ if (empty($choiceValue) && empty($hotSpot) && $loaded) {
         '',
         ['style' => 'width:22px; height:22px; padding-left:0px;padding-right:5px;']
     );
-    $links = '<a onclick="tryAgain();" href="#">'.get_lang('TryAgain').'</a>&nbsp;'.$icon.'&nbsp;';
+    $links = '<a onclick="tryAgain();" href="#">'.get_lang('Try again').'</a>&nbsp;'.$icon.'&nbsp;';
 
     // the link to finish the test
     if ($destinationId == -1) {
@@ -91,7 +91,7 @@ if (empty($choiceValue) && empty($hotSpot) && $loaded) {
                 'finish.gif',
                 '',
                 ['style' => 'width:22px; height:22px; padding-left:0px;padding-right:5px;']
-            ).'<a onclick="SendEx(-1);" href="#">'.get_lang('EndActivity').'</a><br /><br />';
+            ).'<a onclick="SendEx(-1);" href="#">'.get_lang('End of activity').'</a><br /><br />';
     } else {
         // the link to other question
         if (in_array($destinationId, $questionList)) {
@@ -279,7 +279,7 @@ $links = '';
 if ($objExercise->getFeedbackType() === EXERCISE_FEEDBACK_TYPE_DIRECT) {
     if (isset($choiceValue) && $choiceValue == -1) {
         if ($answerType != HOT_SPOT_DELINEATION) {
-            $links .= '<a href="#" onclick="tb_remove();">'.get_lang('ChooseAnAnswer').'</a><br />';
+            $links .= '<a href="#" onclick="tb_remove();">'.get_lang('Choose an answer').'</a><br />';
         }
     }
 }
@@ -300,7 +300,7 @@ if (isset($try) && $try == 1) {
         'reload.gif',
         '',
         ['style' => 'padding-left:0px;padding-right:5px;']
-    ).'<a onclick="SendEx('.$num_value_array[0].');" href="#">'.get_lang('TryAgain').'</a><br /><br />';
+    ).'<a onclick="SendEx('.$num_value_array[0].');" href="#">'.get_lang('Try again').'</a><br /><br />';
 }
 
 // the link to theory (a learning path)
@@ -310,7 +310,7 @@ if (!empty($lp)) {
         'theory.gif',
         '',
         ['style' => 'padding-left:0px;padding-right:5px;']
-    ).'<a target="_blank" href="'.$lp_url.'">'.get_lang('SeeTheory').'</a><br />';
+    ).'<a target="_blank" href="'.$lp_url.'">'.get_lang('Theory link').'</a><br />';
 }
 
 $links .= '<br />';
@@ -321,7 +321,7 @@ if (!empty($url) && $url != -1) {
         'link.gif',
         '',
         ['style' => 'padding-left:0px;padding-right:5px;']
-    ).'<a target="_blank" href="'.$url.'">'.get_lang('VisitUrl').'</a><br /><br />';
+    ).'<a target="_blank" href="'.$url.'">'.get_lang('Visit this link').'</a><br /><br />';
 }
 
 $nextQuestion = $questionNum + 1;
@@ -333,7 +333,7 @@ if ($destinationId == -1) {
         'finish.gif',
         '',
         ['style' => 'width:22px; height:22px; padding-left:0px;padding-right:5px;']
-    ).'<a onclick="SendEx(-1);" href="#">'.get_lang('EndActivity').'</a><br /><br />';
+    ).'<a onclick="SendEx(-1);" href="#">'.get_lang('End of activity').'</a><br /><br />';
 } else {
     // the link to other question
     if (in_array($destinationId, $questionList)) {

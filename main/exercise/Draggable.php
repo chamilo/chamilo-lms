@@ -71,11 +71,11 @@ class Draggable extends Question
                 }
             }
         } else {
-            $defaults['answer[1]'] = get_lang('DefaultMakeCorrespond1');
-            $defaults['answer[2]'] = get_lang('DefaultMakeCorrespond2');
+            $defaults['answer[1]'] = get_lang('First step');
+            $defaults['answer[2]'] = get_lang('Second step');
             $defaults['matches[2]'] = '2';
-            $defaults['option[1]'] = get_lang('DefaultMatchingOptA');
-            $defaults['option[2]'] = get_lang('DefaultMatchingOptB');
+            $defaults['option[1]'] = get_lang('Note down the address');
+            $defaults['option[2]'] = get_lang('Contact the emergency services');
             $defaults['orientation'] = 'h';
         }
 
@@ -88,7 +88,7 @@ class Draggable extends Question
 
         $form->addRadio(
             'orientation',
-            get_lang('ChooseOrientation'),
+            get_lang('Choose orientation'),
             ['h' => get_lang('Horizontal'), 'v' => get_lang('Vertical')]
         );
 
@@ -97,18 +97,18 @@ class Draggable extends Question
             <thead>
                 <tr>
                     <th width="85%">'.get_lang('Answer').'</th>
-                    <th width="15%">'.get_lang('MatchesTo').'</th>
-                    <th width="10">'.get_lang('Weighting').'</th>
+                    <th width="15%">'.get_lang('Matches To').'</th>
+                    <th width="10">'.get_lang('Score').'</th>
                 </tr>
             </thead>
             <tbody>';
 
-        $form->addHeader(get_lang('MakeCorrespond'));
+        $form->addHeader(get_lang('Match them'));
         $form->addHtml($html);
 
         if ($nb_matches < 1) {
             $nb_matches = 1;
-            echo Display::return_message(get_lang('YouHaveToCreateAtLeastOneAnswer'), 'normal');
+            echo Display::return_message(get_lang('You have to create at least one answer'), 'normal');
         }
 
         for ($i = 1; $i <= $nb_matches; $i++) {
@@ -146,8 +146,8 @@ class Draggable extends Question
         global $text;
 
         $group = [
-            $form->addButtonDelete(get_lang('DelElem'), 'lessMatches', true),
-            $form->addButtonCreate(get_lang('AddElem'), 'moreMatches', true),
+            $form->addButtonDelete(get_lang('Remove element'), 'lessMatches', true),
+            $form->addButtonCreate(get_lang('Add element'), 'moreMatches', true),
             $form->addButtonSave($text, 'submitQuestion', true),
         ];
 
@@ -216,12 +216,12 @@ class Draggable extends Question
         $header .= '<table class="'.$this->question_table_class.'"><tr>';
 
         if ($exercise->showExpectedChoice()) {
-            $header .= '<th>'.get_lang('YourChoice').'</th>';
+            $header .= '<th>'.get_lang('Your choice').'</th>';
             if ($exercise->showExpectedChoiceColumn()) {
-                $header .= '<th>'.get_lang('ExpectedChoice').'</th>';
+                $header .= '<th>'.get_lang('Expected choice').'</th>';
             }
         } else {
-            $header .= '<th>'.get_lang('ElementList').'</th>';
+            $header .= '<th>'.get_lang('Elements list').'</th>';
         }
         $header .= '<th>'.get_lang('Status').'</th>';
         $header .= '</tr>';

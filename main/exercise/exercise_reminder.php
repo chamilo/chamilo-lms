@@ -7,8 +7,6 @@ use ChamiloSession as Session;
  * Exercise reminder overview
  * Then it shows the results on the screen.
  *
- * @package chamilo.exercise
- *
  * @author Julio Montoya switchable fill in blank option added
  */
 require_once __DIR__.'/../inc/global.inc.php';
@@ -78,14 +76,14 @@ if (empty($exercise_stat_info) || empty($question_list)) {
     api_not_allowed();
 }
 
-$nameTools = get_lang('Exercises');
-$interbreadcrumb[] = ['url' => 'exercise.php?'.api_get_cidreq(), 'name' => get_lang('Exercises')];
+$nameTools = get_lang('Tests');
+$interbreadcrumb[] = ['url' => 'exercise.php?'.api_get_cidreq(), 'name' => get_lang('Tests')];
 
 $hideHeaderAndFooter = in_array($origin, ['learnpath', 'embeddable']);
 
 if (!$hideHeaderAndFooter) {
     //so we are not in learnpath tool
-    Display::display_header($nameTools, get_lang('Exercise'));
+    Display::display_header($nameTools, get_lang('Test'));
 } else {
     Display::display_reduced_header();
 }
@@ -96,12 +94,12 @@ if (!$hideHeaderAndFooter) {
 if (api_is_course_admin() && !$hideHeaderAndFooter) {
     echo '<div class="actions">';
     echo '<a href="admin.php?'.api_get_cidreq().'&exerciseId='.$objExercise->id.'">'.
-        Display::return_icon('back.png', get_lang('GoBackToQuestionList'), [], 32).'</a>';
-    echo '<a href="exercise_admin.php?'.api_get_cidreq().'&modifyExercise=yes&exerciseId='.$objExercise->id.'">'.
-        Display::return_icon('edit.png', get_lang('ModifyExercise'), [], 32).'</a>';
+        Display::return_icon('back.png', get_lang('Go back to the questions list'), [], 32).'</a>';
+    echo '<a href="exercise_admin.php?'.api_get_cidreq().'&modifyTest=yes&exerciseId='.$objExercise->id.'">'.
+        Display::return_icon('edit.png', get_lang('ModifyTest'), [], 32).'</a>';
     echo '</div>';
 }
-echo Display::page_header(get_lang('QuestionsToReview'));
+echo Display::page_header(get_lang('Questions to be reviewed'));
 
 if ($time_control) {
     echo $objExercise->returnTimeLeftDiv();
@@ -146,9 +144,9 @@ echo '<script>
 
         if (isChecked == 1) {
             $("#message").addClass("warning-message");
-            $("#message").html("'.addslashes(get_lang('SelectAQuestionToReview')).'");
+            $("#message").html("'.addslashes(get_lang('Select a question to revise')).'");
         } else {
-            window.location = "exercise_submit.php?'.api_get_cidreq().'&exerciseId='.$objExercise->id.'&reminder=2&" + lp_data;
+            window.location = "exercise_submit.php?'.api_get_cidreq().'&exerciseId='.$objTest->id.'&reminder=2&" + lp_data;
         }
     }
 
@@ -190,7 +188,7 @@ foreach ($attempt_list as $question_id => $options) {
         }
     }
 }
-echo Display::label(get_lang('QuestionWithNoAnswer'), 'danger');
+echo Display::label(get_lang('Questions without answer'), 'danger');
 echo '<div class="clear"></div><br />';
 
 $table = '';
@@ -237,25 +235,25 @@ foreach ($question_list as $questionId) {
 echo Display::div($table, ['class' => 'question-check-test']);
 
 $exerciseActions = Display::url(
-    get_lang('ReviewQuestions'),
+    get_lang('Review selected questions'),
     'javascript://',
     ['onclick' => 'review_questions();', 'class' => 'btn btn-primary']
 );
 
 $exerciseActions .= '&nbsp;'.Display::url(
-    get_lang('SelectAll'),
+    get_lang('Select all'),
     'javascript://',
     ['onclick' => 'changeOptionStatus(1);', 'class' => 'btn btn-default']
 );
 
 $exerciseActions .= '&nbsp;'.Display::url(
-    get_lang('UnSelectAll'),
+    get_lang('UnSelect all'),
     'javascript://',
     ['onclick' => 'changeOptionStatus(0);', 'class' => 'btn btn-default']
 );
 
 $exerciseActions .= '&nbsp;'.Display::url(
-    get_lang('EndTest'),
+    get_lang('End test'),
     'javascript://',
     ['onclick' => 'final_submit();', 'class' => 'btn btn-warning']
 );

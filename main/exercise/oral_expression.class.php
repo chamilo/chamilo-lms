@@ -40,7 +40,7 @@ class OralExpression extends Question
     {
         $form->addText(
             'weighting',
-            get_lang('Weighting'),
+            get_lang('Score'),
             ['class' => 'span1']
         );
         global $text;

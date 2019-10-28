@@ -15,7 +15,7 @@ if (!api_is_allowed_to_edit()) {
 
 $interbreadcrumb[] = [
     'url' => api_get_path(WEB_CODE_PATH).'exercise/exercise.php?'.api_get_cidreq(),
-    'name' => get_lang('Exercises'),
+    'name' => get_lang('Tests'),
 ];
 
 $courseId = api_get_course_int_id();
@@ -34,7 +34,7 @@ $htmlHeadXtra[] = api_get_jqgrid_js();
 //The order is important you need to check the the $column variable in the model.ajax.php file
 $columns = [
     get_lang('Name'),
-    get_lang('Actions'),
+    get_lang('Detail'),
 ];
 
 // Column config
@@ -91,7 +91,7 @@ switch ($action) {
             unset($values['id']);
             $res = $obj->save($values);
             if ($res) {
-                Display::addFlash(Display::return_message(get_lang('ItemAdded'), 'confirmation'));
+                Display::addFlash(Display::return_message(get_lang('Item added'), 'confirmation'));
             }
             header('Location: '.$url);
             exit;
@@ -115,7 +115,7 @@ switch ($action) {
             $values = $form->exportValues();
             $res = $obj->update($values);
             if ($res) {
-                Display::addFlash(Display::return_message(get_lang('ItemUpdated'), 'confirmation'));
+                Display::addFlash(Display::return_message(get_lang('Item updated'), 'confirmation'));
             }
             header('Location: '.$url);
             exit;
@@ -132,7 +132,7 @@ switch ($action) {
     case 'delete':
         $res = $obj->delete($_GET['id']);
         if ($res) {
-            Display::addFlash(Display::return_message(get_lang('ItemDeleted'), 'confirmation'));
+            Display::addFlash(Display::return_message(get_lang('Item deleted'), 'confirmation'));
         }
         header('Location: '.$url);
         exit;

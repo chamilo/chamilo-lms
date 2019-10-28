@@ -1635,7 +1635,7 @@ abstract class Question
             $form->addElement('text', 'questionName', get_lang('Question'));
         }
 
-        $form->addRule('questionName', get_lang('GiveQuestion'), 'required');
+        $form->addRule('questionName', get_lang('Please type the question'), 'required');
 
         // default content
         $isContent = isset($_REQUEST['isContent']) ? (int) $_REQUEST['isContent'] : null;
@@ -1658,7 +1658,7 @@ abstract class Question
         $form->addElement('html', '<div id="advanced_params_options" style="display:none">');
         $form->addHtmlEditor(
             'questionDescription',
-            get_lang('QuestionDescription'),
+            get_lang('Enrich question'),
             false,
             false,
             $editorConfig
@@ -1695,7 +1695,7 @@ abstract class Question
                     );
                     $buttonGroup[] = $form->addButton(
                         'convertAnswer',
-                        get_lang('ConvertToMultipleAnswer'),
+                        get_lang('Convert to multiple answer'),
                         'dot-circle-o',
                         'default',
                         null,
@@ -1714,7 +1714,7 @@ abstract class Question
                     );
                     $buttonGroup[] = $form->addButton(
                         'convertAnswer',
-                        get_lang('ConvertToUniqueAnswer'),
+                        get_lang('Convert to unique answer'),
                         'check-square-o',
                         'default',
                         null,
@@ -1727,7 +1727,7 @@ abstract class Question
             }
             //Medias
             //$course_medias = self::prepare_course_media_select(api_get_course_int_id());
-            //$form->addElement('select', 'parent_id', get_lang('AttachToMedia'), $course_medias);
+            //$form->addElement('select', 'parent_id', get_lang('Attach to media'), $course_medias);
         }
 
         $form->addElement('html', '</div>');
@@ -1735,29 +1735,29 @@ abstract class Question
         if (!isset($_GET['fromExercise'])) {
             switch ($answerType) {
                 case 1:
-                    $this->question = get_lang('DefaultUniqueQuestion');
+                    $this->question = get_lang('Select the good reasoning');
                     break;
                 case 2:
-                    $this->question = get_lang('DefaultMultipleQuestion');
+                    $this->question = get_lang('The marasmus is a consequence of');
                     break;
                 case 3:
-                    $this->question = get_lang('DefaultFillBlankQuestion');
+                    $this->question = get_lang('Calculate the Body Mass Index');
                     break;
                 case 4:
-                    $this->question = get_lang('DefaultMathingQuestion');
+                    $this->question = get_lang('Order the operations');
                     break;
                 case 5:
-                    $this->question = get_lang('DefaultOpenQuestion');
+                    $this->question = get_lang('List what you consider the 10 top qualities of a good project manager?');
                     break;
                 case 9:
-                    $this->question = get_lang('DefaultMultipleQuestion');
+                    $this->question = get_lang('The marasmus is a consequence of');
                     break;
             }
         }
 
         if (!is_null($exercise)) {
             if ($exercise->questionFeedbackEnabled && $this->showFeedback($exercise)) {
-                $form->addTextarea('feedback', get_lang('FeedbackIfNotCorrect'));
+                $form->addTextarea('feedback', get_lang('Feedback if not correct'));
             }
         }
 
@@ -1893,7 +1893,7 @@ abstract class Question
         if ($objExercise->exercise_was_added_in_lp == true) {
             echo Display::return_icon(
                 'database_na.png',
-                get_lang('GetExistingQuestion'),
+                get_lang('Recycle existing questions'),
                 null,
                 ICON_SIZE_BIG
             );
@@ -1905,7 +1905,7 @@ abstract class Question
             }
             echo Display::return_icon(
                 'database.png',
-                get_lang('GetExistingQuestion'),
+                get_lang('Recycle existing questions'),
                 null,
                 ICON_SIZE_BIG
             );
@@ -2028,7 +2028,7 @@ abstract class Question
             RESULT_DISABLE_SHOW_SCORE_AND_EXPECTED_ANSWERS_AND_RANKING,
         ])
         ) {
-            $scoreLabel = get_lang('QuizWrongAnswerHereIsTheCorrectOne');
+            $scoreLabel = get_lang('Wrong answer. The correct one was:');
         }
 
         $class = 'error';
@@ -2040,7 +2040,7 @@ abstract class Question
                 RESULT_DISABLE_SHOW_SCORE_AND_EXPECTED_ANSWERS_AND_RANKING,
             ])
             ) {
-                $scoreLabel = get_lang('CorrectAnswer');
+                $scoreLabel = get_lang('Correct answer');
             }
             $class = 'success';
         }
@@ -2054,7 +2054,7 @@ abstract class Question
                     $scoreLabel = get_lang('Revised');
                     $class = '';
                 } else {
-                    $scoreLabel = get_lang('NotRevised');
+                    $scoreLabel = get_lang('Not reviewed');
                     $class = 'warning';
                     if (isset($score['weight'])) {
                         $weight = float_format($score['weight'], 1);
@@ -2127,7 +2127,7 @@ abstract class Question
             if ($score['pass'] == true) {
                 $message = Display::div(
                     sprintf(
-                        get_lang('ReadingQuestionCongratsSpeedXReachedForYWords'),
+                        get_lang('Congratulations, you have reached and correctly understood, at a speed of %s words per minute, a text of a total %s words.'),
                         ReadingComprehension::$speeds[$this->level],
                         $this->getWordsCount()
                     )
@@ -2135,7 +2135,7 @@ abstract class Question
             } else {
                 $message = Display::div(
                     sprintf(
-                        get_lang('ReadingQuestionCongratsSpeedXNotReachedForYWords'),
+                        get_lang('Sorry, it seems like a speed of %s words/minute was too fast for this text of %s words.'),
                         ReadingComprehension::$speeds[$this->level],
                         $this->getWordsCount()
                     )
@@ -2317,7 +2317,7 @@ abstract class Question
     {
         $medias = self::get_course_medias($course_id);
         $media_list = [];
-        $media_list[0] = get_lang('NoMedia');
+        $media_list[0] = get_lang('Not linked to media');
 
         if (!empty($medias)) {
             foreach ($medias as $media) {

@@ -10,8 +10,6 @@ use ChamiloSession as Session;
  * extending the class question
  *
  * @author Eric Marguin
- *
- * @package chamilo.exercise
  */
 class MultipleAnswer extends Question
 {
@@ -50,11 +48,11 @@ class MultipleAnswer extends Question
         $html = '<table class="table table-striped table-hover">
             <thead>
                 <tr>
-                    <th width="10">'.get_lang('Number').'</th>
+                    <th width="10">'.get_lang('N°').'</th>
                     <th width="10">'.get_lang('True').'</th>
                     <th width="50%">'.get_lang('Answer').'</th>
                     <th width="50%">'.get_lang('Comment').'</th>
-                    <th width="10">'.get_lang('Weighting').'</th>
+                    <th width="10">'.get_lang('Score').'</th>
                 </tr>
             </thead>
             <tbody>';
@@ -77,7 +75,7 @@ class MultipleAnswer extends Question
 
         if ($nb_answers < 1) {
             $nb_answers = 1;
-            echo Display::return_message(get_lang('YouHaveToCreateAtLeastOneAnswer'));
+            echo Display::return_message(get_lang('You have to create at least one answer'));
         }
 
         for ($i = 1; $i <= $nb_answers; $i++) {
@@ -88,13 +86,13 @@ class MultipleAnswer extends Question
                 $defaults['weighting['.$i.']'] = float_format($answer->weighting[$i], 1);
                 $defaults['correct['.$i.']'] = $answer->correct[$i];
             } else {
-                $defaults['answer[1]'] = get_lang('DefaultMultipleAnswer2');
-                $defaults['comment[1]'] = get_lang('DefaultMultipleComment2');
+                $defaults['answer[1]'] = get_lang('Lack of Vitamin A');
+                $defaults['comment[1]'] = get_lang('The Vitamin A is responsible for...');
                 $defaults['correct[1]'] = true;
                 $defaults['weighting[1]'] = 10;
 
-                $defaults['answer[2]'] = get_lang('DefaultMultipleAnswer1');
-                $defaults['comment[2]'] = get_lang('DefaultMultipleComment1');
+                $defaults['answer[2]'] = get_lang('Lack of Calcium');
+                $defaults['comment[2]'] = get_lang('The calcium acts as a ...');
                 $defaults['correct[2]'] = false;
                 $defaults['weighting[2]'] = -5;
             }
@@ -134,7 +132,7 @@ class MultipleAnswer extends Question
             $boxes_names[] = 'correct['.$i.']';
 
             $form->addHtmlEditor("answer[$i]", null, null, false, $editorConfig);
-            $form->addRule('answer['.$i.']', get_lang('ThisFieldIsRequired'), 'required');
+            $form->addRule('answer['.$i.']', get_lang('Required field'), 'required');
 
             $form->addHtmlEditor("comment[$i]", null, null, false, $editorConfig);
 
@@ -147,7 +145,7 @@ class MultipleAnswer extends Question
 
         $form->add_multiple_required_rule(
             $boxes_names,
-            get_lang('ChooseAtLeastOneCheckbox'),
+            get_lang('Choose at least one good answer'),
             'multiple_required'
         );
 
@@ -157,8 +155,8 @@ class MultipleAnswer extends Question
             (empty($this->exerciseList) && empty($obj_ex->id))
         ) {
             // setting the save button here and not in the question class.php
-            $buttonGroup[] = $form->addButtonDelete(get_lang('LessAnswer'), 'lessAnswers', true);
-            $buttonGroup[] = $form->addButtonCreate(get_lang('PlusAnswer'), 'moreAnswers', true);
+            $buttonGroup[] = $form->addButtonDelete(get_lang('Remove answer option'), 'lessAnswers', true);
+            $buttonGroup[] = $form->addButtonCreate(get_lang('Add answer option'), 'moreAnswers', true);
             $buttonGroup[] = $form->addButton(
                 'submitQuestion',
                 $text,
@@ -234,10 +232,10 @@ class MultipleAnswer extends Question
         $header = parent::return_header($exercise, $counter, $score);
         $header .= '<table class="'.$this->question_table_class.'"><tr>';
 
-        $header .= '<th>'.get_lang('Choice').'</th>';
+        $header .= '<th>'.get_lang('Your choice').'</th>';
 
         if ($exercise->showExpectedChoiceColumn()) {
-            $header .= '<th>'.get_lang('ExpectedChoice').'</th>';
+            $header .= '<th>'.get_lang('ExpectedYour choice').'</th>';
         }
 
         $header .= '<th>'.get_lang('Answer').'</th>';

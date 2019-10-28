@@ -35,7 +35,7 @@ class GlobalMultipleAnswer extends Question
         $html = '<table class="data_table">
                 <tr>
                     <th width="10px">
-                        '.get_lang('Number').'
+                        '.get_lang('N°').'
                     </th>
                     <th width="10px">
                         '.get_lang('True').'
@@ -70,7 +70,7 @@ class GlobalMultipleAnswer extends Question
 
         if ($nb_answers < 1) {
             $nb_answers = 1;
-            echo Display::return_message(get_lang('YouHaveToCreateAtLeastOneAnswer'), 'normal');
+            echo Display::return_message(get_lang('You have to create at least one answer'), 'normal');
         }
 
         //D�but affichage score global dans la modification d'une question
@@ -138,7 +138,7 @@ class GlobalMultipleAnswer extends Question
                     'Height' => '100',
                 ]
             );
-            $form->addRule('answer['.$i.']', get_lang('ThisFieldIsRequired'), 'required');
+            $form->addRule('answer['.$i.']', get_lang('Required field'), 'required');
             $form->addElement(
                 'html_editor',
                 'comment['.$i.']',
@@ -158,7 +158,7 @@ class GlobalMultipleAnswer extends Question
         $form->addElement('html', '</div></div></table>');
         $form->add_multiple_required_rule(
             $boxes_names,
-            get_lang('ChooseAtLeastOneCheckbox'),
+            get_lang('Choose at least one good answer'),
             'multiple_required'
         );
 
@@ -166,11 +166,11 @@ class GlobalMultipleAnswer extends Question
         $form->addElement('text', 'weighting[1]', get_lang('Score'));
 
         //--------- Creation coche pour ne pas prendre en compte les n�gatifs
-        $form->addElement('checkbox', 'pts', '', get_lang('NoNegativeScore'));
+        $form->addElement('checkbox', 'pts', '', get_lang('No negative score'));
         $form->addElement('html', '<br />');
 
         // Affiche un message si le score n'est pas renseign�
-        $form->addRule('weighting[1]', get_lang('ThisFieldIsRequired'), 'required');
+        $form->addRule('weighting[1]', get_lang('Required field'), 'required');
 
         global $text;
 
@@ -178,8 +178,8 @@ class GlobalMultipleAnswer extends Question
             (empty($this->exerciseList) && empty($obj_ex->id))
         ) {
             // setting the save button here and not in the question class.php
-            $form->addButtonDelete(get_lang('LessAnswer'), 'lessAnswers');
-            $form->addButtonCreate(get_lang('PlusAnswer'), 'moreAnswers');
+            $form->addButtonDelete(get_lang('Remove answer option'), 'lessAnswers');
+            $form->addButtonCreate(get_lang('Add answer option'), 'moreAnswers');
             $form->addButtonSave($text, 'submitQuestion');
         }
 
@@ -267,9 +267,9 @@ class GlobalMultipleAnswer extends Question
         $header .= '<table class="'.$this->question_table_class.'"><tr>';
 
         if (!in_array($exercise->results_disabled, [RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER])) {
-            $header .= '<th>'.get_lang('Choice').'</th>';
+            $header .= '<th>'.get_lang('Your choice').'</th>';
             if ($exercise->showExpectedChoiceColumn()) {
-                $header .= '<th>'.get_lang('ExpectedChoice').'</th>';
+                $header .= '<th>'.get_lang('ExpectedYour choice').'</th>';
             }
         }
 

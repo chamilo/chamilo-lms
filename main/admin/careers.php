@@ -143,7 +143,7 @@ switch ($action) {
         break;
     case 'edit':
         api_protect_admin_script();
-        $id = isset($_GET['id']) ? (int) $_GET['id'] : null;
+        $id = isset($_GET['id']) ? (int) $_GET['id'] : 0;
         $careerInfo = $career->get($id);
         if (empty($careerInfo)) {
             api_not_allowed(true);

@@ -4,11 +4,9 @@
 use Chamilo\CourseBundle\Entity\CLpCategory;
 use ChamiloSession as Session;
 
-
 /**
  * Implements the tracking of students in the Reporting pages.
  */
-
 if (!isset($_GET['course'])) {
     $cidReset = true;
 }

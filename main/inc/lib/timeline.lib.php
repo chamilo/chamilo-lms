@@ -4,8 +4,6 @@
 /**
  * Class Timeline
  * Timeline model class definition.
- *
- * @package chamilo.library
  */
 class Timeline extends Model
 {
@@ -31,6 +29,7 @@ class Timeline extends Model
      */
     public function __construct()
     {
+        parent::__construct();
         $this->table = Database::get_course_table(TABLE_TIMELINE);
     }
 

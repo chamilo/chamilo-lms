@@ -94,7 +94,7 @@ foreach ($session_list as $session_item) {
                 if ($user['access_url_id'] != $url_id) {
                     $user_link .= ' '.Display::return_icon('warning.png', get_lang('Users not added to the URL'), [], ICON_SIZE_MEDIUM);
                     $add = Display::return_icon('add.png', get_lang('Add users to an URL'), [], ICON_SIZE_MEDIUM);
-                    $link_to_add_user_in_url = '<a href="'.api_get_self().'?'.Security::remove_XSS($_SERVER['QUERY_STRING']).'&action=add_user_to_url&id_session='.$id_session.'&user_id='.$user['user_id'].'">'.$add.'</a>';
+                    $link_to_add_user_in_url = '<a href="'.api_get_self().'?'.Security::remove_XSS($_SERVER['QUERY_STRING']).'&action=add_user_to_url&id_session='.$session_id.'&user_id='.$user['user_id'].'">'.$add.'</a>';
                 }
             }
             $html .= '<tr>

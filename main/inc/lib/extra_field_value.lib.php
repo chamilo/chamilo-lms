@@ -502,8 +502,8 @@ class ExtraFieldValue extends Model
                 /* Enable this when field_loggeable is introduced as a table field (2.0)
                 if ($extraFieldInfo['field_loggeable'] == 1) {
                 */
-
                 $params['id'] = $field_values['id'];
+
                 return parent::update($params, $showQuery);
             }
         }

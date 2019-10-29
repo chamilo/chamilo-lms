@@ -2,9 +2,8 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * Coaches reporting
+ * Coaches reporting.
  */
-
 ob_start();
 $cidReset = true;
 

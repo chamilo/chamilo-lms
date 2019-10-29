@@ -6431,7 +6431,9 @@ function api_get_current_access_url_id()
  *
  * @author Julio Montoya <gugli100@gmail.com>
  *
- * @return int user id
+ * @param int $user_id
+ *
+ * @return array
  */
 function api_get_access_url_from_user($user_id)
 {
@@ -6442,7 +6444,7 @@ function api_get_access_url_from_user($user_id)
             FROM $table_url_rel_user url_rel_user
             INNER JOIN $table_url u
             ON (url_rel_user.access_url_id = u.id)
-            WHERE user_id = ".intval($user_id);
+            WHERE user_id = ".$user_id;
     $result = Database::query($sql);
     $list = [];
     while ($row = Database::fetch_array($result, 'ASSOC')) {

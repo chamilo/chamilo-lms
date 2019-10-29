@@ -61,7 +61,10 @@ function validate_data($users, $checkUniqueEmail = false)
             // 2.1.1
             $hasDash = strpos($username, '-');
             if ($hasDash !== false) {
-                $user['message'] .= Display::return_message(get_lang('The username cannot contain the '-' character'), 'warning');
+                $user['message'] .= Display::return_message(
+                    get_lang('The username cannot contain the \' - \' character'),
+                    'warning'
+                );
                 $user['has_error'] = true;
             }
             // 2.2. Check whether the username was used twice in import file.

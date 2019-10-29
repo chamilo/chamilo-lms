@@ -2,7 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * Special reporting page for admins. *
+ * Special reporting page for admins.
  */
 
 ob_start();

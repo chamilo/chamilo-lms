@@ -6,7 +6,6 @@
 // resetting the course id
 $cidReset = true;
 
-// including some necessary files
 require_once __DIR__.'/../inc/global.inc.php';
 
 ini_set('memory_limit', -1);

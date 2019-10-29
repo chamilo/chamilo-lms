@@ -19,7 +19,7 @@ $userRepository = UserManager::getRepository();
 /** @var UserEntity $user */
 $user = UserManager::getManager()->find($_REQUEST['u']);
 
-if (!$user) {
+if ($user === null) {
     api_not_allowed(true);
 }
 
@@ -34,7 +34,7 @@ foreach ($subscribedUsers as $subscribedUser) {
     /** @var UserEntity $hrm */
     $hrm = UserManager::getManager()->find($subscribedUser->getFriendUserId());
 
-    if (!$hrm) {
+    if ($hrm === null) {
         continue;
     }
 
@@ -68,7 +68,7 @@ if ($form->validate()) {
         /** @var UserEntity $hrm */
         $hrm = UserManager::getManager()->find($hrmId);
 
-        if (!$hrm) {
+        if ($hrm === null) {
             continue;
         }
 

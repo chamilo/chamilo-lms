@@ -1,4 +1,8 @@
 parameters:
+	symfony:
+	    container_xml_path: '%rootDir%/../../../var/cache/dev/srcChamilo_KernelDevDebugContainer.xml'
+	doctrine    :
+	    objectManagerLoader: '%rootDir%/../../../tests/phpstan/doctrine-orm-bootstrap.php'
 	autoload_files:
 		- %rootDir%/../../../main/work/work.lib.php
 	excludes_analyse:

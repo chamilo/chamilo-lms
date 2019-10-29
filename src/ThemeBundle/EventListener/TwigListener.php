@@ -35,7 +35,7 @@ class TwigListener implements EventSubscriberInterface
     public function onKernelRequest(RequestEvent $event)
     {
         if (!$event->isMasterRequest()) {
-            return;
+            return false;
         }
 
         $container = $this->container;
@@ -47,6 +47,11 @@ class TwigListener implements EventSubscriberInterface
 
         $theme = api_get_visual_theme();
         $twig = $container->get('twig');
+
+        if (empty($twig)) {
+            return false;
+        }
+
         $twig->addGlobal('favico', \Template::getPortalIcon($theme));
 
         if ($settingsManager->getSetting('display.show_administrator_data') === 'true') {
@@ -195,6 +200,8 @@ class TwigListener implements EventSubscriberInterface
             }
             $twig->addGlobal("plugin_$region", $contentToString);
         }
+
+        return true;
     }
 
     /**

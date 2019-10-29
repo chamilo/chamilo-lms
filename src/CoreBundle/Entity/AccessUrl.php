@@ -504,7 +504,12 @@ class AccessUrl extends AbstractResource implements ResourceInterface
      */
     public function getResourceName(): string
     {
-        return $this->getUrl();
+        $url = $this->getUrl();
+        $url = parse_url($url);
+
+        $url = $url['host'];
+
+        return $url;
     }
 
     /**

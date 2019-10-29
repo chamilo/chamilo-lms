@@ -4,7 +4,6 @@
 /**
  * Special reporting page for admins.
  */
-
 ob_start();
 $cidReset = true;
 

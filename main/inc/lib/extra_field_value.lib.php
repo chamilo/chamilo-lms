@@ -496,7 +496,6 @@ class ExtraFieldValue extends Model
                 } else {
                     return parent::save($params, $showQuery);
                 }
-
             } else {
                 // Update
                 /* Enable this when field_loggeable is introduced as a table field (2.0)

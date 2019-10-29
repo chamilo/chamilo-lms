@@ -1,6 +1,6 @@
 <?php
-
 /* For licensing terms, see /license.txt */
+
 /**
  * This page allows the platform admin to decide which languages should
  * be available in the language selection menu in the login page. This can be
@@ -12,8 +12,6 @@
  * @author Roan EMbrechts, code cleaning
  *
  * @since Dokeos 1.6
- *
- * @package chamilo.admin
  */
 
 // we are in the admin area so we do not need a course id
@@ -316,7 +314,7 @@ while ($row = Database::fetch_array($result_select)) {
     } else {
         $setplatformlanguage =
             "<a href=\"javascript:if (confirm('".addslashes(get_lang('Are you sure you want to set this language as the portal\'s default?'))."')) { location.href='".api_get_self()."?action=setplatformlanguage&id=".$row['id']."'; }\">".
-            Display::return_icon('languages_na.png', get_lang('Set language as default'), ICON_SIZE_SMALL)."</a>";
+            Display::return_icon('languages_na.png', get_lang('Set language as default'), null, ICON_SIZE_SMALL)."</a>";
     }
 
     $allow_delete_sub_language = null;

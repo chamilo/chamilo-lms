@@ -17,14 +17,8 @@ use Westsworld\TimeAgo;
  *
  * @package chamilo.library
  */
-
-// Special tags for marking untranslated variables.
-define('SPECIAL_OPENING_TAG', '[=');
-define('SPECIAL_CLOSING_TAG', '=]');
-
 // Predefined date formats in Chamilo provided by the language sub-system.
 // To be used as a parameter for the function api_format_date()
-
 define('TIME_NO_SEC_FORMAT', 0); // 15:23
 define('DATE_FORMAT_SHORT', 1); // Aug 25, 09
 define('DATE_FORMAT_LONG', 2); // Monday August 25, 09
@@ -75,9 +69,9 @@ function get_lang($variable)
 
     // Using symfony
     $defaultDomain = 'messages';
-    $locale = api_get_interface_language();
+    $locale = api_get_language_isocode();
 
-    $translated = Container::getTranslator()->trans(
+    $translated = $translator->trans(
         $variable,
         [],
         $defaultDomain,
@@ -86,7 +80,7 @@ function get_lang($variable)
 
     if ($translated === $variable) {
         // Check the langVariable for BC
-        $translated = Container::getTranslator()->trans(
+        $translated = $translator->trans(
             "lang$variable",
             [],
             $defaultDomain,
@@ -143,11 +137,16 @@ function api_purify_language_id($language)
 }
 
 /**
- * Gets language isocode.
+ * Gets language iso code.
  */
 function api_get_language_isocode()
 {
-    return Container::getRequest()->getLocale();
+    $request = Container::getRequest();
+    if ($request) {
+        return $request->getLocale();
+    }
+
+    return 'en';
 }
 
 /**
@@ -158,18 +157,18 @@ function api_get_language_isocode()
  * */
 function api_get_platform_isocodes()
 {
-    $iso_code = [];
+    $list = [];
     $sql = "SELECT isocode 
             FROM ".Database::get_main_table(TABLE_MAIN_LANGUAGE)." 
             ORDER BY isocode ";
-    $sql_result = Database::query($sql);
-    if (Database::num_rows($sql_result)) {
-        while ($row = Database::fetch_array($sql_result)) {
-            $iso_code[] = trim($row['isocode']);
+    $result = Database::query($sql);
+    if (Database::num_rows($result)) {
+        while ($row = Database::fetch_array($result)) {
+            $list[] = trim($row['isocode']);
         }
     }
 
-    return $iso_code;
+    return $list;
 }
 
 /**

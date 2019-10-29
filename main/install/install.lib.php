@@ -1803,15 +1803,21 @@ function display_configuration_settings_form(
  */
 function display_after_install_message()
 {
-    $html = '<div class="RequirementContent">'.get_lang('When you enter your portal for the first time, the best way to understand it is to create a course with the \'Create course\' link in the menu and play around a little.').'</div>';
+    $container = Container::$container;
+
+    $trans = $container->get('translator');
+    $html = '<div class="RequirementContent">'.
+        $trans->trans(
+            'When you enter your portal for the first time, the best way to understand it is to create a course with the \'Create course\' link in the menu and play around a little.').'</div>';
     $html .= '<div class="alert alert-warning">';
-    $html .= '<strong>'.get_lang('Security advice').'</strong>';
+    $html .= '<strong>'.$trans->trans('Security advice').'</strong>';
     $html .= ': ';
-    $html .= sprintf(get_lang('To protect your site, make the whole %s directory read-only (chmod -R 0555 on Linux) and delete the %s directory.'), 'app/config/', 'main/install/');
+    $html .= sprintf($trans->trans(
+        'To protect your site, make the whole %s directory read-only (chmod -R 0555 on Linux) and delete the %s directory.'), 'var/config/', 'main/install/');
     $html .= '</div></form>
     <br />
     <a class="btn btn-success btn-block" href="../../index.php">
-        '.get_lang('Go to your newly created portal.').'
+        '.$trans->trans('Go to your newly created portal.').'
     </a>';
 
     return $html;
@@ -3163,13 +3169,15 @@ function finishInstallationWithContainer(
     $manager->persist($ticketProject);
     $manager->flush();
 
+    $trans = $container->get('translator');
+
     $categories = [
-        get_lang('Enrollment') => get_lang('Tickets about enrollment'),
-        get_lang('General information') => get_lang('Tickets about general information'),
-        get_lang('Requests and paperwork') => get_lang('Tickets about requests and paperwork'),
-        get_lang('Academic Incidents') => get_lang('Tickets about academic incidents, like exams, practices, tasks, etc.'),
-        get_lang('Virtual campus') => get_lang('Tickets about virtual campus'),
-        get_lang('Online evaluation') => get_lang('Tickets about online evaluation'),
+        $trans->trans('Enrollment') => $trans->trans('Tickets about enrollment'),
+        $trans->trans('General information') => $trans->trans('Tickets about general information'),
+        $trans->trans('Requests and paperwork') => $trans->trans('Tickets about requests and paperwork'),
+        $trans->trans('Academic Incidents') => $trans->trans('Tickets about academic incidents, like exams, practices, tasks, etc.'),
+        $trans->trans('Virtual campus') => $trans->trans('Tickets about virtual campus'),
+        $trans->trans('Online evaluation') => $trans->trans('Tickets about online evaluation'),
     ];
 
     $i = 1;
@@ -3194,9 +3202,9 @@ function finishInstallationWithContainer(
 
     // Default Priorities
     $defaultPriorities = [
-        TicketManager::PRIORITY_NORMAL => get_lang('Normal'),
-        TicketManager::PRIORITY_HIGH => get_lang('High'),
-        TicketManager::PRIORITY_LOW => get_lang('Low'),
+        TicketManager::PRIORITY_NORMAL => $trans->trans('Normal'),
+        TicketManager::PRIORITY_HIGH => $trans->trans('High'),
+        TicketManager::PRIORITY_LOW => $trans->trans('Low'),
     ];
 
     $i = 1;
@@ -3217,11 +3225,11 @@ function finishInstallationWithContainer(
 
     // Default status
     $defaultStatus = [
-        TicketManager::STATUS_NEW => get_lang('New'),
-        TicketManager::STATUS_PENDING => get_lang('Pending'),
-        TicketManager::STATUS_UNCONFIRMED => get_lang('Unconfirmed'),
-        TicketManager::STATUS_CLOSE => get_lang('Close'),
-        TicketManager::STATUS_FORWARDED => get_lang('Forwarded'),
+        TicketManager::STATUS_NEW => $trans->trans('New'),
+        TicketManager::STATUS_PENDING => $trans->trans('Pending'),
+        TicketManager::STATUS_UNCONFIRMED => $trans->trans('Unconfirmed'),
+        TicketManager::STATUS_CLOSE => $trans->trans('Close'),
+        TicketManager::STATUS_FORWARDED => $trans->trans('Forwarded'),
     ];
 
     $i = 1;

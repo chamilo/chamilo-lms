@@ -713,7 +713,7 @@ $poweredBy = 'Powered by <a href="http://www.chamilo.org" target="_blank"> Chami
 ?>
 <!DOCTYPE html>
 <head>
-    <title>&mdash; <?php echo get_lang('Chamilo installation').' &mdash; '.get_lang('Version').' '.$new_version; ?></title>
+    <title>&mdash; <?php echo $translator->trans('Chamilo installation').' &mdash; '.$translator->trans('Version').' '.$new_version; ?></title>
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -742,7 +742,7 @@ $poweredBy = 'Powered by <a href="http://www.chamilo.org" target="_blank"> Chami
             //Blocking step6 button
             $("#button_step6").click(function() {
                 $("#button_step6").hide();
-                $("#button_please_wait").html('<?php echo addslashes(get_lang('Continue')); ?>');
+                $("#button_please_wait").html('<?php echo addslashes($translator->trans('Continue')); ?>');
                 $("#button_please_wait").show();
                 $("#button_please_wait").attr('disabled', true);
                 $("#is_executable").attr("value",'step6');
@@ -752,12 +752,12 @@ $poweredBy = 'Powered by <a href="http://www.chamilo.org" target="_blank"> Chami
                 if ($("#id_contact_form").css("display") == "none") {
                     $("#id_contact_form").css("display","block");
                     $("#img_plus_and_minus").html(
-                        '&nbsp;<i class="fa fa-eye" aria-hidden="true"></i>&nbsp;<?php echo get_lang('Contact information'); ?>'
+                        '&nbsp;<i class="fa fa-eye" aria-hidden="true"></i>&nbsp;<?php echo $translator->trans('Contact information'); ?>'
                     );
                 } else {
                     $("#id_contact_form").css("display","none");
                     $("#img_plus_and_minus").html(
-                        '&nbsp;<i class="fa fa-eye-slash" aria-hidden="true"></i>&nbsp;<?php echo get_lang('Contact information'); ?>'
+                        '&nbsp;<i class="fa fa-eye-slash" aria-hidden="true"></i>&nbsp;<?php echo $translator->trans('Contact information'); ?>'
                     );
                 }
             });
@@ -765,7 +765,7 @@ $poweredBy = 'Powered by <a href="http://www.chamilo.org" target="_blank"> Chami
 
         function send_contact_information() {
             if (!document.getElementById('accept_licence').checked) {
-                alert('<?php echo get_lang('You must accept the licence'); ?>')
+                alert('<?php echo $translator->trans('You must accept the licence'); ?>')
                 ;return false;
             } else {
                 var data_post = "";
@@ -790,11 +790,11 @@ $poweredBy = 'Powered by <a href="http://www.chamilo.org" target="_blank"> Chami
                     data: data_post,
                     success: function(datos) {
                         if (datos == 'required_field_error') {
-                            message = "<?php echo get_lang('The form contains incorrect or incomplete data. Please check your input.'); ?>";
+                            message = "<?php echo $translator->trans('The form contains incorrect or incomplete data. Please check your input.'); ?>";
                         } else if (datos == '1') {
-                            message = "<?php echo get_lang('Contact informationHasBeenSent'); ?>";
+                            message = "<?php echo $translator->trans('Contact informationHasBeenSent'); ?>";
                         } else {
-                            message = "<?php echo get_lang('Error').': '.get_lang('Contact informationHasNotBeenSent'); ?>";
+                            message = "<?php echo $translator->trans('Error').': '.$translator->trans('Contact informationHasNotBeenSent'); ?>";
                         }
                         alert(message);
                         $('#license-next').trigger('click');
@@ -805,7 +805,7 @@ $poweredBy = 'Powered by <a href="http://www.chamilo.org" target="_blank"> Chami
         }
     </script>
 </head>
-<body class="bg-chamilo bg-install" dir="<?php echo api_get_text_direction(); ?>">
+<body class="bg-chamilo bg-install">
 <div class="install-box">
     <div class="row">
         <div class="col-md-4">
@@ -816,37 +816,37 @@ $poweredBy = 'Powered by <a href="http://www.chamilo.org" target="_blank"> Chami
                 <ol class="list-group">
                     <li class="list-group-item <?php step_active('1'); ?>">
                         <span class="number"> 1 </span>
-                        <?php echo get_lang('Installation language'); ?>
+                        <?php echo $translator->trans('Installation language'); ?>
                     </li>
                     <li class="list-group-item <?php step_active('2'); ?>">
                         <span class="number"> 2 </span>
-                        <?php echo get_lang('Requirements'); ?>
+                        <?php echo $translator->trans('Requirements'); ?>
                     </li>
                     <li class="list-group-item <?php step_active('3'); ?>">
                         <span class="number"> 3 </span>
-                        <?php echo get_lang('Licence'); ?>
+                        <?php echo $translator->trans('Licence'); ?>
                     </li>
                     <li class="list-group-item <?php step_active('4'); ?>">
                         <span class="number"> 4 </span>
-                        <?php echo get_lang('MySQL database settings'); ?>
+                        <?php echo $translator->trans('MySQL database settings'); ?>
                     </li>
                     <li class="list-group-item <?php step_active('5'); ?>">
                         <span class="number"> 5 </span>
-                        <?php echo get_lang('Config settings'); ?>
+                        <?php echo $translator->trans('Config settings'); ?>
                     </li>
                     <li class="list-group-item <?php step_active('6'); ?>">
                         <span class="number"> 6 </span>
-                        <?php echo get_lang('Show Overview'); ?>
+                        <?php echo $translator->trans('Show Overview'); ?>
                     </li>
                     <li class="list-group-item <?php step_active('7'); ?>">
                         <span class="number"> 7 </span>
-                        <?php echo get_lang('Install'); ?>
+                        <?php echo $translator->trans('Install'); ?>
                     </li>
                 </ol>
             </div>
             <div id="note">
                 <a class="btn btn-info btn-block" href="<?php echo $installationGuideLink; ?>" target="_blank">
-                    <em class="fa fa-file-text-o"></em> <?php echo get_lang('Read the installation guide'); ?>
+                    <em class="fa fa-file-text-o"></em> <?php echo $translator->trans('Read the installation guide'); ?>
                 </a>
             </div>
         </div>

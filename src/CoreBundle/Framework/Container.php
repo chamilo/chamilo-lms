@@ -205,6 +205,10 @@ class Container
      */
     public static function getRequest()
     {
+        if (self::$container === null) {
+            return null;
+        }
+
         if (!empty(self::$request)) {
             return self::$request;
         }
@@ -213,7 +217,7 @@ class Container
     }
 
     /**
-     * @param $request
+     * @param Request $request
      */
     public static function setRequest($request)
     {

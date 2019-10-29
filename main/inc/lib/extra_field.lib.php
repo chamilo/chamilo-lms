@@ -161,7 +161,9 @@ class ExtraField extends Model
 
         $this->pageUrl = 'extra_fields.php?type='.$this->type;
         // Example QuestionFields
-        $this->pageName = get_lang(ucwords($this->type).'Fields');
+        // @todo
+        //$this->pageName = get_lang(ucwords($this->type).'Fields');
+        $this->pageName = ucwords($this->type).'Fields';
     }
 
     /**

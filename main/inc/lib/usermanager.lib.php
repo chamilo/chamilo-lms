@@ -1764,6 +1764,8 @@ class UserManager
      * functions dealing with the user's productions, as they are located in
      * the same directory.
      *
+     * @deprecated use Resources.
+     *
      * @param int    $id       User ID
      * @param string $type     Type of path to return (can be 'system', 'web')
      * @param array  $userInfo user information to avoid query the DB
@@ -1898,7 +1900,7 @@ class UserManager
      * In case the first level of subdirectory of users/ does not exist, the
      * function will attempt to create it. Probably not the right place to do it
      * but at least it avoids headaches in many other places.
-     *
+     * @deprecated use Resources
      * @param int    $id   User ID
      * @param string $type Type of path to return (can be 'system', 'web', 'last')
      *
@@ -1906,6 +1908,7 @@ class UserManager
      */
     public static function getUserPathById($id, $type)
     {
+        return null;
         $id = (int) $id;
         if (!$id) {
             return null;
@@ -1950,6 +1953,8 @@ class UserManager
      *                            USER_IMAGE_SIZE_MEDIUM, USER_IMAGE_SIZE_BIG or  USER_IMAGE_SIZE_ORIGINAL
      * @param bool   $addRandomId
      * @param array  $userInfo    to avoid query the DB
+     *
+     * @todo use resources to get the user picture
      *
      * @return string
      */

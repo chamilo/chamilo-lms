@@ -27,7 +27,6 @@ class LegacyListener
         if (!$event->isMasterRequest()) {
             return;
         }
-
         $request = $event->getRequest();
         $session = $request->getSession();
 
@@ -113,7 +112,7 @@ class LegacyListener
             if ($userObject !== null && !empty($userId)) {
                 $userInfo = api_get_user_info($userId);
                 $userStatus = $userInfo['status'];
-                $isAdmin = \UserManager::is_admin($userId);
+                $isAdmin = $userInfo['is_admin'];
                 $userInfo['is_anonymous'] = false;
                 $allowedCreateCourse = $userStatus === 1;
             }

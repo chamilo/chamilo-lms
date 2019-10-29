@@ -96,10 +96,7 @@ class CourseManager
         $hook = Container::instantiateHook(HookCreateCourse::class);
 
         // Check portal limits
-        $accessUrlId = empty($accessUrlId)
-            ? (api_get_multiple_access_url() ? api_get_current_access_url_id() : 1)
-            : $accessUrlId;
-
+        $accessUrlId = api_get_current_access_url_id();
         $authorId = empty($authorId) ? api_get_user_id() : (int) $authorId;
 
         if (isset($_configuration[$accessUrlId]) && is_array($_configuration[$accessUrlId])) {
@@ -3452,6 +3449,7 @@ class CourseManager
         $source_file = null,
         $cropParameters = null
     ) {
+        return false;
         if (empty($courseInfo)) {
             return false;
         }

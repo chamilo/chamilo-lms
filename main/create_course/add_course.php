@@ -2,6 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\CourseCategory;
+use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Repository\CourseCategoryRepository;
 
 /**
@@ -351,7 +352,7 @@ if ($form->validate()) {
 
             if (!empty($course_info)) {
                 // update course picture
-                $picture = $_FILES['picture'];
+                /*$picture = $_FILES['picture'];
                 if (!empty($picture['name'])) {
                     $picture_uri = CourseManager::update_course_picture(
                         $course_info,
@@ -359,26 +360,16 @@ if ($form->validate()) {
                         $picture['tmp_name'],
                         $course_values['picture_crop_result']
                     );
-                }
-
-                /*
-                $directory  = $course_info['directory'];
-                $title      = $course_info['title'];
-
-                // Preparing a confirmation message.
-                $link = api_get_path(WEB_COURSE_PATH).$directory.'/';
-
-                $tpl->assign('course_url', $link);
-                $tpl->assign('course_title', Display::url($title, $link));
-                $tpl->assign('course_id', $course_info['code']);
-
-                $add_course_tpl = $tpl->get_template('create_course/add_course.tpl');
-                $message = $tpl->fetch($add_course_tpl);*/
+                }*/
+                /*$resourceFile = new \Chamilo\CoreBundle\Entity\Resource\ResourceFile();
+                $resourceFile->setName('course_image')
+                $picture['tmp_name']*/
                 $splash = api_get_setting('course_creation_splash_screen');
                 if ($splash === 'true') {
-                    $url = api_get_path(WEB_CODE_PATH);
+                    $url = Container::getRouter()->generate('chamilo_core_course_welcome', ['course' =>$course_info['code']]);
+                    /*
                     $url .= 'course_info/start.php?'.api_get_cidreq_params($course_info['code']);
-                    $url .= '&first=1';
+                    $url .= '&first=1';*/
                     header('Location: '.$url);
                     exit;
                 } else {

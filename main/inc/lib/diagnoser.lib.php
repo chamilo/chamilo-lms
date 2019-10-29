@@ -177,7 +177,7 @@ class Diagnoser
             get_lang('The directory should be removed (it is no longer necessary)')
         );
 
-        $app_version = api_get_setting('chamilo_database_version');
+        $app_version = api_get_setting('platform.chamilo_database_version');
         $array[] = $this->build_setting(
             self::STATUS_INFORMATION,
             '[DB]',

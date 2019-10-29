@@ -5,8 +5,6 @@
  * GamificationUtils class
  * Functions to manage the gamification mode.
  *
- * @package chamilo.library
- *
  * @author Angel Fernando Quiroz Campos <angel.quiroz@beeznest.com>
  */
 class GamificationUtils

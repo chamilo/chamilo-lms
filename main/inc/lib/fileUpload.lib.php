@@ -294,7 +294,10 @@ function handle_uploaded_document(
         // We can only unzip ZIP files (no gz, tar,...)
         if ($output) {
             Display::addFlash(
-                Display::return_message(get_lang('The file you selected was not a zip file.')." ".get_lang('Please Try Again!'), 'error')
+                Display::return_message(
+                    get_lang('The file you selected was not a zip file.')." ".get_lang('Please Try Again!'),
+                    'error'
+                )
             );
         }
 
@@ -310,7 +313,10 @@ function handle_uploaded_document(
         if (!filter_extension($cleanName)) {
             if ($output) {
                 Display::addFlash(
-                    Display::return_message(get_lang('File upload failed: this file extension or file type is prohibited'), 'error')
+                    Display::return_message(
+                        get_lang('File upload failed: this file extension or file type is prohibited'),
+                        'error'
+                    )
                 );
             }
 
@@ -329,9 +335,9 @@ function handle_uploaded_document(
                 $errorResult = moveUploadedFile($uploadedFile, $whereToSave.$cleanName);
                 if ($errorResult) {
                     return $whereToSave.$cleanName;
-                } else {
-                    return $errorResult;
                 }
+
+                return $errorResult;
             }
 
             /*

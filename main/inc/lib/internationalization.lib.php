@@ -115,7 +115,6 @@ function api_get_interface_language(
 /**
  * Returns a purified language id, without possible suffixes that will disturb language identification in certain cases.
  *
- * @param string $language the input language identificator, for example 'french_unicode'
  * @param string the same purified or filtered language id, for example 'french'
  *
  * @return string

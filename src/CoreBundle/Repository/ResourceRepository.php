@@ -115,17 +115,17 @@ class ResourceRepository extends EntityRepository
         AbstractResource $parent = null
     ): ResourceNode {
         $em = $this->getEntityManager();
-        $resourceNode = new ResourceNode();
 
-        //$tool = $this->getTool($resource->getToolName());
         $resourceType = $em->getRepository('ChamiloCoreBundle:Resource\ResourceType')->findOneBy(
             ['name' => $resource->getToolName()]
         );
 
+        $resourceNode = new ResourceNode();
         $resourceNode
             ->setName($resource->getResourceName())
             ->setCreator($creator)
-            ->setResourceType($resourceType);
+            ->setResourceType($resourceType)
+        ;
 
         if ($parent !== null) {
             $resourceNode->setParent($parent->getResourceNode());

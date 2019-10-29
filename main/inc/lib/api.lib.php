@@ -4861,8 +4861,8 @@ function languageToCountryIsoCode($languageIsoCode)
  */
 function api_get_languages()
 {
-    $tbl_language = Database::get_main_table(TABLE_MAIN_LANGUAGE);
-    $sql = "SELECT * FROM $tbl_language WHERE available='1' 
+    $table = Database::get_main_table(TABLE_MAIN_LANGUAGE);
+    $sql = "SELECT * FROM $table WHERE available='1' 
             ORDER BY original_name ASC";
     $result = Database::query($sql);
     $languages = [];

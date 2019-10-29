@@ -62,7 +62,6 @@ define('QUICKFORM_INVALID_DATASOURCE', -9);
 class HTML_QuickForm extends HTML_Common
 {
     const MAX_ELEMENT_ARGUMENT = 10;
-    private $dateTimePickerLibraryAdded;
 
     /**
      * Array containing the form fields

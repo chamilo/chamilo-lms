@@ -42,7 +42,6 @@ $action = isset($_REQUEST['action']) ? $_REQUEST['action'] : '';
 $em = Database::getManager();
 $repo = Container::getDocumentRepository();
 $allowUseTool = false;
-$charset = 'utf-8';
 
 if ($allowDownloadDocumentsByApiKey) {
     try {

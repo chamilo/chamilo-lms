@@ -11,8 +11,6 @@ use Symfony\Component\Form\FormBuilderInterface;
 
 /**
  * Class LanguageSettingsSchema.
- *
- * @package Chamilo\CoreBundle\Settings
  */
 class LanguageSettingsSchema extends AbstractSettingsSchema
 {
@@ -59,8 +57,16 @@ class LanguageSettingsSchema extends AbstractSettingsSchema
             'Course language' => 'course_lang', // language of the current course
         ];
 
+        // @todo replace with a call to the Language repository.
+        $languages = api_get_languages();
+        $list = [];
+        foreach ($languages as $index => $value) {
+            $list[html_entity_decode($value)] = $index;
+        }
+
+        $options = ['choices' => $list, 'choice_loader' => null];
         $builder
-            ->add('platform_language', LanguageType::class)
+            ->add('platform_language', LanguageType::class, $options)
             ->add('allow_use_sub_language', YesNoType::class)
             ->add('auto_detect_language_custom_pages', YesNoType::class)
             ->add('show_different_course_language', YesNoType::class)

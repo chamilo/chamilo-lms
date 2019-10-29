@@ -75,10 +75,13 @@ function get_lang($variable)
 
     // Using symfony
     $defaultDomain = 'messages';
+    $locale = api_get_interface_language();
+
     $translated = Container::getTranslator()->trans(
         $variable,
         [],
-        $defaultDomain
+        $defaultDomain,
+        $locale
     );
 
     if ($translated === $variable) {
@@ -86,7 +89,8 @@ function get_lang($variable)
         $translated = Container::getTranslator()->trans(
             "lang$variable",
             [],
-            $defaultDomain
+            $defaultDomain,
+            $locale
         );
 
         if ($translated === "lang$variable") {
@@ -143,7 +147,7 @@ function api_purify_language_id($language)
  */
 function api_get_language_isocode()
 {
-    return Container::getTranslator()->getLocale();
+    return Container::getRequest()->getLocale();
 }
 
 /**

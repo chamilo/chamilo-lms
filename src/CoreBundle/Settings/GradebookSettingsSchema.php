@@ -10,8 +10,6 @@ use Symfony\Component\Form\FormBuilderInterface;
 
 /**
  * Class GradebookSettingsSchema.
- *
- * @package Chamilo\CoreBundle\Settings
  */
 class GradebookSettingsSchema extends AbstractSettingsSchema
 {

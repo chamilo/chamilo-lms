@@ -15,8 +15,6 @@ use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
  *
  * Priority order: platform -> user
  * Priority order: platform -> user -> course
- *
- * @package Chamilo\CoreBundle\EventListener
  */
 class UserLocaleListener
 {

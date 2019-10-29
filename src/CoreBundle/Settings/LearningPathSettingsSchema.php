@@ -9,8 +9,6 @@ use Symfony\Component\Form\FormBuilderInterface;
 
 /**
  * Class LearningPathSettingsSchema.
- *
- * @package Chamilo\CoreBundle\Settings
  */
 class LearningPathSettingsSchema extends AbstractSettingsSchema
 {

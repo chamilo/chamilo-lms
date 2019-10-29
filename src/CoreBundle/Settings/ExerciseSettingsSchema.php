@@ -9,8 +9,6 @@ use Symfony\Component\Form\FormBuilderInterface;
 
 /**
  * Class ExerciseSettingsSchema.
- *
- * @package Chamilo\CoreBundle\Settings
  */
 class ExerciseSettingsSchema extends AbstractSettingsSchema
 {

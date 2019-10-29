@@ -9,8 +9,6 @@ use Symfony\Component\Form\FormBuilderInterface;
 
 /**
  * Class ChatSettingsSchema.
- *
- * @package Chamilo\CoreBundle\Settings
  */
 class ChatSettingsSchema extends AbstractSettingsSchema
 {

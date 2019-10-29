@@ -12,8 +12,6 @@ use Symfony\Component\Form\FormBuilderInterface;
 
 /**
  * Class DocumentSettingsSchema.
- *
- * @package Chamilo\CoreBundle\Settings
  */
 class DocumentSettingsSchema extends AbstractSettingsSchema
 {

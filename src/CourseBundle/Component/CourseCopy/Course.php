@@ -9,8 +9,6 @@ use Chamilo\CourseBundle\Component\CourseCopy\Resources\Resource;
  * A course-object to use in Export/Import/Backup/Copy.
  *
  * @author Bart Mollet <bart.mollet@hogent.be>
- *
- * @package chamilo.backup
  */
 class Course
 {

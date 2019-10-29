@@ -9,8 +9,6 @@ use Symfony\Component\Form\FormBuilderInterface;
 
 /**
  * Class WebServiceSettingsSchema.
- *
- * @package Chamilo\CoreBundle\Settings
  */
 class WebServiceSettingsSchema extends AbstractSettingsSchema
 {

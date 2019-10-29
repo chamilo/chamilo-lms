@@ -13,8 +13,6 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
 /**
  * Class CourseAdmin.
- *
- * @package Chamilo\CoreBundle\Admin
  */
 class CourseRelUserAdmin extends AbstractAdmin
 {

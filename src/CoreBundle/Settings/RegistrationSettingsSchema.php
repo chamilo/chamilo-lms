@@ -11,8 +11,6 @@ use Symfony\Component\Form\FormBuilderInterface;
 
 /**
  * Class RegistrationSettingsSchema.
- *
- * @package Chamilo\CoreBundle\Settings
  */
 class RegistrationSettingsSchema extends AbstractSettingsSchema
 {

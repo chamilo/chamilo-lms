@@ -13,8 +13,6 @@ use Symfony\Component\Filesystem\Filesystem;
  *
  * @author Bart Mollet <bart.mollet@hogent.be>
  *
- * @package chamilo.backup
- *
  * @todo Use archive-folder of Chamilo?
  */
 class CourseArchiver

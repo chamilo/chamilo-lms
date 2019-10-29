@@ -12,8 +12,6 @@ use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 
 /**
  * Class CourseRequestAdmin.
- *
- * @package Chamilo\CoreBundle\Admin
  */
 class CourseRequestAdmin extends AbstractAdmin
 {

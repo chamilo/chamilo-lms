@@ -9,8 +9,6 @@ use Symfony\Component\Form\FormBuilderInterface;
 
 /**
  * Class SkillSettingsSchema.
- *
- * @package Chamilo\CoreBundle\Settings
  */
 class SkillSettingsSchema extends AbstractSettingsSchema
 {

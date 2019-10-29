@@ -9,8 +9,6 @@ use Symfony\Component\Form\FormBuilderInterface;
 
 /**
  * Class PptToLpSettingsSchema.
- *
- * @package Chamilo\CoreBundle\Settings
  */
 class PptToLpSettingsSchema extends AbstractSettingsSchema
 {

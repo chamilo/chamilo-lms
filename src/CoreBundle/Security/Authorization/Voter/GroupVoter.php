@@ -15,8 +15,6 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * Class GroupVoter.
- *
- * @package Chamilo\CoreBundle\Security\Authorization\Voter
  */
 class GroupVoter extends Voter
 {

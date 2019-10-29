@@ -31,7 +31,7 @@ abstract class AbstractSettingsSchema implements SchemaInterface
     }
 
     /**
-     * @param $repo
+     * @param string $repo
      */
     public function setRepository($repo)
     {

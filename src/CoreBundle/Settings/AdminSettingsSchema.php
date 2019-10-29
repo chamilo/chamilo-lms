@@ -11,8 +11,6 @@ use Symfony\Component\Form\FormBuilderInterface;
 
 /**
  * Class AdminSettingsSchema.
- *
- * @package Chamilo\CoreBundle\Settings
  */
 class AdminSettingsSchema extends AbstractSettingsSchema
 {

@@ -11,8 +11,6 @@ use Sonata\AdminBundle\Show\ShowMapper;
 
 /**
  * Class CourseCategoryAdmin.
- *
- * @package Chamilo\CoreBundle\Admin
  */
 class CourseCategoryAdmin extends AbstractAdmin
 {

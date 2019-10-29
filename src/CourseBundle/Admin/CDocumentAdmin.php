@@ -12,8 +12,6 @@ use Sonata\AdminBundle\Show\ShowMapper;
 
 /**
  * Class CDocumentAdmin.
- *
- * @package Chamilo\CourseBundle\Admin
  */
 class CDocumentAdmin extends AbstractAdmin
 {

@@ -22,8 +22,6 @@ use Zend\Permissions\Acl\Role\GenericRole as Role;
 
 /**
  * Class ResourceNodeVoter.
- *
- * @package Chamilo\CoreBundle\Security\Authorization\Voter
  */
 class ResourceNodeVoter extends Voter
 {

@@ -9,8 +9,6 @@ use Symfony\Component\Form\FormBuilderInterface;
 
 /**
  * Class DropboxSettingsSchema.
- *
- * @package Chamilo\CoreBundle\Settings
  */
 class DropboxSettingsSchema extends AbstractSettingsSchema
 {

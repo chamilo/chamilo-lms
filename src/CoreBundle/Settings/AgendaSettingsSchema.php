@@ -10,8 +10,6 @@ use Symfony\Component\Form\FormBuilderInterface;
 
 /**
  * Class AgendaSettingsSchema.
- *
- * @package Chamilo\CoreBundle\Settings
  */
 class AgendaSettingsSchema extends AbstractSettingsSchema
 {

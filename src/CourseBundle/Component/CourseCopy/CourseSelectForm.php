@@ -13,8 +13,6 @@ use Display;
  *
  * @author Bart Mollet <bart.mollet@hogent.be>
  * @author Julio Montoya <gugli100@gmail.com>
- *
- * @package chamilo.backup
  */
 class CourseSelectForm
 {

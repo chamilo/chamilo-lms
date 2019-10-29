@@ -9,8 +9,6 @@ use Symfony\Component\Form\FormBuilderInterface;
 
 /**
  * Class GlossarySettingsSchema.
- *
- * @package Chamilo\CoreBundle\Settings
  */
 class GlossarySettingsSchema extends AbstractSettingsSchema
 {

@@ -17,8 +17,6 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * Class CourseVoter.
- *
- * @package Chamilo\CoreBundle\Security\Authorization\Voter
  */
 class CourseVoter extends Voter
 {

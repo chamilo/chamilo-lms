@@ -17,8 +17,6 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * Class SessionVoter.
- *
- * @package Chamilo\CoreBundle\Security\Authorization\Voter
  */
 class SessionVoter extends Voter
 {

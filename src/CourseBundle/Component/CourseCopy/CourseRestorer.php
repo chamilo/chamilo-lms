@@ -23,8 +23,6 @@ use TestCategory;
  *
  * @author Bart Mollet <bart.mollet@hogent.be>
  * @author Julio Montoya <gugli100@gmail.com> Several fixes/improvements
- *
- * @package chamilo.backup
  */
 class CourseRestorer
 {

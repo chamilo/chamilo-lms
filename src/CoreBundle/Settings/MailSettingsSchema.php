@@ -9,8 +9,6 @@ use Symfony\Component\Form\FormBuilderInterface;
 
 /**
  * Class MailSettingsSchema.
- *
- * @package Chamilo\CoreBundle\Settings
  */
 class MailSettingsSchema extends AbstractSettingsSchema
 {

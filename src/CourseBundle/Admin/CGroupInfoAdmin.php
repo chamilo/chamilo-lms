@@ -11,8 +11,6 @@ use Sonata\AdminBundle\Show\ShowMapper;
 
 /**
  * Class CGroupInfoAdmin.
- *
- * @package Chamilo\CourseBundle\Admin
  */
 class CGroupInfoAdmin extends AbstractAdmin
 {

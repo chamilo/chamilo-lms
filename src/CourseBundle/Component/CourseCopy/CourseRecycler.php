@@ -10,8 +10,6 @@ use TestCategory;
  * Class to delete items from a Chamilo-course.
  *
  * @author Bart Mollet <bart.mollet@hogent.be>
- *
- * @package chamilo.backup
  */
 class CourseRecycler
 {

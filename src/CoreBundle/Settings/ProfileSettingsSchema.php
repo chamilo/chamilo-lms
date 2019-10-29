@@ -11,8 +11,6 @@ use Symfony\Component\Form\FormBuilderInterface;
 
 /**
  * Class ProfileSettingsSchema.
- *
- * @package Chamilo\CoreBundle\Settings
  */
 class ProfileSettingsSchema extends AbstractSettingsSchema
 {

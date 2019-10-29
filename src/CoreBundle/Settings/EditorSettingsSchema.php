@@ -9,8 +9,6 @@ use Symfony\Component\Form\FormBuilderInterface;
 
 /**
  * Class EditorSettingsSchema.
- *
- * @package Chamilo\CoreBundle\Settings
  */
 class EditorSettingsSchema extends AbstractSettingsSchema
 {

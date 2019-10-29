@@ -43,8 +43,6 @@ use TestCategory;
  * Builds a course-object from a Chamilo-course.
  *
  * @author Bart Mollet <bart.mollet@hogent.be>
- *
- * @package chamilo.backup
  */
 class CourseBuilder
 {

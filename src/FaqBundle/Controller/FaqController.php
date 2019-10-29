@@ -11,8 +11,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 /**
  * Class FaqController.
- *
- * @package Chamilo\FaqBundle\Controller
  */
 class FaqController extends AbstractController
 {

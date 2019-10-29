@@ -8,8 +8,6 @@ use Sylius\Bundle\SettingsBundle\Resolver\SettingsResolverInterface;
 
 /**
  * Class SessionSettingsSchema.
- *
- * @package Chamilo\CoreBundle\Settings
  */
 class SettingsResolver implements SettingsResolverInterface
 {

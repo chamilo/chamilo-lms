@@ -7,7 +7,6 @@ addons:
         packages:
         - apache2
         - postfix
-        - libapache2-mod-fastcgi
         - libappindicator1
         - fonts-liberation
 

@@ -1704,10 +1704,10 @@ if ($isAllowedToEdit ||
     }
 }
 if (!isset($_GET['keyword']) && !$is_certificate_mode) {
-    $actionsLeft .= Display::url(
+    /*$actionsLeft .= Display::url(
         Display::return_icon('slideshow.png', get_lang('View Slideshow'), '', ICON_SIZE_MEDIUM),
         api_get_path(WEB_CODE_PATH).'document/slideshow.php?'.api_get_cidreq().'&curdirpath='.$curdirpathurl
-    );
+    );*/
 }
 
 if ($isAllowedToEdit && !$is_certificate_mode) {

@@ -361,28 +361,13 @@ if ($form->validate()) {
                     // @todo add in repository
                     $course = $repo->find($course_info['real_id']);
                     $illustration = new \Chamilo\CoreBundle\Entity\Illustration();
-                    $illustration->setName('course_picture');
-
                     $repo->addResourceNode($illustration, api_get_user_entity(api_get_user_id()), $course);
-                    $repo->addFileToResource($illustration, $uploadFile);
-
+                    $file = $repo->addFileToResource($illustration, $uploadFile);
+                    $file->setCrop($course_values['picture_crop_result']);
+                    $em->persist($file);
                     $em->persist($illustration);
                     $em->flush();
                 }
-
-                // update course picture
-                /*$picture = $_FILES['picture'];
-                if (!empty($picture['name'])) {
-                    $picture_uri = CourseManager::update_course_picture(
-                        $course_info,
-                        $picture['name'],
-                        $picture['tmp_name'],
-                        $course_values['picture_crop_result']
-                    );
-                }*/
-                /*$resourceFile = new \Chamilo\CoreBundle\Entity\Resource\ResourceFile();
-                $resourceFile->setName('course_image')
-                $picture['tmp_name']*/
 
                 $splash = api_get_setting('course_creation_splash_screen');
                 if ($splash === 'true') {

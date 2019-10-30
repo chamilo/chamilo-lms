@@ -326,8 +326,8 @@ function returnThumbnail($course)
         true,
         true
     );
-    $repo = Container::getCourseRepository();
-    $illustration = $repo->getIllustration($courseEntity);
+
+    $illustration = $courseEntity->getResourceNodeIllustration();
     if ($illustration) {
         $courseMediumImage = Container::getRouter()->generate(
             'core_tool_resource',

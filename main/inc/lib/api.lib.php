@@ -6,6 +6,7 @@ use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session as SessionEntity;
 use Chamilo\CoreBundle\Entity\SettingsCurrent;
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CourseBundle\Entity\CGroupInfo;
 use Chamilo\CourseBundle\Entity\CItemProperty;
 use Chamilo\ThemeBundle\Controller\ExceptionController;
 use Chamilo\UserBundle\Entity\User;
@@ -2123,7 +2124,7 @@ function api_get_session_entity($id = 0)
 /**
  * @param int $id
  *
- * @return \Chamilo\CourseBundle\Entity\CGroupInfo
+ * @return CGroupInfo
  */
 function api_get_group_entity($id = 0)
 {

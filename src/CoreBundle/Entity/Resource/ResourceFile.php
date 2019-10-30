@@ -110,6 +110,13 @@ class ResourceFile
     protected $file;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="crop", type="string", length=255, nullable=true)
+     */
+    protected $crop;
+
+    /**
      * @var ResourceNode
      *
      * @ORM\OneToOne(targetEntity="Chamilo\CoreBundle\Entity\Resource\ResourceNode", mappedBy="resourceFile")
@@ -214,6 +221,27 @@ class ResourceFile
     public function setName($name)
     {
         $this->name = $name;
+
+        return $this;
+    }
+
+
+    /**
+     * @return string
+     */
+    public function getCrop(): string
+    {
+        return $this->crop;
+    }
+
+    /**
+     * @param string $crop
+     *
+     * @return $this
+     */
+    public function setCrop($crop)
+    {
+        $this->crop = $crop;
 
         return $this;
     }

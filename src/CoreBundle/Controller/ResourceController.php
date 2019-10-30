@@ -440,7 +440,7 @@ class ResourceController extends BaseController implements CourseControllerInter
      * @return StreamedResponse
      * @throws \League\Flysystem\FileNotFoundException
      */
-    private function showFile(ResourceNode $resourceNode, $glide, $type, $filter)
+    private function showFile(ResourceNode $resourceNode, Glide $glide, $type, $filter)
     {
         $fs = $this-> container->get('oneup_flysystem.resources_filesystem');
 
@@ -470,6 +470,11 @@ class ResourceController extends BaseController implements CourseControllerInter
                 if (!empty($filter)) {
                     $server = $glide->getServer();
                     $filter = $glide->getFilters()[$filter] ?? [];
+
+                    $crop = $resourceFile->getCrop();
+                    if (!empty($filter)) {
+                        $filter['crop'] = $crop;
+                    }
 
                     return $server->getImageResponse($filePath, $filter);
                 }

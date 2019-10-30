@@ -77,7 +77,7 @@ class ResourceRepository extends EntityRepository
      */
     public function getEntityManager(): EntityManager
     {
-        return $this->entityManager;
+        return $this->getRepository()->getEntityManager();
     }
 
     /**
@@ -116,7 +116,7 @@ class ResourceRepository extends EntityRepository
      *
      * @return ResourceNode|mixed
      */
-    public function getIllustration(AbstractResource $resource)
+    /*public function getIllustration(AbstractResource $resource)
     {
         $node = $resource->getResourceNode();
         // @todo also filter by the resource type = Illustration
@@ -127,11 +127,7 @@ class ResourceRepository extends EntityRepository
         $illustration = $node->getChildren()->matching($criteria)->first();
 
         return $illustration;
-
-        /** @var ResourceNode $illustration */
-        //$illustration = $this->getRepository()->findOneBy(['parent' => $node, 'name' => 'course_picture']);
-        var_dump($illustration);
-    }
+    }*/
 
     /**
      * @param AbstractResource $resource

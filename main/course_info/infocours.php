@@ -22,10 +22,13 @@ $nameTools = get_lang('Settings');
 api_protect_course_script(true);
 api_block_anonymous_users();
 $_course = api_get_course_info();
+$courseEntity = api_get_course_entity();
 $currentCourseRepository = $_course['path'];
 $isAllowToEdit = api_is_course_admin() || api_is_platform_admin();
 $course_code = api_get_course_id();
 $courseId = api_get_course_int_id();
+$repo = Container::getCourseRepository();
+$em = $repo->getEntityManager();
 $isEditable = true;
 
 if (!$isAllowToEdit) {
@@ -85,9 +88,13 @@ $form->addHtml(card_settings_open('course_settings', get_lang('Course settings')
 $image = '';
 // Display course picture
 $course_path = api_get_path(SYS_COURSE_PATH).$currentCourseRepository; // course path
-if (file_exists($course_path.'/course-pic85x85.png')) {
-    $course_web_path = api_get_path(WEB_COURSE_PATH).$currentCourseRepository; // course web path
-    $course_medium_image = $course_web_path.'/course-pic85x85.png?'.rand(1, 1000); // redimensioned image 85x85
+
+$illustration = $courseEntity->getResourceNodeIllustration();
+if (!empty($illustration)) {
+    $course_medium_image = Container::getRouter()->generate(
+         'core_tool_resource',
+         ['id' => $illustration->getId()]
+     );
     $image = '<div class="row"><label class="col-md-2 control-label">'.get_lang('Image').'</label> 
                     <div class="col-md-8"><img class="img-thumbnail" src="'.$course_medium_image.'" /></div></div>';
 }
@@ -944,20 +951,35 @@ if ($form->validate() && $isEditable) {
 
     // update course picture
     $picture = $_FILES['picture'];
+
     if (!empty($picture['name'])) {
-        $picture_uri = CourseManager::update_course_picture(
-            $_course,
-            $picture['name'],
-            $picture['tmp_name'],
-            $updateValues['picture_crop_result']
-        );
+        $uploadFile = $request->files->get('picture');
+        // Remove if exists @todo just replace don't delete everything.
+        if (!empty($courseEntity->getResourceNodeIllustration())) {
+            $em->remove($courseEntity->getResourceNodeIllustration());
+            $em->flush();
+        }
+        $illustration = new \Chamilo\CoreBundle\Entity\Illustration();
+        $em->persist($illustration);
+        $repo->addResourceNode($illustration, api_get_user_entity(api_get_user_id()), $courseEntity);
+        $file = $repo->addFileToResource($illustration, $uploadFile);
+        if ($file) {
+            $file->setCrop($updateValues['picture_crop_result']);
+            $em->persist($file);
+            $em->persist($illustration);
+            $em->flush();
+        }
     }
 
     $visibility = $updateValues['visibility'];
     $deletePicture = isset($updateValues['delete_picture']) ? $updateValues['delete_picture'] : '';
 
     if ($deletePicture) {
-        CourseManager::deleteCoursePicture($course_code);
+        $image = $courseEntity->getResourceNodeIllustration();
+        if ($image) {
+            $em->remove($image);
+            $em->flush();
+        }
     }
 
     global $_configuration;

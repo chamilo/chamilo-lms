@@ -35,6 +35,14 @@ class Illustration extends AbstractResource implements ResourceInterface
     protected $name;
 
     /**
+     * Illustration constructor.
+     */
+    public function __construct()
+    {
+        $this->name = 'illustration';
+    }
+
+    /**
      * @return int
      */
     public function getId(): int

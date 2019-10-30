@@ -3,6 +3,7 @@
 
 namespace Chamilo\CoreBundle\Entity\Resource;
 
+use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Mapping as ORM;
 use Sylius\Component\Resource\Model\ResourceInterface;
@@ -64,5 +65,21 @@ abstract class AbstractResource implements ResourceInterface
     public function getResourceNode(): ResourceNode
     {
         return $this->resourceNode;
+    }
+
+    /**
+     * @return ResourceNode
+     */
+    public function getResourceNodeIllustration()
+    {
+        $node = $this->getResourceNode();
+        // @todo also filter by the resource type = Illustration
+        $criteria = Criteria::create()->where(
+            Criteria::expr()->eq('name', 'illustration')
+        );
+
+        $illustration = $node->getChildren()->matching($criteria)->first();
+
+        return $illustration;
     }
 }

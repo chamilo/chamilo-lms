@@ -16,13 +16,13 @@ use Symfony\Component\Routing\Annotation\Route;
  * Class CourseController.
  *
  * @Route("/courses")
- *
- * @package Chamilo\CoreBundle\Controller
  */
 class CourseController extends AbstractController
 {
     /**
      * @Route("/add")
+     *
+     * @param Request $request
      *
      * @Security("has_role('ROLE_TEACHER')")
      *
@@ -63,7 +63,7 @@ class CourseController extends AbstractController
      *      options={"repository_method" = "findOneByCode"}
      * )
      */
-    public function welcomeAction(Course $course)
+    public function welcomeAction(Course $course): Response
     {
         return $this->render('@ChamiloTheme/Course/welcome.html.twig', ['course' => $course]);
     }

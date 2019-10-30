@@ -91,7 +91,6 @@ class ResourceFile
     /**
      * @var int
      *
-     *
      * @ORM\Column(type="integer", nullable=true)
      */
     protected $size;

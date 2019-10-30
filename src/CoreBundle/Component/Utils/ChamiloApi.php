@@ -7,8 +7,6 @@ use ChamiloSession as Session;
 
 /**
  * Class ChamiloApi.
- *
- * @package Chamilo\CoreBundle\Component
  */
 class ChamiloApi
 {
@@ -17,7 +15,7 @@ class ChamiloApi
     /**
      * ChamiloApi constructor.
      *
-     * @param $configuration
+     * @param array $configuration
      */
     public function __construct(array $configuration)
     {

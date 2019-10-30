@@ -7,7 +7,7 @@
         <div id="dlg-webrtc-help">
             <p>{{ 'WebRTCDialogHelp'|get_lang }}</p>
             <img src="{{ _p.web_lib ~ 'javascript/chat/img/webrtc_' ~ (navigator_is_firefox ? 'firefox' : 'chrome') }}.png"
-                 alt="{{ 'Permissions'|get_lang }}" class="img-thumbnail img-responsive">
+                 alt="{{ 'Permissions'|get_lang }}" class="img-thumbnail img-fluid">
         </div>
     </div>
     <div class="row">
@@ -152,7 +152,7 @@
             }
         };
 
-        $(document).on('ready', function () {
+        $(function () {
             VideoChat.init();
         });
     })();

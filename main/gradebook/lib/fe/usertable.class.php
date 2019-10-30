@@ -28,15 +28,15 @@ class UserTable extends SortableTable
         }
         $column = 0;
         $this->set_header($column++, get_lang('Type'));
-        $this->set_header($column++, get_lang('Evaluation'));
+        $this->set_header($column++, get_lang('Score'));
         $this->set_header($column++, get_lang('Course'));
         $this->set_header($column++, get_lang('Category'));
-        $this->set_header($column++, get_lang('EvaluationAverage'));
+        $this->set_header($column++, get_lang('ScoreAverage'));
         $this->set_header($column++, get_lang('Result'));
 
         $scoredisplay = ScoreDisplay::instance();
         if ($scoredisplay->is_custom()) {
-            $this->set_header($column++, get_lang('Display'));
+            $this->set_header($column++, get_lang('Ranking'));
         }
     }
 
@@ -80,7 +80,7 @@ class UserTable extends SortableTable
                 $sorting = UserDataGenerator::UDG_SORT_MASK;
                 break;
         }
-        if ($this->direction == 'DESC') {
+        if ($this->direction === 'DESC') {
             $sorting |= UserDataGenerator::UDG_SORT_DESC;
         } else {
             $sorting |= UserDataGenerator::UDG_SORT_ASC;
@@ -89,7 +89,8 @@ class UserTable extends SortableTable
         // generate the data to display
         $sortable_data = [];
         foreach ($data_array as $data) {
-            if ($data[2] != '') {//filter by course removed
+            if ($data[2] != '') {
+                // filter by course removed
                 $row = [];
                 $row[] = $this->build_type_column($data[0]);
                 $row[] = $this->build_name_link($data[0]);

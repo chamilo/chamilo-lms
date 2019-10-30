@@ -14,7 +14,7 @@ $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 
 $this_section = SECTION_TRACKING;
-$nameTools = get_lang('MyProgress');
+$nameTools = get_lang('Progress');
 
 api_block_anonymous_users();
 
@@ -76,7 +76,7 @@ $template = new Template($nameTools);
 $template->assign('user', $user);
 $template->assign(
     'user_avatar',
-    SocialManager::getAvatarBlock('home', 0, $user->getId())
+    SocialManager::show_social_avatar_block('home', 0, $user->getId())
 );
 $template->assign(
     'gamification_stars',
@@ -105,9 +105,10 @@ if ($currentSession) {
             'stats' => [],
         ];
 
+        $courseInfo = api_get_course_info($course->getCode());
         $learningPathList = new LearnpathList(
             $user->getId(),
-            $course->getCode(),
+            $courseInfo,
             $currentSession->getId()
         );
 
@@ -123,10 +124,8 @@ if ($currentSession) {
                 ]).api_get_cidreq(),
             ];
         }
-
         $sessionData[$course->getId()] = $courseData;
     }
-
     $template->assign('session_data', $sessionData);
 }
 

@@ -2,7 +2,6 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\ExtraField;
-use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Query\Expr\Join;
 
 /**
@@ -11,7 +10,7 @@ use Doctrine\ORM\Query\Expr\Join;
  */
 class CoursesAndSessionsCatalog
 {
-    const PAGE_LENGTH = 12;
+    public const PAGE_LENGTH = 12;
 
     /**
      * Check the configuration for the courses and sessions catalog.
@@ -169,7 +168,7 @@ class CoursesAndSessionsCatalog
 
         $categories['ALL'] = [
             'id' => 0,
-            'name' => get_lang('DisplayAll'),
+            'name' => get_lang('Display all'),
             'code' => 'ALL',
             'parent_id' => null,
             'tree_pos' => 0,
@@ -197,7 +196,7 @@ class CoursesAndSessionsCatalog
         $countCourses = CourseCategory::countCoursesInCategory();
         $categories['NONE'] = [
             'id' => 0,
-            'name' => get_lang('WithoutCategory'),
+            'name' => get_lang('Without category'),
             'code' => 'NONE',
             'parent_id' => null,
             'tree_pos' => 0,
@@ -228,7 +227,7 @@ class CoursesAndSessionsCatalog
         $categories = [];
         $categories[0][0] = [
             'id' => 0,
-            'name' => get_lang('DisplayAll'),
+            'name' => get_lang('Display all'),
             'code' => 'ALL',
             'parent_id' => null,
             'tree_pos' => 0,
@@ -251,7 +250,7 @@ class CoursesAndSessionsCatalog
         $countCourses = CourseCategory::countCoursesInCategory();
         $categories[0][count($categories[0]) + 1] = [
             'id' => 0,
-            'name' => get_lang('None'),
+            'name' => get_lang('none'),
             'code' => 'NONE',
             'parent_id' => null,
             'tree_pos' => $row['tree_pos'] + 1,
@@ -432,7 +431,7 @@ class CoursesAndSessionsCatalog
             );
 
             if ($row['tutor_name'] == '0') {
-                $row['tutor_name'] = get_lang('NoManager');
+                $row['tutor_name'] = get_lang('No administrator');
             }
             $point_info = CourseManager::get_course_ranking($row['id'], 0);
             $courses[] = [
@@ -497,30 +496,37 @@ class CoursesAndSessionsCatalog
                     $urlCondition = ' (access_url_id = '.$urlId.' OR access_url_id = 1) AND ';
                 }
 
-                $sql = "SELECT *
-                            FROM $courseTable as course
-                            INNER JOIN $tbl_url_rel_course as url_rel_course
-                            ON (url_rel_course.c_id = course.id)
-                            WHERE
-                                access_url_id = $urlId AND 
-                                (
-                                    code LIKE '%".$search_term_safe."%' OR
-                                    title LIKE '%".$search_term_safe."%' OR
-                                    tutor_name LIKE '%".$search_term_safe."%'
-                                )
-                                $avoidCoursesCondition
-                                $visibilityCondition
-                            ORDER BY title, visual_code ASC
-                            $limitFilter
-                            ";
+                $sql = "SELECT course.*
+                        FROM $courseTable as course
+                        INNER JOIN $tbl_url_rel_course as url_rel_course
+                        ON (url_rel_course.c_id = course.id)
+                        WHERE
+                            access_url_id = $urlId AND 
+                            (
+                                code LIKE '%".$search_term_safe."%' OR
+                                title LIKE '%".$search_term_safe."%' OR
+                                tutor_name LIKE '%".$search_term_safe."%'
+                            )
+                            $avoidCoursesCondition
+                            $visibilityCondition
+                        ORDER BY title, visual_code ASC
+                        $limitFilter
+                       ";
             }
         }
         $result_find = Database::query($sql);
         $courses = [];
         while ($row = Database::fetch_array($result_find)) {
             $row['registration_code'] = !empty($row['registration_code']);
-            $count_users = count(CourseManager::get_user_list_from_course_code($row['code']));
-            $count_connections_last_month = Tracking::get_course_connections_count(
+            $countUsers = CourseManager::get_user_list_from_course_code(
+                $row['code'],
+                0,
+                null,
+                null,
+                null,
+                true
+            );
+            $connectionsLastMonth = Tracking::get_course_connections_count(
                 $row['id'],
                 0,
                 api_get_utc_datetime(time() - (30 * 86400))
@@ -541,8 +547,8 @@ class CoursesAndSessionsCatalog
                 'registration_code' => $row['registration_code'],
                 'creation_date' => $row['creation_date'],
                 'visibility' => $row['visibility'],
-                'count_users' => $count_users,
-                'count_connections' => $count_connections_last_month,
+                'count_users' => $countUsers,
+                'count_connections' => $connectionsLastMonth,
             ];
         }
 
@@ -552,92 +558,69 @@ class CoursesAndSessionsCatalog
     /**
      * List the sessions.
      *
-     * @param string $date  (optional) The date of sessions
+     * @param string $date
      * @param array  $limit
+     * @param bool   $returnQueryBuilder
+     * @param bool   $getCount
      *
-     * @throws Exception
-     *
-     * @return array The session list
+     * @return array|\Doctrine\ORM\Query The session list
      */
-    public static function browseSessions($date = null, $limit = [])
+    public static function browseSessions($date = null, $limit = [], $returnQueryBuilder = false, $getCount = false)
     {
-        $em = Database::getManager();
         $urlId = api_get_current_access_url_id();
 
-        $sql = "SELECT s.id FROM session s ";
-        $sql .= "
-            INNER JOIN access_url_rel_session ars
-            ON s.id = ars.session_id
-        ";
+        $select = 's';
+        if ($getCount) {
+            $select = 'count(s) ';
+        }
 
-        $sql .= "
-            WHERE s.nbr_courses > 0
-                AND ars.access_url_id = $urlId
-        ";
-
+        $dql = "SELECT $select
+                FROM ChamiloCoreBundle:Session s
+                WHERE EXISTS 
+                    (
+                        SELECT url.sessionId FROM ChamiloCoreBundle:AccessUrlRelSession url 
+                        WHERE url.sessionId = s.id AND url.accessUrlId = $urlId
+                    ) AND
+                    s.nbrCourses > 0
+                ";
         if (!is_null($date)) {
             $date = Database::escape_string($date);
-            $sql .= "
+            $dql .= "
                 AND (
-                    ('$date' BETWEEN DATE(s.access_start_date) AND DATE(s.access_end_date))
-                    OR (s.access_end_date IS NULL)
-                    OR (
-                        s.access_start_date IS NULL
-                        AND s.access_end_date IS NOT NULL
-                        AND DATE(s.access_end_date) >= '$date'
+                    (s.accessEndDate IS NULL) 
+                    OR
+                    ( 
+                    s.accessStartDate IS NOT NULL AND  
+                    s.accessEndDate IS NOT NULL AND
+                    s.accessStartDate >= '$date' AND s.accessEndDate <= '$date')                    
+                    OR 
+                    (
+                        s.accessStartDate IS NULL AND 
+                        s.accessEndDate IS NOT NULL AND 
+                        s.accessStartDate >= '$date'
                     )
                 )
             ";
         }
 
+        $qb = Database::getManager()->createQuery($dql);
+
         if (!empty($limit)) {
-            $limit['start'] = (int) $limit['start'];
-            $limit['length'] = (int) $limit['length'];
-            $sql .= "LIMIT {$limit['start']}, {$limit['length']} ";
+            $qb
+                ->setFirstResult($limit['start'])
+                ->setMaxResults($limit['length'])
+            ;
         }
 
-        $list = Database::store_result(Database::query($sql), 'ASSOC');
-        $sessions = [];
-        foreach ($list as $sessionData) {
-            $id = $sessionData['id'];
-            $sessions[] = $em->find('ChamiloCoreBundle:Session', $id);
+        if ($returnQueryBuilder) {
+            return $qb;
         }
 
-        return $sessions;
-    }
-
-    /**
-     * Search sessions by searched term by session name.
-     *
-     * @param string $queryTerm Term for search
-     * @param array  $limit     Limit info
-     *
-     * @return array The sessions
-     */
-    public static function browseSessionsBySearch($queryTerm, array $limit)
-    {
-        $sessionsToBrowse = [];
-
-        $criteria = Criteria::create()
-            ->where(
-                Criteria::expr()->contains('name', $queryTerm)
-            )
-            ->setFirstResult($limit['start'])
-            ->setMaxResults($limit['length']);
-
-        $sessions = Database::getManager()
-            ->getRepository('ChamiloCoreBundle:Session')
-            ->matching($criteria);
-
-        foreach ($sessions as $session) {
-            if ($session->getNbrCourses() === 0) {
-                continue;
-            }
-
-            $sessionsToBrowse[] = $session;
+        if ($getCount) {
+            return $qb->getSingleScalarResult();
         }
 
-        return $sessionsToBrowse;
+        return $qb->getResult();
     }
 
     /**
@@ -653,14 +636,22 @@ class CoursesAndSessionsCatalog
         $em = Database::getManager();
         $qb = $em->createQueryBuilder();
 
+        $urlId = api_get_current_access_url_id();
+
         $sessions = $qb->select('s')
-            ->distinct(true)
+            ->distinct()
             ->from('ChamiloCoreBundle:Session', 's')
             ->innerJoin(
                 'ChamiloCoreBundle:SessionRelCourse',
                 'src',
                 Join::WITH,
                 's.id = src.session'
+            )
+            ->innerJoin(
+                'ChamiloCoreBundle:AccessUrlRelSession',
+                'url',
+                Join::WITH,
+                'url.sessionId = s.id'
             )
             ->innerJoin(
                 'ChamiloCoreBundle:ExtraFieldRelTag',
@@ -681,10 +672,12 @@ class CoursesAndSessionsCatalog
                 'frt.fieldId = f.id'
             )
             ->where(
-                $qb->expr()->like('t.tag', ":tag")
+                $qb->expr()->like('t.tag', ':tag')
             )
             ->andWhere(
                 $qb->expr()->eq('f.extraFieldType', ExtraField::COURSE_FIELD_TYPE)
+            )->andWhere(
+                $qb->expr()->eq('url.accessUrlId', $urlId)
             )
             ->setFirstResult($limit['start'])
             ->setMaxResults($limit['length'])
@@ -706,8 +699,9 @@ class CoursesAndSessionsCatalog
     /**
      * Build a recursive tree of course categories.
      *
-     * @param $categories
-     * @param $parentId
+     * @param array $categories
+     * @param int   $parentId
+     * @param int   $level
      *
      * @return array
      */
@@ -743,7 +737,7 @@ class CoursesAndSessionsCatalog
     /**
      * List Code Search Category.
      *
-     * @param $code
+     * @param string $code
      *
      * @return array
      */

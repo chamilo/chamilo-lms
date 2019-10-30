@@ -65,7 +65,7 @@ class CUserinfoDef
     /**
      * @var bool
      *
-     * @ORM\Column(name="rank", type="boolean", nullable=false)
+     * @ORM\Column(name="`rank`", type="boolean", nullable=false)
      */
     protected $rank;
 

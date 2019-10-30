@@ -19,27 +19,23 @@ if (!api_get_multiple_access_url()) {
     exit;
 }
 
-$form_sent = 0;
 $first_letter_user = '';
-$first_letter_course = '';
-$courses = [];
 $url_list = [];
 $users = [];
 
-$tbl_access_url_rel_user = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
 $tbl_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL);
 $tbl_user = Database::get_main_table(TABLE_MAIN_USER);
 
 /*	Header	*/
-$tool_name = get_lang('AddUsersToURL');
-$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('PlatformAdmin')];
-$interbreadcrumb[] = ['url' => 'access_urls.php', 'name' => get_lang('MultipleAccessURLs')];
+$tool_name = get_lang('Add users to an URL');
+$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('Administration')];
+$interbreadcrumb[] = ['url' => 'access_urls.php', 'name' => get_lang('Multiple access URL / Branding')];
 
 Display :: display_header($tool_name);
 
 echo '<div class="actions">';
 echo Display::url(
-    Display::return_icon('edit.png', get_lang('EditUsersToURL'), ''),
+    Display::return_icon('edit.png', get_lang('Edit users and URLs'), ''),
     api_get_path(WEB_CODE_PATH).'admin/access_url_edit_users_to_url.php'
 );
 echo '</div>';
@@ -58,12 +54,12 @@ if ($_POST['form_sent']) {
     if ($form_sent == 1) {
         if (count($users) == 0 || count($url_list) == 0) {
             echo Display::return_message(
-                get_lang('AtLeastOneUserAndOneURL'),
+                get_lang('You must select at least one user and one URL'),
                 'error'
             );
         } else {
             UrlManager::add_users_to_urls($users, $url_list);
-            echo Display::return_message(get_lang('UsersBelongURL'), 'confirm');
+            echo Display::return_message(get_lang('The user accounts are now attached to the URL'), 'confirm');
         }
     }
 }
@@ -102,9 +98,9 @@ unset($result);
   <table border="0" cellpadding="5" cellspacing="0" width="100%">
    <tr>
     <td width="40%" align="center">
-     <b><?php echo get_lang('UserList'); ?></b>
+     <b><?php echo get_lang('User list'); ?></b>
      <br/><br/>
-     <?php echo get_lang('Select').' '; echo $target_name == 'firstname' ? get_lang('FirstName') : get_lang('LastName'); ?>
+     <?php echo get_lang('Select').' '; echo $target_name == 'firstname' ? get_lang('First name') : get_lang('Last name'); ?>
      <select name="first_letter_user" onchange="javascript:document.formulaire.form_sent.value='2'; document.formulaire.submit();">
       <option value="">--</option>
       <?php
@@ -114,7 +110,7 @@ unset($result);
     </td>
         <td width="20%">&nbsp;</td>
     <td width="40%" align="center">
-     <b><?php echo get_lang('URLList'); ?> :</b>
+     <b><?php echo get_lang('URL list'); ?> :</b>
     </td>
    </tr>
    <tr>
@@ -134,7 +130,7 @@ unset($result);
     </select>
    </td>
    <td width="20%" valign="middle" align="center">
-    <button type="submit" class="add"> <?php echo get_lang('AddToThatURL'); ?> </button>
+    <button type="submit" class="add"> <?php echo get_lang('Add users to that URL'); ?> </button>
    </td>
    <td width="40%" align="center">
     <select name="url_list[]" multiple="multiple" size="20" style="width:230px;">

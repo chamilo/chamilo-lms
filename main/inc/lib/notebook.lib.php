@@ -34,7 +34,7 @@ class NotebookManager
         return "<script>
 				function confirmation (name)
 				{
-					if (confirm(\" ".get_lang("NoteConfirmDelete")." \"+ name + \" ?\"))
+					if (confirm(\" ".get_lang("Are you sure you want to delete this note")." \"+ name + \" ?\"))
 						{return true;}
 					else
 						{return false;}
@@ -116,6 +116,7 @@ class NotebookManager
         // Database table definition
         $table = Database::get_course_table(TABLE_NOTEBOOK);
         $course_id = api_get_course_int_id();
+        $notebook_id = (int) $notebook_id;
 
         $sql = "SELECT
                 notebook_id 		AS notebook_id,
@@ -123,7 +124,7 @@ class NotebookManager
                 description 		AS note_comment,
                 session_id			AS session_id
                 FROM $table
-                WHERE c_id = $course_id AND notebook_id = '".intval($notebook_id)."' ";
+                WHERE c_id = $course_id AND notebook_id = '".$notebook_id."' ";
         $result = Database::query($sql);
         if (Database::num_rows($result) != 1) {
             return [];
@@ -146,9 +147,10 @@ class NotebookManager
      */
     public static function update_note($values)
     {
-        if (!is_array($values) or empty($values['note_title'])) {
+        if (!is_array($values) || empty($values['note_title'])) {
             return false;
         }
+
         // Database table definition
         $table = Database::get_course_table(TABLE_NOTEBOOK);
 
@@ -194,7 +196,9 @@ class NotebookManager
      */
     public static function delete_note($notebook_id)
     {
-        if (empty($notebook_id) || $notebook_id != strval(intval($notebook_id))) {
+        $notebook_id = (int) $notebook_id;
+
+        if (empty($notebook_id)) {
             return false;
         }
 
@@ -205,10 +209,11 @@ class NotebookManager
         $sql = "DELETE FROM $table
                 WHERE
                     c_id = $course_id AND
-                    notebook_id='".intval($notebook_id)."' AND
+                    notebook_id='".$notebook_id."' AND
                     user_id = '".api_get_user_id()."'";
         $result = Database::query($sql);
         $affected_rows = Database::affected_rows($result);
+
         if ($affected_rows != 1) {
             return false;
         }
@@ -217,7 +222,7 @@ class NotebookManager
         api_item_property_update(
             api_get_course_info(),
             TOOL_NOTEBOOK,
-            intval($notebook_id),
+            $notebook_id,
             'delete',
             api_get_user_id()
         );
@@ -248,16 +253,16 @@ class NotebookManager
         if (!api_is_anonymous()) {
             if ($sessionId == 0 || api_is_allowed_to_session_edit(false, true)) {
                 echo '<a href="index.php?'.api_get_cidreq().'&action=addnote">'.
-                    Display::return_icon('new_note.png', get_lang('NoteAddNew'), '', '32').'</a>';
+                    Display::return_icon('new_note.png', get_lang('Add new note in my personal notebook'), '', '32').'</a>';
             }
         }
 
         echo '<a href="index.php?'.api_get_cidreq().'&action=changeview&view=creation_date&direction='.$link_sort_direction.'">'.
-            Display::return_icon('notes_order_by_date_new.png', get_lang('OrderByCreationDate'), '', '32').'</a>';
+            Display::return_icon('notes_order_by_date_new.png', get_lang('Sort by date created'), '', '32').'</a>';
         echo '<a href="index.php?'.api_get_cidreq().'&action=changeview&view=update_date&direction='.$link_sort_direction.'">'.
-            Display::return_icon('notes_order_by_date_mod.png', get_lang('OrderByModificationDate'), '', '32').'</a>';
+            Display::return_icon('notes_order_by_date_mod.png', get_lang('Sort by date last modified'), '', '32').'</a>';
         echo '<a href="index.php?'.api_get_cidreq().'&action=changeview&view=title&direction='.$link_sort_direction.'">'.
-            Display::return_icon('notes_order_by_title.png', get_lang('OrderByTitle'), '', '32').'</a>';
+            Display::return_icon('notes_order_by_title.png', get_lang('Sort by title'), '', '32').'</a>';
         echo '</div>';
 
         $notebookView = Session::read('notebook_view');
@@ -271,12 +276,12 @@ class NotebookManager
 
         // Database table definition
         $table = Database::get_course_table(TABLE_NOTEBOOK);
-        $order_by = " ORDER BY ".$notebookView." $sort_direction ";
+        $order_by = ' ORDER BY '.$notebookView." $sort_direction ";
 
         // Condition for the session
         $condition_session = api_get_session_condition($sessionId);
 
-        $cond_extra = $notebookView == 'update_date' ? " AND update_date <> ''" : " ";
+        $cond_extra = $notebookView == 'update_date' ? " AND update_date <> ''" : ' ';
         $course_id = api_get_course_int_id();
 
         $sql = "SELECT * FROM $table
@@ -292,7 +297,7 @@ class NotebookManager
             $session_img = api_get_session_image($row['session_id'], $_user['status']);
             $updateValue = '';
             if ($row['update_date'] != $row['creation_date']) {
-                $updateValue = ', '.get_lang('UpdateDate').': '.Display::dateToStringAgoAndLongDate($row['update_date']);
+                $updateValue = ', '.get_lang('Updated').': '.Display::dateToStringAgoAndLongDate($row['update_date']);
             }
 
             $actions = '<a href="'.api_get_self().'?action=editnote&notebook_id='.$row['notebook_id'].'">'.
@@ -302,8 +307,8 @@ class NotebookManager
 
             echo Display::panel(
                 $row['description'],
-                $row['title'].$session_img.' <div class="float-right">'.$actions.'</div>',
-                get_lang('CreationDate').': '.Display::dateToStringAgoAndLongDate($row['creation_date']).$updateValue
+                $row['title'].$session_img.' <div class="pull-right">'.$actions.'</div>',
+                get_lang('Creation date').': '.Display::dateToStringAgoAndLongDate($row['creation_date']).$updateValue
             );
         }
     }

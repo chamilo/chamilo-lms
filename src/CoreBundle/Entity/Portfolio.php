@@ -9,8 +9,6 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Class Portfolio.
  *
- * @package Chamilo\CoreBundle\Entity
- *
  * @ORM\Table(
  *  name="portfolio",
  *  indexes={
@@ -20,7 +18,6 @@ use Doctrine\ORM\Mapping as ORM;
  *   @ORM\Index(name="category", columns={"category_id"})
  *  }
  * )
- * Add @ to the next line if api_get_configuration_value('allow_portfolio_tool') is true
  * @ORM\Entity()
  */
 class Portfolio

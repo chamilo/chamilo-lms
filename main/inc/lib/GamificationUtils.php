@@ -5,8 +5,6 @@
  * GamificationUtils class
  * Functions to manage the gamification mode.
  *
- * @package chamilo.library
- *
  * @author Angel Fernando Quiroz Campos <angel.quiroz@beeznest.com>
  */
 class GamificationUtils
@@ -59,7 +57,7 @@ class GamificationUtils
         foreach ($courses as $course) {
             $learnPathListObject = new LearnpathList(
                 $userId,
-                $course['code'],
+                api_get_course_info($course['code']),
                 $sessionId
             );
             $learnPaths = $learnPathListObject->get_flat_list();
@@ -145,7 +143,7 @@ class GamificationUtils
         foreach ($courses as $course) {
             $learnPathListObject = new LearnpathList(
                 $userId,
-                $course['code'],
+                api_get_course_info($course['code']),
                 $sessionId
             );
             $learnPaths = $learnPathListObject->get_flat_list();

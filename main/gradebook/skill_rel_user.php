@@ -63,16 +63,16 @@ foreach ($itemsPerSkill as $skillId => $skillList) {
 
 $interbreadcrumb[] = [
     'url' => Category::getUrl(),
-    'name' => get_lang('Gradebook'),
+    'name' => get_lang('Assessments'),
 ];
 $interbreadcrumb[] = [
     'url' => api_get_path(WEB_CODE_PATH).'gradebook/gradebook_display_summary.php?'.api_get_cidreq().'&selectcat='.$categoryId,
-    'name' => get_lang('GradebookListOfStudentsReports'),
+    'name' => get_lang('AssessmentsListOfStudentsReports'),
 ];
 
 $url = api_get_path(WEB_AJAX_PATH).'skill.ajax.php?a=assign_user_to_skill';
 
-$template = new Template(get_lang('SkillUserList'));
+$template = new Template(get_lang('Skills and users list'));
 $template->assign('conclusion_list', $uniqueSkillsConclusion);
 $template->assign('skills', $uniqueSkills);
 $template->assign('items', $itemsPerSkill);

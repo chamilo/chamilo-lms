@@ -140,7 +140,7 @@ if (api_is_allowed_to_edit(null, true)) {
     echo '<div class="actions">';
     if ($origin == 'users') {
         echo '<a href="user.php?'.api_get_cidreq().'&origin='.$origin.'">'.
-            Display::return_icon('back.png', get_lang('BackUser'), '', ICON_SIZE_MEDIUM).'</a>';
+            Display::return_icon('back.png', get_lang('Back to users list'), '', ICON_SIZE_MEDIUM).'</a>';
     } else {
         echo '<a href="javascript:history.back(1)">'.
             Display::return_icon('back.png', get_lang('Back'), '', ICON_SIZE_MEDIUM).'</a>';
@@ -150,8 +150,8 @@ if (api_is_allowed_to_edit(null, true)) {
         if (api_get_setting('allow_user_course_subscription_by_course_admin') == 'true') {
             echo '<a href="userInfo.php?'.api_get_cidreq(
                 ).'&origin='.$origin.'&editMainUserInfo='.$userIdViewed.'">'.
-                Display::return_icon('edit.png', get_lang('EditUser'), '', ICON_SIZE_MEDIUM).get_lang(
-                    'EditUser'
+                Display::return_icon('edit.png', get_lang('Edit this user'), '', ICON_SIZE_MEDIUM).get_lang(
+                    'Edit this user'
                 ).'</a>';
         }
     } else {
@@ -159,13 +159,13 @@ if (api_is_allowed_to_edit(null, true)) {
             echo '<a href="userInfo.php?'.api_get_cidreq().'&origin='.$origin.'&uInfo='.$userIdViewed.'">'.
                 Display::return_icon(
                     'user.png',
-                    get_lang('ViewUser'),
+                    get_lang('View this user'),
                     '',
                     ICON_SIZE_MEDIUM
-                ).get_lang('ViewUser').'</a>';
+                ).get_lang('View this user').'</a>';
         }
     }
-    echo '<a href="../mySpace/myStudents.php?'.api_get_cidreq().'&origin=user_course&student='.$userIdViewed.'&details=true&course='.$_course['id'].'">'.Display::return_icon('statistics.png', get_lang('UserStatistics'), '', ICON_SIZE_MEDIUM).get_lang('UserStatistics').'</a>';
+    echo '<a href="../mySpace/myStudents.php?'.api_get_cidreq().'&origin=user_course&student='.$userIdViewed.'&details=true&course='.$_course['id'].'">'.Display::return_icon('statistics.png', get_lang('Reporting for this user'), '', ICON_SIZE_MEDIUM).get_lang('Reporting for this user').'</a>';
     echo '</div>';
 } else {
     if ($tool_info['visibility'] == 1) {
@@ -174,7 +174,7 @@ if (api_is_allowed_to_edit(null, true)) {
             echo '<a href="user.php?'.api_get_cidreq().'&origin='.$origin.'">'.
                 Display::return_icon(
                     'back.png',
-                    get_lang('BackUser'),
+                    get_lang('Back to users list'),
                     '',
                     ICON_SIZE_MEDIUM
                 ).'</a>';
@@ -206,12 +206,12 @@ if ($displayMode == "viewDefEdit") {
     $edit_heading_form->add_textfield('title', get_lang('Title'));
     $edit_heading_form->addElement('textarea', 'comment', get_lang('Comment'), ['cols' => 60, 'rows' => 4]);
     $possible_line_nrs[1] = '1 '.get_lang('Line');
-    $possible_line_nrs[3] = '3 '.get_lang('Lines');
-    $possible_line_nrs[5] = '5 '.get_lang('Lines');
-    $possible_line_nrs[10] = '10 '.get_lang('Lines');
-    $possible_line_nrs[15] = '15 '.get_lang('Lines');
-    $edit_heading_form->addElement('select', 'nbline', get_lang('LineNumber'), $possible_line_nrs);
-    $edit_heading_form->addElement('submit', 'submitDef', get_lang('Ok'));
+    $possible_line_nrs[3] = '3 '.get_lang('lines');
+    $possible_line_nrs[5] = '5 '.get_lang('lines');
+    $possible_line_nrs[10] = '10 '.get_lang('lines');
+    $possible_line_nrs[15] = '15 '.get_lang('lines');
+    $edit_heading_form->addElement('select', 'nbline', get_lang('Line Number'), $possible_line_nrs);
+    $edit_heading_form->addElement('submit', 'submitDef', get_lang('Validate'));
     $edit_heading_form->setDefaults($catToEdit);
     $edit_heading_form->display();
 } elseif ($displayMode == "viewDefList") {
@@ -227,13 +227,13 @@ if ($displayMode == "viewDefEdit") {
             }
             echo "</font>\n", "</blockquote>\n";
             // displays commands
-            echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&removeDef=", $thisCat['catId'], "\">", "<img src=\"../img/delete.gif\" border=\"0\" alt=\"".get_lang('Remove')."\" onclick=\"javascript:if(!confirm('".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES, $charset))."')) return false;\">", "</a>", "<a href=\"".api_get_self()."?".api_get_cidreq()."&editDef=", $thisCat['catId'], "\">", "<img src=\"../img/edit.gif\" border=\"0\" alt=\"".get_lang('Edit')."\" />", "</a>", "<a href=\"".api_get_self()."?".api_get_cidreq()."&moveUpDef=", $thisCat['catId'], "\">", "<img src=\"../img/up.gif\" border=\"0\" alt=\"".get_lang('MoveUp')."\">", "</a>", "<a href=\"".api_get_self()."?".api_get_cidreq()."&moveDownDef=", $thisCat['catId'], "\">", "<img src=\"../img/down.gif\" border=\"0\" alt=\"".get_lang('MoveDown')."\">", "</a>\n";
+            echo "<a href=\"".api_get_self()."?".api_get_cidreq()."&removeDef=", $thisCat['catId'], "\">", "<img src=\"../img/delete.gif\" border=\"0\" alt=\"".get_lang('Remove')."\" onclick=\"javascript:if(!confirm('".addslashes(api_htmlentities(get_lang('Please confirm your choice'), ENT_QUOTES, $charset))."')) return false;\">", "</a>", "<a href=\"".api_get_self()."?".api_get_cidreq()."&editDef=", $thisCat['catId'], "\">", "<img src=\"../img/edit.gif\" border=\"0\" alt=\"".get_lang('Edit')."\" />", "</a>", "<a href=\"".api_get_self()."?".api_get_cidreq()."&moveUpDef=", $thisCat['catId'], "\">", "<img src=\"../img/up.gif\" border=\"0\" alt=\"".get_lang('Move up')."\">", "</a>", "<a href=\"".api_get_self()."?".api_get_cidreq()."&moveDownDef=", $thisCat['catId'], "\">", "<img src=\"../img/down.gif\" border=\"0\" alt=\"".get_lang('Move down')."\">", "</a>\n";
         } // end for each
     } // end if ($catList)
 
     echo "<center>\n",
         "<form method=\"post\" action=\"".api_get_self()."\">",
-        "<input type=\"submit\" name=\"addDef\" class=\"plus\" value=\"".get_lang('AddNewHeading')."\" />",
+        "<input type=\"submit\" name=\"addDef\" class=\"plus\" value=\"".get_lang('Add new heading')."\" />",
     "</form>\n",
     "<center>\n";
 } elseif ($displayMode == 'viewContentEdit') {
@@ -254,7 +254,7 @@ if ($displayMode == "viewDefEdit") {
             ['cols' => 60, 'rows' => $catToEdit['nbline']]
         );
     }
-    $content_heading_form->addElement('submit', 'submitContent', get_lang('Ok'));
+    $content_heading_form->addElement('submit', 'submitContent', get_lang('Validate'));
     $defaults = $catToEdit;
     $defaults['cntId'] = $catToEdit['contentId'];
     $defaults['uInfo'] = $userIdViewed;
@@ -306,32 +306,32 @@ if ($displayMode == "viewDefEdit") {
          echo'<p></p>  ';
         if (!($is_courseAdmin && $_user['user_id'] == $userIdViewed)) {
         } else {
-            echo "<td>", get_lang('CourseManager'), "</td>\n";
+            echo "<td>", get_lang('Teacher'), "</td>\n";
         }
-        echo "<td><button class=\"save\" type=\"submit\" name=\"submit\">".get_lang('SaveChanges')."</button></td>\n", "</tr>", "</table>", "</form>\n";
+        echo "<td><button class=\"save\" type=\"submit\" name=\"submit\">".get_lang('Save changes')."</button></td>\n", "</tr>", "</table>", "</form>\n";
         if (api_get_setting('show_email_addresses') == 'true') {
             echo "<p>".Display:: encrypted_mailto_link($mainUserInfo['email'], $mainUserInfo['email'])."</p>";
         }
 
         if (api_get_setting('extended_profile') == 'true') {
             if (!empty($mainUserInfo['competences'])) {
-                echo '<div style="margin-top:10px;" class="actions-message"><strong>'.get_lang('MyCompetences').'</strong></div><div>'.$mainUserInfo['competences'].'</div>';
+                echo '<div style="margin-top:10px;" class="actions-message"><strong>'.get_lang('My competences').'</strong></div><div>'.$mainUserInfo['competences'].'</div>';
             }
             if (!empty($mainUserInfo['diplomas'])) {
-                echo '<div style="margin-top:10px;" class="actions-message"><strong>'.get_lang('MyDiplomas').'</strong></div><div>'.$mainUserInfo['diplomas'].'</div>';
+                echo '<div style="margin-top:10px;" class="actions-message"><strong>'.get_lang('My diplomas').'</strong></div><div>'.$mainUserInfo['diplomas'].'</div>';
             }
             if (!empty($mainUserInfo['teach'])) {
-                echo '<div style="margin-top:10px;" class="actions-message"><strong>'.get_lang('MyTeach').'</strong></div><div>'.$mainUserInfo['teach'].'</div>';
+                echo '<div style="margin-top:10px;" class="actions-message"><strong>'.get_lang('What I am able to teach').'</strong></div><div>'.$mainUserInfo['teach'].'</div>';
             }
             if (!empty($mainUserInfo['openarea'])) {
-                echo '<div style="margin-top:10px;" class="actions-message"><strong>'.get_lang('MyPersonalOpenArea').'</strong></div><div>'.$mainUserInfo['openarea'].'</div>';
+                echo '<div style="margin-top:10px;" class="actions-message"><strong>'.get_lang('My personal open area').'</strong></div><div>'.$mainUserInfo['openarea'].'</div>';
             }
             if (!empty($mainUserInfo['competences'])) {
-                echo '<div style="margin-top:10px;" class="actions-message"><strong>'.get_lang('MyProductions').'</strong></div><div>'.UserManager::build_production_list($mainUserInfo['user_id']).'</div>';
+                echo '<div style="margin-top:10px;" class="actions-message"><strong>'.get_lang('My productions').'</strong></div><div>'.UserManager::build_production_list($mainUserInfo['user_id']).'</div>';
             }
         }
     } else {
-        Display :: display_normal_message(get_lang('ThisStudentIsSubscribeThroughASession'));
+        echo Display::return_message(get_lang('This learner is subscribed in this training through a training session. You cannot edit his information'));
     }
 } elseif ($displayMode == "viewContentList") {
     // default display
@@ -359,7 +359,7 @@ if ($displayMode == "viewDefEdit") {
         // is the user online?
         $online = '';
         if (user_is_online($userIdViewed)) {
-            $online = Display::return_icon('online.png', get_lang('OnLine'), ['style' => 'with="8"; height="8"']);
+            $online = Display::return_icon('online.gif', get_lang('Online'), ['style' => 'with="8"; height="8"']);
         }
 
         // DISPLAY TABLE HEADING
@@ -372,7 +372,7 @@ if ($displayMode == "viewDefEdit") {
         "<tr align=\"center\" bgcolor=\"#E6E6E6\">\n",
             "<td align=\"left\">".get_lang('Name')."</td>\n",
                 "<td width=\"20%\" align=\"left\">".get_lang('Description')."</td>\n",
-         "<td width=\"100px\" align=\"left\">", get_lang('OfficialCode'), "</td>\n";
+         "<td width=\"100px\" align=\"left\">", get_lang('Code'), "</td>\n";
 
         echo "</tr>\n",
         "<tr align=\"center\">\n",
@@ -398,31 +398,31 @@ if ($displayMode == "viewDefEdit") {
 
         if (api_get_setting('extended_profile') == 'true') {
             if (!empty($mainUserInfo['competences'])) {
-                echo '<div style="margin-top:10px;" class="actions-message"><strong>'.get_lang('MyCompetences').'</strong></div><div>'.$mainUserInfo['competences'].'</div>';
+                echo '<div style="margin-top:10px;" class="actions-message"><strong>'.get_lang('My competences').'</strong></div><div>'.$mainUserInfo['competences'].'</div>';
             }
             if (!empty($mainUserInfo['diplomas'])) {
-                echo '<div style="margin-top:10px;" class="actions-message"><strong>'.get_lang('MyDiplomas').'</strong></div><div>'.$mainUserInfo['diplomas'].'</div>';
+                echo '<div style="margin-top:10px;" class="actions-message"><strong>'.get_lang('My diplomas').'</strong></div><div>'.$mainUserInfo['diplomas'].'</div>';
             }
             if (!empty($mainUserInfo['teach'])) {
-                echo '<div style="margin-top:10px;" class="actions-message"><strong>'.get_lang('MyTeach').'</strong></div><div>'.$mainUserInfo['teach'].'</div>';
+                echo '<div style="margin-top:10px;" class="actions-message"><strong>'.get_lang('What I am able to teach').'</strong></div><div>'.$mainUserInfo['teach'].'</div>';
             }
             if (!empty($mainUserInfo['openarea'])) {
-                echo '<div style="margin-top:10px;" class="actions-message"><strong>'.get_lang('MyPersonalOpenArea').'</strong></div><div>'.$mainUserInfo['openarea'].'</div>';
+                echo '<div style="margin-top:10px;" class="actions-message"><strong>'.get_lang('My personal open area').'</strong></div><div>'.$mainUserInfo['openarea'].'</div>';
             }
             if (!empty($mainUserInfo['competences'])) {
-                echo '<div style="margin-top:10px;" class="actions-message"><strong>'.get_lang('MyProductions').'</strong></div><div>'.UserManager::build_production_list($mainUserInfo['user_id']).'</div>';
+                echo '<div style="margin-top:10px;" class="actions-message"><strong>'.get_lang('My productions').'</strong></div><div>'.UserManager::build_production_list($mainUserInfo['user_id']).'</div>';
             }
         }
     } else {
-        Display::return_message(get_lang('ThisStudentIsSubscribeThroughASession'), 'normal');
+        Display::return_message(get_lang('This learner is subscribed in this training through a training session. You cannot edit his information'), 'normal');
     }
 
     if (api_get_setting('allow_user_headings') == 'true' && $allowedToEditDef) {
         // only course administrators see this line
         echo "<div align=right>",
             "<form method=\"post\" action=\"".api_get_self()."\">",
-        get_lang('CourseAdministratorOnly')," : ",
-            "<input type=\"submit\" class=\"save\" name=\"viewDefList\" value=\"".get_lang('DefineHeadings')."\" />",
+        get_lang('Teachers only')," : ",
+            "<input type=\"submit\" class=\"save\" name=\"viewDefList\" value=\"".get_lang('Define Headings')."\" />",
         "</form>",
         "<hr noshade size=\"1\" style=\"color:#99CCFF\">",
         "</div>\n";

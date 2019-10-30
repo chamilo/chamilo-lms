@@ -13,8 +13,6 @@ use Display;
  *
  * @author Bart Mollet <bart.mollet@hogent.be>
  * @author Julio Montoya <gugli100@gmail.com>
- *
- * @package chamilo.backup
  */
 class CourseSelectForm
 {
@@ -24,28 +22,28 @@ class CourseSelectForm
     public static function getResourceTitleList()
     {
         $list = [];
-        $list[RESOURCE_LEARNPATH_CATEGORY] = get_lang('Learnpath').' '.get_lang('Category');
+        $list[RESOURCE_LEARNPATH_CATEGORY] = get_lang('Courses').' '.get_lang('Category');
         $list[RESOURCE_ASSET] = get_lang('Assets');
-        $list[RESOURCE_GRADEBOOK] = get_lang('Gradebook');
+        $list[RESOURCE_GRADEBOOK] = get_lang('Assessments');
         $list[RESOURCE_EVENT] = get_lang('Events');
         $list[RESOURCE_ANNOUNCEMENT] = get_lang('Announcements');
         $list[RESOURCE_DOCUMENT] = get_lang('Documents');
         $list[RESOURCE_LINK] = get_lang('Links');
-        $list[RESOURCE_COURSEDESCRIPTION] = get_lang('CourseDescription');
+        $list[RESOURCE_COURSEDESCRIPTION] = get_lang('Course Description');
         $list[RESOURCE_FORUM] = get_lang('Forums');
-        $list[RESOURCE_FORUMCATEGORY] = get_lang('ForumCategory');
+        $list[RESOURCE_FORUMCATEGORY] = get_lang('Forum category');
         $list[RESOURCE_QUIZ] = get_lang('Tests');
-        $list[RESOURCE_TEST_CATEGORY] = get_lang('QuestionCategory');
-        $list[RESOURCE_LEARNPATH] = get_lang('ToolLearnpath');
-        $list[RESOURCE_LEARNPATH_CATEGORY] = get_lang('LearnpathCategory');
+        $list[RESOURCE_TEST_CATEGORY] = get_lang('Questions category');
+        $list[RESOURCE_LEARNPATH] = get_lang('ToolCourses');
+        $list[RESOURCE_LEARNPATH_CATEGORY] = get_lang('CoursesCategory');
         $list[RESOURCE_SCORM] = 'SCORM';
-        $list[RESOURCE_TOOL_INTRO] = get_lang('ToolIntro');
+        $list[RESOURCE_TOOL_INTRO] = get_lang('Tool introduction');
         $list[RESOURCE_SURVEY] = get_lang('Survey');
         $list[RESOURCE_GLOSSARY] = get_lang('Glossary');
-        $list[RESOURCE_WIKI] = get_lang('Wiki');
+        $list[RESOURCE_WIKI] = get_lang('Group wiki');
         $list[RESOURCE_THEMATIC] = get_lang('Thematic');
         $list[RESOURCE_ATTENDANCE] = get_lang('Attendance');
-        $list[RESOURCE_WORK] = get_lang('ToolStudentPublication');
+        $list[RESOURCE_WORK] = get_lang('Assignments');
 
         return $list;
     }
@@ -166,7 +164,7 @@ class CourseSelectForm
             $sessionTitle = !empty($hidden_fields['destination_session']) ? ' ('.api_get_session_name($hidden_fields['destination_session']).')' : null;
             $courseInfo = api_get_course_info($hidden_fields['destination_course']);
             echo '<h3>';
-            echo get_lang('DestinationCourse').' : '.$courseInfo['title'].' ('.$courseInfo['code'].') '.$sessionTitle;
+            echo get_lang('Target course').' : '.$courseInfo['title'].' ('.$courseInfo['code'].') '.$sessionTitle;
             echo '</h3>';
         }
 
@@ -191,9 +189,9 @@ class CourseSelectForm
         $forum_topics = [];
 
         echo '<p>';
-        echo get_lang('SelectResources');
+        echo get_lang('Select resources');
         echo '</p>';
-        echo Display::return_message(get_lang('DontForgetToSelectTheMediaFilesIfYourResourceNeedIt'));
+        echo Display::return_message(get_lang('Don\'t forget to select the media files if your resource need it'));
 
         $resource_titles = self::getResourceTitleList();
         $element_count = self::parseResources($resource_titles, $course->resources, true, true);
@@ -287,25 +285,25 @@ class CourseSelectForm
 
         $recycleOption = isset($_POST['recycle_option']) ? true : false;
         if (empty($element_count)) {
-            echo Display::return_message(get_lang('NoDataAvailable'), 'warning');
+            echo Display::return_message(get_lang('No data available'), 'warning');
         } else {
             if (!empty($hidden_fields['destination_session'])) {
                 echo '<br />
                       <button 
                         class="save" 
                         type="submit" 
-                        onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"), ENT_QUOTES, $charset))."'".')) return false;" >'.
-                    get_lang('Ok').'</button>';
+                        onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang("Please confirm your choice"), ENT_QUOTES, $charset))."'".')) return false;" >'.
+                    get_lang('Validate').'</button>';
             } else {
                 if ($recycleOption) {
-                    echo '<br /><button class="save" type="submit">'.get_lang('Ok').'</button>';
+                    echo '<br /><button class="save" type="submit">'.get_lang('Validate').'</button>';
                 } else {
                     echo '<br />
                           <button 
                                 class="save btn btn-primary" 
                                 type="submit" 
-                                onclick="checkLearnPath(\''.addslashes(get_lang('DocumentsWillBeAddedToo')).'\')">'.
-                    get_lang('Ok').'</button>';
+                                onclick="checkLearnPath(\''.addslashes(get_lang('Documents will be added too')).'\')">'.
+                    get_lang('Validate').'</button>';
                 }
             }
         }
@@ -373,7 +371,7 @@ class CourseSelectForm
                         if ($type == RESOURCE_LEARNPATH) {
                             echo Display::return_message(
                                 get_lang(
-                                    'ToExportLearnpathWithQuizYouHaveToSelectQuiz'
+                                    'ToExportCoursesWithQuizYouHaveToSelectQuiz'
                                 ),
                                 'warning'
                             );
@@ -404,7 +402,7 @@ class CourseSelectForm
                                         onclick=\"javascript: setCheckbox('$type',true);\" >".get_lang('All')."</a>";
                             echo "<a class=\"btn btn-default\" 
                                         href=\"javascript: void(0);\" 
-                                        onclick=\"javascript:setCheckbox('$type',false);\" >".get_lang('None')."</a>";
+                                        onclick=\"javascript:setCheckbox('$type',false);\" >".get_lang('none')."</a>";
                             echo '</div>';
                             echo '<ul class="list-backups-options">';
                             foreach ($resources as $id => $resource) {
@@ -758,7 +756,7 @@ class CourseSelectForm
             }
             $courseInfo = api_get_course_info($hidden_fields['destination_course']);
             echo '<h3>';
-            echo get_lang('DestinationCourse').' : '.$courseInfo['title'].$sessionTitle;
+            echo get_lang('Target course').' : '.$courseInfo['title'].$sessionTitle;
             echo '</h3>';
         }
 
@@ -778,7 +776,7 @@ class CourseSelectForm
 
                     echo '<div class="btn-group">';
                     echo "<a class=\"btn\" href=\"#\" onclick=\"javascript:setCheckbox('".$course->code."',true);\" >".get_lang('All')."</a>";
-                    echo "<a class=\"btn\" href=\"#\" onclick=\"javascript:setCheckbox('".$course->code."',false);\" >".get_lang('None')."</a>";
+                    echo "<a class=\"btn\" href=\"#\" onclick=\"javascript:setCheckbox('".$course->code."',false);\" >".get_lang('none')."</a>";
                     echo '</div>';
 
                     foreach ($resources as $id => $resource) {
@@ -807,8 +805,8 @@ class CourseSelectForm
             }
         }
         echo '<br /><button class="save" type="submit" 
-            onclick="checkLearnPath(\''.addslashes(get_lang('DocumentsWillBeAddedToo')).'\')">'.
-            get_lang('Ok').'</button>';
+            onclick="checkLearnPath(\''.addslashes(get_lang('Documents will be added too')).'\')">'.
+            get_lang('Validate').'</button>';
         self::display_hidden_quiz_questions($course);
         self::display_hidden_scorm_directories($course);
         echo '</form>';

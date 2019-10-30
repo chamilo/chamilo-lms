@@ -13,7 +13,7 @@ $exportCSV = isset($_GET['export']) && $_GET['export'] === 'csv' ? true : false;
 $this_section = SECTION_TRACKING;
 
 $csv_content = [];
-$nameTools = get_lang('MySpace');
+$nameTools = get_lang('Reporting');
 
 $is_platform_admin = api_is_platform_admin();
 $is_drh = api_is_drh();
@@ -40,7 +40,7 @@ $(function() {
 </script>';
 
 $form = new FormValidator('exercise', 'get');
-$form->addDatePicker('start_date', get_lang('StartDate'));
+$form->addDatePicker('start_date', get_lang('Start Date'));
 if (empty($courseId)) {
     $form->addSelectAjax(
         'course_id',
@@ -72,12 +72,12 @@ if (empty($courseId)) {
             foreach ($exerciseList as $exercise) {
                 $options[$exercise['id']] = $exercise['title'];
             }
-            $form->addSelect('exercise_id', get_lang('Exercises'), $options);
+            $form->addSelect('exercise_id', get_lang('Tests'), $options);
         } else {
-            $form->addLabel(get_lang('Exercises'), Display::return_message(get_lang('NoExercises')));
+            $form->addLabel(get_lang('Tests'), Display::return_message(get_lang('NoTests')));
         }
     } else {
-        Display::addFlash(Display::return_message(get_lang('CourseDoesNotExist'), 'warning'));
+        Display::addFlash(Display::return_message(get_lang('This course doesn\'t exist'), 'warning'));
     }
 }
 
@@ -102,9 +102,9 @@ if ($form->validate() && !empty($courseInfo)) {
 
     $categoryList = TestCategory::getListOfCategoriesIDForTest($exerciseId, $courseId);
     $columns = [
-        get_lang('FirstName'),
-        get_lang('LastName'),
-        get_lang('LoginName'),
+        get_lang('First name'),
+        get_lang('Last name'),
+        get_lang('Login'),
     ];
 
     if (!empty($extraFields) && isset($extraFields['fields'])) {
@@ -118,8 +118,8 @@ if ($form->validate() && !empty($courseInfo)) {
     }
 
     $columns[] = get_lang('Session');
-    $columns[] = get_lang('SessionStartDate');
-    $columns[] = get_lang('StartDate');
+    $columns[] = get_lang('SessionStart Date');
+    $columns[] = get_lang('Start Date');
     $columns[] = get_lang('Score');
 
     if (!empty($categoryList)) {
@@ -127,7 +127,7 @@ if ($form->validate() && !empty($courseInfo)) {
             $columns[] = $categoryInfo['title'];
         }
     }
-    $columns[] = get_lang('Actions');
+    $columns[] = get_lang('Detail');
 
     $columnModel = [
         ['name' => 'firstname', 'index' => 'firstname', 'width' => '50', 'align' => 'left', 'search' => 'true'],
@@ -221,7 +221,7 @@ if ($form->validate() && !empty($courseInfo)) {
     // add username as title in lastname filed - ref 4226
     function action_formatter(cellvalue, options, rowObject) {
         // rowObject is firstname,lastname,login,... get the third word
-        var loginx = "'.api_htmlentities(sprintf(get_lang("LoginX"), ":::"), ENT_QUOTES).'";
+        var loginx = "'.api_htmlentities(sprintf(get_lang("Login: %s"), ":::"), ENT_QUOTES).'";
         var tabLoginx = loginx.split(/:::/);
         // tabLoginx[0] is before and tabLoginx[1] is after :::
         // may be empty string but is defined
@@ -266,7 +266,7 @@ if ($form->validate() && !empty($courseInfo)) {
             
             jQuery("#'.$tableId.'").jqGrid("navButtonAdd","#'.$tableId.'_pager",{       
                caption: "",
-               title:"'.get_lang('ExportExcel').'",
+               title:"'.get_lang('Excel export').'",
                onClickButton : function() {
                    jQuery("#'.$tableId.'").jqGrid(
                     "excelExport",{
@@ -281,7 +281,7 @@ if ($form->validate() && !empty($courseInfo)) {
         [
             'url' => '  ',
             'url_attributes' => ['id' => 'excel_export'],
-            'content' => Display::return_icon('export_excel.png', get_lang('ExportExcel')),
+            'content' => Display::return_icon('export_excel.png', get_lang('Excel export')),
         ],
     ];
 

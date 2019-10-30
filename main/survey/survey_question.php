@@ -13,6 +13,89 @@ class survey_question
     private $form;
 
     /**
+     * @param FormValidator $form
+     * @param array         $surveyData
+     */
+    public function addParentMenu(FormValidator $form, $surveyData)
+    {
+        $surveyId = $surveyData['survey_id'];
+        $questions = SurveyManager::get_questions($surveyId);
+
+        $options = [];
+        foreach ($questions as $question) {
+            $options[$question['question_id']] = strip_tags($question['question']);
+        }
+        $form->addSelect(
+            'parent_id',
+            get_lang('Parent'),
+            $options,
+            ['id' => 'parent_id', 'placeholder' => get_lang('Please select an option')]
+        );
+        $url = api_get_path(WEB_AJAX_PATH).'survey.ajax.php?'.api_get_cidreq();
+        $form->addHtml('
+            <script>
+                $(function() {                    
+                    $("#parent_id").on("change", function() {
+                        var questionId = $(this).val()
+                        var params = {
+                            "a": "load_question_options",
+                            "survey_id": "'.$surveyId.'",
+                            "question_id": questionId,
+                        };    
+                            
+                          $.ajax({
+                            type: "GET",
+                            url: "'.$url.'",
+                            data: params,
+                            async: false,
+                            success: function(data) {
+                                $("#parent_options").html(data);
+                            }
+                        });        
+                        console.log(); 
+                    });
+                });
+            </script>
+        ');
+        $form->addHtml('<div id="parent_options"></div>');
+        $form->addHidden('option_id', 0);
+    }
+
+    /**
+     * @param string $type
+     *
+     * @return survey_question
+     */
+    public static function createQuestion($type)
+    {
+        switch ($type) {
+            case 'comment':
+                return new ch_comment();
+            case 'dropdown':
+                return new ch_dropdown();
+            case 'multiplechoice':
+                return new ch_multiplechoice();
+            case 'multipleresponse':
+                return new ch_multipleresponse();
+            case 'open':
+                return new ch_open();
+            case 'pagebreak':
+                return new ch_pagebreak();
+            case 'percentage':
+                return new ch_percentage();
+            case 'personality':
+                return new ch_personality();
+            case 'score':
+                return new ch_score();
+            case 'yesno':
+                return new ch_yesno();
+            default:
+                api_not_allowed(true);
+                break;
+        }
+    }
+
+    /**
      * Generic part of any survey question: the question field.
      *
      * @param array $surveyData
@@ -34,20 +117,20 @@ class survey_question
         ).' ';
 
         if ($action == 'add') {
-            $toolName .= get_lang('AddQuestion').': ';
+            $toolName .= get_lang('Add a question').': ';
         } elseif ($action == 'edit') {
-            $toolName .= get_lang('EditQuestion').': ';
+            $toolName .= get_lang('Edit question').': ';
         }
 
         switch ($_GET['type']) {
             case 'yesno':
-                $toolName .= get_lang('YesNo');
+                $toolName .= get_lang('Yes / No');
                 break;
             case 'multiplechoice':
-                $toolName .= get_lang('UniqueSelect');
+                $toolName .= get_lang('Multiple choice');
                 break;
             case 'multipleresponse':
-                $toolName .= get_lang('MultipleResponse');
+                $toolName .= get_lang('Multiple answers');
                 break;
             default:
                 $toolName .= get_lang(api_ucfirst($type));
@@ -78,7 +161,7 @@ class survey_question
 
         if (api_get_configuration_value('allow_required_survey_questions') &&
             in_array($_GET['type'], ['yesno', 'multiplechoice'])) {
-            $form->addCheckBox('is_required', get_lang('IsMandatory'), get_lang('Yes'));
+            $form->addCheckBox('is_required', get_lang('Mandatory?'), get_lang('Yes'));
         }
 
         // When survey type = 1??
@@ -151,20 +234,20 @@ class survey_question
             $surveyId = isset($_GET['survey_id']) ? (int) $_GET['survey_id'] : 0;
             $answersChecker = SurveyUtil::checkIfSurveyHasAnswers($surveyId);
             if (!$answersChecker) {
-                $this->buttonList[] = $this->getForm()->addButtonUpdate(get_lang('ModifyQuestionSurvey'), 'save', true);
+                $this->buttonList[] = $this->getForm()->addButtonUpdate(get_lang('Edit question'), 'save', true);
             } else {
                 $this->getForm()->addHtml('
                     <div class="form-group">
                         <label class="col-sm-2 control-label"></label>
                         <div class="col-sm-8">
-                            <div class="alert alert-info">'.get_lang('YouCantNotEditThisQuestionBecauseAlreadyExistAnswers').'</div>
+                            <div class="alert alert-info">'.get_lang('You can\'t edit this question because answers by students have already been registered').'</div>
                         </div>
                         <div class="col-sm-2"></div>
                     </div>
                 ');
             }
         } else {
-            $this->buttonList[] = $this->getForm()->addButtonSave(get_lang('CreateQuestionSurvey'), 'save', true);
+            $this->buttonList[] = $this->getForm()->addButtonSave(get_lang('Create question'), 'save', true);
         }
 
         $this->getForm()->addGroup($this->buttonList, 'buttons');
@@ -332,7 +415,7 @@ class survey_question
         $this->buttonList['remove_answer'] = $this->getForm()->createElement(
             'button',
             'remove_answer',
-            get_lang('RemoveAnswer'),
+            get_lang('Remove option'),
             'minus',
             'default'
         );
@@ -346,7 +429,7 @@ class survey_question
         $this->buttonList['add_answer'] = $this->getForm()->createElement(
             'button',
             'add_answer',
-            get_lang('AddAnswer'),
+            get_lang('Add option'),
             'plus',
             'default'
         );

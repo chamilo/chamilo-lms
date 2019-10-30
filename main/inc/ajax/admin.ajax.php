@@ -105,10 +105,10 @@ function version_check()
     // The site has not been registered yet.
     $return = '';
     if ($row['selected_value'] == 'false') {
-        $return .= get_lang('VersionCheckExplanation');
+        $return .= get_lang('In order to enable the automatic version checking you have to register your portal on chamilo.org. The information obtained by clicking this button is only for internal use and only aggregated data will be publicly available (total number of portals, total number of chamilo course, total number of chamilo users, ...) (see <a href="http://www.chamilo.org/stats/">http://www.chamilo.org/stats/</a>. When registering you will also appear on the worldwide list (<a href="http://www.chamilo.org/community.php">http://www.chamilo.org/community.php</a>. If you do not want to appear in this list you have to check the checkbox below. The registration is as easy as it can be: you only have to click this button: <br />');
         $return .= '<form class="version-checking" action="'.api_get_path(WEB_CODE_PATH).'admin/index.php" id="VersionCheck" name="VersionCheck" method="post">';
-        $return .= '<label class="checkbox"><input type="checkbox" name="donotlistcampus" value="1" id="checkbox" />'.get_lang('HideCampusFromPublicPlatformsList');
-        $return .= '</label><button type="submit" class="btn btn-primary btn-block" name="Register" value="'.get_lang('EnableVersionCheck').'" id="register" >'.get_lang('EnableVersionCheck').'</button>';
+        $return .= '<label class="checkbox"><input type="checkbox" name="donotlistcampus" value="1" id="checkbox" />'.get_lang('Hide campus from public platforms list');
+        $return .= '</label><button type="submit" class="btn btn-primary btn-block" name="Register" value="'.get_lang('Enable version check').'" id="register" >'.get_lang('Enable version check').'</button>';
         $return .= '</form>';
         check_system_version();
     } else {
@@ -132,7 +132,7 @@ function check_system_version()
 {
     // Check if curl is available.
     if (!in_array('curl', get_loaded_extensions())) {
-        return '<span style="color:red">'.get_lang('ImpossibleToContactVersionServerPleaseTryAgain').'</span>';
+        return '<span style="color:red">'.get_lang('Impossible to contact the version server right now. Please try again later.').'</span>';
     }
 
     $url = 'https://version.chamilo.org';
@@ -223,17 +223,17 @@ function check_system_version()
         }
 
         if (version_compare($system_version, $version, '<')) {
-            $output = '<span style="color:red">'.get_lang('YourVersionNotUpToDate').'<br />
-                       '.get_lang('LatestVersionIs').' <b>Chamilo '.$version.'</b>.  <br />
-                       '.get_lang('YourVersionIs').' <b>Chamilo '.$system_version.'</b>.  <br />'.str_replace('http://www.chamilo.org', '<a href="http://www.chamilo.org">http://www.chamilo.org</a>', get_lang('PleaseVisitOurWebsite')).'</span>';
+            $output = '<span style="color:red">'.get_lang('Your version is not up-to-date').'<br />
+                       '.get_lang('The latest version is').' <b>Chamilo '.$version.'</b>.  <br />
+                       '.get_lang('Your version is').' <b>Chamilo '.$system_version.'</b>.  <br />'.str_replace('http://www.chamilo.org', '<a href="http://www.chamilo.org">http://www.chamilo.org</a>', get_lang('Please visit our website: http://www.chamilo.org')).'</span>';
         } else {
-            $output = '<span style="color:green">'.get_lang('VersionUpToDate').': Chamilo '.$version.'</span>';
+            $output = '<span style="color:green">'.get_lang('Your version is up-to-date').': Chamilo '.$version.'</span>';
         }
 
         return $output;
     }
 
-    return '<span style="color:red">'.get_lang('ImpossibleToContactVersionServerPleaseTryAgain').'</span>';
+    return '<span style="color:red">'.get_lang('Impossible to contact the version server right now. Please try again later.').'</span>';
 }
 
 /**
@@ -260,7 +260,7 @@ function getLatestNews()
     );
 
     if ($response->getStatusCode() !== 200) {
-        throw new Exception(get_lang('DenyEntry'));
+        throw new Exception(get_lang('Deny access'));
     }
 
     return $response->getBody()->getContents();

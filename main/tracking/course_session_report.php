@@ -41,9 +41,9 @@ foreach ($session_list as $sesion_item) {
     $my_session_list[$sesion_item['id']] = $sesion_item['name'];
 }
 if (count($session_list) == 0) {
-    $my_session_list[0] = get_lang('None');
+    $my_session_list[0] = get_lang('none');
 }
-$form->addElement('select', 'session_id', get_lang('Sessions'), $my_session_list);
+$form->addElement('select', 'session_id', get_lang('Course sessions'), $my_session_list);
 $form->addButtonFilter(get_lang('Filter'));
 
 if (!empty($_REQUEST['score'])) {
@@ -64,15 +64,15 @@ $form->setDefaults(['session_id' => $session_id]);
 $course_list = SessionManager::get_course_list_by_session_id($session_id);
 
 if (!$export_to_xls) {
-    Display :: display_header(get_lang("MySpace"));
+    Display :: display_header(get_lang("Reporting"));
     echo '<div class="actions">';
 
     if ($global) {
         echo MySpace::getTopMenu();
     } else {
         echo '<div style="float:left; clear:left">
-                <a href="courseLog.php?'.api_get_cidreq().'&studentlist=true">'.get_lang('StudentsTracking').'</a>&nbsp;|
-                <a href="courseLog.php?'.api_get_cidreq().'&studentlist=false">'.get_lang('CourseTracking').'</a>&nbsp;';
+                <a href="courseLog.php?'.api_get_cidreq().'&studentlist=true">'.get_lang('Report on learners').'</a>&nbsp;|
+                <a href="courseLog.php?'.api_get_cidreq().'&studentlist=false">'.get_lang('Course report').'</a>&nbsp;';
         echo '</div>';
     }
     echo '</div>';
@@ -81,9 +81,9 @@ if (!$export_to_xls) {
         echo MySpace::getAdminActions();
     }
 
-    echo '<h2>'.get_lang('LPExerciseResultsBySession').'</h2>';
+    echo '<h2>'.get_lang('Results of learning paths exercises by session').'</h2>';
     $form->display();
-    echo Display::return_message(get_lang('StudentScoreAverageIsCalculatedBaseInAllLPsAndAllAttempts'));
+    echo Display::return_message(get_lang('Learner score average is calculated bases on all learning paths and all attempts'));
 }
 
 $users = SessionManager::get_users_by_session($session_id);
@@ -98,7 +98,7 @@ foreach ($course_list as $current_course) {
     $attempt_result = [];
 
     // Getting LP list
-    $list = new LearnpathList('', $current_course['code'], $session_id);
+    $list = new LearnpathList('', $course_info, $session_id);
     $lp_list = $list->get_flat_list();
 
     // Looping LPs
@@ -128,10 +128,10 @@ if (!empty($users) && is_array($users)) {
     $html_result .= '<table  class="data_table">';
     $html_result .= '<tr><th>'.get_lang('User').'</th>';
     foreach ($course_list as $item) {
-        $html_result .= '<th>'.$item['title'].'<br /> '.get_lang('AverageScore').' %</th>';
+        $html_result .= '<th>'.$item['title'].'<br /> '.get_lang('Average score').' %</th>';
     }
-    $html_result .= '<th>'.get_lang('AverageScore').' %</th>';
-    $html_result .= '<th>'.get_lang('LastConnexionDate').'</th></tr>';
+    $html_result .= '<th>'.get_lang('Average score').' %</th>';
+    $html_result .= '<th>'.get_lang('Last connexion date').'</th></tr>';
 
     foreach ($users as $user) {
         $total_student = 0;
@@ -182,7 +182,7 @@ if (!empty($users) && is_array($users)) {
         $html_result .= "<td>$total_student</td><td>$string_date</td></tr>";
     }
 
-    $html_result .= "<tr><th>".get_lang('AverageScore')."</th>";
+    $html_result .= "<tr><th>".get_lang('Average score')."</th>";
     $total_average = 0;
     $counter = 0;
     foreach ($course_list as $course_item) {
@@ -211,7 +211,7 @@ if (!empty($users) && is_array($users)) {
     $html_result .= "</tr>";
     $html_result .= '</table>';
 } else {
-    echo Display::return_message(get_lang('NoResults'), 'warning');
+    echo Display::return_message(get_lang('No results found'), 'warning');
 }
 
 if (!$export_to_xls) {

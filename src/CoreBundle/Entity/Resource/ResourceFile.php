@@ -3,17 +3,24 @@
 
 namespace Chamilo\CoreBundle\Entity\Resource;
 
-use Chamilo\MediaBundle\Entity\Media;
 use Doctrine\ORM\Mapping as ORM;
-use Gedmo\Mapping\Annotation as Gedmo;
+use Gedmo\Timestampable\Traits\TimestampableEntity;
+use Symfony\Component\HttpFoundation\File\File;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\Validator\Constraints as Assert;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 /**
  * @ORM\Entity
+ *
+ * @Vich\Uploadable
  *
  * @ORM\Table(name="resource_file")
  */
 class ResourceFile
 {
+    use TimestampableEntity;
+
     /**
      * @ORM\Id
      * @ORM\Column(type="integer")
@@ -22,9 +29,99 @@ class ResourceFile
     protected $id;
 
     /**
-     * @ORM\OneToOne(targetEntity="Chamilo\MediaBundle\Entity\Media", cascade={"all"})
+     * @Assert\NotBlank()
+     *
+     * @var string
+     *
+     * @ORM\Column(type="string", length=255)
      */
-    protected $media;
+    protected $name;
+
+    /**
+     * @var string
+     */
+    protected $description;
+
+    /**
+     * @var bool
+     */
+    protected $enabled = false;
+
+    /**
+     * @var int
+     */
+    protected $width;
+
+    /**
+     * @var int
+     */
+    protected $height;
+
+    /**
+     * @var float
+     */
+    protected $length;
+
+    /**
+     * @var string
+     */
+    protected $copyright;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(type="text", nullable=true)
+     */
+    protected $mimeType;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(type="text", nullable=true)
+     */
+    protected $originalName;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(type="simple_array", nullable=true)
+     */
+    protected $dimensions;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    protected $size;
+
+    /**
+     * @var File
+     *
+     * @Vich\UploadableField(
+     *     mapping="resources",
+     *     fileNameProperty="name",
+     *     size="size",
+     *     mimeType="mimeType",
+     *     originalName="originalName",
+     *     dimensions="dimensions"
+     * )
+     */
+    protected $file;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="crop", type="string", length=255, nullable=true)
+     */
+    protected $crop;
+
+    /**
+     * @var ResourceNode
+     *
+     * @ORM\OneToOne(targetEntity="Chamilo\CoreBundle\Entity\Resource\ResourceNode", mappedBy="resourceFile")
+     */
+    protected $resourceNode;
 
 //    /**
 //     * @var string
@@ -92,12 +189,6 @@ class ResourceFile
 //     */
 //    protected $extension;
 
-    /**
-     * @var ResourceNode
-     *
-     * @ORM\OneToOne(targetEntity="Chamilo\CoreBundle\Entity\Resource\ResourceNode", mappedBy="resourceFile")
-     */
-    protected $resourceNode;
 
     /**
      * @var bool
@@ -107,26 +198,11 @@ class ResourceFile
     //protected $enabled;
 
     /**
-     * @ORM\Column(name="created_at", type="datetime")
-     *
-     * @Gedmo\Timestampable(on="create")
-     */
-    protected $createdAt;
-
-    /**
-     * @ORM\Column(name="updated_at", type="datetime")
-     *
-     * @Gedmo\Timestampable(on="update")
-     */
-    protected $updatedAt;
-
-    /**
      * Constructor.
      */
     public function __construct()
     {
         $this->enabled = true;
-        $this->setOriginalFilename(uniqid());
     }
 
     /**
@@ -145,6 +221,27 @@ class ResourceFile
     public function setName($name)
     {
         $this->name = $name;
+
+        return $this;
+    }
+
+
+    /**
+     * @return string
+     */
+    public function getCrop(): string
+    {
+        return $this->crop;
+    }
+
+    /**
+     * @param string $crop
+     *
+     * @return $this
+     */
+    public function setCrop($crop)
+    {
+        $this->crop = $crop;
 
         return $this;
     }
@@ -190,61 +287,21 @@ class ResourceFile
     }
 
     /**
-     * @return string
+     * @return int
      */
-    public function getSize(): string
+    public function getSize(): int
     {
-        return $this->size;
+        return (int) $this->size;
     }
 
     /**
-     * @param string $size
+     * @param int $size
      *
      * @return ResourceFile
      */
-    public function setSize(string $size): ResourceFile
+    public function setSize($size): ResourceFile
     {
         $this->size = $size;
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getWidth(): string
-    {
-        return $this->width;
-    }
-
-    /**
-     * @param string $width
-     *
-     * @return ResourceFile
-     */
-    public function setWidth(string $width): ResourceFile
-    {
-        $this->width = $width;
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getHeight(): string
-    {
-        return $this->height;
-    }
-
-    /**
-     * @param string $height
-     *
-     * @return ResourceFile
-     */
-    public function setHeight(string $height): ResourceFile
-    {
-        $this->height = $height;
 
         return $this;
     }
@@ -338,26 +395,6 @@ class ResourceFile
     }
 
     /**
-     * @return Media
-     */
-    public function getMedia()
-    {
-        return $this->media;
-    }
-
-    /**
-     * @param Media $media
-     *
-     * @return ResourceFile
-     */
-    public function setMedia($media)
-    {
-        $this->media = $media;
-
-        return $this;
-    }
-
-    /**
      * @return mixed
      */
     public function getId()
@@ -375,5 +412,139 @@ class ResourceFile
         $this->id = $id;
 
         return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDescription(): string
+    {
+        return $this->description;
+    }
+
+    /**
+     * @param string $description
+     *
+     * @return ResourceFile
+     */
+    public function setDescription(string $description): ResourceFile
+    {
+        $this->description = $description;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMimeType(): string
+    {
+        return $this->mimeType;
+    }
+
+    /**
+     * @param string $mimeType
+     *
+     * @return ResourceFile
+     */
+    public function setMimeType($mimeType): ResourceFile
+    {
+        $this->mimeType = $mimeType;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getOriginalName(): string
+    {
+        return $this->originalName;
+    }
+
+    /**
+     * @param string $originalName
+     *
+     * @return ResourceFile
+     */
+    public function setOriginalName($originalName): ResourceFile
+    {
+        $this->originalName = $originalName;
+
+        return $this;
+    }
+
+    /**
+     * @return array
+     */
+    public function getDimensions(): array
+    {
+        return $this->dimensions;
+    }
+
+    /**
+     * @param array $dimensions
+     *
+     * @return ResourceFile
+     */
+    public function setDimensions($dimensions): ResourceFile
+    {
+        $this->dimensions = $dimensions;
+
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getWidth(): int
+    {
+        $data = $this->getDimensions();
+
+        if ($data) {
+            $data = explode(',', $data);
+
+            return (int) $data[0];
+        }
+
+        return 0;
+    }
+
+    /**
+     * @return int
+     */
+    public function getHeight(): int
+    {
+        $data = $this->getDimensions();
+
+        if ($data) {
+            $data = explode(',', $data);
+
+            return (int) $data[1];
+        }
+
+        return 0;
+    }
+
+    /**
+     * @return File
+     */
+    public function getFile(): ?File
+    {
+        return $this->file;
+    }
+
+    /**
+     * @param File|UploadedFile $file
+     */
+    public function setFile(File $file = null): void
+    {
+        $this->file = $file;
+
+        if (null !== $file) {
+            // It is required that at least one field changes if you are using doctrine
+            // otherwise the event listeners won't be called and the file is lost
+            $this->updatedAt = new \DateTimeImmutable();
+        }
     }
 }

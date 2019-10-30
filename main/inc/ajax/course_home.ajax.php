@@ -140,18 +140,18 @@ switch ($action) {
 
         // Get the name of the database course.
         $course_info = api_get_course_info($_GET['code']);
-        $content = get_lang('NoDescription');
+        $content = get_lang('No description');
         if (!empty($course_info)) {
             if (api_get_setting('course_catalog_hide_private') === 'true' &&
-            $course_info['visibility'] == COURSE_VISIBILITY_REGISTERED
-        ) {
-                echo get_lang('PrivateAccess');
+                $course_info['visibility'] == COURSE_VISIBILITY_REGISTERED
+            ) {
+                echo get_lang('Private access');
                 break;
             }
             $table = Database::get_course_table(TABLE_COURSE_DESCRIPTION);
             $sql = "SELECT * FROM $table
-                WHERE c_id = ".$course_info['real_id']." AND session_id = 0
-                ORDER BY id";
+                    WHERE c_id = ".$course_info['real_id']." AND session_id = 0
+                    ORDER BY id";
             $result = Database::query($sql);
             if (Database::num_rows($result) > 0) {
                 while ($description = Database::fetch_object($result)) {
@@ -204,7 +204,8 @@ switch ($action) {
         $count = 0;
         $temp = [];
         foreach ($course_list as $item) {
-            $list = new LearnpathList(api_get_user_id(), $item['code'], $session_id);
+            $courseInfo = api_get_course_info($item['code']);
+            $list = new LearnpathList(api_get_user_id(), $courseInfo, $session_id);
             $flat_list = $list->get_flat_list();
             $lps[$item['code']] = $flat_list;
             $course_url = api_get_path(WEB_COURSE_PATH).$item['directory'].'/?id_session='.$session_id;
@@ -230,16 +231,16 @@ switch ($action) {
                 if (empty($lp_item['modified_on'])) {
                     $lp_date = api_get_local_time($lp_item['created_on']);
                     $image = 'new.gif';
-                    $label = get_lang('LearnpathAdded');
+                    $label = get_lang('Course added');
                 } else {
                     $lp_date = api_get_local_time($lp_item['modified_on']);
                     $image = 'moderator_star.png';
-                    $label = get_lang('LearnpathUpdated');
+                    $label = get_lang('Learning path updated');
                 }
 
                 $icons = '';
                 if (strtotime($last_date) < strtotime($lp_date)) {
-                    $icons = Display::return_icon($image, get_lang('TitleNotification').': '.$label.' - '.$lp_date);
+                    $icons = Display::return_icon($image, get_lang('Since your latest visit').': '.$label.' - '.$lp_date);
                 }
 
                 if (!empty($lp_item['publicated_on'])) {
@@ -342,7 +343,7 @@ switch ($action) {
 
             $list = new LearnpathList(
                 api_get_user_id(),
-                $item['code'],
+                api_get_course_info($item['code']),
                 $session_id,
                 'lp.publicatedOn DESC'
             );
@@ -368,15 +369,15 @@ switch ($action) {
                 if (empty($lp_item['modified_on'])) {
                     $lp_date = api_get_local_time($lp_item['created_on']);
                     $image = 'new.gif';
-                    $label = get_lang('LearnpathAdded');
+                    $label = get_lang('Course added');
                 } else {
                     $lp_date = api_get_local_time($lp_item['modified_on']);
                     $image = 'moderator_star.png';
-                    $label = get_lang('LearnpathUpdated');
+                    $label = get_lang('Learning path updated');
                 }
 
                 if (strtotime($last_date) < strtotime($lp_date)) {
-                    $icons = Display::return_icon($image, get_lang('TitleNotification').': '.$label.' - '.$lp_date);
+                    $icons = Display::return_icon($image, get_lang('Since your latest visit').': '.$label.' - '.$lp_date);
                 }
 
                 if (!empty($lp_item['publicated_on'])) {
@@ -485,7 +486,7 @@ switch ($action) {
 
             $list = new LearnpathList(
                 api_get_user_id(),
-                $item['code'],
+                api_get_course_info($item['code']),
                 $session_id
             );
             $flat_list = $list->get_flat_list();
@@ -507,15 +508,15 @@ switch ($action) {
                 if (empty($lp_item['modified_on'])) {
                     $lp_date = api_get_local_time($lp_item['created_on']);
                     $image = 'new.gif';
-                    $label = get_lang('LearnpathAdded');
+                    $label = get_lang('Course added');
                 } else {
                     $lp_date = api_get_local_time($lp_item['modified_on']);
                     $image = 'moderator_star.png';
-                    $label = get_lang('LearnpathUpdated');
+                    $label = get_lang('Learning path updated');
                 }
                 $icons = '';
                 if (strtotime($last_date) < strtotime($lp_date)) {
-                    $icons = Display::return_icon($image, get_lang('TitleNotification').': '.$label.' - '.$lp_date);
+                    $icons = Display::return_icon($image, get_lang('Since your latest visit').': '.$label.' - '.$lp_date);
                 }
                 if (!empty($lp_item['publicated_on'])) {
                     $date = substr($lp_item['publicated_on'], 0, 10);

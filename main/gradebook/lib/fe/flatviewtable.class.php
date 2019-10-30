@@ -100,7 +100,7 @@ class FlatViewTable extends SortableTable
         $customdisplays = $displayscore->get_custom_score_display_settings();
 
         if (empty($customdisplays)) {
-            echo get_lang('ToViewGraphScoreRuleMustBeEnabled');
+            echo get_lang('To view graph score rule must be enabled');
 
             return '';
         }
@@ -108,7 +108,7 @@ class FlatViewTable extends SortableTable
         $user_results = $this->datagen->get_data_to_graph2(false);
 
         if (empty($user_results) || empty($total_users)) {
-            echo get_lang('NoResults');
+            echo get_lang('No results found');
 
             return '';
         }
@@ -193,8 +193,8 @@ class FlatViewTable extends SortableTable
             }
             $dataSet->setSerieDescription('Labels', strip_tags($header));
             $dataSet->setAbscissa('Labels');
-            $dataSet->setAbscissaName(get_lang('GradebookSkillsRanking'));
-            $dataSet->setAxisName(0, get_lang('Students'));
+            $dataSet->setAbscissaName(get_lang('Skills ranking'));
+            $dataSet->setAxisName(0, get_lang('Learners'));
             $palette = [
                 '0' => ['R' => 186, 'G' => 206, 'B' => 151, 'Alpha' => 100],
                 '1' => ['R' => 210, 'G' => 148, 'B' => 147, 'Alpha' => 100],
@@ -370,7 +370,7 @@ class FlatViewTable extends SortableTable
                     .(isset($_GET['search']) ? '&search='.Security::remove_XSS($_GET['search']) : '').'">'
                     .Display::return_icon(
                         'action_prev.png',
-                        get_lang('PreviousPage'),
+                        get_lang('Previous page'),
                         [],
                         ICON_SIZE_MEDIUM
                     )
@@ -378,7 +378,7 @@ class FlatViewTable extends SortableTable
             } else {
                 $header .= Display::return_icon(
                     'action_prev_na.png',
-                    get_lang('PreviousPage'),
+                    get_lang('Previous page'),
                     [],
                     ICON_SIZE_MEDIUM
                 );
@@ -393,12 +393,12 @@ class FlatViewTable extends SortableTable
                     .'?selectcat='.Security::remove_XSS($_GET['selectcat'])
                     .'&offset='.($this->offset + GRADEBOOK_ITEM_LIMIT)
                     .(isset($_GET['search']) ? '&search='.Security::remove_XSS($_GET['search']) : '').'">'
-                    .Display::return_icon('action_next.png', get_lang('NextPage'), [], ICON_SIZE_MEDIUM)
+                    .Display::return_icon('action_next.png', get_lang('Next page'), [], ICON_SIZE_MEDIUM)
                     .'</a>';
             } else {
                 $header .= Display::return_icon(
                     'action_next_na.png',
-                    get_lang('NextPage'),
+                    get_lang('Next page'),
                     [],
                     ICON_SIZE_MEDIUM
                 );
@@ -455,7 +455,7 @@ class FlatViewTable extends SortableTable
                 );
 
                 foreach ($headerData['items'] as $item) {
-                    $firstHeader[] = '<center>'.$item.'</center>';
+                    $firstHeader[] = '<span class="text-center">'.$item.'</span>';
                 }
             } else {
                 $this->set_header($column, $headerData, false, $thAttributes);
@@ -477,25 +477,27 @@ class FlatViewTable extends SortableTable
             $table_data[] = $firstHeader;
         }
 
+        $columnOffset = empty($this->datagen->params['show_official_code']) ? 0 : 1;
+
         foreach ($data_array as $user_row) {
             $user_id = $user_row[0];
             unset($user_row[0]);
             $userInfo = api_get_user_info($user_id);
             if ($is_western_name_order) {
-                $user_row[1] = $this->build_name_link(
+                $user_row[1 + $columnOffset] = $this->build_name_link(
                     $user_id,
                     $userInfo['firstname']
                 );
-                $user_row[2] = $this->build_name_link(
+                $user_row[2 + $columnOffset] = $this->build_name_link(
                     $user_id,
                     $userInfo['lastname']
                 );
             } else {
-                $user_row[1] = $this->build_name_link(
+                $user_row[1 + $columnOffset] = $this->build_name_link(
                     $user_id,
                     $userInfo['lastname']
                 );
-                $user_row[2] = $this->build_name_link(
+                $user_row[2 + $columnOffset] = $this->build_name_link(
                     $user_id,
                     $userInfo['firstname']
                 );

@@ -7,6 +7,7 @@ use Chamilo\UserBundle\Entity\User;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -20,6 +21,8 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class ResourceNode
 {
+    use TimestampableEntity;
+
     public const PATH_SEPARATOR = '`';
 
     /**
@@ -52,15 +55,16 @@ class ResourceNode
     protected $resourceType;
 
     /**
-     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\Resource\ResourceLink", mappedBy="resourceNode", cascade={"remove"})
+     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\Resource\ResourceLink", mappedBy="resourceNode",
+     *                                                                                cascade={"remove"})
      */
     protected $resourceLinks;
 
     /**
      * @var ResourceFile
      *
-     * @ORM\OneToOne(targetEntity="Chamilo\CoreBundle\Entity\Resource\ResourceFile", inversedBy="resourceNode", cascade={"remove"})
-     * @ORM\JoinColumn(name="resource_file_id", referencedColumnName="id")
+     * @ORM\OneToOne(targetEntity="Chamilo\CoreBundle\Entity\Resource\ResourceFile", inversedBy="resourceNode", orphanRemoval=true)
+     * @ORM\JoinColumn(name="resource_file_id", referencedColumnName="id", onDelete="CASCADE")
      */
     protected $resourceFile;
 
@@ -108,20 +112,6 @@ class ResourceNode
      */
     protected $path;
 
-    /**
-     * @ORM\Column(name="created_at", type="datetime")
-     *
-     * @Gedmo\Timestampable(on="create")
-     */
-    protected $createdAt;
-
-    /**
-     * @ORM\Column(name="updated_at", type="datetime")
-     *
-     * @Gedmo\Timestampable(on="update")
-     */
-    protected $updatedAt;
-
     //protected $pathForCreationLog = '';
 
     /**
@@ -160,44 +150,6 @@ class ResourceNode
         $this->id = $id;
 
         return $this;
-    }
-
-    /**
-     * @param \DateTime|null $updatedAt
-     */
-    public function setUpdatedAt(\DateTime $updatedAt = null)
-    {
-        $this->updatedAt = $updatedAt;
-
-        return $this;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getUpdatedAt()
-    {
-        return $this->updatedAt;
-    }
-
-    /**
-     * @param \DateTime|null $createdAt
-     *
-     * @return $this
-     */
-    public function setCreatedAt(\DateTime $createdAt = null)
-    {
-        $this->createdAt = $createdAt;
-
-        return $this;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getCreatedAt()
-    {
-        return $this->createdAt;
     }
 
     /**
@@ -405,6 +357,14 @@ class ResourceNode
         $this->resourceLinks = $resourceLinks;
 
         return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasResourceFile()
+    {
+        return $this->resourceFile !== null;
     }
 
     /**

@@ -16,7 +16,7 @@ if (empty($studentId)) {
     api_not_allowed(true);
 }
 
-$tool_name = get_lang('StudentPublications');
+$tool_name = get_lang('Assignments');
 $group_id = api_get_group_id();
 $userInfo = api_get_user_info($studentId);
 $courseInfo = api_get_course_info();
@@ -35,7 +35,7 @@ if (!empty($group_id)) {
     ];
     $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'group/group_space.php?'.api_get_cidreq(),
-        'name' => get_lang('GroupSpace').' '.$group_properties['name'],
+        'name' => get_lang('Group area').' '.$group_properties['name'],
     ];
 } else {
     if (!(api_is_allowed_to_edit() || api_is_coach())) {
@@ -59,7 +59,7 @@ switch ($action) {
         if (api_is_allowed_to_edit()) {
             $deletedItems = deleteAllWorkPerUser($studentId, $courseInfo);
             if (!empty($deletedItems)) {
-                $message = get_lang('DocDel').'<br >';
+                $message = get_lang('File deleted').'<br >';
                 foreach ($deletedItems as $item) {
                     $message .= $item['title'].'<br />';
                 }
@@ -74,7 +74,7 @@ switch ($action) {
 
 $interbreadcrumb[] = [
     'url' => api_get_path(WEB_CODE_PATH).'work/work.php?'.api_get_cidreq(),
-    'name' => get_lang('StudentPublications'),
+    'name' => get_lang('Assignments'),
 ];
 $interbreadcrumb[] = [
     'url' => '#',
@@ -87,19 +87,19 @@ $workPerUser = getWorkPerUser($studentId);
 
 echo '<div class="actions">';
 echo '<a href="'.api_get_path(WEB_CODE_PATH).'work/work.php?'.api_get_cidreq().'">'.
-        Display::return_icon('back.png', get_lang('BackToWorksList'), '', ICON_SIZE_MEDIUM).'</a>';
+        Display::return_icon('back.png', get_lang('Back to Assignments list'), '', ICON_SIZE_MEDIUM).'</a>';
 
 if (api_is_allowed_to_edit()) {
     echo '<a href="'.api_get_path(WEB_CODE_PATH).'work/student_work.php?action=export_to_pdf&studentId='.$studentId.'&'.api_get_cidreq().'">'.
-        Display::return_icon('pdf.png', get_lang('ExportToPDF'), '', ICON_SIZE_MEDIUM).'</a>';
+        Display::return_icon('pdf.png', get_lang('Export to PDF'), '', ICON_SIZE_MEDIUM).'</a>';
 
     echo '<a href="'.api_get_path(WEB_CODE_PATH).'work/student_work.php?action=download&studentId='.$studentId.'&'.api_get_cidreq().'">'.
         Display::return_icon('save.png', get_lang('Download'), '', ICON_SIZE_MEDIUM).'</a>';
 
     echo '<a
-            onclick="javascript:if(!confirm(\''.get_lang('AreYouSureToDelete').'\')) return false;"
+            onclick="javascript:if(!confirm(\''.get_lang('Are you sure you want to delete').'\')) return false;"
             href="'.api_get_path(WEB_CODE_PATH).'work/student_work.php?action=delete_all&studentId='.$studentId.'&'.api_get_cidreq().'">'.
-        Display::return_icon('delete.png', get_lang('DeleteAllFiles'), '', ICON_SIZE_MEDIUM).'</a>';
+        Display::return_icon('delete.png', get_lang('Delete all papers'), '', ICON_SIZE_MEDIUM).'</a>';
 }
 
 echo '</div>';
@@ -109,10 +109,10 @@ $column = 0;
 $row = 0;
 $headers = [
     get_lang('Title'),
-    get_lang('HandedOutDate'),
-    get_lang('HandOutDateLimit'),
+    get_lang('Time of reception'),
+    get_lang('Deadline'),
     get_lang('Feedback'),
-    get_lang('Actions'),
+    get_lang('Detail'),
 ];
 foreach ($headers as $header) {
     $table->setHeaderContents($row, $column, $header);
@@ -144,7 +144,7 @@ foreach ($workPerUser as $work) {
         $table->setCellContents($row, $column, $score);
         $column++;
 
-        // Actions
+        // Detail
         $links = null;
 
         // is a text

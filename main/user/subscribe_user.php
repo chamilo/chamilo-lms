@@ -30,39 +30,39 @@ if (!api_is_allowed_to_edit()) {
     api_not_allowed(true);
 }
 
-$tool_name = get_lang('SubscribeUserToCourse');
-$type = isset($_REQUEST['type']) ? intval($_REQUEST['type']) : STUDENT;
+$tool_name = get_lang('Enroll users to course');
+$type = isset($_REQUEST['type']) ? (int) $_REQUEST['type'] : STUDENT;
 $keyword = isset($_REQUEST['keyword']) ? Security::remove_XSS($_REQUEST['keyword']) : null;
 
 $courseInfo = api_get_course_info();
 
 if ($type == COURSEMANAGER) {
-    $tool_name = get_lang('SubscribeUserToCourseAsTeacher');
+    $tool_name = get_lang('Enroll users to courseAsTeacher');
 }
 
 //extra entries in breadcrumb
 $interbreadcrumb[] = [
     'url' => 'user.php?'.api_get_cidreq(),
-    'name' => get_lang('ToolUser'),
+    'name' => get_lang('Users'),
 ];
 if ($keyword) {
     $interbreadcrumb[] = [
         'url' => 'subscribe_user.php?type='.$type.'&'.api_get_cidreq(),
         'name' => $tool_name,
     ];
-    $tool_name = get_lang('SearchResults');
+    $tool_name = get_lang('Search results');
 }
 
 $sessionId = api_get_session_id();
-$list_register_user = '';
-$list_not_register_user = '';
+$list_Registerister_user = '';
+$list_not_Registerister_user = '';
 
-if (isset($_REQUEST['register'])) {
+if (isset($_REQUEST['Registerister'])) {
     $userInfo = api_get_user_info($_REQUEST['user_id']);
     if ($userInfo) {
         if ($type === COURSEMANAGER) {
             if (!empty($sessionId)) {
-                $message = $userInfo['complete_name_with_username'].' '.get_lang('AddedToCourse');
+                $message = $userInfo['complete_name_with_username'].' '.get_lang('has been Registeristered to your course');
                 SessionManager::set_coach_to_course_session(
                     $_REQUEST['user_id'],
                     $sessionId,
@@ -97,7 +97,7 @@ if (isset($_POST['action'])) {
                     if ($userInfo) {
                         if ($type === COURSEMANAGER) {
                             if (!empty($sessionId)) {
-                                $message = $userInfo['complete_name_with_username'].' '.get_lang('AddedToCourse');
+                                $message = $userInfo['complete_name_with_username'].' '.get_lang('has been Registeristered to your course');
                                 $result = SessionManager::set_coach_to_course_session(
                                     $user_id,
                                     $sessionId,
@@ -143,28 +143,28 @@ $parameters['type'] = $type;
 $table->set_additional_parameters($parameters);
 $col = 0;
 $table->set_header($col++, '', false);
-$table->set_header($col++, get_lang('OfficialCode'));
+$table->set_header($col++, get_lang('Code'));
 if (api_is_western_name_order()) {
-    $table->set_header($col++, get_lang('FirstName'));
-    $table->set_header($col++, get_lang('LastName'));
+    $table->set_header($col++, get_lang('First name'));
+    $table->set_header($col++, get_lang('Last name'));
 } else {
-    $table->set_header($col++, get_lang('LastName'));
-    $table->set_header($col++, get_lang('FirstName'));
+    $table->set_header($col++, get_lang('Last name'));
+    $table->set_header($col++, get_lang('First name'));
 }
 
 if (api_get_setting('show_email_addresses') == 'true') {
-    $table->set_header($col++, get_lang('Email'));
+    $table->set_header($col++, get_lang('e-mail'));
     $table->set_column_filter($col - 1, 'email_filter');
 }
-$table->set_header($col++, get_lang('Active'), false);
+$table->set_header($col++, get_lang('active'), false);
 $table->set_column_filter($col - 1, 'active_filter');
-$table->set_header($col++, get_lang('Actions'), false);
-$table->set_column_filter($col - 1, 'reg_filter');
-$table->set_form_actions(['subscribe' => get_lang('reg')], 'user');
+$table->set_header($col++, get_lang('Detail'), false);
+$table->set_column_filter($col - 1, 'Register_filter');
+$table->set_form_actions(['subscribe' => get_lang('Register')], 'user');
 
 if (!empty($_POST['keyword'])) {
     $keyword_name = Security::remove_XSS($_POST['keyword']);
-    echo '<br/>'.get_lang('SearchResultsFor').' <span style="font-style: italic ;"> '.$keyword_name.' </span><br>';
+    echo '<br/>'.get_lang('Search resultsFor').' <span style="font-style: italic ;"> '.$keyword_name.' </span><br>';
 }
 
 Display :: display_header($tool_name, 'User');
@@ -186,7 +186,7 @@ $actionsLeft = Display::url(
 
 if (isset($_GET['subscribe_user_filter_value']) && !empty($_GET['subscribe_user_filter_value'])) {
     $actionsLeft .= '<a href="subscribe_user.php?type='.$type.'">'.
-        Display::return_icon('clean_group.gif').' '.get_lang('ClearFilterResults').'</a>';
+        Display::return_icon('clean_group.gif').' '.get_lang('Clear filter results').'</a>';
 }
 $extraForm = '';
 if (api_get_setting('ProfilingFilterAddingUsers') === 'true') {
@@ -501,7 +501,7 @@ function get_user_data($from, $number_of_items, $column, $direction)
                         field_values.field_id = '".intval($field_identification[0])."' AND
                         field_values.value = '".Database::escape_string($field_identification[1])."'";
             } else {
-                $sql .= "WHERE cu.user_id IS NULL AND u.status<>".DRH." ";
+                $sql .= "WHERE cu.user_id IS NULL AND u.status <> ".DRH." ";
             }
 
             // adding a teacher NOT trough a session on a portal with multiple URLs
@@ -529,7 +529,7 @@ function get_user_data($from, $number_of_items, $column, $direction)
                                 field_values.field_id = '".intval($field_identification[0])."' AND
                                 field_values.value = '".Database::escape_string($field_identification[1])."'";
                     } else {
-                        $sql .= "WHERE cu.user_id IS NULL AND u.status<>".DRH." AND access_url_id= $url_access_id ";
+                        $sql .= "WHERE cu.user_id IS NULL AND u.status <> ".DRH." AND access_url_id= $url_access_id ";
                     }
                 }
             }
@@ -542,8 +542,8 @@ function get_user_data($from, $number_of_items, $column, $direction)
                     LEFT JOIN $tbl_session_rel_course_user cu
                     ON
                         u.user_id = cu.user_id AND
-                        c_id ='".$courseId."' AND
-                        session_id ='".$sessionId."' ";
+                        c_id = $courseId AND
+                        session_id = $sessionId ";
 
             if (api_is_multiple_url_enabled()) {
                 $sql .= " INNER JOIN $tbl_url_rel_user as url_rel_user ON (url_rel_user.user_id = u.user_id) ";
@@ -566,7 +566,7 @@ function get_user_data($from, $number_of_items, $column, $direction)
             } else {
                 $sql .= "WHERE
                             cu.user_id IS NULL AND
-                            u.status<>".DRH." AND
+                            u.status <> ".DRH." AND
                             (u.official_code <> 'ADMIN' OR u.official_code IS NULL) ";
             }
             if (api_is_multiple_url_enabled()) {
@@ -578,7 +578,7 @@ function get_user_data($from, $number_of_items, $column, $direction)
                     LEFT JOIN $course_user_table cu
                     ON
                         u.user_id = cu.user_id AND
-                        c_id ='".$courseId."'";
+                        c_id = $courseId ";
 
             // applying the filter of the additional user profile fields
             if (isset($_GET['subscribe_user_filter_value']) && !empty($_GET['subscribe_user_filter_value'])) {
@@ -588,11 +588,11 @@ function get_user_data($from, $number_of_items, $column, $direction)
                         ON field_values.item_id = u.user_id
                     WHERE
                         cu.user_id IS NULL AND
-                        u.status<>".DRH." AND
+                        u.status <> ".DRH." AND
                         field_values.field_id = '".intval($field_identification[0])."' AND
                         field_values.value = '".Database::escape_string($field_identification[1])."'";
             } else {
-                $sql .= "WHERE cu.user_id IS NULL AND u.status<>".DRH." ";
+                $sql .= "WHERE cu.user_id IS NULL AND u.status <> ".DRH." ";
             }
 
             //showing only the courses of the current Chamilo access_url_id
@@ -622,7 +622,7 @@ function get_user_data($from, $number_of_items, $column, $direction)
                                 access_url_id = $url_access_id
                             ";
                     } else {
-                        $sql .= "WHERE cu.user_id IS NULL AND u.status<>".DRH." AND access_url_id= $url_access_id ";
+                        $sql .= "WHERE cu.user_id IS NULL AND u.status<>".DRH." AND access_url_id = $url_access_id ";
                     }
                 }
             }
@@ -686,13 +686,13 @@ function email_filter($email)
     return Display :: encrypted_mailto_link($email, $email);
 }
 /**
- * Build the reg-column of the table.
+ * Build the Register-column of the table.
  *
  * @param int $user_id The user id
  *
  * @return string Some HTML-code
  */
-function reg_filter($user_id)
+function Register_filter($user_id)
 {
     if (isset($_REQUEST['type']) && $_REQUEST['type'] == COURSEMANAGER) {
         $type = COURSEMANAGER;
@@ -701,8 +701,8 @@ function reg_filter($user_id)
     }
     $user_id = (int) $user_id;
 
-    $result = '<a class="btn btn-small btn-primary" href="'.api_get_self().'?'.api_get_cidreq().'&register=yes&type='.$type.'&user_id='.$user_id.'">'.
-        get_lang("reg").'</a>';
+    $result = '<a class="btn btn-small btn-primary" href="'.api_get_self().'?'.api_get_cidreq().'&Registerister=yes&type='.$type.'&user_id='.$user_id.'">'.
+        get_lang("Register").'</a>';
 
     return $result;
 }
@@ -722,7 +722,7 @@ function active_filter($active, $url_params, $row)
 {
     $_user = api_get_user_info();
     if ($active == '1') {
-        $action = 'AccountActive';
+        $action = 'Accountactive';
         $image = 'accept';
     }
 
@@ -817,7 +817,7 @@ function display_extra_profile_fields_filter()
 {
     // getting all the additional user profile fields
     $extra = UserManager::get_extra_fields(0, 50, 5, 'ASC');
-    $return = '<option value="">'.get_lang('SelectFilter').'</option>';
+    $return = '<option value="">'.get_lang('Select filter').'</option>';
 
     // looping through the additional user profile fields
     foreach ($extra as $id => $field_details) {

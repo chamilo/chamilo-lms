@@ -38,13 +38,13 @@
     {% if _u.is_admin %}
         <div class="col-md-3">
             <div class="thumbnail">
-                <a href="src/configuration.php">
+                <a href="src/list.php">
                     <img src="resources/img/128/settings.png">
                 </a>
                 <div class="caption">
                     <p class="text-center">
                         <a class="btn btn-default btn-sm"
-                           href="src/configuration.php">{{ 'ConfigurationOfCoursesAndPrices'|get_plugin_lang('BuyCoursesPlugin') }}</a>
+                           href="src/list.php">{{ 'ConfigurationOfCoursesAndPrices'|get_plugin_lang('BuyCoursesPlugin') }}</a>
                     </p>
                 </div>
             </div>

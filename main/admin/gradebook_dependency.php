@@ -34,10 +34,10 @@ $table = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
 
 $interbreadcrumb[] = [
     'url' => api_get_path(WEB_CODE_PATH).'admin/gradebook_list.php',
-    'name' => get_lang('Gradebook'),
+    'name' => get_lang('Assessments'),
 ];
 
-$tpl = new Template(get_lang('CourseList'));
+$tpl = new Template(get_lang('Course list'));
 $toolbar = Display::url(
     Display::return_icon('back.png', get_lang('Add'), [], ICON_SIZE_MEDIUM),
     api_get_path(WEB_CODE_PATH).'admin/gradebook_list.php'
@@ -45,7 +45,7 @@ $toolbar = Display::url(
 
 if (empty($dependencies)) {
     Display::addFlash(
-        Display::return_message(get_lang('ThisGradebookDoesntHaveDependencies'))
+        Display::return_message(get_lang('ThisAssessmentsDoesntHaveDependencies'))
     );
 }
 

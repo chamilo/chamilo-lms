@@ -43,8 +43,6 @@ use TestCategory;
  * Builds a course-object from a Chamilo-course.
  *
  * @author Bart Mollet <bart.mollet@hogent.be>
- *
- * @package chamilo.backup
  */
 class CourseBuilder
 {
@@ -977,7 +975,7 @@ class CourseBuilder
 
         $obj = [
             'id' => -1,
-            'title' => get_lang('OrphanQuestions'),
+            'title' => get_lang('Orphan questions'),
             'type' => 2,
         ];
         $newQuiz = new Quiz((object) $obj);
@@ -1021,7 +1019,7 @@ class CourseBuilder
             // This is the fictional test for collecting orphan questions.
             $orphan_questions = new Quiz(
                 -1,
-                get_lang('OrphanQuestions', ''),
+                get_lang('Orphan questions'),
                 '',
                 0,
                 0,
@@ -1429,7 +1427,7 @@ class CourseBuilder
         $courseId = (int) $courseId;
 
         if (!empty($session_id) && !empty($courseId)) {
-            $session_id = intval($session_id);
+            $session_id = (int) $session_id;
             if ($withBaseContent) {
                 $sessionCondition = api_get_session_condition(
                     $session_id,

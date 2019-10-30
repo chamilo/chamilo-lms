@@ -47,7 +47,7 @@ if (!api_is_allowed_to_edit(false, true) || $isDrhOfCourse) {
         api_not_allowed(true);
     }
 
-    Display::display_header(get_lang('ToolSurvey'));
+    Display::display_header(get_lang('Surveys'));
     SurveyUtil::handle_reporting_actions($survey_data, $people_filled);
     Display::display_footer();
     exit;
@@ -62,7 +62,7 @@ if (!empty($exportReport) && !empty($format)) {
     switch ($format) {
         case 'xls':
             $filename = 'survey_results_'.$survey_id.'.xlsx';
-            $data = SurveyUtil::export_complete_report_xls($survey_data, $filename, $userId);
+            SurveyUtil::export_complete_report_xls($survey_data, $filename, $userId);
             exit;
             break;
         case 'csv':
@@ -100,7 +100,7 @@ if (api_strlen(strip_tags($survey_data['title'])) > 40) {
 // Breadcrumbs
 $interbreadcrumb[] = [
     'url' => api_get_path(WEB_CODE_PATH).'survey/survey_list.php?'.api_get_cidreq(),
-    'name' => get_lang('SurveyList'),
+    'name' => get_lang('Survey list'),
 ];
 $interbreadcrumb[] = [
     'url' => api_get_path(WEB_CODE_PATH).'survey/survey.php?survey_id='.$survey_id.'&'.api_get_cidreq(),
@@ -117,16 +117,16 @@ if ($action == 'overview') {
     switch ($action) {
         case 'questionreport':
             $singlePage = isset($_GET['single_page']) ? (int) $_GET['single_page'] : 0;
-            $tool_name = $singlePage ? get_lang('QuestionsOverallReport') : get_lang('DetailedReportByQuestion');
+            $tool_name = $singlePage ? get_lang('Questions\' overall report') : get_lang('Detailed report by question');
             break;
         case 'userreport':
-            $tool_name = get_lang('DetailedReportByUser');
+            $tool_name = get_lang('Detailed report by user');
             break;
         case 'comparativereport':
-            $tool_name = get_lang('ComparativeReport');
+            $tool_name = get_lang('Comparative report');
             break;
         case 'completereport':
-            $tool_name = get_lang('CompleteReport');
+            $tool_name = get_lang('Complete report');
             break;
     }
 }
@@ -147,10 +147,10 @@ if ($action == 'overview') {
     $html .= Display::url(
         Display::return_icon(
             'survey_reporting_overall.png',
-            get_lang('QuestionsOverallReport'),
+            get_lang('Questions\' overall report'),
             null,
             ICON_SIZE_MEDIUM
-        ).'<h4>'.get_lang('QuestionsOverallReport').'</h4><p>'.get_lang('QuestionsOverallReportDetail').'</p>',
+        ).'<h4>'.get_lang('Questions\' overall report').'</h4><p>'.get_lang('Questions\' overall reportDetail').'</p>',
         $url.'action=questionreport&survey_id='.$survey_id.'&single_page=1',
         ['class' => 'list-group-item']
     );
@@ -158,10 +158,10 @@ if ($action == 'overview') {
     $html .= Display::url(
         Display::return_icon(
             'survey_reporting_question.png',
-            get_lang('DetailedReportByQuestion'),
+            get_lang('Detailed report by question'),
             null,
             ICON_SIZE_MEDIUM
-        ).'<h4>'.get_lang('DetailedReportByQuestion').'</h4><p>'.get_lang('DetailedReportByQuestionDetail').'</p>',
+        ).'<h4>'.get_lang('Detailed report by question').'</h4><p>'.get_lang('Detailed report by questionDetail').'</p>',
         $url.'action=questionreport&survey_id='.$survey_id,
         ['class' => 'list-group-item']
     );
@@ -169,10 +169,10 @@ if ($action == 'overview') {
     $html .= Display::url(
         Display::return_icon(
             'survey_reporting_user.png',
-            get_lang('DetailedReportByUser'),
+            get_lang('Detailed report by user'),
             null,
             ICON_SIZE_MEDIUM
-        ).'<h4>'.get_lang('DetailedReportByUser').'</h4><p>'.get_lang('DetailedReportByUserDetail').'</p>',
+        ).'<h4>'.get_lang('Detailed report by user').'</h4><p>'.get_lang('Detailed report by userDetail').'</p>',
         $url.'action=userreport&survey_id='.$survey_id,
         ['class' => 'list-group-item']
     );
@@ -180,10 +180,10 @@ if ($action == 'overview') {
     $html .= Display::url(
         Display::return_icon(
             'survey_reporting_comparative.png',
-            get_lang('ComparativeReport'),
+            get_lang('Comparative report'),
             null,
             ICON_SIZE_MEDIUM
-        ).'<h4>'.get_lang('ComparativeReport').'</h4><p>'.get_lang('ComparativeReportDetail').'</p>',
+        ).'<h4>'.get_lang('Comparative report').'</h4><p>'.get_lang('Comparative reportDetail').'</p>',
         $url.'action=comparativereport&survey_id='.$survey_id,
         ['class' => 'list-group-item']
     );
@@ -191,10 +191,10 @@ if ($action == 'overview') {
     $html .= Display::url(
         Display::return_icon(
             'survey_reporting_complete.png',
-            get_lang('CompleteReport'),
+            get_lang('Complete report'),
             null,
             ICON_SIZE_MEDIUM
-        ).'<h4>'.get_lang('CompleteReport').'</h4><p>'.get_lang('CompleteReportDetail').'</p>',
+        ).'<h4>'.get_lang('Complete report').'</h4><p>'.get_lang('Complete reportDetail').'</p>',
         $url.'action=completereport&survey_id='.$survey_id,
         ['class' => 'list-group-item']
     );

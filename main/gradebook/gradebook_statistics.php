@@ -28,18 +28,18 @@ if ($eval->get_category_id() < 0) {
 
 $interbreadcrumb[] = [
     'url' => Category::getUrl().'selectcat='.$currentcat[0]->get_id(),
-    'name' => get_lang('ToolGradebook'),
+    'name' => get_lang('Assessments'),
 ];
 
 if (api_is_allowed_to_edit()) {
     $interbreadcrumb[] = [
         'url' => 'gradebook_view_result.php?selecteval='.$categoryId.'&'.api_get_cidreq(),
-        'name' => get_lang('ViewResult'),
+        'name' => get_lang('Assessment details'),
     ];
 }
 $displayScore = ScoreDisplay::instance();
 
-Display::display_header(get_lang('EvaluationStatistics'));
+Display::display_header(get_lang('Evaluation statistics'));
 DisplayGradebook::display_header_result(
     $eval,
     $currentcat[0]->get_id(),
@@ -47,12 +47,12 @@ DisplayGradebook::display_header_result(
     'statistics'
 );
 
-//Bad, Regular, Good  - User definitions
+// Bad, Regular, Good  - User definitions
 $displays = $displayScore->get_custom_score_display_settings();
 
 if (!$displayScore->is_custom() || empty($displays)) {
     if (api_is_platform_admin() || api_is_course_admin()) {
-        echo Display::return_message(get_lang('PleaseEnableScoringSystem'), 'error', false);
+        echo Display::return_message(get_lang('Please enable Skills ranking'), 'error', false);
     }
 } else {
     $allresults = Result::load(null, null, $eval->get_id());
@@ -86,21 +86,28 @@ if (!$displayScore->is_custom() || empty($displays)) {
     }
 
     // Generate table
-    $stattable = '<table class="data_table" cellspacing="0" cellpadding="3">';
-    $stattable .= '<tr><th>'.get_lang('ScoringSystem').'</th>';
-    $stattable .= '<th>'.get_lang('Percentage').'</th>';
-    $stattable .= '<th>'.get_lang('CountUsers').'</th></tr>';
+    $html = '<table class="data_table" cellspacing="0" cellpadding="3">';
+    $html .= '<tr><th>'.get_lang('Skills ranking').'</th>';
+    $html .= '<th>'.get_lang('Percentage').'</th>';
+    $html .= '<th>'.get_lang('Number of users').'</th></tr>';
     $counter = 0;
+
+    $model = ExerciseLib::getCourseScoreModel();
     foreach ($keys as $key) {
         $bar = ($highest_ratio > 0 ? ($nr_items[$key] / $highest_ratio) * 100 : 0);
-        $stattable .= '<tr class="row_'.($counter % 2 == 0 ? 'odd' : 'even').'">';
-        $stattable .= '<td width="150">'.$key.'</td>';
-        $stattable .= '<td width="550">'.Display::bar_progress($bar).'</td>';
-        $stattable .= '<td align="right">'.$nr_items[$key].'</td>';
-        $stattable .= '</tr>';
+        $html .= '<tr class="row_'.($counter % 2 == 0 ? 'odd' : 'even').'">';
+        $html .= '<td width="150">'.$key.'</td>';
+        if (empty($model)) {
+            $html .= '<td width="550">'.Display::bar_progress($bar).'</td>';
+        } else {
+            $html .= '<td width="550">'.ExerciseLib::convertScoreToModel($bar).'</td>';
+        }
+
+        $html .= '<td align="right">'.$nr_items[$key].'</td>';
+        $html .= '</tr>';
         $counter++;
     }
-    $stattable .= '</table>';
-    echo $stattable;
+    $html .= '</table>';
+    echo $html;
 }
 Display :: display_footer();

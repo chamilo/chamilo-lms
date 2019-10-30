@@ -47,7 +47,7 @@
                                             </ul>
                                             <p class="text-right">
                                                 <span class="label label-primary">
-                                                    {{ course.currency }} {{ course.price }}
+                                                    {{ course.item.total_price_formatted }}
                                                 </span>
                                             </p>
                                             {% if course.enrolled == "YES" %}
@@ -93,7 +93,7 @@
                                             <p><em class="fa fa-calendar fa-fw"></em> {{ session.dates.display }}</p>
                                             <p class="text-right">
                                                 <span class="label label-primary">
-                                                    {{ session.currency }} {{ session.price }}
+                                                    {{ session.item.total_price_formatted }}
                                                 </span>
                                             </p>
                                             <ul class="list-unstyled">
@@ -135,9 +135,10 @@
                                 <div class="col-md-4 col-sm-6">
                                     <div class="items-course">
                                         <div class="items-course-image">
-                                            <a href="{{ _p.web }}service/{{ service.id }}"><img alt="{{ service.name }}"
-                                                                                                class="img-responsive"
-                                                                                                src="{{ service.image ? service.image : 'session_default.png'|icon() }}"></a>
+                                            <a href="{{ _p.web }}service/{{ service.id }}">
+                                                <img alt="{{ service.name }}"
+                                                    class="img-responsive"
+                                                    src="{{ service.image ? service.image : 'session_default.png'|icon() }}"></a>
                                         </div>
                                         <div class="items-course-info">
                                             <h4 class="title">
@@ -176,7 +177,7 @@
                                             </ul>
                                             <p class="text-right">
                                                 <span class="label label-primary">
-                                                    {{ service.currency == 'BRL' ? 'R$' : service.currency }} {{ service.price }}
+                                                     {{ service.total_price_formatted }}
                                                 </span>
                                             </p>
                                             <div class="toolbar">
@@ -195,6 +196,7 @@
                             {% endfor %}
                         {% endif %}
                     </div>
+                    {{ pagination }}
                 </div>
             </div>
         </div>

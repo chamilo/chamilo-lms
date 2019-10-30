@@ -2,6 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Framework\Container;
+use ChamiloSession as Session;
 use Patchwork\Utf8;
 use Westsworld\TimeAgo;
 
@@ -16,14 +17,8 @@ use Westsworld\TimeAgo;
  *
  * @package chamilo.library
  */
-
-// Special tags for marking untranslated variables.
-define('SPECIAL_OPENING_TAG', '[=');
-define('SPECIAL_CLOSING_TAG', '=]');
-
 // Predefined date formats in Chamilo provided by the language sub-system.
 // To be used as a parameter for the function api_format_date()
-
 define('TIME_NO_SEC_FORMAT', 0); // 15:23
 define('DATE_FORMAT_SHORT', 1); // Aug 25, 09
 define('DATE_FORMAT_LONG', 2); // Monday August 25, 09
@@ -74,21 +69,25 @@ function get_lang($variable)
 
     // Using symfony
     $defaultDomain = 'messages';
-    $translated = Container::getTranslator()->trans(
+    $locale = api_get_language_isocode();
+
+    $translated = $translator->trans(
         $variable,
         [],
-        $defaultDomain
+        $defaultDomain,
+        $locale
     );
 
-    if ($translated == $variable) {
+    if ($translated === $variable) {
         // Check the langVariable for BC
-        $translated = Container::getTranslator()->trans(
+        $translated = $translator->trans(
             "lang$variable",
             [],
-            $defaultDomain
+            $defaultDomain,
+            $locale
         );
 
-        if ($translated == "lang$variable") {
+        if ($translated === "lang$variable") {
             return $variable;
         }
     }
@@ -116,7 +115,6 @@ function api_get_interface_language(
 /**
  * Returns a purified language id, without possible suffixes that will disturb language identification in certain cases.
  *
- * @param string $language the input language identificator, for example 'french_unicode'
  * @param string the same purified or filtered language id, for example 'french'
  *
  * @return string
@@ -138,11 +136,16 @@ function api_purify_language_id($language)
 }
 
 /**
- * Gets language isocode.
+ * Gets language iso code.
  */
 function api_get_language_isocode()
 {
-    return Container::getTranslator()->getLocale();
+    $request = Container::getRequest();
+    if ($request) {
+        return $request->getLocale();
+    }
+
+    return 'en';
 }
 
 /**
@@ -153,18 +156,18 @@ function api_get_language_isocode()
  * */
 function api_get_platform_isocodes()
 {
-    $iso_code = [];
+    $list = [];
     $sql = "SELECT isocode 
             FROM ".Database::get_main_table(TABLE_MAIN_LANGUAGE)." 
             ORDER BY isocode ";
-    $sql_result = Database::query($sql);
-    if (Database::num_rows($sql_result)) {
-        while ($row = Database::fetch_array($sql_result)) {
-            $iso_code[] = trim($row['isocode']);
+    $result = Database::query($sql);
+    if (Database::num_rows($result)) {
+        while ($row = Database::fetch_array($result)) {
+            $list[] = trim($row['isocode']);
         }
     }
 
-    return $iso_code;
+    return $list;
 }
 
 /**
@@ -238,46 +241,45 @@ function api_get_timezones()
  */
 function api_get_timezone()
 {
-    // First, get the default timezone of the server
-    $to_timezone = date_default_timezone_get();
-    // Second, see if a timezone has been chosen for the platform
-    $timezone_value = api_get_setting('timezone_value');
+    $timezone = Session::read('system_timezone');
+    if (empty($timezone)) {
+        // First, get the default timezone of the server
+        $timezone = date_default_timezone_get();
+        // Second, see if a timezone has been chosen for the platform
+        $timezoneFromSettings = api_get_setting('timezone_value', 'timezones');
 
-    if ($timezone_value != null) {
-        $to_timezone = $timezone_value;
-    }
+        if ($timezoneFromSettings != null) {
+            $timezone = $timezoneFromSettings;
+        }
 
-    // If allowed by the administrator
-    $useUsersTimezone = api_get_setting('use_users_timezone');
+        // If allowed by the administrator
+        $allowUserTimezones = api_get_setting('use_users_timezone', 'timezones');
 
-    if ($useUsersTimezone === 'true') {
-        if (!api_is_anonymous()) {
+        if ($allowUserTimezones === 'true') {
             $userId = api_get_user_id();
             // Get the timezone based on user preference, if it exists
-            $userTimezone = UserManager::get_extra_user_data_by_field(
-                $userId,
-                'timezone'
-            );
-            if (isset($userTimezone['timezone']) && $userTimezone['timezone'] != null) {
-                $to_timezone = $userTimezone['timezone'];
+            $newExtraField = new ExtraFieldValue('user');
+            $data = $newExtraField->get_values_by_handler_and_field_variable($userId, 'timezone');
+            if (!empty($data) && isset($data['timezone']) && !empty($data['timezone'])) {
+                $timezone = $data['timezone'];
             }
         }
+        Session::write('system_timezone', $timezone);
     }
 
-    return $to_timezone;
+    return $timezone;
 }
 
 /**
  * Returns the given date as a DATETIME in UTC timezone.
  * This function should be used before entering any date in the DB.
  *
- * @param mixed $time                    date to be converted (can be a string supported by date() or a timestamp)
- * @param bool  $returnNullIfInvalidDate if the date is not correct return null instead of the current date
- * @param bool  $returnObj
+ * @param mixed $time                    Date to be converted (can be a string supported by date() or a timestamp)
+ * @param bool  $returnNullIfInvalidDate If the date is not correct return null instead of the current date
+ * @param bool  $returnObj               Returns a DateTime object
  *
  * @return string|DateTime The DATETIME in UTC to be inserted in the DB,
  *                         or null if the format of the argument is not supported
- *                         or datetime
  *
  * @author Julio Montoya - Adding the 2nd parameter
  * @author Guillaume Viguier <guillaume.viguier@beeznest.com>
@@ -314,8 +316,6 @@ function api_get_utc_datetime(
             return $date->format('Y-m-d H:i:s');
         }
     } catch (Exception $e) {
-        error_log($e->getMessage());
-
         return null;
     }
 }
@@ -323,11 +323,15 @@ function api_get_utc_datetime(
 /**
  * Returns a DATETIME string converted to the right timezone.
  *
- * @param mixed The time to be converted
- * @param string The timezone to be converted to.
- * If null, the timezone will be determined based on user preference,
- * or timezone chosen by the admin for the platform.
- * @param string The timezone to be converted from. If null, UTC will be assumed.
+ * @param mixed  $time                    The time to be converted
+ * @param string $to_timezone             The timezone to be converted to.
+ *                                        If null, the timezone will be determined based on user preference,
+ *                                        or timezone chosen by the admin for the platform.
+ * @param string $from_timezone           The timezone to be converted from. If null, UTC will be assumed.
+ * @param bool   $returnNullIfInvalidDate
+ * @param bool   $showTime
+ * @param bool   $humanForm
+ * @param string $format
  *
  * @return string The converted time formatted as Y-m-d H:i:s
  *
@@ -337,9 +341,10 @@ function api_get_local_time(
     $time = null,
     $to_timezone = null,
     $from_timezone = null,
-    $return_null_if_invalid_date = false,
+    $returnNullIfInvalidDate = false,
     $showTime = true,
-    $humanForm = false
+    $humanForm = false,
+    $format = ''
 ) {
     // Determining the timezone to be converted from
     if (is_null($from_timezone)) {
@@ -348,7 +353,7 @@ function api_get_local_time(
 
     // If time is a timestamp, convert it to a string
     if (is_null($time) || empty($time) || $time == '0000-00-00 00:00:00') {
-        if ($return_null_if_invalid_date) {
+        if ($returnNullIfInvalidDate) {
             return null;
         }
         $from_timezone = 'UTC';
@@ -357,7 +362,7 @@ function api_get_local_time(
 
     if (is_numeric($time)) {
         $time = (int) $time;
-        if ($return_null_if_invalid_date) {
+        if ($returnNullIfInvalidDate) {
             if (strtotime(date('d-m-Y H:i:s', $time)) !== (int) $time) {
                 return null;
             }
@@ -366,6 +371,7 @@ function api_get_local_time(
         $from_timezone = 'UTC';
         $time = gmdate('Y-m-d H:i:s', $time);
     }
+
     if ($time instanceof DateTime) {
         $time = $time->format('Y-m-d H:i:s');
         $from_timezone = 'UTC';
@@ -379,6 +385,10 @@ function api_get_local_time(
 
         $date = new DateTime($time, new DateTimezone($from_timezone));
         $date->setTimezone(new DateTimeZone($to_timezone));
+
+        if (!empty($format)) {
+            return $date->format($format);
+        }
 
         return api_get_human_date_time($date, $showTime, $humanForm);
     } catch (Exception $e) {
@@ -460,117 +470,97 @@ function api_format_date($time, $format = null, $language = null)
         switch ($format) {
             case DATE_FORMAT_ONLY_DAYNAME:
                 $date_format = get_lang('dateFormatOnlyDayName', '', $language);
-                if (INTL_INSTALLED) {
-                    $datetype = IntlDateFormatter::SHORT;
-                    $timetype = IntlDateFormatter::NONE;
-                }
+
+                $datetype = IntlDateFormatter::SHORT;
+                $timetype = IntlDateFormatter::NONE;
+
                 break;
             case DATE_FORMAT_NUMBER_NO_YEAR:
                 $date_format = get_lang('dateFormatShortNumberNoYear', '', $language);
-                if (INTL_INSTALLED) {
-                    $datetype = IntlDateFormatter::SHORT;
-                    $timetype = IntlDateFormatter::NONE;
-                }
+
+                $datetype = IntlDateFormatter::SHORT;
+                $timetype = IntlDateFormatter::NONE;
+
                 break;
             case DATE_FORMAT_NUMBER:
                 $date_format = get_lang('dateFormatShortNumber', '', $language);
-                if (INTL_INSTALLED) {
-                    $datetype = IntlDateFormatter::SHORT;
-                    $timetype = IntlDateFormatter::NONE;
-                }
+
+                $datetype = IntlDateFormatter::SHORT;
+                $timetype = IntlDateFormatter::NONE;
+
                 break;
             case TIME_NO_SEC_FORMAT:
                 $date_format = get_lang('timeNoSecFormat', '', $language);
-                if (INTL_INSTALLED) {
-                    $datetype = IntlDateFormatter::NONE;
-                    $timetype = IntlDateFormatter::SHORT;
-                }
+
+                $datetype = IntlDateFormatter::NONE;
+                $timetype = IntlDateFormatter::SHORT;
+
                 break;
             case DATE_FORMAT_SHORT:
                 $date_format = get_lang('dateFormatShort', '', $language);
-                if (INTL_INSTALLED) {
-                    $datetype = IntlDateFormatter::LONG;
-                    $timetype = IntlDateFormatter::NONE;
-                }
+
+                $datetype = IntlDateFormatter::LONG;
+                $timetype = IntlDateFormatter::NONE;
+
                 break;
             case DATE_FORMAT_LONG:
                 $date_format = get_lang('dateFormatLong', '', $language);
-                if (INTL_INSTALLED) {
-                    $datetype = IntlDateFormatter::FULL;
-                    $timetype = IntlDateFormatter::NONE;
-                }
+
+                $datetype = IntlDateFormatter::FULL;
+                $timetype = IntlDateFormatter::NONE;
+
                 break;
             case DATE_TIME_FORMAT_LONG:
                 $date_format = get_lang('dateTimeFormatLong', '', $language);
-                if (INTL_INSTALLED) {
-                    $datetype = IntlDateFormatter::FULL;
-                    $timetype = IntlDateFormatter::SHORT;
-                }
+
+                $datetype = IntlDateFormatter::FULL;
+                $timetype = IntlDateFormatter::SHORT;
+
                 break;
             case DATE_FORMAT_LONG_NO_DAY:
                 $date_format = get_lang('dateFormatLongNoDay', '', $language);
-                if (INTL_INSTALLED) {
-                    $datetype = IntlDateFormatter::FULL;
-                    $timetype = IntlDateFormatter::SHORT;
-                }
+
+                $datetype = IntlDateFormatter::FULL;
+                $timetype = IntlDateFormatter::SHORT;
+
                 break;
             case DATE_TIME_FORMAT_SHORT:
                 $date_format = get_lang('dateTimeFormatShort', '', $language);
-                if (INTL_INSTALLED) {
-                    $datetype = IntlDateFormatter::FULL;
-                    $timetype = IntlDateFormatter::SHORT;
-                }
+
+                $datetype = IntlDateFormatter::FULL;
+                $timetype = IntlDateFormatter::SHORT;
+
                 break;
             case DATE_TIME_FORMAT_SHORT_TIME_FIRST:
                 $date_format = get_lang('dateTimeFormatShortTimeFirst', '', $language);
-                if (INTL_INSTALLED) {
-                    $datetype = IntlDateFormatter::FULL;
-                    $timetype = IntlDateFormatter::SHORT;
-                }
+
+                $datetype = IntlDateFormatter::FULL;
+                $timetype = IntlDateFormatter::SHORT;
+
                 break;
             case DATE_TIME_FORMAT_LONG_24H:
                 $date_format = get_lang('dateTimeFormatLong24H', '', $language);
-                if (INTL_INSTALLED) {
-                    $datetype = IntlDateFormatter::FULL;
-                    $timetype = IntlDateFormatter::SHORT;
-                }
+
+                $datetype = IntlDateFormatter::FULL;
+                $timetype = IntlDateFormatter::SHORT;
+
                 break;
             default:
                 $date_format = get_lang('dateTimeFormatLong', '', $language);
-                if (INTL_INSTALLED) {
-                    $datetype = IntlDateFormatter::FULL;
-                    $timetype = IntlDateFormatter::SHORT;
-                }
+
+                $datetype = IntlDateFormatter::FULL;
+                $timetype = IntlDateFormatter::SHORT;
         }
-    } else {
-        $date_format = $format;
     }
 
-    if (0) {
-        //if using PHP 5.3 format dates like: $dateFormatShortNumber, can't be used
-        //
-        // Use ICU
-        if (is_null($language)) {
-            $language = api_get_language_isocode();
-        }
-        $date_formatter = new IntlDateFormatter($language, $datetype, $timetype, date_default_timezone_get());
-        //$date_formatter->setPattern($date_format);
-        $formatted_date = api_to_system_encoding($date_formatter->format($time), 'UTF-8');
-    } else {
-        // We replace %a %A %b %B masks of date format with translated strings
-        $translated = &_api_get_day_month_names($language);
-        $date_format = str_replace(
-            ['%A', '%a', '%B', '%b'],
-            [
-                $translated['days_long'][(int) strftime('%w', $time)],
-                $translated['days_short'][(int) strftime('%w', $time)],
-                $translated['months_long'][(int) strftime('%m', $time) - 1],
-                $translated['months_short'][(int) strftime('%m', $time) - 1],
-            ],
-            $date_format
-        );
-        $formatted_date = api_to_system_encoding(strftime($date_format, $time), 'UTF-8');
+    // Use ICU
+    if (is_null($language)) {
+        $language = api_get_language_isocode();
     }
+    $date_formatter = new IntlDateFormatter($language, $datetype, $timetype, date_default_timezone_get());
+    //$date_formatter->setPattern($date_format);
+    $formatted_date = api_to_system_encoding($date_formatter->format($time), 'UTF-8');
+
     date_default_timezone_set($system_timezone);
 
     return $formatted_date;
@@ -598,16 +588,20 @@ function date_to_str_ago($date, $timeZone = 'UTC', $returnDateDifference = false
 
     $getOldTimezone = api_get_timezone();
     $isoCode = api_get_language_isocode();
-    if ($isoCode == 'pt') {
+    if ($isoCode === 'pt') {
         $isoCode = 'pt-BR';
     }
-    $checkFile = api_get_path(SYS_PATH).'vendor/jimmiw/php-time-ago/translations/'.$isoCode.'.php';
-    if (!file_exists($checkFile)) {
-        $isoCode = 'en';
-    }
-    $timeAgo = new TimeAgo($timeZone, $isoCode);
-    $value = $timeAgo->inWords($date);
+    $isoCode = ucfirst($isoCode);
+    $class = "Westsworld\TimeAgo\Translations\\".$isoCode;
 
+    if (class_exists($class)) {
+        $language = new $class();
+    } else {
+        $language = new Westsworld\TimeAgo\Translations\En();
+    }
+    $timeAgo = new TimeAgo($language);
+    $date = api_get_utc_datetime($date, null, true);
+    $value = $timeAgo->inWords($date);
     date_default_timezone_set($getOldTimezone);
 
     if ($returnDateDifference) {

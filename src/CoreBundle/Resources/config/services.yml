@@ -1,29 +1,52 @@
 # Settings parameters that will be used in the 'services' section
 parameters:
-    chamilo_core.entity.manager.course_manager.class: Chamilo\CoreBundle\Entity\Manager\CourseManager
+
     chamilo_core.entity.course: Chamilo\CoreBundle\Entity\Course
 
     chamilo_core.entity.manager.session_manager.class: Chamilo\CoreBundle\Entity\Manager\SessionManager
     chamilo_core.entity.session: Chamilo\CoreBundle\Entity\Session
 
-    chamilo_core.entity.manager.access_url_manager.class: Chamilo\CoreBundle\Entity\Manager\AccessUrlManager
-    chamilo_core.entity.access_url: Chamilo\CoreBundle\Entity\AccessUrl
-
 services:
     _defaults:
         autowire: true
         public: true
+        autoconfigure: true
 
     chamilo_core.translation.loader.po:
         class: Symfony\Component\Translation\Loader\PoFileLoader
         tags:
             - {name: translation.loader, alias: po}
 
+    Chamilo\CoreBundle\:
+        resource: '../../*'
+        exclude: '../../{Repository,Tool,Admin,Block,Component,Composer,DependencyInjection,EventListener,Form,Framework,Menu,Migrations,Security,Settings,Controller,ChamiloCoreBundle.php,Entity,Tests}'
+        public: true
+
+    Chamilo\CoreBundle\Controller\:
+        resource: '../../Controller'
+        public: true
+        tags: ['controller.service_arguments']
+
     # Classic entity repositories
     Chamilo\CoreBundle\Repository\:
-        resource: ../../Repository
-        exclude: '../../Repository/{BranchSyncRepository.php,CourseRepository.php}'
+        resource: '../../Repository'
+        exclude: '../../Repository/{BranchSyncRepository.php,ResourceRepository.php}'
         tags: ['doctrine.repository_service']
+
+    Chamilo\CoreBundle\Controller\ResourceUploaderController:
+        autowire: false
+
+    Chamilo\CoreBundle\Controller\ResourceController:
+        autowire: false
+
+    # Entity repository as a service
+    Chamilo\CoreBundle\Repository\AccessUrlRepository:
+        arguments:
+            $className: 'Chamilo\CoreBundle\Entity\AccessUrl'
+
+    Chamilo\CoreBundle\Repository\CourseRepository:
+        arguments:
+            $className: 'Chamilo\CoreBundle\Entity\Course'
 
     menu.voter.regex:
         class: Chamilo\CoreBundle\Menu\MenuVoter
@@ -32,20 +55,9 @@ services:
             - {name: knp_menu.voter}
 
     # Entity managers
-    chamilo_core.entity.manager.course_manager:
-        class: '%chamilo_core.entity.manager.course_manager.class%'
-        arguments: ['%chamilo_core.entity.course%', '@doctrine']
-        public: true
-
     chamilo_core.entity.manager.session_manager:
         class: '%chamilo_core.entity.manager.session_manager.class%'
         arguments: ['%chamilo_core.entity.session%', '@doctrine']
-        public: true
-
-    chamilo_core.manager.access_url:
-        class: '%chamilo_core.entity.manager.access_url_manager.class%'
-        arguments: ['%chamilo_core.entity.access_url%', '@doctrine']
-        public: true
 
     # Chamilo Twig extension (already added with autowiring)
 #    twig.extension.chamilo_extension:
@@ -62,7 +74,7 @@ services:
         class: Chamilo\CoreBundle\Security\Authorization\Voter\CourseVoter
         arguments:
             - '@doctrine.orm.entity_manager'
-            - '@chamilo_core.entity.manager.course_manager'
+            - '@Chamilo\CoreBundle\Repository\CourseRepository'
             - '@security.authorization_checker'
             - '@service_container'
         public: false
@@ -76,7 +88,7 @@ services:
         class: Chamilo\CoreBundle\Security\Authorization\Voter\SessionVoter
         arguments:
             - '@doctrine.orm.entity_manager'
-            - '@chamilo_core.entity.manager.course_manager'
+            - '@Chamilo\CoreBundle\Repository\CourseRepository'
             - '@security.authorization_checker'
             - '@service_container'
         public: false
@@ -124,7 +136,7 @@ services:
     chamilo_core.html_editor:
         class: Chamilo\CoreBundle\Component\Editor\CkEditor\CkEditor
         arguments: ['@translator', '@router']
-        public: true
+
     # Listeners
 #    chamilo.doctrine.entity_listener_resolver:
 #        class: Chamilo\CoreBundle\Doctrine\EntityListenerResolver
@@ -140,7 +152,7 @@ services:
     # When Course entity is loaded
     chamilo_core.listener.course:
         class: Chamilo\CoreBundle\Entity\Listener\CourseListener
-        arguments: ['@chamilo_course.tool_chain', '@chamilo.settings.manager']
+        arguments: ['@chamilo_core.tool_chain', '@chamilo.settings.manager']
         tags:
             - {name: doctrine.orm.entity_listener, entity_manager: default, lazy: true}
 
@@ -237,7 +249,6 @@ services:
         tags:
             - {name: kernel.event_listener, event: security.interactive_login, method: onSecurityInteractiveLogin}
 
-
     chamilo_core.listener.logout_success_handler:
         class: Chamilo\CoreBundle\EventListener\LogoutSuccessHandler
         arguments: ['@router', '@security.authorization_checker', '@security.token_storage']
@@ -262,185 +273,6 @@ services:
         tags:
             - {name: sonata.block}
             - {name: sonata.breadcrumb}
-
-    # Platform settings
-    chamilo_core.settings.admin:
-        class: Chamilo\CoreBundle\Settings\AdminSettingsSchema
-        tags:
-            - {name: sylius.settings_schema, alias: chamilo_core.settings.admin, namespace: admin}
-
-    chamilo_core.settings.announcement:
-        class: Chamilo\CoreBundle\Settings\AnnouncementSettingsSchema
-        tags:
-            - {name: sylius.settings_schema, alias: chamilo_core.settings.announcement, namespace: announcement}
-
-    chamilo_core.settings.agenda:
-        class: Chamilo\CoreBundle\Settings\AgendaSettingsSchema
-        tags:
-            - {name: sylius.settings_schema, alias: chamilo_core.settings.agenda, namespace: agenda}
-
-    chamilo_core.settings.attendance:
-        class: Chamilo\CoreBundle\Settings\AttendanceSettingsSchema
-        tags:
-            - {name: sylius.settings_schema, alias: chamilo_core.settings.attendance, namespace: attendance}
-
-    chamilo_core.settings.cas:
-        class: Chamilo\CoreBundle\Settings\CasSettingsSchema
-        tags:
-            - {name: sylius.settings_schema, alias: chamilo_core.settings.cas, namespace: cas}
-
-    chamilo_core.settings.certificate:
-        class: Chamilo\CoreBundle\Settings\CertificateSettingsSchema
-        tags:
-            - {name: sylius.settings_schema, alias: chamilo_core.settings.certificate, namespace: certificate}
-
-    chamilo_core.settings.chat:
-        class: Chamilo\CoreBundle\Settings\ChatSettingsSchema
-        tags:
-            - {name: sylius.settings_schema, alias: chamilo_core.settings.chat, namespace: chat}
-
-    chamilo_core.settings.course:
-        class: Chamilo\CoreBundle\Settings\CourseSettingsSchema
-        calls:
-            - [setToolChain, ['@chamilo_course.tool_chain']]
-            - [setCourseManager, ['@chamilo_core.entity.manager.course_manager']]
-        tags:
-            - {name: sylius.settings_schema, alias: chamilo_core.settings.course, namespace: course}
-
-    chamilo_core.settings.crons:
-        class: Chamilo\CoreBundle\Settings\CronSettingsSchema
-        tags:
-            - {name: sylius.settings_schema, alias: chamilo_core.settings.crons, namespace: crons}
-
-    chamilo_core.settings.display:
-        class: Chamilo\CoreBundle\Settings\DisplaySettingsSchema
-        tags:
-            - {name: sylius.settings_schema, alias: chamilo_core.settings.display, namespace: display}
-
-    chamilo_core.settings.document:
-        class: Chamilo\CoreBundle\Settings\DocumentSettingsSchema
-        tags:
-            - {name: sylius.settings_schema, alias: chamilo_core.settings.document, namespace: document}
-
-    chamilo_core.settings.dropbox:
-        class: Chamilo\CoreBundle\Settings\DropboxSettingsSchema
-        tags:
-            - {name: sylius.settings_schema, alias: chamilo_core.settings.dropbox, namespace: dropbox}
-
-    chamilo_core.settings.editor:
-        class: Chamilo\CoreBundle\Settings\EditorSettingsSchema
-        tags:
-            - {name: sylius.settings_schema, alias: chamilo_core.settings.editor, namespace: editor}
-
-    chamilo_core.settings.exercise:
-        class: Chamilo\CoreBundle\Settings\ExerciseSettingsSchema
-        tags:
-            - {name: sylius.settings_schema, alias: chamilo_core.settings.exercise, namespace: exercise}
-
-    chamilo_core.settings.forum:
-        class: Chamilo\CoreBundle\Settings\ForumSettingsSchema
-        tags:
-            - {name: sylius.settings_schema, alias: chamilo_core.settings.forum, namespace: forum}
-
-    chamilo_core.settings.glossary:
-        class: Chamilo\CoreBundle\Settings\GlossarySettingsSchema
-        tags:
-            - {name: sylius.settings_schema, alias: chamilo_core.settings.glossary, namespace: glossary}
-
-    chamilo_core.settings.gradebook:
-        class: Chamilo\CoreBundle\Settings\GradebookSettingsSchema
-        tags:
-            - {name: sylius.settings_schema, alias: chamilo_core.settings.gradebook, namespace: gradebook}
-
-    chamilo_core.settings.group:
-        class: Chamilo\CoreBundle\Settings\GroupSettingsSchema
-        tags:
-            - {name: sylius.settings_schema, alias: chamilo_core.settings.group, namespace: group}
-
-    chamilo_core.settings.language:
-        class: Chamilo\CoreBundle\Settings\LanguageSettingsSchema
-        tags:
-            - {name: sylius.settings_schema, alias: chamilo_core.settings.language, namespace: language}
-
-    chamilo_core.settings.lp:
-        class: Chamilo\CoreBundle\Settings\LearningPathSettingsSchema
-        tags:
-            - {name: sylius.settings_schema, alias: chamilo_core.settings.lp, namespace: lp}
-
-    chamilo_core.settings.mail:
-        class: Chamilo\CoreBundle\Settings\MailSettingsSchema
-        tags:
-            - {name: sylius.settings_schema, alias: chamilo_core.settings.mail, namespace: mail}
-
-    chamilo_core.settings.message:
-        class: Chamilo\CoreBundle\Settings\MessageSettingsSchema
-        tags:
-            - {name: sylius.settings_schema, alias: chamilo_core.settings.message, namespace: message}
-
-    chamilo_core.settings.platform:
-        class: Chamilo\CoreBundle\Settings\PlatformSettingsSchema
-        tags:
-            - {name: sylius.settings_schema, alias: chamilo_core.settings.platform, namespace: platform}
-
-    chamilo_core.settings.profile:
-        class: Chamilo\CoreBundle\Settings\ProfileSettingsSchema
-        tags:
-            - {name: sylius.settings_schema, alias: chamilo_core.settings.profile, namespace: profile}
-
-    chamilo_core.settings.ppt_to_lp:
-        class: Chamilo\CoreBundle\Settings\PptToLpSettingsSchema
-        tags:
-            - {name: sylius.settings_schema, alias: chamilo_core.settings.ppt_to_lp, namespace: ppt_to_lp}
-
-    chamilo_core.settings.registration:
-        class: Chamilo\CoreBundle\Settings\RegistrationSettingsSchema
-        tags:
-            - {name: sylius.settings_schema, alias: chamilo_core.settings.registration, namespace: registration}
-
-    chamilo_core.settings.search:
-        class: Chamilo\CoreBundle\Settings\SearchSettingsSchema
-        tags:
-            - {name: sylius.settings_schema, alias: chamilo_core.settings.search, namespace: search}
-
-    chamilo_core.settings.security:
-        class: Chamilo\CoreBundle\Settings\SecuritySettingsSchema
-        tags:
-            - {name: sylius.settings_schema, alias: chamilo_core.settings.security, namespace: security}
-
-    chamilo_core.settings.session:
-        class: Chamilo\CoreBundle\Settings\SessionSettingsSchema
-        tags:
-            - {name: sylius.settings_schema, alias: chamilo_core.settings.session, namespace: session}
-
-    chamilo_core.settings.skill:
-        class: Chamilo\CoreBundle\Settings\SkillSettingsSchema
-        tags:
-            - {name: sylius.settings_schema, alias: chamilo_core.settings.skill, namespace: skill}
-
-    chamilo_core.settings.social:
-        class: Chamilo\CoreBundle\Settings\SocialSettingsSchema
-        tags:
-            - {name: sylius.settings_schema, alias: chamilo_core.settings.social, namespace: social}
-
-    chamilo_core.settings.survey:
-        class: Chamilo\CoreBundle\Settings\SurveySettingsSchema
-        tags:
-            - {name: sylius.settings_schema, alias: chamilo_core.settings.survey, namespace: survey}
-
-    chamilo_core.settings.ticket:
-        class: Chamilo\CoreBundle\Settings\TicketSettingsSchema
-        tags:
-            - {name: sylius.settings_schema, alias: chamilo_core.settings.ticket, namespace: ticket}
-
-    chamilo_core.settings.tracking:
-        class: Chamilo\CoreBundle\Settings\TrackingSettingsSchema
-        tags:
-            - {name: sylius.settings_schema, alias: chamilo_core.settings.tracking, namespace: tracking}
-
-    chamilo_core.settings.webservice:
-        class: Chamilo\CoreBundle\Settings\WebServiceSettingsSchema
-        tags:
-            - {name: sylius.settings_schema, alias: chamilo_core.settings.webservice, namespace: webservice}
 
     # Form types
     chamilo_user.registration.form.type:

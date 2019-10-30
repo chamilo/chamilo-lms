@@ -9,7 +9,7 @@ if (api_get_setting('platform_unsubscribe_allowed') != 'true') {
 
 $tool_name = get_lang('Unsubscribe');
 
-$message = Display::return_message(get_lang('UnsubscribeFromPlatform'), 'warning');
+$message = Display::return_message(get_lang('If you want to unsubscribe completely from this campus and have all your information removed from our database, please click the button below and confirm.'), 'warning');
 
 $form = new FormValidator('user_add');
 $form->addElement(
@@ -17,7 +17,7 @@ $form->addElement(
     'submit',
     get_lang('Unsubscribe'),
     [
-        'onclick' => "javascript:if(!confirm('".addslashes(api_htmlentities(get_lang("UnsubscribeFromPlatformConfirm")))."')) return false;",
+        'onclick' => "javascript:if(!confirm('".addslashes(api_htmlentities(get_lang("If you want to unsubscribe completely from this campus and have all your information removed from our database, please click the button below and confirm.Confirm")))."')) return false;",
     ]
 );
 $content = $form->returnForm();
@@ -28,7 +28,7 @@ if ($form->validate()) {
     if ($result) {
         $message = Display::return_message(
             sprintf(
-                get_lang('UnsubscribeFromPlatformSuccess'),
+                get_lang('If you want to unsubscribe completely from this campus and have all your information removed from our database, please click the button below and confirm.Success'),
                 $user_info['username']
             )
         );

@@ -1,21 +1,20 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
- * Generate Gettext-format language files from the existing language files
+ * Generate Gettext-format language files from the existing language files.
  *
- * @package chamilo.cron.lang
  * @author Yannick Warnier <yannick.warnier@beeznest.com>
  */
-/**
- * Includes and declarations.
- */
+
 die(); //remove before execution
 require_once __DIR__.'/../../../main/inc/global.inc.php';
-ini_set('memory_limit', '128M');
-$partial = false;//if set to true, do not add empty strings to .po files
+ini_set('memory_limit', '600M');
+$partial = false; //if set to true, do not add empty strings to .po files
 $destinationDir = '/tmp/gettext'; //where to put the generated files
+
 /**
- * Get list of languages
+ * Get list of languages.
  */
 $langPath = api_get_path(SYS_LANG_PATH);
 $languagesListFull = scandir($langPath);
@@ -64,6 +63,7 @@ $langToIso639v1 = [
     'dari'    => 'fa_AF',
     'dutch'   => 'nl',
     'english' => 'en_US',
+    'estonian' => 'et',
     'esperanto' => 'eo',
     'faroese' => 'fo_FO',
     'finnish' => 'fi_FI',
@@ -112,6 +112,7 @@ $langToIso639v1 = [
     'xhosa' => 'xh_ZA',
     'yoruba' => 'yo_NG',
 ];
+
 $langToPOFilename = [
     'arabic'  => 'ar',
     'asturian' => 'ast_ES',
@@ -127,6 +128,7 @@ $langToPOFilename = [
     'dari'    => 'fa_AF',
     'dutch'   => 'nl',
     'english' => 'en',
+    'estonian' => 'et',
     'esperanto' => 'eo',
     'faroese' => 'fo',
     'finnish' => 'fi',

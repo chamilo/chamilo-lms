@@ -74,7 +74,7 @@ RewriteRule ^service/(\d{1,})$ plugin/buycourses/src/service_information.php?ser
 RewriteRule ^lti/os$ public/lti/os [L]
 
 # Deny access
-RewriteRule ^(tests|.git|.env|.env.dist|config) - [F,L,NC]
+RewriteRule ^(tests|.git|.env|.env.dist|.env.local|config) - [F,L,NC]
 
 # Add caching of woff font files to avoid loading 2*15KB each time with Chamilo
 # default OpenSans font

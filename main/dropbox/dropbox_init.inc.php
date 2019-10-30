@@ -190,7 +190,7 @@ if ($action == 'add') {
 $javascript = "<script>
 function confirmsend()
 {
-    if (confirm(\"".get_lang('MailingConfirmSend', '')."\")){
+    if (confirm(\"".get_lang('MailingConfirmSend')."\")){
         return true;
     } else {
         return false;
@@ -200,7 +200,7 @@ function confirmsend()
 
 function confirmation (name)
 {
-    if (confirm(\"".get_lang('ConfirmDelete', '')." : \"+ name )){
+    if (confirm(\"".get_lang('ConfirmDelete')." : \"+ name )){
         return true;
     } else {
         return false;
@@ -211,10 +211,10 @@ function confirmation (name)
 function checkForm (frm)
 {
     if (frm.elements['recipients[]'].selectedIndex < 0){
-        alert(\"".get_lang('NoUserSelected', '')."\");
+        alert(\"".get_lang('NoUserSelected')."\");
         return false;
     } else if (frm.file.value == '') {
-        alert(\"".get_lang('NoFileSpecified', '')."\");
+        alert(\"".get_lang('NoFileSpecified')."\");
         return false;
     } else {
         return true;
@@ -286,7 +286,7 @@ $htmlHeadXtra[] = $javascript;
 $htmlHeadXtra[] = "<script>
 function confirmation (name)
 {
-	if (confirm(\" ".get_lang("AreYouSureToDeleteJS")." \"+ name + \" ?\"))
+	if (confirm(\" ".get_lang("Are you sure to delete")." \"+ name + \" ?\"))
 		{return true;}
 	else
 		{return false;}
@@ -345,16 +345,16 @@ if ((!$is_allowed_in_course || !$is_course_member) &&
 if ($view == 'received') {
     $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'dropbox/index.php?'.api_get_cidreq(),
-        'name' => get_lang('Dropbox', ''),
+        'name' => get_lang('Dropbox'),
     ];
-    $nameTools = get_lang('ReceivedFiles');
+    $nameTools = get_lang('Received Files');
 
     if ($action == 'addreceivedcategory') {
         $interbreadcrumb[] = [
             'url' => api_get_path(WEB_CODE_PATH).'dropbox/index.php?view=received&'.api_get_cidreq(),
-            'name' => get_lang('ReceivedFiles'),
+            'name' => get_lang('Received Files'),
         ];
-        $nameTools = get_lang('AddNewCategory');
+        $nameTools = get_lang('Add a new folder');
     }
 }
 
@@ -363,25 +363,25 @@ if ($view == 'sent' || empty($view)) {
         'url' => api_get_path(WEB_CODE_PATH).'dropbox/index.php?'.api_get_cidreq(),
         'name' => get_lang('Dropbox'),
     ];
-    $nameTools = get_lang('SentFiles');
+    $nameTools = get_lang('Sent Files');
 
     if ($action == 'addsentcategory') {
         $interbreadcrumb[] = [
             'url' => api_get_path(WEB_CODE_PATH).'dropbox/index.php?view=sent&'.api_get_cidreq(),
-            'name' => get_lang('SentFiles'),
+            'name' => get_lang('Sent Files'),
         ];
-        $nameTools = get_lang('AddNewCategory');
+        $nameTools = get_lang('Add a new folder');
     }
     if ($action == 'add') {
-        $nameTools = get_lang('UploadNewFile');
+        $nameTools = get_lang('Share a new file');
     }
 
     if ($action == 'update') {
         $interbreadcrumb[] = [
             'url' => api_get_path(WEB_CODE_PATH).'dropbox/index.php?view=sent&'.api_get_cidreq(),
-            'name' => get_lang('SentFiles'),
+            'name' => get_lang('Sent Files'),
         ];
-        $nameTools = get_lang('UpdateFile');
+        $nameTools = get_lang('Update file');
     }
 }
 

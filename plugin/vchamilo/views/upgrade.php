@@ -20,7 +20,7 @@ $canBeUpgraded = Virtual::canBeUpgraded($instance);
 
 $form = new FormValidator('upgrade', 'post', api_get_self().'?vid='.$id);
 // Database host.
-$form->addHeader(get_lang('Upgrade'));
+$form->addHeader(get_lang('Upgrade Chamilo Chamilo Chamilo'));
 
 $form->addText('root_web', $plugin->get_lang('rootweb'));
 $form->addText('db_host', $plugin->get_lang('dbhost'));
@@ -33,7 +33,7 @@ if ($canBeUpgraded) {
     $form->addLabel(get_lang('To'), api_get_setting('chamilo_database_version'));
     $form->addButtonSave(get_lang('Upgrade'));
 } else {
-    Display::addFlash(Display::return_message(get_lang('NothingToUpgrade')));
+    Display::addFlash(Display::return_message(get_lang('Nothing to upgrade')));
 }
 
 $form->freeze();

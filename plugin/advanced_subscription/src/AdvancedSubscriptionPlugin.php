@@ -1,6 +1,13 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Hook\HookAdminBlock;
+use Chamilo\CoreBundle\Hook\HookNotificationContent;
+use Chamilo\CoreBundle\Hook\HookNotificationTitle;
+use Chamilo\CoreBundle\Hook\HookWSRegistration;
+use Chamilo\CoreBundle\Hook\Interfaces\HookPluginInterface;
+
 /**
  * Class AdvancedSubscriptionPlugin
  * This class is used to add an advanced subscription allowing the admin to
@@ -695,7 +702,7 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
                     $termsAndConditions = $courseLegal->getData($data['courseId'], $data['sessionId']);
                     $termsAndConditions = $termsAndConditions['content'];
                     $termsAndConditions = $this->renderTemplateString($termsAndConditions, $data);
-                    $tpl = new Template(get_lang('TermsAndConditions'));
+                    $tpl = new Template(get_lang('Terms and Conditions'));
                     $tpl->assign('session', $data['session']);
                     $tpl->assign('student', $data['student']);
                     $tpl->assign('sessionId', $data['sessionId']);
@@ -711,7 +718,7 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
                         'error' => UPLOAD_ERR_OK,
                         'size' => filesize(api_get_path(SYS_ARCHIVE_PATH).$filename.'.pdf'),
                     ];
-                    $fileAttachments['comments'][] = get_lang('TermsAndConditions');
+                    $fileAttachments['comments'][] = get_lang('Terms and Conditions');
                 }
                 // Mail to student
                 $mailIds[] = $this->sendMailMessage(
@@ -884,10 +891,12 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
     public function installHook()
     {
         $hookObserver = HookAdvancedSubscription::create();
-        HookAdminBlock::create()->attach($hookObserver);
-        HookWSRegistration::create()->attach($hookObserver);
-        HookNotificationContent::create()->attach($hookObserver);
-        HookNotificationTitle::create()->attach($hookObserver);
+
+        $hookFactory = Container::$container->get('chamilo_core.hook_factory');
+        $hookFactory->build(HookAdminBlock::class)->attach($hookObserver);
+        $hookFactory->build(HookWSRegistration::class)->attach($hookObserver);
+        $hookFactory->build(HookNotificationContent::class)->attach($hookObserver);
+        $hookFactory->build(HookNotificationTitle::class)->attach($hookObserver);
     }
 
     /**
@@ -896,10 +905,12 @@ class AdvancedSubscriptionPlugin extends Plugin implements HookPluginInterface
     public function uninstallHook()
     {
         $hookObserver = HookAdvancedSubscription::create();
-        HookAdminBlock::create()->detach($hookObserver);
-        HookWSRegistration::create()->detach($hookObserver);
-        HookNotificationContent::create()->detach($hookObserver);
-        HookNotificationTitle::create()->detach($hookObserver);
+
+        $hookFactory = Container::$container->get('chamilo_core.hook_factory');
+        $hookFactory->build(HookAdminBlock::class)->detach($hookObserver);
+        $hookFactory->build(HookWSRegistration::class)->detach($hookObserver);
+        $hookFactory->build(HookNotificationContent::class)->detach($hookObserver);
+        $hookFactory->build(HookNotificationTitle::class)->detach($hookObserver);
     }
 
     /**

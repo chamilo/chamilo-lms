@@ -17,6 +17,9 @@ We assume you have already installed "yarn" and "composer" and you're installing
 not in a sub folder inside a domain.
 
 ~~~~
+# on a fresh Ubuntu, you can prepare your server by issuing an apt command like the following
+apt update && apt -y upgrade && apt install apache2 libapache2-mod-php mariadb-client mariadb-server php-pear php-dev php-gd php-curl php-intl php-mysql php-mbstring php-zip php-xml php-cli php-apcu php-bcmath git unzip
+# otherwise, you can use the following directly:
 git clone https://github.com/chamilo/chamilo-lms.git chamilo2
 cd chamilo2
 composer install (If composer asks to accept recipes, just press enter or "n")
@@ -96,3 +99,8 @@ with this purpose into your repository forked from the original Chamilo reposito
 ## Documentation
 
 For more information on Chamilo, visit https://campus.chamilo.org/documentation/index.html
+
+## Notes
+
+You can install Yarn on Ubuntu following the instructions at https://linuxize.com/post/how-to-install-yarn-on-ubuntu-18-04/
+You can install Composer on Ubuntu following the instructions at https://getcomposer.org/download/

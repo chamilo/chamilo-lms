@@ -11,7 +11,7 @@ $plugin = SepePlugin::create();
 $_cid = 0;
 
 if (api_is_platform_admin()) {
-    $actionId = getActionId(intval($_GET['cid']));
+    $actionId = getActionId($_GET['cid']);
     $info = getActionInfo($actionId);
     if ($info === false) {
         header("Location: formative-actions-list.php");

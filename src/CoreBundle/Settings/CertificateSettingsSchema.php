@@ -9,8 +9,6 @@ use Symfony\Component\Form\FormBuilderInterface;
 
 /**
  * Class CertificateSettingsSchema.
- *
- * @package Chamilo\CoreBundle\Settings
  */
 class CertificateSettingsSchema extends AbstractSettingsSchema
 {

@@ -33,12 +33,12 @@ $interbreadcrumb = [
 $toolbar = Display::url(
     Display::return_icon(
         'list_badges.png',
-        get_lang('ManageSkills'),
+        get_lang('Manage skills'),
         null,
         ICON_SIZE_MEDIUM
     ),
     api_get_path(WEB_CODE_PATH).'admin/skill_list.php',
-    ['title' => get_lang('ManageSkills')]
+    ['title' => get_lang('Manage skills')]
 );
 
 $tpl = new Template(get_lang('Badges'));

@@ -2,8 +2,6 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * @package chamilo.social
- *
  * @author Julio Montoya <gugli100@gmail.com>
  */
 $cidReset = true;
@@ -20,7 +18,7 @@ $htmlHeadXtra[] = '<script>
 function delete_friend (element_div) {
 	id_image = $(element_div).attr("id");
 	user_id = id_image.split("_");
-	if (confirm("'.get_lang('Delete', '').'")) {
+	if (confirm("'.get_lang('Delete').'")) {
         $.ajax({
             contentType: "application/x-www-form-urlencoded",
 			type: "POST",
@@ -51,8 +49,8 @@ function show_icon_delete(element_html) {
 	id_elem=elem_id.split("_");
 	ident="#img_"+id_elem[1];
 	$(ident).attr("src","'.Display::returnIconPath('delete.png').'");
-	$(ident).attr("alt","'.get_lang('Delete', '').'");
-	$(ident).attr("title","'.get_lang('Delete', '').'");
+	$(ident).attr("alt","'.get_lang('Delete').'");
+	$(ident).attr("title","'.get_lang('Delete').'");
 }
 
 function hide_icon_delete(element_html)  {
@@ -66,11 +64,11 @@ function hide_icon_delete(element_html)  {
 
 </script>';
 
-$interbreadcrumb[] = ['url' => 'profile.php', 'name' => get_lang('SocialNetwork')];
+$interbreadcrumb[] = ['url' => 'profile.php', 'name' => get_lang('Social network')];
 $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Friends')];
 
 //Block Social Menu
-$social_menu_block = SocialManager::getMenuSocial('friends');
+$social_menu_block = SocialManager::show_social_menu('friends');
 $user_id = api_get_user_id();
 $name_search = isset($_POST['search_name_q']) ? $_POST['search_name_q'] : null;
 $number_friends = 0;
@@ -85,12 +83,12 @@ $social_right_content = '<div class="col-md-12">';
 
 if (count($friends) == 0) {
     $social_right_content .= Display::return_message(
-        Display::tag('p', get_lang('NoFriendsInYourContactList')),
+        Display::tag('p', get_lang('No friends in your contact list')),
         'warning',
         false
     );
     $social_right_content .= Display::toolbarButton(
-        get_lang('TryAndFindSomeFriends'),
+        get_lang('Try and find some friends'),
         'search.php',
         'search',
         'success'
@@ -111,7 +109,6 @@ if (count($friends) == 0) {
 
     $friend_html = '<div id="whoisonline">';
     $friend_html .= '<div class="row">';
-    $friend_html .= '<div class="col-lg-12">';
     $number_friends = count($friends);
     $j = 0;
 
@@ -129,7 +126,6 @@ if (count($friends) == 0) {
             $j++;
         }
     }
-    $friend_html .= '</div>';
     $friend_html .= '</div>';
     $friend_html .= '</div>';
     $social_right_content .= $friend_html;

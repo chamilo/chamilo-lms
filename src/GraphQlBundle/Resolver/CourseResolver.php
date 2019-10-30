@@ -15,7 +15,7 @@ use Chamilo\CourseBundle\Entity\CLpCategory;
 use Chamilo\CourseBundle\Entity\CTool;
 use Chamilo\CourseBundle\Repository\CNotebookRepository;
 use Chamilo\GraphQlBundle\Traits\GraphQLTrait;
-use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\Criteria;
 use Firebase\JWT\JWT;
 use Overblog\GraphQLBundle\Definition\Argument;
@@ -24,8 +24,6 @@ use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 
 /**
  * Class CourseResolver.
- *
- * @package Chamilo\GraphQlBundle\Resolver
  */
 class CourseResolver implements ContainerAwareInterface
 {
@@ -98,9 +96,9 @@ class CourseResolver implements ContainerAwareInterface
      * @param Argument     $args
      * @param \ArrayObject $context
      *
-     * @return ArrayCollection
+     * @return Collection
      */
-    public function getTools(Course $course, Argument $args, \ArrayObject $context): ArrayCollection
+    public function getTools(Course $course, Argument $args, \ArrayObject $context): Collection
     {
         $session = null;
 
@@ -167,7 +165,7 @@ class CourseResolver implements ContainerAwareInterface
      */
     public function getAnnouncements(CTool $tool, \ArrayObject $context): array
     {
-        $announcementManager = $this->container->get('chamilo_course.entity.manager.announcement_manager');
+        $announcementManager = $this->container->get('Chamilo\CourseBundle\Repository\CAnnouncementRepository');
         $announcementsInfo = $announcementManager->getAnnouncements(
             $this->getCurrentUser(),
             $tool->getCourse(),

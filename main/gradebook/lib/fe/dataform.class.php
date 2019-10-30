@@ -62,7 +62,7 @@ class DataForm extends FormValidator
     {
         $renderer = &$this->defaultRenderer();
         $renderer->setCustomElementTemplate('<span>{element}</span>');
-        $this->addElement('header', get_lang('ChooseOrientation'));
+        $this->addElement('header', get_lang('Choose orientation'));
         $this->addElement('radio', 'orientation', null, get_lang('Portrait'), 'portrait');
         $this->addElement('radio', 'orientation', null, get_lang('Landscape'), 'landscape');
         $this->addButtonExport(get_lang('Export'));
@@ -73,8 +73,8 @@ class DataForm extends FormValidator
 
     protected function build_export_form()
     {
-        $this->addElement('header', get_lang('ChooseFormat'));
-        $this->addElement('radio', 'file_type', get_lang('OutputFileType'), 'CSV (Comma-Separated Values)', 'csv');
+        $this->addElement('header', get_lang('PDF report'));
+        $this->addElement('radio', 'file_type', get_lang('Output file type'), 'CSV (Comma-Separated Values)', 'csv');
         $this->addElement('radio', 'file_type', null, 'XML (Extensible Markup Language)', 'xml');
         $this->addElement('radio', 'file_type', null, 'PDF (Portable Document Format)', 'pdf');
         $this->addButtonExport(get_lang('Export'));
@@ -85,13 +85,13 @@ class DataForm extends FormValidator
 
     protected function build_export_form_option($show_pdf = true)
     {
-        $this->addElement('header', get_lang('ChooseFormat'));
-        $this->addElement('radio', 'file_type', get_lang('OutputFileType'), 'CSV (Comma-Separated Values)', 'csv');
+        $this->addElement('header', get_lang('PDF report'));
+        $this->addElement('radio', 'file_type', get_lang('Output file type'), 'CSV (Comma-Separated Values)', 'csv');
         $this->addElement('radio', 'file_type', null, 'XML (Extensible Markup Language)', 'xml');
         $this->addElement(
             'radio',
             'file_type',
-            Display::return_icon('info3.gif', get_lang('ToExportMustLockEvaluation')),
+            Display::return_icon('info3.gif', get_lang('To export, you must lock the evaluation.')),
             'PDF (Portable Document Format)',
             'pdf',
             ['disabled']
@@ -105,21 +105,21 @@ class DataForm extends FormValidator
     protected function build_import_form()
     {
         $this->addElement('hidden', 'formSent');
-        $this->addElement('header', get_lang('ImportFileLocation'));
-        $this->addElement('file', 'import_file', get_lang('Location'));
+        $this->addElement('header', get_lang('Import marks in an assessment'));
+        $this->addElement('file', 'import_file', get_lang('URL/URI'));
         $this->addElement(
             'radio',
             'file_type',
-            get_lang('FileType'),
+            get_lang('File type'),
             'CSV (<a href="docs/example_csv.html" target="_blank" download>'
-                .get_lang('ExampleCSVFile')
+                .get_lang('Example CSV file')
                 .'</a>)',
             'csv'
         );
-        //$this->addElement('radio', 'file_type', null, 'XML (<a href="docs/example_xml.html" target="_blank" download>'.get_lang('ExampleXMLFile').'</a>)', 'xml');
-        $this->addElement('checkbox', 'overwrite', null, get_lang('OverwriteScores'));
-        $this->addElement('checkbox', 'ignoreerrors', null, get_lang('IgnoreErrors'));
-        $this->addButtonImport(get_lang('Ok'));
+        //$this->addElement('radio', 'file_type', null, 'XML (<a href="docs/example_xml.html" target="_blank" download>'.get_lang('Example XML file').'</a>)', 'xml');
+        $this->addElement('checkbox', 'overwrite', null, get_lang('Overwrite scores'));
+        $this->addElement('checkbox', 'ignoreerrors', null, get_lang('Ignore errors'));
+        $this->addButtonImport(get_lang('Validate'));
         $this->setDefaults([
             'formSent' => '1',
             'file_type' => 'csv',

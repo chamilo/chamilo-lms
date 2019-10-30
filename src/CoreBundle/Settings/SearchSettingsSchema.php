@@ -10,8 +10,6 @@ use Symfony\Component\Form\FormBuilderInterface;
 
 /**
  * Class SearchSettingsSchema.
- *
- * @package Chamilo\CoreBundle\Settings
  */
 class SearchSettingsSchema extends AbstractSettingsSchema
 {

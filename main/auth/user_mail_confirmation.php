@@ -43,13 +43,13 @@ if ($user) {
     );
 
     Display::addFlash(
-        Display::return_message(get_lang('UserConfirmedNowYouCanLogInThePlatform'), 'success')
+        Display::return_message(get_lang('User confirmed. Now you can login the platform.'), 'success')
     );
     header('Location: '.$url);
     exit;
 } else {
     Display::addFlash(
-        Display::return_message(get_lang('LinkExpired'))
+        Display::return_message(get_lang('Link expired, please try again.'))
     );
     header('Location: '.api_get_path(WEB_PATH));
     exit;

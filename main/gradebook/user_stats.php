@@ -19,7 +19,7 @@ if (!$isDrhOfCourse) {
 }
 $interbreadcrumb[] = [
     'url' => Category::getUrl(),
-    'name' => get_lang('Gradebook'),
+    'name' => get_lang('Assessments'),
 ];
 
 $categoryId = isset($_GET['selectcat']) ? (int) $_GET['selectcat'] : 0;
@@ -53,28 +53,28 @@ if (isset($_GET['exportpdf'])) {
         true
     );
     $newarray = [];
-    $displayscore = ScoreDisplay :: instance();
+    $displayscore = ScoreDisplay::instance();
     foreach ($data_array as $data) {
         $newarray[] = array_slice($data, 1);
     }
     $userInfo = api_get_user_info($userId);
-    $html .= get_lang('Results').' : '.$userInfo['complete_name_with_username'].' ('.api_get_local_time().')';
+    $html .= get_lang('Results and feedback').' : '.$userInfo['complete_name_with_username'].' ('.api_get_local_time().')';
 
     if ($displayscore->is_custom()) {
         $header_names = [
-            get_lang('Evaluation'),
+            get_lang('Score'),
             get_lang('Course'),
             get_lang('Category'),
-            get_lang('EvaluationAverage'),
+            get_lang('ScoreAverage'),
             get_lang('Result'),
-            get_lang('Display'),
+            get_lang('Ranking'),
         ];
     } else {
         $header_names = [
-            get_lang('Evaluation'),
+            get_lang('Score'),
             get_lang('Course'),
             get_lang('Category'),
-            get_lang('EvaluationAverage'),
+            get_lang('ScoreAverage'),
             get_lang('Result'),
         ];
     }
@@ -106,12 +106,12 @@ $actions = '<div class="actions">';
 if (!empty($categoryId)) {
     $interbreadcrumb[] = [
         'url' => 'gradebook_flatview.php?selectcat='.$categoryId.'&'.api_get_cidreq(),
-        'name' => get_lang('FlatView'),
+        'name' => get_lang('List View'),
     ];
     $actions .= '<a href=gradebook_flatview.php?selectcat='.$categoryId.'&'.api_get_cidreq().'>'.
         Display::return_icon(
             'back.png',
-            get_lang('BackTo').' '.get_lang('FlatView'),
+            get_lang('Back to').' '.get_lang('List View'),
             '',
             ICON_SIZE_MEDIUM
         ).
@@ -121,18 +121,18 @@ if (!empty($categoryId)) {
 if (!empty($evaluationId)) {
     $interbreadcrumb[] = [
         'url' => 'gradebook_view_result.php?selecteval='.$evaluationId.'&'.api_get_cidreq(),
-        'name' => get_lang('ViewResult'),
+        'name' => get_lang('Assessment details'),
     ];
     $actions .= '<a href="gradebook_view_result.php?selecteval='.$evaluationId.'&'.api_get_cidreq().'">
-	'.Display::return_icon('back.png', get_lang('BackToEvaluation'), '', ICON_SIZE_MEDIUM).'</a>';
+	'.Display::return_icon('back.png', get_lang('Back toScore'), '', ICON_SIZE_MEDIUM).'</a>';
 }
 
 $actions .= '<a href="'.api_get_self().'?exportpdf=&userid='.$userId.'&selectcat='.$category[0]->get_id().'&'.api_get_cidreq().'" target="_blank">
-'.Display::return_icon('pdf.png', get_lang('ExportPDF'), '', ICON_SIZE_MEDIUM).'</a>';
+'.Display::return_icon('pdf.png', get_lang('Export to PDF'), '', ICON_SIZE_MEDIUM).'</a>';
 
 $actions .= '</div>';
 
-Display::display_header(get_lang('ResultsPerUser'));
+Display::display_header(get_lang('Results and feedbackPerUser'));
 echo $actions;
 DisplayGradebook::display_header_user($_GET['userid'], $category[0]->get_id());
 $user_table->display();

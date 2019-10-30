@@ -99,7 +99,7 @@ if (phpversion() >= '5.3' && extension_loaded('fileinfo')) {
 
 //checks if the file exists, then rename the new
 if (file_exists($saveDir.'/'.$filename.'.'.$extension) && $currentTool=='document/createdraw') {
-    $message = get_lang('FileExistsChangeToSave');
+    $message = get_lang('This file name already exists, choose another to save your image.');
     $params = array(
         'message' => $message,
         'url' => ''
@@ -174,12 +174,12 @@ if ($suffix != 'png') {
         $relativeUrlPath = '/';
     };
     $url = api_get_path(WEB_CODE_PATH).'document/document.php?'.api_get_cidreq().'&curdirpath='.urlencode($relativeUrlPath);
-    $message = get_lang('FileSavedAs').': '.$title;
-    //echo 'alert("'.get_lang('FileSavedAs').': '.$title.'");';
+    $message = get_lang('File saved as').': '.$title;
+    //echo 'alert("'.get_lang('File saved as').': '.$title.'");';
     //echo 'window.top.location.href="'.$interbreadcrumb.'";';//return to current document list
 } else {
     $url = '';
-    $message = get_lang('FileExportAs').': '.$title;
+    $message = get_lang('File export as').': '.$title;
 }
 
 $params = array(

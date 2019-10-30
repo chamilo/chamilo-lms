@@ -323,13 +323,14 @@ class Template
         $this->assign('show_header', $status);
 
         $show_toolbar = 0;
+
         if (self::isToolBarDisplayedForUser()) {
             $show_toolbar = 1;
         }
 
         $this->assign('show_toolbar', $show_toolbar);
 
-        //Only if course is available
+        // Only if course is available
         $courseToolBar = '';
         $show_course_navigation_menu = '';
         if (!empty($this->course_id) && $this->user_is_logged_in) {
@@ -567,21 +568,6 @@ class Template
     }
 
     /**
-     * Sets the "styles" menu in ckEditor.
-     *
-     * Reads css/themes/xxx/editor.css if exists and shows it in the menu, otherwise it
-     * will take the default web/editor.css file
-     */
-    public function setStyleMenuInCkEditor()
-    {
-        $cssEditor = api_get_cdn_path(api_get_path(WEB_CSS_PATH).'editor.css');
-        if (is_file(api_get_path(SYS_CSS_PATH).$this->themeDir.'editor.css')) {
-            $cssEditor = api_get_path(WEB_CSS_PATH).$this->themeDir.'editor.css';
-        }
-        $this->assign('css_editor', $cssEditor);
-    }
-
-    /**
      * Prepare custom CSS to be added at the very end of the <head> section.
      *
      * @see setCssFiles() for the mainstream CSS files
@@ -589,20 +575,13 @@ class Template
     public function setCssCustomFiles()
     {
         global $disable_js_and_css_files;
-        // chamilo CSS
-        //$css[] = api_get_cdn_path(api_get_path(WEB_CSS_PATH).'../chamilo.css');
-
-        // Base CSS
-        //$css[] = api_get_cdn_path(api_get_path(WEB_CSS_PATH).'base.css');
         $css = [];
         if ($this->show_learnpath) {
-            $css[] = api_get_cdn_path(api_get_path(WEB_CSS_PATH).'scorm.css');
             if (is_file(api_get_path(SYS_CSS_PATH).$this->themeDir.'learnpath.css')) {
                 $css[] = api_get_path(WEB_CSS_PATH).$this->themeDir.'learnpath.css';
             }
         }
 
-        //$css[] = api_get_cdn_path(api_get_path(WEB_CSS_PATH).$this->themeDir.'default.css');
         $css_file_to_string = '';
         foreach ($css as $file) {
             $css_file_to_string .= api_get_css($file);
@@ -634,7 +613,7 @@ class Template
             $style_print = '';
             if (is_readable(api_get_path(SYS_CSS_PATH).$this->theme.'/print.css')) {
                 $style_print = api_get_css(
-                    api_get_cdn_path(api_get_path(WEB_CSS_PATH).$this->theme.'/print.css'),
+                    api_get_path(WEB_CSS_PATH).$this->theme.'/print.css',
                     'print'
                 );
             }
@@ -686,14 +665,14 @@ class Template
         $js_file_to_string = '';
         $bowerJsFiles = [
             'modernizr/modernizr.js',
-            'jquery/dist/jquery.min.js',
+            'jquery/query.min.js',
             'bootstrap/dist/js/bootstrap.min.js',
             'jquery-ui/jquery-ui.min.js',
             'jqueryui-touch-punch/jquery.ui.touch-punch.min.js',
             'moment/min/moment-with-locales.js',
             //'bootstrap-daterangepicker/daterangepicker.js',
             'jquery-timeago/jquery.timeago.js',
-            'mediaelement/build/mediaelement-and-player.min.js',
+            'mediaelement/mediaelement-and-player.min.js',
             'jqueryui-timepicker-addon/dist/jquery-ui-timepicker-addon.min.js',
             'image-map-resizer/js/imageMapResizer.min.js',
             'jquery.scrollbar/jquery.scrollbar.min.js',
@@ -905,48 +884,48 @@ class Template
      */
     public function handleLoginFailed()
     {
-        $message = get_lang('InvalidId');
+        $message = get_lang('Login failed - incorrect login or password.');
 
         if (!isset($_GET['error'])) {
             if (api_is_self_registration_allowed()) {
-                $message = get_lang('InvalidForSelfRegistration');
+                $message = get_lang('Login failed - if you are not registered, you can do so using the <a href=claroline/auth/inscription.php>registration form</a>');
             }
         } else {
             switch ($_GET['error']) {
                 case '':
                     if (api_is_self_registration_allowed()) {
-                        $message = get_lang('InvalidForSelfRegistration');
+                        $message = get_lang('Login failed - if you are not registered, you can do so using the <a href=claroline/auth/inscription.php>registration form</a>');
                     }
                     break;
                 case 'account_expired':
-                    $message = get_lang('AccountExpired');
+                    $message = get_lang('Account expired');
                     break;
                 case 'account_inactive':
-                    $message = get_lang('AccountInactive');
+                    $message = get_lang('Account inactive');
 
                     if (api_get_setting('allow_registration') === 'confirmation') {
-                        $message = get_lang('AccountNotConfirmed').PHP_EOL;
+                        $message = get_lang('Your account is inactive because you have not confirmed it yet. Check your email and follow the instructions or click the following link to resend the email').PHP_EOL;
                         $message .= Display::url(
-                            get_lang('ReSendConfirmationMail'),
+                            get_lang('Send confirmation mail again'),
                             api_get_path(WEB_PATH).'main/auth/resend_confirmation_mail.php',
                             ['class' => 'alert-link']
                         );
                     }
                     break;
                 case 'user_password_incorrect':
-                    $message = get_lang('InvalidId');
+                    $message = get_lang('Login failed - incorrect login or password.');
                     break;
                 case 'access_url_inactive':
-                    $message = get_lang('AccountURLInactive');
+                    $message = get_lang('Account inactive for this URL');
                     break;
                 case 'wrong_captcha':
-                    $message = get_lang('TheTextYouEnteredDoesNotMatchThePicture');
+                    $message = get_lang('The text you entered doesn\'t match the picture.');
                     break;
                 case 'blocked_by_captcha':
-                    $message = get_lang('AccountBlockedByCaptcha');
+                    $message = get_lang('Account blocked by captcha.');
                     break;
                 case 'multiple_connection_not_allowed':
-                    $message = get_lang('MultipleConnectionsAreNotAllow');
+                    $message = get_lang('This user is already logged in');
                     break;
             }
         }
@@ -971,7 +950,7 @@ class Template
             'id' => '_username',
             'autofocus' => 'autofocus',
             'icon' => 'user fa-fw',
-            'placeholder' => get_lang('UserName'),
+            'placeholder' => get_lang('Username'),
         ];
         $browserAutoCapitalize = false;
         // Avoid showing the autocapitalize option if the browser doesn't
@@ -982,7 +961,7 @@ class Template
         }
         $form->addText(
             '_username',
-            get_lang('UserName'),
+            get_lang('Username'),
             true,
             $params
         );
@@ -1028,23 +1007,23 @@ class Template
                 // Minimum options using all defaults (including defaults for Image_Text):
                 //$options = array('callback' => 'qfcaptcha_image.php');
                 $captcha_question = $form->addElement('CAPTCHA_Image', 'captcha_question', '', $options);
-                $form->addHtml(get_lang('ClickOnTheImageForANewOne'));
+                $form->addHtml(get_lang('Click on the image to load a new one.'));
 
                 $form->addElement(
                     'text',
                     'captcha',
-                    get_lang('EnterTheLettersYouSee')
+                    get_lang('Enter the letters you see.')
                 );
                 $form->addRule(
                     'captcha',
-                    get_lang('EnterTheCharactersYouReadInTheImage'),
+                    get_lang('Enter the characters you see on the image'),
                     'required',
                     null,
                     'client'
                 );
                 $form->addRule(
                     'captcha',
-                    get_lang('TheTextYouEnteredDoesNotMatchThePicture'),
+                    get_lang('The text you entered doesn\'t match the picture.'),
                     'CAPTCHA',
                     $captcha_question
                 );
@@ -1053,7 +1032,7 @@ class Template
 
         $form->addButton(
             'submitAuth',
-            get_lang('LoginEnter'),
+            get_lang('Login'),
             null,
             'primary',
             null,
@@ -1154,7 +1133,7 @@ class Template
         $rightFloatMenu = '';
         $iconBug = Display::return_icon(
             'bug.png',
-            get_lang('ReportABug'),
+            get_lang('Report a bug'),
             [],
             ICON_SIZE_LARGE
         );
@@ -1182,13 +1161,17 @@ class Template
             if (!empty($courseInfo)) {
                 $courseParams = api_get_cidreq();
             }
-            $url = api_get_path(WEB_CODE_PATH).
-                'ticket/tickets.php?project_id='.$defaultProjectId.'&'.$courseParams;
-            $rightFloatMenu .= '<div class="help">
-                <a href="'.$url.'" target="_blank">
-                    '.$iconTicket.'
-                </a>
-            </div>';
+            $url = api_get_path(WEB_CODE_PATH).'ticket/tickets.php?project_id='.$defaultProjectId.'&'.$courseParams;
+
+            $allow = TicketManager::userIsAllowInProject(api_get_user_info(), $defaultProjectId);
+
+            if ($allow) {
+                $rightFloatMenu .= '<div class="help">
+                    <a href="'.$url.'" target="_blank">
+                        '.$iconTicket.'
+                    </a>
+                </div>';
+            }
         }
 
         $this->assign('bug_notification', $rightFloatMenu);
@@ -1351,9 +1334,12 @@ class Template
         $this->assign('prefetch', $prefetch);
         $this->assign('text_direction', api_get_text_direction());
         $this->assign('section_name', 'section-'.$this_section);
-        $this->assignFavIcon(); //Set a 'favico' var for the template
+        $this->assignFavIcon();
         $this->setHelp();
+
         $this->assignBugNotification(); //Prepare the 'bug_notification' var for the template
+
+        $this->assignAccessibilityBlock(); //Prepare the 'accessibility' var for the template
 
         // Preparing values for the menu
 
@@ -1396,7 +1382,7 @@ class Template
         if ($allow === false) {
             $certificateUrl = api_get_path(WEB_CODE_PATH).'gradebook/my_certificates.php';
             $certificateLink = Display::url(
-                get_lang('MyCertificates'),
+                get_lang('My certificates'),
                 $certificateUrl
             );
             $this->assign('certificate_link', $certificateLink);
@@ -1501,8 +1487,6 @@ class Template
                 $this->assign('footer_extra_content', $extra_footer);
             }
         }
-
-        // Tutor name
     }
 
     /**
@@ -1568,6 +1552,7 @@ class Template
     {
         // Default root chamilo favicon
         $favico = '<link rel="shortcut icon" href="'.api_get_path(WEB_PATH).'favicon.ico" type="image/x-icon" />';
+
         //Added to verify if in the current Chamilo Theme exist a favicon
         $favicoThemeUrl = api_get_path(SYS_CSS_PATH).$this->themeDir.'images/';
 
@@ -1611,9 +1596,9 @@ class Template
         if (api_get_setting('accessibility_font_resize') == 'true') {
             $resize .= '<div class="resize_font">';
             $resize .= '<div class="btn-group">';
-            $resize .= '<a title="'.get_lang('DecreaseFontSize').'" href="#" class="decrease_font btn btn-default"><em class="fa fa-font"></em></a>';
-            $resize .= '<a title="'.get_lang('ResetFontSize').'" href="#" class="reset_font btn btn-default"><em class="fa fa-font"></em></a>';
-            $resize .= '<a title="'.get_lang('IncreaseFontSize').'" href="#" class="increase_font btn btn-default"><em class="fa fa-font"></em></a>';
+            $resize .= '<a title="'.get_lang('Decrease the font size').'" href="#" class="decrease_font btn btn-default"><em class="fa fa-font"></em></a>';
+            $resize .= '<a title="'.get_lang('Reset the font size').'" href="#" class="reset_font btn btn-default"><em class="fa fa-font"></em></a>';
+            $resize .= '<a title="'.get_lang('Increase the font size').'" href="#" class="increase_font btn btn-default"><em class="fa fa-font"></em></a>';
             $resize .= '</div>';
             $resize .= '</div>';
         }

@@ -15,7 +15,7 @@ api_protect_teacher_script(true);
 
 // Add the JS needed to use the jqgrid
 $htmlHeadXtra[] = api_get_jqgrid_js();
-$tool_name = get_lang('SessionList');
+$tool_name = get_lang('Session list');
 $allowTutors = api_get_setting('allow_tutors_to_assign_students_to_session');
 
 if ($allowTutors !== 'true') {
@@ -34,15 +34,15 @@ if (isset($_REQUEST['keyword'])) {
 //The order is important you need to check the the $column variable in the model.ajax.php file
 $columns = [
     get_lang('Name'),
-    get_lang('NumberOfCourses'),
-    get_lang('NumberOfUsers'),
-    get_lang('SessionCategoryName'),
-    get_lang('StartDate'),
-    get_lang('EndDate'),
+    get_lang('Courses'),
+    get_lang('Number of users'),
+    get_lang('Category name'),
+    get_lang('Start Date'),
+    get_lang('End Date'),
     get_lang('Coach'),
     get_lang('Status'),
     get_lang('Visibility'),
-    get_lang('Actions'),
+    get_lang('Detail'),
 ];
 
 //Column config
@@ -58,10 +58,10 @@ $column_model = [
       //for the bottom bar
         'searchoptions' => [
             'defaultValue' => '1',
-            'value' => '1:'.get_lang('Active').';0:'.get_lang('Inactive'),
+            'value' => '1:'.get_lang('active').';0:'.get_lang('inactive'),
         ],
       //for the top bar
-      'editoptions' => ['value' => ':'.get_lang('All').';1:'.get_lang('Active').';0:'.get_lang('Inactive')], ],
+      'editoptions' => ['value' => ':'.get_lang('All').';1:'.get_lang('active').';0:'.get_lang('inactive')], ],
     ['name' => 'visibility', 'index' => 'visibility', 'width' => '40', 'align' => 'left', 'search' => 'false'],
     ['name' => 'actions', 'index' => 'actions', 'width' => '100', 'align' => 'left', 'formatter' => 'action_formatter', 'sortable' => 'false', 'search' => 'false'],
 ];
@@ -75,7 +75,7 @@ $extra_params['height'] = 'auto';
 
 //With this function we can add actions to the jgrid (edit, delete, etc)
 $action_links = 'function action_formatter(cellvalue, options, rowObject) {
-     return \'&nbsp;<a href="add_users_to_session.php?page=session_list.php&id_session=\'+options.rowId+\'">'.Display::return_icon('user_subscribe_session.png', get_lang('SubscribeUsersToSession'), '', ICON_SIZE_SMALL).'</a>'.
+     return \'&nbsp;<a href="add_users_to_session.php?page=session_list.php&id_session=\'+options.rowId+\'">'.Display::return_icon('user_subscribe_session.png', get_lang('Subscribe users to this session'), '', ICON_SIZE_SMALL).'</a>'.
      '\';
 }';
 ?>
@@ -140,11 +140,11 @@ $(function() {
 if (api_is_platform_admin()) {
     echo '<div class="actions">';
     echo '<a href="'.api_get_path(WEB_CODE_PATH).'session/session_add.php">'.
-        Display::return_icon('new_session.png', get_lang('AddSession'), '', ICON_SIZE_MEDIUM).'</a>';
+        Display::return_icon('new_session.png', get_lang('Add a training session'), '', ICON_SIZE_MEDIUM).'</a>';
     echo '<a href="'.api_get_path(WEB_CODE_PATH).'session/add_many_session_to_category.php">'.
-        Display::return_icon('session_to_category.png', get_lang('AddSessionsInCategories'), '', ICON_SIZE_MEDIUM).'</a>';
+        Display::return_icon('session_to_category.png', get_lang('Add a training sessionsInCategories'), '', ICON_SIZE_MEDIUM).'</a>';
     echo '<a href="'.api_get_path(WEB_CODE_PATH).'session/session_category_list.php">'.
-        Display::return_icon('folder.png', get_lang('ListSessionCategory'), '', ICON_SIZE_MEDIUM).'</a>';
+        Display::return_icon('folder.png', get_lang('Sessions categories list'), '', ICON_SIZE_MEDIUM).'</a>';
     echo '</div>';
 }
 echo Display::grid_html('sessions');

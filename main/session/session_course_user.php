@@ -13,12 +13,11 @@ require_once __DIR__.'/../inc/global.inc.php';
 
 // setting the section (for the tabs)
 $this_section = SECTION_PLATFORM_ADMIN;
-$tool_name = get_lang('EditSessionCoursesByUser');
-
-$id_session = intval($_GET['id_session']);
-$id_user = intval($_GET['id_user']);
-
+$tool_name = get_lang('Edit session courses by user');
+$id_session = isset($_GET['id_session']) ? (int) $_GET['id_session'] : 0;
 SessionManager::protectSession($id_session);
+
+$id_user = intval($_GET['id_user']);
 
 $em = Database::getManager();
 /** @var Session $session */
@@ -30,7 +29,7 @@ if (!api_is_platform_admin() && $session->getSessionAdminId() != api_get_user_id
 }
 
 if (!$session->getCourses()->count()) {
-    Display::addFlash(Display::return_message(get_lang('NoCoursesForThisSession'), 'warning'));
+    Display::addFlash(Display::return_message(get_lang('No course for this session'), 'warning'));
     header('Location: session_course_user.php?id_session='.$id_session.'&id_user='.$id_user);
     exit;
 }
@@ -55,7 +54,7 @@ if ($form->validate()) {
     $values['courses_to_avoid'] = !empty($values['courses_to_avoid']) ? $values['courses_to_avoid'] : [];
 
     if ($session->getCourses()->count() == count($values['courses_to_avoid'])) {
-        Display::addFlash(Display::return_message(get_lang('MaybeYouWantToDeleteThisUserFromSession')));
+        Display::addFlash(Display::return_message(get_lang('Maybe you want to delete the user, instead of unsubscribing him from all courses...?')));
         header('Location: session_course_user.php?id_session='.$id_session.'&id_user='.$id_user);
         exit;
     }
@@ -87,7 +86,7 @@ if ($form->validate()) {
     $em->persist($session);
     $em->flush();
 
-    Display::addFlash(Display::return_message(get_lang('CoursesUpdated')));
+    Display::addFlash(Display::return_message(get_lang('Courses updated')));
     header('Location: session_course_user.php?id_session='.$session->getId().'&id_user='.$user->getId());
     exit;
 }
@@ -96,10 +95,10 @@ $form->setDefaults(['courses_to_avoid' => $avoidedCourseIds]);
 
 /* View */
 // setting breadcrumbs
-$interbreadcrumb[] = ['url' => 'session_list.php', 'name' => get_lang('SessionList')];
+$interbreadcrumb[] = ['url' => 'session_list.php', 'name' => get_lang('Session list')];
 $interbreadcrumb[] = [
     'url' => 'resume_session.php?id_session='.$id_session,
-    'name' => get_lang('SessionOverview'),
+    'name' => get_lang('Session overview'),
 ];
 
 Display::display_header($tool_name);
@@ -109,10 +108,10 @@ echo Display::page_header($session->getName().' - '.UserManager::formatUserFullN
     <div class="col-sm-8 col-sm-offset-2">
         <div class="row">
             <div class="col-sm-5">
-                <label for="courses_to_avoid-f"><?php echo get_lang('CourseListInSession'); ?></label>
+                <label for="courses_to_avoid-f"><?php echo get_lang('Courses in this session'); ?></label>
             </div>
             <div class="col-sm-5 col-sm-offset-2">
-                <label for="courses_to_avoid-t"><?php echo get_lang('CoursesToAvoid'); ?></label>
+                <label for="courses_to_avoid-t"><?php echo get_lang('Unaccessible courses'); ?></label>
             </div>
         </div>
     </div>

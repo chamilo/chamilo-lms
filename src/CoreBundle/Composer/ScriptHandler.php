@@ -22,6 +22,10 @@ class ScriptHandler
         }
         $fs = new Filesystem();
         $fs->mirror($appCss, $newPath, null, ['override' => true]);*/
+
+        if (function_exists('opcache_reset')) {
+            opcache_reset();
+        }
     }
 
     /**

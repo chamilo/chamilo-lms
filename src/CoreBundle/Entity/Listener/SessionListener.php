@@ -12,8 +12,6 @@ use Doctrine\ORM\Event\LifecycleEventArgs;
 /**
  * Class SessionListener
  * Session entity listener, when a session is created/updated.
- *
- * @package Chamilo\CoreBundle\EventListener
  */
 class SessionListener
 {

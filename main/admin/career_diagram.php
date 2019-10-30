@@ -1,8 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use Fhaculty\Graph\Graph;
-
 /**
  *  @package chamilo.admin
  */
@@ -44,11 +42,11 @@ if (empty($careerInfo)) {
 // setting breadcrumbs
 $interbreadcrumb[] = [
     'url' => 'index.php',
-    'name' => get_lang('PlatformAdmin'),
+    'name' => get_lang('Administration'),
 ];
 $interbreadcrumb[] = [
     'url' => 'career_dashboard.php',
-    'name' => get_lang('CareersAndPromotions'),
+    'name' => get_lang('Careers and promotions'),
 ];
 
 $interbreadcrumb[] = [
@@ -57,8 +55,6 @@ $interbreadcrumb[] = [
 ];
 
 $action = isset($_GET['action']) ? $_GET['action'] : '';
-$check = Security::check_token('request');
-$token = Security::get_token();
 
 if ($action == 'add') {
     $interbreadcrumb[] = ['url' => 'careers.php', 'name' => get_lang('Careers')];
@@ -72,13 +68,6 @@ if ($action == 'add') {
 }
 
 $extraFieldValue = new ExtraFieldValue('career');
-$item = $extraFieldValue->get_values_by_handler_and_field_variable(
-    $careerId,
-    'career_diagram',
-    false,
-    false,
-    false
-);
 
 // Check urls
 $itemUrls = $extraFieldValue->get_values_by_handler_and_field_variable(
@@ -86,7 +75,7 @@ $itemUrls = $extraFieldValue->get_values_by_handler_and_field_variable(
     'career_urls',
     false,
     false,
-    false
+    0
 );
 
 $urlToString = '';
@@ -107,14 +96,14 @@ if (!empty($itemUrls) && !empty($itemUrls['value'])) {
 
 $tpl = new Template(get_lang('Diagram'));
 $html = Display::page_subheader2($careerInfo['name'].$urlToString);
-if (!empty($item) && isset($item['value']) && !empty($item['value'])) {
-    /** @var Graph $graph */
-    $graph = UnserializeApi::unserialize('career', $item['value']);
-    $html .= Career::renderDiagramByColumn($graph, $tpl);
+$diagram = Career::renderDiagramByColumn($careerInfo, $tpl);
+
+if (!empty($diagram)) {
+    $html .= $diagram;
 } else {
     Display::addFlash(
         Display::return_message(
-            sprintf(get_lang('CareerXDoesntHaveADiagram'), $careerInfo['name']),
+            sprintf(get_lang('Career %s doesn\'t have a diagram.'), $careerInfo['name']),
             'warning'
         )
     );

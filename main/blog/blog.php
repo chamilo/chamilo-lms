@@ -1,14 +1,13 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
  * BLOG HOMEPAGE
  * This file takes care of all blog navigation and displaying.
- *
- * @package chamilo.blogs
  */
 require_once __DIR__.'/../inc/global.inc.php';
 
-$blog_id = intval($_GET['blog_id']);
+$blog_id = isset($_GET['blog_id']) ? $_GET['blog_id'] : 0;
 
 if (empty($blog_id)) {
     api_not_allowed(true);
@@ -49,7 +48,7 @@ if (!empty($_POST['edit_post_submit'])) {
         $blog_id
     );
     Display::addFlash(
-        Display::return_message(get_lang('BlogEdited'), 'success')
+        Display::return_message(get_lang('The project has been edited.'), 'success')
     );
 }
 
@@ -65,7 +64,7 @@ if (!empty($_POST['new_task_submit'])) {
     );
 
     Display::addFlash(
-        Display::return_message(get_lang('TaskCreated'), 'success')
+        Display::return_message(get_lang('The task has been created'), 'success')
     );
 }
 
@@ -81,7 +80,7 @@ if (isset($_POST['edit_task_submit'])) {
         $_POST['task_color']
     );
     Display::addFlash(
-        Display::return_message(get_lang('TaskEdited'), 'success')
+        Display::return_message(get_lang('The task has been edited.'), 'success')
     );
 }
 
@@ -93,7 +92,7 @@ if (!empty($_POST['assign_task_submit'])) {
         $_POST['task_day']
     );
     Display::addFlash(
-        Display::return_message(get_lang('TaskAssigned'), 'success')
+        Display::return_message(get_lang('The task has been assigned.'), 'success')
     );
 }
 
@@ -108,7 +107,7 @@ if (isset($_POST['assign_task_edit_submit'])) {
         $_POST['old_target_date']
     );
     Display::addFlash(
-        Display::return_message(get_lang('AssignedTaskEdited'), 'success')
+        Display::return_message(get_lang('AssignedThe task has been edited.'), 'success')
     );
 }
 if (!empty($_POST['register'])) {
@@ -128,7 +127,7 @@ if (!empty($_POST['unregister'])) {
 if (!empty($_GET['register'])) {
     Blog::subscribeUser((int) $_GET['blog_id'], (int) $_GET['user_id']);
     Display::addFlash(
-        Display::return_message(get_lang('UserRegistered'), 'success')
+        Display::return_message(get_lang('The user has been registered'), 'success')
     );
     $flag = 1;
 }
@@ -140,14 +139,14 @@ if (isset($_GET['action']) && $_GET['action'] == 'manage_tasks') {
     if (isset($_GET['do']) && $_GET['do'] == 'delete') {
         Blog::deleteTask($blog_id, (int) $_GET['task_id']);
         Display::addFlash(
-            Display::return_message(get_lang('TaskDeleted'), 'success')
+            Display::return_message(get_lang('The task has been deleted.'), 'success')
         );
     }
 
     if (isset($_GET['do']) && $_GET['do'] == 'delete_assignment') {
         Blog::deleteAssignedTask($blog_id, intval($_GET['task_id']), intval($_GET['user_id']));
         Display::addFlash(
-            Display::return_message(get_lang('TaskAssignmentDeleted'), 'success')
+            Display::return_message(get_lang('The task assignment has been deleted.'), 'success')
         );
     }
 }
@@ -159,11 +158,11 @@ if (isset($_GET['action']) && $_GET['action'] == 'view_post') {
         if (api_is_allowed('BLOG_'.$blog_id, 'article_comments_delete', $task_id)) {
             Blog::deleteComment($blog_id, (int) $_GET['post_id'], (int) $_GET['comment_id']);
             Display::addFlash(
-                Display::return_message(get_lang('CommentDeleted'), 'success')
+                Display::return_message(get_lang('The comment has been deleted.'), 'success')
             );
         } else {
             Display::addFlash(
-                Display::return_message(get_lang('ActionNotAllowed'), 'error')
+                Display::return_message(get_lang('Action not allowed'), 'error')
             );
         }
     }
@@ -173,11 +172,11 @@ if (isset($_GET['action']) && $_GET['action'] == 'view_post') {
             Blog::deletePost($blog_id, (int) $_GET['article_id']);
             $action = ''; // Article is gone, go to blog home
             Display::addFlash(
-                Display::return_message(get_lang('BlogDeleted'), 'success')
+                Display::return_message(get_lang('The project has been deleted.'), 'success')
             );
         } else {
             Display::addFlash(
-                Display::return_message(get_lang('ActionNotAllowed'), 'error')
+                Display::return_message(get_lang('Action not allowed'), 'error')
             );
         }
     }
@@ -186,7 +185,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'view_post') {
             if (api_is_allowed('BLOG_'.$blog_id, 'article_rate')) {
                 Blog::addRating('post', $blog_id, (int) $_GET['post_id'], (int) $_GET['rating']);
                 Display::addFlash(
-                    Display::return_message(get_lang('RatingAdded'), 'success')
+                    Display::return_message(get_lang('A rating has been added.'), 'success')
                 );
             }
         }
@@ -194,7 +193,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'view_post') {
             if (api_is_allowed('BLOG_'.$blog_id, 'article_comments_add')) {
                 Blog::addRating('comment', $blog_id, (int) $_GET['comment_id'], (int) $_GET['rating']);
                 Display::addFlash(
-                    Display::return_message(get_lang('RatingAdded'), 'success')
+                    Display::return_message(get_lang('A rating has been added.'), 'success')
                 );
             }
         }
@@ -207,25 +206,25 @@ if (isset($_GET['action']) && $_GET['action'] == 'view_post') {
 // Set breadcrumb
 switch ($action) {
     case 'new_post':
-        $nameTools = get_lang('NewPost');
+        $nameTools = get_lang('New task');
         break;
     case 'view_post':
         $nameTools = '';
         break;
     case 'manage_tasks':
-        $nameTools = get_lang('TaskManager');
+        $nameTools = get_lang('Roles management');
         break;
     case 'manage_members':
-        $nameTools = get_lang('MemberManager');
+        $nameTools = get_lang('Users management');
         break;
     case 'manage_rights':
-        $nameTools = get_lang('RightsManager');
+        $nameTools = get_lang('Users rights management');
         break;
     case 'view_search_result':
-        $nameTools = get_lang('SearchResults');
+        $nameTools = get_lang('Search results');
         break;
     case 'execute_task':
-        $nameTools = get_lang('ExecuteThisTask');
+        $nameTools = get_lang('A task for me');
         break;
     default:
         $nameTools = Blog::getBlogTitle($blog_id);
@@ -241,19 +240,19 @@ $actionsLeft = Display::url(
 );
 if (api_is_allowed('BLOG_'.$blog_id, 'article_add')) {
     $actionsLeft .= Display::url(
-        Display::return_icon('new_article.png', get_lang('NewPost'), '', ICON_SIZE_MEDIUM),
+        Display::return_icon('new_article.png', get_lang('New task'), '', ICON_SIZE_MEDIUM),
         api_get_self().'?action=new_post&blog_id='.$blog_id.'&'.api_get_cidreq()
     );
 }
 if (api_is_allowed('BLOG_'.$blog_id, 'task_management')) {
     $actionsLeft .= Display::url(
-        Display::return_icon('blog_tasks.png', get_lang('TaskManager'), '', ICON_SIZE_MEDIUM),
+        Display::return_icon('blog_tasks.png', get_lang('Roles management'), '', ICON_SIZE_MEDIUM),
         api_get_self().'?action=manage_tasks&blog_id='.$blog_id.'&'.api_get_cidreq()
     );
 }
 if (api_is_allowed('BLOG_'.$blog_id, 'member_management')) {
     $actionsLeft .= Display::url(
-        Display::return_icon('blog_admin_users.png', get_lang('MemberManager'), '', ICON_SIZE_MEDIUM),
+        Display::return_icon('blog_admin_users.png', get_lang('Users management'), '', ICON_SIZE_MEDIUM),
         api_get_self().'?action=manage_members&blog_id='.$blog_id.'&'.api_get_cidreq()
     );
 }
@@ -419,14 +418,14 @@ switch ($action) {
         if (isset($_GET['filter']) && !empty($_GET['filter'])) {
             $listArticles = Blog::getDailyResults($blog_id, Database::escape_string($_GET['filter']));
             $dateSearch = api_format_date($_GET['filter'], DATE_FORMAT_LONG);
-            $titleSearch = get_lang('PostsOf').' '.$dateSearch;
+            $titleSearch = get_lang('Tasks by').' '.$dateSearch;
             $tpl->assign('search', $titleSearch);
             $tpl->assign('articles', $listArticles);
-            $blogLayout = $tpl->get_template('blog/blog.html.twig');
+            $blogLayout = $tpl->get_template('blog/blog.tpl');
         } else {
             $listArticles = Blog::getPosts($blog_id);
             $tpl->assign('articles', $listArticles);
-            $blogLayout = $tpl->get_template('blog/blog.html.twig');
+            $blogLayout = $tpl->get_template('blog/blog.tpl');
         }
         break;
 }

@@ -2,11 +2,9 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * Class Gradebook
+ * Class Gradebook.
  * This class provides methods for the notebook management.
  * Include/require it in your code to use its features.
- *
- * @package chamilo.library
  */
 class Gradebook extends Model
 {

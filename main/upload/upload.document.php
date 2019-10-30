@@ -33,7 +33,7 @@ if (!DocumentManager::get_document_id($_course, $path)) {
 /**
  *	Header.
  */
-$nameTools = get_lang('UplUploadDocument');
+$nameTools = get_lang('Upload documents');
 $interbreadcrumb[] = [
     "url" => api_get_path(WEB_CODE_PATH)."document/document.php?curdirpath=".urlencode($path).'&'.api_get_cidreq(),
     "name" => get_lang('Documents'),
@@ -146,10 +146,10 @@ if (isset($_POST['create_dir']) && $_POST['dirname'] != '') {
         $_POST['dirname']
     );
     if ($created_dir) {
-        echo Display::return_message(get_lang('DirCr'));
+        echo Display::return_message(get_lang('Folder created'));
         $path = $created_dir;
     } else {
-        echo Display::return_message(get_lang('CannotCreateDir'));
+        echo Display::return_message(get_lang('Unable to create the folder.'));
     }
 }
 
@@ -157,9 +157,9 @@ if (isset($_GET['createdir'])) {
     //create the form that asks for the directory name
     $new_folder_text = '<form action="'.api_get_self().'" method="POST">';
     $new_folder_text .= '<input type="hidden" name="curdirpath" value="'.$path.'"/>';
-    $new_folder_text .= get_lang('NewDir').' ';
+    $new_folder_text .= get_lang('Name of the new folder').' ';
     $new_folder_text .= '<input type="text" name="dirname"/>';
-    $new_folder_text .= '<input type="submit" name="create_dir" value="'.get_lang('Ok').'"/>';
+    $new_folder_text .= '<input type="submit" name="create_dir" value="'.get_lang('Validate').'"/>';
     $new_folder_text .= '</form>';
     //show the form
     echo Display::return_message($new_folder_text, 'normal');
@@ -168,7 +168,7 @@ if (isset($_GET['createdir'])) {
     <p>
         <a href="<?php echo api_get_self(); ?>?path=<?php echo $path; ?>&amp;createdir=1">
             <?php echo Display::return_icon('new_folder.gif'); ?>
-            <?php echo get_lang('CreateDir'); ?>
+            <?php echo get_lang('Create folder'); ?>
         </a>
     </p>
 <?php
@@ -203,21 +203,21 @@ if (isset($_GET['createdir'])) {
 <?php echo get_lang('Options'); ?>
 </td>
 <td>
-- <input type="checkbox" name="unzip" value="1" onclick="check_unzip()"/> <?php echo get_lang('Uncompress'); ?><br/>
-- <?php echo get_lang('UplWhatIfFileExists'); ?><br/>
-&nbsp;&nbsp;&nbsp;<input type="radio" name="if_exists" value="nothing" title="<?php echo get_lang('UplDoNothingLong'); ?>" checked="checked"/>  <?php echo get_lang('UplDoNothing'); ?><br/>
-&nbsp;&nbsp;&nbsp;<input type="radio" name="if_exists" value="overwrite" title="<?php echo get_lang('UplOverwriteLong'); ?>"/> <?php echo get_lang('UplOverwrite'); ?><br/>
-&nbsp;&nbsp;&nbsp;<input type="radio" name="if_exists" value="rename" title="<?php echo get_lang('UplRenameLong'); ?>"/> <?php echo get_lang('UplRename'); ?>
+- <input type="checkbox" name="unzip" value="1" onclick="check_unzip()"/> <?php echo get_lang('Uncompress zip'); ?><br/>
+- <?php echo get_lang('If file exists:'); ?><br/>
+&nbsp;&nbsp;&nbsp;<input type="radio" name="if_exists" value="nothing" title="<?php echo get_lang('Don\'t upload if file exists'); ?>" checked="checked"/>  <?php echo get_lang('Do nothing'); ?><br/>
+&nbsp;&nbsp;&nbsp;<input type="radio" name="if_exists" value="overwrite" title="<?php echo get_lang('Overwrite the existing file'); ?>"/> <?php echo get_lang('Overwrite'); ?><br/>
+&nbsp;&nbsp;&nbsp;<input type="radio" name="if_exists" value="rename" title="<?php echo get_lang('Rename the uploaded file if it exists'); ?>"/> <?php echo get_lang('Rename'); ?>
 </td>
 </tr>
 </table>
 
-<input type="submit" value="<?php echo get_lang('Ok'); ?>">
+<input type="submit" value="<?php echo get_lang('Validate'); ?>">
 </form>
 <!-- end upload form -->
 
  <!-- so they can get back to the documents   -->
- <p><?php echo get_lang('Back'); ?> <?php echo get_lang('To'); ?> <a href="document.php?curdirpath=<?php echo $path; ?>"><?php echo get_lang('DocumentsOverview'); ?></a></p>
+ <p><?php echo get_lang('Back'); ?> <?php echo get_lang('To'); ?> <a href="document.php?curdirpath=<?php echo $path; ?>"><?php echo get_lang('Documents overview'); ?></a></p>
 <?php
 
 Display::display_footer();

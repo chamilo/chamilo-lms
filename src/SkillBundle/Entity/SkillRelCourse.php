@@ -7,16 +7,18 @@ use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\Skill;
 use Doctrine\ORM\Mapping as ORM;
-use Gedmo\Mapping\Annotation as Gedmo;
+use Gedmo\Timestampable\Traits\TimestampableEntity;
 
 /**
  * SkillRelCourse.
  *
  * @ORM\Table(name="skill_rel_course")
- * @ORM\Entity // uncomment if api_get_configuration_value('allow_skill_rel_items')
+ * @ORM\Entity
  */
 class SkillRelCourse
 {
+    use TimestampableEntity;
+
     /**
      * @var int
      *
@@ -49,24 +51,6 @@ class SkillRelCourse
      * @ORM\JoinColumn(name="session_id", referencedColumnName="id", nullable=false)
      */
     protected $session;
-
-    /**
-     * @var \DateTime
-     *
-     * @Gedmo\Timestampable(on="create")
-     *
-     * @ORM\Column(name="created_at", type="datetime")
-     */
-    protected $createdAt;
-
-    /**
-     * @var \DateTime
-     *
-     * @Gedmo\Timestampable(on="update")
-     *
-     * @ORM\Column(name="updated_at", type="datetime")
-     */
-    protected $updatedAt;
 
     /**
      * SkillRelItem constructor.

@@ -1,17 +1,20 @@
 var Encore = require('@symfony/webpack-encore');
-var copyWebpackPlugin = require('copy-webpack-plugin');
+
+const CopyWebpackPlugin = require('copy-webpack-plugin');
+const FileManagerPlugin = require('filemanager-webpack-plugin');
 
 Encore
     .setOutputPath('public/build/')
     .setManifestKeyPrefix('public/build/')
-    // If chamilo is installed in localhost/chamilo2
     .setPublicPath('../')
-    // If chamilo is installed in a domain my.chamilo.net
-    //.setPublicPath('/public/build')
     .cleanupOutputBeforeBuild()
 
     .addEntry('app', './assets/js/app.js')
     .addEntry('bootstrap', './assets/js/bootstrap.js')
+
+    .addEntry('exercise', './assets/js/exercise.js')
+
+    .addEntry('free-jqgrid', './assets/js/free-jqgrid.js')
 
     .addStyleEntry('css/app', './assets/css/app.scss')
     .addStyleEntry('css/bootstrap', './assets/css/bootstrap.scss')
@@ -31,9 +34,56 @@ Encore
     // .enableVersioning(Encore.isProduction())
 
     .enableSassLoader()
-
+    .enableVueLoader()
     .autoProvidejQuery()
+    .copyFiles([
+        {
+            from: './node_modules/multiselect-two-sides/dist/js',
+            pattern: /(multiselect.js)$/,
+            to: 'libs/multiselect-two-sides/dist/js/multiselect.js'
+        },
+        {
+            from: './node_modules/pwstrength-bootstrap/dist/',
+            pattern: /(pwstrength-bootstrap.js)$/,
+            to: 'libs/pwstrength-bootstrap/dist/pwstrength-bootstrap.js'
+        },
+        {
+            from: './node_modules/readmore-js',
+            pattern: /(readmore.js)$/,
+            to: 'libs/readmore-js/readmore.js'
+        },
+        {
+            from: './node_modules/js-cookie/src/',
+            pattern: /(js.cookie.js)$/,
+            to: 'libs/js-cookie/src/js.cookie.js'
+        },
+        {
+            from: './node_modules/mathjax/',
+            pattern: /(MathJax.js)$/,
+            to: 'libs/mathjax/MathJax.js'
+        },
+    ])
 ;
+
+Encore.addPlugin(new CopyWebpackPlugin([
+    {
+        from: './node_modules/mediaelement/build',
+        to: 'libs/mediaelement'
+    },
+    {
+        from: './node_modules/mediaelement-plugins/dist',
+        to: 'libs/mediaelement/plugins'
+    },
+    {
+        from: './node_modules/mathjax/config',
+        to: 'libs/mathjax/config'
+    },
+]));
+
+// Encore.addPlugin(new copyWebpackPlugin([{
+//     from: 'assets/css/themes/' + theme + '/images',
+//     to: 'css/themes/' + theme + '/images'
+// };
 
 var themes = [
     'chamilo'
@@ -44,11 +94,26 @@ themes.forEach(function (theme) {
     Encore.addStyleEntry('css/themes/' + theme + '/default', './assets/css/themes/' + theme + '/default.css');
 
     // Copy images from themes into public/build
-    Encore.addPlugin(new copyWebpackPlugin([{
+    Encore.addPlugin(new CopyWebpackPlugin([{
         from: 'assets/css/themes/' + theme + '/images',
         to: 'css/themes/' + theme + '/images'
     },
     ]));
 });
+
+// Fix free-jqgrid languages files
+Encore.addPlugin(new FileManagerPlugin({
+    onEnd: {
+        move: [
+            {
+                source: './public/public/build/free-jqgrid/',
+                destination: './public/build/free-jqgrid/'
+            }
+        ],
+        delete: [
+            './public/public/'
+        ]
+    }
+}));
 
 module.exports = Encore.getWebpackConfig();

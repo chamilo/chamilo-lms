@@ -51,9 +51,13 @@ plugin/vchamilo/templates/*
 
 # Stuff updated through composer - Remove just before release
 vendor
+composer.lock
+symfony.lock
 
 ###> symfony/framework-bundle ###
-.env
+/.env.local
+/.env.local.php
+/.env.*.local
 /public/bundles/
 /var/
 /vendor
@@ -71,12 +75,6 @@ vendor
 ###> symfony/web-server-bundle ###
 .web-server-pid
 ###< symfony/web-server-bundle ###
-
-###> symfony/webpack-encore-pack ###
-/node_modules/
-/public/build/
-###< symfony/webpack-encore-pack ###
-
 ###> symfony/webpack-encore-bundle ###
 /node_modules/
 /public/build/

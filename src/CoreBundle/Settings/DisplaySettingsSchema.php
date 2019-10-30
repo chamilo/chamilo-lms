@@ -10,8 +10,6 @@ use Symfony\Component\Form\FormBuilderInterface;
 
 /**
  * Class DisplaySettingsSchema.
- *
- * @package Chamilo\CoreBundle\Settings
  */
 class DisplaySettingsSchema extends AbstractSettingsSchema
 {

@@ -113,10 +113,10 @@ function format_specific_fields_selects($sf_terms, $op, $prefilter_prefix = '')
  */
 function search_widget_normal_form($action, $show_thesaurus, $sf_terms, $op)
 {
-    $thesaurus_icon = Display::return_icon('thesaurus.gif', get_lang('SearchAdvancedOptions'), ['id' => 'thesaurus-icon']);
-    $advanced_options = '<a id="tags-toggle" href="#">'.get_lang('SearchAdvancedOptions').'</a>';
+    $thesaurus_icon = Display::return_icon('thesaurus.gif', get_lang('Advanced search options'), ['id' => 'thesaurus-icon']);
+    $advanced_options = '<a id="tags-toggle" href="#">'.get_lang('Advanced search options').'</a>';
     $display_thesaurus = ($show_thesaurus == true ? 'block' : 'none');
-    $help = '<h3>'.get_lang('SearchKeywordsHelpTitle').'</h3>'.get_lang('SearchKeywordsHelpComment');
+    $help = '<h3>'.get_lang('Keywords search help').'</h3>'.get_lang('Select keywords in one or more fields and click the search button.<br /><br />To select more than one keyword in a field, use Ctrl+click.');
     $mode = (!empty($_REQUEST['mode']) ? htmlentities($_REQUEST['mode']) : 'gallery');
     $type = (!empty($_REQUEST['type']) ? htmlentities($_REQUEST['type']) : 'normal');
 
@@ -133,11 +133,11 @@ function search_widget_normal_form($action, $show_thesaurus, $sf_terms, $op)
     if ($navigator_info['name'] == 'Internet Explorer' && $navigator_info['version'] == '6') {
         $submit_button1 = '<input type="submit" id="submit" value="'.get_lang('Search').'" />';
         $submit_button2 = '<input class="lower-submit" type="submit" value="'.get_lang('Search').'" />';
-        $reset_button = '<input type="submit" id="tags-clean" value="'.get_lang('SearchResetKeywords').'" />';
+        $reset_button = '<input type="submit" id="tags-clean" value="'.get_lang('Reset keywords').'" />';
     } else {
         $submit_button1 = '<button class="search" type="submit" id="submit" value="'.get_lang("Search").'" /> '.get_lang('Search').'</button>';
         $submit_button2 = '<button class="search" type="submit" value="'.get_lang('Search').'" />'.get_lang('Search').'</button>';
-        $reset_button = '<button class="save"   type="submit" id="tags-clean" value="'.get_lang('SearchResetKeywords').'" />'.get_lang('SearchResetKeywords').'</button> ';
+        $reset_button = '<button class="save"   type="submit" id="tags-clean" value="'.get_lang('Reset keywords').'" />'.get_lang('Reset keywords').'</button> ';
     }
 
     $query = isset($_REQUEST['query']) ? Security::remove_XSS($_REQUEST['query']) : null;
@@ -168,9 +168,9 @@ function search_widget_normal_form($action, $show_thesaurus, $sf_terms, $op)
         $form .= '</tr>
                     <tr>
                         <td id="operator-select">
-                            '.get_lang('SearchCombineSearchWith').':<br />
-                            <input type="radio" class="search-operator" name="operator" value="or" '.$or_checked.'>'.api_strtoupper(get_lang('Or')).'</input>
-                            <input type="radio" class="search-operator" name="operator" value="and" '.$and_checked.'>'.api_strtoupper(get_lang('And')).'</input>
+                            '.get_lang('Combine keywords with').':<br />
+                            <input type="radio" class="search-operator" name="operator" value="or" '.$or_checked.'>'.api_strtoupper(get_lang('or')).'</input>
+                            <input type="radio" class="search-operator" name="operator" value="and" '.$and_checked.'>'.api_strtoupper(get_lang('and')).'</input>
                         </td>
                         <td></td>
                         <td>
@@ -200,10 +200,10 @@ function search_widget_prefilter_form(
     $op,
     $prefilter_prefix = null
 ) {
-    $thesaurus_icon = Display::return_icon('thesaurus.gif', get_lang('SearchAdvancedOptions'), ['id' => 'thesaurus-icon']);
-    $advanced_options = '<a id="tags-toggle" href="#">'.get_lang('SearchAdvancedOptions').'</a>';
+    $thesaurus_icon = Display::return_icon('thesaurus.gif', get_lang('Advanced search options'), ['id' => 'thesaurus-icon']);
+    $advanced_options = '<a id="tags-toggle" href="#">'.get_lang('Advanced search options').'</a>';
     $display_thesaurus = ($show_thesaurus == true ? 'block' : 'none');
-    $help = '<h3>'.get_lang('SearchKeywordsHelpTitle').'</h3>'.get_lang('SearchKeywordsHelpComment');
+    $help = '<h3>'.get_lang('Keywords search help').'</h3>'.get_lang('Select keywords in one or more fields and click the search button.<br /><br />To select more than one keyword in a field, use Ctrl+click.');
     $mode = (!empty($_REQUEST['mode']) ? htmlentities($_REQUEST['mode']) : 'gallery');
     $type = (!empty($_REQUEST['type']) ? htmlentities($_REQUEST['type']) : 'normal');
 
@@ -263,15 +263,15 @@ function search_widget_prefilter_form(
                     </tr>
                     <tr>
                         <td id="operator-select">
-                            '.get_lang('SearchCombineSearchWith').':<br />
-                            <input type="radio" class="search-operator" name="operator" value="or" '.$or_checked.'>'.api_strtoupper(get_lang('Or')).'</input>
-                            <input type="radio" class="search-operator" name="operator" value="and" '.$and_checked.'>'.api_strtoupper(get_lang('And')).'</input>
+                            '.get_lang('Combine keywords with').':<br />
+                            <input type="radio" class="search-operator" name="operator" value="or" '.$or_checked.'>'.api_strtoupper(get_lang('or')).'</input>
+                            <input type="radio" class="search-operator" name="operator" value="and" '.$and_checked.'>'.api_strtoupper(get_lang('and')).'</input>
                         </td>
                         <td></td>
                         <td>
                             <br />
                             <input class="lower-submit" type="submit" value="'.get_lang('Search').'" />
-                            <input type="submit" id="tags-clean" value="'.get_lang('SearchResetKeywords').'" />
+                            <input type="submit" id="tags-clean" value="'.get_lang('Reset keywords').'" />
                         </td>
                     </tr>
                     </table>

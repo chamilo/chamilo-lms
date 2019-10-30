@@ -32,12 +32,43 @@ $this_section = SECTION_COURSES;
 
 api_block_anonymous_users(); // Only users who are logged in can proceed.
 
+$logInfo = [
+    'tool' => SECTION_COURSES,
+    'tool_id' => 0,
+    'tool_id_detail' => 0,
+    'action' => '',
+    'info' => '',
+];
+Event::registerLog($logInfo);
+
 $userId = api_get_user_id();
+
+$collapsable = api_get_configuration_value('allow_user_session_collapsable');
+if ($collapsable) {
+    $action = isset($_REQUEST['action']) ? $_REQUEST['action'] : '';
+    $sessionId = isset($_REQUEST['session_id']) ? $_REQUEST['session_id'] : '';
+    $value = isset($_REQUEST['value']) ? (int) $_REQUEST['value'] : '';
+    switch ($action) {
+        case 'collapse_session':
+            if (!empty($sessionId)) {
+                $userRelSession = SessionManager::getUserSession($userId, $sessionId);
+                if ($userRelSession) {
+                    $table = Database::get_main_table(TABLE_MAIN_SESSION_USER);
+                    $sql = "UPDATE $table SET collapsed = $value WHERE id = ".$userRelSession['id'];
+                    Database::query($sql);
+                    Display::addFlash(Display::return_message(get_lang('Update successful')));
+                }
+                header('Location: user_portal.php');
+                exit;
+            }
+            break;
+    }
+}
 
 /* Constants and CONFIGURATION parameters */
 $load_dirs = api_get_setting('show_documents_preview');
 $displayMyCourseViewBySessionLink = api_get_setting('my_courses_view_by_session') === 'true';
-$nameTools = get_lang('MyCourses');
+$nameTools = get_lang('My courses');
 $loadHistory = isset($_GET['history']) && intval($_GET['history']) == 1 ? true : false;
 
 // Load course notification by ajax
@@ -128,7 +159,7 @@ if ($displayMyCourseViewBySessionLink) {
 
 $myCourseListAsCategory = api_get_configuration_value('my_courses_list_as_category');
 
-$controller = new IndexManager(get_lang('MyCourses'));
+$controller = new IndexManager(get_lang('My courses'));
 
 if (!$myCourseListAsCategory) {
     // Main courses and session list
@@ -182,7 +213,6 @@ if (!$myCourseListAsCategory) {
             true,
             $loadHistory
         );
-
         $getCategory = CourseCategory::getCategory($categoryCode);
         $controller->tpl->assign('category', $getCategory);
     }
@@ -243,9 +273,7 @@ if (empty($courseAndSessions['html_courses']) && !isset($_GET['history'])) {
     $showWelcomeCourse = true;
 }
 
-$controller->tpl->assign('show_welcome_course', $showWelcomeCourse);
-$controller->tpl->assign('html_sessions', $courseAndSessions['html_sessions']);
-$controller->tpl->assign('html_courses', $courseAndSessions['html_courses']);
+$controller->tpl->assign('content', $courseAndSessions['html']);
 
 // Display the Site Use Cookie Warning Validation
 $useCookieValidation = api_get_setting('cookie_warning');
@@ -270,13 +298,14 @@ if (!empty($_GET['history'])) {
 }
 $controller->tpl->assign('course_history_page', $historyClass);
 if ($myCourseListAsCategory) {
-    $controller->tpl->assign('header', get_lang('MyCourses'));
+    $controller->tpl->assign('header', get_lang('My courses'));
 }
 
 $controller->setGradeBookDependencyBar($userId);
 
 // Deleting the session_id.
 Session::erase('session_id');
+Session::erase('id_session');
 Session::erase('studentview');
 api_remove_in_gradebook();
 

@@ -13,8 +13,8 @@ require_once __DIR__.'/../inc/global.inc.php';
 
 $this_section = SECTION_PLATFORM_ADMIN;
 api_protect_admin_script();
-$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('PlatformAdmin')];
-$tool_name = get_lang('TermsAndConditions');
+$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('Administration')];
+$tool_name = get_lang('Terms and Conditions');
 Display::display_header($tool_name);
 
 $parameters['sec_token'] = Security::get_token();
@@ -24,9 +24,9 @@ echo '<div class="actions">';
 echo '<a href="'.api_get_path(WEB_CODE_PATH).'admin/legal_add.php">';
 echo Display::return_icon(
     'edit.png',
-    get_lang('EditTermsAndConditions')
+    get_lang('EditTerms and Conditions')
 );
-echo get_lang('EditTermsAndConditions').'</a>&nbsp;&nbsp;';
+echo get_lang('EditTerms and Conditions').'</a>&nbsp;&nbsp;';
 echo '</div>';
 
 $em = Database::getManager();
@@ -36,7 +36,7 @@ $legalCount = $legalTermsRepo->countAllActiveLegalTerms();
 $languages = api_get_languages();
 $available_languages = count($languages['folder']);
 if ($legalCount != $available_languages) {
-    echo Display::return_message(get_lang('YouShouldCreateTermAndConditionsForAllAvailableLanguages'), 'warning');
+    echo Display::return_message(get_lang('You should create the "Term and Conditions" for all the available languages.'), 'warning');
 }
 
 $table = new SortableTable('conditions', 'count_mask', 'get_legal_data_mask', 2);

@@ -95,7 +95,7 @@ if (!$is_allowed_to_edit && !$is_visible) {
 }
 
 $pathinfo = pathinfo($header_file);
-$playerSupportedFiles = ['mp4', 'ogv', 'flv', 'm4v', 'webm'];
+$playerSupportedFiles = ['mp3', 'mp4', 'ogv', 'flv', 'm4v', 'webm'];
 $playerSupported = false;
 if (in_array(strtolower($pathinfo['extension']), $playerSupportedFiles)) {
     $playerSupported = true;
@@ -112,7 +112,7 @@ if (isset($group_id) && $group_id != '') {
     ];
     $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'group/group_space.php?'.api_get_cidreq(),
-        'name' => get_lang('GroupSpace').' '.$current_group_name,
+        'name' => get_lang('Group area').' '.$current_group_name,
     ];
     $name_to_show = explode('/', $name_to_show);
     unset($name_to_show[1]);
@@ -166,7 +166,7 @@ if (api_is_course_admin()) {
     $frameheight = 165;
 }
 
-$frameReady = Display::getFrameReadyBlock('top.mainFrame');
+$frameReady = Display::getFrameReadyBlock('#mainFrame');
 
 $web_odf_supported_files = DocumentManager::get_web_odf_extension_list();
 // PDF should be displayed with viewerJS
@@ -226,20 +226,14 @@ if (!$playerSupported && $execute_iframe) {
     </script>';
     $htmlHeadXtra[] = '<script type="text/javascript" src="'.api_get_path(WEB_LIBRARY_PATH).'javascript/jquery.frameready.js"></script>';
     $htmlHeadXtra[] = '<script>
-        var updateContentHeight = function() {
-            my_iframe = document.getElementById("mainFrame");
-            if (my_iframe) {
-                //this doesnt seem to work in IE 7,8,9
-                new_height = my_iframe.contentWindow.document.body.scrollHeight;
-                my_iframe.height = my_iframe.contentWindow.document.body.scrollHeight + "px";
-            }
-        };
-
         // Fixes the content height of the frame
-        window.onload = function() {
-            updateContentHeight();
+        $(function() {
+            $(\'#mainFrame\').on(\'load\', function () {
+                this.style.height = (this.contentWindow.document.body.scrollHeight + 50) + \'px\';
+            });
+            
             '.$frameReady.'
-        }
+        });
     </script>';
 }
 
@@ -303,7 +297,7 @@ if ($execute_iframe) {
             $actionsLeft .= Display::url(
                 Display::return_icon(
                     'edit.png',
-                    get_lang('Modify'),
+                    get_lang('Edit'),
                     '',
                     ICON_SIZE_MEDIUM
                 ),
@@ -331,13 +325,14 @@ if ($execute_iframe) {
                 ]
             );
             $actionsLeft .= Display::url(
-                Display::return_icon('pdf.png', get_lang('Export2PDF'), [], ICON_SIZE_MEDIUM),
+                Display::return_icon('pdf.png', get_lang('Export to PDF format'), [], ICON_SIZE_MEDIUM),
                 api_get_path(WEB_CODE_PATH).'document/document.php?'.api_get_cidreq(
                 ).'&action=export_to_pdf&id='.$document_id
             );
         }
 
         echo $toolbar = Display::toolbarAction('actions-documents', [$actionsLeft]);
+
         echo '<iframe 
             id="mainFrame" 
             name="mainFrame" 

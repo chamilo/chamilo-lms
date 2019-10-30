@@ -46,13 +46,13 @@ $toolbar = Display::url(
     $currentUrl.'&action=add'
 );
 
-$toolName = get_lang('Gradebook');
+$toolName = get_lang('Assessments');
 switch ($action) {
     case 'add':
     case 'edit':
         $interbreadcrumb[] = [
             'url' => $currentUrl,
-            'name' => get_lang('Gradebook'),
+            'name' => get_lang('Assessments'),
         ];
         $toolName = get_lang(ucfirst($action));
         break;
@@ -84,7 +84,7 @@ switch ($action) {
 
         $form->addSelectAjax(
             'depends',
-            get_lang('DependsOnGradebook'),
+            get_lang('DependsOnAssessments'),
             null,
             [
                 'url' => api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=search_course',
@@ -94,12 +94,12 @@ switch ($action) {
 
         $form->addText(
             'gradebooks_to_validate_in_dependence',
-            get_lang('NumberOfGradebookToValidateInDependence')
+            get_lang('NumberOfAssessmentsToValidateInDependence')
         );
 
         $form->addText(
             'minimum',
-            get_lang('MinimumGradebookToValidate'),
+            get_lang('MinimumAssessmentsToValidate'),
             false
         );
 
@@ -158,7 +158,7 @@ switch ($action) {
                     exit;
                 }
             } else {
-                Display::addFlash(Display::return_message(get_lang('CategoryExists')));
+                Display::addFlash(Display::return_message(get_lang('Category exists')));
             }
         }
         break;
@@ -198,7 +198,7 @@ switch ($action) {
 
             $form->addSelectAjax(
                 'depends',
-                get_lang('DependsOnGradebook'),
+                get_lang('DependsOnAssessments'),
                 $options,
                 [
                     'url' => api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=search_course',
@@ -208,12 +208,12 @@ switch ($action) {
 
             $form->addText(
                 'gradebooks_to_validate_in_dependence',
-                get_lang('NumberOfGradebookToValidateInDependence')
+                get_lang('NumberOfAssessmentsToValidateInDependence')
             );
 
             $form->addText(
                 'minimum',
-                get_lang('MinimumGradebookToValidate'),
+                get_lang('MinimumAssessmentsToValidate'),
                 false
             );
 
@@ -257,7 +257,7 @@ switch ($action) {
                     );
                 }
 
-                Display::addFlash(Display::return_message(get_lang('Updated')));
+                Display::addFlash(Display::return_message(get_lang('Update successful')));
                 header('Location: '.$currentUrl);
                 exit;
             }

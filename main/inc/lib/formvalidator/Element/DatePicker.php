@@ -51,9 +51,9 @@ class DatePicker extends HTML_QuickForm_text
                 <input class="form-control" type="hidden" id="'.$id.'_alt" value="'.$value.'">
                 <span class="input-group-btn">
                     <button class="btn btn-default" type="button"
-                            title="'.sprintf(get_lang('ResetFieldX'), $this->_label).'">
+                            title="'.sprintf(get_lang('Reset %s'), $this->_label).'">
                         <span class="fa fa-trash text-danger" aria-hidden="true"></span>
-                        <span class="sr-only">'.sprintf(get_lang('ResetFieldX'), $this->_label).'</span>
+                        <span class="sr-only">'.sprintf(get_lang('Reset %s'), $this->_label).'</span>
                     </button>
                 </span>
             </div>
@@ -150,11 +150,11 @@ class DatePicker extends HTML_QuickForm_text
                         defaultDate: '".$this->getValue()."',
                         dateFormat: 'yy-mm-dd',
                         altField: '#{$id}_alt',
-                        altFormat: \"".get_lang('DateFormatLongNoDayJS')."\",
+                        altFormat: \"".get_lang('MM dd, yy')."\",
                         showOn: 'both',
                         buttonImage: '".Display::return_icon('attendance.png', null, [], ICON_SIZE_TINY, true, true)."',
                         buttonImageOnly: true,
-                        buttonText: '".get_lang('SelectDate')."',
+                        buttonText: '".get_lang('Select date')."',
                         changeMonth: true,
                         changeYear: true,
                         yearRange: 'c-60y:c+5y'

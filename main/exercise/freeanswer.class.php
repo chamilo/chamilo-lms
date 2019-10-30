@@ -12,8 +12,8 @@
  */
 class FreeAnswer extends Question
 {
-    public static $typePicture = 'open_answer.png';
-    public static $explanationLangVar = 'FreeAnswer';
+    public $typePicture = 'open_answer.png';
+    public $explanationLangVar = 'FreeAnswer';
 
     /**
      * Constructor.
@@ -30,7 +30,7 @@ class FreeAnswer extends Question
      */
     public function createAnswersForm($form)
     {
-        $form->addElement('text', 'weighting', get_lang('Weighting'));
+        $form->addElement('text', 'weighting', get_lang('Score'));
         global $text;
         // setting the save button here and not in the question class.php
         $form->addButtonSave($text, 'submitQuestion');
@@ -55,7 +55,7 @@ class FreeAnswer extends Question
     /**
      * {@inheritdoc}
      */
-    public function return_header($exercise, $counter = null, $score = [])
+    public function return_header(Exercise $exercise, $counter = null, $score = [])
     {
         $score['revised'] = $this->isQuestionWaitingReview($score);
         $header = parent::return_header($exercise, $counter, $score);

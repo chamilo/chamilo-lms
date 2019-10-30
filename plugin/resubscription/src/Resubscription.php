@@ -1,6 +1,10 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Hook\HookResubscribe;
+use Chamilo\CoreBundle\Hook\Interfaces\HookPluginInterface;
+
 /**
  * Limit session resubscriptions.
  *
@@ -16,8 +20,8 @@ class Resubscription extends Plugin implements HookPluginInterface
     protected function __construct()
     {
         $options = [
-            'calendar_year' => get_lang('CalendarYear'),
-            'natural_year' => get_lang('NaturalYear'),
+            'calendar_year' => get_lang('Calendar year'),
+            'natural_year' => get_lang('Natural year'),
         ];
         $parameters = [
             'resubscription_limit' => [
@@ -63,8 +67,9 @@ class Resubscription extends Plugin implements HookPluginInterface
      */
     public function installHook()
     {
-        $hook = HookResubscription::create();
-        HookResubscribe::create()->attach($hook);
+        $hookObserver = HookResubscription::create();
+
+        Container::instantiateHook(HookResubscribe::class)->attach($hookObserver);
     }
 
     /**
@@ -72,7 +77,8 @@ class Resubscription extends Plugin implements HookPluginInterface
      */
     public function uninstallHook()
     {
-        $hook = HookResubscription::create();
-        HookResubscribe::create()->detach($hook);
+        $hookObserver = HookResubscription::create();
+
+        Container::instantiateHook(HookResubscribe::class)->detach($hookObserver);
     }
 }

@@ -21,7 +21,7 @@ if (api_get_setting('enabled_support_paint') === 'false') {
 }
 
 $this_section = SECTION_COURSES;
-$nameTools = get_lang('PhotoRetouching');
+$nameTools = get_lang('Photo retouching');
 $groupRights = Session::read('group_member_with_upload_rights');
 
 api_protect_course_script();
@@ -47,7 +47,7 @@ if (empty($paintDir)) {
 }
 
 Session::write('paint_dir', $paintDir);
-Session::write('paint_file', get_lang('NewImage'));
+Session::write('paint_file', get_lang('New image'));
 
 // Please, do not modify this dirname formatting
 if (strstr($dir, '..')) {
@@ -78,7 +78,7 @@ $groupId = api_get_group_id();
 if (!empty($groupId)) {
     $interbreadcrumb[] = [
         "url" => api_get_path(WEB_CODE_PATH)."group/group_space.php?".api_get_cidreq(),
-        "name" => get_lang('GroupSpace'),
+        "name" => get_lang('Group area'),
     ];
     $group = GroupManager::get_group_properties($groupId);
     $path = explode('/', $dir);
@@ -129,7 +129,7 @@ echo '<div class="actions">';
 echo '<a href="document.php?id='.$document_id.'">'.
     Display::return_icon(
         'back.png',
-        get_lang('BackTo').' '.get_lang('DocumentsOverview'),
+        get_lang('Back to').' '.get_lang('Documents overview'),
         '',
         ICON_SIZE_MEDIUM
     ).
@@ -138,7 +138,7 @@ echo '</div>';
 
 // pixlr
 // max size 1 Mb ??
-$title = urlencode(utf8_encode(get_lang('NewImage'))); //TODO:check
+$title = urlencode(utf8_encode(get_lang('New image'))); //TODO:check
 $image = Display::returnIconPath('canvas1024x768.png');
 $exit_path = api_get_path(WEB_CODE_PATH).'document/exit_pixlr.php';
 Session::write('exit_pixlr', $document_data['path']);

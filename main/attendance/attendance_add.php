@@ -14,7 +14,7 @@ api_protect_course_script(true);
 
 // error messages
 if (isset($error)) {
-    echo Display::return_message(get_lang('FormHasErrorsPleaseComplete'), 'error', false);
+    echo Display::return_message(get_lang('The form contains incorrect or incomplete data. Please check your input.'), 'error', false);
 }
 
 if (!isset($error)) {
@@ -26,7 +26,7 @@ $form = new FormValidator(
     'POST',
     'index.php?action=attendance_add&'.api_get_cidreq()
 );
-$form->addElement('header', '', get_lang('CreateANewAttendance'));
+$form->addElement('header', '', get_lang('Create a new attendance list'));
 $form->addElement('hidden', 'sec_token', $token);
 
 $form->addText('title', get_lang('Title'), true);
@@ -50,19 +50,19 @@ if ((api_get_session_id() != 0 && Gradebook::is_active()) || api_get_session_id(
         'checkbox',
         'attendance_qualify_gradebook',
         '',
-        get_lang('QualifyAttendanceGradebook'),
+        get_lang('Grade the attendance list in the assessment tool'),
         'onclick="javascript: if(this.checked){document.getElementById(\'options_field\').style.display = \'block\';}else{document.getElementById(\'options_field\').style.display = \'none\';}"'
     );
     $form->addElement('html', '<div id="options_field" style="display:none">');
 
     GradebookUtils::load_gradebook_select_in_tool($form);
 
-    $form->addElement('text', 'attendance_qualify_title', get_lang('TitleColumnGradebook'));
+    $form->addElement('text', 'attendance_qualify_title', get_lang('Column header in Competences Report'));
     $form->applyFilter('attendance_qualify_title', 'html_filter');
     $form->addElement(
         'text',
         'attendance_weight',
-        get_lang('QualifyWeight'),
+        get_lang('Weight in Report'),
         'value="0.00" Style="width:40px" onfocus="javascript: this.select();"'
     );
     $form->applyFilter('attendance_weight', 'html_filter');

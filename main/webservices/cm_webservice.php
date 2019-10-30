@@ -142,20 +142,20 @@ class WSCM
                         if ($uData->getExpirationDate() > $now || !$uData->getExpirationDate()) {
                             return "valid";
                         } else {
-                            return get_lang('AccountExpired');
+                            return get_lang('Account expired');
                         }
                     } else {
-                        return get_lang('AccountInactive');
+                        return get_lang('Account inactive');
                     }
                 } else {
-                    return get_lang('InvalidId');
+                    return get_lang('Login failed - incorrect login or password.');
                 }
             } else {
-                return get_lang('AccountURLInactive');
+                return get_lang('Account inactive for this URL');
             }
         }
 
-        return get_lang('InvalidId');
+        return get_lang('Login failed - incorrect login or password.');
     }
 
     /**

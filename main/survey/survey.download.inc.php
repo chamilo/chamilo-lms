@@ -29,7 +29,7 @@ function check_download_survey($course, $invitation, $doc_url)
                 invitation_code = '".Database::escape_string($invitation)."'";
     $result = Database::query($sql);
     if (Database::num_rows($result) < 1) {
-        echo Display::return_message(get_lang('WrongInvitationCode'), 'error', false);
+        echo Display::return_message(get_lang('Wrong invitation code'), 'error', false);
         Display::display_footer();
         exit;
     }
@@ -37,7 +37,7 @@ function check_download_survey($course, $invitation, $doc_url)
 
     // Now we check if the user already filled the survey
     if ($survey_invitation['answered'] == 1) {
-        echo Display::return_message(get_lang('YouAlreadyFilledThisSurvey'), 'error', false);
+        echo Display::return_message(get_lang('You already filled this survey'), 'error', false);
         Display::display_footer();
         exit;
     }
@@ -61,7 +61,7 @@ function check_download_survey($course, $invitation, $doc_url)
                 echo '<option value="'.$row['survey_id'].'">'.$row['lang'].'</option>';
             }
             echo '</select>';
-            echo '  <input type="submit" name="Submit" value="'.get_lang('Ok').'" />';
+            echo '  <input type="submit" name="Submit" value="'.get_lang('Validate').'" />';
             echo '</form>';
             Display::display_footer();
             exit;
@@ -100,7 +100,7 @@ function check_download_survey($course, $invitation, $doc_url)
                     )";
     $result = Database::query($sql);
     if (Database::num_rows($result) == 0) {
-        echo Display::return_message(get_lang('WrongInvitationCode'), 'error', false);
+        echo Display::return_message(get_lang('Wrong invitation code'), 'error', false);
         Display::display_footer();
         exit;
     }

@@ -30,7 +30,7 @@ switch ($action) {
             UserManager::relate_users($my_current_friend, $current_user_id, $relation_type);
             SocialManager::invitation_accepted($my_current_friend, $current_user_id);
             Display::addFlash(
-                Display::return_message(get_lang('AddedContactToList'), 'success')
+                Display::return_message(get_lang('Added contact to list'), 'success')
             );
 
             header('Location: '.api_get_path(WEB_CODE_PATH).'social/invitations.php');
@@ -49,7 +49,7 @@ switch ($action) {
         if (isset($_GET['denied_friend_id'])) {
             SocialManager::invitation_denied($_GET['denied_friend_id'], $current_user_id);
             Display::addFlash(
-                Display::return_message(get_lang('InvitationDenied'), 'success')
+                Display::return_message(get_lang('Invitation denied'), 'success')
             );
 
             header('Location: '.api_get_path(WEB_CODE_PATH).'social/invitations.php');
@@ -73,7 +73,6 @@ switch ($action) {
         }
         $user_id = api_get_user_id();
         $name_search = Security::remove_XSS($_POST['search_name_q']);
-        $number_friends = 0;
 
         if (isset($name_search) && $name_search != 'undefined') {
             $friends = SocialManager::get_friends($user_id, null, $name_search);
@@ -173,27 +172,26 @@ switch ($action) {
                     $result = Blog::getBlogCommentsFromUser($course_id, $user_id, $course_code);
                     if (!empty($result)) {
                         echo '<div  style="background:#FAF9F6; padding-left:10px;">';
-                        api_display_tool_title(api_xml_http_response_encode(get_lang('BlogComments')));
+                        api_display_tool_title(api_xml_http_response_encode(get_lang('Blog comments')));
                         echo api_xml_http_response_encode($result);
                         echo '</div>';
                         echo '<br />';
                         $all_result_data++;
                     }
                     if ($all_result_data == 0) {
-                        echo api_xml_http_response_encode(get_lang('NoDataAvailable'));
+                        echo api_xml_http_response_encode(get_lang('No data available'));
                     }
                 } else {
                     echo '<div class="clear"></div><br />';
                     api_display_tool_title(api_xml_http_response_encode(get_lang('Details')));
                     echo '<div style="background:#FAF9F6; padding:0px;">';
-                    echo api_xml_http_response_encode(get_lang('UserNonRegisteredAtTheCourse'));
+                    echo api_xml_http_response_encode(get_lang('User not registered in course'));
                     echo '<div class="clear"></div><br />';
                     echo '</div>';
                     echo '<div class="clear"></div><br />';
                 }
                 break;
             case 'unload_course':
-                break;
             default:
                 break;
         }
@@ -219,19 +217,12 @@ switch ($action) {
             $comment = isset($_REQUEST['comment']) ? $_REQUEST['comment'] : '';
             if (!empty($comment)) {
                 $messageId = SocialManager::sendWallMessage(
-                    api_get_user_id(),
+                    $userId,
                     $messageInfo['user_receiver_id'],
                     $comment,
                     $messageId,
                     MESSAGE_STATUS_WALL
                 );
-                /*if ($messageId && !empty($_FILES['picture']['tmp_name'])) {
-                    self::sendWallMessageAttachmentFile(
-                        $friendId,
-                        $_FILES['picture'],
-                        $messageId
-                    );
-                }*/
                 if ($messageId) {
                     $messageInfo = MessageManager::get_message_by_id($messageId);
                     echo SocialManager::processPostComment($messageInfo);
@@ -261,7 +252,7 @@ switch ($action) {
                 empty($messageInfo['group_id']);
             if ($canDelete || api_is_platform_admin()) {
                 SocialManager::deleteMessage($messageId);
-                echo Display::return_message(get_lang('MessageDeleted'));
+                echo Display::return_message(get_lang('The message has been deleted'));
                 break;
             }
         }
@@ -271,8 +262,8 @@ switch ($action) {
             break;
         }
         $start = isset($_REQUEST['start']) ? (int) $_REQUEST['start'] : 0;
-        $length = isset($_REQUEST['length']) ? (int) $_REQUEST['length'] : 10;
         $userId = isset($_REQUEST['u']) ? (int) $_REQUEST['u'] : api_get_user_id();
+
         $html = '';
         if ($userId == api_get_user_id()) {
             $threadList = SocialManager::getThreadList($userId);
@@ -281,7 +272,12 @@ switch ($action) {
                 $threadIdList = array_column($threadList, 'id');
             }
 
-            $html = SocialManager::getMyWallMessages($userId, $start, SocialManager::DEFAULT_SCROLL_NEW_POST, $threadIdList);
+            $html = SocialManager::getMyWallMessages(
+                $userId,
+                $start,
+                SocialManager::DEFAULT_SCROLL_NEW_POST,
+                $threadIdList
+            );
             $html = $html['posts'];
         } else {
             $messages = SocialManager::getWallMessages(
@@ -308,7 +304,7 @@ switch ($action) {
         if (!empty($html)) {
             $html .= Display::div(
                 Display::url(
-                    get_lang('SeeMore'),
+                    get_lang('See more'),
                     api_get_self().'?u='.$userId.'&a=list_wall_message&start='.
                     ($start + SocialManager::DEFAULT_SCROLL_NEW_POST).'&length='.SocialManager::DEFAULT_SCROLL_NEW_POST,
                     [

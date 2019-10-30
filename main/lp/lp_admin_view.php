@@ -38,27 +38,27 @@ if (!$is_allowed_to_edit || $isStudentView) {
 if (api_is_in_gradebook()) {
     $interbreadcrumb[] = [
         'url' => Category::getUrl(),
-        'name' => get_lang('ToolGradebook'),
+        'name' => get_lang('Assessments'),
     ];
 }
 
 $interbreadcrumb[] = [
     'url' => 'lp_controller.php?action=list&'.api_get_cidreq(),
-    'name' => get_lang('LearningPaths'),
+    'name' => get_lang('Learning paths'),
 ];
 $interbreadcrumb[] = [
     'url' => api_get_self()."?action=build&lp_id=$learnpath_id&".api_get_cidreq(),
-    "name" => Security::remove_XSS($learnPath->get_name()),
+    "name" => Security::remove_XSS($learnPath->getNameNoTags()),
 ];
 $interbreadcrumb[] = [
     'url' => api_get_self()."?action=add_item&type=step&lp_id=$learnpath_id&".api_get_cidreq(),
-    'name' => get_lang('NewStep'),
+    'name' => get_lang('Add learning object or activity'),
 ];
 
 if (isset($_REQUEST['updateaudio'])) {
-    $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('UpdateAllAudioFragments')];
+    $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Add audio')];
 } else {
-    $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('BasicOverview')];
+    $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Organize')];
 }
 
 $htmlHeadXtra[] = '<script>'.$learnPath->get_js_dropdown_array().'</script>';
@@ -84,7 +84,7 @@ if (isset($_POST['save_audio'])) {
     if (count($lp_items_to_remove_audio) > 0) {
         $sql = "UPDATE $tbl_lp_item SET audio = '' 
                 WHERE iid IN (".$in.")";
-        $result = Database::query($sql);
+        Database::query($sql);
     }
 
     // Uploading the audio files.
@@ -147,14 +147,14 @@ if (isset($_POST['save_audio'])) {
             Database::query($sql);
         }
     }
-    //echo Display::return_message(get_lang('ItemUpdated'), 'confirm');
+    //echo Display::return_message(get_lang('Item updated'), 'confirm');
     $url = api_get_self().'?action=add_item&type=step&lp_id='.$learnPath->get_id().'&'.api_get_cidreq();
     header('Location: '.$url);
     exit;
 }
 
 Display::display_header(null, 'Path');
-$suredel = trim(get_lang('AreYouSureToDeleteJS'));
+$suredel = trim(get_lang('Are you sure to delete'));
 
 ?>
 <script>
@@ -273,7 +273,7 @@ switch ($_GET['action']) {
     case 'edit_item':
         if (isset($is_success) && $is_success === true) {
             echo Display::return_message(
-                get_lang('LearnpathItemEdited'),
+                get_lang('The learning object has been edited'),
                 'confirm'
             );
         } else {
@@ -283,7 +283,7 @@ switch ($_GET['action']) {
     case 'delete_item':
         if (isset($is_success) && $is_success === true) {
             echo Display::return_message(
-                get_lang('LearnpathItemDeleted'),
+                get_lang('The learning object has been deleted'),
                 'confirm'
             );
         }

@@ -100,6 +100,11 @@ if (api_is_in_group()) {
 
 $is_certificate_mode = DocumentManager::is_certificate_mode($dir);
 
+$em = Database::getManager();
+$documentRepository = Container::getDocumentRepository();
+/** @var CDocument $document */
+$document = $documentRepository->find($document_data['iid']);
+
 //Call from
 $call_from_tool = api_get_origin();
 $slide_id = isset($_GET['origin_opt']) ? Security::remove_XSS($_GET['origin_opt']) : null;
@@ -149,7 +154,7 @@ $course_id = api_get_course_int_id();
 if (!empty($group_id)) {
     $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'group/group_space.php?'.api_get_cidreq(),
-        'name' => get_lang('GroupSpace'),
+        'name' => get_lang('Group area'),
     ];
     $group_document = true;
 }
@@ -162,7 +167,7 @@ if (!$is_certificate_mode) {
 } else {
     $interbreadcrumb[] = [
         'url' => Category::getUrl(),
-        'name' => get_lang('Gradebook'),
+        'name' => get_lang('Assessments'),
     ];
 }
 
@@ -212,7 +217,7 @@ if (!empty($sessionId)) {
 
 if (api_is_in_group()) {
     $group_properties = GroupManager::get_group_properties($group_id);
-    GroupManager::allowUploadEditDocument(
+    GroupManager::allowUploadEdit(
         api_get_user_id(),
         api_get_course_int_id(),
         $group_properties,
@@ -244,30 +249,23 @@ if (isset($_POST['comment'])) {
         }
 
         if (!$linkExists || $linkExists == $document_id) {
-            $params = [
-                'comment' => $comment,
-                'title' => $title,
-            ];
-            Database::update(
-                $dbTable,
-                $params,
-                ['c_id = ? AND id = ?' => [$course_id, $document_id]]
-            );
+            $document
+                ->setTitle($title)
+                ->setComment($comment)
+            ;
+            $em->persist($document);
+            $em->flush();
 
             if ($file_type != 'link') {
-                Display::addFlash(Display::return_message(get_lang('fileModified')));
+                Display::addFlash(Display::return_message(get_lang('Update successful')));
             } else {
-                Display::addFlash(Display::return_message(get_lang('CloudLinkModified')));
+                Display::addFlash(Display::return_message(get_lang('Cloud file link updated.')));
             }
         } else {
-            Display::addFlash(Display::return_message(get_lang('UrlAlreadyExists'), 'warning'));
+            Display::addFlash(Display::return_message(get_lang('This URL already exists'), 'warning'));
         }
     }
 }
-
-$em = Database::getManager();
-/** @var CDocument $document */
-$document = $em->getRepository('ChamiloCourseBundle:CDocument')->find($document_data['iid']);
 
 if ($is_allowed_to_edit) {
     if (isset($_POST['formSent']) && $_POST['formSent'] == 1 && !empty($document_id)) {
@@ -280,35 +278,8 @@ if ($is_allowed_to_edit) {
         $read_only_flag = isset($_POST['readonly']) ? $_POST['readonly'] : null;
         $read_only_flag = empty($read_only_flag) ? 0 : 1;
 
-        if ($file_type != 'link') {
-            //$file_size = filesize($document_data['absolute_path']);
-        }
-
-        if ($read_only_flag == 0) {
-            if (!empty($content)) {
-                $node = $document->getResourceNode();
-                $file = $node->getResourceFile();
-
-                if ($file) {
-                    $media = $node->getResourceFile()->getMedia();
-                    $provider = Container::$container->get('sonata.media.pool')->getProvider($media->getProviderName());
-                    $reference = $provider->getReferenceFile($media);
-                    //$node->setUpdatedAt(new \DateTime());
-                    $reference->setContent($content);
-                    $media->setSize($reference->getSize());
-                    $em->merge($media);
-                    $em->merge($node);
-                    $em->flush();
-                }
-            } else {
-                if ($document_id) {
-                    //update_existing_document($_course, $document_id, $file_size, $read_only_flag);
-                }
-            }
-        } else {
-            if ($document_id) {
-                //update_existing_document($_course, $document_id, $file_size, $read_only_flag);
-            }
+        if ($read_only_flag == 0 && !empty($content)) {
+            $documentRepository->updateDocumentContent($document, $content);
         }
 
         header('Location: document.php?id='.$document_data['parent_id'].'&'.api_get_cidreq().($is_certificate_mode ? '&curdirpath=/certificates&selectcat=1' : ''));
@@ -327,21 +298,19 @@ $extension = $path_info['extension'] ?? '';
 
 $em = Database::getManager();
 /** @var \Chamilo\CoreBundle\Entity\Resource\ResourceNode $node */
-$node = $em->getRepository('ChamiloCoreBundle:Resource\ResourceNode')->find($document_data['resource_node_id']);
+//$node = $em->getRepository('ChamiloCoreBundle:Resource\ResourceNode')->find($document_data['resource_node_id']);
+$node = $document->getResourceNode();
 
 if (in_array($extension, ['html', 'htm'])) {
-    $file = $node->getResourceFile();
+    $file = $document->getResourceNode()->getResourceFile();
 
     if ($file) {
-        $media = $node->getResourceFile()->getMedia();
-        $provider = Container::$container->get('sonata.media.pool')->getProvider($media->getProviderName());
-        $reference = $provider->getReferenceFile($media);
-        $content = $reference->getContent();
+        $content = $documentRepository->getDocumentContent($document_data['id']);
     }
 }
 
 // Display the header
-$nameTools = get_lang('EditDocument').': '.Security::remove_XSS($document_data['title']);
+$nameTools = get_lang('Edit').': '.Security::remove_XSS($document_data['title']);
 Display::display_header($nameTools, 'Doc');
 
 $owner_id = $node->getCreator()->getId();
@@ -384,6 +353,7 @@ if ($owner_id == api_get_user_id() ||
     // Desactivation of IE proprietary commenting tags inside the text before loading it on the online editor.
     // This fix has been proposed by Hubert Borderiou, see Bug #573, http://support.chamilo.org/issues/573
     $defaults['content'] = str_replace('<!--[', '<!-- [', $content);
+
     // HotPotatoes tests are html files, but they should not be edited in order their functionality to be preserved.
     $showSystemFolders = api_get_course_setting('show_system_folders');
     $condition = stripos($dir, '/HotPotatoes_files') === false;
@@ -398,12 +368,12 @@ if ($owner_id == api_get_user_id() ||
     }
 
     if (!empty($createdDate)) {
-        $form->addLabel(get_lang('CreatedOn'), Display::dateToStringAgoAndLongDate($createdDate));
+        $form->addLabel(get_lang('Created on'), Display::dateToStringAgoAndLongDate($createdDate));
     }
 
     if ($file_type != 'link') {
         if (!$group_document && !DocumentManager::is_my_shared_folder(api_get_user_id(), $currentDirPath, $sessionId)) {
-            $form->addLabel(get_lang('UpdatedOn'), Display::dateToStringAgoAndLongDate($last_edit_date));
+            $form->addLabel(get_lang('Update successfulOn'), Display::dateToStringAgoAndLongDate($last_edit_date));
         }
 
         if (!empty($document_info['insert_user_id'])) {
@@ -422,7 +392,7 @@ if ($owner_id == api_get_user_id() ||
         $urlWLRegEx = '/(\/\/|\.)('.implode('|', $urlWL).')/i';
         $urlWLText = "\n\t* ".implode("\n\t* ", $urlWL);
         $urlWLHTML = "<ul><li>".implode("</li><li>", $urlWL)."</li></ul>";
-        $form->addText('comment', get_lang('Url'));
+        $form->addText('comment', get_lang('URL'));
         $form->addElement(
             'static',
             'info',
@@ -437,7 +407,7 @@ if ($owner_id == api_get_user_id() ||
 
     if ($file_type != 'link') {
         if ($owner_id == api_get_user_id() || api_is_platform_admin()) {
-            $checked = &$form->addElement('checkbox', 'readonly', null, get_lang('ReadOnly'));
+            $checked = &$form->addElement('checkbox', 'readonly', null, get_lang('Read only'));
             if ($readonly == 1) {
                 $checked->setChecked(true);
             }
@@ -445,22 +415,22 @@ if ($owner_id == api_get_user_id() ||
     }
 
     if ($file_type == 'link') {
-        $form->addRule('title', get_lang('PleaseEnterCloudLinkName'), 'required');
-        $form->addRule('comment', get_lang('PleaseEnterURL'), 'required');
+        $form->addRule('title', get_lang('Please enter a name for this Cloud link'), 'required');
+        $form->addRule('comment', get_lang('Please enter the URL'), 'required');
         // Well formed url pattern (must have the protocol)
         $urlRegEx = DocumentManager::getWellFormedUrlRegex();
-        $form->addRule('comment', get_lang('NotValidURL'), 'regex', $urlRegEx, 'client');
-        $form->addRule('comment', get_lang('NotValidURL'), 'regex', $urlRegEx, 'server');
-        $form->addRule('comment', get_lang('NotValidDomain').$urlWLText, 'regex', $urlWLRegEx, 'client');
-        $form->addRule('comment', get_lang('NotValidDomain').$urlWLHTML, 'regex', $urlWLRegEx, 'server');
+        $form->addRule('comment', get_lang('URL field format invalid. Example of expected format: http://dropbox.com/sh/loremipsum/loremipsum?dl=0'), 'regex', $urlRegEx, 'client');
+        $form->addRule('comment', get_lang('URL field format invalid. Example of expected format: http://dropbox.com/sh/loremipsum/loremipsum?dl=0'), 'regex', $urlRegEx, 'server');
+        $form->addRule('comment', get_lang('The domain is not valid. It must be one of the following:').$urlWLText, 'regex', $urlWLRegEx, 'client');
+        $form->addRule('comment', get_lang('The domain is not valid. It must be one of the following:').$urlWLHTML, 'regex', $urlWLRegEx, 'server');
     }
 
     if ($is_certificate_mode) {
-        $form->addButtonUpdate(get_lang('SaveCertificate'));
+        $form->addButtonUpdate(get_lang('Save certificate'));
     } elseif ($file_type == 'link') {
-        $form->addButtonUpdate(get_lang('SaveLink'));
+        $form->addButtonUpdate(get_lang('Save link'));
     } else {
-        $form->addButtonUpdate(get_lang('SaveDocument'));
+        $form->addButtonUpdate(get_lang('Save document'));
     }
     $form->addHidden('formSent', 1);
     $form->addHidden('filename', $filename);
@@ -492,7 +462,7 @@ if ($owner_id == api_get_user_id() ||
         foreach ($all_information_by_create_certificate[0] as $info_value) {
             $str_info .= $info_value.'<br/>';
         }
-        $create_certificate = get_lang('CreateCertificateWithTags');
+        $create_certificate = get_lang('Create your certificate copy-pasting the following tags. They will be replaced in the document by their student-specific value:');
         echo Display::return_message(
             $create_certificate.': <br /><br />'.$str_info,
             'normal',
@@ -503,7 +473,7 @@ if ($owner_id == api_get_user_id() ||
     if ($extension == 'svg' && !api_browser_support('svg') &&
         api_get_setting('enabled_support_svg') == 'true'
     ) {
-        echo Display::return_message(get_lang('BrowserDontSupportsSVG'), 'warning');
+        echo Display::return_message(get_lang('Your browser does not support SVG files. To use the drawing tool you must have an advanced browser such as Firefox or Chrome'), 'warning');
     }
     if ($file_type != 'link') {
         // HTML-editor
@@ -551,27 +521,28 @@ function show_return($document_id, $path, $call_from_tool = '', $slide_id = 0, $
     if ($is_certificate_mode) {
         $selectedCategory = (isset($_GET['curdirpath']) ? Security::remove_XSS($_GET['curdirpath']) : '');
         $actionsLeft .= '<a href="document.php?curdirpath='.$selectedCategory.'&selectcat='.$selectedCategory.'">'.
-            Display::return_icon('back.png', get_lang('Back').' '.get_lang('To').' '.get_lang('CertificateOverview'), '', ICON_SIZE_MEDIUM).'</a>';
+            Display::return_icon('back.png', get_lang('Back').' '.get_lang('To').' '.get_lang('Certificate overview'), '', ICON_SIZE_MEDIUM).'</a>';
         $actionsLeft .= '<a id="hide_bar_template" href="#" role="button">'.Display::return_icon('expand.png', get_lang('Expand'), ['id' => 'expand'], ICON_SIZE_MEDIUM).Display::return_icon('contract.png', get_lang('Collapse'), ['id' => 'contract', 'class' => 'hide'], ICON_SIZE_MEDIUM).'</a>';
     } elseif ($call_from_tool == 'slideshow') {
-        $actionsLeft .= '<a href="'.api_get_path(WEB_PATH).'main/document/slideshow.php?slide_id='.$slide_id.'&curdirpath='.Security::remove_XSS(urlencode($_GET['curdirpath'])).'">'.
-            Display::return_icon('slideshow.png', get_lang('BackTo').' '.get_lang('ViewSlideshow'), '', ICON_SIZE_MEDIUM).'</a>';
+        /*$actionsLeft .= '<a href="'.api_get_path(WEB_PATH).'main/document/slideshow.php?slide_id='.$slide_id.'&curdirpath='.Security::remove_XSS(urlencode($_GET['curdirpath'])).'">'.
+            Display::return_icon('slideshow.png', get_lang('Back to').' '.get_lang('View Slideshow'), '', ICON_SIZE_MEDIUM).'</a>';
+        */
     } elseif ($call_from_tool == 'editdraw') {
         $actionsLeft .= '<a href="'.$url.'">'.
-            Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('DocumentsOverview'), '', ICON_SIZE_MEDIUM).'</a>';
-        $actionsLeft .= '<a href="javascript:history.back(1)">'.Display::return_icon('draw.png', get_lang('BackTo').' '.get_lang('Draw'), [], 32).'</a>';
+            Display::return_icon('back.png', get_lang('Back to').' '.get_lang('Documents overview'), '', ICON_SIZE_MEDIUM).'</a>';
+        $actionsLeft .= '<a href="javascript:history.back(1)">'.Display::return_icon('draw.png', get_lang('Back to').' '.get_lang('Draw'), [], 32).'</a>';
     } elseif ($call_from_tool == 'editodf') {
         $actionsLeft .= '<a href="'.$url.'">'.
-            Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('DocumentsOverview'), '', ICON_SIZE_MEDIUM).'</a>';
-        $actionsLeft .= '<a href="javascript:history.back(1)">'.Display::return_icon('draw.png', get_lang('BackTo').' '.get_lang('Write'), [], 32).'</a>';
+            Display::return_icon('back.png', get_lang('Back to').' '.get_lang('Documents overview'), '', ICON_SIZE_MEDIUM).'</a>';
+        $actionsLeft .= '<a href="javascript:history.back(1)">'.Display::return_icon('draw.png', get_lang('Back to').' '.get_lang('Write'), [], 32).'</a>';
         $actionsLeft .= '<a id="hide_bar_template" href="#" role="button">'.Display::return_icon('expand.png', get_lang('Expand'), ['id' => 'expand'], ICON_SIZE_MEDIUM).Display::return_icon('contract.png', get_lang('Collapse'), ['id' => 'contract', 'class' => 'hide'], ICON_SIZE_MEDIUM).'</a>';
     } elseif ($call_from_tool == 'editpaint' && api_get_setting('enabled_support_pixlr') === 'true') {
         $actionsLeft .= '<a href="'.$url.'">'.
-            Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('DocumentsOverview'), [], ICON_SIZE_MEDIUM).'</a>';
-        $actionsLeft .= '<a href="javascript:history.back(1)">'.Display::return_icon('paint.png', get_lang('BackTo').' '.get_lang('Paint'), [], 32).'</a>';
+            Display::return_icon('back.png', get_lang('Back to').' '.get_lang('Documents overview'), [], ICON_SIZE_MEDIUM).'</a>';
+        $actionsLeft .= '<a href="javascript:history.back(1)">'.Display::return_icon('paint.png', get_lang('Back to').' '.get_lang('Paint'), [], 32).'</a>';
     } else {
         $actionsLeft .= '<a href="'.$url.'">'.
-            Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('DocumentsOverview'), '', ICON_SIZE_MEDIUM).'</a>';
+            Display::return_icon('back.png', get_lang('Back to').' '.get_lang('Documents overview'), '', ICON_SIZE_MEDIUM).'</a>';
         $actionsLeft .= '<a id="hide_bar_template" href="#" role="button">'.Display::return_icon('expand.png', get_lang('Expand'), ['id' => 'expand'], ICON_SIZE_MEDIUM).Display::return_icon('contract.png', get_lang('Collapse'), ['id' => 'contract', 'class' => 'hide'], ICON_SIZE_MEDIUM).'</a>';
     }
 

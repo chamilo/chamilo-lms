@@ -34,10 +34,6 @@ if (empty($survey_data)) {
 
 // Database table definitions
 $table_survey = Database::get_course_table(TABLE_SURVEY);
-$table_survey_question = Database::get_course_table(TABLE_SURVEY_QUESTION);
-$table_survey_question_option = Database::get_course_table(TABLE_SURVEY_QUESTION_OPTION);
-$table_course = Database::get_main_table(TABLE_MAIN_COURSE);
-$table_user = Database::get_main_table(TABLE_MAIN_USER);
 
 $urlname = strip_tags(api_substr(api_html_entity_decode($survey_data['title'], ENT_QUOTES), 0, 40));
 if (api_strlen(strip_tags($survey_data['title'])) > 40) {
@@ -47,7 +43,7 @@ if (api_strlen(strip_tags($survey_data['title'])) > 40) {
 // Breadcrumbs
 $interbreadcrumb[] = [
     'url' => api_get_path(WEB_CODE_PATH).'survey/survey_list.php?'.api_get_cidreq(),
-    'name' => get_lang('SurveyList'),
+    'name' => get_lang('Survey list'),
 ];
 if (api_is_course_admin()) {
     if ($survey_data['survey_type'] == 3) {
@@ -67,7 +63,7 @@ if (api_is_course_admin()) {
         'name' => $urlname,
     ];
 }
-$tool_name = get_lang('SurveyPublication');
+$tool_name = get_lang('Publication of the survey');
 
 // Displaying the header
 Display::display_header($tool_name, 'Survey');
@@ -86,7 +82,7 @@ $sql = "SELECT * FROM $table_survey
         WHERE c_id = $course_id AND code='".Database::escape_string($survey_data['code'])."'";
 $result = Database::query($sql);
 if (Database::num_rows($result) > 1) {
-    echo Display::return_message(get_lang('IdenticalSurveycodeWarning'), 'warning');
+    echo Display::return_message(get_lang('This survey code already exists. That probably means the survey exists in other languages. Invited people will choose between different languages.'), 'warning');
 }
 
 // Invited / answered message
@@ -95,11 +91,11 @@ if ($survey_data['invited'] > 0 && !isset($_POST['submit'])) {
         $survey_data['answered'],
         api_get_path(WEB_CODE_PATH).'survey/survey_invitation.php?view=answered&survey_id='.$survey_data['survey_id'].'&'.api_get_cidreq()
     );
-    $message .= ' '.get_lang('HaveAnswered').' ';
+    $message .= ' '.get_lang('have answered').' ';
     $message .= Display::url(
         $survey_data['invited'],
         api_get_path(WEB_CODE_PATH).'survey/survey_invitation.php?view=invited&survey_id='.$survey_data['survey_id'].'&'.api_get_cidreq());
-    $message .= ' '.get_lang('WereInvited');
+    $message .= ' '.get_lang('were invited');
     echo Display::return_message($message, 'normal', false);
 }
 
@@ -132,52 +128,45 @@ CourseManager::addUserGroupMultiSelect($form, []);
 $form->addElement(
     'textarea',
     'additional_users',
-    [get_lang('AdditonalUsers'), get_lang('AdditonalUsersComment')],
+    [get_lang('Additional users'), get_lang('Additional usersComment')],
     ['rows' => 5]
 );
 
 $form->addElement('html', '<div id="check_mail">');
-$form->addElement('checkbox', 'send_mail', '', get_lang('SendMail'));
+$form->addElement('checkbox', 'send_mail', '', get_lang('Send mail'));
 $form->addElement('html', '</div>');
 $form->addElement('html', '<div id="mail_text_wrapper">');
 
 // The title of the mail
-$form->addText('mail_title', get_lang('MailTitle'), false);
+$form->addText('mail_title', get_lang('Mail subject'), false);
 // The text of the mail
 $form->addHtmlEditor(
     'mail_text',
-    [get_lang('MailText'), get_lang('UseLinkSyntax')],
+    [get_lang('E-mail message'), get_lang('The selected users will receive an email with the text above and a unique link that they have to click to fill the survey. If you want to put the link somewhere in your text you have to put the following text wherever you want in your text: **link** (star star link star star). This will then automatically be replaced by the unique link. If you do not add **link** to your text then the email link will be added to the end of the mail')],
     false,
     ['ToolbarSet' => 'Survey', 'Height' => '150']
 );
 $form->addElement('html', '</div>');
 // You cab send a reminder to unanswered people if the survey is not anonymous
 if ($survey_data['anonymous'] != 1 || api_get_configuration_value('survey_anonymous_show_answered')) {
-    $form->addElement('checkbox', 'remindUnAnswered', '', get_lang('RemindUnanswered'));
+    $form->addElement('checkbox', 'remindUnAnswered', '', get_lang('Remind only users who didn\'t answer'));
 }
 // Allow resending to all selected users
-$form->addElement('checkbox', 'resend_to_all', '', get_lang('ReminderResendToAllUsers'));
+$form->addElement('checkbox', 'resend_to_all', '', get_lang('Remind all users of the survey. If you do not check this checkbox only the newly-added users will receive an e-mail.'));
+$form->addElement('checkbox', 'hide_link', '', get_lang('Hide survey invitation link'));
 
 // Submit button
-$form->addButtonSave(get_lang('PublishSurvey'));
-// The rules (required fields)
-/*if ($survey_data['send_mail'] == 0) {
-    $form->addRule('mail_title', get_lang('ThisFieldIsRequired'), 'required');
-    $form->addRule('mail_text', get_lang('ThisFieldIsRequired'), 'required');
-}*/
-$portal_url = api_get_path(WEB_PATH);
-if (api_is_multiple_url_enabled()) {
-    $access_url_id = api_get_current_access_url_id();
-    if ($access_url_id != -1) {
-        $url = api_get_access_url($access_url_id);
-        $portal_url = $url['url'];
-    }
-}
+$form->addButtonSave(get_lang('Publish survey'));
 
 // Show the URL that can be used by users to fill a survey without invitation
-$auto_survey_link = SurveyUtil::generateFillSurveyLink('auto', $_course, $survey_data['session_id'], $survey_data['survey_code']);
+$auto_survey_link = SurveyUtil::generateFillSurveyLink(
+    'auto',
+    $_course,
+    $survey_data['session_id'],
+    $survey_data['survey_code']
+);
 
-$form->addElement('label', null, get_lang('AutoInviteLink'));
+$form->addElement('label', null, get_lang('Users who are not invited can use this link to take the survey:'));
 $form->addElement('label', null, $auto_survey_link);
 
 if ($form->validate()) {
@@ -187,10 +176,11 @@ if ($form->validate()) {
     $sendMail = isset($values['send_mail']) ? $values['send_mail'] : '';
     $remindUnAnswered = isset($values['remindUnAnswered']) ? $values['remindUnAnswered'] : '';
     $users = isset($values['users']) ? $values['users'] : [];
+    $hideLink = isset($values['hide_link']) && $values['hide_link'] ? true : false;
 
     if ($sendMail) {
         if (empty($values['mail_title']) || empty($values['mail_text'])) {
-            echo Display::return_message(get_lang('FormHasErrorsPleaseComplete'), 'error');
+            echo Display::return_message(get_lang('The form contains incorrect or incomplete data. Please check your input.'), 'error');
             // Getting the invited users
             $defaults = SurveyUtil::get_invited_users($survey_data['code']);
 
@@ -223,7 +213,9 @@ if ($form->validate()) {
         $values['mail_text'],
         $resendAll,
         $sendMail,
-        $remindUnAnswered
+        $remindUnAnswered,
+        false,
+        $hideLink
     );
 
     // Saving the invitations for the additional users
@@ -252,13 +244,13 @@ if ($form->validate()) {
     if ($total_invited > 0) {
         $message = '<a href="'.$invitationUrl.'&view=answered">'.
             $survey_data['answered'].'</a> ';
-        $message .= get_lang('HaveAnswered').' ';
+        $message .= get_lang('have answered').' ';
         $message .= '<a href="'.$invitationUrl.'&view=invited">'.
             $total_invited.'</a> ';
-        $message .= get_lang('WereInvited');
+        $message .= get_lang('were invited');
         echo Display::return_message($message, 'normal', false);
         if ($sendMail) {
-            echo Display::return_message($total_count.' '.get_lang('InvitationsSend'), 'success', false);
+            echo Display::return_message($total_count.' '.get_lang('invitations sent.'), 'success', false);
         }
     }
 } else {

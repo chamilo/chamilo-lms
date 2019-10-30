@@ -13,8 +13,6 @@ use Sonata\AdminBundle\Show\ShowMapper;
 
 /**
  * Class ResourceNodeAdmin.
- *
- * @package Chamilo\CoreBundle\Admin
  */
 class ResourceNodeAdmin extends AbstractAdmin
 {

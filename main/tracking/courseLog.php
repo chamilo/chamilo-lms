@@ -19,20 +19,20 @@ $sessionId = api_get_session_id();
 $sortByFirstName = api_sort_by_first_name();
 $from_myspace = false;
 $from = isset($_GET['from']) ? $_GET['from'] : null;
+$origin = api_get_origin();
 
 // Starting the output buffering when we are exporting the information.
-$export_csv = isset($_GET['export']) && $_GET['export'] == 'csv' ? true : false;
+$export_csv = isset($_GET['export']) && $_GET['export'] === 'csv' ? true : false;
 
 $htmlHeadXtra[] = api_get_js('chartjs/Chart.min.js');
 $htmlHeadXtra[] = ' ';
 
 $this_section = SECTION_COURSES;
-if ($from == 'myspace') {
+if ($from === 'myspace') {
     $from_myspace = true;
     $this_section = 'session_my_space';
 }
 
-// Access restrictions.
 $is_allowedToTrack = Tracking::isAllowToTrack($sessionId);
 
 if (!$is_allowedToTrack) {
@@ -44,11 +44,7 @@ if (api_is_drh()) {
     // Blocking course for drh
     if (api_drh_can_access_all_session_content()) {
         // If the drh has been configured to be allowed to see all session content, give him access to the session courses
-        $coursesFromSession = SessionManager::getAllCoursesFollowedByUser(
-            api_get_user_id(),
-            null
-        );
-
+        $coursesFromSession = SessionManager::getAllCoursesFollowedByUser(api_get_user_id(), null);
         $coursesFromSessionCodeList = [];
         if (!empty($coursesFromSession)) {
             foreach ($coursesFromSession as $course) {
@@ -63,7 +59,7 @@ if (api_is_drh()) {
 
         if (!in_array($courseCode, $coursesFollowedList)) {
             if (!in_array($courseCode, $coursesFromSessionCodeList)) {
-                api_not_allowed();
+                api_not_allowed(true);
             }
         }
     } else {
@@ -89,7 +85,6 @@ if (!empty($columnsToHideFromSetting) && isset($columnsToHideFromSetting['column
     $columnsToHide = $columnsToHideFromSetting['columns'];
 }
 $columnsToHide = json_encode($columnsToHide);
-
 $csv_content = [];
 
 // Scripts for reporting array hide/show columns
@@ -108,7 +103,7 @@ $js = "<script>
                 $(this).prepend(
                     '<div style=\"cursor:pointer\" onclick=\"foldup(' + index + ')\">".Display::return_icon(
                         'visible.png',
-                        get_lang('HideColumn'),
+                        get_lang('Hide column'),
                         ['align' => 'absmiddle', 'hspace' => '3px'],
                         ICON_SIZE_SMALL
                      )."</div>'
@@ -142,44 +137,42 @@ $table_user = Database::get_main_table(TABLE_MAIN_USER);
 $TABLEQUIZ = Database::get_course_table(TABLE_QUIZ_TEST);
 
 // Breadcrumbs.
-if (isset($_GET['origin']) && $_GET['origin'] == 'resume_session') {
+if ($origin === 'resume_session') {
     $interbreadcrumb[] = [
         'url' => '../admin/index.php',
-        'name' => get_lang('PlatformAdmin'),
+        'name' => get_lang('Administration'),
     ];
     $interbreadcrumb[] = [
         'url' => '../session/session_list.php',
-        'name' => get_lang('SessionList'),
+        'name' => get_lang('Session list'),
     ];
     $interbreadcrumb[] = [
         'url' => '../session/resume_session.php?id_session='.$sessionId,
-        'name' => get_lang('SessionOverview'),
+        'name' => get_lang('Session overview'),
     ];
 }
 
 $view = isset($_REQUEST['view']) ? $_REQUEST['view'] : '';
-$nameTools = get_lang('Tracking');
+$nameTools = get_lang('Reporting');
 
-//Template Tracking
 $tpl = new Template($nameTools);
-
-// getting all the students of the course
+// Getting all the students of the course
 if (empty($sessionId)) {
     // Registered students in a course outside session.
-    $a_students = CourseManager::get_student_list_from_course_code($courseId);
+    $studentList = CourseManager::get_student_list_from_course_code($courseId);
 } else {
     // Registered students in session.
-    $a_students = CourseManager::get_student_list_from_course_code($courseId, true, $sessionId);
+    $studentList = CourseManager::get_student_list_from_course_code($courseId, true, $sessionId);
 }
 
-$nbStudents = count($a_students);
-$user_ids = array_keys($a_students);
+$nbStudents = count($studentList);
+$user_ids = array_keys($studentList);
 $extra_info = [];
 $userProfileInfo = [];
 // Getting all the additional information of an additional profile field.
 if (isset($_GET['additional_profile_field'])) {
     $user_array = [];
-    foreach ($a_students as $key => $item) {
+    foreach ($studentList as $key => $item) {
         $user_array[] = $key;
     }
 
@@ -197,19 +190,18 @@ if (isset($_GET['additional_profile_field'])) {
 Session::write('additional_user_profile_info', $userProfileInfo);
 Session::write('extra_field_info', $extra_info);
 
-// Display the header.
 Display::display_header($nameTools, 'Tracking');
 
 $actionsLeft = TrackingCourseLog::actionsLeft('users', $sessionId);
 
-$actionsRight = '<div class="float-right">';
+$actionsRight = '<div class="pull-right">';
 $actionsRight .= '<a href="javascript: void(0);" onclick="javascript: window.print();">'.
     Display::return_icon('printer.png', get_lang('Print'), '', ICON_SIZE_MEDIUM).'</a>';
 
-$addional_param = '';
+$additionalParams = '';
 if (isset($_GET['additional_profile_field'])) {
     foreach ($_GET['additional_profile_field'] as $fieldId) {
-        $addional_param .= '&additional_profile_field[]='.(int) $fieldId;
+        $additionalParams .= '&additional_profile_field[]='.(int) $fieldId;
     }
 }
 
@@ -218,8 +210,8 @@ if (isset($_GET['users_tracking_per_page'])) {
     $users_tracking_per_page = '&users_tracking_per_page='.intval($_GET['users_tracking_per_page']);
 }
 
-$actionsRight .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&export=csv&'.$addional_param.$users_tracking_per_page.'">
-     '.Display::return_icon('export_csv.png', get_lang('ExportAsCSV'), '', ICON_SIZE_MEDIUM).'</a>';
+$actionsRight .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&export=csv&'.$additionalParams.$users_tracking_per_page.'">
+     '.Display::return_icon('export_csv.png', get_lang('CSV export'), '', ICON_SIZE_MEDIUM).'</a>';
 $actionsRight .= '</div>';
 // Create a search-box.
 $form_search = new FormValidator(
@@ -234,7 +226,7 @@ $form_search->addHidden('from', Security::remove_XSS($from));
 $form_search->addHidden('session_id', $sessionId);
 $form_search->addHidden('id_session', $sessionId);
 $form_search->addElement('text', 'user_keyword');
-$form_search->addButtonSearch(get_lang('SearchUsers'));
+$form_search->addButtonSearch(get_lang('Search users'));
 echo Display::toolbarAction(
     'toolbar-courselog',
     [$actionsLeft, $form_search->returnForm(), $actionsRight]
@@ -283,7 +275,7 @@ if (!empty($sessionId)) {
 }
 $html = '';
 if (!empty($teacherList)) {
-    $html .= Display::page_subheader2(get_lang('Teachers'));
+    $html .= Display::page_subheader2(get_lang('Trainers'));
     $html .= $teacherList;
 }
 
@@ -296,7 +288,7 @@ $showReporting = api_get_configuration_value('hide_reporting_session_list') === 
 if ($showReporting) {
     $sessionList = SessionManager::get_session_by_course($courseInfo['real_id']);
     if (!empty($sessionList)) {
-        $html .= Display::page_subheader2(get_lang('SessionList'));
+        $html .= Display::page_subheader2(get_lang('Session list'));
         $icon = Display::return_icon(
             'session.png',
             null,
@@ -354,7 +346,7 @@ if ($nbStudents > 0) {
 
     $hideReports = api_get_configuration_value('hide_course_report_graph');
 
-    if ($hideReports == false) {
+    if ($hideReports === false) {
         foreach ($usersTracking as $userTracking) {
             $userInfo = api_get_user_info_from_username($userTracking[3]);
             if (empty($userInfo)) {
@@ -418,10 +410,10 @@ if ($nbStudents > 0) {
     }
 }
 
-$html .= Display::page_subheader2(get_lang('StudentList'));
+$html .= Display::page_subheader2(get_lang('Learners list'));
 
 if ($nbStudents > 0) {
-    $getLangXDays = get_lang('XDays');
+    $getLangXDays = get_lang('%s days');
     $form = new FormValidator(
         'reminder_form',
         'get',
@@ -443,7 +435,7 @@ if ($nbStudents > 0) {
     ];
     $el = $form->addSelect(
         'since',
-        Display::returnFontAwesomeIcon('warning').get_lang('RemindInactivesLearnersSince'),
+        Display::returnFontAwesomeIcon('warning').get_lang('Remind learners inactive since'),
         $options,
         ['disable_js' => true]
     );
@@ -453,7 +445,7 @@ if ($nbStudents > 0) {
     $form->addElement('hidden', 'remindallinactives', 'true');
     $form->addElement('hidden', 'cidReq', $courseInfo['code']);
     $form->addElement('hidden', 'id_session', api_get_session_id());
-    $form->addButtonSend(get_lang('SendNotification'));
+    $form->addButtonSend(get_lang('Notify'));
 
     $extra_field_select = TrackingCourseLog::display_additional_profile_fields();
 
@@ -468,9 +460,6 @@ if ($nbStudents > 0) {
         //override the SortableTable "per page" limit if CSV
         $_GET['users_tracking_per_page'] = 1000000;
     }
-
-    $all_datas = [];
-    $course_code = $_course['id'];
 
     $table = new SortableTableFromArray(
         $usersTracking,
@@ -488,69 +477,69 @@ if ($nbStudents > 0) {
 
     $headers = [];
     // tab of header texts
-    $table->set_header(0, get_lang('OfficialCode'), true);
-    $headers['official_code'] = get_lang('OfficialCode');
+    $table->set_header(0, get_lang('Code'), true);
+    $headers['official_code'] = get_lang('Code');
     if ($sortByFirstName) {
-        $table->set_header(1, get_lang('FirstName'), true);
-        $table->set_header(2, get_lang('LastName'), true);
-        $headers['firstname'] = get_lang('FirstName');
-        $headers['lastname'] = get_lang('LastName');
+        $table->set_header(1, get_lang('First name'), true);
+        $table->set_header(2, get_lang('Last name'), true);
+        $headers['firstname'] = get_lang('First name');
+        $headers['lastname'] = get_lang('Last name');
     } else {
-        $table->set_header(1, get_lang('LastName'), true);
-        $table->set_header(2, get_lang('FirstName'), true);
-        $headers['lastname'] = get_lang('LastName');
-        $headers['firstname'] = get_lang('FirstName');
+        $table->set_header(1, get_lang('Last name'), true);
+        $table->set_header(2, get_lang('First name'), true);
+        $headers['lastname'] = get_lang('Last name');
+        $headers['firstname'] = get_lang('First name');
     }
     $table->set_header(3, get_lang('Login'), false);
     $headers['login'] = get_lang('Login');
 
     $table->set_header(
         4,
-        get_lang('TrainingTime').'&nbsp;'.
-        Display::return_icon('info3.gif', get_lang('CourseTimeInfo'), ['align' => 'absmiddle', 'hspace' => '3px']),
+        get_lang('Time').'&nbsp;'.
+        Display::return_icon('info3.gif', get_lang('Time spent in the course'), ['align' => 'absmiddle', 'hspace' => '3px']),
         false,
         ['style' => 'width:110px;']
     );
-    $headers['training_time'] = get_lang('TrainingTime');
-    $table->set_header(5, get_lang('CourseProgress').'&nbsp;'.
+    $headers['training_time'] = get_lang('Time');
+    $table->set_header(5, get_lang('Progress').'&nbsp;'.
         Display::return_icon(
             'info3.gif',
-            get_lang('ScormAndLPProgressTotalAverage'),
+            get_lang('Average progress in courses'),
             ['align' => 'absmiddle', 'hspace' => '3px']
         ),
         false,
         ['style' => 'width:110px;']
     );
-    $headers['course_progress'] = get_lang('CourseProgress');
+    $headers['course_progress'] = get_lang('Progress');
 
-    $table->set_header(6, get_lang('ExerciseProgress').'&nbsp;'.
+    $table->set_header(6, get_lang('Exercise progress').'&nbsp;'.
         Display::return_icon(
             'info3.gif',
-            get_lang('ExerciseProgressInfo'),
+            get_lang('Exercise progressInfo'),
             ['align' => 'absmiddle', 'hspace' => '3px']
         ),
         false,
         ['style' => 'width:110px;']
     );
-    $headers['exercise_progress'] = get_lang('ExerciseProgress');
-    $table->set_header(7, get_lang('ExerciseAverage').'&nbsp;'.
-        Display::return_icon('info3.gif', get_lang('ExerciseAverageInfo'), ['align' => 'absmiddle', 'hspace' => '3px']),
+    $headers['exercise_progress'] = get_lang('Exercise progress');
+    $table->set_header(7, get_lang('Exercise average').'&nbsp;'.
+        Display::return_icon('info3.gif', get_lang('Exercise averageInfo'), ['align' => 'absmiddle', 'hspace' => '3px']),
         false,
         ['style' => 'width:110px;']
     );
-    $headers['exercise_average'] = get_lang('ExerciseAverage');
+    $headers['exercise_average'] = get_lang('Exercise average');
     $table->set_header(8, get_lang('Score').'&nbsp;'.
         Display::return_icon(
             'info3.gif',
-            get_lang('ScormAndLPTestTotalAverage'),
+            get_lang('Average of tests in Learning Paths'),
             ['align' => 'absmiddle', 'hspace' => '3px']
         ),
         false,
         ['style' => 'width:110px;']
     );
     $headers['score'] = get_lang('Score');
-    $table->set_header(9, get_lang('Student_publication'), false);
-    $headers['student_publication'] = get_lang('Student_publication');
+    $table->set_header(9, get_lang('Assignments'), false);
+    $headers['student_publication'] = get_lang('Assignments');
     $table->set_header(10, get_lang('Messages'), false);
     $headers['messages'] = get_lang('Messages');
     $table->set_header(11, get_lang('Classes'));
@@ -559,10 +548,10 @@ if ($nbStudents > 0) {
     if (empty($sessionId)) {
         $table->set_header(12, get_lang('Survey'), false);
         $headers['survey'] = get_lang('Survey');
-        $table->set_header(13, get_lang('FirstLoginInCourse'), false);
-        $headers['first_login'] = get_lang('FirstLoginInCourse');
-        $table->set_header(14, get_lang('LatestLoginInCourse'), false);
-        $headers['latest_login'] = get_lang('LatestLoginInCourse');
+        $table->set_header(13, get_lang('First access to course'), false);
+        $headers['first_login'] = get_lang('First access to course');
+        $table->set_header(14, get_lang('Latest access in course'), false);
+        $headers['latest_login'] = get_lang('Latest access in course');
         if (isset($_GET['additional_profile_field'])) {
             $counter = 15;
             foreach ($_GET['additional_profile_field'] as $fieldId) {
@@ -578,10 +567,10 @@ if ($nbStudents > 0) {
             $headers['details'] = get_lang('Details');
         }
     } else {
-        $table->set_header(12, get_lang('FirstLoginInCourse'), false);
-        $headers['first_login'] = get_lang('FirstLoginInCourse');
-        $table->set_header(13, get_lang('LatestLoginInCourse'), false);
-        $headers['latest_login'] = get_lang('LatestLoginInCourse');
+        $table->set_header(12, get_lang('First access to course'), false);
+        $headers['first_login'] = get_lang('First access to course');
+        $table->set_header(13, get_lang('Latest access in course'), false);
+        $headers['latest_login'] = get_lang('Latest access in course');
 
         if (isset($_GET['additional_profile_field'])) {
             $counter = 15;
@@ -598,7 +587,7 @@ if ($nbStudents > 0) {
     // display buttons to un hide hidden columns
     $html .= '<div id="unhideButtons" class="btn-toolbar">';
     $index = 0;
-    $getLangDisplayColumn = get_lang('DisplayColumn');
+    $getLangDisplayColumn = get_lang('Show column');
     foreach ($headers as $header) {
         $html .= Display::toolbarButton(
             $header,
@@ -613,13 +602,13 @@ if ($nbStudents > 0) {
         );
         $index++;
     }
-    $html .= "</div>";
-    // Display the table
-    $html .= "<div id='reporting_table'>";
+    $html .= '</div>';
+
+    $html .= '<div id="reporting_table">';
     $html .= $table->return_table();
-    $html .= "</div>";
+    $html .= '</div>';
 } else {
-    $html .= Display::return_message(get_lang('NoUsersInCourse'), 'warning', true);
+    $html .= Display::return_message(get_lang('No users in course'), 'warning', true);
 }
 
 echo Display::panel($html, $titleSession);
@@ -627,29 +616,29 @@ echo Display::panel($html, $titleSession);
 // Send the csv file if asked.
 if ($export_csv) {
     $csv_headers = [];
-    $csv_headers[] = get_lang('OfficialCode');
+    $csv_headers[] = get_lang('Code');
     if ($sortByFirstName) {
-        $csv_headers[] = get_lang('FirstName');
-        $csv_headers[] = get_lang('LastName');
+        $csv_headers[] = get_lang('First name');
+        $csv_headers[] = get_lang('Last name');
     } else {
-        $csv_headers[] = get_lang('LastName');
-        $csv_headers[] = get_lang('FirstName');
+        $csv_headers[] = get_lang('Last name');
+        $csv_headers[] = get_lang('First name');
     }
     $csv_headers[] = get_lang('Login');
-    $csv_headers[] = get_lang('TrainingTime');
-    $csv_headers[] = get_lang('CourseProgress');
-    $csv_headers[] = get_lang('ExerciseProgress');
-    $csv_headers[] = get_lang('ExerciseAverage');
+    $csv_headers[] = get_lang('Time');
+    $csv_headers[] = get_lang('Progress');
+    $csv_headers[] = get_lang('Exercise progress');
+    $csv_headers[] = get_lang('Exercise average');
     $csv_headers[] = get_lang('Score');
-    $csv_headers[] = get_lang('Student_publication');
+    $csv_headers[] = get_lang('Assignments');
     $csv_headers[] = get_lang('Messages');
 
     if (empty($sessionId)) {
         $csv_headers[] = get_lang('Survey');
     }
 
-    $csv_headers[] = get_lang('FirstLoginInCourse');
-    $csv_headers[] = get_lang('LatestLoginInCourse');
+    $csv_headers[] = get_lang('First access to course');
+    $csv_headers[] = get_lang('Latest access in course');
 
     if (isset($_GET['additional_profile_field'])) {
         foreach ($_GET['additional_profile_field'] as $fieldId) {
@@ -664,12 +653,11 @@ if ($export_csv) {
     array_unshift($csvContentInSession, $csv_headers);
 
     if ($sessionId) {
-        $sessionData = [];
         $sessionInfo = api_get_session_info($sessionId);
         $sessionDates = SessionManager::parseSessionDates($sessionInfo);
 
         array_unshift($csvContentInSession, [get_lang('Date'), $sessionDates['access']]);
-        array_unshift($csvContentInSession, [get_lang('SessionName'), $sessionInfo['name']]);
+        array_unshift($csvContentInSession, [get_lang('Session name'), $sessionInfo['name']]);
     }
 
     Export::arrayToCsv($csvContentInSession, 'reporting_student_list');

@@ -1,4 +1,10 @@
 // ---------------------------------------------------------
+// IMAGE PATH
+// ---------------------------------------------------------
+$svg-path: "../../../public/img/icons/svg/";
+$img-path: "../../../public/img/";
+
+// ---------------------------------------------------------
 // BREAKPOINTS
 // ---------------------------------------------------------
 
@@ -40,12 +46,14 @@ $default-black        : #000000;
 // ---------------------------------------------------------
 // linear-gradient(120deg, #00a5e4, #4a71d0);
 
-$page-background      : #fcfcfc;
+$page-background      : #FFFFFF;
 $menu-background      : #FFFFFF;
 $menu-secondary       : #ff3c7e;
+$breadcrumb-back      : #f9f9f9;
 
 // SIDEBAR
-$sidebar-background   : #5b6be8;
+$sidebar-background   : #003B88;
+$sidebar-border       : #0A366F;
 $sidebar-link         : #FFFFFF;
 $sidebar-link-item    : #acddfc;
 $sidebar-icon         : #00BCD4;
@@ -56,9 +64,11 @@ $header-link          : #54667a;
 $header-hover         : #ff3c7e;
 $breadcrumb-color     : #d2f1ff;
 $select-color         : #ced4da;
+
 //FOOTER
-$background-footer     : #28506a;
-$border-footer        : #28506a;
+$background-footer    : #3F51B5;
+$border-footer        : #3F51B5;
+
 // ---------------------------------------------------------
 // OTHERS
 // ---------------------------------------------------------
@@ -69,19 +79,13 @@ $offscreen-size       : 280px;
 $card-border-color    : #e5e9f2;
 $row-table-select     : #f9ffff;
 $default-yellow       : #FFCC00;
+
 // ---------------------------------------------------------
 // FONTS
 // ---------------------------------------------------------
-
 $font-primary: Roboto, -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
 $font-secondary: $font-primary;
 $font-size-base: 0.875rem;
-
-// ---------------------------------------------------------
-// IMAGE PATH
-// ---------------------------------------------------------
-$svg-path: "../img/icons/svg/";
-$img-path: "../img/icons/";
 
 // ---------------------------------------------------------
 // FORMS
@@ -101,16 +105,16 @@ $dark_custom:          #607d8b !default;
 $theme-colors-custom: () !default;
 // stylelint-disable-next-line scss/dollar-variable-default
 $theme-colors-custom: map-merge(
-  (
-    "primary":    $primary_custom,
-    "secondary":  $secondary_custom,
-    "success":    $success_custom,
-    "info":       $info_custom,
-    "warning":    $warning_custom,
-    "danger":     $danger_custom,
-    "light":      $light_custom,
-    "dark":       $dark_custom
-  ),
-  $theme-colors-custom
+    (
+            "primary": $primary_custom,
+            "secondary": $secondary_custom,
+            "success": $success_custom,
+            "info": $info_custom,
+            "warning": $warning_custom,
+            "danger": $danger_custom,
+            "light": $light_custom,
+            "dark": $dark_custom
+    ),
+    $theme-colors-custom
 );
 

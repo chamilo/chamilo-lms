@@ -16,12 +16,12 @@ $htmlHeadXtra[] = api_get_asset('datepair.js/dist/jquery.datepair.js');
 
 $interbreadcrumb[] = [
     'url' => api_get_path(WEB_CODE_PATH).'survey/survey_list.php?'.api_get_cidreq(),
-    'name' => get_lang('SurveyList'),
+    'name' => get_lang('Survey list'),
 ];
 
 $courseInfo = api_get_course_info();
 
-$tool_name = get_lang('CreateMeeting');
+$tool_name = get_lang('Create meeting poll');
 
 $form = new FormValidator(
     'survey',
@@ -45,20 +45,20 @@ $text = $form->addText(
 $allowSurveyAvailabilityDatetime = api_get_configuration_value('allow_survey_availability_datetime');
 
 if ($allowSurveyAvailabilityDatetime) {
-    $startDateElement = $form->addDateTimePicker('start_date', get_lang('StartDate'));
-    $endDateElement = $form->addDateTimePicker('end_date', get_lang('EndDate'));
-    $form->addRule('start_date', get_lang('InvalidDate'), 'datetime');
-    $form->addRule('end_date', get_lang('InvalidDate'), 'datetime');
+    $startDateElement = $form->addDateTimePicker('start_date', get_lang('Start Date'));
+    $endDateElement = $form->addDateTimePicker('end_date', get_lang('End Date'));
+    $form->addRule('start_date', get_lang('Invalid date'), 'datetime');
+    $form->addRule('end_date', get_lang('Invalid date'), 'datetime');
 } else {
-    $startDateElement = $form->addElement('date_picker', 'start_date', get_lang('StartDate'));
-    $endDateElement = $form->addElement('date_picker', 'end_date', get_lang('EndDate'));
-    $form->addRule('start_date', get_lang('InvalidDate'), 'date');
-    $form->addRule('end_date', get_lang('InvalidDate'), 'date');
+    $startDateElement = $form->addElement('date_picker', 'start_date', get_lang('Start Date'));
+    $endDateElement = $form->addElement('date_picker', 'end_date', get_lang('End Date'));
+    $form->addRule('start_date', get_lang('Invalid date'), 'date');
+    $form->addRule('end_date', get_lang('Invalid date'), 'date');
 }
 
 $form->addRule(
     ['start_date', 'end_date'],
-    get_lang('StartDateShouldBeBeforeEndDate'),
+    get_lang('Start DateShouldBeBeforeEnd Date'),
     'date_compare',
     'lte'
 );
@@ -108,7 +108,7 @@ $form->addLabel(
     )
 );
 
-$form->addButtonCreate(get_lang('CreateSurvey'), 'submit_survey');
+$form->addButtonCreate(get_lang('Create survey'), 'submit_survey');
 
 $defaults = [];
 $form->setDefaults($defaults);

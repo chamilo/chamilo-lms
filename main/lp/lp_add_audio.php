@@ -30,40 +30,40 @@ $lp = Session::read('oLP');
 if (api_is_in_gradebook()) {
     $interbreadcrumb[] = [
         'url' => Category::getUrl(),
-        'name' => get_lang('ToolGradebook'),
+        'name' => get_lang('Assessments'),
     ];
 }
 
 $interbreadcrumb[] = [
     'url' => 'lp_controller.php?action=list&'.api_get_cidreq(),
-    'name' => get_lang('LearningPaths'),
+    'name' => get_lang('Learning paths'),
 ];
 $interbreadcrumb[] = [
     'url' => api_get_self()."?action=build&lp_id=$learnpath_id&".api_get_cidreq(),
-    'name' => $lp->get_name(),
+    'name' => $lp->getNameNoTags(),
 ];
 
 switch ($type) {
     case 'dir':
         $interbreadcrumb[] = [
             'url' => 'lp_controller.php?action=add_item&type=step&lp_id='.$lp->get_id().'&'.api_get_cidreq(),
-            'name' => get_lang('NewStep'),
+            'name' => get_lang('Add learning object or activity'),
         ];
-        $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('NewChapter')];
+        $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Add section')];
         break;
     case 'document':
         $interbreadcrumb[] = [
             'url' => 'lp_controller.php?action=add_item&type=step&lp_id='.$lp->get_id().'&'.api_get_cidreq(),
-            'name' => get_lang('NewStep'),
+            'name' => get_lang('Add learning object or activity'),
         ];
         break;
     default:
-        $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('NewStep')];
+        $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Add learning object or activity')];
         break;
 }
 
 if ($action == 'add_item' && $type == 'document') {
-    $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('NewDocumentCreated')];
+    $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('The rich media page/activity has been added to the course')];
 }
 
 // Theme calls.
@@ -83,9 +83,13 @@ $form = new FormValidator(
     null,
     ['enctype' => 'multipart/form-data']
 );
-$suredel = trim(get_lang('AreYouSureToDeleteJS'));
+$suredel = trim(get_lang('Are you sure to delete'));
 
 $lpPathInfo = $lp->generate_lp_folder(api_get_course_info());
+
+DocumentManager::createDefaultAudioFolder($courseInfo);
+
+$audioFolderId = DocumentManager::get_document_id($courseInfo, '/audio');
 
 $file = null;
 if (isset($lp_item->audio) && !empty($lp_item->audio)) {
@@ -106,7 +110,7 @@ $page .= $lp->return_new_tree(null, true);
 // Show the template list.
 $page .= '</div>';
 
-$recordVoiceForm = Display::page_subheader(get_lang('RecordYourVoice'));
+$recordVoiceForm = Display::page_subheader(get_lang('Record your voice'));
 
 $page .= '<div id="doc_form" class="col-md-8">';
 
@@ -123,9 +127,9 @@ $tpl->assign('enable_record_audio', api_get_setting('enable_record_audio') === '
 $tpl->assign('cur_dir_path', '/audio');
 $tpl->assign('lp_item_id', $lp_item_id);
 $tpl->assign('lp_dir', api_remove_trailing_slash($lpPathInfo['dir']));
-$form->addElement('header', get_lang('Or'));
-$form->addElement('header', get_lang('AudioFile'));
-$form->addLabel(null, sprintf(get_lang('AudioFileForItemX'), $lp_item->get_title()));
+$form->addElement('header', get_lang('or'));
+$form->addElement('header', get_lang('Audio file'));
+$form->addLabel(null, sprintf(get_lang('Audio fileForItemX'), $lp_item->get_title()));
 
 if (!empty($file)) {
     $audioPlayer = '<div id="preview">'.
@@ -137,7 +141,7 @@ if (!empty($file)) {
         'label',
         null,
         Display::url(
-            get_lang('RemoveAudio'),
+            get_lang('Remove audio'),
             $url,
             ['class' => 'btn btn-danger']
         )
@@ -147,26 +151,27 @@ if (!empty($file)) {
     $form->addElement('hidden', 'id', $lp_item_id);
     $form->addButtonSave(get_lang('Save'));
 }
-$form->addElement('header', get_lang('Or'));
+$form->addElement('header', get_lang('or'));
 
 $courseInfo = api_get_course_info();
 $documentTree = DocumentManager::get_document_preview(
     $courseInfo,
-    false,
+    $lp->get_id(),
     null,
     api_get_session_id(),
     false,
     '',
     api_get_path(WEB_CODE_PATH).'lp/lp_controller.php?action=add_audio&lp_id='.$lp->get_id().'&id='.$lp_item_id,
     false,
-    true
+    true,
+    $audioFolderId
 );
 
 $tpl->assign('pre_page', $page);
 
 $tpl->assign('form', $form->returnForm());
 
-$page = '<legend>'.get_lang('SelectAnAudioFileFromDocuments').'</legend>';
+$page = '<legend>'.get_lang('SelectAnAudio fileFromDocuments').'</legend>';
 $page .= $documentTree;
 $page .= '</div>';
 $page .= '</div>';

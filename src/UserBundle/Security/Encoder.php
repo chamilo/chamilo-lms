@@ -72,7 +72,7 @@ class Encoder extends BasePasswordEncoder
                 break;
             case 'sha1':
             case 'md5':
-                $defaultEncoder = new MessageDigestPasswordEncoder($this->method, false, 1);
+                $defaultEncoder = new MessageDigestPasswordEncoder($this->passwordEncrypt, false, 1);
                 break;
         }
 

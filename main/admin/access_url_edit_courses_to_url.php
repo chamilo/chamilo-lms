@@ -26,15 +26,10 @@ if (!api_get_multiple_access_url()) {
     exit;
 }
 
-// Database Table Definitions
-$tbl_access_url_rel_course = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
-$tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
-$tbl_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL);
-
 // setting breadcrumbs
-$tool_name = get_lang('EditCoursesToURL');
-$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('PlatformAdmin')];
-$interbreadcrumb[] = ['url' => 'access_urls.php', 'name' => get_lang('MultipleAccessURLs')];
+$tool_name = get_lang('Edit courses of an URL');
+$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('Administration')];
+$interbreadcrumb[] = ['url' => 'access_urls.php', 'name' => get_lang('Multiple access URL / Branding')];
 
 $add_type = 'multiple';
 if (isset($_REQUEST['add_type']) && $_REQUEST['add_type'] != '') {
@@ -76,10 +71,6 @@ function remove_item(origin) {
 }
 </script>';
 
-$form_sent = 0;
-$UserList = $SessionList = [];
-$users = $sessions = [];
-
 if (isset($_POST['form_sent']) && $_POST['form_sent']) {
     $form_sent = $_POST['form_sent'];
     $course_list = $_POST['course_list'];
@@ -90,11 +81,11 @@ if (isset($_POST['form_sent']) && $_POST['form_sent']) {
 
     if ($form_sent == 1) {
         if ($access_url_id == 0) {
-            Display::addFlash(Display::return_message(get_lang('SelectURL')));
+            Display::addFlash(Display::return_message(get_lang('Select a URL')));
             header('Location: access_url_edit_users_to_url.php?');
         } elseif (is_array($course_list)) {
             UrlManager::update_urls_rel_course($course_list, $access_url_id);
-            Display::addFlash(Display::return_message(get_lang('CoursesWereEdited')));
+            Display::addFlash(Display::return_message(get_lang('Courses updated successfully')));
             header('Location: access_urls.php?');
         }
         exit;
@@ -105,7 +96,7 @@ Display::display_header($tool_name);
 
 echo '<div class="actions">';
 echo Display::url(
-    Display::return_icon('view_more_stats.gif', get_lang('AddUserToURL')),
+    Display::return_icon('view_more_stats.gif', get_lang('Add user to this URL')),
     api_get_path(WEB_CODE_PATH).'admin/access_url_add_courses_to_url.php'
 );
 echo '</div>';
@@ -145,12 +136,12 @@ if ($ajax_search) {
 
 if ($add_type == 'multiple') {
     $link_add_type_unique = '<a href="'.api_get_self().'?add_type=unique&access_url_id='.$access_url_id.'">'.
-        get_lang('SessionAddTypeUnique').'</a>';
-    $link_add_type_multiple = get_lang('SessionAddTypeMultiple');
+        get_lang('Single registration').'</a>';
+    $link_add_type_multiple = get_lang('Multiple registration');
 } else {
-    $link_add_type_unique = get_lang('SessionAddTypeUnique');
+    $link_add_type_unique = get_lang('Single registration');
     $link_add_type_multiple = '<a href="'.api_get_self().'?add_type=multiple&access_url_id='.$access_url_id.'">'.
-        get_lang('SessionAddTypeMultiple').'</a>';
+        get_lang('Multiple registration').'</a>';
 }
 $url_list = UrlManager::get_url_data();
 ?>
@@ -161,9 +152,9 @@ $url_list = UrlManager::get_url_data();
 <form name="formulaire" method="post" action="<?php echo api_get_self(); ?>" style="margin:0px;" <?php if ($ajax_search) {
     echo ' onsubmit="valide();"';
 }?> >
-    <?php echo get_lang('SelectUrl').' : '; ?>
+    <?php echo get_lang('Select URL').' : '; ?>
     <select name="access_url_id" onchange="javascript:send();">
-        <option value="0">-- <?php echo get_lang('SelectUrl'); ?> -- </option>
+        <option value="0">-- <?php echo get_lang('Select URL'); ?> -- </option>
         <?php
         $url_selected = '';
         foreach ($url_list as $url_obj) {
@@ -188,10 +179,10 @@ $url_list = UrlManager::get_url_data();
     <table border="0" cellpadding="5" cellspacing="0" width="100%">
         <!-- Users -->
         <tr>
-            <td align="center"><b><?php echo get_lang('CourseListInPlatform'); ?> :</b>
+            <td align="center"><b><?php echo get_lang('Courses list'); ?> :</b>
             </td>
             <td></td>
-            <td align="center"><b><?php echo get_lang('CourseListIn').' '.$url_selected; ?></b></td>
+            <td align="center"><b><?php echo get_lang('Courses of').' '.$url_selected; ?></b></td>
         </tr>
         <tr>
             <td align="center">
@@ -260,9 +251,9 @@ $url_list = UrlManager::get_url_data();
                 <br />
                 <?php
                 if (isset($_GET['add'])) {
-                    echo '<button class="btn btn-default" onclick="valide()" >'.get_lang('AddCoursesToURL').'</button>';
+                    echo '<button class="btn btn-default" onclick="valide()" >'.get_lang('Add courses to an URL').'</button>';
                 } else {
-                    echo '<button class="btn btn-default" onclick="valide()" >'.get_lang('EditCoursesToURL').'</button>';
+                    echo '<button class="btn btn-default" onclick="valide()" >'.get_lang('Edit courses of an URL').'</button>';
                 }
                 ?>
             </td>

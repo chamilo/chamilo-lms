@@ -23,7 +23,7 @@ if (empty($my_folder_data)) {
 }
 
 $work_data = get_work_assignment_by_id($workId);
-$tool_name = get_lang('StudentPublications');
+$tool_name = get_lang('Assignments');
 $group_id = api_get_group_id();
 $courseInfo = api_get_course_info();
 
@@ -61,13 +61,13 @@ if (!empty($group_id)) {
     ];
     $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'group/group_space.php?'.api_get_cidreq(),
-        'name' => get_lang('GroupSpace').' '.$group_properties['name'],
+        'name' => get_lang('Group area').' '.$group_properties['name'],
     ];
 }
 
 $interbreadcrumb[] = [
     'url' => api_get_path(WEB_CODE_PATH).'work/work.php?'.api_get_cidreq(),
-    'name' => get_lang('StudentPublications'),
+    'name' => get_lang('Assignments'),
 ];
 $interbreadcrumb[] = [
     'url' => api_get_path(WEB_CODE_PATH).'work/work_list_others.php?'.api_get_cidreq().'&id='.$workId,
@@ -78,7 +78,7 @@ Display :: display_header(null);
 
 echo '<div class="actions">';
 echo '<a href="'.api_get_path(WEB_CODE_PATH).'work/work.php?'.api_get_cidreq().'>'.
-    Display::return_icon('back.png', get_lang('BackToWorksList'), '', ICON_SIZE_MEDIUM).'</a>';
+    Display::return_icon('back.png', get_lang('Back to Assignments list'), '', ICON_SIZE_MEDIUM).'</a>';
 echo '</div>';
 
 if (!empty($my_folder_data['description'])) {
@@ -92,13 +92,13 @@ if (!empty($work_data['enable_qualification']) && !empty($check_qualification)) 
     $type = 'simple';
     $columns = [
         get_lang('Type'),
-        get_lang('FirstName'),
-        get_lang('LastName'),
+        get_lang('First name'),
+        get_lang('Last name'),
         get_lang('Title'),
-        get_lang('Qualification'),
+        get_lang('Score'),
         get_lang('Date'),
         get_lang('Status'),
-        get_lang('Actions'),
+        get_lang('Detail'),
     ];
     $column_model = [
         [
@@ -154,11 +154,11 @@ if (!empty($work_data['enable_qualification']) && !empty($check_qualification)) 
     $type = 'complex';
     $columns = [
         get_lang('Type'),
-        get_lang('FirstName'),
-        get_lang('LastName'),
+        get_lang('First name'),
+        get_lang('Last name'),
         get_lang('Title'),
         get_lang('Date'),
-        get_lang('Actions'),
+        get_lang('Detail'),
     ];
     $column_model = [
         [

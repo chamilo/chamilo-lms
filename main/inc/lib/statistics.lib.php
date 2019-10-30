@@ -165,6 +165,38 @@ class Statistics
     }
 
     /**
+     * @param string $startDate
+     * @param string $endDate
+     *
+     * @return array
+     */
+    public static function getCoursesWithActivity($startDate, $endDate)
+    {
+        $access_url_rel_course_table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
+        $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LASTACCESS);
+        $startDate = Database::escape_string($startDate);
+        $endDate = Database::escape_string($endDate);
+
+        $urlId = api_get_current_access_url_id();
+
+        if (api_is_multiple_url_enabled()) {
+            $sql = "SELECT DISTINCT(t.c_id) FROM $table t , $access_url_rel_course_table a
+                    WHERE
+                        t.c_id = a.c_id AND
+                        access_url_id='".$urlId."' AND
+                        access_date BETWEEN '$startDate' AND '$endDate'
+                    ";
+        } else {
+            $sql = "SELECT DISTINCT(t.c_id) FROM $table t
+                   access_date BETWEEN '$startDate' AND '$endDate' ";
+        }
+
+        $result = Database::query($sql);
+
+        return Database::store_result($result);
+    }
+
+    /**
      * Count activities from track_e_default_table.
      *
      * @return int Number of activities counted
@@ -480,7 +512,7 @@ class Statistics
             $where_url_last = ' AND login_date > DATE_SUB("'.$now.'",INTERVAL 1 %s)';
         }
 
-        $period = get_lang('PeriodMonth');
+        $period = get_lang('Month');
         $periodCollection = api_get_months_long();
         $sql = "SELECT 
                 DATE_FORMAT( login_date, '%Y-%m' ) AS stat_date , 
@@ -492,7 +524,7 @@ class Statistics
 
         switch ($type) {
             case 'hour':
-                $period = get_lang('PeriodHour');
+                $period = get_lang('Hour');
                 $sql = "SELECT 
                           DATE_FORMAT( login_date, '%H') AS stat_date, 
                           count( login_id ) AS number_of_logins 
@@ -508,7 +540,7 @@ class Statistics
                 break;
             case 'day':
                 $periodCollection = api_get_week_days_long();
-                $period = get_lang('PeriodDay');
+                $period = get_lang('Day');
                 $sql = "SELECT DATE_FORMAT( login_date, '%w' ) AS stat_date , 
                         count( login_id ) AS number_of_logins 
                         FROM  $table $table_url $where_url 
@@ -530,7 +562,7 @@ class Statistics
                 $stat_date = ($type === 'day') ? $periodCollection[$obj->stat_date] : $obj->stat_date;
                 $result_last_x[$stat_date] = $obj->number_of_logins;
             }
-            self::printStats(get_lang('LastLogins').' ('.$period.')', $result_last_x, true);
+            self::printStats(get_lang('Last logins').' ('.$period.')', $result_last_x, true);
             flush(); //flush web request at this point to see something already while the full data set is loading
             echo '<br />';
         }
@@ -550,7 +582,7 @@ class Statistics
             }
             $result[$stat_date] = $obj->number_of_logins;
         }
-        self::printStats(get_lang('AllLogins').' ('.$period.')', $result, true);
+        self::printStats(get_lang('All logins').' ('.$period.')', $result, true);
     }
 
     /**
@@ -594,7 +626,7 @@ class Statistics
             $localDate = api_get_local_time($startDate, null, null, false, false);
             $localEndDate = api_get_local_time($endDate, null, null, false, false);
 
-            $label = sprintf(get_lang('LastXDays'), $day);
+            $label = sprintf(get_lang('Last %s days'), $day);
             if ($day == 1) {
                 $label = get_lang('Today');
             }
@@ -620,10 +652,45 @@ class Statistics
             $totalLogin[$label] = $obj->number;
         }
         if ($distinct) {
-            self::printStats(get_lang('DistinctUsersLogins'), $totalLogin, false);
+            self::printStats(get_lang('Distinct users logins'), $totalLogin, false);
         } else {
             self::printStats(get_lang('Logins'), $totalLogin, false);
         }
+    }
+
+    public static function getLoginCount($startDate, $endDate)
+    {
+        $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
+        $access_url_rel_user_table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
+        $urlId = api_get_current_access_url_id();
+        $table_url = '';
+        $where_url = '';
+        if (api_is_multiple_url_enabled()) {
+            $table_url = ", $access_url_rel_user_table";
+            $where_url = " AND login_user_id=user_id AND access_url_id='".$urlId."'";
+        }
+        $startDate = Database::escape_string($startDate);
+        $endDate = Database::escape_string($endDate);
+
+        $sql = "
+                SELECT count(logins) count FROM (
+                    SELECT count(login_user_id) AS logins
+                    FROM $table $table_url 
+                    WHERE 
+                    login_date BETWEEN '$startDate' AND '$endDate'  
+                    $where_url 
+                    GROUP BY login_user_id
+                ) as t
+                ";
+
+        $res = Database::query($sql);
+        $totalLogin = 0;
+        $row = Database::fetch_array($res, 'ASSOC');
+        if ($row) {
+            $totalLogin = $row['count'];
+        }
+
+        return $totalLogin;
     }
 
     /**
@@ -739,7 +806,7 @@ class Statistics
         if (empty($result)) {
             $result = self::getToolsStats();
         }
-        self::printStats(get_lang('PlatformToolAccess'), $result, true);
+        self::printStats(get_lang('Tools access'), $result, true);
     }
 
     /**
@@ -797,7 +864,7 @@ class Statistics
         $result[get_lang('No')] = $count1->n - $count2->n;
         $result[get_lang('Yes')] = $count2->n; // #users with picture
 
-        self::printStats(get_lang('CountUsers').' ('.get_lang('UserPicture').')', $result, true);
+        self::printStats(get_lang('Number of users').' ('.get_lang('Picture').')', $result, true);
     }
 
     /**
@@ -805,7 +872,7 @@ class Statistics
      */
     public static function printActivitiesStats()
     {
-        echo '<h4>'.get_lang('ImportantActivities').'</h4>';
+        echo '<h4>'.get_lang('Important activities').'</h4>';
         // Create a search-box
         $form = new FormValidator(
             'search_simple',
@@ -842,13 +909,13 @@ class Statistics
         }
 
         $table->set_additional_parameters($parameters);
-        $table->set_header(0, get_lang('EventType'));
-        $table->set_header(1, get_lang('DataType'));
+        $table->set_header(0, get_lang('Event type'));
+        $table->set_header(1, get_lang('Data type'));
         $table->set_header(2, get_lang('Value'));
         $table->set_header(3, get_lang('Course'));
         $table->set_header(4, get_lang('Session'));
-        $table->set_header(5, get_lang('UserName'));
-        $table->set_header(6, get_lang('IPAddress'));
+        $table->set_header(5, get_lang('Username'));
+        $table->set_header(6, get_lang('IP address'));
         $table->set_header(7, get_lang('Date'));
         $table->display();
     }
@@ -875,7 +942,7 @@ class Statistics
         }
         $form = new FormValidator('courselastvisit', 'get');
         $form->addElement('hidden', 'report', 'courselastvisit');
-        $form->addText('date_diff', get_lang('Days'), true);
+        $form->addText('date_diff', get_lang('days'), true);
         $form->addRule('date_diff', 'InvalidNumber', 'numeric');
         $form->addButtonSearch(get_lang('Search'), 'submit');
         if (!isset($_GET['date_diff'])) {
@@ -906,7 +973,7 @@ class Statistics
         $from = ($page_nr - 1) * $per_page;
         $sql .= ' LIMIT '.$from.','.$per_page;
 
-        echo '<p>'.get_lang('LastAccess').' &gt;= '.$date_diff.' '.get_lang('Days').'</p>';
+        echo '<p>'.get_lang('Latest access').' &gt;= '.$date_diff.' '.get_lang('days').'</p>';
         $res = Database::query($sql);
         if (Database::num_rows($res) > 0) {
             $courses = [];
@@ -920,8 +987,8 @@ class Statistics
             }
             $parameters['date_diff'] = $date_diff;
             $parameters['report'] = 'courselastvisit';
-            $table_header[] = [get_lang("CourseCode"), true];
-            $table_header[] = [get_lang("LastAccess"), true];
+            $table_header[] = [get_lang("Code"), true];
+            $table_header[] = [get_lang("Latest access"), true];
             Display:: display_sortable_table(
                 $table_header,
                 $courses,
@@ -930,7 +997,7 @@ class Statistics
                 $parameters
             );
         } else {
-            echo get_lang('NoSearchResults');
+            echo get_lang('No search results');
         }
     }
 
@@ -1045,23 +1112,23 @@ class Statistics
             $where_url = '';
         }
         $now = api_get_utc_datetime();
-        $sql[get_lang('ThisDay')] =
+        $sql[get_lang('This day')] =
             "SELECT count(distinct(login_user_id)) AS number ".
             " FROM $table $table_url ".
             " WHERE DATE_ADD(login_date, INTERVAL 1 DAY) >= '$now' $where_url";
-        $sql[get_lang('Last7days')] =
+        $sql[get_lang('In the last 7 days')] =
             "SELECT count(distinct(login_user_id)) AS number ".
             " FROM $table $table_url ".
             " WHERE DATE_ADD(login_date, INTERVAL 7 DAY) >= '$now' $where_url";
-        $sql[get_lang('Last31days')] =
+        $sql[get_lang('In the last 31 days')] =
             "SELECT count(distinct(login_user_id)) AS number ".
             " FROM $table $table_url ".
             " WHERE DATE_ADD(login_date, INTERVAL 31 DAY) >= '$now' $where_url";
-        $sql[sprintf(get_lang('LastXMonths'), 6)] =
+        $sql[sprintf(get_lang('Last %i months'), 6)] =
             "SELECT count(distinct(login_user_id)) AS number ".
             " FROM $table $table_url ".
             " WHERE DATE_ADD(login_date, INTERVAL 6 MONTH) >= '$now' $where_url";
-        $sql[get_lang('NeverConnected')] =
+        $sql[get_lang('Never connected')] =
             "SELECT count(distinct(login_user_id)) AS number ".
             " FROM $table $table_url WHERE 1=1 $where_url";
         foreach ($sql as $index => $query) {
@@ -1071,7 +1138,7 @@ class Statistics
             $totalLogin[$index] = $r < 0 ? 0 : $r;
         }
         self::printStats(
-            get_lang('StatsUsersDidNotLoginInLastPeriods'),
+            get_lang('Not logged in for some time'),
             $totalLogin,
             false
         );
@@ -1148,5 +1215,136 @@ class Statistics
         </script>';
 
         return $chartCode;
+    }
+
+    /**
+     * Display the Logins By Date report and allow export its result to XLS.
+     */
+    public static function printLoginsByDate()
+    {
+        if (isset($_GET['export']) && 'xls' === $_GET['export']) {
+            $result = self::getLoginsByDate($_GET['start'], $_GET['end']);
+            $data = [[get_lang('Username'), get_lang('First name'), get_lang('Last name'), get_lang('Total time')]];
+
+            foreach ($result as $i => $item) {
+                $data[] = [
+                    $item['username'],
+                    $item['firstname'],
+                    $item['lastname'],
+                    api_time_to_hms($item['time_count']),
+                ];
+            }
+
+            Export::arrayToXls($data);
+
+            exit;
+        }
+
+        echo Display::page_header(get_lang('Logins by date'));
+
+        $actions = '';
+        $content = '';
+
+        $form = new FormValidator('frm_logins_by_date', 'get');
+        $form->addDateRangePicker(
+            'daterange',
+            get_lang('Date range'),
+            true,
+            ['format' => 'YYYY-MM-DD', 'timePicker' => 'false', 'validate_format' => 'Y-m-d']
+        );
+        $form->addHidden('report', 'logins_by_date');
+        $form->addButtonFilter(get_lang('Search'));
+
+        if ($form->validate()) {
+            $values = $form->exportValues();
+
+            $result = self::getLoginsByDate($values['daterange_start'], $values['daterange_end']);
+
+            if (!empty($result)) {
+                $actions = Display::url(
+                    Display::return_icon('excel.png', get_lang('ExportToXls'), [], ICON_SIZE_MEDIUM),
+                    api_get_self().'?'.http_build_query(
+                        [
+                            'report' => 'logins_by_date',
+                            'export' => 'xls',
+                            'start' => Security::remove_XSS($values['daterange_start']),
+                            'end' => Security::remove_XSS($values['daterange_end']),
+                        ]
+                    )
+                );
+            }
+
+            $table = new HTML_Table(['class' => 'data_table']);
+            $table->setHeaderContents(0, 0, get_lang('Username'));
+            $table->setHeaderContents(0, 1, get_lang('First name'));
+            $table->setHeaderContents(0, 2, get_lang('Last name'));
+            $table->setHeaderContents(0, 3, get_lang('Total time'));
+
+            foreach ($result as $i => $item) {
+                $table->setCellContents($i + 1, 0, $item['username']);
+                $table->setCellContents($i + 1, 1, $item['firstname']);
+                $table->setCellContents($i + 1, 2, $item['lastname']);
+                $table->setCellContents($i + 1, 3, api_time_to_hms($item['time_count']));
+            }
+
+            $table->setColAttributes(0, ['class' => 'text-center']);
+            $table->setColAttributes(3, ['class' => 'text-center']);
+            $content = $table->toHtml();
+        }
+
+        $form->display();
+
+        if (!empty($actions)) {
+            echo  Display::toolbarAction('logins_by_date_toolbar', [$actions]);
+        }
+
+        echo $content;
+    }
+
+    /**
+     * @param string $startDate
+     * @param string $endDate
+     *
+     * @return array
+     */
+    private static function getLoginsByDate($startDate, $endDate)
+    {
+        /** @var DateTime $startDate */
+        $startDate = api_get_utc_datetime("$startDate 00:00:00");
+        /** @var DateTime $endDate */
+        $endDate = api_get_utc_datetime("$endDate 23:59:59");
+
+        if (empty($startDate) || empty($endDate)) {
+            return [];
+        }
+
+        $tblUser = Database::get_main_table(TABLE_MAIN_USER);
+        $tblLogin = Database::get_main_table(TABLE_STATISTIC_TRACK_E_LOGIN);
+        $urlJoin = '';
+        $urlWhere = '';
+
+        if (api_is_multiple_url_enabled()) {
+            $tblUrlUser = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
+
+            $urlJoin = "INNER JOIN $tblUrlUser au ON u.id = au.user_id";
+            $urlWhere = 'AND au.access_url_id = '.api_get_current_access_url_id();
+        }
+
+        $sql = "SELECT u.id,
+                    u.firstname,
+                    u.lastname,
+                    u.username,
+                    SUM(TIMESTAMPDIFF(SECOND, l.login_date, l.logout_date)) AS time_count
+                FROM $tblUser u
+                INNER JOIN $tblLogin l ON u.id = l.login_user_id
+                $urlJoin
+                WHERE l.login_date BETWEEN '$startDate' AND '$endDate'
+                $urlWhere
+                GROUP BY u.id";
+
+        $stmt = Database::query($sql);
+        $result = Database::store_result($stmt, 'ASSOC');
+
+        return $result;
     }
 }

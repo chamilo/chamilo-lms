@@ -16,13 +16,13 @@ $session_id = isset($_GET['id_session']) ? intval($_GET['id_session']) : null;
 SessionManager::protectSession($session_id);
 
 $form_sent = 0;
-$tool_name = get_lang('ImportUsers');
+$tool_name = get_lang('Import users');
 
-//$interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('PlatformAdmin'));
-$interbreadcrumb[] = ['url' => "session_list.php", "name" => get_lang('SessionList')];
+//$interbreadcrumb[] = array('url' => 'index.php', 'name' => get_lang('Administration'));
+$interbreadcrumb[] = ['url' => "session_list.php", "name" => get_lang('Session list')];
 $interbreadcrumb[] = [
     'url' => "resume_session.php?id_session=".$session_id,
-    "name" => get_lang('SessionOverview'),
+    "name" => get_lang('Session overview'),
 ];
 
 if (isset($_POST['formSent']) && $_POST['formSent']) {
@@ -54,10 +54,10 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
                 $user_info = api_get_user_info($user_id);
                 $user_id = $user_info['complete_name'];
             }
-            $error_message = get_lang('UsersAdded').' : '.implode(', ', $user_list);
+            $error_message = get_lang('Users added').' : '.implode(', ', $user_list);
         }
     } else {
-        $error_message = get_lang('NoInputFile');
+        $error_message = get_lang('No file was sent');
     }
 }
 
@@ -66,7 +66,7 @@ Display::display_header($tool_name);
 
 echo '<div class="actions">';
 echo '<a href="resume_session.php?id_session='.$session_id.'">'.
-    Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('PlatformAdmin'), '', ICON_SIZE_MEDIUM).
+    Display::return_icon('back.png', get_lang('Back to').' '.get_lang('Administration'), '', ICON_SIZE_MEDIUM).
     '</a>';
 echo '</div>';
 
@@ -82,13 +82,13 @@ $form = new FormValidator(
     ['enctype' => 'multipart/form-data']
 );
 $form->addElement('hidden', 'formSent', 1);
-$form->addElement('file', 'import_file', get_lang('ImportCSVFileLocation'));
+$form->addElement('file', 'import_file', get_lang('CSV file import location'));
 $form->addButtonImport(get_lang('Import'));
 
 $form->display();
 
 ?>
-<p><?php echo get_lang('CSVMustLookLike'); ?> :</p>
+<p><?php echo get_lang('The CSV file must look like this'); ?> :</p>
 <blockquote>
 <pre>
 username;

@@ -10,7 +10,7 @@ if (empty($allow)) {
 
 api_block_anonymous_users();
 
-$nameTools = get_lang('MyProgress');
+$nameTools = get_lang('Progress');
 $this_section = 'session_my_progress_ind';
 $_user = api_get_user_info();
 

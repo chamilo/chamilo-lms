@@ -5,9 +5,9 @@ require_once __DIR__.'/../inc/global.inc.php';
 
 // Build the form
 $form = new FormValidator('resend');
-$form->addHeader(get_lang('ReSendConfirmationMail'));
-$form->addText('user', get_lang('UserName'), true);
-$form->addButtonSend(get_lang('Send'));
+$form->addHeader(get_lang('Send message confirmation mail again'));
+$form->addText('user', get_lang('Username'), true);
+$form->addButtonSend(get_lang('Send message'));
 
 if ($form->validate()) {
     $values = $form->exportValues();
@@ -15,7 +15,7 @@ if ($form->validate()) {
     if ($user) {
         UserManager::sendUserConfirmationMail($user);
     } else {
-        Display::addFlash(Display::return_message(get_lang('UserDoesNotExist')));
+        Display::addFlash(Display::return_message(get_lang('This user doesn\'t exist')));
     }
 
     header('Location: '.api_get_path(WEB_PATH));

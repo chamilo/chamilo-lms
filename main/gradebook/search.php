@@ -15,7 +15,7 @@ require_once __DIR__.'/../inc/global.inc.php';
 if (api_get_setting('allow_public_certificates') != 'true') {
     api_not_allowed(
         true,
-        Display::return_message(get_lang('CertificatesNotPublic'), 'warning')
+        Display::return_message(get_lang('Certificates are not publicly available'), 'warning')
     );
 }
 
@@ -24,8 +24,8 @@ $userId = isset($_GET['id']) ? intval($_GET['id']) : 0;
 $userList = $userInfo = $courseList = $sessionList = [];
 
 $searchForm = new FormValidator('search_form', 'post', null, null);
-$searchForm->addText('firstname', get_lang('FirstName'));
-$searchForm->addText('lastname', get_lang('LastName'));
+$searchForm->addText('firstname', get_lang('First name'));
+$searchForm->addText('lastname', get_lang('Last name'));
 $searchForm->addButtonSearch();
 
 if ($searchForm->validate()) {
@@ -35,7 +35,7 @@ if ($searchForm->validate()) {
 
     if (empty($userList)) {
         Display::addFlash(
-            Display::return_message(get_lang('NoResults'), 'warning')
+            Display::return_message(get_lang('No results found'), 'warning')
         );
 
         header('Location: '.api_get_self());
@@ -46,7 +46,7 @@ if ($searchForm->validate()) {
 
     if (empty($userInfo)) {
         Display::addFlash(
-            Display::return_message(get_lang('NoUser'), 'warning')
+            Display::return_message(get_lang('No user'), 'warning')
         );
 
         header('Location: '.api_get_self());
@@ -63,7 +63,7 @@ if ($searchForm->validate()) {
         Display::addFlash(
             Display::return_message(
                 sprintf(
-                    get_lang('TheUserXNotYetAchievedCertificates'),
+                    get_lang('User %s hast not acquired any certificate yet'),
                     $userInfo['complete_name']
                 ),
                 'warning'
@@ -75,7 +75,7 @@ if ($searchForm->validate()) {
     }
 }
 
-$template = new Template(get_lang('SearchCertificates'));
+$template = new Template(get_lang('Search certificates'));
 
 $template->assign('search_form', $searchForm->returnForm());
 $template->assign('user_list', $userList);
@@ -85,7 +85,7 @@ $template->assign('session_list', $sessionList);
 $templateName = $template->get_template('gradebook/search.tpl');
 $content = $template->fetch($templateName);
 
-$template->assign('header', get_lang('SearchCertificates'));
+$template->assign('header', get_lang('Search certificates'));
 $template->assign('content', $content);
 
 $template->display_one_col_template();

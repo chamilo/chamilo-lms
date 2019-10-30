@@ -17,8 +17,6 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Class elFinder Connector - editor + Chamilo repository.
- *
- * @package Chamilo\CoreBundle\Component\Editor
  */
 class Connector
 {
@@ -192,7 +190,6 @@ class Connector
     {
         // for more options: https://github.com/Studio-42/elFinder/wiki/Connector-configuration-options
         return [
-            'tmbPath' => '/var/www/html/chamilo2/public/cache/',
             'uploadOverwrite' => false, // Replace files on upload or give them new name if the same file was uploaded
             //'acceptedName' =>
             'uploadAllow' => [

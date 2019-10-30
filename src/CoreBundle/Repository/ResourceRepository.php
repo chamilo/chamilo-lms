@@ -5,36 +5,161 @@ namespace Chamilo\CoreBundle\Repository;
 
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Resource\AbstractResource;
+use Chamilo\CoreBundle\Entity\Resource\ResourceFile;
 use Chamilo\CoreBundle\Entity\Resource\ResourceLink;
 use Chamilo\CoreBundle\Entity\Resource\ResourceNode;
 use Chamilo\CoreBundle\Entity\Resource\ResourceRight;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\Tool;
 use Chamilo\CoreBundle\Entity\Usergroup;
+use Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter;
 use Chamilo\CourseBundle\Entity\CGroupInfo;
 use Chamilo\UserBundle\Entity\User;
+use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Query\Expr\Join;
+use League\Flysystem\FilesystemInterface;
+use League\Flysystem\MountManager;
+use Sylius\Bundle\ResourceBundle\Doctrine\ORM\EntityRepository;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /**
  * Class ResourceRepository.
- *
- * @package Chamilo\CoreBundle\Entity
  */
-class ResourceRepository
+class ResourceRepository extends EntityRepository
 {
+    /**
+     * @var EntityRepository
+     */
+    protected $repository;
+
+    /**
+     * @var FilesystemInterface
+     */
+    protected $fs;
+
     /**
      * @var EntityManager
      */
     protected $entityManager;
 
     /**
+     * The entity class FQN.
+     *
+     * @var string
+     */
+    protected $className;
+
+    /**
+     * ResourceRepository constructor.
+     *
+     * @param EntityManager $entityManager
+     * @param MountManager  $mountManager
+     * @param string        $className
+     */
+    public function __construct(EntityManager $entityManager, MountManager $mountManager, string $className)
+    {
+        $this->repository = $entityManager->getRepository($className);
+        // Flysystem mount name is saved in config/packages/oneup_flysystem.yaml
+        $this->fs = $mountManager->getFilesystem('resources_fs');
+    }
+
+    /**
+     * @return FilesystemInterface
+     */
+    public function getFileSystem()
+    {
+        return $this->fs;
+    }
+
+    /**
      * @return EntityManager
      */
-    public function getEntityManager()
+    public function getEntityManager(): EntityManager
     {
-        return $this->entityManager;
+        return $this->getRepository()->getEntityManager();
     }
+
+    /**
+     * @return EntityRepository
+     */
+    public function getRepository()
+    {
+        return $this->repository;
+    }
+
+    /**
+     * @param mixed $id
+     * @param null  $lockMode
+     * @param null  $lockVersion
+     *
+     * @return AbstractResource|null
+     */
+    public function find($id, $lockMode = null, $lockVersion = null)
+    {
+        return $this->getRepository()->find($id);
+    }
+
+    /**
+     * @param array      $criteria
+     * @param array|null $orderBy
+     *
+     * @return AbstractResource
+     */
+    public function findOneBy(array $criteria, array $orderBy = null)
+    {
+        return $this->getRepository()->findOneBy($criteria, $orderBy);
+    }
+
+    /**
+     * @param AbstractResource $resource
+     *
+     * @return ResourceNode|mixed
+     */
+    /*public function getIllustration(AbstractResource $resource)
+    {
+        $node = $resource->getResourceNode();
+        // @todo also filter by the resource type = Illustration
+        $criteria = Criteria::create()->where(
+            Criteria::expr()->eq('name', 'course_picture')
+        );
+
+        $illustration = $node->getChildren()->matching($criteria)->first();
+
+        return $illustration;
+    }*/
+
+    /**
+     * @param AbstractResource $resource
+     * @param UploadedFile     $file
+     *
+     * @return ResourceFile
+     */
+    public function addFileToResource(AbstractResource $resource, UploadedFile $file)
+    {
+        $resourceNode = $resource->getResourceNode();
+
+        if (!$resourceNode) {
+            return false;
+        }
+
+        $resourceFile = $resourceNode->getResourceFile();
+        if ($resourceFile === null) {
+            $resourceFile = new ResourceFile();
+        }
+
+        $em = $this->getEntityManager();
+
+        $resourceFile->setFile($file);
+        $resourceFile->setName($resource->getResourceName());
+        $em->persist($resourceFile);
+        $resourceNode->setResourceFile($resourceFile);
+        $em->persist($resourceNode);
+        $em->flush();
+
+        return $resourceFile;
+    }
+
 
     /**
      * Creates a ResourceNode.
@@ -50,29 +175,29 @@ class ResourceRepository
         User $creator,
         AbstractResource $parent = null
     ): ResourceNode {
-        $resourceNode = new ResourceNode();
+        $em = $this->getEntityManager();
 
-        $tool = $this->getTool($resource->getToolName());
-        $resourceType = $this->getEntityManager()->getRepository('ChamiloCoreBundle:Resource\ResourceType')->findOneBy(
+        $resourceType = $em->getRepository('ChamiloCoreBundle:Resource\ResourceType')->findOneBy(
             ['name' => $resource->getToolName()]
         );
+
+        $resourceNode = new ResourceNode();
         $resourceNode
             ->setName($resource->getResourceName())
             ->setCreator($creator)
-            ->setResourceType($resourceType);
+            ->setResourceType($resourceType)
+        ;
 
         if ($parent !== null) {
             $resourceNode->setParent($parent->getResourceNode());
         }
 
-        $this->getEntityManager()->persist($resourceNode);
-        $this->getEntityManager()->flush();
+        $resource->setResourceNode($resourceNode);
+
+        $em->persist($resourceNode);
+        $em->persist($resource);
 
         return $resourceNode;
-    }
-
-    public function addResourceMedia(ResourceNode $resourceNode, $file)
-    {
     }
 
     /**
@@ -80,7 +205,7 @@ class ResourceRepository
      *
      * @return ResourceLink
      */
-    public function addResourceOnlyToMe(ResourceNode $resourceNode): ResourceLink
+    public function addResourceToMe(ResourceNode $resourceNode): ResourceLink
     {
         $resourceLink = new ResourceLink();
         $resourceLink
@@ -114,13 +239,61 @@ class ResourceRepository
     }
 
     /**
+     * @param ResourceNode $resourceNode
+     * @param int          $visibility
+     * @param Course       $course
+     * @param Session      $session
+     * @param CGroupInfo   $group
+     */
+    public function addResourceToCourse(ResourceNode $resourceNode, $visibility, $course, $session, $group): void
+    {
+        $visibility = (int) $visibility;
+        if (empty($visibility)) {
+            $visibility = ResourceLink::VISIBILITY_PUBLISHED;
+        }
+
+        $link = new ResourceLink();
+        $link
+            ->setCourse($course)
+            ->setSession($session)
+            ->setGroup($group)
+            //->setUser($toUser)
+            ->setResourceNode($resourceNode)
+            ->setVisibility($visibility)
+        ;
+
+        $rights = [];
+        switch ($visibility) {
+            case ResourceLink::VISIBILITY_PENDING:
+            case ResourceLink::VISIBILITY_DRAFT:
+                $editorMask = ResourceNodeVoter::getEditorMask();
+                $resourceRight = new ResourceRight();
+                $resourceRight
+                    ->setMask($editorMask)
+                    ->setRole(ResourceNodeVoter::ROLE_CURRENT_COURSE_TEACHER)
+                ;
+                $rights[] = $resourceRight;
+                break;
+        }
+
+        if (!empty($rights)) {
+            foreach ($rights as $right) {
+                $link->addResourceRight($right);
+            }
+        }
+
+        $em = $this->getEntityManager();
+        $em->persist($link);
+    }
+
+    /**
      * @param ResourceNode  $resourceNode
      * @param Course        $course
      * @param ResourceRight $right
      *
      * @return ResourceLink
      */
-    public function addResourceToCourse(ResourceNode $resourceNode, Course $course, ResourceRight $right): ResourceLink
+    public function addResourceToCourse2(ResourceNode $resourceNode, Course $course, ResourceRight $right): ResourceLink
     {
         $resourceLink = new ResourceLink();
         $resourceLink
@@ -145,24 +318,6 @@ class ResourceRepository
         $this->getEntityManager()->persist($resourceLink);
 
         return $resourceLink;
-    }
-
-    /**
-     * @param ResourceNode $resourceNode
-     * @param array        $userList     User id list
-     */
-    public function addResourceToUserList(ResourceNode $resourceNode, array $userList)
-    {
-        $em = $this->getEntityManager();
-
-        if (!empty($userList)) {
-            foreach ($userList as $userId) {
-                $toUser = $em->getRepository('ChamiloUserBundle:User')->find($userId);
-
-                $resourceLink = $this->addResourceNodeToUser($resourceNode, $toUser);
-                $em->persist($resourceLink);
-            }
-        }
     }
 
     /**
@@ -253,6 +408,24 @@ class ResourceRepository
     }
 
     /**
+     * @param ResourceNode $resourceNode
+     * @param array        $userList     User id list
+     */
+    public function addResourceToUserList(ResourceNode $resourceNode, array $userList)
+    {
+        $em = $this->getEntityManager();
+
+        if (!empty($userList)) {
+            foreach ($userList as $userId) {
+                $toUser = $em->getRepository('ChamiloUserBundle:User')->find($userId);
+
+                $resourceLink = $this->addResourceNodeToUser($resourceNode, $toUser);
+                $em->persist($resourceLink);
+            }
+        }
+    }
+
+    /**
      * @param Course           $course
      * @param Tool             $tool
      * @param AbstractResource $parent
@@ -322,5 +495,13 @@ class ResourceRepository
             ->getEntityManager()
             ->getRepository('ChamiloCoreBundle:Tool')
             ->findOneBy(['name' => $tool]);
+    }
+
+    /**
+     * @return mixed
+     */
+    public function create()
+    {
+        return new $this->className();
     }
 }

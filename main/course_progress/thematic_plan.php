@@ -10,7 +10,7 @@ use ChamiloSession as Session;
  *
  * @package chamilo.course_progress
  */
-$tpl = new Template(get_lang('ThematicControl'));
+$tpl = new Template(get_lang('Thematic control'));
 $toolbar = null;
 $formLayout = null;
 
@@ -34,7 +34,7 @@ if (!empty($thematic_simple_list)) {
 }
 
 if (isset($message) && $message == 'ok') {
-    echo Display::return_message(get_lang('ThematicSectionHasBeenCreatedSuccessfull'), 'normal');
+    echo Display::return_message(get_lang('Thematic section has been created successfully'), 'normal');
 }
 
 if ($action === 'thematic_plan_list') {
@@ -90,7 +90,7 @@ if ($action === 'thematic_plan_list') {
     $form->addGroup([
         $form->addButton(
             'add_item',
-            get_lang('SaveAndAddNewItem'),
+            get_lang('Save and add new item'),
             'plus',
             'info',
             'default',
@@ -103,7 +103,7 @@ if ($action === 'thematic_plan_list') {
     $formLayout = $form->returnForm();
 } elseif ($action == 'thematic_plan_add' || $action == 'thematic_plan_edit') {
     if ($description_type >= ADD_THEMATIC_PLAN) {
-        $header_form = get_lang('NewBloc');
+        $header_form = get_lang('Other');
     } else {
         $header_form = $default_thematic_plan_title[$description_type];
     }
@@ -156,7 +156,7 @@ if ($action === 'thematic_plan_list') {
     $form->setDefaults($default);
 
     if (isset($default_thematic_plan_question[$description_type])) {
-        $message = '<strong>'.get_lang('QuestionPlan').'</strong><br />';
+        $message = '<strong>'.get_lang('Help').'</strong><br />';
         $message .= $default_thematic_plan_question[$description_type];
         Display::addFlash(Display::return_message($message, 'normal', false));
     }
@@ -165,7 +165,7 @@ if ($action === 'thematic_plan_list') {
     if ($error) {
         Display::addFlash(
             Display::return_message(
-                get_lang('FormHasErrorsPleaseComplete'),
+                get_lang('The form contains incorrect or incomplete data. Please check your input.'),
                 'error',
                 false
             )

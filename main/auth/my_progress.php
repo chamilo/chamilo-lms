@@ -9,10 +9,14 @@
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 
-$this_section = SECTION_TRACKING;
-$nameTools = get_lang('MyProgress');
-
 api_block_anonymous_users();
+
+if (api_get_configuration_value('block_my_progress_page')) {
+    api_not_allowed(true);
+}
+
+$this_section = SECTION_TRACKING;
+$nameTools = get_lang('Progress');
 
 $htmlHeadXtra[] = api_get_js('jquery.timelinr-0.9.54.js');
 $htmlHeadXtra[] = "<script>
@@ -29,10 +33,6 @@ $pluginCalendar = api_get_plugin_setting('learning_calendar', 'enabled') === 'tr
 if ($pluginCalendar) {
     $plugin = LearningCalendarPlugin::create();
     $plugin->setJavaScript($htmlHeadXtra);
-}
-
-if (api_get_configuration_value('block_my_progress_page')) {
-    api_not_allowed(true);
 }
 
 $user_id = api_get_user_id();
@@ -69,7 +69,7 @@ if (!empty($courseUserList)) {
 
         $issues .= '<div class="text-course">';
         $issues .= '<p>'.sprintf(
-            get_lang('YouHaveEnteredTheCourseXInY'),
+            get_lang('You have entered the course <b>%s</b> in <b>%s</b>'),
             '" '.$courseInfo['name'].' "',
             api_convert_and_format_date($login, DATE_TIME_FORMAT_LONG)
         ).'</p>';
@@ -79,8 +79,8 @@ if (!empty($courseUserList)) {
     }
 }
 
-$content = Tracking::show_user_progress(api_get_user_id(), $sessionId);
-$content .= Tracking::show_course_detail(api_get_user_id(), $courseCode, $sessionId);
+$content = Tracking::show_user_progress($user_id, $sessionId);
+$content .= Tracking::show_course_detail($user_id, $courseCode, $sessionId);
 
 if (!empty($dates)) {
     if (!empty($content)) {
@@ -110,7 +110,30 @@ if (api_get_configuration_value('private_messages_about_user_visible_to_user') =
 
 $message = null;
 if (empty($content)) {
-    $message = Display::return_message(get_lang('NoDataAvailable'), 'warning');
+    $message = Display::return_message(get_lang('No data available'), 'warning');
+}
+
+$show = api_get_configuration_value('allow_career_users');
+
+if ($show) {
+    $careers = UserManager::getUserCareers($user_id);
+
+    if (!empty($careers)) {
+        $title = Display::page_subheader(get_lang('Careers'), null, 'h3', ['class' => 'section-title']);
+        $table = new HTML_Table(['class' => 'data_table']);
+        $table->setHeaderContents(0, 0, get_lang('Career'));
+        $table->setHeaderContents(0, 1, get_lang('Diagram'));
+
+        $row = 1;
+        foreach ($careers as $careerData) {
+            $table->setCellContents($row, 0, $careerData['name']);
+            $url = api_get_path(WEB_CODE_PATH).'user/career_diagram.php?career_id='.$careerData['id'];
+            $diagram = Display::url(get_lang('Diagram'), $url);
+            $table->setCellContents($row, 1, $diagram);
+            $row++;
+        }
+        $content = $title.$table->toHtml().$content;
+    }
 }
 
 $tpl = new Template($nameTools);

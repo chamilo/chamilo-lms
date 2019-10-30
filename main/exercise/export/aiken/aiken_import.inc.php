@@ -17,12 +17,12 @@
  */
 function aiken_display_form()
 {
-    $name_tools = get_lang('ImportAikenQuiz');
+    $name_tools = get_lang('Import Aiken quiz');
     $form = '<div class="actions">';
     $form .= '<a href="exercise.php?show=test&'.api_get_cidreq().'">'.
         Display::return_icon(
             'back.png',
-            get_lang('BackToExercisesList'),
+            get_lang('Back to Tests tool'),
             '',
             ICON_SIZE_MEDIUM
         ).'</a>';
@@ -35,11 +35,11 @@ function aiken_display_form()
         ['enctype' => 'multipart/form-data']
     );
     $form_validator->addElement('header', $name_tools);
-    $form_validator->addElement('text', 'total_weight', get_lang('TotalWeight'));
+    $form_validator->addElement('text', 'total_weight', get_lang('Total weight'));
     $form_validator->addElement('file', 'userFile', get_lang('File'));
     $form_validator->addButtonUpload(get_lang('Upload'), 'submit');
     $form .= $form_validator->returnForm();
-    $form .= '<blockquote>'.get_lang('ImportAikenQuizExplanation').'<br /><pre>'.get_lang('ImportAikenQuizExplanationExample').'</pre></blockquote>';
+    $form .= '<blockquote>'.get_lang('Import Aiken quizExplanation').'<br /><pre>'.get_lang('Import Aiken quizExplanationExample').'</pre></blockquote>';
     echo $form;
 }
 
@@ -179,8 +179,11 @@ function aiken_import_exercise($file)
     $exercise->exercise = $exercise_info['name'];
     $exercise->save();
     $last_exercise_id = $exercise->selectId();
+    $tableQuestion = Database::get_course_table(TABLE_QUIZ_QUESTION);
+    $tableAnswer = Database::get_course_table(TABLE_QUIZ_ANSWER);
     if (!empty($last_exercise_id)) {
         // For each question found...
+        $courseId = api_get_course_int_id();
         foreach ($exercise_info['question'] as $key => $question_array) {
             // 2.create question
             $question = new Aiken2Question();
@@ -191,14 +194,13 @@ function aiken_import_exercise($file)
             if (isset($question_array['description'])) {
                 $question->updateDescription($question_array['description']);
             }
-
             $type = $question->selectType();
             $question->type = constant($type);
             $question->save($exercise);
-
             $last_question_id = $question->selectId();
-            //3. Create answer
-            $answer = new Answer($last_question_id);
+
+            // 3. Create answer
+            $answer = new Answer($last_question_id, $courseId, $exercise, false);
             $answer->new_nbrAnswers = count($question_array['answer']);
             $max_score = 0;
 
@@ -211,6 +213,7 @@ function aiken_import_exercise($file)
                 $key++;
                 $answer->new_answer[$key] = $answers['value'];
                 $answer->new_position[$key] = $key;
+                $answer->new_comment[$key] = '';
                 // Correct answers ...
                 if (in_array($key, $question_array['correct_answers'])) {
                     $answer->new_correct[$key] = 1;
@@ -229,16 +232,41 @@ function aiken_import_exercise($file)
                 if (!empty($scoreFromFile) && $answer->new_correct[$key]) {
                     $answer->new_weighting[$key] = $scoreFromFile;
                 }
+
+                $params = [
+                    'c_id' => $courseId,
+                    'question_id' => $last_question_id,
+                    'answer' => $answer->new_answer[$key],
+                    'correct' => $answer->new_correct[$key],
+                    'comment' => $answer->new_comment[$key],
+                    'ponderation' => isset($answer->new_weighting[$key]) ? $answer->new_weighting[$key] : '',
+                    'position' => $answer->new_position[$key],
+                    'hotspot_coordinates' => '',
+                    'hotspot_type' => '',
+                ];
+
+                $answerId = Database::insert($tableAnswer, $params);
+                if ($answerId) {
+                    $params = [
+                        'id_auto' => $answerId,
+                        'id' => $answerId,
+                    ];
+                    Database::update($tableAnswer, $params, ['iid = ?' => [$answerId]]);
+                }
             }
 
             if (!empty($scoreFromFile)) {
                 $max_score = $scoreFromFile;
             }
 
-            $answer->save();
-            // Now that we know the question score, set it!
-            $question->updateWeighting($max_score);
-            $question->save($exercise);
+            //$answer->save();
+
+            $params = ['ponderation' => $max_score];
+            Database::update(
+                $tableQuestion,
+                $params,
+                ['iid = ?' => [$last_question_id]]
+            );
         }
 
         // Delete the temp dir where the exercise was unzipped
@@ -370,7 +398,7 @@ function aiken_import_file($array_file)
     if ($process && $unzip == 1) {
         $imported = aiken_import_exercise($array_file['name']);
         if (is_numeric($imported) && !empty($imported)) {
-            Display::addFlash(Display::return_message(get_lang('Uploaded')));
+            Display::addFlash(Display::return_message(get_lang('Uploaded.')));
 
             return $imported;
         } else {

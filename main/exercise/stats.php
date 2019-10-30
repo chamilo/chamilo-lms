@@ -49,12 +49,12 @@ $data = [];
 // Question title 	# of students who tool it 	Lowest score 	Average 	Highest score 	Maximum score
 $headers = [
     get_lang('Question'),
-    get_lang('QuestionType'),
-    get_lang('NumberStudentWhoSelectedIt'),
-    get_lang('LowestScore'),
-    get_lang('AverageScore'),
-    get_lang('HighestScore'),
-    get_lang('Weighting'),
+    get_lang('Question type'),
+    get_lang('Number of learners who selected it'),
+    get_lang('Lowest score'),
+    get_lang('Average score'),
+    get_lang('Highest score'),
+    get_lang('Score'),
 ];
 
 if (!empty($question_list)) {
@@ -121,7 +121,7 @@ $headers = [
     get_lang('Question'),
     get_lang('Answer'),
     get_lang('Correct'),
-    get_lang('NumberStudentWhoSelectedIt'),
+    get_lang('Number of learners who selected it'),
 ];
 
 $data = [];
@@ -235,7 +235,7 @@ if (!empty($question_list)) {
                         $answer_id,
                         $question_id,
                         $exerciseId,
-                        api_get_course_int_id(),
+                        $courseCode,
                         $sessionId
                     );
                     $percentage = 0;
@@ -302,18 +302,18 @@ $content .= $table->toHtml();
 
 $interbreadcrumb[] = [
     "url" => "exercise.php?".api_get_cidreq(),
-    "name" => get_lang('Exercises'),
+    "name" => get_lang('Tests'),
 ];
 $interbreadcrumb[] = [
     "url" => "admin.php?exerciseId=$exerciseId&".api_get_cidreq(),
     "name" => $objExercise->selectTitle(true),
 ];
 
-$tpl = new Template(get_lang('ReportByQuestion'));
+$tpl = new Template(get_lang('Report by question'));
 $actions = '<a href="exercise_report.php?exerciseId='.$exerciseId.'&'.api_get_cidreq().'">'.
     Display:: return_icon(
         'back.png',
-        get_lang('GoBackToQuestionList'),
+        get_lang('Go back to the questions list'),
         '',
         ICON_SIZE_MEDIUM
     )

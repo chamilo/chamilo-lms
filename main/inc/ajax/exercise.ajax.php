@@ -202,7 +202,6 @@ switch ($action) {
                     lastname,
                     aa.status,
                     start_date,
-                    score,
                     max_score,
                     score/max_score as score,
                     exe_duration,
@@ -215,7 +214,6 @@ switch ($action) {
                         t.exe_user_id,
                         status,
                         start_date,
-                        score,
                         max_score,
                         score/max_score as score,
                         exe_duration,
@@ -274,12 +272,12 @@ switch ($action) {
                     $h = floor($remaining / 3600);
                     $m = floor(($remaining - ($h * 3600)) / 60);
                     $s = ($remaining - ($h * 3600) - ($m * 60));
-                    $timeInfo = api_format_date(
+                    $timeInfo = api_convert_and_format_date(
                             $row['start_date'],
                             DATE_TIME_FORMAT_LONG
                         ).' ['.($h > 0 ? $h.':' : '').sprintf("%02d", $m).':'.sprintf("%02d", $s).']';
                 } else {
-                    $timeInfo = api_format_date(
+                    $timeInfo = api_convert_and_format_date(
                         $row['start_date'],
                         DATE_TIME_FORMAT_LONG
                     );
@@ -318,7 +316,7 @@ switch ($action) {
                 );
                 $counter++;
             }
-            echo Display::return_message(get_lang('Saved'), 'confirmation');
+            echo Display::return_message(get_lang('Saved..'), 'confirmation');
         }
         break;
     case 'update_question_order':
@@ -348,7 +346,7 @@ switch ($action) {
                 ;
                 $counter++;
             }
-            echo Display::return_message(get_lang('Saved'), 'confirmation');
+            echo Display::return_message(get_lang('Saved..'), 'confirmation');
         }
         break;
     case 'add_question_to_reminder':
@@ -498,7 +496,7 @@ switch ($action) {
             $total_weight = 0;
             if ($type == 'simple') {
                 foreach ($question_list as $my_question_id) {
-                    $objQuestionTmp = Question::read($my_question_id, $course_id);
+                    $objQuestionTmp = Question::read($my_question_id, $objExercise->course);
                     $total_weight += $objQuestionTmp->selectWeighting();
                 }
             }
@@ -521,7 +519,7 @@ switch ($action) {
                 }
 
                 // Creates a temporary Question object
-                $objQuestionTmp = Question::read($my_question_id, $course_id);
+                $objQuestionTmp = Question::read($my_question_id, $objExercise->course);
 
                 $myChoiceDegreeCertainty = null;
                 if ($objQuestionTmp->type === MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY) {
@@ -549,7 +547,7 @@ switch ($action) {
                     $hotspot_delineation_result = $_SESSION['hotspot_delineation_result'][$objExercise->selectId()][$my_question_id];
                 }
 
-                if ($type == 'simple') {
+                if ($type === 'simple') {
                     // Getting old attempt in order to decrees the total score.
                     $old_result = $objExercise->manage_answer(
                         $exeId,
@@ -560,10 +558,8 @@ switch ($action) {
                         false,
                         true,
                         false,
-                        $objExercise->selectPropagateNeg(),
-                        []
+                        $objExercise->selectPropagateNeg()
                     );
-
                     // Removing old score.
                     $total_score = $total_score - $old_result['score'];
                 }
@@ -732,10 +728,10 @@ switch ($action) {
         $objQuestion = Question::read($questionId);
         $id = '';
         if (api_get_configuration_value('show_question_id')) {
-            $id = '<h4 class="question-type">#'.$objQuestion->course['code'].'-'.$objQuestion->iid.'</h4>';
+            $id = '<h4>#'.$objQuestion->course['code'].'-'.$objQuestion->iid.'</h4>';
         }
         echo $id;
-        echo '<h4 class="question-type">'.$objQuestion->get_question_type_name().'</h4>';
+        echo '<p class="lead">'.$objQuestion->get_question_type_name().'</p>';
         if ($objQuestion->type === FILL_IN_BLANKS) {
             echo '<script>
                 $(function() {
@@ -761,6 +757,37 @@ switch ($action) {
             true,
             true
         );
+        break;
+    case 'get_quiz_embeddable':
+        $exercises = ExerciseLib::get_all_exercises_for_course_id(
+            api_get_course_info(),
+            api_get_session_id(),
+            api_get_course_int_id(),
+            false
+        );
+
+        $exercises = array_filter(
+            $exercises,
+            function (array $exercise) {
+                return ExerciseLib::isQuizEmbeddable($exercise);
+            }
+        );
+
+        $result = [];
+
+        $codePath = api_get_path(WEB_CODE_PATH);
+
+        foreach ($exercises as $exercise) {
+            $title = Security::remove_XSS(api_html_entity_decode($exercise['title']));
+
+            $result[] = [
+                'id' => $exercise['iid'],
+                'title' => strip_tags($title),
+            ];
+        }
+
+        header('Content-Type: application/json');
+        echo json_encode($result);
         break;
     default:
         echo '';

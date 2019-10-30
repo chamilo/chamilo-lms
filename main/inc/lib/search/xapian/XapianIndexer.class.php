@@ -1,15 +1,11 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-/**
- * @package chamilo.include.search
- */
-require_once 'xapian.php';
+//@todo add setting to add xapian.php
+//require_once 'xapian.php';
 
 /**
  * Abstract helper class.
- *
- * @package chamilo.include.search
  */
 abstract class XapianIndexer
 {

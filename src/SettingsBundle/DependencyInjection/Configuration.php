@@ -19,8 +19,7 @@ class Configuration implements ConfigurationInterface
      */
     public function getConfigTreeBuilder()
     {
-        $treeBuilder = new TreeBuilder();
-        $rootNode = $treeBuilder->root('chamilo_settings');
+        $treeBuilder = new TreeBuilder('chamilo_settings');
 
         // Here you should define the parameters that are allowed to
         // configure your bundle. See the documentation linked above for

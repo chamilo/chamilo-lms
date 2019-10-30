@@ -87,7 +87,7 @@ class MailTemplateManager extends Model
         // Setting the form elements
         $header = get_lang('Add');
         if ($action === 'edit') {
-            $header = get_lang('Modify');
+            $header = get_lang('Edit');
         }
         $id = isset($_GET['id']) ? (int) $_GET['id'] : '';
 
@@ -141,9 +141,9 @@ class MailTemplateManager extends Model
         $defaults = $this->get($id);
 
         if ($action === 'edit') {
-            $form->addLabel(get_lang('CreatedAt'), Display::dateToStringAgoAndLongDate($defaults['created_at']));
-            $form->addLabel(get_lang('UpdatedAt'), Display::dateToStringAgoAndLongDate($defaults['updated_at']));
-            $form->addButtonSave(get_lang('Modify'), 'submit');
+            $form->addLabel(get_lang('Created at'), Display::dateToStringAgoAndLongDate($defaults['created_at']));
+            $form->addLabel(get_lang('Updated at'), Display::dateToStringAgoAndLongDate($defaults['updated_at']));
+            $form->addButtonSave(get_lang('Edit'), 'submit');
         } else {
             $form->addButtonCreate(get_lang('Add'), 'submit');
         }
@@ -155,7 +155,7 @@ class MailTemplateManager extends Model
         $form->setDefaults($defaults);
 
         // Setting the rules
-        $form->addRule('name', get_lang('ThisFieldIsRequired'), 'required');
+        $form->addRule('name', get_lang('Required field'), 'required');
 
         return $form;
     }

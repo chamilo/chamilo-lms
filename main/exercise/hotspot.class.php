@@ -14,8 +14,8 @@
  */
 class HotSpot extends Question
 {
-    public static $typePicture = 'hotspot.png';
-    public static $explanationLangVar = 'HotSpot';
+    public $typePicture = 'hotspot.png';
+    public $explanationLangVar = 'HotSpot';
 
     /**
      * HotSpot constructor.
@@ -51,24 +51,24 @@ class HotSpot extends Question
                 'imageUpload',
                 [
                     '<img src="'.$icon.'" />',
-                    get_lang('UploadJpgPicture'),
+                    get_lang('Upload image (jpg, png or gif) to apply hotspots.'),
                 ]
             );
 
             // setting the save button here and not in the question class.php
             // Saving a question
-            $form->addButtonSave(get_lang('GoToQuestion'), 'submitQuestion');
+            $form->addButtonSave(get_lang('Go to question'), 'submitQuestion');
             $form->addRule(
                 'imageUpload',
-                get_lang('OnlyImagesAllowed'),
+                get_lang('Only PNG, JPG or GIF images allowed'),
                 'filetype',
                 ['jpg', 'jpeg', 'png', 'gif']
             );
-            $form->addRule('imageUpload', get_lang('NoImage'), 'uploadedfile');
+            $form->addRule('imageUpload', get_lang('Please select an image'), 'uploadedfile');
         } else {
             // setting the save button here and not in the question class.php
             // Editing a question
-            $form->addButtonUpdate(get_lang('ModifyQuestion'), 'submitQuestion');
+            $form->addButtonUpdate(get_lang('Save the question'), 'submitQuestion');
         }
     }
 
@@ -103,52 +103,5 @@ class HotSpot extends Question
     public function processAnswersCreation($form, $exercise)
     {
         // nothing
-    }
-}
-
-/**
- * Class HotSpotDelineation.
- */
-class HotSpotDelineation extends HotSpot
-{
-    public static $typePicture = 'hotspot-delineation.png';
-    public static $explanationLangVar = 'HotspotDelineation';
-
-    /**
-     * HotSpotDelineation constructor.
-     */
-    public function __construct()
-    {
-        parent::__construct();
-        $this->type = HOT_SPOT_DELINEATION;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function createForm(&$form, $exercise)
-    {
-        parent::createForm($form, $exercise);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function processCreation($form, $exercise)
-    {
-        parent::processCreation($form, $exercise);
-    }
-
-    public function createAnswersForm($form)
-    {
-        parent::createAnswersForm($form);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function processAnswersCreation($form, $exercise)
-    {
-        parent::processAnswersCreation($form, $exercise);
     }
 }

@@ -39,10 +39,10 @@ switch ($action) {
             );
 
             if (empty($mails_sent_to)) {
-                Display::addFlash(Display::return_message(get_lang('NoResults'), 'warning'));
+                Display::addFlash(Display::return_message(get_lang('No results found'), 'warning'));
             } else {
                 Display::addFlash(Display::return_message(
-                    get_lang('MessageHasBeenSent').' '.implode(', ', $mails_sent_to),
+                    get_lang('Your message has been sent.').' '.implode(', ', $mails_sent_to),
                     'success'
                 ));
             }
@@ -78,13 +78,13 @@ if (!empty($group_id)) {
     ];
     $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'group/group_space.php?gidReq='.$group_id,
-        'name' => get_lang('GroupSpace').' '.$group_properties['name'],
+        'name' => get_lang('Group area').' '.$group_properties['name'],
     ];
 }
 
 $interbreadcrumb[] = [
     'url' => api_get_path(WEB_CODE_PATH).'work/work.php?'.api_get_cidreq(),
-    'name' => get_lang('StudentPublications'),
+    'name' => get_lang('Assignments'),
 ];
 $interbreadcrumb[] = [
     'url' => api_get_path(WEB_CODE_PATH).'work/work_list_all.php?'.api_get_cidreq().'&id='.$workId,
@@ -92,29 +92,29 @@ $interbreadcrumb[] = [
 ];
 
 if (isset($_GET['list']) && $_GET['list'] == 'with') {
-    $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('UsersWithTask')];
+    $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Learners who sent their work')];
 } else {
-    $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('UsersWithoutTask')];
+    $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Learners who didn\'t send their work')];
 }
 
 Display::display_header(null);
 
 echo '<div class="actions">';
 echo '<a href="'.api_get_path(WEB_CODE_PATH).'work/work_list_all.php?id='.$workId.'&'.api_get_cidreq().'">'.
-    Display::return_icon('back.png', get_lang('BackToWorksList'), '', ICON_SIZE_MEDIUM).'</a>';
+    Display::return_icon('back.png', get_lang('Back to Assignments list'), '', ICON_SIZE_MEDIUM).'</a>';
 $output = '';
 if (!empty($workId)) {
     if (empty($_GET['list']) or Security::remove_XSS($_GET['list']) == 'with') {
         $output .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&id='.$workId.'&list=without">'.
-            Display::return_icon('exercice_uncheck.png', get_lang('ViewUsersWithoutTask'), '', ICON_SIZE_MEDIUM).
+            Display::return_icon('exercice_uncheck.png', get_lang('ViewLearners who didn\'t send their work'), '', ICON_SIZE_MEDIUM).
             "</a>";
     } else {
         if (!isset($_GET['action']) || (isset($_GET['action']) && $_GET['action'] != 'send_mail')) {
             $output .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&id='.$workId.'&list=without&action=send_mail&sec_token='.$token.'">'.
-                Display::return_icon('mail_send.png', get_lang('ReminderMessage'), '', ICON_SIZE_MEDIUM).
+                Display::return_icon('mail_send.png', get_lang('Send a reminder'), '', ICON_SIZE_MEDIUM).
                 "</a>";
         } else {
-            $output .= Display::return_icon('mail_send_na.png', get_lang('ReminderMessage'), '', ICON_SIZE_MEDIUM);
+            $output .= Display::return_icon('mail_send_na.png', get_lang('Send a reminder'), '', ICON_SIZE_MEDIUM);
         }
     }
 }

@@ -7,8 +7,6 @@ namespace Chamilo\CourseBundle\Component\CourseCopy\Resources;
  * A WWW-link from the Links-module in a Chamilo-course.
  *
  * @author Bart Mollet <bart.mollet@hogent.be>
- *
- * @package chamilo.backup
  */
 class ToolIntro extends Resource
 {
@@ -87,7 +85,7 @@ class ToolIntro extends Resource
             default:
                 $lang_id = ucfirst($this->id); // This is a wild guess.
         }
-        echo '<strong>'.get_lang($lang_id, '').':</strong><br />';
+        echo '<strong>'.get_lang($lang_id).':</strong><br />';
         echo $this->intro_text;
     }
 }

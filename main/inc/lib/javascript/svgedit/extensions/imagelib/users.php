@@ -44,10 +44,10 @@ $style .='</style>';
 
 <?php
 
-echo '<h2>'.get_lang('SocialNetwork').': '.get_lang('MyFiles').'</h2>';
+echo '<h2>'.get_lang('Social network').': '.get_lang('My files').'</h2>';
 
 if (!empty($png_svg_files)) {
-	echo '<h3>'.get_lang('SelectSVGEditImage').'</h3>';
+	echo '<h3>'.get_lang('Select a picture (SVG, PNG)').'</h3>';
 	echo '<ul>';
 	foreach($png_svg_files as $filename) {
 		$image = $user_disk_path.$filename;
@@ -63,7 +63,7 @@ if (!empty($png_svg_files)) {
 	}
 	echo '</ul>';
 } else {
-	echo Display::return_message(get_lang('NoSVGImages'), 'warning');
+	echo Display::return_message(get_lang('No SVG image'), 'warning');
 }
 ?>
 </body>

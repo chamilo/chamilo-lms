@@ -11,8 +11,8 @@
         </li>
     {% endif %}
 </ul>
-</br>
-</br>
+<br />
+<br />
 {{ form }}
 
 <div class="table-responsive">
@@ -27,6 +27,9 @@
             <th class="text-center">{{ 'ProductType'|get_plugin_lang('BuyCoursesPlugin') }}</th>
             <th>{{ 'Name'|get_lang }}</th>
             <th>{{ 'UserName'|get_lang }}</th>
+            {% if invoicing_enable %}
+                <th class="text-center">{{ 'Invoice'|get_plugin_lang('BuyCoursesPlugin') }}</th>
+            {% endif %}
             <th class="text-center">{{ 'Options'|get_lang }}</th>
         </tr>
         </thead>
@@ -43,12 +46,22 @@
                         {{ 'SaleStatusCompleted'|get_plugin_lang('BuyCoursesPlugin') }}
                     {% endif %}
                 </td>
-                <td class="text-center">{{ sale.date }}</td>
+                <td class="text-center">{{ sale.date | api_get_local_time }}</td>
                 <td class="text-center">{{ sale.payment_type }}</td>
-                <td class="text-right">{{ sale.currency ~ ' ' ~ sale.price }}</td>
+                <td class="text-right">{{ sale.total_price }}</td>
                 <td class="text-center">{{ sale.product_type }}</td>
                 <td>{{ sale.product_name }}</td>
                 <td>{{ sale.complete_user_name }}</td>
+                {% if invoicing_enable %}
+                    <td class="text-center">
+                    {% if sale.invoice == 1 %}
+                        <a href="{{ _p.web_plugin ~ 'buycourses/src/invoice.php?' ~ {'invoice': sale.id, 'is_service': 0}|url_encode() }}" title="{{ 'InvoiceView'|get_plugin_lang('BuyCoursesPlugin') }}" >
+                            <img src="{{ _p.web_img }}/icons/32/default.png" alt="{{ 'InvoiceView'|get_plugin_lang('BuyCoursesPlugin') }}" />
+                            <br/>{{ sale.num_invoice }}
+                        </a>
+                    {% endif %}
+                    </td>
+                {% endif %}
                 <td class="text-center">
                     {% if sale.status == sale_status_pending %}
                         <a href="{{ _p.web_self ~ '?' ~ {'order': sale.id, 'action': 'confirm'}|url_encode() }}"
@@ -68,7 +81,7 @@
 </div>
 
 <script>
-    $(document).on('ready', function () {
+    $(function () {
         $('[name="filter_type"]').on('change', function () {
             var self = $(this);
 

@@ -10,8 +10,6 @@ use Symfony\Component\Form\FormBuilderInterface;
 
 /**
  * Class SurveySettingsSchema.
- *
- * @package Chamilo\CoreBundle\Settings
  */
 class SurveySettingsSchema extends AbstractSettingsSchema
 {

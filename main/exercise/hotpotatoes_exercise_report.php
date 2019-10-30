@@ -75,7 +75,7 @@ if ($is_allowedToEdit && $origin != 'learnpath') {
     }
 } else {
     $actions .= '<a href="exercise.php">'.
-        Display::return_icon('back.png', get_lang('GoBackToQuestionList'), '', ICON_SIZE_MEDIUM).'</a>';
+        Display::return_icon('back.png', get_lang('Go back to the questions list'), '', ICON_SIZE_MEDIUM).'</a>';
 }
 
 if ($is_allowedToEdit) {
@@ -84,7 +84,7 @@ if ($is_allowedToEdit) {
         case 'delete':
             $fileToDelete = isset($_GET['id']) ? $_GET['id'] : null;
             deleteAttempt($fileToDelete);
-            Display::addFlash(Display::return_message(get_lang('ItemDeleted')));
+            Display::addFlash(Display::return_message(get_lang('Item deleted')));
             $url = api_get_self().'?'.api_get_cidreq().'&path='.$hotpotatoes_path;
             header("Location: $url");
             exit;
@@ -92,14 +92,14 @@ if ($is_allowedToEdit) {
     }
 }
 
-$nameTools = get_lang('Results');
+$nameTools = get_lang('Results and feedback');
 
 if ($is_allowedToEdit || $is_tutor) {
-    $nameTools = get_lang('StudentScore');
-    $interbreadcrumb[] = ["url" => "exercise.php?".api_get_cidreq(), "name" => get_lang('Exercises')];
+    $nameTools = get_lang('Learner score');
+    $interbreadcrumb[] = ["url" => "exercise.php?".api_get_cidreq(), "name" => get_lang('Tests')];
     $objExerciseTmp = new Exercise();
 } else {
-    $interbreadcrumb[] = ["url" => "exercise.php?".api_get_cidreq(), "name" => get_lang('Exercises')];
+    $interbreadcrumb[] = ["url" => "exercise.php?".api_get_cidreq(), "name" => get_lang('Tests')];
     $objExerciseTmp = new Exercise();
 }
 
@@ -137,11 +137,11 @@ $(function() {
 });
 </script>';
 
-$extra .= '<div id="dialog-confirm" title="'.get_lang("ConfirmYourChoice").'">';
+$extra .= '<div id="dialog-confirm" title="'.get_lang("Please confirm your choice").'">';
 $form = new FormValidator('report', 'post', null, null, ['class' => 'form-vertical']);
-$form->addElement('radio', 'export_format', null, get_lang('ExportAsCSV'), 'csv', ['id' => 'export_format_csv_label']);
-//$form->addElement('radio', 'export_format', null, get_lang('ExportAsXLS'), 'xls', array('id' => 'export_format_xls_label'));
-//$form->addElement('checkbox', 'load_extra_data', null, get_lang('LoadExtraData'), '0', array('id' => 'export_format_xls_label'));
+$form->addElement('radio', 'export_format', null, get_lang('CSV export'), 'csv', ['id' => 'export_format_csv_label']);
+//$form->addElement('radio', 'export_format', null, get_lang('Excel export'), 'xls', array('id' => 'export_format_xls_label'));
+//$form->addElement('checkbox', 'load_extra_data', null, get_lang('Load extra user fields data (have to be marked as 'Filter' to appear).'), '0', array('id' => 'export_format_xls_label'));
 $form->setDefaults(['export_format' => 'csv']);
 $extra .= $form->returnForm();
 $extra .= '</div>';
@@ -158,7 +158,7 @@ $action_links = '';
 // Generating group list
 
 $group_list = GroupManager::get_group_list();
-$group_parameters = ['group_all:'.get_lang('All'), 'group_none:'.get_lang('None')];
+$group_parameters = ['group_all:'.get_lang('All'), 'group_none:'.get_lang('none')];
 
 foreach ($group_list as $group) {
     $group_parameters[] = $group['id'].':'.$group['name'];
@@ -170,13 +170,13 @@ if (!empty($group_parameters)) {
 if ($is_allowedToEdit || $is_tutor) {
     // The order is important you need to check the the $column variable in the model.ajax.php file
     $columns = [
-        get_lang('FirstName'),
-        get_lang('LastName'),
-        get_lang('LoginName'),
+        get_lang('First name'),
+        get_lang('Last name'),
+        get_lang('Login'),
         get_lang('Group'),
-        get_lang('StartDate'),
+        get_lang('Start Date'),
         get_lang('Score'),
-        get_lang('Actions'),
+        get_lang('Detail'),
     ];
 
     // Column config
@@ -209,7 +209,7 @@ if ($is_allowedToEdit || $is_tutor) {
     // add username as title in lastname filed - ref 4226
     function action_formatter(cellvalue, options, rowObject) {
         // rowObject is firstname,lastname,login,... get the third word
-        var loginx = "'.api_htmlentities(sprintf(get_lang("LoginX"), ":::"), ENT_QUOTES).'";
+        var loginx = "'.api_htmlentities(sprintf(get_lang("Login: %s"), ":::"), ENT_QUOTES).'";
         var tabLoginx = loginx.split(/:::/);
         // tabLoginx[0] is before and tabLoginx[1] is after :::
         // may be empty string but is defined
@@ -218,9 +218,9 @@ if ($is_allowedToEdit || $is_tutor) {
 } else {
     //The order is important you need to check the the $column variable in the model.ajax.php file
     $columns = [
-        get_lang('StartDate'),
+        get_lang('Start Date'),
         get_lang('Score'),
-        get_lang('Actions'),
+        get_lang('Detail'),
     ];
 
     //Column config

@@ -9,8 +9,6 @@ use Symfony\Component\Form\FormBuilderInterface;
 
 /**
  * Class AttendanceSettingsSchema.
- *
- * @package Chamilo\CoreBundle\Settings
  */
 class AttendanceSettingsSchema extends AbstractSettingsSchema
 {

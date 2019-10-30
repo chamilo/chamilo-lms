@@ -8,8 +8,8 @@ $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 $this_section = SECTION_COURSES;
 
-$course_code = isset($_REQUEST['course_code']) ? $_REQUEST['course_code'] : null;
-$session_id = isset($_REQUEST['session_id']) ? intval($_REQUEST['session_id']) : null;
+$course_code = isset($_REQUEST['course_code']) ? Security::remove_XSS($_REQUEST['course_code']) : null;
+$session_id = isset($_REQUEST['session_id']) ? (int) $_REQUEST['session_id'] : null;
 $user_id = api_get_user_id();
 
 if (empty($course_code)) {
@@ -57,20 +57,20 @@ if ($pluginLegal && isset($userData) && !empty($userData)) {
     if ($userData['web_agreement'] == 1) {
         if (empty($userData['mail_agreement'])) {
             $pluginMessage = Display::return_message(
-                $plugin->get_lang('YouNeedToConfirmYourAgreementCheckYourEmail')
+                $plugin->get_lang('You need to confirm your agreement to our terms first. Please check your e-mail.')
             );
             $hideForm = true;
         }
     }
 }
-$form->addElement('header', get_lang('CourseLegalAgreement'));
+$form->addElement('header', get_lang('Legal agreement for this course'));
 $form->addElement('label', null, $course_legal);
 if ($pluginLegal && !empty($plugin)) {
     $form->addElement('label', null, $plugin->getCurrentFile($course_info['real_id'], $session_id));
 }
 $form->addElement('hidden', 'course_code', $course_code);
 $form->addElement('hidden', 'session_id', $session_id);
-$form->addElement('checkbox', 'accept_legal', null, get_lang('AcceptLegal'));
+$form->addElement('checkbox', 'accept_legal', null, get_lang('Accept legal agreement'));
 $form->addButtonSave(get_lang('Accept'));
 
 $variable = 'accept_legal_'.$user_id.'_'.$course_info['real_id'].'_'.$session_id;

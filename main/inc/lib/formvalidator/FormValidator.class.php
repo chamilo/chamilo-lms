@@ -87,13 +87,13 @@ class FormValidator extends HTML_QuickForm
 
             //When you want to group buttons use something like this
             /* $group = array();
-              $group[] = $form->createElement('button', 'mark_all', get_lang('MarkAll'));
-              $group[] = $form->createElement('button', 'unmark_all', get_lang('UnmarkAll'));
+              $group[] = $form->createElement('button', 'mark_all', get_lang('Select all'));
+              $group[] = $form->createElement('button', 'unmark_all', get_lang('Unselect all'));
               $form->addGroup($group, 'buttons_in_action');
              */
             $renderer->setElementTemplate($templateSimple, 'buttons_in_action');
 
-            $templateSimpleRight = '<div class="form-actions"> <div class="float-right">{label} {element}</div></div>';
+            $templateSimpleRight = '<div class="form-actions"> <div class="pull-right">{label} {element}</div></div>';
             $renderer->setElementTemplate($templateSimpleRight, 'buttons_in_action_right');
         }
 
@@ -102,7 +102,7 @@ class FormValidator extends HTML_QuickForm
 
         //Set required field template
         $this->setRequiredNote(
-            '<span class="form_required">*</span> <small>'.get_lang('ThisFieldIsRequired').'</small>'
+            '<span class="form_required">*</span> <small>'.get_lang('Required field').'</small>'
         );
 
         $noteTemplate = <<<EOT
@@ -142,7 +142,6 @@ EOT;
                 <div class="col-sm-8">
                     {icon}
                     {element}
-
                     <!-- BEGIN label_2 -->
                         <p class="help-block">{label_2}</p>
                     <!-- END label_2 -->
@@ -196,10 +195,19 @@ EOT;
 
         $this->applyFilter($name, 'trim');
         if ($required) {
-            $this->addRule($name, get_lang('ThisFieldIsRequired'), 'required');
+            $this->addRule($name, get_lang('Required field'), 'required');
         }
 
         return $element;
+    }
+
+    /**
+     * Add hidden course params.
+     */
+    public function addCourseHiddenParams()
+    {
+        $this->addHidden('cidReq', api_get_course_id());
+        $this->addHidden('id_session', api_get_session_id());
     }
 
     /**
@@ -221,7 +229,7 @@ EOT;
         $this->addElement('hidden', $name.'_end');
 
         if ($required) {
-            $this->addRule($name, get_lang('ThisFieldIsRequired'), 'required');
+            $this->addRule($name, get_lang('Required field'), 'required');
         }
     }
 
@@ -255,14 +263,17 @@ EOT;
      * @param array  $options
      * @param array  $attributes
      *
-     * @throws
+     * @throws Exception
+     *
+     * @return HTML_QuickForm_element
      */
     public function addSelectAjax($name, $label, $options = [], $attributes = [])
     {
         if (!isset($attributes['url'])) {
             throw new \Exception('select_ajax needs an URL');
         }
-        $this->addElement(
+
+        return $this->addElement(
             'select_ajax',
             $name,
             $label,
@@ -284,9 +295,9 @@ EOT;
     }
 
     /**
-     * @param string $name
+     * @param string       $name
      * @param string|array $label
-     * @param array  $attributes
+     * @param array        $attributes
      *
      * @return DateTimeRangePicker
      */
@@ -318,7 +329,7 @@ EOT;
         $element = $this->addElement('textarea', $name, $label, $attributes);
 
         if ($required) {
-            $this->addRule($name, get_lang('ThisFieldIsRequired'), 'required');
+            $this->addRule($name, get_lang('Required field'), 'required');
         }
 
         return $element;
@@ -377,10 +388,11 @@ EOT;
      * @param string $label         Text appearing on the button
      * @param string $name          Element name (for form treatment purposes)
      * @param bool   $createElement Whether to use the create or add method
+     * @param array  $attributes
      *
      * @return HTML_QuickForm_button
      */
-    public function addButtonSave($label, $name = 'submit', $createElement = false)
+    public function addButtonSave($label, $name = 'submit', $createElement = false, $attributes = [])
     {
         return $this->addButton(
             $name,
@@ -389,7 +401,7 @@ EOT;
             'primary',
             null,
             null,
-            [],
+            $attributes,
             $createElement
         );
     }
@@ -907,7 +919,9 @@ EOT;
      */
     public function addHeader($text)
     {
-        $this->addElement('header', $text);
+        if (!empty($text)) {
+            $this->addElement('header', $text);
+        }
     }
 
     /**
@@ -937,7 +951,7 @@ EOT;
                                 <img id="'.$id.'_preview_image">
                             </div>
                             <button class="btn btn-primary" type="button" name="cropButton" id="'.$id.'_crop_button">
-                                <em class="fa fa-crop"></em> '.get_lang('CropYourPicture').'
+                                <em class="fa fa-crop"></em> '.get_lang('Crop your picture').'
                             </button>
                         </div>
                     </div>
@@ -1001,12 +1015,12 @@ EOT;
     /**
      * Adds a HTML-editor to the form.
      *
-     * @param string $name
+     * @param string       $name
      * @param string|array $label      The label for the form-element
-     * @param bool   $required   (optional) Is the form-element required (default=true)
-     * @param bool   $fullPage   (optional) When it is true, the editor loads completed html code for a full page
-     * @param array  $config     (optional) Configuration settings for the online editor
-     * @param array  $attributes
+     * @param bool         $required   (optional) Is the form-element required (default=true)
+     * @param bool         $fullPage   (optional) When it is true, the editor loads completed html code for a full page
+     * @param array        $config     (optional) Configuration settings for the online editor
+     * @param array        $attributes
      *
      * @throws Exception
      * @throws HTML_QuickForm_Error
@@ -1024,19 +1038,24 @@ EOT;
         $attributes['cols'] = isset($config['cols']) ? $config['cols'] : 80;
         $attributes['cols-size'] = isset($config['cols-size']) ? $config['cols-size'] : [];
         $attributes['class'] = isset($config['class']) ? $config['class'] : [];
+        $attributes['id'] = isset($config['id']) ? $config['id'] : '';
+
+        if (empty($attributes['id'])) {
+            $attributes['id'] = $name;
+        }
 
         $this->addElement('html_editor', $name, $label, $attributes, $config);
         $this->applyFilter($name, 'trim');
         if ($required) {
-            $this->addRule($name, get_lang('ThisFieldIsRequired'), 'required');
+            $this->addRule($name, get_lang('Required field'), 'required');
         }
 
         /** @var HtmlEditor $element */
         $element = $this->getElement($name);
-        $config['style'] = false;
+        $config['style'] = isset($config['style']) ? $config['style'] : false;
         if ($fullPage) {
             $config['fullPage'] = true;
-            // Adds editor.css in ckEditor
+            // Adds editor_content.css in ckEditor
             $config['style'] = true;
         }
 
@@ -1103,7 +1122,7 @@ EOT;
      */
     public function addButtonAdvancedSettings($name, $label = '')
     {
-        $label = !empty($label) ? $label : get_lang('AdvancedParameters');
+        $label = !empty($label) ? $label : get_lang('Advanced settings');
 
         return $this->addElement('advanced_settings', $name, $label);
     }
@@ -1114,7 +1133,7 @@ EOT;
     public function addProgress($delay = 2, $label = '')
     {
         if (empty($label)) {
-            $label = get_lang('PleaseStandBy');
+            $label = get_lang('Please stand by...');
         }
         $this->with_progress_bar = true;
         $id = $this->getAttribute('id');
@@ -1222,10 +1241,10 @@ EOT;
     {
         $this->addElement('url', $name, $label, $attributes);
         $this->applyFilter($name, 'trim');
-        $this->addRule($name, get_lang('InsertAValidUrl'), 'url');
+        $this->addRule($name, get_lang('Insert a valid URL'), 'url');
 
         if ($required) {
-            $this->addRule($name, get_lang('ThisFieldIsRequired'), 'required');
+            $this->addRule($name, get_lang('Required field'), 'required');
         }
     }
 
@@ -1248,7 +1267,7 @@ EOT;
             $attributes,
             [
                 'pattern' => '[a-zA-ZñÑ]+',
-                'title' => get_lang('OnlyLetters'),
+                'title' => get_lang('Only letters'),
             ]
         );
 
@@ -1257,7 +1276,7 @@ EOT;
             $name,
             [
                 $label,
-                get_lang('OnlyLetters'),
+                get_lang('Only letters'),
             ],
             $attributes
         );
@@ -1265,12 +1284,12 @@ EOT;
         $this->applyFilter($name, 'trim');
 
         if ($required) {
-            $this->addRule($name, get_lang('ThisFieldIsRequired'), 'required');
+            $this->addRule($name, get_lang('Required field'), 'required');
         }
 
         $this->addRule(
             $name,
-            get_lang('OnlyLetters'),
+            get_lang('Only letters'),
             'regex',
             '/^[a-zA-ZñÑ]+$/'
         );
@@ -1295,7 +1314,7 @@ EOT;
             $attributes,
             [
                 'pattern' => '[a-zA-Z0-9ñÑ]+',
-                'title' => get_lang('OnlyLettersAndNumbers'),
+                'title' => get_lang('Only lettersAndNumbers'),
             ]
         );
 
@@ -1304,7 +1323,7 @@ EOT;
             $name,
             [
                 $label,
-                get_lang('OnlyLettersAndNumbers'),
+                get_lang('Only lettersAndNumbers'),
             ],
             $attributes
         );
@@ -1312,12 +1331,12 @@ EOT;
         $this->applyFilter($name, 'trim');
 
         if ($required) {
-            $this->addRule($name, get_lang('ThisFieldIsRequired'), 'required');
+            $this->addRule($name, get_lang('Required field'), 'required');
         }
 
         $this->addRule(
             $name,
-            get_lang('OnlyLettersAndNumbers'),
+            get_lang('Only lettersAndNumbers'),
             'regex',
             '/^[a-zA-Z0-9ÑÑ]+$/'
         );
@@ -1351,13 +1370,13 @@ EOT;
         $this->applyFilter($name, 'trim');
 
         if ($required) {
-            $this->addRule($name, get_lang('ThisFieldIsRequired'), 'required');
+            $this->addRule($name, get_lang('Required field'), 'required');
         }
 
         // Rule allows "," and "."
         /*$this->addRule(
             $name,
-            get_lang('OnlyNumbers'),
+            get_lang('Only numbers'),
             'regex',
             '/(^-?\d\d*\.\d*$)|(^-?\d\d*$)|(^-?\.\d\d*$)|(^-?\d\d*\,\d*$)|(^-?\,\d\d*$)/'
         );*/
@@ -1365,7 +1384,7 @@ EOT;
         if ($allowNegative == false) {
             $this->addRule(
                 $name,
-                get_lang('NegativeValue'),
+                get_lang('Negative value'),
                 'compare',
                 '>=',
                 'server',
@@ -1378,7 +1397,7 @@ EOT;
         if (!is_null($minValue)) {
             $this->addRule(
                 $name,
-                get_lang('UnderMin'),
+                get_lang('Under the minimum.'),
                 'compare',
                 '>=',
                 'server',
@@ -1391,7 +1410,7 @@ EOT;
         if (!is_null($maxValue)) {
             $this->addRule(
                 $name,
-                get_lang('OverMax'),
+                get_lang('Value exceeds score.'),
                 'compare',
                 '<=',
                 'server',
@@ -1421,7 +1440,7 @@ EOT;
             $attributes,
             [
                 'pattern' => '[a-zA-ZñÑ\s]+',
-                'title' => get_lang('OnlyLettersAndSpaces'),
+                'title' => get_lang('Only lettersAndSpaces'),
             ]
         );
 
@@ -1430,7 +1449,7 @@ EOT;
             $name,
             [
                 $label,
-                get_lang('OnlyLettersAndSpaces'),
+                get_lang('Only lettersAndSpaces'),
             ],
             $attributes
         );
@@ -1438,12 +1457,12 @@ EOT;
         $this->applyFilter($name, 'trim');
 
         if ($required) {
-            $this->addRule($name, get_lang('ThisFieldIsRequired'), 'required');
+            $this->addRule($name, get_lang('Required field'), 'required');
         }
 
         $this->addRule(
             $name,
-            get_lang('OnlyLettersAndSpaces'),
+            get_lang('Only lettersAndSpaces'),
             'regex',
             '/^[a-zA-ZñÑ\s]+$/'
         );
@@ -1468,7 +1487,7 @@ EOT;
             $attributes,
             [
                 'pattern' => '[a-zA-Z0-9ñÑ\s]+',
-                'title' => get_lang('OnlyLettersAndNumbersAndSpaces'),
+                'title' => get_lang('Only lettersAndNumbersAndSpaces'),
             ]
         );
 
@@ -1477,7 +1496,7 @@ EOT;
             $name,
             [
                 $label,
-                get_lang('OnlyLettersAndNumbersAndSpaces'),
+                get_lang('Only lettersAndNumbersAndSpaces'),
             ],
             $attributes
         );
@@ -1485,12 +1504,12 @@ EOT;
         $this->applyFilter($name, 'trim');
 
         if ($required) {
-            $this->addRule($name, get_lang('ThisFieldIsRequired'), 'required');
+            $this->addRule($name, get_lang('Required field'), 'required');
         }
 
         $this->addRule(
             $name,
-            get_lang('OnlyLettersAndNumbersAndSpaces'),
+            get_lang('Only lettersAndNumbersAndSpaces'),
             'regex',
             '/^[a-zA-Z0-9ñÑ\s]+$/'
         );
@@ -1507,17 +1526,17 @@ EOT;
 
         $this->addHtml('
             <div class="description-upload">
-            '.get_lang('ClickToSelectOrDragAndDropMultipleFilesOnTheUploadField').'
+            '.get_lang('Click on the box below to select files from your computer (you can use CTRL + clic to select various files at a time), or drag and drop some files from your desktop directly over the box below. The system will handle the rest!').'
             </div>
             <span class="btn btn-success fileinput-button">
                 <i class="glyphicon glyphicon-plus"></i>
-                <span>'.get_lang('AddFiles').'</span>
+                <span>'.get_lang('Add files').'</span>
                 <!-- The file input field used as target for the file upload widget -->
                 <input id="'.$inputName.'" type="file" name="files[]" multiple>
             </span>
             <div id="dropzone">
                 <div class="button-load">
-                '.get_lang('UploadFiles').'
+                '.get_lang('Click or drag and drop files here to upload them').'
                 </div>
             </div>
             <br />
@@ -1538,7 +1557,7 @@ EOT;
     public function addPasswordRule($elementName, $groupName = '')
     {
         if (api_get_setting('security.check_password') == 'true') {
-            $message = get_lang('PassTooEasy').': '.api_generate_password();
+            $message = get_lang('this password  is too simple. Use a pass like this').': '.api_generate_password();
 
             if (!empty($groupName)) {
                 $groupObj = $this->getElement($groupName);
@@ -1767,7 +1786,7 @@ EOT;
                     // Update file name with new one from Chamilo
                     $(data.context.children()[index]).parent().find('.file_name').html(file.name);
                     var message = $('<div class=\"col-sm-3\">').html(
-                        $('<span class=\"message-image-success\"/>').text('".addslashes(get_lang('UplUploadSucceeded'))."')
+                        $('<span class=\"message-image-success\"/>').text('".addslashes(get_lang('File upload succeeded!'))."')
                     );
                     $(data.context.children()[index]).parent().append(message);
                 });                
@@ -1775,7 +1794,7 @@ EOT;
                 ".$redirectCondition."
             }).on('fileuploadfail', function (e, data) {
                 $.each(data.files, function (index) {
-                    var failedMessage = '".addslashes(get_lang('UplUploadFailed'))."';
+                    var failedMessage = '".addslashes(get_lang('The file upload has failed.'))."';
                     var error = $('<div class=\"col-sm-3\">').html(
                         $('<span class=\"alert alert-danger\"/>').text(failedMessage)
                     );

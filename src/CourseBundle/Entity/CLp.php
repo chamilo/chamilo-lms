@@ -213,7 +213,7 @@ class CLp
     /**
      * @var int
      *
-     * @ORM\Column(name="category_id", type="integer", precision=0, scale=0, nullable=false, unique=false)
+     * @ORM\Column(name="category_id", type="integer", nullable=false, unique=false)
      */
     protected $categoryId;
 

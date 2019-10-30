@@ -15,8 +15,8 @@ api_protect_admin_script();
 $htmlHeadXtra[] = api_get_jqgrid_js();
 
 // setting breadcrumbs
-$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('PlatformAdmin')];
-$interbreadcrumb[] = ['url' => 'career_dashboard.php', 'name' => get_lang('CareersAndPromotions')];
+$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('Administration')];
+$interbreadcrumb[] = ['url' => 'career_dashboard.php', 'name' => get_lang('Careers and promotions')];
 
 $action = isset($_GET['action']) ? $_GET['action'] : null;
 
@@ -64,7 +64,7 @@ $columns = [
     get_lang('Name'),
     get_lang('Career'),
     get_lang('Description'),
-    get_lang('Actions'),
+    get_lang('Detail'),
 ];
 $column_model = [
     [
@@ -101,10 +101,10 @@ $extra_params['autowidth'] = 'true'; //use the width of the parent
 $extra_params['height'] = 'auto'; //use the width of the parent
 //With this function we can add actions to the jgrid
 $action_links = 'function action_formatter (cellvalue, options, rowObject) {
-    return \'<a href="add_sessions_to_promotion.php?id=\'+options.rowId+\'">'.Display::return_icon('session_to_promotion.png', get_lang('SubscribeSessionsToPromotions'), '', ICON_SIZE_SMALL).'</a>'.
+    return \'<a href="add_sessions_to_promotion.php?id=\'+options.rowId+\'">'.Display::return_icon('session_to_promotion.png', get_lang('Subscribe sessions to promotions'), '', ICON_SIZE_SMALL).'</a>'.
     '&nbsp;<a href="?action=edit&id=\'+options.rowId+\'">'.Display::return_icon('edit.png', get_lang('Edit'), '', ICON_SIZE_SMALL).'</a>'.
-    '&nbsp;<a onclick="javascript:if(!confirm('."\'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"), ENT_QUOTES))."\'".')) return false;"  href="?sec_token='.$token.'&action=copy&id=\'+options.rowId+\'">'.Display::return_icon('copy.png', get_lang('Copy'), '', ICON_SIZE_SMALL).'</a>'.
-    '&nbsp;<a onclick="javascript:if(!confirm('."\'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"), ENT_QUOTES))."\'".')) return false;"  href="?sec_token='.$token.'&action=delete&id=\'+options.rowId+\'">'.Display::return_icon('delete.png', get_lang('Delete'), '', ICON_SIZE_SMALL).'</a> \';
+    '&nbsp;<a onclick="javascript:if(!confirm('."\'".addslashes(api_htmlentities(get_lang("Please confirm your choice"), ENT_QUOTES))."\'".')) return false;"  href="?sec_token='.$token.'&action=copy&id=\'+options.rowId+\'">'.Display::return_icon('copy.png', get_lang('Copy'), '', ICON_SIZE_SMALL).'</a>'.
+    '&nbsp;<a onclick="javascript:if(!confirm('."\'".addslashes(api_htmlentities(get_lang("Please confirm your choice"), ENT_QUOTES))."\'".')) return false;"  href="?sec_token='.$token.'&action=delete&id=\'+options.rowId+\'">'.Display::return_icon('delete.png', get_lang('Delete'), '', ICON_SIZE_SMALL).'</a> \';
 }';
 
 ?>
@@ -129,7 +129,7 @@ switch ($action) {
         $career = new Career();
         $careers = $career->get_all();
         if (empty($careers)) {
-            $url = Display::url(get_lang('YouNeedToCreateACareerFirst'), 'careers.php?action=add');
+            $url = Display::url(get_lang('You will have to create a career before you can add promotions (promotions are sub-elements of a career)'), 'careers.php?action=add');
             echo Display::return_message($url, 'normal', false);
             Display::display_footer();
             exit;
@@ -144,7 +144,7 @@ switch ($action) {
                 $values = $form->exportValues();
                 $res = $promotion->save($values);
                 if ($res) {
-                    echo Display::return_message(get_lang('ItemAdded'), 'confirm');
+                    echo Display::return_message(get_lang('Item added'), 'confirm');
                 }
             }
             $promotion->display();
@@ -169,7 +169,7 @@ switch ($action) {
                 $res = $promotion->update($values);
                 $promotion->update_all_sessions_status_by_promotion_id($values['id'], $values['status']);
                 if ($res) {
-                    echo Display::return_message(get_lang('PromotionUpdated').': '.$values['name'], 'confirm');
+                    echo Display::return_message(get_lang('Promotion updated successfully').': '.$values['name'], 'confirm');
                 }
             }
             $promotion->display();
@@ -195,7 +195,7 @@ switch ($action) {
             // Action handling: deleting an obj
             $res = $promotion->delete($_GET['id']);
             if ($res) {
-                return Display::return_message(get_lang('ItemDeleted'), 'confirm');
+                return Display::return_message(get_lang('Item deleted'), 'confirm');
             }
         }
         $promotion->display();
@@ -208,7 +208,7 @@ switch ($action) {
             $res = $promotion->copy($_GET['id'], null, true);
             if ($res) {
                 echo Display::return_message(
-                    get_lang('ItemCopied').' - '.get_lang(
+                    get_lang('Item copied').' - '.get_lang(
                         'ExerciseAndLPsAreInvisibleInTheNewCourse'
                     ),
                     'confirm'

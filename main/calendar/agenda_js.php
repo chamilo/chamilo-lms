@@ -62,7 +62,7 @@ if (!empty($group_id)) {
     ];
     $interbreadcrumb[] = [
         "url" => api_get_path(WEB_CODE_PATH)."group/group_space.php?".api_get_cidreq(),
-        "name" => get_lang('GroupSpace').' '.$group_properties['name'],
+        "name" => get_lang('Group area').' '.$group_properties['name'],
     ];
 }
 
@@ -147,7 +147,7 @@ $export_icon_high = Display::return_icon(
 
 $tpl->assign(
     'export_ical_confidential_icon',
-    Display::return_icon($export_icon_high, get_lang('ExportiCalConfidential'))
+    Display::return_icon($export_icon_high, get_lang('Export in iCal format as confidential event'))
 );
 
 $actions = $agenda->displayActions('calendar', $userId);
@@ -161,7 +161,7 @@ $type_event_class = $type.'_event';
 $type_label = get_lang(ucfirst($type).'Calendar');
 if ($type == 'course' && !empty($group_id)) {
     $type_event_class = 'group_event';
-    $type_label = get_lang('GroupCalendar');
+    $type_label = get_lang('Agenda');
 }
 
 $defaultView = api_get_setting('default_calendar_view');
@@ -175,7 +175,7 @@ $tpl->assign('default_view', $defaultView);
 
 if ($type == 'course' && !empty($session_id)) {
     $type_event_class = 'session_event';
-    $type_label = get_lang('SessionCalendar');
+    $type_label = get_lang('Session calendar');
 }
 
 $agendaColors = array_merge(
@@ -267,15 +267,20 @@ $form->addHtmlEditor(
     [
         'ToolbarSet' => 'TestProposedAnswer',
         'Height' => '120',
+        'id' => 'content',
     ]
 );
 
 if ($agenda->type === 'course') {
     $form->addHtml('<div id="add_as_announcement_div" style="display: none">');
-    $form->addElement('checkbox', 'add_as_annonuncement', null, get_lang('AddAsAnnouncement'));
+    $form->addElement('checkbox', 'add_as_annonuncement', null, get_lang('Add as an announcement'));
     $form->addHtml('</div>');
     $form->addElement('textarea', 'comment', get_lang('Comment'), ['id' => 'comment']);
 }
+
+$form->addHtml('<div id="attachment_block" style="display: none">');
+$form->addLabel(get_lang('Attachment'), '<div id="attachment_text" style="display: none"></div>');
+$form->addHtml('</div>');
 
 $tpl->assign('form_add', $form->returnForm());
 $tpl->assign('legend_list', api_get_configuration_value('agenda_legend'));

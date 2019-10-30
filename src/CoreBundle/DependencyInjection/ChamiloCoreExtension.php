@@ -10,8 +10,6 @@ use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 
 /**
  * Class ChamiloCoreExtension.
- *
- * @package Chamilo\CoreBundle\DependencyInjection
  */
 class ChamiloCoreExtension extends Extension
 {
@@ -25,9 +23,10 @@ class ChamiloCoreExtension extends Extension
             $container,
             new FileLocator(__DIR__.'/../Resources/config')
         );
-
         $loader->load('services.yml');
         $loader->load('admin.yml');
+        $loader->load('tools.yml');
+        $loader->load('settings.yml');
     }
 
     /**

@@ -16,10 +16,12 @@ require_once '../config.php';
 
 if (!isset($_REQUEST['t'], $_REQUEST['i'])) {
     header('Location: '.api_get_path(WEB_PLUGIN_PATH).'buycourses/src/service_catalog.php');
+    exit;
 }
 
 $currentUserId = api_get_user_id();
-$serviceId = intval($_REQUEST['i']);
+$serviceId = (int) $_REQUEST['i'];
+$type = (int) $_REQUEST['t'];
 
 if (empty($currentUserId)) {
     api_not_allowed(true);
@@ -33,57 +35,21 @@ $includeServices = $plugin->get('include_services');
 $paypalEnabled = $plugin->get('paypal_enable') === 'true';
 $transferEnabled = $plugin->get('transfer_enable') === 'true';
 $culqiEnabled = $plugin->get('culqi_enable') === 'true';
-$wizard = true;
 $additionalQueryString = '';
 if ($includeServices !== 'true') {
     api_not_allowed(true);
 }
 
-$typeUser = intval($_REQUEST['t']) === BuyCoursesPlugin::SERVICE_TYPE_USER;
-$typeCourse = intval($_REQUEST['t']) === BuyCoursesPlugin::SERVICE_TYPE_COURSE;
-$typeSession = intval($_REQUEST['t']) === BuyCoursesPlugin::SERVICE_TYPE_SESSION;
-$typeFinalLp = intval($_REQUEST['t']) === BuyCoursesPlugin::SERVICE_TYPE_LP_FINAL_ITEM;
-$queryString = 'i='.intval($_REQUEST['i']).'&t='.intval($_REQUEST['t']).$additionalQueryString;
+$typeUser = $type === BuyCoursesPlugin::SERVICE_TYPE_USER;
+$typeCourse = $type === BuyCoursesPlugin::SERVICE_TYPE_COURSE;
+$typeSession = $type === BuyCoursesPlugin::SERVICE_TYPE_SESSION;
+$typeFinalLp = $type === BuyCoursesPlugin::SERVICE_TYPE_LP_FINAL_ITEM;
+$queryString = 'i='.$serviceId.'&t='.$type.$additionalQueryString;
 
-$serviceInfo = $plugin->getServices(intval($_REQUEST['i']));
+$serviceInfo = $plugin->getService($serviceId);
 $userInfo = api_get_user_info($currentUserId);
 
 $form = new FormValidator('confirm_sale');
-
-if ($form->validate()) {
-    $formValues = $form->getSubmitValues();
-
-    if (!$formValues['payment_type']) {
-        Display::addFlash(
-            Display::return_message($plugin->get_lang('NeedToSelectPaymentType'), 'error', false)
-        );
-        header('Location:'.api_get_self().'?'.$queryString);
-        exit;
-    }
-
-    if (!$formValues['info_select']) {
-        Display::addFlash(
-            Display::return_message($plugin->get_lang('AdditionalInfoRequired'), 'error', false)
-        );
-        header('Location:'.api_get_self().'?'.$queryString);
-        exit;
-    }
-
-    $serviceSaleId = $plugin->registerServiceSale(
-        $serviceId,
-        $formValues['payment_type'],
-        $formValues['info_select'],
-        $formValues['enable_trial']
-    );
-
-    if ($serviceSaleId !== false) {
-        $_SESSION['bc_service_sale_id'] = $serviceSaleId;
-
-        header('Location: '.api_get_path(WEB_PLUGIN_PATH).'buycourses/src/service_process_confirm.php');
-    }
-    exit;
-}
-
 $paymentTypesOptions = $plugin->getPaymentTypes();
 
 if (!$paypalEnabled) {
@@ -105,14 +71,20 @@ $form->addHtml(
     )
 );
 $form->addRadio('payment_type', null, $paymentTypesOptions);
-$form->addHtml(
-    Display::return_message(
-        $plugin->get_lang('PleaseSelectTheCorrectInfoToApplyTheService'),
-        'info'
-    )
-);
+
+$infoRequired = false;
+if ($typeUser || $typeCourse || $typeSession || $typeFinalLp) {
+    $infoRequired = true;
+    $form->addHtml(
+        Display::return_message(
+            $plugin->get_lang('PleaseSelectTheCorrectInfoToApplyTheService'),
+            'info'
+        )
+    );
+}
+
 $selectOptions = [
-    0 => get_lang('None'),
+    0 => get_lang('none'),
 ];
 
 if ($typeUser) {
@@ -120,13 +92,13 @@ if ($typeUser) {
     $selectOptions[$userInfo['user_id']] = api_get_person_name(
         $userInfo['firstname'],
         $userInfo['lastname']
-    ).' ('.get_lang('Myself').')';
+    ).' ('.get_lang('myself').')';
 
     if (!empty($users)) {
         /** @var User $user */
         foreach ($users as $user) {
             if (intval($userInfo['user_id']) !== intval($user->getId())) {
-                $selectOptions[$user->getId()] = UserManager::formatUserFullName($user, true);
+                $selectOptions[$user->getId()] = $user->getCompleteNameWithUsername();
             }
         }
     }
@@ -195,7 +167,7 @@ if ($typeUser) {
             ->getRepository('ChamiloCourseBundle:CLp')
             ->findBy(['sessionId' => $session->getSession()->getId()]);
 
-        //Here check all the lpItems
+        // Here check all the lpItems
         foreach ($thisLpList as $lp) {
             $thisLpItems = $em->getRepository('ChamiloCourseBundle:CLpItem')->findBy(['lpId' => $lp->getId()]);
 
@@ -210,10 +182,9 @@ if ($typeUser) {
 
         $thisLpList = $em->getRepository('ChamiloCourseBundle:CLp')->findBy(['cId' => $session->getCourse()->getId()]);
 
-        //Here check all the lpItems
+        // Here check all the lpItems
         foreach ($thisLpList as $lp) {
             $thisLpItems = $em->getRepository('ChamiloCourseBundle:CLpItem')->findBy(['lpId' => $lp->getId()]);
-
             foreach ($thisLpItems as $item) {
                 //Now only we need the final item and return the current LP
                 if ($item->getItemType() == TOOL_LP_FINAL_ITEM) {
@@ -225,28 +196,63 @@ if ($typeUser) {
     }
 
     $selectOptions = $selectOptions + $courseLpList + $sessionLpList;
-
     if (!$checker) {
         $form->addHtml(
             Display::return_message(
-                $plugin->get_lang('YourCoursesNeedAtLeastOneLearningPath'),
+                $plugin->get_lang('YourCoursesNeedAtLeastOneLearning paths'),
                 'error'
             )
         );
     }
-    $form->addSelect('info_select', get_lang('LearningPath'), $selectOptions);
+    $form->addSelect('info_select', get_lang('Learning paths'), $selectOptions);
 }
 
 $form->addHidden('t', intval($_GET['t']));
 $form->addHidden('i', intval($_GET['i']));
-
 $form->addButton('submit', $plugin->get_lang('ConfirmOrder'), 'check', 'success');
+
+if ($form->validate()) {
+    $formValues = $form->getSubmitValues();
+
+    if (!isset($formValues['payment_type'])) {
+        Display::addFlash(
+            Display::return_message($plugin->get_lang('NeedToSelectPaymentType'), 'error', false)
+        );
+        header('Location:'.api_get_self().'?'.$queryString);
+        exit;
+    }
+
+    $infoSelected = [];
+    if ($infoRequired) {
+        if (isset($formValues['info_select'])) {
+            $infoSelected = $formValues['info_select'];
+        } else {
+            Display::addFlash(
+                Display::return_message($plugin->get_lang('AdditionalInfoRequired'), 'error', false)
+            );
+            header('Location:'.api_get_self().'?'.$queryString);
+            exit;
+        }
+    }
+
+    $serviceSaleId = $plugin->registerServiceSale(
+        $serviceId,
+        $formValues['payment_type'],
+        $infoSelected
+    );
+
+    if ($serviceSaleId !== false) {
+        $_SESSION['bc_service_sale_id'] = $serviceSaleId;
+        header('Location: '.api_get_path(WEB_PLUGIN_PATH).'buycourses/src/service_process_confirm.php');
+    }
+    exit;
+}
 
 // View
 $templateName = $plugin->get_lang('PaymentMethods');
 $interbreadcrumb[] = [
-    "url" => "service_catalog.php",
-    "name" => $plugin->get_lang('ListOfServicesOnSale'),
+    'url' => 'service_catalog.php',
+    'name' => $plugin->get_lang('ListOfServicesOnSale'),
 ];
 
 $tpl = new Template($templateName);

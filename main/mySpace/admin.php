@@ -1,9 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
  * Special reporting page for admins.
- *
- * @package chamilo.reporting
  */
 ob_start();
 $cidReset = true;
@@ -15,7 +14,7 @@ $this_section = SECTION_TRACKING;
 $nameTools = get_lang('Administrators');
 
 api_block_anonymous_users();
-$interbreadcrumb[] = ["url" => "index.php", "name" => get_lang('MySpace')];
+$interbreadcrumb[] = ["url" => "index.php", "name" => get_lang('Reporting')];
 Display :: display_header($nameTools);
 
 api_display_tool_title($nameTools);
@@ -39,19 +38,19 @@ $sql = "SELECT user.user_id,lastname,firstname,email
 $result_admins = Database::query($sql);
 
 if (api_is_western_name_order()) {
-    echo '<table class="data_table"><tr><th>'.get_lang('FirstName').'</th><th>'.get_lang('LastName').'</th><th>'.get_lang('Email').'</th></tr>';
+    echo '<table class="data_table"><tr><th>'.get_lang('First name').'</th><th>'.get_lang('Last name').'</th><th>'.get_lang('e-mail').'</th></tr>';
 } else {
-    echo '<table class="data_table"><tr><th>'.get_lang('LastName').'</th><th>'.get_lang('FirstName').'</th><th>'.get_lang('Email').'</th></tr>';
+    echo '<table class="data_table"><tr><th>'.get_lang('Last name').'</th><th>'.get_lang('First name').'</th><th>'.get_lang('e-mail').'</th></tr>';
 }
 
 if (api_is_western_name_order(PERSON_NAME_DATA_EXPORT)) {
-    $header[] = get_lang('FirstName', '');
-    $header[] = get_lang('LastName', '');
+    $header[] = get_lang('First name');
+    $header[] = get_lang('Last name');
 } else {
-    $header[] = get_lang('LastName', '');
-    $header[] = get_lang('FirstName', '');
+    $header[] = get_lang('Last name');
+    $header[] = get_lang('First name');
 }
-$header[] = get_lang('Email', '');
+$header[] = get_lang('e-mail');
 
 if (Database::num_rows($result_admins) > 0) {
     while ($admins = Database::fetch_array($result_admins)) {
@@ -64,9 +63,9 @@ if (Database::num_rows($result_admins) > 0) {
             $css_class = "row_odd";
             if ($i % 20 == 0 && $i != 0) {
                 if (api_is_western_name_order()) {
-                    echo '<tr><th>'.get_lang('FirstName').'</th><th>'.get_lang('LastName').'</th><th>'.get_lang('Email').'</th></tr>';
+                    echo '<tr><th>'.get_lang('First name').'</th><th>'.get_lang('Last name').'</th><th>'.get_lang('e-mail').'</th></tr>';
                 } else {
-                    echo '<tr><th>'.get_lang('LastName').'</th><th>'.get_lang('FirstName').'</th><th>'.get_lang('Email').'</th></tr>';
+                    echo '<tr><th>'.get_lang('Last name').'</th><th>'.get_lang('First name').'</th><th>'.get_lang('e-mail').'</th></tr>';
                 }
             }
         } else {
@@ -92,7 +91,7 @@ if (Database::num_rows($result_admins) > 0) {
     }
 } else {
     // No results
-    echo '<tr><td colspan="3">'.get_lang('NoResults').'</td></tr>';
+    echo '<tr><td colspan="3">'.get_lang('No results found').'</td></tr>';
 }
 echo '</table>';
 
@@ -103,8 +102,8 @@ if (isset($_POST['export'])) {
 echo "
     <br /><br />
     <form method='post' action='admin.php'>
-        <button type='submit' class='save' name='export' value='".get_lang('ExportExcel')."'>
-            ".get_lang('ExportExcel')."
+        <button type='submit' class='save' name='export' value='".get_lang('Excel export')."'>
+            ".get_lang('Excel export')."
         </button>
     <form>
 ";

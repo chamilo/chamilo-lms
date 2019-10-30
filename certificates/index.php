@@ -8,9 +8,11 @@
 require_once '../main/inc/global.inc.php';
 
 $action = isset($_GET['action']) ? $_GET['action'] : null;
-$certificate = new Certificate($_GET['id']);
+$userId = isset($_GET['user_id']) ? $_GET['user_id'] : 0;
 
-CustomCertificatePlugin::redirectCheck($certificate, $_GET['id']);
+$certificate = new Certificate($_GET['id'], $userId);
+
+CustomCertificatePlugin::redirectCheck($certificate, $_GET['id'], $userId);
 
 switch ($action) {
     case 'export':
@@ -61,7 +63,7 @@ switch ($action) {
         if (!$certificate->isVisible()) {
             Display::display_reduced_header();
             echo Display::return_message(
-                get_lang('CertificateExistsButNotPublic'),
+                get_lang('The requested certificate exists on this portal, but it has not been made public. Please login to view it.'),
                 'warning'
             );
             Display::display_reduced_footer();
@@ -71,7 +73,7 @@ switch ($action) {
         if (!$certificate->isAvailable()) {
             Display::display_reduced_header();
             echo Display::return_message(
-                get_lang('NoCertificateAvailable'),
+                get_lang('No certificate available'),
                 'error'
             );
             Display::display_reduced_footer();

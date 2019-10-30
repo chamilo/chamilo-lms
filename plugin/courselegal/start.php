@@ -57,7 +57,7 @@ if ($form->validate()) {
 }
 Display::display_header($legal->get_lang('CourseLegal'));
 $url = api_get_path(WEB_PLUGIN_PATH).'courselegal/user_list.php?'.api_get_cidreq();
-$link = Display::url(Display::return_icon('user.png', get_lang('UserList')), $url);
+$link = Display::url(Display::return_icon('user.png', get_lang('User list')), $url);
 echo '<div class="actions">'.$link.'</div>';
 $form->display();
 

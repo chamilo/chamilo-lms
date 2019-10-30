@@ -10,7 +10,7 @@ $cidReset = true;
 
 require_once __DIR__.'/../inc/global.inc.php';
 
-$id_session = intval($_GET['id_session']);
+$id_session = isset($_GET['id_session']) ? (int) $_GET['id_session'] : 0;
 SessionManager::protectSession($id_session);
 $course_code = $_GET['course_code'];
 $course_info = api_get_course_info($_REQUEST['course_code']);
@@ -42,10 +42,10 @@ if (!list($session_name, $course_title) = Database::fetch_row($result)) {
     exit();
 }
 
-$interbreadcrumb[] = ['url' => "session_list.php", "name" => get_lang("SessionList")];
+$interbreadcrumb[] = ['url' => "session_list.php", "name" => get_lang("Session list")];
 $interbreadcrumb[] = [
     'url' => "resume_session.php?id_session=".$id_session,
-    "name" => get_lang('SessionOverview'),
+    "name" => get_lang('Session overview'),
 ];
 $interbreadcrumb[] = [
     'url' => "session_course_list.php?id_session=$id_session",
@@ -89,7 +89,7 @@ if (isset($_POST['formSent']) && $_POST['formSent']) {
                 true
             );
         }
-        Display::addFlash(Display::return_message(get_lang('Updated')));
+        Display::addFlash(Display::return_message(get_lang('Update successful')));
         header('Location: '.Security::remove_XSS($_GET['page']).'?id_session='.$id_session);
         exit();
     }
@@ -141,7 +141,7 @@ if (!api_is_platform_admin() && api_is_teacher()) {
 }
 
 Display::display_header($tool_name);
-$tool_name = get_lang('ModifySessionCourse');
+$tool_name = get_lang('Edit session course');
 api_display_tool_title($tool_name);
 
 $form = new FormValidator(
@@ -159,9 +159,9 @@ foreach ($coaches as $enreg) {
     }
 }
 
-$form->addSelect('id_coach', get_lang('CoachName'), $options, ['multiple' => 'multiple']);
+$form->addSelect('id_coach', get_lang('Coach name'), $options, ['multiple' => 'multiple']);
 $form->addHidden('formSent', 1);
-$form->addButtonSave(get_lang('AssignCoach'));
+$form->addButtonSave(get_lang('Assign coach'));
 $form->setDefaults(['id_coach' => $selected]);
 $form->display();
 

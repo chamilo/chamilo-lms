@@ -72,14 +72,14 @@ foreach ($instances as $instance) {
     $cmd .= '&nbsp;<a href="'.$thisurl.'?what=snapshotinstance&vid='.$instance->id.'" title="'.$plugin->get_lang('snapshotinstance').'">
         '.Display::returnFontAwesomeIcon('camera', 2).'</a>';
 
-    $cmd .= '<a href="'.$thisurl.'?what=upgrade&vids[]='.$instance->id.'" title="'.$plugin->get_lang('Upgrade').'">
+    $cmd .= '<a href="'.$thisurl.'?what=upgrade&vids[]='.$instance->id.'" title="'.$plugin->get_lang('Upgrade Chamilo').'">
          &nbsp;'.Display::returnFontAwesomeIcon('wrench', 2).' </a>';
 
     if (!$instance->visible) {
-        $cmd .= '<a onclick="javascript:if(!confirm(\''.get_lang('AreYouSureToDelete').'\')) return false;" href="'.$thisurl.'?what=fulldeleteinstances&vids[]='.$instance->id.'" title="'.$plugin->get_lang('destroyinstances').'">
+        $cmd .= '<a onclick="javascript:if(!confirm(\''.get_lang('Are you sure you want to delete').'\')) return false;" href="'.$thisurl.'?what=fulldeleteinstances&vids[]='.$instance->id.'" title="'.$plugin->get_lang('destroyinstances').'">
         &nbsp;'.Display::returnFontAwesomeIcon('remove', 2).' </a>';
     } else {
-        $cmd .= '<a onclick="javascript:if(!confirm(\''.get_lang('AreYouSureToDelete').'\')) return false;" href="'.$thisurl.'?what=deleteinstances&vids[]='.$instance->id.'" title="'.$plugin->get_lang('deleteinstances').'">
+        $cmd .= '<a onclick="javascript:if(!confirm(\''.get_lang('Are you sure you want to delete').'\')) return false;" href="'.$thisurl.'?what=deleteinstances&vids[]='.$instance->id.'" title="'.$plugin->get_lang('deleteinstances').'">
          &nbsp;'.Display::returnFontAwesomeIcon('remove', 2).' </a>';
     }
 

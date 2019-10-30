@@ -9,8 +9,6 @@ use Symfony\Component\Form\FormBuilderInterface;
 
 /**
  * Class SocialSettingsSchema.
- *
- * @package Chamilo\CoreBundle\Settings
  */
 class SocialSettingsSchema extends AbstractSettingsSchema
 {

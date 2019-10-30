@@ -10,8 +10,6 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
  * Class ResourceRightType.
- *
- * @package Chamilo\CoreBundle\Form\Type
  */
 class ResourceRightType extends AbstractType
 {

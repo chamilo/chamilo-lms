@@ -28,9 +28,9 @@ $columns = [
     get_lang('Name'),
     get_lang('Users'),
     get_lang('Courses'),
-    get_lang('Sessions'),
+    get_lang('Course sessions'),
     get_lang('Type'),
-    get_lang('Actions'),
+    get_lang('Detail'),
 ];
 
 //Column config
@@ -59,11 +59,11 @@ $extra_params['sortorder'] = 'desc';
 // With this function we can add actions to the jgrid
 $action_links = 'function action_formatter (cellvalue, options, rowObject) {
     return \''
-    .' <a href="add_users_to_usergroup.php?id=\'+options.rowId+\'">'.Display::return_icon('user_to_class.png', get_lang('SubscribeUsersToClass'), null, ICON_SIZE_MEDIUM).'</a>'
-    .' <a href="add_courses_to_usergroup.php?id=\'+options.rowId+\'">'.Display::return_icon('course_to_class.png', get_lang('SubscribeClassToCourses'), null, ICON_SIZE_MEDIUM).'</a>'
-    .' <a href="add_sessions_to_usergroup.php?id=\'+options.rowId+\'">'.Display::return_icon('sessions_to_class.png', get_lang('SubscribeClassToSessions'), null, ICON_SIZE_MEDIUM).'</a>'
+    .' <a href="add_users_to_usergroup.php?id=\'+options.rowId+\'">'.Display::return_icon('user_to_class.png', get_lang('Subscribe users to class'), null, ICON_SIZE_MEDIUM).'</a>'
+    .' <a href="add_courses_to_usergroup.php?id=\'+options.rowId+\'">'.Display::return_icon('course_to_class.png', get_lang('Subscribe class to courses'), null, ICON_SIZE_MEDIUM).'</a>'
+    .' <a href="add_sessions_to_usergroup.php?id=\'+options.rowId+\'">'.Display::return_icon('sessions_to_class.png', get_lang('SubscribeClassToCourse sessions'), null, ICON_SIZE_MEDIUM).'</a>'
     .' <a href="?action=edit&id=\'+options.rowId+\'">'.Display::return_icon('edit.png', get_lang('Edit'), null, ICON_SIZE_SMALL).'</a>'
-    .' <a onclick="javascript:if(!confirm('."\'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"), ENT_QUOTES))."\'".')) return false;"  href="?action=delete&id=\'+options.rowId+\'">'.Display::return_icon('delete.png', get_lang('Delete'), null, ICON_SIZE_SMALL).'</a>\';
+    .' <a onclick="javascript:if(!confirm('."\'".addslashes(api_htmlentities(get_lang("Please confirm your choice"), ENT_QUOTES))."\'".')) return false;"  href="?action=delete&id=\'+options.rowId+\'">'.Display::return_icon('delete.png', get_lang('Delete'), null, ICON_SIZE_SMALL).'</a>\';
 }';
 
 $usergroup->showGroupTypeSetting = true;
@@ -93,11 +93,11 @@ switch ($action) {
             $values = $form->exportValues();
             $res = $usergroup->save($values);
             if ($res) {
-                Display::addFlash(Display::return_message(get_lang('ItemAdded'), 'confirmation'));
+                Display::addFlash(Display::return_message(get_lang('Item added'), 'confirmation'));
             } else {
                 Display::addFlash(Display::return_message(
                     Security::remove_XSS($values['name']).': '.
-                    get_lang('AlreadyExists'),
+                    get_lang('Already exists'),
                     'warning'
                 ));
             }
@@ -140,11 +140,11 @@ switch ($action) {
             $values = $form->getSubmitValues();
             $res = $usergroup->update($values);
             if ($res) {
-                Display::addFlash(Display::return_message(get_lang('Updated'), 'confirmation'));
+                Display::addFlash(Display::return_message(get_lang('Update successful'), 'confirmation'));
             } else {
                 Display::addFlash(Display::return_message(
                     Security::remove_XSS($values['name']).': '.
-                    get_lang('AlreadyExists'),
+                    get_lang('Already exists'),
                     'warning'
                 ));
             }

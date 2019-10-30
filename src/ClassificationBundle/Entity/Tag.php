@@ -7,8 +7,6 @@ use Sonata\ClassificationBundle\Entity\BaseTag;
 
 /**
  * Class Tag.
- *
- * @package Chamilo\ClassificationBundle\Entity
  */
 class Tag extends BaseTag
 {

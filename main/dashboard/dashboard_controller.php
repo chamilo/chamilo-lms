@@ -71,10 +71,10 @@ class DashboardController
         $link_blocks_view = $link_list_view = null;
         if ($view == 'list') {
             $link_blocks_view = '<a href="'.api_get_self().'?view=blocks">'.
-                Display::return_icon('blocks.png', get_lang('DashboardBlocks'), '', ICON_SIZE_MEDIUM).'</a>';
+                Display::return_icon('blocks.png', get_lang('Dashboard blocks'), '', ICON_SIZE_MEDIUM).'</a>';
         } else {
             $link_list_view = '<a href="'.api_get_self().'?view=list">'.
-                Display::return_icon('edit.png', get_lang('EditBlocks'), '', ICON_SIZE_MEDIUM).'</a>';
+                Display::return_icon('edit.png', get_lang('Edit blocks'), '', ICON_SIZE_MEDIUM).'</a>';
         }
 
         $configuration_link = null;
@@ -82,7 +82,7 @@ class DashboardController
             $configuration_link = '<a href="'.api_get_path(WEB_CODE_PATH).'admin/settings.php?category=Plugins">'
                 .Display::return_icon(
                     'settings.png',
-                    get_lang('ConfigureDashboardPlugin'),
+                    get_lang('Configure Dashboard Plugin'),
                     '',
                     ICON_SIZE_MEDIUM
                 ).'</a>';

@@ -11,8 +11,6 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
  * Class ResourceLinkType.
- *
- * @package Chamilo\CoreBundle\Form\Type
  */
 class ResourceLinkType extends AbstractType
 {

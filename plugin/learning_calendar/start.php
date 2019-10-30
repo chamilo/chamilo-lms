@@ -31,7 +31,7 @@ switch ($action) {
                 'author_id' => api_get_user_id(),
             ];
             Database::insert('learning_calendar', $params);
-            Display::addFlash(Display::return_message(get_lang('Saved')));
+            Display::addFlash(Display::return_message(get_lang('Saved..')));
             header('Location: start.php');
             exit;
         }
@@ -59,7 +59,7 @@ switch ($action) {
                 'description' => $values['description'],
             ];
             Database::update('learning_calendar', $params, ['id = ?' => $calendarId]);
-            Display::addFlash(Display::return_message(get_lang('Updated')));
+            Display::addFlash(Display::return_message(get_lang('Update successful')));
             header('Location: start.php');
             exit;
         }
@@ -67,7 +67,7 @@ switch ($action) {
     case 'copy':
         $result = $plugin->copyCalendar($calendarId);
         if ($result) {
-            Display::addFlash(Display::return_message(get_lang('Saved')));
+            Display::addFlash(Display::return_message(get_lang('Saved..')));
         }
         header('Location: start.php');
         exit;
@@ -85,7 +85,7 @@ switch ($action) {
         $itemId = isset($_REQUEST['lp_item_id']) ? $_REQUEST['lp_item_id'] : 0;
         $lpId = isset($_REQUEST['lp_id']) ? $_REQUEST['lp_id'] : 0;
         $plugin->toggleVisibility($itemId);
-        Display::addFlash(Display::return_message(get_lang('Updated')));
+        Display::addFlash(Display::return_message(get_lang('Update successful')));
         $url = api_get_path(WEB_CODE_PATH).
             'lp/lp_controller.php?action=add_item&type=step&lp_id='.$lpId.'&'.api_get_cidreq();
         header("Location: $url");
@@ -98,9 +98,9 @@ $htmlHeadXtra[] = api_get_jqgrid_js();
 $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_learning_path_calendars';
 $columns = [
     get_lang('Title'),
-    get_lang('TotalHours'),
-    get_lang('MinutesPerDay'),
-    get_lang('Actions'),
+    get_lang('Total hours'),
+    get_lang('Minutes per day'),
+    get_lang('Detail'),
 ];
 
 $columnModel = [

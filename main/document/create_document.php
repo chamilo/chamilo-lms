@@ -63,9 +63,9 @@ if (isset($_REQUEST['certificate']) && $_REQUEST['certificate'] == 'true') {
     $is_certificate_mode = true;
 }
 
-$nameTools = get_lang('CreateDocument');
+$nameTools = get_lang('Create a rich media page / activity');
 if ($is_certificate_mode) {
-    $nameTools = get_lang('CreateCertificate');
+    $nameTools = get_lang('Create certificate');
 }
 
 /* Constants and variables */
@@ -200,7 +200,7 @@ if (!$is_certificate_mode) {
     if (api_is_in_group()) {
         $interbreadcrumb[] = [
             "url" => "../group/group_space.php?".api_get_cidreq(),
-            "name" => get_lang('GroupSpace'),
+            "name" => get_lang('Group area'),
         ];
         $path = explode('/', $dir);
         if ('/'.$path[1] != $group_properties['directory']) {
@@ -214,7 +214,7 @@ if (!$is_certificate_mode) {
 } else {
     $interbreadcrumb[] = [
         'url' => Category::getUrl(),
-        'name' => get_lang('Gradebook'),
+        'name' => get_lang('Assessments'),
     ];
 }
 
@@ -297,7 +297,7 @@ function document_exists($filename)
 if ($is_certificate_mode) {
     $form->addText(
         'title',
-        get_lang('CertificateName'),
+        get_lang('Certificate name'),
         true,
         ['cols-size' => [2, 10, 0], 'autofocus']
     );
@@ -316,11 +316,11 @@ if (!empty($groupId)) {
         'checkbox',
         'readonly',
         '',
-        get_lang('ReadOnly')
+        get_lang('Read only')
     );
 }
-$form->addRule('title', get_lang('ThisFieldIsRequired'), 'required');
-$form->addRule('title', get_lang('FileExists'), 'callback', 'document_exists');
+$form->addRule('title', get_lang('Required field'), 'required');
+$form->addRule('title', get_lang('The operation is impossible, a file with this name already exists.'), 'callback', 'document_exists');
 
 $current_session_id = api_get_session_id();
 $form->addHtmlEditor(
@@ -352,7 +352,7 @@ if (!$is_certificate_mode &&
 
     $parent_select = $form->addSelect(
         'curdirpath',
-        get_lang('DestinationDirectory'),
+        get_lang('Destination folder'),
         null,
         ['cols-size' => [2, 10, 0]]
     );
@@ -397,7 +397,7 @@ if (!$is_certificate_mode &&
     }
 
     if (empty($group_dir)) {
-        $parent_select->addOption(get_lang('HomeDirectory'), '/');
+        $parent_select->addOption(get_lang('Home'), '/');
         if (is_array($folders)) {
             foreach ($folders as &$folder) {
                 //Hide some folders
@@ -451,7 +451,7 @@ if (!$is_certificate_mode &&
                 $selected = (substr($dir, 0, -1) == $folder) ? ' selected="selected"' : '';
                 $label = $folder_titles[$folder];
                 if ($folder == $group_dir) {
-                    $label = '/ ('.get_lang('HomeDirectory').')';
+                    $label = '/ ('.get_lang('Home').')';
                 } else {
                     $path_parts = explode('/', str_replace($group_dir, '', $folder));
                     $label = cut($label, 80);
@@ -469,9 +469,9 @@ if (!$is_certificate_mode &&
 $form->addHidden('dirValue', '');
 
 if ($is_certificate_mode) {
-    $form->addButtonCreate(get_lang('CreateCertificate'));
+    $form->addButtonCreate(get_lang('Create certificate'));
 } else {
-    $form->addButtonCreate(get_lang('CreateDoc'));
+    $form->addButtonCreate(get_lang('Create a rich media page / activity'));
 }
 
 $form->setDefaults($defaults);
@@ -517,7 +517,6 @@ if ($form->validate()) {
     );
 
     $save_file_path = $dir.$filename.'.'.$extension;
-
     $document = DocumentManager::addDocument(
         $_course,
         $save_file_path,
@@ -543,11 +542,11 @@ if ($form->validate()) {
             }
             $certificate_condition = '&certificate=true&curdirpath=/certificates';
         }
-        Display::addFlash(Display::return_message(get_lang('ItemAdded')));
+        Display::addFlash(Display::return_message(get_lang('Item added')));
         header('Location: document.php?'.api_get_cidreq().'&id='.$folder_id.$certificate_condition);
         exit();
     } else {
-        Display::addFlash(Display::return_message(get_lang('Impossible'), 'error'));
+        Display::addFlash(Display::return_message(get_lang('Operation impossible'), 'error'));
         header('Location: document.php?'.api_get_cidreq().'&id='.$folder_id);
         exit();
     }
@@ -578,12 +577,12 @@ if ($form->validate()) {
     // link back to the documents overview
     if ($is_certificate_mode) {
         $actionsLeft = '<a href="document.php?certificate=true&id='.$folder_id.'&selectcat='.Security::remove_XSS($_GET['selectcat']).'">'.
-            Display::return_icon('back.png', get_lang('Back').' '.get_lang('To').' '.get_lang('CertificateOverview'), '', ICON_SIZE_MEDIUM).'</a>';
+            Display::return_icon('back.png', get_lang('Back').' '.get_lang('To').' '.get_lang('Certificate overview'), '', ICON_SIZE_MEDIUM).'</a>';
         $actionsLeft .= '<a id="hide_bar_template" href="#" role="button">'.
             Display::return_icon('expand.png', get_lang('Back'), ['id' => 'expand'], ICON_SIZE_MEDIUM).Display::return_icon('contract.png', get_lang('Back'), ['id' => 'contract', 'class' => 'hide'], ICON_SIZE_MEDIUM).'</a>';
     } else {
         $actionsLeft = '<a href="document.php?curdirpath='.Security::remove_XSS($dir).'">'.
-            Display::return_icon('back.png', get_lang('Back').' '.get_lang('To').' '.get_lang('DocumentsOverview'), '', ICON_SIZE_MEDIUM).'</a>';
+            Display::return_icon('back.png', get_lang('Back').' '.get_lang('To').' '.get_lang('Documents overview'), '', ICON_SIZE_MEDIUM).'</a>';
         $actionsLeft .= '<a id="hide_bar_template" href="#" role="button">'.
             Display::return_icon('expand.png', get_lang('Expand'), ['id' => 'expand'], ICON_SIZE_MEDIUM).
             Display::return_icon('contract.png', get_lang('Collapse'), ['id' => 'contract', 'class' => 'hide'], ICON_SIZE_MEDIUM).'</a>';
@@ -601,7 +600,7 @@ if ($form->validate()) {
         foreach ($all_information_by_create_certificate[0] as $info_value) {
             $str_info .= $info_value.'<br/>';
         }
-        $create_certificate = get_lang('CreateCertificateWithTags');
+        $create_certificate = get_lang('Create certificateWithTags');
         echo Display::return_message($create_certificate.': <br /><br/>'.$str_info, 'normal', false);
     }
 

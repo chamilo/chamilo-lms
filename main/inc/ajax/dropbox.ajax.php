@@ -18,7 +18,7 @@ switch ($action) {
         $id = isset($_GET['id']) ? (int) $_GET['id'] : 0;
 
         if (empty($recipients) && empty($id)) {
-            $resultList[] = ['error' => get_lang('YouMustSelectAtLeastOneDestinee')];
+            $resultList[] = ['error' => get_lang('You must select at least one destinee')];
             echo json_encode(['files' => $resultList]);
             exit;
         }
@@ -63,7 +63,7 @@ switch ($action) {
                     $json['type'] = api_htmlentities($file['type']);
                     $json['result'] = Display::return_icon(
                         'accept.png',
-                        get_lang('Uploaded')
+                        get_lang('Uploaded.')
                     );
                 } else {
                     $json['result'] = Display::return_icon(

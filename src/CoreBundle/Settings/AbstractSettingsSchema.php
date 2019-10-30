@@ -8,8 +8,6 @@ use Sylius\Bundle\SettingsBundle\Schema\SchemaInterface;
 
 /**
  * Class AbstractSettingsSchema.
- *
- * @package Chamilo\CoreBundle\Settings
  */
 abstract class AbstractSettingsSchema implements SchemaInterface
 {
@@ -22,5 +20,21 @@ abstract class AbstractSettingsSchema implements SchemaInterface
         foreach ($allowedTypes as $name => $type) {
             $builder->setAllowedTypes($name, $type);
         }
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getRepository()
+    {
+        return $this->repository;
+    }
+
+    /**
+     * @param string $repo
+     */
+    public function setRepository($repo)
+    {
+        $this->repository = $repo;
     }
 }

@@ -26,15 +26,13 @@ if ($lp_controller_touched != 1) {
 
 require_once __DIR__.'/../inc/global.inc.php';
 
+api_protect_course_script();
+
 if (isset($_REQUEST['origin']) && $_REQUEST['origin'] === 'learnpath') {
     $_REQUEST['origin'] = '';
 }
 
-//To prevent the template class
-$show_learnpath = true;
-
-api_protect_course_script();
-
+// To prevent the template class
 $lp_id = !empty($_GET['lp_id']) ? (int) $_GET['lp_id'] : 0;
 $sessionId = api_get_session_id();
 $course_code = api_get_course_id();
@@ -152,7 +150,7 @@ if ($allowLpItemTip) {
                     })
                     .then(function(content) {                    
                         if (content == 1) {
-                            textToShow = "'.addslashes(get_lang('LPItemCanBeAccessed')).'";
+                            textToShow = "'.addslashes(get_lang('Item can be viewed - Prerequisites completed')).'";
                             api.set("style.classes", "qtip-green qtip-shadow");                        
                         } else {
                             textToShow = content;                        
@@ -170,7 +168,7 @@ if ($allowLpItemTip) {
 }
 
 // Impress js
-if ($lp->mode == 'impress') {
+if ($lp->mode === 'impress') {
     $lp_id = $lp->get_id();
     $url = api_get_path(WEB_CODE_PATH)."lp/lp_impress.php?lp_id=$lp_id&".api_get_cidreq();
     header("Location: $url");
@@ -189,6 +187,20 @@ if (isset($exerciseResult) || isset($_SESSION['exerciseResult'])) {
     Session::erase('duration_time_previous');
     Session::erase('duration_time');
 }
+
+// additional APIs
+$htmlHeadXtra[] = '<script>
+chamilo_courseCode = "'.$course_code.'";
+</script>';
+// Document API
+//$htmlHeadXtra[] = '<script src="js/documentapi.js" type="text/javascript" language="javascript"></script>';
+// Storage API
+$htmlHeadXtra[] = '<script>
+var sv_user = \''.api_get_user_id().'\';
+var sv_course = chamilo_courseCode;
+var sv_sco = \''.$lp_id.'\';
+</script>'; // FIXME fetch sco and userid from a more reliable source directly in sotrageapi.js
+//$htmlHeadXtra[] = '<script type="text/javascript" src="js/storageapi.js"></script>';
 
 /**
  * Get a link to the corresponding document.
@@ -236,7 +248,6 @@ if (!isset($src)) {
                 }
 
                 $src = $lp->fixBlockedLinks($src);
-
                 $lp->start_current_item(); // starts time counter manually if asset
             } else {
                 $src = 'blank.php?error=prerequisites';
@@ -299,9 +310,7 @@ if (!empty($_REQUEST['exeId']) &&
     $safe_id = $lp_id;
     $safe_exe_id = (int) $_REQUEST['exeId'];
 
-    if ($safe_id == strval(intval($safe_id)) &&
-        $safe_item_id == strval(intval($safe_item_id))
-    ) {
+    if (!empty($safe_id) && !empty($safe_item_id)) {
         $sql = 'SELECT start_date, exe_date, score, max_score, exe_exo_id, exe_duration
                 FROM '.$TBL_TRACK_EXERCICES.'
                 WHERE exe_id = '.$safe_exe_id;
@@ -321,7 +330,7 @@ if (!empty($_REQUEST['exeId']) &&
                 WHERE
                     c_id = $course_id AND
                     lp_item_id = $safe_item_id AND
-                    lp_view_id = ".$lp->lp_view_id."
+                    lp_view_id = ".$lp->get_view_id()."
                 ORDER BY id DESC
                 LIMIT 1";
         $res_last_attempt = Database::query($sql);
@@ -362,7 +371,7 @@ if (!empty($_REQUEST['exeId']) &&
             Database::query($sql);
         }
     }
-    if (intval($_GET['fb_type']) > 0) {
+    if (intval($_GET['fb_type']) != EXERCISE_FEEDBACK_TYPE_END) {
         $src = 'blank.php?msg=exerciseFinished';
     } else {
         $src = api_get_path(WEB_CODE_PATH).'exercise/result.php?id='.$safe_exe_id.'&'.api_get_cidreq(true, true, 'learnpath');
@@ -387,7 +396,6 @@ if ($lp->mode == 'fullscreen') {
         window.open('$src','content_id','toolbar=0,location=0,status=0,scrollbars=1,resizable=1');
     </script>";
 }
-
 // Set flag to ensure lp_header.php is loaded by this script (flag is unset in lp_header.php).
 Session::write('loaded_lp_view', true);
 $display_none = '';
@@ -410,7 +418,7 @@ if (!api_is_invitee()) {
     $progress_bar = $lp->getProgressBar();
 }
 $navigation_bar = $lp->get_navigation_bar();
-$navigation_bar_bottom = $lp->get_navigation_bar("control-bottom", "display:none");
+$navigation_bar_bottom = $lp->get_navigation_bar('control-bottom');
 $mediaplayer = $lp->get_mediaplayer($lp->current, $autostart);
 
 $tbl_lp_item = Database::get_course_table(TABLE_LP_ITEM);
@@ -435,11 +443,11 @@ global $interbreadcrumb;
 if ($is_allowed_to_edit) {
     $interbreadcrumb[] = [
         'url' => api_get_self().'?action=list&isStudentView=false&'.api_get_cidreq(true, true, 'course'),
-        'name' => get_lang('LearningPaths'),
+        'name' => get_lang('Learning paths'),
     ];
     $interbreadcrumb[] = [
         'url' => api_get_self()."?action=add_item&type=step&lp_id={$lp->lp_id}&isStudentView=false&".api_get_cidreq(true, true, 'course'),
-        'name' => $lp->get_name(),
+        'name' => $lp->getNameNoTags(),
     ];
 
     $interbreadcrumb[] = [
@@ -456,16 +464,16 @@ if ($is_allowed_to_edit) {
     ]);
 }
 
-$buttonHomeText = get_lang('CourseHomepageLink');
+$buttonHomeText = get_lang('Course home');
 $returnLink = api_get_course_setting('lp_return_link');
 switch ($returnLink) {
     case 1: // lp list
         $buttonHomeUrl .= '&redirectTo=lp_list';
-        $buttonHomeText = get_lang('LearningPathList');
+        $buttonHomeText = get_lang('Learning path list');
         break;
     case 2: // user portal
         $buttonHomeUrl .= '&redirectTo=my_courses';
-        $buttonHomeText = get_lang('MyCourses');
+        $buttonHomeText = get_lang('My courses');
         break;
 }
 
@@ -507,7 +515,7 @@ $template = new Template('', false, false, true, true, false);
 $fixLinkSetting = api_get_configuration_value('lp_fix_embed_content');
 $fixLink = '';
 if ($fixLinkSetting) {
-    $fixLink = '{type:"script", id:"_fr10", src:"'.api_get_path(WEB_LIBRARY_PATH).'javascript/fixlinks.js"}';
+    $fixLink = '{type:"script", id:"_fr10", src:"'.api_get_path(WEB_LIBRARY_PATH).'fixlinks.js"}';
 }
 
 $template->assign('fix_link', $fixLink);
@@ -517,6 +525,7 @@ $template->assign('glossary_tool_available_list', ['true', 'lp', 'exercise_and_l
 $gamificationMode = api_get_setting('gamification_mode');
 // ...AND this learning path is set in gamification mode, then change the display
 $gamificationMode = $gamificationMode && $lp->seriousgame_mode;
+
 $template->assign('gamification_mode', $gamificationMode);
 $template->assign('glossary_extra_tools', api_get_setting('show_glossary_in_extra_tools'));
 $template->assign('show_glossary_in_documents', api_get_setting('show_glossary_in_documents'));
@@ -536,6 +545,15 @@ $template->assign('iframe_src', $src);
 $template->assign('navigation_bar_bottom', $navigation_bar_bottom);
 $template->assign('show_left_column', $lp->getHideTableOfContents() == 0);
 
+$showMenu = 0;
+$settings = api_get_configuration_value('lp_view_settings');
+$display = isset($settings['display']) ? $settings['display'] : false;
+if (!empty($display)) {
+    $showMenu = isset($display['show_toolbar_by_default']) && $display['show_toolbar_by_default'] ? 1 : 0;
+}
+
+$template->assign('show_toolbar_by_default', $showMenu);
+
 if ($gamificationMode == 1) {
     $template->assign('gamification_stars', $lp->getCalculateStars($sessionId));
     $template->assign('gamification_points', $lp->getCalculateScore($sessionId));
@@ -544,7 +562,7 @@ if ($gamificationMode == 1) {
 $template->assign('lp_author', $lp->get_author());
 
 $lpMinTime = '';
-if (Tracking::minimunTimeAvailable(api_get_session_id(), api_get_course_int_id())) {
+if (Tracking::minimumTimeAvailable(api_get_session_id(), api_get_course_int_id())) {
     // Calulate minimum and accumulated time
     $timeLp = $_SESSION['oLP']->getAccumulateWorkTime();
     $timeTotalCourse = $_SESSION['oLP']->getAccumulateWorkTimeTotalCourse();
@@ -588,7 +606,7 @@ if (Tracking::minimunTimeAvailable(api_get_session_id(), api_get_course_int_id()
 
 $template->assign('lp_accumulate_work_time', $lpMinTime);
 $template->assign('lp_mode', $lp->mode);
-$template->assign('lp_title_scorm', $lp->name);
+$template->assign('lp_title_scorm', $lp->get_name());
 if (api_get_configuration_value('lp_view_accordion') === true && $lpType == 1) {
     $template->assign('data_panel', $lp->getParentToc($get_toc_list));
 } else {
@@ -596,18 +614,24 @@ if (api_get_configuration_value('lp_view_accordion') === true && $lpType == 1) {
 }
 $template->assign('lp_id', $lp->lp_id);
 $template->assign('lp_current_item_id', $lp->get_current_item_id());
+
+$menuLocation = 'left';
+if (!empty(api_get_configuration_value('lp_menu_location'))) {
+    $menuLocation = api_get_configuration_value('lp_menu_location');
+}
+$template->assign('menu_location', $menuLocation);
 $template->assign('disable_js_in_lp_view', (int) api_get_configuration_value('disable_js_in_lp_view'));
 $template->assign(
     'lp_preview_image',
     Display::img(
         $lpPreviewImagePath,
-        $lp->name,
+        $lp->getNameNoTags(),
         [],
         ICON_SIZE_BIG
     )
 );
 
-$frameReady = Display::getFrameReadyBlock('top.content_name');
+$frameReady = Display::getFrameReadyBlock('#content_id, #content_id_blank');
 $template->assign('frame_ready', $frameReady);
 $template->displayTemplate('@ChamiloTheme/LearnPath/view.html.twig');
 

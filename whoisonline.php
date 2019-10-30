@@ -58,7 +58,7 @@ if (isset($_GET['id'])) {
     }
 }
 
-$tpl = new Template(get_lang('UsersOnLineList'));
+$tpl = new Template(get_lang('Online users list'));
 
 if (api_get_setting('allow_social_tool') === 'true' && !api_is_anonymous()) {
     $tpl->assign('whoisonline', $whoisonline_list);

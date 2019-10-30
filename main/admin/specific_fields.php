@@ -15,8 +15,8 @@ require_once __DIR__.'/../inc/global.inc.php';
 api_protect_admin_script();
 
 // Breadcrumb
-$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('PlatformAdmin')];
-$interbreadcrumb[] = ['url' => 'settings.php?category=Search', 'name' => get_lang('PlatformConfigSettings')];
+$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('Administration')];
+$interbreadcrumb[] = ['url' => 'settings.php?category=Search', 'name' => get_lang('Configuration settings')];
 
 $libpath = api_get_path(LIBRARY_PATH);
 
@@ -30,7 +30,7 @@ $form->addElement(
     'static',
     'search_advanced_link',
     null,
-    '<a href="specific_fields_add.php">'.Display::return_icon('fieldadd.gif').get_lang('AddSpecificSearchField').'</a>'
+    '<a href="specific_fields_add.php">'.Display::return_icon('fieldadd.gif').get_lang('Add a specific search field').'</a>'
 );
 
 // Create a sortable table with specific fields data
@@ -48,9 +48,9 @@ $table = new SortableTableFromArrayConfig(
     $column_order
 );
 $table->set_header(0, '&nbsp;', false, null, 'width="2%"', 'style="display:none"');
-$table->set_header(1, get_lang('Code'), true, 'width="10%"');
+$table->set_header(1, get_lang('Course code'), true, 'width="10%"');
 $table->set_header(2, get_lang('Name'));
-$table->set_header(3, get_lang('Modify'), false, 'width="10%"');
+$table->set_header(3, get_lang('Edit'), false, 'width="10%"');
 $table->set_column_filter(3, 'edit_filter');
 
 function edit_filter($id, $url_params, $row)
@@ -58,7 +58,7 @@ function edit_filter($id, $url_params, $row)
     global $charset;
     $return = '<a href="specific_fields_add.php?action=edit&field_id='.$row[0].'">'.
         Display::return_icon('edit.gif', get_lang('Edit')).'</a>';
-    $return .= ' <a href="'.api_get_self().'?action=delete&field_id='.$row[0].'" onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"), ENT_QUOTES, $charset))."'".')) return false;">'.
+    $return .= ' <a href="'.api_get_self().'?action=delete&field_id='.$row[0].'" onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang("Please confirm your choice"), ENT_QUOTES, $charset))."'".')) return false;">'.
         Display::return_icon('delete.gif', get_lang('Delete')).'</a>';
 
     return $return;
@@ -66,13 +66,13 @@ function edit_filter($id, $url_params, $row)
 
 if (isset($_REQUEST['action']) && $_REQUEST['action'] == 'delete') {
     delete_specific_field($_REQUEST['field_id']);
-    header('Location: specific_fields.php?message='.get_lang('FieldRemoved'));
+    header('Location: specific_fields.php?message='.get_lang('Field removed'));
     exit;
 }
 
 // Displaying the header
-Display::display_header(get_lang('SpecificSearchFields'));
-echo Display::addFlash(Display::return_message(get_lang('SpecificSearchFieldsIntro')));
+Display::display_header(get_lang('Specific search fields'));
+echo Display::addFlash(Display::return_message(get_lang('Specific search fieldsIntro')));
 
 if (!empty($_GET['message'])) {
     Display::addFlash(Display::return_message($_GET['message'], 'confirm'));

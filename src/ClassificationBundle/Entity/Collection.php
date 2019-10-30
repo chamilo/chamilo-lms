@@ -7,8 +7,6 @@ use Sonata\ClassificationBundle\Entity\BaseCollection;
 
 /**
  * Class Collection.
- *
- * @package Chamilo\ClassificationBundle\Entity
  */
 class Collection extends BaseCollection
 {

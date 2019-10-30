@@ -26,8 +26,7 @@ $sessionId = isset($_GET['session_id']) ? (int) $_GET['session_id'] : 0;
 
 $em = Database::getManager();
 
-/** @var Session $session */
-$session = $em->find('ChamiloCoreBundle:Session', $sessionId);
+$session = api_get_session_entity($sessionId);
 
 if (!$session) {
     api_not_allowed(true);
@@ -239,7 +238,7 @@ $template->assign(
 $template->assign('has_requirements', $hasRequirements);
 $template->assign('sequences', $sessionRequirements);
 $template->assign('is_premium', $sessionIsPremium);
-$layout = $template->get_template('session/about.html.twig');
+$layout = $template->get_template('session/about.tpl');
 $content = $template->fetch($layout);
 //$template->assign('header', $session->getName());
 $template->assign('content', $content);

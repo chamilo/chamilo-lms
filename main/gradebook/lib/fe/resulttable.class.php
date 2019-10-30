@@ -7,8 +7,6 @@
  *
  * @author Stijn Konings
  * @author Bert Steppé
- *
- * @package chamilo.gradebook
  */
 class ResultTable extends SortableTable
 {
@@ -58,18 +56,23 @@ class ResultTable extends SortableTable
             ]);
         }
         if (api_is_western_name_order()) {
-            $this->set_header($column++, get_lang('FirstName'));
-            $this->set_header($column++, get_lang('LastName'));
+            $this->set_header($column++, get_lang('First name'));
+            $this->set_header($column++, get_lang('Last name'));
         } else {
-            $this->set_header($column++, get_lang('LastName'));
-            $this->set_header($column++, get_lang('FirstName'));
+            $this->set_header($column++, get_lang('Last name'));
+            $this->set_header($column++, get_lang('First name'));
         }
-        $this->set_header($column++, get_lang('Score'));
+
+        $model = ExerciseLib::getCourseScoreModel();
+        if (empty($model)) {
+            $this->set_header($column++, get_lang('Score'));
+        }
+
         if ($scoredisplay->is_custom()) {
-            $this->set_header($column++, get_lang('Display'));
+            $this->set_header($column++, get_lang('Ranking'));
         }
         if (!$this->forprint) {
-            $this->set_header($column++, get_lang('Modify'), false);
+            $this->set_header($column++, get_lang('Edit'), false);
         }
     }
 
@@ -123,13 +126,15 @@ class ResultTable extends SortableTable
                 break;
         }
 
-        if ($this->direction == 'DESC') {
+        if ($this->direction === 'DESC') {
             $sorting |= ResultsDataGenerator::RDG_SORT_DESC;
         } else {
             $sorting |= ResultsDataGenerator::RDG_SORT_ASC;
         }
 
         $data_array = $this->datagen->get_data($sorting, $from, $this->per_page);
+
+        $model = ExerciseLib::getCourseScoreModel();
 
         // generate the data to display
         $sortable_data = [];
@@ -146,11 +151,13 @@ class ResultTable extends SortableTable
                 $row[] = $item['firstname'];
             }
 
-            $row[] = Display::bar_progress(
-                $item['percentage_score'],
-                false,
-                $item['score']
-            );
+            if (empty($model)) {
+                $row[] = Display::bar_progress(
+                    $item['percentage_score'],
+                    false,
+                    $item['score']
+                );
+            }
 
             if ($scoredisplay->is_custom()) {
                 $row[] = $item['display'];
@@ -185,10 +192,10 @@ class ResultTable extends SortableTable
         $htmlTable = new HTML_Table(['class' => 'data_table']);
         $htmlTable->setHeaderContents(0, 0, get_lang('Score'));
         $htmlTable->setHeaderContents(0, 1, get_lang('Comment'));
-        $htmlTable->setHeaderContents(0, 2, get_lang('CreatedAt'));
+        $htmlTable->setHeaderContents(0, 2, get_lang('Created at'));
 
         if (!empty($url)) {
-            $htmlTable->setHeaderContents(0, 3, get_lang('Actions'));
+            $htmlTable->setHeaderContents(0, 3, get_lang('Detail'));
         }
 
         $row = 1;
@@ -222,34 +229,34 @@ class ResultTable extends SortableTable
         $locked_status = $this->evaluation->get_locked();
         $allowMultipleAttempts = api_get_configuration_value('gradebook_multiple_evaluation_attempts');
         $baseUrl = api_get_self().'?selecteval='.$this->evaluation->get_id().'&'.api_get_cidreq();
+        $editColumn = '';
         if (api_is_allowed_to_edit(null, true) && $locked_status == 0) {
-            $edit_column = '';
             if ($allowMultipleAttempts) {
                 if (!empty($item['percentage_score'])) {
-                    $edit_column .=
+                    $editColumn .=
                         Display::url(
                             Display::return_icon('add.png', get_lang('AddAttempt'), '', '22'),
                             $baseUrl.'&action=add_attempt&editres='.$item['result_id']
                         );
                 } else {
-                    $edit_column .= '<a href="'.api_get_self().'?editres='.$item['result_id'].'&selecteval='.$this->evaluation->get_id().'&'.api_get_cidreq().'">'.
-                        Display::return_icon('edit.png', get_lang('Modify'), '', '22').'</a>';
+                    $editColumn .= '<a href="'.api_get_self().'?editres='.$item['result_id'].'&selecteval='.$this->evaluation->get_id().'&'.api_get_cidreq().'">'.
+                        Display::return_icon('edit.png', get_lang('Edit'), '', '22').'</a>';
                 }
             } else {
-                $edit_column .= '<a href="'.api_get_self().'?editres='.$item['result_id'].'&selecteval='.$this->evaluation->get_id().'&'.api_get_cidreq().'">'.
-                    Display::return_icon('edit.png', get_lang('Modify'), '', '22').'</a>';
+                $editColumn .= '<a href="'.api_get_self().'?editres='.$item['result_id'].'&selecteval='.$this->evaluation->get_id().'&'.api_get_cidreq().'">'.
+                    Display::return_icon('edit.png', get_lang('Edit'), '', '22').'</a>';
             }
-            $edit_column .= ' <a href="'.api_get_self().'?delete_mark='.$item['result_id'].'&selecteval='.$this->evaluation->get_id().'&'.api_get_cidreq().'">'.
+            $editColumn .= ' <a href="'.api_get_self().'?delete_mark='.$item['result_id'].'&selecteval='.$this->evaluation->get_id().'&'.api_get_cidreq().'">'.
                 Display::return_icon('delete.png', get_lang('Delete'), '', '22').'</a>';
         }
 
         if ($this->evaluation->get_course_code() == null) {
-            $edit_column .= '&nbsp;<a href="'.api_get_self().'?resultdelete='.$item['result_id'].'&selecteval='.$this->evaluation->get_id().'" onclick="return confirmationuser();">';
-            $edit_column .= Display::return_icon('delete.png', get_lang('Delete'));
-            $edit_column .= '</a>';
-            $edit_column .= '&nbsp;<a href="user_stats.php?userid='.$item['id'].'&selecteval='.$this->evaluation->get_id().'&'.api_get_cidreq().'">';
-            $edit_column .= Display::return_icon('statistics.gif', get_lang('Statistics'));
-            $edit_column .= '</a>';
+            $editColumn .= '&nbsp;<a href="'.api_get_self().'?resultdelete='.$item['result_id'].'&selecteval='.$this->evaluation->get_id().'" onclick="return confirmationuser();">';
+            $editColumn .= Display::return_icon('delete.png', get_lang('Delete'));
+            $editColumn .= '</a>';
+            $editColumn .= '&nbsp;<a href="user_stats.php?userid='.$item['id'].'&selecteval='.$this->evaluation->get_id().'&'.api_get_cidreq().'">';
+            $editColumn .= Display::return_icon('statistics.gif', get_lang('Statistics'));
+            $editColumn .= '</a>';
         }
 
         // Evaluation's origin is a link
@@ -258,11 +265,11 @@ class ResultTable extends SortableTable
             $doc_url = $link->get_view_url($item['id']);
 
             if ($doc_url != null) {
-                $edit_column .= '&nbsp;<a href="'.$doc_url.'" target="_blank">';
-                $edit_column .= Display::return_icon('link.gif', get_lang('OpenDocument')).'</a>';
+                $editColumn .= '&nbsp;<a href="'.$doc_url.'" target="_blank">';
+                $editColumn .= Display::return_icon('link.gif', get_lang('Open document')).'</a>';
             }
         }
 
-        return $edit_column;
+        return $editColumn;
     }
 }

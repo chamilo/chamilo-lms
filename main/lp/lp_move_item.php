@@ -53,21 +53,21 @@ $course_id = api_get_course_int_id();
 if (api_is_in_gradebook()) {
     $interbreadcrumb[] = [
         'url' => Category::getUrl(),
-        'name' => get_lang('ToolGradebook'),
+        'name' => get_lang('Assessments'),
     ];
 }
 
 $interbreadcrumb[] = [
     'url' => 'lp_controller.php?action=list&'.api_get_cidreq(),
-    'name' => get_lang('LearningPaths'),
+    'name' => get_lang('Learning paths'),
 ];
 $interbreadcrumb[] = [
     'url' => api_get_self()."?action=build&lp_id=$learnpath_id&".api_get_cidreq(),
-    'name' => stripslashes($learnPath->get_name()),
+    'name' => $learnPath->getNameNoTags(),
 ];
 $interbreadcrumb[] = [
     'url' => api_get_self()."?action=add_item&type=step&lp_id=$learnpath_id&".api_get_cidreq(),
-    'name' => get_lang('NewStep'),
+    'name' => get_lang('Add learning object or activity'),
 ];
 
 // Theme calls
@@ -76,7 +76,7 @@ $lp_theme_css = $learnPath->get_theme();
 
 Display::display_header(get_lang('Move'), 'Path');
 
-$suredel = trim(get_lang('AreYouSureToDeleteJS'));
+$suredel = trim(get_lang('Are you sure to delete'));
 ?>
 <script>
 /* <![CDATA[ */

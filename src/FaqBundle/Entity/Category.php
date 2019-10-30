@@ -5,6 +5,7 @@ namespace Chamilo\FaqBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Knp\DoctrineBehaviors\Model as ORMBehaviors;
 
 /**
@@ -15,12 +16,11 @@ use Knp\DoctrineBehaviors\Model as ORMBehaviors;
  *     name="faq_category",
  *     indexes={@ORM\Index(name="is_active_idx", columns={"is_active"})}
  * )
- *
- * @package Chamilo\FaqBundle\Entity
  */
 class Category
 {
     use ORMBehaviors\Translatable\Translatable;
+    use TimestampableEntity;
 
     /**
      * @ORM\Column(type="integer")
@@ -36,7 +36,8 @@ class Category
 
     /**
      * @Gedmo\SortablePosition
-     * @ORM\Column(name="rank", type="integer")
+     *
+     * @ORM\Column(name="`rank`", type="integer")
      */
     protected $rank;
 
@@ -44,18 +45,6 @@ class Category
      * @ORM\Column(name="is_active", type="boolean")
      */
     protected $isActive;
-
-    /**
-     * @Gedmo\Timestampable(on="create")
-     * @ORM\Column(name="created_at", type="datetime")
-     */
-    protected $createdAt;
-
-    /**
-     * @Gedmo\Timestampable(on="update")
-     * @ORM\Column(name="updated_at", type="datetime")
-     */
-    protected $updatedAt;
 
     /**
      * @param $method
@@ -134,54 +123,6 @@ class Category
     public function getIsActive()
     {
         return $this->isActive;
-    }
-
-    /**
-     * Set createdAt.
-     *
-     * @param \DateTime $createdAt
-     *
-     * @return Category
-     */
-    public function setCreatedAt(\DateTime $createdAt)
-    {
-        $this->createdAt = $createdAt;
-
-        return $this;
-    }
-
-    /**
-     * Get createdAt.
-     *
-     * @return \DateTime
-     */
-    public function getCreatedAt()
-    {
-        return $this->createdAt;
-    }
-
-    /**
-     * Set updatedAt.
-     *
-     * @param \DateTime $updatedAt
-     *
-     * @return Category
-     */
-    public function setUpdatedAt(\DateTime $updatedAt)
-    {
-        $this->updatedAt = $updatedAt;
-
-        return $this;
-    }
-
-    /**
-     * Get updatedAt.
-     *
-     * @return \DateTime
-     */
-    public function getUpdatedAt()
-    {
-        return $this->updatedAt;
     }
 
     /**

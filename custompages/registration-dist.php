@@ -106,7 +106,7 @@ EOT;
                             ?>
                         </div>
                         <div id="links">
-                            <!--<a href="mailto: support@cblue.be"><?php echo custompages_get_lang('NeedContactAdmin'); ?></a><br />-->
+                            <!--<a href="mailto: support@cblue.be"><?php echo custompages_get_lang('Click here to contact the administrator'); ?></a><br />-->
                         </div>
                     </div>
                     <div id="footer">

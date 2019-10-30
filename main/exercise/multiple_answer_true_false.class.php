@@ -9,13 +9,11 @@ use ChamiloSession as Session;
  * (MULTIPLE CHOICE, MULTIPLE ANSWER), extending the class question.
  *
  * @author Julio Montoya
- *
- * @package chamilo.exercise
  */
 class MultipleAnswerTrueFalse extends Question
 {
-    public static $typePicture = 'mcmao.png';
-    public static $explanationLangVar = 'MultipleAnswerTrueFalse';
+    public $typePicture = 'mcmao.png';
+    public $explanationLangVar = 'MultipleAnswerTrueFalse';
     public $options;
 
     /**
@@ -43,16 +41,16 @@ class MultipleAnswerTrueFalse extends Question
         $renderer = &$form->defaultRenderer();
         $defaults = [];
 
-        $html = '<table class="table table-hover">';
+        $html = '<table class="table table-striped table-hover">';
         $html .= '<thead>';
         $html .= '<tr>';
-        $html .= '<th>'.get_lang('Number').'</th>';
+        $html .= '<th>'.get_lang('N°').'</th>';
         $html .= '<th>'.get_lang('True').'</th>';
         $html .= '<th>'.get_lang('False').'</th>';
         $html .= '<th>'.get_lang('Answer').'</th>';
 
         // show column comment when feedback is enable
-        if ($obj_ex->selectFeedbackType() != EXERCISE_FEEDBACK_TYPE_EXAM) {
+        if ($obj_ex->getFeedbackType() != EXERCISE_FEEDBACK_TYPE_EXAM) {
             $html .= '<th>'.get_lang('Comment').'</th>';
         }
 
@@ -77,7 +75,7 @@ class MultipleAnswerTrueFalse extends Question
         $form->addElement('hidden', 'nb_answers');
         if ($nb_answers < 1) {
             $nb_answers = 1;
-            echo Display::return_message(get_lang('YouHaveToCreateAtLeastOneAnswer'));
+            echo Display::return_message(get_lang('You have to create at least one answer'));
         }
 
         // Can be more options
@@ -139,14 +137,14 @@ class MultipleAnswerTrueFalse extends Question
 
             $form->addHtmlEditor(
                 "answer[$i]",
-                get_lang('ThisFieldIsRequired'),
+                get_lang('Required field'),
                 true,
                 false,
                 ['ToolbarSet' => 'TestProposedAnswer', 'Width' => '100%', 'Height' => '100']
             );
 
             // show comment when feedback is enable
-            if ($obj_ex->selectFeedbackType() != EXERCISE_FEEDBACK_TYPE_EXAM) {
+            if ($obj_ex->getFeedbackType() != EXERCISE_FEEDBACK_TYPE_EXAM) {
                 $form->addElement(
                     'html_editor',
                     'comment['.$i.']',
@@ -182,7 +180,7 @@ class MultipleAnswerTrueFalse extends Question
         $wrongInputTemplate .= '<!-- BEGIN error --><span class="form_error">{error}</span><!-- END error -->';
         $wrongInputTemplate .= '</td>';
 
-        $doubtScoreInputTemplate = '<td>'.get_lang('DoubtScore').'<br>{element}';
+        $doubtScoreInputTemplate = '<td>'.get_lang('Don\'t know').'<br>{element}';
         $doubtScoreInputTemplate .= '<!-- BEGIN error --><span class="form_error">{error}</span><!-- END error -->';
         $doubtScoreInputTemplate .= '</td>';
         $doubtScoreInputTemplate .= '</tr>';
@@ -197,11 +195,11 @@ class MultipleAnswerTrueFalse extends Question
         // 3 scores
         $form->addElement('text', 'option[1]', get_lang('Correct'), ['class' => 'span1', 'value' => '1']);
         $form->addElement('text', 'option[2]', get_lang('Wrong'), ['class' => 'span1', 'value' => '-0.5']);
-        $form->addElement('text', 'option[3]', get_lang('DoubtScore'), ['class' => 'span1', 'value' => '0']);
+        $form->addElement('text', 'option[3]', get_lang('Don\'t know'), ['class' => 'span1', 'value' => '0']);
 
-        $form->addRule('option[1]', get_lang('ThisFieldIsRequired'), 'required');
-        $form->addRule('option[2]', get_lang('ThisFieldIsRequired'), 'required');
-        $form->addRule('option[3]', get_lang('ThisFieldIsRequired'), 'required');
+        $form->addRule('option[1]', get_lang('Required field'), 'required');
+        $form->addRule('option[2]', get_lang('Required field'), 'required');
+        $form->addRule('option[3]', get_lang('Required field'), 'required');
 
         $form->addElement('hidden', 'options_count', 3);
 
@@ -217,10 +215,12 @@ class MultipleAnswerTrueFalse extends Question
         }
 
         global $text;
-        if ($obj_ex->edit_exercise_in_lp == true) {
+        if ($obj_ex->edit_exercise_in_lp == true ||
+            (empty($this->exerciseList) && empty($obj_ex->id))
+        ) {
             // setting the save button here and not in the question class.php
-            $buttonGroup[] = $form->addButtonDelete(get_lang('LessAnswer'), 'lessAnswers', true);
-            $buttonGroup[] = $form->addButtonCreate(get_lang('PlusAnswer'), 'moreAnswers', true);
+            $buttonGroup[] = $form->addButtonDelete(get_lang('Remove answer option'), 'lessAnswers', true);
+            $buttonGroup[] = $form->addButtonCreate(get_lang('Add answer option'), 'moreAnswers', true);
             $buttonGroup[] = $form->addButtonSave($text, 'submitQuestion', true);
 
             $form->addGroup($buttonGroup);
@@ -239,7 +239,7 @@ class MultipleAnswerTrueFalse extends Question
      */
     public function processAnswersCreation($form, $exercise)
     {
-        $questionWeighting = $nbrGoodAnswers = 0;
+        $questionWeighting = 0;
         $objAnswer = new Answer($this->id);
         $nb_answers = $form->getSubmitValue('nb_answers');
         $course_id = api_get_course_int_id();
@@ -306,14 +306,19 @@ class MultipleAnswerTrueFalse extends Question
     /**
      * {@inheritdoc}
      */
-    public function return_header($exercise, $counter = null, $score = null)
+    public function return_header(Exercise $exercise, $counter = null, $score = [])
     {
         $header = parent::return_header($exercise, $counter, $score);
         $header .= '<table class="'.$this->question_table_class.'"><tr>';
 
-        if ($exercise->results_disabled != RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER) {
-            $header .= '<th>'.get_lang('Choice').'</th>';
-            $header .= '<th>'.get_lang('ExpectedChoice').'</th>';
+        if (!in_array($exercise->results_disabled, [
+            RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER,
+        ])
+        ) {
+            $header .= '<th>'.get_lang('Your choice').'</th>';
+            if ($exercise->showExpectedChoiceColumn()) {
+                $header .= '<th>'.get_lang('ExpectedYour choice').'</th>';
+            }
         }
 
         $header .= '<th>'.get_lang('Answer').'</th>';
@@ -321,8 +326,15 @@ class MultipleAnswerTrueFalse extends Question
         if ($exercise->showExpectedChoice()) {
             $header .= '<th>'.get_lang('Status').'</th>';
         }
-        if ($exercise->feedback_type != EXERCISE_FEEDBACK_TYPE_EXAM ||
-            $exercise->results_disabled == RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER) {
+        if ($exercise->getFeedbackType() != EXERCISE_FEEDBACK_TYPE_EXAM ||
+            in_array(
+                $exercise->results_disabled,
+                [
+                    RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER,
+                    RESULT_DISABLE_SHOW_SCORE_AND_EXPECTED_ANSWERS_AND_RANKING,
+                ]
+            )
+        ) {
             $header .= '<th>'.get_lang('Comment').'</th>';
         }
         $header .= '</tr>';

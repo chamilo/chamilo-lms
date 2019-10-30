@@ -27,7 +27,7 @@ class SettingsController extends SyliusSettingsController
      *
      * @return Response
      */
-    public function indexAction()
+    public function indexAction(): Response
     {
         $manager = $this->getSettingsManager();
         $schemas = $manager->getSchemas();
@@ -51,7 +51,7 @@ class SettingsController extends SyliusSettingsController
      *
      * @return Response
      */
-    public function searchSettingAction(Request $request)
+    public function searchSettingAction(Request $request): Response
     {
         $manager = $this->getSettingsManager();
         $formList = [];
@@ -101,7 +101,6 @@ class SettingsController extends SyliusSettingsController
                 'schemas' => $schemas,
                 'settings' => $settings,
                 'form_list' => $formList,
-                'keyword' => $keyword,
                 'search_form' => $searchForm->createView(),
             ]
         );
@@ -119,7 +118,7 @@ class SettingsController extends SyliusSettingsController
      *
      * @return Response
      */
-    public function updateSettingAction(Request $request, $namespace)
+    public function updateSettingAction(Request $request, $namespace): Response
     {
         $manager = $this->getSettingsManager();
         // @todo improve get the current url entity
@@ -179,10 +178,6 @@ class SettingsController extends SyliusSettingsController
             if (!empty($keywordFromGet)) {
                 return $this->redirect($request->headers->get('referer'));
             }
-
-            /*if ($request->headers->has('referer')) {
-                return $this->redirect($request->headers->get('referer'));
-            }*/
         }
         $schemas = $manager->getSchemas();
 

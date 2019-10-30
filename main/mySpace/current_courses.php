@@ -192,23 +192,23 @@ if (!empty($my_courses)) {
 }
 
 $headers = [
-    get_lang('LearningPath'),
-    get_lang('Teachers'),
+    get_lang('Learning paths'),
+    get_lang('Trainers'),
     get_lang('Courses'),
-    get_lang('NumberOfStudents'),
-    get_lang('NumberStudentsAccessingCourse'),
-    get_lang('PercentageStudentsAccessingCourse'),
-    get_lang('NumberStudentsCompleteAllActivities'),
-    get_lang('PercentageStudentsCompleteAllActivities'),
-    get_lang('AverageOfActivitiesCompletedPerStudent'),
-    get_lang('TotalTimeSpentInTheCourse'),
-    get_lang('AverageTimePerStudentInCourse'),
-    get_lang('NumberOfDocumentsInLearnpath'),
-    get_lang('NumberOfExercisesInLearnpath'),
-    get_lang('NumberOfLinksInLearnpath'),
-    get_lang('NumberOfForumsInLearnpath'),
-    get_lang('NumberOfAssignmentsInLearnpath'),
-    get_lang('NumberOfAnnouncementsInCourse'),
+    get_lang('Number of learners'),
+    get_lang('Number of learners accessing the course'),
+    get_lang('Percentage of learners accessing the course'),
+    get_lang('Number of learners who completed all activities (100% progress)'),
+    get_lang('Percentage of learners who completed all activities (100% progress)'),
+    get_lang('Average number of activities completed per learner'),
+    get_lang('Total time spent in the course'),
+    get_lang('Average time spent per learner in the course'),
+    get_lang('Number of documents in learning path'),
+    get_lang('Number of exercises in learning path'),
+    get_lang('Number of links in learning path'),
+    get_lang('Number of forums in learning path'),
+    get_lang('Number of assignments in learning path'),
+    get_lang('Number of announcements in course'),
 ];
 
 if (isset($_GET['export'])) {
@@ -220,8 +220,8 @@ if (isset($_GET['export'])) {
     exit;
 }
 
-$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('MySpace')];
-Display::display_header(get_lang('CurrentCourses'));
+$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('Reporting')];
+Display::display_header(get_lang('Current courses'));
 
 $table = new HTML_Table(['class' => 'data_table']);
 $row = 0;
@@ -245,7 +245,7 @@ foreach ($array as $row_table) {
 
 echo '<div class="actions">';
 echo '<a href="'.api_get_path(WEB_CODE_PATH).'mySpace">'.Display::return_icon('back.png', get_lang('Back'), [], 32).'</a>';
-echo '<a href="'.api_get_path(WEB_CODE_PATH).'mySpace/current_courses.php?export=1">'.Display::return_icon('export_excel.png', get_lang('CurrentCoursesReport'), [], 32).'</a> ';
+echo '<a href="'.api_get_path(WEB_CODE_PATH).'mySpace/current_courses.php?export=1">'.Display::return_icon('export_excel.png', get_lang('Current coursesReport'), [], 32).'</a> ';
 echo '</div>';
 echo '<div style="overflow:auto;">';
 echo $table->toHtml();

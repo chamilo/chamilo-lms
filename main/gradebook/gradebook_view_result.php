@@ -21,7 +21,7 @@ if (!$isDrhOfCourse) {
 
 $interbreadcrumb[] = [
     'url' => Category::getUrl(),
-    'name' => get_lang('Gradebook'),
+    'name' => get_lang('Assessments'),
 ];
 
 //load the evaluation & category
@@ -95,7 +95,7 @@ if (isset($_GET['action'])) {
 
                 $url = api_get_self().'?selecteval='.$select_eval.'&'.api_get_cidreq().'&editres='.$result->get_id();
                 $form = new FormValidator('attempt', 'post', $url.'&action=add_attempt');
-                $form->addHeader(get_lang('AddResult'));
+                $form->addHeader(get_lang('Grade learners'));
                 $form->addLabel(get_lang('CurrentScore'), $result->get_score());
 
                 $form->addFloat(
@@ -166,8 +166,7 @@ if (isset($_GET['action'])) {
 }
 
 if (isset($_GET['editres'])) {
-    $edit_res_xml = Security::remove_XSS($_GET['editres']);
-    $resultedit = Result::load($edit_res_xml);
+    $resultedit = Result::load($_GET['editres']);
     $edit_res_form = new EvalForm(
         EvalForm::TYPE_RESULT_EDIT,
         $eval[0],
@@ -182,7 +181,7 @@ if (isset($_GET['editres'])) {
         $result = new Result();
         $resultlog = new Result();
         $resultlog->addResultLog($values['hid_user_id'], $select_eval);
-        $result->set_id($edit_res_xml);
+        $result->set_id($_GET['editres']);
         $result->set_user_id($values['hid_user_id']);
         $result->set_evaluation_id($select_eval);
         $row_value = isset($values['score']) ? $values['score'] : 0;
@@ -217,7 +216,7 @@ $file_type = null;
 if (isset($_GET['import'])) {
     $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'gradebook/gradebook_view_result.php?selecteval='.$select_eval.'&'.api_get_cidreq(),
-        'name' => get_lang('ViewResult'),
+        'name' => get_lang('Assessment details'),
     ];
     $import_result_form = new DataForm(
         DataForm::TYPE_IMPORT,
@@ -313,7 +312,7 @@ if (isset($_GET['import'])) {
         if ($overwritescore != 0) {
             Display::addFlash(
                 Display::return_message(
-                    get_lang('ImportOverWriteScore').' '.$overwritescore
+                    get_lang('The import should overwrite the score.').' '.$overwritescore
                 )
             );
             header('Location: '.api_get_self().'?selecteval='.$select_eval.'&importoverwritescore='.$overwritescore);
@@ -322,7 +321,7 @@ if (isset($_GET['import'])) {
         if ($nr_results_added == 0) {
             Display::addFlash(
                 Display::return_message(
-                    get_lang('ProblemUploadingFile'),
+                    get_lang('There was a problem sending your file. Nothing has been received.'),
                     'warning',
                     false
                 )
@@ -332,7 +331,7 @@ if (isset($_GET['import'])) {
         }
         Display::addFlash(
             Display::return_message(
-                get_lang('FileUploadComplete'),
+                get_lang('File upload successfull'),
                 'success',
                 false
             )
@@ -345,11 +344,11 @@ if (isset($_GET['import'])) {
 if (isset($_GET['export'])) {
     $interbreadcrumb[] = [
         'url' => 'gradebook_view_result.php?selecteval='.$select_eval.'&'.api_get_cidreq(),
-        'name' => get_lang('ViewResult'),
+        'name' => get_lang('Assessment details'),
     ];
     $locked_status = $eval[0]->get_locked();
     $export_result_form = new DataForm(
-        DataForm :: TYPE_EXPORT,
+        DataForm::TYPE_EXPORT,
         'export_result_form',
         null,
         api_get_self().'?export=&selecteval='.$select_eval.'&'.api_get_cidreq(),
@@ -385,7 +384,7 @@ if (isset($_GET['export'])) {
             // set headers pdf
             !empty($_user['official_code']) ? $officialcode = $_user['official_code'].' - ' : '';
 
-            $h1 = [get_lang('Teacher'), $officialcode.$_user['firstName'].', '.$_user['lastName']];
+            $h1 = [get_lang('Trainer'), $officialcode.$_user['firstName'].', '.$_user['lastName']];
             $h2 = [get_lang('Score'), $eval[0]->get_max()];
             $h3 = [get_lang('Course'), $_course['name']];
             $h4 = [get_lang('Weight'), $eval[0]->get_weight()];
@@ -395,8 +394,8 @@ if (isset($_GET['export'])) {
             $header_pdf = [$h1, $h2, $h3, $h4, $h5, $h6];
 
             // set footer pdf
-            $f1 = '<hr />'.get_lang('Drh');
-            $f2 = '<hr />'.get_lang('Teacher');
+            $f1 = '<hr />'.get_lang('Human Resources Manager');
+            $f2 = '<hr />'.get_lang('Trainer');
             $f3 = '<hr />'.get_lang('Date');
             $footer_pdf = [$f1, $f2, $f3];
 
@@ -406,14 +405,14 @@ if (isset($_GET['export'])) {
             // set headers data table
             $head_ape_name = '';
             if (api_is_western_name_order()) {
-                $head_ape_name = get_lang('FirstName').', '.get_lang('LastName');
+                $head_ape_name = get_lang('First name').', '.get_lang('Last name');
             } else {
-                $head_ape_name = get_lang('LastName').', '.get_lang('FirstName');
+                $head_ape_name = get_lang('Last name').', '.get_lang('First name');
             }
 
             $head_table = [
                 ['#', 3],
-                [get_lang('Code'), 12],
+                [get_lang('Course code'), 12],
                 [$head_ape_name, 40],
                 [get_lang('Score'), 12],
             ];
@@ -425,7 +424,7 @@ if (isset($_GET['export'])) {
             $customdisplays = $scoredisplay->get_custom_score_display_settings();
 
             if (!empty($customdisplays) && $scoredisplay->is_custom()) {
-                $head_display_score = get_lang('Display');
+                $head_display_score = get_lang('Ranking');
                 $head_table[] = [$head_display_score, 15];
             }
 
@@ -460,13 +459,13 @@ if (isset($_GET['export'])) {
                 }
                 if ($number_decimals == null) {
                     if (empty($data['scoreletter']) && !is_numeric($data['score'])) {
-                        $result[] = get_lang('DidNotTakeTheExam');
+                        $result[] = get_lang('The user did not take the exam.');
                     } else {
                         $result[] = api_strtoupper(get_lang('Literal'.$data['scoreletter']));
                     }
                 } else {
                     if (empty($data['score']) && !is_numeric($data['score'])) {
-                        $result[] = get_lang('DidNotTakeTheExamAcronym');
+                        $result[] = get_lang('The user did not take the exam.Acronym');
                     } else {
                         $result[] = $data['score'];
                     }
@@ -519,7 +518,7 @@ if (isset($_GET['export'])) {
 if (isset($_GET['resultdelete'])) {
     $result = Result::load($_GET['resultdelete']);
     $result[0]->delete();
-    Display::addFlash(Display::return_message(get_lang('ResultDeleted')));
+    Display::addFlash(Display::return_message(get_lang('Result deleted.')));
     header('Location: gradebook_view_result.php?selecteval='.$select_eval.'&'.api_get_cidreq());
     exit;
 }
@@ -529,7 +528,7 @@ if (isset($_POST['action'])) {
     if ($number_of_selected_items == '0') {
         Display::addFlash(
             Display::return_message(
-                get_lang('NoItemsSelected'),
+                get_lang('No resource selected'),
                 'warning',
                 false
             )
@@ -543,7 +542,7 @@ if (isset($_POST['action'])) {
                     $result[0]->delete();
                     $number_of_deleted_results++;
                 }
-                Display::addFlash(Display::return_message(get_lang('ResultsDeleted'), 'confirmation', false));
+                Display::addFlash(Display::return_message(get_lang('Results deleted.'), 'confirmation', false));
                 header('Location: gradebook_view_result.php?massdelete=&selecteval='.$select_eval.'&'.api_get_cidreq());
                 exit;
                 break;
@@ -572,24 +571,24 @@ if (isset($_GET['print'])) {
     if ($displayscore->is_custom()) {
         if (api_is_western_name_order()) {
             $header_names = [
-                get_lang('FirstName'),
-                get_lang('LastName'),
+                get_lang('First name'),
+                get_lang('Last name'),
                 get_lang('Score'),
-                get_lang('Display'),
+                get_lang('Ranking'),
             ];
         } else {
             $header_names = [
-                get_lang('LastName'),
-                get_lang('FirstName'),
+                get_lang('Last name'),
+                get_lang('First name'),
                 get_lang('Score'),
-                get_lang('Display'),
+                get_lang('Ranking'),
             ];
         }
     } else {
         if (api_is_western_name_order()) {
-            $header_names = [get_lang('FirstName'), get_lang('LastName'), get_lang('Score')];
+            $header_names = [get_lang('First name'), get_lang('Last name'), get_lang('Score')];
         } else {
-            $header_names = [get_lang('LastName'), get_lang('FirstName'), get_lang('Score')];
+            $header_names = [get_lang('Last name'), get_lang('First name'), get_lang('Score')];
         }
     }
     $newarray = [];
@@ -600,7 +599,7 @@ if (isset($_GET['print'])) {
     echo print_table(
         $newarray,
         $header_names,
-        get_lang('ViewResult'),
+        get_lang('Assessment details'),
         $eval[0]->get_name()
     );
     exit;
@@ -610,14 +609,14 @@ if (isset($_GET['print'])) {
 
 $htmlHeadXtra[] = '<script>
 function confirmationuser() {
-    if (confirm("'.get_lang('DeleteUser').'?"))
+    if (confirm("'.get_lang('Delete user').'?"))
     	{return true;}
     else
     	{return false;}
 }
 
 function confirmationall () {
-    if (confirm("'.get_lang('DeleteAll').'?"))
+    if (confirm("'.get_lang('Delete all').'?"))
     	{return true;}
     else
     	{return false;}
@@ -625,7 +624,7 @@ function confirmationall () {
 </script>';
 if (isset($_GET['deleteall'])) {
     $eval[0]->delete_results();
-    Display::addFlash(Display::return_message(get_lang('AllResultDeleted')));
+    Display::addFlash(Display::return_message(get_lang('AllResult deleted.')));
     header('Location: '.api_get_path(WEB_CODE_PATH).'gradebook/gradebook_view_result.php?allresdeleted=&selecteval='.$select_eval.'&'.api_get_cidreq());
     exit;
 }
@@ -638,30 +637,30 @@ if (!isset($_GET['export']) && (!isset($_GET['import']))) {
     }
     $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'gradebook/gradebook_view_result.php?selecteval='.$select_eval.'&'.api_get_cidreq(),
-        'name' => get_lang('ViewResult'),
+        'name' => get_lang('Assessment details'),
     ];
     Display::display_header();
 }
 
 if (isset($_GET['adduser'])) {
-    echo Display::return_message(get_lang('UserAdded'), 'confirmation', false);
+    echo Display::return_message(get_lang('The user has been added'), 'confirmation', false);
 }
 
 if (isset($_GET['incorrectdata'])) {
-    echo Display::return_message(get_lang('IncorrectData'), 'warning', false);
+    echo Display::return_message(get_lang('Incorrect data'), 'warning', false);
 }
 
 if (isset($_GET['nouser'])) {
-    echo Display::return_message(get_lang('NoUser'), 'warning', false);
+    echo Display::return_message(get_lang('No user'), 'warning', false);
 }
 if (isset($_GET['overwritemax'])) {
-    echo Display::return_message(get_lang('OverWriteMax'), 'warning', false);
+    echo Display::return_message(get_lang('Overwrite the maximum.'), 'warning', false);
 }
 
 if (isset($_GET['import_user_error'])) {
     $userinfo = api_get_user_info($_GET['import_user_error']);
     echo Display::return_message(
-        get_lang('UserInfoDoesNotMatch').' '.
+        get_lang('The user info doesn\'t match.').' '.
         api_get_person_name($userinfo['firstname'], $userinfo['lastname']),
         'warning'
     );
@@ -669,7 +668,7 @@ if (isset($_GET['import_user_error'])) {
 if (isset($_GET['import_score_error'])) {
     $userinfo = api_get_user_info($_GET['import_score_error']);
     echo Display::return_message(
-        get_lang('ScoreDoesNotMatch').' '.
+        get_lang('The score doesn\'t match').' '.
         api_get_person_name($userinfo['firstname'], $userinfo['lastname']),
         'warning'
     );

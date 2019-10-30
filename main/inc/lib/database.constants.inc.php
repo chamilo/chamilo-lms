@@ -25,7 +25,6 @@ define('TABLE_MAIN_COURSE_USER', 'course_rel_user');
 define('TABLE_MAIN_COURSE_CATALOGUE_USER', 'course_rel_user_catalogue');
 define('TABLE_MAIN_CLASS_USER', 'class_user');
 define('TABLE_MAIN_CATEGORY', 'course_category');
-define('TABLE_MAIN_COURSE_MODULE', 'course_module');
 define('TABLE_MAIN_SYSTEM_ANNOUNCEMENTS', 'sys_announcement');
 define('TABLE_MAIN_SYSTEM_ANNOUNCEMENTS_GROUPS', 'announcement_rel_group');
 define('TABLE_MAIN_LANGUAGE', 'language');
@@ -160,6 +159,7 @@ define('TABLE_STUDENT_PUBLICATION_ASSIGNMENT', 'student_publication_assignment')
 define('TABLE_STUDENT_PUBLICATION_REL_DOCUMENT', 'student_publication_rel_document');
 define('TABLE_STUDENT_PUBLICATION_REL_USER', 'student_publication_rel_user');
 define('TABLE_STUDENT_PUBLICATION_ASSIGNMENT_COMMENT', 'student_publication_comment');
+define('TABLE_PLAGIARISM', 'plagiarism_compilatio_docs');
 
 // Course forum tables
 define('TABLE_FORUM_CATEGORY', 'forum_category');
@@ -339,3 +339,5 @@ define('TABLE_STATISTIC_TRACK_E_EXERCICES_TEMP', 'track_e_exercices_temp');
 
 define('TABLE_USER_INFO_DEF', 'userinfo_def');
 define('TABLE_USER_INFO_CONTENT', 'userinfo_content');
+
+define('TABLE_MAIN_USER_CAREER', 'user_career');

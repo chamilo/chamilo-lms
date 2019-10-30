@@ -21,8 +21,6 @@ use Symfony\Component\Translation\Translator;
  *
  * @todo reduce high level of duplication in this code
  * @todo (busy) organise code into functions
- *
- * @package chamilo.install
  */
 $originalDisplayErrors = ini_get('display_errors');
 $originalMemoryLimit = ini_get('memory_limit');
@@ -41,10 +39,7 @@ define('FORM_FIELD_DISPLAY_LENGTH', 40);
 define('DATABASE_FORM_FIELD_DISPLAY_LENGTH', 25);
 define('MAX_FORM_FIELD_LENGTH', 80);
 
-require_once '../inc/lib/api.lib.php';
-require_once '../inc/lib/text.lib.php';
-
-api_check_php_version('../inc/');
+api_check_php_version();
 ob_implicit_flush(true);
 
 // Defaults settings
@@ -61,10 +56,6 @@ putenv('APP_DEBUG=1');
 
 session_start();
 
-require_once api_get_path(LIBRARY_PATH).'database.constants.inc.php';
-require_once api_get_path(LIBRARY_PATH).'fileManage.lib.php';
-require_once api_get_path(LIBRARY_PATH).'text.lib.php';
-require_once api_get_path(LIBRARY_PATH).'banner.lib.php';
 require_once 'install.lib.php';
 
 $installationLanguage = 'en';
@@ -112,8 +103,8 @@ $dbNameForm = 'chamilo';
 $dbPortForm = 3306;
 $allowSelfReg = 'approval';
 $allowSelfRegProf = 1;
-$adminLastName = get_lang('DefaultInstallAdminLastname');
-$adminFirstName = get_lang('DefaultInstallAdminFirstname');
+$adminLastName = get_lang('Doe');
+$adminFirstName = get_lang('John');
 $loginForm = 'admin';
 $passForm = '';
 $institutionUrlForm = 'http://www.chamilo.org';
@@ -126,34 +117,12 @@ $session_lifetime = 360000;
 //$installLanguage = isset($_SESSION['install_language']) ? $_SESSION['install_language'] : 'english';
 $installLanguage = '';
 $installationGuideLink = '../../documentation/installation_guide.html';
-/*
-// Loading language files.
-require api_get_path(SYS_LANG_PATH).'english/trad4all.inc.php';
-if ($installationLanguage != 'english') {
-    include_once api_get_path(SYS_LANG_PATH).$installationLanguage.'/trad4all.inc.php';
-    switch ($installationLanguage) {
-        case 'french':
-            $installationGuideLink = '../../documentation/installation_guide_fr_FR.html';
-            break;
-        case 'spanish':
-            $installationGuideLink = '../../documentation/installation_guide_es_ES.html';
-            break;
-        case 'italian':
-            $installationGuideLink = '../../documentation/installation_guide_it_IT.html';
-            break;
-        default:
-            break;
-    }
-}*/
 
 // Enables the portability layer and configures PHP for UTF-8
 \Patchwork\Utf8\Bootup::initAll();
 
 // Setting the error reporting levels.
 error_reporting(E_ALL);
-
-// Overriding the timelimit (for large campusses that have to be migrated).
-//@set_time_limit(0);
 
 // Upgrading from any subversion of 1.9
 $update_from_version_8 = [
@@ -181,6 +150,9 @@ $update_from_version_8 = [
     '1.11.6',
     '1.11.8',
     '1.11.10',
+    '1.11.11',
+    '1.11.12',
+    '1.11.14',
 ];
 
 $my_old_version = '';
@@ -213,13 +185,13 @@ if (!empty($_POST['updatePath'])) {
     $proposedUpdatePath = $_POST['updatePath'];
 }
 
-if (@$_POST['step2_install'] || @$_POST['step2_update_8'] || @$_POST['step2_update_6']) {
-    if (@$_POST['step2_install']) {
+if (isset($_POST['step2_install']) || isset($_POST['step2_update_8']) || isset($_POST['step2_update_6'])) {
+    if (isset($_POST['step2_install'])) {
         $installType = 'new';
         $_POST['step2'] = 1;
     } else {
         $installType = 'update';
-        if (@$_POST['step2_update_8']) {
+        if (isset($_POST['step2_update_8'])) {
             $emptyUpdatePath = false;
             $proposedUpdatePath = api_add_trailing_slash(empty($_POST['updatePath']) ? api_get_path(SYS_PATH) : $_POST['updatePath']);
             if (file_exists($proposedUpdatePath)) {
@@ -233,7 +205,7 @@ if (@$_POST['step2_install'] || @$_POST['step2_update_8'] || @$_POST['step2_upda
             }
         }
     }
-} elseif (@$_POST['step1']) {
+} elseif (isset($_POST['step1'])) {
     $_POST['updatePath'] = '';
     $installType = '';
     $updateFromConfigFile = '';
@@ -309,7 +281,7 @@ if (!$_POST) {
     $current_step = 5;
 } elseif (!empty($_POST['step5'])) {
     $current_step = 6;
-} elseif (@$_POST['step6']) {
+} elseif (isset($_POST['step6'])) {
     $current_step = 7;
 }
 
@@ -323,10 +295,10 @@ if ($encryptPassForm == '1') {
 $form = '';
 $instalation_type_label = '';
 if ($installType == 'new') {
-    $instalation_type_label = get_lang('NewInstallation');
+    $instalation_type_label = get_lang('New installation');
 } elseif ($installType == 'update') {
     $update_from_version = isset($update_from_version) ? $update_from_version : null;
-    $instalation_type_label = get_lang('UpdateFromLMSVersion').(is_array($update_from_version) ? implode('|', $update_from_version) : '');
+    $instalation_type_label = get_lang('Update from Chamilo').(is_array($update_from_version) ? implode('|', $update_from_version) : '');
 }
 
 if (!empty($instalation_type_label) && empty($_POST['step6'])) {
@@ -373,13 +345,13 @@ $form .= '<input type="hidden" name="old_version"        value="'.api_htmlentiti
 $form .= '<input type="hidden" name="new_version"        value="'.api_htmlentities($new_version, ENT_QUOTES).'"/>';
 $form .= '<input type="hidden" name="installationProfile" value="'.api_htmlentities($installationProfile, ENT_QUOTES).'"/>';
 
-if (@$_POST['step2']) {
+if (isset($_POST['step2'])) {
     // STEP 3 : LICENSE
     ob_start();
     display_license_agreement();
     $form .= ob_get_contents();
     ob_end_clean();
-} elseif (@$_POST['step3']) {
+} elseif (isset($_POST['step3'])) {
     // STEP 4 : MYSQL DATABASE SETTINGS
     ob_start();
     display_database_settings_form(
@@ -393,7 +365,7 @@ if (@$_POST['step2']) {
     );
     $form .= ob_get_contents();
     ob_end_clean();
-} elseif (@$_POST['step4']) {
+} elseif (isset($_POST['step4'])) {
     //STEP 5 : CONFIGURATION SETTINGS
     //if update, try getting settings from the database...
     if ($installType === 'update') {
@@ -489,107 +461,49 @@ if (@$_POST['step2']) {
     );
     $form .= ob_get_contents();
     ob_end_clean();
-} elseif (@$_POST['step5']) {
+} elseif (isset($_POST['step5'])) {
     ob_start();
     //STEP 6 : LAST CHECK BEFORE INSTALL?>
     <div class="RequirementHeading">
-        <h3><?php echo display_step_sequence().get_lang('LastCheck'); ?></h3>
+        <h3><?php echo display_step_sequence().get_lang('Last check before install'); ?></h3>
     </div>
     <div class="RequirementContent">
-        <?php echo get_lang('HereAreTheValuesYouEntered'); ?>
+        <?php echo get_lang('Here are the values you entered'); ?>
     </div>
 
     <?php
     if ($installType == 'new') {
-        echo get_lang('AdminLogin').' : <strong>'.$loginForm.'</strong><br />';
-        echo get_lang('AdminPass').' : <strong>'.$passForm.'</strong><br /><br />'; /* TODO: Maybe this password should be hidden too? */
+        echo get_lang('Administrator login').' : <strong>'.$loginForm.'</strong><br />';
+        echo get_lang('Administrator password (<font color="red">you may want to change this</font>)').' : <strong>'.$passForm.'</strong><br /><br />'; /* TODO: Maybe this password should be hidden too? */
     }
     $allowSelfRegistrationLiteral = ($allowSelfReg == 'true') ? get_lang('Yes') : ($allowSelfReg == 'approval' ? get_lang('Approval') : get_lang('No'));
-    echo get_lang('AdminFirstName').' : '.$adminFirstName, '<br />', get_lang('AdminLastName').' : '.$adminLastName, '<br />';
-    echo get_lang('AdminEmail').' : '.$emailForm; ?><br />
-    <?php echo get_lang('AdminPhone').' : '.$adminPhoneForm; ?><br />
-    <?php echo get_lang('MainLang').' : '.$languageForm; ?><br /><br />
-    <?php echo get_lang('DBHost').' : '.$dbHostForm; ?><br />
-    <?php echo get_lang('DBPort').' : '.$dbPortForm; ?><br />
-    <?php echo get_lang('DBLogin').' : '.$dbUsernameForm; ?><br />
-    <?php echo get_lang('DBPassword').' : '.str_repeat('*', api_strlen($dbPassForm)); ?><br />
-    <?php echo get_lang('MainDB').' : <strong>'.$dbNameForm; ?></strong><br />
-    <?php echo get_lang('AllowSelfReg').' : '.$allowSelfRegistrationLiteral; ?><br />
-    <?php echo get_lang('EncryptMethodUserPass').' : ';
+    echo get_lang('Administrator first name').' : '.$adminFirstName, '<br />', get_lang('Administrator last name').' : '.$adminLastName, '<br />';
+    echo get_lang('Administrator e-mail').' : '.$emailForm; ?><br />
+    <?php echo get_lang('Administrator telephone').' : '.$adminPhoneForm; ?><br />
+    <?php echo get_lang('Main language').' : '.$languageForm; ?><br /><br />
+    <?php echo get_lang('Database Host').' : '.$dbHostForm; ?><br />
+    <?php echo get_lang('Port').' : '.$dbPortForm; ?><br />
+    <?php echo get_lang('Database Login').' : '.$dbUsernameForm; ?><br />
+    <?php echo get_lang('Database Password').' : '.str_repeat('*', api_strlen($dbPassForm)); ?><br />
+    <?php echo get_lang('Main Chamilo database (DB)').' : <strong>'.$dbNameForm; ?></strong><br />
+    <?php echo get_lang('Allow self-registration').' : '.$allowSelfRegistrationLiteral; ?><br />
+    <?php echo get_lang('Encryption method').' : ';
     echo $encryptPassForm; ?>
     <br /><br />
-    <?php echo get_lang('CampusName').' : '.$campusForm; ?><br />
-    <?php echo get_lang('InstituteShortName').' : '.$institutionForm; ?><br />
-    <?php echo get_lang('InstituteURL').' : '.$institutionUrlForm; ?><br />
-    <?php echo get_lang('ChamiloURL').' : '.$urlForm; ?><br /><br />
+    <?php echo get_lang('Your portal name').' : '.$campusForm; ?><br />
+    <?php echo get_lang('Your company short name').' : '.$institutionForm; ?><br />
+    <?php echo get_lang('URL of this company').' : '.$institutionUrlForm; ?><br />
+    <?php echo get_lang('Chamilo URL').' : '.$urlForm; ?><br /><br />
     <?php
     if ($installType == 'new') {
         echo Display::return_message(
             '<h4 style="text-align: center">'.get_lang(
                 'Warning'
-            ).'</h4>'.get_lang('TheInstallScriptWillEraseAllTables'),
+            ).'</h4>'.get_lang('The install script will erase all tables of the selected database. We heavily recommend you do a full backup of them before confirming this last install step.'),
             'warning',
             false
         );
     } ?>
-
-    <div id="pnl-check-crs-tables" class="alert alert-warning hide">
-        <p><?php echo get_lang('CRSTablesIntro'); ?></p>
-        <p>
-            <button type="button" class="btn btn-warning btn-xs" id="btn-remove-crs-table" data-removing-text="<?php echo get_lang('Removing'); ?>" autocomplete="off">
-                <span class="fa-stack" aria-hidden="true">
-                    <span class="fa fa-circle-thin fa-stack-2x"></span>
-                    <span class="fa fa-trash-o fa-stack-1x"></span>
-                </span>
-                <?php echo get_lang('CheckForCRSTables'); ?>
-            </button>
-        </p>
-    </div>
-    <script>
-        $(document).on('ready', function () {
-            $.post('<?php echo api_get_path(WEB_CODE_PATH); ?>install/ajax.php', {
-                a: 'check_crs_tables',
-                db_host: '<?php echo $dbHostForm; ?>',
-                db_username: '<?php echo $dbUsernameForm; ?>',
-                db_pass: '<?php echo $dbPassForm; ?>',
-                db_name: '<?php echo $dbNameForm; ?>',
-                db_port: '<?php echo $dbPortForm; ?>',
-                install_type: '<?php echo $installType; ?>'
-            }, function (response) {
-                if (!parseInt(response)) {
-                    return;
-                }
-
-                $('#pnl-check-crs-tables').removeClass('hide');
-                $('#btn-remove-crs-table').on('click', function (e) {
-                    e.preventDefault();
-
-                    var sure = confirm('<?php echo get_lang('AreYouSureToDelete'); ?>');
-
-                    if (!sure) {
-                        return;
-                    }
-
-                    var $btnNext = $('button.btn-success:submit'),
-                        $btnRemove = $(this).button('removing');
-
-                    $btnNext.prop('disabled', true);
-
-                    $.post('<?php echo api_get_path(WEB_CODE_PATH); ?>install/ajax.php', {
-                        a: 'remove_crs_tables',
-                        db_host: '<?php echo $dbHostForm; ?>',
-                        db_username: '<?php echo $dbUsernameForm; ?>',
-                        db_pass: '<?php echo $dbPassForm; ?>',
-                        db_name: '<?php echo $dbNameForm; ?>',
-                        db_port: '<?php echo $dbPortForm; ?>'
-                    }, function () {
-                        $btnRemove.remove();
-                        $btnNext.prop('disabled', false);
-                    });
-                });
-            });
-        });
-    </script>
     <table width="100%">
         <tr>
             <td>
@@ -600,9 +514,9 @@ if (@$_POST['step2']) {
             <td align="right">
                 <input type="hidden" name="is_executable" id="is_executable" value="-" />
                 <input type="hidden" name="step6" value="1" />
-                <button id="button_step6" class="btn btn-success" type="submit" name="button_step6" value="<?php echo get_lang('InstallChamilo'); ?>">
+                <button id="button_step6" class="btn btn-success" type="submit" name="button_step6" value="<?php echo get_lang('Install chamilo'); ?>">
                     <em class="fa fa-floppy-o"> </em>
-                    <?php echo get_lang('InstallChamilo'); ?>
+                    <?php echo get_lang('Install chamilo'); ?>
                 </button>
                 <button class="btn btn-save" id="button_please_wait"></button>
             </td>
@@ -611,20 +525,20 @@ if (@$_POST['step2']) {
     <?php
     $form .= ob_get_contents();
     ob_end_clean();
-} elseif (@$_POST['step6']) {
+} elseif (isset($_POST['step6'])) {
     ob_start();
     //STEP 6 : INSTALLATION PROCESS
     $current_step = 7;
-    $msg = get_lang('InstallExecution');
+    $msg = get_lang('Installation process execution');
     if ($installType === 'update') {
-        $msg = get_lang('UpdateExecution');
+        $msg = get_lang('Update process execution');
     }
     $form .= '<div class="RequirementHeading">
       <h3>'.display_step_sequence().$msg.'</h3>';
     if (!empty($installationProfile)) {
         $form .= '    <h3>('.$installationProfile.')</h3>';
     }
-    $form .= '<div id="pleasewait" class="alert alert-success">'.get_lang('PleaseWaitThisCouldTakeAWhile').'
+    $form .= '<div id="pleasewait" class="alert alert-success">'.get_lang('Please wait. This could take a while...').'
       <div class="progress">
       <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%">
         <span class="sr-only">100% Complete</span>
@@ -646,9 +560,9 @@ if (@$_POST['step2']) {
         $perm_file = api_get_permissions_for_new_files();
         migrateSwitch($my_old_version, $manager);
 
-        // Create .env file
-        $envFile = api_get_path(SYS_PATH).'.env';
-        $distFile = api_get_path(SYS_PATH).'.env.dist';
+        // Create .env.local file
+        $envFile = api_get_path(SYS_PATH).'.env.local';
+        $distFile = api_get_path(SYS_PATH).'.env';
 
         $params = [
             '{{DATABASE_HOST}}' => $dbHostForm,
@@ -669,10 +583,6 @@ if (@$_POST['step2']) {
         $kernel = new Kernel('dev', true);
         $application = new Application($kernel);
         error_log('Set Kernel');
-        // Create database
-        /*$input = new ArrayInput([]);
-        $command = $application->find('doctrine:schema:create');
-        $result = $command->run($input, new ConsoleOutput());*/
 
         session_unset();
         $_SESSION = [];
@@ -710,9 +620,9 @@ if (@$_POST['step2']) {
         );
 
         $manager = $database->getManager();
-        // Create .env file
-        $envFile = api_get_path(SYS_PATH).'.env';
-        $distFile = api_get_path(SYS_PATH).'.env.dist';
+        // Create .env.local file
+        $envFile = api_get_path(SYS_PATH).'.env.local';
+        $distFile = api_get_path(SYS_PATH).'.env';
 
         $params = [
             '{{DATABASE_HOST}}' => $dbHostForm,
@@ -776,7 +686,7 @@ if (@$_POST['step2']) {
     $form .= '<script>$(\'#pleasewait\').hide(\'fast\');</script>';
     $form .= ob_get_contents();
     ob_end_clean();
-} elseif (@$_POST['step1'] || $badUpdatePath) {
+} elseif (isset($_POST['step1']) || $badUpdatePath) {
     //STEP 1 : REQUIREMENTS
     //make sure that proposed path is set, shouldn't be necessary but...
     if (empty($proposedUpdatePath)) {
@@ -803,15 +713,19 @@ $poweredBy = 'Powered by <a href="http://www.chamilo.org" target="_blank"> Chami
 ?>
 <!DOCTYPE html>
 <head>
-    <title>&mdash; <?php echo get_lang('ChamiloInstallation').' &mdash; '.get_lang('Version').' '.$new_version; ?></title>
+    <title>&mdash; <?php echo $translator->trans('Chamilo installation').' &mdash; '.$translator->trans('Version').' '.$new_version; ?></title>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
     <style type="text/css" media="screen, projection">
         @import "../../public/build/css/app.css";
         @import "../../public/build/css/themes/chamilo/default.css";
     </style>
     <script type="text/javascript" src="../../public/build/runtime.js"></script>
     <script type="text/javascript" src="../../public/build/app.js"></script>
-    <script type="text/javascript">
-        $(document).ready( function() {
+    <script>
+        $(function() {
             $("#details_button").click(function() {
                 $( "#details" ).toggle("slow", function() {
                 });
@@ -828,25 +742,22 @@ $poweredBy = 'Powered by <a href="http://www.chamilo.org" target="_blank"> Chami
             //Blocking step6 button
             $("#button_step6").click(function() {
                 $("#button_step6").hide();
-                $("#button_please_wait").html('<?php echo addslashes(get_lang('PleaseWait')); ?>');
+                $("#button_please_wait").html('<?php echo addslashes($translator->trans('Continue')); ?>');
                 $("#button_please_wait").show();
                 $("#button_please_wait").attr('disabled', true);
                 $("#is_executable").attr("value",'step6');
             });
-        });
 
-        init_visibility=0;
-        $(document).ready( function() {
             $(".advanced_parameters").click(function() {
                 if ($("#id_contact_form").css("display") == "none") {
                     $("#id_contact_form").css("display","block");
                     $("#img_plus_and_minus").html(
-                        '&nbsp;<i class="fa fa-eye" aria-hidden="true"></i>&nbsp;<?php echo get_lang('ContactInformation'); ?>'
+                        '&nbsp;<i class="fa fa-eye" aria-hidden="true"></i>&nbsp;<?php echo $translator->trans('Contact information'); ?>'
                     );
                 } else {
                     $("#id_contact_form").css("display","none");
                     $("#img_plus_and_minus").html(
-                        '&nbsp;<i class="fa fa-eye-slash" aria-hidden="true"></i>&nbsp;<?php echo get_lang('ContactInformation'); ?>'
+                        '&nbsp;<i class="fa fa-eye-slash" aria-hidden="true"></i>&nbsp;<?php echo $translator->trans('Contact information'); ?>'
                     );
                 }
             });
@@ -854,7 +765,7 @@ $poweredBy = 'Powered by <a href="http://www.chamilo.org" target="_blank"> Chami
 
         function send_contact_information() {
             if (!document.getElementById('accept_licence').checked) {
-                alert('<?php echo get_lang('YouMustAcceptLicence'); ?>')
+                alert('<?php echo $translator->trans('You must accept the licence'); ?>')
                 ;return false;
             } else {
                 var data_post = "";
@@ -879,11 +790,11 @@ $poweredBy = 'Powered by <a href="http://www.chamilo.org" target="_blank"> Chami
                     data: data_post,
                     success: function(datos) {
                         if (datos == 'required_field_error') {
-                            message = "<?php echo get_lang('FormHasErrorsPleaseComplete'); ?>";
+                            message = "<?php echo $translator->trans('The form contains incorrect or incomplete data. Please check your input.'); ?>";
                         } else if (datos == '1') {
-                            message = "<?php echo get_lang('ContactInformationHasBeenSent'); ?>";
+                            message = "<?php echo $translator->trans('Contact informationHasBeenSent'); ?>";
                         } else {
-                            message = "<?php echo get_lang('Error').': '.get_lang('ContactInformationHasNotBeenSent'); ?>";
+                            message = "<?php echo $translator->trans('Error').': '.$translator->trans('Contact informationHasNotBeenSent'); ?>";
                         }
                         alert(message);
                         $('#license-next').trigger('click');
@@ -893,10 +804,8 @@ $poweredBy = 'Powered by <a href="http://www.chamilo.org" target="_blank"> Chami
             }
         }
     </script>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 </head>
-<body class="bg-chamilo bg-install" dir="<?php echo api_get_text_direction(); ?>">
+<body class="bg-chamilo bg-install">
 <div class="install-box">
     <div class="row">
         <div class="col-md-4">
@@ -907,37 +816,37 @@ $poweredBy = 'Powered by <a href="http://www.chamilo.org" target="_blank"> Chami
                 <ol class="list-group">
                     <li class="list-group-item <?php step_active('1'); ?>">
                         <span class="number"> 1 </span>
-                        <?php echo get_lang('Installation language'); ?>
+                        <?php echo $translator->trans('Installation language'); ?>
                     </li>
                     <li class="list-group-item <?php step_active('2'); ?>">
                         <span class="number"> 2 </span>
-                        <?php echo get_lang('Requirements'); ?>
+                        <?php echo $translator->trans('Requirements'); ?>
                     </li>
                     <li class="list-group-item <?php step_active('3'); ?>">
                         <span class="number"> 3 </span>
-                        <?php echo get_lang('Licence'); ?>
+                        <?php echo $translator->trans('Licence'); ?>
                     </li>
                     <li class="list-group-item <?php step_active('4'); ?>">
                         <span class="number"> 4 </span>
-                        <?php echo get_lang('DBSetting'); ?>
+                        <?php echo $translator->trans('MySQL database settings'); ?>
                     </li>
                     <li class="list-group-item <?php step_active('5'); ?>">
                         <span class="number"> 5 </span>
-                        <?php echo get_lang('CfgSetting'); ?>
+                        <?php echo $translator->trans('Config settings'); ?>
                     </li>
                     <li class="list-group-item <?php step_active('6'); ?>">
                         <span class="number"> 6 </span>
-                        <?php echo get_lang('PrintOverview'); ?>
+                        <?php echo $translator->trans('Show Overview'); ?>
                     </li>
                     <li class="list-group-item <?php step_active('7'); ?>">
                         <span class="number"> 7 </span>
-                        <?php echo get_lang('Installing'); ?>
+                        <?php echo $translator->trans('Install'); ?>
                     </li>
                 </ol>
             </div>
             <div id="note">
                 <a class="btn btn-info btn-block" href="<?php echo $installationGuideLink; ?>" target="_blank">
-                    <em class="fa fa-file-text-o"></em> <?php echo get_lang('Read the installation guide'); ?>
+                    <em class="fa fa-file-text-o"></em> <?php echo $translator->trans('Read the installation guide'); ?>
                 </a>
             </div>
         </div>

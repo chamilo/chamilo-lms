@@ -1,17 +1,21 @@
 # The Azure Active Directory Plugin
-Allow authentication with Microsoft's Azure Active Directory
+Allow authentication (with OAuth2) with Microsoft's Azure Active Directory.
+
+> This plugin use the [`thenetworg/oauth2-azure`](https://github.com/TheNetworg/oauth2-azure) package.
 
 ### To configure Azure Active Directory
-* [Create an Azure AD B2C tenant](https://azure.microsoft.com/en-us/documentation/articles/active-directory-b2c-get-started/)
-* [Register your application](https://azure.microsoft.com/en-us/documentation/articles/active-directory-b2c-app-registration/)
-* [Configure Facebook, Google+, Microsoft account, Amazon, and LinkedIn accounts for use in your consumer-facing applications](https://azure.microsoft.com/en-us/documentation/articles/active-directory-b2c-overview/#how-to-articles)
+* Create and configure an application.
+* In _Authentication_ section, set an _Reply URL_ with `https://{CHAMILO_URL}/plugin/azure_active_directory/src/callback.php`.
+* In _Certificates & secrets_, create a secret string (or application password). And keep copied.
 
 ### To configure this plugin
-* Enable
-* Application ID: Enter the Application Id assinged to your app by the Azure portal, e.g. 580e250c-8f26-49d0-bee8-1c078add1609
-* Tenant: Enter the name of your B2C directory, e.g. contoso.onmicrosoft.com
-* Sign up policy: Enter your sign up policy name, e.g. b2c_1_sign_up
-* Sign in policy: Enter your sign in policy name, e.g. b2c_1_sign_in
-* Block name: (Optional) The name to show above the buttons
+* _Enable_
+* _Application ID_: Enter the Application Id assinged to your app by the Azure portal.
+* _Application secret_: Enter the client secret created.
+* _Block name_: (Optional) The name to show above the login button.
+* _Force logout button_: (Optional) Add a button to force logout from Azure.
+* _Management login_: (Optional) Disable the chamilo login and enable an alternative login page for users.   
+   You will need copy the `/plugin/azure_active_directory/layout/login_form.tpl` file to `/main/template/overrides/layout/` directory.
+* _Name for the management login_: A name for the management login. By default is "Management Login".
 
-And assign a region. Preferably `login_bottom`
+And assign a region. Preferably `login_bottom`.

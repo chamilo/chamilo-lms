@@ -6,8 +6,6 @@ use Symfony\Component\Filesystem\Filesystem;
 /**
  * This is the file manage library for Chamilo.
  * Include/require it in your code to use its functionality.
- *
- * @package chamilo.library
  */
 
 /**

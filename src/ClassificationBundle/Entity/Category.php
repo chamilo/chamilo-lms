@@ -7,8 +7,6 @@ use Sonata\ClassificationBundle\Entity\BaseCategory;
 
 /**
  * Class Category.
- *
- * @package Chamilo\ClassificationBundle\Entity
  */
 class Category extends BaseCategory
 {

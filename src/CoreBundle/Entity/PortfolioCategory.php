@@ -5,6 +5,7 @@ namespace Chamilo\CoreBundle\Entity;
 
 use Chamilo\UserBundle\Entity\User;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -235,11 +236,11 @@ class PortfolioCategory
     /**
      * Set items.
      *
-     * @param ArrayCollection $items
+     * @param Collection $items
      *
      * @return PortfolioCategory
      */
-    public function setItems(ArrayCollection $items)
+    public function setItems(Collection $items)
     {
         $this->items = $items;
 

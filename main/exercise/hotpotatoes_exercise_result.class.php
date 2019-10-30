@@ -118,22 +118,22 @@ class HotpotatoesExerciseResult
 
         if (api_is_western_name_order()) {
             if (!empty($this->results[0]['first_name'])) {
-                $data .= get_lang('FirstName').';';
+                $data .= get_lang('First name').';';
             }
             if (!empty($this->results[0]['last_name'])) {
-                $data .= get_lang('LastName').';';
+                $data .= get_lang('Last name').';';
             }
         } else {
             if (!empty($this->results[0]['last_name'])) {
-                $data .= get_lang('LastName').';';
+                $data .= get_lang('Last name').';';
             }
             if (!empty($this->results[0]['first_name'])) {
-                $data .= get_lang('FirstName').';';
+                $data .= get_lang('First name').';';
             }
         }
-        $data .= get_lang('Email').';';
+        $data .= get_lang('e-mail').';';
         $data .= get_lang('Title').';';
-        $data .= get_lang('StartDate').';';
+        $data .= get_lang('Start Date').';';
         $data .= get_lang('Score').';';
         $data .= get_lang('Total').';';
         $data .= "\n";
@@ -223,13 +223,13 @@ class HotpotatoesExerciseResult
         }
         $list = [];
         if ($withColumnUser) {
-            $list[0][] = get_lang('Email');
+            $list[0][] = get_lang('e-mail');
             if (api_is_western_name_order()) {
-                $list[0][] = get_lang('FirstName');
-                $list[0][] = get_lang('LastName');
+                $list[0][] = get_lang('First name');
+                $list[0][] = get_lang('Last name');
             } else {
-                $list[0][] = get_lang('LastName');
-                $list[0][] = get_lang('FirstName');
+                $list[0][] = get_lang('Last name');
+                $list[0][] = get_lang('First name');
             }
         }
 
@@ -255,9 +255,9 @@ class HotpotatoesExerciseResult
         }
 
         $list[0][] = get_lang('Title');
-        $list[0][] = get_lang('StartDate');
-        $list[0][] = get_lang('EndDate');
-        $list[0][] = get_lang('Duration').' ('.get_lang('MinMinutes').')';
+        $list[0][] = get_lang('Start Date');
+        $list[0][] = get_lang('End Date');
+        $list[0][] = get_lang('Duration').' ('.get_lang('minutes').')';
         $list[0][] = get_lang('Score');
         $list[0][] = get_lang('Total');
         $list[0][] = get_lang('Status');

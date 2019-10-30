@@ -3,7 +3,7 @@
         <div class="col-md-5">
             <div class="thumbnail">
                 <figure class="text-center">
-                    <img class="img-responsive center-block" src="{{ badge.issue_info.skill_badge_image }}" alt="{{ badge.issue_info.skill_name }}">
+                    <img class="img-fluid center-block" src="{{ badge.issue_info.skill_badge_image }}" alt="{{ badge.issue_info.skill_name }}">
                     <figcaption>
                         <p class="lead">{{ badge.issue_info.skill_name }}</p>
                         {% if badge.issue_info.skill_short_code %}
@@ -133,10 +133,9 @@
     </div>
     {% if badge.allow_download_export %}
         <script>
-            $(document).on('ready', function () {
+            $(function () {
                 $('#badge-export-button-{{ badge.issue_info.id }}').on('click', function (e) {
                     e.preventDefault();
-
                     OpenBadges.issue({{ badge.issue_info.badge_assertion|json_encode() }});
                 });
             });

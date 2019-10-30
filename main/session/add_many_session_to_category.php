@@ -17,7 +17,7 @@ $xajax->registerFunction('search_courses');
 $this_section = SECTION_PLATFORM_ADMIN;
 
 // setting breadcrumbs
-$interbreadcrumb[] = ['url' => 'session_list.php', 'name' => get_lang('SessionList')];
+$interbreadcrumb[] = ['url' => 'session_list.php', 'name' => get_lang('Session list')];
 
 // Database Table Definitions
 $tbl_session_rel_course_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
@@ -28,7 +28,7 @@ $tbl_session_rel_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
 $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
 
 // setting the name of the tool
-$tool_name = get_lang('SubscribeSessionsToCategory');
+$tool_name = get_lang('Subscription sessions in the category');
 
 $add_type = 'multiple';
 if (isset($_GET['add_type']) && $_GET['add_type'] != '') {
@@ -106,11 +106,11 @@ if (isset($_GET['id_category'])) {
 }
 
 if (isset($_GET['msg']) && $_GET['msg'] == 'error') {
-    $errorMsg = get_lang('MsgErrorSessionCategory');
+    $errorMsg = get_lang('Select category and sessions');
 }
 
 if (isset($_GET['msg']) && $_GET['msg'] == 'ok') {
-    $OkMsg = get_lang('SessionCategoryUpdate');
+    $OkMsg = get_lang('Category update');
 }
 
 $page = isset($_GET['page']) ? Security::remove_XSS($_GET['page']) : null;
@@ -128,7 +128,7 @@ if ((isset($_POST['CategorySessionId']) && $_POST['formSent'] == 0) || isset($_G
 
 $rows_session_category = SessionManager::get_all_session_category();
 if (empty($rows_session_category)) {
-    echo Display::return_message(get_lang('YouNeedToAddASessionCategoryFirst'), 'warning');
+    echo Display::return_message(get_lang('You need to add a session category first'), 'warning');
     Display::display_footer();
     exit;
 }
@@ -164,7 +164,7 @@ if (!empty($OkMsg)) {
  * The a/b/c Filter is not a priority
  *
  * <td width="45%" align="center">
- <?php echo get_lang('FirstLetterCourse'); ?> :
+ <?php echo get_lang('First letter (code)'); ?> :
      <select name="firstLetterCourse" onchange = "xajax_search_courses(this.value,'multiple')">
       <option value="%">--</option>
       <?php
@@ -181,7 +181,7 @@ if (!empty($OkMsg)) {
     <td align="left"></td>
     <td align="left"></td>
     <td  align="center">
-    <b><?php echo get_lang('SessionCategoryName'); ?> :</b><br />
+    <b><?php echo get_lang('Category name'); ?> :</b><br />
     <select name="CategorySessionId" style="width: 320px;" onchange="javascript:send();" >
         <option value="0" ></option>
         <?php
@@ -199,9 +199,9 @@ if (!empty($OkMsg)) {
     </td>
 </tr>
 <tr>
-  <td width="45%" align="center"><b><?php echo get_lang('SessionListInPlatform'); ?> :</b></td>
+  <td width="45%" align="center"><b><?php echo get_lang('Session listInPlatform'); ?> :</b></td>
   <td width="10%">&nbsp;</td>
-  <td align="center" width="45%"><b><?php echo get_lang('SessionListInCategory'); ?> :</b></td>
+  <td align="center" width="45%"><b><?php echo get_lang('Session listInCategory'); ?> :</b></td>
 </tr>
 
 <?php if ($add_type == 'multiple') {
@@ -236,7 +236,7 @@ if (!empty($OkMsg)) {
     </button>
     <br /><br /><br /><br /><br /><br />
     <?php
-        echo '<button class="btn btn-primary" type="button" value="" onclick="valide()" >'.get_lang('SubscribeSessionsToCategory').'</button>';
+        echo '<button class="btn btn-primary" type="button" value="" onclick="valide()" >'.get_lang('Subscription sessions in the category').'</button>';
     ?>
   </td>
   <td width="45%" align="center">

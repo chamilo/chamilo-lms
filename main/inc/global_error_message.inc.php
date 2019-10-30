@@ -193,7 +193,7 @@ if (is_int($global_error_code) && $global_error_code > 0) {
                 .avatar{
                     text-align: center;
                 }
-                .avatar .img-responsive{
+                .avatar .img-fluid{
                     display: initial;
                 }
                 .office{
@@ -226,7 +226,7 @@ if (is_int($global_error_code) && $global_error_code > 0) {
                 <div class="container">
                     <div class="welcome-install">
                         <div class="avatar">
-                            <img class="img-responsive" src="{MR_CHAMILO}"/>
+                            <img class="img-fluid" src="{MR_CHAMILO}"/>
                         </div>
                         <div class="row">
                             <div class="col-md-12">

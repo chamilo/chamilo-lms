@@ -19,7 +19,12 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(
  *  name="c_document",
  *  indexes={
- *      @ORM\Index(name="course", columns={"c_id"})
+ *      @ORM\Index(name="course", columns={"c_id"}),
+ *      @ORM\Index(name="idx_cdoc_path", columns={"path"}),
+ *      @ORM\Index(name="idx_cdoc_size", columns={"size"}),
+ *      @ORM\Index(name="idx_cdoc_id", columns={"id"}),
+ *      @ORM\Index(name="idx_cdoc_type", columns={"filetype"}),
+ *      @ORM\Index(name="idx_cdoc_sid", columns={"session_id"}),
  *  }
  * )
  * @GRID\Source(columns="iid, id, title, filetype", filterable=false)
@@ -87,16 +92,16 @@ class CDocument extends AbstractResource implements ResourceInterface
     protected $readonly;
 
     /**
-     * @var Course|null
+     * @var Course
      *
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Course", cascade={"persist"})
-     * @ORM\JoinColumn(name="c_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="c_id", referencedColumnName="id", onDelete="CASCADE" )
      */
     protected $course;
 
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Session", cascade={"persist"})
-     * @ORM\JoinColumn(name="session_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="session_id", referencedColumnName="id", onDelete="CASCADE" )
      */
     protected $session;
 
@@ -218,9 +223,9 @@ class CDocument extends AbstractResource implements ResourceInterface
      *
      * @return CDocument
      */
-    public function setSize($size)
+    public function setSize(int $size)
     {
-        $this->size = $size;
+        $this->size =  $size ?: 0;
 
         return $this;
     }
@@ -353,11 +358,21 @@ class CDocument extends AbstractResource implements ResourceInterface
     }
 
     /**
-     * This is a "soft delete" only changes visibility, doesn't delete the record.
+     * Visibility types ResourceLink::VISIBILITY_DELETED.
+     *
+     * @return int
      */
-    public function setSoftDelete()
+    public function getVisibility()
     {
-        $this->getCourseSessionResourceLink()->setVisibility(ResourceLink::VISIBILITY_DELETED);
+        return $this->getCourseSessionResourceLink()->getVisibility();
+    }
+
+    /**
+     * @return bool
+     */
+    public function isVisible(): bool
+    {
+        return $this->getVisibility() === ResourceLink::VISIBILITY_PUBLISHED;
     }
 
     /**
@@ -369,9 +384,9 @@ class CDocument extends AbstractResource implements ResourceInterface
     {
         // Update id with iid value
         $em = $args->getEntityManager();
-        $this->setId($this->iid);
+        $this->setId($this->getIid());
         $em->persist($this);
-        $em->flush($this);
+        $em->flush();
     }
 
     /**
@@ -397,6 +412,6 @@ class CDocument extends AbstractResource implements ResourceInterface
      */
     public function getToolName(): string
     {
-        return 'document';
+        return 'CDocument';
     }
 }

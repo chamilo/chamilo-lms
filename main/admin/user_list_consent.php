@@ -287,9 +287,9 @@ function requestTypeFilter($fieldId, $url_params, $row)
     $extraFieldId = $extraFields['delete_legal'];
 
     if ($fieldId == $extraFieldId) {
-        return get_lang('DeleteLegal');
+        return get_lang('Delete legal agreement');
     } else {
-        return get_lang('DeleteAccount');
+        return get_lang('Delete account');
     }
 }
 
@@ -311,10 +311,10 @@ function modify_filter($user_id, $url_params, $row)
     $token = Security::getTokenFromSession();
     $result = '';
     $result .= '<a href="user_information.php?user_id='.$user_id.'">'.
-        Display::return_icon('info2.png', get_lang('Info')).'</a>&nbsp;&nbsp;';
+        Display::return_icon('info2.png', get_lang('Information')).'</a>&nbsp;&nbsp;';
 
     $result .= Display::url(
-        Display::return_icon('message_new.png', get_lang('SendMessage')),
+        Display::return_icon('message_new.png', get_lang('Send message')),
         api_get_path(WEB_CODE_PATH).'messages/new_message.php?send_to_user='.$user_id
     );
     $result .= '&nbsp;&nbsp;';
@@ -323,7 +323,7 @@ function modify_filter($user_id, $url_params, $row)
 
     if ($row[10] == $extraFieldId) {
         $result .= Display::url(
-            Display::return_icon('delete_terms.png', get_lang('RemoveTerms')),
+            Display::return_icon('delete_terms.png', get_lang('Remove legal agreement')),
             api_get_self().'?user_id='.$user_id.'&action=delete_terms&sec_token='.$token
         );
         $result .= '&nbsp;&nbsp;';
@@ -331,7 +331,7 @@ function modify_filter($user_id, $url_params, $row)
 
     if ($user_id != api_get_user_id()) {
         $result .= ' <a href="'.api_get_self().'?action=anonymize&user_id='.$user_id.'&'.$url_params.'&sec_token='.$token.'"  onclick="javascript:if(!confirm('."'".addslashes(
-                api_htmlentities(get_lang('ConfirmYourChoice'))
+                api_htmlentities(get_lang('Please confirm your choice'))
             )."'".')) return false;">'.
             Display::return_icon(
                 'anonymous.png',
@@ -342,7 +342,7 @@ function modify_filter($user_id, $url_params, $row)
             '</a>';
 
         $result .= ' <a href="'.api_get_self().'?action=delete_user&user_id='.$user_id.'&'.$url_params.'&sec_token='.$token.'"  onclick="javascript:if(!confirm('."'".addslashes(
-            api_htmlentities(get_lang('ConfirmYourChoice'))
+            api_htmlentities(get_lang('Please confirm your choice'))
         )."'".')) return false;">'.
         Display::return_icon(
             'delete.png',
@@ -367,13 +367,13 @@ function modify_filter($user_id, $url_params, $row)
     if ($is_admin) {
         $result .= Display::return_icon(
             'admin_star.png',
-            get_lang('IsAdministrator'),
+            get_lang('Is administrator'),
             ['width' => ICON_SIZE_SMALL, 'heigth' => ICON_SIZE_SMALL]
         );
     } else {
         $result .= Display::return_icon(
             'admin_star_na.png',
-            get_lang('IsNotAdministrator')
+            get_lang('Is not administrator')
         );
     }
 
@@ -412,7 +412,7 @@ function active_filter($active, $params, $row)
     if ($action === 'edit') {
         $result = Display::return_icon(
             $image.'.png',
-            get_lang('AccountExpired'),
+            get_lang('Account expired'),
             [],
             16
         );
@@ -450,12 +450,12 @@ function status_filter($status)
 }
 
 if (isset($_GET['keyword']) || isset($_GET['keyword_firstname'])) {
-    $interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('PlatformAdmin')];
-    $interbreadcrumb[] = ['url' => 'user_list_consent.php', 'name' => get_lang('UserList')];
-    $tool_name = get_lang('SearchUsers');
+    $interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('Administration')];
+    $interbreadcrumb[] = ['url' => 'user_list_consent.php', 'name' => get_lang('User list')];
+    $tool_name = get_lang('Search users');
 } else {
-    $interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('PlatformAdmin')];
-    $tool_name = get_lang('UserList');
+    $interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('Administration')];
+    $tool_name = get_lang('User list');
 }
 
 $message = '';
@@ -493,12 +493,12 @@ if (!empty($action)) {
                     }
                     if ($number_of_selected_users == $number_of_affected_users) {
                         $message = Display::return_message(
-                            get_lang('SelectedUsersDeleted'),
+                            get_lang('Selected users deleted'),
                             'confirmation'
                         );
                     } else {
                         $message = Display::return_message(
-                            get_lang('SomeUsersNotDeleted'),
+                            get_lang('Some of the selected users have not been deleted. We recommend you confirm which, by using the advanced search.'),
                             'error'
                         );
                     }
@@ -522,7 +522,7 @@ $form->addText(
     get_lang('Search'),
     false,
     [
-        'aria-label' => get_lang('SearchUsers'),
+        'aria-label' => get_lang('Search users'),
     ]
 );
 $form->addButtonSearch(get_lang('Search'));
@@ -560,19 +560,19 @@ $form = new FormValidator(
 );
 
 $form->addElement('html', '<div id="advanced_search_form" style="display:none;">');
-$form->addElement('header', get_lang('AdvancedSearch'));
-$form->addText('keyword_firstname', get_lang('FirstName'), false);
-$form->addText('keyword_lastname', get_lang('LastName'), false);
-$form->addText('keyword_username', get_lang('LoginName'), false);
-$form->addText('keyword_email', get_lang('Email'), false);
-$form->addText('keyword_officialcode', get_lang('OfficialCode'), false);
+$form->addElement('header', get_lang('Advanced search'));
+$form->addText('keyword_firstname', get_lang('First name'), false);
+$form->addText('keyword_lastname', get_lang('Last name'), false);
+$form->addText('keyword_username', get_lang('Login'), false);
+$form->addText('keyword_email', get_lang('e-mail'), false);
+$form->addText('keyword_officialcode', get_lang('Code'), false);
 
 $status_options = [];
 $status_options['%'] = get_lang('All');
-$status_options[STUDENT] = get_lang('Student');
-$status_options[COURSEMANAGER] = get_lang('Teacher');
-$status_options[DRH] = get_lang('Drh');
-$status_options[SESSIONADMIN] = get_lang('SessionsAdmin');
+$status_options[STUDENT] = get_lang('Learner');
+$status_options[COURSEMANAGER] = get_lang('Trainer');
+$status_options[DRH] = get_lang('Human Resources Manager');
+$status_options[SESSIONADMIN] = get_lang('Sessions administrator');
 $status_options[PLATFORM_ADMIN] = get_lang('Administrator');
 
 $form->addElement(
@@ -581,7 +581,7 @@ $form->addElement(
     get_lang('Profile'),
     $status_options
 );
-$form->addButtonSearch(get_lang('SearchUsers'));
+$form->addButtonSearch(get_lang('Search users'));
 
 $defaults = [];
 $defaults['keyword_active'] = 1;
@@ -600,22 +600,22 @@ $table = new SortableTable(
 $table->set_additional_parameters($parameters);
 $table->set_header(0, '', false, 'width="18px"');
 $table->set_header(1, get_lang('Photo'), false);
-$table->set_header(2, get_lang('OfficialCode'));
+$table->set_header(2, get_lang('Code'));
 
 if (api_is_western_name_order()) {
-    $table->set_header(3, get_lang('FirstName'));
-    $table->set_header(4, get_lang('LastName'));
+    $table->set_header(3, get_lang('First name'));
+    $table->set_header(4, get_lang('Last name'));
 } else {
-    $table->set_header(3, get_lang('LastName'));
-    $table->set_header(4, get_lang('FirstName'));
+    $table->set_header(3, get_lang('Last name'));
+    $table->set_header(4, get_lang('First name'));
 }
-$table->set_header(5, get_lang('LoginName'));
-$table->set_header(6, get_lang('Email'));
+$table->set_header(5, get_lang('Login'));
+$table->set_header(6, get_lang('e-mail'));
 $table->set_header(7, get_lang('Profile'));
-$table->set_header(8, get_lang('Active'), true, 'width="15px"');
-$table->set_header(9, get_lang('RegistrationDate'), true, 'width="90px"');
-$table->set_header(10, get_lang('RequestType'), true, 'width="15px"');
-$table->set_header(11, get_lang('RequestDate'), true, 'width="15px"');
+$table->set_header(8, get_lang('active'), true, 'width="15px"');
+$table->set_header(9, get_lang('Registration date'), true, 'width="90px"');
+$table->set_header(10, get_lang('Request type'), true, 'width="15px"');
+$table->set_header(11, get_lang('Request date'), true, 'width="15px"');
 $table->set_header(12, get_lang('Action'), false, 'width="220px"');
 
 $table->set_column_filter(3, 'user_filter');
@@ -631,7 +631,7 @@ $actionsList = [];
 if (api_is_platform_admin() &&
     !api_get_configuration_value('deny_delete_users')
 ) {
-    $actionsList['delete'] = get_lang('DeleteFromPlatform');
+    $actionsList['delete'] = get_lang('Remove from portal');
 }
 
 $table->set_form_actions($actionsList);
@@ -645,7 +645,7 @@ $toolbarActions = Display::toolbarAction(
 );
 
 $noticeMessage = sprintf(
-    get_lang('InformationRightToBeForgottenLinkX'),
+    get_lang('InformationrmationRightToBeForgottenLinkX'),
     '<a href="https://gdpr-info.eu/art-17-gdpr/">https://gdpr-info.eu/art-17-gdpr/</a>'
 );
 $notice = Display::return_message($noticeMessage, 'normal', false);

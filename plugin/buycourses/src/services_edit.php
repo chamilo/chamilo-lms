@@ -10,20 +10,20 @@ $cidReset = true;
 
 require_once '../../../main/inc/global.inc.php';
 
-$serviceId = isset($_REQUEST['id']) ? intval($_REQUEST['id']) : null;
+$serviceId = isset($_REQUEST['id']) ? (int) $_REQUEST['id'] : null;
 
 if (!$serviceId) {
-    header('Location: configuration.php');
+    header('Location: list.php');
+    exit;
 }
 
 $plugin = BuyCoursesPlugin::create();
 $currency = $plugin->getSelectedCurrency();
-$em = Database::getManager();
 $users = UserManager::getRepository()->findAll();
 $userOptions = [];
 if (!empty($users)) {
     foreach ($users as $user) {
-        $userOptions[$user->getId()] = UserManager::formatUserFullName($user, true);
+        $userOptions[$user->getId()] = $user->getCompleteNameWithUsername();
     }
 }
 
@@ -33,16 +33,18 @@ $htmlHeadXtra[] = api_get_asset('cropper/dist/cropper.min.js');
 
 //view
 $interbreadcrumb[] = [
-    'url' => 'configuration.php',
+    'url' => 'list.php',
     'name' => $plugin->get_lang('Configuration'),
 ];
 
-$service = $plugin->getServices($serviceId);
+$globalSettingsParams = $plugin->getGlobalParameters();
+$service = $plugin->getService($serviceId);
 
 $formDefaultValues = [
     'name' => $service['name'],
     'description' => $service['description'],
     'price' => $service['price'],
+    'tax_perc' => $service['tax_perc'],
     'duration_days' => $service['duration_days'],
     'owner_id' => intval($service['owner_id']),
     'applies_to' => intval($service['applies_to']),
@@ -65,15 +67,21 @@ $form->addElement(
 );
 $form->addElement(
     'number',
+    'tax_perc',
+    [$plugin->get_lang('TaxPerc'), $plugin->get_lang('TaxPercDescription'), '%'],
+    ['step' => 1, 'placeholder' => $globalSettingsParams['global_tax_perc'].'% '.$plugin->get_lang('ByDefault')]
+);
+$form->addElement(
+    'number',
     'duration_days',
-    [$plugin->get_lang('Duration'), null, get_lang('Days')],
+    [$plugin->get_lang('Duration'), null, get_lang('days')],
     ['step' => 1]
 );
 $form->addElement(
     'radio',
     'applies_to',
     $plugin->get_lang('AppliesTo'),
-    get_lang('None'),
+    get_lang('none'),
     0
 );
 $form->addElement(
@@ -101,7 +109,7 @@ $form->addElement(
     'radio',
     'applies_to',
     null,
-    get_lang('TemplateTitleCertificate'),
+    get_lang('Certificate of completion'),
     4
 );
 $form->addSelect(
@@ -112,10 +120,10 @@ $form->addSelect(
 $form->addCheckBox('visibility', $plugin->get_lang('VisibleInCatalog'));
 $form->addFile(
     'picture',
-    $formDefaultValues['image'] != '' ? get_lang('UpdateImage') : get_lang('AddImage'),
+    $formDefaultValues['image'] != '' ? get_lang('Update Image') : get_lang('Add image'),
     ['id' => 'picture', 'class' => 'picture-form', 'crop_image' => true, 'crop_ratio' => '16 / 9']
 );
-$form->addText('video_url', get_lang('VideoUrl'), false);
+$form->addText('video_url', get_lang('Video URL'), false);
 $form->addHtmlEditor('service_information', $plugin->get_lang('ServiceInformation'), false);
 $form->addHidden('id', $serviceId);
 $form->addButtonSave(get_lang('Edit'));
@@ -136,7 +144,7 @@ if ($form->validate()) {
             Display::return_message($plugin->get_lang('ServiceEdited'), 'success')
         );
     }
-    header('Location: configuration.php');
+    header('Location: list.php');
     exit;
 }
 

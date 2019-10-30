@@ -117,7 +117,7 @@ class WSCMUser extends WSCM
             if ($count_is_true) {
                 return Display::return_message(
                     api_htmlentities(
-                        get_lang('InvitationHasBeenSent'),
+                        get_lang('The invitation has been sent'),
                         ENT_QUOTES,
                         $charset
                     ),
@@ -127,7 +127,7 @@ class WSCMUser extends WSCM
             } else {
                 return Display::return_message(
                     api_htmlentities(
-                        get_lang('YouAlreadySentAnInvitation'),
+                        get_lang('You already sent an invitation'),
                         ENT_QUOTES,
                         $charset
                     ),
@@ -137,7 +137,7 @@ class WSCMUser extends WSCM
             }
         }
 
-        return get_lang('InvalidId');
+        return get_lang('Login failed - incorrect login or password.');
     }
 
     public function accept_friend($username, $password, $userfriend_id)
@@ -151,10 +151,10 @@ class WSCMUser extends WSCM
             );
             SocialManager::invitation_accepted($userfriend_id, $user_id);
 
-            return get_lang('AddedContactToList');
+            return get_lang('Added contact to list');
         }
 
-        return get_lang('InvalidId');
+        return get_lang('Login failed - incorrect login or password.');
     }
 
     public function denied_invitation($username, $password, $userfriend_id)
@@ -163,10 +163,10 @@ class WSCMUser extends WSCM
             $user_id = UserManager::get_user_id_from_username($username);
             SocialManager::invitation_denied($userfriend_id, $user_id);
 
-            return get_lang('InvitationDenied');
+            return get_lang('Invitation denied');
         }
 
-        return get_lang('InvalidId');
+        return get_lang('Login failed - incorrect login or password.');
     }
 
     /**

@@ -12,7 +12,7 @@ $this_section = SECTION_PLATFORM_ADMIN;
 
 api_protect_admin_script();
 $htmlHeadXtra[] = '<script>
- $(document).ready(function() {
+ $(function () {
     $(".save").click(function() {
         var button_name=$(this).attr("name");
         var button_array=button_name.split("|");
@@ -42,14 +42,14 @@ $htmlHeadXtra[] = '<script>
                 },
                 success: function(datos) {
                     if (datos == "1") {
-                        $("#div_message_information_id").html(\''.Display::return_message(get_lang('TheNewWordHasBeenAdded'), 'success').'\');
+                        $("#div_message_information_id").html(\''.Display::return_message(get_lang('The new word has been added'), 'success').'\');
                     } else {
                         $("#div_message_information_id").html("<div class=\"alert alert-warning\">" + datos +"</div>");
                     }
                 }
             });
         } else {
-            $("#div_message_information_id").html(\''.Display::return_message(get_lang('FormHasErrorsPleaseComplete'), 'error').'\');
+            $("#div_message_information_id").html(\''.Display::return_message(get_lang('The form contains incorrect or incomplete data. Please check your input.'), 'error').'\');
         }
     });
 });
@@ -59,10 +59,10 @@ $htmlHeadXtra[] = '<script>
  * Main code.
  */
 // setting the name of the tool
-$tool_name = get_lang('CreateSubLanguage');
+$tool_name = get_lang('Create sub-language');
 // setting breadcrumbs
-$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('PlatformAdmin')];
-$interbreadcrumb[] = ['url' => 'languages.php', 'name' => get_lang('PlatformLanguages')];
+$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('Administration')];
+$interbreadcrumb[] = ['url' => 'languages.php', 'name' => get_lang('Chamilo Portal Languages')];
 
 $sublanguage_folder_error = false;
 
@@ -74,7 +74,7 @@ if (isset($_GET['id']) && $_GET['id'] == strval(intval($_GET['id']))) {
     $sub_language_file = api_get_path(SYS_LANG_PATH).$all_data_of_sublanguage['dokeos_folder'];
 
     if (!file_exists($sub_language_file) || !is_writable($sub_language_file)) {
-        $sublanguage_folder_error = $sub_language_file.' '.get_lang('IsNotWritable');
+        $sublanguage_folder_error = $sub_language_file.' '.get_lang('is not writeable');
     }
     if (SubLanguageManager::check_if_exist_language_by_id($_GET['id']) === true) {
         $language_id_exist = true;
@@ -86,7 +86,7 @@ if (isset($_GET['id']) && $_GET['id'] == strval(intval($_GET['id']))) {
     $language_id_exist = false;
 }
 
-$intro = sprintf(get_lang('RegisterTermsOfSubLanguageForX'), strtolower($sub_language_name));
+$intro = sprintf(get_lang('Define new terms for sub-language %s by searching some term, then save each translation by clicking the save button. You will then have to switch your own user language to see the new terms appear.'), strtolower($sub_language_name));
 $path_folder = api_get_path(SYS_LANG_PATH).$all_data_of_language['dokeos_folder'];
 
 if (!is_dir($path_folder) || strlen($all_data_of_language['dokeos_folder']) == 0) {
@@ -98,13 +98,13 @@ Display :: display_header($language_name);
 echo '<div class="actions-message" >';
 echo $intro;
 echo '<br />';
-printf(get_lang('ParentLanguageX'), $language_name);
+printf(get_lang('Parent language: %s'), $language_name);
 echo '</div>';
 echo '<br />';
 $txt_search_word = (!empty($_REQUEST['txt_search_word']) ? Security::remove_XSS($_REQUEST['txt_search_word']) : '');
 $html = '<div style="float:left" class="actions">';
 $html .= '<form style="float:left"  id="Searchlanguage" name="Searchlanguage" method="GET" action="sub_language.php">';
-$html .= '&nbsp;'.get_lang('OriginalName').'&nbsp; :&nbsp;';
+$html .= '&nbsp;'.get_lang('Original name').'&nbsp; :&nbsp;';
 
 $html .= '<input name="id" type="hidden"  id="id" value="'.Security::remove_XSS($_REQUEST['id']).'" />';
 $html .= '<input name="sub_language_id" type="hidden"  id="id" value="'.Security::remove_XSS($_REQUEST['sub_language_id']).'" />';
@@ -375,10 +375,10 @@ $parameters = [
 ];
 $table = new SortableTableFromArrayConfig($list_info, 1, 20, 'data_info');
 $table->set_additional_parameters($parameters);
-$table->set_header(0, get_lang('LanguageFile'));
-$table->set_header(1, get_lang('LanguageVariable'));
-$table->set_header(2, get_lang('EnglishName'));
-$table->set_header(3, get_lang('OriginalName'));
+$table->set_header(0, get_lang('Language file'));
+$table->set_header(1, get_lang('Language variable'));
+$table->set_header(2, get_lang('English name'));
+$table->set_header(3, get_lang('Original name'));
 $table->set_header(4, get_lang('Translation'), false);
 $table->set_header(5, get_lang('Action'), false);
 $table->setHideColumn(0);

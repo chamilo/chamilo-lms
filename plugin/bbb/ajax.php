@@ -35,7 +35,7 @@ switch ($action) {
 
             $url = $meetingInfo['video_url'].'/capture.m4v';
             $link = Display::url(
-                Display::return_icon('save.png', get_lang('DownloadFile')),
+                Display::return_icon('save.png', get_lang('Download file')),
                 $meetingInfo['video_url'].'/capture.m4v',
                 ['target' => '_blank']
             );

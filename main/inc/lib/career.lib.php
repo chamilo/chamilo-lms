@@ -125,10 +125,10 @@ class Career extends Model
         // Setting the form elements
         $header = get_lang('Add');
         if ($action == 'edit') {
-            $header = get_lang('Modify');
+            $header = get_lang('Edit');
         }
 
-        $id = isset($_GET['id']) ? intval($_GET['id']) : '';
+        $id = isset($_GET['id']) ? (int) $_GET['id'] : '';
         $form->addHeader($header);
         $form->addHidden('id', $id);
         $form->addElement('text', 'name', get_lang('Name'), ['size' => '70']);
@@ -145,14 +145,16 @@ class Career extends Model
         );
         $status_list = $this->get_status_list();
         $form->addElement('select', 'status', get_lang('Status'), $status_list);
+
         if ($action == 'edit') {
-            $form->addElement('text', 'created_at', get_lang('CreatedAt'));
+            $extraField = new ExtraField('career');
+            $extraField->addElements($form, $id);
+
+            $form->addElement('text', 'created_at', get_lang('Created at'));
             $form->freeze('created_at');
-        }
-        if ($action == 'edit') {
-            $form->addButtonSave(get_lang('Modify'), 'submit');
+            $form->addButtonSave(get_lang('Edit'));
         } else {
-            $form->addButtonCreate(get_lang('Add'), 'submit');
+            $form->addButtonCreate(get_lang('Add'));
         }
 
         // Setting the defaults
@@ -168,7 +170,7 @@ class Career extends Model
         $form->setDefaults($defaults);
 
         // Setting the rules
-        $form->addRule('name', get_lang('ThisFieldIsRequired'), 'required');
+        $form->addRule('name', get_lang('Required field'), 'required');
 
         return $form;
     }
@@ -191,7 +193,7 @@ class Career extends Model
                 case 'updated_at':
                     break;
                 case 'name':
-                    $val .= ' '.get_lang('CopyLabelSuffix');
+                    $val .= ' '.get_lang('Copy');
                     $new[$key] = $val;
                     break;
                 case 'created_at':
@@ -246,22 +248,26 @@ class Career extends Model
      */
     public function save($params, $show_query = false)
     {
-        if (isset($params['description'])) {
-            $params['description'] = Security::remove_XSS($params['description']);
-        }
+        $career = new \Chamilo\CoreBundle\Entity\Career();
+        $career
+            ->setName($params['name'])
+            ->setStatus($params['status'])
+            ->setDescription($params['description']);
 
-        $id = parent::save($params);
-        if (!empty($id)) {
+        Database::getManager()->persist($career);
+        Database::getManager()->flush();
+
+        if ($career->getId()) {
             Event::addEvent(
                 LOG_CAREER_CREATE,
                 LOG_CAREER_ID,
-                $id,
+                $career->getId(),
                 api_get_utc_datetime(),
                 api_get_user_id()
             );
         }
 
-        return $id;
+        return $career->getId();
     }
 
     /**
@@ -451,13 +457,34 @@ class Career extends Model
     }
 
     /**
-     * @param Graph    $graph
+     * @param array    $careerInfo
      * @param Template $tpl
+     * @param int      $loadUserIdData
      *
      * @return string
      */
-    public static function renderDiagramByColumn($graph, $tpl)
+    public static function renderDiagramByColumn($careerInfo, $tpl, $loadUserIdData = 0)
     {
+        $careerId = isset($careerInfo['id']) ? $careerInfo['id'] : 0;
+        if (empty($careerId)) {
+            return '';
+        }
+
+        $extraFieldValue = new ExtraFieldValue('career');
+        $item = $extraFieldValue->get_values_by_handler_and_field_variable(
+            $careerId,
+            'career_diagram',
+            false,
+            false,
+            false
+        );
+
+        $graph = null;
+        if (!empty($item) && isset($item['value']) && !empty($item['value'])) {
+            /** @var Graph $graph */
+            $graph = UnserializeApi::unserialize('career', $item['value']);
+        }
+
         if (!($graph instanceof Graph)) {
             return '';
         }
@@ -468,6 +495,14 @@ class Career extends Model
             $groupId = (int) $vertex->getGroup();
             if ($groupId > $maxColumn) {
                 $maxColumn = $groupId;
+            }
+        }
+
+        $userResult = [];
+        if (!empty($loadUserIdData)) {
+            $careerData = UserManager::getUserCareer($loadUserIdData, $careerId);
+            if (isset($careerData['extra_data']) && !empty($careerData['extra_data'])) {
+                $userResult = unserialize($careerData['extra_data']);
             }
         }
 
@@ -490,7 +525,6 @@ class Career extends Model
             $subGroupLabel = isset($subGroupData[1]) ? $subGroupData[1] : '';
 
             if (!empty($subGroupId) && !in_array($subGroupId, $subGroups)) {
-                //$subGroups[$subGroupId][] = $vertex->getId();
                 $subGroups[$subGroupId]['items'][] = $vertex->getId();
                 $subGroups[$subGroupId]['label'] = $subGroupLabel;
             }
@@ -505,8 +539,6 @@ class Career extends Model
             $list[$column]['column'] = $column;
         }
 
-        $connections = '';
-        $groupDrawLine = [];
         $groupCourseList = [];
         $simpleConnectionList = [];
 
@@ -516,7 +548,6 @@ class Career extends Model
                 /** @var Vertex $vertex */
                 foreach ($subGroupList['items'] as $vertex) {
                     if ($vertex instanceof Vertex) {
-                        $rowId = $vertex->getId();
                         $groupCourseList[$vertex->getAttribute('Column')][] = $vertex->getId();
                         $connectionList = $vertex->getAttribute('Connections');
                         if (empty($connectionList)) {
@@ -536,12 +567,11 @@ class Career extends Model
                                     '',
                                     $explode[0]
                                 );
-                                $groupDrawLine[$groupValueId] = true;
                                 $simpleFirstConnection = 'g'.(int) $groupValueId;
                             } else {
                                 // Course block (row_123 id)
                                 if (!empty($explode[0])) {
-                                    $simpleFirstConnection = 'v'.(int) $explode[0];
+                                    $simpleFirstConnection = 'v'.$explode[0];
                                 }
                             }
                         } else {
@@ -565,7 +595,6 @@ class Career extends Model
                                     $value
                                 );
                                 $simpleSecondConnection = 'g'.(int) $groupValueId;
-                                $groupDrawLine[$groupValueId] = true;
                             } else {
                                 // Course block (row_123 id)
                                 if (!empty($explode[0]) && isset($explode[1])) {
@@ -601,21 +630,29 @@ class Career extends Model
 
         // Creates graph
         $graph = new stdClass();
-        $graph->blockWidth = 240;
-        $graph->blockHeight = 120;
+        $graph->blockWidth = 280;
+        $graph->blockHeight = 150;
+
         $graph->xGap = 70;
-        $graph->yGap = 40;
+        $graph->yGap = 55;
+
         $graph->xDiff = 70;
-        $graph->yDiff = 40;
-        $graph->groupXGap = 50;
+        $graph->yDiff = 55;
+
+        if (!empty($userResult)) {
+            $graph->blockHeight = 180;
+            $graph->yGap = 60;
+            $graph->yDiff = 60;
+        }
 
         foreach ($groupsBetweenColumns as $group => $items) {
-            self::parseColumnList($groupCourseList, $items, '', $graph, $simpleConnectionList);
+            self::parseColumnList($groupCourseList, $items, $graph, $simpleConnectionList, $userResult);
         }
 
         $graphHtml .= '<style>
              .panel-title {
                 font-size: 11px;
+                height: 40px;
              }
              </style>';
 
@@ -623,7 +660,7 @@ class Career extends Model
         if (!empty($graph->groupList)) {
             $groupList = [];
             $groupDiffX = 20;
-            $groupDiffY = 10;
+            $groupDiffY = 50;
             $style = 'whiteSpace=wrap;rounded;html=1;strokeColor=red;fillColor=none;strokeWidth=2;align=left;verticalAlign=top;';
             foreach ($graph->groupList as $id => $data) {
                 if (empty($id)) {
@@ -681,9 +718,16 @@ class Career extends Model
             foreach ($subGroupListData as $subGroupId => $data) {
                 $x = $data['min_x'] - $subGroupDiffX;
                 $y = $data['min_y'] - $subGroupDiffX;
+
+                $spaceForSubGroupTitle = 0;
+                if (!empty($data['label'])) {
+                    $spaceForSubGroupTitle = 40;
+                }
+
                 $width = $data['max_width'] + $subGroupDiffX * 2;
-                $height = $data['max_height'] + $subGroupDiffX * 2;
-                $label = '<h4>'.$data['label'].'</h4>';
+                $height = $data['max_height'] + $subGroupDiffX * 2 + $spaceForSubGroupTitle;
+
+                $label = '<h4 style="background: white">'.$data['label'].'</h4>';
                 $vertexData = "var sg$subGroupId = graph.insertVertex(parent, null, '$label', $x, $y, $width, $height, '$style');";
                 $subGroupList[] = $vertexData;
             }
@@ -711,7 +755,16 @@ class Career extends Model
         return $graphHtml;
     }
 
-    public static function parseColumnList($groupCourseList, $columnList, $width, &$graph, &$connections)
+    /**
+     * @param $groupCourseList
+     * @param $columnList
+     * @param $graph
+     * @param $connections
+     * @param $userResult
+     *
+     * @return string
+     */
+    public static function parseColumnList($groupCourseList, $columnList, &$graph, &$connections, $userResult)
     {
         $graphHtml = '';
         $oldGroup = null;
@@ -788,7 +841,8 @@ class Career extends Model
                     $addRow,
                     $graph,
                     $newGroup,
-                    $connections
+                    $connections,
+                    $userResult
                 );
             }
 
@@ -807,10 +861,11 @@ class Career extends Model
      * @param stdClass $graph
      * @param int      $group
      * @param array    $connections
+     * @param array    $userResult
      *
      * @return string
      */
-    public static function parseVertexList($groupCourseList, $vertexList, $addRow = 0, &$graph, $group, &$connections)
+    public static function parseVertexList($groupCourseList, $vertexList, $addRow = 0, &$graph, $group, &$connections, $userResult)
     {
         if (empty($vertexList)) {
             return '';
@@ -838,8 +893,56 @@ class Career extends Model
             if (!empty($vertex->getAttribute('DefinedColor'))) {
                 $color = $vertex->getAttribute('DefinedColor');
             }
-            $content = '<div class="float-left">'.$vertex->getAttribute('Notes').'</div>';
-            $content .= '<div class="float-right">['.$id.']</div>';
+            $content = '<div class="pull-left">'.$vertex->getAttribute('Notes').'</div>';
+            $content .= '<div class="pull-right">['.$id.']</div>';
+
+            if (!empty($userResult) && isset($userResult[$id])) {
+                $results = '';
+                $size = 2;
+                foreach ($userResult[$id] as $resultId => $iconData) {
+                    $icon = '';
+                    switch ($iconData['Icon']) {
+                        case 0:
+                            $icon = Display::returnFontAwesomeIcon('times-circle', $size);
+                            break;
+                        case 1:
+                            $icon = Display::returnFontAwesomeIcon('check-circle', $size);
+                            break;
+                        case 2:
+                            $icon = Display::returnFontAwesomeIcon('info-circle', $size);
+                            break;
+                    }
+
+                    if (substr($resultId, 0, 1) == 2) {
+                        $iconData['Description'] = 'Result Id = '.$resultId;
+                    }
+
+                    if (!empty($icon)) {
+                        $params = [
+                            'id' => 'course_'.$id.'_'.$resultId,
+                            'data-toggle' => 'popover',
+                            'title' => 'Popover title',
+                            'class' => 'popup',
+                            'data-description' => $iconData['Description'],
+                            'data-period' => $iconData['Period'],
+                            'data-teacher-text' => $iconData['TeacherText'],
+                            'data-teacher' => $iconData['TeacherUsername'],
+                            'data-score' => $iconData['ScoreText'],
+                            'data-score-value' => $iconData['ScoreValue'],
+                            'data-info' => $iconData['Info'],
+                            'data-background-color' => $iconData['BgColor'],
+                            'data-color' => $iconData['Color'],
+                            'data-border-color' => $iconData['BorderColor'],
+                            'style' => 'color:'.$iconData['IconColor'],
+                        ];
+                        $results .= Display::url($icon, 'javascript:void(0);', $params);
+                    }
+                }
+
+                if (!empty($results)) {
+                    $content .= '<div class="row"></div><div class="pull-right">'.$results.'</div>';
+                }
+            }
 
             $title = $vertex->getAttribute('graphviz.label');
             if (!empty($vertex->getAttribute('LinkedElement'))) {
@@ -1123,7 +1226,7 @@ class Career extends Model
                                 $color = $vertex->getAttribute('DefinedColor');
                             }
                             $content = $vertex->getAttribute('Notes');
-                            $content .= '<div class="float-right">['.$id.']</div>';
+                            $content .= '<div class="pull-right">['.$id.']</div>';
 
                             $title = $vertex->getAttribute('graphviz.label');
                             if (!empty($vertex->getAttribute('LinkedElement'))) {

@@ -13,9 +13,9 @@ $this_section = SECTION_PLATFORM_ADMIN;
 
 api_protect_admin_script();
 
-$tool_name = get_lang('AddCourse');
-$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('PlatformAdmin')];
-$interbreadcrumb[] = ['url' => 'course_list.php', 'name' => get_lang('CourseList')];
+$tool_name = get_lang('Create a course');
+$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('Administration')];
+$interbreadcrumb[] = ['url' => 'course_list.php', 'name' => get_lang('Course list')];
 
 $em = Database::getManager();
 /** @var CourseCategoryRepository $courseCategoriesRepo */
@@ -43,14 +43,14 @@ $form->applyFilter('title', 'trim');
 $form->addText(
     'visual_code',
     [
-        get_lang('CourseCode'),
-        get_lang('OnlyLettersAndNumbers'),
+        get_lang('Code'),
+        get_lang('Only letters (a-z) and numbers (0-9)'),
     ],
     false,
     [
         'maxlength' => CourseManager::MAX_COURSE_LENGTH_CODE,
         'pattern' => '[a-zA-Z0-9]+',
-        'title' => get_lang('OnlyLettersAndNumbers'),
+        'title' => get_lang('Only letters (a-z) and numbers (0-9)'),
         'id' => 'visual_code',
     ]
 );
@@ -70,7 +70,7 @@ if ($countCategories >= 100) {
     $form->addElement(
         'select_ajax',
         'category_code',
-        get_lang('CourseFaculty'),
+        get_lang('Category'),
         null,
         ['url' => $url]
     );
@@ -79,21 +79,21 @@ if ($countCategories >= 100) {
         $accessUrlId,
         api_get_configuration_value('allow_base_course_category')
     );
-    $categoriesOptions = [null => get_lang('None')];
+    $categoriesOptions = [null => get_lang('none')];
     /** @var CourseCategory $category */
     foreach ($categories as $category) {
         $categoriesOptions[$category->getCode()] = (string) $category;
     }
     $form->addSelect(
         'category_code',
-        get_lang('CourseFaculty'),
+        get_lang('Category'),
         $categoriesOptions
     );
 }
 
 $form->addRule(
     'visual_code',
-    get_lang('Max'),
+    get_lang('max. 20 characters, e.g. <i>INNOV21</i>'),
     'maxlength',
     CourseManager::MAX_COURSE_LENGTH_CODE
 );
@@ -102,7 +102,7 @@ $currentTeacher = api_get_user_entity(api_get_user_id());
 
 $form->addSelectAjax(
     'course_teachers',
-    get_lang('CourseTeachers'),
+    get_lang('Teachers'),
     [$currentTeacher->getId() => UserManager::formatUserFullName($currentTeacher, true)],
     [
         'url' => api_get_path(WEB_AJAX_PATH).'user_manager.ajax.php?a=teacher_to_basis_course',
@@ -115,7 +115,7 @@ $form->applyFilter('course_teachers', 'html_filter');
 // Course department
 $form->addText(
     'department_name',
-    get_lang('CourseDepartment'),
+    get_lang('Department'),
     false,
     ['size' => '60', 'id' => 'department_name']
 );
@@ -125,7 +125,7 @@ $form->applyFilter('department_name', 'trim');
 // Department URL
 $form->addText(
     'department_url',
-    get_lang('CourseDepartmentURL'),
+    get_lang('DepartmentURL'),
     false,
     ['size' => '60', 'id' => 'department_url']
 );
@@ -150,39 +150,39 @@ if (api_get_setting('teacher_can_select_course_template') === 'true') {
         'select_ajax',
         'course_template',
         [
-            get_lang('CourseTemplate'),
-            get_lang('PickACourseAsATemplateForThisNewCourse'),
+            get_lang('Course template'),
+            get_lang('Pick a course as template for this new course'),
         ],
         null,
         ['url' => api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=search_course']
     );
 }
 
-$form->addElement('checkbox', 'exemplary_content', '', get_lang('FillWithExemplaryContent'));
+$form->addElement('checkbox', 'exemplary_content', '', get_lang('Fill with demo content'));
 
 $group = [];
-$group[] = $form->createElement('radio', 'visibility', get_lang('CourseAccess'), get_lang('OpenToTheWorld'), COURSE_VISIBILITY_OPEN_WORLD);
-$group[] = $form->createElement('radio', 'visibility', null, get_lang('OpenToThePlatform'), COURSE_VISIBILITY_OPEN_PLATFORM);
-$group[] = $form->createElement('radio', 'visibility', null, get_lang('Private'), COURSE_VISIBILITY_REGISTERED);
-$group[] = $form->createElement('radio', 'visibility', null, get_lang('CourseVisibilityClosed'), COURSE_VISIBILITY_CLOSED);
-$group[] = $form->createElement('radio', 'visibility', null, get_lang('CourseVisibilityHidden'), COURSE_VISIBILITY_HIDDEN);
+$group[] = $form->createElement('radio', 'visibility', get_lang('Course access'), get_lang('Public - access allowed for the whole world'), COURSE_VISIBILITY_OPEN_WORLD);
+$group[] = $form->createElement('radio', 'visibility', null, get_lang(' Open - access allowed for users registered on the platform'), COURSE_VISIBILITY_OPEN_PLATFORM);
+$group[] = $form->createElement('radio', 'visibility', null, get_lang('Private access (access authorized to group members only)'), COURSE_VISIBILITY_REGISTERED);
+$group[] = $form->createElement('radio', 'visibility', null, get_lang('Closed - the course is only accessible to the teachers'), COURSE_VISIBILITY_CLOSED);
+$group[] = $form->createElement('radio', 'visibility', null, get_lang('Hidden - Completely hidden to all users except the administrators'), COURSE_VISIBILITY_HIDDEN);
 
-$form->addGroup($group, '', get_lang('CourseAccess'));
+$form->addGroup($group, '', get_lang('Course access'));
 
 $group = [];
 $group[] = $form->createElement('radio', 'subscribe', get_lang('Subscription'), get_lang('Allowed'), 1);
-$group[] = $form->createElement('radio', 'subscribe', null, get_lang('Denied'), 0);
+$group[] = $form->createElement('radio', 'subscribe', null, get_lang('This function is only available to trainers'), 0);
 $form->addGroup($group, '', get_lang('Subscription'));
 
 $group = [];
-$group[] = $form->createElement('radio', 'unsubscribe', get_lang('Unsubscription'), get_lang('AllowedToUnsubscribe'), 1);
-$group[] = $form->createElement('radio', 'unsubscribe', null, get_lang('NotAllowedToUnsubscribe'), 0);
-$form->addGroup($group, '', get_lang('Unsubscription'));
+$group[] = $form->createElement('radio', 'unsubscribe', get_lang('Unsubscribe'), get_lang('Users are allowed to unsubscribe from this course'), 1);
+$group[] = $form->createElement('radio', 'unsubscribe', null, get_lang('NotUsers are allowed to unsubscribe from this course'), 0);
+$form->addGroup($group, '', get_lang('Unsubscribe'));
 
-$form->addElement('text', 'disk_quota', [get_lang('CourseQuota'), null, get_lang('MB')], [
+$form->addElement('text', 'disk_quota', [get_lang('Disk Space'), null, get_lang('MB')], [
     'id' => 'disk_quota',
 ]);
-$form->addRule('disk_quota', get_lang('ThisFieldShouldBeNumeric'), 'numeric');
+$form->addRule('disk_quota', get_lang('This field should be numeric'), 'numeric');
 
 $obj = new GradeModel();
 $obj->fill_grade_model_select_in_form($form);
@@ -200,7 +200,7 @@ $(function() {
 </script>';
 
 $form->addProgress();
-$form->addButtonCreate(get_lang('CreateCourse'));
+$form->addButtonCreate(get_lang('Create a course'));
 
 // Set some default values.
 $values['course_language'] = api_get_setting('platformLanguage');
@@ -244,7 +244,7 @@ if ($form->validate()) {
         Display::addFlash(
             Display::return_message(
                 sprintf(
-                    get_lang('CourseXAdded'),
+                    get_lang('Course %s added'),
                     Display::url($courseInfo['title'], $courseInfo['course_public_url'])
                 ),
                 'confirmation',

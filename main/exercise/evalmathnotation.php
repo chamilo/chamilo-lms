@@ -4,48 +4,48 @@
 require_once "../inc/global.inc.php";
 
 echo "<pre>".
-get_lang('SummationPlus')."\n".
-get_lang('SubstractionMinus')."\n".
-get_lang('MultiplicationStar')."\n".
-get_lang('DivisionSlash')."\n".
-get_lang('ExponentiationCircumflex')."\n".
-get_lang('ModuloPercentage')."\n".
+get_lang('Summation:			+')."\n".
+get_lang('Substraction:			-')."\n".
+get_lang('Multiplication:			*')."\n".
+get_lang('Division:			/')."\n".
+get_lang('Exponentiation:			^')."\n".
+get_lang('Modulo:			%')."\n".
 "\n".
-get_lang('SquareRootSqrt')."\n".
-get_lang('AbsoluteValueAbs')."\n".
-get_lang('NaturalLogarithmLn')."\n".
-get_lang('LogarithmLog')."\n".
-get_lang('ENumberE')."\n".
-get_lang('PiNumberPi')."\n".
+get_lang('Square root:			sqrt(x)')."\n".
+get_lang('Absolute value:			abs(x)')."\n".
+get_lang('Natural logarithm:		ln(x)')."\n".
+get_lang('Logarithm:			log(x)')."\n".
+get_lang('E number:			e')."\n".
+get_lang('Pi number:			pi')."\n".
 "\n".
-get_lang('SineSin')."\n".
-get_lang('HyperbolicSineSinh')."\n".
-get_lang('ArcsineArcsin')."\n".
-get_lang('HyperbolicArcsineArcsinh')."\n".
+get_lang('Sine:				sin(x)')."\n".
+get_lang('HyperbolicSine:				sin(x)h')."\n".
+get_lang('Arcsine:			arcsin(x)')."\n".
+get_lang('HyperbolicArcsine:			arcsin(x)h')."\n".
 "\n".
-get_lang('CosineCos')."\n".
-get_lang('HyperbolicCosineCosh')."\n".
-get_lang('ArccosineArccos')."\n".
-get_lang('HyperbolicArccosineArccosh')."\n".
+get_lang('Cosine:				cos(x)')."\n".
+get_lang('HyperbolicCosine:				cos(x)h')."\n".
+get_lang('Arccosine:			arccos(x)')."\n".
+get_lang('HyperbolicArccosine:			arccos(x)h')."\n".
 "\n".
-get_lang('TangentTan')."\n".
-get_lang('HyperbolicTangentTanh')."\n".
-get_lang('ArctangentArctan')."\n".
-get_lang('HyperbolicArctangentArctanh')."\n".
+get_lang('Tangent:			tan(x)')."\n".
+get_lang('HyperbolicTangent:			tan(x)h')."\n".
+get_lang('Arctangent:			arctan(x)')."\n".
+get_lang('HyperbolicArctangent:			arctan(x)h')."\n".
 "\n".
-get_lang('CotangentCot')."\n".
-get_lang('HyperbolicCotangentCoth')."\n".
-get_lang('ArccotangentArccot')."\n".
-get_lang('HyperbolicArccotangentArccoth')."\n".
+get_lang('Cotangent:			cot(x)')."\n".
+get_lang('HyperbolicCotangent:			cot(x)h')."\n".
+get_lang('Arccotangent:			arccot(x)')."\n".
+get_lang('HyperbolicArccotangent:			arccot(x)h')."\n".
 "\n".
-get_lang('SecantSec')."\n".
-get_lang('HyperbolicSecantSech')."\n".
-get_lang('ArcsecantArcsec')."\n".
-get_lang('HyperbolicArcsecantArcsech')."\n".
+get_lang('Secant:				sec(x)')."\n".
+get_lang('HyperbolicSecant:				sec(x)h')."\n".
+get_lang('Arcsecant:			arcsec(x)')."\n".
+get_lang('HyperbolicArcsecant:			arcsec(x)h')."\n".
 "\n".
-get_lang('CosecantCsc')."\n".
-get_lang('HyperbolicCosecantCsch')."\n".
-get_lang('ArccosecantArccsc')."\n".
-get_lang('HyperbolicArccosecantArccsch')."\n".
+get_lang('Cosecant:				csc(x)')."\n".
+get_lang('HyperbolicCosecant:				csc(x)h')."\n".
+get_lang('Arccosecant:			arccsc(x)')."\n".
+get_lang('HyperbolicArccosecant:			arccsc(x)h')."\n".
 "\n".
 "</pre>";

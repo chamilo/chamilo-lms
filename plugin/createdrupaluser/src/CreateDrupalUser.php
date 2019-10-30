@@ -1,6 +1,10 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Hook\HookCreateUser;
+use Chamilo\CoreBundle\Hook\Interfaces\HookPluginInterface;
+
 /**
  * Create a user in Drupal website when a user is registered in Chamilo LMS.
  *
@@ -63,7 +67,8 @@ class CreateDrupalUser extends Plugin implements HookPluginInterface
     {
         /** @var HookCreateDrupalUser $observer */
         $observer = HookCreateDrupalUser::create();
-        HookCreateUser::create()->attach($observer);
+
+        Container::instantiateHook(HookCreateUser::class)->attach($observer);
     }
 
     /**
@@ -73,7 +78,8 @@ class CreateDrupalUser extends Plugin implements HookPluginInterface
     {
         /** @var HookCreateDrupalUser $observer */
         $observer = HookCreateDrupalUser::create();
-        $event = HookCreateUser::create();
+
+        $event = Container::instantiateHook(HookCreateUser::class);
 
         if ($event) {
             $event->detach($observer);

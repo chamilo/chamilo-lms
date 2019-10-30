@@ -12,8 +12,8 @@
  */
 class OralExpression extends Question
 {
-    public static $typePicture = 'audio_question.png';
-    public static $explanationLangVar = 'OralExpression';
+    public $typePicture = 'audio_question.png';
+    public $explanationLangVar = 'OralExpression';
     public $available_extensions = ['wav', 'ogg'];
     private $sessionId;
     private $userId;
@@ -40,7 +40,7 @@ class OralExpression extends Question
     {
         $form->addText(
             'weighting',
-            get_lang('Weighting'),
+            get_lang('Score'),
             ['class' => 'span1']
         );
         global $text;
@@ -67,7 +67,7 @@ class OralExpression extends Question
     /**
      * {@inheritdoc}
      */
-    public function return_header($exercise, $counter = null, $score = null)
+    public function return_header(Exercise $exercise, $counter = null, $score = [])
     {
         $score['revised'] = $this->isQuestionWaitingReview($score);
         $header = parent::return_header($exercise, $counter, $score);

@@ -16,7 +16,7 @@ $gradingElectronic = GradingElectronicPlugin::create();
 
 try {
     if (!$allowed) {
-        throw new Exception(get_lang('NotAllowed'));
+        throw new Exception(get_lang('You are not allowed to see this page. Either your connection has expired or you are trying to access a page for which you do not have the sufficient privileges.'));
     }
 
     $toolIsEnabled = $gradingElectronic->get('tool_enable') === 'true';
@@ -110,7 +110,7 @@ try {
 
     $fileData = [];
     $fileData[] = sprintf(
-        "1 %s %s%s",
+        '1 %s %s%s',
         $fieldProvider ? $fieldProvider['value'] : null,
         $values['course'],
         $dateStart->format('m/d/Y')

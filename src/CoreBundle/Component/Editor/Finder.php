@@ -12,13 +12,11 @@ use Exception;
  * Based in \elFinder this class only has a small change that allows use
  * drivers with out adding elFinderVolume as class name.
  *
- * Class Finder
+ * Class Finder.
  *
  * This class just modifies this line:
  * $class = 'elFinderVolume'.(isset($o['driver']) ? $o['driver'] : '');
  * in order to use normal classes and not a custom 'elFinderVolume' class.
- *
- * @package Chamilo\CoreBundle\Component\Editor
  */
 class Finder extends \elFinder
 {

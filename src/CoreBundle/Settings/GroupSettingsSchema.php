@@ -9,8 +9,6 @@ use Symfony\Component\Form\FormBuilderInterface;
 
 /**
  * Class GroupSettingsSchema.
- *
- * @package Chamilo\CoreBundle\Settings
  */
 class GroupSettingsSchema extends AbstractSettingsSchema
 {

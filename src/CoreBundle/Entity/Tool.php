@@ -72,8 +72,8 @@ class Tool
     {
         $this->toolResourceRight = new ArrayCollection();
 
-        foreach ($toolResourceRight as $toolResourceRight) {
-            $this->addToolResourceRight($toolResourceRight);
+        foreach ($toolResourceRight as $item) {
+            $this->addToolResourceRight($item);
         }
     }
 

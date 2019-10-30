@@ -50,7 +50,7 @@ $action = isset($_GET['action']) ? $_GET['action'] : '';
 
 $interbreadcrumb[] = [
     'url' => api_get_path(WEB_CODE_PATH).'ticket/tickets.php?project_id='.$projectId,
-    'name' => get_lang('MyTickets'),
+    'name' => get_lang('My tickets'),
 ];
 
 $interbreadcrumb[] = [
@@ -75,7 +75,7 @@ switch ($action) {
             TicketManager::deleteCategory($id);
             Display::addFlash(Display::return_message(get_lang('Deleted')));
         } else {
-            Display::addFlash(Display::return_message(get_lang('ThisItemIsRelatedToOtherTickets')));
+            Display::addFlash(Display::return_message(get_lang('This item is related to other tickets.')));
         }
         header("Location: ".api_get_self().'?project_id='.$projectId);
         exit;
@@ -135,7 +135,7 @@ switch ($action) {
                 'sys_lastedit_user_id' => api_get_user_id(),
             ];
             $cat = TicketManager::updateCategory($_GET['id'], $params);
-            Display::addFlash(Display::return_message(get_lang('Updated')));
+            Display::addFlash(Display::return_message(get_lang('Update successful')));
             header("Location: ".api_get_self().'?project_id='.$projectId);
             exit;
         }
@@ -165,7 +165,7 @@ function modify_filter($id, $params, $row)
     }
 
     $result .= Display::url(
-        Display::return_icon('user.png', get_lang('AssignUser')),
+        Display::return_icon('user.png', get_lang('Assign user')),
         "categories_add_user.php?id={$row['id']}&project_id=".$projectId
     );
 
@@ -182,8 +182,8 @@ function modify_filter($id, $params, $row)
 $table->set_header(0, '', false);
 $table->set_header(1, get_lang('Title'), false);
 $table->set_header(2, get_lang('Description'), true, ["style" => "width:200px"]);
-$table->set_header(3, get_lang('TotalTickets'), false);
-$table->set_header(4, get_lang('Actions'), true);
+$table->set_header(3, get_lang('Total tickets'), false);
+$table->set_header(4, get_lang('Detail'), true);
 $table->set_column_filter(4, 'modify_filter');
 
 Display::display_header($toolName);

@@ -21,7 +21,7 @@ class SelectAjax extends HTML_QuickForm_select
      */
     public function toHtml()
     {
-        $iso = api_get_language_isocode(api_get_interface_language());
+        $iso = api_get_language_isocode();
         $formatResult = $this->getAttribute('formatResult');
         $formatCondition = '';
 
@@ -44,7 +44,7 @@ class SelectAjax extends HTML_QuickForm_select
 
         $plHolder = $this->getAttribute('placeholder');
         if (empty($plHolder)) {
-            $plHolder = get_lang('SelectAnOption');
+            $plHolder = get_lang('Please select an option');
         }
 
         $id = $this->getAttribute('id');

@@ -19,7 +19,7 @@ class ExtraFieldOptionRelFieldOption
     /**
      * @var int
      *
-     * @ORM\Column(name="id", type="integer", precision=0, scale=0, nullable=false, unique=false)
+     * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      */
@@ -28,28 +28,28 @@ class ExtraFieldOptionRelFieldOption
     /**
      * @var int
      *
-     * @ORM\Column(name="field_option_id", type="integer", precision=0, scale=0, nullable=true, unique=false)
+     * @ORM\Column(name="field_option_id", type="integer", nullable=true, unique=false)
      */
     protected $fieldOptionId;
 
     /**
      * @var int
      *
-     * @ORM\Column(name="related_field_option_id", type="integer", precision=0, scale=0, nullable=true, unique=false)
+     * @ORM\Column(name="related_field_option_id", type="integer", nullable=true, unique=false)
      */
     protected $relatedFieldOptionId;
 
     /**
      * @var int
      *
-     * @ORM\Column(name="role_id", type="integer", precision=0, scale=0, nullable=true, unique=false)
+     * @ORM\Column(name="role_id", type="integer", nullable=true, unique=false)
      */
     protected $roleId;
 
     /**
      * @var int
      *
-     * @ORM\Column(name="field_id", type="integer", precision=0, scale=0, nullable=true, unique=false)
+     * @ORM\Column(name="field_id", type="integer", nullable=true, unique=false)
      */
     protected $fieldId;
 

@@ -303,7 +303,7 @@ class UserRepository extends EntityRepository
     /**
      * Get the sessions admins for a user.
      *
-     * @param User $user The user
+     * @param User $user
      *
      * @return array
      */
@@ -338,7 +338,7 @@ class UserRepository extends EntityRepository
     /**
      * Get the student bosses for a user.
      *
-     * @param User $user The user
+     * @param User $user
      *
      * @return array
      */
@@ -488,6 +488,37 @@ class UserRepository extends EntityRepository
     }
 
     /**
+     * Get the list of HRM who have assigned this user.
+     *
+     * @param int $userId
+     * @param int $urlId
+     *
+     * @return array
+     */
+    public function getAssignedHrmUserList($userId, $urlId)
+    {
+        $qb = $this->createQueryBuilder('user');
+
+        $hrmList = $qb
+            ->select('uru')
+            ->innerJoin('ChamiloCoreBundle:UserRelUser', 'uru', Join::WITH, 'uru.userId = user.id')
+            ->innerJoin('ChamiloCoreBundle:AccessUrlRelUser', 'auru', Join::WITH, 'auru.user = uru.friendUserId')
+            ->where(
+                $qb->expr()->eq('auru.url', $urlId)
+            )
+            ->andWhere(
+                $qb->expr()->eq('uru.userId', $userId)
+            )
+            ->andWhere(
+                $qb->expr()->eq('uru.relationType', USER_RELATION_TYPE_RRHH)
+            )
+            ->getQuery()
+            ->getResult();
+
+        return $hrmList;
+    }
+
+    /**
      * Serialize the whole entity to an array.
      *
      * @param int   $userId
@@ -541,7 +572,7 @@ class UserRepository extends EntityRepository
                 foreach ($fs as $file) {
                     $chatFiles[] =
                         $course->getCourse()->getDirectory().'/document/chat_files/'.$file->getFilename().' - '.
-                        get_lang('ContentNotAccessibleRequestFromDataPrivacyOfficer');
+                        get_lang('This content is not accessible to you directly because of course-related access rules. If you require access to that data, please contact the Data Privacy Officer as defined in our privacy terms.');
                 }
             }
         }
@@ -1318,10 +1349,9 @@ class UserRepository extends EntityRepository
         $dateNormalizer->setIgnoredAttributes($ignore);
 
         $callback = function ($dateTime) {
-            return $dateTime instanceof \DateTime
-                ? $dateTime->format(\DateTime::ISO8601)
-                : '';
+            return $dateTime instanceof \DateTime ? $dateTime->format(\DateTime::ATOM) : '';
         };
+
         $dateNormalizer->setCallbacks(
             [
                 'createdAt' => $callback,

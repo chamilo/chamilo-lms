@@ -2,8 +2,6 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * @package chamilo.social
- *
  * @author Julio Montoya <gugli100@gmail.com>
  */
 $cidReset = true;
@@ -15,7 +13,7 @@ Skill::isAllowed(api_get_user_id());
 //Add the JS needed to use the jqgrid
 $htmlHeadXtra[] = api_get_jqgrid_js();
 
-$interbreadcrumb[] = ["url" => "index.php", "name" => get_lang('Skills')];
+$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('Skills')];
 
 //jqgrid will use this URL to do the selects
 $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_user_skill_ranking';
@@ -23,10 +21,10 @@ $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_user_skill_ranking';
 //The order is important you need to check the the $column variable in the model.ajax.php file
 $columns = [
     get_lang('Photo'),
-    get_lang('FirstName'),
-    get_lang('LastName'),
-    get_lang('SkillsAcquired'),
-    get_lang('CurrentlyLearning'),
+    get_lang('First name'),
+    get_lang('Last name'),
+    get_lang('Skills acquired'),
+    get_lang('Currently learning'),
     get_lang('Rank'),
 ];
 

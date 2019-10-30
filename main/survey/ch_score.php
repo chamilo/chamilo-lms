@@ -8,13 +8,13 @@ class ch_score extends survey_question
 {
     /**
      * @param array $survey_data
-     * @param $form_content
+     * @param array $formData
      */
     public function createForm($survey_data, $formData)
     {
         parent::createForm($survey_data, $formData);
 
-        $this->getForm()->addText('maximum_score', get_lang('MaximumScore'));
+        $this->getForm()->addText('maximum_score', get_lang('Score'));
 
         $config = ['ToolbarSet' => 'Survey', 'Width' => '100%', 'Height' => '120'];
         if (is_array($formData['answers'])) {

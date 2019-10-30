@@ -11,7 +11,7 @@ $cidReset = true;
 require_once __DIR__.'/../../inc/global.inc.php';
 api_protect_admin_script();
 
-$interbreadcrumb[] = ['url' => '../index.php', 'name' => get_lang('PlatformAdmin')];
+$interbreadcrumb[] = ['url' => '../index.php', 'name' => get_lang('Administration')];
 
 $report = isset($_REQUEST['report']) ? $_REQUEST['report'] : '';
 $sessionDuration = isset($_GET['session_duration']) ? (int) $_GET['session_duration'] : '';
@@ -87,9 +87,9 @@ if (
             $url1 = $urlBase.'a=users&count_invisible='.$invisible;
             $url2 = $urlBase.'a=users_teachers&count_invisible='.$invisible;
             $url3 = $urlBase.'a=users_students&count_invisible='.$invisible;
-            $reportName1 = get_lang('NumberOfUsers');
-            $reportName2 = get_lang('Teachers');
-            $reportName3 = get_lang('Students');
+            $reportName1 = get_lang('Number of users');
+            $reportName2 = get_lang('Trainers');
+            $reportName3 = get_lang('Learners');
             $reportType = 'pie';
             $reportOptions = '
                 legend: {
@@ -130,6 +130,10 @@ if ($report == 'user_session') {
     $htmlHeadXtra[] = api_get_jqgrid_js();
 }
 
+if (isset($_GET['export'])) {
+    ob_start();
+}
+
 $tool_name = get_lang('Statistics');
 Display::display_header($tool_name);
 echo Display::page_header($tool_name);
@@ -141,32 +145,33 @@ $strSocial = get_lang('Social');
 $strSession = get_lang('Session');
 
 // courses ...
-$tools[$strCourse]['report=courses'] = get_lang('CountCours');
-$tools[$strCourse]['report=tools'] = get_lang('PlatformToolAccess');
-$tools[$strCourse]['report=courselastvisit'] = get_lang('LastAccess');
-$tools[$strCourse]['report=coursebylanguage'] = get_lang('CountCourseByLanguage');
+$tools[$strCourse]['report=courses'] = get_lang('Courses');
+$tools[$strCourse]['report=tools'] = get_lang('Tools access');
+$tools[$strCourse]['report=courselastvisit'] = get_lang('Latest access');
+$tools[$strCourse]['report=coursebylanguage'] = get_lang('CourseseByLanguage');
 
 // users ...
-$tools[$strUsers]['report=users'] = get_lang('CountUsers');
+$tools[$strUsers]['report=users'] = get_lang('Number of users');
 $tools[$strUsers]['report=recentlogins'] = get_lang('Logins');
-$tools[$strUsers]['report=logins&amp;type=month'] = get_lang('Logins').' ('.get_lang('PeriodMonth').')';
-$tools[$strUsers]['report=logins&amp;type=day'] = get_lang('Logins').' ('.get_lang('PeriodDay').')';
-$tools[$strUsers]['report=logins&amp;type=hour'] = get_lang('Logins').' ('.get_lang('PeriodHour').')';
-$tools[$strUsers]['report=pictures'] = get_lang('CountUsers').' ('.get_lang('UserPicture').')';
-$tools[$strUsers]['report=no_login_users'] = get_lang('StatsUsersDidNotLoginInLastPeriods');
+$tools[$strUsers]['report=logins&amp;type=month'] = get_lang('Logins').' ('.get_lang('Month').')';
+$tools[$strUsers]['report=logins&amp;type=day'] = get_lang('Logins').' ('.get_lang('Day').')';
+$tools[$strUsers]['report=logins&amp;type=hour'] = get_lang('Logins').' ('.get_lang('Hour').')';
+$tools[$strUsers]['report=pictures'] = get_lang('Number of users').' ('.get_lang('Picture').')';
+$tools[$strUsers]['report=logins_by_date'] = get_lang('Logins by date');
+$tools[$strUsers]['report=no_login_users'] = get_lang('Not logged in for some time');
 $tools[$strUsers]['report=zombies'] = get_lang('Zombies');
 
 // system ...
-$tools[$strSystem]['report=activities'] = get_lang('ImportantActivities');
+$tools[$strSystem]['report=activities'] = get_lang('Important activities');
 
 if (api_is_global_platform_admin() && api_is_multiple_url_enabled()) {
-    $tools[$strSystem]['report=user_session'] = get_lang('PortalUserSessionStats');
+    $tools[$strSystem]['report=user_session'] = get_lang('Portal user session stats');
 }
 
 // social ...
-$tools[$strSocial]['report=messagesent'] = get_lang('MessagesSent');
-$tools[$strSocial]['report=messagereceived'] = get_lang('MessagesReceived');
-$tools[$strSocial]['report=friends'] = get_lang('CountFriends');
+$tools[$strSocial]['report=messagesent'] = get_lang('Number of messages sent');
+$tools[$strSocial]['report=messagereceived'] = get_lang('Number of messages received');
+$tools[$strSocial]['report=friends'] = get_lang('Contacts count');
 
 echo '<table><tr>';
 foreach ($tools as $section => $items) {
@@ -210,7 +215,7 @@ switch ($report) {
             'URL',
             get_lang('Session'),
             get_lang('Course'),
-            get_lang('CountUsers'),
+            get_lang('Number of users'),
         ];
 
         $columnModel = [
@@ -289,7 +294,7 @@ switch ($report) {
             $courses[$name] = Statistics::countCourses($code);
         }
         // courses for each course category
-        Statistics::printStats(get_lang('CountCours'), $courses);
+        Statistics::printStats(get_lang('Courses'), $courses);
         break;
     case 'tools':
         echo '<canvas class="col-md-12" id="canvas" height="300px" style="margin-bottom: 20px"></canvas>';
@@ -298,7 +303,7 @@ switch ($report) {
     case 'coursebylanguage':
         echo '<canvas class="col-md-12" id="canvas" height="300px" style="margin-bottom: 20px"></canvas>';
         $result = Statistics::printCourseByLanguageStats();
-        Statistics::printStats(get_lang('CountCourseByLanguage'), $result, true);
+        Statistics::printStats(get_lang('CourseseByLanguage'), $result, true);
         break;
     case 'courselastvisit':
         Statistics::printCourseLastVisit();
@@ -313,10 +318,10 @@ switch ($report) {
         $teachers = $students = [];
         $countInvisible = isset($_GET['count_invisible_courses']) ? intval($_GET['count_invisible_courses']) : null;
         Statistics::printStats(
-            get_lang('NumberOfUsers'),
+            get_lang('Number of users'),
             [
-                get_lang('Teachers') => Statistics::countUsers(COURSEMANAGER, null, $countInvisible),
-                get_lang('Students') => Statistics::countUsers(STUDENT, null, $countInvisible),
+                get_lang('Trainers') => Statistics::countUsers(COURSEMANAGER, null, $countInvisible),
+                get_lang('Learners') => Statistics::countUsers(STUDENT, null, $countInvisible),
             ]
         );
         foreach ($course_categories as $code => $name) {
@@ -325,15 +330,15 @@ switch ($report) {
             $students[$name] = Statistics::countUsers(STUDENT, $code, $countInvisible);
         }
         // docents for each course category
-        Statistics::printStats(get_lang('Teachers'), $teachers);
+        Statistics::printStats(get_lang('Trainers'), $teachers);
         // students for each course category
-        Statistics::printStats(get_lang('Students'), $students);
+        Statistics::printStats(get_lang('Learners'), $students);
         break;
     case 'recentlogins':
-        echo '<h2>'.sprintf(get_lang('LastXDays'), '15').'</h2>';
+        echo '<h2>'.sprintf(get_lang('Last %s days'), '15').'</h2>';
         $form = new FormValidator('session_time', 'get', api_get_self().'?report=recentlogins&session_duration='.$sessionDuration);
         $sessionTimeList = ['', 5 => 5, 15 => 15, 30 => 30, 60 => 60];
-        $form->addSelect('session_duration', [get_lang('SessionMinDuration'), get_lang('Minutes')], $sessionTimeList);
+        $form->addSelect('session_duration', [get_lang('Session min duration'), get_lang('Minutes')], $sessionTimeList);
         $form->addButtonSend(get_lang('Filter'));
         $form->addHidden('report', 'recentlogins');
         $form->display();
@@ -359,17 +364,24 @@ switch ($report) {
         break;
     case 'messagesent':
         $messages_sent = Statistics::getMessages('sent');
-        Statistics::printStats(get_lang('MessagesSent'), $messages_sent);
+        Statistics::printStats(get_lang('Number of messages sent'), $messages_sent);
         break;
     case 'messagereceived':
         $messages_received = Statistics::getMessages('received');
-        Statistics::printStats(get_lang('MessagesReceived'), $messages_received);
+        Statistics::printStats(get_lang('Number of messages received'), $messages_received);
         break;
     case 'friends':
         // total amount of friends
         $friends = Statistics::getFriends();
-        Statistics::printStats(get_lang('CountFriends'), $friends);
+        Statistics::printStats(get_lang('Contacts count'), $friends);
+        break;
+    case 'logins_by_date':
+        Statistics::printLoginsByDate();
         break;
 }
 
 Display::display_footer();
+
+if (isset($_GET['export'])) {
+    ob_end_clean();
+}

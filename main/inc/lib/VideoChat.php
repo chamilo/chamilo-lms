@@ -20,8 +20,8 @@ class VideoChat
      */
     public static function getChatRoomByUsers($user1, $user2)
     {
-        $user1 = intval($user1);
-        $user2 = intval($user2);
+        $user1 = (int) $user1;
+        $user2 = (int) $user2;
 
         if (empty($user1) || empty($user2)) {
             return false;
@@ -54,15 +54,15 @@ class VideoChat
         $toUserInfo = api_get_user_info($toUser);
 
         $chatName = vsprintf(
-            get_lang('VideoChatBetweenUserXAndUserY'),
+            get_lang('Video chat between %s and %s'),
             [$fromUserInfo['firstname'], $toUserInfo['firstname']]
         );
 
         return Database::insert(
             Database::get_main_table(TABLE_MAIN_CHAT_VIDEO),
             [
-                'from_user' => intval($fromUser),
-                'to_user' => intval($toUser),
+                'from_user' => $fromUser,
+                'to_user' => $toUser,
                 'room_name' => $chatName,
                 'datetime' => api_get_utc_datetime(),
             ]

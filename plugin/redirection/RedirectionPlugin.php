@@ -88,6 +88,20 @@ class RedirectionPlugin extends Plugin
     }
 
     /**
+     * Deletes redirection from user.
+     *
+     * @param int $userId
+     */
+    public static function deleteUserRedirection($userId)
+    {
+        $table = Database::get_main_table('plugin_redirection');
+        Database::delete(
+            $table,
+            ['user_id = ?' => [$userId]]
+        );
+    }
+
+    /**
      * Deletes an existing redirection.
      *
      * @param int $id
@@ -148,7 +162,7 @@ class RedirectionPlugin extends Plugin
     {
         // Check redirection plugin
         $plugin = new AppPlugin();
-        $pluginList = $plugin->get_installed_plugins();
+        $pluginList = $plugin->getInstalledPlugins();
         $redirectionInstalled = in_array('redirection', $pluginList);
         if ($redirectionInstalled) {
             $pluginInfo = $plugin->getPluginInfo('redirection');

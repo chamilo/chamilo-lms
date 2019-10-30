@@ -18,7 +18,7 @@ api_protect_admin_script();
 $htmlHeadXtra[] = api_get_jqgrid_js();
 
 // setting breadcrumbs
-$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('PlatformAdmin')];
+$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('Administration')];
 
 $tool_name = null;
 
@@ -126,7 +126,7 @@ switch ($action) {
             unset($values['id']);
             $res = $obj->save($values);
             if ($res) {
-                echo Display::return_message(get_lang('ItemAdded'), 'confirmation');
+                echo Display::return_message(get_lang('Item added'), 'confirmation');
             }
             $obj->display();
         } else {
@@ -149,7 +149,7 @@ switch ($action) {
             $values = $form->exportValues();
             $res = $obj->update($values);
             echo Display::return_message(
-                sprintf(get_lang('ItemUpdated'), $values['variable']),
+                sprintf(get_lang('Item updated'), $values['variable']),
                 'confirmation',
                 false
             );
@@ -168,7 +168,7 @@ switch ($action) {
         // Action handling: delete
         $res = $obj->delete($_GET['id']);
         if ($res) {
-            echo Display::return_message(get_lang('ItemDeleted'), 'confirmation');
+            echo Display::return_message(get_lang('Item deleted'), 'confirmation');
         }
         $obj->display();
         break;

@@ -11,6 +11,11 @@ require_once __DIR__.'/../../vendor/autoload.php';
 $course_plugin = 'bbb'; //needed in order to load the plugin lang variables
 require_once __DIR__.'/config.php';
 
+$logInfo = [
+    'tool' => 'Videoconference',
+];
+Event::registerLog($logInfo);
+
 $tool_name = get_lang('Videoconference');
 $tpl = new Template($tool_name);
 
@@ -59,7 +64,6 @@ if ($bbb->pluginEnabled) {
             $meetingParams = [];
             $meetingParams['meeting_name'] = $bbb->getCurrentVideoConferenceName();
             $meetingParams['interface'] = $interface;
-
             if ($bbb->meetingExists($meetingParams['meeting_name'])) {
                 $joinUrl = $bbb->joinMeeting($meetingParams['meeting_name']);
                 if ($joinUrl) {

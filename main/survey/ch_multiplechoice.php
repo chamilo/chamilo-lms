@@ -20,7 +20,7 @@ class ch_multiplechoice extends survey_question
             'horizontal' => get_lang('Horizontal'),
             'vertical' => get_lang('Vertical'),
         ];
-        $this->getForm()->addRadio('horizontalvertical', get_lang('DisplayAnswersHorVert'), $options);
+        $this->getForm()->addRadio('horizontalvertical', get_lang('Display'), $options);
 
         $formData['horizontalvertical'] = isset($formData['horizontalvertical']) ? $formData['horizontalvertical'] : 'horizontal';
         $this->getForm()->setDefaults($formData);
@@ -30,15 +30,6 @@ class ch_multiplechoice extends survey_question
         if (is_array($formData['answers'])) {
             foreach ($formData['answers'] as $key => $value) {
                 $this->getForm()->addHtmlEditor('answers['.$key.']', null, false, false, $config);
-
-                if ($key < $total - 1) {
-                    //$this->getForm()->addButton("move_down[$key]", get_lang('Down'));
-                }
-
-                if ($key > 0) {
-                    //$this->getForm()->addButton("move_up[$key]", get_lang('Up'));
-                }
-
                 if ($total > 2) {
                     $this->getForm()->addButton("delete_answer[$key]", get_lang('Delete'), 'trash', 'danger');
                 }

@@ -27,44 +27,34 @@ $sessionUrl = api_get_path(WEB_CODE_PATH).'session/resume_session.php?id_session
 $htmlHeadXtra[] = api_get_jqgrid_js();
 $interbreadcrumb[] = [
     'url' => 'session_list.php',
-    'name' => get_lang('SessionList'),
+    'name' => get_lang('Session list'),
 ];
 $interbreadcrumb[] = [
     'url' => $sessionUrl,
-    'name' => get_lang('SessionOverview'),
+    'name' => get_lang('Session overview'),
 ];
 
-if ($action == 'add') {
-    $interbreadcrumb[] = [
-        'url' => api_get_self().'?session_id='.$sessionId,
-        'name' => get_lang('ScheduledAnnouncements'),
-    ];
-    $tool_name = get_lang('Add');
-} elseif ($action == 'edit') {
-    $tool_name = get_lang('Edit');
-    $interbreadcrumb[] = [
-        'url' => api_get_self().'?session_id='.$sessionId,
-        'name' => get_lang('ScheduledAnnouncements'),
-    ];
-} else {
-    $tool_name = get_lang('ScheduledAnnouncements');
-}
+$tool_name = get_lang('Scheduled announcements');
 
 switch ($action) {
     case 'run':
         $messagesSent = $object->sendPendingMessages();
-
         Display::addFlash(
             Display::return_message(
-                get_lang('MessageSent').': '.$messagesSent,
+                get_lang('Message Sent').': '.$messagesSent,
                 'confirmation'
             )
         );
         $content = $object->getGrid($sessionId);
-
         break;
     case 'add':
-        $url = api_get_self().'?action='.Security::remove_XSS($_GET['action']).'&session_id='.$sessionId;
+        $interbreadcrumb[] = [
+            'url' => api_get_self().'?session_id='.$sessionId,
+            'name' => get_lang('Scheduled announcements'),
+        ];
+        $tool_name = get_lang('Add');
+
+        $url = api_get_self().'?action=add&session_id='.$sessionId;
         $form = $object->returnForm($url, 'add', $sessionInfo);
 
         // The validation or display
@@ -106,7 +96,7 @@ switch ($action) {
 
                 Display::addFlash(
                     Display::return_message(
-                        get_lang('ItemAdded'),
+                        get_lang('Item added'),
                         'confirmation'
                     )
                 );
@@ -125,8 +115,14 @@ switch ($action) {
         }
         break;
     case 'edit':
+        $tool_name = get_lang('Edit');
+        $interbreadcrumb[] = [
+            'url' => api_get_self().'?session_id='.$sessionId,
+            'name' => get_lang('Scheduled announcements'),
+        ];
+
         // Action handling: Editing
-        $url = api_get_self().'?action='.Security::remove_XSS($_GET['action']).'&id='.$id.'&session_id='.$sessionId;
+        $url = api_get_self().'?action=edit&id='.$id.'&session_id='.$sessionId;
         $form = $object->returnSimpleForm($id, $url, 'edit', $sessionInfo);
         if ($form->validate()) {
             $values = $form->getSubmitValues();
@@ -140,7 +136,7 @@ switch ($action) {
             $extraFieldValue->saveFieldValues($values);
 
             Display::addFlash(Display::return_message(
-                get_lang('Updated'),
+                get_lang('Update successful'),
                 'confirmation'
             ));
             header("Location: $url");
@@ -166,7 +162,7 @@ $columns = [
     get_lang('Subject'),
     get_lang('Date'),
     get_lang('Sent'),
-    get_lang('Actions'),
+    get_lang('Detail'),
 ];
 
 $columnModel = [
@@ -202,7 +198,7 @@ $columnModel = [
 
 $actionLinks = 'function action_formatter(cellvalue, options, rowObject) {
     return \'<a href="?action=edit&session_id='.$sessionId.'&id=\'+options.rowId+\'">'.Display::return_icon('edit.png', get_lang('Edit'), '', ICON_SIZE_SMALL).'</a>'.
-    '&nbsp;<a onclick="javascript:if(!confirm('."\'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"), ENT_QUOTES))."\'".')) return false;"  href="?action=delete&session_id='.$sessionId.'&id=\'+options.rowId+\'">'.Display::return_icon('delete.png', get_lang('Delete'), '', ICON_SIZE_SMALL).'</a>'.
+    '&nbsp;<a onclick="javascript:if(!confirm('."\'".addslashes(api_htmlentities(get_lang("Please confirm your choice"), ENT_QUOTES))."\'".')) return false;"  href="?action=delete&session_id='.$sessionId.'&id=\'+options.rowId+\'">'.Display::return_icon('delete.png', get_lang('Delete'), '', ICON_SIZE_SMALL).'</a>'.
     '\';
 }';
 

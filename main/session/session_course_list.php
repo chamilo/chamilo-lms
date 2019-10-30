@@ -10,7 +10,7 @@ require_once __DIR__.'/../inc/global.inc.php';
 // setting the section (for the tabs)
 $this_section = SECTION_PLATFORM_ADMIN;
 
-$id_session = intval($_GET['id_session']);
+$id_session = isset($_GET['id_session']) ? (int) $_GET['id_session'] : 0;
 SessionManager::protectSession($id_session);
 
 // Database Table Definitions
@@ -62,21 +62,21 @@ $sql = "SELECT c.id, c.code, c.title, nbr_users
 		LIMIT $from,".($limit + 1);
 $result = Database::query($sql);
 $Courses = Database::store_result($result);
-$tool_name = api_htmlentities($session_name, ENT_QUOTES, $charset).' : '.get_lang('CourseListInSession');
+$tool_name = api_htmlentities($session_name, ENT_QUOTES, $charset).' : '.get_lang('Courses in this session');
 
-$interbreadcrumb[] = ['url' => "session_list.php", "name" => get_lang('SessionList')];
-$interbreadcrumb[] = ['url' => "resume_session.php?id_session=".Security::remove_XSS($_REQUEST['id_session']), "name" => get_lang('SessionOverview')];
+$interbreadcrumb[] = ['url' => "session_list.php", "name" => get_lang('Session list')];
+$interbreadcrumb[] = ['url' => "resume_session.php?id_session=".Security::remove_XSS($_REQUEST['id_session']), "name" => get_lang('Session overview')];
 
 Display::display_header($tool_name);
 echo Display::page_header($tool_name);
 ?>
-<form method="post" action="<?php echo api_get_self(); ?>?id_session=<?php echo $id_session; ?>&sort=<?php echo $sort; ?>" onsubmit="javascript:if(!confirm('<?php echo get_lang('ConfirmYourChoice'); ?>')) return false;">
+<form method="post" action="<?php echo api_get_self(); ?>?id_session=<?php echo $id_session; ?>&sort=<?php echo $sort; ?>" onsubmit="javascript:if(!confirm('<?php echo get_lang('Please confirm your choice'); ?>')) return false;">
 <?php
 $tableHeader = [];
 $tableHeader[] = [' '];
-$tableHeader[] = [get_lang('CourseTitle')];
-$tableHeader[] = [get_lang('NbUsers')];
-$tableHeader[] = [get_lang('Actions')];
+$tableHeader[] = [get_lang('Course title')];
+$tableHeader[] = [get_lang('Users')];
+$tableHeader[] = [get_lang('Detail')];
 
 $tableCourses = [];
 
@@ -89,15 +89,15 @@ foreach ($Courses as $key => $enreg) {
         Display::return_icon('course_home.png', get_lang('Course')).'</a>
 			<a href="session_course_edit.php?id_session='.$id_session.'&page=session_course_list.php&course_code='.$enreg['code'].'">'.
         Display::return_icon('edit.png', get_lang('Edit')).'</a>
-			<a href="'.api_get_self().'?id_session='.$id_session.'&sort='.$sort.'&action=delete&idChecked[]='.$enreg['id'].'" onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang("ConfirmYourChoice"), ENT_QUOTES, $charset)).'\')) return false;">'.
+			<a href="'.api_get_self().'?id_session='.$id_session.'&sort='.$sort.'&action=delete&idChecked[]='.$enreg['id'].'" onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang("Please confirm your choice"), ENT_QUOTES, $charset)).'\')) return false;">'.
         Display::return_icon('delete.png', get_lang('Delete')).'</a>';
     $tableCourses[] = $course;
 }
 echo '<form method="post" action="'.api_get_self().'">';
 Display :: display_sortable_table($tableHeader, $tableCourses, [], []);
 echo '<select name="action">
-	<option value="delete">'.get_lang('UnsubscribeCoursesFromSession').'</option>
+	<option value="delete">'.get_lang('Unsubscribe selected courses from this session').'</option>
 	</select>
-	<button class="save" type="submit">'.get_lang('Ok').'</button>
+	<button class="save" type="submit">'.get_lang('Validate').'</button>
 	</form>';
 Display::display_footer();

@@ -14,6 +14,7 @@ $this_section = SECTION_PLATFORM_ADMIN;
 api_protect_admin_script(true);
 
 $session_id = isset($_GET['session_id']) ? intval($_GET['session_id']) : 0;
+
 $formSent = 0;
 $errorMsg = '';
 
@@ -29,8 +30,8 @@ $tbl_session_course_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_US
 $archivePath = api_get_path(SYS_ARCHIVE_PATH);
 $archiveURL = api_get_path(WEB_CODE_PATH).'course_info/download.php?archive_path=&archive=';
 
-$tool_name = get_lang('ExportSessionListXMLCSV');
-$interbreadcrumb[] = ['url' => 'session_list.php', 'name' => get_lang('SessionList')];
+$tool_name = get_lang('Export sessions list');
+$interbreadcrumb[] = ['url' => 'session_list.php', 'name' => get_lang('Session list')];
 set_time_limit(0);
 if (isset($_POST['formSent'])) {
     $formSent = $_POST['formSent'];
@@ -253,8 +254,8 @@ if (isset($_POST['formSent'])) {
             case 'xml':
                 fputs($fp, "</Sessions>\n");
                 fclose($fp);
-                $errorMsg = get_lang('UserListHasBeenExported').'<br/>
-                <a class="btn btn-default" href="'.$archiveURL.$archiveFile.'">'.get_lang('ClickHereToDownloadTheFile').'</a>';
+                $errorMsg = get_lang('The users list has been exported.').'<br/>
+                <a class="btn btn-default" href="'.$archiveURL.$archiveFile.'">'.get_lang('Download the file').'</a>';
                 break;
             case 'csv':
                 Export::arrayToCsv($sessionListToExport, $archiveFile);
@@ -289,7 +290,7 @@ $Sessions = Database::store_result($result);
 
 echo '<div class="actions">';
 echo '<a href="../session/session_list.php">'.
-        Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('SessionList'), '', ICON_SIZE_MEDIUM).'</a>';
+        Display::return_icon('back.png', get_lang('Back to').' '.get_lang('Session list'), '', ICON_SIZE_MEDIUM).'</a>';
 echo '</div>';
 
 if (!empty($errorMsg)) {
@@ -298,18 +299,18 @@ if (!empty($errorMsg)) {
 
 $form = new FormValidator('session_export', 'post', api_get_self());
 $form->addElement('hidden', 'formSent', 1);
-$form->addElement('radio', 'file_type', get_lang('OutputFileType'), 'CSV', 'csv', null);
+$form->addElement('radio', 'file_type', get_lang('Output file type'), 'CSV', 'csv', null);
 $form->addElement('radio', 'file_type', '', 'XLS', 'xls', null);
 $form->addElement('radio', 'file_type', null, 'XML', 'xml', null, ['id' => 'file_type_xml']);
 
 $options = [];
-$options['0'] = get_lang('AllSessions');
+$options['0'] = get_lang('All the sessions');
 foreach ($Sessions as $enreg) {
     $options[$enreg['id']] = $enreg['name'];
 }
 
-$form->addElement('select', 'session_id', get_lang('WhichSessionToExport'), $options);
-$form->addButtonExport(get_lang('ExportSession'));
+$form->addElement('select', 'session_id', get_lang('Choose the session to export'), $options);
+$form->addButtonExport(get_lang('Export session(s)'));
 
 $defaults = [];
 $defaults['file_type'] = 'csv';

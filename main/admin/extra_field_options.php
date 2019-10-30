@@ -16,7 +16,7 @@ api_protect_admin_script();
 $htmlHeadXtra[] = api_get_jqgrid_js();
 
 // setting breadcrumbs
-$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('PlatformAdmin')];
+$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('Administration')];
 
 $tool_name = null;
 
@@ -44,7 +44,7 @@ if ($action == 'add') {
     ];
     $interbreadcrumb[] = [
         'url' => 'extra_field_options.php?type='.$extra_field->type.'&field_id='.$extra_field_info['id'],
-        'name' => get_lang('EditExtraFieldOptions'),
+        'name' => get_lang('Edit extra field options'),
     ];
     $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Add')];
 } elseif ($action == 'edit') {
@@ -55,7 +55,7 @@ if ($action == 'add') {
     ];
     $interbreadcrumb[] = [
         'url' => 'extra_field_options.php?type='.$extra_field->type.'&field_id='.$extra_field_info['id'],
-        'name' => get_lang('EditExtraFieldOptions'),
+        'name' => get_lang('Edit extra field options'),
     ];
     $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Edit')];
 } else {
@@ -64,7 +64,7 @@ if ($action == 'add') {
         'url' => 'extra_fields.php?type='.$extra_field->type.'&action=edit&id='.$extra_field_info['id'],
         'name' => $extra_field_info['display_text'],
     ];
-    $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('EditExtraFieldOptions')];
+    $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Edit extra field options')];
 }
 
 //jqgrid will use this URL to do the selects
@@ -76,7 +76,7 @@ $columns = [
     get_lang('Name'),
     get_lang('Value'),
     get_lang('Order'),
-    get_lang('Actions'),
+    get_lang('Detail'),
 ];
 
 //Column config
@@ -119,7 +119,7 @@ $extra_params['height'] = 'auto';
 //With this function we can add actions to the jgrid (edit, delete, etc)
 $action_links = 'function action_formatter(cellvalue, options, rowObject) {
     return \'<a href="?action=edit&'.$params.'&id=\'+options.rowId+\'">'.Display::return_icon('edit.png', get_lang('Edit'), '', ICON_SIZE_SMALL).'</a>'.
-    '&nbsp;<a onclick="javascript:if(!confirm('."\'".addslashes(get_lang("ConfirmYourChoice"))."\'".')) return false;"  href="?sec_token='.$token.'&action=delete&'.$params.'&id=\'+options.rowId+\'">'.Display::return_icon('delete.png', get_lang('Delete'), '', ICON_SIZE_SMALL).'</a>'.
+    '&nbsp;<a onclick="javascript:if(!confirm('."\'".addslashes(get_lang("Please confirm your choice"))."\'".')) return false;"  href="?sec_token='.$token.'&action=delete&'.$params.'&id=\'+options.rowId+\'">'.Display::return_icon('delete.png', get_lang('Delete'), '', ICON_SIZE_SMALL).'</a>'.
     '\';
  }';
 
@@ -160,7 +160,7 @@ switch ($action) {
                 $values = $form->exportValues();
                 $res = $obj->save_one_item($values);
                 if ($res) {
-                    echo Display::return_message(get_lang('ItemAdded'), 'confirmation');
+                    echo Display::return_message(get_lang('Item added'), 'confirmation');
                 }
             }
             $obj->display();
@@ -181,7 +181,7 @@ switch ($action) {
                 $values = $form->exportValues();
                 $res = $obj->update($values);
                 echo Display::return_message(
-                    sprintf(get_lang('ItemUpdated'), $values['display_text']),
+                    sprintf(get_lang('Item updated'), $values['display_text']),
                     'confirmation',
                     false
                 );
@@ -198,7 +198,7 @@ switch ($action) {
         if ($check) {
             $res = $obj->delete($_GET['id']);
             if ($res) {
-                echo Display::return_message(get_lang('ItemDeleted'), 'confirmation');
+                echo Display::return_message(get_lang('Item deleted'), 'confirmation');
             }
         }
         $obj->display();

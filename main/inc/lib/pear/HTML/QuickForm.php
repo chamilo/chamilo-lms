@@ -29,7 +29,7 @@
  * @global array $GLOBALS['_HTML_QuickForm_registered_rules']
  */
 
-/**#@+
+/**
  * Error codes for HTML_QuickForm
  *
  * Codes are mapped to textual messages by errorMessage() method, if you add a
@@ -62,8 +62,6 @@ define('QUICKFORM_INVALID_DATASOURCE', -9);
 class HTML_QuickForm extends HTML_Common
 {
     const MAX_ELEMENT_ARGUMENT = 10;
-
-    private $dateTimePickerLibraryAdded;
 
     /**
      * Array containing the form fields
@@ -267,15 +265,6 @@ class HTML_QuickForm extends HTML_Common
                     $this->_maxFileSize = $matches['1'];
             }
         }
-
-//        $course_id = api_get_course_int_id();
-//        //If I'm in a course replace the default max filesize with the course limits
-//        if (!empty($course_id)) {
-//            $free_course_quota = DocumentManager::get_course_quota() - DocumentManager::documents_total_space();
-//            if (empty($this->_maxFileSize) || $free_course_quota <= $this->_maxFileSize) {
-//                $this->_maxFileSize = intval($free_course_quota);
-//            }
-//        }
     }
 
     /**
@@ -300,7 +289,7 @@ class HTML_QuickForm extends HTML_Common
      * @access    public
      * @return    void
      */
-    function registerElementType($typeName, $include, $className)
+    public function registerElementType($typeName, $include, $className)
     {
         $GLOBALS['HTML_QUICKFORM_ELEMENT_TYPES'][strtolower($typeName)] = array($include, $className);
     }
@@ -454,11 +443,12 @@ class HTML_QuickForm extends HTML_Common
     public function &createElement($elementType)
     {
         $args = func_get_args();
-        $element = HTML_QuickForm::_loadElement(
+        $element = $this->_loadElement(
             'createElement',
             $elementType,
             array_slice($args, 1)
         );
+
         return $element;
     }
 
@@ -667,7 +657,7 @@ class HTML_QuickForm extends HTML_Common
      * @param    string     $name           (optional)group name
      * @param    string     $groupLabel     (optional)group label
      * @param    string     $separator      (optional)string to separate elements
-     * @param    string     $appendName     (optional)specify whether the group name should be
+     * @param    bool       $appendName     (optional)specify whether the group name should be
      *                                      used in the form element name ex: group[element]
      * @return   HTML_QuickForm_group       reference to a newly added group
      * @since    2.8
@@ -749,7 +739,7 @@ class HTML_QuickForm extends HTML_Common
      * @return    mixed     element value
      * @throws    HTML_QuickForm_Error
      */
-    function &getElementValue($element)
+    public function &getElementValue($element)
     {
         if (!isset($this->_elementIndex[$element])) {
             throw new \Exception("Element '$element' does not exist in HTML_QuickForm::getElementValue()");
@@ -860,7 +850,7 @@ class HTML_QuickForm extends HTML_Common
     * @param  string  The key from the $_FILES array that should be appended
     * @return array
     */
-    function _reindexFiles($value, $key)
+    public function _reindexFiles($value, $key)
     {
         if (!is_array($value)) {
             return array($key => $value);
@@ -881,15 +871,12 @@ class HTML_QuickForm extends HTML_Common
      * @access    public
      * @return    string    error message corresponding to checked element
      */
-    function getElementError($element)
+    public function getElementError($element)
     {
         if (isset($this->_errors[$element])) {
             return $this->_errors[$element];
         }
-    } // end func getElementError
-
-    // }}}
-    // {{{ setElementError()
+    }
 
     /**
      * Set error message for a form element
@@ -900,17 +887,14 @@ class HTML_QuickForm extends HTML_Common
      * @access    public
      * @return    void
      */
-    function setElementError($element, $message = null)
+    public function setElementError($element, $message = null)
     {
         if (!empty($message)) {
             $this->_errors[$element] = $message;
         } else {
             unset($this->_errors[$element]);
         }
-    } // end func setElementError
-
-     // }}}
-     // {{{ getElementType()
+    }
 
      /**
       * Returns the type of the given element
@@ -920,16 +904,13 @@ class HTML_QuickForm extends HTML_Common
       * @access     public
       * @return     string    Type of the element, false if the element is not found
       */
-     function getElementType($element)
+    public function getElementType($element)
      {
          if (isset($this->_elementIndex[$element])) {
              return $this->_elements[$this->_elementIndex[$element]]->getType();
          }
          return false;
-     } // end func getElementType
-
-     // }}}
-     // {{{ updateElementAttr()
+     }
 
     /**
      * Updates Attributes for one or more elements
@@ -940,7 +921,7 @@ class HTML_QuickForm extends HTML_Common
      * @access     public
      * @return     void
      */
-    function updateElementAttr($elements, $attrs)
+    public function updateElementAttr($elements, $attrs)
     {
         if (is_string($elements)) {
             $elements = split('[ ]?,[ ]?', $elements);
@@ -973,7 +954,7 @@ class HTML_QuickForm extends HTML_Common
      * @return HTML_QuickForm_element    a reference to the removed element
      * @throws HTML_QuickForm_Error
      */
-    function &removeElement($elementName, $removeRules = true)
+    public function &removeElement($elementName, $removeRules = true)
     {
         if (!isset($this->_elementIndex[$elementName])) {
             throw new \Exception("Element '$elementName' does not exist in HTML_QuickForm::removeElement()");
@@ -1089,7 +1070,7 @@ class HTML_QuickForm extends HTML_Common
      * @access   public
      * @throws   HTML_QuickForm_Error
      */
-    function addGroupRule($group, $arg1, $type='', $format=null, $howmany=0, $validation = 'server', $reset = false)
+    public function addGroupRule($group, $arg1, $type='', $format=null, $howmany=0, $validation = 'server', $reset = false)
     {
         if (!$this->elementExists($group)) {
             throw new \Exception("Group '$group' does not exist in HTML_QuickForm::addGroupRule()");
@@ -1166,10 +1147,7 @@ class HTML_QuickForm extends HTML_Common
                 $this->updateAttributes(array('onsubmit' => 'try { var myValidator = validate_' . $this->_attributes['id'] . '; } catch(e) { return true; } return myValidator(this);'));
             }
         }
-    } // end func addGroupRule
-
-    // }}}
-    // {{{ addFormRule()
+    }
 
    /**
     * Adds a global validation rule
@@ -1191,9 +1169,6 @@ class HTML_QuickForm extends HTML_Common
         $this->_formRules[] = $rule;
     }
 
-    // }}}
-    // {{{ applyFilter()
-
     /**
      * Applies a data filter for the given field(s)
      *
@@ -1203,7 +1178,7 @@ class HTML_QuickForm extends HTML_Common
      * @access   public
      * @throws   HTML_QuickForm_Error
      */
-    function applyFilter($element, $filter)
+    public function applyFilter($element, $filter)
     {
         if (!is_callable($filter)) {
             throw new \Exception("Callback function does not exist in QuickForm::applyFilter()");
@@ -1229,10 +1204,7 @@ class HTML_QuickForm extends HTML_Common
                 }
             }
         }
-    } // end func applyFilter
-
-    // }}}
-    // {{{ _recursiveFilter()
+    }
 
     /**
      * Recursively apply a filter function
@@ -1243,7 +1215,7 @@ class HTML_QuickForm extends HTML_Common
      * @access    private
      * @return    cleaned values
      */
-    function _recursiveFilter($filter, $value)
+    public function _recursiveFilter($filter, $value)
     {
         if (is_array($value)) {
             $cleanValues = array();
@@ -1254,10 +1226,7 @@ class HTML_QuickForm extends HTML_Common
         } else {
             return call_user_func($filter, $value);
         }
-    } // end func _recursiveFilter
-
-    // }}}
-    // {{{ arrayMerge()
+    }
 
    /**
     * Merges two arrays
@@ -1288,10 +1257,7 @@ class HTML_QuickForm extends HTML_Common
             }
         }
         return $a;
-    } // end func arrayMerge
-
-    // }}}
-    // {{{ isTypeRegistered()
+    }
 
     /**
      * Returns whether or not the form element type is supported
@@ -1316,10 +1282,7 @@ class HTML_QuickForm extends HTML_Common
     function getRegisteredTypes()
     {
         return array_keys($GLOBALS['HTML_QUICKFORM_ELEMENT_TYPES']);
-    } // end func getRegisteredTypes
-
-    // }}}
-    // {{{ isRuleRegistered()
+    }
 
     /**
      * Returns whether or not the given rule is supported
@@ -1345,10 +1308,7 @@ class HTML_QuickForm extends HTML_Common
     function getRegisteredRules()
     {
         return array_keys($GLOBALS['_HTML_QuickForm_registered_rules']);
-    } // end func getRegisteredRules
-
-    // }}}
-    // {{{ isElementRequired()
+    }
 
     /**
      * Returns whether or not the form element is required
@@ -1361,10 +1321,7 @@ class HTML_QuickForm extends HTML_Common
     function isElementRequired($element)
     {
         return in_array($element, $this->_required, true);
-    } // end func isElementRequired
-
-    // }}}
-    // {{{ isElementFrozen()
+    }
 
     /**
      * Returns whether or not the form element is frozen
@@ -1380,10 +1337,7 @@ class HTML_QuickForm extends HTML_Common
              return $this->_elements[$this->_elementIndex[$element]]->isFrozen();
          }
          return false;
-    } // end func isElementFrozen
-
-    // }}}
-    // {{{ setJsWarnings()
+    }
 
     /**
      * Sets JavaScript warning messages
@@ -1398,10 +1352,7 @@ class HTML_QuickForm extends HTML_Common
     {
         $this->_jsPrefix = $pref;
         $this->_jsPostfix = $post;
-    } // end func setJsWarnings
-
-    // }}}
-    // {{{ setRequiredNote()
+    }
 
     /**
      * Sets required-note
@@ -1414,10 +1365,7 @@ class HTML_QuickForm extends HTML_Common
     function setRequiredNote($note)
     {
         $this->_requiredNote = $note;
-    } // end func setRequiredNote
-
-    // }}}
-    // {{{ getRequiredNote()
+    }
 
     /**
      * Returns the required note

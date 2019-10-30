@@ -222,7 +222,7 @@ class ExerciseResult
                 $return[$i]['duration'] = $result['duration'];
                 $return[$i]['result'] = $result['exresult'];
                 $return[$i]['max'] = $result['exweight'];
-                $return[$i]['status'] = $revised ? get_lang('Validated') : get_lang('NotValidated');
+                $return[$i]['status'] = $revised ? get_lang('Validated') : get_lang('Not validated');
                 $return[$i]['lp_id'] = $result['orig_lp_id'];
                 $return[$i]['lp_name'] = $result['lp_name'];
 
@@ -267,7 +267,7 @@ class ExerciseResult
                         $return[$i]['duration'] = null;
                         $return[$i]['result'] = null;
                         $return[$i]['max'] = null;
-                        $return[$i]['status'] = get_lang('NotAttempted');
+                        $return[$i]['status'] = get_lang('Not attempted');
                         $return[$i]['lp_id'] = null;
                         $return[$i]['lp_name'] = null;
                         $return[$i]['is_user_subscribed'] = get_lang('Yes');
@@ -318,26 +318,26 @@ class ExerciseResult
         $data = '';
         if (api_is_western_name_order()) {
             if (!empty($this->results[0]['first_name'])) {
-                $data .= get_lang('FirstName').';';
+                $data .= get_lang('First name').';';
             }
             if (!empty($this->results[0]['last_name'])) {
-                $data .= get_lang('LastName').';';
+                $data .= get_lang('Last name').';';
             }
         } else {
             if (!empty($this->results[0]['last_name'])) {
-                $data .= get_lang('LastName').';';
+                $data .= get_lang('Last name').';';
             }
             if (!empty($this->results[0]['first_name'])) {
-                $data .= get_lang('FirstName').';';
+                $data .= get_lang('First name').';';
             }
         }
         $officialCodeInList = api_get_setting('show_official_code_exercise_result_list');
         if ($officialCodeInList === 'true') {
-            $data .= get_lang('OfficialCode').';';
+            $data .= get_lang('Code').';';
         }
 
-        $data .= get_lang('LoginName').';';
-        $data .= get_lang('Email').';';
+        $data .= get_lang('Login').';';
+        $data .= get_lang('e-mail').';';
         $data .= get_lang('Groups').';';
 
         if ($export_user_fields) {
@@ -358,14 +358,14 @@ class ExerciseResult
         }
 
         $data .= get_lang('Title').';';
-        $data .= get_lang('StartDate').';';
-        $data .= get_lang('EndDate').';';
-        $data .= get_lang('Duration').' ('.get_lang('MinMinutes').') ;';
+        $data .= get_lang('Start Date').';';
+        $data .= get_lang('End Date').';';
+        $data .= get_lang('Duration').' ('.get_lang('minutes').') ;';
         $data .= get_lang('Score').';';
         $data .= get_lang('Total').';';
         $data .= get_lang('Status').';';
-        $data .= get_lang('ToolLearnpath').';';
-        $data .= get_lang('UserIsCurrentlySubscribed').';';
+        $data .= get_lang('Learning path').';';
+        $data .= get_lang('The user is currently subscribed').';';
         $data .= "\n";
 
         //results
@@ -383,7 +383,7 @@ class ExerciseResult
                 $data .= $row['official_code'].';';
             }
 
-            // Email
+            // e-mail
             $data .= str_replace("\r\n", '  ', api_html_entity_decode(strip_tags($row['username']), ENT_QUOTES, $charset)).';';
             $data .= str_replace("\r\n", '  ', api_html_entity_decode(strip_tags($row['email']), ENT_QUOTES, $charset)).';';
             $data .= str_replace("\r\n", '  ', implode(", ", GroupManager::get_user_group_name($row['user_id']))).';';
@@ -486,19 +486,19 @@ class ExerciseResult
         $list = [];
         if ($withColumnUser) {
             if (api_is_western_name_order()) {
-                $list[0][] = get_lang('FirstName');
-                $list[0][] = get_lang('LastName');
+                $list[0][] = get_lang('First name');
+                $list[0][] = get_lang('Last name');
             } else {
-                $list[0][] = get_lang('LastName');
-                $list[0][] = get_lang('FirstName');
+                $list[0][] = get_lang('Last name');
+                $list[0][] = get_lang('First name');
             }
 
             if ($officialCodeInList === 'true') {
-                $list[0][] = get_lang('OfficialCode');
+                $list[0][] = get_lang('Code');
             }
 
-            $list[0][] = get_lang('LoginName');
-            $list[0][] = get_lang('Email');
+            $list[0][] = get_lang('Login');
+            $list[0][] = get_lang('e-mail');
         }
 
         $list[0][] = get_lang('Groups');
@@ -525,14 +525,14 @@ class ExerciseResult
         }
 
         $list[0][] = get_lang('Title');
-        $list[0][] = get_lang('StartDate');
-        $list[0][] = get_lang('EndDate');
-        $list[0][] = get_lang('Duration').' ('.get_lang('MinMinutes').')';
+        $list[0][] = get_lang('Start Date');
+        $list[0][] = get_lang('End Date');
+        $list[0][] = get_lang('Duration').' ('.get_lang('minutes').')';
         $list[0][] = get_lang('Score');
         $list[0][] = get_lang('Total');
         $list[0][] = get_lang('Status');
-        $list[0][] = get_lang('ToolLearnpath');
-        $list[0][] = get_lang('UserIsCurrentlySubscribed');
+        $list[0][] = get_lang('Learning path');
+        $list[0][] = get_lang('The user is currently subscribed');
         $column = 1;
         foreach ($this->results as $row) {
             if ($withColumnUser) {

@@ -31,7 +31,7 @@ $userId = Request::get('id');
 
 $this_section = SECTION_CAMPUS;
 
-$tool_name = get_lang('LostPassword');
+$tool_name = get_lang('I lost my password');
 
 if ($reset && $userId) {
     $messageText = Login::reset_password($reset, $userId, true);
@@ -56,8 +56,8 @@ $form->addHeader($tool_name);
 $form->addText(
     'user',
     [
-        get_lang('LoginOrEmailAddress'),
-        get_lang('EnterEmailUserAndWellSendYouPassword'),
+        get_lang('Username or e-mail address'),
+        get_lang('Enter the username or the e-mail address with which you registered and we will send your password.'),
     ],
     true
 );
@@ -86,22 +86,22 @@ if ($allowCaptcha) {
         '',
         $options
     );
-    $form->addElement('static', null, null, get_lang('ClickOnTheImageForANewOne'));
+    $form->addElement('static', null, null, get_lang('Click on the image to load a new one.'));
 
-    $form->addElement('text', 'captcha', get_lang('EnterTheLettersYouSee'), ['size' => 40]);
-    $form->addRule('captcha', get_lang('EnterTheCharactersYouReadInTheImage'), 'required', null, 'client');
+    $form->addElement('text', 'captcha', get_lang('Enter the letters you see.'), ['size' => 40]);
+    $form->addRule('captcha', get_lang('Enter the characters you see on the image'), 'required', null, 'client');
 
-    $form->addRule('captcha', get_lang('TheTextYouEnteredDoesNotMatchThePicture'), 'CAPTCHA', $captcha_question);
+    $form->addRule('captcha', get_lang('The text you entered doesn\'t match the picture.'), 'CAPTCHA', $captcha_question);
 }
 
-$form->addButtonSend(get_lang('Send'));
+$form->addButtonSend(get_lang('Send message'));
 
 if ($form->validate()) {
     $values = $form->exportValues();
     $user = Login::get_user_accounts_by_username($values['user']);
 
     if (!$user) {
-        $messageText = get_lang('NoUserAccountWithThisEmailAddress');
+        $messageText = get_lang('There is no account with this user and/or e-mail address');
 
         if (CustomPages::enabled() && CustomPages::exists(CustomPages::LOST_PASSWORD)) {
             CustomPages::display(
@@ -140,7 +140,7 @@ if ($form->validate()) {
 
     if ($user['auth_source'] == 'extldap') {
         Display::addFlash(
-            Display::return_message(get_lang('CouldNotResetPasswordBecauseLDAP'), 'info', false)
+            Display::return_message(get_lang('Could not reset password, contact your helpdesk.'), 'info', false)
         );
         header('Location: '.api_get_path(WEB_PATH));
         exit;
@@ -155,7 +155,7 @@ if ($form->validate()) {
         if (CustomPages::enabled() && CustomPages::exists(CustomPages::INDEX_UNLOGGED)) {
             CustomPages::display(
                 CustomPages::INDEX_UNLOGGED,
-                ['info' => get_lang('CheckYourEmailAndFollowInstructions')]
+                ['info' => get_lang('Check your e-mail and follow the instructions.')]
             );
             exit;
         }

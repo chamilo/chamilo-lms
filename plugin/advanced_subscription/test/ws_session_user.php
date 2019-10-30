@@ -1,22 +1,19 @@
 <?php
 /* For license terms, see /license.txt */
-/**
- * A script to test session details by user web service.
- *
- * @package chamilo.plugin.advanced_subscription
- */
+
+use Chamilo\CoreBundle\Framework\Container;
 
 /**
- * Init.
+ * A script to test session details by user web service.
  */
 require_once __DIR__.'/../config.php';
-// Protect test
+
 api_protect_admin_script();
 
 // exit;
 
 $plugin = AdvancedSubscriptionPlugin::create();
-$hookPlugin = HookAdvancedSubscription::create();
+$hookPlugin = Container::instantiateHook(HookAdvancedSubscription::class);
 // Get params from request (GET or POST)
 $params = [];
 // Init result array

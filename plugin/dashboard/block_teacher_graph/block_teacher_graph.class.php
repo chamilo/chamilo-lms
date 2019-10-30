@@ -72,7 +72,7 @@ class BlockTeacherGraph extends Block
         $column = 1;
         $data = [];
         $html = $this->getBlockCard(
-            get_lang('TeachersInformationsGraph'),
+            get_lang('Teachers report chart'),
             $this->getContent()
         );
 
@@ -194,7 +194,7 @@ class BlockTeacherGraph extends Block
             }
             $graph = '<img src="'.$imgPath.'" >';
         } else {
-            $graph = '<p>'.api_convert_encoding(get_lang('GraphicNotAvailable'), 'UTF-8').'</p>';
+            $graph = '<p>'.api_convert_encoding(get_lang('Graphic not available'), 'UTF-8').'</p>';
         }
 
         return $graph;

@@ -126,7 +126,7 @@ switch ($type) {
                     $lp->set_modified_on();
                     $lpItem = new learnpathItem($lpItemId);
                     $lpItem->add_audio_from_documents($newDocId);
-                    echo Display::return_message(get_lang('Updated'), 'info');
+                    echo Display::return_message(get_lang('Update successful'), 'info');
                 }
             }
 

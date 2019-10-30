@@ -282,10 +282,17 @@ class HTML_QuickForm_Renderer_Default extends HTML_QuickForm_Renderer
         $label = $element->getLabel();
         $labelForId = $element->getAttribute('id');
         $extraLabelClass = $element->getAttribute('extra_label_class');
+
         $icon = $element->getIconToHtml();
 
         if (is_array($label)) {
             $nameLabel = array_shift($label);
+            // In some cases, label (coming from display_text) might be a
+            // double-level array. In this case, take the first item of the
+            // sub-array as label
+            if (is_array($nameLabel)) {
+                $nameLabel = $nameLabel[0];
+            }
         } else {
             $nameLabel = $label;
         }
@@ -297,6 +304,7 @@ class HTML_QuickForm_Renderer_Default extends HTML_QuickForm_Renderer
             $html = str_replace('{label}', $nameLabel, $this->_templates[$name]);
         } else {
             $customElementTemplate = $this->getCustomElementTemplate();
+
             if (empty($customElementTemplate)) {
                 if (method_exists($element, 'getTemplate')) {
                     $template = $element->getTemplate(
@@ -314,10 +322,7 @@ class HTML_QuickForm_Renderer_Default extends HTML_QuickForm_Renderer
             } else {
                 $template = $customElementTemplate;
             }
-            $html = $template;
-            if (is_string($nameLabel)) {
-                $html = str_replace('{label}', $nameLabel, $template);
-            }
+            $html = str_replace('{label}', $nameLabel, $template);
         }
         $html = str_replace('{label-for}', $labelFor, $html);
         $html = str_replace('{icon}', $icon, $html);

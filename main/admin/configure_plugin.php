@@ -15,7 +15,7 @@ api_protect_admin_script();
 
 $pluginName = $_GET['name'];
 $appPlugin = new AppPlugin();
-$installedPlugins = $appPlugin->get_installed_plugins();
+$installedPlugins = $appPlugin->getInstalledPlugins();
 $pluginInfo = $appPlugin->getPluginInfo($pluginName, true);
 
 if (!in_array($pluginName, $installedPlugins) || empty($pluginInfo)) {
@@ -40,7 +40,7 @@ if (isset($pluginInfo['settings_form'])) {
     }
 } else {
     Display::addFlash(
-        Display::return_message(get_lang('NoConfigurationSettingsForThisPlugin'), 'warning')
+        Display::return_message(get_lang('No configuration settings found for this plugin'), 'warning')
     );
 }
 
@@ -93,7 +93,7 @@ if (isset($form)) {
             $objPlugin->manageTab($values['show_main_menu_tab']);
         }
 
-        Display::addFlash(Display::return_message(get_lang('Updated'), 'success'));
+        Display::addFlash(Display::return_message(get_lang('Update successful'), 'success'));
         header("Location: $currentUrl");
         exit;
     } else {
@@ -105,7 +105,7 @@ if (isset($form)) {
 
 $interbreadcrumb[] = [
     'url' => api_get_path(WEB_CODE_PATH).'admin/index.php',
-    'name' => get_lang('PlatformAdmin'),
+    'name' => get_lang('Administration'),
 ];
 $interbreadcrumb[] = [
     'url' => api_get_path(WEB_CODE_PATH).'admin/settings.php?category=Plugins',

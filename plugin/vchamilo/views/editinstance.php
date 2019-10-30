@@ -53,7 +53,7 @@ if ($data = $form->get_data()) {
             unset($data->vid);
 
             Database::update('vchamilo', (array) $data, ['id = ?' => $id], false);
-            Display::addFlash(Display::return_message(get_lang('Updated')));
+            Display::addFlash(Display::return_message(get_lang('Update successful')));
             Virtual::redirect(api_get_path(WEB_PLUGIN_PATH).'vchamilo/views/manage.php');
             break;
     }

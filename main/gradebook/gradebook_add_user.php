@@ -66,16 +66,16 @@ if (isset($_POST['submit_button'])) {
     }
 }
 
-$interbreadcrumb[] = ['url' => Category::getUrl(), 'name' => get_lang('Gradebook')];
+$interbreadcrumb[] = ['url' => Category::getUrl(), 'name' => get_lang('Assessments')];
 $interbreadcrumb[] = [
     'url' => 'gradebook_view_result.php?selecteval='.Security::remove_XSS($_GET['selecteval']).'&'.api_get_cidreq(),
-    'name' => get_lang('ViewResult'),
+    'name' => get_lang('Assessment details'),
 ];
-Display :: display_header(get_lang('AddUserToEval'));
+Display :: display_header(get_lang('Add users to evaluation'));
 if (isset($_GET['erroroneuser'])) {
-    echo Display::return_message(get_lang('AtLeastOneUser'), 'warning', false);
+    echo Display::return_message(get_lang('You must select at least one user !'), 'warning', false);
 }
-DisplayGradebook :: display_header_result($evaluation[0], null, 0, 0);
+DisplayGradebook::display_header_result($evaluation[0], null, 0, 0);
 echo '<div class="main">';
 echo $add_user_form->toHtml();
 echo '</div>';

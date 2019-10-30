@@ -572,7 +572,7 @@ class CourseChatUtils
 
         if (isset($_GET['origin']) && $_GET['origin'] == 'whoisonline') {
             //the caller
-            $content[0] = get_lang('CallSent').'<br />'.$content[0];
+            $content[0] = get_lang('Chat call has been sent. Waiting for the approval of your partner.').'<br />'.$content[0];
         }
 
         $history = '<div id="content-chat">';
@@ -585,7 +585,7 @@ class CourseChatUtils
             $history .= '
                 <div id="clear-chat">
                     <button type="button" id="chat-reset" class="btn btn-danger btn-sm">
-                        '.get_lang('ClearList').'
+                        '.get_lang('Clear the chat').'
                     </button>
                 </div>
             ';

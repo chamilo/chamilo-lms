@@ -6,13 +6,13 @@
     <section class="section-slider pb-5 pt-5">
         <div class="container">
             {% if chamilo_settings_get('announcement.hide_global_announcements_when_not_connected') == 'false' %}
-                {{ render(controller('ChamiloCoreBundle:News:news')) }}
+                {{ render(controller('Chamilo\\CoreBundle\\Controller\\NewsController::newsAction')) }}
             {% endif %}
         </div>
     </section>
     <section class="section-welcome pb-5 pt-5">
         <div class="container">
-            {{ render(controller('ChamiloPageBundle:Page:renderPage', {'slug': 'welcome'} )) }}
+            {{ render(controller('Chamilo\\PageBundle\\Controller\\PageController::renderPageAction', {'slug': 'welcome'} )) }}
         </div>
     </section>
     <section class="section-content">

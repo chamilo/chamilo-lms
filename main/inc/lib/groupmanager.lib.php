@@ -8,8 +8,6 @@ use Chamilo\CourseBundle\Entity\CGroupRelUser;
  *
  * @author Bart Mollet
  *
- * @package chamilo.library
- *
  * @todo Add $course_code parameter to all functions. So this GroupManager can
  * be used outside a session.
  */
@@ -45,6 +43,7 @@ class GroupManager
     public const TOOL_NOT_AVAILABLE = 0;
     public const TOOL_PUBLIC = 1;
     public const TOOL_PRIVATE = 2;
+    public const TOOL_PRIVATE_BETWEEN_USERS = 3;
 
     /**
      * Constants for the available group tools.
@@ -293,7 +292,7 @@ class GroupManager
                 $forum_categories = get_forum_categories();
                 if (empty($forum_categories)) {
                     $categoryParam = [
-                        'forum_category_title' => get_lang('GroupForums'),
+                        'forum_category_title' => get_lang('Group forums'),
                     ];
                     store_forumcategory($categoryParam);
                     $forum_categories = get_forum_categories();
@@ -1819,13 +1818,13 @@ class GroupManager
         $course_id = empty($course_id) ? api_get_course_int_id() : (int) $course_id;
         $group_id = $groupInfo['id'];
 
-        $table = Database::get_course_table(TABLE_GROUP_USER);
         if (!empty($user_ids)) {
+            $table = Database::get_course_table(TABLE_GROUP_USER);
             foreach ($user_ids as $user_id) {
                 if (self::canUserSubscribe($user_id, $groupInfo)) {
-                    $user_id = intval($user_id);
-                    $sql = "INSERT INTO ".$table." (c_id, user_id, group_id)
-                            VALUES ('$course_id', '".$user_id."', '".$group_id."')";
+                    $user_id = (int) $user_id;
+                    $sql = "INSERT INTO $table (c_id, user_id, group_id, status, role)
+                            VALUES ('$course_id', '".$user_id."', '".$group_id."', 0, '')";
                     Database::query($sql);
                 }
             }
@@ -1971,8 +1970,8 @@ class GroupManager
             return false;
         }
 
-        $user_id = intval($user_id);
-        $group_id = intval($groupInfo['id']);
+        $user_id = (int) $user_id;
+        $group_id = (int) $groupInfo['id'];
 
         $table = Database::get_course_table(TABLE_GROUP_TUTOR);
 
@@ -1984,9 +1983,9 @@ class GroupManager
         $result = Database::query($sql);
         if (Database::num_rows($result) > 0) {
             return true;
-        } else {
-            return false;
         }
+
+        return false;
     }
 
     /**
@@ -2007,12 +2006,16 @@ class GroupManager
     public static function is_user_in_group($user_id, $groupInfo)
     {
         $member = self::is_subscribed($user_id, $groupInfo);
-        $tutor = self::is_tutor_of_group($user_id, $groupInfo);
-        if ($member || $tutor) {
+        if ($member) {
             return true;
-        } else {
-            return false;
         }
+
+        $tutor = self::is_tutor_of_group($user_id, $groupInfo);
+        if ($tutor) {
+            return true;
+        }
+
+        return false;
     }
 
     /**
@@ -2078,7 +2081,7 @@ class GroupManager
         }
 
         // Course admin also have access to everything
-        if (api_is_allowed_to_edit()) {
+        if (api_is_allowed_to_edit(false, true, true)) {
             return true;
         }
 
@@ -2123,10 +2126,6 @@ class GroupManager
             return false;
         }
 
-        if (api_is_allowed_to_edit(false, true)) {
-            return true;
-        }
-
         $status = $groupInfo[$key];
 
         switch ($status) {
@@ -2139,6 +2138,13 @@ class GroupManager
             case self::TOOL_PRIVATE:
                 $userIsInGroup = self::is_user_in_group($user_id, $groupInfo);
                 if ($userIsInGroup) {
+                    return true;
+                }
+                break;
+            case self::TOOL_PRIVATE_BETWEEN_USERS:
+                // Only works for announcements for now
+                $userIsInGroup = self::is_user_in_group($user_id, $groupInfo);
+                if ($userIsInGroup && $tool == self::GROUP_TOOL_ANNOUNCEMENT) {
                     return true;
                 }
                 break;
@@ -2164,14 +2170,24 @@ class GroupManager
             return true;
         }
 
-        if (api_is_allowed_to_edit(false, true)) {
+        if (api_is_allowed_to_edit(false, true, true)) {
             return true;
         }
 
-        $groupId = $groupInfo['iid'];
-        $tutors = self::get_subscribed_tutors($groupInfo, true);
+        if (!empty($sessionId)) {
+            if (api_is_coach($sessionId, api_get_course_int_id())) {
+                return true;
+            }
 
-        if (in_array($userId, $tutors)) {
+            if (api_is_drh()) {
+                if (SessionManager::isUserSubscribedAsHRM($sessionId, $userId)) {
+                    return true;
+                }
+            }
+        }
+
+        $groupId = $groupInfo['iid'];
+        if (self::is_tutor_of_group($userId, $groupInfo)) {
             return true;
         }
 
@@ -2231,16 +2247,18 @@ class GroupManager
      * Get all groups where a specific user is subscribed.
      *
      * @param int $user_id
+     * @param int $courseId
      *
      * @return array
      */
-    public static function getAllGroupPerUserSubscription($user_id)
+    public static function getAllGroupPerUserSubscription($user_id, $courseId = 0)
     {
         $table_group_user = Database::get_course_table(TABLE_GROUP_USER);
         $table_tutor_user = Database::get_course_table(TABLE_GROUP_TUTOR);
         $table_group = Database::get_course_table(TABLE_GROUP);
-        $user_id = intval($user_id);
-        $course_id = api_get_course_int_id();
+        $user_id = (int) $user_id;
+        $courseId = empty($courseId) ? api_get_course_int_id() : (int) $courseId;
+
         $sql = "SELECT DISTINCT g.*
                FROM $table_group g
                LEFT JOIN $table_group_user gu
@@ -2248,7 +2266,7 @@ class GroupManager
                LEFT JOIN $table_tutor_user tu
                ON (tu.group_id = g.iid AND g.c_id = tu.c_id)
                WHERE
-                  g.c_id = $course_id AND
+                  g.c_id = $courseId AND
                   (gu.user_id = $user_id OR tu.user_id = $user_id) ";
         $res = Database::query($sql);
         $groups = [];
@@ -2308,9 +2326,9 @@ class GroupManager
                 }
 
                 if (!empty($user_id) && !empty($this_group['id_tutor']) && $user_id == $this_group['id_tutor']) {
-                    $group_name .= Display::label(get_lang('OneMyGroups'), 'success');
+                    $group_name .= Display::label(get_lang('my supervision'), 'success');
                 } elseif ($isMember) {
-                    $group_name .= Display::label(get_lang('MyGroup'), 'success');
+                    $group_name .= Display::label(get_lang('my group'), 'success');
                 }
 
                 if (api_is_allowed_to_edit() && !empty($this_group['session_name'])) {
@@ -2331,7 +2349,7 @@ class GroupManager
                 foreach ($tutorsids_of_group as $tutor_id) {
                     $tutor = api_get_user_info($tutor_id);
                     $username = api_htmlentities(
-                        sprintf(get_lang('LoginX'), $tutor['username']),
+                        sprintf(get_lang('Login: %s'), $tutor['username']),
                         ENT_QUOTES
                     );
                     if (api_get_setting('show_email_addresses') === 'true') {
@@ -2380,9 +2398,9 @@ class GroupManager
             // Self-registration / unregistration
             if (!api_is_allowed_to_edit(false, true)) {
                 if (self::is_self_registration_allowed($user_id, $this_group)) {
-                    $row[] = '<a class = "btn btn-default" href="group.php?'.api_get_cidreq().'&category='.$category_id.'&action=self_reg&group_id='.$this_group['id'].'" onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES, $charset))."'".')) return false;">'.get_lang('GroupSelfRegInf').'</a>';
+                    $row[] = '<a class = "btn btn-default" href="group.php?'.api_get_cidreq().'&category='.$category_id.'&action=self_reg&group_id='.$this_group['id'].'" onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang('Please confirm your choice'), ENT_QUOTES, $charset))."'".')) return false;">'.get_lang('register').'</a>';
                 } elseif (self::is_self_unregistration_allowed($user_id, $this_group)) {
-                    $row[] = '<a class = "btn btn-default" href="group.php?'.api_get_cidreq().'&category='.$category_id.'&action=self_unreg&group_id='.$this_group['id'].'" onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES, $charset))."'".')) return false;">'.get_lang('GroupSelfUnRegInf').'</a>';
+                    $row[] = '<a class = "btn btn-default" href="group.php?'.api_get_cidreq().'&category='.$category_id.'&action=self_unreg&group_id='.$this_group['id'].'" onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang('Please confirm your choice'), ENT_QUOTES, $charset))."'".')) return false;">'.get_lang('unregister').'</a>';
                 } else {
                     $row[] = '-';
                 }
@@ -2394,7 +2412,7 @@ class GroupManager
                 !(api_is_session_general_coach() && intval($this_group['session_id']) != $session_id)
             ) {
                 $edit_actions = '<a href="'.$url.'settings.php?'.api_get_cidreq(true, false).'&gidReq='.$this_group['id'].'"  title="'.get_lang('Edit').'">'.
-                    Display::return_icon('edit.png', get_lang('EditGroup'), '', ICON_SIZE_SMALL).'</a>&nbsp;';
+                    Display::return_icon('edit.png', get_lang('Edit this group'), '', ICON_SIZE_SMALL).'</a>&nbsp;';
 
                 if ($this_group['status'] == 1) {
                     $edit_actions .= '<a href="'.api_get_self().'?'.api_get_cidreq(true, false).'&category='.$category_id.'&action=set_invisible&id='.$this_group['id'].'" title="'.get_lang('Hide').'">'.
@@ -2404,16 +2422,16 @@ class GroupManager
                         Display::return_icon('invisible.png', get_lang('Show'), '', ICON_SIZE_SMALL).'</a>&nbsp;';
                 }
 
-                $edit_actions .= '<a href="'.$url.'member_settings.php?'.api_get_cidreq(true, false).'&gidReq='.$this_group['id'].'"  title="'.get_lang('GroupMembers').'">'.
-                    Display::return_icon('user.png', get_lang('GroupMembers'), '', ICON_SIZE_SMALL).'</a>&nbsp;';
+                $edit_actions .= '<a href="'.$url.'member_settings.php?'.api_get_cidreq(true, false).'&gidReq='.$this_group['id'].'"  title="'.get_lang('Group members').'">'.
+                    Display::return_icon('user.png', get_lang('Group members'), '', ICON_SIZE_SMALL).'</a>&nbsp;';
 
-                $edit_actions .= '<a href="'.$url.'group_overview.php?action=export&type=xls&'.api_get_cidreq(true, false).'&id='.$this_group['id'].'"  title="'.get_lang('ExportUsers').'">'.
+                $edit_actions .= '<a href="'.$url.'group_overview.php?action=export&type=xls&'.api_get_cidreq(true, false).'&id='.$this_group['id'].'"  title="'.get_lang('Export users list').'">'.
                     Display::return_icon('export_excel.png', get_lang('Export'), '', ICON_SIZE_SMALL).'</a>&nbsp;';
 
-                $edit_actions .= '<a href="'.api_get_self().'?'.api_get_cidreq(true, false).'&category='.$category_id.'&action=fill_one&id='.$this_group['id'].'" onclick="javascript: if(!confirm('."'".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES))."'".')) return false;" title="'.get_lang('FillGroup').'">'.
-                    Display::return_icon('fill.png', get_lang('FillGroup'), '', ICON_SIZE_SMALL).'</a>&nbsp;';
+                $edit_actions .= '<a href="'.api_get_self().'?'.api_get_cidreq(true, false).'&category='.$category_id.'&action=fill_one&id='.$this_group['id'].'" onclick="javascript: if(!confirm('."'".addslashes(api_htmlentities(get_lang('Please confirm your choice'), ENT_QUOTES))."'".')) return false;" title="'.get_lang('Fill the group randomly with course students').'">'.
+                    Display::return_icon('fill.png', get_lang('Fill the group randomly with course students'), '', ICON_SIZE_SMALL).'</a>&nbsp;';
 
-                $edit_actions .= '<a href="'.api_get_self().'?'.api_get_cidreq(true, false).'&category='.$category_id.'&action=delete_one&id='.$this_group['id'].'" onclick="javascript: if(!confirm('."'".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES))."'".')) return false;" title="'.get_lang('Delete').'">'.
+                $edit_actions .= '<a href="'.api_get_self().'?'.api_get_cidreq(true, false).'&category='.$category_id.'&action=delete_one&id='.$this_group['id'].'" onclick="javascript: if(!confirm('."'".addslashes(api_htmlentities(get_lang('Please confirm your choice'), ENT_QUOTES))."'".')) return false;" title="'.get_lang('Delete').'">'.
                     Display::return_icon('delete.png', get_lang('Delete'), '', ICON_SIZE_SMALL).'</a>&nbsp;';
 
                 $row[] = $edit_actions;
@@ -2443,20 +2461,20 @@ class GroupManager
             $table->set_header($column++, '', false);
         }
         $table->set_header($column++, get_lang('Groups'));
-        $table->set_header($column++, get_lang('GroupTutor'));
+        $table->set_header($column++, get_lang('Group tutor'));
         $table->set_header($column++, get_lang('Registered'), false);
 
         if (!api_is_allowed_to_edit(false, true)) {
             // If self-registration allowed
-            $table->set_header($column++, get_lang('GroupSelfRegistration'), false);
+            $table->set_header($column++, get_lang('Registration'), false);
         }
 
         if (api_is_allowed_to_edit(false, true)) {
             // Only for course administrator
-            $table->set_header($column++, get_lang('Modify'), false);
+            $table->set_header($column++, get_lang('Edit'), false);
             $form_actions = [];
-            $form_actions['fill_selected'] = get_lang('FillGroup');
-            $form_actions['empty_selected'] = get_lang('EmptyGroup');
+            $form_actions['fill_selected'] = get_lang('Fill the group randomly with course students');
+            $form_actions['empty_selected'] = get_lang('unsubscribe all users');
             $form_actions['delete_selected'] = get_lang('Delete');
             if (count($group_list) > 1) {
                 $table->set_form_actions($form_actions, 'group');
@@ -2487,7 +2505,7 @@ class GroupManager
         $groupCategories = self::get_categories();
 
         if (empty($groupCategories)) {
-            $result['error'][] = get_lang('CreateACategory');
+            $result['error'][] = get_lang('Create a category');
 
             return $result;
         }
@@ -2633,7 +2651,7 @@ class GroupManager
                             Display::addFlash(
                                 Display::return_message(
                                     sprintf(
-                                        get_lang('StudentXIsNotSubscribedToCourse'),
+                                        get_lang('Student %s is no subscribed to this course'),
                                         $userInfo['complete_name']
                                     ),
                                     'warning'
@@ -2666,7 +2684,7 @@ class GroupManager
                         ) {
                             Display::addFlash(
                                 Display::return_message(
-                                    sprintf(get_lang('TutorXIsNotSubscribedToCourse'), $userInfo['complete_name']),
+                                    sprintf(get_lang('Tutor %s is no subscribed to this course'), $userInfo['complete_name']),
                                     'warning'
                                 )
                             );
@@ -2860,18 +2878,17 @@ class GroupManager
         echo '
             <ul class="toolbar-groups nav nav-tabs">
                 <li class="'.$activeSettings.'">
-                    <a href="'.sprintf($url, 'settings.php').'">
+                    <a id="group_settings_tab" href="'.sprintf($url, 'settings.php').'">
                     '.Display::return_icon('settings.png').' '.get_lang('Settings').'
                     </a>
                 </li>
                 <li class="'.$activeMember.'">
-                    <a href="'.sprintf($url, 'member_settings.php').'">
-                    '.Display::return_icon('user.png').' '.get_lang('GroupMembers').'
-                    </a>
+                    <a id="group_members_tab" href="'.sprintf($url, 'member_settings.php').'">
+                    '.Display::return_icon('user.png').' '.get_lang('Group members').'</a>
                 </li>
                 <li class="'.$activeTutor.'">
-                    <a href="'.sprintf($url, 'tutor_settings.php').'">
-                    '.Display::return_icon('teacher.png').' '.get_lang('GroupTutors').'
+                    <a id="group_tutors_tab" href="'.sprintf($url, 'tutor_settings.php').'">
+                    '.Display::return_icon('teacher.png').' '.get_lang('Group tutors').'
                     </a>
                 </li>
             </ul>';
@@ -2917,7 +2934,7 @@ class GroupManager
                         $users = self::getTutors($group);
                         if (!empty($users)) {
                             $content .= '<ul>';
-                            $content .= "<li>".Display::tag('h4', get_lang('Tutors'))."</li><ul>";
+                            $content .= "<li>".Display::tag('h4', get_lang('Coaches'))."</li><ul>";
                             foreach ($users as $user) {
                                 $user_info = api_get_user_info($user['user_id']);
                                 $content .= '<li title="'.$user_info['username'].'">'.
@@ -2931,7 +2948,7 @@ class GroupManager
                         $users = self::getStudents($group['id']);
                         if (!empty($users)) {
                             $content .= '<ul>';
-                            $content .= "<li>".Display::tag('h4', get_lang('Students'))."</li><ul>";
+                            $content .= "<li>".Display::tag('h4', get_lang('Learners'))."</li><ul>";
                             foreach ($users as $user) {
                                 $user_info = api_get_user_info($user['user_id']);
                                 $content .= '<li title="'.$user_info['username'].'">'.

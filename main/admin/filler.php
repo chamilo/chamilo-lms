@@ -19,13 +19,13 @@ $this_section = SECTION_PLATFORM_ADMIN;
 // Access restrictions
 api_protect_admin_script(true);
 
-$nameTools = get_lang('PlatformAdmin');
+$nameTools = get_lang('Administration');
 
 // setting breadcrumbs
 $interbreadcrumb[] = ['url' => 'index.php', 'name' => $nameTools];
 
 // setting the name of the tool
-$nameTools = get_lang('DataFiller');
+$nameTools = get_lang('Data filler');
 
 $output = [];
 if (!empty($_GET['fill'])) {
@@ -65,23 +65,23 @@ if (count($output) > 0) {
 <div id="datafiller" class="card">
     <div class="card-body">
     <h4><?php
-        echo Display::return_icon('bug.png', get_lang('DataFiller'), null, ICON_SIZE_MEDIUM).' '.get_lang('DataFiller');
+        echo Display::return_icon('bug.png', get_lang('Data filler'), null, ICON_SIZE_MEDIUM).' '.get_lang('Data filler');
         ?>
     </h4>
-    <div class="description"><?php echo get_lang('ThisSectionIsOnlyVisibleOnSourceInstalls'); ?></div>
+    <div class="description"><?php echo get_lang('This section is only visible on installations from source code, not in packaged versions of the platform. It will allow you to quickly populate your platform with test data. Use with care (data is really inserted) and only on development or testing installations.'); ?></div>
     <ul class="fillers">
       <li>
           <a href="filler.php?fill=users">
             <?php
-            echo Display::return_icon('user.png', get_lang('FillUsers'), null, ICON_SIZE_SMALL).
-                ' '.get_lang('FillUsers');
+            echo Display::return_icon('user.png', get_lang('Fill users'), null, ICON_SIZE_SMALL).
+                ' '.get_lang('Fill users');
             ?>
           </a></li>
       <li>
           <a href="filler.php?fill=courses">
           <?php
-          echo Display::return_icon('new-course.png', get_lang('FillCourses'), null, ICON_SIZE_SMALL).
-              ' '.get_lang('FillCourses');
+          echo Display::return_icon('new-course.png', get_lang('Fill courses'), null, ICON_SIZE_SMALL).
+              ' '.get_lang('Fill courses');
             ?>
         </a>
       </li>

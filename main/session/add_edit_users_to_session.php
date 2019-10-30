@@ -15,16 +15,19 @@ $xajax->registerFunction('search_users');
 // setting the section (for the tabs)
 $this_section = SECTION_PLATFORM_ADMIN;
 
-$id_session = intval($_GET['id_session']);
+$id_session = isset($_GET['id_session']) ? (int) $_GET['id_session'] : 0;
+if (empty($id_session)) {
+    api_not_allowed(true);
+}
 $addProcess = isset($_GET['add']) ? Security::remove_XSS($_GET['add']) : null;
 
 SessionManager::protectSession($id_session);
 
 // setting breadcrumbs
-$interbreadcrumb[] = ['url' => 'session_list.php', 'name' => get_lang('SessionList')];
+$interbreadcrumb[] = ['url' => 'session_list.php', 'name' => get_lang('Session list')];
 $interbreadcrumb[] = [
     'url' => "resume_session.php?id_session=".$id_session,
-    "name" => get_lang('SessionOverview'),
+    "name" => get_lang('Session overview'),
 ];
 
 // Database Table Definitions
@@ -34,7 +37,7 @@ $tbl_user = Database::get_main_table(TABLE_MAIN_USER);
 $tbl_session_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_USER);
 
 // setting the name of the tool
-$tool_name = get_lang('SubscribeUsersToSession');
+$tool_name = get_lang('Subscribe users to this session');
 $add_type = 'unique';
 if (isset($_REQUEST['add_type']) && $_REQUEST['add_type'] != '') {
     $add_type = Security::remove_XSS($_REQUEST['add_type']);
@@ -336,7 +339,7 @@ if (isset($_POST['form_sent']) && $_POST['form_sent']) {
             null,
             !$notEmptyList
         );
-        Display::addFlash(Display::return_message(get_lang('Updated')));
+        Display::addFlash(Display::return_message(get_lang('Update successful')));
         header('Location: resume_session.php?id_session='.$id_session);
         exit;
     }
@@ -589,27 +592,27 @@ if ($ajax_search) {
 if ($add_type == 'multiple') {
     $link_add_type_unique =
         '<a href="'.api_get_self().'?id_session='.$id_session.'&add='.$addProcess.'&add_type=unique">'.
-        Display::return_icon('single.gif').get_lang('SessionAddTypeUnique').'</a>';
-    $link_add_type_multiple = Display::url(Display::return_icon('multiple.gif').get_lang('SessionAddTypeMultiple'), '');
+        Display::return_icon('single.gif').get_lang('Single registration').'</a>';
+    $link_add_type_multiple = Display::url(Display::return_icon('multiple.gif').get_lang('Multiple registration'), '');
 } else {
-    $link_add_type_unique = Display::url(Display::return_icon('single.gif').get_lang('SessionAddTypeUnique'), '');
+    $link_add_type_unique = Display::url(Display::return_icon('single.gif').get_lang('Single registration'), '');
     $link_add_type_multiple =
         '<a href="'.api_get_self().'?id_session='.$id_session.'&amp;add='.$addProcess.'&amp;add_type=multiple">'
-        .Display::return_icon('multiple.gif').get_lang('SessionAddTypeMultiple').'</a>';
+        .Display::return_icon('multiple.gif').get_lang('Multiple registration').'</a>';
 }
 $link_add_group = Display::url(
-    Display::return_icon('multiple.gif', get_lang('RegistrationByUsersGroups')).get_lang('RegistrationByUsersGroups'),
+    Display::return_icon('multiple.gif', get_lang('Enrolment by classes')).get_lang('Enrolment by classes'),
     api_get_path(WEB_CODE_PATH).'admin/usergroups.php'
 );
 
 $newLinks = Display::url(
-    Display::return_icon('teacher.png', get_lang('EnrollTrainersFromExistingSessions'), null, ICON_SIZE_TINY).
-        get_lang('EnrollTrainersFromExistingSessions'),
+    Display::return_icon('teacher.png', get_lang('Enroll trainers from existing sessions'), null, ICON_SIZE_TINY).
+        get_lang('Enroll trainers from existing sessions'),
     api_get_path(WEB_CODE_PATH).'session/add_teachers_to_session.php?id='.$id_session
 );
 $newLinks .= Display::url(
-    Display::return_icon('user.png', get_lang('EnrollTrainersFromExistingSessions'), null, ICON_SIZE_TINY).
-        get_lang('EnrollStudentsFromExistingSessions'),
+    Display::return_icon('user.png', get_lang('Enroll trainers from existing sessions'), null, ICON_SIZE_TINY).
+        get_lang('Enroll students from existing sessions'),
     api_get_path(WEB_CODE_PATH).'session/add_students_to_session.php?id='.$id_session
 );
 ?>
@@ -632,7 +635,7 @@ $newLinks .= Display::url(
         if ($add_type == 'multiple') {
             if (is_array($extra_field_list)) {
                 if (is_array($new_field_list) && count($new_field_list) > 0) {
-                    echo '<h3>'.get_lang('FilterUsers').'</h3>';
+                    echo '<h3>'.get_lang('Filter users').'</h3>';
                     foreach ($new_field_list as $new_field) {
                         echo $new_field['name'];
                         $varname = 'field_'.$new_field['variable'];
@@ -681,7 +684,7 @@ $newLinks .= Display::url(
         <div id="multiple-add-session" class="row">
             <div class="col-md-4">
                 <div class="form-group">
-                    <label><?php echo get_lang('UserListInPlatform'); ?> </label>
+                    <label><?php echo get_lang('Portal users list'); ?> </label>
                     <?php
                     if (!($add_type == 'multiple')) {
                         ?>
@@ -719,7 +722,7 @@ $newLinks .= Display::url(
                         <input type="checkbox" onchange="checked_in_no_session(this.checked);"
                                name="user_with_any_session" id="user_with_any_session_id">
                         <label
-                            for="user_with_any_session_id"><?php echo get_lang('UsersRegisteredInNoSession'); ?></label>
+                            for="user_with_any_session_id"><?php echo get_lang('Users not registered in any session'); ?></label>
                         <?php
                     }
                     unset($nosessionUsersList);
@@ -730,7 +733,7 @@ $newLinks .= Display::url(
             <div class="col-md-4">
                 <?php if ($add_type == 'multiple') {
                         ?>
-                    <?php echo get_lang('FirstLetterUser'); ?> :
+                    <?php echo get_lang('First letter (last name)'); ?> :
                     <select id="first_letter_user" name="firstLetterUser" onchange="change_select(this.value);">
                         <option value="%">--</option>
                         <?php
@@ -772,17 +775,17 @@ $newLinks .= Display::url(
                     }
                     if (!empty($addProcess)) {
                         echo '<button name="next" class="btn btn-success" type="button" value="" onclick="valide()" >'
-                            .get_lang('FinishSessionCreation').'</button>';
+                            .get_lang('Finish session creation').'</button>';
                     } else {
                         echo '<button name="next" class="btn btn-success" type="button" value="" onclick="valide()" >'
-                            .get_lang('SubscribeUsersToSession').'</button>';
+                            .get_lang('Subscribe users to this session').'</button>';
                     }
                     ?>
                 </div>
             </div>
 
             <div class="col-md-4">
-                <label><?php echo get_lang('UserListInSession'); ?> :</label>
+                <label><?php echo get_lang('List of users registered in this session'); ?> :</label>
                 <select id="destination_users" name="sessionUsersList[]" multiple="multiple" size="15"
                         class="form-control">
                     <?php

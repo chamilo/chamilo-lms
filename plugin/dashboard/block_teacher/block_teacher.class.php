@@ -67,7 +67,7 @@ class BlockTeacher extends Block
         $column = 1;
         $data = [];
         $html = $this->getBlockCard(
-            get_lang('TeachersInformationsList'),
+            get_lang('Teachers report'),
             $this->getContent()
         );
         $data['column'] = $column;
@@ -91,8 +91,8 @@ class BlockTeacher extends Block
             $teachers_table .= '
                                 <tr>
                                     <th>'.get_lang('User').'</th>
-                                    <th>'.get_lang('TimeSpentOnThePlatform').'</th>
-                                    <th>'.get_lang('LastConnexion').'</th>
+                                    <th>'.get_lang('Time spent in portal').'</th>
+                                    <th>'.get_lang('Latest login').'</th>
                                 </tr>
                             ';
             $i = 1;
@@ -121,14 +121,14 @@ class BlockTeacher extends Block
             }
             $teachers_table .= '</table>';
         } else {
-            $teachers_table .= get_lang('ThereIsNoInformationAboutYourTeachers');
+            $teachers_table .= get_lang('There is no available information about your teachers');
         }
 
         $content = $teachers_table;
 
         if (count($teachers) > 0) {
             $content .= '<div style="text-align:right;margin-top:10px;">
-            <a href="'.api_get_path(WEB_CODE_PATH).'mySpace/index.php?view=admin">'.get_lang('SeeMore').'</a></div>';
+            <a href="'.api_get_path(WEB_CODE_PATH).'mySpace/index.php?view=admin">'.get_lang('See more').'</a></div>';
         }
 
         return $content;
@@ -140,7 +140,7 @@ class BlockTeacher extends Block
     public function get_teachers_content_html_for_drh()
     {
         $teachers = $this->teachers;
-        $content = '<h4>'.get_lang('YourTeachers').'</h4>';
+        $content = '<h4>'.get_lang('Your teachers').'</h4>';
         $teachers_table = null;
         if (count($teachers) > 0) {
             $a_last_week = get_last_week();
@@ -150,7 +150,7 @@ class BlockTeacher extends Block
             $teachers_table .= '
                                 <tr>
                                     <th>'.get_lang('User').'</th>
-                                    <th>'.get_lang('TimeSpentLastWeek').'<br />'.$last_week.'</th>
+                                    <th>'.get_lang('Time spent last week').'<br />'.$last_week.'</th>
                                 </tr>
                             ';
 
@@ -178,11 +178,11 @@ class BlockTeacher extends Block
             }
             $teachers_table .= '</table>';
         } else {
-            $teachers_table .= get_lang('ThereIsNoInformationAboutYourTeachers');
+            $teachers_table .= get_lang('There is no available information about your teachers');
         }
         $content .= $teachers_table;
         if (count($teachers) > 0) {
-            $content .= '<div style="text-align:right;margin-top:10px;"><a href="'.api_get_path(WEB_CODE_PATH).'mySpace/teachers.php">'.get_lang('SeeMore').'</a></div>';
+            $content .= '<div style="text-align:right;margin-top:10px;"><a href="'.api_get_path(WEB_CODE_PATH).'mySpace/teachers.php">'.get_lang('See more').'</a></div>';
         }
 
         return $content;

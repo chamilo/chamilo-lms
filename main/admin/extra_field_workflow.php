@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\ExtraFieldOptionRelFieldOption;
+
 /**
  *  @package chamilo.admin
  */
@@ -13,7 +15,7 @@ $type = isset($_REQUEST['type']) ? $_REQUEST['type'] : null;
 api_protect_admin_script();
 
 // setting breadcrumbs
-$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('PlatformAdmin')];
+$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('Administration')];
 
 $tool_name = null;
 
@@ -41,7 +43,7 @@ if ($action == 'add') {
     ];
     $interbreadcrumb[] = [
         'url' => 'extra_field_options.php?type='.$extraField->type.'&field_id='.$extraFieldInfo['id'],
-        'name' => get_lang('EditExtraFieldOptions'),
+        'name' => get_lang('Edit extra field options'),
     ];
     $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Add')];
 } elseif ($action == 'edit') {
@@ -55,7 +57,7 @@ if ($action == 'add') {
     ];
     $interbreadcrumb[] = [
         'url' => 'extra_field_options.php?type='.$extraField->type.'&field_id='.$extraFieldInfo['id'],
-        'name' => get_lang('EditExtraFieldOptions'),
+        'name' => get_lang('Edit extra field options'),
     ];
 
     $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Edit')];
@@ -70,7 +72,7 @@ if ($action == 'add') {
     ];
     $interbreadcrumb[] = [
         'url' => '#',
-        'name' => get_lang('EditExtraFieldOptions'),
+        'name' => get_lang('Edit extra field options'),
     ];
 }
 
@@ -80,8 +82,8 @@ $roleId = isset($_REQUEST['roleId']) ? $_REQUEST['roleId'] : null;
 $params = 'field_id='.$field_id.'&type='.$extraField->type.'&roleId='.$roleId;
 $paramsNoRole = 'field_id='.$field_id.'&type='.$extraField->type;
 
-//The order is important you need to check the the $column variable in the model.ajax.php file
-$columns = [get_lang('Name'), get_lang('Value'), get_lang('Order'), get_lang('Actions')];
+// The order is important you need to check the the $column variable in the model.ajax.php file
+$columns = [get_lang('Name'), get_lang('Value'), get_lang('Order'), get_lang('Detail')];
 
 $htmlHeadXtra[] = '<script>
     function setHidden(obj) {
@@ -94,19 +96,21 @@ $htmlHeadXtra[] = '<script>
         }
     }
 
-    function changeStatus(obj) {
-        var roleId = $(obj).find(":selected").val();
-        if (roleId != 0) {
-            window.location.replace("'.api_get_self().'?'.$paramsNoRole.'&roleId="+roleId);
-        }
-    }
-    $().ready( function() {
-        $(".select_all").on("click", function() {
+    $(function() {        
+        $("#workflow_status").on("change", function() {
+            var roleId = $(this).find(":selected").val();            
+            if (roleId != 0) {
+                window.location.replace("'.api_get_self().'?'.$paramsNoRole.'&roleId="+roleId);
+            }
+        });
+        
+        $("[name=select_all]").on("click", function() {
             $("#workflow :checkbox").prop("checked", 1);
             $("#workflow :hidden").prop("value", 1);
             return false;
         });
-        $(".unselect_all").on("click", function() {
+        
+        $("[name=unselect_all]").on("click", function() {
             $("#workflow :checkbox").prop("checked", 0);
             $("#workflow :hidden").prop("value", 0);
             return false;
@@ -114,38 +118,41 @@ $htmlHeadXtra[] = '<script>
     });
 </script>';
 
-Display::display_header($tool_name);
-echo Display::page_header($extraFieldInfo['display_text']);
-
 $obj = new ExtraFieldOption($type);
 $columns = ['display_text', 'option_value', 'option_order'];
 $result = Database::select(
     '*',
     $obj->table,
     [
-        'where' => ["field_id = ? " => $field_id],
-        'order' => "option_order ASC",
+        'where' => ['field_id = ? ' => $field_id],
+        'order' => 'option_order ASC',
     ]
 );
 
 $table = new HTML_Table(['class' => 'data_table']);
 $column = 0;
 $row = 0;
-$table->setHeaderContents($row, $column, get_lang('CurrentStatus'));
+$table->setHeaderContents($row, $column, get_lang('Current status'));
 $column++;
 foreach ($result as $item) {
-    $table->setHeaderContents($row, $column, $item['option_display_text']);
+    $table->setHeaderContents($row, $column, $item['display_text']);
     $column++;
 }
 $row++;
 
 $form = new FormValidator('workflow', 'post', api_get_self().'?'.$params);
-$options = api_get_user_roles();
-$options[0] = get_lang('SelectAnOption');
-ksort($options);
-$form->addElement('select', 'status', get_lang('SelectRole'), $options, ['onclick' => 'changeStatus(this)']);
+//$options = api_get_user_roles();
+$options[0] = get_lang('Please select an option');
+$options[STUDENT] = get_lang('Learner');
+$options[COURSEMANAGER] = get_lang('Trainer');
 
-$checks = $app['orm.em']->getRepository('ChamiloLMS\Entity\ExtraFieldOptionRelFieldOption')->findBy(
+ksort($options);
+$form->addElement('select', 'status', get_lang('Select role'), $options);
+
+$em = Database::getManager();
+$repo = $em->getRepository('ChamiloCoreBundle:ExtraFieldOptionRelFieldOption');
+
+$checks = $repo->findBy(
     ['fieldId' => $field_id, 'roleId' => $roleId]
 );
 $includedFields = [];
@@ -157,7 +164,7 @@ if (!empty($checks)) {
 
 foreach ($result as $item) {
     $column = 0;
-    $table->setCellContents($row, $column, $item['option_display_text']);
+    $table->setCellContents($row, $column, $item['display_text']);
     $column++;
     $value = null;
 
@@ -183,53 +190,79 @@ foreach ($result as $item) {
 if (!empty($roleId)) {
     $form->addElement('html', $table->toHtml());
     $group = [];
-    $group[] = $form->createElement('button', 'submit', get_lang('Save'));
-    $group[] = $form->createElement('button', 'select_all', get_lang('SelectAll'), ['class' => 'btn select_all']);
-    $group[] = $form->createElement('button', 'unselect_all', get_lang('UnSelectAll'), ['class' => 'btn unselect_all']);
-    $form->addGroup($group, '', null, ' ');
+    $group[] = $form->addButtonSave(get_lang('Save'), 'submit', true);
+    $group[] = $form->addButton(
+        'select_all',
+        get_lang('Select all'),
+        'check',
+        'default',
+        'default',
+        null,
+        [],
+        true
+    );
+    $group[] = $form->addButton(
+        'unselect_all',
+        get_lang('UnSelect all'),
+        'check',
+        'default',
+        'default',
+        null,
+        [],
+        true
+    );
 
+    $form->addGroup($group, '', null, ' ');
     $form->setDefaults(['status' => $roleId]);
 } else {
     $form->addButtonUpdate(get_lang('Edit'));
 }
 
-$form->display();
-
 if ($form->validate()) {
     $values = $form->getSubmitValues();
     $result = $values['hidden_extra_field_status'];
+
     if (!empty($result)) {
         foreach ($result as $id => $items) {
             foreach ($items as $subItemId => $value) {
-                $extraFieldOptionRelFieldOption = $app['orm.em']->getRepository('ChamiloLMS\Entity\ExtraFieldOptionRelFieldOption')->findOneBy(
+                $extraFieldOptionRelFieldOption = $repo->findOneBy(
                     [
-                    'fieldId' => $field_id,
-                    'fieldOptionId' => $subItemId,
-                    'roleId' => $roleId,
-                    'relatedFieldOptionId' => $id,
+                        'fieldId' => $field_id,
+                        'fieldOptionId' => $subItemId,
+                        'roleId' => $roleId,
+                        'relatedFieldOptionId' => $id,
                     ]
                 );
 
                 if ($value == 1) {
                     if (empty($extraFieldOptionRelFieldOption)) {
-                        $extraFieldOptionRelFieldOption = new \Chamilo\CoreBundle\Entity\ExtraFieldOptionRelFieldOption();
-                        $extraFieldOptionRelFieldOption->setFieldId($field_id);
-                        $extraFieldOptionRelFieldOption->setFieldOptionId($subItemId);
-                        $extraFieldOptionRelFieldOption->setRelatedFieldOptionId($id);
-                        $extraFieldOptionRelFieldOption->setRoleId($roleId);
-                        $app['orm.ems']['db_write']->persist($extraFieldOptionRelFieldOption);
+                        $extraFieldOptionRelFieldOption = new ExtraFieldOptionRelFieldOption();
+                        $extraFieldOptionRelFieldOption
+                            ->setFieldId($field_id)
+                            ->setFieldOptionId($subItemId)
+                            ->setRelatedFieldOptionId($id)
+                            ->setRoleId($roleId)
+                        ;
+
+                        $em->persist($extraFieldOptionRelFieldOption);
                     }
                 } else {
                     if ($extraFieldOptionRelFieldOption) {
-                        $app['orm.ems']['db_write']->remove($extraFieldOptionRelFieldOption);
+                        $em->remove($extraFieldOptionRelFieldOption);
                     }
                 }
             }
         }
-        $app['orm.ems']['db_write']->flush();
+        $em->flush();
+
+        Display::addFlash(Display::return_message(get_lang('Update successful')));
         header('Location:'.api_get_self().'?'.$params);
         exit;
     }
 }
 
-Display :: display_footer();
+Display::display_header($tool_name);
+echo Display::page_header($extraFieldInfo['display_text']);
+$form->display();
+
+Display::display_footer();

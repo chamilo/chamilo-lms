@@ -16,6 +16,8 @@ session_cache_limiter('none');
 
 require_once __DIR__.'/../inc/global.inc.php';
 
+api_protect_course_script(true);
+
 $_course = api_get_course_info();
 require api_get_path(LIBRARY_PATH).'geometry.lib.php';
 
@@ -27,8 +29,8 @@ $answer_type = $objQuestion->selectType(); //very important
 $TBL_ANSWERS = Database::get_course_table(TABLE_QUIZ_ANSWER);
 $picture = $objQuestion->getPicture();
 $pictureName = $objQuestion->getPictureFilename();
-$pictureWidth = $picture->getResourceNode()->getResourceFile()->getMedia()->getWidth();
-$pictureHeight = $picture->getResourceNode()->getResourceFile()->getMedia()->getHeight();
+$pictureWidth = $picture->getResourceNode()->getResourceFile()->getWidth();
+$pictureHeight = $picture->getResourceNode()->getResourceFile()->getHeight();
 
 $course_id = api_get_course_int_id();
 

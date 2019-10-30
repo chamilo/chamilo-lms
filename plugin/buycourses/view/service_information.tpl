@@ -56,26 +56,26 @@
                         </div>
                         {% endif %}
                         <div class="service-details">
-                            <p><em class="fa fa-flag-o"></em> <b>{{ 'AppliesTo'|get_plugin_lang('BuyCoursesPlugin') }}</b> :
-                                {% if service.applies_to == 1 %}
-                                {{ 'User'|get_lang }}
-                                {% elseif service.applies_to == 2 %}
-                                {{ 'Course'|get_lang }}
-                                {% elseif service.applies_to == 3 %}
-                                {{ 'Session'|get_lang }}
-                                {% elseif service.applies_to == 4 %}
-                                {{ 'TemplateTitleCertificate'|get_lang }}
-                                {% endif %}
-                            </p>
-                            <p><em class="fa fa-money"></em> <b>{{ 'Price'|get_plugin_lang('BuyCoursesPlugin') }}</b>
-                                : {{ service.currency == 'BRL' ? 'R$' : service.currency }} {{ service.price }}</p>
+                            {% if service.applies_to != 0 %}
+                                <p><em class="fa fa-flag-o"></em> <b>{{ 'AppliesTo'|get_plugin_lang('BuyCoursesPlugin') }}</b> :
+                                    {% if service.applies_to == 1 %}
+                                        {{ 'User'|get_lang }}
+                                    {% elseif service.applies_to == 2 %}
+                                        {{ 'Course'|get_lang }}
+                                    {% elseif service.applies_to == 3 %}
+                                        {{ 'Session'|get_lang }}
+                                    {% elseif service.applies_to == 4 %}
+                                        {{ 'TemplateTitleCertificate'|get_lang }}
+                                    {% endif %}
+                                </p>
+                            {% endif %}
                         </div>
                         <div class="service-buy">
                             <div class="row">
                                 <div class="col-sm-6">
                                     <div class="price">
                                         {{ 'Total'|get_lang }}
-                                        : {{ service.currency == 'BRL' ? 'R$' : service.currency }} {{ service.price }}
+                                        {{ service.total_price_formatted }}
                                     </div>
                                 </div>
                                 <div class="col-sm-6">

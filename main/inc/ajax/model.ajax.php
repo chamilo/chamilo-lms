@@ -64,6 +64,7 @@ if (!in_array(
         'get_learning_path_calendars',
         'get_usergroups_users',
         'get_calendar_users',
+        'get_exercise_categories',
     ]
 ) && !isset($_REQUEST['from_course_session'])) {
     api_protect_admin_script(true);
@@ -136,7 +137,7 @@ $accessStartDate = '';
 $accessEndDate = '';
 $overwriteColumnHeaderExport = [];
 
-if (!empty($searchString)) {
+if (!empty($search)) {
     $search = 'true';
 }
 
@@ -153,18 +154,18 @@ if (($search || $forceSearch) && ($search !== 'false')) {
         $whereCondition .= '  ('.$whereConditionInForm.') ';
     }
     $filters = isset($_REQUEST['filters']) && !is_array($_REQUEST['filters']) ? json_decode($_REQUEST['filters']) : false;
-
     if (isset($_REQUEST['filters2'])) {
         $filters = json_decode($_REQUEST['filters2']);
     }
 
     if (!empty($filters)) {
-        if (in_array($action, ['get_questions', 'get_sessions'])) {
+        if (in_array($action, ['get_questions', 'get_sessions', 'get_sessions_tracking'])) {
             switch ($action) {
                 case 'get_questions':
                     $type = 'question';
                     break;
                 case 'get_sessions':
+                case 'get_sessions_tracking':
                     $type = 'session';
                     break;
             }
@@ -177,11 +178,11 @@ if (($search || $forceSearch) && ($search !== 'false')) {
                     if (empty($data)) {
                         continue;
                     }
-                    if ($data->field == 'extra_access_start_date') {
+                    if ($data->field === 'extra_access_start_date') {
                         $accessStartDate = $data->data;
                     }
 
-                    if ($data->field == 'extra_access_end_date') {
+                    if ($data->field === 'extra_access_end_date') {
                         $accessEndDate = $data->data;
                     }
 
@@ -193,7 +194,6 @@ if (($search || $forceSearch) && ($search !== 'false')) {
 
                 $extra_fields = $result['extra_fields'];
                 $condition_array = $result['condition_array'];
-
                 $extraCondition = '';
                 if (!empty($condition_array)) {
                     $extraCondition = $filters->groupOp.' ( ';
@@ -263,6 +263,11 @@ if (!$sidx) {
 //@todo rework this
 
 switch ($action) {
+    case 'get_exercise_categories':
+        $manager = new ExerciseCategoryManager();
+        $courseId = isset($_REQUEST['c_id']) ? $_REQUEST['c_id'] : 0;
+        $count = $manager->getCourseCount($courseId);
+        break;
     case 'get_calendar_users':
         $calendarPlugin = LearningCalendarPlugin::create();
         $id = isset($_REQUEST['id']) ? $_REQUEST['id'] : 0;
@@ -270,7 +275,7 @@ switch ($action) {
         break;
     case 'get_usergroups_users':
         $usergroup = new UserGroup();
-        $usergroup->protectScript();
+        $usergroup->protectScript(null, true, true);
         $id = isset($_REQUEST['id']) ? $_REQUEST['id'] : 0;
         $count = $usergroup->getUserGroupUsers($id, true);
         break;
@@ -538,6 +543,10 @@ switch ($action) {
         $courseInfo = api_get_course_info();
         $documents = getAllDocumentToWork($work_id, api_get_course_int_id());
 
+        if (trim($whereCondition) === '1 = 1') {
+            $whereCondition = '';
+        }
+
         if (empty($documents)) {
             $whereCondition .= " AND u.user_id = ".api_get_user_id();
             $count = get_work_user_list(
@@ -590,6 +599,17 @@ switch ($action) {
                 $whereCondition .= " te.exe_user_id  = '$filter_user'";
             } else {
                 $whereCondition .= " AND te.exe_user_id  = '$filter_user'";
+            }
+        }
+
+        if (isset($_GET['group_id_in_toolbar']) && !empty($_GET['group_id_in_toolbar'])) {
+            $groupIdFromToolbar = (int) $_GET['group_id_in_toolbar'];
+            if (!empty($groupIdFromToolbar)) {
+                if (empty($whereCondition)) {
+                    $whereCondition .= " te.group_id  = '$groupIdFromToolbar'";
+                } else {
+                    $whereCondition .= " AND group_id  = '$groupIdFromToolbar'";
+                }
             }
         }
 
@@ -656,7 +676,8 @@ switch ($action) {
                 false,
                 null,
                 $keyword,
-                $description
+                $description,
+                ['where' => $whereCondition, 'extra' => $extra_fields]
             );
         } else {
             // Sessions for the coach
@@ -666,7 +687,10 @@ switch ($action) {
                 null,
                 true,
                 $keyword,
-                $description
+                $description,
+                null,
+                null,
+                ['where' => $whereCondition, 'extra' => $extra_fields]
             );
         }
         break;
@@ -785,24 +809,38 @@ switch ($action) {
         break;
     case 'get_usergroups_teacher':
         $obj = new UserGroup();
-        $obj->protectScript();
+        $obj->protectScript(null, false, true);
         $type = isset($_REQUEST['type']) ? $_REQUEST['type'] : 'registered';
         $groupFilter = isset($_REQUEST['group_filter']) ? (int) $_REQUEST['group_filter'] : 0;
+        $keyword = isset($_REQUEST['keyword']) ? $_REQUEST['keyword'] : '';
+
         $course_id = api_get_course_int_id();
-        if ($type === 'registered') {
-            $count = $obj->getUserGroupByCourseWithDataCount(
-                $course_id,
-                $groupFilter
-            );
-        } else {
-            $count = $obj->get_count($groupFilter);
+        $options = [];
+        $options['course_id'] = $course_id;
+
+        switch ($type) {
+            case 'not_registered':
+                $options['where'] = [' (course_id IS NULL OR course_id != ?) ' => $course_id];
+                if (!empty($keyword)) {
+                    $options['where']['AND name like %?% '] = $keyword;
+                }
+                $count = $obj->getUserGroupNotInCourse($options, $groupFilter, true);
+                break;
+            case 'registered':
+                $options['where'] = [' usergroup.course_id = ? ' => $course_id];
+                $count = $obj->getUserGroupInCourse(
+                    $options,
+                    $groupFilter,
+                    true
+                );
+                break;
         }
         break;
     default:
         exit;
 }
 
-//3. Calculating first, end, etc
+// 3. Calculating first, end, etc
 $total_pages = 0;
 if ($count > 0) {
     if (!empty($limit)) {
@@ -829,6 +867,21 @@ $is_allowedToEdit = api_is_allowed_to_edit(null, true) || api_is_allowed_to_edit
 $columns = [];
 
 switch ($action) {
+    case 'get_exercise_categories':
+        api_protect_course_script();
+        if (!api_is_allowed_to_edit()) {
+            api_not_allowed(true);
+        }
+
+        $columns = ['name', 'actions'];
+        $manager = new ExerciseCategoryManager();
+
+        $result = $manager->get_all([
+            'where' => ['c_id = ? ' => $courseId],
+            'order' => "$sidx $sord",
+            'LIMIT' => "$start , $limit",
+        ]);
+        break;
     case 'get_calendar_users':
         $columns = ['firstname', 'lastname', 'exam'];
         $result = $calendarPlugin->getUsersPerCalendar($id);
@@ -926,11 +979,11 @@ switch ($action) {
 
         $column_names = [
             get_lang('Company'),
-            get_lang('TrainingHoursAccumulated'),
-            get_lang('CountOfSubscriptions'),
-            get_lang('CountOfUsers'),
-            get_lang('AverageHoursPerStudent'),
-            get_lang('CountCertificates'),
+            get_lang('Hours of accumulated training'),
+            get_lang('Subscriptions count'),
+            get_lang('Users count'),
+            get_lang('Avg hours/student'),
+            get_lang('Certificates count'),
         ];
 
         $extra_fields = UserManager::get_extra_fields(
@@ -1000,11 +1053,11 @@ switch ($action) {
         $column_names = [
             get_lang('Course'),
             get_lang('User'),
-            get_lang('Email'),
-            get_lang('ManHours'),
-            get_lang('CertificateGenerated'),
+            get_lang('e-mail'),
+            get_lang('Man hours'),
+            get_lang('Generated certificate'),
             get_lang('Approved'),
-            get_lang('CourseAdvance'),
+            get_lang('Course progress'),
         ];
 
         $extra_fields = UserManager::get_extra_fields(
@@ -1183,6 +1236,10 @@ switch ($action) {
         );
         break;
     case 'get_work_user_list_all':
+        $plagiarismColumns = [];
+        if (api_get_configuration_value('allow_compilatio_tool')) {
+            $plagiarismColumns = ['compilatio'];
+        }
         if (isset($_GET['type']) && $_GET['type'] === 'simple') {
             $columns = [
                 'fullname',
@@ -1191,20 +1248,23 @@ switch ($action) {
                 'sent_date',
                 'qualificator_id',
                 'correction',
-                'actions',
             ];
+            $columns = array_merge($columns, $plagiarismColumns);
+            $columns[] = 'actions';
         } else {
             $columns = [
                 'fullname',
                 'title',
                 'qualification',
                 'sent_date',
-                //'status',
-                //'has_correction',
                 'correction',
-                'actions',
             ];
+            $columns = array_merge($columns, $plagiarismColumns);
+            $columns[] = 'actions';
         }
+
+        $whereCondition = " AND $whereCondition ";
+
         $result = get_work_user_list(
             $start,
             $limit,
@@ -1213,16 +1273,29 @@ switch ($action) {
             $work_id,
             $whereCondition
         );
-
         break;
     case 'get_work_user_list_others':
+        $plagiarismColumns = [];
+        if (api_get_configuration_value('allow_compilatio_tool')) {
+            $plagiarismColumns = ['compilatio'];
+        }
+
         if (isset($_GET['type']) && $_GET['type'] === 'simple') {
             $columns = [
-                'type', 'firstname', 'lastname', 'title', 'qualification', 'sent_date', 'qualificator_id', 'actions',
+                'type', 'firstname', 'lastname', 'title', 'qualification', 'sent_date', 'qualificator_id',
             ];
+            $columns = array_merge($columns, $plagiarismColumns);
+            $columns[] = 'actions';
         } else {
-            $columns = ['type', 'firstname', 'lastname', 'title', 'sent_date', 'actions'];
+            $columns = ['type', 'firstname', 'lastname', 'title', 'sent_date'];
+            $columns = array_merge($columns, $plagiarismColumns);
+            $columns[] = 'actions';
         }
+
+        if (trim($whereCondition) === '1 = 1') {
+            $whereCondition = '';
+        }
+
         $whereCondition .= " AND u.user_id <> ".api_get_user_id();
         $result = get_work_user_list(
             $start,
@@ -1234,18 +1307,29 @@ switch ($action) {
         );
         break;
     case 'get_work_user_list':
+        $plagiarismColumns = [];
+        if (api_get_configuration_value('allow_compilatio_tool')) {
+            $plagiarismColumns = ['compilatio'];
+        }
         if (isset($_GET['type']) && $_GET['type'] == 'simple') {
             $columns = [
-                'type', 'title', 'qualification', 'sent_date', 'qualificator_id', 'actions',
+                'type', 'title', 'qualification', 'sent_date', 'qualificator_id',
             ];
+            $columns = array_merge($columns, $plagiarismColumns);
+            $columns[] = 'actions';
         } else {
-            $columns = ['type', 'title', 'qualification', 'sent_date', 'actions'];
+            $columns = ['type', 'title', 'qualification', 'sent_date'];
+            $columns = array_merge($columns, $plagiarismColumns);
+            $columns[] = 'actions';
         }
-
         $documents = getAllDocumentToWork($work_id, api_get_course_int_id());
 
+        if (trim($whereCondition) === '1 = 1') {
+            $whereCondition = '';
+        }
+
         if (empty($documents)) {
-            $whereCondition .= " AND u.user_id = ".api_get_user_id();
+            $whereCondition .= ' AND u.user_id = '.api_get_user_id();
             $result = get_work_user_list(
                 $start,
                 $limit,
@@ -1267,9 +1351,6 @@ switch ($action) {
         }
         break;
     case 'get_exercise_results':
-        $course = api_get_course_info();
-        // Used inside ExerciseLib::get_exam_results_data()
-        $documentPath = api_get_path(SYS_COURSE_PATH).$course['path']."/document";
         $is_allowedToEdit = api_is_allowed_to_edit(null, true) ||
             api_is_drh() ||
             api_is_student_boss() ||
@@ -1294,6 +1375,7 @@ switch ($action) {
                 $columns = array_merge(['official_code'], $columns);
             }
         }
+
         $result = ExerciseLib::get_exam_results_data(
             $start,
             $limit,
@@ -1304,10 +1386,6 @@ switch ($action) {
         );
         break;
     case 'get_exercise_results_report':
-        // Used inside ExerciseLib::get_exam_results_data()
-        $documentPath = api_get_path(SYS_COURSE_PATH).$courseInfo['path'].'/document';
-        $sessionId = api_get_session_id();
-
         $columns = [
             'firstname',
             'lastname',
@@ -1353,11 +1431,11 @@ switch ($action) {
             $columns[] = 'only_score';
             $columns[] = 'total';
 
-            $overwriteColumnHeaderExport['session_access_start_date'] = get_lang('SessionStartDate');
-            $overwriteColumnHeaderExport['exe_date'] = get_lang('StartDate');
+            $overwriteColumnHeaderExport['session_access_start_date'] = get_lang('Access start date');
+            $overwriteColumnHeaderExport['exe_date'] = get_lang('Start Date');
             $overwriteColumnHeaderExport['score_percentage'] = get_lang('Score').' - '.get_lang('Percentage');
-            $overwriteColumnHeaderExport['only_score'] = get_lang('Score').' - '.get_lang('ScoreNote');
-            $overwriteColumnHeaderExport['total'] = get_lang('Score').' - '.get_lang('ScoreTest');
+            $overwriteColumnHeaderExport['only_score'] = get_lang('Score').' - '.get_lang('Note');
+            $overwriteColumnHeaderExport['total'] = get_lang('Score').' - '.get_lang('Test');
         }
         $categoryList = TestCategory::getListOfCategoriesIDForTest($exerciseId, $courseId);
 
@@ -1372,9 +1450,9 @@ switch ($action) {
                     $overwriteColumnHeaderExport[$label.'_score_percentage'] = $categoryInfo['title'].
                         ' - '.get_lang('Percentage');
                     $overwriteColumnHeaderExport[$label.'_only_score'] = $categoryInfo['title'].
-                        ' - '.get_lang('ScoreNote');
+                        ' - '.get_lang('Note');
                     $overwriteColumnHeaderExport[$label.'_total'] = $categoryInfo['title'].
-                        ' - '.get_lang('ScoreTest');
+                        ' - '.get_lang('Test');
                 } else {
                     $columns[] = $label;
                 }
@@ -1472,7 +1550,8 @@ switch ($action) {
                 false,
                 $orderBy,
                 $keyword,
-                $description
+                $description,
+                ['where' => $whereCondition, 'extra' => $extra_fields]
             );
         } else {
             // Sessions for the coach
@@ -1484,17 +1563,13 @@ switch ($action) {
                 $keyword,
                 $description,
                 $sidx,
-                $sord
+                $sord,
+                ['where' => $whereCondition, 'extra' => $extra_fields]
             );
         }
 
-        $columns = [
-            'name',
-            'date',
-            'course_per_session',
-            'student_per_session',
-            'details',
-        ];
+        $session_columns = SessionManager::getGridColumns('my_space');
+        $columns = $session_columns['simple_column_name'];
 
         $result = [];
         if (!empty($sessions)) {
@@ -1530,7 +1605,7 @@ switch ($action) {
 
                 $detailButtons = [];
                 $detailButtons[] = Display::url(
-                    Display::return_icon('works.png', get_lang('WorksReport')),
+                    Display::return_icon('works.png', get_lang('Assignments report')),
                     api_get_path(WEB_CODE_PATH).'mySpace/works_in_session_report.php?session='.$session['id']
                 );
                 $detailButtons[] = Display::url(
@@ -1538,7 +1613,7 @@ switch ($action) {
                     api_get_path(WEB_CODE_PATH).'mySpace/course.php?session_id='.$session['id']
                 );
 
-                $result[] = [
+                $item = [
                     'name' => Display::url(
                         $session['name'],
                         api_get_path(WEB_CODE_PATH).'mySpace/course.php?session_id='.$session['id']
@@ -1546,8 +1621,15 @@ switch ($action) {
                     'date' => $dateToString,
                     'course_per_session' => $count_courses_in_session,
                     'student_per_session' => $count_users_in_session,
-                    'details' => implode(' ', $detailButtons),
+                    'actions' => implode(' ', $detailButtons),
                 ];
+
+                if (!empty($extra_fields)) {
+                    foreach ($extra_fields as $extraField) {
+                        $item[$extraField['field']] = $extraField['data'];
+                    }
+                }
+                $result[] = $item;
             }
         }
         break;
@@ -1576,41 +1658,6 @@ switch ($action) {
                 ]
             );
         }
-        break;
-        /*
-        $columns = array(
-            'name',
-            'nbr_courses',
-            'nbr_users',
-            'category_name',
-            'access_start_date',
-            'access_end_date',
-            'coach_name',
-            'session_active',
-            'visibility'
-        );
-
-        if (SessionManager::allowToManageSessions()) {
-            if (SessionManager::allowOnlyMySessions()) {
-                $whereCondition .= ' AND s.id_coach = '.api_get_user_id();
-            }
-
-            // Rename Category_name
-            $whereCondition = str_replace(
-                'category_name',
-                'sc.name',
-                $whereCondition
-            );
-
-            $result = SessionManager::get_sessions_admin(
-                array(
-                    'where' => $whereCondition,
-                    'order' => "$sidx $sord",
-                    'limit' => "$start , $limit"
-                )
-            );
-        }
-        */
         break;
     case 'get_exercise_progress':
         $sessionId = (int) $_GET['session_id'];
@@ -1846,7 +1893,7 @@ switch ($action) {
                 $item['name'] = '<font style="color:#AAA">'.$item['name'].'</font>';
             }
             $item['headline'] = Display::url($item['headline'], api_get_path(WEB_CODE_PATH).'timeline/view.php?id='.$item['id']);
-            $item['actions'] = Display::url(Display::return_icon('add.png', get_lang('AddItems')), api_get_path(WEB_CODE_PATH).'timeline/?action=add_item&parent_id='.$item['id']);
+            $item['actions'] = Display::url(Display::return_icon('add.png', get_lang('Add items')), api_get_path(WEB_CODE_PATH).'timeline/?action=add_item&parent_id='.$item['id']);
             $item['actions'] .= Display::url(Display::return_icon('edit.png', get_lang('Edit')), api_get_path(WEB_CODE_PATH).'timeline/?action=edit&id='.$item['id']);
             $item['actions'] .= Display::url(Display::return_icon('delete.png', get_lang('Delete')), api_get_path(WEB_CODE_PATH).'timeline/?action=delete&id='.$item['id']);
 
@@ -1870,21 +1917,23 @@ switch ($action) {
                 continue;
             }
             $skills = $obj->getSkillsByGradebook($item['id']);
+            $courseId = $item['c_id'];
+            $courseInfo = api_get_course_info_by_id($courseId);
 
             //Fixes bug when gradebook doesn't have names
             if (empty($item['name'])) {
-                $item['name'] = $item['course_code'];
+                $item['name'] = $courseInfo['code'];
             }
 
             $item['name'] = Display::url(
                 $item['name'],
-                api_get_path(WEB_CODE_PATH).'gradebook/index.php?id_session=0&cidReq='.$item['course_code']
+                api_get_path(WEB_CODE_PATH).'gradebook/index.php?id_session=0&cidReq='.$courseInfo['code']
             );
 
             if (!empty($item['certif_min_score']) && !empty($item['document_id'])) {
                 $item['certificates'] = Display::return_icon(
                     'accept.png',
-                    get_lang('WithCertificate'),
+                    get_lang('With Certificate'),
                     [],
                     ICON_SIZE_SMALL
                 );
@@ -1892,7 +1941,7 @@ switch ($action) {
             } else {
                 $item['certificates'] = Display::return_icon(
                     'warning.png',
-                    get_lang('NoCertificate'),
+                    get_lang('No certificate'),
                     [],
                     ICON_SIZE_SMALL
                 );
@@ -2065,7 +2114,7 @@ switch ($action) {
                     break;
                 case $cntExer:
                     $columns[] = 'finalScore';
-                    $column_names[] = get_lang('FinalScore');
+                    $column_names[] = get_lang('Final score');
                     break;
                 default:
                     $title = '';
@@ -2142,37 +2191,36 @@ switch ($action) {
         $obj = new ExtraFieldOption($type);
         $columns = ['display_text', 'option_value', 'option_order'];
         $result = $obj->get_all([
-            'where' => ["field_id = ? " => $field_id],
+            'where' => ['field_id = ? ' => $field_id],
             'order' => "$sidx $sord",
             'LIMIT' => "$start , $limit",
         ]);
         break;
     case 'get_usergroups_teacher':
         $columns = ['name', 'users', 'status', 'group_type', 'actions'];
-        $options = ['order' => "name $sord", 'LIMIT' => "$start , $limit"];
-        $options['course_id'] = $course_id;
-
+        $options['order'] = "name $sord";
+        $options['limit'] = "$start , $limit";
         switch ($type) {
             case 'not_registered':
-                $options['where'] = [' (course_id IS NULL OR course_id != ?) ' => $course_id];
                 $result = $obj->getUserGroupNotInCourse($options, $groupFilter);
                 break;
             case 'registered':
-                $options['where'] = [' usergroup.course_id = ? ' => $course_id];
                 $result = $obj->getUserGroupInCourse($options, $groupFilter);
                 break;
         }
 
         $new_result = [];
+        $currentUserId = api_get_user_id();
+        $isAllow = api_is_allowed_to_edit();
         if (!empty($result)) {
             $urlUserGroup = api_get_path(WEB_CODE_PATH).'admin/usergroup_users.php?'.api_get_cidreq();
             foreach ($result as $group) {
-                $count = count($obj->get_users_by_usergroup($group['id']));
-                $group['users'] = $count;
+                $countUsers = count($obj->get_users_by_usergroup($group['id']));
+                $group['users'] = $countUsers;
 
-                if ($obj->allowTeachers()) {
+                if (!empty($countUsers)) {
                     $group['users'] = Display::url(
-                        $count,
+                        $countUsers,
                         $urlUserGroup.'&id='.$group['id']
                     );
                 }
@@ -2198,14 +2246,15 @@ switch ($action) {
                 $group['status'] = $role;
                 $group['actions'] = '';
 
-                if ($obj->allowTeachers()) {
-                    $group['actions'] .= Display::url(
-                        Display::return_icon('statistics.png'),
-                        $urlUserGroup.'&id='.$group['id']
-                    ).'&nbsp;';
+                if ($isAllow) {
+                    if ($obj->allowTeachers() && $group['author_id'] == $currentUserId) {
+                        $group['actions'] .= Display::url(
+                            Display::return_icon('statistics.png', get_lang('Statistics')),
+                            $urlUserGroup.'&id='.$group['id']
+                        ).'&nbsp;';
+                    }
+                    $group['actions'] .= Display::url($icon, $url);
                 }
-
-                $group['actions'] .= Display::url($icon, $url);
                 $new_result[] = $group;
             }
             $result = $new_result;
@@ -2260,9 +2309,10 @@ $allowed_actions = [
     'get_learning_path_calendars',
     'get_usergroups_users',
     'get_calendar_users',
+    'get_exercise_categories',
 ];
 
-//5. Creating an obj to return a json
+// 5. Creating an obj to return a json
 if (in_array($action, $allowed_actions)) {
     $response = new stdClass();
     $response->page = $page;

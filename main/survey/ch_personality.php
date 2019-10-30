@@ -17,7 +17,7 @@ class ch_personality extends survey_question
     {
         parent::createForm($survey_data, $form_content);
         $this->html .= '	<tr>';
-        $this->html .= '		<td colspan="2"><strong>'.get_lang('DisplayAnswersHorVert').'</strong></td>';
+        $this->html .= '		<td colspan="2"><strong>'.get_lang('Display').'</strong></td>';
         $this->html .= '	</tr>';
         // Horizontal or vertical
         $this->html .= '	<tr>';
@@ -44,7 +44,7 @@ class ch_personality extends survey_question
 
         // The options
         $this->html .= '	<tr>';
-        $this->html .= '		<td colspan="3"><strong>'.get_lang('AnswerOptions').'</strong></td>';
+        $this->html .= '		<td colspan="3"><strong>'.get_lang('Answer options').'</strong></td>';
         $this->html .= '	</tr>';
         $total_number_of_answers = count($form_content['answers']);
 
@@ -82,8 +82,6 @@ class ch_personality extends survey_question
                 $count++;
             }
         }
-        // The buttons for adding or removing
-        //$this->html .= parent :: add_remove_buttons($form_content);
     }
 
     /**

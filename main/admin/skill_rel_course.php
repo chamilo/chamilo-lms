@@ -32,7 +32,7 @@ if (!empty($sessionId)) {
     $sessionName = ' '.$session->getName().' - '.$course->getTitleAndCode();
 }
 
-$form->addHeader(get_lang('AddSkills').$sessionName);
+$form->addHeader(get_lang('Add skills').$sessionName);
 
 $skillList = [];
 $em = Database::getManager();
@@ -64,7 +64,7 @@ $form->setDefaults(['skills' => array_keys($skillList)]);
 if ($form->validate()) {
     $result = Skill::saveSkillsToCourseFromForm($form);
     if ($result) {
-        Display::addFlash(Display::return_message(get_lang('Updated')));
+        Display::addFlash(Display::return_message(get_lang('Update successful')));
     }
     header('Location: '.$url);
     exit;
@@ -73,14 +73,14 @@ $content = $form->returnForm();
 
 $interbreadcrumb[] = [
     'url' => api_get_path(WEB_CODE_PATH).'session/session_list.php',
-    'name' => get_lang('SessionList'),
+    'name' => get_lang('Session list'),
 ];
 
 $interbreadcrumb[] = [
     'url' => api_get_path(WEB_CODE_PATH).'session/resume_session.php?id_session='.$sessionId,
-    'name' => get_lang('SessionOverview'),
+    'name' => get_lang('Session overview'),
 ];
 
-$template = new Template(get_lang('SkillRelCourses'));
+$template = new Template(get_lang('Courses-Skills associations'));
 $template->assign('content', $content);
 $template->display_one_col_template();

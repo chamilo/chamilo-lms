@@ -22,7 +22,7 @@ $work['description'] = isset($work['description']) ? Security::remove_XSS($work[
 $htmlHeadXtra[] = '<script>'.ExerciseLib::getJsCode().'</script>';
 $interbreadcrumb[] = [
     'url' => api_get_path(WEB_CODE_PATH).'work/work.php?'.api_get_cidreq(),
-    'name' => get_lang('StudentPublications'),
+    'name' => get_lang('Assignments'),
 ];
 
 $my_folder_data = get_work_data_by_id($work['parent_id']);
@@ -64,9 +64,7 @@ if ((user_is_author($id) || $isDrhOfCourse || (api_is_allowed_to_edit() || api_i
         $work['active'] == 1 &&
         $work['accepted'] == 1
         ) ||
-        (api_is_allowed_to_edit() || api_is_coach()) ||
-        user_is_author($id) ||
-        $isDrhOfCourse
+        (api_is_allowed_to_edit() || api_is_coach()) || user_is_author($id) || $isDrhOfCourse
     ) {
         $action = isset($_REQUEST['action']) ? $_REQUEST['action'] : null;
         $page = isset($_REQUEST['page']) ? $_REQUEST['page'] : null;
@@ -107,7 +105,7 @@ if ((user_is_author($id) || $isDrhOfCourse || (api_is_allowed_to_edit() || api_i
                             WHERE c_id = ".$courseInfo['real_id']." AND id = $id";
                     Database::query($sql);
 
-                    Display::addFlash(Display::return_message(get_lang('Updated')));
+                    Display::addFlash(Display::return_message(get_lang('Update successful')));
 
                     $resultUpload = uploadWork(
                         $my_folder_data,
@@ -130,7 +128,7 @@ if ((user_is_author($id) || $isDrhOfCourse || (api_is_allowed_to_edit() || api_i
                                     WHERE iid = ".$work['iid'];
                             Database::query($sql);
                             Display::addFlash(
-                                Display::return_message(get_lang('FileUploadSucces'))
+                                Display::return_message(get_lang('The file has successfully been uploaded.'))
                             );
                         }
                     }
@@ -150,7 +148,7 @@ if ((user_is_author($id) || $isDrhOfCourse || (api_is_allowed_to_edit() || api_i
                     api_get_course_info()
                 );
 
-                Display::addFlash(Display::return_message(get_lang('DocDeleted')));
+                Display::addFlash(Display::return_message(get_lang('Document deleted')));
                 header('Location: '.$url);
                 exit;
                 break;
@@ -182,7 +180,7 @@ if ((user_is_author($id) || $isDrhOfCourse || (api_is_allowed_to_edit() || api_i
                 $actions = Display::url(
                     Display::return_icon(
                         'back.png',
-                        get_lang('BackToWorksList'),
+                        get_lang('Back to Assignments list'),
                         null,
                         ICON_SIZE_MEDIUM
                     ),

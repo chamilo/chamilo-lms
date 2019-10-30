@@ -55,7 +55,7 @@ foreach ($urlList as $url) {
 
     $url = api_get_path(WEB_CODE_PATH).'admin/user_list_consent.php';
     $link = Display::url($url, $url);
-    $subject = get_lang('UserRequestWaitingForAction');
+    $subject = get_lang('A user is waiting for an action about his/her personal data request');
 
     $email = api_get_configuration_value('data_protection_officer_email');
 
@@ -67,7 +67,9 @@ foreach ($urlList as $url) {
         $userInfo = api_get_user_info($userId);
         if ($userInfo) {
             $content = sprintf(
-                get_lang('TheUserXIsWaitingForAnActionGoHereX'),
+                get_lang('The user %s is waiting for an action about it\'s personal data request. 
+
+ To manage personal data requests you can follow this link : %s'),
                 $userInfo['complete_name'],
                 $link
             );

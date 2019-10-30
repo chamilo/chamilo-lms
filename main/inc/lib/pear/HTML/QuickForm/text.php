@@ -53,7 +53,8 @@ class HTML_QuickForm_text extends HTML_QuickForm_input
             $attributes = [];
         }
         if (is_array($attributes) || empty($attributes)) {
-            $attributes['class'] = 'form-control';
+            $classFromAttributes = isset($attributes['class']) ? $attributes['class'] : '';
+            $attributes['class'] = $classFromAttributes.' form-control';
         }
         $inputSize = isset($attributes['input-size']) ? $attributes['input-size'] : null;
         $this->setInputSize($inputSize);
@@ -112,7 +113,6 @@ class HTML_QuickForm_text extends HTML_QuickForm_input
 
         switch ($layout) {
             case FormValidator::LAYOUT_INLINE:
-                //<div class="input-group {error_class}">
                 return '                
                     <label class="sr-only"  {label-for} >
                         <!-- BEGIN required --><span class="form_required">*</span><!-- END required -->

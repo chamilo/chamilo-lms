@@ -18,7 +18,7 @@ $groupId = api_get_group_id();
 
 // Section (for the tabs)
 $this_section = SECTION_COURSES;
-$work_id = isset($_GET['id']) ? intval($_GET['id']) : null;
+$work_id = isset($_GET['id']) ? (int) $_GET['id'] : null;
 $my_folder_data = get_work_data_by_id($work_id);
 
 $curdirpath = '';
@@ -27,15 +27,15 @@ $htmlHeadXtra[] = to_javascript_work();
 
 /*	Constants and variables */
 
-$tool_name = get_lang('StudentPublications');
+$tool_name = get_lang('Assignments');
 
-$item_id = isset($_REQUEST['item_id']) ? intval($_REQUEST['item_id']) : null;
+$item_id = isset($_REQUEST['item_id']) ? (int) $_REQUEST['item_id'] : null;
 $origin = api_get_origin();
 $course_dir = api_get_path(SYS_COURSE_PATH).$courseInfo['path'];
 $base_work_dir = $course_dir.'/work';
 $action = isset($_REQUEST['action']) ? $_REQUEST['action'] : 'list';
 
-//Download folder
+// Download folder
 if ($action === 'downloadfolder') {
     require 'downloadfolder.inc.php';
 }
@@ -49,7 +49,7 @@ if ($action === 'upload_form') {
 if (api_is_in_gradebook()) {
     $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'gradebook/index.php?'.api_get_cidreq(),
-        'name' => get_lang('ToolGradebook'),
+        'name' => get_lang('Assessments'),
     ];
 }
 
@@ -63,11 +63,11 @@ if (!empty($groupId)) {
     ];
     $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'group/group_space.php?'.api_get_cidreq(),
-        'name' => get_lang('GroupSpace').' '.$group_properties['name'],
+        'name' => get_lang('Group area').' '.$group_properties['name'],
     ];
     $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'work/work.php?'.api_get_cidreq(),
-        'name' => get_lang('StudentPublications'),
+        'name' => get_lang('Assignments'),
     ];
     $url_dir = api_get_path(WEB_CODE_PATH).'work/work.php?&id='.$work_id.'&'.api_get_cidreq();
     if (!empty($my_folder_data)) {
@@ -77,14 +77,14 @@ if (!empty($groupId)) {
     if ($action == 'upload_form') {
         $interbreadcrumb[] = [
             'url' => api_get_path(WEB_CODE_PATH).'work/work.php?'.api_get_cidreq(),
-            'name' => get_lang('UploadADocument'),
+            'name' => get_lang('Upload a document'),
         ];
     }
 
     if ($action == 'create_dir') {
         $interbreadcrumb[] = [
             'url' => api_get_path(WEB_CODE_PATH).'work/work.php?'.api_get_cidreq(),
-            'name' => get_lang('CreateAssignment'),
+            'name' => get_lang('Create assignment'),
         ];
     }
 } else {
@@ -94,10 +94,10 @@ if (!empty($groupId)) {
         ) {
             $interbreadcrumb[] = [
                 'url' => api_get_path(WEB_CODE_PATH).'work/work.php?'.api_get_cidreq(),
-                'name' => get_lang('StudentPublications'),
+                'name' => get_lang('Assignments'),
             ];
         } else {
-            $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('StudentPublications')];
+            $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Assignments')];
         }
 
         if (!empty($my_folder_data)) {
@@ -107,17 +107,16 @@ if (!empty($groupId)) {
             ];
         }
 
-        if ($action == 'upload_form') {
-            $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('UploadADocument')];
+        if ($action === 'upload_form') {
+            $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Upload a document')];
         }
 
-        if ($action == 'create_dir') {
-            $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('CreateAssignment')];
+        if ($action === 'create_dir') {
+            $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Create assignment')];
         }
     }
 }
 
-// Stats
 Event::event_access_tool(TOOL_STUDENTPUBLICATION);
 
 $logInfo = [
@@ -125,7 +124,6 @@ $logInfo = [
     'tool_id' => 0,
     'tool_id_detail' => 0,
     'action' => $action,
-    'action_details' => '',
 ];
 Event::registerLog($logInfo);
 
@@ -163,13 +161,13 @@ switch ($action) {
             'post',
             $addUrl
         );
-        $form->addHeader(get_lang('CreateAssignment'));
+        $form->addHeader(get_lang('Create assignment'));
         $form->addElement('hidden', 'action', 'add');
         // Set default values
         $defaults = !empty($_POST) ? $_POST : ['allow_text_assignment' => 2];
 
         $form = getFormWork($form, $defaults);
-        $form->addButtonCreate(get_lang('CreateDirectory'));
+        $form->addButtonCreate(get_lang('Validate'));
 
         if ($form->validate()) {
             $values = $form->getSubmitValues();
@@ -184,10 +182,10 @@ switch ($action) {
             if ($result) {
                 Skill::saveSkills($form, ITEM_TYPE_STUDENT_PUBLICATION, $result);
 
-                $message = Display::return_message(get_lang('DirectoryCreated'), 'success');
+                $message = Display::return_message(get_lang('Directory created'), 'success');
             } else {
                 $currentUrl = $addUrl;
-                $message = Display::return_message(get_lang('CannotCreateDir'), 'error');
+                $message = Display::return_message(get_lang('Unable to create the folder.'), 'error');
             }
 
             Display::addFlash($message);
@@ -203,7 +201,7 @@ switch ($action) {
             $result = deleteDirWork($_REQUEST['id']);
             if ($result) {
                 $message = Display::return_message(
-                    get_lang('DirDeleted').': '.$work_to_delete['title'],
+                    get_lang('Folder deleted').': '.$work_to_delete['title'],
                     'success'
                 );
                 Display::addFlash($message);
@@ -255,12 +253,12 @@ switch ($action) {
                         $user_id
                     );
 
-                    $message = Display::return_message(get_lang('DirMv'), 'success');
+                    $message = Display::return_message(get_lang('Element moved'), 'success');
                 } else {
-                    $message = Display::return_message(get_lang('Impossible'), 'error');
+                    $message = Display::return_message(get_lang('Operation impossible'), 'error');
                 }
             } else {
-                $message = Display::return_message(get_lang('Impossible'), 'error');
+                $message = Display::return_message(get_lang('Operation impossible'), 'error');
             }
             Display::addFlash($message);
             header('Location: '.$currentUrl);
@@ -287,7 +285,7 @@ switch ($action) {
 
         Display::addFlash(
             Display::return_message(
-                get_lang('VisibilityChanged'),
+                get_lang('The visibility has been changed.'),
                 'confirmation'
             )
         );
@@ -316,7 +314,7 @@ switch ($action) {
 
         Display::addFlash(
             Display::return_message(
-                get_lang('VisibilityChanged'),
+                get_lang('The visibility has been changed.'),
                 'confirmation'
             )
         );

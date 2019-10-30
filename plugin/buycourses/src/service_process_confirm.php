@@ -1,6 +1,8 @@
 <?php
 /* For license terms, see /license.txt */
 
+use ChamiloSession as Session;
+
 /**
  * Process purchase confirmation script for the Buy Courses plugin.
  *
@@ -9,15 +11,13 @@
 require_once '../config.php';
 
 $plugin = BuyCoursesPlugin::create();
-
-$serviceSaleId = $_SESSION['bc_service_sale_id'];
+$serviceSaleId = Session::read('bc_service_sale_id');
 
 if (empty($serviceSaleId)) {
     api_not_allowed(true);
 }
 
 $serviceSale = $plugin->getServiceSale($serviceSaleId);
-
 $userInfo = api_get_user_info($serviceSale['buyer']['id']);
 
 if (empty($serviceSale)) {
@@ -25,7 +25,7 @@ if (empty($serviceSale)) {
 }
 
 $currency = $plugin->getCurrency($serviceSale['currency_id']);
-$terms = $plugin->getGlobalParameters();
+$globalParameters = $plugin->getGlobalParameters();
 
 switch ($serviceSale['payment_type']) {
     case BuyCoursesPlugin::PAYMENT_TYPE_PAYPAL:
@@ -46,8 +46,7 @@ switch ($serviceSale['payment_type']) {
 
         // The extra params for handle the hard job, this var is VERY IMPORTANT !!
         $extra = '';
-
-        require_once "paypalfunctions.php";
+        require_once 'paypalfunctions.php';
 
         $extra .= "&L_PAYMENTREQUEST_0_NAME0={$serviceSale['service']['name']}";
         $extra .= "&L_PAYMENTREQUEST_0_QTY0=1";
@@ -63,19 +62,40 @@ switch ($serviceSale['payment_type']) {
             $extra
         );
 
-        if ($expressCheckout["ACK"] !== 'Success') {
+        if ($expressCheckout['ACK'] !== 'Success') {
             $erroMessage = vsprintf(
-                $plugin->get_lang('ErrorOccurred'),
+                $plugin->get_lang('An error occurred.'),
                 [$expressCheckout['L_ERRORCODE0'], $expressCheckout['L_LONGMESSAGE0']]
             );
             Display::addFlash(
                 Display::return_message($erroMessage, 'error', false)
             );
 
-            $plugin->cancelServiceSale(intval($serviceSale['id']));
-
+            $plugin->cancelServiceSale($serviceSale['id']);
             header('Location: '.api_get_path(WEB_PLUGIN_PATH).'buycourses/src/service_catalog.php');
             exit;
+        }
+
+        if (!empty($globalParameters['sale_email'])) {
+            $messageConfirmTemplate = new Template();
+            $messageConfirmTemplate->assign('user', $userInfo);
+            $messageConfirmTemplate->assign(
+                'sale',
+                [
+                    'date' => $serviceSale['buy_date'],
+                    'product' => $serviceSale['service']['name'],
+                    'currency' => $currency['iso_code'],
+                    'price' => $serviceSale['price'],
+                    'reference' => $serviceSale['reference'],
+                ]
+            );
+
+            api_mail_html(
+                '',
+                $globalParameters['sale_email'],
+                $plugin->get_lang('bc_subject'),
+                $messageConfirmTemplate->fetch('buycourses/view/message_confirm.tpl')
+            );
         }
 
         RedirectToPayPal($expressCheckout['TOKEN']);
@@ -96,7 +116,7 @@ switch ($serviceSale['payment_type']) {
             $formValues = $form->getSubmitValues();
 
             if (isset($formValues['cancel'])) {
-                $plugin->cancelServiceSale(intval($serviceSale['id']));
+                $plugin->cancelServiceSale($serviceSale['id']);
 
                 unset($_SESSION['bc_service_sale_id']);
                 Display::addFlash(
@@ -112,10 +132,10 @@ switch ($serviceSale['payment_type']) {
                 [
                     'name' => $serviceSale['service']['name'],
                     'buyer' => $serviceSale['buyer']['name'],
-                    'buy_date' => api_format_date($serviceSale['buy_date'], DATE_TIME_FORMAT_LONG_24H),
-                    'start_date' => api_format_date($serviceSale['start_date'], DATE_TIME_FORMAT_LONG_24H),
-                    'end_date' => api_format_date($serviceSale['end_date'], DATE_TIME_FORMAT_LONG_24H),
-                    'currency' => $currency['currency'],
+                    'buy_date' => $serviceSale['buy_date'],
+                    'start_date' => $serviceSale['start_date'],
+                    'end_date' => $serviceSale['end_date'],
+                    'currency' => $currency['iso_code'],
                     'price' => $serviceSale['price'],
                     'reference' => $serviceSale['reference'],
                 ]
@@ -126,8 +146,30 @@ switch ($serviceSale['payment_type']) {
                 $buyer['complete_name'],
                 $buyer['email'],
                 $plugin->get_lang('bc_subject'),
-                $messageTemplate->fetch('buycourses/view/message_transfer.tpl')
+                $messageTemplate->fetch('buycourses/view/service_message_transfer.tpl')
             );
+
+            if (!empty($globalParameters['sale_email'])) {
+                $messageConfirmTemplate = new Template();
+                $messageConfirmTemplate->assign('user', $userInfo);
+                $messageConfirmTemplate->assign(
+                    'sale',
+                    [
+                        'date' => $serviceSale['buy_date'],
+                        'product' => $serviceSale['service']['name'],
+                        'currency' => $currency['iso_code'],
+                        'price' => $serviceSale['price'],
+                        'reference' => $serviceSale['reference'],
+                    ]
+                );
+
+                api_mail_html(
+                    '',
+                    $globalParameters['sale_email'],
+                    $plugin->get_lang('bc_subject'),
+                    $messageConfirmTemplate->fetch('buycourses/view/message_confirm.tpl')
+                );
+            }
 
             Display::addFlash(
                 Display::return_message(
@@ -165,14 +207,14 @@ switch ($serviceSale['payment_type']) {
         );
 
         $template = new Template();
-
-        $template->assign('terms', $terms['terms_and_conditions']);
+        $template->assign('terms', $globalParameters['terms_and_conditions']);
         $template->assign('title', $serviceSale['service']['name']);
         $template->assign('price', $serviceSale['price']);
         $template->assign('currency', $serviceSale['currency_id']);
         $template->assign('buying_service', $serviceSale);
         $template->assign('user', $userInfo);
         $template->assign('service', $serviceSale['service']);
+        $template->assign('service_item', $serviceSale['item']);
         $template->assign('transfer_accounts', $transferAccounts);
         $template->assign('form', $form->returnForm());
 
@@ -181,7 +223,6 @@ switch ($serviceSale['payment_type']) {
         $template->assign('content', $content);
         $template->display_one_col_template();
         break;
-
     case BuyCoursesPlugin::PAYMENT_TYPE_CULQI:
         // We need to include the main online script, acording to the Culqi documentation the JS needs to be loeaded
         // directly from the main url "https://integ-pago.culqi.com" because a local copy of this JS is not supported
@@ -235,13 +276,14 @@ switch ($serviceSale['payment_type']) {
         );
 
         $template = new Template();
-        $template->assign('terms', $terms['terms_and_conditions']);
+        $template->assign('terms', $globalParameters['terms_and_conditions']);
         $template->assign('title', $serviceSale['service']['name']);
         $template->assign('price', floatval($serviceSale['price']));
         $template->assign('currency', $plugin->getSelectedCurrency());
         $template->assign('buying_service', $serviceSale);
         $template->assign('user', $userInfo);
         $template->assign('service', $serviceSale['service']);
+        $template->assign('service_item', $serviceSale['item']);
         $template->assign('form', $form->returnForm());
         $template->assign('is_culqi_payment', true);
         $template->assign('culqi_params', $culqiParams = $plugin->getCulqiParams());

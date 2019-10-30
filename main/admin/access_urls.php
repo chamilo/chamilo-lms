@@ -1,5 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
  * Frontend script for multiple access urls.
  *
@@ -20,8 +21,8 @@ if (!api_get_multiple_access_url()) {
     exit;
 }
 
-$interbreadcrumb[] = ["url" => 'index.php', 'name' => get_lang('PlatformAdmin')];
-$tool_name = get_lang('MultipleAccessURLs');
+$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('Administration')];
+$tool_name = get_lang('Multiple access URL / Branding');
 Display :: display_header($tool_name);
 
 $my_user_url_list = api_get_access_url_from_user(api_get_user_id());
@@ -30,24 +31,24 @@ $url_list = UrlManager::get_url_data();
 
 // Actions
 if (isset($_GET['action'])) {
-    $url_id = (empty($_GET['url_id']) ? 0 : intval($_GET['url_id']));
+    $url_id = empty($_GET['url_id']) ? 0 : (int) $_GET['url_id'];
 
     switch ($_GET['action']) {
         case 'delete_url':
             $result = UrlManager::delete($url_id);
             if ($result) {
-                echo Display::return_message(get_lang('URLDeleted'), 'normal');
+                echo Display::return_message(get_lang('URL deleted.'), 'normal');
             } else {
-                echo Display::return_message(get_lang('CannotDeleteURL'), 'error');
+                echo Display::return_message(get_lang('Cannot delete this URL.'), 'error');
             }
             break;
         case 'lock':
             UrlManager::set_url_status('lock', $url_id);
-            echo Display::return_message(get_lang('URLInactive'), 'normal');
+            echo Display::return_message(get_lang('The URL has been disabled'), 'normal');
             break;
         case 'unlock':
             UrlManager::set_url_status('unlock', $url_id);
-            echo Display::return_message(get_lang('URLActive'), 'normal');
+            echo Display::return_message(get_lang('The URL has been enabled'), 'normal');
             break;
         case 'register':
             // we are going to register the admin
@@ -61,7 +62,7 @@ if (isset($_GET['action'])) {
                         }
                     }
                     echo Display::return_message(
-                        get_lang('AdminUserRegisteredToThisURL').': '.$url_str.'<br />',
+                        get_lang('Admin user assigned to this URL').': '.$url_str.'<br />',
                         'normal',
                         false
                     );
@@ -83,7 +84,7 @@ foreach ($url_list as $my_url) {
 }
 if (!empty($url_string)) {
     echo Display::return_message(
-        get_lang('AdminShouldBeRegisterInSite').'<br />'.$url_string,
+        get_lang('Admin user should be registered here').'<br />'.$url_string,
         'warning',
         false
     );
@@ -92,7 +93,7 @@ if (!empty($url_string)) {
 // checking the current installation
 if ($current_access_url_id == -1) {
     echo Display::return_message(
-        get_lang('URLNotConfiguredPleaseChangedTo').': '.api_get_path(WEB_PATH),
+        get_lang('URL not configured yet, please add this URL :').': '.api_get_path(WEB_PATH),
         'warning'
     );
 } elseif (api_is_platform_admin()) {
@@ -103,7 +104,7 @@ if ($current_access_url_id == -1) {
     if ($quant == 0) {
         echo Display::return_message(
             '<a href="'.api_get_self().'?action=register&sec_token='.$parameters['sec_token'].'">'.
-            get_lang('ClickToRegisterAdmin').'</a>',
+            get_lang('Click here to register the admin into all sites').'</a>',
             'warning',
             false
         );
@@ -113,28 +114,28 @@ if ($current_access_url_id == -1) {
 // action menu
 echo '<div class="actions">';
 echo Display::url(
-    Display::return_icon('new_link.png', get_lang('AddUrl'), [], ICON_SIZE_MEDIUM),
+    Display::return_icon('new_link.png', get_lang('Add URL'), [], ICON_SIZE_MEDIUM),
     api_get_path(WEB_CODE_PATH).'admin/access_url_edit.php'
 );
 echo Display::url(
-    Display::return_icon('user.png', get_lang('ManageUsers'), [], ICON_SIZE_MEDIUM),
+    Display::return_icon('user.png', get_lang('Manage users'), [], ICON_SIZE_MEDIUM),
     api_get_path(WEB_CODE_PATH).'admin/access_url_edit_users_to_url.php'
 );
 echo Display::url(
-    Display::return_icon('course.png', get_lang('ManageCourses'), [], ICON_SIZE_MEDIUM),
+    Display::return_icon('course.png', get_lang('Manage courses'), [], ICON_SIZE_MEDIUM),
     api_get_path(WEB_CODE_PATH).'admin/access_url_edit_courses_to_url.php'
 );
 
 $userGroup = new UserGroup();
 if ($userGroup->getUseMultipleUrl()) {
     echo Display::url(
-        Display::return_icon('class.png', get_lang('ManageUserGroup'), [], ICON_SIZE_MEDIUM),
+        Display::return_icon('class.png', get_lang('Manage user groups'), [], ICON_SIZE_MEDIUM),
         api_get_path(WEB_CODE_PATH).'admin/access_url_edit_usergroup_to_url.php'
     );
 }
 
 echo Display::url(
-    Display::return_icon('folder.png', get_lang('ManageCourseCategories'), [], ICON_SIZE_MEDIUM),
+    Display::return_icon('folder.png', get_lang('Manage course categories'), [], ICON_SIZE_MEDIUM),
     api_get_path(WEB_CODE_PATH).'admin/access_url_edit_course_category_to_url.php'
 );
 
@@ -170,7 +171,7 @@ foreach ($data as $row) {
         "access_url_edit.php?url_id=$url_id"
     );
     if ($url_id != '1') {
-        $actions .= '<a href="access_urls.php?action=delete_url&amp;url_id='.$url_id.'" onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"), ENT_QUOTES, $charset))."'".')) return false;">'.
+        $actions .= '<a href="access_urls.php?action=delete_url&amp;url_id='.$url_id.'" onclick="javascript:if(!confirm('."'".addslashes(api_htmlentities(get_lang("Please confirm your choice"), ENT_QUOTES, $charset))."'".')) return false;">'.
             Display::return_icon('delete.png', get_lang('Delete'), [], ICON_SIZE_SMALL).'</a>';
     }
     $urls[] = [$url, $description, $status, $createdAt, $actions];
@@ -180,9 +181,9 @@ $table = new SortableTableFromArrayConfig($urls, 2, 50, 'urls');
 $table->set_additional_parameters($parameters);
 $table->set_header(0, 'URL');
 $table->set_header(1, get_lang('Description'));
-$table->set_header(2, get_lang('Active'));
-$table->set_header(3, get_lang('CreatedAt'));
-$table->set_header(4, get_lang('Modify'), false);
+$table->set_header(2, get_lang('active'));
+$table->set_header(3, get_lang('Created at'));
+$table->set_header(4, get_lang('Edit'), false);
 $table->display();
 
 Display :: display_footer();

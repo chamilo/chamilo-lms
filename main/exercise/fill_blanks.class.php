@@ -5,18 +5,16 @@
  *  Class FillBlanks.
  *
  * @author Eric Marguin
- * @author Julio Montoya multiple fill in blank option added
- *
- * @package chamilo.exercise
+ * @author Julio Montoya multiple fill in blank option added.
  */
 class FillBlanks extends Question
 {
-    const FILL_THE_BLANK_STANDARD = 0;
-    const FILL_THE_BLANK_MENU = 1;
-    const FILL_THE_BLANK_SEVERAL_ANSWER = 2;
+    public const FILL_THE_BLANK_STANDARD = 0;
+    public const FILL_THE_BLANK_MENU = 1;
+    public const FILL_THE_BLANK_SEVERAL_ANSWER = 2;
 
-    public static $typePicture = 'fill_in_blanks.png';
-    public static $explanationLangVar = 'FillBlanks';
+    public $typePicture = 'fill_in_blanks.png';
+    public $explanationLangVar = 'FillBlanks';
 
     /**
      * Constructor.
@@ -34,6 +32,7 @@ class FillBlanks extends Question
     public function createAnswersForm($form)
     {
         $defaults = [];
+        //$defaults['answer'] = get_lang('<table cellspacing="0" cellpadding="10" border="1" width="720" style="" height:="">    <tbody>        <tr>            <td colspan="2">            <h3>Example fill the form activity : calculate the Body Mass Index</h3>            </td>        </tr>        <tr>            <td style="text-align: right;"><strong>Age</strong></td>            <td width="75%" style="">[25] years old</td>        </tr>        <tr>            <td style="text-align: right;"><strong>Sex</strong></td>            <td style="" text-align:="">[M] (M or F)</td>        </tr>        <tr>            <td style="text-align: right;"><strong>Weight</strong></td>            <td style="" text-align:="">95 Kg</td>        </tr>        <tr>            <td style="vertical-align: top; text-align: right;"><strong>Height</strong></td>            <td style="vertical-align: top;">1.81 m</td>        </tr>        <tr>            <td style="vertical-align: top; text-align: right;"><strong>Body Mass Index</strong></td>            <td style="vertical-align: top;">[29] BMI =Weight/Size<sup>2</sup> (Cf.<a href="http://en.wikipedia.org/wiki/Body_mass_index" onclick="window.open(this.href,'','resizable=yes,location=yes,menubar=no,scrollbars=yes,status=yes,toolbar=no,fullscreen=no,dependent=no,width=800,height=600,left=40,top=40,status'); return false"> Wikipedia article</a>)</td>        </tr>    </tbody></table>');
         $defaults['answer'] = get_lang('DefaultTextInBlanks');
         $defaults['select_separator'] = 0;
         $blankSeparatorNumber = 0;
@@ -101,9 +100,9 @@ class FillBlanks extends Question
                 fields += "<label class=\"col-sm-2 control-label\"></label>";
                 fields += "<div class=\"col-sm-8\">";
                 fields += "<table class=\"data_table\">";
-                fields += "<tr><th style=\"width:220px\">'.get_lang('WordTofind').'</th>";
-                fields += "<th style=\"width:50px\">'.get_lang('QuestionWeighting').'</th>";
-                fields += "<th>'.get_lang('BlankInputSize').'</th></tr>";
+                fields += "<tr><th style=\"width:220px\">'.get_lang('Word to find').'</th>";
+                fields += "<th style=\"width:50px\">'.get_lang('Score').'</th>";
+                fields += "<th>'.get_lang('Input size of box to fill').'</th></tr>";
 
                 if (blanks != null) {
                     for (var i=0; i < blanks.length; i++) {
@@ -323,7 +322,7 @@ class FillBlanks extends Question
         // answer
         $form->addLabel(
             null,
-            get_lang('TypeTextBelow').', '.get_lang('And').' '.get_lang('UseTagForBlank')
+            get_lang('Please type your text below').', '.get_lang('and').' '.get_lang('use square brackets [...] to define one or more blanks')
         );
         $form->addElement(
             'html_editor',
@@ -332,27 +331,27 @@ class FillBlanks extends Question
             ['id' => 'answer'],
             ['ToolbarSet' => 'TestQuestionDescription']
         );
-        $form->addRule('answer', get_lang('GiveText'), 'required');
+        $form->addRule('answer', get_lang('Please type the text'), 'required');
 
         //added multiple answers
-        $form->addElement('checkbox', 'multiple_answer', '', get_lang('FillInBlankSwitchable'));
+        $form->addElement('checkbox', 'multiple_answer', '', get_lang('Allow answers order switches'));
         $form->addElement(
             'select',
             'select_separator',
-            get_lang('SelectFillTheBlankSeparator'),
+            get_lang('Select a blanks marker'),
             self::getAllowedSeparatorForSelect(),
             ' id="select_separator" style="width:150px" class="selectpicker" onchange="changeBlankSeparator()" '
         );
         $form->addLabel(
             null,
-            '<input type="button" onclick="updateBlanks()" value="'.get_lang('RefreshBlanks').'" class="btn btn-default" />'
+            '<input type="button" onclick="updateBlanks()" value="'.get_lang('Refresh terms').'" class="btn btn-default" />'
         );
 
         $form->addHtml('<div id="blanks_weighting"></div>');
 
         global $text;
         // setting the save button here and not in the question class.php
-        $form->addHtml('<div id="defineoneblank" style="color:#D04A66; margin-left:160px">'.get_lang('DefineBlanks').'</div>');
+        $form->addHtml('<div id="defineoneblank" style="color:#D04A66; margin-left:160px">'.get_lang('Please define at least one blank with square brackets [...]').'</div>');
         $form->addButtonSave($text, 'submitQuestion');
 
         if (!empty($this->id)) {
@@ -484,7 +483,7 @@ class FillBlanks extends Question
     /**
      * {@inheritdoc}
      */
-    public function return_header($exercise, $counter = null, $score = null)
+    public function return_header(Exercise $exercise, $counter = null, $score = [])
     {
         $header = parent::return_header($exercise, $counter, $score);
         $header .= '<table class="'.$this->question_table_class.'">
@@ -570,7 +569,6 @@ class FillBlanks extends Question
             case self::FILL_THE_BLANK_STANDARD:
             default:
                 $attributes['id'] = $labelId;
-                $attributes['class'] = 'form-control';
                 $result = Display::input(
                     'text',
                     "choice[$questionId][]",
@@ -1053,45 +1051,6 @@ class FillBlanks extends Question
     }
 
     /**
-     * return $text protected for use in regexp.
-     *
-     * @param string $text
-     *
-     * @return string
-     */
-    public static function getRegexpProtected($text)
-    {
-        $listRegexpCharacters = [
-            "/",
-            ".",
-            "+",
-            "*",
-            "?",
-            "[",
-            "^",
-            "]",
-            "$",
-            "(",
-            ")",
-            "{",
-            "}",
-            "=",
-            "!",
-            ">",
-            "|",
-            ":",
-            "-",
-            ")",
-        ];
-        $result = $text;
-        for ($i = 0; $i < count($listRegexpCharacters); $i++) {
-            $result = str_replace($listRegexpCharacters[$i], "\\".$listRegexpCharacters[$i], $result);
-        }
-
-        return $result;
-    }
-
-    /**
      * This function must be the same than the js one getSeparatorFromNumber above.
      *
      * @return array
@@ -1152,29 +1111,6 @@ class FillBlanks extends Question
         }
 
         return $listResults;
-    }
-
-    /**
-     * return the code number of the separator for the question.
-     *
-     * @param string $startSeparator
-     * @param string $endSeparator
-     *
-     * @return int
-     */
-    public function getDefaultSeparatorNumber($startSeparator, $endSeparator)
-    {
-        $listSeparators = self::getAllowedSeparator();
-        $result = 0;
-        for ($i = 0; $i < count($listSeparators); $i++) {
-            if ($listSeparators[$i][0] == $startSeparator &&
-                $listSeparators[$i][1] == $endSeparator
-            ) {
-                $result = $i;
-            }
-        }
-
-        return $result;
     }
 
     /**
@@ -1266,6 +1202,7 @@ class FillBlanks extends Question
         $hideExpectedAnswer = false;
         $hideUserSelection = false;
         switch ($resultsDisabled) {
+            case RESULT_DISABLE_SHOW_SCORE_AND_EXPECTED_ANSWERS_AND_RANKING:
             case RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER:
                 $hideUserSelection = true;
                 break;
@@ -1321,7 +1258,7 @@ class FillBlanks extends Question
         if ($hideExpectedAnswer) {
             $correctAnswerHtml = "<span 
                 class='feedback-green' 
-                title='".get_lang('ExerciseWithFeedbackWithoutCorrectionComment')."'> &#8212; </span>";
+                title='".get_lang('Note: This test has been setup to hide the expected answers.')."'> &#8212; </span>";
         }
 
         $result = "<span class='feedback-question'>";

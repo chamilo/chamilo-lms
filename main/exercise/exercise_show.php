@@ -10,13 +10,11 @@ use ChamiloSession as Session;
  *
  * @version $Id: exercise_show.php 22256 2009-07-20 17:40:20Z ivantcholakov $
  *
- * @package chamilo.exercise
- *
  * @todo remove the debug code and use the general debug library
  * @todo small letters for table variables
  */
 require_once __DIR__.'/../inc/global.inc.php';
-$debug = false;
+
 $origin = api_get_origin();
 $currentUserId = api_get_user_id();
 $printHeaders = $origin === 'learnpath';
@@ -67,7 +65,7 @@ if (empty($exerciseResult)) {
 if (empty($choiceDegreeCertainty)) {
     $choiceDegreeCertainty = isset($_REQUEST['choiceDegreeCertainty']) ? $_REQUEST['choiceDegreeCertainty'] : null;
 }
-$questionId = isset($_REQUEST['questionId']) ? $_REQUEST['questionId'] : null;
+$questionId = isset($_REQUEST['questionId']) ? (int) $_REQUEST['questionId'] : null;
 
 if (empty($choice)) {
     $choice = isset($_REQUEST['choice']) ? $_REQUEST['choice'] : null;
@@ -127,7 +125,7 @@ if (empty($objExercise)) {
     $objExercise = new Exercise();
     $objExercise->read($exercise_id);
 }
-$feedback_type = $objExercise->feedback_type;
+$feedback_type = $objExercise->getFeedbackType();
 
 // Only users can see their own results
 if (!$is_allowedToEdit) {
@@ -139,16 +137,19 @@ if (!$is_allowedToEdit) {
 $allowRecordAudio = api_get_setting('enable_record_audio') === 'true';
 $allowTeacherCommentAudio = api_get_configuration_value('allow_teacher_comment_audio') === true;
 
+$js = '<script>'.api_get_language_translate_html().'</script>';
+$htmlHeadXtra[] = $js;
+
 if (api_is_in_gradebook()) {
     $interbreadcrumb[] = [
         'url' => Category::getUrl(),
-        'name' => get_lang('ToolGradebook'),
+        'name' => get_lang('Assessments'),
     ];
 }
 
 $interbreadcrumb[] = [
     'url' => 'exercise.php?'.api_get_cidreq(),
-    'name' => get_lang('Exercises'),
+    'name' => get_lang('Tests'),
 ];
 $interbreadcrumb[] = [
     'url' => 'overview.php?exerciseId='.$exercise_id.'&'.api_get_cidreq(),
@@ -207,8 +208,16 @@ if ($action != 'export') {
                 var oHidn = document.createElement("input");
                 oHidn.type = "hidden";
                 var selname = oHidn.name = "marks_" + m_id[i];
-                var selid = document.forms['marksform_' + m_id[i]].marks.selectedIndex;
-                oHidn.value = document.forms['marksform_' + m_id[i]].marks.options[selid].value;
+
+                var elMarks = document.forms['marksform_' + m_id[i]].marks;
+
+                if (elMarks.tagName.toLowerCase() === 'select') {
+                    var selid = elMarks.selectedIndex;
+                    oHidn.value = elMarks.options[selid].value;
+                } else if (elMarks.tagName.toLowerCase() === 'input') {
+                    oHidn.value = elMarks.value;
+                }
+
                 f.appendChild(oHidn);
             }
 
@@ -247,7 +256,7 @@ if (!empty($track_exercise_info)) {
             if ($origin != 'learnpath') {
                 if ($currentUserId == $student_id) {
                     echo Display::return_message(
-                        get_lang('ThankYouForPassingTheTest'),
+                        get_lang('Thank you for passing the test'),
                         'warning',
                         false
                     );
@@ -280,7 +289,7 @@ if (!empty($track_exercise_info)) {
             break;
     }
 } else {
-    echo Display::return_message(get_lang('CantViewResults'), 'warning');
+    echo Display::return_message(get_lang('Can\'t view results'), 'warning');
     $show_results = false;
 }
 
@@ -306,29 +315,24 @@ if ($show_results || $show_only_total_score || $showTotalScoreAndUserChoicesInLa
 }
 
 $i = $totalScore = $totalWeighting = 0;
-if ($debug > 0) {
-    error_log("ExerciseResult: ".print_r($exerciseResult, 1));
-    error_log("QuestionList: ".print_r($questionList, 1));
-}
-
 $arrques = [];
 $arrans = [];
-$user_restriction = $is_allowedToEdit ? '' : "AND user_id=".intval($student_id)." ";
+$user_restriction = $is_allowedToEdit ? '' : " AND user_id= $student_id ";
 $sql = "SELECT attempts.question_id, answer
         FROM $TBL_TRACK_ATTEMPT as attempts
-        INNER JOIN ".$TBL_TRACK_EXERCISES." AS stats_exercises
-        ON stats_exercises.exe_id=attempts.exe_id
+        INNER JOIN $TBL_TRACK_EXERCISES AS stats_exercises
+        ON stats_exercises.exe_id = attempts.exe_id
         INNER JOIN $TBL_EXERCISE_QUESTION AS quizz_rel_questions
         ON
             quizz_rel_questions.exercice_id=stats_exercises.exe_exo_id AND
             quizz_rel_questions.question_id = attempts.question_id AND
             quizz_rel_questions.c_id=".api_get_course_int_id()."
-        INNER JOIN ".$TBL_QUESTIONS." AS questions
+        INNER JOIN $TBL_QUESTIONS AS questions
         ON
             questions.id = quizz_rel_questions.question_id AND
             questions.c_id = ".api_get_course_int_id()."
         WHERE
-            attempts.exe_id = ".$id." $user_restriction
+            attempts.exe_id = $id $user_restriction
 		GROUP BY quizz_rel_questions.question_order, attempts.question_id";
 $result = Database::query($sql);
 $question_list_from_database = [];
@@ -355,7 +359,7 @@ if (!empty($track_exercise_info['data_tracking'])) {
 }
 
 // Display the text when finished message if we are on a LP #4227
-$end_of_message = $objExercise->selectTextWhenFinished();
+$end_of_message = $objExercise->getTextWhenFinished();
 if (!empty($end_of_message) && ($origin === 'learnpath')) {
     echo Display::return_message($end_of_message, 'normal', false);
     echo "<div class='clear'>&nbsp;</div>";
@@ -526,154 +530,8 @@ foreach ($questionList as $questionId) {
             $questionScore = $question_result['score'];
             $totalScore += $question_result['score'];
 
-            $final_overlap = $question_result['extra']['final_overlap'];
-            $final_missing = $question_result['extra']['final_missing'];
-            $final_excess = $question_result['extra']['final_excess'];
-
-            $overlap_color = $question_result['extra']['overlap_color'];
-            $missing_color = $question_result['extra']['missing_color'];
-            $excess_color = $question_result['extra']['excess_color'];
-
-            $threadhold1 = $question_result['extra']['threadhold1'];
-            $threadhold2 = $question_result['extra']['threadhold2'];
-            $threadhold3 = $question_result['extra']['threadhold3'];
-
-            if ($show_results) {
-                if ($overlap_color) {
-                    $overlap_color = 'green';
-                } else {
-                    $overlap_color = 'red';
-                }
-
-                if ($missing_color) {
-                    $missing_color = 'green';
-                } else {
-                    $missing_color = 'red';
-                }
-                if ($excess_color) {
-                    $excess_color = 'green';
-                } else {
-                    $excess_color = 'red';
-                }
-
-                if (!is_numeric($final_overlap)) {
-                    $final_overlap = 0;
-                }
-
-                if (!is_numeric($final_missing)) {
-                    $final_missing = 0;
-                }
-                if (!is_numeric($final_excess)) {
-                    $final_excess = 0;
-                }
-
-                if ($final_excess > 100) {
-                    $final_excess = 100;
-                }
-
-                $table_resume = '
-                    <table class="data_table">
-                        <tr class="row_odd" >
-                            <td>&nbsp;</td>
-                            <td><b>'.get_lang('Requirements').'</b></td>
-                            <td><b>'.get_lang('YourAnswer').'</b></td>
-                        </tr>
-                        <tr class="row_even">
-                            <td><b>'.get_lang('Overlap').'</b></td>
-                            <td>'.get_lang('Min').' '.$threadhold1.'</td>
-                            <td>
-                                <div style="color:'.$overlap_color.'">
-                                    '.(($final_overlap < 0) ? 0 : intval($final_overlap)).'
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td><b>'.get_lang('Excess').'</b></td>
-                            <td>'.get_lang('Max').' '.$threadhold2.'</td>
-                            <td>
-                                <div style="color:'.$excess_color.'">
-                                    '.(($final_excess < 0) ? 0 : intval($final_excess)).'
-                                </div>
-                            </td>
-                        </tr>
-                        <tr class="row_even">
-                            <td><b>'.get_lang('Missing').'</b></td>
-                            <td>'.get_lang('Max').' '.$threadhold3.'</td>
-                            <td>
-                                <div style="color:'.$missing_color.'">
-                                    '.(($final_missing < 0) ? 0 : intval($final_missing)).'
-                                </div>
-                            </td>
-                        </tr>
-                    </table>
-                ';
-
-                if ($answerType != HOT_SPOT_DELINEATION) {
-                    $item_list = explode('@@', $destination);
-
-                    $try = $item_list[0];
-                    $lp = $item_list[1];
-                    $destinationid = $item_list[2];
-                    $url = $item_list[3];
-                    $table_resume = '';
-                } else {
-                    if ($next == 0) {
-                        $try = $try_hotspot;
-                        $lp = $lp_hotspot;
-                        $destinationid = $select_question_hotspot;
-                        $url = $url_hotspot;
-                    } else {
-                        //show if no error
-                        $comment = $answerComment = $objAnswerTmp->selectComment($nbrAnswers);
-                        $answerDestination = $objAnswerTmp->selectDestination($nbrAnswers);
-                    }
-                }
-
-                echo '<h1><div style="color:#333;">'.get_lang('Feedback').'</div></h1>';
-                if ($answerType == HOT_SPOT_DELINEATION) {
-                    if ($organs_at_risk_hit > 0) {
-                        $message = '<br />'.get_lang('ResultIs').' <b>'.$result_comment.'</b><br />';
-                        $message .= '<p style="color:#DC0A0A;"><b>'.get_lang('OARHit').'</b></p>';
-                    } else {
-                        $message = '<p>'.get_lang('YourDelineation').'</p>';
-                        $message .= $table_resume;
-                        $message .= '<br />'.get_lang('ResultIs').' <b>'.$result_comment.'</b><br />';
-                    }
-                    $message .= '<p>'.$comment.'</p>';
-                    echo $message;
-                } else {
-                    echo '<p>'.$comment.'</p>';
-                }
-
-                //showing the score
-                $queryfree = "SELECT marks from ".$TBL_TRACK_ATTEMPT." 
-                              WHERE exe_id = ".intval($id)." AND question_id= ".intval($questionId);
-                $resfree = Database::query($queryfree);
-                $questionScore = Database::result($resfree, 0, "marks");
-                $totalScore += $questionScore;
-                $relPath = api_get_path(REL_PATH);
-                echo '</table></td></tr>';
-                echo "
-                        <tr>
-                            <td colspan=\"2\">
-                                <div id=\"hotspot-solution\"></div>
-                                <script>
-                                    $(function() {
-                                        new HotspotQuestion({
-                                            questionId: $questionId,
-                                            exerciseId: {$objExercise->id},
-                                            exeId: $id,
-                                            selector: '#hotspot-solution',
-                                            for: 'solution',
-                                            relPath: '$relPath'
-                                        });
-                                    });
-                                </script>
-                            </td>
-                        </tr>
-                    </table>
-                ";
-            }
+            //$organs_at_risk_hit
+            echo $objExercise->getDelineationResult($objQuestionTmp, $questionId, $show_results, $question_result);
             break;
         case ANNOTATION:
             $question_result = $objExercise->manage_answer(
@@ -732,11 +590,11 @@ foreach ($questionList as $questionId) {
             $name = 'fckdiv'.$questionId;
             $marksname = 'marksName'.$questionId;
             if (in_array($answerType, [FREE_ANSWER, ORAL_EXPRESSION, ANNOTATION])) {
-                $url_name = get_lang('EditCommentsAndMarks');
+                $url_name = get_lang('Edit individual feedback and grade the open question');
             } else {
-                $url_name = get_lang('AddComments');
-                if ($action == 'edit') {
-                    $url_name = get_lang('EditIndividualComment');
+                $url_name = get_lang('Add individual feedback');
+                if ($action === 'edit') {
+                    $url_name = get_lang('Edit individual feedback');
                 }
             }
             echo '<p>';
@@ -768,14 +626,16 @@ foreach ($questionList as $questionId) {
             $renderer->setFormTemplate('<form{attributes}><div>{content}</div></form>');
             $renderer->setCustomElementTemplate('<div>{element}</div>');
             $comnt = Event::get_comments($id, $questionId);
-            $default = ['comments_'.$questionId => $comnt];
+
+            $textareaId = 'comments_'.$questionId;
+            $default = [$textareaId => $comnt];
 
             if ($useAdvancedEditor) {
                 $feedback_form->addElement(
                     'html_editor',
-                    'comments_'.$questionId,
+                    $textareaId,
                     null,
-                    null,
+                    ['id' => $textareaId],
                     [
                         'ToolbarSet' => 'TestAnswerFeedback',
                         'Width' => '100%',
@@ -783,7 +643,7 @@ foreach ($questionList as $questionId) {
                     ]
                 );
             } else {
-                $feedback_form->addElement('textarea', 'comments_'.$questionId);
+                $feedback_form->addElement('textarea', $textareaId, ['id' => $textareaId]);
             }
             $feedback_form->setDefaults($default);
             $feedback_form->display();
@@ -808,36 +668,69 @@ foreach ($questionList as $questionId) {
 
         if ($is_allowedToEdit && $isFeedbackAllowed && $action != 'export') {
             if (in_array($answerType, [FREE_ANSWER, ORAL_EXPRESSION, ANNOTATION])) {
-                $marksname = "marksName".$questionId;
+                $marksname = 'marksName'.$questionId;
                 $arrmarks[] = $questionId;
 
                 echo '<div id="'.$marksname.'" class="hidden">';
-                // @todo use FormValidator
-                /*$formMark = new FormValidator("marksform_'.$questionId.'", 'post');
-                $options = [
-                  1,
-                  2
-                ];
-                $formMark->addSelect('marks', get_lang('AssignMarks'), $options);
-                $formMark->display();*/
-                echo '<form name="marksform_'.$questionId.'" method="post" action="">';
-                echo get_lang('AssignMarks');
-                echo "&nbsp;<select name='marks' id='select_marks_".$questionId."' class='selectpicker exercise_mark_select'>";
+
+                $allowDecimalScore = api_get_configuration_value('quiz_open_question_decimal_score');
+                $formMark = new FormValidator('marksform_'.$questionId, 'post');
+                $formMark->addHeader(get_lang('Assign a grade'));
                 $model = ExerciseLib::getCourseScoreModel();
-                if (empty($model)) {
-                    for ($i = 0; $i <= $questionWeighting; $i++) {
-                        echo '<option value="'.$i.'" '.(($i == $questionScore) ? "selected='selected'" : '').'>'.$i.'</option>';
-                    }
+
+                if ($allowDecimalScore && empty($model)) {
+                    $formMark->addElement(
+                        'number',
+                        'marks',
+                        get_lang('Assign a grade'),
+                        [
+                            'step' => 0.01,
+                            'min' => 0,
+                            'max' => $questionWeighting,
+                            'placeholder' => 0,
+                            'class' => 'grade_select',
+                            'id' => "select_marks_$questionId",
+                        ]
+                    );
+                    $formMark->setDefaults(['marks' => $questionScore]);
+                    $formMark->applyFilter('marks', 'stripslashes');
+                    $formMark->applyFilter('marks', 'trim');
+                    $formMark->applyFilter('marks', 'floatval');
+                    $formMark->addRule('marks', get_lang('Numerical'), 'numeric');
+                    $formMark->addRule('marks', get_lang('Value is too small.'), 'min_numeric_length', 0);
+                    $formMark->addRule('marks', get_lang('Value is too big.'), 'max_numeric_length', $questionWeighting);
                 } else {
-                    foreach ($model['score_list'] as $item) {
-                        $i = api_number_format($item['score_to_qualify'] / 100 * $questionWeighting, 2);
-                        $model = ExerciseLib::getModelStyle($item, $i);
-                        echo '<option class = "'.$item['css_class'].'" value="'.$i.'" '.(($i == $questionScore) ? "selected='selected'" : '').'>'.$model.'</option>';
+                    $select = $formMark->addSelect(
+                        'marks',
+                        get_lang('Assign a grade'),
+                        [],
+                        ['disable_js' => true, 'extra_class' => 'grade_select']
+                    );
+
+                    if (empty($model)) {
+                        for ($i = 0; $i <= $questionWeighting; $i++) {
+                            $attributes = [];
+                            if ($questionScore == $i) {
+                                $attributes['selected'] = 'selected';
+                            }
+                            $select->addOption($i, $i, $attributes);
+                        }
+                    } else {
+                        foreach ($model['score_list'] as $item) {
+                            $i = api_number_format($item['score_to_qualify'] / 100 * $questionWeighting, 2);
+                            $model = ExerciseLib::getModelStyle($item, $i);
+                            $attributes = ['class' => $item['css_class']];
+                            if ($questionScore == $i) {
+                                $attributes['selected'] = 'selected';
+                            }
+                            $select->addOption($model, $i, $attributes);
+                        }
+                        $select->updateSelectWithSelectedOption($formMark);
                     }
                 }
-                echo '</select>';
-                echo '</form><br /></div>';
 
+                $formMark->display();
+                echo '</div>';
                 if ($questionScore == -1) {
                     $questionScore = 0;
                     echo ExerciseLib::getNotCorrectedYetText();
@@ -925,6 +818,10 @@ foreach ($questionList as $questionId) {
         $score['score'] = $my_total_score;
         $score['weight'] = $my_total_weight;
         $score['comments'] = isset($comnt) ? $comnt : null;
+
+        if (isset($question_result['user_answered'])) {
+            $score['user_answered'] = $question_result['user_answered'];
+        }
     }
 
     if (in_array($objQuestionTmp->type, [FREE_ANSWER, ORAL_EXPRESSION, ANNOTATION])) {
@@ -959,6 +856,19 @@ foreach ($questionList as $questionId) {
 } // end of large foreach on questions
 
 $totalScoreText = '';
+
+if ($answerType != MULTIPLE_ANSWER_TRUE_FALSE_DEGREE_CERTAINTY) {
+    $pluginEvaluation = QuestionOptionsEvaluationPlugin::create();
+
+    if ('true' === $pluginEvaluation->get(QuestionOptionsEvaluationPlugin::SETTING_ENABLE)) {
+        $formula = $pluginEvaluation->getFormulaForExercise($objExercise->selectId());
+
+        if (!empty($formula)) {
+            $totalScore = $pluginEvaluation->getResultWithFormula($id, $formula);
+            $totalWeighting = $pluginEvaluation->getMaxScore();
+        }
+    }
+}
 
 // Total score
 $myTotalScoreTemp = $totalScore;
@@ -1006,7 +916,10 @@ if (!empty($category_list) && ($show_results || $show_only_total_score || $showT
     );
 }
 
-if (RESULT_DISABLE_RANKING == $track_exercise_info['results_disabled']) {
+if (in_array(
+    $track_exercise_info['results_disabled'],
+    [RESULT_DISABLE_RANKING, RESULT_DISABLE_SHOW_SCORE_AND_EXPECTED_ANSWERS_AND_RANKING]
+)) {
     echo Display::page_header(get_lang('Ranking'), null, 'h4');
     echo ExerciseLib::displayResultsInRanking(
         $objExercise->iId,
@@ -1095,8 +1008,8 @@ if ($isFeedbackAllowed && $origin != 'learnpath' && $origin != 'student_progress
     if ($objExercise->results_disabled != RESULT_DISABLE_NO_SCORE_AND_EXPECTED_ANSWERS) {
         $emailForm->addCheckBox(
             'send_notification',
-            get_lang('SendEmail'),
-            get_lang('SendEmail'),
+            get_lang('Send email'),
+            get_lang('Send email'),
             ['onclick' => 'openEmailWrapper();']
         );
         $emailForm->addHtml('<div id="email_content_wrapper" style="display:none; margin-bottom: 20px;">');
@@ -1136,7 +1049,7 @@ if ($isFeedbackAllowed && $origin != 'learnpath' && $origin != 'student_progress
     $emailForm->setDefaults(['notification_content' => $content]);
 
     $emailForm->addButtonSend(
-        get_lang('CorrectTest'),
+        get_lang('Correct test'),
         'submit',
         false,
         ['onclick' => "getFCK('$strids', '$marksid')"]
@@ -1155,8 +1068,8 @@ if ($origin == 'student_progress') {
         ?>
     <button type="button" class="save"
             onclick="top.location.href='../auth/my_progress.php?course=<?php echo api_get_course_id(); ?>'"
-            value="<?php echo get_lang('Finish'); ?>">
-        <?php echo get_lang('Finish'); ?>
+            value="<?php echo get_lang('Quit test'); ?>">
+        <?php echo get_lang('Quit test'); ?>
     </button>
     <?php
     }
@@ -1184,7 +1097,7 @@ if ($origin != 'learnpath') {
         echo '</body></html>';
     } else {
         echo Display::return_message(
-            get_lang('ExerciseFinished').' '.get_lang('ToContinueUseMenu'),
+            get_lang('ExerciseQuit tested').' '.get_lang('To continue this course, please use the side-menu.'),
             'normal'
         );
         echo '<br />';

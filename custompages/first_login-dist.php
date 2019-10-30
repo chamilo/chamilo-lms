@@ -53,10 +53,10 @@ if (isset($_POST['password'])) {
     }
 }
 if ($_GET['invalid'] == 1) {
-    $error_message = get_lang('CurrentPasswordEmptyOrIncorrect');
+    $error_message = get_lang('The current password is incorrect');
 }
 if ($_GET['invalid'] == 2) {
-    $error_message = get_lang('PassTwo');
+    $error_message = get_lang('You have typed two different passwords');
 }
 $www = api_get_path('WEB_PATH');
 /**
@@ -91,10 +91,10 @@ $www = api_get_path('WEB_PATH');
         <div id="header">
             <img src="/custompages/images/header.png" alt="Logo" />
         </div> <!-- #header -->
-    <h2> <?php echo custompages_get_lang('FirstLogin'); ?> </h2>
+    <h2> <?php echo custompages_get_lang('First connection'); ?> </h2>
 
         <div id="changepassword-form-box" class="form-box">
-      <div class="info"> <?php echo custompages_get_lang('FirstLoginChangePassword'); ?> </div>
+      <div class="info"> <?php echo custompages_get_lang('First connectionChangePassword'); ?> </div>
         <?php if (isset($error_message)) {
     echo '<div id="changepassword-form-error" class="form-error">'.$error_message.'</div>';
 }?>
@@ -107,7 +107,7 @@ $www = api_get_path('WEB_PATH');
                 </div>
             </form>
             <div id="changepassword-form-submit" class="form-submit" onclick="document.forms['changepassword-form'].submit();">
-      <span><?php echo custompages_get_lang('LoginEnter'); ?></span>
+      <span><?php echo custompages_get_lang('Login'); ?></span>
             </div> <!-- #form-submit -->
         </div> <!-- #form -->
         <div id="footer">

@@ -19,7 +19,7 @@ $userRepository = UserManager::getRepository();
 /** @var UserEntity $user */
 $user = UserManager::getManager()->find($_REQUEST['u']);
 
-if (!$user) {
+if ($user === null) {
     api_not_allowed(true);
 }
 
@@ -34,7 +34,7 @@ foreach ($subscribedUsers as $subscribedUser) {
     /** @var UserEntity $hrm */
     $hrm = UserManager::getManager()->find($subscribedUser->getFriendUserId());
 
-    if (!$hrm) {
+    if ($hrm === null) {
         continue;
     }
 
@@ -45,11 +45,11 @@ $form = new FormValidator('assign_hrm');
 $form->addUserAvatar('u', get_lang('User'), 'medium');
 $form->addSelectAjax(
     'hrm',
-    get_lang('HrmList'),
+    get_lang('Human Resource Managers list'),
     $hrmOptions,
     ['multiple' => 'multiple', 'url' => api_get_path(WEB_AJAX_PATH).'user_manager.ajax.php?a=user_by_role']
 );
-$form->addButtonSave(get_lang('Send'));
+$form->addButtonSave(get_lang('Send message'));
 $form->setDefaults([
     'u' => $user,
     'hrm' => array_keys($hrmOptions),
@@ -68,7 +68,7 @@ if ($form->validate()) {
         /** @var UserEntity $hrm */
         $hrm = UserManager::getManager()->find($hrmId);
 
-        if (!$hrm) {
+        if ($hrm === null) {
             continue;
         }
 
@@ -80,21 +80,21 @@ if ($form->validate()) {
     }
 
     Display::addFlash(
-        Display::return_message(get_lang('AssignedUsersHaveBeenUpdatedSuccessfully'), 'success')
+        Display::return_message(get_lang('The assigned users have been updated'), 'success')
     );
 
     header('Location: '.api_get_path(WEB_CODE_PATH).'admin/user_information.php?user_id='.$user->getId());
     exit;
 }
 
-$interbreadcrumb[] = ['name' => get_lang('PlatformAdmin'), 'url' => 'index.php'];
-$interbreadcrumb[] = ['name' => get_lang('UserList'), 'url' => 'user_list.php'];
+$interbreadcrumb[] = ['name' => get_lang('Administration'), 'url' => 'index.php'];
+$interbreadcrumb[] = ['name' => get_lang('User list'), 'url' => 'user_list.php'];
 $interbreadcrumb[] = [
     'name' => UserManager::formatUserFullName($user),
     'url' => 'user_information.php?user_id='.$user->getId(),
 ];
 
-$toolName = get_lang('AssignHrmToUser');
+$toolName = get_lang('Assign Human Resources Manager to user');
 
 $view = new Template($toolName);
 $view->assign('header', $toolName);

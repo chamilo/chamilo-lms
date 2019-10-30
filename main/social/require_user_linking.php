@@ -41,17 +41,17 @@ foreach ($usersRequested as $userRequested) {
 }
 
 $form = new FormValidator('require_user_linking');
-$form->addUserAvatar('hrm', get_lang('DRH'), 'medium');
+$form->addUserAvatar('hrm', get_lang('Human Resources Manager'), 'medium');
 $form->addSelectAjax(
     'users',
-    [get_lang('LinkMeToStudent'), get_lang('LinkMeToStudentComment')],
+    [get_lang('Link me to student'), get_lang('Link me to studentComment')],
     $requestOptions,
     [
         'multiple' => 'multiple',
         'url' => api_get_path(WEB_AJAX_PATH).'user_manager.ajax.php?a=get_user_like',
     ]
 );
-$form->addButtonSave(get_lang('RequestLinkToStudent'));
+$form->addButtonSave(get_lang('Request linking with student'));
 $form->setDefaults([
     'hrm' => $hrm,
     'users' => array_keys($requestOptions),
@@ -68,7 +68,7 @@ if ($form->validate()) {
     UserManager::requestUsersToHRManager($hrm->getId(), $usersId, false);
 
     Display::addFlash(
-        Display::return_message(get_lang('LinkingRequestsAdded'), 'success')
+        Display::return_message(get_lang('Linking request added'), 'success')
     );
 
     header('Location: '.api_get_self());
@@ -79,7 +79,7 @@ $usersAssigned = UserManager::get_users_followed_by_drh($hrm->getId());
 
 $content = $form->returnForm();
 
-$content .= Display::page_subheader(get_lang('AssignedUsersListToHumanResourcesManager'));
+$content .= Display::page_subheader(get_lang('List of users assigned to Human Resources manager'));
 $content .= '<div class="row">';
 
 foreach ($usersAssigned as $userAssigned) {
@@ -108,7 +108,7 @@ foreach ($usersAssigned as $userAssigned) {
 
 $content .= '</div>';
 
-$toolName = get_lang('RequestLinkingToUser');
+$toolName = get_lang('Request linking to student');
 
 $view = new Template($toolName);
 $view->assign('header', $toolName);

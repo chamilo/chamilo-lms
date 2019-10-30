@@ -17,7 +17,7 @@ if (!api_is_allowed_to_session_edit(false, true)) {
     api_not_allowed();
 }
 
-echo Display::page_subheader(get_lang('RecoverDropboxFiles'));
+echo Display::page_subheader(get_lang('Recover dropbox files'));
 if (isset($_GET['recover_id']) && !empty($_GET['recover_id'])) {
     $recover_id = intval($_GET['recover_id']);
 
@@ -53,8 +53,8 @@ if (Database::num_rows($result)) {
         }
     }
     $headers = [
-        get_lang('FileName'),
-        get_lang('UploadedDate'),
+        get_lang('Filename'),
+        get_lang('Date of upload'),
         get_lang('Action'),
     ];
     echo Display::table($headers, $rows);

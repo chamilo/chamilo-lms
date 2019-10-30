@@ -24,6 +24,7 @@ if (!api_is_allowed_to_edit()) {
 }
 
 api_set_more_memory_and_time_limits();
+$isPlatformAdmin = api_is_platform_admin();
 
 // Section for the tabs
 $this_section = SECTION_COURSES;
@@ -31,11 +32,11 @@ $this_section = SECTION_COURSES;
 // Breadcrumbs
 $interbreadcrumb[] = [
     'url' => '../course_info/maintenance.php',
-    'name' => get_lang('Maintenance'),
+    'name' => get_lang('Backup'),
 ];
 
 // Displaying the header
-$nameTools = get_lang('ImportBackup');
+$nameTools = get_lang('Import backup');
 Display::display_header($nameTools);
 
 // Display the tool title
@@ -84,23 +85,23 @@ if (Security::check_token('post') && ($action === 'course_select_form' || $impor
         $cr = new CourseRestorer($course);
         $cr->set_file_option($_POST['same_file_name_option']);
         $cr->restore();
-        echo Display::return_message(get_lang('ImportFinished'));
+        echo Display::return_message(get_lang('Import finished'));
         echo '<a class="btn btn-default" href="'.api_get_path(WEB_COURSE_PATH).api_get_course_path().'/index.php">'.
-            get_lang('CourseHomepage').'</a>';
+            get_lang('Course home').'</a>';
     } else {
         if (!$error) {
-            echo Display::return_message(get_lang('NoResourcesInBackupFile'), 'warning');
-            echo '<a class="btn btn-default" href="import_backup.php?'.api_get_cidreq().'">'.get_lang('TryAgain').'</a>';
+            echo Display::return_message(get_lang('There are no resources in backup file'), 'warning');
+            echo '<a class="btn btn-default" href="import_backup.php?'.api_get_cidreq().'">'.get_lang('Try again').'</a>';
         } elseif ($filename === false) {
-            echo Display::return_message(get_lang('ArchivesDirectoryNotWriteableContactAdmin'), 'error');
-            echo '<a class="btn btn-default" href="import_backup.php?'.api_get_cidreq().'">'.get_lang('TryAgain').'</a>';
+            echo Display::return_message(get_lang('The app/cache/ directory, used by this tool, is not writeable. Please contact your platform administrator.'), 'error');
+            echo '<a class="btn btn-default" href="import_backup.php?'.api_get_cidreq().'">'.get_lang('Try again').'</a>';
         } else {
             if ($filename == '') {
-                echo Display::return_message(get_lang('SelectBackupFile'), 'error');
-                echo '<a class="btn btn-default" href="import_backup.php?'.api_get_cidreq().'">'.get_lang('TryAgain').'</a>';
+                echo Display::return_message(get_lang('Select a backup file'), 'error');
+                echo '<a class="btn btn-default" href="import_backup.php?'.api_get_cidreq().'">'.get_lang('Try again').'</a>';
             } else {
-                echo Display::return_message(get_lang('UploadError'), 'error');
-                echo '<a class="btn btn-default" href="import_backup.php?'.api_get_cidreq().'">'.get_lang('TryAgain').'</a>';
+                echo Display::return_message(get_lang('Upload failed, please check maximum file size limits and folder rights.'), 'error');
+                echo '<a class="btn btn-default" href="import_backup.php?'.api_get_cidreq().'">'.get_lang('Try again').'</a>';
             }
         }
     }
@@ -125,15 +126,15 @@ if (Security::check_token('post') && ($action === 'course_select_form' || $impor
         $hiddenFields['sec_token'] = Security::get_token();
         CourseSelectForm::display_form($course, $hiddenFields);
     } elseif ($filename === false) {
-        echo Display::return_message(get_lang('ArchivesDirectoryNotWriteableContactAdmin'), 'error');
-        echo '<a class="btn btn-default" href="import_backup.php?'.api_get_cidreq().'">'.get_lang('TryAgain').'</a>';
+        echo Display::return_message(get_lang('The app/cache/ directory, used by this tool, is not writeable. Please contact your platform administrator.'), 'error');
+        echo '<a class="btn btn-default" href="import_backup.php?'.api_get_cidreq().'">'.get_lang('Try again').'</a>';
     } else {
-        echo Display::return_message(get_lang('NoResourcesInBackupFile'), 'warning');
-        echo '<a class="btn btn-default" href="import_backup.php?'.api_get_cidreq().'">'.get_lang('TryAgain').'</a>';
+        echo Display::return_message(get_lang('There are no resources in backup file'), 'warning');
+        echo '<a class="btn btn-default" href="import_backup.php?'.api_get_cidreq().'">'.get_lang('Try again').'</a>';
     }
 } else {
     $user = api_get_user_info();
-    $backups = CourseArchiver::getAvailableBackups($is_platformAdmin ? null : $user['user_id']);
+    $backups = CourseArchiver::getAvailableBackups($isPlatformAdmin ? null : $user['user_id']);
     $backups_available = count($backups) > 0;
 
     $form = new FormValidator(
@@ -143,7 +144,7 @@ if (Security::check_token('post') && ($action === 'course_select_form' || $impor
         '',
         ['enctype' => 'multipart/form-data']
     );
-    $form->addElement('header', get_lang('SelectBackupFile'));
+    $form->addElement('header', get_lang('Select a backup file'));
     $renderer = $form->defaultRenderer();
     $renderer->setCustomElementTemplate('<div>{element}</div> ');
 
@@ -153,7 +154,7 @@ if (Security::check_token('post') && ($action === 'course_select_form' || $impor
         'radio',
         'backup_type',
         '',
-        get_lang('LocalFile'),
+        get_lang('local file'),
         'local',
         'id="bt_local" class="checkbox" onclick="javascript: document.import_backup_form.backup_server.disabled=true;document.import_backup_form.backup.disabled=false;"'
     );
@@ -165,7 +166,7 @@ if (Security::check_token('post') && ($action === 'course_select_form' || $impor
             'radio',
             'backup_type',
             '',
-            get_lang('ServerFile'),
+            get_lang('server file'),
             'server',
             'id="bt_server" class="checkbox" onclick="javascript: document.import_backup_form.backup_server.disabled=false;document.import_backup_form.backup.disabled=true;"'
         );
@@ -189,7 +190,7 @@ if (Security::check_token('post') && ($action === 'course_select_form' || $impor
             'radio',
             '',
             '',
-            '<i>'.get_lang('NoBackupsAvailable').'</i>',
+            '<i>'.get_lang('No backup is available').'</i>',
             '',
             'disabled="true"'
         );
@@ -201,7 +202,7 @@ if (Security::check_token('post') && ($action === 'course_select_form' || $impor
         'radio',
         'import_option',
         '',
-        get_lang('ImportFullBackup'),
+        get_lang('Import full backup'),
         'full_backup',
         'id="import_option_1" class="checkbox"'
     );
@@ -209,20 +210,20 @@ if (Security::check_token('post') && ($action === 'course_select_form' || $impor
         'radio',
         'import_option',
         '',
-        get_lang('LetMeSelectItems'),
+        get_lang('Let me select learning objects'),
         'select_items',
         'id="import_option_2" class="checkbox"'
     );
 
     $form->addElement('html', '<br /><br />');
 
-    $form->addElement('html', get_lang('SameFilename'));
+    $form->addElement('html', get_lang('What should be done with imported files with the same file name as existing files?'));
     $form->addElement('html', '<br /><br />');
     $form->addElement(
         'radio',
         'same_file_name_option',
         '',
-        get_lang('SameFilenameSkip'),
+        get_lang('What should be done with imported files with the same file name as existing files?Skip'),
         FILE_SKIP,
         'id="same_file_name_option_1" class="checkbox"'
     );
@@ -230,7 +231,7 @@ if (Security::check_token('post') && ($action === 'course_select_form' || $impor
         'radio',
         'same_file_name_option',
         '',
-        get_lang('SameFilenameRename'),
+        get_lang('What should be done with imported files with the same file name as existing files?Rename'),
         FILE_RENAME,
         'id="same_file_name_option_2" class="checkbox"'
     );
@@ -238,13 +239,13 @@ if (Security::check_token('post') && ($action === 'course_select_form' || $impor
         'radio',
         'same_file_name_option',
         '',
-        get_lang('SameFilenameOverwrite'),
+        get_lang('What should be done with imported files with the same file name as existing files?Overwrite'),
         FILE_OVERWRITE,
         'id="same_file_name_option_3" class="checkbox"'
     );
 
     $form->addElement('html', '<br />');
-    $form->addButtonImport(get_lang('ImportBackup'));
+    $form->addButtonImport(get_lang('Import backup'));
     $values['backup_type'] = 'local';
     $values['import_option'] = 'full_backup';
     $values['same_file_name_option'] = FILE_OVERWRITE;

@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\Repository\LegalRepository;
+
 /**
  * @package chamilo.messages
  */
@@ -24,9 +26,9 @@ if (empty($userInfo)) {
 }
 
 $substitutionTerms = [
-    'password' => get_lang('EncryptedData'),
-    'salt' => get_lang('RandomData'),
-    'empty' => get_lang('NoData'),
+    'password' => get_lang('Encrypted data'),
+    'salt' => get_lang('Random data'),
+    'empty' => get_lang('No data available'),
 ];
 
 $action = isset($_REQUEST['action']) ? $_REQUEST['action'] : '';
@@ -34,21 +36,21 @@ $formToString = '';
 
 if (api_get_setting('allow_terms_conditions') === 'true') {
     $form = new FormValidator('delete_term', 'post', api_get_self().'?action=delete_legal&user_id='.$userId);
-    $form->addHtml(Display::return_message(get_lang('WhyYouWantToDeleteYourLegalAgreement'), 'normal', false));
-    $form->addTextarea('explanation', [get_lang('DeleteLegal'), get_lang('ExplanationDeleteLegal')], [], true);
+    $form->addHtml(Display::return_message(get_lang('You can ask below for your legal agreement to be deleted or your account to be deleted.</br>In the case of the legal agreement, once deleted you will have to accept it again on your next login to be able to access the platform and recover your access, because we cannot reasonably at the same time give you a personal environment and not treat your personal data.</br>In the case of an account deletion, your account will be deleted along with all of your course subscriptions and all the information related to your account. Please select the corresponding option with care. In both cases, one of our administrators will review your request before it is effective, to avoid any misunderstanding and definitive loss of your data.'), 'normal', false));
+    $form->addTextarea('explanation', [get_lang('Delete legal agreement'), get_lang('ExplanationDelete legal agreement')], [], true);
     $form->addHidden('action', 'delete_legal');
-    $form->addButtonSave(get_lang('DeleteLegal'));
+    $form->addButtonSave(get_lang('Delete legal agreement'));
     $formToString = $form->returnForm();
 
     $formDelete = new FormValidator('delete_account', 'post', api_get_self().'?action=delete_account&user_id='.$userId);
     $formDelete->addTextarea(
         'explanation',
-        [get_lang('DeleteAccount'), get_lang('ExplanationDeleteAccount')],
+        [get_lang('Delete account'), get_lang('ExplanationDelete account')],
         [],
         true
     );
     $formDelete->addHidden('action', 'delete_account');
-    $formDelete->addButtonDelete(get_lang('DeleteAccount'));
+    $formDelete->addButtonDelete(get_lang('Delete account'));
     $formToString .= $formDelete->returnForm();
 }
 switch ($action) {
@@ -83,11 +85,11 @@ switch ($action) {
             $currentUserInfo = api_get_user_info($userId);
             foreach ($bossList as $bossId) {
                 $subjectEmail = sprintf(
-                    get_lang('UserXSignedTheAgreement'),
+                    get_lang('User %s signed the agreement.'),
                     $currentUserInfo['complete_name']
                 );
                 $contentEmail = sprintf(
-                    get_lang('UserXSignedTheAgreementTheDateY'),
+                    get_lang('User %s signed the agreement.TheDateY'),
                     $currentUserInfo['complete_name'],
                     api_get_local_time($time)
                 );
@@ -100,7 +102,7 @@ switch ($action) {
                 );
             }
         }
-        Display::addFlash(Display::return_message(get_lang('Saved')));
+        Display::addFlash(Display::return_message(get_lang('Saved..')));
         header('Location: '.api_get_self());
         exit;
         break;
@@ -120,7 +122,7 @@ switch ($action) {
                 $explanation
             );
 
-            Display::addFlash(Display::return_message(get_lang('Saved')));
+            Display::addFlash(Display::return_message(get_lang('Saved..')));
             Event::addEvent(
                 LOG_USER_DELETE_ACCOUNT_REQUEST,
                 LOG_USER_OBJECT,
@@ -129,9 +131,9 @@ switch ($action) {
 
             $url = api_get_path(WEB_CODE_PATH).'admin/user_list_consent.php';
             $link = Display::url($url, $url);
-            $subject = get_lang('RequestForAccountDeletion');
+            $subject = get_lang('Request for account removal');
             $content = sprintf(
-                get_lang('TheUserXAskedForAccountDeletionWithJustificationXGoHereX'),
+                get_lang('User %s asked for the deletion of his/her account, explaining that "%s". You can process the request here: %s'),
                 $userInfo['complete_name'],
                 $explanation,
                 $link
@@ -175,9 +177,9 @@ switch ($action) {
 
             $url = api_get_path(WEB_CODE_PATH).'admin/user_list_consent.php';
             $link = Display::url($url, $url);
-            $subject = get_lang('RequestForLegalConsentWithdrawal');
+            $subject = get_lang('Request for consent withdrawal on legal terms');
             $content = sprintf(
-                get_lang('TheUserXAskedLegalConsentWithdrawalWithJustificationXGoHereX'),
+                get_lang('User %s asked for the removal of his/her consent to our legal terms, explaining that "%s". You can process the request here: %s'),
                 $userInfo['complete_name'],
                 $explanation,
                 $link
@@ -209,14 +211,14 @@ if (!empty($_GET['export'])) {
 
 $allowSocial = api_get_setting('allow_social_tool') === 'true';
 
-$nameTools = get_lang('PersonalDataReport');
+$nameTools = get_lang('Personal data');
 $show_message = null;
 
 if ($allowSocial) {
     $this_section = SECTION_SOCIAL;
     $interbreadcrumb[] = [
         'url' => api_get_path(WEB_PATH).'main/social/home.php',
-        'name' => get_lang('SocialNetwork'),
+        'name' => get_lang('Social network'),
     ];
 } else {
     $this_section = SECTION_MYPROFILE;
@@ -226,13 +228,13 @@ if ($allowSocial) {
     ];
 }
 
-$interbreadcrumb[] = ['url' => '#', 'name' => get_lang('PersonalDataReport')];
+$interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Personal data')];
 
 // LEFT CONTENT
 $socialMenuBlock = '';
 if ($allowSocial) {
     // Block Social Menu
-    $socialMenuBlock = SocialManager::getMenuSocial('personal-data');
+    $socialMenuBlock = SocialManager::show_social_menu('personal-data');
 }
 
 // MAIN CONTENT
@@ -253,7 +255,7 @@ foreach ($properties as $key => $value) {
                     $personalDataContent .= '<u>'.$categoryName.'</u> &gt;</li>';
                     $personalDataContent .= '<ul id="personal-data-list-'.$category.'_options" style="display:none;">';
                     if (empty($subValue)) {
-                        $personalDataContent .= '<li>'.get_lang('NoData').'</li>';
+                        $personalDataContent .= '<li>'.get_lang('No data available').'</li>';
                     } else {
                         foreach ($subValue as $subSubValue) {
                             $personalDataContent .= '<li>'.Security::remove_XSS($subSubValue).'</li>';
@@ -265,10 +267,16 @@ foreach ($properties as $key => $value) {
             case 'extraFields':
                 $personalDataContent .= '<li>'.$key.': </li><ul>';
                 if (empty($value)) {
-                    $personalDataContent .= '<li>'.get_lang('NoData').'</li>';
+                    $personalDataContent .= '<li>'.get_lang('No data available').'</li>';
                 } else {
                     foreach ($value as $subValue) {
-                        $personalDataContent .= '<li>'.$subValue->variable.': '.Security::remove_XSS($subValue->value).'</li>';
+                        if (is_array($subValue->value)) {
+                            // tags fields can be stored as arrays
+                            $val = json_encode(Security::remove_XSS($subValue->value));
+                        } else {
+                            $val = Security::remove_XSS($subValue->value);
+                        }
+                        $personalDataContent .= '<li>'.$subValue->variable.': '.$val.'</li>';
                     }
                 }
                 $personalDataContent .= '</ul>';
@@ -279,7 +287,7 @@ foreach ($properties as $key => $value) {
                     $personalDataContent .= '<u>'.get_lang($category).'</u> &gt;</li>';
                     $personalDataContent .= '<ul id="personal-data-list-'.$category.'_options" style="display:none;">';
                     if (empty($subValue)) {
-                        $personalDataContent .= '<li>'.get_lang('NoData').'</li>';
+                        $personalDataContent .= '<li>'.get_lang('No data available').'</li>';
                     } else {
                         if (count($subValue) === 1000) {
                             $showWarningMessage = true;
@@ -309,7 +317,7 @@ foreach ($properties as $key => $value) {
             case 'groups':
                 $personalDataContent .= '<li>'.$key.': </li><ul>';
                 if (empty($subValue)) {
-                    $personalDataContent .= '<li>'.get_lang('NoData').'</li>';
+                    $personalDataContent .= '<li>'.get_lang('No data available').'</li>';
                 } else {
                     foreach ($value as $subValue) {
                         $personalDataContent .= '<li>'.Security::remove_XSS($subValue).'</li>';
@@ -322,7 +330,7 @@ foreach ($properties as $key => $value) {
                 foreach ($value as $session => $courseList) {
                     $personalDataContent .= '<li>'.$session.'<ul>';
                     if (empty($courseList)) {
-                        $personalDataContent .= '<li>'.get_lang('NoData').'</li>';
+                        $personalDataContent .= '<li>'.get_lang('No data available').'</li>';
                     } else {
                         foreach ($courseList as $course) {
                             $personalDataContent .= '<li>'.$course.'</li>';
@@ -347,7 +355,7 @@ foreach ($properties as $key => $value) {
         /*sif (!empty($value['date'])) {
             $personalDataContent .= '<li>'.$key.': '.$value['date'].'</li>';
         } else {
-            $personalDataContent .= '<li>'.$key.': '.get_lang('ComplexDataNotShown').'</li>';
+            $personalDataContent .= '<li>'.$key.': '.get_lang('Complex data (not shown)').'</li>';
         }*/
     } else {
         $personalDataContent .= '<li>'.$key.': '.Security::remove_XSS($value).'</li>';
@@ -363,30 +371,30 @@ if (api_get_setting('allow_terms_conditions') === 'true') {
         $userId,
         'legal_accept'
     );
-    $permissionBlock .= Display::return_icon('accept_na.png', get_lang('NotAccepted'));
+    $permissionBlock .= Display::return_icon('accept_na.png', get_lang('Rejected'));
     if (isset($value['value']) && !empty($value['value'])) {
         list($legalId, $legalLanguageId, $legalTime) = explode(':', $value['value']);
-        $permissionBlock = '<h4>'.get_lang('CurrentStatus').'</h4>'.
-            get_lang('LegalAgreementAccepted').' '.Display::return_icon('accept.png', get_lang('LegalAgreementAccepted'), [], ICON_SIZE_TINY).
+        $permissionBlock = '<h4>'.get_lang('Current status').'</h4>'.
+            get_lang('Legal agreement accepted').' '.Display::return_icon('accept.png', get_lang('Legal agreement accepted'), [], ICON_SIZE_TINY).
             '<br />';
         $permissionBlock .= get_lang('Date').': '.api_get_local_time($legalTime).'<br /><br />';
         $permissionBlock .= $formToString;
 
     /*$permissionBlock .= Display::url(
-        get_lang('DeleteLegal'),
+        get_lang('Delete legal agreement'),
         api_get_self().'?action=delete_legal&user_id='.$userId,
         ['class' => 'btn btn-danger btn-xs']
     );*/
     } else {
         // @TODO add action handling for button
         $permissionBlock .= Display::url(
-            get_lang('SendLegal'),
+            get_lang('Send legal agreement'),
             api_get_self().'?action=send_legal&user_id='.$userId,
             ['class' => 'btn btn-primary btn-xs']
         );
     }
 } else {
-    $permissionBlock .= get_lang('NoTermsAndConditionsAvailable');
+    $permissionBlock .= get_lang('No terms and conditions available');
 }
 
 //Build the final array to pass to template
@@ -431,11 +439,11 @@ $tpl->assign('actions', Display::toolbarAction('toolbar', [$actions]));
 $termLink = '';
 if (api_get_setting('allow_terms_conditions') === 'true') {
     $url = api_get_path(WEB_CODE_PATH).'social/terms.php';
-    $termLink = Display::url(get_lang('ReadTermsAndConditions'), $url);
+    $termLink = Display::url(get_lang('Read the Terms and Conditions'), $url);
 }
 
 if ($showWarningMessage) {
-    Display::addFlash(Display::return_message(get_lang('MoreDataAvailableInTheDatabaseButTrunkedForEfficiencyReasons')));
+    Display::addFlash(Display::return_message(get_lang('More data available in the database but trunked for efficiency reasons.')));
 }
 
 // Block Social Avatar

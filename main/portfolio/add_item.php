@@ -11,7 +11,7 @@ $categories = $em
 
 $form = new FormValidator('add_portfolio', 'post', $baseUrl.'action=add_item');
 if (api_get_configuration_value('save_titles_as_html')) {
-    $form->addHtmlEditor('title', get_lang('Title'), true, false, ['ToolbarSet' => 'NotebookStudent']);
+    $form->addHtmlEditor('title', get_lang('Title'), true, false, ['ToolbarSet' => 'TitleAsHtml']);
 } else {
     $form->addText('title', get_lang('Title'));
     $form->applyFilter('title', 'trim');
@@ -44,14 +44,14 @@ if ($form->validate()) {
     $em->flush();
 
     Display::addFlash(
-        Display::return_message(get_lang('PortfolioItemAdded'), 'success')
+        Display::return_message(get_lang('Portfolio item added'), 'success')
     );
 
     header("Location: $baseUrl");
     exit;
 }
 
-$toolName = get_lang('AddPortfolioItem');
+$toolName = get_lang('Add item to portfolio');
 $interbreadcrumb[] = [
     'name' => get_lang('Portfolio'),
     'url' => $baseUrl,

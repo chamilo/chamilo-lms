@@ -67,20 +67,20 @@ class UserForm extends FormValidator
     protected function build_user_info_form()
     {
         if (api_is_western_name_order()) {
-            $this->addElement('static', 'fname', get_lang('FirstName'), $this->user_info['firstname']);
-            $this->addElement('static', 'lname', get_lang('LastName'), $this->user_info['lastname']);
+            $this->addElement('static', 'fname', get_lang('First name'), $this->user_info['firstname']);
+            $this->addElement('static', 'lname', get_lang('Last name'), $this->user_info['lastname']);
         } else {
-            $this->addElement('static', 'lname', get_lang('LastName'), $this->user_info['lastname']);
-            $this->addElement('static', 'fname', get_lang('FirstName'), $this->user_info['firstname']);
+            $this->addElement('static', 'lname', get_lang('Last name'), $this->user_info['lastname']);
+            $this->addElement('static', 'fname', get_lang('First name'), $this->user_info['firstname']);
         }
-        $this->addElement('static', 'uname', get_lang('UserName'), $this->user_info['username']);
+        $this->addElement('static', 'uname', get_lang('Username'), $this->user_info['username']);
         $this->addElement(
             'static',
             'email',
-            get_lang('Email'),
+            get_lang('e-mail'),
             '<a href="mailto:'.$this->user_info['email'].'">'.$this->user_info['email'].'</a>'
         );
-        $this->addElement('static', 'ofcode', get_lang('OfficialCode'), $this->user_info['official_code']);
+        $this->addElement('static', 'ofcode', get_lang('Code'), $this->user_info['official_code']);
         $this->addElement('static', 'phone', get_lang('Phone'), $this->user_info['phone']);
         $this->addButtonSave(get_lang('Back'), 'submit');
     }

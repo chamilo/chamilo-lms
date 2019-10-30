@@ -13,8 +13,8 @@
  */
 class MultipleAnswerCombinationTrueFalse extends MultipleAnswerCombination
 {
-    public static $typePicture = 'mcmaco.png';
-    public static $explanationLangVar = 'MultipleAnswerCombinationTrueFalse';
+    public $typePicture = 'mcmaco.png';
+    public $explanationLangVar = 'MultipleAnswerCombinationTrueFalse';
     public $options;
 
     /**
@@ -28,7 +28,7 @@ class MultipleAnswerCombinationTrueFalse extends MultipleAnswerCombination
         $this->options = [
             '1' => get_lang('True'),
             '0' => get_lang('False'),
-            '2' => get_lang('DontKnow'),
+            '2' => get_lang('Don\'t know'),
         ];
     }
 }

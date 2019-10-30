@@ -17,7 +17,7 @@ api_protect_course_script();
 /** @var learnpath $learnPath */
 $learnPath = Session::read('oLP');
 
-$nameTools = get_lang('Doc');
+$nameTools = get_lang('Document');
 $this_section = SECTION_COURSES;
 Event::event_access_tool(TOOL_LEARNPATH);
 
@@ -26,16 +26,16 @@ $lpId = $learnPath->get_id();
 if (api_is_in_gradebook()) {
     $interbreadcrumb[] = [
         'url' => Category::getUrl(),
-        'name' => get_lang('ToolGradebook'),
+        'name' => get_lang('Assessments'),
     ];
 }
 $interbreadcrumb[] = [
     'url' => 'lp_controller.php?action=list&'.api_get_cidreq(),
-    'name' => get_lang('LearningPaths'),
+    'name' => get_lang('Learning paths'),
 ];
 $interbreadcrumb[] = [
     'url' => api_get_self()."?action=build&lp_id=".$lpId.'&'.api_get_cidreq(),
-    'name' => $learnPath->get_name(),
+    'name' => $learnPath->getNameNoTags(),
 ];
 
 $htmlHeadXtra[] = '<script>
@@ -65,12 +65,22 @@ $form = new FormValidator(
 );
 
 // Form title
-$form->addElement('header', get_lang('EditLPSettings'));
+$form->addElement('header', get_lang('Edit'));
 
 // Title
-$form->addElement('text', 'lp_name', api_ucfirst(get_lang('LearnpathTitle')), ['size' => 43]);
+if (api_get_configuration_value('save_titles_as_html')) {
+    $form->addHtmlEditor(
+        'lp_name',
+        get_lang('Learning path name'),
+        true,
+        false,
+        ['ToolbarSet' => 'TitleAsHtml']
+    );
+} else {
+    $form->addElement('text', 'lp_name', api_ucfirst(get_lang('Title')), ['size' => 43]);
+}
 $form->applyFilter('lp_name', 'html_filter');
-$form->addRule('lp_name', get_lang('ThisFieldIsRequired'), 'required');
+$form->addRule('lp_name', get_lang('Required field'), 'required');
 $form->addElement('hidden', 'lp_encoding');
 $items = learnpath::getCategoryFromCourseIntoSelect(api_get_course_int_id(), true);
 $form->addElement('select', 'category_id', get_lang('Category'), $items);
@@ -80,14 +90,14 @@ $form->addElement(
     'checkbox',
     'hide_toc_frame',
     null,
-    get_lang('HideTocFrame')
+    get_lang('Hide table of contents frame')
 );
 
 if (api_get_setting('allow_course_theme') === 'true') {
     $mycourselptheme = api_get_course_setting('allow_learning_path_theme');
     if (!empty($mycourselptheme) && $mycourselptheme != -1 && $mycourselptheme == 1) {
         //LP theme picker
-        $theme_select = $form->addElement('SelectTheme', 'lp_theme', get_lang('Theme'));
+        $theme_select = $form->addElement('SelectGraphical theme', 'lp_theme', get_lang('Graphical theme'));
         $form->applyFilter('lp_theme', 'trim');
         $s_theme = $learnPath->get_theme();
         $theme_select->setSelected($s_theme); //default
@@ -108,12 +118,12 @@ $form->applyFilter('lp_author', 'html_filter');
 if (strlen($learnPath->get_preview_image()) > 0) {
     $show_preview_image = '<img src='.api_get_path(WEB_COURSE_PATH).api_get_course_path()
         .'/upload/learning_path/images/'.$learnPath->get_preview_image().'>';
-    $form->addElement('label', get_lang('ImagePreview'), $show_preview_image);
-    $form->addElement('checkbox', 'remove_picture', null, get_lang('DelImage'));
+    $form->addElement('label', get_lang('Image preview'), $show_preview_image);
+    $form->addElement('checkbox', 'remove_picture', null, get_lang('Remove picture'));
 }
-$label = ($learnPath->get_preview_image() != '' ? get_lang('UpdateImage') : get_lang('AddImage'));
-$form->addElement('file', 'lp_preview_image', [$label, get_lang('ImageWillResizeMsg')]);
-$form->addRule('lp_preview_image', get_lang('OnlyImagesAllowed'), 'filetype', ['jpg', 'jpeg', 'png', 'gif']);
+$label = $learnPath->get_preview_image() != '' ? get_lang('Update Image') : get_lang('Add image');
+$form->addElement('file', 'lp_preview_image', [$label, get_lang('Trainer picture will resize if needed')]);
+$form->addRule('lp_preview_image', get_lang('Only PNG, JPG or GIF images allowed'), 'filetype', ['jpg', 'jpeg', 'png', 'gif']);
 
 // Search terms (only if search is activated).
 if (api_get_setting('search_enabled') === 'true') {
@@ -151,17 +161,17 @@ $publicated_on = $learnPath->publicated_on;
 // Prerequisites
 $form->addElement('html', '<div class="form-group">');
 $items = $learnPath->display_lp_prerequisites_list();
-$form->addElement('html', '<label class="col-md-2">'.get_lang('LearnpathPrerequisites').'</label>');
+$form->addElement('html', '<label class="col-md-2">'.get_lang('Prerequisites').'</label>');
 $form->addElement('html', '<div class="col-md-8">');
 $form->addElement('html', $items);
-$form->addElement('html', '<div class="help-block">'.get_lang('LpPrerequisiteDescription').'</div>');
+$form->addElement('html', '<div class="help-block">'.get_lang('Selecting another learning path as a prerequisite will hide the current prerequisite until the one in prerequisite is fully completed (100%)').'</div>');
 $form->addElement('html', '</div>');
 $form->addElement('html', '<div class="col-md-2"></div>');
 $form->addElement('html', '</div>');
 // Time Control
-if (Tracking::minimunTimeAvailable(api_get_session_id(), api_get_course_int_id())) {
+if (Tracking::minimumTimeAvailable(api_get_session_id(), api_get_course_int_id())) {
     $accumulateTime = $_SESSION['oLP']->getAccumulateWorkTime();
-    $form->addText('accumulate_work_time', [get_lang('LpMinTime'), get_lang('LpMinTimeDescription')]);
+    $form->addText('accumulate_work_time', [get_lang('Minimum time (minutes)'), get_lang('Minimum time (minutes)Description')]);
     $defaults['accumulate_work_time'] = $accumulateTime;
 }
 
@@ -170,7 +180,7 @@ $form->addElement(
     'checkbox',
     'activate_start_date_check',
     null,
-    get_lang('EnableStartTime'),
+    get_lang('Enable start time'),
     ['onclick' => 'activate_start_date()']
 );
 
@@ -181,7 +191,7 @@ if (!empty($publicated_on) && $publicated_on !== '0000-00-00 00:00:00') {
 }
 
 $form->addElement('html', '<div id="start_date_div" style="display:'.$display_date.';">');
-$form->addDateTimePicker('publicated_on', get_lang('PublicationDate'));
+$form->addDateTimePicker('publicated_on', get_lang('Publication date'));
 $form->addElement('html', '</div>');
 
 //End date
@@ -189,7 +199,7 @@ $form->addElement(
     'checkbox',
     'activate_end_date_check',
     null,
-    get_lang('EnableEndTime'),
+    get_lang('Enable end time'),
     ['onclick' => 'activate_end_date()']
 );
 $display_date = 'none';
@@ -199,11 +209,11 @@ if (!empty($expired_on)) {
 }
 
 $form->addElement('html', '<div id="end_date_div" style="display:'.$display_date.';">');
-$form->addDateTimePicker('expired_on', get_lang('ExpirationDate'));
+$form->addDateTimePicker('expired_on', get_lang('Expiration date'));
 $form->addElement('html', '</div>');
 
 if (api_is_platform_admin()) {
-    $form->addElement('checkbox', 'use_max_score', null, get_lang('UseMaxScore100'));
+    $form->addElement('checkbox', 'use_max_score', null, get_lang('Use default maximum score of 100'));
     $defaults['use_max_score'] = $learnPath->use_max_score;
 }
 
@@ -213,7 +223,7 @@ if ($subscriptionSettings['allow_add_users_to_lp']) {
         'checkbox',
         'subscribe_users',
         null,
-        get_lang('SubscribeUsersToLp')
+        get_lang('Subscribe users to learning path')
     );
 }
 
@@ -221,8 +231,8 @@ if ($subscriptionSettings['allow_add_users_to_lp']) {
 $form->addElement(
     'checkbox',
     'accumulate_scorm_time',
-    [null, get_lang('AccumulateScormTimeInfo')],
-    get_lang('AccumulateScormTime')
+    [null, get_lang('When enabled, the session time for SCORM Learning Paths will be cumulative, otherwise, it will only be counted from the last update time.')],
+    get_lang('Accumulate SCORM session time')
 );
 
 $options = learnpath::getIconSelect();
@@ -236,28 +246,23 @@ if (!empty($options)) {
     $defaults['extra_lp_icon'] = learnpath::getSelectedIcon($lpId);
 }
 
-$enableLpExtraFields = false;
-if ($enableLpExtraFields) {
-    $extraField = new ExtraField('lp');
-    $extra = $extraField->addElements($form, $lpId);
-}
+$extraField = new ExtraField('lp');
+$extra = $extraField->addElements($form, $lpId, ['lp_icon']);
 
 $skillList = Skill::addSkillsToForm($form, ITEM_TYPE_LEARNPATH, $lpId);
 
 // Submit button
-$form->addButtonSave(get_lang('SaveLPSettings'));
+$form->addButtonSave(get_lang('Save course settings'));
 
 // Hidden fields
 $form->addElement('hidden', 'action', 'update_lp');
 $form->addElement('hidden', 'lp_id', $lpId);
 
-if ($enableLpExtraFields) {
-    $htmlHeadXtra[] = '<script>
-    $(function() {
-        '.$extra['jquery_ready_content'].'
-    });
-    </script>';
-}
+$htmlHeadXtra[] = '<script>
+$(function() {
+    '.$extra['jquery_ready_content'].'
+});
+</script>';
 
 $htmlHeadXtra[] = '<script>'.$learnPath->get_js_dropdown_array().'</script>';
 
@@ -271,7 +276,7 @@ $defaults['subscribe_users'] = $learnPath->getSubscribeUsers();
 $defaults['skills'] = array_keys($skillList);
 $form->setDefaults($defaults);
 
-Display::display_header(get_lang('CourseSettings'), 'Path');
+Display::display_header(get_lang('Course settings'), 'Path');
 
 echo $learnPath->build_action_menu(false, false, true, false);
 echo '<div class="row">';

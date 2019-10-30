@@ -59,7 +59,7 @@ if (api_is_anonymous()) {
 
         $form2->addElement('html', $option2);
         $form2->addElement('checkbox', 'right', null, get_lang('Yes'));
-        $form2->addElement('button', 'submit', get_lang('Send'));
+        $form2->addElement('button', 'submit', get_lang('Send message'));
         $formHtml2 = $form2->returnForm();
 
         if ($form2->validate()) {

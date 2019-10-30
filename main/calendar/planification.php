@@ -44,7 +44,7 @@ $colors = ChamiloApi::getColorPalette(false, true, count($sessions));
 $agenda = new Agenda('personal');
 $actions = $agenda->displayActions('list', $userId);
 
-$toolName = get_lang('SessionsPlanCalendar');
+$toolName = get_lang('Sessions plan calendar');
 
 $interbreadcrumb[] = [
     'url' => api_get_path(WEB_CODE_PATH).'calendar/agenda_js.php?type=personal',

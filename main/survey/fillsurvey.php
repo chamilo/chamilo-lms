@@ -61,7 +61,7 @@ $sessionId = isset($_GET['id_session']) ? (int) $_GET['id_session'] : api_get_se
 if (!empty($userInfo)) {
     $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'survey/survey_list.php?cidReq='.$courseInfo['code'].'&id_session='.$sessionId,
-        'name' => get_lang('SurveyList'),
+        'name' => get_lang('Survey list'),
     ];
 }
 
@@ -86,7 +86,7 @@ if ($surveyCode != '') {
 
 // First we check if the needed parameters are present
 if ((!isset($_GET['course']) || !isset($_GET['invitationcode'])) && !isset($_GET['user_id'])) {
-    api_not_allowed(true, get_lang('SurveyParametersMissingUseCopyPaste'));
+    api_not_allowed(true, get_lang('There is a parameter missing in the link. Please use copy and past'));
 }
 
 $invitationcode = $_GET['invitationcode'];
@@ -99,8 +99,20 @@ if ($invitationcode == 'auto' && isset($_GET['scode'])) {
     if ($isAnonymous) {
         $autoInvitationcode = 'auto-ANONY_'.md5(time())."-$surveyCode";
     } else {
-        // New invitation code from userid
-        $autoInvitationcode = "auto-$userid-$surveyCode";
+        $invitations = SurveyManager::getUserInvitationsForSurveyInCourse(
+            $userid,
+            $surveyCode,
+            $courseInfo['real_id'],
+            $sessionId
+        );
+        $lastInvitation = current($invitations);
+
+        if (!$lastInvitation) {
+            // New invitation code from userid
+            $autoInvitationcode = "auto-$userid-$surveyCode";
+        } else {
+            $autoInvitationcode = $lastInvitation->getInvitationCode();
+        }
     }
 
     // The survey code must exist in this course, or the URL is invalid
@@ -143,7 +155,7 @@ $sql = "SELECT * FROM $table_survey_invitation
             invitation_code = '".Database::escape_string($invitationcode)."'";
 $result = Database::query($sql);
 if (Database::num_rows($result) < 1) {
-    api_not_allowed(true, get_lang('WrongInvitationCode'));
+    api_not_allowed(true, get_lang('Wrong invitation code'));
 }
 
 $survey_invitation = Database::fetch_array($result, 'ASSOC');
@@ -157,7 +169,7 @@ if (!isset($_POST['finish_survey']) &&
     ) ||
     ($survey_invitation['answered'] == 1 && !isset($_GET['user_id']))
 ) {
-    api_not_allowed(true, Display::return_message(get_lang('YouAlreadyFilledThisSurvey')));
+    api_not_allowed(true, Display::return_message(get_lang('You already filled this survey')));
 }
 
 $logInfo = [
@@ -182,7 +194,7 @@ if (Database::num_rows($result) > 1) {
     if ($_POST['language']) {
         $survey_invitation['survey_id'] = $_POST['language'];
     } else {
-        Display::display_header(get_lang('ToolSurvey'));
+        Display::display_header(get_lang('Surveys'));
         $frmLangUrl = api_get_self().'?'.api_get_cidreq().'&'
             .http_build_query([
                 'course' => Security::remove_XSS($_GET['course']),
@@ -195,7 +207,7 @@ if (Database::num_rows($result) > 1) {
             echo '<option value="'.$row['survey_id'].'">'.$row['lang'].'</option>';
         }
         echo '</select>';
-        echo '<button type="submit" name="Submit" class="next">'.get_lang('Ok').'</button>';
+        echo '<button type="submit" name="Submit" class="next">'.get_lang('Validate').'</button>';
         echo '</form>';
         Display::display_footer();
         exit();
@@ -386,7 +398,7 @@ if (count($_POST) > 0) {
         }
     } else {
         // In case it's another type than 0 or 1
-        api_not_allowed(true, get_lang('ErrorSurveyTypeUnknown'));
+        api_not_allowed(true, get_lang('Survey type unknown'));
     }
 }
 
@@ -426,50 +438,50 @@ if ($survey_data['form_fields'] != '' &&
     if (api_is_western_name_order()) {
         if (isset($list['firstname']) && $list['firstname'] == 1) {
             //FIRST NAME
-            $form->addElement('text', 'firstname', get_lang('FirstName'), ['size' => 40]);
+            $form->addElement('text', 'firstname', get_lang('First name'), ['size' => 40]);
             if (api_get_setting('profile', 'name') !== 'true') {
                 $form->freeze(['firstname']);
             }
             $form->applyFilter(['firstname'], 'stripslashes');
             $form->applyFilter(['firstname'], 'trim');
-            $form->addRule('firstname', get_lang('ThisFieldIsRequired'), 'required');
+            $form->addRule('firstname', get_lang('Required field'), 'required');
         }
         if (isset($list['lastname']) && $list['lastname'] == 1) {
             //    LAST NAME
-            $form->addElement('text', 'lastname', get_lang('LastName'), ['size' => 40]);
+            $form->addElement('text', 'lastname', get_lang('Last name'), ['size' => 40]);
             if (api_get_setting('profile', 'name') !== 'true') {
                 $form->freeze(['lastname']);
             }
             $form->applyFilter(['lastname'], 'stripslashes');
             $form->applyFilter(['lastname'], 'trim');
-            $form->addRule('lastname', get_lang('ThisFieldIsRequired'), 'required');
+            $form->addRule('lastname', get_lang('Required field'), 'required');
         }
     } else {
         if (isset($list['lastname']) && $list['lastname'] == 1) {
             //    LAST NAME
-            $form->addElement('text', 'lastname', get_lang('LastName'), ['size' => 40]);
+            $form->addElement('text', 'lastname', get_lang('Last name'), ['size' => 40]);
             if (api_get_setting('profile', 'name') !== 'true') {
                 $form->freeze(['lastname']);
             }
             $form->applyFilter(['lastname'], 'stripslashes');
             $form->applyFilter(['lastname'], 'trim');
-            $form->addRule('lastname', get_lang('ThisFieldIsRequired'), 'required');
+            $form->addRule('lastname', get_lang('Required field'), 'required');
         }
         if (isset($list['firstname']) && $list['firstname'] == 1) {
             //FIRST NAME
-            $form->addElement('text', 'firstname', get_lang('FirstName'), ['size' => 40]);
+            $form->addElement('text', 'firstname', get_lang('First name'), ['size' => 40]);
             if (api_get_setting('profile', 'name') !== 'true') {
                 $form->freeze(['firstname']);
             }
             $form->applyFilter(['firstname'], 'stripslashes');
             $form->applyFilter(['firstname'], 'trim');
-            $form->addRule('firstname', get_lang('ThisFieldIsRequired'), 'required');
+            $form->addRule('firstname', get_lang('Required field'), 'required');
         }
     }
 
     if (isset($list['official_code']) && $list['official_code'] == 1) {
         //    OFFICIAL CODE
-        $form->addElement('text', 'official_code', get_lang('OfficialCode'), ['size' => 40]);
+        $form->addElement('text', 'official_code', get_lang('Code'), ['size' => 40]);
         if (api_get_setting('profile', 'officialcode') !== 'true') {
             $form->freeze('official_code');
         }
@@ -478,22 +490,22 @@ if ($survey_data['form_fields'] != '' &&
         if (api_get_setting('registration', 'officialcode') == 'true' &&
             api_get_setting('profile', 'officialcode') == 'true'
         ) {
-            $form->addRule('official_code', get_lang('ThisFieldIsRequired'), 'required');
+            $form->addRule('official_code', get_lang('Required field'), 'required');
         }
     }
 
     if (isset($list['email']) && $list['email'] == 1) {
         //    EMAIL
-        $form->addElement('text', 'email', get_lang('Email'), ['size' => 40]);
+        $form->addElement('text', 'email', get_lang('e-mail'), ['size' => 40]);
         if (api_get_setting('profile', 'email') !== 'true') {
             $form->freeze('email');
         }
         $form->applyFilter('email', 'stripslashes');
         $form->applyFilter('email', 'trim');
         if (api_get_setting('registration', 'email') == 'true') {
-            $form->addRule('email', get_lang('ThisFieldIsRequired'), 'required');
+            $form->addRule('email', get_lang('Required field'), 'required');
         }
-        $form->addRule('email', get_lang('EmailWrong'), 'email');
+        $form->addRule('email', get_lang('e-mailWrong'), 'email');
     }
 
     if (isset($list['phone']) && $list['phone'] == 1) {
@@ -505,7 +517,7 @@ if ($survey_data['form_fields'] != '' &&
         $form->applyFilter('phone', 'stripslashes');
         $form->applyFilter('phone', 'trim');
         if (api_get_setting('profile', 'phone') == 'true') {
-            $form->addRule('phone', get_lang('ThisFieldIsRequired'), 'required');
+            $form->addRule('phone', get_lang('Required field'), 'required');
         }
     }
 
@@ -516,7 +528,7 @@ if ($survey_data['form_fields'] != '' &&
             $form->freeze('language');
         }
         if (api_get_setting('profile', 'language') == 'true') {
-            $form->addRule('language', get_lang('ThisFieldIsRequired'), 'required');
+            $form->addRule('language', get_lang('Required field'), 'required');
         }
     }
 
@@ -537,7 +549,7 @@ if ($survey_data['form_fields'] != '' &&
     $form->setDefaults($user_data);
 }
 
-Display::display_header(get_lang('ToolSurvey'));
+Display::display_header(get_lang('Surveys'));
 
 // Displaying the survey title and subtitle (appears on every page)
 echo '<div class="survey-block">';
@@ -602,7 +614,7 @@ if ($survey_data['form_fields'] &&
                 $extraFieldValue->saveFieldValues($user_data);
 
                 echo '<div id="survey_content" class="survey_content">'.
-                    get_lang('InformationUpdated').' '.get_lang('PleaseFillSurvey').'</div>';
+                    get_lang('Information updated').' '.get_lang('Please fill survey').'</div>';
             }
         }
         $_GET['show'] = 0;
@@ -612,7 +624,7 @@ if ($survey_data['form_fields'] &&
         Session::erase('page_questions_sec');
         $paged_questions_sec = [];
     } else {
-        echo '<div id="survey_content" class="survey_content">'.get_lang('UpdateInformation').'</div>';
+        echo '<div id="survey_content" class="survey_content">'.get_lang('Update information').'</div>';
         // We unset the sessions
         Session::erase('paged_questions');
         Session::erase('page_questions_sec');
@@ -623,7 +635,7 @@ if ($survey_data['form_fields'] &&
 
 // Displaying the survey thanks message
 if (isset($_POST['finish_survey'])) {
-    echo Display::return_message(get_lang('SurveyFinished'), 'confirm');
+    echo Display::return_message(get_lang('You have finished this survey.'), 'confirm');
     echo $survey_data['survey_thanks'];
 
     SurveyManager::update_survey_answered(
@@ -639,7 +651,7 @@ if (isset($_POST['finish_survey'])) {
 
     if ($courseInfo && !api_is_anonymous()) {
         echo Display::toolbarButton(
-            get_lang('ReturnToCourseHomepage'),
+            get_lang('Return to Course Homepage'),
             api_get_course_url($courseInfo['code']),
             'home'
         );
@@ -869,33 +881,6 @@ if ((isset($_GET['show']) && $_GET['show'] != '') ||
                 $count_result++;
             }
 
-            /*
-              //i.e 70% - 70% -70% 70%  $equal_count =3
-              while (1) {
-              if ($result[$i]['value']  == $result[$i+1]['value']) {
-              $equal_count++;
-              } else {
-              break;
-              }
-              $i++;
-              }
-              echo 'eq'. $equal_count;
-              echo '<br />';
-              if     ($equal_count == 0) {
-              //i.e 70% 70% -60% 60%  $equal_count = 1 only we get the first 2 options
-              if (($result[0]['value'] == $result[1]['value'])  &&  ($result[2]['value'] == $result[3]['value'])) {
-              $group_cant = 1;
-              } else {
-              // By default we chose the highest 3
-              $group_cant=2;
-              }
-              } elseif ($equal_count == 2) {
-              $group_cant = 2;
-              } else {
-              $group_cant = -1;
-              }
-             */
-
             // i.e 70% - 70% -70% 70%  $equal_count =3
             $i = 0;
             $group_cant = 0;
@@ -1068,13 +1053,13 @@ if ((isset($_GET['show']) && $_GET['show'] != '') ||
                             $counter++;
                         }
                     } else {
-                        echo get_lang('SurveyUndetermined');
+                        echo get_lang('Survey undefined');
                     }
                 } else {
-                    echo get_lang('SurveyUndetermined');
+                    echo get_lang('Survey undefined');
                 }
             } else {
-                echo get_lang('SurveyUndetermined');
+                echo get_lang('Survey undefined');
             }
         } else {
             // We need this variable only in the 2nd set of questions when personality is set.
@@ -1185,7 +1170,7 @@ if ((isset($_GET['show']) && $_GET['show'] != '') ||
             }
         }
     } else { // In case it's another type than 0 or 1
-        echo get_lang('ErrorSurveyTypeUnknown');
+        echo get_lang('Survey type unknown');
     }
 }
 
@@ -1251,7 +1236,7 @@ if (isset($questions) && is_array($questions)) {
     foreach ($questions as $key => &$question) {
         $ch_type = 'ch_'.$question['type'];
         $questionNumber = $questionCounter;
-        $display = new $ch_type();
+        $display = survey_question::createQuestion($question['type']);
         // @todo move this in a function.
         $form->addHtml('<div class="survey_question '.$ch_type.'">');
         $form->addHtml('<div style="float:left; font-weight: bold; margin-right: 5px;"> '.$questionNumber.'. </div>');
@@ -1267,13 +1252,11 @@ if (isset($questions) && is_array($questions)) {
                     $finalAnswer = [];
                     foreach ($userAnswer as $userChoice) {
                         list($choiceId, $choiceValue) = explode('*', $userChoice);
-
                         $finalAnswer[$choiceId] = $choiceValue;
                     }
                     break;
                 case 'percentage':
                     list($choiceId, $choiceValue) = explode('*', current($userAnswer));
-
                     $finalAnswer = $choiceId;
                     break;
                 default:
@@ -1295,7 +1278,7 @@ if ($survey_data['survey_type'] == '0') {
             if ($show == 0) {
                 $form->addButton(
                     'next_survey_page',
-                    get_lang('StartSurvey'),
+                    get_lang('Start the Survey'),
                     'arrow-right',
                     'success'
                 );
@@ -1311,7 +1294,7 @@ if ($survey_data['survey_type'] == '0') {
         if ($show >= $numberOfPages && $displayFinishButton) {
             $form->addButton(
                 'finish_survey',
-                get_lang('FinishSurvey'),
+                get_lang('Finish survey'),
                 'arrow-right',
                 'success'
             );
@@ -1324,7 +1307,7 @@ if ($survey_data['survey_type'] == '0') {
                 if ($show == 0) {
                     $form->addButton(
                         'next_survey_page',
-                        get_lang('StartSurvey'),
+                        get_lang('Start the Survey'),
                         'arrow-right',
                         'success'
                     );
@@ -1341,7 +1324,7 @@ if ($survey_data['survey_type'] == '0') {
             if ($show >= $numberOfPages && $displayFinishButton) {
                 $form->addButton(
                     'finish_survey',
-                    get_lang('FinishSurvey'),
+                    get_lang('Finish survey'),
                     'arrow-right',
                     'success'
                 );
@@ -1385,14 +1368,14 @@ if ($survey_data['survey_type'] == '0') {
         } elseif ($personality > 0) {
             if ($survey_data['one_question_per_page'] == 1) {
                 if ($show >= $numberOfPages) {
-                    $form->addButton('finish_survey', get_lang('FinishSurvey'), 'arrow-right', 'success');
+                    $form->addButton('finish_survey', get_lang('Finish survey'), 'arrow-right', 'success');
                 } else {
                     $form->addHidden('personality', $personality);
                     $form->addButton('next_survey_page', get_lang('Next'), 'arrow-right', 'success');
                 }
             } else {
                 // if the personality test hidden input was set.
-                $form->addButton('finish_survey', get_lang('FinishSurvey'), 'arrow-right');
+                $form->addButton('finish_survey', get_lang('Finish survey'), 'arrow-right');
             }
         }
     } elseif ($survey_data['form_fields'] == '') {

@@ -26,7 +26,7 @@ class WSCMAnnouncements extends WSCM
 
             return $announcements;
         } else {
-            return get_lang('InvalidId');
+            return get_lang('Login failed - incorrect login or password.');
         }
     }
 
@@ -80,7 +80,7 @@ class WSCMAnnouncements extends WSCM
                 $announcements[0][$field_table]
             ) : $announcements[0][$field_table];
         } else {
-            return get_lang('InvalidId');
+            return get_lang('Login failed - incorrect login or password.');
         }
     }
 

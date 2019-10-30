@@ -9,8 +9,6 @@ use Symfony\Component\Form\FormBuilderInterface;
 
 /**
  * Class CasSettingsSchema.
- *
- * @package Chamilo\CoreBundle\Settings
  */
 class CasSettingsSchema extends AbstractSettingsSchema
 {

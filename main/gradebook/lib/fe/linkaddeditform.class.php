@@ -42,7 +42,7 @@ class LinkAddEditForm extends FormValidator
 
         $defaults = [];
         if (!empty($_GET['editlink'])) {
-            $this->addElement('header', '', get_lang('EditLink'));
+            $this->addElement('header', '', get_lang('Edit link'));
         }
 
         // ELEMENT: name
@@ -50,7 +50,7 @@ class LinkAddEditForm extends FormValidator
             if ($link->needs_name_and_description()) {
                 $this->addText('name', get_lang('Name'), true, ['size' => '40', 'maxlength' => '40']);
             } else {
-                $select = $this->addElement('select', 'select_link', get_lang('ChooseItem'));
+                $select = $this->addElement('select', 'select_link', get_lang('Choose activity to assess'));
                 foreach ($link->get_all_links() as $newlink) {
                     $select->addoption($newlink[1], $newlink[0]);
                 }
@@ -76,11 +76,11 @@ class LinkAddEditForm extends FormValidator
             $select_gradebook = $this->addElement(
                 'select',
                 'select_gradebook',
-                get_lang('SelectGradebook'),
+                get_lang('Select assessment'),
                 [],
                 ['id' => 'hide_category_id']
             );
-            $this->addRule('select_gradebook', get_lang('ThisFieldIsRequired'), 'nonzero');
+            $this->addRule('select_gradebook', get_lang('Required field'), 'nonzero');
             $default_weight = 0;
             if (!empty($category_object)) {
                 foreach ($category_object as $my_cat) {
@@ -142,7 +142,7 @@ class LinkAddEditForm extends FormValidator
             if ($form_type == self::TYPE_EDIT && $link->has_results()) {
                 $this->addText(
                     'max',
-                    get_lang('QualificationNumeric'),
+                    get_lang('Maximum score'),
                     false,
                     [
                         'size' => '4',
@@ -151,11 +151,11 @@ class LinkAddEditForm extends FormValidator
                     ]
                 );
             } else {
-                $this->addText('max', get_lang('QualificationNumeric'), true, ['size' => '4', 'maxlength' => '5']);
-                $this->addRule('max', get_lang('OnlyNumbers'), 'numeric');
+                $this->addText('max', get_lang('Maximum score'), true, ['size' => '4', 'maxlength' => '5']);
+                $this->addRule('max', get_lang('Only numbers'), 'numeric');
                 $this->addRule(
                     'max',
-                    get_lang('NegativeValue'),
+                    get_lang('Negative value'),
                     'compare',
                     '>=',
                     'server',
@@ -191,13 +191,13 @@ class LinkAddEditForm extends FormValidator
 
         // ELEMENT: add results
         if ($form_type == self::TYPE_ADD && $link->needs_results()) {
-            $this->addElement('checkbox', 'addresult', get_lang('AddResult'));
+            $this->addElement('checkbox', 'addresult', get_lang('Grade learners'));
         }
         // submit button
         if ($form_type == self::TYPE_ADD) {
-            $this->addButtonCreate(get_lang('CreateLink'));
+            $this->addButtonCreate(get_lang('Add this learning activity to the assessment'));
         } else {
-            $this->addButtonUpdate(get_lang('LinkMod'));
+            $this->addButtonUpdate(get_lang('Edit link'));
         }
 
         if ($form_type == self::TYPE_ADD) {

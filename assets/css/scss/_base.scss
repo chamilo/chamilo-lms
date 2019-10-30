@@ -1,6 +1,4 @@
-// ---------------------------------------------------------
 // BASE CSS
-// ---------------------------------------------------------
 
 html, html a, body {
   -webkit-font-smoothing: antialiased;
@@ -100,7 +98,10 @@ hr {
   margin-bottom: 10px;
 }
 .tab-content{
-  margin-top: 10px;
+  margin-top: 1rem !important;
+  &.card-body{
+    padding: 0.5rem;
+  }
 }
 
 /****** BOOTSTRAP SELECT ******/
@@ -175,7 +176,6 @@ hr {
 .section-intro{
   margin-bottom: 2rem;
   padding-bottom: 2rem;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.125);
   .toolbar{
     text-align: right;
   }
@@ -540,6 +540,8 @@ hr {
     border-bottom: 1px solid #e5e9f2;
     .card-title{
       margin-bottom: 0;
+      font-weight: normal;
+      color: #316dab;
     }
   }
 }
@@ -556,7 +558,16 @@ hr {
     grid-template-columns: repeat(1, 1fr);
   }
 }
-
+.tool-view{
+  text-align: center;
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+  margin-top: 2rem;
+  .controls{
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+  }
+}
 /* CATEGORY CLASSIC */
 .category-list{
   display: grid;
@@ -743,7 +754,7 @@ hr {
   margin: auto;
   .doc-preview{
     .preview-lg{
-      width: 328px;
+      width: 326px;
       height: 185px;
       background-color: $grey-500;
     }
@@ -781,9 +792,9 @@ hr {
   display: grid;
   grid-gap: 1rem;
   grid-row-gap: 16px;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   @include large($breakpoint-xl){
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(3, 1fr);
   }
   @include portrait($breakpoint-sm, $breakpoint-md){
     grid-template-columns: repeat(2, 1fr);
@@ -820,7 +831,7 @@ hr {
         padding: 0.8rem;
       }
       .title{
-        font-size: 14px;
+        font-size: 16px;
       }
     }
   }
@@ -987,9 +998,7 @@ hr {
   .card-title a {
     display: block;
     position: relative;
-    color: $grey-900;
-    font-size: 16px;
-    font-weight: bold;
+    font-size: 18px;
     margin-bottom: 15px;
     padding: 10px 5px;
     border: none;
@@ -1032,7 +1041,7 @@ hr {
       font-size: 20px;
       line-height: 20px;
       position: absolute;
-      top: 18px;
+      top: 14px;
       right: 10px;
     }
     &.collapsed:after {
@@ -1132,7 +1141,7 @@ hr {
         left: 44%;
         margin-left: -32px;
         text-align: center;
-        border: 2px solid rgba(0, 188, 212, 0.37) ;
+        border: 2px solid rgba(216, 216, 216, 0.37);
         box-shadow: 0 0.25rem 0.5rem rgba(0,0,0,.16);
         border-radius: 10px;
         &:hover{
@@ -1423,12 +1432,6 @@ hr {
     box-sizing: border-box;
     ._jsPlumb_endpoint {
       z-index: 50;
-    }
-    .data_table{
-      border: none;
-      td{
-        border: none;
-      }
     }
     .window {
       border: 1px solid #dddddd;
@@ -1870,7 +1873,7 @@ hr {
     top: 0;
     display: block;
     content: ' ';
-    background: url(#{$svg-path}/coursestudent_na.svg);
+    background: url('#{$svg-path}/coursestudent_na.svg');
     width: 132px;
     height: 132px;
     border-radius: 0;
@@ -2354,12 +2357,12 @@ hr {
 }
 
 .border-sequence {
-  background: url("../../public/img/line.png") repeat-x 0 35px;
+  background: url("#{$img-path}line.png") repeat-x 0 35px;
 }
 
 .arrow-sequence {
   height: 68px;
-  background: url("../../public/img/icons/48/sequence-arrow.png") no-repeat center 15px;
+  background: url("#{$img-path}icons/48/sequence-arrow.png") no-repeat center 15px;
   margin-top: 10px;
   padding-top: 10px;
 }
@@ -2568,7 +2571,7 @@ hr {
       text-indent: -9999px;
       overflow: hidden;
       right: 0;
-      background: url('../img/timeline/next.png') no-repeat 0 0;
+      background: url('#{$img-path}timeline/next.png') no-repeat 0 0;
       &:hover{
         background-position: 0 -76px;
       }
@@ -2582,7 +2585,7 @@ hr {
       height: 38px;
       text-indent: -9999px;
       overflow: hidden;
-      background: url('../img/timeline/prev.png') no-repeat 0 0;
+      background: url('#{$img-path}timeline/prev.png') no-repeat 0 0;
       &:hover{
         background-position: 0 -76px;
       }
@@ -2596,7 +2599,7 @@ hr {
   overflow: hidden;
   margin: 20px auto;
   position: relative;
-  background: url('../../public/img/timeline/dot.gif') left 45px repeat-x;
+  background: url('#{$img-path}timeline/dot.gif') left 45px repeat-x;
   #dates {
     width: 800px;
     height: 60px;
@@ -2608,7 +2611,7 @@ hr {
       height: 50px;
       font-size: 16px;
       text-align: center;
-      background: url('../../public/img/timeline/biggerdot.png') center bottom no-repeat;
+      background: url('#{$img-path}timeline/biggerdot.png') center bottom no-repeat;
     }
     a {
       line-height: 38px;
@@ -2798,7 +2801,7 @@ hr {
       margin-right: 1em;
       padding-bottom: 1em;
       a {
-        background: url("../../public/img/icons/16/winner.png") no-repeat;
+        background: url("#{$img-path}icons/16/winner.png") no-repeat;
         padding-left: 1.5em;
         padding-bottom: 1em;
       }
@@ -3323,7 +3326,7 @@ hr {
   height: 25px;
   position: relative;
   overflow: hidden;
-  background: url(../../public/img/alt_star.png) top left repeat-x;
+  background: url('#{$img-path}alt_star.png') top left repeat-x;
   li{
     padding: 0;
     margin: 0;
@@ -3342,7 +3345,7 @@ hr {
       padding: 0;
       overflow: hidden;
       &:hover{
-        background: url(../../public/img/alt_star.png) left bottom;
+        background: url('#{$img-path}alt_star.png') left bottom;
         z-index: 2;
         left: 0;
         border: none;
@@ -3379,7 +3382,7 @@ hr {
       }
     }
     .current-rating {
-      background: url(../../public/img/alt_star.png) left center;
+      background: url('#{$img-path}alt_star.png') left center;
       position: absolute;
       height: 25px;
       display: block;
@@ -3397,7 +3400,7 @@ hr {
     font-size: 10px;
     font-weight: normal;
     width: 100%;
-    background: url("../../public/img/icons/64/file_upload.png") no-repeat center 20px;
+    background: url("#{$img-path}icons/64/file_upload.png") no-repeat center 20px;
     padding-top: 70px;
   }
   .file_upload_small {
@@ -3443,19 +3446,19 @@ table.certaintyTable {
   padding: 5px;
   text-align: center;
   margin-bottom: 10px;
-  background: url(../../public/img/clock-exercise.png) no-repeat center center #FFF;
+  background: url(#{$img-path}clock-exercise.png) no-repeat center center #FFF;
   border: 1px solid #DDD;
   border-radius: 5px;
 }
 
 .time_warning_two {
-  background: url(../../public/img/clock-exercise.png) no-repeat center center #FFD700;
+  background: url(#{$img-path}clock-exercise.png) no-repeat center center #FFD700;
   border: 1px solid #FFCC00;
   color: #C00;
 }
 
 .time_warning_one {
-  background: url(../../public/img/clock-exercise.png) no-repeat center center #FB3A35;
+  background: url(#{$img-path}clock-exercise.png) no-repeat center center #FB3A35;
   border: 1px solid #FB3A35;
   color: #FFF;
 }
@@ -3532,9 +3535,9 @@ table.certaintyTable {
     display: block;
   }
   .arrow {
-    background: url("../img/icons/22/arrow-up-collapse.png") no-repeat 99% center;
+    background: url("#{$img-path}icons/22/arrow-up-collapse.png") no-repeat 99% center;
     &.collapsed{
-      background: url("../img/icons/22/arrow-down-collapse.png") no-repeat 99% center;
+      background: url("#{$img-path}icons/22/arrow-down-collapse.png") no-repeat 99% center;
     }
   }
   .thematic-advance {
@@ -3678,7 +3681,7 @@ table.certaintyTable {
 /****** VIDEO CHAT ******/
 
 #chat-video-panel .thumbnail video {
-  background: #FFF url("../../public/img/icons/128/camera-webrtc.png") no-repeat center center;
+  background: #FFF url("#{$img-path}icons/128/camera-webrtc.png") no-repeat center center;
   display: block;
   min-width: 100%;
   width: 100%;
@@ -3844,49 +3847,49 @@ table.certaintyTable {
     background-repeat: no-repeat;
   }
   select#question_type_hidden option[value="1"] {
-    background-image: url(../../public/img/icons/32/mcua.png);
+    background-image: url(#{$img-path}icons/32/mcua.png);
   }
   select#question_type_hidden option[value="2"] {
-    background-image: url(../../public/img/icons/32/mcma.png);
+    background-image: url(#{$img-path}icons/32/mcma.png);
   }
   select#question_type_hidden option[value="3"] {
-    background-image: url(../../public/img/icons/32/fill_in_blanks.png);
+    background-image: url(#{$img-path}icons/32/fill_in_blanks.png);
   }
   select#question_type_hidden option[value="4"] {
-    background-image: url(../../public/img/icons/32/matching.png);
+    background-image: url(#{$img-path}icons/32/matching.png);
   }
   select#question_type_hidden option[value="5"] {
-    background-image: url(../../public/img/icons/32/open_answer.png);
+    background-image: url(#{$img-path}icons/32/open_answer.png);
   }
   select#question_type_hidden option[value="6"] {
-    background-image: url(../../public/img/icons/32/hotspot.png);
+    background-image: url(#{$img-path}icons/32/hotspot.png);
   }
   select#question_type_hidden option[value="7"] {
-    background-image: url(../../public/img/icons/32/mcma.png);
+    background-image: url(#{$img-path}icons/32/mcma.png);
   }
   select#question_type_hidden option[value="8"] {
-    background-image: url(../../public/img/icons/32/mcma.png);
+    background-image: url(#{$img-path}icons/32/mcma.png);
   }
   select#question_type_hidden option[value="9"] {
-    background-image: url(../../public/img/icons/32/mcmac.png);
+    background-image: url(#{$img-path}icons/32/mcmac.png);
   }
   select#question_type_hidden option[value="10"] {
-    background-image: url(../../public/img/icons/32/mcuao.png);
+    background-image: url(#{$img-path}icons/32/mcuao.png);
   }
   select#question_type_hidden option[value="11"] {
-    background-image: url(../../public/img/icons/32/mcmao.png);
+    background-image: url(#{$img-path}icons/32/mcmao.png);
   }
   select#question_type_hidden option[value="12"] {
-    background-image: url(../../public/img/icons/32/mcmaco.png);
+    background-image: url(#{$img-path}icons/32/mcmaco.png);
   }
   select#question_type_hidden option[value="13"] {
-    background-image: url(../../public/img/icons/32/audio_question.png);
+    background-image: url(#{$img-path}icons/32/audio_question.png);
   }
   select#question_type_hidden option[value="14"] {
-    background-image: url(../../public/img/icons/32/mcmagl.png);
+    background-image: url(#{$img-path}icons/32/mcmagl.png);
   }
   select#question_type_hidden option[value="16"] {
-    background-image: url(../../public/img/icons/32/calculated_answer.png);
+    background-image: url(#{$img-path}icons/32/calculated_answer.png);
   }
 }
 /****** EXERCISE MATFDC ******/
@@ -4060,47 +4063,21 @@ table.certaintyTable {
   vertical-align: top;
 }
 
-/*** SPINNERS ***/
-#main-spinner {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+// Convert classic 1.11.x styles into a v2 format.
+
+.data_table {
+  @extend .table;
+  @extend .table-bordered;
+  @extend .table-striped;
 }
-.spinner {
-  position: relative;
-}
-.spinner:before, .spinner:after {
-  content: "";
-  position: relative;
-  display: block;
-}
-.spinner:before {
-  animation: spinner 2.5s cubic-bezier(0.75, 0, 0.5, 1) infinite normal;
-  width: 2em;
-  height: 2em;
-  background-color: $sidebar-background;
-}
-.spinner:after {
-  animation: shadow 2.5s cubic-bezier(0.75, 0, 0.5, 1) infinite normal;
-  bottom: -.5em;
-  height: .25em;
-  border-radius: 50%;
-  background-color: rgba(#000,0.2);
+.pull-right {
+  @extend .float-right;
 }
 
-@keyframes spinner {
-  50% {
-    border-radius: 50%;
-    transform: scale(0.5) rotate(360deg);
-  }
-  100% {
-    transform: scale(1) rotate(720deg);
-  }
+.btn-default {
+  @extend .btn-secondary;
 }
-@keyframes shadow {
-  50% {
-    transform: scale(0.5);
-    background-color: rgba(#000,0.1);
-  }
+
+.img-responsive {
+  @extend .img-fluid;
 }

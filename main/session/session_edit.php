@@ -21,7 +21,7 @@ $formSent = 0;
 $tbl_user = Database::get_main_table(TABLE_MAIN_USER);
 $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
 
-$id = intval($_GET['id']);
+$id = (int) $_GET['id'];
 
 SessionManager::protectSession($id);
 
@@ -51,11 +51,10 @@ if (!empty($sessionInfo['coach_access_end_date'])) {
     $sessionInfo['coach_access_end_date'] = api_get_local_time($sessionInfo['coach_access_end_date']);
 }
 
-$id_coach = $sessionInfo['id_coach'];
-$tool_name = get_lang('EditSession');
+$tool_name = get_lang('Edit this session');
 
-$interbreadcrumb[] = ['url' => "session_list.php", "name" => get_lang('SessionList')];
-$interbreadcrumb[] = ['url' => "resume_session.php?id_session=".$id, "name" => get_lang('SessionOverview')];
+$interbreadcrumb[] = ['url' => 'session_list.php', 'name' => get_lang('Session list')];
+$interbreadcrumb[] = ['url' => 'resume_session.php?id_session='.$id, 'name' => get_lang('Session overview')];
 
 if (isset($_POST['formSent']) && $_POST['formSent']) {
     $formSent = 1;
@@ -82,10 +81,8 @@ if (api_is_multiple_url_enabled()) {
 
 $result = Database::query($sql);
 $coaches = Database::store_result($result);
-$thisYear = date('Y');
-
 $coachesOption = [
-    '' => '----- '.get_lang('None').' -----',
+    '' => '----- '.get_lang('none').' -----',
 ];
 
 foreach ($coaches as $coach) {
@@ -96,7 +93,7 @@ foreach ($coaches as $coach) {
 $categoriesList = SessionManager::get_all_session_category();
 
 $categoriesOption = [
-    '0' => get_lang('None'),
+    '0' => get_lang('none'),
 ];
 
 if ($categoriesList != false) {
@@ -122,7 +119,7 @@ $(function() {
 });
 </script>';
 
-$form->addButtonUpdate(get_lang('ModifyThisSession'));
+$form->addButtonUpdate(get_lang('Edit this session'));
 
 $formDefaults = $sessionInfo;
 
@@ -193,7 +190,7 @@ if ($form->validate()) {
     );
 
     if ($return) {
-        Display::addFlash(Display::return_message(get_lang('Updated')));
+        Display::addFlash(Display::return_message(get_lang('Update successful')));
         header('Location: resume_session.php?id_session='.$return);
         exit();
     }
@@ -206,7 +203,6 @@ $form->display();
 
 <script>
 $(function() {
-
 <?php
     if (!empty($sessionInfo['duration'])) {
         echo 'accessSwitcher(0);';

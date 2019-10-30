@@ -48,11 +48,11 @@ if (isset($new_language) && isset($language_variable) && isset($file_id)) {
     }
 
     if (isset($_REQUEST['redirect'])) {
-        $message = Display::return_message(get_lang('TheNewWordHasBeenAdded'), 'success');
+        $message = Display::return_message(get_lang('The new word has been added'), 'success');
 
         if (!empty($variables_with_problems)) {
             Display::return_message(
-                $path_folder.' '.get_lang('IsNotWritable').'<br /> '.api_ucwords(get_lang('ErrorsFound'))
+                $path_folder.' '.get_lang('is not writeable').'<br /> '.api_ucwords(get_lang('errors found'))
                     .': <br />'.$variables_with_problems,
                 'error'
             );
@@ -83,7 +83,7 @@ if (isset($new_language) && isset($language_variable) && isset($file_id)) {
     }
 
     if (!empty($variables_with_problems)) {
-        echo $path_folder.' '.get_lang('IsNotWritable').'<br /> '.api_ucwords(get_lang('ErrorsFound')).': <br />'.$variables_with_problems;
+        echo $path_folder.' '.get_lang('is not writeable').'<br /> '.api_ucwords(get_lang('errors found')).': <br />'.$variables_with_problems;
     } else {
         echo 1;
     }

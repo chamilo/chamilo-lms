@@ -1,4 +1,4 @@
-dist: trusty
+dist: bionic
 sudo: required
 language: php
 
@@ -7,20 +7,19 @@ addons:
         packages:
         - apache2
         - postfix
-        - libapache2-mod-fastcgi
         - libappindicator1
         - fonts-liberation
 
 services:
     - mysql
-
+    - xvfb
 cache:
   yarn: true
   directories:
     - $HOME/.composer/cache/files
 php:
-  - 7.1
   - 7.2
+  - 7.3
 
 env:
   global:
@@ -28,33 +27,18 @@ env:
     - CHAMILO_VERSION=master
 
 before_install:
-  # Repo for Yarn
-  - sudo apt-key adv --fetch-keys http://dl.yarnpkg.com/debian/pubkey.gpg
-  - echo "deb http://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
-  - sudo apt-get update -qq
-  - sudo apt-get install -y -qq yarn
-  #- sudo apt-get update
-  #- sudo apt-get install apache2 libapache2-mod-fastcgi
   # Fix travis error https://github.com/travis-ci/travis-ci/issues/8607
   - sudo rm -vf /etc/apt/sources.list.d/*riak*
   # Get Chrome
-  #- wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
-  #- sudo apt-get update
-  #- sudo apt-get install google-chrome-stable
   - google-chrome-stable --headless --disable-gpu --remote-debugging-port=9222 http://localhost &
   # Get Chrome driver
   - wget https://chromedriver.storage.googleapis.com/2.35/chromedriver_linux64.zip && unzip chromedriver_linux64.zip
   - sudo mv chromedriver /usr/bin
   - sudo chmod +x /usr/bin/chromedriver
-  # Setup display for Selenium
-  - sh -e /etc/init.d/xvfb start
-  - export DISPLAY=:99.0
-  - sleep 3
+
   # Get Selenium
   - wget http://selenium-release.storage.googleapis.com/3.1/selenium-server-standalone-3.1.0.jar
   # Check java
-  - java -version
-  - sudo apt-get install oracle-java8-installer
   - java -version
   - java -jar selenium-server-standalone-3.1.0.jar -log selenium.log  > /dev/null &
   - nohup bash -c "webdriver-manager start 2>&1 &"
@@ -63,6 +47,7 @@ before_install:
   # Apache & php-fpm configuration
   - bash tests/travis/setup-php-fpm.sh
   - bash tests/travis/setup-apache.sh
+  - curl $VHOST_URL
 
   - mysqld --version
   - apache2 -v
@@ -83,7 +68,7 @@ before_install:
   - cd $TRAVIS_BUILD_DIR
   - pwd
   # Install vendors
-  - travis_wait 30 composer install
+  - travis_wait 45 composer install
   # Install chamilo
   - php -d date.timezone="Europe/Paris" $TRAVIS_BUILD_DIR/chash/chash.php chash:chamilo_install $CHAMILO_VERSION $TRAVIS_BUILD_DIR --no-interaction --sitename="Chamilo" --site_url="http://$VHOST_URL/" --institution="Chamilo" --institution_url="https://chamilo.org" --encrypt_method="sha1" --firstname="John" --lastname="Doe" --language="english" --driver="pdo_mysql" --host="localhost" --port="3306" --dbname="chamilo" --dbuser="root" --permissions_for_new_directories="0777" --permissions_for_new_files="0666" --linux-user="www-data" --linux-group="www-data" --username="admin" --password="admin" --email="admin@example.com" --phone="555-5555"
   # Install bundle js/css
@@ -91,7 +76,7 @@ before_install:
   # Permissions
   - sudo chmod -R 777 var/cache var/log var/courses var/upload public
   # Dump js routes
-  - bin/console fos:js-routing:dump --format=json --target=public/js/fos_js_routes.json
+  - php bin/console fos:js-routing:dump --format=json --target=public/js/fos_js_routes.json
   - # Install third party js/css libraries
   - yarn install
   - ./node_modules/.bin/encore dev
@@ -103,6 +88,8 @@ before_install:
   - sudo chmod +x /home/travis/build
   - sudo service apache2 restart
   - curl $VHOST_URL
+  - curl $VHOST_URL/public
+  - curl $VHOST_URL/public/login
   - ls -la public/build
 
 script:

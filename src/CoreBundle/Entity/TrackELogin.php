@@ -9,7 +9,8 @@ use Doctrine\ORM\Mapping as ORM;
  * TrackELogin.
  *
  * @ORM\Table(name="track_e_login", indexes={
- *     @ORM\Index(name="login_user_id", columns={"login_user_id"})
+ *     @ORM\Index(name="login_user_id", columns={"login_user_id"}),
+ *     @ORM\Index(name="idx_track_e_login_date", columns={"login_date"})
  * })
  * @ORM\Entity
  */

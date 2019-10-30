@@ -19,7 +19,7 @@ $this_section = SECTION_PLATFORM_ADMIN;
 //api_protect_admin_script(); // on vire la secu... qui n'a pas lieu d'etre ici (script de synchro)
 
 // setting breadcrumbs
-$interbreadcrumb[] = array('url' => 'index.php', "name" => get_lang('PlatformAdmin'));
+$interbreadcrumb[] = array('url' => 'index.php', "name" => get_lang('Administration'));
 $interbreadcrumb[] = array('url' => api_get_self(), "name" => "Liste des sessions");
 
 // Database Table Definitions
@@ -58,7 +58,7 @@ foreach ($Sessions as $session) {
 		ORDER BY code_ufr, code_etape";
 	$result = Database::query($sql);
 	*/
-	$ds = ldap_connect($ldap_host, $ldap_port) or die(get_lang('LDAPConnectionError'));
+	$ds = ldap_connect($ldap_host, $ldap_port) or die(get_lang('LDAP Connection Error'));
 	ldap_set_version($ds);
 	// Import des utilisateurs des etapes dans la session
 	if ($ds)
@@ -145,11 +145,11 @@ foreach ($Sessions as $session) {
 		}
 		if (isset($included) && ($included))
 		{
-			$message .= "> $name_session: ".count($UserAdd)." ".get_lang('Added').' '.get_lang('And').' '.count($UserUpdate).' '.get_lang('Modified').'<br/>';
+			$message .= "> $name_session: ".count($UserAdd)." ".get_lang('Added').' '.get_lang('and').' '.count($UserUpdate).' '.get_lang('Modified').'<br/>';
 		}
 		else
 		{
-			print "> $name_session: ".count($UserAdd).get_lang('Added').' '.get_lang('And').' '.count($UserUpdate).' '.get_lang('Modified')."\n";
+			print "> $name_session: ".count($UserAdd).get_lang('Added').' '.get_lang('and').' '.count($UserUpdate).' '.get_lang('Modified')."\n";
 		}
 
 		// Une fois les utilisateurs importer dans la base des utilisateurs, on peux les affecter la session

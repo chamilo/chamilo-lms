@@ -10,8 +10,8 @@
  */
 class StudentPublicationLink extends AbstractLink
 {
-    private $studpub_table = null;
-    private $itemprop_table = null;
+    private $studpub_table;
+    private $itemprop_table;
 
     /**
      * Constructor.
@@ -34,17 +34,18 @@ class StudentPublicationLink extends AbstractLink
         // with the same title as the evaluation name
 
         $eval = $this->get_evaluation();
-        $stud_id = intval($stud_id);
+        $stud_id = (int) $stud_id;
         $itemProperty = $this->get_itemprop_table();
         $workTable = $this->get_studpub_table();
         $courseId = $this->course_id;
 
         $sql = "SELECT pub.url
-                FROM $itemProperty prop INNER JOIN $workTable pub
+                FROM $itemProperty prop 
+                INNER JOIN $workTable pub
                 ON (prop.c_id = pub.c_id AND prop.ref = pub.id)
                 WHERE
-                    prop.c_id = ".$courseId." AND
-                    pub.c_id = ".$courseId." AND
+                    prop.c_id = $courseId AND
+                    pub.c_id = $courseId AND
                     prop.tool = 'work' AND 
                     prop.insert_user_id = $stud_id AND                     
                     pub.title = '".Database::escape_string($eval->get_name())."' AND 
@@ -63,7 +64,7 @@ class StudentPublicationLink extends AbstractLink
      */
     public function get_type_name()
     {
-        return get_lang('Works');
+        return get_lang('Assignments');
     }
 
     public function is_allowed_to_change_name()
@@ -82,7 +83,8 @@ class StudentPublicationLink extends AbstractLink
             return [];
         }
         $em = Database::getManager();
-        $session = $em->find('ChamiloCoreBundle:Session', api_get_session_id());
+        $sessionId = $this->get_session_id();
+        $session = $em->find('ChamiloCoreBundle:Session', $sessionId);
         /*
         if (empty($session_id)) {
             $session_condition = api_get_session_condition(0, true);
@@ -128,7 +130,7 @@ class StudentPublicationLink extends AbstractLink
         $id = $data['id'];
 
         $em = Database::getManager();
-        $session = $em->find('ChamiloCoreBundle:Session', api_get_session_id());
+        $session = $em->find('ChamiloCoreBundle:Session', $this->get_session_id());
         $results = $em
             ->getRepository('ChamiloCourseBundle:CStudentPublication')
             ->findBy([
@@ -155,7 +157,7 @@ class StudentPublicationLink extends AbstractLink
             return [];
         }
         $id = $data['id'];
-        $session = $em->find('ChamiloCoreBundle:Session', api_get_session_id());
+        $session = api_get_session_entity($this->get_session_id());
 
         $assignment = $em
             ->getRepository('ChamiloCourseBundle:CStudentPublication')
@@ -225,7 +227,7 @@ class StudentPublicationLink extends AbstractLink
         // for 1 student
         if (!empty($stud_id)) {
             if (!count($scores)) {
-                return '';
+                return [null, null];
             }
 
             $data = $scores[0];
@@ -233,6 +235,8 @@ class StudentPublicationLink extends AbstractLink
             return [
                 $data->getQualification(),
                 $assignment->getQualification(),
+                api_get_local_time($assignment->getDateOfQualification()),
+                1,
             ];
         }
 
@@ -261,7 +265,7 @@ class StudentPublicationLink extends AbstractLink
         }
 
         if ($rescount == 0) {
-            return null;
+            return [null, null];
         }
 
         switch ($type) {
@@ -302,8 +306,8 @@ class StudentPublicationLink extends AbstractLink
 
     public function get_link()
     {
-        $session_id = api_get_session_id();
-        $url = api_get_path(WEB_PATH).'main/work/work.php?'.api_get_cidreq_params($this->get_course_code(), $session_id).'&id='.$this->exercise_data['id'].'&gradebook=view';
+        $sessionId = $this->get_session_id();
+        $url = api_get_path(WEB_PATH).'main/work/work.php?'.api_get_cidreq_params($this->get_course_code(), $sessionId).'&id='.$this->exercise_data['id'].'&gradebook=view';
 
         return $url;
     }
@@ -329,7 +333,7 @@ class StudentPublicationLink extends AbstractLink
         $sql = 'SELECT count(id) FROM '.$this->get_studpub_table().'
                 WHERE 
                     c_id = "'.$this->course_id.'" AND 
-                    id = '.$id.'';
+                    id = '.$id;
         $result = Database::query($sql);
         $number = Database::fetch_row($result);
 

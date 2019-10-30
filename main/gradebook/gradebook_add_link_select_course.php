@@ -38,8 +38,8 @@ if ($form->validate()) {
 
 $interbreadcrumb[] = [
     'url' => Category::getUrl().'selectcat='.$selectCat,
-    'name' => get_lang('Gradebook'),
+    'name' => get_lang('Assessments'),
 ];
-Display :: display_header(get_lang('NewCategory'));
+Display :: display_header(get_lang('New category'));
 $form->display();
 Display :: display_footer();

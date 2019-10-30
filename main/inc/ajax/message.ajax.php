@@ -17,18 +17,24 @@ switch ($action) {
         $userId = api_get_user_id();
         $listInbox = [];
         if (api_get_setting('allow_message_tool') == 'true') {
-            $list = MessageManager::getNumberOfMessages(true, true);
+            $list = MessageManager::getMessageData(
+                0,
+                10,
+                null,
+                null,
+                ['actions' => ['read'], 'type' => MessageManager::MESSAGE_TYPE_INBOX]
+            );
             foreach ($list as $row) {
-                $user = api_get_user_info($row['user_sender_id']);
-                $temp['title'] = $row['title'];
-                $temp['date'] = $row['send_date'];
+                $user = api_get_user_info($row['0']);
+                $temp['title'] = $row['1'];
+                $temp['date'] = $row['2'];
                 $temp['fullname'] = $user['complete_name'];
                 $temp['email'] = $user['email'];
-                $temp['url'] = api_get_path(WEB_PATH).'main/messages/view_message.php?id='.$row['id'];
+                $temp['url'] = $row['1'];
                 $listInbox[] = $temp;
             }
         }
-        header("Content-type:application/json");
+        header('Content-type:application/json');
         echo json_encode($listInbox);
         break;
     case 'get_notifications_friends':
@@ -50,22 +56,20 @@ switch ($action) {
                 $listInvitations[] = $temp;
             }
         }
-        header("Content-type:application/json");
+        header('Content-type:application/json');
         echo json_encode($listInvitations);
         break;
     case 'get_count_message':
         $userId = api_get_user_id();
         $invitations = [];
-        $group_pending_invitations = 0;
-
         // Setting notifications
         $count_unread_message = 0;
-        if (api_get_setting('allow_message_tool') == 'true') {
+        if (api_get_setting('allow_message_tool') === 'true') {
             // get count unread message and total invitations
-            $count_unread_message = MessageManager::getNumberOfMessages(true);
+            $count_unread_message = MessageManager::getCountNewMessagesFromDB($userId);
         }
 
-        if (api_get_setting('allow_social_tool') == 'true') {
+        if (api_get_setting('allow_social_tool') === 'true') {
             $number_of_new_messages_of_friend = SocialManager::get_message_number_invitation_by_user_id(
                 $userId
             );
@@ -90,11 +94,13 @@ switch ($action) {
         echo json_encode($invitations);
         break;
     case 'send_message':
+        api_block_anonymous_users(false);
+
         $subject = isset($_REQUEST['subject']) ? trim($_REQUEST['subject']) : null;
         $messageContent = isset($_REQUEST['content']) ? trim($_REQUEST['content']) : null;
 
         if (empty($subject) || empty($messageContent)) {
-            echo Display::return_message(get_lang('ErrorSendingMessage'), 'error');
+            echo Display::return_message(get_lang('There was an error while trying to send the message.'), 'error');
             exit;
         }
 
@@ -106,12 +112,12 @@ switch ($action) {
             $courseInfo = api_get_course_info_by_id($courseId);
             if (!empty($courseInfo)) {
                 if (empty($sessionId)) {
-                    $courseNotification = sprintf(get_lang('ThisEmailWasSentViaCourseX'), $courseInfo['title']);
+                    $courseNotification = sprintf(get_lang('This e-mail was sent via course %s'), $courseInfo['title']);
                 } else {
                     $sessionInfo = api_get_session_info($sessionId);
                     if (!empty($sessionInfo)) {
                         $courseNotification = sprintf(
-                            get_lang('ThisEmailWasSentViaCourseXInSessionX'),
+                            get_lang('This e-mail was sent via course %sInSessionX'),
                             $courseInfo['title'],
                             $sessionInfo['name']
                         );
@@ -123,12 +129,14 @@ switch ($action) {
 
         $result = MessageManager::send_message($_REQUEST['user_id'], $subject, $messageContent);
         if ($result) {
-            echo Display::return_message(get_lang('MessageHasBeenSent'), 'confirmation');
+            echo Display::return_message(get_lang('Your message has been sent.'), 'confirmation');
         } else {
-            echo Display::return_message(get_lang('ErrorSendingMessage'), 'confirmation');
+            echo Display::return_message(get_lang('There was an error while trying to send the message.'), 'confirmation');
         }
         break;
     case 'send_invitation':
+        api_block_anonymous_users(false);
+
         $subject = isset($_REQUEST['subject']) ? trim($_REQUEST['subject']) : null;
         $invitationContent = isset($_REQUEST['content']) ? trim($_REQUEST['content']) : null;
 
@@ -163,7 +171,7 @@ switch ($action) {
                 'id' => $user->getId(),
             ];
         }
-        header("Content-type:application/json");
+        header('Content-type:application/json');
         echo json_encode($return);
         break;
     default:

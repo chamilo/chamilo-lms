@@ -22,8 +22,8 @@ $this_section = SECTION_PLATFORM_ADMIN;
 api_protect_admin_script(true);
 
 // setting breadcrumbs
-$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('PlatformAdmin')];
-$interbreadcrumb[] = ['url' => 'user_list.php', 'name' => get_lang('UserList')];
+$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('Administration')];
+$interbreadcrumb[] = ['url' => 'user_list.php', 'name' => get_lang('User list')];
 
 // Database Table Definitions
 $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
@@ -39,11 +39,11 @@ $ajax_search = false;
 
 // Setting the name of the tool
 if (UserManager::is_admin($user_id)) {
-    $tool_name = get_lang('AssignSessionsToPlatformAdministrator');
+    $tool_name = get_lang('AssignSessionsToAdministrationistrator');
 } elseif ($user_info['status'] == SESSIONADMIN) {
-    $tool_name = get_lang('AssignSessionsToSessionsAdministrator');
+    $tool_name = get_lang('assign sessions to sessions administrator');
 } else {
-    $tool_name = get_lang('AssignSessionsToHumanResourcesManager');
+    $tool_name = get_lang('Assign sessions to Human Resources manager');
 }
 
 $add_type = 'multiple';
@@ -165,7 +165,7 @@ if (isset($_POST['formSent']) && intval($_POST['formSent']) == 1) {
     );
     if ($affected_rows) {
         Display::addFlash(
-            Display::return_message(get_lang('AssignedSessionsHaveBeenUpdatedSuccessfully'))
+            Display::return_message(get_lang('The assigned sessions have been updated'))
         );
     }
 }
@@ -176,15 +176,15 @@ Display::display_header($tool_name);
 // Actions
 if ($user_info['status'] != SESSIONADMIN) {
     $actionsLeft = '<a href="dashboard_add_users_to_user.php?user='.$user_id.'">'.
-        Display::return_icon('add-user.png', get_lang('AssignUsers'), null, ICON_SIZE_MEDIUM).'</a>';
+        Display::return_icon('add-user.png', get_lang('Assign users'), null, ICON_SIZE_MEDIUM).'</a>';
     $actionsLeft .= '<a href="dashboard_add_courses_to_user.php?user='.$user_id.'">'.
-        Display::return_icon('course-add.png', get_lang('AssignCourses'), null, ICON_SIZE_MEDIUM).'</a>';
+        Display::return_icon('course-add.png', get_lang('Assign courses'), null, ICON_SIZE_MEDIUM).'</a>';
 
     echo Display::toolbarAction('toolbar-dashboard', [$actionsLeft]);
 }
 
 echo Display::page_header(
-    sprintf(get_lang('AssignSessionsToX'), api_get_person_name($user_info['firstname'], $user_info['lastname'])),
+    sprintf(get_lang('Assign sessions to %s'), api_get_person_name($user_info['firstname'], $user_info['lastname'])),
     null,
     'h3'
 );
@@ -224,7 +224,7 @@ $result = Database::query($sql);
 
     <div class="row">
         <div class="col-md-4">
-            <h5><?php echo get_lang('SessionsListInPlatform'); ?> :</h5>
+            <h5><?php echo get_lang('List of sessions on the platform'); ?> :</h5>
             <div id="ajax_list_sessions_multiple">
                 <select id="origin" name="NoAssignedSessionsList[]" multiple="multiple" size="20" style="width:340px;">
                     <?php
@@ -242,7 +242,7 @@ $result = Database::query($sql);
             <div class="code-course">
                 <?php if ($add_type == 'multiple') {
                         ?>
-                <p><?php echo get_lang('FirstLetterSession'); ?> :</p>
+                <p><?php echo get_lang('Session title\'s first letter'); ?> :</p>
                 <select class="selectpicker form-control" name="firstLetterSession" onchange = "xajax_search_sessions(this.value, 'multiple')">
                     <option value="%">--</option>
                         <?php  echo Display :: get_alphabet_options($firstLetterSession); ?>
@@ -283,11 +283,11 @@ $result = Database::query($sql);
             <h5>
                 <?php
                 if (UserManager::is_admin($user_id)) {
-                    echo get_lang('AssignedSessionsListToPlatformAdministrator');
+                    echo get_lang('AssignedSessionsListToAdministrationistrator');
                 } elseif ($user_info['status'] == SESSIONADMIN) {
-                    echo get_lang('AssignedSessionsListToSessionsAdministrator');
+                    echo get_lang('Assigned sessions list to sessions administrator');
                 } else {
-                    echo get_lang('AssignedSessionsListToHumanResourcesManager');
+                    echo get_lang('List of sessions assigned to the Human Resources manager');
                 }
                 ?>
             :</h5>

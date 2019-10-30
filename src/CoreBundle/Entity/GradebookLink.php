@@ -5,11 +5,16 @@ namespace Chamilo\CoreBundle\Entity;
 
 use Chamilo\CoreBundle\Traits\CourseTrait;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * GradebookLink.
  *
- * @ORM\Table(name="gradebook_link")
+ * @ORM\Table(name="gradebook_link",
+ *  indexes={
+ *     @ORM\Index(name="idx_gl_cat", columns={"category_id"}),
+ *  }
+ * )
  * @ORM\Entity
  */
 class GradebookLink
@@ -62,6 +67,8 @@ class GradebookLink
     /**
      * @var \DateTime
      *
+     * @Gedmo\Timestampable(on="create")
+     *
      * @ORM\Column(name="created_at", type="datetime", nullable=false)
      */
     protected $createdAt;
@@ -86,6 +93,14 @@ class GradebookLink
      * @ORM\Column(name="locked", type="integer", nullable=false)
      */
     protected $locked;
+
+    /**
+     * GradebookEvaluation constructor.
+     */
+    public function __construct()
+    {
+        $this->locked = 0;
+    }
 
     /**
      * Set type.

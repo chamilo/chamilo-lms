@@ -9,6 +9,9 @@
  * @author Istvan Mandak (original author)
  */
 require_once __DIR__.'/../inc/global.inc.php';
+
+api_protect_course_script(true);
+
 require_once 'hotpotatoes.lib.php';
 
 // Section (for the tabs).
@@ -23,13 +26,13 @@ if (!api_is_allowed_to_edit(null, true)) {
 if (api_is_in_gradebook()) {
     $interbreadcrumb[] = [
         'url' => Category::getUrl(),
-        'name' => get_lang('ToolGradebook'),
+        'name' => get_lang('Assessments'),
     ];
 }
 // The breadcrumbs.
 $interbreadcrumb[] = [
     'url' => api_get_path(WEB_CODE_PATH).'exercise/exercise.php?'.api_get_cidreq(),
-    'name' => get_lang('Exercises'),
+    'name' => get_lang('Tests'),
 ];
 
 $is_allowedToEdit = api_is_allowed_to_edit(null, true);
@@ -61,7 +64,7 @@ if (api_is_allowed_to_edit(null, true)) {
             '/HotPotatoes_files',
             'folder',
             0,
-            get_lang('HotPotatoesFiles')
+            get_lang('HotPotatoes files')
         );
         // Update properties in dbase (in any case).
         /*api_item_property_update(
@@ -83,7 +86,7 @@ if (api_is_allowed_to_edit(null, true)) {
 }
 
 /** Display */
-$nameTools = get_lang('HotPotatoesTests');
+$nameTools = get_lang('Import Hotpotatoes tests');
 
 $form = new FormValidator(
     'hotpotatoes',
@@ -99,13 +102,13 @@ $form->addElement('hidden', 'imgcount', $imgcount);
 $form->addElement('hidden', 'finish', $finish);
 $form->addElement('html', GenerateHiddenList($imgparams));
 $form->addElement('label', '', Display::return_icon('hotpotatoes.jpg', 'HotPotatoes'));
-$label = get_lang('DownloadImg').' : ';
+$label = get_lang('Upload Image file to the server').' : ';
 if ($finish == 0) {
-    $label = get_lang('DownloadFile').' : ';
+    $label = get_lang('Download file').' : ';
 }
 
 $form->addElement('file', 'userFile', $label);
-$form->addButtonSend(get_lang('SendFile'));
+$form->addButtonSend(get_lang('Upload document'));
 
 // If finish is set; it's because the user came from this script in the first place (displaying hidden "finish" field).
 if ((api_is_allowed_to_edit(null, true)) && (($finish == 0) || ($finish == 2))) {
@@ -118,7 +121,7 @@ if ((api_is_allowed_to_edit(null, true)) && (($finish == 0) || ($finish == 2))) 
 
         //if the size is not defined, it's probably because there has been an error or no file was submitted
         if (!$_FILES['userFile']['size']) {
-            $dialogBox .= get_lang('SendFileError').'<br />'.get_lang('Notice').' : '.get_lang('MaxFileSize').' '.ini_get('upload_max_filesize');
+            $dialogBox .= get_lang('Upload documentError').'<br />'.get_lang('Notice').' : '.get_lang('Maximum file size').' '.ini_get('upload_max_filesize');
         } else {
             $unzip = 0;
             if (preg_match('/\.zip$/i', $_FILES['userFile']['name'])) {
@@ -132,13 +135,6 @@ if ((api_is_allowed_to_edit(null, true)) && (($finish == 0) || ($finish == 2))) 
                 $fld = GenerateHpFolder($document_sys_path.$uploadPath.'/');
                 @mkdir($document_sys_path.$uploadPath.'/'.$fld, api_get_permissions_for_new_directories());
                 $doc_id = DocumentManager::addDocument($_course, '/HotPotatoes_files/'.$fld, 'folder', 0, $fld);
-            /*api_item_property_update(
-                $_course,
-                TOOL_DOCUMENT,
-                $doc_id,
-                'FolderCreated',
-                api_get_user_id()
-            );*/
             } else {
                 // It is not the first step... get the filename directly from the system params.
                 $filename = $_FILES['userFile']['name'];
@@ -163,7 +159,7 @@ if ((api_is_allowed_to_edit(null, true)) && (($finish == 0) || ($finish == 2))) 
                     if ($checked) {
                         $imgcount = $imgcount - 1;
                     } else {
-                        $dialogBox .= $filename.' '.get_lang('NameNotEqual');
+                        $dialogBox .= $filename.' '.get_lang('is not the valid file !');
                         my_delete($document_sys_path.$uploadPath.'/'.$fld.'/'.$filename);
                         DocumentManager::updateDbInfo('delete', $uploadPath.'/'.$fld.'/'.$filename);
                     }
@@ -181,7 +177,7 @@ if ((api_is_allowed_to_edit(null, true)) && (($finish == 0) || ($finish == 2))) 
                             $finish = 1;
                         } else {
                             // There is still one or more img missing.
-                            $dialogBox .= get_lang('DownloadEnd');
+                            $dialogBox .= get_lang('The upload is finished');
                         }
                     }
                 }
@@ -235,17 +231,17 @@ if ((api_is_allowed_to_edit(null, true)) && (($finish == 0) || ($finish == 2))) 
         exit;
     }
 
-    Display::display_header($nameTools, get_lang('Exercise'));
+    Display::display_header($nameTools, get_lang('Test'));
 
     echo '<div class="actions">';
     echo '<a href="exercise.php?show=test">'.
-        Display::return_icon('back.png', get_lang('BackToExercisesList'), '', ICON_SIZE_MEDIUM).
+        Display::return_icon('back.png', get_lang('BackToTestsList'), '', ICON_SIZE_MEDIUM).
         '</a>';
     echo '</div>';
 
     if ($finish == 2) {
         // If we are in the img upload process.
-        $dialogBox .= get_lang('ImgNote_st').$imgcount.get_lang('ImgNote_en').'<br />';
+        $dialogBox .= get_lang('<br> You still have to upload').$imgcount.get_lang(' image(s) :').'<br />';
         foreach ($imgparams as $key => $string) {
             $dialogBox .= $string.'; ';
         }

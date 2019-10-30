@@ -5,6 +5,7 @@ namespace Chamilo\CoreBundle\Security\Authorization\Voter;
 
 use Chamilo\CoreBundle\Entity\Manager\CourseManager;
 use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CoreBundle\Repository\CourseRepository;
 use Chamilo\UserBundle\Entity\User;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
@@ -16,8 +17,6 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * Class SessionVoter.
- *
- * @package Chamilo\CoreBundle\Security\Authorization\Voter
  */
 class SessionVoter extends Voter
 {
@@ -38,7 +37,7 @@ class SessionVoter extends Voter
      */
     public function __construct(
         EntityManagerInterface $entityManager,
-        CourseManager $courseManager,
+        CourseRepository $courseManager,
         AuthorizationCheckerInterface $authorizationChecker,
         ContainerInterface $container
     ) {

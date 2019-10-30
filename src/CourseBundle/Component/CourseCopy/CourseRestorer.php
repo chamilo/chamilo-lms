@@ -23,8 +23,6 @@ use TestCategory;
  *
  * @author Bart Mollet <bart.mollet@hogent.be>
  * @author Julio Montoya <gugli100@gmail.com> Several fixes/improvements
- *
- * @package chamilo.backup
  */
 class CourseRestorer
 {
@@ -1952,7 +1950,13 @@ class CourseRestorer
                     $imageNewId = $documentsToRestore->destination_id;
                 }
             }
-
+            $question->question = DocumentManager::replaceUrlWithNewCourseCode(
+                $question->question,
+                $this->course->code,
+                $this->course->destination_path,
+                $this->course->backup_path,
+                $this->course->info['path']
+            );
             $params = [
                 'c_id' => $this->destination_course_id,
                 'question' => self::DBUTF8($question->question),
@@ -1979,7 +1983,17 @@ class CourseRestorer
             $onlyAnswers = [];
 
             if (in_array($question->quiz_type, [DRAGGABLE, MATCHING, MATCHING_DRAGGABLE])) {
-                $allAnswers = array_column($question->answers, 'answer', 'id');
+                $tempAnswerList = $question->answers;
+                foreach ($tempAnswerList as &$value) {
+                    $value['answer'] = DocumentManager::replaceUrlWithNewCourseCode(
+                        $value['answer'],
+                        $this->course->code,
+                        $this->course->destination_path,
+                        $this->course->backup_path,
+                        $this->course->info['path']
+                    );
+                }
+                $allAnswers = array_column($tempAnswerList, 'answer', 'id');
             }
 
             if (in_array($question->quiz_type, [MATCHING, MATCHING_DRAGGABLE])) {
@@ -2660,6 +2674,7 @@ class CourseRestorer
                         strlen($lp->preview_image) - 7,
                         strlen($lp->preview_image)
                     );
+
                     if (file_exists($origin_path.$lp->preview_image) &&
                         !is_dir($origin_path.$lp->preview_image)
                     ) {
@@ -2669,6 +2684,15 @@ class CourseRestorer
                         );
                         if ($copy_result) {
                             $lp->preview_image = $new_filename;
+                            // Create 64 version from original
+                            $temp = new \Image($destination_path.$new_filename);
+                            $temp->resize(64);
+                            $pathInfo = pathinfo($new_filename);
+                            if ($pathInfo) {
+                                $filename = $pathInfo['filename'];
+                                $extension = $pathInfo['extension'];
+                                $temp->send_image($destination_path.'/'.$filename.'.64.'.$extension);
+                            }
                         } else {
                             $lp->preview_image = '';
                         }
@@ -2676,7 +2700,7 @@ class CourseRestorer
                 }
 
                 if ($this->add_text_in_items) {
-                    $lp->name = $lp->name.' '.get_lang('CopyLabelSuffix');
+                    $lp->name = $lp->name.' '.get_lang('Copy');
                 }
 
                 if (isset($this->tool_copy_settings['learnpaths'])) {
@@ -2971,7 +2995,7 @@ class CourseRestorer
                     if (is_file($path)) {
                         /* if (!is_file($dest . '/' . $file) || $overwrite)
                          if (!@copy($path, $dest . '/' . $file)) {
-                             echo '<font color="red">File ('.$path.') '.get_lang('NotHavePermission').'</font>';
+                             echo '<font color="red">File ('.$path.') '.get_lang('The user doesn't have permissions to do the requested operation.').'</font>';
                          }*/
                     } elseif (is_dir($path)) {
                         if (!is_dir($dest.'/'.$file)) {
@@ -3347,7 +3371,7 @@ class CourseRestorer
                             $this->destination_course_info['real_id']
                         );
                         if (!empty($workData)) {
-                            continue;
+                            break;
                         }
                         break;
                     case FILE_OVERWRITE:
@@ -3543,7 +3567,7 @@ class CourseRestorer
                 ) {
                     switch ($this->file_option) {
                         case FILE_SKIP:
-                            continue;
+                            break;
                         case FILE_OVERWRITE:
                             copy(
                                 $this->course->backup_path.'/'.$asset->path,

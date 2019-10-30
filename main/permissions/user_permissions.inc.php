@@ -11,7 +11,7 @@ include_once 'all_permissions.inc.php';
 include_once api_get_library_path()."/groupmanager.lib.php";
 include_once api_get_library_path()."/blog.lib.php";
 // 			ACTIONS
-if ($_POST['StoreUserPermissions'] and $setting_visualisation == 'checkbox') {
+if ($_POST['StoreUser permissions'] and $setting_visualisation == 'checkbox') {
     $result_message = store_permissions('user', $user_id);
     if ($result_message) {
         echo Display::return_message($result_message);
@@ -92,7 +92,7 @@ echo "<form method=\"post\" action=\"".str_replace('&', '&amp;', $_SERVER['REQUE
 
 if (api_get_setting('user_roles') == 'true') {
     // the list of the roles for the user
-    echo '<strong>'.get_lang('UserRoles').'</strong><br />';
+    echo '<strong>'.get_lang('User roles').'</strong><br />';
     $current_user_course_roles = get_roles('user', $user_id);
     $current_user_platform_roles = get_roles('user', $user_id, 'platform');
     display_role_list($current_user_course_roles, $current_user_platform_roles);
@@ -102,7 +102,7 @@ if (api_get_setting('user_roles') == 'true') {
 // ---------------------------------------------------
 // 			DISPLAYING THE MATRIX (user permissions)
 // ---------------------------------------------------
-echo '<strong>'.get_lang('UserPermissions').'</strong>';
+echo '<strong>'.get_lang('User permissions').'</strong>';
 echo "<table class=\"data_table\">\n";
 
 // the header
@@ -164,12 +164,12 @@ foreach ($tool_rights as $tool => $rights) {
 
 echo "</table>\n";
 if ($setting_visualisation == 'checkbox') {
-    echo "<input type=\"Submit\" name=\"StoreUserPermissions\" value=\"".get_lang('StorePermissions')."\">";
+    echo "<input type=\"Submit\" name=\"StoreUser permissions\" value=\"".get_lang('Store permissions')."\">";
 }
 echo "</form><br />";
 
 // 			LEGEND
 echo '<strong>'.get_lang('Legend').'</strong><br />';
-echo '<img src="../img/wrong.gif" /> '.get_lang('UserHasPermissionNot').'<br />';
-echo '<img src="../img/checkbox_on2.gif" /> '.get_lang('UserHasPermission').'<br />';
-echo '<img src="../img/checkbox_on3.gif" /> '.get_lang('UserHasPermissionByRoleGroup').'<br />';
+echo '<img src="../img/wrong.gif" /> '.get_lang('The user hasn\'t rights').'<br />';
+echo '<img src="../img/checkbox_on2.gif" /> '.get_lang('The user has rights').'<br />';
+echo '<img src="../img/checkbox_on3.gif" /> '.get_lang('The user has rightsByRoleGroup').'<br />';

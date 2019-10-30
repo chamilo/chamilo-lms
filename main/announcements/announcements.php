@@ -17,7 +17,6 @@
 // use anonymous mode when accessing this course tool
 $use_anonymous = true;
 
-// setting the global file that gets the general configuration, the databases, the languages, ...
 require_once __DIR__.'/../inc/global.inc.php';
 
 api_protect_course_script(true);
@@ -28,16 +27,15 @@ $token = Security::get_existing_token();
 $courseId = api_get_course_int_id();
 $_course = api_get_course_info_by_id($courseId);
 $group_id = api_get_group_id();
-$sessionId = api_get_session_id();
-
 $current_course_tool = TOOL_ANNOUNCEMENT;
 $this_section = SECTION_COURSES;
-$nameTools = get_lang('ToolAnnouncement');
+$nameTools = get_lang('Announcements');
 
 $allowToEdit = (
     api_is_allowed_to_edit(false, true) ||
     (api_get_course_setting('allow_user_edit_announcement') && !api_is_anonymous())
 );
+$allowStudentInGroupToSend = false;
 
 $sessionId = api_get_session_id();
 $drhHasAccessToSessionContent = api_drh_can_access_all_session_content();
@@ -45,32 +43,20 @@ if (!empty($sessionId) && $drhHasAccessToSessionContent) {
     $allowToEdit = $allowToEdit || api_is_drh();
 }
 
-// Configuration settings
-$display_announcement_list = true;
-$display_form = false;
-$display_title_list = true;
-
-// Maximum title messages to display
-$maximum = '12';
-
-// Length of the titles
-$length = '36';
-
 // Database Table Definitions
-$tbl_courses = Database::get_main_table(TABLE_MAIN_COURSE);
-$tbl_sessions = Database::get_main_table(TABLE_MAIN_SESSION);
 $tbl_announcement = Database::get_course_table(TABLE_ANNOUNCEMENT);
 $tbl_item_property = Database::get_course_table(TABLE_ITEM_PROPERTY);
+
 $isTutor = false;
 if (!empty($group_id)) {
-    $groupProperties = GroupManager:: get_group_properties($group_id);
+    $groupProperties = GroupManager::get_group_properties($group_id);
     $interbreadcrumb[] = [
-        'url' => api_get_path(WEB_CODE_PATH)."group/group.php?".api_get_cidreq(),
+        'url' => api_get_path(WEB_CODE_PATH).'group/group.php?'.api_get_cidreq(),
         'name' => get_lang('Groups'),
     ];
     $interbreadcrumb[] = [
-        'url' => api_get_path(WEB_CODE_PATH)."group/group_space.php?".api_get_cidreq(),
-        'name' => get_lang('GroupSpace').' '.$groupProperties['name'],
+        'url' => api_get_path(WEB_CODE_PATH).'group/group_space.php?'.api_get_cidreq(),
+        'name' => get_lang('Group area').' '.$groupProperties['name'],
     ];
 
     if ($allowToEdit === false) {
@@ -79,10 +65,14 @@ if (!empty($group_id)) {
         if ($isTutor) {
             $allowToEdit = true;
         }
+
+        // Last chance ... students can send announcements
+        if ($groupProperties['announcements_state'] == GroupManager::TOOL_PRIVATE_BETWEEN_USERS) {
+            $allowStudentInGroupToSend = true;
+        }
     }
 }
 
-/* Tracking */
 Event::event_access_tool(TOOL_ANNOUNCEMENT);
 
 $announcement_id = isset($_GET['id']) ? (int) $_GET['id'] : null;
@@ -95,8 +85,6 @@ $searchFormToString = '';
 
 $logInfo = [
     'tool' => TOOL_ANNOUNCEMENT,
-    'tool_id' => 0,
-    'tool_id_detail' => 0,
     'action' => $action,
 ];
 Event::registerLog($logInfo);
@@ -123,7 +111,6 @@ switch ($action) {
                 $sortDirection = 'ASC';
             }
 
-            $announcementInfo = AnnouncementManager::get_by_id($courseId, $thisAnnouncementId);
             $sql = "SELECT DISTINCT announcement.id, announcement.display_order
                     FROM $tbl_announcement announcement 
                     INNER JOIN $tbl_item_property itemproperty
@@ -157,7 +144,7 @@ switch ($action) {
                     $thisAnnouncementOrderFound = true;
                 }
             }
-            Display::addFlash(Display::return_message(get_lang('AnnouncementMoved')));
+            Display::addFlash(Display::return_message(get_lang('The announcement has been moved')));
             header('Location: '.$homeUrl);
             exit;
         }
@@ -167,9 +154,11 @@ switch ($action) {
             'url' => api_get_path(WEB_CODE_PATH).'announcements/announcements.php?'.api_get_cidreq(),
             'name' => $nameTools,
         ];
-
         $nameTools = get_lang('View');
         $content = AnnouncementManager::displayAnnouncement($announcement_id);
+        if (empty($content)) {
+            api_not_allowed(true);
+        }
         break;
     case 'list':
         $htmlHeadXtra[] = api_get_jqgrid_js();
@@ -211,8 +200,8 @@ switch ($action) {
         $columns = [
             get_lang('Title'),
             get_lang('By'),
-            get_lang('LastUpdateDate'),
-            get_lang('Actions'),
+            get_lang('Latest update'),
+            get_lang('Detail'),
         ];
 
         // Column config
@@ -243,7 +232,6 @@ switch ($action) {
                 'index' => 'actions',
                 'width' => '150',
                 'align' => 'left',
-                //'formatter' => 'action_formatter',
                 'sortable' => 'false',
             ],
         ];
@@ -253,7 +241,8 @@ switch ($action) {
         // height auto
         $extra_params['height'] = 'auto';
         $editOptions = '';
-        if (api_is_allowed_to_edit() || $isTutor) {
+
+        if ($isTutor || api_is_allowed_to_edit()) {
             $extra_params['multiselect'] = true;
             $editOptions = '
             $("#announcements").jqGrid(
@@ -291,20 +280,22 @@ switch ($action) {
 
         if (empty($count)) {
             $html = '';
-            if ($allowToEdit && (empty($_GET['origin']) || $_GET['origin'] !== 'learnpath')) {
+            if (($allowToEdit || $allowStudentInGroupToSend) &&
+                (empty($_GET['origin']) || $_GET['origin'] !== 'learnpath')
+            ) {
                 $html .= '<div id="no-data-view">';
                 $html .= '<h3>'.get_lang('Announcements').'</h3>';
                 $html .= Display::return_icon('valves.png', '', [], 64);
                 $html .= '<div class="controls">';
                 $html .= Display::url(
-                    get_lang('AddAnnouncement'),
+                    get_lang('Add an announcement'),
                     api_get_self()."?".api_get_cidreq()."&action=add",
                     ['class' => 'btn btn-primary']
                 );
                 $html .= '</div>';
                 $html .= '</div>';
             } else {
-                $html = Display::return_message(get_lang('NoAnnouncements'), 'warning');
+                $html = Display::return_message(get_lang('There are no announcements.'), 'warning');
             }
             $content = $html;
         } else {
@@ -313,7 +304,7 @@ switch ($action) {
         break;
     case 'delete':
         /* Delete announcement */
-        $id = intval($_GET['id']);
+        $id = (int) $_GET['id'];
         if ($sessionId != 0 && api_is_allowed_to_session_edit(false, true) == false) {
             api_not_allowed();
         }
@@ -328,7 +319,7 @@ switch ($action) {
 
         if ($delete) {
             AnnouncementManager::delete_announcement($_course, $id);
-            Display::addFlash(Display::return_message(get_lang('AnnouncementDeleted')));
+            Display::addFlash(Display::return_message(get_lang('Announcement has been deleted')));
         }
         header('Location: '.$homeUrl);
         exit;
@@ -338,7 +329,7 @@ switch ($action) {
             $allow = api_get_configuration_value('disable_delete_all_announcements');
             if ($allow === false) {
                 AnnouncementManager::delete_all_announcements($_course);
-                Display::addFlash(Display::return_message(get_lang('AnnouncementDeletedAll')));
+                Display::addFlash(Display::return_message(get_lang('Announcement has been deletedAll')));
             }
             header('Location: '.$homeUrl);
             exit;
@@ -374,7 +365,7 @@ switch ($action) {
                         $_course,
                         $_GET['id']
                     );
-                    Display::addFlash(Display::return_message(get_lang('VisibilityChanged')));
+                    Display::addFlash(Display::return_message(get_lang('The visibility has been changed.')));
                     header('Location: '.$homeUrl);
                     exit;
                 }
@@ -389,8 +380,10 @@ switch ($action) {
             api_not_allowed(true);
         }
 
-        if (!$allowToEdit) {
-            api_not_allowed(true);
+        if ($allowStudentInGroupToSend === false) {
+            if (!$allowToEdit) {
+                api_not_allowed(true);
+            }
         }
 
         // DISPLAY ADD ANNOUNCEMENT COMMAND
@@ -405,9 +398,9 @@ switch ($action) {
             ['enctype' => 'multipart/form-data']
         );
 
-        $form_name = get_lang('ModifyAnnouncement');
+        $form_name = get_lang('Edit announcement');
         if (empty($id)) {
-            $form_name = get_lang('AddAnnouncement');
+            $form_name = get_lang('Add an announcement');
         }
         $interbreadcrumb[] = [
             'url' => api_get_path(WEB_CODE_PATH).'announcements/announcements.php?'.api_get_cidreq(),
@@ -418,7 +411,7 @@ switch ($action) {
         $form->addHeader($form_name);
         $form->addButtonAdvancedSettings(
             'choose_recipients',
-            [get_lang('ChooseRecipients')]
+            [get_lang('Choose recipients')]
         );
         $form->addHtml('<div id="choose_recipients_options" style="display:none;">');
 
@@ -427,18 +420,25 @@ switch ($action) {
             if (isset($_GET['remind_inactive'])) {
                 $email_ann = '1';
                 $content_to_modify = sprintf(
-                    get_lang('RemindInactiveLearnersMailContent'),
+                    get_lang('Dear user,<br /><br /> you are not active on %s since more than %s days.'),
                     api_get_setting('siteName'),
                     7
                 );
                 $title_to_modify = sprintf(
-                    get_lang('RemindInactiveLearnersMailSubject'),
+                    get_lang('Inactivity on %s'),
                     api_get_setting('siteName')
                 );
             } elseif (isset($_GET['remindallinactives']) && $_GET['remindallinactives'] === 'true') {
                 // we want to remind inactive users. The $_GET['since'] parameter
                 // determines which users have to be warned (i.e the users who have been inactive for x days or more
-                $since = isset($_GET['since']) ? (int) $_GET['since'] : 6;
+                $since = 6;
+                if (isset($_GET['since'])) {
+                    if ($_GET['since'] === 'never') {
+                        $since = 'never';
+                    } else {
+                        $since = (int) $_GET['since'];
+                    }
+                }
 
                 // Getting the users who have to be reminded
                 $to = Tracking::getInactiveStudentsInCourse(
@@ -455,12 +455,12 @@ switch ($action) {
                 $email_ann = '1';
                 // setting the variables for the form elements: the title of the email
                 $title_to_modify = sprintf(
-                    get_lang('RemindInactiveLearnersMailSubject'),
+                    get_lang('Inactivity on %s'),
                     api_get_setting('siteName')
                 );
                 // setting the variables for the form elements: the message of the email
                 $content_to_modify = sprintf(
-                    get_lang('RemindInactiveLearnersMailContent'),
+                    get_lang('Dear user,<br /><br /> you are not active on %s since more than %s days.'),
                     api_get_setting('siteName'),
                     $since
                 );
@@ -468,7 +468,7 @@ switch ($action) {
                 // then we have a different subject and content for the announcement
                 if ($_GET['since'] === 'never') {
                     $title_to_modify = sprintf(
-                        get_lang('RemindInactiveLearnersMailSubject'),
+                        get_lang('Inactivity on %s'),
                         api_get_setting('siteName')
                     );
                     $content_to_modify = get_lang(
@@ -482,7 +482,7 @@ switch ($action) {
         }
 
         $form->addHtml('</div>');
-        $form->addCheckBox('email_ann', '', get_lang('EmailOption'));
+        $form->addCheckBox('email_ann', '', get_lang('Send this announcement by email to selected groups/users'));
 
         if (!isset($announcement_to_modify)) {
             $announcement_to_modify = '';
@@ -501,7 +501,7 @@ switch ($action) {
                 $separated = CourseManager::separateUsersGroups($to);
                 if (isset($separated['groups']) && count($separated['groups']) > 1) {
                     $form->freeze();
-                    Display::addFlash(Display::return_message(get_lang('LockByTeacher')));
+                    Display::addFlash(Display::return_message(get_lang('Disabled by trainer')));
                     $showSubmitButton = false;
                 }
             }
@@ -523,7 +523,7 @@ switch ($action) {
 
         $form->addHtml("
             <script>
-                $(document).on('ready', function () {
+                $(function () {
                     $('#announcement_preview').on('click', function() {  
                         var users = [];
                         $('#users_to option').each(function() {
@@ -546,7 +546,7 @@ switch ($action) {
                                     resultToString += '&nbsp;' + value;
                                 });
                                 $('#announcement_preview_result').html('' +
-                                    '".addslashes(get_lang('AnnouncementWillBeSentTo'))."<br/>' + resultToString
+                                    '".addslashes(get_lang('Announcement will be sent to'))."<br/>' + resultToString
                                 );
                                 $('#announcement_preview_result').show();
                                 $('#send_button').show();                                
@@ -566,7 +566,7 @@ switch ($action) {
                 $form->addHtml(
                     "
                     <script>
-                        $(document).on('ready', function () {
+                        $(function () {
                             $('#choose_recipients').click();
                         });
                     </script>
@@ -579,10 +579,10 @@ switch ($action) {
         $form->addElement(
             'text',
             'title',
-            get_lang('EmailTitle'),
+            get_lang('Subject'),
             ['onkeypress' => 'return event.keyCode != 13;']
         );
-        $form->addRule('title', get_lang('ThisFieldIsRequired'), 'required');
+        $form->addRule('title', get_lang('Required field'), 'required');
         $form->addElement('hidden', 'id');
         $htmlTags = '';
         $tags = AnnouncementManager::getTags();
@@ -600,12 +600,12 @@ switch ($action) {
             false,
             ['ToolbarSet' => 'Announcements']
         );
-        $form->addElement('file', 'user_upload', get_lang('AddAnAttachment'));
-        $form->addElement('textarea', 'file_comment', get_lang('FileComment'));
+        $form->addElement('file', 'user_upload', get_lang('Add attachment'));
+        $form->addElement('textarea', 'file_comment', get_lang('File comment'));
         $form->addHidden('sec_token', $token);
 
         if (empty($sessionId)) {
-            $form->addCheckBox('send_to_users_in_session', null, get_lang('SendToUsersInSessions'));
+            $form->addCheckBox('send_to_users_in_session', null, get_lang('Send to users in all sessions of this course'));
         }
 
         $config = api_get_configuration_value('announcement.hide_send_to_hrm_users');
@@ -614,12 +614,12 @@ switch ($action) {
             $form->addCheckBox(
                 'send_to_hrm_users',
                 null,
-                get_lang('SendAnnouncementCopyToDRH'),
+                get_lang('Send a copy to HR managers of selected students'),
                 ['id' => 'send_to_hrm_users']
             );
         }
 
-        $form->addCheckBox('send_me_a_copy_by_email', null, get_lang('SendAnnouncementCopyToMyself'));
+        $form->addCheckBox('send_me_a_copy_by_email', null, get_lang('Send a copy by email to myself.'));
         $defaults['send_me_a_copy_by_email'] = true;
 
         if ($showSubmitButton) {
@@ -631,7 +631,7 @@ switch ($action) {
                 ).'<div id="announcement_preview_result" style="display:none"></div>'
             );
             $form->addHtml('<div id="send_button" style="display:none">');
-            $form->addButtonSave(get_lang('ButtonPublishAnnouncement'));
+            $form->addButtonSave(get_lang('Send announcement'));
             $form->addHtml('</div>');
         }
         $form->setDefaults($defaults);
@@ -677,7 +677,7 @@ switch ($action) {
 
                     Display::addFlash(
                         Display::return_message(
-                            get_lang('AnnouncementModified'),
+                            get_lang('Announcement has been modified'),
                             'success'
                         )
                     );
@@ -718,7 +718,7 @@ switch ($action) {
                     if ($insert_id) {
                         Display::addFlash(
                             Display::return_message(
-                                get_lang('AnnouncementAdded'),
+                                get_lang('Announcement has been added'),
                                 'success'
                             )
                         );
@@ -768,14 +768,14 @@ if (empty($_GET['origin']) || $_GET['origin'] !== 'learnpath') {
 // Actions
 $show_actions = false;
 $actionsLeft = '';
-if ($allowToEdit && (empty($_GET['origin']) || $_GET['origin'] !== 'learnpath')) {
+if (($allowToEdit || $allowStudentInGroupToSend) && (empty($_GET['origin']) || $_GET['origin'] !== 'learnpath')) {
     if (in_array($action, ['add', 'modify', 'view'])) {
         $actionsLeft .= "<a href='".api_get_self()."?".api_get_cidreq()."'>".
             Display::return_icon('back.png', get_lang('Back'), '', ICON_SIZE_MEDIUM).
             "</a>";
     } else {
         $actionsLeft .= "<a href='".api_get_self()."?".api_get_cidreq()."&action=add'>".
-            Display::return_icon('new_announce.png', get_lang('AddAnnouncement'), '', ICON_SIZE_MEDIUM).
+            Display::return_icon('new_announce.png', get_lang('Add an announcement'), '', ICON_SIZE_MEDIUM).
             "</a>";
     }
     $show_actions = true;
@@ -788,14 +788,14 @@ if ($allowToEdit && (empty($_GET['origin']) || $_GET['origin'] !== 'learnpath'))
 
 if ($allowToEdit && api_get_group_id() == 0) {
     $allow = api_get_configuration_value('disable_delete_all_announcements');
-    if ($allow === false) {
+    if ($allow === false && api_is_allowed_to_edit()) {
         if (!isset($_GET['action']) ||
             isset($_GET['action']) && $_GET['action'] == 'list'
         ) {
-            $actionsLeft .= "<a href=\"".api_get_self()."?".api_get_cidreq()."&action=delete_all\" onclick=\"javascript:if(!confirm('".get_lang("ConfirmYourChoice")."')) return false;\">".
+            $actionsLeft .= "<a href=\"".api_get_self()."?".api_get_cidreq()."&action=delete_all\" onclick=\"javascript:if(!confirm('".get_lang("Please confirm your choice")."')) return false;\">".
                 Display::return_icon(
                     'delete_announce.png',
-                    get_lang('AnnouncementDeleteAll'),
+                    get_lang('Clear list of announcements'),
                     '',
                     ICON_SIZE_MEDIUM
                 )."</a>";

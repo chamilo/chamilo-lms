@@ -13,8 +13,6 @@ use Symfony\Component\Form\FormBuilderInterface;
 
 /**
  * Class PlatformSettingsSchema.
- *
- * @package Chamilo\CoreBundle\Settings
  */
 class PlatformSettingsSchema extends AbstractSettingsSchema
 {

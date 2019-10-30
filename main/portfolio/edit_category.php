@@ -3,7 +3,7 @@
 
 $form = new FormValidator('edit_category', 'post', $baseUrl."action=edit_category&id={$category->getId()}");
 if (api_get_configuration_value('save_titles_as_html')) {
-    $form->addHtmlEditor('title', get_lang('Title'), true, false, ['ToolbarSet' => 'NotebookStudent']);
+    $form->addHtmlEditor('title', get_lang('Title'), true, false, ['ToolbarSet' => 'TitleAsHtml']);
 } else {
     $form->addText('title', get_lang('Title'));
     $form->applyFilter('title', 'trim');
@@ -26,14 +26,14 @@ if ($form->validate()) {
     $em->flush();
 
     Display::addFlash(
-        Display::return_message(get_lang('Updated'), 'success')
+        Display::return_message(get_lang('Update successful'), 'success')
     );
 
     header("Location: $baseUrl");
     exit;
 }
 
-$toolName = get_lang('EditCategory');
+$toolName = get_lang('Edit this category');
 $interbreadcrumb[] = [
     'name' => get_lang('Portfolio'),
     'url' => $baseUrl,

@@ -13,9 +13,9 @@ $this_section = SECTION_PLATFORM_ADMIN;
 
 api_protect_admin_script(true);
 
-$tool_name = get_lang('SessionOverview');
-$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('PlatformAdmin')];
-$interbreadcrumb[] = ['url' => 'session_list.php', 'name' => get_lang('SessionList')];
+$tool_name = get_lang('Session overview');
+$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('Administration')];
+$interbreadcrumb[] = ['url' => 'session_list.php', 'name' => get_lang('Session list')];
 
 // Database Table Definitions
 $tbl_user = Database::get_main_table(TABLE_MAIN_USER);
@@ -32,7 +32,7 @@ switch ($action) {
         $user_info = api_get_user_info($user_id);
         if ($result) {
             $message = Display::return_message(
-                get_lang('UserAdded').' '.api_get_person_name(
+                get_lang('The user has been added').' '.api_get_person_name(
                     $user_info['firstname'],
                     $user_info['lastname']
                 ),
@@ -55,9 +55,9 @@ $session_list = SessionManager::get_sessions_list();
 $html = '';
 $show_users_with_problems = isset($_REQUEST['show_users_with_problems']) && $_REQUEST['show_users_with_problems'] == 1 ? true : false;
 if ($show_users_with_problems) {
-    $html .= '<a href="'.api_get_self().'?show_users_with_problems=0">'.get_lang('ShowAllUsers').'</a>';
+    $html .= '<a href="'.api_get_self().'?show_users_with_problems=0">'.get_lang('Show all users').'</a>';
 } else {
-    $html .= '<a href="'.api_get_self().'?show_users_with_problems=1">'.get_lang('ShowUsersNotAddedInTheURL').'</a>';
+    $html .= '<a href="'.api_get_self().'?show_users_with_problems=1">'.get_lang('Show users not added to the URL').'</a>';
 }
 
 foreach ($session_list as $session_item) {
@@ -81,7 +81,7 @@ foreach ($session_list as $session_item) {
     $users = Database::store_result($result);
 
     if (!empty($users)) {
-        $html .= '<table class="data_table"><tr><th>'.get_lang('User').'<th>'.get_lang('Actions').'</th></tr>';
+        $html .= '<table class="data_table"><tr><th>'.get_lang('User').'<th>'.get_lang('Detail').'</th></tr>';
 
         foreach ($users as $user) {
             $user_link = '';
@@ -92,9 +92,9 @@ foreach ($session_list as $session_item) {
             $link_to_add_user_in_url = '';
             if ($multiple_url_is_on) {
                 if ($user['access_url_id'] != $url_id) {
-                    $user_link .= ' '.Display::return_icon('warning.png', get_lang('UserNotAddedInURL'), [], ICON_SIZE_MEDIUM);
-                    $add = Display::return_icon('add.png', get_lang('AddUsersToURL'), [], ICON_SIZE_MEDIUM);
-                    $link_to_add_user_in_url = '<a href="'.api_get_self().'?'.Security::remove_XSS($_SERVER['QUERY_STRING']).'&action=add_user_to_url&id_session='.$id_session.'&user_id='.$user['user_id'].'">'.$add.'</a>';
+                    $user_link .= ' '.Display::return_icon('warning.png', get_lang('Users not added to the URL'), [], ICON_SIZE_MEDIUM);
+                    $add = Display::return_icon('add.png', get_lang('Add users to an URL'), [], ICON_SIZE_MEDIUM);
+                    $link_to_add_user_in_url = '<a href="'.api_get_self().'?'.Security::remove_XSS($_SERVER['QUERY_STRING']).'&action=add_user_to_url&id_session='.$session_id.'&user_id='.$user['user_id'].'">'.$add.'</a>';
                 }
             }
             $html .= '<tr>

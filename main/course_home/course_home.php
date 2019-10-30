@@ -26,11 +26,12 @@ use Fhaculty\Graph\Graph;
  * Show message to confirm that a tools must be hide from available tools
  *
  *   visibility 0,1
- *
- * @package chamilo.course_home
  */
 $use_anonymous = true;
 require_once __DIR__.'/../inc/global.inc.php';
+
+$js = '<script>'.api_get_language_translate_html().'</script>';
+$htmlHeadXtra[] = $js;
 
 $htmlHeadXtra[] = '<script>
 /* option show/hide thematic-block */
@@ -71,7 +72,7 @@ $(function() {
 			success: function(data) {
 				eval("var info=" + data);
 				new_current_tool_image = info.image;
-				new_current_view       = "'.api_get_path(WEB_IMG_PATH).'" + info.view;
+				new_current_view       = "'.api_get_path('WEB_PUBLIC_PATH').'img/" + info.view;
 				//eyes
 				$("#" + tool_id).attr("src", new_current_view);
 				//tool
@@ -81,16 +82,16 @@ $(function() {
 				$("#istooldesc_" + my_tool_id).attr("class", info.tclass);
 
 				if (image_link == "visible.png") {
-					$("#" + tool_id).attr("alt", "'.get_lang('Activate', '').'");
-					$("#" + tool_id).attr("title", "'.get_lang('Activate', '').'");
+					$("#" + tool_id).attr("alt", "'.get_lang('Activate').'");
+					$("#" + tool_id).attr("title", "'.get_lang('Activate').'");
 				} else {
-					$("#" + tool_id).attr("alt", "'.get_lang('Deactivate', '').'");
-					$("#" + tool_id).attr("title", "'.get_lang('Deactivate', '').'");
+					$("#" + tool_id).attr("alt", "'.get_lang('Deactivate').'");
+					$("#" + tool_id).attr("title", "'.get_lang('Deactivate').'");
 				}
 				if (info.message == "is_active") {
-					message = "'.get_lang('ToolIsNowVisible', '').'";
+					message = "'.get_lang('ToolIsNowVisible').'";
 				} else {
-					message = "'.get_lang('ToolIsNowHidden', '').'";
+					message = "'.get_lang('ToolIsNowHidden').'";
 				}
 				$(".normal-message").hide();
 				$("#id_confirmation_message").html(message);
@@ -174,16 +175,18 @@ $logInfo = [
 ];
 Event::registerLog($logInfo);
 
-/*Auto launch code */
+/* Auto launch code */
 $autoLaunchWarning = '';
 $showAutoLaunchLpWarning = false;
 $course_id = api_get_course_int_id();
 $lpAutoLaunch = api_get_course_setting('enable_lp_auto_launch');
 $session_id = api_get_session_id();
+$allowAutoLaunchForCourseAdmins = api_is_platform_admin() || api_is_allowed_to_edit(true, true) || api_is_coach();
+
 if (!empty($lpAutoLaunch)) {
     if ($lpAutoLaunch == 2) {
         // LP list
-        if (api_is_platform_admin() || api_is_allowed_to_edit()) {
+        if ($allowAutoLaunchForCourseAdmins) {
             $showAutoLaunchLpWarning = true;
         } else {
             $session_key = 'lp_autolaunch_'.$session_id.'_'.api_get_course_int_id().'_'.api_get_user_id();
@@ -217,12 +220,12 @@ if (!empty($lpAutoLaunch)) {
         if (Database::num_rows($result) > 0) {
             $lp_data = Database::fetch_array($result, 'ASSOC');
             if (!empty($lp_data['id'])) {
-                if (api_is_platform_admin() || api_is_allowed_to_edit()) {
+                if ($allowAutoLaunchForCourseAdmins) {
                     $showAutoLaunchLpWarning = true;
                 } else {
                     $session_key = 'lp_autolaunch_'.$session_id.'_'.api_get_course_int_id().'_'.api_get_user_id();
                     if (!isset($_SESSION[$session_key])) {
-                        //redirecting to the LP
+                        // Redirecting to the LP
                         $url = api_get_path(WEB_CODE_PATH).'lp/lp_controller.php?'.api_get_cidreq().'&action=view&lp_id='.$lp_data['id'];
 
                         $_SESSION[$session_key] = true;
@@ -236,14 +239,14 @@ if (!empty($lpAutoLaunch)) {
 }
 
 if ($showAutoLaunchLpWarning) {
-    $autoLaunchWarning = get_lang('TheLPAutoLaunchSettingIsONStudentsWillBeRedirectToAnSpecificLP');
+    $autoLaunchWarning = get_lang('The learning path auto-launch setting is ON. When learners enter this course, they will be automatically redirected to the learning path marked as auto-launch.');
 }
 
 $forumAutoLaunch = api_get_course_setting('enable_forum_auto_launch');
 if ($forumAutoLaunch == 1) {
-    if (api_is_platform_admin() || api_is_allowed_to_edit()) {
+    if ($allowAutoLaunchForCourseAdmins) {
         if (empty($autoLaunchWarning)) {
-            $autoLaunchWarning = get_lang('TheForumAutoLaunchSettingIsOnStudentsWillBeRedirectToTheForumTool');
+            $autoLaunchWarning = get_lang('The forum\'s auto-launch setting is on. Students will be redirected to the forum tool when entering this course.');
         }
     } else {
         $url = api_get_path(WEB_CODE_PATH).'forum/index.php?'.api_get_cidreq().'&id_session='.$session_id;
@@ -255,7 +258,7 @@ if ($forumAutoLaunch == 1) {
 if (api_get_configuration_value('allow_exercise_auto_launch')) {
     $exerciseAutoLaunch = (int) api_get_course_setting('enable_exercise_auto_launch');
     if ($exerciseAutoLaunch == 2) {
-        if (api_is_platform_admin() || api_is_allowed_to_edit()) {
+        if ($allowAutoLaunchForCourseAdmins) {
             if (empty($autoLaunchWarning)) {
                 $autoLaunchWarning = get_lang(
                     'TheExerciseAutoLaunchSettingIsONStudentsWillBeRedirectToTheExerciseList'
@@ -268,7 +271,7 @@ if (api_get_configuration_value('allow_exercise_auto_launch')) {
             exit;
         }
     } elseif ($exerciseAutoLaunch == 1) {
-        if (api_is_platform_admin() || api_is_allowed_to_edit()) {
+        if ($allowAutoLaunchForCourseAdmins) {
             if (empty($autoLaunchWarning)) {
                 $autoLaunchWarning = get_lang(
                     'TheExerciseAutoLaunchSettingIsONStudentsWillBeRedirectToAnSpecificExercise'
@@ -308,9 +311,9 @@ if (api_get_configuration_value('allow_exercise_auto_launch')) {
 
 $documentAutoLaunch = api_get_course_setting('enable_document_auto_launch');
 if ($documentAutoLaunch == 1) {
-    if (api_is_platform_admin() || api_is_allowed_to_edit()) {
+    if ($allowAutoLaunchForCourseAdmins) {
         if (empty($autoLaunchWarning)) {
-            $autoLaunchWarning = get_lang('TheDocumentAutoLaunchSettingIsOnStudentsWillBeRedirectToTheDocumentTool');
+            $autoLaunchWarning = get_lang('The document auto-launch feature configuration is enabled. Learners will be automatically redirected to document tool.');
         }
     } else {
         // Redirecting to the document
@@ -320,9 +323,8 @@ if ($documentAutoLaunch == 1) {
     }
 }
 
+// Used in different pages
 $tool_table = Database::get_course_table(TABLE_TOOL_LIST);
-$temps = time();
-$reqdate = "&reqdate=$temps";
 
 /*	Introduction section (editable by course admins) */
 $content = Display::return_introduction_section(
@@ -344,17 +346,14 @@ if (!empty($autoLaunchWarning)) {
     );
 }
 
-if (api_get_setting('homepage_view') === 'activity' ||
-    api_get_setting('homepage_view') === 'activity_big'
-) {
-    require 'activity.php';
-} elseif (api_get_setting('homepage_view') === '2column') {
-    require '2column.php';
-} elseif (api_get_setting('homepage_view') === '3column') {
-    require '3column.php';
-} elseif (api_get_setting('homepage_view') === 'vertical_activity') {
-    require 'vertical_activity.php';
-}
+/*$homePageView = api_get_setting('homepage_view');
+switch ($homePageView) {
+    case 'activity':
+    case 'activity_big':
+        require 'activity.php';
+        break;
+}*/
+require 'activity.php';
 
 // Get session-career diagram
 $diagram = '';
@@ -412,6 +411,7 @@ Session::erase('_gid');
 Session::erase('oLP');
 Session::erase('lpobject');
 api_remove_in_gradebook();
+Exercise::cleanSessionVariables();
 DocumentManager::removeGeneratedAudioTempFile();
 
 $tpl = new Template(null);

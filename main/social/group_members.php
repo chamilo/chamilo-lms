@@ -48,7 +48,7 @@ if (empty($group_id)) {
 $interbreadcrumb[] = ['url' => 'home.php', 'name' => get_lang('Social')];
 $interbreadcrumb[] = ['url' => 'groups.php', 'name' => get_lang('Groups')];
 $interbreadcrumb[] = ['url' => 'group_view.php?id='.$group_id, 'name' => $group_info['name']];
-$interbreadcrumb[] = ['url' => '#', 'name' => get_lang('MemberList')];
+$interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Members list')];
 
 //if i'm a moderator
 if (isset($_GET['action']) && $_GET['action'] == 'add') {
@@ -57,7 +57,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'add') {
     //if i'm a moderator
     if ($userGroup->isGroupModerator($group_id)) {
         $userGroup->update_user_role($user_join, $group_id);
-        Display::addFlash(Display::return_message(get_lang('UserAdded')));
+        Display::addFlash(Display::return_message(get_lang('The user has been added')));
     }
 }
 
@@ -67,7 +67,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'delete') {
     //if i'm a moderator
     if ($userGroup->isGroupModerator($group_id)) {
         $userGroup->delete_user_rel_group($user_join, $group_id);
-        Display::addFlash(Display::return_message(get_lang('UserDeleted')));
+        Display::addFlash(Display::return_message(get_lang('The user has been deleted')));
     }
 }
 
@@ -81,7 +81,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'set_moderator') {
             $group_id,
             GROUP_USER_PERMISSION_MODERATOR
         );
-        Display::addFlash(Display::return_message(get_lang('UserChangeToModerator')));
+        Display::addFlash(Display::return_message(get_lang('User updated to moderator')));
     }
 }
 
@@ -95,7 +95,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'delete_moderator') {
             $group_id,
             GROUP_USER_PERMISSION_READER
         );
-        Display::addFlash(Display::return_message(get_lang('UserChangeToReader')));
+        Display::addFlash(Display::return_message(get_lang('User updated to reader')));
     }
 }
 
@@ -112,11 +112,11 @@ $users = $userGroup->get_users_by_group(
 );
 $new_member_list = [];
 
-$social_avatar_block = SocialManager::getAvatarBlock(
+$social_avatar_block = SocialManager::show_social_avatar_block(
     'member_list',
     $group_id
 );
-$social_menu_block = SocialManager::getMenuSocial('member_list', $group_id);
+$social_menu_block = SocialManager::show_social_menu('member_list', $group_id);
 $social_right_content = '<h2>'.$group_info['name'].'</h2>';
 
 foreach ($users as $user) {
@@ -139,12 +139,12 @@ foreach ($users as $user) {
                 $user['link'] = '<a href="group_members.php?id='.$group_id.'&u='.$user['id'].'&action=delete">'.
                     Display::return_icon(
                         'delete.png',
-                        get_lang('DeleteFromGroup')
+                        get_lang('Delete from group')
                     ).'</a>'.
                     '<a href="group_members.php?id='.$group_id.'&u='.$user['id'].'&action=set_moderator">'.
                     Display::return_icon(
                         'social_moderator_add.png',
-                        get_lang('AddModerator')
+                        get_lang('Add as moderator')
                     ).'</a>';
             }
             break;
@@ -152,7 +152,7 @@ foreach ($users as $user) {
             $user['link'] = '<a href="group_members.php?id='.$group_id.'&u='.$user['id'].'&action=add">'.
                 Display::return_icon(
                     'pending_invitation.png',
-                    get_lang('PendingInvitation')
+                    get_lang('Pending invitation')
                 ).'</a>';
             break;
         case GROUP_USER_PERMISSION_MODERATOR:
@@ -165,7 +165,7 @@ foreach ($users as $user) {
                 $user['link'] .= '<a href="group_members.php?id='.$group_id.'&u='.$user['id'].'&action=delete_moderator">'.
                     Display::return_icon(
                         'social_moderator_delete.png',
-                        get_lang('DeleteModerator')
+                        get_lang('Remove moderator')
                     ).'</a>';
             }
             break;

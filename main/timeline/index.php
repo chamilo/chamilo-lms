@@ -13,13 +13,15 @@ $htmlHeadXtra[] = api_get_jqgrid_js();
 //$htmlHeadXtra[] = api_get_css(api_get_path(WEB_LIBRARY_PATH).'javascript/timeline/timeline.css');
 
 // setting breadcrumbs
-//$interbreadcrumb[]=array('url' => 'index.php','name' => get_lang('PlatformAdmin'));
-//$interbreadcrumb[]=array('url' => 'career_dashboard.php','name' => get_lang('CareersAndPromotions'));
+//$interbreadcrumb[]=array('url' => 'index.php','name' => get_lang('Administration'));
+//$interbreadcrumb[]=array('url' => 'career_dashboard.php','name' => get_lang('Careers and promotions'));
 
 $action = isset($_GET['action']) ? $_GET['action'] : null;
 
 $check = Security::check_token('request');
 $token = Security::get_token();
+$actions = '';
+$message = '';
 
 switch ($action) {
     case 'add':
@@ -32,7 +34,7 @@ switch ($action) {
         break;
     case 'add_item':
         $interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('Timeline')];
-        $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('TimelineItem')];
+        $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Item')];
         break;
     default:
         $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Timeline')];
@@ -42,7 +44,7 @@ switch ($action) {
 $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_timelines';
 
 //The order is important you need to check the the $column variable in the model.ajax.php file
-$columns = [get_lang('Name'), get_lang('Actions')];
+$columns = [get_lang('Name'), get_lang('Detail')];
 
 //Column config
 $column_model = [
@@ -80,7 +82,7 @@ switch ($action) {
                 $values = $form->exportValues();
                 $res = $timeline->save($values);
                 if ($res) {
-                    $message = Display::return_message(get_lang('ItemAdded'), 'success');
+                    $message = Display::return_message(get_lang('Item added'), 'success');
                 }
             }
             $content = $timeline->listing();
@@ -102,7 +104,7 @@ switch ($action) {
                 $values = $form->exportValues();
                 //$timeline->update_all_promotion_status_by_career_id($values['id'],$values['status']);
                 $res = $timeline->update($values);
-                $message = Display::return_message(sprintf(get_lang('ItemUpdated'), $values['name']), 'confirmation');
+                $message = Display::return_message(sprintf(get_lang('Item updated'), $values['name']), 'confirmation');
             }
             $timeline->display();
         } else {
@@ -124,7 +126,7 @@ switch ($action) {
                 $values['type'] = '';
                 //$timeline->update_all_promotion_status_by_career_id($values['id'],$values['status']);
                 $res = $timeline->save_item($values);
-                $message = Display::return_message(sprintf(get_lang('ItemUpdated'), $values['name']), 'confirmation');
+                $message = Display::return_message(sprintf(get_lang('Item updated'), $values['name']), 'confirmation');
             }
             $timeline->display();
         } else {
@@ -139,7 +141,7 @@ switch ($action) {
         if ($check) {
             $res = $timeline->delete($_GET['id']);
             if ($res) {
-                $message = Display::return_message(get_lang('ItemDeleted'), 'success');
+                $message = Display::return_message(get_lang('Item deleted'), 'success');
             }
         }
         $content = $timeline->listing();
@@ -149,7 +151,7 @@ switch ($action) {
         break;
 }
 
-$tpl = new Template($tool_name);
+$tpl = new Template();
 
 $tpl->assign('actions', $actions);
 $tpl->assign('message', $message);

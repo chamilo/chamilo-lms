@@ -7,6 +7,9 @@
  * @package chamilo.exercise
  */
 require_once __DIR__.'/../inc/global.inc.php';
+
+api_protect_course_script(true);
+
 $courseInfo = api_get_course_info();
 $_user = api_get_user_info();
 
@@ -101,7 +104,7 @@ if ($origin != 'learnpath') {
                     lp_view_id = $lpViewId
                 ";
         Database::query($sql);
-        echo Display::return_message(get_lang('HotPotatoesFinished'), 'confirm');
+        echo Display::return_message(get_lang('This HotPotatoes test has been closed.'), 'confirm');
     } else {
         echo Display::return_message(get_lang('Error'), 'error');
     }

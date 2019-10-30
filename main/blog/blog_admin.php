@@ -4,8 +4,6 @@
 /**
  * BLOG HOMEPAGE
  * This file takes care of all blog navigation and displaying.
- *
- * @package chamilo.blogs
  */
 require_once __DIR__.'/../inc/global.inc.php';
 $current_course_tool = TOOL_BLOGS;
@@ -23,7 +21,7 @@ $origin = api_get_origin();
 $action = isset($_GET['action']) ? $_GET['action'] : '';
 
 if (api_is_allowed_to_edit()) {
-    $nameTools = get_lang('blog_management');
+    $nameTools = get_lang('Project management');
 
     // showing the header if we are not in the learning path, if we are in
     // the learning path, we do not include the banner so we have to explicitly
@@ -35,38 +33,38 @@ if (api_is_allowed_to_edit()) {
         ];
         $my_url = '';
         if ($action == 'add') {
-            $current_section = get_lang('AddBlog');
+            $current_section = get_lang('Create a new project');
             $my_url = 'action=add';
         } elseif ($action == 'edit') {
-            $current_section = get_lang('EditBlog');
+            $current_section = get_lang('Edit a project');
             $my_url = 'action=edit&amp;blog_id='.Security::remove_XSS($_GET['blog_id']);
         }
         Display::display_header('');
     }
     echo '<div class="actions">';
     echo "<a href='".api_get_self()."?".api_get_cidreq()."&action=add'>",
-        Display::return_icon('new_blog.png', get_lang('AddBlog'), '', ICON_SIZE_MEDIUM)."</a>";
+        Display::return_icon('new_blog.png', get_lang('Create a new project'), '', ICON_SIZE_MEDIUM)."</a>";
     echo '</div>';
 
     if (!empty($_POST['new_blog_submit']) && !empty($_POST['blog_name'])) {
         if (isset($_POST['blog_name'])) {
             Blog::addBlog($_POST['blog_name'], $_POST['blog_subtitle']);
-            echo Display::return_message(get_lang('BlogStored'), 'confirmation');
+            echo Display::return_message(get_lang('The project has been added.'), 'confirmation');
         }
     }
     if (!empty($_POST['edit_blog_submit']) && !empty($_POST['blog_name'])) {
         if (strlen(trim($_POST['blog_name'])) > 0) {
             Blog::editBlog($_POST['blog_id'], $_POST['blog_name'], $_POST['blog_subtitle']);
-            echo Display::return_message(get_lang('BlogEdited'), 'confirmation');
+            echo Display::return_message(get_lang('The project has been edited.'), 'confirmation');
         }
     }
     if (isset($_GET['action']) && $_GET['action'] == 'visibility') {
         Blog::changeBlogVisibility(intval($_GET['blog_id']));
-        echo Display::return_message(get_lang('VisibilityChanged'), 'confirmation');
+        echo Display::return_message(get_lang('The visibility has been changed.'), 'confirmation');
     }
     if (isset($_GET['action']) && $_GET['action'] == 'delete') {
         Blog::deleteBlog(intval($_GET['blog_id']));
-        echo Display::return_message(get_lang('BlogDeleted'), 'confirmation');
+        echo Display::return_message(get_lang('The project has been deleted.'), 'confirmation');
     }
 
     if (isset($_GET['action']) && $_GET['action'] == 'add') {
@@ -85,7 +83,7 @@ if (api_is_allowed_to_edit()) {
         if (!$_POST || (!empty($_POST) && (empty($_POST['edit_blog_submit']) || empty($_POST['blog_name'])))) {
             // if there is post data there is certainly an error in the form
             if ($_POST) {
-                echo Display::return_message(get_lang('FormHasErrorsPleaseComplete'), 'error');
+                echo Display::return_message(get_lang('The form contains incorrect or incomplete data. Please check your input.'), 'error');
             }
             Blog::displayBlogEditForm(intval($_GET['blog_id']));
         }

@@ -115,7 +115,7 @@ if (!empty($documentInfo['parents'])) {
 $actionBack = Display::url(
     Display::return_icon(
         'back.png',
-        get_lang('BackTo').' '.get_lang('DocumentsOverview'),
+        get_lang('Back to').' '.get_lang('Documents overview'),
         [],
         ICON_SIZE_MEDIUM
     ),

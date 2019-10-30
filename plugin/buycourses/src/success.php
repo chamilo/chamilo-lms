@@ -67,7 +67,7 @@ if ($form->validate()) {
 
     if ($confirmPayments['ACK'] !== 'Success') {
         $erroMessage = vsprintf(
-            $plugin->get_lang('ErrorOccurred'),
+            $plugin->get_lang('An error occurred.'),
             [$expressCheckout['L_ERRORCODE0'], $confirmPayments['L_LONGMESSAGE0']]
         );
         Display::addFlash(
@@ -92,7 +92,7 @@ if ($form->validate()) {
             }
 
             Display::addFlash(
-                Display::return_message($plugin->get_lang('ErrorContactPlatformAdmin'), 'error')
+                Display::return_message($plugin->get_lang('There happened an unknown error. Please contact the platform administrator.'), 'error')
             );
             break;
         case 'Pending':
@@ -146,7 +146,7 @@ if ($form->validate()) {
             break;
         default:
             Display::addFlash(
-                Display::return_message($plugin->get_lang('ErrorContactPlatformAdmin'), 'error')
+                Display::return_message($plugin->get_lang('There happened an unknown error. Please contact the platform administrator.'), 'error')
             );
             break;
     }
@@ -166,7 +166,7 @@ $shippingDetails = GetShippingDetails($token);
 
 if ($shippingDetails['ACK'] !== 'Success') {
     $erroMessage = vsprintf(
-        $plugin->get_lang('ErrorOccurred'),
+        $plugin->get_lang('An error occurred.'),
         [$expressCheckout['L_ERRORCODE0'], $shippingDetails['L_LONGMESSAGE0']]
     );
     Display::addFlash(

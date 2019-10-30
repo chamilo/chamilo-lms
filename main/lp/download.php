@@ -14,6 +14,7 @@ $this_section = SECTION_COURSES;
 
 // Protection
 api_protect_course_script();
+$_course = api_get_course_info();
 
 if (!isset($_course)) {
     api_not_allowed(true);
@@ -53,6 +54,6 @@ if ($lp) {
     }
 }
 
-echo Display::return_message(get_lang('ProtectedDocument'), 'error');
+echo Display::return_message(get_lang('Protected Document'), 'error');
 //api_not_allowed backbutton won't work.
 exit;

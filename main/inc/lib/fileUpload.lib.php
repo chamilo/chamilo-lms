@@ -3,6 +3,7 @@
 
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CDocument;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /**
  * FILE UPLOAD LIBRARY.
@@ -95,7 +96,7 @@ function process_uploaded_file($uploaded_file, $show_output = true)
                 if ($show_output) {
                     Display::addFlash(
                         Display::return_message(
-                            get_lang('UplExceedMaxServerUpload').ini_get('upload_max_filesize'),
+                            get_lang('The uploaded file exceeds the maximum filesize allowed by the server:').ini_get('upload_max_filesize'),
                             'error'
                         )
                     );
@@ -106,11 +107,11 @@ function process_uploaded_file($uploaded_file, $show_output = true)
                 // The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the HTML form.
                 // Not used at the moment, but could be handy if we want to limit the size of an upload
                 // (e.g. image upload in html editor).
-                $max_file_size = intval($_POST['MAX_FILE_SIZE']);
+                $max_file_size = (int) $_POST['MAX_FILE_SIZE'];
                 if ($show_output) {
                     Display::addFlash(
                         Display::return_message(
-                            get_lang('UplExceedMaxPostSize').format_file_size($max_file_size),
+                            get_lang('The file size exceeds the maximum allowed setting:').format_file_size($max_file_size),
                             'error'
                         )
                     );
@@ -122,7 +123,7 @@ function process_uploaded_file($uploaded_file, $show_output = true)
                 if ($show_output) {
                     Display::addFlash(
                         Display::return_message(
-                            get_lang('UplPartialUpload').' '.get_lang('PleaseTryAgain'),
+                            get_lang('The uploaded file was only partially uploaded.').' '.get_lang('Please Try Again!'),
                             'error'
                         )
                     );
@@ -134,7 +135,7 @@ function process_uploaded_file($uploaded_file, $show_output = true)
                 if ($show_output) {
                     Display::addFlash(
                         Display::return_message(
-                            get_lang('UplNoFileUploaded').' '.get_lang('UplSelectFileFirst'),
+                            get_lang('No file was uploaded.').' '.get_lang('Please select a file before pressing the upload button.'),
                             'error'
                         )
                     );
@@ -147,7 +148,7 @@ function process_uploaded_file($uploaded_file, $show_output = true)
     if (!file_exists($uploaded_file['tmp_name'])) {
         // No file was uploaded.
         if ($show_output) {
-            Display::addFlash(Display::return_message(get_lang('UplUploadFailed'), 'error'));
+            Display::addFlash(Display::return_message(get_lang('The file upload has failed.'), 'error'));
         }
 
         return false;
@@ -160,7 +161,7 @@ function process_uploaded_file($uploaded_file, $show_output = true)
             if ($show_output) {
                 Display::addFlash(
                     Display::return_message(
-                        get_lang('UplUploadFailedSizeIsZero'),
+                        get_lang('The file upload has failed.SizeIsZero'),
                         'error'
                     )
                 );
@@ -180,7 +181,7 @@ function process_uploaded_file($uploaded_file, $show_output = true)
             if ($show_output) {
                 Display::addFlash(
                     Display::return_message(
-                        get_lang('UplNotEnoughSpace'),
+                        get_lang('There is not enough space to upload this file.'),
                         'error'
                     )
                 );
@@ -221,6 +222,7 @@ function process_uploaded_file($uploaded_file, $show_output = true)
  * @param bool   $treat_spaces_as_hyphens
  * @param string $uploadKey
  * @param int    $parentId
+ * @param $content
  *
  * So far only use for unzip_uploaded_document function.
  * If no output wanted on success, set to false.
@@ -243,7 +245,8 @@ function handle_uploaded_document(
     $sessionId = null,
     $treat_spaces_as_hyphens = true,
     $uploadKey = '',
-    $parentId = 0
+    $parentId = 0,
+    $content = null
 ) {
     if (!$userId) {
         return false;
@@ -266,7 +269,7 @@ function handle_uploaded_document(
     // Check if there is enough space to save the file
     if (!DocumentManager::enough_space($uploadedFile['size'], $maxSpace)) {
         if ($output) {
-            Display::addFlash(Display::return_message(get_lang('UplNotEnoughSpace'), 'error'));
+            Display::addFlash(Display::return_message(get_lang('There is not enough space to upload this file.'), 'error'));
         }
 
         return false;
@@ -291,7 +294,10 @@ function handle_uploaded_document(
         // We can only unzip ZIP files (no gz, tar,...)
         if ($output) {
             Display::addFlash(
-                Display::return_message(get_lang('UplNotAZip')." ".get_lang('PleaseTryAgain'), 'error')
+                Display::return_message(
+                    get_lang('The file you selected was not a zip file.')." ".get_lang('Please Try Again!'),
+                    'error'
+                )
             );
         }
 
@@ -307,7 +313,10 @@ function handle_uploaded_document(
         if (!filter_extension($cleanName)) {
             if ($output) {
                 Display::addFlash(
-                    Display::return_message(get_lang('UplUnableToSaveFileFilteredExtension'), 'error')
+                    Display::return_message(
+                        get_lang('File upload failed: this file extension or file type is prohibited'),
+                        'error'
+                    )
                 );
             }
 
@@ -326,9 +335,9 @@ function handle_uploaded_document(
                 $errorResult = moveUploadedFile($uploadedFile, $whereToSave.$cleanName);
                 if ($errorResult) {
                     return $whereToSave.$cleanName;
-                } else {
-                    return $errorResult;
                 }
+
+                return $errorResult;
             }
 
             /*
@@ -358,14 +367,15 @@ function handle_uploaded_document(
                 $sessionId
             );
 
-            $documentRepo = Container::$container->get('Chamilo\CourseBundle\Repository\CDocumentRepository');
+            $documentRepo = Container::getDocumentRepository();
             $document = $documentRepo->find($docId);
 
-            $request = Container::getRequest();
-            $content = $request->files->get($uploadKey);
-
-            if (is_array($content)) {
-                $content = $content[0];
+            if (!($content instanceof UploadedFile)) {
+                $request = Container::getRequest();
+                $content = $request->files->get($uploadKey);
+                if (is_array($content)) {
+                    $content = $content[0];
+                }
             }
 
             // What to do if the target file exists
@@ -383,7 +393,6 @@ function handle_uploaded_document(
                         $document = DocumentManager::addFileToDocument(
                             $document,
                             $filePath,
-                            null,
                             $content,
                             null,
                             null,
@@ -394,8 +403,8 @@ function handle_uploaded_document(
                         if ($document && $output) {
                             Display::addFlash(
                                 Display::return_message(
-                                    get_lang('UplUploadSucceeded').'<br /> '.
-                                    $document->getTitle().' '.get_lang('UplFileOverwritten'),
+                                    get_lang('File upload succeeded!').'<br /> '.
+                                    $document->getTitle().' '.get_lang(' was overwritten.'),
                                     'confirmation',
                                     false
                                 )
@@ -425,7 +434,7 @@ function handle_uploaded_document(
                         if ($document) {
                             Display::addFlash(
                                 Display::return_message(
-                                    get_lang('UplUploadSucceeded').'<br /> '.$documentTitle,
+                                    get_lang('File upload succeeded!').'<br /> '.$documentTitle,
                                     'confirmation',
                                     false
                                 )
@@ -475,11 +484,11 @@ function handle_uploaded_document(
                     );
 
                     // Display success message to user
-                    if ($output) {
+                    if ($output && $document) {
                         Display::addFlash(
                             Display::return_message(
-                                get_lang('UplUploadSucceeded').'<br />'.
-                                get_lang('UplFileSavedAs').' '.$document->getTitle(),
+                                get_lang('File upload succeeded!').'<br />'.
+                                get_lang('File saved as').' '.$document->getTitle(),
                                 'success',
                                 false
                             )
@@ -493,7 +502,7 @@ function handle_uploaded_document(
                         if ($output) {
                             Display::addFlash(
                                 Display::return_message(
-                                    $uploadPath.$cleanName.' '.get_lang('UplAlreadyExists'),
+                                    $uploadPath.$cleanName.' '.get_lang(' already exists.'),
                                     'warning',
                                     false
                                 )
@@ -507,11 +516,10 @@ function handle_uploaded_document(
                     if ($document) {
                         if ($output) {
                             Display::addFlash(
-                                Display::return_message($cleanName.' '.get_lang('UplAlreadyExists'), 'warning', false)
+                                Display::return_message($cleanName.' '.get_lang(' already exists.'), 'warning', false)
                             );
                         }
                     } else {
-                        error_log($filePath);
                         // Put the document data in the database
                         $document = DocumentManager::addDocument(
                             $courseInfo,
@@ -534,7 +542,7 @@ function handle_uploaded_document(
                             if ($output) {
                                 Display::addFlash(
                                     Display::return_message(
-                                        get_lang('UplUploadSucceeded').'<br /> '.$documentTitle,
+                                        get_lang('File upload succeeded!').'<br /> '.$documentTitle,
                                         'confirm',
                                         false
                                     )
@@ -546,7 +554,7 @@ function handle_uploaded_document(
                             if ($output) {
                                 Display::addFlash(
                                     Display::return_message(
-                                        get_lang('UplUnableToSaveFile'),
+                                        get_lang('The uploaded file could not be saved (perhaps a permission problem?)'),
                                         'error',
                                         false
                                     )
@@ -571,7 +579,11 @@ function moveUploadedFile($file, $storePath)
     $handleFromFile = isset($file['from_file']) && $file['from_file'] ? true : false;
     $moveFile = isset($file['move_file']) && $file['move_file'] ? true : false;
     if ($moveFile) {
-        copy($file['tmp_name'], $storePath);
+        $copied = copy($file['tmp_name'], $storePath);
+
+        if (!$copied) {
+            return false;
+        }
     }
     if ($handleFromFile) {
         return file_exists($file['tmp_name']);
@@ -833,7 +845,7 @@ function unzip_uploaded_file($uploaded_file, $upload_path, $base_work_dir, $max_
         foreach ($zip_content_array as &$this_content) {
             if (preg_match('~.(php.*|phtml)$~i', $this_content['filename'])) {
                 Display::addFlash(
-                    Display::return_message(get_lang('ZipNoPhp'))
+                    Display::return_message(get_lang('The zip file can not contain .PHP files'))
                 );
 
                 return false;
@@ -857,7 +869,7 @@ function unzip_uploaded_file($uploaded_file, $upload_path, $base_work_dir, $max_
 
         if (!$ok_scorm && defined('CHECK_FOR_SCORM') && CHECK_FOR_SCORM) {
             Display::addFlash(
-                Display::return_message(get_lang('NotScormContent'))
+                Display::return_message(get_lang('This is not a valid SCORM ZIP file !'))
             );
 
             return false;
@@ -865,7 +877,7 @@ function unzip_uploaded_file($uploaded_file, $upload_path, $base_work_dir, $max_
 
         if (!enough_size($realFileSize, $base_work_dir, $max_filled_space)) {
             Display::addFlash(
-                Display::return_message(get_lang('NoSpace'))
+                Display::return_message(get_lang('The upload has failed. Either you have exceeded your maximum quota, or there is not enough disk space.'))
             );
 
             return false;
@@ -974,7 +986,7 @@ function unzip_uploaded_document(
     }
 
     if (!DocumentManager::enough_space($realSize, $maxFilledSpace)) {
-        echo Display::return_message(get_lang('UplNotEnoughSpace'), 'error');
+        echo Display::return_message(get_lang('There is not enough space to upload this file.'), 'error');
 
         return false;
     }
@@ -1038,6 +1050,41 @@ function clean_up_files_in_zip($p_event, &$p_header)
         '.Thumbs.db',
         'Thumbs.db',
     ];
+
+    if (in_array($baseName, $skipFiles)) {
+        return 0;
+    }
+    $modifiedStoredFileName = clean_up_path($originalStoredFileName);
+    $p_header['filename'] = str_replace($originalStoredFileName, $modifiedStoredFileName, $p_header['filename']);
+
+    return 1;
+}
+
+/**
+ * Allow .htaccess file.
+ *
+ * @param $p_event
+ * @param $p_header
+ *
+ * @return int
+ */
+function cleanZipFilesAllowHtaccess($p_event, &$p_header)
+{
+    $originalStoredFileName = $p_header['stored_filename'];
+    $baseName = basename($originalStoredFileName);
+
+    $allowFiles = ['.htaccess'];
+    if (in_array($baseName, $allowFiles)) {
+        return 1;
+    }
+
+    // Skip files
+    $skipFiles = [
+        '__MACOSX',
+        '.Thumbs.db',
+        'Thumbs.db',
+    ];
+
     if (in_array($baseName, $skipFiles)) {
         return 0;
     }
@@ -1341,6 +1388,7 @@ function search_img_from_html($html_file)
  * @param int    $visibility              (0 for invisible, 1 for visible, 2 for deleted)
  * @param bool   $generateNewNameIfExists
  * @param bool   $sendNotification        depends in conf setting "send_notification_when_document_added"
+ * @param array  $parentInfo
  *
  * @return CDocument|false
  */
@@ -1355,7 +1403,8 @@ function create_unexisting_directory(
     $title = '',
     $visibility = '',
     $generateNewNameIfExists = false,
-    $sendNotification = true
+    $sendNotification = true,
+    $parentInfo = []
 ) {
     $course_id = $_course['real_id'];
     $session_id = (int) $session_id;
@@ -1409,6 +1458,12 @@ function create_unexisting_directory(
                 c_id = $course_id AND
                 path = '".Database::escape_string($systemFolderName)."'";
     $rs = Database::query($sql);
+
+    $parentId = 0;
+    if (!empty($parentInfo) && isset($parentInfo['iid'])) {
+        $parentId = $parentInfo['iid'];
+    }
+
     if (Database::num_rows($rs) == 0) {
         $document = DocumentManager::addDocument(
             $_course,
@@ -1422,7 +1477,9 @@ function create_unexisting_directory(
             $to_group_id,
             $session_id,
             $user_id,
-            $sendNotification
+            $sendNotification,
+            '',
+            $parentId
         );
 
         if ($document) {
@@ -1437,10 +1494,11 @@ function create_unexisting_directory(
             $session_id
         );
 
-        $em = Database::getManager();
-        $document = $em->getRepository('ChamiloCourseBundle:CDocument')->find($documentData['iid']);
+        if ($documentData) {
+            $document = Container::getDocumentRepository()->find($documentData['iid']);
 
-        return $document;
+            return $document;
+        }
     }
 
     return false;
@@ -1574,7 +1632,7 @@ function build_missing_files_form($missing_files, $upload_path, $file_name)
     $added_slash = ($upload_path == '/') ? '' : '/';
     $folder_id = DocumentManager::get_document_id(api_get_course_info(), $upload_path);
     // Build the form
-    $form = "<p><strong>".get_lang('MissingImagesDetected')."</strong></p>"
+    $form = "<p><strong>".get_lang('Missing images detected')."</strong></p>"
         ."<form method=\"post\" action=\"".api_get_self()."\" enctype=\"multipart/form-data\">"
         // Related_file is the path to the file that has missing images
         ."<input type=\"hidden\" name=\"related_file\" value=\"".$upload_path.$added_slash.$file_name."\" />"
@@ -1592,7 +1650,7 @@ function build_missing_files_form($missing_files, $upload_path, $file_name)
     }
     $form .= "</table>"
         ."<button type='submit' name=\"cancel_submit_image\" value=\"".get_lang('Cancel')."\" class=\"cancel\">".get_lang('Cancel')."</button>"
-        ."<button type='submit' name=\"submit_image\" value=\"".get_lang('Ok')."\" class=\"save\">".get_lang('Ok')."</button>"
+        ."<button type='submit' name=\"submit_image\" value=\"".get_lang('Validate')."\" class=\"save\">".get_lang('Validate')."</button>"
         ."</form>";
 
     return $form;
@@ -1702,7 +1760,7 @@ function add_all_documents_in_folder_to_database(
                                     );
                                     Display::addFlash(
                                         Display::return_message(
-                                            $folderData['path'].' '.get_lang('UplAlreadyExists'),
+                                            $folderData['path'].' '.get_lang(' already exists.'),
                                             'warning'
                                         )
                                     );

@@ -2,21 +2,19 @@
 /* See license terms in /license.txt */
 
 use Chamilo\CoreBundle\Component\Editor\Connector;
-use Chamilo\CoreBundle\Component\Filesystem\Data;
 use MediaAlchemyst\Alchemyst;
 use MediaAlchemyst\DriversContainer;
 use Neutron\TemporaryFilesystem\Manager;
 use Neutron\TemporaryFilesystem\TemporaryFilesystem;
-use Port\Csv\CsvWriter;
-use Port\Excel\ExcelWriter;
+use Sonata\Exporter\Handler;
+use Sonata\Exporter\Source\ArraySourceIterator;
+use Sonata\Exporter\Writer\CsvWriter;
+use Sonata\Exporter\Writer\XlsWriter;
 use Symfony\Component\Filesystem\Filesystem;
 
 /**
  *  This is the export library for Chamilo.
- *	Include/require it in your code to use its functionality.
- *	Several functions below are adaptations from functions distributed by www.nexen.net.
- *
- *  @package chamilo.library
+ *  Include/require it in your code to use its functionality.
  */
 class Export
 {
@@ -44,21 +42,12 @@ class Export
         }
 
         $enclosure = !empty($enclosure) ? $enclosure : '"';
-
         $filePath = api_get_path(SYS_ARCHIVE_PATH).uniqid('').'.csv';
-        $stream = fopen($filePath, 'w');
-        $writer = new CsvWriter(';', $enclosure, $stream, true);
-        $writer->prepare();
+        $writer = new CsvWriter($filePath, ';', $enclosure, true);
 
-        foreach ($data as $item) {
-            if (empty($item)) {
-                $writer->writeItem([]);
-                continue;
-            }
-            $item = array_map('trim', $item);
-            $writer->writeItem($item);
-        }
-        $writer->finish();
+        $source = new ArraySourceIterator($data);
+        $handler = Handler::create($source, $writer);
+        $handler->export();
 
         if (!$writeOnly) {
             DocumentManager::file_send_for_download($filePath, true, $filename.'.csv');
@@ -74,18 +63,17 @@ class Export
      * @param array  $data
      * @param string $filename
      */
-    public static function arrayToXls($data, $filename = 'export', $encoding = 'utf-8')
+    public static function arrayToXls($data, $filename = 'export')
     {
-        $filePath = api_get_path(SYS_ARCHIVE_PATH).uniqid('').'.xlsx';
-
-        $file = new \SplFileObject($filePath, 'w');
-        $writer = new ExcelWriter($file);
-        $writer->prepare();
-        foreach ($data as $row) {
-            $writer->writeItem($row);
+        if (empty($data)) {
+            return false;
         }
 
-        $writer->finish();
+        $filePath = api_get_path(SYS_ARCHIVE_PATH).uniqid('').'.xlsx';
+        $writer = new XlsWriter($filePath);
+        $source = new ArraySourceIterator($data);
+        $handler = Handler::create($source, $writer);
+        $handler->export();
 
         DocumentManager::file_send_for_download($filePath, true, $filename.'.xlsx');
         exit;
@@ -160,67 +148,6 @@ class Export
         fclose($handle);
         DocumentManager::file_send_for_download($file, true, $filename.'.xml');
         exit;
-    }
-
-    /**
-     * Export hierarchical tabular data to XML-file.
-     *
-     * @param array  Hierarchical array of data to put in XML, each element presenting a 'name' and a 'value' property
-     * @param string Name of file to be given to the user
-     * @param string Name of common tag to place each line in
-     * @param string Name of the root element. A root element should always be given.
-     * @param string Encoding in which the data is provided
-     */
-    public static function export_complex_table_xml(
-        $data,
-        $filename = 'export',
-        $wrapper_tagname,
-        $encoding = 'ISO-8859-1'
-    ) {
-        $file = api_get_path(SYS_ARCHIVE_PATH).'/'.uniqid('').'.xml';
-        $handle = fopen($file, 'a+');
-        fwrite($handle, '<?xml version="1.0" encoding="'.$encoding.'"?>'."\n");
-
-        if (!is_null($wrapper_tagname)) {
-            fwrite($handle, '<'.$wrapper_tagname.'>');
-        }
-        $s = self::_export_complex_table_xml_helper($data);
-        fwrite($handle, $s);
-        if (!is_null($wrapper_tagname)) {
-            fwrite($handle, '</'.$wrapper_tagname.'>'."\n");
-        }
-        fclose($handle);
-        DocumentManager::file_send_for_download($file, true, $filename.'.xml');
-
-        return false;
-    }
-
-    /**
-     * Helper for the hierarchical XML exporter.
-     *
-     * @param   array   Hierarhical array composed of elements of type ('name'=>'xyz','value'=>'...')
-     * @param   int     Level of recursivity. Allows the XML to be finely presented
-     *
-     * @return string The XML string to be inserted into the root element
-     */
-    public static function _export_complex_table_xml_helper($data, $level = 1)
-    {
-        if (count($data) < 1) {
-            return '';
-        }
-        $string = '';
-        foreach ($data as $row) {
-            $string .= "\n".str_repeat("\t", $level).'<'.$row['name'].'>';
-            if (is_array($row['value'])) {
-                $string .= self::_export_complex_table_xml_helper($row['value'], $level + 1)."\n";
-                $string .= str_repeat("\t", $level).'</'.$row['name'].'>';
-            } else {
-                $string .= $row['value'];
-                $string .= '</'.$row['name'].'>';
-            }
-        }
-
-        return $string;
     }
 
     /**

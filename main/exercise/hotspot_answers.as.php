@@ -51,7 +51,7 @@ if (!api_is_allowed_to_edit(null, true)) {
     }
 }
 
-$objQuestion = Question::read($questionId, $courseId);
+$objQuestion = Question::read($questionId, $objExercise->course);
 $objExercise->read($exerciseId);
 
 if (empty($objQuestion) || empty($objExercise)) {
@@ -60,8 +60,8 @@ if (empty($objQuestion) || empty($objExercise)) {
 
 $em = Database::getManager();
 $picture = $objQuestion->getPicture();
-$pictureWidth = $picture->getResourceNode()->getResourceFile()->getMedia()->getWidth();
-$pictureHeight = $picture->getResourceNode()->getResourceFile()->getMedia()->getHeight();
+$pictureWidth = $picture->getResourceNode()->getResourceFile()->getWidth();
+$pictureHeight = $picture->getResourceNode()->getResourceFile()->getHeight();
 
 $data = [];
 $data['type'] = 'solution';
@@ -100,9 +100,9 @@ if (in_array(
 ) {
     $showOnlyScore = true;
     $showResults = true;
+    $lpId = isset($trackExerciseInfo['orig_lp_id']) ? $trackExerciseInfo['orig_lp_id'] : 0;
+    $lpItemId = isset($trackExerciseInfo['orig_lp_item_id']) ? $trackExerciseInfo['orig_lp_item_id'] : 0;
     if ($objExercise->attempts > 0) {
-        $lpId = $trackExerciseInfo['orig_lp_id'] ?? 0;
-        $lpItemId = $trackExerciseInfo['orig_lp_item_id'] ?? 0;
         $attempts = Event::getExerciseResultsByUser(
             api_get_user_id(),
             $objExercise->id,
@@ -124,7 +124,7 @@ if (in_array(
 }
 
 $hideExpectedAnswer = false;
-if ($objExercise->selectFeedbackType() == 0 &&
+if ($objExercise->getFeedbackType() == 0 &&
     $objExercise->selectResultsDisabled() == RESULT_DISABLE_SHOW_SCORE_ONLY
 ) {
     $hideExpectedAnswer = true;

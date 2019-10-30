@@ -53,7 +53,7 @@ if (api_get_group_id()) {
         $groupIid = $group_properties['iid'];
         $interbreadcrumb[] = [
             'url' => '../group/group_space.php?'.api_get_cidreq(),
-            'name' => get_lang('GroupSpace'),
+            'name' => get_lang('Group area'),
         ];
     } else {
         api_not_allowed(true);
@@ -95,7 +95,7 @@ if (empty($document_data['parents'])) {
 
 $this_section = SECTION_COURSES;
 
-$nameTools = get_lang('LinkAdd');
+$nameTools = get_lang('Add a link');
 $action = api_get_self().'?'.api_get_cidreq().'&id='.$document_id;
 
 // URLs in whitelist
@@ -109,8 +109,8 @@ $urlWLHTML = "<ul><li>".implode("</li><li>", $urlWL)."</li></ul>";
 $form = new FormValidator('upload', 'POST', $action, '', ['enctype' => 'multipart/form-data']);
 $form->addHidden('linkid', $document_id);
 $form->addHidden('curdirpath', $path);
-$form->addElement('text', 'name', get_lang('LinkName'), ['id' => 'name_link']);
-$form->addElement('text', 'url', get_lang('Url'), ['id' => 'url_link']);
+$form->addElement('text', 'name', get_lang('Link name'), ['id' => 'name_link']);
+$form->addElement('text', 'url', get_lang('URL'), ['id' => 'url_link']);
 $form->addElement(
     'static',
     'info',
@@ -119,29 +119,29 @@ $form->addElement(
         'ValidDomainList'
     ).' <span class="glyphicon glyphicon-question-sign"></span></span>'
 );
-$form->addButtonSend(get_lang('AddCloudLink'), 'submitDocument');
+$form->addButtonSend(get_lang('Add link to Cloud file'), 'submitDocument');
 
-$form->addRule('name', get_lang('PleaseEnterCloudLinkName'), 'required', null, 'client');
-$form->addRule('name', get_lang('PleaseEnterCloudLinkName'), 'required', null, 'server');
-$form->addRule('url', get_lang('PleaseEnterURL'), 'required', null, 'client');
-$form->addRule('url', get_lang('PleaseEnterURL'), 'required', null, 'server');
+$form->addRule('name', get_lang('PleaseEnterCloudLink name'), 'required', null, 'client');
+$form->addRule('name', get_lang('PleaseEnterCloudLink name'), 'required', null, 'server');
+$form->addRule('url', get_lang('Please enter the URL'), 'required', null, 'client');
+$form->addRule('url', get_lang('Please enter the URL'), 'required', null, 'server');
 // Well formed url pattern (must have the protocol)
 $urlRegEx = DocumentManager::getWellFormedUrlRegex();
-$form->addRule('url', get_lang('NotValidURL'), 'regex', $urlRegEx, 'client');
-$form->addRule('url', get_lang('NotValidURL'), 'regex', $urlRegEx, 'server');
-$form->addRule('url', get_lang('NotValidDomain').$urlWLText, 'regex', $urlWLRegEx, 'client');
-$form->addRule('url', get_lang('NotValidDomain').$urlWLHTML, 'regex', $urlWLRegEx, 'server');
+$form->addRule('url', get_lang('URL field format invalid. Example of expected format: http://dropbox.com/sh/loremipsum/loremipsum?dl=0'), 'regex', $urlRegEx, 'client');
+$form->addRule('url', get_lang('URL field format invalid. Example of expected format: http://dropbox.com/sh/loremipsum/loremipsum?dl=0'), 'regex', $urlRegEx, 'server');
+$form->addRule('url', get_lang('The domain is not valid. It must be one of the following:').$urlWLText, 'regex', $urlWLRegEx, 'client');
+$form->addRule('url', get_lang('The domain is not valid. It must be one of the following:').$urlWLHTML, 'regex', $urlWLRegEx, 'server');
 
 if ($form->validate()) {
     if (isset($_REQUEST['linkid'])) {
         $doc_id = DocumentManager::addCloudLink($courseInfo, $path, $_REQUEST['url'], $_REQUEST['name']);
         if ($doc_id) {
-            Display::addFlash(Display::return_message(get_lang('CloudLinkAdded'), 'success', false));
+            Display::addFlash(Display::return_message(get_lang('CloudAdd a linked'), 'success', false));
         } else {
             if (DocumentManager::cloudLinkExists($courseInfo, $path, $_REQUEST['url'])) {
-                Display::addFlash(Display::return_message(get_lang('UrlAlreadyExists'), 'warning', false));
+                Display::addFlash(Display::return_message(get_lang('URLAlreadyExists'), 'warning', false));
             } else {
-                Display::addFlash(Display::return_message(get_lang('ErrorAddCloudLink'), 'warning', false));
+                Display::addFlash(Display::return_message(get_lang('ErrorAdd link to Cloud file'), 'warning', false));
             }
         }
         header('Location: document.php?'.api_get_cidreq());
@@ -156,7 +156,7 @@ Display::display_header($nameTools, 'Doc');
 echo '<div class="actions">';
 // Link back to the documents overview
 echo '<a href="document.php?id='.$document_id.'&'.api_get_cidreq().'">'.
-    Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('DocumentsOverview'), '', ICON_SIZE_MEDIUM).
+    Display::return_icon('back.png', get_lang('Back to').' '.get_lang('Documents overview'), '', ICON_SIZE_MEDIUM).
     '</a>';
 echo '</div>';
 

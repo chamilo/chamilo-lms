@@ -24,7 +24,7 @@ foreach ($settingsCurrent as $settingCurrent) {
         [
             $settingCurrent->getVariable(),
             $settingCurrent->getSubkey(),
-            $settingCurrent->getUrl()
+            $settingCurrent->getAccessUrl()
         ]
     );
 
@@ -68,7 +68,7 @@ if (empty($duplicatedCurrent)) {
     foreach ($duplicatedCurrent as $settingCurrent) {
         echo vsprintf(
             "variable = '%s' subkey = '%s' access_url = '%s'<br>" . PHP_EOL,
-            [$settingCurrent->getVariable(), $settingCurrent->getSubkey(), $settingCurrent->getUrl()]
+            [$settingCurrent->getVariable(), $settingCurrent->getSubkey(), $settingCurrent->getAccessUrl()]
         );
 
         $entityManager->remove($settingCurrent);

@@ -14,7 +14,7 @@ if ($userNotAllowed) {
     api_not_allowed(true);
 }
 
-$interbreadcrumb[] = ['url' => api_is_student_boss() ? '#' : 'index.php', 'name' => get_lang('MySpace')];
+$interbreadcrumb[] = ['url' => api_is_student_boss() ? '#' : 'index.php', 'name' => get_lang('Reporting')];
 $tool_name = get_lang('Report');
 
 $this_section = SECTION_TRACKING;
@@ -31,11 +31,11 @@ $extra_fields = UserManager::get_extra_fields(0, 100, null, null, true, true);
 $columns = [
     get_lang('Course'),
     get_lang('User'),
-    get_lang('Email'),
-    get_lang('ManHours'),
-    get_lang('CertificateGenerated'),
-    get_lang('Approved'),
-    get_lang('CourseAdvance'),
+    get_lang('e-mail'),
+    get_lang('Man hours'),
+    get_lang('Generated certificate'),
+    get_lang('Completed learning paths'),
+    get_lang('Course progress'),
 ];
 
 //Column config
@@ -99,21 +99,21 @@ $actions = null;
 
 if (api_is_student_boss()) {
     $actions .= Display::url(
-        Display::return_icon('statistics.png', get_lang('MyStats'), '', ICON_SIZE_MEDIUM),
+        Display::return_icon('statistics.png', get_lang('View my progress'), '', ICON_SIZE_MEDIUM),
         api_get_path(WEB_CODE_PATH)."auth/my_progress.php"
     );
     $actions .= Display::url(
-        Display::return_icon('user.png', get_lang('Students'), [], ICON_SIZE_MEDIUM),
+        Display::return_icon('user.png', get_lang('Learners'), [], ICON_SIZE_MEDIUM),
         api_get_path(WEB_CODE_PATH)."mySpace/student.php"
     );
     $actions .= Display::url(
-        Display::return_icon("statistics.png", get_lang("CompanyReport"), [], ICON_SIZE_MEDIUM),
+        Display::return_icon("statistics.png", get_lang("Corporate report"), [], ICON_SIZE_MEDIUM),
         "#"
     );
     $actions .= Display::url(
         Display::return_icon(
             "certificate_list.png",
-            get_lang("GradebookSeeListOfStudentsCertificates"),
+            get_lang("GradebookSeeListOfLearnersCertificates"),
             [],
             ICON_SIZE_MEDIUM
         ),
@@ -127,14 +127,14 @@ if (!empty($actions)) {
     $content .= $actions;
 }
 $content .= Display::url(
-    get_lang("CompanyReportResumed"),
+    get_lang("Corporate reportResumed"),
     api_get_path(WEB_CODE_PATH)."mySpace/company_reports_resumed.php",
     [
         'class' => 'btn btn-success',
     ]
 );
 $content .= '</div>';
-$content .= '<h1 class="page-header">'.get_lang('CompanyReport').'</h1>';
+$content .= '<h1 class="page-header">'.get_lang('Corporate report').'</h1>';
 $content .= Display::grid_html('user_course_report');
 
 $tpl = new Template($tool_name);

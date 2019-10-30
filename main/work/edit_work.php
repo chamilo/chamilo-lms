@@ -2,6 +2,9 @@
 /* For licensing terms, see /license.txt */
 
 require_once __DIR__.'/../inc/global.inc.php';
+
+api_protect_course_script(true);
+
 $lib_path = api_get_path(LIBRARY_PATH);
 
 /* Libraries */
@@ -35,7 +38,7 @@ if (api_is_platform_admin() == false && $locked == true) {
 $htmlHeadXtra[] = to_javascript_work();
 $interbreadcrumb[] = [
     'url' => api_get_path(WEB_CODE_PATH).'work/work.php?'.api_get_cidreq(),
-    'name' => get_lang('StudentPublications'),
+    'name' => get_lang('Assignments'),
 ];
 $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Edit')];
 
@@ -88,7 +91,7 @@ if (!empty($homework['ends_on'])) {
 $defaults['add_to_calendar'] = isset($homework['add_to_calendar']) ? $homework['add_to_calendar'] : null;
 $form = getFormWork($form, $defaults, $workId);
 $form->addElement('hidden', 'work_id', $workId);
-$form->addButtonUpdate(get_lang('ModifyDirectory'));
+$form->addButtonUpdate(get_lang('Validate'));
 
 $currentUrl = api_get_path(WEB_CODE_PATH).'work/edit_work.php?id='.$workId.'&'.api_get_cidreq();
 if ($form->validate()) {
@@ -102,7 +105,7 @@ if ($form->validate()) {
         if ($params['expires_on'] > $params['ends_on']) {
             Display::addFlash(
                 Display::return_message(
-                    get_lang('DateExpiredNotBeLessDeadLine'),
+                    get_lang('The date of effective blocking of sending the work can not be before the displayed posting deadline.'),
                     'warning'
                 )
             );
@@ -126,11 +129,11 @@ if ($form->validate()) {
         updatePublicationAssignment($workId, $params, $courseInfo, $groupId);
         updateDirName($workData, $params['new_dir']);
         Skill::saveSkills($form, ITEM_TYPE_STUDENT_PUBLICATION, $workData['iid']);
-        Display::addFlash(Display::return_message(get_lang('Updated'), 'success'));
+        Display::addFlash(Display::return_message(get_lang('Update successful'), 'success'));
         header('Location: '.$currentUrl);
         exit;
     } else {
-        Display::addFlash(Display::return_message(get_lang('FileExists'), 'warning'));
+        Display::addFlash(Display::return_message(get_lang('The operation is impossible, a file with this name already exists.'), 'warning'));
     }
 }
 

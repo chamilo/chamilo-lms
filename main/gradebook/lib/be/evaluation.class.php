@@ -1,6 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\GradebookEvaluation;
 use ChamiloSession as Session;
 
 /**
@@ -11,7 +12,7 @@ use ChamiloSession as Session;
 class Evaluation implements GradebookItem
 {
     public $studentList;
-    /** @var \Chamilo\CoreBundle\Entity\GradebookEvaluation */
+    /** @var GradebookEvaluation */
     public $entity;
     private $id;
     private $name;
@@ -73,7 +74,7 @@ class Evaluation implements GradebookItem
      */
     public function get_id()
     {
-        return $this->id;
+        return (int) $this->id;
     }
 
     /**
@@ -305,49 +306,29 @@ class Evaluation implements GradebookItem
             isset($this->eval_max) &&
             isset($this->visible)
         ) {
-            $table = Database::get_main_table(TABLE_MAIN_GRADEBOOK_EVALUATION);
-
-            $sql = 'INSERT INTO '.$table
-                .' (name, user_id, weight, max, visible';
-            if (isset($this->description)) {
-                $sql .= ',description';
-            }
-            if (isset($this->courseId)) {
-                $sql .= ', c_id';
-            }
-            if (isset($this->category)) {
-                $sql .= ', category_id';
-            }
-            $sql .= ', created_at';
-            $sql .= ',type';
-            $sql .= ") VALUES ('".Database::escape_string($this->get_name())."'"
-                .','.intval($this->get_user_id())
-                .','.api_float_val($this->get_weight())
-                .','.intval($this->get_max())
-                .','.intval($this->is_visible());
-
-            if (isset($this->description)) {
-                $sql .= ",'".Database::escape_string($this->get_description())."'";
-            }
-            if (isset($this->courseId)) {
-                $sql .= ",'".Database::escape_string($this->getCourseId())."'";
-            }
-            if (isset($this->category)) {
-                $sql .= ','.intval($this->get_category_id());
-            }
             if (empty($this->type)) {
                 $this->type = 'evaluation';
             }
-            $sql .= ", '".api_get_utc_datetime()."'";
-            $sql .= ',\''.Database::escape_string($this->type).'\'';
-            $sql .= ")";
+            $em = Database::getManager();
 
-            Database::query($sql);
-            $this->set_id(Database::insert_id());
-        } else {
-            return false;
-            //die('Error in Evaluation add: required field empty');
+            $evaluation = new GradebookEvaluation();
+            $evaluation
+                ->setDescription($this->description)
+                ->setCourse(api_get_course_entity())
+                ->setName($this->get_name())
+                ->setCategoryId($this->get_category_id())
+                ->setUserId($this->get_user_id())
+                ->setWeight(api_float_val($this->get_weight()))
+                ->setMax($this->get_max())
+                ->setVisible($this->is_visible())
+                ->setType($this->type)
+            ;
+            $em->persist($evaluation);
+            $em->flush();
+            $this->set_id($evaluation->getId());
         }
+
+        return false;
     }
 
     /**
@@ -427,7 +408,7 @@ class Evaluation implements GradebookItem
     {
         $table = Database::get_main_table(TABLE_MAIN_GRADEBOOK_EVALUATION);
         $sql = 'DELETE FROM '.$table.' 
-                WHERE id = '.intval($this->id);
+                WHERE id = '.$this->get_id();
         Database::query($sql);
     }
 
@@ -490,7 +471,7 @@ class Evaluation implements GradebookItem
         $table = Database::get_main_table(TABLE_MAIN_GRADEBOOK_RESULT);
         $sql = 'SELECT count(id) AS number
                 FROM '.$table.'
-                WHERE evaluation_id = '.intval($this->id);
+                WHERE evaluation_id = '.intval($this->get_id());
         $result = Database::query($sql);
         $number = Database::fetch_row($result);
 
@@ -504,7 +485,7 @@ class Evaluation implements GradebookItem
     {
         $table = Database::get_main_table(TABLE_MAIN_GRADEBOOK_RESULT);
         $sql = 'DELETE FROM '.$table.'
-                WHERE evaluation_id = '.intval($this->id);
+                WHERE evaluation_id = '.$this->get_id();
         Database::query($sql);
     }
 
@@ -645,8 +626,9 @@ class Evaluation implements GradebookItem
                 }
                 $students[$res->get_user_id()] = $score;
             }
+
             if (empty($count)) {
-                return null;
+                return [null, null];
             }
 
             switch ($type) {
@@ -689,7 +671,7 @@ class Evaluation implements GradebookItem
         $user = api_is_platform_admin() ? null : api_get_user_id();
         $targets = [];
         $level = 0;
-        $root = [0, get_lang('RootCat'), $level];
+        $root = [0, get_lang('Main folder'), $level];
         $targets[] = $root;
 
         if (isset($this->courseId) && !empty($this->courseId)) {
@@ -779,7 +761,7 @@ class Evaluation implements GradebookItem
                     lastname LIKE '".Database::escape_string($first_letter_user)."%' AND 
                     status = ".STUDENT." AND user_id NOT IN (
                         SELECT user_id FROM $table 
-                        WHERE evaluation_id = ".intval($this->id)."
+                        WHERE evaluation_id = ".$this->get_id()."
                     )
                 ORDER BY lastname";
 
@@ -835,7 +817,7 @@ class Evaluation implements GradebookItem
         $table_evaluation = Database::get_main_table(TABLE_MAIN_GRADEBOOK_EVALUATION);
         $sql = "UPDATE $table_evaluation 
                 SET locked = '".intval($locked)."' 
-                WHERE id='".intval($this->id)."'";
+                WHERE id='".$this->get_id()."'";
         Database::query($sql);
     }
 
@@ -972,13 +954,15 @@ class Evaluation implements GradebookItem
     /**
      * Internal function used by get_target_categories().
      *
-     * @param int $level
+     * @param array $targets
+     * @param int   $level
+     * @param int   $categoryId
      *
      * @return array
      */
-    private function addTargetSubcategories($targets, $level, $catid)
+    private function addTargetSubcategories($targets, $level, $categoryId)
     {
-        $subcats = Category::load(null, null, null, $catid);
+        $subcats = Category::load(null, null, null, $categoryId);
         foreach ($subcats as $cat) {
             $targets[] = [$cat->get_id(), $cat->get_name(), $level + 1];
             $targets = $this->addTargetSubcategories(

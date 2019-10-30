@@ -53,7 +53,7 @@ $get_file = Security::remove_XSS($file_path);
 $file = basename($get_file);
 $temp_file = explode(".", $file);
 $filename = $temp_file[0];
-$nameTools = get_lang('EditDocument').': '.$filename;
+$nameTools = get_lang('Edit').': '.$filename;
 $courseDir = $_course['path'].'/document';
 $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
 
@@ -88,7 +88,7 @@ if (!is_dir($filepath)) {
 if (!empty($group_id)) {
     $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'group/group_space.php?'.api_get_cidreq(),
-        'name' => get_lang('GroupSpace'),
+        'name' => get_lang('Group area'),
     ];
     $group_document = true;
 }
@@ -103,7 +103,7 @@ if (!$is_certificate_mode) {
 } else {
     $interbreadcrumb[] = [
         'url' => Category::getUrl(),
-        'name' => get_lang('Gradebook'),
+        'name' => get_lang('Assessments'),
     ];
 }
 
@@ -133,7 +133,7 @@ Event::event_access_tool(TOOL_DOCUMENT);
 Display :: display_header($nameTools, 'Doc');
 echo '<div class="actions">';
 echo '<a href="document.php?id='.$parent_id.'">'.
-    Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('DocumentsOverview'), '', ICON_SIZE_MEDIUM).'</a>';
+    Display::return_icon('back.png', get_lang('Back to').' '.get_lang('Documents overview'), '', ICON_SIZE_MEDIUM).'</a>';
 echo '<a href="edit_document.php?'.api_get_cidreq().'&id='.$document_id.'&origin=editdraw">'.
     Display::return_icon('edit.png', get_lang('Rename').'/'.get_lang('Comments'), '', ICON_SIZE_MEDIUM).'</a>';
 echo '</div>';
@@ -167,6 +167,6 @@ if (api_browser_support('svg')) {
     echo '<iframe style="height: 550px; width: 100%;" scrolling="no" frameborder="0\' src="'.$svg_url.'"<noframes><p>Sorry, your browser does not handle frames</p></noframes></iframe>';
     echo '</noscript>';
 } else {
-    echo Display::return_message(get_lang('BrowserDontSupportsSVG'), 'error');
+    echo Display::return_message(get_lang('Your browser does not support SVG files. To use the drawing tool you must have an advanced browser such as Firefox or Chrome'), 'error');
 }
 Display::display_footer();

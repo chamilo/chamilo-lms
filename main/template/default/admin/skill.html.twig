@@ -1,3 +1,4 @@
+{% autoescape false %}
 <h3>{{ 'Skills' | get_lang }}</h3>
 <ul>
     <li>
@@ -26,3 +27,4 @@
     </h4>
     {{ item.profile }}
 {% endfor %}
+{% endautoescape %}

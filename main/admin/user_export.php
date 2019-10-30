@@ -17,8 +17,8 @@ $user_table = Database::get_main_table(TABLE_MAIN_USER);
 $course_user_table = Database::get_main_table(TABLE_MAIN_COURSE_USER);
 $session_course_user_table = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 
-$tool_name = get_lang('ExportUserListXMLCSV');
-$interbreadcrumb[] = ["url" => 'index.php', "name" => get_lang('PlatformAdmin')];
+$tool_name = get_lang('Export users list');
+$interbreadcrumb[] = ["url" => 'index.php', "name" => get_lang('Administration')];
 
 set_time_limit(0);
 $coursesSessions = [];
@@ -50,12 +50,12 @@ while ($course = Database::fetch_object($result)) {
 }
 $form = new FormValidator('export_users');
 $form->addElement('header', $tool_name);
-$form->addElement('radio', 'file_type', get_lang('OutputFileType'), 'XML', 'xml');
+$form->addElement('radio', 'file_type', get_lang('Output file type'), 'XML', 'xml');
 $form->addElement('radio', 'file_type', null, 'CSV', 'csv');
 $form->addElement('radio', 'file_type', null, 'XLS', 'xls');
-$form->addElement('checkbox', 'addcsvheader', get_lang('AddCSVHeader'), get_lang('YesAddCSVHeader'), '1');
-$form->addElement('select', 'course_code', get_lang('OnlyUsersFromCourse'), $courses);
-$form->addElement('select', 'course_session', get_lang('OnlyUsersFromCourseSession'), $coursesSessions);
+$form->addElement('checkbox', 'addcsvheader', get_lang('Include header line?'), get_lang('YesInclude header line?'), '1');
+$form->addElement('select', 'course_code', get_lang('Only users from the course'), $courses);
+$form->addElement('select', 'course_session', get_lang('Only users from the courseSession'), $coursesSessions);
 $form->addButtonExport(get_lang('Export'));
 $form->setDefaults(['file_type' => 'csv']);
 

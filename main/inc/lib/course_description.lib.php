@@ -43,6 +43,7 @@ class CourseDescription
      */
     public static function get_descriptions($course_id)
     {
+        $course_id = (int) $course_id;
         // Get course code
         $course_info = api_get_course_info_by_id($course_id);
         if (!empty($course_info)) {
@@ -59,7 +60,6 @@ class CourseDescription
             $desc_tmp = new CourseDescription();
             $desc_tmp->set_id($row['id']);
             $desc_tmp->set_title($row['title']);
-
             $desc_tmp->set_content($row['content']);
             $desc_tmp->set_session_id($row['session_id']);
             $desc_tmp->set_description_type($row['description_type']);
@@ -85,6 +85,11 @@ class CourseDescription
             true
         );
         $course_id = $this->course_id ?: api_get_course_int_id();
+
+        if (empty($course_id)) {
+            return [];
+        }
+
         $sql = "SELECT * FROM $table
 		        WHERE c_id = $course_id $condition_session
 		        ORDER BY id ";
@@ -113,6 +118,8 @@ class CourseDescription
         $session_id = null
     ) {
         $table = Database::get_course_table(TABLE_COURSE_DESCRIPTION);
+        $courseId = (int) $courseId;
+
         if (empty($courseId)) {
             $courseId = api_get_course_int_id();
         }
@@ -121,7 +128,8 @@ class CourseDescription
             $session_id = $this->session_id;
         }
         $condition_session = api_get_session_condition($session_id);
-        $description_type = intval($description_type);
+        $description_type = (int) $description_type;
+
         $sql = "SELECT * FROM $table
 		        WHERE 
 		            c_id = $courseId AND 
@@ -150,6 +158,7 @@ class CourseDescription
     {
         $table = Database::get_course_table(TABLE_COURSE_DESCRIPTION);
         $course_id = api_get_course_int_id();
+        $id = (int) $id;
 
         if (!isset($session_id)) {
             $session_id = $this->session_id;
@@ -159,7 +168,7 @@ class CourseDescription
             $course_info = api_get_course_info($course_code);
             $course_id = $course_info['real_id'];
         }
-        $id = intval($id);
+
         $sql = "SELECT * FROM $table
 		        WHERE c_id = $course_id AND id='$id' $condition_session ";
         $rs = Database::query($sql);
@@ -328,12 +337,12 @@ class CourseDescription
     public function get_default_description_title()
     {
         $default_description_titles = [];
-        $default_description_titles[1] = get_lang('GeneralDescription');
+        $default_description_titles[1] = get_lang('Description');
         $default_description_titles[2] = get_lang('Objectives');
         $default_description_titles[3] = get_lang('Topics');
         $default_description_titles[4] = get_lang('Methodology');
-        $default_description_titles[5] = get_lang('CourseMaterial');
-        $default_description_titles[6] = get_lang('HumanAndTechnicalResources');
+        $default_description_titles[5] = get_lang('Course material');
+        $default_description_titles[6] = get_lang('Resources');
         $default_description_titles[7] = get_lang('Assessment');
         $default_description_titles[8] = get_lang('Other');
 
@@ -388,14 +397,14 @@ class CourseDescription
     public function get_default_question()
     {
         $question = [];
-        $question[1] = get_lang('GeneralDescriptionQuestions');
-        $question[2] = get_lang('ObjectivesQuestions');
-        $question[3] = get_lang('TopicsQuestions');
-        $question[4] = get_lang('MethodologyQuestions');
-        $question[5] = get_lang('CourseMaterialQuestions');
-        $question[6] = get_lang('HumanAndTechnicalResourcesQuestions');
-        $question[7] = get_lang('AssessmentQuestions');
-        //$question[8]= get_lang('ThematicAdvanceQuestions');
+        $question[1] = get_lang('DescriptionQuestions');
+        $question[2] = get_lang('What should the end results be when the learner has completed the course? What are the activities performed during the course?');
+        $question[3] = get_lang('How does the course progress? Where should the learner pay special care? Are there identifiable problems in understanding different areas? How much time should one dedicate to the different areas of the course?');
+        $question[4] = get_lang('What methods and activities help achieve the objectives of the course?  What would the schedule be?');
+        $question[5] = get_lang('Course materialQuestions');
+        $question[6] = get_lang('ResourcesQuestions');
+        $question[7] = get_lang('How will learners be assessed? Are there strategies to develop in order to master the topic?');
+        //$question[8]= get_lang('What is the current progress you have reached with your learners inside your course? How much do you think is remaining in comparison to the complete program?');
 
         return $question;
     }
@@ -408,14 +417,14 @@ class CourseDescription
     public function get_default_information()
     {
         $information = [];
-        $information[1] = get_lang('GeneralDescriptionInformation');
-        $information[2] = get_lang('ObjectivesInformation');
-        $information[3] = get_lang('TopicsInformation');
-        $information[4] = get_lang('MethodologyInformation');
-        $information[5] = get_lang('CourseMaterialInformation');
-        $information[6] = get_lang('HumanAndTechnicalResourcesInformation');
-        $information[7] = get_lang('AssessmentInformation');
-        //$information[8]= get_lang('ThematicAdvanceInformation');
+        $information[1] = get_lang('DescriptionInformation');
+        $information[2] = get_lang('What are the objectives of the course (competences, skills, outcomes)?');
+        $information[3] = get_lang('List of topics included in the training. Importance of each topic. Level of difficulty. Structure and inter-dependence of the different parts.');
+        $information[4] = get_lang('Presentation of the activities (conference, papers, group research, labs...).');
+        $information[5] = get_lang('Course materialInformation');
+        $information[6] = get_lang('ResourcesInformation');
+        $information[7] = get_lang('Criteria for skills acquisition.');
+        //$information[8]= get_lang('The thematic advance tool allows you to organize your course through time.');
 
         return $information;
     }

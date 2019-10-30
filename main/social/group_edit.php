@@ -17,7 +17,7 @@ if (api_get_setting('allow_social_tool') !== 'true') {
 $this_section = SECTION_SOCIAL;
 
 $group_id = isset($_GET['id']) ? intval($_GET['id']) : intval($_POST['id']);
-$tool_name = get_lang('GroupEdit');
+$tool_name = get_lang('Edit group');
 $usergroup = new UserGroup();
 $group_data = $usergroup->get($group_id);
 
@@ -49,12 +49,12 @@ if ($form->validate()) {
     $group['id'] = $group_id;
     $group['group_type'] = $usergroup::SOCIAL_CLASS;
     $usergroup->update($group);
-    Display::addFlash(Display::return_message(get_lang('GroupUpdated')));
+    Display::addFlash(Display::return_message(get_lang('Class updated.')));
     header('Location: group_view.php?id='.$group_id);
     exit();
 }
 
-$social_left_content = SocialManager::getMenuSocial('group_edit', $group_id);
+$social_left_content = SocialManager::show_social_menu('group_edit', $group_id);
 $social_right_content = $form->returnForm();
 
 $tpl = new Template(get_lang('Edit'));

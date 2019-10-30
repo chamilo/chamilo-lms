@@ -16,7 +16,7 @@ header('Content-Type: text/html; charset='.api_get_system_encoding());
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=<?php echo api_get_system_encoding(); ?>" />
 <title>
-<?php echo get_lang('AllowedHTMLTags'); ?>
+<?php echo get_lang('Allowed HTML tags'); ?>
 </title>
 <style type="text/css" media="screen, projection">
 /*<![CDATA[*/
@@ -39,7 +39,7 @@ if (api_get_setting('stylesheets') != '') {
 <div style="margin:10px;">
 <div style="text-align:right;"><a href="javascript: window.close();"><?php echo get_lang('Close'); ?></a></div>
 <h4>
-<?php echo get_lang('AllowedHTMLTags'); ?>
+<?php echo get_lang('Allowed HTML tags'); ?>
 </h4>
 <?php
 $html_type = $_SESSION['status'] == COURSEMANAGER ? TEACHER_HTML : STUDENT_HTML;

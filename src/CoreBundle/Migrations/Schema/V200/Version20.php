@@ -55,7 +55,7 @@ class Version20 extends AbstractMigrationChamilo
         $this->addSql('ALTER TABLE faq_question_translation ADD CONSTRAINT FK_C2D1A2C2AC5D3 FOREIGN KEY (translatable_id) REFERENCES faq_question (id) ON DELETE CASCADE;');
         $this->addSql('ALTER TABLE faq_category_translation ADD CONSTRAINT FK_5493B0FC2C2AC5D3 FOREIGN KEY (translatable_id) REFERENCES faq_category (id) ON DELETE CASCADE;');
         $this->addSql('ALTER TABLE faq_question ADD CONSTRAINT FK_4A55B05912469DE2 FOREIGN KEY (category_id) REFERENCES faq_category (id);');
-        $this->addSql('ALTER TABLE contact_category_translation ADD CONSTRAINT FK_3E770F302C2AC5D3 FOREIGN KEY (translatable_id) REFERENCES contact_category (id) ON DELETE CASCADE;');
+        $this->addSql('ALTER TABLE contact_category_translavERSION20tion ADD CONSTRAINT FK_3E770F302C2AC5D3 FOREIGN KEY (translatable_id) REFERENCES contact_category (id) ON DELETE CASCADE;');
         $this->addSql('ALTER TABLE page__page ADD CONSTRAINT FK_2FAE39EDF6BD1646 FOREIGN KEY (site_id) REFERENCES page__site (id) ON DELETE CASCADE;');
         $this->addSql('ALTER TABLE page__page ADD CONSTRAINT FK_2FAE39ED727ACA70 FOREIGN KEY (parent_id) REFERENCES page__page (id) ON DELETE CASCADE;');
         $this->addSql('ALTER TABLE page__page ADD CONSTRAINT FK_2FAE39ED158E0B66 FOREIGN KEY (target_id) REFERENCES page__page (id) ON DELETE CASCADE;');
@@ -154,9 +154,68 @@ class Version20 extends AbstractMigrationChamilo
         $this->addSql('ALTER TABLE message ADD CONSTRAINT FK_B6BD307FF6C43E79 FOREIGN KEY (user_sender_id) REFERENCES user (id)');
         $this->addSql('ALTER TABLE message ADD CONSTRAINT FK_B6BD307F64482423 FOREIGN KEY (user_receiver_id) REFERENCES user (id)');
 
+        $table = $schema->getTable('c_document');
+        if (!$table->hasIndex('idx_cdoc_path')) {
+            $this->addSql('CREATE INDEX idx_cdoc_path ON c_document (path)');
+        }
+        if (!$table->hasIndex('idx_cdoc_size')) {
+            $this->addSql('CREATE INDEX idx_cdoc_size ON c_document (size)');
+        }
+        if (!$table->hasIndex('idx_cdoc_id')) {
+            $this->addSql('CREATE INDEX idx_cdoc_id ON c_document (id)');
+        }
+        if (!$table->hasIndex('idx_cdoc_type')) {
+            $this->addSql('CREATE INDEX idx_cdoc_type ON c_document (filetype)');
+        }
+        if (!$table->hasIndex('idx_cdoc_sid')) {
+            $this->addSql('CREATE INDEX idx_cdoc_sid ON c_document (session_id)');
+        }
+
+        $table = $schema->getTable('c_item_property');
+        if (!$table->hasIndex('idx_cip_lasteditu')) {
+            $this->addSql('CREATE INDEX idx_cip_lasteditu ON c_item_property (lastedit_user_id)');
+        }
+        if (!$table->hasIndex('idx_item_property_visibility')) {
+            $this->addSql('CREATE INDEX idx_item_property_visibility ON c_item_property (visibility)');
+        }
+
+        $table = $schema->getTable('extra_field_values');
+        if (!$table->hasIndex('idx_efv_item')) {
+            $this->addSql('CREATE INDEX idx_efv_item ON extra_field_values (item_id)');
+        }
+
+        $table = $schema->getTable('gradebook_link');
+        if (!$table->hasIndex('idx_gl_cat')) {
+            $this->addSql('CREATE INDEX idx_gl_cat ON gradebook_link (category_id)');
+        }
+
+        $table = $schema->getTable('gradebook_category');
+        if (!$table->hasIndex('idx_gb_cat_parent')) {
+            $this->addSql('CREATE INDEX idx_gb_cat_parent ON gradebook_category (parent_id)');
+        }
+
+        $table = $schema->getTable('gradebook_result');
+        if (!$table->hasIndex('idx_gb_uid_eid')) {
+            $this->addSql('CREATE INDEX idx_gb_uid_eid ON gradebook_result (user_id, evaluation_id)');
+        }
+
+        $table = $schema->getTable('gradebook_evaluation');
+        if (!$table->hasIndex('idx_ge_cat')) {
+            $this->addSql('CREATE INDEX idx_ge_cat ON gradebook_evaluation (category_id)');
+        }
+
+        $table = $schema->getTable('track_e_default');
+        if (!$table->hasIndex('idx_message_user_receiver_status')) {
+            $this->addSql('CREATE INDEX idx_default_user_id ON track_e_default (default_user_id)');
+        }
+
         $table = $schema->getTable('message');
         if (!$table->hasIndex('idx_message_user_receiver_status')) {
             $this->addSql('CREATE INDEX idx_message_user_receiver_status ON message (user_receiver_id, msg_status)');
+        }
+
+        if (!$table->hasIndex('idx_message_status')) {
+            $this->addSql('CREATE INDEX idx_message_status ON message (msg_status)');
         }
 
         if (!$table->hasIndex('idx_message_receiver_status_send_date')) {
@@ -203,10 +262,10 @@ class Version20 extends AbstractMigrationChamilo
         $this->addSql("INSERT INTO settings_options (variable, value, display_text) VALUES ('show_glossary_in_extra_tools', 'lp', 'LearningPath')");
         $this->addSql("INSERT INTO settings_options (variable, value, display_text) VALUES ('show_glossary_in_extra_tools', 'exercise_and_lp', 'ExerciseAndLearningPath')");
 
-        $cSurvey = $schema->getTable('c_survey');
+        $survey = $schema->getTable('c_survey');
 
-        if (!$cSurvey->hasColumn('is_mandatory')) {
-            $cSurvey->addColumn('is_mandatory', Type::BOOLEAN)->setDefault(false);
+        if (!$survey->hasColumn('is_mandatory')) {
+            $survey->addColumn('is_mandatory', Type::BOOLEAN)->setDefault(false);
         }
 
         $this->addSql('ALTER TABLE c_student_publication ADD filesize INT DEFAULT NULL');
@@ -215,6 +274,33 @@ class Version20 extends AbstractMigrationChamilo
 
         $this->addSql('ALTER TABLE c_survey_invitation CHANGE reminder_date reminder_date DATETIME DEFAULT NULL');
         $this->addSql('UPDATE c_survey_invitation SET reminder_date = NULL WHERE CAST(reminder_date AS CHAR(20)) = "0000-00-00 00:00:00"');
+
+        $table = $schema->hasTable('message_feedback');
+        if ($table === false) {
+            $this->addSql(
+                'CREATE TABLE message_feedback (id BIGINT AUTO_INCREMENT NOT NULL, message_id BIGINT NOT NULL, user_id INT NOT NULL, liked TINYINT(1) DEFAULT 0 NOT NULL, disliked TINYINT(1) DEFAULT 0 NOT NULL, updated_at DATETIME NOT NULL, INDEX IDX_DB0F8049537A1329 (message_id), INDEX IDX_DB0F8049A76ED395 (user_id), INDEX idx_message_feedback_uid_mid (message_id, user_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB ROW_FORMAT = DYNAMIC;'
+            );
+            $this->addSql(
+                'ALTER TABLE message_feedback ADD CONSTRAINT FK_DB0F8049537A1329 FOREIGN KEY (message_id) REFERENCES message (id) ON DELETE CASCADE'
+            );
+            $this->addSql(
+                'ALTER TABLE message_feedback ADD CONSTRAINT FK_DB0F8049A76ED395 FOREIGN KEY (user_id) REFERENCES user (id) ON DELETE CASCADE;'
+            );
+        }
+
+        $table = $schema->hasTable('gradebook_result_attempt');
+        if ($table === false) {
+            $this->addSql(
+                'CREATE TABLE gradebook_result_attempt (id INT AUTO_INCREMENT NOT NULL, comment LONGTEXT DEFAULT NULL, score DOUBLE PRECISION DEFAULT NULL, result_id INT NOT NULL, created_at DATETIME NOT NULL, updated_at DATETIME NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB ROW_FORMAT = DYNAMIC;'
+            );
+        }
+
+        $table = $schema->hasTable('track_e_access_complete');
+        if ($table === false) {
+            $this->addSql(
+                'CREATE TABLE track_e_access_complete (id INT AUTO_INCREMENT NOT NULL, user_id INT NOT NULL, date_reg DATETIME NOT NULL, tool VARCHAR(255) NOT NULL, tool_id INT NOT NULL, tool_id_detail INT NOT NULL, action VARCHAR(255) NOT NULL, action_details VARCHAR(255) NOT NULL, current_id INT NOT NULL, ip_user VARCHAR(255) NOT NULL, user_agent VARCHAR(255) NOT NULL, session_id INT NOT NULL, c_id INT NOT NULL, ch_sid VARCHAR(255) NOT NULL, login_as INT NOT NULL, info LONGTEXT NOT NULL, url LONGTEXT NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB ROW_FORMAT = DYNAMIC;'
+            );
+        }
 
         /*$table = $schema->getTable('course_rel_class');
         if (!$table->hasColumn('c_id')) {
@@ -535,6 +621,14 @@ class Version20 extends AbstractMigrationChamilo
             );
         }
 
+        if ($table->hasColumn('page_result_configuration') === false) {
+            $this->addSql(
+                "ALTER TABLE c_quiz ADD page_result_configuration LONGTEXT DEFAULT NULL COMMENT '(DC2Type:array)'"
+            );
+        }
+
+        $this->addSql('ALTER TABLE c_quiz MODIFY COLUMN save_correct_answers INT NULL DEFAULT NULL');
+
         $table = $schema->getTable('c_lp_item_view');
         if ($table->hasIndex('idx_c_lp_item_view_cid_id_view_count') == false) {
             $this->addSql(
@@ -602,7 +696,7 @@ class Version20 extends AbstractMigrationChamilo
         $this->addSql('CREATE TABLE resource_right (id INT AUTO_INCREMENT NOT NULL, resource_link_id INT DEFAULT NULL, role VARCHAR(255) NOT NULL, mask INT NOT NULL, INDEX IDX_9F710F26F004E599 (resource_link_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB ROW_FORMAT = DYNAMIC;');
         $this->addSql('CREATE TABLE resource_node (id INT AUTO_INCREMENT NOT NULL, resource_type_id INT NOT NULL, resource_file_id INT DEFAULT NULL, creator_id INT NOT NULL, parent_id INT DEFAULT NULL, name VARCHAR(255) NOT NULL, description LONGTEXT DEFAULT NULL, level INT DEFAULT NULL, path VARCHAR(3000) DEFAULT NULL, created_at DATETIME NOT NULL, updated_at DATETIME NOT NULL, INDEX IDX_8A5F48FF98EC6B7B (resource_type_id), UNIQUE INDEX UNIQ_8A5F48FFCE6B9E84 (resource_file_id), INDEX IDX_8A5F48FF61220EA6 (creator_id), INDEX IDX_8A5F48FF727ACA70 (parent_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB ROW_FORMAT = DYNAMIC;');
         $this->addSql('CREATE TABLE resource_type (id INT AUTO_INCREMENT NOT NULL, tool_id INT DEFAULT NULL, name VARCHAR(255) NOT NULL, created_at DATETIME NOT NULL, updated_at DATETIME NOT NULL, INDEX IDX_83FEF7938F7B22CC (tool_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB ROW_FORMAT = DYNAMIC;');
-        $this->addSql('CREATE TABLE resource_file (id INT AUTO_INCREMENT NOT NULL, media_id INT DEFAULT NULL, enabled TINYINT(1) NOT NULL, created_at DATETIME NOT NULL, updated_at DATETIME NOT NULL, UNIQUE INDEX UNIQ_83BF96AAEA9FDD75 (media_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB ROW_FORMAT = DYNAMIC;');
+        $this->addSql('CREATE TABLE resource_file (id INT AUTO_INCREMENT NOT NULL, name VARCHAR(255) NOT NULL, size INT NOT NULL, media_id INT DEFAULT NULL, enabled TINYINT(1) NOT NULL, created_at DATETIME NOT NULL, updated_at DATETIME NOT NULL, UNIQUE INDEX UNIQ_83BF96AAEA9FDD75 (media_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB ROW_FORMAT = DYNAMIC;');
         $this->addSql('ALTER TABLE classification__tag ADD CONSTRAINT FK_CA57A1C7E25D857E FOREIGN KEY (context) REFERENCES classification__context (id);');
         $this->addSql('ALTER TABLE classification__category ADD CONSTRAINT FK_43629B36727ACA70 FOREIGN KEY (parent_id) REFERENCES classification__category (id) ON DELETE CASCADE;');
         $this->addSql('ALTER TABLE classification__category ADD CONSTRAINT FK_43629B36E25D857E FOREIGN KEY (context) REFERENCES classification__context (id);');
@@ -709,6 +803,16 @@ class Version20 extends AbstractMigrationChamilo
             $this->addSql('ALTER TABLE usergroup ADD author_id INT DEFAULT NULL');
         }
 
+        $table = $schema->getTable('track_e_attempt');
+        if (!$table->hasIndex('idx_track_e_attempt_tms')) {
+            $this->addSql('CREATE INDEX idx_track_e_attempt_tms ON track_e_attempt (tms)');
+        }
+
+        $table = $schema->getTable('track_e_login');
+        if (!$table->hasIndex('idx_track_e_login_date')) {
+            $this->addSql('CREATE INDEX idx_track_e_login_date ON track_e_login (login_date)');
+        }
+
         $this->addSql('ALTER TABLE c_group_info ADD CONSTRAINT FK_CE06532491D79BD3 FOREIGN KEY (c_id) REFERENCES course (id);');
 
         $this->addSql('ALTER TABLE course_category CHANGE auth_course_child auth_course_child VARCHAR(40) DEFAULT NULL');
@@ -716,11 +820,11 @@ class Version20 extends AbstractMigrationChamilo
 
         // WIP: Document - resource
         $this->addSql('ALTER TABLE c_document CHANGE c_id c_id INT DEFAULT NULL');
-        $this->addSql('ALTER TABLE c_document ADD CONSTRAINT FK_C9FA0CBD91D79BD3 FOREIGN KEY (c_id) REFERENCES course (id)');
+        $this->addSql('ALTER TABLE c_document ADD CONSTRAINT FK_C9FA0CBD91D79BD3 FOREIGN KEY (c_id) REFERENCES course (id) ON DELETE CASCADE;');
 
         $this->addSql('ALTER TABLE c_document CHANGE session_id session_id INT DEFAULT NULL;');
         $this->addSql('UPDATE c_document SET session_id = null WHERE session_id = 0');
-        $this->addSql('ALTER TABLE c_document ADD CONSTRAINT FK_C9FA0CBD613FECDF FOREIGN KEY (session_id) REFERENCES session (id)');
+        $this->addSql('ALTER TABLE c_document ADD CONSTRAINT FK_C9FA0CBD613FECDF FOREIGN KEY (session_id) REFERENCES session (id) ON DELETE CASCADE');
         $this->addSql('CREATE INDEX IDX_C9FA0CBD613FECDF ON c_document (session_id)');
 
         $this->addSql('ALTER TABLE access_url_rel_course_category CHANGE access_url_id access_url_id INT DEFAULT NULL, CHANGE course_category_id course_category_id INT DEFAULT NULL');
@@ -812,12 +916,36 @@ class Version20 extends AbstractMigrationChamilo
             'openid_association',
             'track_stored_values',
             'track_stored_values_stack',
+            'course_module',
         ];
         foreach ($dropTables as $table) {
             if ($schema->hasTable($table)) {
                 $schema->dropTable($table);
             }
         }
+
+        $result = $connection
+            ->executeQuery("SELECT COUNT(1) FROM settings_current WHERE variable = 'exercise_invisible_in_session' AND category = 'Session'");
+        $count = $result->fetch()[0];
+
+        if (empty($count)) {
+            $this->addSql("INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('exercise_invisible_in_session',NULL,'radio','Session','false','ExerciseInvisibleInSessionTitle','ExerciseInvisibleInSessionComment','',NULL, 1)");
+            $this->addSql("INSERT INTO settings_options (variable, value, display_text) VALUES ('exercise_invisible_in_session','true','Yes')");
+            $this->addSql("INSERT INTO settings_options (variable, value, display_text) VALUES ('exercise_invisible_in_session','false','No')");
+        }
+
+        $result = $connection->executeQuery("SELECT COUNT(1) FROM settings_current WHERE variable = 'configure_exercise_visibility_in_course' AND category = 'Session'");
+        $count = $result->fetch()[0];
+
+        if (empty($count)) {
+            $this->addSql("INSERT INTO settings_current (variable, subkey, type, category, selected_value, title, comment, scope, subkeytext, access_url_changeable) VALUES ('configure_exercise_visibility_in_course',NULL,'radio','Session','false','ConfigureExerciseVisibilityInCourseTitle','ConfigureExerciseVisibilityInCourseComment','',NULL, 1)");
+            $this->addSql("INSERT INTO settings_options (variable, value, display_text) VALUES ('configure_exercise_visibility_in_course','true','Yes')");
+            $this->addSql("INSERT INTO settings_options (variable, value, display_text) VALUES ('configure_exercise_visibility_in_course','false','No')");
+        }
+
+        //CREATE TABLE illustration (id INT AUTO_INCREMENT NOT NULL, resource_node_id INT DEFAULT NULL, name VARCHAR(255) NOT NULL, created_at DATETIME NOT NULL, updated_at DATETIME NOT NULL, UNIQUE INDEX UNIQ_D67B9A421BAD783F (resource_node_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB ROW_FORMAT = DYNAMIC;
+        //ALTER TABLE illustration ADD CONSTRAINT FK_D67B9A421BAD783F FOREIGN KEY (resource_node_id) REFERENCES resource_node (id) ON DELETE CASCADE;
+
     }
 
     /**

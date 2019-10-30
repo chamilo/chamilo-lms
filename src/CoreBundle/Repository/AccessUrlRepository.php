@@ -3,27 +3,11 @@
 
 namespace Chamilo\CoreBundle\Repository;
 
-use Chamilo\CoreBundle\Entity\AccessUrl;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\Common\Persistence\ManagerRegistry;
-
 /**
  * Class AccessUrlRepository.
- *
- * @package Chamilo\CoreBundle\Repository
  */
-class AccessUrlRepository extends ServiceEntityRepository
+class AccessUrlRepository extends ResourceRepository
 {
-    /**
-     * AccessUrlRepository constructor.
-     *
-     * @param ManagerRegistry $registry
-     */
-    public function __construct(ManagerRegistry $registry)
-    {
-        parent::__construct($registry, AccessUrl::class);
-    }
-
     /**
      * Select the first access_url ID in the list as a default setting for
      * the creation of new users.
@@ -32,7 +16,7 @@ class AccessUrlRepository extends ServiceEntityRepository
      */
     public function getFirstId()
     {
-        $qb = $this->createQueryBuilder('a');
+        $qb = $this->getRepository()->createQueryBuilder('a');
         $qb->select('MIN (a.id)');
         $q = $qb->getQuery();
 

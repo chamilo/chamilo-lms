@@ -330,27 +330,11 @@ class Chat extends Model
             ];
         }
 
-        /*if (!empty($_SESSION['openChatBoxes'])) {
-            foreach ($_SESSION['openChatBoxes'] as $userId => $time) {
-                if (!isset($_SESSION['tsChatBoxes'][$userId])) {
-                    $now = time() - $time;
-                    $time = api_convert_and_format_date($time, DATE_TIME_FORMAT_SHORT_TIME_FIRST);
-                    $message = sprintf(get_lang('SentAtX'), $time);
-
-                    if ($now > 180) {
-                        if (isset($chatHistory[$userId])) {
-                            $chatHistory[$userId]['items'][] = $item;
-                        }
-                        $_SESSION['tsChatBoxes'][$userId] = 1;
-                    }
-                }
-            }
-        }*/
         Session::write('chatHistory', $chatHistory);
 
         $sql = "UPDATE ".$this->table."
                 SET recd = 1
-                WHERE to_user = '".$currentUserId."' AND recd = 0";
+                WHERE to_user = $currentUserId AND recd = 0";
         Database::query($sql);
 
         echo json_encode(['items' => $chatHistory]);
@@ -439,7 +423,7 @@ class Chat extends Model
     /**
      * Close a specific chat box (user ID taken from $_POST['chatbox']).
      *
-     * @param $userId
+     * @param int $userId
      */
     public function closeWindow($userId)
     {

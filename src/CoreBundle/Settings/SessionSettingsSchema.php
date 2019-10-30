@@ -10,8 +10,6 @@ use Symfony\Component\Form\FormBuilderInterface;
 
 /**
  * Class SessionSettingsSchema.
- *
- * @package Chamilo\CoreBundle\Settings
  */
 class SessionSettingsSchema extends AbstractSettingsSchema
 {

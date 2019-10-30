@@ -7,7 +7,7 @@ use Chamilo\CoreBundle\Entity\AccessUrl;
 use Chamilo\CoreBundle\Entity\AccessUrlRelCourse;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Repository\CourseRepository;
-use Chamilo\CourseBundle\ToolChain;
+use Chamilo\CoreBundle\ToolChain;
 use Chamilo\SettingsBundle\Manager\SettingsManager;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 
@@ -15,7 +15,7 @@ use Doctrine\ORM\Event\LifecycleEventArgs;
  * Class CourseListener.
  * Course entity listener, when a course is created/edited and when the tool chain is loaded.
  *
- * @package Chamilo\CoreBundle\EventListener
+ * @todo check hosting course limits
  */
 class CourseListener
 {
@@ -52,10 +52,11 @@ class CourseListener
     {
         /** @var AccessUrlRelCourse $urlRelCourse */
         if ($course) {
-            $urlRelCourse = $course->getUrls()->first();
-            $url = $urlRelCourse->getUrl();
-            $repo = $args->getEntityManager()->getRepository('ChamiloCoreBundle:Course');
-            $this->checkLimit($repo, $course, $url);
+            /*$urlRelCourse = $course->getUrls()->first();
+            $url = $urlRelCourse->getUrl();*/
+            //$url = $course->getCurrentUrl();
+            //$repo = $args->getEntityManager()->getRepository('ChamiloCoreBundle:Course');
+            ///$this->checkLimit($repo, $course, $url);
             $this->toolChain->addToolsInCourse($course, $this->settingsManager);
         }
     }
@@ -71,17 +72,10 @@ class CourseListener
     public function preUpdate(Course $course, LifecycleEventArgs $args)
     {
         if ($course) {
-            $url = $course->getCurrentUrl();
+            /*$url = $course->getCurrentUrl();
             $repo = $args->getEntityManager()->getRepository('ChamiloCoreBundle:Course');
-
-            $this->checkLimit($repo, $course, $url);
+            $this->checkLimit($repo, $course, $url);*/
         }
-
-        /*if ($eventArgs->getEntity() instanceof User) {
-            if ($eventArgs->hasChangedField('name') && $eventArgs->getNewValue('name') == 'Alice') {
-                $eventArgs->setNewValue('name', 'Bob');
-            }
-        }*/
     }
 
     /**

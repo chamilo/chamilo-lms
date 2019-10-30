@@ -66,7 +66,7 @@ class Image
     }
 
     /**
-     * @param $cropParameters
+     * @param string $cropParameters
      *
      * @return bool
      */

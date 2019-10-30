@@ -18,7 +18,7 @@ if (!$is_allowed_to_edit) {
     api_not_allowed(true);
 }
 
-$lpId = isset($_GET['lp_id']) ? intval($_GET['lp_id']) : 0;
+$lpId = isset($_GET['lp_id']) ? (int) $_GET['lp_id'] : 0;
 
 if (empty($lpId)) {
     api_not_allowed(true);
@@ -33,12 +33,12 @@ $oLP = new learnpath(api_get_course_id(), $lpId, api_get_user_id());
 
 $interbreadcrumb[] = [
     'url' => 'lp_controller.php?action=list&'.api_get_cidreq(),
-    'name' => get_lang('LearningPaths'),
+    'name' => get_lang('Learning paths'),
 ];
 
 $interbreadcrumb[] = [
-    'url' => api_get_self()."?action=build&lp_id=".$oLP->get_id().'&'.api_get_cidreq(),
-    'name' => $oLP->get_name(),
+    'url' => api_get_self().'?action=build&lp_id='.$oLP->get_id().'&'.api_get_cidreq(),
+    'name' => $oLP->getNameNoTags(),
 ];
 
 $courseId = api_get_course_int_id();
@@ -68,12 +68,13 @@ if (!$session) {
         ->getQuery()
         ->getResult();
 } else {
-    $session->getUserCourseSubscriptionsByStatus($course, Session::STUDENT)
-        ->forAll(
-            function ($i, SessionRelCourseRelUser $sessionCourseUser) use (&$subscribedUsers) {
-                $subscribedUsers[$i] = $sessionCourseUser->getUser();
-            }
-        );
+    $list = $session->getUserCourseSubscriptionsByStatus($course, Session::STUDENT);
+    if ($list) {
+        /** @var SessionRelCourseRelUser $sessionCourseUser */
+        foreach ($list as $sessionCourseUser) {
+            $subscribedUsers[$sessionCourseUser->getUser()->getUserId()] = $sessionCourseUser->getUser();
+        }
+    }
 }
 
 // Getting all users in a nice format.
@@ -149,7 +150,6 @@ $groupMultiSelect = $form->addElement(
     $groupChoices
 );
 
-// submit button
 $form->addButtonSave(get_lang('Save'));
 
 $defaults = [];
@@ -176,7 +176,7 @@ if ($form->validate()) {
             $lpId,
             $users
         );
-        Display::addFlash(Display::return_message(get_lang('Updated')));
+        Display::addFlash(Display::return_message(get_lang('Update successful')));
     }
 
     // Subscribing groups
@@ -192,19 +192,22 @@ if ($form->validate()) {
             $lpId,
             $groups
         );
-        Display::addFlash(Display::return_message(get_lang('Updated')));
+        Display::addFlash(Display::return_message(get_lang('Update successful')));
     }
 
     header("Location: $url");
     exit;
-} else {
-    Display::addFlash(Display::return_message(get_lang('UserLpSubscriptionDescription')));
-    $headers = [
-        get_lang('SubscribeUsersToLp'),
-        get_lang('SubscribeGroupsToLp'),
-    ];
-    $tpl = new Template();
-    $tabs = Display::tabs($headers, [$formUsers->toHtml(), $form->toHtml()]);
-    $tpl->assign('content', $tabs);
-    $tpl->display_one_col_template();
 }
+
+$message = Display::return_message(get_lang('Note that if the inscription of users in a category is available, then if you have already subscribe user to the category it will override the inscription of users here in the Learning Path'));
+$headers = [
+    get_lang('Subscribe users to learning path'),
+    get_lang('Subscribe groups to learning path'),
+];
+
+$menu = $oLP->build_action_menu(true, false, true, false);
+
+$tpl = new Template();
+$tabs = Display::tabs($headers, [$formUsers->toHtml(), $form->toHtml()]);
+$tpl->assign('content', $menu.$message.$tabs);
+$tpl->display_one_col_template();

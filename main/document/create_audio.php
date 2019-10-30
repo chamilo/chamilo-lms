@@ -16,7 +16,7 @@ use ChamiloSession as Session;
 require_once __DIR__.'/../inc/global.inc.php';
 $this_section = SECTION_COURSES;
 
-$nameTools = get_lang('CreateAudio');
+$nameTools = get_lang('Create audio');
 
 api_protect_course_script();
 api_block_anonymous_users();
@@ -87,7 +87,7 @@ if (!is_dir($filepath)) {
 if (!empty($groupId)) {
     $interbreadcrumb[] = [
         "url" => "../group/group_space.php?".api_get_cidreq(),
-        "name" => get_lang('GroupSpace'),
+        "name" => get_lang('Group area'),
     ];
     $group = GroupManager:: get_group_properties($groupId);
     $path = explode('/', $dir);
@@ -150,14 +150,14 @@ echo '<div class="actions">';
 echo '<a href="document.php?id='.$document_id.'">';
 echo Display::return_icon(
     'back.png',
-    get_lang('BackTo').' '.get_lang('DocumentsOverview'),
+    get_lang('Back to').' '.get_lang('Documents overview'),
     '',
     ICON_SIZE_MEDIUM
 );
 echo '</a>';
 
 echo '<a href="create_audio.php?'.api_get_cidreq().'&id='.$document_id.'&service=google">'.
-    Display::return_icon('google.png', get_lang('GoogleAudio'), '', ICON_SIZE_MEDIUM).'</a>';
+    Display::return_icon('google.png', get_lang('Use Google audio services'), '', ICON_SIZE_MEDIUM).'</a>';
 echo '</div>';
 ?>
     <!-- javascript and styles for textareaCounter-->
@@ -225,13 +225,13 @@ while ($row = Database::fetch_array($result_select)) {
 if ($service == 'google') {
     $selected_language = api_get_language_isocode(); //lang default is the course language
     $form = new FormValidator('form1', 'post', api_get_self().'?'.api_get_cidreq(), '', ['id' => 'form1']);
-    $form->addHeader(get_lang('HelpText2Audio'));
+    $form->addHeader(get_lang('Convert your text to speech'));
     $form->addElement('hidden', 'text2voice_mode', 'google');
     $form->addElement('hidden', 'id', $document_id);
     $form->addElement('text', 'title', get_lang('Title'));
     $form->addElement('select', 'lang', get_lang('Language'), $options);
-    $form->addElement('textarea', 'text', get_lang('InsertText2Audio'), ['id' => 'textarea_google']);
-    $form->addButtonSave(get_lang('SaveMP3'));
+    $form->addElement('textarea', 'text', get_lang('Enter the text you want to convert to an audio file'), ['id' => 'textarea_google']);
+    $form->addButtonSave(get_lang('Save mp3'));
     $defaults = [];
     $defaults['lang'] = $selected_language;
     $form->setDefaults($defaults);
@@ -301,7 +301,7 @@ function downloadAudioGoogle($dir)
     }
 
     if (empty($content)) {
-        Display::addFlash(Display::return_message(get_lang('GoogleTranslateApiReturnedEmptyAnswer'), 'error'));
+        Display::addFlash(Display::return_message(get_lang('The Google Translate API used by this feature returned and empty answer. Please check or ask your translate_app_google_key setting is set correctly, or kindly ask an administrator to do so.'), 'error'));
 
         return;
     }
@@ -323,6 +323,6 @@ function downloadAudioGoogle($dir)
         true,
         $content
     );
-    echo Display::return_message(get_lang('DocumentCreated'), 'confirm');
+    echo Display::return_message(get_lang('Documented created'), 'confirm');
     echo '<script>window.location.href="'.$location.'"</script>';
 }

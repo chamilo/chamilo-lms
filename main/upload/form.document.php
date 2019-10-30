@@ -12,7 +12,7 @@
 /**
  * Just display the form needed to upload a SCORM and give its settings.
  */
-$nameTools = get_lang('FileUpload');
+$nameTools = get_lang('File upload');
 $interbreadcrumb[] = ["url" => "../lp/lp_controller.php?action=list", "name" => get_lang(TOOL_DOCUMENT)];
 Display::display_header($nameTools, "Doc");
 // Show the title

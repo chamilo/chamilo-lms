@@ -37,32 +37,27 @@ Versions:
 					    -- See included samples for usage examples
 */
 
-/* _______________________________________________________________________*/
-
-/* get the config values */
-//require_once "config.php";
-
-class BigBlueButtonBN {
-
+class BigBlueButtonBN
+{
 	private $_securitySalt;
 	private $_bbbServerBaseUrl;
 
-	/* ___________ General Methods for the BigBlueButton Class __________ */
-
-	function __construct() {
-	/*
-	Establish just our basic elements in the constructor:
-	*/
+	public function __construct()
+    {
+        /*
+        Establish just our basic elements in the constructor:
+        */
 		// BASE CONFIGS - set these for your BBB server in config.php and they will
 		// simply flow in here via the constants:
 		$this->_securitySalt 		= CONFIG_SECURITY_SALT;
 		$this->_bbbServerBaseUrl 	= CONFIG_SERVER_BASE_URL;
 	}
 
-	private function _processXmlResponse($url){
-	/*
-	A private utility method used by other public methods to process XML responses.
-	*/
+	private function _processXmlResponse($url)
+    {
+        /*
+        A private utility method used by other public methods to process XML responses.
+        */
 		if (extension_loaded('curl')) {
 			$ch = curl_init() or die ( curl_error($ch) );
 			$timeout = 10;
@@ -143,7 +138,8 @@ class BigBlueButtonBN {
 		return ( $creationUrl.$params.'&checksum='.sha1("create".$params.$this->_securitySalt) );
 	}
 
-	public function createMeetingWithXmlResponseArray($creationParams) {
+	public function createMeetingWithXmlResponseArray($creationParams)
+    {
 		/*
 		USAGE:
 		$creationParams = array(
@@ -165,27 +161,28 @@ class BigBlueButtonBN {
 		$xml = $this->_processXmlResponse($this->getCreateMeetingURL($creationParams));
 
         if ($xml) {
-			if($xml->meetingID)
-				return array(
-					'returncode' => $xml->returncode->__toString(),
-					'message' => $xml->message->__toString(),
-					'messageKey' => $xml->messageKey->__toString(),
-					'meetingId' => $xml->meetingID->__toString(),
-					'attendeePw' => $xml->attendeePW->__toString(),
-					'moderatorPw' => $xml->moderatorPW->__toString(),
-					'hasBeenForciblyEnded' => $xml->hasBeenForciblyEnded->__toString(),
-					'createTime' => $xml->createTime->__toString()
-					);
-			else
-				return array(
-					'returncode' => $xml->returncode->__toString(),
-					'message' => $xml->message->__toString(),
-					'messageKey' => $xml->messageKey->__toString()
-					);
-		}
-		else {
-			return null;
-		}
+            if ($xml->meetingID) {
+                return array(
+                    'returncode' => $xml->returncode->__toString(),
+                    'message' => $xml->message->__toString(),
+                    'messageKey' => $xml->messageKey->__toString(),
+                    'meetingId' => $xml->meetingID->__toString(),
+                    'attendeePw' => $xml->attendeePW->__toString(),
+                    'moderatorPw' => $xml->moderatorPW->__toString(),
+                    'hasBeenForciblyEnded' => $xml->hasBeenForciblyEnded->__toString(),
+                    'createTime' => $xml->createTime->__toString(),
+                    'internalMeetingID' => $xml->internalMeetingID->__toString()
+                );
+            } else {
+                return array(
+                    'returncode' => $xml->returncode->__toString(),
+                    'message' => $xml->message->__toString(),
+                    'messageKey' => $xml->messageKey->__toString(),
+                );
+            }
+        } else {
+            return null;
+        }
 	}
 
 	public function getJoinMeetingURL($joinParams) {
@@ -396,8 +393,7 @@ class BigBlueButtonBN {
 					'message' => $xml->message->__toString()
 				);
 				return $result;
-			}
-			else {
+			} else {
 				// In this case, we have success and meeting info:
 				$result = array(
 					'returncode' => $xml->returncode->__toString(),
@@ -415,7 +411,9 @@ class BigBlueButtonBN {
 					'participantCount' => $xml->participantCount->__toString(),
 					'maxUsers' => $xml->maxUsers->__toString(),
 					'moderatorCount' => $xml->moderatorCount->__toString(),
+                    'internalMeetingID' => $xml->internalMeetingID->__toString()
 				);
+
 				// Then interate through attendee results and return them as part of the array:
 				foreach ($xml->attendees->attendee as $a) {
 					$result[] = array(
@@ -509,6 +507,69 @@ class BigBlueButtonBN {
 		}
 	}
 
+	/**
+	 * @param $array recordingParams
+	 *
+	 * @return array|null
+	 */
+	public function getRecordings($recordingParams)
+	{
+		/* USAGE:
+		$recordingParams = array(
+			'meetingId' => '1234',		-- OPTIONAL - comma separate if multiple ids
+		);
+		NOTE: 'duration' DOES work when creating a meeting, so if you set duration
+		when creating a meeting, it will kick users out after the duration. Should
+		probably be required in user code when 'recording' is set to true.
+		*/
+		$xml = $this->_processXmlResponse($this->getRecordingsUrl($recordingParams));
+		if($xml) {
+			// If we don't get a success code or messageKey, find out why:
+			if (($xml->returncode != 'SUCCESS') || ($xml->messageKey == null)) {
+				$result = array(
+					'returncode' => $xml->returncode->__toString(),
+					'messageKey' => $xml->messageKey->__toString(),
+					'message' => $xml->message->__toString()
+				);
+				return $result;
+			}
+			else {
+				// In this case, we have success and recording info:
+				$result = array(
+					'returncode' => $xml->returncode->__toString(),
+					'messageKey' => $xml->messageKey->__toString(),
+					'message' => $xml->message->__toString()
+				);
+				$result['records'] = [];
+				if (!empty($xml->recordings->recording)) {
+					foreach ($xml->recordings->recording as $r) {
+						$result['records'][] = array(
+							'recordId' => $r->recordID->__toString(),
+							'meetingId' => $r->meetingID->__toString(),
+							'name' => $r->name->__toString(),
+							'published' => $r->published->__toString(),
+							'startTime' => $r->startTime->__toString(),
+							'endTime' => $r->endTime->__toString(),
+							'playbackFormatType' => $r->playback->format->type->__toString(),
+							'playbackFormatUrl' => $r->playback->format->url->__toString(),
+							'playbackFormatLength' => $r->playback->format->length->__toString(),
+							'metadataTitle' => $r->metadata->title->__toString(),
+							'metadataSubject' => $r->metadata->subject->__toString(),
+							'metadataDescription' => $r->metadata->description->__toString(),
+							'metadataCreator' => $r->metadata->creator->__toString(),
+							'metadataContributor' => $r->metadata->contributor->__toString(),
+							'metadataLanguage' => $r->metadata->language->__toString(),
+						);
+					}
+				}
+
+				return $result;
+			}
+		}
+
+		return null;
+	}
+
 	public function getPublishRecordingsUrl($recordingParams) {
 		/* USAGE:
 		$recordingParams = array(
@@ -577,8 +638,30 @@ class BigBlueButtonBN {
 
 	}
 
+	/** USAGE:
+	 * $recordingParams = array(
+	 * 'recordId' => '1234',        -- REQUIRED - comma separate if multiple ids
+	 * );
+	 */
+	public function generateRecording($recordingParams)
+	{
+	    if (empty($recordingParams)) {
+	        return false;
+        }
 
+		$recordingsUrl = $this->_bbbServerBaseUrl.'../demo/regenerateRecord.jsp?';
+		$params = 'recordID='.urlencode($recordingParams['recordId']);
+		$url = $recordingsUrl.$params.'&checksum='.sha1('regenerateRecord'.$params.$this->_securitySalt);
 
-} // END OF BIGBLUEBUTTON CLASS
+        $ch = curl_init() or die ( curl_error($ch) );
+        $timeout = 10;
+        curl_setopt( $ch, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt( $ch, CURLOPT_URL, $url );
+        curl_setopt( $ch, CURLOPT_RETURNTRANSFER, 1 );
+        curl_setopt( $ch, CURLOPT_CONNECTTIMEOUT, $timeout);
+        $data = curl_exec( $ch );
+        curl_close( $ch );
 
-?>
+        return true;
+	}
+}

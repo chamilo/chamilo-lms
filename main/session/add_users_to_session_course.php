@@ -15,7 +15,7 @@ $xajax->registerFunction('search_users');
 // setting the section (for the tabs)
 $this_section = SECTION_PLATFORM_ADMIN;
 
-$id_session = (int) $_GET['id_session'];
+$id_session = isset($_GET['id_session']) ? (int) $_GET['id_session'] : 0;
 $courseId = isset($_GET['course_id']) ? (int) $_GET['course_id'] : 0;
 
 if (empty($id_session) || empty($courseId)) {
@@ -29,10 +29,10 @@ SessionManager::protectSession($id_session);
 $courseInfo = api_get_course_info_by_id($courseId);
 
 // setting breadcrumbs
-$interbreadcrumb[] = ['url' => 'session_list.php', 'name' => get_lang('SessionList')];
+$interbreadcrumb[] = ['url' => 'session_list.php', 'name' => get_lang('Session list')];
 $interbreadcrumb[] = [
     'url' => "resume_session.php?id_session=".$id_session,
-    'name' => get_lang('SessionOverview'),
+    'name' => get_lang('Session overview'),
 ];
 
 // Database Table Definitions
@@ -43,7 +43,7 @@ $tbl_session_rel_user = Database::get_main_table(TABLE_MAIN_SESSION_USER);
 $tableRelSessionCourseUser = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
 
 // setting the name of the tool
-$tool_name = get_lang('SubscribeUsersToSession');
+$tool_name = get_lang('Subscribe users to this session');
 $add_type = 'unique';
 if (isset($_REQUEST['add_type']) && $_REQUEST['add_type'] != '') {
     $add_type = Security::remove_XSS($_REQUEST['add_type']);
@@ -359,7 +359,7 @@ if (isset($_POST['form_sent']) && $_POST['form_sent']) {
             $courseInfo['code']
         );
 
-        Display::addFlash(Display::return_message(get_lang('Updated')));
+        Display::addFlash(Display::return_message(get_lang('Update successful')));
         header('Location: resume_session.php?id_session='.$id_session);
         exit;
     }
@@ -639,13 +639,13 @@ if ($ajax_search) {
 if ($add_type == 'multiple') {
     $link_add_type_unique =
         '<a href="'.api_get_self().'?course_id='.$courseId.'&id_session='.$id_session.'&add='.$addProcess.'&add_type=unique">'.
-        Display::return_icon('single.gif').get_lang('SessionAddTypeUnique').'</a>';
-    $link_add_type_multiple = Display::url(Display::return_icon('multiple.gif').get_lang('SessionAddTypeMultiple'), '');
+        Display::return_icon('single.gif').get_lang('Single registration').'</a>';
+    $link_add_type_multiple = Display::url(Display::return_icon('multiple.gif').get_lang('Multiple registration'), '');
 } else {
-    $link_add_type_unique = Display::url(Display::return_icon('single.gif').get_lang('SessionAddTypeUnique'), '');
+    $link_add_type_unique = Display::url(Display::return_icon('single.gif').get_lang('Single registration'), '');
     $link_add_type_multiple =
         '<a href="'.api_get_self().'?course_id='.$courseId.'&id_session='.$id_session.'&amp;add='.$addProcess.'&amp;add_type=multiple">'
-        .Display::return_icon('multiple.gif').get_lang('SessionAddTypeMultiple').'</a>';
+        .Display::return_icon('multiple.gif').get_lang('Multiple registration').'</a>';
 }
 ?>
     <div class="actions">
@@ -665,7 +665,7 @@ if ($add_type == 'multiple') {
         if ($add_type == 'multiple') {
             if (is_array($extra_field_list)) {
                 if (is_array($new_field_list) && count($new_field_list) > 0) {
-                    echo '<h3>'.get_lang('FilterUsers').'</h3>';
+                    echo '<h3>'.get_lang('Filter users').'</h3>';
                     foreach ($new_field_list as $new_field) {
                         echo $new_field['name'];
                         $varname = 'field_'.$new_field['variable'];
@@ -714,7 +714,7 @@ if ($add_type == 'multiple') {
         <div id="multiple-add-session" class="row">
             <div class="col-md-4">
                 <div class="form-group">
-                    <label><?php echo get_lang('UserListInPlatform'); ?> </label>
+                    <label><?php echo get_lang('Portal users list'); ?> </label>
                     <?php
                     if (!($add_type == 'multiple')) {
                         ?>
@@ -759,7 +759,7 @@ if ($add_type == 'multiple') {
             <div class="col-md-4">
                 <?php if ($add_type == 'multiple') {
                         ?>
-                    <?php echo get_lang('FirstLetterUser'); ?> :
+                    <?php echo get_lang('First letter (last name)'); ?> :
                     <select id="first_letter_user" name="firstLetterUser" onchange="change_select(this.value);">
                         <option value="%">--</option>
                         <?php
@@ -801,17 +801,17 @@ if ($add_type == 'multiple') {
                     }
                     if (!empty($addProcess)) {
                         echo '<button name="next" class="btn btn-success" type="button" value="" onclick="valide()" >'
-                            .get_lang('FinishSessionCreation').'</button>';
+                            .get_lang('Finish session creation').'</button>';
                     } else {
                         echo '<button name="next" class="btn btn-success" type="button" value="" onclick="valide()" >'
-                            .get_lang('SubscribeUsersToSession').'</button>';
+                            .get_lang('Subscribe users to this session').'</button>';
                     }
                     ?>
                 </div>
             </div>
 
             <div class="col-md-4">
-                <label><?php echo get_lang('UserListInSession'); ?> :</label>
+                <label><?php echo get_lang('List of users registered in this session'); ?> :</label>
                 <select id="destination_users" name="sessionUsersList[]" multiple="multiple" size="15"
                         class="form-control">
                     <?php

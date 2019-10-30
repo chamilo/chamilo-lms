@@ -43,7 +43,7 @@ function minItem(item) {
 
 $interbreadcrumb[] = [
     'url' => Category::getUrl().'selectcat=1',
-    'name' => get_lang('ToolGradebook'),
+    'name' => get_lang('Assessments'),
 ];
 
 $select_cat = intval($_GET['selectcat']);
@@ -84,7 +84,7 @@ if ($scoreform->validate()) {
     if (!$ranges_ok) {
         Display::addFlash(
             Display::return_message(
-                get_lang('NoUniqueScoreRanges'),
+                get_lang('There is no unique score range possibility.'),
                 'error',
                 false
             )
@@ -106,7 +106,7 @@ if ($scoreform->validate()) {
     }
 
     Display::addFlash(
-        Display::return_message(get_lang('ScoringUpdated'), 'confirm', false)
+        Display::return_message(get_lang('Skills ranking updated'), 'confirm', false)
     );
 
     header('Location:'.api_get_self().'?selectcat='.$select_cat.'&'.api_get_cidreq());
@@ -114,6 +114,6 @@ if ($scoreform->validate()) {
 }
 
 $this_section = SECTION_COURSES;
-Display::display_header(get_lang('ScoreEdit'));
+Display::display_header(get_lang('Skills ranking'));
 $scoreform->display();
 Display::display_footer();

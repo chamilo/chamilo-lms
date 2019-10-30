@@ -45,11 +45,11 @@ if (empty($courseCode) || empty($sessionId)) {
 }
 
 $this_section = SECTION_COURSES;
-$nameTools = get_lang('CopyCourse');
+$nameTools = get_lang('Copy course');
 $returnLink = api_get_path(WEB_CODE_PATH).'course_info/maintenance_coach.php?'.api_get_cidreq();
 $interbreadcrumb[] = [
     'url' => $returnLink,
-    'name' => get_lang('Maintenance'),
+    'name' => get_lang('Backup'),
 ];
 
 // Database Table Definitions
@@ -118,14 +118,14 @@ function displayForm()
     // Link back to the documents overview
     $html .= '<a href="'.$returnLink.'">'.Display::return_icon(
             'back.png',
-        get_lang('BackTo').' '.get_lang('Maintenance'),
+        get_lang('Back to').' '.get_lang('Backup'),
         '',
         ICON_SIZE_MEDIUM
         ).'</a>';
     $html .= '</div>';
 
     $html .= Display::return_message(
-            get_lang('CopyCourseFromSessionToSessionExplanation')
+            get_lang('Copy courseFromSessionToSessionExplanation')
     );
 
     $html .= '<form name="formulaire" method="post" action="'.api_get_self().'?'.api_get_cidreq().'" >';
@@ -176,17 +176,17 @@ function displayForm()
     $html .= '</tr></table>';
 
     $html .= "<fieldset>";
-    $html .= '<legend>'.get_lang('TypeOfCopy').' <small>('.get_lang('CopyOnlySessionItems').')</small></legend>';
+    $html .= '<legend>'.get_lang('Type of copy').' <small>('.get_lang('Copy only session items').')</small></legend>';
     $html .= '<label class="radio"><input type="radio" id="copy_option_1" name="copy_option" value="full_copy" checked="checked"/>';
-    $html .= get_lang('FullCopy').'</label>';
+    $html .= get_lang('Full copy').'</label>';
     $html .= '<label class="radio"><input type="radio" id="copy_option_2" name="copy_option" value="select_items"/>';
-    $html .= ' '.get_lang('LetMeSelectItems').'</label><br/>';
+    $html .= ' '.get_lang('Let me select learning objects').'</label><br/>';
 
     $html .= "</fieldset>";
 
     $html .= '<button class="save" type="submit" onclick="javascript:if(!confirm('."'".addslashes(
-            api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES)
-        )."'".')) return false;">'.get_lang('CopyCourse').'</button>';
+            api_htmlentities(get_lang('Please confirm your choice'), ENT_QUOTES)
+        )."'".')) return false;">'.get_lang('Copy course').'</button>';
     $html .= '</form>';
     echo $html;
 }
@@ -298,7 +298,7 @@ if (($action === 'course_select_form') ||
 
         $cr = new CourseRestorer($course);
         $cr->restore($destinationCourse, $destinationSession);
-        echo Display::return_message(get_lang('CopyFinished'), 'confirmation');
+        echo Display::return_message(get_lang('Copying is finished'), 'confirmation');
 
         displayForm();
     } else {
@@ -325,7 +325,7 @@ if (($action === 'course_select_form') ||
             //We need only one value
             if (count($arrCourseOrigin) > 1 || count($arrCourseDestination) > 1) {
                 echo Display::return_message(
-                    get_lang('YouMustSelectACourseFromOriginalSession'),
+                    get_lang('You must select a course from original session'),
                     'error'
                 );
             } else {
@@ -338,13 +338,13 @@ if (($action === 'course_select_form') ||
                 );
                 $cr = new CourseRestorer($course);
                 $cr->restore($courseDestination, $destinationSession);
-                echo Display::return_message(get_lang('CopyFinished'), 'confirmation');
+                echo Display::return_message(get_lang('Copying is finished'), 'confirmation');
             }
 
             displayForm();
         } else {
             echo Display::return_message(
-                get_lang('YouMustSelectACourseFromOriginalSession'),
+                get_lang('You must select a course from original session'),
                 'error'
             );
             displayForm();
@@ -354,7 +354,7 @@ if (($action === 'course_select_form') ||
     // Else, if a CourseSelectForm is requested, show it
     if (api_get_setting('show_glossary_in_documents') != 'none') {
         echo Display::return_message(
-            get_lang('ToExportDocumentsWithGlossaryYouHaveToSelectGlossary'),
+            get_lang('To export a document that has glossary terms with its references to the glossary, you have to make sure you include the glossary tool in the export'),
             'normal'
         );
     }
@@ -371,7 +371,7 @@ if (($action === 'course_select_form') ||
 
     if (!empty($destinationSession)) {
         echo Display::return_message(
-            get_lang('ToExportLearnpathWithQuizYouHaveToSelectQuiz'),
+            get_lang('If you want to export a course containing a test, you have to make sure the corresponding tests are included in the export, so you have to select them in the list of tests.'),
             'normal'
         );
 

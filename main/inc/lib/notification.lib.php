@@ -1,6 +1,10 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Hook\HookNotificationContent;
+use Chamilo\CoreBundle\Hook\HookNotificationTitle;
+
 /**
  * Notification class
  * This class provides methods for the Notification management.
@@ -149,7 +153,7 @@ class Notification extends Model
      */
     public function formatTitle($title, $senderInfo, $forceTitleWhenSendingEmail = false)
     {
-        $hook = HookNotificationTitle::create();
+        $hook = Container::instantiateHook(HookNotificationTitle::class);
         if (!empty($hook)) {
             $hook->setEventData(['title' => $title]);
             $data = $hook->notifyNotificationTitle(HOOK_EVENT_TYPE_PRE);
@@ -169,7 +173,7 @@ class Notification extends Model
                         null,
                         PERSON_NAME_EMAIL_ADDRESS
                     );
-                    $newTitle .= sprintf(get_lang('YouHaveANewMessageFromX'), $senderName);
+                    $newTitle .= sprintf(get_lang('You have a new message from %s'), $senderName);
                 }
                 break;
             case self::NOTIFICATION_TYPE_DIRECT_MESSAGE:
@@ -183,13 +187,13 @@ class Notification extends Model
                         null,
                         PERSON_NAME_EMAIL_ADDRESS
                     );
-                    $newTitle .= sprintf(get_lang('YouHaveANewInvitationFromX'), $senderName);
+                    $newTitle .= sprintf(get_lang('You have a new invitation from %s'), $senderName);
                 }
                 break;
             case self::NOTIFICATION_TYPE_GROUP:
                 if (!empty($senderInfo)) {
                     $senderName = $senderInfo['group_info']['name'];
-                    $newTitle .= sprintf(get_lang('YouHaveReceivedANewMessageInTheGroupX'), $senderName);
+                    $newTitle .= sprintf(get_lang('You have received a new message in group %s'), $senderName);
                     $senderName = api_get_person_name(
                         $senderInfo['user_info']['firstname'],
                         $senderInfo['user_info']['lastname'],
@@ -368,7 +372,7 @@ class Notification extends Model
      * */
     public function formatContent($messageId, $content, $senderInfo)
     {
-        $hook = HookNotificationContent::create();
+        $hook = Container::instantiateHook(HookNotificationContent::class);
         if (!empty($hook)) {
             $hook->setEventData(['content' => $content]);
             $data = $hook->notifyNotificationContent(HOOK_EVENT_TYPE_PRE);
@@ -391,7 +395,7 @@ class Notification extends Model
             case self::NOTIFICATION_TYPE_DIRECT_MESSAGE:
                 $newMessageText = '';
                 $linkToNewMessage = Display::url(
-                    get_lang('SeeMessage'),
+                    get_lang('See message'),
                     api_get_path(WEB_CODE_PATH).'messages/view_message.php?id='.$messageId
                 );
                 break;
@@ -402,24 +406,24 @@ class Notification extends Model
                 }
                 if (!empty($senderInfo)) {
                     $newMessageText = sprintf(
-                        get_lang('YouHaveANewMessageFromX'),
+                        get_lang('You have a new message from %s'),
                         $senderInfoName
                     );
                 }
                 $linkToNewMessage = Display::url(
-                    get_lang('SeeMessage'),
+                    get_lang('See message'),
                     api_get_path(WEB_CODE_PATH).'messages/view_message.php?id='.$messageId
                 );
                 break;
             case self::NOTIFICATION_TYPE_INVITATION:
                 if (!empty($senderInfo)) {
                     $newMessageText = sprintf(
-                        get_lang('YouHaveANewInvitationFromX'),
+                        get_lang('You have a new invitation from %s'),
                         $senderInfoName
                     );
                 }
                 $linkToNewMessage = Display::url(
-                    get_lang('SeeInvitation'),
+                    get_lang('See invitation'),
                     api_get_path(WEB_CODE_PATH).'social/invitations.php'
                 );
                 break;
@@ -427,7 +431,7 @@ class Notification extends Model
                 $topicPage = isset($_REQUEST['topics_page_nr']) ? (int) $_REQUEST['topics_page_nr'] : 0;
                 if (!empty($senderInfo)) {
                     $senderName = $senderInfo['group_info']['name'];
-                    $newMessageText = sprintf(get_lang('YouHaveReceivedANewMessageInTheGroupX'), $senderName);
+                    $newMessageText = sprintf(get_lang('You have received a new message in group %s'), $senderName);
                     $senderName = Display::url(
                         $senderInfoName,
                         api_get_path(WEB_CODE_PATH).'social/profile.php?'.$senderInfo['user_info']['user_id']
@@ -435,7 +439,7 @@ class Notification extends Model
                     $newMessageText .= '<br />'.get_lang('User').': '.$senderName;
                 }
                 $groupUrl = api_get_path(WEB_CODE_PATH).'social/group_topics.php?id='.$senderInfo['group_info']['id'].'&topic_id='.$senderInfo['group_info']['topic_id'].'&msg_id='.$senderInfo['group_info']['msg_id'].'&topics_page_nr='.$topicPage;
-                $linkToNewMessage = Display::url(get_lang('SeeMessage'), $groupUrl);
+                $linkToNewMessage = Display::url(get_lang('See message'), $groupUrl);
                 break;
         }
         $preferenceUrl = api_get_path(WEB_CODE_PATH).'auth/profile.php';
@@ -453,7 +457,7 @@ class Notification extends Model
         // You have received this message because you are subscribed text
         $content = $content.'<br /><hr><i>'.
             sprintf(
-                get_lang('YouHaveReceivedThisNotificationBecauseYouAreSubscribedOrInvolvedInItToChangeYourNotificationPreferencesPleaseClickHereX'),
+                get_lang('You have received this notification because you are subscribed or involved in it to change your notification preferences please click here: %s'),
                 Display::url($preferenceUrl, $preferenceUrl)
             ).'</i>';
 
@@ -489,9 +493,11 @@ class Notification extends Model
             return false;
         }
 
-        $content = str_replace(['<br>', '<br/>', '<br />'], "\n", $content);
         $content = strip_tags($content);
-        $content = html_entity_decode($content, ENT_QUOTES);
+        $content = explode("\n", $content);
+        $content = array_map('trim', $content);
+        $content = array_filter($content);
+        $content = implode(PHP_EOL, $content);
 
         $gcmRegistrationIds = [];
         foreach ($userIds as $userId) {
@@ -523,6 +529,12 @@ class Notification extends Model
                 'title' => $title,
                 'message' => $content,
             ],
+            'notification' => [
+                'title' => $title,
+                'body' => $content,
+                'sound' => 'default',
+            ],
+            'collapse_key' => get_lang('Messages'),
         ]);
 
         $ch = curl_init();

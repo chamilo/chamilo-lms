@@ -81,15 +81,15 @@ switch ($action) {
             $db['graph_result'] = grapher($sql_result, $start_date, $end_date, $type);
         } else {
             $db['result'] = Display::return_message(
-                get_lang('NoDataAvailable'),
+                get_lang('No data available'),
                 'warning'
             );
             $db['graph_result'] = Display::return_message(
-                get_lang('NoDataAvailable'),
+                get_lang('No data available'),
                 'warning'
             );
             $db['stats'] = Display::return_message(
-                get_lang('NoDataAvailable'),
+                get_lang('No data available'),
                 'warning'
             );
         }

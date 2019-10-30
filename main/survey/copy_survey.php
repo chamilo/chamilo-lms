@@ -17,7 +17,7 @@ if (!api_is_allowed_to_edit()) {
 // Breadcrumbs
 $interbreadcrumb[] = [
     'url' => api_get_path(WEB_CODE_PATH).'survey/survey_list.php?'.api_get_cidreq(),
-    'name' => get_lang('SurveyList'),
+    'name' => get_lang('Survey list'),
 ];
 
 // The section (for the tabs)
@@ -45,14 +45,14 @@ $form->addElement(
 );
 $form->addSelectAjax(
     'destination_course',
-    get_lang('SelectDestinationCourse'),
+    get_lang('Select target course'),
     null,
     [
         'url' => api_get_path(WEB_AJAX_PATH).'course.ajax.php?a=get_my_courses_and_sessions&'.api_get_cidreq(),
     ]
 );
 
-$form->addButtonCopy(get_lang('CopySurvey'));
+$form->addButtonCopy(get_lang('Copy survey'));
 
 // Add Security token
 $token = Security::get_existing_token();
@@ -74,17 +74,17 @@ if ($form->validate() && Security::check_token('post')) {
     if ($surveyCopyId) {
         // Empty the copied survey
         SurveyManager::emptySurveyFromId($surveyCopyId);
-        Display::addFlash(Display::return_message(get_lang('SurveyCopied')));
+        Display::addFlash(Display::return_message(get_lang('Survey copied')));
     } else {
-        Display::addFlash(Display::return_message(get_lang('ThereWasAnError'), 'warning'));
+        Display::addFlash(Display::return_message(get_lang('There was an error.'), 'warning'));
     }
 
     header('Location: '.api_get_self().'?'.api_get_cidreq().'&survey_id='.$surveyId);
     exit;
 }
 
-Display::display_header(get_lang('CopySurvey'));
-echo Display::page_header(get_lang('CopySurvey'));
+Display::display_header(get_lang('Copy survey'));
+echo Display::page_header(get_lang('Copy survey'));
 $form->display();
 
 Display::display_footer();

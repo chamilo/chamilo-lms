@@ -11,8 +11,8 @@
  */
 class ReadingComprehension extends UniqueAnswer
 {
-    public static $typePicture = 'reading-comprehension.png';
-    public static $explanationLangVar = 'ReadingComprehension';
+    public $typePicture = 'reading-comprehension.png';
+    public $explanationLangVar = 'ReadingComprehension';
 
     /**
      * Defines the different speeds of scrolling for the reading window,
@@ -78,7 +78,7 @@ class ReadingComprehension extends UniqueAnswer
         if (empty($text)) {
             // We have an issue here... how do we treat this case?
             // For now, let's define a default case
-            $text = get_lang('NoExercise');
+            $text = get_lang('No tests');
         }
         $words = str_word_count($text, 2, '0..9');
         $indexes = array_keys($words);
@@ -141,7 +141,7 @@ class ReadingComprehension extends UniqueAnswer
         $form->addTextarea('questionDescription', get_lang('Text'), ['rows' => 20]);
         // question name
         if (api_get_configuration_value('save_titles_as_html')) {
-            $editorConfig = ['ToolbarSet' => 'Minimal'];
+            $editorConfig = ['ToolbarSet' => 'TitleAsHtml'];
             $form->addHtmlEditor(
                 'questionName',
                 get_lang('Question'),
@@ -155,10 +155,8 @@ class ReadingComprehension extends UniqueAnswer
         }
 
         // hidden values
-        $my_id = isset($_REQUEST['myid']) ? intval($_REQUEST['myid']) : null;
-        $form->addElement('hidden', 'myid', $my_id);
-        $form->addRule('questionName', get_lang('GiveQuestion'), 'required');
-        $isContent = isset($_REQUEST['isContent']) ? intval($_REQUEST['isContent']) : null;
+        $form->addRule('questionName', get_lang('Please type the question'), 'required');
+        $isContent = isset($_REQUEST['isContent']) ? (int) $_REQUEST['isContent'] : null;
 
         // default values
         $defaults = [];
@@ -172,12 +170,8 @@ class ReadingComprehension extends UniqueAnswer
             $form->setDefaults($defaults);
         }
 
-        if (!empty($_REQUEST['myid'])) {
+        if (!isset($_GET['newQuestion']) || $isContent) {
             $form->setDefaults($defaults);
-        } else {
-            if ($isContent == 1) {
-                $form->setDefaults($defaults);
-            }
         }
     }
 
@@ -187,11 +181,11 @@ class ReadingComprehension extends UniqueAnswer
     public static function get_default_levels()
     {
         $select_level = [
-            1 => sprintf(get_lang('ReadingComprehensionLevelX'), self::$speeds[1]),
-            2 => sprintf(get_lang('ReadingComprehensionLevelX'), self::$speeds[2]),
-            3 => sprintf(get_lang('ReadingComprehensionLevelX'), self::$speeds[3]),
-            4 => sprintf(get_lang('ReadingComprehensionLevelX'), self::$speeds[4]),
-            5 => sprintf(get_lang('ReadingComprehensionLevelX'), self::$speeds[5]),
+            1 => sprintf(get_lang('%s words per minute'), self::$speeds[1]),
+            2 => sprintf(get_lang('%s words per minute'), self::$speeds[2]),
+            3 => sprintf(get_lang('%s words per minute'), self::$speeds[3]),
+            4 => sprintf(get_lang('%s words per minute'), self::$speeds[4]),
+            5 => sprintf(get_lang('%s words per minute'), self::$speeds[5]),
         ];
 
         return $select_level;

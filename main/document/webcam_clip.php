@@ -17,7 +17,7 @@ require_once __DIR__.'/../inc/global.inc.php';
 
 $_SESSION['whereami'] = 'document/webcamclip';
 $this_section = SECTION_COURSES;
-$nameTools = get_lang('WebCamClip');
+$nameTools = get_lang('Webcam Clip');
 $htmlHeadXtra[] = api_get_js_simple(api_get_path(WEB_PATH).'web/assets/webcamjs/webcam.js');
 $htmlHeadXtra[] = api_get_js('webcam_recorder.js');
 $groupRights = Session::read('group_member_with_upload_rights');
@@ -81,7 +81,7 @@ if (!is_dir($filepath)) {
 if (!empty($groupId)) {
     $interbreadcrumb[] = [
         "url" => "../group/group_space.php?".api_get_cidreq(),
-        "name" => get_lang('GroupSpace'),
+        "name" => get_lang('Group area'),
     ];
     $noPHP_SELF = true;
     $group = GroupManager::get_group_properties($groupId);
@@ -142,7 +142,7 @@ $actions = Display::toolbarAction(
         Display::url(
             Display::return_icon(
                 'back.png',
-                get_lang('BackTo').' '.get_lang('DocumentsOverview'),
+                get_lang('Back to').' '.get_lang('Documents overview'),
                 [],
                 ICON_SIZE_MEDIUM
             ),
@@ -159,7 +159,7 @@ $template->assign('filename', 'video_clip.jpg');
 $layout = $template->get_template('document/webcam.tpl');
 $content = $template->fetch($layout);
 
-$template->assign('header', get_lang('TakeYourPhotos'));
+$template->assign('header', get_lang('Take your photos'));
 $template->assign('actions', $actions);
 $template->assign('content', $content);
 $template->display_one_col_template();

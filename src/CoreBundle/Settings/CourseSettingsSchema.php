@@ -6,8 +6,8 @@ namespace Chamilo\CoreBundle\Settings;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Manager\CourseManager;
 use Chamilo\CoreBundle\Form\Type\YesNoType;
-use Chamilo\CourseBundle\Tool\BaseTool;
-use Chamilo\CourseBundle\ToolChain;
+use Chamilo\CoreBundle\Tool\AbstractTool;
+use Chamilo\CoreBundle\ToolChain;
 use Chamilo\SettingsBundle\Transformer\ArrayToIdentifierTransformer;
 use Sylius\Bundle\ResourceBundle\Form\DataTransformer\ResourceToIdentifierTransformer;
 use Sylius\Bundle\SettingsBundle\Schema\AbstractSettingsBuilder;
@@ -18,8 +18,6 @@ use Symfony\Component\Form\FormBuilderInterface;
 
 /**
  * Class CourseSettingsSchema.
- *
- * @package Chamilo\CoreBundle\Settings
  */
 class CourseSettingsSchema extends AbstractSettingsSchema
 {
@@ -33,10 +31,12 @@ class CourseSettingsSchema extends AbstractSettingsSchema
      */
     protected $courseManager;
 
+    protected $repository;
+
     /**
      * @param ToolChain $tools
      */
-    public function setToolChain(ToolChain $tools)
+    public function setToolChain(ToolChain $tools): void
     {
         $this->toolChain = $tools;
     }
@@ -44,7 +44,7 @@ class CourseSettingsSchema extends AbstractSettingsSchema
     /**
      * @param CourseManager $manager
      */
-    public function setCourseManager($manager)
+    public function setCourseManager($manager): void
     {
         $this->courseManager = $manager;
     }
@@ -52,10 +52,10 @@ class CourseSettingsSchema extends AbstractSettingsSchema
     /**
      * @return array
      */
-    public function getProcessedToolChain()
+    public function getProcessedToolChain(): array
     {
         $tools = [];
-        /** @var BaseTool $tool */
+        /** @var AbstractTool $tool */
         foreach ($this->toolChain->getTools() as $tool) {
             $name = $tool->getName();
             $tools[$name] = $name;
@@ -70,7 +70,6 @@ class CourseSettingsSchema extends AbstractSettingsSchema
     public function buildSettings(AbstractSettingsBuilder $builder)
     {
         $tools = $this->getProcessedToolChain();
-        $em = $this->courseManager->getEntityManager();
 
         $builder
             ->setDefaults(
@@ -123,7 +122,7 @@ class CourseSettingsSchema extends AbstractSettingsSchema
             )
             ->setTransformer(
                 'course_creation_use_template',
-                new ResourceToIdentifierTransformer($em->getRepository('ChamiloCoreBundle:Course'))
+                new ResourceToIdentifierTransformer($this->getRepository())
             )
         ;
 
@@ -152,10 +151,10 @@ class CourseSettingsSchema extends AbstractSettingsSchema
                 ChoiceType::class,
                 [
                     'choices' => [
-                        'HomepageView2column' => '2column',
-                        'HomepageView3column' => '3column',
-                        'HomepageViewVerticalActivity' => 'vertical_activity',
-                        'HomepageViewActivity' => 'activity',
+                        //'HomepageView2column' => '2column',
+                        //'HomepageView3column' => '3column',
+                        //'HomepageViewVerticalActivity' => 'vertical_activity',
+                        //'HomepageViewActivity' => 'activity',
                         'HomepageViewActivityBig' => 'activity_big',
                     ],
                 ]

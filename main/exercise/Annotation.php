@@ -6,13 +6,11 @@
  * Allow instanciate an object of type HotSpot extending the class question.
  *
  * @author Angel Fernando Quiroz Campos <angel.quiroz@beeznest.com>
- *
- * @package chamilo.
  */
 class Annotation extends Question
 {
-    public static $typePicture = 'annotation.png';
-    public static $explanationLangVar = 'Annotation';
+    public $typePicture = 'annotation.png';
+    public $explanationLangVar = 'Annotation';
 
     /**
      * Annotation constructor.
@@ -38,7 +36,7 @@ class Annotation extends Question
         $form->addElement(
             'number',
             'weighting',
-            get_lang('Weighting'),
+            get_lang('Score'),
             ['step' => '0.1']
         );
 
@@ -71,18 +69,18 @@ class Annotation extends Question
                         true
                     )
                 ),
-                get_lang('UploadJpgPicture'),
+                get_lang('Upload image (jpg, png or gif) to apply hotspots.'),
             ]
         );
 
-        $form->addButtonSave(get_lang('GoToQuestion'), 'submitQuestion');
+        $form->addButtonSave(get_lang('Go to question'), 'submitQuestion');
         $form->addRule(
             'imageUpload',
-            get_lang('OnlyImagesAllowed'),
+            get_lang('Only PNG, JPG or GIF images allowed'),
             'filetype',
             ['jpg', 'jpeg', 'png', 'gif']
         );
-        $form->addRule('imageUpload', get_lang('NoImage'), 'uploadedfile');
+        $form->addRule('imageUpload', get_lang('Please select an image'), 'uploadedfile');
     }
 
     /**
@@ -127,7 +125,7 @@ class Annotation extends Question
     /**
      * {@inheritdoc}
      */
-    public function return_header($exercise, $counter = null, $score = [])
+    public function return_header(Exercise $exercise, $counter = null, $score = [])
     {
         $score['revised'] = $this->isQuestionWaitingReview($score);
 

@@ -1,8 +1,7 @@
 <?php
-/* vim: set expandtab tabstop=4 shiftwidth=4 softtabstop=4: */
 
 /**
- * HTML class for a textarea type field
+ * HTML class for a textarea type field.
  *
  * PHP versions 4 and 5
  *
@@ -14,36 +13,43 @@
  *
  * @category    HTML
  * @package     HTML_QuickForm
+ *
  * @author      Adam Daniel <adaniel1@eesus.jnj.com>
  * @author      Bertrand Mansion <bmansion@mamasam.com>
  * @copyright   2001-2009 The PHP Group
  * @license     http://www.php.net/license/3_01.txt PHP License 3.01
+ *
  * @version     CVS: $Id: textarea.php,v 1.13 2009/04/04 21:34:04 avb Exp $
- * @link        http://pear.php.net/package/HTML_QuickForm
+ *
+ * @see        http://pear.php.net/package/HTML_QuickForm
  */
 
 /**
- * HTML class for a textarea type field
+ * HTML class for a textarea type field.
  *
  * @category    HTML
  * @package     HTML_QuickForm
+ *
  * @author      Adam Daniel <adaniel1@eesus.jnj.com>
  * @author      Bertrand Mansion <bmansion@mamasam.com>
+ *
  * @version     Release: 3.2.11
+ *
  * @since       1.0
  */
 class HTML_QuickForm_textarea extends HTML_QuickForm_element
 {
     /**
-     * Field value
-     * @var       string
+     * Field value.
+     *
+     * @var string
+     *
      * @since     1.0
-     * @access    private
      */
     public $_value;
 
     /**
-     * Class constructor
+     * Class constructor.
      *
      * @param string       $elementName Input field name attribute
      * @param string|array $label       Label(s) for a field
@@ -58,30 +64,37 @@ class HTML_QuickForm_textarea extends HTML_QuickForm_element
         $columnsSize = isset($attributes['cols-size']) ? $attributes['cols-size'] : null;
         $this->setColumnsSize($columnsSize);
         parent::__construct($elementName, $label, $attributes);
+
+        $id = $this->getAttribute('id');
+
+        if (empty($id)) {
+            $name = $this->getAttribute('name');
+            $this->setAttribute('id', uniqid($name.'_'));
+        }
+
         $this->_persistantFreeze = true;
         $this->_type = 'textarea';
         $this->_value = null;
     }
 
     /**
-     * Sets the input field name
+     * Sets the input field name.
      *
-     * @param     string    $name   Input field name attribute
+     * @param string $name Input field name attribute
+     *
      * @since     1.0
-     * @access    public
-     * @return    void
      */
     public function setName($name)
     {
-        $this->updateAttributes(array('name' => $name));
+        $this->updateAttributes(['name' => $name]);
     }
 
     /**
-     * Returns the element name
+     * Returns the element name.
      *
      * @since     1.0
-     * @access    public
-     * @return    string
+     *
+     * @return string
      */
     public function getName()
     {
@@ -89,12 +102,11 @@ class HTML_QuickForm_textarea extends HTML_QuickForm_element
     }
 
     /**
-     * Sets value for textarea element
+     * Sets value for textarea element.
      *
-     * @param     string    $value  Value for textarea element
+     * @param string $value Value for textarea element
+     *
      * @since     1.0
-     * @access    public
-     * @return    void
      */
     public function setValue($value)
     {
@@ -102,11 +114,11 @@ class HTML_QuickForm_textarea extends HTML_QuickForm_element
     }
 
     /**
-     * Returns the value of the form element
+     * Returns the value of the form element.
      *
      * @since     1.0
-     * @access    public
-     * @return    string
+     *
+     * @return string
      */
     public function getValue()
     {
@@ -114,37 +126,35 @@ class HTML_QuickForm_textarea extends HTML_QuickForm_element
     }
 
     /**
-     * Sets height in rows for textarea element
+     * Sets height in rows for textarea element.
      *
-     * @param     string    $rows  Height expressed in rows
+     * @param string $rows Height expressed in rows
+     *
      * @since     1.0
-     * @access    public
-     * @return    void
      */
     public function setRows($rows)
     {
-        $this->updateAttributes(array('rows' => $rows));
+        $this->updateAttributes(['rows' => $rows]);
     }
 
     /**
-     * Sets width in cols for textarea element
+     * Sets width in cols for textarea element.
      *
-     * @param     string    $cols  Width expressed in cols
+     * @param string $cols Width expressed in cols
+     *
      * @since     1.0
-     * @access    public
-     * @return    void
      */
     public function setCols($cols)
     {
-        $this->updateAttributes(array('cols' => $cols));
+        $this->updateAttributes(['cols' => $cols]);
     }
 
     /**
-     * Returns the textarea element in HTML
+     * Returns the textarea element in HTML.
      *
      * @since     1.0
-     * @access    public
-     * @return    string
+     *
+     * @return string
      */
     public function toHtml()
     {
@@ -152,32 +162,33 @@ class HTML_QuickForm_textarea extends HTML_QuickForm_element
             return $this->getFrozenHtml();
         } else {
             return $this->_getTabs().
-                   '<textarea' . $this->_getAttrString($this->_attributes) . '>' .
+                   '<textarea'.$this->_getAttrString($this->_attributes).'>'.
                    // because we wrap the form later we don't want the text indented
                    // Modified by Ivan Tcholakov, 16-MAR-2010.
                    //preg_replace("/(\r\n|\n|\r)/", '&#010;', htmlspecialchars($this->_value)) .
-                   preg_replace("/(\r\n|\n|\r)/", '&#010;', $this->getCleanValue()) .
-                   //
+                   preg_replace("/(\r\n|\n|\r)/", '&#010;', $this->getCleanValue()).
+
                    '</textarea>';
         }
     }
 
     /**
-     * Returns the value of field without HTML tags (in this case, value is changed to a mask)
+     * Returns the value of field without HTML tags (in this case, value is changed to a mask).
      *
      * @since     1.0
-     * @access    public
-     * @return    string
+     *
+     * @return string
      */
     public function getFrozenHtml()
     {
         $value = $this->getCleanValue();
         if ($this->getAttribute('wrap') == 'off') {
-            $html = $this->_getTabs() . '<pre>' . $value."</pre>\n";
+            $html = $this->_getTabs().'<pre>'.$value."</pre>\n";
         } else {
             $html = nl2br($value)."\n";
         }
-        return $html . $this->_getPersistantData();
+
+        return $html.$this->_getPersistantData();
     }
 
     /**
@@ -207,7 +218,6 @@ class HTML_QuickForm_textarea extends HTML_QuickForm_element
                 </div>';
                 break;
             case FormValidator::LAYOUT_HORIZONTAL:
-
                 $template = '
                 <div class="form-group row {error_class}">
                     <label {label-for} class="col-sm-'.$size[0].' col-form-label" >
@@ -232,14 +242,12 @@ class HTML_QuickForm_textarea extends HTML_QuickForm_element
                         <!-- END label_3 -->
                     </div>
                 </div>';
-
-                if(isset($custom['card-full']) && $custom['card-full'] == true){
+                if (isset($custom['data-block']) && $custom['data-block'] == true) {
                     $template = '
                     <label {label-for}>{label}</label>
                     <div class="card-textarea">
                          {element}
-                    </div>
-                    
+                    </div>                    
                     ';
                 }
 

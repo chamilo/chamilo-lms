@@ -1,9 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-/**
- *  @package chamilo.admin
- */
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 
@@ -19,7 +16,7 @@ if (api_get_setting('gradebook_enable_grade_model') != 'true') {
 $htmlHeadXtra[] = api_get_jqgrid_js();
 
 // setting breadcrumbs
-$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('PlatformAdmin')];
+$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('Administration')];
 
 $action = isset($_GET['action']) ? $_GET['action'] : null;
 
@@ -27,13 +24,13 @@ $check = Security::check_token('request');
 $token = Security::get_token();
 
 if ($action === 'add') {
-    $interbreadcrumb[] = ['url' => 'grade_models.php', 'name' => get_lang('GradeModel')];
+    $interbreadcrumb[] = ['url' => 'grade_models.php', 'name' => get_lang('Grading model')];
     $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Add')];
 } elseif ($action == 'edit') {
-    $interbreadcrumb[] = ['url' => 'grade_models.php', 'name' => get_lang('GradeModel')];
+    $interbreadcrumb[] = ['url' => 'grade_models.php', 'name' => get_lang('Grading model')];
     $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Edit')];
 } else {
-    $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('GradeModel')];
+    $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Grading model')];
 }
 
 $htmlHeadXtra[] = '<script>
@@ -76,7 +73,7 @@ $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_grade_models';
 $columns = [
     get_lang('Name'),
     get_lang('Description'),
-    get_lang('Actions'),
+    get_lang('Detail'),
 ];
 
 //Column config
@@ -112,7 +109,7 @@ $extra_params['height'] = 'auto';
 //With this function we can add actions to the jgrid (edit, delete, etc)
 $action_links = 'function action_formatter(cellvalue, options, rowObject) {
      return \'<a href="?action=edit&id=\'+options.rowId+\'">'.Display::return_icon('edit.png', get_lang('Edit'), '', ICON_SIZE_SMALL).'</a>'.
-     '&nbsp;<a onclick="javascript:if(!confirm('."\'".addslashes(api_htmlentities(get_lang("ConfirmYourChoice"), ENT_QUOTES))."\'".')) return false;"  href="?sec_token='.$token.'&action=delete&id=\'+options.rowId+\'">'.Display::return_icon('delete.png', get_lang('Delete'), '', ICON_SIZE_SMALL).'</a>'.
+     '&nbsp;<a onclick="javascript:if(!confirm('."\'".addslashes(api_htmlentities(get_lang("Please confirm your choice"), ENT_QUOTES))."\'".')) return false;"  href="?sec_token='.$token.'&action=delete&id=\'+options.rowId+\'">'.Display::return_icon('delete.png', get_lang('Delete'), '', ICON_SIZE_SMALL).'</a>'.
      '\';
 }';
 ?>
@@ -151,7 +148,7 @@ switch ($action) {
                 $values = $form->exportValues();
                 $res = $obj->save($values);
                 if ($res) {
-                    echo Display::return_message(get_lang('ItemAdded'), 'confirm');
+                    echo Display::return_message(get_lang('Item added'), 'confirm');
                 }
             }
             $obj->display();
@@ -176,7 +173,7 @@ switch ($action) {
             if ($check) {
                 $values = $form->exportValues();
                 $res = $obj->update($values);
-                echo Display::return_message(get_lang('ItemUpdated'), 'confirm', false);
+                echo Display::return_message(get_lang('Item updated'), 'confirm', false);
             }
             $obj->display();
         } else {
@@ -195,7 +192,7 @@ switch ($action) {
         if ($check) {
             $res = $obj->delete($_GET['id']);
             if ($res) {
-                echo Display::return_message(get_lang('ItemDeleted'), 'confirm');
+                echo Display::return_message(get_lang('Item deleted'), 'confirm');
             }
         }
         $obj->display();
@@ -204,5 +201,9 @@ switch ($action) {
         $obj->display();
         break;
 }
-echo '<script> $(document).ready(function(){ $("input").removeClass("form-control"); }); </script>';
+echo '<script> 
+$(function () { 
+    $("input").removeClass("form-control"); 
+}); 
+</script>';
 Display::display_footer();

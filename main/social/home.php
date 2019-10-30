@@ -29,54 +29,6 @@ if (api_get_setting('allow_social_tool') !== 'true') {
 
 $userGroup = new UserGroup();
 
-//fast upload image
-/*if (api_get_setting('profile', 'picture') == 'true') {
-    $form = new FormValidator('profile', 'post', 'home.php', null, []);
-
-    //	PICTURE
-    $form->addElement('file', 'picture', get_lang('AddImage'));
-    $form->addProgress();
-    if (!empty($user_data['picture_uri'])) {
-        $form->addElement(
-            'checkbox',
-            'remove_picture',
-            null,
-            get_lang('DelImage')
-        );
-    }
-    $allowed_picture_types = api_get_supported_image_extensions();
-    $form->addRule(
-        'picture',
-        get_lang('OnlyImagesAllowed').' ('.implode(
-            ',',
-            $allowed_picture_types
-        ).')',
-        'filetype',
-        $allowed_picture_types
-    );
-    $form->addButtonSave(get_lang('SaveSettings'), 'apply_change');
-
-    if ($form->validate()) {
-        $user_data = $form->getSubmitValues();
-        // upload picture if a new one is provided
-        if ($_FILES['picture']['size']) {
-            if ($new_picture = UserManager::update_user_picture(
-                api_get_user_id(),
-                $_FILES['picture']['name'],
-                $_FILES['picture']['tmp_name']
-            )) {
-                $table_user = Database::get_main_table(TABLE_MAIN_USER);
-                $sql = "UPDATE $table_user
-                        SET
-                            picture_uri = '$new_picture'
-                        WHERE user_id =  ".api_get_user_id();
-
-                $result = Database::query($sql);
-            }
-        }
-    }
-}*/
-
 SocialManager::handlePosts(api_get_self());
 
 $threadList = SocialManager::getThreadList($user_id);
@@ -85,18 +37,17 @@ if (!empty($threadList)) {
     $threadIdList = array_column($threadList, 'id');
 }
 
-// Social Post Wall
 $posts = SocialManager::getMyWallMessages($user_id, 0, 10, $threadIdList);
 $countPost = $posts['count'];
 $posts = $posts['posts'];
 SocialManager::getScrollJs($countPost, $htmlHeadXtra);
 
 // Block Menu
-$social_menu_block = SocialManager::show_social_menu('home');
+$menu = SocialManager::show_social_menu('home');
 
 $social_search_block = Display::panel(
-    UserManager::getSearchForm(''),
-    get_lang('SearchUsers')
+    UserManager::get_search_form(''),
+    get_lang('Search users')
 );
 
 $social_group_block = SocialManager::getGroupBlock($user_id);
@@ -106,8 +57,9 @@ $friend_html = SocialManager::listMyFriendsBlock($user_id);
 
 // Block Social Sessions
 $social_session_block = null;
-$user_info = api_get_user_info($user_id);
-$sessionList = SessionManager::getSessionsFollowedByUser($user_id, $user_info['status']);
+//$user_info = api_get_user_info($user_id);
+//$sessionList = SessionManager::getSessionsFollowedByUser($user_id, $user_info['status']);
+$sessionList = [];
 
 if (count($sessionList) > 0) {
     $social_session_block = $sessionList;
@@ -130,22 +82,25 @@ $formSearch->addText(
     get_lang('Search'),
     false,
     [
-        'aria-label' => get_lang('SearchUsers'),
+        'aria-label' => get_lang('Search users'),
         'custom' => true,
-        'placeholder' => get_lang('SearchUsersByName'),
+        'placeholder' => get_lang('Search usersByName'),
     ]
 );
 
-$tpl = new Template(get_lang('SocialNetwork'));
+// Added a Jquery Function to return the Preview of OpenGraph URL Content
+$htmlHeadXtra[] = SocialManager::getScriptToGetOpenGraph();
+
+$tpl = new Template(get_lang('Social network'));
 SocialManager::setSocialUserBlock($tpl, $user_id, 'home');
-$tpl->assign('social_wall_block', $wallSocialAddPost);
-$tpl->assign('social_post_wall_block', $posts);
-$tpl->assign('social_menu_block', $social_menu_block);
+$tpl->assign('add_post_form', $wallSocialAddPost);
+$tpl->assign('posts', $posts);
+$tpl->assign('social_menu_block', $menu);
 $tpl->assign('social_auto_extend_link', $socialAutoExtendLink);
 $tpl->assign('search_friends_form', $formSearch->returnForm());
 $tpl->assign('social_friend_block', $friend_html);
 $tpl->assign('social_search_block', $social_search_block);
-$tpl->assign('social_skill_block', SocialManager::getSkillBlock($user_id));
+$tpl->assign('social_skill_block', SocialManager::getSkillBlock($user_id, 'vertical'));
 $tpl->assign('social_group_block', $social_group_block);
 $tpl->assign('session_list', $social_session_block);
 $social_layout = $tpl->get_template('social/home.tpl');

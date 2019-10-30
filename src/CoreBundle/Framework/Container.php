@@ -4,6 +4,14 @@
 namespace Chamilo\CoreBundle\Framework;
 
 use Chamilo\CoreBundle\Component\Editor\Editor;
+use Chamilo\CoreBundle\Hook\Interfaces\HookEventInterface;
+use Chamilo\CoreBundle\Repository\AccessUrlRepository;
+use Chamilo\CoreBundle\Repository\CourseRepository;
+use Chamilo\CoreBundle\ToolChain;
+use Chamilo\CourseBundle\Repository\CDocumentRepository;
+use Chamilo\CourseBundle\Repository\CExerciseCategoryRepository;
+use Chamilo\CourseBundle\Repository\CQuizQuestionCategoryRepository;
+use Chamilo\CourseBundle\Repository\CQuizRepository;
 use Chamilo\PageBundle\Entity\Page;
 use Chamilo\SettingsBundle\Manager\SettingsManager;
 use Sonata\PageBundle\Entity\SiteManager;
@@ -14,13 +22,11 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Security\Core\Authorization\AuthorizationChecker;
 use Symfony\Component\Security\Core\Role\RoleHierarchy;
-use Symfony\Component\Translation\TranslatorInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Class Container
  * This class is a way to access Symfony2 services in legacy Chamilo code.
- *
- * @package Chamilo\CoreBundle\Framework
  */
 class Container
 {
@@ -186,20 +192,14 @@ class Container
     }
 
     /**
-     * @deprecated
-     *
-     * @return \Symfony\Bundle\FrameworkBundle\Routing\Router
-     */
-    public static function getUrlGenerator()
-    {
-        return self::$container->get('router.default');
-    }
-
-    /**
      * @return object|Request
      */
     public static function getRequest()
     {
+        if (self::$container === null) {
+            return null;
+        }
+
         if (!empty(self::$request)) {
             return self::$request;
         }
@@ -207,6 +207,9 @@ class Container
         return self::$container->get('request_stack');
     }
 
+    /**
+     * @param Request $request
+     */
     public static function setRequest($request)
     {
         self::$request = $request;
@@ -321,7 +324,55 @@ class Container
     }
 
     /**
-     * @param UserManager
+     * @return CDocumentRepository
+     */
+    public static function getDocumentRepository()
+    {
+        return self::$container->get('Chamilo\CourseBundle\Repository\CDocumentRepository');
+    }
+
+    /**
+     * @return CQuizRepository
+     */
+    public static function getExerciseRepository()
+    {
+        return self::$container->get('Chamilo\CourseBundle\Repository\CQuizRepository');
+    }
+
+    /**
+     * @return CExerciseCategoryRepository
+     */
+    public static function getExerciseCategoryRepository()
+    {
+        return self::$container->get('Chamilo\CourseBundle\Repository\CExerciseCategoryRepository');
+    }
+
+    /**
+     * @return CQuizQuestionCategoryRepository
+     */
+    public static function getQuestionCategoryRepository()
+    {
+        return self::$container->get('Chamilo\CourseBundle\Repository\CQuizQuestionCategoryRepository');
+    }
+
+    /**
+     * @return AccessUrlRepository
+     */
+    public static function getAccessUrlRepository()
+    {
+        return self::$container->get('Chamilo\CoreBundle\Repository\AccessUrlRepository');
+    }
+
+    /**
+     * @return CourseRepository
+     */
+    public static function getCourseRepository()
+    {
+        return self::$container->get('Chamilo\CoreBundle\Repository\CourseRepository');
+    }
+
+    /**
+     * @param $manager UserManager
      */
     public static function setUserManager($manager)
     {
@@ -337,7 +388,7 @@ class Container
     }
 
     /**
-     * @param UserManager
+     * @param $manager UserManager
      */
     public static function setSiteManager($manager)
     {
@@ -387,11 +438,11 @@ class Container
     }
 
     /**
-     * @return \Chamilo\CourseBundle\ToolChain
+     * @return ToolChain
      */
     public static function getToolChain()
     {
-        return self::$container->get('chamilo_course.tool_chain');
+        return self::$container->get('chamilo_core.tool_chain');
     }
 
     /**
@@ -410,10 +461,8 @@ class Container
         self::setSiteManager($container->get('sonata.page.manager.site'));
 
         \CourseManager::setCourseSettingsManager($container->get('chamilo_course.settings.manager'));
-        \CourseManager::setCourseManager($container->get('chamilo_core.entity.manager.course_manager'));
-
         // Setting course tool chain (in order to create tools to a course)
-        \CourseManager::setToolList($container->get('chamilo_course.tool_chain'));
+        \CourseManager::setToolList($container->get('chamilo_core.tool_chain'));
 
         if ($setSession) {
             self::$session = $container->get('session');
@@ -456,5 +505,17 @@ class Container
         }
 
         return $page;
+    }
+
+    /**
+     * @param string $class
+     *
+     * @throws \Exception
+     *
+     * @return HookEventInterface
+     */
+    public static function instantiateHook(string $class): HookEventInterface
+    {
+        return self::$container->get('chamilo_core.hook_factory')->build($class);
     }
 }

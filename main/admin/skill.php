@@ -53,8 +53,8 @@ if (!empty($item)) {
 }
 $formToDisplay = $form->returnForm();
 
-$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('PlatformAdmin')];
-$interbreadcrumb[] = ['url' => api_get_self(), 'name' => get_lang('ManageSkillsLevels')];
+$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('Administration')];
+$interbreadcrumb[] = ['url' => api_get_self(), 'name' => get_lang('Manage skills levels')];
 
 $tpl = new Template($action);
 switch ($action) {
@@ -69,7 +69,7 @@ switch ($action) {
                 $item->setProfile($profile);
                 $em->persist($item);
                 $em->flush();
-                Display::addFlash(Display::return_message(get_lang('Updated')));
+                Display::addFlash(Display::return_message(get_lang('Update successful')));
             }
             header('Location: '.$listAction);
             exit;

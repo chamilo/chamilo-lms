@@ -6,7 +6,6 @@
 // resetting the course id
 $cidReset = true;
 
-// including some necessary files
 require_once __DIR__.'/../inc/global.inc.php';
 
 ini_set('memory_limit', -1);
@@ -19,7 +18,7 @@ $this_section = SECTION_PLATFORM_ADMIN;
 api_protect_admin_script(true);
 
 // setting breadcrumbs
-$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('PlatformAdmin')];
+$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('Administration')];
 
 $form = new FormValidator(
     'archive_cleanup_form',
@@ -29,7 +28,7 @@ $form = new FormValidator(
     [],
     FormValidator::LAYOUT_BOX
 );
-$form->addButtonSend(get_lang('ArchiveDirCleanupProceedButton'));
+$form->addButtonSend(get_lang('Proceed with cleanup'));
 
 if ($form->validate()) {
     if (function_exists('opcache_reset')) {
@@ -52,15 +51,15 @@ if ($form->validate()) {
     $htaccess = @file_get_contents($archive_path.'.htaccess');
     $result = rmdirr($archive_path, true, true);
     if (false === $result) {
-        Display::addFlash(Display::return_message(get_lang('ArchiveDirCleanupFailed'), 'error'));
+        Display::addFlash(Display::return_message(get_lang('Cleanup of cache and temporary filesFailed'), 'error'));
     } else {
-        Display::addFlash(Display::return_message(get_lang('ArchiveDirCleanupSucceeded')));
+        Display::addFlash(Display::return_message(get_lang('The app/cache/ directory cleanup has been executed successfully.')));
     }
     try {
         \Chamilo\CoreBundle\Composer\ScriptHandler::dumpCssFiles();
-        Display::addFlash(Display::return_message(get_lang('WebFolderRefreshSucceeded')));
+        Display::addFlash(Display::return_message(get_lang('The styles and assets in the web/ folder have been refreshed.')));
     } catch (Exception $e) {
-        Display::addFlash(Display::return_message(get_lang('WebFolderRefreshFailed'), 'error'));
+        Display::addFlash(Display::return_message(get_lang('The styles and assets in the web/ folder could not be refreshed, probably due to a permissions problem. Make sure the web/ folder is writeable by your web server.'), 'error'));
         error_log($e->getMessage());
     }
 
@@ -72,7 +71,7 @@ if ($form->validate()) {
     exit;
 }
 
-Display::display_header(get_lang('ArchiveDirCleanup'));
-echo Display::return_message(get_lang('ArchiveDirCleanupDescr'), 'warning');
+Display::display_header(get_lang('Cleanup of cache and temporary files'));
+echo Display::return_message(get_lang('Cleanup of cache and temporary filesDescr'), 'warning');
 $form->display();
 Display::display_footer();

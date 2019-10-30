@@ -46,6 +46,7 @@ class PDF
         $params['right'] = isset($params['right']) ? $params['right'] : 15;
         $params['top'] = isset($params['top']) ? $params['top'] : 30;
         $params['bottom'] = isset($params['bottom']) ? $params['bottom'] : 30;
+        $params['margin_footer'] = isset($params['margin_footer']) ? $params['margin_footer'] : 8;
 
         $this->params['filename'] = isset($params['filename']) ? $params['filename'] : api_get_local_time();
         $this->params['pdf_title'] = isset($params['pdf_title']) ? $params['pdf_title'] : '';
@@ -61,19 +62,6 @@ class PDF
         $this->params['pdf_date'] = isset($params['pdf_date']) ? $params['pdf_date'] : api_format_date($localTime, DATE_TIME_FORMAT_LONG);
         $this->params['pdf_date_only'] = isset($params['pdf_date']) ? $params['pdf_date'] : api_format_date($localTime, DATE_FORMAT_LONG);
 
-        /*$this->pdf = new Mpdf(
-            'UTF-8',
-            $pageFormat,
-            '',
-            '',
-            $params['left'],
-            $params['right'],
-            $params['top'],
-            $params['bottom'],
-            8,
-            8,
-            $orientation
-        );*/
         $params = [
             'tempDir' => api_get_path(SYS_ARCHIVE_PATH).'mpdf',
             'mode' => 'utf-8',
@@ -124,6 +112,7 @@ class PDF
         $tpl->assign('pdf_content', $content);
 
         // Showing only the current teacher/admin instead the all teacher list name see BT#4080
+        $teacher_list = null;
         if (isset($this->params['show_real_course_teachers']) &&
             $this->params['show_real_course_teachers']
         ) {
@@ -141,7 +130,6 @@ class PDF
             }
         } else {
             $user_info = api_get_user_info();
-
             if ($this->params['show_teacher_as_myself']) {
                 $teacher_list = $user_info['complete_name'];
             }
@@ -204,6 +192,7 @@ class PDF
      * @param bool   $print_title    add title
      * @param bool   $complete_style show header and footer if true
      * @param bool   $addStyle
+     * @param string $mainTitle
      *
      * @return false|null
      */
@@ -213,7 +202,8 @@ class PDF
         $courseCode = null,
         $printTitle = false,
         $complete_style = true,
-        $addStyle = true
+        $addStyle = true,
+        $mainTitle = ''
     ) {
         if (empty($htmlFileArray)) {
             return false;
@@ -248,7 +238,6 @@ class PDF
             if ($counter == count($htmlFileArray)) {
                 $pageBreak = '';
             }
-            $counter++;
 
             //if the array provided contained subarrays with 'title' entry,
             // then print the title in the PDF
@@ -260,14 +249,27 @@ class PDF
                 $htmlTitle = basename($file);
             }
 
+            $counter++;
+
             if (empty($file) && !empty($htmlTitle)) {
-                //this is a chapter, print title & skip the rest
+                // this is a chapter, print title & skip the rest
+                if ($counter === 2 && !empty($mainTitle)) {
+                    $this->pdf->WriteHTML(
+                        '<html><body><h2 style="text-align: center">'.$mainTitle.'</h2></body></html>'
+                    );
+                }
                 if ($printTitle) {
                     $this->pdf->WriteHTML(
-                        '<html><body><h3>'.$htmlTitle.'</h3></body></html>'.$pageBreak
+                        '<html><body><h3>'.$html_title.'</h3></body></html>'.$page_break
                     );
                 }
                 continue;
+            } else {
+                if ($counter === 2 && !empty($mainTitle)) {
+                    $this->pdf->WriteHTML(
+                        '<html><body><h2 style="text-align: center">'.$mainTitle.'</h2></body></html>'
+                    );
+                }
             }
 
             if (!file_exists($file)) {
@@ -856,7 +858,33 @@ class PDF
             $userId
         );
 
-        Display::addFlash(Display::return_message(get_lang('ItemAdded')));
+        Display::addFlash(Display::return_message(get_lang('Item added')));
+    }
+
+    /**
+     * @param string $theme
+     *
+     * @throws MpdfException
+     */
+    public function setBackground($theme)
+    {
+        $themeName = empty($theme) ? api_get_visual_theme() : $theme;
+        $themeDir = \Template::getThemeDir($themeName);
+        $customLetterhead = $themeDir.'images/letterhead.png';
+        $urlPathLetterhead = api_get_path(SYS_CSS_PATH).$customLetterhead;
+
+        $urlWebLetterhead = '#FFFFFF';
+        $fullPage = false;
+        if (file_exists($urlPathLetterhead)) {
+            $fullPage = true;
+            $urlWebLetterhead = 'url('.api_get_path(WEB_CSS_PATH).$customLetterhead.')';
+        }
+
+        if ($fullPage) {
+            $this->pdf->SetDisplayMode('fullpage');
+            $this->pdf->SetDefaultBodyCSS('background', $urlWebLetterhead);
+            $this->pdf->SetDefaultBodyCSS('background-image-resize', '6');
+        }
     }
 
     /**

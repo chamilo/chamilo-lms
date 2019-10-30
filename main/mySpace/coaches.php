@@ -1,11 +1,9 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-/*
- * Coaches reporting
- * @package chamilo.reporting
+/**
+ * Coaches reporting.
  */
-
 ob_start();
 $cidReset = true;
 
@@ -13,13 +11,13 @@ require_once __DIR__.'/../inc/global.inc.php';
 
 $this_section = SECTION_TRACKING;
 
-$nameTools = get_lang('Tutors');
+$nameTools = get_lang('Coaches');
 
 api_block_anonymous_users();
-$interbreadcrumb[] = ["url" => "index.php", "name" => get_lang('MySpace')];
+$interbreadcrumb[] = ["url" => "index.php", "name" => get_lang('Reporting')];
 
 if (isset($_GET["id_student"])) {
-    $interbreadcrumb[] = ["url" => "student.php", "name" => get_lang('Students')];
+    $interbreadcrumb[] = ["url" => "student.php", "name" => get_lang('Learners')];
 }
 
 Display :: display_header($nameTools);
@@ -81,31 +79,31 @@ $result_coachs = Database::query($sql_coachs);
 if (api_is_western_name_order()) {
     echo '<table class="data_table">
 	    <tr>
-            <th>'.get_lang('FirstName').'</th>
-            <th>'.get_lang('LastName').'</th>
-            <th>'.get_lang('ConnectionTime').'</th>
-            <th>'.get_lang('AdminCourses').'</th>
-            <th>'.get_lang('Students').'</th>
+            <th>'.get_lang('First name').'</th>
+            <th>'.get_lang('Last name').'</th>
+            <th>'.get_lang('Connection time').'</th>
+            <th>'.get_lang('Courses').'</th>
+            <th>'.get_lang('Learners').'</th>
         </tr>';
 } else {
     echo '<table class="data_table">
 	        <tr>
-                <th>'.get_lang('LastName').'</th>
-                <th>'.get_lang('FirstName').'</th>
-                <th>'.get_lang('ConnectionTime').'</th>
-                <th>'.get_lang('AdminCourses').'</th>
-                <th>'.get_lang('Students').'</th>
+                <th>'.get_lang('Last name').'</th>
+                <th>'.get_lang('First name').'</th>
+                <th>'.get_lang('Connection time').'</th>
+                <th>'.get_lang('Courses').'</th>
+                <th>'.get_lang('Learners').'</th>
 	        </tr>';
 }
 
 if (api_is_western_name_order(PERSON_NAME_DATA_EXPORT)) {
-    $header[] = get_lang('FirstName', '');
-    $header[] = get_lang('LastName', '');
+    $header[] = get_lang('First name');
+    $header[] = get_lang('Last name');
 } else {
-    $header[] = get_lang('LastName', '');
-    $header[] = get_lang('FirstName', '');
+    $header[] = get_lang('Last name');
+    $header[] = get_lang('First name');
 }
-$header[] = get_lang('ConnectionTime', '');
+$header[] = get_lang('Connection time');
 
 if (Database::num_rows($result_coachs) > 0) {
     while ($coachs = Database::fetch_array($result_coachs)) {
@@ -148,19 +146,19 @@ if (Database::num_rows($result_coachs) > 0) {
             if ($i % 20 == 0 && $i != 0) {
                 if (api_is_western_name_order()) {
                     echo '<tr>
-					    <th>'.get_lang('FirstName').'</th>
-                        <th>'.get_lang('LastName').'</th>
-                        <th>'.get_lang('ConnectionTime').'</th>
-                        <th>'.get_lang('AdminCourses').'</th>
-                        <th>'.get_lang('Students').'</th>
+					    <th>'.get_lang('First name').'</th>
+                        <th>'.get_lang('Last name').'</th>
+                        <th>'.get_lang('Connection time').'</th>
+                        <th>'.get_lang('Courses').'</th>
+                        <th>'.get_lang('Learners').'</th>
 					</tr>';
                 } else {
                     echo '<tr>
-					    <th>'.get_lang('LastName').'</th>
-                        <th>'.get_lang('FirstName').'</th>
-                        <th>'.get_lang('ConnectionTime').'</th>
-                        <th>'.get_lang('AdminCourses').'</th>
-                        <th>'.get_lang('Students').'</th>
+					    <th>'.get_lang('Last name').'</th>
+                        <th>'.get_lang('First name').'</th>
+                        <th>'.get_lang('Connection time').'</th>
+                        <th>'.get_lang('Courses').'</th>
+                        <th>'.get_lang('Learners').'</th>
 					</tr>';
                 }
             }
@@ -209,7 +207,7 @@ if (Database::num_rows($result_coachs) > 0) {
     }
 } else {
     // No results
-    echo '<tr><td colspan="5">'.get_lang("NoResult").'</td></tr>';
+    echo '<tr><td colspan="5">'.get_lang("There is no result yet").'</td></tr>';
 }
 echo '</table>';
 
@@ -221,8 +219,8 @@ echo "<br /><br />";
 echo "
     <br /><br />
     <form method='post' action='coaches.php'>
-        <button type='submit' class='save' name='export' value='".get_lang('ExportExcel')."'>
-            ".get_lang('ExportExcel')."
+        <button type='submit' class='save' name='export' value='".get_lang('Excel export')."'>
+            ".get_lang('Excel export')."
         </button>
     <form>
 ";

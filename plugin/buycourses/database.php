@@ -90,6 +90,11 @@ $itemTable->addColumn(
     \Doctrine\DBAL\Types\Type::INTEGER,
     ['unsigned' => true]
 );
+$itemTable->addColumn(
+    'tax_perc',
+    \Doctrine\DBAL\Types\Type::INTEGER,
+    ['unsigned' => true, 'notnull' => false]
+);
 $itemTable->setPrimaryKey(['id']);
 $itemTable->addForeignKeyConstraint(
     $currencyTable,
@@ -196,12 +201,28 @@ $saleTable->addColumn(
     ['scale' => 2]
 );
 $saleTable->addColumn(
+    'price_without_tax',
+    \Doctrine\DBAL\Types\Type::DECIMAL,
+    ['scale' => 2, 'notnull' => false]
+);
+$saleTable->addColumn(
+    'tax_perc',
+    \Doctrine\DBAL\Types\Type::INTEGER,
+    ['unsigned' => true, 'notnull' => false]
+);
+$saleTable->addColumn(
+    'tax_amount',
+    \Doctrine\DBAL\Types\Type::DECIMAL,
+        ['scale' => 2, 'notnull' => false]
+);
+$saleTable->addColumn(
     'currency_id',
     \Doctrine\DBAL\Types\Type::INTEGER,
     ['unsigned' => true]
 );
 $saleTable->addColumn('status', \Doctrine\DBAL\Types\Type::INTEGER);
 $saleTable->addColumn('payment_type', \Doctrine\DBAL\Types\Type::INTEGER);
+$saleTable->addColumn('invoice', \Doctrine\DBAL\Types\Type::INTEGER);
 $saleTable->setPrimaryKey(['id']);
 $saleTable->addForeignKeyConstraint(
     $currencyTable,
@@ -250,6 +271,21 @@ $servicesNodeTable->addColumn(
     \Doctrine\DBAL\Types\Type::DECIMAL,
     ['scale' => 2]
 );
+$servicesNodeTable->addColumn(
+    'price_without_tax',
+    \Doctrine\DBAL\Types\Type::DECIMAL,
+    ['scale' => 2, 'notnull' => false]
+);
+$servicesNodeTable->addColumn(
+    'tax_perc',
+    \Doctrine\DBAL\Types\Type::INTEGER,
+    ['unsigned' => true, 'notnull' => false]
+);
+$servicesNodeTable->addColumn(
+    'tax_amount',
+    \Doctrine\DBAL\Types\Type::DECIMAL,
+    ['scale' => 2, 'notnull' => false]
+);
 $servicesNodeTable->addColumn('node_type', \Doctrine\DBAL\Types\Type::INTEGER);
 $servicesNodeTable->addColumn('node_id', \Doctrine\DBAL\Types\Type::INTEGER);
 $servicesNodeTable->addColumn('buyer_id', \Doctrine\DBAL\Types\Type::INTEGER);
@@ -265,6 +301,7 @@ $servicesNodeTable->addColumn(
 );
 $servicesNodeTable->addColumn('status', \Doctrine\DBAL\Types\Type::INTEGER);
 $servicesNodeTable->addColumn('payment_type', \Doctrine\DBAL\Types\Type::INTEGER);
+$servicesNodeTable->addColumn('invoice', \Doctrine\DBAL\Types\Type::INTEGER);
 $servicesNodeTable->setPrimaryKey(['id']);
 $servicesNodeTable->addForeignKeyConstraint(
     $servicesTable,
@@ -291,7 +328,39 @@ $globalTable->addColumn(
     ['autoincrement' => true, 'unsigned' => true]
 );
 $globalTable->addColumn('terms_and_conditions', \Doctrine\DBAL\Types\Type::TEXT);
+$globalTable->addColumn('global_tax_perc', \Doctrine\DBAL\Types\Type::INTEGER);
+$globalTable->addColumn('tax_applies_to', \Doctrine\DBAL\Types\Type::INTEGER);
+$globalTable->addColumn('tax_name', \Doctrine\DBAL\Types\Type::STRING);
+$globalTable->addColumn('seller_name', \Doctrine\DBAL\Types\Type::STRING);
+$globalTable->addColumn('seller_id', \Doctrine\DBAL\Types\Type::STRING);
+$globalTable->addColumn('seller_address', \Doctrine\DBAL\Types\Type::STRING);
+$globalTable->addColumn('seller_email', \Doctrine\DBAL\Types\Type::STRING);
+$globalTable->addColumn('next_number_invoice', \Doctrine\DBAL\Types\Type::INTEGER);
+$globalTable->addColumn('invoice_series', \Doctrine\DBAL\Types\Type::STRING);
+$globalTable->addColumn('sale_email', \Doctrine\DBAL\Types\Type::STRING);
 $globalTable->setPrimaryKey(['id']);
+
+$invoiceTable = $pluginSchema->createTable(BuyCoursesPlugin::TABLE_INVOICE);
+$invoiceTable->addColumn(
+    'id',
+    \Doctrine\DBAL\Types\Type::INTEGER,
+    ['autoincrement' => true, 'unsigned' => true]
+);
+$invoiceTable->addColumn('sale_id', \Doctrine\DBAL\Types\Type::INTEGER);
+$invoiceTable->addColumn('is_service', \Doctrine\DBAL\Types\Type::INTEGER);
+$invoiceTable->addColumn(
+    'num_invoice',
+    \Doctrine\DBAL\Types\Type::INTEGER,
+    ['unsigned' => true, 'notnull' => false]
+);
+$invoiceTable->addColumn(
+    'year',
+    \Doctrine\DBAL\Types\Type::INTEGER,
+    ['unsigned' => true, 'notnull' => false]
+);
+$invoiceTable->addColumn('serie', \Doctrine\DBAL\Types\Type::STRING);
+$invoiceTable->addColumn('date_invoice', \Doctrine\DBAL\Types\Type::DATETIME);
+$invoiceTable->setPrimaryKey(['id']);
 
 $queries = $pluginSchema->toSql($platform);
 
@@ -631,3 +700,21 @@ foreach ($currencies as $currency) {
         ]
     );
 }
+
+$fieldlabel = 'buycourses_company';
+$fieldtype = '1';
+$fieldtitle = BuyCoursesPlugin::get_lang('Company');
+$fielddefault = '';
+$field_id = UserManager::create_extra_field($fieldlabel, $fieldtype, $fieldtitle, $fielddefault);
+
+$fieldlabel = 'buycourses_vat';
+$fieldtype = '1';
+$fieldtitle = BuyCoursesPlugin::get_lang('VAT');
+$fielddefault = '';
+$field_id = UserManager::create_extra_field($fieldlabel, $fieldtype, $fieldtitle, $fielddefault);
+
+$fieldlabel = 'buycourses_address';
+$fieldtype = '1';
+$fieldtitle = BuyCoursesPlugin::get_lang('The address of');
+$fielddefault = '';
+$field_id = UserManager::create_extra_field($fieldlabel, $fieldtype, $fieldtitle, $fielddefault);

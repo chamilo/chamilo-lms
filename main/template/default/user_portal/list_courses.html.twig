@@ -49,7 +49,7 @@
                 </div>
             {% endif %}
 
-            <h5 class="title">
+            <h5 class="title mt-2">
                 {% if item.visibility == constant('COURSE_VISIBILITY_CLOSED') and not item.current_user_is_teacher %}
                     {{ item.title }} {{ item.code_course }}
                 {% else %}

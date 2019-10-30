@@ -96,24 +96,25 @@ class PageController extends BaseController
         BlockManager $blockManager
     ) {
         $host = $request->getHost();
+        $locale = $request->get('_locale');
         $criteria = [
-            'locale' => $request->getLocale(),
+            'locale' => $locale,
             'host' => $host,
         ];
 
         $site = $siteManager->findOneBy($criteria);
         // If site doesn't exists or the site has a different locale from request, create new one.
-        if (!$site || ($site && ($request->getLocale() !== $site->getLocale()))) {
+        if (!$site || ($site && ($locale !== $site->getLocale()))) {
             // Create new site for this host and language
             $site = $siteManager->create();
             $site->setHost($host);
             $site->setEnabled(true);
-            $site->setName($host.' in language '.$request->getLocale());
+            $site->setName($host.' in language '.$locale);
             $site->setEnabledFrom(new \DateTime('now'));
             $site->setEnabledTo(new \DateTime('+20 years'));
             $site->setRelativePath('');
             $site->setIsDefault(false);
-            $site->setLocale($request->getLocale());
+            $site->setLocale($locale);
             $site = $siteManager->save($site);
 
             // Create first root page
@@ -257,6 +258,7 @@ class PageController extends BaseController
             [
                 'page' => $page,
                 'form' => $form->createView(),
+                'current_locale' => $locale,
             ]
         );
     }
@@ -272,11 +274,21 @@ class PageController extends BaseController
      *
      * @return Response
      */
-    public function editPageAction($slug): Response
+    public function editPageAction($slug, Request $request): Response
     {
+        $defaultLocale = $request->getLocale();
+        $localeFromGet = $request->get('_locale');
+        if (!empty($localeFromGet)) {
+            $defaultLocale = $localeFromGet;
+        }
+
         return $this->forward(
             'Chamilo\PageBundle\Controller\PageController:createPage',
-            ['pageSlug' => $slug, 'redirect' => $this->generateUrl('edit_page', ['slug' => $slug])]
+            [
+                'pageSlug' => $slug,
+                'redirect' => $this->generateUrl('edit_page', ['slug' => $slug, '_locale' => $defaultLocale]),
+                'request' => $request,
+            ]
         );
     }
 

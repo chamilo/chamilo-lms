@@ -1,11 +1,19 @@
 <?php
 /* For licensing terms, see /license.txt */
+
+use Chamilo\CoreBundle\Hook\HookObserver;
+use Chamilo\CoreBundle\Hook\Interfaces\HookAdminBlockEventInterface;
+use Chamilo\CoreBundle\Hook\Interfaces\HookAdminBlockObserverInterface;
+use Chamilo\CoreBundle\Hook\Interfaces\HookNotificationContentEventInterface;
+use Chamilo\CoreBundle\Hook\Interfaces\HookNotificationContentObserverInterface;
+use Chamilo\CoreBundle\Hook\Interfaces\HookNotificationTitleEventInterface;
+use Chamilo\CoreBundle\Hook\Interfaces\HookWSRegistrationEventInterface;
+use Chamilo\CoreBundle\Hook\Interfaces\HookWSRegistrationObserverInterface;
+
 /**
  * Hook Observer for Advanced subscription plugin.
  *
  * @author Daniel Alejandro Barreto Alva <daniel.barreto@beeznest.com>
- *
- * @package chamilo.plugin.advanced_subscription
  */
 require_once __DIR__.'/../config.php';
 

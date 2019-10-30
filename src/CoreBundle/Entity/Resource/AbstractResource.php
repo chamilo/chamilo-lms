@@ -3,6 +3,8 @@
 
 namespace Chamilo\CoreBundle\Entity\Resource;
 
+use Doctrine\Common\Collections\Criteria;
+use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Mapping as ORM;
 use Sylius\Component\Resource\Model\ResourceInterface;
 
@@ -13,24 +15,36 @@ use Sylius\Component\Resource\Model\ResourceInterface;
 abstract class AbstractResource implements ResourceInterface
 {
     /**
-     * @ORM\OneToOne(targetEntity="Chamilo\CoreBundle\Entity\Resource\ResourceNode")
-     * @ORM\JoinColumn(name="resource_node_id", referencedColumnName="id")
+     * @ORM\OneToOne(targetEntity="Chamilo\CoreBundle\Entity\Resource\ResourceNode", cascade={"remove"}, orphanRemoval=true)
+     * @ORM\JoinColumn(name="resource_node_id", referencedColumnName="id", onDelete="CASCADE")
      */
     public $resourceNode;
 
     /**
-     * @ORM\PrePersist()
-     * @ORM\PreUpdate()
+     * @return string
      */
-    public function preUpdate()
-    {
-    }
+    abstract public function getResourceName(): string;
 
     /**
-     * @ORM\PostRemove()
+     * @ORM\PostUpdate()
+     *
+     * @param LifecycleEventArgs $args
      */
-    public function postRemove()
+    public function postUpdate(LifecycleEventArgs $args)
     {
+        $em = $args->getEntityManager();
+        // Updates resource node name with the resource name.
+        $node = $this->getResourceNode();
+        $name = $this->getResourceName();
+        $node->setName($name);
+
+        if ($node->hasResourceFile()) {
+            // Update file name if exists too.
+            $node->getResourceFile()->setOriginalName($name);
+        }
+
+        $em->persist($node);
+        $em->flush();
     }
 
     /**
@@ -51,5 +65,21 @@ abstract class AbstractResource implements ResourceInterface
     public function getResourceNode(): ResourceNode
     {
         return $this->resourceNode;
+    }
+
+    /**
+     * @return ResourceNode
+     */
+    public function getResourceNodeIllustration()
+    {
+        $node = $this->getResourceNode();
+        // @todo also filter by the resource type = Illustration
+        $criteria = Criteria::create()->where(
+            Criteria::expr()->eq('name', 'illustration')
+        );
+
+        $illustration = $node->getChildren()->matching($criteria)->first();
+
+        return $illustration;
     }
 }

@@ -32,7 +32,7 @@ api_protect_course_script(true);
 $cidreq = api_get_cidreq();
 $_user = api_get_user_info();
 
-$nameTools = get_lang('ToolForum');
+$nameTools = get_lang('Forums');
 
 require_once 'forumfunction.inc.php';
 
@@ -54,7 +54,7 @@ Event::registerLog($logInfo);
 if (api_is_in_gradebook()) {
     $interbreadcrumb[] = [
         'url' => Category::getUrl(),
-        'name' => get_lang('ToolGradebook'),
+        'name' => get_lang('Assessments'),
     ];
 }
 
@@ -113,7 +113,7 @@ if (!empty($groupId)) {
     ];
     $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'group/group_space.php?'.$cidreq,
-        'name' => get_lang('GroupSpace').' '.$groupProperties['name'],
+        'name' => get_lang('Group area').' '.$groupProperties['name'],
     ];
     $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'forum/viewforum.php?'.$cidreq.'&forum='.intval($_GET['forum']),
@@ -121,7 +121,7 @@ if (!empty($groupId)) {
     ];
     $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'forum/newthread.php?'.$cidreq.'&forum='.intval($_GET['forum']),
-        'name' => get_lang('NewTopic'),
+        'name' => get_lang('Create thread'),
     ];
 } else {
     $interbreadcrumb[] = ['url' => api_get_path(WEB_CODE_PATH).'forum/index.php?'.$cidreq, 'name' => $nameTools];
@@ -133,7 +133,7 @@ if (!empty($groupId)) {
         'url' => api_get_path(WEB_CODE_PATH).'forum/viewforum.php?'.$cidreq.'&forum='.intval($_GET['forum']),
         'name' => $current_forum['forum_title'],
     ];
-    $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('NewTopic')];
+    $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Create thread')];
 }
 
 $htmlHeadXtra[] = "
@@ -155,7 +155,6 @@ $htmlHeadXtra[] = "
 $form = show_add_post_form(
     $current_forum,
     'newthread',
-    '',
     isset($_SESSION['formelements']) ? $_SESSION['formelements'] : null
 );
 
@@ -170,7 +169,7 @@ handle_forum_and_forumcategories();
 echo '<div class="actions">';
 echo '<span style="float:right;">'.search_link().'</span>';
 echo '<a href="viewforum.php?forum='.intval($_GET['forum']).'&'.$cidreq.'">'.
-    Display::return_icon('back.png', get_lang('BackToForum'), '', ICON_SIZE_MEDIUM).'</a>';
+    Display::return_icon('back.png', get_lang('Back to forum'), '', ICON_SIZE_MEDIUM).'</a>';
 echo '</div>';
 
 // Set forum attachment data into $_SESSION

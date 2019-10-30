@@ -44,7 +44,7 @@ class Diagnoser
                 'info' => 'Configuration settings of the database server. To check the database consistency after an upgrade, if you have access to the command line, you can use "php bin/doctrine.php orm:schema-tool:update --dump-sql". This will print a list of database changes that should be applied to your system in order to get the right structure. Index name changes can be ignored. Use "--force" instead of "--dump" to try and execute them in order.',
             ],
             'webserver' => [
-                'lang' => get_lang('WebServer'),
+                'lang' => get_lang('Web server'),
                 'info' => 'Information about your webserver\'s configuration ',
             ],
             'paths' => [
@@ -115,7 +115,7 @@ class Diagnoser
                 $row++;
             }
 
-            echo $table->display();
+            $table->display();
         }
         echo '</div></div>';
     }
@@ -155,12 +155,12 @@ class Diagnoser
             $array[] = $this->build_setting(
                 $status,
                 '[FILES]',
-                get_lang('IsWritable').': '.$folder,
+                get_lang('Is writable').': '.$folder,
                 'http://be2.php.net/manual/en/function.is-writable.php',
                 $writable,
                 1,
                 'yes_no',
-                get_lang('DirectoryMustBeWritable')
+                get_lang('The directory must be writable by the web server')
             );
         }
 
@@ -169,15 +169,15 @@ class Diagnoser
         $array[] = $this->build_setting(
             $status,
             '[FILES]',
-            get_lang('DirectoryExists').': /install',
+            get_lang('The directory exists').': /install',
             'http://be2.php.net/file_exists',
             $exists,
             0,
             'yes_no',
-            get_lang('DirectoryShouldBeRemoved')
+            get_lang('The directory should be removed (it is no longer necessary)')
         );
 
-        $app_version = api_get_setting('chamilo_database_version');
+        $app_version = api_get_setting('platform.chamilo_database_version');
         $array[] = $this->build_setting(
             self::STATUS_INFORMATION,
             '[DB]',
@@ -192,22 +192,24 @@ class Diagnoser
         $access_url_id = api_get_current_access_url_id();
 
         if ($access_url_id === 1) {
+            $size = '-';
             global $_configuration;
             $message2 = '';
             if ($access_url_id === 1) {
                 if (api_is_windows_os()) {
-                    $message2 .= get_lang('SpaceUsedOnSystemCannotBeMeasuredOnWindows');
+                    $message2 .= get_lang('The space used on disk cannot be measured properly on Windows-based systems.');
                 } else {
                     $dir = api_get_path(SYS_PATH);
                     $du = exec('du -sh '.$dir, $err);
                     list($size, $none) = explode("\t", $du);
+                    unset($none);
                     $limit = 0;
                     if (isset($_configuration[$access_url_id])) {
                         if (isset($_configuration[$access_url_id]['hosting_limit_disk_space'])) {
                             $limit = $_configuration[$access_url_id]['hosting_limit_disk_space'];
                         }
                     }
-                    $message2 .= sprintf(get_lang('TotalSpaceUsedByPortalXLimitIsYMB'), $size, $limit);
+                    $message2 .= sprintf(get_lang('Total space used by portal %s limit is %s MB'), $size, $limit);
                 }
             }
 
@@ -222,6 +224,32 @@ class Diagnoser
                 $message2
             );
         }
+        $new_version = '-';
+        $new_version_status = '';
+        $file = api_get_path(SYS_CODE_PATH).'install/version.php';
+        if (is_file($file)) {
+            @include $file;
+        }
+        $array[] = $this->build_setting(
+            self::STATUS_INFORMATION,
+            '[CONFIG]',
+            get_lang('Version from the version file'),
+            '#',
+            $new_version.' '.$new_version_status,
+            '-',
+            null,
+            get_lang('The version from the version.php file is updated with each version but only available if the main/install/ directory is present.')
+        );
+        $array[] = $this->build_setting(
+            self::STATUS_INFORMATION,
+            '[CONFIG]',
+            get_lang('Version from the config file'),
+            '#',
+            api_get_configuration_value('system_version'),
+            $new_version,
+            null,
+            get_lang('The version from the main configuration file shows on the main administration page, but has to be changed manually on upgrade.')
+        );
 
         return $array;
     }
@@ -247,7 +275,7 @@ class Diagnoser
             phpversion(),
             '>= '.REQUIRED_PHP_VERSION,
             null,
-            get_lang('PHPVersionInfo')
+            get_lang('PHP version')
         );
 
         $setting = ini_get('output_buffering');
@@ -261,7 +289,7 @@ class Diagnoser
             $setting,
             $req_setting,
             'on_off',
-            get_lang('OutputBufferingInfo')
+            get_lang('Output buffering setting is "On" for being enabled or "Off" for being disabled. This setting also may be enabled through an integer value (4096 for example) which is the output buffer size.')
         );
 
         $setting = ini_get('file_uploads');
@@ -275,7 +303,7 @@ class Diagnoser
             $setting,
             $req_setting,
             'on_off',
-            get_lang('FileUploadsInfo')
+            get_lang('File uploads indicate whether file uploads are authorized at all')
         );
 
         $setting = ini_get('magic_quotes_runtime');
@@ -289,7 +317,7 @@ class Diagnoser
             $setting,
             $req_setting,
             'on_off',
-            get_lang('MagicQuotesRuntimeInfo')
+            get_lang('This is a highly unrecommended feature which converts values returned by all functions that returned external values to slash-escaped values. This feature should *not* be enabled.')
         );
 
         $setting = ini_get('safe_mode');
@@ -303,7 +331,7 @@ class Diagnoser
             $setting,
             $req_setting,
             'on_off',
-            get_lang('SafeModeInfo')
+            get_lang('Safe mode is a deprecated PHP feature which (badly) limits the access of PHP scripts to other resources. It is recommended to leave it off.')
         );
 
         $setting = ini_get('register_globals');
@@ -317,7 +345,7 @@ class Diagnoser
             $setting,
             $req_setting,
             'on_off',
-            get_lang('RegisterGlobalsInfo')
+            get_lang('Whether to use the register globals feature or not. Using it represents potential security risks with this software.')
         );
 
         $setting = ini_get('short_open_tag');
@@ -331,7 +359,7 @@ class Diagnoser
             $setting,
             $req_setting,
             'on_off',
-            get_lang('ShortOpenTagInfo')
+            get_lang('Whether to allow for short open tags to be used or not. This feature should not be used.')
         );
 
         $setting = ini_get('magic_quotes_gpc');
@@ -345,7 +373,7 @@ class Diagnoser
             $setting,
             $req_setting,
             'on_off',
-            get_lang('MagicQuotesGpcInfo')
+            get_lang('Whether to automatically escape values from GET, POST and COOKIES arrays. A similar feature is provided for the required data inside this software, so using it provokes double slash-escaping of values.')
         );
 
         $setting = ini_get('display_errors');
@@ -359,7 +387,7 @@ class Diagnoser
             $setting,
             $req_setting,
             'on_off',
-            get_lang('DisplayErrorsInfo')
+            get_lang('Show errors on screen. Turn this on on development servers, off on production servers.')
         );
 
         $setting = ini_get('default_charset');
@@ -376,11 +404,11 @@ class Diagnoser
             $setting,
             $req_setting,
             null,
-            get_lang('DefaultCharsetInfo')
+            get_lang('The default character set to be sent when returning pages')
         );
 
         $setting = ini_get('max_execution_time');
-        $req_setting = '300 ('.get_lang('Minimum').')';
+        $req_setting = '300 ('.get_lang('minimum').')';
         $status = $setting >= 300 ? self::STATUS_OK : self::STATUS_WARNING;
         $array[] = $this->build_setting(
             $status,
@@ -390,11 +418,11 @@ class Diagnoser
             $setting,
             $req_setting,
             null,
-            get_lang('MaxExecutionTimeInfo')
+            get_lang('Maximum time a script can take to execute. If using more than that, the script is abandoned to avoid slowing down other users.')
         );
 
         $setting = ini_get('max_input_time');
-        $req_setting = '300 ('.get_lang('Minimum').')';
+        $req_setting = '300 ('.get_lang('minimum').')';
         $status = $setting >= 300 ? self::STATUS_OK : self::STATUS_WARNING;
         $array[] = $this->build_setting(
             $status,
@@ -404,7 +432,7 @@ class Diagnoser
             $setting,
             $req_setting,
             null,
-            get_lang('MaxInputTimeInfo')
+            get_lang('The maximum time allowed for a form to be processed by the server. If it takes longer, the process is abandonned and a blank page is returned.')
         );
 
         $setting = ini_get('memory_limit');
@@ -421,7 +449,7 @@ class Diagnoser
             $setting,
             $req_setting,
             null,
-            get_lang('MemoryLimitInfo')
+            get_lang('Maximum memory limit for one single script run. If the memory needed is higher, the process will stop to avoid consuming all the server\'s available memory and thus slowing down other users.')
         );
 
         $setting = ini_get('post_max_size');
@@ -438,7 +466,7 @@ class Diagnoser
             $setting,
             $req_setting,
             null,
-            get_lang('PostMaxSizeInfo')
+            get_lang('This is the maximum size of uploads through forms using the POST method (i.e. classical file upload forms)')
         );
 
         $setting = ini_get('upload_max_filesize');
@@ -455,7 +483,7 @@ class Diagnoser
             $setting,
             $req_setting,
             null,
-            get_lang('UploadMaxFilesizeInfo')
+            get_lang('Maximum volume of an uploaded file. This setting should, most of the time, be matched with the post_max_size variable.')
         );
 
         $setting = ini_get('upload_tmp_dir');
@@ -468,7 +496,7 @@ class Diagnoser
             $setting,
             '',
             null,
-            get_lang('UploadTmpDirInfo')
+            get_lang('The temporary upload directory is a space on the server where files are uploaded before being filtered and treated by PHP.')
         );
 
         $setting = ini_get('variables_order');
@@ -482,7 +510,7 @@ class Diagnoser
             $setting,
             $req_setting,
             null,
-            get_lang('VariablesOrderInfo')
+            get_lang('The order of precedence of Environment, GET, POST, COOKIES and SESSION variables')
         );
 
         $setting = ini_get('session.gc_maxlifetime');
@@ -496,7 +524,7 @@ class Diagnoser
             $setting,
             $req_setting,
             null,
-            get_lang('SessionGCMaxLifetimeInfo')
+            get_lang('The session garbage collector maximum lifetime indicates which maximum time is given between two runs of the garbage collector.')
         );
 
         if (api_check_browscap()) {
@@ -514,7 +542,7 @@ class Diagnoser
             $setting,
             $req_setting,
             'on_off',
-            get_lang('BrowscapInfo')
+            get_lang('Browscap loading browscap.ini file that contains a large amount of data on the browser and its capabilities, so it can be used by the function get_browser () PHP')
         );
 
         // Extensions
@@ -522,52 +550,52 @@ class Diagnoser
             'gd' => [
                 'link' => 'http://www.php.net/gd',
                 'expected' => 1,
-                'comment' => get_lang('ExtensionMustBeLoaded'),
+                'comment' => get_lang('This extension must be loaded.'),
             ],
             'pdo_mysql' => [
                 'link' => 'http://php.net/manual/en/ref.pdo-mysql.php',
                 'expected' => 1,
-                'comment' => get_lang('ExtensionMustBeLoaded'),
+                'comment' => get_lang('This extension must be loaded.'),
             ],
             'pcre' => [
                 'link' => 'http://www.php.net/pcre',
                 'expected' => 1,
-                'comment' => get_lang('ExtensionMustBeLoaded'),
+                'comment' => get_lang('This extension must be loaded.'),
             ],
             'session' => [
                 'link' => 'http://www.php.net/session',
                 'expected' => 1,
-                'comment' => get_lang('ExtensionMustBeLoaded'),
+                'comment' => get_lang('This extension must be loaded.'),
             ],
             'standard' => [
                 'link' => 'http://www.php.net/spl',
                 'expected' => 1,
-                'comment' => get_lang('ExtensionMustBeLoaded'),
+                'comment' => get_lang('This extension must be loaded.'),
             ],
             'zlib' => [
                 'link' => 'http://www.php.net/zlib',
                 'expected' => 1,
-                'comment' => get_lang('ExtensionMustBeLoaded'),
+                'comment' => get_lang('This extension must be loaded.'),
             ],
             'xsl' => [
                 'link' => 'http://be2.php.net/xsl',
                 'expected' => 2,
-                'comment' => get_lang('ExtensionShouldBeLoaded'),
+                'comment' => get_lang('This extension should be loaded.'),
             ],
             'curl' => [
                 'link' => 'http://www.php.net/curl',
                 'expected' => 2,
-                'comment' => get_lang('ExtensionShouldBeLoaded'),
+                'comment' => get_lang('This extension should be loaded.'),
             ],
             'Zend OPcache' => [
                 'link' => 'http://www.php.net/opcache',
                 'expected' => 2,
-                'comment' => get_lang('ExtensionShouldBeLoaded'),
+                'comment' => get_lang('This extension should be loaded.'),
             ],
             'apcu' => [
                 'link' => 'http://www.php.net/apcu',
                 'expected' => 2,
-                'comment' => get_lang('ExtensionShouldBeLoaded'),
+                'comment' => get_lang('This extension should be loaded.'),
             ],
         ];
 
@@ -581,7 +609,7 @@ class Diagnoser
             $array[] = $this->build_setting(
                 $status,
                 '[EXTENSION]',
-                get_lang('LoadedExtension').': '.$extension,
+                get_lang('Extension loaded').': '.$extension,
                 $url,
                 $loaded,
                 $expected_value,
@@ -627,7 +655,7 @@ class Diagnoser
             $host,
             null,
             null,
-            get_lang('MysqlHostInfo')
+            get_lang('MySQL server host')
         );
 
         $array[] = $this->build_setting(
@@ -672,7 +700,7 @@ class Diagnoser
             $_SERVER["SERVER_NAME"],
             null,
             null,
-            get_lang('ServerNameInfo')
+            get_lang('Server name (as used in your request)')
         );
         $array[] = $this->build_setting(
             self::STATUS_INFORMATION,
@@ -682,7 +710,7 @@ class Diagnoser
             $_SERVER["SERVER_ADDR"],
             null,
             null,
-            get_lang('ServerAddessInfo')
+            get_lang('Server address')
         );
         $array[] = $this->build_setting(
             self::STATUS_INFORMATION,
@@ -692,7 +720,7 @@ class Diagnoser
             $_SERVER["SERVER_PORT"],
             null,
             null,
-            get_lang('ServerPortInfo')
+            get_lang('Server port')
         );
         $array[] = $this->build_setting(
             self::STATUS_INFORMATION,
@@ -702,7 +730,7 @@ class Diagnoser
             $_SERVER["SERVER_SOFTWARE"],
             null,
             null,
-            get_lang('ServerSoftwareInfo')
+            get_lang('Software running as a web server')
         );
         $array[] = $this->build_setting(
             self::STATUS_INFORMATION,
@@ -712,7 +740,7 @@ class Diagnoser
             $_SERVER["REMOTE_ADDR"],
             null,
             null,
-            get_lang('ServerRemoteInfo')
+            get_lang('Remote address (your address as received by the server)')
         );
         $array[] = $this->build_setting(
             self::STATUS_INFORMATION,
@@ -722,7 +750,7 @@ class Diagnoser
             $_SERVER["HTTP_USER_AGENT"],
             null,
             null,
-            get_lang('ServerUserAgentInfo')
+            get_lang('Your user agent as received by the server')
         );
         $array[] = $this->build_setting(
             self::STATUS_INFORMATION,
@@ -732,7 +760,7 @@ class Diagnoser
             $_SERVER["SERVER_PROTOCOL"],
             null,
             null,
-            get_lang('ServerProtocolInfo')
+            get_lang('Protocol used by this server')
         );
         $array[] = $this->build_setting(
             self::STATUS_INFORMATION,
@@ -742,7 +770,7 @@ class Diagnoser
             php_uname(),
             null,
             null,
-            get_lang('UnameInfo')
+            get_lang('Information on the system the current server is running on')
         );
         $array[] = $this->build_setting(
             self::STATUS_INFORMATION,
@@ -752,7 +780,7 @@ class Diagnoser
             (!empty($_SERVER["HTTP_X_FORWARDED_FOR"]) ? $_SERVER["HTTP_X_FORWARDED_FOR"] : ''),
             null,
             null,
-            get_lang('ServerXForwardedForInfo')
+            get_lang('If the server is behind a proxy or firewall (and only in those cases), it might be using the X_FORWARDED_FOR HTTP header to show the remote user IP (yours, in this case).')
         );
 
         return $array;
@@ -760,6 +788,17 @@ class Diagnoser
 
     /**
      * Additional functions needed for fast integration.
+     *
+     * @param int    $status         Status constant defining which icon to use to illustrate the info
+     * @param string $section        The name of the section this setting is included in
+     * @param string $title          The name of the setting (usually a translated string)
+     * @param string $url            A URL to point the user to regarding this setting, or '#' otherwise
+     * @param mixed  $current_value  The current value for this setting
+     * @param mixed  $expected_value The expected value for this setting
+     * @param string $formatter      If this setting is expressed in some kind of format, which format to use
+     * @param string $comment        A translated string explaining what this setting represents
+     *
+     * @return array A list of elements to show in an array's row
      */
     public function build_setting(
         $status,
@@ -782,6 +821,7 @@ class Diagnoser
                 $img = 'bullet_red.png';
                 break;
             case self::STATUS_INFORMATION:
+            default:
                 $img = 'bullet_blue.png';
                 break;
         }

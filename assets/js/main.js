@@ -1,22 +1,5 @@
 
-$(window).resize(function(){
-    var widthScreen = $(window).width();
-    if(widthScreen >= 1400){
-        $('body').addClass('sidebar-lg-show');
-    } else {
-        $('body').removeClass('sidebar-lg-show');
-    }
-});
-
 $(function () {
-
-    //Width calculation for Sidebar
-    var widthScreen = $(window).width();
-
-    if(widthScreen >= 1400){
-        $('body').addClass('sidebar-lg-show');
-    }
-
     //Elevator Scroll
     $(window).scroll(function () {
         if ($(this).scrollTop() > 50) {

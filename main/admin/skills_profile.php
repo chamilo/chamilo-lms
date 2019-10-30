@@ -15,7 +15,7 @@ Skill::isAllowed();
 
 $interbreadcrumb[] = [
     'url' => 'index.php',
-    "name" => get_lang('PlatformAdmin'),
+    "name" => get_lang('Administration'),
 ];
 
 $skill = new Skill();
@@ -26,7 +26,7 @@ $url = api_get_path(WEB_AJAX_PATH).'skill.ajax.php';
 $tpl = new Template(get_lang('Skills'));
 $form = new FormValidator('profile_search');
 
-$form->addElement('header', get_lang('SearchSkills'));
+$form->addElement('header', get_lang('Search skills'));
 $form->addElement('select', 'skills', null, null, ['id' => 'skills']);
 $form->addButtonSearch(get_lang('Search'));
 

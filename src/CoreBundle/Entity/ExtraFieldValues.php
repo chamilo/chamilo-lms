@@ -4,7 +4,7 @@
 namespace Chamilo\CoreBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Gedmo\Mapping\Annotation as Gedmo;
+use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Sylius\Component\Attribute\Model\AttributeValue as BaseAttributeValue;
 
 /**
@@ -14,6 +14,7 @@ use Sylius\Component\Attribute\Model\AttributeValue as BaseAttributeValue;
  *     name="extra_field_values",
  *     indexes={
  *         @ORM\Index(name="idx_efv_fiii", columns={"field_id", "item_id"}),
+ *         @ORM\Index(name="idx_efv_item", columns={"item_id"})
  *     }
  * )
  * @ORM\Entity(repositoryClass="Chamilo\CoreBundle\Repository\ExtraFieldValuesRepository")
@@ -21,6 +22,8 @@ use Sylius\Component\Attribute\Model\AttributeValue as BaseAttributeValue;
  */
 class ExtraFieldValues // extends BaseAttributeValue
 {
+    use TimestampableEntity;
+
     /**
      * @var int
      *
@@ -49,23 +52,8 @@ class ExtraFieldValues // extends BaseAttributeValue
     protected $itemId;
 
     /**
-     * @var \DateTime
-     *
-     * @Gedmo\Timestampable(on="create")
-     * @ORM\Column(name="created_at", type="datetime")
-     */
-    protected $createdAt;
-
-    /**
-     * @var \DateTime
-     *
-     * @Gedmo\Timestampable(on="update")
-     * @ORM\Column(name="updated_at", type="datetime")
-     */
-    protected $updatedAt;
-
-    /**
      * @var string
+     *
      * @ORM\Column(name="comment", type="text", nullable=true, unique=false)
      */
     protected $comment;
@@ -113,46 +101,6 @@ class ExtraFieldValues // extends BaseAttributeValue
     public function setItemId($itemId)
     {
         $this->itemId = $itemId;
-
-        return $this;
-    }
-
-    /**
-     * @return \DateTime
-     */
-    public function getCreatedAt()
-    {
-        return $this->createdAt;
-    }
-
-    /**
-     * @param \DateTime $createdAt
-     *
-     * @return $this
-     */
-    public function setCreatedAt($createdAt)
-    {
-        $this->createdAt = $createdAt;
-
-        return $this;
-    }
-
-    /**
-     * @return \DateTime
-     */
-    public function getUpdatedAt()
-    {
-        return $this->updatedAt;
-    }
-
-    /**
-     * @param \DateTime $updatedAt
-     *
-     * @return $this
-     */
-    public function setUpdatedAt($updatedAt)
-    {
-        $this->updatedAt = $updatedAt;
 
         return $this;
     }

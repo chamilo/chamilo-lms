@@ -20,25 +20,20 @@ if (!api_get_multiple_access_url()) {
 }
 
 $userGroup = new UserGroup();
-$form_sent = 0;
 $firstLetterUserGroup = null;
 $courses = [];
 $url_list = [];
 
-$tbl_access_url_rel_course = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
 $tbl_access_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL);
-$tbl_user = Database::get_main_table(TABLE_MAIN_USER);
-$tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
-
-$tool_name = get_lang('AddUserGroupToURL');
-$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('PlatformAdmin')];
-$interbreadcrumb[] = ['url' => 'access_urls.php', 'name' => get_lang('MultipleAccessURLs')];
+$tool_name = get_lang('Add group to URL');
+$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('Administration')];
+$interbreadcrumb[] = ['url' => 'access_urls.php', 'name' => get_lang('Multiple access URL / Branding')];
 
 Display::display_header($tool_name);
 
 echo '<div class="actions">';
 echo Display::url(
-    Display::return_icon('edit.png', get_lang('EditUserGroupToURL'), ''),
+    Display::return_icon('edit.png', get_lang('Edit groups for one URL'), ''),
     api_get_path(WEB_CODE_PATH).'admin/access_url_edit_usergroup_to_url.php'
 );
 echo '</div>';
@@ -53,10 +48,10 @@ if (isset($_POST['form_sent']) && $_POST['form_sent']) {
 
     if ($form_sent == 1) {
         if (count($userGroups) == 0 || count($urlList) == 0) {
-            echo Display::return_message(get_lang('AtLeastOneUserGroupAndOneURL'), 'error');
+            echo Display::return_message(get_lang('You need to select at least one group and one site'), 'error');
         } else {
             UrlManager::addUserGroupListToUrl($userGroups, $urlList);
-            echo Display::return_message(get_lang('UserGroupBelongURL'), 'confirm');
+            echo Display::return_message(get_lang('The group now belongs to the selected site'), 'confirm');
         }
     }
 }
@@ -80,9 +75,9 @@ $db_urls = Database::store_result($result);
     <table border="0" cellpadding="5" cellspacing="0" width="100%">
     <tr>
         <td width="40%" align="center">
-            <b><?php echo get_lang('UserGroupList'); ?></b>
+            <b><?php echo get_lang('User groups list'); ?></b>
             <br/><br/>
-             <?php echo get_lang('FirstLetter'); ?> :
+             <?php echo get_lang('First letter'); ?> :
              <select name="first_letter_user_group" onchange="javascript:document.formulaire.form_sent.value='2'; document.formulaire.submit();">
                 <option value="">--</option>
                 <?php
@@ -93,7 +88,7 @@ $db_urls = Database::store_result($result);
         </td>
         <td width="20%">&nbsp;</td>
         <td width="40%" align="center">
-            <b><?php echo get_lang('URLList'); ?> :</b>
+            <b><?php echo get_lang('URL list'); ?> :</b>
         </td>
    </tr>
    <tr>
@@ -110,7 +105,7 @@ $db_urls = Database::store_result($result);
     </select>
    </td>
    <td width="20%" valign="middle" align="center">
-    <button type="submit" class="add"> <?php echo get_lang('AddUserGroupToThatURL'); ?> </button>
+    <button type="submit" class="add"> <?php echo get_lang('Add user group to this URL'); ?> </button>
    </td>
    <td width="40%" align="center">
     <select name="url_list[]" multiple="multiple" size="20" style="width:300px;">

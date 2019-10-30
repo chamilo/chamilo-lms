@@ -11,18 +11,18 @@ if (!ctype_alnum($token)) {
 
 // Build the form
 $form = new FormValidator('reset', 'POST', api_get_self().'?token='.$token);
-$form->addElement('header', get_lang('ResetPassword'));
+$form->addElement('header', get_lang('Reset password'));
 $form->addHidden('token', $token);
 $form->addElement('password', 'pass1', get_lang('Password'));
 $form->addElement(
     'password',
     'pass2',
-    get_lang('Confirmation'),
+    get_lang('Confirm password'),
     ['id' => 'pass2', 'size' => 20, 'autocomplete' => 'off']
 );
-$form->addRule('pass1', get_lang('ThisFieldIsRequired'), 'required');
-$form->addRule('pass2', get_lang('ThisFieldIsRequired'), 'required');
-$form->addRule(['pass1', 'pass2'], get_lang('PassTwo'), 'compare');
+$form->addRule('pass1', get_lang('Required field'), 'required');
+$form->addRule('pass2', get_lang('Required field'), 'required');
+$form->addRule(['pass1', 'pass2'], get_lang('You have typed two different passwords'), 'compare');
 $form->addButtonSave(get_lang('Update'));
 
 $ttl = api_get_setting('user_reset_password_token_limit');
@@ -39,7 +39,7 @@ if ($form->validate()) {
     $user = UserManager::getManager()->findUserByConfirmationToken($token);
     if ($user) {
         if (!$user->isPasswordRequestNonExpired($ttl)) {
-            Display::addFlash(Display::return_message(get_lang('LinkExpired')), 'warning');
+            Display::addFlash(Display::return_message(get_lang('Link expired, please try again.')), 'warning');
             header('Location: '.api_get_path(WEB_CODE_PATH).'auth/lostPassword.php');
             exit;
         }
@@ -54,12 +54,12 @@ if ($form->validate()) {
         Database::getManager()->persist($user);
         Database::getManager()->flush();
 
-        Display::addFlash(Display::return_message(get_lang('Updated')));
+        Display::addFlash(Display::return_message(get_lang('Update successful')));
         header('Location: '.api_get_path(WEB_PATH));
         exit;
     } else {
         Display::addFlash(
-            Display::return_message(get_lang('LinkExpired'))
+            Display::return_message(get_lang('Link expired, please try again.'))
         );
     }
 }

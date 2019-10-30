@@ -47,9 +47,9 @@ if (isset($_GET['isStudentView']) && $_GET['isStudentView'] == 'true') {
 }
 
 // interbreadcrumb
-$interbreadcrumb[] = ["url" => "index.php?".api_get_cidreq(), "name" => get_lang('CourseProgram')];
+$interbreadcrumb[] = ["url" => "index.php?".api_get_cidreq(), "name" => get_lang('Description')];
 if ($description_type == 1) {
-    $interbreadcrumb[] = ["url" => "#", "name" => get_lang('GeneralDescription')];
+    $interbreadcrumb[] = ["url" => "#", "name" => get_lang('Description')];
 }
 if ($description_type == 2) {
     $interbreadcrumb[] = ["url" => "#", "name" => get_lang('Objectives')];
@@ -61,16 +61,16 @@ if ($description_type == 4) {
     $interbreadcrumb[] = ["url" => "#", "name" => get_lang('Methodology')];
 }
 if ($description_type == 5) {
-    $interbreadcrumb[] = ["url" => "#", "name" => get_lang('CourseMaterial')];
+    $interbreadcrumb[] = ["url" => "#", "name" => get_lang('Course material')];
 }
 if ($description_type == 6) {
-    $interbreadcrumb[] = ["url" => "#", "name" => get_lang('HumanAndTechnicalResources')];
+    $interbreadcrumb[] = ["url" => "#", "name" => get_lang('Resources')];
 }
 if ($description_type == 7) {
     $interbreadcrumb[] = ["url" => "#", "name" => get_lang('Assessment')];
 }
 if ($description_type == 8) {
-    $interbreadcrumb[] = ["url" => "#", "name" => get_lang('ThematicAdvance')];
+    $interbreadcrumb[] = ["url" => "#", "name" => get_lang('Thematic advance')];
 }
 if ($description_type >= 9) {
     $interbreadcrumb[] = ["url" => "#", "name" => get_lang('Others')];

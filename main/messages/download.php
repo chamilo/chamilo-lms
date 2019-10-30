@@ -13,12 +13,18 @@ session_cache_limiter('public');
 
 require_once __DIR__.'/../inc/global.inc.php';
 
+$file_url = isset($_GET['file']) ? $_GET['file'] : '';
+$type = isset($_GET['type']) ? $_GET['type'] : '';
+
+if (empty($file_url)) {
+    api_not_allowed();
+}
+
 // IMPORTANT to avoid caching of documents
 header('Expires: Wed, 01 Jan 1990 00:00:00 GMT');
 header('Cache-Control: public');
 header('Pragma: no-cache');
 
-$file_url = $_GET['file'];
 //change the '&' that got rewritten to '///' by mod_rewrite back to '&'
 $file_url = str_replace('///', '&', $file_url);
 //still a space present? it must be a '+' (that got replaced by mod_rewrite)
@@ -47,13 +53,13 @@ $current_uid = api_get_user_id();
 
 // get message user id for inbox/outbox
 $message_uid = '';
-$message_type = ['inbox', 'outbox'];
-if (in_array($_GET['type'], $message_type)) {
-    if ($_GET['type'] == 'inbox') {
+switch ($type) {
+    case MessageManager::MESSAGE_TYPE_INBOX:
         $message_uid = $row_users['user_receiver_id'];
-    } else {
+        break;
+    case MessageManager::MESSAGE_TYPE_OUTBOX:
         $message_uid = $row_users['user_sender_id'];
-    }
+        break;
 }
 
 // allow to the correct user for download this file

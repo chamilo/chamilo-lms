@@ -68,7 +68,7 @@ if ($global) {
     while ($a_exercices = Database::fetch_array($resultExercices)) {
         $exercise_list[$a_exercices['id']] = $a_exercices['title'];
     }
-    $form->addElement('select', 'exercise_id', get_lang('Exercise'), $exercise_list);
+    $form->addElement('select', 'exercise_id', get_lang('Test'), $exercise_list);
 }
 
 //$form->addElement('submit','submit',get_lang('Filter'));
@@ -88,19 +88,19 @@ if (!$export_to_csv) {
     if ($global) {
         echo '<div style="float:right"> <a href="'.api_get_self().'?export=1&score='.$filter_score.'&exercise_id='.$exercise_id.'">
                 '.Display::return_icon('csv.gif').'
-                &nbsp;'.get_lang('ExportAsCSV').'</a>'.
+                &nbsp;'.get_lang('CSV export').'</a>'.
                 '<a href="javascript: void(0);" onclick="javascript: window.print()">
                 '.Display::return_icon('printmgr.gif').'
                 &nbsp;'.get_lang('Print').'</a>
                     </div>';
 
-        $menu_items[] = '<a href="'.api_get_path(WEB_CODE_PATH).'mySpace/?view=teacher">'.get_lang('TeacherInterface').'</a>';
+        $menu_items[] = '<a href="'.api_get_path(WEB_CODE_PATH).'mySpace/?view=teacher">'.get_lang('Trainer View').'</a>';
         if (api_is_platform_admin()) {
-            $menu_items[] = '<a href="'.api_get_path(WEB_CODE_PATH).'mySpace/?view=admin">'.get_lang('AdminInterface').'</a>';
+            $menu_items[] = '<a href="'.api_get_path(WEB_CODE_PATH).'mySpace/?view=admin">'.get_lang('Admin view').'</a>';
         } else {
-            $menu_items[] = '<a href="'.api_get_path(WEB_CODE_PATH).'mySpace/?view=coach">'.get_lang('AdminInterface').'</a>';
+            $menu_items[] = '<a href="'.api_get_path(WEB_CODE_PATH).'mySpace/?view=coach">'.get_lang('Admin view').'</a>';
         }
-        $menu_items[] = get_lang('ExamTracking');
+        $menu_items[] = get_lang('Exam tracking');
         $nb_menu_items = count($menu_items);
         if ($nb_menu_items > 1) {
             foreach ($menu_items as $key => $item) {
@@ -112,13 +112,13 @@ if (!$export_to_csv) {
             echo '<br />';
         }
     } else {
-        echo '<a href="courseLog.php?'.api_get_cidreq().'&studentlist=true">'.get_lang('StudentsTracking').'</a>&nbsp;|
-             <a href="courseLog.php?'.api_get_cidreq().'&studentlist=false">'.get_lang('CourseTracking').'</a>&nbsp;|&nbsp';
-        echo '<a href="courseLog.php?'.api_get_cidreq().'&studentlist=resources">'.get_lang('ResourcesTracking').'</a>';
-        echo ' | '.get_lang('ExamTracking').'';
+        echo '<a href="courseLog.php?'.api_get_cidreq().'&studentlist=true">'.get_lang('Report on learners').'</a>&nbsp;|
+             <a href="courseLog.php?'.api_get_cidreq().'&studentlist=false">'.get_lang('Course report').'</a>&nbsp;|&nbsp';
+        echo '<a href="courseLog.php?'.api_get_cidreq().'&studentlist=resources">'.get_lang('Report on resource').'</a>';
+        echo ' | '.get_lang('Exam tracking').'';
         echo '<a href="'.api_get_self().'?export=1&score='.$filter_score.'&exercise_id='.$exercise_id.'">
             '.Display::return_icon('excel.gif').'
-            &nbsp;'.get_lang('ExportAsXLS').'</a><br /><br />';
+            &nbsp;'.get_lang('Excel export').'</a><br /><br />';
     }
     echo '</div>';
     echo '<br /><br />';
@@ -133,7 +133,7 @@ foreach ($course_list as $current_course) {
     $_course = $course_info;
 
     // Getting LP list
-    $list = new LearnpathList('', $current_course['code'], $session_id);
+    $list = new LearnpathList('', $course_info, $session_id);
     $lp_list = $list->get_flat_list();
 
     // Looping LPs
@@ -174,12 +174,12 @@ $export_array = [];
 if (!empty($main_result)) {
     $html_result .= '<table  class="data_table">';
     $html_result .= '<tr><th>'.get_lang('Course').'</th>';
-    $html_result .= '<th>'.get_lang('LearningPath').'</th>';
-    $html_result .= '<th>'.get_lang('Exercise').'</th>';
+    $html_result .= '<th>'.get_lang('Learning paths').'</th>';
+    $html_result .= '<th>'.get_lang('Test').'</th>';
     $html_result .= '<th>'.get_lang('User').'</th>';
     $html_result .= '<th>'.get_lang('Attempt').'</th>';
     $html_result .= '<th>'.get_lang('Date').'</th>';
-    $html_result .= '<th>'.get_lang('Results').'</th>';
+    $html_result .= '<th>'.get_lang('Results and feedback and feedback').'</th>';
     $html_result .= '</tr>';
 
     foreach ($main_result as $course_code => $lps) {
@@ -237,12 +237,12 @@ function export_complete_report_csv($filename, $array)
 {
     $header[] = [
         get_lang('Course'),
-        get_lang('LearningPath'),
-        get_lang('Exercise'),
+        get_lang('Learning paths'),
+        get_lang('Test'),
         get_lang('User'),
         get_lang('Attempt'),
         get_lang('Date'),
-        get_lang('Results'),
+        get_lang('Results and feedback and feedback'),
     ];
     if (!empty($array)) {
         $array = array_merge($header, $array);

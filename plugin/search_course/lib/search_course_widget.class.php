@@ -153,7 +153,7 @@ class SearchCourseWidget
 
         $search_term = self::post('search_term');
         if ($search_term) {
-            $search_result_for_label = self::get_lang('SearchResultsFor');
+            $search_result_for_label = self::get_lang('Search results for:');
             $search_term_html = htmlentities($search_term, ENT_QUOTES, $charset);
             echo "<h5>$search_result_for_label $search_term_html</h5>";
 
@@ -166,7 +166,7 @@ class SearchCourseWidget
 
     public function display_header()
     {
-        $search_course_label = self::get_lang('SearchCourse');
+        $search_course_label = self::get_lang('Search courses');
         echo <<<EOT
         <div class="well course_search">
         <div class="menusection">
@@ -263,14 +263,14 @@ EOT;
         //Already subscribed
         $code = $current_course['code'];
         if (isset($user_courses[$code])) {
-            echo self::get_lang('AlreadySubscribed');
+            echo self::get_lang('Already subscribed');
 
             return false;
         }
 
         //Not authorized to subscribe
         if ($current_course['subscribe'] != SUBSCRIBE_ALLOWED) {
-            echo self::get_lang('SubscribingNotAllowed');
+            echo self::get_lang('Subscribing not allowed');
 
             return false;
         }

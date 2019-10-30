@@ -19,7 +19,7 @@ switch ($action) {
             if ($result) {
                 echo Display::return_icon(
                     'check-circle.png',
-                    get_lang('Ok'),
+                    get_lang('Validate'),
                     null,
                     ICON_SIZE_TINY
                 );

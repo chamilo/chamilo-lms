@@ -309,7 +309,7 @@ class MutationMap extends ResolverMap implements ContainerAwareInterface
             $language,
             $phone,
             null,
-            PLATFORM_AUTH_SOURCE,
+            null,
             $expirationDate,
             $userInput['isActive']
         );
@@ -681,7 +681,7 @@ class MutationMap extends ResolverMap implements ContainerAwareInterface
             !empty($userInput['lastname']) ? $userInput['lastname'] : $user->getLastname(),
             !empty($userInput['username']) ? $userInput['username'] : $user->getUsername(),
             null,
-            PLATFORM_AUTH_SOURCE,
+            null,
             !empty($userInput['email']) ? $userInput['email'] : $user->getEmail(),
             !empty($userInput['status']) ? $userInput['status'] : $user->getStatus(),
             !empty($userInput['officialCode']) ? $userInput['officialCode'] : $user->getOfficialCode(),

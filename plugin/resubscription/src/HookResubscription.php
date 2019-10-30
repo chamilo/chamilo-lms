@@ -1,6 +1,10 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Hook\HookObserver;
+use Chamilo\CoreBundle\Hook\Interfaces\HookResubscribeEventInterface;
+use Chamilo\CoreBundle\Hook\Interfaces\HookResubscribeObserverInterface;
+
 /**
  * Hook to limit session resubscriptions.
  *
@@ -24,7 +28,9 @@ class HookResubscription extends HookObserver implements HookResubscribeObserver
     /**
      * Limit session resubscription when a Chamilo user is resubscribed to a session.
      *
-     * @param HookCreateUserEventInterface $hook The hook
+     * @param HookResubscribeEventInterface $hook The hook
+     *
+     * @throws Exception
      */
     public function hookResubscribe(HookResubscribeEventInterface $hook)
     {
@@ -99,7 +105,7 @@ class HookResubscription extends HookObserver implements HookResubscribeObserver
                 if (isset($userSessionCourses[$currentSessionCourse['c_id']])) {
                     $endDate = $userSessionCourses[$currentSessionCourse['c_id']];
                     $resubscriptionDate = gmdate($limitDateFormat, strtotime($endDate." +$resubscriptionOffset"));
-                    $icon = Display::return_icon('students.gif', get_lang('Student'));
+                    $icon = Display::return_icon('students.gif', get_lang('Learner'));
                     $canResubscribeFrom = sprintf(
                         get_plugin_lang('CanResubscribeFromX', 'resubscription'),
                         $resubscriptionDate

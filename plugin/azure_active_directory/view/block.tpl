@@ -8,12 +8,15 @@
             <a href="{{ azure_active_directory.signin_url }}" class="btn btn-default">{{ 'SignIn'|get_lang }}</a>
         {% endif %}
 
-        {% if not azure_active_directory.signup_url is empty %}
-            <a href="{{ azure_active_directory.signup_url }}" class="btn btn-success">{{ 'SignUp'|get_lang }}</a>
+        {% if not azure_active_directory.signout_url is empty %}
+            <a href="{{ azure_active_directory.signout_url }}" class="btn btn-danger">{{ 'Logout'|get_lang }}</a>
         {% endif %}
 
-        {% if not azure_active_directory.signunified_url is empty %}
-            <a href="{{ azure_active_directory.signunified_url }}" class="btn btn-info">{{ 'SignUpAndSignIn'|get_plugin_lang('AzureActiveDirectory') }}</a>
+        {% if azure_active_directory.management_login_enabled %}
+            <hr>
+            <a href="{{ _p.web_plugin  ~ 'azure_active_directory/login.php' }}">
+                {{ azure_active_directory.management_login_name }}
+            </a>
         {% endif %}
     </div>
 {% endif %}

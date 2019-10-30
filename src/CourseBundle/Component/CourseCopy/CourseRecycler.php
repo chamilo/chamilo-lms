@@ -10,8 +10,6 @@ use TestCategory;
  * Class to delete items from a Chamilo-course.
  *
  * @author Bart Mollet <bart.mollet@hogent.be>
- *
- * @package chamilo.backup
  */
 class CourseRecycler
 {
@@ -86,10 +84,6 @@ class CourseRecycler
                     Database::query($sql);
                 }
             }
-        }
-
-        if ($backupType === 'full_backup') {
-            \CourseManager::deleteCoursePicture($this->course_info['code']);
         }
     }
 

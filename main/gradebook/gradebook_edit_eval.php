@@ -60,7 +60,7 @@ if ($form->validate()) {
 $selectcat_inter = isset($_GET['selectcat']) ? (int) $_GET['selectcat'] : 0;
 $interbreadcrumb[] = [
     'url' => Category::getUrl().'selectcat='.$selectcat_inter,
-    'name' => get_lang('Gradebook'),
+    'name' => get_lang('Assessments'),
 ];
 
 $htmlHeadXtra[] = '<script>
@@ -82,6 +82,6 @@ $(function() {
 });
 </script>';
 
-Display::display_header(get_lang('EditEvaluation'));
+Display::display_header(get_lang('Edit evaluation'));
 $form->display();
 Display::display_footer();

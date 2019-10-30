@@ -7,8 +7,6 @@ namespace Chamilo\CourseBundle\Component\CourseCopy\Resources;
  * An announcement.
  *
  * @author Bart Mollet <bart.mollet@hogent.be>
- *
- * @package chamilo.backup
  */
 class Announcement extends Resource
 {

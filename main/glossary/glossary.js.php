@@ -3,9 +3,11 @@
 
 require_once __DIR__.'/../inc/global.inc.php';
 
+header('Content-type: application/x-javascript');
+
 $origin = api_get_origin();
 
-$tpl = new Template();
+$tpl = new Template('', false, false, false, true, false, false);
 
 $glossaryExtraTools = api_get_setting('show_glossary_in_extra_tools');
 
@@ -24,6 +26,5 @@ if ($showGlossary) {
     $addReady = isset($_GET['add_ready']) ? true : false;
     $tpl->assign('add_ready', $addReady);
     $contentTemplate = $tpl->get_template($templateName);
-    header('Content-type: application/x-javascript');
     $tpl->display($contentTemplate);
 }

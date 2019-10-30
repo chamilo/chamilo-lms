@@ -27,7 +27,7 @@ $lpId = isset($_GET['lp_id']) ? intval($_GET['lp_id']) : 0;
 
 // This page can only be shown from inside a learning path
 if (!$id && !$lpId) {
-    Display::return_message(get_lang('FileNotFound'), 'warning');
+    Display::return_message(get_lang('The file was not found'), 'warning');
     exit;
 }
 
@@ -36,8 +36,7 @@ $plugin = BuyCoursesPlugin::create();
 $checker = $plugin->isEnabled() && $plugin->get('include_services');
 
 if ($checker) {
-    $userServiceSale = $plugin->getServiceSale(
-        null,
+    $userServiceSale = $plugin->getServiceSales(
         $userId,
         BuyCoursesPlugin::SERVICE_STATUS_COMPLETED,
         BuyCoursesPlugin::SERVICE_TYPE_LP_FINAL_ITEM,
@@ -50,7 +49,7 @@ if ($checker) {
         $url = api_get_path(WEB_PLUGIN_PATH).'buycourses/src/service_catalog.php';
         $content = sprintf(
             Display::return_message(
-                get_lang('IfYouWantToGetTheCertificateAndOrSkillsAsociatedToThisCourseYouNeedToBuyTheCertificateServiceYouCanGoToServiceCatalogClickingHere'),
+                get_lang('If you want to get the certificate and/or skills associated with this course, you need to buy the certificate service. You can go to the services catalog by clicking this link: %s'),
                 'normal',
                 false
             ),
@@ -95,7 +94,7 @@ unset($currentItem);
 // show a prerequisites warning
 if ($accessGranted == false) {
     echo Display::return_message(
-        get_lang('LearnpathPrereqNotCompleted'),
+        get_lang('This learning object cannot display because the course prerequisites are not completed. This happens when a course imposes that you follow it step by step or get a minimum score in tests before you reach the next steps.'),
         'warning'
     );
     $finalItemTemplate = '';
@@ -137,47 +136,41 @@ if ($accessGranted == false) {
             $catCourseCode = CourseManager::get_course_by_category($categoryId);
             $show_message = $cat->show_message_resource_delete($catCourseCode);
 
-            if ($show_message == '') {
-                if (!api_is_allowed_to_edit() && !api_is_excluded_user_type()) {
-                    $certificate = Category::generateUserCertificate(
-                        $categoryId,
-                        $userId
-                    );
+            if (false === $show_message && !api_is_allowed_to_edit() && !api_is_excluded_user_type()) {
+                $certificate = Category::generateUserCertificate(
+                    $categoryId,
+                    $userId
+                );
 
-                    if (!empty($certificate['pdf_url']) ||
-                        !empty($certificate['badge_link'])
-                    ) {
-                        if (is_array($certificate) &&
-                            isset($certificate['pdf_url'])
-                        ) {
-                            $downloadCertificateLink = generateLPFinalItemTemplateCertificateLinks(
-                                $certificate
-                            );
-                        }
-
-                        if (is_array($certificate) &&
-                            isset($certificate['badge_link'])
-                        ) {
-                            $courseId = api_get_course_int_id();
-                            $badgeLink = generateLPFinalItemTemplateBadgeLinks(
-                                $userId,
-                                $courseId,
-                                $sessionId
-                            );
-                        }
+                if (!empty($certificate['pdf_url']) ||
+                    !empty($certificate['badge_link'])
+                ) {
+                    if (is_array($certificate)) {
+                        $downloadCertificateLink = Category::getDownloadCertificateBlock($certificate);
                     }
 
-                    $currentScore = Category::getCurrentScore(
-                        $userId,
-                        $category,
-                        true
-                    );
-                    Category::registerCurrentScore(
-                        $currentScore,
-                        $userId,
-                        $categoryId
-                    );
+                    if (is_array($certificate) &&
+                        isset($certificate['badge_link'])
+                    ) {
+                        $courseId = api_get_course_int_id();
+                        $badgeLink = generateLPFinalItemTemplateBadgeLinks(
+                            $userId,
+                            $courseId,
+                            $sessionId
+                        );
+                    }
                 }
+
+                $currentScore = Category::getCurrentScore(
+                    $userId,
+                    $category,
+                    true
+                );
+                Category::registerCurrentScore(
+                    $currentScore,
+                    $userId,
+                    $categoryId
+                );
             }
         }
 
@@ -190,7 +183,7 @@ if ($accessGranted == false) {
         );
 
         if (!$finalItemTemplate) {
-            echo Display::return_message(get_lang('FileNotFound'), 'warning');
+            echo Display::return_message(get_lang('The file was not found'), 'warning');
         }
     }
 }
@@ -266,11 +259,11 @@ function generateLPFinalItemTemplateBadgeLinks($userId, $courseId, $sessionId = 
                         ".$skill->getDescription()."
                     </div>
                     <div class='col-md-2 col-xs-12'>
-                        <h5><b>".get_lang('ShareWithYourFriends')."</b></h5>
+                        <h5><b>".get_lang('Share with your friends')."</b></h5>
                         <a href='http://www.facebook.com/sharer.php?u=".api_get_path(WEB_PATH)."badge/".$skill->getId()."/user/".$userId."' target='_new'>
                             <em class='fa fa-facebook-square fa-3x text-info' aria-hidden='true'></em>
                         </a>
-                        <a href='https://twitter.com/home?status=".sprintf(get_lang('IHaveObtainedSkillXOnY'), '"'.$skill->getName().'"', api_get_setting('siteName')).' - '.api_get_path(WEB_PATH).'badge/'.$skill->getId().'/user/'.$userId."' target='_new'>
+                        <a href='https://twitter.com/home?status=".sprintf(get_lang('I have achieved skill %s on %s'), '"'.$skill->getName().'"', api_get_setting('siteName')).' - '.api_get_path(WEB_PATH).'badge/'.$skill->getId().'/user/'.$userId."' target='_new'>
                             <em class='fa fa-twitter-square fa-3x text-light' aria-hidden='true'></em>
                         </a>
                     </div>
@@ -280,7 +273,7 @@ function generateLPFinalItemTemplateBadgeLinks($userId, $courseId, $sessionId = 
         $badgeLink .= "
             <div class='panel panel-default'>
                 <div class='panel-body'>
-                    <h3 class='text-center'>".get_lang('AdditionallyYouHaveObtainedTheFollowingSkills')."</h3>
+                    <h3 class='text-center'>".get_lang('Additionally, you have achieved the following skills')."</h3>
                     $skillList
                 </div>
             </div>
@@ -288,31 +281,4 @@ function generateLPFinalItemTemplateBadgeLinks($userId, $courseId, $sessionId = 
     }
 
     return $badgeLink;
-}
-
-/**
- * Return HTML string with certificate links.
- *
- * @param array $certificate
- *
- * @return string HTML string for certificates
- */
-function generateLPFinalItemTemplateCertificateLinks($certificate)
-{
-    $downloadCertificateLink = Display::url(
-        Display::returnFontAwesomeIcon('file-pdf-o').get_lang('DownloadCertificatePdf'),
-        $certificate['pdf_url'],
-        ['class' => 'btn btn-default']
-    );
-    $viewCertificateLink = $certificate['certificate_link'];
-    $downloadCertificateLink = "
-        <div class='panel panel-default'>
-            <div class='panel-body'>
-                <h3 class='text-center'>".get_lang('NowDownloadYourCertificateClickHere')."</h3>
-                <div class='text-center'>$downloadCertificateLink $viewCertificateLink</div>
-            </div>
-        </div>
-    ";
-
-    return $downloadCertificateLink;
 }

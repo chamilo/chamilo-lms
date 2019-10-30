@@ -34,13 +34,13 @@ $courseInfo = api_get_course_info();
 
 $interbreadcrumb[] = [
     'url' => api_get_path(WEB_CODE_PATH).'work/work.php?'.api_get_cidreq(),
-    'name' => get_lang('StudentPublications'),
+    'name' => get_lang('Assignments'),
 ];
 $interbreadcrumb[] = [
     'url' => api_get_path(WEB_CODE_PATH).'work/work_list_all.php?'.api_get_cidreq().'&id='.$workId,
     'name' => $my_folder_data['title'],
 ];
-$interbreadcrumb[] = ['url' => '#', 'name' => get_lang('AddDocument')];
+$interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Add document')];
 
 switch ($action) {
     case 'delete':
@@ -58,8 +58,9 @@ if (empty($docId)) {
     Display::display_header(null);
     $documents = getAllDocumentToWork($workId, api_get_course_int_id());
     if (!empty($documents)) {
-        echo Display::page_subheader(get_lang('DocumentsAdded'));
+        echo Display::page_subheader(get_lang('Documents added'));
         echo '<div class="well">';
+        $urlDocument = api_get_path(WEB_CODE_PATH).'work/add_document.php';
         foreach ($documents as $doc) {
             $documentId = $doc['document_id'];
             $docData = DocumentManager::get_document_data_by_id($documentId, $courseInfo['code']);
@@ -88,11 +89,12 @@ if (empty($docId)) {
     echo Display::page_subheader(get_lang('Documents'));
     echo $documentTree;
     echo '<hr /><div class="clear"></div>';
+    Display::display_footer();
 } else {
     $documentInfo = DocumentManager::get_document_data_by_id($docId, $courseInfo['code']);
     $url = api_get_path(WEB_CODE_PATH).'work/add_document.php?id='.$workId.'&document_id='.$docId.'&'.api_get_cidreq();
     $form = new FormValidator('add_doc', 'post', $url);
-    $form->addElement('header', get_lang('AddDocument'));
+    $form->addElement('header', get_lang('Add document'));
     $form->addElement('hidden', 'add_doc', '1');
     $form->addElement('hidden', 'id', $workId);
     $form->addElement('hidden', 'document_id', $docId);
@@ -108,7 +110,7 @@ if (empty($docId)) {
             addDocumentToWork($docId, $workId, api_get_course_int_id());
             Display::addFlash(Display::return_message(get_lang('Added'), 'success'));
         } else {
-            Display::addFlash(Display::return_message(get_lang('DocumentAlreadyAdded'), 'warning'));
+            Display::addFlash(Display::return_message(get_lang('Document already added'), 'warning'));
         }
 
         $url = api_get_path(WEB_CODE_PATH).'work/add_document.php?id='.$workId.'&'.api_get_cidreq();
@@ -118,4 +120,5 @@ if (empty($docId)) {
 
     Display::display_header(null);
     $form->display();
+    Display::display_footer();
 }

@@ -42,7 +42,7 @@ function denied_friend (element_input) {
 }
 
 function register_friend(element_input) {
-    if(confirm("'.get_lang('AddToFriends').'")) {
+    if(confirm("'.get_lang('Are you sure you want to add this contact to your friends ?').'")) {
     	name_button=$(element_input).attr("id");
     	name_div_id="id_"+name_button.substring(13);
     	user_id=name_div_id.split("_");
@@ -76,12 +76,12 @@ $(function() {
 </script>';
 
 // Social Menu Block
-$social_menu_block = SocialManager::getMenuSocial('myfiles');
+$social_menu_block = SocialManager::show_social_menu('myfiles');
 $actions = null;
 
 if (isset($_GET['cidReq'])) {
     $actions = Display::url(
-        Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('Documents').' ('.get_lang('Course').')'),
+        Display::return_icon('back.png', get_lang('Back to').' '.get_lang('Documents').' ('.get_lang('Course').')'),
         api_get_self().'?'.api_get_cidreq().'&id='.$_GET['parent_id']
     );
 }
@@ -90,17 +90,17 @@ if (api_get_setting('allow_social_tool') == 'true') {
     Session::write('this_section', SECTION_SOCIAL);
     $interbreadcrumb[] = [
         'url' => 'profile.php',
-        'name' => get_lang('SocialNetwork'),
+        'name' => get_lang('Social network'),
     ];
 } else {
     Session::write('this_section', SECTION_COURSES);
     $interbreadcrumb[] = [
         'url' => api_get_path(WEB_PATH).'user_portal.php',
-        'name' => get_lang('MyCourses'),
+        'name' => get_lang('My courses'),
     ];
 }
 
-$tpl = new Template(get_lang('MyFiles'));
+$tpl = new Template(get_lang('My files'));
 SocialManager::setSocialUserBlock($tpl, api_get_user_id(), 'myfiles');
 $editor = \Chamilo\CoreBundle\Framework\Container::getHtmlEditor();
 $template = $tpl->get_template($editor->getEditorStandAloneTemplate());
@@ -114,7 +114,7 @@ if (api_get_setting('allow_social_tool') == 'true') {
     $social_layout = $tpl->get_template('social/myfiles.tpl');
     $tpl->display($social_layout);
 } else {
-    $controller = new IndexManager(get_lang('MyCourses'));
+    $controller = new IndexManager(get_lang('My courses'));
     $tpl->assign(
         'actions',
         Display::toolbarAction('toolbar', [$actions])

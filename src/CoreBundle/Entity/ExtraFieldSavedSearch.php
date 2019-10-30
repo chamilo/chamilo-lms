@@ -5,7 +5,7 @@ namespace Chamilo\CoreBundle\Entity;
 
 use Chamilo\UserBundle\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
-use Gedmo\Mapping\Annotation as Gedmo;
+use Gedmo\Timestampable\Traits\TimestampableEntity;
 
 /**
  * Class ExtraFieldSavedSearch.
@@ -15,6 +15,8 @@ use Gedmo\Mapping\Annotation as Gedmo;
  */
 class ExtraFieldSavedSearch
 {
+    use TimestampableEntity;
+
     /**
      * @var int
      *
@@ -26,6 +28,7 @@ class ExtraFieldSavedSearch
 
     /**
      * @var ExtraField
+     *
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\ExtraField")
      * @ORM\JoinColumn(name="field_id", referencedColumnName="id")
      */
@@ -45,22 +48,6 @@ class ExtraFieldSavedSearch
      * @ORM\Column(name="value", type="array", nullable=true, unique=false)
      */
     protected $value;
-
-    /**
-     * @var \DateTime
-     *
-     * @Gedmo\Timestampable(on="create")
-     * @ORM\Column(name="created_at", type="datetime")
-     */
-    protected $createdAt;
-
-    /**
-     * @var \DateTime
-     *
-     * @Gedmo\Timestampable(on="update")
-     * @ORM\Column(name="updated_at", type="datetime")
-     */
-    protected $updatedAt;
 
     /**
      * Get id.
@@ -128,46 +115,6 @@ class ExtraFieldSavedSearch
     public function setValue($value)
     {
         $this->value = $value;
-
-        return $this;
-    }
-
-    /**
-     * @return \DateTime
-     */
-    public function getCreatedAt()
-    {
-        return $this->createdAt;
-    }
-
-    /**
-     * @param \DateTime $createdAt
-     *
-     * @return ExtraFieldSavedSearch
-     */
-    public function setCreatedAt($createdAt)
-    {
-        $this->createdAt = $createdAt;
-
-        return $this;
-    }
-
-    /**
-     * @return \DateTime
-     */
-    public function getUpdatedAt()
-    {
-        return $this->updatedAt;
-    }
-
-    /**
-     * @param \DateTime $updatedAt
-     *
-     * @return ExtraFieldSavedSearch
-     */
-    public function setUpdatedAt($updatedAt)
-    {
-        $this->updatedAt = $updatedAt;
 
         return $this;
     }

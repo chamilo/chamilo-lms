@@ -35,12 +35,12 @@ $categories = [];
 foreach ($default_description_titles as $id => $title) {
     $categories[$id] = $title;
 }
-$categories[ADD_BLOCK] = get_lang('NewBloc');
+$categories[ADD_BLOCK] = get_lang('Other');
 
 $i = 1;
 echo '<div class="actions" style="margin-bottom:30px">';
 echo '<a href="index.php?'.api_get_cidreq().'">'.
-        Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('ToolCourseDescription'), '', ICON_SIZE_MEDIUM).
+        Display::return_icon('back.png', get_lang('Back to').' '.get_lang('Course description'), '', ICON_SIZE_MEDIUM).
     '</a>';
 
 ksort($categories);
@@ -59,7 +59,7 @@ echo '</div>';
 
 // error messages
 if (isset($error) && intval($error) == 1) {
-    echo Display::return_message(get_lang('FormHasErrorsPleaseComplete'), 'error', false);
+    echo Display::return_message(get_lang('The form contains incorrect or incomplete data. Please check your input.'), 'error', false);
 }
 
 // default header title form
@@ -86,7 +86,7 @@ if (api_get_configuration_value('save_titles_as_html')) {
         get_lang('Title'),
         true,
         false,
-        ['ToolbarSet' => 'Minimal']
+        ['ToolbarSet' => 'TitleAsHtml']
     );
 } else {
     $form->addText('title', get_lang('Title'));
@@ -117,7 +117,7 @@ $default['description_type'] = $description_type;
 $form->setDefaults($default);
 
 if (isset($question[$description_type])) {
-    $message = '<strong>'.get_lang('QuestionPlan').'</strong><br />';
+    $message = '<strong>'.get_lang('Help').'</strong><br />';
     $message .= $question[$description_type];
     Display::addFlash(Display::return_message($message, 'normal', false));
 }

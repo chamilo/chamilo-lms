@@ -233,7 +233,7 @@ class CustomCertificatePlugin extends Plugin
             $courseCode = $row['course_code'];
             $sessionId = $row['session_id'];
             $userId = $row['user_id'];
-            if (api_get_course_setting('customcertificate_course_enable', $courseCode) == 1) {
+            if (api_get_course_setting('customcertificate_course_enable', api_get_course_info($courseCode)) == 1) {
                 return [
                     'course_code' => $courseCode,
                     'session_id' => $sessionId,
@@ -284,5 +284,58 @@ class CustomCertificatePlugin extends Plugin
                 exit;
             }
         }
+    }
+
+    /**
+     * Get certificate info.
+     *
+     * @param int $courseId
+     * @param int $sessionId
+     * @param int $accessUrlId
+     *
+     * @return array
+     */
+    public static function getInfoCertificate($courseId, $sessionId, $accessUrlId)
+    {
+        $courseId = (int) $courseId;
+        $sessionId = (int) $sessionId;
+        $accessUrlId = !empty($accessUrlId) ? (int) $accessUrlId : 1;
+
+        $table = Database::get_main_table(self::TABLE_CUSTOMCERTIFICATE);
+        $sql = "SELECT * FROM $table
+                WHERE 
+                    c_id = $courseId AND 
+                    session_id = $sessionId AND
+                    access_url_id = $accessUrlId";
+        $result = Database::query($sql);
+        $resultArray = [];
+        if (Database::num_rows($result) > 0) {
+            $resultArray = Database::fetch_array($result);
+        }
+
+        return $resultArray;
+    }
+
+    /**
+     * Get default certificate info.
+     *
+     * @param int $accessUrlId
+     *
+     * @return array
+     */
+    public static function getInfoCertificateDefault($accessUrlId)
+    {
+        $accessUrlId = !empty($accessUrlId) ? (int) $accessUrlId : 1;
+
+        $table = Database::get_main_table(self::TABLE_CUSTOMCERTIFICATE);
+        $sql = "SELECT * FROM $table
+                WHERE certificate_default = 1 AND access_url_id = $accessUrlId";
+        $result = Database::query($sql);
+        $resultArray = [];
+        if (Database::num_rows($result) > 0) {
+            $resultArray = Database::fetch_array($result);
+        }
+
+        return $resultArray;
     }
 }

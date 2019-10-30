@@ -18,10 +18,10 @@ $htmlHeadXtra[] = api_get_jqgrid_js();
 $action = isset($_REQUEST['action']) ? $_REQUEST['action'] : 'display';
 
 // setting breadcrumbs
-$tool_name = get_lang('SkillsAndGradebooks');
-$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('PlatformAdmin')];
+$tool_name = get_lang('Skills and assessments');
+$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('Administration')];
 if ($action == 'add_skill') {
-    $interbreadcrumb[] = ['url' => 'skills_gradebook.php', 'name' => get_lang('SkillsAndGradebooks')];
+    $interbreadcrumb[] = ['url' => 'skills_gradebook.php', 'name' => get_lang('Skills and assessments')];
     $tool_name = get_lang('Add');
 }
 
@@ -38,7 +38,7 @@ switch ($action) {
         if ($form->validate()) {
             $values = $form->exportValues();
             $gradebook->updateSkillsToGradeBook($values['id'], $values['skill']);
-            Display::addFlash(Display::return_message(get_lang('ItemAdded'), 'confirm'));
+            Display::addFlash(Display::return_message(get_lang('Item added'), 'confirm'));
             header('Location: '.api_get_self());
             exit;
         }
@@ -54,9 +54,9 @@ $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=get_gradebooks';
 //The order is important you need to check the the $column variable in the model.ajax.php file
 $columns = [
     get_lang('Name'),
-    get_lang('CertificatesFiles'),
+    get_lang('Certificates'),
     get_lang('Skills'),
-    get_lang('Actions'),
+    get_lang('Detail'),
 ];
 
 //Column config
@@ -95,10 +95,10 @@ $extra_params['autowidth'] = 'true';
 //height auto
 $extra_params['height'] = 'auto';
 
-$iconAdd = Display::return_icon('add.png', addslashes(get_lang('AddSkill')));
+$iconAdd = Display::return_icon('add.png', addslashes(get_lang('Add skill')));
 $iconAddNa = Display::return_icon(
     'add_na.png',
-    addslashes(get_lang('YourGradebookFirstNeedsACertificateInOrderToBeLinkedToASkill'))
+    addslashes(get_lang('Your gradebook first needs a certificate in order to be linked to a skill'))
 );
 
 //With this function we can add actions to the jgrid (edit, delete, etc)

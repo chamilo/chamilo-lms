@@ -4,16 +4,16 @@
 namespace Chamilo\ThemeBundle\EventListener;
 
 use Chamilo\CoreBundle\Framework\Container;
+use CourseManager;
+use SessionManager;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Symfony\Component\HttpKernel\Event\GetResponseEvent;
+use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 
 /**
  * Class TwigListener.
- *
- * @package Chamilo\ThemeBundle\EventListener
  */
 class TwigListener implements EventSubscriberInterface
 {
@@ -30,12 +30,12 @@ class TwigListener implements EventSubscriberInterface
     }
 
     /**
-     * @param GetResponseEvent $event
+     * @param RequestEvent $event
      */
-    public function onKernelRequest(GetResponseEvent $event)
+    public function onKernelRequest(RequestEvent $event)
     {
         if (!$event->isMasterRequest()) {
-            return;
+            return false;
         }
 
         $container = $this->container;
@@ -47,6 +47,11 @@ class TwigListener implements EventSubscriberInterface
 
         $theme = api_get_visual_theme();
         $twig = $container->get('twig');
+
+        if (empty($twig)) {
+            return false;
+        }
+
         $twig->addGlobal('favico', \Template::getPortalIcon($theme));
 
         if ($settingsManager->getSetting('display.show_administrator_data') === 'true') {
@@ -67,7 +72,7 @@ class TwigListener implements EventSubscriberInterface
             $adminName = '';
             // Administrator name
             if (!empty($name)) {
-                $adminName = get_lang('Manager').' : ';
+                $adminName = get_lang('Administrator').' : ';
                 $adminName .= \Display::encrypted_mailto_link($email, $name);
             }
             $twig->addGlobal('administrator_name', $adminName);
@@ -96,21 +101,23 @@ class TwigListener implements EventSubscriberInterface
             if (!empty($courseId)) {
                 $tutorData = '';
                 if ($sessionId !== 0) {
-                    $coachEmail = \CourseManager::get_email_of_tutor_to_session(
-                        $sessionId,
-                        $courseId
-                    );
-                    $email_link = [];
-                    foreach ($coachEmail as $coach) {
-                        $email_link[] = \Display::encrypted_mailto_link($coach['email'], $coach['complete_name']);
+                    $users = SessionManager::getCoachesByCourseSession($sessionId, $courseId);
+                    $links = [];
+                    if (!empty($users)) {
+                        $coaches = [];
+                        foreach ($users as $userId) {
+                            $coaches[] = api_get_user_info($userId);
+                        }
+                        $links = array_column($coaches, 'complete_name_with_message_link');
                     }
-                    if (count($coachEmail) > 1) {
+                    $count = count($links);
+                    if ($count > 1) {
                         $tutorData .= get_lang('Coachs').' : ';
-                        $tutorData .= array_to_string($email_link, \CourseManager::USER_SEPARATOR);
-                    } elseif (count($coachEmail) == 1) {
+                        $tutorData .= array_to_string($links, CourseManager::USER_SEPARATOR);
+                    } elseif ($count === 1) {
                         $tutorData .= get_lang('Coach').' : ';
-                        $tutorData .= array_to_string($email_link, \CourseManager::USER_SEPARATOR);
-                    } elseif (count($coachEmail) == 0) {
+                        $tutorData .= array_to_string($links, CourseManager::USER_SEPARATOR);
+                    } elseif ($count === 0) {
                         $tutorData .= '';
                     }
                 }
@@ -119,19 +126,19 @@ class TwigListener implements EventSubscriberInterface
 
             if (!empty($courseId)) {
                 $teacherData = '';
-                $mail = \CourseManager::get_emails_of_tutors_to_course($courseId);
-                if (!empty($mail)) {
+                $teachers = CourseManager::getTeachersFromCourse($courseId);
+                if (!empty($teachers)) {
                     $teachersParsed = [];
-                    foreach ($mail as $value) {
-                        foreach ($value as $email => $name) {
-                            $teachersParsed[] = \Display::encrypted_mailto_link($email, $name);
-                        }
+                    foreach ($teachers as $teacher) {
+                        $userId = $teacher['id'];
+                        $teachersParsed[] = api_get_user_info($userId);
                     }
-                    $label = get_lang('Teacher');
-                    if (count($mail) > 1) {
-                        $label = get_lang('Teachers');
+                    $links = array_column($teachersParsed, 'complete_name_with_message_link');
+                    $label = get_lang('Trainer');
+                    if (count($links) > 1) {
+                        $label = get_lang('Trainers');
                     }
-                    $teacherData .= $label.' : '.array_to_string($teachersParsed, \CourseManager::USER_SEPARATOR);
+                    $teacherData .= $label.' : '.array_to_string($links, CourseManager::USER_SEPARATOR);
                 }
                 $twig->addGlobal('teachers', $teacherData);
             }
@@ -193,6 +200,8 @@ class TwigListener implements EventSubscriberInterface
             }
             $twig->addGlobal("plugin_$region", $contentToString);
         }
+
+        return true;
     }
 
     /**

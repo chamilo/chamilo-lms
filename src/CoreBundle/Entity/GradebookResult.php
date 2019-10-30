@@ -8,7 +8,11 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * GradebookResult.
  *
- * @ORM\Table(name="gradebook_result")
+ * @ORM\Table(name="gradebook_result",
+ *  indexes={
+ *     @ORM\Index(name="idx_gb_uid_eid", columns={"user_id", "evaluation_id"}),
+ * })
+ *
  * @ORM\Entity
  */
 class GradebookResult

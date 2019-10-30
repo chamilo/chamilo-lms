@@ -1,3 +1,35 @@
+# Put parameters here that don't need to change on each machine where the app is deployed
+# https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
+parameters:
+    password_encryption: '%env(APP_ENCRYPT_METHOD)%'
+    secret: '%env(APP_SECRET)%'
+    locale: '%env(APP_LOCALE)%'
+    url_append: '%env(APP_URL_APPEND)%'
+    installed: '%env(APP_INSTALLED)%'
+    twig:
+        form:
+            resources:
+                - 'GeneratorBundle::fields.html.twig'
+
+    mailer_transport: smtp
+    mailer_host: 127.0.0.1
+    mailer_user: admin@example.com
+    mailer_password: null
+    course_info_is_not_editable: false
+    sonata_media.cdn.host: '%url_append%/public/resource'
+    sonata_page.varnish.command: 'if [ ! -r "/etc/varnish/secret" ]; then echo "VALID ERROR :/"; else varnishadm -S /etc/varnish/secret -T 127.0.0.1:6082 {{ COMMAND }} "{{ EXPRESSION }}"; fi;'
+    router.request_context.base_url: '%url_append%'
+    asset.request_context.base_path: '%url_append%'
+
+    glide_config:
+        source: 'oneup_flysystem.resources_filesystem'
+        cache: 'oneup_flysystem.cache_resources_filesystem'
+        #cache: 'var/cache/resource/'
+
+    glide_media_filters:
+        document_thumbnail_small:
+            w: 500
+
 services:
     # default configuration for services in *this* file
     _defaults:
@@ -6,28 +38,26 @@ services:
         public: true       # Allows optimizing the container by removing unused services; this also means
           # fetching services directly from the container via $container->get() won't work.
         # The best practice is to be explicit about your dependencies anyway.
+        bind:
+            $passwordEncrypt: '%password_encryption%'
+
+    Chamilo\CoreBundle\Component\Utils\Glide:
+        arguments:
+            - {source: '@oneup_flysystem.resources_filesystem', cache: '@oneup_flysystem.cache_resources_filesystem'}
+            - '%glide_media_filters%'
 
     # makes classes in src/ available to be used as services
     # this creates a service per class whose id is the fully-qualified class name
-
-    Chamilo\CoreBundle\:
-        resource: '../src/CoreBundle/*'
-        exclude: '../src/CoreBundle/{Entity,Migrations,Tests,Admin,Block,Component,Repository,Security,EventListener}'
-        public: true
-
     _instanceof:
         Sylius\Bundle\ResourceBundle\Controller\ResourceController:
             autowire: false
 
-    Chamilo\CoreBundle\Controller\ResourceUploaderController:
-        autowire: false
-
-    Chamilo\CoreBundle\Controller\ResourceController:
-        autowire: false
-
     Chamilo\PageBundle\:
         resource: '../src/PageBundle/*'
         exclude: '../src/PageBundle/{Entity,Migrations,Tests}'
+        public: true
+
+    Vich\UploaderBundle\Naming\SubdirDirectoryNamer:
         public: true
 
     Chamilo\ThemeBundle\:
@@ -43,8 +73,78 @@ services:
 
     Doctrine\ORM\EntityManager: "@doctrine.orm.default_entity_manager"
 
+    chamilo_core.hook_factory:
+        class: 'Chamilo\CoreBundle\Hook\HookFactory'
+
+        # makes classes in src/ available to be used as services
+    # this creates a service per class whose id is the fully-qualified class name
+    AdminBundle\:
+        resource: '../src/AdminBundle/*'
+        # you can exclude directories or files
+        # but if a service is unused, it's removed anyway
+        exclude: '../src/AdminBundle/{ChamiloAdminBundle.php,Entity,Repository,Tests}'
+
+    ClassificationBundle\:
+        resource: '../src/ClassificationBundle/*'
+        # you can exclude directories or files
+        # but if a service is unused, it's removed anyway
+        exclude: '../src/ClassificationBundle/{ChamiloClassificationBundle.php,Entity,Admin,Document,Repository,Tests}'
+
+    ContactBundle\:
+        resource: '../src/ContactBundle/*'
+        # you can exclude directories or files
+        # but if a service is unused, it's removed anyway
+        exclude: '../src/ContactBundle/{ChamiloContactBundle.php,Entity,Admin,Controller,DependencyInjection,Form,Repository,Tests}'
+
+    Chamilo\UserBundle\:
+        resource: '../src/UserBundle/*'
+        # you can exclude directories or files
+        # but if a service is unused, it's removed anyway
+        exclude: '../src/UserBundle/{Admin,ChamiloUserBundle.php,Security/FOSUBUserProvider.php,DependencyInjection,Form,EventListener,Entity,Repository}'
+
+    chamilo_lti_utils:
+        class: Chamilo\LtiBundle\Util\Utils
+        arguments: ['@chamilo.settings.manager']
+
 sylius_settings:
     driver: doctrine/orm
+
+# Doctrine audit
+sonata_doctrine_orm_admin:
+    audit:
+        force: false # Audits are set in the admin.yml files with audit:true
+
+# Grid default template
+#apy_data_grid:
+#    theme: ChamiloCoreBundle::grid.html.twig
+#
+
+# Course settings
+chamilo_course:
+    driver: doctrine/orm
+#    resources:
+#        parameter:
+#            classes:
+#                model: Chamilo\CourseBundle\Entity\CCourseSetting
+#                repository: Chamilo\CourseBundle\Repository\CCourseSettingRepository
+
+#doctrine_cache:
+#    providers:
+#        sylius_settings:
+#            type: file_system
+#        chamilo_settings:
+#            type: file_system
+
+gregwar_captcha:
+    width: 200
+    height: 50
+    length: 6
+
+imports:
+    - {resource: ../src/CoreBundle/Resources/config/services.yml}
+    - {resource: ../src/PageBundle/Resources/config/services.yml}
+    - {resource: ../vendor/knplabs/doctrine-behaviors/config/orm-services.yml}
+
 
 #sylius_resource:
 #    resources:
@@ -77,25 +177,3 @@ sylius_settings:
 #        - "%kernel.root_dir%/../doclib/uploads"
 #        - true
 
-# Put parameters here that don't need to change on each machine where the app is deployed
-# https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
-parameters:
-    password_encryption: '%env(APP_ENCRYPT_METHOD)%'
-    secret: '%env(APP_SECRET)%'
-    locale: '%env(APP_LOCALE)%'
-    url_append: '%env(APP_URL_APPEND)%'
-    installed: '%env(APP_INSTALLED)%'
-    twig:
-        form:
-            resources:
-                - 'GeneratorBundle::fields.html.twig'
-
-    mailer_transport: smtp
-    mailer_host: 127.0.0.1
-    mailer_user: admin@example.com
-    mailer_password: null
-    course_info_is_not_editable: false
-    sonata_media.cdn.host: '%url_append%/public/resource'
-    sonata_page.varnish.command: 'if [ ! -r "/etc/varnish/secret" ]; then echo "VALID ERROR :/"; else varnishadm -S /etc/varnish/secret -T 127.0.0.1:6082 {{ COMMAND }} "{{ EXPRESSION }}"; fi;'
-    router.request_context.base_url: '%url_append%'
-    asset.request_context.base_path: '%url_append%'

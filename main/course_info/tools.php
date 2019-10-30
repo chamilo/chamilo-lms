@@ -19,9 +19,9 @@ if (!api_is_allowed_to_edit()) {
 }
 
 $action = isset($_GET['action']) ? $_GET['action'] : '';
-$id = isset($_GET['id']) ? intval($_GET['id']) : '';
+$id = isset($_GET['id']) ? (int) $_GET['id'] : '';
 
-$toolName = get_lang('CustomizeIcons');
+$toolName = get_lang('Customize icons');
 
 switch ($action) {
     case 'delete_icon':
@@ -31,7 +31,7 @@ switch ($action) {
         }
 
         $currentUrl = api_get_self().'?'.api_get_cidreq();
-        Display::addFlash(Display::return_message(get_lang('Updated')));
+        Display::addFlash(Display::return_message(get_lang('Update successful')));
         CourseHome::deleteIcon($id);
         header('Location: '.$currentUrl);
         exit;
@@ -45,37 +45,37 @@ switch ($action) {
 
         $interbreadcrumb[] = [
             'url' => api_get_self().'?'.api_get_cidreq(),
-            'name' => get_lang('CustomizeIcons'),
+            'name' => get_lang('Customize icons'),
         ];
         $toolName = Security::remove_XSS(stripslashes($tool['name']));
 
         $currentUrl = api_get_self().'?action=edit_icon&id='.$id.'&'.api_get_cidreq();
 
         $form = new FormValidator('icon_edit', 'post', $currentUrl);
-        $form->addHeader(get_lang('EditIcon'));
+        $form->addHeader(get_lang('Edit icon'));
         $form->addHtml('<div class="col-md-7">');
         $form->addText('name', get_lang('Name'));
         $form->addText('link', get_lang('Links'));
         $allowedPictureTypes = ['jpg', 'jpeg', 'png'];
-        $form->addFile('icon', get_lang('CustomIcon'));
+        $form->addFile('icon', get_lang('Custom icon'));
         $form->addRule(
             'icon',
-            get_lang('OnlyImagesAllowed').' ('.implode(',', $allowedPictureTypes).')',
+            get_lang('Only PNG, JPG or GIF images allowed').' ('.implode(',', $allowedPictureTypes).')',
             'filetype',
             $allowedPictureTypes
         );
         $form->addSelect(
             'target',
-            get_lang('LinkTarget'),
+            get_lang('Link\'s target'),
             [
-                '_self' => get_lang('LinkOpenSelf'),
-                '_blank' => get_lang('LinkOpenBlank'),
+                '_self' => get_lang('Open self'),
+                '_blank' => get_lang('Open blank'),
             ]
         );
         $form->addSelect(
             'visibility',
             get_lang('Visibility'),
-            [1 => get_lang('Visible'), 0 => get_lang('Invisible')]
+            [1 => get_lang('Visible'), 0 => get_lang('invisible')]
         );
         $form->addTextarea(
             'description',
@@ -87,13 +87,13 @@ switch ($action) {
         $form->addHtml('<div class="col-md-5">');
         if (isset($tool['custom_icon']) && !empty($tool['custom_icon'])) {
             $form->addLabel(
-                get_lang('CurrentIcon'),
+                get_lang('Current icon'),
                 Display::img(
                     CourseHome::getCustomWebIconPath().$tool['custom_icon']
                 )
             );
 
-            $form->addCheckBox('delete_icon', null, get_lang('DeletePicture'));
+            $form->addCheckBox('delete_icon', null, get_lang('Delete picture'));
         }
         $form->addHtml('</div>');
         $form->setDefaults($tool);
@@ -102,7 +102,7 @@ switch ($action) {
         if ($form->validate()) {
             $data = $form->getSubmitValues();
             CourseHome::updateTool($id, $data);
-            Display::addFlash(Display::return_message(get_lang('Updated')));
+            Display::addFlash(Display::return_message(get_lang('Update successful')));
             if (isset($data['delete_icon'])) {
                 CourseHome::deleteIcon($id);
             }
@@ -147,7 +147,7 @@ switch ($action) {
             $tmp['visibility'] = $tool['visibility'];
 
             $delete = (!empty($tool['custom_icon'])) ? "<a class=\"btn btn-default\" onclick=\"javascript:
-                if(!confirm('".addslashes(api_htmlentities(get_lang('ConfirmYourChoice'), ENT_QUOTES, $charset)).
+                if(!confirm('".addslashes(api_htmlentities(get_lang('Please confirm your choice'), ENT_QUOTES, $charset)).
                 "')) return false;\" href=\"".api_get_self().'?action=delete_icon&id='.$tool['iid'].'&'.api_get_cidreq()."\">
             <i class=\"fas fa-trash-alt\"></i></a>" : "";
             $edit = '<a class="btn btn-outline-secondary btn-sm" href="'.api_get_self().'?action=edit_icon&id='.$tool['iid'].'&'.api_get_cidreq().'"><i class="fas fa-pencil-alt"></i></a>';

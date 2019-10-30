@@ -21,6 +21,8 @@ class ScoreDisplay
 
     /**
      * Protected constructor - call instance() to instantiate.
+     *
+     * @param int $category_id
      */
     public function __construct($category_id = 0)
     {
@@ -53,7 +55,7 @@ class ScoreDisplay
                 foreach ($displays as $display) {
                     $data = explode('::', $display['selected_value']);
                     if (empty($data[1])) {
-                        $data[1] = "";
+                        $data[1] = '';
                     }
                     $portal_displays[$data[0]] = [
                         'score' => $data[0],
@@ -225,12 +227,12 @@ class ScoreDisplay
 
         //Get this from DB settings
         $display = [
-            50 => get_lang('GradebookFailed'),
-            60 => get_lang('GradebookPoor'),
-            70 => get_lang('GradebookFair'),
-            80 => get_lang('GradebookGood'),
-            90 => get_lang('GradebookOutstanding'),
-            100 => get_lang('GradebookExcellent'),
+            50 => get_lang('Failed'),
+            60 => get_lang('Poor'),
+            70 => get_lang('Fair'),
+            80 => get_lang('Good'),
+            90 => get_lang('Outstanding'),
+            100 => get_lang('Excellent'),
         ];
 
         $table = Database::get_main_table(TABLE_MAIN_GRADEBOOK_SCORE_DISPLAY);
@@ -306,6 +308,11 @@ class ScoreDisplay
             $percentage = $my_score[0] / $my_score[1] * 100;
 
             return Display::bar_progress($percentage);
+        }
+        if ($type == SCORE_NUMERIC) {
+            $percentage = $my_score[0] / $my_score[1] * 100;
+
+            return round($percentage);
         }
 
         if ($type == SCORE_SIMPLE) {

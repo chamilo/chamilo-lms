@@ -9,8 +9,6 @@ use Symfony\Component\Form\FormBuilderInterface;
 
 /**
  * Class TrackingSettingsSchema.
- *
- * @package Chamilo\CoreBundle\Settings
  */
 class TrackingSettingsSchema extends AbstractSettingsSchema
 {

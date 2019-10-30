@@ -1,8 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use ChamiloSession as Session;
-
 /**
  * List all certificates filtered by session/course and month/year.
  *
@@ -26,7 +24,7 @@ $this_section = SECTION_TRACKING;
 
 $interbreadcrumb[] = [
     "url" => api_is_student_boss() ? "#" : api_get_path(WEB_CODE_PATH)."mySpace/index.php?".api_get_cidreq(),
-    "name" => get_lang("MySpace"),
+    "name" => get_lang("Reporting"),
 ];
 
 $selectedSession = isset($_POST['session']) && !empty($_POST['session']) ? intval($_POST['session']) : 0;
@@ -56,7 +54,7 @@ foreach ($sessionsList as $session) {
 
 if ($selectedSession > 0) {
     if (!SessionManager::isValidId($selectedSession)) {
-        Display::addFlash(Display::return_message(get_lang('NoSession')));
+        Display::addFlash(Display::return_message(get_lang('The session could not be found')));
 
         header("Location: $selfUrl");
         exit;
@@ -111,7 +109,7 @@ if ($searchSessionAndCourse || $searchCourseOnly) {
     $selectedCourseInfo = api_get_course_info_by_id($selectedCourse);
 
     if (empty($selectedCourseInfo)) {
-        Display::addFlash(Display::return_message(get_lang('NoCourse')));
+        Display::addFlash(Display::return_message(get_lang('This course could not be found')));
 
         header("Location: $selfUrl");
         exit;
@@ -207,7 +205,7 @@ if ($searchSessionAndCourse || $searchCourseOnly) {
     $selectedStudentInfo = api_get_user_info($selectedStudent);
 
     if (empty($selectedStudentInfo)) {
-        Display::addFlash(Display::return_message(get_lang('NoUser')));
+        Display::addFlash(Display::return_message(get_lang('No user')));
 
         header('Location: '.$selfUrl);
         exit;
@@ -270,14 +268,14 @@ if ($searchSessionAndCourse || $searchCourseOnly) {
 }
 
 /* View */
-$template = new Template(get_lang('GradebookListOfStudentsCertificates'));
+$template = new Template(get_lang('List of learner certificates'));
 
 $form = new FormValidator(
     'certificate_report_form',
     'post',
     api_get_path(WEB_CODE_PATH).'gradebook/certificate_report.php'
 );
-$form->addSelect('session', get_lang('Sessions'), $sessions, ['id' => 'session']);
+$form->addSelect('session', get_lang('Course sessions'), $sessions, ['id' => 'session']);
 $form->addSelect('course', get_lang('Courses'), $courses, ['id' => 'course']);
 $form->addGroup(
     [
@@ -292,7 +290,7 @@ $form->addGroup(
             'text',
             'year',
             null,
-            ['id' => 'year', 'placeholder' => get_lang('Year')]
+            ['id' => 'year', 'placeholder' => get_lang('year')]
         ),
     ],
     null,
@@ -316,7 +314,7 @@ if (api_is_student_boss()) {
         'post',
         api_get_path(WEB_CODE_PATH).'gradebook/certificate_report.php'
     );
-    $searchForm->addSelect('student', get_lang('Students'), $students, ['id' => 'student']);
+    $searchForm->addSelect('student', get_lang('Learners'), $students, ['id' => 'student']);
     $searchForm->addButtonSearch();
     $searchForm->setDefaults([
         'student' => $selectedStudent,

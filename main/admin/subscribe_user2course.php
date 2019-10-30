@@ -27,8 +27,8 @@ $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
 $tbl_user = Database::get_main_table(TABLE_MAIN_USER);
 
 /* Header */
-$tool_name = get_lang('AddUsersToACourse');
-$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('PlatformAdmin')];
+$tool_name = get_lang('Add users to course');
+$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('Administration')];
 
 $htmlHeadXtra[] = '<script>
 function validate_filter() {
@@ -41,7 +41,7 @@ function validate_filter() {
 Display :: display_header($tool_name);
 
 $link_add_group = '<a href="usergroups.php">'.
-    Display::return_icon('multiple.gif', get_lang('RegistrationByUsersGroups')).get_lang('RegistrationByUsersGroups').'</a>';
+    Display::return_icon('multiple.gif', get_lang('Enrolment by classes')).get_lang('Enrolment by classes').'</a>';
 echo '<div class="actions">'.$link_add_group.'</div>';
 
 $form = new FormValidator('subscribe_user2course');
@@ -79,8 +79,8 @@ if (is_array($extra_field_list)) {
 /* React on POSTed request */
 if (isset($_POST['form_sent']) && $_POST['form_sent']) {
     $form_sent = $_POST['form_sent'];
-    $users = isset($_POST['UserList']) && is_array($_POST['UserList']) ? $_POST['UserList'] : [];
-    $courses = isset($_POST['CourseList']) && is_array($_POST['CourseList']) ? $_POST['CourseList'] : [];
+    $users = isset($_POST['User list']) && is_array($_POST['User list']) ? $_POST['User list'] : [];
+    $courses = isset($_POST['Course list']) && is_array($_POST['Course list']) ? $_POST['Course list'] : [];
     $first_letter_user = Database::escape_string($_POST['firstLetterUser']);
     $first_letter_course = Database::escape_string($_POST['firstLetterCourse']);
 
@@ -90,7 +90,7 @@ if (isset($_POST['form_sent']) && $_POST['form_sent']) {
 
     if ($form_sent == 1) {
         if (count($users) == 0 || count($courses) == 0) {
-            echo Display::return_message(get_lang('AtLeastOneUserAndOneCourse'), 'error');
+            echo Display::return_message(get_lang('You must select at least one user and one course'), 'error');
         } else {
             $errorDrh = 0;
             foreach ($courses as $course_code) {
@@ -105,9 +105,9 @@ if (isset($_POST['form_sent']) && $_POST['form_sent']) {
             }
 
             if ($errorDrh == 0) {
-                echo Display::return_message(get_lang('UsersAreSubscibedToCourse'), 'confirm');
+                echo Display::return_message(get_lang('The selected users are subscribed to the selected course'), 'confirm');
             } else {
-                echo Display::return_message(get_lang('HumanResourcesManagerShouldNotBeRegisteredToCourses'), 'error');
+                echo Display::return_message(get_lang('Human resources managers should not be registered to courses. The corresponding users you selected have not been subscribed.'), 'error');
             }
         }
     }
@@ -248,7 +248,7 @@ unset($result);
 <?php
 if (is_array($extra_field_list)) {
     if (is_array($new_field_list) && count($new_field_list) > 0) {
-        echo '<h3>'.get_lang('FilterUsers').'</h3>';
+        echo '<h3>'.get_lang('Filter users').'</h3>';
         foreach ($new_field_list as $new_field) {
             echo $new_field['name'];
             $varname = 'field_'.$new_field['variable'];
@@ -287,12 +287,12 @@ if (is_array($extra_field_list)) {
   <table border="0" cellpadding="5" cellspacing="0" width="100%">
    <tr>
     <td width="40%" align="center">
-     <b><?php echo get_lang('UserList'); ?></b>
+     <b><?php echo get_lang('User list'); ?></b>
      <br/><br/>
-        <?php echo get_lang('FirstLetterUser'); ?> :
+        <?php echo get_lang('First letter (last name)'); ?> :
      <select name="firstLetterUser"
         onchange="javascript:document.formulaire.form_sent.value='2'; document.formulaire.submit();"
-        aria-label="<?php echo get_lang('FirstLetterUser'); ?>">
+        aria-label="<?php echo get_lang('First letter (last name)'); ?>">
       <option value="">--</option>
       <?php
         echo Display :: get_alphabet_options($first_letter_user);
@@ -301,12 +301,12 @@ if (is_array($extra_field_list)) {
     </td>
     <td width="20%">&nbsp;</td>
     <td width="40%" align="center">
-     <b><?php echo get_lang('CourseList'); ?> :</b>
+     <b><?php echo get_lang('Course list'); ?> :</b>
      <br/><br/>
-        <?php echo get_lang('FirstLetterCourse'); ?> :
+        <?php echo get_lang('First letter (code)'); ?> :
      <select name="firstLetterCourse"
         onchange="javascript:document.formulaire.form_sent.value='2'; document.formulaire.submit();"
-        aria-label="<?php echo get_lang('FirstLetterCourse'); ?>">
+        aria-label="<?php echo get_lang('First letter (code)'); ?>">
       <option value="">--</option>
       <?php
       echo Display :: get_alphabet_options($first_letter_course);
@@ -316,7 +316,7 @@ if (is_array($extra_field_list)) {
    </tr>
    <tr>
     <td width="40%" align="center">
-     <select name="UserList[]" multiple="multiple" size="20" style="width:300px;">
+     <select name="User list[]" multiple="multiple" size="20" style="width:300px;">
     <?php foreach ($db_users as $user) {
           ?>
           <option value="<?php echo $user['user_id']; ?>" <?php if (in_array($user['user_id'], $users)) {
@@ -335,12 +335,12 @@ if (is_array($extra_field_list)) {
     </select>
    </td>
    <td width="20%" valign="middle" align="center">
-    <button type="submit" class="btn btn-primary" value="<?php echo get_lang('AddToThatCourse'); ?> &gt;&gt;">
-        <em class="fa fa-plus"></em> <?php echo get_lang('AddToThatCourse'); ?>
+    <button type="submit" class="btn btn-primary" value="<?php echo get_lang('Add to the course(s)'); ?> &gt;&gt;">
+        <em class="fa fa-plus"></em> <?php echo get_lang('Add to the course(s)'); ?>
     </button>
    </td>
    <td width="40%" align="center">
-    <select name="CourseList[]" multiple="multiple" size="20" style="width:300px;">
+    <select name="Course list[]" multiple="multiple" size="20" style="width:300px;">
     <?php foreach ($db_courses as $course) {
           ?>
          <option value="<?php echo $course['code']; ?>" <?php if (in_array($course['code'], $courses)) {

@@ -12,9 +12,6 @@ use Chamilo\CoreBundle\Entity\Session;
  * This functions are loaded when the CourseListener.php fires when a c_id/cidReq/ or courses/XXX/ parameter and
  * the controller implements this interface. See the ResourceController class as an example.
  * is loaded in the URL.
- *
- *
- * @package Chamilo\CourseBundle\Controller
  */
 interface CourseControllerInterface
 {

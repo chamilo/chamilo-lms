@@ -22,6 +22,11 @@ if (empty($_POST['current_dir'])) {
 }
 $uncompress = 1;
 
+$allowHtaccess = false;
+if (api_get_configuration_value('allow_htaccess_import_from_scorm') && isset($_POST['allow_htaccess'])) {
+    $allowHtaccess = true;
+}
+
 /*
  * Check the request method in place of a variable from POST
  * because if the file size exceed the maximum file upload
@@ -32,7 +37,7 @@ $user_file = $user_file ? $user_file : [];
 $is_error = isset($user_file['error']) ? $user_file['error'] : false;
 if (isset($_POST) && $is_error) {
     Display::addFlash(
-        Display::return_message(get_lang('UplFileTooBig'))
+        Display::return_message(get_lang('The file is too big to upload.'))
     );
 
     return false;
@@ -59,6 +64,7 @@ if (isset($_POST) && $is_error) {
     if (!empty($_REQUEST['content_proximity'])) {
         $proximity = Database::escape_string($_REQUEST['content_proximity']);
     }
+
     $maker = 'Scorm';
     if (!empty($_REQUEST['content_maker'])) {
         $maker = Database::escape_string($_REQUEST['content_maker']);
@@ -75,16 +81,23 @@ if (isset($_POST) && $is_error) {
                 // FILE_SKIP, FILE_RENAME or FILE_OVERWRITE
                 $courseRestorer->set_file_option(FILE_OVERWRITE);
                 $courseRestorer->restore();
-                Display::addFlash(Display::return_message(get_lang('UplUploadSucceeded')));
+                Display::addFlash(Display::return_message(get_lang('File upload succeeded!')));
             }
             break;
         case 'scorm':
             $oScorm = new scorm();
-            $manifest = $oScorm->import_package($_FILES['user_file'], $current_dir);
+            $manifest = $oScorm->import_package(
+                $_FILES['user_file'],
+                $current_dir,
+                [],
+                false,
+                null,
+                $allowHtaccess
+            );
             if (!empty($manifest)) {
                 $oScorm->parse_manifest($manifest);
                 $oScorm->import_manifest(api_get_course_id(), $_REQUEST['use_max_score']);
-                Display::addFlash(Display::return_message(get_lang('UplUploadSucceeded')));
+                Display::addFlash(Display::return_message(get_lang('File upload succeeded!')));
             }
             $oScorm->set_proximity($proximity);
             $oScorm->set_maker($maker);
@@ -96,7 +109,7 @@ if (isset($_POST) && $is_error) {
             if (!empty($config_dir)) {
                 $oAICC->parse_config_files($config_dir);
                 $oAICC->import_aicc(api_get_course_id());
-                Display::addFlash(Display::return_message(get_lang('UplUploadSucceeded')));
+                Display::addFlash(Display::return_message(get_lang('File upload succeeded!')));
             }
             $oAICC->set_proximity($proximity);
             $oAICC->set_maker($maker);
@@ -107,18 +120,18 @@ if (isset($_POST) && $is_error) {
             $take_slide_name = empty($_POST['take_slide_name']) ? false : true;
             $o_ppt = new OpenofficePresentation($take_slide_name);
             $first_item_id = $o_ppt->convert_document($_FILES['user_file'], 'make_lp', $_POST['slide_size']);
-            Display::addFlash(Display::return_message(get_lang('UplUploadSucceeded')));
+            Display::addFlash(Display::return_message(get_lang('File upload succeeded!')));
             break;
         case 'woogie':
             require_once 'openoffice_text.class.php';
             $split_steps = (empty($_POST['split_steps']) || $_POST['split_steps'] == 'per_page') ? 'per_page' : 'per_chapter';
             $o_doc = new OpenofficeText($split_steps);
             $first_item_id = $o_doc->convert_document($_FILES['user_file']);
-            Display::addFlash(Display::return_message(get_lang('UplUploadSucceeded')));
+            Display::addFlash(Display::return_message(get_lang('File upload succeeded!')));
             break;
         case '':
         default:
-            Display::addFlash(Display::return_message(get_lang('ScormUnknownPackageFormat'), 'warning'));
+            Display::addFlash(Display::return_message(get_lang('Unknown package format'), 'warning'));
 
             return false;
             break;
@@ -144,9 +157,9 @@ if (isset($_POST) && $is_error) {
     $new_dir = api_replace_dangerous_char(trim($file_base_name));
 
     $result = learnpath::verify_document_size($s);
-    if ($result == true) {
+    if ($result) {
         Display::addFlash(
-            Display::return_message(get_lang('UplFileTooBig'))
+            Display::return_message(get_lang('The file is too big to upload.'))
         );
     }
     $type = learnpath::get_package_type($s, basename($s));
@@ -158,7 +171,7 @@ if (isset($_POST) && $is_error) {
             if (!empty($manifest)) {
                 $oScorm->parse_manifest($manifest);
                 $oScorm->import_manifest(api_get_course_id(), $_REQUEST['use_max_score']);
-                Display::addFlash(Display::return_message(get_lang('UplUploadSucceeded')));
+                Display::addFlash(Display::return_message(get_lang('File upload succeeded!')));
             }
 
             $proximity = '';
@@ -179,7 +192,7 @@ if (isset($_POST) && $is_error) {
             if (!empty($config_dir)) {
                 $oAICC->parse_config_files($config_dir);
                 $oAICC->import_aicc(api_get_course_id());
-                Display::addFlash(Display::return_message(get_lang('UplUploadSucceeded')));
+                Display::addFlash(Display::return_message(get_lang('File upload succeeded!')));
             }
             $proximity = '';
             if (!empty($_REQUEST['content_proximity'])) {
@@ -196,7 +209,7 @@ if (isset($_POST) && $is_error) {
         case '':
         default:
             Display::addFlash(
-                Display::return_message(get_lang('ScormUnknownPackageFormat'), 'warning')
+                Display::return_message(get_lang('Unknown package format'), 'warning')
             );
 
             return false;

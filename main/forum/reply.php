@@ -23,7 +23,7 @@ $this_section = SECTION_COURSES;
 
 api_protect_course_script(true);
 
-$nameTools = get_lang('ForumCategories');
+$nameTools = get_lang('Forum Categories');
 $origin = api_get_origin();
 $_user = api_get_user_info();
 
@@ -80,7 +80,7 @@ if ($current_forum['forum_of_group'] != 0) {
 if (api_is_in_gradebook()) {
     $interbreadcrumb[] = [
         'url' => Category::getUrl(),
-        'name' => get_lang('ToolGradebook'),
+        'name' => get_lang('Assessments'),
     ];
 }
 $groupId = api_get_group_id();
@@ -93,7 +93,7 @@ if (!empty($groupId)) {
 
     $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'group/group_space.php?'.api_get_cidreq(),
-        'name' => get_lang('GroupSpace').' '.$group_properties['name'],
+        'name' => get_lang('Group area').' '.$group_properties['name'],
     ];
 
     $interbreadcrumb[] = [
@@ -164,7 +164,6 @@ Event::registerLog($logInfo);
 $form = show_add_post_form(
     $current_forum,
     $my_action,
-    $my_post,
     $my_elements
 );
 
@@ -182,7 +181,7 @@ if ($origin != 'learnpath') {
     echo '<a href="viewthread.php?'.api_get_cidreq().'&forum='.$forumId.'&thread='.$threadId.'">';
     echo Display::return_icon(
         'back.png',
-        get_lang('BackToThread'),
+        get_lang('Back to thread'),
         '',
         ICON_SIZE_MEDIUM
     ).'</a>';

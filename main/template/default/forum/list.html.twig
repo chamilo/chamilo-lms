@@ -35,28 +35,44 @@
 
     {% set fold_forum_categories = 'forum_fold_categories'|api_get_configuration_value %}
 
-    <div class="accordion forum" id="accordion-forum">
+
     {% if data is not empty %}
-        {% for item in data %}
+        <div class="accordion forum" id="accordion-forum">
+            {% for item in data %}
 
-            {% set category_language_array = [] %}
-            {% set category_language = '' %}
-            {% for extra_field in item.extra_fields %}
-                {% if extra_field.variable == 'language' %}
-                    {% set category_language_array = extra_field.value | split(';')  %}
-                    {% set category_language = extra_field.value | replace({';': ' ' })  %}
-                {% endif %}
+                {% set category_language_array = [] %}
+                {% set category_language = '' %}
+                {% for extra_field in item.extra_fields %}
+                    {% if extra_field.variable == 'language' %}
+                        {% set category_language_array = extra_field.value | split(';')  %}
+                        {% set category_language = extra_field.value | replace({';': ' ' })  %}
+                    {% endif %}
+                {% endfor %}
+
+                {{ display.card_collapse('accordion-forum', item)  }}
+
             {% endfor %}
-
-            {{ display.card_collapse('accordion-forum', item)  }}
-
-        {% endfor %}
-    {% else %}
-        <div class="alert alert-warning">
-            {{ 'NoForumInThisCategory'|get_lang }}
         </div>
+    {% else %}
+
+        <div class="alert alert-info">
+            {{ 'There is no forum in this category'|get_lang }}
+        </div>
+
+        {% if is_allowed_to_edit %}
+            <div id="no-data-view" class="tool-view">
+                <h2>{{ "Forum"|trans }}</h2>
+                <img src="{{ "forum.png"|icon(64) }}" width="64" height="64">
+                <div class="controls">
+                    <a href="{{ _p.web_self }}?{{ _p.web_cid_query ~ "&action=addglossary" }}" class="btn btn-outline-primary">
+                        {{ "Add forum category"|trans }}
+                    </a>
+                </div>
+            </div>
+        {% endif %}
+
     {% endif %}
-    </div>
+
 
 {% endautoescape %}
 {% endblock %}

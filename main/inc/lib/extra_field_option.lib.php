@@ -710,10 +710,10 @@ class ExtraFieldOption extends Model
     public function getPriorityOptions()
     {
         return  [
-            '' => get_lang('SelectAnOption'),
+            '' => get_lang('Please select an option'),
             1 => get_lang('Success'),
-            2 => get_lang('Info'),
-            3 => get_lang('Warning'),
+            2 => get_lang('Information'),
+            3 => get_lang('Warning !'),
             4 => get_lang('Error'),
         ];
     }
@@ -754,7 +754,7 @@ class ExtraFieldOption extends Model
         // Setting the form elements
         $header = get_lang('Add');
         if ($action == 'edit') {
-            $header = get_lang('Modify');
+            $header = get_lang('Edit');
         }
 
         $form->addElement('header', $header);
@@ -769,7 +769,7 @@ class ExtraFieldOption extends Model
                 'extra_field_option' => $id,
             ]);
             $translateButton = Display::toolbarButton(
-                get_lang('TranslateThisTerm'),
+                get_lang('Translate this term'),
                 $translateUrl,
                 'language',
                 'link'
@@ -786,7 +786,7 @@ class ExtraFieldOption extends Model
         $form->addElement('text', 'option_value', get_lang('Value'));
         $form->addElement('text', 'option_order', get_lang('Order'));
         $form->addElement('select', 'priority', get_lang('Priority'), $this->getPriorityOptions());
-        $form->addElement('textarea', 'priority_message', get_lang('PriorityOfMessage'));
+        $form->addElement('textarea', 'priority_message', get_lang('Message type'));
 
         $defaults = [];
 
@@ -794,7 +794,7 @@ class ExtraFieldOption extends Model
             // Setting the defaults
             $defaults = $this->get($id, false);
             $form->freeze('option_value');
-            $form->addButtonUpdate(get_lang('Modify'));
+            $form->addButtonUpdate(get_lang('Edit'));
         } else {
             $form->addButtonCreate(get_lang('Add'));
         }
@@ -802,8 +802,8 @@ class ExtraFieldOption extends Model
         $form->setDefaults($defaults);
 
         // Setting the rules
-        $form->addRule('display_text', get_lang('ThisFieldIsRequired'), 'required');
-        $form->addRule('option_value', get_lang('ThisFieldIsRequired'), 'required');
+        $form->addRule('display_text', get_lang('Required field'), 'required');
+        $form->addRule('option_value', get_lang('Required field'), 'required');
 
         return $form;
     }
@@ -921,6 +921,28 @@ class ExtraFieldOption extends Model
         foreach ($result as &$row) {
             $row['display_text'] = self::translateDisplayName($row['display_text']);
         }
+
+        return $result;
+    }
+
+    /**
+     * @param string $variable
+     *
+     * @return array|\Chamilo\CoreBundle\Entity\ExtraFieldOptions[]
+     */
+    public function getOptionsByFieldVariable($variable)
+    {
+        $extraFieldType = $this->getExtraField()->getExtraFieldType();
+
+        $dql = "SELECT o FROM ChamiloCoreBundle:ExtraFieldOptions o
+            INNER JOIN ChamiloCoreBundle:ExtraField f WITH o.field = f.id
+            WHERE f.variable = :variable AND f.extraFieldType = :extra_field_type
+            ORDER BY o.value ASC";
+
+        $result = Database::getManager()
+            ->createQuery($dql)
+            ->setParameters(['variable' => $variable, 'extra_field_type' => $extraFieldType])
+            ->getResult();
 
         return $result;
     }

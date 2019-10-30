@@ -16,7 +16,7 @@ class CourseCategory
     public static function getCategoryById($categoryId)
     {
         $table = Database::get_main_table(TABLE_MAIN_CATEGORY);
-        $categoryId = intval($categoryId);
+        $categoryId = (int) $categoryId;
         $sql = "SELECT * FROM $table WHERE id = $categoryId";
         $result = Database::query($sql);
         if (Database::num_rows($result)) {
@@ -29,7 +29,7 @@ class CourseCategory
     /**
      * Get category details from a simple category code.
      *
-     * @param string $category The literal category code
+     * @param string $categoryCode The literal category code
      *
      * @return array
      */
@@ -41,17 +41,18 @@ class CourseCategory
         $result = Database::query($sql);
         if (Database::num_rows($result)) {
             $category = Database::fetch_array($result, 'ASSOC');
-            // Get access url id
-            $table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE_CATEGORY);
-            $sql = "SELECT * FROM $table WHERE course_category_id = ".$category['id'];
-            $result = Database::query($sql);
-            $result = Database::fetch_array($result);
-            if ($result) {
-                $category['access_url_id'] = $result['access_url_id'];
-            }
-            $category['course_count'] = self::countCoursesInCategory($categoryCode);
+            if ($category) {
+                // Get access url id
+                $table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE_CATEGORY);
+                $sql = "SELECT * FROM $table WHERE course_category_id = ".$category['id'];
+                $result = Database::query($sql);
+                $result = Database::fetch_array($result);
+                if ($result) {
+                    $category['access_url_id'] = $result['access_url_id'];
+                }
 
-            return $category;
+                return $category;
+            }
         }
 
         return [];
@@ -198,11 +199,17 @@ class CourseCategory
         ];
 
         $categoryId = Database::insert($table, $params);
+        if ($categoryId) {
+            self::updateParentCategoryChildrenCount($parent_id, 1);
+            UrlManager::addCourseCategoryListToUrl(
+                [$categoryId],
+                [api_get_current_access_url_id()]
+            );
 
-        self::updateParentCategoryChildrenCount($parent_id, 1);
-        self::addToUrl($categoryId);
+            return $categoryId;
+        }
 
-        return $categoryId;
+        return false;
     }
 
     /**
@@ -215,7 +222,7 @@ class CourseCategory
     {
         $table = Database::get_main_table(TABLE_MAIN_CATEGORY);
         $categoryId = Database::escape_string($categoryId);
-        $delta = intval($delta);
+        $delta = (int) $delta;
         // First get to the highest level possible in the tree
         $result = Database::query("SELECT parent_id FROM $table WHERE code = '$categoryId'");
         $row = Database::fetch_array($result);
@@ -224,7 +231,6 @@ class CourseCategory
             self::updateParentCategoryChildrenCount($row['parent_id'], $delta);
         }
         // Now we're at the top, get back down to update each child
-        //$children_count = courseCategoryChildrenCount($categoryId);
         $sql = "UPDATE $table SET children_count = (children_count - ".abs($delta).") WHERE code = '$categoryId'";
         if ($delta >= 0) {
             $sql = "UPDATE $table SET children_count = (children_count + $delta) WHERE code = '$categoryId'";
@@ -329,7 +335,7 @@ class CourseCategory
     {
         $table = Database::get_main_table(TABLE_MAIN_CATEGORY);
         $code = Database::escape_string($code);
-        $tree_pos = intval($tree_pos);
+        $tree_pos = (int) $tree_pos;
         $parent_id = Database::escape_string($parent_id);
 
         $parentIdCondition = " AND (parent_id IS NULL OR parent_id = '' )";
@@ -383,7 +389,7 @@ class CourseCategory
     public static function courseCategoryChildrenCount($categoryId)
     {
         $table = Database::get_main_table(TABLE_MAIN_CATEGORY);
-        $categoryId = intval($categoryId);
+        $categoryId = (int) $categoryId;
         $count = 0;
         if (empty($categoryId)) {
             return 0;
@@ -487,14 +493,14 @@ class CourseCategory
         $categorySource = Security::remove_XSS($categorySource);
 
         if (count($categories) > 0) {
-            $table = new HTML_Table(['class' => 'table data_table']);
+            $table = new HTML_Table(['class' => 'data_table']);
             $column = 0;
             $row = 0;
             $headers = [
                 get_lang('Category'),
-                get_lang('SubCat'),
+                get_lang('Sub-categories'),
                 get_lang('Courses'),
-                get_lang('Actions'),
+                get_lang('Detail'),
             ];
             foreach ($headers as $header) {
                 $table->setHeaderContents($row, $column, $header);
@@ -505,19 +511,19 @@ class CourseCategory
 
             $editIcon = Display::return_icon(
                 'edit.png',
-                get_lang('EditNode'),
+                get_lang('Edit this category'),
                 null,
                 ICON_SIZE_SMALL
             );
             $deleteIcon = Display::return_icon(
                 'delete.png',
-                get_lang('DeleteNode'),
+                get_lang('Delete this category'),
                 null,
                 ICON_SIZE_SMALL
             );
             $moveIcon = Display::return_icon(
                 'up.png',
-                get_lang('UpInSameLevel'),
+                get_lang('Up in same level'),
                 null,
                 ICON_SIZE_SMALL
             );
@@ -540,7 +546,7 @@ class CourseCategory
                 $title = Display::url(
                     Display::return_icon(
                         'folder_document.gif',
-                        get_lang('OpenNode'),
+                        get_lang('Open this category'),
                         null,
                         ICON_SIZE_SMALL
                     ).' '.$category['name'].' ('.$category['code'].')',
@@ -562,7 +568,7 @@ class CourseCategory
 
             return $table->toHtml();
         } else {
-            return Display::return_message(get_lang('NoCategories'), 'warning');
+            return Display::return_message(get_lang('There are no categories here'), 'warning');
         }
     }
 
@@ -577,19 +583,6 @@ class CourseCategory
                 ORDER BY tree_pos";
 
         return Database::store_result(Database::query($sql));
-    }
-
-    /**
-     * @param int $id
-     *
-     * @return bool
-     */
-    public static function addToUrl($id)
-    {
-        UrlManager::addCourseCategoryListToUrl(
-            [$id],
-            [api_get_current_access_url_id()]
-        );
     }
 
     /**
@@ -903,27 +896,20 @@ class CourseCategory
      */
     public static function getCourseCatalogNameTools($action)
     {
-        $nameTools = get_lang('SortMyCourses');
+        $nameTools = get_lang('My courses');
         if (empty($action)) {
             return $nameTools; //should never happen
         }
 
         switch ($action) {
-            case 'createcoursecategory':
-                $nameTools = get_lang('CreateCourseCategory');
-                break;
             case 'subscribe':
-                $nameTools = get_lang('CourseManagement');
-                break;
             case 'subscribe_user_with_password':
-                $nameTools = get_lang('CourseManagement');
-                break;
             case 'display_random_courses':
             case 'display_courses':
-                $nameTools = get_lang('CourseManagement');
+                $nameTools = get_lang('Courses catalog');
                 break;
             case 'display_sessions':
-                $nameTools = get_lang('Sessions');
+                $nameTools = get_lang('Course sessions');
                 break;
             default:
                 // Nothing to do
@@ -990,38 +976,5 @@ class CourseCategory
         );
 
         return true;
-    }
-
-    /**
-     * Deletes the image on disk and in the database.
-     *
-     * @param $categoryId
-     *
-     * @return bool Always returns true
-     */
-    public static function deletePictureCategory($categoryId)
-    {
-        $dirName = 'course_category/';
-        $fileImage = $dirName.'cc_'.$categoryId.'.jpg';
-        $fileDir = api_get_path(SYS_UPLOAD_PATH).$fileImage;
-        if (file_exists($fileDir)) {
-            try {
-                unlink($fileDir);
-            } catch (Exception $e) {
-                error_log($e->getMessage());
-            }
-        }
-        $table = Database::get_main_table(TABLE_MAIN_CATEGORY);
-        $result = Database::update(
-            $table,
-            ['image' => ''],
-            ['id = ?' => $categoryId]
-        );
-
-        if ($result) {
-            return true;
-        }
-
-        return false;
     }
 }

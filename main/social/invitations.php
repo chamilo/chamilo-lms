@@ -17,7 +17,7 @@ if (api_get_setting('allow_social_tool') !== 'true') {
 
 $this_section = SECTION_SOCIAL;
 
-$interbreadcrumb[] = ['url' => 'profile.php', 'name' => get_lang('SocialNetwork')];
+$interbreadcrumb[] = ['url' => 'profile.php', 'name' => get_lang('Social network')];
 $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Invitations')];
 
 $userGroupModel = new UserGroup();
@@ -38,7 +38,7 @@ if (is_array($_GET) && count($_GET) > 0) {
                     $userGroupModel->update_user_role(api_get_user_id(), $value, GROUP_USER_PERMISSION_READER);
 
                     Display::addFlash(
-                        Display::return_message(get_lang('UserIsSubscribedToThisGroup'), 'success')
+                        Display::return_message(get_lang('User is subscribed to this group'), 'success')
                     );
 
                     header('Location: '.api_get_path(WEB_CODE_PATH).'social/invitations.php');
@@ -54,7 +54,7 @@ if (is_array($_GET) && count($_GET) > 0) {
                     ]
                 )) {
                     Display::addFlash(
-                        Display::return_message(get_lang('UserIsAlreadySubscribedToThisGroup'), 'warning')
+                        Display::return_message(get_lang('User is already subscribed to this group'), 'warning')
                     );
 
                     header('Location: '.api_get_path(WEB_CODE_PATH).'social/invitations.php');
@@ -62,7 +62,7 @@ if (is_array($_GET) && count($_GET) > 0) {
                 }
 
                 Display::addFlash(
-                    Display::return_message(get_lang('UserIsNotSubscribedToThisGroup'), 'warning')
+                    Display::return_message(get_lang('User is not subscribed to this group'), 'warning')
                 );
 
                 header('Location: '.api_get_path(WEB_CODE_PATH).'social/invitations.php');
@@ -72,7 +72,7 @@ if (is_array($_GET) && count($_GET) > 0) {
                 $userGroupModel->delete_user_rel_group(api_get_user_id(), $value);
 
                 Display::addFlash(
-                    Display::return_message(get_lang('GroupInvitationWasDeny'))
+                    Display::return_message(get_lang('Group invitation was denied'))
                 );
 
                 header('Location: '.api_get_path(WEB_CODE_PATH).'social/invitations.php');
@@ -84,34 +84,33 @@ if (is_array($_GET) && count($_GET) > 0) {
 $content = null;
 
 // Block Menu Social
-$social_menu_block = SocialManager::getMenuSocial('invitations');
+$social_menu_block = SocialManager::show_social_menu('invitations');
 // Block Invitations
 $socialInvitationsBlock = '<div id="id_response" align="center"></div>';
 
 $user_id = api_get_user_id();
-$list_get_invitation = SocialManager::get_list_invitation_of_friends_by_user_id($user_id, 0);
+$list_get_invitation = SocialManager::get_list_invitation_of_friends_by_user_id($user_id);
 $list_get_invitation_sent = SocialManager::get_list_invitation_sent_by_user_id($user_id);
 $pending_invitations = $userGroupModel->get_groups_by_user(
     $user_id,
     GROUP_USER_PERMISSION_PENDING_INVITATION
 );
-$number_loop = count($list_get_invitation);
+$numberLoop = count($list_get_invitation);
 
-$total_invitations = $number_loop + count($list_get_invitation_sent) + count($pending_invitations);
+$total_invitations = $numberLoop + count($list_get_invitation_sent) + count($pending_invitations);
 
-if ($total_invitations == 0 && count($_GET) <= 0) {
+if (count($_GET) <= 0) {
     $socialInvitationsBlock .= '<div class="row">
         <div class="col-md-12">
             <a class="btn btn-success" href="search.php"><em class="fa fa-search"></em> '.
-                get_lang('TryAndFindSomeFriends').'
+                get_lang('Try and find some friends').'
             </a>
             </div>
-        </div>';
+        </div><br />';
 }
 
-if ($number_loop != 0) {
+if ($numberLoop != 0) {
     $invitationHtml = '';
-
     foreach ($list_get_invitation as $invitation) {
         $sender_user_id = $invitation['user_sender_id'];
         $user_info = api_get_user_info($sender_user_id);
@@ -128,7 +127,7 @@ if ($number_loop != 0) {
         $invitationHtml .= '</div>';
         $invitationHtml .= '<div class="col-md-10">';
 
-        $invitationHtml .= '<div class="float-right">';
+        $invitationHtml .= '<div class="pull-right">';
         $invitationHtml .= '<div class="btn-group btn-group-sm" role="group">';
         $invitationHtml .= Display::toolbarButton(
             null,
@@ -163,7 +162,7 @@ if ($number_loop != 0) {
         $invitationHtml .= '</div>';
         $invitationHtml .= '</div></div>';
     }
-    $socialInvitationsBlock .= Display::panel($invitationHtml, get_lang('InvitationReceived'));
+    $socialInvitationsBlock .= Display::panel($invitationHtml, get_lang('Invitation received'));
 }
 
 if (count($list_get_invitation_sent) > 0) {
@@ -189,7 +188,7 @@ if (count($list_get_invitation_sent) > 0) {
         $invitationSentHtml .= '</div>';
         $invitationSentHtml .= '</div></div>';
     }
-    $socialInvitationsBlock .= Display::panel($invitationSentHtml, get_lang('InvitationSent'));
+    $socialInvitationsBlock .= Display::panel($invitationSentHtml, get_lang('Invitation sent'));
 }
 
 if (count($pending_invitations) > 0) {
@@ -215,14 +214,14 @@ if (count($pending_invitations) > 0) {
         $waitingInvitation .= '<div class="description-group">'.$invitation['description'].'</div>';
         $waitingInvitation .= '<div class="btn-group" role="group">';
         $waitingInvitation .= Display::toolbarButton(
-            get_lang('AcceptInvitation'),
+            get_lang('Accept invitation'),
             api_get_path(WEB_CODE_PATH).'social/invitations.php?'.http_build_query(['accept' => $invitation['id']]),
             'check',
             'success',
             ['id' => 'accept-invitation-'.$invitation['id']]
         );
         $waitingInvitation .= Display::toolbarButton(
-            get_lang('DenyInvitation'),
+            get_lang('Deny invitation'),
             api_get_path(WEB_CODE_PATH).'social/invitations.php?'.http_build_query(['deny' => $invitation['id']]),
             'times',
             'danger',
@@ -231,7 +230,7 @@ if (count($pending_invitations) > 0) {
         $waitingInvitation .= '</div>';
         $waitingInvitation .= '</div></div>';
     }
-    $socialInvitationsBlock .= Display::panel($waitingInvitation, get_lang('GroupsWaitingApproval'));
+    $socialInvitationsBlock .= Display::panel($waitingInvitation, get_lang('Groups waiting for approval'));
 }
 
 $tpl = new Template(null);

@@ -9,8 +9,6 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
  * Class YesNoType.
- *
- * @package Chamilo\CoreBundle\Form\Type
  */
 class YesNoType extends AbstractType
 {

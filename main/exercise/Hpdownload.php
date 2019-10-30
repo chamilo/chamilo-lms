@@ -12,6 +12,9 @@
 session_cache_limiter('public');
 
 require_once __DIR__.'/../inc/global.inc.php';
+
+api_protect_course_script(true);
+
 $this_section = SECTION_COURSES;
 
 $tbl_document = Database::get_course_table(TABLE_DOCUMENT);

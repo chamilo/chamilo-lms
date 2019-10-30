@@ -17,7 +17,7 @@ $users = UserManager::getRepository()->findAll();
 $userOptions = [];
 if (!empty($users)) {
     foreach ($users as $user) {
-        $userOptions[$user->getId()] = UserManager::formatUserFullName($user, true);
+        $userOptions[$user->getId()] = $user->getCompleteNameWithUsername();
     }
 }
 
@@ -28,12 +28,15 @@ $htmlHeadXtra[] = api_get_asset('cropper/dist/cropper.min.js');
 
 //view
 $interbreadcrumb[] = [
-    'url' => 'configuration.php',
+    'url' => 'list.php',
     'name' => $plugin->get_lang('Configuration'),
 ];
 
+$globalSettingsParams = $plugin->getGlobalParameters();
+
 $formDefaultValues = [
     'price' => 0,
+    'tax_perc' => $globalSettingsParams['global_tax_perc'],
     'duration_days' => 0,
     'applies_to' => 0,
     'visibility' => true,
@@ -50,15 +53,21 @@ $form->addElement(
 );
 $form->addElement(
     'number',
+    'tax_perc',
+    [$plugin->get_lang('TaxPerc'), $plugin->get_lang('TaxPercDescription'), '%'],
+    ['step' => 1, 'placeholder' => $globalSettingsParams['global_tax_perc'].'% '.$plugin->get_lang('ByDefault')]
+);
+$form->addElement(
+    'number',
     'duration_days',
-    [$plugin->get_lang('Duration'), null, get_lang('Days')],
+    [$plugin->get_lang('Duration'), null, get_lang('days')],
     ['step' => 1]
 );
 $form->addElement(
     'radio',
     'applies_to',
     $plugin->get_lang('AppliesTo'),
-    get_lang('None'),
+    get_lang('none'),
     0
 );
 $form->addElement(
@@ -86,7 +95,7 @@ $form->addElement(
     'radio',
     'applies_to',
     null,
-    get_lang('TemplateTitleCertificate'),
+    get_lang('Certificate of completion'),
     4
 );
 $form->addSelect(
@@ -102,7 +111,7 @@ $form->addFile(
     )),
     ['id' => 'picture', 'class' => 'picture-form', 'crop_image' => true, 'crop_ratio' => '16 / 9']
 );
-$form->addText('video_url', get_lang('VideoUrl'), false);
+$form->addText('video_url', get_lang('Video URL'), false);
 $form->addHtmlEditor('service_information', $plugin->get_lang('ServiceInformation'), false);
 $form->addButtonSave(get_lang('Add'));
 $form->setDefaults($formDefaultValues);
@@ -116,7 +125,7 @@ if ($form->validate()) {
         Display::return_message($plugin->get_lang('ServiceAdded'), 'success')
     );
 
-    header('Location: configuration.php');
+    header('Location: list.php');
     exit;
 }
 

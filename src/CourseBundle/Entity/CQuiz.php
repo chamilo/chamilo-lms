@@ -3,6 +3,9 @@
 
 namespace Chamilo\CourseBundle\Entity;
 
+use Chamilo\CoreBundle\Entity\Resource\AbstractResource;
+use Chamilo\CoreBundle\Entity\Resource\ResourceInterface;
+use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -17,7 +20,7 @@ use Doctrine\ORM\Mapping as ORM;
  * )
  * @ORM\Entity
  */
-class CQuiz
+class CQuiz extends AbstractResource implements ResourceInterface
 {
     /**
      * @var int
@@ -155,8 +158,9 @@ class CQuiz
     protected $propagateNeg;
 
     /**
-     * @var bool
-     * @ORm\Column(name="save_correct_answers", type="boolean", nullable=false)
+     * @var int
+     *
+     * @ORm\Column(name="save_correct_answers", type="integer", nullable=true)
      */
     protected $saveCorrectAnswers;
 
@@ -210,6 +214,13 @@ class CQuiz
     protected $hideQuestionTitle;
 
     /**
+     * @var int
+     *
+     * @ORM\Column(name="exercise_category_id", type="integer", nullable=true)
+     */
+    protected $exerciseCategoryId;
+
+    /**
      * @var bool
      *
      * @ORM\Column(name="show_previous_button", type="boolean", nullable=true, options={"default":1})
@@ -229,6 +240,13 @@ class CQuiz
      * @ORM\Column(name="autolaunch", type="boolean", nullable=true, options={"default":0})
      */
     protected $autoLaunch;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="page_result_configuration", type="array", nullable=true)
+     */
+    protected $pageResultConfiguration;
 
     /**
      * CQuiz constructor.
@@ -626,7 +644,7 @@ class CQuiz
     }
 
     /**
-     * @param $saveCorrectAnswers boolean
+     * @param int $saveCorrectAnswers
      *
      * @return CQuiz
      */
@@ -638,7 +656,7 @@ class CQuiz
     }
 
     /**
-     * @return bool
+     * @return int
      */
     public function getSaveCorrectAnswers()
     {
@@ -911,5 +929,45 @@ class CQuiz
         $this->iid = $iid;
 
         return $this;
+    }
+
+    /**
+     * @ORM\PostPersist()
+     *
+     * @param LifecycleEventArgs $args
+     */
+    public function postPersist(LifecycleEventArgs $args)
+    {
+        // Update id with iid value
+        $em = $args->getEntityManager();
+        $this->setId($this->iid);
+        $em->persist($this);
+        $em->flush();
+    }
+
+    /**
+     * Resource identifier.
+     *
+     * @return int
+     */
+    public function getResourceIdentifier(): int
+    {
+        return $this->getIid();
+    }
+
+    /**
+     * @return string
+     */
+    public function getResourceName(): string
+    {
+        return $this->getTitle();
+    }
+
+    /**
+     * @return string
+     */
+    public function getToolName(): string
+    {
+        return 'CQuiz';
     }
 }

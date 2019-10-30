@@ -46,7 +46,7 @@ switch ($action) {
 
                         echo Display::img(
                             $graphImage,
-                            get_lang('GraphDependencyTree'),
+                            get_lang('Dependency tree'),
                             ['class' => 'center-block'],
                             false
                         );
@@ -57,7 +57,7 @@ switch ($action) {
                             .' because GraphViz command "dot" could not be executed '
                             .'- Make sure graphviz is installed.'
                         );
-                        echo '<p class="text-center"><small>'.get_lang('MissingChartLibraryPleaseCheckLog')
+                        echo '<p class="text-center"><small>'.get_lang('Missing chart library. Please check the error log for details.')
                             .'</small></p>';
                     }
                 }
@@ -111,7 +111,7 @@ switch ($action) {
                         $id,
                         [
                             'class' => 'sequence-id',
-                            'title' => get_lang('UseAsReference'),
+                            'title' => get_lang('Use as reference'),
                             'type' => 'button',
                         ]
                     );
@@ -307,7 +307,7 @@ switch ($action) {
         $vertexFromSession = Session::read('sr_vertex');
         if ($vertexFromSession) {
             Session::erase('sr_vertex');
-            echo Display::return_message(get_lang('Saved'), 'success');
+            echo Display::return_message(get_lang('Saved..'), 'success');
             break;
         }
 
@@ -383,7 +383,7 @@ switch ($action) {
                 $em->persist($sequenceResource);
                 $em->flush();
 
-                echo Display::return_message(get_lang('Saved'), 'success');
+                echo Display::return_message(get_lang('Saved..'), 'success');
                 break;
         }
         break;

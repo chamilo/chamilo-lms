@@ -22,8 +22,6 @@ use Zend\Permissions\Acl\Role\GenericRole as Role;
 
 /**
  * Class ResourceNodeVoter.
- *
- * @package Chamilo\CoreBundle\Security\Authorization\Voter
  */
 class ResourceNodeVoter extends Voter
 {
@@ -144,7 +142,7 @@ class ResourceNodeVoter extends Voter
         $links = $resourceNode->getResourceLinks();
         $linkFound = false;
 
-        $courseManager = $this->container->get('chamilo_core.entity.manager.course_manager');
+        $courseManager = $this->container->get('Chamilo\CoreBundle\Repository\CourseRepository');
 
         /** @var ResourceLink $link */
         foreach ($links as $link) {

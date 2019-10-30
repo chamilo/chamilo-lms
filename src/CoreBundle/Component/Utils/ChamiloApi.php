@@ -7,8 +7,6 @@ use ChamiloSession as Session;
 
 /**
  * Class ChamiloApi.
- *
- * @package Chamilo\CoreBundle\Component
  */
 class ChamiloApi
 {
@@ -17,7 +15,7 @@ class ChamiloApi
     /**
      * ChamiloApi constructor.
      *
-     * @param $configuration
+     * @param array $configuration
      */
     public function __construct(array $configuration)
     {
@@ -354,5 +352,45 @@ class ChamiloApi
         $localMidnight->modify('midnight');
 
         return $localMidnight;
+    }
+
+    /**
+     * Get JavaScript code necessary to load quiz markers-rolls in medialement's Markers Rolls plugin.
+     *
+     * @return string
+     */
+    public static function getQuizMarkersRollsJS()
+    {
+        $webCodePath = api_get_path(WEB_CODE_PATH);
+        $cidReq = api_get_cidreq(true, true, 'embeddable');
+        $colorPalette = self::getColorPalette(false, true);
+
+        return "
+            var \$originalNode = $(originalNode),
+                    qMarkersRolls = \$originalNode.data('q-markersrolls') || [],
+                    qMarkersColor = \$originalNode.data('q-markersrolls-color') || '{$colorPalette[0]}';
+
+                if (0 == qMarkersRolls.length) {
+                    return;
+                }
+
+                instance.options.markersRollsColor = qMarkersColor;
+                instance.options.markersRollsWidth = 2;
+                instance.options.markersRolls = {};
+
+                qMarkersRolls.forEach(function (qMarkerRoll) {
+                    var url = '{$webCodePath}exercise/exercise_submit.php?$cidReq&'
+                        + $.param({
+                            exerciseId: qMarkerRoll[1],
+                            learnpath_id: 0,
+                            learnpath_item_id: 0,
+                            learnpath_item_view_id: 0
+                        });
+
+                    instance.options.markersRolls[qMarkerRoll[0]] = url;
+                });
+
+                instance.buildmarkersrolls(instance, instance.controls, instance.layers, instance.media);
+        ";
     }
 }

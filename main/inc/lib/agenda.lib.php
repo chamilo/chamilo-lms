@@ -2056,7 +2056,7 @@ class Agenda
                             // Add username as tooltip for $event['sent_to'] - ref #4226
                             $username = api_htmlentities(
                                 sprintf(
-                                    get_lang('LoginX'),
+                                    get_lang('Login: %s'),
                                     $user_info['username']
                                 ),
                                 ENT_QUOTES
@@ -2352,9 +2352,9 @@ class Agenda
 
         $idAttach = isset($params['id_attach']) ? (int) $params['id_attach'] : null;
         $groupId = api_get_group_id();
-        $form_Title = get_lang('AddCalendarItem');
+        $form_Title = get_lang('Add event to agenda');
         if (!empty($id)) {
-            $form_Title = get_lang('ModifyCalendarItem');
+            $form_Title = get_lang('Edit event');
         }
 
         $form->addHeader($form_Title);
@@ -2384,13 +2384,13 @@ class Agenda
                 'label',
                 null,
                 Display::return_message(
-                    get_lang('EditingThisEventWillRemoveItFromTheSerie'),
+                    get_lang('Editing this event will remove it from the serie of events it is currently part of'),
                     'warning'
                 )
             );
         }
 
-        $form->addElement('text', 'title', get_lang('ItemTitle'));
+        $form->addElement('text', 'title', get_lang('Event name'));
 
         if (isset($groupId) && !empty($groupId)) {
             $form->addElement(
@@ -2408,18 +2408,18 @@ class Agenda
 
         $form->addDateRangePicker(
             'date_range',
-            get_lang('DateRange'),
+            get_lang('Date range'),
             false,
             ['id' => 'date_range']
         );
-        $form->addElement('checkbox', 'all_day', null, get_lang('AllDay'));
+        $form->addElement('checkbox', 'all_day', null, get_lang('All day'));
 
         if ($this->type == 'course') {
             $repeat = $form->addElement(
                 'checkbox',
                 'repeat',
                 null,
-                get_lang('RepeatEvent'),
+                get_lang('Repeat event'),
                 ['onclick' => 'return plus_repeated_event();']
             );
             $form->addElement(
@@ -2429,13 +2429,13 @@ class Agenda
             $form->addElement(
                 'select',
                 'repeat_type',
-                get_lang('RepeatType'),
+                get_lang('Repeat type'),
                 self::getRepeatTypes()
             );
             $form->addElement(
                 'date_picker',
                 'repeat_end_day',
-                get_lang('RepeatEnd'),
+                get_lang('Repeat end date'),
                 ['id' => 'repeat_end_date_form']
             );
 
@@ -2489,22 +2489,26 @@ class Agenda
         if ($this->type == 'course') {
             $form->addElement('textarea', 'comment', get_lang('Comment'));
             $form->addLabel(
-                get_lang('FilesAttachment'),
-                '<span id="filepaths">
+                get_lang('Files attachments'),
+                '<div id="filepaths" class="file-upload-event">
+                        
                         <div id="filepath_1">
-                            <input type="file" name="attach_1"/><br />
-                            '.get_lang('Description').'&nbsp;&nbsp;<input type="text" name="legend[]" /><br /><br />
+                            <input type="file" name="attach_1"/>
+                            
+                            <label>'.get_lang('Description').'</label>
+                            <input class="form-control" type="text" name="legend[]" />
                         </div>
-                    </span>'
+                        
+                    </div>'
             );
 
             $form->addLabel(
                 '',
                 '<span id="link-more-attach">
                     <a href="javascript://" onclick="return add_image_form()">'.
-                get_lang('AddOneMoreFile').'</a>
+                get_lang('Add one more file').'</a>
                  </span>&nbsp;('.sprintf(
-                    get_lang('MaximunFileSizeX'),
+                    get_lang('Maximun file size: %s'),
                     format_file_size(
                         api_get_setting('message_max_upload_filesize')
                     )
@@ -2531,7 +2535,7 @@ class Agenda
             $form->addElement(
                 'textarea',
                 'file_comment',
-                get_lang('FileComment')
+                get_lang('File comment')
             );
         }
 
@@ -2540,23 +2544,23 @@ class Agenda
                 'checkbox',
                 'add_announcement',
                 null,
-                get_lang('AddAnnouncement').'&nbsp('.get_lang('SendMail').')'
+                get_lang('Add an announcement').'&nbsp('.get_lang('Send mail').')'
             );
         }
 
         if ($id) {
-            $form->addButtonUpdate(get_lang('ModifyEvent'));
+            $form->addButtonUpdate(get_lang('Edit event'));
         } else {
-            $form->addButtonSave(get_lang('AgendaAdd'));
+            $form->addButtonSave(get_lang('Add event'));
         }
 
         $form->setDefaults($params);
         $form->addRule(
             'date_range',
-            get_lang('ThisFieldIsRequired'),
+            get_lang('Required field'),
             'required'
         );
-        $form->addRule('title', get_lang('ThisFieldIsRequired'), 'required');
+        $form->addRule('title', get_lang('Required field'), 'required');
 
         return $form;
     }
@@ -2657,12 +2661,12 @@ class Agenda
     public static function getRepeatTypes()
     {
         return [
-            'daily' => get_lang('RepeatDaily'),
-            'weekly' => get_lang('RepeatWeekly'),
-            'monthlyByDate' => get_lang('RepeatMonthlyByDate'),
-            //monthlyByDay"> get_lang('RepeatMonthlyByDay');
-            //monthlyByDayR' => get_lang('RepeatMonthlyByDayR'),
-            'yearly' => get_lang('RepeatYearly'),
+            'daily' => get_lang('Daily'),
+            'weekly' => get_lang('Weekly'),
+            'monthlyByDate' => get_lang('Monthly, by date'),
+            //monthlyByDay"> get_lang('Monthly, by day');
+            //monthlyByDayR' => get_lang('Monthly, by dayR'),
+            'yearly' => get_lang('Yearly'),
         ];
     }
 
@@ -2771,7 +2775,7 @@ class Agenda
 
             if (!filter_extension($new_file_name)) {
                 return Display::return_message(
-                    get_lang('UplUnableToSaveFileFilteredExtension'),
+                    get_lang('File upload failed: this file extension or file type is prohibited'),
                     'error'
                 );
             } else {
@@ -2870,7 +2874,7 @@ class Agenda
 
         if (!empty($result)) {
             return Display::return_message(
-                get_lang("AttachmentFileDeleteSuccess"),
+                get_lang("The attached file has been deleted"),
                 'confirmation'
             );
         }
@@ -2942,62 +2946,41 @@ class Agenda
      */
     public function displayActions($view, $filter = 0)
     {
-        $courseInfo = api_get_course_info();
         $groupInfo = GroupManager::get_group_properties(api_get_group_id());
         $groupIid = isset($groupInfo['iid']) ? $groupInfo['iid'] : 0;
 
-        $courseCondition = '';
-        if (!empty($courseInfo)) {
-            $courseCondition = api_get_cidreq();
-        }
+        $codePath = api_get_path(WEB_CODE_PATH);
+
+        $currentUserId = api_get_user_id();
+        $cidReq = api_get_cidreq();
 
         $actionsLeft = '';
-        $actionsLeft .= "<a href='".api_get_path(WEB_CODE_PATH)."calendar/agenda_js.php?type={$this->type}&".$courseCondition."'>".
-            Display::return_icon(
-                'calendar.png',
-                get_lang('Calendar'),
-                '',
-                ICON_SIZE_MEDIUM
-            )."</a>";
-
-        $actionsLeft .= "<a href='".api_get_path(WEB_CODE_PATH)."calendar/agenda_list.php?type={$this->type}&".$courseCondition."'>".
-            Display::return_icon(
-                'week.png',
-                get_lang('AgendaList'),
-                '',
-                ICON_SIZE_MEDIUM
-            )."</a>";
+        $actionsLeft .= Display::url(
+            Display::return_icon('calendar.png', get_lang('Calendar'), [], ICON_SIZE_MEDIUM),
+            $codePath."calendar/agenda_js.php?type={$this->type}&$cidReq"
+        );
+        $actionsLeft .= Display::url(
+            Display::return_icon('week.png', get_lang('Agenda list'), [], ICON_SIZE_MEDIUM),
+            $codePath."calendar/agenda_list.php?type={$this->type}&$cidReq"
+        );
 
         $form = '';
         if (api_is_allowed_to_edit(false, true) ||
-            (api_get_course_setting('allow_user_edit_agenda') == '1' &&
-                !api_is_anonymous()) &&
-            api_is_allowed_to_session_edit(false, true) ||
-            (GroupManager::user_has_access(
-                api_get_user_id(),
-                $groupIid,
-                GroupManager::GROUP_TOOL_CALENDAR
-            ) &&
-            GroupManager::is_tutor_of_group(api_get_user_id(), $groupInfo))
+            (api_get_course_setting('allow_user_edit_agenda') == '1' && !api_is_anonymous()) &&
+            api_is_allowed_to_session_edit(false, true)
+            || (
+                GroupManager::user_has_access($currentUserId, $groupIid, GroupManager::GROUP_TOOL_CALENDAR)
+                && GroupManager::is_tutor_of_group($currentUserId, $groupInfo)
+            )
         ) {
             $actionsLeft .= Display::url(
-                Display::return_icon(
-                    'new_event.png',
-                    get_lang('AgendaAdd'),
-                    '',
-                    ICON_SIZE_MEDIUM
-                ),
-                api_get_path(WEB_CODE_PATH)."calendar/agenda.php?".api_get_cidreq()."&action=add&type=".$this->type
+                Display::return_icon('new_event.png', get_lang('Add event'), [], ICON_SIZE_MEDIUM),
+                $codePath."calendar/agenda.php?action=add&type={$this->type}&$cidReq"
             );
 
             $actionsLeft .= Display::url(
-                Display::return_icon(
-                    'import_calendar.png',
-                    get_lang('ICalFileImport'),
-                    '',
-                    ICON_SIZE_MEDIUM
-                ),
-                api_get_path(WEB_CODE_PATH)."calendar/agenda.php?".api_get_cidreq()."&action=importical&type=".$this->type
+                Display::return_icon('import_calendar.png', get_lang('Outlook import'), [], ICON_SIZE_MEDIUM),
+                $codePath."calendar/agenda.php?action=importical&type={$this->type}&$cidReq"
             );
 
             if ($this->type === 'course') {
@@ -3021,6 +3004,13 @@ class Agenda
             }
         }
 
+        if ($this->type == 'personal' && !api_is_anonymous()) {
+            $actionsLeft .= Display::url(
+                Display::return_icon('1day.png', get_lang('Sessions plan calendar'), [], ICON_SIZE_MEDIUM),
+                $codePath."calendar/planification.php"
+            );
+        }
+
         if (api_is_platform_admin() ||
             api_is_teacher() ||
             api_is_student_boss() ||
@@ -3040,35 +3030,31 @@ class Agenda
                         FormValidator::LAYOUT_INLINE
                     );
 
+                    $sessions = [];
+
                     if (api_is_drh()) {
-                        $sessionList = SessionManager::get_sessions_followed_by_drh(
-                            api_get_user_id()
-                        );
+                        $sessionList = SessionManager::get_sessions_followed_by_drh($currentUserId);
                         if (!empty($sessionList)) {
-                            $sessions = [];
                             foreach ($sessionList as $sessionItem) {
                                 $sessions[$sessionItem['id']] = strip_tags($sessionItem['name']);
                             }
                         }
                     } else {
-                        $sessions = SessionManager::get_sessions_by_user(
-                            api_get_user_id()
-                        );
-                        $sessions = array_column(
-                            $sessions,
-                            'session_name',
-                            'session_id'
-                        );
+                        $sessions = SessionManager::get_sessions_by_user($currentUserId);
+                        $sessions = array_column($sessions, 'session_name', 'session_id');
                     }
+
                     $form->addHidden('type', 'personal');
-                    $sessions = ['0' => get_lang('Select An Option')] + $sessions;
+                    $sessions = ['0' => get_lang('Please select an option')] + $sessions;
 
                     $form->addSelect(
                         'session_id',
                         get_lang('Session'),
                         $sessions,
-                        ['id' => 'session_id', 'onchange' => 'submit();', 'icon' => 'broom']
-                    )->setButton(true);
+                        ['id' => 'session_id', 'onchange' => 'submit();']
+                    );
+
+                    $form->addButtonReset(get_lang('Reset'));
                     $form = $form->returnForm();
                 }
             }
@@ -3098,11 +3084,11 @@ class Agenda
             api_get_self().'?action=importical&type='.$this->type,
             ['enctype' => 'multipart/form-data']
         );
-        $form->addElement('header', get_lang('ICalFileImport'));
-        $form->addElement('file', 'ical_import', get_lang('ICalFileImport'));
+        $form->addHeader(get_lang('Outlook import'));
+        $form->addElement('file', 'ical_import', get_lang('Outlook import'));
         $form->addRule(
             'ical_import',
-            get_lang('ThisFieldIsRequired'),
+            get_lang('Required field'),
             'required'
         );
         $form->addButtonImport(get_lang('Import'), 'ical_submit');
@@ -3238,7 +3224,7 @@ class Agenda
         if (!empty($messages)) {
             $messages = implode('<br /> ', $messages);
         } else {
-            $messages = get_lang('NoAgendaItems');
+            $messages = get_lang('There are no events');
         }
 
         return $messages;
@@ -3526,7 +3512,7 @@ class Agenda
                 // This is the array construction for the WEEK or MONTH view
                 //Display the Agenda global in the tab agenda (administrator)
                 $agendaitems[$day] .= "<i>$start_time $end_time</i>&nbsp;-&nbsp;";
-                $agendaitems[$day] .= "<b>".get_lang('GlobalEvent')."</b>";
+                $agendaitems[$day] .= "<b>".get_lang('Platform event')."</b>";
                 $agendaitems[$day] .= "<div>".$item['title']."</div><br>";
             } else {
                 // this is the array construction for the DAY view
@@ -3538,7 +3524,7 @@ class Agenda
                     $content = $agendaitems[$halfhour];
                 }
                 $agendaitems[$halfhour] = $content."<div><i>$hour:$minute</i> <b>".get_lang(
-                        'GlobalEvent'
+                        'Platform event'
                     ).":  </b>".$item['title']."</div>";
             }
         }
@@ -3747,7 +3733,7 @@ class Agenda
                 '',
                 [
                     'onclick' => "load_calendar('".$user_id."','".$prev_month."', '".$prev_year."'); ",
-                    'class' => 'float-right btn ui-button ui-widget ui-state-default',
+                    'class' => 'pull-right btn ui-button ui-widget ui-state-default',
                 ]
             );
         }
@@ -3817,7 +3803,7 @@ class Agenda
                                     $bg_color = '#D0E7F4';
                                     $icon = Display::return_icon(
                                         'user.png',
-                                        get_lang('MyAgenda'),
+                                        get_lang('Personal agenda'),
                                         [],
                                         ICON_SIZE_SMALL
                                     );
@@ -3826,7 +3812,7 @@ class Agenda
                                     $bg_color = '#FFBC89';
                                     $icon = Display::return_icon(
                                         'view_remove.png',
-                                        get_lang('GlobalEvent'),
+                                        get_lang('Platform event'),
                                         [],
                                         ICON_SIZE_SMALL
                                     );

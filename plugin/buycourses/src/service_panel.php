@@ -17,16 +17,12 @@ $userInfo = api_get_user_info();
 if (!$userInfo) {
     api_not_allowed(true);
 }
-
-$em = Database::getManager();
-$paymentTypes = $plugin->getPaymentTypes();
 $serviceTypes = $plugin->getServiceTypes();
-
 $serviceSaleStatuses['status_cancelled'] = BuyCoursesPlugin::SERVICE_STATUS_CANCELLED;
 $serviceSaleStatuses['status_pending'] = BuyCoursesPlugin::SERVICE_STATUS_PENDING;
 $serviceSaleStatuses['status_completed'] = BuyCoursesPlugin::SERVICE_STATUS_COMPLETED;
 
-$serviceSales = $plugin->getServiceSale(null, $userInfo['user_id']);
+$serviceSales = $plugin->getServiceSales($userInfo['user_id']);
 $saleList = [];
 
 foreach ($serviceSales as $sale) {
@@ -52,7 +48,7 @@ $toolbar = Display::toolbarButton(
     ['title' => $plugin->get_lang('CourseListOnSale')]
 );
 
-$templateName = $plugin->get_lang('TabsDashboard');
+$templateName = $plugin->get_lang('Dashboard');
 $tpl = new Template($templateName);
 $tpl->assign('showing_courses', true);
 $tpl->assign('services_are_included', $includeServices);

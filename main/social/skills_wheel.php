@@ -35,7 +35,7 @@ $dialogForm->addLabel(
     Display::tag('p', null, ['id' => 'name', 'class' => 'form-control-static'])
 );
 $dialogForm->addLabel(
-    get_lang('ShortCode'),
+    get_lang('Short code'),
     Display::tag('p', null, ['id' => 'short_code', 'class' => 'form-control-static'])
 );
 $dialogForm->addLabel(
@@ -44,8 +44,8 @@ $dialogForm->addLabel(
 );
 $dialogForm->addLabel(
     [
-        get_lang('Gradebook'),
-        get_lang('WithCertificate'),
+        get_lang('Assessments'),
+        get_lang('With Certificate'),
     ],
     Display::tag(
         'ul',

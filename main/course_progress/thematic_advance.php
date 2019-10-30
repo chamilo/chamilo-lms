@@ -12,14 +12,14 @@
 
 // protect a course script
 api_protect_course_script(true);
-$tpl = new Template(get_lang('ThematicControl'));
+$tpl = new Template(get_lang('Thematic control'));
 $toolbar = null;
 $formLayout = null;
 
 if ($action === 'thematic_advance_add' || $action === 'thematic_advance_edit') {
-    $header_form = get_lang('NewThematicAdvance');
+    $header_form = get_lang('New thematic advance');
     if ($action === 'thematic_advance_edit') {
-        $header_form = get_lang('EditThematicAdvance');
+        $header_form = get_lang('Edit thematic advance');
     }
 
     // display form
@@ -44,7 +44,7 @@ if ($action === 'thematic_advance_add' || $action === 'thematic_advance_edit') {
         'radio',
         'start_date_type',
         null,
-        get_lang('StartDateFromAnAttendance'),
+        get_lang('Start date taken from an attendance date'),
         '1',
         [
             'onclick' => 'check_per_attendance(this)',
@@ -55,14 +55,14 @@ if ($action === 'thematic_advance_add' || $action === 'thematic_advance_edit') {
         'radio',
         'start_date_type',
         null,
-        get_lang('StartDateCustom'),
+        get_lang('Custom start date'),
         '2',
         [
             'onclick' => 'check_per_custom_date(this)',
             'id' => 'custom_date',
         ]
     );
-    $form->addGroup($radios, null, get_lang('StartDateOptions'));
+    $form->addGroup($radios, null, get_lang('Start date options'));
 
     if (isset($thematic_advance_data['attendance_id']) &&
         $thematic_advance_data['attendance_id'] == 0) {
@@ -71,7 +71,7 @@ if ($action === 'thematic_advance_add' || $action === 'thematic_advance_edit') {
         $form->addElement('html', '<div id="div_custom_datetime" style="display:none">');
     }
 
-    $form->addElement('DateTimePicker', 'custom_start_date', get_lang('StartDate'));
+    $form->addElement('DateTimePicker', 'custom_start_date', get_lang('Start Date'));
     $form->addElement('html', '</div>');
 
     if (isset($thematic_advance_data['attendance_id']) &&
@@ -94,7 +94,7 @@ if ($action === 'thematic_advance_add' || $action === 'thematic_advance_edit') {
         $form->addElement(
             'label',
             get_lang('Attendances'),
-            '<strong><em>'.get_lang('ThereAreNoAttendancesInsideCourse').'</em></strong>'
+            '<strong><em>'.get_lang('There is no attendance sheet in this course').'</em></strong>'
         );
     }
 
@@ -103,7 +103,7 @@ if ($action === 'thematic_advance_add' || $action === 'thematic_advance_edit') {
         $form->addElement(
             'select',
             'start_date_by_attendance',
-            get_lang('StartDate'),
+            get_lang('Start Date'),
             $calendar_select,
             ['id' => 'start_date_select_calendar']
         );
@@ -113,7 +113,7 @@ if ($action === 'thematic_advance_add' || $action === 'thematic_advance_edit') {
 
     $form->addText(
         'duration_in_hours',
-        get_lang('DurationInHours'),
+        get_lang('Duration in hours'),
         false,
         [
             'size' => '3',
@@ -222,7 +222,7 @@ if ($action === 'thematic_advance_add' || $action === 'thematic_advance_edit') {
                 'thematic_id' => $values['thematic_id'],
             ]);
 
-        Display::addFlash(Display::return_message(get_lang('Updated')));
+        Display::addFlash(Display::return_message(get_lang('Update successful')));
 
         header('Location: '.api_get_path(WEB_CODE_PATH).$redirectUrlParams);
         exit;
@@ -233,10 +233,10 @@ if ($action === 'thematic_advance_add' || $action === 'thematic_advance_edit') {
     // thematic advance list
     echo '<div class="actions">';
     echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&action=thematic_details">'.
-            Display::return_icon('back.png', get_lang("BackTo"), '', ICON_SIZE_MEDIUM).'</a>';
+            Display::return_icon('back.png', get_lang("Back to"), '', ICON_SIZE_MEDIUM).'</a>';
     if (api_is_allowed_to_edit(false, true)) {
         echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&action=thematic_advance_add&thematic_id='.$thematic_id.'"> '.
-            Display::return_icon('add.png', get_lang('NewThematicAdvance'), '', ICON_SIZE_MEDIUM).'</a>';
+            Display::return_icon('add.png', get_lang('New thematic advance'), '', ICON_SIZE_MEDIUM).'</a>';
     }
     echo '</div>';
     $table = new SortableTable(
@@ -246,14 +246,14 @@ if ($action === 'thematic_advance_add' || $action === 'thematic_advance_edit') {
     );
     //$table->set_additional_parameters($parameters);
     $table->set_header(0, '', false, ['style' => 'width:20px;']);
-    $table->set_header(1, get_lang('StartDate'), false);
-    $table->set_header(2, get_lang('DurationInHours'), false, ['style' => 'width:80px;']);
+    $table->set_header(1, get_lang('Start Date'), false);
+    $table->set_header(2, get_lang('Duration in hours'), false, ['style' => 'width:80px;']);
     $table->set_header(3, get_lang('Content'), false);
 
     if (api_is_allowed_to_edit(null, true)) {
         $table->set_header(
             4,
-            get_lang('Actions'),
+            get_lang('Detail'),
             false,
             ['style' => 'text-align:center']
         );

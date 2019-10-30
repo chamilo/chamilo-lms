@@ -43,20 +43,30 @@ class Attendance
      *
      * @see SortableTable#get_total_number_of_items()
      */
-    public static function getNumberOfAttendances($active = -1)
+    public static function getNumberOfAttendances()
     {
         $tbl_attendance = Database::get_course_table(TABLE_ATTENDANCE);
         $session_id = api_get_session_id();
         $condition_session = api_get_session_condition($session_id);
         $course_id = api_get_course_int_id();
+
+        $active_plus = '';
+
+        if ((isset($_GET['isStudentView']) && $_GET['isStudentView'] == 'true') ||
+            !api_is_allowed_to_edit(null, true)
+        ) {
+            $active_plus = ' AND att.active = 1';
+        }
+
         $sql = "SELECT COUNT(att.id) AS total_number_of_items
                 FROM $tbl_attendance att
-                WHERE c_id = $course_id $condition_session ";
-
-        $active = (int) $active;
+                WHERE 
+                      c_id = $course_id AND 
+                      active <> 2 $active_plus $condition_session  ";
+        /*$active = (int) $active;
         if ($active === 1 || $active === 0) {
             $sql .= "AND att.active = $active";
-        }
+        }*/
         $res = Database::query($sql);
         $obj = Database::fetch_object($res);
 
@@ -240,18 +250,18 @@ class Attendance
                     $locked = $attendance[4];
                     if ($locked == 0) {
                         if (api_is_platform_admin()) {
-                            $message_alert = get_lang('AreYouSureToLockTheAttendance');
+                            $message_alert = get_lang('Are you sure you want to lock the attendance?');
                         } else {
-                            $message_alert = get_lang('UnlockMessageInformation');
+                            $message_alert = get_lang('The attendance is not locked, which means your teacher is still able to modify it.');
                         }
                         $actions .= '&nbsp;<a onclick="javascript:if(!confirm(\''.$message_alert.'\')) return false;" href="index.php?'.api_get_cidreq().'&action=lock_attendance&attendance_id='.$attendance[0].'">'.
-                            Display::return_icon('unlock.png', get_lang('LockAttendance')).'</a>';
+                            Display::return_icon('unlock.png', get_lang('Lock attendance')).'</a>';
                     } else {
                         if (api_is_platform_admin()) {
-                            $actions .= '&nbsp;<a onclick="javascript:if(!confirm(\''.get_lang('AreYouSureToUnlockTheAttendance').'\')) return false;" href="index.php?'.api_get_cidreq().'&action=unlock_attendance&attendance_id='.$attendance[0].'">'.
-                                    Display::return_icon('locked.png', get_lang('UnlockAttendance')).'</a>';
+                            $actions .= '&nbsp;<a onclick="javascript:if(!confirm(\''.get_lang('Are you sure you want to unlock the attendance?').'\')) return false;" href="index.php?'.api_get_cidreq().'&action=unlock_attendance&attendance_id='.$attendance[0].'">'.
+                                    Display::return_icon('locked.png', get_lang('Unlock attendance')).'</a>';
                         } else {
-                            $actions .= '&nbsp;'.Display::return_icon('locked_na.png', get_lang('LockedAttendance'));
+                            $actions .= '&nbsp;'.Display::return_icon('locked_na.png', get_lang('Locked attendance'));
                         }
                     }
                 }

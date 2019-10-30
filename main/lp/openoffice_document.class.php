@@ -33,9 +33,6 @@ abstract class OpenofficeDocument extends learnpath
      */
     public function __construct($course_code = null, $resource_id = null, $user_id = null)
     {
-        if ($this->debug > 0) {
-            error_log('In OpenofficeDocument::OpenofficeDocument()', 0);
-        }
         if (!empty($course_code) && !empty($resource_id) && !empty($user_id)) {
             parent::__construct($course_code, $resource_id, $user_id);
         }
@@ -141,15 +138,15 @@ abstract class OpenofficeDocument extends learnpath
                 switch ($return) {
                     case 1:
                         // Can't connect to openoffice.
-                        $this->error = get_lang('CannotConnectToOpenOffice');
+                        $this->error = get_lang('The connection to the document converter failed. Please contact your platform administrator to fix the problem.');
                         break;
                     case 2:
                         // Conversion failed in openoffice.
-                        $this->error = get_lang('OogieConversionFailed');
+                        $this->error = get_lang('The conversion failed. <br />Some documents are too complex to be treated automatically by the document converter.<br />We try to improve it.');
                         break;
                     case 255:
                         // Conversion can't be launch because command failed.
-                        $this->error = get_lang('OogieUnknownError');
+                        $this->error = get_lang('The conversion failed for an unknown reason.<br />Please contact your administrator to get more information.');
                         break;
                 }
                 DocumentManager::delete_document($_course, $this->created_dir, $this->base_work_dir);
@@ -259,15 +256,15 @@ abstract class OpenofficeDocument extends learnpath
                 switch ($return) {
                     case 1:
                         // Can't connect to openoffice.
-                        $this->error = get_lang('CannotConnectToOpenOffice');
+                        $this->error = get_lang('The connection to the document converter failed. Please contact your platform administrator to fix the problem.');
                         break;
                     case 2:
                         // Conversion failed in openoffice.
-                        $this->error = get_lang('OogieConversionFailed');
+                        $this->error = get_lang('The conversion failed. <br />Some documents are too complex to be treated automatically by the document converter.<br />We try to improve it.');
                         break;
                     case 255:
                         // Conversion can't be launch because command failed.
-                        $this->error = get_lang('OogieUnknownError');
+                        $this->error = get_lang('The conversion failed for an unknown reason.<br />Please contact your administrator to get more information.');
                         break;
                 }
                 DocumentManager::delete_document($_course, $this->created_dir, $this->base_work_dir);
@@ -305,7 +302,7 @@ abstract class OpenofficeDocument extends learnpath
                 filesize($this->base_work_dir.'/'.$this->created_dir),
                 $convertedTitle,
                 sprintf(
-                    get_lang('FileConvertedFromXToY'),
+                    get_lang('File converted from %s to %s'),
                     strtoupper($originalPathInfo['extension']),
                     strtoupper($convertedPathInfo['extension'])
                 ),
@@ -378,7 +375,6 @@ abstract class OpenofficeDocument extends learnpath
         ];
 
         try {
-            //error_log('['.time().'] Calling wsConvertPpt webservice on ' . $ppt2lp_host);
             $result = $client->__call('wsConvertPpt', ['pptData' => $params]);
         } catch (Exception $e) {
             error_log('['.time().'] Chamilo SOAP call error: '.$e->getMessage());

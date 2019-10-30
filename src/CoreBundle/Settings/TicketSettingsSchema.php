@@ -9,8 +9,6 @@ use Symfony\Component\Form\FormBuilderInterface;
 
 /**
  * Class GradebookSettingsSchema.
- *
- * @package Chamilo\CoreBundle\Settings
  */
 class TicketSettingsSchema extends AbstractSettingsSchema
 {

@@ -1,12 +1,9 @@
 <script>
 (function () {
     var designer = null;
-    $(document).on('ready', function () {
+    $(function () {
         $('.help-badges').tooltip();
         $('.help-badges-img').tooltip();
-    });
-
-    $(document).on('ready', function () {
         $('#btn-open-designer').on('click', function (e) {
             e.preventDefault();
 
@@ -683,7 +680,7 @@
     </div>
     <div class="col-md-3">
         <div class="openbadges-img" id="badge-container">
-            <img id="badge-preview" class="img-responsive" alt="{{ 'BadgePreview' | get_lang }}" src="{{ skill.icon_big }}">
+            <img id="badge-preview" class="img-fluid" alt="{{ 'BadgePreview' | get_lang }}" src="{{ skill.icon_big }}">
         </div>
 
         <div class="create-openbadges">
@@ -701,7 +698,7 @@
 </div>
 {{ badge_studio.script_js }}
 <script>
-    $(document).ready(function() {
+    $(function() {
         $('#set-custom-badge').click(function () {
             var data = $('#raster').attr('src');
             $('#badge_studio_image').val(data);

@@ -30,7 +30,8 @@ $strings['ServerIsNotConfigured'] = "Videoconference server is not configured";
 $strings['XUsersOnLine'] = "%s user(s) online";
 
 $strings['host'] = 'BigBlueButton host';
-$strings['host_help'] = 'This is the name of the server where your BigBlueButton server is running. Might be localhost, an IP address (e.g. 192.168.13.54) or a domain name (e.g. my.video.com).';
+$strings['host_help'] = 'This is the name of the server where your BigBlueButton server is running. 
+Might be localhost, an IP address (e.g. http://192.168.13.54) or a domain name (e.g. http://my.video.com).';
 
 $strings['salt'] = 'BigBlueButton salt';
 $strings['salt_help'] = 'This is the security key of your BigBlueButton server, which will allow your server to authentify the Chamilo installation. Refer to the BigBlueButton documentation to locate it. Try bbb-conf --salt';
@@ -74,3 +75,5 @@ $strings['ParticipantsWillUseSameInterface'] = 'Participants will use the same i
 $strings['SetByStudent'] = 'Set by student';
 $strings['SetByTeacher'] = 'Set by teacher';
 $strings['SetByDefault'] = 'Set to default interface';
+$strings['allow_regenerate_recording'] = 'Allow regenerate recording';
+$strings['bbb_force_record_generation'] = 'Force record generation at the end of the meeting';

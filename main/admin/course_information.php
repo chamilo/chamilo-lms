@@ -92,7 +92,7 @@ function get_course_usage($course, $session_id = 0)
     return $usage;
 }
 
-$interbreadcrumb[] = ["url" => 'index.php', "name" => get_lang('PlatformAdmin')];
+$interbreadcrumb[] = ["url" => 'index.php', "name" => get_lang('Administration')];
 $interbreadcrumb[] = ["url" => 'course_list.php', "name" => get_lang('Courses')];
 $courseId = $courseInfo['real_id'];
 $tool_name = $courseInfo['title'].' ('.$courseInfo['visual_code'].')';
@@ -100,12 +100,12 @@ Display::display_header($tool_name);
 ?>
     <div class="actions">
         <a href="<?php echo $courseInfo['course_public_url']; ?>">
-            <?php Display::display_icon('home.png', get_lang('CourseHomepage'), [], ICON_SIZE_MEDIUM); ?>
+            <?php Display::display_icon('home.png', get_lang('Course home'), [], ICON_SIZE_MEDIUM); ?>
         </a>
     </div>
 <?php
 
-echo Display::page_header(get_lang('CourseUsage'));
+echo Display::page_header(get_lang('Course usage'));
 
 $table = new SortableTableFromArray(
     get_course_usage($courseInfo, $sessionId),
@@ -115,8 +115,8 @@ $table = new SortableTableFromArray(
 );
 $table->set_additional_parameters(['code' => $courseInfo['code']]);
 $table->set_other_tables(['user_table', 'class_table']);
-$table->set_header(0, get_lang('Tool'), true);
-$table->set_header(1, get_lang('NumberOfItems'), true);
+$table->set_header(0, get_lang('tool'), true);
+$table->set_header(1, get_lang('number of items'), true);
 $table->display();
 
 /**
@@ -153,28 +153,28 @@ if (Database::num_rows($res) > 0) {
             $user[] = $obj->firstname;
         }
         $user[] = Display:: encrypted_mailto_link($obj->email, $obj->email);
-        $user[] = $obj->course_status == 5 ? get_lang('Student') : get_lang('Teacher');
+        $user[] = $obj->course_status == 5 ? get_lang('Learner') : get_lang('Trainer');
         $user[] = '<a href="user_information.php?user_id='.$obj->user_id.'">'.
-            Display::return_icon('info2.png', get_lang('UserInfo')).'</a>';
+            Display::return_icon('info2.png', get_lang('user information')).'</a>';
         $users[] = $user;
     }
     $table = new SortableTableFromArray($users, 0, 20, 'user_table');
     $table->set_additional_parameters(['code' => $courseInfo['code']]);
     $table->set_other_tables(['usage_table', 'class_table']);
-    $table->set_header(0, get_lang('OfficialCode'), true);
+    $table->set_header(0, get_lang('Code'), true);
     if ($is_western_name_order) {
-        $table->set_header(1, get_lang('FirstName'), true);
-        $table->set_header(2, get_lang('LastName'), true);
+        $table->set_header(1, get_lang('First name'), true);
+        $table->set_header(2, get_lang('Last name'), true);
     } else {
-        $table->set_header(1, get_lang('LastName'), true);
-        $table->set_header(2, get_lang('FirstName'), true);
+        $table->set_header(1, get_lang('Last name'), true);
+        $table->set_header(2, get_lang('First name'), true);
     }
-    $table->set_header(3, get_lang('Email'), true);
+    $table->set_header(3, get_lang('e-mail'), true);
     $table->set_header(4, get_lang('Status'), true);
     $table->set_header(5, '', false);
     $table->display();
 } else {
-    echo get_lang('NoUsersInCourse');
+    echo get_lang('No users in course');
 }
 
 $sessionList = SessionManager::get_session_by_course($courseInfo['real_id']);
@@ -185,7 +185,7 @@ if (!empty($sessionList)) {
         $session[0] = Display::url($session[0], $url.'session/resume_session.php?id_session='.$session['id']);
         unset($session[1]);
     }
-    echo Display::page_header(get_lang('Sessions'));
+    echo Display::page_header(get_lang('Course sessions'));
     $table = new SortableTableFromArray($sessionList, 0, 20, 'user_table');
     $table->display();
 }

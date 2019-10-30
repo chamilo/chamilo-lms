@@ -5,6 +5,8 @@ use Chamilo\CoreBundle\Entity\TrackEExercises;
 
 require_once __DIR__.'/../inc/global.inc.php';
 
+api_protect_course_script(true);
+
 $isAllowedToEdit = api_is_allowed_to_edit(true, true);
 
 if (!$isAllowedToEdit) {
@@ -62,7 +64,7 @@ if ('true' === $pluginEvaluation->get(QuestionOptionsEvaluationPlugin::SETTING_E
 
 if (!$useEvaluationPlugin) {
     foreach ($questionList as $questionId) {
-        $question = Question::read($questionId, $courseId);
+        $question = Question::read($questionId, api_get_course_info());
         $totalWeight += $question->selectWeighting();
 
         // We're inside *one* question. Go through each possible answer for this question
@@ -114,8 +116,8 @@ if (!$useEvaluationPlugin) {
 $table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
 
 $sql = "UPDATE $table SET
-          exe_result = '$totalScore',
-          exe_weighting = '$totalWeight'
+          score = '$totalScore',
+          max_score = '$totalWeight'
         WHERE exe_id = $exeId";
 Database::query($sql);
 

@@ -19,7 +19,7 @@ api_protect_admin_script();
 Skill::isAllowed();
 
 $action = isset($_GET['action']) ? $_GET['action'] : 'list';
-$skillId = isset($_GET['id']) ? intval($_GET['id']) : 0;
+$skillId = isset($_GET['id']) ? (int) $_GET['id'] : 0;
 
 $entityManager = Database::getManager();
 
@@ -30,7 +30,7 @@ switch ($action) {
         if (is_null($skill)) {
             Display::addFlash(
                 Display::return_message(
-                    get_lang('SkillNotFound'),
+                    get_lang('Skill not found'),
                     'error'
                 )
             );
@@ -48,7 +48,7 @@ switch ($action) {
 
             Display::addFlash(
                 Display::return_message(
-                    sprintf(get_lang('SkillXEnabled'), $skill->getName()),
+                    sprintf(get_lang('Skill "%s" enabled'), $skill->getName()),
                     'success'
                 )
             );
@@ -64,7 +64,7 @@ switch ($action) {
         if (is_null($skill)) {
             Display::addFlash(
                 Display::return_message(
-                    get_lang('SkillNotFound'),
+                    get_lang('Skill not found'),
                     'error'
                 )
             );
@@ -101,7 +101,7 @@ switch ($action) {
 
             Display::addFlash(
                 Display::return_message(
-                    sprintf(get_lang('SkillXDisabled'), $skill->getName()),
+                    sprintf(get_lang('Skill "%s" disabled'), $skill->getName()),
                     'success'
                 )
             );
@@ -112,50 +112,39 @@ switch ($action) {
         break;
     case 'list':
     default:
-        $interbreadcrumb[] = ["url" => 'index.php', "name" => get_lang('PlatformAdmin')];
+        $interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('Administration')];
 
         $toolbar = Display::url(
             Display::return_icon(
                 'add.png',
-                get_lang('CreateSkill'),
+                get_lang('Create skill'),
                 null,
                 ICON_SIZE_MEDIUM
             ),
             api_get_path(WEB_CODE_PATH).'admin/skill_create.php',
-            ['title' => get_lang('CreateSkill')]
+            ['title' => get_lang('Create skill')]
         );
 
         $toolbar .= Display::url(
             Display::return_icon(
                 'wheel_skill.png',
-                get_lang('SkillsWheel'),
+                get_lang('Skills wheel'),
                 null,
                 ICON_SIZE_MEDIUM
             ),
             api_get_path(WEB_CODE_PATH).'admin/skills_wheel.php',
-            ['title' => get_lang('SkillsWheel')]
+            ['title' => get_lang('Skills wheel')]
         );
-
-        /*$toolbar .= Display::url(
-            Display::return_icon(
-                'edit-skill.png',
-                get_lang('BadgesManagement'),
-                null,
-                ICON_SIZE_MEDIUM
-            ),
-            api_get_path(WEB_CODE_PATH).'admin/skill_badge_list.php',
-            ['title' => get_lang('BadgesManagement')]
-        );*/
 
         $toolbar .= Display::url(
             Display::return_icon(
                 'import_csv.png',
-                get_lang('ImportSkillsListCSV'),
+                get_lang('Import skills from a CSV file'),
                 null,
                 ICON_SIZE_MEDIUM
             ),
             api_get_path(WEB_CODE_PATH).'admin/skills_import.php',
-            ['title' => get_lang('ImportSkillsListCSV')]
+            ['title' => get_lang('Import skills from a CSV file')]
         );
 
         $extraField = new ExtraField('skill');
@@ -175,7 +164,6 @@ switch ($action) {
 
         if ($extraFieldSearchTagId) {
             $skills = [];
-
             $skillsFiltered = $extraField->getAllSkillPerTag($arrayVals['id'], $extraFieldSearchTagId);
             foreach ($skillList as $index => $value) {
                 if (array_search($index, $skillsFiltered)) {
@@ -185,11 +173,11 @@ switch ($action) {
             $skillList = $skills;
         }
 
-        $tpl = new Template(get_lang('ManageSkills'));
+        $tpl = new Template(get_lang('Manage skills'));
         $tpl->assign('skills', $skillList);
         $tpl->assign('current_tag_id', $extraFieldSearchTagId);
         $tpl->assign('tags', $tags);
-        $templateName = $tpl->get_template('skill/list.html.twig');
+        $templateName = $tpl->get_template('skill/list.tpl');
         $content = $tpl->fetch($templateName);
 
         $tpl->assign(

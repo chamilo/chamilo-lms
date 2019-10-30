@@ -30,20 +30,20 @@ if ($form->validate()) {
     $values['relation_type'] = GROUP_USER_PERMISSION_ADMIN;
 
     $groupId = $usergroup->save($values);
-    Display::addFlash(Display::return_message(get_lang('GroupAdded')));
+    Display::addFlash(Display::return_message(get_lang('Group added')));
     header('Location: group_view.php?id='.$groupId);
     exit();
 }
 
-$nameTools = get_lang('AddGroup');
+$nameTools = get_lang('Add group');
 $this_section = SECTION_SOCIAL;
 
 $interbreadcrumb[] = ['url' => 'home.php', 'name' => get_lang('Social')];
 $interbreadcrumb[] = ['url' => 'groups.php', 'name' => get_lang('Groups')];
 $interbreadcrumb[] = ['url' => '#', 'name' => $nameTools];
 
-$social_avatar_block = SocialManager::getAvatarBlock('group_add');
-$social_menu_block = SocialManager::getMenuSocial('group_add');
+$social_avatar_block = SocialManager::show_social_avatar_block('group_add');
+$social_menu_block = SocialManager::show_social_menu('group_add');
 $social_right_content = $form->returnForm();
 
 $tpl = new Template(null);

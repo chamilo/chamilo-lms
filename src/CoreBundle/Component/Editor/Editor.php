@@ -8,11 +8,14 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Class Editor.
- *
- * @package Chamilo\CoreBundle\Component\Editor
  */
 class Editor
 {
+    /**
+     * @var string
+     */
+    public $textareaId;
+
     /**
      * Name of the instance.
      *
@@ -86,15 +89,23 @@ class Editor
     }
 
     /**
-     * Return the HTML code required to run editor.
-     *
      * @return string
      */
-    public function createHtml()
+    public function getTextareaId()
     {
-        $html = '<textarea id="'.$this->getName().'" name="'.$this->getName().'">'.$this->value.'</textarea>';
+        return $this->textareaId;
+    }
 
-        return $html;
+    /**
+     * @param string $textareaId
+     *
+     * @return Editor
+     */
+    public function setTextareaId($textareaId)
+    {
+        $this->textareaId = $textareaId;
+
+        return $this;
     }
 
     /**
@@ -113,7 +124,7 @@ class Editor
      */
     public function getConfigAttribute($key)
     {
-        return $this->config[$key] ?? null;
+        return isset($this->config[$key]) ? $this->config[$key] : null;
     }
 
     /**
@@ -155,7 +166,7 @@ class Editor
      */
     public function getEditorStandAloneTemplate()
     {
-        return 'elfinder_standalone.html.twig';
+        return 'javascript/editor/elfinder_standalone.html.twig';
     }
 
     /**

@@ -1,15 +1,9 @@
 <?php
 
 /* For licensing terms, see /license.txt */
-/**
- * @package chamilo.include.search
- */
-require_once __DIR__.'/../../global.inc.php';
 
 /**
  * Class wrapper.
- *
- * @package chamilo.include.search
  */
 class ChamiloIndexer extends XapianIndexer
 {

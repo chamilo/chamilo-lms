@@ -4,13 +4,13 @@
 /**
  * HotPotatoes administration.
  *
- * @package chamilo.exercise
- *
  * @author Istvan Mandak
  */
 require_once __DIR__.'/../inc/global.inc.php';
 
 $this_section = SECTION_COURSES;
+
+api_protect_course_script(true);
 
 $_course = api_get_course_info();
 
@@ -42,15 +42,15 @@ if (!$is_allowedToEdit) {
 if (api_is_in_gradebook()) {
     $interbreadcrumb[] = [
         'url' => Category::getUrl(),
-        'name' => get_lang('ToolGradebook'),
+        'name' => get_lang('Assessments'),
     ];
 }
 
 $interbreadcrumb[] = [
     "url" => "exercise.php",
-    "name" => get_lang('Exercises'),
+    "name" => get_lang('Tests'),
 ];
-$nameTools = get_lang('adminHP');
+$nameTools = get_lang('Hot Potatoes Admin');
 
 Display::display_header($nameTools, "Exercise");
 
@@ -73,7 +73,6 @@ echo "<form action=\"".api_get_self()."\" method='post' name='form1'>";
 echo "<input type=\"hidden\" name=\"hotpotatoesName\" value=\"$hotpotatoesName\">";
 echo "<input type=\"text\" name=\"newName\" value=\"";
 
-$lstrComment = '';
 $lstrComment = GetComment($hotpotatoesName);
 if ($lstrComment == '') {
     $lstrComment = GetQuizName($hotpotatoesName, $documentPath);
@@ -84,7 +83,7 @@ if ($lstrComment == '') {
 
 echo $lstrComment;
 echo "\" size=40>&nbsp;";
-echo "<button type=\"submit\" class=\"save\" name=\"submit\" value=\"".get_lang('Ok')."\">".get_lang('Ok')."</button>";
+echo "<button type=\"submit\" class=\"save\" name=\"submit\" value=\"".get_lang('Validate')."\">".get_lang('Validate')."</button>";
 echo "<button type=\"button\" class=\"cancel\" name=\"cancel\" value=\"".get_lang('Cancel')."\" onclick=\"javascript:document.form1.newName.value='';\">".get_lang('Cancel')."</button>";
 echo "</form>";
 

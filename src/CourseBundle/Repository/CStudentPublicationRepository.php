@@ -13,10 +13,8 @@ use Doctrine\ORM\Query\Expr\Join;
 
 /**
  * Class CStudentPublicationRepository.
- *
- * @package Chamilo\CourseBundle\Repository
  */
-class CStudentPublicationRepository extends ServiceEntityRepository
+final class CStudentPublicationRepository extends ServiceEntityRepository
 {
     /**
      * CStudentPublicationRepository constructor.

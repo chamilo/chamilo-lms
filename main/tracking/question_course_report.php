@@ -31,7 +31,7 @@ $global = true;
 
 $course_list = $course_select_list = [];
 $html_result = '';
-$course_select_list[0] = get_lang('None');
+$course_select_list[0] = get_lang('none');
 
 $htmlHeadXtra[] = '
 <script type="text/javascript">
@@ -57,7 +57,7 @@ foreach ($temp_course_list as $temp_course_item) {
 $session_list = SessionManager::get_sessions_list([], ['name']);
 
 $my_session_list = [];
-$my_session_list[0] = get_lang('None');
+$my_session_list[0] = get_lang('none');
 foreach ($session_list as $sesion_item) {
     $my_session_list[$sesion_item['id']] = $sesion_item['name'];
 }
@@ -66,7 +66,7 @@ $form = new FormValidator('search_simple', 'POST', '', '', null, false);
 $form->addElement(
     'select',
     'session_id',
-    get_lang('Sessions'),
+    get_lang('Course sessions'),
     $my_session_list,
     ['id' => 'session_id', 'onchange' => 'load_courses();']
 );
@@ -93,7 +93,7 @@ $form->setDefaults(['course_code' => (string) $course_code]);
 $course_info = api_get_course_info($course_code);
 
 if (!empty($course_info)) {
-    $list = new LearnpathList('', $course_code);
+    $list = new LearnpathList('', $course_info);
     $lp_list = $list->get_flat_list();
 
     $main_question_list = [];
@@ -146,16 +146,16 @@ if (!empty($course_info)) {
 }
 
 if (!$export_to_xls) {
-    Display::display_header(get_lang("MySpace"));
+    Display::display_header(get_lang("Reporting"));
     echo '<div class="actions">';
     if ($global) {
         echo MySpace::getTopMenu();
     } else {
         echo '<div style="float:left; clear:left">
                 <a href="courseLog.php?'.api_get_cidreq().'&studentlist=true">'.
-                    get_lang('StudentsTracking').'</a>&nbsp;|
+                    get_lang('Report on learners').'</a>&nbsp;|
                 <a href="courseLog.php?'.api_get_cidreq().'&studentlist=false">'.
-                    get_lang('CourseTracking').'</a>&nbsp;';
+                    get_lang('Course report').'</a>&nbsp;';
         echo '</div>';
     }
     echo '</div>';
@@ -164,12 +164,12 @@ if (!$export_to_xls) {
         echo MySpace::getAdminActions();
     }
     echo '<br />';
-    echo '<h2>'.get_lang('LPQuestionListResults').'</h2>';
+    echo '<h2>'.get_lang('Learning paths exercises results list').'</h2>';
 
     $form->display();
 
     if (empty($course_code)) {
-        echo Display::return_message(get_lang('PleaseSelectACourse'), 'warning');
+        echo Display::return_message(get_lang('Please select a course'), 'warning');
     }
 }
 
@@ -179,8 +179,8 @@ $counter = 0;
 if (!empty($main_question_list) && is_array($main_question_list)) {
     $html_result .= '<table  class="data_table">';
     $html_result .= '<tr><th>'.get_lang('Question').
-                    Display::return_icon('info3.gif', get_lang('QuestionsAreTakenFromLPExercises'), ['align' => 'absmiddle', 'hspace' => '3px']).'</th>';
-    $html_result .= '<th>'.$course_info['visual_code'].' '.get_lang('AverageScore').Display::return_icon('info3.gif', get_lang('AllStudentsAttemptsAreConsidered'), ['align' => 'absmiddle', 'hspace' => '3px']).' </th>';
+                    Display::return_icon('info3.gif', get_lang('These questions have been taken from the learning paths'), ['align' => 'absmiddle', 'hspace' => '3px']).'</th>';
+    $html_result .= '<th>'.$course_info['visual_code'].' '.get_lang('Average score').Display::return_icon('info3.gif', get_lang('All learners attempts are considered'), ['align' => 'absmiddle', 'hspace' => '3px']).' </th>';
     $html_result .= '<th>'.get_lang('Quantity').'</th>';
 
     foreach ($main_question_list as $question) {
@@ -213,7 +213,7 @@ if (!empty($main_question_list) && is_array($main_question_list)) {
     $html_result .= '</table>';
 } else {
     if (!empty($course_code)) {
-        echo Display::return_message(get_lang('NoResults'), 'warning');
+        echo Display::return_message(get_lang('No results found'), 'warning');
     }
 }
 

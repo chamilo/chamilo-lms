@@ -88,41 +88,41 @@ $(function() {
 if (api_is_in_gradebook()) {
     $interbreadcrumb[] = [
         'url' => Category::getUrl(),
-        'name' => get_lang('ToolGradebook'),
+        'name' => get_lang('Assessments'),
     ];
 }
 
 $htmlHeadXtra[] = api_get_jquery_libraries_js(['jquery-ui', 'jquery-upload']);
 $interbreadcrumb[] = [
     'url' => 'lp_controller.php?action=list&'.api_get_cidreq(),
-    'name' => get_lang('LearningPaths'),
+    'name' => get_lang('Learning paths'),
 ];
 $interbreadcrumb[] = [
     'url' => api_get_self()."?action=build&lp_id=$lpId&".api_get_cidreq(),
-    'name' => $learnPath->get_name(),
+    'name' => $learnPath->getNameNoTags(),
 ];
 
 switch ($type) {
     case 'dir':
         $interbreadcrumb[] = [
             'url' => 'lp_controller.php?action=add_item&type=step&lp_id='.$learnPath->get_id().'&'.api_get_cidreq(),
-            'name' => get_lang('NewStep'),
+            'name' => get_lang('Add learning object or activity'),
         ];
-        $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('NewChapter')];
+        $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Add section')];
         break;
     case 'document':
         $interbreadcrumb[] = [
             'url' => 'lp_controller.php?action=add_item&type=step&lp_id='.$learnPath->get_id().'&'.api_get_cidreq(),
-            'name' => get_lang('NewStep'),
+            'name' => get_lang('Add learning object or activity'),
         ];
         break;
     default:
-        $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('NewStep')];
+        $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Add learning object or activity')];
         break;
 }
 
-if ($action == 'add_item' && $type == 'document') {
-    $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('NewDocumentCreated')];
+if ($action === 'add_item' && $type === 'document') {
+    $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('The rich media page/activity has been added to the course')];
 }
 
 // Theme calls.
@@ -131,17 +131,8 @@ $lp_theme_css = $learnPath->get_theme();
 
 Display::display_header(null, 'Path');
 
-$suredel = trim(get_lang('AreYouSureToDeleteJS'));
-//@todo move this somewhere else css/fix.css
+$suredel = trim(get_lang('Are you sure to delete'));
 ?>
-<style>
-    #feedback { font-size: 1.4em; }
-    #resExercise .ui-selecting { background: #FECA40; }
-    #resExercise .ui-selected { background: #F39814; color: white; }
-    #resExercise { list-style-type: none; margin: 0; padding: 0; width: 60%; }
-    #resExercise li { margin: 3px; padding: 0.4em; font-size: 1.4em; height: 18px; }
-</style>
-
 <script>
 function stripslashes(str) {
     str=str.replace(/\\'/g,'\'');
@@ -172,7 +163,7 @@ $(function() {
     });
 
     $('.lp-btn-associate-forum').on('click', function (e) {
-        var associate = confirm('<?php echo get_lang('ConfirmAssociateForumToLPItem'); ?>');
+        var associate = confirm('<?php echo get_lang('This action will associate a forum thread to this learning path item. Do you want to proceed?'); ?>');
 
         if (!associate) {
             e.preventDefault();
@@ -180,7 +171,7 @@ $(function() {
     });
 
     $('.lp-btn-dissociate-forum').on('click', function (e) {
-        var dissociate = confirm('<?php echo get_lang('ConfirmDissociateForumToLPItem'); ?>');
+        var dissociate = confirm('<?php echo get_lang('This action will dissociate the forum thread of this learning path item. Do you want to proceed?'); ?>');
 
         if (!dissociate) {
             e.preventDefault();
@@ -202,7 +193,7 @@ $(document).on('shown.bs.tab', 'a[data-toggle="tab"]', function (e) {
 })
 </script>
 <?php
-/* DISPLAY SECTION */
+
 echo $learnPath->build_action_menu();
 echo '<div class="row">';
 echo '<div id="lp_sidebar" class="col-md-4">';
@@ -216,7 +207,6 @@ if (($type == 'document' || $type == 'step') && !isset($_GET['file'])) {
     echo '<div id="frmModel" class="scrollbar-inner lp-add-item">';
     echo '</div>';
 }
-
 echo '</div>';
 
 echo '<div id="doc_form" class="col-md-8">';
@@ -231,34 +221,34 @@ if (isset($new_item_id) && is_numeric($new_item_id)) {
         case 'dir':
             echo $learnPath->display_manipulate($new_item_id, $_POST['type']);
             echo Display::return_message(
-                get_lang('NewChapterCreated'),
+                get_lang('Add sectionCreated'),
                 'confirmation'
             );
             break;
         case TOOL_LINK:
             echo $learnPath->display_manipulate($new_item_id, $type);
             echo Display::return_message(
-                get_lang('NewLinksCreated'),
+                get_lang('The new link has been created'),
                 'confirmation'
             );
             break;
         case TOOL_STUDENTPUBLICATION:
             echo $learnPath->display_manipulate($new_item_id, $type);
             echo Display::return_message(
-                get_lang('NewStudentPublicationCreated'),
+                get_lang('The new assignment has been created'),
                 'confirmation'
             );
             break;
         case TOOL_QUIZ:
             echo $learnPath->display_manipulate($new_item_id, $type);
             echo Display::return_message(
-                get_lang('NewExerciseCreated'),
+                get_lang('The test has been added to the course'),
                 'confirmation'
             );
             break;
         case TOOL_DOCUMENT:
             echo Display::return_message(
-                get_lang('NewDocumentCreated'),
+                get_lang('The rich media page/activity has been added to the course'),
                 'confirmation'
             );
             echo $learnPath->display_item($new_item_id);
@@ -266,14 +256,14 @@ if (isset($new_item_id) && is_numeric($new_item_id)) {
         case TOOL_FORUM:
             echo $learnPath->display_manipulate($new_item_id, $type);
             echo Display::return_message(
-                get_lang('NewForumCreated'),
+                get_lang('A new forum has now been created'),
                 'confirmation'
             );
             break;
         case 'thread':
             echo $learnPath->display_manipulate($new_item_id, $type);
             echo Display::return_message(
-                get_lang('NewThreadCreated'),
+                get_lang('A new forum thread has now been created'),
                 'confirmation'
             );
             break;
@@ -283,7 +273,7 @@ if (isset($new_item_id) && is_numeric($new_item_id)) {
         case 'dir':
             echo $learnPath->display_item_form(
                 $type,
-                get_lang('EnterDataNewChapter')
+                get_lang('EnterDataAdd section')
             );
             break;
         case TOOL_DOCUMENT:
@@ -298,7 +288,7 @@ if (isset($new_item_id) && is_numeric($new_item_id)) {
             break;
         case TOOL_QUIZ:
             echo Display::return_message(
-                get_lang('ExerciseCantBeEditedAfterAddingToTheLP'),
+                get_lang('Exercise can\'t be edited after being added to the Learning Path'),
                 'warning'
             );
             echo $learnPath->display_quiz_form('add', 0, $_GET['file']);

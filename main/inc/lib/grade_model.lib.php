@@ -3,8 +3,6 @@
 
 /**
  * Class GradeModel.
- *
- * @package chamilo.library
  */
 class GradeModel extends Model
 {
@@ -82,7 +80,7 @@ class GradeModel extends Model
         $header = get_lang('Add');
 
         if ($action == 'edit') {
-            $header = get_lang('Modify');
+            $header = get_lang('Edit');
         }
         $id = isset($_GET['id']) ? intval($_GET['id']) : '';
 
@@ -159,23 +157,23 @@ class GradeModel extends Model
             $renderer->setElementTemplate($template_acronym, 'components['.$i.'][acronym]');
 
             if ($i == 0) {
-                $form->addRule('components['.$i.'][percentage]', get_lang('ThisFieldIsRequired'), 'required');
-                $form->addRule('components['.$i.'][acronym]', get_lang('ThisFieldIsRequired'), 'required');
-                $form->addRule('components['.$i.'][title]', get_lang('ThisFieldIsRequired'), 'required');
+                $form->addRule('components['.$i.'][percentage]', get_lang('Required field'), 'required');
+                $form->addRule('components['.$i.'][acronym]', get_lang('Required field'), 'required');
+                $form->addRule('components['.$i.'][title]', get_lang('Required field'), 'required');
             }
-            $form->addRule('components['.$i.'][percentage]', get_lang('OnlyNumbers'), 'numeric');
-            $form->addRule(['components['.$i.'][percentage]', 'maxvalue'], get_lang('Over100'), 'compare', '<=');
-            $form->addRule(['components['.$i.'][percentage]', 'minvalue'], get_lang('UnderMin'), 'compare', '>=');
+            $form->addRule('components['.$i.'][percentage]', get_lang('Only numbers'), 'numeric');
+            $form->addRule(['components['.$i.'][percentage]', 'maxvalue'], get_lang('Over 100'), 'compare', '<=');
+            $form->addRule(['components['.$i.'][percentage]', 'minvalue'], get_lang('Under the minimum.'), 'compare', '>=');
 
             $component_array[] = 'components['.$i.'][percentage]';
         }
 
         //New rule added in the formvalidator compare_fields that filters a group of fields in order to compare with the wanted value
-        $form->addRule($component_array, get_lang('AllMustWeight100'), 'compare_fields', '==@100');
-        $form->addElement('label', '', get_lang('AllMustWeight100'));
+        $form->addRule($component_array, get_lang('The sum of all values must be 100'), 'compare_fields', '==@100');
+        $form->addElement('label', '', get_lang('The sum of all values must be 100'));
 
         if ($action == 'edit') {
-            $form->addButtonUpdate(get_lang('Modify'));
+            $form->addButtonUpdate(get_lang('Edit'));
         } else {
             $form->addButtonCreate(get_lang('Add'));
         }
@@ -192,7 +190,7 @@ class GradeModel extends Model
         $form->setDefaults($defaults);
 
         // Setting the rules
-        $form->addRule('name', get_lang('ThisFieldIsRequired'), 'required');
+        $form->addRule('name', get_lang('Required field'), 'required');
 
         return $form;
     }
@@ -278,13 +276,13 @@ class GradeModel extends Model
 
         if (api_get_setting('teachers_can_change_grade_model_settings') === 'true' || api_is_platform_admin()) {
             $grade_models = $this->get_all();
-            $grade_model_options = ['-1' => get_lang('None')];
+            $grade_model_options = ['-1' => get_lang('none')];
             if (!empty($grade_models)) {
                 foreach ($grade_models as $item) {
                     $grade_model_options[$item['id']] = $item['name'];
                 }
             }
-            $form->addElement('select', $name, get_lang('GradeModel'), $grade_model_options);
+            $form->addElement('select', $name, get_lang('Grading model'), $grade_model_options);
             $default_platform_setting = api_get_setting('gradebook_default_grade_model_id');
             $default = -1;
 

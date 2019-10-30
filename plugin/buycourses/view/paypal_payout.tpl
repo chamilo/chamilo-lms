@@ -63,10 +63,8 @@
 </div>
 
 <script>
-    $(document).ready(function () {
-
+    $(function () {
         $("#responseButton").hide();
-
         $("#checkAll").click(function () {
             $(':checkbox').prop('checked', this.checked);
         });

@@ -5,6 +5,7 @@ use ChamiloSession as Session;
 
 /**
  * Class TestCategory.
+ * Manage question categories inside an exercise.
  *
  * @author hubert.borderiou
  * @author Julio Montoya - several fixes
@@ -283,22 +284,6 @@ class TestCategory
     }
 
     /**
-     * true if question id has a category.
-     *
-     * @param int $questionId
-     *
-     * @return bool
-     */
-    public static function isQuestionHasCategory($questionId)
-    {
-        if (self::getCategoryForQuestion($questionId) > 0) {
-            return true;
-        }
-
-        return false;
-    }
-
-    /**
      * Return the category name for question with question_id = $questionId
      * In this version, a question has only 1 category.
      *
@@ -437,17 +422,6 @@ class TestCategory
     }
 
     /**
-     * return the number of differents categories for a test
-     * input : test_id
-     * return : integer
-     * hubert.borderiou 07-04-2011.
-     */
-    public static function getNumberOfCategoriesForTest($id)
-    {
-        return count(self::getListOfCategoriesIDForTest($id));
-    }
-
-    /**
      * return the number of question of a category id in a test.
      *
      * @param int $exerciseId
@@ -522,7 +496,7 @@ class TestCategory
             $courseId = api_get_course_int_id();
         }
         $categories = self::getCategoryListInfo('', $courseId);
-        $result = ['0' => get_lang('NoCategorySelected')];
+        $result = ['0' => get_lang('GeneralSelected')];
         for ($i = 0; $i < count($categories); $i++) {
             $result[$categories[$i]->id] = $categories[$i]->name;
         }
@@ -672,22 +646,6 @@ class TestCategory
     }
 
     /**
-     * Display signs [+] and/or (>0) after question title if question has options
-     * scoreAlwaysPositive and/or uncheckedMayScore.
-     *
-     * @param $objQuestion
-     */
-    public function displayQuestionOption($objQuestion)
-    {
-        if ($objQuestion->type == MULTIPLE_ANSWER && $objQuestion->scoreAlwaysPositive) {
-            echo "<span style='font-size:75%'> (>0)</span>";
-        }
-        if ($objQuestion->type == MULTIPLE_ANSWER && $objQuestion->uncheckedMayScore) {
-            echo "<span style='font-size:75%'> [+]</span>";
-        }
-    }
-
-    /**
      * sortTabByBracketLabel ($tabCategoryQuestions)
      * key of $tabCategoryQuestions are the category id (0 for not in a category)
      * value is the array of question id of this category
@@ -711,40 +669,6 @@ class TestCategory
         }
 
         return $tabResult;
-    }
-
-    /**
-     * return total score for test exe_id for all question in the category $in_cat_id for user
-     * If no question for this category, return "".
-     */
-    public static function getCatScoreForExeidForUserid($in_cat_id, $in_exe_id, $in_user_id)
-    {
-        $tbl_track_attempt = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
-        $tbl_question_rel_category = Database::get_course_table(TABLE_QUIZ_QUESTION_REL_CATEGORY);
-        $in_cat_id = (int) $in_cat_id;
-        $in_exe_id = (int) $in_exe_id;
-        $in_user_id = (int) $in_user_id;
-
-        $query = "SELECT DISTINCT
-                        marks, 
-                        exe_id, 
-                        user_id, 
-                        ta.question_id, 
-                        category_id
-                  FROM $tbl_track_attempt ta 
-                  INNER JOIN $tbl_question_rel_category qrc
-                  ON (ta.question_id = qrc.question_id)
-                  WHERE
-                    qrc.category_id = $in_cat_id AND
-                    exe_id = $in_exe_id AND 
-                    user_id = $in_user_id";
-        $res = Database::query($query);
-        $score = '';
-        while ($data = Database::fetch_array($res)) {
-            $score += $data['marks'];
-        }
-
-        return $score;
     }
 
     /**
@@ -801,8 +725,8 @@ class TestCategory
 
         $table = new HTML_Table(['class' => 'table table-bordered', 'id' => 'category_results']);
         $table->setHeaderContents(0, 0, get_lang('Categories'));
-        $table->setHeaderContents(0, 1, get_lang('AbsoluteScore'));
-        $table->setHeaderContents(0, 2, get_lang('RelativeScore'));
+        $table->setHeaderContents(0, 1, get_lang('Absolute score'));
+        $table->setHeaderContents(0, 2, get_lang('Relative score'));
         $row = 1;
 
         $none_category = [];
@@ -843,7 +767,7 @@ class TestCategory
             }
 
             if (!empty($none_category)) {
-                $table->setCellContents($row, 0, get_lang('None'));
+                $table->setCellContents($row, 0, get_lang('none'));
                 $table->setCellContents(
                     $row,
                     1,
@@ -897,22 +821,6 @@ class TestCategory
     }
 
     /**
-     * @return array
-     */
-    public static function get_all_categories()
-    {
-        $table = Database::get_course_table(TABLE_QUIZ_CATEGORY);
-        $sql = "SELECT * FROM $table ORDER BY title ASC";
-        $res = Database::query($sql);
-        $array = [];
-        while ($row = Database::fetch_array($res, 'ASSOC')) {
-            $array[] = $row;
-        }
-
-        return $array;
-    }
-
-    /**
      * @param Exercise $exercise
      * @param int      $courseId
      * @param string   $order
@@ -957,7 +865,7 @@ class TestCategory
                     }
                 }
                 if (empty($row['title']) && empty($row['category_id'])) {
-                    $row['title'] = get_lang('NoCategory');
+                    $row['title'] = get_lang('General');
                 }
                 $categories[$row['category_id']] = $row;
             }
@@ -978,12 +886,12 @@ class TestCategory
     {
         switch ($action) {
             case 'new':
-                $header = get_lang('AddACategory');
-                $submit = get_lang('AddTestCategory');
+                $header = get_lang('Add category');
+                $submit = get_lang('Add test category');
                 break;
             case 'edit':
-                $header = get_lang('EditCategory');
-                $submit = get_lang('ModifyCategory');
+                $header = get_lang('Edit this category');
+                $submit = get_lang('Edit category');
                 break;
         }
 
@@ -993,12 +901,12 @@ class TestCategory
         $form->addElement(
             'text',
             'category_name',
-            get_lang('CategoryName'),
+            get_lang('Category name'),
             ['class' => 'span6']
         );
         $form->add_html_editor(
             'category_description',
-            get_lang('CategoryDescription'),
+            get_lang('Category description'),
             false,
             false,
             [
@@ -1041,7 +949,7 @@ class TestCategory
         $form->setDefaults($defaults);
 
         // setting the rules
-        $form->addRule('category_name', get_lang('ThisFieldIsRequired'), 'required');
+        $form->addRule('category_name', get_lang('Required field'), 'required');
     }
 
     /**
@@ -1065,7 +973,7 @@ class TestCategory
             $warning = null;
             if ($nbQuestionsTotal != $real_question_count) {
                 $warning = Display::return_message(
-                    get_lang('CheckThatYouHaveEnoughQuestionsInYourCategories'),
+                    get_lang('Make sure you have enough questions in your categories.'),
                     'warning'
                 );
             }
@@ -1074,14 +982,14 @@ class TestCategory
             $return .= '<table class="data_table">';
             $return .= '<tr>';
             $return .= '<th height="24">'.get_lang('Categories').'</th>';
-            $return .= '<th width="70" height="24">'.get_lang('Number').'</th></tr>';
+            $return .= '<th width="70" height="24">'.get_lang('N°').'</th></tr>';
 
             $emptyCategory = [
                 'id' => '0',
-                'name' => get_lang('NoCategory'),
+                'name' => get_lang('General'),
                 'description' => '',
                 'iid' => '0',
-                'title' => get_lang('NoCategory'),
+                'title' => get_lang('General'),
             ];
 
             $categories[] = $emptyCategory;
@@ -1100,29 +1008,10 @@ class TestCategory
             }
 
             $return .= '</table>';
-            $return .= get_lang('ZeroMeansNoQuestionWillBeSelectedMinusOneMeansThatAllQuestionsWillBeSelected');
+            $return .= get_lang('-1 = All questions will be selected.');
         }
 
         return $return;
-    }
-
-    /**
-     * Sorts an array.
-     *
-     * @param array $array
-     *
-     * @return array
-     */
-    public function sort_tree_array($array)
-    {
-        foreach ($array as $key => $row) {
-            $parent[$key] = $row['parent_id'];
-        }
-        if (count($array) > 0) {
-            array_multisort($parent, SORT_ASC, $array);
-        }
-
-        return $array;
     }
 
     /**
@@ -1274,7 +1163,7 @@ class TestCategory
                 $links .= '<a href="'.api_get_self().'?action=editcategory&category_id='.$category['id'].'&'.api_get_cidreq().'">'.
                     Display::return_icon('edit.png', get_lang('Edit'), [], ICON_SIZE_SMALL).'</a>';
                 $links .= ' <a href="'.api_get_self().'?'.api_get_cidreq().'&action=deletecategory&category_id='.$category['id'].'" ';
-                $links .= 'onclick="return confirmDelete(\''.self::protectJSDialogQuote(get_lang('DeleteCategoryAreYouSure').'['.$rowname).'] ?\', \'id_cat'.$category['id'].'\');">';
+                $links .= 'onclick="return confirmDelete(\''.self::protectJSDialogQuote(get_lang('Are you sure you want to delete this category?').'['.$rowname).'] ?\', \'id_cat'.$category['id'].'\');">';
                 $links .= Display::return_icon('delete.png', get_lang('Delete'), [], ICON_SIZE_SMALL).'</a>';
             }
 

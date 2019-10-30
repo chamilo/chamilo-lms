@@ -63,18 +63,18 @@ $usersData[$fromUserId] = api_get_user_info($fromUserId);
 $messages = MessageManager::getAllMessagesBetweenStudents($toUserId, $fromUserId);
 
 $content = Display::page_subheader2(sprintf(
-    get_lang('MessagesExchangeBetweenXAndY'),
+    get_lang('Messages exchange between %s and %s'),
     $usersData[$toUserId]['complete_name'],
     $usersData[$fromUserId]['complete_name']
 ));
 
 $interbreadcrumb[] = [
     'url' => api_get_path(WEB_CODE_PATH).'mySpace/student.php',
-    'name' => get_lang('MyStudents'),
+    'name' => get_lang('My learners'),
 ];
 $interbreadcrumb[] = [
     'url' => api_get_path(WEB_CODE_PATH).'mySpace/myStudents.php?student='.$fromUserId,
-    'name' => get_lang('StudentDetails'),
+    'name' => get_lang('Learner details'),
 ];
 
 $uniqueMessageList = [];
@@ -82,7 +82,7 @@ foreach ($messages as $message) {
     $message['title'].
     $subText = get_lang('From').': '.$usersData[$message['user_sender_id']]['complete_name'];
     $title = empty($message['title']) ? get_lang('Untitled') : $message['title'];
-    $title = $title.' - '.$subText.'<span class="float-right">'.Display::dateToStringAgoAndLongDate($message['send_date']).'</span>';
+    $title = $title.' - '.$subText.'<span class="pull-right">'.Display::dateToStringAgoAndLongDate($message['send_date']).'</span>';
     $messageId = $message['id'];
 
     $hash = sha1($message['title'].$message['content'].$message['send_date']);
@@ -102,6 +102,6 @@ foreach ($messages as $message) {
     $uniqueMessageList[] = $hash;
 }
 
-$template = new Template(get_lang('MessageTracking'));
+$template = new Template(get_lang('Message tracking'));
 $template->assign('content', $content);
 $template->display_one_col_template();

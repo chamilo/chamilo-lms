@@ -3,7 +3,7 @@ var imageSource = "{{ _p.web_main }}" + "inc/lib/javascript/indicator.gif";
 var indicatorImage ='<img src="' + imageSource + '" />';
 
 {% if add_ready %}
-$(document).ready(function() {
+$(function() {
 {% endif %}
     $("body").on("click", ".glossary", function() {
         is_glossary_name = $(this).html();

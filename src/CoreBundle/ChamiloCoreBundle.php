@@ -3,18 +3,21 @@
 
 namespace Chamilo\CoreBundle;
 
+use Chamilo\CoreBundle\DependencyInjection\Compiler\ToolCompilerClass;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
 /**
  * Class ChamiloCoreBundle.
- *
- * @package Chamilo\CoreBundle
  */
 class ChamiloCoreBundle extends Bundle
 {
+    /**
+     * @param ContainerBuilder $container
+     */
     public function build(ContainerBuilder $container)
     {
         parent::build($container);
+        $container->addCompilerPass(new ToolCompilerClass());
     }
 }

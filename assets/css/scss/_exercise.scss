@@ -1,0 +1,61 @@
+// Exercise CSS
+
+.question_menu {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.question_menu li {
+  display: inline-block;
+}
+
+
+/* Fixes questions list */
+.question_options {
+  min-height: 150px;
+}
+
+.question_options label {
+  margin-bottom: 14px;
+  display: block;
+  font-weight: normal;
+}
+
+.question_options .radio {
+  min-height: 18px;
+  margin-left: 65px;
+}
+
+.question_options .checkbox {
+  margin-left: 65px;
+}
+
+.question_options .radio input[type="radio"], .question_options .checkbox input[type="checkbox"] {
+  float: left;
+  margin-left: -25px;
+}
+
+.question_options input[type="text"] {
+  padding: 6px 12px;
+  margin: 2px 2px 2px 0;
+  vertical-align: middle;
+  display: inline-block;
+  height: 34px;
+  line-height: 1.42857;
+  border: 1px solid #CCCCCC;
+  border-radius: 4px;
+  -moz-border-radius: 4px;
+  -webkit-border-radius: 4px;
+  color: #555555;
+  font-weight: bold;
+  background-color: #FCF8D6;
+
+}
+
+.question_options input[type="text"]:focus {
+  border-color: #66AFE9;
+  background-color: #ffffff;
+  outline: 0 none;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 8px rgba(102, 175, 233, 0.6);
+}

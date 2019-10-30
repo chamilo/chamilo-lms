@@ -37,13 +37,12 @@ if ($deleteQuestion) {
 $ajax_url = api_get_path(WEB_AJAX_PATH).'exercise.ajax.php?'.api_get_cidreq().'&exercise_id='.intval($exerciseId);
 ?>
 <div id="dialog-confirm"
-     title="<?php echo get_lang('ConfirmYourChoice'); ?>"
+     title="<?php echo get_lang('Please confirm your choice'); ?>"
      style="display:none;">
     <p>
-        <?php echo get_lang('AreYouSureToDelete'); ?>
+        <?php echo get_lang('Are you sure you want to delete'); ?>
     </p>
 </div>
-
 <script>
     $(function () {
         $("#dialog:ui-dialog").dialog("destroy");
@@ -60,12 +59,12 @@ $ajax_url = api_get_path(WEB_AJAX_PATH).'exercise.ajax.php?'.api_get_cidreq().'&
             $("#dialog-confirm").dialog({
                 modal: true,
                 buttons: {
-                    "<?php echo get_lang("Yes"); ?>": function () {
+                    "<?php echo get_lang('Yes'); ?>": function () {
                         location.href = targetUrl;
                         $(this).dialog("close");
 
                     },
-                    "<?php echo get_lang("No"); ?>": function () {
+                    "<?php echo get_lang('No'); ?>": function () {
                         $(this).dialog("close");
                     }
                 }
@@ -148,7 +147,7 @@ $ajax_url = api_get_path(WEB_AJAX_PATH).'exercise.ajax.php?'.api_get_cidreq().'&
 </script>
 <?php
 
-//we filter the type of questions we can add
+// Filter the type of questions we can add
 Question::displayTypeMenu($objExercise);
 
 echo '<div id="message"></div>';
@@ -159,7 +158,7 @@ Session::erase('less_answer');
 // If we are in a test
 $inATest = isset($exerciseId) && $exerciseId > 0;
 if (!$inATest) {
-    echo "<div class='alert alert-warning'>".get_lang('ChoiceQuestionType')."</div>";
+    echo Display::return_message(get_lang('Choose question type'), 'warning');
 } else {
     if ($nbrQuestions) {
         // In the building exercise mode show question list ordered as is.
@@ -167,15 +166,13 @@ if (!$inATest) {
 
         // In building mode show all questions not render by teacher order.
         $objExercise->questionSelectionType = EX_Q_SELECTION_ORDERED;
-        $alloQuestionOrdering = true;
+        $allowQuestionOrdering = true;
         $showPagination = api_get_configuration_value('show_question_pagination');
         if (!empty($showPagination) && $nbrQuestions > $showPagination) {
-            // $page is declare in admin.php
-            //$page = isset($_GET['page']) && !empty($_GET['page']) ? (int) $_GET['page'] : 1;
             $length = api_get_configuration_value('question_pagination_length');
             $url = api_get_self().'?'.api_get_cidreq();
             // Use pagination for exercise with more than 200 questions.
-            $alloQuestionOrdering = false;
+            $allowQuestionOrdering = false;
             $start = ($page - 1) * $length;
             $questionList = $objExercise->getQuestionForTeacher($start, $length);
             $paginator = new Knp\Component\Pager\Paginator();
@@ -204,17 +201,22 @@ if (!$inATest) {
         }
 
         echo '
-        <div class="list-header-question">
-            <h2>'.get_lang('List Questions').'</h2>
-        </div>
-        <div id="question_list">
-    ';
+            <div class="row hidden-xs">
+                <div class="col-sm-5"><strong>'.get_lang('Questions').'</strong></div>
+                <div class="col-sm-1 text-center"><strong>'.get_lang('Type').'</strong></div>
+                <div class="col-sm-2"><strong>'.get_lang('Category').'</strong></div>
+                <div class="col-sm-1 text-right"><strong>'.get_lang('Difficulty').'</strong></div>
+                <div class="col-sm-1 text-right"><strong>'.get_lang('Score').'</strong></div>
+                <div class="col-sm-2 text-right"><strong>'.get_lang('Detail').'</strong></div>
+            </div>
+            <div id="question_list">
+        ';
 
         $category_list = TestCategory::getListOfCategoriesNameForTest($objExercise->id, false);
 
         if (is_array($questionList)) {
             foreach ($questionList as $id) {
-                //To avoid warning messages
+                // To avoid warning messages.
                 if (!is_numeric($id)) {
                     continue;
                 }
@@ -226,48 +228,59 @@ if (!$inATest) {
                 }
 
                 $clone_link = Display::url(
-                    Display::returnFontAwesomeIcon('copy'),
-                    api_get_self().'?'.api_get_cidreq().'&clone_question='.$id,
-                    [
-                        'class' => 'btn btn-outline-secondary btn-sm',
-                        'title' => get_lang('Copy'),
-                    ]
+                    Display::return_icon(
+                        'cd.png',
+                        get_lang('Copy'),
+                        [],
+                        ICON_SIZE_TINY
+                    ),
+                    api_get_self().'?'.api_get_cidreq().'&clone_question='.$id.'&page='.$page,
+                    ['class' => 'btn btn-default btn-sm']
                 );
-                $edit_link = $objQuestionTmp->type == CALCULATED_ANSWER && $objQuestionTmp->isAnswered()
+
+                $edit_link = $objQuestionTmp->selectType() == CALCULATED_ANSWER && $objQuestionTmp->isAnswered()
                     ? Display::span(
-                        Display::returnFontAwesomeIcon('pencil-alt'),
-                        [
-                           'class' => 'btn btn-outline-secondary btn-sm',
-                           'title' => get_lang('QuestionEditionNotAvailableBecauseItIsAlreadyAnsweredHoweverYouCanCopyItAndModifyTheCopy'),
-                           'disabled',
-                        ]
+                        Display::return_icon(
+                            'edit_na.png',
+                            get_lang('Question edition is not available because the question has been already answered. However, you can copy and modify it.'),
+                            [],
+                            ICON_SIZE_TINY
+                        ),
+                        ['class' => 'btn btn-default btn-sm']
                     )
                     : Display::url(
-                        Display::returnFontAwesomeIcon('pencil-alt'),
+                        Display::return_icon(
+                            'edit.png',
+                            get_lang('Edit'),
+                            [],
+                            ICON_SIZE_TINY
+                        ),
                         api_get_self().'?'.api_get_cidreq().'&'
                             .http_build_query([
                                 'type' => $objQuestionTmp->selectType(),
-                                'myid' => 1,
                                 'editQuestion' => $id,
+                                'page' => $page,
                             ]),
-                        [
-                            'class' => 'btn btn-outline-secondary btn-sm',
-                            'title' => get_lang('Modify'),
-                        ]
+                        ['class' => 'btn btn-default btn-sm']
                     );
                 $delete_link = null;
                 if ($objExercise->edit_exercise_in_lp == true) {
                     $delete_link = Display::url(
-                        Display::returnFontAwesomeIcon('trash-alt'),
+                        Display::return_icon(
+                            'delete.png',
+                            get_lang('Remove from test'),
+                            [],
+                            ICON_SIZE_TINY
+                        ),
                         api_get_self().'?'.api_get_cidreq().'&'
                             .http_build_query([
                                 'exerciseId' => $exerciseId,
                                 'deleteQuestion' => $id,
+                                'page' => $page,
                             ]),
                         [
                             'id' => "delete_$id",
-                            'title' => get_lang('RemoveFromTest'),
-                            'class' => 'btn btn-outline-secondary btn-sm delete-swal',
+                            'class' => 'opener btn btn-default btn-sm',
                         ]
                     );
                 }
@@ -276,47 +289,40 @@ if (!$inATest) {
                     $delete_link = '';
                 }
 
-                $btnActions = implode(
+                $btnDetail = implode(
                     PHP_EOL,
                     [$edit_link, $clone_link, $delete_link]
                 );
 
                 $title = Security::remove_XSS($objQuestionTmp->selectTitle());
                 $title = strip_tags($title);
-                $move = null;
-                if ($alloQuestionOrdering) {
-                    $move .= Display::tag(
-                        'div',
-                        Display::returnFontAwesomeIcon(
-                            'arrows-alt ',
-                            1,
-                            true),
-                        [
-                            'class' => 'btn-moved moved',
-                        ]
-                    );
+                $move = '&nbsp;';
+                if ($allowQuestionOrdering) {
+                    $move = Display::returnFontAwesomeIcon('arrows moved', 1, true);
                 }
 
                 // Question name
                 $questionName =
                     '<a href="#" title = "'.Security::remove_XSS($title).'">
-                        '.cut($title, 42).'
+                        '.$move.' '.cut($title, 42).'
                     </a>';
 
                 // Question type
-                list($typeImg, $typeExpl) = $objQuestionTmp->get_type_icon_html();
-                $questionType = Display::return_icon($typeImg, $typeExpl, [], ICON_SIZE_MEDIUM);
+                $typeImg = $objQuestionTmp->getTypePicture();
+                $typeExpl = $objQuestionTmp->getExplanation();
+
+                $questionType = Display::return_icon($typeImg, $typeExpl);
 
                 // Question category
                 $txtQuestionCat = Security::remove_XSS(
                     TestCategory::getCategoryNameForQuestion($objQuestionTmp->id)
                 );
                 if (empty($txtQuestionCat)) {
-                    $txtQuestionCat = "-";
+                    $txtQuestionCat = '-';
                 }
 
                 // Question level
-                $txtQuestionLevel = $objQuestionTmp->level;
+                $txtQuestionLevel = $objQuestionTmp->getLevel();
                 if (empty($objQuestionTmp->level)) {
                     $txtQuestionLevel = '-';
                 }
@@ -328,29 +334,29 @@ if (!$inATest) {
                 echo '<div id="question_id_list_'.$id.'">
                         <div class="header_operations" data-exercise="'.$objExercise->selectId().'"
                             data-question="'.$id.'">
-                            <div class="card">
-                                <div class="card-body">
-                                     <div class="row">
-                                        <div class="col-md-1">
-                                            '.$move.'
-                                        </div>
-                                        <div class="col-md-5">
-                                            <div class="question-title">
-                                                '.$questionType.$questionName.'
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <div class="d-flex flex-row bd-highlight mt-2 mb-2">
-                                                <div class="p-2 bd-highlight">'.get_lang('Category').': '.cut($txtQuestionCat, 42).'</div>
-                                                <div class="p-2 bd-highlight">'.get_lang('Difficulty').': '.$questionLevel.'</div>
-                                                <div class="p-2 bd-highlight">'.get_lang('Score').': '.$questionScore.'</div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-2">
-                                            <div class="text-right mt-2 mb-2 mr-2">'.$btnActions.'</div>
-                                        </div>
-                                     </div>
-                                </div>                     
+                            <div class="row">
+                                <div class="question col-sm-5 col-xs-12">'
+                                    .$questionName.'
+                                </div>
+                                <div class="type text-center col-sm-1 col-xs-12">
+                                    <span class="visible-xs-inline">'.get_lang('Type').' </span>'
+                                    .$questionType.'
+                                </div>
+                                <div class="category col-sm-2 col-xs-12" title="'.$txtQuestionCat.'">
+                                    <span class="visible-xs-inline">'.get_lang('Category').' </span>'
+                                    .cut($txtQuestionCat, 42).'
+                                </div>
+                                <div class="level text-right col-sm-1 col-xs-6">
+                                    <span class="visible-xs-inline">'.get_lang('Difficulty').' </span>'
+                                    .$questionLevel.'
+                                </div>
+                                <div class="score text-right col-sm-1 col-xs-6">
+                                    <span class="visible-xs-inline">'.get_lang('Score').' </span>'
+                                    .$questionScore.'
+                                </div>
+                                <div class="btn-actions text-right col-sm-2 col-xs-6">
+                                    <div class="edition">'.$btnDetail.'</div>
+                                </div>
                             </div>
                         </div>
                         <div class="question-list-description-block" id="pnl-question-'.$id.'">
@@ -360,8 +366,9 @@ if (!$inATest) {
                 unset($objQuestionTmp);
             }
         }
+
+        echo '</div>'; //question list div
     } else {
-        echo Display::return_message(get_lang('NoQuestion'), 'warning');
+        echo Display::return_message(get_lang('Questions list (there is no question so far).'), 'warning');
     }
-    echo '</div>'; //question list div
 }

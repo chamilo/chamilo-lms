@@ -159,21 +159,6 @@ class Database
     }
 
     /**
-     * Escape MySQL wildchars _ and % in LIKE search.
-     *
-     * @param string $text The string to escape
-     *
-     * @return string The escaped string
-     */
-    public static function escape_sql_wildcards($text)
-    {
-        $text = api_preg_replace("/_/", "\_", $text);
-        $text = api_preg_replace("/%/", "\%", $text);
-
-        return $text;
-    }
-
-    /**
      * Escapes a string to insert into the database as text.
      *
      * @param string $string
@@ -248,19 +233,6 @@ class Database
         }
 
         return $result->fetch(PDO::FETCH_NUM);
-    }
-
-    /**
-     * Frees all the memory associated with the provided result identifier.
-     *
-     * @return bool|null Returns TRUE on success or FALSE on failure.
-     *                   Notes: Use this method if you are concerned about how much memory is being
-     *                   used for queries that return large result sets.
-     *                   Anyway, all associated result memory is automatically freed at the end of the script's execution.
-     */
-    public static function free_result(Statement $result)
-    {
-        $result->closeCursor();
     }
 
     /**
@@ -339,7 +311,7 @@ class Database
             exit;
         } else {
             error_log($e->getMessage());
-            api_not_allowed(false, get_lang('GeneralError'));
+            api_not_allowed(false, get_lang('An error has occured. Please contact your system administrator.'));
             exit;
         }
     }

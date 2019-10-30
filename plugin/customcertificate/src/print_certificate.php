@@ -31,8 +31,8 @@ if ($default == 1) {
     $courseId = api_get_course_int_id();
     $courseCode = api_get_course_id();
     $sessionId = api_get_session_id();
-    $enableCourse = api_get_course_setting('customcertificate_course_enable', $courseCode) == 1 ? true : false;
-    $useDefault = api_get_course_setting('use_certificate_default', $courseCode) == 1 ? true : false;
+    $enableCourse = api_get_course_setting('customcertificate_course_enable') == 1 ? true : false;
+    $useDefault = api_get_course_setting('use_certificate_default') == 1 ? true : false;
 }
 
 if (empty($courseCode)) {
@@ -46,7 +46,7 @@ if (empty($courseCode)) {
 }
 
 if (empty($sessionId)) {
-    $sessionId = isset($_REQUEST['session_id']) ? (int) $_REQUEST['session_id'] : '';
+    $sessionId = isset($_REQUEST['session_id']) ? (int) $_REQUEST['session_id'] : 0;
 }
 
 $accessUrlId = api_get_current_access_url_id();
@@ -83,28 +83,14 @@ $useDefault = false;
 $path = api_get_path(SYS_UPLOAD_PATH).'certificates/';
 
 // Get info certificate
-$infoCertificate = Database::select(
-    '*',
-    $table,
-    ['where' => ['access_url_id = ? AND c_id = ? AND session_id = ?' => [$accessUrlId, $courseId, $sessionId]]],
-    'first'
-);
+$infoCertificate = CustomCertificatePlugin::getInfoCertificate($courseId, $sessionId, $accessUrlId);
 
 if (!is_array($infoCertificate)) {
     $infoCertificate = [];
 }
 
 if (empty($infoCertificate)) {
-    $infoCertificate = Database::select(
-        '*',
-        Database::get_main_table(CustomCertificatePlugin::TABLE_CUSTOMCERTIFICATE),
-        ['where' => ['access_url_id = ? AND certificate_default = ? ' => [$accessUrlId, 1]]],
-        'first'
-    );
-
-    if (!is_array($infoCertificate)) {
-        $infoCertificate = [];
-    }
+    $infoCertificate = CustomCertificatePlugin::getInfoCertificateDefault($accessUrlId);
 
     if (empty($infoCertificate)) {
         Display::display_header($plugin->get_lang('PrintCertificate'));
@@ -183,19 +169,19 @@ foreach ($userList as $userInfo) {
     $htmlText .= '</tr>';
     $htmlText .= '</table>';
 
-    $all_user_info = DocumentManager::get_all_info_to_certificate(
+    $allUserInfo = DocumentManager::get_all_info_to_certificate(
         $studentId,
         $courseCode,
-        true
+        false
     );
 
     $myContentHtml = $infoCertificate['content_course'];
     $myContentHtml = str_replace(chr(13).chr(10).chr(13).chr(10), chr(13).chr(10), $myContentHtml);
-    $info_to_be_replaced_in_content_html = $all_user_info[0];
-    $info_to_replace_in_content_html = $all_user_info[1];
+    $infoToBeReplacedInContentHtml = $allUserInfo[0];
+    $infoToReplaceInContentHtml = $allUserInfo[1];
     $myContentHtml = str_replace(
-        $info_to_be_replaced_in_content_html,
-        $info_to_replace_in_content_html,
+        $infoToBeReplacedInContentHtml,
+        $infoToReplaceInContentHtml,
         $myContentHtml
     );
 
@@ -253,6 +239,8 @@ foreach ($userList as $userInfo) {
                     '............'
                 );
             }
+        } elseif ($infoCertificate['type_date_expediction'] == 4) {
+            $dateExpediction .= $plugin->get_lang('to').$infoToReplaceInContentHtml[9]; //date_certificate_no_time
         } else {
             if (!empty($sessionInfo)) {
                 $dateInfo = api_get_local_time($sessionInfo['access_end_date']);
@@ -374,7 +362,7 @@ foreach ($userList as $userInfo) {
             $categoriesTempList = learnpath::getCategories($courseId);
             $categoryTest = new CLpCategory();
             $categoryTest->setId(0);
-            $categoryTest->setName($plugin->get_lang('WithOutCategory'));
+            $categoryTest->setName($plugin->get_lang('Without category'));
             $categoryTest->setPosition(0);
             $categories = [$categoryTest];
 
@@ -416,7 +404,7 @@ foreach ($userList as $userInfo) {
                 }
 
                 if (count($categories) > 1 && count($flat_list) > 0) {
-                    if ($item->getName() != $plugin->get_lang('WithOutCategory')) {
+                    if ($item->getName() != $plugin->get_lang('Without category')) {
                         $items[] = '<h4 style="margin:0">'.$item->getName().'</h4>';
                     }
                 }

@@ -6,8 +6,6 @@
  * redirect
  * the process here to do what needs to be done with each file.
  *
- * @package chamilo.upload
- *
  * @author Yannick Warnier <ywarnier@beeznest.org>
  */
 require_once __DIR__.'/../inc/global.inc.php';
@@ -65,11 +63,11 @@ if (isset($_POST['convert'])) {
                 if (!empty($o_doc->error)) {
                     $errorMessage = $o_doc->error;
                 } else {
-                    $errorMessage = get_lang('OogieUnknownError');
+                    $errorMessage = get_lang('The conversion failed for an unknown reason.<br />Please contact your administrator to get more information.');
                 }
             }
         } else {
-            $errorMessage = get_lang('WoogieBadExtension');
+            $errorMessage = get_lang('Please upload text documents only. Filename extension should be .doc, .docx or .odt');
         }
     }
 }
@@ -81,13 +79,13 @@ if (!$is_allowed_to_edit) {
     api_not_allowed(true);
 }
 
-$interbreadcrumb[] = ["url" => "../lp/lp_controller.php?action=list", "name" => get_lang("Doc")];
-$nameTools = get_lang("WoogieConversionPowerPoint");
+$interbreadcrumb[] = ["url" => "../lp/lp_controller.php?action=list", "name" => get_lang("Document")];
+$nameTools = get_lang("Woogie : Word conversion");
 Display :: display_header($nameTools);
 
 echo '<span style="color: #5577af; font-size: 16px; font-family: Arial; margin-left: 10px;">'.
-    get_lang("WelcomeWoogieSubtitle").'</span><br>';
-$message = get_lang("WelcomeWoogieConverter");
+    get_lang("MS Word to course converter").'</span><br>';
+$message = get_lang('Welcome to Woogie Rapid Learning<ul type="1"><li>Browse your hard disk to find any .doc, .sxw or .odt file<li>Upload it to Woogie. It will convert it into a SCORM course<li>You will then be able to add audio comments on each page and insert quizzes and other activities between pages</ul>');
 echo '<br />';
 $s_style = "border-width: 1px;
          border-style: solid;
@@ -131,7 +129,7 @@ $form = new FormValidator('update_course', 'POST', '', '', 'style="margin: 0;"')
 
 $form->addElement('html', '<br>');
 
-$div_upload_limit = '&nbsp;&nbsp;'.get_lang('UploadMaxSize').' : '.ini_get('post_max_size');
+$div_upload_limit = '&nbsp;&nbsp;'.get_lang('Upload max size').' : '.ini_get('post_max_size');
 
 $renderer = $form->defaultRenderer();
 // set template for user_file element
@@ -156,12 +154,12 @@ $renderer->setCustomElementTemplate($user_file_template);
 
 $form->addElement('file', 'user_file', Display::return_icon('word_big.gif'));
 if (api_get_setting('search_enabled') === 'true') {
-    $form->addElement('checkbox', 'index_document', '', get_lang('SearchFeatureDoIndexDocument'));
+    $form->addElement('checkbox', 'index_document', '', get_lang('Index document text?ument'));
     $form->addElement('html', '<br />');
     $form->addElement(
         'html',
         get_lang(
-            'SearchFeatureDocumentLanguage'
+            'SearchFeatureDocumentumentLanguage'
         ).': &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'.api_get_languages_combo()
     );
     $form->addElement('html', '<div class="sub-form">');
@@ -172,12 +170,12 @@ if (api_get_setting('search_enabled') === 'true') {
 }
 
 /*
- * commented because SplitStepsPerChapter is not stable at all
- * $form -> addElement ('radio', 'split_steps',null, get_lang('SplitStepsPerPage'),'per_page');
- * $form -> addElement ('radio', 'split_steps',null, get_lang('SplitStepsPerChapter'),'per_chapter');
+ * commented because A section, a learning object is not stable at all
+ * $form -> addElement ('radio', 'split_steps',null, get_lang('A page, a learning object'),'per_page');
+ * $form -> addElement ('radio', 'split_steps',null, get_lang('A section, a learning object'),'per_chapter');
  */
 $form->addElement('hidden', 'split_steps', 'per_page');
-$form->addElement('submit', 'convert', get_lang('ConvertToLP'), 'class="convert_button"');
+$form->addElement('submit', 'convert', get_lang('Convert to course'), 'class="convert_button"');
 $form->addElement('hidden', 'woogie', 'true');
 $form->addProgress();
 $defaults = ['split_steps' => 'per_page', 'index_document' => 'checked="checked"'];

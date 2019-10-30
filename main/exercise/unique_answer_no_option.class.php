@@ -10,13 +10,11 @@ use ChamiloSession as Session;
  *
  * @author Eric Marguin
  * @author Julio Montoya
- *
- * @package chamilo.exercise
  */
 class UniqueAnswerNoOption extends Question
 {
-    public static $typePicture = 'mcuao.png';
-    public static $explanationLangVar = 'UniqueAnswerNoOption';
+    public $typePicture = 'mcuao.png';
+    public $explanationLangVar = 'UniqueAnswerNoOption';
 
     /**
      * Constructor.
@@ -49,12 +47,12 @@ class UniqueAnswerNoOption extends Question
         /*
           Types of Feedback
           $feedback_option[0]=get_lang('Feedback');
-          $feedback_option[1]=get_lang('DirectFeedback');
-          $feedback_option[2]=get_lang('NoFeedback');
+          $feedback_option[1]=get_lang('Adaptative test with immediate feedback');
+          $feedback_option[2]=get_lang('Exam (no feedback)');
          */
 
         $feedback_title = '';
-        if ($obj_ex->selectFeedbackType() == 1) {
+        if ($obj_ex->getFeedbackType() == 1) {
             $editor_config['Width'] = '250';
             $editor_config['Height'] = '110';
             $comment_title = '<th width="50%" >'.get_lang('Comment').'</th>';
@@ -63,14 +61,14 @@ class UniqueAnswerNoOption extends Question
             $comment_title = '<th width="50%">'.get_lang('Comment').'</th>';
         }
 
-        $html = '<table class="table table-hover">';
+        $html = '<table class="table table-striped table-hover">';
         $html .= '<thead>';
         $html .= '<tr>';
-        $html .= '<th>'.get_lang('Number').'</th>';
+        $html .= '<th>'.get_lang('N°').'</th>';
         $html .= '<th>'.get_lang('True').'</th>';
         $html .= '<th width="50%">'.get_lang('Answer').'</th>';
         $html .= $comment_title.$feedback_title;
-        $html .= '<th>'.get_lang('Weighting').'</th>';
+        $html .= '<th>'.get_lang('Score').'</th>';
         $html .= '</tr>';
         $html .= '</thead>';
         $html .= '<tbody>';
@@ -92,7 +90,7 @@ class UniqueAnswerNoOption extends Question
         $temp_scenario = [];
         if ($nb_answers < 1) {
             $nb_answers = 1;
-            echo Display::return_message(get_lang('YouHaveToCreateAtLeastOneAnswer'));
+            echo Display::return_message(get_lang('You have to create at least one answer'));
         }
         $editQuestion = isset($_GET['editQuestion']) ? $_GET['editQuestion'] : false;
         if ($editQuestion) {
@@ -209,7 +207,7 @@ class UniqueAnswerNoOption extends Question
         $form->addHtml('<tr>');
 
         $defaults["counter[$i]"] = '-';
-        $defaults['answer['.$i.']'] = get_lang('DontKnow');
+        $defaults['answer['.$i.']'] = get_lang('Don\'t know');
         $defaults['weighting['.$i.']'] = '0';
         $defaults['scenario'] = $temp_scenario;
         $renderer = &$form->defaultRenderer();
@@ -243,7 +241,7 @@ class UniqueAnswerNoOption extends Question
         $form->addElement('radio', 'correct', null, null, $i, ['class' => 'checkbox', 'disabled' => true]);
         $form->addElement('html_editor', 'answer['.$i.']', null, [], $editor_config);
 
-        $form->addRule('answer['.$i.']', get_lang('ThisFieldIsRequired'), 'required');
+        $form->addRule('answer['.$i.']', get_lang('Required field'), 'required');
         $form->addElement('html_editor', 'comment['.$i.']', null, [], $editor_config);
         $form->addElement('text', "weighting[$i]", null)->freeze();
 
@@ -254,10 +252,12 @@ class UniqueAnswerNoOption extends Question
 
         global $text;
         //ie6 fix
-        if ($obj_ex->edit_exercise_in_lp == true) {
+        if ($obj_ex->edit_exercise_in_lp == true ||
+            (empty($this->exerciseList) && empty($obj_ex->id))
+        ) {
             //setting the save button here and not in the question class.php
-            $buttonGroup[] = $form->addButtonDelete(get_lang('LessAnswer'), 'lessAnswers', true);
-            $buttonGroup[] = $form->addButtonCreate(get_lang('PlusAnswer'), 'moreAnswers', true);
+            $buttonGroup[] = $form->addButtonDelete(get_lang('Remove answer option'), 'lessAnswers', true);
+            $buttonGroup[] = $form->addButtonCreate(get_lang('Add answer option'), 'moreAnswers', true);
             $buttonGroup[] = $form->addButtonSave($text, 'submitQuestion', true);
 
             $form->addGroup($buttonGroup);
@@ -397,14 +397,19 @@ class UniqueAnswerNoOption extends Question
     /**
      * {@inheritdoc}
      */
-    public function return_header($exercise, $counter = null, $score = null)
+    public function return_header(Exercise $exercise, $counter = null, $score = [])
     {
         $header = parent::return_header($exercise, $counter, $score);
         $header .= '<table class="'.$this->question_table_class.'"><tr>';
 
-        if ($exercise->results_disabled != RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER) {
-            $header .= '<th>'.get_lang('Choice').'</th>';
-            $header .= '<th>'.get_lang('ExpectedChoice').'</th>';
+        if (!in_array($exercise->results_disabled, [
+            RESULT_DISABLE_SHOW_ONLY_IN_CORRECT_ANSWER,
+        ])
+        ) {
+            $header .= '<th>'.get_lang('Your choice').'</th>';
+            if ($exercise->showExpectedChoiceColumn()) {
+                $header .= '<th>'.get_lang('ExpectedYour choice').'</th>';
+            }
         }
         $header .= '<th>'.get_lang('Answer').'</th>';
         if ($exercise->showExpectedChoice()) {

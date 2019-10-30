@@ -51,16 +51,20 @@ if ($showGlossary) {
     $htmlHeadXtra[] = api_get_js('jquery.highlight.js');
 }
 
-$htmlHeadXtra[] = api_get_js('jqueryui-touch-punch/jquery.ui.touch-punch.min.js');
-$htmlHeadXtra[] = api_get_js('jquery.jsPlumb.all.js');
-$htmlHeadXtra[] = api_get_js('d3/jquery.xcolor.js');
+$js = '<script>'.api_get_language_translate_html().'</script>';
+$htmlHeadXtra[] = $js;
+
+//$htmlHeadXtra[] = api_get_js('jqueryui-touch-punch/jquery.ui.touch-punch.min.js');
+//$htmlHeadXtra[] = api_get_js('jquery.jsPlumb.all.js');
+//$htmlHeadXtra[] = api_get_js('d3/jquery.xcolor.js');
 
 //This library is necessary for the time control feature
 //tmlHeadXtra[] = api_get_css(api_get_path(WEB_LIBRARY_PATH).'javascript/epiclock/stylesheet/jquery.epiclock.css');
-$htmlHeadXtra[] = api_get_css(api_get_path(WEB_LIBRARY_PATH).'javascript/epiclock/renderers/minute/epiclock.minute.css');
-$htmlHeadXtra[] = api_get_js('epiclock/javascript/jquery.dateformat.min.js');
-$htmlHeadXtra[] = api_get_js('epiclock/javascript/jquery.epiclock.min.js');
-$htmlHeadXtra[] = api_get_js('epiclock/renderers/minute/epiclock.minute.js');
+//$htmlHeadXtra[] = api_get_css(api_get_path(WEB_LIBRARY_PATH).'javascript/epiclock/renderers/minute/epiclock.minute.css');
+//$htmlHeadXtra[] = api_get_js('epiclock/javascript/jquery.dateformat.min.js');
+//$htmlHeadXtra[] = api_get_js('epiclock/javascript/jquery.epiclock.min.js');
+//$htmlHeadXtra[] = api_get_js('epiclock/renderers/minute/epiclock.minute.js');
+$htmlHeadXtra[] = api_get_build_js('exercise.js');
 $htmlHeadXtra[] = '<link rel="stylesheet" href="'.api_get_path(WEB_LIBRARY_JS_PATH).'hotspot/css/hotspot.css">';
 $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_JS_PATH).'hotspot/js/hotspot.js"></script>';
 $htmlHeadXtra[] = '<script src="'.api_get_path(WEB_LIBRARY_JS_PATH).'annotation/js/annotation.js"></script>';
@@ -79,36 +83,32 @@ if (api_get_setting('enable_record_audio') === 'true') {
 $template = new Template();
 
 // General parameters passed via POST/GET
-$learnpath_id = isset($_REQUEST['learnpath_id']) ? intval($_REQUEST['learnpath_id']) : 0;
-$learnpath_item_id = isset($_REQUEST['learnpath_item_id']) ? intval($_REQUEST['learnpath_item_id']) : 0;
-$learnpath_item_view_id = isset($_REQUEST['learnpath_item_view_id']) ? intval($_REQUEST['learnpath_item_view_id']) : 0;
+$learnpath_id = isset($_REQUEST['learnpath_id']) ? (int) $_REQUEST['learnpath_id'] : 0;
+$learnpath_item_id = isset($_REQUEST['learnpath_item_id']) ? (int) $_REQUEST['learnpath_item_id'] : 0;
+$learnpath_item_view_id = isset($_REQUEST['learnpath_item_view_id']) ? (int) $_REQUEST['learnpath_item_view_id'] : 0;
 
-$reminder = isset($_REQUEST['reminder']) ? intval($_REQUEST['reminder']) : 0;
-$remind_question_id = isset($_REQUEST['remind_question_id']) ? intval($_REQUEST['remind_question_id']) : 0;
-$exerciseId = isset($_REQUEST['exerciseId']) ? intval($_REQUEST['exerciseId']) : 0;
+$reminder = isset($_REQUEST['reminder']) ? (int) $_REQUEST['reminder'] : 0;
+$remind_question_id = isset($_REQUEST['remind_question_id']) ? (int) $_REQUEST['remind_question_id'] : 0;
+$exerciseId = isset($_REQUEST['exerciseId']) ? (int) $_REQUEST['exerciseId'] : 0;
 $formSent = isset($_REQUEST['formSent']) ? $_REQUEST['formSent'] : null;
 $exerciseResult = isset($_REQUEST['exerciseResult']) ? $_REQUEST['exerciseResult'] : null;
 $exerciseResultCoordinates = isset($_REQUEST['exerciseResultCoordinates']) ? $_REQUEST['exerciseResultCoordinates'] : null;
 $choice = isset($_REQUEST['choice']) ? $_REQUEST['choice'] : null;
 $choice = empty($choice) ? isset($_REQUEST['choice2']) ? $_REQUEST['choice2'] : null : null;
 
-//From submit modal
-$current_question = isset($_REQUEST['num']) ? intval($_REQUEST['num']) : null;
-$currentAnswer = isset($_REQUEST['num_answer']) ? intval($_REQUEST['num_answer']) : null;
-$endExercise = isset($_REQUEST['end_exercise']) && $_REQUEST['end_exercise'] == 1 ? true : false;
-
+// From submit modal
+$current_question = isset($_REQUEST['num']) ? (int) $_REQUEST['num'] : null;
+$currentAnswer = isset($_REQUEST['num_answer']) ? (int) $_REQUEST['num_answer'] : null;
 $logInfo = [
     'tool' => TOOL_QUIZ,
     'tool_id' => $exerciseId,
     'tool_id_detail' => 0,
-    'action' => ((int) $_REQUEST['learnpath_id'] > 0) ? 'learnpath_id' : '',
-    'action_details' => ((int) $_REQUEST['learnpath_id'] > 0) ? (int) $_REQUEST['learnpath_id'] : '',
+    'action' => $learnpath_id,
+    'action_details' => $learnpath_id,
 ];
 Event::registerLog($logInfo);
 
-// Error message
 $error = '';
-
 $exercise_attempt_table = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
 
 /*  Teacher takes an exam and want to see a preview,
@@ -134,13 +134,13 @@ if (!isset($exerciseInSession) || isset($exerciseInSession) && ($exerciseInSessi
 
     // if the specified exercise doesn't exist or is disabled
     if (!$objExercise->read($exerciseId) ||
-        (!$objExercise->selectStatus() && !$is_allowedToEdit && $origin != 'learnpath')
+        (!$objExercise->selectStatus() && !$is_allowedToEdit && !in_array($origin, ['learnpath', 'embeddable']))
     ) {
         if ($debug) {
             error_log('1.1. Error while reading the exercise');
         }
         unset($objExercise);
-        $error = get_lang('ExerciseNotFound');
+        $error = get_lang('Test not found or not visible');
     } else {
         // Saves the object into the session
         Session::write('objExercise', $objExercise);
@@ -152,6 +152,7 @@ if (!isset($exerciseInSession) || isset($exerciseInSession) && ($exerciseInSessi
     Session::write('firstTime', false);
 }
 //2. Checking if $objExercise is set
+/** @var |Exercise $objExercise */
 if (!isset($objExercise) && isset($exerciseInSession)) {
     if ($debug) {
         error_log('2. Loading $objExercise from session');
@@ -175,13 +176,14 @@ $exercise_sound = $objExercise->selectSound();
 // If reminder ends we jump to the exercise_reminder
 if ($objExercise->review_answers) {
     if ($remind_question_id == -1) {
-        header('Location: exercise_reminder.php?exerciseId='.$exerciseId.'&'.api_get_cidreq());
+        header('Location: '.api_get_path(WEB_CODE_PATH).
+            'exercise/exercise_reminder.php?exerciseId='.$exerciseId.'&'.api_get_cidreq());
         exit;
     }
 }
 
 $template->assign('shuffle_answers', $objExercise->random_answers);
-$templateName = $template->get_template('exercise/submit.js.html.twig');
+$templateName = $template->get_template('exercise/submit.js.tpl');
 $htmlHeadXtra[] = $template->fetch($templateName);
 
 $current_timestamp = time();
@@ -218,7 +220,7 @@ $show_clock = true;
 $user_id = api_get_user_id();
 if ($objExercise->selectAttempts() > 0) {
     $messageReachedMax = Display::return_message(
-        sprintf(get_lang('ReachedMaxAttempts'), $exercise_title, $objExercise->selectAttempts()),
+        sprintf(get_lang('You cannot take test <b>%s</b> because you have already reached the maximum of %s attempts.'), $exercise_title, $objExercise->selectAttempts()),
         'warning',
         false
     );
@@ -235,7 +237,7 @@ if ($objExercise->selectAttempts() > 0) {
     if ($attempt_count >= $objExercise->selectAttempts()) {
         $show_clock = false;
         if (!api_is_allowed_to_edit(null, true)) {
-            if ($objExercise->results_disabled == 0 && $origin != 'learnpath') {
+            if ($objExercise->results_disabled == 0 && !in_array($origin, ['learnpath', 'embeddable'])) {
                 // Showing latest attempt according with task BT#1628
                 $exercise_stat_info = Event::getExerciseResultsByUser(
                     $user_id,
@@ -247,7 +249,7 @@ if ($objExercise->selectAttempts() > 0) {
                 if (!empty($exercise_stat_info)) {
                     $isQuestionsLimitReached = ExerciseLib::isQuestionsLimitPerDayReached(
                         $user_id,
-                        $objExercise->selectNbrQuestions(),
+                        count($objExercise->get_validated_question_list()),
                         $courseId,
                         $sessionId
                     );
@@ -257,17 +259,17 @@ if ($objExercise->selectAttempts() > 0) {
 
                         Display::addFlash(
                             Display::return_message(
-                                sprintf(get_lang('QuizQuestionsLimitPerDayXReached'), $maxQuestionsAnswered),
+                                sprintf(get_lang('Sorry, you have reached the maximum number of questions (%s) for the day. Please try again tomorrow.'), $maxQuestionsAnswered),
                                 'warning',
                                 false
                             )
                         );
 
-                        if ($origin == 'learnpath') {
+                        if (in_array($origin, ['learnpath', 'embeddable'])) {
                             Display::display_reduced_header();
                             Display::display_reduced_footer();
                         } else {
-                            Display::display_header(get_lang('Exercises'));
+                            Display::display_header(get_lang('Tests'));
                             Display::display_footer();
                         }
 
@@ -306,7 +308,7 @@ if ($objExercise->selectAttempts() > 0) {
                         $last_attempt_info['max_score']
                     );
                     $attempt_html .= Display::div(
-                        get_lang('YourTotalScore').' '.$score,
+                        get_lang('Score for the test').' '.$score,
                         ['id' => 'question_score']
                     );
                 } else {
@@ -319,15 +321,15 @@ if ($objExercise->selectAttempts() > 0) {
             $attempt_html .= $messageReachedMax;
         }
 
-        if ($origin == 'learnpath') {
+        if (in_array($origin, ['learnpath', 'embeddable'])) {
             Display::display_reduced_header();
         } else {
-            Display::display_header(get_lang('Exercises'));
+            Display::display_header(get_lang('Tests'));
         }
 
         echo $attempt_html;
 
-        if ($origin != 'learnpath') {
+        if (!in_array($origin, ['learnpath', 'embeddable'])) {
             Display::display_footer();
         }
         exit;
@@ -573,10 +575,6 @@ if ($time_control) {
     } else {
         $clock_expired_time = $_SESSION['expired_time'][$current_expired_time_key];
     }
-} else {
-    if ($debug) {
-        error_log("7 No time control");
-    }
 }
 
 // Get time left for expiring time
@@ -664,7 +662,7 @@ if ($formSent && isset($_POST)) {
                 // stores the user answer into the array
                 $exerciseResult[$key] = $choice[$key];
                 //saving each question
-                if ($objExercise->feedback_type != EXERCISE_FEEDBACK_TYPE_DIRECT) {
+                if (!in_array($objExercise->getFeedbackType(), [EXERCISE_FEEDBACK_TYPE_DIRECT, EXERCISE_FEEDBACK_TYPE_POPUP])) {
                     $nro_question = $current_question; // - 1;
                     $questionId = $key;
                     // gets the student choice for this question
@@ -720,11 +718,11 @@ if ($formSent && isset($_POST)) {
                     );
                     if ($attempt_count >= $objExercise->selectAttempts()) {
                         echo Display::return_message(
-                            sprintf(get_lang('ReachedMaxAttempts'), $exercise_title, $objExercise->selectAttempts()),
+                            sprintf(get_lang('You cannot take test <b>%s</b> because you have already reached the maximum of %s attempts.'), $exercise_title, $objExercise->selectAttempts()),
                             'warning',
                             false
                         );
-                        if ($origin != 'learnpath') {
+                        if (!in_array($origin, ['learnpath', 'embeddable'])) {
                             //so we are not in learnpath tool
                             echo '</div>'; //End glossary div
                             Display::display_footer();
@@ -752,10 +750,6 @@ if ($formSent && isset($_POST)) {
     }
     if ($debug) {
         error_log('11. $formSent was set - end');
-    }
-} else {
-    if ($debug) {
-        error_log('9. $formSent was NOT sent');
     }
 }
 
@@ -793,11 +787,11 @@ if ($question_count != 0) {
                     );
                     if ($attempt_count >= $objExercise->selectAttempts()) {
                         Display::return_message(
-                            sprintf(get_lang('ReachedMaxAttempts'), $exercise_title, $objExercise->selectAttempts()),
+                            sprintf(get_lang('You cannot take test <b>%s</b> because you have already reached the maximum of %s attempts.'), $exercise_title, $objExercise->selectAttempts()),
                             'warning',
                             false
                         );
-                        if ($origin != 'learnpath') {
+                        if (!in_array($origin, ['learnpath', 'embeddable'])) {
                             //so we are not in learnpath tool
                             echo '</div>'; //End glossary div
                             Display::display_footer();
@@ -840,34 +834,34 @@ if ($question_count != 0) {
         }
     }
 } else {
-    $error = get_lang('ThereAreNoQuestionsForThisExercise');
+    $error = get_lang('There are no questions for this exercise');
     // if we are in the case where user select random by category, but didn't choose the number of random question
     if ($objExercise->getRandomByCategory() > 0 && $objExercise->random <= 0) {
-        $error .= "<br/>".get_lang('PleaseSelectSomeRandomQuestion');
+        $error .= '<br/>'.get_lang('Please select some random question');
     }
 }
 
 if (api_is_in_gradebook()) {
     $interbreadcrumb[] = [
         'url' => Category::getUrl(),
-        'name' => get_lang('ToolGradebook'),
+        'name' => get_lang('Assessments'),
     ];
 }
 
 $interbreadcrumb[] = [
-    "url" => "exercise.php?".api_get_cidreq(),
-    "name" => get_lang('Exercises'),
+    'url' => 'exercise.php?'.api_get_cidreq(),
+    'name' => get_lang('Tests'),
 ];
-$interbreadcrumb[] = ["url" => "#", "name" => $objExercise->selectTitle(true)];
+$interbreadcrumb[] = ['url' => '#', 'name' => $objExercise->selectTitle(true)];
 
-if ($origin != 'learnpath') { //so we are not in learnpath tool
+if (!in_array($origin, ['learnpath', 'embeddable'])) { //so we are not in learnpath tool
     if (!api_is_allowed_to_session_edit()) {
         Display::addFlash(
-            Display::return_message(get_lang('SessionIsReadOnly'), 'warning')
+            Display::return_message(get_lang('The session is read only'), 'warning')
         );
     }
 
-    Display::display_header(null, 'Exercises');
+    Display::display_header(null, 'Tests');
 } else {
     $htmlHeadXtra[] = "<style> body { background: none;} </style> ";
     Display::display_reduced_header();
@@ -877,14 +871,14 @@ if ($origin != 'learnpath') { //so we are not in learnpath tool
 $show_quiz_edition = $objExercise->added_in_lp();
 
 // I'm in a preview mode
-if (api_is_course_admin() && $origin != 'learnpath') {
+if (api_is_course_admin() && !in_array($origin, ['learnpath', 'embeddable'])) {
     echo '<div class="actions">';
     if ($show_quiz_edition == false) {
         echo '<a href="exercise_admin.php?'.api_get_cidreq().'&modifyExercise=yes&exerciseId='.$objExercise->id.'">'.
-            Display::return_icon('settings.png', get_lang('ModifyExercise'), '', ICON_SIZE_MEDIUM).'</a>';
+            Display::return_icon('settings.png', get_lang('Edit test name and settings'), '', ICON_SIZE_MEDIUM).'</a>';
     } else {
         echo '<a href="#">'.
-            Display::return_icon('settings_na.png', get_lang('ModifyExercise'), '', ICON_SIZE_MEDIUM).'</a>';
+            Display::return_icon('settings_na.png', get_lang('Edit test name and settings'), '', ICON_SIZE_MEDIUM).'</a>';
     }
     echo '</div>';
 }
@@ -897,7 +891,7 @@ $is_visible_return = $objExercise->is_visible(
 
 if ($is_visible_return['value'] == false) {
     echo $is_visible_return['message'];
-    if ($origin != 'learnpath') {
+    if (!in_array($origin, ['learnpath', 'embeddable'])) {
         Display :: display_footer();
     }
     exit;
@@ -924,7 +918,7 @@ if ($limit_time_exists) {
 
     if (!$permission_to_start || $exercise_timeover) {
         if (!api_is_allowed_to_edit(null, true)) {
-            $message_warning = $permission_to_start ? get_lang('ReachedTimeLimit') : get_lang('ExerciseNoStartedYet');
+            $message_warning = $permission_to_start ? get_lang('Time limit reached') : get_lang('The test did not start yet');
             echo Display::return_message(
                 sprintf(
                     $message_warning,
@@ -933,12 +927,12 @@ if ($limit_time_exists) {
                 ),
                 'warning'
             );
-            if ($origin != 'learnpath') {
+            if (!in_array($origin, ['learnpath', 'embeddable'])) {
                 Display::display_footer();
             }
             exit;
         } else {
-            $message_warning = $permission_to_start ? get_lang('ReachedTimeLimitAdmin') : get_lang('ExerciseNoStartedAdmin');
+            $message_warning = $permission_to_start ? get_lang('Time limit reachedAdmin') : get_lang('The trainer did not allow the test to start yet');
             echo Display::return_message(
                 sprintf(
                     $message_warning,
@@ -959,26 +953,27 @@ if (isset($_custom['exercises_hidden_when_no_start_date']) &&
     if (empty($objExercise->start_time)) {
         echo Display:: return_message(
             sprintf(
-                get_lang('ExerciseNoStartedYet'),
+                get_lang('The test did not start yet'),
                 $exercise_title,
                 $objExercise->selectAttempts()
             ),
             'warning'
         );
-        if ($origin != 'learnpath') {
-            Display :: display_footer();
+        if (!in_array($origin, ['learnpath', 'embeddable'])) {
+            Display::display_footer();
+            exit;
         }
     }
 }
 
 // Timer control
 if ($time_control) {
-    echo $objExercise->return_time_left_div();
+    echo $objExercise->returnTimeLeftDiv();
     echo '<div style="display:none" class="warning-message" id="expired-message-id">'.
-        get_lang('ExerciseExpiredTimeMessage').'</div>';
+        get_lang('The exercise time limit has expired').'</div>';
 }
 
-if ($origin != 'learnpath') {
+if (!in_array($origin, ['learnpath', 'embeddable'])) {
     echo '<div id="highlight-plugin" class="glossary-content">';
 }
 
@@ -1047,7 +1042,7 @@ if (!empty($error)) {
         echo "<a 
             href=\"../document/download.php?doc_url=%2Faudio%2F".Security::remove_XSS($exercise_sound)."\" 
             target=\"_blank\">";
-        echo "<img src=\"../img/sound.gif\" border=\"0\" align=\"absmiddle\" alt=", get_lang('Sound')."\" /></a>";
+        echo "<img src=\"../img/sound.gif\" border=\"0\" align=\"absmiddle\" alt=", get_lang('Audio or video file')."\" /></a>";
     }
     // Get number of hotspot questions for javascript validation
     $number_of_hotspot_questions = 0;
@@ -1083,7 +1078,7 @@ if (!empty($error)) {
 
     $saveIcon = Display::return_icon(
         'save.png',
-        get_lang('Saved'),
+        get_lang('Saved...'),
         [],
         ICON_SIZE_SMALL,
         false,
@@ -1128,6 +1123,16 @@ if (!empty($error)) {
             // Block form submition on enter
             $(".block_on_enter").keypress(function(event) {
                 return event.keyCode != 13;
+            });
+            
+            $(".checkCalculatedQuestionOnEnter").keypress(function(event) {
+                if (event.keyCode === 13) {
+                    event.preventDefault();
+                    var id = $(this).attr("id");
+                    var parts = id.split("_");
+                    var buttonId = "button_" + parts[1];
+                    document.getElementById(buttonId).click();                    
+                }
             });
 
             $(".main_question").mouseover(function() {
@@ -1218,8 +1223,7 @@ if (!empty($error)) {
                 url = "exercise_submit.php?'.$params.'&num='.$current_question.'&remind_question_id='.$remind_question_id.'&reminder=2";
             } else {
                 url = "exercise_submit.php?'.$params.'&num='.$current_question.'&remind_question_id='.$remind_question_id.'";
-            }
-            //$("#save_for_now_"+question_id).html(\''.Display::return_icon('save.png', get_lang('Saved'), [], ICON_SIZE_SMALL).'\');
+            }            
             window.location = url;
         }
         
@@ -1229,19 +1233,19 @@ if (!empty($error)) {
         }
 
         function save_now(question_id, url_extra, validate) {
-            //1. Normal choice inputs
+            // 1. Normal choice inputs
             var my_choice = $(\'*[name*="choice[\'+question_id+\']"]\').serialize();
-
-            //2. Reminder checkbox
+            
+            // 2. Reminder checkbox
             var remind_list = $(\'*[name*="remind_list"]\').serialize();
 
-            //3. Hotspots
+            // 3. Hotspots
             var hotspot = $(\'*[name*="hotspot[\'+question_id+\']"]\').serialize();
             
-            //4. choice for degree of certainty
+            // 4. choice for degree of certainty
             var my_choiceDc = $(\'*[name*="choiceDegreeCertainty[\'+question_id+\']"]\').serialize();
 
-            // Checking FCK
+            // Checking CkEditor
             if (question_id) {
                 if (CKEDITOR.instances["choice["+question_id+"]"]) {
                     var ckContent = CKEDITOR.instances["choice["+question_id+"]"].getData();
@@ -1271,7 +1275,7 @@ if (!empty($error)) {
                 success: function(return_value) {
                     if (return_value == "ok") {
                         $("#save_for_now_"+question_id).html(\''.
-                        Display::return_icon('save.png', get_lang('Saved'), [], ICON_SIZE_SMALL).'\');                                                    
+                        Display::return_icon('save.png', get_lang('Saved...'), [], ICON_SIZE_SMALL).'\');                                                    
                     } else if (return_value == "error") {
                         $("#save_for_now_"+question_id).html(\''.
                             Display::return_icon('error.png', get_lang('Error'), [], ICON_SIZE_SMALL).'\');
@@ -1292,7 +1296,7 @@ if (!empty($error)) {
                         }
 
                         $("#save_for_now_"+question_id).html(\''.
-                            Display::return_icon('save.png', get_lang('Saved'), [], ICON_SIZE_SMALL).'\');
+                            Display::return_icon('save.png', get_lang('Saved...'), [], ICON_SIZE_SMALL).'\');
 
                         window.location = url;
                     }
@@ -1318,7 +1322,7 @@ if (!empty($error)) {
             var question_list = ['.implode(',', $questionList).'];
             var free_answers = {};
             $.each(question_list, function(index, my_question_id) {
-                // Checking FCK
+                // Checking Ckeditor
                 if (my_question_id) {
                     if (CKEDITOR.instances["choice["+my_question_id+"]"]) {
                         var ckContent = CKEDITOR.instances["choice["+my_question_id+"]"].getData();
@@ -1391,7 +1395,7 @@ if (!empty($error)) {
                 $i++;
                 continue;
             } else {
-                if ($objExercise->feedback_type != EXERCISE_FEEDBACK_TYPE_DIRECT) {
+                if (!in_array($objExercise->getFeedbackType(), [EXERCISE_FEEDBACK_TYPE_DIRECT, EXERCISE_FEEDBACK_TYPE_POPUP])) {
                     // if the user has already answered this question
                     if (isset($exerciseResult[$questionId])) {
                         // construction of the Question object
@@ -1399,7 +1403,7 @@ if (!empty($error)) {
                         $questionName = $objQuestionTmp->selectTitle();
                         // destruction of the Question object
                         unset($objQuestionTmp);
-                        echo Display::return_message(get_lang('AlreadyAnswered'));
+                        echo Display::return_message(get_lang('You already answered the question'));
                         $i++;
                         break;
                     }
@@ -1410,11 +1414,23 @@ if (!empty($error)) {
         $user_choice = null;
         if (isset($attempt_list[$questionId])) {
             $user_choice = $attempt_list[$questionId];
-        } elseif ($objExercise->saveCorrectAnswers) {
-            $correctAnswers = $objExercise->getCorrectAnswersInAllAttempts(
-                $learnpath_id,
-                $learnpath_item_id
-            );
+        } elseif ($objExercise->getSaveCorrectAnswers()) {
+            $correctAnswers = [];
+            switch ($objExercise->getSaveCorrectAnswers()) {
+                case 1:
+                    $correctAnswers = $objExercise->getCorrectAnswersInAllAttempts(
+                        $learnpath_id,
+                        $learnpath_item_id
+                    );
+                    break;
+                case 2:
+                    $correctAnswers = $objExercise->getAnswersInAllAttempts(
+                        $learnpath_id,
+                        $learnpath_item_id,
+                        false
+                    );
+                    break;
+            }
 
             if (isset($correctAnswers[$questionId])) {
                 $user_choice = $correctAnswers[$questionId];
@@ -1422,8 +1438,7 @@ if (!empty($error)) {
         }
 
         $remind_highlight = '';
-
-        //Hides questions when reviewing a ALL_ON_ONE_PAGE exercise see #4542 no_remind_highlight class hide with jquery
+        // Hides questions when reviewing a ALL_ON_ONE_PAGE exercise see #4542 no_remind_highlight class hide with jquery
         if ($objExercise->type == ALL_ON_ONE_PAGE &&
             isset($_GET['reminder']) && $_GET['reminder'] == 2
         ) {
@@ -1445,7 +1460,7 @@ if (!empty($error)) {
         if (!empty($objExercise->description)) {
             if ($objExercise->type == ONE_PER_PAGE || ($objExercise->type != ONE_PER_PAGE && $i == 1)) {
                 echo Display::panelCollapse(
-                    '<span>'.get_lang('ExerciseDescriptionLabel').'</span>',
+                    '<span>'.get_lang('Description').'</span>',
                     $objExercise->description,
                     'exercise-description',
                     [],
@@ -1459,21 +1474,33 @@ if (!empty($error)) {
 
         echo '<div id="question_div_'.$questionId.'" class="main-question '.$remind_highlight.'" >';
 
+        $showQuestion = true;
+        $exerciseResultFromSession = Session::read('exerciseResult');
+        if ($objExercise->getFeedbackType() === EXERCISE_FEEDBACK_TYPE_POPUP &&
+            isset($exerciseResultFromSession[$questionId])
+        ) {
+            $showQuestion = false;
+        }
+
         // Shows the question and its answers
-        ExerciseLib::showQuestion(
-            $objExercise,
-            $questionId,
-            false,
-            $origin,
-            $i,
-            $objExercise->getHideQuestionTitle() ? false : true,
-            false,
-            $user_choice,
-            false,
-            null,
-            false,
-            true
-        );
+        if ($showQuestion) {
+            ExerciseLib::showQuestion(
+                $objExercise,
+                $questionId,
+                false,
+                $origin,
+                $i,
+                $objExercise->getHideQuestionTitle() ? false : true,
+                false,
+                $user_choice,
+                false,
+                null,
+                false,
+                true
+            );
+        } else {
+            echo Display::return_message(get_lang('You already answered the question'));
+        }
 
         // Button save and continue
         switch ($objExercise->type) {
@@ -1491,7 +1518,7 @@ if (!empty($error)) {
                     $button = [
                         Display::button(
                             'save_now',
-                            get_lang('SaveForNow'),
+                            get_lang('Save and continue'),
                             ['type' => 'button', 'class' => 'btn btn-info', 'data-question' => $questionId]
                         ),
                         '<span id="save_for_now_'.$questionId.'"></span>&nbsp;',
@@ -1513,7 +1540,7 @@ if (!empty($error)) {
                     'remind_list['.$questionId.']',
                     '',
                     $attributes
-                ).get_lang('ReviewQuestionLater'),
+                ).get_lang('Revise question later'),
                 [
                     'class' => 'checkbox',
                     'for' => 'remind_list['.$questionId.']',
@@ -1545,10 +1572,8 @@ if (!empty($error)) {
     }
     echo '</form>';
 }
-
-if ($origin != 'learnpath') {
+if (!in_array($origin, ['learnpath', 'embeddable'])) {
     // So we are not in learnpath tool
     echo '</div>'; //End glossary div
 }
-
-Display :: display_footer();
+Display::display_footer();

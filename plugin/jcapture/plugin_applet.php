@@ -76,7 +76,7 @@ function insertAtCarret() {
            scriptable = "false"
            pluginspage="http://java.sun.com/products/plugin/index.html#download">
     </embed>
-    <?php echo get_lang('NoJava'); ?>
+    <?php echo get_lang('Your browser does not support Java'); ?>
 
 </object>
 

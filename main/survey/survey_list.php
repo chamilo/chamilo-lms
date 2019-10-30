@@ -2,8 +2,6 @@
 /* For licensing terms, see /license.txt */
 
 /**
- * @package chamilo.survey
- *
  * @author unknown, the initial survey that did not make it in 1.8 because of bad code
  * @author Patrick Cool <patrick.cool@UGent.be>, Ghent University: cleanup, refactoring and rewriting large parts of the code
  * @author Julio Montoya Armas <gugli100@gmail.com>, Chamilo: Personality Test modification and rewriting large parts of the code
@@ -47,7 +45,7 @@ $isDrhOfCourse = CourseManager::isUserSubscribedInCourseAsDrh(
 );
 
 if ($isDrhOfCourse) {
-    Display::display_header(get_lang('SurveyList'));
+    Display::display_header(get_lang('Survey list'));
     // Tool introduction
     Display::display_introduction_section('survey', 'left');
     SurveyUtil::displaySurveyListForDrh();
@@ -57,7 +55,7 @@ if ($isDrhOfCourse) {
 
 if (!api_is_allowed_to_edit(false, true)) {
     // Coach can see this
-    Display::display_header(get_lang('SurveyList'));
+    Display::display_header(get_lang('Survey list'));
     // Tool introduction
     Display::display_introduction_section('survey', 'left');
     SurveyUtil::getSurveyList($currentUserId);
@@ -68,20 +66,14 @@ if (!api_is_allowed_to_edit(false, true)) {
 $extend_rights_for_coachs = api_get_setting('extend_rights_for_coach_on_survey');
 
 // Database table definitions
-$table_survey = Database::get_course_table(TABLE_SURVEY);
-$table_survey_question = Database::get_course_table(TABLE_SURVEY_QUESTION);
-$table_course = Database::get_main_table(TABLE_MAIN_COURSE);
-$table_user = Database::get_main_table(TABLE_MAIN_USER);
-
-// Language variables
 if (isset($_GET['search']) && $_GET['search'] == 'advanced') {
     $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'survey/survey_list.php',
-        'name' => get_lang('SurveyList'),
+        'name' => get_lang('Survey list'),
     ];
-    $tool_name = get_lang('SearchASurvey');
+    $tool_name = get_lang('Search a survey');
 } else {
-    $tool_name = get_lang('SurveyList');
+    $tool_name = get_lang('Survey list');
 }
 
 $listUrl = api_get_path(WEB_CODE_PATH).'survey/survey_list.php?'.api_get_cidreq();
@@ -92,7 +84,7 @@ switch ($action) {
         $surveyData = SurveyManager::get_survey($surveyId);
         if (!empty($surveyData)) {
             SurveyManager::removeMultiplicateQuestions($surveyData);
-            Display::addFlash(Display::return_message(get_lang('Updated'), 'confirmation', false));
+            Display::addFlash(Display::return_message(get_lang('Update successful'), 'confirmation', false));
         }
         header('Location: '.$listUrl);
         exit;
@@ -102,7 +94,7 @@ switch ($action) {
         if (!empty($surveyData)) {
             SurveyManager::multiplicateQuestions($surveyData);
             Display::cleanFlashMessages();
-            Display::addFlash(Display::return_message(get_lang('Updated'), 'confirmation', false));
+            Display::addFlash(Display::return_message(get_lang('Update successful'), 'confirmation', false));
         }
         header('Location: '.$listUrl);
         exit;
@@ -110,7 +102,7 @@ switch ($action) {
     case 'copy_survey':
         if (!empty($surveyId) && api_is_allowed_to_edit()) {
             SurveyManager::copy_survey($surveyId);
-            Display::addFlash(Display::return_message(get_lang('SurveyCopied'), 'confirmation', false));
+            Display::addFlash(Display::return_message(get_lang('Survey copied'), 'confirmation', false));
             header('Location: '.$listUrl);
             exit;
         }
@@ -133,9 +125,9 @@ switch ($action) {
             $return = SurveyManager::delete_survey($surveyId);
 
             if ($return) {
-                Display::addFlash(Display::return_message(get_lang('SurveyDeleted'), 'confirmation', false));
+                Display::addFlash(Display::return_message(get_lang('The survey has been deleted.'), 'confirmation', false));
             } else {
-                Display::addFlash(Display::return_message(get_lang('ErrorOccurred'), 'error', false));
+                Display::addFlash(Display::return_message(get_lang('An error occurred.'), 'error', false));
             }
             header('Location: '.$listUrl);
             exit;
@@ -156,16 +148,15 @@ switch ($action) {
         }
         $return = SurveyManager::empty_survey($surveyId);
         if ($return) {
-            Display::addFlash(Display::return_message(get_lang('SurveyEmptied'), 'confirmation', false));
+            Display::addFlash(Display::return_message(get_lang('Answers to survey successfully deleted'), 'confirmation', false));
         } else {
-            Display::addFlash(Display::return_message(get_lang('ErrorOccurred'), 'error', false));
+            Display::addFlash(Display::return_message(get_lang('An error occurred.'), 'error', false));
         }
         header('Location: '.$listUrl);
         exit;
         break;
 }
 
-// Header
 Display::display_header($tool_name, 'Survey');
 // Tool introduction
 Display::display_introduction_section('survey', 'left');
@@ -188,9 +179,9 @@ if (isset($_POST['action']) && $_POST['action']) {
             // delete the actual survey
             SurveyManager::delete_survey($value);
         }
-        echo Display::return_message(get_lang('SurveysDeleted'), 'confirmation', false);
+        echo Display::return_message(get_lang('Surveys deleted'), 'confirmation', false);
     } else {
-        echo Display::return_message(get_lang('NoSurveysSelected'), 'error', false);
+        echo Display::return_message(get_lang('No surveys have been selected.'), 'error', false);
     }
 }
 
@@ -198,13 +189,14 @@ echo '<div class="actions">';
 if (!api_is_session_general_coach() || $extend_rights_for_coachs == 'true') {
     // Action links
     echo '<a href="'.api_get_path(WEB_CODE_PATH).'survey/create_new_survey.php?'.api_get_cidreq().'&amp;action=add">'.
-        Display::return_icon('new_survey.png', get_lang('CreateNewSurvey'), '', ICON_SIZE_MEDIUM).'</a> ';
+        Display::return_icon('new_survey.png', get_lang('Create survey'), '', ICON_SIZE_MEDIUM).'</a> ';
     $url = api_get_path(WEB_CODE_PATH).'survey/create_meeting.php?'.api_get_cidreq();
-    echo Display::url(Display::return_icon('add_doodle.png', get_lang('CreateNewSurveyDoodle'), '', ICON_SIZE_MEDIUM), $url);
+    echo Display::url(Display::return_icon('add_doodle.png', get_lang('Create surveyDoodle'), '', ICON_SIZE_MEDIUM), $url);
 }
 echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&amp;search=advanced">'.
     Display::return_icon('search.png', get_lang('Search'), '', ICON_SIZE_MEDIUM).'</a>';
 echo '</div>';
+
 // Load main content
 if (api_is_session_general_coach() && $extend_rights_for_coachs == 'false') {
     SurveyUtil::display_survey_list_for_coach();

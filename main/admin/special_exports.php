@@ -9,32 +9,26 @@ use Chamilo\CourseBundle\Component\CourseCopy\CourseSelectForm;
  *
  * @author Jhon Hinojosa
  * @author Julio Montoya Fixing pclzip folder + some clean <gugli100@gmail.com>
- *
- * @package chamilo.include.export
  */
-
-// including the global file
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';
 
-$this_section = SECTION_PLATFORM_ADMIN;
-$interbreadcrumb[] = ["url" => 'index.php', "name" => get_lang('PlatformAdmin')];
-// Access restrictions
 api_protect_admin_script(true);
-$nameTools = get_lang('SpecialExports');
+api_set_more_memory_and_time_limits();
+
+$this_section = SECTION_PLATFORM_ADMIN;
+$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('Administration')];
+
+$nameTools = get_lang('Special exports');
 $export = '';
 $querypath = '';
 
-api_set_more_memory_and_time_limits();
-
-// Displaying the header
 Display::display_header($nameTools);
 
-// Display the tool title
 echo Display::page_header($nameTools);
 
 if (count($_POST) == 0) {
-    echo Display::return_message(get_lang('SpecialExportsIntroduction'));
+    echo Display::return_message(get_lang('Special exportsIntroduction'));
 }
 $error = 0;
 $tbl_session = Database::get_main_table(TABLE_MAIN_SESSION);
@@ -61,7 +55,7 @@ if ((isset($_POST['action']) && $_POST['action'] == 'course_select_form') ||
 
         $zip_folder = new PclZip($FileZip['TEMP_FILE_ZIP']);
         if (!isset($_POST['resource']) || count($_POST['resource']) == 0) {
-            echo Display::return_message(get_lang('ErrorMsgSpecialExport'), 'error');
+            echo Display::return_message(get_lang('There were no courses registered or may not have made the association with the sessions'), 'error');
         } else {
             $Resource = $_POST['resource'];
 
@@ -127,7 +121,7 @@ if ((isset($_POST['action']) && $_POST['action'] == 'course_select_form') ||
 }
 
 if ($export && $name) {
-    echo Display::return_message(get_lang('BackupCreated'), 'confirm');
+    echo Display::return_message(get_lang('The backup has been created. The download of this file will start in a few moments. If your download does not start, click the following link'), 'confirm');
     echo '<br /><a class="btn btn-default" href="'.api_get_path(WEB_CODE_PATH).'course_info/download.php?archive_path=&archive='.urlencode($name).'">'.get_lang('Download').'</a>';
 } else {
     // Display forms especial export
@@ -135,10 +129,10 @@ if ($export && $name) {
         $cb = new CourseBuilder();
         $course = $cb->build_session_course();
         if ($course === false) {
-            echo Display::return_message(get_lang('ErrorMsgSpecialExport'), 'error');
+            echo Display::return_message(get_lang('There were no courses registered or may not have made the association with the sessions'), 'error');
             form_special_export();
         } else {
-            echo Display::return_message(get_lang('ToExportSpecialSelect'), 'normal');
+            echo Display::return_message(get_lang('If you want to export courses containing sessions, which will ensure that these seansido included in the export to any of that will have to choose in the list.'), 'normal');
             CourseSelectForm :: display_form_session_export($course);
         }
     } else {
@@ -146,7 +140,6 @@ if ($export && $name) {
     }
 }
 
-/* FOOTER */
 Display::display_footer();
 
 function form_special_export()
@@ -154,10 +147,10 @@ function form_special_export()
     $form = new FormValidator('special_exports', 'post');
     $renderer = $form->defaultRenderer();
     $renderer->setCustomElementTemplate('<div>{element}</div> ');
-    $form->addElement('radio', 'backup_option', '', get_lang('SpecialCreateFullBackup'), 'full_backup');
-    $form->addElement('radio', 'backup_option', '', get_lang('SpecialLetMeSelectItems'), 'select_items');
+    $form->addElement('radio', 'backup_option', '', get_lang('Special create full backup'), 'full_backup');
+    $form->addElement('radio', 'backup_option', '', get_lang('Special let me select items'), 'select_items');
     $form->addElement('html', '<br />');
-    $form->addButtonExport(get_lang('CreateBackup'));
+    $form->addButtonExport(get_lang('Create a backup'));
     $form->addProgress();
     $values['backup_option'] = 'full_backup';
     $form->setDefaults($values);
@@ -307,7 +300,7 @@ function fullexportspecial()
             return $name;
         }
     } else {
-        echo Display::return_message(get_lang('ErrorMsgSpecialExport'), 'error'); //main API
+        echo Display::return_message(get_lang('There were no courses registered or may not have made the association with the sessions'), 'error'); //main API
         $export = false;
 
         return false;

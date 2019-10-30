@@ -5,8 +5,6 @@
  * View (MVC patter) for attendance calendar (list, edit, add).
  *
  * @author Christian Fasanando <christian1827@gmail.com>
- *
- * @package chamilo.attendance
  */
 
 // protect a course script
@@ -16,21 +14,21 @@ if (!$is_locked_attendance || api_is_platform_admin()) {
     echo '<div class="actions">';
     if ($action == 'calendar_add') {
         echo '<a href="index.php?'.api_get_cidreq().'&action=calendar_list&attendance_id='.$attendance_id.'">'.
-            Display::return_icon('back.png', get_lang('AttendanceCalendar'), '', ICON_SIZE_MEDIUM).'</a>';
+            Display::return_icon('back.png', get_lang('Attendance calendar'), '', ICON_SIZE_MEDIUM).'</a>';
     } else {
         echo '<a href="index.php?'.api_get_cidreq().'&action=attendance_sheet_list&attendance_id='.$attendance_id.'">'.
-            Display::return_icon('back.png', get_lang('AttendanceSheet'), '', ICON_SIZE_MEDIUM).'</a>';
+            Display::return_icon('back.png', get_lang('Attendance sheet'), '', ICON_SIZE_MEDIUM).'</a>';
         if (api_is_allowed_to_edit()) {
             echo '<a href="index.php?'.api_get_cidreq().'&action=calendar_add&attendance_id='.$attendance_id.'">'.
-                Display::return_icon('add.png', get_lang('AddDateAndTime'), '', ICON_SIZE_MEDIUM).'</a>';
-            echo '<a onclick="javascript:if(!confirm(\''.get_lang('AreYouSureToDeleteAllDates').'\')) return false;" href="index.php?'.api_get_cidreq().'&action=calendar_all_delete&attendance_id='.$attendance_id.'">'.
-                Display::return_icon('clean.png', get_lang('CleanCalendar'), '', ICON_SIZE_MEDIUM).'</a>';
+                Display::return_icon('add.png', get_lang('Add a date and time'), '', ICON_SIZE_MEDIUM).'</a>';
+            echo '<a onclick="javascript:if(!confirm(\''.get_lang('Are you sure you want to delete all dates?').'\')) return false;" href="index.php?'.api_get_cidreq().'&action=calendar_all_delete&attendance_id='.$attendance_id.'">'.
+                Display::return_icon('clean.png', get_lang('Clean the calendar of all lists'), '', ICON_SIZE_MEDIUM).'</a>';
         }
     }
     echo '</div>';
 }
 
-$message_information = get_lang('AttendanceCalendarDescription');
+$message_information = get_lang('Attendance calendarDescription');
 if (!empty($message_information)) {
     $message = '<strong>'.get_lang('Information').'</strong><br />';
     $message .= $message_information;
@@ -38,12 +36,12 @@ if (!empty($message_information)) {
 }
 
 if (isset($error_repeat_date) && $error_repeat_date) {
-    $message = get_lang('EndDateMustBeMoreThanStartDate');
+    $message = get_lang('End date must be more than the start date');
     echo Display::return_message($message, 'error', false);
 }
 
 if (isset($error_checkdate) && $error_checkdate) {
-    $message = get_lang('InvalidDate');
+    $message = get_lang('Invalid date');
     echo Display::return_message($message, 'error', false);
 }
 
@@ -61,10 +59,10 @@ if (isset($action) && $action == 'calendar_add') {
         'index.php?action=calendar_add&attendance_id='.$attendance_id.'&'.api_get_cidreq(),
         ''
     );
-    $form->addElement('header', get_lang('AddADateTime'));
+    $form->addElement('header', get_lang('Add a date time'));
     $form->addDateTimePicker(
         'date_time',
-        [get_lang('StartDate')],
+        [get_lang('Start Date')],
         ['id' => 'date_time']
     );
 
@@ -74,7 +72,7 @@ if (isset($action) && $action == 'calendar_add') {
         'checkbox',
         'repeat',
         null,
-        get_lang('RepeatDate'),
+        get_lang('Repeat date'),
         [
             'onclick' => "javascript: if(this.checked){document.getElementById('repeat-date-attendance').style.display='block';}else{document.getElementById('repeat-date-attendance').style.display='none';}",
         ]
@@ -89,16 +87,16 @@ if (isset($action) && $action == 'calendar_add') {
     }
 
     $a_repeat_type = [
-        'daily' => get_lang('RepeatDaily'),
-        'weekly' => get_lang('RepeatWeekly'),
-        'monthlyByDate' => get_lang('RepeatMonthlyByDate'),
+        'daily' => get_lang('Daily'),
+        'weekly' => get_lang('Weekly'),
+        'monthlyByDate' => get_lang('Monthly, by date'),
     ];
-    $form->addElement('select', 'repeat_type', get_lang('RepeatType'), $a_repeat_type);
+    $form->addElement('select', 'repeat_type', get_lang('Repeat type'), $a_repeat_type);
 
     $form->addElement(
         'date_picker',
         'end_date_time',
-        get_lang('RepeatEnd'),
+        get_lang('Repeat end date'),
         ['form_name' => 'attendance_calendar_add']
     );
     $defaults['end_date_time'] = date('Y-m-d');
@@ -120,7 +118,7 @@ if (isset($action) && $action == 'calendar_add') {
         $groupIdList[$group['id']] = $group['name'];
     }
 
-    echo Display::page_subheader(get_lang('CalendarList'));
+    echo Display::page_subheader(get_lang('Calendar list of attendances'));
     echo '<ul class="list-group">';
     if (!empty($attendance_calendar)) {
         foreach ($attendance_calendar as $calendar) {
@@ -151,7 +149,7 @@ if (isset($action) && $action == 'calendar_add') {
             } else {
                 echo Display::return_icon(
                     'lp_calendar_event.png',
-                    get_lang('DateTime'),
+                    get_lang('Date DateTime time'),
                     null,
                     ICON_SIZE_MEDIUM
                 ).' '.
@@ -170,10 +168,10 @@ if (isset($action) && $action == 'calendar_add') {
 
                 if (!$is_locked_attendance || api_is_platform_admin()) {
                     if (api_is_allowed_to_edit()) {
-                        echo '<div class="float-right">';
+                        echo '<div class="pull-right">';
                         echo '<a href="index.php?'.api_get_cidreq().'&action=calendar_edit&calendar_id='.intval($calendar['id']).'&attendance_id='.$attendance_id.'">'.
                             Display::return_icon('edit.png', get_lang('Edit'), ['style' => 'vertical-align:middle'], ICON_SIZE_SMALL).'</a>&nbsp;';
-                        echo '<a onclick="javascript:if(!confirm(\''.get_lang('AreYouSureToDelete').'\')) return false;" href="index.php?'.api_get_cidreq().'&action=calendar_delete&calendar_id='.intval($calendar['id']).'&attendance_id='.$attendance_id.'">'.
+                        echo '<a onclick="javascript:if(!confirm(\''.get_lang('Are you sure you want to delete').'\')) return false;" href="index.php?'.api_get_cidreq().'&action=calendar_delete&calendar_id='.intval($calendar['id']).'&attendance_id='.$attendance_id.'">'.
                             Display::return_icon('delete.png', get_lang('Delete'), ['style' => 'vertical-align:middle'], ICON_SIZE_SMALL).'</a>';
                         echo '</div>';
                     }
@@ -182,7 +180,7 @@ if (isset($action) && $action == 'calendar_add') {
             echo '</li>';
         }
     } else {
-        echo Display::return_message(get_lang('ThereAreNoRegisteredDatetimeYet'), 'warning');
+        echo Display::return_message(get_lang('There is no date/time registered yet'), 'warning');
     }
     echo '</ul>';
 }

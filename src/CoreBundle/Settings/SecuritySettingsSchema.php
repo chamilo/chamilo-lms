@@ -10,8 +10,6 @@ use Symfony\Component\Form\FormBuilderInterface;
 
 /**
  * Class SecuritySettingsSchema.
- *
- * @package Chamilo\CoreBundle\Settings
  */
 class SecuritySettingsSchema extends AbstractSettingsSchema
 {

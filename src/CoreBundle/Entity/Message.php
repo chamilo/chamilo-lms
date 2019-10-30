@@ -17,7 +17,8 @@ use Doctrine\ORM\Mapping as ORM;
  *     @ORM\Index(name="idx_message_user_receiver_status", columns={"user_receiver_id", "msg_status"}),
  *     @ORM\Index(name="idx_message_receiver_status_send_date", columns={"user_receiver_id", "msg_status", "send_date"}),
  *     @ORM\Index(name="idx_message_group", columns={"group_id"}),
- *     @ORM\Index(name="idx_message_parent", columns={"parent_id"})
+ *     @ORM\Index(name="idx_message_parent", columns={"parent_id"}),
+ *     @ORM\Index(name="idx_message_status", columns={"msg_status"})
  * })
  * @ORM\Entity(repositoryClass="Chamilo\CoreBundle\Repository\MessageRepository")
  */

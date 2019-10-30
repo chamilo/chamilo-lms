@@ -3,8 +3,6 @@
 
 /**
  * Class LegalManager.
- *
- * @package chamilo.legal
  */
 class LegalManager
 {
@@ -211,7 +209,7 @@ class LegalManager
             $sessionListToString = '';
             $sessionList = SessionManager::get_sessions_by_user(api_get_user_id());
             if ($sessionList) {
-                $sessionListToString = get_lang('SessionList').'<ul>';
+                $sessionListToString = get_lang('Session list').'<ul>';
                 foreach ($sessionList as $session) {
                     $sessionListToString .= '<li>'.$session['session_name'].'</li>';
                 }
@@ -266,7 +264,7 @@ class LegalManager
                     <div id="legal-terms" class="scrollbar-inner">'.$term_preview['content'].'</div>
                     </div>';
                 }
-                $preview .= get_lang('ByClickingRegisterYouAgreeTermsAndConditions');
+                $preview .= get_lang('By clicking on \'Register\' below you are agreeing to the Terms and Conditions');
                 $courseInfo = api_get_course_info();
                 if (api_get_setting('load_term_conditions_section') === 'course' && empty($courseInfo)) {
                     $preview = '';
@@ -275,12 +273,12 @@ class LegalManager
                 // Page link
             case 1:
                 $preview = '<fieldset>
-                             <legend>'.get_lang('TermsAndConditions').'</legend>';
+                             <legend>'.get_lang('Terms and Conditions').'</legend>';
                 $preview .= '<div id="legal-accept-wrapper" class="form-item">
                 <label class="option" for="legal-accept">
                 <input id="legal-accept" type="checkbox" value="1" name="legal_accept"/>
-                '.get_lang('IHaveReadAndAgree').'
-                <a href="#">'.get_lang('TermsAndConditions').'</a>
+                '.get_lang('I have read and agree to the').'
+                <a href="#">'.get_lang('Terms and Conditions').'</a>
                 </label>
                 </div>
                 </fieldset>';
@@ -325,9 +323,9 @@ class LegalManager
                 $legal[2] = substr($legal[2], 0, 2000).' ... ';
             }
             if ($legal[4] == 0) {
-                $legal[4] = get_lang('HTMLText');
+                $legal[4] = get_lang('HTML');
             } elseif ($legal[4] == 1) {
-                $legal[4] = get_lang('PageLink');
+                $legal[4] = get_lang('Page Link');
             }
             $legals[] = $legal;
         }
@@ -380,9 +378,9 @@ class LegalManager
      */
     public static function sendLegal($userId)
     {
-        $subject = get_lang('SendTermsSubject');
+        $subject = get_lang('Your terms and conditions are ready to be signed');
         $content = sprintf(
-            get_lang('SendTermsDescriptionToUrlX'),
+            get_lang('Hello,<br />Your tutor sent you your terms and conditions. You can sign it following this URL: %s'),
             api_get_path(WEB_PATH)
         );
         MessageManager::send_message_simple($userId, $subject, $content);

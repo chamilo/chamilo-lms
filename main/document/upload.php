@@ -4,10 +4,12 @@
 /**
  * @package chamilo.document
  */
-require_once __DIR__.'/../inc/global.inc.php';
+use Chamilo\CoreBundle\Framework\Container;
 
-// Including additional libraries
+require_once __DIR__.'/../inc/global.inc.php';
 require_once api_get_path(LIBRARY_PATH).'specific_fields_manager.lib.php';
+
+api_protect_course_script(true);
 
 // Adding extra javascript to the form
 $htmlHeadXtra[] = api_get_jquery_libraries_js(['jquery-ui', 'jquery-upload']);
@@ -20,7 +22,7 @@ $courseDir = $_course['path'].'/document';
 $sys_course_path = api_get_path(SYS_COURSE_PATH);
 $base_work_dir = $sys_course_path.$courseDir;
 $sessionId = api_get_session_id();
-$selectcat = isset($_GET['selectcat']) ? Security::remove_XSS($_GET['selectcat']) : null;
+$selectcat = isset($_GET['selectcat']) ? (int) $_GET['selectcat'] : null;
 
 $document_data = [];
 
@@ -81,7 +83,7 @@ if (!empty($groupId)) {
     if ($is_allowed_to_edit || GroupManager::is_user_in_group(api_get_user_id(), $group_properties)) {
         $interbreadcrumb[] = [
             'url' => api_get_path(WEB_CODE_PATH).'group/group_space.php?'.api_get_cidreq(),
-            'name' => get_lang('GroupSpace'),
+            'name' => get_lang('Group area'),
         ];
     } else {
         api_not_allowed(true);
@@ -114,10 +116,10 @@ if ($groupId != 0) {
     $add_group_to_title = ' ('.$group_properties['name'].')';
 }
 if (isset($_REQUEST['certificate'])) {
-    $nameTools = get_lang('UploadCertificate').$add_group_to_title;
+    $nameTools = get_lang('Upload certificate').$add_group_to_title;
     $is_certificate_mode = true;
 } else {
-    $nameTools = get_lang('UplUploadDocument').$add_group_to_title;
+    $nameTools = get_lang('Upload documents').$add_group_to_title;
 }
 
 $certificateLink = '';
@@ -129,7 +131,7 @@ if ($is_certificate_mode) {
 if ($is_certificate_mode) {
     $interbreadcrumb[] = [
         'url' => '../gradebook/index.php?'.api_get_cidreq().$certificateLink,
-        'name' => get_lang('Gradebook'),
+        'name' => get_lang('Assessments'),
     ];
 } else {
     $interbreadcrumb[] = [
@@ -194,11 +196,11 @@ Display::display_header($nameTools, 'Doc');
 // Link back to the documents overview
 if ($is_certificate_mode) {
     $actions = '<a href="document.php?id='.$document_id.'&selectcat='.$selectcat.'&'.api_get_cidreq().'">'.
-        Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('CertificateOverview'), '', ICON_SIZE_MEDIUM).
+        Display::return_icon('back.png', get_lang('Back to').' '.get_lang('Certificate overview'), '', ICON_SIZE_MEDIUM).
         '</a>';
 } else {
     $actions = '<a href="document.php?id='.$document_id.'&'.api_get_cidreq().'">'.
-        Display::return_icon('back.png', get_lang('BackTo').' '.get_lang('DocumentsOverview'), '', ICON_SIZE_MEDIUM).
+        Display::return_icon('back.png', get_lang('Back to').' '.get_lang('Documents overview'), '', ICON_SIZE_MEDIUM).
         '</a>';
 }
 
@@ -230,10 +232,12 @@ $form = new FormValidator(
 $form->addElement('hidden', 'id', $document_id);
 $form->addElement('hidden', 'curdirpath', $path);
 
-$courseQuota = format_file_size(DocumentManager::get_course_quota() - DocumentManager::documents_total_space());
+$repo = Container::getDocumentRepository();
+$total = $repo->getTotalSpace(api_get_course_int_id());
+$courseQuota = format_file_size(DocumentManager::get_course_quota() - $total);
 $label =
-    get_lang('MaxFileSize').': '.ini_get('upload_max_filesize').'<br/>'.
-    get_lang('DocumentQuota').': '.$courseQuota;
+    get_lang('Maximum file size').': '.ini_get('upload_max_filesize').'<br/>'.
+    get_lang('Space Available').': '.$courseQuota;
 
 $form->addElement('file', 'file', [get_lang('File'), $label], 'style="width: 250px" id="user_upload"');
 $form->addElement('text', 'title', get_lang('Title'), ['id' => 'title_file']);
@@ -248,21 +252,21 @@ $form->addElement(
     'checkbox',
     'unzip',
     get_lang('Options'),
-    get_lang('Uncompress'),
+    get_lang('Uncompress zip'),
     'onclick="javascript: check_unzip();" value="1"'
 );
 
 if (api_get_setting('search_enabled') === 'true') {
     //TODO: include language file
-    $supportedFormats = get_lang('SupportedFormatsForIndex').': HTML, PDF, TXT, PDF, Postscript, MS Word, RTF, MS Power Point';
+    $supportedFormats = get_lang('Supported formats for index').': HTML, PDF, TXT, PDF, Postscript, MS Word, RTF, MS Power Point';
     $form->addElement(
         'checkbox',
         'index_document',
         '',
-        get_lang('SearchFeatureDoIndexDocument').'<div style="font-size: 80%" >'.$supportedFormats.'</div>'
+        get_lang('Index document text?').'<div style="font-size: 80%" >'.$supportedFormats.'</div>'
     );
     $form->addElement('html', '<br /><div class="sub-form">');
-    $form->addElement('html', '<div class="label">'.get_lang('SearchFeatureDocumentLanguage').'</div>');
+    $form->addElement('html', '<div class="label">'.get_lang('Document language for indexation').'</div>');
     $form->addLabel(get_lang('Language'), api_get_languages_combo());
     $form->addElement('html', '</div><div class="sub-form">');
     $specific_fields = get_specific_field_list();
@@ -272,14 +276,14 @@ if (api_get_setting('search_enabled') === 'true') {
     $form->addElement('html', '</div>');
 }
 
-$form->addElement('radio', 'if_exists', get_lang('UplWhatIfFileExists'), get_lang('UplDoNothing'), 'nothing');
-$form->addElement('radio', 'if_exists', '', get_lang('UplOverwriteLong'), 'overwrite');
-$form->addElement('radio', 'if_exists', '', get_lang('UplRenameLong'), 'rename');
+$form->addElement('radio', 'if_exists', get_lang('If file exists:'), get_lang('Do nothing'), 'nothing');
+$form->addElement('radio', 'if_exists', '', get_lang('Overwrite the existing file'), 'overwrite');
+$form->addElement('radio', 'if_exists', '', get_lang('Rename the uploaded file if it exists'), 'rename');
 // Close the java script and avoid the footer up
 $form->addElement('html', '</div>');
 
 // Button upload document
-$form->addButtonSend(get_lang('SendDocument'), 'submitDocument');
+$form->addButtonSend(get_lang('Upload file'), 'submitDocument');
 $form->addProgress('DocumentUpload', 'file');
 
 $fileExistsOption = api_get_setting('document_if_file_exists_option');

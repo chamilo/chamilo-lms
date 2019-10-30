@@ -2,16 +2,12 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\Skill;
-use Chamilo\CoreBundle\Entity\SkillRelUser;
-use Chamilo\UserBundle\Entity\User;
 use Skill as SkillManager;
 
 /**
  * Page for assign skills to a user.
  *
  * @author: Jose Loguercio <jose.loguercio@beeznest.com>
- *
- * @package chamilo.badge
  */
 require_once __DIR__.'/../inc/global.inc.php';
 
@@ -39,7 +35,7 @@ $skillUserRepo = $entityManager->getRepository('ChamiloCoreBundle:SkillRelUser')
 $skillLevels = api_get_configuration_value('skill_levels_names');
 
 $skillsOptions = ['' => get_lang('Select')];
-$acquiredLevel = ['' => get_lang('None')];
+$acquiredLevel = ['' => get_lang('none')];
 $formDefaultValues = [];
 
 if (empty($skillLevels)) {
@@ -156,8 +152,8 @@ $disableList = [];
 $currentUrl = api_get_self().'?user='.$userId.'&current='.$currentLevel;
 
 $form = new FormValidator('assign_skill', 'POST', $currentUrl);
-$form->addHeader(get_lang('AssignSkill'));
-$form->addText('user_name', get_lang('UserName'), false);
+$form->addHeader(get_lang('Assign skill'));
+$form->addText('user_name', get_lang('Username'), false);
 
 $levelName = get_lang('Skill');
 if (!empty($skillLevels)) {
@@ -193,7 +189,7 @@ if (!empty($skillIdFromGet)) {
             $skillsOptions[$child['id']] = $child['data']['name'];
         }
 
-        $levelName = get_lang('SubSkill');
+        $levelName = get_lang('Sub-skill');
         if (!empty($skillLevels)) {
             if (isset($skillLevels['levels'][$counter + 2])) {
                 $levelName = get_lang($skillLevels['levels'][$counter + 2]);
@@ -229,20 +225,20 @@ $currentUrl = api_get_self().'?user='.$userId.'&current='.$currentLevel.'&sub_sk
 $form->addHidden('sub_skill_list', $subSkillListToString);
 $form->addHidden('user', $user->getId());
 $form->addHidden('id', $skillId);
-$form->addRule('skill', get_lang('ThisFieldIsRequired'), 'required');
+$form->addRule('skill', get_lang('Required field'), 'required');
 
 $showLevels = api_get_configuration_value('hide_skill_levels') === false;
 
 if ($showLevels) {
-    $form->addSelect('acquired_level', get_lang('AcquiredLevel'), $acquiredLevel);
-    //$form->addRule('acquired_level', get_lang('ThisFieldIsRequired'), 'required');
+    $form->addSelect('acquired_level', get_lang('Level acquired'), $acquiredLevel);
+    //$form->addRule('acquired_level', get_lang('Required field'), 'required');
 }
 
 $form->addTextarea('argumentation', get_lang('Argumentation'), ['rows' => 6]);
-$form->addRule('argumentation', get_lang('ThisFieldIsRequired'), 'required');
+$form->addRule('argumentation', get_lang('Required field'), 'required');
 $form->addRule(
     'argumentation',
-    sprintf(get_lang('ThisTextShouldBeAtLeastXCharsLong'), 10),
+    sprintf(get_lang('This text should be at least %s characters long'), 10),
     'mintext',
     10
 );
@@ -266,7 +262,7 @@ if ($form->validate()) {
 
     if (!$skill) {
         Display::addFlash(
-            Display::return_message(get_lang('SkillNotFound'), 'error')
+            Display::return_message(get_lang('Skill not found'), 'error')
         );
 
         header('Location: '.api_get_self().'?'.$currentUrl);
@@ -277,7 +273,7 @@ if ($form->validate()) {
         Display::addFlash(
             Display::return_message(
                 sprintf(
-                    get_lang('TheUserXHasAlreadyAchievedTheSkillY'),
+                    get_lang('The user %s has already achieved the skill %s'),
                     UserManager::formatUserFullName($user),
                     $skill->getName()
                 ),
@@ -289,22 +285,13 @@ if ($form->validate()) {
         exit;
     }
 
-    $skillUser = new SkillRelUser();
-    $skillUser->setUser($user);
-    $skillUser->setSkill($skill);
-
-    if ($showLevels) {
-        $level = $skillLevelRepo->find($values['acquired_level']);
-        $skillUser->setAcquiredLevel($level);
-    }
-
-    $skillUser->setArgumentation($values['argumentation']);
-    $skillUser->setArgumentationAuthorId(api_get_user_id());
-    $skillUser->setAcquiredSkillAt(new DateTime());
-    $skillUser->setAssignedBy(0);
-
-    $entityManager->persist($skillUser);
-    $entityManager->flush();
+    $skillUser = $skillManager->addSkillToUserBadge(
+        $user,
+        $skill,
+        $values['acquired_level'],
+        $values['argumentation'],
+        api_get_user_id()
+    );
 
     // Send email depending of children_auto_threshold
     $skillRelSkill = new SkillRelSkill();
@@ -331,12 +318,12 @@ if ($form->validate()) {
             if ($counter >= $requiredSkills) {
                 $bossList = UserManager::getStudentBossList($userId);
                 if (!empty($bossList)) {
-                    Display::addFlash(Display::return_message(get_lang('MessageSent')));
+                    Display::addFlash(Display::return_message(get_lang('Message Sent')));
                     $url = api_get_path(WEB_CODE_PATH).'badge/assign.php?user='.$userId.'&id='.$parentId;
                     $link = Display::url($url, $url);
-                    $subject = get_lang("StudentHadEnoughSkills");
+                    $subject = get_lang('A student has obtained the number of sub-skills needed to validate the mother skill.');
                     $message = sprintf(
-                        get_lang("StudentXHadEnoughSkillsToGetSkillXToAssignClickHereX"),
+                        get_lang('Learner %s has enough sub-skill to get skill %s. To assign this skill it is possible to go here : %s'),
                         UserManager::formatUserFullName($user),
                         $parentData['name'],
                         $link
@@ -357,7 +344,7 @@ if ($form->validate()) {
     Display::addFlash(
         Display::return_message(
             sprintf(
-                get_lang('SkillXAssignedToUserY'),
+                get_lang('The skill %s has been assigned to user %s'),
                 $skill->getName(),
                 UserManager::formatUserFullName($user)
             ),
@@ -375,17 +362,17 @@ $form->freeze(['user_name']);
 if (api_is_drh()) {
     $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'mySpace/index.php',
-        "name" => get_lang('MySpace'),
+        "name" => get_lang('Reporting'),
     ];
     if ($user->getStatus() == COURSEMANAGER) {
         $interbreadcrumb[] = [
             "url" => api_get_path(WEB_CODE_PATH).'mySpace/teachers.php',
-            'name' => get_lang('Teachers'),
+            'name' => get_lang('Trainers'),
         ];
     } else {
         $interbreadcrumb[] = [
             "url" => api_get_path(WEB_CODE_PATH).'mySpace/student.php',
-            'name' => get_lang('MyStudents'),
+            'name' => get_lang('My learners'),
         ];
     }
     $interbreadcrumb[] = [
@@ -395,11 +382,11 @@ if (api_is_drh()) {
 } else {
     $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'admin/index.php',
-        'name' => get_lang('PlatformAdmin'),
+        'name' => get_lang('Administration'),
     ];
     $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'admin/user_list.php',
-        'name' => get_lang('UserList'),
+        'name' => get_lang('User list'),
     ];
     $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'admin/user_information.php?user_id='.$userId,
@@ -429,6 +416,6 @@ $(function() {
 });
 </script>';
 
-$template = new Template(get_lang('AddSkill'));
+$template = new Template(get_lang('Add skill'));
 $template->assign('content', $form->returnForm());
 $template->display_one_col_template();

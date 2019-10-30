@@ -29,7 +29,7 @@ $data['profile_completed'] = isset($_REQUEST['profile_completed']) ? floatval($_
 $data['accept_terms'] = isset($_REQUEST['accept_terms']) ? intval($_REQUEST['accept_terms']) : 0;
 $data['courseId'] = isset($_REQUEST['c']) ? intval($_REQUEST['c']) : 0;
 // Init result array
-$result = ['error' => true, 'errorMessage' => get_lang('ThereWasAnError')];
+$result = ['error' => true, 'errorMessage' => get_lang('There was an error.')];
 $showJSON = true;
 // Check if data is valid or is for start subscription
 $verified = $plugin->checkHash($data, $hash) || $data['action'] == 'subscribe';

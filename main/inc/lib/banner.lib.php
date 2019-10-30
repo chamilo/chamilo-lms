@@ -54,7 +54,7 @@ function getCustomTabs()
 function return_logo($theme = '', $responsive = true)
 {
     $siteName = api_get_setting('siteName');
-    $class = 'img-responsive';
+    $class = 'img-fluid';
     if (!$responsive) {
         $class = '';
     }
@@ -86,6 +86,21 @@ function accessToWhoIsOnline()
         $access = true;
     }
 
+    if ($access === true) {
+        $profileList = api_get_configuration_value('allow_online_users_by_status');
+        if (!empty($profileList) && isset($profileList['status'])) {
+            $userInfo = api_get_user_info();
+            if ($userInfo['is_admin']) {
+                $userInfo['status'] = PLATFORM_ADMIN;
+            }
+            $profileList = $profileList['status'];
+            $access = false;
+            if (in_array($userInfo['status'], $profileList)) {
+                $access = true;
+            }
+        }
+    }
+
     return $access;
 }
 
@@ -111,8 +126,8 @@ function returnNotificationMenu()
             (api_get_setting('showonline', 'users') == 'true' && $user_id)
         ) {
             $html .= '<li class="user-online"><a href="'.api_get_path(WEB_PATH).'whoisonline.php" target="_self" title="'
-                .get_lang('UsersOnline').'" >'
-                .Display::return_icon('user.png', get_lang('UsersOnline'), [], ICON_SIZE_TINY)
+                .get_lang('Users online').'" >'
+                .Display::return_icon('user.png', get_lang('Users online'), [], ICON_SIZE_TINY)
                 .' '.$number.'</a></li>';
         }
 
@@ -125,7 +140,7 @@ function returnNotificationMenu()
         ) {
             $html .= '<li class="user-online-course"><a href="'.api_get_path(WEB_PATH).'whoisonline.php?cidReq='.$courseInfo['sysCode']
                 .'" target="_self">'
-                .Display::return_icon('course.png', get_lang('UsersOnline').' '.get_lang('InThisCourse'), [], ICON_SIZE_TINY)
+                .Display::return_icon('course.png', get_lang('Users online').' '.get_lang('in this course'), [], ICON_SIZE_TINY)
                 .' '.$number_online_in_course.' </a></li>';
         }
 
@@ -137,7 +152,7 @@ function returnNotificationMenu()
                 $numberOnlineInSession = getOnlineUsersInSessionCount($sessionId);
                 $html .= '<li class="user-online-session">
                             <a href="'.api_get_path(WEB_PATH).'whoisonlinesession.php" target="_self">'
-                            .Display::return_icon('session.png', get_lang('UsersConnectedToMySessions'), [], ICON_SIZE_TINY)
+                            .Display::return_icon('session.png', get_lang('Online in my sessions'), [], ICON_SIZE_TINY)
                             .' '.$numberOnlineInSession.'</a></li>';
             }
         }
@@ -248,7 +263,7 @@ function return_navigation_array()
                     $url = api_get_path(WEB_PLUGIN_PATH).'studentfollowup/my_students.php';
                 }
                 $navigation['follow_up']['url'] = $url;
-                $navigation['follow_up']['title'] = $plugin->get_lang('CareDetailView');
+                $navigation['follow_up']['title'] = $plugin->get_lang('Student care detail view');
                 $navigation['follow_up']['key'] = 'homepage';
                 $navigation['follow_up']['icon'] = 'homepage.png';
             }
@@ -347,7 +362,7 @@ function return_breadcrumb($interbreadcrumb, $language_file, $nameTools)
             case 'get_lang':
                 $itemTitle = Display::return_icon(
                     'home.png',
-                    get_lang('CourseHomepageLink'),
+                    get_lang('Course home'),
                     [],
                     ICON_SIZE_TINY
                 );
@@ -379,12 +394,12 @@ function return_breadcrumb($interbreadcrumb, $language_file, $nameTools)
 
                     if ($daysLeft >= 0) {
                         $additionalBlocks .= Display::return_message(
-                            sprintf(get_lang('SessionDurationXDaysLeft'), $daysLeft),
+                            sprintf(get_lang('This session has a maximum duration. Only %s days to go.'), $daysLeft),
                             'information'
                         );
                     } else {
                         $additionalBlocks .= Display::return_message(
-                            get_lang('YourSessionTimeHasExpired'),
+                            get_lang('You are already registered but your allowed access time has expired.'),
                             'warning'
                         );
                     }
@@ -394,7 +409,7 @@ function return_breadcrumb($interbreadcrumb, $language_file, $nameTools)
 
         /**
          * @todo could be useful adding the My courses in the breadcrumb
-         * $navigation_item_my_courses['title'] = get_lang('MyCourses');
+         * $navigation_item_my_courses['title'] = get_lang('My courses');
          * $navigation_item_my_courses['url'] = api_get_path(WEB_PATH).'user_portal.php';
          * $navigation[] = $navigation_item_my_courses;
          */
@@ -422,14 +437,14 @@ function return_breadcrumb($interbreadcrumb, $language_file, $nameTools)
             $navigation_item['title'] = $breadcrumb_step['name'];
             // titles for shared folders
             if ($breadcrumb_step['name'] == 'shared_folder') {
-                $navigation_item['title'] = get_lang('UserFolders');
+                $navigation_item['title'] = get_lang('Folders of users');
             } elseif (strstr($breadcrumb_step['name'], 'shared_folder_session_')) {
-                $navigation_item['title'] = get_lang('UserFolders');
+                $navigation_item['title'] = get_lang('Folders of users');
             } elseif (strstr($breadcrumb_step['name'], 'sf_user_')) {
                 $userinfo = api_get_user_info(substr($breadcrumb_step['name'], 8));
                 $navigation_item['title'] = $userinfo['complete_name'];
             } elseif ($breadcrumb_step['name'] == 'chat_files') {
-                $navigation_item['title'] = get_lang('ChatFiles');
+                $navigation_item['title'] = get_lang('Chat conversations history');
             } elseif ($breadcrumb_step['name'] == 'images') {
                 $navigation_item['title'] = get_lang('Images');
             } elseif ($breadcrumb_step['name'] == 'video') {
@@ -519,7 +534,6 @@ function return_breadcrumb($interbreadcrumb, $language_file, $nameTools)
         $i = 0;
         $final_navigation_count = count($final_navigation);
         if (!empty($final_navigation)) {
-            // $home_link.= '<span class="divider">/</span>';
             if (!empty($home_link)) {
                 $lis .= Display::tag('li', $home_link);
             }
@@ -542,7 +556,7 @@ function return_breadcrumb($interbreadcrumb, $language_file, $nameTools)
 
         // View as student/teacher link
         if (!empty($view_as_student_link)) {
-            $html .= Display::tag('div', $view_as_student_link, ['id' => 'view_as_link', 'class' => 'float-right']);
+            $html .= Display::tag('div', $view_as_student_link, ['id' => 'view_as_link', 'class' => 'pull-right']);
         }
 
         if (!empty($navigation_right)) {
@@ -551,7 +565,7 @@ function return_breadcrumb($interbreadcrumb, $language_file, $nameTools)
                 $lis .= Display::tag(
                     'li',
                     $item['title'],
-                    ['class' => $extra_class.' float-right']
+                    ['class' => $extra_class.' pull-right']
                 );
             }
         }

@@ -16,15 +16,15 @@ $this_section = SECTION_PLATFORM_ADMIN;
 // Setting breadcrumbs
 $interbreadcrumb[] = [
     'url' => 'session_list.php',
-    'name' => get_lang('SessionList'),
+    'name' => get_lang('Session list'),
 ];
 
 // Setting the name of the tool
-$tool_name = get_lang('EnrollTrainersFromExistingSessions');
+$tool_name = get_lang('Enroll trainers from existing sessions');
 
 $form_sent = 0;
 $errorMsg = '';
-$id = intval($_GET['id']);
+$id = isset($_GET['id']) ? (int) $_GET['id'] : 0;
 
 SessionManager::protectSession($id);
 
@@ -66,7 +66,7 @@ echo Display::input('hidden', 'form_sent', '1');
 <table border="0" cellpadding="5" cellspacing="0" width="100%">
     <tr>
         <td align="center">
-            <b><?php echo get_lang('Sessions'); ?> :</b>
+            <b><?php echo get_lang('Course sessions'); ?> :</b>
         </td>
         <td></td>
         <td align="center">
@@ -104,7 +104,7 @@ echo Display::input('hidden', 'form_sent', '1');
             <br />
             <?php
             echo '<button class="btn btn-success" type="submit">'.
-                get_lang('SubscribeTeachersToSession').'</button>';
+                get_lang('Subscribe teachers to session(s)').'</button>';
             ?>
         </td>
     </tr>

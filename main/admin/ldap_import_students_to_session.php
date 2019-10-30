@@ -18,9 +18,9 @@ api_protect_admin_script();
 
 $annee_base = date('Y');
 
-$tool_name = get_lang('LDAPImport');
+$tool_name = get_lang('LDAP Import');
 // setting breadcrumbs
-$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('PlatformAdmin')];
+$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('Administration')];
 
 $htmlHeadXtra[] = '<script language="JavaScript" type="text/javascript">
 var buttoncheck = 1;
@@ -32,7 +32,7 @@ function checkAll() {
 			boxes[i].checked = true;
 		}
 		buttoncheck = 1;
-		return "'.get_lang('None').'";
+		return "'.get_lang('none').'";
 	}
 	else {
 		for (i = 0; i < boxes.length; i++) {
@@ -52,9 +52,9 @@ $id_session = $_POST['id_session'];
 if (empty($annee) && empty($id_session)) {
     Display::display_header($tool_name);
     echo '<div style="align:center">';
-    echo Display::return_icon('group.gif', get_lang('LDAPSelectFilterOnUsersOU')).' '.get_lang('LDAPSelectFilterOnUsersOU');
+    echo Display::return_icon('group.gif', get_lang('Select a filter to find a matching string at the end of the OU attribute')).' '.get_lang('Select a filter to find a matching string at the end of the OU attribute');
     echo '<form method="get" action="'.api_get_self().'"><br />';
-    echo '<em>'.get_lang('LDAPOUAttributeFilter').' :</em> ';
+    echo '<em>'.get_lang('The OU attribute filter').' :</em> ';
     echo '<input  type="text" name="annee" size="4" maxlength="30" value="'.$annee_base.'"> ';
     echo '<input type="submit" value="'.get_lang('Submit').'">';
     echo '</form>';
@@ -64,8 +64,8 @@ if (empty($annee) && empty($id_session)) {
     echo '<div style="align:center">';
     echo Display::return_icon(
             'course.png',
-            get_lang('SelectSessionToImportUsersTo')
-        ).' '.get_lang('SelectSessionToImportUsersTo').'<br />';
+            get_lang('Select the session in which you want to import these users')
+        ).' '.get_lang('Select the session in which you want to import these users').'<br />';
     echo '<form method="post" action="'.api_get_self().'?annee='.Security::remove_XSS($annee).'"><br />';
     echo '<select name="id_session">';
 
@@ -92,9 +92,9 @@ elseif (!empty($annee) && !empty($id_session) && empty($_POST['confirmed'])) {
     echo '<div style="align: center;">';
     echo '<br />';
     echo '<br />';
-    echo '<h3>'.Display::return_icon('group.gif', get_lang('SelectStudents')).' '.get_lang('SelectStudents').'</h3>';
+    echo '<h3>'.Display::return_icon('group.gif', get_lang('Select learners')).' '.get_lang('Select learners').'</h3>';
     //echo "Connection ...";
-    $ds = ldap_connect($ldap_host, $ldap_port) or die(get_lang('LDAPConnectionError'));
+    $ds = ldap_connect($ldap_host, $ldap_port) or die(get_lang('LDAP Connection Error'));
     ldap_set_version($ds);
     if ($ds) {
         $r = false;
@@ -125,10 +125,10 @@ elseif (!empty($annee) && !empty($id_session) && empty($_POST['confirmed'])) {
         $statut = 5;
         include 'ldap_form_add_users_group.php';
     } else {
-        echo '<h4>'.get_lang('UnableToConnectTo').' '.$host.'</h4>';
+        echo '<h4>'.get_lang('Unable to connect to').' '.$host.'</h4>';
     }
     echo '<br /><br />';
-    echo '<a href="ldap_import_students.php?annee=">'.get_lang('BackToNewSearch').'</a>';
+    echo '<a href="ldap_import_students.php?annee=">'.get_lang('Back to start new search').'</a>';
     echo '<br /><br />';
     echo '</div>';
 } elseif (!empty($annee) && !empty($id_session) && ($_POST['confirmed'] == 'yes')) {
@@ -167,12 +167,12 @@ elseif (!empty($annee) && !empty($id_session) && empty($_POST['confirmed'])) {
         header('Location: resume_session.php?id_session='.Security::remove_XSS($_POST['id_session']));
         exit;
     } else {
-        $message = get_lang('NoUserAdded');
+        $message = get_lang('No user added');
         Display::addFlash(Display::return_message($message, 'normal', false));
         Display::display_header($tool_name);
     }
     echo '<br /><br />';
-    echo '<a href="ldap_import_students.php?annee=&composante=&etape=">'.get_lang('BackToNewSearch').'</a>';
+    echo '<a href="ldap_import_students.php?annee=&composante=&etape=">'.get_lang('Back to start new search').'</a>';
     echo '<br /><br />';
 }
 Display::display_footer();

@@ -120,7 +120,7 @@ if ($form->validate()) {
 
 $interbreadcrumb[] = [
     'url' => Category::getUrl().'selectcat='.$linkcat,
-    'name' => get_lang('Gradebook'),
+    'name' => get_lang('Assessments'),
 ];
 
 $htmlHeadXtra[] = '<script>
@@ -142,6 +142,6 @@ $(function() {
 });
 </script>';
 
-Display :: display_header(get_lang('EditLink'));
+Display::display_header(get_lang('Edit link'));
 $form->display();
-Display :: display_footer();
+Display::display_footer();

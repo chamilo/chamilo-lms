@@ -3,6 +3,8 @@
 
 namespace Chamilo\CoreBundle\Entity;
 
+use Chamilo\CoreBundle\Entity\Resource\AbstractResource;
+use Chamilo\CoreBundle\Entity\Resource\ResourceInterface;
 use Chamilo\CourseBundle\Entity\CGroupInfo;
 use Chamilo\CourseBundle\Entity\CTool;
 use Chamilo\UserBundle\Entity\User;
@@ -28,10 +30,10 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @UniqueEntity("visualCode")
  * @UniqueEntity("directory")
  *
- * @ORM\Entity(repositoryClass="Chamilo\CoreBundle\Repository\CourseRepository")
+ * @ORM\Entity
  * @ORM\EntityListeners({"Chamilo\CoreBundle\Entity\Listener\CourseListener"})
  */
-class Course
+class Course extends AbstractResource implements ResourceInterface
 {
     public const CLOSED = 0;
     public const REGISTERED = 1;
@@ -1064,7 +1066,7 @@ class Course
      */
     public function setSubscribe($subscribe)
     {
-        $this->subscribe = boolval($subscribe);
+        $this->subscribe = (bool) $subscribe;
 
         return $this;
     }
@@ -1088,7 +1090,7 @@ class Course
      */
     public function setUnsubscribe($unsubscribe)
     {
-        $this->unsubscribe = boolval($unsubscribe);
+        $this->unsubscribe = (bool) $unsubscribe;
 
         return $this;
     }
@@ -1331,7 +1333,7 @@ class Course
      *
      * @return bool
      */
-    protected function hasSubscription(CourseRelUser $subscription)
+    public function hasSubscription(CourseRelUser $subscription)
     {
         if ($this->getUsers()->count()) {
             $criteria = Criteria::create()->where(
@@ -1356,7 +1358,7 @@ class Course
      * @param string $role
      * @param string $status
      */
-    protected function addUser(User $user, $relationType, $role, $status)
+    public function addUser(User $user, $relationType, $role, $status)
     {
         $courseRelUser = new CourseRelUser();
         $courseRelUser->setCourse($this);
@@ -1365,5 +1367,31 @@ class Course
         $courseRelUser->setRole($role);
         $courseRelUser->setStatus($status);
         $this->addUsers($courseRelUser);
+    }
+
+    /**
+     * Resource identifier.
+     *
+     * @return int
+     */
+    public function getResourceIdentifier(): int
+    {
+        return $this->getId();
+    }
+
+    /**
+     * @return string
+     */
+    public function getResourceName(): string
+    {
+        return $this->getCode();
+    }
+
+    /**
+     * @return string
+     */
+    public function getToolName(): string
+    {
+        return 'Course';
     }
 }

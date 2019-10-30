@@ -60,16 +60,16 @@ $csv_content = [];
 
 // Breadcrumbs.
 if (isset($_GET['origin']) && $_GET['origin'] == 'resume_session') {
-    $interbreadcrumb[] = ['url' => '../admin/index.php', 'name' => get_lang('PlatformAdmin')];
-    $interbreadcrumb[] = ['url' => '../session/session_list.php', 'name' => get_lang('SessionList')];
+    $interbreadcrumb[] = ['url' => '../admin/index.php', 'name' => get_lang('Administration')];
+    $interbreadcrumb[] = ['url' => '../session/session_list.php', 'name' => get_lang('Session list')];
     $interbreadcrumb[] = [
         'url' => '../session/resume_session.php?id_session='.api_get_session_id(),
-        'name' => get_lang('SessionOverview'),
+        'name' => get_lang('Session overview'),
     ];
 }
 
 $view = isset($_REQUEST['view']) ? $_REQUEST['view'] : '';
-$nameTools = get_lang('Tracking');
+$nameTools = get_lang('Reporting');
 
 // Display the header.
 Display::display_header($nameTools, 'Tracking');
@@ -107,7 +107,7 @@ echo '<a href="javascript: void(0);" onclick="javascript: window.print();">'.
     Display::return_icon('printer.png', get_lang('Print'), '', ICON_SIZE_MEDIUM).'</a>';
 
 echo '<a href="'.api_get_self().'?'.api_get_cidreq().'&id_session='.api_get_session_id().'&export=csv">
-	'.Display::return_icon('export_csv.png', get_lang('ExportAsCSV'), '', ICON_SIZE_MEDIUM).'</a>';
+	'.Display::return_icon('export_csv.png', get_lang('CSV export'), '', ICON_SIZE_MEDIUM).'</a>';
 
 echo '</span>';
 echo '</div>';
@@ -116,7 +116,7 @@ $course_code = api_get_course_id();
 $course_id = api_get_course_int_id();
 
 if ($lpReporting) {
-    $list = new LearnpathList(null, $course_code, $session_id);
+    $list = new LearnpathList(null, $course_info, $session_id);
     $flat_list = $list->get_flat_list();
 
     if (count($flat_list) > 0) {
@@ -125,12 +125,12 @@ if ($lpReporting) {
         echo Display::page_subheader(
             Display::return_icon(
                 'scorms.gif',
-                get_lang('AverageProgressInLearnpath')
-            ).' '.get_lang('AverageProgressInLearnpath')
+                get_lang('Progress in courses')
+            ).' '.get_lang('Progress in courses')
         );
         echo '<table class="data_table">';
         if ($export_csv) {
-            $temp = [get_lang('AverageProgressInLearnpath', ''), ''];
+            $temp = [get_lang('Progress in courses', ''), ''];
             $csv_content[] = ['', ''];
             $csv_content[] = $temp;
         }
@@ -179,8 +179,8 @@ if ($exerciseReporting) {
     echo Display::page_subheader(
         Display::return_icon(
             'quiz.png',
-            get_lang('AverageResultsToTheExercices')
-        ).' '.get_lang('AverageResultsToTheExercices')
+            get_lang('Tests score')
+        ).' '.get_lang('Tests score')
     );
     echo '<table class="data_table">';
     $course_id = api_get_course_int_id();
@@ -189,7 +189,7 @@ if ($exerciseReporting) {
     $rs = Database::query($sql);
 
     if ($export_csv) {
-        $temp = [get_lang('AverageProgressInLearnpath'), ''];
+        $temp = [get_lang('Progress in courses'), ''];
         $csv_content[] = ['', ''];
         $csv_content[] = $temp;
     }
@@ -226,9 +226,9 @@ if ($exerciseReporting) {
             }
         }
     } else {
-        echo '<tr><td>'.get_lang('NoExercises').'</td></tr>';
+        echo '<tr><td>'.get_lang('No tests').'</td></tr>';
         if ($export_csv) {
-            $temp = [get_lang('NoExercises', ''), ''];
+            $temp = [get_lang('No tests', ''), ''];
             $csv_content[] = $temp;
         }
     }
@@ -261,9 +261,9 @@ $count_number_of_posts_by_course = Tracking:: count_number_of_posts_by_course(
 
 if ($export_csv) {
     $csv_content[] = [get_lang('Forum')];
-    $csv_content[] = [get_lang('ForumForumsNumber'), $count_number_of_forums_by_course];
-    $csv_content[] = [get_lang('ForumThreadsNumber'), $count_number_of_threads_by_course];
-    $csv_content[] = [get_lang('ForumPostsNumber'), $count_number_of_posts_by_course];
+    $csv_content[] = [get_lang('Forums Number'), $count_number_of_forums_by_course];
+    $csv_content[] = [get_lang('Threads number'), $count_number_of_threads_by_course];
+    $csv_content[] = [get_lang('Posts number'), $count_number_of_posts_by_course];
 }
 
 // Forums tracking.
@@ -271,12 +271,12 @@ echo '<div class="report_section">';
 echo Display::page_subheader(
     Display::return_icon('forum.gif', get_lang('Forum')).' '.
     get_lang('Forum').'&nbsp;-&nbsp;<a href="../forum/index.php?'.api_get_cidreq().'">'.
-    get_lang('SeeDetail').'</a>'
+    get_lang('See detail').'</a>'
 );
 echo '<table class="data_table">';
-echo '<tr><td>'.get_lang('ForumForumsNumber').'</td><td align="right">'.$count_number_of_forums_by_course.'</td></tr>';
-echo '<tr><td>'.get_lang('ForumThreadsNumber').'</td><td align="right">'.$count_number_of_threads_by_course.'</td></tr>';
-echo '<tr><td>'.get_lang('ForumPostsNumber').'</td><td align="right">'.$count_number_of_posts_by_course.'</td></tr>';
+echo '<tr><td>'.get_lang('Forums Number').'</td><td align="right">'.$count_number_of_forums_by_course.'</td></tr>';
+echo '<tr><td>'.get_lang('Threads number').'</td><td align="right">'.$count_number_of_threads_by_course.'</td></tr>';
+echo '<tr><td>'.get_lang('Posts number').'</td><td align="right">'.$count_number_of_posts_by_course.'</td></tr>';
 echo '</table></div>';
 echo '<div class="clear"></div>';
 
@@ -297,7 +297,7 @@ if ($showChatReporting) {
         $csv_content[] = [get_lang('Chat', ''), ''];
         $csv_content[] = [
             sprintf(
-                get_lang('ChatConnectionsDuringLastXDays', ''),
+                get_lang('Connections to the chat during last %s days', ''),
                 '7'
             ),
             $chat_connections_during_last_x_days_by_course,
@@ -305,7 +305,7 @@ if ($showChatReporting) {
     }
     echo '<tr><td>';
     echo sprintf(
-        get_lang('ChatConnectionsDuringLastXDays'),
+        get_lang('Connections to the chat during last %s days'),
         '7'
     );
     echo '</td><td align="right">'.$chat_connections_during_last_x_days_by_course.'</td></tr>';
@@ -320,8 +320,8 @@ if ($showTrackingReporting) {
     echo Display::page_subheader(
         Display::return_icon(
             'acces_tool.gif',
-            get_lang('ToolsMostUsed')
-        ).' '.get_lang('ToolsMostUsed')
+            get_lang('Tools most used')
+        ).' '.get_lang('Tools most used')
     );
     echo '<table class="data_table">';
 
@@ -331,7 +331,7 @@ if ($showTrackingReporting) {
     );
 
     if ($export_csv) {
-        $temp = [get_lang('ToolsMostUsed'), ''];
+        $temp = [get_lang('Tools most used'), ''];
         $csv_content[] = $temp;
     }
 
@@ -339,12 +339,12 @@ if ($showTrackingReporting) {
         foreach ($tools_most_used as $row) {
             echo '<tr>
                     <td>'.get_lang(ucfirst($row['access_tool'])).'</td>
-                    <td align="right">'.$row['count_access_tool'].' '.get_lang('Clicks').'</td>
+                    <td align="right">'.$row['count_access_tool'].' '.get_lang('clicks').'</td>
                   </tr>';
             if ($export_csv) {
                 $temp = [
                     get_lang(ucfirst($row['access_tool']), ''),
-                    $row['count_access_tool'].' '.get_lang('Clicks', ''),
+                    $row['count_access_tool'].' '.get_lang('clicks', ''),
                 ];
                 $csv_content[] = $temp;
             }
@@ -359,18 +359,18 @@ if ($documentReporting) {
     // Documents tracking.
     if (!isset($_GET['num']) || empty($_GET['num'])) {
         $num = 3;
-        $link = '&nbsp;-&nbsp;<a href="'.api_get_self().'?'.api_get_cidreq().'&num=1#documents_tracking">'.get_lang('SeeDetail').'</a>';
+        $link = '&nbsp;-&nbsp;<a href="'.api_get_self().'?'.api_get_cidreq().'&num=1#documents_tracking">'.get_lang('See detail').'</a>';
     } else {
         $num = 1000;
-        $link = '&nbsp;-&nbsp;<a href="'.api_get_self().'?'.api_get_cidreq().'&num=0#documents_tracking">'.get_lang('ViewMinus').'</a>';
+        $link = '&nbsp;-&nbsp;<a href="'.api_get_self().'?'.api_get_cidreq().'&num=0#documents_tracking">'.get_lang('View minus').'</a>';
     }
 
     echo '<a name="documents_tracking" id="a"></a><div class="report_section">';
     echo Display::page_subheader(
         Display::return_icon(
             'documents.gif',
-            get_lang('DocumentsMostDownloaded')
-        ).'&nbsp;'.get_lang('DocumentsMostDownloaded').$link
+            get_lang('Documents most downloaded')
+        ).'&nbsp;'.get_lang('Documents most downloaded').$link
     );
 
     echo '<table class="data_table">';
@@ -381,7 +381,7 @@ if ($documentReporting) {
     );
 
     if ($export_csv) {
-        $temp = [get_lang('DocumentsMostDownloaded', ''), ''];
+        $temp = [get_lang('Documents most downloaded', ''), ''];
         $csv_content[] = ['', ''];
         $csv_content[] = $temp;
     }
@@ -397,20 +397,20 @@ if ($documentReporting) {
                 ).'document/show_content.php?file='.$row['down_doc_path'].$course_path_params
             );
             echo '</td>
-                    <td align="right">'.$row['count_down'].' '.get_lang('Clicks').'</td>
+                    <td align="right">'.$row['count_down'].' '.get_lang('clicks').'</td>
                   </tr>';
             if ($export_csv) {
                 $temp = [
                     $row['down_doc_path'],
-                    $row['count_down'].' '.get_lang('Clicks', ''),
+                    $row['count_down'].' '.get_lang('clicks', ''),
                 ];
                 $csv_content[] = $temp;
             }
         }
     } else {
-        echo '<tr><td>'.get_lang('NoDocumentDownloaded').'</td></tr>';
+        echo '<tr><td>'.get_lang('No document downloaded').'</td></tr>';
         if ($export_csv) {
-            $temp = [get_lang('NoDocumentDownloaded', ''), ''];
+            $temp = [get_lang('No document downloaded', ''), ''];
             $csv_content[] = $temp;
         }
     }
@@ -424,8 +424,8 @@ if ($linkReporting) {
     echo Display::page_subheader(
         Display::return_icon(
             'link.gif',
-            get_lang('LinksMostClicked')
-        ).'&nbsp;'.get_lang('LinksMostClicked')
+            get_lang('Links most visited')
+        ).'&nbsp;'.get_lang('Links most visited')
     );
     echo '<table class="data_table">';
     $links_most_visited = Tracking::get_links_most_visited_by_course(
@@ -434,7 +434,7 @@ if ($linkReporting) {
     );
 
     if ($export_csv) {
-        $temp = [get_lang('LinksMostClicked'), ''];
+        $temp = [get_lang('Links most visited'), ''];
         $csv_content[] = ['', ''];
         $csv_content[] = $temp;
     }
@@ -446,19 +446,19 @@ if ($linkReporting) {
                 $row['title'].' ('.$row['url'].')',
                 $row['url']
             );
-            echo '</td><td align="right">'.$row['count_visits'].' '.get_lang('Clicks').'</td></tr>';
+            echo '</td><td align="right">'.$row['count_visits'].' '.get_lang('clicks').'</td></tr>';
             if ($export_csv) {
                 $temp = [
                     $row['title'],
-                    $row['count_visits'].' '.get_lang('Clicks', ''),
+                    $row['count_visits'].' '.get_lang('clicks', ''),
                 ];
                 $csv_content[] = $temp;
             }
         }
     } else {
-        echo '<tr><td>'.get_lang('NoLinkVisited').'</td></tr>';
+        echo '<tr><td>'.get_lang('No link visited').'</td></tr>';
         if ($export_csv) {
-            $temp = [get_lang('NoLinkVisited'), ''];
+            $temp = [get_lang('No link visited'), ''];
             $csv_content[] = $temp;
         }
     }

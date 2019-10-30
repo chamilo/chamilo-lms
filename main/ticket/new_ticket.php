@@ -12,15 +12,12 @@ if (!api_is_platform_admin() && api_get_setting('ticket_allow_student_add') !== 
 }
 
 api_block_anonymous_users();
-
 $courseId = api_get_course_int_id();
 
 $htmlHeadXtra[] = '<script>
-
-function updateCourseList(sessionId) {    
+function updateCourseList(sessionId) {
     $selectCourse = $("select#course_id");
-    $selectCourse.empty();
-        
+    $selectCourse.empty();        
     $.get("'.api_get_path(WEB_AJAX_PATH).'session.ajax.php", {
         a: "get_courses_inside_session",
         session_id : sessionId
@@ -104,27 +101,17 @@ function add_image_form() {
         }
     }
 }
-</script>
-';
-$projectId = isset($_GET['project_id']) ? (int) $_GET['project_id'] : '';
+</script>';
+
+$projectId = isset($_GET['project_id']) ? (int) $_GET['project_id'] : 0;
 
 $types = TicketManager::get_all_tickets_categories($projectId, 'category.name ASC');
-$htmlHeadXtra[] = '<script language="javascript">
+$htmlHeadXtra[] = '<script>
     var projects = '.js_array($types, 'projects', 'project_id').'
     var course_required = '.js_array($types, 'course_required', 'course_required').'
     var other_area = '.js_array($types, 'other_area', 'other_area').'
     var email = '.js_array($types, 'email', 'email').
 '</script>';
-
-/**
- * @param $s
- *
- * @return string
- */
-function js_str($s)
-{
-    return '"'.addcslashes($s, "\0..\37\"\\").'"';
-}
 
 /**
  * @param $array
@@ -147,7 +134,7 @@ function save_ticket()
 {
     $content = $_POST['content'];
     if (!empty($_POST['phone'])) {
-        $content .= '<p style="color:red">&nbsp;'.get_lang('Phone').': '.$_POST['phone'].'</p>';
+        $content .= '<p style="color:red">&nbsp;'.get_lang('Phone').': '.Security::remove_XSS($_POST['phone']).'</p>';
     }
     $course_id = isset($_POST['course_id']) ? (int) $_POST['course_id'] : '';
     $sessionId = isset($_POST['session_id']) ? (int) $_POST['session_id'] : '';
@@ -181,13 +168,13 @@ function save_ticket()
         header('Location:'.api_get_path(WEB_CODE_PATH).'ticket/tickets.php');
         exit;
     } else {
-        Display::addFlash(Display::return_message(get_lang('ThereWasAnErrorRegisteringTheTicket')));
+        Display::addFlash(Display::return_message(get_lang('There was an error registering your ticket')));
     }
 }
 
 $interbreadcrumb[] = [
     'url' => api_get_path(WEB_CODE_PATH).'ticket/tickets.php',
-    'name' => get_lang('MyTickets'),
+    'name' => get_lang('My tickets'),
 ];
 
 $userId = api_get_user_id();
@@ -214,15 +201,15 @@ $sourceAttributes = [
     'id' => 'source_id',
     'for' => 'source_id',
 ];
-$sourceList[TicketManager::SOURCE_PLATFORM] = get_lang('SrcPlatform');
+$sourceList[TicketManager::SOURCE_PLATFORM] = get_lang('Platform');
 if (api_is_platform_admin()) {
     $sourceAttributes = [
         'id' => 'source_id',
         'for' => 'source_id',
     ];
-    $sourceList[TicketManager::SOURCE_EMAIL] = get_lang('SrcEmail');
-    $sourceList[TicketManager::SOURCE_PHONE] = get_lang('SrcPhone');
-    $sourceList[TicketManager::SOURCE_PRESENTIAL] = get_lang('SrcPresential');
+    $sourceList[TicketManager::SOURCE_EMAIL] = get_lang('E-mail');
+    $sourceList[TicketManager::SOURCE_PHONE] = get_lang('Phone');
+    $sourceList[TicketManager::SOURCE_PRESENTIAL] = get_lang('Presential');
 }
 
 // Priority List
@@ -316,7 +303,7 @@ if (api_is_platform_admin()) {
 $form->addElement(
     'text',
     'personal_email',
-    get_lang('PersonalEmail'),
+    get_lang('Personal e-mail'),
     [
         'id' => 'personal_email',
     ]
@@ -400,15 +387,15 @@ if (!empty($courseInfo)) {
 
 $form->setDefaults($params);
 
-$form->addElement('file', 'attach_1', get_lang('FilesAttachment'));
+$form->addElement('file', 'attach_1', get_lang('Files attachments'));
 $form->addLabel('', '<span id="filepaths"><div id="filepath_1"></div></span>');
 
 $form->addLabel(
     '',
     '<span id="link-more-attach">
-         <span class="btn btn-success" onclick="return add_image_form()">'.get_lang('AddOneMoreFile').'</span>
+         <span class="btn btn-success" onclick="return add_image_form()">'.get_lang('Add one more file').'</span>
          </span>
-         ('.sprintf(get_lang('MaximunFileSizeX'), format_file_size(api_get_setting('message_max_upload_filesize'))).')
+         ('.sprintf(get_lang('Maximun file size: %s'), format_file_size(api_get_setting('message_max_upload_filesize'))).')
     '
 );
 
@@ -416,7 +403,7 @@ $form->addElement('html', '<br/>');
 $form->addElement(
     'button',
     'compose',
-    get_lang('SendMessage'),
+    get_lang('Send message'),
     null,
     null,
     null,
@@ -426,15 +413,15 @@ $form->addElement(
     ]
 );
 
-$form->addRule('content', get_lang('ThisFieldIsRequired'), 'required');
-$form->addRule('category_id', get_lang('ThisFieldIsRequired'), 'required');
-$form->addRule('subject', get_lang('ThisFieldIsRequired'), 'required');
+$form->addRule('content', get_lang('Required field'), 'required');
+$form->addRule('category_id', get_lang('Required field'), 'required');
+$form->addRule('subject', get_lang('Required field'), 'required');
 
 if ($form->validate()) {
     save_ticket();
 }
 
-Display::display_header(get_lang('ComposeMessage'));
+Display::display_header(get_lang('Compose message'));
 
 echo '<div class="actions">';
 echo Display::url(

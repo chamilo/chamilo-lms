@@ -14,9 +14,8 @@ use Symfony\Component\Routing\Annotation\Route;
 /**
  * Class HomeController.
  *
- * @package Chamilo\CourseBundle\Controller\Home
- *
  * @author Julio Montoya <gugli100@gmail.com>
+ *
  * @Route("/")
  */
 class HomeController extends ToolBaseController
@@ -73,7 +72,7 @@ class HomeController extends ToolBaseController
                 $userId = $this->getUser()->getId();
                 $autoreg = $request->get('autoreg');
                 if ($autoreg == 1) {
-                    \CourseManager::subscribe_user(
+                    \CourseManager::subscribeUser(
                         $userId,
                         $courseCode,
                         STUDENT
@@ -82,17 +81,8 @@ class HomeController extends ToolBaseController
             }
         }
 
-        $homeView = api_get_setting('course.homepage_view');
-
-        if ($homeView == 'activity' || $homeView == 'activity_big') {
-            $blocks = $this->renderActivityView();
-        } elseif ($homeView == '2column') {
-            $result = $this->render2ColumnView();
-        } elseif ($homeView == '3column') {
-            $result = $this->render3ColumnView();
-        } elseif ($homeView == 'vertical_activity') {
-            $result = $this->renderVerticalActivityView();
-        }
+        //$homeView = api_get_setting('course.homepage_view');
+        $blocks = $this->renderActivityView();
 
         $toolList = $result['tool_list'];
 
@@ -119,35 +109,6 @@ class HomeController extends ToolBaseController
                 'lp_warning' => null,
             ]
         );
-    }
-
-    /**
-     * @param string $courseCode
-     * @param string $fileName
-     *
-     * @return \Symfony\Component\HttpFoundation\BinaryFileResponse
-     */
-    public function getFileAction($courseCode, $fileName)
-    {
-        $courseInfo = api_get_course_info($courseCode);
-        $sessionId = $this->getRequest()->get('id_session');
-
-        $docId = \DocumentManager::get_document_id($courseInfo, "/".$fileName);
-
-        $filePath = null;
-
-        if ($docId) {
-            $isVisible = \DocumentManager::is_visible_by_id($docId, $courseInfo, $sessionId, api_get_user_id());
-            $documentData = \DocumentManager::get_document_data_by_id($docId, $courseCode);
-            $filePath = $documentData['absolute_path'];
-            event_download($filePath);
-        }
-
-        if (!api_is_allowed_to_edit() && !$isVisible) {
-            $this->abort(500);
-        }
-
-        return $this->sendFile($filePath);
     }
 
     /**
@@ -195,7 +156,7 @@ class HomeController extends ToolBaseController
         }
         $entityManager->persist($tool);
         //$entityManager->flush();
-        return Display::return_message(get_lang('ToolIsNowHidden'), 'confirmation');
+        return Display::return_message(get_lang('The tool is now invisible.'), 'confirmation');
     }
 
     /**
@@ -458,7 +419,7 @@ class HomeController extends ToolBaseController
             $content .= '<div class="alert alert-success" style="border:0px; margin-top: 0px;padding:0px;">
                 <div class="normal-message" id="id_normal_message" style="display:none">';
             $content .= '<img src="'.api_get_path(WEB_PATH).'main/inc/lib/javascript/indicator.gif"/>&nbsp;&nbsp;';
-            $content .= get_lang('PleaseStandBy');
+            $content .= get_lang('Please stand by...');
             $content .= '</div>
                 <div class="alert alert-success" id="id_confirmation_message" style="display:none"></div>
             </div>';
@@ -469,7 +430,7 @@ class HomeController extends ToolBaseController
                 $content .= '
                 <div class="row">
                     <div class="col-xs-12 col-md-12">
-                        <span class="viewcaption">'.get_lang('SessionData').'</span>
+                        <span class="viewcaption">'.get_lang('Session\'s data').'</span>
                         <table class="course_activity_home">'.
                             CourseHome::show_session_data($session_id).'
                         </table>
@@ -507,7 +468,7 @@ class HomeController extends ToolBaseController
             if (api_get_setting('show_session_data') === 'true' && $session_id > 0) {
                 $content .= '<div class="row">
                     <div class="col-xs-12 col-md-12">
-                    <span class="viewcaption">'.get_lang('SessionData').'</span>
+                    <span class="viewcaption">'.get_lang('Session\'s data').'</span>
                     <table class="course_activity_home">';
                 $content .= CourseHome::show_session_data($session_id);
                 $content .= '</table></div></div>';
@@ -586,18 +547,6 @@ class HomeController extends ToolBaseController
         return $blocks;
     }
 
-    private function render2ColumnView()
-    {
-    }
-
-    private function render3ColumnView()
-    {
-    }
-
-    private function renderVerticalActivityView()
-    {
-    }
-
     /**
      * @return array
      */
@@ -620,7 +569,7 @@ class HomeController extends ToolBaseController
                     $sessionData = Session::read($session_key);
                     if (!isset($sessionData)) {
                         //redirecting to the Exercise
-                        $url = api_get_path(WEB_CODE_PATH).'exercise/exercice.php?'.api_get_cidreq().'&id_session='.$session_id;
+                        $url = api_get_path(WEB_CODE_PATH).'exercise/exercise.php?'.api_get_cidreq().'&id_session='.$session_id;
                         $_SESSION[$session_key] = true;
 
                         header("Location: $url");

@@ -124,6 +124,17 @@
     </div>
 </div>
 {% else %}
-    <div class="alert alert-info" role="alert">{{ 'ThereIsNoAThematicSection' | get_lang }}</div>
+    <div class="alert alert-info" role="alert">{{ 'There is no thematic section' | get_lang }}</div>
+    {% if is_allowed_to_edit %}
+        <div id="no-data-view" class="tool-view">
+            <h2>{{ "Educational programming"|trans }}</h2>
+            <img src="{{ "course_progress.png"|icon(64) }}" width="64" height="64">
+            <div class="controls">
+                <a href="{{ _p.web_self }}?{{ _p.web_cid_query ~ "&action=thematic_add" ~ token }}" class="btn btn-outline-primary">
+                    {{ "Add thematic"|trans }}
+                </a>
+            </div>
+        </div>
+    {% endif %}
 {% endif %}
 {% endautoescape %}

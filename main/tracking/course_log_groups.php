@@ -33,9 +33,9 @@ $columns = [
     get_lang('Time'),
     get_lang('Progress'),
     get_lang('Score'),
-    get_lang('Works'),
+    get_lang('Assignments'),
     get_lang('Messages'),
-    get_lang('Actions'),
+    get_lang('Detail'),
 ];
 
 // Column config

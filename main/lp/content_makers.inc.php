@@ -9,7 +9,7 @@
  * @author Yannick Warnier <yannick.warnier@beeznest.com>
  */
 $content_origins = [
-    '--'.get_lang('GenericScorm').'--',
+    '--'.get_lang('Generic SCORM').'--',
     '--'.get_lang('Other').'--',
     'Accent',
     'Accenture',

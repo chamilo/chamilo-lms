@@ -79,7 +79,7 @@ class BlockEvaluationGraph extends Block
 
         $html = '';
         if (empty($evaluations_base_courses_graph) && empty($evaluations_courses_in_sessions_graph)) {
-            $html .= '<p>'.api_convert_encoding(get_lang('GraphicNotAvailable'), 'UTF-8').'</p>';
+            $html .= '<p>'.api_convert_encoding(get_lang('Graphic not available'), 'UTF-8').'</p>';
         } else {
             // display evaluations base courses graph
             if (!empty($evaluations_base_courses_graph)) {
@@ -102,7 +102,7 @@ class BlockEvaluationGraph extends Block
         }
 
         $html = $this->getBlockCard(
-            get_lang('EvaluationsGraph'),
+            get_lang('Graph of evaluations'),
             $html
         );
 
@@ -156,12 +156,12 @@ class BlockEvaluationGraph extends Block
                         $dataSet->addPoints($max, 'Serie1');
                         $dataSet->addPoints($items, 'Labels');
 
-                        $dataSet->setSerieDescription('Serie1', get_lang('Max'));
-                        $dataSet->setSerieDescription('Serie2', get_lang('Avg'));
-                        $dataSet->setSerieDescription('Serie3', get_lang('Min'));
+                        $dataSet->setSerieDescription('Serie1', get_lang('Maximum'));
+                        $dataSet->setSerieDescription('Serie2', get_lang('Average'));
+                        $dataSet->setSerieDescription('Serie3', get_lang('Minimum'));
                         $dataSet->setAbscissa('Labels');
 
-                        $dataSet->setAbscissaName(get_lang('EvaluationName'));
+                        $dataSet->setAbscissaName(get_lang('Assessment'));
 
                         $dataSet->normalize(100, '%');
 
@@ -336,11 +336,11 @@ class BlockEvaluationGraph extends Block
                             $dataSet->addPoints($max, 'Serie1');
                             $dataSet->addPoints($items, 'Labels');
 
-                            $dataSet->setSerieDescription('Serie1', get_lang('Max'));
+                            $dataSet->setSerieDescription('Serie1', get_lang('Maximum'));
                             $dataSet->setSerieDescription('Serie2', get_lang('Avg'));
-                            $dataSet->setSerieDescription('Serie3', get_lang('Min'));
+                            $dataSet->setSerieDescription('Serie3', get_lang('Minimum'));
                             $dataSet->setAbscissa('Labels');
-                            $dataSet->setAbscissaName(get_lang('EvaluationName'));
+                            $dataSet->setAbscissaName(get_lang('Assessment'));
                             $dataSet->normalize(100, '%');
                             $dataSet->loadPalette(api_get_path(SYS_CODE_PATH).'palettes/pchart/default.color', true);
 

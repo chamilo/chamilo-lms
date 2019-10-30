@@ -66,7 +66,7 @@ $(function () {
     });
 });
 </script>
-<header class="app-header navbar">
+<header id="app_header" class="app-header navbar">
     <button class="navbar-toggler sidebar-toggler d-lg-none mr-auto" type="button" data-toggle="sidebar-show">
         <span class="navbar-toggler-icon"></span>
     </button>
@@ -77,9 +77,6 @@ $(function () {
         <img class="navbar-brand-full" width="130"
              src="{{ url('legacy_public') ~ 'build/css/themes/'~ theme ~'/images/logo_chamilo.svg' }}"
              alt="Chamilo"/>
-        <img class="navbar-brand-minimized" width="35"
-             src="{{ url('legacy_public') ~ 'build/css/themes/'~ theme ~'/images/avatar.svg' }}"
-             alt="Chamilo">
     </a>
 
     <ul class="nav navbar-nav d-md-down-none">
@@ -168,6 +165,12 @@ $(function () {
                 <div class="dropdown-header text-center">
                     <strong>Settings</strong>
                 </div>
+
+                <a class="dropdown-item" href="{{ url('legacy_main', { 'name' : 'auth/profile.php' }) }}">
+                    <i class="fa fa-user"></i>
+                    {{ "My profile"|trans }}
+                </a>
+
                 <a class="dropdown-item" href="{{ url('legacy_main', { 'name' : 'survey/pending.php' }) }}">
                     <i class="fa fa-chart-pie"></i> {{ 'PendingSurveys'|trans }}
                 </a>
@@ -176,17 +179,14 @@ $(function () {
                     <i class="fa fa-graduation-cap" aria-hidden="true"></i>
                      {{ "MyCertificates"|trans }}
                 </a>
-                <a class="dropdown-item" href="{{ url('legacy_main', { 'name' : 'messages/inbox.php' }) }}">
-                    <i class="fa fa-envelope" aria-hidden="true"></i>
-                     {{ "Inbox"|trans }}
-                    <span class="badge badge-success">42</span>
-                </a>
-                <a class="dropdown-item" href="{{ url('legacy_main', { 'name' : 'auth/profile.php' }) }}">
-                    <i class="fa fa-user"></i>
-                     {{ "Edit profile"|trans }}
-                </a>
+{#                <a class="dropdown-item" href="{{ url('legacy_main', { 'name' : 'messages/inbox.php' }) }}">#}
+{#                    <i class="fa fa-envelope" aria-hidden="true"></i>#}
+{#                     {{ "Inbox"|trans }}#}
+{#                    <span class="badge badge-success">42</span>#}
+{#                </a>#}
+
                 <a class="dropdown-item" href="#">
-                    <i class="fa fa-wrench"></i> {{ "Configuration"|trans }}
+                    <i class="fa fa-wrench"></i> {{ "Administration"|trans }}
                 </a>
 
                 <a class="dropdown-item" id="logout_button" title="{{ "Logout"|trans }}"

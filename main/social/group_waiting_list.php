@@ -35,7 +35,7 @@ if (empty($group_id)) {
 
 $interbreadcrumb[] = ['url' => 'groups.php', 'name' => get_lang('Groups')];
 $interbreadcrumb[] = ['url' => 'group_view.php?id='.$group_id, 'name' => $group_info['name']];
-$interbreadcrumb[] = ['url' => '#', 'name' => get_lang('WaitingList')];
+$interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Waiting list')];
 
 // Group information
 $admins = $usergroup->get_users_by_group(
@@ -53,7 +53,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'accept') {
     //if i'm a moderator
     if ($usergroup->isGroupModerator($group_id)) {
         $usergroup->update_user_role($user_join, $group_id);
-        Display::addFlash(Display::return_message(get_lang('UserAdded')));
+        Display::addFlash(Display::return_message(get_lang('The user has been added')));
     }
 }
 
@@ -63,7 +63,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'deny') {
     //if i'm a moderator
     if ($usergroup->isGroupModerator($group_id)) {
         $usergroup->delete_user_rel_group($user_join, $group_id);
-        Display::addFlash(Display::return_message(get_lang('UserDeleted')));
+        Display::addFlash(Display::return_message(get_lang('The user has been deleted')));
     }
 }
 
@@ -73,7 +73,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'set_moderator') {
     //if i'm the admin
     if ($usergroup->is_group_admin($group_id)) {
         $usergroup->update_user_role($user_moderator, $group_id, GROUP_USER_PERMISSION_MODERATOR);
-        Display::addFlash(Display::return_message(get_lang('UserChangeToModerator')));
+        Display::addFlash(Display::return_message(get_lang('User updated to moderator')));
     }
 }
 
@@ -86,7 +86,7 @@ $users = $usergroup->get_users_by_group(
 );
 
 $new_member_list = [];
-$social_left_content = SocialManager::getMenuSocial('waiting_list', $group_id);
+$social_left_content = SocialManager::show_social_menu('waiting_list', $group_id);
 
 // Display form
 foreach ($users as $user) {
@@ -94,11 +94,11 @@ foreach ($users as $user) {
     switch ($user['relation_type']) {
         case GROUP_USER_PERMISSION_PENDING_INVITATION_SENT_BY_USER:
             $user['link'] = '<a href="group_waiting_list.php?id='.$group_id.'&u='.$userId.'&action=accept">'.
-                Display::return_icon('invitation_friend.png', get_lang('AddNormalUser')).'</a>';
+                Display::return_icon('invitation_friend.png', get_lang('Add as simple user')).'</a>';
             $user['link'] .= '<a href="group_waiting_list.php?id='.$group_id.'&u='.$userId.'&action=set_moderator">'.
-                Display::return_icon('social_moderator_add.png', get_lang('AddModerator')).'</a>';
+                Display::return_icon('social_moderator_add.png', get_lang('Add as moderator')).'</a>';
             $user['link'] .= '<a href="group_waiting_list.php?id='.$group_id.'&u='.$userId.'&action=deny">'.
-                Display::return_icon('user_delete.png', get_lang('DenyEntry')).'</a>';
+                Display::return_icon('user_delete.png', get_lang('Deny access')).'</a>';
             break;
     }
     $new_member_list[] = $user;
@@ -106,13 +106,13 @@ foreach ($users as $user) {
 
 $social_right_content = '';
 if (empty($new_member_list) > 0) {
-    $social_right_content = Display :: return_message(get_lang('ThereAreNotUsersInTheWaitingList'));
+    $social_right_content = Display :: return_message(get_lang('ThereAreNotUsersInTheWaiting list'));
 }
 
 $tpl = new Template(null);
 
 SocialManager::setSocialUserBlock($tpl, api_get_user_id(), 'groups', $group_id);
-$social_menu_block = SocialManager::getMenuSocial('member_list', $group_id);
+$social_menu_block = SocialManager::show_social_menu('member_list', $group_id);
 $tpl->assign('social_menu_block', $social_menu_block);
 $tpl->setHelp('Groups');
 $tpl->assign('members', $new_member_list);

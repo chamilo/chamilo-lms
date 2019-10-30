@@ -11,8 +11,6 @@ use ChamiloSession as Session;
  * Class ExtraFieldValue
  * Declaration for the ExtraFieldValue class, managing the values in extra
  * fields for any data type.
- *
- * @package chamilo.library
  */
 class ExtraFieldValue extends Model
 {
@@ -281,9 +279,11 @@ class ExtraFieldValue extends Model
                     }
 
                     if (!empty($value['tmp_name']) && isset($value['error']) && $value['error'] == 0) {
-                        //Crop the image to adjust 16:9 ratio
-                        $crop = new Image($value['tmp_name']);
-                        $crop->crop($params['extra_'.$field_variable.'_crop_result']);
+                        // Crop the image to adjust 16:9 ratio
+                        if (isset($params['extra_'.$field_variable.'_crop_result'])) {
+                            $crop = new Image($value['tmp_name']);
+                            $crop->crop($params['extra_'.$field_variable.'_crop_result']);
+                        }
 
                         $imageExtraField = new Image($value['tmp_name']);
                         $imageExtraField->resize(400);
@@ -474,117 +474,34 @@ class ExtraFieldValue extends Model
                 /* Enable this when field_loggeable is introduced as a table field (2.0)
                 if ($extraFieldInfo['field_loggeable'] == 1) {
                 */
-                if (false) {
-                    global $app;
-                    switch ($this->type) {
-                        case 'question':
-                            $extraFieldValue = new ChamiloLMS\Entity\QuestionFieldValues();
-                            $extraFieldValue->setUserId(api_get_user_id());
-                            $extraFieldValue->setQuestionId($params[$this->handler_id]);
-                            break;
-                        case 'course':
-                            $extraFieldValue = new ChamiloLMS\Entity\CourseFieldValues();
-                            $extraFieldValue->setUserId(api_get_user_id());
-                            $extraFieldValue->setQuestionId($params[$this->handler_id]);
-                            break;
-                        case 'user':
-                            $extraFieldValue = new ChamiloLMS\Entity\UserFieldValues();
-                            $extraFieldValue->setUserId($params[$this->handler_id]);
-                            $extraFieldValue->setAuthorId(api_get_user_id());
-                            break;
-                        case 'session':
-                            $extraFieldValue = new ChamiloLMS\Entity\SessionFieldValues();
-                            $extraFieldValue->setUserId(api_get_user_id());
-                            $extraFieldValue->setSessionId($params[$this->handler_id]);
-                            break;
-                    }
-                    if (isset($extraFieldValue)) {
-                        if (!empty($params['value'])) {
-                            $extraFieldValue->setComment($params['comment']);
-                            $extraFieldValue->setFieldValue($params['value']);
-                            $extraFieldValue->setFieldId($params['field_id']);
-                            $extraFieldValue->setTms(api_get_utc_datetime(null, false, true));
-                            $app['orm.ems']['db_write']->persist($extraFieldValue);
-                            $app['orm.ems']['db_write']->flush();
-                        }
-                    }
-                } else {
-                    if ($extraFieldInfo['field_type'] == ExtraField::FIELD_TYPE_TAG) {
-                        $option = new ExtraFieldOption($this->type);
-                        $optionExists = $option->get($params['value']);
-                        if (empty($optionExists)) {
-                            $optionParams = [
-                                'field_id' => $params['field_id'],
-                                'option_value' => $params['value'],
-                            ];
-                            $optionId = $option->saveOptions($optionParams);
-                        } else {
-                            $optionId = $optionExists['id'];
-                        }
-
-                        $params['value'] = $optionId;
-                        if ($optionId) {
-                            return parent::save($params, $showQuery);
-                        }
+                if ($extraFieldInfo['field_type'] == ExtraField::FIELD_TYPE_TAG) {
+                    $option = new ExtraFieldOption($this->type);
+                    $optionExists = $option->get($params['value']);
+                    if (empty($optionExists)) {
+                        $optionParams = [
+                            'field_id' => $params['field_id'],
+                            'option_value' => $params['value'],
+                        ];
+                        $optionId = $option->saveOptions($optionParams);
                     } else {
+                        $optionId = $optionExists['id'];
+                    }
+
+                    $params['value'] = $optionId;
+                    if ($optionId) {
                         return parent::save($params, $showQuery);
                     }
+                } else {
+                    return parent::save($params, $showQuery);
                 }
             } else {
                 // Update
                 /* Enable this when field_loggeable is introduced as a table field (2.0)
                 if ($extraFieldInfo['field_loggeable'] == 1) {
                 */
-                if (false) {
-                    global $app;
-                    switch ($this->type) {
-                        case 'question':
-                            $extraFieldValue = $app['orm.ems']['db_write']->getRepository('ChamiloLMS\Entity\QuestionFieldValues')->find($field_values['id']);
-                            $extraFieldValue->setUserId(api_get_user_id());
-                            $extraFieldValue->setQuestionId($params[$this->handler_id]);
-                            break;
-                        case 'course':
-                            $extraFieldValue = $app['orm.ems']['db_write']->getRepository('ChamiloLMS\Entity\CourseFieldValues')->find($field_values['id']);
-                            $extraFieldValue->setUserId(api_get_user_id());
-                            $extraFieldValue->setCourseCode($params[$this->handler_id]);
-                            break;
-                        case 'user':
-                            $extraFieldValue = $app['orm.ems']['db_write']->getRepository('ChamiloLMS\Entity\UserFieldValues')->find($field_values['id']);
-                            $extraFieldValue->setUserId(api_get_user_id());
-                            $extraFieldValue->setAuthorId(api_get_user_id());
-                            break;
-                        case 'session':
-                            $extraFieldValue = $app['orm.ems']['db_write']->getRepository('ChamiloLMS\Entity\SessionFieldValues')->find($field_values['id']);
-                            $extraFieldValue->setUserId(api_get_user_id());
-                            $extraFieldValue->setSessionId($params[$this->handler_id]);
-                            break;
-                    }
+                $params['id'] = $field_values['id'];
 
-                    if (isset($extraFieldValue)) {
-                        if (!empty($params['value'])) {
-                            /*
-                             *  If the field value is similar to the previous value then the comment will be the same
-                                in order to no save in the log an empty record
-                            */
-                            if ($extraFieldValue->getFieldValue() == $params['value']) {
-                                if (empty($params['comment'])) {
-                                    $params['comment'] = $extraFieldValue->getComment();
-                                }
-                            }
-
-                            $extraFieldValue->setComment($params['comment']);
-                            $extraFieldValue->setFieldValue($params['value']);
-                            $extraFieldValue->setFieldId($params['field_id']);
-                            $extraFieldValue->setTms(api_get_utc_datetime(null, false, true));
-                            $app['orm.ems']['db_write']->persist($extraFieldValue);
-                            $app['orm.ems']['db_write']->flush();
-                        }
-                    }
-                } else {
-                    $params['id'] = $field_values['id'];
-
-                    return parent::update($params, $showQuery);
-                }
+                return parent::update($params, $showQuery);
             }
         }
     }
@@ -1031,27 +948,6 @@ class ExtraFieldValue extends Model
     }
 
     /**
-     * Deletes values of a specific field for a specific item.
-     *
-     * @param int $item_id  (session id, course id, etc)
-     * @param int $field_id
-     * @assert (-1,-1) == null
-     */
-    public function delete_values_by_handler_and_field_id($item_id, $field_id)
-    {
-        $field_id = (int) $field_id;
-        $item_id = (int) $item_id;
-        $extraFieldType = $this->getExtraField()->getExtraFieldType();
-
-        $sql = "DELETE FROM {$this->table}
-                WHERE
-                    item_id = '$item_id' AND
-                    field_id = '$field_id'
-                ";
-        Database::query($sql);
-    }
-
-    /**
      * Deletes all values from an item.
      *
      * @param int $itemId (session id, course id, etc)
@@ -1106,20 +1002,6 @@ class ExtraFieldValue extends Model
         }
 
         return false;
-    }
-
-    /**
-     * Not yet implemented - Compares the field values of two items.
-     *
-     * @param int $item_id         Item 1
-     * @param int $item_to_compare Item 2
-     *
-     * @todo
-     *
-     * @return mixed Differential array generated from the comparison
-     */
-    public function compareItemValues($item_id, $item_to_compare)
-    {
     }
 
     /**

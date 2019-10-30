@@ -31,7 +31,7 @@ class ScormAnswerFree extends Answer
             $layout = $template->get_template('document/record_audio.tpl');
             $html .= $template->fetch($layout);*/
 
-            $html = '<tr><td colspan="2">'.get_lang('ThisItemIsNotExportable').'</td></tr>';
+            $html = '<tr><td colspan="2">'.get_lang('This learning object or activity is not SCORM compliant. That\'s why it is not exportable.').'</td></tr>';
 
             return [$js, $html];
         }
@@ -111,7 +111,7 @@ class ScormAnswerHotspot extends Answer
             margin-left: -8px; 
             border: 1px solid #4271b5; 
             height: 448px; 
-            width: 200px;"><b>'.get_lang('HotspotZones').'</b><ol>';
+            width: 200px;"><b>'.get_lang('Image zones').'</b><ol>';
         for ($answerId = 1; $answerId <= $nbrAnswers; $answerId++) {
             $answerList .= '<li>'.$this->selectAnswer($answerId).'</li>';
         }
@@ -140,7 +140,7 @@ HTML;
         $html .= '</table></td></tr>';
 
         // currently the free answers cannot be displayed, so ignore the textarea
-        $html = '<tr><td colspan="2">'.get_lang('ThisItemIsNotExportable').'</td></tr>';
+        $html = '<tr><td colspan="2">'.get_lang('This learning object or activity is not SCORM compliant. That\'s why it is not exportable.').'</td></tr>';
 
         return [$js, $html];
     }

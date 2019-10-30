@@ -99,6 +99,8 @@ class AddCourse
      */
     public static function prepare_course_repository($course_repository)
     {
+        return true;
+
         $perm = api_get_permissions_for_new_directories();
         $perm_file = api_get_permissions_for_new_files();
         $htmlpage = "<!DOCTYPE html>\n<html lang=\"en\">\n  <head>\n    <meta charset=\"utf-8\">\n    <title>Not authorized</title>\n  </head>\n  <body>\n  </body>\n</html>";
@@ -207,7 +209,8 @@ class AddCourse
     /**
      * Gets an array with all the course tables (deprecated?).
      *
-     * @return string[]
+     * @return array
+     *
      * @assert (null) !== null
      */
     public static function get_course_tables()
@@ -229,19 +232,19 @@ class AddCourse
         $tables[] = 'calendar_event_attachment';
         $tables[] = 'announcement';
         $tables[] = 'announcement_attachment';
-        $tables[] = 'resource';
+        //$tables[] = 'resource';
         $tables[] = 'student_publication';
         $tables[] = 'student_publication_assignment';
         $tables[] = 'document';
-        $tables[] = 'forum_post';
+        $tables[] = 'forum_category';
+        $tables[] = 'forum_forum';
         $tables[] = 'forum_thread';
+        $tables[] = 'forum_post';
         $tables[] = 'forum_mailcue';
         $tables[] = 'forum_attachment';
         $tables[] = 'forum_notification';
         $tables[] = 'forum_thread_qualify';
         $tables[] = 'forum_thread_qualify_log';
-        $tables[] = 'forum_forum';
-        $tables[] = 'forum_category';
         $tables[] = 'link';
         $tables[] = 'link_category';
         $tables[] = 'online_connected';
@@ -431,7 +434,7 @@ class AddCourse
             [
                 'c_id' => $course_id,
                 'id' => 2,
-                'title' => get_lang('DefaultGroupCategory'),
+                'title' => get_lang('Default groups'),
                 'description' => '',
                 'max_student' => 0,
                 'self_reg_allowed' => 0,
@@ -451,8 +454,9 @@ class AddCourse
         $now = api_get_utc_datetime();
 
         $files = [
-            ['path' => '/shared_folder', 'title' => get_lang('UserFolders'), 'filetype' => 'folder', 'size' => 0],
-            ['path' => '/chat_files', 'title' => get_lang('ChatFiles'), 'filetype' => 'folder', 'size' => 0],
+            ['path' => '/shared_folder', 'title' => get_lang('Folders of users'), 'filetype' => 'folder', 'size' => 0],
+            ['path' => '/chat_files', 'title' => get_lang('Chat conversations history'), 'filetype' => 'folder', 'size' => 0],
+            ['path' => '/certificates', 'title' => get_lang('Certificates'), 'filetype' => 'folder', 'size' => 0],
         ];
 
         $counter = 1;
@@ -467,11 +471,10 @@ class AddCourse
         if ($fill_with_exemplary_content) {
             $files = [
                 ['path' => '/images', 'title' => get_lang('Images'), 'filetype' => 'folder', 'size' => 0],
-                ['path' => '/images/gallery', 'title' => get_lang('DefaultCourseImages'), 'filetype' => 'folder', 'size' => 0],
+                ['path' => '/images/gallery', 'title' => get_lang('Gallery'), 'filetype' => 'folder', 'size' => 0],
                 ['path' => '/audio', 'title' => get_lang('Audio'), 'filetype' => 'folder', 'size' => 0],
                 ['path' => '/flash', 'title' => get_lang('Flash'), 'filetype' => 'folder', 'size' => 0],
                 ['path' => '/video', 'title' => get_lang('Video'), 'filetype' => 'folder', 'size' => 0],
-                ['path' => '/certificates', 'title' => get_lang('Certificates'), 'filetype' => 'folder', 'size' => 0],
             ];
 
             foreach ($files as $file) {
@@ -537,8 +540,8 @@ class AddCourse
                 $now,
                 $now,
                 0,
-                get_lang('AgendaCreationTitle'),
-                get_lang('AgendaCreationContenu')
+                get_lang('Course creation'),
+                get_lang('This course was created at this time')
             );
 
             /*  Links tool */
@@ -548,8 +551,8 @@ class AddCourse
                 [
                     'c_id' => $course_id,
                     'url' => 'http://www.google.com',
-                    'title' => 'Google',
-                    'description' => get_lang('Google'),
+                    'title' => 'Quick and powerful search engine',
+                    'description' => get_lang('Quick and powerful search engine'),
                     'category_id' => 0,
                     'on_homepage' => 0,
                     'target' => '_self',
@@ -558,8 +561,8 @@ class AddCourse
                 [
                     'c_id' => $course_id,
                     'url' => 'http://www.wikipedia.org',
-                    'title' => 'Wikipedia',
-                    'description' => get_lang('Wikipedia'),
+                    'title' => 'Free online encyclopedia',
+                    'description' => get_lang('Free online encyclopedia'),
                     'category_id' => 0,
                     'on_homepage' => 0,
                     'target' => '_self',
@@ -575,8 +578,8 @@ class AddCourse
             AnnouncementManager::add_announcement(
                 $courseInfo,
                 0,
-                get_lang('AnnouncementExampleTitle'),
-                get_lang('AnnouncementEx'),
+                get_lang('This is an announcement example'),
+                get_lang('This is an announcement example. Only trainers are allowed to publish announcements.'),
                 ['everyone' => 'everyone'],
                 null,
                 null,
@@ -588,7 +591,7 @@ class AddCourse
             /* Introduction text */
             $intro_text = '<p style="text-align: center;">
                             <img src="'.api_get_path(REL_CODE_PATH).'img/mascot.png" alt="Mr. Chamilo" title="Mr. Chamilo" />
-                            <h2>'.get_lang('IntroductionText').'</h2>
+                            <h2>'.get_lang('Introduction text').'</h2>
                          </p>';
 
             $toolIntro = new CToolIntro();
@@ -604,7 +607,7 @@ class AddCourse
                 ->setCId($course_id)
                 ->setId(TOOL_STUDENTPUBLICATION)
                 ->setSessionId(0)
-                ->setIntroText(get_lang('IntroductionTwo'));
+                ->setIntroText(get_lang('This page allows users and groups to publish documents.'));
             $manager->persist($toolIntro);
 
             $toolIntro = new CToolIntro();
@@ -612,20 +615,20 @@ class AddCourse
                 ->setCId($course_id)
                 ->setId(TOOL_WIKI)
                 ->setSessionId(0)
-                ->setIntroText(get_lang('IntroductionWiki'));
+                ->setIntroText(get_lang('The word Wiki is short for WikiWikiWeb. Wikiwiki is a Hawaiian word, meaning "fast" or "speed". In a wiki, people write pages together. If one person writes something wrong, the next person can correct it. The next person can also add something new to the page. Because of this, the pages improve continuously.'));
             $manager->persist($toolIntro);
 
             $manager->flush();
 
             /*  Exercise tool */
             $exercise = new Exercise($course_id);
-            $exercise->exercise = get_lang('ExerciceEx');
+            $exercise->exercise = get_lang('Sample test');
             $html = '<table width="100%" border="0" cellpadding="0" cellspacing="0">
                         <tr>
                         <td width="220" valign="top" align="left">
                             <img src="'.api_get_path(WEB_PUBLIC_PATH).'img/document/images/mr_chamilo/doubts.png">
                         </td>
-                        <td valign="top" align="left">'.get_lang('Antique').'</td></tr>
+                        <td valign="top" align="left">'.get_lang('Irony').'</td></tr>
                     </table>';
             $exercise->type = 1;
             $exercise->setRandom(0);
@@ -637,8 +640,8 @@ class AddCourse
             $exercise_id = $exercise->id;
 
             $question = new MultipleAnswer();
-            $question->question = get_lang('SocraticIrony');
-            $question->description = get_lang('ManyAnswers');
+            $question->question = get_lang('Socratic irony is...');
+            $question->description = get_lang('(more than one answer can be true)');
             $question->weighting = 10;
             $question->position = 1;
             $question->course = $courseInfo;
@@ -647,10 +650,10 @@ class AddCourse
 
             $answer = new Answer($questionId, $courseInfo['real_id']);
 
-            $answer->createAnswer(get_lang('Ridiculise'), 0, get_lang('NoPsychology'), -5, 1);
-            $answer->createAnswer(get_lang('AdmitError'), 0, get_lang('NoSeduction'), -5, 2);
-            $answer->createAnswer(get_lang('Force'), 1, get_lang('Indeed'), 5, 3);
-            $answer->createAnswer(get_lang('Contradiction'), 1, get_lang('NotFalse'), 5, 4);
+            $answer->createAnswer(get_lang('Ridiculise one\'s interlocutor in order to have him concede he is wrong.'), 0, get_lang('No. Socratic irony is not a matter of psychology, it concerns argumentation.'), -5, 1);
+            $answer->createAnswer(get_lang('Admit one\'s own errors to invite one\'s interlocutor to do the same.'), 0, get_lang('No. Socratic irony is not a seduction strategy or a method based on the example.'), -5, 2);
+            $answer->createAnswer(get_lang('Compell one\'s interlocutor, by a series of questions and sub-questions, to admit he doesn\'t know what he claims to know.'), 1, get_lang('Indeed'), 5, 3);
+            $answer->createAnswer(get_lang('Use the Principle of Non Contradiction to force one\'s interlocutor into a dead end.'), 1, get_lang('This answer is not false. It is true that the revelation of the interlocutor\'s ignorance means showing the contradictory conclusions where lead his premisses.'), 5, 4);
             $answer->save();
 
             /* Forum tool */
@@ -658,7 +661,7 @@ class AddCourse
             require_once api_get_path(SYS_CODE_PATH).'forum/forumfunction.inc.php';
 
             $params = [
-                'forum_category_title' => get_lang('ExampleForumCategory'),
+                'forum_category_title' => get_lang('Example Forum Category'),
                 'forum_category_comment' => '',
             ];
 
@@ -666,7 +669,7 @@ class AddCourse
 
             $params = [
                 'forum_category' => $forumCategoryId,
-                'forum_title' => get_lang('ExampleForum'),
+                'forum_title' => get_lang('Example Forum'),
                 'forum_comment' => '',
                 'default_view_type_group' => ['default_view_type' => 'flat'],
             ];
@@ -676,9 +679,9 @@ class AddCourse
             $forumInfo = get_forum_information($forumId, $courseInfo['real_id']);
 
             $params = [
-                'post_title' => get_lang('ExampleThread'),
+                'post_title' => get_lang('Example Thread'),
                 'forum_id' => $forumId,
-                'post_text' => get_lang('ExampleThreadContent'),
+                'post_text' => get_lang('Example ThreadContent'),
                 'calification_notebook_title' => '',
                 'numeric_calification' => '',
                 'weight_calification' => '',
@@ -765,14 +768,15 @@ class AddCourse
     /**
      * Function register_course to create a record in the course table of the main database.
      *
-     * @param array Course details (see code for details)
+     * @param array $params      Course details (see code for details).
+     * @param int   $accessUrlId Optional.
      *
      * @return int Created course ID
      *
      * @todo use an array called $params instead of lots of params
      * @assert (null) === false
      */
-    public static function register_course($params)
+    public static function register_course($params, $accessUrlId = 1)
     {
         global $error_msg;
         $title = $params['title'];
@@ -864,9 +868,8 @@ class AddCourse
         $course_id = 0;
 
         if ($ok_to_register_course) {
-            $courseManager = Container::$container->get('chamilo_core.entity.manager.course_manager');
-            /** @var \Chamilo\CoreBundle\Entity\Course $course */
-            $course = $courseManager->create();
+            $repo = Container::getCourseRepository();
+            $course = new \Chamilo\CoreBundle\Entity\Course();
             $urlId = 1;
             if (api_get_current_access_url_id() !== -1) {
                 $urlId = api_get_current_access_url_id();
@@ -878,14 +881,13 @@ class AddCourse
                 ->setDirectory($directory)
                 ->setCourseLanguage($course_language)
                 ->setTitle($title)
-                ->setDescription(get_lang('CourseDescription'))
+                ->setDescription(get_lang('Course Description'))
                 ->setCategoryCode($category_code)
                 ->setVisibility($visibility)
                 ->setShowScore(1)
                 ->setDiskQuota($disk_quota)
                 ->setCreationDate(new \DateTime())
                 ->setExpirationDate(new \DateTime($expiration_date))
-                //->setLastEdit()
                 ->setDepartmentName($department_name)
                 ->setDepartmentUrl($department_url)
                 ->setSubscribe($subscribe)
@@ -893,11 +895,16 @@ class AddCourse
                 ->setVisualCode($visual_code)
                 ->addUrl($url)
             ;
-
-            $courseManager->save($course, true);
+            $repo->getEntityManager()->persist($course);
+            $repo->getEntityManager()->flush();
             $course_id = $course->getId();
 
             if ($course_id) {
+                $repo->addResourceNode(
+                    $course,
+                    api_get_user_entity(api_get_user_id()),
+                    $url
+                );
                 $sort = api_max_sort_value('0', api_get_user_id());
                 // Default true
                 $addTeacher = isset($params['add_user_as_teacher']) ? $params['add_user_as_teacher'] : true;
@@ -944,16 +951,7 @@ class AddCourse
                 }
 
                 // Adding the course to an URL.
-                // Already added by when saving the entity
-                /*if (api_is_multiple_url_enabled()) {
-                    $url_id = 1;
-                    if (api_get_current_access_url_id() != -1) {
-                        $url_id = api_get_current_access_url_id();
-                    }
-                    UrlManager::add_course_to_url($course_id, $url_id);
-                } else {
-                    UrlManager::add_course_to_url($course_id, 1);
-                }*/
+                UrlManager::add_course_to_url($course_id, $accessUrlId);
 
                 // Add event to the system log.
                 $user_id = api_get_user_id();
@@ -985,11 +983,11 @@ class AddCourse
                         ).' '.$recipient_name.",\n\n".get_lang(
                             'MessageOfNewCourseToAdmin'
                         ).' '.$siteName.' - '.$iname."\n";
-                    $message .= get_lang('CourseName').' '.$title."\n";
+                    $message .= get_lang('Course name').' '.$title."\n";
                     $message .= get_lang(
                             'Category'
                         ).' '.$category_code."\n";
-                    $message .= get_lang('Tutor').' '.$tutor_name."\n";
+                    $message .= get_lang('Coach').' '.$tutor_name."\n";
                     $message .= get_lang('Language').' '.$course_language;
 
                     $userInfo = api_get_user_info($user_id);

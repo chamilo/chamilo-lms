@@ -11,8 +11,6 @@ use Sonata\AdminBundle\Form\FormMapper;
 
 /**
  * Class QuestionAdmin.
- *
- * @package Chamilo\FaqBundle\Admin
  */
 class CategoryAdmin extends AbstractAdmin
 {

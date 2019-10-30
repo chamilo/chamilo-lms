@@ -44,7 +44,7 @@ if (!$skill || empty($variableLanguage)) {
 
 if (empty($originalName)) {
     Display::addFlash(
-        Display::return_message(get_lang('CanNotTranslate'), 'error')
+        Display::return_message(get_lang('Could not translate'), 'error')
     );
     header('Location: '.api_get_path(WEB_CODE_PATH).'admin/skill_edit.php?id='.$skill->getId());
     exit;
@@ -56,7 +56,7 @@ $languages = $em
     ->getRepository('ChamiloCoreBundle:Language')
     ->findAllPlatformSubLanguages();
 
-$languagesOptions = [0 => get_lang('None')];
+$languagesOptions = [0 => get_lang('none')];
 
 /** @var Language $language */
 foreach ($languages as $language) {
@@ -66,12 +66,12 @@ foreach ($languages as $language) {
 $translateUrl = api_get_path(WEB_CODE_PATH).'admin/sub_language_ajax.inc.php?skill='.$skill->getId();
 
 $form = new FormValidator('new_lang_variable', 'POST', $translateUrl);
-$form->addHeader(get_lang('AddWordForTheSubLanguage'));
-$form->addText('variable_language', get_lang('LanguageVariable'), false);
-$form->addText('original_name', get_lang('OriginalName'), false);
+$form->addHeader(get_lang('Add terms to the sub-language'));
+$form->addText('variable_language', get_lang('Language variable'), false);
+$form->addText('original_name', get_lang('Original name'), false);
 $form->addSelect(
     'sub_language',
-    [get_lang('SubLanguage'), get_lang('OnlyActiveSubLanguagesAreListed')],
+    [get_lang('Sub-language'), get_lang('OnlyActiveSub-languagesAreListed')],
     $languagesOptions
 );
 
@@ -79,7 +79,7 @@ if ($languageId) {
     $languageInfo = api_get_language_info($languageId);
     $form->addText(
         'new_language',
-        [get_lang('Translation'), get_lang('IfThisTranslationExistsThisWillReplaceTheTerm')]
+        [get_lang('Translation'), get_lang('If this term has already been translated, this operation will replace its translation for this sub-language.')]
     );
     $form->addHidden('file_id', 0);
     $form->addHidden('id', $languageInfo['parent_id']);
@@ -98,10 +98,10 @@ $form->setDefaults([
 $form->addRule('sub_language', get_lang('Required'), 'required');
 $form->freeze(['variable_language', 'original_name']);
 
-$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('PlatformAdmin')];
-$interbreadcrumb[] = ['url' => 'skill_list.php', 'name' => get_lang('ManageSkills')];
+$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('Administration')];
+$interbreadcrumb[] = ['url' => 'skill_list.php', 'name' => get_lang('Manage skills')];
 
-$view = new Template(get_lang('AddWordForTheSubLanguage'));
+$view = new Template(get_lang('Add terms to the sub-language'));
 $view->assign('form', $form->returnForm());
 $template = $view->get_template('extrafield/translate.tpl');
 $content = $view->fetch($template);

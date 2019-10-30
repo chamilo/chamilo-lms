@@ -5,8 +5,6 @@
  * Generate a teacher time report in platform or sessions/courses.
  *
  * @author Angel Fernando Quiroz Campos <angel.quiroz@beeznest.com>
- *
- * @package chamilo.admin
  */
 
 // Resetting the course id.
@@ -20,9 +18,9 @@ $this_section = SECTION_PLATFORM_ADMIN;
 
 $interbreadcrumb[] = [
     'url' => 'index.php',
-    'name' => get_lang('PlatformAdmin'),
+    'name' => get_lang('Administration'),
 ];
-$toolName = get_lang('TeacherTimeReport');
+$toolName = get_lang('Trainers time report');
 
 // Access restrictions.
 api_protect_admin_script();
@@ -84,9 +82,9 @@ foreach ($teacherList as $teacherItem) {
 }
 
 $withFilter = false;
-$reportTitle = get_lang('TimeReportIncludingAllCoursesAndSessionsByTeacher');
+$reportTitle = get_lang('Time report including all courses and sessions, by teacher');
 $reportSubTitle = sprintf(
-    get_lang('TimeSpentBetweenXAndY'),
+    get_lang('Time spent between %s and %s'),
     $selectedFrom,
     $selectedUntil
 );
@@ -99,7 +97,7 @@ if (!empty($selectedCourse)) {
     if (empty($course)) {
         api_not_allowed(true);
     }
-    $reportTitle = sprintf(get_lang('TimeReportForCourseX'), $course['title']);
+    $reportTitle = sprintf(get_lang('Time report for course %s'), $course['title']);
     $teachers = CourseManager::get_teacher_list_from_course_code($selectedCourse);
 
     foreach ($teachers as $teacher) {
@@ -186,7 +184,7 @@ if (!empty($selectedSession)) {
         'name' => $session['name'],
     ];
 
-    $reportTitle = sprintf(get_lang('TimeReportForSessionX'), $session['name']);
+    $reportTitle = sprintf(get_lang('Time report for session %s'), $session['name']);
     $courses = SessionManager::get_course_list_by_session_id($selectedSession);
 
     foreach ($courses as $course) {
@@ -243,7 +241,7 @@ if (!empty($selectedTeacher)) {
     ];
 
     $reportTitle = sprintf(
-        get_lang('TimeReportForTeacherX'),
+        get_lang('Time report for teacher %s'),
         $teacher['complete_name']
     );
 
@@ -328,14 +326,14 @@ $timeReport->sortData($withFilter);
 
 if (isset($_GET['export'])) {
     $dataToExport = $timeReport->prepareDataToExport($withFilter);
-    $fileName = get_lang('TeacherTimeReport').' '.api_get_local_time();
+    $fileName = get_lang('Trainers time report').' '.api_get_local_time();
 
     switch ($_GET['export']) {
         case 'pdf':
             $params = [
                 'filename' => $fileName,
                 'pdf_title' => "$reportTitle - $reportSubTitle",
-                'pdf_description' => get_lang('TeacherTimeReport'),
+                'pdf_description' => get_lang('Trainers time report'),
                 'format' => 'A4-L',
                 'orientation' => 'L',
             ];
@@ -402,7 +400,7 @@ $form->setDefaults([
 $leftActions = Display::url(
     Display::return_icon(
         'session.png',
-        get_lang('Sessions'),
+        get_lang('Course sessions'),
         [],
         ICON_SIZE_MEDIUM
     ),
@@ -419,7 +417,7 @@ $exportUrlParams = [
 $rightActions = Display::url(
     Display::return_icon(
         'pdf.png',
-        get_lang('ExportToPDF'),
+        get_lang('Export to PDF'),
         [],
         ICON_SIZE_MEDIUM
     ),
@@ -428,7 +426,7 @@ $rightActions = Display::url(
 $rightActions .= Display::url(
     Display::return_icon(
         'export_excel.png',
-        get_lang('ExportExcel'),
+        get_lang('Excel export'),
         [],
         ICON_SIZE_MEDIUM
     ),
@@ -451,7 +449,7 @@ $tpl->assign('rows', $timeReport->data);
 
 $templateName = $tpl->get_template('admin/teacher_time_report.tpl');
 $contentTemplate = $tpl->fetch($templateName);
-$tpl->assign('header', get_lang('TeacherTimeReport'));
+$tpl->assign('header', get_lang('Trainers time report'));
 $tpl->assign(
     'actions',
     Display::toolbarAction(

@@ -1,4 +1,6 @@
 <?php
+/* For licensing terms, see /license.txt*/
+
 /**
  * Validates imported data.
  */
@@ -24,30 +26,30 @@ function validate_data($users)
             if (!UserManager::is_username_empty($user['UserName'])) {
                 // 2.1. Check whether username was used twice in the import file.
                 if (isset($usernames[$user['UserName']])) {
-                    $user['error'] = get_lang('UserNameUsedTwice');
+                    $user['error'] = get_lang('Login is used twice');
                     $errors[] = $user;
                 }
                 $usernames[$user['UserName']] = 1;
                 // 2.2. Check whether username is allready in use in database.
                 if (!UserManager::is_username_available($user['UserName'])) {
-                    $user['error'] = get_lang('UserNameNotAvailable');
+                    $user['error'] = get_lang('This login is not available');
                     $errors[] = $user;
                 }
                 // 2.3. Check whether username is too long.
                 if (UserManager::is_username_too_long($user['UserName'])) {
-                    $user['error'] = get_lang('UserNameTooLong');
+                    $user['error'] = get_lang('This login is too long');
                     $errors[] = $user;
                 }
             }
             // 3. Check status.
             if (isset($user['Status']) && !api_status_exists($user['Status'])) {
-                $user['error'] = get_lang('WrongStatus');
+                $user['error'] = get_lang('This status doesn\'t exist');
                 $errors[] = $user;
             }
             // 5. Check authentication source.
             if (isset($user['AuthSource']) && strlen($user['AuthSource']) != 0) {
                 if (!in_array($user['AuthSource'], $defined_auth_sources)) {
-                    $user['error'] = get_lang('AuthSourceNotAvailable');
+                    $user['error'] = get_lang('Authentication source unavailable.');
                     $errors[] = $user;
                 }
             }
@@ -87,6 +89,8 @@ function complete_missing_data($user)
 
 /**
  * Save the imported data.
+ *
+ * @param array
  */
 function save_data($users)
 {
@@ -107,13 +111,16 @@ function save_data($users)
                 '',
                 $user['AuthSource']
             );
-            foreach ($user['Courses'] as $index => $course) {
-                if (CourseManager:: course_exists($course)) {
-                    CourseManager:: subscribe_user(
-                        $user_id,
-                        $course,
-                        $user['Status']
-                    );
+
+            if (!empty($user['Courses'])) {
+                foreach ($user['Courses'] as $course) {
+                    if (CourseManager::course_exists($course)) {
+                        CourseManager::subscribeUser(
+                            $user_id,
+                            $course,
+                            $user['Status']
+                        );
+                    }
                 }
             }
 
@@ -151,7 +158,7 @@ function save_data($users)
  */
 function parse_csv_data($file)
 {
-    $users = Import :: csvToArray($file);
+    $users = Import::csvToArray($file);
     foreach ($users as $index => $user) {
         if (isset($user['Courses'])) {
             $user['Courses'] = explode('|', trim($user['Courses']));

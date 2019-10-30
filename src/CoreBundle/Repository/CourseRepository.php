@@ -4,19 +4,48 @@
 namespace Chamilo\CoreBundle\Repository;
 
 use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\Resource\ResourceNode;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\ORM\QueryBuilder;
-use Sylius\Bundle\ResourceBundle\Doctrine\ORM\EntityRepository;
 
 /**
- * Class CourseRepository
- * The functions inside this class must return an instance of QueryBuilder.
+ * Class CourseRepository.
  *
- * @package Chamilo\CoreBundle\Repository
+ * The functions inside this class must return an instance of QueryBuilder.
  */
-class CourseRepository extends EntityRepository
+class CourseRepository extends ResourceRepository
 {
+    /**
+     * @param Course $course
+     */
+    public function deleteCourse(Course $course)
+    {
+        $em = $this->getEntityManager();
+
+        // Deleting all nodes connected to the course:
+        $node = $course->getResourceNode();
+        $children = $node->getChildren();
+        /** @var ResourceNode $child */
+        foreach ($children as $child) {
+            $em->remove($child);
+        }
+        $em->flush();
+
+        $em->remove($course);
+        $em->flush();
+    }
+
+    /**
+     * @param string $code
+     *
+     * @return Course
+     */
+    public function findOneByCode($code)
+    {
+        return $this->findOneBy(['code' => $code]);
+    }
+
     /**
      * Get all users that are registered in the course. No matter the status.
      *
@@ -27,7 +56,7 @@ class CourseRepository extends EntityRepository
     public function getSubscribedUsers(Course $course)
     {
         // Course builder
-        $queryBuilder = $this->createQueryBuilder('c');
+        $queryBuilder = $this->getRepository()->createQueryBuilder('c');
 
         // Selecting user info.
         $queryBuilder->select('DISTINCT user');
@@ -71,7 +100,7 @@ class CourseRepository extends EntityRepository
      */
     public function getSubscribedStudents(Course $course)
     {
-        return self::getSubscribedUsersByStatus($course, STUDENT);
+        return $this->getSubscribedUsersByStatus($course, STUDENT);
     }
 
     /**
@@ -97,7 +126,7 @@ class CourseRepository extends EntityRepository
      */
     public function getSubscribedTeachers(Course $course)
     {
-        return self::getSubscribedUsersByStatus($course, COURSEMANAGER);
+        return $this->getSubscribedUsersByStatus($course, COURSEMANAGER);
     }
 
     /**
@@ -119,7 +148,7 @@ class CourseRepository extends EntityRepository
 
     public function getCoursesWithNoSession($urlId)
     {
-        $queryBuilder = $this->createQueryBuilder('c');
+        $queryBuilder = $this->getRepository()->createQueryBuilder('c');
         $criteria = Criteria::create();
         $queryBuilder = $queryBuilder
             ->select('c')

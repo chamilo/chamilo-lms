@@ -2,6 +2,8 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\CoreBundle\Entity\ExtraField as EntityExtraField;
+use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Hook\HookWSRegistration;
 use Chamilo\UserBundle\Entity\User;
 
 /**
@@ -124,7 +126,8 @@ function WSHelperVerifyKey($params)
 $server = new soap_server();
 
 /** @var HookWSRegistration $hook */
-$hook = HookWSRegistration::create();
+$hook = Container::instantiateHook(HookWSRegistration::class);
+
 if (!empty($hook)) {
     $hook->setEventData(['server' => $server]);
     $res = $hook->notifyWSRegistration(HOOK_EVENT_TYPE_PRE);
@@ -3585,14 +3588,14 @@ function WSCourseDescription($params)
     $result = Database::query($sql);
 
     $default_titles = [
-        get_lang('GeneralDescription'),
+        get_lang('Description'),
         get_lang('Objectives'),
         get_lang('Topics'),
         get_lang('Methodology'),
-        get_lang('CourseMaterial'),
-        get_lang('HumanAndTechnicalResources'),
+        get_lang('Course material'),
+        get_lang('Resources'),
         get_lang('Assessment'),
-        get_lang('AddCategory'),
+        get_lang('Add category'),
     ];
 
     for ($x = 1; $x < 9; $x++) {

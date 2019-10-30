@@ -31,17 +31,17 @@ function validate_data($skills)
         }
         // 2. Check skill ID is not empty
         if (!isset($skill['id']) || empty($skill['id'])) {
-            $skill['error'] = get_lang('SkillImportNoID');
+            $skill['error'] = get_lang('The skill ID was not set');
             $errors[] = $skill;
         }
         // 3. Check skill Parent
         if (!isset($skill['parent_id'])) {
-            $skill['error'] = get_lang('SkillImportNoParent');
+            $skill['error'] = get_lang('The parent skill was not set');
             $errors[] = $skill;
         }
         // 4. Check skill Name
         if (!isset($skill['name'])) {
-            $skill['error'] = get_lang('SkillImportNoName');
+            $skill['error'] = get_lang('The skill had no name set');
             $errors[] = $skill;
         }
     }
@@ -104,8 +104,8 @@ function parse_csv_data($file)
 $this_section = SECTION_PLATFORM_ADMIN;
 api_protect_admin_script(true);
 
-$tool_name = get_lang('ImportSkillsListCSV');
-$interbreadcrumb[] = ["url" => 'index.php', "name" => get_lang('PlatformAdmin')];
+$tool_name = get_lang('Import skills from a CSV file');
+$interbreadcrumb[] = ["url" => 'index.php', "name" => get_lang('Administration')];
 
 set_time_limit(0);
 $extra_fields = UserManager::get_extra_fields(0, 0, 5, 'ASC', true);
@@ -152,13 +152,13 @@ if (!empty($_POST['formSent']) && $_FILES['import_file']['size'] !== 0) {
     if (strcmp($file_type, 'csv') === 0) {
         save_data($skills_to_insert);
     } else {
-        $error_message = get_lang('YouMustImportAFileAccordingToSelectedOption');
+        $error_message = get_lang('You must import a file corresponding to the selected format');
     }
 
     if (count($errors) > 0) {
-        $see_message_import = get_lang('FileImportedJustSkillsThatAreNotRegistered');
+        $see_message_import = get_lang('Only skills that were not registered were imported');
     } else {
-        $see_message_import = get_lang('FileImported');
+        $see_message_import = get_lang('File imported');
     }
 
     if (count($errors) != 0) {
@@ -172,11 +172,11 @@ if (!empty($_POST['formSent']) && $_FILES['import_file']['size'] !== 0) {
     }
 
     if ($error_kind_file) {
-        $error_message = get_lang('YouMustImportAFileAccordingToSelectedOption');
+        $error_message = get_lang('You must import a file corresponding to the selected format');
     }
 }
 
-$interbreadcrumb[] = ["url" => 'skill_list.php', "name" => get_lang('ManageSkills')];
+$interbreadcrumb[] = ["url" => 'skill_list.php', "name" => get_lang('Manage skills')];
 
 Display :: display_header($tool_name);
 
@@ -193,16 +193,16 @@ echo $objSkill->getToolBar();
 $form = new FormValidator('user_import', 'post', 'skills_import.php');
 $form->addElement('header', '', $tool_name);
 $form->addElement('hidden', 'formSent');
-$form->addElement('file', 'import_file', get_lang('ImportFileLocation'));
+$form->addElement('file', 'import_file', get_lang('Import marks in an assessment'));
 $group = [];
 $group[] = $form->createElement(
     'radio',
     'file_type',
     '',
-    'CSV (<a href="skill_example.csv" target="_blank" download>'.get_lang('ExampleCSVFile').'</a>)',
+    'CSV (<a href="skill_example.csv" target="_blank" download>'.get_lang('Example CSV file').'</a>)',
     'csv'
 );
-$form->addGroup($group, '', get_lang('FileType'));
+$form->addGroup($group, '', get_lang('File type'));
 $form->addButtonImport(get_lang('Import'));
 $defaults['formSent'] = 1;
 $defaults['sendMail'] = 0;
@@ -211,7 +211,7 @@ $form->setDefaults($defaults);
 $form->display();
 
 ?>
-<p><?php echo get_lang('CSVMustLookLike').' ('.get_lang('MandatoryFields').')'; ?> :</p>
+<p><?php echo get_lang('The CSV file must look like this').' ('.get_lang('Fields in <strong>bold</strong> are mandatory.').')'; ?> :</p>
 
 <pre>
     <b>id</b>;<b>parent_id</b>;<b>name</b>;<b>description</b>

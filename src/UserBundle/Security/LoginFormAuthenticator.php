@@ -1,7 +1,10 @@
 <?php
+/* For licensing terms, see /license.txt */
 
 namespace Chamilo\UserBundle\Security;
 
+use Chamilo\CoreBundle\Hook\CheckLoginCredentialsHook;
+use Chamilo\CoreBundle\Hook\HookFactory;
 use Chamilo\SettingsBundle\Manager\SettingsManager;
 use Chamilo\UserBundle\Form\LoginType;
 use Doctrine\ORM\EntityManager;
@@ -20,8 +23,6 @@ use Symfony\Component\Security\Guard\Authenticator\AbstractFormLoginAuthenticato
 
 /**
  * Class LoginFormAuthenticator.
- *
- * @package Chamilo\UserBundle\Security
  */
 class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
 {
@@ -30,13 +31,15 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
     private $passwordEncoder;
     private $csrfTokenManager;
     private $formFactory;
+    private $hookFactory;
 
     public function __construct(
         EntityManager $em,
         RouterInterface $router,
         UserPasswordEncoderInterface $passwordEncoder,
         CsrfTokenManagerInterface $csrfTokenManager,
-        FormFactoryInterface $formFactory
+        FormFactoryInterface $formFactory,
+        HookFactory $hookFactory
     ) {
         $this->em = $em;
         $this->router = $router;
@@ -44,6 +47,7 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
         $this->csrfTokenManager = $csrfTokenManager;
         $this->formFactory = $formFactory;
         //$this->settingsManager = $settingsManager;
+        $this->hookFactory = $hookFactory;
     }
 
     /**
@@ -75,17 +79,25 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
      * @param mixed         $credentials
      * @param UserInterface $user
      *
+     * @throws \Exception
+     *
      * @return bool
      */
     public function checkCredentials($credentials, UserInterface $user)
     {
-        if (!$this->passwordEncoder->isPasswordValid($user, $credentials['_password'])) {
+        if ($this->passwordEncoder->isPasswordValid($user, $credentials['_password'])) {
+            return true;
+        }
+
+        $hook = $this->hookFactory->build(CheckLoginCredentialsHook::class);
+
+        if (empty($hook)) {
             return false;
         }
 
-        // other checks
+        $hook->setEventData(['user' => $user, 'credentials' => $credentials]);
 
-        return true;
+        return $hook->notifyLoginCredentials();
     }
 
     /**

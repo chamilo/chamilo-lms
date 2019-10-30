@@ -47,7 +47,7 @@ class DropboxLink extends EvalLink
 
     public function get_type_name()
     {
-        return get_lang('LMSDropbox');
+        return get_lang('Dropbox');
     }
 
     public function is_allowed_to_change_name()

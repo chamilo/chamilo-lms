@@ -5,15 +5,9 @@ namespace Chamilo\CoreBundle\Entity\Resource;
 
 /**
  * Interface ResourceInterface.
- *
- * @package Chamilo\CoreBundle\Entity\Resource
  */
 interface ResourceInterface
 {
-    public function setResourceNode(ResourceNode $resourceNode);
-
-    public function getResourceNode();
-
     /**
      * Returns the resource id.
      *
@@ -21,9 +15,13 @@ interface ResourceInterface
      */
     public function getResourceIdentifier(): int;
 
+    /**
+     * @return string
+     */
     public function getResourceName(): string;
 
+    /**
+     * @return string
+     */
     public function getToolName(): string;
-
-    //"getName()", "name()", "isName()", "hasName()", "__get()"
 }

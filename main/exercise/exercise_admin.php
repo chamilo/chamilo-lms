@@ -8,12 +8,12 @@ use ChamiloSession as Session;
  * This script allows to manage an exercise. It is included from
  * the script admin.php.
  *
- * @package chamilo.exercise
- *
  * @author Olivier Brouckaert, Julio Montoya
  */
 require_once __DIR__.'/../inc/global.inc.php';
 $this_section = SECTION_COURSES;
+
+api_protect_course_script(true);
 
 if (!api_is_allowed_to_edit(null, true)) {
     api_not_allowed(true);
@@ -48,8 +48,7 @@ $htmlHeadXtra[] = '<script>
     }
 
     function option_time_expired() {
-        if(document.getElementById(\'timercontrol\').style.display == \'none\')
-        {
+        if(document.getElementById(\'timercontrol\').style.display == \'none\') {
           document.getElementById(\'timercontrol\').style.display = \'block\';
         } else {
           document.getElementById(\'timercontrol\').style.display = \'none\';
@@ -150,13 +149,13 @@ $objExercise->createForm($form);
 // VALIDATE FORM
 if ($form->validate()) {
     $objExercise->processCreation($form);
-    if ($form->getSubmitValue('edit') == 'true') {
+    if ($form->getSubmitValue('edit') === 'true') {
         Display::addFlash(
-            Display::return_message(get_lang('ExerciseEdited'), 'success')
+            Display::return_message(get_lang('Test name and settings have been saved.'), 'success')
         );
     } else {
         Display::addFlash(
-            Display::return_message(get_lang('ExerciseAdded'), 'success')
+            Display::return_message(get_lang('Test added'), 'success')
         );
     }
     $exercise_id = $objExercise->id;
@@ -167,26 +166,25 @@ if ($form->validate()) {
     if (api_is_in_gradebook()) {
         $interbreadcrumb[] = [
             'url' => Category::getUrl(),
-            'name' => get_lang('ToolGradebook'),
+            'name' => get_lang('Assessments'),
         ];
     }
-    $nameTools = get_lang('ExerciseManagement');
+    $nameTools = get_lang('Tests management');
     $interbreadcrumb[] = [
         'url' => 'exercise.php?'.api_get_cidreq(),
-        'name' => get_lang('Exercises'),
+        'name' => get_lang('Tests'),
     ];
     $interbreadcrumb[] = [
         'url' => 'admin.php?exerciseId='.$objExercise->id.'&'.api_get_cidreq(),
         'name' => $objExercise->selectTitle(true),
     ];
 
-    Display::display_header($nameTools, get_lang('Exercise'));
+    Display::display_header($nameTools, get_lang('Test'));
 
     echo '<div class="actions">';
-
     if ($objExercise->id != 0) {
         echo '<a href="admin.php?'.api_get_cidreq().'&exerciseId='.$objExercise->id.'">'.
-            Display::return_icon('back.png', get_lang('GoBackToQuestionList'), '', ICON_SIZE_MEDIUM).'</a>';
+            Display::return_icon('back.png', get_lang('Go back to the questions list'), '', ICON_SIZE_MEDIUM).'</a>';
     } else {
         if (!empty($_GET['lp_id']) || !empty($_POST['lp_id'])) {
             if (!empty($_POST['lp_id'])) {
@@ -197,23 +195,23 @@ if ($form->validate()) {
             }
             $lp_id = (int) $lp_id;
             echo "<a href=\"../lp/lp_controller.php?".api_get_cidreq()."&gradebook=&action=add_item&type=step&lp_id=".$lp_id."#resource_tab-2\">".
-                Display::return_icon('back.png', get_lang("BackTo").' '.get_lang("LearningPaths"), '', ICON_SIZE_MEDIUM)."</a>";
+                Display::return_icon('back.png', get_lang("Back to").' '.get_lang('Learning paths'), '', ICON_SIZE_MEDIUM)."</a>";
         } else {
             echo '<a href="exercise.php?'.api_get_cidreq().'">'.
-                Display::return_icon('back.png', get_lang('BackToExercisesList'), '', ICON_SIZE_MEDIUM).
+                Display::return_icon('back.png', get_lang('Back toTestsList'), '', ICON_SIZE_MEDIUM).
                 '</a>';
         }
     }
     echo '</div>';
 
-    if ($objExercise->feedback_type == 1) {
-        echo Display::return_message(get_lang('DirectFeedbackCantModifyTypeQuestion'));
+    if (in_array($objExercise->getFeedbackType(), [EXERCISE_FEEDBACK_TYPE_DIRECT, EXERCISE_FEEDBACK_TYPE_POPUP])) {
+        echo Display::return_message(get_lang('The test type cannot be modified since it was set to self evaluation. Self evaluation gives you the possibility to give direct feedback to the user, but this is not compatible with all question types and, so this type quiz cannot be changed afterward.'));
     }
 
-    if (api_get_setting('search_enabled') == 'true' &&
+    if (api_get_setting('search_enabled') === 'true' &&
         !extension_loaded('xapian')
     ) {
-        echo Display::return_message(get_lang('SearchXapianModuleNotInstalled'), 'error');
+        echo Display::return_message(get_lang('The Xapian search module is not installed'), 'error');
     }
 
     // to hide the exercise description

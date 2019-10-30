@@ -28,13 +28,13 @@ $url = api_get_path(WEB_AJAX_PATH).'model.ajax.php?a=course_log_events&'.api_get
 
 // The order is important you need to check the the $column variable in the model.ajax.php file
 $columns = [
-    get_lang('EventType'),
-    get_lang('DataType'),
+    get_lang('Event type'),
+    get_lang('Data type'),
     get_lang('Value'),
     get_lang('Course'),
     get_lang('Session'),
-    get_lang('UserName'),
-    get_lang('IPAddress'),
+    get_lang('Username'),
+    get_lang('IP address'),
     get_lang('Date'),
 ];
 

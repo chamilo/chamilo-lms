@@ -1,5 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
+
 /**
  * @package chamilo.admin
  *
@@ -25,15 +26,16 @@ if ($form->validate()) {
         $url_array = $form->getSubmitValues();
         $url = Security::remove_XSS($url_array['url']);
         $description = Security::remove_XSS($url_array['description']);
-        $active = isset($url_array['active']) ? intval($url_array['active']) : 0;
-        $url_id = isset($url_array['id']) ? intval($url_array['id']) : 0;
+        $active = isset($url_array['active']) ? (int) $url_array['active'] : 0;
+        $url_id = isset($url_array['id']) ? (int) $url_array['id'] : 0;
         $url_to_go = 'access_urls.php';
         if (!empty($url_id)) {
             //we can't change the status of the url with id=1
             if ($url_id == 1) {
                 $active = 1;
             }
-            //checking url
+
+            // Checking url
             if (substr($url, strlen($url) - 1, strlen($url)) == '/') {
                 UrlManager::update($url_id, $url, $description, $active);
             } else {
@@ -41,12 +43,12 @@ if ($form->validate()) {
             }
             // URL Images
             $url_images_dir = api_get_path(SYS_PATH).'custompages/url-images/';
-            $image_fields = ["url_image_1", "url_image_2", "url_image_3"];
+            $image_fields = ['url_image_1', 'url_image_2', 'url_image_3'];
             foreach ($image_fields as $image_field) {
                 if ($_FILES[$image_field]['error'] == 0) {
                     // Hardcoded: only PNG files allowed
                     $fileFields = explode('.', $_FILES[$image_field]['name']);
-                    if (end($fileFields) == 'png') {
+                    if (end($fileFields) === 'png') {
                         if (file_exists($url_images_dir.$url_id.'_'.$image_field.'.png')) {
                             // if the file exists, we have to remove it before move_uploaded_file
                             unlink($url_images_dir.$url_id.'_'.$image_field.'.png');
@@ -56,12 +58,10 @@ if ($form->validate()) {
                             $url_images_dir.$url_id.'_'.$image_field.'.png'
                         );
                     }
-                    // else fail silently
                 }
-                // else fail silently
             }
             $url_to_go = 'access_urls.php';
-            $message = get_lang('URLEdited');
+            $message = get_lang('The URL has been edited');
         } else {
             $num = UrlManager::url_exist($url);
             if ($num == 0) {
@@ -72,11 +72,11 @@ if ($form->validate()) {
                     //create
                     UrlManager::add($url.'/', $description, $active);
                 }
-                $message = get_lang('URLAdded');
+                $message = get_lang('The URL has been added');
                 $url_to_go = 'access_urls.php';
             } else {
                 $url_to_go = 'access_url_edit.php';
-                $message = get_lang('URLAlreadyAdded');
+                $message = get_lang('This URL already exists, please select another URL');
             }
             // URL Images
             $url .= (substr($url, strlen($url) - 1, strlen($url)) == '/') ? '' : '/';
@@ -88,11 +88,12 @@ if ($form->validate()) {
                     // Hardcoded: only PNG files allowed
                     $fileFields = explode('.', $_FILES[$image_field]['name']);
                     if (end($fileFields) == 'png') {
-                        move_uploaded_file($_FILES[$image_field]['tmp_name'], $url_images_dir.$url_id.'_'.$image_field.'.png');
+                        move_uploaded_file(
+                            $_FILES[$image_field]['tmp_name'],
+                            $url_images_dir.$url_id.'_'.$image_field.'.png'
+                        );
                     }
-                    // else fail silently
                 }
-                // else fail silently
             }
         }
         Security::clear_token();
@@ -111,21 +112,21 @@ if ($form->validate()) {
 }
 
 $form->addElement('text', 'url', 'URL');
-$form->addRule('url', get_lang('ThisFieldIsRequired'), 'required');
+$form->addRule('url', get_lang('Required field'), 'required');
 $form->addRule('url', '', 'maxlength', 254);
 $form->addElement('textarea', 'description', get_lang('Description'));
 
 //the first url with id = 1 will be always active
 if (isset($_GET['url_id']) && $_GET['url_id'] != 1) {
-    $form->addElement('checkbox', 'active', null, get_lang('Active'));
+    $form->addElement('checkbox', 'active', null, get_lang('active'));
 }
 
 $defaults['url'] = 'http://';
 $form->setDefaults($defaults);
 
-$submit_name = get_lang('AddUrl');
+$submit_name = get_lang('Add URL');
 if (isset($_GET['url_id'])) {
-    $url_id = intval($_GET['url_id']);
+    $url_id = (int) $_GET['url_id'];
     $num_url_id = UrlManager::url_id_exist($url_id);
     if ($num_url_id != 1) {
         header('Location: access_urls.php');
@@ -134,7 +135,7 @@ if (isset($_GET['url_id'])) {
     $url_data = UrlManager::get_url_data_from_id($url_id);
     $form->addElement('hidden', 'id', $url_data['id']);
     $form->setDefaults($url_data);
-    $submit_name = get_lang('AddUrl');
+    $submit_name = get_lang('Add URL');
 }
 
 if (!api_is_multiple_url_enabled()) {
@@ -142,9 +143,9 @@ if (!api_is_multiple_url_enabled()) {
     exit;
 }
 
-$tool_name = get_lang('AddUrl');
-$interbreadcrumb[] = ["url" => 'index.php', "name" => get_lang('PlatformAdmin')];
-$interbreadcrumb[] = ["url" => 'access_urls.php', "name" => get_lang('MultipleAccessURLs')];
+$tool_name = get_lang('Add URL');
+$interbreadcrumb[] = ['url' => 'index.php', 'name' => get_lang('Administration')];
+$interbreadcrumb[] = ['url' => 'access_urls.php', 'name' => get_lang('Multiple access URL / Branding')];
 
 Display :: display_header($tool_name);
 

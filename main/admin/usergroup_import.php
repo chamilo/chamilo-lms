@@ -20,13 +20,13 @@ function validate_data($classes)
         // 1. Check of class name is available.
         if (!isset($class['name']) || strlen(trim($class['name'])) == 0) {
             $class['line'] = $index + 2;
-            $class['error'] = get_lang('MissingClassName');
+            $class['error'] = get_lang('Missing class name');
             $errors[] = $class;
         } else {
             // 2. Check whether class doesn't exist yet.
             if ($usergroup->usergroup_exists($class['name'])) {
                 $class['line'] = $index + 2;
-                $class['error'] = get_lang('ClassNameExists').
+                $class['error'] = get_lang('Class name exists').
                     ': <strong>'.$class['name'].'</strong>';
                 $errors[] = $class;
             }
@@ -89,21 +89,21 @@ $usergroup->protectScript();
 $interbreadcrumb[] = ['url' => 'usergroups.php', 'name' => get_lang('Classes')];
 
 // Setting the name of the tool.
-$tool_name = get_lang('ImportClassListCSV');
+$tool_name = get_lang('Import class list via CSV');
 
 set_time_limit(0);
 
 $form = new FormValidator('import_classes');
-$form->addElement('file', 'import_file', get_lang('ImportCSVFileLocation'));
+$form->addElement('file', 'import_file', get_lang('CSV file import location'));
 $group = [];
 $group[] = $form->createElement(
     'radio',
     'file_type',
     '',
-    'CSV (<a href="example_class.csv" target="_blank" download>'.get_lang('ExampleCSVFile').'</a>)',
+    'CSV (<a href="example_class.csv" target="_blank" download>'.get_lang('Example CSV file').'</a>)',
     'csv'
 );
-$form->addGroup($group, '', get_lang('FileType'), null);
+$form->addGroup($group, '', get_lang('File type'), null);
 $form->addButtonImport(get_lang('Import'));
 
 if ($form->validate()) {
@@ -113,7 +113,7 @@ if ($form->validate()) {
         $number_of_added_classes = save_data($classes);
         Display::addFlash(Display::return_message($number_of_added_classes.' '.get_lang('Added'), 'normal'));
     } else {
-        $error_message = get_lang('ErrorsWhenImportingFile');
+        $error_message = get_lang('Errors when importing file');
         $error_message .= '<ul>';
         foreach ($errors as $index => $error_class) {
             $error_message .= '<li>'.$error_class['error'].' ('.get_lang('Line').' '.$error_class['line'].')';
@@ -130,7 +130,7 @@ Display::display_header($tool_name);
 
 $form->display();
 ?>
-<p><?php echo get_lang('CSVMustLookLike').' ('.get_lang('MandatoryFields').')'; ?> :</p>
+<p><?php echo get_lang('The CSV file must look like this').' ('.get_lang('Fields in <strong>bold</strong> are mandatory.').')'; ?> :</p>
 
 <pre>
 <b>name;description;</b>users

@@ -24,7 +24,7 @@ if (!isset($_FILES['audio_blob'], $_REQUEST['audio_dir'])) {
         header('Content-Type: application/json');
         echo json_encode([
             'error' => true,
-            'message' => Display::return_message(get_lang('UploadError'), 'error'),
+            'message' => Display::return_message(get_lang('Upload failed, please check maximum file size limits and folder rights.'), 'error'),
         ]);
 
         Display::cleanFlashMessages();
@@ -32,7 +32,7 @@ if (!isset($_FILES['audio_blob'], $_REQUEST['audio_dir'])) {
     }
 
     Display::addFlash(
-        Display::return_message(get_lang('UploadError'), 'error')
+        Display::return_message(get_lang('Upload failed, please check maximum file size limits and folder rights.'), 'error')
     );
     exit;
 }
@@ -43,11 +43,11 @@ $audioDir = Security::remove_XSS($_REQUEST['audio_dir']);
 
 switch ($type) {
     case 'document':
-        $dirBaseDocuments = api_get_path(SYS_COURSE_PATH).$courseInfo['path'].'/document';
+        /*$dirBaseDocuments = api_get_path(SYS_COURSE_PATH).$courseInfo['path'].'/document';
         $saveDir = $dirBaseDocuments.$audioDir;
         if (!is_dir($saveDir)) {
             mkdir($saveDir, api_get_permissions_for_new_directories(), true);
-        }
+        }*/
         $uploadedDocument = DocumentManager::upload_document(
             $file,
             $audioDir,

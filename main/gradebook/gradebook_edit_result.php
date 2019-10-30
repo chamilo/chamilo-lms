@@ -66,7 +66,7 @@ if ($edit_result_form->validate()) {
             Database::insert($table, $params);
         }
     }
-    Display::addFlash(Display::return_message(get_lang('AllResultsEdited')));
+    Display::addFlash(Display::return_message(get_lang('All results have been edited')));
     header('Location: gradebook_view_result.php?selecteval='.$select_eval.'&'.api_get_cidreq());
     exit;
 }
@@ -75,13 +75,13 @@ $table = $edit_result_form->toHtml();
 
 $interbreadcrumb[] = [
     'url' => Category::getUrl(),
-    'name' => get_lang('Gradebook'),
+    'name' => get_lang('Assessments'),
 ];
 $interbreadcrumb[] = [
     'url' => 'gradebook_view_result.php?selecteval='.$select_eval.'&'.api_get_cidreq(),
-    'name' => get_lang('ViewResult'),
+    'name' => get_lang('Assessment details'),
 ];
-Display::display_header(get_lang('EditResult'));
+Display::display_header(get_lang('Grade learners'));
 DisplayGradebook::display_header_result($evaluation[0], null, 0, 0);
 echo $table;
 Display :: display_footer();

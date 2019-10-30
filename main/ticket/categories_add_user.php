@@ -9,7 +9,7 @@ require_once __DIR__.'/../inc/global.inc.php';
 api_protect_admin_script(true);
 
 $categoryId = isset($_REQUEST['id']) ? (int) $_REQUEST['id'] : 0;
-$projectId = isset($_GET['project_id']) ? (int) $_GET['project_id'] : '';
+$projectId = isset($_GET['project_id']) ? (int) $_GET['project_id'] : 0;
 
 $categoryInfo = TicketManager::getCategory($categoryId);
 
@@ -48,14 +48,14 @@ if ($form->validate()) {
     $values = $form->exportValues();
     TicketManager::deleteAllUserInCategory($categoryId);
     TicketManager::addUsersToCategory($categoryId, $values['users']);
-    Display::addFlash(Display::return_message(get_lang('Updated')));
-    header("Location: ".api_get_self()."?id=".$categoryId.'&project_id='.$projectId);
+    Display::addFlash(Display::return_message(get_lang('Update successful')));
+    header('Location: '.api_get_self().'?id='.$categoryId.'&project_id='.$projectId);
     exit;
 }
 
 $interbreadcrumb[] = [
     'url' => api_get_path(WEB_CODE_PATH).'ticket/tickets.php?project_id='.$projectId,
-    'name' => get_lang('MyTickets'),
+    'name' => get_lang('My tickets'),
 ];
 
 $interbreadcrumb[] = [

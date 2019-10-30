@@ -9,8 +9,6 @@ use Symfony\Component\Form\FormBuilderInterface;
 
 /**
  * Class AnnouncementSettingsSchema.
- *
- * @package Chamilo\CoreBundle\Settings
  */
 class AnnouncementSettingsSchema extends AbstractSettingsSchema
 {

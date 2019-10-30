@@ -37,12 +37,12 @@ try {
             $password = isset($_POST['password']) ? $_POST['password'] : null;
             $isValid = Rest::isValidUser($username, $password);
             if (!$isValid) {
-                throw new Exception(get_lang('InvalideUserDetected'));
+                throw new Exception(get_lang('Invalid user detected.'));
             }
 
             $restResponse->setData([
                 'url' => api_get_path(WEB_PATH),
-                'apiKey' => Rest::findUserApiKey($username, Rest::SERVIVE_NAME),
+                'apiKey' => Rest::findUserApiKey($username, Rest::SERVICE_NAME),
                 'gcmSenderId' => api_get_setting('messaging_gdc_project_number'),
             ]);
             break;
@@ -57,6 +57,32 @@ try {
             $lastMessageId = isset($_POST['last']) ? intval($_POST['last']) : 0;
             $messages = $restApi->getUserMessages($lastMessageId);
             $restResponse->setData($messages);
+            break;
+        case Rest::POST_USER_MESSAGE_READ:
+        case Rest::POST_USER_MESSAGE_UNREAD:
+            $messagesId = isset($_POST['messages']) && is_array($_POST['messages'])
+                ? array_map('intval', $_POST['messages'])
+                : [];
+
+            $messagesId = array_filter($messagesId);
+
+            if (empty($messagesId)) {
+                throw new Exception(get_lang('No data available'));
+            }
+
+            $messageStatus = $action === Rest::POST_USER_MESSAGE_READ ? MESSAGE_STATUS_NEW : MESSAGE_STATUS_UNREAD;
+
+            $data = array_flip($messagesId);
+
+            foreach ($messagesId as $messageId) {
+                $data[$messageId] = MessageManager::update_message_status(
+                    $restApi->getUser()->getId(),
+                    $messageId,
+                    $messageStatus
+                );
+            }
+
+            $restResponse->setData($data);
             break;
         case Rest::GET_USER_COURSES:
             $courses = $restApi->getUserCourses();
@@ -131,11 +157,43 @@ try {
             $data = $restApi->subscribeUserToCourse($_POST);
             $restResponse->setData($data);
             break;
+        case Rest::CREATE_CAMPUS:
+            $data = $restApi->createCampusURL($_POST);
+            $restResponse->setData($data);
+            break;
+        case Rest::EDIT_CAMPUS:
+            $data = $restApi->editCampusURL($_POST);
+            $restResponse->setData($data);
+            break;
+        case Rest::DELETE_CAMPUS:
+            $data = $restApi->deleteCampusURL($_POST);
+            $restResponse->setData($data);
+            break;
+        case Rest::SAVE_SESSION:
+            $data = $restApi->addSession($_POST);
+            $restResponse->setData($data);
+            break;
+        case Rest::GET_USERS:
+            $data = $restApi->getUsersCampus($_POST);
+            $restResponse->setData($data);
+            break;
+        case Rest::GET_COURSE:
+            $data = $restApi->getCoursesCampus($_POST);
+            $restResponse->setData($data);
+            break;
+        case Rest::ADD_COURSES_SESSION:
+            $data = $restApi->addCoursesSession($_POST);
+            $restResponse->setData($data);
+            break;
+        case Rest::ADD_USER_SESSION:
+            $data = $restApi->addUsersSession($_POST);
+            $restResponse->setData($data);
+            break;
         case Rest::SAVE_FORUM_POST:
             if (
                 empty($_POST['title']) || empty($_POST['text']) || empty($_POST['thread']) || empty($_POST['forum'])
             ) {
-                throw new Exception(get_lang('NoData'));
+                throw new Exception(get_lang('No data available'));
             }
 
             $forumId = isset($_POST['forum']) ? intval($_POST['forum']) : 0;
@@ -168,7 +226,7 @@ try {
         case Rest::GET_MESSAGE_USERS:
             $search = !empty($_REQUEST['q']) ? $_REQUEST['q'] : null;
             if (!$search || strlen($search) < 2) {
-                throw new Exception(get_lang('TooShort'));
+                throw new Exception(get_lang('Too short'));
             }
 
             $data = $restApi->getMessageUsers($search);
@@ -184,7 +242,7 @@ try {
             if (
                 empty($_POST['title']) || empty($_POST['text']) || empty($_POST['forum'])
             ) {
-                throw new Exception(get_lang('NoData'));
+                throw new Exception(get_lang('No data available'));
             }
 
             $forumId = isset($_POST['forum']) ? intval($_POST['forum']) : 0;
@@ -201,7 +259,7 @@ try {
             $restResponse->setData($data);
             break;
         default:
-            throw new Exception(get_lang('InvalidAction'));
+            throw new Exception(get_lang('Invalid action'));
     }
 } catch (Exception $exeption) {
     $restResponse->setErrorMessage(

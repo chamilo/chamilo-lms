@@ -1,8 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use kigkonsult\iCalcreator\vcalendar;
-use kigkonsult\iCalcreator\vevent;
+use Kigkonsult\Icalcreator\Vcalendar;
+use Kigkonsult\Icalcreator\Vevent;
 
 /**
  * This file exclusively export calendar items to iCal or similar formats.
@@ -17,7 +17,7 @@ $this_section = SECTION_MYAGENDA;
 api_block_anonymous_users();
 
 // setting the name of the tool
-$nameTools = get_lang('MyAgenda');
+$nameTools = get_lang('Personal agenda');
 
 // the variables for the days and the months
 // Defining the shorts for the days
@@ -48,11 +48,11 @@ $event = $agenda->get_event($id);
 if (!empty($event)) {
     define('ICAL_LANG', api_get_language_isocode());
 
-    $ical = new vcalendar();
+    $ical = new Vcalendar();
     $ical->setConfig('unique_id', api_get_path(WEB_PATH));
     $ical->setProperty('method', 'PUBLISH');
     $ical->setConfig('url', api_get_path(WEB_PATH));
-    $vevent = new vevent();
+    $vevent = new Vevent();
 
     switch ($_GET['class']) {
         case 'public':

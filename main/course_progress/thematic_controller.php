@@ -69,7 +69,7 @@ class ThematicController
                                     $action = 'thematic_details';
                                     $thematic_id = null;
                                 }
-                                Display::addFlash(Display::return_message(get_lang('Updated')));
+                                Display::addFlash(Display::return_message(get_lang('Update successful')));
                             }
                         } else {
                             $error = true;
@@ -527,7 +527,7 @@ class ThematicController
         // get data for attendance input select
         $attendance_list = $attendance->get_attendances_list();
         $attendance_select = [];
-        $attendance_select[0] = get_lang('SelectAnAttendance');
+        $attendance_select[0] = get_lang('Select an attendance');
         foreach ($attendance_list as $attendance_id => $attendance_data) {
             $attendance_select[$attendance_id] = $attendance_data['name'];
         }

@@ -112,8 +112,8 @@ $(function() {
             });
             $(".checkboxes_col_"+calendar_id+" input:checkbox").attr("disabled",true);
             $(this).attr("src","'.Display::returnIconPath('lock-closed.png').'");
-            $(this).attr("title","'.get_lang('DateUnLock').'");
-            $(this).attr("alt","'.get_lang('DateUnLock').'");
+            $(this).attr("title","'.get_lang('Unlock date').'");
+            $(this).attr("alt","'.get_lang('Unlock date').'");
             $(this).attr("class","img_lock");
             $("#hidden_input_"+calendar_id).attr("value","");
             $("#hidden_input_"+calendar_id).attr("disabled",true);
@@ -151,8 +151,8 @@ $(function() {
 
             $(".checkboxes_col_"+calendar_id+" input:checkbox").attr("disabled",false);
             $(this).attr("src","'.Display::returnIconPath('lock-open.png').'");
-            $(this).attr("title","'.get_lang('DateLock').'");
-            $(this).attr("alt","'.get_lang('DateLock').'");
+            $(this).attr("title","'.get_lang('Lock date').'");
+            $(this).attr("alt","'.get_lang('Lock date').'");
             $(this).attr("class","img_unlock");
             $("#hidden_input_"+calendar_id).attr("disabled",false);
             $("#hidden_input_"+calendar_id).attr("value",calendar_id);
@@ -200,15 +200,15 @@ if (api_is_drh() && isset($_GET['student_id'])) {
 if (api_is_in_gradebook()) {
     $interbreadcrumb[] = [
         'url' => api_get_path(WEB_CODE_PATH).'gradebook/index.php?'.api_get_cidreq(),
-        'name' => get_lang('ToolGradebook'),
+        'name' => get_lang('Assessments'),
     ];
 }
 $interbreadcrumb[] = [
     'url' => 'index.php?'.api_get_cidreq().'&action=attendance_list&'.$student_param,
-    'name' => get_lang('ToolAttendance'),
+    'name' => get_lang('Attendances'),
 ];
 if ($action == 'attendance_add') {
-    $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('CreateANewAttendance')];
+    $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Create a new attendance list')];
 }
 if ($action == 'attendance_edit') {
     $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Edit')];
@@ -223,14 +223,14 @@ if ($action == 'calendar_list' || $action == 'calendar_edit' || $action == 'cale
         'url' => 'index.php?'.api_get_cidreq().'&action=attendance_sheet_list&attendance_id='.$attendance_id,
         'name' => $attendance_data['name'],
     ];
-    $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('AttendanceCalendar')];
+    $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Attendance calendar')];
 }
 if ($action == 'calendar_add') {
     $interbreadcrumb[] = [
         'url' => 'index.php?'.api_get_cidreq().'&action=attendance_sheet_list&attendance_id='.$attendance_id,
         'name' => $attendance_data['name'],
     ];
-    $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('AddDateAndTime')];
+    $interbreadcrumb[] = ['url' => '#', 'name' => get_lang('Add a date and time')];
 }
 
 $allowToEdit = api_is_allowed_to_edit(null, true);

@@ -192,16 +192,6 @@ class Container
     }
 
     /**
-     * @deprecated
-     *
-     * @return \Symfony\Bundle\FrameworkBundle\Routing\Router
-     */
-    public static function getUrlGenerator()
-    {
-        return self::$container->get('router.default');
-    }
-
-    /**
      * @return object|Request
      */
     public static function getRequest()

@@ -12,11 +12,13 @@ use APY\DataGridBundle\Grid\Source\Entity;
 use Chamilo\CoreBundle\Component\Utils\Glide;
 use Chamilo\CoreBundle\Entity\Resource\ResourceNode;
 use Chamilo\CoreBundle\Entity\Resource\ResourceRight;
+use Chamilo\CoreBundle\Repository\ResourceRepository;
 use Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter;
 use Chamilo\CourseBundle\Controller\CourseControllerInterface;
 use Chamilo\CourseBundle\Controller\CourseControllerTrait;
 use Chamilo\CourseBundle\Entity\CDocument;
 use Chamilo\CourseBundle\Repository\CDocumentRepository;
+use Doctrine\ORM\EntityManager;
 use FOS\RestBundle\View\View;
 use Sylius\Bundle\ResourceBundle\Event\ResourceControllerEvent;
 use Sylius\Component\Resource\Exception\UpdateHandlingException;
@@ -400,17 +402,108 @@ class ResourceController extends BaseController implements CourseControllerInter
      *
      * @param Request             $request
      * @param CDocumentRepository $documentRepo
+     * @param Glide               $glide
      *
      * @return Response
      */
-    public function showAction(
-        Request $request,
-        CDocumentRepository $documentRepo,
-        Glide $glide
-    ): Response {
+    public function getResourceFileAction(Request $request, Glide $glide): Response
+    {
+        $id = $request->get('id');
+        $em = $this->getDoctrine();
+        $resourceNode = $em->getRepository('ChamiloCoreBundle:Resource\ResourceNode')->find($id);
+
+        return $this->showFile($resourceNode, $glide, 'show', '');
+
+
+        /*
+        $fs = $documentRepo->getFileSystem();
+        $stream = $fs->readStream($filePath);
+        $response = new StreamedResponse(function () use ($stream): void {
+            stream_copy_to_stream($stream, fopen('php://output', 'wb'));
+        });
+        $disposition = $response->headers->makeDisposition(
+            $forceDownload ? ResponseHeaderBag::DISPOSITION_ATTACHMENT : ResponseHeaderBag::DISPOSITION_INLINE,
+            Transliterator::transliterate($fileName)
+        );
+        $response->headers->set('Content-Disposition', $disposition);
+        $response->headers->set('Content-Type', $mimeType ?: 'application/octet-stream');
+
+        return $response;*/
+    }
+
+    /**
+     * @param ResourceNode $resourceNode
+     * @param              $glide
+     * @param              $type
+     * @param              $filter
+     *
+     * @return StreamedResponse
+     * @throws \League\Flysystem\FileNotFoundException
+     */
+    private function showFile(ResourceNode $resourceNode, $glide, $type, $filter)
+    {
+        $fs = $this-> container->get('oneup_flysystem.resources_filesystem');
+
+        $this->denyAccessUnlessGranted(
+            ResourceNodeVoter::VIEW,
+            $resourceNode,
+            'Unauthorised access to resource'
+        );
+        $resourceFile = $resourceNode->getResourceFile();
+
+        if (!$resourceFile) {
+            throw new NotFoundHttpException();
+        }
+
+        $fileName = $resourceNode->getName();
+        $filePath = $resourceFile->getFile()->getPathname();
+        $mimeType = $resourceFile->getMimeType();
+
+        switch ($type) {
+            case 'download':
+                $forceDownload = true;
+                break;
+            case 'show':
+            default:
+                $forceDownload = false;
+                // See filter definition
+                if (!empty($filter)) {
+                    $server = $glide->getServer();
+                    $filter = $glide->getFilters()[$filter] ?? [];
+
+                    return $server->getImageResponse($filePath, $filter);
+                }
+                break;
+        }
+
+        $stream = $fs->readStream($filePath);
+        $response = new StreamedResponse(function () use ($stream): void {
+            stream_copy_to_stream($stream, fopen('php://output', 'wb'));
+        });
+        $disposition = $response->headers->makeDisposition(
+            $forceDownload ? ResponseHeaderBag::DISPOSITION_ATTACHMENT : ResponseHeaderBag::DISPOSITION_INLINE,
+            Transliterator::transliterate($fileName)
+        );
+        $response->headers->set('Content-Disposition', $disposition);
+        $response->headers->set('Content-Type', $mimeType ?: 'application/octet-stream');
+
+        return $response;
+    }
+
+    /**
+     * Shows a resource.
+     *
+     * @param Request             $request
+     * @param CDocumentRepository $documentRepo
+     * @param Glide               $glide
+     *
+     * @return Response
+     */
+    public function showAction(Request $request, CDocumentRepository $documentRepo, Glide $glide): Response
+    {
         $file = $request->get('file');
         $type = $request->get('type');
-        // see list of filters in config/packages/liip_imagine.yaml
+        // see list of filters in config/services.yaml
         $filter = $request->get('filter');
         $type = !empty($type) ? $type : 'show';
 
@@ -428,89 +521,7 @@ class ResourceController extends BaseController implements CourseControllerInter
         /** @var ResourceNode $resourceNode */
         $resourceNode = $document->getResourceNode();
 
-        $this->denyAccessUnlessGranted(
-            ResourceNodeVoter::VIEW,
-            $resourceNode,
-            'Unauthorised access to resource'
-        );
-
-        $resourceFile = $resourceNode->getResourceFile();
-
-        if (!$resourceFile) {
-            throw new NotFoundHttpException();
-        }
-
-        $fileName = $resourceNode->getName();
-        $filePath = $resourceFile->getFile()->getPathname();
-        $mimeType = $resourceFile->getMimeType();
-
-        //ServerFactory
-
-        switch ($type) {
-            case 'download':
-                $forceDownload = true;
-                //$provider = $this->get('sonata.media.pool')->getProvider($media->getProviderName());
-                //$response = $provider->getDownloadResponse($media, $format, $this->get('sonata.media.pool')->getDownloadMode($media));
-                break;
-            case 'show':
-            default:
-                $forceDownload = false;
-                // See filter definition
-                if (!empty($filter)) {
-                    $server = $glide->getServer();
-                    $filter = $glide->getFilters()[$filter] ?? [];
-
-                    return $server->getImageResponse($filePath, $filter);
-                }
-                break;
-        }
-
-        $fs = $documentRepo->getFileSystem();
-        $stream = $fs->readStream($filePath);
-        $response = new StreamedResponse(function () use ($stream): void {
-            stream_copy_to_stream($stream, fopen('php://output', 'wb'));
-        });
-        $disposition = $response->headers->makeDisposition(
-            $forceDownload ? ResponseHeaderBag::DISPOSITION_ATTACHMENT : ResponseHeaderBag::DISPOSITION_INLINE,
-            Transliterator::transliterate($fileName)
-        );
-        $response->headers->set('Content-Disposition', $disposition);
-        $response->headers->set('Content-Type', $mimeType ?: 'application/octet-stream');
-
-        return $response;
-
-        /*
-
-        $configuration = $this->requestConfigurationFactory->create($this->metadata, $request);
-        $this->isGrantedOr403($configuration, ResourceActions::SHOW);
-
-        $resource = $this->findOr404($configuration);
-        $resourceNode = $resource->getResourceNode();
-
-        $this->eventDispatcher->dispatch(ResourceActions::SHOW, $configuration, $resource);
-
-        $this->denyAccessUnlessGranted(
-            ResourceNodeVoter::VIEW,
-            $resourceNode,
-            'Unauthorised access to resource'
-        );
-
-        $view = View::create($resource);
-
-        if ($configuration->isHtmlRequest()) {
-            $view
-                ->setTemplate($configuration->getTemplate(ResourceActions::SHOW.'.html'))
-                ->setTemplateVar($this->metadata->getName())
-                ->setData([
-                    'configuration' => $configuration,
-                    'metadata' => $this->metadata,
-                    'resource' => $resource,
-                    $this->metadata->getName() => $resource,
-                ])
-            ;
-        }
-
-        return $this->viewHandler->handle($configuration, $view);*/
+        return $this->showFile($resourceNode, $glide, $type, $filter);
     }
 
     /**

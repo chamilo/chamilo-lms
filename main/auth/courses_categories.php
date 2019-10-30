@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Framework\Container;
+
 /**
  * View (MVC patter) for courses categories.
  *
@@ -8,6 +10,7 @@
  *
  * @package chamilo.auth
  */
+
 if (isset($_REQUEST['action']) && Security::remove_XSS($_REQUEST['action']) !== 'subscribe') {
     $stok = Security::get_token();
 } else {
@@ -306,27 +309,29 @@ function getOptionSelect($categories, $codeType)
  *
  * @return string HTML string
  */
-function returnThumbnail($course, $registeredUser)
+function returnThumbnail($course)
 {
     $html = '';
     $title = cut($course['title'], 70);
     //$linkCourse = api_get_course_url($course['code']);
     $linkCourse = api_get_path(WEB_PATH).'course/'.$course['real_id'].'/about';
-    // course path
-    $course_path = api_get_path(SYS_COURSE_PATH).$course['directory'];
-
-    if (file_exists($course_path.'/course-pic.png')) {
-        // redimensioned image 85x85
-        $courseMediumImage = api_get_path(WEB_COURSE_PATH).$course['directory'].'/course-pic.png';
-    } else {
-        // without picture
-        $courseMediumImage = Display::return_icon(
-            'session_default.png',
-            null,
-            null,
-            null,
-            null,
-            true
+    $courseEntity = api_get_course_entity($course['real_id']);
+    //$courseMediumImage = api_get_path(WEB_COURSE_PATH).$course['directory'].'/course-pic.png';
+    $courseMediumImage = Display::return_icon(
+        'session_default.png',
+        null,
+        null,
+        null,
+        null,
+        true,
+        true
+    );
+    $repo = Container::getCourseRepository();
+    $illustration = $repo->getIllustration($courseEntity);
+    if ($illustration) {
+        $courseMediumImage = Container::getRouter()->generate(
+            'core_tool_resource',
+            ['id' => $illustration->getId()]
         );
     }
 

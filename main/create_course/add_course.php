@@ -341,16 +341,35 @@ if ($form->validate()) {
             $params['gradebook_model_id'] = isset($course_values['gradebook_model_id']) ? $course_values['gradebook_model_id'] : null;
             $params['course_template'] = isset($course_values['course_template']) ? $course_values['course_template'] : '';
 
-            include_once api_get_path(SYS_CODE_PATH).'lang/english/trad4all.inc.php';
+            /*include_once api_get_path(SYS_CODE_PATH).'lang/english/trad4all.inc.php';
             $file_to_include = api_get_path(SYS_CODE_PATH).'lang/'.$course_language.'/trad4all.inc.php';
 
             if (file_exists($file_to_include)) {
                 include $file_to_include;
-            }
+            }*/
 
             $course_info = CourseManager::create_course($params);
 
             if (!empty($course_info)) {
+                $request = Container::getRequest();
+
+                if ($request->files->has('picture')) {
+                    $uploadFile = $request->files->get('picture');
+                    $repo = Container::getCourseRepository();
+                    $em = $repo->getEntityManager();
+
+                    // @todo add in repository
+                    $course = $repo->find($course_info['real_id']);
+                    $illustration = new \Chamilo\CoreBundle\Entity\Illustration();
+                    $illustration->setName('course_picture');
+
+                    $repo->addResourceNode($illustration, api_get_user_entity(api_get_user_id()), $course);
+                    $repo->addFileToResource($illustration, $uploadFile);
+
+                    $em->persist($illustration);
+                    $em->flush();
+                }
+
                 // update course picture
                 /*$picture = $_FILES['picture'];
                 if (!empty($picture['name'])) {
@@ -364,12 +383,10 @@ if ($form->validate()) {
                 /*$resourceFile = new \Chamilo\CoreBundle\Entity\Resource\ResourceFile();
                 $resourceFile->setName('course_image')
                 $picture['tmp_name']*/
+
                 $splash = api_get_setting('course_creation_splash_screen');
                 if ($splash === 'true') {
                     $url = Container::getRouter()->generate('chamilo_core_course_welcome', ['course' =>$course_info['code']]);
-                    /*
-                    $url .= 'course_info/start.php?'.api_get_cidreq_params($course_info['code']);
-                    $url .= '&first=1';*/
                     header('Location: '.$url);
                     exit;
                 } else {

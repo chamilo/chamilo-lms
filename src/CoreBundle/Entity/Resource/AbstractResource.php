@@ -25,15 +25,6 @@ abstract class AbstractResource implements ResourceInterface
     abstract public function getResourceName(): string;
 
     /**
-     * ORM\PreUpdate()
-     *
-     * @param LifecycleEventArgs $args
-     */
-    /*public function preUpdate(LifecycleEventArgs $args): void
-    {
-    }*/
-
-    /**
      * @ORM\PostUpdate()
      *
      * @param LifecycleEventArgs $args

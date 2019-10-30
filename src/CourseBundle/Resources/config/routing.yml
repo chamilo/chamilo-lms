@@ -14,6 +14,13 @@ core_tool_document:
     requirements:
         file: .+ # allow "/" in {file}
 
+core_tool_resource:
+    path: /resources/{id}
+    defaults:
+        _controller: Chamilo\CoreBundle\Controller\ResourceController::getResourceFileAction
+    requirements:
+        file: .+ # allow "/" in {file}
+
 chamilo_course_tool_intro_create:
     path: /courses/{course}/introduction/{tool}/create/
     methods: [GET, POST]

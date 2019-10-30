@@ -5,6 +5,7 @@ namespace Chamilo\CoreBundle\Repository;
 
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Resource\AbstractResource;
+use Chamilo\CoreBundle\Entity\Resource\ResourceFile;
 use Chamilo\CoreBundle\Entity\Resource\ResourceLink;
 use Chamilo\CoreBundle\Entity\Resource\ResourceNode;
 use Chamilo\CoreBundle\Entity\Resource\ResourceRight;
@@ -14,11 +15,13 @@ use Chamilo\CoreBundle\Entity\Usergroup;
 use Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter;
 use Chamilo\CourseBundle\Entity\CGroupInfo;
 use Chamilo\UserBundle\Entity\User;
+use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Query\Expr\Join;
 use League\Flysystem\FilesystemInterface;
 use League\Flysystem\MountManager;
 use Sylius\Bundle\ResourceBundle\Doctrine\ORM\EntityRepository;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /**
  * Class ResourceRepository.
@@ -57,8 +60,8 @@ class ResourceRepository extends EntityRepository
     public function __construct(EntityManager $entityManager, MountManager $mountManager, string $className)
     {
         $this->repository = $entityManager->getRepository($className);
+        // Flysystem mount name is saved in config/packages/oneup_flysystem.yaml
         $this->fs = $mountManager->getFilesystem('resources_fs');
-        $this->entityManager = $entityManager;
     }
 
     /**
@@ -108,6 +111,58 @@ class ResourceRepository extends EntityRepository
         return $this->getRepository()->findOneBy($criteria, $orderBy);
     }
 
+    /**
+     * @param AbstractResource $resource
+     *
+     * @return ResourceNode|mixed
+     */
+    public function getIllustration(AbstractResource $resource)
+    {
+        $node = $resource->getResourceNode();
+        // @todo also filter by the resource type = Illustration
+        $criteria = Criteria::create()->where(
+            Criteria::expr()->eq('name', 'course_picture')
+        );
+
+        $illustration = $node->getChildren()->matching($criteria)->first();
+
+        return $illustration;
+
+        /** @var ResourceNode $illustration */
+        //$illustration = $this->getRepository()->findOneBy(['parent' => $node, 'name' => 'course_picture']);
+        var_dump($illustration);
+    }
+
+    /**
+     * @param AbstractResource $resource
+     * @param UploadedFile     $file
+     *
+     * @return ResourceFile
+     */
+    public function addFileToResource(AbstractResource $resource, UploadedFile $file)
+    {
+        $resourceNode = $resource->getResourceNode();
+
+        if (!$resourceNode) {
+            return false;
+        }
+
+        $resourceFile = $resourceNode->getResourceFile();
+        if ($resourceFile === null) {
+            $resourceFile = new ResourceFile();
+        }
+
+        $em = $this->getEntityManager();
+
+        $resourceFile->setFile($file);
+        $resourceFile->setName($resource->getResourceName());
+        $em->persist($resourceFile);
+        $resourceNode->setResourceFile($resourceFile);
+        $em->persist($resourceNode);
+        $em->flush();
+
+        return $resourceFile;
+    }
 
 
     /**

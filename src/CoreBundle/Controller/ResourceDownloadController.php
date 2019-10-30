@@ -18,8 +18,6 @@ use Symfony\Component\Routing\Annotation\Route;
  * @author Julio Montoya <gugli100@gmail.com>.
  *
  * @Route("/resource")
- *
- * @package Chamilo\CoreBundle\Controller
  */
 class ResourceDownloadController extends BaseController
 {

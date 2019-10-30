@@ -24,11 +24,11 @@ parameters:
     glide_config:
         source: 'oneup_flysystem.resources_filesystem'
         cache: 'oneup_flysystem.cache_resources_filesystem'
+        #cache: 'var/cache/resource/'
 
     glide_media_filters:
         document_thumbnail_small:
-            w: 100
-            h: 100
+            w: 500
 
 services:
     # default configuration for services in *this* file
@@ -128,12 +128,12 @@ chamilo_course:
 #                model: Chamilo\CourseBundle\Entity\CCourseSetting
 #                repository: Chamilo\CourseBundle\Repository\CCourseSettingRepository
 
-doctrine_cache:
-    providers:
-        sylius_settings:
-            type: file_system
-        chamilo_settings:
-            type: file_system
+#doctrine_cache:
+#    providers:
+#        sylius_settings:
+#            type: file_system
+#        chamilo_settings:
+#            type: file_system
 
 gregwar_captcha:
     width: 200

@@ -43,9 +43,9 @@ class CourseRelUserCatalogue
     protected $course;
 
     /**
-     * @var bool
+     * @var int
      *
-     * @ORM\Column(name="visible", type="integer", precision=0, scale=0, nullable=false, unique=false)
+     * @ORM\Column(name="visible", type="integer", nullable=false, unique=false)
      */
     protected $visible;
 

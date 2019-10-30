@@ -81,17 +81,8 @@ class HomeController extends ToolBaseController
             }
         }
 
-        $homeView = api_get_setting('course.homepage_view');
-
-        if ($homeView == 'activity' || $homeView == 'activity_big') {
-            $blocks = $this->renderActivityView();
-        } elseif ($homeView == '2column') {
-            $result = $this->render2ColumnView();
-        } elseif ($homeView == '3column') {
-            $result = $this->render3ColumnView();
-        } elseif ($homeView == 'vertical_activity') {
-            $result = $this->renderVerticalActivityView();
-        }
+        //$homeView = api_get_setting('course.homepage_view');
+        $blocks = $this->renderActivityView();
 
         $toolList = $result['tool_list'];
 
@@ -118,35 +109,6 @@ class HomeController extends ToolBaseController
                 'lp_warning' => null,
             ]
         );
-    }
-
-    /**
-     * @param string $courseCode
-     * @param string $fileName
-     *
-     * @return \Symfony\Component\HttpFoundation\BinaryFileResponse
-     */
-    public function getFileAction($courseCode, $fileName)
-    {
-        $courseInfo = api_get_course_info($courseCode);
-        $sessionId = $this->getRequest()->get('id_session');
-
-        $docId = \DocumentManager::get_document_id($courseInfo, "/".$fileName);
-
-        $filePath = null;
-
-        if ($docId) {
-            $isVisible = \DocumentManager::is_visible_by_id($docId, $courseInfo, $sessionId, api_get_user_id());
-            $documentData = \DocumentManager::get_document_data_by_id($docId, $courseCode);
-            $filePath = $documentData['absolute_path'];
-            \Event::event_download($filePath);
-        }
-
-        if (!api_is_allowed_to_edit() && !$isVisible) {
-            $this->abort(500);
-        }
-
-        return $this->sendFile($filePath);
     }
 
     /**
@@ -583,18 +545,6 @@ class HomeController extends ToolBaseController
         }
 
         return $blocks;
-    }
-
-    private function render2ColumnView()
-    {
-    }
-
-    private function render3ColumnView()
-    {
-    }
-
-    private function renderVerticalActivityView()
-    {
     }
 
     /**

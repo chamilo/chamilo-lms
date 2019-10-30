@@ -2,7 +2,6 @@
 /* See license terms in /license.txt */
 
 use Chamilo\CoreBundle\Component\Editor\Connector;
-use Chamilo\CoreBundle\Component\Filesystem\Data;
 use MediaAlchemyst\Alchemyst;
 use MediaAlchemyst\DriversContainer;
 use Neutron\TemporaryFilesystem\Manager;

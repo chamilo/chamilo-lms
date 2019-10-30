@@ -1,7 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use Chamilo\CoreBundle\Component\Filesystem\Data;
 use ChamiloSession as Session;
 
 /**

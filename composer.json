@@ -164,7 +164,8 @@
         "league/csv": "^9.1",
         "brumann/polyfill-unserialize": "^1.0",
         "vich/uploader-bundle": "1.8.*",
-        "maennchen/zipstream-php": "^1.2"
+        "maennchen/zipstream-php": "^1.2",
+        "league/glide-symfony": "^1.0"
     },
     "config": {
         "component-dir": "public/assets"

@@ -3,9 +3,15 @@ oneup_flysystem:
         resource_adapter:
             local:
                 directory: '%kernel.project_dir%/var/upload/resource'
-
+        resource_cache_adapter:
+            local:
+                directory: '%kernel.project_dir%/var/cache/resource'
     filesystems:
         resources:
             adapter: resource_adapter
             mount: resources_fs
+            visibility: private
+        cache_resources:
+            adapter: resource_cache_adapter
+            mount: cache_resources_fs
             visibility: private

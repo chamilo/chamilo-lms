@@ -9,6 +9,7 @@ use APY\DataGridBundle\Grid\Export\CSVExport;
 use APY\DataGridBundle\Grid\Export\ExcelExport;
 use APY\DataGridBundle\Grid\Grid;
 use APY\DataGridBundle\Grid\Source\Entity;
+use Chamilo\CoreBundle\Component\Utils\Glide;
 use Chamilo\CoreBundle\Entity\Resource\ResourceNode;
 use Chamilo\CoreBundle\Entity\Resource\ResourceRight;
 use Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter;
@@ -17,8 +18,6 @@ use Chamilo\CourseBundle\Controller\CourseControllerTrait;
 use Chamilo\CourseBundle\Entity\CDocument;
 use Chamilo\CourseBundle\Repository\CDocumentRepository;
 use FOS\RestBundle\View\View;
-use League\Flysystem\MountManager;
-use Liip\ImagineBundle\Service\FilterService;
 use Sonata\MediaBundle\Provider\ImageProvider;
 use Sylius\Bundle\ResourceBundle\Event\ResourceControllerEvent;
 use Sylius\Component\Resource\Exception\UpdateHandlingException;
@@ -35,8 +34,6 @@ use Vich\UploaderBundle\Util\Transliterator;
  * Class ResourceController.
  *
  * @author Julio Montoya <gugli100@gmail.com>.
- *
- * @package Chamilo\CoreBundle\Controller
  */
 class ResourceController extends BaseController implements CourseControllerInterface
 {
@@ -404,23 +401,19 @@ class ResourceController extends BaseController implements CourseControllerInter
      *
      * @param Request             $request
      * @param CDocumentRepository $documentRepo
-     * @param FilterService       $filterService
      *
      * @return Response
      */
     public function showAction(
         Request $request,
         CDocumentRepository $documentRepo,
-        FilterService $filterService,
-        MountManager $mountManager
+        Glide $glide
     ): Response {
         $file = $request->get('file');
         $type = $request->get('type');
-        $filter = $request->get('filter'); // see list of filters in config/packages/liip_imagine.yaml
-
-        if (empty($type)) {
-            $type = 'show';
-        }
+        // see list of filters in config/packages/liip_imagine.yaml
+        $filter = $request->get('filter');
+        $type = !empty($type) ? $type : 'show';
 
         $criteria = [
             'path' => "/$file",
@@ -448,18 +441,11 @@ class ResourceController extends BaseController implements CourseControllerInter
             throw new NotFoundHttpException();
         }
 
-        //$media = $resourceFile->getMedia();
-        //$format = MediaProviderInterface::FORMAT_REFERENCE;
         $fileName = $resourceNode->getName();
         $filePath = $resourceFile->getFile()->getPathname();
         $mimeType = $resourceFile->getMimeType();
-        // @todo use $documentRepo
-        $fs = $this->get('oneup_flysystem.mount_manager')->getFilesystem('resources_fs');
 
-        $stream = $fs->readStream($filePath);
-        $response = new StreamedResponse(function () use ($stream): void {
-            stream_copy_to_stream($stream, fopen('php://output', 'wb'));
-        });
+        //ServerFactory
 
         switch ($type) {
             case 'download':
@@ -470,41 +456,21 @@ class ResourceController extends BaseController implements CourseControllerInter
             case 'show':
             default:
                 $forceDownload = false;
-               // $resourceFile = $fs->readStream($resourceFile->getFile()->getPathname());
-                //var_dump($resourceFile->getFile()->getPathname());
-                //var_dump($fs->read($resourceFile->getFile()->getPathname()));
-                // $downloadHandler doesn't work with flysystem:
-                // https://github.com/dustin10/VichUploaderBundle/issues/827
-                //return $downloadHandler->downloadObject($resourceFile, 'file', ResourceFile::class, $name);
-
-                /** @var ImageProvider $provider */
-               /* $provider = $this->get('sonata.media.pool')->getProvider($media->getProviderName());
-                $filename = sprintf(
-                    '%s/%s',
-                    $provider->getFilesystem()->getAdapter()->getDirectory(),
-                    $provider->generatePrivateUrl($media, $format)
-                );
-
+                // See filter definition
                 if (!empty($filter)) {
-                    $resourcePath = $filterService->getUrlOfFilteredImage(
-                        $provider->generatePrivateUrl($media, $format),
-                        $filter
-                    );
-                    if ($resourcePath) {
-                        $cacheFolder = '/var/cache/resource/';
-                        $pos = strpos($resourcePath, $cacheFolder);
-                        $cacheValue = substr($resourcePath, $pos + strlen($cacheFolder), strlen($resourcePath));
-                        $cachedFile = $this->get('kernel')->getResourceCacheDir().$cacheValue;
+                    $server = $glide->getServer();
+                    $filter = $glide->getFilters()[$filter] ?? [];
 
-                        if (is_file($cachedFile)) {
-                            $filename = $cachedFile;
-                        }
-                    }
+                    return $server->getImageResponse($filePath, $filter);
                 }
-                return new BinaryFileResponse($filename);*/
                 break;
         }
 
+        $fs = $documentRepo->getFileSystem();
+        $stream = $fs->readStream($filePath);
+        $response = new StreamedResponse(function () use ($stream): void {
+            stream_copy_to_stream($stream, fopen('php://output', 'wb'));
+        });
         $disposition = $response->headers->makeDisposition(
             $forceDownload ? ResponseHeaderBag::DISPOSITION_ATTACHMENT : ResponseHeaderBag::DISPOSITION_INLINE,
             Transliterator::transliterate($fileName)

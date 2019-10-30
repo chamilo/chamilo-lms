@@ -62,6 +62,22 @@ class ResourceRepository extends EntityRepository
     }
 
     /**
+     * @return FilesystemInterface
+     */
+    public function getFileSystem()
+    {
+        return $this->fs;
+    }
+
+    /**
+     * @return EntityManager
+     */
+    public function getEntityManager(): EntityManager
+    {
+        return $this->entityManager;
+    }
+
+    /**
      * @return EntityRepository
      */
     public function getRepository()
@@ -92,13 +108,7 @@ class ResourceRepository extends EntityRepository
         return $this->getRepository()->findOneBy($criteria, $orderBy);
     }
 
-    /**
-     * @return EntityManager
-     */
-    public function getEntityManager(): EntityManager
-    {
-        return $this->entityManager;
-    }
+
 
     /**
      * Creates a ResourceNode.

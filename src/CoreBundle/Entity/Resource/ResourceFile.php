@@ -6,6 +6,7 @@ namespace Chamilo\CoreBundle\Entity\Resource;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Symfony\Component\HttpFoundation\File\File;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Validator\Constraints as Assert;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
@@ -90,18 +91,31 @@ class ResourceFile
     /**
      * @var int
      *
-     * @Assert\NotBlank()
      *
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="integer", nullable=true)
      */
     protected $size;
 
     /**
      * @var File
      *
-     * @Vich\UploadableField(mapping="resources", fileNameProperty="name", size="size", mimeType="mimeType", originalName="originalName", dimensions="dimensions")
+     * @Vich\UploadableField(
+     *     mapping="resources",
+     *     fileNameProperty="name",
+     *     size="size",
+     *     mimeType="mimeType",
+     *     originalName="originalName",
+     *     dimensions="dimensions"
+     * )
      */
     protected $file;
+
+    /**
+     * @var ResourceNode
+     *
+     * @ORM\OneToOne(targetEntity="Chamilo\CoreBundle\Entity\Resource\ResourceNode", mappedBy="resourceFile")
+     */
+    protected $resourceNode;
 
 //    /**
 //     * @var string
@@ -169,12 +183,6 @@ class ResourceFile
 //     */
 //    protected $extension;
 
-    /**
-     * @var ResourceNode
-     *
-     * @ORM\OneToOne(targetEntity="Chamilo\CoreBundle\Entity\Resource\ResourceNode", mappedBy="resourceFile")
-     */
-    protected $resourceNode;
 
     /**
      * @var bool
@@ -189,7 +197,6 @@ class ResourceFile
     public function __construct()
     {
         $this->enabled = true;
-        $this->setOriginalFilename(uniqid());
     }
 
     /**
@@ -265,7 +272,7 @@ class ResourceFile
      *
      * @return ResourceFile
      */
-    public function setSize(int $size): ResourceFile
+    public function setSize($size): ResourceFile
     {
         $this->size = $size;
 
@@ -413,7 +420,7 @@ class ResourceFile
      *
      * @return ResourceFile
      */
-    public function setMimeType(string $mimeType): ResourceFile
+    public function setMimeType($mimeType): ResourceFile
     {
         $this->mimeType = $mimeType;
 
@@ -433,7 +440,7 @@ class ResourceFile
      *
      * @return ResourceFile
      */
-    public function setOriginalName(string $originalName): ResourceFile
+    public function setOriginalName($originalName): ResourceFile
     {
         $this->originalName = $originalName;
 
@@ -453,7 +460,7 @@ class ResourceFile
      *
      * @return ResourceFile
      */
-    public function setDimensions(array $dimensions): ResourceFile
+    public function setDimensions($dimensions): ResourceFile
     {
         $this->dimensions = $dimensions;
 
@@ -501,7 +508,7 @@ class ResourceFile
     }
 
     /**
-     * @param File|\Symfony\Component\HttpFoundation\File\UploadedFile $file
+     * @param File|UploadedFile $file
      */
     public function setFile(File $file = null): void
     {

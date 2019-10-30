@@ -63,9 +63,8 @@ class ResourceNode
     /**
      * @var ResourceFile
      *
-     * @ORM\OneToOne(targetEntity="Chamilo\CoreBundle\Entity\Resource\ResourceFile", inversedBy="resourceNode",
-     *                                                                               cascade={"remove"})
-     * @ORM\JoinColumn(name="resource_file_id", referencedColumnName="id")
+     * @ORM\OneToOne(targetEntity="Chamilo\CoreBundle\Entity\Resource\ResourceFile", inversedBy="resourceNode", orphanRemoval=true)
+     * @ORM\JoinColumn(name="resource_file_id", referencedColumnName="id", onDelete="CASCADE")
      */
     protected $resourceFile;
 

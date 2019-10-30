@@ -1169,7 +1169,9 @@ class DocumentManager
         $repo = Container::getDocumentRepository();
         /** @var CDocument $document */
         $document = $repo->find($docInfo['iid']);
-        $repo->softDelete($document);
+        //$repo->softDelete($document);
+        $repo->getEntityManager()->remove($document);
+        $repo->getEntityManager()->flush();
 
         return true;
     }

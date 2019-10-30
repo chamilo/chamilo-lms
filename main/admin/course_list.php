@@ -4,8 +4,6 @@
 /**
  * This script shows a list of courses and allows searching for courses codes
  * and names.
- *
- * @package chamilo.admin
  */
 $cidReset = true;
 require_once __DIR__.'/../inc/global.inc.php';

@@ -209,7 +209,8 @@ class AddCourse
     /**
      * Gets an array with all the course tables (deprecated?).
      *
-     * @return string[]
+     * @return array
+     *
      * @assert (null) !== null
      */
     public static function get_course_tables()
@@ -231,7 +232,7 @@ class AddCourse
         $tables[] = 'calendar_event_attachment';
         $tables[] = 'announcement';
         $tables[] = 'announcement_attachment';
-        $tables[] = 'resource';
+        //$tables[] = 'resource';
         $tables[] = 'student_publication';
         $tables[] = 'student_publication_assignment';
         $tables[] = 'document';

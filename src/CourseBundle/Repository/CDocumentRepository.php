@@ -93,7 +93,7 @@ final class CDocumentRepository extends ResourceRepository
         $path = str_replace('_', '\_', $path);
         $addedSlash = $path === '/' ? '' : '/';
 
-        $repo = $this->repository;
+        $repo = $this->getRepository();
         $qb = $repo->createQueryBuilder('d');
         $query = $qb
             ->select('SUM(d.size)')
@@ -127,7 +127,7 @@ final class CDocumentRepository extends ResourceRepository
      */
     public function getTotalSpace($courseId, $groupId = null, $sessionId = null)
     {
-        $repo = $this->repository;
+        $repo = $this->getRepository();
         $groupId = empty($groupId) ? null : $groupId;
         $sessionId = empty($sessionId) ? null : $sessionId;
 
@@ -165,7 +165,7 @@ final class CDocumentRepository extends ResourceRepository
             return false;
         }
 
-        $em = $this->entityManager;
+        $em = $this->getEntityManager();
         $link = $document->getCourseSessionResourceLink();
         $link->setVisibility($visibility);
 
@@ -235,6 +235,7 @@ final class CDocumentRepository extends ResourceRepository
     {
         $resourceNode = $document->getResourceNode();
         $children = $resourceNode->getChildren();
+        $em = $this->getEntityManager();
 
         if ($recursive) {
             if (!empty($children)) {
@@ -273,10 +274,9 @@ final class CDocumentRepository extends ResourceRepository
                 } else {
                     $link->setResourceRight([]);
                 }
-                $this->entityManager->merge($link);
+                $em->merge($link);
             }
         }
-
-        $this->entityManager->flush();
+        $em->flush();
     }
 }

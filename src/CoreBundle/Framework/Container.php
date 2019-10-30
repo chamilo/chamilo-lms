@@ -6,6 +6,7 @@ namespace Chamilo\CoreBundle\Framework;
 use Chamilo\CoreBundle\Component\Editor\Editor;
 use Chamilo\CoreBundle\Hook\Interfaces\HookEventInterface;
 use Chamilo\CoreBundle\Repository\AccessUrlRepository;
+use Chamilo\CoreBundle\Repository\CourseRepository;
 use Chamilo\CoreBundle\ToolChain;
 use Chamilo\CourseBundle\Repository\CDocumentRepository;
 use Chamilo\CourseBundle\Repository\CExerciseCategoryRepository;
@@ -373,7 +374,7 @@ class Container
     }
 
     /**
-     * @return AccessUrlRepository
+     * @return CourseRepository
      */
     public static function getCourseRepository()
     {

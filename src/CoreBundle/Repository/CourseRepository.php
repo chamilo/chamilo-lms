@@ -4,6 +4,7 @@
 namespace Chamilo\CoreBundle\Repository;
 
 use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\Resource\ResourceNode;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\ORM\QueryBuilder;
@@ -15,6 +16,26 @@ use Doctrine\ORM\QueryBuilder;
  */
 class CourseRepository extends ResourceRepository
 {
+    /**
+     * @param Course $course
+     */
+    public function deleteCourse(Course $course)
+    {
+        $em = $this->getEntityManager();
+
+        // Deleting all nodes connected to the course:
+        $node = $course->getResourceNode();
+        $children = $node->getChildren();
+        /** @var ResourceNode $child */
+        foreach ($children as $child) {
+            $em->remove($child);
+        }
+        $em->flush();
+
+        $em->remove($course);
+        $em->flush();
+    }
+
     /**
      * @param string $code
      *

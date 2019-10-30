@@ -92,16 +92,16 @@ class CDocument extends AbstractResource implements ResourceInterface
     protected $readonly;
 
     /**
-     * @var Course|null
+     * @var Course
      *
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Course", cascade={"persist"})
-     * @ORM\JoinColumn(name="c_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="c_id", referencedColumnName="id", onDelete="CASCADE" )
      */
     protected $course;
 
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Session", cascade={"persist"})
-     * @ORM\JoinColumn(name="session_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="session_id", referencedColumnName="id", onDelete="CASCADE" )
      */
     protected $session;
 
@@ -223,9 +223,9 @@ class CDocument extends AbstractResource implements ResourceInterface
      *
      * @return CDocument
      */
-    public function setSize($size)
+    public function setSize(int $size)
     {
-        $this->size = $size;
+        $this->size =  $size ?: 0;
 
         return $this;
     }

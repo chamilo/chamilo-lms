@@ -6,8 +6,10 @@ vich_uploader:
         resources:
             uri_prefix: '/'
             upload_destination: resources_fs
-            inject_on_load: true
             namer: Vich\UploaderBundle\Naming\Base64Namer
             directory_namer:
                 service: Vich\UploaderBundle\Naming\SubdirDirectoryNamer
                 options: {chars_per_dir: 1, dirs: 3}
+            inject_on_load: true
+            delete_on_update: true
+            delete_on_remove: true

@@ -11,6 +11,7 @@ use Chamilo\CourseBundle\Component\CourseCopy\CourseBuilder;
 use Chamilo\CourseBundle\Component\CourseCopy\CourseRestorer;
 use Chamilo\CourseBundle\Manager\SettingsManager;
 use ChamiloSession as Session;
+use Doctrine\ORM\EntityManager;
 
 /**
  * Class CourseManager.
@@ -18,10 +19,6 @@ use ChamiloSession as Session;
  * This is the course library for Chamilo.
  *
  * All main course functions should be placed here.
- *
- * Many functions of this library deal with providing support for
- * virtual/linked/combined courses (this was already used in several universities
- * but not available in standard Chamilo).
  *
  * There are probably some places left with the wrong code.
  */
@@ -31,7 +28,6 @@ class CourseManager
     /** This constant is used to show separate user names in the course
      * list (userportal), footer, etc */
     public const USER_SEPARATOR = ' |';
-    public const COURSE_FIELD_TYPE_CHECKBOX = 10;
     public $columns = [];
     public static $em;
     public static $toolList;
@@ -39,7 +35,7 @@ class CourseManager
     private static $manager;
 
     /**
-     * @param \Doctrine\ORM\EntityManager
+     * @param EntityManager
      */
     public static function setEntityManager($em)
     {
@@ -47,7 +43,7 @@ class CourseManager
     }
 
     /**
-     * @return \Doctrine\ORM\EntityManager
+     * @return EntityManager
      */
     public static function getEntityManager()
     {
@@ -2278,7 +2274,6 @@ class CourseManager
         $table_course_survey = Database::get_main_table(TABLE_MAIN_SHARED_SURVEY);
         $table_course_survey_question = Database::get_main_table(TABLE_MAIN_SHARED_SURVEY_QUESTION);
         $table_course_survey_question_option = Database::get_main_table(TABLE_MAIN_SHARED_SURVEY_QUESTION_OPTION);
-        $table_course_rel_url = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
 
         $table_stats_hotpots = Database::get_main_table(TABLE_STATISTIC_TRACK_E_HOTPOTATOES);
         $table_stats_attempt = Database::get_main_table(TABLE_STATISTIC_TRACK_E_ATTEMPT);
@@ -2303,7 +2298,7 @@ class CourseManager
         }
 
         $codeFiltered = $course['code'];
-        $courseId = $course['real_id']; // int
+        $courseId = $course['real_id'];
         $courseEntity = api_get_course_entity($courseId);
 
         $count = 0;
@@ -2318,8 +2313,6 @@ class CourseManager
 
         if ($count === 0) {
             self::create_database_dump($code);
-
-            $course_tables = AddCourse::get_course_tables();
 
             // Cleaning group categories
             $groupCategories = GroupManager::get_categories($course['code']);
@@ -2337,20 +2330,25 @@ class CourseManager
                 }
             }
 
+            $course_tables = AddCourse::get_course_tables();
             // Cleaning c_x tables
             if (!empty($courseId)) {
                 foreach ($course_tables as $table) {
+                    if ($table === 'document') {
+                        // Table document will be deleted by Doctrine.
+                        continue;
+                    }
                     $table = Database::get_course_table($table);
                     $sql = "DELETE FROM $table WHERE c_id = $courseId ";
                     Database::query($sql);
                 }
             }
 
-            $course_dir = api_get_path(SYS_COURSE_PATH).$course['directory'];
+            /*$course_dir = api_get_path(SYS_COURSE_PATH).$course['directory'];
             $archive_dir = api_get_path(SYS_ARCHIVE_PATH).$course['directory'].'_'.time();
             if (is_dir($course_dir)) {
                 rename($course_dir, $archive_dir);
-            }
+            }*/
 
             Category::deleteFromCourse($courseEntity);
 
@@ -2364,8 +2362,9 @@ class CourseManager
             Database::query($sql);
 
             // Delete from Course - URL
-            $sql = "DELETE FROM $table_course_rel_url WHERE c_id = $courseId";
-            Database::query($sql);
+            // Already deleted because of entities.
+            //$sql = "DELETE FROM $table_course_rel_url WHERE c_id = $courseId";
+            //Database::query($sql);
 
             $sql = "SELECT survey_id FROM $table_course_survey WHERE course_code = '$codeFiltered'";
             $result_surveys = Database::query($sql);
@@ -2431,12 +2430,12 @@ class CourseManager
             // To prevent fK mix up on some tables
             GroupManager::deleteAllGroupsFromCourse($courseId);
 
-            $app_plugin = new AppPlugin();
-            $app_plugin->performActionsWhenDeletingItem('course', $courseId);
+            $appPlugin = new AppPlugin();
+            $appPlugin->performActionsWhenDeletingItem('course', $courseId);
 
             // Delete the course from the database
-            Database::getManager()->remove($courseEntity);
-            Database::getManager()->flush();
+            $repo = Container::getCourseRepository();
+            $repo->deleteCourse($courseEntity);
 
             // delete extra course fields
             $extraFieldValues = new ExtraFieldValue('course');
@@ -3487,10 +3486,13 @@ class CourseManager
     /**
      * Deletes the course picture.
      *
+     * @deprecated resource will be used.
+     *
      * @param string $courseCode
      */
     public static function deleteCoursePicture($courseCode)
     {
+        return false;
         $course_info = api_get_course_info($courseCode);
         // course path
         $storePath = api_get_path(SYS_COURSE_PATH).$course_info['path'];

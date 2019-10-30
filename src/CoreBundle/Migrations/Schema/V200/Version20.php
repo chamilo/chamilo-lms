@@ -820,11 +820,11 @@ class Version20 extends AbstractMigrationChamilo
 
         // WIP: Document - resource
         $this->addSql('ALTER TABLE c_document CHANGE c_id c_id INT DEFAULT NULL');
-        $this->addSql('ALTER TABLE c_document ADD CONSTRAINT FK_C9FA0CBD91D79BD3 FOREIGN KEY (c_id) REFERENCES course (id)');
+        $this->addSql('ALTER TABLE c_document ADD CONSTRAINT FK_C9FA0CBD91D79BD3 FOREIGN KEY (c_id) REFERENCES course (id) ON DELETE CASCADE;');
 
         $this->addSql('ALTER TABLE c_document CHANGE session_id session_id INT DEFAULT NULL;');
         $this->addSql('UPDATE c_document SET session_id = null WHERE session_id = 0');
-        $this->addSql('ALTER TABLE c_document ADD CONSTRAINT FK_C9FA0CBD613FECDF FOREIGN KEY (session_id) REFERENCES session (id)');
+        $this->addSql('ALTER TABLE c_document ADD CONSTRAINT FK_C9FA0CBD613FECDF FOREIGN KEY (session_id) REFERENCES session (id) ON DELETE CASCADE');
         $this->addSql('CREATE INDEX IDX_C9FA0CBD613FECDF ON c_document (session_id)');
 
         $this->addSql('ALTER TABLE access_url_rel_course_category CHANGE access_url_id access_url_id INT DEFAULT NULL, CHANGE course_category_id course_category_id INT DEFAULT NULL');
@@ -916,6 +916,7 @@ class Version20 extends AbstractMigrationChamilo
             'openid_association',
             'track_stored_values',
             'track_stored_values_stack',
+            'course_module',
         ];
         foreach ($dropTables as $table) {
             if ($schema->hasTable($table)) {
@@ -941,28 +942,6 @@ class Version20 extends AbstractMigrationChamilo
             $this->addSql("INSERT INTO settings_options (variable, value, display_text) VALUES ('configure_exercise_visibility_in_course','true','Yes')");
             $this->addSql("INSERT INTO settings_options (variable, value, display_text) VALUES ('configure_exercise_visibility_in_course','false','No')");
         }
-
-        $this->addSql("ALTER TABLE c_quiz ADD resource_node_id INT DEFAULT NULL;");
-        $this->addSql("ALTER TABLE c_quiz ADD CONSTRAINT FK_B7A1C31BAD783F FOREIGN KEY (resource_node_id) REFERENCES resource_node (id)");
-        $this->addSql("CREATE UNIQUE INDEX UNIQ_B7A1C31BAD783F ON c_quiz (resource_node_id)");
-
-        $this->addSql("ALTER TABLE c_quiz_question_category ADD resource_node_id INT DEFAULT NULL");
-        $this->addSql("ALTER TABLE c_quiz_question_category ADD CONSTRAINT FK_1414369D1BAD783F FOREIGN KEY (resource_node_id) REFERENCES resource_node (id)");
-        $this->addSql("CREATE UNIQUE INDEX UNIQ_1414369D1BAD783F ON c_quiz_question_category (resource_node_id)");
-
-        $this->addSql("ALTER TABLE c_exercise_category ADD resource_node_id INT DEFAULT NULL;");
-        $this->addSql("ALTER TABLE c_exercise_category ADD CONSTRAINT FK_B94C157E1BAD783F FOREIGN KEY (resource_node_id) REFERENCES resource_node (id);");
-        $this->addSql("CREATE UNIQUE INDEX UNIQ_B94C157E1BAD783F ON c_exercise_category (resource_node_id);");
-
-        $this->addSql("ALTER TABLE course ADD resource_node_id INT DEFAULT NULL;");
-        $this->addSql("ALTER TABLE course ADD CONSTRAINT FK_169E6FB91BAD783F FOREIGN KEY (resource_node_id) REFERENCES resource_node (id)");
-        $this->addSql("CREATE UNIQUE INDEX UNIQ_169E6FB91BAD783F ON course (resource_node_id)");
-
-        $this->addSql("ALTER TABLE access_url ADD resource_node_id INT DEFAULT NULL");
-        $this->addSql("ALTER TABLE access_url ADD CONSTRAINT FK_9436187B1BAD783F FOREIGN KEY (resource_node_id) REFERENCES resource_node (id)");
-        $this->addSql("CREATE UNIQUE INDEX UNIQ_9436187B1BAD783F ON access_url (resource_node_id)");
-
-        //course_module drop ?
     }
 
     /**

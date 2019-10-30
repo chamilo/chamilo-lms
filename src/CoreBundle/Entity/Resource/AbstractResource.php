@@ -14,8 +14,8 @@ use Sylius\Component\Resource\Model\ResourceInterface;
 abstract class AbstractResource implements ResourceInterface
 {
     /**
-     * @ORM\OneToOne(targetEntity="Chamilo\CoreBundle\Entity\Resource\ResourceNode")
-     * @ORM\JoinColumn(name="resource_node_id", referencedColumnName="id")
+     * @ORM\OneToOne(targetEntity="Chamilo\CoreBundle\Entity\Resource\ResourceNode", cascade={"remove"}, orphanRemoval=true)
+     * @ORM\JoinColumn(name="resource_node_id", referencedColumnName="id", onDelete="CASCADE")
      */
     public $resourceNode;
 
@@ -25,13 +25,13 @@ abstract class AbstractResource implements ResourceInterface
     abstract public function getResourceName(): string;
 
     /**
-     * @ORM\PreUpdate()
+     * ORM\PreUpdate()
      *
      * @param LifecycleEventArgs $args
      */
-    public function preUpdate(LifecycleEventArgs $args): void
+    /*public function preUpdate(LifecycleEventArgs $args): void
     {
-    }
+    }*/
 
     /**
      * @ORM\PostUpdate()

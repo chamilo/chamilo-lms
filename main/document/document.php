@@ -75,9 +75,6 @@ $courseInfo = api_get_course_info();
 $courseId = $courseInfo['real_id'];
 $course_dir = $courseInfo['directory'].'/document';
 $usePpt2lp = api_get_setting('service_ppt2lp', 'active') == 'true';
-$sys_course_path = api_get_path(SYS_COURSE_PATH);
-$base_work_dir = $sys_course_path.$course_dir;
-$document_path = $base_work_dir;
 $currentUrl = api_get_self().'?'.api_get_cidreq();
 
 // I'm in the certification module?
@@ -275,7 +272,7 @@ switch ($action) {
                         $deleteDocument = DocumentManager::delete_document(
                             $courseInfo,
                             null,
-                            $base_work_dir,
+                            '',
                             $sessionId,
                             $_GET['deleteid'],
                             $groupIid
@@ -351,21 +348,6 @@ switch ($action) {
         $url = $publicPath."courses/$courseCode/document$path";
         header("Location: $url");
         exit;
-
-        // Check visibility of document and paths
-        if (!($isAllowedToEdit || $groupMemberWithUploadRights) &&
-            !DocumentManager::is_visible_by_id($document_id, $courseInfo, $sessionId, api_get_user_id())
-        ) {
-            api_not_allowed(true);
-        }
-        $full_file_name = $base_work_dir.$document_data['path'];
-        if (Security::check_abs_path($full_file_name, $base_work_dir.'/')) {
-            $result = DocumentManager::file_send_for_download($full_file_name, true);
-            if ($result === false) {
-                api_not_allowed(true);
-            }
-        }
-        exit;
         break;
     case 'downloadfolder':
         if (api_get_setting('students_download_folders') == 'true' || $isAllowedToEdit) {
@@ -422,6 +404,7 @@ switch ($action) {
         }
         break;
     case 'copytomyfiles':
+        break;
         // Copy a file to general my files user's
         if (api_get_setting('allow_my_files') == 'true' &&
             api_get_setting('users_copy_files') == 'true' &&
@@ -524,6 +507,7 @@ switch ($action) {
         }
         break;
     case 'convertToPdf':
+        break;
         // PDF format as target by default
         $formatTarget = $_REQUEST['formatTarget']
             ? strtolower(Security::remove_XSS($_REQUEST['formatTarget']))
@@ -606,6 +590,7 @@ if (isset($document_id) && empty($action)) {
         true,
         $sessionId
     );
+
     if ($sessionId != 0 && !$document_data) {
         // If there is a session defined and asking for the
         // document * from the session* didn't work, try it from the course
@@ -617,6 +602,8 @@ if (isset($document_id) && empty($action)) {
             0
         );
     }
+
+    //var_dump($document_data);    exit;
     // If the document is not a folder we show the document.
 
     if ($document_data) {
@@ -1087,7 +1074,6 @@ if ($isAllowedToEdit || $groupMemberWithUploadRights ||
         // Security fix: make sure they can't move files that are not in the document table
         if (!empty($document_to_move)) {
             if ($document_to_move['filetype'] === 'link') {
-                $real_path_target = $base_work_dir.$moveTo.'/';
                 if (!DocumentManager::cloudLinkExists($_course, $moveTo, $document_to_move['comment'])) {
                     DocumentManager::updateDbInfo(
                         'update',
@@ -1225,7 +1211,7 @@ if ($isAllowedToEdit ||
                             $deleteDocument = DocumentManager::delete_document(
                                 $courseInfo,
                                 null,
-                                $base_work_dir,
+                                '',
                                 $sessionId,
                                 $documentId,
                                 $groupIid
@@ -1300,7 +1286,6 @@ if ($isAllowedToEdit ||
             $added_slash = $curdirpath == '/' ? '' : '/';
             $dir_name = $curdirpath.$added_slash.api_replace_dangerous_char($post_dir_name);
             $dir_name = disable_dangerous_file($dir_name);
-            $dir_check = $base_work_dir.$dir_name;
             $visibility = empty($groupId) ? null : 1;
 
             $newFolderData = create_unexisting_directory(
@@ -1309,7 +1294,7 @@ if ($isAllowedToEdit ||
                 $sessionId,
                 api_get_group_id(),
                 $to_user_id,
-                $base_work_dir,
+                '',
                 $dir_name,
                 $post_dir_name,
                 $visibility,

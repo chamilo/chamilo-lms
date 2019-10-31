@@ -2065,8 +2065,6 @@ function api_get_course_info($course_code = null)
 
         $courseInfo = api_format_course_array($course);
 
-        Session::write('_course', $courseInfo);
-
         return $courseInfo;
     }
 
@@ -2220,8 +2218,7 @@ function api_format_course_array(Course $course)
     $courseData['code'] = $courseData['sysCode'] = $course->getCode();
     $courseData['name'] = $courseData['title'] = $course->getTitle();
     $courseData['official_code'] = $courseData['visual_code'] = $course->getVisualCode();
-    //$courseData['path'] = $course_data['directory']; // Use as key in path.
-    //$courseData['directory'] = $course_data['directory'];
+    $courseData['path'] = $courseData['directory'] = $course->getDirectory(); // Use as key in path.
     $courseData['creation_date'] = $course->getCreationDate()->format('Y-m-d H:i:s');
     $courseData['titular'] = $course->getTutorName();
     $courseData['language'] = $courseData['course_language'] = $course->getCourseLanguage();

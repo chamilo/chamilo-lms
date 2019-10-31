@@ -4287,11 +4287,11 @@ class DocumentManager
         $fileName = api_replace_dangerous_char($title);
         $filePath = api_get_path(SYS_COURSE_PATH)."{$courseData['directory']}/document$dir";
 
-        if (!is_dir($filePath)) {
+        /*if (!is_dir($filePath)) {
             mkdir($filePath, api_get_permissions_for_new_directories());
-        }
+        }*/
 
-        $fileFullPath = "$filePath/$fileName.html";
+        //$fileFullPath = "$filePath/$fileName.html";
         $fileType = 'file';
         $templateContent = file_get_contents(api_get_path(SYS_CODE_PATH).'gradebook/certificate_template/template.html');
 
@@ -4694,6 +4694,9 @@ class DocumentManager
 
             if (is_array($folders)) {
                 foreach ($folders as $folder_id => &$folder) {
+                    if (!isset($folder_titles[$folder])) {
+                        continue;
+                    }
                     $selected = ($document_id == $folder_id) ? ' selected="selected"' : '';
                     $path_parts = explode('/', $folder);
                     $folder_titles[$folder] = cut($folder_titles[$folder], 80);
@@ -6349,6 +6352,7 @@ This folder contains all sessions that have been opened in the chat. Although th
         $session = api_get_session_entity($sessionId);
         $group = api_get_group_entity($groupId);
         $readonly = (int) $readonly;
+        $fileSize = (int) $fileSize;
         $documentRepo = Container::getDocumentRepository();
 
         $parentNode = $courseEntity;

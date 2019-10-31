@@ -31,7 +31,7 @@ class IllustrationRepository extends ResourceRepository
             $illustration = new Illustration();
             $em->persist($illustration);
             $illustrationNode = $this->addResourceNode($illustration, $user, $resource);
-            $this->addResourceToEveryone($illustrationNode);
+            //$this->addResourceToEveryone($illustrationNode);
         }
         return $this->addFile($illustrationNode, $uploadFile);
     }

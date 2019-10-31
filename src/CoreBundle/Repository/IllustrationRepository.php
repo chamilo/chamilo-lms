@@ -44,11 +44,7 @@ class IllustrationRepository extends ResourceRepository
     public function getIllustrationNodeFromResource(AbstractResource $resource)
     {
         $nodeRepo = $this->getResourceNodeRepository();
-        $em = $this->getEntityManager();
-
-        $resourceType = $em->getRepository('ChamiloCoreBundle:Resource\ResourceType')->findOneBy(
-            ['name' => $this->getShortClassName()]
-        );
+        $resourceType = $this->getRepositoryResourceType();
 
         //var_dump($resource->getResourceNode()->getId());exit;
 

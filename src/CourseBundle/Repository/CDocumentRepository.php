@@ -193,16 +193,6 @@ final class CDocumentRepository extends ResourceRepository
     }
 
     /**
-     * Change all links visibility to DELETED.
-     *
-     * @param CDocument $document
-     */
-    public function softDelete($document)
-    {
-        $this->setLinkVisibility($document, ResourceLink::VISIBILITY_DELETED);
-    }
-
-    /**
      * @param int $userId
      *
      * @return array
@@ -224,59 +214,5 @@ final class CDocumentRepository extends ResourceRepository
             ->getQuery();
 
         return $query->getResult();
-    }
-
-    /**
-     * @param CDocument $document
-     * @param int       $visibility
-     * @param bool      $recursive
-     */
-    private function setLinkVisibility($document, $visibility, $recursive = true)
-    {
-        $resourceNode = $document->getResourceNode();
-        $children = $resourceNode->getChildren();
-        $em = $this->getEntityManager();
-
-        if ($recursive) {
-            if (!empty($children)) {
-                /** @var ResourceNode $child */
-                foreach ($children as $child) {
-                    $criteria = ['resourceNode' => $child];
-                    $childDocument = $this->repository->findOneBy($criteria);
-                    if ($childDocument) {
-                        $this->setLinkVisibility($childDocument, $visibility);
-                    }
-                }
-            }
-        }
-
-        $links = $resourceNode->getResourceLinks();
-
-        if (!empty($links)) {
-            /** @var ResourceLink $link */
-            foreach ($links as $link) {
-                $link->setVisibility($visibility);
-
-                if ($visibility === ResourceLink::VISIBILITY_DRAFT) {
-                    $editorMask = ResourceNodeVoter::getEditorMask();
-                    $rights = [];
-                    $resourceRight = new ResourceRight();
-                    $resourceRight
-                        ->setMask($editorMask)
-                        ->setRole(ResourceNodeVoter::ROLE_CURRENT_COURSE_TEACHER)
-                        ->setResourceLink($link)
-                    ;
-                    $rights[] = $resourceRight;
-
-                    if (!empty($rights)) {
-                        $link->setResourceRight($rights);
-                    }
-                } else {
-                    $link->setResourceRight([]);
-                }
-                $em->merge($link);
-            }
-        }
-        $em->flush();
     }
 }

@@ -9,6 +9,7 @@ use Chamilo\CoreBundle\Entity\Resource\ResourceFile;
 use Chamilo\CoreBundle\Entity\Resource\ResourceLink;
 use Chamilo\CoreBundle\Entity\Resource\ResourceNode;
 use Chamilo\CoreBundle\Entity\Resource\ResourceRight;
+use Chamilo\CoreBundle\Entity\Resource\ResourceType;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\Tool;
 use Chamilo\CoreBundle\Entity\Usergroup;
@@ -73,6 +74,14 @@ class ResourceRepository extends EntityRepository
         $this->router = $router;
         $this->resourceNodeRepository = $entityManager->getRepository('ChamiloCoreBundle:Resource\ResourceNode');
         $this->shortClassName = (new \ReflectionClass($className))->getShortName();
+    }
+
+    /**
+     * @return mixed
+     */
+    public function create()
+    {
+        return new $this->className();
     }
 
     /**
@@ -179,9 +188,7 @@ class ResourceRepository extends EntityRepository
     ): ResourceNode {
         $em = $this->getEntityManager();
 
-        $resourceType = $em->getRepository('ChamiloCoreBundle:Resource\ResourceType')->findOneBy(
-            ['name' => $this->getShortClassName()]
-        );
+        $resourceType = $this->getRepositoryResourceType();
 
         $resourceNode = new ResourceNode();
         $resourceNode
@@ -198,8 +205,21 @@ class ResourceRepository extends EntityRepository
 
         $em->persist($resourceNode);
         $em->persist($resource);
+        $em->flush();
 
         return $resourceNode;
+    }
+
+    /**
+     * @return ResourceType
+     */
+    public function getRepositoryResourceType()
+    {
+        $em = $this->getEntityManager();
+
+        return $em->getRepository('ChamiloCoreBundle:Resource\ResourceType')->findOneBy(
+            ['name' => $this->getShortClassName()]
+        );
     }
 
     /**
@@ -286,6 +306,7 @@ class ResourceRepository extends EntityRepository
 
         $em = $this->getEntityManager();
         $em->persist($link);
+        $em->flush();
     }
 
     /**
@@ -500,10 +521,80 @@ class ResourceRepository extends EntityRepository
     }
 
     /**
-     * @return mixed
+     * @param AbstractResource $resource
+     * @param int              $visibility
+     * @param bool             $recursive
      */
-    public function create()
+    private function setLinkVisibility(AbstractResource $resource, $visibility, $recursive = true)
     {
-        return new $this->className();
+        $resourceNode = $resource->getResourceNode();
+
+        $em = $this->getEntityManager();
+        if ($recursive) {
+            $children = $resourceNode->getChildren();
+            if (!empty($children)) {
+                /** @var ResourceNode $child */
+                foreach ($children as $child) {
+                    $criteria = ['resourceNode' => $child];
+                    $childDocument = $this->getRepository()->findOneBy($criteria);
+                    if ($childDocument) {
+                        $this->setLinkVisibility($childDocument, $visibility);
+                    }
+                }
+            }
+        }
+
+        $links = $resourceNode->getResourceLinks();
+
+        if (!empty($links)) {
+            /** @var ResourceLink $link */
+            foreach ($links as $link) {
+                $link->setVisibility($visibility);
+
+                if ($visibility === ResourceLink::VISIBILITY_DRAFT) {
+                    $editorMask = ResourceNodeVoter::getEditorMask();
+                    $rights = [];
+                    $resourceRight = new ResourceRight();
+                    $resourceRight
+                        ->setMask($editorMask)
+                        ->setRole(ResourceNodeVoter::ROLE_CURRENT_COURSE_TEACHER)
+                        ->setResourceLink($link)
+                    ;
+                    $rights[] = $resourceRight;
+
+                    if (!empty($rights)) {
+                        $link->setResourceRight($rights);
+                    }
+                } else {
+                    $link->setResourceRight([]);
+                }
+                $em->merge($link);
+            }
+        }
+        $em->flush();
+    }
+
+    /**
+     * Deletes the AbstractResource (CDocument, CQuiz), ResourceNode,
+     * ResourceLinks and ResourceFile as well as deletes the files phisically via Flysystem.
+     *
+     * @param AbstractResource $resource
+     *
+     */
+    public function hardDelete(AbstractResource $resource)
+    {
+        $em = $this->getEntityManager();
+        $em->remove($resource);
+        $em->flush();
+    }
+
+    /**
+     * Change all links visibility to DELETED.
+     *
+     * @param AbstractResource $resource
+     */
+    public function softDelete(AbstractResource $resource)
+    {
+        $this->setLinkVisibility($resource, ResourceLink::VISIBILITY_DELETED);
     }
 }

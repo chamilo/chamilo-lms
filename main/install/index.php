@@ -573,6 +573,7 @@ if (isset($_POST['step2'])) {
             '{{APP_INSTALLED}}' => 1,
             '{{APP_ENCRYPT_METHOD}}' => $encryptPassForm,
             '{{APP_URL_APPEND}}' => $urlAppendPath,
+            '{{APP_SECRET}}' => generateRandomToken(),
         ];
 
         error_log('Update env file');
@@ -633,6 +634,7 @@ if (isset($_POST['step2'])) {
             '{{APP_INSTALLED}}' => 1,
             '{{APP_ENCRYPT_METHOD}}' => $encryptPassForm,
             '{{APP_URL_APPEND}}' => $urlAppendPath,
+            '{{APP_SECRET}}' => generateRandomToken(),
         ];
 
         updateEnvFile($distFile, $envFile, $params);

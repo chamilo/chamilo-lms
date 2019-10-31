@@ -3750,3 +3750,11 @@ function fixPostGroupIds($connection)
     }
     error_log('End - Fix work documents');
 }
+
+/**
+ * @return string
+ */
+function generateRandomToken()
+{
+    return hash('sha1', uniqid(mt_rand(), true));
+}

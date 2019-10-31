@@ -23,7 +23,6 @@ api_protect_course_script(true);
 api_block_anonymous_users();
 $_course = api_get_course_info();
 $courseEntity = api_get_course_entity();
-$currentCourseRepository = $_course['path'];
 $isAllowToEdit = api_is_course_admin() || api_is_platform_admin();
 $course_code = api_get_course_id();
 $courseId = api_get_course_int_id();
@@ -87,7 +86,7 @@ function card_settings_close()
 $form->addHtml(card_settings_open('course_settings', get_lang('Course settings'), true, 'settings.png', 'accordionSettings'));
 
 $image = '';
-$illustrationUrl = $illustrationRepo->getIllustrationUrl($courseEntity);
+$illustrationUrl = $illustrationRepo->getIllustrationUrl($courseEntity, 'course_picture_medium');
 
 if (!empty($illustrationUrl)) {
     $image = '<div class="row"><label class="col-md-2 control-label">'.get_lang('Image').'</label> 

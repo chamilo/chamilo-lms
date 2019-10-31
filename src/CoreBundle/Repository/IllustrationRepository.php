@@ -75,17 +75,23 @@ class IllustrationRepository extends ResourceRepository
 
     /**
      * @param AbstractResource $resource
+     * @param string           $filter
      *
      * @return string
      */
-    public function getIllustrationUrl(AbstractResource $resource)
+    public function getIllustrationUrl(AbstractResource $resource, $filter = '')
     {
         $node = $this->getIllustrationNodeFromResource($resource);
 
         if ($node !== null) {
+            $params = ['id' => $node->getId()];
+            if (!empty($filter)) {
+                $params['filter'] = $filter;
+            }
+
             return $this->router->generate(
                 'core_tool_resource',
-                ['id' => $node->getId(), 'filter' => 'course_picture']
+                $params
             );
         }
 

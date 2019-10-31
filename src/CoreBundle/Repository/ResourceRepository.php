@@ -139,24 +139,6 @@ class ResourceRepository extends EntityRepository
     }
 
     /**
-     * @param AbstractResource $resource
-     *
-     * @return ResourceNode|mixed
-     */
-    /*public function getIllustration(AbstractResource $resource)
-    {
-        $node = $resource->getResourceNode();
-        // @todo also filter by the resource type = Illustration
-        $criteria = Criteria::create()->where(
-            Criteria::expr()->eq('name', 'course_picture')
-        );
-
-        $illustration = $node->getChildren()->matching($criteria)->first();
-
-        return $illustration;
-    }*/
-
-    /**
      * @param ResourceNode $resourceNode
      * @param UploadedFile $file
      *

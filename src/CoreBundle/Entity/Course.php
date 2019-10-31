@@ -1178,6 +1178,26 @@ class Course extends AbstractResource implements ResourceInterface
     }
 
     /**
+     * @return bool
+     */
+    public function isAddTeachersToSessionsCourses()
+    {
+        return $this->addTeachersToSessionsCourses;
+    }
+
+    /**
+     * @param bool $addTeachersToSessionsCourses
+     *
+     * @return Course
+     */
+    public function setAddTeachersToSessionsCourses($addTeachersToSessionsCourses): Course
+    {
+        $this->addTeachersToSessionsCourses = $addTeachersToSessionsCourses;
+
+        return $this;
+    }
+
+    /**
      * Set courseTypeId.
      *
      * @param int $courseTypeId

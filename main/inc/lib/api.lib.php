@@ -2058,39 +2058,49 @@ function api_remove_in_gradebook()
 function api_get_course_info($course_code = null)
 {
     if (!empty($course_code)) {
-        $course_code = Database::escape_string($course_code);
-        $courseId = api_get_course_int_id($course_code);
-
-        if (empty($courseId)) {
+        $course = Container::getCourseRepository()->findOneByCode($course_code);
+        if (empty($course)) {
             return [];
         }
 
-        $course_table = Database::get_main_table(TABLE_MAIN_COURSE);
-        $course_cat_table = Database::get_main_table(TABLE_MAIN_CATEGORY);
-        $sql = "SELECT
-                    course.*,
-                    course_category.code faCode,
-                    course_category.name faName
-                FROM $course_table
-                LEFT JOIN $course_cat_table
-                ON course.category_code = course_category.code
-                WHERE course.id = $courseId";
-        $result = Database::query($sql);
-        $courseInfo = [];
-        if (Database::num_rows($result) > 0) {
-            $data = Database::fetch_array($result);
-            $courseInfo = api_format_course_array($data);
-        }
+        $courseInfo = api_format_course_array($course);
+
+        Session::write('_course', $courseInfo);
 
         return $courseInfo;
     }
 
-    $_course = Session::read('_course');
-    if ($_course == '-1') {
-        $_course = [];
+    /*$course_code = Database::escape_string($course_code);
+    $courseId = api_get_course_int_id($course_code);
+    if (empty($courseId)) {
+        return [];
     }
 
-    return $_course;
+    $course_table = Database::get_main_table(TABLE_MAIN_COURSE);
+    $course_cat_table = Database::get_main_table(TABLE_MAIN_CATEGORY);
+    $sql = "SELECT
+                course.*,
+                course_category.code faCode,
+                course_category.name faName
+            FROM $course_table
+            LEFT JOIN $course_cat_table
+            ON course.category_code = course_category.code
+            WHERE course.id = $courseId";
+    $result = Database::query($sql);
+    $courseInfo = [];
+    if (Database::num_rows($result) > 0) {
+        $data = Database::fetch_array($result);
+        $courseInfo = api_format_course_array($data);
+    }
+
+    return $courseInfo;*/
+
+    $course = Session::read('_course');
+    if ($course == '-1') {
+        $course = [];
+    }
+
+    return $course;
 }
 
 /**
@@ -2168,96 +2178,79 @@ function api_get_course_info_by_id($id = 0)
         return $course;
     }
 
-    $course_table = Database::get_main_table(TABLE_MAIN_COURSE);
-    $course_cat_table = Database::get_main_table(TABLE_MAIN_CATEGORY);
-    $sql = "SELECT
-                course.*,
-                course_category.code faCode,
-                course_category.name faName,
-                course_category.id faId
-            FROM $course_table
-            LEFT JOIN $course_cat_table
-            ON course.category_code = course_category.code
-            WHERE course.id = $id";
-    $result = Database::query($sql);
-
-    if (Database::num_rows($result) > 0) {
-        $row = Database::fetch_array($result);
-        $course = api_format_course_array($row);
-
-        return $course;
+    $course = Container::getCourseRepository()->find($id);
+    if (empty($course)) {
+        return [];
     }
 
-    return [];
+    return api_format_course_array($course);
 }
 
 /**
  * Reformat the course array (output by api_get_course_info()) in order, mostly,
- * to switch from 'code' to 'id' in the array. This is a legacy feature and is
- * now possibly causing massive confusion as a new "id" field has been added to
- * the course table in 1.9.0.
+ * to switch from 'code' to 'id' in the array.
  *
- * @param $course_data
+ * @param Course $course
  *
  * @return array
  *
  * @todo eradicate the false "id"=code field of the $_course array and use the int id
  */
-function api_format_course_array($course_data)
+function api_format_course_array(Course $course)
 {
-    if (empty($course_data)) {
+    if (empty($course)) {
         return [];
     }
 
-    $_course = [];
-    $_course['id'] = $course_data['code'];
-    $_course['real_id'] = $course_data['id'];
+    $categoryCode = $course->getCategoryCode();
 
-    // Added
-    $_course['code'] = $course_data['code'];
-    $_course['name'] = $course_data['title'];
-    $_course['title'] = $course_data['title'];
-    $_course['official_code'] = $course_data['visual_code'];
-    $_course['visual_code'] = $course_data['visual_code'];
-    $_course['sysCode'] = $course_data['code'];
-    $_course['path'] = $course_data['directory']; // Use as key in path.
-    $_course['directory'] = $course_data['directory'];
-    $_course['creation_date'] = $course_data['creation_date'];
-    $_course['titular'] = $course_data['tutor_name'];
-    $_course['language'] = $course_data['course_language'];
-    $_course['extLink']['url'] = $course_data['department_url'];
-    $_course['extLink']['name'] = $course_data['department_name'];
-    $_course['categoryCode'] = $course_data['faCode'];
-    $_course['categoryName'] = $course_data['faName'];
-    $_course['visibility'] = $course_data['visibility'];
-    $_course['subscribe_allowed'] = $course_data['subscribe'];
-    $_course['subscribe'] = $course_data['subscribe'];
-    $_course['unsubscribe'] = $course_data['unsubscribe'];
-    $_course['course_language'] = $course_data['course_language'];
-    $_course['activate_legal'] = isset($course_data['activate_legal']) ? $course_data['activate_legal'] : false;
-    $_course['legal'] = $course_data['legal'];
-    $_course['show_score'] = $course_data['show_score']; //used in the work tool
-    $_course['department_name'] = $course_data['department_name'];
-    $_course['department_url'] = $course_data['department_url'];
-
-    $courseSys = api_get_path(SYS_COURSE_PATH).$course_data['directory'];
-    $webCourseHome = api_get_path(WEB_COURSE_PATH).$course_data['directory'];
-
-    // Course password
-    $_course['registration_code'] = !empty($course_data['registration_code']) ? sha1($course_data['registration_code']) : null;
-    $_course['disk_quota'] = $course_data['disk_quota'];
-    $_course['course_public_url'] = $webCourseHome.'/index.php';
-    $_course['course_sys_path'] = $courseSys.'/';
-
-    if (array_key_exists('add_teachers_to_sessions_courses', $course_data)) {
-        $_course['add_teachers_to_sessions_courses'] = $course_data['add_teachers_to_sessions_courses'];
+    $courseData = [];
+    $courseData['categoryCode'] = '';
+    $courseData['categoryName'] = '';
+    if (!empty($categoryCode)) {
+        $categoryRepo = Database::getManager()->getRepository('ChamiloCoreBundle:CourseCategory');
+        $category = $categoryRepo->findOneBy(['code' => $categoryCode]);
+        $courseData['categoryCode'] = $category->getCode();
+        $courseData['categoryName'] = $category->getName();
     }
 
+    $courseData['id'] = $courseData['real_id'] = $course->getId();
+
+    // Added
+    $courseData['code'] = $courseData['sysCode'] = $course->getCode();
+    $courseData['name'] = $courseData['title'] = $course->getTitle();
+    $courseData['official_code'] = $courseData['visual_code'] = $course->getVisualCode();
+    //$courseData['path'] = $course_data['directory']; // Use as key in path.
+    //$courseData['directory'] = $course_data['directory'];
+    $courseData['creation_date'] = $course->getCreationDate()->format('Y-m-d H:i:s');
+    $courseData['titular'] = $course->getTutorName();
+    $courseData['language'] = $courseData['course_language'] = $course->getCourseLanguage();
+    $courseData['extLink']['url'] = $courseData['department_url'] = $course->getDepartmentUrl();
+    $courseData['extLink']['name'] = $courseData['department_name']  = $course->getDepartmentName();
+
+    $courseData['visibility'] = $course->getVisibility();
+    $courseData['subscribe_allowed'] = $courseData['subscribe'] = $course->getSubscribe();
+    $courseData['unsubscribe'] = $course->getUnsubscribe();
+    $courseData['activate_legal'] = $course->getActivateLegal();
+    $courseData['legal'] = $course->getLegal();
+    $courseData['show_score'] = $course->getShowScore(); //used in the work tool
+
+    //$courseSys = api_get_path(SYS_COURSE_PATH).$course_data['directory'];
+    $webCourseHome = api_get_path(WEB_COURSE_PATH).$courseData['code'];
+
+    // Course password
+    $courseData['registration_code'] = $course->getRegistrationCode();
+    $courseData['disk_quota'] = $course->getDiskQuota();
+    $courseData['course_public_url'] = $webCourseHome.'/index.php';
+    //$courseData['course_sys_path'] = $courseSys.'/';
+    $courseData['add_teachers_to_sessions_courses'] = $course->isAddTeachersToSessionsCourses();
+    $courseData['entity'] = $course;
+
     // Course image
-    $_course['course_image_source'] = '';
+    /*$courseData['course_image_source'] = '';
     if (file_exists($courseSys.'/course-pic85x85.png')) {
         $url_image = $webCourseHome.'/course-pic85x85.png';
-        $_course['course_image_source'] = $courseSys.'/course-pic85x85.png';
+        $courseData['course_image_source'] = $courseSys.'/course-pic85x85.png';
     } else {
         $url_image = Display::return_icon(
             'course.png',
@@ -2268,14 +2261,30 @@ function api_format_course_array($course_data)
             true,
             false
         );
+    }*/
+
+    $image = Display::return_icon(
+        'course.png',
+        null,
+        null,
+        ICON_SIZE_BIG,
+        null,
+        true,
+        false
+    );
+
+    $illustration = Container::getIllustrationRepository()->getIllustrationUrl($course);
+    if (!empty($illustration)) {
+        $image = $illustration;
     }
-    $_course['course_image'] = $url_image;
+
+    $courseData['course_image'] = $image.'?filter=course_picture_small';
 
     // Course large image
-    $_course['course_image_large_source'] = '';
+    /*$courseData['course_image_large_source'] = '';
     if (file_exists($courseSys.'/course-pic.png')) {
         $url_image = $webCourseHome.'/course-pic.png';
-        $_course['course_image_large_source'] = $courseSys.'/course-pic.png';
+        $courseData['course_image_large_source'] = $courseSys.'/course-pic.png';
     } else {
         $url_image = Display::return_icon(
             'session_default.png',
@@ -2286,11 +2295,11 @@ function api_format_course_array($course_data)
             true,
             true
         );
-    }
+    }*/
 
-    $_course['course_image_large'] = $url_image;
+    $courseData['course_image_large'] = $image.'?filter=course_picture_medium';
 
-    return $_course;
+    return $courseData;
 }
 
 /**

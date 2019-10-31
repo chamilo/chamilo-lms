@@ -269,7 +269,7 @@ class CourseBuilder
         }
 
         // Add asset
-        if ($course['course_image_source'] && basename($course['course_image_source']) !== 'course.png') {
+        /*if ($course['course_image_source'] && basename($course['course_image_source']) !== 'course.png') {
             // Add course image courses/XXX/course-pic85x85.png
             $asset = new Asset(
                 $course['course_image_source'],
@@ -284,7 +284,7 @@ class CourseBuilder
                 basename($course['course_image_large_source'])
             );
             $this->course->add_resource($asset);
-        }
+        }*/
 
         // Once we've built the resources array a bit more, try to get items
         // from the item_property table and order them in the "resources" array

@@ -36,7 +36,7 @@ parameters:
         course_picture_small:
             w: 85
             h: 47
-        course_picture:
+        course_picture_medium:
             w: 400
             h: 225
         document_thumbnail_small:

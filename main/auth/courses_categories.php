@@ -325,7 +325,10 @@ function returnThumbnail($course)
         true
     );
 
-    $illustrationUrl = Container::getIllustrationRepository()->getIllustrationUrl($courseEntity);
+    $illustrationUrl = Container::getIllustrationRepository()->getIllustrationUrl(
+        $courseEntity,
+        'course_picture_medium'
+    );
     if ($illustrationUrl) {
         $courseMediumImage = $illustrationUrl;
     }

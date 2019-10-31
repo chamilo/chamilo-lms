@@ -3810,7 +3810,7 @@ class CourseManager
                 );
             }
 
-            $courseUrl = api_get_path(WEB_COURSE_PATH).$course_info['path'].'/index.php?id_session=0';
+            $courseUrl = $course_info['course_public_url'].'?id_session=0';
             $teachers = [];
             if (api_get_setting('display_teacher_in_courselist') === 'true') {
                 $teachers = self::getTeachersFromCourse(

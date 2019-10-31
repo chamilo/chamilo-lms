@@ -347,7 +347,6 @@ if ($form->validate()) {
             if (file_exists($file_to_include)) {
                 include $file_to_include;
             }*/
-
             $course_info = CourseManager::create_course($params);
 
             if (!empty($course_info)) {
@@ -363,7 +362,7 @@ if ($form->validate()) {
                     $illustration = new \Chamilo\CoreBundle\Entity\Illustration();
                     $repo->addResourceNode($illustration, api_get_user_entity(api_get_user_id()), $course);
                     $file = $repo->addFileToResource($illustration, $uploadFile);
-                    $file->setCrop($course_values['picture_crop_result']);
+                    $file->setCrop($course_values['picture_crop_result_for_resource']);
                     $em->persist($file);
                     $em->persist($illustration);
                     $em->flush();
@@ -371,7 +370,10 @@ if ($form->validate()) {
 
                 $splash = api_get_setting('course_creation_splash_screen');
                 if ($splash === 'true') {
-                    $url = Container::getRouter()->generate('chamilo_core_course_welcome', ['course' =>$course_info['code']]);
+                    $url = Container::getRouter()->generate(
+                        'chamilo_core_course_welcome',
+                        ['course' => $course_info['code']]
+                    );
                     header('Location: '.$url);
                     exit;
                 } else {

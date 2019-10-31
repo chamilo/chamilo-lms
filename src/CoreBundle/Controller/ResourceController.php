@@ -12,17 +12,17 @@ use APY\DataGridBundle\Grid\Source\Entity;
 use Chamilo\CoreBundle\Component\Utils\Glide;
 use Chamilo\CoreBundle\Entity\Resource\ResourceNode;
 use Chamilo\CoreBundle\Entity\Resource\ResourceRight;
-use Chamilo\CoreBundle\Repository\ResourceRepository;
 use Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter;
 use Chamilo\CourseBundle\Controller\CourseControllerInterface;
 use Chamilo\CourseBundle\Controller\CourseControllerTrait;
 use Chamilo\CourseBundle\Entity\CDocument;
 use Chamilo\CourseBundle\Repository\CDocumentRepository;
-use Doctrine\ORM\EntityManager;
 use FOS\RestBundle\View\View;
 use Sylius\Bundle\ResourceBundle\Event\ResourceControllerEvent;
 use Sylius\Component\Resource\Exception\UpdateHandlingException;
 use Sylius\Component\Resource\ResourceActions;
+use Symfony\Component\Filesystem\Exception\FileNotFoundException;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
@@ -154,7 +154,7 @@ class ResourceController extends BaseController implements CourseControllerInter
      * @param Request $request
      * @param string  $fileType
      *
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse|Response|null
+     * @return RedirectResponse|Response|null
      */
     public function createResource(Request $request, $fileType = 'file')
     {
@@ -409,90 +409,15 @@ class ResourceController extends BaseController implements CourseControllerInter
     public function getResourceFileAction(Request $request, Glide $glide): Response
     {
         $id = $request->get('id');
+        $filter = $request->get('filter');
         $em = $this->getDoctrine();
         $resourceNode = $em->getRepository('ChamiloCoreBundle:Resource\ResourceNode')->find($id);
 
-        return $this->showFile($resourceNode, $glide, 'show', '');
-
-
-        /*
-        $fs = $documentRepo->getFileSystem();
-        $stream = $fs->readStream($filePath);
-        $response = new StreamedResponse(function () use ($stream): void {
-            stream_copy_to_stream($stream, fopen('php://output', 'wb'));
-        });
-        $disposition = $response->headers->makeDisposition(
-            $forceDownload ? ResponseHeaderBag::DISPOSITION_ATTACHMENT : ResponseHeaderBag::DISPOSITION_INLINE,
-            Transliterator::transliterate($fileName)
-        );
-        $response->headers->set('Content-Disposition', $disposition);
-        $response->headers->set('Content-Type', $mimeType ?: 'application/octet-stream');
-
-        return $response;*/
-    }
-
-    /**
-     * @param ResourceNode $resourceNode
-     * @param              $glide
-     * @param              $type
-     * @param              $filter
-     *
-     * @return StreamedResponse
-     * @throws \League\Flysystem\FileNotFoundException
-     */
-    private function showFile(ResourceNode $resourceNode, Glide $glide, $type, $filter)
-    {
-        $fs = $this-> container->get('oneup_flysystem.resources_filesystem');
-
-        $this->denyAccessUnlessGranted(
-            ResourceNodeVoter::VIEW,
-            $resourceNode,
-            'Unauthorised access to resource'
-        );
-        $resourceFile = $resourceNode->getResourceFile();
-
-        if (!$resourceFile) {
-            throw new NotFoundHttpException();
+        if ($resourceNode === null) {
+            throw new FileNotFoundException('Not found');
         }
 
-        $fileName = $resourceNode->getName();
-        $filePath = $resourceFile->getFile()->getPathname();
-        $mimeType = $resourceFile->getMimeType();
-
-        switch ($type) {
-            case 'download':
-                $forceDownload = true;
-                break;
-            case 'show':
-            default:
-                $forceDownload = false;
-                // See filter definition
-                if (!empty($filter)) {
-                    $server = $glide->getServer();
-                    $filter = $glide->getFilters()[$filter] ?? [];
-
-                    $crop = $resourceFile->getCrop();
-                    if (!empty($filter)) {
-                        $filter['crop'] = $crop;
-                    }
-
-                    return $server->getImageResponse($filePath, $filter);
-                }
-                break;
-        }
-
-        $stream = $fs->readStream($filePath);
-        $response = new StreamedResponse(function () use ($stream): void {
-            stream_copy_to_stream($stream, fopen('php://output', 'wb'));
-        });
-        $disposition = $response->headers->makeDisposition(
-            $forceDownload ? ResponseHeaderBag::DISPOSITION_ATTACHMENT : ResponseHeaderBag::DISPOSITION_INLINE,
-            Transliterator::transliterate($fileName)
-        );
-        $response->headers->set('Content-Disposition', $disposition);
-        $response->headers->set('Content-Type', $mimeType ?: 'application/octet-stream');
-
-        return $response;
+        return $this->showFile($request, $resourceNode, $glide, 'show', $filter);
     }
 
     /**
@@ -526,7 +451,7 @@ class ResourceController extends BaseController implements CourseControllerInter
         /** @var ResourceNode $resourceNode */
         $resourceNode = $document->getResourceNode();
 
-        return $this->showFile($resourceNode, $glide, $type, $filter);
+        return $this->showFile($request, $resourceNode, $glide, $type, $filter);
     }
 
     /**
@@ -623,5 +548,72 @@ class ResourceController extends BaseController implements CourseControllerInter
         ;
 
         return $this->viewHandler->handle($configuration, $view);
+    }
+    /**
+     * @param Request      $request
+     * @param ResourceNode $resourceNode
+     * @param Glide        $glide
+     * @param              $type
+     * @param string       $filter
+     *
+     * @return mixed|StreamedResponse
+     * @throws \League\Flysystem\FileNotFoundException
+     */
+    private function showFile(Request $request, ResourceNode $resourceNode, Glide $glide, $type, $filter = '')
+    {
+        $fs = $this->container->get('oneup_flysystem.resources_filesystem');
+
+        $this->denyAccessUnlessGranted(
+            ResourceNodeVoter::VIEW,
+            $resourceNode,
+            'Unauthorised access to resource'
+        );
+        $resourceFile = $resourceNode->getResourceFile();
+
+        if (!$resourceFile) {
+            throw new NotFoundHttpException();
+        }
+
+        $fileName = $resourceNode->getName();
+        $filePath = $resourceFile->getFile()->getPathname();
+        $mimeType = $resourceFile->getMimeType();
+
+        switch ($type) {
+            case 'download':
+                $forceDownload = true;
+                break;
+            case 'show':
+            default:
+                $forceDownload = false;
+                $server = $glide->getServer();
+                $params = $request->query->all();
+
+                // The filter overwrites the params from get
+                if (!empty($filter)) {
+                    $params = $glide->getFilters()[$filter] ?? [];
+                }
+
+                // The image was cropped by the user, so we force to render this version, no matter other parameters.
+                $crop = $resourceFile->getCrop();
+                if (!empty($crop)) {
+                    $params['crop'] = $crop;
+                }
+
+                return $server->getImageResponse($filePath, $params);
+                break;
+        }
+
+        $stream = $fs->readStream($filePath);
+        $response = new StreamedResponse(function () use ($stream): void {
+            stream_copy_to_stream($stream, fopen('php://output', 'wb'));
+        });
+        $disposition = $response->headers->makeDisposition(
+            $forceDownload ? ResponseHeaderBag::DISPOSITION_ATTACHMENT : ResponseHeaderBag::DISPOSITION_INLINE,
+            Transliterator::transliterate($fileName)
+        );
+        $response->headers->set('Content-Disposition', $disposition);
+        $response->headers->set('Content-Type', $mimeType ?: 'application/octet-stream');
+
+        return $response;
     }
 }

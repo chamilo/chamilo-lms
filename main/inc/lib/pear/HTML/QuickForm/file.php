@@ -267,6 +267,7 @@ class HTML_QuickForm_file extends HTML_QuickForm_input
             var $inputFile = $(\'#'.$id.'\'),
                 $image = $(\'#'.$id.'_preview_image\'),
                 $input = $(\'[name="'.$id.'_crop_result"]\'),
+                $inputForResource = $(\'[name="'.$id.'_crop_result_for_resource"]\'),
                 $cropButton = $(\'#'.$id.'_crop_button\'),
                 $formGroup = $(\'#'.$id.'-form-group\');
 
@@ -300,7 +301,10 @@ class HTML_QuickForm_file extends HTML_QuickForm_input
                         scalable: '.$scalable.',
                         crop: function(e) {
                             // Output the result data for cropping image.
-                            $input.val(event.detail.x + \',\' + event.detail.y + \',\' + event.detail.width + \',\' + event.detail.height);
+                            $input.val(event.detail.x + \',\' + event.detail.y + \',\' + event.detail.width + \',\' + event.detail.height);                            
+                            $inputForResource.val(
+                                parseInt(event.detail.width) + \',\' + parseInt(event.detail.height) + \',\' +  parseInt(event.detail.x) + \',\' + parseInt(event.detail.y)
+                            );                            
                         }
                     });
             }
@@ -308,12 +312,9 @@ class HTML_QuickForm_file extends HTML_QuickForm_input
             $inputFile.on(\'change\', function () {
                 var inputFile = this,
                     file = inputFile.files[0],
-                    fileReader = new FileReader();
-                    
+                    fileReader = new FileReader();                    
                     $(".img-box").hide();
                     $(".img-preview").show();
-
-
                 if (!isValidType(file)) {
                     $formGroup.hide();
                     $cropButton.hide();

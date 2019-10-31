@@ -10,7 +10,6 @@ use Chamilo\CoreBundle\Framework\Container;
  *
  * @package chamilo.auth
  */
-
 if (isset($_REQUEST['action']) && Security::remove_XSS($_REQUEST['action']) !== 'subscribe') {
     $stok = Security::get_token();
 } else {

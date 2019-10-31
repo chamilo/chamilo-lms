@@ -1,8 +1,6 @@
 # Settings parameters that will be used in the 'services' section
 parameters:
-
     chamilo_core.entity.course: Chamilo\CoreBundle\Entity\Course
-
     chamilo_core.entity.manager.session_manager.class: Chamilo\CoreBundle\Entity\Manager\SessionManager
     chamilo_core.entity.session: Chamilo\CoreBundle\Entity\Session
 

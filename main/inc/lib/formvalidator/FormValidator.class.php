@@ -958,6 +958,7 @@ EOT;
                 </div>'
                 );
                 $this->addHidden($id.'_crop_result', '');
+                $this->addHidden($id.'_crop_result_for_resource', '');
                 $this->addHidden($id.'_crop_image_base_64', '');
             }
         } catch (HTML_Quick | Form_Error $e) {

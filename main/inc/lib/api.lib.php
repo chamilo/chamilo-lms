@@ -8753,6 +8753,7 @@ function api_format_time($time, $originFormat = 'php')
  *
  * @param string $name            The new directory name
  * @param string $parentDirectory Directory parent directory name
+ *
  * @deprecated use Resources
  *
  * @return bool Return true if the directory was create. Otherwise return false
@@ -9107,6 +9108,7 @@ function api_is_student_view_active()
  * @param array  $file
  * @param int    $itemId
  * @param string $cropParameters
+ *
  * @deprecated use Resources
  *
  * @return array|bool

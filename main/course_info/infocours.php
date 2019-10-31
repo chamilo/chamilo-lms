@@ -86,15 +86,12 @@ function card_settings_close()
 $form->addHtml(card_settings_open('course_settings', get_lang('Course settings'), true, 'settings.png', 'accordionSettings'));
 
 $image = '';
-// Display course picture
-$course_path = api_get_path(SYS_COURSE_PATH).$currentCourseRepository; // course path
-
 $illustration = $courseEntity->getResourceNodeIllustration();
 if (!empty($illustration)) {
     $course_medium_image = Container::getRouter()->generate(
-         'core_tool_resource',
-         ['id' => $illustration->getId()]
-     );
+        'core_tool_resource',
+        ['id' => $illustration->getId(), 'filter' => 'course_picture']
+    );
     $image = '<div class="row"><label class="col-md-2 control-label">'.get_lang('Image').'</label> 
                     <div class="col-md-8"><img class="img-thumbnail" src="'.$course_medium_image.'" /></div></div>';
 }
@@ -964,7 +961,7 @@ if ($form->validate() && $isEditable) {
         $repo->addResourceNode($illustration, api_get_user_entity(api_get_user_id()), $courseEntity);
         $file = $repo->addFileToResource($illustration, $uploadFile);
         if ($file) {
-            $file->setCrop($updateValues['picture_crop_result']);
+            $file->setCrop($updateValues['picture_crop_result_for_resource']);
             $em->persist($file);
             $em->persist($illustration);
             $em->flush();

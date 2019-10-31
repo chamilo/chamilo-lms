@@ -225,7 +225,7 @@ class CDocument extends AbstractResource implements ResourceInterface
      */
     public function setSize(int $size)
     {
-        $this->size =  $size ?: 0;
+        $this->size = $size ?: 0;
 
         return $this;
     }

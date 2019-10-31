@@ -225,7 +225,6 @@ class ResourceFile
         return $this;
     }
 
-
     /**
      * @return string
      */

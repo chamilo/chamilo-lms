@@ -41,11 +41,6 @@ RewriteRule ^courses/([^/]+)/upload/([^/]+)/(.*)$ main/document/download_uploade
 # Rewrite everything in the work folder
 RewriteRule ^courses/([^/]+)/work/(.*)$ main/work/download.php?file=work/$2&cDir=$1 [QSA,L]
 
-#RewriteRule ^courses/([^/]+)/course-pic85x85.png$ main/inc/ajax/course.ajax.php?a=get_course_image&code=$1&image=course_image_source [QSA,L]
-#RewriteRule ^courses/([^/]+)/course-pic.png$ main/inc/ajax/course.ajax.php?a=get_course_image&code=$1&image=course_image_large_source [QSA,L]
-RewriteRule ^courses/([^/]+)/course-pic85x85.png$ var/courses/$1/course-pic85x85.png [QSA,L]
-RewriteRule ^courses/([^/]+)/course-pic.png$ var/courses/$1/course-pic.png [QSA,L]
-
 # Redirect all courses/ to app/courses/
 RewriteRule ^courses/([^/]+)/(.*)$ app/courses/$1/$2 [QSA,L]
 

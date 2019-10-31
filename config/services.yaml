@@ -27,6 +27,9 @@ parameters:
         #cache: 'var/cache/resource/'
 
     glide_media_filters:
+        course_picture:
+            w: 400
+            h: 225
         document_thumbnail_small:
             w: 500
 
@@ -176,4 +179,3 @@ imports:
 #    arguments:
 #        - "%kernel.root_dir%/../doclib/uploads"
 #        - true
-

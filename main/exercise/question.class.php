@@ -946,7 +946,8 @@ abstract class Question
         $c_id = $this->course['real_id'];
         $categoryId = $this->category;
 
-        $repo = Container::getQuestionCategoryRepository();
+        $questionRepo = Container::getQuestionRepository();
+        $exerciseRepo = Container::getExerciseRepository();
 
         // question already exists
         if (!empty($id)) {
@@ -1038,18 +1039,16 @@ abstract class Question
                     $this->id
                 );
 
-                /** @var CQuizQuestionCategory $questionCategory */
-                /*$questionCategory = $repo->find($this->id);
-                $repo->addResourceNode($questionCategory, api_get_user_entity(api_get_user_id()));
-                $repo->addResourceToCourse($questionCategory->getResourceNode());*/
-
-                /*api_item_property_update(
-                    $this->course,
-                    TOOL_QUIZ,
-                    $this->id,
-                    'QuizQuestionAdded',
-                    api_get_user_id()
-                );*/
+                $questionEntity = $questionRepo->find($this->id);
+                $exerciseEntity = $exerciseRepo->find($exerciseId);
+                $node = $questionRepo->addResourceNode($questionEntity, api_get_user_entity(api_get_user_id()), $exerciseEntity);
+                $questionRepo->addResourceToCourse(
+                    $node,
+                    \Chamilo\CoreBundle\Entity\Resource\ResourceLink::VISIBILITY_PUBLISHED,
+                    api_get_course_entity(),
+                    api_get_session_entity(),
+                    api_get_group_entity()
+                );
 
                 // If hotspot, create first answer
                 if ($type == HOT_SPOT || $type == HOT_SPOT_ORDER) {

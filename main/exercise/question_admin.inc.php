@@ -5,8 +5,6 @@
  * This script allows to manage the statements of questions.
  * It is included from the script admin.php.
  *
- * @package chamilo.exercise
- *
  * @author Olivier Brouckaert
  *
  * @version $Id: question_admin.inc.php 22126 2009-07-15 22:38:39Z juliomontoya $

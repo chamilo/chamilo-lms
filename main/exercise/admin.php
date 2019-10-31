@@ -118,15 +118,6 @@ if (isset($_REQUEST['convertAnswer'])) {
 $objAnswer = Session::read('objAnswer');
 $_course = api_get_course_info();
 
-// document path
-$documentPath = api_get_path(SYS_COURSE_PATH).$_course['path'].'/document';
-
-// picture path
-$picturePath = $documentPath.'/images';
-
-// audio path
-$audioPath = $documentPath.'/audio';
-
 // tables used in the exercise tool
 if (!empty($_GET['action']) && $_GET['action'] == 'exportqti2' && !empty($_GET['questionId'])) {
     require_once 'export/qti2/qti2_export.php';

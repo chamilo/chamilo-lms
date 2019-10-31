@@ -23,7 +23,7 @@ use Doctrine\DBAL\Types\Type;
  */
 class Exercise
 {
-    const PAGINATION_ITEMS_PER_PAGE = 20;
+    public const PAGINATION_ITEMS_PER_PAGE = 20;
     public $iId;
     public $id;
     public $name;
@@ -968,6 +968,7 @@ class Exercise
         if (!empty($questions_by_category)) {
             $newCategoryList = [];
             $em = Database::getManager();
+            $repo = $em->getRepository('ChamiloCoreBundle:CQuizCategory');
 
             foreach ($questions_by_category as $categoryId => $questionList) {
                 $cat = new TestCategory();
@@ -987,7 +988,6 @@ class Exercise
                     } else {
                         $categoryEntity = $parentsLoaded[$cat['parent_id']];
                     }
-                    $repo = $em->getRepository('ChamiloCoreBundle:CQuizCategory');
                     $path = $repo->getPath($categoryEntity);
 
                     $index = 0;
@@ -1527,6 +1527,7 @@ class Exercise
         $expired_time = (int) $this->expired_time;
 
         $repo = Container::getExerciseRepository();
+        $courseEntity = api_get_course_entity($this->course_id);
 
         // Exercise already exists
         if ($id) {
@@ -1690,7 +1691,7 @@ class Exercise
                 Database::query($sql);
 
                 $exercise = $repo->find($this->id);
-                $node = $repo->addResourceNode($exercise, api_get_user_entity(api_get_user_id()));
+                $node = $repo->addResourceNode($exercise, api_get_user_entity(api_get_user_id()), $courseEntity);
                 $repo->addResourceToCourse(
                     $node,
                     ResourceLink::VISIBILITY_PUBLISHED,
@@ -1700,7 +1701,7 @@ class Exercise
                 );
 
                 // insert into the item_property table
-                api_item_property_update(
+                /*api_item_property_update(
                     $this->course,
                     TOOL_QUIZ,
                     $this->id,
@@ -1715,7 +1716,7 @@ class Exercise
                     TOOL_QUIZ,
                     null,
                     $this->course
-                );
+                );*/
 
                 if (api_get_setting('search_enabled') == 'true' && extension_loaded('xapian')) {
                     $this->search_engine_save();
@@ -1851,7 +1852,11 @@ class Exercise
                 WHERE c_id = ".$this->course_id." AND id = ".intval($this->id);
         Database::query($sql);
 
-        api_item_property_update(
+        $repo = Container::getExerciseRepository();
+        $exercise = $repo->find($this->iId);
+        $repo->softDelete($exercise);
+
+        /*api_item_property_update(
             $this->course,
             TOOL_QUIZ,
             $this->id,
@@ -1864,7 +1869,7 @@ class Exercise
             $this->id,
             'delete',
             api_get_user_id()
-        );
+        );*/
 
         Skill::deleteSkillsFromItem($this->iId, ITEM_TYPE_EXERCISE);
 

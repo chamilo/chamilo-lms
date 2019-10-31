@@ -3,6 +3,8 @@
 
 namespace Chamilo\CourseBundle\Entity;
 
+use Chamilo\CoreBundle\Entity\Resource\AbstractResource;
+use Chamilo\CoreBundle\Entity\Resource\ResourceInterface;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -17,7 +19,7 @@ use Doctrine\ORM\Mapping as ORM;
  * )
  * @ORM\Entity()
  */
-class CQuizQuestion
+class CQuizQuestion extends AbstractResource implements ResourceInterface
 {
     /**
      * @var int
@@ -385,5 +387,31 @@ class CQuizQuestion
     public function getIid()
     {
         return $this->iid;
+    }
+
+    /**
+     * Resource identifier.
+     *
+     * @return int
+     */
+    public function getResourceIdentifier(): int
+    {
+        return $this->getIid();
+    }
+
+    /**
+     * @return string
+     */
+    public function getResourceName(): string
+    {
+        return $this->getQuestion();
+    }
+
+    /**
+     * @return string
+     */
+    public function getToolName(): string
+    {
+        return 'CQuizQuestion';
     }
 }

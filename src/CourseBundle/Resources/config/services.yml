@@ -40,6 +40,10 @@ services:
         arguments:
             $className: 'Chamilo\CourseBundle\Entity\CExerciseCategory'
 
+    Chamilo\CourseBundle\Repository\CQuizQuestionRepository:
+        arguments:
+            $className: 'Chamilo\CourseBundle\Entity\CQuizQuestion'
+
     # Event Listeners
     chamilo_course.listener.course:
         class: Chamilo\CourseBundle\EventListener\CourseListener

@@ -223,7 +223,7 @@ services:
             - exercise/exercise.php
             - quiz.gif
             - '@chamilo_course.settings.exercise'
-            - [CQuiz, CQuizQuestionCategory, CQuizQuestionCategory, CExerciseCategory]
+            - [CQuiz, CQuizQuestion, CQuizQuestionCategory, CQuizQuestionCategory, CExerciseCategory]
             - 0
         tags:
             - {name: chamilo_core.tool}

@@ -9,9 +9,11 @@ use Chamilo\CoreBundle\Repository\AccessUrlRepository;
 use Chamilo\CoreBundle\Repository\CourseRepository;
 use Chamilo\CoreBundle\Repository\IllustrationRepository;
 use Chamilo\CoreBundle\ToolChain;
+use Chamilo\CourseBundle\Entity\CQuizQuestion;
 use Chamilo\CourseBundle\Repository\CDocumentRepository;
 use Chamilo\CourseBundle\Repository\CExerciseCategoryRepository;
 use Chamilo\CourseBundle\Repository\CQuizQuestionCategoryRepository;
+use Chamilo\CourseBundle\Repository\CQuizQuestionRepository;
 use Chamilo\CourseBundle\Repository\CQuizRepository;
 use Chamilo\PageBundle\Entity\Page;
 use Chamilo\SettingsBundle\Manager\SettingsManager;
@@ -346,6 +348,14 @@ class Container
     public static function getExerciseCategoryRepository()
     {
         return self::$container->get('Chamilo\CourseBundle\Repository\CExerciseCategoryRepository');
+    }
+
+    /**
+     * @return CQuizQuestionRepository
+     */
+    public static function getQuestionRepository()
+    {
+        return self::$container->get('Chamilo\CourseBundle\Repository\CQuizQuestionRepository');
     }
 
     /**

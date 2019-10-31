@@ -585,21 +585,24 @@ class ResourceController extends BaseController implements CourseControllerInter
             case 'show':
             default:
                 $forceDownload = false;
-                $server = $glide->getServer();
-                $params = $request->query->all();
+                if (strpos($mimeType, 'image') !== false) {
+                    $server = $glide->getServer();
+                    $params = $request->query->all();
 
-                // The filter overwrites the params from get
-                if (!empty($filter)) {
-                    $params = $glide->getFilters()[$filter] ?? [];
+                    // The filter overwrites the params from get
+                    if (!empty($filter)) {
+                        $params = $glide->getFilters()[$filter] ?? [];
+                    }
+
+                    // The image was cropped manually by the user, so we force to render this version,
+                    // no matter other crop parameters.
+                    $crop = $resourceFile->getCrop();
+                    if (!empty($crop)) {
+                        $params['crop'] = $crop;
+                    }
+
+                    return $server->getImageResponse($filePath, $params);
                 }
-
-                // The image was cropped by the user, so we force to render this version, no matter other parameters.
-                $crop = $resourceFile->getCrop();
-                if (!empty($crop)) {
-                    $params['crop'] = $crop;
-                }
-
-                return $server->getImageResponse($filePath, $params);
                 break;
         }
 

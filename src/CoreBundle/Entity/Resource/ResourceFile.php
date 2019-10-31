@@ -228,7 +228,7 @@ class ResourceFile
     /**
      * @return string
      */
-    public function getCrop(): string
+    public function getCrop()
     {
         return $this->crop;
     }

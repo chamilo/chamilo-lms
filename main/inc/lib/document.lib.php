@@ -2743,18 +2743,18 @@ class DocumentManager
     /**
      * Uploads a document.
      *
-     * @param array  $files                   the $_FILES variable
+     * @param array  $files          the $_FILES variable
      * @param string $path
      * @param string $title
      * @param string $comment
-     * @param int    $unzip                   unzip or not the file
-     * @param string $ifExists                overwrite, rename or warn (default)
-     * @param bool   $index_document          index document (search xapian module)
-     * @param bool   $show_output             print html messages
+     * @param int    $unzip          unzip or not the file
+     * @param string $ifExists       overwrite, rename or warn (default)
+     * @param bool   $index_document index document (search xapian module)
+     * @param bool   $show_output    print html messages
      * @param string $fileKey
      * @param bool   $treat_spaces_as_hyphens
      * @param int    $parentId
-     * @param $content
+     * @param string $content
      *
      * @return CDocument|false
      */

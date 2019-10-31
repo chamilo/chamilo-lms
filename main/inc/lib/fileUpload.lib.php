@@ -1,6 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\Resource\ResourceLink;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CDocument;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -275,6 +276,9 @@ function handle_uploaded_document(
         return false;
     }
 
+    $defaultVisibility = api_get_setting('course.active_tools_on_create');
+    $defaultVisibility = in_array('document', $defaultVisibility) ? ResourceLink::VISIBILITY_PUBLISHED : ResourceLink::VISIBILITY_DRAFT;
+
     // If the want to unzip, check if the file has a .zip (or ZIP,Zip,ZiP,...) extension
     if ($unzip == 1 && preg_match('/.zip$/', strtolower($uploadedFile['name']))) {
         return unzip_uploaded_document(
@@ -394,7 +398,7 @@ function handle_uploaded_document(
                             $document,
                             $filePath,
                             $content,
-                            null,
+                            $defaultVisibility,
                             null,
                             $group
                         );
@@ -422,7 +426,7 @@ function handle_uploaded_document(
                             $documentTitle,
                             $comment,
                             0,
-                            null,
+                            $defaultVisibility,
                             $groupId,
                             $sessionId,
                             0,
@@ -474,7 +478,7 @@ function handle_uploaded_document(
                         $documentTitle,
                         $comment, // comment
                         0, // read only
-                        true, // save visibility
+                        $defaultVisibility, // save visibility
                         $groupId,
                         $sessionId,
                         0,
@@ -529,7 +533,7 @@ function handle_uploaded_document(
                             $documentTitle,
                             $comment,
                             0,
-                            true,
+                            $defaultVisibility,
                             $groupId,
                             $sessionId,
                             0,

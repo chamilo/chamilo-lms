@@ -36,7 +36,7 @@ if (!empty($action)) {
                 $_POST['code'],
                 $_POST['name'],
                 $_POST['auth_course_child'],
-                $categoryId
+                $parentInfo ? $parentInfo['id'] : null
             );
 
             $errorMsg = Display::return_message(get_lang('Created'));
@@ -184,10 +184,12 @@ if ($action == 'add' || $action == 'edit') {
     echo '<div class="actions">';
     $link = null;
     if (!empty($parentInfo)) {
-        $parentCode = $parentInfo['parent_id'];
+        $realParentInfo = $parentInfo['parent_id'] ? CourseCategory::getCategoryById($parentInfo['parent_id']) : [];
+        $realParentCode = $realParentInfo ? $realParentInfo['code'] : '';
+
         echo Display::url(
             Display::return_icon('back.png', get_lang('Back'), '', ICON_SIZE_MEDIUM),
-            api_get_path(WEB_CODE_PATH).'admin/course_category.php?category='.$parentCode
+            api_get_path(WEB_CODE_PATH).'admin/course_category.php?category='.$realParentCode
         );
     }
 
@@ -206,7 +208,9 @@ if ($action == 'add' || $action == 'edit') {
     if (!empty($parentInfo)) {
         echo Display::page_subheader($parentInfo['name'].' ('.$parentInfo['code'].')');
     }
-    echo CourseCategory::listCategories($category);
+    echo CourseCategory::listCategories(
+        CourseCategory::getCategory($category)
+    );
 }
 
 Display::display_footer();

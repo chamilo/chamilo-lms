@@ -59,15 +59,15 @@ class CourseCategory
     }
 
     /**
-     * @param string $category Optional. Parent category code
+     * @param int|null $category Optional. Parent category ID.
      *
      * @return array
      */
-    public static function getCategories($category = '')
+    public static function getCategories($category = null)
     {
         $tbl_category = Database::get_main_table(TABLE_MAIN_CATEGORY);
         $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
-        $category = Database::escape_string($category);
+        $category = (int) $category;
         $conditions = null;
 
         $table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE_CATEGORY);
@@ -79,8 +79,8 @@ class CourseCategory
         }
 
         $parentIdCondition = " AND (t1.parent_id IS NULL OR t1.parent_id = '' )";
-        if (!empty($category)) {
-            $parentIdCondition = " AND t1.parent_id = '$category' ";
+        if ($category) {
+            $parentIdCondition = " AND t1.parent_id = $category ";
         }
 
         $sql = "SELECT
@@ -94,7 +94,7 @@ class CourseCategory
                 FROM $tbl_category t1
                 $conditions
                 LEFT JOIN $tbl_category t2
-                ON t1.code = t2.parent_id
+                ON t1.id = t2.parent_id
                 LEFT JOIN $tbl_course t3
                 ON t3.category_code=t1.code
                 WHERE
@@ -175,7 +175,7 @@ class CourseCategory
         $table = Database::get_main_table(TABLE_MAIN_CATEGORY);
         $code = trim($code);
         $name = trim($name);
-        $parent_id = trim($parent_id);
+        $parent_id = (int) $parent_id;
 
         $code = CourseManager::generate_course_code($code);
         $sql = "SELECT 1 FROM $table
@@ -224,16 +224,16 @@ class CourseCategory
         $categoryId = Database::escape_string($categoryId);
         $delta = (int) $delta;
         // First get to the highest level possible in the tree
-        $result = Database::query("SELECT parent_id FROM $table WHERE code = '$categoryId'");
+        $result = Database::query("SELECT parent_id FROM $table WHERE id = '$categoryId'");
         $row = Database::fetch_array($result);
-        if ($row !== false and $row['parent_id'] != 0) {
+        if ($row !== false && $row['parent_id'] != 0) {
             // if a parent was found, enter there to see if he's got one more parent
             self::updateParentCategoryChildrenCount($row['parent_id'], $delta);
         }
         // Now we're at the top, get back down to update each child
-        $sql = "UPDATE $table SET children_count = (children_count - ".abs($delta).") WHERE code = '$categoryId'";
+        $sql = "UPDATE $table SET children_count = (children_count - ".abs($delta).") WHERE id = '$categoryId'";
         if ($delta >= 0) {
-            $sql = "UPDATE $table SET children_count = (children_count + $delta) WHERE code = '$categoryId'";
+            $sql = "UPDATE $table SET children_count = (children_count + $delta) WHERE id = '$categoryId'";
         }
         Database::query($sql);
     }
@@ -483,14 +483,14 @@ class CourseCategory
     }
 
     /**
-     * @param string $categorySource
+     * @param array $categorySource
      *
      * @return string
      */
-    public static function listCategories($categorySource)
+    public static function listCategories(array $categorySource = [])
     {
-        $categories = self::getCategories($categorySource);
-        $categorySource = Security::remove_XSS($categorySource);
+        $categories = self::getCategories($categorySource ? $categorySource['id'] : null);
+        $categoryCode = $categorySource ? Security::remove_XSS($categorySource['code']) : '';
 
         if (count($categories) > 0) {
             $table = new HTML_Table(['class' => 'data_table']);
@@ -507,7 +507,7 @@ class CourseCategory
                 $column++;
             }
             $row++;
-            $mainUrl = api_get_path(WEB_CODE_PATH).'admin/course_category.php?category='.$categorySource;
+            $mainUrl = api_get_path(WEB_CODE_PATH).'admin/course_category.php?category='.$categoryCode;
 
             $editIcon = Display::return_icon(
                 'edit.png',

@@ -3,26 +3,6 @@
     <nav class="sidebar-nav">
         {% set menu = knp_menu_get('menuApp') %}
         {{ knp_menu_render(menu, {'ancestorClass': 'current_open open', 'template': '@ChamiloTheme/Menu/left_menu.html.twig'}) }}
-        <ul class="navbar-nav">
-            <li class="nav-item">
-                <a class='nav-link' href="https://docs.chamilo.org/">
-                    <i class="far fa-file-alt"></i>
-                    {{ "Documentation"|trans }}
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class='nav-link' href="https://forum.chamilo.org/">
-                    <i class="fa fa-users"></i>
-                    {{ "Forums"|trans }}
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class='nav-link' href="https://github.com/chamilo/chamilo-lms">
-                    <i class="fab fa-github"></i>
-                    {{ "GithubRepository"|trans }}
-                </a>
-            </li>
-        </ul>
     </nav>
     {#<button class="sidebar-minimizer brand-minimizer" type="button"></button>#}
 </div>

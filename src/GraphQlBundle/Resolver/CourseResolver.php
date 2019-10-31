@@ -54,7 +54,7 @@ class CourseResolver implements ContainerAwareInterface
      */
     public function getPicture(Course $course, Argument $args)
     {
-        return Container::getIllustrationRepository()->getIllustrationUrl($course));
+        return Container::getIllustrationRepository()->getIllustrationUrl($course);
     }
 
     /**

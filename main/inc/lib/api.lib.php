@@ -7198,7 +7198,7 @@ function api_get_build_js($file)
  */
 function api_get_asset($file)
 {
-    return '<script type="text/javascript" src="'.api_get_path(WEB_PUBLIC_PATH).'libs/'.$file.'"></script>'."\n";
+    return '<script type="text/javascript" src="'.api_get_path(WEB_PUBLIC_PATH).'build/libs/'.$file.'"></script>'."\n";
 }
 
 /**

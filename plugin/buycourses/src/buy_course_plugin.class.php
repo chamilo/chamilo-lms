@@ -3,6 +3,7 @@
 
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CoreBundle\Framework\Container;
 use Doctrine\ORM\Query\Expr\Join;
 
 /**
@@ -686,13 +687,10 @@ class BuyCoursesPlugin extends Plugin
                 $courseItem['teachers'][] = $teacher->getCompleteName();
             }
 
-            // Check images
-            $possiblePath = api_get_path(SYS_COURSE_PATH);
-            $possiblePath .= $course->getDirectory();
-            $possiblePath .= '/course-pic.png';
-
-            if (file_exists($possiblePath)) {
-                $courseItem['course_img'] = api_get_path(WEB_COURSE_PATH).$course->getDirectory().'/course-pic.png';
+            $illustrationUrl = Container::getIllustrationRepository()->getIllustrationUrl($course);
+            $courseItem['course_img'] = '';
+            if ($illustrationUrl) {
+                $courseItem['course_img'] = $illustrationUrl;
             }
             $courseCatalog[] = $courseItem;
         }
@@ -782,12 +780,10 @@ class BuyCoursesPlugin extends Plugin
             $courseInfo['teachers'][] = $teacher;
         }
 
-        $possiblePath = api_get_path(SYS_COURSE_PATH);
-        $possiblePath .= $course->getDirectory();
-        $possiblePath .= '/course-pic.png';
-
-        if (file_exists($possiblePath)) {
-            $courseInfo['course_img'] = api_get_path(WEB_COURSE_PATH).$course->getDirectory().'/course-pic.png';
+        $illustrationUrl = Container::getIllustrationRepository()->getIllustrationUrl($course);
+        $courseItem['course_img'] = '';
+        if ($illustrationUrl) {
+            $courseInfo['course_img'] = $illustrationUrl;
         }
 
         return $courseInfo;

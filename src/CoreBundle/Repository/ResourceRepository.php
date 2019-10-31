@@ -15,19 +15,21 @@ use Chamilo\CoreBundle\Entity\Usergroup;
 use Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter;
 use Chamilo\CourseBundle\Entity\CGroupInfo;
 use Chamilo\UserBundle\Entity\User;
-use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Query\Expr\Join;
 use League\Flysystem\FilesystemInterface;
 use League\Flysystem\MountManager;
 use Sylius\Bundle\ResourceBundle\Doctrine\ORM\EntityRepository;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\Routing\RouterInterface;
 
 /**
  * Class ResourceRepository.
  */
 class ResourceRepository extends EntityRepository
 {
+    /** @var string */
+    public $shortClassName;
     /**
      * @var EntityRepository
      */
@@ -50,18 +52,43 @@ class ResourceRepository extends EntityRepository
      */
     protected $className;
 
+    /** @var RouterInterface */
+    protected $router;
+
+    protected $resourceNodeRepository;
+
     /**
      * ResourceRepository constructor.
      *
-     * @param EntityManager $entityManager
-     * @param MountManager  $mountManager
-     * @param string        $className
+     * @param EntityManager   $entityManager
+     * @param MountManager    $mountManager
+     * @param RouterInterface $router
+     * @param string          $className
      */
-    public function __construct(EntityManager $entityManager, MountManager $mountManager, string $className)
+    public function __construct(EntityManager $entityManager, MountManager $mountManager, RouterInterface $router, string $className)
     {
         $this->repository = $entityManager->getRepository($className);
         // Flysystem mount name is saved in config/packages/oneup_flysystem.yaml
         $this->fs = $mountManager->getFilesystem('resources_fs');
+        $this->router = $router;
+        $this->resourceNodeRepository = $entityManager->getRepository('ChamiloCoreBundle:Resource\ResourceNode');
+        $this->shortClassName = (new \ReflectionClass($className))->getShortName();
+    }
+
+    /**
+     * @return string
+     */
+    public function getShortClassName(): string
+    {
+        return $this->shortClassName;
+    }
+
+    /**
+     * @return EntityRepository
+     */
+    public function getResourceNodeRepository()
+    {
+        return $this->resourceNodeRepository;
     }
 
     /**
@@ -130,19 +157,13 @@ class ResourceRepository extends EntityRepository
     }*/
 
     /**
-     * @param AbstractResource $resource
-     * @param UploadedFile     $file
+     * @param ResourceNode $resourceNode
+     * @param UploadedFile $file
      *
      * @return ResourceFile
      */
-    public function addFileToResource(AbstractResource $resource, UploadedFile $file)
+    public function addFile(ResourceNode $resourceNode, UploadedFile $file)
     {
-        $resourceNode = $resource->getResourceNode();
-
-        if (!$resourceNode) {
-            return false;
-        }
-
         $resourceFile = $resourceNode->getResourceFile();
         if ($resourceFile === null) {
             $resourceFile = new ResourceFile();
@@ -151,7 +172,7 @@ class ResourceRepository extends EntityRepository
         $em = $this->getEntityManager();
 
         $resourceFile->setFile($file);
-        $resourceFile->setName($resource->getResourceName());
+        $resourceFile->setName($resourceNode->getName());
         $em->persist($resourceFile);
         $resourceNode->setResourceFile($resourceFile);
         $em->persist($resourceNode);
@@ -159,7 +180,6 @@ class ResourceRepository extends EntityRepository
 
         return $resourceFile;
     }
-
 
     /**
      * Creates a ResourceNode.
@@ -178,7 +198,7 @@ class ResourceRepository extends EntityRepository
         $em = $this->getEntityManager();
 
         $resourceType = $em->getRepository('ChamiloCoreBundle:Resource\ResourceType')->findOneBy(
-            ['name' => $resource->getToolName()]
+            ['name' => $this->getShortClassName()]
         );
 
         $resourceNode = new ResourceNode();

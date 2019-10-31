@@ -28,6 +28,7 @@ $isAllowToEdit = api_is_course_admin() || api_is_platform_admin();
 $course_code = api_get_course_id();
 $courseId = api_get_course_int_id();
 $repo = Container::getCourseRepository();
+$illustrationRepo = Container::getIllustrationRepository();
 $em = $repo->getEntityManager();
 $isEditable = true;
 
@@ -86,14 +87,11 @@ function card_settings_close()
 $form->addHtml(card_settings_open('course_settings', get_lang('Course settings'), true, 'settings.png', 'accordionSettings'));
 
 $image = '';
-$illustration = $courseEntity->getResourceNodeIllustration();
-if (!empty($illustration)) {
-    $course_medium_image = Container::getRouter()->generate(
-        'core_tool_resource',
-        ['id' => $illustration->getId(), 'filter' => 'course_picture']
-    );
+$illustrationUrl = $illustrationRepo->getIllustrationUrl($courseEntity);
+
+if (!empty($illustrationUrl)) {
     $image = '<div class="row"><label class="col-md-2 control-label">'.get_lang('Image').'</label> 
-                    <div class="col-md-8"><img class="img-thumbnail" src="'.$course_medium_image.'" /></div></div>';
+                    <div class="col-md-8"><img class="img-thumbnail" src="'.$illustrationUrl.'" /></div></div>';
 }
 
 $form->addText('title', get_lang('Title'), true);
@@ -951,19 +949,10 @@ if ($form->validate() && $isEditable) {
 
     if (!empty($picture['name'])) {
         $uploadFile = $request->files->get('picture');
-        // Remove if exists @todo just replace don't delete everything.
-        if (!empty($courseEntity->getResourceNodeIllustration())) {
-            $em->remove($courseEntity->getResourceNodeIllustration());
-            $em->flush();
-        }
-        $illustration = new \Chamilo\CoreBundle\Entity\Illustration();
-        $em->persist($illustration);
-        $repo->addResourceNode($illustration, api_get_user_entity(api_get_user_id()), $courseEntity);
-        $file = $repo->addFileToResource($illustration, $uploadFile);
+        $file = $illustrationRepo->addIllustration($courseEntity, api_get_user_entity(api_get_user_id()), $uploadFile);
         if ($file) {
             $file->setCrop($updateValues['picture_crop_result_for_resource']);
             $em->persist($file);
-            $em->persist($illustration);
             $em->flush();
         }
     }
@@ -972,11 +961,7 @@ if ($form->validate() && $isEditable) {
     $deletePicture = isset($updateValues['delete_picture']) ? $updateValues['delete_picture'] : '';
 
     if ($deletePicture) {
-        $image = $courseEntity->getResourceNodeIllustration();
-        if ($image) {
-            $em->remove($image);
-            $em->flush();
-        }
+        $illustrationRepo->deleteIllustration($courseEntity);
     }
 
     global $_configuration;

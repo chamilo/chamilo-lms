@@ -4,6 +4,7 @@
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\CourseRelUser;
 use Chamilo\CoreBundle\Entity\ExtraField;
+use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CCourseDescription;
 
 /**
@@ -30,7 +31,7 @@ $em = Database::getManager();
 $userId = api_get_user_id();
 
 /** @var Course $course */
-$course = $em->find('ChamiloCoreBundle:Course', $courseId);
+$course = api_get_course_entity($courseId);
 
 if (!$course) {
     api_not_allowed(true);
@@ -148,7 +149,7 @@ $courseItem = [
     'code' => $course->getCode(),
     'title' => $course->getTitle(),
     'description' => $courseDescription,
-    'image' => CourseManager::getPicturePath($course, true),
+    'image' => Container::getIllustrationRepository()->getIllustrationUrl($course),
     'syllabus' => $topics,
     'tags' => $courseTags,
     'teachers' => $teachersData,

@@ -6,6 +6,7 @@ namespace Chamilo\GraphQlBundle\Resolver;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\SessionRelCourseRelUser;
+use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CAnnouncement;
 use Chamilo\CourseBundle\Entity\CForumCategory;
 use Chamilo\CourseBundle\Entity\CForumForum;
@@ -53,7 +54,7 @@ class CourseResolver implements ContainerAwareInterface
      */
     public function getPicture(Course $course, Argument $args)
     {
-        return \CourseManager::getPicturePath($course, $args['fullSize']);
+        return Container::getIllustrationRepository()->getIllustrationUrl($course));
     }
 
     /**

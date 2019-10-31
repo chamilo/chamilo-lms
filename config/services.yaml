@@ -27,6 +27,15 @@ parameters:
         #cache: 'var/cache/resource/'
 
     glide_media_filters:
+        user_picture_small:
+            w: 48
+            h: 48
+        user_picture_profile:
+            w: 94
+            h: 94
+        course_picture_small:
+            w: 85
+            h: 47
         course_picture:
             w: 400
             h: 225

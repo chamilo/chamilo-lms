@@ -1,6 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Entity\ExtraField;
 use Chamilo\CoreBundle\Entity\SequenceResource;
 use Chamilo\CoreBundle\Entity\Session;
@@ -128,7 +129,7 @@ foreach ($sessionCourses as $sessionRelCourse) {
     $courses[] = [
         'course' => $sessionCourse,
         'description' => $courseDescription,
-        'image' => CourseManager::getPicturePath($sessionCourse, true),
+        'image' => Container::getIllustrationRepository()->getIllustrationUrl($sessionCourse),
         'tags' => $courseTags,
         'objectives' => $courseObjectives,
         'topics' => $courseTopics,

@@ -1657,7 +1657,7 @@ class Template
                         $socialMeta .= '<meta property="twitter:description" content="'.$metaDescription.'" />'."\n";
                     }
 
-                    $picture = CourseManager::getPicturePath($course, true);
+                    $picture = Container::getIllustrationRepository()->getIllustrationUrl($course);
                     if (!empty($picture)) {
                         $socialMeta .= '<meta property="og:image" content="'.$picture.'" />'."\n";
                         $socialMeta .= '<meta property="twitter:image" content="'.$picture.'" />'."\n";

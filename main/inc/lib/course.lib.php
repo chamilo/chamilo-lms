@@ -6302,37 +6302,6 @@ class CourseManager
     }
 
     /**
-     * @param Course $course
-     *
-     * @return bool
-     */
-    public static function hasPicture(Course $course)
-    {
-        return file_exists(api_get_path(SYS_COURSE_PATH).$course->getDirectory().'/course-pic85x85.png');
-    }
-
-    /**
-     * Get the course picture path.
-     *
-     * @param Course $course
-     * @param bool   $fullSize
-     *
-     * @return string|null
-     */
-    public static function getPicturePath(Course $course, $fullSize = false)
-    {
-        if (!self::hasPicture($course)) {
-            return null;
-        }
-
-        if ($fullSize) {
-            return api_get_path(WEB_COURSE_PATH).$course->getDirectory().'/course-pic.png';
-        }
-
-        return api_get_path(WEB_COURSE_PATH).$course->getDirectory().'/course-pic85x85.png';
-    }
-
-    /**
      * @return int
      */
     public static function getCountOpenCourses()

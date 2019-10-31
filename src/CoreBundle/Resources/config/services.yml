@@ -46,6 +46,10 @@ services:
         arguments:
             $className: 'Chamilo\CoreBundle\Entity\Course'
 
+    Chamilo\CoreBundle\Repository\IllustrationRepository:
+        arguments:
+            $className: 'Chamilo\CoreBundle\Entity\Illustration'
+
     menu.voter.regex:
         class: Chamilo\CoreBundle\Menu\MenuVoter
         arguments: ['@request_stack']

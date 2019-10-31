@@ -66,20 +66,4 @@ abstract class AbstractResource implements ResourceInterface
     {
         return $this->resourceNode;
     }
-
-    /**
-     * @return ResourceNode
-     */
-    public function getResourceNodeIllustration()
-    {
-        $node = $this->getResourceNode();
-        // @todo also filter by the resource type = Illustration
-        $criteria = Criteria::create()->where(
-            Criteria::expr()->eq('name', 'illustration')
-        );
-
-        $illustration = $node->getChildren()->matching($criteria)->first();
-
-        return $illustration;
-    }
 }

@@ -7,6 +7,7 @@ use Chamilo\CoreBundle\Component\Editor\Editor;
 use Chamilo\CoreBundle\Hook\Interfaces\HookEventInterface;
 use Chamilo\CoreBundle\Repository\AccessUrlRepository;
 use Chamilo\CoreBundle\Repository\CourseRepository;
+use Chamilo\CoreBundle\Repository\IllustrationRepository;
 use Chamilo\CoreBundle\ToolChain;
 use Chamilo\CourseBundle\Repository\CDocumentRepository;
 use Chamilo\CourseBundle\Repository\CExerciseCategoryRepository;
@@ -369,6 +370,14 @@ class Container
     public static function getCourseRepository()
     {
         return self::$container->get('Chamilo\CoreBundle\Repository\CourseRepository');
+    }
+
+    /**
+     * @return IllustrationRepository
+     */
+    public static function getIllustrationRepository()
+    {
+        return self::$container->get('Chamilo\CoreBundle\Repository\IllustrationRepository');
     }
 
     /**

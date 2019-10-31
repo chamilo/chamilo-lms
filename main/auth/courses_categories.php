@@ -315,7 +315,6 @@ function returnThumbnail($course)
     //$linkCourse = api_get_course_url($course['code']);
     $linkCourse = api_get_path(WEB_PATH).'course/'.$course['real_id'].'/about';
     $courseEntity = api_get_course_entity($course['real_id']);
-    //$courseMediumImage = api_get_path(WEB_COURSE_PATH).$course['directory'].'/course-pic.png';
     $courseMediumImage = Display::return_icon(
         'session_default.png',
         null,
@@ -326,12 +325,9 @@ function returnThumbnail($course)
         true
     );
 
-    $illustration = $courseEntity->getResourceNodeIllustration();
-    if ($illustration) {
-        $courseMediumImage = Container::getRouter()->generate(
-            'core_tool_resource',
-            ['id' => $illustration->getId()]
-        );
+    $illustrationUrl = Container::getIllustrationRepository()->getIllustrationUrl($courseEntity);
+    if ($illustrationUrl) {
+        $courseMediumImage = $illustrationUrl;
     }
 
     $html .= '<div class="image">';

@@ -19,7 +19,7 @@ class CourseRepository extends ResourceRepository
     /**
      * @param Course $course
      */
-    public function deleteCourse(Course $course)
+    public function deleteCourse(Course $course): void
     {
         $em = $this->getEntityManager();
 

@@ -8,6 +8,9 @@
  *
  * @package chamilo.social.skill
  */
+
+use Chamilo\CoreBundle\Framework\Container;
+
 require_once __DIR__.'/../inc/global.inc.php';
 
 $userId = api_get_user_id();
@@ -73,7 +76,7 @@ if ($isStudent) {
     if ($frmStudents->validate()) {
         $selectedStudent = (int) $frmStudents->exportValue('student');
 
-        $sql = "SELECT s.name, sru.acquired_skill_at, c.title, c.directory
+        $sql = "SELECT s.name, sru.acquired_skill_at, c.title, c.directory, c.id as course_id
                 FROM $skillTable s
                 INNER JOIN $skillRelUserTable sru
                 ON s.id = sru.skill_id
@@ -100,26 +103,10 @@ if ($isStudent) {
                 'course_name' => $resultData['title'],
             ];
 
-            $imageSysPath = sprintf('%s%s/course-pic.png', api_get_path(SYS_COURSE_PATH), $resultData['directory']);
-
-            if (file_exists($imageSysPath)) {
-                $thumbSysPath = sprintf(
-                    "%s%s/course-pic32.png",
-                    api_get_path(SYS_COURSE_PATH),
-                    $resultData['directory']
-                );
-                $thumbWebPath = sprintf(
-                    "%s%s/course-pic32.png",
-                    api_get_path(WEB_COURSE_PATH),
-                    $resultData['directory']
-                );
-
-                if (!file_exists($thumbSysPath)) {
-                    $courseImageThumb = new Image($imageSysPath);
-                    $courseImageThumb->resize(32);
-                    $courseImageThumb->send_image($thumbSysPath);
-                }
-                $tableRow['courseImage'] = $thumbWebPath;
+            $courseEntity = api_get_course_entity($resultData[ 'course_id']);
+            $illustrationUrl = Container::getIllustrationRepository()->getIllustrationUrl($courseEntity);
+            if ($illustrationUrl) {
+                $tableRow['course_image'] = $illustrationUrl;
             }
             $tableRows[] = $tableRow;
         }
@@ -188,19 +175,10 @@ if ($isStudent) {
             true
         );
 
-        $imageSysPath = sprintf("%s%s/course-pic.png", api_get_path(SYS_COURSE_PATH), $row['c_directory']);
-
-        if (file_exists($imageSysPath)) {
-            $thumbSysPath = sprintf("%s%s/course-pic32.png", api_get_path(SYS_COURSE_PATH), $row['c_directory']);
-            $thumbWebPath = sprintf("%s%s/course-pic32.png", api_get_path(WEB_COURSE_PATH), $row['c_directory']);
-
-            if (!file_exists($thumbSysPath)) {
-                $courseImageThumb = new Image($imageSysPath);
-                $courseImageThumb->resize(32);
-                $courseImageThumb->send_image($thumbSysPath);
-            }
-
-            $row['course_image'] = $thumbWebPath;
+        $courseEntity = api_get_course_entity($row[ 'real_id']);
+        $illustrationUrl = Container::getIllustrationRepository()->getIllustrationUrl($courseEntity);
+        if ($illustrationUrl) {
+            $row['course_image'] = $illustrationUrl;
         }
     }
 

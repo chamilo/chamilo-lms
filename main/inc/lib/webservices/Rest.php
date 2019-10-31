@@ -1,6 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\ExtraFieldValues;
 use Chamilo\CoreBundle\Entity\Session;
@@ -229,8 +230,7 @@ class Rest extends WebService
             /** @var Course $course */
             $course = Database::getManager()->find('ChamiloCoreBundle:Course', $courseInfo['real_id']);
             $teachers = CourseManager::getTeacherListFromCourseCodeToString($course->getCode());
-            $picturePath = CourseManager::getPicturePath($course, true)
-                ?: Display::return_icon('session_default.png', null, null, null, null, true);
+            $picturePath = Container::getIllustrationRepository()->getIllustrationUrl($course);
 
             $data[] = [
                 'id' => $course->getId(),
@@ -265,7 +265,7 @@ class Rest extends WebService
             'title' => $this->course->getTitle(),
             'code' => $this->course->getCode(),
             'directory' => $this->course->getDirectory(),
-            'urlPicture' => CourseManager::getPicturePath($this->course, true),
+            'urlPicture' => Container::getIllustrationRepository()->getIllustrationUrl($this->course);
             'teachers' => $teachers,
             'tools' => array_map(
                 function ($tool) {

@@ -228,7 +228,11 @@ class MutationMap extends ResolverMap implements ContainerAwareInterface
         }
 
         if (isset($courseInput['categoryCode'])) {
-            $course->setCategoryCode($courseInput['categoryCode']);
+            $courseCategory = $this->em
+                ->getRepository('ChamiloCoreBundle:CourseCategory')
+                ->findOneBy(['code' => $courseInput['categoryCode']]);
+
+            $course->setCategory($courseCategory);
         }
 
         if (!empty($courseInput['visualCode'])) {

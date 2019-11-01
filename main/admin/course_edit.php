@@ -153,7 +153,7 @@ if ($countCategories >= 100) {
 
     $categorySelect = $form->addElement(
         'select_ajax',
-        'category_code',
+        'category_id',
         get_lang('Category'),
         null,
         ['url' => $url]
@@ -164,20 +164,19 @@ if ($countCategories >= 100) {
         $categorySelect->addOption($data['name'], $data['code']);
     }
 } else {
-    $courseInfo['category_code'] = $courseInfo['categoryCode'];
     $categories = $courseCategoriesRepo->findAllInAccessUrl(
         $urlId,
         api_get_configuration_value('allow_base_course_category')
     );
-    $categoriesOptions = [null => get_lang('none')];
+    $categoriesOptions = [0 => get_lang('None')];
 
     /** @var CourseCategory $category */
     foreach ($categories as $category) {
-        $categoriesOptions[$category->getCode()] = (string) $category;
+        $categoriesOptions[$category->getId()] = (string) $category;
     }
 
     $form->addSelect(
-        'category_code',
+        'category_id',
         get_lang('Category'),
         $categoriesOptions
     );
@@ -355,7 +354,7 @@ if ($form->validate()) {
 
     $teachers = isset($course['course_teachers']) ? $course['course_teachers'] : '';
     $title = $course['title'];
-    $category_code = isset($course['category_code']) ? $course['category_code'] : '';
+    $category_code = isset($course['category_id']) ? (int) $course['category_id'] : '';
     $department_name = $course['department_name'];
     $department_url = $course['department_url'];
     $course_language = $course['course_language'];
@@ -375,7 +374,7 @@ if ($form->validate()) {
     $params = [
         'course_language' => $course_language,
         'title' => $title,
-        'category_code' => $category_code,
+        'category' => $category_code,
         'visual_code' => $visual_code,
         'department_name' => $department_name,
         'department_url' => $department_url,

@@ -786,7 +786,7 @@ class Course extends AbstractResource implements ResourceInterface
     /**
      * Get categoryCode.
      *
-     * @return string
+     * @return CourseCategory
      */
     public function getCategory()
     {

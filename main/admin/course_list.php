@@ -94,22 +94,24 @@ function get_number_of_courses()
 function get_course_data($from, $number_of_items, $column, $direction)
 {
     $course_table = Database::get_main_table(TABLE_MAIN_COURSE);
+    $tblCourseCategory = Database::get_main_table(TABLE_MAIN_CATEGORY);
 
     $sql = "SELECT  
-                code AS col0,
+                course.code AS col0,
                 title AS col1,
-                code AS col2,
+                course.code AS col2,
                 course_language AS col3,
-                category_code AS col4,
+                category.code AS col4,
                 subscribe AS col5,
                 unsubscribe AS col6,
-                code AS col7,
+                course.code AS col7,
                 visibility AS col8,
                 directory as col9,
                 visual_code,
                 directory,
                 course.id
-    		FROM $course_table course";
+    		FROM $course_table course
+    		LEFT JOIN $tblCourseCategory category ON course.category = category.id ";
 
     if ((api_is_platform_admin() || api_is_session_admin()) &&
         api_is_multiple_url_enabled() && api_get_current_access_url_id() != -1
@@ -123,7 +125,7 @@ function get_course_data($from, $number_of_items, $column, $direction)
         $keyword = Database::escape_string("%".trim($_GET['keyword'])."%");
         $sql .= " WHERE (
             title LIKE '".$keyword."' OR
-            code LIKE '".$keyword."' OR
+            course.code LIKE '".$keyword."' OR
             visual_code LIKE '".$keyword."'
         )
         ";
@@ -139,7 +141,7 @@ function get_course_data($from, $number_of_items, $column, $direction)
         $keyword_unsubscribe = Database::escape_string($_GET['keyword_unsubscribe']);
 
         $sql .= " WHERE
-                (code LIKE '".$keyword_code."' OR visual_code LIKE '".$keyword_code."') AND
+                (course.code LIKE '".$keyword_code."' OR visual_code LIKE '".$keyword_code."') AND
                 title LIKE '".$keyword_title."' AND
                 course_language LIKE '".$keyword_language."' AND
                 visibility LIKE '".$keyword_visibility."' AND
@@ -147,7 +149,7 @@ function get_course_data($from, $number_of_items, $column, $direction)
                 unsubscribe LIKE '".$keyword_unsubscribe."'";
 
         if (!empty($keyword_category)) {
-            $sql .= " AND category_code LIKE '".$keyword_category."' ";
+            $sql .= " AND category.code LIKE '".$keyword_category."' ";
         }
     }
 

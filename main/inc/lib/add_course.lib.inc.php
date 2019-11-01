@@ -786,7 +786,7 @@ class AddCourse
         $visual_code = $params['visual_code'];
         $directory = $params['directory'];
         $tutor_name = isset($params['tutor_name']) ? $params['tutor_name'] : null;
-        $category_code = isset($params['course_category']) ? $params['course_category'] : '';
+        $categoryId = isset($params['category_id']) ? (int) $params['category_id'] : '';
         $course_language = isset($params['course_language']) && !empty($params['course_language']) ? $params['course_language'] : api_get_setting(
             'platformLanguage'
         );
@@ -870,6 +870,8 @@ class AddCourse
         if ($ok_to_register_course) {
             $repo = Container::getCourseRepository();
             $course = new \Chamilo\CoreBundle\Entity\Course();
+            /** @var \Chamilo\CoreBundle\Entity\CourseCategory $courseCategory */
+            $courseCategory = Container::getCourseCategoryRepository()->find($categoryId);
             $urlId = 1;
             if (api_get_current_access_url_id() !== -1) {
                 $urlId = api_get_current_access_url_id();
@@ -882,7 +884,7 @@ class AddCourse
                 ->setCourseLanguage($course_language)
                 ->setTitle($title)
                 ->setDescription(get_lang('Course Description'))
-                ->setCategoryCode($category_code)
+                ->setCategory($courseCategory)
                 ->setVisibility($visibility)
                 ->setShowScore(1)
                 ->setDiskQuota($disk_quota)
@@ -984,9 +986,12 @@ class AddCourse
                             'MessageOfNewCourseToAdmin'
                         ).' '.$siteName.' - '.$iname."\n";
                     $message .= get_lang('Course name').' '.$title."\n";
-                    $message .= get_lang(
-                            'Category'
-                        ).' '.$category_code."\n";
+
+                    if ($courseCategory) {
+                        $message .= get_lang(
+                                'Category'
+                            ).' '.$courseCategory->getCode()."\n";
+                    }
                     $message .= get_lang('Coach').' '.$tutor_name."\n";
                     $message .= get_lang('Language').' '.$course_language;
 

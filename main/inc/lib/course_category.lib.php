@@ -96,7 +96,7 @@ class CourseCategory
                 LEFT JOIN $tbl_category t2
                 ON t1.id = t2.parent_id
                 LEFT JOIN $tbl_course t3
-                ON t3.category_code=t1.code
+                ON t3.category = t1.id
                 WHERE
                     1 = 1
                     $parentIdCondition
@@ -263,7 +263,7 @@ class CourseCategory
                 );
                 Database::query("UPDATE $tbl_category SET parent_id='".$row['parent_id']."' WHERE parent_id='$node'");
             } else {
-                Database::query("UPDATE $tbl_course SET category_code='' WHERE category_code='$node'");
+                Database::query("UPDATE $tbl_course SET category = NULL WHERE category = ".$category['id']);
                 Database::query("UPDATE $tbl_category SET parent_id=NULL WHERE parent_id='$node'");
             }
 

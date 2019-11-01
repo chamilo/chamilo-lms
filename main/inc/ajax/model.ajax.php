@@ -1,6 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Framework\Container;
 use ChamiloSession as Session;
 
 require_once __DIR__.'/../global.inc.php';
@@ -264,9 +265,10 @@ if (!$sidx) {
 
 switch ($action) {
     case 'get_exercise_categories':
+        $exerciseCategoryRepo = Container::getExerciseCategoryRepository();
         $manager = new ExerciseCategoryManager();
         $courseId = isset($_REQUEST['c_id']) ? $_REQUEST['c_id'] : 0;
-        $count = $manager->getCourseCount($courseId);
+        $count = $exerciseCategoryRepo->getCourseCount($courseId);
         break;
     case 'get_calendar_users':
         $calendarPlugin = LearningCalendarPlugin::create();

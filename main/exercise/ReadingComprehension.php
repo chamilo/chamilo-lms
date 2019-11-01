@@ -132,8 +132,8 @@ class ReadingComprehension extends UniqueAnswer
     public function createForm(&$form, $exercise)
     {
         // Categories
-        $tabCat = TestCategory::getCategoriesIdAndName();
-        $form->addSelect('questionCategory', get_lang('Category'), $tabCat);
+        $categories = TestCategory::getCategoriesForSelect();
+        $form->addSelect('questionCategory', get_lang('Category'), $categories);
         // Advanced parameters
         $levels = self::get_default_levels();
         $form->addSelect('questionLevel', get_lang('Difficulty'), $levels);

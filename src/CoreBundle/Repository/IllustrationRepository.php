@@ -44,9 +44,7 @@ class IllustrationRepository extends ResourceRepository
     public function getIllustrationNodeFromResource(AbstractResource $resource)
     {
         $nodeRepo = $this->getResourceNodeRepository();
-        $resourceType = $this->getRepositoryResourceType();
-
-        //var_dump($resource->getResourceNode()->getId());exit;
+        $resourceType = $this->getResourceType();
 
         /** @var ResourceNode $node */
         $node = $nodeRepo->findOneBy(

@@ -71,7 +71,7 @@ class ResourceController extends BaseController implements CourseControllerInter
         if (!empty($parentId)) {
             $parent = $repository->find($parentId);
         }
-        $resources = $repository->getResourceByCourse($course, $tool, $parent);
+        $resources = $repository->getResourcesByCourse($course, $tool, $parent);
 
         $source->setData($resources);
         $grid->setSource($source);

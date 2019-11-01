@@ -1,6 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\Resource\ResourceLink;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CExerciseCategory;
 
@@ -77,6 +78,35 @@ class ExerciseCategoryManager extends Model
     }
 
     /**
+     * @param array $params
+     * @param bool  $showQuery
+     *
+     * @return bool
+     */
+    public function update($params, $showQuery = false)
+    {
+        $id = $params['id'];
+
+        $repo = Container::getExerciseCategoryRepository();
+        /** @var CExerciseCategory $category */
+        $category = $repo->find($id);
+
+        if ($category) {
+            $category
+                ->setName($params['name'])
+                ->setDescription($params['description'])
+            ;
+
+            $repo->getEntityManager()->persist($category);
+            $repo->getEntityManager()->flush();
+
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
      * Save values in the *_field_values table.
      *
      * @param array $params    Structured array with the values to save
@@ -109,7 +139,15 @@ class ExerciseCategoryManager extends Model
             $category->setPosition($position);
 */
         $em->persist($category);
-        $repo->addResourceNode($category, api_get_user_entity(api_get_user_id()), api_get_course_entity($courseId));
+        $repo->addResourceToCourse(
+            $category,
+            ResourceLink::VISIBILITY_PUBLISHED,
+            api_get_user_entity(api_get_user_id()),
+            api_get_course_entity($courseId),
+            api_get_session_entity(),
+            api_get_group_entity()
+        );
+
         $em->flush();
 
         return $category;

@@ -1168,9 +1168,13 @@ class DocumentManager
 
         $repo = Container::getDocumentRepository();
         $document = $repo->find($docInfo['iid']);
-        $repo->hardDelete($document);
+        if ($document) {
+            $repo->hardDelete($document);
 
-        return true;
+            return true;
+        }
+
+        return false;
     }
 
     /**
@@ -6276,7 +6280,7 @@ This folder contains all sessions that have been opened in the chat. Although th
             $visibility = ResourceLink::VISIBILITY_PUBLISHED;
         }
 
-        $repo->addResourceToCourse($resourceNode, $visibility, $document->getCourse(), $document->getSession(), $group);
+        $repo->addResourceNodeToCourse($resourceNode, $visibility, $document->getCourse(), $document->getSession(), $group);
         $em->flush();
 
         $documentId = $document->getIid();

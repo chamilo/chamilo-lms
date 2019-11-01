@@ -394,7 +394,7 @@ if ($course_id_changed) {
 }
 
 // Get category list for the course $selected_course
-$categoryList = TestCategory::getCategoriesIdAndName($selected_course);
+$categoryList = TestCategory::getCategoriesForSelect();
 $selectCourseCategory = Display::select(
     'courseCategoryId',
     $categoryList,

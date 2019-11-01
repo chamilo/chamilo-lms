@@ -1691,10 +1691,10 @@ class Exercise
                 Database::query($sql);
 
                 $exercise = $repo->find($this->id);
-                $node = $repo->addResourceNode($exercise, api_get_user_entity(api_get_user_id()), $courseEntity);
                 $repo->addResourceToCourse(
-                    $node,
+                    $exercise,
                     ResourceLink::VISIBILITY_PUBLISHED,
+                    api_get_user_entity(api_get_user_id()),
                     api_get_course_entity(),
                     api_get_session_entity(),
                     api_get_group_entity()

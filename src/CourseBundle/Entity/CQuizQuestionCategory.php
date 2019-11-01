@@ -5,6 +5,8 @@ namespace Chamilo\CourseBundle\Entity;
 
 use Chamilo\CoreBundle\Entity\Resource\AbstractResource;
 use Chamilo\CoreBundle\Entity\Resource\ResourceInterface;
+use Chamilo\CourseBundle\Traits\SessionCourseResources;
+use Chamilo\CourseBundle\Traits\SessionCourseResourcesTrait;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -21,6 +23,8 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class CQuizQuestionCategory extends AbstractResource implements ResourceInterface
 {
+    use SessionCourseResourcesTrait;
+
     /**
      * @var int
      *
@@ -29,13 +33,6 @@ class CQuizQuestionCategory extends AbstractResource implements ResourceInterfac
      * @ORM\GeneratedValue
      */
     protected $iid;
-
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="c_id", type="integer")
-     */
-    protected $cId;
 
     /**
      * @var int
@@ -57,6 +54,12 @@ class CQuizQuestionCategory extends AbstractResource implements ResourceInterfac
      * @ORM\Column(name="description", type="text", nullable=true)
      */
     protected $description;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Course")
+     * @ORM\JoinColumn(name="c_id", referencedColumnName="id", nullable=false)
+     */
+    protected $course;
 
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Session", cascade={"persist"})
@@ -145,27 +148,43 @@ class CQuizQuestionCategory extends AbstractResource implements ResourceInterfac
     }
 
     /**
-     * Set cId.
-     *
-     * @param int $cId
+     * @return mixed
+     */
+    public function getCourse()
+    {
+        return $this->course;
+    }
+
+    /**
+     * @param mixed $course
      *
      * @return CQuizQuestionCategory
      */
-    public function setCId($cId)
+    public function setCourse($course)
     {
-        $this->cId = $cId;
+        $this->course = $course;
 
         return $this;
     }
 
     /**
-     * Get cId.
-     *
-     * @return int
+     * @return mixed
      */
-    public function getCId()
+    public function getSession()
     {
-        return $this->cId;
+        return $this->session;
+    }
+
+    /**
+     * @param mixed $session
+     *
+     * @return CQuizQuestionCategory
+     */
+    public function setSession($session)
+    {
+        $this->session = $session;
+
+        return $this;
     }
 
     /**

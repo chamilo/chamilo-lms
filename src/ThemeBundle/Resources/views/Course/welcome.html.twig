@@ -65,9 +65,9 @@
             {% endif %}
             <div class="items-tools">
                 <div class="item">
-                    {{ 'tool_reference.png' | img(64, 'Add forum'|trans ) }}
+                    {{ 'tool_reference.png' | img(64, 'Course settings'|trans ) }}
                     <div class="caption">
-                        <a href="{{ _p.web_main }}forum/index.php?cidReq={{ course.code }}" class="btn btn-outline-primary">
+                        <a href="{{ _p.web_main }}course_info/infocours.php?cidReq={{ course.code }}" class="btn btn-outline-primary">
                             <em class="fa fa-users"></em> {{ 'Change settings'|trans }}
                         </a>
                     </div>

@@ -3,6 +3,7 @@
 
 namespace Chamilo\CourseBundle\Entity;
 
+use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Resource\AbstractResource;
 use Chamilo\CoreBundle\Entity\Resource\ResourceInterface;
 use Doctrine\ORM\Event\LifecycleEventArgs;
@@ -214,11 +215,13 @@ class CQuiz extends AbstractResource implements ResourceInterface
     protected $hideQuestionTitle;
 
     /**
-     * @var int
+     * @var CExerciseCategory
      *
-     * @ORM\Column(name="exercise_category_id", type="integer", nullable=true)
+     * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CExerciseCategory", cascade={"persist"})
+     * @ORM\JoinColumn(name="exercise_category_id", referencedColumnName="id", onDelete="SET NULL")
+     *
      */
-    protected $exerciseCategoryId;
+    protected $exerciseCategory;
 
     /**
      * @var bool
@@ -829,6 +832,26 @@ class CQuiz extends AbstractResource implements ResourceInterface
     public function getCId()
     {
         return $this->cId;
+    }
+
+    /**
+     * @return CExerciseCategory
+     */
+    public function getExerciseCategory(): ?CExerciseCategory
+    {
+        return $this->exerciseCategory;
+    }
+
+    /**
+     * @param CExerciseCategory $exerciseCategory
+     *
+     * @return CQuiz
+     */
+    public function setExerciseCategory(CExerciseCategory $exerciseCategory): CQuiz
+    {
+        $this->exerciseCategory = $exerciseCategory;
+
+        return $this;
     }
 
     /**

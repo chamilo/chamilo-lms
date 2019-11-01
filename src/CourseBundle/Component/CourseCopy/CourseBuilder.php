@@ -1079,7 +1079,8 @@ class CourseBuilder
         $idList = []
     ) {
         // get all test category in course
-        $categories = TestCategory::getCategoryListInfo('', $courseId);
+        $category = new TestCategory();
+        $categories = $category->getCategories();
         foreach ($categories as $category) {
             $this->findAndSetDocumentsInText($category->description);
 

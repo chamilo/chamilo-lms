@@ -1,14 +1,14 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\Resource\ResourceLink;
+use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CExerciseCategory;
 
 /**
  * Class ExtraFieldValue
  * Declaration for the ExtraFieldValue class, managing the values in extra
  * fields for any data type.
- *
- * @package chamilo.library
  */
 class ExerciseCategoryManager extends Model
 {
@@ -38,38 +38,13 @@ class ExerciseCategoryManager extends Model
     }
 
     /**
-     * Gets the number of values stored in the table (all fields together)
-     * for this type of resource.
-     *
-     * @param int $courseId
-     *
-     * @return int Number of rows in the table
-     */
-    public function getCourseCount($courseId)
-    {
-        $em = Database::getManager();
-        $query = $em->getRepository('ChamiloCourseBundle:CExerciseCategory')->createQueryBuilder('e');
-        $query->select('count(e.id)');
-        $query->where('e.cId = :cId');
-        $query->setParameter('cId', $courseId);
-
-        return $query->getQuery()->getSingleScalarResult();
-    }
-
-    /**
      * @param int $courseId
      *
      * @return array
      */
     public function getCategories($courseId)
     {
-        $em = Database::getManager();
-        $query = $em->getRepository('ChamiloCourseBundle:CExerciseCategory')->createQueryBuilder('e');
-        $query->where('e.cId = :cId');
-        $query->setParameter('cId', $courseId);
-        $query->orderBy('e.position');
-
-        return $query->getQuery()->getResult();
+        return Container::getExerciseCategoryRepository()->getCategories($courseId);
     }
 
     /**
@@ -97,21 +72,38 @@ class ExerciseCategoryManager extends Model
      */
     public function delete($id)
     {
-        $em = Database::getManager();
-        $repo = Database::getManager()->getRepository('ChamiloCourseBundle:CExerciseCategory');
+        $repo = Container::getExerciseCategoryRepository();
         $category = $repo->find($id);
+        $repo->hardDelete($category);
+    }
+
+    /**
+     * @param array $params
+     * @param bool  $showQuery
+     *
+     * @return bool
+     */
+    public function update($params, $showQuery = false)
+    {
+        $id = $params['id'];
+
+        $repo = Container::getExerciseCategoryRepository();
+        /** @var CExerciseCategory $category */
+        $category = $repo->find($id);
+
         if ($category) {
-            $em->remove($category);
-            $em->flush();
+            $category
+                ->setName($params['name'])
+                ->setDescription($params['description'])
+            ;
 
-            $courseId = api_get_course_int_id();
-            $table = Database::get_course_table(TABLE_QUIZ_TEST);
-            $id = (int) $id;
+            $repo->getEntityManager()->persist($category);
+            $repo->getEntityManager()->flush();
 
-            $sql = "UPDATE $table SET exercise_category_id = 0 
-                    WHERE c_id = $courseId AND exercise_category_id = $id";
-            Database::query($sql);
+            return true;
         }
+
+        return false;
     }
 
     /**
@@ -123,11 +115,12 @@ class ExerciseCategoryManager extends Model
     public function save($params, $showQuery = false)
     {
         $courseId = api_get_course_int_id();
+        $repo = Container::getExerciseCategoryRepository();
         $em = Database::getManager();
         $category = new CExerciseCategory();
         $category
             ->setName($params['name'])
-            ->setCId(api_get_course_int_id())
+            ->setCId($courseId)
             ->setDescription($params['name'])
         ;
         /*
@@ -146,13 +139,22 @@ class ExerciseCategoryManager extends Model
             $category->setPosition($position);
 */
         $em->persist($category);
+        $repo->addResourceToCourse(
+            $category,
+            ResourceLink::VISIBILITY_PUBLISHED,
+            api_get_user_entity(api_get_user_id()),
+            api_get_course_entity($courseId),
+            api_get_session_entity(),
+            api_get_group_entity()
+        );
+
         $em->flush();
 
         return $category;
     }
 
     /**
-     * @param $token
+     * @param string $token
      *
      * @return string
      */
@@ -161,6 +163,8 @@ class ExerciseCategoryManager extends Model
         //With this function we can add actions to the jgrid (edit, delete, etc)
         $editIcon = Display::return_icon('edit.png', get_lang('Edit'), '', ICON_SIZE_SMALL);
         $deleteIcon = Display::return_icon('delete.png', get_lang('Delete'), '', ICON_SIZE_SMALL);
+        /*$editIcon = Display::returnFontAwesomeIcon('pencil');
+        $deleteIcon = Display::returnFontAwesomeIcon('trash');*/
         $confirmMessage = addslashes(
             api_htmlentities(get_lang('Please confirm your choice'), ENT_QUOTES)
         );
@@ -168,7 +172,7 @@ class ExerciseCategoryManager extends Model
         $courseParams = api_get_cidreq();
 
         $editButton = <<<JAVASCRIPT
-            <a href="?action=edit&{$courseParams}&id=' + options.rowId + '" class="btn btn-link btn-xs">\
+            <a href="?action=edit&{$courseParams}&id=' + options.rowId + '" class="">\
                 $editIcon\
             </a>
 JAVASCRIPT;
@@ -176,7 +180,7 @@ JAVASCRIPT;
             <a \
                 onclick="if (!confirm(\'$confirmMessage\')) {return false;}" \
                 href="?sec_token=$token&{$courseParams}&id=' + options.rowId + '&action=delete" \
-                class="btn btn-link btn-xs">\
+                class="">\
                 $deleteIcon\
             </a>
 JAVASCRIPT;

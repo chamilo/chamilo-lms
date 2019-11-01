@@ -236,7 +236,7 @@ class ResourceNode
      * Returns the path cleaned from its ids.
      * Eg.: "Root/subdir/file.txt".
      *
-     * @return
+     * @return string
      */
     public function getPathForDisplay()
     {
@@ -300,8 +300,6 @@ class ResourceNode
     /**
      * This is required for logging the resource path at the creation.
      * Do not use this function otherwise.
-     *
-     * @return type
      */
     public function setPathForCreationLog($path)
     {

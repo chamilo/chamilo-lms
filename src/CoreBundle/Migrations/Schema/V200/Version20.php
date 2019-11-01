@@ -948,6 +948,12 @@ class Version20 extends AbstractMigrationChamilo
         /*ALTER TABLE c_quiz_question ADD resource_node_id INT DEFAULT NULL;
         ALTER TABLE c_quiz_question ADD CONSTRAINT FK_9A48A59F1BAD783F FOREIGN KEY (resource_node_id) REFERENCES resource_node (id) ON DELETE CASCADE;
         CREATE UNIQUE INDEX UNIQ_9A48A59F1BAD783F ON c_quiz_question (resource_node_id);*/
+
+        /*ALTER TABLE c_quiz CHANGE exercise_category_id exercise_category_id BIGINT DEFAULT NULL;
+        ALTER TABLE c_quiz ADD CONSTRAINT FK_B7A1C35FB48D66 FOREIGN KEY (exercise_category_id) REFERENCES c_exercise_category (id);
+        CREATE INDEX IDX_B7A1C35FB48D66 ON c_quiz (exercise_category_id);
+        ALTER TABLE c_quiz_question_category ADD CONSTRAINT FK_1414369D91D79BD3 FOREIGN KEY (c_id) REFERENCES course (id);
+        */
     }
 
     /**

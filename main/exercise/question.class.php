@@ -1,6 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Entity\Resource\ResourceLink;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CDocument;
 use Chamilo\CourseBundle\Entity\CQuizAnswer;
@@ -542,45 +543,6 @@ abstract class Question
     }
 
     /**
-     * Save category of a question.
-     *
-     * A question can have n categories if category is empty,
-     * then question has no category then delete the category entry
-     *
-     * @param array $category_list
-     *
-     * @author Julio Montoya - Adding multiple cat support
-     */
-    public function saveCategories($category_list)
-    {
-        if (!empty($category_list)) {
-            $this->deleteCategory();
-            $table = Database::get_course_table(TABLE_QUIZ_QUESTION_REL_CATEGORY);
-
-            // update or add category for a question
-            foreach ($category_list as $category_id) {
-                $category_id = (int) $category_id;
-                $question_id = (int) $this->id;
-                $sql = "SELECT count(*) AS nb
-                        FROM $table
-                        WHERE
-                            category_id = $category_id
-                            AND question_id = $question_id
-                            AND c_id=".api_get_course_int_id();
-                $res = Database::query($sql);
-                $row = Database::fetch_array($res);
-                if ($row['nb'] > 0) {
-                    // DO nothing
-                } else {
-                    $sql = "INSERT INTO $table (c_id, question_id, category_id)
-                            VALUES (".api_get_course_int_id().", $question_id, $category_id)";
-                    Database::query($sql);
-                }
-            }
-        }
-    }
-
-    /**
      * in this version, a question can only have 1 category
      * if category is 0, then question has no category then delete the category entry.
      *
@@ -1042,9 +1004,9 @@ abstract class Question
                 $questionEntity = $questionRepo->find($this->id);
                 $exerciseEntity = $exerciseRepo->find($exerciseId);
                 $node = $questionRepo->addResourceNode($questionEntity, api_get_user_entity(api_get_user_id()), $exerciseEntity);
-                $questionRepo->addResourceToCourse(
+                $questionRepo->addResourceNodeToCourse(
                     $node,
-                    \Chamilo\CoreBundle\Entity\Resource\ResourceLink::VISIBILITY_PUBLISHED,
+                    ResourceLink::VISIBILITY_PUBLISHED,
                     api_get_course_entity(),
                     api_get_session_entity(),
                     api_get_group_entity()
@@ -1674,7 +1636,8 @@ abstract class Question
             );
 
             // Categories
-            $tabCat = TestCategory::getCategoriesIdAndName();
+            $tabCat = TestCategory::getCategoriesForSelect();
+
             $form->addElement(
                 'select',
                 'questionCategory',

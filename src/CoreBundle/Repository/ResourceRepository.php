@@ -29,8 +29,6 @@ use Symfony\Component\Routing\RouterInterface;
  */
 class ResourceRepository extends EntityRepository
 {
-    /** @var string */
-    public $shortClassName;
     /**
      * @var EntityRepository
      */
@@ -73,7 +71,6 @@ class ResourceRepository extends EntityRepository
         $this->fs = $mountManager->getFilesystem('resources_fs');
         $this->router = $router;
         $this->resourceNodeRepository = $entityManager->getRepository('ChamiloCoreBundle:Resource\ResourceNode');
-        $this->shortClassName = (new \ReflectionClass($className))->getShortName();
     }
 
     /**
@@ -82,14 +79,6 @@ class ResourceRepository extends EntityRepository
     public function create()
     {
         return new $this->className();
-    }
-
-    /**
-     * @return string
-     */
-    public function getShortClassName(): string
-    {
-        return $this->shortClassName;
     }
 
     /**
@@ -188,7 +177,7 @@ class ResourceRepository extends EntityRepository
     ): ResourceNode {
         $em = $this->getEntityManager();
 
-        $resourceType = $this->getRepositoryResourceType();
+        $resourceType = $this->getResourceType();
 
         $resourceNode = new ResourceNode();
         $resourceNode
@@ -210,15 +199,71 @@ class ResourceRepository extends EntityRepository
         return $resourceNode;
     }
 
+    public function addResourceToCourse(AbstractResource $resource, $visibility, User $creator, Course $course, $session = null, $group = null)
+    {
+        $node = $this->addResourceNode($resource, $creator, $course);
+        $this->addResourceNodeToCourse($node, $visibility, $course, $session, $group);
+    }
+
+    /**
+     * @param ResourceNode $resourceNode
+     * @param int          $visibility
+     * @param Course       $course
+     * @param Session      $session
+     * @param CGroupInfo   $group
+     */
+    public function addResourceNodeToCourse(ResourceNode $resourceNode, $visibility, $course, $session, $group): void
+    {
+        $visibility = (int) $visibility;
+        if (empty($visibility)) {
+            $visibility = ResourceLink::VISIBILITY_PUBLISHED;
+        }
+
+        $link = new ResourceLink();
+        $link
+            ->setCourse($course)
+            ->setSession($session)
+            ->setGroup($group)
+            //->setUser($toUser)
+            ->setResourceNode($resourceNode)
+            ->setVisibility($visibility)
+        ;
+
+        $rights = [];
+        switch ($visibility) {
+            case ResourceLink::VISIBILITY_PENDING:
+            case ResourceLink::VISIBILITY_DRAFT:
+                $editorMask = ResourceNodeVoter::getEditorMask();
+                $resourceRight = new ResourceRight();
+                $resourceRight
+                    ->setMask($editorMask)
+                    ->setRole(ResourceNodeVoter::ROLE_CURRENT_COURSE_TEACHER)
+                ;
+                $rights[] = $resourceRight;
+                break;
+        }
+
+        if (!empty($rights)) {
+            foreach ($rights as $right) {
+                $link->addResourceRight($right);
+            }
+        }
+
+        $em = $this->getEntityManager();
+        $em->persist($link);
+        $em->flush();
+    }
+
     /**
      * @return ResourceType
      */
-    public function getRepositoryResourceType()
+    public function getResourceType()
     {
         $em = $this->getEntityManager();
+        $entityName = $this->getRepository()->getClassMetadata()->getReflectionClass()->getShortName();
 
         return $em->getRepository('ChamiloCoreBundle:Resource\ResourceType')->findOneBy(
-            ['name' => $this->getShortClassName()]
+            ['name' => $entityName]
         );
     }
 
@@ -260,54 +305,7 @@ class ResourceRepository extends EntityRepository
         return $resourceLink;
     }
 
-    /**
-     * @param ResourceNode $resourceNode
-     * @param int          $visibility
-     * @param Course       $course
-     * @param Session      $session
-     * @param CGroupInfo   $group
-     */
-    public function addResourceToCourse(ResourceNode $resourceNode, $visibility, $course, $session, $group): void
-    {
-        $visibility = (int) $visibility;
-        if (empty($visibility)) {
-            $visibility = ResourceLink::VISIBILITY_PUBLISHED;
-        }
 
-        $link = new ResourceLink();
-        $link
-            ->setCourse($course)
-            ->setSession($session)
-            ->setGroup($group)
-            //->setUser($toUser)
-            ->setResourceNode($resourceNode)
-            ->setVisibility($visibility)
-        ;
-
-        $rights = [];
-        switch ($visibility) {
-            case ResourceLink::VISIBILITY_PENDING:
-            case ResourceLink::VISIBILITY_DRAFT:
-                $editorMask = ResourceNodeVoter::getEditorMask();
-                $resourceRight = new ResourceRight();
-                $resourceRight
-                    ->setMask($editorMask)
-                    ->setRole(ResourceNodeVoter::ROLE_CURRENT_COURSE_TEACHER)
-                ;
-                $rights[] = $resourceRight;
-                break;
-        }
-
-        if (!empty($rights)) {
-            foreach ($rights as $right) {
-                $link->addResourceRight($right);
-            }
-        }
-
-        $em = $this->getEntityManager();
-        $em->persist($link);
-        $em->flush();
-    }
 
     /**
      * @param ResourceNode  $resourceNode
@@ -365,7 +363,6 @@ class ResourceRepository extends EntityRepository
      * @param Session       $session
      * @param ResourceRight $right
      *
-     * @return ResourceLink
      */
     public function addResourceToSession(
         ResourceNode $resourceNode,
@@ -449,44 +446,75 @@ class ResourceRepository extends EntityRepository
     }
 
     /**
-     * @param Course           $course
-     * @param Tool             $tool
-     * @param AbstractResource $parent
+     * @param Course          $course
+     * @param Session|null    $session
+     * @param CGroupInfo|null $group
      *
-     * @return ResourceLink
+     * @return array
      */
-    public function getResourceByCourse(Course $course, Tool $tool, AbstractResource $parent = null)
+    public function getResourcesByCourse(Course $course, Session $session = null, CGroupInfo $group = null)
     {
+        $repo = $this->getRepository();
+        $className = $repo->getClassName();
+
+        // Check if this resource type requires to load the base course resources when using a session
+        $loadBaseSessionContent = $repo->getClassMetadata()->getReflectionClass()->hasProperty(
+            'loadBaseCourseResourcesFromSession'
+        );
+        $type = $this->getResourceType();
+
         $query = $this->getEntityManager()->createQueryBuilder()
             ->select('resource')
-            ->from('Chamilo\CoreBundle\Entity\Resource\ResourceNode', 'node')
-            ->innerJoin('node.links', 'links')
+            ->from(ResourceNode::class, 'node')
+            ->innerJoin('node.resourceLinks', 'links')
             ->innerJoin(
-                $this->getClassName(),
+                $className,
                 'resource',
                 Join::WITH,
                 'resource.course = links.course AND resource.resourceNode = node.id'
             )
-            ->where('node.tool = :tool')
+            ->where('node.resourceType = :type')
             ->andWhere('links.course = :course')
             //->where('link.cId = ?', $course->getId())
             //->where('node.cId = 0')
             //->orderBy('node');
             ->setParameters(
                 [
-                    'tool' => $tool,
+                    'type' => $type,
                     'course' => $course,
                 ]
             );
 
-        if ($parent !== null) {
+        if ($session === null) {
+            $query->andWhere('links.session IS NULL');
+        } else {
+            if ($loadBaseSessionContent) {
+                $query->andWhere('links.session = :session OR links.session IS NULL');
+                $query->setParameter('session', $session);
+            } else {
+                $query->andWhere('links.session = :session');
+                $query->setParameter('session', $session);
+            }
+        }
+
+        if ($group === null) {
+            $query->andWhere('links.group IS NULL');
+        }
+
+        /*if ($parent !== null) {
             $query->andWhere('node.parent = :parentId');
             $query->setParameter('parentId', $parent->getResourceNode()->getId());
         } else {
-            $query->andWhere('node.parent IS NULL');
-        }
+            $query->andWhere('node.parent = :parentId');
+            $query->setParameter('parentId', $course->getResourceNode());
+        }*/
+
+        /*$query->setFirstResult();
+        $query->setMaxResults();
+        $query->orderBy();*/
 
         $query = $query->getQuery();
+        //var_dump($query->getSQL());
 
         /*$query = $this->getEntityManager()->createQueryBuilder()
             ->select('notebook')
@@ -503,7 +531,6 @@ class ResourceRepository extends EntityRepository
             )
             ->getQuery()
         ;*/
-
         return $query->getResult();
     }
 
@@ -512,7 +539,7 @@ class ResourceRepository extends EntityRepository
      *
      * @return Tool|null
      */
-    public function getTool($tool)
+    private function getTool($tool)
     {
         return $this
             ->getEntityManager()
@@ -550,7 +577,6 @@ class ResourceRepository extends EntityRepository
             /** @var ResourceLink $link */
             foreach ($links as $link) {
                 $link->setVisibility($visibility);
-
                 if ($visibility === ResourceLink::VISIBILITY_DRAFT) {
                     $editorMask = ResourceNodeVoter::getEditorMask();
                     $rights = [];
@@ -575,11 +601,10 @@ class ResourceRepository extends EntityRepository
     }
 
     /**
-     * Deletes the AbstractResource (CDocument, CQuiz), ResourceNode,
-     * ResourceLinks and ResourceFile as well as deletes the files phisically via Flysystem.
+     * Deletes several entities: AbstractResource (Ex: CDocument, CQuiz), ResourceNode,
+     * ResourceLinks and ResourceFile (including files via Flysystem)
      *
      * @param AbstractResource $resource
-     *
      */
     public function hardDelete(AbstractResource $resource)
     {

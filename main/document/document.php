@@ -385,6 +385,8 @@ switch ($action) {
         }
         break;
     case 'export_to_pdf':
+        // @todo disabled for v2
+        break;
         if (api_get_setting('students_export2pdf') == 'true' ||
             $isAllowedToEdit || api_is_platform_admin()
         ) {
@@ -404,6 +406,7 @@ switch ($action) {
         }
         break;
     case 'copytomyfiles':
+        // @todo disabled for v2
         break;
         // Copy a file to general my files user's
         if (api_get_setting('allow_my_files') == 'true' &&
@@ -507,6 +510,7 @@ switch ($action) {
         }
         break;
     case 'convertToPdf':
+        // @todo disabled for v2
         break;
         // PDF format as target by default
         $formatTarget = $_REQUEST['formatTarget']

@@ -50,6 +50,9 @@ try {
             exit;
         }
         $append = "$append/";
+        $append .= 'public';
+    } else {
+        $append .= '/public';
     }
 
     $container = $kernel->getContainer();
@@ -60,8 +63,6 @@ try {
     $router->setContext($context);
     $response = $kernel->handle($request);
     $context = Container::getRouter()->getContext();
-    //var_dump($append);
-    $append .= '/public';
     $context->setBaseUrl($append);
     $container = $kernel->getContainer();
 

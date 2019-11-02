@@ -8,11 +8,19 @@ core_tool:
     prefix: /courses/{course}/
 
 resources_get_info:
-    path: /resources/{id}
+    path: /resources/info/{id}
     defaults:
         _controller: Chamilo\CoreBundle\Controller\ResourceController::showAction
     requirements:
         file: .+ # allow "/" in {file}
+
+resources_list:
+    path: /resources/{type}/list
+    defaults:
+        _controller: Chamilo\CoreBundle\Controller\ResourceController::listAction
+    requirements:
+        file: .+ # allow "/" in {file}
+
 
 resources_get_file:
     path: /resources/file/{id}
@@ -27,6 +35,10 @@ resources_document_get_file:
         _controller: Chamilo\CoreBundle\Controller\ResourceController::showAction
     requirements:
         file: .+ # allow "/" in {file}
+
+
+
+
 
 chamilo_course_tool_intro_create:
     path: /courses/{course}/introduction/{tool}/create/

@@ -1118,6 +1118,7 @@ class TestCategory
     {
         $sessionId = (int) $sessionId;
         $categories = $this->getCategories($courseId, $sessionId);
+
         $html = '';
         $deleteIcon = Display::return_icon('delete.png', get_lang('Delete'), [], ICON_SIZE_SMALL);
         /** @var CQuizQuestionCategory $category */

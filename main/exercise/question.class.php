@@ -339,7 +339,7 @@ abstract class Question
                 'filter' => 'hotspot_question',
                 'course' => api_get_course_id(),
             ];
-            $url = $router->generate('core_tool_document', $params);
+            $url = $router->generate('resources_document_get_file', $params);
 
             return $url;
 

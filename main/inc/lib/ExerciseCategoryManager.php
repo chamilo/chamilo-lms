@@ -1,9 +1,11 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use APY\DataGridBundle\Grid\Source\Entity;
 use Chamilo\CoreBundle\Entity\Resource\ResourceLink;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CExerciseCategory;
+
 
 /**
  * Class ExtraFieldValue
@@ -115,14 +117,18 @@ class ExerciseCategoryManager extends Model
     public function save($params, $showQuery = false)
     {
         $courseId = api_get_course_int_id();
+        $course = api_get_course_entity($courseId);
+
         $repo = Container::getExerciseCategoryRepository();
-        $em = Database::getManager();
+        $em = $repo->getEntityManager();
+
         $category = new CExerciseCategory();
         $category
             ->setName($params['name'])
-            ->setCId($courseId)
-            ->setDescription($params['name'])
+            ->setCourse($course)
+            ->setDescription($params['description'])
         ;
+
         /*
             // Update position
             $query = $em->getRepository('ChamiloCourseBundle:CExerciseCategory')->createQueryBuilder('e');
@@ -139,11 +145,13 @@ class ExerciseCategoryManager extends Model
             $category->setPosition($position);
 */
         $em->persist($category);
+        $em->flush();
+
         $repo->addResourceToCourse(
             $category,
             ResourceLink::VISIBILITY_PUBLISHED,
             api_get_user_entity(api_get_user_id()),
-            api_get_course_entity($courseId),
+            $course,
             api_get_session_entity(),
             api_get_group_entity()
         );
@@ -265,7 +273,42 @@ JAVASCRIPT;
         );
         $content .= '</a>';
         $content .= '</div>';
-        $content .= Display::grid_html('categories');
+        ///$grid = Container::$container->get('grid');
+        $source = new Entity('ChamiloCourseBundle:CExerciseCategory');
+        $qb = Container::getExerciseCategoryRepository()->getResourcesByCourse(api_get_course_entity());
+        $source-> initQueryBuilder($qb);
+
+        $builder = Container::$container->get('apy_grid.factory');
+
+        $grid = $builder->createBuilder(
+            'grid',
+            $source,
+            [
+                'persistence' => false,
+                'route' => 'home',
+                'filterable' => true,
+                'sortable' => true,
+                'max_per_page' => 10,
+            ]
+        )->add(
+            'id',
+            'number',
+            [
+                'title' => '#',
+                'primary' => 'true',
+            ]
+        )->add(
+                'name',
+                'text',
+                [
+                    'title' => 'name',
+                ]
+            );
+
+        $grid = $grid->getGrid();
+        $grid->setRouteUrl(api_get_self().'?cidReq=GEORGIA');
+        $grid->handleRequest(Container::getRequest());
+        $content .= Container::$container->get('twig')->render('@ChamiloTheme/Resource/grid.html.twig', array('grid' => $grid));
 
         return $content;
     }

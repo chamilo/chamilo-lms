@@ -81,6 +81,7 @@ services:
         exclude: '../src/ThemeBundle/{Entity,Migrations,Tests}'
         public: true
 
+
     Chamilo\ThemeBundle\Controller\ExceptionController:
         public: true
         arguments:
@@ -121,6 +122,16 @@ services:
         class: Chamilo\LtiBundle\Util\Utils
         arguments: ['@chamilo.settings.manager']
 
+
+    apy_grid.factory:
+        class: APY\DataGridBundle\Grid\GridFactory
+        arguments: ['@service_container', '@apy_grid.registry']
+        public: true
+
+    apy_grid.registry:
+        class: APY\DataGridBundle\Grid\GridRegistry
+        public: true
+
 sylius_settings:
     driver: doctrine/orm
 
@@ -131,7 +142,7 @@ sonata_doctrine_orm_admin:
 
 # Grid default template
 #apy_data_grid:
-#    theme: ChamiloCoreBundle::grid.html.twig
+#    theme: ChamiloThemeBundle::grid.html.twig
 #
 
 # Course settings
@@ -161,6 +172,7 @@ imports:
     - {resource: ../vendor/knplabs/doctrine-behaviors/config/orm-services.yml}
 
 
+
 #sylius_resource:
 #    resources:
 #        app.document:
@@ -170,24 +182,9 @@ imports:
 #                model: Chamilo\CourseBundle\Entity\CDocument
 #                repository: Chamilo\CoreBundle\Repository\ResourceRepository
 
-
-#sonata.media.provider.private:
-#    class: Sonata\MediaBundle\Provider\FileProvider
-#    tags:
-#        - { name: sonata.media.provider }
-#    arguments:
-#        - 'sonata.media.provider.private'
-#        - '@app.sonata.media.private.filesystem'
-#        - '@sonata.media.cdn.server'
-#        - '@sonata.media.generator.default'
-#        - '@sonata.media.thumbnail.format'
-#
-#chamilo.sonata.media.private.filesystem:
-#    class: Gaufrette\Filesystem
-#    arguments: ['@chamilo.sonata.media.private.adapter']
-#
-#chamilo.sonata.media.private.adapter:
-#    class: Sonata\MediaBundle\Filesystem\Local
-#    arguments:
-#        - "%kernel.root_dir%/../doclib/uploads"
-#        - true
+sylius_resource:
+    resources:
+        app.exercise_category:
+            driver: 'doctrine/orm'
+            classes:
+                model: 'Chamilo\CourseBundle\Entity\CExerciseCategory'

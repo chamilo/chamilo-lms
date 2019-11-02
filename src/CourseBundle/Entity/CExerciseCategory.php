@@ -3,6 +3,8 @@
 
 namespace Chamilo\CourseBundle\Entity;
 
+use APY\DataGridBundle\Grid\Mapping as GRID;
+use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Resource\AbstractResource;
 use Chamilo\CoreBundle\Entity\Resource\ResourceInterface;
 use Doctrine\ORM\Mapping as ORM;
@@ -13,7 +15,10 @@ use Gedmo\Timestampable\Traits\TimestampableEntity;
  * CExerciseCategory.
  *
  * @ORM\Table(name="c_exercise_category")
+ *
  * @ORM\Entity(repositoryClass="Gedmo\Sortable\Entity\Repository\SortableRepository")
+ *
+ * @GRID\Source(columns="id, name")
  */
 class CExerciseCategory extends AbstractResource implements ResourceInterface
 {
@@ -29,16 +34,23 @@ class CExerciseCategory extends AbstractResource implements ResourceInterface
     protected $id;
 
     /**
-     * @var int
+     * @var Course
      *
-     * @Gedmo\SortableGroup
+     * Gedmo\SortableGroup
      *
-     * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CExerciseCategory", inversedBy="children")
-     * @ORM\JoinColumn(referencedColumnName="id", onDelete="SET NULL")
+     * ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CExerciseCategory", inversedBy="children")
+     * ORM\JoinColumn(referencedColumnName="id", onDelete="SET NULL")
      *
-     * @ORM\Column(name="c_id", type="integer")
      */
-    protected $cId;
+    //protected $course;
+
+    /**
+     * @var Course
+     *
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Course")
+     * @ORM\JoinColumn(name="c_id", referencedColumnName="id", nullable=false)
+     */
+    protected $course;
 
     /**
      * @var string
@@ -89,26 +101,6 @@ class CExerciseCategory extends AbstractResource implements ResourceInterface
     }
 
     /**
-     * @return int
-     */
-    public function getCId()
-    {
-        return $this->cId;
-    }
-
-    /**
-     * @param int $cId
-     *
-     * @return CExerciseCategory
-     */
-    public function setCId($cId)
-    {
-        $this->cId = $cId;
-
-        return $this;
-    }
-
-    /**
      * @return string
      */
     public function getName()
@@ -149,41 +141,21 @@ class CExerciseCategory extends AbstractResource implements ResourceInterface
     }
 
     /**
-     * @return \DateTime
+     * @return Course
      */
-    public function getCreatedAt()
+    public function getCourse()
     {
-        return $this->createdAt;
+        return $this->course;
     }
 
     /**
-     * @param \DateTime $createdAt
+     * @param Course $course
      *
      * @return CExerciseCategory
      */
-    public function setCreatedAt($createdAt)
+    public function setCourse(Course $course): CExerciseCategory
     {
-        $this->createdAt = $createdAt;
-
-        return $this;
-    }
-
-    /**
-     * @return \DateTime
-     */
-    public function getUpdatedAt()
-    {
-        return $this->updatedAt;
-    }
-
-    /**
-     * @param \DateTime $updatedAt
-     *
-     * @return CExerciseCategory
-     */
-    public function setUpdatedAt($updatedAt)
-    {
-        $this->updatedAt = $updatedAt;
+        $this->course = $course;
 
         return $this;
     }
@@ -224,13 +196,5 @@ class CExerciseCategory extends AbstractResource implements ResourceInterface
     public function getResourceName(): string
     {
         return $this->getName();
-    }
-
-    /**
-     * @return string
-     */
-    public function getToolName(): string
-    {
-        return 'CExerciseCategory';
     }
 }

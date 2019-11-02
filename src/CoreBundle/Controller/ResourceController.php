@@ -29,11 +29,8 @@ use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Vich\UploaderBundle\Util\Transliterator;
-use League\Flysystem\Adapter\Local;
-use League\Flysystem\Filesystem;
-use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\Routing\Annotation\Route;
+use Vich\UploaderBundle\Util\Transliterator;
 
 /**
  * Class ResourceController.
@@ -51,6 +48,7 @@ class ResourceController extends BaseController implements CourseControllerInter
      */
     public function indexAction(Request $request): Response
     {
+
         return [];
 
         $source = new Entity('ChamiloCourseBundle:CDocument');
@@ -152,6 +150,16 @@ class ResourceController extends BaseController implements CourseControllerInter
         );
 
         return $grid->getGridResponse('ChamiloCoreBundle:Document:index.html.twig', ['parent_id' => $parentId]);
+    }
+
+    public function listAction(Request $request, $type): Response
+    {
+        $source = new Entity('ChamiloCourseBundle:CDocument');
+
+        /* @var Grid $grid */
+        $grid = $this->get('grid');
+
+        return $grid->getGridResponse('@ChamiloCore/Resource/index.html.twig', ['grid' => $grid]);
     }
 
     /**
@@ -442,6 +450,12 @@ class ResourceController extends BaseController implements CourseControllerInter
         if (null === $resourceNode) {
             throw new NotFoundHttpException();
         }
+
+        $this->denyAccessUnlessGranted(
+            ResourceNodeVoter::VIEW,
+            $resourceNode,
+            'Unauthorised access to resource'
+        );
 
         $params = [
             'resource_node' => $resourceNode,

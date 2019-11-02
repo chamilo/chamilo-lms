@@ -105,12 +105,20 @@ class CourseCategory
     protected $urls;
 
     /**
+     * @var ArrayCollection
+     *
+     * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\Course", mappedBy="category")
+     */
+    protected $courses;
+
+    /**
      * Constructor.
      */
     public function __construct()
     {
         $this->childrenCount = 0;
         $this->children = new ArrayCollection();
+        $this->courses = new ArrayCollection();
     }
 
     /**
@@ -372,5 +380,33 @@ class CourseCategory
         $this->description = $description;
 
         return $this;
+    }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getCourses(): ArrayCollection
+    {
+        return $this->courses;
+    }
+
+    /**
+     * @param ArrayCollection $courses
+     *
+     * @return CourseCategory
+     */
+    public function setCourses(ArrayCollection $courses): CourseCategory
+    {
+        $this->courses = $courses;
+
+        return $this;
+    }
+
+    /**
+     * @param Course $course
+     */
+    public function addCourse(Course $course)
+    {
+        $this->courses[] = $course;
     }
 }

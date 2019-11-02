@@ -22,7 +22,6 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Table(
  *  name="course",
  *  indexes={
- *      @ORM\Index(name="category_code", columns={"category_code"}),
  *      @ORM\Index(name="directory", columns={"directory"}),
  *  }
  * )
@@ -205,11 +204,12 @@ class Course extends AbstractResource implements ResourceInterface
     protected $description;
 
     /**
-     * @var string
+     * @var CourseCategory
      *
-     * @ORM\Column(name="category_code", type="string", length=40, nullable=true, unique=false)
+     * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\CourseCategory", inversedBy="courses")
+     * @ORM\JoinColumn(name="category", referencedColumnName="id")
      */
-    protected $categoryCode;
+    protected $category;
 
     /**
      * @var int
@@ -772,13 +772,13 @@ class Course extends AbstractResource implements ResourceInterface
     /**
      * Set categoryCode.
      *
-     * @param string $categoryCode
+     * @param string $category
      *
      * @return Course
      */
-    public function setCategoryCode($categoryCode)
+    public function setCategory($category)
     {
-        $this->categoryCode = $categoryCode;
+        $this->category = $category;
 
         return $this;
     }
@@ -786,11 +786,11 @@ class Course extends AbstractResource implements ResourceInterface
     /**
      * Get categoryCode.
      *
-     * @return string
+     * @return CourseCategory
      */
-    public function getCategoryCode()
+    public function getCategory()
     {
-        return $this->categoryCode;
+        return $this->category;
     }
 
     /**

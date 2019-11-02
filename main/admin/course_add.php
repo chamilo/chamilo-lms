@@ -69,7 +69,7 @@ if ($countCategories >= 100) {
 
     $form->addElement(
         'select_ajax',
-        'category_code',
+        'category_id',
         get_lang('Category'),
         null,
         ['url' => $url]
@@ -79,13 +79,13 @@ if ($countCategories >= 100) {
         $accessUrlId,
         api_get_configuration_value('allow_base_course_category')
     );
-    $categoriesOptions = [null => get_lang('none')];
+    $categoriesOptions = [0 => get_lang('None')];
     /** @var CourseCategory $category */
     foreach ($categories as $category) {
-        $categoriesOptions[$category->getCode()] = (string) $category;
+        $categoriesOptions[$category->getId()] = (string) $category;
     }
     $form->addSelect(
-        'category_code',
+        'category_id',
         get_lang('Category'),
         $categoriesOptions
     );
@@ -230,7 +230,7 @@ if ($form->validate()) {
     $course['wanted_code'] = $course['visual_code'];
     $course['gradebook_model_id'] = isset($course['gradebook_model_id']) ? $course['gradebook_model_id'] : null;
     // Fixing category code
-    $course['course_category'] = isset($course['category_code']) ? $course['category_code'] : '';
+    $course['category_id'] = isset($course['category_id']) ? (int) $course['category_id'] : '';
 
     include_once api_get_path(SYS_CODE_PATH).'lang/english/trad4all.inc.php';
     $file_to_include = api_get_path(SYS_CODE_PATH).'lang/'.$course['course_language'].'/trad4all.inc.php';

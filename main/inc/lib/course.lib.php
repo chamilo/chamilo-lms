@@ -2893,7 +2893,7 @@ class CourseManager
             $sql = "SELECT 
                         DISTINCT(course.code), 
                         course.id as real_id, 
-                        course.category_code AS category,
+                        course.category,
                         course.title
                     FROM $tbl_course course
                     INNER JOIN $tbl_course_user cru 

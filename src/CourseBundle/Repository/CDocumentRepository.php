@@ -4,7 +4,6 @@
 namespace Chamilo\CourseBundle\Repository;
 
 use Chamilo\CoreBundle\Entity\Resource\ResourceLink;
-use Chamilo\CoreBundle\Entity\Resource\ResourceNode;
 use Chamilo\CoreBundle\Entity\Resource\ResourceRight;
 use Chamilo\CoreBundle\Repository\ResourceRepository;
 use Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter;
@@ -16,6 +15,34 @@ use Gaufrette\Exception\FileNotFound;
  */
 final class CDocumentRepository extends ResourceRepository
 {
+    /**
+     * @param CDocument $document
+     *
+     * @return string
+     */
+    public function getDocumentUrl(CDocument $document)
+    {
+        // There are no URL for folders.
+        if ($document->getFiletype() === 'folder') {
+            return '';
+        }
+        $file = $document->getResourceNode()->getResourceFile();
+
+        if ($file === null) {
+            return '';
+        }
+
+        $params = [
+            'course' => $document->getCourse()->getCode(),
+            'file' => ltrim($document->getPath(), '/'),
+        ];
+
+        return $this->getRouter()->generate(
+            'core_tool_document',
+            $params
+        );
+    }
+
     /**
      * @param int $id
      *

@@ -34,7 +34,6 @@ switch ($action) {
         api_protect_course_script(true);
         // User access same as upload.php
         $is_allowed_to_edit = api_is_allowed_to_edit(null, true);
-
         $sessionId = api_get_session_id();
 
         if (!$is_allowed_to_edit && $sessionId && $_REQUEST['curdirpath'] == "/basic-course-documents__{$sessionId}__0") {
@@ -122,7 +121,7 @@ switch ($action) {
                 if (!empty($document)) {
                     $json['name'] = Display::url(
                         api_htmlentities($document->getTitle()),
-                        api_htmlentities($document->getTitle()),
+                        $repo->getDocumentUrl($document),
                         ['target' => '_blank']
                     );
                     $json['url'] = '#';

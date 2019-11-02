@@ -1,0 +1,153 @@
+{% extends "@ChamiloTheme/Layout/layout_one_col.html.twig" %}
+
+{% block content %}
+{% autoescape false %}
+    <script>
+        /* option show/hide thematic-block */
+        $(function() {
+            $("#thematic-show").click(function(){
+                $(".btn-hide-thematic").hide();
+                $(".btn-show-thematic").show(); //show using class
+                $("#pross").fadeToggle(); //Not working collapse for Chrome
+            });
+
+            $("#thematic-hide").click(function(){
+                $(".btn-show-thematic").hide(); //show using class
+                $(".btn-hide-thematic").show();
+                $("#pross").fadeToggle(); //Not working collapse for Chrome
+            });
+
+            $(".make_visible_and_invisible").attr("href", "javascript:void(0);");
+            $(".make_visible_and_invisible > img").click(function () {
+                make_visible = "visible.png";
+                make_invisible = "invisible.png";
+                path_name = $(this).attr("src");
+                list_path_name = path_name.split("/");
+                image_link = list_path_name[list_path_name.length - 1];
+                tool_id = $(this).attr("id");
+                tool_info = tool_id.split("_");
+                my_tool_id = tool_info[1];
+                $("#id_normal_message").attr("class", "normal-message alert alert-success");
+
+                $.ajax({
+                    contentType: "application/x-www-form-urlencoded",
+                    beforeSend: function(myObject) {
+                        $(".normal-message").show();
+                        $("#id_confirmation_message").hide();
+                    },
+                    type: "GET",
+                    url: "'.api_get_path(WEB_AJAX_PATH).'course_home.ajax.php?'.api_get_cidreq().'&a=set_visibility",
+                    data: "id=" + my_tool_id + "&sent_http_request=1",
+                    success: function(data) {
+                        eval("var info=" + data);
+                        new_current_tool_image = info.image;
+                        new_current_view       = "'.api_get_path('WEB_PUBLIC_PATH').'img/" + info.view;
+                        //eyes
+                        $("#" + tool_id).attr("src", new_current_view);
+                        //tool
+                        $("#toolimage_" + my_tool_id).attr("src", new_current_tool_image);
+                        //clase
+                        $("#tooldesc_" + my_tool_id).attr("class", info.tclass);
+                        $("#istooldesc_" + my_tool_id).attr("class", info.tclass);
+
+                        if (image_link == "visible.png") {
+                            $("#" + tool_id).attr("alt", "'.get_lang('Activate').'");
+                            $("#" + tool_id).attr("title", "'.get_lang('Activate').'");
+                        } else {
+                            $("#" + tool_id).attr("alt", "'.get_lang('Deactivate').'");
+                            $("#" + tool_id).attr("title", "'.get_lang('Deactivate').'");
+                        }
+                        if (info.message == "is_active") {
+                            message = "'.get_lang('ToolIsNowVisible').'";
+                        } else {
+                            message = "'.get_lang('ToolIsNowHidden').'";
+                        }
+                        $(".normal-message").hide();
+                        $("#id_confirmation_message").html(message);
+                        $("#id_confirmation_message").show();
+                    }
+                });
+            });
+        });
+    </script>
+
+    {% if app.user.status != 5 %} <!-- main/template/default/course_home/activity.html.twig -->
+        <div class="accordion accordion-b4" id="course-tools">
+            {% for block in blocks %}
+                <div class="card">
+                    <div class="card-header" id="heading-{{ block.class }}">
+                        {% if block.title %}
+                            <h5 class="card-title">
+                                <a class="{{ ( block.title == 'Authoring') ? ' ' : 'collapse' }}" role="button" data-toggle="collapse" data-target="#collapse-{{ block.class }}" aria-expanded="{{ ( block.title == 'Authoring') ? 'true' : 'false' }}" aria-controls="collapse-{{ block.class }}">
+                                    {{ block.title }}
+                                </a>
+                            </h5>
+                        {% endif %}
+                    </div>
+
+                    <div id="collapse-{{ block.class }}" class="collapse show" aria-labelledby="heading-{{ block.class }}" data-parent="#course-tools">
+                        <div class="grid-tools">
+                            {% if 'homepage_view'|api_get_setting == 'activity' %}
+                                {% for item in block.content %}
+                                    <div class="col-md-4 course-tool">
+                                        {{ item.extra|raw }}
+                                        {{ item.visibility|raw }}
+                                        {{ item.icon|raw }}
+                                        {{ item.link|raw }}
+                                    </div>
+                                {% endfor %}
+                            {% endif %}
+                            {% if 'homepage_view'|api_get_setting == 'activity_big' %}
+                                {% for item in block.content %}
+                                    <div class="items-tools ">
+                                        <div class="tools mt-3 mb-3">
+                                            <div class="big_icon">
+                                                {{ item.tool.image|raw }}
+                                            </div>
+                                            <div class="content pt-2 pb-2">
+                                                {{ item.extra|raw }}
+                                                {{ item.link|raw }}
+                                                {% if item.visibility is not empty %}
+                                                    <div class="view">
+                                                        {{ item.visibility|raw }}
+                                                    </div>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="grid-tools">
+            {% for block in blocks %}
+                {% if 'homepage_view'|api_get_setting == 'activity_big' %}
+                    {% for item in block.content %}
+                        <div class="items-tools">
+                            <div class="tools mt-3 mb-3">
+                                <div class="big_icon">
+                                    {{ item.tool.image|raw }}
+                                </div>
+                                <div class="content pt-2 pb-2">
+                                    {{ item.extra|raw }}
+                                    {{ item.link|raw }}
+                                    {% if item.visibility is not empty %}
+                                        <div class="view">
+                                            {{ item.visibility|raw }}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endfor %}
+        </div>
+    {% endif %}
+
+{% endautoescape %}
+{% endblock %}

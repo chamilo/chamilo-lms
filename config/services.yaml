@@ -72,6 +72,9 @@ services:
     Vich\UploaderBundle\Naming\SubdirDirectoryNamer:
         public: true
 
+    Chamilo\CoreBundle\Component\Naming\SmartUniqueNamer:
+        public: true
+
     Chamilo\ThemeBundle\:
         autowire: true
         resource: '../src/ThemeBundle/*'

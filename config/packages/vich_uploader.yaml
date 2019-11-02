@@ -6,10 +6,13 @@ vich_uploader:
         resources:
             uri_prefix: '/'
             upload_destination: resources_fs
-            namer: Vich\UploaderBundle\Naming\Base64Namer
+#            namer: Vich\UploaderBundle\Naming\SmartUniqueNamer
+            # Using Chamilo namespace until issue is resolved:
+            # https://github.com/Sylius/Sylius/pull/10668
+            namer: Chamilo\CoreBundle\Component\Naming\SmartUniqueNamer
             directory_namer:
                 service: Vich\UploaderBundle\Naming\SubdirDirectoryNamer
-                options: {chars_per_dir: 1, dirs: 3}
+                options: {chars_per_dir: 1, dirs: 2}
             inject_on_load: true
             delete_on_update: true
             delete_on_remove: true

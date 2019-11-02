@@ -8,7 +8,7 @@ use Chamilo\CoreBundle\Entity\Resource\ResourceRight;
 use Chamilo\CoreBundle\Repository\ResourceRepository;
 use Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter;
 use Chamilo\CourseBundle\Entity\CDocument;
-use Gaufrette\Exception\FileNotFound;
+use Symfony\Component\Filesystem\Exception\FileNotFoundException;
 
 /**
  * Class CDocumentRepository.
@@ -59,7 +59,7 @@ final class CDocumentRepository extends ResourceRepository
 
             return $this->fs->read($fileName);
         } catch (\Throwable $exception) {
-            throw new FileNotFound($id);
+            throw new FileNotFoundException($id);
         }
     }
 

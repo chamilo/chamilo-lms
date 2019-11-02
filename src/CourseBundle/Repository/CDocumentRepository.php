@@ -38,7 +38,7 @@ final class CDocumentRepository extends ResourceRepository
         ];
 
         return $this->getRouter()->generate(
-            'core_tool_document',
+            'resources_document_get_file',
             $params
         );
     }

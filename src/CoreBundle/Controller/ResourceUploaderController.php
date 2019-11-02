@@ -21,6 +21,7 @@ class ResourceUploaderController extends BlueimpController
      */
     public function upload()
     {
+        return;
         error_log('upload!!!');
         $request = $this->getRequest();
         $response = new EmptyResponse();

@@ -26,6 +26,8 @@ abstract class AbstractResource implements ResourceInterface
     abstract public function getResourceName(): string;
 
     /**
+     * Updates the resource node name when updating the resource.
+     *
      * @ORM\PostUpdate()
      *
      * @param LifecycleEventArgs $args

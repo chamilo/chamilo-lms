@@ -22,7 +22,7 @@ class IllustrationRepository extends ResourceRepository
      *
      * @return ResourceFile
      */
-    public function  addIllustration(AbstractResource $resource, User $user, $uploadFile)
+    public function addIllustration(AbstractResource $resource, User $user, $uploadFile): ?ResourceFile
     {
         $illustrationNode = $this->getIllustrationNodeFromResource($resource);
         $em = $this->getEntityManager();
@@ -33,6 +33,7 @@ class IllustrationRepository extends ResourceRepository
             $illustrationNode = $this->addResourceNode($illustration, $user, $resource);
             //$this->addResourceToEveryone($illustrationNode);
         }
+
         return $this->addFile($illustrationNode, $uploadFile);
     }
 
@@ -41,7 +42,7 @@ class IllustrationRepository extends ResourceRepository
      *
      * @return ResourceNode
      */
-    public function getIllustrationNodeFromResource(AbstractResource $resource)
+    public function getIllustrationNodeFromResource(AbstractResource $resource): ?ResourceNode
     {
         $nodeRepo = $this->getResourceNodeRepository();
         $resourceType = $this->getResourceType();
@@ -69,7 +70,7 @@ class IllustrationRepository extends ResourceRepository
 
     /**
      * @param AbstractResource $resource
-     * @param string           $filter
+     * @param string           $filter   See: services.yaml parameter "glide_media_filters" to see the list of filters.
      *
      * @return string
      */
@@ -83,8 +84,8 @@ class IllustrationRepository extends ResourceRepository
                 $params['filter'] = $filter;
             }
 
-            return $this->router->generate(
-                'core_tool_resource',
+            return $this->getRouter()->generate(
+                'resources_get_file',
                 $params
             );
         }

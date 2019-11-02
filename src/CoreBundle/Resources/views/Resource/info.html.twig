@@ -1,0 +1,26 @@
+{% extends "@ChamiloTheme/Layout/layout_one_col.html.twig" %}
+
+{% block content %}
+    {% autoescape false %}
+        <h3>{{ resource_node.name }} </h3>
+
+        Type: {{ resource_node.resourceType }}      <br />
+
+        {% if resource_node.resourceFile %}
+            File:
+            <a href="{{ url('resources_get_file', {id: resource_node.id } ) }}">
+                {{ resource_node.resourceFile }}
+            </a>
+            <br />
+            Size: {{ resource_node.resourceFile.size }}
+            <br /><br />
+        {% endif %}
+
+        Updated at: {{ resource_node.updatedAt | date_to_time_ago }}
+        <br />
+        Created at: {{ resource_node.createdAt | date_to_time_ago }}<br />
+        <br />
+        Creator: {{ resource_node.creator }}
+
+    {% endautoescape %}
+{% endblock %}

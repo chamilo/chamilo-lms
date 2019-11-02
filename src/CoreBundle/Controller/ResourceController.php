@@ -30,6 +30,10 @@ use Symfony\Component\HttpFoundation\StreamedResponse;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Vich\UploaderBundle\Util\Transliterator;
+use League\Flysystem\Adapter\Local;
+use League\Flysystem\Filesystem;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
+use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * Class ResourceController.
@@ -401,7 +405,6 @@ class ResourceController extends BaseController implements CourseControllerInter
      * Shows a resource.
      *
      * @param Request             $request
-     * @param CDocumentRepository $documentRepo
      * @param Glide               $glide
      *
      * @return Response
@@ -429,29 +432,21 @@ class ResourceController extends BaseController implements CourseControllerInter
      *
      * @return Response
      */
-    public function showAction(Request $request, CDocumentRepository $documentRepo, Glide $glide): Response
+    public function showAction(Request $request): Response
     {
-        $file = $request->get('file');
-        $type = $request->get('type');
-        // see list of filters in config/services.yaml
-        $filter = $request->get('filter');
-        $type = !empty($type) ? $type : 'show';
+        $em = $this->getDoctrine();
 
-        $criteria = [
-            'path' => "/$file",
-            'course' => $this->getCourse(),
-        ];
+        $id = $request->get('id');
+        $resourceNode = $em->getRepository('ChamiloCoreBundle:Resource\ResourceNode')->find($id);
 
-        $document = $documentRepo->findOneBy($criteria);
-
-        if (null === $document) {
+        if (null === $resourceNode) {
             throw new NotFoundHttpException();
         }
 
-        /** @var ResourceNode $resourceNode */
-        $resourceNode = $document->getResourceNode();
-
-        return $this->showFile($request, $resourceNode, $glide, $type, $filter);
+        $params = [
+            'resource_node' => $resourceNode,
+        ];
+        return $this->render('@ChamiloCore/Resource/info.html.twig', $params);
     }
 
     /**
@@ -618,5 +613,25 @@ class ResourceController extends BaseController implements CourseControllerInter
         $response->headers->set('Content-Type', $mimeType ?: 'application/octet-stream');
 
         return $response;
+    }
+
+    /**
+     * Upload form.
+     *
+     * @Route("/upload/{type}/{id}", name="resource_upload", methods={"GET", "POST"}, options={"expose"=true})
+     *
+     * @return Response
+     */
+    public function showUploadFormAction($type, $id): Response
+    {
+        //$helper = $this->container->get('oneup_uploader.templating.uploader_helper');
+        //$endpoint = $helper->endpoint('courses');
+        return $this->render(
+            '@ChamiloCore/Resource/upload.html.twig',
+            [
+                'identifier' => $id,
+                'type' => $type,
+            ]
+        );
     }
 }

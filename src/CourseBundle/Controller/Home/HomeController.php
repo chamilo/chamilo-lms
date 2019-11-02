@@ -3,6 +3,7 @@
 
 namespace Chamilo\CourseBundle\Controller\Home;
 
+use APY\DataGridBundle\Grid\Source\Entity;
 use Chamilo\CourseBundle\Controller\ToolBaseController;
 use Chamilo\CourseBundle\Entity\CTool;
 use CourseHome;
@@ -16,6 +17,7 @@ use Security;
 use Event;
 use Database;
 use ExtraFieldValue;
+use Ublaboo\DataGrid\DataGrid;
 
 /**
  * Class HomeController.
@@ -106,8 +108,6 @@ class HomeController extends ToolBaseController
 
         $logInfo = [
             'tool' => 'course-main',
-            'tool_id' => 0,
-            'tool_id_detail' => 0,
             'action' => $action,
         ];
         Event::registerLog($logInfo);
@@ -285,13 +285,11 @@ class HomeController extends ToolBaseController
 
         //require 'activity.php';
         // Activity start
-
-
         $id = isset($_GET['id']) ? (int) $_GET['id'] : null;
         $course_id = api_get_course_int_id();
         $session_id = api_get_session_id();
 
-// Work with data post askable by admin of course
+        // Work with data post askable by admin of course
         if (api_is_platform_admin()) {
             // Show message to confirm that a tool it to be hidden from available tools
             // visibility 0,1->2
@@ -317,7 +315,7 @@ class HomeController extends ToolBaseController
             $pluginExtra = $plugin->getTeacherLink();
         }
 
-// Start of tools for CourseAdmins (teachers/tutors)
+        // Start of tools for CourseAdmins (teachers/tutors)
         if ($session_id === 0 && api_is_course_admin() && api_is_allowed_to_edit(null, true)) {
             $content .= '<div class="alert alert-success" style="border:0px; margin-top: 0px;padding:0px;">
 		<div class="normal-message" id="id_normal_message" style="display:none">';
@@ -340,11 +338,9 @@ class HomeController extends ToolBaseController
         }
 
         $blocks = CourseHome::getUserBlocks();
-
-
         // Activity end
 
-// Get session-career diagram
+        // Get session-career diagram
         $diagram = '';
         $allow = api_get_configuration_value('allow_career_diagram');
         if ($allow === true) {
@@ -395,6 +391,10 @@ class HomeController extends ToolBaseController
 
         $content = '<div id="course_tools">'.$diagram.$content.'</div>';
 
+        $source = new Entity('ChamiloCourseBundle:CExerciseCategory');
+        $grid = $this->get('grid');
+        $grid ->setSource($source);
+
         // Deleting the objects
         Session::erase('_gid');
         Session::erase('oLP');
@@ -403,11 +403,15 @@ class HomeController extends ToolBaseController
         \Exercise::cleanSessionVariables();
         \DocumentManager::removeGeneratedAudioTempFile();
 
+
+
+
         return $this->render(
             '@ChamiloTheme/Course/home.html.twig',
             [
                 'course' => $course,
                 'diagram' => $diagram,
+                'grid' => $grid,
                // 'session_info' => $sessionInfo,
                 'icons' => $result['content'],
                 'blocks' => $blocks,

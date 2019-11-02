@@ -67,7 +67,7 @@ class ResourceRepository extends EntityRepository
     public function __construct(EntityManager $entityManager, MountManager $mountManager, RouterInterface $router, string $className)
     {
         $this->repository = $entityManager->getRepository($className);
-        // Flysystem mount name is saved in config/packages/oneup_flysystem.yaml
+        // Flysystem mount name is saved in config/packages/oneup_flysystem.yaml @todo add it as a service.
         $this->fs = $mountManager->getFilesystem('resources_fs');
         $this->router = $router;
         $this->resourceNodeRepository = $entityManager->getRepository('ChamiloCoreBundle:Resource\ResourceNode');
@@ -79,6 +79,14 @@ class ResourceRepository extends EntityRepository
     public function create()
     {
         return new $this->className();
+    }
+
+    /**
+     * @return RouterInterface
+     */
+    public function getRouter(): RouterInterface
+    {
+        return $this->router;
     }
 
     /**
@@ -120,7 +128,7 @@ class ResourceRepository extends EntityRepository
      *
      * @return AbstractResource|null
      */
-    public function find($id, $lockMode = null, $lockVersion = null)
+    public function find($id, $lockMode = null, $lockVersion = null): ?AbstractResource
     {
         return $this->getRepository()->find($id);
     }
@@ -131,7 +139,7 @@ class ResourceRepository extends EntityRepository
      *
      * @return AbstractResource
      */
-    public function findOneBy(array $criteria, array $orderBy = null)
+    public function findOneBy(array $criteria, array $orderBy = null): ?AbstractResource
     {
         return $this->getRepository()->findOneBy($criteria, $orderBy);
     }
@@ -142,7 +150,7 @@ class ResourceRepository extends EntityRepository
      *
      * @return ResourceFile
      */
-    public function addFile(ResourceNode $resourceNode, UploadedFile $file)
+    public function addFile(ResourceNode $resourceNode, UploadedFile $file): ?ResourceFile
     {
         $resourceFile = $resourceNode->getResourceFile();
         if ($resourceFile === null) {
@@ -170,11 +178,8 @@ class ResourceRepository extends EntityRepository
      *
      * @return ResourceNode
      */
-    public function addResourceNode(
-        AbstractResource $resource,
-        User $creator,
-        AbstractResource $parent = null
-    ): ResourceNode {
+    public function addResourceNode(AbstractResource $resource, User $creator, AbstractResource $parent = null): ResourceNode
+    {
         $em = $this->getEntityManager();
 
         $resourceType = $this->getResourceType();
@@ -199,7 +204,15 @@ class ResourceRepository extends EntityRepository
         return $resourceNode;
     }
 
-    public function addResourceToCourse(AbstractResource $resource, $visibility, User $creator, Course $course, $session = null, $group = null)
+    /**
+     * @param AbstractResource $resource
+     * @param int              $visibility
+     * @param User             $creator
+     * @param Course           $course
+     * @param Session          $session
+     * @param CGroupInfo       $group
+     */
+    public function addResourceToCourse(AbstractResource $resource, int $visibility, User $creator, Course $course, Session $session = null, CGroupInfo $group = null)
     {
         $node = $this->addResourceNode($resource, $creator, $course);
         $this->addResourceNodeToCourse($node, $visibility, $course, $session, $group);
@@ -304,8 +317,6 @@ class ResourceRepository extends EntityRepository
 
         return $resourceLink;
     }
-
-
 
     /**
      * @param ResourceNode  $resourceNode
@@ -463,7 +474,7 @@ class ResourceRepository extends EntityRepository
         );
         $type = $this->getResourceType();
 
-        $query = $this->getEntityManager()->createQueryBuilder()
+        $qb = $this->getEntityManager()->createQueryBuilder()
             ->select('resource')
             ->from(ResourceNode::class, 'node')
             ->innerJoin('node.resourceLinks', 'links')
@@ -486,37 +497,39 @@ class ResourceRepository extends EntityRepository
             );
 
         if ($session === null) {
-            $query->andWhere('links.session IS NULL');
+            $qb->andWhere('links.session IS NULL');
         } else {
             if ($loadBaseSessionContent) {
-                $query->andWhere('links.session = :session OR links.session IS NULL');
-                $query->setParameter('session', $session);
+                $qb->andWhere('links.session = :session OR links.session IS NULL');
+                $qb->setParameter('session', $session);
             } else {
-                $query->andWhere('links.session = :session');
-                $query->setParameter('session', $session);
+                $qb->andWhere('links.session = :session');
+                $qb->setParameter('session', $session);
             }
         }
 
         if ($group === null) {
-            $query->andWhere('links.group IS NULL');
+            $qb->andWhere('links.group IS NULL');
         }
 
         /*if ($parent !== null) {
-            $query->andWhere('node.parent = :parentId');
-            $query->setParameter('parentId', $parent->getResourceNode()->getId());
+            $qb->andWhere('node.parent = :parentId');
+            $qb->setParameter('parentId', $parent->getResourceNode()->getId());
         } else {
-            $query->andWhere('node.parent = :parentId');
-            $query->setParameter('parentId', $course->getResourceNode());
+            $qb->andWhere('node.parent = :parentId');
+            $qb->setParameter('parentId', $course->getResourceNode());
         }*/
 
-        /*$query->setFirstResult();
-        $query->setMaxResults();
-        $query->orderBy();*/
+        /*$qb->setFirstResult();
+        $qb->setMaxResults();
+        $qb->orderBy();*/
 
-        $query = $query->getQuery();
-        //var_dump($query->getSQL());
+        return $qb;
 
-        /*$query = $this->getEntityManager()->createQueryBuilder()
+        $qb = $qb->getQuery();
+        //var_dump($qb->getSQL());
+
+        /*$qb = $this->getEntityManager()->createQueryBuilder()
             ->select('notebook')
             ->from('ChamiloNotebookBundle:CNotebook', 'notebook')
             ->innerJoin('notebook.resourceNodes', 'node')
@@ -531,7 +544,7 @@ class ResourceRepository extends EntityRepository
             )
             ->getQuery()
         ;*/
-        return $query->getResult();
+        return $qb->getResult();
     }
 
     /**

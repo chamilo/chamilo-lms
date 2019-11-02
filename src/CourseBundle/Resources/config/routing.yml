@@ -7,17 +7,24 @@ core_tool:
     type: annotation
     prefix: /courses/{course}/
 
-core_tool_document:
-    path: /courses/{course}/document/{file}
+resources_get_info:
+    path: /resources/{id}
     defaults:
         _controller: Chamilo\CoreBundle\Controller\ResourceController::showAction
     requirements:
         file: .+ # allow "/" in {file}
 
-core_tool_resource:
-    path: /resources/{id}
+resources_get_file:
+    path: /resources/file/{id}
     defaults:
         _controller: Chamilo\CoreBundle\Controller\ResourceController::getResourceFileAction
+    requirements:
+        file: .+ # allow "/" in {file}
+
+resources_document_get_file:
+    path: /courses/{course}/document/{file}
+    defaults:
+        _controller: Chamilo\CoreBundle\Controller\ResourceController::showAction
     requirements:
         file: .+ # allow "/" in {file}
 

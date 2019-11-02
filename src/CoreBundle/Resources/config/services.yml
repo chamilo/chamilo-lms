@@ -67,6 +67,11 @@ services:
 #        tags:
 #            - {name: twig.extension}
 
+#    twig.extension.date:
+#        class: Twig_Extensions_Extension_Date
+#        tags:
+#            - { name: twig.extension }
+
     # Chamilo custom password encoder (depends on the password_encryption param)
 #    chamilo_user.security.encoder:
 #        class: Chamilo\UserBundle\Security\Encoder

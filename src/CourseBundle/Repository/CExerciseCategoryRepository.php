@@ -22,7 +22,7 @@ final class CExerciseCategoryRepository extends ResourceRepository
     {
         $query = $this->getRepository()->createQueryBuilder('e');
         $query->select('count(e.id)');
-        $query->where('e.cId = :cId');
+        $query->where('e.course = :cId');
         $query->setParameter('cId', $courseId);
 
         return $query->getQuery()->getSingleScalarResult();
@@ -36,7 +36,7 @@ final class CExerciseCategoryRepository extends ResourceRepository
     public function getCategories($courseId)
     {
         $query = $this->getRepository()->createQueryBuilder('e');
-        $query->where('e.cId = :cId');
+        $query->where('e.course = :cId');
         $query->setParameter('cId', $courseId);
         $query->orderBy('e.position');
 

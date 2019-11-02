@@ -206,6 +206,14 @@ class ResourceFile
     }
 
     /**
+     * @return string
+     */
+    public function __toString(): string
+    {
+        return (string) $this->getName();
+    }
+
+    /**
      * @return mixed
      */
     public function getName()

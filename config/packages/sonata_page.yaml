@@ -44,7 +44,7 @@ sonata_page:
         - ^/news/(.*)
         - ^/courses/(.*)
         - ^/editor/(.*)
-        - ^/resource/(.*)
+        - ^/resources/(.*)
         - ^/front/editor
         - ^/contact(.*) # sonata admin
         - ^/cms/pages/latest

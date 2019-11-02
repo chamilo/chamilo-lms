@@ -99,12 +99,4 @@ class Illustration extends AbstractResource implements ResourceInterface
     {
         return $this->getName();
     }
-
-    /**
-     * @return string
-     */
-    public function getToolName(): string
-    {
-        return 'Illustration';
-    }
 }

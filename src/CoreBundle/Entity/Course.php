@@ -1406,12 +1406,4 @@ class Course extends AbstractResource implements ResourceInterface
     {
         return $this->getCode();
     }
-
-    /**
-     * @return string
-     */
-    public function getToolName(): string
-    {
-        return 'Course';
-    }
 }

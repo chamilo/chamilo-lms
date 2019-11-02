@@ -511,12 +511,4 @@ class AccessUrl extends AbstractResource implements ResourceInterface
 
         return $url;
     }
-
-    /**
-     * @return string
-     */
-    public function getToolName(): string
-    {
-        return 'AccessUrl';
-    }
 }

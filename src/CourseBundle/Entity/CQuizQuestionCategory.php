@@ -218,12 +218,4 @@ class CQuizQuestionCategory extends AbstractResource implements ResourceInterfac
     {
         return $this->getTitle();
     }
-
-    /**
-     * @return string
-     */
-    public function getToolName(): string
-    {
-        return 'CQuizQuestionCategory';
-    }
 }

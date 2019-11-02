@@ -19,9 +19,4 @@ interface ResourceInterface
      * @return string
      */
     public function getResourceName(): string;
-
-    /**
-     * @return string
-     */
-    public function getToolName(): string;
 }

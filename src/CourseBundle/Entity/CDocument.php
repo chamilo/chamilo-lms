@@ -406,12 +406,4 @@ class CDocument extends AbstractResource implements ResourceInterface
     {
         return $this->getTitle();
     }
-
-    /**
-     * @return string
-     */
-    public function getToolName(): string
-    {
-        return 'CDocument';
-    }
 }

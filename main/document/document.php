@@ -607,9 +607,7 @@ if (isset($document_id) && empty($action)) {
         );
     }
 
-    //var_dump($document_data);    exit;
     // If the document is not a folder we show the document.
-
     if ($document_data) {
         $parent_id = $document_data['parent_id'];
         // Hack in order to clean the document id in case of false positive from links

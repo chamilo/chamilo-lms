@@ -406,12 +406,4 @@ class CQuizQuestion extends AbstractResource implements ResourceInterface
     {
         return $this->getQuestion();
     }
-
-    /**
-     * @return string
-     */
-    public function getToolName(): string
-    {
-        return 'CQuizQuestion';
-    }
 }

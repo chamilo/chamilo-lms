@@ -368,7 +368,7 @@ class ResourceNode
     /**
      * @return ResourceFile
      */
-    public function getResourceFile()
+    public function getResourceFile(): ?ResourceFile
     {
         return $this->resourceFile;
     }

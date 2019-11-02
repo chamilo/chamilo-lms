@@ -291,23 +291,6 @@ class CourseListener
             $controllerActionParts = explode(':', $controllerAction);
             $controllerNameParts = explode('.', $controllerActionParts[0]);
             $controllerName = $controllerActionParts[0];
-
-        /*$toolName = null;
-        $toolAction = null;
-        if (isset($controllerNameParts[1]) &&
-            $controllerNameParts[1] == 'controller'
-        ) {
-            $toolName = $this->container->get($controllerName)->getToolName();
-            $action = str_replace('action', '', $controllerActionParts[1]);
-            $toolAction = $toolName.'.'.$action;
-        }*/
-
-            //$container->get('twig')->addGlobal('tool.name', $toolName);
-            //$container->get('twig')->addGlobal('tool.action', $toolAction);
-
-            //$sessionHandler->set('_gid', $groupId);
-            //$sessionHandler->set('is_allowed_in_course', true);
-            //$sessionHandler->set('id_session', $sessionId);
         } else {
             $ignore = [
                 'fos_js_routing.controller:indexAction',

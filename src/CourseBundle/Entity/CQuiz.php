@@ -985,12 +985,4 @@ class CQuiz extends AbstractResource implements ResourceInterface
     {
         return $this->getTitle();
     }
-
-    /**
-     * @return string
-     */
-    public function getToolName(): string
-    {
-        return 'CQuiz';
-    }
 }

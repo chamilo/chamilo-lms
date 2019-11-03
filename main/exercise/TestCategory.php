@@ -138,9 +138,6 @@ class TestCategory
         $category = $this->getCategory($id, $course_id);
 
         if ($category) {
-            /*$sql = "DELETE FROM $table
-                    WHERE id= $id AND c_id=".$course_id;
-            Database::query($sql);*/
 
             // remove link between question and category
             $sql = "DELETE FROM $tbl_question_rel_cat
@@ -151,21 +148,34 @@ class TestCategory
             $category = $repo->find($id);
             $repo->hardDelete($category);
 
-            //Database::query($sql);
-            // item_property update
-            /*$courseInfo = api_get_course_info_by_id($course_id);
-            api_item_property_update(
-                $courseInfo,
-                TOOL_TEST_CATEGORY,
-                $this->id,
-                'TestCategoryDeleted',
-                api_get_user_id()
-            );*/
-
             return true;
         }
 
         return false;
+    }
+
+    /**
+     * @param                                                   $primaryKeys
+     * @param                                                   $allPrimaryKeys
+     * @param \Symfony\Component\HttpFoundation\Session\Session $session
+     * @param                                                   $parameters
+     */
+    public function deleteResource(
+        $primaryKeys,
+        $allPrimaryKeys,
+        Symfony\Component\HttpFoundation\Session\Session $session,
+        $parameters
+    ) {
+        $repo = Container::getQuestionCategoryRepository();
+        $translator = Container::getTranslator();
+        foreach ($primaryKeys as $id) {
+            $category = $repo->find($id);
+            $repo->hardDelete($category);
+        }
+
+        Display::addFlash(Display::return_message($translator->trans('Deleted')));
+        header('Location:'. api_get_self().'?'.api_get_cidreq());
+        exit;
     }
 
     /**
@@ -1117,12 +1127,12 @@ class TestCategory
     public function displayCategories($courseId, $sessionId = 0)
     {
         $sessionId = (int) $sessionId;
-        $categories = $this->getCategories($courseId, $sessionId);
+        //$categories = $this->getCategories($courseId, $sessionId);
 
         $html = '';
         $deleteIcon = Display::return_icon('delete.png', get_lang('Delete'), [], ICON_SIZE_SMALL);
         /** @var CQuizQuestionCategory $category */
-        foreach ($categories as $category) {
+        /*foreach ($categories as $category) {
             $id = $category->getId();
             $count = $this->getCategoryQuestionsNumber($id);
             $rowname = self::protectJSDialogQuote($category->getTitle());
@@ -1141,7 +1151,74 @@ class TestCategory
                 $links .= $deleteIcon.'</a>';
             }
             $html .= Display::panel($content, $category->getTitle().$links);
+        }*/
+
+        // 1. Set entity
+        $source = new \APY\DataGridBundle\Grid\Source\Entity('ChamiloCourseBundle:CQuizQuestionCategory');
+        // 2. Get query builder from repo.
+        $qb = Container::getQuestionCategoryRepository()->getResourcesByCourse(api_get_course_entity());
+
+        // 3. Set QueryBuilder to the source.
+        $source-> initQueryBuilder($qb);
+
+        // 4. Get the grid builder.
+        $builder = Container::$container->get('apy_grid.factory');
+
+        // 5. Set parameters and properties.
+        $grid = $builder->createBuilder(
+            'grid',
+            $source,
+            [
+                'persistence' => false,
+                'route' => 'home',
+                'filterable' => true,
+                'sortable' => true,
+                'max_per_page' => 10,
+            ]
+        )->add(
+            'id',
+            'number',
+            [
+                'title' => '#',
+                'primary' => 'true',
+            ]
+        )->add(
+            'title',
+            'text',
+            [
+                'title' => 'title',
+            ]
+        )->add(
+            'description',
+            'text',
+            [
+                'title' => 'description',
+            ]
+        );
+
+        $grid = $grid->getGrid();
+
+        // 7. Add actions
+        if (Container::getAuthorizationChecker()->isGranted(\Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter::ROLE_CURRENT_COURSE_TEACHER)) {
+            $deleteMassAction = new \APY\DataGridBundle\Grid\Action\MassAction(
+                'Delete',
+                ['TestCategory', 'deleteResource'],
+                true,
+                []
+            );
+            $grid->addMassAction($deleteMassAction);
         }
+
+        // 8. Set route and request
+        $grid
+            ->setRouteUrl(api_get_self().'?'.api_get_cidreq())
+            ->handleRequest(Container::getRequest())
+        ;
+
+        $html = Container::$container->get('twig')->render(
+            '@ChamiloTheme/Resource/grid.html.twig',
+            ['grid' => $grid]
+        );
 
         return $html;
     }

@@ -1,9 +1,11 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use APY\DataGridBundle\Grid\Action\MassAction;
 use APY\DataGridBundle\Grid\Source\Entity;
 use Chamilo\CoreBundle\Entity\Resource\ResourceLink;
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter;
 use Chamilo\CourseBundle\Entity\CExerciseCategory;
 
 
@@ -77,6 +79,30 @@ class ExerciseCategoryManager extends Model
         $repo = Container::getExerciseCategoryRepository();
         $category = $repo->find($id);
         $repo->hardDelete($category);
+    }
+
+    /**
+     * @param                                                   $primaryKeys
+     * @param                                                   $allPrimaryKeys
+     * @param \Symfony\Component\HttpFoundation\Session\Session $session
+     * @param                                                   $parameters
+     */
+    public function deleteResource(
+        $primaryKeys,
+        $allPrimaryKeys,
+        Symfony\Component\HttpFoundation\Session\Session $session,
+        $parameters
+    ) {
+        $repo = Container::getExerciseCategoryRepository();
+        $translator = Container::getTranslator();
+        foreach ($primaryKeys as $id) {
+            $category = $repo->find($id);
+            $repo->hardDelete($category);
+        }
+
+        Display::addFlash(Display::return_message($translator->trans('Deleted')));
+        header('Location:'. api_get_self().'?'.api_get_cidreq());
+        exit;
     }
 
     /**
@@ -234,13 +260,6 @@ JAVASCRIPT;
         } else {
             $form->addButtonCreate(get_lang('Add'));
         }
-
-        /*if (!empty($defaults['created_at'])) {
-            $defaults['created_at'] = api_convert_and_format_date($defaults['created_at']);
-        }
-        if (!empty($defaults['updated_at'])) {
-            $defaults['updated_at'] = api_convert_and_format_date($defaults['updated_at']);
-        }*/
         $form->setDefaults($defaults);
 
         // Setting the rules
@@ -254,7 +273,7 @@ JAVASCRIPT;
      */
     public function display()
     {
-        // action links
+        // Action links
         $content = '<div class="actions">';
         $content .= '<a href="'.api_get_path(WEB_CODE_PATH).'exercise/exercise.php?'.api_get_cidreq().'">';
         $content .= Display::return_icon(
@@ -273,13 +292,19 @@ JAVASCRIPT;
         );
         $content .= '</a>';
         $content .= '</div>';
-        ///$grid = Container::$container->get('grid');
+
+        // 1. Set entity
         $source = new Entity('ChamiloCourseBundle:CExerciseCategory');
+        // 2. Get query builder from repo.
         $qb = Container::getExerciseCategoryRepository()->getResourcesByCourse(api_get_course_entity());
+
+        // 3. Set QueryBuilder to the source.
         $source-> initQueryBuilder($qb);
 
+        // 4. Get the grid builder.
         $builder = Container::$container->get('apy_grid.factory');
 
+        // 5. Set parameters and properties.
         $grid = $builder->createBuilder(
             'grid',
             $source,
@@ -298,17 +323,42 @@ JAVASCRIPT;
                 'primary' => 'true',
             ]
         )->add(
-                'name',
-                'text',
-                [
-                    'title' => 'name',
-                ]
-            );
+            'name',
+            'text',
+            [
+                'title' => 'name',
+            ]
+        )->add(
+            'description',
+            'text',
+            [
+                'title' => 'description',
+            ]
+        );
 
         $grid = $grid->getGrid();
-        $grid->setRouteUrl(api_get_self().'?cidReq=GEORGIA');
-        $grid->handleRequest(Container::getRequest());
-        $content .= Container::$container->get('twig')->render('@ChamiloTheme/Resource/grid.html.twig', array('grid' => $grid));
+
+        // 7. Add actions
+        if (Container::getAuthorizationChecker()->isGranted(ResourceNodeVoter::ROLE_CURRENT_COURSE_TEACHER)) {
+            $deleteMassAction = new MassAction(
+                'Delete',
+            ['ExerciseCategoryManager', 'deleteResource'],
+                true,
+            []
+            );
+            $grid->addMassAction($deleteMassAction);
+        }
+
+        // 8. Set route and request
+        $grid
+            ->setRouteUrl(api_get_self().'?'.api_get_cidreq())
+            ->handleRequest(Container::getRequest())
+        ;
+
+        $content .= Container::$container->get('twig')->render(
+            '@ChamiloTheme/Resource/grid.html.twig',
+            ['grid' => $grid]
+        );
 
         return $content;
     }

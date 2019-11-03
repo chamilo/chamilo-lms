@@ -79,14 +79,6 @@ switch ($action) {
             $content .= $form->returnForm();
         }
         break;
-    case 'delete':
-        $res = $obj->delete($_GET['id']);
-        if ($res) {
-            Display::addFlash(Display::return_message(get_lang('Item deleted'), 'confirmation'));
-        }
-        header('Location: '.$url);
-        exit;
-        break;
     default:
         $content = $obj->display();
         break;

@@ -18,6 +18,7 @@ use Chamilo\CourseBundle\Entity\CGroupInfo;
 use Chamilo\UserBundle\Entity\User;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Query\Expr\Join;
+use Doctrine\ORM\QueryBuilder;
 use League\Flysystem\FilesystemInterface;
 use League\Flysystem\MountManager;
 use Sylius\Bundle\ResourceBundle\Doctrine\ORM\EntityRepository;
@@ -461,7 +462,7 @@ class ResourceRepository extends EntityRepository
      * @param Session|null    $session
      * @param CGroupInfo|null $group
      *
-     * @return array
+     * @return QueryBuilder
      */
     public function getResourcesByCourse(Course $course, Session $session = null, CGroupInfo $group = null)
     {
@@ -474,17 +475,18 @@ class ResourceRepository extends EntityRepository
         );
         $type = $this->getResourceType();
 
-        $qb = $this->getEntityManager()->createQueryBuilder()
+        $qb = $repo->getEntityManager()->createQueryBuilder()
             ->select('resource')
-            ->from(ResourceNode::class, 'node')
-            ->innerJoin('node.resourceLinks', 'links')
+            ->from($className, 'resource')
             ->innerJoin(
-                $className,
-                'resource',
+                ResourceNode::class,
+                'node',
                 Join::WITH,
-                'resource.course = links.course AND resource.resourceNode = node.id'
+                'resource.resourceNode = node.id'
             )
+            ->innerJoin('node.resourceLinks', 'links')
             ->where('node.resourceType = :type')
+            ->andWhere('resource.course = links.course')
             ->andWhere('links.course = :course')
             //->where('link.cId = ?', $course->getId())
             //->where('node.cId = 0')

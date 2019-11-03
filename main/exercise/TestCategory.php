@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use APY\DataGridBundle\Grid\Action\MassAction;
+use APY\DataGridBundle\Grid\Action\RowAction;
 use Chamilo\CoreBundle\Entity\Resource\ResourceLink;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CQuizQuestionCategory;
@@ -138,7 +140,6 @@ class TestCategory
         $category = $this->getCategory($id, $course_id);
 
         if ($category) {
-
             // remove link between question and category
             $sql = "DELETE FROM $tbl_question_rel_cat
                     WHERE category_id = $id AND c_id=".$course_id;
@@ -204,39 +205,11 @@ class TestCategory
 
             $repo->getEntityManager()->persist($category);
             $repo->getEntityManager()->flush();
-            // item_property update
-            /*api_item_property_update(
-                $courseInfo,
-                TOOL_TEST_CATEGORY,
-                $this->id,
-                'TestCategoryModified',
-                api_get_user_id()
-            );*/
+
             return true;
         }
 
         return false;
-    }
-
-    /**
-     * Gets the number of question of category id=in_id.
-     *
-     * @param int $id
-     *
-     * @return int
-     */
-    public function getCategoryQuestionsNumber($id): int
-    {
-        $table = Database::get_course_table(TABLE_QUIZ_QUESTION_REL_CATEGORY);
-        $id = (int) $id;
-
-        $sql = "SELECT count(*) AS nb
-                FROM $table
-                WHERE category_id = $id AND c_id=".api_get_course_int_id();
-        $res = Database::query($sql);
-        $row = Database::fetch_array($res);
-
-        return (int) $row['nb'];
     }
 
     /**
@@ -1200,7 +1173,33 @@ class TestCategory
 
         // 7. Add actions
         if (Container::getAuthorizationChecker()->isGranted(\Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter::ROLE_CURRENT_COURSE_TEACHER)) {
-            $deleteMassAction = new \APY\DataGridBundle\Grid\Action\MassAction(
+            // Add row actions
+            $myRowAction = new RowAction(
+                get_lang('Edit'),
+                'legacy_main',
+                false,
+                '_self',
+                ['class' => 'btn btn-secondary']
+            );
+            $myRowAction->setRouteParameters(
+                ['id', 'name' => 'exercise/tests_category.php', 'cidReq' => api_get_course_id(), 'action' => 'editcategory']
+            );
+            $grid->addRowAction($myRowAction);
+
+            $myRowAction = new RowAction(
+                get_lang('Delete'),
+                'legacy_main',
+                true,
+                '_self',
+                ['class' => 'btn btn-danger', 'form_delete' => true]
+            );
+            $myRowAction->setRouteParameters(
+                ['id', 'name' => 'exercise/tests_category.php', 'cidReq' => api_get_course_id(), 'action' => 'deletecategory']
+            );
+            $grid->addRowAction($myRowAction);
+
+            // Add mass actions
+            $deleteMassAction = new MassAction(
                 'Delete',
                 ['TestCategory', 'deleteResource'],
                 true,
@@ -1221,23 +1220,5 @@ class TestCategory
         );
 
         return $html;
-    }
-
-    /**
-     * To allowed " in javascript dialog box without bad surprises
-     * replace " with two '.
-     *
-     * @param string $text
-     *
-     * @return mixed
-     */
-    public function protectJSDialogQuote($text)
-    {
-        $res = $text;
-        $res = str_replace("'", "\'", $res);
-        // super astuce pour afficher les " dans les boite de dialogue
-        $res = str_replace('"', "\'\'", $res);
-
-        return $res;
     }
 }

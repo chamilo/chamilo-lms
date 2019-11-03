@@ -2,6 +2,7 @@
 /* For licensing terms, see /license.txt */
 
 use APY\DataGridBundle\Grid\Action\MassAction;
+use APY\DataGridBundle\Grid\Action\RowAction;
 use APY\DataGridBundle\Grid\Source\Entity;
 use Chamilo\CoreBundle\Entity\Resource\ResourceLink;
 use Chamilo\CoreBundle\Framework\Container;
@@ -79,6 +80,8 @@ class ExerciseCategoryManager extends Model
         $repo = Container::getExerciseCategoryRepository();
         $category = $repo->find($id);
         $repo->hardDelete($category);
+
+        return true;
     }
 
     /**
@@ -335,11 +338,35 @@ JAVASCRIPT;
                 'title' => 'description',
             ]
         );
-
         $grid = $grid->getGrid();
 
-        // 7. Add actions
         if (Container::getAuthorizationChecker()->isGranted(ResourceNodeVoter::ROLE_CURRENT_COURSE_TEACHER)) {
+            // Add row actions
+            $myRowAction = new RowAction(
+                get_lang('Edit'),
+                'legacy_main',
+                false,
+                '_self',
+                ['class' => 'btn btn-secondary']
+            );
+            $myRowAction->setRouteParameters(
+                ['id', 'name' => 'exercise/category.php', 'cidReq' => api_get_course_id(), 'action' => 'edit']
+            );
+            $grid->addRowAction($myRowAction);
+
+            $myRowAction = new RowAction(
+                get_lang('Delete'),
+                'legacy_main',
+                true,
+                '_self',
+                ['class' => 'btn btn-danger', 'form_delete' => true]
+            );
+            $myRowAction->setRouteParameters(
+                ['id', 'name' => 'exercise/category.php', 'cidReq' => api_get_course_id(), 'action' => 'delete']
+            );
+            $grid->addRowAction($myRowAction);
+
+            // Add mass actions
             $deleteMassAction = new MassAction(
                 'Delete',
             ['ExerciseCategoryManager', 'deleteResource'],

@@ -117,7 +117,7 @@ function edit_category_form($action)
 {
     $action = Security::remove_XSS($action);
     if (isset($_GET['id']) && is_numeric($_GET['id'])) {
-        $category_id = intval($_GET['id']);
+        $category_id = (int) $_GET['id'];
         $objcat = new TestCategory();
         $objcat = $objcat->getCategory($category_id);
         $form = new FormValidator(

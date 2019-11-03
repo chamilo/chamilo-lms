@@ -3,8 +3,10 @@
 
 use APY\DataGridBundle\Grid\Action\MassAction;
 use APY\DataGridBundle\Grid\Action\RowAction;
+use APY\DataGridBundle\Grid\Source\Entity;
 use Chamilo\CoreBundle\Entity\Resource\ResourceLink;
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter;
 use Chamilo\CourseBundle\Entity\CQuizQuestionCategory;
 use ChamiloSession as Session;
 
@@ -108,14 +110,6 @@ class TestCategory
                     api_get_session_entity(),
                     api_get_group_entity()
                 );
-
-                /*api_item_property_update(
-                    $courseInfo,
-                    TOOL_TEST_CATEGORY,
-                    $newId,
-                    'TestCategoryAdded',
-                    api_get_user_id()
-                );*/
 
                 return $newId;
             }
@@ -1088,7 +1082,7 @@ class TestCategory
         $repo = Container::getQuestionCategoryRepository();
         $resources = $repo->getResourcesByCourse($courseEntity, $sessionEntity);
 
-        return $resources;
+        return $resources->getQuery()->getArrayResult();
     }
 
     /**
@@ -1099,35 +1093,8 @@ class TestCategory
      */
     public function displayCategories($courseId, $sessionId = 0)
     {
-        $sessionId = (int) $sessionId;
-        //$categories = $this->getCategories($courseId, $sessionId);
-
-        $html = '';
-        $deleteIcon = Display::return_icon('delete.png', get_lang('Delete'), [], ICON_SIZE_SMALL);
-        /** @var CQuizQuestionCategory $category */
-        /*foreach ($categories as $category) {
-            $id = $category->getId();
-            $count = $this->getCategoryQuestionsNumber($id);
-            $rowname = self::protectJSDialogQuote($category->getTitle());
-            $label = $count == 1 ? $count.' '.get_lang('Question') : $count.' '.get_lang('Questions');
-            $content = "<span style='float:right'>".$label."</span>";
-            $content .= '<div class="sectioncomment">';
-            $content .= $category->getTitle();
-            $content .= '</div>';
-
-            $links = '';
-            if (!$sessionId) {
-                $links .= '<a href="'.api_get_self().'?action=editcategory&category_id='.$id.'&'.api_get_cidreq().'">'.
-                    Display::return_icon('edit.png', get_lang('Edit'), [], ICON_SIZE_SMALL).'</a>';
-                $links .= ' <a href="'.api_get_self().'?'.api_get_cidreq().'&action=deletecategory&category_id='.$id.'" ';
-                $links .= 'onclick="return confirmDelete(\''.self::protectJSDialogQuote(get_lang('Are you sure you want to delete this category?').'['.$rowname).'] ?\', \'id_cat'.$id.'\');">';
-                $links .= $deleteIcon.'</a>';
-            }
-            $html .= Display::panel($content, $category->getTitle().$links);
-        }*/
-
         // 1. Set entity
-        $source = new \APY\DataGridBundle\Grid\Source\Entity('ChamiloCourseBundle:CQuizQuestionCategory');
+        $source = new Entity('ChamiloCourseBundle:CQuizQuestionCategory');
         // 2. Get query builder from repo.
         $qb = Container::getQuestionCategoryRepository()->getResourcesByCourse(api_get_course_entity());
 
@@ -1172,7 +1139,7 @@ class TestCategory
         $grid = $grid->getGrid();
 
         // 7. Add actions
-        if (Container::getAuthorizationChecker()->isGranted(\Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter::ROLE_CURRENT_COURSE_TEACHER)) {
+        if (Container::getAuthorizationChecker()->isGranted(ResourceNodeVoter::ROLE_CURRENT_COURSE_TEACHER)) {
             // Add row actions
             $myRowAction = new RowAction(
                 get_lang('Edit'),

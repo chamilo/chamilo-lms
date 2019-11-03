@@ -207,7 +207,7 @@ class Course extends AbstractResource implements ResourceInterface
      * @var CourseCategory
      *
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\CourseCategory", inversedBy="courses")
-     * @ORM\JoinColumn(name="category", referencedColumnName="id")
+     * @ORM\JoinColumn(name="category_id", referencedColumnName="id")
      */
     protected $category;
 
@@ -770,7 +770,7 @@ class Course extends AbstractResource implements ResourceInterface
     }
 
     /**
-     * Set categoryCode.
+     * Set category.
      *
      * @param string $category
      *
@@ -784,7 +784,7 @@ class Course extends AbstractResource implements ResourceInterface
     }
 
     /**
-     * Get categoryCode.
+     * Get category.
      *
      * @return CourseCategory
      */

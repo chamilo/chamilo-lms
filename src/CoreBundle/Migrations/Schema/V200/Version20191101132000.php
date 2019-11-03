@@ -20,12 +20,12 @@ class Version20191101132000 extends AbstractMigrationChamilo
     {
         $this->getEntityManager();
 
-        $this->addSql('ALTER TABLE course ADD category INT DEFAULT NULL');
-        $this->addSql('UPDATE course co SET co.category = (SELECT cat.id FROM course_category cat WHERE cat.code = co.category_code)');
+        $this->addSql('ALTER TABLE course ADD category_id INT DEFAULT NULL;');
+        $this->addSql('UPDATE course co SET co.category_id = (SELECT cat.id FROM course_category cat WHERE cat.code = co.category_code)');
         $this->addSql('DROP INDEX category_code ON course');
         $this->addSql('ALTER TABLE course DROP category_code');
-        $this->addSql('ALTER TABLE course ADD CONSTRAINT FK_169E6FB964C19C1 FOREIGN KEY (category) REFERENCES course_category (id)');
-        $this->addSql('CREATE INDEX IDX_169E6FB964C19C1 ON course (category)');
+        $this->addSql('ALTER TABLE course ADD CONSTRAINT FK_169E6FB912469DE2 FOREIGN KEY (category_id) REFERENCES course_category (id)');
+        $this->addSql('CREATE INDEX IDX_169E6FB912469DE2 ON course (category_id)');
     }
 
     /**

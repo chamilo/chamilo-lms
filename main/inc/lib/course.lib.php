@@ -212,13 +212,16 @@ class CourseManager
         $onlyThisCourseList = []
     ) {
         $courseTable = Database::get_main_table(TABLE_MAIN_COURSE);
-        $sql = "SELECT course.*, course.id as real_id 
-                FROM $courseTable course ";
+        $tblCourseCategory = Database::get_main_table(TABLE_MAIN_CATEGORY);
+        $sql = "SELECT course.*, course.id as real_id, course_category.code AS category_code
+                FROM $courseTable course  ";
 
         if (!empty($urlId)) {
             $table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
             $sql .= " INNER JOIN $table url ON (url.c_id = course.id) ";
         }
+
+        $sql .= " LEFT JOIN $tblCourseCategory ON course.category_id = course_category.id ";
 
         $visibility = (int) $visibility;
 
@@ -1013,6 +1016,7 @@ class CourseManager
         // Definitions database tables and variables
         $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
         $tbl_course_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
+        $tblCourseCategory = Database::get_main_table(TABLE_MAIN_CATEGORY);
         $user_id = intval($user_id);
         $data = [];
 
@@ -1021,10 +1025,11 @@ class CourseManager
                     course.title,
                     course.id,
                     course.id as real_id,
-                    course.category_code
+                    course_category.code AS category_code
                 FROM $tbl_course_user as course_rel_user
                 INNER JOIN $tbl_course as course
                 ON course.id = course_rel_user.c_id
+                LEFT JOIN $tblCourseCategory ON course.category_id = $tblCourseCategory.id
                 WHERE
                     course_rel_user.user_id = $user_id AND
                     course_rel_user.status = 1
@@ -2827,6 +2832,7 @@ class CourseManager
         $tbl_course_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
         $tbl_user_course_category = Database::get_main_table(TABLE_USER_COURSE_CATEGORY);
         $tableCourseUrl = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
+        $tblCourseCategory = Database::get_main_table(TABLE_MAIN_CATEGORY);
 
         $languageCondition = '';
         $onlyInUserLanguage = api_get_configuration_value('my_courses_show_courses_in_user_language_only');
@@ -2862,11 +2868,12 @@ class CourseManager
                 if (!empty($withSpecialCourses)) {
                     $sql = "SELECT DISTINCT (course.code), 
                             course.id as real_id,
-                            course.category_code AS category,
+                            course_category.code AS category,
                             course.title
                             FROM $tbl_course_user course_rel_user
                             LEFT JOIN $tbl_course course
                             ON course.id = course_rel_user.c_id
+                            LEFT JOIN $tblCourseCategory ON course_category.id = course.category_id
                             LEFT JOIN $tbl_user_course_category user_course_category
                             ON course_rel_user.user_course_cat = user_course_category.id
                             INNER JOIN $tableCourseUrl url 
@@ -2893,7 +2900,7 @@ class CourseManager
             $sql = "SELECT 
                         DISTINCT(course.code), 
                         course.id as real_id, 
-                        course.category,
+                        course.category_id AS category,
                         course.title
                     FROM $tbl_course course
                     INNER JOIN $tbl_course_user cru 
@@ -3033,6 +3040,14 @@ class CourseManager
      */
     public static function update_attributes($id, $attributes)
     {
+        $courseCategory = CourseCategory::getCategory($attributes['category_code']);
+
+        unset($attributes['category_code']);
+
+        if (!empty($courseCategory)) {
+            $attributes['category_id'] = $courseCategory['id'];
+        }
+
         $id = (int) $id;
         $table = Database::get_main_table(TABLE_MAIN_COURSE);
         $sql = "UPDATE $table SET ";

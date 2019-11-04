@@ -96,7 +96,7 @@ class CourseCategory
                 LEFT JOIN $tbl_category t2
                 ON t1.id = t2.parent_id
                 LEFT JOIN $tbl_course t3
-                ON t3.category = t1.id
+                ON t3.category_id = t1.id
                 WHERE
                     1 = 1
                     $parentIdCondition
@@ -259,11 +259,11 @@ class CourseCategory
         if ($row = Database::fetch_array($result)) {
             if (!empty($row['parent_id'])) {
                 Database::query(
-                    "UPDATE $tbl_course SET category_code = '".$row['parent_id']."' WHERE category_code='$node'"
+                    "UPDATE $tbl_course SET category_id = '".$row['parent_id']."' WHERE category_id = {$category['id']}"
                 );
                 Database::query("UPDATE $tbl_category SET parent_id='".$row['parent_id']."' WHERE parent_id='$node'");
             } else {
-                Database::query("UPDATE $tbl_course SET category = NULL WHERE category = ".$category['id']);
+                Database::query("UPDATE $tbl_course SET category_id = NULL WHERE category_id = ".$category['id']);
                 Database::query("UPDATE $tbl_category SET parent_id=NULL WHERE parent_id='$node'");
             }
 
@@ -292,7 +292,6 @@ class CourseCategory
      */
     public static function editNode($code, $name, $canHaveCourses, $old_code)
     {
-        $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
         $tbl_category = Database::get_main_table(TABLE_MAIN_CATEGORY);
 
         $code = trim(Database::escape_string($code));
@@ -312,11 +311,6 @@ class CourseCategory
         // Updating children
         $sql = "UPDATE $tbl_category SET parent_id = '$code'
             WHERE parent_id = '$old_code'";
-        Database::query($sql);
-
-        // Updating course category
-        $sql = "UPDATE $tbl_course SET category_code = '$code'
-            WHERE category_code = '$old_code' ";
         Database::query($sql);
 
         return true;
@@ -623,6 +617,7 @@ class CourseCategory
     public static function countCoursesInCategory($category_code = '', $searchTerm = '')
     {
         $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
+        $tblCourseCategory = Database::get_main_table(TABLE_MAIN_CATEGORY);
 
         $categoryCode = Database::escape_string($category_code);
         $searchTerm = Database::escape_string($searchTerm);
@@ -630,30 +625,33 @@ class CourseCategory
         $avoidCoursesCondition = CoursesAndSessionsCatalog::getAvoidCourseCondition();
         $visibilityCondition = CourseManager::getCourseVisibilitySQLCondition('course', true);
 
+        $categoryJoin = '';
         $categoryFilter = '';
         if ($categoryCode === 'ALL') {
             // Nothing to do
         } elseif ($categoryCode === 'NONE') {
-            $categoryFilter = ' AND category_code = "" ';
+            $categoryFilter = ' AND course.category_id IS NULL ';
         } else {
-            $categoryFilter = ' AND category_code = "'.$categoryCode.'" ';
+            $categoryJoin = " INNER JOIN $tblCourseCategory cat ON course.category_id = cat.id ";
+            $categoryFilter = ' AND cat.code = "'.$categoryCode.'" ';
         }
 
         $searchFilter = '';
         if (!empty($searchTerm)) {
             $searchFilter = ' AND (
-                code LIKE "%'.$searchTerm.'%" OR 
-                title LIKE "%'.$searchTerm.'%" OR 
-                tutor_name LIKE "%'.$searchTerm.'%"
+                course.code LIKE "%'.$searchTerm.'%" OR 
+                course.title LIKE "%'.$searchTerm.'%" OR 
+                course.tutor_name LIKE "%'.$searchTerm.'%"
             ) ';
         }
 
-        $urlCondition = ' access_url_id = '.api_get_current_access_url_id().' AND';
+        $urlCondition = ' url_rel_course.access_url_id = '.api_get_current_access_url_id().' AND';
         $tbl_url_rel_course = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
-        $sql = "SELECT count(*) as count 
+        $sql = "SELECT count(course.id) as count 
                 FROM $tbl_course as course
                 INNER JOIN $tbl_url_rel_course as url_rel_course
                 ON (url_rel_course.c_id = course.id)
+                $categoryJoin
                 WHERE
                     $urlCondition
                     course.visibility != '0' AND

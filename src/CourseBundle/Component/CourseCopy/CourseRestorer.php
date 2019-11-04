@@ -255,7 +255,7 @@ class CourseRestorer
     /**
      * Restore only harmless course settings:
      * course_language, visibility, department_name,department_url,
-     * subscribe, unsubscribe ,category_code.
+     * subscribe, unsubscribe, category_id.
      *
      * @param string $destination_course_code
      */
@@ -267,7 +267,7 @@ class CourseRestorer
         $params['visibility'] = $course_info['visibility'];
         $params['department_name'] = $course_info['department_name'];
         $params['department_url'] = $course_info['department_url'];
-        $params['category_code'] = $course_info['categoryCode'];
+        $params['category_id'] = $course_info['category_id'];
         $params['subscribe'] = $course_info['subscribe_allowed'];
         $params['unsubscribe'] = $course_info['unsubscribe'];
         CourseManager::update_attributes($origin_course_info['real_id'], $params);

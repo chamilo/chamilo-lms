@@ -374,7 +374,7 @@ if ($form->validate()) {
     $params = [
         'course_language' => $course_language,
         'title' => $title,
-        'category' => $category_code,
+        'category_id' => $category_code,
         'visual_code' => $visual_code,
         'department_name' => $department_name,
         'department_url' => $department_url,

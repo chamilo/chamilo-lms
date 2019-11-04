@@ -44,12 +44,13 @@ class Auth
                     course.unsubscribe unsubscr,
                     course.title i,
                     course.tutor_name t,
-                    course.category_code cat,
+                    $course_cat_table.code cat,
                     course.directory dir,
                     course_rel_user.status status,
                     course_rel_user.sort sort,
                     course_rel_user.user_course_cat user_course_cat
                 FROM $TABLECOURS course, $TABLECOURSUSER  course_rel_user
+                LEFT JOIN $tblCourseCategory ON course.category_id = $course_cat_table.id
                 WHERE
                     course.id = course_rel_user.c_id AND
                     course_rel_user.relation_type <> ".COURSE_RELATION_TYPE_RRHH." AND

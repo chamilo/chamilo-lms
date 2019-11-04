@@ -293,6 +293,7 @@ class CoursesAndSessionsCatalog
     public static function getCoursesInCategory($category_code, $random_value = null, $limit = [])
     {
         $tbl_course = Database::get_main_table(TABLE_MAIN_COURSE);
+        $tblCourseCategory = Database::get_main_table(TABLE_MAIN_CATEGORY);
         $avoidCoursesCondition = self::getAvoidCourseCondition();
         $visibilityCondition = CourseManager::getCourseVisibilitySQLCondition('course', true);
 
@@ -359,18 +360,21 @@ class CoursesAndSessionsCatalog
             $category_code = Database::escape_string($category_code);
             $listCode = self::childrenCategories($category_code);
             $conditionCode = ' ';
+            $joinCategory = '';
 
             if (empty($listCode)) {
                 if ($category_code === 'NONE') {
-                    $conditionCode .= " category_code='' ";
+                    $conditionCode .= " category_id IS NULL";
                 } else {
-                    $conditionCode .= " category_code='$category_code' ";
+                    $conditionCode .= " course_category.code = '$category_code' ";
+                    $joinCategory = " LEFT JOIN $tblCourseCategory course_category ON course.category_id = course_category.id ";
                 }
             } else {
                 foreach ($listCode as $code) {
-                    $conditionCode .= " category_code='$code' OR ";
+                    $conditionCode .= " course_category.code = '$category_code' OR ";
+                    $joinCategory = " LEFT JOIN $tblCourseCategory course_category ON course.category_id = course_category.id ";
                 }
-                $conditionCode .= " category_code='$category_code' ";
+                $conditionCode .= " course_category.code = '$category_code' ";
             }
 
             if (empty($category_code) || $category_code == 'ALL') {
@@ -382,7 +386,8 @@ class CoursesAndSessionsCatalog
                           $visibilityCondition
                     ORDER BY title $limitFilter ";
             } else {
-                $sql = "SELECT *, id as real_id FROM $tbl_course course
+                $sql = "SELECT course.*, id as real_id FROM $tbl_course course
+                        $joinCategory
                         WHERE
                             $conditionCode 
                             $avoidCoursesCondition
@@ -397,7 +402,8 @@ class CoursesAndSessionsCatalog
 
                 $urlCondition = ' access_url_id = '.$urlId.' ';
                 if ($category_code != 'ALL') {
-                    $sql = "SELECT *, course.id real_id FROM $tbl_course as course
+                    $sql = "SELECT *, course.id real_id, course_category.code AS category_code FROM $tbl_course as course
+                            $joinCategory
                             INNER JOIN $tbl_url_rel_course as url_rel_course
                             ON (url_rel_course.c_id = course.id)
                             WHERE

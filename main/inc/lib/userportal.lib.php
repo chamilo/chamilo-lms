@@ -114,8 +114,12 @@ class IndexManager
     {
         $setting_show_also_closed_courses = api_get_setting('show_closed_courses') == 'true';
         $main_course_table = Database::get_main_table(TABLE_MAIN_COURSE);
+        $tblCourseCategory = Database::get_main_table(TABLE_MAIN_CATEGORY);
         $category = Database::escape_string($category);
-        $sql_query = "SELECT * FROM $main_course_table WHERE category_code='$category'";
+        $sql_query = "SELECT course.*, course_category.code AS category_code
+            FROM $main_course_table course
+            INNER JOIN $tblCourseCategory course_category ON course.category_id = course_category.id 
+            WHERE course_category.code ='$category'";
         $sql_result = Database::query($sql_query);
         while ($course = Database::fetch_array($sql_result)) {
             if (!$setting_show_also_closed_courses) {
@@ -336,9 +340,17 @@ class IndexManager
         $main_category_table = Database::get_main_table(TABLE_MAIN_CATEGORY);
 
         // Get list of courses in category $category.
-        $sql = "SELECT * FROM $main_course_table cours
-                WHERE category_code = '".$category."'
+        $sql = "SELECT *, '' AS category_code FROM $main_course_table cours
+                WHERE category_id IS NULL
                 ORDER BY title, UPPER(visual_code)";
+
+        if (!empty($category)) {
+            $sql = "SELECT course.*, course_category.code AS category_code
+                FROM $main_course_table course
+                INNER JOIN $main_category_table course_category ON course.category_id = course_category.id
+                WHERE course_category.code = '$category'
+                ORDER BY course.title, UPPER(visual_code)";
+        }
 
         // Showing only the courses of the current access_url_id.
         if (api_is_multiple_url_enabled()) {
@@ -350,8 +362,19 @@ class IndexManager
                         ON (url_rel_course.c_id = course.id)
                         WHERE
                             access_url_id = $url_access_id AND
-                            category_code = '".$category."'
+                            category_id IS NULL
                         ORDER BY title, UPPER(visual_code)";
+
+                if (!empty($category)) {
+                    $sql = "SELECT * FROM $main_course_table as course
+                        INNER  JOIN $main_category_table course_category ON course.category_id = course_category.id 
+                        INNER JOIN $tbl_url_rel_course as url_rel_course
+                        ON (url_rel_course.c_id = course.id)
+                        WHERE
+                            access_url_id = $url_access_id AND
+                            course_category.code = '$category'
+                        ORDER BY title, UPPER(visual_code)";
+                }
             }
         }
 
@@ -385,7 +408,7 @@ class IndexManager
                     LEFT JOIN $main_category_table t2 
                     ON t1.code=t2.parent_id
                     LEFT JOIN $main_course_table t3 
-                    ON (t3.category_code = t1.code $platform_visible_courses)
+                    ON (t3.category_id = t1.id $platform_visible_courses)
                     WHERE t1.parent_id ".(empty($category) ? "IS NULL" : "='$category'")."
                     GROUP BY t1.name,t1.code,t1.parent_id,t1.children_count 
                     ORDER BY t1.tree_pos, t1.name";
@@ -407,7 +430,7 @@ class IndexManager
                     FROM $main_category_table t1
                     $courseCategoryCondition
                     LEFT JOIN $main_category_table t2 ON t1.code = t2.parent_id
-                    LEFT JOIN $main_course_table t3 ON (t3.category_code = t1.code $platform_visible_courses)
+                    LEFT JOIN $main_course_table t3 ON (t3.category_id = t1.id $platform_visible_courses)
                     INNER JOIN $tbl_url_rel_course as url_rel_course
                     ON (url_rel_course.c_id = t3.id)
                     WHERE
@@ -2445,8 +2468,8 @@ class IndexManager
         return array_filter(
             $courseList,
             function ($courseInfo) use ($categoryCode) {
-                if (isset($courseInfo['category_code']) &&
-                    $courseInfo['category_code'] === $categoryCode
+                if (isset($courseInfo['categoryCode']) &&
+                    $courseInfo['categoryCode'] === $categoryCode
                 ) {
                     return true;
                 }

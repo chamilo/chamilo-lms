@@ -42,20 +42,31 @@ class Statistics
     public static function countCourses($categoryCode = null)
     {
         $course_table = Database::get_main_table(TABLE_MAIN_COURSE);
+        $tblCourseCategory = Database::get_main_table(TABLE_MAIN_CATEGORY);
         $access_url_rel_course_table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
         $urlId = api_get_current_access_url_id();
+
+        $categoryJoin = '';
+        $categoryCondition = '';
+
+        if (!empty($categoryCode)) {
+            $categoryJoin = " LEFT JOIN $tblCourseCategory course_category ON course.category_id = course_category.id ";
+            $categoryCondition = " course_category.code = '".Database::escape_string($categoryCode)."' ";
+        }
+
         if (api_is_multiple_url_enabled()) {
             $sql = "SELECT COUNT(*) AS number
                     FROM ".$course_table." as c, $access_url_rel_course_table as u
+                    $categoryJoin
                     WHERE u.c_id = c.id AND access_url_id='".$urlId."'";
             if (isset($categoryCode)) {
-                $sql .= " AND category_code = '".Database::escape_string($categoryCode)."'";
+                $sql .= " AND $categoryCondition";
             }
         } else {
             $sql = "SELECT COUNT(*) AS number
-                    FROM $course_table";
+                    FROM $course_table $categoryJoin";
             if (isset($categoryCode)) {
-                $sql .= " WHERE category_code = '".Database::escape_string($categoryCode)."'";
+                $sql .= " WHERE $categoryCondition";
             }
         }
 
@@ -120,6 +131,7 @@ class Statistics
         $course_table = Database::get_main_table(TABLE_MAIN_COURSE);
         $user_table = Database::get_main_table(TABLE_MAIN_USER);
         $access_url_rel_user_table = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_USER);
+        $tblCourseCategory = Database::get_main_table(TABLE_MAIN_CATEGORY);
         $urlId = api_get_current_access_url_id();
         $active_filter = $onlyActive ? ' AND active=1' : '';
         $status_filter = isset($status) ? ' AND status = '.intval($status) : '';
@@ -134,9 +146,10 @@ class Statistics
             if (isset($categoryCode)) {
                 $sql = "SELECT COUNT(DISTINCT(cu.user_id)) AS number
                         FROM $course_user_table cu, $course_table c, $access_url_rel_user_table as url
+                        INNER JOIN $tblCourseCategory course_category ON c.category_id = course_category.id
                         WHERE
                             c.id = cu.c_id AND
-                            c.category_code = '".Database::escape_string($categoryCode)."' AND
+                            course_category.code = '".Database::escape_string($categoryCode)."' AND
                             cu.user_id = url.user_id AND
                             access_url_id='".$urlId."'
                             $status_filter $active_filter";
@@ -149,9 +162,10 @@ class Statistics
                 $status_filter = isset($status) ? ' AND status = '.intval($status) : '';
                 $sql = "SELECT COUNT(DISTINCT(cu.user_id)) AS number
                         FROM $course_user_table cu, $course_table c
+                        INNER JOIN $tblCourseCategory course_category ON c.category_id = course_category.id
                         WHERE
                             c.id = cu.c_id AND
-                            c.category_code = '".Database::escape_string($categoryCode)."'
+                            course_category.code = '".Database::escape_string($categoryCode)."'
                             $status_filter
                             $active_filter
                         ";

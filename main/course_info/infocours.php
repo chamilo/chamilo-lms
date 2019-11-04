@@ -99,10 +99,10 @@ $form->applyFilter('title', 'trim');
 
 $form->addElement(
     'select',
-    'category_code',
+    'category_id',
     get_lang('Category'),
     $categories,
-    ['style' => 'width:350px', 'id' => 'category_code']
+    ['style' => 'width:350px', 'id' => 'category_id']
 );
 $form->addSelectLanguage(
     'course_language',
@@ -913,7 +913,7 @@ $all_course_information = CourseManager::get_course_information($_course['sysCod
 // Set the default values of the form
 $values = [];
 $values['title'] = $_course['name'];
-$values['category_code'] = $_course['categoryCode'];
+$values['category_id'] = $_course['category_id'];
 $values['course_language'] = $_course['language'];
 $values['department_name'] = $_course['extLink']['name'];
 $values['department_url'] = $_course['extLink']['url'];
@@ -1009,7 +1009,7 @@ if ($form->validate() && $isEditable) {
     $params = [
         'title' => $updateValues['title'],
         'course_language' => $updateValues['course_language'],
-        'category_code' => $updateValues['category_code'],
+        'category_id' => $updateValues['category_id'],
         'department_name' => $updateValues['department_name'],
         'department_url' => $updateValues['department_url'],
         'visibility' => $updateValues['visibility'],

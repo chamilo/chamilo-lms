@@ -23,6 +23,7 @@ $sessionId = isset($_GET['session_id']) ? $_GET['session_id'] : null;
 function get_number_of_courses()
 {
     $course_table = Database::get_main_table(TABLE_MAIN_COURSE);
+    $tblCourseCategory = Database::get_main_table(TABLE_MAIN_CATEGORY);
     $sql = "SELECT COUNT(code) AS total_number_of_items FROM $course_table c";
 
     if ((api_is_platform_admin() || api_is_session_admin()) &&
@@ -32,6 +33,8 @@ function get_number_of_courses()
         $sql .= " INNER JOIN $access_url_rel_course_table url_rel_course
                  ON (c.id = url_rel_course.c_id)";
     }
+
+    $sql .= " LEFT JOIN $tblCourseCategory ON c.category_id = course_category.id ";
 
     if (isset($_GET['keyword'])) {
         $keyword = Database::escape_string("%".$_GET['keyword']."%");
@@ -62,7 +65,7 @@ function get_number_of_courses()
         ";
 
         if (!empty($keyword_category)) {
-            $sql .= " AND c.category_code LIKE '".$keyword_category."' ";
+            $sql .= " AND course_category.code LIKE '".$keyword_category."' ";
         }
     }
 
@@ -111,7 +114,7 @@ function get_course_data($from, $number_of_items, $column, $direction)
                 directory,
                 course.id
     		FROM $course_table course
-    		LEFT JOIN $tblCourseCategory category ON course.category = category.id ";
+    		LEFT JOIN $tblCourseCategory category ON course.category_id = category.id ";
 
     if ((api_is_platform_admin() || api_is_session_admin()) &&
         api_is_multiple_url_enabled() && api_get_current_access_url_id() != -1
@@ -246,13 +249,14 @@ function get_course_data_by_session($from, $number_of_items, $column, $direction
     $course_table = Database::get_main_table(TABLE_MAIN_COURSE);
     $session_rel_course = Database::get_main_table(TABLE_MAIN_SESSION_COURSE);
     $session = Database::get_main_table(TABLE_MAIN_SESSION);
+    $tblCourseCategory = Database::get_main_table(TABLE_MAIN_CATEGORY);
 
     $sql = "SELECT
                 c.code AS col0,
                 c.title AS col1,
                 c.code AS col2,
                 c.course_language AS col3,
-                c.category_code AS col4,
+                course_category.code AS col4,
                 c.subscribe AS col5,
                 c.unsubscribe AS col6,
                 c.code AS col7,
@@ -264,6 +268,7 @@ function get_course_data_by_session($from, $number_of_items, $column, $direction
             ON c.id = r.c_id
             INNER JOIN $session s
             ON r.session_id = s.id
+            LEFT JOIN $tblCourseCategory ON c.category_id = course_category.id
             ";
 
     if (isset($_GET['session_id']) && !empty($_GET['session_id'])) {

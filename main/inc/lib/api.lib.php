@@ -6147,13 +6147,13 @@ function api_is_course_visible_for_user($userid = null, $cid = null)
     $course_cat_table = Database::get_main_table(TABLE_MAIN_CATEGORY);
 
     $sql = "SELECT
-                $course_table.category_code,
+                $course_cat_table.code AS category_code,
                 $course_table.visibility,
                 $course_table.code,
                 $course_cat_table.code
             FROM $course_table
             LEFT JOIN $course_cat_table
-                ON $course_table.category_code = $course_cat_table.code
+                ON $course_table.category_id = $course_cat_table.id
             WHERE
                 $course_table.code = '$cid'
             LIMIT 1";

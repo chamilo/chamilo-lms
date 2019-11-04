@@ -3167,6 +3167,7 @@ class UserManager
         $tbl_session_user = Database::get_main_table(TABLE_MAIN_SESSION_USER);
         $tbl_course_user = Database::get_main_table(TABLE_MAIN_COURSE_USER);
         $tbl_session_course_user = Database::get_main_table(TABLE_MAIN_SESSION_COURSE_USER);
+        $tblCourseCategory = Database::get_main_table(TABLE_MAIN_CATEGORY);
 
         $user_id = (int) $user_id;
 
@@ -3300,7 +3301,7 @@ class UserManager
                         ".(api_is_western_name_order() ? "CONCAT(user.firstname,' ',user.lastname)" : "CONCAT(user.lastname,' ',user.firstname)")." t,
                         email, course.course_language l,
                         1 sort,
-                        category_code user_course_cat,
+                        course_category.code user_course_cat,
                         access_start_date,
                         access_end_date,
                         session.id as session_id,
@@ -3308,6 +3309,7 @@ class UserManager
                     FROM $tbl_session_course_user as session_course_user
                     INNER JOIN $tbl_course AS course
                         ON course.id = session_course_user.c_id
+                    LEFT JOIN $tblCourseCategory course_category ON course.category_id = course_category.id
                     INNER JOIN $tbl_session as session
                         ON session.id = session_course_user.session_id
                     LEFT JOIN $tbl_user as user
@@ -3342,7 +3344,7 @@ class UserManager
                 email,
                 course.course_language l,
                 1 sort,
-                category_code user_course_cat,
+                course_category.code user_course_cat,
                 access_start_date,
                 access_end_date,
                 session.id as session_id,
@@ -3351,6 +3353,7 @@ class UserManager
             FROM $tbl_session_course_user as session_course_user
             INNER JOIN $tbl_course AS course
             ON course.id = session_course_user.c_id AND session_course_user.session_id = $session_id
+            LEFT JOIN $tblCourseCategory course_category ON course.category_id = course_category.id
             INNER JOIN $tbl_session as session 
             ON session_course_user.session_id = session.id
             LEFT JOIN $tbl_user as user ON user.id = session_course_user.user_id

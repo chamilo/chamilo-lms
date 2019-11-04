@@ -305,9 +305,18 @@ class PageController
         $main_course_table = Database :: get_main_table(TABLE_MAIN_COURSE);
         $main_category_table = Database :: get_main_table(TABLE_MAIN_CATEGORY);
 
+        $categoryId = null;
+        $courseCategory = \CourseCategory::getCategory($_GET['category']);
+        $categoryCondition = 'category_code IS NULL';
+
+        if (!empty($courseCategory)) {
+            $categoryId = $courseCategory['id'];
+            $categoryCondition = "category_code = $categoryId";
+        }
+
         // Get list of courses in category $category.
         $sql_get_course_list = "SELECT * FROM $main_course_table cours
-                                    WHERE category_code = '".Database::escape_string($_GET['category'])."'
+                                    WHERE $categoryCondition
                                     ORDER BY title, UPPER(visual_code)";
 
         // Showing only the courses of the current access_url_id.
@@ -317,9 +326,7 @@ class PageController
                 $tbl_url_rel_course = Database::get_main_table(TABLE_MAIN_ACCESS_URL_REL_COURSE);
                 $sql_get_course_list = "SELECT * FROM $main_course_table as course INNER JOIN $tbl_url_rel_course as url_rel_course
                         ON (url_rel_course.c_id = course.id)
-                        WHERE access_url_id = $url_access_id AND category_code = '".Database::escape_string(
-                    $_GET['category']
-                )."' ORDER BY title, UPPER(visual_code)";
+                        WHERE access_url_id = $url_access_id AND $categoryCondition ORDER BY title, UPPER(visual_code)";
             }
         }
 
@@ -349,7 +356,7 @@ class PageController
                     SELECT t1.name,t1.code,t1.parent_id,t1.children_count,COUNT(DISTINCT t3.code) AS nbCourse
                     FROM $main_category_table t1
                     LEFT JOIN $main_category_table t2 ON t1.code=t2.parent_id
-                    LEFT JOIN $main_course_table t3 ON (t3.category_code=t1.code $platform_visible_courses)
+                    LEFT JOIN $main_course_table t3 ON (t3.category_id = t1.id $platform_visible_courses)
                     WHERE t1.parent_id ".(empty($category) ? "IS NULL" : "='$category'")."
                     GROUP BY t1.name,t1.code,t1.parent_id,t1.children_count ORDER BY t1.tree_pos, t1.name";
 
@@ -362,7 +369,7 @@ class PageController
                     SELECT t1.name,t1.code,t1.parent_id,t1.children_count,COUNT(DISTINCT t3.code) AS nbCourse
                     FROM $main_category_table t1
                     LEFT JOIN $main_category_table t2 ON t1.code=t2.parent_id
-                    LEFT JOIN $main_course_table t3 ON (t3.category_code=t1.code $platform_visible_courses)
+                    LEFT JOIN $main_course_table t3 ON (t3.category_id = t1.id $platform_visible_courses)
                     INNER JOIN $tbl_url_rel_course as url_rel_course
                         ON (url_rel_course.c_id = t3.id)
                     WHERE access_url_id = $url_access_id AND t1.parent_id ".(empty($category) ? "IS NULL" : "='$category'")."

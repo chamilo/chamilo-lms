@@ -82,6 +82,7 @@ function get_request_data($from, $number_of_items, $column, $direction)
 {
     $keyword = isset($_GET['keyword']) ? Database::escape_string(trim($_GET['keyword'])) : null;
     $course_request_table = Database::get_main_table(TABLE_MAIN_COURSE_REQUEST);
+    $tblCourseCategory = Database::get_main_table(TABLE_MAIN_CATEGORY);
 
     $from = intval($from);
     $number_of_items = intval($number_of_items);
@@ -92,11 +93,12 @@ function get_request_data($from, $number_of_items, $column, $direction)
                 id AS col0,
                code AS col1,
                title AS col2,
-               category_code AS col3,
+               course_category.code AS col3,
                tutor_name AS col4,
                request_date AS col5,
                id  AS col6
            FROM $course_request_table
+           LEFT JOIN $tblCourseCategory on course.category_id = course_category.id
            WHERE status = ".COURSE_REQUEST_ACCEPTED;
 
     if ($keyword != '') {

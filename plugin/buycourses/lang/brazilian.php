@@ -8,7 +8,6 @@ $strings['paypal_enable'] = "Ativar PayPal";
 $strings['transfer_enable'] = "Permitir transferência bancária";
 $strings['unregistered_users_enable'] = "Permitir que usuários anônimos";
 $strings['Free'] = "GRÁTIS";
-
 $strings['banktransfer'] = "Transferência Bancária";
 $strings['SaleStatusPending'] = "Venda pendente";
 $strings['SaleStatusCanceled'] = "Venda cancelada";
@@ -91,6 +90,7 @@ $strings['AvailableCourse'] = "Campo disponível";
 $strings['ShowOnCourseCatalog'] = "Mostrar no catálogo de cursos";
 $strings['ByStatus'] = "Por estado";
 $strings['ByUser'] = "Por usuário";
+$strings['ByEmail'] = "Por email";
 $strings['PaymentMethod'] = "Método de pagamento";
 $strings['SWIFT'] = "Código SWIFT";
 $strings['SWIFT_help'] = "Formato padrão de Códigos de Identificação Bancária (BIC) e serve como um identificador exclusivo de um banco ou instituição financeira";

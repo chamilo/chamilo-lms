@@ -133,6 +133,7 @@ $strings['AvailableCourse'] = "Available course";
 $strings['ShowOnCourseCatalog'] = "Show on course catalog";
 $strings['ByStatus'] = "By status";
 $strings['ByUser'] = "By user";
+$strings['ByEmail'] = "By email";
 $strings['PaymentMethod'] = "Payment method";
 $strings['SWIFT'] = "SWIFT code";
 $strings['SWIFT_help'] = "Standard format of Bank Identifier Codes (BIC) and serves as a unique identifier for a bank or financial institution";

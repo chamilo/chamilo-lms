@@ -9,7 +9,6 @@ $strings['commissions_enable'] = "Activer commissions";
 $strings['transfer_enable'] = "Activer les transferts bancaires";
 $strings['unregistered_users_enable'] = "Permettre l'accès aux utilisateurs non enregistrés sur la plateforme";
 $strings['Free'] = "GRATUIT";
-
 $strings['PaypalPayoutCommissions'] = "Commissions PayPal Payouts";
 $strings['MyPayouts'] = "Mes paiements";
 $strings['Commission'] = "Commission";
@@ -130,6 +129,7 @@ $strings['AvailableCourse'] = "Cours disponibles";
 $strings['ShowOnCourseCatalog'] = "Afficher dans le catalogue de cours";
 $strings['ByStatus'] = "Par statut";
 $strings['ByUser'] = "Par utilisateur";
+$strings['ByEmail'] = "Par email";
 $strings['PaymentMethod'] = "Méthodes de paiement";
 $strings['SWIFT'] = "Code SWIFT";
 $strings['SWIFT_help'] = "Format standard des codes d'identification de banque (BIC) et sert un identifiant unique pour une banque ou une institution financière.";
@@ -140,7 +140,6 @@ $strings['public_main_menu_tab'] = "Montrer l'onglet dans le menu principal aux 
 $strings['culqi_enable'] = "Activé culqi";
 $strings['include_services'] = "Inclure les services";
 $strings['hide_free_text'] = "Cacher le texte 'Free' ou 'Gratuit'";
-
 $strings['Services'] = "Services";
 $strings['ServiceName'] = "Nom du service";
 $strings['AppliesTo'] = "S'applique à";

@@ -18,24 +18,25 @@
 <div class="table-responsive">
     <table class="table table-striped table-hover">
         <thead>
-        <tr>
-            <th class="text-center">{{ 'OrderReference'|get_plugin_lang('BuyCoursesPlugin') }}</th>
-            <th class="text-center">{{ 'OrderStatus'|get_plugin_lang('BuyCoursesPlugin') }}</th>
-            <th class="text-center">{{ 'OrderDate'|get_plugin_lang('BuyCoursesPlugin') }}</th>
-            <th class="text-center">{{ 'PaymentMethod'|get_plugin_lang('BuyCoursesPlugin') }}</th>
-            <th class="text-center">{{ 'Price'|get_plugin_lang('BuyCoursesPlugin') }}</th>
-            <th class="text-center">{{ 'ProductType'|get_plugin_lang('BuyCoursesPlugin') }}</th>
+        <tr class="sale-columns">
+            <th>{{ 'OrderReference'|get_plugin_lang('BuyCoursesPlugin') }}</th>
+            <th>{{ 'OrderStatus'|get_plugin_lang('BuyCoursesPlugin') }}</th>
+            <th>{{ 'OrderDate'|get_plugin_lang('BuyCoursesPlugin') }}</th>
+            <th>{{ 'PaymentMethod'|get_plugin_lang('BuyCoursesPlugin') }}</th>
+            <th>{{ 'Price'|get_plugin_lang('BuyCoursesPlugin') }}</th>
+            <th>{{ 'ProductType'|get_plugin_lang('BuyCoursesPlugin') }}</th>
             <th>{{ 'Name'|get_lang }}</th>
             <th>{{ 'UserName'|get_lang }}</th>
+            <th>{{ 'Email'|get_lang }}</th>
             {% if invoicing_enable %}
-                <th class="text-center">{{ 'Invoice'|get_plugin_lang('BuyCoursesPlugin') }}</th>
+                <th>{{ 'Invoice'|get_plugin_lang('BuyCoursesPlugin') }}</th>
             {% endif %}
-            <th class="text-center">{{ 'Options'|get_lang }}</th>
+            <th width="10%">{{ 'Options'|get_lang }}</th>
         </tr>
         </thead>
         <tbody>
         {% for sale in sale_list %}
-            <tr {{ sale.id == selected_sale ? 'class="warning"' : '' }}>
+            <tr class="sale-row {{ sale.id == selected_sale ? 'warning' : '' }}">
                 <td class="text-center">{{ sale.reference }}</td>
                 <td class="text-center">
                     {% if sale.status == sale_status_canceled %}
@@ -52,6 +53,7 @@
                 <td class="text-center">{{ sale.product_type }}</td>
                 <td>{{ sale.product_name }}</td>
                 <td>{{ sale.complete_user_name }}</td>
+                <td>{{ sale.email }}</td>
                 {% if invoicing_enable %}
                     <td class="text-center">
                     {% if sale.invoice == 1 %}
@@ -64,14 +66,16 @@
                 {% endif %}
                 <td class="text-center">
                     {% if sale.status == sale_status_pending %}
-                        <a href="{{ _p.web_self ~ '?' ~ {'order': sale.id, 'action': 'confirm'}|url_encode() }}"
-                           class="btn btn-success btn-sm">
-                            <em class="fa fa-user-plus fa-fw"></em> {{ 'SubscribeUser'|get_plugin_lang('BuyCoursesPlugin') }}
-                        </a>
-                        <a href="{{ _p.web_self ~ '?' ~ {'order': sale.id, 'action': 'cancel'}|url_encode() }}"
-                           class="btn btn-danger btn-sm">
-                            <em class="fa fa-times fa-fw"></em> {{ 'DeleteOrder'|get_plugin_lang('BuyCoursesPlugin') }}
-                        </a>
+                        <div class="btn-group btn-group-xs" role="group" aria-label="...">
+                            <a title="{{ 'SubscribeUser'|get_plugin_lang('BuyCoursesPlugin') }}" href="{{ _p.web_self ~ '?' ~ {'order': sale.id, 'action': 'confirm'}|url_encode() }}"
+                               class="btn btn-default">
+                                <img src="{{ 'user_subscribe_session.png' | icon(22) }}" width="22" height="22 alt="{{ 'SubscribeUser'|get_plugin_lang('BuyCoursesPlugin') }}">
+                            </a>
+                            <a title="{{ 'DeleteOrder'|get_plugin_lang('BuyCoursesPlugin') }}" href="{{ _p.web_self ~ '?' ~ {'order': sale.id, 'action': 'cancel'}|url_encode() }}"
+                               class="btn btn-default">
+                                <img src="{{ 'delete.png' | icon(22) }}" width="22" height="22 alt="{{ 'DeleteOrder'|get_plugin_lang('BuyCoursesPlugin') }}">
+                            </a>
+                        </div>
                     {% endif %}
                 </td>
             </tr>
@@ -88,9 +92,23 @@
             if (self.val() === '0') {
                 $('#report-by-user').hide();
                 $('#report-by-status').show();
-            } else {
+                $('#report-by-date').hide();
+                $('#report-by-email').hide();
+            } else if (self.val() === '1') {
                 $('#report-by-status').hide();
                 $('#report-by-user').show();
+                $('#report-by-date').hide();
+                $('#report-by-email').hide();
+            } else if (self.val() === '2') {
+                $('#report-by-status').hide();
+                $('#report-by-user').hide();
+                $('#report-by-date').show();
+                $('#report-by-email').hide();
+            } else if (self.val() === '3') {
+                $('#report-by-status').hide();
+                $('#report-by-user').hide();
+                $('#report-by-date').hide();
+                $('#report-by-email').show();
             }
         });
     });

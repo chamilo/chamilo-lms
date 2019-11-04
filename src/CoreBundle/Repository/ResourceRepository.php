@@ -3,6 +3,8 @@
 
 namespace Chamilo\CoreBundle\Repository;
 
+use APY\DataGridBundle\Grid\Action\RowAction;
+use APY\DataGridBundle\Grid\Row;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Resource\AbstractResource;
 use Chamilo\CoreBundle\Entity\Resource\ResourceFile;
@@ -471,7 +473,7 @@ class ResourceRepository extends EntityRepository
 
         // Check if this resource type requires to load the base course resources when using a session
         $loadBaseSessionContent = $repo->getClassMetadata()->getReflectionClass()->hasProperty(
-            'loadBaseCourseResourcesFromSession'
+            'loadCourseResourcesInSession'
         );
         $type = $this->getResourceType();
 
@@ -502,9 +504,11 @@ class ResourceRepository extends EntityRepository
             $qb->andWhere('links.session IS NULL');
         } else {
             if ($loadBaseSessionContent) {
+                // Load course base content.
                 $qb->andWhere('links.session = :session OR links.session IS NULL');
                 $qb->setParameter('session', $session);
             } else {
+                // Load only session resources.
                 $qb->andWhere('links.session = :session');
                 $qb->setParameter('session', $session);
             }
@@ -547,6 +551,22 @@ class ResourceRepository extends EntityRepository
             ->getQuery()
         ;*/
         return $qb->getResult();
+    }
+
+    public function rowCanBeEdited($session, RowAction $action, Row $row)
+    {
+        if (!empty($session)) {
+            /** @var \Chamilo\CoreBundle\Entity\Resource\AbstractResource $entity */
+            $entity = $row->getEntity();
+            $hasSession = $entity->getResourceNode()->hasSession($session);
+            if ($hasSession->count() > 0) {
+
+                return $action;
+            }
+
+            return null;
+        }
+        return $action;
     }
 
     /**

@@ -5,8 +5,8 @@ namespace Chamilo\CourseBundle\Entity;
 
 use Chamilo\CoreBundle\Entity\Resource\AbstractResource;
 use Chamilo\CoreBundle\Entity\Resource\ResourceInterface;
-use Chamilo\CourseBundle\Traits\SessionCourseResources;
-use Chamilo\CourseBundle\Traits\SessionCourseResourcesTrait;
+use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CourseBundle\Traits\ShowCourseResourcesInSessionTrait;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -23,7 +23,7 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class CQuizQuestionCategory extends AbstractResource implements ResourceInterface
 {
-    use SessionCourseResourcesTrait;
+    use ShowCourseResourcesInSessionTrait;
 
     /**
      * @var int
@@ -176,7 +176,7 @@ class CQuizQuestionCategory extends AbstractResource implements ResourceInterfac
     }
 
     /**
-     * @param mixed $session
+     * @param Session $session
      *
      * @return CQuizQuestionCategory
      */
@@ -185,6 +185,14 @@ class CQuizQuestionCategory extends AbstractResource implements ResourceInterfac
         $this->session = $session;
 
         return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasSession()
+    {
+        return $this->session !== null;
     }
 
     /**

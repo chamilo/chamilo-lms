@@ -3,6 +3,7 @@
 
 use APY\DataGridBundle\Grid\Action\MassAction;
 use APY\DataGridBundle\Grid\Action\RowAction;
+use APY\DataGridBundle\Grid\Row;
 use APY\DataGridBundle\Grid\Source\Entity;
 use Chamilo\CoreBundle\Entity\Resource\ResourceLink;
 use Chamilo\CoreBundle\Framework\Container;
@@ -1062,27 +1063,12 @@ class TestCategory
         if (!empty($sessionId)) {
             $sessionEntity = api_get_session_entity($sessionId);
         }
-        if (empty($sessionId)) {
-            $sessionCondition = api_get_session_condition(
-                $sessionId,
-                true,
-                false,
-                'i.session_id'
-            );
-        } else {
-            $sessionCondition = api_get_session_condition(
-                $sessionId,
-                true,
-                true,
-                'i.session_id'
-            );
-        }
 
         $courseEntity = api_get_course_entity($courseId);
         $repo = Container::getQuestionCategoryRepository();
         $resources = $repo->getResourcesByCourse($courseEntity, $sessionEntity);
 
-        return $resources->getQuery()->getArrayResult();
+        return $resources->getQuery()->getResult();
     }
 
     /**
@@ -1093,10 +1079,15 @@ class TestCategory
      */
     public function displayCategories($courseId, $sessionId = 0)
     {
+        $course = api_get_course_entity($courseId);
+        $session = api_get_session_entity($sessionId);
+
         // 1. Set entity
         $source = new Entity('ChamiloCourseBundle:CQuizQuestionCategory');
+        $repo = Container::getQuestionCategoryRepository();
+
         // 2. Get query builder from repo.
-        $qb = Container::getQuestionCategoryRepository()->getResourcesByCourse(api_get_course_entity());
+        $qb = $repo->getResourcesByCourse($course, $session);
 
         // 3. Set QueryBuilder to the source.
         $source-> initQueryBuilder($qb);
@@ -1121,7 +1112,7 @@ class TestCategory
             [
                 'title' => '#',
                 'primary' => true,
-                'visible' => false
+                'visible' => false,
             ]
         )->add(
             'title',
@@ -1147,10 +1138,17 @@ class TestCategory
                 [
                     'id',
                     'name' => 'exercise/tests_category.php',
-                    'cidReq' => api_get_course_id(),
+                    'cidReq' => $course->getCode(),
                     'action' => 'editcategory',
                 ]
             );
+
+            $myRowAction->addManipulateRender(
+                function (RowAction $action, Row $row) use ($session, $repo) {
+                    return $repo->rowCanBeEdited($session, $action, $row);
+                }
+            );
+
             $grid->addRowAction($myRowAction);
 
             $myRowAction = new RowAction(
@@ -1164,20 +1162,30 @@ class TestCategory
                 [
                     'id',
                     'name' => 'exercise/tests_category.php',
-                    'cidReq' => api_get_course_id(),
+                    'cidReq' => $course->getCode(),
                     'action' => 'deletecategory',
                 ]
             );
+
+            $myRowAction->addManipulateRender(
+                function (RowAction $action, Row $row) use ($session, $repo) {
+                    return $repo->rowCanBeEdited($session, $action, $row);
+                }
+            );
+
             $grid->addRowAction($myRowAction);
 
-            // Add mass actions
-            $deleteMassAction = new MassAction(
-                'Delete',
-                ['TestCategory', 'deleteResource'],
-                true,
-                []
-            );
-            $grid->addMassAction($deleteMassAction);
+            if (empty($session)) {
+                // Add mass actions
+                $deleteMassAction = new MassAction(
+                    'Delete',
+                    ['TestCategory', 'deleteResource'],
+                    true,
+                    [],
+                    ResourceNodeVoter::ROLE_CURRENT_COURSE_TEACHER
+                );
+                $grid->addMassAction($deleteMassAction);
+            }
         }
 
         // 8. Set route and request

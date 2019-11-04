@@ -3,6 +3,7 @@
 
 use APY\DataGridBundle\Grid\Action\MassAction;
 use APY\DataGridBundle\Grid\Action\RowAction;
+use APY\DataGridBundle\Grid\Row;
 use APY\DataGridBundle\Grid\Source\Entity;
 use Chamilo\CoreBundle\Entity\Resource\ResourceLink;
 use Chamilo\CoreBundle\Framework\Container;
@@ -276,6 +277,9 @@ JAVASCRIPT;
      */
     public function display()
     {
+        $session = api_get_session_entity();
+        $course = api_get_course_entity();
+
         // Action links
         $content = '<div class="actions">';
         $content .= '<a href="'.api_get_path(WEB_CODE_PATH).'exercise/exercise.php?'.api_get_cidreq().'">';
@@ -298,8 +302,9 @@ JAVASCRIPT;
 
         // 1. Set entity
         $source = new Entity('ChamiloCourseBundle:CExerciseCategory');
+        $repo = Container::getExerciseCategoryRepository();
         // 2. Get query builder from repo.
-        $qb = Container::getExerciseCategoryRepository()->getResourcesByCourse(api_get_course_entity());
+        $qb = $repo->getResourcesByCourse($course, $session);
 
         // 3. Set QueryBuilder to the source.
         $source-> initQueryBuilder($qb);
@@ -324,7 +329,7 @@ JAVASCRIPT;
             [
                 'title' => '#',
                 'primary' => true,
-                'visible' => false
+                'visible' => false,
             ]
         )->add(
             'name',
@@ -347,6 +352,13 @@ JAVASCRIPT;
             $myRowAction->setRouteParameters(
                 ['id', 'name' => 'exercise/category.php', 'cidReq' => api_get_course_id(), 'action' => 'edit']
             );
+
+            $myRowAction->addManipulateRender(
+                function (RowAction $action, Row $row) use ($session, $repo) {
+                    return $repo->rowCanBeEdited($session, $action, $row);
+                }
+            );
+
             $grid->addRowAction($myRowAction);
 
             $myRowAction = new RowAction(
@@ -359,16 +371,24 @@ JAVASCRIPT;
             $myRowAction->setRouteParameters(
                 ['id', 'name' => 'exercise/category.php', 'cidReq' => api_get_course_id(), 'action' => 'delete']
             );
+            $myRowAction->addManipulateRender(
+                function (RowAction $action, Row $row) use ($session, $repo) {
+                    return $repo->rowCanBeEdited($session, $action, $row);
+                }
+            );
+
             $grid->addRowAction($myRowAction);
 
-            // Add mass actions
-            $deleteMassAction = new MassAction(
-                'Delete',
-            ['ExerciseCategoryManager', 'deleteResource'],
-                true,
-            []
-            );
-            $grid->addMassAction($deleteMassAction);
+            if (empty($session)) {
+                // Add mass actions
+                $deleteMassAction = new MassAction(
+                    'Delete',
+                    ['ExerciseCategoryManager', 'deleteResource'],
+                    true,
+                    []
+                );
+                $grid->addMassAction($deleteMassAction);
+            }
         }
 
         // 8. Set route and request

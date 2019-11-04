@@ -3,8 +3,10 @@
 
 namespace Chamilo\CoreBundle\Entity\Resource;
 
+use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\UserBundle\Entity\User;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
@@ -355,6 +357,25 @@ class ResourceNode
         $this->resourceLinks = $resourceLinks;
 
         return $this;
+    }
+
+    /**
+     * @param Session $session
+     *
+     * @return ArrayCollection
+     */
+    public function hasSession(Session $session = null)
+    {
+        $links = $this->getResourceLinks();
+        $criteria = Criteria::create();
+
+        $criteria->andWhere(
+            Criteria::expr()->eq('session', $session)
+        );
+
+        $result = $links->matching($criteria);
+
+        return $result;
     }
 
     /**

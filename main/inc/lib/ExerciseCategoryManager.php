@@ -323,19 +323,14 @@ JAVASCRIPT;
             'number',
             [
                 'title' => '#',
-                'primary' => 'true',
+                'primary' => true,
+                'visible' => false
             ]
         )->add(
             'name',
             'text',
             [
-                'title' => 'name',
-            ]
-        )->add(
-            'description',
-            'text',
-            [
-                'title' => 'description',
+                'title' => get_lang('Name'),
             ]
         );
         $grid = $grid->getGrid();

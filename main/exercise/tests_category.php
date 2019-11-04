@@ -37,8 +37,8 @@ $sessionId = api_get_session_id();
 
 // breadcrumbs
 $interbreadcrumb[] = [
-    "url" => "exercise.php?".api_get_cidreq(),
-    "name" => get_lang('Tests'),
+    'url' => 'exercise.php?'.api_get_cidreq(),
+    'name' => get_lang('Tests'),
 ];
 
 $action = isset($_GET['action']) ? $_GET['action'] : '';

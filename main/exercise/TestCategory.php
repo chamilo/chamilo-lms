@@ -1120,19 +1120,14 @@ class TestCategory
             'number',
             [
                 'title' => '#',
-                'primary' => 'true',
+                'primary' => true,
+                'visible' => false
             ]
         )->add(
             'title',
             'text',
             [
-                'title' => 'title',
-            ]
-        )->add(
-            'description',
-            'text',
-            [
-                'title' => 'description',
+                'title' => get_lang('Name'),
             ]
         );
 
@@ -1149,7 +1144,12 @@ class TestCategory
                 ['class' => 'btn btn-secondary']
             );
             $myRowAction->setRouteParameters(
-                ['id', 'name' => 'exercise/tests_category.php', 'cidReq' => api_get_course_id(), 'action' => 'editcategory']
+                [
+                    'id',
+                    'name' => 'exercise/tests_category.php',
+                    'cidReq' => api_get_course_id(),
+                    'action' => 'editcategory',
+                ]
             );
             $grid->addRowAction($myRowAction);
 
@@ -1161,7 +1161,12 @@ class TestCategory
                 ['class' => 'btn btn-danger', 'form_delete' => true]
             );
             $myRowAction->setRouteParameters(
-                ['id', 'name' => 'exercise/tests_category.php', 'cidReq' => api_get_course_id(), 'action' => 'deletecategory']
+                [
+                    'id',
+                    'name' => 'exercise/tests_category.php',
+                    'cidReq' => api_get_course_id(),
+                    'action' => 'deletecategory',
+                ]
             );
             $grid->addRowAction($myRowAction);
 

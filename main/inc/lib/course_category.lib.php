@@ -591,7 +591,7 @@ class CourseCategory
         $whereCondition = ' AND a.access_url_id = '.api_get_current_access_url_id();
 
         $tbl_category = Database::get_main_table(TABLE_MAIN_CATEGORY);
-        $sql = "SELECT code, name
+        $sql = "SELECT c.id, c.code, name
                 FROM $tbl_category c
                 $conditions
                 WHERE (auth_course_child = 'TRUE' OR code = '".Database::escape_string($categoryCode)."')
@@ -601,7 +601,7 @@ class CourseCategory
 
         $categories[''] = '-';
         while ($cat = Database::fetch_array($res)) {
-            $categories[$cat['code']] = '('.$cat['code'].') '.$cat['name'];
+            $categories[$cat['id']] = '('.$cat['code'].') '.$cat['name'];
             ksort($categories);
         }
 

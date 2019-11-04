@@ -27,6 +27,7 @@ $isAllowToEdit = api_is_course_admin() || api_is_platform_admin();
 $course_code = api_get_course_id();
 $courseId = api_get_course_int_id();
 $repo = Container::getCourseRepository();
+$courseCategoryRepo = Container::getCourseCategoryRepository();
 $illustrationRepo = Container::getIllustrationRepository();
 $em = $repo->getEntityManager();
 $isEditable = true;
@@ -58,7 +59,6 @@ $form = new FormValidator(
 );
 
 // COURSE SETTINGS
-
 function card_settings_open($id, $title, $open = false, $icon, $parent)
 {
     $html = '<div class="card">';
@@ -907,9 +907,6 @@ $appPlugin->add_course_settings_form($form);
 
 $form->addHtml('</div>');
 
-// Get all the course information
-$all_course_information = CourseManager::get_course_information($_course['sysCode']);
-
 // Set the default values of the form
 $values = [];
 $values['title'] = $_course['name'];
@@ -920,10 +917,10 @@ $values['department_url'] = $_course['extLink']['url'];
 $values['visibility'] = $_course['visibility'];
 $values['subscribe'] = $_course['subscribe'];
 $values['unsubscribe'] = $_course['unsubscribe'];
-$values['course_registration_password'] = $all_course_information['registration_code'];
-$values['legal'] = $all_course_information['legal'];
-$values['activate_legal'] = $all_course_information['activate_legal'];
-$values['show_score'] = $all_course_information['show_score'];
+$values['course_registration_password'] = $_course['registration_code'];
+$values['legal'] = $_course['legal'];
+$values['activate_legal'] = $_course['activate_legal'];
+$values['show_score'] = $_course['show_score'];
 
 $courseSettings = CourseManager::getCourseSettingVariables($appPlugin);
 
@@ -1004,23 +1001,29 @@ if ($form->validate() && $isEditable) {
     }
 
     $activeLegal = isset($updateValues['activate_legal']) ? $updateValues['activate_legal'] : 0;
-    $table_course = Database::get_main_table(TABLE_MAIN_COURSE);
 
-    $params = [
-        'title' => $updateValues['title'],
-        'course_language' => $updateValues['course_language'],
-        'category_id' => $updateValues['category_id'],
-        'department_name' => $updateValues['department_name'],
-        'department_url' => $updateValues['department_url'],
-        'visibility' => $updateValues['visibility'],
-        'subscribe' => $updateValues['subscribe'],
-        'unsubscribe' => $updateValues['unsubscribe'],
-        'legal' => $updateValues['legal'],
-        'activate_legal' => $activeLegal,
-        'registration_code' => $updateValues['course_registration_password'],
-        'show_score' => $updateValues['show_score'],
-    ];
-    Database::update($table_course, $params, ['id = ?' => $courseId]);
+    $category = null;
+    if (!empty($updateValues['category_id'])) {
+        $category = $courseCategoryRepo->find($updateValues['category_id']);
+    }
+
+    $courseEntity
+        ->setTitle($updateValues['title'])
+        ->setCourseLanguage($updateValues['course_language'])
+        ->setCategory($category)
+        ->setDepartmentName($updateValues['department_name'])
+        ->setDepartmentUrl($updateValues['department_url'])
+        ->setVisibility($updateValues['visibility'])
+        ->setSubscribe($updateValues['subscribe'])
+        ->setUnsubscribe($updateValues['unsubscribe'])
+        ->setLegal($updateValues['legal'])
+        ->setActivateLegal($activeLegal)
+        ->setRegistrationCode($updateValues['course_registration_password'])
+        ->setShowScore($updateValues['show_score'])
+    ;
+
+    $em->persist($courseEntity);
+    $em->flush();
 
     // Insert/Updates course_settings table
     foreach ($courseSettings as $setting) {

@@ -772,11 +772,11 @@ class Course extends AbstractResource implements ResourceInterface
     /**
      * Set category.
      *
-     * @param string $category
+     * @param CourseCategory $category
      *
      * @return Course
      */
-    public function setCategory($category)
+    public function setCategory(CourseCategory $category = null)
     {
         $this->category = $category;
 

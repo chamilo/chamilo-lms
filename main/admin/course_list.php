@@ -24,7 +24,7 @@ function get_number_of_courses()
 {
     $course_table = Database::get_main_table(TABLE_MAIN_COURSE);
     $tblCourseCategory = Database::get_main_table(TABLE_MAIN_CATEGORY);
-    $sql = "SELECT COUNT(code) AS total_number_of_items FROM $course_table c";
+    $sql = "SELECT COUNT(c.id) AS total_number_of_items FROM $course_table c";
 
     if ((api_is_platform_admin() || api_is_session_admin()) &&
         api_is_multiple_url_enabled() && api_get_current_access_url_id() != -1

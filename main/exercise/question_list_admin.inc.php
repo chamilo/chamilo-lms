@@ -4,7 +4,6 @@
 use ChamiloSession as Session;
 
 /**
- *    Code library for HotPotatoes integration.
  *
  * @package chamilo.exercise
  *

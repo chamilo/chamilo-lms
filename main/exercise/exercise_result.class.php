@@ -42,7 +42,6 @@ class ExerciseResult
      * @return bool
      */
     public function getExercisesReporting(
-        $document_path,
         $user_id = null,
         $filter = 0,
         $exercise_id = 0
@@ -303,7 +302,6 @@ class ExerciseResult
     ) {
         global $charset;
         $this->getExercisesReporting(
-            $document_path,
             $user_id,
             $export_filter,
             $exercise_id
@@ -461,7 +459,6 @@ class ExerciseResult
     ) {
         global $charset;
         $this->getExercisesReporting(
-            $document_path,
             $user_id,
             $export_filter,
             $exercise_id,

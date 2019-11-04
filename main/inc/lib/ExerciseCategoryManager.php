@@ -354,7 +354,7 @@ JAVASCRIPT;
 
             $myRowAction->addManipulateRender(
                 function (RowAction $action, Row $row) use ($session, $repo) {
-                    return $repo->rowCanBeEdited($session, $action, $row);
+                    return $repo->rowCanBeEdited($action, $row, $session);
                 }
             );
 
@@ -372,7 +372,7 @@ JAVASCRIPT;
             );
             $myRowAction->addManipulateRender(
                 function (RowAction $action, Row $row) use ($session, $repo) {
-                    return $repo->rowCanBeEdited($session, $action, $row);
+                    return $repo->rowCanBeEdited($action, $row, $session);
                 }
             );
 

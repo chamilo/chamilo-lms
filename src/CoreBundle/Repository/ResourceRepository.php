@@ -409,7 +409,7 @@ class ResourceRepository extends EntityRepository
             )
             ->innerJoin('node.resourceLinks', 'links')
             ->where('node.resourceType = :type')
-            ->andWhere('resource.course = links.course')
+            //->andWhere('resource.course = links.course')
             ->andWhere('links.course = :course')
             //->where('link.cId = ?', $course->getId())
             //->where('node.cId = 0')
@@ -475,16 +475,16 @@ class ResourceRepository extends EntityRepository
     }
 
     /**
-     * @param Session   $session
      * @param RowAction $action
      * @param Row       $row
+     * @param Session   $session
      *
      * @return RowAction|null
      */
-    public function rowCanBeEdited($session, RowAction $action, Row $row)
+    public function rowCanBeEdited(RowAction $action, Row $row, Session $session = null)
     {
         if (!empty($session)) {
-            /** @var \Chamilo\CoreBundle\Entity\Resource\AbstractResource $entity */
+            /** @var AbstractResource $entity */
             $entity = $row->getEntity();
             $hasSession = $entity->getResourceNode()->hasSession($session);
             if ($hasSession->count() > 0) {

@@ -1139,7 +1139,7 @@ class TestCategory
 
             $myRowAction->addManipulateRender(
                 function (RowAction $action, Row $row) use ($session, $repo) {
-                    return $repo->rowCanBeEdited($session, $action, $row);
+                    return $repo->rowCanBeEdited($action, $row, $session);
                 }
             );
 
@@ -1163,7 +1163,7 @@ class TestCategory
 
             $myRowAction->addManipulateRender(
                 function (RowAction $action, Row $row) use ($session, $repo) {
-                    return $repo->rowCanBeEdited($session, $action, $row);
+                    return $repo->rowCanBeEdited($action, $row, $session);
                 }
             );
 

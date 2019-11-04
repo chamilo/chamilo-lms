@@ -14,17 +14,11 @@ use Doctrine\DBAL\Schema\Schema;
  */
 class Version20160808160000 extends AbstractMigrationChamilo
 {
-    /**
-     * @param Schema $schema
-     */
     public function up(Schema $schema)
     {
         $this->addSql("UPDATE c_quiz_answer SET destination = NULL WHERE TRIM(destination) = ''");
     }
 
-    /**
-     * @param Schema $schema
-     */
     public function down(Schema $schema)
     {
         $this->addSql("UPDATE c_quiz_answer SET destination = '' WHERE destination IS NULL");

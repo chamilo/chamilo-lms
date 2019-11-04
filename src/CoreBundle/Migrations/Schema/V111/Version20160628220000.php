@@ -15,8 +15,6 @@ use Doctrine\DBAL\Schema\Schema;
 class Version20160628220000 extends AbstractMigrationChamilo
 {
     /**
-     * @param Schema $schema
-     *
      * @throws \Doctrine\DBAL\DBALException
      * @throws \Doctrine\DBAL\Schema\SchemaException
      */
@@ -37,8 +35,6 @@ class Version20160628220000 extends AbstractMigrationChamilo
     }
 
     /**
-     * @param Schema $schema
-     *
      * @throws \Doctrine\DBAL\DBALException
      * @throws \Doctrine\DBAL\Schema\SchemaException
      */

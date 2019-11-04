@@ -13,8 +13,6 @@ use Doctrine\DBAL\Schema\Schema;
 class Version111 extends AbstractMigrationChamilo
 {
     /**
-     * @param Schema $schema
-     *
      * @throws \Doctrine\DBAL\Schema\SchemaException
      */
     public function up(Schema $schema)
@@ -547,16 +545,10 @@ class Version111 extends AbstractMigrationChamilo
         }
     }
 
-    /**
-     * @param Schema $schema
-     */
     public function postUp(Schema $schema)
     {
     }
 
-    /**
-     * @param Schema $schema
-     */
     public function down(Schema $schema)
     {
         $this->addSql('DROP TABLE c_lp_category_user');

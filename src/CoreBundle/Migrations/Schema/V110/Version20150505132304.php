@@ -11,9 +11,6 @@ use Doctrine\DBAL\Schema\Schema;
  */
 class Version20150505132304 extends AbstractMigrationChamilo
 {
-    /**
-     * @param Schema $schema
-     */
     public function up(Schema $schema)
     {
         // Force table creation in order to do updates/insert later.
@@ -42,16 +39,10 @@ class Version20150505132304 extends AbstractMigrationChamilo
         */
     }
 
-    /**
-     * @param Schema $schema
-     */
     public function postUp(Schema $schema)
     {
     }
 
-    /**
-     * @param Schema $schema
-     */
     public function down(Schema $schema)
     {
         $this->addSql('ALTER TABLE extra_field_options DROP FOREIGN KEY FK_A572E3AE443707B0');

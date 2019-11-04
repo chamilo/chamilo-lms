@@ -14,9 +14,6 @@ use Doctrine\DBAL\Schema\Schema;
  */
 class Version20160808154200 extends AbstractMigrationChamilo
 {
-    /**
-     * @param Schema $schema
-     */
     public function up(Schema $schema)
     {
         $question = $schema->getTable('c_quiz_question');
@@ -34,9 +31,6 @@ class Version20160808154200 extends AbstractMigrationChamilo
             ->setDefault(null);
     }
 
-    /**
-     * @param Schema $schema
-     */
     public function down(Schema $schema)
     {
         $answer = $schema->getTable('c_quiz_answer');

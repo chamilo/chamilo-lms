@@ -11,9 +11,6 @@ use Doctrine\DBAL\Schema\Schema;
  */
 class Version20150528103216 extends AbstractMigrationChamilo
 {
-    /**
-     * @param Schema $schema
-     */
     public function up(Schema $schema)
     {
         $this->addSql('ALTER TABLE session ADD COLUMN access_start_date datetime');
@@ -55,9 +52,6 @@ class Version20150528103216 extends AbstractMigrationChamilo
         $this->addSql('UPDATE session SET display_end_date = NULL WHERE display_end_date = "0000-00-00 23:59:59"');
     }
 
-    /**
-     * @param Schema $schema
-     */
     public function down(Schema $schema)
     {
         $this->addSql('ALTER TABLE session CREATE date_start date NOT NULL');

@@ -12,8 +12,6 @@ use Doctrine\DBAL\Schema\Schema;
 class Version20160418113000 extends AbstractMigrationChamilo
 {
     /**
-     * @param Schema $schema
-     *
      * @throws \Doctrine\DBAL\Schema\SchemaException
      */
     public function up(Schema $schema)
@@ -21,9 +19,6 @@ class Version20160418113000 extends AbstractMigrationChamilo
         $this->addSql('ALTER TABLE user ADD address VARCHAR(250) DEFAULT NULL;');
     }
 
-    /**
-     * @param Schema $schema
-     */
     public function down(Schema $schema)
     {
         $this->addSql('ALTER TABLE user DROP COLUMN address');

@@ -11,9 +11,6 @@ use Doctrine\DBAL\Schema\Schema;
  */
 class Version20150616093200 extends AbstractMigrationChamilo
 {
-    /**
-     * @param Schema $schema
-     */
     public function up(Schema $schema)
     {
         $connection = $this->connection;
@@ -24,9 +21,6 @@ class Version20150616093200 extends AbstractMigrationChamilo
         }
     }
 
-    /**
-     * @param Schema $schema
-     */
     public function down(Schema $schema)
     {
         $this->addSql("DELETE FROM extra_field

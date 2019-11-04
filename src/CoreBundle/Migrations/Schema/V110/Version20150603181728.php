@@ -11,9 +11,6 @@ use Doctrine\DBAL\Schema\Schema;
  */
 class Version20150603181728 extends AbstractMigrationChamilo
 {
-    /**
-     * @param Schema $schema
-     */
     public function preUp(Schema $schema)
     {
         $this->addSql("ALTER TABLE course ENGINE=InnoDB");
@@ -23,9 +20,6 @@ class Version20150603181728 extends AbstractMigrationChamilo
         $this->addSql("ALTER TABLE c_item_property ENGINE=InnoDB");
     }
 
-    /**
-     * @param Schema $schema
-     */
     public function up(Schema $schema)
     {
         $table = $schema->getTable('c_lp');
@@ -105,9 +99,6 @@ class Version20150603181728 extends AbstractMigrationChamilo
         $this->addSql('CREATE INDEX IDX_1D84C181330D47E9 ON c_item_property (to_group_id)');
     }
 
-    /**
-     * @param Schema $schema
-     */
     public function down(Schema $schema)
     {
         $this->addSql('ALTER TABLE c_lp DROP max_attempts, DROP subscribe_users');

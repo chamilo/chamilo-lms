@@ -11,9 +11,6 @@ use Doctrine\DBAL\Schema\Schema;
  */
 class Version20151101082200 extends AbstractMigrationChamilo
 {
-    /**
-     * @param Schema $schema
-     */
     public function up(Schema $schema)
     {
         $this->addSql("ALTER TABLE access_url ENGINE=InnoDB");
@@ -42,9 +39,6 @@ class Version20151101082200 extends AbstractMigrationChamilo
         }
     }
 
-    /**
-     * @param Schema $schema
-     */
     public function down(Schema $schema)
     {
     }

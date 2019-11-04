@@ -13,9 +13,6 @@ use Doctrine\DBAL\Schema\Schema;
  */
 class Version20150805161000 extends AbstractMigrationChamilo
 {
-    /**
-     * @param Schema $schema
-     */
     public function up(Schema $schema)
     {
         $sessionTable = $schema->getTable('session');
@@ -27,9 +24,6 @@ class Version20150805161000 extends AbstractMigrationChamilo
         );
     }
 
-    /**
-     * @param Schema $schema
-     */
     public function down(Schema $schema)
     {
         $sessionTable = $schema->getTable('session');

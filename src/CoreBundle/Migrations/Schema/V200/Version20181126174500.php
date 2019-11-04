@@ -13,9 +13,6 @@ use Doctrine\DBAL\Schema\Schema;
  */
 class Version20181126174500 extends AbstractMigrationChamilo
 {
-    /**
-     * @param \Doctrine\DBAL\Schema\Schema $schema
-     */
     public function up(Schema $schema)
     {
         if ($schema->hasTable('plugin_ims_lti_tool')) {
@@ -57,9 +54,6 @@ class Version20181126174500 extends AbstractMigrationChamilo
         );
     }
 
-    /**
-     * @param \Doctrine\DBAL\Schema\Schema $schema
-     */
     public function down(Schema $schema)
     {
     }

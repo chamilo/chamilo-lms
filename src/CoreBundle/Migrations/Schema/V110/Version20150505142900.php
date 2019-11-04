@@ -15,8 +15,6 @@ use Doctrine\DBAL\Types\Type;
 class Version20150505142900 extends AbstractMigrationChamilo
 {
     /**
-     * @param Schema $schema
-     *
      * @throws \Doctrine\DBAL\Schema\SchemaException
      */
     public function up(Schema $schema)
@@ -68,8 +66,6 @@ class Version20150505142900 extends AbstractMigrationChamilo
 
     /**
      * We don't allow downgrades yet.
-     *
-     * @param Schema $schema
      */
     public function down(Schema $schema)
     {

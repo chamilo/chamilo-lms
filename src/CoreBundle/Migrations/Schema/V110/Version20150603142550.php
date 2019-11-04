@@ -11,18 +11,12 @@ use Doctrine\DBAL\Schema\Schema;
  */
 class Version20150603142550 extends AbstractMigrationChamilo
 {
-    /**
-     * @param Schema $schema
-     */
     public function preUp(Schema $schema)
     {
         $this->addSql("ALTER TABLE c_calendar_event ENGINE=InnoDB");
         $this->addSql("ALTER TABLE c_thematic_advance ENGINE=InnoDB");
     }
 
-    /**
-     * @param Schema $schema
-     */
     public function up(Schema $schema)
     {
         $this->addSql('CREATE TABLE IF NOT EXISTS room (id INT AUTO_INCREMENT NOT NULL, branch_id INT DEFAULT NULL, title VARCHAR(255) DEFAULT NULL, description LONGTEXT, geolocation VARCHAR(255) DEFAULT NULL, ip VARCHAR(39) DEFAULT NULL, ip_mask VARCHAR(6) DEFAULT NULL, INDEX IDX_729F519BDCD6CC49 (branch_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB');
@@ -44,9 +38,6 @@ class Version20150603142550 extends AbstractMigrationChamilo
         $this->addSql('CREATE INDEX IDX_62798E9754177093 ON c_thematic_advance (room_id)');
     }
 
-    /**
-     * @param Schema $schema
-     */
     public function down(Schema $schema)
     {
         $this->addSql('ALTER TABLE course DROP FOREIGN KEY FK_169E6FB954177093');

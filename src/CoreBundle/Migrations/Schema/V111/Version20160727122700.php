@@ -14,9 +14,6 @@ use Doctrine\DBAL\Schema\Schema;
  */
 class Version20160727122700 extends AbstractMigrationChamilo
 {
-    /**
-     * @param Schema $schema
-     */
     public function up(Schema $schema)
     {
         $schema
@@ -24,9 +21,6 @@ class Version20160727122700 extends AbstractMigrationChamilo
             ->addIndex(['session_id'], 'session');
     }
 
-    /**
-     * @param Schema $schema
-     */
     public function down(Schema $schema)
     {
         $schema

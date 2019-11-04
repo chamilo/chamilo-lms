@@ -13,9 +13,6 @@ use Doctrine\DBAL\Schema\Schema;
  */
 class Version20150821150000 extends AbstractMigrationChamilo
 {
-    /**
-     * @param Schema $schema
-     */
     public function up(Schema $schema)
     {
         $entityManage = $this->getEntityManager();
@@ -99,9 +96,6 @@ class Version20150821150000 extends AbstractMigrationChamilo
         $deleteSettings->getQuery()->execute();
     }
 
-    /**
-     * @param Schema $schema
-     */
     public function down(Schema $schema)
     {
         $this->addSettingCurrent(

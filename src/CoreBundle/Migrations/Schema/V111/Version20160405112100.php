@@ -13,9 +13,6 @@ use Doctrine\DBAL\Schema\Schema;
  */
 class Version20160405112100 extends AbstractMigrationChamilo
 {
-    /**
-     * @param Schema $schema
-     */
     public function up(Schema $schema)
     {
         $this->addSql(
@@ -111,9 +108,6 @@ class Version20160405112100 extends AbstractMigrationChamilo
         }
     }
 
-    /**
-     * @param Schema $schema
-     */
     public function down(Schema $schema)
     {
         $this->addSql(

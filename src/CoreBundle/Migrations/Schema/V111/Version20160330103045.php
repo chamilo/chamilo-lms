@@ -13,9 +13,6 @@ use Doctrine\DBAL\Schema\Schema;
  */
 class Version20160330103045 extends AbstractMigrationChamilo
 {
-    /**
-     * @param Schema $schema
-     */
     public function up(Schema $schema)
     {
         /*
@@ -170,9 +167,6 @@ class Version20160330103045 extends AbstractMigrationChamilo
         $this->addSql("ALTER TABLE fos_user_user_group ADD CONSTRAINT FK_B3C77447FE54D947 FOREIGN KEY (group_id) REFERENCES fos_group (id)");
     }
 
-    /**
-     * @param Schema $schema
-     */
     public function down(Schema $schema)
     {
     }

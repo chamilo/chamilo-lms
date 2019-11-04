@@ -16,9 +16,6 @@ use Doctrine\DBAL\Types\Type;
  */
 class Version110 extends AbstractMigrationChamilo
 {
-    /**
-     * @param Schema $schema
-     */
     public function preUp(Schema $schema)
     {
         $this->addSql("ALTER TABLE session_rel_course ENGINE=InnoDB");
@@ -28,8 +25,6 @@ class Version110 extends AbstractMigrationChamilo
     }
 
     /**
-     * @param Schema $schema
-     *
      * @throws \Doctrine\DBAL\Schema\SchemaException
      */
     public function up(Schema $schema)
@@ -653,8 +648,6 @@ class Version110 extends AbstractMigrationChamilo
 
     /**
      * We don't allow downgrades yet.
-     *
-     * @param Schema $schema
      */
     public function down(Schema $schema)
     {

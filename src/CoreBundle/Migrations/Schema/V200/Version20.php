@@ -13,9 +13,6 @@ use Doctrine\DBAL\Types\Type;
  */
 class Version20 extends AbstractMigrationChamilo
 {
-    /**
-     * @param Schema $schema
-     */
     public function up(Schema $schema)
     {
         // Use $schema->createTable
@@ -958,9 +955,6 @@ class Version20 extends AbstractMigrationChamilo
         $this->addSql("ALTER TABLE c_quiz_question ADD feedback LONGTEXT DEFAULT NULL;");
     }
 
-    /**
-     * @param Schema $schema
-     */
     public function down(Schema $schema)
     {
     }

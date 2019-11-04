@@ -15,9 +15,6 @@ use Doctrine\DBAL\Schema\Schema;
  */
 class Version20160804174600 extends AbstractMigrationChamilo
 {
-    /**
-     * @param Schema $schema
-     */
     public function up(Schema $schema)
     {
         $em = $this->getEntityManager();
@@ -665,9 +662,6 @@ class Version20160804174600 extends AbstractMigrationChamilo
         $em->flush();
     }
 
-    /**
-     * @param Schema $schema
-     */
     public function down(Schema $schema)
     {
         $em = $this->getEntityManager();

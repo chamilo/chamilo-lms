@@ -13,9 +13,6 @@ use Doctrine\DBAL\Schema\Schema;
  */
 class Version20150713132630 extends AbstractMigrationChamilo
 {
-    /**
-     * @param Schema $schema
-     */
     public function up(Schema $schema)
     {
         if ($schema->hasTable('c_student_publication')) {
@@ -24,9 +21,6 @@ class Version20150713132630 extends AbstractMigrationChamilo
         }
     }
 
-    /**
-     * @param Schema $schema
-     */
     public function down(Schema $schema)
     {
         $this->addSql('ALTER TABLE c_student_publication DROP url_correction');

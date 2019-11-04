@@ -13,9 +13,6 @@ use Doctrine\DBAL\Schema\Schema;
  */
 class Version20150803171220 extends AbstractMigrationChamilo
 {
-    /**
-     * @param Schema $schema
-     */
     public function up(Schema $schema)
     {
         $this->addSql('UPDATE user SET username_canonical = username');
@@ -26,9 +23,6 @@ class Version20150803171220 extends AbstractMigrationChamilo
         // $schema->renameTable('track_e_exercices', 'track_e_exercises');
     }
 
-    /**
-     * @param Schema $schema
-     */
     public function down(Schema $schema)
     {
         $this->addSql('ALTER TABLE user DROP confirmation_token');

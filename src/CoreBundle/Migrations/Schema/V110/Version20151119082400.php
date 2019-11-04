@@ -11,9 +11,6 @@ use Doctrine\DBAL\Schema\Schema;
  */
 class Version20151119082400 extends AbstractMigrationChamilo
 {
-    /**
-     * @param Schema $schema
-     */
     public function up(Schema $schema)
     {
         $user = $schema->getTable('user');
@@ -24,9 +21,6 @@ class Version20151119082400 extends AbstractMigrationChamilo
         $userRelTag->addIndex(['tag_id']);
     }
 
-    /**
-     * @param Schema $schema
-     */
     public function down(Schema $schema)
     {
     }

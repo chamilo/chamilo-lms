@@ -14,17 +14,11 @@ use Doctrine\DBAL\Schema\Schema;
  */
 class Version20150527120703 extends AbstractMigrationChamilo
 {
-    /**
-     * @param Schema $schema
-     */
     public function up(Schema $schema)
     {
         $this->addSql('ALTER TABLE c_lp CHANGE COLUMN autolunch autolaunch INT NOT NULL DEFAULT 0');
     }
 
-    /**
-     * @param Schema $schema
-     */
     public function down(Schema $schema)
     {
         $this->addSql('ALTER TABLE c_lp CHANGE COLUMN autolaunch autolunch INT NOT NULL');

@@ -13,9 +13,6 @@ use Doctrine\DBAL\Schema\Schema;
  */
 class Version20191101132000 extends AbstractMigrationChamilo
 {
-    /**
-     * @param Schema $schema
-     */
     public function up(Schema $schema)
     {
         $this->getEntityManager();
@@ -28,9 +25,6 @@ class Version20191101132000 extends AbstractMigrationChamilo
         $this->addSql('CREATE INDEX IDX_169E6FB912469DE2 ON course (category_id)');
     }
 
-    /**
-     * @param Schema $schema
-     */
     public function down(Schema $schema)
     {
     }

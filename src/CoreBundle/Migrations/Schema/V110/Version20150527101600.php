@@ -14,9 +14,6 @@ use Doctrine\DBAL\Schema\Schema;
  */
 class Version20150527101600 extends AbstractMigrationChamilo
 {
-    /**
-     * @param Schema $schema
-     */
     public function up(Schema $schema)
     {
         $this->addSettingCurrent(
@@ -45,9 +42,6 @@ class Version20150527101600 extends AbstractMigrationChamilo
         );
     }
 
-    /**
-     * @param Schema $schema
-     */
     public function down(Schema $schema)
     {
         $this->addSql("DELETE FROM settings_options WHERE variable = 'gamification_mode'");

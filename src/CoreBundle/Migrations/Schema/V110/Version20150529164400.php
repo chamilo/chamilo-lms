@@ -12,9 +12,6 @@ use Doctrine\DBAL\Types\Type as TableColumnType;
  */
 class Version20150529164400 extends AbstractMigrationChamilo
 {
-    /**
-     * @param Schema $schema
-     */
     public function up(Schema $schema)
     {
         if (!$schema->hasTable('gradebook_score_log')) {
@@ -56,9 +53,6 @@ class Version20150529164400 extends AbstractMigrationChamilo
         }
     }
 
-    /**
-     * @param Schema $schema
-     */
     public function down(Schema $schema)
     {
         $schema->dropTable('gradebook_score_log');

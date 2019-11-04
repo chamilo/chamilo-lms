@@ -12,9 +12,6 @@ use Doctrine\DBAL\Types\Type as TableColumnType;
  */
 class Version20150608104600 extends AbstractMigrationChamilo
 {
-    /**
-     * @param Schema $schema
-     */
     public function up(Schema $schema)
     {
         if (!$schema->hasTable('extra_field_rel_tag')) {
@@ -59,9 +56,6 @@ class Version20150608104600 extends AbstractMigrationChamilo
         }
     }
 
-    /**
-     * @param Schema $schema
-     */
     public function down(Schema $schema)
     {
         $schema->dropTable('extra_field_rel_tag');

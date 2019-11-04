@@ -12,9 +12,6 @@ use Doctrine\DBAL\Types\Type;
  */
 class Version20151101082300 extends AbstractMigrationChamilo
 {
-    /**
-     * @param Schema $schema
-     */
     public function up(Schema $schema)
     {
         $accessUrl = $schema->getTable('access_url');
@@ -311,9 +308,6 @@ class Version20151101082300 extends AbstractMigrationChamilo
         $usergroupRelUSer->addForeignKeyConstraint('user', ['user_id'], ['id']);
     }
 
-    /**
-     * @param Schema $schema
-     */
     public function down(Schema $schema)
     {
     }

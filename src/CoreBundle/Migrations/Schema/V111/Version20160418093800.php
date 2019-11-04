@@ -16,8 +16,6 @@ use Doctrine\DBAL\Types\Type;
 class Version20160418093800 extends AbstractMigrationChamilo
 {
     /**
-     * @param Schema $schema
-     *
      * @throws \Doctrine\DBAL\Schema\SchemaException
      */
     public function up(Schema $schema)
@@ -26,9 +24,6 @@ class Version20160418093800 extends AbstractMigrationChamilo
         $cQuizTable->addColumn('save_correct_answers', Type::BOOLEAN);
     }
 
-    /**
-     * @param Schema $schema
-     */
     public function down(Schema $schema)
     {
     }

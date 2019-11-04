@@ -182,8 +182,6 @@ class Version20160907150300 extends AbstractMigrationChamilo
     ];
 
     /**
-     * @param Schema $schema
-     *
      * @throws \Doctrine\DBAL\DBALException
      * @throws \Doctrine\DBAL\Schema\SchemaException
      */
@@ -201,8 +199,6 @@ class Version20160907150300 extends AbstractMigrationChamilo
     }
 
     /**
-     * @param Schema $schema
-     *
      * @throws \Doctrine\DBAL\DBALException
      * @throws \Doctrine\DBAL\Schema\SchemaException
      */

@@ -11,9 +11,6 @@ use Doctrine\DBAL\Schema\Schema;
  */
 class Version20150706135000 extends AbstractMigrationChamilo
 {
-    /**
-     * @param Schema $schema
-     */
     public function up(Schema $schema)
     {
         $gradebookCategory = $schema->getTable('gradebook_category');
@@ -25,9 +22,6 @@ class Version20150706135000 extends AbstractMigrationChamilo
         $isRequirement->setNotnull(true)->setDefault(false);
     }
 
-    /**
-     * @param Schema $schema
-     */
     public function down(Schema $schema)
     {
         $gradebookCategory = $schema->getTable('gradebook_category');

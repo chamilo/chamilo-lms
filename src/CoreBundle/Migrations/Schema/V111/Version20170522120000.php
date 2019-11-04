@@ -16,9 +16,6 @@ use Doctrine\DBAL\Schema\Schema;
  */
 class Version20170522120000 extends AbstractMigrationChamilo
 {
-    /**
-     * @param Schema $schema
-     */
     public function up(Schema $schema)
     {
         error_log('Version20170522120000');
@@ -31,8 +28,6 @@ class Version20170522120000 extends AbstractMigrationChamilo
     /**
      * Down does not do anything in this case because the field shouldn't
      * have been there in the first place.
-     *
-     * @param Schema $schema
      */
     public function down(Schema $schema)
     {

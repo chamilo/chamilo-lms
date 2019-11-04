@@ -13,9 +13,6 @@ use Doctrine\DBAL\Schema\Schema;
  */
 class Version20170904145500 extends AbstractMigrationChamilo
 {
-    /**
-     * @param Schema $schema
-     */
     public function up(Schema $schema)
     {
         $this->addSql('DELETE FROM c_group_rel_user WHERE user_id NOT IN (SELECT id FROM user)');
@@ -33,9 +30,6 @@ class Version20170904145500 extends AbstractMigrationChamilo
         $this->addSql('CREATE INDEX IDX_F6FF71ABFE54D947 ON c_group_rel_tutor (group_id)');
     }
 
-    /**
-     * @param \Doctrine\DBAL\Schema\Schema $schema
-     */
     public function down(Schema $schema)
     {
     }

@@ -15,9 +15,6 @@ use Doctrine\DBAL\Schema\Schema;
  */
 class Version20180904175500 extends AbstractMigrationChamilo
 {
-    /**
-     * @param Schema $schema
-     */
     public function up(Schema $schema)
     {
         $this->addSql('CREATE INDEX IDX_B68FF524537A1329 ON message_attachment (message_id)');
@@ -25,9 +22,6 @@ class Version20180904175500 extends AbstractMigrationChamilo
         $this->addSql('ALTER TABLE message_attachment ADD CONSTRAINT FK_B68FF524537A1329 FOREIGN KEY (message_id) REFERENCES message (id)');
     }
 
-    /**
-     * @param Schema $schema
-     */
     public function down(Schema $schema)
     {
     }

@@ -11,9 +11,6 @@ use Doctrine\DBAL\Schema\Schema;
  */
 class Version20151214164000 extends AbstractMigrationChamilo
 {
-    /**
-     * @param Schema $schema
-     */
     public function up(Schema $schema)
     {
         $extraFieldValueTable = $schema->getTable('extra_field_values');
@@ -23,9 +20,6 @@ class Version20151214164000 extends AbstractMigrationChamilo
         $extraFieldTable->addIndex(['extra_field_type']);
     }
 
-    /**
-     * @param Schema $schema
-     */
     public function down(Schema $schema)
     {
     }

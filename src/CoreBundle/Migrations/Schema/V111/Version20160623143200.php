@@ -15,8 +15,6 @@ use Doctrine\DBAL\Schema\Schema;
 class Version20160623143200 extends AbstractMigrationChamilo
 {
     /**
-     * @param Schema $schema
-     *
      * @throws \Doctrine\DBAL\Schema\SchemaException
      */
     public function up(Schema $schema)
@@ -28,9 +26,6 @@ class Version20160623143200 extends AbstractMigrationChamilo
             ->dropColumn('chatcall_text');
     }
 
-    /**
-     * @param Schema $schema
-     */
     public function down(Schema $schema)
     {
     }

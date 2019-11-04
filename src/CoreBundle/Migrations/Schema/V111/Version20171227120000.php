@@ -16,9 +16,6 @@ use Doctrine\DBAL\Schema\Schema;
  */
 class Version20171227120000 extends AbstractMigrationChamilo
 {
-    /**
-     * @param Schema $schema
-     */
     public function up(Schema $schema)
     {
         error_log('Version20171227120000');
@@ -76,9 +73,6 @@ class Version20171227120000 extends AbstractMigrationChamilo
         $this->addSql('ALTER TABLE skill_level CHANGE profile_id profile_id INT DEFAULT NULL, CHANGE position position INT NOT NULL, CHANGE short_name short_name VARCHAR(255) NOT NULL');
     }
 
-    /**
-     * @param Schema $schema
-     */
     public function down(Schema $schema)
     {
         // No need to revert those database changes as they are minor.

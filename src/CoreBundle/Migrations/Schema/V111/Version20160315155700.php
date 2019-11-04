@@ -13,8 +13,6 @@ use Doctrine\DBAL\Schema\Schema;
 class Version20160315155700 extends AbstractMigrationChamilo
 {
     /**
-     * @param Schema $schema
-     *
      * @throws \Doctrine\DBAL\Schema\SchemaException
      */
     public function up(Schema $schema)
@@ -22,9 +20,6 @@ class Version20160315155700 extends AbstractMigrationChamilo
         $this->addSql("UPDATE settings_current SET type = 'select_course' WHERE variable = 'course_creation_use_template'");
     }
 
-    /**
-     * @param Schema $schema
-     */
     public function down(Schema $schema)
     {
     }

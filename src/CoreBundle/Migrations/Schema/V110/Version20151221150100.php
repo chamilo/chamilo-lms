@@ -11,9 +11,6 @@ use Doctrine\DBAL\Schema\Schema;
  */
 class Version20151221150100 extends AbstractMigrationChamilo
 {
-    /**
-     * @param Schema $schema
-     */
     public function up(Schema $schema)
     {
         $this->addSql("ALTER TABLE c_quiz_answer ENGINE=InnoDB");
@@ -59,9 +56,6 @@ class Version20151221150100 extends AbstractMigrationChamilo
         $this->addSql("ALTER TABLE c_quiz_question DROP INDEX idx_qq_type_temp");
     }
 
-    /**
-     * @param Schema $schema
-     */
     public function down(Schema $schema)
     {
     }

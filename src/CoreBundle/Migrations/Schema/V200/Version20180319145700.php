@@ -15,9 +15,6 @@ use Doctrine\DBAL\Schema\Schema;
  */
 class Version20180319145700 extends AbstractMigrationChamilo
 {
-    /**
-     * @param Schema $schema
-     */
     public function up(Schema $schema)
     {
         $this->addSql('CREATE INDEX idx_survey_q_qid ON c_survey_question (question_id)');
@@ -26,9 +23,6 @@ class Version20180319145700 extends AbstractMigrationChamilo
         $this->addSql('CREATE INDEX idx_survey_qo_qid ON c_survey_question_option (question_id)');
     }
 
-    /**
-     * @param Schema $schema
-     */
     public function down(Schema $schema)
     {
     }

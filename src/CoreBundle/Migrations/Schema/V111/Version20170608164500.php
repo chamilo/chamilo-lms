@@ -16,9 +16,6 @@ use Doctrine\DBAL\Types\Type;
  */
 class Version20170608164500 extends AbstractMigrationChamilo
 {
-    /**
-     * @param Schema $schema
-     */
     public function up(Schema $schema)
     {
         error_log('Version20170608164500');
@@ -28,9 +25,6 @@ class Version20170608164500 extends AbstractMigrationChamilo
             ->setType(Type::getType(Type::INTEGER));
     }
 
-    /**
-     * @param Schema $schema
-     */
     public function down(Schema $schema)
     {
         $schema

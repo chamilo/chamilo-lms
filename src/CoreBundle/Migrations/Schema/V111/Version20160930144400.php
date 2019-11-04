@@ -14,9 +14,6 @@ use Doctrine\DBAL\Schema\Schema;
  */
 class Version20160930144400 extends AbstractMigrationChamilo
 {
-    /**
-     * @param Schema $schema
-     */
     public function up(Schema $schema)
     {
         error_log('Version20160930144400');
@@ -34,9 +31,6 @@ class Version20160930144400 extends AbstractMigrationChamilo
         $this->addSql('ALTER TABLE extra_field ADD visible_to_others TINYINT(1) DEFAULT 0, CHANGE visible visible_to_self TINYINT(1) DEFAULT 0');
     }
 
-    /**
-     * @param Schema $schema
-     */
     public function down(Schema $schema)
     {
         $this->addSql('

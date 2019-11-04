@@ -18,9 +18,6 @@ use Doctrine\DBAL\Types\Type;
  */
 class Version20151214170800 extends AbstractMigrationChamilo
 {
-    /**
-     * @param Schema $schema
-     */
     public function up(Schema $schema)
     {
         $this->addSql("ALTER TABLE track_e_hotspot ADD c_id INT NULL");
@@ -120,9 +117,6 @@ class Version20151214170800 extends AbstractMigrationChamilo
         }
     }
 
-    /**
-     * @param Schema $schema
-     */
     public function down(Schema $schema)
     {
     }

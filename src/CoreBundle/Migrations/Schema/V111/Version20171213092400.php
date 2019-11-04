@@ -16,9 +16,6 @@ use Doctrine\DBAL\Schema\Schema;
  */
 class Version20171213092400 extends AbstractMigrationChamilo
 {
-    /**
-     * @param Schema $schema
-     */
     public function up(Schema $schema)
     {
         error_log('Version20171213092400');
@@ -37,9 +34,6 @@ class Version20171213092400 extends AbstractMigrationChamilo
         $this->addSql('ALTER TABLE c_quiz CHANGE end_time end_time DATETIME DEFAULT NULL');
     }
 
-    /**
-     * @param Schema $schema
-     */
     public function down(Schema $schema)
     {
         $table = $schema->getTable('c_quiz_answer');

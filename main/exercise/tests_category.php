@@ -116,19 +116,19 @@ function importCategoryForm()
 function edit_category_form($action)
 {
     $action = Security::remove_XSS($action);
-    if (isset($_GET['category_id']) && is_numeric($_GET['category_id'])) {
-        $category_id = intval($_GET['category_id']);
+    if (isset($_GET['id']) && is_numeric($_GET['id'])) {
+        $category_id = (int) $_GET['id'];
         $objcat = new TestCategory();
         $objcat = $objcat->getCategory($category_id);
         $form = new FormValidator(
             'note',
             'post',
-            api_get_self().'?action='.$action.'&category_id='.$category_id.'&'.api_get_cidreq()
+            api_get_self().'?action='.$action.'&id='.$category_id.'&'.api_get_cidreq()
         );
 
         // Setting the form elements
         $form->addElement('header', get_lang('Edit this category'));
-        $form->addElement('hidden', 'category_id');
+        $form->addElement('hidden', 'id');
         $form->addElement('text', 'category_name', get_lang('Category name'), ['size' => '95']);
         $form->addHtmlEditor(
             'category_description',
@@ -141,7 +141,7 @@ function edit_category_form($action)
 
         // setting the defaults
         $defaults = [];
-        $defaults['category_id'] = $objcat->id;
+        $defaults['id'] = $objcat->id;
         $defaults['category_name'] = $objcat->name;
         $defaults['category_description'] = $objcat->description;
         $form->setDefaults($defaults);
@@ -155,7 +155,7 @@ function edit_category_form($action)
             if ($check) {
                 $values = $form->exportValues();
                 $category = new TestCategory();
-                $category = $category->getCategory($values['category_id']);
+                $category = $category->getCategory($values['id']);
 
                 if ($category) {
                     $category->name = $values['category_name'];
@@ -184,9 +184,9 @@ function edit_category_form($action)
 // process to delete a category
 function delete_category_form()
 {
-    if (isset($_GET['category_id']) && is_numeric($_GET['category_id'])) {
+    if (isset($_GET['id']) && is_numeric($_GET['id'])) {
         $category = new TestCategory();
-        if ($category->removeCategory($_GET['category_id'])) {
+        if ($category->removeCategory($_GET['id'])) {
             Display::addFlash(Display::return_message(get_lang('Category deleted')));
         } else {
             Display::addFlash(Display::return_message(get_lang('Error: could not delete category'), 'error'));

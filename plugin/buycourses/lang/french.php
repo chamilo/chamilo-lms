@@ -161,3 +161,5 @@ $strings['BoughtBy'] = "Acheté par";
 $strings['PurchaserUser'] = "Utilisateur acheteur";
 $strings['Pending'] = "En attente";
 $strings['Names'] = "Nom";
+$strings['ExportReport'] =  "Rapport des ventes à l'exportation";
+$strings['SelectDateRange'] = "Sélectionnez une date de début et une date de fin pour le rapport";

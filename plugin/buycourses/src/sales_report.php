@@ -124,7 +124,14 @@ foreach ($sales as &$sale) {
 $interbreadcrumb[] = ['url' => '../index.php', 'name' => $plugin->get_lang('plugin_title')];
 $templateName = $plugin->get_lang('SalesReport');
 $template = new Template($templateName);
-$toolbar = '';
+
+$toolbar = Display::url(
+    Display::returnFontAwesomeIcon('file-excel-o').
+    get_lang('GenerateReport'),
+    api_get_path(WEB_PLUGIN_PATH).'buycourses/src/export_report.php',
+    ['class' => 'btn btn-primary']
+);
+
 if ($paypalEnable === 'true' && $commissionsEnable === 'true') {
     $toolbar .= Display::toolbarButton(
         $plugin->get_lang('PaypalPayoutCommissions'),
@@ -154,6 +161,10 @@ if ($commissionsEnable === 'true') {
         Display::toolbarAction('toolbar', [$toolbar])
     );
 }
+$template->assign(
+    'actions',
+    Display::toolbarAction('toolbar', [$toolbar])
+);
 $template->assign('form', $form->returnForm());
 $template->assign('selected_sale', $selectedSale);
 $template->assign('selected_status', $selectedStatus);

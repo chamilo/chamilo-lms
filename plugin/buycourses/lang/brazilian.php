@@ -94,3 +94,5 @@ $strings['ByUser'] = "Por usuário";
 $strings['PaymentMethod'] = "Método de pagamento";
 $strings['SWIFT'] = "Código SWIFT";
 $strings['SWIFT_help'] = "Formato padrão de Códigos de Identificação Bancária (BIC) e serve como um identificador exclusivo de um banco ou instituição financeira";
+$strings['ExportReport'] = "Exportar Relatório de Vendas";
+$strings['SelectDateRange'] = "Selecione uma data de início e uma data de término para o relatório";

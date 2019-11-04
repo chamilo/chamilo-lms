@@ -36,9 +36,6 @@ if ($limitTeacherAccess && !api_is_platform_admin()) {
     api_not_allowed(true);
 }
 
-// including additional libraries
-require_once 'hotpotatoes.lib.php';
-
 $_course = api_get_course_info();
 
 // document path

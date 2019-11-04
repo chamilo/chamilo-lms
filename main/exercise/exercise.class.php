@@ -8371,7 +8371,6 @@ class Exercise
      */
     public static function exerciseGrid($categoryId, $keyword = '')
     {
-        $TBL_DOCUMENT = Database::get_course_table(TABLE_DOCUMENT);
         $TBL_ITEM_PROPERTY = Database::get_course_table(TABLE_ITEM_PROPERTY);
         $TBL_EXERCISE_QUESTION = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
         $TBL_EXERCISES = Database::get_course_table(TABLE_QUIZ_TEST);
@@ -8394,15 +8393,12 @@ class Exercise
         $sessionId = api_get_session_id();
         $courseId = $courseInfo['real_id'];
         $tableRows = [];
-        $uploadPath = DIR_HOTPOTATOES; //defined in main_api
-        $exercisePath = api_get_self();
         $origin = api_get_origin();
         $userInfo = api_get_user_info();
         $charset = 'utf-8';
         $token = Security::get_token();
         $userId = api_get_user_id();
         $isDrhOfCourse = CourseManager::isUserSubscribedInCourseAsDrh($userId, $courseInfo);
-        $documentPath = api_get_path(SYS_COURSE_PATH).$courseInfo['path'].'/document';
         $limitTeacherAccess = api_get_configuration_value('limit_exercise_teacher_access');
 
         // Condition for the session
@@ -8488,29 +8484,7 @@ class Exercise
             $total_exercises = $result_total['count'];
         }
 
-        //get HotPotatoes files (active and inactive)
-        if ($is_allowedToEdit) {
-            $sql = "SELECT * FROM $TBL_DOCUMENT
-                    WHERE
-                        c_id = $courseId AND
-                        path LIKE '".Database::escape_string($uploadPath.'/%/%')."'";
-            $res = Database::query($sql);
-            $hp_count = Database :: num_rows($res);
-        } else {
-            $sql = "SELECT * FROM $TBL_DOCUMENT d 
-                    INNER JOIN $TBL_ITEM_PROPERTY ip
-                    ON (d.id = ip.ref AND d.c_id = ip.c_id) 
-                    WHERE                
-                        ip.tool = '".TOOL_DOCUMENT."' AND
-                        d.path LIKE '".Database::escape_string($uploadPath.'/%/%')."' AND
-                        ip.visibility = 1 AND
-                        d.c_id = $courseId AND
-                        ip.c_id  = $courseId";
-            $res = Database::query($sql);
-            $hp_count = Database::num_rows($res);
-        }
-
-        $total = $total_exercises + $hp_count;
+        $total = $total_exercises;
         $exerciseList = [];
         while ($row = Database::fetch_array($result, 'ASSOC')) {
             $exerciseList[] = $row;
@@ -9156,170 +9130,6 @@ class Exercise
 
                     $tableRows[] = $currentRow;
                 }
-            }
-        }
-
-        // end exercise list
-        // Hotpotatoes results
-        if ($is_allowedToEdit) {
-            $sql = "SELECT d.iid, d.path as path, d.comment as comment
-                    FROM $TBL_DOCUMENT d
-                    WHERE
-                        d.c_id = $courseId AND
-                        (d.path LIKE '%htm%') AND
-                        d.path  LIKE '".Database :: escape_string($uploadPath.'/%/%')."'
-                    LIMIT $from , $limit"; // only .htm or .html files listed
-        } else {
-            $sql = "SELECT d.iid, d.path as path, d.comment as comment
-                    FROM $TBL_DOCUMENT d
-                    WHERE
-                        d.c_id = $courseId AND
-                        (d.path LIKE '%htm%') AND
-                        d.path  LIKE '".Database :: escape_string($uploadPath.'/%/%')."'
-                    LIMIT $from , $limit";
-        }
-
-        $result = Database::query($sql);
-        $attributes = [];
-        while ($row = Database::fetch_array($result, 'ASSOC')) {
-            $attributes[$row['iid']] = $row;
-        }
-
-        $nbrActiveTests = 0;
-        if (!empty($attributes)) {
-            foreach ($attributes as $item) {
-                $id = $item['iid'];
-                $path = $item['path'];
-
-                $title = GetQuizName($path, $documentPath);
-                if ($title == '') {
-                    $title = basename($path);
-                }
-
-                // prof only
-                if ($is_allowedToEdit) {
-                    $visibility = api_get_item_visibility(
-                        ['real_id' => $courseId],
-                        TOOL_DOCUMENT,
-                        $id,
-                        0
-                    );
-
-                    if (!empty($sessionId)) {
-                        if (0 == $visibility) {
-                            continue;
-                        }
-
-                        $visibility = api_get_item_visibility(
-                            ['real_id' => $courseId],
-                            TOOL_DOCUMENT,
-                            $id,
-                            $sessionId
-                        );
-                    }
-
-                    $title =
-                        implode(PHP_EOL, [
-                            Display::return_icon('hotpotatoes_s.png', 'HotPotatoes'),
-                            Display::url(
-                                $title,
-                                'showinframes.php?'.api_get_cidreq().'&'.http_build_query([
-                                    'file' => $path,
-                                    'uid' => $userId,
-                                ]),
-                                ['class' => $visibility == 0 ? 'text-muted' : null]
-                            ),
-                        ]);
-
-                    $actions = Display::url(
-                        Display::return_icon(
-                            'edit.png',
-                            get_lang('Edit'),
-                            '',
-                            ICON_SIZE_SMALL
-                        ),
-                        'adminhp.php?'.api_get_cidreq().'&hotpotatoesName='.$path
-                    );
-
-                    $actions .= '<a href="hotpotatoes_exercise_report.php?'.api_get_cidreq().'&path='.$path.'">'.
-                        Display::return_icon('test_results.png', get_lang('Results and feedback and feedback and feedback and feedback and feedback and feedback'), '', ICON_SIZE_SMALL).
-                        '</a>';
-
-                    // if active
-                    if ($visibility != 0) {
-                        $nbrActiveTests = $nbrActiveTests + 1;
-                        $actions .= '      <a href="'.$exercisePath.'?'.api_get_cidreq().'&hpchoice=disable&file='.$path.'">'.
-                            Display::return_icon('visible.png', get_lang('Deactivate'), '', ICON_SIZE_SMALL).'</a>';
-                    } else { // else if not active
-                        $actions .= '    <a href="'.$exercisePath.'?'.api_get_cidreq().'&hpchoice=enable&file='.$path.'">'.
-                            Display::return_icon('invisible.png', get_lang('Activate'), '', ICON_SIZE_SMALL).'</a>';
-                    }
-                    $actions .= '<a href="'.$exercisePath.'?'.api_get_cidreq().'&hpchoice=delete&file='.$path.'" onclick="javascript:if(!confirm(\''.addslashes(api_htmlentities(get_lang('Are you sure to delete'), ENT_QUOTES, $charset)).'\')) return false;">'.
-                        Display::return_icon('delete.png', get_lang('Delete'), '', ICON_SIZE_SMALL).'</a>';
-
-                    $currentRow = [
-                        '',
-                        $title,
-                        '',
-                        $actions,
-                    ];
-                } else {
-                    $visibility = api_get_item_visibility(
-                        ['real_id' => $courseId],
-                        TOOL_DOCUMENT,
-                        $id,
-                        $sessionId
-                    );
-
-                    if (0 == $visibility) {
-                        continue;
-                    }
-
-                    // Student only
-                    $attempt = ExerciseLib::getLatestHotPotatoResult(
-                        $path,
-                        $userId,
-                        api_get_course_int_id(),
-                        api_get_session_id()
-                    );
-
-                    $nbrActiveTests = $nbrActiveTests + 1;
-                    $title = Display::url(
-                        $title,
-                        'showinframes.php?'.api_get_cidreq().'&'.http_build_query(
-                            [
-                                'file' => $path,
-                                'cid' => api_get_course_id(),
-                                'uid' => $userId,
-                            ]
-                        )
-                    );
-
-                    if (!empty($attempt)) {
-                        $actions = '<a href="hotpotatoes_exercise_report.php?'.api_get_cidreq().'&path='.$path.'&filter_by_user='.$userId.'">'.Display::return_icon('test_results.png', get_lang('Results and feedback and feedback and feedback and feedback and feedback and feedback'), '', ICON_SIZE_SMALL).'</a>';
-                        $attemptText = get_lang('Latest attempt').' : ';
-                        $attemptText .= ExerciseLib::show_score(
-                                $attempt['exe_result'],
-                                $attempt['exe_weighting']
-                            ).' ';
-                        $attemptText .= $actions;
-                    } else {
-                        // No attempts.
-                        $attemptText = get_lang('Not attempted').' ';
-                    }
-
-                    $currentRow = [
-                        $title,
-                        $attemptText,
-                    ];
-
-                    if ($isDrhOfCourse) {
-                        $currentRow[] = '<a href="hotpotatoes_exercise_report.php?'.api_get_cidreq().'&path='.$path.'">'.
-                            Display::return_icon('test_results.png', get_lang('Results and feedback and feedback and feedback and feedback and feedback and feedback'), '', ICON_SIZE_SMALL).'</a>';
-                    }
-                }
-
-                $tableRows[] = $currentRow;
             }
         }
 

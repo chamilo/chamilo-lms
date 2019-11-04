@@ -9987,7 +9987,7 @@ class learnpath
         $userInfo = api_get_user_info();
 
         // New for hotpotatoes.
-        $uploadPath = DIR_HOTPOTATOES; //defined in main_api
+        //$uploadPath = DIR_HOTPOTATOES; //defined in main_api
         $tbl_doc = Database::get_course_table(TABLE_DOCUMENT);
         $tbl_quiz = Database::get_course_table(TABLE_QUIZ_TEST);
         $condition_session = api_get_session_condition($session_id, true, true);
@@ -10020,16 +10020,18 @@ class learnpath
                             $categoryCondition
                             $keywordCondition
                      ORDER BY title ASC";
+        $res_quiz = Database::query($sql_quiz);
 
-        $sql_hot = "SELECT * FROM $tbl_doc
-                    WHERE 
-                        c_id = $course_id AND 
-                        path LIKE '".$uploadPath."/%/%htm%'  
+        /*$sql_hot = "SELECT * FROM $tbl_doc
+                    WHERE
+                        c_id = $course_id AND
+                        path LIKE '".$uploadPath."/%/%htm%'
                         $condition_session
                      ORDER BY id ASC";
 
         $res_quiz = Database::query($sql_quiz);
-        $res_hot = Database::query($sql_hot);
+        $res_hot = Database::query($sql_hot);*/
+
 
         $currentUrl = api_get_self().'?'.api_get_cidreq().'&action=add_item&type=step&lp_id='.$this->lp_id.'#resource_tab-2';
 
@@ -10080,10 +10082,9 @@ class learnpath
         );
         $quizIcon = Display::return_icon('quiz.png', '', [], ICON_SIZE_TINY);
         $moveIcon = Display::return_icon('move_everywhere.png', get_lang('Move'), [], ICON_SIZE_TINY);
-        $exerciseUrl = api_get_path(WEB_CODE_PATH).'exercise/showinframes.php?'.api_get_cidreq();
-
+        //$exerciseUrl = api_get_path(WEB_CODE_PATH).'exercise/showinframes.php?'.api_get_cidreq();
         // Display hotpotatoes
-        while ($row_hot = Database::fetch_array($res_hot)) {
+        /*while ($row_hot = Database::fetch_array($res_hot)) {
             $link = Display::url(
                 $previewIcon,
                 $exerciseUrl.'&file='.$row_hot['path'],
@@ -10102,7 +10103,7 @@ class learnpath
             $return .= '<a href="'.api_get_self().'?'.api_get_cidreq().'&action=add_item&type='.TOOL_HOTPOTATOES.'&file='.$row_hot['id'].'&lp_id='.$this->lp_id.'">'.
                 ((!empty($row_hot['comment'])) ? $row_hot['comment'] : Security::remove_XSS($row_hot['title'])).$link.'</a>';
             $return .= '</li>';
-        }
+        }*/
 
         $exerciseUrl = api_get_path(WEB_CODE_PATH).'exercise/overview.php?'.api_get_cidreq();
         while ($row_quiz = Database::fetch_array($res_quiz)) {
@@ -12800,14 +12801,14 @@ EOD;
                         'exerciseId' => $id,
                     ]);
             case TOOL_HOTPOTATOES: //lowercase because of strtolower above
-                $TBL_DOCUMENT = Database::get_course_table(TABLE_DOCUMENT);
+                /*$TBL_DOCUMENT = Database::get_course_table(TABLE_DOCUMENT);
                 $result = Database::query("SELECT * FROM ".$TBL_DOCUMENT." WHERE c_id = $course_id AND iid=$id");
                 $myrow = Database::fetch_array($result);
                 $path = $myrow['path'];
 
                 return $main_dir_path.'exercise/showinframes.php?file='.$path.'&cid='.$course_code.'&uid='
                     .api_get_user_id().'&learnpath_id='.$learningPathId.'&learnpath_item_id='.$id_in_path
-                    .'&lp_view_id='.$lpViewId.'&'.$extraParams;
+                    .'&lp_view_id='.$lpViewId.'&'.$extraParams;*/
             case TOOL_FORUM:
                 return $main_dir_path.'forum/viewforum.php?forum='.$id.'&lp=true&'.$extraParams;
             case TOOL_THREAD:

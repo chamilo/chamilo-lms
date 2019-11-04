@@ -1728,12 +1728,12 @@ abstract class Question
     }
 
     /**
-     * function which process the creation of questions.
+     * Function which process the creation of questions.
      *
      * @param FormValidator $form
      * @param Exercise      $exercise
      */
-    public function processCreation($form, $exercise)
+    public function processCreation(FormValidator $form, $exercise)
     {
         $this->updateTitle($form->getSubmitValue('questionName'));
         $this->updateDescription($form->getSubmitValue('questionDescription'));
@@ -1755,7 +1755,7 @@ abstract class Question
      *
      * @param FormValidator $form
      */
-    abstract public function createAnswersForm($form);
+    abstract public function createAnswersForm(FormValidator $form);
 
     /**
      * abstract function which process the creation of answers.

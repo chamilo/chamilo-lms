@@ -23,7 +23,7 @@ $type = Security::remove_XSS($_GET['type']);
 $doExerciseUrl = '';
 
 // no support for hot potatoes
-if ($type == LINK_HOTPOTATOES) {
+/*if ($type == LINK_HOTPOTATOES) {
     $exerciseId = $_GET['exerciseId'];
     $path = Security::remove_XSS($_GET['path']);
     $doExerciseUrl = api_get_path(WEB_CODE_PATH).'exercise/showinframes.php?'.http_build_query(
@@ -37,7 +37,7 @@ if ($type == LINK_HOTPOTATOES) {
     );
     header('Location: '.$doExerciseUrl);
     exit;
-}
+}*/
 
 if (!empty($doExerciseUrl)) {
     header('Location: '.$doExerciseUrl);

@@ -38,7 +38,6 @@ class ExerciseLink extends AbstractLink
      */
     public function get_all_links($getOnlyHotPotatoes = false)
     {
-        $TBL_DOCUMENT = Database::get_course_table(TABLE_DOCUMENT);
         $tableItemProperty = Database::get_course_table(TABLE_ITEM_PROPERTY);
         $exerciseTable = $this->get_exercise_table();
         $lpItemTable = Database::get_course_table(TABLE_LP_ITEM);
@@ -70,30 +69,11 @@ class ExerciseLink extends AbstractLink
 				    item_type = 'quiz'
 				  $session_condition";
 
-        $sql2 = "SELECT d.path as path, d.comment as comment, ip.visibility as visibility, d.id
-                FROM $TBL_DOCUMENT d 
-                INNER JOIN $tableItemProperty ip
-                ON (d.id = ip.ref AND d.c_id = ip.c_id)
-                WHERE
-                    d.c_id = $this->course_id AND
-                    ip.c_id = $this->course_id AND                
-                    ip.tool = '".TOOL_DOCUMENT."' AND
-                    (d.path LIKE '%htm%') AND 
-                    (d.path LIKE '%HotPotatoes_files%') AND
-                    d.path  LIKE '".Database::escape_string($uploadPath.'/%/%')."' AND
-                    ip.visibility = '1'
-                ";
-
-        require_once api_get_path(SYS_CODE_PATH).'exercise/hotpotatoes.lib.php';
-
         $exerciseInLP = [];
-        if (!$this->is_hp) {
-            $result = Database::query($sql);
-            $resultLp = Database::query($sqlLp);
-            $exerciseInLP = Database::store_result($resultLp);
-        } else {
-            $result2 = Database::query($sql2);
-        }
+        $result = Database::query($sql);
+        $resultLp = Database::query($sqlLp);
+        $exerciseInLP = Database::store_result($resultLp);
+
 
         $cats = [];
         if (isset($result)) {
@@ -102,33 +82,6 @@ class ExerciseLink extends AbstractLink
                     $cats[] = [$data['iid'], $data['title']];
                 }
             }
-        }
-        $hotPotatoes = [];
-        if (isset($result2)) {
-            if (Database::num_rows($result2) > 0) {
-                while ($row = Database::fetch_array($result2)) {
-                    $attribute['path'][] = $row['path'];
-                    $attribute['visibility'][] = $row['visibility'];
-                    $attribute['comment'][] = $row['comment'];
-                    $attribute['id'] = $row['id'];
-
-                    if (isset($attribute['path']) && is_array($attribute['path'])) {
-                        foreach ($attribute['path'] as $path) {
-                            $title = GetQuizName($path, $documentPath);
-                            if ($title == '') {
-                                $title = basename($path);
-                            }
-                            $element = [$attribute['id'], $title.'(HP)'];
-                            $cats[] = $element;
-                            $hotPotatoes[] = $element;
-                        }
-                    }
-                }
-            }
-        }
-
-        if ($getOnlyHotPotatoes) {
-            return $hotPotatoes;
         }
 
         if (!empty($exerciseInLP)) {
@@ -456,20 +409,7 @@ class ExerciseLink extends AbstractLink
      */
     public function get_name()
     {
-        $documentPath = api_get_path(SYS_COURSE_PATH).$this->course_code.'/document';
-        require_once api_get_path(SYS_CODE_PATH).'exercise/hotpotatoes.lib.php';
         $data = $this->get_exercise_data();
-
-        if ($this->is_hp == 1) {
-            if (isset($data['path'])) {
-                $title = GetQuizName($data['path'], $documentPath);
-                if ($title == '') {
-                    $title = basename($data['path']);
-                }
-
-                return $title;
-            }
-        }
 
         return $data['title'];
     }

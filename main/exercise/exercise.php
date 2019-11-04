@@ -7,19 +7,19 @@
  * @package chamilo.exercise
  *
  * @author Olivier Brouckaert, original author
- * @author Denes Nagy, HotPotatoes integration
  * @author Wolfgang Schneider, code/html cleanup
  * @author Julio Montoya <gugli100@gmail.com>, lots of cleanup + several improvements
  * Modified by hubert.borderiou (question category)
  */
+
+use Chamilo\CourseBundle\Entity\CExerciseCategory;
+
 require_once __DIR__.'/../inc/global.inc.php';
 $current_course_tool = TOOL_QUIZ;
 
 // Setting the tabs
 $this_section = SECTION_COURSES;
 
-//$htmlHeadXtra[] = api_get_asset('qtip2/jquery.qtip.min.js');
-//$htmlHeadXtra[] = api_get_css_asset('qtip2/jquery.qtip.min.css');
 api_protect_course_script(true);
 
 $limitTeacherAccess = api_get_configuration_value('limit_exercise_teacher_access');
@@ -27,8 +27,6 @@ $limitTeacherAccess = api_get_configuration_value('limit_exercise_teacher_access
 $check = Security::get_existing_token('get');
 
 $currentUrl = api_get_self().'?'.api_get_cidreq();
-
-require_once 'hotpotatoes.lib.php';
 
 /*  Constants and variables */
 $is_allowedToEdit = api_is_allowed_to_edit(null, true);
@@ -56,9 +54,6 @@ $documentPath = api_get_path(SYS_COURSE_PATH).$courseInfo['path'].'/document';
 $picturePath = $documentPath.'/images';
 // audio path
 $audioPath = $documentPath.'/audio';
-
-// hot potatoes
-$uploadPath = DIR_HOTPOTATOES; //defined in main_api
 $exercisePath = api_get_self();
 $exfile = explode('/', $exercisePath);
 $exfile = strtolower($exfile[count($exfile) - 1]);
@@ -71,7 +66,6 @@ Exercise::cleanSessionVariables();
 //General POST/GET/SESSION/COOKIES parameters recovery
 $origin = api_get_origin();
 $choice = isset($_REQUEST['choice']) ? Security::remove_XSS($_REQUEST['choice']) : null;
-$hpchoice = isset($_REQUEST['hpchoice']) ? Security::remove_XSS($_REQUEST['hpchoice']) : null;
 $exerciseId = isset($_REQUEST['exerciseId']) ? (int) $_REQUEST['exerciseId'] : null;
 $file = isset($_REQUEST['file']) ? Database::escape_string($_REQUEST['file']) : null;
 $learnpath_id = isset($_REQUEST['learnpath_id']) ? (int) $_REQUEST['learnpath_id'] : null;
@@ -264,8 +258,6 @@ $logInfo = [
 ];
 Event::registerLog($logInfo);
 
-HotPotGCt($documentPath, 1, $userId);
-
 // Only for administrator
 if ($is_allowedToEdit) {
     if (!empty($choice)) {
@@ -400,90 +392,6 @@ if ($is_allowedToEdit) {
         unset($objExerciseTmp);
         Security::clear_token();
     }
-
-    if (!empty($hpchoice)) {
-        switch ($hpchoice) {
-            case 'delete':
-                if ($limitTeacherAccess && !api_is_platform_admin()) {
-                    // Teacher change exercise
-                    break;
-                }
-                // deletes an exercise
-                $imgparams = [];
-                $imgcount = 0;
-                GetImgParams($file, $documentPath, $imgparams, $imgcount);
-                $fld = GetFolderName($file);
-
-                for ($i = 0; $i < $imgcount; $i++) {
-                    my_delete($documentPath.$uploadPath."/".$fld."/".$imgparams[$i]);
-                    DocumentManager::updateDbInfo("delete", $uploadPath."/".$fld."/".$imgparams[$i]);
-                }
-
-                if (!is_dir($documentPath.$uploadPath."/".$fld."/")) {
-                    my_delete($documentPath.$file);
-                    DocumentManager::updateDbInfo("delete", $file);
-                } else {
-                    if (my_delete($documentPath.$file)) {
-                        DocumentManager::updateDbInfo("delete", $file);
-                    }
-                }
-
-                /* hotpotatoes folder may contains several tests so
-                   don't delete folder if not empty :
-                    http://support.chamilo.org/issues/2165
-                */
-                if (!(strstr($uploadPath, DIR_HOTPOTATOES) &&
-                    !folder_is_empty($documentPath.$uploadPath."/".$fld."/"))
-                ) {
-                    my_delete($documentPath.$uploadPath."/".$fld."/");
-                }
-                break;
-            case 'enable': // enables an exercise
-                if ($limitTeacherAccess && !api_is_platform_admin()) {
-                    // Teacher change exercise
-                    break;
-                }
-
-                $newVisibilityStatus = '1'; //"visible"
-                $query = "SELECT id FROM $TBL_DOCUMENT
-                          WHERE c_id = $courseId AND path='".Database::escape_string($file)."'";
-                $res = Database::query($query);
-                $row = Database :: fetch_array($res, 'ASSOC');
-                api_item_property_update(
-                    $courseInfo,
-                    TOOL_DOCUMENT,
-                    $row['id'],
-                    'visible',
-                    $userId
-                );
-
-                Display::addFlash(Display::return_message(get_lang('Update successful')));
-
-                break;
-            case 'disable': // disables an exercise
-                if ($limitTeacherAccess && !api_is_platform_admin()) {
-                    // Teacher change exercise
-                    break;
-                }
-                $newVisibilityStatus = '0'; //"invisible"
-                $query = "SELECT id FROM $TBL_DOCUMENT
-                          WHERE c_id = $courseId AND path='".Database::escape_string($file)."'";
-                $res = Database::query($query);
-                $row = Database :: fetch_array($res, 'ASSOC');
-                api_item_property_update(
-                    $courseInfo,
-                    TOOL_DOCUMENT,
-                    $row['id'],
-                    'invisible',
-                    $userId
-                );
-                break;
-            default:
-                break;
-        }
-        header('Location: '.$currentUrl);
-        exit;
-    }
 }
 
 if ($origin !== 'learnpath') {
@@ -500,8 +408,6 @@ Display::display_introduction_section(TOOL_QUIZ);
 // Selects $limit exercises at the same time
 // maximum number of exercises on a same page
 $limit = Exercise::PAGINATION_ITEMS_PER_PAGE;
-
-HotPotGCt($documentPath, 1, $userId);
 
 $token = Security::get_token();
 if ($is_allowedToEdit && $origin !== 'learnpath') {
@@ -526,8 +432,8 @@ if ($is_allowedToEdit && $origin !== 'learnpath') {
 
     //echo Display::url(Display::return_icon('looknfeel.png', get_lang('Media')), 'media.php?' . api_get_cidreq());
     // end question category
-    $actionsLeft .= '<a href="'.api_get_path(WEB_CODE_PATH).'exercise/hotpotatoes.php?'.api_get_cidreq().'">'.
-        Display::return_icon('import_hotpotatoes.png', get_lang('Import Hotpotatoes'), '', ICON_SIZE_MEDIUM).'</a>';
+    /*$actionsLeft .= '<a href="'.api_get_path(WEB_CODE_PATH).'exercise/hotpotatoes.php?'.api_get_cidreq().'">'.
+        Display::return_icon('import_hotpotatoes.png', get_lang('Import Hotpotatoes'), '', ICON_SIZE_MEDIUM).'</a>';*/
     // link to import qti2 ...
     $actionsLeft .= '<a href="'.api_get_path(WEB_CODE_PATH).'exercise/qti2.php?'.api_get_cidreq().'">'.
         Display::return_icon('import_qti2.png', get_lang('Import exercises Qti2'), '', ICON_SIZE_MEDIUM).'</a>';
@@ -609,7 +515,7 @@ if (api_get_configuration_value('allow_exercise_categories') === false) {
         $total = count($categories);
         $upIcon = Display::return_icon('up.png', get_lang('Move up'));
         $downIcon = Display::return_icon('down.png', get_lang('Move down'));
-        /** @var \Chamilo\CourseBundle\Entity\CExerciseCategory $category */
+        /** @var CExerciseCategory $category */
         foreach ($categories as $category) {
             $categoryIdItem = $category->getId();
             $up = '';

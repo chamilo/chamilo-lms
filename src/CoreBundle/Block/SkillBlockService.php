@@ -45,9 +45,6 @@ class SkillBlockService extends AbstractBlockService
     }
 
     /**
-     * @param BlockContextInterface $blockContext
-     * @param Response|null         $response
-     *
      * @return Response
      */
     public function execute(

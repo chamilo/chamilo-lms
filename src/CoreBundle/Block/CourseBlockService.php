@@ -43,9 +43,6 @@ class CourseBlockService extends AbstractBlockService
     }
 
     /**
-     * @param BlockContextInterface $blockContext
-     * @param Response|null         $response
-     *
      * @return Response
      */
     public function execute(BlockContextInterface $blockContext, Response $response = null)

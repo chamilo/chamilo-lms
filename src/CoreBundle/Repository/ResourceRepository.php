@@ -474,6 +474,13 @@ class ResourceRepository extends EntityRepository
         return $qb->getResult();
     }
 
+    /**
+     * @param Session   $session
+     * @param RowAction $action
+     * @param Row       $row
+     *
+     * @return RowAction|null
+     */
     public function rowCanBeEdited($session, RowAction $action, Row $row)
     {
         if (!empty($session)) {

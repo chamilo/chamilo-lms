@@ -166,9 +166,6 @@ class ExtraField extends Model
         $this->pageName = ucwords($this->type).'Fields';
     }
 
-    /**
-     * @return int
-     */
     public function getExtraFieldType(): int
     {
         return (int) $this->extraFieldType;
@@ -817,8 +814,6 @@ class ExtraField extends Model
     }
 
     /**
-     * @param array $options
-     *
      * @return array
      */
     public static function tripleSelectConvertArrayToOrderedArray(array $options)
@@ -896,8 +891,6 @@ class ExtraField extends Model
     }
 
     /**
-     * @param array $options
-     *
      * @return string
      */
     public static function tripleSelectConvertArrayToString(array $options)
@@ -3013,8 +3006,7 @@ JAVASCRIPT;
     }
 
     /**
-     * @param array $options
-     * @param int   $parentId
+     * @param int $parentId
      *
      * @return array
      */
@@ -3027,7 +3019,6 @@ JAVASCRIPT;
 
     /**
      * @param \FormValidator $form
-     * @param array          $fieldDetails
      * @param int            $defaultValueId
      * @param bool           $freezeElement
      */
@@ -3272,7 +3263,6 @@ JAVASCRIPT;
 
     /**
      * @param \FormValidator $form
-     * @param array          $fieldDetails
      * @param bool           $freezeElement Optional
      *
      * @return string JavaScript code
@@ -3342,8 +3332,6 @@ JAVASCRIPT;
 
     /**
      * @param \FormValidator $form
-     * @param array          $fieldDetails
-     * @param array          $extraData
      * @param bool           $freezeElement
      *
      * @return string

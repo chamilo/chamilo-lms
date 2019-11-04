@@ -80,6 +80,14 @@ class CExerciseCategory extends AbstractResource implements ResourceInterface
     }
 
     /**
+     * @return string
+     */
+    public function __toString(): string
+    {
+        return (string) $this->getName();
+    }
+
+    /**
      * @return int
      */
     public function getId()

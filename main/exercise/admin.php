@@ -62,7 +62,7 @@ if (!$is_allowedToEdit) {
     api_not_allowed(true);
 }
 
-$exerciseId = isset($_GET['exerciseId']) ? (int) $_GET['exerciseId'] : 0;
+$exerciseId = isset($_GET['id']) ? (int) $_GET['id'] : 0;
 
 /*  stripslashes POST data  */
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {

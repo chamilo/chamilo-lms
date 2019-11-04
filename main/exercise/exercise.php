@@ -48,25 +48,13 @@ $TBL_EXERCISE_QUESTION = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
 $TBL_EXERCISES = Database::get_course_table(TABLE_QUIZ_TEST);
 $TBL_TRACK_EXERCISES = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);
 
-// document path
-$documentPath = api_get_path(SYS_COURSE_PATH).$courseInfo['path'].'/document';
-// picture path
-$picturePath = $documentPath.'/images';
-// audio path
-$audioPath = $documentPath.'/audio';
-$exercisePath = api_get_self();
-$exfile = explode('/', $exercisePath);
-$exfile = strtolower($exfile[count($exfile) - 1]);
-$exercisePath = substr($exercisePath, 0, strpos($exercisePath, $exfile));
-$exercisePath = $exercisePath.'exercise.php';
-
 // Clear the exercise session
 Exercise::cleanSessionVariables();
 
 //General POST/GET/SESSION/COOKIES parameters recovery
 $origin = api_get_origin();
 $choice = isset($_REQUEST['choice']) ? Security::remove_XSS($_REQUEST['choice']) : null;
-$exerciseId = isset($_REQUEST['exerciseId']) ? (int) $_REQUEST['exerciseId'] : null;
+$exerciseId = isset($_REQUEST['id']) ? (int) $_REQUEST['id'] : null;
 $file = isset($_REQUEST['file']) ? Database::escape_string($_REQUEST['file']) : null;
 $learnpath_id = isset($_REQUEST['learnpath_id']) ? (int) $_REQUEST['learnpath_id'] : null;
 $learnpath_item_id = isset($_REQUEST['learnpath_item_id']) ? (int) $_REQUEST['learnpath_item_id'] : null;
@@ -86,6 +74,11 @@ $nameTools = get_lang('Tests');
 // Simple actions
 if ($is_allowedToEdit) {
     switch ($action) {
+        case 'delete':
+
+            header('Location: '.$currentUrl);
+            exit;
+            break;
         case 'clean_all_test':
             if ($check) {
                 if ($limitTeacherAccess && !api_is_platform_admin()) {
@@ -502,12 +495,13 @@ if ($is_allowedToEdit) {
         [6, 1, 5]
     );
 }
+
 if (api_get_configuration_value('allow_exercise_categories') === false) {
     echo Exercise::exerciseGrid(0, $keyword);
 } else {
     if (empty($categoryId)) {
         echo Display::page_subheader(get_lang('General'));
-        echo Exercise::exerciseGrid(0, $keyword);
+        echo Exercise::exerciseGridResource(0, $keyword);
         $counter = 0;
         $manager = new ExerciseCategoryManager();
         $categories = $manager->getCategories($courseId);
@@ -533,13 +527,13 @@ if (api_get_configuration_value('allow_exercise_categories') === false) {
                 }
             }
             echo Display::page_subheader($category->getName().$up.$down);
-            echo Exercise::exerciseGrid($category->getId(), $keyword);
+            echo Exercise::exerciseGridResource($category->getId(), $keyword);
         }
     } else {
         $manager = new ExerciseCategoryManager();
         $category = $manager->get($categoryId);
         echo Display::page_subheader($category['name']);
-        echo Exercise::exerciseGrid($category['id'], $keyword);
+        echo Exercise::exerciseGridResource($category['id'], $keyword);
     }
 }
 

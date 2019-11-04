@@ -1,10 +1,15 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use APY\DataGridBundle\Grid\Action\MassAction;
+use APY\DataGridBundle\Grid\Action\RowAction;
+use APY\DataGridBundle\Grid\Row;
+use APY\DataGridBundle\Grid\Source\Entity;
 use Chamilo\CoreBundle\Entity\GradebookLink;
 use Chamilo\CoreBundle\Entity\Resource\ResourceLink;
 use Chamilo\CoreBundle\Entity\TrackEHotspot;
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter;
 use Chamilo\CourseBundle\Entity\CExerciseCategory;
 use Chamilo\CourseBundle\Entity\CQuizCategory;
 use ChamiloSession as Session;
@@ -8358,6 +8363,159 @@ class Exercise
         }
     }
 
+    public static function exerciseGridResource($categoryId, $keyboard)
+    {
+        $courseId = api_get_course_int_id();
+        $sessionId = api_get_session_id();
+        $course = api_get_course_entity($courseId);
+        $session = api_get_session_entity($sessionId);
+
+        // 1. Set entity
+        $source = new Entity('ChamiloCourseBundle:CQuizQuestionCategory');
+        $repo = Container::getExerciseRepository();
+
+        // 2. Get query builder from repo.
+        $qb = $repo->getResourcesByCourse($course, $session);
+
+        if (!empty($categoryId)) {
+            //$repo = Container::getExerciseCategoryRepository();
+            //$category = $repo->find($categoryId);
+            $qb->andWhere($qb->expr()->eq('resource.exerciseCategory', $categoryId));
+        } else {
+
+            $qb->andWhere($qb->expr()->isNull('resource.exerciseCategory'));
+        }
+
+        // 3. Set QueryBuilder to the source.
+        $source->initQueryBuilder($qb);
+
+        // 4. Get the grid builder.
+        $builder = Container::$container->get('apy_grid.factory');
+
+        // 5. Set parameters and properties.
+        $grid = $builder->createBuilder(
+            'grid',
+            $source,
+            [
+                'persistence' => false,
+                'route' => 'home',
+                'filterable' => true,
+                'sortable' => true,
+                'max_per_page' => 10,
+            ]
+        )->add(
+            'id',
+            'number',
+            [
+                'title' => '#',
+                'primary' => true,
+                'visible' => false,
+            ]
+        )->add(
+            'title',
+            'text',
+            [
+                'title' => get_lang('Name'),
+            ]
+        );
+
+        $grid = $grid->getGrid();
+
+        // Url link.
+        $grid->getColumn('title')->manipulateRenderCell(
+            function ($value, $row, $router) use ($course) {
+                //?cidReq=TEST123&id_session=0&gidReq=0&gradebook=0&origin=&exerciseId=1
+                $url = $router->generate(
+                    'legacy_main',
+                    [
+                        'name' => 'exercise/overview.php',
+                        'cidReq' => $course->getCode(),
+                        'exerciseId' => $row->getField('id'),
+                    ]
+                );
+                return Display::url($value, $url);
+            }
+        );
+
+        // 7. Add actions
+        if (Container::getAuthorizationChecker()->isGranted(ResourceNodeVoter::ROLE_CURRENT_COURSE_TEACHER)) {
+            // Add row actions
+            $myRowAction = new RowAction(
+                get_lang('Edit'),
+                'legacy_main',
+                false,
+                '_self',
+                ['class' => 'btn btn-secondary']
+            );
+            $myRowAction->setRouteParameters(
+                [
+                    'id',
+                    'name' => 'exercise/admin.php',
+                    'cidReq' => $course->getCode(),
+                    'id_session' => $sessionId,
+                    //'choice' => 'edit',
+                ]
+            );
+
+            $myRowAction->addManipulateRender(
+                function (RowAction $action, Row $row) use ($session, $repo) {
+                    return $repo->rowCanBeEdited($action, $row, $session);
+                }
+            );
+
+            $grid->addRowAction($myRowAction);
+
+            $myRowAction = new RowAction(
+                get_lang('Delete'),
+                'legacy_main',
+                true,
+                '_self',
+                ['class' => 'btn btn-danger', 'form_delete' => true]
+            );
+            $myRowAction->setRouteParameters(
+                [
+                    'id',
+                    'name' => 'exercise/exercise.php',
+                    'cidReq' => $course->getCode(),
+                    'choice' => 'delete',
+                ]
+            );
+
+            $myRowAction->addManipulateRender(
+                function (RowAction $action, Row $row) use ($session, $repo) {
+                    return $repo->rowCanBeEdited($action, $row, $session);
+                }
+            );
+
+            $grid->addRowAction($myRowAction);
+
+            if (empty($session)) {
+                // Add mass actions
+                $deleteMassAction = new MassAction(
+                    'Delete',
+                    ['TestCategory', 'deleteResource'],
+                    true,
+                    [],
+                    ResourceNodeVoter::ROLE_CURRENT_COURSE_TEACHER
+                );
+                $grid->addMassAction($deleteMassAction);
+            }
+        }
+
+        // 8. Set route and request
+        $grid
+            ->setRouteUrl(api_get_self().'?'.api_get_cidreq())
+            ->handleRequest(Container::getRequest())
+        ;
+
+        $html = Container::$container->get('twig')->render(
+            '@ChamiloTheme/Resource/grid.html.twig',
+            ['grid' => $grid]
+        );
+
+        return $html;
+    }
+
     /**
      * Return an HTML table of exercises for on-screen printing, including
      * action icons. If no exercise is present and the user can edit the
@@ -8371,7 +8529,6 @@ class Exercise
      */
     public static function exerciseGrid($categoryId, $keyword = '')
     {
-        $TBL_ITEM_PROPERTY = Database::get_course_table(TABLE_ITEM_PROPERTY);
         $TBL_EXERCISE_QUESTION = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
         $TBL_EXERCISES = Database::get_course_table(TABLE_QUIZ_TEST);
         $TBL_TRACK_EXERCISES = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);

@@ -123,8 +123,6 @@ class Message
     /**
      * Set userSender.
      *
-     * @param User $userSender
-     *
      * @return Message
      */
     public function setUserSender(User $userSender)
@@ -146,8 +144,6 @@ class Message
 
     /**
      * Set userReceiver.
-     *
-     * @param User $userReceiver
      *
      * @return Message
      */

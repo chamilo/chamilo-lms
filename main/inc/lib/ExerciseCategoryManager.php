@@ -10,7 +10,6 @@ use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter;
 use Chamilo\CourseBundle\Entity\CExerciseCategory;
 
-
 /**
  * Class ExtraFieldValue
  * Declaration for the ExtraFieldValue class, managing the values in extra
@@ -105,7 +104,7 @@ class ExerciseCategoryManager extends Model
         }
 
         Display::addFlash(Display::return_message($translator->trans('Deleted')));
-        header('Location:'. api_get_self().'?'.api_get_cidreq());
+        header('Location:'.api_get_self().'?'.api_get_cidreq());
         exit;
     }
 
@@ -307,7 +306,7 @@ JAVASCRIPT;
         $qb = $repo->getResourcesByCourse($course, $session);
 
         // 3. Set QueryBuilder to the source.
-        $source-> initQueryBuilder($qb);
+        $source->initQueryBuilder($qb);
 
         // 4. Get the grid builder.
         $builder = Container::$container->get('apy_grid.factory');

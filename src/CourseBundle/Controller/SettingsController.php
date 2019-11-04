@@ -22,8 +22,7 @@ class SettingsController extends AbstractController
     /**
      * Edit configuration with given namespace.
      *
-     * @param Request $request
-     * @param string  $namespace
+     * @param string $namespace
      *
      * @ParamConverter("course", class="ChamiloCoreBundle:Course", options={"repository_method" = "findOneByCode"})
      *

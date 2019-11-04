@@ -20,8 +20,6 @@ class CForumPostRepository extends ServiceEntityRepository
 {
     /**
      * CForumPostRepository constructor.
-     *
-     * @param ManagerRegistry $registry
      */
     public function __construct(ManagerRegistry $registry)
     {
@@ -29,15 +27,9 @@ class CForumPostRepository extends ServiceEntityRepository
     }
 
     /**
-     * @param bool            $onlyVisibles
-     * @param bool            $isAllowedToEdit
-     * @param CForumThread    $thread
-     * @param Course          $course
-     * @param User|null       $currentUser
-     * @param CGroupInfo|null $group
-     * @param string          $orderDirection
-     *
-     * @return array
+     * @param bool   $onlyVisibles
+     * @param bool   $isAllowedToEdit
+     * @param string $orderDirection
      */
     public function findAllInCourseByThread(
         $onlyVisibles,

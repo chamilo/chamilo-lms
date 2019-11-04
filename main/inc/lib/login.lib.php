@@ -212,9 +212,6 @@ class Login
         }
     }
 
-    /**
-     * @param User $user
-     */
     public static function sendResetEmail(User $user)
     {
         $uniqueId = api_get_unique_id();

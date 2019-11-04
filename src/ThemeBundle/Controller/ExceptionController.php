@@ -14,10 +14,9 @@ use Symfony\Component\HttpFoundation\Request;
 class ExceptionController extends BaseExceptionController
 {
     /**
-     * @param Request $request
-     * @param string  $format
-     * @param int     $code
-     * @param bool    $showException
+     * @param string $format
+     * @param int    $code
+     * @param bool   $showException
      *
      * @return TemplateReference
      */

@@ -56,8 +56,6 @@ trait GraphQLTrait
 
     /**
      * ApiGraphQLTrait constructor.
-     *
-     * @param ContainerInterface $container
      */
     public function __construct(ContainerInterface $container)
     {
@@ -103,11 +101,6 @@ trait GraphQLTrait
         $this->currentUser = $user;
     }
 
-    /**
-     * @param User $user
-     *
-     * @return string
-     */
     private function encodeToken(User $user): string
     {
         $secret = $this->container->getParameter('secret');
@@ -126,8 +119,6 @@ trait GraphQLTrait
 
     /**
      * @param string $token
-     *
-     * @return array
      */
     private function decodeToken($token): array
     {
@@ -162,8 +153,6 @@ trait GraphQLTrait
 
     /**
      * Get the current logged user.
-     *
-     * @return User
      */
     private function getCurrentUser(): User
     {
@@ -176,9 +165,6 @@ trait GraphQLTrait
         return $this->currentUser;
     }
 
-    /**
-     * @return AccessUrl
-     */
     private function getAccessUrl(): AccessUrl
     {
         if (null === $this->currentAccessUrl) {
@@ -202,9 +188,6 @@ trait GraphQLTrait
 
     /**
      * Check if the current user has access to course.
-     *
-     * @param Course       $course
-     * @param Session|null $session
      */
     private function checkCourseAccess(Course $course, Session $session = null)
     {

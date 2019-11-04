@@ -18,8 +18,6 @@ class HookNotificationTitle extends HookEvent implements HookNotificationTitleEv
 {
     /**
      * Construct.
-     *
-     * @param EntityManager $entityManager
      */
     protected function __construct(EntityManager $entityManager)
     {
@@ -28,8 +26,6 @@ class HookNotificationTitle extends HookEvent implements HookNotificationTitleEv
 
     /**
      * @param int $type
-     *
-     * @return array
      */
     public function notifyNotificationTitle($type): array
     {

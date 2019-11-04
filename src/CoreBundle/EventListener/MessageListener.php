@@ -15,17 +15,11 @@ class MessageListener
 {
     protected $container;
 
-    /**
-     * @param ContainerInterface $container
-     */
     public function __construct(ContainerInterface $container)
     {
         $this->container = $container;
     }
 
-    /**
-     * @param MessageListEvent $event
-     */
     public function onListMessages(MessageListEvent $event)
     {
         foreach ($this->getMessages() as $message) {

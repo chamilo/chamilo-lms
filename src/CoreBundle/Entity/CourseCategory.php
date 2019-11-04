@@ -157,18 +157,12 @@ class CourseCategory
         return $this->children;
     }
 
-    /**
-     * @param CourseCategory $child
-     */
     public function addChild(CourseCategory $child)
     {
         $this->children[] = $child;
         $child->setParent($this);
     }
 
-    /**
-     * @param CourseCategory $parent
-     */
     public function setParent(CourseCategory $parent)
     {
         $this->parent = $parent;
@@ -342,19 +336,11 @@ class CourseCategory
         return $this->authCatChild;
     }
 
-    /**
-     * @return string
-     */
     public function getImage(): string
     {
         return $this->image;
     }
 
-    /**
-     * @param string $image
-     *
-     * @return CourseCategory
-     */
     public function setImage(string $image): CourseCategory
     {
         $this->image = $image;
@@ -362,19 +348,11 @@ class CourseCategory
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getDescription(): string
     {
         return $this->description;
     }
 
-    /**
-     * @param string $description
-     *
-     * @return CourseCategory
-     */
     public function setDescription(string $description): CourseCategory
     {
         $this->description = $description;
@@ -382,19 +360,11 @@ class CourseCategory
         return $this;
     }
 
-    /**
-     * @return ArrayCollection
-     */
     public function getCourses(): ArrayCollection
     {
         return $this->courses;
     }
 
-    /**
-     * @param ArrayCollection $courses
-     *
-     * @return CourseCategory
-     */
     public function setCourses(ArrayCollection $courses): CourseCategory
     {
         $this->courses = $courses;
@@ -402,9 +372,6 @@ class CourseCategory
         return $this;
     }
 
-    /**
-     * @param Course $course
-     */
     public function addCourse(Course $course)
     {
         $this->courses[] = $course;

@@ -22,8 +22,6 @@ class CourseController extends AbstractController
     /**
      * @Route("/add")
      *
-     * @param Request $request
-     *
      * @Security("has_role('ROLE_TEACHER')")
      *
      * @return Response

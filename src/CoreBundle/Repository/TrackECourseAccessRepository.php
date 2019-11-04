@@ -19,8 +19,6 @@ class TrackECourseAccessRepository extends ServiceEntityRepository
 {
     /**
      * TrackECourseAccessRepository constructor.
-     *
-     * @param ManagerRegistry $registry
      */
     public function __construct(ManagerRegistry $registry)
     {

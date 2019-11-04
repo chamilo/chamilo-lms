@@ -41,14 +41,8 @@ class ResourceController extends BaseController implements CourseControllerInter
 {
     use CourseControllerTrait;
 
-    /**
-     * @param Request $request
-     *
-     * @return Response
-     */
     public function indexAction(Request $request): Response
     {
-
         return [];
 
         $source = new Entity('ChamiloCourseBundle:CDocument');
@@ -163,8 +157,7 @@ class ResourceController extends BaseController implements CourseControllerInter
     }
 
     /**
-     * @param Request $request
-     * @param string  $fileType
+     * @param string $fileType
      *
      * @return RedirectResponse|Response|null
      */
@@ -389,21 +382,11 @@ class ResourceController extends BaseController implements CourseControllerInter
         return $this->viewHandler->handle($configuration, $view);
     }
 
-    /**
-     * @param Request $request
-     *
-     * @return Response
-     */
     public function createAction(Request $request): Response
     {
         return $this->createResource($request, 'folder');
     }
 
-    /**
-     * @param Request $request
-     *
-     * @return Response
-     */
     public function createDocumentAction(Request $request): Response
     {
         return $this->createResource($request, 'file');
@@ -411,11 +394,6 @@ class ResourceController extends BaseController implements CourseControllerInter
 
     /**
      * Shows a resource.
-     *
-     * @param Request             $request
-     * @param Glide               $glide
-     *
-     * @return Response
      */
     public function getResourceFileAction(Request $request, Glide $glide): Response
     {
@@ -434,11 +412,8 @@ class ResourceController extends BaseController implements CourseControllerInter
     /**
      * Shows a resource.
      *
-     * @param Request             $request
      * @param CDocumentRepository $documentRepo
      * @param Glide               $glide
-     *
-     * @return Response
      */
     public function showAction(Request $request): Response
     {
@@ -460,15 +435,11 @@ class ResourceController extends BaseController implements CourseControllerInter
         $params = [
             'resource_node' => $resourceNode,
         ];
+
         return $this->render('@ChamiloCore/Resource/info.html.twig', $params);
     }
 
     /**
-     * @param Request             $request
-     * @param CDocumentRepository $documentRepo
-     * @param Glide               $glide
-     *
-     * @return Response
      * @throws \League\Flysystem\FileNotFoundException
      */
     public function getDocumentAction(Request $request, CDocumentRepository $documentRepo, Glide $glide): Response
@@ -494,11 +465,6 @@ class ResourceController extends BaseController implements CourseControllerInter
         return $this->showFile($request, $resourceNode, $glide, $type, $filter);
     }
 
-    /**
-     * @param Request $request
-     *
-     * @return Response
-     */
     public function updateAction(Request $request): Response
     {
         $configuration = $this->requestConfigurationFactory->create($this->metadata, $request);
@@ -589,15 +555,32 @@ class ResourceController extends BaseController implements CourseControllerInter
 
         return $this->viewHandler->handle($configuration, $view);
     }
+
     /**
-     * @param Request      $request
-     * @param ResourceNode $resourceNode
-     * @param Glide        $glide
-     * @param              $type
-     * @param string       $filter
+     * Upload form.
+     *
+     * @Route("/upload/{type}/{id}", name="resource_upload", methods={"GET", "POST"}, options={"expose"=true})
+     */
+    public function showUploadFormAction($type, $id): Response
+    {
+        //$helper = $this->container->get('oneup_uploader.templating.uploader_helper');
+        //$endpoint = $helper->endpoint('courses');
+        return $this->render(
+            '@ChamiloCore/Resource/upload.html.twig',
+            [
+                'identifier' => $id,
+                'type' => $type,
+            ]
+        );
+    }
+
+    /**
+     * @param        $type
+     * @param string $filter
+     *
+     * @throws \League\Flysystem\FileNotFoundException
      *
      * @return mixed|StreamedResponse
-     * @throws \League\Flysystem\FileNotFoundException
      */
     private function showFile(Request $request, ResourceNode $resourceNode, Glide $glide, $type, $filter = '')
     {
@@ -658,25 +641,5 @@ class ResourceController extends BaseController implements CourseControllerInter
         $response->headers->set('Content-Type', $mimeType ?: 'application/octet-stream');
 
         return $response;
-    }
-
-    /**
-     * Upload form.
-     *
-     * @Route("/upload/{type}/{id}", name="resource_upload", methods={"GET", "POST"}, options={"expose"=true})
-     *
-     * @return Response
-     */
-    public function showUploadFormAction($type, $id): Response
-    {
-        //$helper = $this->container->get('oneup_uploader.templating.uploader_helper');
-        //$endpoint = $helper->endpoint('courses');
-        return $this->render(
-            '@ChamiloCore/Resource/upload.html.twig',
-            [
-                'identifier' => $id,
-                'type' => $type,
-            ]
-        );
     }
 }

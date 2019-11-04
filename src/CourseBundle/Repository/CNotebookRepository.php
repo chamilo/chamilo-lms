@@ -19,8 +19,6 @@ class CNotebookRepository extends ServiceEntityRepository
 {
     /**
      * CNotebookRepository constructor.
-     *
-     * @param ManagerRegistry $registry
      */
     public function __construct(ManagerRegistry $registry)
     {
@@ -30,11 +28,8 @@ class CNotebookRepository extends ServiceEntityRepository
     /**
      * Get the user notebooks in a course.
      *
-     * @param User         $user
-     * @param Course       $course
-     * @param Session|null $session
-     * @param string       $orderField
-     * @param string       $orderDirection
+     * @param string $orderField
+     * @param string $orderDirection
      *
      * @return array
      */

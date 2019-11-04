@@ -28,13 +28,6 @@ class GroupVoter extends Voter
     private $authorizationChecker;
     private $container;
 
-    /**
-     * @param EntityManager                 $entityManager
-     * @param CourseRepository              $courseManager
-     * @param CGroupInfoRepository          $groupManager
-     * @param AuthorizationCheckerInterface $authorizationChecker
-     * @param ContainerInterface            $container
-     */
     public function __construct(
         EntityManager $entityManager,
         CourseRepository $courseManager,

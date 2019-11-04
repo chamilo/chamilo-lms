@@ -10,13 +10,8 @@ interface ResourceInterface
 {
     /**
      * Returns the resource id.
-     *
-     * @return int
      */
     public function getResourceIdentifier(): int;
 
-    /**
-     * @return string
-     */
     public function getResourceName(): string;
 }

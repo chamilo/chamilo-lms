@@ -20,11 +20,6 @@ class LogoutSuccessHandler implements LogoutSuccessHandlerInterface
     protected $checker;
     protected $storage;
 
-    /**
-     * @param UrlGeneratorInterface         $urlGenerator
-     * @param AuthorizationCheckerInterface $checker
-     * @param TokenStorageInterface         $storage
-     */
     public function __construct(
         UrlGeneratorInterface $urlGenerator,
         AuthorizationCheckerInterface $checker,
@@ -36,8 +31,6 @@ class LogoutSuccessHandler implements LogoutSuccessHandlerInterface
     }
 
     /**
-     * @param Request $request
-     *
      * @return RedirectResponse|null
      */
     public function onLogoutSuccess(Request $request)

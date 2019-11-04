@@ -11,9 +11,6 @@ use Twig\TwigFilter;
  */
 class ChamiloExtension extends AbstractExtension
 {
-    /**
-     * @return array
-     */
     public function getFilters(): array
     {
         return [

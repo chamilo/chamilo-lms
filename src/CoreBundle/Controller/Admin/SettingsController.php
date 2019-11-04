@@ -24,8 +24,6 @@ class SettingsController extends SyliusSettingsController
      * @Security("has_role('ROLE_ADMIN')")
      *
      * @Route("/settings", name="admin_settings")
-     *
-     * @return Response
      */
     public function indexAction(): Response
     {
@@ -46,10 +44,6 @@ class SettingsController extends SyliusSettingsController
      * @Security("has_role('ROLE_ADMIN')")
      *
      * @Route("/settings/search_settings", name="chamilo_platform_settings_search")
-     *
-     * @param Request $request
-     *
-     * @return Response
      */
     public function searchSettingAction(Request $request): Response
     {
@@ -113,10 +107,7 @@ class SettingsController extends SyliusSettingsController
      *
      * @Route("/settings/{namespace}", name="chamilo_platform_settings")
      *
-     * @param Request $request
-     * @param string  $namespace
-     *
-     * @return Response
+     * @param string $namespace
      */
     public function updateSettingAction(Request $request, $namespace): Response
     {
@@ -195,8 +186,6 @@ class SettingsController extends SyliusSettingsController
 
     /**
      * Sync settings from classes with the database.
-     *
-     * @param Request $request
      */
     public function syncSettings(Request $request)
     {

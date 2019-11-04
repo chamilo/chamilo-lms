@@ -65,9 +65,6 @@ class CourseType extends AbstractType
             ->add('save', 'submit', ['label' => 'Update']);
     }
 
-    /**
-     * @param OptionsResolver $resolver
-     */
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(

@@ -601,19 +601,11 @@ class CGroupInfo
         return $this->id;
     }
 
-    /**
-     * @return int
-     */
     public function getDocumentAccess(): int
     {
         return $this->documentAccess;
     }
 
-    /**
-     * @param int $documentAccess
-     *
-     * @return CGroupInfo
-     */
     public function setDocumentAccess(int $documentAccess): CGroupInfo
     {
         $this->documentAccess = $documentAccess;
@@ -621,19 +613,11 @@ class CGroupInfo
         return $this;
     }
 
-    /**
-     * @return Collection
-     */
     public function getMembers(): Collection
     {
         return $this->members;
     }
 
-    /**
-     * @param Collection $members
-     *
-     * @return CGroupInfo
-     */
     public function setMembers(Collection $members): CGroupInfo
     {
         $this->members = $members;
@@ -641,19 +625,11 @@ class CGroupInfo
         return $this;
     }
 
-    /**
-     * @return Collection
-     */
     public function getTutors(): Collection
     {
         return $this->tutors;
     }
 
-    /**
-     * @param Collection $tutors
-     *
-     * @return CGroupInfo
-     */
     public function setTutors(Collection $tutors): CGroupInfo
     {
         $this->tutors = $tutors;
@@ -661,11 +637,6 @@ class CGroupInfo
         return $this;
     }
 
-    /**
-     * @param User|null $user
-     *
-     * @return bool
-     */
     public function userIsTutor(User $user = null): bool
     {
         if (empty($user)) {

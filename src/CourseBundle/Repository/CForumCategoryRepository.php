@@ -19,8 +19,6 @@ class CForumCategoryRepository extends ServiceEntityRepository
 {
     /**
      * CCourseSettingRepository constructor.
-     *
-     * @param ManagerRegistry $registry
      */
     public function __construct(ManagerRegistry $registry)
     {
@@ -28,11 +26,7 @@ class CForumCategoryRepository extends ServiceEntityRepository
     }
 
     /**
-     * @param bool         $isAllowedToEdit
-     * @param Course       $course
-     * @param Session|null $session
-     *
-     * @return array
+     * @param bool $isAllowedToEdit
      *
      * @todo Remove api_get_session_condition
      */
@@ -80,9 +74,7 @@ class CForumCategoryRepository extends ServiceEntityRepository
     }
 
     /**
-     * @param int     $id
-     * @param Course  $course
-     * @param Session $session
+     * @param int $id
      *
      * @return CForumCategory|null
      *

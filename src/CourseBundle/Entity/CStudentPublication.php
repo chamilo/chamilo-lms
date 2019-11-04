@@ -798,19 +798,11 @@ class CStudentPublication
         return $this->iid;
     }
 
-    /**
-     * @return int
-     */
     public function getFileSize(): int
     {
         return $this->fileSize;
     }
 
-    /**
-     * @param int $fileSize
-     *
-     * @return CStudentPublication
-     */
     public function setFileSize(int $fileSize): CStudentPublication
     {
         $this->fileSize = $fileSize;

@@ -72,9 +72,6 @@ class Database
         self::$em = $em;
     }
 
-    /**
-     * @param Connection $connection
-     */
     public static function setConnection(Connection $connection)
     {
         self::$connection = $connection;
@@ -149,8 +146,6 @@ class Database
     /**
      * Returns the number of affected rows in the last database operation.
      *
-     * @param Statement $result
-     *
      * @return int
      */
     public static function affected_rows(Statement $result)
@@ -179,8 +174,7 @@ class Database
     /**
      * Gets the array from a SQL result (as returned by Database::query).
      *
-     * @param Statement $result
-     * @param string    $option Optional: "ASSOC","NUM" or "BOTH"
+     * @param string $option Optional: "ASSOC","NUM" or "BOTH"
      *
      * @return array|mixed
      */
@@ -196,8 +190,6 @@ class Database
     /**
      * Gets an associative array from a SQL result (as returned by Database::query).
      *
-     * @param Statement $result
-     *
      * @return array
      */
     public static function fetch_assoc(Statement $result)
@@ -209,8 +201,6 @@ class Database
      * Gets the next row of the result of the SQL query
      * (as returned by Database::query) in an object form.
      *
-     * @param Statement $result
-     *
      * @return mixed
      */
     public static function fetch_object(Statement $result)
@@ -221,8 +211,6 @@ class Database
     /**
      * Gets the array from a SQL result (as returned by Database::query)
      * help achieving database independence.
-     *
-     * @param Statement $result
      *
      * @return mixed
      */
@@ -246,8 +234,6 @@ class Database
     }
 
     /**
-     * @param Statement $result
-     *
      * @return int
      */
     public static function num_rows(Statement $result)
@@ -263,9 +249,8 @@ class Database
      * Acts as the relative *_result() function of most DB drivers and fetches a
      * specific line and a field.
      *
-     * @param Statement $resource
-     * @param int       $row
-     * @param string    $field
+     * @param int    $row
+     * @param string $field
      *
      * @return mixed
      */

@@ -24,8 +24,6 @@ class BuildAttributeValueFormListener implements EventSubscriberInterface
 
     /**
      * Builds proper product form after setting the product.
-     *
-     * @param FormEvent $event
      */
     public function buildForm(FormEvent $event)
     {
@@ -72,8 +70,6 @@ class BuildAttributeValueFormListener implements EventSubscriberInterface
 
     /**
      * Verify value before set to form.
-     *
-     * @param AttributeValueInterface $attributeValue
      */
     protected function verifyValue(AttributeValueInterface $attributeValue)
     {

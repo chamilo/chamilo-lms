@@ -74,8 +74,6 @@ class SidebarController extends AbstractController
     }
 
     /**
-     * @param Request $request
-     *
      * @return Response
      */
     public function leftMenuAction(Request $request)

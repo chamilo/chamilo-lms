@@ -22,8 +22,6 @@ class AdminController extends BaseController
      * @Route("/", name="chamilo_lti_admin")
      *
      * @Security("has_role('ROLE_ADMIN')")
-     *
-     * @return Response
      */
     public function adminAction(): Response
     {
@@ -37,10 +35,6 @@ class AdminController extends BaseController
      * @Route("/add", name="chamilo_lti_admin_add")
      *
      * @Security("has_role('ROLE_ADMIN')")
-     *
-     * @param Request $request
-     *
-     * @return Response
      */
     public function adminAddAction(Request $request): Response
     {
@@ -82,8 +76,7 @@ class AdminController extends BaseController
      *
      * @Security("has_role('ROLE_ADMIN')")
      *
-     * @param int     $toolId
-     * @param Request $request
+     * @param int $toolId
      *
      * @return Response
      */

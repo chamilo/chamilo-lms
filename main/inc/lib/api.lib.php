@@ -701,7 +701,6 @@ define('TOOL_ADMIN_VISIBLE', 'tooladminvisible');
  *
  * @return string the requested path or the converted path
  *
- *
  * Notes about the current behaviour model:
  * 1. Windows back-slashes are converted to slashes in the result.
  * 2. A semi-absolute web-path is detected by its leading slash. On Linux systems, absolute system paths start with
@@ -2188,8 +2187,6 @@ function api_get_course_info_by_id($id = 0)
  * Reformat the course array (output by api_get_course_info()) in order, mostly,
  * to switch from 'code' to 'id' in the array.
  *
- * @param Course $course
- *
  * @return array
  *
  * @todo eradicate the false "id"=code field of the $_course array and use the int id
@@ -2223,7 +2220,7 @@ function api_format_course_array(Course $course)
     $courseData['titular'] = $course->getTutorName();
     $courseData['language'] = $courseData['course_language'] = $course->getCourseLanguage();
     $courseData['extLink']['url'] = $courseData['department_url'] = $course->getDepartmentUrl();
-    $courseData['extLink']['name'] = $courseData['department_name']  = $course->getDepartmentName();
+    $courseData['extLink']['name'] = $courseData['department_name'] = $course->getDepartmentName();
 
     $courseData['visibility'] = $course->getVisibility();
     $courseData['subscribe_allowed'] = $courseData['subscribe'] = $course->getSubscribe();

@@ -16,9 +16,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 class IllustrationRepository extends ResourceRepository
 {
     /**
-     * @param AbstractResource $resource
-     * @param User             $user
-     * @param UploadedFile     $uploadFile
+     * @param UploadedFile $uploadFile
      *
      * @return ResourceFile
      */
@@ -38,8 +36,6 @@ class IllustrationRepository extends ResourceRepository
     }
 
     /**
-     * @param AbstractResource $resource
-     *
      * @return ResourceNode
      */
     public function getIllustrationNodeFromResource(AbstractResource $resource): ?ResourceNode
@@ -55,9 +51,6 @@ class IllustrationRepository extends ResourceRepository
         return $node;
     }
 
-    /**
-     * @param AbstractResource $resource
-     */
     public function deleteIllustration(AbstractResource $resource)
     {
         $node = $this->getIllustrationNodeFromResource($resource);
@@ -69,8 +62,7 @@ class IllustrationRepository extends ResourceRepository
     }
 
     /**
-     * @param AbstractResource $resource
-     * @param string           $filter   See: services.yaml parameter "glide_media_filters" to see the list of filters.
+     * @param string $filter See: services.yaml parameter "glide_media_filters" to see the list of filters.
      *
      * @return string
      */

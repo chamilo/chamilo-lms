@@ -163,19 +163,11 @@ class GradebookResultLog
         return $this->id;
     }
 
-    /**
-     * @return int
-     */
     public function getResultId(): int
     {
         return $this->resultId;
     }
 
-    /**
-     * @param int $resultId
-     *
-     * @return GradebookResultLog
-     */
     public function setResultId(int $resultId): GradebookResultLog
     {
         $this->resultId = $resultId;

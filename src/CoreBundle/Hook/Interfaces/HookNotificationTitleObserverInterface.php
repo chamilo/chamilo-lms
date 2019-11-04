@@ -15,8 +15,6 @@ namespace Chamilo\CoreBundle\Hook\Interfaces;
 interface HookNotificationTitleObserverInterface extends HookObserverInterface
 {
     /**
-     * @param HookNotificationTitleEventInterface $hook
-     *
      * @return array
      */
     public function hookNotificationTitle(HookNotificationTitleEventInterface $hook);

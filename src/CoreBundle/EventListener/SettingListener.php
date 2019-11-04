@@ -17,17 +17,11 @@ class SettingListener
     /** @var ContainerInterface */
     protected $container;
 
-    /**
-     * @param ContainerInterface $container
-     */
     public function __construct(ContainerInterface $container)
     {
         $this->container = $container;
     }
 
-    /**
-     * @param SettingsEvent $event
-     */
     public function onSettingPreSave(SettingsEvent $event)
     {
         /*$urlId = $this->container->get('request')->getSession()->get('access_url_id');

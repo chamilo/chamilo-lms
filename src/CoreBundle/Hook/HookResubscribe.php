@@ -16,8 +16,6 @@ class HookResubscribe extends HookEvent implements HookResubscribeEventInterface
 {
     /**
      * Constructor.
-     *
-     * @param EntityManager $entityManager
      */
     protected function __construct(EntityManager $entityManager)
     {

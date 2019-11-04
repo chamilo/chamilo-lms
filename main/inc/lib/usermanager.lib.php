@@ -1900,7 +1900,9 @@ class UserManager
      * In case the first level of subdirectory of users/ does not exist, the
      * function will attempt to create it. Probably not the right place to do it
      * but at least it avoids headaches in many other places.
+     *
      * @deprecated use Resources
+     *
      * @param int    $id   User ID
      * @param string $type Type of path to return (can be 'system', 'web', 'last')
      *
@@ -5010,7 +5012,6 @@ class UserManager
     /**
      * Remove the requests for assign a user to a HRM.
      *
-     * @param User  $hrmId
      * @param array $usersId List of user IDs from whom to remove all relations requests with HRM
      */
     public static function clearHrmRequestsForUser(User $hrmId, $usersId)
@@ -5341,9 +5342,6 @@ class UserManager
         return $icon_link;
     }
 
-    /**
-     * @param User $user
-     */
     public static function add_user_as_admin(User $user)
     {
         $table_admin = Database::get_main_table(TABLE_MAIN_ADMIN);
@@ -5984,8 +5982,6 @@ SQL;
     /**
      * Send user confirmation mail.
      *
-     * @param User $user
-     *
      * @throws Exception
      */
     public static function sendUserConfirmationMail(User $user)
@@ -6293,8 +6289,7 @@ SQL;
     }
 
     /**
-     * @param array $userInfo
-     * @param int   $searchYear
+     * @param int $searchYear
      *
      * @throws Exception
      *
@@ -6471,10 +6466,7 @@ SQL;
     /**
      * Return the user's full name. Optionally with the username.
      *
-     * @param User $user
      * @param bool $includeUsername Optional. By default username is not included.
-     *
-     * @return string
      */
     public static function formatUserFullName(User $user, $includeUsername = false): string
     {
@@ -6606,8 +6598,6 @@ SQL;
     }
 
     /**
-     * @param User $user
-     *
      * @return \Symfony\Component\Security\Core\Encoder\PasswordEncoderInterface
      */
     private static function getEncoder(User $user)

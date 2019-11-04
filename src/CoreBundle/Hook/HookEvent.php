@@ -32,8 +32,7 @@ abstract class HookEvent implements HookEventInterface
     /**
      * Construct Method.
      *
-     * @param string        $eventName
-     * @param EntityManager $entityManager
+     * @param string $eventName
      */
     protected function __construct($eventName, EntityManager $entityManager)
     {
@@ -82,8 +81,6 @@ abstract class HookEvent implements HookEventInterface
 
     /**
      * Return the singleton instance of Hook event.
-     *
-     * @param EntityManager $entityManager
      *
      * @return static
      */
@@ -152,8 +149,6 @@ abstract class HookEvent implements HookEventInterface
 
     /**
      * Return the event name refer to where hook is used.
-     *
-     * @return string
      */
     public function getEventName(): string
     {
@@ -162,8 +157,6 @@ abstract class HookEvent implements HookEventInterface
 
     /**
      * Return an array containing all data needed by the hook observer to update.
-     *
-     * @return array
      */
     public function getEventData(): array
     {
@@ -172,8 +165,6 @@ abstract class HookEvent implements HookEventInterface
 
     /**
      * Set an array with data needed by hooks.
-     *
-     * @param array $data
      *
      * @return $this
      */
@@ -189,8 +180,6 @@ abstract class HookEvent implements HookEventInterface
 
     /**
      * Detach all hook observers.
-     *
-     * @return HookEventInterface
      */
     public function detachAll(): HookEventInterface
     {

@@ -12,9 +12,6 @@ use Symfony\Component\HttpKernel\Bundle\Bundle;
  */
 class ChamiloCoreBundle extends Bundle
 {
-    /**
-     * @param ContainerBuilder $container
-     */
     public function build(ContainerBuilder $container)
     {
         parent::build($container);

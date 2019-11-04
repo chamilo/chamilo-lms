@@ -18,8 +18,6 @@ class HookFactory
 
     /**
      * HookFactory constructor.
-     *
-     * @param EntityManager $entityManager
      */
     public function __construct(EntityManager $entityManager)
     {
@@ -27,8 +25,6 @@ class HookFactory
     }
 
     /**
-     * @param string $type
-     *
      * @throws \Exception
      *
      * @return HookEventInterface

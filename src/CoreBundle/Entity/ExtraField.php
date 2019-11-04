@@ -359,19 +359,11 @@ class ExtraField // extends BaseAttribute
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getDescription(): string
     {
         return $this->description;
     }
 
-    /**
-     * @param string $description
-     *
-     * @return ExtraField
-     */
     public function setDescription(string $description): ExtraField
     {
         $this->description = $description;
@@ -379,9 +371,6 @@ class ExtraField // extends BaseAttribute
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getTypeToString(): string
     {
         switch ($this->type) {

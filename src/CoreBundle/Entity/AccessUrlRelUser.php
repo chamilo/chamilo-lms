@@ -52,19 +52,11 @@ class AccessUrlRelUser
         return (string) $this->id;
     }
 
-    /**
-     * @return int
-     */
     public function getId(): int
     {
         return $this->id;
     }
 
-    /**
-     * @param int $id
-     *
-     * @return AccessUrlRelUser
-     */
     public function setId(int $id): AccessUrlRelUser
     {
         $this->id = $id;
@@ -72,9 +64,6 @@ class AccessUrlRelUser
         return $this;
     }
 
-    /**
-     * @return User
-     */
     public function getUser(): User
     {
         return $this->user;
@@ -92,19 +81,11 @@ class AccessUrlRelUser
         return $this;
     }
 
-    /**
-     * @return AccessUrl
-     */
     public function getUrl(): AccessUrl
     {
         return $this->url;
     }
 
-    /**
-     * @param AccessUrl $url
-     *
-     * @return AccessUrlRelUser
-     */
     public function setUrl(AccessUrl $url): AccessUrlRelUser
     {
         $this->url = $url;

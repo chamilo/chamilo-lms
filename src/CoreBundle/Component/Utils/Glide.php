@@ -17,9 +17,6 @@ class Glide
 
     /**
      * Glide constructor.
-     *
-     * @param array $config
-     * @param array $filters
      */
     public function __construct(array $config, array $filters)
     {
@@ -33,17 +30,11 @@ class Glide
         $this->filters = $filters;
     }
 
-    /**
-     * @return Server
-     */
     public function getServer(): Server
     {
         return $this->server;
     }
 
-    /**
-     * @return array
-     */
     public function getFilters(): array
     {
         return $this->filters;

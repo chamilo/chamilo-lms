@@ -24,9 +24,6 @@ class CourseListener
 
     /**
      * CourseListener constructor.
-     *
-     * @param ToolChain       $toolChain
-     * @param SettingsManager $settingsManager
      */
     public function __construct(ToolChain $toolChain, SettingsManager $settingsManager)
     {
@@ -42,9 +39,6 @@ class CourseListener
      *
      * This function add the course tools to the current course entity
      * thanks to the tool chain see src/Chamilo/CourseBundle/ToolChain.php
-     *
-     * @param Course             $course
-     * @param LifecycleEventArgs $args
      *
      * @throws \Exception
      */
@@ -64,9 +58,6 @@ class CourseListener
     /**
      * This code is executed when a course is updated.
      *
-     * @param Course             $course
-     * @param LifecycleEventArgs $args
-     *
      * @throws \Exception
      */
     public function preUpdate(Course $course, LifecycleEventArgs $args)
@@ -80,8 +71,6 @@ class CourseListener
 
     /**
      * @param CourseRepository $repo
-     * @param Course           $course
-     * @param AccessUrl        $url
      *
      * @throws \Exception
      */

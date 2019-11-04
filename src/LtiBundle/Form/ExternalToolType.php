@@ -22,10 +22,6 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  */
 class ExternalToolType extends AbstractType
 {
-    /**
-     * @param FormBuilderInterface $builder
-     * @param array                $options
-     */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         /** @var ExternalTool $tool */
@@ -95,17 +91,11 @@ class ExternalToolType extends AbstractType
         );
     }
 
-    /**
-     * @param OptionsResolver $resolver
-     */
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(['data_class', ExternalTool::class]);
     }
 
-    /**
-     * @param FormEvent $event
-     */
     public function onPostSubmit(FormEvent $event)
     {
         /** @var ExternalTool $tool */

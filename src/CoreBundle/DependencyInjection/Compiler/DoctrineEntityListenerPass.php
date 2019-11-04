@@ -11,9 +11,6 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
  */
 class DoctrineEntityListenerPass implements CompilerPassInterface
 {
-    /**
-     * @param ContainerBuilder $container
-     */
     public function process(ContainerBuilder $container)
     {
         $definition = $container->getDefinition('chamilo.doctrine.entity_listener_resolver');

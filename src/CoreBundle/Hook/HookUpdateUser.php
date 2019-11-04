@@ -14,8 +14,6 @@ class HookUpdateUser extends HookEvent implements HookUpdateUserEventInterface
 {
     /**
      * HookUpdateUser constructor.
-     *
-     * @param EntityManager $entityManager
      */
     public function __construct(EntityManager $entityManager)
     {

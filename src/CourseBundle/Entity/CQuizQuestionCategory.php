@@ -197,8 +197,6 @@ class CQuizQuestionCategory extends AbstractResource implements ResourceInterfac
 
     /**
      * @ORM\PostPersist()
-     *
-     * @param LifecycleEventArgs $args
      */
     public function postPersist(LifecycleEventArgs $args)
     {
@@ -211,17 +209,12 @@ class CQuizQuestionCategory extends AbstractResource implements ResourceInterfac
 
     /**
      * Resource identifier.
-     *
-     * @return int
      */
     public function getResourceIdentifier(): int
     {
         return $this->getIid();
     }
 
-    /**
-     * @return string
-     */
     public function getResourceName(): string
     {
         return $this->getTitle();

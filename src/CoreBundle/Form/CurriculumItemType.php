@@ -12,10 +12,6 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
  */
 class CurriculumItemType extends AbstractType
 {
-    /**
-     * @param FormBuilderInterface $builder
-     * @param array                $options
-     */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         //$builderData = $builder->getData();

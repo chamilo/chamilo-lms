@@ -20,8 +20,6 @@ class IndexController extends BaseController
      * The Chamilo index home page.
      *
      * @Route("/", name="home", methods={"GET", "POST"}, options={"expose"=true})
-     *
-     * @return Response
      */
     public function indexAction(): Response
     {
@@ -39,10 +37,6 @@ class IndexController extends BaseController
      * @Route("/toggle_student_view", methods={"GET"})
      *
      * @Security("has_role('ROLE_TEACHER')")
-     *
-     * @param Request $request
-     *
-     * @return Response
      */
     public function toggleStudentViewAction(Request $request): Response
     {

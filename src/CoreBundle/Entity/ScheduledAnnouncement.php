@@ -71,19 +71,11 @@ class ScheduledAnnouncement
     {
     }
 
-    /**
-     * @return int
-     */
     public function getId(): int
     {
         return $this->id;
     }
 
-    /**
-     * @param int $id
-     *
-     * @return ScheduledAnnouncement
-     */
     public function setId(int $id): ScheduledAnnouncement
     {
         $this->id = $id;
@@ -91,19 +83,11 @@ class ScheduledAnnouncement
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getSubject(): string
     {
         return $this->subject;
     }
 
-    /**
-     * @param string $subject
-     *
-     * @return ScheduledAnnouncement
-     */
     public function setSubject(string $subject): ScheduledAnnouncement
     {
         $this->subject = $subject;
@@ -111,19 +95,11 @@ class ScheduledAnnouncement
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getMessage(): string
     {
         return $this->message;
     }
 
-    /**
-     * @param string $message
-     *
-     * @return ScheduledAnnouncement
-     */
     public function setMessage(string $message): ScheduledAnnouncement
     {
         $this->message = $message;
@@ -131,19 +107,11 @@ class ScheduledAnnouncement
         return $this;
     }
 
-    /**
-     * @return \DateTime
-     */
     public function getDate(): \DateTime
     {
         return $this->date;
     }
 
-    /**
-     * @param \DateTime $date
-     *
-     * @return ScheduledAnnouncement
-     */
     public function setDate(\DateTime $date): ScheduledAnnouncement
     {
         $this->date = $date;
@@ -151,19 +119,11 @@ class ScheduledAnnouncement
         return $this;
     }
 
-    /**
-     * @return bool
-     */
     public function isSent(): bool
     {
         return $this->sent;
     }
 
-    /**
-     * @param bool $sent
-     *
-     * @return ScheduledAnnouncement
-     */
     public function setSent(bool $sent): ScheduledAnnouncement
     {
         $this->sent = $sent;
@@ -171,19 +131,11 @@ class ScheduledAnnouncement
         return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getSessionId(): int
     {
         return $this->sessionId;
     }
 
-    /**
-     * @param int $sessionId
-     *
-     * @return ScheduledAnnouncement
-     */
     public function setSessionId(int $sessionId): ScheduledAnnouncement
     {
         $this->sessionId = $sessionId;
@@ -191,19 +143,11 @@ class ScheduledAnnouncement
         return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getCId(): int
     {
         return $this->cId;
     }
 
-    /**
-     * @param int $cId
-     *
-     * @return ScheduledAnnouncement
-     */
     public function setCId(int $cId): ScheduledAnnouncement
     {
         $this->cId = $cId;

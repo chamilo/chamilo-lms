@@ -16,8 +16,6 @@ namespace Chamilo\CoreBundle\Hook\Interfaces;
 interface HookCreateCourseObserverInterface extends HookObserverInterface
 {
     /**
-     * @param HookCreateCourseEventInterface $hook
-     *
      * @return int
      */
     public function hookCreateCourse(HookCreateCourseEventInterface $hook);

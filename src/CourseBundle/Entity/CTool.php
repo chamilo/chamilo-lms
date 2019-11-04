@@ -164,8 +164,6 @@ class CTool
     }
 
     /**
-     * @param Course $course
-     *
      * @return $this
      */
     public function setCourse(Course $course)
@@ -175,17 +173,11 @@ class CTool
         return $this;
     }
 
-    /**
-     * @return Course
-     */
     public function getCourse(): Course
     {
         return $this->course;
     }
 
-    /**
-     * @param ClassMetadata $metadata
-     */
     public static function loadValidatorMetadata(ClassMetadata $metadata)
     {
         $metadata->addPropertyConstraint(

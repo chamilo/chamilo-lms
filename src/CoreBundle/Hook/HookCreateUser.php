@@ -15,8 +15,6 @@ class HookCreateUser extends HookEvent implements HookCreateUserEventInterface
 {
     /**
      * Constructor.
-     *
-     * @param EntityManager $entityManager
      */
     protected function __construct(EntityManager $entityManager)
     {

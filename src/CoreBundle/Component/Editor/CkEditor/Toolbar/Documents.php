@@ -50,8 +50,6 @@ class Documents extends Basic
 
     /**
      * Get the default toolbar configuration when the setting more_buttons_maximized_mode is false.
-     *
-     * @return array
      */
     protected function getNormalToolbar(): array
     {
@@ -142,8 +140,6 @@ class Documents extends Basic
 
     /**
      * Get the toolbar configuration when CKEditor is minimized.
-     *
-     * @return array
      */
     protected function getMinimizedToolbar(): array
     {

@@ -25,8 +25,6 @@ class BuildAttributeFormChoicesListener extends BaseBuildAttributeFormChoicesLis
 
     /**
      * Constructor.
-     *
-     * @param FormFactoryInterface $factory
      */
     public function __construct(FormFactoryInterface $factory)
     {
@@ -46,8 +44,6 @@ class BuildAttributeFormChoicesListener extends BaseBuildAttributeFormChoicesLis
 
     /**
      * Build configuration field for attribute form.
-     *
-     * @param FormEvent $event
      */
     public function buildConfiguration(FormEvent $event)
     {
@@ -81,8 +77,6 @@ class BuildAttributeFormChoicesListener extends BaseBuildAttributeFormChoicesLis
 
     /**
      * Builds choices for attribute form.
-     *
-     * @param FormEvent $event
      */
     public function buildChoices(FormEvent $event)
     {

@@ -17,8 +17,6 @@ class MessageRepository extends ServiceEntityRepository
 {
     /**
      * MessageRepository constructor.
-     *
-     * @param ManagerRegistry $registry
      */
     public function __construct(ManagerRegistry $registry)
     {
@@ -26,8 +24,7 @@ class MessageRepository extends ServiceEntityRepository
     }
 
     /**
-     * @param User $user
-     * @param int  $lastMessageId
+     * @param int $lastMessageId
      *
      * @return mixed
      */

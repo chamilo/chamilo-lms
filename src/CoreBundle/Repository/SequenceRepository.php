@@ -19,8 +19,6 @@ class SequenceRepository extends ServiceEntityRepository
 {
     /**
      * SequenceRepository constructor.
-     *
-     * @param ManagerRegistry $registry
      */
     public function __construct(ManagerRegistry $registry)
     {

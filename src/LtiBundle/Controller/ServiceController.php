@@ -21,8 +21,6 @@ class ServiceController extends BaseController
 {
     /**
      * @Route("/lti/os", name="chamilo_lti_os")
-     *
-     * @return Response
      */
     public function outcomeServiceAction(): Response
     {

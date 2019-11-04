@@ -14,8 +14,6 @@ class HookEventSkype extends HookEvent implements HookSkypeEventInterface
 {
     /**
      * Constructor.
-     *
-     * @param EntityManager $entityManager
      */
     protected function __construct(EntityManager $entityManager)
     {

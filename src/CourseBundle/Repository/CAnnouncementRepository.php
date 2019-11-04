@@ -15,17 +15,12 @@ use Chamilo\UserBundle\Entity\User;
 final class CAnnouncementRepository extends ResourceRepository
 {
     /**
-     * @param User            $user
-     * @param Course          $course
-     * @param CGroupInfo|null $group
-     * @param Session|null    $session
-     * @param bool            $allowUserEditSetting
-     * @param bool            $allowOnlyGroup
-     * @param bool            $getCount
-     * @param int|null        $start
-     * @param int|null        $limit
-     * @param string          $titleToSearch
-     * @param User|null       $userToSearch
+     * @param bool     $allowUserEditSetting
+     * @param bool     $allowOnlyGroup
+     * @param bool     $getCount
+     * @param int|null $start
+     * @param int|null $limit
+     * @param string   $titleToSearch
      *
      * @return mixed
      */

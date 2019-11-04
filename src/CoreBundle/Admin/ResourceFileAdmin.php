@@ -17,9 +17,6 @@ use Sonata\AdminBundle\Show\ShowMapper;
  */
 class ResourceFileAdmin extends AbstractAdmin
 {
-    /**
-     * @param \Sonata\AdminBundle\Show\ShowMapper $showMapper
-     */
     protected function configureShowField(ShowMapper $showMapper)
     {
         $showMapper
@@ -27,9 +24,6 @@ class ResourceFileAdmin extends AbstractAdmin
         ;
     }
 
-    /**
-     * @param FormMapper $formMapper
-     */
     protected function configureFormFields(FormMapper $formMapper)
     {
         $formMapper
@@ -38,9 +32,6 @@ class ResourceFileAdmin extends AbstractAdmin
         ;
     }
 
-    /**
-     * @param DatagridMapper $datagridMapper
-     */
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
         $datagridMapper
@@ -48,9 +39,6 @@ class ResourceFileAdmin extends AbstractAdmin
         ;
     }
 
-    /**
-     * @param ListMapper $listMapper
-     */
     protected function configureListFields(ListMapper $listMapper)
     {
         $listMapper

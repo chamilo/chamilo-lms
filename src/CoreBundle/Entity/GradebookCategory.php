@@ -513,19 +513,11 @@ class GradebookCategory
         return $this->isRequirement;
     }
 
-    /**
-     * @return int
-     */
     public function getGradeBooksToValidateInDependence(): int
     {
         return $this->gradeBooksToValidateInDependence;
     }
 
-    /**
-     * @param int $value
-     *
-     * @return GradebookCategory
-     */
     public function setGradeBooksToValidateInDependence(int $value): GradebookCategory
     {
         $this->gradeBooksToValidateInDependence = $value;
@@ -533,19 +525,11 @@ class GradebookCategory
         return $this;
     }
 
-    /**
-     * @return User
-     */
     public function getUser(): User
     {
         return $this->user;
     }
 
-    /**
-     * @param User $user
-     *
-     * @return GradebookCategory
-     */
     public function setUser(User $user): GradebookCategory
     {
         $this->user = $user;

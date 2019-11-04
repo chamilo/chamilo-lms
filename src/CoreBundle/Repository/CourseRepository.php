@@ -16,9 +16,6 @@ use Doctrine\ORM\QueryBuilder;
  */
 class CourseRepository extends ResourceRepository
 {
-    /**
-     * @param Course $course
-     */
     public function deleteCourse(Course $course): void
     {
         $em = $this->getEntityManager();
@@ -48,8 +45,6 @@ class CourseRepository extends ResourceRepository
 
     /**
      * Get all users that are registered in the course. No matter the status.
-     *
-     * @param Course $course
      *
      * @return \Doctrine\ORM\QueryBuilder
      */
@@ -94,8 +89,6 @@ class CourseRepository extends ResourceRepository
     /**
      * Gets students subscribed in the course.
      *
-     * @param Course $course
-     *
      * @return QueryBuilder
      */
     public function getSubscribedStudents(Course $course)
@@ -105,8 +98,6 @@ class CourseRepository extends ResourceRepository
 
     /**
      * Gets the students subscribed in the course.
-     *
-     * @param Course $course
      *
      * @return QueryBuilder
      */
@@ -120,8 +111,6 @@ class CourseRepository extends ResourceRepository
     /**
      * Gets the teachers subscribed in the course.
      *
-     * @param Course $course
-     *
      * @return QueryBuilder
      */
     public function getSubscribedTeachers(Course $course)
@@ -130,8 +119,7 @@ class CourseRepository extends ResourceRepository
     }
 
     /**
-     * @param Course $course
-     * @param int    $status use legacy chamilo constants COURSEMANAGER|STUDENT
+     * @param int $status use legacy chamilo constants COURSEMANAGER|STUDENT
      *
      * @return QueryBuilder
      */

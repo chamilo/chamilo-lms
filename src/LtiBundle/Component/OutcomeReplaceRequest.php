@@ -15,8 +15,6 @@ class OutcomeReplaceRequest extends OutcomeRequest
 {
     /**
      * OutcomeReplaceRequest constructor.
-     *
-     * @param \SimpleXMLElement $xml
      */
     public function __construct(\SimpleXMLElement $xml)
     {

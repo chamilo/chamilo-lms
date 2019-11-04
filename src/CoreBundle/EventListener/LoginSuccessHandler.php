@@ -26,10 +26,6 @@ class LoginSuccessHandler
 
     /**
      * LoginSuccessHandler constructor.
-     *
-     * @param UrlGeneratorInterface         $urlGenerator
-     * @param AuthorizationCheckerInterface $checker
-     * @param SettingsManager               $settingsManager
      */
     public function __construct(
         UrlGeneratorInterface $urlGenerator,

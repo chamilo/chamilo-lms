@@ -17,9 +17,6 @@ use Sonata\AdminBundle\Show\ShowMapper;
  */
 class ResourceRightAdmin extends AbstractAdmin
 {
-    /**
-     * @param \Sonata\AdminBundle\Show\ShowMapper $showMapper
-     */
     protected function configureShowField(ShowMapper $showMapper)
     {
         $showMapper
@@ -29,9 +26,6 @@ class ResourceRightAdmin extends AbstractAdmin
         ;
     }
 
-    /**
-     * @param FormMapper $formMapper
-     */
     protected function configureFormFields(FormMapper $formMapper)
     {
         $formMapper
@@ -53,9 +47,6 @@ class ResourceRightAdmin extends AbstractAdmin
 //    }
 //
 
-    /**
-     * @param ListMapper $listMapper
-     */
     protected function configureListFields(ListMapper $listMapper)
     {
         $listMapper

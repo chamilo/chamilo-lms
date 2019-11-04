@@ -15,8 +15,6 @@ class HookConditionalLogin extends HookEvent implements HookConditionalLoginEven
 {
     /**
      * HookConditionalLogin constructor.
-     *
-     * @param EntityManager $entityManager
      */
     protected function __construct(EntityManager $entityManager)
     {
@@ -25,8 +23,6 @@ class HookConditionalLogin extends HookEvent implements HookConditionalLoginEven
 
     /**
      * Notify to all hook observers.
-     *
-     * @return array
      */
     public function notifyConditionalLogin(): array
     {

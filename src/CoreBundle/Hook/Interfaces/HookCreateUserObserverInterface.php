@@ -16,8 +16,6 @@ namespace Chamilo\CoreBundle\Hook\Interfaces;
 interface HookCreateUserObserverInterface extends HookObserverInterface
 {
     /**
-     * @param HookCreateUserEventInterface $hook
-     *
      * @return int
      */
     public function hookCreateUser(HookCreateUserEventInterface $hook);

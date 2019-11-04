@@ -148,8 +148,6 @@ class CourseRequest
     /**
      * Set user.
      *
-     * @param User $user
-     *
      * @return UsergroupRelUser
      */
     public function setUser(User $user)

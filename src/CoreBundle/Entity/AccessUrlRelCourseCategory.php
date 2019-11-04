@@ -38,19 +38,11 @@ class AccessUrlRelCourseCategory
      */
     protected $courseCategory;
 
-    /**
-     * @return AccessUrl
-     */
     public function getUrl(): AccessUrl
     {
         return $this->url;
     }
 
-    /**
-     * @param AccessUrl $url
-     *
-     * @return AccessUrlRelCourseCategory
-     */
     public function setUrl(AccessUrl $url): AccessUrlRelCourseCategory
     {
         $this->url = $url;
@@ -58,19 +50,11 @@ class AccessUrlRelCourseCategory
         return $this;
     }
 
-    /**
-     * @return CourseCategory
-     */
     public function getCourseCategory(): CourseCategory
     {
         return $this->courseCategory;
     }
 
-    /**
-     * @param CourseCategory $courseCategory
-     *
-     * @return AccessUrlRelCourseCategory
-     */
     public function setCourseCategory(CourseCategory $courseCategory): AccessUrlRelCourseCategory
     {
         $this->courseCategory = $courseCategory;

@@ -25,9 +25,6 @@ class UserLocaleListener
 
     /**
      * UserLocaleListener constructor.
-     *
-     * @param SessionInterface $session
-     * @param SettingsManager  $settings
      */
     public function __construct(SessionInterface $session, SettingsManager $settings)
     {
@@ -37,8 +34,6 @@ class UserLocaleListener
 
     /**
      * Set locale when user enters the platform.
-     *
-     * @param InteractiveLoginEvent $event
      */
     public function onInteractiveLogin(InteractiveLoginEvent $event)
     {

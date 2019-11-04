@@ -17,9 +17,6 @@ class Encoder extends BasePasswordEncoder
 {
     private $passwordEncrypt;
 
-    /**
-     * @param string $passwordEncrypt
-     */
     public function __construct(string $passwordEncrypt)
     {
         $passwordEncrypt = str_replace("'", '', trim($passwordEncrypt));

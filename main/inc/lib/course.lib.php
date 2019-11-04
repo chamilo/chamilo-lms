@@ -5250,8 +5250,6 @@ class CourseManager
     /**
      * Course available settings variables see c_course_setting table.
      *
-     * @param AppPlugin $appPlugin
-     *
      * @return array
      */
     public static function getCourseSettingVariables(AppPlugin $appPlugin)
@@ -5321,7 +5319,6 @@ class CourseManager
     }
 
     /**
-     * @param AppPlugin    $appPlugin
      * @param string       $variable
      * @param string|array $value
      * @param int          $courseId
@@ -6267,8 +6264,6 @@ class CourseManager
 
     /**
      * Get the course categories form a course list.
-     *
-     * @param array $courseList
      *
      * @return array
      */

@@ -383,9 +383,6 @@ class Session
         return $this;
     }
 
-    /**
-     * @param SessionRelUser $user
-     */
     public function addUser(SessionRelUser $user)
     {
         $user->setSession($this);
@@ -396,8 +393,7 @@ class Session
     }
 
     /**
-     * @param int  $status
-     * @param User $user
+     * @param int $status
      */
     public function addUserInSession($status, User $user)
     {
@@ -410,8 +406,6 @@ class Session
     }
 
     /**
-     * @param SessionRelUser $subscription
-     *
      * @return bool
      */
     public function hasUser(SessionRelUser $subscription)
@@ -453,9 +447,6 @@ class Session
         }
     }
 
-    /**
-     * @param SessionRelCourse $course
-     */
     public function addCourses(SessionRelCourse $course)
     {
         $course->setSession($this);
@@ -463,8 +454,6 @@ class Session
     }
 
     /**
-     * @param Course $course
-     *
      * @return bool
      */
     public function hasCourse(Course $course)
@@ -498,9 +487,6 @@ class Session
     /**
      * Remove course subscription for a user.
      * If user status in session is student, then decrease number of course users.
-     *
-     * @param User   $user
-     * @param Course $course
      */
     public function removeUserCourseSubscription(User $user, Course $course)
     {
@@ -522,12 +508,8 @@ class Session
     }
 
     /**
-     * @param User   $user
-     * @param Course $course
-     * @param int    $status if not set it will check if the user is registered
-     *                       with any status
-     *
-     * @return bool
+     * @param int $status if not set it will check if the user is registered
+     *                    with any status
      */
     public function hasUserInCourse(User $user, Course $course, $status = null): bool
     {
@@ -537,9 +519,6 @@ class Session
     }
 
     /**
-     * @param User   $user
-     * @param Course $course
-     *
      * @return bool
      */
     public function hasStudentInCourse(User $user, Course $course)
@@ -548,10 +527,7 @@ class Session
     }
 
     /**
-     * @param User   $user
      * @param Course $course
-     *
-     * @return bool
      */
     public function hasCoachInCourseWithStatus(User $user, Course $course = null): bool
     {
@@ -563,8 +539,6 @@ class Session
     }
 
     /**
-     * @param User   $user
-     * @param Course $course
      * @param string $status
      *
      * @return \Doctrine\Common\Collections\Collection|static
@@ -963,9 +937,6 @@ class Session
         return $this;
     }
 
-    /**
-     * @return array
-     */
     public static function getStatusList(): array
     {
         return [
@@ -978,8 +949,6 @@ class Session
 
     /**
      * Check if session is visible.
-     *
-     * @return bool
      */
     public function isActive(): bool
     {
@@ -992,9 +961,6 @@ class Session
         return false;
     }
 
-    /**
-     * @return bool
-     */
     public function isActiveForStudent(): bool
     {
         $start = $this->getAccessStartDate();
@@ -1014,9 +980,6 @@ class Session
         return $this->compareDates($start, $end);
     }
 
-    /**
-     * @param Course $course
-     */
     public function addCourse(Course $course)
     {
         $entity = new SessionRelCourse();
@@ -1048,9 +1011,6 @@ class Session
         return $this;
     }
 
-    /**
-     * @param SessionRelCourseRelUser $subscription
-     */
     public function addUserCourseSubscription(SessionRelCourseRelUser $subscription)
     {
         $subscription->setSession($this);
@@ -1060,8 +1020,6 @@ class Session
     }
 
     /**
-     * @param Course $course
-     *
      * @return SessionRelCourse
      */
     public function getCourseSubscription(Course $course)
@@ -1082,9 +1040,7 @@ class Session
      * Add a user course subscription.
      * If user status in session is student, then increase number of course users.
      *
-     * @param int    $status
-     * @param User   $user
-     * @param Course $course
+     * @param int $status
      */
     public function addUserInCourse($status, User $user, Course $course)
     {
@@ -1105,8 +1061,6 @@ class Session
     }
 
     /**
-     * @param SessionRelCourseRelUser $subscription
-     *
      * @return bool
      */
     public function hasUserCourseSubscription(SessionRelCourseRelUser $subscription)
@@ -1139,8 +1093,6 @@ class Session
 
     /**
      * currentCourse is set in CourseListener.
-     *
-     * @param Course $course
      *
      * @return $this
      */
@@ -1188,8 +1140,7 @@ class Session
     /**
      * Get user from course by status.
      *
-     * @param Course $course
-     * @param int    $status
+     * @param int $status
      *
      * @return \Doctrine\Common\Collections\ArrayCollection|\Doctrine\Common\Collections\Collection
      */
@@ -1207,8 +1158,6 @@ class Session
     }
 
     /**
-     * @param Collection $studentPublications
-     *
      * @return Session
      */
     public function setStudentPublications(Collection $studentPublications)
@@ -1223,8 +1172,6 @@ class Session
     }
 
     /**
-     * @param CStudentPublication $studentPublication
-     *
      * @return Session
      */
     public function addStudentPublication(CStudentPublication $studentPublication)
@@ -1255,8 +1202,6 @@ class Session
     }
 
     /**
-     * @param AccessUrl $url
-     *
      * @return $this
      */
     public function setCurrentUrl(AccessUrl $url)
@@ -1301,9 +1246,6 @@ class Session
         }
     }
 
-    /**
-     * @param AccessUrlRelSession $url
-     */
     public function addUrls(AccessUrlRelSession $url)
     {
         $url->setSession($this);
@@ -1330,11 +1272,6 @@ class Session
         return $this;
     }
 
-    /**
-     * @param User $user
-     *
-     * @return bool
-     */
     public function isUserGeneralCoach(User $user): bool
     {
         $generalCoach = $this->getGeneralCoach();
@@ -1353,8 +1290,6 @@ class Session
     /**
      * Check if $user is course coach in any course.
      *
-     * @param User $user
-     *
      * @return bool
      */
     public function hasCoachInCourseList(User $user)
@@ -1371,8 +1306,6 @@ class Session
 
     /**
      * Check if $user is student in any course.
-     *
-     * @param User $user
      *
      * @return bool
      */
@@ -1391,8 +1324,6 @@ class Session
     /**
      * @param \DateTime $start
      * @param \DateTime $end
-     *
-     * @return bool
      */
     protected function compareDates($start, $end): bool
     {

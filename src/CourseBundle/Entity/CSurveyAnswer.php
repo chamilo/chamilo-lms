@@ -84,19 +84,11 @@ class CSurveyAnswer
         $this->answerId = 0;
     }
 
-    /**
-     * @return int
-     */
     public function getIid(): int
     {
         return $this->iid;
     }
 
-    /**
-     * @param int $iid
-     *
-     * @return CSurveyAnswer
-     */
     public function setIid(int $iid): CSurveyAnswer
     {
         $this->iid = $iid;

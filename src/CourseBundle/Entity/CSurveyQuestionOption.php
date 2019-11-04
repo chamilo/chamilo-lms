@@ -85,19 +85,11 @@ class CSurveyQuestionOption
         $this->questionOptionId = 0;
     }
 
-    /**
-     * @return int
-     */
     public function getIid(): int
     {
         return $this->iid;
     }
 
-    /**
-     * @param int $iid
-     *
-     * @return CSurveyQuestionOption
-     */
     public function setIid(int $iid): CSurveyQuestionOption
     {
         $this->iid = $iid;

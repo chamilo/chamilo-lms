@@ -18,8 +18,6 @@ class NewsController extends BaseController
 {
     /**
      * @Route("/", name="news_index", methods={"GET"}, options={"expose"=true})
-     *
-     * @return Response
      */
     public function indexAction(): Response
     {
@@ -44,8 +42,6 @@ class NewsController extends BaseController
      * @Route("/{id}", name="news", methods={"GET", "POST"}, options={"expose"=true})
      *
      * @param int $id
-     *
-     * @return Response
      */
     public function newsAction($id = 0): Response
     {

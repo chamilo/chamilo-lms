@@ -16,8 +16,6 @@ use Symfony\Component\Filesystem\Exception\FileNotFoundException;
 final class CDocumentRepository extends ResourceRepository
 {
     /**
-     * @param CDocument $document
-     *
      * @return string
      */
     public function getDocumentUrl(CDocument $document)
@@ -45,8 +43,6 @@ final class CDocumentRepository extends ResourceRepository
 
     /**
      * @param int $id
-     *
-     * @return string
      */
     public function getDocumentContent($id): string
     {
@@ -64,8 +60,7 @@ final class CDocumentRepository extends ResourceRepository
     }
 
     /**
-     * @param CDocument $document
-     * @param string    $content
+     * @param string $content
      *
      * @return bool
      */
@@ -87,8 +82,6 @@ final class CDocumentRepository extends ResourceRepository
     }
 
     /**
-     * @param CDocument $document
-     *
      * @return CDocument|null
      */
     public function getParent(CDocument $document)
@@ -183,8 +176,6 @@ final class CDocumentRepository extends ResourceRepository
      *
      * @param CDocument $document
      * @param int       $visibility
-     *
-     * @return bool
      */
     public function updateVisibility($document, $visibility): bool
     {

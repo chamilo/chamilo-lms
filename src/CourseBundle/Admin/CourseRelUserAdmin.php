@@ -16,9 +16,6 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
  */
 class CourseRelUserAdmin extends AbstractAdmin
 {
-    /**
-     * @param \Sonata\AdminBundle\Show\ShowMapper $showMapper
-     */
     protected function configureShowField(ShowMapper $showMapper)
     {
         $showMapper
@@ -26,9 +23,6 @@ class CourseRelUserAdmin extends AbstractAdmin
         ;
     }
 
-    /**
-     * @param FormMapper $formMapper
-     */
     protected function configureFormFields(FormMapper $formMapper)
     {
         $formMapper
@@ -52,9 +46,6 @@ class CourseRelUserAdmin extends AbstractAdmin
         ;
     }
 
-    /**
-     * @param DatagridMapper $datagridMapper
-     */
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
         $datagridMapper
@@ -63,9 +54,6 @@ class CourseRelUserAdmin extends AbstractAdmin
         ;
     }
 
-    /**
-     * @param ListMapper $listMapper
-     */
     protected function configureListFields(ListMapper $listMapper)
     {
         $listMapper

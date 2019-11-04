@@ -32,8 +32,6 @@ class CkEditor extends Editor
      * Return the HTML code required to run editor.
      *
      * @param string $value
-     *
-     * @return string
      */
     public function createHtmlStyle($value): string
     {
@@ -148,8 +146,6 @@ class CkEditor extends Editor
 
     /**
      * Get the empty template.
-     *
-     * @return array
      */
     private function getEmptyTemplate(): array
     {
@@ -178,8 +174,6 @@ class CkEditor extends Editor
 
     /**
      * Get the platform templates.
-     *
-     * @return array
      */
     private function getPlatformTemplates(): array
     {

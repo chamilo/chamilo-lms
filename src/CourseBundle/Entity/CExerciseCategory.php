@@ -40,7 +40,6 @@ class CExerciseCategory extends AbstractResource implements ResourceInterface
      *
      * ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CExerciseCategory", inversedBy="children")
      * ORM\JoinColumn(referencedColumnName="id", onDelete="SET NULL")
-     *
      */
     //protected $course;
 
@@ -148,11 +147,6 @@ class CExerciseCategory extends AbstractResource implements ResourceInterface
         return $this->course;
     }
 
-    /**
-     * @param Course $course
-     *
-     * @return CExerciseCategory
-     */
     public function setCourse(Course $course): CExerciseCategory
     {
         $this->course = $course;
@@ -182,17 +176,12 @@ class CExerciseCategory extends AbstractResource implements ResourceInterface
 
     /**
      * Resource identifier.
-     *
-     * @return int
      */
     public function getResourceIdentifier(): int
     {
         return $this->getId();
     }
 
-    /**
-     * @return string
-     */
     public function getResourceName(): string
     {
         return $this->getName();

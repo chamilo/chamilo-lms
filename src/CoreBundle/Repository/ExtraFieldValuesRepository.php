@@ -19,8 +19,6 @@ class ExtraFieldValuesRepository extends ServiceEntityRepository
 {
     /**
      * ExtraFieldValuesRepository constructor.
-     *
-     * @param ManagerRegistry $registry
      */
     public function __construct(ManagerRegistry $registry)
     {

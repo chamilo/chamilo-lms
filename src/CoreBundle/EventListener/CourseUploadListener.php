@@ -21,8 +21,6 @@ class CourseUploadListener
 
     /**
      * CourseUploadListener constructor.
-     *
-     * @param ObjectManager $om
      */
     public function __construct(ObjectManager $om)
     {
@@ -30,8 +28,6 @@ class CourseUploadListener
     }
 
     /**
-     * @param PostPersistEvent $event
-     *
      * @return \Oneup\UploaderBundle\Uploader\Response\ResponseInterface
      */
     public function onUpload(PostPersistEvent $event)

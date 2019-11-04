@@ -219,8 +219,6 @@ class CDocument extends AbstractResource implements ResourceInterface
     /**
      * Set size.
      *
-     * @param int $size
-     *
      * @return CDocument
      */
     public function setSize(int $size)
@@ -288,9 +286,6 @@ class CDocument extends AbstractResource implements ResourceInterface
         return $this->id;
     }
 
-    /**
-     * @return Course
-     */
     public function getCourse(): Course
     {
         return $this->course;
@@ -367,9 +362,6 @@ class CDocument extends AbstractResource implements ResourceInterface
         return $this->getCourseSessionResourceLink()->getVisibility();
     }
 
-    /**
-     * @return bool
-     */
     public function isVisible(): bool
     {
         return $this->getVisibility() === ResourceLink::VISIBILITY_PUBLISHED;
@@ -377,8 +369,6 @@ class CDocument extends AbstractResource implements ResourceInterface
 
     /**
      * @ORM\PostPersist()
-     *
-     * @param LifecycleEventArgs $args
      */
     public function postPersist(LifecycleEventArgs $args)
     {
@@ -391,17 +381,12 @@ class CDocument extends AbstractResource implements ResourceInterface
 
     /**
      * Resource identifier.
-     *
-     * @return int
      */
     public function getResourceIdentifier(): int
     {
         return $this->getIid();
     }
 
-    /**
-     * @return string
-     */
     public function getResourceName(): string
     {
         return $this->getTitle();

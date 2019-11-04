@@ -42,32 +42,22 @@ interface HookEventInterface
     /**
      * Return the singleton instance of Hook event.
      *
-     * @param EntityManager $entityManager
-     *
      * @return static
      */
     public static function create(EntityManager $entityManager);
 
     /**
      * Return an array containing all data needed by the hook observer to update.
-     *
-     * @return array
      */
     public function getEventData(): array;
 
     /**
      * Set an array with data needed by hooks.
-     *
-     * @param array $data
-     *
-     * @return HookEventInterface
      */
     public function setEventData(array $data): HookEventInterface;
 
     /**
      * Return the event name refer to where hook is used.
-     *
-     * @return string
      */
     public function getEventName(): string;
 
@@ -80,15 +70,11 @@ interface HookEventInterface
 
     /**
      * Detach all hook observers.
-     *
-     * @return HookEventInterface
      */
     public function detachAll(): HookEventInterface;
 
     /**
      * Get the entity manager used.
-     *
-     * @return EntityManager|null
      */
     public function getEntityManager(): ? EntityManager;
 }

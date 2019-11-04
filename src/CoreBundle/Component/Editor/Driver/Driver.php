@@ -40,8 +40,6 @@ class Driver extends \elFinderVolumeLocalFileSystem
 
     /**
      * Set connector.
-     *
-     * @param Connector $connector
      */
     public function setConnector(Connector $connector)
     {

@@ -16,8 +16,6 @@ class ExtraFieldOptionsRepository extends ServiceEntityRepository
 {
     /**
      * ExtraFieldOptionsRepository constructor.
-     *
-     * @param ManagerRegistry $registry
      */
     public function __construct(ManagerRegistry $registry)
     {
@@ -26,8 +24,6 @@ class ExtraFieldOptionsRepository extends ServiceEntityRepository
 
     /**
      * Get the secondary options. For double select extra field.
-     *
-     * @param ExtraFieldOptions $option
      *
      * @return array
      */

@@ -20,8 +20,6 @@ class UserResolver implements ContainerAwareInterface
     use GraphQLTrait;
 
     /**
-     * @param User $user
-     *
      * @return string
      */
     public function getEmail(User $user)
@@ -38,9 +36,6 @@ class UserResolver implements ContainerAwareInterface
     }
 
     /**
-     * @param User     $user
-     * @param Argument $args
-     *
      * @return string
      */
     public function getPicture(User $user, Argument $args)
@@ -52,9 +47,6 @@ class UserResolver implements ContainerAwareInterface
     }
 
     /**
-     * @param User     $user
-     * @param Argument $args
-     *
      * @return ArrayCollection
      */
     public function getMessages(User $user, Argument $args)
@@ -65,9 +57,6 @@ class UserResolver implements ContainerAwareInterface
     }
 
     /**
-     * @param User     $user
-     * @param Argument $args
-     *
      * @return array
      */
     public function getMessageContacts(User $user, Argument $args)
@@ -85,10 +74,6 @@ class UserResolver implements ContainerAwareInterface
     }
 
     /**
-     * @param User         $user
-     * @param Argument     $args
-     * @param \ArrayObject $context
-     *
      * @return array
      */
     public function getCourses(User $user, Argument $args, \ArrayObject $context)
@@ -114,8 +99,6 @@ class UserResolver implements ContainerAwareInterface
     }
 
     /**
-     * @param User $user
-     *
      * @return array
      */
     public function getSessions(User $user)
@@ -142,8 +125,6 @@ class UserResolver implements ContainerAwareInterface
     }
 
     /**
-     * @param User $user
-     *
      * @todo Based on UserManager::get_sessions_by_category. Review to integrate Symfony
      *
      * @return array

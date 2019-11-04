@@ -189,7 +189,6 @@ class ResourceFile
 //     */
 //    protected $extension;
 
-
     /**
      * @var bool
      *
@@ -205,9 +204,6 @@ class ResourceFile
         $this->enabled = true;
     }
 
-    /**
-     * @return string
-     */
     public function __toString(): string
     {
         return (string) $this->getName();
@@ -253,19 +249,11 @@ class ResourceFile
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getHash(): string
     {
         return $this->hash;
     }
 
-    /**
-     * @param string $hash
-     *
-     * @return ResourceFile
-     */
     public function setHash(string $hash): ResourceFile
     {
         $this->hash = $hash;
@@ -273,19 +261,11 @@ class ResourceFile
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getOriginalFilename(): string
     {
         return $this->originalFilename;
     }
 
-    /**
-     * @param string $originalFilename
-     *
-     * @return ResourceFile
-     */
     public function setOriginalFilename(string $originalFilename): ResourceFile
     {
         $this->originalFilename = $originalFilename;
@@ -293,9 +273,6 @@ class ResourceFile
         return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getSize(): int
     {
         return (int) $this->size;
@@ -303,8 +280,6 @@ class ResourceFile
 
     /**
      * @param int $size
-     *
-     * @return ResourceFile
      */
     public function setSize($size): ResourceFile
     {
@@ -313,27 +288,16 @@ class ResourceFile
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getCopyright(): string
     {
         return (string) $this->copyright;
     }
 
-    /**
-     * @return string
-     */
     public function getContentType(): string
     {
         return (string) $this->contentType;
     }
 
-    /**
-     * @param string $contentType
-     *
-     * @return ResourceFile
-     */
     public function setContentType(string $contentType): ResourceFile
     {
         $this->contentType = $contentType;
@@ -341,19 +305,11 @@ class ResourceFile
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getExtension(): string
     {
         return $this->extension;
     }
 
-    /**
-     * @param string $extension
-     *
-     * @return ResourceFile
-     */
     public function setExtension(string $extension): ResourceFile
     {
         $this->extension = $extension;
@@ -361,19 +317,11 @@ class ResourceFile
         return $this;
     }
 
-    /**
-     * @return ResourceNode
-     */
     public function getResourceNode(): ResourceNode
     {
         return $this->resourceNode;
     }
 
-    /**
-     * @param ResourceNode $resourceNode
-     *
-     * @return ResourceFile
-     */
     public function setResourceNode(ResourceNode $resourceNode): ResourceFile
     {
         $this->resourceNode = $resourceNode;
@@ -381,19 +329,11 @@ class ResourceFile
         return $this;
     }
 
-    /**
-     * @return bool
-     */
     public function isEnabled(): bool
     {
         return $this->enabled;
     }
 
-    /**
-     * @param bool $enabled
-     *
-     * @return ResourceFile
-     */
     public function setEnabled(bool $enabled): ResourceFile
     {
         $this->enabled = $enabled;
@@ -421,19 +361,11 @@ class ResourceFile
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getDescription(): string
     {
         return $this->description;
     }
 
-    /**
-     * @param string $description
-     *
-     * @return ResourceFile
-     */
     public function setDescription(string $description): ResourceFile
     {
         $this->description = $description;
@@ -441,9 +373,6 @@ class ResourceFile
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getMimeType(): string
     {
         return $this->mimeType;
@@ -451,8 +380,6 @@ class ResourceFile
 
     /**
      * @param string $mimeType
-     *
-     * @return ResourceFile
      */
     public function setMimeType($mimeType): ResourceFile
     {
@@ -461,9 +388,6 @@ class ResourceFile
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getOriginalName(): string
     {
         return $this->originalName;
@@ -471,8 +395,6 @@ class ResourceFile
 
     /**
      * @param string $originalName
-     *
-     * @return ResourceFile
      */
     public function setOriginalName($originalName): ResourceFile
     {
@@ -481,9 +403,6 @@ class ResourceFile
         return $this;
     }
 
-    /**
-     * @return array
-     */
     public function getDimensions(): array
     {
         return $this->dimensions;
@@ -491,8 +410,6 @@ class ResourceFile
 
     /**
      * @param array $dimensions
-     *
-     * @return ResourceFile
      */
     public function setDimensions($dimensions): ResourceFile
     {
@@ -501,9 +418,6 @@ class ResourceFile
         return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getWidth(): int
     {
         $data = $this->getDimensions();
@@ -517,9 +431,6 @@ class ResourceFile
         return 0;
     }
 
-    /**
-     * @return int
-     */
     public function getHeight(): int
     {
         $data = $this->getDimensions();

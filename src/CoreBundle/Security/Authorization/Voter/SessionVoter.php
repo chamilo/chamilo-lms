@@ -30,10 +30,7 @@ class SessionVoter extends Voter
     private $container;
 
     /**
-     * @param EntityManagerInterface        $entityManager
-     * @param CourseManager                 $courseManager
-     * @param AuthorizationCheckerInterface $authorizationChecker
-     * @param ContainerInterface            $container
+     * @param CourseManager $courseManager
      */
     public function __construct(
         EntityManagerInterface $entityManager,
@@ -179,9 +176,6 @@ class SessionVoter extends Voter
     }
 
     /**
-     * @param Session $session
-     * @param User    $user
-     *
      * @return bool
      */
     private function sessionIsAvailableByDuration(Session $session, User $user)
@@ -224,11 +218,7 @@ class SessionVoter extends Voter
     }
 
     /**
-     * @param User    $user
-     * @param Session $session
-     * @param bool    $checkSession
-     *
-     * @return bool
+     * @param bool $checkSession
      */
     private function canEditSession(User $user, Session $session, $checkSession = true): bool
     {
@@ -253,9 +243,6 @@ class SessionVoter extends Voter
         return true;
     }
 
-    /**
-     * @return bool
-     */
     private function allowToManageSessions(): bool
     {
         if ($this->allowManageAllSessions()) {
@@ -273,9 +260,6 @@ class SessionVoter extends Voter
         return false;
     }
 
-    /**
-     * @return bool
-     */
     private function allowManageAllSessions(): bool
     {
         $authChecker = $this->getAuthorizationChecker();
@@ -288,9 +272,6 @@ class SessionVoter extends Voter
     }
 
     /**
-     * @param User    $user
-     * @param Session $session
-     *
      * @return bool
      */
     private function allowed(User $user, Session $session)

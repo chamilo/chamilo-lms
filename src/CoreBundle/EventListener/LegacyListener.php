@@ -19,9 +19,6 @@ class LegacyListener
 {
     use ContainerAwareTrait;
 
-    /**
-     * @param RequestEvent $event
-     */
     public function onKernelRequest(RequestEvent $event)
     {
         if (!$event->isMasterRequest()) {
@@ -218,16 +215,10 @@ class LegacyListener
         $session->set('access_url_id', $urlId);
     }
 
-    /**
-     * @param ResponseEvent $event
-     */
     public function onKernelResponse(ResponseEvent $event)
     {
     }
 
-    /**
-     * @param ControllerEvent $event
-     */
     public function onKernelController(ControllerEvent $event)
     {
     }

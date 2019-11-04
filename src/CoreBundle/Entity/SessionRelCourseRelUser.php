@@ -90,9 +90,6 @@ class SessionRelCourseRelUser
         $this->visibility = 1;
     }
 
-    /**
-     * @return User
-     */
     public function getUser(): User
     {
         return $this->user;

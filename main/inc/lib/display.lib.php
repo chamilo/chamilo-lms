@@ -2545,8 +2545,6 @@ class Display
 
     /**
      * @param string $content
-     *
-     * @return string
      */
     public static function contentPanel($content): string
     {

@@ -88,9 +88,6 @@ abstract class AbstractTool implements ToolInterface
         $this->admin = $admin;
     }
 
-    /**
-     * @return int
-     */
     public function getAdmin(): int
     {
         return (int) $this->admin;

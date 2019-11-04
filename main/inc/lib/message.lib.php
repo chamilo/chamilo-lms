@@ -2566,8 +2566,6 @@ class MessageManager
 
     /**
      * Send a notification to all admins when a new user is registered.
-     *
-     * @param User $user
      */
     public static function sendNotificationByRegisteredUser(User $user)
     {

@@ -15,8 +15,6 @@ class OutcomeReadRequest extends OutcomeRequest
 {
     /**
      * OutcomeReadRequest constructor.
-     *
-     * @param \SimpleXMLElement $xml
      */
     public function __construct(\SimpleXMLElement $xml)
     {

@@ -103,9 +103,6 @@ class CourseAdmin extends AbstractAdmin
         }
     }
 
-    /**
-     * @param ToolChain $chainTool
-     */
     public function setToolChain(ToolChain $chainTool)
     {
         $this->toolChain = $chainTool;
@@ -119,9 +116,6 @@ class CourseAdmin extends AbstractAdmin
         return $this->toolChain;
     }
 
-    /**
-     * @param FormMapper $formMapper
-     */
     protected function configureFormFields(FormMapper $formMapper)
     {
         $formMapper
@@ -180,9 +174,6 @@ class CourseAdmin extends AbstractAdmin
         ;
     }
 
-    /**
-     * @param DatagridMapper $datagridMapper
-     */
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
         $datagridMapper
@@ -198,9 +189,6 @@ class CourseAdmin extends AbstractAdmin
         ;
     }
 
-    /**
-     * @param ListMapper $listMapper
-     */
     protected function configureListFields(ListMapper $listMapper)
     {
         $listMapper

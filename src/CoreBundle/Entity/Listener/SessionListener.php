@@ -21,9 +21,6 @@ class SessionListener
      * new object : prePersist
      * edited object: preUpdate
      *
-     * @param Session            $session
-     * @param LifecycleEventArgs $args
-     *
      * @throws \Exception
      */
     public function prePersist(Session $session, LifecycleEventArgs $args)
@@ -40,9 +37,6 @@ class SessionListener
     /**
      * This code is executed when a session is updated.
      *
-     * @param Session            $session
-     * @param LifecycleEventArgs $args
-     *
      * @throws \Exception
      */
     public function preUpdate(Session $session, LifecycleEventArgs $args)
@@ -51,7 +45,6 @@ class SessionListener
 
     /**
      * @param SessionRepository $repo
-     * @param AccessUrl         $url
      *
      * @throws \Exception
      */

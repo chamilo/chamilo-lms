@@ -128,8 +128,6 @@ class Category
     /**
      * Add question.
      *
-     * @param Question $question
-     *
      * @return Category
      */
     public function addQuestion(Question $question)
@@ -141,8 +139,6 @@ class Category
 
     /**
      * Remove question.
-     *
-     * @param Question $question
      */
     public function removeQuestion(Question $question)
     {

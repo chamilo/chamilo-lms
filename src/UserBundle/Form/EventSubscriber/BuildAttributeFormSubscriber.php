@@ -27,9 +27,6 @@ class BuildAttributeFormSubscriber implements EventSubscriberInterface
      */
     protected $factory;
 
-    /**
-     * @param FormFactoryInterface $formFactory
-     */
     public function __construct(FormFactoryInterface $formFactory)
     {
         $this->factory = $formFactory;
@@ -45,9 +42,6 @@ class BuildAttributeFormSubscriber implements EventSubscriberInterface
         ];
     }
 
-    /**
-     * @param FormEvent $event
-     */
     public function addConfigurationFields(FormEvent $event)
     {
         $attribute = $event->getData();

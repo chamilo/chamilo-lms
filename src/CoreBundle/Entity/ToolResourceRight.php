@@ -113,17 +113,12 @@ class ToolResourceRight
 
     /**
      * Get id.
-     *
-     * @return int
      */
     public function getId(): int
     {
         return $this->id;
     }
 
-    /**
-     * @return array
-     */
     public static function getDefaultRoles(): array
     {
         return [
@@ -132,9 +127,6 @@ class ToolResourceRight
         ];
     }
 
-    /**
-     * @return array
-     */
     public static function getMaskList(): array
     {
         $readerMask = ResourceNodeVoter::getReaderMask();

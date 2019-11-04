@@ -6395,9 +6395,7 @@ class Tracking
     }
 
     /**
-     * @param User                $user
      * @param string              $tool
-     * @param Course              $course
      * @param sessionEntity |null $session Optional
      *
      * @throws \Doctrine\ORM\NonUniqueResultException

@@ -6,7 +6,6 @@ use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CDocument;
 use Chamilo\CourseBundle\Entity\CQuizAnswer;
 use Chamilo\CourseBundle\Entity\CQuizQuestion;
-use Chamilo\CourseBundle\Entity\CQuizQuestionCategory;
 
 /**
  * Class Question.
@@ -914,7 +913,7 @@ abstract class Question
 
         // question already exists
         if (!empty($id)) {
-            /** @var  CQuizQuestion $question */
+            /** @var CQuizQuestion $question */
             $question = $questionRepo->find($id);
             $question
                 ->setQuestion($this->question)
@@ -1949,9 +1948,8 @@ abstract class Question
     /**
      * Shows question title an description.
      *
-     * @param Exercise $exercise
-     * @param int      $counter
-     * @param array    $score
+     * @param int   $counter
+     * @param array $score
      *
      * @return string HTML string with the header of the question (before the answers table)
      */

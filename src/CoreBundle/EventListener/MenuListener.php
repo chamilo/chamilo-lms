@@ -16,17 +16,11 @@ class MenuListener
 {
     protected $container;
 
-    /**
-     * @param ContainerInterface $container
-     */
     public function __construct(ContainerInterface $container)
     {
         $this->container = $container;
     }
 
-    /**
-     * @param SidebarMenuKnpEvent $event
-     */
     public function onSetupMenu(SidebarMenuKnpEvent $event)
     {
         //$request = $event->getRequest();

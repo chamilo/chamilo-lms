@@ -132,7 +132,6 @@ class WhispeakAuthPlugin extends Plugin
     }
 
     /**
-     * @param User   $user
      * @param string $filePath
      *
      * @return array
@@ -154,7 +153,6 @@ class WhispeakAuthPlugin extends Plugin
     }
 
     /**
-     * @param User   $user
      * @param string $uid
      *
      * @throws \Doctrine\ORM\OptimisticLockException
@@ -252,8 +250,6 @@ class WhispeakAuthPlugin extends Plugin
 
     /**
      * @param string $endPoint
-     * @param array  $metadata
-     * @param User   $user
      * @param string $filePath
      *
      * @return array

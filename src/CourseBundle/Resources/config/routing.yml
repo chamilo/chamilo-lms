@@ -35,10 +35,6 @@ resources_document_get_file:
     requirements:
         file: .+ # allow "/" in {file}
 
-
-
-
-
 chamilo_course_tool_intro_create:
     path: /courses/{course}/introduction/{tool}/create/
     methods: [GET, POST]

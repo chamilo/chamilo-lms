@@ -26,8 +26,7 @@ abstract class OutcomeResponse
     /**
      * OutcomeResponse constructor.
      *
-     * @param OutcomeResponseStatus $statusInfo
-     * @param mixed|null            $bodyParam
+     * @param mixed|null $bodyParam
      */
     public function __construct(OutcomeResponseStatus $statusInfo, $bodyParam = null)
     {
@@ -61,8 +60,5 @@ abstract class OutcomeResponse
         return $xml->asXML();
     }
 
-    /**
-     * @param \SimpleXMLElement $xmlBody
-     */
     abstract protected function generateBody(\SimpleXMLElement $xmlBody);
 }

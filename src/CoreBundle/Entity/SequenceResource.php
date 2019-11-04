@@ -126,8 +126,6 @@ class SequenceResource
     }
 
     /**
-     * @param Sequence $sequence
-     *
      * @return $this
      */
     public function setSequence(Sequence $sequence)

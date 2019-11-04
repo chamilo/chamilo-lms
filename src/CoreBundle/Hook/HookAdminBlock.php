@@ -22,8 +22,6 @@ class HookAdminBlock extends HookEvent implements HookAdminBlockEventInterface
     /**
      * Constructor.
      *
-     * @param EntityManager $entityManager
-     *
      * @throws Exception
      */
     protected function __construct(EntityManager $entityManager)

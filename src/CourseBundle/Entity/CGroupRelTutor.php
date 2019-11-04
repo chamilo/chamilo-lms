@@ -61,8 +61,6 @@ class CGroupRelTutor
     /**
      * Set userId.
      *
-     * @param User $user
-     *
      * @return CGroupRelTutor
      */
     public function setUser(User $user)
@@ -84,8 +82,6 @@ class CGroupRelTutor
 
     /**
      * Set group.
-     *
-     * @param CGroupInfo $group
      *
      * @return CGroupRelTutor
      */

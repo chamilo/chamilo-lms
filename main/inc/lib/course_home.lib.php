@@ -1297,9 +1297,8 @@ class CourseHome
     /**
      * Find the tool icon when homepage_view is activity_big.
      *
-     * @param array $item
-     * @param int   $iconSize
-     * @param bool  $generateId
+     * @param int  $iconSize
+     * @param bool $generateId
      *
      * @return string
      */

@@ -279,8 +279,6 @@ class CForumCategory
     }
 
     /**
-     * @param CItemProperty $itemProperty
-     *
      * @return CForumCategory
      */
     public function setItemProperty(CItemProperty $itemProperty)

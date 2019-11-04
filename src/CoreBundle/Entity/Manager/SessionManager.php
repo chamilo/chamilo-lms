@@ -32,19 +32,12 @@ class SessionManager extends BaseEntityManager
         return $this->getRepository()->findOneByName($name);
     }
 
-    /**
-     * @param User    $user
-     * @param Session $session
-     */
     public function addDrh(User $user, Session $session)
     {
         $session->addUserInSession(Session::COACH, $user);
     }
 
     /**
-     * @param User    $user
-     * @param Session $session
-     *
      * @return bool
      */
     public function hasDrh(User $user, Session $session)
@@ -57,11 +50,6 @@ class SessionManager extends BaseEntityManager
         return $session->hasUser($subscription);
     }
 
-    /**
-     * @param User    $user
-     * @param Course  $course
-     * @param Session $session
-     */
     public function addStudentInCourse(
         User $user,
         Course $course,
@@ -71,10 +59,6 @@ class SessionManager extends BaseEntityManager
     }
 
     /**
-     * @param User    $user
-     * @param Course  $course
-     * @param Session $session
-     *
      * @return bool
      */
     public function hasStudentInCourse(
@@ -85,11 +69,6 @@ class SessionManager extends BaseEntityManager
         return $session->hasUserInCourse($user, $course, Session::STUDENT);
     }
 
-    /**
-     * @param User    $user
-     * @param Course  $course
-     * @param Session $session
-     */
     public function addCoachInCourse(
         User $user,
         Course $course,
@@ -99,10 +78,6 @@ class SessionManager extends BaseEntityManager
     }
 
     /**
-     * @param User    $user
-     * @param Course  $course
-     * @param Session $session
-     *
      * @return bool
      */
     public function hasCoachInCourse(
@@ -115,9 +90,6 @@ class SessionManager extends BaseEntityManager
 
     /**
      * @param $status
-     * @param User    $user
-     * @param Course  $course
-     * @param Session $session
      */
     protected function addUserInCourse(
         $status,

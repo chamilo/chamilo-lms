@@ -12,8 +12,6 @@ interface HookConditionalLoginEventInterface extends HookEventInterface
 {
     /**
      * Call Conditional Login hooks.
-     *
-     * @return array
      */
     public function notifyConditionalLogin(): array;
 }

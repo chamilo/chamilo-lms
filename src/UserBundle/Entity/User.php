@@ -563,8 +563,6 @@ class User extends BaseUser implements ThemeUser, EquatableInterface //implement
      * Updates the id with the user_id.
      *
      * @ORM\PostPersist()
-     *
-     * @param LifecycleEventArgs $args
      */
     public function postPersist(LifecycleEventArgs $args)
     {
@@ -675,9 +673,6 @@ class User extends BaseUser implements ThemeUser, EquatableInterface //implement
             ;
     }
 
-    /**
-     * @param ClassMetadata $metadata
-     */
     public static function loadValidatorMetadata(ClassMetadata $metadata)
     {
         //$metadata->addPropertyConstraint('firstname', new Assert\NotBlank());
@@ -1580,9 +1575,6 @@ class User extends BaseUser implements ThemeUser, EquatableInterface //implement
             $this->getPasswordRequestedAt()->getTimestamp() + $ttl > time();
     }*/
 
-    /**
-     * @return string
-     */
     public function getUsername(): string
     {
         return (string) $this->username;
@@ -1610,8 +1602,6 @@ class User extends BaseUser implements ThemeUser, EquatableInterface //implement
 
     /**
      * Sets the credentials expiration date.
-     *
-     * @param \DateTime|null $date
      *
      * @return User
      */
@@ -1752,8 +1742,6 @@ class User extends BaseUser implements ThemeUser, EquatableInterface //implement
     }
 
     /**
-     * @param \DateTime $date
-     *
      * @return User
      */
     public function setExpiresAt(\DateTime $date)
@@ -1763,9 +1751,6 @@ class User extends BaseUser implements ThemeUser, EquatableInterface //implement
         return $this;
     }
 
-    /**
-     * @return bool
-     */
     public function getLocked(): bool
     {
         return $this->locked;
@@ -1784,8 +1769,6 @@ class User extends BaseUser implements ThemeUser, EquatableInterface //implement
     }
 
     /**
-     * @param array $roles
-     *
      * @return $this
      */
     public function setRoles(array $roles)
@@ -1864,8 +1847,6 @@ class User extends BaseUser implements ThemeUser, EquatableInterface //implement
     /**
      * Sets the AccessUrl for the current user in memory.
      *
-     * @param AccessUrl $url
-     *
      * @return $this
      */
     public function setCurrentUrl(AccessUrl $url)
@@ -1935,8 +1916,6 @@ class User extends BaseUser implements ThemeUser, EquatableInterface //implement
     }
 
     /**
-     * @param UserInterface $user
-     *
      * @return bool
      */
     public function isEqualTo(UserInterface $user)
@@ -1956,9 +1935,6 @@ class User extends BaseUser implements ThemeUser, EquatableInterface //implement
         return true;
     }
 
-    /**
-     * @return string
-     */
     public function getPictureLegacy(): string
     {
         $id = $this->id;
@@ -1992,8 +1968,6 @@ class User extends BaseUser implements ThemeUser, EquatableInterface //implement
 
     /**
      * @param int $lastId Optional. The ID of the last received message
-     *
-     * @return ArrayCollection
      */
     public function getUnreadReceivedMessages($lastId = 0): ArrayCollection
     {
@@ -2013,27 +1987,16 @@ class User extends BaseUser implements ThemeUser, EquatableInterface //implement
         return $this->receivedMessages->matching($criteria);
     }
 
-    /**
-     * @return Collection
-     */
     public function getCourseGroupsAsMember(): Collection
     {
         return $this->courseGroupsAsMember;
     }
 
-    /**
-     * @return Collection
-     */
     public function getCourseGroupsAsTutor(): Collection
     {
         return $this->courseGroupsAsTutor;
     }
 
-    /**
-     * @param Course $course
-     *
-     * @return ArrayCollection
-     */
     public function getCourseGroupsAsMemberFromCourse(Course $course): ArrayCollection
     {
         $criteria = Criteria::create();
@@ -2044,11 +2007,6 @@ class User extends BaseUser implements ThemeUser, EquatableInterface //implement
         return $this->courseGroupsAsMember->matching($criteria);
     }
 
-    /**
-     * @param Course $course
-     *
-     * @return ArrayCollection
-     */
     public function getCourseGroupsAsTutorFromCourse(Course $course): ArrayCollection
     {
         $criteria = Criteria::create();

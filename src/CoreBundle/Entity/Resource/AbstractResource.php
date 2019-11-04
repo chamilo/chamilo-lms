@@ -3,7 +3,6 @@
 
 namespace Chamilo\CoreBundle\Entity\Resource;
 
-use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Mapping as ORM;
 use Sylius\Component\Resource\Model\ResourceInterface;
@@ -20,17 +19,12 @@ abstract class AbstractResource implements ResourceInterface
      */
     public $resourceNode;
 
-    /**
-     * @return string
-     */
     abstract public function getResourceName(): string;
 
     /**
      * Updates the resource node name when updating the resource.
      *
      * @ORM\PostUpdate()
-     *
-     * @param LifecycleEventArgs $args
      */
     public function postUpdate(LifecycleEventArgs $args)
     {
@@ -50,8 +44,6 @@ abstract class AbstractResource implements ResourceInterface
     }
 
     /**
-     * @param ResourceNode $resourceNode
-     *
      * @return $this
      */
     public function setResourceNode(ResourceNode $resourceNode): self
@@ -61,9 +53,6 @@ abstract class AbstractResource implements ResourceInterface
         return $this;
     }
 
-    /**
-     * @return ResourceNode
-     */
     public function getResourceNode(): ResourceNode
     {
         return $this->resourceNode;

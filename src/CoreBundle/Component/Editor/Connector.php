@@ -74,9 +74,6 @@ class Connector
         $this->driverList = $this->getDefaultDriverList();
     }
 
-    /**
-     * @return array
-     */
     public function getDriverList(): array
     {
         return $this->driverList;
@@ -102,9 +99,6 @@ class Connector
         }
     }
 
-    /**
-     * @return array
-     */
     public function getDrivers(): array
     {
         return $this->drivers;
@@ -183,8 +177,6 @@ class Connector
 
     /**
      * Get default driver settings.
-     *
-     * @return array
      */
     public function getDefaultDriverSettings(): array
     {
@@ -268,9 +260,6 @@ class Connector
         ];
     }
 
-    /**
-     * @return array
-     */
     public function getOperations(): array
     {
         //https://github.com/Studio-42/elFinder/wiki/Connector-configuration-options-2.1

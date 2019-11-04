@@ -18,8 +18,6 @@ class HookManagement implements HookManagementInterface
 
     /**
      * Constructor.
-     *
-     * @param EntityManager $entityManager
      */
     protected function __construct(EntityManager $entityManager)
     {

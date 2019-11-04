@@ -546,19 +546,11 @@ class TrackEExercises
         return $this->exeId;
     }
 
-    /**
-     * @return float
-     */
     public function getScore(): float
     {
         return $this->score;
     }
 
-    /**
-     * @param float $score
-     *
-     * @return TrackEExercises
-     */
     public function setScore(float $score): TrackEExercises
     {
         $this->score = $score;
@@ -566,19 +558,11 @@ class TrackEExercises
         return $this;
     }
 
-    /**
-     * @return float
-     */
     public function getMaxScore(): float
     {
         return $this->maxScore;
     }
 
-    /**
-     * @param float $maxScore
-     *
-     * @return TrackEExercises
-     */
     public function setMaxScore(float $maxScore): TrackEExercises
     {
         $this->maxScore = $maxScore;

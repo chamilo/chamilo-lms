@@ -16,8 +16,6 @@ class LegalRepository extends ServiceEntityRepository
 {
     /**
      * LegalRepository constructor.
-     *
-     * @param ManagerRegistry $registry
      */
     public function __construct(ManagerRegistry $registry)
     {

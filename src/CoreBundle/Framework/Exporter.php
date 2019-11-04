@@ -18,9 +18,8 @@ use Symfony\Component\HttpFoundation\StreamedResponse;
 class Exporter
 {
     /**
-     * @param string                  $format
-     * @param string                  $filename
-     * @param SourceIteratorInterface $source
+     * @param string $format
+     * @param string $filename
      *
      * @throws \RuntimeException
      *

@@ -53,9 +53,6 @@ class Editor
 
     /**
      * Editor constructor.
-     *
-     * @param TranslatorInterface $translator
-     * @param RouterInterface     $urlGenerator
      */
     public function __construct(
         TranslatorInterface $translator,

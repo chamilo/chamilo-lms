@@ -15,8 +15,6 @@ class OutcomeDeleteRequest extends OutcomeRequest
 {
     /**
      * OutcomeDeleteRequest constructor.
-     *
-     * @param \SimpleXMLElement $xml
      */
     public function __construct(\SimpleXMLElement $xml)
     {

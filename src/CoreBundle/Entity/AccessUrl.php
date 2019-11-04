@@ -491,17 +491,12 @@ class AccessUrl extends AbstractResource implements ResourceInterface
 
     /**
      * Resource identifier.
-     *
-     * @return int
      */
     public function getResourceIdentifier(): int
     {
         return $this->getId();
     }
 
-    /**
-     * @return string
-     */
     public function getResourceName(): string
     {
         $url = $this->getUrl();

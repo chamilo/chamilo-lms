@@ -186,8 +186,7 @@ class CToolIntroController extends ToolBaseController
     /**
      * @Route("/{iid}/delete", methods={"GET"})
      *
-     * @param int     $iid
-     * @param Request $request
+     * @param int $iid
      *
      * @return Response
      */

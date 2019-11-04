@@ -16,8 +16,6 @@ class HookNotificationContent extends HookEvent implements HookNotificationConte
 {
     /**
      * Construct.
-     *
-     * @param EntityManager $entityManager
      */
     protected function __construct(EntityManager $entityManager)
     {
@@ -26,8 +24,6 @@ class HookNotificationContent extends HookEvent implements HookNotificationConte
 
     /**
      * @param int $type
-     *
-     * @return array
      */
     public function notifyNotificationContent($type): array
     {

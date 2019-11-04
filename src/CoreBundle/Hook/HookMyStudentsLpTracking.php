@@ -13,17 +13,12 @@ class HookMyStudentsLpTracking extends HookEvent implements HookMyStudentsLpTrac
 {
     /**
      * HookMyStudentsLpTracking constructor.
-     *
-     * @param EntityManager $entityManager
      */
     protected function __construct(EntityManager $entityManager)
     {
         parent::__construct('HookMyStudentsLpTracking', $entityManager);
     }
 
-    /**
-     * @return array
-     */
     public function notifyTrackingHeader(): array
     {
         $results = [];
@@ -39,8 +34,6 @@ class HookMyStudentsLpTracking extends HookEvent implements HookMyStudentsLpTrac
     /**
      * @param int $lpId
      * @param int $studentId
-     *
-     * @return array
      */
     public function notifyTrackingContent($lpId, $studentId): array
     {

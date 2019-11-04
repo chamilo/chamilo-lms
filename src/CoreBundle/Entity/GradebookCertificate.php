@@ -200,19 +200,11 @@ class GradebookCertificate
         return $this->id;
     }
 
-    /**
-     * @return \DateTime
-     */
     public function getDownloadedAt(): \DateTime
     {
         return $this->downloadedAt;
     }
 
-    /**
-     * @param \DateTime $downloadedAt
-     *
-     * @return GradebookCertificate
-     */
     public function setDownloadedAt(\DateTime $downloadedAt): GradebookCertificate
     {
         $this->downloadedAt = $downloadedAt;

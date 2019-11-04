@@ -21,10 +21,6 @@ class GraphQlController extends AbstractController
     /**
      * @Route("/learnpath/view", name="chamilo_graphql_learnpath")
      *
-     * @param Request $request
-     *
-     * @return RedirectResponse
-     *
      * @todo Use symfony router to generate url
      */
     public function viewLearnpathAction(Request $request): RedirectResponse

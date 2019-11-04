@@ -167,8 +167,6 @@ class ResourceNode
     /**
      * Sets the resource creator.
      *
-     * @param User $creator
-     *
      * @return $this
      */
     public function setCreator(User $creator)
@@ -257,9 +255,7 @@ class ResourceNode
     public function setName($name)
     {
         if (strpos(self::PATH_SEPARATOR, $name) !== false) {
-            throw new \InvalidArgumentException(
-                'Invalid character "'.self::PATH_SEPARATOR.'" in resource name.'
-            );
+            throw new \InvalidArgumentException('Invalid character "'.self::PATH_SEPARATOR.'" in resource name.');
         }
 
         $this->name = $name;
@@ -394,11 +390,6 @@ class ResourceNode
         return $this->resourceFile;
     }
 
-    /**
-     * @param ResourceFile $resourceFile
-     *
-     * @return ResourceNode
-     */
     public function setResourceFile(ResourceFile $resourceFile): ResourceNode
     {
         $this->resourceFile = $resourceFile;
@@ -406,19 +397,11 @@ class ResourceNode
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getDescription(): string
     {
         return (string) $this->description;
     }
 
-    /**
-     * @param string $description
-     *
-     * @return ResourceNode
-     */
     public function setDescription(string $description): ResourceNode
     {
         $this->description = $description;

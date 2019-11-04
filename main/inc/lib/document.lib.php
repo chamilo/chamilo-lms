@@ -521,14 +521,13 @@ class DocumentManager
     /**
      * Fetches all document data for the given user/group.
      *
-     * @param array     $courseInfo
-     * @param string    $path
-     * @param int       $toGroupId       iid
-     * @param int       $toUserId
-     * @param bool      $canSeeInvisible
-     * @param bool      $search
-     * @param int       $sessionId
-     * @param User|null $currentUser
+     * @param array  $courseInfo
+     * @param string $path
+     * @param int    $toGroupId       iid
+     * @param int    $toUserId
+     * @param bool   $canSeeInvisible
+     * @param bool   $search
+     * @param int    $sessionId
      *
      * @return array with all document data
      */
@@ -2744,14 +2743,14 @@ class DocumentManager
     /**
      * Uploads a document.
      *
-     * @param array  $files          the $_FILES variable
+     * @param array  $files                   the $_FILES variable
      * @param string $path
      * @param string $title
      * @param string $comment
-     * @param int    $unzip          unzip or not the file
-     * @param string $ifExists       overwrite, rename or warn (default)
-     * @param bool   $index_document index document (search xapian module)
-     * @param bool   $show_output    print html messages
+     * @param int    $unzip                   unzip or not the file
+     * @param string $ifExists                overwrite, rename or warn (default)
+     * @param bool   $index_document          index document (search xapian module)
+     * @param bool   $show_output             print html messages
      * @param string $fileKey
      * @param bool   $treat_spaces_as_hyphens
      * @param int    $parentId
@@ -5528,9 +5527,8 @@ This folder contains all sessions that have been opened in the chat. Although th
     /**
      * Create users shared folder for course.
      *
-     * @param int   $userId
-     * @param array $courseInfo
-     * @param int   $sessionId
+     * @param int $userId
+     * @param int $sessionId
      */
     public static function createUserSharedFolder($userId, array $courseInfo, $sessionId = 0)
     {
@@ -6217,7 +6215,6 @@ This folder contains all sessions that have been opened in the chat. Although th
     }
 
     /**
-     * @param CDocument           $document
      * @param string              $realPath
      * @param string|UploadedFile $content
      * @param int                 $visibility
@@ -6794,7 +6791,6 @@ This folder contains all sessions that have been opened in the chat. Although th
      * Get the button to edit document.
      *
      * @param bool   $isReadOnly
-     * @param array  $documentData
      * @param string $extension
      * @param bool   $isCertificateMode
      *
@@ -6880,10 +6876,9 @@ This folder contains all sessions that have been opened in the chat. Although th
     /**
      * Get the button to move document.
      *
-     * @param bool  $isReadOnly
-     * @param array $documentData
-     * @param bool  $isCertificateMode
-     * @param int   $parentId
+     * @param bool $isReadOnly
+     * @param bool $isCertificateMode
+     * @param int  $parentId
      *
      * @return string
      */
@@ -6922,11 +6917,10 @@ This folder contains all sessions that have been opened in the chat. Although th
     /**
      * Get the button to set visibility to document.
      *
-     * @param bool  $isReadOnly
-     * @param int   $visibility
-     * @param array $documentData
-     * @param bool  $isCertificateMode
-     * @param int   $parentId
+     * @param bool $isReadOnly
+     * @param int  $visibility
+     * @param bool $isCertificateMode
+     * @param int  $parentId
      *
      * @return string|null
      */
@@ -6969,7 +6963,6 @@ This folder contains all sessions that have been opened in the chat. Although th
      * GEt the button to delete a document.
      *
      * @param bool   $isReadOnly
-     * @param array  $documentData
      * @param bool   $isCertificateMode
      * @param string $curDirPath
      * @param int    $parentId

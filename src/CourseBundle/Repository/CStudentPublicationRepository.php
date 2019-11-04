@@ -18,8 +18,6 @@ final class CStudentPublicationRepository extends ServiceEntityRepository
 {
     /**
      * CStudentPublicationRepository constructor.
-     *
-     * @param ManagerRegistry $registry
      */
     public function __construct(ManagerRegistry $registry)
     {
@@ -29,8 +27,6 @@ final class CStudentPublicationRepository extends ServiceEntityRepository
     /**
      * Find all the works registered by a teacher.
      *
-     * @param User    $user
-     * @param Course  $course
      * @param Session $session Optional
      * @param int     $groupId Optional
      *

@@ -418,9 +418,6 @@ class Skill
         return false;
     }
 
-    /**
-     * @param SkillRelItem $skillRelItem
-     */
     public function addItem(SkillRelItem $skillRelItem)
     {
         $skillRelItem->setSkill($this);
@@ -448,8 +445,6 @@ class Skill
     }
 
     /**
-     * @param SkillRelCourse $searchItem
-     *
      * @return bool
      */
     public function hasCourseAndSession(SkillRelCourse $searchItem)
@@ -480,9 +475,6 @@ class Skill
         return false;
     }
 
-    /**
-     * @param SkillRelCourse $item
-     */
     public function addToCourse(SkillRelCourse $item)
     {
         $item->setSkill($this);

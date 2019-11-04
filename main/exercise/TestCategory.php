@@ -170,7 +170,7 @@ class TestCategory
         }
 
         Display::addFlash(Display::return_message($translator->trans('Deleted')));
-        header('Location:'. api_get_self().'?'.api_get_cidreq());
+        header('Location:'.api_get_self().'?'.api_get_cidreq());
         exit;
     }
 
@@ -303,8 +303,6 @@ class TestCategory
     }
 
     /**
-     * @param Exercise $exercise
-     *
      * @return array
      */
     public static function getListOfCategoriesIDForTestObject(Exercise $exercise)
@@ -363,8 +361,6 @@ class TestCategory
     }
 
     /**
-     * @param Exercise $exercise
-     *
      * @return array
      */
     public static function getListOfCategoriesForTest(Exercise $exercise)
@@ -911,8 +907,6 @@ class TestCategory
     /**
      * Returns the category form.
      *
-     * @param Exercise $exercise
-     *
      * @return string
      */
     public function returnCategoryForm(Exercise $exercise)
@@ -1090,7 +1084,7 @@ class TestCategory
         $qb = $repo->getResourcesByCourse($course, $session);
 
         // 3. Set QueryBuilder to the source.
-        $source-> initQueryBuilder($qb);
+        $source->initQueryBuilder($qb);
 
         // 4. Get the grid builder.
         $builder = Container::$container->get('apy_grid.factory');

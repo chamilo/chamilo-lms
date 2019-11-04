@@ -42,8 +42,6 @@ class MutationMap extends ResolverMap implements ContainerAwareInterface
     }
 
     /**
-     * @param Argument $args
-     *
      * @return array
      */
     protected function resolveAuthenticate(Argument $args)
@@ -69,8 +67,6 @@ class MutationMap extends ResolverMap implements ContainerAwareInterface
     }
 
     /**
-     * @param Argument $args
-     *
      * @return array
      */
     protected function resolveViewerSendMessage(Argument $args)
@@ -119,13 +115,9 @@ class MutationMap extends ResolverMap implements ContainerAwareInterface
     }
 
     /**
-     * @param Argument $args
-     *
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      * @throws \Doctrine\ORM\TransactionRequiredException
-     *
-     * @return Course
      */
     protected function resolveCreateCourse(Argument $args): Course
     {
@@ -191,13 +183,9 @@ class MutationMap extends ResolverMap implements ContainerAwareInterface
     }
 
     /**
-     * @param Argument $args
-     *
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      * @throws \Doctrine\ORM\TransactionRequiredException
-     *
-     * @return Course
      */
     protected function resolveEditCourse(Argument $args): Course
     {
@@ -268,13 +256,9 @@ class MutationMap extends ResolverMap implements ContainerAwareInterface
     }
 
     /**
-     * @param Argument $args
-     *
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      * @throws \Doctrine\ORM\TransactionRequiredException
-     *
-     * @return User
      */
     protected function resolveCreateUser(Argument $args): User
     {
@@ -333,13 +317,9 @@ class MutationMap extends ResolverMap implements ContainerAwareInterface
     }
 
     /**
-     * @param Argument $args
-     *
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      * @throws \Doctrine\ORM\TransactionRequiredException
-     *
-     * @return bool
      */
     protected function resolveSubscribeUserToCourse(Argument $args): bool
     {
@@ -376,13 +356,9 @@ class MutationMap extends ResolverMap implements ContainerAwareInterface
     }
 
     /**
-     * @param Argument $args
-     *
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      * @throws \Doctrine\ORM\TransactionRequiredException
-     *
-     * @return CForumThread
      */
     protected function resolveAddForumThread(Argument $args): CForumThread
     {
@@ -470,13 +446,9 @@ class MutationMap extends ResolverMap implements ContainerAwareInterface
     }
 
     /**
-     * @param Argument $args
-     *
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      * @throws \Doctrine\ORM\TransactionRequiredException
-     *
-     * @return CForumPost
      */
     protected function resolveAddForumPost(Argument $args): CForumPost
     {
@@ -563,13 +535,9 @@ class MutationMap extends ResolverMap implements ContainerAwareInterface
     }
 
     /**
-     * @param Argument $args
-     *
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      * @throws \Doctrine\ORM\TransactionRequiredException
-     *
-     * @return CNotebook
      */
     protected function resolveAddCourseNote(Argument $args): CNotebook
     {
@@ -607,11 +575,6 @@ class MutationMap extends ResolverMap implements ContainerAwareInterface
         return $this->em->find('ChamiloCourseBundle:CNotebook', $noteId);
     }
 
-    /**
-     * @param Argument $args
-     *
-     * @return bool
-     */
     protected function resolveDisableUser(Argument $args): bool
     {
         $this->changeUserActiveState($args['itemId']['name'], $args['itemId']['value'], false);
@@ -619,11 +582,6 @@ class MutationMap extends ResolverMap implements ContainerAwareInterface
         return true;
     }
 
-    /**
-     * @param Argument $args
-     *
-     * @return bool
-     */
     protected function resolveEnableUser(Argument $args): bool
     {
         $this->changeUserActiveState($args['itemId']['name'], $args['itemId']['value'], true);
@@ -632,11 +590,7 @@ class MutationMap extends ResolverMap implements ContainerAwareInterface
     }
 
     /**
-     * @param Argument $args
-     *
      * @throws \Exception
-     *
-     * @return bool
      */
     protected function resolveDeleteUser(Argument $args): bool
     {
@@ -655,11 +609,6 @@ class MutationMap extends ResolverMap implements ContainerAwareInterface
         return \UserManager::delete_user($userId);
     }
 
-    /**
-     * @param Argument $args
-     *
-     * @return User
-     */
     protected function resolveEditUser(Argument $args): User
     {
         $this->checkAuthorization();
@@ -700,11 +649,6 @@ class MutationMap extends ResolverMap implements ContainerAwareInterface
         return $this->em->find('ChamiloUserBundle:User', $userId);
     }
 
-    /**
-     * @param Argument $args
-     *
-     * @return bool
-     */
     protected function resolveDeleteCourse(Argument $args): bool
     {
         $this->checkAuthorization();

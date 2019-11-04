@@ -78,8 +78,6 @@ class Tool
     }
 
     /**
-     * @param ToolResourceRight $toolResourceRight
-     *
      * @return $this
      */
     public function addToolResourceRight(ToolResourceRight $toolResourceRight)
@@ -112,8 +110,6 @@ class Tool
 
     /**
      * Get id.
-     *
-     * @return int
      */
     public function getId(): int
     {

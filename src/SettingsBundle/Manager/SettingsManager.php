@@ -69,11 +69,6 @@ class SettingsManager implements SettingsManagerInterface
     /**
      * SettingsManager constructor.
      *
-     * @param ServiceRegistryInterface $schemaRegistry
-     * @param ServiceRegistryInterface $resolverRegistry
-     * @param EntityManager            $manager
-     * @param EntityRepository         $repository
-     * @param FactoryInterface         $settingsFactory
      * @param $eventDispatcher
      */
     public function __construct(
@@ -100,17 +95,11 @@ class SettingsManager implements SettingsManagerInterface
         return $this->url;
     }
 
-    /**
-     * @param AccessUrl $url
-     */
     public function setUrl(AccessUrl $url)
     {
         $this->url = $url;
     }
 
-    /**
-     * @param AccessUrl $url
-     */
     public function updateSchemas(AccessUrl $url)
     {
         $this->url = $url;
@@ -126,9 +115,6 @@ class SettingsManager implements SettingsManagerInterface
         }
     }
 
-    /**
-     * @param AccessUrl $url
-     */
     public function installSchemas(AccessUrl $url)
     {
         $this->url = $url;
@@ -753,8 +739,6 @@ class SettingsManager implements SettingsManagerInterface
     }
 
     /**
-     * @param SettingsInterface $settings
-     *
      * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      */

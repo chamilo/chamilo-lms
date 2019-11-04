@@ -20,8 +20,6 @@ class ItemPropertyRepository extends ServiceEntityRepository
 {
     /**
      * ItemPropertyRepository constructor.
-     *
-     * @param ManagerRegistry $registry
      */
     public function __construct(ManagerRegistry $registry)
     {
@@ -33,7 +31,6 @@ class ItemPropertyRepository extends ServiceEntityRepository
      *
      * @param string  $tool    learnpath | document | etc
      * @param int     $itemId
-     * @param Course  $course
      * @param Session $session
      * @param Group   $group
      *
@@ -63,7 +60,6 @@ class ItemPropertyRepository extends ServiceEntityRepository
      *
      * @param string  $tool    learnpath | document | etc
      * @param int     $itemId
-     * @param Course  $course
      * @param Session $session
      *
      * @return array
@@ -91,7 +87,6 @@ class ItemPropertyRepository extends ServiceEntityRepository
      *
      * @param User    $currentUser
      * @param string  $tool        learnpath | document | etc
-     * @param Course  $course
      * @param Session $session
      * @param int     $itemId
      * @param array   $newList
@@ -162,7 +157,6 @@ class ItemPropertyRepository extends ServiceEntityRepository
      * Unsubscribe groups to item.
      *
      * @param string  $tool
-     * @param Course  $course
      * @param Session $session
      * @param int     $itemId
      * @param array   $groups
@@ -217,7 +211,6 @@ class ItemPropertyRepository extends ServiceEntityRepository
      *
      * @param User    $currentUser
      * @param string  $tool
-     * @param Course  $course
      * @param Session $session
      * @param int     $itemId
      * @param array   $newUserList
@@ -291,7 +284,6 @@ class ItemPropertyRepository extends ServiceEntityRepository
      * Unsubscribe users to item.
      *
      * @param string  $tool
-     * @param Course  $course
      * @param Session $session
      * @param int     $itemId
      * @param array   $usersToDelete

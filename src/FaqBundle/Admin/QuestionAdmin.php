@@ -20,9 +20,6 @@ class QuestionAdmin extends AbstractAdmin
         '_sort_order' => 'Desc',
     ];
 
-    /**
-     * @param DatagridMapper $datagridMapper
-     */
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
         $datagridMapper
@@ -31,9 +28,6 @@ class QuestionAdmin extends AbstractAdmin
         ;
     }
 
-    /**
-     * @param ListMapper $listMapper
-     */
     protected function configureListFields(ListMapper $listMapper)
     {
         $listMapper
@@ -55,9 +49,6 @@ class QuestionAdmin extends AbstractAdmin
             );
     }
 
-    /**
-     * @param FormMapper $formMapper
-     */
     protected function configureFormFields(FormMapper $formMapper)
     {
         $formMapper

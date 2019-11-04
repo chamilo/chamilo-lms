@@ -530,19 +530,11 @@ class CGroupCategory
         return $this->cId;
     }
 
-    /**
-     * @return int
-     */
     public function getDocumentAccess(): int
     {
         return $this->documentAccess;
     }
 
-    /**
-     * @param int $documentAccess
-     *
-     * @return CGroupCategory
-     */
     public function setDocumentAccess(int $documentAccess): CGroupCategory
     {
         $this->documentAccess = $documentAccess;

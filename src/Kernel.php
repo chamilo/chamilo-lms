@@ -98,9 +98,6 @@ class Kernel extends BaseKernel
         return $this->getRealRootDir().'config/configuration.php';
     }
 
-    /**
-     * @param array $configuration
-     */
     public function setApi(array $configuration)
     {
         new ChamiloApi($configuration);
@@ -125,10 +122,6 @@ class Kernel extends BaseKernel
         return $this->getContainer()->getParameter('url_append');
     }
 
-    /**
-     * @param ContainerBuilder $container
-     * @param LoaderInterface  $loader
-     */
     protected function configureContainer(ContainerBuilder $container, LoaderInterface $loader): void
     {
         $container->addResource(new FileResource($this->getProjectDir().'/config/bundles.php'));
@@ -141,9 +134,6 @@ class Kernel extends BaseKernel
         $loader->load($confDir.'/{services}_'.$this->environment.self::CONFIG_EXTS, 'glob');
     }
 
-    /**
-     * @param RouteCollectionBuilder $routes
-     */
     protected function configureRoutes(RouteCollectionBuilder $routes): void
     {
         $confDir = $this->getProjectDir().'/config';

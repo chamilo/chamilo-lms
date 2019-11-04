@@ -31,8 +31,6 @@ class PageController extends BaseController
      * @Route("/cms/page/latest/{number}")
      *
      * @param int $number
-     *
-     * @return Response
      */
     public function getLatestPages($number, PageManager $pageManager): Response
     {
@@ -70,15 +68,8 @@ class PageController extends BaseController
      * Creates a page if it doesn't exists.
      * Updates the page if page exists.
      *
-     * @param string              $pageSlug
-     * @param bool                $redirect
-     * @param Request             $request
-     * @param SiteManager         $siteManager
-     * @param PageManager         $pageManager
-     * @param TemplateManager     $templateManager
-     * @param TranslatorInterface $translator
-     * @param BlockInteractor     $blockInteractor
-     * @param BlockManager        $blockManager
+     * @param string $pageSlug
+     * @param bool   $redirect
      *
      * @throws \Exception
      *
@@ -271,8 +262,6 @@ class PageController extends BaseController
      * @Security("has_role('ROLE_ADMIN')")
      *
      * @param string $slug
-     *
-     * @return Response
      */
     public function editPageAction($slug, Request $request): Response
     {
@@ -295,9 +284,7 @@ class PageController extends BaseController
     /**
      * @Route("/internal_page/{slug}")
      *
-     * @param string  $slug
-     * @param Request $request
-     * @param bool    $showEditPageLink
+     * @param bool $showEditPageLink
      *
      * @return Response
      */

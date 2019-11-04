@@ -60,10 +60,6 @@ class NavBuilder implements ContainerAwareInterface
 
     /**
      * Top menu left.
-     *
-     * @param array $options
-     *
-     * @return ItemInterface
      */
     public function menuApp(array $options): ItemInterface
     {
@@ -435,9 +431,6 @@ class NavBuilder implements ContainerAwareInterface
 
     /**
      * Course menu.
-     *
-     * @param FactoryInterface $factory
-     * @param array            $options
      *
      * @return ItemInterface
      */

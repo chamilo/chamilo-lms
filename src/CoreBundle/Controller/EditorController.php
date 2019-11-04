@@ -33,9 +33,6 @@ class EditorController extends BaseController
      *
      * @Route("/templates", methods={"GET"}, name="editor_templates")
      *
-     * @param TranslatorInterface $translator
-     * @param RouterInterface     $router
-     *
      * @return Response
      */
     public function editorTemplatesAction(TranslatorInterface $translator, RouterInterface $router)
@@ -54,8 +51,6 @@ class EditorController extends BaseController
 
     /**
      * @Route("/myfilemanager", methods={"GET"}, name="editor_myfiles")
-     *
-     * @return Response
      */
     public function editorFileManager(): Response
     {
@@ -70,10 +65,7 @@ class EditorController extends BaseController
     /**
      * @Route("/filemanager/{parentId}", methods={"GET"}, name="editor_filemanager")
      *
-     * @param int                 $parentId
-     * @param CDocumentRepository $documentRepository
-     *
-     * @return Response
+     * @param int $parentId
      */
     public function customEditorFileManager($parentId = 0, CDocumentRepository $documentRepository): Response
     {
@@ -165,9 +157,6 @@ class EditorController extends BaseController
     /**
      * @Route("/connector", methods={"GET", "POST"}, name="editor_connector")
      *
-     * @param TranslatorInterface $translator
-     * @param RouterInterface     $router
-     *
      * @return Response
      */
     public function editorConnector(TranslatorInterface $translator, RouterInterface $router)
@@ -212,8 +201,6 @@ class EditorController extends BaseController
 
     /**
      * @Route("/config", methods={"GET"}, name="config_editor")
-     *
-     * @param SettingsManager $settingsManager
      *
      * @return Response
      */

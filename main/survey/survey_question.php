@@ -13,8 +13,7 @@ class survey_question
     private $form;
 
     /**
-     * @param FormValidator $form
-     * @param array         $surveyData
+     * @param array $surveyData
      */
     public function addParentMenu(FormValidator $form, $surveyData)
     {
@@ -436,9 +435,8 @@ class survey_question
     }
 
     /**
-     * @param FormValidator $form
-     * @param array         $questionData
-     * @param array         $answers
+     * @param array $questionData
+     * @param array $answers
      */
     public function render(FormValidator $form, $questionData = [], $answers = [])
     {

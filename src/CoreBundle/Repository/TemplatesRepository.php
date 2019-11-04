@@ -17,8 +17,6 @@ class TemplatesRepository extends ServiceEntityRepository
 {
     /**
      * TemplatesRepository constructor.
-     *
-     * @param ManagerRegistry $registry
      */
     public function __construct(ManagerRegistry $registry)
     {
@@ -27,9 +25,6 @@ class TemplatesRepository extends ServiceEntityRepository
 
     /**
      * Get the course template for a user.
-     *
-     * @param Course $course
-     * @param User   $user
      *
      * @return array
      */

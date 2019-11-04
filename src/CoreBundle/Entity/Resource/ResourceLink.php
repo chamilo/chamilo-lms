@@ -163,8 +163,6 @@ class ResourceLink
     }
 
     /**
-     * @param ResourceRight $right
-     *
      * @return $this
      */
     public function addResourceRight(ResourceRight $right)
@@ -295,8 +293,6 @@ class ResourceLink
     }
 
     /**
-     * @param ResourceNode $resourceNode
-     *
      * @return $this
      */
     public function setResourceNode(ResourceNode $resourceNode)
@@ -314,19 +310,11 @@ class ResourceLink
         return $this->resourceNode;
     }
 
-    /**
-     * @return int
-     */
     public function getVisibility(): int
     {
         return $this->visibility;
     }
 
-    /**
-     * @param int $visibility
-     *
-     * @return ResourceLink
-     */
     public function setVisibility(int $visibility): ResourceLink
     {
         $this->visibility = $visibility;
@@ -342,9 +330,6 @@ class ResourceLink
         return $this;
     }
 
-    /**
-     * @return array
-     */
     public static function getVisibilityList(): array
     {
         return [

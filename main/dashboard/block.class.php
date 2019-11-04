@@ -21,9 +21,6 @@ class Block
     {
     }
 
-    /**
-     * @return string
-     */
     public function getDeleteLink(): string
     {
         global $charset;
@@ -43,8 +40,6 @@ class Block
     /**
      * @param string $title
      * @param string $content
-     *
-     * @return string
      */
     public function getBlockCard($title, $content): string
     {

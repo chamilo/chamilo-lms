@@ -20,8 +20,6 @@ class CForumForumRepository extends ServiceEntityRepository
 {
     /**
      * CForumForumRepository constructor.
-     *
-     * @param ManagerRegistry $registry
      */
     public function __construct(ManagerRegistry $registry)
     {
@@ -29,13 +27,8 @@ class CForumForumRepository extends ServiceEntityRepository
     }
 
     /**
-     * @param bool           $isAllowedToEdit
-     * @param CForumCategory $category
-     * @param Course         $course
-     * @param Session|null   $session
-     * @param bool           $includeGroupsForums
-     *
-     * @return array
+     * @param bool $isAllowedToEdit
+     * @param bool $includeGroupsForums
      *
      * @todo Remove api_get_session_condition
      */
@@ -92,8 +85,7 @@ class CForumForumRepository extends ServiceEntityRepository
     }
 
     /**
-     * @param int    $id
-     * @param Course $course
+     * @param int $id
      *
      * @return CForumForum
      */

@@ -29,12 +29,6 @@ class CourseVoter extends Voter
     private $authorizationChecker;
     private $container;
 
-    /**
-     * @param EntityManagerInterface        $entityManager
-     * @param CourseRepository              $courseManager
-     * @param AuthorizationCheckerInterface $authorizationChecker
-     * @param ContainerInterface            $container
-     */
     public function __construct(
         EntityManagerInterface $entityManager,
         CourseRepository $courseManager,

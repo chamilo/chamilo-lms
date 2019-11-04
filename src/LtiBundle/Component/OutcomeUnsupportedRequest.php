@@ -13,8 +13,7 @@ class OutcomeUnsupportedRequest extends OutcomeRequest
     /**
      * OutcomeUnsupportedRequest constructor.
      *
-     * @param \SimpleXMLElement $xml
-     * @param string            $name
+     * @param string $name
      */
     public function __construct(\SimpleXMLElement $xml, $name)
     {

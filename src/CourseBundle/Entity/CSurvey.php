@@ -265,19 +265,11 @@ class CSurvey
         $this->surveyType = 0;
     }
 
-    /**
-     * @return int
-     */
     public function getIid(): int
     {
         return $this->iid;
     }
 
-    /**
-     * @param int $iid
-     *
-     * @return CSurvey
-     */
     public function setIid(int $iid): CSurvey
     {
         $this->iid = $iid;

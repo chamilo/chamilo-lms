@@ -14,9 +14,6 @@ use Sonata\AdminBundle\Form\FormMapper;
  */
 class CategoryAdmin extends AbstractAdmin
 {
-    /**
-     * @param ListMapper $listMapper
-     */
     protected function configureListFields(ListMapper $listMapper)
     {
         $listMapper
@@ -39,9 +36,6 @@ class CategoryAdmin extends AbstractAdmin
         ;
     }
 
-    /**
-     * @param DatagridMapper $datagridMapper
-     */
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
         $datagridMapper

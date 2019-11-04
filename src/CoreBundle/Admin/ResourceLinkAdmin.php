@@ -20,9 +20,6 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
  */
 class ResourceLinkAdmin extends AbstractAdmin
 {
-    /**
-     * @param \Sonata\AdminBundle\Show\ShowMapper $showMapper
-     */
     protected function configureShowField(ShowMapper $showMapper)
     {
         $showMapper
@@ -31,9 +28,6 @@ class ResourceLinkAdmin extends AbstractAdmin
         ;
     }
 
-    /**
-     * @param FormMapper $formMapper
-     */
     protected function configureFormFields(FormMapper $formMapper)
     {
         $formMapper
@@ -60,9 +54,6 @@ class ResourceLinkAdmin extends AbstractAdmin
 //    }
 //
 
-    /**
-     * @param ListMapper $listMapper
-     */
     protected function configureListFields(ListMapper $listMapper)
     {
         $listMapper

@@ -303,8 +303,6 @@ class UserRepository extends EntityRepository
     /**
      * Get the sessions admins for a user.
      *
-     * @param User $user
-     *
      * @return array
      */
     public function getSessionAdmins(User $user)
@@ -338,8 +336,6 @@ class UserRepository extends EntityRepository
     /**
      * Get the student bosses for a user.
      *
-     * @param User $user
-     *
      * @return array
      */
     public function getStudentBosses(User $user)
@@ -366,8 +362,6 @@ class UserRepository extends EntityRepository
     /**
      * Get number of users in URL.
      *
-     * @param AccessUrl $url
-     *
      * @return int
      */
     public function getCountUsersByUrl(AccessUrl $url)
@@ -383,8 +377,6 @@ class UserRepository extends EntityRepository
 
     /**
      * Get number of users in URL.
-     *
-     * @param AccessUrl $url
      *
      * @return int
      */
@@ -1374,8 +1366,6 @@ class UserRepository extends EntityRepository
      * This might be different from user.last_login in the case of legacy users
      * as user.last_login was only implemented in 1.10 version with a default
      * value of NULL (not the last record from track_e_login).
-     *
-     * @param User $user
      *
      * @throws \Exception
      *

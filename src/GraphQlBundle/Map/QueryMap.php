@@ -390,8 +390,6 @@ class QueryMap extends ResolverMap implements ContainerAwareInterface
     }
 
     /**
-     * @param Argument $args
-     *
      * @return Course
      */
     protected function resolveCourse(Argument $args)
@@ -420,8 +418,6 @@ class QueryMap extends ResolverMap implements ContainerAwareInterface
     }
 
     /**
-     * @param Argument $args
-     *
      * @return Session
      */
     protected function resolveSession(Argument $args)
@@ -451,8 +447,6 @@ class QueryMap extends ResolverMap implements ContainerAwareInterface
     }
 
     /**
-     * @param Argument $args
-     *
      * @return SessionCategory
      */
     protected function resolveSessionCategory(Argument $args)
@@ -471,11 +465,9 @@ class QueryMap extends ResolverMap implements ContainerAwareInterface
     }
 
     /**
-     * @param string            $fieldName
-     * @param object            $object
-     * @param object|null       $resolver
-     * @param Argument|null     $args
-     * @param \ArrayObject|null $context
+     * @param string      $fieldName
+     * @param object      $object
+     * @param object|null $resolver
      *
      * @return mixed
      */

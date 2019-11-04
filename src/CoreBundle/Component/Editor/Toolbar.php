@@ -93,8 +93,6 @@ class Toolbar
 
     /**
      * Get plugins by default in all editors in the platform.
-     *
-     * @return array
      */
     public function getDefaultPlugins(): array
     {
@@ -103,8 +101,6 @@ class Toolbar
 
     /**
      * Get fixed plugins depending of the toolbar.
-     *
-     * @return array
      */
     public function getPlugins(): array
     {
@@ -121,17 +117,11 @@ class Toolbar
         return [];
     }
 
-    /**
-     * @param array $config
-     */
     public function setConfig(array $config)
     {
         $this->config = $config;
     }
 
-    /**
-     * @param array $config
-     */
     public function updateConfig(array $config)
     {
         if (empty($this->config)) {

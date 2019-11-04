@@ -6,18 +6,17 @@ namespace Chamilo\CourseBundle\Controller\Home;
 use APY\DataGridBundle\Grid\Source\Entity;
 use Chamilo\CourseBundle\Controller\ToolBaseController;
 use Chamilo\CourseBundle\Entity\CTool;
+use Chamilosession as Session;
 use CourseHome;
+use CourseManager;
+use Database;
 use Display;
+use Event;
+use ExtraFieldValue;
+use Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use CourseManager;
-use Chamilosession as Session;
-use Security;
-use Event;
-use Database;
-use ExtraFieldValue;
-use Ublaboo\DataGrid\DataGrid;
 
 /**
  * Class HomeController.
@@ -31,8 +30,6 @@ class HomeController extends ToolBaseController
     /**
      * @Route("/", name="course_home")
      * @Route("/index.php", methods={"GET"})
-     *
-     * @param Request $request
      *
      * @return Response
      */
@@ -393,7 +390,7 @@ class HomeController extends ToolBaseController
 
         $source = new Entity('ChamiloCourseBundle:CExerciseCategory');
         $grid = $this->get('grid');
-        $grid ->setSource($source);
+        $grid->setSource($source);
 
         // Deleting the objects
         Session::erase('_gid');
@@ -402,9 +399,6 @@ class HomeController extends ToolBaseController
         api_remove_in_gradebook();
         \Exercise::cleanSessionVariables();
         \DocumentManager::removeGeneratedAudioTempFile();
-
-
-
 
         return $this->render(
             '@ChamiloTheme/Course/home.html.twig',
@@ -496,8 +490,6 @@ class HomeController extends ToolBaseController
 
     /**
      * @Route("/icon_list", methods={"GET"})
-     *
-     * @param Request $request
      */
     public function iconListAction(Request $request)
     {

@@ -13,8 +13,7 @@ class OutcomeUnsupportedResponse extends OutcomeResponse
     /**
      * OutcomeUnsupportedResponse constructor.
      *
-     * @param OutcomeResponseStatus $statusInfo
-     * @param string                $type
+     * @param string $type
      */
     public function __construct(OutcomeResponseStatus $statusInfo, $type)
     {
@@ -23,9 +22,6 @@ class OutcomeUnsupportedResponse extends OutcomeResponse
         parent::__construct($statusInfo);
     }
 
-    /**
-     * @param \SimpleXMLElement $xmlBody
-     */
     protected function generateBody(\SimpleXMLElement $xmlBody)
     {
     }

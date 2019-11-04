@@ -137,19 +137,11 @@ class CSurveyQuestion
         $this->surveyGroupSec2 = '';
     }
 
-    /**
-     * @return int
-     */
     public function getIid(): int
     {
         return $this->iid;
     }
 
-    /**
-     * @param int $iid
-     *
-     * @return CSurveyQuestion
-     */
     public function setIid(int $iid): CSurveyQuestion
     {
         $this->iid = $iid;
@@ -471,8 +463,6 @@ class CSurveyQuestion
 
     /**
      * Set isMandatory.
-     *
-     * @return bool
      */
     public function isMandatory(): bool
     {
@@ -481,10 +471,6 @@ class CSurveyQuestion
 
     /**
      * Get isMandatory.
-     *
-     * @param bool $isMandatory
-     *
-     * @return CSurveyQuestion
      */
     public function setIsMandatory(bool $isMandatory): CSurveyQuestion
     {

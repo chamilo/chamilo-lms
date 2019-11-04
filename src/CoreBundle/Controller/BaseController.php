@@ -83,9 +83,6 @@ abstract class BaseController extends AbstractController
         return $this->getDoctrine()->getManager()->find('ChamiloCoreBundle:Session', $sessionId);
     }
 
-    /**
-     * @return string
-     */
     public function getCourseUrlQuery(): string
     {
         $url = '';

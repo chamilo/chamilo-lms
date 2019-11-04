@@ -384,10 +384,9 @@ class UserPortalController extends BaseController
      *
      * @Security("has_role('ROLE_USER')")
      *
-     * @param string  $type       courses|sessions|mycoursecategories
-     * @param string  $filter     history|current for the userportal courses page
-     * @param int     $coursePage
-     * @param Request $request
+     * @param string $type       courses|sessions|mycoursecategories
+     * @param string $filter     history|current for the userportal courses page
+     * @param int    $coursePage
      *
      * @return Response
      */

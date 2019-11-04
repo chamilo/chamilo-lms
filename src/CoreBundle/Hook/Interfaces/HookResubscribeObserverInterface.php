@@ -16,8 +16,6 @@ namespace Chamilo\CoreBundle\Hook\Interfaces;
 interface HookResubscribeObserverInterface extends HookObserverInterface
 {
     /**
-     * @param HookResubscribeEventInterface $hook
-     *
      * @return int
      */
     public function hookResubscribe(HookResubscribeEventInterface $hook);

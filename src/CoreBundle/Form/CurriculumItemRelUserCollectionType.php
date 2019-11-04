@@ -24,10 +24,6 @@ class CurriculumItemRelUserCollectionType extends AbstractType
         $this->itemId = $itemId;
     }
 
-    /**
-     * @param FormBuilderInterface $builder
-     * @param array                $options
-     */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder->add(

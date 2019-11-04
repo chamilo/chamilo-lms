@@ -55,25 +55,16 @@ class ToolChain
         $this->tools = [];
     }
 
-    /**
-     * @param AbstractTool $tool
-     */
     public function addTool(AbstractTool $tool): void
     {
         $this->tools[$tool->getName()] = $tool;
     }
 
-    /**
-     * @return array
-     */
     public function getTools(): array
     {
         return $this->tools;
     }
 
-    /**
-     * @param ObjectManager $manager
-     */
     public function createTools(ObjectManager $manager): void
     {
         $tools = $this->getTools();
@@ -109,9 +100,6 @@ class ToolChain
         }
     }
 
-    /**
-     * @param Tool $tool
-     */
     public function setToolPermissions(Tool $tool): void
     {
         $toolResourceRight = new ToolResourceRight();
@@ -130,12 +118,6 @@ class ToolChain
         $tool->addToolResourceRight($toolResourceRightReader);
     }
 
-    /**
-     * @param Course          $course
-     * @param SettingsManager $settingsManager
-     *
-     * @return Course
-     */
     public function addToolsInCourse(Course $course, SettingsManager $settingsManager): Course
     {
         $tools = $this->getTools();

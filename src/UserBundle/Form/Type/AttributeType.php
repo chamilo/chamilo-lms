@@ -24,7 +24,6 @@ class AttributeType extends AbstractResourceType
 
     /**
      * @param string $dataClass
-     * @param array  $validationGroups
      * @param string $subjectName
      */
     public function __construct($dataClass, array $validationGroups, $subjectName)

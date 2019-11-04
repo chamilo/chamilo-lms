@@ -22,8 +22,6 @@ class HookWSRegistration extends HookEvent implements HookWSRegistrationEventInt
 {
     /**
      * HookWSRegistration constructor.
-     *
-     * @param EntityManager $entityManager
      */
     protected function __construct(EntityManager $entityManager)
     {

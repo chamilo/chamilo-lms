@@ -10,10 +10,5 @@ namespace Chamilo\CoreBundle\Hook\Interfaces;
  */
 interface CheckLoginCredentialsHookObserverInterface extends HookObserverInterface
 {
-    /**
-     * @param CheckLoginCredentialsHookEventInterface $event
-     *
-     * @return bool
-     */
     public function checkLoginCredentials(CheckLoginCredentialsHookEventInterface $event): bool;
 }

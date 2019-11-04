@@ -18,8 +18,6 @@ class Utils
 
     /**
      * Utils constructor.
-     *
-     * @param SettingsManager $settingsManager
      */
     public function __construct(SettingsManager $settingsManager)
     {
@@ -52,8 +50,6 @@ class Utils
     }
 
     /**
-     * @param User $user
-     *
      * @return string
      */
     public static function generateUserRoles(User $user)
@@ -80,8 +76,6 @@ class Utils
     }
 
     /**
-     * @param User $currentUser
-     *
      * @return string
      */
     public function generateRoleScopeMentor(User $currentUser)
@@ -100,9 +94,6 @@ class Utils
         return implode(',', $scope);
     }
 
-    /**
-     * @param array $params
-     */
     public static function trimParams(array &$params)
     {
         foreach ($params as $key => $value) {
@@ -113,9 +104,6 @@ class Utils
     }
 
     /**
-     * @param ExternalTool $tool
-     * @param array        $params
-     *
      * @return array
      */
     public static function removeQueryParamsFromLaunchUrl(ExternalTool $tool, array &$params)
@@ -138,10 +126,9 @@ class Utils
     }
 
     /**
-     * @param string       $url
-     * @param string       $originConsumerKey
-     * @param string       $originSignature
-     * @param ExternalTool $tool
+     * @param string $url
+     * @param string $originConsumerKey
+     * @param string $originSignature
      *
      * @return bool
      */

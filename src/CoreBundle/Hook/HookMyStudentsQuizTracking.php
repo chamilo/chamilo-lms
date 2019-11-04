@@ -14,17 +14,12 @@ class HookMyStudentsQuizTracking extends HookEvent implements HookMyStudentsQuiz
 {
     /**
      * HookMyStudentsQuizTracking constructor.
-     *
-     * @param EntityManager $entityManager
      */
     protected function __construct(EntityManager $entityManager)
     {
         parent::__construct('HookMyStudentsQuizTracking', $entityManager);
     }
 
-    /**
-     * @return array
-     */
     public function notifyTrackingHeader(): array
     {
         $results = [];
@@ -40,8 +35,6 @@ class HookMyStudentsQuizTracking extends HookEvent implements HookMyStudentsQuiz
     /**
      * @param int $quizId
      * @param int $studentId
-     *
-     * @return array
      */
     public function notifyTrackingContent($quizId, $studentId): array
     {

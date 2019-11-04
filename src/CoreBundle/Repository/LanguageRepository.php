@@ -16,8 +16,6 @@ class LanguageRepository extends ServiceEntityRepository
 {
     /**
      * LanguageRepository constructor.
-     *
-     * @param ManagerRegistry $registry
      */
     public function __construct(ManagerRegistry $registry)
     {

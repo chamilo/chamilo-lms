@@ -21,17 +21,12 @@ class TwigListener implements EventSubscriberInterface
 
     /**
      * TwigListener constructor.
-     *
-     * @param ContainerInterface $container
      */
     public function __construct(ContainerInterface $container)
     {
         $this->container = $container;
     }
 
-    /**
-     * @param RequestEvent $event
-     */
     public function onKernelRequest(RequestEvent $event)
     {
         if (!$event->isMasterRequest()) {
@@ -204,9 +199,6 @@ class TwigListener implements EventSubscriberInterface
         return true;
     }
 
-    /**
-     * @return array
-     */
     public static function getSubscribedEvents(): array
     {
         return [

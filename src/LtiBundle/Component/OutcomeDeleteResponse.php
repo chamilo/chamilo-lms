@@ -13,8 +13,7 @@ class OutcomeDeleteResponse extends OutcomeResponse
     /**
      * OutcomeDeleteResponse constructor.
      *
-     * @param OutcomeResponseStatus $statusInfo
-     * @param mixed|null            $bodyParam
+     * @param mixed|null $bodyParam
      */
     public function __construct(OutcomeResponseStatus $statusInfo, $bodyParam = null)
     {
@@ -23,9 +22,6 @@ class OutcomeDeleteResponse extends OutcomeResponse
         parent::__construct($statusInfo, $bodyParam);
     }
 
-    /**
-     * @param \SimpleXMLElement $xmlBody
-     */
     protected function generateBody(\SimpleXMLElement $xmlBody)
     {
         $xmlBody->addChild('deleteResultResponse');

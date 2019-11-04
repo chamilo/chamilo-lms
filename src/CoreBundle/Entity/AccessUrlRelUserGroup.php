@@ -77,19 +77,11 @@ class AccessUrlRelUserGroup
         return $this;
     }
 
-    /**
-     * @return AccessUrl
-     */
     public function getUrl(): AccessUrl
     {
         return $this->url;
     }
 
-    /**
-     * @param AccessUrl $url
-     *
-     * @return AccessUrlRelUserGroup
-     */
     public function setUrl(AccessUrl $url): AccessUrlRelUserGroup
     {
         $this->url = $url;

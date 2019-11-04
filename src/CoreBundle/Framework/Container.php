@@ -10,7 +10,6 @@ use Chamilo\CoreBundle\Repository\CourseCategoryRepository;
 use Chamilo\CoreBundle\Repository\CourseRepository;
 use Chamilo\CoreBundle\Repository\IllustrationRepository;
 use Chamilo\CoreBundle\ToolChain;
-use Chamilo\CourseBundle\Entity\CQuizQuestion;
 use Chamilo\CourseBundle\Repository\CDocumentRepository;
 use Chamilo\CourseBundle\Repository\CExerciseCategoryRepository;
 use Chamilo\CourseBundle\Repository\CQuizQuestionCategoryRepository;
@@ -536,11 +535,7 @@ class Container
     }
 
     /**
-     * @param string $class
-     *
      * @throws \Exception
-     *
-     * @return HookEventInterface
      */
     public static function instantiateHook(string $class): HookEventInterface
     {

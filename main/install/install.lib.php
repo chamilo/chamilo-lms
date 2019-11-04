@@ -1987,8 +1987,7 @@ function installSettings(
  * Executes DB changes based in the classes defined in
  * src/CoreBundle/Migrations/Schema/*.
  *
- * @param string        $chamiloVersion
- * @param EntityManager $manager
+ * @param string $chamiloVersion
  *
  * @throws \Doctrine\DBAL\DBALException
  *
@@ -2060,8 +2059,6 @@ function migrate($chamiloVersion, EntityManager $manager)
 }
 
 /**
- * @param EntityManager $em
- *
  * @throws \Doctrine\DBAL\DBALException
  */
 function fixIds(EntityManager $em)

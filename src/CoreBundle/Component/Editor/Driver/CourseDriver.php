@@ -250,9 +250,6 @@ class CourseDriver extends Driver implements DriverInterface
         return $url;
     }
 
-    /**
-     * @return string
-     */
     public function getCourseDirectory(): string
     {
         return $this->connector->course->getDirectory();
@@ -342,9 +339,6 @@ class CourseDriver extends Driver implements DriverInterface
         return false;
     }
 
-    /**
-     * @return array
-     */
     public function getCourseInfoArray(): array
     {
         $courseInfo = [

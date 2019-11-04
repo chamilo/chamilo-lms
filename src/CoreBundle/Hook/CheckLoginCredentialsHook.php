@@ -14,8 +14,6 @@ class CheckLoginCredentialsHook extends HookEvent implements CheckLoginCredentia
 {
     /**
      * CheckLoginCredentialsHook constructor.
-     *
-     * @param EntityManager $entityManager
      */
     protected function __construct(EntityManager $entityManager)
     {
@@ -24,8 +22,6 @@ class CheckLoginCredentialsHook extends HookEvent implements CheckLoginCredentia
 
     /**
      * Call to all observers.
-     *
-     * @return bool
      */
     public function notifyLoginCredentials(): bool
     {

@@ -33,9 +33,6 @@ class CourseSettingsSchema extends AbstractSettingsSchema
 
     protected $repository;
 
-    /**
-     * @param ToolChain $tools
-     */
     public function setToolChain(ToolChain $tools): void
     {
         $this->toolChain = $tools;
@@ -49,9 +46,6 @@ class CourseSettingsSchema extends AbstractSettingsSchema
         $this->courseManager = $manager;
     }
 
-    /**
-     * @return array
-     */
     public function getProcessedToolChain(): array
     {
         $tools = [];

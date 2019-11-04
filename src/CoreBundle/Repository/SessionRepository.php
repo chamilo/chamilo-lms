@@ -18,8 +18,6 @@ class SessionRepository extends ServiceEntityRepository
 {
     /**
      * SessionRepository constructor.
-     *
-     * @param ManagerRegistry $registry
      */
     public function __construct(ManagerRegistry $registry)
     {

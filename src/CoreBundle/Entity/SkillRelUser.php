@@ -125,8 +125,6 @@ class SkillRelUser
     /**
      * Set user.
      *
-     * @param User $user
-     *
      * @return SkillRelUser
      */
     public function setUser(User $user)
@@ -148,8 +146,6 @@ class SkillRelUser
 
     /**
      * Set skill.
-     *
-     * @param Skill $skill
      *
      * @return SkillRelUser
      */
@@ -173,8 +169,6 @@ class SkillRelUser
     /**
      * Set course.
      *
-     * @param Course $course
-     *
      * @return SkillRelUser
      */
     public function setCourse(Course $course)
@@ -196,8 +190,6 @@ class SkillRelUser
 
     /**
      * Set session.
-     *
-     * @param Session $session
      *
      * @return SkillRelUser
      */

@@ -18,8 +18,6 @@ interface HookNotificationContentEventInterface extends HookEventInterface
 {
     /**
      * @param int $type
-     *
-     * @return array
      */
     public function notifyNotificationContent($type): array;
 }

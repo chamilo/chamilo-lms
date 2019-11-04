@@ -17,9 +17,6 @@ abstract class AbstractMigrationChamilo extends AbstractMigration
 {
     private $manager;
 
-    /**
-     * @param EntityManager $manager
-     */
     public function setEntityManager(EntityManager $manager)
     {
         $this->manager = $manager;

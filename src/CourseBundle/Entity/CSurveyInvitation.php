@@ -346,19 +346,11 @@ class CSurveyInvitation
         return $this->cId;
     }
 
-    /**
-     * @return \DateTime
-     */
     public function getAnsweredAt(): \DateTime
     {
         return $this->answeredAt;
     }
 
-    /**
-     * @param \DateTime $answeredAt
-     *
-     * @return CSurveyInvitation
-     */
     public function setAnsweredAt(\DateTime $answeredAt): CSurveyInvitation
     {
         $this->answeredAt = $answeredAt;

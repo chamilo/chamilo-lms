@@ -99,8 +99,6 @@ class CGroupRelUser
     /**
      * Set group.
      *
-     * @param CGroupInfo $group
-     *
      * @return CGroupRelUser
      */
     public function setGroup(CGroupInfo $group)

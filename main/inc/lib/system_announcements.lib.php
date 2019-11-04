@@ -13,9 +13,6 @@ class SystemAnnouncementManager
     public const VISIBLE_SESSION_ADMIN = 'visible_session_admin';
     public const VISIBLE_STUDENT_BOSS = 'visible_boss';
 
-    /**
-     * @return array
-     */
     public static function getVisibilityList(): array
     {
         $visibleToUsers = [
@@ -872,8 +869,6 @@ class SystemAnnouncementManager
      *
      * @param string $visible see self::VISIBLE_* constants
      * @param int    $id      The identifier of the announcement to display
-     *
-     * @return array
      */
     public static function getAnnouncements($visible, $id = null): array
     {
@@ -936,8 +931,6 @@ class SystemAnnouncementManager
      *
      * @param int $announcementId The announcement ID
      * @param int $visibility     The announcement visibility
-     *
-     * @return array
      */
     public static function getAnnouncement($announcementId, $visibility): array
     {

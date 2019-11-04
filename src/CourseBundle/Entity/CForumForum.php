@@ -332,8 +332,6 @@ class CForumForum
     /**
      * Set forumCategory.
      *
-     * @param CForumCategory|null $forumCategory
-     *
      * @return CForumForum
      */
     public function setForumCategory(CForumCategory $forumCategory = null)
@@ -521,17 +519,12 @@ class CForumForum
         return $this->forumOfGroup;
     }
 
-    /**
-     * @return string
-     */
     public function getForumGroupPublicPrivate(): string
     {
         return $this->forumGroupPublicPrivate;
     }
 
     /**
-     * @param string $forumGroupPublicPrivate
-     *
      * @return $this
      */
     public function setForumGroupPublicPrivate(string $forumGroupPublicPrivate)
@@ -799,8 +792,6 @@ class CForumForum
 
     /**
      * Set itemProperty.
-     *
-     * @param CItemProperty $itemProperty
      *
      * @return CForumForum
      */

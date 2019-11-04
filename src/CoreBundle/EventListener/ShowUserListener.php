@@ -15,17 +15,11 @@ class ShowUserListener
 {
     protected $container;
 
-    /**
-     * @param ContainerInterface $container
-     */
     public function __construct(ContainerInterface $container)
     {
         $this->container = $container;
     }
 
-    /**
-     * @param ShowUserEvent $event
-     */
     public function onShowUser(ShowUserEvent $event)
     {
         $user = $this->getUser();

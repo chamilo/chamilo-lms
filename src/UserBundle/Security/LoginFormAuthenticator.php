@@ -50,11 +50,6 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
         $this->hookFactory = $hookFactory;
     }
 
-    /**
-     * @param Request $request
-     *
-     * @return bool
-     */
     public function supports(Request $request): bool
     {
         if ($request->getPathInfo() !== '/login' || $request->getMethod() != 'POST') {
@@ -65,8 +60,7 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
     }
 
     /**
-     * @param array                 $credentials
-     * @param UserProviderInterface $userProvider
+     * @param array $credentials
      *
      * @return UserInterface|null
      */
@@ -76,8 +70,7 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
     }
 
     /**
-     * @param mixed         $credentials
-     * @param UserInterface $user
+     * @param mixed $credentials
      *
      * @throws \Exception
      *
@@ -100,12 +93,6 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
         return $hook->notifyLoginCredentials();
     }
 
-    /**
-     * @param Request                 $request
-     * @param AuthenticationException $exception
-     *
-     * @return RedirectResponse
-     */
     public function onAuthenticationFailure(Request $request, AuthenticationException $exception): RedirectResponse
     {
         $request->getSession()->set(Security::AUTHENTICATION_ERROR, $exception);
@@ -113,31 +100,19 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
         return new RedirectResponse($this->router->generate('login'));
     }
 
-    /**
-     * @return RedirectResponse
-     */
     public function getLoginUrl(): RedirectResponse
     {
         return new RedirectResponse($this->router->generate('login'));
     }
 
     /**
-     * @param Request        $request
-     * @param TokenInterface $token
-     * @param string         $providerKey
-     *
-     * @return RedirectResponse
+     * @param string $providerKey
      */
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, $providerKey): RedirectResponse
     {
         return new RedirectResponse($this->router->generate('home'));
     }
 
-    /**
-     * @param Request $request
-     *
-     * @return array
-     */
     public function getCredentials(Request $request): array
     {
         if ($request->getPathInfo() !== '/login' || !$request->isMethod('POST')) {

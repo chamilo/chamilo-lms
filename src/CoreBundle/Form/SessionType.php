@@ -64,9 +64,6 @@ class SessionType extends AbstractType
             ->add('save', 'submit', ['label' => 'Update']);
     }
 
-    /**
-     * @param OptionsResolverInterface $resolver
-     */
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(

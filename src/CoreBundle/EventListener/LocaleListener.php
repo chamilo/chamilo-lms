@@ -25,8 +25,7 @@ class LocaleListener implements EventSubscriberInterface
     /**
      * LocaleListener constructor.
      *
-     * @param string             $defaultLocale
-     * @param ContainerInterface $container
+     * @param string $defaultLocale
      */
     public function __construct($defaultLocale, ContainerInterface $container)
     {
@@ -34,9 +33,6 @@ class LocaleListener implements EventSubscriberInterface
         $this->container = $container;
     }
 
-    /**
-     * @param RequestEvent $event
-     */
     public function onKernelRequest(RequestEvent $event)
     {
         $request = $event->getRequest();

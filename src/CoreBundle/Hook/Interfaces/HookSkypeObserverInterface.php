@@ -16,8 +16,6 @@ namespace Chamilo\CoreBundle\Hook\Interfaces;
 interface HookSkypeObserverInterface extends HookObserverInterface
 {
     /**
-     * @param HookSkypeEventInterface $hook
-     *
      * @return int
      */
     public function hookEventSkype(HookSkypeEventInterface $hook);

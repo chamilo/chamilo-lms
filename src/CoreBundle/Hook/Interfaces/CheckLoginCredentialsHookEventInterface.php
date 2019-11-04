@@ -12,8 +12,6 @@ interface CheckLoginCredentialsHookEventInterface extends HookEventInterface
 {
     /**
      * Call to all observers.
-     *
-     * @return bool
      */
     public function notifyLoginCredentials(): bool;
 }

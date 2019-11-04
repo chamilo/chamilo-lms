@@ -31,8 +31,6 @@ class CourseListener
 
     /**
      * Get request from the URL cidReq, c_id or the "ABC" in the courses url (courses/ABC/index.php).
-     *
-     * @param RequestEvent $event
      */
     public function onKernelRequest(RequestEvent $event)
     {
@@ -209,17 +207,12 @@ class CourseListener
         }
     }
 
-    /**
-     * @param ResponseEvent $event
-     */
     public function onKernelResponse(ResponseEvent $event)
     {
     }
 
     /**
      * Once the onKernelRequest was fired, we check if the session object were set and we inject them in the controller.
-     *
-     * @param ControllerEvent $event
      */
     public function onKernelController(ControllerEvent $event)
     {
@@ -305,9 +298,6 @@ class CourseListener
         }
     }
 
-    /**
-     * @param Request $request
-     */
     public function removeCourseFromSession(Request $request)
     {
         $sessionHandler = $request->getSession();
@@ -351,8 +341,6 @@ class CourseListener
      * @param int    $sessionId
      * @param int    $groupId
      * @param string $origin
-     *
-     * @return string
      */
     private function generateCourseUrl($course, $sessionId, $groupId, $origin): string
     {

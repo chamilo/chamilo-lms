@@ -396,8 +396,6 @@ class CQuizQuestion extends AbstractResource implements ResourceInterface
 
     /**
      * @param string $feedback
-     *
-     * @return CQuizQuestion
      */
     public function setFeedback($feedback): CQuizQuestion
     {
@@ -418,17 +416,12 @@ class CQuizQuestion extends AbstractResource implements ResourceInterface
 
     /**
      * Resource identifier.
-     *
-     * @return int
      */
     public function getResourceIdentifier(): int
     {
         return $this->getIid();
     }
 
-    /**
-     * @return string
-     */
     public function getResourceName(): string
     {
         return $this->getQuestion();

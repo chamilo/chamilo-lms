@@ -422,9 +422,6 @@ class Course extends AbstractResource implements ResourceInterface
         }
     }
 
-    /**
-     * @param CTool $tool
-     */
     public function addTools(CTool $tool)
     {
         $tool->setCourse($this);
@@ -451,18 +448,12 @@ class Course extends AbstractResource implements ResourceInterface
         }
     }
 
-    /**
-     * @param AccessUrlRelCourse $url
-     */
     public function addUrlRelCourse(AccessUrlRelCourse $url)
     {
         $url->setCourse($this);
         $this->urls[] = $url;
     }
 
-    /**
-     * @param AccessUrl $url
-     */
     public function addUrl(AccessUrl $url)
     {
         $urlRelCourse = new AccessUrlRelCourse();
@@ -521,9 +512,6 @@ class Course extends AbstractResource implements ResourceInterface
         }
     }
 
-    /**
-     * @param CourseRelUser $courseRelUser
-     */
     public function addUsers(CourseRelUser $courseRelUser)
     {
         $courseRelUser->setCourse($this);
@@ -534,8 +522,6 @@ class Course extends AbstractResource implements ResourceInterface
     }
 
     /**
-     * @param User $user
-     *
      * @return bool
      */
     public function hasUser(User $user)
@@ -548,8 +534,6 @@ class Course extends AbstractResource implements ResourceInterface
     }
 
     /**
-     * @param User $user
-     *
      * @return bool
      */
     public function hasStudent(User $user)
@@ -562,8 +546,6 @@ class Course extends AbstractResource implements ResourceInterface
     }
 
     /**
-     * @param User $user
-     *
      * @return bool
      */
     public function hasTeacher(User $user)
@@ -576,8 +558,6 @@ class Course extends AbstractResource implements ResourceInterface
     }
 
     /**
-     * @param CGroupInfo $group
-     *
      * @return bool
      */
     public function hasGroup(CGroupInfo $group)
@@ -591,8 +571,6 @@ class Course extends AbstractResource implements ResourceInterface
 
     /**
      * Remove $user.
-     *
-     * @param CourseRelUser $user
      */
     public function removeUsers(CourseRelUser $user)
     {
@@ -603,17 +581,11 @@ class Course extends AbstractResource implements ResourceInterface
         }
     }
 
-    /**
-     * @param User $user
-     */
     public function addTeacher(User $user)
     {
         $this->addUser($user, 0, "Trainer", User::COURSE_MANAGER);
     }
 
-    /**
-     * @param User $user
-     */
     public function addStudent(User $user)
     {
         $this->addUser($user, 0, "", User::STUDENT);
@@ -1187,8 +1159,6 @@ class Course extends AbstractResource implements ResourceInterface
 
     /**
      * @param bool $addTeachersToSessionsCourses
-     *
-     * @return Course
      */
     public function setAddTeachersToSessionsCourses($addTeachersToSessionsCourses): Course
     {
@@ -1288,8 +1258,6 @@ class Course extends AbstractResource implements ResourceInterface
     }
 
     /**
-     * @param Session $session
-     *
      * @return $this
      */
     public function setCurrentSession(Session $session)
@@ -1312,8 +1280,6 @@ class Course extends AbstractResource implements ResourceInterface
     }
 
     /**
-     * @param AccessUrl $url
-     *
      * @return $this
      */
     public function setCurrentUrl(AccessUrl $url)
@@ -1349,8 +1315,6 @@ class Course extends AbstractResource implements ResourceInterface
     }
 
     /**
-     * @param CourseRelUser $subscription
-     *
      * @return bool
      */
     public function hasSubscription(CourseRelUser $subscription)
@@ -1373,7 +1337,6 @@ class Course extends AbstractResource implements ResourceInterface
     }
 
     /**
-     * @param User   $user
      * @param string $relationType
      * @param string $role
      * @param string $status
@@ -1391,17 +1354,12 @@ class Course extends AbstractResource implements ResourceInterface
 
     /**
      * Resource identifier.
-     *
-     * @return int
      */
     public function getResourceIdentifier(): int
     {
         return $this->getId();
     }
 
-    /**
-     * @return string
-     */
     public function getResourceName(): string
     {
         return $this->getCode();

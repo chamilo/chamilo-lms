@@ -49,8 +49,6 @@ class AccessUrlRelSession
     /**
      * Set url.
      *
-     * @param AccessUrl $url
-     *
      * @return AccessUrlRelSession
      */
     public function setUrl(AccessUrl $url)
@@ -69,8 +67,6 @@ class AccessUrlRelSession
     }
 
     /**
-     * @param Session $session
-     *
      * @return $this
      */
     public function setSession(Session $session)

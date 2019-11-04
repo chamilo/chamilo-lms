@@ -21,10 +21,6 @@ class OnlineListener
     protected $context;
     protected $em;
 
-    /**
-     * @param TokenStorageInterface $context
-     * @param ObjectManager         $em
-     */
     public function __construct(TokenStorageInterface $context, ObjectManager $em)
     {
         $this->em = $em;
@@ -33,8 +29,6 @@ class OnlineListener
 
     /**
      * Update the user "lastActivity" on each request.
-     *
-     * @param FilterControllerEvent $event
      */
     public function onCoreController(FilterControllerEvent $event)
     {

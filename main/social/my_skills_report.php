@@ -8,7 +8,6 @@
  *
  * @package chamilo.social.skill
  */
-
 use Chamilo\CoreBundle\Framework\Container;
 
 require_once __DIR__.'/../inc/global.inc.php';
@@ -103,7 +102,7 @@ if ($isStudent) {
                 'course_name' => $resultData['title'],
             ];
 
-            $courseEntity = api_get_course_entity($resultData[ 'course_id']);
+            $courseEntity = api_get_course_entity($resultData['course_id']);
             $illustrationUrl = Container::getIllustrationRepository()->getIllustrationUrl($courseEntity);
             if ($illustrationUrl) {
                 $tableRow['course_image'] = $illustrationUrl;
@@ -175,7 +174,7 @@ if ($isStudent) {
             true
         );
 
-        $courseEntity = api_get_course_entity($row[ 'real_id']);
+        $courseEntity = api_get_course_entity($row['real_id']);
         $illustrationUrl = Container::getIllustrationRepository()->getIllustrationUrl($courseEntity);
         if ($illustrationUrl) {
             $row['course_image'] = $illustrationUrl;

@@ -173,19 +173,11 @@ class TrackEHotpotatoes
         return $this->id;
     }
 
-    /**
-     * @return int
-     */
     public function getScore(): int
     {
         return $this->score;
     }
 
-    /**
-     * @param int $score
-     *
-     * @return TrackEHotpotatoes
-     */
     public function setScore(int $score): TrackEHotpotatoes
     {
         $this->score = $score;
@@ -193,19 +185,11 @@ class TrackEHotpotatoes
         return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getMaxScore(): int
     {
         return $this->maxScore;
     }
 
-    /**
-     * @param int $maxScore
-     *
-     * @return TrackEHotpotatoes
-     */
     public function setMaxScore(int $maxScore): TrackEHotpotatoes
     {
         $this->maxScore = $maxScore;

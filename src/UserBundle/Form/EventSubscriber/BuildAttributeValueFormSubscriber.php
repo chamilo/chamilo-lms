@@ -28,9 +28,6 @@ class BuildAttributeValueFormSubscriber implements EventSubscriberInterface
      */
     protected $attributeRepository;
 
-    /**
-     * @param RepositoryInterface $attributeRepository
-     */
     public function __construct(RepositoryInterface $attributeRepository)
     {
         $this->attributeRepository = $attributeRepository;
@@ -47,9 +44,6 @@ class BuildAttributeValueFormSubscriber implements EventSubscriberInterface
         ];
     }
 
-    /**
-     * @param FormEvent $event
-     */
     public function preSetData(FormEvent $event)
     {
         $attributeValue = $event->getData();
@@ -60,9 +54,6 @@ class BuildAttributeValueFormSubscriber implements EventSubscriberInterface
         $this->addValueField($event->getForm(), $attributeValue->getAttribute());
     }
 
-    /**
-     * @param FormEvent $event
-     */
     public function preSubmit(FormEvent $event)
     {
         $attributeValue = $event->getData();
@@ -79,10 +70,6 @@ class BuildAttributeValueFormSubscriber implements EventSubscriberInterface
         $this->addValueField($form, $attribute);
     }
 
-    /**
-     * @param FormInterface      $form
-     * @param AttributeInterface $attribute
-     */
     private function addValueField(FormInterface $form, AttributeInterface $attribute)
     {
         $options = [

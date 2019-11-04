@@ -477,8 +477,6 @@ class CourseCategory
     }
 
     /**
-     * @param array $categorySource
-     *
      * @return string
      */
     public static function listCategories(array $categorySource = [])

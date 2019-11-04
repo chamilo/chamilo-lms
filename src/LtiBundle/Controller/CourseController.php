@@ -27,10 +27,7 @@ class CourseController extends BaseController
     /**
      * @Route("/edit/{id}", name="chamilo_lti_edit", requirements={"id"="\d+"})
      *
-     * @param string  $id
-     * @param Request $request
-     *
-     * @return Response
+     * @param string $id
      */
     public function editAction($id, Request $request): Response
     {
@@ -105,8 +102,6 @@ class CourseController extends BaseController
      * @Route("/launch/{id}", name="chamilo_lti_launch", requirements={"id"="\d+"})
      *
      * @param string $id
-     *
-     * @return Response
      */
     public function launchAction($id): Response
     {
@@ -261,10 +256,6 @@ class CourseController extends BaseController
 
     /**
      * @Route("/item_return", name="chamilo_lti_return_item")
-     *
-     * @param Request $request
-     *
-     * @return Response
      */
     public function returnItemAction(Request $request): Response
     {
@@ -334,8 +325,6 @@ class CourseController extends BaseController
      * @Route("/{id}", name="chamilo_lti_show", requirements={"id"="\d+"})
      *
      * @param string $id
-     *
-     * @return Response
      */
     public function showAction($id): Response
     {
@@ -380,10 +369,7 @@ class CourseController extends BaseController
      *
      * @Security("has_role('ROLE_TEACHER')")
      *
-     * @param string  $id
-     * @param Request $request
-     *
-     * @return Response
+     * @param string $id
      */
     public function courseConfigureAction($id = '', Request $request): Response
     {
@@ -591,9 +577,6 @@ class CourseController extends BaseController
         return $this->redirect(api_get_course_url());
     }
 
-    /**
-     * @param Course $course
-     */
     private function setConfigureBreadcrumb(Course $course)
     {
         $breadcrumb = $this->get('chamilo_core.block.breadcrumb');
@@ -611,13 +594,6 @@ class CourseController extends BaseController
         );
     }
 
-    /**
-     * @param array        $params
-     * @param array        $customParams
-     * @param User         $user
-     * @param Course       $course
-     * @param Session|null $session
-     */
     private function variableSubstitution(
         array $params,
         array &$customParams,
@@ -658,10 +634,6 @@ class CourseController extends BaseController
     }
 
     /**
-     * @param User         $user
-     * @param Course       $course
-     * @param Session|null $session
-     *
      * @return array
      */
     private static function getReplaceableVariables(User $user, Course $course, Session $session = null)
@@ -778,9 +750,6 @@ class CourseController extends BaseController
     }
 
     /**
-     * @param array        $contentItem
-     * @param ExternalTool $baseTool
-     *
      * @return ExternalTool
      */
     private function createLtiLink(array &$contentItem, ExternalTool $baseTool)

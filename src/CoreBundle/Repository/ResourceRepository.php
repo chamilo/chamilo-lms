@@ -61,11 +61,6 @@ class ResourceRepository extends EntityRepository
 
     /**
      * ResourceRepository constructor.
-     *
-     * @param EntityManager   $entityManager
-     * @param MountManager    $mountManager
-     * @param RouterInterface $router
-     * @param string          $className
      */
     public function __construct(EntityManager $entityManager, MountManager $mountManager, RouterInterface $router, string $className)
     {
@@ -84,9 +79,6 @@ class ResourceRepository extends EntityRepository
         return new $this->className();
     }
 
-    /**
-     * @return RouterInterface
-     */
     public function getRouter(): RouterInterface
     {
         return $this->router;
@@ -108,9 +100,6 @@ class ResourceRepository extends EntityRepository
         return $this->fs;
     }
 
-    /**
-     * @return EntityManager
-     */
     public function getEntityManager(): EntityManager
     {
         return $this->getRepository()->getEntityManager();
@@ -128,8 +117,6 @@ class ResourceRepository extends EntityRepository
      * @param mixed $id
      * @param null  $lockMode
      * @param null  $lockVersion
-     *
-     * @return AbstractResource|null
      */
     public function find($id, $lockMode = null, $lockVersion = null): ?AbstractResource
     {
@@ -137,9 +124,6 @@ class ResourceRepository extends EntityRepository
     }
 
     /**
-     * @param array      $criteria
-     * @param array|null $orderBy
-     *
      * @return AbstractResource
      */
     public function findOneBy(array $criteria, array $orderBy = null): ?AbstractResource
@@ -148,9 +132,6 @@ class ResourceRepository extends EntityRepository
     }
 
     /**
-     * @param ResourceNode $resourceNode
-     * @param UploadedFile $file
-     *
      * @return ResourceFile
      */
     public function addFile(ResourceNode $resourceNode, UploadedFile $file): ?ResourceFile
@@ -175,11 +156,7 @@ class ResourceRepository extends EntityRepository
     /**
      * Creates a ResourceNode.
      *
-     * @param AbstractResource $resource
-     * @param User             $creator
      * @param AbstractResource $parent
-     *
-     * @return ResourceNode
      */
     public function addResourceNode(AbstractResource $resource, User $creator, AbstractResource $parent = null): ResourceNode
     {
@@ -208,12 +185,8 @@ class ResourceRepository extends EntityRepository
     }
 
     /**
-     * @param AbstractResource $resource
-     * @param int              $visibility
-     * @param User             $creator
-     * @param Course           $course
-     * @param Session          $session
-     * @param CGroupInfo       $group
+     * @param Session    $session
+     * @param CGroupInfo $group
      */
     public function addResourceToCourse(AbstractResource $resource, int $visibility, User $creator, Course $course, Session $session = null, CGroupInfo $group = null)
     {
@@ -222,11 +195,10 @@ class ResourceRepository extends EntityRepository
     }
 
     /**
-     * @param ResourceNode $resourceNode
-     * @param int          $visibility
-     * @param Course       $course
-     * @param Session      $session
-     * @param CGroupInfo   $group
+     * @param int        $visibility
+     * @param Course     $course
+     * @param Session    $session
+     * @param CGroupInfo $group
      */
     public function addResourceNodeToCourse(ResourceNode $resourceNode, $visibility, $course, $session, $group): void
     {
@@ -283,11 +255,6 @@ class ResourceRepository extends EntityRepository
         );
     }
 
-    /**
-     * @param ResourceNode $resourceNode
-     *
-     * @return ResourceLink
-     */
     public function addResourceToMe(ResourceNode $resourceNode): ResourceLink
     {
         $resourceLink = new ResourceLink();
@@ -301,12 +268,6 @@ class ResourceRepository extends EntityRepository
         return $resourceLink;
     }
 
-    /**
-     * @param ResourceNode  $resourceNode
-     * @param ResourceRight $right
-     *
-     * @return ResourceLink
-     */
     public function addResourceToEveryone(ResourceNode $resourceNode, ResourceRight $right): ResourceLink
     {
         $resourceLink = new ResourceLink();
@@ -321,13 +282,6 @@ class ResourceRepository extends EntityRepository
         return $resourceLink;
     }
 
-    /**
-     * @param ResourceNode  $resourceNode
-     * @param Course        $course
-     * @param ResourceRight $right
-     *
-     * @return ResourceLink
-     */
     public function addResourceToCourse2(ResourceNode $resourceNode, Course $course, ResourceRight $right): ResourceLink
     {
         $resourceLink = new ResourceLink();
@@ -341,12 +295,6 @@ class ResourceRepository extends EntityRepository
         return $resourceLink;
     }
 
-    /**
-     * @param ResourceNode $resourceNode
-     * @param User         $toUser
-     *
-     * @return ResourceLink
-     */
     public function addResourceToUser(ResourceNode $resourceNode, User $toUser): ResourceLink
     {
         $resourceLink = $this->addResourceNodeToUser($resourceNode, $toUser);
@@ -355,12 +303,6 @@ class ResourceRepository extends EntityRepository
         return $resourceLink;
     }
 
-    /**
-     * @param ResourceNode $resourceNode
-     * @param User         $toUser
-     *
-     * @return ResourceLink
-     */
     public function addResourceNodeToUser(ResourceNode $resourceNode, User $toUser): ResourceLink
     {
         $resourceLink = new ResourceLink();
@@ -371,13 +313,6 @@ class ResourceRepository extends EntityRepository
         return $resourceLink;
     }
 
-    /**
-     * @param ResourceNode  $resourceNode
-     * @param Course        $course
-     * @param Session       $session
-     * @param ResourceRight $right
-     *
-     */
     public function addResourceToSession(
         ResourceNode $resourceNode,
         Course $course,
@@ -396,11 +331,6 @@ class ResourceRepository extends EntityRepository
     }
 
     /**
-     * @param ResourceNode  $resourceNode
-     * @param Course        $course
-     * @param CGroupInfo    $group
-     * @param ResourceRight $right
-     *
      * @return ResourceLink
      */
     public function addResourceToCourseGroup(
@@ -421,10 +351,6 @@ class ResourceRepository extends EntityRepository
     }
 
     /**
-     * @param ResourceNode  $resourceNode
-     * @param Usergroup     $group
-     * @param ResourceRight $right
-     *
      * @return ResourceLink
      */
     public function addResourceToGroup(
@@ -442,8 +368,7 @@ class ResourceRepository extends EntityRepository
     }
 
     /**
-     * @param ResourceNode $resourceNode
-     * @param array        $userList     User id list
+     * @param array $userList User id list
      */
     public function addResourceToUserList(ResourceNode $resourceNode, array $userList)
     {
@@ -460,10 +385,6 @@ class ResourceRepository extends EntityRepository
     }
 
     /**
-     * @param Course          $course
-     * @param Session|null    $session
-     * @param CGroupInfo|null $group
-     *
      * @return QueryBuilder
      */
     public function getResourcesByCourse(Course $course, Session $session = null, CGroupInfo $group = null)
@@ -560,13 +481,32 @@ class ResourceRepository extends EntityRepository
             $entity = $row->getEntity();
             $hasSession = $entity->getResourceNode()->hasSession($session);
             if ($hasSession->count() > 0) {
-
                 return $action;
             }
 
             return null;
         }
+
         return $action;
+    }
+
+    /**
+     * Deletes several entities: AbstractResource (Ex: CDocument, CQuiz), ResourceNode,
+     * ResourceLinks and ResourceFile (including files via Flysystem).
+     */
+    public function hardDelete(AbstractResource $resource)
+    {
+        $em = $this->getEntityManager();
+        $em->remove($resource);
+        $em->flush();
+    }
+
+    /**
+     * Change all links visibility to DELETED.
+     */
+    public function softDelete(AbstractResource $resource)
+    {
+        $this->setLinkVisibility($resource, ResourceLink::VISIBILITY_DELETED);
     }
 
     /**
@@ -583,9 +523,8 @@ class ResourceRepository extends EntityRepository
     }
 
     /**
-     * @param AbstractResource $resource
-     * @param int              $visibility
-     * @param bool             $recursive
+     * @param int  $visibility
+     * @param bool $recursive
      */
     private function setLinkVisibility(AbstractResource $resource, $visibility, $recursive = true)
     {
@@ -633,28 +572,5 @@ class ResourceRepository extends EntityRepository
             }
         }
         $em->flush();
-    }
-
-    /**
-     * Deletes several entities: AbstractResource (Ex: CDocument, CQuiz), ResourceNode,
-     * ResourceLinks and ResourceFile (including files via Flysystem)
-     *
-     * @param AbstractResource $resource
-     */
-    public function hardDelete(AbstractResource $resource)
-    {
-        $em = $this->getEntityManager();
-        $em->remove($resource);
-        $em->flush();
-    }
-
-    /**
-     * Change all links visibility to DELETED.
-     *
-     * @param AbstractResource $resource
-     */
-    public function softDelete(AbstractResource $resource)
-    {
-        $this->setLinkVisibility($resource, ResourceLink::VISIBILITY_DELETED);
     }
 }

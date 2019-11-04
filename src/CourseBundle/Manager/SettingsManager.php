@@ -30,9 +30,6 @@ class SettingsManager extends ChamiloSettingsManager
         return $this->course;
     }
 
-    /**
-     * @param Course $course
-     */
     public function setCourse(Course $course)
     {
         $this->course = $course;

@@ -9450,10 +9450,9 @@ class Exercise
     }
 
     /**
-     * @param Question $objQuestionTmp
-     * @param int      $questionId
-     * @param bool     $show_results
-     * @param array    $question_result
+     * @param int   $questionId
+     * @param bool  $show_results
+     * @param array $question_result
      */
     public function getDelineationResult(Question $objQuestionTmp, $questionId, $show_results, $question_result)
     {
@@ -10026,8 +10025,6 @@ class Exercise
     }
 
     /**
-     * @param FormValidator $form
-     *
      * @return HTML_QuickForm_group
      */
     private function setResultDisabledGroup(FormValidator $form)

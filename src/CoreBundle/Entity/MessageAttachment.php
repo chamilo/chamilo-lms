@@ -133,8 +133,6 @@ class MessageAttachment
     /**
      * Set message.
      *
-     * @param Message $message
-     *
      * @return MessageAttachment
      */
     public function setMessage(Message $message)

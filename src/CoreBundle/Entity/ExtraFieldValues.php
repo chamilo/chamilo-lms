@@ -139,19 +139,11 @@ class ExtraFieldValues // extends BaseAttributeValue
         return $this->id;
     }
 
-    /**
-     * @return string
-     */
     public function getValue(): string
     {
         return $this->value;
     }
 
-    /**
-     * @param string $value
-     *
-     * @return ExtraFieldValues
-     */
     public function setValue(string $value): ExtraFieldValues
     {
         $this->value = $value;

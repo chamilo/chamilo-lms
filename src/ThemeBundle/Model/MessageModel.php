@@ -85,8 +85,6 @@ class MessageModel implements MessageInterface
     /**
      * Set the date sent.
      *
-     * @param \DateTime $sentAt
-     *
      * @return $this
      */
     public function setSentAt(\DateTime $sentAt)

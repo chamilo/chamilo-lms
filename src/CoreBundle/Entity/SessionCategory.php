@@ -65,8 +65,6 @@ class SessionCategory
     /**
      * Set url.
      *
-     * @param AccessUrl $url
-     *
      * @return SessionCategory
      */
     public function setUrl(AccessUrl $url)
@@ -76,9 +74,6 @@ class SessionCategory
         return $this;
     }
 
-    /**
-     * @return AccessUrl
-     */
     public function getUrl(): AccessUrl
     {
         return $this->url;

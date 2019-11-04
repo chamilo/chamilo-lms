@@ -10,9 +10,6 @@ trait ShowCourseResourcesInSessionTrait
 {
     protected $loadCourseResourcesInSession = true;
 
-    /**
-     * @return bool
-     */
     public function isLoadCourseResourcesInSession(): bool
     {
         return $this->loadCourseResourcesInSession;

@@ -13,8 +13,6 @@ class HookCreateCourse extends HookEvent implements HookCreateCourseEventInterfa
 {
     /**
      * HookCreateCourse constructor.
-     *
-     * @param EntityManager $entityManager
      */
     protected function __construct(EntityManager $entityManager)
     {

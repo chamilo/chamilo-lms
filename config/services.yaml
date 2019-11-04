@@ -171,8 +171,6 @@ imports:
     - {resource: ../src/PageBundle/Resources/config/services.yml}
     - {resource: ../vendor/knplabs/doctrine-behaviors/config/orm-services.yml}
 
-
-
 #sylius_resource:
 #    resources:
 #        app.document:

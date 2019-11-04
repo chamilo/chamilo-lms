@@ -18,8 +18,6 @@ class OnlineController extends BaseController
 {
     /**
      * @Route("/", name="users_online", methods={"GET"}, options={"expose"=true})
-     *
-     * @return Response
      */
     public function indexAction(): Response
     {
@@ -37,8 +35,6 @@ class OnlineController extends BaseController
 
     /**
      * @Route("/in_course/{cidReq}", name="online_users_in_course", methods={"GET", "POST"}, options={"expose"=true})
-     *
-     * @return Response
      */
     public function onlineUsersInCoursesAction($cidReq): Response
     {
@@ -65,8 +61,6 @@ class OnlineController extends BaseController
      * @Route("/in_sessions", name="online_users_in_session", methods={"GET", "POST"}, options={"expose"=true})
      *
      * @param int $id
-     *
-     * @return Response
      */
     public function onlineUsersInCoursesSessionAction($id = 0): Response
     {

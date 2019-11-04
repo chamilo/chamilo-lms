@@ -14,8 +14,6 @@ class ChamiloApi
 
     /**
      * ChamiloApi constructor.
-     *
-     * @param array $configuration
      */
     public function __construct(array $configuration)
     {

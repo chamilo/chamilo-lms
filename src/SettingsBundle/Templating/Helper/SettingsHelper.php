@@ -20,9 +20,6 @@ class SettingsHelper extends Helper implements SettingsHelperInterface
      */
     private $settingsManager;
 
-    /**
-     * @param SettingsManagerInterface $settingsManager
-     */
     public function __construct(SettingsManagerInterface $settingsManager)
     {
         $this->settingsManager = $settingsManager;

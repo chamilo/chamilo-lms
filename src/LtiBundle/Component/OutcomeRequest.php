@@ -49,8 +49,6 @@ abstract class OutcomeRequest
 
     /**
      * OutcomeRequest constructor.
-     *
-     * @param \SimpleXMLElement $xml
      */
     public function __construct(\SimpleXMLElement $xml)
     {
@@ -60,17 +58,11 @@ abstract class OutcomeRequest
         $this->xmlRequest = $xml->imsx_POXBody->children();
     }
 
-    /**
-     * @param EntityManager $entityManager
-     */
     public function setEntityManager(EntityManager $entityManager)
     {
         $this->entityManager = $entityManager;
     }
 
-    /**
-     * @param Translator $translator
-     */
     public function setTranslator(Translator $translator)
     {
         $this->translator = $translator;

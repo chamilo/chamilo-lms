@@ -195,19 +195,11 @@ class Templates
         return $this->id;
     }
 
-    /**
-     * @return Course
-     */
     public function getCourse(): Course
     {
         return $this->course;
     }
 
-    /**
-     * @param Course $course
-     *
-     * @return Templates
-     */
     public function setCourse(Course $course): Templates
     {
         $this->course = $course;

@@ -16,8 +16,6 @@ namespace Chamilo\CoreBundle\Hook\Interfaces;
 interface HookAdminBlockObserverInterface extends HookObserverInterface
 {
     /**
-     * @param HookAdminBlockEventInterface $hook
-     *
      * @return int
      */
     public function hookAdminBlock(HookAdminBlockEventInterface $hook);

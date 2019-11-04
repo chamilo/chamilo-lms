@@ -234,8 +234,6 @@ class CForumThread
     /**
      * Set forum.
      *
-     * @param CForumForum|null $forum
-     *
      * @return CForumThread
      */
     public function setForum(CForumForum $forum = null)
@@ -658,8 +656,6 @@ class CForumThread
     }
 
     /**
-     * @param CItemProperty $itemProperty
-     *
      * @return CForumThread
      */
     public function setItemProperty(CItemProperty $itemProperty)

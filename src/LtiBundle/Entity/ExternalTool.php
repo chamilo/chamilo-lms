@@ -272,8 +272,6 @@ class ExternalTool
     }
 
     /**
-     * @param array $params
-     *
      * @return string|null
      */
     public function encodeCustomParams(array $params)
@@ -348,8 +346,6 @@ class ExternalTool
 
     /**
      * Set course.
-     *
-     * @param Course|null $course
      *
      * @return ExternalTool
      */
@@ -463,8 +459,6 @@ class ExternalTool
     }
 
     /**
-     * @param ExternalTool $parent
-     *
      * @return ExternalTool
      */
     public function setParent(ExternalTool $parent)

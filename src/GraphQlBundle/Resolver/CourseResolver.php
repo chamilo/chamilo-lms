@@ -47,9 +47,6 @@ class CourseResolver implements ContainerAwareInterface
     }
 
     /**
-     * @param Course   $course
-     * @param Argument $args
-     *
      * @return string|null
      */
     public function getPicture(Course $course, Argument $args)
@@ -57,13 +54,6 @@ class CourseResolver implements ContainerAwareInterface
         return Container::getIllustrationRepository()->getIllustrationUrl($course);
     }
 
-    /**
-     * @param Course       $course
-     * @param Argument     $args
-     * @param \ArrayObject $context
-     *
-     * @return array
-     */
     public function getTeachers(Course $course, Argument $args, \ArrayObject $context): array
     {
         if ($context->offsetExists('session')) {
@@ -92,13 +82,6 @@ class CourseResolver implements ContainerAwareInterface
         return $teachers;
     }
 
-    /**
-     * @param Course       $course
-     * @param Argument     $args
-     * @param \ArrayObject $context
-     *
-     * @return Collection
-     */
     public function getTools(Course $course, Argument $args, \ArrayObject $context): Collection
     {
         $session = null;
@@ -125,9 +108,6 @@ class CourseResolver implements ContainerAwareInterface
     }
 
     /**
-     * @param CTool        $tool
-     * @param \ArrayObject $context
-     *
      * @return array
      */
     public function getDescriptions(Ctool $tool, \ArrayObject $context)
@@ -158,12 +138,6 @@ class CourseResolver implements ContainerAwareInterface
         return $qb->getQuery()->getResult();
     }
 
-    /**
-     * @param CTool        $tool
-     * @param \ArrayObject $context
-     *
-     * @return array
-     */
     public function getAnnouncements(CTool $tool, \ArrayObject $context): array
     {
         $announcementManager = $this->container->get('Chamilo\CourseBundle\Repository\CAnnouncementRepository');
@@ -186,8 +160,7 @@ class CourseResolver implements ContainerAwareInterface
     }
 
     /**
-     * @param int          $id
-     * @param \ArrayObject $context
+     * @param int $id
      *
      * @return \stdClass
      */
@@ -206,11 +179,6 @@ class CourseResolver implements ContainerAwareInterface
         return self::getAnnouncementObject($announcementInfo['announcement'], $announcementInfo['item_property']);
     }
 
-    /**
-     * @param \ArrayObject $context
-     *
-     * @return array
-     */
     public function getNotes(\ArrayObject $context): array
     {
         /** @var CNotebookRepository $notebooksRepo */
@@ -224,11 +192,6 @@ class CourseResolver implements ContainerAwareInterface
         return $notebooks;
     }
 
-    /**
-     * @param \ArrayObject $context
-     *
-     * @return array
-     */
     public function getForumCategories(\ArrayObject $context): array
     {
         /** @var Course $course */
@@ -242,12 +205,6 @@ class CourseResolver implements ContainerAwareInterface
         return $cats;
     }
 
-    /**
-     * @param CForumCategory $category
-     * @param \ArrayObject   $context
-     *
-     * @return array
-     */
     public function getForums(CForumCategory $category, \ArrayObject $context): array
     {
         /** @var Course $course */
@@ -262,8 +219,7 @@ class CourseResolver implements ContainerAwareInterface
     }
 
     /**
-     * @param int          $id
-     * @param \ArrayObject $context
+     * @param int $id
      *
      * @return CForumForum
      */
@@ -282,12 +238,6 @@ class CourseResolver implements ContainerAwareInterface
         return $forum;
     }
 
-    /**
-     * @param CForumForum  $forum
-     * @param \ArrayObject $context
-     *
-     * @return array
-     */
     public function getThreads(CForumForum $forum, \ArrayObject $context): array
     {
         /** @var Course $course */
@@ -302,8 +252,7 @@ class CourseResolver implements ContainerAwareInterface
     }
 
     /**
-     * @param int          $id
-     * @param \ArrayObject $context
+     * @param int $id
      *
      * @return CForumThread
      */
@@ -325,9 +274,6 @@ class CourseResolver implements ContainerAwareInterface
     }
 
     /**
-     * @param CForumThread $thread
-     * @param \ArrayObject $context
-     *
      * @return array
      */
     public function getPosts(CForumThread $thread, \ArrayObject $context)
@@ -347,11 +293,6 @@ class CourseResolver implements ContainerAwareInterface
         return $posts;
     }
 
-    /**
-     * @param \ArrayObject $context
-     *
-     * @return array
-     */
     public function getAgenda(\ArrayObject $context): array
     {
         /** @var Session|null $session */
@@ -389,10 +330,7 @@ class CourseResolver implements ContainerAwareInterface
     }
 
     /**
-     * @param int          $dirId
-     * @param \ArrayObject $context
-     *
-     * @return array
+     * @param int $dirId
      */
     public function getDocuments($dirId, \ArrayObject $context): array
     {
@@ -472,11 +410,6 @@ class CourseResolver implements ContainerAwareInterface
         return $results;
     }
 
-    /**
-     * @param \ArrayObject $context
-     *
-     * @return array
-     */
     public function getLearnpathCategories(\ArrayObject $context): array
     {
         /** @var Course $course */
@@ -496,12 +429,6 @@ class CourseResolver implements ContainerAwareInterface
         return $categories;
     }
 
-    /**
-     * @param CLpCategory  $category
-     * @param \ArrayObject $context
-     *
-     * @return array
-     */
     public function getLearnpathsByCategory(CLpCategory $category, \ArrayObject $context): array
     {
         $user = $this->getCurrentUser();
@@ -566,9 +493,6 @@ class CourseResolver implements ContainerAwareInterface
     }
 
     /**
-     * @param CAnnouncement $a
-     * @param CItemProperty $ip
-     *
      * @return \stdClass
      */
     private static function getAnnouncementObject(CAnnouncement $a, CItemProperty $ip)
@@ -584,9 +508,7 @@ class CourseResolver implements ContainerAwareInterface
     }
 
     /**
-     * @param int          $lpId
-     * @param Course       $course
-     * @param Session|null $session
+     * @param int $lpId
      *
      * @return string
      */

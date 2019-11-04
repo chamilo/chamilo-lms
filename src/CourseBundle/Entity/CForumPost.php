@@ -179,8 +179,6 @@ class CForumPost
     /**
      * Set thread.
      *
-     * @param CForumThread|null $thread
-     *
      * @return CForumPost
      */
     public function setThread(CForumThread $thread = null)

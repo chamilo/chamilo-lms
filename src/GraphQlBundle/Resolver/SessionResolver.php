@@ -19,8 +19,6 @@ class SessionResolver implements ContainerAwareInterface
     use GraphQLTrait;
 
     /**
-     * @param Session $session
-     *
      * @return string
      */
     public function getDescription(Session $session)
@@ -33,8 +31,6 @@ class SessionResolver implements ContainerAwareInterface
     }
 
     /**
-     * @param Session $session
-     *
      * @return int
      */
     public function getNumberOfUsers(Session $session)
@@ -43,8 +39,6 @@ class SessionResolver implements ContainerAwareInterface
     }
 
     /**
-     * @param Session $session
-     *
      * @return int
      */
     public function getNumberOfCourses(Session $session)
@@ -52,11 +46,6 @@ class SessionResolver implements ContainerAwareInterface
         return $session->getNbrCourses();
     }
 
-    /**
-     * @param Session $session
-     *
-     * @return array
-     */
     public function getCourses(Session $session): array
     {
         $courses = [];

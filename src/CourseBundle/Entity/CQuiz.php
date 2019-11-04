@@ -219,7 +219,6 @@ class CQuiz extends AbstractResource implements ResourceInterface
      *
      * @ORM\ManyToOne(targetEntity="Chamilo\CourseBundle\Entity\CExerciseCategory", cascade={"persist"})
      * @ORM\JoinColumn(name="exercise_category_id", referencedColumnName="id", onDelete="SET NULL")
-     *
      */
     protected $exerciseCategory;
 
@@ -842,11 +841,6 @@ class CQuiz extends AbstractResource implements ResourceInterface
         return $this->exerciseCategory;
     }
 
-    /**
-     * @param CExerciseCategory $exerciseCategory
-     *
-     * @return CQuiz
-     */
     public function setExerciseCategory(CExerciseCategory $exerciseCategory): CQuiz
     {
         $this->exerciseCategory = $exerciseCategory;
@@ -894,19 +888,11 @@ class CQuiz extends AbstractResource implements ResourceInterface
         return $this;
     }
 
-    /**
-     * @return bool
-     */
     public function isShowPreviousButton(): bool
     {
         return $this->showPreviousButton;
     }
 
-    /**
-     * @param bool $showPreviousButton
-     *
-     * @return CQuiz
-     */
     public function setShowPreviousButton(bool $showPreviousButton): CQuiz
     {
         $this->showPreviousButton = $showPreviousButton;
@@ -914,19 +900,11 @@ class CQuiz extends AbstractResource implements ResourceInterface
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getNotifications(): string
     {
         return $this->notifications;
     }
 
-    /**
-     * @param string $notifications
-     *
-     * @return CQuiz
-     */
     public function setNotifications(string $notifications): CQuiz
     {
         $this->notifications = $notifications;
@@ -956,8 +934,6 @@ class CQuiz extends AbstractResource implements ResourceInterface
 
     /**
      * @ORM\PostPersist()
-     *
-     * @param LifecycleEventArgs $args
      */
     public function postPersist(LifecycleEventArgs $args)
     {
@@ -970,17 +946,12 @@ class CQuiz extends AbstractResource implements ResourceInterface
 
     /**
      * Resource identifier.
-     *
-     * @return int
      */
     public function getResourceIdentifier(): int
     {
         return $this->getIid();
     }
 
-    /**
-     * @return string
-     */
     public function getResourceName(): string
     {
         return $this->getTitle();

@@ -343,7 +343,12 @@ if ($inATest) {
 
     echo '</div>';
     if ($objExercise->added_in_lp()) {
-        echo Display::return_message(get_lang('This exercise has been included in a learning path, so it cannot be accessed by students directly from here. If you want to put the same exercise available through the exercises tool, please make a copy of the current exercise using the copy icon.'), 'warning');
+        echo Display::return_message(
+            get_lang(
+                'This exercise has been included in a learning path, so it cannot be accessed by students directly from here. If you want to put the same exercise available through the exercises tool, please make a copy of the current exercise using the copy icon.'
+            ),
+            'warning'
+        );
     }
     if ($editQuestion && $objQuestion->existsInAnotherExercise()) {
         echo Display::return_message(

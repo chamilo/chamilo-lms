@@ -464,6 +464,37 @@ class ResourceController extends BaseController implements CourseControllerInter
     }
 
     /**
+     * @param Request             $request
+     * @param CDocumentRepository $documentRepo
+     * @param Glide               $glide
+     *
+     * @return Response
+     * @throws \League\Flysystem\FileNotFoundException
+     */
+    public function getDocumentAction(Request $request, CDocumentRepository $documentRepo, Glide $glide): Response
+    {
+        $file = $request->get('file');
+        $type = $request->get('type');
+        // see list of filters in config/services.yaml
+        $filter = $request->get('filter');
+        $type = !empty($type) ? $type : 'show';
+        $criteria = [
+            'path' => "/$file",
+            'course' => $this->getCourse(),
+        ];
+
+        $document = $documentRepo->findOneBy($criteria);
+
+        if (null === $document) {
+            throw new NotFoundHttpException();
+        }
+        /** @var ResourceNode $resourceNode */
+        $resourceNode = $document->getResourceNode();
+
+        return $this->showFile($request, $resourceNode, $glide, $type, $filter);
+    }
+
+    /**
      * @param Request $request
      *
      * @return Response

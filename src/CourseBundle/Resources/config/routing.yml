@@ -21,7 +21,6 @@ resources_list:
     requirements:
         file: .+ # allow "/" in {file}
 
-
 resources_get_file:
     path: /resources/file/{id}
     defaults:
@@ -32,7 +31,7 @@ resources_get_file:
 resources_document_get_file:
     path: /courses/{course}/document/{file}
     defaults:
-        _controller: Chamilo\CoreBundle\Controller\ResourceController::showAction
+        _controller: Chamilo\CoreBundle\Controller\ResourceController::getDocumentAction
     requirements:
         file: .+ # allow "/" in {file}
 

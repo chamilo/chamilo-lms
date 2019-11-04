@@ -5,6 +5,7 @@ use Chamilo\CoreBundle\Entity\Resource\ResourceLink;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CDocument;
 use Chamilo\CourseBundle\Entity\CQuizAnswer;
+use Chamilo\CourseBundle\Entity\CQuizQuestion;
 use Chamilo\CourseBundle\Entity\CQuizQuestionCategory;
 
 /**
@@ -913,25 +914,21 @@ abstract class Question
 
         // question already exists
         if (!empty($id)) {
-            $params = [
-                'question' => $question,
-                'description' => $description,
-                'ponderation' => $weighting,
-                'position' => $position,
-                'type' => $type,
-                'picture' => $picture,
-                'extra' => $extra,
-                'level' => $level,
-            ];
-            if ($exercise->questionFeedbackEnabled) {
-                $params['feedback'] = $this->feedback;
-            }
+            /** @var  CQuizQuestion $question */
+            $question = $questionRepo->find($id);
+            $question
+                ->setQuestion($this->question)
+                ->setDescription($this->description)
+                ->setPonderation($this->weighting)
+                ->setPosition($this->position)
+                ->setType($this->type)
+                ->setExtra($this->extra)
+                ->setLevel($this->level)
+                ->setFeedback($this->feedback)
+            ;
 
-            Database::update(
-                $TBL_QUESTIONS,
-                $params,
-                ['c_id = ? AND id = ?' => [$c_id, $id]]
-            );
+            $em->persist($question);
+            $em->flush();
 
             Event::addEvent(
                 LOG_QUESTION_UPDATED,
@@ -939,23 +936,6 @@ abstract class Question
                 $this->iid
             );
             $this->saveCategory($categoryId);
-
-            if (!empty($exerciseId)) {
-                /*api_item_property_update(
-                    $this->course,
-                    TOOL_QUIZ,
-                    $id,
-                    'QuizQuestionUpdated',
-                    api_get_user_id()
-                );*/
-            }
-
-            /** @var CQuizQuestionCategory $questionCategory */
-            /*$questionCategory = $repo->find($this->iid);
-            $questionCategory->setTitle('');
-            $repo->addResourceNode($questionCategory, api_get_user_entity(api_get_user_id()));
-            $repo->addResourceToCourse($questionCategory->getResourceNode());*/
-
             if (api_get_setting('search_enabled') === 'true') {
                 $this->search_engine_edit($exerciseId);
             }
@@ -974,22 +954,23 @@ abstract class Question
             $this->updatePosition($current_position + 1);
             $position = $this->position;
 
-            $params = [
-                'c_id' => $c_id,
-                'question' => $question,
-                'description' => $description,
-                'ponderation' => $weighting,
-                'position' => $position,
-                'type' => $type,
-                'picture' => $picture,
-                'extra' => $extra,
-                'level' => $level,
-            ];
+            $question = new CQuizQuestion();
+            $question
+                ->setCId($c_id)
+                ->setQuestion($this->question)
+                ->setDescription($this->description)
+                ->setPonderation($this->weighting)
+                ->setPosition($position)
+                ->setType($this->type)
+                ->setExtra($this->extra)
+                ->setLevel($this->level)
+                ->setFeedback($this->feedback)
+            ;
 
-            if ($exercise->questionFeedbackEnabled) {
-                $params['feedback'] = $this->feedback;
-            }
-            $this->id = Database::insert($TBL_QUESTIONS, $params);
+            $em->persist($question);
+            $em->flush();
+
+            $this->id = $question->getIid();
 
             if ($this->id) {
                 $sql = "UPDATE $TBL_QUESTIONS SET id = iid WHERE iid = {$this->id}";
@@ -1000,10 +981,8 @@ abstract class Question
                     LOG_QUESTION_ID,
                     $this->id
                 );
-
-                $questionEntity = $questionRepo->find($this->id);
                 $exerciseEntity = $exerciseRepo->find($exerciseId);
-                $node = $questionRepo->addResourceNode($questionEntity, api_get_user_entity(api_get_user_id()), $exerciseEntity);
+                $node = $questionRepo->addResourceNode($question, api_get_user_entity(api_get_user_id()), $exerciseEntity);
                 $questionRepo->addResourceNodeToCourse(
                     $node,
                     ResourceLink::VISIBILITY_PUBLISHED,

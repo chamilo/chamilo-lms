@@ -954,6 +954,8 @@ class Version20 extends AbstractMigrationChamilo
         CREATE INDEX IDX_B7A1C35FB48D66 ON c_quiz (exercise_category_id);
         ALTER TABLE c_quiz_question_category ADD CONSTRAINT FK_1414369D91D79BD3 FOREIGN KEY (c_id) REFERENCES course (id);
         */
+
+        $this->addSql("ALTER TABLE c_quiz_question ADD feedback LONGTEXT DEFAULT NULL;");
     }
 
     /**

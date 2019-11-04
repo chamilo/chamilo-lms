@@ -96,6 +96,13 @@ class CQuizQuestion extends AbstractResource implements ResourceInterface
     /**
      * @var string
      *
+     * @ORM\Column(name="feedback", type="text", nullable=true)
+     */
+    protected $feedback;
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="extra", type="string", length=255, nullable=true)
      */
     protected $extra;
@@ -377,6 +384,26 @@ class CQuizQuestion extends AbstractResource implements ResourceInterface
     public function getCId()
     {
         return $this->cId;
+    }
+
+    /**
+     * @return string
+     */
+    public function getFeedback()
+    {
+        return $this->feedback;
+    }
+
+    /**
+     * @param string $feedback
+     *
+     * @return CQuizQuestion
+     */
+    public function setFeedback($feedback): CQuizQuestion
+    {
+        $this->feedback = $feedback;
+
+        return $this;
     }
 
     /**

@@ -33,17 +33,15 @@
 <link rel="stylesheet" href="{{ url('legacy_public') ~ 'build/css/themes/'~ theme ~'/default.css' }}"/>
 {% endif %}
 <link rel="stylesheet" media="print" href="{{ url('legacy_public') ~ 'build/css/print.css' }}"/>
-{# Add third party js libraries that can't be loaded using webpack #}
-{% include "@ChamiloTheme/Layout/legacy_js.html.twig" %}
 {# app.js is generated using the file webpack.config.js and using yarn read /assets/README.md for more info #}
 <script src="{{ url('legacy_public') ~ 'build/runtime.js' }}"></script>
+<script src="{{ url('legacy_public') ~ 'libs/ckeditor/ckeditor.js' }}"></script>
 <script src="{{ url('legacy_public') ~ 'build/app.js' }}"></script>
-
+{# Add third party js libraries that can't be loaded using webpack #}
+{#<script src="{{ asset('libs/readmore-js/readmore.js') }}"></script>#}
+<script src="{{ url('legacy_public') ~ 'build/libs/js-cookie/src/js.cookie.js' }}"></script>
 {# Check chamilo_js key in assetic.yml #}
 {% block javascripts %}
-    {#{%- javascripts '@chamilo_js' -%}#}
-    {#<script src="{{ asset_url }} "></script>#}
-    {#{% endjavascripts %}#}
     {% block chamilo_header_js %}
         {# Loading legacy js using the $htmlHeadXtra array #}
         {% autoescape false %}
@@ -52,14 +50,5 @@
             {% endfor %}
         {% endautoescape %}
     {% endblock %}
-
-    {#'@MopaBootstrapBundle/Resources/public/js/eyecon-bootstrap-datepicker.js'#}
-
-    {#{% javascripts#}
-    {#'bundles/mopabootstrap/js/mopabootstrap-collection.js'#}
-    {#'bundles/mopabootstrap/js/mopabootstrap-subnav.js'#}
-    {#%}#}
-    {#<script type="text/javascript" src="{{ asset_url | replace({'/app_dev.php': ''}) }}"></script>#}
-    {#{% endjavascripts %}#}
 {% endblock %}
 

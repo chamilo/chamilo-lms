@@ -161,14 +161,6 @@ class Editor
     /**
      * @return string
      */
-    public function getEditorStandAloneTemplate()
-    {
-        return 'javascript/editor/elfinder_standalone.html.twig';
-    }
-
-    /**
-     * @return string
-     */
     public function getLocale()
     {
         return api_get_language_isocode();

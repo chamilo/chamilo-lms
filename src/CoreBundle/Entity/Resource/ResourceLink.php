@@ -173,6 +173,9 @@ class ResourceLink
         return $this;
     }
 
+    /**
+     * @return ArrayCollection
+     */
     public function getResourceRight()
     {
         return $this->resourceRight;
@@ -330,6 +333,9 @@ class ResourceLink
         return $this;
     }
 
+    /**
+     * @return array
+     */
     public static function getVisibilityList(): array
     {
         return [

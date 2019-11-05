@@ -99,6 +99,8 @@ class ResourceNode
     protected $level;
 
     /**
+     * @var ResourceNode[]
+     *
      * @ORM\OneToMany(
      *     targetEntity="Chamilo\CoreBundle\Entity\Resource\ResourceNode",
      *     mappedBy="parent"
@@ -336,7 +338,7 @@ class ResourceNode
     }
 
     /**
-     * @return ArrayCollection
+     * @return ArrayCollection|ResourceLink[]
      */
     public function getResourceLinks()
     {
@@ -390,6 +392,11 @@ class ResourceNode
         return $this->resourceFile;
     }
 
+    /**
+     * @param ResourceFile $resourceFile
+     *
+     * @return ResourceNode
+     */
     public function setResourceFile(ResourceFile $resourceFile): ResourceNode
     {
         $this->resourceFile = $resourceFile;
@@ -397,11 +404,19 @@ class ResourceNode
         return $this;
     }
 
+    /**
+     * @return string
+     */
     public function getDescription(): string
     {
         return (string) $this->description;
     }
 
+    /**
+     * @param string $description
+     *
+     * @return ResourceNode
+     */
     public function setDescription(string $description): ResourceNode
     {
         $this->description = $description;

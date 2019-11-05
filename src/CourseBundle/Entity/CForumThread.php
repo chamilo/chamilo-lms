@@ -648,7 +648,7 @@ class CForumThread
     }
 
     /**
-     * @return ArrayCollection
+     * @return ArrayCollection|CForumPost[]
      */
     public function getPosts()
     {

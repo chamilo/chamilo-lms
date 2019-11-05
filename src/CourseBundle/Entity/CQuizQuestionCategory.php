@@ -215,6 +215,9 @@ class CQuizQuestionCategory extends AbstractResource implements ResourceInterfac
         return $this->getIid();
     }
 
+    /**
+     * @return string
+     */
     public function getResourceName(): string
     {
         return $this->getTitle();

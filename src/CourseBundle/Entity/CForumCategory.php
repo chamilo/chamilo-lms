@@ -271,7 +271,7 @@ class CForumCategory
     /**
      * Get forums.
      *
-     * @return ArrayCollection
+     * @return ArrayCollection|CForumForum[]
      */
     public function getForums()
     {

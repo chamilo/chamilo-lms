@@ -783,7 +783,7 @@ class CForumForum
     /**
      * Get threads.
      *
-     * @return ArrayCollection
+     * @return ArrayCollection|CForumThread[]
      */
     public function getThreads()
     {

@@ -956,6 +956,9 @@ class CQuiz extends AbstractResource implements ResourceInterface
         return $this->getIid();
     }
 
+    /**
+     * @return string
+     */
     public function getResourceName(): string
     {
         return $this->getTitle();

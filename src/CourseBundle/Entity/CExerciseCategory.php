@@ -155,6 +155,11 @@ class CExerciseCategory extends AbstractResource implements ResourceInterface
         return $this->course;
     }
 
+    /**
+     * @param Course $course
+     *
+     * @return CExerciseCategory
+     */
     public function setCourse(Course $course): CExerciseCategory
     {
         $this->course = $course;
@@ -190,6 +195,9 @@ class CExerciseCategory extends AbstractResource implements ResourceInterface
         return $this->getId();
     }
 
+    /**
+     * @return string
+     */
     public function getResourceName(): string
     {
         return $this->getName();

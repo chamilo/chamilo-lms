@@ -26,6 +26,7 @@ use League\Flysystem\MountManager;
 use Sylius\Bundle\ResourceBundle\Doctrine\ORM\EntityRepository;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Routing\RouterInterface;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
 /**
  * Class ResourceRepository.
@@ -60,15 +61,29 @@ class ResourceRepository extends EntityRepository
     protected $resourceNodeRepository;
 
     /**
+     * @var AuthorizationCheckerInterface
+     */
+    protected $authorizationChecker;
+
+    /**
      * ResourceRepository constructor.
      */
-    public function __construct(EntityManager $entityManager, MountManager $mountManager, RouterInterface $router, string $className)
+    public function __construct(AuthorizationCheckerInterface $authorizationChecker, EntityManager $entityManager, MountManager $mountManager, RouterInterface $router, string $className)
     {
         $this->repository = $entityManager->getRepository($className);
         // Flysystem mount name is saved in config/packages/oneup_flysystem.yaml @todo add it as a service.
         $this->fs = $mountManager->getFilesystem('resources_fs');
         $this->router = $router;
         $this->resourceNodeRepository = $entityManager->getRepository('ChamiloCoreBundle:Resource\ResourceNode');
+        $this->authorizationChecker = $authorizationChecker;
+    }
+
+    /**
+     * @return AuthorizationCheckerInterface
+     */
+    public function getAuthorizationChecker(): AuthorizationCheckerInterface
+    {
+        return $this->authorizationChecker;
     }
 
     /**
@@ -419,17 +434,25 @@ class ResourceRepository extends EntityRepository
             )
             ->innerJoin('node.resourceLinks', 'links')
             ->where('node.resourceType = :type')
-            //->andWhere('resource.course = links.course')
             ->andWhere('links.course = :course')
-            //->where('link.cId = ?', $course->getId())
-            //->where('node.cId = 0')
-            //->orderBy('node');
             ->setParameters(
                 [
                     'type' => $type,
                     'course' => $course,
                 ]
             );
+
+        $checker = $this->getAuthorizationChecker();
+        $isAdmin = $checker->isGranted('ROLE_ADMIN') ||
+            $checker->isGranted('ROLE_CURRENT_COURSE_TEACHER');
+
+        if ($isAdmin === false) {
+            $qb
+                ->andWhere('links.visibility = :visibility')
+                ->setParameter('visibility', ResourceLink::VISIBILITY_PUBLISHED)
+            ;
+            // @todo Add start/end visibility restrictrions
+        }
 
         if ($session === null) {
             $qb->andWhere('links.session IS NULL');
@@ -449,39 +472,7 @@ class ResourceRepository extends EntityRepository
             $qb->andWhere('links.group IS NULL');
         }
 
-        /*if ($parent !== null) {
-            $qb->andWhere('node.parent = :parentId');
-            $qb->setParameter('parentId', $parent->getResourceNode()->getId());
-        } else {
-            $qb->andWhere('node.parent = :parentId');
-            $qb->setParameter('parentId', $course->getResourceNode());
-        }*/
-
-        /*$qb->setFirstResult();
-        $qb->setMaxResults();
-        $qb->orderBy();*/
-
         return $qb;
-
-        $qb = $qb->getQuery();
-        //var_dump($qb->getSQL());
-
-        /*$qb = $this->getEntityManager()->createQueryBuilder()
-            ->select('notebook')
-            ->from('ChamiloNotebookBundle:CNotebook', 'notebook')
-            ->innerJoin('notebook.resourceNodes', 'node')
-            //->innerJoin('node.links', 'link')
-            ->where('node.tool = :tool')
-            //->where('link.cId = ?', $course->getId())
-            //->where('node.cId = 0')
-            //->orderBy('node');
-            ->setParameters(array(
-                    'tool'=> 'notebook'
-                )
-            )
-            ->getQuery()
-        ;*/
-        return $qb->getResult();
     }
 
     /**

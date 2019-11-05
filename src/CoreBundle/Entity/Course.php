@@ -748,7 +748,7 @@ class Course extends AbstractResource implements ResourceInterface
      *
      * @return Course
      */
-    public function setCategory(CourseCategory $category = null)
+    public function setCategory(CourseCategory $category = null): Course
     {
         $this->category = $category;
 
@@ -760,7 +760,7 @@ class Course extends AbstractResource implements ResourceInterface
      *
      * @return CourseCategory
      */
-    public function getCategory()
+    public function getCategory(): ?CourseCategory
     {
         return $this->category;
     }

@@ -11,6 +11,7 @@ use Chamilo\CoreBundle\Entity\TrackEHotspot;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter;
 use Chamilo\CourseBundle\Entity\CExerciseCategory;
+use Chamilo\CourseBundle\Entity\CQuiz;
 use Chamilo\CourseBundle\Entity\CQuizCategory;
 use ChamiloSession as Session;
 use Doctrine\DBAL\Types\Type;
@@ -1838,13 +1839,21 @@ class Exercise
     public function delete()
     {
         $limitTeacherAccess = api_get_configuration_value('limit_exercise_teacher_access');
-
         if ($limitTeacherAccess && !api_is_platform_admin()) {
             return false;
         }
 
+        $exerciseId = $this->iId;
+
+        $repo = Container::getExerciseRepository();
+        $exercise = $repo->find($exerciseId);
+
+        if ($exercise === null) {
+            return false;
+        }
+
         $locked = api_resource_is_locked_by_gradebook(
-            $this->id,
+            $exerciseId,
             LINK_EXERCISE
         );
 
@@ -1854,29 +1863,12 @@ class Exercise
 
         $table = Database::get_course_table(TABLE_QUIZ_TEST);
         $sql = "UPDATE $table SET active='-1'
-                WHERE c_id = ".$this->course_id." AND id = ".intval($this->id);
+                WHERE c_id = ".$this->course_id." AND iid = ".$exerciseId;
         Database::query($sql);
 
-        $repo = Container::getExerciseRepository();
-        $exercise = $repo->find($this->iId);
         $repo->softDelete($exercise);
 
-        /*api_item_property_update(
-            $this->course,
-            TOOL_QUIZ,
-            $this->id,
-            'QuizDeleted',
-            api_get_user_id()
-        );
-        api_item_property_update(
-            $this->course,
-            TOOL_QUIZ,
-            $this->id,
-            'delete',
-            api_get_user_id()
-        );*/
-
-        Skill::deleteSkillsFromItem($this->iId, ITEM_TYPE_EXERCISE);
+        Skill::deleteSkillsFromItem($exerciseId, ITEM_TYPE_EXERCISE);
 
         if (api_get_setting('search_enabled') === 'true' &&
             extension_loaded('xapian')
@@ -1887,7 +1879,7 @@ class Exercise
         $linkInfo = GradebookUtils::isResourceInCourseGradebook(
             $this->course['code'],
             LINK_EXERCISE,
-            $this->id,
+            $exerciseId,
             $this->sessionId
         );
         if ($linkInfo !== false) {
@@ -3766,10 +3758,6 @@ class Exercise
                         }
                     }
                     $totalScore += $answerWeighting;
-
-                    if ($debug) {
-                        error_log("studentChoice: $studentChoice");
-                    }
                     break;
                 case GLOBAL_MULTIPLE_ANSWER:
                     if ($from_database) {
@@ -8363,6 +8351,12 @@ class Exercise
         }
     }
 
+    /**
+     * @param int $categoryId
+     * @param string $keyword
+     *
+     * @return string
+     */
     public static function exerciseGridResource($categoryId, $keyword)
     {
         $courseId = api_get_course_int_id();
@@ -8371,15 +8365,13 @@ class Exercise
         $session = api_get_session_entity($sessionId);
 
         // 1. Set entity
-        $source = new Entity('ChamiloCourseBundle:CQuizQuestionCategory');
+        $source = new Entity('ChamiloCourseBundle:CQuiz');
         $repo = Container::getExerciseRepository();
 
         // 2. Get query builder from repo.
         $qb = $repo->getResourcesByCourse($course, $session);
 
         if (!empty($categoryId)) {
-            //$repo = Container::getExerciseCategoryRepository();
-            //$category = $repo->find($categoryId);
             $qb->andWhere($qb->expr()->eq('resource.exerciseCategory', $categoryId));
         } else {
             $qb->andWhere($qb->expr()->isNull('resource.exerciseCategory'));
@@ -8422,6 +8414,7 @@ class Exercise
         );
 
         $grid = $grid->getGrid();
+        $grid->setId('grid_category_'.$categoryId);
 
         // Url link.
         $grid->getColumn('title')->manipulateRenderCell(
@@ -8441,7 +8434,6 @@ class Exercise
 
         // 7. Add actions
         if ($editAccess) {
-            // Add row actions
             $myRowAction = new RowAction(
                 get_lang('Edit'),
                 'legacy_main',
@@ -8457,44 +8449,113 @@ class Exercise
                     'id_session' => $sessionId,
                 ]
             );
+            $myRowAction->addManipulateRender(
+                function (RowAction $action, Row $row) use ($session, $repo) {
+                    return $repo->rowCanBeEdited($action, $row, $session);
+                }
+            );
+            $grid->addRowAction($myRowAction);
 
+            // Results
+            $myRowAction = new RowAction(
+                get_lang('Results'),
+                'legacy_main',
+                false,
+                '_self',
+                ['class' => 'btn btn-primary']
+            );
+            $myRowAction->setRouteParameters(
+                [
+                    'id',
+                    'name' => 'exercise/exercise_report.php',
+                    'cidReq' => $course->getCode(),
+                    'id_session' => $sessionId,
+                ]
+            );
             $myRowAction->addManipulateRender(
                 function (RowAction $action, Row $row) use ($session, $repo) {
                     return $repo->rowCanBeEdited($action, $row, $session);
                 }
             );
 
+            // To use icon instead of col
+            //$myRowAction->render()
             $grid->addRowAction($myRowAction);
 
+            // Hide/show
+            $myRowAction = new RowAction(
+                get_lang('Active'),
+                'legacy_main',
+                false,
+                '_self'
+            );
+
+            $myRowAction->addManipulateRender(
+                function (RowAction $action, Row $row) use ($session, $repo, $course, $sessionId) {
+                    $action = $repo->rowCanBeEdited($action, $row, $session);
+                    /** @var CQuiz $exercise */
+                    $exercise = $row->getEntity();
+                    $link = $exercise->getFirstResourceLinkFromCourseSession($course, $session);
+
+                    if ($link !== null) {
+                        $visibleChoice = 'enable';
+                        $attributes = ['class' => 'btn btn-secondary'];
+                        $title = get_lang('Enable');
+                        if ($link->getVisibility() === ResourceLink::VISIBILITY_PUBLISHED) {
+                            $visibleChoice = 'disable';
+                            $attributes = ['class' => 'btn btn-danger'];
+                            $title = get_lang('Disable');
+                        }
+                        $params = [
+                            'id' => $exercise->getIid(),
+                            'name' => 'exercise/exercise.php',
+                            'cidReq' => $course->getCode(),
+                            'id_session' => $sessionId,
+                            'action' => $visibleChoice,
+                        ];
+
+                        if ($action) {
+                            $action->setTitle($title);
+                            $action->setAttributes($attributes);
+                            $action->setRouteParameters($params);
+                        }
+
+                        return $action;
+                    }
+                }
+            );
+
+            $grid->addRowAction($myRowAction);
+
+            // Delete
             $myRowAction = new RowAction(
                 get_lang('Delete'),
                 'legacy_main',
                 true,
                 '_self',
-                ['class' => 'btn btn-danger', 'form_delete' => true]
+                ['class' => 'btn btn-danger']
             );
             $myRowAction->setRouteParameters(
                 [
                     'id',
                     'name' => 'exercise/exercise.php',
                     'cidReq' => $course->getCode(),
-                    'choice' => 'delete',
+                    'id_session' => $sessionId,
+                    'action' => 'delete',
                 ]
             );
-
             $myRowAction->addManipulateRender(
                 function (RowAction $action, Row $row) use ($session, $repo) {
                     return $repo->rowCanBeEdited($action, $row, $session);
                 }
             );
-
             $grid->addRowAction($myRowAction);
 
             if (empty($session)) {
                 // Add mass actions
                 $deleteMassAction = new MassAction(
                     'Delete',
-                    ['TestCategory', 'deleteResource'],
+                    ['Exercise', 'deleteResource'],
                     true,
                     [],
                     ResourceNodeVoter::ROLE_CURRENT_COURSE_TEACHER
@@ -8892,7 +8953,7 @@ class Exercise
                                             '',
                                             ICON_SIZE_SMALL
                                         ),
-                                        'exercise.php?'.api_get_cidreq().'&choice=enable_launch&sec_token='.$token.'&exerciseId='.$row['id']
+                                        'exercise.php?'.api_get_cidreq().'&action=enable_launch&sec_token='.$token.'&exerciseId='.$row['id']
                                     );
                                 } else {
                                     $actions .= Display::url(
@@ -8902,7 +8963,7 @@ class Exercise
                                             '',
                                             ICON_SIZE_SMALL
                                         ),
-                                        'exercise.php?'.api_get_cidreq().'&choice=disable_launch&sec_token='.$token.'&exerciseId='.$row['id']
+                                        'exercise.php?'.api_get_cidreq().'&action=disable_launch&sec_token='.$token.'&exerciseId='.$row['id']
                                     );
                                 }
                             }
@@ -8913,7 +8974,7 @@ class Exercise
                                 '',
                                 [
                                     'onclick' => "javascript:if(!confirm('".addslashes(api_htmlentities(get_lang('Are you sure to copy'), ENT_QUOTES, $charset))." ".addslashes($row['title'])."?"."')) return false;",
-                                    'href' => 'exercise.php?'.api_get_cidreq().'&choice=copy_exercise&sec_token='.$token.'&exerciseId='.$row['id'],
+                                    'href' => 'exercise.php?'.api_get_cidreq().'&action=copy_exercise&sec_token='.$token.'&exerciseId='.$row['id'],
                                 ]
                             );
 
@@ -8929,7 +8990,7 @@ class Exercise
                                     '',
                                     [
                                         'onclick' => "javascript:if(!confirm('".addslashes(api_htmlentities(get_lang('Are you sure to delete results and feedback'), ENT_QUOTES, $charset))." ".addslashes($row['title'])."?"."')) return false;",
-                                        'href' => 'exercise.php?'.api_get_cidreq().'&choice=clean_results&sec_token='.$token.'&exerciseId='.$row['id'],
+                                        'href' => 'exercise.php?'.api_get_cidreq().'&action=clean_results&sec_token='.$token.'&exerciseId='.$row['id'],
                                     ]
                                 );
                             } else {
@@ -8963,7 +9024,7 @@ class Exercise
                                             '',
                                             ICON_SIZE_SMALL
                                         ),
-                                        'exercise.php?'.api_get_cidreq().'&choice=enable&sec_token='.$token.'&exerciseId='.$row['id']
+                                        'exercise.php?'.api_get_cidreq().'&action=enable&sec_token='.$token.'&exerciseId='.$row['id']
                                     );
                                 } else {
                                     // else if not active
@@ -8974,7 +9035,7 @@ class Exercise
                                             '',
                                             ICON_SIZE_SMALL
                                         ),
-                                        'exercise.php?'.api_get_cidreq().'&choice=disable&sec_token='.$token.'&exerciseId='.$row['id']
+                                        'exercise.php?'.api_get_cidreq().'&action=disable&sec_token='.$token.'&exerciseId='.$row['id']
                                     );
                                 }
                             }
@@ -9025,7 +9086,7 @@ class Exercise
                                             '',
                                             ICON_SIZE_SMALL
                                         ),
-                                        'exercise.php?'.api_get_cidreq().'&choice=enable&sec_token='.$token.'&exerciseId='.$row['id']
+                                        'exercise.php?'.api_get_cidreq().'&action=enable&sec_token='.$token.'&exerciseId='.$row['id']
                                     );
                                 } else {
                                     // else if not active
@@ -9036,7 +9097,7 @@ class Exercise
                                             '',
                                             ICON_SIZE_SMALL
                                         ),
-                                        'exercise.php?'.api_get_cidreq().'&choice=disable&sec_token='.$token.'&exerciseId='.$row['id']
+                                        'exercise.php?'.api_get_cidreq().'&action=disable&sec_token='.$token.'&exerciseId='.$row['id']
                                     );
                                 }
                             }
@@ -9053,7 +9114,7 @@ class Exercise
                                 '',
                                 [
                                     'onclick' => "javascript:if(!confirm('".addslashes(api_htmlentities(get_lang('Are you sure to copy'), ENT_QUOTES, $charset))." ".addslashes($row['title'])."?"."')) return false;",
-                                    'href' => 'exercise.php?'.api_get_cidreq().'&choice=copy_exercise&sec_token='.$token.'&exerciseId='.$row['id'],
+                                    'href' => 'exercise.php?'.api_get_cidreq().'&action=copy_exercise&sec_token='.$token.'&exerciseId='.$row['id'],
                                 ]
                             );
                         }
@@ -9072,7 +9133,7 @@ class Exercise
                                     '',
                                     [
                                         'onclick' => "javascript:if(!confirm('".addslashes(api_htmlentities(get_lang('Are you sure to delete'), ENT_QUOTES, $charset))." ".addslashes($exercise->getUnformattedTitle())."?"."')) return false;",
-                                        'href' => 'exercise.php?'.api_get_cidreq().'&choice=delete&sec_token='.$token.'&exerciseId='.$row['id'],
+                                        'href' => 'exercise.php?'.api_get_cidreq().'&action=delete&sec_token='.$token.'&exerciseId='.$row['id'],
                                     ]
                                 );
                             } else {

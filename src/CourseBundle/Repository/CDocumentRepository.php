@@ -172,17 +172,6 @@ final class CDocumentRepository extends ResourceRepository
     }
 
     /**
-     * Changes current document link visibility.
-     *
-     * @param CDocument $document
-     * @param int       $visibility
-     */
-    public function updateVisibility($document, $visibility): bool
-    {
-        return $this->setLinkVisibility($document, $visibility, false);
-    }
-
-    /**
      * @param int $userId
      *
      * @return array

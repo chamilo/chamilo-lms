@@ -174,7 +174,7 @@ class ResourceLink
     }
 
     /**
-     * @return ArrayCollection
+     * @return ArrayCollection|ResourceRight[]
      */
     public function getResourceRight()
     {
@@ -313,11 +313,19 @@ class ResourceLink
         return $this->resourceNode;
     }
 
+    /**
+     * @return int
+     */
     public function getVisibility(): int
     {
         return $this->visibility;
     }
 
+    /**
+     * @param int $visibility
+     *
+     * @return ResourceLink
+     */
     public function setVisibility(int $visibility): ResourceLink
     {
         $this->visibility = $visibility;

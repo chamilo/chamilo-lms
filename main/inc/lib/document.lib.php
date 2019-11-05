@@ -6843,7 +6843,7 @@ This folder contains all sessions that have been opened in the chat. Although th
 
             return Display::url(
                 Display::return_icon($visibility_icon.'.png', $tip_visibility),
-                api_get_self()."?$courseParams&id=$parentId&$visibility_command={$documentData['id']}"
+                api_get_self()."?$courseParams&id=$parentId&action=$visibility_command&document_id={$documentData['id']}"
             );
         }
 

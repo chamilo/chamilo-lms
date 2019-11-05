@@ -79,6 +79,9 @@ class ResourceRepository extends EntityRepository
         return new $this->className();
     }
 
+    /**
+     * @return RouterInterface
+     */
     public function getRouter(): RouterInterface
     {
         return $this->router;
@@ -100,6 +103,9 @@ class ResourceRepository extends EntityRepository
         return $this->fs;
     }
 
+    /**
+     * @return EntityManager
+     */
     public function getEntityManager(): EntityManager
     {
         return $this->getRepository()->getEntityManager();
@@ -385,6 +391,10 @@ class ResourceRepository extends EntityRepository
     }
 
     /**
+     * @param Course          $course
+     * @param Session|null    $session
+     * @param CGroupInfo|null $group
+     *
      * @return QueryBuilder
      */
     public function getResourcesByCourse(Course $course, Session $session = null, CGroupInfo $group = null)
@@ -498,6 +508,19 @@ class ResourceRepository extends EntityRepository
     }
 
     /**
+     * @param string $tool
+     *
+     * @return Tool|null
+     */
+    private function getTool($tool)
+    {
+        return $this
+            ->getEntityManager()
+            ->getRepository('ChamiloCoreBundle:Tool')
+            ->findOneBy(['name' => $tool]);
+    }
+
+    /**
      * Deletes several entities: AbstractResource (Ex: CDocument, CQuiz), ResourceNode,
      * ResourceLinks and ResourceFile (including files via Flysystem).
      */
@@ -517,16 +540,27 @@ class ResourceRepository extends EntityRepository
     }
 
     /**
-     * @param string $tool
-     *
-     * @return Tool|null
+     * @param AbstractResource $resource
      */
-    private function getTool($tool)
+    public function setVisibilityPublished(AbstractResource $resource)
     {
-        return $this
-            ->getEntityManager()
-            ->getRepository('ChamiloCoreBundle:Tool')
-            ->findOneBy(['name' => $tool]);
+        $this->setLinkVisibility($resource, ResourceLink::VISIBILITY_PUBLISHED);
+    }
+
+    /**
+     * @param AbstractResource $resource
+     */
+    public function setVisibilityDraft(AbstractResource $resource)
+    {
+        $this->setLinkVisibility($resource, ResourceLink::VISIBILITY_DRAFT);
+    }
+
+    /**
+     * @param AbstractResource $resource
+     */
+    public function setVisibilityPending(AbstractResource $resource)
+    {
+        $this->setLinkVisibility($resource, ResourceLink::VISIBILITY_PENDING);
     }
 
     /**
@@ -535,10 +569,8 @@ class ResourceRepository extends EntityRepository
      * @param bool             $recursive
      *
      * @return bool
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
      */
-    public function setLinkVisibility(AbstractResource $resource, $visibility, $recursive = true)
+    private function setLinkVisibility(AbstractResource $resource, $visibility, $recursive = true)
     {
         $resourceNode = $resource->getResourceNode();
 

@@ -1,7 +1,6 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use Chamilo\CoreBundle\Entity\Resource\ResourceLink;
 use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CDocument;
 use ChamiloSession as Session;
@@ -9,25 +8,11 @@ use ChamiloSession as Session;
 /**
  * Homepage script for the documents tool.
  *
- * This script allows the user to manage files and directories on a remote http
- * server.
+ * This script allows the user to manage files and directories.
  * The user can : - navigate through files and directories.
  *                 - upload a file
  *                 - delete, copy a file or a directory
  *                 - edit properties & content (name, comments, html content)
- * The script is organised in four sections.
- *
- * 1) Execute the command called by the user
- *                Note: somme commands of this section are organised in two steps.
- *                The script always begins with the second step,
- *                so it allows to return more easily to the first step.
- *
- *                Note (March 2004) some editing functions (renaming, commenting)
- *                are moved to a separate page, edit_document.php. This is also
- *                where xml and other stuff should be added.
- * 2) Define the directory to display
- * 3) Read files and directories from the directory defined in part 2
- * 4) Display all of that on an HTML page
  */
 require_once __DIR__.'/../inc/global.inc.php';
 
@@ -221,10 +206,39 @@ if (!empty($groupId)) {
 
 // Detail.
 $document_id = isset($_REQUEST['id']) ? (int) $_REQUEST['id'] : null;
+$documentIdToEdit = isset($_REQUEST['document_id']) ? (int) $_REQUEST['document_id'] : 0;
+
 $currentUrl = api_get_self().'?'.api_get_cidreq().'&id='.$document_id;
 $curdirpath = isset($_GET['curdirpath']) ? Security::remove_XSS($_GET['curdirpath']) : null;
 
 switch ($action) {
+    case 'set_visible':
+    case 'set_invisible':
+        if (!$isAllowedToEdit) {
+            if (api_is_coach()) {
+                if (!DocumentManager::is_visible_by_id($documentIdToEdit, $courseInfo, $sessionId, api_get_user_id())) {
+                    api_not_allowed(true);
+                }
+            }
+            if (DocumentManager::check_readonly($courseInfo, api_get_user_id(), $documentIdToEdit)) {
+                api_not_allowed(true);
+            }
+        }
+
+        /** @var CDocument $document */
+        $document = $repo->find($documentIdToEdit);
+
+        // Make visible or invisible?
+        if ($action === 'set_visible') {
+            $repo->setVisibilityPublished($document);
+        } else {
+            $repo->setVisibilityDraft($document);
+        }
+
+        Display::addFlash(Display::return_message(get_lang('The visibility has been changed.'), 'confirmation'));
+        header('Location: '.$currentUrl);
+        exit;
+        break;
     case 'delete_item':
         if ($isAllowedToEdit ||
             $groupMemberWithUploadRights ||
@@ -1156,13 +1170,6 @@ if ($isAllowedToEdit ||
             '/chat_files',
             '/certificates',
         ];
-
-        $defaultVisibility = ResourceLink::VISIBILITY_DRAFT;
-        // Make visible or invisible?
-        if ($_POST['action'] === 'set_visible') {
-            $defaultVisibility = ResourceLink::VISIBILITY_PUBLISHED;
-        }
-
         foreach ($files as $documentId) {
             $data = DocumentManager::get_document_data_by_id($documentId, $courseInfo['code']);
             /** @var CDocument $document */
@@ -1174,10 +1181,10 @@ if ($isAllowedToEdit ||
             } else {
                 switch ($_POST['action']) {
                     case 'set_invisible':
-                        $repo->updateVisibility($document, $defaultVisibility);
+                        $repo->setVisibilityPublished($document);
                         break;
                     case 'set_visible':
-                        $repo->updateVisibility($document, $defaultVisibility);
+                        $repo->setVisibilityDraft($document);
                         $messages .= Display::return_message(
                             get_lang('The visibility has been changed.').': '.$data['title'],
                             'confirmation'
@@ -1328,42 +1335,6 @@ if ($isAllowedToEdit ||
     }
 }
 
-/* VISIBILITY COMMANDS */
-if ($isAllowedToEdit) {
-    if ((isset($_GET['set_invisible']) && !empty($_GET['set_invisible'])) ||
-        (isset($_GET['set_visible']) && !empty($_GET['set_visible']))
-    ) {
-        $defaultVisibility = ResourceLink::VISIBILITY_DRAFT;
-        // Make visible or invisible?
-        if (isset($_GET['set_visible'])) {
-            $defaultVisibility = ResourceLink::VISIBILITY_PUBLISHED;
-            $update_id = intval($_GET['set_visible']);
-            $visibility_command = 'visible';
-        } else {
-            $update_id = intval($_GET['set_invisible']);
-            $visibility_command = 'invisible';
-        }
-
-        if (!$isAllowedToEdit) {
-            if (api_is_coach()) {
-                if (!DocumentManager::is_visible_by_id($update_id, $courseInfo, $sessionId, api_get_user_id())) {
-                    api_not_allowed(true);
-                }
-            }
-            if (DocumentManager::check_readonly($courseInfo, api_get_user_id(), $update_id)) {
-                api_not_allowed(true);
-            }
-        }
-
-        /** @var CDocument $document */
-        $document = $repo->find($update_id);
-        $repo->updateVisibility($document, $defaultVisibility);
-        Display::addFlash(Display::return_message(get_lang('The visibility has been changed.'), 'confirmation'));
-
-        header('Location: '.$currentUrl);
-        exit;
-    }
-}
 $templateForm = '';
 
 /* TEMPLATE ACTION */

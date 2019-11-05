@@ -1,6 +1,10 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CourseBundle\Entity\CExerciseCategory;
+use Chamilo\CourseBundle\Entity\CQuiz;
+
 /**
  * Exercise list: This script shows the list of exercises for administrators and students.
  *
@@ -9,8 +13,6 @@
  * @author Julio Montoya <gugli100@gmail.com>, lots of cleanup + several improvements
  * Modified by hubert.borderiou (question category)
  */
-
-use Chamilo\CourseBundle\Entity\CExerciseCategory;
 
 require_once __DIR__.'/../inc/global.inc.php';
 $current_course_tool = TOOL_QUIZ;
@@ -26,7 +28,6 @@ $check = Security::get_existing_token('get');
 
 $currentUrl = api_get_self().'?'.api_get_cidreq();
 
-/*  Constants and variables */
 $is_allowedToEdit = api_is_allowed_to_edit(null, true);
 $is_tutor = api_is_allowed_to_edit(true);
 $is_tutor_course = api_is_course_tutor();
@@ -51,7 +52,6 @@ Exercise::cleanSessionVariables();
 
 //General POST/GET/SESSION/COOKIES parameters recovery
 $origin = api_get_origin();
-$choice = isset($_REQUEST['choice']) ? Security::remove_XSS($_REQUEST['choice']) : null;
 $exerciseId = isset($_REQUEST['id']) ? (int) $_REQUEST['id'] : null;
 $file = isset($_REQUEST['file']) ? Database::escape_string($_REQUEST['file']) : null;
 $learnpath_id = isset($_REQUEST['learnpath_id']) ? (int) $_REQUEST['learnpath_id'] : null;
@@ -59,6 +59,13 @@ $learnpath_item_id = isset($_REQUEST['learnpath_item_id']) ? (int) $_REQUEST['le
 $categoryId = isset($_REQUEST['category_id']) ? (int) $_REQUEST['category_id'] : 0;
 $action = isset($_REQUEST['action']) ? $_REQUEST['action'] : '';
 $keyword = isset($_REQUEST['keyword']) ? Security::remove_XSS($_REQUEST['keyword']) : '';
+
+$exerciseRepo = Container::getExerciseRepository();
+$exerciseEntity = null;
+if (!empty($exerciseId)) {
+    /** @var CQuiz $exerciseEntity */
+    $exerciseEntity = $exerciseRepo->find($exerciseId);
+}
 
 if (api_is_in_gradebook()) {
     $interbreadcrumb[] = [
@@ -70,12 +77,91 @@ if (api_is_in_gradebook()) {
 $nameTools = get_lang('Tests');
 
 // Simple actions
-if ($is_allowedToEdit) {
-    switch ($action) {
-        case 'delete':
+if ($is_allowedToEdit && !empty($action)) {
+    $objExerciseTmp = new Exercise();
+    $exercise_action_locked = api_resource_is_locked_by_gradebook(
+        $exerciseId,
+        LINK_EXERCISE
+    );
+    $result = $objExerciseTmp->read($exerciseId);
 
-            header('Location: '.$currentUrl);
-            exit;
+    if (empty($result)) {
+        api_not_allowed();
+    }
+
+    switch ($action) {
+        case 'enable_launch':
+            $objExerciseTmp->cleanCourseLaunchSettings();
+            $objExerciseTmp->enableAutoLaunch();
+            Display::addFlash(Display::return_message(get_lang('Updated')));
+            break;
+        case 'disable_launch':
+            $objExerciseTmp->cleanCourseLaunchSettings();
+            break;
+        case 'delete':
+            $result = $objExerciseTmp->delete();
+            if ($result) {
+                Display::addFlash(Display::return_message(get_lang('ExerciseDeleted'), 'confirmation'));
+            }
+            break;
+        case 'enable':
+            if ($limitTeacherAccess && !api_is_platform_admin()) {
+                // Teacher change exercise
+                break;
+            }
+            $exerciseRepo->setVisibilityPublished($exerciseEntity);
+            Display::addFlash(Display::return_message(get_lang('The visibility has been changed.'), 'confirmation'));
+            break;
+        case 'disable':
+            if ($limitTeacherAccess && !api_is_platform_admin()) {
+                // Teacher change exercise
+                break;
+            }
+
+            $exerciseRepo->setVisibilityDraft($exerciseEntity);
+            Display::addFlash(Display::return_message(get_lang('The visibility has been changed.'), 'confirmation'));
+            break;
+        case 'disable_results':
+            //disable the results for the learners
+            $objExerciseTmp->disable_results();
+            $objExerciseTmp->save();
+            Display::addFlash(Display::return_message(get_lang('Results disabled for learners'), 'confirmation'));
+            break;
+        case 'enable_results':
+            //disable the results for the learners
+            $objExerciseTmp->enable_results();
+            $objExerciseTmp->save();
+            Display::addFlash(Display::return_message(get_lang('Results enabled for learners'), 'confirmation'));
+            break;
+        case 'clean_results':
+            if ($limitTeacherAccess && !api_is_platform_admin()) {
+                // Teacher change exercise
+                break;
+            }
+
+            // Clean student results
+            if ($exercise_action_locked == false) {
+                $quantity_results_deleted = $objExerciseTmp->cleanResults(true);
+                $title = $objExerciseTmp->selectTitle();
+
+                Display::addFlash(
+                    Display::return_message(
+                        $title.': '.sprintf(
+                            get_lang('%d results cleaned'),
+                            $quantity_results_deleted
+                        ),
+                        'confirmation'
+                    )
+                );
+            }
+            break;
+        case 'copy_exercise': //copy an exercise
+            api_set_more_memory_and_time_limits();
+            $objExerciseTmp->copyExercise();
+            Display::addFlash(Display::return_message(
+                get_lang('Test copied'),
+                'confirmation'
+            ));
             break;
         case 'clean_all_test':
             if ($check) {
@@ -163,80 +249,12 @@ if ($is_allowedToEdit) {
 
             break;
     }
-}
 
-// Mass actions
-if (!empty($action) && $is_allowedToEdit) {
-    $exerciseListToEdit = isset($_REQUEST['id']) ? $_REQUEST['id'] : 0;
-    if (!empty($exerciseListToEdit)) {
-        foreach ($exerciseListToEdit as $exerciseIdToEdit) {
-            $objExerciseTmp = new Exercise();
-            $result = $objExerciseTmp->read($exerciseIdToEdit);
-
-            if (empty($result)) {
-                continue;
-            }
-
-            switch ($action) {
-                case 'delete':
-                    $objExerciseTmp->delete();
-                    break;
-                case 'visible':
-                    if ($limitTeacherAccess && !api_is_platform_admin()) {
-                        // Teacher change exercise
-                        break;
-                    }
-
-                    // enables an exercise
-                    if (empty($sessionId)) {
-                        $objExerciseTmp->enable();
-                        $objExerciseTmp->save();
-                    } else {
-                        if (!empty($objExerciseTmp->sessionId)) {
-                            $objExerciseTmp->enable();
-                            $objExerciseTmp->save();
-                        }
-                    }
-                    api_item_property_update(
-                        $courseInfo,
-                        TOOL_QUIZ,
-                        $objExerciseTmp->id,
-                        'visible',
-                        $userId
-                    );
-
-                    break;
-                case 'invisible':
-                    if ($limitTeacherAccess && !api_is_platform_admin()) {
-                        // Teacher change exercise
-                        break;
-                    }
-
-                    // enables an exercise
-                    if (empty($sessionId)) {
-                        $objExerciseTmp->disable();
-                        $objExerciseTmp->save();
-                    } else {
-                        if (!empty($objExerciseTmp->sessionId)) {
-                            $objExerciseTmp->disable();
-                            $objExerciseTmp->save();
-                        }
-                    }
-
-                    api_item_property_update(
-                        $courseInfo,
-                        TOOL_QUIZ,
-                        $objExerciseTmp->id,
-                        'visible',
-                        $userId
-                    );
-                    break;
-            }
-        }
-        Display::addFlash(Display::return_message(get_lang('Update successful')));
-        header('Location: '.$currentUrl);
-        exit;
-    }
+    // destruction of Exercise
+    unset($objExerciseTmp);
+    Security::clear_token();
+    header('Location: '.$currentUrl);
+    exit;
 }
 
 Event::event_access_tool(TOOL_QUIZ);
@@ -248,142 +266,6 @@ $logInfo = [
     'action_details' => isset($_REQUEST['learnpath_id']) ? (int) $_REQUEST['learnpath_id'] : '',
 ];
 Event::registerLog($logInfo);
-
-// Only for administrator
-if ($is_allowedToEdit) {
-    if (!empty($choice)) {
-        // single exercise choice
-        // construction of Exercise
-        $objExerciseTmp = new Exercise();
-        $exercise_action_locked = api_resource_is_locked_by_gradebook(
-            $exerciseId,
-            LINK_EXERCISE
-        );
-
-        if ($objExerciseTmp->read($exerciseId)) {
-            if ($check) {
-                switch ($choice) {
-                    case 'enable_launch':
-                        $objExerciseTmp->cleanCourseLaunchSettings();
-                        $objExerciseTmp->enableAutoLaunch();
-                        Display::addFlash(Display::return_message(get_lang('Updated')));
-                        break;
-                    case 'disable_launch':
-                        $objExerciseTmp->cleanCourseLaunchSettings();
-                        break;
-                    case 'delete':
-                        // deletes an exercise
-                        $result = $objExerciseTmp->delete();
-                        if ($result) {
-                            Display::addFlash(Display::return_message(get_lang('ExerciseDeleted'), 'confirmation'));
-                        }
-                        break;
-                    case 'enable':
-                        if ($limitTeacherAccess && !api_is_platform_admin()) {
-                            // Teacher change exercise
-                            break;
-                        }
-
-                        // Enables an exercise
-                        if (empty($sessionId)) {
-                            $objExerciseTmp->enable();
-                            $objExerciseTmp->save();
-                        } else {
-                            if (!empty($objExerciseTmp->sessionId)) {
-                                $objExerciseTmp->enable();
-                                $objExerciseTmp->save();
-                            }
-                        }
-
-                        api_item_property_update(
-                            $courseInfo,
-                            TOOL_QUIZ,
-                            $objExerciseTmp->id,
-                            'visible',
-                            $userId
-                        );
-                        Display::addFlash(Display::return_message(get_lang('VisibilityChanged'), 'confirmation'));
-                        break;
-                    case 'disable':
-                        if ($limitTeacherAccess && !api_is_platform_admin()) {
-                            // Teacher change exercise
-                            break;
-                        }
-                        // disables an exercise
-                        if (empty($sessionId)) {
-                            $objExerciseTmp->disable();
-                            $objExerciseTmp->save();
-                        } else {
-                            // Only change active if it belongs to a session
-                            if (!empty($objExerciseTmp->sessionId)) {
-                                $objExerciseTmp->disable();
-                                $objExerciseTmp->save();
-                            }
-                        }
-
-                        api_item_property_update(
-                            $courseInfo,
-                            TOOL_QUIZ,
-                            $objExerciseTmp->id,
-                            'invisible',
-                            $userId
-                        );
-                        Display::addFlash(Display::return_message(get_lang('The visibility has been changed.'), 'confirmation'));
-                        break;
-                    case 'disable_results':
-                        //disable the results for the learners
-                        $objExerciseTmp->disable_results();
-                        $objExerciseTmp->save();
-                        Display::addFlash(Display::return_message(get_lang('Results disabled for learners'), 'confirmation'));
-
-                        break;
-                    case 'enable_results':
-                        //disable the results for the learners
-                        $objExerciseTmp->enable_results();
-                        $objExerciseTmp->save();
-                        Display::addFlash(Display::return_message(get_lang('Results enabled for learners'), 'confirmation'));
-
-                        break;
-                    case 'clean_results':
-                        if ($limitTeacherAccess && !api_is_platform_admin()) {
-                            // Teacher change exercise
-                            break;
-                        }
-
-                        // Clean student results
-                        if ($exercise_action_locked == false) {
-                            $quantity_results_deleted = $objExerciseTmp->cleanResults(true);
-                            $title = $objExerciseTmp->selectTitle();
-
-                            Display::addFlash(
-                                Display::return_message(
-                                    $title.': '.sprintf(
-                                        get_lang('%d results cleaned'),
-                                        $quantity_results_deleted
-                                    ),
-                                    'confirmation'
-                                )
-                            );
-                        }
-                        break;
-                    case 'copy_exercise': //copy an exercise
-                        api_set_more_memory_and_time_limits();
-                        $objExerciseTmp->copyExercise();
-                        Display::addFlash(Display::return_message(
-                            get_lang('Test copied'),
-                            'confirmation'
-                        ));
-                        break;
-                }
-                header('Location: '.$currentUrl);
-                exit;
-            }
-        }
-        // destruction of Exercise
-        unset($objExerciseTmp);
-        Security::clear_token();
-    }
-}
 
 if ($origin !== 'learnpath') {
     //so we are not in learnpath tool

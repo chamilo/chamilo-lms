@@ -3,11 +3,9 @@
 
 use Chamilo\CoreBundle\Entity\CourseCategory;
 use Chamilo\CoreBundle\Repository\CourseCategoryRepository;
+use Chamilo\CoreBundle\Repository\CourseRepository;
 use Chamilo\UserBundle\Entity\User;
 
-/**
- * @package chamilo.admin
- */
 $cidReset = true;
 
 require_once __DIR__.'/../inc/global.inc.php';
@@ -17,6 +15,8 @@ api_protect_admin_script();
 
 $course_table = Database::get_main_table(TABLE_MAIN_COURSE);
 $em = Database::getManager();
+/** @var CourseRepository $courseRepo */
+$courseRepo = $em->getRepository('ChamiloCoreBundle:CourseCategory');
 /** @var CourseCategoryRepository $courseCategoriesRepo */
 $courseCategoriesRepo = $em->getRepository('ChamiloCoreBundle:CourseCategory');
 // Get all possible teachers.
@@ -353,37 +353,35 @@ if ($form->validate()) {
     }
 
     $teachers = isset($course['course_teachers']) ? $course['course_teachers'] : '';
-    $title = $course['title'];
-    $category_code = isset($course['category_id']) ? (int) $course['category_id'] : '';
-    $department_name = $course['department_name'];
+    $categoryId = isset($course['category_id']) && !empty($course['category_id']) ? (int) $course['category_id'] : null;
     $department_url = $course['department_url'];
-    $course_language = $course['course_language'];
-    $course['disk_quota'] = $course['disk_quota'] * 1024 * 1024;
-    $disk_quota = $course['disk_quota'];
-    $subscribe = $course['subscribe'];
-    $unsubscribe = $course['unsubscribe'];
-    $course['course_code'] = $course_code;
 
     if (!stristr($department_url, 'http://')) {
         $department_url = 'http://'.$department_url;
     }
 
-    Database::query($sql);
+    $category = null;
+    if (!empty($categoryId)) {
+        $category = $courseCategoriesRepo->find($categoryId);
+    }
 
-    $title = str_replace('&amp;', '&', $title);
-    $params = [
-        'course_language' => $course_language,
-        'title' => $title,
-        'category_id' => $category_code,
-        'visual_code' => $visual_code,
-        'department_name' => $department_name,
-        'department_url' => $department_url,
-        'disk_quota' => $disk_quota,
-        'visibility' => $visibility,
-        'subscribe' => $subscribe,
-        'unsubscribe' => $unsubscribe,
-    ];
-    Database::update($course_table, $params, ['id = ?' => $courseId]);
+    /** @var \Chamilo\CoreBundle\Entity\Course $courseEntity */
+    $courseEntity = $courseInfo['entity'];
+    $courseEntity
+        ->setCourseLanguage($course['course_language'])
+        ->setTitle(str_replace('&amp;', '&', $course['title']))
+        ->setVisualCode($visual_code)
+        ->setDepartmentName($course['department_name'])
+        ->setDepartmentUrl($department_url)
+        ->setDiskQuota($course['disk_quota'] * 1024 * 1024)
+        ->setSubscribe($course['subscribe'])
+        ->setUnsubscribe($course['unsubscribe'])
+        ->setVisibility($visibility)
+        ->setCategory($category)
+    ;
+
+    $em->persist($courseEntity);
+    $em->flush();
 
     // update the extra fields
     $courseFieldValue = new ExtraFieldValue('course');

@@ -10,6 +10,8 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * CItemProperty.
  *
+ * @deprecated.
+ *
  * @ORM\Table(name="c_item_property", indexes={
  *     @ORM\Index(name="idx_item_property_toolref", columns={"tool", "ref"}),
  *     @ORM\Index(name="idx_cip_lasteditu", columns={"lastedit_user_id"}),

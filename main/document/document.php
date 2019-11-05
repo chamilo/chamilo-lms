@@ -556,9 +556,8 @@ switch ($action) {
                 'warning'
             ));
         } else {
-            $convertedFile = $fileInfo['dirname'].DIRECTORY_SEPARATOR
-                .$fileInfo['filename'].'_from_'.$fileInfo['extension']
-                .'.'.$formatTarget;
+            $convertedFile = $fileInfo['dirname'].
+                DIRECTORY_SEPARATOR.$fileInfo['filename'].'_from_'.$fileInfo['extension'].'.'.$formatTarget;
             $convertedTitle = $document_info['title'];
             $obj = new OpenofficePresentation(true);
             if (file_exists($convertedFile)) {

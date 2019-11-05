@@ -46,6 +46,9 @@ class ResourceNodeVoter extends Voter
         $this->container = $container;
     }
 
+    /**
+     * @return int
+     */
     public static function getReaderMask(): int
     {
         $builder = new MaskBuilder();
@@ -56,6 +59,9 @@ class ResourceNodeVoter extends Voter
         return $builder->get();
     }
 
+    /**
+     * @return int
+     */
     public static function getEditorMask(): int
     {
         $builder = new MaskBuilder();

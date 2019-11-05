@@ -6161,14 +6161,20 @@ This folder contains all sessions that have been opened in the chat. Although th
         }
 
         // By default visibility is published
-        // @todo change visibility
+        // @todo change default visibility
         //$newVisibility = ResourceLink::VISIBILITY_PUBLISHED;
         $visibility = (int) $visibility;
         if (empty($visibility)) {
             $visibility = ResourceLink::VISIBILITY_PUBLISHED;
         }
 
-        $repo->addResourceNodeToCourse($resourceNode, $visibility, $document->getCourse(), $document->getSession(), $group);
+        $repo->addResourceNodeToCourse(
+            $resourceNode,
+            $visibility,
+            $document->getCourse(),
+            $document->getSession(),
+            $group
+        );
         $em->flush();
 
         $documentId = $document->getIid();

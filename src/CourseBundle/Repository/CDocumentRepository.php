@@ -4,9 +4,7 @@
 namespace Chamilo\CourseBundle\Repository;
 
 use Chamilo\CoreBundle\Entity\Resource\ResourceLink;
-use Chamilo\CoreBundle\Entity\Resource\ResourceRight;
 use Chamilo\CoreBundle\Repository\ResourceRepository;
-use Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter;
 use Chamilo\CourseBundle\Entity\CDocument;
 use Symfony\Component\Filesystem\Exception\FileNotFoundException;
 

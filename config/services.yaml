@@ -122,7 +122,6 @@ services:
         class: Chamilo\LtiBundle\Util\Utils
         arguments: ['@chamilo.settings.manager']
 
-
     apy_grid.factory:
         class: APY\DataGridBundle\Grid\GridFactory
         arguments: ['@service_container', '@apy_grid.registry']
@@ -141,9 +140,22 @@ sonata_doctrine_orm_admin:
         force: false # Audits are set in the admin.yml files with audit:true
 
 # Grid default template
-#apy_data_grid:
-#    theme: ChamiloThemeBundle::grid.html.twig
-#
+apy_data_grid:
+    theme: '@ChamiloTheme/Resource/grid_theme.html.twig'
+    limits: [20, 50, 100]
+#    persistence: false
+#    no_data_message: "No data"
+#    no_result_message: "No result"
+#    actions_columns_size: -1
+#    actions_columns_title: "Actions"
+#    actions_columns_separator: "<br />"
+#    pagerfanta:
+#        enable: false
+#        view_class: "Pagerfanta\View\DefaultView"
+#        options:
+#            prev_message: "«"
+#            next_message: "»"
+
 
 # Course settings
 chamilo_course:

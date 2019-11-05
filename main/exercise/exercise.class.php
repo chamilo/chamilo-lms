@@ -8363,7 +8363,7 @@ class Exercise
         }
     }
 
-    public static function exerciseGridResource($categoryId, $keyboard)
+    public static function exerciseGridResource($categoryId, $keyword)
     {
         $courseId = api_get_course_int_id();
         $sessionId = api_get_session_id();
@@ -8382,7 +8382,6 @@ class Exercise
             //$category = $repo->find($categoryId);
             $qb->andWhere($qb->expr()->eq('resource.exerciseCategory', $categoryId));
         } else {
-
             $qb->andWhere($qb->expr()->isNull('resource.exerciseCategory'));
         }
 
@@ -8392,6 +8391,8 @@ class Exercise
         // 4. Get the grid builder.
         $builder = Container::$container->get('apy_grid.factory');
 
+        $editAccess = Container::getAuthorizationChecker()->isGranted(ResourceNodeVoter::ROLE_CURRENT_COURSE_TEACHER);
+
         // 5. Set parameters and properties.
         $grid = $builder->createBuilder(
             'grid',
@@ -8399,8 +8400,8 @@ class Exercise
             [
                 'persistence' => false,
                 'route' => 'home',
-                'filterable' => true,
-                'sortable' => true,
+                'filterable' => $editAccess,
+                'sortable' => $editAccess,
                 'max_per_page' => 10,
             ]
         )->add(
@@ -8416,6 +8417,7 @@ class Exercise
             'text',
             [
                 'title' => get_lang('Name'),
+                'safe' => false // does not escape html
             ]
         );
 
@@ -8423,13 +8425,13 @@ class Exercise
 
         // Url link.
         $grid->getColumn('title')->manipulateRenderCell(
-            function ($value, $row, $router) use ($course) {
-                //?cidReq=TEST123&id_session=0&gidReq=0&gradebook=0&origin=&exerciseId=1
+            function ($value, $row, $router) use ($course, $sessionId) {
                 $url = $router->generate(
                     'legacy_main',
                     [
                         'name' => 'exercise/overview.php',
                         'cidReq' => $course->getCode(),
+                        'id_session' => $sessionId,
                         'exerciseId' => $row->getField('id'),
                     ]
                 );
@@ -8438,7 +8440,7 @@ class Exercise
         );
 
         // 7. Add actions
-        if (Container::getAuthorizationChecker()->isGranted(ResourceNodeVoter::ROLE_CURRENT_COURSE_TEACHER)) {
+        if ($editAccess) {
             // Add row actions
             $myRowAction = new RowAction(
                 get_lang('Edit'),
@@ -8453,7 +8455,6 @@ class Exercise
                     'name' => 'exercise/admin.php',
                     'cidReq' => $course->getCode(),
                     'id_session' => $sessionId,
-                    //'choice' => 'edit',
                 ]
             );
 

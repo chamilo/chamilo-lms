@@ -4,8 +4,6 @@
 /**
  * Exercise list: This script shows the list of exercises for administrators and students.
  *
- * @package chamilo.exercise
- *
  * @author Olivier Brouckaert, original author
  * @author Wolfgang Schneider, code/html cleanup
  * @author Julio Montoya <gugli100@gmail.com>, lots of cleanup + several improvements
@@ -460,7 +458,7 @@ if ($is_allowedToEdit && $origin !== 'learnpath') {
     }
 
     // Create a search-box
-    $form = new FormValidator('search_simple', 'get', $currentUrl, null, null, FormValidator::LAYOUT_INLINE);
+    /*$form = new FormValidator('search_simple', 'get', $currentUrl, null, null, FormValidator::LAYOUT_INLINE);
     $form->addCourseHiddenParams();
 
     if (api_get_configuration_value('allow_exercise_categories')) {
@@ -485,7 +483,8 @@ if ($is_allowedToEdit && $origin !== 'learnpath') {
         ]
     );
     $form->addButtonSearch(get_lang('Search'));
-    $actionsRight = $form->returnForm();
+    $actionsRight = $form->returnForm();*/
+    $actionsRight = '';
 }
 
 if ($is_allowedToEdit) {

@@ -388,10 +388,6 @@ class HomeController extends ToolBaseController
 
         $content = '<div id="course_tools">'.$diagram.$content.'</div>';
 
-        $source = new Entity('ChamiloCourseBundle:CExerciseCategory');
-        $grid = $this->get('grid');
-        $grid->setSource($source);
-
         // Deleting the objects
         Session::erase('_gid');
         Session::erase('oLP');
@@ -405,7 +401,6 @@ class HomeController extends ToolBaseController
             [
                 'course' => $course,
                 'diagram' => $diagram,
-                'grid' => $grid,
                // 'session_info' => $sessionInfo,
                 'icons' => $result['content'],
                 'blocks' => $blocks,

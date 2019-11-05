@@ -33,7 +33,6 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class CDocument extends AbstractResource implements ResourceInterface
 {
-
     /**
      * @var int
      *

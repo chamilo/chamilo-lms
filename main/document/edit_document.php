@@ -193,7 +193,7 @@ Event::event_access_tool(TOOL_DOCUMENT);
 
 //TODO:check the below code and his funcionality
 if (!api_is_allowed_to_edit()) {
-    if (DocumentManager::check_readonly($course_info, $user_id, $file)) {
+    if ($readonly) {
         api_not_allowed();
     }
 }

@@ -246,7 +246,7 @@ switch ($action) {
                         }
                     }
 
-                    if (DocumentManager::check_readonly($courseInfo, api_get_user_id(), '', $_GET['deleteid'], true)) {
+                    if (DocumentManager::check_readonly($courseInfo, api_get_user_id(), $_GET['deleteid'], true)) {
                         api_not_allowed();
                     }
                 }
@@ -979,7 +979,7 @@ if ($isAllowedToEdit || $groupMemberWithUploadRights ||
         }
 
         if (!$isAllowedToEdit) {
-            if (DocumentManager::check_readonly($courseInfo, api_get_user_id(), '', $my_get_move)) {
+            if (DocumentManager::check_readonly($courseInfo, api_get_user_id(), $my_get_move)) {
                 api_not_allowed(true);
             }
         }
@@ -1046,7 +1046,7 @@ if ($isAllowedToEdit || $groupMemberWithUploadRights ||
 
     if (!empty($moveTo) && isset($moveFile)) {
         if (!$isAllowedToEdit) {
-            if (DocumentManager::check_readonly($courseInfo, api_get_user_id(), '', $moveFile)) {
+            if (DocumentManager::check_readonly($courseInfo, api_get_user_id(), $moveFile)) {
                 api_not_allowed(true);
             }
         }
@@ -1193,7 +1193,6 @@ if ($isAllowedToEdit ||
                                     if (DocumentManager::check_readonly(
                                         $courseInfo,
                                         api_get_user_id(),
-                                        null,
                                         $id,
                                         false,
                                         $sessionId
@@ -1351,7 +1350,7 @@ if ($isAllowedToEdit) {
                     api_not_allowed(true);
                 }
             }
-            if (DocumentManager::check_readonly($courseInfo, api_get_user_id(), '', $update_id)) {
+            if (DocumentManager::check_readonly($courseInfo, api_get_user_id(), $update_id)) {
                 api_not_allowed(true);
             }
         }

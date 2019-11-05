@@ -3,6 +3,9 @@
 
 namespace Chamilo\CoreBundle\Entity\Resource;
 
+use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\Session;
+use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Mapping as ORM;
 use Sylius\Component\Resource\Model\ResourceInterface;
@@ -53,8 +56,35 @@ abstract class AbstractResource implements ResourceInterface
         return $this;
     }
 
+    /**
+     * @return ResourceNode
+     */
     public function getResourceNode(): ResourceNode
     {
         return $this->resourceNode;
+    }
+
+    /**
+     * @param Course       $course
+     * @param Session|null $session
+     *
+     * @return ResourceLink|null
+     */
+    public function getFirstResourceLinkFromCourseSession(Course $course, Session $session = null): ?ResourceLink
+    {
+        $criteria = Criteria::create();
+        $criteria
+            ->where(Criteria::expr()->eq('course', $course))
+            ->andWhere(
+                Criteria::expr()->eq('session', $session)
+            );
+        $resourceNode = $this->getResourceNode();
+
+        $result = null;
+        if ($resourceNode && $resourceNode->getResourceLinks()) {
+            $result = $resourceNode->getResourceLinks()->matching($criteria)->first();
+        }
+
+        return $result;
     }
 }

@@ -934,7 +934,6 @@ class DocumentManager
     public static function check_readonly(
         $_course,
         $user_id,
-        $file = null,
         $document_id = 0,
         $to_delete = false,
         $sessionId = null
@@ -944,73 +943,18 @@ class DocumentManager
             $sessionId = api_get_session_id();
         }
         $document_id = (int) $document_id;
-        if (empty($document_id)) {
-            $document_id = self::get_document_id($_course, $file, $sessionId);
+
+        $repo = Container::getDocumentRepository();
+        /** @var CDocument $document */
+        $document = $repo->find($document_id);
+
+        if ($document === null) {
+            return false;
         }
 
-        $TABLE_PROPERTY = Database::get_course_table(TABLE_ITEM_PROPERTY);
-        $TABLE_DOCUMENT = Database::get_course_table(TABLE_DOCUMENT);
-        $course_id = $_course['real_id'];
+        $readOnly = $document->getReadonly();
 
-        if ($to_delete) {
-            if (self::isFolder($_course, $document_id)) {
-                if (!empty($file)) {
-                    $path = Database::escape_string($file);
-                    // Check
-                    $sql = "SELECT td.id, readonly, tp.insert_user_id
-                            FROM $TABLE_DOCUMENT td 
-                            INNER JOIN $TABLE_PROPERTY tp
-                            ON (td.c_id = tp.c_id AND tp.ref= td.id)
-                            WHERE
-                                td.c_id = $course_id AND
-                                tp.c_id = $course_id AND
-                                td.session_id = $sessionId AND                                
-                                (path='".$path."' OR path LIKE BINARY '".$path."/%' ) ";
-                    // Get all id's of documents that are deleted
-                    $what_to_check_result = Database::query($sql);
-
-                    if ($what_to_check_result && Database::num_rows($what_to_check_result) != 0) {
-                        // file with readonly set to 1 exist?
-                        $readonly_set = false;
-                        while ($row = Database::fetch_array($what_to_check_result)) {
-                            //query to delete from item_property table
-                            if ($row['readonly'] == 1) {
-                                if (!($row['insert_user_id'] == $user_id)) {
-                                    $readonly_set = true;
-                                    break;
-                                }
-                            }
-                        }
-
-                        if ($readonly_set) {
-                            return true;
-                        }
-                    }
-                }
-
-                return false;
-            }
-        }
-
-        if (!empty($document_id)) {
-            $sql = "SELECT a.insert_user_id, b.readonly
-                   FROM $TABLE_PROPERTY a 
-                   INNER JOIN $TABLE_DOCUMENT b
-                   ON (a.c_id = b.c_id AND a.ref= b.id)
-                   WHERE
-            			a.c_id = $course_id AND
-                        b.c_id = $course_id AND
-            			a.ref = $document_id 
-                    LIMIT 1";
-            $result = Database::query($sql);
-            $doc_details = Database::fetch_array($result, 'ASSOC');
-
-            if ($doc_details['readonly'] == 1) {
-                return !($doc_details['insert_user_id'] == $user_id || api_is_platform_admin());
-            }
-        }
-
-        return false;
+        return $readOnly;
     }
 
     /**
@@ -1531,7 +1475,7 @@ class DocumentManager
     public static function is_visible_by_id(
         $doc_id,
         $course_info,
-        $session_id,
+        $sessionId,
         $user_id,
         $admins_can_see_everything = true,
         $userIsSubscribed = null
@@ -1547,10 +1491,10 @@ class DocumentManager
         }
 
         $doc_id = (int) $doc_id;
-        $session_id = (int) $session_id;
+        $sessionId = (int) $sessionId;
         // 2. Course and Session visibility are handle in local.inc.php/global.inc.php
         // 3. Checking if user exist in course/session
-        if ($session_id == 0) {
+        if ($sessionId == 0) {
             if (is_null($userIsSubscribed)) {
                 $userIsSubscribed = CourseManager::is_user_subscribed_in_course(
                     $user_id,
@@ -1575,7 +1519,7 @@ class DocumentManager
             $user_status = SessionManager::get_user_status_in_course_session(
                 $user_id,
                 $course_info['real_id'],
-                $session_id
+                $sessionId
             );
 
             if (in_array($user_status, ['0', '2', '6'])) {
@@ -1593,74 +1537,21 @@ class DocumentManager
         // 4. Checking document visibility (i'm repeating the code in order to be more clear when reading ) - jm
         if ($user_in_course) {
             $repo = $em->getRepository('ChamiloCourseBundle:CDocument');
-            /** @var \Chamilo\CourseBundle\Entity\CDocument $document */
+            /** @var CDocument $document */
             $document = $repo->find($doc_id);
-
+            /*
             if ($document->isVisible()) {
                 return true;
             }
 
-            return false;
+            return false;*/
 
-            // 4.1 Checking document visibility for a Course
-            if ($session_id == 0) {
-                $link = $document->getCourseSessionResourceLink();
-
-                if ($link && $link->getVisibility() == ResourceLink::VISIBILITY_PUBLISHED) {
-                    return true;
-                }
-
-                return false;
-
-                $item_info = api_get_item_property_info(
-                    $course_info['real_id'],
-                    'document',
-                    $doc_id,
-                    0
-                );
-
-                if (isset($item_info['visibility'])) {
-                    // True for admins if document exists
-                    if ($admins_can_see_everything && api_is_platform_admin()) {
-                        return true;
-                    }
-                    if ($item_info['visibility'] == 1) {
-                        return true;
-                    }
-                }
-            } else {
-                // 4.2 Checking document visibility for a Course in a Session
-                $item_info = api_get_item_property_info(
-                    $course_info['real_id'],
-                    'document',
-                    $doc_id,
-                    0
-                );
-
-                $item_info_in_session = api_get_item_property_info(
-                    $course_info['real_id'],
-                    'document',
-                    $doc_id,
-                    $session_id
-                );
-
-                // True for admins if document exists
-                if (isset($item_info['visibility'])) {
-                    if ($admins_can_see_everything && api_is_platform_admin()) {
-                        return true;
-                    }
-                }
-
-                if (isset($item_info_in_session['visibility'])) {
-                    if ($item_info_in_session['visibility'] == 1) {
-                        return true;
-                    }
-                } else {
-                    if ($item_info['visibility'] == 1) {
-                        return true;
-                    }
-                }
+            $link = $document->getCourseSessionResourceLink();
+            if ($link && $link->getVisibility() == ResourceLink::VISIBILITY_PUBLISHED) {
+                return true;
             }
+
+            return false;
         } elseif ($admins_can_see_everything && api_is_platform_admin()) {
             return true;
         }
@@ -1675,21 +1566,21 @@ class DocumentManager
      *
      * @param int $courseId
      * @param int $document_id
-     * @param int $session_id
+     * @param int $sessionId
      */
-    public static function attach_gradebook_certificate($courseId, $document_id, $session_id = 0)
+    public static function attach_gradebook_certificate($courseId, $document_id, $sessionId = 0)
     {
         $tbl_category = Database::get_main_table(TABLE_MAIN_GRADEBOOK_CATEGORY);
-        $session_id = intval($session_id);
+        $sessionId = intval($sessionId);
         $courseId = (int) $courseId;
-        if (empty($session_id)) {
-            $session_id = api_get_session_id();
+        if (empty($sessionId)) {
+            $sessionId = api_get_session_id();
         }
 
-        if (empty($session_id)) {
+        if (empty($sessionId)) {
             $sql_session = 'AND (session_id = 0 OR isnull(session_id)) ';
-        } elseif ($session_id > 0) {
-            $sql_session = 'AND session_id='.$session_id;
+        } elseif ($sessionId > 0) {
+            $sql_session = 'AND session_id='.$sessionId;
         } else {
             $sql_session = '';
         }

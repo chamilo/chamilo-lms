@@ -530,12 +530,21 @@ class ResourceRepository extends EntityRepository
     }
 
     /**
-     * @param int  $visibility
-     * @param bool $recursive
+     * @param AbstractResource $resource
+     * @param                  $visibility
+     * @param bool             $recursive
+     *
+     * @return bool
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
      */
-    private function setLinkVisibility(AbstractResource $resource, $visibility, $recursive = true)
+    public function setLinkVisibility(AbstractResource $resource, $visibility, $recursive = true)
     {
         $resourceNode = $resource->getResourceNode();
+
+        if ($resourceNode === null){
+            return false;
+        }
 
         $em = $this->getEntityManager();
         if ($recursive) {
@@ -579,5 +588,7 @@ class ResourceRepository extends EntityRepository
             }
         }
         $em->flush();
+
+        return true;
     }
 }

@@ -33,6 +33,7 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class CDocument extends AbstractResource implements ResourceInterface
 {
+
     /**
      * @var int
      *
@@ -336,20 +337,7 @@ class CDocument extends AbstractResource implements ResourceInterface
      */
     public function getCourseSessionResourceLink()
     {
-        $criteria = Criteria::create();
-        $criteria
-            ->where(Criteria::expr()->eq('course', $this->getCourse()))
-            ->andWhere(
-                Criteria::expr()->eq('session', $this->getSession())
-            );
-        $resourceNode = $this->getResourceNode();
-
-        $result = null;
-        if ($resourceNode && $resourceNode->getResourceLinks()) {
-            $result = $resourceNode->getResourceLinks()->matching($criteria)->first();
-        }
-
-        return $result;
+        return $this->getFirstResourceLinkFromCourseSession($this->getCourse(), $this->getSession());
     }
 
     /**
@@ -364,7 +352,7 @@ class CDocument extends AbstractResource implements ResourceInterface
 
     public function isVisible(): bool
     {
-        return $this->getVisibility() === ResourceLink::VISIBILITY_PUBLISHED;
+        return $this->getCourseSessionResourceLink() === ResourceLink::VISIBILITY_PUBLISHED;
     }
 
     /**

@@ -179,35 +179,7 @@ final class CDocumentRepository extends ResourceRepository
      */
     public function updateVisibility($document, $visibility): bool
     {
-        if (empty($document)) {
-            return false;
-        }
-
-        $em = $this->getEntityManager();
-        $link = $document->getCourseSessionResourceLink();
-        $link->setVisibility($visibility);
-
-        if ($visibility === ResourceLink::VISIBILITY_DRAFT) {
-            $editorMask = ResourceNodeVoter::getEditorMask();
-            $rights = [];
-            $resourceRight = new ResourceRight();
-            $resourceRight
-                ->setMask($editorMask)
-                ->setRole(ResourceNodeVoter::ROLE_CURRENT_COURSE_TEACHER)
-                ->setResourceLink($link)
-            ;
-            $rights[] = $resourceRight;
-
-            if (!empty($rights)) {
-                $link->setResourceRight($rights);
-            }
-        } else {
-            $link->setResourceRight([]);
-        }
-        $em->persist($link);
-        $em->flush();
-
-        return true;
+        return $this->setLinkVisibility($document, $visibility, false);
     }
 
     /**

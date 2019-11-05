@@ -51,9 +51,9 @@ class Rest extends WebService
     const DELETE_CAMPUS = 'delete_campus';
     const SAVE_SESSION = 'save_session';
     const GET_USERS = 'get_users';
-    const GET_COURSE = 'get_courses';
+    const GET_COURSES = 'get_courses';
     const ADD_COURSES_SESSION = 'add_courses_session';
-    const ADD_USER_SESSION = 'add_users_session';
+    const ADD_USERS_SESSION = 'add_users_session';
 
     /**
      * @var Session

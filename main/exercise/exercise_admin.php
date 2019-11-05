@@ -126,15 +126,15 @@ $(function() {
 
 $objExercise = new Exercise();
 $course_id = api_get_course_int_id();
-
+$exerciseId = isset($_REQUEST['id']) ? (int) $_REQUEST['id'] : 0;
 //INIT FORM
-if (isset($_GET['exerciseId'])) {
+if (!empty($exerciseId)) {
     $form = new FormValidator(
         'exercise_admin',
         'post',
-        api_get_self().'?'.api_get_cidreq().'&exerciseId='.intval($_GET['exerciseId'])
+        api_get_self().'?'.api_get_cidreq().'&exerciseId='.$exerciseId
     );
-    $objExercise->read($_GET['exerciseId'], false);
+    $objExercise->read($exerciseId, false);
     $form->addElement('hidden', 'edit', 'true');
 } else {
     $form = new FormValidator(

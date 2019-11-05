@@ -8444,8 +8444,28 @@ class Exercise
 
         // 7. Add actions
         if ($editAccess) {
+            // Edit
             $myRowAction = new RowAction(
                 get_lang('Edit'),
+                'legacy_main',
+                false,
+                '_self',
+                ['class' => 'btn btn-secondary']
+            );
+
+            $myRowAction->setRouteParameters(
+                [
+                    'id',
+                    'name' => 'exercise/exercise_admin.php',
+                    'cidReq' => $course->getCode(),
+                    'id_session' => $sessionId,
+                ]
+            );
+            $grid->addRowAction($myRowAction);
+
+            // Add questions
+            $myRowAction = new RowAction(
+                get_lang('Add questions'),
                 'legacy_main',
                 false,
                 '_self',

@@ -8418,7 +8418,16 @@ class Exercise
 
         // Url link.
         $grid->getColumn('title')->manipulateRenderCell(
-            function ($value, $row, $router) use ($course, $sessionId) {
+            function ($value, $row, $router) use ($course, $session, $sessionId) {
+                /** @var CQuiz $exercise */
+                $exercise = $row->getEntity();
+                $link = $exercise->getFirstResourceLinkFromCourseSession($course, $session);
+
+                $attributes = [];
+                if ($link && $link->isDraft()) {
+                    $attributes['class'] = ' text-muted ';
+                }
+
                 $url = $router->generate(
                     'legacy_main',
                     [
@@ -8428,7 +8437,8 @@ class Exercise
                         'exerciseId' => $row->getField('id'),
                     ]
                 );
-                return Display::url($value, $url);
+
+                return Display::url($value, $url, $attributes);
             }
         );
 

@@ -328,9 +328,37 @@ class ResourceLink
      */
     public function setVisibility(int $visibility): ResourceLink
     {
+        if (!in_array($visibility, self::getVisibilityList())) {
+            throw new \LogicException('The visibility is not valid');
+        }
+
         $this->visibility = $visibility;
 
         return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isPublished()
+    {
+        return $this->getVisibility() === self::VISIBILITY_PUBLISHED;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isPending()
+    {
+        return $this->getVisibility() === self::VISIBILITY_PENDING;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isDraft()
+    {
+        return $this->getVisibility() === self::VISIBILITY_DRAFT;
     }
 
     /**

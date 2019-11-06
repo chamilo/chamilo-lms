@@ -1,6 +1,9 @@
 {% autoescape false %}
 <div class="app-elevator">
-    <button id="back-to-top" role="button" type="button" class="btn btn-primary" title="{{ 'BackToTop'|trans }}" data-toggle="tooltip" data-placement="left">
+    <button id="back-to-top"
+            role="button" type="button"
+            class="btn btn-primary"
+            title="{{ 'Back to top'|trans }}" data-toggle="tooltip" data-placement="left">
         <i class="fas fa-angle-up"></i>
     </button>
 </div>
@@ -8,7 +11,7 @@
 <footer class="app-footer">
     <div>
         <a href="{{_p.web}}" target="_blank">
-            {{ "PoweredByX" |trans | format(_s.software_name) }}
+            {{ "Powered by %s" |trans | format(_s.software_name) }}
             {{ "Chamilo"| trans }}
         </a>&copy; {{ "now"|date("Y") }}
     </div>

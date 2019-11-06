@@ -11,8 +11,6 @@ use Symfony\Component\Routing\Annotation\Route;
  * author Julio Montoya <gugli100@gmail.com>.
  *
  * @Route("/online")
- *
- * @package Chamilo\CoreBundle\Controller
  */
 class OnlineController extends BaseController
 {

@@ -11,8 +11,6 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 
 /**
  * Class ResourceUploaderController.
- *
- * @package Chamilo\CoreBundle\Controller
  */
 class ResourceUploaderController extends BlueimpController
 {

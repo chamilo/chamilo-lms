@@ -11,8 +11,6 @@ use Symfony\Component\Routing\Annotation\Route;
 /**
  * Class IndexController
  * author Julio Montoya <gugli100@gmail.com>.
- *
- * @package Chamilo\CoreBundle\Controller
  */
 class IndexController extends BaseController
 {

@@ -158,7 +158,7 @@ class ResourceRepository extends EntityRepository
     public function addFile(ResourceNode $resourceNode, UploadedFile $file): ?ResourceFile
     {
         $resourceFile = $resourceNode->getResourceFile();
-        if ($resourceFile === null) {
+        if (null === $resourceFile) {
             $resourceFile = new ResourceFile();
         }
 
@@ -192,7 +192,7 @@ class ResourceRepository extends EntityRepository
             ->setResourceType($resourceType)
         ;
 
-        if ($parent !== null) {
+        if (null !== $parent) {
             $resourceNode->setParent($parent->getResourceNode());
         }
 
@@ -406,10 +406,6 @@ class ResourceRepository extends EntityRepository
     }
 
     /**
-     * @param Course          $course
-     * @param Session|null    $session
-     * @param CGroupInfo|null $group
-     *
      * @return QueryBuilder
      */
     public function getResourcesByCourse(Course $course, Session $session = null, CGroupInfo $group = null)
@@ -446,7 +442,7 @@ class ResourceRepository extends EntityRepository
         $isAdmin = $checker->isGranted('ROLE_ADMIN') ||
             $checker->isGranted('ROLE_CURRENT_COURSE_TEACHER');
 
-        if ($isAdmin === false) {
+        if (false === $isAdmin) {
             $qb
                 ->andWhere('links.visibility = :visibility')
                 ->setParameter('visibility', ResourceLink::VISIBILITY_PUBLISHED)
@@ -454,7 +450,7 @@ class ResourceRepository extends EntityRepository
             // @todo Add start/end visibility restrictrions
         }
 
-        if ($session === null) {
+        if (null === $session) {
             $qb->andWhere('links.session IS NULL');
         } else {
             if ($loadBaseSessionContent) {
@@ -468,7 +464,7 @@ class ResourceRepository extends EntityRepository
             }
         }
 
-        if ($group === null) {
+        if (null === $group) {
             $qb->andWhere('links.group IS NULL');
         }
 
@@ -482,9 +478,9 @@ class ResourceRepository extends EntityRepository
      *
      * @return RowAction|null
      */
-    public function rowCanBeEdited(RowAction $action, Row $row, Session $session = null)
+    public function rowCanBeEdited(RowAction $action, Row $row, Session $session = null): ?RowAction
     {
-        if (!empty($session)) {
+        if (null !== $session) {
             /** @var AbstractResource $entity */
             $entity = $row->getEntity();
             $hasSession = $entity->getResourceNode()->hasSession($session);
@@ -565,7 +561,7 @@ class ResourceRepository extends EntityRepository
     {
         $resourceNode = $resource->getResourceNode();
 
-        if ($resourceNode === null){
+        if (null === $resourceNode) {
             return false;
         }
 
@@ -590,7 +586,7 @@ class ResourceRepository extends EntityRepository
             /** @var ResourceLink $link */
             foreach ($links as $link) {
                 $link->setVisibility($visibility);
-                if ($visibility === ResourceLink::VISIBILITY_DRAFT) {
+                if (ResourceLink::VISIBILITY_DRAFT === $visibility) {
                     $editorMask = ResourceNodeVoter::getEditorMask();
                     $rights = [];
                     $resourceRight = new ResourceRight();

@@ -1131,13 +1131,13 @@ class Rest extends WebService
         if ($return) {
             $out = [
                 'status' => true,
-                'message' => 'Sesión creada correctamente',
+                'message' => get_lang('ANewSessionWasCreated'),
                 'id_session' => $return,
             ];
         } else {
             $out = [
                 'status' => false,
-                'message' => 'Error al crear la sesión',
+                'message' => get_lang('ErrorOccurred'),
             ];
         }
 
@@ -1180,10 +1180,10 @@ class Rest extends WebService
             $results['status'] = true;
             $results['code_course'] = $courseInfo['code'];
             $results['title_course'] = $courseInfo['title'];
-            $results['message'] = 'Curso registrado con exito';
+            $results['message'] = sprintf(get_lang('CourseXAdded'), $courseInfo['code']);
         } else {
             $results['status'] = false;
-            $results['message'] = 'Error al registrar el curso';
+            $results['message'] = get_lang('CourseCreationFailed');
         }
 
         return $results;
@@ -1452,12 +1452,12 @@ class Rest extends WebService
         if ($result) {
             return [
                 'status' => $result,
-                'message' => 'Los cursos fueron añadidos a la sessión',
+                'message' => get_lang('Updated'),
             ];
         } else {
             return [
                 'status' => $result,
-                'message' => 'Error al añadir cursos a la sessión',
+                'message' => get_lang('ErrorOccurred'),
             ];
         }
     }
@@ -1485,7 +1485,7 @@ class Rest extends WebService
 
         return [
             'status' => true,
-            'message' => 'Error al añadir usuarios a la sessión',
+            'message' => get_lang('UsersAdded'),
         ];
     }
 

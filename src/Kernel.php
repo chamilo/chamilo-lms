@@ -31,14 +31,6 @@ class Kernel extends BaseKernel
     /**
      * @return string
      */
-    public function getResourceCacheDir()
-    {
-        return $this->getProjectDir().'/var/cache/resource/';
-    }
-
-    /**
-     * @return string
-     */
     public function getLogDir()
     {
         return $this->getProjectDir().'/var/log';

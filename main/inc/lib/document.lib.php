@@ -548,35 +548,13 @@ class DocumentManager
         $tblDocument = Database::get_course_table(TABLE_DOCUMENT);
         $currentUser = $currentUser ?: api_get_current_user();
 
-        $userGroupFilter = '';
-        if (!is_null($toUserId)) {
-            $toUserId = (int) $toUserId;
-            $userGroupFilter = "last.to_user_id = $toUserId";
-            if (empty($toUserId)) {
-                $userGroupFilter = ' (last.to_user_id = 0 OR last.to_user_id IS NULL) ';
-            }
-        } else {
-            $toGroupId = (int) $toGroupId;
-            $userGroupFilter = "last.to_group_id = $toGroupId";
-            if (empty($toGroupId)) {
-                $userGroupFilter = '( last.to_group_id = 0 OR last.to_group_id IS NULL) ';
-            }
-        }
-
         // Escape underscores in the path so they don't act as a wildcard
         $originalPath = $path;
         $path = str_replace('_', '\_', $path);
 
-        $visibilityBit = ' <> 2';
-
         // The given path will not end with a slash, unless it's the root '/'
         // so no root -> add slash
         $addedSlash = $path == '/' ? '' : '/';
-
-        // Condition for the session
-        $sessionId = $sessionId ?: api_get_session_id();
-        $conditionSession = " AND (last.session_id = '$sessionId' OR (last.session_id = '0' OR last.session_id IS NULL) )";
-        $conditionSession .= self::getSessionFolderFilters($originalPath, $sessionId);
 
         $sharedCondition = null;
         if ($originalPath == '/shared_folder') {
@@ -626,9 +604,7 @@ class DocumentManager
         $isCoach = api_is_coach();
         if ($result !== false && Database::num_rows($result) != 0) {
             $rows = [];
-
             $hideInvisibleDocuments = api_get_configuration_value('hide_invisible_course_documents_in_sessions');
-
             while ($row = Database::fetch_array($result, 'ASSOC')) {
                 if (isset($rows[$row['id']])) {
                     continue;
@@ -636,11 +612,11 @@ class DocumentManager
 
                 // If we are in session and hide_invisible_course_documents_in_sessions is enabled
                 // Then we avoid the documents that have visibility in session but that they come from a base course
-                if ($hideInvisibleDocuments && $sessionId) {
+                /*if ($hideInvisibleDocuments && $sessionId) {
                     if ($row['item_property_session_id'] == $sessionId && empty($row['session_id'])) {
                         continue;
                     }
-                }
+                }*/
 
                 if (self::isBasicCourseFolder($row['path'], $sessionId)) {
                     $basicCourseDocumentsContent = self::getAllDocumentData(
@@ -715,9 +691,9 @@ class DocumentManager
             }
 
             return $finalDocumentData;
-        } else {
-            return [];
         }
+
+        return [];
     }
 
     /**
@@ -994,7 +970,7 @@ class DocumentManager
     ) {
         // Deleting from the DB
         $user_id = api_get_user_id();
-        $document_id = intval($document_id);
+        $document_id = (int) $document_id;
 
         if (empty($course_info)) {
             $course_info = api_get_course_info();
@@ -1003,19 +979,7 @@ class DocumentManager
         if (empty($session_id)) {
             $session_id = api_get_session_id();
         }
-        // Soft DB delete
-        /*api_item_property_update(
-            $course_info,
-            TOOL_DOCUMENT,
-            $document_id,
-            'delete',
-            $user_id,
-            null,
-            null,
-            null,
-            null,
-            $session_id
-        );*/
+
         self::delete_document_from_search_engine($course_info['code'], $document_id);
         self::unsetDocumentAsTemplate($document_id, $course_info['real_id'], $user_id);
 
@@ -1027,17 +991,6 @@ class DocumentManager
             $repo->softDelete($document);
 
             return true;
-
-            /*$sql = "DELETE FROM $TABLE_ITEMPROPERTY
-                    WHERE
-                        c_id = {$course_info['real_id']} AND
-                        ref = ".$document_id." AND
-                        tool='".TOOL_DOCUMENT."'";
-            Database::query($sql);
-
-            $sql = "DELETE FROM $TABLE_DOCUMENT
-                    WHERE c_id = {$course_info['real_id']} AND id = ".$document_id;
-            Database::query($sql);*/
         }
     }
 
@@ -1370,8 +1323,7 @@ class DocumentManager
     }
 
     /**
-     * Return true if the documentpath have visibility=1 as
-     * item_property (you should use the is_visible_by_id).
+     * Check document visibility.
      *
      * @param string $doc_path the relative complete path of the document
      * @param array  $course   the _course array info of the document's course
@@ -2974,8 +2926,6 @@ class DocumentManager
         }
 
         $tbl_doc = Database::get_course_table(TABLE_DOCUMENT);
-        $tbl_item_prop = Database::get_course_table(TABLE_ITEM_PROPERTY);
-        $condition_session = " AND (l.session_id = '$session_id' OR l.session_id = '0' OR l.session_id IS NULL)";
 
         $add_folder_filter = null;
         if (!empty($filter_by_folder)) {
@@ -3855,35 +3805,6 @@ class DocumentManager
     }
 
     /**
-     * @param array  $courseInfo
-     * @param int    $id         doc id
-     * @param string $visibility visible/invisible
-     * @param int    $userId
-     */
-    public static function updateVisibilityFromAllSessions($courseInfo, $id, $visibility, $userId)
-    {
-        $sessionList = SessionManager::get_session_by_course($courseInfo['real_id']);
-
-        if (!empty($sessionList)) {
-            foreach ($sessionList as $session) {
-                $sessionId = $session['id'];
-                api_item_property_update(
-                    $courseInfo,
-                    TOOL_DOCUMENT,
-                    $id,
-                    $visibility,
-                    $userId,
-                    null,
-                    null,
-                    null,
-                    null,
-                    $sessionId
-                );
-            }
-        }
-    }
-
-    /**
      * @param string $filePath
      * @param string $path
      * @param array  $courseInfo
@@ -4224,19 +4145,6 @@ class DocumentManager
             false,
             $fileContent
         );
-
-        /*api_item_property_update(
-            $courseData,
-            TOOL_DOCUMENT,
-            $documentId,
-            'DocumentAdded',
-            api_get_user_id(),
-            null,
-            null,
-            null,
-            null,
-            $sessionId
-        );*/
 
         $defaultCertificateId = self::get_default_certificate_id($courseData['real_id'], $sessionId);
 
@@ -4841,15 +4749,17 @@ class DocumentManager
                     preg_match('/svg$/i', urldecode($checkExtension))
                 ) {
                     // Simpler version of showinframesmin.php with no headers
-                    $url = 'show_content.php?'.$courseParams.'&id='.$document_data['id'];
+                    //$url = 'show_content.php?'.$courseParams.'&id='.$document_data['id'];
                     $class = 'ajax ';
+                    //$url = $documentWebPath.str_replace('%2F', '/', $url_path).'?'.$courseParams;
+                    $url = api_get_path(WEB_PUBLIC_PATH)."courses/$courseCode/document$url_path?type=show";
                     if ($addToEditor) {
                         $class = $classAddToEditor;
                         $url = $documentWebPath.str_replace('%2F', '/', $url_path).'?'.$courseParams;
                     }
-                    $url = $documentWebPath.str_replace('%2F', '/', $url_path).'?'.$courseParams;
+
                     $url_path = str_replace('%2F', '/', $url_path);
-                    $url = api_get_path(WEB_PUBLIC_PATH)."courses/$courseCode/document$url_path?type=show";
+
 
                     if ($visibility == false) {
                         $class = ' ajax text-muted ';
@@ -6343,7 +6253,11 @@ This folder contains all sessions that have been opened in the chat. Although th
         $sessionId = api_get_session_id();
         $groupId = api_get_group_id();
         $userIsSubscribed = CourseManager::is_user_subscribed_in_course($userId, $courseInfo['code']);
+
         $url = api_get_path(WEB_COURSE_PATH).$courseInfo['directory'].'/document';
+        if ($addToEditor) {
+            $url = api_get_path(REL_COURSE_PATH).$courseInfo['directory'].'/document';
+        }
 
         $courseId = $courseInfo['real_id'];
         $group_properties = GroupManager::get_group_properties($groupId);

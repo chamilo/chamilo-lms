@@ -338,34 +338,6 @@ if ($is_allowedToEdit && $origin !== 'learnpath') {
     } else {
         $actionsLeft .= $cleanAll;
     }
-
-    // Create a search-box
-    /*$form = new FormValidator('search_simple', 'get', $currentUrl, null, null, FormValidator::LAYOUT_INLINE);
-    $form->addCourseHiddenParams();
-
-    if (api_get_configuration_value('allow_exercise_categories')) {
-        $manager = new ExerciseCategoryManager();
-        $options = $manager->getCategoriesForSelect(api_get_course_int_id());
-        if (!empty($options)) {
-            $form->addSelect(
-                'category_id',
-                get_lang('Category'),
-                $options,
-                ['placeholder' => get_lang('Please select an option'), 'disable_js' => true]
-            );
-        }
-    }
-
-    $form->addText(
-        'keyword',
-        get_lang('Search'),
-        false,
-        [
-            'aria-label' => get_lang('Search'),
-        ]
-    );
-    $form->addButtonSearch(get_lang('Search'));
-    $actionsRight = $form->returnForm();*/
     $actionsRight = '';
 }
 
@@ -402,11 +374,11 @@ if (api_get_configuration_value('allow_exercise_categories') === false) {
                 }
                 $down = Display::url($downIcon, $modifyUrl.'&action=down_category&category_id_edit='.$categoryIdItem);
                 $counter++;
-
                 if ($total === $counter) {
                     $down = Display::url(Display::return_icon('down_na.png'), '#');
                 }
             }
+
             echo Display::page_subheader($category->getName().$up.$down);
             echo Exercise::exerciseGridResource($category->getId(), $keyword);
         }

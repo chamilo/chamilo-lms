@@ -6213,7 +6213,7 @@ class Exercise
             return [];
         }
 
-        $link = $exercise->getFirstResourceLinkFromCourseSession();
+        $link = $exercise->getFirstResourceLinkFromCourseSession(api_get_course_entity($this->course_id));
 
         if ($link->isDraft()) {
             $this->active = 0;
@@ -8392,7 +8392,7 @@ class Exercise
             'text',
             [
                 'title' => get_lang('Name'),
-                'safe' => false // does not escape html
+                'safe' => false, // does not escape html
             ]
         );
 

@@ -15,7 +15,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * Base entity for all resources.
  *
- * @ORM\Entity(repositoryClass="Gedmo\Tree\Entity\Repository\MaterializedPathRepository")
+ * @ORM\Entity(repositoryClass="Chamilo\CoreBundle\Repository\ResourceNodeRepository")
  *
  * @ORM\Table(name="resource_node")
  *
@@ -284,14 +284,23 @@ class ResourceNode
      */
     public static function convertPathForDisplay($path)
     {
-        $pathForDisplay = preg_replace(
+        /*$pathForDisplay = preg_replace(
             '/-\d+'.self::PATH_SEPARATOR.'/',
             ' / ',
             $path
         );
+        if ($pathForDisplay !== null && strlen($pathForDisplay) > 0) {
+            $pathForDisplay = substr_replace($pathForDisplay, '', -3);
+        }
+        */
+        $pathForDisplay = preg_replace(
+            '/-\d+'.self::PATH_SEPARATOR.'/',
+            '/',
+            $path
+        );
 
         if ($pathForDisplay !== null && strlen($pathForDisplay) > 0) {
-            $pathForDisplay = substr_replace($pathForDisplay, "", -3);
+            $pathForDisplay = substr_replace($pathForDisplay, '', -1);
         }
 
         return $pathForDisplay;

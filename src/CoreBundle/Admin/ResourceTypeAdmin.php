@@ -18,6 +18,7 @@ class ResourceTypeAdmin extends AbstractAdmin
     {
         $showMapper
             ->add('name')
+            ->add('entityName')
         ;
     }
 
@@ -25,6 +26,7 @@ class ResourceTypeAdmin extends AbstractAdmin
     {
         $formMapper
             ->add('name')
+            ->add('entityName')
             ->end()
         ;
     }

@@ -31,6 +31,13 @@ class ResourceType
     protected $name;
 
     /**
+     * @ORM\Column()
+     *
+     * @Assert\NotBlank()
+     */
+    protected $entityName;
+
+    /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Tool", inversedBy="resourceTypes")
      * @ORM\JoinColumn(name="tool_id", referencedColumnName="id")
      */
@@ -132,6 +139,26 @@ class ResourceType
     public function setResourceNodes($resourceNodes)
     {
         $this->resourceNodes = $resourceNodes;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getEntityName()
+    {
+        return $this->entityName;
+    }
+
+    /**
+     * @param string $entityName
+     *
+     * @return ResourceType
+     */
+    public function setEntityName($entityName)
+    {
+        $this->entityName = $entityName;
 
         return $this;
     }

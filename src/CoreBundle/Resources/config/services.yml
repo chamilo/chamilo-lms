@@ -28,7 +28,7 @@ services:
     # Classic entity repositories
     Chamilo\CoreBundle\Repository\:
         resource: '../../Repository'
-        exclude: '../../Repository/{BranchSyncRepository.php,ResourceRepository.php}'
+        exclude: '../../Repository/{BranchSyncRepository.php,ResourceRepository.php,ResourceNodeRepository.php}'
         tags: ['doctrine.repository_service']
 
     Chamilo\CoreBundle\Controller\ResourceUploaderController:

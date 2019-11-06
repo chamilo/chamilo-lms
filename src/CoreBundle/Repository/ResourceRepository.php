@@ -67,6 +67,12 @@ class ResourceRepository extends EntityRepository
 
     /**
      * ResourceRepository constructor.
+     *
+     * @param AuthorizationCheckerInterface $authorizationChecker
+     * @param EntityManager                 $entityManager
+     * @param MountManager                  $mountManager
+     * @param RouterInterface               $router
+     * @param string                        $className
      */
     public function __construct(AuthorizationCheckerInterface $authorizationChecker, EntityManager $entityManager, MountManager $mountManager, RouterInterface $router, string $className)
     {
@@ -103,7 +109,7 @@ class ResourceRepository extends EntityRepository
     }
 
     /**
-     * @return EntityRepository
+     * @return ResourceNodeRepository
      */
     public function getResourceNodeRepository()
     {
@@ -138,6 +144,8 @@ class ResourceRepository extends EntityRepository
      * @param mixed $id
      * @param null  $lockMode
      * @param null  $lockVersion
+     *
+     * @return AbstractResource|null
      */
     public function find($id, $lockMode = null, $lockVersion = null): ?AbstractResource
     {
@@ -145,7 +153,7 @@ class ResourceRepository extends EntityRepository
     }
 
     /**
-     * @return AbstractResource
+     * @return AbstractResource|null
      */
     public function findOneBy(array $criteria, array $orderBy = null): ?AbstractResource
     {
@@ -153,7 +161,7 @@ class ResourceRepository extends EntityRepository
     }
 
     /**
-     * @return ResourceFile
+     * @return ResourceFile|null
      */
     public function addFile(ResourceNode $resourceNode, UploadedFile $file): ?ResourceFile
     {
@@ -178,6 +186,8 @@ class ResourceRepository extends EntityRepository
      * Creates a ResourceNode.
      *
      * @param AbstractResource $parent
+     *
+     * @return ResourceNode
      */
     public function addResourceNode(AbstractResource $resource, User $creator, AbstractResource $parent = null): ResourceNode
     {
@@ -206,8 +216,12 @@ class ResourceRepository extends EntityRepository
     }
 
     /**
-     * @param Session    $session
-     * @param CGroupInfo $group
+     * @param AbstractResource $resource
+     * @param int              $visibility
+     * @param User             $creator
+     * @param Course           $course
+     * @param Session|null     $session
+     * @param CGroupInfo|null  $group
      */
     public function addResourceToCourse(AbstractResource $resource, int $visibility, User $creator, Course $course, Session $session = null, CGroupInfo $group = null)
     {
@@ -216,10 +230,11 @@ class ResourceRepository extends EntityRepository
     }
 
     /**
-     * @param int        $visibility
-     * @param Course     $course
-     * @param Session    $session
-     * @param CGroupInfo $group
+     * @param ResourceNode $resourceNode
+     * @param int          $visibility
+     * @param Course       $course
+     * @param Session      $session
+     * @param CGroupInfo   $group
      */
     public function addResourceNodeToCourse(ResourceNode $resourceNode, $visibility, $course, $session, $group): void
     {
@@ -272,7 +287,7 @@ class ResourceRepository extends EntityRepository
         $entityName = $this->getRepository()->getClassMetadata()->getReflectionClass()->getShortName();
 
         return $em->getRepository('ChamiloCoreBundle:Resource\ResourceType')->findOneBy(
-            ['name' => $entityName]
+            ['entityName' => $entityName]
         );
     }
 

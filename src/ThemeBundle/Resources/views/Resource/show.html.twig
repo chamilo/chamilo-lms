@@ -3,14 +3,16 @@
 {% block content %}
     {% autoescape false %}
         <h3>{{ resource_node.name }} </h3>
-
         Type: {{ resource_node.resourceType }}      <br />
-
         {% if resource_node.resourceFile %}
-            File:
-            <a href="{{ url('resources_get_file', {id: resource_node.id } ) }}">
-                {{ resource_node.resourceFile }}
-            </a>
+            {% if resource_node.isResourceFileAnImage %}
+                <img src="{{ url('chamilo_core_resource_file', {id: resource_node.id, 'type' : type, 'tool' : tool} ) }}" />
+            {% else %}
+                File:
+                <a href="{{ url('chamilo_core_resource_file', {id: resource_node.id, 'type' : type, 'tool' : tool } ) }}">
+                    {{ resource_node.resourceFile }}
+                </a>
+            {% endif %}
             <br />
             Size: {{ resource_node.resourceFile.size }}
             <br /><br />

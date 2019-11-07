@@ -402,6 +402,22 @@ class ResourceNode
     }
 
     /**
+     * @return bool
+     */
+    public function isResourceFileAnImage()
+    {
+        if ($this->hasResourceFile()) {
+
+            $mimeType = $this->getResourceFile()->getMimeType();
+            if (strpos($mimeType, 'image') !== false) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
      * @param ResourceFile $resourceFile
      *
      * @return ResourceNode

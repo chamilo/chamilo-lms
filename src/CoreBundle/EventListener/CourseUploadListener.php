@@ -6,11 +6,10 @@ namespace Chamilo\CoreBundle\EventListener;
 use Doctrine\Common\Persistence\ObjectManager;
 use Oneup\UploaderBundle\Event\PostPersistEvent;
 use Oneup\UploaderBundle\Uploader\File\FlysystemFile;
+use Oneup\UploaderBundle\Uploader\Response\ResponseInterface;
 
 /**
  * Class UploadListener.
- *
- * @package Chamilo\CoreBundle\EventListener
  */
 class CourseUploadListener
 {
@@ -21,6 +20,8 @@ class CourseUploadListener
 
     /**
      * CourseUploadListener constructor.
+     *
+     * @param ObjectManager $om
      */
     public function __construct(ObjectManager $om)
     {
@@ -28,7 +29,7 @@ class CourseUploadListener
     }
 
     /**
-     * @return \Oneup\UploaderBundle\Uploader\Response\ResponseInterface
+     * @return ResponseInterface
      */
     public function onUpload(PostPersistEvent $event)
     {

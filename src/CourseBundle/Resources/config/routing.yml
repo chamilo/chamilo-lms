@@ -7,33 +7,53 @@ core_tool:
     type: annotation
     prefix: /courses/{course}/
 
-resources_get_info:
-    path: /resources/info/{id}
-    defaults:
-        _controller: Chamilo\CoreBundle\Controller\ResourceController::showAction
-    requirements:
-        file: .+ # allow "/" in {file}
-
-resources_list:
-    path: /resources/{type}/list
-    defaults:
-        _controller: Chamilo\CoreBundle\Controller\ResourceController::listAction
-    requirements:
-        file: .+ # allow "/" in {file}
-
-resources_get_file:
-    path: /resources/file/{id}
-    defaults:
-        _controller: Chamilo\CoreBundle\Controller\ResourceController::getResourceFileAction
-    requirements:
-        file: .+ # allow "/" in {file}
-
 resources_document_get_file:
     path: /courses/{course}/document/{file}
     defaults:
         _controller: Chamilo\CoreBundle\Controller\ResourceController::getDocumentAction
     requirements:
         file: .+ # allow "/" in {file}
+
+resources_document_list:
+    path: /courses/{course}/resources/document/list
+    defaults:
+        _controller: Chamilo\CourseBundle\Controller\CDocumentController::indexAction
+    requirements:
+        file: .+ # allow "/" in {file}
+
+resources_document_upload:
+    path: /courses/{course}/resources/document/upload
+    defaults:
+        _controller: Chamilo\CourseBundle\Controller\CDocumentController::uploadAction
+    requirements:
+        file: .+ # allow "/" in {file}
+
+resources_document_update:
+    path: /courses/{course}/resources/document/update/{id}
+    defaults:
+        _controller: Chamilo\CourseBundle\Controller\CDocumentController::updateAction
+    requirements:
+        file: .+ # allow "/" in {file}
+
+
+resources_document_delete:
+    path: /courses/{course}/resources/document/delete/{id}
+    defaults:
+        _controller: Chamilo\CourseBundle\Controller\CDocumentController::deleteAction
+    requirements:
+        file: .+ # allow "/" in {file}
+
+
+
+
+
+
+
+
+resources_document_folder_download:
+    path: /courses/{course}/download_folder/{folderId}
+    defaults:
+        _controller: Chamilo\CoreBundle\Controller\ResourceController::downloadFolderAction
 
 chamilo_course_tool_intro_create:
     path: /courses/{course}/introduction/{tool}/create/

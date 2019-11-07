@@ -19,13 +19,13 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * Class HomeController.
+ * Class CourseHomeController.
  *
  * @author Julio Montoya <gugli100@gmail.com>
  *
  * @Route("/")
  */
-class HomeController extends ToolBaseController
+class CourseHomeController extends ToolBaseController
 {
     /**
      * @Route("/", name="course_home")

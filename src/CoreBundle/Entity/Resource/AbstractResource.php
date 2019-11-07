@@ -3,6 +3,8 @@
 
 namespace Chamilo\CoreBundle\Entity\Resource;
 
+
+use APY\DataGridBundle\Grid\Mapping as GRID;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
 use Doctrine\Common\Collections\Criteria;

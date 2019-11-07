@@ -17,22 +17,24 @@ services:
 
     Chamilo\CoreBundle\:
         resource: '../../*'
-        exclude: '../../{Repository,Tool,Admin,Block,Component,Composer,DependencyInjection,EventListener,Form,Framework,Menu,Migrations,Security,Settings,Controller,ChamiloCoreBundle.php,Entity,Tests}'
+        exclude: '../../{Repository,Tool,Admin,Block,Component,Composer,DependencyInjection,EventListener,Form,Framework,Menu,Migrations,Security,Settings,ChamiloCoreBundle.php,Entity,Tests}'
         public: true
 
     Chamilo\CoreBundle\Controller\:
         resource: '../../Controller'
-        public: true
         tags: ['controller.service_arguments']
+
+    apy_grid.factory:
+        class: APY\DataGridBundle\Grid\GridFactory
+        arguments: ['@service_container', '@apy_grid.registry']
+
+    APY\DataGridBundle\Grid\Grid: '@grid'
 
     # Classic entity repositories
     Chamilo\CoreBundle\Repository\:
         resource: '../../Repository'
         exclude: '../../Repository/{BranchSyncRepository.php,ResourceRepository.php,ResourceNodeRepository.php}'
         tags: ['doctrine.repository_service']
-
-#    Chamilo\CoreBundle\Controller\ResourceController:
-#        autowire: false
 
     # Entity repository as a service
     Chamilo\CoreBundle\Repository\AccessUrlRepository:
@@ -277,6 +279,11 @@ services:
         tags:
             - {name: sonata.block}
             - {name: sonata.breadcrumb}
+
+    Chamilo\CoreBundle\Block\BreadcrumbBlockService: '@chamilo_core.block.breadcrumb'
+
+    Chamilo\CoreBundle\Controller\ResourceUploadController:
+        autowire: false
 
     # Form types
     chamilo_user.registration.form.type:

@@ -9,9 +9,9 @@ use Chamilo\CoreBundle\Entity\Resource\AbstractResource;
 use Chamilo\CoreBundle\Entity\Resource\ResourceInterface;
 use Chamilo\CoreBundle\Entity\Resource\ResourceLink;
 use Chamilo\CoreBundle\Entity\Session;
-use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Sluggable\Util\Urlizer;
 
 /**
  * CDocument.
@@ -27,7 +27,7 @@ use Doctrine\ORM\Mapping as ORM;
  *      @ORM\Index(name="idx_cdoc_sid", columns={"session_id"}),
  *  }
  * )
- * @GRID\Source(columns="iid, id, title, filetype", filterable=false)
+ * @GRID\Source(columns="iid, title, filetype", filterable=false)
  *
  * @ORM\Entity
  */
@@ -110,6 +110,7 @@ class CDocument extends AbstractResource implements ResourceInterface
      */
     public function __construct()
     {
+        $this->readonly = false;
     }
 
     /**
@@ -382,6 +383,6 @@ class CDocument extends AbstractResource implements ResourceInterface
      */
     public function getResourceName(): string
     {
-        return $this->getTitle();
+        return basename($this->getPath());
     }
 }

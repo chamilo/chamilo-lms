@@ -1,9 +1,10 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-namespace Chamilo\CoreBundle\Form\Type;
+namespace Chamilo\CourseBundle\Form\Type;
 
 use Chamilo\CourseBundle\Entity\CDocument;
+use FOS\CKEditorBundle\Form\Type\CKEditorType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -11,18 +12,20 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * Class DocumentType.
+ * Class CDocumentType.
  */
-class DocumentType extends AbstractType
+class CDocumentType extends AbstractType
 {
     /**
      * {@inheritdoc}
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        ///var_dump($options);
         $builder
             ->add('title')
-            ->add('comment', 'ckeditor')
+            ->add('title')
+//            ->add('comment', CKEditorType::class)
             /*->add(
                 'shared',
                 ChoiceType::class,
@@ -49,9 +52,8 @@ class DocumentType extends AbstractType
                     'allow_delete' => true,
                 )
             )*/
-            ->add('c_id', HiddenType::class)
+            //->add('c_id', HiddenType::class)
             ->add('filetype', HiddenType::class)
-
             /*->add(
                 'rights',
                 'collection',

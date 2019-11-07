@@ -16,6 +16,7 @@ use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\Tool;
 use Chamilo\CoreBundle\Entity\Usergroup;
 use Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter;
+use Chamilo\CoreBundle\ToolChain;
 use Chamilo\CourseBundle\Entity\CGroupInfo;
 use Chamilo\UserBundle\Entity\User;
 use Doctrine\ORM\EntityManager;
@@ -24,6 +25,7 @@ use Doctrine\ORM\QueryBuilder;
 use League\Flysystem\FilesystemInterface;
 use League\Flysystem\MountManager;
 use Sylius\Bundle\ResourceBundle\Doctrine\ORM\EntityRepository;
+use Symfony\Component\Form\FormFactory;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
@@ -66,6 +68,11 @@ class ResourceRepository extends EntityRepository
     protected $authorizationChecker;
 
     /**
+     * @var MountManager
+     */
+    protected $mountManager;
+
+    /**
      * ResourceRepository constructor.
      *
      * @param AuthorizationCheckerInterface $authorizationChecker
@@ -74,12 +81,19 @@ class ResourceRepository extends EntityRepository
      * @param RouterInterface               $router
      * @param string                        $className
      */
-    public function __construct(AuthorizationCheckerInterface $authorizationChecker, EntityManager $entityManager, MountManager $mountManager, RouterInterface $router, string $className)
-    {
+    public function __construct(
+        AuthorizationCheckerInterface $authorizationChecker,
+        EntityManager $entityManager,
+        MountManager $mountManager,
+        RouterInterface $router,
+        string $className
+    ) {
         $this->repository = $entityManager->getRepository($className);
         // Flysystem mount name is saved in config/packages/oneup_flysystem.yaml @todo add it as a service.
         $this->fs = $mountManager->getFilesystem('resources_fs');
+        $this->mountManager = $mountManager;
         $this->router = $router;
+        //$this->toolChain = $toolChain;
         $this->resourceNodeRepository = $entityManager->getRepository('ChamiloCoreBundle:Resource\ResourceNode');
         $this->authorizationChecker = $authorizationChecker;
     }
@@ -138,6 +152,25 @@ class ResourceRepository extends EntityRepository
     public function getRepository()
     {
         return $this->repository;
+    }
+
+    /**
+     * @param FormFactory $formFactory
+     *
+     * @return \Symfony\Component\Form\FormInterface
+     * @throws \ReflectionException
+     */
+    public function getForm(FormFactory $formFactory)
+    {
+        $className = $this->repository->getClassName();
+        $shortName = (new \ReflectionClass($className))->getShortName();
+
+        $formType = str_replace('Entity\CDocument', 'Form\\Type', $className).'\\'.$shortName.'Type';
+       // $formType = new $formType;
+        $entity = new $className;
+        //$this->container->get('form.factory')->create($type, $data, $options);
+
+        return $formFactory->create($formType, $entity);
     }
 
     /**
@@ -284,7 +317,7 @@ class ResourceRepository extends EntityRepository
     public function getResourceType()
     {
         $em = $this->getEntityManager();
-        $entityName = $this->getRepository()->getClassMetadata()->getReflectionClass()->getShortName();
+        $entityName = $this->getRepository()->getClassName();
 
         return $em->getRepository('ChamiloCoreBundle:Resource\ResourceType')->findOneBy(
             ['entityName' => $entityName]
@@ -421,12 +454,17 @@ class ResourceRepository extends EntityRepository
     }
 
     /**
+     * @param Course          $course
+     * @param Session|null    $session
+     * @param CGroupInfo|null $group
+     *
      * @return QueryBuilder
      */
-    public function getResourcesByCourse(Course $course, Session $session = null, CGroupInfo $group = null)
+    public function getResourcesByCourse(Course $course, Session $session = null, CGroupInfo $group = null, ResourceNode $parentNode = null)
     {
         $repo = $this->getRepository();
         $className = $repo->getClassName();
+        $checker = $this->getAuthorizationChecker();
 
         // Check if this resource type requires to load the base course resources when using a session
         $loadBaseSessionContent = $repo->getClassMetadata()->getReflectionClass()->hasProperty(
@@ -453,7 +491,6 @@ class ResourceRepository extends EntityRepository
                 ]
             );
 
-        $checker = $this->getAuthorizationChecker();
         $isAdmin = $checker->isGranted('ROLE_ADMIN') ||
             $checker->isGranted('ROLE_CURRENT_COURSE_TEACHER');
 
@@ -479,9 +516,16 @@ class ResourceRepository extends EntityRepository
             }
         }
 
+        if (null !== $parentNode) {
+            $qb->andWhere('node.parent = :parentNode');
+            $qb->setParameter('parentNode', $parentNode);
+        }
+
         if (null === $group) {
             $qb->andWhere('links.group IS NULL');
         }
+
+        //echo ($qb->getQuery()->getSQL());exit;
 
         return $qb;
     }

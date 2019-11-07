@@ -9,7 +9,7 @@ services:
             - ~
         calls:
             - [setTranslationDomain, [ChamiloCoreBundle]]
-            - [setToolChain, ['@chamilo_core.tool_chain']]
+            - [setToolChain, ['@Chamilo\CoreBundle\ToolChain']]
 
     sonata.admin.course_rel_user:
         class: Chamilo\CourseBundle\Admin\CourseRelUserAdmin

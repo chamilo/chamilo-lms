@@ -19,11 +19,21 @@ use Doctrine\ORM\Event\LifecycleEventArgs;
  */
 class CourseListener
 {
+    /**
+     * @var ToolChain
+     */
     protected $toolChain;
+
+    /**
+     * @var SettingsManager
+     */
     protected $settingsManager;
 
     /**
      * CourseListener constructor.
+     *
+     * @param ToolChain       $toolChain
+     * @param SettingsManager $settingsManager
      */
     public function __construct(ToolChain $toolChain, SettingsManager $settingsManager)
     {

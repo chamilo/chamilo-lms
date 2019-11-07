@@ -469,7 +469,7 @@ class Container
      */
     public static function getToolChain()
     {
-        return self::$container->get('chamilo_core.tool_chain');
+        return self::$container->get(ToolChain::class);
     }
 
     /**
@@ -489,7 +489,7 @@ class Container
 
         \CourseManager::setCourseSettingsManager($container->get('chamilo_course.settings.manager'));
         // Setting course tool chain (in order to create tools to a course)
-        \CourseManager::setToolList($container->get('chamilo_core.tool_chain'));
+        \CourseManager::setToolList($container->get(ToolChain::class));
 
         if ($setSession) {
             self::$session = $container->get('session');

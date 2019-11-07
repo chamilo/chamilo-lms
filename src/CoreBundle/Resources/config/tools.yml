@@ -4,10 +4,10 @@ services:
         public: true
         autoconfigure: false
 
+
     # Tool chain loads the list of tool services with the tag "chamilo_core.tool"
     # Tool chain is filled in file DependencyInjection/Compiler/ToolCompilerClass.php
-    chamilo_core.tool_chain:
-        class: 'Chamilo\CoreBundle\ToolChain'
+    Chamilo\CoreBundle\ToolChain: ~
 
     # Admin
     chamilo_core.tool.admin:
@@ -185,7 +185,7 @@ services:
             - document/document.php
             - folder_document.gif
             - '@chamilo_course.settings.document'
-            - {CDocument: 'documents'}
+            - {CDocument: 'files', Certificates: 'certificates'}
             - 0
         tags:
             - {name: chamilo_core.tool}

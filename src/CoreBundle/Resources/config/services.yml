@@ -31,11 +31,8 @@ services:
         exclude: '../../Repository/{BranchSyncRepository.php,ResourceRepository.php,ResourceNodeRepository.php}'
         tags: ['doctrine.repository_service']
 
-    Chamilo\CoreBundle\Controller\ResourceUploaderController:
-        autowire: false
-
-    Chamilo\CoreBundle\Controller\ResourceController:
-        autowire: false
+#    Chamilo\CoreBundle\Controller\ResourceController:
+#        autowire: false
 
     # Entity repository as a service
     Chamilo\CoreBundle\Repository\AccessUrlRepository:
@@ -159,7 +156,7 @@ services:
     # When Course entity is loaded
     chamilo_core.listener.course:
         class: Chamilo\CoreBundle\Entity\Listener\CourseListener
-        arguments: ['@chamilo_core.tool_chain', '@chamilo.settings.manager']
+        arguments: ['@Chamilo\CoreBundle\ToolChain', '@chamilo.settings.manager']
         tags:
             - {name: doctrine.orm.entity_listener, entity_manager: default, lazy: true}
 

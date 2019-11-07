@@ -3,6 +3,7 @@
 
 namespace Chamilo\CoreBundle\DependencyInjection\Compiler;
 
+use Chamilo\CoreBundle\ToolChain;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
@@ -14,13 +15,16 @@ use Symfony\Component\DependencyInjection\Reference;
  */
 class ToolCompilerClass implements CompilerPassInterface
 {
+    /**
+     * @param ContainerBuilder $container
+     */
     public function process(ContainerBuilder $container)
     {
-        if (!$container->hasDefinition('chamilo_core.tool_chain')) {
+        if (!$container->has(ToolChain::class)) {
             return;
         }
 
-        $definition = $container->getDefinition('chamilo_core.tool_chain');
+        $definition = $container->findDefinition(ToolChain::class);
         $taggedServices = $container->findTaggedServiceIds('chamilo_core.tool');
         foreach ($taggedServices as $id => $attributes) {
             $definition->addMethodCall('addTool', [new Reference($id)]);

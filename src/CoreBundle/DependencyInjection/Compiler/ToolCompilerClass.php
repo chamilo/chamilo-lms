@@ -12,6 +12,9 @@ use Symfony\Component\DependencyInjection\Reference;
  * Class ToolCompilerClass.
  * Search the services with tag "chamilo_core.tool" in order to be added
  * as a tool (Documents, Notebook, etc).
+ *
+ * See:
+ * https://symfony.com/doc/current/service_container/tags.html
  */
 class ToolCompilerClass implements CompilerPassInterface
 {

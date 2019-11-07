@@ -4,6 +4,7 @@
 use Chamilo\CoreBundle\Entity\AccessUrl;
 use Chamilo\CoreBundle\Entity\ExtraField;
 use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CoreBundle\ToolChain;
 use Chamilo\TicketBundle\Entity\Category as TicketCategory;
 use Chamilo\TicketBundle\Entity\Priority as TicketPriority;
 use Chamilo\TicketBundle\Entity\Project as TicketProject;
@@ -3026,7 +3027,7 @@ function installSchemas($container, $manager, $upgrade = false)
     $settingsManager = Container::getSettingsManager();
 
     // Install course tools (table "tool")
-    $toolChain = $container->get('chamilo_core.tool_chain');
+    $toolChain = $container->get(ToolChain::class);
     $toolChain->createTools($manager);
 
     $urlRepo = $container->get('Chamilo\CoreBundle\Repository\AccessUrlRepository');

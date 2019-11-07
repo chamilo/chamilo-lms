@@ -4,7 +4,6 @@
  * This is a minified version of global.inc.php meant *only* for download.php
  * to check permissions and deliver the file.
  */
-error_log(__LINE__.' : '.microtime());
 use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
 
 // Include the libraries that are necessary everywhere
@@ -302,4 +301,3 @@ if (!isset($_SESSION['login_as']) && isset($_user)) {
         Database::query($sql);
     }
 }
-error_log(__LINE__.' : '.microtime());

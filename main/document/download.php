@@ -56,7 +56,6 @@ if (substr($refer_script, 0, 15) == '/fillsurvey.php') {
     list($invitation, $part1) = preg_split('/&/', $part2);
     unset($part1);
     unset($part2);
-    $invitation = substr(strstr($refer_script, 'invitationcode='), 15);
     $course = strstr($refer_script, 'course=');
     $course = substr($course, 7, strpos($course, '&') - 7);
     include '../survey/survey.download.inc.php';

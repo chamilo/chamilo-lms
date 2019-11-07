@@ -13,16 +13,8 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class SequenceResource
 {
-    const COURSE_TYPE = 1;
-    const SESSION_TYPE = 2;
-
-    /**
-     * @var Sequence
-     *
-     * @ORM\ManyToOne(targetEntity="Sequence")
-     * @ORM\JoinColumn(name="sequence_id", referencedColumnName="id")
-     */
-    protected $sequence;
+    public const COURSE_TYPE = 1;
+    public const SESSION_TYPE = 2;
 
     /**
      * @var int
@@ -32,6 +24,14 @@ class SequenceResource
      * @ORM\GeneratedValue()
      */
     protected $id;
+
+    /**
+     * @var Sequence
+     *
+     * @ORM\ManyToOne(targetEntity="Sequence")
+     * @ORM\JoinColumn(name="sequence_id", referencedColumnName="id")
+     */
+    protected $sequence;
 
     /**
      * @var int

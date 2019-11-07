@@ -146,7 +146,7 @@ class ResourceType
     /**
      * @return string
      */
-    public function getEntityName()
+    public function getEntityName(): string
     {
         return $this->entityName;
     }

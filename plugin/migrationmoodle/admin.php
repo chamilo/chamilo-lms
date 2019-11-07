@@ -4,6 +4,7 @@
 use Chamilo\PluginBundle\MigrationMoodle\Task\CourseCategoriesTask;
 use Chamilo\PluginBundle\MigrationMoodle\Task\CoursesTask;
 use Chamilo\PluginBundle\MigrationMoodle\Task\CourseUsersTask;
+use Chamilo\PluginBundle\MigrationMoodle\Task\CQuizTask;
 use Chamilo\PluginBundle\MigrationMoodle\Task\UsersTask;
 
 require_once __DIR__.'/../../main/inc/global.inc.php';
@@ -17,6 +18,7 @@ $actionNames = [
     'course_categories' => 'Course categories',
     'courses' => 'Courses',
     'course_users' => 'Users in courses',
+    'quizzes' => 'Quizzes',
 ];
 
 foreach ($actionNames as $actionName => $actionTitle) {
@@ -44,6 +46,10 @@ if (!empty($action)) {
         case 'course_users':
             $courseUsersMigration = new CourseUsersTask();
             $courseUsersMigration->execute();
+            break;
+        case 'quizzes':
+            $quizTask = new CQuizTask();
+            $quizTask->execute();
             break;
     }
 }

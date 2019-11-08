@@ -7,6 +7,7 @@ use Chamilo\PluginBundle\MigrationMoodle\Task\CoursesTask;
 use Chamilo\PluginBundle\MigrationMoodle\Task\CourseUsersTask;
 use Chamilo\PluginBundle\MigrationMoodle\Task\CQuizTask;
 use Chamilo\PluginBundle\MigrationMoodle\Task\LearningPathsTask;
+use Chamilo\PluginBundle\MigrationMoodle\Task\LpDirsTask;
 use Chamilo\PluginBundle\MigrationMoodle\Task\UsersTask;
 
 require_once __DIR__.'/../../main/inc/global.inc.php';
@@ -22,6 +23,7 @@ $actionNames = [
     'course_users' => 'Users in courses',
     'quizzes' => 'Quizzes',
     'learning_paths' => 'Learning Paths',
+    'learning_path_chatpers' => 'Learning Paths: Chapters',
 ];
 
 foreach ($actionNames as $actionName => $actionTitle) {
@@ -55,6 +57,8 @@ if (!empty($action)) {
         case 'learning_paths':
             $task = new LearningPathsTask();
             break;
+        case 'learning_path_chatpers':
+            $task = new LpDirsTask();
     }
 
     if ($task) {

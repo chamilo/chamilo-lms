@@ -746,23 +746,25 @@ class ResourceController extends AbstractResourceController implements CourseCon
         $repository = $this->getRepositoryFromRequest($request);
 
         $form = $repository->getForm($this->container->get('form.factory'));
-        $url = $this->generateUrl('editor_filemanager');
-        $form->add(
-            'content',
-            CKEditorType::class,
-            [
-                'mapped' => false,
-                'config' => [
-                    'filebrowserImageBrowseRoute' => 'editor_filemanager',
-                    'filebrowserImageBrowseRouteParameters' => array(
-                        'tool' => $tool,
-                        'type' => $type,
-                        'cidReq' => $this->getCourse()->getCode(),
-                        'id' => $resourceNodeParentId
-                    )
+
+        if ($fileType === 'file') {
+            $form->add(
+                'content',
+                CKEditorType::class,
+                [
+                    'mapped' => false,
+                    'config' => [
+                        'filebrowserImageBrowseRoute' => 'editor_filemanager',
+                        'filebrowserImageBrowseRouteParameters' => array(
+                            'tool' => $tool,
+                            'type' => $type,
+                            'cidReq' => $this->getCourse()->getCode(),
+                            'id' => $resourceNodeParentId
+                        )
                     ],
-            ]
-        );
+                ]
+            );
+        }
 
         $course = $this->getCourse();
         $session = $this->getSession();
@@ -773,6 +775,8 @@ class ResourceController extends AbstractResourceController implements CourseCon
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
+            $em = $this->getDoctrine()->getManager();
+
             /** @var CDocument $newResource */
             $newResource = $form->getData();
 
@@ -784,26 +788,30 @@ class ResourceController extends AbstractResourceController implements CourseCon
                 ->setReadonly(false)
             ;
 
-            $content = $form->get('content')->getViewData();
+            if ($fileType === 'file') {
+                $content = $form->get('content')->getViewData();
+                $fileName = $newResource->getTitle().'.html';
+                $handle = tmpfile();
+                fwrite($handle, $content);
+                $meta = stream_get_meta_data($handle);
 
-            $fileName = $newResource->getTitle().'.html';
-            $handle = tmpfile();
-            fwrite($handle, $content);
-            $meta = stream_get_meta_data($handle);
+                $file = new UploadedFile($meta['uri'], $fileName, null, null, true);
 
-            $file = new UploadedFile($meta['uri'], $fileName, null, null, true);
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($newResource);
-            $em->flush();
+                $em->persist($newResource);
+                $em->flush();
+            }
 
             $resourceNode = $repository->addResourceNodeParent($newResource, $this->getUser(), $parentNode);
-            $resourceNode->setName($fileName);
-            $resourceFile = new ResourceFile();
-            $resourceFile->setFile($file);
-            $resourceFile->setName($fileName);
-            $em->persist($resourceFile);
 
-            $resourceNode->setResourceFile($resourceFile);
+            if ($fileType === 'file') {
+                $resourceNode->setName($fileName);
+                $resourceFile = new ResourceFile();
+                $resourceFile->setFile($file);
+                $resourceFile->setName($fileName);
+                $em->persist($resourceFile);
+                $resourceNode->setResourceFile($resourceFile);
+            }
+
             $em->persist($resourceNode);
 
             $repository->addResourceNodeToCourse(

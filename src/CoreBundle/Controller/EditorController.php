@@ -67,8 +67,9 @@ class EditorController extends BaseController
      *
      * @param int $parentId
      */
-    public function customEditorFileManager($parentId = 0, CDocumentRepository $documentRepository): Response
+    public function customEditorFileManager(\Symfony\Component\HttpFoundation\Request $request,  $parentId = 0, CDocumentRepository $documentRepository): Response
     {
+        $id = $request->get('id');
         $courseInfo = api_get_course_info();
 
         $params = [
@@ -86,7 +87,7 @@ class EditorController extends BaseController
             $oldParentId = -1;
             if (!empty($parentId)) {
                 /** @var CDocument $doc */
-                $doc = $this->getDoctrine()->getRepository('ChamiloCourseBundle:CDocument')->find($parentId);
+                $doc = $this->getDoctrine()->getRepository('ChamiloCourseBundle:CDocument')->findOneBy(['resourceNode'=> $id]);
                 $path = $doc->getPath();
 
                 $parent = $documentRepository->getParent($doc);

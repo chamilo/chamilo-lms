@@ -21,9 +21,7 @@ class CDocumentType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        ///var_dump($options);
         $builder
-            ->add('title')
             ->add('title')
 //            ->add('comment', CKEditorType::class)
             /*->add(

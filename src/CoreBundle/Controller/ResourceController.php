@@ -13,6 +13,7 @@ use APY\DataGridBundle\Grid\Source\Entity;
 use Chamilo\CoreBundle\Block\BreadcrumbBlockService;
 use Chamilo\CoreBundle\Component\Utils\Glide;
 use Chamilo\CoreBundle\Entity\Resource\AbstractResource;
+use Chamilo\CoreBundle\Entity\Resource\ResourceFile;
 use Chamilo\CoreBundle\Entity\Resource\ResourceLink;
 use Chamilo\CoreBundle\Entity\Resource\ResourceNode;
 use Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter;
@@ -23,6 +24,7 @@ use Chamilo\CourseBundle\Repository\CDocumentRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\QueryBuilder;
+use FOS\CKEditorBundle\Form\Type\CKEditorType;
 use FOS\RestBundle\View\View;
 use League\Flysystem\Filesystem;
 use Oneup\UploaderBundle\Uploader\Response\EmptyResponse;
@@ -41,6 +43,8 @@ use Symfony\Component\HttpFoundation\StreamedResponse;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Component\Routing\RouterInterface;
 use Vich\UploaderBundle\Util\Transliterator;
 use ZipStream\Option\Archive;
 use ZipStream\ZipStream;
@@ -615,7 +619,6 @@ class ResourceController extends AbstractResourceController implements CourseCon
                 $stream = $fileSystem->readStream($systemName);
                 //error_log($node->getPathForDisplay());
                 $fileToDisplay = str_replace($rootNodePath, '', $node->getPathForDisplay());
-                error_log($fileToDisplay);
                 $zip->addFileFromStream($fileToDisplay, $stream);
             }
             //$data = $repo->getDocumentContent($not_deleted_file['id']);
@@ -658,47 +661,6 @@ class ResourceController extends AbstractResourceController implements CourseCon
             ]
         );
     }
-
-    /**
-     * @return JsonResponse
-     */
-    public function upload()
-    {
-        error_log('upload!!!');
-        return;
-        $request = $this->getRequest();
-        $response = new EmptyResponse();
-        $files = $this->getFiles($request->files);
-
-        $chunked = null !== $request->headers->get('content-range');
-
-        try {
-            /** @var UploadedFile $file */
-            foreach ($files as $file) {
-                try {
-                    $file->getFilename();
-                    $type = $request->get('type');
-
-                    if ($type === 'course') {
-                        $courseCode = $request->get('identifier');
-                        $this->container->get('');
-                    }
-
-                    $chunked ?
-                        $this->handleChunkedUpload($file, $response, $request) :
-                        $this->handleUpload($file, $response, $request);
-                } catch (UploadException $e) {
-                    $this->errorHandler->addException($response, $e);
-                }
-            }
-        } catch (UploadException $e) {
-            // return nothing
-            return new JsonResponse([]);
-        }
-
-        return $this->createSupportedJsonResponse($response->assemble());
-    }
-
 
     /**
      * @param Request      $request
@@ -784,6 +746,23 @@ class ResourceController extends AbstractResourceController implements CourseCon
         $repository = $this->getRepositoryFromRequest($request);
 
         $form = $repository->getForm($this->container->get('form.factory'));
+        $url = $this->generateUrl('editor_filemanager');
+        $form->add(
+            'content',
+            CKEditorType::class,
+            [
+                'mapped' => false,
+                'config' => [
+                    'filebrowserImageBrowseRoute' => 'editor_filemanager',
+                    'filebrowserImageBrowseRouteParameters' => array(
+                        'tool' => $tool,
+                        'type' => $type,
+                        'cidReq' => $this->getCourse()->getCode(),
+                        'id' => $resourceNodeParentId
+                    )
+                    ],
+            ]
+        );
 
         $course = $this->getCourse();
         $session = $this->getSession();
@@ -802,15 +781,30 @@ class ResourceController extends AbstractResourceController implements CourseCon
                 ->setSession($session)
                 ->setFiletype($fileType)
                 //->setTitle($title) // already added in $form->getData()
-                //->setComment($comment)
                 ->setReadonly(false)
             ;
 
+            $content = $form->get('content')->getViewData();
+
+            $fileName = $newResource->getTitle().'.html';
+            $handle = tmpfile();
+            fwrite($handle, $content);
+            $meta = stream_get_meta_data($handle);
+
+            $file = new UploadedFile($meta['uri'], $fileName, null, null, true);
             $em = $this->getDoctrine()->getManager();
             $em->persist($newResource);
             $em->flush();
 
             $resourceNode = $repository->addResourceNodeParent($newResource, $this->getUser(), $parentNode);
+            $resourceNode->setName($fileName);
+            $resourceFile = new ResourceFile();
+            $resourceFile->setFile($file);
+            $resourceFile->setName($fileName);
+            $em->persist($resourceFile);
+
+            $resourceNode->setResourceFile($resourceFile);
+            $em->persist($resourceNode);
 
             $repository->addResourceNodeToCourse(
                 $resourceNode,

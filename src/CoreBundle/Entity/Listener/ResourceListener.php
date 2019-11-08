@@ -18,12 +18,15 @@ use Vich\UploaderBundle\Util\FilenameUtils;
 class ResourceListener
 {
     protected $slugify;
-    protected $mountManager;
 
-    public function __construct(SlugifyInterface $slugify, MountManager $mountManager)
+    /**
+     * ResourceListener constructor.
+     *
+     * @param SlugifyInterface $slugify
+     */
+    public function __construct(SlugifyInterface $slugify)
     {
         $this->slugify = $slugify;
-        $this->fileSystem = $mountManager->getFilesystem('resources_fs');
     }
 
     /**
@@ -45,7 +48,6 @@ class ResourceListener
         } else {
             $modified = $this->slugify->slugify($name);
         }
-
         $node->setName($modified);
 
         $em->persist($node);

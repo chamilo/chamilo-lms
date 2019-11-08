@@ -165,7 +165,7 @@ class ResourceRepository extends EntityRepository
      *
      * @return FormInterface
      */
-    public function getForm(FormFactory $formFactory, AbstractResource $resource = null)
+    public function getForm(FormFactory $formFactory, AbstractResource $resource = null, $options = [])
     {
         $className = $this->repository->getClassName();
         $shortName = (new \ReflectionClass($className))->getShortName();
@@ -176,7 +176,7 @@ class ResourceRepository extends EntityRepository
             $resource = new $className;
         }
 
-        return $formFactory->create($formType, $resource);
+        return $formFactory->create($formType, $resource, $options);
     }
 
     /**

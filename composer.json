@@ -40,6 +40,7 @@
         "ext-dom": "*",
         "ext-fileinfo": "*",
         "ext-gd": "*",
+        "ext-exif": "*",
         "ext-intl": "*",
         "ext-json": "*",
         "ext-libxml": "*",
@@ -156,16 +157,17 @@
         "liip/theme-bundle": "^1.6",
         "liip/imagine-bundle": "^2.1",
         "a2lix/translation-form-bundle": "^3.0",
-        "oneup/uploader-bundle": "^2.0",
+        "oneup/uploader-bundle": "dev-master",
         "overblog/graphql-bundle": "~0.11",
         "firebase/php-jwt": "^5.0",
         "simplethings/entity-audit-bundle": "^1.0",
         "masterminds/html5": "2.*",
         "league/csv": "^9.1",
         "brumann/polyfill-unserialize": "^1.0",
-        "vich/uploader-bundle": "1.8.*",
+        "vich/uploader-bundle": "~1.0",
         "maennchen/zipstream-php": "^1.2",
-        "league/glide-symfony": "^1.0"
+        "league/glide-symfony": "^1.0",
+        "cocur/slugify": "^3.2"
     },
     "config": {
         "component-dir": "public/assets"
@@ -207,6 +209,7 @@
         ],
         "pre-update-cmd": [
             "Chamilo\\CoreBundle\\Composer\\ScriptHandler::deleteOldFilesFrom19x"
-        ]
+        ],
+        "phpcs": "phpcs --standard=.php_cs.dist"
     }
 }

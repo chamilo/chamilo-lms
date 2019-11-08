@@ -12,6 +12,7 @@ use APY\DataGridBundle\Grid\Row;
 use APY\DataGridBundle\Grid\Source\Entity;
 use Chamilo\CoreBundle\Block\BreadcrumbBlockService;
 use Chamilo\CoreBundle\Component\Utils\Glide;
+use Chamilo\CoreBundle\Entity\Resource\AbstractResource;
 use Chamilo\CoreBundle\Entity\Resource\ResourceLink;
 use Chamilo\CoreBundle\Entity\Resource\ResourceNode;
 use Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter;
@@ -319,13 +320,17 @@ class ResourceController extends AbstractResourceController implements CourseCon
             $em->flush();
             $this->addFlash('success', $this->trans('Updated'));
 
+            if ($newResource->getResourceNode()->hasResourceFile()) {
+                $resourceNodeParentId = $newResource->getResourceNode()->getParent()->getId();
+            }
+
             return $this->redirectToRoute(
                 'chamilo_core_resource_list',
                 [
                     'id' => $resourceNodeParentId,
                     'tool' => $tool,
                     'type' => $type,
-                    'cidReq' => $this->getCourse()->getCode()
+                    'cidReq' => $this->getCourse()->getCode(),
                 ]
             );
         }
@@ -419,7 +424,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
                 'id' => $parentId,
                 'tool' => $tool,
                 'type' => $type,
-                'cidReq' => $this->getCourse()->getCode()
+                'cidReq' => $this->getCourse()->getCode(),
             ]
         );
     }
@@ -466,7 +471,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
                 'id' => $parentId,
                 'tool' => $tool,
                 'type' => $type,
-                'cidReq' => $this->getCourse()->getCode()
+                'cidReq' => $this->getCourse()->getCode(),
             ]
         );
     }
@@ -631,7 +636,8 @@ class ResourceController extends AbstractResourceController implements CourseCon
     /**
      * Upload form.
      *
-     * @Route("/{tool}/{type}/{id}/upload", name="chamilo_core_resource_upload", methods={"GET", "POST"}, options={"expose"=true})
+     * @Route("/{tool}/{type}/{id}/upload", name="chamilo_core_resource_upload", methods={"GET", "POST"},
+     *                                      options={"expose"=true})
      */
     public function uploadAction(Request $request, $tool, $type, $id): Response
     {
@@ -795,7 +801,6 @@ class ResourceController extends AbstractResourceController implements CourseCon
                 ->setCourse($course)
                 ->setSession($session)
                 ->setFiletype($fileType)
-                ->setPath($newResource->getTitle())
                 //->setTitle($title) // already added in $form->getData()
                 //->setComment($comment)
                 ->setReadonly(false)
@@ -879,7 +884,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
                     'id' => $resourceNodeParentId,
                     'tool' => $tool,
                     'type' => $type,
-                    'cidReq' => $this->getCourse()->getCode()
+                    'cidReq' => $this->getCourse()->getCode(),
                 ]
             );
         }
@@ -917,6 +922,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
         if (!empty($resourceNodeId)) {
             $breadcrumb = $this->breadcrumbBlockService;
 
+            // Root tool link
             $breadcrumb->addChild(
                 $this->translator->trans('Documents'),
                 [
@@ -930,9 +936,11 @@ class ResourceController extends AbstractResourceController implements CourseCon
             $repo = $this->getRepositoryFromRequest($request);
 
             /** @var ResourceNode $parent */
-            $parent = $originalParent = $repo->getResourceNodeRepository()->find(
-                $resourceNodeId
-            );
+            $originalResource = $repo->findOneBy([ 'resourceNode' => $resourceNodeId]);
+            if ($originalResource === null) {
+                return;
+            }
+            $parent = $originalParent = $originalResource->getResourceNode();
 
             $parentList = [];
             while ($parent !== null) {
@@ -941,27 +949,34 @@ class ResourceController extends AbstractResourceController implements CourseCon
                 }
                 $parent = $parent->getParent();
                 if ($parent) {
-                    $parent = $repo->getResourceNodeRepository()->find($parent->getId());
-                    $parentList[] = $parent;
+                    $resource = $repo->findOneBy([ 'resourceNode' => $parent->getId()]);
+                    if ($resource) {
+                        $parentList[] = $resource;
+                    }
                 }
             }
 
             $parentList = array_reverse($parentList);
-
-            foreach ($parentList as $parent) {
+            /** @var AbstractResource $item */
+            foreach ($parentList as $item) {
                 $breadcrumb->addChild(
-                    $parent->getName(),
+                    $item->getResourceName(),
                     [
                         'uri' => $this->generateUrl(
                             'chamilo_core_resource_list',
-                            ['tool' => $tool, 'type' => $type, 'id' => $parent->getId(), 'cidReq' => $courseCode]
+                            [
+                                'tool' => $tool,
+                                'type' => $type,
+                                'id' => $item->getResourceNode()->getId(),
+                                'cidReq' => $courseCode,
+                            ]
                         ),
                     ]
                 );
             }
 
             $breadcrumb->addChild(
-                $originalParent->getName(),
+                $originalResource->getResourceName(),
                 [
                     'uri' => $this->generateUrl(
                         'chamilo_core_resource_list',

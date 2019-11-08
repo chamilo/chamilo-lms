@@ -52,7 +52,7 @@ class CDocument extends AbstractResource implements ResourceInterface
     /**
      * @var string
      *
-     * @ORM\Column(name="path", type="string", length=255, nullable=false)
+     * @ORM\Column(name="path", type="string", length=255, nullable=true)
      */
     protected $path;
 
@@ -385,6 +385,6 @@ class CDocument extends AbstractResource implements ResourceInterface
      */
     public function getResourceName(): string
     {
-        return basename($this->getPath());
+        return $this->getTitle();
     }
 }

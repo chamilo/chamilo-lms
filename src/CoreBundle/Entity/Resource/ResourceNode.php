@@ -36,19 +36,11 @@ class ResourceNode
 
     /**
      * @Gedmo\TreePathSource
-     *
      * @ORM\Column()
      *
      * @Assert\NotBlank()
      */
     protected $name;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="description", type="text", nullable = true)
-     */
-    protected $description;
 
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Resource\ResourceType", inversedBy="resourceNodes")
@@ -425,26 +417,6 @@ class ResourceNode
     public function setResourceFile(ResourceFile $resourceFile): ResourceNode
     {
         $this->resourceFile = $resourceFile;
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getDescription(): string
-    {
-        return (string) $this->description;
-    }
-
-    /**
-     * @param string $description
-     *
-     * @return ResourceNode
-     */
-    public function setDescription(string $description): ResourceNode
-    {
-        $this->description = $description;
 
         return $this;
     }

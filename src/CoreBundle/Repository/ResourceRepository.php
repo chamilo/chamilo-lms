@@ -19,6 +19,8 @@ use Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter;
 use Chamilo\CoreBundle\ToolChain;
 use Chamilo\CourseBundle\Entity\CGroupInfo;
 use Chamilo\UserBundle\Entity\User;
+use Cocur\Slugify\Slugify;
+use Cocur\Slugify\SlugifyInterface;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\ORM\QueryBuilder;
@@ -72,6 +74,7 @@ class ResourceRepository extends EntityRepository
      * @var MountManager
      */
     protected $mountManager;
+    protected $slugify;
 
     /**
      * ResourceRepository constructor.
@@ -87,6 +90,7 @@ class ResourceRepository extends EntityRepository
         EntityManager $entityManager,
         MountManager $mountManager,
         RouterInterface $router,
+        SlugifyInterface $slugify,
         string $className
     ) {
         $this->repository = $entityManager->getRepository($className);
@@ -97,6 +101,7 @@ class ResourceRepository extends EntityRepository
         //$this->toolChain = $toolChain;
         $this->resourceNodeRepository = $entityManager->getRepository('ChamiloCoreBundle:Resource\ResourceNode');
         $this->authorizationChecker = $authorizationChecker;
+        $this->slugify = $slugify;
     }
 
     /**
@@ -222,15 +227,12 @@ class ResourceRepository extends EntityRepository
      * @param ResourceNode|null $parent
      *
      * @return ResourceNode
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
      */
     public function addResourceNodeParent(AbstractResource $resource, User $creator, ResourceNode $parent = null): ResourceNode
     {
         $em = $this->getEntityManager();
 
         $resourceType = $this->getResourceType();
-
         $resourceNode = new ResourceNode();
         $resourceNode
             ->setName($resource->getResourceName())

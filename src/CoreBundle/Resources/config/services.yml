@@ -155,6 +155,12 @@ services:
 #        tags:
 #            - {name: kernel.event_listener, event: kernel.controller, method: onCoreController}
 
+    # When Session entity is loaded
+    chamilo_core.listener.resource:
+        class: Chamilo\CoreBundle\Entity\Listener\ResourceListener
+        tags:
+            - {name: doctrine.orm.entity_listener, entity_manager: default, lazy: true}
+
     # When Course entity is loaded
     chamilo_core.listener.course:
         class: Chamilo\CoreBundle\Entity\Listener\CourseListener

@@ -79,4 +79,5 @@ return [
     Liip\ImagineBundle\LiipImagineBundle::class => ['all' => true],
     HtmlSanitizer\Bundle\HtmlSanitizerBundle::class => ['all' => true],
     Vich\UploaderBundle\VichUploaderBundle::class => ['all' => true],
+    Cocur\Slugify\Bridge\Symfony\CocurSlugifyBundle::class => ['all' => true],
 ];

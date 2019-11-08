@@ -15,6 +15,7 @@ use Sylius\Component\Resource\Model\ResourceInterface;
 /**
  * @ORM\MappedSuperclass
  * @ORM\HasLifecycleCallbacks
+ * @ORM\EntityListeners({"Chamilo\CoreBundle\Entity\Listener\ResourceListener"})
  */
 abstract class AbstractResource implements ResourceInterface
 {
@@ -25,28 +26,6 @@ abstract class AbstractResource implements ResourceInterface
     public $resourceNode;
 
     abstract public function getResourceName(): string;
-
-    /**
-     * Updates the resource node name when updating the resource.
-     *
-     * @ORM\PostUpdate()
-     */
-    public function postUpdate(LifecycleEventArgs $args)
-    {
-        $em = $args->getEntityManager();
-        // Updates resource node name with the resource name.
-        $node = $this->getResourceNode();
-        $name = $this->getResourceName();
-        $node->setName($name);
-
-        if ($node->hasResourceFile()) {
-            // Update file name if exists too.
-            $node->getResourceFile()->setOriginalName($name);
-        }
-
-        $em->persist($node);
-        $em->flush();
-    }
 
     /**
      * @return $this

@@ -163,22 +163,9 @@ apy_data_grid:
 #            prev_message: "«"
 #            next_message: "»"
 
-
 # Course settings
 chamilo_course:
     driver: doctrine/orm
-#    resources:
-#        parameter:
-#            classes:
-#                model: Chamilo\CourseBundle\Entity\CCourseSetting
-#                repository: Chamilo\CourseBundle\Repository\CCourseSettingRepository
-
-#doctrine_cache:
-#    providers:
-#        sylius_settings:
-#            type: file_system
-#        chamilo_settings:
-#            type: file_system
 
 gregwar_captcha:
     width: 200
@@ -190,18 +177,12 @@ imports:
     - {resource: ../src/PageBundle/Resources/config/services.yml}
     - {resource: ../vendor/knplabs/doctrine-behaviors/config/orm-services.yml}
 
-#sylius_resource:
-#    resources:
-#        app.document:
-#            templates: ChamiloCoreBundle:Document
-#            classes:
-#                controller: Chamilo\CoreBundle\Controller\ResourceController
-#                model: Chamilo\CourseBundle\Entity\CDocument
-#                repository: Chamilo\CoreBundle\Repository\ResourceRepository
-
 sylius_resource:
     resources:
         app.exercise_category:
             driver: 'doctrine/orm'
             classes:
                 model: 'Chamilo\CourseBundle\Entity\CExerciseCategory'
+
+cocur_slugify:
+    lowercase: true

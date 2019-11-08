@@ -6,6 +6,7 @@ namespace Chamilo\CoreBundle\Controller;
 use Chamilo\CoreBundle\Block\BreadcrumbBlockService;
 use Chamilo\CoreBundle\Repository\ResourceRepository;
 use Chamilo\CoreBundle\ToolChain;
+use Cocur\Slugify\SlugifyInterface;
 use League\Flysystem\MountManager;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -20,18 +21,21 @@ abstract class AbstractResourceController extends BaseController
     protected $translator;
     protected $breadcrumbBlockService;
     protected $fs;
+    protected $slugify;
 
     public function __construct(
         MountManager $mountManager,
         ToolChain $toolChain,
         TranslatorInterface $translator,
-        BreadcrumbBlockService $breadcrumbBlockService
+        BreadcrumbBlockService $breadcrumbBlockService,
+        SlugifyInterface $slugify
     ) {
         $this->mountManager = $mountManager;
         $this->fs = $mountManager->getFilesystem('resources_fs');
         $this->translator = $translator;
         $this->toolChain = $toolChain;
         $this->breadcrumbBlockService = $breadcrumbBlockService;
+        $this->slugify = $slugify;
     }
 
     /**
@@ -80,6 +84,7 @@ abstract class AbstractResourceController extends BaseController
             $this->getDoctrine()->getManager(),
             $this->mountManager,
             $this->get('router'),
+            $this->slugify,
             $type
         );
 

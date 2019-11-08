@@ -56,7 +56,7 @@ class ResourceUploadController extends BlueimpController
 
         $parent = $repo->getResourceNodeRepository()->find($id);
 
-        $chunked = null !== $request->headers->get('content-range');
+        //$chunked = null !== $request->headers->get('content-range');
 
         $response = new EmptyResponse();
         $files = $this->getFiles($request->files);
@@ -72,15 +72,12 @@ class ResourceUploadController extends BlueimpController
                         ->setTitle($title)
                         ->setSize($file->getSize())
                         ->setCourse($course)
-                        ->setPath($title)
                     ;
 
                     $em->persist($document);
                     $em->flush();
                     $document->setId($document->getIid());
-
-                    $resourceNode = $repo->addResourceNode($document,$user);
-                    $resourceNode->setParent($parent);
+                    $resourceNode = $repo->addResourceNodeParent($document,$user, $parent);
 
                     $resourceFile = new ResourceFile();
                     $resourceFile->setFile($file);
@@ -88,7 +85,6 @@ class ResourceUploadController extends BlueimpController
                     $em->persist($resourceFile);
 
                     $resourceNode->setResourceFile($resourceFile);
-
                     $em->persist($resourceNode);
                     $em->flush();
 

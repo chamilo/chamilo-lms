@@ -1,6 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\PluginBundle\MigrationMoodle\Task\BaseTask;
 use Chamilo\PluginBundle\MigrationMoodle\Task\CourseCategoriesTask;
 use Chamilo\PluginBundle\MigrationMoodle\Task\CoursesTask;
 use Chamilo\PluginBundle\MigrationMoodle\Task\CourseUsersTask;
@@ -30,27 +31,29 @@ foreach ($actionNames as $actionName => $actionTitle) {
 if (!empty($action)) {
     echo '<h3>'.$actionNames[$action].'</h3>';
 
+    /** @var BaseTask|null $task */
+    $task = null;
+
     switch ($action) {
         case 'users':
-            $usersMigration = new UsersTask();
-            $usersMigration->execute();
+            $task = new UsersTask();
             break;
         case 'course_categories':
-            $courseCategoriesMigration = new CourseCategoriesTask();
-            $courseCategoriesMigration->execute();
+            $task = new CourseCategoriesTask();
             break;
         case 'courses':
-            $coursesMigration = new CoursesTask();
-            $coursesMigration->execute();
+            $task = new CoursesTask();
             break;
         case 'course_users':
-            $courseUsersMigration = new CourseUsersTask();
-            $courseUsersMigration->execute();
+            $task = new CourseUsersTask();
             break;
         case 'quizzes':
-            $quizTask = new CQuizTask();
-            $quizTask->execute();
+            $task = new CQuizTask();
             break;
+    }
+
+    if ($task) {
+        $task->execute();
     }
 }
 

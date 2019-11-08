@@ -11,7 +11,6 @@ use Chamilo\CoreBundle\Entity\Resource\ResourceLink;
 use Chamilo\CoreBundle\Entity\Session;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Mapping as ORM;
-use Gedmo\Sluggable\Util\Urlizer;
 
 /**
  * CDocument.
@@ -27,7 +26,7 @@ use Gedmo\Sluggable\Util\Urlizer;
  *      @ORM\Index(name="idx_cdoc_sid", columns={"session_id"}),
  *  }
  * )
- * @GRID\Source(columns="iid, title, filetype", filterable=true)
+ * @GRID\Source(columns="iid, title, filetype", filterable=false)
  *
  * @ORM\Entity
  */

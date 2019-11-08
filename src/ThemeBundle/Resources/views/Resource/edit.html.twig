@@ -8,9 +8,13 @@
     <div class="box-body">
       {{ form_start(form) }}
 
-      {#      {{ form_errors(form) }}#}
+      {{ form_errors(form) }}
 
-      {#      {{ form_row(form.title) }}#}
+      {{ form_row(form.title) }}
+
+      {% if form.content %}
+        {{ form_row(form.content) }}
+      {% endif %}
 
       {#      {{ form_label(form.title) }}#}
       {#      {{ form_errors(form.title) }}#}

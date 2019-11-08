@@ -3,7 +3,7 @@
 {% block content %}
     {% autoescape false %}
         <h3>{{ resource_node.name }} </h3>
-        Type: {{ resource_node.resourceType }}<br />
+{#        Type: {{ resource_node.resourceType }}<br />#}
 
         {% if resource_node.resourceFile %}
             {% if resource_node.isResourceFileAnImage %}

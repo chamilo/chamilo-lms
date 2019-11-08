@@ -39,45 +39,7 @@ final class CDocumentRepository extends ResourceRepository
         );
     }
 
-    /**
-     * @param int $id
-     */
-    public function getDocumentContent($id): string
-    {
-        try {
-            /** @var CDocument $document */
-            $document = $this->find($id);
-            $resourceNode = $document->getResourceNode();
-            $resourceFile = $resourceNode->getResourceFile();
-            $fileName = $resourceFile->getFile()->getPathname();
 
-            return $this->fs->read($fileName);
-        } catch (\Throwable $exception) {
-            throw new FileNotFoundException($id);
-        }
-    }
-
-    /**
-     * @param string $content
-     *
-     * @return bool
-     */
-    public function updateDocumentContent(CDocument $document, $content)
-    {
-        try {
-            $resourceNode = $document->getResourceNode();
-            $resourceFile = $resourceNode->getResourceFile();
-            $fileName = $resourceFile->getFile()->getPathname();
-
-            $this->fs->update($fileName, $content);
-            $size = $this->fs->getSize($fileName);
-            $document->setSize($size);
-            $this->entityManager->persist($document);
-
-            return true;
-        } catch (\Throwable $exception) {
-        }
-    }
 
     /**
      * @return CDocument|null

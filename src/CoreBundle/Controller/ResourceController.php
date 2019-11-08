@@ -308,11 +308,36 @@ class ResourceController extends AbstractResourceController implements CourseCon
         $type = $request->get('type');
         $nodeId = $request->get('id');
 
+        $this->setBreadCrumb($request);
+
         $repository = $this->getRepositoryFromRequest($request);
+        /** @var AbstractResource $resource */
         $resource = $repository->getRepository()->findOneBy(['resourceNode' => $nodeId]);
-        $resourceNodeParentId = $resource->getResourceNode()->getId();
+        $node = $resource->getResourceNode();
+        $resourceNodeParentId = $node->getId();
 
         $form = $repository->getForm($this->container->get('form.factory'), $resource);
+
+        if ($node->isEditable()) {
+            $form->add(
+                'content',
+                CKEditorType::class,
+                [
+                    'mapped' => false,
+                    'config' => [
+                        'filebrowserImageBrowseRoute' => 'editor_filemanager',
+                        'filebrowserImageBrowseRouteParameters' => array(
+                            'tool' => $tool,
+                            'type' => $type,
+                            'cidReq' => $this->getCourse()->getCode(),
+                            'id' => $resourceNodeParentId
+                        )
+                    ],
+                ]
+            );
+            $content = $repository->getResourceFileContent($resource);
+            $form->get('content')->setData($content);
+        }
 
         $form->handleRequest($request);
 
@@ -320,6 +345,9 @@ class ResourceController extends AbstractResourceController implements CourseCon
             /** @var CDocument $newResource */
             $newResource = $form->getData();
             $em = $this->getDoctrine()->getManager();
+            $data = $form->get('content')->getData();
+            $repository->updateResourceFileContent($newResource, $data);
+
             $em->persist($newResource);
             $em->flush();
             $this->addFlash('success', $this->trans('Updated'));

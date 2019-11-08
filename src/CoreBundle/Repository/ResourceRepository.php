@@ -17,6 +17,7 @@ use Chamilo\CoreBundle\Entity\Tool;
 use Chamilo\CoreBundle\Entity\Usergroup;
 use Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter;
 use Chamilo\CoreBundle\ToolChain;
+use Chamilo\CourseBundle\Entity\CDocument;
 use Chamilo\CourseBundle\Entity\CGroupInfo;
 use Chamilo\UserBundle\Entity\User;
 use Cocur\Slugify\Slugify;
@@ -27,6 +28,7 @@ use Doctrine\ORM\QueryBuilder;
 use League\Flysystem\FilesystemInterface;
 use League\Flysystem\MountManager;
 use Sylius\Bundle\ResourceBundle\Doctrine\ORM\EntityRepository;
+use Symfony\Component\Filesystem\Exception\FileNotFoundException;
 use Symfony\Component\Form\FormFactory;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -690,4 +692,54 @@ class ResourceRepository extends EntityRepository
 
         return true;
     }
+
+    /**
+     * @param AbstractResource $resource
+     *
+     * @return string
+     */
+    public function getResourceFileContent(AbstractResource $resource): string
+    {
+        try {
+            $resourceNode = $resource->getResourceNode();
+            if ($resourceNode->hasResourceFile()) {
+                $resourceFile = $resourceNode->getResourceFile();
+                $fileName = $resourceFile->getFile()->getPathname();
+
+                return $this->fs->read($fileName);
+            }
+
+            return '';
+        } catch (\Throwable $exception) {
+            throw new FileNotFoundException($id);
+        }
+    }
+
+    /**
+     * @param AbstractResource $resource
+     * @param string $content
+     *
+     * @return bool
+     */
+    public function updateResourceFileContent(AbstractResource $resource, $content)
+    {
+        try {
+            $resourceNode = $resource->getResourceNode();
+            if ($resourceNode->hasResourceFile()) {
+                $resourceFile = $resourceNode->getResourceFile();
+                $fileName = $resourceFile->getFile()->getPathname();
+
+                $this->fs->update($fileName, $content);
+                $size = $this->fs->getSize($fileName);
+                $resource->setSize($size);
+                $this->entityManager->persist($resource);
+
+                return true;
+            }
+
+            return false;
+        } catch (\Throwable $exception) {
+        }
+    }
+
 }

@@ -205,7 +205,7 @@ class ResourceNode
     /**
      * Returns the parent resource.
      *
-     * @return AbstractResource
+     * @return ResourceNode
      */
     public function getParent()
     {

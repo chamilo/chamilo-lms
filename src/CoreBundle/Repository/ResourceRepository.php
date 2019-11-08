@@ -26,6 +26,7 @@ use League\Flysystem\FilesystemInterface;
 use League\Flysystem\MountManager;
 use Sylius\Bundle\ResourceBundle\Doctrine\ORM\EntityRepository;
 use Symfony\Component\Form\FormFactory;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
@@ -157,20 +158,20 @@ class ResourceRepository extends EntityRepository
     /**
      * @param FormFactory $formFactory
      *
-     * @return \Symfony\Component\Form\FormInterface
-     * @throws \ReflectionException
+     * @return FormInterface
      */
-    public function getForm(FormFactory $formFactory)
+    public function getForm(FormFactory $formFactory, AbstractResource $resource = null)
     {
         $className = $this->repository->getClassName();
         $shortName = (new \ReflectionClass($className))->getShortName();
 
         $formType = str_replace('Entity\CDocument', 'Form\\Type', $className).'\\'.$shortName.'Type';
-       // $formType = new $formType;
-        $entity = new $className;
-        //$this->container->get('form.factory')->create($type, $data, $options);
 
-        return $formFactory->create($formType, $entity);
+        if ($resource === null){
+            $resource = new $className;
+        }
+
+        return $formFactory->create($formType, $resource);
     }
 
     /**
@@ -216,13 +217,15 @@ class ResourceRepository extends EntityRepository
     }
 
     /**
-     * Creates a ResourceNode.
-     *
-     * @param AbstractResource $parent
+     * @param AbstractResource  $resource
+     * @param User              $creator
+     * @param ResourceNode|null $parent
      *
      * @return ResourceNode
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
      */
-    public function addResourceNode(AbstractResource $resource, User $creator, AbstractResource $parent = null): ResourceNode
+    public function addResourceNodeParent(AbstractResource $resource, User $creator, ResourceNode $parent = null): ResourceNode
     {
         $em = $this->getEntityManager();
 
@@ -236,7 +239,7 @@ class ResourceRepository extends EntityRepository
         ;
 
         if (null !== $parent) {
-            $resourceNode->setParent($parent->getResourceNode());
+            $resourceNode->setParent($parent);
         }
 
         $resource->setResourceNode($resourceNode);
@@ -246,6 +249,22 @@ class ResourceRepository extends EntityRepository
         $em->flush();
 
         return $resourceNode;
+    }
+
+    /**
+     * @param AbstractResource      $resource
+     * @param User                  $creator
+     * @param AbstractResource|null $parent
+     *
+     * @return ResourceNode
+     */
+    public function addResourceNode(AbstractResource $resource, User $creator, AbstractResource $parent = null): ResourceNode
+    {
+        if (null !== $parent) {
+            $parent = $parent->getResourceNode();
+        }
+
+        return $this->addResourceNodeParent($resource, $creator, $parent);
     }
 
     /**

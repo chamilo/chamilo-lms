@@ -6,13 +6,22 @@
         Type: {{ resource_node.resourceType }}      <br />
         {% if resource_node.resourceFile %}
             {% if resource_node.isResourceFileAnImage %}
-                <img src="{{ url('chamilo_core_resource_file', {id: resource_node.id, 'type' : type, 'tool' : tool} ) }}" />
+                Preview:
+                <br />
+                <img src=
+                     "{{ url(
+                         'chamilo_core_resource_file', {id: resource_node.id, 'type' : type, 'tool' : tool, 'filter' : 'resource_show_preview'}
+                     ) }}"
+                />
             {% else %}
-                File:
-                <a href="{{ url('chamilo_core_resource_file', {id: resource_node.id, 'type' : type, 'tool' : tool } ) }}">
-                    {{ resource_node.resourceFile }}
-                </a>
+
             {% endif %}
+            <br />
+
+            Download original file:
+            <a href="{{ url('chamilo_core_resource_file', {id: resource_node.id, 'type' : type, 'tool' : tool, 'mode' : 'download'} ) }}">
+                {{ resource_node.resourceFile }}
+            </a>
             <br />
             Size: {{ resource_node.resourceFile.size }}
             <br /><br />

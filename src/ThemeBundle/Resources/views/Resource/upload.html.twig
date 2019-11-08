@@ -62,9 +62,8 @@
               progress + '%'
           );
       }).on('fileuploaddone', function (e, data) {
-          console.log(data);
-          $.each(data.result.files, function (index, file) {
 
+          $.each(data.result.files, function (index, file) {
               if (file.error) {
                   var link = $('<div>')
                       .attr({class : 'panel-image'})                            ;

@@ -75,12 +75,13 @@ class ResourceController extends AbstractResourceController implements CourseCon
 
         $breadcrumb = $this->breadcrumbBlockService;
         $breadcrumb->addChild(
-            $this->translator->trans('Documents'),
+            $this->trans('Documents'),
             [
                 'uri' => '#',
             ]
         );
 
+        // The base resource node is the course.
         $id = $this->getCourse()->getResourceNode()->getId();
 
         return $grid->getGridResponse(
@@ -101,7 +102,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
         $tool = $request->get('tool');
         $type = $request->get('type');
 
-        $repository = $this->getRepository($tool, $type);
+        $repository = $this->getRepositoryFromRequest($request);
         $class = $repository->getRepository()->getClassName();
         $source = new Entity($class);
 
@@ -150,6 +151,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
                 $myParams = $routeParams;
                 $myParams['id'] = $id;
                 unset($myParams[0]);
+
                 if ($resourceNode->hasResourceFile()) {
                     $url = $router->generate(
                         'chamilo_core_resource_show',
@@ -169,9 +171,9 @@ class ResourceController extends AbstractResourceController implements CourseCon
         if ($this->isGranted(ResourceNodeVoter::ROLE_CURRENT_COURSE_TEACHER)) {
             $deleteMassAction = new MassAction(
                 'Delete',
-                'chamilo.controller.notebook:deleteMassAction',
+                'ChamiloCoreBundle:Resource:deleteMass',
                 true,
-                ['course' => $courseIdentifier]
+                $routeParams
             );
             $grid->addMassAction($deleteMassAction);
         }
@@ -236,70 +238,6 @@ class ResourceController extends AbstractResourceController implements CourseCon
     }
 
     /**
-     * @param Request $request
-     */
-    public function setBreadCrumb(Request $request)
-    {
-        $tool = $request->get('tool');
-        $type = $request->get('type');
-        $resourceNodeId = $request->get('id');
-        $courseCode = $request->get('cidReq');
-
-        if (!empty($resourceNodeId)) {
-            $breadcrumb = $this->breadcrumbBlockService;
-
-            $breadcrumb->addChild(
-                $this->translator->trans('Documents'),
-                [
-                    'uri' => $this->generateUrl(
-                        'chamilo_core_resource_index',
-                        ['tool' => $tool, 'type' => $type, 'cidReq' => $courseCode]
-                    ),
-                ]
-            );
-
-            /** @var ResourceNode $parent */
-            $parent = $originalParent = $this->getRepository($tool, $type)->getResourceNodeRepository()->find($resourceNodeId);
-
-            $parentList = [];
-            while ($parent !== null) {
-                if ($type !== $parent->getResourceType()->getName()){
-                    break;
-                }
-                $parent = $parent->getParent();
-                if ($parent) {
-                    $parent = $this->getRepository($tool, $type)->getResourceNodeRepository()->find($parent->getId());
-                    $parentList[] = $parent;
-                }
-            }
-
-            $parentList = array_reverse($parentList);
-
-            foreach ($parentList as $parent) {
-                $breadcrumb->addChild(
-                    $parent->getName(),
-                    [
-                        'uri' => $this->generateUrl(
-                            'chamilo_core_resource_list',
-                            ['tool' => $tool, 'type' => $type, 'id' => $parent->getId(), 'cidReq' => $courseCode]
-                        ),
-                    ]
-                );
-            }
-
-            $breadcrumb->addChild(
-                $originalParent->getName(),
-                [
-                    'uri' => $this->generateUrl(
-                        'chamilo_core_resource_list',
-                        ['tool' => $tool, 'type' => $type, 'id' => $originalParent->getId(), 'cidReq' => $courseCode]
-                    ),
-                ]
-            );
-        }
-    }
-
-    /**
      * @Route("/{tool}/{type}/{id}/list", name="chamilo_core_resource_list")
      *
      * If node has children show it
@@ -316,7 +254,6 @@ class ResourceController extends AbstractResourceController implements CourseCon
 
         $grid = $this->getGrid( $request, $grid,$resourceNodeId);
 
-        // Set breadcrumb
         $this->setBreadCrumb($request);
 
         return $grid->getGridResponse(
@@ -351,6 +288,57 @@ class ResourceController extends AbstractResourceController implements CourseCon
         $this->setBreadCrumb($request);
 
         return $this->createResource($request, 'file');
+    }
+
+    /**
+     * @Route("/{tool}/{type}/{id}/edit", methods={"GET", "POST"})
+     *
+     * @param Request $request
+     *
+     * @return Response
+     */
+    public function editAction(Request $request): Response
+    {
+        $tool = $request->get('tool');
+        $type = $request->get('type');
+        $nodeId = $request->get('id');
+
+        $repository = $this->getRepositoryFromRequest($request);
+        $resource = $repository->getRepository()->findOneBy(['resourceNode' => $nodeId]);
+        $resourceNodeParentId = $resource->getResourceNode()->getId();
+
+        $form = $repository->getForm($this->container->get('form.factory'), $resource);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            /** @var CDocument $newResource */
+            $newResource = $form->getData();
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($newResource);
+            $em->flush();
+            $this->addFlash('success', $this->trans('Updated'));
+
+            return $this->redirectToRoute(
+                'chamilo_core_resource_list',
+                [
+                    'id' => $resourceNodeParentId,
+                    'tool' => $tool,
+                    'type' => $type,
+                    'cidReq' => $this->getCourse()->getCode()
+                ]
+            );
+        }
+
+        return $this->render(
+            '@ChamiloTheme/Resource/edit.html.twig',
+            [
+                'form' => $form->createView(),
+                'parent' => $resourceNodeParentId,
+            ]
+        );
+
+
     }
 
     /**
@@ -394,108 +382,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
     }
 
     /**
-     * @Route("/{tool}/{type}/{id}/edit", methods={"GET", "POST"})
-     *
-     * @param Request $request
-     *
-     * @return Response
-     */
-    public function editAction(Request $request): Response
-    {
-        $configuration = $this->requestConfigurationFactory->create($this->metadata, $request);
-
-        $this->isGrantedOr403($configuration, ResourceActions::UPDATE);
-        /** @var CDocument $resource */
-        $resource = $this->findOr404($configuration);
-        $resourceNode = $resource->getResourceNode();
-
-        $this->denyAccessUnlessGranted(
-            ResourceNodeVoter::EDIT,
-            $resourceNode,
-            'Unauthorised access to resource'
-        );
-
-        $form = $this->resourceFormFactory->create($configuration, $resource);
-
-        if (in_array($request->getMethod(), ['POST', 'PUT', 'PATCH'], true) && $form->handleRequest($request)->isValid()) {
-            $resource = $form->getData();
-
-            /** @var ResourceControllerEvent $event */
-            $event = $this->eventDispatcher->dispatchPreEvent(ResourceActions::UPDATE, $configuration, $resource);
-
-            if ($event->isStopped() && !$configuration->isHtmlRequest()) {
-                throw new HttpException($event->getErrorCode(), $event->getMessage());
-            }
-            if ($event->isStopped()) {
-                $this->flashHelper->addFlashFromEvent($configuration, $event);
-
-                if ($event->hasResponse()) {
-                    return $event->getResponse();
-                }
-
-                return $this->redirectHandler->redirectToResource($configuration, $resource);
-            }
-
-            try {
-                $this->resourceUpdateHandler->handle($resource, $configuration, $this->manager);
-            } catch (UpdateHandlingException $exception) {
-                if (!$configuration->isHtmlRequest()) {
-                    return $this->viewHandler->handle(
-                        $configuration,
-                        View::create($form, $exception->getApiResponseCode())
-                    );
-                }
-
-                $this->flashHelper->addErrorFlash($configuration, $exception->getFlash());
-
-                return $this->redirectHandler->redirectToReferer($configuration);
-            }
-
-            $postEvent = $this->eventDispatcher->dispatchPostEvent(ResourceActions::UPDATE, $configuration, $resource);
-
-            if (!$configuration->isHtmlRequest()) {
-                $view = $configuration->getParameters()->get('return_content', false) ? View::create(
-                    $resource,
-                    Response::HTTP_OK
-                ) : View::create(null, Response::HTTP_NO_CONTENT);
-
-                return $this->viewHandler->handle($configuration, $view);
-            }
-
-            $this->flashHelper->addSuccessFlash($configuration, ResourceActions::UPDATE, $resource);
-
-            if ($postEvent->hasResponse()) {
-                return $postEvent->getResponse();
-            }
-
-            return $this->redirectHandler->redirectToResource($configuration, $resource);
-        }
-
-        if (!$configuration->isHtmlRequest()) {
-            return $this->viewHandler->handle($configuration, View::create($form, Response::HTTP_BAD_REQUEST));
-        }
-
-        $initializeEvent = $this->eventDispatcher->dispatchInitializeEvent(ResourceActions::UPDATE, $configuration, $resource);
-        if ($initializeEvent->hasResponse()) {
-            return $initializeEvent->getResponse();
-        }
-
-        $view = View::create()
-            ->setData([
-                'configuration' => $configuration,
-                'metadata' => $this->metadata,
-                'resource' => $resource,
-                $this->metadata->getName() => $resource,
-                'form' => $form->createView(),
-            ])
-            ->setTemplate($configuration->getTemplate(ResourceActions::UPDATE.'.html'))
-        ;
-
-        return $this->viewHandler->handle($configuration, $view);
-    }
-
-    /**
-     * @Route("/{tool}/{type}/{id}", methods={"DELETE"})
+     * @Route("/{tool}/{type}/{id}", methods={"DELETE"}, name="chamilo_core_resource_delete")
      *
      * @param Request $request
      *
@@ -503,93 +390,85 @@ class ResourceController extends AbstractResourceController implements CourseCon
      */
     public function deleteAction(Request $request): Response
     {
-        $configuration = $this->requestConfigurationFactory->create($this->metadata, $request);
+        $tool = $request->get('tool');
+        $type = $request->get('type');
 
-        $this->isGrantedOr403($configuration, ResourceActions::UPDATE);
-        /** @var CDocument $resource */
-        $resource = $this->findOr404($configuration);
-        $resourceNode = $resource->getResourceNode();
+        $em = $this->getDoctrine()->getManager();
+
+        $id = $request->get('id');
+        $resourceNode = $this->getDoctrine()->getRepository('ChamiloCoreBundle:Resource\ResourceNode')->find($id);
+        $parentId = $resourceNode->getParent()->getId();
+
+        if (null === $resourceNode) {
+            throw new NotFoundHttpException();
+        }
 
         $this->denyAccessUnlessGranted(
-            ResourceNodeVoter::EDIT,
+            ResourceNodeVoter::DELETE,
             $resourceNode,
             'Unauthorised access to resource'
         );
 
-        $form = $this->resourceFormFactory->create($configuration, $resource);
+        $em->remove($resourceNode);
+        $this->addFlash('success', $this->trans('Deleted'));
+        $em->flush();
 
-        if (in_array($request->getMethod(), ['POST', 'PUT', 'PATCH'], true) && $form->handleRequest($request)->isValid()) {
-            $resource = $form->getData();
+        return $this->redirectToRoute(
+            'chamilo_core_resource_list',
+            [
+                'id' => $parentId,
+                'tool' => $tool,
+                'type' => $type,
+                'cidReq' => $this->getCourse()->getCode()
+            ]
+        );
+    }
 
-            /** @var ResourceControllerEvent $event */
-            $event = $this->eventDispatcher->dispatchPreEvent(ResourceActions::UPDATE, $configuration, $resource);
+    /**
+     * @Route("/{tool}/{type}/{id}", methods={"DELETE"}, name="chamilo_core_resource_delete_mass")
+     *
+     * @param Request $request
+     *
+     * @return Response
+     */
+    public function deleteMassAction($primaryKeys, $allPrimaryKeys, Request $request): Response
+    {
+        $tool = $request->get('tool');
+        $type = $request->get('type');
+        $em = $this->getDoctrine()->getManager();
+        $repo = $this->getRepositoryFromRequest($request);
 
-            if ($event->isStopped() && !$configuration->isHtmlRequest()) {
-                throw new HttpException($event->getErrorCode(), $event->getMessage());
-            }
-            if ($event->isStopped()) {
-                $this->flashHelper->addFlashFromEvent($configuration, $event);
+        $parentId = 0;
+        foreach ($primaryKeys as $id) {
+            $resource = $repo->find($id);
+            $resourceNode = $resource->getResourceNode();
 
-                if ($event->hasResponse()) {
-                    return $event->getResponse();
-                }
-
-                return $this->redirectHandler->redirectToResource($configuration, $resource);
-            }
-
-            try {
-                $this->resourceUpdateHandler->handle($resource, $configuration, $this->manager);
-            } catch (UpdateHandlingException $exception) {
-                if (!$configuration->isHtmlRequest()) {
-                    return $this->viewHandler->handle(
-                        $configuration,
-                        View::create($form, $exception->getApiResponseCode())
-                    );
-                }
-
-                $this->flashHelper->addErrorFlash($configuration, $exception->getFlash());
-
-                return $this->redirectHandler->redirectToReferer($configuration);
-            }
-
-            $postEvent = $this->eventDispatcher->dispatchPostEvent(ResourceActions::UPDATE, $configuration, $resource);
-
-            if (!$configuration->isHtmlRequest()) {
-                $view = $configuration->getParameters()->get('return_content', false) ? View::create($resource, Response::HTTP_OK) : View::create(null, Response::HTTP_NO_CONTENT);
-
-                return $this->viewHandler->handle($configuration, $view);
+            if (null === $resourceNode) {
+                continue;
             }
 
-            $this->flashHelper->addSuccessFlash($configuration, ResourceActions::UPDATE, $resource);
+            $this->denyAccessUnlessGranted(
+                ResourceNodeVoter::DELETE,
+                $resourceNode,
+                'Unauthorised access to resource'
+            );
 
-            if ($postEvent->hasResponse()) {
-                return $postEvent->getResponse();
-            }
-
-            return $this->redirectHandler->redirectToResource($configuration, $resource);
+            $parentId = $resourceNode->getParent()->getId();
+            $em->remove($resource);
         }
 
-        if (!$configuration->isHtmlRequest()) {
-            return $this->viewHandler->handle($configuration, View::create($form, Response::HTTP_BAD_REQUEST));
-        }
+        $this->addFlash('success', $this->trans('Deleted'));
+        $em->flush();
 
-        $initializeEvent = $this->eventDispatcher->dispatchInitializeEvent(ResourceActions::UPDATE, $configuration, $resource);
-        if ($initializeEvent->hasResponse()) {
-            return $initializeEvent->getResponse();
-        }
-
-        $view = View::create()
-            ->setData([
-                'configuration' => $configuration,
-                'metadata' => $this->metadata,
-                'resource' => $resource,
-                $this->metadata->getName() => $resource,
-                'form' => $form->createView(),
-            ])
-            ->setTemplate($configuration->getTemplate(ResourceActions::UPDATE.'.html'))
-        ;
-
-        return $this->viewHandler->handle($configuration, $view);
+        return $this->redirectToRoute(
+            'chamilo_core_resource_list',
+            [
+                'id' => $parentId,
+                'tool' => $tool,
+                'type' => $type,
+                'cidReq' => $this->getCourse()->getCode()
+            ]
+        );
     }
 
     /**
@@ -604,6 +483,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
     {
         $id = $request->get('id');
         $filter = $request->get('filter');
+        $mode = $request->get('mode');
         $em = $this->getDoctrine();
         $resourceNode = $em->getRepository('ChamiloCoreBundle:Resource\ResourceNode')->find($id);
 
@@ -611,7 +491,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
             throw new FileNotFoundException('Not found');
         }
 
-        return $this->showFile($request, $resourceNode, $glide, 'show', $filter);
+        return $this->showFile($request, $resourceNode, $glide, $mode, $filter);
     }
 
     /**
@@ -627,10 +507,10 @@ class ResourceController extends AbstractResourceController implements CourseCon
     public function getDocumentAction(Request $request, CDocumentRepository $documentRepo, Glide $glide): Response
     {
         $file = $request->get('file');
-        $type = $request->get('type');
+        $mode = $request->get('mode');
         // see list of filters in config/services.yaml
         $filter = $request->get('filter');
-        $type = !empty($type) ? $type : 'show';
+        $mode = !empty($mode) ? $mode : 'show';
         $criteria = [
             'path' => "/$file",
             'course' => $this->getCourse(),
@@ -644,7 +524,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
         /** @var ResourceNode $resourceNode */
         $resourceNode = $document->getResourceNode();
 
-        return $this->showFile($request, $resourceNode, $glide, $type, $filter);
+        return $this->showFile($request, $resourceNode, $glide, $mode, $filter);
     }
 
     /**
@@ -818,12 +698,12 @@ class ResourceController extends AbstractResourceController implements CourseCon
      * @param Request      $request
      * @param ResourceNode $resourceNode
      * @param Glide        $glide
-     * @param              $type
+     * @param string       $mode show or download
      * @param string       $filter
      *
      * @return mixed|StreamedResponse
      */
-    private function showFile(Request $request, ResourceNode $resourceNode, Glide $glide, $type, $filter = '')
+    private function showFile(Request $request, ResourceNode $resourceNode, Glide $glide, $mode = 'show', $filter = '')
     {
         $this->denyAccessUnlessGranted(
             ResourceNodeVoter::VIEW,
@@ -840,7 +720,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
         $filePath = $resourceFile->getFile()->getPathname();
         $mimeType = $resourceFile->getMimeType();
 
-        switch ($type) {
+        switch ($mode) {
             case 'download':
                 $forceDownload = true;
                 break;
@@ -883,11 +763,11 @@ class ResourceController extends AbstractResourceController implements CourseCon
         return $response;
     }
 
-
     /**
-     * @param string $fileType
+     * @param Request $request
+     * @param string  $fileType
      *
-     * @return RedirectResponse|Response|null
+     * @return RedirectResponse|Response
      */
     private function createResource(Request $request, $fileType = 'file')
     {
@@ -897,51 +777,35 @@ class ResourceController extends AbstractResourceController implements CourseCon
 
         $repository = $this->getRepositoryFromRequest($request);
 
-        /*$configuration = $this->requestConfigurationFactory->create($this->metadata, $request);
-        $this->isGrantedOr403($configuration, ResourceActions::CREATE);
-        /** @var CDocument $newResource */
-
         $form = $repository->getForm($this->container->get('form.factory'));
 
         $course = $this->getCourse();
         $session = $this->getSession();
-        $parent = $course;
+        $parentNode = $course->getResourceNode();
         if (!empty($resourceNodeParentId)) {
-            $parent = $repository->getRepository()->findOneBy(['resourceNode' => $resourceNodeParentId]);
+            $parentNode = $repository->getResourceNodeRepository()->find($resourceNodeParentId);
         }
 
-        if ($request->isMethod('POST') && $form->handleRequest($request)->isValid()) {
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
             /** @var CDocument $newResource */
             $newResource = $form->getData();
-            $path = \URLify::filter($newResource->getTitle());
-            switch ($fileType) {
-                case 'folder':
-                    $newResource
-                        ->setPath($path)
-                        ->setSize(0)
-                    ;
-                    break;
-                case 'file':
-                    $newResource
-                        ->setPath($path)
-                        ->setSize(0)
-                    ;
-                    break;
-            }
 
             $newResource
                 ->setCourse($course)
                 ->setSession($session)
                 ->setFiletype($fileType)
+                ->setPath($newResource->getTitle())
                 //->setTitle($title) // already added in $form->getData()
                 //->setComment($comment)
                 ->setReadonly(false)
             ;
+
             $em = $this->getDoctrine()->getManager();
             $em->persist($newResource);
-            $newResource->setId($newResource->getIid());
-            $em->persist($newResource);
-            $resourceNode = $repository->addResourceNode($newResource, $this->getUser(), $parent);
+            $em->flush();
+
+            $resourceNode = $repository->addResourceNodeParent($newResource, $this->getUser(), $parentNode);
 
             $repository->addResourceNodeToCourse(
                 $resourceNode,
@@ -950,6 +814,8 @@ class ResourceController extends AbstractResourceController implements CourseCon
                 $session,
                 null
             );
+
+            $em->flush();
 
             // Loops all sharing options
             /*foreach ($shareList as $share) {
@@ -1004,9 +870,8 @@ class ResourceController extends AbstractResourceController implements CourseCon
                         break;
                 }*/
             //}
-
             $em->flush();
-            $this->addFlash('success', 'saved');
+            $this->addFlash('success', $this->trans('Saved'));
 
             return $this->redirectToRoute(
                 'chamilo_core_resource_list',
@@ -1036,5 +901,74 @@ class ResourceController extends AbstractResourceController implements CourseCon
                 'file_type' => $fileType,
             ]
         );
+    }
+
+
+    /**
+     * @param Request $request
+     */
+    public function setBreadCrumb(Request $request)
+    {
+        $tool = $request->get('tool');
+        $type = $request->get('type');
+        $resourceNodeId = $request->get('id');
+        $courseCode = $request->get('cidReq');
+
+        if (!empty($resourceNodeId)) {
+            $breadcrumb = $this->breadcrumbBlockService;
+
+            $breadcrumb->addChild(
+                $this->translator->trans('Documents'),
+                [
+                    'uri' => $this->generateUrl(
+                        'chamilo_core_resource_index',
+                        ['tool' => $tool, 'type' => $type, 'cidReq' => $courseCode]
+                    ),
+                ]
+            );
+
+            $repo = $this->getRepositoryFromRequest($request);
+
+            /** @var ResourceNode $parent */
+            $parent = $originalParent = $repo->getResourceNodeRepository()->find(
+                $resourceNodeId
+            );
+
+            $parentList = [];
+            while ($parent !== null) {
+                if ($type !== $parent->getResourceType()->getName()){
+                    break;
+                }
+                $parent = $parent->getParent();
+                if ($parent) {
+                    $parent = $repo->getResourceNodeRepository()->find($parent->getId());
+                    $parentList[] = $parent;
+                }
+            }
+
+            $parentList = array_reverse($parentList);
+
+            foreach ($parentList as $parent) {
+                $breadcrumb->addChild(
+                    $parent->getName(),
+                    [
+                        'uri' => $this->generateUrl(
+                            'chamilo_core_resource_list',
+                            ['tool' => $tool, 'type' => $type, 'id' => $parent->getId(), 'cidReq' => $courseCode]
+                        ),
+                    ]
+                );
+            }
+
+            $breadcrumb->addChild(
+                $originalParent->getName(),
+                [
+                    'uri' => $this->generateUrl(
+                        'chamilo_core_resource_list',
+                        ['tool' => $tool, 'type' => $type, 'id' => $originalParent->getId(), 'cidReq' => $courseCode]
+                    ),
+                ]
+            );
+        }
     }
 }

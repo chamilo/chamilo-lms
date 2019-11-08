@@ -71,13 +71,17 @@ class IllustrationRepository extends ResourceRepository
         $node = $this->getIllustrationNodeFromResource($resource);
 
         if ($node !== null) {
-            $params = ['id' => $node->getId()];
+            $params = [
+                'id' => $node->getId(),
+                'tool' => 'admin',
+                'type' => 'illustrations',
+            ];
             if (!empty($filter)) {
                 $params['filter'] = $filter;
             }
 
             return $this->getRouter()->generate(
-                'resources_get_file',
+                'chamilo_core_resource_file',
                 $params
             );
         }

@@ -7,6 +7,7 @@ use Chamilo\CoreBundle\Block\BreadcrumbBlockService;
 use Chamilo\CoreBundle\Repository\ResourceRepository;
 use Chamilo\CoreBundle\ToolChain;
 use League\Flysystem\MountManager;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
@@ -34,11 +35,21 @@ abstract class AbstractResourceController extends BaseController
     }
 
     /**
-     * @param $request
+     * @param string $variable
+     *
+     * @return string
+     */
+    public function trans($variable)
+    {
+        return $this->translator->trans($variable);
+    }
+
+    /**
+     * @param Request $request
      *
      * @return ResourceRepository
      */
-    public function getRepositoryFromRequest($request)
+    public function getRepositoryFromRequest(Request $request)
     {
         $tool = $request->get('tool');
         $type = $request->get('type');

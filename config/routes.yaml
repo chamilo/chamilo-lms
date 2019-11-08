@@ -18,6 +18,10 @@ sonata_admin_my_dashboard:
 sonata_user_admin_security_logout:
     path: /logout
 
+oneup_uploader:
+    resource: .
+    type: uploader
+
 # Resources
 
 #app_document:

@@ -27,7 +27,7 @@ use Gedmo\Sluggable\Util\Urlizer;
  *      @ORM\Index(name="idx_cdoc_sid", columns={"session_id"}),
  *  }
  * )
- * @GRID\Source(columns="iid, title, filetype", filterable=false)
+ * @GRID\Source(columns="iid, title, filetype", filterable=true)
  *
  * @ORM\Entity
  */
@@ -111,6 +111,8 @@ class CDocument extends AbstractResource implements ResourceInterface
     public function __construct()
     {
         $this->readonly = false;
+        $this->size = 0;
+        $this->id = 0;
     }
 
     /**

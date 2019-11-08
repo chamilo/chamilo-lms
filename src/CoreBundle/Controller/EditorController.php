@@ -3,15 +3,22 @@
 
 namespace Chamilo\CoreBundle\Controller;
 
+use APY\DataGridBundle\Grid\Action\MassAction;
+use APY\DataGridBundle\Grid\Action\RowAction;
+use APY\DataGridBundle\Grid\Grid;
+use APY\DataGridBundle\Grid\Row;
+use APY\DataGridBundle\Grid\Source\Entity;
 use Chamilo\CoreBundle\Component\Editor\CkEditor\CkEditor;
 use Chamilo\CoreBundle\Component\Editor\Connector;
 use Chamilo\CoreBundle\Component\Editor\Finder;
 use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
+use Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter;
 use Chamilo\CourseBundle\Entity\CDocument;
 use Chamilo\CourseBundle\Repository\CDocumentRepository;
 use Chamilo\SettingsBundle\Manager\SettingsManager;
 use DocumentManager;
 use FM\ElfinderBundle\Connector\ElFinderConnector;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Routing\RouterInterface;
@@ -21,10 +28,6 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  * Class EditorController.
  *
  * @Route("/editor")
- *
- * @deprecated not used for now
- *
- * @package Chamilo\CoreBundle\Controller
  */
 class EditorController extends BaseController
 {
@@ -63,96 +66,106 @@ class EditorController extends BaseController
     }
 
     /**
+     * @todo use resource repository instead of hardcoded CDocumentRepository
+     *
      * @Route("/filemanager/{parentId}", methods={"GET"}, name="editor_filemanager")
      *
      * @param int $parentId
      */
-    public function customEditorFileManager(\Symfony\Component\HttpFoundation\Request $request,  $parentId = 0, CDocumentRepository $documentRepository): Response
+    public function customEditorFileManager(Request $request, Grid $grid, $parentId = 0, CDocumentRepository $repository): Response
     {
         $id = $request->get('id');
-        $courseInfo = api_get_course_info();
 
-        $params = [
-            'table' => '',
-            'parent_id' => -1,
-            'allow_course' => false,
-        ];
+        $course = $this->getCourse();
+        $session = $this->getCourseSession();
+        $parent = $course->getResourceNode();
 
-        if (!empty($courseInfo)) {
-            $groupIid = api_get_group_id();
-            $isAllowedToEdit = api_is_allowed_to_edit();
-            $groupMemberWithUploadRights = false;
-
-            $path = '/';
-            $oldParentId = -1;
-            if (!empty($parentId)) {
-                /** @var CDocument $doc */
-                $doc = $this->getDoctrine()->getRepository('ChamiloCourseBundle:CDocument')->findOneBy(['resourceNode'=> $id]);
-                $path = $doc->getPath();
-
-                $parent = $documentRepository->getParent($doc);
-                $oldParentId = 0;
-                if (!empty($parent)) {
-                    $oldParentId = $parent->getId();
-                }
-            }
-
-            $documentAndFolders = DocumentManager::getAllDocumentData(
-                $courseInfo,
-                $path,
-                $groupIid,
-                null,
-                $isAllowedToEdit || $groupMemberWithUploadRights,
-                false,
-                0,
-                null,
-                $parentId
-            );
-
-            $url = $this->generateUrl('editor_filemanager');
-
-            $data = DocumentManager::processDocumentAndFolders(
-                $documentAndFolders,
-                $courseInfo,
-                false,
-                $groupMemberWithUploadRights,
-                $path,
-                true,
-                $url
-            );
-
-            $show = [1, 1, 1, 1];
-            if ($isAllowedToEdit) {
-                $show = [0, 1, 1, 1, 1];
-            }
-
-            $table = new \SortableTableFromArrayConfig(
-                $data,
-                2,
-                20,
-                'documents',
-                $show,
-                [],
-                'ASC',
-                true
-            );
-            $column = 1;
-            if ($isAllowedToEdit) {
-                $table->set_header($column++, '', false, ['style' => 'width:12px;']);
-            }
-            $table->set_header($column++, get_lang('Type'), false, ['style' => 'width:30px;']);
-            $table->set_header($column++, get_lang('Name'));
-            $table->set_header($column++, get_lang('Size'), false, ['style' => 'width:50px;']);
-            $table->set_header($column, get_lang('Date'), false, ['style' => 'width:150px;']);
-
-            $params = [
-                'table' => $table->return_table(),
-                'parent_id' => $oldParentId,
-                'allow_course' => true,
-            ];
+        if (!empty($parentId)) {
+            $parent = $repository->getResourceNodeRepository()->find($parentId);
         }
 
-        return $this->render('@ChamiloTheme/Editor/custom.html.twig', $params);
+        $source = new Entity(CDocument::class);
+
+        $qb = $repository->getResourcesByCourse($course, $session, null, $parent);
+
+        // 3. Set QueryBuilder to the source.
+        $source->initQueryBuilder($qb);
+        $grid->setSource($source);
+
+        $title = $grid->getColumn('title');
+        $title->setSafe(false);
+
+        //$grid->hideFilters();
+        $grid->setLimits(20);
+        //$grid->isReadyForRedirect();
+        //$grid->setMaxResults(1);
+        //$grid->setLimits(2);
+
+        $courseIdentifier = $course->getCode();
+
+        $routeParams = ['cidReq' => $courseIdentifier, 'id'];
+
+        $grid->getColumn('title')->manipulateRenderCell(
+            function ($value, Row $row, $router) use ($course, $routeParams) {
+                /** @var CDocument $entity */
+                $entity = $row->getEntity();
+                $resourceNode = $entity->getResourceNode();
+                $id = $resourceNode->getId();
+
+                $myParams = $routeParams;
+                $myParams['id'] = $id;
+                $myParams['parentId'] = $id;
+
+                unset($myParams[0]);
+
+                if ($resourceNode->hasResourceFile()) {
+                    $documentParams = [
+                        'course' => $course->getCode(),
+                        'file' => $resourceNode->getPathForDisplay()
+                    ];
+                    $url = $router->generate(
+                        'resources_document_get_file',
+                        $documentParams
+                    );
+                    return '<a href="'.$url.'" class="select_to_ckeditor">'.$value.'</a>';
+                }
+
+                $url = $router->generate(
+                    'editor_filemanager',
+                    $myParams
+                );
+
+                return '<a href="'.$url.'">'.$value.'</a>';
+            }
+        );
+
+        // Show resource data
+        /*$myRowAction = new RowAction(
+            'use',
+            'chamilo_core_resource_show',
+            false,
+            '_self',
+            ['class' => 'btn btn-secondary']
+        );
+        $myRowAction->setRouteParameters($routeParams);
+
+        $setNodeParameters = function (RowAction $action, Row $row) use ($routeParams) {
+            $id = $row->getEntity()->getResourceNode()->getId();
+            $routeParams['id'] = $id;
+            $action->setRouteParameters($routeParams);
+            return $action;
+        };
+        $myRowAction->addManipulateRender($setNodeParameters);
+
+        $grid->addRowAction($myRowAction);*/
+
+        //return $this->render('@ChamiloTheme/Editor/custom.html.twig', $params);
+
+        return $grid->getGridResponse(
+            '@ChamiloTheme/Editor/custom.html.twig',
+            ['id' => $id, 'grid' => $grid]
+        );
+
     }
 
     /**

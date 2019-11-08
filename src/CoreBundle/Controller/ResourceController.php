@@ -374,8 +374,6 @@ class ResourceController extends AbstractResourceController implements CourseCon
                 'parent' => $resourceNodeParentId,
             ]
         );
-
-
     }
 
     /**

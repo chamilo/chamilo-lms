@@ -5,6 +5,7 @@
  * Test example to user API v2.php
  *
  * Using Guzzle' HTTP client to call the API endpoint and make requests.
+ * Change URL on the first lines of createUser() below to suit your needs.
  */
 
 use GuzzleHttp\Client;
@@ -32,7 +33,7 @@ function authenticate() {
     ]);
 
     if ($response->getStatusCode() !== 200) {
-        throw new Exception('Deny entry');
+        throw new Exception('Entry denied');
     }
 
     $jsonResponse = json_decode($response->getBody()->getContents());
@@ -88,13 +89,13 @@ function createUser($apiKey)
     );
 
     if ($response->getStatusCode() !== 200) {
-        throw new Exception('Deny entry');
+        throw new Exception('Entry denied');
     }
 
     $jsonResponse = json_decode($response->getBody()->getContents());
 
     if ($jsonResponse->error) {
-        throw new Exception('User nor created');
+        throw new Exception('User not created');
     }
 
     return $jsonResponse->data[0];
@@ -104,4 +105,4 @@ $apiKey = authenticate();
 
 $userId = createUser($apiKey);
 
-echo 'ID for new user: '.$userId;
+echo 'ID of new user: '.$userId;

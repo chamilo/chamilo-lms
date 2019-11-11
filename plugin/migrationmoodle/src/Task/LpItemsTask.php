@@ -26,9 +26,14 @@ class LpItemsTask extends BaseTask
     {
         return [
             'class' => BaseExtractor::class,
-            'query' => 'SELECT id, lessonid, prevpageid, qtype, title
+            'query' => 'SELECT id, lessonid, prevpageid, nextpageid, qtype, title, display
                 FROM mdl_lesson_pages
-                WHERE qtype NOT IN (21, 31)',
+                WHERE qtype NOT IN (21, 30, 31)
+                ORDER BY
+                    CASE
+                        WHEN id > prevpageid THEN prevpageid
+                        WHEN id < prevpageid THEN id
+                    END',
         ];
     }
 

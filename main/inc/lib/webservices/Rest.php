@@ -1192,11 +1192,12 @@ class Rest extends WebService
     /**
      * @param $user_param
      *
+     * @throws Exception
+     *
      * @return array
      */
     public function addUser($user_param)
     {
-        $results = [];
         $orig_user_id_value = [];
         $firstName = $user_param['firstname'];
         $lastName = $user_param['lastname'];
@@ -1234,7 +1235,7 @@ class Rest extends WebService
 
         // First check wether the login already exists.
         if (!UserManager::is_username_available($loginName)) {
-            $results[] = 0;
+            throw new Exception(get_lang('UserNameNotAvailable'));
         }
 
         $userId = UserManager::create_user(
@@ -1254,60 +1255,59 @@ class Rest extends WebService
             $hr_dept_id
         );
 
-        if ($userId) {
-            if (api_is_multiple_url_enabled()) {
-                if (api_get_current_access_url_id() != -1) {
-                    UrlManager::add_user_to_url(
-                        $userId,
-                        api_get_current_access_url_id()
-                    );
-                } else {
-                    UrlManager::add_user_to_url($userId, 1);
-                }
-            } else {
-                // We add by default the access_url_user table with access_url_id = 1
-                UrlManager::add_user_to_url($userId, 1);
-            }
-
-            // Save new field label into user_field table.
-            UserManager::create_extra_field(
-                $original_user_id_name,
-                1,
-                $original_user_id_name,
-                ''
-            );
-            // Save the external system's id into user_field_value table.
-            UserManager::update_extra_field_value(
-                $userId,
-                $original_user_id_name,
-                $original_user_id_value
-            );
-
-            if (is_array($extra_list) && count($extra_list) > 0) {
-                foreach ($extra_list as $extra) {
-                    $extra_field_name = $extra['field_name'];
-                    $extra_field_value = $extra['field_value'];
-                    // Save new field label into user_field table.
-                    UserManager::create_extra_field(
-                        $extra_field_name,
-                        1,
-                        $extra_field_name,
-                        ''
-                    );
-                    // Save the external system's id into user_field_value table.
-                    UserManager::update_extra_field_value(
-                        $userId,
-                        $extra_field_name,
-                        $extra_field_value
-                    );
-                }
-            }
-            $results[] = $userId;
-        } else {
-            $results[] = 0;
+        if (empty($userId)) {
+            throw new Exception(get_lang('UserNotRegistered'));
         }
 
-        return $results;
+        if (api_is_multiple_url_enabled()) {
+            if (api_get_current_access_url_id() != -1) {
+                UrlManager::add_user_to_url(
+                    $userId,
+                    api_get_current_access_url_id()
+                );
+            } else {
+                UrlManager::add_user_to_url($userId, 1);
+            }
+        } else {
+            // We add by default the access_url_user table with access_url_id = 1
+            UrlManager::add_user_to_url($userId, 1);
+        }
+
+        // Save new field label into user_field table.
+        UserManager::create_extra_field(
+            $original_user_id_name,
+            1,
+            $original_user_id_name,
+            ''
+        );
+        // Save the external system's id into user_field_value table.
+        UserManager::update_extra_field_value(
+            $userId,
+            $original_user_id_name,
+            $original_user_id_value
+        );
+
+        if (is_array($extra_list) && count($extra_list) > 0) {
+            foreach ($extra_list as $extra) {
+                $extra_field_name = $extra['field_name'];
+                $extra_field_value = $extra['field_value'];
+                // Save new field label into user_field table.
+                UserManager::create_extra_field(
+                    $extra_field_name,
+                    1,
+                    $extra_field_name,
+                    ''
+                );
+                // Save the external system's id into user_field_value table.
+                UserManager::update_extra_field_value(
+                    $userId,
+                    $extra_field_name,
+                    $extra_field_value
+                );
+            }
+        }
+
+        return [$userId];
     }
 
     /**

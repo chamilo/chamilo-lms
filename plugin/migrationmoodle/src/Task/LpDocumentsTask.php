@@ -4,20 +4,18 @@
 namespace Chamilo\PluginBundle\MigrationMoodle\Task;
 
 use Chamilo\PluginBundle\MigrationMoodle\Extractor\BaseExtractor;
-use Chamilo\PluginBundle\MigrationMoodle\Loader\LpItemsLoader;
+use Chamilo\PluginBundle\MigrationMoodle\Loader\LpDocumentsLoader;
 use Chamilo\PluginBundle\MigrationMoodle\Transformer\BaseTransformer;
 use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\LoadedCourseCodeFromLessonLookup;
-use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\LoadedLpDirFromLessonLookup;
 use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\LoadedLpFromLessonLookup;
 use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\LoadedLpItemLookup;
-use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\LpItemTypeLookup;
 
 /**
- * Class LpItemsTask.
+ * Class LpDocumentsTask.
  *
  * @package Chamilo\PluginBundle\MigrationMoodle\Task
  */
-class LpItemsTask extends BaseTask
+class LpDocumentsTask extends BaseTask
 {
     /**
      * @return array
@@ -26,14 +24,7 @@ class LpItemsTask extends BaseTask
     {
         return [
             'class' => BaseExtractor::class,
-            'query' => 'SELECT id, lessonid, prevpageid, nextpageid, qtype, title, display
-                FROM mdl_lesson_pages
-                WHERE qtype NOT IN (21, 30, 31)
-                ORDER BY
-                    CASE
-                        WHEN id > prevpageid THEN prevpageid
-                        WHEN id < prevpageid THEN id
-                    END',
+            'query' => 'SELECT id, lessonid, title, contents FROM mdl_lesson_pages WHERE qtype = 20',
         ];
     }
 
@@ -51,21 +42,14 @@ class LpItemsTask extends BaseTask
                 ],
                 'lp_id' => [
                     'class' => LoadedLpFromLessonLookup::class,
-                    'properties' => ['lessonid']
+                    'properties' => ['lessonid'],
                 ],
-                'parent' => [
-                    'class' => LoadedLpDirFromLessonLookup::class,
-                    'properties' => ['lessonid']
-                ],
-                'previous' => [
+                'item_id' => [
                     'class' => LoadedLpItemLookup::class,
-                    'properties' => ['prevpageid'],
+                    'properties' => ['id'],
                 ],
-                'item_type' => [
-                    'class' => LpItemTypeLookup::class,
-                    'properties' => ['qtype'],
-                ],
-                'title' => 'title',
+                'item_title' => 'title',
+                'item_content' => 'contents',
             ],
         ];
     }
@@ -76,7 +60,7 @@ class LpItemsTask extends BaseTask
     public function getLoadConfiguration()
     {
         return [
-            'class' => LpItemsLoader::class,
+            'class' => LpDocumentsLoader::class,
         ];
     }
 }

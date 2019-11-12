@@ -7,11 +7,11 @@ use Doctrine\DBAL\DBALException;
 use Doctrine\DBAL\FetchMode;
 
 /**
- * Class LoadedCourseFromLessonLookup.
+ * Class LoadedCourseCodeFromLessonLookup.
  *
  * @package Chamilo\PluginBundle\MigrationMoodle\Transformer\Property
  */
-class LoadedCourseFromLessonLookup extends LoadedCourseCodeLookup
+class LoadedCourseCodeFromLessonLookup extends LoadedCourseCodeLookup
 {
     public function transform(array $data)
     {

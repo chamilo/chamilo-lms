@@ -7,8 +7,10 @@ use Chamilo\PluginBundle\MigrationMoodle\Extractor\BaseExtractor;
 use Chamilo\PluginBundle\MigrationMoodle\Loader\LpDocumentsLoader;
 use Chamilo\PluginBundle\MigrationMoodle\Transformer\BaseTransformer;
 use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\LoadedCourseCodeFromLessonLookup;
+use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\LoadedCourseCodeLookup;
 use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\LoadedLpFromLessonLookup;
 use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\LoadedLpItemLookup;
+use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\ReplaceFilePaths;
 
 /**
  * Class LpDocumentsTask.
@@ -24,7 +26,10 @@ class LpDocumentsTask extends BaseTask
     {
         return [
             'class' => BaseExtractor::class,
-            'query' => 'SELECT id, lessonid, title, contents FROM mdl_lesson_pages WHERE qtype = 20',
+            'query' => 'SELECT lp.id, l.id lessonid, l.course, lp.title, lp.contents
+                FROM mdl_lesson_pages lp
+                INNER JOIN mdl_lesson l ON lp.lessonid = l.id
+                WHERE lp.qtype = 20',
         ];
     }
 
@@ -37,8 +42,8 @@ class LpDocumentsTask extends BaseTask
             'class' => BaseTransformer::class,
             'map' => [
                 'c_code' => [
-                    'class' => LoadedCourseCodeFromLessonLookup::class,
-                    'properties' => ['lessonid'],
+                    'class' => LoadedCourseCodeLookup::class,
+                    'properties' => ['course'],
                 ],
                 'lp_id' => [
                     'class' => LoadedLpFromLessonLookup::class,
@@ -49,7 +54,10 @@ class LpDocumentsTask extends BaseTask
                     'properties' => ['id'],
                 ],
                 'item_title' => 'title',
-                'item_content' => 'contents',
+                'item_content' => [
+                    'class' => ReplaceFilePaths::class,
+                    'properties' => ['contents', 'course'],
+                ],
             ],
         ];
     }

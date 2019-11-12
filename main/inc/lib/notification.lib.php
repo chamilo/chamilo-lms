@@ -531,6 +531,8 @@ class Notification extends Model
             'data' => [
                 'title' => $title,
                 'message' => $content,
+                'body' => $content,
+                'sound' => 'default',
             ],
             'notification' => [
                 'title' => $title,

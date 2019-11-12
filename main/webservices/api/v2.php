@@ -270,6 +270,27 @@ try {
             $data = $restApi->saveForumThread($threadInfo, $forumId);
             $restResponse->setData($data);
             break;
+        case Rest::GET_USER_MESSAGES_RECEIVED:
+            $lastMessageId = isset($_POST['last']) ? intval($_POST['last']) : 0;
+            $messages = $restApi->getUserReceivedMessages($lastMessageId);
+            $restResponse->setData($messages);
+            break;
+        case Rest::GET_USER_MESSAGES_SENT:
+            $lastMessageId = isset($_POST['last']) ? intval($_POST['last']) : 0;
+            $messages = $restApi->getUserSentMessages($lastMessageId);
+            $restResponse->setData($messages);
+            break;
+        case Rest::DELETE_USER_MESSAGE:
+            $messageId = isset($_POST['message_id']) ? intval($_POST['message_id']) : 0;
+            $messageType = !empty($_POST['msg_type']) ? $_POST['msg_type'] : '';
+            $restApi->deleteUserMessage($messageId, $messageType);
+            $restResponse->setData(['status' => true]);
+            break;
+        case Rest::SET_MESSAGE_READ:
+            $messageId = isset($_POST['message_id']) ? intval($_POST['message_id']) : 0;
+            $restApi->setMessageRead($messageId);
+            $restResponse->setData(['status' => true]);
+            break;
         default:
             throw new Exception(get_lang('InvalidAction'));
     }
@@ -281,5 +302,6 @@ try {
 
 header('Content-Type: application/json');
 header('Access-Control-Allow-Origin: *');
+
 
 echo $restResponse->format();

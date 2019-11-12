@@ -46,6 +46,10 @@ class Rest extends WebService
     const SAVE_USER = 'save_user';
     const SUBSCRIBE_USER_TO_COURSE = 'subscribe_user_to_course';
     const EXTRAFIELD_GCM_ID = 'gcm_registration_id';
+    const GET_USER_MESSAGES_RECEIVED = 'user_messages_received';
+    const GET_USER_MESSAGES_SENT = 'user_messages_sent';
+    const DELETE_USER_MESSAGE = 'delete_user_message';
+    const SET_MESSAGE_READ = 'set_message_read';
     const CREATE_CAMPUS = 'add_campus';
     const EDIT_CAMPUS = 'edit_campus';
     const DELETE_CAMPUS = 'delete_campus';
@@ -205,6 +209,74 @@ class Rest extends WebService
                 'hasAttachments' => $hasAttachments,
                 'url' => api_get_path(WEB_CODE_PATH).'messages/view_message.php?'
                     .http_build_query(['type' => 1, 'id' => $message['id']]),
+            ];
+        }
+
+        return $messages;
+    }
+
+     /**
+     * @return array
+     */
+    public function getUserReceivedMessages()
+    {
+        $lastMessages = MessageManager::getReceivedMessages($this->user->getId(), 0);
+        $messages = [];
+
+        foreach ($lastMessages as $message) {
+            $hasAttachments = MessageManager::hasAttachments($message['id']);
+            $attachmentList = [];
+            if ($hasAttachments) {
+                $attachmentList = MessageManager::getAttachmentList($message['id']);
+            }
+            $messages[] = [
+                'id' => $message['id'],
+                'title' => $message['title'],
+                'msgStatus' => $message['msg_status'],
+                'sender' => [
+                    'id' => $message['user_id'],
+                    'lastname' => $message['lastname'],
+                    'firstname' => $message['firstname'],
+                    'completeName' => api_get_person_name($message['firstname'], $message['lastname']),
+                    'pictureUri' => $message['pictureUri'],
+                ],
+                'sendDate' => $message['send_date'],
+                'content' => $message['content'],
+                'hasAttachments' => $hasAttachments,
+                'attachmentList' => $attachmentList,
+                'url' => '',
+            ];
+        }
+
+        return $messages;
+    }
+
+    /**
+     * @return array
+     */
+    public function getUserSentMessages()
+    {
+        $lastMessages = MessageManager::getSentMessages($this->user->getId(), 0);
+        $messages = [];
+
+        foreach ($lastMessages as $message) {
+            $hasAttachments = MessageManager::hasAttachments($message['id']);
+
+            $messages[] = [
+                'id' => $message['id'],
+                'title' => $message['title'],
+                'msgStatus' => $message['msg_status'],
+                'receiver' => [
+                    'id' => $message['user_id'],
+                    'lastname' => $message['lastname'],
+                    'firstname' => $message['firstname'],
+                    'completeName' => api_get_person_name($message['firstname'], $message['lastname']),
+                    'pictureUri' => $message['pictureUri'],
+                ],
+                'sendDate' => $message['send_date'],
+                'content' => $message['content'],
+                'hasAttachments' => $hasAttachments,
+                'url' => '',
             ];
         }
 
@@ -1335,6 +1407,20 @@ class Rest extends WebService
         }
 
         return [true];
+    }
+
+    public function deleteUserMessage($messageId, $messageType)
+    {
+        if ($messageType === "sent") {
+            return MessageManager::delete_message_by_user_sender($this->user->getId(), $messageId);
+        } else {
+            return MessageManager::delete_message_by_user_receiver($this->user->getId(), $messageId);
+        }
+    }
+
+    public function setMessageRead($messageId)
+    {
+        MessageManager::update_message($this->user->getId(), $messageId);
     }
 
     /**

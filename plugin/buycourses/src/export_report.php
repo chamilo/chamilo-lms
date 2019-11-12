@@ -1,5 +1,5 @@
 <?php
-
+/* For license terms, see /license.txt */
 //Initialization
 $cidReset = true;
 
@@ -21,11 +21,11 @@ if ($form->validate()) {
     $dateStart = $reportValues['date_start'];
     $dateEnd = $reportValues['date_end'];
 
-    if($dateStart == null || $dateEnd == null){
+    if ($dateStart == null || $dateEnd == null) {
         Display::addFlash(
             Display::return_message($plugin->get_lang('SelectDateRange'),'error', false)
         );
-    } else if($dateStart>$dateEnd) {
+    } else if ($dateStart>$dateEnd) {
         Display::addFlash(
             Display::return_message(get_lang('EndDateCannotBeBeforeTheStartDate'),'error', false)
         );
@@ -34,7 +34,7 @@ if ($form->validate()) {
     }
 }
 
-if(!empty($salesStatus)){
+if (!empty($salesStatus)) {
     $archiveFile = 'export_report_sales_'.api_get_local_time();
     Export::arrayToXls($salesStatus, $archiveFile);
 }

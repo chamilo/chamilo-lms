@@ -1281,9 +1281,10 @@ class BuyCoursesPlugin extends Plugin
     /**
      * Get the list statuses for sales.
      *
-     * @param null $dateStart
-     * @param null $dateEnd
+     * @param string $dateStart
+     * @param string $dateEnd
      * @return array
+     * @throws Exception
      */
     public function getSaleListReport($dateStart = null, $dateEnd = null)
     {
@@ -1306,9 +1307,9 @@ class BuyCoursesPlugin extends Plugin
         $textStatus = null;
         $paymentTypes = $this->getPaymentTypes();
         $productTypes = $this->getProductTypes();
-        foreach($list as $item){
+        foreach ($list as $item) {
             $statusSaleOrder = $item['status'];
-            switch ($statusSaleOrder){
+            switch ($statusSaleOrder) {
                 case 0:
                     $textStatus = $this->get_lang('SaleStatusPending');
                     break;
@@ -1350,9 +1351,9 @@ class BuyCoursesPlugin extends Plugin
         //Validation Export
         $dateStart = strtotime($dateStart);
         $dateEnd = strtotime($dateEnd);
-        foreach ($listExportTemp as $item){
+        foreach ($listExportTemp as $item) {
             $dateFilter = strtotime($item['date']);
-            if(($dateFilter >= $dateStart) && ($dateFilter <= $dateEnd)){
+            if (($dateFilter >= $dateStart) && ($dateFilter <= $dateEnd)) {
                 $listExport[] = [
                     'id' => $item['id'],
                     'status' => $item['status'],

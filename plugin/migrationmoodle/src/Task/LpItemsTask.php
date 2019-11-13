@@ -6,7 +6,7 @@ namespace Chamilo\PluginBundle\MigrationMoodle\Task;
 use Chamilo\PluginBundle\MigrationMoodle\Extractor\BaseExtractor;
 use Chamilo\PluginBundle\MigrationMoodle\Loader\LpItemsLoader;
 use Chamilo\PluginBundle\MigrationMoodle\Transformer\BaseTransformer;
-use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\LoadedCourseCodeFromLessonLookup;
+use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\LoadedCourseCodeLookup;
 use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\LoadedLpDirFromLessonLookup;
 use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\LoadedLpFromLessonLookup;
 use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\LoadedLpItemLookup;
@@ -26,13 +26,14 @@ class LpItemsTask extends BaseTask
     {
         return [
             'class' => BaseExtractor::class,
-            'query' => 'SELECT id, lessonid, prevpageid, nextpageid, qtype, title, display
-                FROM mdl_lesson_pages
-                WHERE qtype NOT IN (21, 30, 31)
+            'query' => 'SELECT lp.id, lp.lessonid, lp.prevpageid, lp.nextpageid, lp.qtype, lp.title, l.course
+                FROM mdl_lesson_pages lp
+                INNER JOIN mdl_lesson l ON lp.lessonid = l.id
+                WHERE lp.qtype NOT IN (21, 30, 31)
                 ORDER BY
                     CASE
-                        WHEN id > prevpageid THEN prevpageid
-                        WHEN id < prevpageid THEN id
+                        WHEN lp.id > lp.prevpageid THEN lp.prevpageid
+                        WHEN lp.id < lp.prevpageid THEN lp.id
                     END',
         ];
     }
@@ -46,8 +47,8 @@ class LpItemsTask extends BaseTask
             'class' => BaseTransformer::class,
             'map' => [
                 'c_code' => [
-                    'class' => LoadedCourseCodeFromLessonLookup::class,
-                    'properties' => ['lessonid'],
+                    'class' => LoadedCourseCodeLookup::class,
+                    'properties' => ['course'],
                 ],
                 'lp_id' => [
                     'class' => LoadedLpFromLessonLookup::class,

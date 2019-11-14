@@ -8,6 +8,7 @@ use Chamilo\PluginBundle\MigrationMoodle\Task\CourseUsersTask;
 use Chamilo\PluginBundle\MigrationMoodle\Task\CQuizTask;
 use Chamilo\PluginBundle\MigrationMoodle\Task\LearningPathsTask;
 use Chamilo\PluginBundle\MigrationMoodle\Task\LpDirsTask;
+use Chamilo\PluginBundle\MigrationMoodle\Task\LpDocumentsFilesTask;
 use Chamilo\PluginBundle\MigrationMoodle\Task\LpDocumentsTask;
 use Chamilo\PluginBundle\MigrationMoodle\Task\LpItemsTask;
 use Chamilo\PluginBundle\MigrationMoodle\Task\UsersTask;
@@ -27,7 +28,8 @@ $actionNames = [
     'learning_paths' => 'Learning Paths',
     'learning_path_chatpers' => 'Learning Paths: Chapters',
     'learning_path_items' => 'Learning Paths: Items',
-    'learning_path_documents' => 'Learning Paths Items: Documents'
+    'learning_path_documents' => 'Learning Paths Items: Documents',
+    'learning_path_documents_files' => 'Learning Paths Items: Documents files',
 ];
 
 foreach ($actionNames as $actionName => $actionTitle) {
@@ -69,6 +71,9 @@ if (!empty($action)) {
             break;
         case 'learning_path_documents':
             $task =  new LpDocumentsTask();
+            break;
+        case 'learning_path_documents_files':
+            $task = new LpDocumentsFilesTask();
             break;
     }
 

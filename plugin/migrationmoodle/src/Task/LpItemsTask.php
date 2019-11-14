@@ -31,6 +31,7 @@ class LpItemsTask extends BaseTask
                 INNER JOIN mdl_lesson l ON lp.lessonid = l.id
                 WHERE lp.qtype NOT IN (21, 30, 31)
                 ORDER BY
+                    l.id,
                     CASE
                         WHEN lp.id > lp.prevpageid THEN lp.prevpageid
                         WHEN lp.id < lp.prevpageid THEN lp.id

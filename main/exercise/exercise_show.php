@@ -498,7 +498,7 @@ foreach ($questionList as $questionId) {
                                     $(function() {
                                         new HotspotQuestion({
                                             questionId: $questionId,
-                                            exerciseId: {$objExercise->id},                                            
+                                            exerciseId: {$objExercise->id},
                                             exeId: $id,
                                             selector: '#hotspot-solution-$questionId-$id',
                                             for: 'solution',

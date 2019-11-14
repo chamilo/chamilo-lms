@@ -69,6 +69,12 @@ abstract class Question
         ANNOTATION => ['Annotation.php', 'Annotation'],
         READING_COMPREHENSION => ['ReadingComprehension.php', 'ReadingComprehension'],
     ];
+    public static $questionPtTypes = [
+        QUESTION_PT_TYPE_CATEGORY_RANKING => ['ptest_category_ranking.class.php', 'PtestCategoryRanking'],
+        QUESTION_PT_TYPE_AGREE_OR_DISAGREE => ['ptest_agree_disagree.class.php', 'PtestAgreeOrDisagree'],
+        QUESTION_PT_TYPE_AGREE_SCALE => ['ptest_agree_scale.class.php', 'PtestAgreeScale'],
+        QUESTION_PT_TYPE_AGREE_REORDER => ['ptest_agree_reorder.class.php', 'PtestAgreeReorder'],
+    ];
 
     /**
      * constructor of the class.
@@ -130,7 +136,7 @@ abstract class Question
      *
      * @author Olivier Brouckaert
      */
-    public static function read($id, $course_info = [], $getExerciseList = true)
+    public static function read($id, $course_info = [], $getExerciseList = true, $ptest = false)
     {
         $id = (int) $id;
         if (empty($course_info)) {
@@ -152,7 +158,7 @@ abstract class Question
 
         // if the question has been found
         if ($object = Database::fetch_object($result)) {
-            $objQuestion = self::getInstance($object->type);
+            $objQuestion = self::getInstance($object->type, $ptest);
             if (!empty($objQuestion)) {
                 $objQuestion->id = (int) $id;
                 $objQuestion->iid = (int) $object->iid;
@@ -1525,10 +1531,24 @@ abstract class Question
     /**
      * @return string
      */
-    public function get_question_type_name()
+    public function get_question_type_name($ptest = false)
     {
-        $key = self::$questionTypes[$this->type];
+        if ($ptest) {
+            $key = self::$questionPtTypes[$this->type];
+        } else {
+            $key = self::$questionTypes[$this->type];
+        }
 
+        return get_lang($key[1]);
+    }
+
+    /**
+     * @return string
+     */
+    public function get_question_ptest_type_name()
+    {
+        $key = self::$questionPtTypes[$this->type];
+        
         return get_lang($key[1]);
     }
 
@@ -1542,6 +1562,14 @@ abstract class Question
         }
 
         return self::$questionTypes[$type];
+    }
+
+    /**
+     * @param string $type
+     */
+    public static function get_question_ptest_type($type)
+    {
+        return self::$questionPtTypes[$type];
     }
 
     /**
@@ -1562,16 +1590,28 @@ abstract class Question
     }
 
     /**
+     * @return array
+     */
+    public static function getQuestionPtTypeList()
+    {
+        return self::$questionPtTypes;
+    }
+
+    /**
      * Returns an instance of the class corresponding to the type.
      *
      * @param int $type the type of the question
      *
      * @return $this instance of a Question subclass (or of Questionc class by default)
      */
-    public static function getInstance($type)
+    public static function getInstance($type, $ptest = false)
     {
         if (!is_null($type)) {
-            list($fileName, $className) = self::get_question_type($type);
+            if ($ptest) {
+                list($fileName, $className) = self::get_question_ptest_type($type);
+            } else {
+                list($fileName, $className) = self::get_question_type($type);
+            }
             if (!empty($fileName)) {
                 include_once $fileName;
                 if (class_exists($className)) {
@@ -1766,6 +1806,112 @@ abstract class Question
     }
 
     /**
+     * Creates the form to create / edit a question
+     * A subclass can redefine this function to add fields...
+     *
+     * @param FormValidator $form
+     * @param Exercise      $exercise
+     */
+    public function createPtForm(&$form, $exercise)
+    {
+        echo '<style>
+                .media { display:none;}
+            </style>';
+
+        // question name
+        if (api_get_configuration_value('save_titles_as_html')) {
+            $editorConfig = ['ToolbarSet' => 'TitleAsHtml'];
+            $form->addHtmlEditor(
+                'questionName',
+                get_lang('Question'),
+                false,
+                false,
+                $editorConfig,
+                true
+            );
+        } else {
+            $form->addElement('text', 'questionName', get_lang('Question'));
+        }
+
+        $form->addRule('questionName', get_lang('GiveQuestion'), 'required');
+
+        // default content
+        $isContent = isset($_REQUEST['isContent']) ? (int) $_REQUEST['isContent'] : null;
+
+        // Question type
+        $answerType = isset($_REQUEST['answerType']) ? (int) $_REQUEST['answerType'] : null;
+        $form->addElement('hidden', 'answerType', $answerType);
+
+        // html editor
+        $editorConfig = [
+            'ToolbarSet' => 'TestQuestionDescription',
+            'Height' => '150',
+        ];
+
+        if (!api_is_allowed_to_edit(null, true)) {
+            $editorConfig['UserStatus'] = 'student';
+        }
+
+        $form->addButtonAdvancedSettings('advanced_params');
+        $form->addElement('html', '<div id="advanced_params_options" style="display:none">');
+        $form->addHtmlEditor(
+            'questionDescription',
+            get_lang('QuestionDescription'),
+            false,
+            false,
+            $editorConfig
+        );
+
+        if ($this->type != MEDIA_QUESTION) {
+            // Advanced parameters
+            $select_level = self::get_default_levels();
+            $form->addElement(
+                'select',
+                'questionLevel',
+                get_lang('Difficulty'),
+                $select_level
+            );
+
+            // Categories
+            $tabCat = TestCategory::getCategoriesIdAndName();
+            $form->addElement(
+                'select',
+                'questionCategory',
+                get_lang('Category'),
+                $tabCat
+            );
+
+            global $text;
+
+            $buttonGroup = [];
+            $buttonGroup[] = $form->addButtonSave(
+                $text,
+                'submitQuestion',
+                true
+            );
+            $form->addGroup($buttonGroup);
+        }
+
+        $form->addElement('html', '</div>');
+
+        // default values
+        $defaults = [];
+        $defaults['questionName'] = $this->question;
+        $defaults['questionDescription'] = $this->description;
+        $defaults['questionLevel'] = $this->level;
+        $defaults['questionCategory'] = $this->category;
+        
+        // Came from he question pool
+        if (isset($_GET['fromExercise'])) {
+            $form->setDefaults($defaults);
+        }
+        
+        if (!isset($_GET['newQuestion']) || $isContent) {
+            $form->setDefaults($defaults);
+        }
+    }
+
+    /**
      * function which process the creation of questions.
      *
      * @param FormValidator $form
@@ -1890,6 +2036,54 @@ abstract class Question
         }
         echo '</a>';
         echo '</div></li>';
+        echo '</ul>';
+        echo '</div>';
+        echo '</div>';
+    }
+
+    /**
+     * Displays the menu of question types.
+     *
+     * @param Exercise $objExercise
+     */
+    public static function displayPtTypeMenu($objExercise)
+    {
+        // 1. by default we show all the question types
+        $questionTypeList = self::getQuestionPtTypeList();
+        
+        echo '<div class="panel panel-default">';
+        echo '<div class="panel-body">';
+        echo '<ul class="question_menu">';
+        foreach ($questionTypeList as $i => $type) {
+            /** @var Question $type */
+            $type = new $type[1]();
+            $img = $type->getTypePicture();
+            $explanation = get_lang($type->getExplanation());
+            echo '<li>';
+            echo '<div class="icon-image">';
+            $icon = '<a href="ptest_admin.php?exerciseId='.$objExercise->id.'&'.api_get_cidreq().'&newQuestion=yes&answerType='.$i.'">'.
+                Display::return_icon($img, $explanation, null, ICON_SIZE_BIG).'</a>';
+                
+            if ($objExercise->force_edit_exercise_in_lp === false) {
+                if ($objExercise->exercise_was_added_in_lp == true) {
+                    $img = pathinfo($img);
+                    $img = $img['filename'].'_na.'.$img['extension'];
+                    $icon = Display::return_icon($img, $explanation, null, ICON_SIZE_BIG);
+                }
+            }
+            echo $icon;
+            echo '</div>';
+            echo '</li>';
+            
+        }
+        echo '<li class="pull-right">';
+        echo '<div class="icon-image">';
+        $icon = '<a href="ptests_category.php?exerciseId='.$objExercise->selectId().'&'.api_get_cidreq().'">'.
+            Display::return_icon('sessions_category.png', get_lang('PtCategories'), null, ICON_SIZE_BIG).
+            '</a>';
+        echo $icon;
+        echo '</div>';
+        echo '</li>';
         echo '</ul>';
         echo '</div>';
         echo '</div>';

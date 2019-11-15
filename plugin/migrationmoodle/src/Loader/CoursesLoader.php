@@ -19,6 +19,8 @@ class CoursesLoader implements LoaderInterface
      */
     public function load(array $incomingData)
     {
+        $incomingData['disk_quota'] = 500 * 1024 * 1024;
+
         $courseInfo = \CourseManager::create_course($incomingData, 1);
 
         return $courseInfo['real_id'];

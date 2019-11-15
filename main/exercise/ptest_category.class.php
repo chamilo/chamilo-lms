@@ -105,7 +105,7 @@ class PTestCategory
                     api_get_user_id()
                 );
             }
-            
+
             return $newId;
         } else {
             return false;
@@ -182,9 +182,9 @@ class PTestCategory
 
     /**
      * Gets the number of categories of exercise id=in_id.
-     * 
+     *
      * @param int $exerciseId
-     * 
+     *
      * @return int
      */
     public function getCategoriesExerciseNumber($exerciseId)

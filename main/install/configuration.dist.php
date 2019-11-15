@@ -70,6 +70,10 @@ $_configuration['url_append'] = '{URL_APPEND_PATH}';
 // -> Uncomment the line bellow to activate Facebook Auth AND edit app/config/auth.conf.php for configuration
 // $_configuration['facebook_auth'] = 1;
 //
+// OKTA IMPLEMENTATION BASED ON external_login info
+// -> Uncomment the line bellow to activate Facebook Auth AND edit app/config/auth.conf.php for configuration
+// $_configuration['okta_auth'] = 1;
+//
 // OTHER EXTERNAL LOGIN INFORMATION
 // To fetch external login information, uncomment those 2 lines and modify  files auth/external_login/newUser.php and auth/external_login/updateUser.php files
 // $extAuthSource["external_login"]["newUser"] = $_configuration['root_sys']."main/auth/external_login/newUser.php";

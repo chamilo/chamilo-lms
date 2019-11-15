@@ -175,6 +175,11 @@ function online_logout($user_id = null, $logout_redirect = false)
         }
     }
 
+    if (api_is_okta_auth_activated()) {
+        include_once __DIR__ . '/../../auth/external_login/okta.inc.php';
+        oktaCloseSession();
+    }
+
     api_delete_firstpage_parameter();
     Session::erase('last_id');
     CourseChatUtils::exitChat($user_id);

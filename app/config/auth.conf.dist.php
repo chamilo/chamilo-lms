@@ -24,6 +24,23 @@
 
 
 /**
+ * okta
+ */
+
+/**
+ * Uncomment those lines and put your okta app parameters here
+ *  Find them here : https://developer.okta.com/
+ */
+/*$okta_config = array(
+    'client_id' => 'client id',
+    'client_secret' => 'client secret code',
+    'okta_domain' => 'https://dev-chamilo.okta.com',
+    'api_token' => 'Generate api token from okta dashboard',
+    'return_url' => api_get_path(WEB_PATH).'?action=oktaconnect',
+);*/
+
+
+/**
  * Shibboleth
  */
 

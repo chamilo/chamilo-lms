@@ -1047,6 +1047,16 @@ function api_is_facebook_auth_activated()
 }
 
 /**
+ * @return bool Return true if okta authentification is activated
+ */
+function api_is_okta_auth_activated()
+{
+    global $_configuration;
+
+    return isset($_configuration['okta_auth']) && $_configuration['okta_auth'] == 1;
+}
+
+/**
  * Adds to a given path a trailing slash if it is necessary (adds "/" character at the end of the string).
  *
  * @param string $path the input path

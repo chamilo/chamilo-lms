@@ -1,5 +1,17 @@
 <?php
 /* For licensing terms, see /license.txt */
+/**
+ * Entry point for REST web services in Chamilo
+ * 
+ * Call it with the 'authenticate' action first, to get an api_key, then use
+ * the api_key in all subsequent calls.
+ * 
+ * Send the REST call parameters as a 'hash' in POST or GET. The hash must be
+ * JSON encoded and contain at least 'action', 'username', and either
+ * 'password' for the first call or 'api_key' in subsequent calls.
+ * You can store the API key on an external system (it will remain the same),
+ * although it is not recommended to do so (for security reasons).
+ */
 require_once __DIR__.'/../../inc/global.inc.php';
 
 $hash = isset($_REQUEST['hash']) ? $_REQUEST['hash'] : null;
@@ -177,7 +189,7 @@ try {
             $data = $restApi->getUsersCampus($_POST);
             $restResponse->setData($data);
             break;
-        case Rest::GET_COURSE:
+        case Rest::GET_COURSES:
             $data = $restApi->getCoursesCampus($_POST);
             $restResponse->setData($data);
             break;
@@ -185,7 +197,7 @@ try {
             $data = $restApi->addCoursesSession($_POST);
             $restResponse->setData($data);
             break;
-        case Rest::ADD_USER_SESSION:
+        case Rest::ADD_USERS_SESSION:
             $data = $restApi->addUsersSession($_POST);
             $restResponse->setData($data);
             break;
@@ -258,16 +270,38 @@ try {
             $data = $restApi->saveForumThread($threadInfo, $forumId);
             $restResponse->setData($data);
             break;
+        case Rest::GET_USER_MESSAGES_RECEIVED:
+            $lastMessageId = isset($_POST['last']) ? intval($_POST['last']) : 0;
+            $messages = $restApi->getUserReceivedMessages($lastMessageId);
+            $restResponse->setData($messages);
+            break;
+        case Rest::GET_USER_MESSAGES_SENT:
+            $lastMessageId = isset($_POST['last']) ? intval($_POST['last']) : 0;
+            $messages = $restApi->getUserSentMessages($lastMessageId);
+            $restResponse->setData($messages);
+            break;
+        case Rest::DELETE_USER_MESSAGE:
+            $messageId = isset($_POST['message_id']) ? intval($_POST['message_id']) : 0;
+            $messageType = !empty($_POST['msg_type']) ? $_POST['msg_type'] : '';
+            $restApi->deleteUserMessage($messageId, $messageType);
+            $restResponse->setData(['status' => true]);
+            break;
+        case Rest::SET_MESSAGE_READ:
+            $messageId = isset($_POST['message_id']) ? intval($_POST['message_id']) : 0;
+            $restApi->setMessageRead($messageId);
+            $restResponse->setData(['status' => true]);
+            break;
         default:
             throw new Exception(get_lang('InvalidAction'));
     }
-} catch (Exception $exeption) {
+} catch (Exception $exception) {
     $restResponse->setErrorMessage(
-        $exeption->getMessage()
+        $exception->getMessage()
     );
 }
 
 header('Content-Type: application/json');
 header('Access-Control-Allow-Origin: *');
+
 
 echo $restResponse->format();

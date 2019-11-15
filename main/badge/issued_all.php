@@ -222,6 +222,9 @@ foreach ($userSkills as $index => $skillIssue) {
 
         if (strcmp($backpack, $configBackpack) !== 0) {
             $backpack = $configBackpack;
+            if (substr($backpack, -1) !== '/') {
+                $backpack .= '/';
+            }
         }
 
         $htmlHeadXtra[] = '<script src="'.$backpack.'issuer.js"></script>';

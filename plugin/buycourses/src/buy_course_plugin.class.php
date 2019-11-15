@@ -1269,13 +1269,106 @@ class BuyCoursesPlugin extends Plugin
         ";
 
         return Database::select(
-            ['c.iso_code', 'u.firstname', 'u.lastname', 's.*'],
+            ['c.iso_code', 'u.firstname', 'u.lastname', 'u.email', 's.*'],
             "$saleTable s $innerJoins",
             [
                 'where' => ['s.status = ?' => (int) $status],
                 'order' => 'id DESC',
             ]
         );
+    }
+
+    /**
+     * Get the list statuses for sales.
+     *
+     * @param string $dateStart
+     * @param string $dateEnd
+     * @return array
+     * @throws Exception
+     */
+    public function getSaleListReport($dateStart = null, $dateEnd = null)
+    {
+        $saleTable = Database::get_main_table(self::TABLE_SALE);
+        $currencyTable = Database::get_main_table(self::TABLE_CURRENCY);
+        $userTable = Database::get_main_table(TABLE_MAIN_USER);
+        $innerJoins = "
+            INNER JOIN $currencyTable c ON s.currency_id = c.id
+            INNER JOIN $userTable u ON s.user_id = u.id
+        ";
+        $list = Database::select(
+            ['c.iso_code', 'u.firstname', 'u.lastname', 'u.email' , 's.*'],
+            "$saleTable s $innerJoins",
+            [
+                'order' => 'id DESC',
+            ]
+        );
+        $listExportTemp = [];
+        $listExport = [];
+        $textStatus = null;
+        $paymentTypes = $this->getPaymentTypes();
+        $productTypes = $this->getProductTypes();
+        foreach ($list as $item) {
+            $statusSaleOrder = $item['status'];
+            switch ($statusSaleOrder) {
+                case 0:
+                    $textStatus = $this->get_lang('SaleStatusPending');
+                    break;
+                case 1:
+                    $textStatus = $this->get_lang('SaleStatusCompleted');
+                    break;
+                case -1:
+                    $textStatus = $this->get_lang('SaleStatusCanceled');
+                    break;
+            }
+            $dateFilter = new DateTime($item['date']);
+            $listExportTemp[] = [
+                'id' => $item['id'],
+                'reference' => $item['reference'],
+                'status' => $textStatus,
+                'status_filter' => $item['status'],
+                'date' => $dateFilter->format('Y-m-d'),
+                'order_time' => $dateFilter->format('H:i:s'),
+                'price' => $item['iso_code'].' '.$item['price'],
+                'product_type' => $productTypes[$item['product_type']],
+                'product_name' => $item['product_name'],
+                'payment_type' => $paymentTypes[$item['payment_type']],
+                'complete_user_name' => api_get_person_name($item['firstname'], $item['lastname']),
+                'email' => $item['email'],
+            ];
+        }
+        $listExport[] = [
+            get_lang('Number'),
+            $this->get_lang('OrderStatus'),
+            $this->get_lang('OrderDate'),
+            $this->get_lang('OrderTime'),
+            $this->get_lang('PaymentMethod'),
+            $this->get_lang('SalePrice'),
+            $this->get_lang('ProductType'),
+            $this->get_lang('ProductName'),
+            $this->get_lang('UserName'),
+            get_lang('Email')
+        ];
+        //Validation Export
+        $dateStart = strtotime($dateStart);
+        $dateEnd = strtotime($dateEnd);
+        foreach ($listExportTemp as $item) {
+            $dateFilter = strtotime($item['date']);
+            if (($dateFilter >= $dateStart) && ($dateFilter <= $dateEnd)) {
+                $listExport[] = [
+                    'id' => $item['id'],
+                    'status' => $item['status'],
+                    'date' => $item['date'],
+                    'order_time' => $item['order_time'],
+                    'payment_type' => $item['payment_type'],
+                    'price' => $item['price'],
+                    'product_type' => $item['product_type'],
+                    'product_name' => $item['product_name'],
+                    'complete_user_name' => $item['complete_user_name'],
+                    'email' => $item['email'],
+                ];
+            }
+        }
+        return $listExport;
     }
 
     /**
@@ -1411,7 +1504,7 @@ class BuyCoursesPlugin extends Plugin
         ";
 
         return Database::select(
-            ['c.iso_code', 'u.firstname', 'u.lastname', 's.*'],
+            ['c.iso_code', 'u.firstname', 'u.lastname', 'u.email', 's.*'],
             "$saleTable s $innerJoins",
             [
                 'where' => [
@@ -1452,6 +1545,76 @@ class BuyCoursesPlugin extends Plugin
             [
                 'where' => [
                     'u.id = ? AND s.status = ?' => [(int) $id, self::SALE_STATUS_COMPLETED],
+                ],
+                'order' => 'id DESC',
+            ]
+        );
+    }
+
+    /**
+     * Get a list of sales by date range.
+     *
+     * @param string $dateStart
+     * @param string $dateEnd
+     *
+     * @return array The sale list. Otherwise return false
+     */
+    public function getSaleListByDate($dateStart, $dateEnd)
+    {
+        $dateStart = trim($dateStart);
+        $dateEnd = trim($dateEnd);
+        if (empty($dateStart)) {
+            return [];
+        }
+        if (empty($dateEnd)) {
+            return [];
+        }
+        $saleTable = Database::get_main_table(self::TABLE_SALE);
+        $currencyTable = Database::get_main_table(self::TABLE_CURRENCY);
+        $userTable = Database::get_main_table(TABLE_MAIN_USER);
+        $innerJoins = "
+            INNER JOIN $currencyTable c ON s.currency_id = c.id
+            INNER JOIN $userTable u ON s.user_id = u.id
+        ";
+        return Database::select(
+            ['c.iso_code', 'u.firstname', 'u.lastname', 'u.email' , 's.*'],
+            "$saleTable s $innerJoins",
+            [
+                'where' => [
+                    's.date BETWEEN ? AND ' => $dateStart,
+                    ' ? ' => $dateEnd,
+                ],
+                'order' => 'id DESC',
+            ]
+        );
+    }
+
+    /**
+     * Get a list of sales by the user Email.
+     *
+     * @param string $term The search term
+     *
+     * @return array The sale list. Otherwise return false
+     */
+    public function getSaleListByEmail($term)
+    {
+        $term = trim($term);
+        if (empty($term)) {
+            return [];
+        }
+        $saleTable = Database::get_main_table(self::TABLE_SALE);
+        $currencyTable = Database::get_main_table(self::TABLE_CURRENCY);
+        $userTable = Database::get_main_table(TABLE_MAIN_USER);
+        $innerJoins = "
+            INNER JOIN $currencyTable c ON s.currency_id = c.id
+            INNER JOIN $userTable u ON s.user_id = u.id
+        ";
+        return Database::select(
+            ['c.iso_code', 'u.firstname', 'u.lastname', 'u.email', 's.*'],
+            "$saleTable s $innerJoins",
+            [
+                'where' => [
+                    'u.email LIKE %?% ' => $term,
                 ],
                 'order' => 'id DESC',
             ]

@@ -1594,8 +1594,7 @@ class DocumentManager
         $course_id = $course['real_id'];
         // note the extra / at the end of doc_path to match every path in
         // the document table that is part of the document path
-
-        $session_id = intval($session_id);
+        $session_id = (int) $session_id;
         $condition = "AND d.session_id IN  ('$session_id', '0') ";
         // The " d.filetype='file' " let the user see a file even if the folder is hidden see #2198
 

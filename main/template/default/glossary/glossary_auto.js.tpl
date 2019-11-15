@@ -6,6 +6,8 @@ $(document).ready(function() {
     var ajaxRequestUrl = "{{ _p.web }}main/glossary/glossary_ajax_request.php?{{ _p.web_cid_query }}";
     var imageSource = "{{ _p.web }}main/inc/lib/javascript/indicator.gif";
     var indicatorImage ='<img src="' + imageSource + '" />';
+    var termsArray = new Array(); // needed in this function for a wide scope
+    var termsArrayCopy = new Array();
 
     $.ajax({
         contentType: "application/x-www-form-urlencoded",
@@ -25,19 +27,19 @@ $(document).ready(function() {
                 specific_terms=data_terms[i].split("__|__|");
                 var real_term = specific_terms[1]; // glossary term
                 var real_code = specific_terms[0]; // glossary id
-                complex_array[real_code] = real_term;
-                cp_complex_array[real_code] = real_term;
+                termsArray[real_code] = real_term;
+                termsArrayCopy[real_code] = real_term;
             }
 
-            complex_array.reverse();
+            termsArray.reverse();
 
-            for (var my_index in complex_array) {
-                n = complex_array[my_index];
+            for (var my_index in termsArray) {
+                n = termsArray[my_index];
                 if (n == null) {
                     n = '';
                 } else {
-                    for (var cp_my_index in cp_complex_array) {
-                        cp_data = cp_complex_array[cp_my_index];
+                    for (var cp_my_index in termsArrayCopy) {
+                        cp_data = termsArrayCopy[cp_my_index];
                         if (cp_data == null) {
                             cp_data = '';
                         } else {
@@ -50,7 +52,6 @@ $(document).ready(function() {
                 }
             }
 
-            var complex_array = new Array();
             //mouse on click
             $("body").on("click", ".glossary-ajax", function(e) {
                 random_id = Math.round(Math.random()*100);
@@ -86,6 +87,27 @@ $(document).ready(function() {
                     data: "glossary_id="+my_glossary_id,
                     success: function(datas) {
                         $("div#"+div_content_id).html(datas);
+
+                        // Make sure the dialog opens also with links to other
+                        // glossary terms
+                        for (var my_index in termsArray) {
+                            n = termsArray[my_index];
+                            if (n == null) {
+                                n = '';
+                            } else {
+                                for (var cp_my_index in termsArrayCopy) {
+                                    cp_data = termsArrayCopy[cp_my_index];
+                                    if (cp_data == null) {
+                                        cp_data = '';
+                                    } else {
+                                        if (cp_data == n) {
+                                            my_index = cp_my_index;
+                                        }
+                                    }
+                                }
+                                $("div#"+div_content_id).highlight(n, my_index);
+                            }
+                        }
                         $("#"+div_show_id).dialog("open");
                     }
                 });

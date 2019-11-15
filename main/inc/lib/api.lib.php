@@ -9579,8 +9579,8 @@ function api_set_noreply_and_from_address_to_mailer(PHPMailer $mailer, array $se
         isset($platformEmail['SMTP_UNIQUE_SENDER']) &&
         $platformEmail['SMTP_UNIQUE_SENDER']
     ) {
-        $senderName = $platformEmail['SMTP_FROM_NAME'];
-        $senderEmail = $platformEmail['SMTP_FROM_EMAIL'];
+	$senderName = $notification->getDefaultPlatformSenderName();
+        $senderEmail = $notification->getDefaultPlatformSenderEmail();
 
         if (PHPMailer::ValidateAddress($senderEmail)) {
             //force-set Sender to $senderEmail, otherwise SetFrom only does it if it is currently empty

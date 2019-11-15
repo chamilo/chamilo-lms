@@ -12,6 +12,11 @@ use GuzzleHttp\Client;
 
 require_once '../../../vendor/autoload.php';
 
+// set your URL, username and password here to use it for all webservices in this test file.
+$webserviceURL='http://MYCHAMILO.loc/main/webservices/api/';
+$webserviceUsername='admin';
+$webservicePassword='admin';
+
 /**
  * Make a request to get the API key for admin user.
  *
@@ -20,26 +25,29 @@ require_once '../../../vendor/autoload.php';
  * @return string
  */
 function authenticate() {
+    global $webserviceURL;
+    global $webserviceUsername;
+    global $webservicePassword;
     $client = new Client([
-        'base_uri' => 'https://my.chamilo.test/main/webservices/api/',
+        'base_uri' => $webserviceURL,
     ]);
 
     $response = $client->post('v2.php', [
         'form_params' => [
             'action' => 'authenticate',
-            'username' => 'admin',
-            'password' => 'admin',
+            'username' => $webserviceUsername,
+            'password' => $webservicePassword,
         ],
     ]);
 
     if ($response->getStatusCode() !== 200) {
-        throw new Exception('Entry denied');
+        throw new Exception('Entry denied with code : ' . $response->getStatusCode());
     }
 
     $jsonResponse = json_decode($response->getBody()->getContents());
 
     if ($jsonResponse->error) {
-        throw new Exception('Authentication failed');
+        throw new Exception('Authentication failed because : ' . $jsonResponse->message);
     }
 
     return $jsonResponse->data->apiKey;
@@ -54,8 +62,10 @@ function authenticate() {
  */
 function createUser($apiKey)
 {
+    global $webserviceURL;
+    global $webserviceUsername;
     $client = new Client([
-        'base_uri' => 'https://c11.test/main/webservices/api/',
+        'base_uri' => $webserviceURL,
     ]);
 
     $response = $client->post(
@@ -64,7 +74,7 @@ function createUser($apiKey)
             'form_params' => [
                 // data for the user who makes the request
                 'action' => 'save_user',
-                'username' => 'admin',
+                'username' => $webserviceUsername,
                 'api_key' => $apiKey,
                 // data for new user
                 'firstname' => 'Test User',
@@ -89,20 +99,19 @@ function createUser($apiKey)
     );
 
     if ($response->getStatusCode() !== 200) {
-        throw new Exception('Entry denied');
+        throw new Exception('Entry denied with code : ' . $response->getStatusCode());
     }
 
     $jsonResponse = json_decode($response->getBody()->getContents());
 
     if ($jsonResponse->error) {
-        throw new Exception('User not created');
+        throw new Exception('User not created because : ' . $jsonResponse->message);
     }
-
     return $jsonResponse->data[0];
 }
 
 $apiKey = authenticate();
 
+//Creating a new user restuser
 $userId = createUser($apiKey);
-
 echo 'ID of new user: '.$userId;

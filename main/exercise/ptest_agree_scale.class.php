@@ -38,13 +38,13 @@ class PtestAgreeScale extends Question
         // Getting the exercise list
         /** @var Exercise $obj_ex */
         $obj_ex = Session::read('objExercise');
-        
+
         $editor_config = [
             'ToolbarSet' => 'TestProposedAnswer',
             'Width' => '100%',
             'Height' => '125',
         ];
-        
+
         // Categories options select
         $category = new PTestCategory();
         $categoriesList = $category->getCategoryListInfo($obj_ex->selectId());
@@ -52,12 +52,12 @@ class PtestAgreeScale extends Question
         foreach ($categoriesList as $categoryItem) {
             $categoriesOptions[$categoryItem->id] = (string) $categoryItem->name;
         }
-        
+
         //this line defines how many questions by default appear when creating a choice question
         // The previous default value was 2. See task #1759.
         $nb_answers = isset($_POST['nb_answers']) ? (int) $_POST['nb_answers'] : count($categoriesList);
         $nb_answers += (isset($_POST['lessAnswers']) ? -1 : (isset($_POST['moreAnswers']) ? 1 : 0));
-        
+
         $html = '<table class="table table-striped table-hover">
             <thead>
                 <tr style="text-align: center;">
@@ -67,10 +67,10 @@ class PtestAgreeScale extends Question
                 </tr>
             </thead>
             <tbody>';
-        
+
         $form->addHeader(get_lang('Answers'));
         $form->addHtml($html);
-        
+
         $defaults = [];
         if (!empty($this->id)) {
             $answer = new Answer($this->id);
@@ -80,7 +80,7 @@ class PtestAgreeScale extends Question
             }
         }
         $form->addElement('hidden', 'nb_answers');
-        
+
         //$temp_scenario = [];
         if ($nb_answers < 1) {
             $nb_answers = 1;
@@ -88,14 +88,14 @@ class PtestAgreeScale extends Question
                 get_lang('YouHaveToCreateAtLeastOneAnswer')
             );
         }
-        
+
         for ($i = 1; $i <= $nb_answers; $i++) {
             $form->addHtml('<tr>');
             if (isset($answer) && is_object($answer)) {
                 $defaults['answer['.$i.']'] = isset($answer->answer[$i]) ? $answer->answer[$i] : '';
                 $defaults['ptest_category['.$i.']'] = isset($answer->ptest_category[$i]) ? $answer->ptest_category[$i] : 0;
             }
-            
+
             $renderer = $form->defaultRenderer();
             $renderer->setElementTemplate(
                 '<td><!-- BEGIN error --><span class="form_error">{error}</span><!-- END error --><br/>{element}</td>',
@@ -116,30 +116,30 @@ class PtestAgreeScale extends Question
                 ' value = "'.$i.'"'
             );
             $answer_number->freeze();
-            
+
             $form->addHtmlEditor('answer['.$i.']', null, null, false, $editor_config);
-            
+
             $form->addRule(
                 'answer['.$i.']',
                 get_lang('ThisFieldIsRequired'),
                 'required'
             );
-            
+
             $form->addSelect(
                 'ptest_category['.$i.']',
                 null,
                 $categoriesOptions
             );
-            
+
             $form->addHtml('</tr>');
         }
-        
+
         $form->addHtml('</tbody>');
         $form->addHtml('</table>');
-        
+
         global $text;
         $buttonGroup = [];
-        
+
         if ($obj_ex->edit_exercise_in_lp == true ||
             (empty($this->exerciseList) && empty($obj_ex->id))
         ) {
@@ -158,7 +158,7 @@ class PtestAgreeScale extends Question
             );
             $form->addGroup($buttonGroup);
         }
-        
+
         if (!empty($this->id)) {
             $form->setDefaults($defaults);
         } else {
@@ -230,7 +230,7 @@ class PtestAgreeScale extends Question
     {
         $objAnswer = new Answer($this->id);
         $nb_answers = $form->getSubmitValue('nb_answers');
-        
+
         for ($i = 1; $i <= $nb_answers; $i++) {
             $answer = trim($form->getSubmitValue('answer['.$i.']'));
             $goodAnswer = false;
@@ -238,7 +238,7 @@ class PtestAgreeScale extends Question
             $weighting = 0;
             $ptestCategory = (int) $form->getSubmitValue('ptest_category['.$i.']');
             $dest = '';
-            
+
             $objAnswer->createAnswer(
                 $answer,
                 $goodAnswer,
@@ -251,10 +251,10 @@ class PtestAgreeScale extends Question
                 $ptestCategory
             );
         }
-        
+
         // saves the answers into the data base
         $objAnswer->save();
-        
+
         $this->save($exercise);
     }
 
@@ -265,11 +265,11 @@ class PtestAgreeScale extends Question
     {
         $header = parent::return_header($exercise, $counter); //, $score);
         $header .= '<table class="'.$this->question_table_class.'"><tr>';
-        
+
         $header .= '<th style="width:1px;white-space:nowrap;">'.get_lang('Choice').'</th>';
         $header .= '<th>'.get_lang('Answer').'</th>';
         $header .= '</tr>';
-        
+
         return $header;
     }
 

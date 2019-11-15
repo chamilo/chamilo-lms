@@ -617,12 +617,12 @@ switch ($action) {
                         $objExercise->selectPropagateNeg(),
                         $hotspot_delineation_result
                     );
-                } else if ($objQuestionTmp->type === QUESTION_PT_TYPE_AGREE_OR_DISAGREE) {
+                } elseif ($objQuestionTmp->type === QUESTION_PT_TYPE_AGREE_OR_DISAGREE) {
                     $myChoiceTmp = [];
                     $myChoiceTmp['agree'] = isset($_REQUEST['choice-agree'][$my_question_id]) && !empty($_REQUEST['choice-agree'][$my_question_id])
                         ? (int) $_REQUEST['choice-agree'][$my_question_id]
                         : 0;
-                        $myChoiceTmp['disagree'] = isset($_REQUEST['choice-disagree'][$my_question_id]) && !empty($_REQUEST['choice-disagree'][$my_question_id])
+                    $myChoiceTmp['disagree'] = isset($_REQUEST['choice-disagree'][$my_question_id]) && !empty($_REQUEST['choice-disagree'][$my_question_id])
                         ? (int) $_REQUEST['choice-disagree'][$my_question_id]
                         : 0;
 
@@ -638,7 +638,7 @@ switch ($action) {
                         $objExercise->selectPropagateNeg(),
                         $hotspot_delineation_result
                     );
-                } else if ($objQuestionTmp->type === QUESTION_PT_TYPE_AGREE_SCALE) {
+                } elseif ($objQuestionTmp->type === QUESTION_PT_TYPE_AGREE_SCALE) {
                     $result = $objExercise->manage_answer(
                         $exeId,
                         $my_question_id,
@@ -651,7 +651,7 @@ switch ($action) {
                         $objExercise->selectPropagateNeg(),
                         $hotspot_delineation_result
                     );
-                } else if ($objQuestionTmp->type === QUESTION_PT_TYPE_AGREE_REORDER) {
+                } elseif ($objQuestionTmp->type === QUESTION_PT_TYPE_AGREE_REORDER) {
                     $myChoiceTmp = [];
                     foreach ($_REQUEST['choice'][$my_question_id] as $key => $value) {
                         $myChoiceTmp[$key] = $value;

@@ -2448,7 +2448,7 @@ class Exercise
         if ($type == 'ptest') {
             $form->addElement('hidden', 'exercisePtType', EXERCISE_PT_TYPE_PTEST);
             $form->addElement('hidden', 'results_disabled', RESULT_DISABLE_PT_TYPE_PTEST);
-            
+
             // Type of questions disposition on page
             $radios = [];
             $radios[] = $form->createElement(
@@ -2469,81 +2469,81 @@ class Exercise
                 get_lang('SequentialExercise'),
                 '2',
                 [
-                        'onclick' => 'check_per_page_one()',
-                        'id' => 'option_page_one',
+                    'onclick' => 'check_per_page_one()',
+                    'id' => 'option_page_one',
                 ]
             );
 
             $form->addGroup($radios, null, get_lang('QuestionsPerPage'));
 
             $option = [
-                    EX_Q_SELECTION_ORDERED => get_lang('OrderedByUser'),
-                    //  Defined by user
-                    EX_Q_SELECTION_RANDOM => get_lang('Random'),
-                    // 1-10, All
-                    'per_categories' => '--------'.get_lang('UsingCategories').'----------',
-                    // Base (A 123 {3} B 456 {3} C 789{2} D 0{0}) --> Matrix {3, 3, 2, 0}
-                    EX_Q_SELECTION_CATEGORIES_ORDERED_QUESTIONS_ORDERED => get_lang('OrderedCategoriesAlphabeticallyWithQuestionsOrdered'),
-                    // A 123 B 456 C 78 (0, 1, all)
-                    EX_Q_SELECTION_CATEGORIES_RANDOM_QUESTIONS_ORDERED => get_lang('RandomCategoriesWithQuestionsOrdered'),
-                    // C 78 B 456 A 123
-                    EX_Q_SELECTION_CATEGORIES_ORDERED_QUESTIONS_RANDOM => get_lang('OrderedCategoriesAlphabeticallyWithRandomQuestions'),
-                    // A 321 B 654 C 87
-                    EX_Q_SELECTION_CATEGORIES_RANDOM_QUESTIONS_RANDOM => get_lang('RandomCategoriesWithRandomQuestions'),
-                    // C 87 B 654 A 321
-                    //EX_Q_SELECTION_CATEGORIES_RANDOM_QUESTIONS_ORDERED_NO_GROUPED => get_lang('RandomCategoriesWithQuestionsOrderedNoQuestionGrouped'),
-                    /*    B 456 C 78 A 123
-                     456 78 123
-                     123 456 78
-                     */
-                    //EX_Q_SELECTION_CATEGORIES_RANDOM_QUESTIONS_RANDOM_NO_GROUPED => get_lang('RandomCategoriesWithRandomQuestionsNoQuestionGrouped'),
-                    /*
-                     A 123 B 456 C 78
-                     B 456 C 78 A 123
-                     B 654 C 87 A 321
-                     654 87 321
-                     165 842 73
-                     */
-                    //EX_Q_SELECTION_CATEGORIES_ORDERED_BY_PARENT_QUESTIONS_ORDERED => get_lang('OrderedCategoriesByParentWithQuestionsOrdered'),
-                    //EX_Q_SELECTION_CATEGORIES_ORDERED_BY_PARENT_QUESTIONS_RANDOM => get_lang('OrderedCategoriesByParentWithQuestionsRandom'),
+                EX_Q_SELECTION_ORDERED => get_lang('OrderedByUser'),
+                //  Defined by user
+                EX_Q_SELECTION_RANDOM => get_lang('Random'),
+                // 1-10, All
+                'per_categories' => '--------'.get_lang('UsingCategories').'----------',
+                // Base (A 123 {3} B 456 {3} C 789{2} D 0{0}) --> Matrix {3, 3, 2, 0}
+                EX_Q_SELECTION_CATEGORIES_ORDERED_QUESTIONS_ORDERED => get_lang('OrderedCategoriesAlphabeticallyWithQuestionsOrdered'),
+                // A 123 B 456 C 78 (0, 1, all)
+                EX_Q_SELECTION_CATEGORIES_RANDOM_QUESTIONS_ORDERED => get_lang('RandomCategoriesWithQuestionsOrdered'),
+                // C 78 B 456 A 123
+                EX_Q_SELECTION_CATEGORIES_ORDERED_QUESTIONS_RANDOM => get_lang('OrderedCategoriesAlphabeticallyWithRandomQuestions'),
+                // A 321 B 654 C 87
+                EX_Q_SELECTION_CATEGORIES_RANDOM_QUESTIONS_RANDOM => get_lang('RandomCategoriesWithRandomQuestions'),
+                // C 87 B 654 A 321
+                //EX_Q_SELECTION_CATEGORIES_RANDOM_QUESTIONS_ORDERED_NO_GROUPED => get_lang('RandomCategoriesWithQuestionsOrderedNoQuestionGrouped'),
+                /*    B 456 C 78 A 123
+                 456 78 123
+                 123 456 78
+                 */
+                //EX_Q_SELECTION_CATEGORIES_RANDOM_QUESTIONS_RANDOM_NO_GROUPED => get_lang('RandomCategoriesWithRandomQuestionsNoQuestionGrouped'),
+                /*
+                 A 123 B 456 C 78
+                 B 456 C 78 A 123
+                 B 654 C 87 A 321
+                 654 87 321
+                 165 842 73
+                 */
+                //EX_Q_SELECTION_CATEGORIES_ORDERED_BY_PARENT_QUESTIONS_ORDERED => get_lang('OrderedCategoriesByParentWithQuestionsOrdered'),
+                //EX_Q_SELECTION_CATEGORIES_ORDERED_BY_PARENT_QUESTIONS_RANDOM => get_lang('OrderedCategoriesByParentWithQuestionsRandom'),
             ];
-            
+
             $form->addElement(
-                    'select',
-                    'question_selection_type',
-                    [get_lang('QuestionSelection')],
-                    $option,
-                    [
-                            'id' => 'questionSelection',
-                            'onchange' => 'checkQuestionSelection()',
-                    ]
-                    );
-            
+                'select',
+                'question_selection_type',
+                [get_lang('QuestionSelection')],
+                $option,
+                [
+                    'id' => 'questionSelection',
+                    'onchange' => 'checkQuestionSelection()',
+                ]
+            );
+
             $pageConfig = api_get_configuration_value('allow_quiz_results_page_config');
             if ($pageConfig) {
                 $group = [
-                        $form->createElement(
-                                'checkbox',
-                                'hide_expected_answer',
-                                null,
-                                get_lang('HideExpectedAnswer')
-                                ),
-                        $form->createElement(
-                                'checkbox',
-                                'hide_total_score',
-                                null,
-                                get_lang('HideTotalScore')
-                                ),
-                        $form->createElement(
-                                'checkbox',
-                                'hide_question_score',
-                                null,
-                                get_lang('HideQuestionScore')
-                                ),
+                    $form->createElement(
+                        'checkbox',
+                        'hide_expected_answer',
+                        null,
+                        get_lang('HideExpectedAnswer')
+                    ),
+                    $form->createElement(
+                        'checkbox',
+                        'hide_total_score',
+                        null,
+                        get_lang('HideTotalScore')
+                    ),
+                    $form->createElement(
+                        'checkbox',
+                        'hide_question_score',
+                        null,
+                        get_lang('HideQuestionScore')
+                    ),
                 ];
                 $form->addGroup($group, null, get_lang('ResultsConfigurationPage'));
             }
-            
+
             $displayMatrix = 'none';
             $displayRandom = 'none';
             $selectionType = $this->getQuestionSelectionType();
@@ -2555,33 +2555,33 @@ class Exercise
                     $displayMatrix = 'block';
                     break;
             }
-            
+
             $form->addElement(
-                    'html',
-                    '<div id="hidden_random" style="display:'.$displayRandom.'">'
-                    );
+                'html',
+                '<div id="hidden_random" style="display:'.$displayRandom.'">'
+            );
             // Number of random question.
             $max = ($this->id > 0) ? $this->getQuestionCount() : 10;
             $option = range(0, $max);
             $option[0] = get_lang('No');
             $option[-1] = get_lang('AllQuestionsShort');
             $form->addElement(
-                    'select',
-                    'randomQuestions',
-                    [
-                            get_lang('RandomQuestions'),
-                            get_lang('RandomQuestionsHelp'),
-                    ],
-                    $option,
-                    ['id' => 'randomQuestions']
-                    );
+                'select',
+                'randomQuestions',
+                [
+                    get_lang('RandomQuestions'),
+                    get_lang('RandomQuestionsHelp'),
+                ],
+                $option,
+                ['id' => 'randomQuestions']
+            );
             $form->addElement('html', '</div>');
             
             $form->addElement(
-                    'html',
-                    '<div id="hidden_matrix" style="display:'.$displayMatrix.'">'
-                    );
-            
+                'html',
+                '<div id="hidden_matrix" style="display:'.$displayMatrix.'">'
+            );
+
             // Category selection.
             $cat = new TestCategory();
             $cat_form = $cat->returnCategoryForm($this);
@@ -2600,20 +2600,20 @@ class Exercise
 
             // Category name.
             $radio_display_cat_name = [
-                    $form->createElement('radio', 'display_category_name', null, get_lang('Yes'), '1'),
-                    $form->createElement('radio', 'display_category_name', null, get_lang('No'), '0'),
+                $form->createElement('radio', 'display_category_name', null, get_lang('Yes'), '1'),
+                $form->createElement('radio', 'display_category_name', null, get_lang('No'), '0'),
             ];
             $form->addGroup($radio_display_cat_name, null, get_lang('QuestionDisplayCategoryName'));
-            
+
             // Hide question title.
             $group = [
-                    $form->createElement('radio', 'hide_question_title', null, get_lang('Yes'), '1'),
-                    $form->createElement('radio', 'hide_question_title', null, get_lang('No'), '0'),
+                $form->createElement('radio', 'hide_question_title', null, get_lang('Yes'), '1'),
+                $form->createElement('radio', 'hide_question_title', null, get_lang('No'), '0'),
             ];
             $form->addGroup($group, null, get_lang('HideQuestionTitle'));
-            
+
             $allow = api_get_configuration_value('allow_quiz_show_previous_button_setting');
-            
+
             if ($allow === true) {
                 // Hide question title.
                 $group = [
@@ -2634,11 +2634,11 @@ class Exercise
                 ];
                 $form->addGroup($group, null, get_lang('ShowPreviousButton'));
             }
-            
+
             // Attempts
             $attempt_option = range(0, 10);
             $attempt_option[0] = get_lang('Infinite');
-            
+
             $form->addElement(
                 'select',
                 'exerciseAttempts',
@@ -2646,47 +2646,47 @@ class Exercise
                 $attempt_option,
                 ['id' => 'exerciseAttempts']
             );
-            
+
             // Exercise time limit
             $form->addElement(
-                    'checkbox',
-                    'activate_start_date_check',
-                    null,
-                    get_lang('EnableStartTime'),
-                    ['onclick' => 'activate_start_date()']
-                    );
-            
+                'checkbox',
+                'activate_start_date_check',
+                null,
+                get_lang('EnableStartTime'),
+                ['onclick' => 'activate_start_date()']
+            );
+
             if (!empty($this->start_time)) {
                 $form->addElement('html', '<div id="start_date_div" style="display:block;">');
             } else {
                 $form->addElement('html', '<div id="start_date_div" style="display:none;">');
             }
-            
+
             $form->addElement('date_time_picker', 'start_time');
             $form->addElement('html', '</div>');
             $form->addElement(
-                    'checkbox',
-                    'activate_end_date_check',
-                    null,
-                    get_lang('EnableEndTime'),
-                    ['onclick' => 'activate_end_date()']
-                    );
-            
+                'checkbox',
+                'activate_end_date_check',
+                null,
+                get_lang('EnableEndTime'),
+                ['onclick' => 'activate_end_date()']
+            );
+
             if (!empty($this->end_time)) {
                 $form->addElement('html', '<div id="end_date_div" style="display:block;">');
             } else {
                 $form->addElement('html', '<div id="end_date_div" style="display:none;">');
             }
-            
+
             $form->addElement('date_time_picker', 'end_time');
             $form->addElement('html', '</div>');
             
             $display = 'block';
-                        
+
             $form->addElement('html', '<div class="clear">&nbsp;</div>');
             $form->addElement('checkbox', 'review_answers', null, get_lang('ReviewAnswers'));
             $form->addElement('html', '<div id="divtimecontrol"  style="display:'.$display.';">');
-            
+
             // Timer control
             $form->addElement(
                 'checkbox',
@@ -2694,12 +2694,12 @@ class Exercise
                 null,
                 get_lang('EnableTimerControl'),
                 [
-                        'onclick' => 'option_time_expired()',
-                        'id' => 'enabletimercontrol',
-                        'onload' => 'check_load_time()',
+                    'onclick' => 'option_time_expired()',
+                    'id' => 'enabletimercontrol',
+                    'onload' => 'check_load_time()',
                 ]
             );
-            
+
             $expired_date = (int) $this->selectExpiredTime();
             
             if (($expired_date != '0')) {
@@ -2726,7 +2726,7 @@ class Exercise
                 false,
                 $editor_config
             );
-            
+
             $allow = api_get_configuration_value('allow_notification_setting_per_exercise');
             if ($allow === true) {
                 $settings = ExerciseLib::getNotificationSettings();
@@ -2742,13 +2742,13 @@ class Exercise
                 }
                 $form->addGroup($group, '', [get_lang('EmailNotifications')]);
             }
-            
+
             $form->addCheckBox(
                 'update_title_in_lps',
                 null,
                 get_lang('UpdateTitleInLps')
             );
-            
+
             $form->addElement('html', '</div>'); //End advanced setting
             $form->addElement('html', '</div>');
             
@@ -9425,7 +9425,7 @@ class Exercise
                             $embeddableIcon = Display::return_icon('om_integration.png', get_lang('ThisQuizCanBeEmbeddable'));
                             $url .= Display::div($embeddableIcon, ['class' => 'pull-right']);
                         }
-                        
+
                         if ($row['pt_type'] == EXERCISE_PT_TYPE_PTEST) {
                             $embeddableIcon = Display::return_icon('new_personality_test.png', get_lang('PtestType'));
                             $url .= Display::div($embeddableIcon, ['class' => 'pull-right']);
@@ -9461,7 +9461,7 @@ class Exercise
                                 // Exercise results
                                 $resultsLink = '<a href="exercise_report.php?'.api_get_cidreq().'&exerciseId='.$row['id'].'">'.
                                     Display::return_icon('test_results.png', get_lang('Results'), '', ICON_SIZE_SMALL).'</a>';
-    
+
                                 if ($limitTeacherAccess) {
                                     if (api_is_platform_admin()) {
                                         $actions .= $resultsLink;
@@ -9470,7 +9470,7 @@ class Exercise
                                     // Exercise results
                                     $actions .= $resultsLink;
                                 }
-    
+
                                 // Auto launch
                                 if ($autoLaunchAvailable) {
                                     $autoLaunch = $exercise->getAutoLaunch();
@@ -9496,7 +9496,7 @@ class Exercise
                                         );
                                     }
                                 }
-    
+
                                 // Export
                                 $actions .= Display::url(
                                     Display::return_icon('cd.png', get_lang('CopyExercise')),
@@ -9506,7 +9506,7 @@ class Exercise
                                         'href' => 'exercise.php?'.api_get_cidreq().'&choice=copy_exercise&sec_token='.$token.'&exerciseId='.$row['id'],
                                     ]
                                 );
-    
+
                                 // Clean exercise
                                 if ($locked == false) {
                                     $clean = Display::url(
@@ -9530,7 +9530,7 @@ class Exercise
                                         ICON_SIZE_SMALL
                                     );
                                 }
-    
+
                                 if ($limitTeacherAccess && !api_is_platform_admin()) {
                                     $clean = '';
                                 }
@@ -9549,7 +9549,7 @@ class Exercise
                                     $actions .= $resultsLink;
                                 }
                             }
-                            
+
                             // Visible / invisible
                             // Check if this exercise was added in a LP
                             if ($exercise->exercise_was_added_in_lp == true) {
@@ -9601,11 +9601,11 @@ class Exercise
                                     ),
                                     'exercise.php?action=exportqti2&exerciseId='.$row['id'].'&'.api_get_cidreq()
                                 );
-    
+
                                 if ($limitTeacherAccess && !api_is_platform_admin()) {
                                     $export = '';
                                 }
-    
+
                                 $actions .= $export;
                             }
                         } else {
@@ -9865,7 +9865,7 @@ class Exercise
                             }
                             if ($my_result_disabled == RESULT_DISABLE_PT_TYPE_PTEST) {
                                 $attempt_text = $num.' '.get_lang('Attempts');
-                            } 
+                            }
                         }
                     }
 

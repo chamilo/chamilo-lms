@@ -1409,7 +1409,7 @@ HTML;
 
                         $answer = Security::remove_XSS($answer, STUDENT);
 
-                        $s.= '<tr><td class="text-center">'.$answerId.'</td><td>'.$answer.'</td></tr>';
+                        $s .= '<tr><td class="text-center">'.$answerId.'</td><td>'.$answer.'</td></tr>';
 
                         break;
                     case QUESTION_PT_TYPE_AGREE_SCALE:
@@ -1457,7 +1457,7 @@ HTML;
 
                         $answer = Security::remove_XSS($answer, STUDENT);
 
-                        $s.= '<tr><td class="text-center">'.$answerId.'</td><td>'.$answer.'</td></tr>';
+                        $s .= '<tr><td class="text-center">'.$answerId.'</td><td>'.$answer.'</td></tr>';
 
                         break;
                 }
@@ -1481,7 +1481,7 @@ HTML;
             )) {
                 $s .= '</table>';
             }
-            
+
             if ($answerType == QUESTION_PT_TYPE_AGREE_OR_DISAGREE) {
                 $s .= '<div class="form-horizontal">';
                 $s .= '<div class="form-group">';
@@ -4373,12 +4373,12 @@ EOT;
                         $userListUse[] = $row['exe_user_id'];
                         $answerValue = json_decode($row['answer'], true);
                         $sum += $answerValue[$answer_id];
-                        $count++;  
-                        
+                        $count++;
+
                     }
 
                     if ($count > 0) {
-                        return round(($sum/$count),1);
+                        return round(($sum / $count),1);
                     }
 
                     return 0;
@@ -4404,7 +4404,7 @@ EOT;
                     }
 
                     if ($count > 0) {
-                        return round(($sum/$count),1);
+                        return round(($sum / $count),1);
                     }
 
                     return 0;

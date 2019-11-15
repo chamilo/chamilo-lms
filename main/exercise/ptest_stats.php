@@ -76,7 +76,7 @@ if (!empty($question_list)) {
                         get_lang('Answer'),
                         get_lang('NumberStudentWhoSelectedIt'),
                     ];
-                    
+
                     $data[$id]['answer'] = $answer_info;
                     $count = ExerciseLib::get_number_students_answer_count(
                         $real_answer_id,
@@ -159,7 +159,7 @@ if (!empty($question_list)) {
                         get_lang('Answer'),
                         get_lang('AverageScore'),
                     ];
-                    
+
                     $data[$id]['answer'] = $answer_info;
                     $count = ExerciseLib::get_number_students_answer_count(
                         $real_answer_id,
@@ -207,7 +207,7 @@ if (!empty($question_list)) {
             }
             $id++;
         }
-        
+
         // Format A table
         $table = new HTML_Table(['class' => 'data_table']);
         $row = 0;
@@ -228,11 +228,9 @@ if (!empty($question_list)) {
             $row++;
         }
         $content .= $table->toHtml();
-        
+
     }
 }
-
-
 
 $interbreadcrumb[] = [
     "url" => "exercise.php?".api_get_cidreq(),

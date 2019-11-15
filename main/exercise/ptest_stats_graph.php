@@ -47,7 +47,7 @@ $question_list = $objExercise->get_validated_question_list();
 
 $cList = PTestCategory::getCategoryListInfo($objExercise->id);
 
-$categoryList =  [];
+$categoryList = [];
 foreach ($cList as $item) {
     $categoryList[$item->id]['label'] = $item->name;
     $categoryList[$item->id]['num'] = 0;
@@ -116,7 +116,7 @@ if (!empty($question_list)) {
     }
 }
 
-$labels =  [];
+$labels = [];
 $num = [];
 foreach ($categoryList as $item) {
     $labels[] = $item['label'];

@@ -722,7 +722,6 @@ require_once __DIR__.'/internationalization.lib.php';
  *
  * @return string the requested path or the converted path
  *
- *
  * Notes about the current behaviour model:
  * 1. Windows back-slashes are converted to slashes in the result.
  * 2. A semi-absolute web-path is detected by its leading slash. On Linux systems, absolute system paths start with

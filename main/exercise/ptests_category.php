@@ -3,10 +3,6 @@
 
 use ChamiloSession as Session;
 
-/**
-  hubert.borderiou
-  Manage tests category page
- */
 $htmlHeadXtra[] = '
 <script>
 	function confirmDelete(in_txt, in_id) {
@@ -45,7 +41,7 @@ $objExercise = Session::read('objExercise');
 if (!is_object($objExercise) || $objExercise->selectPtType() != EXERCISE_PT_TYPE_PTEST) {
     // construction of the Exercise object
     $objExercise = new Exercise();
-    
+
     // creation of a new exercise if wrong or not specified exercise ID
     if ($exerciseId) {
         $parseQuestionList = $showPagination > 0 ? false : true;
@@ -63,7 +59,6 @@ if (!is_object($objExercise) || $objExercise->selectPtType() != EXERCISE_PT_TYPE
 if ($objExercise->sessionId != $sessionId) {
     api_not_allowed(true);
 }
-
 
 // breadcrumbs
 $interbreadcrumb[] = [
@@ -91,8 +86,6 @@ displayActionBar();
 echo $content;
 echo $category->displayCategories($exerciseId, $courseId, $sessionId);
 Display::display_footer();
-
-
 
 /**
  * Form to edit a category.

@@ -212,11 +212,11 @@ class PtestAgreeReorder extends Question
     {
         $header = parent::return_header($exercise, $counter); //, $score);
         $header .= '<table class="'.$this->question_table_class.'"><tr>';
-        
+
         $header .= '<th style="width:1px;white-space:nowrap;">'.get_lang('Choice').'</th>';
         $header .= '<th>'.get_lang('Answer').'</th>';
         $header .= '</tr>';
-        
+
         return $header;
     }
 

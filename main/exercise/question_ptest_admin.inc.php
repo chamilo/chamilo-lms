@@ -57,7 +57,7 @@ if (is_object($objQuestion)) {
         // Question
         $objQuestion->processCreation($form, $objExercise);
         $objQuestion->processAnswersCreation($form, $objExercise);
-        
+
         if (isset($_GET['editQuestion'])) {
             if (empty($exerciseId)) {
                 Display::addFlash(Display::return_message(get_lang('ItemUpdated')));

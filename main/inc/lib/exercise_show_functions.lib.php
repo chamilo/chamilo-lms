@@ -486,7 +486,7 @@ class ExerciseShowFunctions
             case QUESTION_PT_TYPE_CATEGORY_RANKING:
                 $iconOff = '<i class="fa fa-circle-o" aria-hidden="true"></i>';
                 $iconOn = '<i class="fa fa-dot-circle-o" aria-hidden="true"></i>';
-                $icon .= $studentChoice ? $iconOn: $iconOff;
+                $icon .= $studentChoice ? $iconOn : $iconOff;
                 break;
             case QUESTION_PT_TYPE_AGREE_OR_DISAGREE:
                 $icon = '';

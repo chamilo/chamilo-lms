@@ -146,7 +146,7 @@ if (!empty($_GET['action']) && $_GET['action'] == 'exportqti2' && !empty($_GET['
     $zip_folder = new PclZip($temp_zip_file);
     $zip_folder->add($temp_xml_file, PCLZIP_OPT_REMOVE_ALL_PATH);
     $name = 'qti2_export_'.$qid.'.zip';
-    
+
     DocumentManager::file_send_for_download($temp_zip_file, true, $name);
     unlink($temp_zip_file);
     unlink($temp_xml_file);
@@ -323,7 +323,6 @@ if ($inATest) {
             false
         );
     }
-
 } elseif (isset($_GET['newQuestion'])) {
     // we are in create a new question from question pool not in a test
     echo '<div class="actions">';

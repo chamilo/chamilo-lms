@@ -1548,7 +1548,7 @@ abstract class Question
     public function get_question_ptest_type_name()
     {
         $key = self::$questionPtTypes[$this->type];
-        
+
         return get_lang($key[1]);
     }
 
@@ -1900,12 +1900,12 @@ abstract class Question
         $defaults['questionDescription'] = $this->description;
         $defaults['questionLevel'] = $this->level;
         $defaults['questionCategory'] = $this->category;
-        
+
         // Came from he question pool
         if (isset($_GET['fromExercise'])) {
             $form->setDefaults($defaults);
         }
-        
+
         if (!isset($_GET['newQuestion']) || $isContent) {
             $form->setDefaults($defaults);
         }
@@ -2050,7 +2050,7 @@ abstract class Question
     {
         // 1. by default we show all the question types
         $questionTypeList = self::getQuestionPtTypeList();
-        
+
         echo '<div class="panel panel-default">';
         echo '<div class="panel-body">';
         echo '<ul class="question_menu">';
@@ -2063,7 +2063,7 @@ abstract class Question
             echo '<div class="icon-image">';
             $icon = '<a href="ptest_admin.php?exerciseId='.$objExercise->id.'&'.api_get_cidreq().'&newQuestion=yes&answerType='.$i.'">'.
                 Display::return_icon($img, $explanation, null, ICON_SIZE_BIG).'</a>';
-                
+
             if ($objExercise->force_edit_exercise_in_lp === false) {
                 if ($objExercise->exercise_was_added_in_lp == true) {
                     $img = pathinfo($img);
@@ -2074,7 +2074,6 @@ abstract class Question
             echo $icon;
             echo '</div>';
             echo '</li>';
-            
         }
         echo '<li class="pull-right">';
         echo '<div class="icon-image">';

@@ -44,7 +44,7 @@ class PtestCategoryRanking extends Question
             'Width' => '100%',
             'Height' => '125',
         ];
-        
+
         // Categories options select
         $category = new PTestCategory();
         $categoriesList = $category->getCategoryListInfo($obj_ex->selectId());
@@ -118,7 +118,7 @@ class PtestCategoryRanking extends Question
                 ' value = "'.$i.'"'
             );
             $answer_number->freeze();
-            
+
             $form->addHtmlEditor('answer['.$i.']', null, null, false, $editor_config);
 
             $form->addRule(
@@ -126,7 +126,7 @@ class PtestCategoryRanking extends Question
                 get_lang('ThisFieldIsRequired'),
                 'required'
             );
-            
+
             $form->addSelect(
                 'ptest_category['.$i.']',
                 null,
@@ -160,7 +160,6 @@ class PtestCategoryRanking extends Question
             );
             $form->addGroup($buttonGroup);
         }
-
 
         if (!empty($this->id)) {
             $form->setDefaults($defaults);

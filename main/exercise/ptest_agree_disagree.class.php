@@ -12,7 +12,7 @@ use ChamiloSession as Session;
  * extending the class question
  *
  * @author Jose Angel Ruiz (NOSOLORED)
-  *
+ *
  * @package chamilo.exercise
  */
 class PtestAgreeOrDisagree extends Question

@@ -21,10 +21,10 @@ class LpDocumentsLoader implements LoaderInterface
      */
     public function load(array $incomingData)
     {
-        $courseInfo = api_get_course_info($incomingData['c_code']);
+        $courseInfo = api_get_course_info_by_id($incomingData['c_id']);
 
         $lp = new \learnpath(
-            $incomingData['c_code'],
+            $courseInfo['code'],
             $incomingData['lp_id'],
             api_get_user_id()
         );

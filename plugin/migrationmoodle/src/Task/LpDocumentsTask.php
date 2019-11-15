@@ -7,6 +7,7 @@ use Chamilo\PluginBundle\MigrationMoodle\Extractor\BaseExtractor;
 use Chamilo\PluginBundle\MigrationMoodle\Loader\LpDocumentsLoader;
 use Chamilo\PluginBundle\MigrationMoodle\Transformer\BaseTransformer;
 use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\LoadedCourseCodeLookup;
+use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\LoadedCourseLookup;
 use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\LoadedLpFromLessonLookup;
 use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\LoadedLpItemLookup;
 use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\ReplaceFilePaths;
@@ -41,8 +42,8 @@ class LpDocumentsTask extends BaseTask
         return [
             'class' => BaseTransformer::class,
             'map' => [
-                'c_code' => [
-                    'class' => LoadedCourseCodeLookup::class,
+                'c_id' => [
+                    'class' => LoadedCourseLookup::class,
                     'properties' => ['course'],
                 ],
                 'lp_id' => [

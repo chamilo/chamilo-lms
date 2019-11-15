@@ -10,6 +10,7 @@ use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\LoadedCourseCodeLo
 use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\LoadedLpFromLessonLookup;
 use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\LoadedLpItemLookup;
 use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\ReplaceFilePaths;
+use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\WrapHtmlAndReplaceFilePaths;
 
 /**
  * Class LpDocumentsTask.
@@ -54,7 +55,7 @@ class LpDocumentsTask extends BaseTask
                 ],
                 'item_title' => 'title',
                 'item_content' => [
-                    'class' => ReplaceFilePaths::class,
+                    'class' => WrapHtmlAndReplaceFilePaths::class,
                     'properties' => ['contents', 'course'],
                 ],
             ],

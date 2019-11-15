@@ -33,7 +33,10 @@ class LpDocumentsFilesTask extends BaseTask
                 FROM mdl_files f
                 INNER JOIN mdl_context c ON f.contextid = c.id
                 INNER JOIN mdl_course_modules cm ON c.instanceid = cm.id
-                WHERE f.component = 'mod_lesson' AND f.filearea = 'page_contents' AND c.contextlevel = 70",
+                WHERE f.component = 'mod_lesson'
+                    AND f.filearea = 'page_contents'
+                    AND c.contextlevel = 70
+                    AND f.filename NOT IN ('.', '..')",
         ];
     }
 

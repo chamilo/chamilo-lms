@@ -122,7 +122,7 @@ if (api_is_facebook_auth_activated() && !api_get_user_id()) {
 }
 
 // okta connection, if activated
-if (api_is_okta_auth_activated() && !api_get_user_id()) {
+if (api_is_okta_auth_activated() && !api_get_user_id() && !empty($_GET['action']) && $_GET['action'] == 'oktaconnect') {
     require_once api_get_path(SYS_PATH)  . 'main/auth/external_login/okta.inc.php';
     if (isset($okta_config['client_id']) && isset($okta_config['client_secret'])) {
         oktaConnect();

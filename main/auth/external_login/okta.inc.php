@@ -183,23 +183,3 @@ function oktaDisplayError($message)
     header('Location:' . api_get_path(WEB_PATH));
     exit;
 }
-
-/**
- * Delete Open Session
- * @return bool|string
- */
-function oktaCloseSession()
-{
-
-    $url = oktaApiBaseUrl() . 'sessions/' . Session::read('okta_id_token');
-   // echo $url;exit;
-    $ch = curl_init();
-    curl_setopt($ch, CURLOPT_URL, $url);
-    curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "DELETE");
-    $result = curl_exec($ch);
-    $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-    curl_close($ch);
-
-    //var_dump($result);
-    //exit;
-}

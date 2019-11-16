@@ -11,6 +11,7 @@ use Chamilo\PluginBundle\MigrationMoodle\Task\LpDirsTask;
 use Chamilo\PluginBundle\MigrationMoodle\Task\LpDocumentsFilesTask;
 use Chamilo\PluginBundle\MigrationMoodle\Task\LpDocumentsTask;
 use Chamilo\PluginBundle\MigrationMoodle\Task\LpItemsTask;
+use Chamilo\PluginBundle\MigrationMoodle\Task\LpQuizzesTask;
 use Chamilo\PluginBundle\MigrationMoodle\Task\UsersTask;
 
 require_once __DIR__.'/../../main/inc/global.inc.php';
@@ -30,6 +31,7 @@ $actionNames = [
     'learning_path_items' => 'Learning Paths: Items',
     'learning_path_documents' => 'Learning Paths Items: Documents',
     'learning_path_documents_files' => 'Learning Paths Items: Documents files',
+    'learning_path_quizzes' => 'Learning Paths Items: Quizzes',
 ];
 
 foreach ($actionNames as $actionName => $actionTitle) {
@@ -74,6 +76,9 @@ if (!empty($action)) {
             break;
         case 'learning_path_documents_files':
             $task = new LpDocumentsFilesTask();
+            break;
+        case 'learning_path_quizzes':
+            $task = new LpQuizzesTask();
             break;
     }
 

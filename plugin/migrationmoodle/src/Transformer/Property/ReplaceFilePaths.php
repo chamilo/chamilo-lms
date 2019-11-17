@@ -28,10 +28,14 @@ class ReplaceFilePaths extends LoadedCourseLookup
 
         /** @var \DOMElement $img */
         foreach ($doc->getElementsByTagName('img') as $img) {
-            $source = str_replace(
-                [' ', '%20'],
-                '-',
-                $img->getAttribute('src')
+            $source = \URLify::filter(
+                $img->getAttribute('src'),
+                250,
+                '',
+                true,
+                true,
+                false,
+                false
             );
 
             $img->setAttribute('src' , $source);

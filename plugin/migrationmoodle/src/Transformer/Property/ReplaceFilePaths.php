@@ -15,11 +15,14 @@ class ReplaceFilePaths extends LoadedCourseLookup
      *
      * @throws \Exception
      *
-     * @return mixed
+     * @return string
      */
     public function transform(array $data)
     {
         list($content, $mCourseId) = array_values($data);
+
+        $cId = parent::transform([$mCourseId]);
+        $courseInfo = api_get_course_info_by_id($cId);
 
         $doc = new \DOMDocument();
         $doc->loadHTML(
@@ -28,27 +31,46 @@ class ReplaceFilePaths extends LoadedCourseLookup
 
         /** @var \DOMElement $img */
         foreach ($doc->getElementsByTagName('img') as $img) {
-            $source = \URLify::filter(
-                $img->getAttribute('src'),
-                250,
-                '',
-                true,
-                true,
-                false,
-                false
-            );
+            $source = $img->getAttribute('src');
+            $newSource = $this->getNewSource($source, $courseInfo['path']);
 
-            $img->setAttribute('src' , $source);
+            $img->setAttribute('src', $newSource);
         }
 
-        $content = $doc->saveHTML();
+        $body = $doc->getElementsByTagName('body')->item(0);
+        $bodyHtml = $doc->saveHTML($body);
 
-        $cId = parent::transform([$mCourseId]);
-        $courseInfo = api_get_course_info_by_id($cId);
+        return $this->removeBodyTags($bodyHtml);
+    }
 
-        $newPath = "/courses/{$courseInfo['path']}/document";
-        $content = str_replace('@@PLUGINFILE@@', $newPath, $content);
+    /**
+     * @param string $source
+     * @param string $coursePath
+     *
+     * @return string
+     */
+    private function getNewSource($source, $coursePath)
+    {
+        $fileName = basename($source);
+        $fileName = \URLify::filter($fileName, 250, '', true, true, false, false);
 
-        return $content;
+        return "/courses/$coursePath/document/$fileName";
+    }
+
+    /**
+     * @param string $bodyHtml
+     *
+     * @return false|string
+     */
+    private function removeBodyTags($bodyHtml)
+    {
+        $tagStart = '<body>';
+        $tagEnd = '</body>';
+
+        return $content = substr(
+            $bodyHtml,
+            strlen($tagStart),
+            -1 * strlen($tagEnd)
+        );
     }
 }

@@ -21,7 +21,7 @@ class WrapHtmlAndReplaceFilePaths extends ReplaceFilePaths
      */
     public function transform(array $data)
     {
-        list($content, $mCourseId) = array_values($data);
+        $content = parent::transform($data);
 
         $style = api_get_css_asset('bootstrap/dist/css/bootstrap.min.css');
         $style .= api_get_css_asset('fontawesome/css/font-awesome.min.css');
@@ -29,6 +29,6 @@ class WrapHtmlAndReplaceFilePaths extends ReplaceFilePaths
 
         $content = "<!DOCTYPE html><head>$style</head><body>$content</body>";
 
-        return parent::transform([$content, $mCourseId]);
+        return $content;
     }
 }

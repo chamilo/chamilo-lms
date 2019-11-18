@@ -71,13 +71,6 @@ class MigrationMoodlePlugin extends Plugin implements HookPluginInterface
      */
     public function performActionsAfterConfigure()
     {
-        UserManager::create_extra_field(
-            'moodle_password',
-            ExtraField::FIELD_TYPE_TEXT,
-            $this->get_lang('MoodlePassword'),
-            ''
-        );
-
         if ('true' === $this->get('active')) {
             $this->installHook();
         } else {

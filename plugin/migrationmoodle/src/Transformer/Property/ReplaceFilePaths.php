@@ -52,6 +52,7 @@ class ReplaceFilePaths extends LoadedCourseLookup
     private function getNewSource($source, $coursePath)
     {
         $fileName = basename($source);
+        $fileName = urldecode($fileName);
         $fileName = \URLify::filter($fileName, 250, '', true, true, false, false);
 
         return "/courses/$coursePath/document/$fileName";

@@ -25,7 +25,7 @@ class LpQuizzesTask extends BaseTask
     {
         return [
             'class' => BaseExtractor::class,
-            'query' => 'SELECT lp.id, l.id lessonid, l.course, lp.title, lp.contents, lp.qoption, lp.qtype
+            'query' => 'SELECT lp.id, l.course, lp.title, lp.contents, lp.qoption, lp.qtype
                 FROM mdl_lesson_pages lp
                 INNER JOIN mdl_lesson l ON lp.lessonid = l.id
                 WHERE lp.qtype IN (1, 2, 3, 5, 8, 10)',
@@ -44,21 +44,17 @@ class LpQuizzesTask extends BaseTask
                     'class' => LoadedCourseLookup::class,
                     'properties' => ['course'],
                 ],
-                'lp_id' => [
-                    'class' => LoadedLpFromLessonLookup::class,
-                    'properties' => ['lessonid'],
-                ],
                 'item_id' => [
                     'class' => LoadedLpItemLookup::class,
                     'properties' => ['id'],
                 ],
                 'item_title' => 'title',
-                'item_content' => [
+                'question_title' => [
                     'class' => ReplaceFilePaths::class,
                     'properties' => ['contents', 'course'],
                 ],
-                'extra_option' => 'qoption',
-                'type' => 'qtype',
+                'qoption' => 'qoption',
+                'qtype' => 'qtype',
             ],
         ];
     }

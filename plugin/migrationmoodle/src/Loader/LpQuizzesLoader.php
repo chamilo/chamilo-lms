@@ -8,6 +8,8 @@ use Chamilo\PluginBundle\MigrationMoodle\Interfaces\LoaderInterface;
 /**
  * Class LpQuizzesLoader.
  *
+ * Loader for create a quiz with one question according the transformed data.
+ *
  * @package Chamilo\PluginBundle\MigrationMoodle\Loader
  */
 class LpQuizzesLoader implements LoaderInterface
@@ -24,8 +26,6 @@ class LpQuizzesLoader implements LoaderInterface
      */
     public function load(array $incomingData)
     {
-        $questionType = $this->getQuestionType($incomingData['qtype'], $incomingData['qoption']);
-
         $exercise = new \Exercise($incomingData['c_id']);
         $exercise->updateTitle(\Exercise::format_title_variable($incomingData['item_title']));
         $exercise->updateDescription('');
@@ -52,7 +52,7 @@ class LpQuizzesLoader implements LoaderInterface
             ->setParameters(['path' => $quizId, 'id' => $incomingData['item_id']])
             ->execute();
 
-        $question = \Question::getInstance($questionType);
+        $question = \Question::getInstance($incomingData['question_type']);
         $question->course = api_get_course_info_by_id($incomingData['c_id']);
         $question->updateTitle($incomingData['question_title']);
         $question->updateLevel(1);
@@ -60,38 +60,5 @@ class LpQuizzesLoader implements LoaderInterface
         $question->save($exercise);
 
         return $question->id;
-    }
-
-    /**
-     * @param int $type   Type of question page.
-     * @param int $option Extra option for quesiton page.
-     *
-     * @throws \Exception
-     *
-     * @return int
-     */
-    private function getQuestionType($type, $option)
-    {
-        if (in_array($type, [1, 8])) {
-            return FILL_IN_BLANKS;
-        }
-
-        if (in_array($type, [2, 3])) {
-            if ($type == 3 && $option) {
-                return MULTIPLE_ANSWER;
-            }
-
-            return UNIQUE_ANSWER;
-        }
-
-        if ($type == 5) {
-            return MATCHING_DRAGGABLE;
-        }
-
-        if ($type == 10) {
-            return FREE_ANSWER;
-        }
-
-        throw new \Exception("Type $type not found.");
     }
 }

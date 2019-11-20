@@ -7,12 +7,17 @@ use Chamilo\PluginBundle\MigrationMoodle\Extractor\BaseExtractor;
 use Chamilo\PluginBundle\MigrationMoodle\Loader\LpQuizzesLoader;
 use Chamilo\PluginBundle\MigrationMoodle\Transformer\BaseTransformer;
 use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\LoadedCourseLookup;
-use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\LoadedLpFromLessonLookup;
 use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\LoadedLpItemLookup;
+use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\LpQuizQuestionTypeLookup;
 use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\ReplaceFilePaths;
 
 /**
  * Class LpQuizzesTask.
+ *
+ * Task to convert the question pages from a moodle lesson in one chamilo quiz with one question.
+ *
+ * The types question pages are:
+ * 1, short answer; 2, true-false; 3, multiple choice or multiple answer; 5, matching; 8, numerical; 10, essay.
  *
  * @package Chamilo\PluginBundle\MigrationMoodle\Task
  */
@@ -53,8 +58,10 @@ class LpQuizzesTask extends BaseTask
                     'class' => ReplaceFilePaths::class,
                     'properties' => ['contents', 'course'],
                 ],
-                'qoption' => 'qoption',
-                'qtype' => 'qtype',
+                'question_type' => [
+                    'class' => LpQuizQuestionTypeLookup::class,
+                    'properties' => ['qtype', 'qoption'],
+                ],
             ],
         ];
     }

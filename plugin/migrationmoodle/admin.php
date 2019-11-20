@@ -11,6 +11,7 @@ use Chamilo\PluginBundle\MigrationMoodle\Task\LpDirsTask;
 use Chamilo\PluginBundle\MigrationMoodle\Task\LpDocumentsFilesTask;
 use Chamilo\PluginBundle\MigrationMoodle\Task\LpDocumentsTask;
 use Chamilo\PluginBundle\MigrationMoodle\Task\LpItemsTask;
+use Chamilo\PluginBundle\MigrationMoodle\Task\LpQuizQuestionsTask;
 use Chamilo\PluginBundle\MigrationMoodle\Task\LpQuizzesTask;
 use Chamilo\PluginBundle\MigrationMoodle\Task\UsersTask;
 
@@ -71,7 +72,13 @@ $menu = [
                             [
                                 'learning_path_quizzes',
                                 'Quizzes',
-                                [],
+                                [
+                                    [
+                                        'learnin_path_quiz_questions',
+                                        'Questions',
+                                        []
+                                    ]
+                                ],
                             ],
                         ],
                     ],
@@ -140,6 +147,9 @@ if (!empty($action)) {
             break;
         case 'learning_path_quizzes':
             $task = new LpQuizzesTask();
+            break;
+        case 'learnin_path_quiz_questions':
+            $task = new LpQuizQuestionsTask();
             break;
     }
 

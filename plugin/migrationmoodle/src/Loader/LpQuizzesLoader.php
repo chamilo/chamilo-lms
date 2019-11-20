@@ -8,7 +8,7 @@ use Chamilo\PluginBundle\MigrationMoodle\Interfaces\LoaderInterface;
 /**
  * Class LpQuizzesLoader.
  *
- * Loader for create a quiz with one question according the transformed data.
+ * Loader for create a quiz according the transformed data comming from a moodle's lesson question page.
  *
  * @package Chamilo\PluginBundle\MigrationMoodle\Loader
  */
@@ -52,13 +52,6 @@ class LpQuizzesLoader implements LoaderInterface
             ->setParameters(['path' => $quizId, 'id' => $incomingData['item_id']])
             ->execute();
 
-        $question = \Question::getInstance($incomingData['question_type']);
-        $question->course = api_get_course_info_by_id($incomingData['c_id']);
-        $question->updateTitle($incomingData['question_title']);
-        $question->updateLevel(1);
-        $question->updateCategory(0);
-        $question->save($exercise);
-
-        return $question->id;
+        return $quizId;
     }
 }

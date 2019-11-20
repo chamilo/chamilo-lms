@@ -7816,18 +7816,11 @@ class SessionManager
         $form->addElement('html', '<div id="advanced_params_options" style="display:none">');
 
         if (empty($sessionId)) {
-            $sessions = self::formatSessionsAdminForGrid();
-            $sessionList = [];
-            $sessionList[] = '';
-            foreach ($sessions as $session) {
-                $sessionList[$session['id']] = strip_tags($session['name']);
-            }
-
-            $form->addSelect(
+            $form->addSelectAjax(
                 'session_template',
                 get_lang('SessionTemplate'),
-                $sessionList,
-                ['id' => 'system_template']
+                [],
+                ['url' => api_get_path(WEB_AJAX_PATH).'session.ajax.php?a=search_template_session', 'id' => 'system_template']
             );
         }
 

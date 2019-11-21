@@ -7,6 +7,7 @@ use Chamilo\PluginBundle\MigrationMoodle\Task\CoursesTask;
 use Chamilo\PluginBundle\MigrationMoodle\Task\CourseUsersTask;
 use Chamilo\PluginBundle\MigrationMoodle\Task\CQuizTask;
 use Chamilo\PluginBundle\MigrationMoodle\Task\LearningPathsTask;
+use Chamilo\PluginBundle\MigrationMoodle\Task\LessonAnswersMultipleChoiceTask;
 use Chamilo\PluginBundle\MigrationMoodle\Task\LessonAnswersTrueFalseTask;
 use Chamilo\PluginBundle\MigrationMoodle\Task\LpDirsTask;
 use Chamilo\PluginBundle\MigrationMoodle\Task\LpDocumentsFilesTask;
@@ -82,6 +83,11 @@ $menu = [
                                     [
                                         'learnin_path_quiz_answers_true_false',
                                         'Answers for True-False questions',
+                                        []
+                                    ],
+                                    [
+                                        'learnin_path_quiz_answers_multiple_choice',
+                                        'Answers for Multiple Choice questions',
                                         []
                                     ]
                                 ],
@@ -159,6 +165,9 @@ if (!empty($action)) {
             break;
         case 'learnin_path_quiz_answers_true_false':
             $task = new LessonAnswersTrueFalseTask();
+            break;
+        case 'learnin_path_quiz_answers_multiple_choice':
+            $task = new LessonAnswersMultipleChoiceTask();
             break;
     }
 

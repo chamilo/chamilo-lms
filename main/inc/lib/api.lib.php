@@ -6431,7 +6431,7 @@ function api_replace_dangerous_char($filename, $treat_spaces_as_hyphens = true)
         250,
         '',
         true,
-        true,
+        false,
         false,
         false,
         $treat_spaces_as_hyphens

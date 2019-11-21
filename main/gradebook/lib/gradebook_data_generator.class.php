@@ -240,10 +240,71 @@ class GradebookDataGenerator
                                 }
                                 $score = AbstractLink::getCurrentUserRanking($userId, $rankingStudentList);
                             }
+                            //$score = AbstractLink::getCurrentUserRanking($userId, $item->entity->getUserScoreList());
                         } else {
                             if (!empty($studentList)) {
+                                $session_id = api_get_session_id();
+                                //$cats = $item->get_subcategories(null);
+                                $evals = $item->get_evaluations(null);
+                                $links = $item->get_links(null);
                                 foreach ($studentList as $user) {
-                                    $score = $this->build_result_column(
+                                    $ressum = 0;
+                                    $weightsum = 0;
+                                    $bestResult = 0;
+
+                                    if (!empty($evals)) {
+                                        foreach ($evals as $eval) {
+                                            $evalres = $eval->calc_score($user['user_id'], null);
+                                            $eval->setStudentList($studentList);
+
+                                            if (isset($evalres) && $eval->get_weight() != 0) {
+                                                $evalweight = $eval->get_weight();
+                                                $weightsum += $evalweight;
+                                                if (!empty($evalres[1])) {
+                                                    $ressum += $evalres[0] / $evalres[1] * $evalweight;
+                                                }
+
+                                                if ($ressum > $bestResult) {
+                                                    $bestResult = $ressum;
+                                                }
+                                            } else {
+                                                if ($eval->get_weight() != 0) {
+                                                    $evalweight = $eval->get_weight();
+                                                    $weightsum += $evalweight;
+                                                }
+                                            }
+                                        }
+                                    }
+
+                                    if (!empty($links)) {
+                                        foreach ($links as $link) {
+                                            $link->setStudentList($studentList);
+
+                                            if ($session_id) {
+                                                $link->set_session_id($session_id);
+                                            }
+
+                                            $linkres = $link->calc_score($user['user_id'], null);
+                                            if (!empty($linkres) && $link->get_weight() != 0) {
+                                                $linkweight = $link->get_weight();
+                                                $link_res_denom = $linkres[1] == 0 ? 1 : $linkres[1];
+
+                                                $weightsum += $linkweight;
+                                                $ressum += $linkres[0] / $link_res_denom * $linkweight;
+                                                if ($ressum > $bestResult) {
+                                                    $bestResult = $ressum;
+                                                }
+                                            } else {
+                                                // Adding if result does not exists
+                                                if ($link->get_weight() != 0) {
+                                                    $linkweight = $link->get_weight();
+                                                    $weightsum += $linkweight;
+                                                }
+                                            }
+                                        }
+                                    }
+
+                                    /*$score = $this->build_result_column(
                                         $user['user_id'],
                                         $item,
                                         $ignore_score_color,
@@ -251,11 +312,18 @@ class GradebookDataGenerator
                                     );
                                     if (!empty($score['score'][0])) {
                                         $invalidateResults = false;
+                                    }*/
+
+                                    if (!empty($ressum)) {
+                                        $invalidateResults = false;
                                     }
-                                    $rankingStudentList[$user['user_id']] = $score['score'][0];
+
+                                    $rankingStudentList[$user['user_id']] = $ressum;
                                 }
                             }
+                            //error_log($item->get_id());
                             $score = AbstractLink::getCurrentUserRanking($userId, $rankingStudentList);
+                            //error_log(print_r($score, 1));
                         }
 
                         $row['ranking'] = $scoreDisplay->display_score(
@@ -314,6 +382,7 @@ class GradebookDataGenerator
                         } else {
                             if (!empty($studentList)) {
                                 foreach ($studentList as $user) {
+
                                     $score = $this->build_result_column(
                                         $user['user_id'],
                                         $item,

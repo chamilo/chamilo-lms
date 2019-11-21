@@ -154,6 +154,33 @@ class Answer
     }
 
     /**
+     * Get answers already added to question.
+     *
+     * @return array
+     */
+    public function getAnswers()
+    {
+        $table = Database::get_course_table(TABLE_QUIZ_ANSWER);
+        $questionId = $this->questionId;
+
+        $sql = "SELECT * FROM $table
+                WHERE c_id = {$this->course_id}
+                    AND question_id = $questionId
+                ORDER BY position";
+
+        $result = Database::query($sql);
+
+        $answers = [];
+
+        // while a record is found
+        while ($answer = Database::fetch_assoc($result)) {
+            $answers[] = $answer;
+        }
+
+        return $answers;
+    }
+
+    /**
      * @param int $id
      *
      * @return array

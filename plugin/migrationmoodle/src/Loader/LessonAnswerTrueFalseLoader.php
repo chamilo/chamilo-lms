@@ -31,6 +31,20 @@ class LessonAnswerTrueFalseLoader implements LoaderInterface
         $question = \Question::read($incomingData['question_id'], $courseInfo);
 
         $answer = new \Answer($incomingData['question_id'], $incomingData['c_id'], $exercise);
+        $questionsAnswers = $answer->getAnswers();
+
+        foreach ($questionsAnswers as $questionsAnswer) {
+            $answer->createAnswer(
+                $questionsAnswer['answer'],
+                $questionsAnswer['correct'],
+                $questionsAnswer['comment'],
+                $questionsAnswer['ponderation'],
+                $questionsAnswer['position'],
+                $questionsAnswer['hotspot_coordinates'],
+                $questionsAnswer['hotspot_type'],
+                $questionsAnswer['destination']
+            );
+        }
 
         $isGoodAnswer = !empty($incomingData['score']);
 
@@ -52,6 +66,7 @@ class LessonAnswerTrueFalseLoader implements LoaderInterface
             null,
             '0@@0@@0@@0'
         );
+
         $answer->save();
         $question->save($exercise);
 

@@ -291,6 +291,20 @@ try {
             $restApi->setMessageRead($messageId);
             $restResponse->setData(['status' => true]);
             break;
+        case Rest::CREATE_SESSION_FROM_MODEL:
+            if (
+                empty($_POST['modelSessionId']) || empty($_POST['sessionName']) || empty($_POST['startDate']) || empty($_POST['endDate'])
+            ) {
+                throw new Exception(get_lang('NoData'));
+            }
+            $modelSessionId = intval($_POST['modelSessionId']);
+            $sessionName = $_POST['sessionName'];
+            $startDate = $_POST['startDate'];
+            $endDate = $_POST['endDate'];
+            $extraFields = isset($_POST['extraFields']) ? $_POST['extraFields'] : [];
+            $newSessionId = $restApi->createSessionFromModel($modelSessionId, $sessionName, $startDate, $endDate, $extraFields);
+            $restResponse->setData($newSessionId);
+            break;
         default:
             throw new Exception(get_lang('InvalidAction'));
     }

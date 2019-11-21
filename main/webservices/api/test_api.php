@@ -59,8 +59,6 @@ class V2Test extends TestCase
     /**
      * @param $apiKey
      *
-     * @return int
-     *
      * @depends testAuthenticate
      * @throws Exception
      *
@@ -109,6 +107,61 @@ class V2Test extends TestCase
         $userId = $jsonResponse->data[0];
 
         UserManager::delete_user($userId);
+    }
+
+    /**
+     * @param $apiKey
+     * @depends testAuthenticate
+     */
+    public function testCreateSessionFromModel($apiKey)
+    {
+        $modelSessionId = SessionManager::create_session(
+            'Model session',
+            '2019-01-01 00:00', '2019-08-31 00:00',
+            '2019-01-01 00:00', '2019-08-31 00:00',
+            '2019-01-01 00:00', '2019-08-31 00:00',
+            null, null
+        );
+
+        $this->assertIsInt($modelSessionId);
+
+        $response = $this->client->post(
+            'v2.php',
+            [
+                'form_params' => [
+                    // data for the user who makes the request
+                    'action' => 'create_session_from_model',
+                    'username' => self::WEBSERVICE_USERNAME,
+                    'api_key' => $apiKey,
+                    // data for new user
+                    'modelSessionId' => $modelSessionId,
+                    'sessionName' => 'Name of the new session',
+                    'startDate' => '2019-09-01 00:00',
+                    'endDate' => '2019-12-31 00:00',
+                    'extraFields' => [
+                        [
+                            'field_name' => 'description',
+                            'field_value' => 'Description of the new session',
+                        ],
+                    ],
+                ],
+            ]
+        );
+
+        SessionManager::delete($modelSessionId);
+
+        $this->assertSame(200, $response->getStatusCode(), 'Entry denied with code : ' . $response->getStatusCode());
+
+        $jsonResponse = json_decode($response->getBody()->getContents());
+
+        $this->assertFalse($jsonResponse->error, 'Session not created because : ' . $jsonResponse->message);
+        $this->assertNotNull($jsonResponse->data);
+        $this->assertIsArray($jsonResponse->data);
+        $this->assertArrayHasKey(0, $jsonResponse->data);
+        $this->assertIsInt($jsonResponse->data[0]);
+
+        $newSessionId = $jsonResponse->data[0];
+        SessionManager::delete($newSessionId);
     }
 
 }

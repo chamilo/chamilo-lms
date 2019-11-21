@@ -58,6 +58,7 @@ class Rest extends WebService
     const GET_COURSES = 'get_courses';
     const ADD_COURSES_SESSION = 'add_courses_session';
     const ADD_USERS_SESSION = 'add_users_session';
+    const CREATE_SESSION_FROM_MODEL = 'create_session_from_model';
 
     /**
      * @var Session
@@ -1589,5 +1590,60 @@ class Rest extends WebService
         $encoded = json_encode($params);
 
         return $encoded;
+    }
+
+    /**
+     * @param $params
+     *
+     * @throws Exception
+     *
+     * @return integer
+     */
+    public function createSessionFromModel($modelSessionId, $sessionName, $startDate, $endDate, array $extraFields = [])
+    {
+        if (!SessionManager::isValidId($modelSessionId)) {
+            throw new Exception(get_lang('ModelSessionDoesNotExist'));
+        }
+
+        $modelSession = SessionManager::fetch($modelSessionId);
+
+        foreach ($extraFields as $k => $v) {
+            if (array_key_exists($k, $modelSession)) {
+                $modelSession[$k] = $v;
+            }
+        }
+
+        if (api_is_multiple_url_enabled()) {
+            if (api_get_current_access_url_id() != -1) {
+                $modelSession['accessUrlId'] = api_get_current_access_url_id();
+            }
+        }
+
+        $newSessionId = SessionManager::create_session(
+            $sessionName,
+            $startDate,
+            $endDate,
+            $startDate,
+            $endDate,
+            $startDate,
+            $endDate,
+            $modelSession['coachId'],
+            $modelSession['sessionCategoryId'],
+            $modelSession['visibility'],
+            false,
+            $modelSession['duration'],
+            $modelSession['description'],
+            $modelSession['showDescription'],
+            $extraFields,
+            $modelSession['sessionAdminId'],
+            $modelSession['sendSubscriptionNotification'],
+            $modelSession['accessUrlId']
+        );
+
+        if (empty($newSessionId)) {
+            throw new Exception(get_lang('SessionNotRegistered'));
+        }
+
+        return [$newSessionId];
     }
 }

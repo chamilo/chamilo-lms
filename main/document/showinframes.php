@@ -103,7 +103,7 @@ if (!$is_allowed_to_edit && !$is_visible) {
 }
 
 $pathinfo = pathinfo($header_file);
-$playerSupportedFiles = ['mp3', 'mp4', 'ogv', 'flv', 'm4v', 'webm'];
+$playerSupportedFiles = ['mp3', 'mp4', 'ogv', 'ogg', 'flv', 'm4v', 'webm'];
 $playerSupported = false;
 if (in_array(strtolower($pathinfo['extension']), $playerSupportedFiles)) {
     $playerSupported = true;

@@ -1195,7 +1195,7 @@ class FillBlanks extends Question
         $result = '';
         $listStudentAnswerInfo = self::getAnswerInfo($answer, true);
 
-        if (in_array($resultsDisabled, [
+        /*if (in_array($resultsDisabled, [
             RESULT_DISABLE_SHOW_SCORE_ATTEMPT_SHOW_ANSWERS_LAST_ATTEMPT,
             RESULT_DISABLE_DONT_SHOW_SCORE_ONLY_IF_USER_FINISHES_ATTEMPTS_SHOW_ALWAYS_FEEDBACK,
             ]
@@ -1205,7 +1205,7 @@ class FillBlanks extends Question
             if ($showTotalScoreAndUserChoices) {
                 $resultsDisabled = false;
             }
-        }
+        }*/
 
         // rebuild the answer with good HTML style
         // this is the student answer, right or wrong

@@ -3256,6 +3256,7 @@ class DocumentManager
     {
         $id = api_get_unique_id();
         switch ($extension) {
+            case 'ogg':
             case 'mp3':
                 $document_data['file_extension'] = $extension;
                 $html = '<div style="margin: 0; position: absolute; top: 50%; left: 35%;">';

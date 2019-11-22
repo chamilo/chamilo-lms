@@ -1806,50 +1806,23 @@ class DocumentManager
     public static function create_directory_certificate_in_course($courseInfo)
     {
         if (!empty($courseInfo)) {
-            $to_group_id = 0;
-            $to_user_id = null;
-            $course_dir = $courseInfo['path']."/document/";
-            $sys_course_path = api_get_path(SYS_COURSE_PATH);
-            $base_work_dir = $sys_course_path.$course_dir;
             $dir_name = '/certificates';
             $post_dir_name = get_lang('Certificates');
-            $visibility_command = 'invisible';
-
             $id = self::get_document_id_of_directory_certificate();
-
             if (empty($id)) {
                 create_unexisting_directory(
                     $courseInfo,
                     api_get_user_id(),
                     api_get_session_id(),
-                    $to_group_id,
-                    $to_user_id,
-                    $base_work_dir,
+                    0,
+                    0,
+                    '',
                     $dir_name,
                     $post_dir_name,
                     null,
                     false,
                     false
                 );
-
-                $id = self::get_document_id_of_directory_certificate();
-
-                if (empty($id)) {
-                    self::addDocument(
-                        $courseInfo,
-                        $dir_name,
-                        'folder',
-                        0,
-                        $post_dir_name,
-                        null,
-                        0,
-                        true,
-                        $to_group_id,
-                        0,
-                        0,
-                        false
-                    );
-                }
             }
         }
     }
@@ -2844,6 +2817,7 @@ class DocumentManager
     {
         $id = api_get_unique_id();
         switch ($extension) {
+            case 'ogg':
             case 'mp3':
                 $document_data['file_extension'] = $extension;
                 $html = '<div style="margin: 0; position: absolute; top: 50%; left: 35%;">';
@@ -4752,14 +4726,12 @@ class DocumentManager
                     //$url = 'show_content.php?'.$courseParams.'&id='.$document_data['id'];
                     $class = 'ajax ';
                     //$url = $documentWebPath.str_replace('%2F', '/', $url_path).'?'.$courseParams;
+                    $url_path = str_replace('%2F', '/', $url_path);
                     $url = api_get_path(WEB_PUBLIC_PATH)."courses/$courseCode/document$url_path?type=show";
                     if ($addToEditor) {
                         $class = $classAddToEditor;
-                        $url = $documentWebPath.str_replace('%2F', '/', $url_path).'?'.$courseParams;
+                        $url = $documentWebPath.$url_path;
                     }
-
-                    $url_path = str_replace('%2F', '/', $url_path);
-
 
                     if ($visibility == false) {
                         $class = ' ajax text-muted ';
@@ -5333,6 +5305,7 @@ This folder contains all sessions that have been opened in the chat. Although th
      */
     public static function createUserSharedFolder($userId, array $courseInfo, $sessionId = 0)
     {
+        return false;
         $documentDirectory = api_get_path(SYS_COURSE_PATH).$courseInfo['directory'].'/document';
         $userInfo = api_get_user_info($userId);
 
@@ -6176,13 +6149,14 @@ This folder contains all sessions that have been opened in the chat. Although th
             return false;
         }
 
+        // is updated using the title
         $document = new CDocument();
         $document
             ->setCourse($courseEntity)
-            ->setPath($path)
             ->setFiletype($fileType)
             ->setSize($fileSize)
             ->setTitle($title)
+            ->setPath($path)
             ->setComment($comment)
             ->setReadonly($readonly)
             ->setSession($session)

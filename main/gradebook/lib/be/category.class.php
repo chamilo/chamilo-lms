@@ -946,7 +946,6 @@ class Category implements GradebookItem
                 }
             }
 
-            $students = [];
             if (!empty($evals)) {
                 /** @var Evaluation $eval */
                 foreach ($evals as $eval) {
@@ -1137,18 +1136,6 @@ class Category implements GradebookItem
                 $maxScore = current($totalScorePerStudent);
 
                 return [$maxScore, $this->get_weight()];
-                if (empty($bestResult)) {
-                    if ($cacheAvailable) {
-                        $cacheDriver->save($key, null);
-                    }
-
-                    return null;
-                }
-                if ($cacheAvailable) {
-                    $cacheDriver->save($key, [$bestResult, $weightsum]);
-                }
-
-                return [$bestResult, $weightsum];
                 break;
             case 'average':
                 if (empty($ressum)) {

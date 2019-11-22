@@ -10,6 +10,7 @@ use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\LessonAnswersMatch
 use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\LoadedCourseLookup;
 use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\LoadedLpQuizLookup;
 use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\LoadedLpQuizQuestionLookup;
+use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\ReplaceFilePaths;
 
 /**
  * Class LessonAnswersMatchingTask.
@@ -61,7 +62,10 @@ class LessonAnswersMatchingTask extends BaseTask
                     'class' => LessonAnswersMatchingScoreLookup::class,
                     'properties' => ['pageid', 'lessonid', 'course'],
                 ],
-                'answer' => 'answer',
+                'answer' => [
+                    'class' => ReplaceFilePaths::class,
+                    'properties' => ['answer', 'course'],
+                ],
                 'feedback' => 'response',
             ],
         ];

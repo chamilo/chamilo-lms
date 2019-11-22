@@ -6,6 +6,7 @@ use Chamilo\PluginBundle\MigrationMoodle\Task\CourseCategoriesTask;
 use Chamilo\PluginBundle\MigrationMoodle\Task\CoursesTask;
 use Chamilo\PluginBundle\MigrationMoodle\Task\CourseUsersTask;
 use Chamilo\PluginBundle\MigrationMoodle\Task\CQuizTask;
+use Chamilo\PluginBundle\MigrationMoodle\Task\FilesForLessonAnswersTask;
 use Chamilo\PluginBundle\MigrationMoodle\Task\LearningPathsTask;
 use Chamilo\PluginBundle\MigrationMoodle\Task\LessonAnswersEssayTask;
 use Chamilo\PluginBundle\MigrationMoodle\Task\LessonAnswersMatchingTask;
@@ -14,7 +15,7 @@ use Chamilo\PluginBundle\MigrationMoodle\Task\LessonAnswersMultipleChoiceTask;
 use Chamilo\PluginBundle\MigrationMoodle\Task\LessonAnswersShortAnswerTask;
 use Chamilo\PluginBundle\MigrationMoodle\Task\LessonAnswersTrueFalseTask;
 use Chamilo\PluginBundle\MigrationMoodle\Task\LpDirsTask;
-use Chamilo\PluginBundle\MigrationMoodle\Task\LpDocumentsFilesTask;
+use Chamilo\PluginBundle\MigrationMoodle\Task\FilesForLessonPagesTask;
 use Chamilo\PluginBundle\MigrationMoodle\Task\LpDocumentsTask;
 use Chamilo\PluginBundle\MigrationMoodle\Task\LpItemsTask;
 use Chamilo\PluginBundle\MigrationMoodle\Task\LpQuizQuestionsTask;
@@ -82,38 +83,44 @@ $menu = [
                                     [
                                         'learnin_path_quiz_questions',
                                         'Questions',
-                                        []
+                                        [
+                                            [
+                                                'learnin_path_quiz_answers_true_false',
+                                                'Answers for True-False questions',
+                                                []
+                                            ],
+                                            [
+                                                'learnin_path_quiz_answers_multiple_choice',
+                                                'Answers for Multiple Choice questions',
+                                                []
+                                            ],
+                                            [
+                                                'learnin_path_quiz_answers_multiple_answer',
+                                                'Answers for Multiple Answers questions',
+                                                []
+                                            ],
+                                            [
+                                                'learnin_path_quiz_answers_matching',
+                                                'Answers for Matching questions',
+                                                []
+                                            ],
+                                            [
+                                                'learnin_path_quiz_answers_essay',
+                                                'Answers for Essay questions',
+                                                []
+                                            ],
+                                            [
+                                                'learnin_path_quiz_answers_short_answer',
+                                                'Answers for Short-Answer and Numerical questions',
+                                                []
+                                            ]
+                                        ],
                                     ],
                                     [
-                                        'learnin_path_quiz_answers_true_false',
-                                        'Answers for True-False questions',
-                                        []
+                                        'files_for_lesson_answers',
+                                        'Files for answers',
+                                        [],
                                     ],
-                                    [
-                                        'learnin_path_quiz_answers_multiple_choice',
-                                        'Answers for Multiple Choice questions',
-                                        []
-                                    ],
-                                    [
-                                        'learnin_path_quiz_answers_multiple_answer',
-                                        'Answers for Multiple Answers questions',
-                                        []
-                                    ],
-                                    [
-                                        'learnin_path_quiz_answers_matching',
-                                        'Answers for Matching questions',
-                                        []
-                                    ],
-                                    [
-                                        'learnin_path_quiz_answers_essay',
-                                        'Answers for Essay questions',
-                                        []
-                                    ],
-                                    [
-                                        'learnin_path_quiz_answers_short_answer',
-                                        'Answers for Short-Answer and Numerical questions',
-                                        []
-                                    ]
                                 ],
                             ],
                         ],
@@ -179,7 +186,7 @@ if (!empty($action)) {
             $task = new LpDocumentsTask();
             break;
         case 'learning_path_documents_files':
-            $task = new LpDocumentsFilesTask();
+            $task = new FilesForLessonPagesTask();
             break;
         case 'learning_path_quizzes':
             $task = new LpQuizzesTask();
@@ -204,6 +211,9 @@ if (!empty($action)) {
             break;
         case 'learnin_path_quiz_answers_short_answer':
             $task = new LessonAnswersShortAnswerTask();
+            break;
+        case 'files_for_lesson_answers':
+            $task = new FilesForLessonAnswersTask();
             break;
     }
 

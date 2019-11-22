@@ -9,6 +9,7 @@ use Chamilo\PluginBundle\MigrationMoodle\Transformer\BaseTransformer;
 use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\LoadedCourseLookup;
 use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\LoadedLpQuizLookup;
 use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\LoadedLpQuizQuestionLookup;
+use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\ReplaceFilePaths;
 
 /**
  * Class LessonAnswersTrueFalseTask.
@@ -56,7 +57,10 @@ class LessonAnswersTrueFalseTask extends BaseTask
                     'properties' => ['pageid'],
                 ],
                 'score' => 'score',
-                'answer' => 'answer',
+                'answer' => [
+                    'class' => ReplaceFilePaths::class,
+                    'properties' => ['answer', 'course'],
+                ],
                 'feedback' => 'response',
             ],
         ];

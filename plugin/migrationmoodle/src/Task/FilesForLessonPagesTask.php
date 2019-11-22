@@ -9,11 +9,13 @@ use Chamilo\PluginBundle\MigrationMoodle\Transformer\BaseTransformer;
 use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\LoadedCourseLookup;
 
 /**
- * Class LpDocumentsFilesTask.
+ * Class LessonPagesFilesTask.
+ *
+ * Task for migrate the files for lesson pages.
  *
  * @package Chamilo\PluginBundle\MigrationMoodle\Task
  */
-class LpDocumentsFilesTask extends BaseTask
+class FilesForLessonPagesTask extends BaseTask
 {
     /**
      * @return array

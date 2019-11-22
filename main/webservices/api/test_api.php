@@ -6,6 +6,7 @@
  *
  * Using Guzzle' HTTP client to call the API endpoint and make requests.
  */
+
 use GuzzleHttp\Client;
 use PHPUnit\Framework\TestCase;
 
@@ -204,6 +205,8 @@ class V2Test extends TestCase
         );
         $loginName = 'tester'.time();
         $userId = UserManager::create_user('Tester', 'Tester', 5, 'tester@local', $loginName, 'xXxxXxxXX');
+        $anotherUserId = UserManager::create_user('Tester Bis', 'Tester Bis', 5, 'testerbis@local', $loginName.'bis', 'xXxxXxxXX');
+        SessionManager::subscribeUsersToSession($sessionId, [$anotherUserId]);
 
         $response = $this->client->post(
             'v2.php',
@@ -218,9 +221,6 @@ class V2Test extends TestCase
             ]
         );
 
-        UserManager::delete_user($userId);
-        SessionManager::delete($sessionId);
-
         $this->assertSame(200, $response->getStatusCode());
 
         $jsonResponse = json_decode($response->getBody()->getContents());
@@ -231,6 +231,12 @@ class V2Test extends TestCase
         $this->assertArrayHasKey(0, $jsonResponse->data);
         $this->assertIsBool($jsonResponse->data[0]);
         $this->assertSame(True, $jsonResponse->data[0]);
+
+        $sessionRelUsers = Database::getManager()->getRepository('ChamiloCoreBundle:SessionRelUser')->findBy([ 'session' => $sessionId ]);
+        $this->assertSame(2, count($sessionRelUsers));
+
+        UserManager::delete_users([ $userId, $anotherUserId ]);
+        SessionManager::delete($sessionId);
     }
 
 }

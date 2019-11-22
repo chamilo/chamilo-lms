@@ -9,6 +9,8 @@ use Doctrine\DBAL\DBALException;
 /**
  * Class LessonAnswersMatchingScoreLookup.
  *
+ * Calculate the score for Matching answers. Correct score / count of options.
+ *
  * @package Chamilo\PluginBundle\MigrationMoodle\Transformer\Property
  */
 class LessonAnswersMatchingScoreLookup implements TransformPropertyInterface
@@ -18,7 +20,7 @@ class LessonAnswersMatchingScoreLookup implements TransformPropertyInterface
      *
      * @throws \Exception
      *
-     * @return mixed
+     * @return float|int
      */
     public function transform(array $data)
     {
@@ -31,25 +33,29 @@ class LessonAnswersMatchingScoreLookup implements TransformPropertyInterface
         }
 
         try {
-            $query = "SELECT la.score
+            $query = "SELECT
+                    la.score,
+                    COUNT(IF(score = 0 AND response IS NOT NULL, 1, NULL)) 'count'
                 FROM mdl_lesson_answers la
                 INNER JOIN mdl_lesson l ON (la.lessonid = l.id)
                 WHERE la.pageid = ?
                     AND la.lessonid = ?
-                    AND l.course = ?
-                    AND la.score > 0";
+                    AND l.course = ?";
 
-            $score = $connection->fetchColumn($query, [$pageid, $lessonid, $course], 0);
+            $result = $connection->fetchAssoc($query, [$pageid, $lessonid, $course]);
         } catch (DBALException $e) {
             throw new \Exception("Unable to execute query \"{$this->query}\".", 0, $e);
         }
 
         $connection->close();
 
-        if (empty($score)) {
-            return 1;
+        $score = (float) $result['score'];
+        $count = (int) $result['count'];
+
+        if (0 === $count) {
+            return 0;
         }
 
-        return $score;
+        return $score / $count;
     }
 }

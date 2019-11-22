@@ -7,6 +7,7 @@ use Chamilo\PluginBundle\MigrationMoodle\Task\CoursesTask;
 use Chamilo\PluginBundle\MigrationMoodle\Task\CourseUsersTask;
 use Chamilo\PluginBundle\MigrationMoodle\Task\CQuizTask;
 use Chamilo\PluginBundle\MigrationMoodle\Task\LearningPathsTask;
+use Chamilo\PluginBundle\MigrationMoodle\Task\LessonAnswersEssayTask;
 use Chamilo\PluginBundle\MigrationMoodle\Task\LessonAnswersMatchingTask;
 use Chamilo\PluginBundle\MigrationMoodle\Task\LessonAnswersMultipleAnswerTask;
 use Chamilo\PluginBundle\MigrationMoodle\Task\LessonAnswersMultipleChoiceTask;
@@ -101,6 +102,11 @@ $menu = [
                                         'learnin_path_quiz_answers_matching',
                                         'Answers for Matching questions',
                                         []
+                                    ],
+                                    [
+                                        'learnin_path_quiz_answers_essay',
+                                        'Answers for Essay questions',
+                                        []
                                     ]
                                 ],
                             ],
@@ -186,6 +192,9 @@ if (!empty($action)) {
             break;
         case 'learnin_path_quiz_answers_matching':
             $task = new LessonAnswersMatchingTask();
+            break;
+        case 'learnin_path_quiz_answers_essay':
+            $task = new LessonAnswersEssayTask();
             break;
     }
 

@@ -335,7 +335,7 @@ abstract class Question
             // this "filter" param is used to resize the image to width 800px see config/packages/liip_imagine.yaml
             $params = [
                 'file' => 'images/'.$this->getPictureFilename(),
-                'type' => 'show',
+                'mode' => 'show',
                 'filter' => 'hotspot_question',
                 'course' => api_get_course_id(),
             ];

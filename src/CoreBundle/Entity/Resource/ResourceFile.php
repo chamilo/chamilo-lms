@@ -264,18 +264,6 @@ class ResourceFile
         return $this;
     }
 
-    public function getOriginalFilename(): string
-    {
-        return $this->originalFilename;
-    }
-
-    public function setOriginalFilename(string $originalFilename): ResourceFile
-    {
-        $this->originalFilename = $originalFilename;
-
-        return $this;
-    }
-
     public function getSize(): int
     {
         return (int) $this->size;
@@ -399,13 +387,18 @@ class ResourceFile
         return $this;
     }
 
+    /**
+     * @return string
+     */
     public function getOriginalName(): string
     {
         return $this->originalName;
     }
 
     /**
-     * @param string $originalName
+     * @param $originalName
+     *
+     * @return ResourceFile
      */
     public function setOriginalName($originalName): ResourceFile
     {
@@ -423,7 +416,9 @@ class ResourceFile
     }
 
     /**
-     * @param array $dimensions
+     * @param $dimensions
+     *
+     * @return ResourceFile
      */
     public function setDimensions($dimensions): ResourceFile
     {

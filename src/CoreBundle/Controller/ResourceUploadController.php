@@ -76,15 +76,10 @@ class ResourceUploadController extends BlueimpController
 
                     $em->persist($document);
                     $em->flush();
-                    $document->setId($document->getIid());
+
                     $resourceNode = $repo->addResourceNodeParent($document,$user, $parent);
-
-                    $resourceFile = new ResourceFile();
-                    $resourceFile->setFile($file);
-                    $resourceFile->setName($title);
-                    $em->persist($resourceFile);
-
-                    $resourceNode->setResourceFile($resourceFile);
+                    $document->setId($document->getIid());
+                    $repo->addFile($document, $file);
                     $em->persist($resourceNode);
                     $em->flush();
 

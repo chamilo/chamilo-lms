@@ -25,7 +25,6 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\QueryBuilder;
 use FOS\CKEditorBundle\Form\Type\CKEditorType;
-use FOS\RestBundle\View\View;
 use League\Flysystem\Filesystem;
 use Oneup\UploaderBundle\Uploader\Response\EmptyResponse;
 use Sylius\Bundle\ResourceBundle\Event\ResourceControllerEvent;
@@ -345,11 +344,16 @@ class ResourceController extends AbstractResourceController implements CourseCon
             /** @var CDocument $newResource */
             $newResource = $form->getData();
             $em = $this->getDoctrine()->getManager();
-            $data = $form->get('content')->getData();
-            $repository->updateResourceFileContent($newResource, $data);
 
+            if ($form->has('content')) {
+                $data = $form->get('content')->getData();
+                $repository->updateResourceFileContent($newResource, $data);
+            }
+
+            $newResource->setTitle($form->get('title')->getData());
             $em->persist($newResource);
             $em->flush();
+
             $this->addFlash('success', $this->trans('Updated'));
 
             if ($newResource->getResourceNode()->hasResourceFile()) {
@@ -523,7 +527,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
         $resourceNode = $em->getRepository('ChamiloCoreBundle:Resource\ResourceNode')->find($id);
 
         if ($resourceNode === null) {
-            throw new FileNotFoundException('Not found');
+            throw new FileNotFoundException('Resource not found');
         }
 
         return $this->showFile($request, $resourceNode, $glide, $mode, $filter);
@@ -710,7 +714,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
             throw new NotFoundHttpException();
         }
 
-        $fileName = $resourceNode->getName();
+        $fileName = $resourceFile->getOriginalName();
         $filePath = $resourceFile->getFile()->getPathname();
         $mimeType = $resourceFile->getMimeType();
 
@@ -794,8 +798,10 @@ class ResourceController extends AbstractResourceController implements CourseCon
 
         $course = $this->getCourse();
         $session = $this->getSession();
+        // Default parent node is course.
         $parentNode = $course->getResourceNode();
         if (!empty($resourceNodeParentId)) {
+            // Get parent node.
             $parentNode = $repository->getResourceNodeRepository()->find($resourceNodeParentId);
         }
 
@@ -814,6 +820,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
                 ->setReadonly(false)
             ;
 
+            $file = null;
             if ($fileType === 'file') {
                 $content = $form->get('content')->getViewData();
                 $fileName = $newResource->getTitle().'.html';
@@ -829,13 +836,8 @@ class ResourceController extends AbstractResourceController implements CourseCon
 
             $resourceNode = $repository->addResourceNodeParent($newResource, $this->getUser(), $parentNode);
 
-            if ($fileType === 'file') {
-                $resourceNode->setName($fileName);
-                $resourceFile = new ResourceFile();
-                $resourceFile->setFile($file);
-                $resourceFile->setName($fileName);
-                $em->persist($resourceFile);
-                $resourceNode->setResourceFile($resourceFile);
+            if ($fileType === 'file' && $file) {
+                $repository->addFile($resourceNode, $file);
             }
 
             $em->persist($resourceNode);
@@ -963,8 +965,8 @@ class ResourceController extends AbstractResourceController implements CourseCon
 
             $repo = $this->getRepositoryFromRequest($request);
 
-            /** @var ResourceNode $parent */
-            $originalResource = $repo->findOneBy([ 'resourceNode' => $resourceNodeId]);
+            /** @var AbstractResource $parent */
+            $originalResource = $repo->findOneBy(['resourceNode' => $resourceNodeId]);
             if ($originalResource === null) {
                 return;
             }
@@ -972,12 +974,12 @@ class ResourceController extends AbstractResourceController implements CourseCon
 
             $parentList = [];
             while ($parent !== null) {
-                if ($type !== $parent->getResourceType()->getName()){
+                if ($type !== $parent->getResourceType()->getName()) {
                     break;
                 }
                 $parent = $parent->getParent();
                 if ($parent) {
-                    $resource = $repo->findOneBy([ 'resourceNode' => $parent->getId()]);
+                    $resource = $repo->findOneBy(['resourceNode' => $parent->getId()]);
                     if ($resource) {
                         $parentList[] = $resource;
                     }

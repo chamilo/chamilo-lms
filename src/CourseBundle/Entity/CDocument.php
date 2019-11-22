@@ -27,7 +27,6 @@ use Doctrine\ORM\Mapping as ORM;
  *  }
  * )
  * @GRID\Source(columns="iid, title, filetype", filterable=false)
- *
  * @ORM\Entity
  */
 class CDocument extends AbstractResource implements ResourceInterface
@@ -360,7 +359,7 @@ class CDocument extends AbstractResource implements ResourceInterface
     }
 
     /**
-     * @ORM\PostPersist()
+     *
      */
     public function postPersist(LifecycleEventArgs $args)
     {
@@ -385,5 +384,10 @@ class CDocument extends AbstractResource implements ResourceInterface
     public function getResourceName(): string
     {
         return $this->getTitle();
+    }
+
+    public function getResourceFieldName(): string
+    {
+        return 'title';
     }
 }

@@ -35,12 +35,12 @@ class ResourceNode
     protected $id;
 
     /**
-     * @Gedmo\TreePathSource
-     * @ORM\Column()
-     *
      * @Assert\NotBlank()
+     *
+     * @Gedmo\TreePathSource
+     * @ORM\Column(name="slug", type="string", length=255, nullable=true)
      */
-    protected $name;
+    protected $slug;
 
     /**
      * @ORM\ManyToOne(targetEntity="Chamilo\CoreBundle\Entity\Resource\ResourceType", inversedBy="resourceNodes")
@@ -123,7 +123,7 @@ class ResourceNode
      */
     public function __toString()
     {
-        return (string) $this->getName();
+        return (string) $this->getPathForDisplay();
     }
 
     /**
@@ -238,33 +238,27 @@ class ResourceNode
     }
 
     /**
-     * Sets the resource name.
-     *
-     * @param string $name
-     *
-     * @throws an exception if the name contains the path separator ('/')
-     *
-     * @return $this
+     * @return mixed
      */
-    public function setName($name)
+    public function getSlug()
     {
-        if (strpos(self::PATH_SEPARATOR, $name) !== false) {
-            throw new \InvalidArgumentException('Invalid character "'.self::PATH_SEPARATOR.'" in resource name.');
-        }
-
-        $this->name = $name;
-
-        return $this;
+        return $this->slug;
     }
 
     /**
-     * Returns the resource name.
+     * @param mixed $slug
      *
-     * @return string
+     * @return ResourceNode
      */
-    public function getName()
+    public function setSlug($slug)
     {
-        return $this->name;
+        if (strpos(self::PATH_SEPARATOR, $slug) !== false) {
+            throw new \InvalidArgumentException('Invalid character "'.self::PATH_SEPARATOR.'" in resource name.');
+        }
+
+        $this->slug = $slug;
+
+        return $this;
     }
 
     /**

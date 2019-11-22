@@ -16,8 +16,6 @@ use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CoreBundle\Entity\Tool;
 use Chamilo\CoreBundle\Entity\Usergroup;
 use Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter;
-use Chamilo\CoreBundle\ToolChain;
-use Chamilo\CourseBundle\Entity\CDocument;
 use Chamilo\CourseBundle\Entity\CGroupInfo;
 use Chamilo\UserBundle\Entity\User;
 use Cocur\Slugify\Slugify;
@@ -27,6 +25,7 @@ use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\ORM\QueryBuilder;
 use League\Flysystem\FilesystemInterface;
 use League\Flysystem\MountManager;
+use mysql_xdevapi\Exception;
 use Sylius\Bundle\ResourceBundle\Doctrine\ORM\EntityRepository;
 use Symfony\Component\Filesystem\Exception\FileNotFoundException;
 use Symfony\Component\Form\FormFactory;
@@ -100,7 +99,6 @@ class ResourceRepository extends EntityRepository
         $this->fs = $mountManager->getFilesystem('resources_fs');
         $this->mountManager = $mountManager;
         $this->router = $router;
-        //$this->toolChain = $toolChain;
         $this->resourceNodeRepository = $entityManager->getRepository('ChamiloCoreBundle:Resource\ResourceNode');
         $this->authorizationChecker = $authorizationChecker;
         $this->slugify = $slugify;
@@ -202,28 +200,6 @@ class ResourceRepository extends EntityRepository
     }
 
     /**
-     * @return ResourceFile|null
-     */
-    public function addFile(ResourceNode $resourceNode, UploadedFile $file): ?ResourceFile
-    {
-        $resourceFile = $resourceNode->getResourceFile();
-        if (null === $resourceFile) {
-            $resourceFile = new ResourceFile();
-        }
-
-        $em = $this->getEntityManager();
-
-        $resourceFile->setFile($file);
-        $resourceFile->setName($resourceNode->getName());
-        $em->persist($resourceFile);
-        $resourceNode->setResourceFile($resourceFile);
-        $em->persist($resourceNode);
-        $em->flush();
-
-        return $resourceFile;
-    }
-
-    /**
      * @param AbstractResource  $resource
      * @param User              $creator
      * @param ResourceNode|null $parent
@@ -236,8 +212,18 @@ class ResourceRepository extends EntityRepository
 
         $resourceType = $this->getResourceType();
         $resourceNode = new ResourceNode();
+        $resourceName = $resource->getResourceName();
+        $extension = $this->slugify->slugify(pathinfo($resourceName, PATHINFO_EXTENSION));
+
+        if (empty($extension)) {
+            $slug = $this->slugify->slugify($resourceName);
+        } else {
+            $baseName = $this->slugify->slugify(pathinfo($resourceName, PATHINFO_BASENAME));
+            $slug = $baseName.'.'.$extension;
+        }
+
         $resourceNode
-            ->setName($resource->getResourceName())
+            ->setSlug($slug)
             ->setCreator($creator)
             ->setResourceType($resourceType)
         ;
@@ -253,6 +239,34 @@ class ResourceRepository extends EntityRepository
         $em->flush();
 
         return $resourceNode;
+    }
+
+    /**
+     * @return ResourceFile|null
+     */
+    public function addFile(AbstractResource $resource, UploadedFile $file): ?ResourceFile
+    {
+        $resourceNode = $resource->getResourceNode();
+
+        if (null === $resourceNode) {
+            throw new \LogicException('Resource node is null');
+        }
+
+        $resourceFile = $resourceNode->getResourceFile();
+        if (null === $resourceFile) {
+            $resourceFile = new ResourceFile();
+        }
+
+        $em = $this->getEntityManager();
+
+        $resourceFile->setFile($file);
+        $resourceFile->setName($resource->getResourceName());
+        $em->persist($resourceFile);
+        $resourceNode->setResourceFile($resourceFile);
+        $em->persist($resourceNode);
+        $em->flush();
+
+        return $resourceFile;
     }
 
     /**

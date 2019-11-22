@@ -28,6 +28,7 @@
     "core-js": "2",
     "cropper": "^4.0",
     "datepair.js": "^0.4.16",
+    "dropzone": "^5.5.1",
     "easy-pie-chart": "^2.1.7",
     "flag-icon-css": "^3.0",
     "fs": "0.0.1-security",

@@ -3,14 +3,9 @@
 
 namespace Chamilo\CoreBundle\Entity\Listener;
 
-use Chamilo\CoreBundle\Component\Naming\SmartUniqueNamer;
 use Chamilo\CoreBundle\Entity\Resource\AbstractResource;
 use Cocur\Slugify\SlugifyInterface;
 use Doctrine\ORM\Event\LifecycleEventArgs;
-use League\Flysystem\MountManager;
-use Vich\UploaderBundle\Mapping\PropertyMappingFactory;
-use Vich\UploaderBundle\Naming\HashNamer;
-use Vich\UploaderBundle\Util\FilenameUtils;
 
 /**
  * Class ResourceListener.
@@ -33,24 +28,51 @@ class ResourceListener
      * @param AbstractResource   $resource
      * @param LifecycleEventArgs $args
      */
+    public function prePersist(AbstractResource $resource, LifecycleEventArgs $args)
+    {
+        error_log('prePersist');
+    }
+
+    /**
+     * @param AbstractResource   $resource
+     * @param LifecycleEventArgs $args
+     */
+    public function preUpdate(AbstractResource $resource, LifecycleEventArgs $args)
+    {
+        error_log('preUpdate');
+    }
+
+    /**
+     * @param AbstractResource   $resource
+     * @param LifecycleEventArgs $args
+     */
     public function postUpdate(AbstractResource $resource, LifecycleEventArgs $args)
     {
+        error_log('postUpdate');
+
         $em = $args->getEntityManager();
+
         // Updates resource node name with the resource name.
-        $node = $resource->getResourceNode();
+        $resourceNode = $resource->getResourceNode();
         $name = $resource->getResourceName();
 
-        if ($node->hasResourceFile()) {
+        if ($resourceNode->hasResourceFile()) {
             $originalExtension = pathinfo($name, PATHINFO_EXTENSION);
-            $originalBasename = \basename($name, '.'.$originalExtension);
-
+            $originalBasename = \basename($name, $originalExtension);
             $modified = sprintf('%s.%s', $this->slugify->slugify($originalBasename), $originalExtension);
         } else {
             $modified = $this->slugify->slugify($name);
         }
-        $node->setName($modified);
 
-        $em->persist($node);
+        error_log($name);
+        error_log($modified);
+
+        $resourceNode->setSlug($modified);
+
+        if ($resourceNode->hasResourceFile()) {
+            $resourceNode->getResourceFile()->setOriginalName($name);
+        }
+        $em->persist($resourceNode);
         $em->flush();
     }
 }

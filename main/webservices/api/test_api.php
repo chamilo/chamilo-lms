@@ -112,9 +112,14 @@ class V2Test extends TestCase
     /**
      * @param $apiKey
      * @depends testAuthenticate
+     * @throws Exception
      */
     public function testCreateSessionFromModel($apiKey)
     {
+        $career = new Career();
+        $careerId = $career->save([ 'name' => 'test career'.time() ]);
+        $promotion = new Promotion();
+        $promotionId = $promotion->save([ 'career_id' => $careerId, 'name' => 'test promo'.time() ]);
         $modelSessionId = SessionManager::create_session(
             'Model session'.time(),
             '2019-01-01 00:00', '2019-08-31 00:00',
@@ -122,16 +127,16 @@ class V2Test extends TestCase
             '2019-01-01 00:00', '2019-08-31 00:00',
             null, null
         );
+
+        SessionManager::subscribe_sessions_to_promotion($promotionId, [$modelSessionId]);
+
         $courseCodes = ['course A'.time(), 'course B'.time(), 'course C'.time()];
         $courseList = [];
         foreach($courseCodes as $code) {
             $course = CourseManager::create_course(['code' => $code, 'title' => $code, 'wanted_code' => $code ], 1/*FIXME*/);
             $courseList[] = $course['real_id'];
         }
-        try {
-            SessionManager::add_courses_to_session($modelSessionId, $courseList);
-        } catch (Exception $e) {
-        }
+        SessionManager::add_courses_to_session($modelSessionId, $courseList);
 
         $response = $this->client->post(
             'v2.php',
@@ -166,6 +171,10 @@ class V2Test extends TestCase
 
         $newSessionId = $jsonResponse->data[0];
 
+        $promotionSessions = SessionManager::get_all_sessions_by_promotion($promotionId);
+        $this->assertArrayHasKey($newSessionId, $promotionSessions);
+        $this->assertArrayHasKey($modelSessionId, $promotionSessions);
+
         $modelCourseList = array_keys(SessionManager::get_course_list_by_session_id($modelSessionId));
         $newCourseList = array_keys(SessionManager::get_course_list_by_session_id($newSessionId));
         $this->assertSame($modelCourseList, $newCourseList);
@@ -175,6 +184,8 @@ class V2Test extends TestCase
         }
         SessionManager::delete($modelSessionId);
         SessionManager::delete($newSessionId);
+        $promotion->delete($promotionId);
+        $career->delete($careerId);
     }
 
     /**

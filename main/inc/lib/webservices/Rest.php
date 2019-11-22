@@ -1647,10 +1647,18 @@ class Rest extends WebService
             throw new Exception(get_lang('SessionNotRegistered'));
         }
 
+        $promotionId = $modelSession['promotion_id'];
+        if ($promotionId) {
+            $sessionList = array_keys(SessionManager::get_all_sessions_by_promotion($promotionId));
+            $sessionList[] = $newSessionId;
+            SessionManager::subscribe_sessions_to_promotion($modelSession['promotion_id'], $sessionList);
+        }
+
         $courseList = array_keys(SessionManager::get_course_list_by_session_id($modelSessionId));
         if (!SessionManager::add_courses_to_session($newSessionId, $courseList)) {
             throw new Exception(get_lang('CoursesNotAddedToSession'));
         }
+
 
         return [$newSessionId];
     }

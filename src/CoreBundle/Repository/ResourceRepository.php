@@ -262,6 +262,7 @@ class ResourceRepository extends EntityRepository
         $resourceFile->setFile($file);
         $resourceFile->setName($resource->getResourceName());
         $em->persist($resourceFile);
+
         $resourceNode->setResourceFile($resourceFile);
         $em->persist($resourceNode);
         $em->flush();

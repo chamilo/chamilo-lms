@@ -42,11 +42,19 @@ class Illustration extends AbstractResource implements ResourceInterface
         $this->name = 'illustration';
     }
 
+    /**
+     * @return int
+     */
     public function getId(): int
     {
         return $this->id;
     }
 
+    /**
+     * @param int $id
+     *
+     * @return Illustration
+     */
     public function setId(int $id): Illustration
     {
         $this->id = $id;
@@ -54,11 +62,19 @@ class Illustration extends AbstractResource implements ResourceInterface
         return $this;
     }
 
+    /**
+     * @return string
+     */
     public function getName(): string
     {
         return $this->name;
     }
 
+    /**
+     * @param string $name
+     *
+     * @return Illustration
+     */
     public function setName(string $name): Illustration
     {
         $this->name = $name;
@@ -74,6 +90,9 @@ class Illustration extends AbstractResource implements ResourceInterface
         return $this->getId();
     }
 
+    /**
+     * @return string
+     */
     public function getResourceName(): string
     {
         return $this->getName();

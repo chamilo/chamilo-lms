@@ -16,9 +16,11 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 class IllustrationRepository extends ResourceRepository
 {
     /**
-     * @param UploadedFile $uploadFile
+     * @param AbstractResource $resource
+     * @param User             $user
+     * @param                  $uploadFile
      *
-     * @return ResourceFile
+     * @return ResourceFile|null
      */
     public function addIllustration(AbstractResource $resource, User $user, $uploadFile): ?ResourceFile
     {
@@ -28,15 +30,19 @@ class IllustrationRepository extends ResourceRepository
         if ($illustrationNode === null) {
             $illustration = new Illustration();
             $em->persist($illustration);
-            $illustrationNode = $this->addResourceNode($illustration, $user, $resource);
-            //$this->addResourceToEveryone($illustrationNode);
+            $this->addResourceNode($illustration, $user, $resource);
+        } else {
+            $illustration = $this->repository->findOneBy(['resourceNode' => $illustrationNode]);
         }
 
-        return $this->addFile($illustrationNode, $uploadFile);
+        //$this->addResourceToEveryone($illustrationNode);
+        return $this->addFile($illustration, $uploadFile);
     }
 
     /**
-     * @return ResourceNode
+     * @param AbstractResource $resource
+     *
+     * @return ResourceNode|null
      */
     public function getIllustrationNodeFromResource(AbstractResource $resource): ?ResourceNode
     {
@@ -51,6 +57,9 @@ class IllustrationRepository extends ResourceRepository
         return $node;
     }
 
+    /**
+     * @param AbstractResource $resource
+     */
     public function deleteIllustration(AbstractResource $resource)
     {
         $node = $this->getIllustrationNodeFromResource($resource);

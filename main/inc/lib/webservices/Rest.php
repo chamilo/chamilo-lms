@@ -1680,7 +1680,7 @@ class Rest extends WebService
             throw new Exception(get_lang('UserNotFound'));
         }
 
-        $subscribed = SessionManager::subscribeUsersToSession($sessionId, [$userId]);
+        $subscribed = SessionManager::subscribeUsersToSession($sessionId, [$userId], SESSION_VISIBLE_READ_ONLY, false);
         if (!$subscribed) {
             throw new Exception(get_lang('UserNotSubscribed'));
         }

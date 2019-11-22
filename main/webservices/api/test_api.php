@@ -129,11 +129,9 @@ class V2Test extends TestCase
             'v2.php',
             [
                 'form_params' => [
-                    // data for the user who makes the request
                     'action' => 'create_session_from_model',
                     'username' => self::WEBSERVICE_USERNAME,
                     'api_key' => $apiKey,
-                    // data for new user
                     'modelSessionId' => $modelSessionId,
                     'sessionName' => 'Name of the new session',
                     'startDate' => '2019-09-01 00:00',
@@ -162,6 +160,51 @@ class V2Test extends TestCase
 
         $newSessionId = $jsonResponse->data[0];
         SessionManager::delete($newSessionId);
+    }
+
+    /**
+     * @param $apiKey
+     * @depends testAuthenticate
+     * @throws Exception
+     */
+    public function testSubscribeUserToSessionFromUsername($apiKey)
+    {
+        $sessionId = SessionManager::create_session(
+            'Session to subscribe'.time(),
+            '2019-01-01 00:00', '2019-08-31 00:00',
+            '2019-01-01 00:00', '2019-08-31 00:00',
+            '2019-01-01 00:00', '2019-08-31 00:00',
+            null, null
+        );
+        $loginName = 'tester'.time();
+        $userId = UserManager::create_user('Tester', 'Tester', 5, 'tester@local', $loginName, 'xXxxXxxXX');
+
+        $response = $this->client->post(
+            'v2.php',
+            [
+                'form_params' => [
+                    'action' => 'subscribe_user_to_session_from_username',
+                    'username' => self::WEBSERVICE_USERNAME,
+                    'api_key' => $apiKey,
+                    'sessionId' => $sessionId,
+                    'loginName' => $loginName,
+                ],
+            ]
+        );
+
+        UserManager::delete_user($userId);
+        SessionManager::delete($sessionId);
+
+        $this->assertSame(200, $response->getStatusCode());
+
+        $jsonResponse = json_decode($response->getBody()->getContents());
+
+        $this->assertFalse($jsonResponse->error, $jsonResponse->error ? $jsonResponse->message : '');
+        $this->assertNotNull($jsonResponse->data);
+        $this->assertIsArray($jsonResponse->data);
+        $this->assertArrayHasKey(0, $jsonResponse->data);
+        $this->assertIsBool($jsonResponse->data[0]);
+        $this->assertSame(True, $jsonResponse->data[0]);
     }
 
 }

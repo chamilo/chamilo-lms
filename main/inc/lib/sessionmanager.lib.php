@@ -2078,6 +2078,7 @@ class SessionManager
                 SET nbr_users = (SELECT count(user_id) FROM $tbl_session_rel_user WHERE session_id = $sessionId)
                 WHERE id = $sessionId";
         Database::query($sql);
+        return true;
     }
 
     /**

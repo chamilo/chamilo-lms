@@ -59,6 +59,7 @@ class Rest extends WebService
     const ADD_COURSES_SESSION = 'add_courses_session';
     const ADD_USERS_SESSION = 'add_users_session';
     const CREATE_SESSION_FROM_MODEL = 'create_session_from_model';
+    const SUBSCRIBE_USER_TO_SESSION_FROM_USERNAME = 'subscribe_user_to_session_from_username';
 
     /**
      * @var Session
@@ -1645,5 +1646,30 @@ class Rest extends WebService
         }
 
         return [$newSessionId];
+    }
+
+    /**
+     * @param $sessionId
+     * @param $loginName
+     * @return array
+     * @throws Exception
+     */
+    public function subscribeUserToSessionFromUsername($sessionId, $loginName)
+    {
+        if (!SessionManager::isValidId($sessionId)) {
+            throw new Exception(get_lang('SessionNotFound'));
+        }
+
+        $userId = UserManager::get_user_id_from_username($loginName);
+        if (False === $userId) {
+            throw new Exception(get_lang('UserNotFound'));
+        }
+
+        $subscribed = SessionManager::subscribeUsersToSession($sessionId, [$userId]);
+        if (!$subscribed) {
+            throw new Exception(get_lang('UserNotSubscribed'));
+        }
+
+        return [true];
     }
 }

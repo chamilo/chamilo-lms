@@ -305,6 +305,13 @@ try {
             $newSessionId = $restApi->createSessionFromModel($modelSessionId, $sessionName, $startDate, $endDate, $extraFields);
             $restResponse->setData($newSessionId);
             break;
+        case Rest::SUBSCRIBE_USER_TO_SESSION_FROM_USERNAME:
+            if (empty($_POST['sessionId']) || empty($_POST['loginName'])) {
+                throw new Exception(get_lang('NoData'));
+            }
+            $subscribed = $restApi->subscribeUserToSessionFromUsername($_POST['sessionId'], $_POST['loginName']);
+            $restResponse->setData($subscribed);
+            break;
         default:
             throw new Exception(get_lang('InvalidAction'));
     }

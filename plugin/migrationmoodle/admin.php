@@ -111,7 +111,7 @@ $menu = [
                                     ],
                                     [
                                         'learnin_path_quiz_answers_short_answer',
-                                        'Answers for Short-Answer questions',
+                                        'Answers for Short-Answer and Numerical questions',
                                         []
                                     ]
                                 ],

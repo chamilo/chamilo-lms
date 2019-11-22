@@ -8,6 +8,8 @@ use Chamilo\PluginBundle\MigrationMoodle\Interfaces\LoaderInterface;
 /**
  * Class LessonAnswersShortAnswerLoader.
  *
+ * Loader to create Fill Blanks question answers comming from Short Answer and Numerical lesson page.
+ *
  * @package Chamilo\PluginBundle\MigrationMoodle\Loader
  */
 class LessonAnswersShortAnswerLoader implements LoaderInterface

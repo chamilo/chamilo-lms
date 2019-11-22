@@ -13,6 +13,8 @@ use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\LoadedLpQuizQuesti
 /**
  * Class LessonAnswersShortAnswerTask.
  *
+ * Task to convert Short Answers and Numerical answers from a lesson page in quiz answers for chamilo.
+ *
  * @package Chamilo\PluginBundle\MigrationMoodle\Task
  */
 class LessonAnswersShortAnswerTask extends BaseTask
@@ -35,7 +37,7 @@ class LessonAnswersShortAnswerTask extends BaseTask
                 FROM mdl_lesson_answers la
                 INNER JOIN mdl_lesson_pages lp ON (la.pageid = lp.id AND la.lessonid = lp.lessonid)
                 INNER JOIN mdl_lesson l ON (lp.lessonid = l.id AND la.lessonid = l.id) 
-                WHERE lp.qtype = 1
+                WHERE lp.qtype IN (1, 8)
                 GROUP BY lp.id
                 ORDER BY lp.id",
         ];

@@ -116,14 +116,22 @@ class V2Test extends TestCase
     public function testCreateSessionFromModel($apiKey)
     {
         $modelSessionId = SessionManager::create_session(
-            'Model session',
+            'Model session'.time(),
             '2019-01-01 00:00', '2019-08-31 00:00',
             '2019-01-01 00:00', '2019-08-31 00:00',
             '2019-01-01 00:00', '2019-08-31 00:00',
             null, null
         );
-
-        $this->assertIsInt($modelSessionId);
+        $courseCodes = ['course A'.time(), 'course B'.time(), 'course C'.time()];
+        $courseList = [];
+        foreach($courseCodes as $code) {
+            $course = CourseManager::create_course(['code' => $code, 'title' => $code, 'wanted_code' => $code ], 1/*FIXME*/);
+            $courseList[] = $course['real_id'];
+        }
+        try {
+            SessionManager::add_courses_to_session($modelSessionId, $courseList);
+        } catch (Exception $e) {
+        }
 
         $response = $this->client->post(
             'v2.php',
@@ -133,7 +141,7 @@ class V2Test extends TestCase
                     'username' => self::WEBSERVICE_USERNAME,
                     'api_key' => $apiKey,
                     'modelSessionId' => $modelSessionId,
-                    'sessionName' => 'Name of the new session',
+                    'sessionName' => 'Name of the new session'.time(),
                     'startDate' => '2019-09-01 00:00',
                     'endDate' => '2019-12-31 00:00',
                     'extraFields' => [
@@ -146,8 +154,6 @@ class V2Test extends TestCase
             ]
         );
 
-        SessionManager::delete($modelSessionId);
-
         $this->assertSame(200, $response->getStatusCode(), 'Entry denied with code : ' . $response->getStatusCode());
 
         $jsonResponse = json_decode($response->getBody()->getContents());
@@ -159,6 +165,15 @@ class V2Test extends TestCase
         $this->assertIsInt($jsonResponse->data[0]);
 
         $newSessionId = $jsonResponse->data[0];
+
+        $modelCourseList = array_keys(SessionManager::get_course_list_by_session_id($modelSessionId));
+        $newCourseList = array_keys(SessionManager::get_course_list_by_session_id($newSessionId));
+        $this->assertSame($modelCourseList, $newCourseList);
+
+        foreach($courseCodes as $code) {
+            CourseManager::delete_course($code);
+        }
+        SessionManager::delete($modelSessionId);
         SessionManager::delete($newSessionId);
     }
 

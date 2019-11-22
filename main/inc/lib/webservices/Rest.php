@@ -1594,11 +1594,13 @@ class Rest extends WebService
     }
 
     /**
-     * @param $params
-     *
+     * @param $modelSessionId
+     * @param $sessionName
+     * @param $startDate
+     * @param $endDate
+     * @param array $extraFields
+     * @return array
      * @throws Exception
-     *
-     * @return integer
      */
     public function createSessionFromModel($modelSessionId, $sessionName, $startDate, $endDate, array $extraFields = [])
     {
@@ -1643,6 +1645,11 @@ class Rest extends WebService
 
         if (empty($newSessionId)) {
             throw new Exception(get_lang('SessionNotRegistered'));
+        }
+
+        $courseList = array_keys(SessionManager::get_course_list_by_session_id($modelSessionId));
+        if (!SessionManager::add_courses_to_session($newSessionId, $courseList)) {
+            throw new Exception(get_lang('CoursesNotAddedToSession'));
         }
 
         return [$newSessionId];

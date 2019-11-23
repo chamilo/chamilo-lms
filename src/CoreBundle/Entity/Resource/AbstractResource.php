@@ -3,6 +3,7 @@
 
 namespace Chamilo\CoreBundle\Entity\Resource;
 
+use APY\DataGridBundle\Grid\Mapping as GRID;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
 use Doctrine\Common\Collections\Criteria;
@@ -17,6 +18,8 @@ use Sylius\Component\Resource\Model\ResourceInterface;
 abstract class AbstractResource implements ResourceInterface
 {
     /**
+     * @GRID\Column(field="resourceNode.createdAt", title="Date added", type="datetime")
+     *
      * @ORM\OneToOne(targetEntity="Chamilo\CoreBundle\Entity\Resource\ResourceNode", cascade={"remove"}, orphanRemoval=true)
      * @ORM\JoinColumn(name="resource_node_id", referencedColumnName="id", onDelete="CASCADE")
      */

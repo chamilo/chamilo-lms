@@ -10,10 +10,8 @@ use APY\DataGridBundle\Grid\Export\ExcelExport;
 use APY\DataGridBundle\Grid\Grid;
 use APY\DataGridBundle\Grid\Row;
 use APY\DataGridBundle\Grid\Source\Entity;
-use Chamilo\CoreBundle\Block\BreadcrumbBlockService;
 use Chamilo\CoreBundle\Component\Utils\Glide;
 use Chamilo\CoreBundle\Entity\Resource\AbstractResource;
-use Chamilo\CoreBundle\Entity\Resource\ResourceFile;
 use Chamilo\CoreBundle\Entity\Resource\ResourceLink;
 use Chamilo\CoreBundle\Entity\Resource\ResourceNode;
 use Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter;
@@ -26,24 +24,15 @@ use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\QueryBuilder;
 use FOS\CKEditorBundle\Form\Type\CKEditorType;
 use League\Flysystem\Filesystem;
-use Oneup\UploaderBundle\Uploader\Response\EmptyResponse;
-use Sylius\Bundle\ResourceBundle\Event\ResourceControllerEvent;
-use Sylius\Component\Resource\Exception\UpdateHandlingException;
-use Sylius\Component\Resource\ResourceActions;
 use Symfony\Component\Filesystem\Exception\FileNotFoundException;
-use Symfony\Component\HttpFoundation\File\Exception\UploadException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\HttpFoundation\StreamedResponse;
-use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use Symfony\Component\Routing\RouterInterface;
 use Vich\UploaderBundle\Util\Transliterator;
 use ZipStream\Option\Archive;
 use ZipStream\ZipStream;
@@ -146,6 +135,9 @@ class ResourceController extends AbstractResourceController implements CourseCon
         $routeParams = ['tool' => $tool, 'type' => $type, 'cidReq' => $courseIdentifier, 'id'];
 
         // Title link.
+        $grid->getColumn('title')->setTitle($this->trans('Name'));
+        $grid->getColumn('filetype')->setTitle($this->trans('Type'));
+
         $grid->getColumn('title')->manipulateRenderCell(
             function ($value, Row $row, $router) use ($routeParams) {
                 /** @var CDocument $entity */
@@ -172,6 +164,23 @@ class ResourceController extends AbstractResourceController implements CourseCon
                 return '<a href="'.$url.'">'.$value.'</a>';
             }
         );
+
+        $grid->getColumn('filetype')->manipulateRenderCell(
+            function ($value, Row $row, $router) use ($routeParams) {
+                /** @var CDocument $entity */
+                $entity = $row->getEntity();
+                $resourceNode = $entity->getResourceNode();
+
+                if ($resourceNode->hasResourceFile()) {
+                    $file = $resourceNode->getResourceFile();
+                    return $file->getMimeType();
+                }
+
+                return $this->trans('Folder');
+            }
+        );
+
+        $grid->setHiddenColumns(['iid']);
 
         // Delete mass action.
         if ($this->isGranted(ResourceNodeVoter::ROLE_CURRENT_COURSE_TEACHER)) {

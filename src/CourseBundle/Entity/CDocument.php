@@ -26,7 +26,7 @@ use Doctrine\ORM\Mapping as ORM;
  *      @ORM\Index(name="idx_cdoc_sid", columns={"session_id"}),
  *  }
  * )
- * @GRID\Source(columns="iid, title, filetype", filterable=false)
+ * @GRID\Source(columns="iid, title, filetype, resourceNode.createdAt", filterable=false)
  * @ORM\Entity
  */
 class CDocument extends AbstractResource implements ResourceInterface

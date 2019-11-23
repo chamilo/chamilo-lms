@@ -61,6 +61,7 @@ class Rest extends WebService
     const CREATE_SESSION_FROM_MODEL = 'create_session_from_model';
     const SUBSCRIBE_USER_TO_SESSION_FROM_USERNAME = 'subscribe_user_to_session_from_username';
     const GET_SESSION_FROM_EXTRA_FIELD = 'get_session_from_extra_field';
+    const UPDATE_USER_FROM_USERNAME = 'update_user_from_username';
 
     /**
      * @var Session
@@ -1716,5 +1717,194 @@ class Rest extends WebService
 
         // return sessionId
         return [ intval($sessionIdList[0]['item_id']) ];
+    }
+
+    /**
+     * @param $user_param
+     * @return array        [ true ] on success
+     * @throws Exception
+     */
+    public function updateUserFromUserName($user_param)
+    {
+        // find user
+        $userId = null;
+        foreach($user_param as $k => $v) {
+            if (strtolower($k) === 'loginname') {
+                $userId = UserManager::get_user_id_from_username($v);
+                if (False === $userId) {
+                    throw new Exception(get_lang('UserNotFound'));
+                }
+                break;
+            }
+        }
+        if (is_null($userId)) {
+            throw new Exception(get_lang('NoData'));
+        }
+        /** @var User $user */
+        $user = UserManager::getRepository()->find($userId);
+        if (empty($user)) {
+            throw new Exception(get_lang('CouldNotLoadUser'));
+        }
+
+        // tell the world we are about to update a user
+        $hook = HookUpdateUser::create();
+        if (!empty($hook)) {
+            $hook->notifyUpdateUser(HOOK_EVENT_TYPE_PRE);
+        }
+
+        // apply submitted modifications
+        foreach($user_param as $k => $v) {
+            switch(strtolower($k)) {
+                case 'email':
+                    $user->setEmail($v);
+                    break;
+                case 'enabled':
+                    $user->setEnabled($v);
+                    break;
+                case 'lastname':
+                    $user->setLastname($v);
+                    break;
+                case 'firstname':
+                    $user->setFirstname($v);
+                    break;
+                case 'phone':
+                    $user->setPhone($v);
+                    break;
+                case 'address':
+                    $user->setAddress($v);
+                    break;
+                case 'roles':
+                    $user->setRoles($v);
+                    break;
+                case 'profile_completed':
+                    $user->setProfileCompleted($v);
+                    break;
+                case 'auth_source':
+                    $user->setAuthSource($v);
+                    break;
+                case 'status':
+                    $user->setStatus($v);
+                    break;
+                case 'official_code':
+                    $user->setOfficialCode($v);
+                    break;
+                case 'picture_uri':
+                    $user->setPictureUri($v);
+                    break;
+                case 'creator_id':
+                    $user->setCreatorId($v);
+                    break;
+                case 'competences':
+                    $user->setCompetences($v);
+                    break;
+                case 'diplomas':
+                    $user->setDiplomas($v);
+                    break;
+                case 'openarea':
+                    $user->setOpenArea($v);
+                    break;
+                case 'teach':
+                    $user->setTeach($v);
+                    break;
+                case 'productions':
+                    $user->setProductions($v);
+                    break;
+                case 'language':
+                    $languages = api_get_languages();
+                    if (!in_array($v, $languages['folder'])) {
+                        throw new Exception(get_lang('LanguageUnavailable'));
+                    }
+                    $user->setLanguage($v);
+                    break;
+                case 'registration_date':
+                    $user->setRegistrationDate($v);
+                    break;
+                case 'expiration_date':
+                    $user->setExpirationDate(new DateTime(
+                        api_get_utc_datetime($v),
+                        new DateTimeZone('UTC')
+                    ));
+                    break;
+                case 'active':
+                    // see UserManager::update_user() usermanager.lib.php:1205
+                    if ($user->getActive() != $v) {
+                        $user->setActive($v);
+                        Event::addEvent($v ? LOG_USER_ENABLE : LOG_USER_DISABLE, LOG_USER_ID, $userId);
+                    }
+                    break;
+                case 'openid':
+                    $user->setOpenId($v);
+                    break;
+                case 'theme':
+                    $user->setTheme($v);
+                    break;
+                case 'hr_dept_id':
+                    $user->setHrDeptId($v);
+                    break;
+                case 'extra':
+                    if (is_array($v)) {
+                        if (count($v) > 0) {
+                            if (is_array($v[0])) {
+                                foreach ($v as $field) {
+                                    $field_name = $field['field_name'];
+                                    $field_value = $field['field_value'];
+                                    if (!isset($field_name) || !isset($field_value) ||
+                                        !UserManager::update_extra_field_value($userId, $field_name, $field_value)) {
+                                        throw new Exception(get_lang('CouldNotUpdateExtraFieldValue').': '.print_r($field, true));
+                                    }
+                                }
+                            } else {
+                                foreach ($v as $fname => $fvalue) {
+                                    if (!UserManager::update_extra_field_value($userId, $fname, $fvalue)) {
+                                        throw new Exception(get_lang('CouldNotUpdateExtraFieldValue').': '.$fname);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    break;
+                case 'username':
+                case 'api_key':
+                case 'action':
+                case 'loginname':
+                    break;
+                case 'email_canonical':
+                case 'locked':
+                case 'expired':
+                case 'credentials_expired':
+                case 'credentials_expire_at':
+                case 'expires_at':
+                case 'salt':
+                case 'last_login':
+                case 'created_at':
+                case 'updated_at':
+                case 'confirmation_token':
+                case 'password_requested_at':
+                case 'password': // see UserManager::update_user usermanager.lib.php:1182
+                case 'username_canonical':
+                default:
+                    throw new Exception(get_lang('UnsupportedUpdate')." '$k'");
+            }
+        }
+
+        // save modifications
+        UserManager::getManager()->updateUser($user, true);
+
+        // tell the world we just updated this user
+        if (!empty($hook)) {
+            $hook->setEventData(['user' => $user]);
+            $hook->notifyUpdateUser(HOOK_EVENT_TYPE_POST);
+        }
+
+        // invalidate cache for this user
+        $cacheAvailable = api_get_configuration_value('apc');
+        if ($cacheAvailable === true) {
+            $apcVar = api_get_configuration_value('apc_prefix').'userinfo_'.$userId;
+            if (apcu_exists($apcVar)) {
+                apcu_delete($apcVar);
+            }
+        }
+
+        return [ true ];
     }
 }

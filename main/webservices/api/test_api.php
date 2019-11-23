@@ -444,4 +444,73 @@ class V2Test extends TestCase
         $extraFieldModel->delete($firstExtraFieldId);
         $extraFieldModel->delete($secondExtraFieldId);
     }
+
+    /**
+     * @throws Exception when it cannot delete the test user
+     */
+    public function testUpdateUserFromUsername() {
+        $ACTION = 'update_user_from_username';
+        // create a user with initial data and extra field values
+        $LOGIN_NAME = 'testUser'.time();
+        $userId = UserManager::create_user('Initial first name', 'Initial last name', 5, 'initial.email@local', $LOGIN_NAME, 'xXxxXxxXX');
+
+        // create an extra field and initialise its value for the user
+        $extraFieldModel = new ExtraField('user');
+        $EXTRA_FIELD_NAME = 'extraUserField'.time();
+        $extraFieldId = $extraFieldModel->save([
+            'field_type' => ExtraField::FIELD_TYPE_TEXT,
+            'variable' => $EXTRA_FIELD_NAME,
+            'display_text' => $EXTRA_FIELD_NAME,
+            'visible_to_self' => 1,
+            'visible_to_others' => 1,
+            'changeable' => 1,
+            'filter' => 1,
+        ]);
+        SessionManager::update_session_extra_field_value($userId, $EXTRA_FIELD_NAME, 'extra field initial value');
+
+        // update user with new data and extra field data
+        $NEW_DATA = [
+            'firstname' => 'New first name'.time(),
+            'lastname' => 'New last name',
+            'status' => 1,
+            'email' => 'new.address@local',
+            //'original_user_id_name' => 'myplatform_user_id', // field to identify the user in the external system
+            //'original_user_id_value' => '1234', // ID for the user in the external system
+            //'language' => 'english',
+            //'phone' => '',
+            //'expiration_date' => '',
+        ];
+        $parameters = $NEW_DATA;
+        $EXTRA_FIELD_NEW_VALUE = 'extra field value';
+        $parameters['extra'] = [
+            [ 'field_name' => $EXTRA_FIELD_NAME, 'field_value' => $EXTRA_FIELD_NEW_VALUE ],
+        ];
+        $parameters['loginName'] = $LOGIN_NAME;
+        $updated = $this->boolean($ACTION, $parameters);
+        $this->assertTrue($updated);
+
+        // assert it reports an error with a non-existent login name
+        $parameters['loginName'] = 'santaClaus';
+        $this->assertSame('UserNotFound', $this->errorMessageString($ACTION, $parameters));
+
+        // compare each saved value to the original
+        $userManager = UserManager::getManager();
+        /** @var User $user */
+        $user = $userManager->find($userId);
+        $userManager->reloadUser($user);
+        foreach($NEW_DATA as $k => $v) {
+            $kk = ucfirst($k);
+            $this->assertSame($v, eval("return \$user->get$kk();"), $k);
+        }
+
+        // assert extra field values have been updated
+        $extraFieldValueModel = new ExtraFieldValue('user');
+        $extraFieldValue = $extraFieldValueModel->get_values_by_handler_and_field_variable($userId, $EXTRA_FIELD_NAME);
+        $this->assertNotFalse($extraFieldValue);
+        $this->assertSame($EXTRA_FIELD_NEW_VALUE, $extraFieldValue['value']);
+
+        // clean up
+        UserManager::delete_user($userId);
+        $extraFieldModel->delete($extraFieldId);
+    }
 }

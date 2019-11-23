@@ -319,6 +319,10 @@ try {
             $idSession = $restApi->getSessionFromExtraField($_POST['field_name'], $_POST['field_value']);
             $restResponse->setData($idSession);
             break;
+        case Rest::UPDATE_USER_FROM_USERNAME:
+            $data = $restApi->updateUserFromUserName($_POST);
+            $restResponse->setData($data);
+            break;
         default:
             throw new Exception(get_lang('InvalidAction'));
     }

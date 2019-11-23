@@ -392,11 +392,18 @@ class ResourceController extends AbstractResourceController implements CourseCon
     public function showAction(Request $request): Response
     {
         $this->setBreadCrumb($request);
+        $nodeId = $request->get('id');
 
-        $em = $this->getDoctrine();
+        $repository = $this->getRepositoryFromRequest($request);
 
-        $id = $request->get('id');
-        $resourceNode = $em->getRepository('ChamiloCoreBundle:Resource\ResourceNode')->find($id);
+        /** @var AbstractResource $resource */
+        $resource = $repository->getRepository()->findOneBy(['resourceNode' => $nodeId]);
+
+        if (null === $resource) {
+            throw new NotFoundHttpException();
+        }
+
+        $resourceNode = $resource->getResourceNode();
 
         if (null === $resourceNode) {
             throw new NotFoundHttpException();
@@ -412,7 +419,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
         $type = $request->get('type');
 
         $params = [
-            'resource_node' => $resourceNode,
+            'resource' => $resource,
             'tool' => $tool,
             'type' => $type,
         ];
@@ -825,15 +832,14 @@ class ResourceController extends AbstractResourceController implements CourseCon
             $file = null;
             if ($fileType === 'file') {
                 $content = $form->get('content')->getViewData();
-                $fileName = $newResource->getTitle().'.html';
+                $newResource->setTitle($newResource->getTitle().'.html');
+                $fileName = $newResource->getTitle();
+
                 $handle = tmpfile();
                 fwrite($handle, $content);
                 $meta = stream_get_meta_data($handle);
-
                 $file = new UploadedFile($meta['uri'], $fileName, null, null, true);
-
                 $em->persist($newResource);
-                //$em->flush();
             }
 
             $resourceNode = $repository->createNodeForResource($newResource, $this->getUser(), $parentNode, $file);

@@ -258,7 +258,10 @@ class ResourceRepository extends EntityRepository
         $resourceName = $resource->getResourceName();
 
         if ($resourceNode->hasResourceFile()) {
-            $originalExtension = pathinfo($resourceName, PATHINFO_EXTENSION);
+            $resourceFile = $resourceNode->getResourceFile();
+            $originalName = $resourceFile->getOriginalName();
+            $originalExtension = pathinfo($originalName, PATHINFO_EXTENSION);
+
             $originalBasename = \basename($resourceName, $originalExtension);
             $slug = sprintf(
                 '%s.%s',
@@ -266,11 +269,9 @@ class ResourceRepository extends EntityRepository
                 $this->slugify->slugify($originalExtension)
             );
 
-            $resourceFile = $resourceNode->getResourceFile();
-            $originalName = $resourceFile->getOriginalName();
-            $originalExtension = pathinfo($originalName, PATHINFO_EXTENSION);
             $newOriginalName = sprintf('%s.%s', $resourceName, $originalExtension);
             $resourceFile->setOriginalName($newOriginalName);
+
             $em->persist($resourceFile);
         } else {
             $slug = $this->slugify->slugify($resourceName);
@@ -330,7 +331,7 @@ class ResourceRepository extends EntityRepository
             $parent = $parent->getResourceNode();
         }
 
-        return $this->addResourceNodeParent($resource, $creator, $parent);
+        return $this->createNodeForResource($resource, $creator, $parent);
     }
 
     /**

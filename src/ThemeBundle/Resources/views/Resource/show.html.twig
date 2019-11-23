@@ -2,16 +2,16 @@
 
 {% block content %}
     {% autoescape false %}
-        <h3>{{ resource_node.name }} </h3>
+        <h3>{{ resource }} </h3>
 {#        Type: {{ resource_node.resourceType }}<br />#}
 
-        {% if resource_node.resourceFile %}
-            {% if resource_node.isResourceFileAnImage %}
+        {% if resource.resourceNode.resourceFile %}
+            {% if resource.resourceNode.isResourceFileAnImage %}
                 Preview:
                 <br />
                 <img src=
                      "{{ url(
-                         'chamilo_core_resource_file', {id: resource_node.id, 'type' : type, 'tool' : tool, 'filter' : 'resource_show_preview'}
+                         'chamilo_core_resource_file', {id: resource.resourceNode.id, 'type' : type, 'tool' : tool, 'filter' : 'resource_show_preview'}
                      ) }}"
                 />
             {% else %}
@@ -19,20 +19,20 @@
             {% endif %}
             <br />
 
-            Download original file:
-            <a href="{{ url('chamilo_core_resource_file', {id: resource_node.id, 'type' : type, 'tool' : tool, 'mode' : 'download'} ) }}">
-                {{ resource_node.resourceFile }}
+            File:
+            <a href="{{ url('chamilo_core_resource_file', {id: resource.resourceNode.id, 'type' : type, 'tool' : tool, 'mode' : 'download'} ) }}">
+                {{ resource.resourceNode.slug }}
             </a>
             <br />
-            Size: {{ resource_node.resourceFile.size }}
+            Size: {{ resource.resourceNode.resourceFile.size }}
             <br /><br />
         {% endif %}
 
-        Updated at: {{ resource_node.updatedAt | date_to_time_ago }}
+        Updated at: {{ resource.resourceNode.updatedAt | date_to_time_ago }}
         <br />
-        Created at: {{ resource_node.createdAt | date_to_time_ago }}<br />
+        Created at: {{ resource.resourceNode.createdAt | date_to_time_ago }}<br />
         <br />
-        Creator: {{ resource_node.creator }}
+        Creator: {{ resource.resourceNode.creator }}
 
     {% endautoescape %}
 {% endblock %}

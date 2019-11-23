@@ -75,7 +75,7 @@ class V2Test extends TestCase
                     'username' => self::WEBSERVICE_USERNAME,
                     'api_key' => $apiKey,
                     // data for new user
-                    'firstname' => 'Test User ',
+                    'firstname' => 'Test User'.time(),
                     'lastname' => 'Chamilo',
                     'status' => 5, // student
                     'email' => 'testuser@example.com',
@@ -107,6 +107,8 @@ class V2Test extends TestCase
         $this->assertIsInt($jsonResponse->data[0]);
         $userId = $jsonResponse->data[0];
 
+        // TODO more tests on created user
+
         UserManager::delete_user($userId);
     }
 
@@ -129,11 +131,40 @@ class V2Test extends TestCase
             null, null
         );
 
+        $extraFieldModel = new ExtraField('session');
+
+        define('EXTRA_FIELD_NAME', 'extraField'.time());
+        define('EXTRA_FIELD_VALUE_FOR_MODEL_SESSION', 'extra field value for model');
+        define('EXTRA_FIELD_VALUE_FOR_NEW_SESSION', 'extra field value for new session');
+        $extraFieldId = $extraFieldModel->save([
+            'field_type' => ExtraField::FIELD_TYPE_TEXT,
+            'variable' => EXTRA_FIELD_NAME,
+            'display_text' => EXTRA_FIELD_NAME,
+            'visible_to_self' => 1,
+            'visible_to_others' => 1,
+            'changeable' => 1,
+            'filter' => 1,
+        ]);
+        SessionManager::update_session_extra_field_value($modelSessionId, EXTRA_FIELD_NAME, EXTRA_FIELD_VALUE_FOR_MODEL_SESSION);
+
+        define('SECOND_EXTRA_FIELD_NAME', 'secondExtraField'.time());
+        define('SECOND_EXTRA_FIELD_VALUE', 'second extra field value');
+        $secondExtraFieldId = $extraFieldModel->save([
+            'field_type' => ExtraField::FIELD_TYPE_TEXT,
+            'variable' => SECOND_EXTRA_FIELD_NAME,
+            'display_text' => SECOND_EXTRA_FIELD_NAME,
+            'visible_to_self' => 1,
+            'visible_to_others' => 1,
+            'changeable' => 1,
+            'filter' => 1,
+        ]);
+        SessionManager::update_session_extra_field_value($modelSessionId, SECOND_EXTRA_FIELD_NAME, SECOND_EXTRA_FIELD_VALUE);
+
         SessionManager::subscribe_sessions_to_promotion($promotionId, [$modelSessionId]);
 
-        $courseCodes = ['course A'.time(), 'course B'.time(), 'course C'.time()];
+        define('COURSE_CODES', [ 'course A'.time(), 'course B'.time(), 'course C'.time() ]);
         $courseList = [];
-        foreach($courseCodes as $code) {
+        foreach(COURSE_CODES as $code) {
             $course = CourseManager::create_course(['code' => $code, 'title' => $code, 'wanted_code' => $code ], 1/*FIXME*/);
             $courseList[] = $course['real_id'];
         }
@@ -151,20 +182,20 @@ class V2Test extends TestCase
                     'startDate' => '2019-09-01 00:00',
                     'endDate' => '2019-12-31 00:00',
                     'extraFields' => [
-                        [
-                            'field_name' => 'description',
-                            'field_value' => 'Description of the new session',
-                        ],
+                        EXTRA_FIELD_NAME => EXTRA_FIELD_VALUE_FOR_NEW_SESSION
                     ],
                 ],
             ]
         );
 
-        $this->assertSame(200, $response->getStatusCode(), 'Entry denied with code : ' . $response->getStatusCode());
+        $this->assertSame(200, $response->getStatusCode());
 
         $jsonResponse = json_decode($response->getBody()->getContents());
 
-        $this->assertFalse($jsonResponse->error, 'Session not created because : ' . $jsonResponse->message);
+        $this->assertNotNull($jsonResponse);
+        $errorGenerated = is_null($jsonResponse->error) ? false : $jsonResponse->error; // in some cases error is null TODO investigate
+        $message = is_string($jsonResponse->message) ? $jsonResponse->message : 'no message generated';
+        $this->assertFalse($errorGenerated, $message);
         $this->assertNotNull($jsonResponse->data);
         $this->assertIsArray($jsonResponse->data);
         $this->assertArrayHasKey(0, $jsonResponse->data);
@@ -176,17 +207,35 @@ class V2Test extends TestCase
         $this->assertArrayHasKey($newSessionId, $promotionSessions);
         $this->assertArrayHasKey($modelSessionId, $promotionSessions);
 
+        $extraData = SessionManager::getFilteredExtraFields($newSessionId, [ EXTRA_FIELD_NAME ]);
+        $this->assertSame(1, count($extraData));
+        $this->assertSame(EXTRA_FIELD_VALUE_FOR_NEW_SESSION, $extraData[0]['value']);
+
+        $extraData = SessionManager::getFilteredExtraFields($modelSessionId, [ EXTRA_FIELD_NAME ]);
+        $this->assertSame(1, count($extraData));
+        $this->assertSame(EXTRA_FIELD_VALUE_FOR_MODEL_SESSION, $extraData[0]['value']);
+
+        $extraData = SessionManager::getFilteredExtraFields($newSessionId, [ SECOND_EXTRA_FIELD_NAME ]);
+        $this->assertSame(1, count($extraData));
+        $this->assertSame(SECOND_EXTRA_FIELD_VALUE, $extraData[0]['value']);
+
+        $extraData = SessionManager::getFilteredExtraFields($modelSessionId, [ SECOND_EXTRA_FIELD_NAME ]);
+        $this->assertSame(1, count($extraData));
+        $this->assertSame(SECOND_EXTRA_FIELD_VALUE, $extraData[0]['value']);
+
         $modelCourseList = array_keys(SessionManager::get_course_list_by_session_id($modelSessionId));
         $newCourseList = array_keys(SessionManager::get_course_list_by_session_id($newSessionId));
         $this->assertSame($modelCourseList, $newCourseList);
 
-        foreach($courseCodes as $code) {
+        foreach(COURSE_CODES as $code) {
             CourseManager::delete_course($code);
         }
         SessionManager::delete($modelSessionId);
         SessionManager::delete($newSessionId);
         $promotion->delete($promotionId);
         $career->delete($careerId);
+        $extraFieldModel->delete($extraFieldId);
+        $extraFieldModel->delete($secondExtraFieldId);
     }
 
     /**

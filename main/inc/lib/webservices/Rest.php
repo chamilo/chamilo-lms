@@ -1610,12 +1610,6 @@ class Rest extends WebService
 
         $modelSession = SessionManager::fetch($modelSessionId);
 
-        foreach ($extraFields as $k => $v) {
-            if (array_key_exists($k, $modelSession)) {
-                $modelSession[$k] = $v;
-            }
-        }
-
         if (api_is_multiple_url_enabled()) {
             if (api_get_current_access_url_id() != -1) {
                 $modelSession['accessUrlId'] = api_get_current_access_url_id();
@@ -1654,11 +1648,20 @@ class Rest extends WebService
             SessionManager::subscribe_sessions_to_promotion($modelSession['promotion_id'], $sessionList);
         }
 
+        $modelExtraFields = [];
+        $fields = SessionManager::getFilteredExtraFields($modelSessionId);
+        foreach($fields as $field) {
+            $modelExtraFields[$field['variable']] = $field['value'];
+        }
+        $allExtraFields = array_merge($modelExtraFields, $extraFields);
+        foreach($allExtraFields as $k => $v) {
+            $res = SessionManager::update_session_extra_field_value($newSessionId, $k, $v);
+        }
+
         $courseList = array_keys(SessionManager::get_course_list_by_session_id($modelSessionId));
         if (!SessionManager::add_courses_to_session($newSessionId, $courseList)) {
             throw new Exception(get_lang('CoursesNotAddedToSession'));
         }
-
 
         return [$newSessionId];
     }

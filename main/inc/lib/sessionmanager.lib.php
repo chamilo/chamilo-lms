@@ -7505,7 +7505,7 @@ class SessionManager
 
     /**
      * @param int   $sessionId
-     * @param array $extraFieldsToInclude
+     * @param array $extraFieldsToInclude (empty means all)
      *
      * @return array
      */
@@ -7521,9 +7521,13 @@ class SessionManager
         }
 
         $sessionExtraField = new ExtraFieldModel('session');
-        $fieldList = $sessionExtraField->get_all([
+        $fieldList = $sessionExtraField->get_all(empty($extraFieldsToInclude) ? [] : [
             "variable IN ( ".implode(", ", $variablePlaceHolders)." ) " => $variables,
         ]);
+
+        if (empty($fieldList)) {
+            return [];
+        }
 
         $fields = [];
 

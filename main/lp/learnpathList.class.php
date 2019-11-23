@@ -106,10 +106,7 @@ class LearnpathList
         $isAllowToEdit = api_is_allowed_to_edit();
         /** @var CLp $row */
         foreach ($learningPaths as $row) {
-            // Use domesticate here instead of Database::escape_string because
-            // it prevents ' to be slashed and the input (done by learnpath.class.php::toggle_visibility())
-            // is done using domesticate()
-            $name = domesticate($row->getName());
+            $name = Database::escape_string($row->getName());
             $link = 'lp/lp_controller.php?action=view&lp_id='.$row->getId().'&id_session='.$session_id;
             $oldLink = 'newscorm/lp_controller.php?action=view&lp_id='.$row->getId().'&id_session='.$session_id;
 

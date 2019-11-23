@@ -268,7 +268,6 @@ class GradebookTable extends SortableTable
                                 $defaultData[$item->get_id()]['ranking'] = $rankingStudentList;
                                 $defaultData[$item->get_id()]['ranking_invalidate'] = $invalidateRanking;
                             }
-                            //exit;
                         }
                         break;
                 }

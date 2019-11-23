@@ -238,6 +238,18 @@ class ResourceNode
     }
 
     /**
+     * @param string $base
+     *
+     * @return string
+     */
+    public function getPathForDisplayRemoveBase(string $base)
+    {
+        $path = str_replace($base, '', $this->path);
+
+        return self::convertPathForDisplay($path);
+    }
+
+    /**
      * @return mixed
      */
     public function getSlug()

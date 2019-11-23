@@ -105,8 +105,10 @@ class EditorController extends BaseController
 
         $routeParams = ['cidReq' => $courseIdentifier, 'id'];
 
+        $removePath = $course->getResourceNode()->getPath();
+
         $grid->getColumn('title')->manipulateRenderCell(
-            function ($value, Row $row, $router) use ($course, $routeParams) {
+            function ($value, Row $row, $router) use ($course, $routeParams, $removePath) {
                 /** @var CDocument $entity */
                 $entity = $row->getEntity();
                 $resourceNode = $entity->getResourceNode();
@@ -121,7 +123,7 @@ class EditorController extends BaseController
                 if ($resourceNode->hasResourceFile()) {
                     $documentParams = [
                         'course' => $course->getCode(),
-                        'file' => $resourceNode->getPathForDisplay()
+                        'file' => $resourceNode->getPathForDisplayRemoveBase($removePath)
                     ];
                     $url = $router->generate(
                         'resources_document_get_file',

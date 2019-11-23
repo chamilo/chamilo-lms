@@ -550,25 +550,33 @@ class ResourceController extends AbstractResourceController implements CourseCon
      * @return Response
      * @throws \League\Flysystem\FileNotFoundException
      */
-    public function getDocumentAction(Request $request, CDocumentRepository $documentRepo, Glide $glide): Response
+    public function getDocumentAction(Request $request, Glide $glide): Response
     {
         $file = $request->get('file');
         $mode = $request->get('mode');
+
         // see list of filters in config/services.yaml
         $filter = $request->get('filter');
         $mode = !empty($mode) ? $mode : 'show';
-        $criteria = [
-            'path' => "/$file",
-            'course' => $this->getCourse(),
-        ];
 
-        $document = $documentRepo->findOneBy($criteria);
+        $repository = $this->getRepository('document', 'files');
+        $nodeRepository = $repository->getResourceNodeRepository();
 
-        if (null === $document) {
+        $title = basename($file);
+        // @todo improve criteria to avoid giving the wrong file.
+        $criteria = ['slug' => $title];
+
+        $resourceNode = $nodeRepository->findOneBy($criteria);
+
+        if (null === $resourceNode) {
             throw new NotFoundHttpException();
         }
-        /** @var ResourceNode $resourceNode */
-        $resourceNode = $document->getResourceNode();
+
+        $this->denyAccessUnlessGranted(
+            ResourceNodeVoter::VIEW,
+            $resourceNode,
+            'Unauthorised access to resource'
+        );
 
         return $this->showFile($request, $resourceNode, $glide, $mode, $filter);
     }

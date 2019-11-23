@@ -33,6 +33,7 @@ use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Router;
 use Vich\UploaderBundle\Util\Transliterator;
 use ZipStream\Option\Archive;
 use ZipStream\ZipStream;
@@ -140,6 +141,8 @@ class ResourceController extends AbstractResourceController implements CourseCon
 
         $grid->getColumn('title')->manipulateRenderCell(
             function ($value, Row $row, $router) use ($routeParams) {
+
+                /** @var Router $router */
                 /** @var CDocument $entity */
                 $entity = $row->getEntity();
                 $resourceNode = $entity->getResourceNode();
@@ -154,14 +157,38 @@ class ResourceController extends AbstractResourceController implements CourseCon
                         'chamilo_core_resource_show',
                         $myParams
                     );
+
+                    if ($resourceNode->isResourceFileAnImage()) {
+                        $url = $router->generate(
+                            'chamilo_core_resource_file',
+                            $myParams
+                        );
+
+                        return '<a data-fancybox="gallery" href="'.$url.'">'.$value.'</a>';
+                    }
+
+                    if ($resourceNode->isResourceFileAVideo()) {
+                        $url = $router->generate(
+                            'chamilo_core_resource_file',
+                            $myParams
+                        );
+
+                        return '
+                        <video width="640" height="320" controls id="video'.$id.'" style="display:none;">
+                            <source src="'.$url.'" type="video/mp4">
+                            Your browser doesn\'t support HTML5 video tag.
+                        </video>
+                        <a data-fancybox="gallery"  data-width="640" data-height="360" href="#video'.$id.'">'.$value.'</a>';
+                    }
+                    return '<a data-fancybox="gallery" data-type="iframe" data-src="'.$url.'" href="javascript:;" >'.$value.'</a>';
                 } else {
                     $url = $router->generate(
                         'chamilo_core_resource_list',
                         $myParams
                     );
-                }
 
-                return '<a href="'.$url.'">'.$value.'</a>';
+                    return '<a href="'.$url.'">'.$value.'</a>';
+                }
             }
         );
 

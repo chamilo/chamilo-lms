@@ -430,6 +430,19 @@ class ResourceNode
         return false;
     }
 
+    public function isResourceFileAVideo()
+    {
+        if ($this->hasResourceFile()) {
+
+            $mimeType = $this->getResourceFile()->getMimeType();
+            if (strpos($mimeType, 'video') !== false) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     /**
      * @param ResourceFile $resourceFile
      *

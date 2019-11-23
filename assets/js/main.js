@@ -1,6 +1,5 @@
-
 $(function () {
-    //Elevator Scroll
+    // Elevator Scroll
     $(window).scroll(function () {
         if ($(this).scrollTop() > 50) {
             $('.app-elevator').fadeIn();
@@ -8,6 +7,7 @@ $(function () {
             $('.app-elevator').fadeOut();
         }
     });
+
     // scroll body to 0px on click
     $('#back-to-top').click(function () {
         $('#back-to-top').tooltip('hide');
@@ -33,5 +33,4 @@ $(function () {
         var $category = $('select[name=category_code] option:selected').html();
         $(".category").text($category);
     });
-
 });

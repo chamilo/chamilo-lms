@@ -3,8 +3,6 @@
 {% block content %}
     {% autoescape false %}
         <h3>{{ resource }} </h3>
-{#        Type: {{ resource_node.resourceType }}<br />#}
-
         {% if resource.resourceNode.resourceFile %}
             {% if resource.resourceNode.isResourceFileAnImage %}
                 Preview:

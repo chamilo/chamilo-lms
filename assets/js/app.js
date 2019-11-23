@@ -13,12 +13,17 @@ import $ from 'jquery';
 window.jQuery = $;
 window.$ = $;
 
+
 Routing.setRoutingData(routes);
 
 const locale = document.querySelector('html').lang;
 
 require('./vendor');
 require('./main');
+
+
+require('webpack-jquery-ui');
+require('webpack-jquery-ui/css');
 
 // @todo rework url naming
 const homePublicUrl = Routing.generate('home') + 'public/';

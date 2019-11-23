@@ -17,7 +17,22 @@
       </a>
     </div>
   {% endif %}
+  <script>
+    $(function () {
+      $('[data-fancybox="gallery"]').fancybox({
+        toolbar: "true",
+        buttons: [
+          "zoom",
+          //"share",
+          "slideShow",
+          //"fullScreen",
+          "download",
+          "thumbs",
+          "close"
+        ],
+      });
+    });
+  </script>
 
   {% include '@ChamiloTheme/Resource/grid.html.twig' %}
-
 {% endblock %}

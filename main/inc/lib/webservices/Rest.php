@@ -1657,12 +1657,27 @@ class Rest extends WebService
         }
         $allExtraFields = array_merge($modelExtraFields, $extraFields);
         foreach($allExtraFields as $k => $v) {
-            $res = SessionManager::update_session_extra_field_value($newSessionId, $k, $v);
+            if (!SessionManager::update_session_extra_field_value($newSessionId, $k, $v)) {
+                throw new Exception(get_lang('CouldNotUpdateExtraFieldValue'));
+            }
         }
 
         $courseList = array_keys(SessionManager::get_course_list_by_session_id($modelSessionId));
         if (!SessionManager::add_courses_to_session($newSessionId, $courseList)) {
             throw new Exception(get_lang('CoursesNotAddedToSession'));
+        }
+
+        if (api_is_multiple_url_enabled()) {
+            if (api_get_current_access_url_id() != -1) {
+                UrlManager::add_session_to_url(
+                    $newSessionId,
+                    api_get_current_access_url_id()
+                );
+            } else {
+                UrlManager::add_session_to_url($newSessionId, 1);
+            }
+        } else {
+            UrlManager::add_session_to_url($newSessionId, 1);
         }
 
         return [$newSessionId];

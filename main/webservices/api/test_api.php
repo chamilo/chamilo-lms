@@ -229,6 +229,12 @@ class V2Test extends TestCase
             null, null
         );
 
+        // move the session to a non-standard URL
+        if (api_is_multiple_url_enabled()) {
+            $urlId = UrlManager::add('https://www.url.org/chamilo-lms/' . time(), 'Non-default URL', 1);
+            UrlManager::update_urls_rel_session([$modelSessionId], $urlId);
+        }
+
         // create an extra field and set its value in the model session - the new session will be given a different value in this field
         $extraFieldModel = new ExtraField('session');
         $EXTRA_FIELD_NAME = 'extraField'.time();
@@ -315,6 +321,13 @@ class V2Test extends TestCase
         $newCourseList = array_keys(SessionManager::get_course_list_by_session_id($newSessionId));
         $this->assertSame($modelCourseList, $newCourseList);
 
+        // assert the current url was set on the new session
+        if (api_is_multiple_url_enabled()) {
+            $urls = UrlManager::get_access_url_from_session($newSessionId);
+            $this->assertSame(1, count($urls));
+            $this->assertSame(api_get_current_access_url_id(), intval($urls[0]['access_url_id']));
+        }
+
         // clean up
         foreach($COURSE_CODES as $code) {
             CourseManager::delete_course($code);
@@ -325,6 +338,9 @@ class V2Test extends TestCase
         $career->delete($careerId);
         $extraFieldModel->delete($extraFieldId);
         $extraFieldModel->delete($secondExtraFieldId);
+        if (api_is_multiple_url_enabled()) {
+            UrlManager::delete($urlId);
+        }
     }
 
     public function testSubscribeUserToSessionFromUsername()

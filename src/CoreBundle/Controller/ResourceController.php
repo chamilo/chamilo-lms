@@ -342,7 +342,6 @@ class ResourceController extends AbstractResourceController implements CourseCon
         if ($form->isSubmitted() && $form->isValid()) {
             /** @var CDocument $newResource */
             $newResource = $form->getData();
-            $em = $this->getDoctrine()->getManager();
 
             if ($form->has('content')) {
                 $data = $form->get('content')->getData();
@@ -350,8 +349,10 @@ class ResourceController extends AbstractResourceController implements CourseCon
             }
 
             $newResource->setTitle($form->get('title')->getData());
-            $em->persist($newResource);
-            $em->flush();
+            $repository->updateNodeForResource($newResource);
+
+            /*$em->persist($newResource);
+            $em->flush();*/
 
             $this->addFlash('success', $this->trans('Updated'));
 
@@ -713,7 +714,8 @@ class ResourceController extends AbstractResourceController implements CourseCon
             throw new NotFoundHttpException();
         }
 
-        $fileName = $resourceFile->getOriginalName();
+        //$fileName = $resourceFile->getOriginalName();
+        $fileName = $resourceNode->getSlug();
         $filePath = $resourceFile->getFile()->getPathname();
         $mimeType = $resourceFile->getMimeType();
 
@@ -752,7 +754,8 @@ class ResourceController extends AbstractResourceController implements CourseCon
         });
         $disposition = $response->headers->makeDisposition(
             $forceDownload ? ResponseHeaderBag::DISPOSITION_ATTACHMENT : ResponseHeaderBag::DISPOSITION_INLINE,
-            Transliterator::transliterate($fileName)
+            $fileName
+            //Transliterator::transliterate($fileName)
         );
         $response->headers->set('Content-Disposition', $disposition);
         $response->headers->set('Content-Type', $mimeType ?: 'application/octet-stream');
@@ -830,15 +833,10 @@ class ResourceController extends AbstractResourceController implements CourseCon
                 $file = new UploadedFile($meta['uri'], $fileName, null, null, true);
 
                 $em->persist($newResource);
-                $em->flush();
+                //$em->flush();
             }
 
-            $resourceNode = $repository->addResourceNodeParent($newResource, $this->getUser(), $parentNode);
-
-            if ($fileType === 'file' && $file) {
-                $repository->addFile($resourceNode, $file);
-            }
-
+            $resourceNode = $repository->createNodeForResource($newResource, $this->getUser(), $parentNode, $file);
             $em->persist($resourceNode);
 
             $repository->addResourceNodeToCourse(

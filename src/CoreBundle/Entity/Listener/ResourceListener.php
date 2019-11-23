@@ -6,6 +6,7 @@ namespace Chamilo\CoreBundle\Entity\Listener;
 use Chamilo\CoreBundle\Entity\Resource\AbstractResource;
 use Cocur\Slugify\SlugifyInterface;
 use Doctrine\ORM\Event\LifecycleEventArgs;
+use Doctrine\ORM\Event\PreUpdateEventArgs;
 
 /**
  * Class ResourceListener.
@@ -30,16 +31,28 @@ class ResourceListener
      */
     public function prePersist(AbstractResource $resource, LifecycleEventArgs $args)
     {
-        error_log('prePersist');
+        //error_log('prePersist');
     }
 
     /**
-     * @param AbstractResource   $resource
-     * @param LifecycleEventArgs $args
+     * When updating a Resource
+     *
+     * @param PreUpdateEventArgs $event
      */
-    public function preUpdate(AbstractResource $resource, LifecycleEventArgs $args)
+    public function preUpdate(AbstractResource $resource, PreUpdateEventArgs $event)
     {
-        error_log('preUpdate');
+        /*error_log('preUpdate');
+        $fieldIdentifier = $resource->getResourceFieldName();
+        error_log($fieldIdentifier);
+        $em = $event->getEntityManager();
+        if ($event->hasChangedField($fieldIdentifier)) {
+            error_log('changed');
+            $oldValue = $event->getOldValue($fieldIdentifier);
+            error_log($oldValue);
+            $newValue = $event->getNewValue($fieldIdentifier);
+            error_log($newValue);
+            //$this->updateResourceName($resource, $newValue, $em);
+        }*/
     }
 
     /**
@@ -48,13 +61,19 @@ class ResourceListener
      */
     public function postUpdate(AbstractResource $resource, LifecycleEventArgs $args)
     {
-        error_log('postUpdate');
-
+        //error_log('postUpdate');
         $em = $args->getEntityManager();
+        //$this->updateResourceName($resource, $resource->getResourceName(), $em);
+    }
 
+    public function updateResourceName(AbstractResource $resource, $newValue, $em)
+    {
         // Updates resource node name with the resource name.
-        $resourceNode = $resource->getResourceNode();
-        $name = $resource->getResourceName();
+        /*$resourceNode = $resource->getResourceNode();
+
+        $newName = $resource->getResourceName();
+
+        $name = $resourceNode->getSlug();
 
         if ($resourceNode->hasResourceFile()) {
             $originalExtension = pathinfo($name, PATHINFO_EXTENSION);
@@ -73,6 +92,6 @@ class ResourceListener
             $resourceNode->getResourceFile()->setOriginalName($name);
         }
         $em->persist($resourceNode);
-        $em->flush();
+        $em->flush();*/
     }
 }

@@ -75,13 +75,8 @@ class ResourceUploadController extends BlueimpController
                     ;
 
                     $em->persist($document);
-                    $em->flush();
 
-                    $resourceNode = $repo->addResourceNodeParent($document,$user, $parent);
-                    $document->setId($document->getIid());
-                    $repo->addFile($document, $file);
-                    $em->persist($resourceNode);
-                    $em->flush();
+                    $resourceNode = $repo->createNodeForResource($document, $user, $parent, $file);
 
                     $repo->addResourceNodeToCourse(
                         $resourceNode,
@@ -90,6 +85,8 @@ class ResourceUploadController extends BlueimpController
                         $session,
                         null
                     );
+
+                    $em->flush();
 
                     /*$chunked ?
                         $this->handleChunkedUpload($file, $response, $request) :

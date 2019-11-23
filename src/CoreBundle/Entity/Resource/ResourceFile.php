@@ -209,7 +209,7 @@ class ResourceFile
      */
     public function __toString(): string
     {
-        return (string) $this->getName();
+        return (string) $this->getOriginalName();
     }
 
     /**

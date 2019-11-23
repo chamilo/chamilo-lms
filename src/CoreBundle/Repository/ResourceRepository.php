@@ -206,11 +206,12 @@ class ResourceRepository extends EntityRepository
      *
      * @return ResourceNode
      */
-    public function addResourceNodeParent(AbstractResource $resource, User $creator, ResourceNode $parent = null): ResourceNode
+    public function createNodeForResource(AbstractResource $resource, User $creator, ResourceNode $parent = null, UploadedFile $file = null): ResourceNode
     {
         $em = $this->getEntityManager();
 
         $resourceType = $this->getResourceType();
+
         $resourceNode = new ResourceNode();
         $resourceName = $resource->getResourceName();
         $extension = $this->slugify->slugify(pathinfo($resourceName, PATHINFO_EXTENSION));
@@ -218,8 +219,9 @@ class ResourceRepository extends EntityRepository
         if (empty($extension)) {
             $slug = $this->slugify->slugify($resourceName);
         } else {
-            $baseName = $this->slugify->slugify(pathinfo($resourceName, PATHINFO_BASENAME));
-            $slug = $baseName.'.'.$extension;
+            $originalExtension = pathinfo($resourceName, PATHINFO_EXTENSION);
+            $originalBasename = \basename($resourceName, $originalExtension);
+            $slug = sprintf('%s.%s', $this->slugify->slugify($originalBasename), $originalExtension);
         }
 
         $resourceNode
@@ -233,9 +235,52 @@ class ResourceRepository extends EntityRepository
         }
 
         $resource->setResourceNode($resourceNode);
+        $em->persist($resourceNode);
+        $em->persist($resource);
+
+        if (null !== $file) {
+            $this->addFile($resource, $file);
+        }
+
+        return $resourceNode;
+    }
+
+    /**
+     * @param AbstractResource $resource
+     *
+     * @return ResourceNode
+     */
+    public function updateNodeForResource(AbstractResource $resource): ResourceNode
+    {
+        $em = $this->getEntityManager();
+
+        $resourceNode = $resource->getResourceNode();
+        $resourceName = $resource->getResourceName();
+
+        if ($resourceNode->hasResourceFile()) {
+            $originalExtension = pathinfo($resourceName, PATHINFO_EXTENSION);
+            $originalBasename = \basename($resourceName, $originalExtension);
+            $slug = sprintf(
+                '%s.%s',
+                $this->slugify->slugify($originalBasename),
+                $this->slugify->slugify($originalExtension)
+            );
+
+            $resourceFile = $resourceNode->getResourceFile();
+            $originalName = $resourceFile->getOriginalName();
+            $originalExtension = pathinfo($originalName, PATHINFO_EXTENSION);
+            $newOriginalName = sprintf('%s.%s', $resourceName, $originalExtension);
+            $resourceFile->setOriginalName($newOriginalName);
+            $em->persist($resourceFile);
+        } else {
+            $slug = $this->slugify->slugify($resourceName);
+        }
+
+        $resourceNode->setSlug($slug);
 
         $em->persist($resourceNode);
         $em->persist($resource);
+
         $em->flush();
 
         return $resourceNode;
@@ -265,7 +310,9 @@ class ResourceRepository extends EntityRepository
 
         $resourceNode->setResourceFile($resourceFile);
         $em->persist($resourceNode);
-        $em->flush();
+
+        /*$em->persist($resourceNode);
+        $em->flush();*/
 
         return $resourceFile;
     }
@@ -346,7 +393,6 @@ class ResourceRepository extends EntityRepository
 
         $em = $this->getEntityManager();
         $em->persist($link);
-        $em->flush();
     }
 
     /**
@@ -700,7 +746,7 @@ class ResourceRepository extends EntityRepository
                 } else {
                     $link->setResourceRight([]);
                 }
-                $em->merge($link);
+                $em->persist($link);
             }
         }
         $em->flush();

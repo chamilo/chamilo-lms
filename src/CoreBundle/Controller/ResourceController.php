@@ -145,6 +145,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
 
         $routeParams = ['tool' => $tool, 'type' => $type, 'cidReq' => $courseIdentifier, 'id'];
 
+        // Title link.
         $grid->getColumn('title')->manipulateRenderCell(
             function ($value, Row $row, $router) use ($routeParams) {
                 /** @var CDocument $entity */
@@ -172,6 +173,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
             }
         );
 
+        // Delete mass action.
         if ($this->isGranted(ResourceNodeVoter::ROLE_CURRENT_COURSE_TEACHER)) {
             $deleteMassAction = new MassAction(
                 'Delete',
@@ -182,7 +184,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
             $grid->addMassAction($deleteMassAction);
         }
 
-        // Show resource data
+        // Show resource action.
         $myRowAction = new RowAction(
             $translation->trans('View'),
             'chamilo_core_resource_show',
@@ -190,20 +192,20 @@ class ResourceController extends AbstractResourceController implements CourseCon
             '_self',
             ['class' => 'btn btn-secondary']
         );
-        $myRowAction->setRouteParameters($routeParams);
 
         $setNodeParameters = function (RowAction $action, Row $row) use ($routeParams) {
             $id = $row->getEntity()->getResourceNode()->getId();
             $routeParams['id'] = $id;
             $action->setRouteParameters($routeParams);
+
             return $action;
         };
-        $myRowAction->addManipulateRender($setNodeParameters);
 
+        $myRowAction->addManipulateRender($setNodeParameters);
         $grid->addRowAction($myRowAction);
 
         if ($this->isGranted(ResourceNodeVoter::ROLE_CURRENT_COURSE_TEACHER)) {
-            // Edit
+            // Edit action.
             $myRowAction = new RowAction(
                 $translation->trans('Edit'),
                 'chamilo_core_resource_edit',
@@ -211,20 +213,17 @@ class ResourceController extends AbstractResourceController implements CourseCon
                 '_self',
                 ['class' => 'btn btn-secondary']
             );
-            $myRowAction->setRouteParameters($routeParams);
             $myRowAction->addManipulateRender($setNodeParameters);
-
             $grid->addRowAction($myRowAction);
 
-            // Delete
+            // Delete action.
             $myRowAction = new RowAction(
                 $translation->trans('Delete'),
                 'chamilo_core_resource_delete',
-                false,
+                true,
                 '_self',
-                ['class' => 'btn btn-danger', 'form_delete' => true]
+                ['class' => 'btn btn-danger']
             );
-            $myRowAction->setRouteParameters($routeParams);
             $myRowAction->addManipulateRender($setNodeParameters);
             $grid->addRowAction($myRowAction);
         }
@@ -421,7 +420,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
     }
 
     /**
-     * @Route("/{tool}/{type}/{id}", methods={"DELETE"}, name="chamilo_core_resource_delete")
+     * @Route("/{tool}/{type}/{id}", name="chamilo_core_resource_delete")
      *
      * @param Request $request
      *

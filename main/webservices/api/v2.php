@@ -312,6 +312,13 @@ try {
             $subscribed = $restApi->subscribeUserToSessionFromUsername($_POST['sessionId'], $_POST['loginName']);
             $restResponse->setData($subscribed);
             break;
+        case Rest::GET_SESSION_FROM_EXTRA_FIELD;
+            if (empty($_POST['field_name']) || empty($_POST['field_value'])) {
+                throw new Exception(get_lang('NoData'));
+            }
+            $idSession = $restApi->getSessionFromExtraField($_POST['field_name'], $_POST['field_value']);
+            $restResponse->setData($idSession);
+            break;
         default:
             throw new Exception(get_lang('InvalidAction'));
     }

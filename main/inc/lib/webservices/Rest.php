@@ -60,6 +60,7 @@ class Rest extends WebService
     const ADD_USERS_SESSION = 'add_users_session';
     const CREATE_SESSION_FROM_MODEL = 'create_session_from_model';
     const SUBSCRIBE_USER_TO_SESSION_FROM_USERNAME = 'subscribe_user_to_session_from_username';
+    const GET_SESSION_FROM_EXTRA_FIELD = 'get_session_from_extra_field';
 
     /**
      * @var Session
@@ -1689,5 +1690,31 @@ class Rest extends WebService
         }
 
         return [true];
+    }
+
+    /**
+     * @param $fieldName
+     * @param $fieldValue
+     * @return array
+     * @throws Exception
+     */
+    public function getSessionFromExtraField($fieldName, $fieldValue)
+    {
+        // find sessions that that have value in field
+        $valueModel = new ExtraFieldValue('session');
+        $sessionIdList = $valueModel->get_item_id_from_field_variable_and_field_value($fieldName, $fieldValue, false, false, true);
+
+        // throw if none found
+        if (empty($sessionIdList)) {
+            throw new Exception(get_lang('NoSessionMatched'));
+        }
+
+        // throw if more than one found
+        if (count($sessionIdList) > 1) {
+            throw new Exception(get_lang('MoreThanOneSessionMatched'));
+        }
+
+        // return sessionId
+        return [ intval($sessionIdList[0]['item_id']) ];
     }
 }

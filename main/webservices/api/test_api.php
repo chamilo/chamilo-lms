@@ -23,7 +23,7 @@ class V2Test extends TestCase
     protected function setUp(): void
     {
         $this->client = new Client([
-            'base_uri' => api_get_path(WEB_CODE_PATH).'webservices/api/v2.php',
+            'base_uri' => api_get_path(WEB_CODE_PATH).'webservices/api/',
         ]);
     }
 
@@ -288,4 +288,100 @@ class V2Test extends TestCase
         SessionManager::delete($sessionId);
     }
 
+    /**
+     * @param $apiKey
+     * @depends testAuthenticate
+     */
+    public function testGetSessionFromExtraField($apiKey)
+    {
+        // create 2 extra fields
+        $extraFieldModel = new ExtraField('session');
+        define('FIRST_EXTRA_FIELD_NAME', 'firstExtraField'.time());
+        $firstExtraFieldId = $extraFieldModel->save([
+            'field_type' => ExtraField::FIELD_TYPE_TEXT,
+            'variable' => FIRST_EXTRA_FIELD_NAME,
+            'display_text' => FIRST_EXTRA_FIELD_NAME,
+            'visible_to_self' => 1,
+            'visible_to_others' => 1,
+            'changeable' => 1,
+            'filter' => 1,
+        ]);
+        define('SECOND_EXTRA_FIELD_NAME', 'secondExtraField'.time());
+        $secondExtraFieldId = $extraFieldModel->save([
+            'field_type' => ExtraField::FIELD_TYPE_TEXT,
+            'variable' => SECOND_EXTRA_FIELD_NAME,
+            'display_text' => SECOND_EXTRA_FIELD_NAME,
+            'visible_to_self' => 1,
+            'visible_to_others' => 1,
+            'changeable' => 1,
+            'filter' => 1,
+        ]);
+
+        // create 2 sessions
+        $firstSessionId = SessionManager::create_session(
+            'First session'.time(),
+            '2019-01-01 00:00', '2019-08-31 00:00',
+            '2019-01-01 00:00', '2019-08-31 00:00',
+            '2019-01-01 00:00', '2019-08-31 00:00',
+            null, null
+        );
+        $secondSessionId = SessionManager::create_session(
+            'Second session'.time(),
+            '2019-09-01 00:00', '2019-12-31 00:00',
+            '2019-09-01 00:00', '2019-12-31 00:00',
+            '2019-09-01 00:00', '2019-12-31 00:00',
+            null, null
+        );
+
+        // assign unique distinct value in first field to each session
+        SessionManager::update_session_extra_field_value($firstSessionId, FIRST_EXTRA_FIELD_NAME, $firstSessionId);
+        SessionManager::update_session_extra_field_value($secondSessionId, FIRST_EXTRA_FIELD_NAME, $secondSessionId);
+
+        // assign the same value in second field to all sessions
+        define('COMMON_VALUE', 'common value');
+        SessionManager::update_session_extra_field_value($firstSessionId, SECOND_EXTRA_FIELD_NAME, COMMON_VALUE);
+        SessionManager::update_session_extra_field_value($secondSessionId, SECOND_EXTRA_FIELD_NAME, COMMON_VALUE);
+
+        // assert that the correct session id is returned using each unique value
+        $formParams = [
+            'action' => 'get_session_from_extra_field',
+            'username' => self::WEBSERVICE_USERNAME,
+            'api_key' => $apiKey,
+            'field_name' => FIRST_EXTRA_FIELD_NAME
+        ];
+        foreach( [ $firstSessionId, $secondSessionId ] as $sessionId) {
+            $formParams['field_value'] = $sessionId;
+            $response = $this->client->post('v2.php'/*TODO constant*/, [ 'form_params' => $formParams ] );
+            $this->assertNotNull($response);
+            $this->assertSame(200, $response->getStatusCode());
+            $jsonResponse = json_decode($response->getBody()->getContents());
+            $this->assertNotNull($jsonResponse);
+            $this->assertFalse($jsonResponse->error);
+            $data = $jsonResponse->data;
+            $this->assertIsArray($data);
+            $this->assertSame(1, count($data));
+            $this->assertSame($sessionId, $data[0]);
+        }
+
+        // assert search for common value in second field generates the right error message
+        $formParams['field_name'] = SECOND_EXTRA_FIELD_NAME;
+        $formParams['field_value'] = COMMON_VALUE;
+        $response = $this->client->post('v2.php', [ 'form_params' => $formParams ] );
+        $this->assertNotNull($response);
+        $this->assertSame(200, $response->getStatusCode());
+        $jsonResponse = json_decode($response->getBody()->getContents());
+        $this->assertNotNull($jsonResponse);
+        $this->assertNotFalse($jsonResponse->error);
+        $this->assertSame('MoreThanOneSessionMatched', $jsonResponse->message);
+
+        // assert search for unknown value generates the right error message
+        $formParams['field_value'] = 'value not found';
+        $response = $this->client->post('v2.php', [ 'form_params' => $formParams ] );
+        $this->assertNotNull($response);
+        $this->assertSame(200, $response->getStatusCode());
+        $jsonResponse = json_decode($response->getBody()->getContents());
+        $this->assertNotNull($jsonResponse);
+        $this->assertNotFalse($jsonResponse->error);
+        $this->assertSame('NoSessionMatched', $jsonResponse->message);
+    }
 }

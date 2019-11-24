@@ -55,6 +55,10 @@ class BreadcrumbBlockService extends BaseBreadcrumbMenuBlockService
         $menu = $this->getRootMenu($blockContext);
 
         $menu->addChild('Home', ['route' => 'home']);
+        $sessionId = 0;
+        if ($blockContext->getBlock()->getSetting('session_id')) {
+            $sessionId = $blockContext->getBlock()->getSetting('session_id');
+        }
 
         // Add course
         /** @var Course $course */
@@ -73,6 +77,7 @@ class BreadcrumbBlockService extends BaseBreadcrumbMenuBlockService
                     'route' => 'course_home',
                     'routeParameters' => [
                         'course' => $code,
+                        'id_session' => $sessionId,
                     ],
                 ]
             );

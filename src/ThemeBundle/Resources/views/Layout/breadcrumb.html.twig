@@ -1,4 +1,5 @@
 {% autoescape false %}
+    {# Course comes from the base-layout.html #}
     {% if course is not defined %}
         {% set course = '' %}
     {% endif %}
@@ -13,6 +14,7 @@
             {
                 'context': 'chamilo_core.block.breadcrumb',
                 'course': course,
+                'session_id': session,
                 'legacy_breadcrumb': legacy_breadcrumb,
                 'current_uri': app.request.requestUri
             }

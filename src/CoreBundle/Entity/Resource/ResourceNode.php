@@ -430,6 +430,9 @@ class ResourceNode
         return false;
     }
 
+    /**
+     * @return bool
+     */
     public function isResourceFileAVideo()
     {
         if ($this->hasResourceFile()) {

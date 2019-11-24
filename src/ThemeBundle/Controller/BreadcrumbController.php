@@ -59,13 +59,13 @@ class BreadcrumbController extends AbstractController
             }
         }
 
-        return $this->render(
+        /*return $this->render(
             '@ChamiloTheme/Breadcrumb/breadcrumb.html.twig',
             [
                 'active' => $list,
                 'title' => $title,
             ]
-        );
+        );*/
     }
 
     /**

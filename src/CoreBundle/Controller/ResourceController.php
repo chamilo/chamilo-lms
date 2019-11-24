@@ -222,7 +222,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
 
         // Show resource action.
         $myRowAction = new RowAction(
-            $translation->trans('View'),
+            $translation->trans('Info'),
             'chamilo_core_resource_show',
             false,
             '_self',
@@ -995,6 +995,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
         $type = $request->get('type');
         $resourceNodeId = $request->get('id');
         $courseCode = $request->get('cidReq');
+        $sessionId = $request->get('id_session');
 
         if (!empty($resourceNodeId)) {
             $breadcrumb = $this->breadcrumbBlockService;
@@ -1005,7 +1006,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
                 [
                     'uri' => $this->generateUrl(
                         'chamilo_core_resource_index',
-                        ['tool' => $tool, 'type' => $type, 'cidReq' => $courseCode]
+                        ['tool' => $tool, 'type' => $type, 'cidReq' => $courseCode, 'id_session' => $sessionId]
                     ),
                 ]
             );
@@ -1046,6 +1047,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
                                 'type' => $type,
                                 'id' => $item->getResourceNode()->getId(),
                                 'cidReq' => $courseCode,
+                                'id_session' => $sessionId,
                             ]
                         ),
                     ]
@@ -1057,7 +1059,13 @@ class ResourceController extends AbstractResourceController implements CourseCon
                 [
                     'uri' => $this->generateUrl(
                         'chamilo_core_resource_list',
-                        ['tool' => $tool, 'type' => $type, 'id' => $originalParent->getId(), 'cidReq' => $courseCode]
+                        [
+                            'tool' => $tool,
+                            'type' => $type,
+                            'id' => $originalParent->getId(),
+                            'cidReq' => $courseCode,
+                            'id_session' => $sessionId,
+                        ]
                     ),
                 ]
             );

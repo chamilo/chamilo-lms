@@ -642,7 +642,8 @@ class Rest extends WebService
                 'title' => $forumInfo['forum_title'],
                 'description' => $forumInfo['forum_comment'],
                 'image' => $forumInfo['forum_image'] ? ($webCoursePath.$forumInfo['forum_image']) : '',
-                'numberOfThreads' => isset($forumInfo['number_of_threads']) ? intval($forumInfo['number_of_threads']) : 0,
+                'numberOfThreads' =>
+                    isset($forumInfo['number_of_threads']) ? intval($forumInfo['number_of_threads']) : 0,
                 'lastPost' => null,
             ];
 
@@ -1656,8 +1657,8 @@ class Rest extends WebService
             $modelExtraFields[$field['variable']] = $field['value'];
         }
         $allExtraFields = array_merge($modelExtraFields, $extraFields);
-        foreach($allExtraFields as $k => $v) {
-            if (!SessionManager::update_session_extra_field_value($newSessionId, $k, $v)) {
+        foreach($allExtraFields as $name => $value) {
+            if (!SessionManager::update_session_extra_field_value($newSessionId, $name, $value)) {
                 throw new Exception(get_lang('CouldNotUpdateExtraFieldValue'));
             }
         }
@@ -1700,7 +1701,8 @@ class Rest extends WebService
             throw new Exception(get_lang('UserNotFound'));
         }
 
-        $subscribed = SessionManager::subscribeUsersToSession($sessionId, [$userId], SESSION_VISIBLE_READ_ONLY, false);
+        $subscribed = SessionManager::subscribeUsersToSession(
+            $sessionId, [$userId], SESSION_VISIBLE_READ_ONLY, false);
         if (!$subscribed) {
             throw new Exception(get_lang('UserNotSubscribed'));
         }
@@ -1718,7 +1720,8 @@ class Rest extends WebService
     {
         // find sessions that that have value in field
         $valueModel = new ExtraFieldValue('session');
-        $sessionIdList = $valueModel->get_item_id_from_field_variable_and_field_value($fieldName, $fieldValue, false, false, true);
+        $sessionIdList = $valueModel->get_item_id_from_field_variable_and_field_value(
+            $fieldName, $fieldValue, false, false, true);
 
         // throw if none found
         if (empty($sessionIdList)) {
@@ -1735,18 +1738,18 @@ class Rest extends WebService
     }
 
     /**
-     * @param $user_param
+     * @param $parameters
      * @return array        [ true ] on success
      * @throws Exception
      */
-    public function updateUserFromUserName($user_param)
+    public function updateUserFromUserName($parameters)
     {
         // find user
         $userId = null;
-        foreach($user_param as $k => $v) {
-            if (strtolower($k) === 'loginname') {
-                $userId = UserManager::get_user_id_from_username($v);
-                if (False === $userId) {
+        foreach($parameters as $name => $value) {
+            if (strtolower($name) === 'loginname') {
+                $userId = UserManager::get_user_id_from_username($value);
+                if (false === $userId) {
                     throw new Exception(get_lang('UserNotFound'));
                 }
                 break;
@@ -1768,110 +1771,111 @@ class Rest extends WebService
         }
 
         // apply submitted modifications
-        foreach($user_param as $k => $v) {
-            switch(strtolower($k)) {
+        foreach($parameters as $name => $value) {
+            switch(strtolower($name)) {
                 case 'email':
-                    $user->setEmail($v);
+                    $user->setEmail($value);
                     break;
                 case 'enabled':
-                    $user->setEnabled($v);
+                    $user->setEnabled($value);
                     break;
                 case 'lastname':
-                    $user->setLastname($v);
+                    $user->setLastname($value);
                     break;
                 case 'firstname':
-                    $user->setFirstname($v);
+                    $user->setFirstname($value);
                     break;
                 case 'phone':
-                    $user->setPhone($v);
+                    $user->setPhone($value);
                     break;
                 case 'address':
-                    $user->setAddress($v);
+                    $user->setAddress($value);
                     break;
                 case 'roles':
-                    $user->setRoles($v);
+                    $user->setRoles($value);
                     break;
                 case 'profile_completed':
-                    $user->setProfileCompleted($v);
+                    $user->setProfileCompleted($value);
                     break;
                 case 'auth_source':
-                    $user->setAuthSource($v);
+                    $user->setAuthSource($value);
                     break;
                 case 'status':
-                    $user->setStatus($v);
+                    $user->setStatus($value);
                     break;
                 case 'official_code':
-                    $user->setOfficialCode($v);
+                    $user->setOfficialCode($value);
                     break;
                 case 'picture_uri':
-                    $user->setPictureUri($v);
+                    $user->setPictureUri($value);
                     break;
                 case 'creator_id':
-                    $user->setCreatorId($v);
+                    $user->setCreatorId($value);
                     break;
                 case 'competences':
-                    $user->setCompetences($v);
+                    $user->setCompetences($value);
                     break;
                 case 'diplomas':
-                    $user->setDiplomas($v);
+                    $user->setDiplomas($value);
                     break;
                 case 'openarea':
-                    $user->setOpenArea($v);
+                    $user->setOpenArea($value);
                     break;
                 case 'teach':
-                    $user->setTeach($v);
+                    $user->setTeach($value);
                     break;
                 case 'productions':
-                    $user->setProductions($v);
+                    $user->setProductions($value);
                     break;
                 case 'language':
                     $languages = api_get_languages();
-                    if (!in_array($v, $languages['folder'])) {
+                    if (!in_array($value, $languages['folder'])) {
                         throw new Exception(get_lang('LanguageUnavailable'));
                     }
-                    $user->setLanguage($v);
+                    $user->setLanguage($value);
                     break;
                 case 'registration_date':
-                    $user->setRegistrationDate($v);
+                    $user->setRegistrationDate($value);
                     break;
                 case 'expiration_date':
                     $user->setExpirationDate(new DateTime(
-                        api_get_utc_datetime($v),
+                        api_get_utc_datetime($value),
                         new DateTimeZone('UTC')
                     ));
                     break;
                 case 'active':
                     // see UserManager::update_user() usermanager.lib.php:1205
-                    if ($user->getActive() != $v) {
-                        $user->setActive($v);
-                        Event::addEvent($v ? LOG_USER_ENABLE : LOG_USER_DISABLE, LOG_USER_ID, $userId);
+                    if ($user->getActive() != $value) {
+                        $user->setActive($value);
+                        Event::addEvent($value ? LOG_USER_ENABLE : LOG_USER_DISABLE, LOG_USER_ID, $userId);
                     }
                     break;
                 case 'openid':
-                    $user->setOpenId($v);
+                    $user->setOpenId($value);
                     break;
                 case 'theme':
-                    $user->setTheme($v);
+                    $user->setTheme($value);
                     break;
                 case 'hr_dept_id':
-                    $user->setHrDeptId($v);
+                    $user->setHrDeptId($value);
                     break;
                 case 'extra':
-                    if (is_array($v)) {
-                        if (count($v) > 0) {
-                            if (is_array($v[0])) {
-                                foreach ($v as $field) {
-                                    $field_name = $field['field_name'];
-                                    $field_value = $field['field_value'];
-                                    if (!isset($field_name) || !isset($field_value) ||
-                                        !UserManager::update_extra_field_value($userId, $field_name, $field_value)) {
-                                        throw new Exception(get_lang('CouldNotUpdateExtraFieldValue').': '.print_r($field, true));
+                    if (is_array($value)) {
+                        if (count($value) > 0) {
+                            if (is_array($value[0])) {
+                                foreach ($value as $field) {
+                                    $fieldName = $field['field_name'];
+                                    $fieldValue = $field['field_value'];
+                                    if (!isset($fieldName) || !isset($fieldValue) ||
+                                        !UserManager::update_extra_field_value($userId, $fieldName, $fieldValue)) {
+                                        throw new Exception(
+                                            get_lang('CouldNotUpdateExtraFieldValue').': '.print_r($field, true));
                                     }
                                 }
                             } else {
-                                foreach ($v as $fname => $fvalue) {
-                                    if (!UserManager::update_extra_field_value($userId, $fname, $fvalue)) {
-                                        throw new Exception(get_lang('CouldNotUpdateExtraFieldValue').': '.$fname);
+                                foreach ($value as $fieldName => $fieldValue) {
+                                    if (!UserManager::update_extra_field_value($userId, $fieldName, $fieldValue)) {
+                                        throw new Exception(get_lang('CouldNotUpdateExtraFieldValue').': '.$fieldName);
                                     }
                                 }
                             }
@@ -1898,7 +1902,7 @@ class Rest extends WebService
                 case 'password': // see UserManager::update_user usermanager.lib.php:1182
                 case 'username_canonical':
                 default:
-                    throw new Exception(get_lang('UnsupportedUpdate')." '$k'");
+                    throw new Exception(get_lang('UnsupportedUpdate')." '$name'");
             }
         }
 

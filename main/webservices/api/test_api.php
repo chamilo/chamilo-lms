@@ -13,12 +13,14 @@ use PHPUnit\Framework\TestCase;
 require_once __DIR__.'/../../../vendor/autoload.php';
 require_once __DIR__.'/../../inc/global.inc.php';
 
-
+/**
+ * Class V2Test
+ */
 class V2Test extends TestCase
 {
     const WEBSERVICE_USERNAME = 'admin';
     const WEBSERVICE_PASSWORD = 'admin';
-    const URI = 'webservices/api/v2.php';
+    const RELATIVE_URI = 'webservices/api/v2.php';
     public $client;
     public $apiKey;
 
@@ -29,11 +31,13 @@ class V2Test extends TestCase
      */
     protected function setUp(): void
     {
+        parent::setUp();
+
         $this->client = new Client([
             'base_uri' => api_get_path(WEB_CODE_PATH),
         ]);
 
-        $response = $this->client->post(self::URI, [
+        $response = $this->client->post(self::RELATIVE_URI, [
             'form_params' => [
                 'action' => 'authenticate',
                 'username' => self::WEBSERVICE_USERNAME,
@@ -42,9 +46,9 @@ class V2Test extends TestCase
         ]);
 
         if (200 === $response->getStatusCode()) {
-            $decoded_response = json_decode($response->getBody()->getContents(), false, 3, JSON_THROW_ON_ERROR);
-            if (is_object($decoded_response)) {
-                $this->apiKey = $decoded_response->data->apiKey;
+            $decodedResponse = json_decode($response->getBody()->getContents(), false, 3, JSON_THROW_ON_ERROR);
+            if (is_object($decodedResponse)) {
+                $this->apiKey = $decodedResponse->data->apiKey;
             } else {
                 throw new Exception('The returned JSON document is not an object');
             }
@@ -68,7 +72,7 @@ class V2Test extends TestCase
             'api_key' => $this->apiKey,
             'action' => $action,
         ];
-        $response = $this->client->post(self::URI, ['form_params' => array_merge($baseParams, $parameters)]);
+        $response = $this->client->post(self::RELATIVE_URI, ['form_params' => array_merge($baseParams, $parameters)]);
         $this->assertNotNull($response);
         $this->assertSame(200, $response->getStatusCode());
         $decodedResponse = json_decode($response->getBody()->getContents());
@@ -108,7 +112,8 @@ class V2Test extends TestCase
     {
         $decodedResponse = $this->decodedResponse($action, $parameters);
         $this->assertIsObject($decodedResponse);
-        $this->assertTrue(property_exists($decodedResponse, 'data'), 'response data property is missing: '.print_r($decodedResponse, true));
+        $this->assertTrue(property_exists($decodedResponse, 'data'),
+            'response data property is missing: '.print_r($decodedResponse, true));
         $data = $decodedResponse->data;
         $this->assertIsArray($data);
         return $data;
@@ -180,8 +185,8 @@ class V2Test extends TestCase
             //'expiration_date' => '',
         ];
         $params = [];
-        foreach($ORIGINAL_VALUES as $k => $v) {
-            $params[strtolower($k)] = $v;
+        foreach($ORIGINAL_VALUES as $name => $value) {
+            $params[strtolower($name)] = $value;
         }
         $params['extra'] =  [
             [ 'field_name' => $EXTRA_FIELD_NAME, 'field_value' => $EXTRA_FIELD_VALUE ],
@@ -190,10 +195,10 @@ class V2Test extends TestCase
 
         // compare each saved value to the original
         $user = UserManager::getManager()->find($userId);
-        foreach($ORIGINAL_VALUES as $k => $v) {
-            $kk = ucfirst($k);
-            if ($k !== 'password' and method_exists($user, "get$kk")) {
-                $this->assertSame($v, eval("return \$user->get$kk();"), $k);
+        foreach($ORIGINAL_VALUES as $name => $value) {
+            $methodName = 'get'.ucfirst($name);
+            if ($name !== 'password' and method_exists($user, "$methodName")) {
+                $this->assertSame($value, eval("return \$user->$methodName();"), $name);
             }
         }
 
@@ -235,7 +240,8 @@ class V2Test extends TestCase
             UrlManager::update_urls_rel_session([$modelSessionId], $urlId);
         }
 
-        // create an extra field and set its value in the model session - the new session will be given a different value in this field
+        // create an extra field and set its value in the model session
+        // the new session will be given a different value in this field
         $extraFieldModel = new ExtraField('session');
         $EXTRA_FIELD_NAME = 'extraField'.time();
         $EXTRA_FIELD_VALUE_FOR_MODEL_SESSION = 'extra field value for model';
@@ -249,9 +255,11 @@ class V2Test extends TestCase
             'changeable' => 1,
             'filter' => 1,
         ]);
-        SessionManager::update_session_extra_field_value($modelSessionId, $EXTRA_FIELD_NAME, $EXTRA_FIELD_VALUE_FOR_MODEL_SESSION);
+        SessionManager::update_session_extra_field_value(
+            $modelSessionId, $EXTRA_FIELD_NAME, $EXTRA_FIELD_VALUE_FOR_MODEL_SESSION);
 
-        // create a second extra field and set its value in the model session - the new session will inherit the same value in this field
+        // create a second extra field and set its value in the model session
+        // the new session will inherit the same value in this field
         $SECOND_EXTRA_FIELD_NAME = 'secondExtraField'.time();
         $SECOND_EXTRA_FIELD_VALUE = 'second extra field value';
         $secondExtraFieldId = $extraFieldModel->save([
@@ -263,7 +271,8 @@ class V2Test extends TestCase
             'changeable' => 1,
             'filter' => 1,
         ]);
-        SessionManager::update_session_extra_field_value($modelSessionId, $SECOND_EXTRA_FIELD_NAME, $SECOND_EXTRA_FIELD_VALUE);
+        SessionManager::update_session_extra_field_value(
+            $modelSessionId, $SECOND_EXTRA_FIELD_NAME, $SECOND_EXTRA_FIELD_VALUE);
 
         // subscribe the model session to the promotion - the new session will inherit this too
         SessionManager::subscribe_sessions_to_promotion($promotionId, [$modelSessionId]);
@@ -271,13 +280,16 @@ class V2Test extends TestCase
         // create courses and add them the the model session
         $COURSE_CODES = [ 'course A'.time(), 'course B'.time(), 'course C'.time() ];
         $courseList = [];
+        $authorId = UserManager::get_user_id_from_username(self::WEBSERVICE_USERNAME);
         foreach($COURSE_CODES as $code) {
-            $course = CourseManager::create_course(['code' => $code, 'title' => $code, 'wanted_code' => $code ], UserManager::get_user_id_from_username(self::WEBSERVICE_USERNAME));
+            $course = CourseManager::create_course(['code' => $code, 'title' => $code ], $authorId);
             $courseList[] = $course['real_id'];
         }
         SessionManager::add_courses_to_session($modelSessionId, $courseList);
 
-        // call the webservice to create the new session from the model session, specifying a different value in the first extra field
+        // call the webservice to create the new session from the model session,
+        // specifying a different value in the first extra field
+        // and assert it returns an integer
         $newSessionId = $this->integer($ACTION, [
                 'modelSessionId' => $modelSessionId,
                 'sessionName' => 'Name of the new session'.time(),
@@ -297,22 +309,26 @@ class V2Test extends TestCase
 
         // assert the new session has its own new value in the first extra field
         $extraFieldValueModel = new ExtraFieldValue('session');
-        $extraFieldValue = $extraFieldValueModel->get_values_by_handler_and_field_variable($newSessionId, $EXTRA_FIELD_NAME);
+        $extraFieldValue = $extraFieldValueModel->get_values_by_handler_and_field_variable(
+            $newSessionId, $EXTRA_FIELD_NAME);
         $this->assertNotFalse($extraFieldValue);
         $this->assertSame($EXTRA_FIELD_VALUE_FOR_NEW_SESSION, $extraFieldValue['value']);
 
         // assert the model session still has its own original value in the first extra field
-        $extraFieldValue = $extraFieldValueModel->get_values_by_handler_and_field_variable($modelSessionId, $EXTRA_FIELD_NAME);
+        $extraFieldValue = $extraFieldValueModel->get_values_by_handler_and_field_variable(
+            $modelSessionId, $EXTRA_FIELD_NAME);
         $this->assertNotFalse($extraFieldValue);
         $this->assertSame($EXTRA_FIELD_VALUE_FOR_MODEL_SESSION, $extraFieldValue['value']);
 
         // assert the new session has inherited the model session value in the second extra field
-        $extraFieldValue = $extraFieldValueModel->get_values_by_handler_and_field_variable($newSessionId, $SECOND_EXTRA_FIELD_NAME);
+        $extraFieldValue = $extraFieldValueModel->get_values_by_handler_and_field_variable(
+            $newSessionId, $SECOND_EXTRA_FIELD_NAME);
         $this->assertNotFalse($extraFieldValue);
         $this->assertSame($SECOND_EXTRA_FIELD_VALUE, $extraFieldValue['value']);
 
         // assert the model session still has the same value in the second extra field
-        $extraFieldValue = $extraFieldValueModel->get_values_by_handler_and_field_variable($modelSessionId, $SECOND_EXTRA_FIELD_NAME);
+        $extraFieldValue = $extraFieldValueModel->get_values_by_handler_and_field_variable(
+            $modelSessionId, $SECOND_EXTRA_FIELD_NAME);
         $this->assertNotFalse($extraFieldValue);
         $this->assertSame($SECOND_EXTRA_FIELD_VALUE, $extraFieldValue['value']);
 
@@ -361,7 +377,7 @@ class V2Test extends TestCase
         $userId = UserManager::create_user('Tester', 'Tester', 5, 'tester@local', $loginName, 'xXxxXxxXX');
 
         // create another user and subscribe it to the session
-        $anotherUserId = UserManager::create_user('Tester Bis', 'Tester Bis', 5, 'testerbis@local', $loginName.'bis', 'xXxxXxxXX');
+        $anotherUserId = UserManager::create_user('Tester 2', 'Tester 2', 5, 'tester2@local', $loginName.'t2', 'xXxxX');
         SessionManager::subscribeUsersToSession($sessionId, [$anotherUserId]);
 
         // call the webservice to subscribe the first user to the session
@@ -369,7 +385,9 @@ class V2Test extends TestCase
         $this->assertTrue($subscribed);
 
         // assert we now have two users subscribed to the session
-        $sessionRelUsers = Database::getManager()->getRepository('ChamiloCoreBundle:SessionRelUser')->findBy([ 'session' => $sessionId ]);
+        $sessionRelUsers = Database::getManager()
+            ->getRepository('ChamiloCoreBundle:SessionRelUser')
+            ->findBy([ 'session' => $sessionId ]);
         $this->assertSame(2, count($sessionRelUsers));
 
         // clean up
@@ -468,7 +486,8 @@ class V2Test extends TestCase
         $ACTION = 'update_user_from_username';
         // create a user with initial data and extra field values
         $LOGIN_NAME = 'testUser'.time();
-        $userId = UserManager::create_user('Initial first name', 'Initial last name', 5, 'initial.email@local', $LOGIN_NAME, 'xXxxXxxXX');
+        $userId = UserManager::create_user(
+            'Initial first name', 'Initial last name', 5,'initial.email@local', $LOGIN_NAME, 'xXxxXxxXX');
 
         // create an extra field and initialise its value for the user
         $extraFieldModel = new ExtraField('user');

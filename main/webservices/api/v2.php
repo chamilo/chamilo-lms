@@ -2,10 +2,10 @@
 /* For licensing terms, see /license.txt */
 /**
  * Entry point for REST web services in Chamilo
- * 
+ *
  * Call it with the 'authenticate' action first, to get an api_key, then use
  * the api_key in all subsequent calls.
- * 
+ *
  * Send the REST call parameters as a 'hash' in POST or GET. The hash must be
  * JSON encoded and contain at least 'action', 'username', and either
  * 'password' for the first call or 'api_key' in subsequent calls.
@@ -292,17 +292,18 @@ try {
             $restResponse->setData(['status' => true]);
             break;
         case Rest::CREATE_SESSION_FROM_MODEL:
-            if (
-                empty($_POST['modelSessionId']) || empty($_POST['sessionName']) || empty($_POST['startDate']) || empty($_POST['endDate'])
-            ) {
+            if (empty($_POST['modelSessionId'])
+                || empty($_POST['sessionName'])
+                || empty($_POST['startDate'])
+                || empty($_POST['endDate'])) {
                 throw new Exception(get_lang('NoData'));
             }
-            $modelSessionId = intval($_POST['modelSessionId']);
-            $sessionName = $_POST['sessionName'];
-            $startDate = $_POST['startDate'];
-            $endDate = $_POST['endDate'];
-            $extraFields = isset($_POST['extraFields']) ? $_POST['extraFields'] : [];
-            $newSessionId = $restApi->createSessionFromModel($modelSessionId, $sessionName, $startDate, $endDate, $extraFields);
+            $newSessionId = $restApi->createSessionFromModel(
+                intval($_POST['modelSessionId']),
+                $_POST['sessionName'],
+                $_POST['startDate'],
+                $_POST['endDate'],
+                isset($_POST['extraFields']) ? $_POST['extraFields'] : []);
             $restResponse->setData($newSessionId);
             break;
         case Rest::SUBSCRIBE_USER_TO_SESSION_FROM_USERNAME:

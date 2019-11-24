@@ -14,7 +14,14 @@ use ChamiloSession as Session;
  *                 - delete, copy a file or a directory
  *                 - edit properties & content (name, comments, html content)
  */
-require_once __DIR__.'/../inc/global.inc.php';
+//require_once __DIR__.'/../inc/global.inc.php';
+
+$courseCode = isset($_GET['cidReq']) ? htmlentities($_GET['cidReq']) : '';
+$sessionId = isset($_GET['id_session']) ? (int) $_GET['id_session'] : 0;
+
+$url = "../../public/resources/document/files?cidReq=$courseCode&id_session=$sessionId";
+header("Location: $url");
+exit;
 
 $allowDownloadDocumentsByApiKey = api_get_setting('allow_download_documents_by_api_key') === 'true';
 $current_course_tool = TOOL_DOCUMENT;
@@ -359,7 +366,7 @@ switch ($action) {
         $publicPath = api_get_path(WEB_PUBLIC_PATH);
         $courseCode = api_get_course_id();
         $path = $document_data['path'];
-        $url = $publicPath."courses/$courseCode/document$path";
+        $url = $publicPath."courses/$courseCode/document$path&id_session=$sessionId";
         header("Location: $url");
         exit;
         break;
@@ -1294,7 +1301,6 @@ if ($isAllowedToEdit ||
             $dir_name = $curdirpath.$added_slash.api_replace_dangerous_char($post_dir_name);
             $dir_name = disable_dangerous_file($dir_name);
             $visibility = empty($groupId) ? null : 1;
-
             $newFolderData = create_unexisting_directory(
                 $courseInfo,
                 api_get_user_id(),
@@ -1758,7 +1764,7 @@ if (!$is_certificate_mode && !isset($_GET['move'])) {
 }
 
 $tableToString = '';
-if (!empty($documentAndFolders)) {
+if (!empty($documentAndFolders) && !empty($sortable_data)) {
     $column_show = [];
     if (($isAllowedToEdit || $groupMemberWithUploadRights) && count($documentAndFolders) > 1) {
         $column_show[] = 1;

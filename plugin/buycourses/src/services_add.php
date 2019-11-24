@@ -17,7 +17,7 @@ $users = UserManager::getRepository()->findAll();
 $userOptions = [];
 if (!empty($users)) {
     foreach ($users as $user) {
-        $userOptions[$user->getId()] = $user->getCompleteNameWithUsername();
+        $userOptions[$user->getId()] = UserManager::formatUserFullName($user, true);
     }
 }
 

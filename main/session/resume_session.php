@@ -187,7 +187,7 @@ if ($session->getNbrCourses() === 0) {
         if ($coachSubscriptions) {
             /** @var SessionRelCourseRelUser $subscription */
             foreach ($coachSubscriptions as $subscription) {
-                $namesOfCoaches[] = $subscription->getUser()->getCompleteNameWithUserName();
+                $namesOfCoaches[] = UserManager::formatUserFullName($subscription->getUser(), true);
             }
         }
 

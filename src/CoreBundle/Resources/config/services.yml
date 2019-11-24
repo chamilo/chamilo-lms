@@ -229,8 +229,8 @@ services:
             - {name: kernel.event_listener, event: theme.messages, method: onListMessages}
 
     # Course upload listener
-    chamilo_core.listener.course_upload_listener:
-        class: Chamilo\CoreBundle\EventListener\CourseUploadListener
+    chamilo_core.listener.resource_upload_listener:
+        class: Chamilo\CoreBundle\EventListener\ResourceUploadListener
         arguments: ['@doctrine.orm.entity_manager']
         tags:
             - {name: kernel.event_listener, event: oneup_uploader.post_persist, method: onUpload}

@@ -3,15 +3,17 @@
 
 namespace Chamilo\CoreBundle\EventListener;
 
+use Chamilo\CoreBundle\Entity\Resource\AbstractResource;
+use Chamilo\CoreBundle\Entity\Resource\ResourceNode;
 use Doctrine\Common\Persistence\ObjectManager;
 use Oneup\UploaderBundle\Event\PostPersistEvent;
 use Oneup\UploaderBundle\Uploader\File\FlysystemFile;
 use Oneup\UploaderBundle\Uploader\Response\ResponseInterface;
 
 /**
- * Class UploadListener.
+ * Class ResourceUploadListener.
  */
-class CourseUploadListener
+class ResourceUploadListener
 {
     /**
      * @var ObjectManager
@@ -19,7 +21,7 @@ class CourseUploadListener
     private $om;
 
     /**
-     * CourseUploadListener constructor.
+     * ResourceUploadListener constructor.
      *
      * @param ObjectManager $om
      */
@@ -33,14 +35,22 @@ class CourseUploadListener
      */
     public function onUpload(PostPersistEvent $event)
     {
-        /** @var FlysystemFile $file */
+        /** @var AbstractResource $file */
         $file = $event->getFile();
+        $json = [];
 
-        error_log('CourseUploadListener:onUpload listener'.$file->getPathname());
+        $json['name'] = $file->getResourceName();
+
+        $json['url'] = '#';
+        $json['size'] = format_file_size($file->getSize());
+        $json['type'] = '';
+        $json['result'] = 'ok';
+        error_log('ResourceUploadListener:onUpload listener'.$file->getPath());
 
         // If everything went fine
         $response = $event->getResponse();
-        $response['success'] = true;
+        $list[] = $json;
+        $response['files'] = $list;
 
         return $response;
     }

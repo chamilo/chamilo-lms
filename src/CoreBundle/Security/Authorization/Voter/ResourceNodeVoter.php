@@ -131,8 +131,9 @@ class ResourceNodeVoter extends Voter
         // Checking possible links connected to this resource
         $request = $this->container->get('request_stack')->getCurrentRequest();
 
-        $courseCode = $request->get('course');
-        $sessionId = $request->get('session');
+        // @todo fix parameters.
+        $courseCode = $request->get('cidReq');
+        $sessionId = $request->get('id_session');
 
         $links = $resourceNode->getResourceLinks();
         $linkFound = false;
@@ -147,10 +148,6 @@ class ResourceNodeVoter extends Voter
                 break;
             }
             $linkUser = $link->getUser();
-            $linkCourse = $link->getCourse();
-            $linkSession = $link->getSession();
-            $linkUserGroup = $link->getUserGroup();
-
             // Check if resource was sent to the current user.
             if ($linkUser instanceof UserInterface &&
                 $linkUser->getUsername() === $creator->getUsername()
@@ -158,6 +155,10 @@ class ResourceNodeVoter extends Voter
                 $linkFound = true;
                 break;
             }
+
+            $linkCourse = $link->getCourse();
+            $linkSession = $link->getSession();
+            $linkUserGroup = $link->getUserGroup();
 
             // @todo Check if resource was sent to a usergroup
             // @todo Check if resource was sent to a group inside a course
@@ -181,6 +182,7 @@ class ResourceNodeVoter extends Voter
             // Check if resource was sent to a course
             if ($linkCourse instanceof Course && !empty($courseCode)) {
                 $course = $courseManager->findOneByCode($courseCode);
+
                 if ($course instanceof Course &&
                     $linkCourse->getCode() === $course->getCode()
                 ) {

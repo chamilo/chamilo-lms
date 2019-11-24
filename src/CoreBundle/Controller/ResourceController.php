@@ -467,7 +467,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
         $this->denyAccessUnlessGranted(
             ResourceNodeVoter::VIEW,
             $resourceNode,
-            'Unauthorised access to resource'
+            $this->trans('Unauthorised access to resource')
         );
 
         $tool = $request->get('tool');
@@ -507,7 +507,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
         $this->denyAccessUnlessGranted(
             ResourceNodeVoter::DELETE,
             $resourceNode,
-            'Unauthorised access to resource'
+            $this->trans('Unauthorised access to resource')
         );
 
         $em->remove($resourceNode);
@@ -551,7 +551,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
             $this->denyAccessUnlessGranted(
                 ResourceNodeVoter::DELETE,
                 $resourceNode,
-                'Unauthorised access to resource'
+                $this->trans('Unauthorised access to resource')
             );
 
             $parentId = $resourceNode->getParent()->getId();
@@ -630,7 +630,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
         $this->denyAccessUnlessGranted(
             ResourceNodeVoter::VIEW,
             $resourceNode,
-            'Unauthorised access to resource'
+            $this->trans('Unauthorised access to resource')
         );
 
         return $this->showFile($request, $resourceNode, $glide, $mode, $filter);
@@ -665,7 +665,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
         $this->denyAccessUnlessGranted(
             ResourceNodeVoter::VIEW,
             $resourceNode,
-            'Unauthorised access to resource'
+            $this->trans('Unauthorised access to resource')
         );
 
         $zipName = $resourceNode->getName().'.zip';
@@ -775,7 +775,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
         $this->denyAccessUnlessGranted(
             ResourceNodeVoter::VIEW,
             $resourceNode,
-            'Unauthorised access to resource'
+            $this->trans('Unauthorised access to resource')
         );
         $resourceFile = $resourceNode->getResourceFile();
 

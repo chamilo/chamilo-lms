@@ -9,16 +9,31 @@
                 <br />
                 <img src=
                      "{{ url(
-                         'chamilo_core_resource_file', {id: resource.resourceNode.id, 'type' : type, 'tool' : tool, 'filter' : 'resource_show_preview'}
+                         'chamilo_core_resource_file', {
+                             'id': resource.resourceNode.id,
+                             'cidReq': course.code,
+                             'id_session': sessionObj.id,
+                             'type' : type,
+                             'tool' : tool,
+                             'filter' : 'resource_show_preview'
+                         }
                      ) }}"
                 />
             {% else %}
-
             {% endif %}
             <br />
 
             File:
-            <a href="{{ url('chamilo_core_resource_file', {id: resource.resourceNode.id, 'type' : type, 'tool' : tool, 'mode' : 'download'} ) }}">
+            <a href="{{ url('chamilo_core_resource_file', {
+                'id': resource.resourceNode.id,
+                'cidReq': course.code,
+                'id_session': sessionObj.id,
+                'type' : type,
+                'tool' : tool,
+                'mode' : 'download'
+            }
+            )
+            }}">
                 {{ resource.resourceNode.slug }}
             </a>
             <br />
@@ -31,6 +46,16 @@
         Created at: {{ resource.resourceNode.createdAt | date_to_time_ago }}<br />
         <br />
         Creator: {{ resource.resourceNode.creator }}
+
+        {# Show where the file was added#}
+        {% if resource.resourceNode.resourceLinks %}
+            <br />
+            Added in:
+            <br />
+            {% for link in resource.resourceNode.resourceLinks  %}
+                Course: {{ link.course }} {% if link.session %} Session: {{ link.session }} {% endif %}
+            {% endfor %}
+        {% endif %}
 
     {% endautoescape %}
 {% endblock %}

@@ -201,6 +201,12 @@ class ResourceController extends AbstractResourceController implements CourseCon
                         </video>
                         <a data-fancybox="gallery"  data-width="640" data-height="360" href="#video'.$id.'">'.$value.'</a>';
                     }
+
+                    $url = $router->generate(
+                        'chamilo_core_resource_preview',
+                        $myParams
+                    );
+
                     return '<a data-fancybox="gallery" data-type="iframe" data-src="'.$url.'" href="javascript:;" >'.$value.'</a>';
                 } else {
                     $url = $router->generate(
@@ -247,7 +253,11 @@ class ResourceController extends AbstractResourceController implements CourseCon
             'chamilo_core_resource_show',
             false,
             '_self',
-            ['class' => 'btn btn-secondary', 'icon' => 'fa-info-circle']
+            [
+                'class' => 'btn btn-secondary ',
+                'icon' => 'fa-info-circle',
+                'iframe' => true,
+            ]
         );
 
         $setNodeParameters = function (RowAction $action, Row $row) use ($routeParams) {
@@ -470,7 +480,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
     }
 
     /**
-     * Shows a resource.
+     * Shows a resource information.
      *
      * @Route("/{tool}/{type}/{id}/show", methods={"GET"}, name="chamilo_core_resource_show")
      *
@@ -515,6 +525,54 @@ class ResourceController extends AbstractResourceController implements CourseCon
 
         return $this->render('@ChamiloTheme/Resource/show.html.twig', $params);
     }
+
+    /**
+     * Preview a file. Mostly used when using a modal.
+     *
+     * @Route("/{tool}/{type}/{id}/preview", methods={"GET"}, name="chamilo_core_resource_preview")
+     *
+     * @param Request $request
+     *
+     * @return Response
+     */
+    public function previewAction(Request $request): Response
+    {
+        $this->setBreadCrumb($request);
+        $nodeId = $request->get('id');
+
+        $repository = $this->getRepositoryFromRequest($request);
+
+        /** @var AbstractResource $resource */
+        $resource = $repository->getRepository()->findOneBy(['resourceNode' => $nodeId]);
+
+        if (null === $resource) {
+            throw new NotFoundHttpException();
+        }
+
+        $resourceNode = $resource->getResourceNode();
+
+        if (null === $resourceNode) {
+            throw new NotFoundHttpException();
+        }
+
+        $this->denyAccessUnlessGranted(
+            ResourceNodeVoter::VIEW,
+            $resourceNode,
+            $this->trans('Unauthorised access to resource')
+        );
+
+        $tool = $request->get('tool');
+        $type = $request->get('type');
+
+        $params = [
+            'resource' => $resource,
+            'tool' => $tool,
+            'type' => $type,
+        ];
+
+        return $this->render('@ChamiloTheme/Resource/preview.html.twig', $params);
+    }
+
 
     /**
      * @Route("/{tool}/{type}/{id}/change_visibility", name="chamilo_core_resource_change_visibility")
@@ -1086,7 +1144,6 @@ class ResourceController extends AbstractResourceController implements CourseCon
             ]
         );
     }
-
 
     /**
      * @param Request $request

@@ -43,13 +43,6 @@ resources_document_delete:
     requirements:
         file: .+ # allow "/" in {file}
 
-
-
-
-
-
-
-
 resources_document_folder_download:
     path: /courses/{course}/download_folder/{folderId}
     defaults:

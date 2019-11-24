@@ -1,0 +1,44 @@
+{% extends "@ChamiloTheme/Layout/no_layout.html.twig" %}
+
+{% block content %}
+    {% autoescape false %}
+        <h3>{{ resource }} </h3>
+        {% if resource.resourceNode.resourceFile %}
+            {% if resource.resourceNode.isResourceFileAnImage %}
+                Preview:
+                <br />
+                <img src=
+                     "{{ url(
+                         'chamilo_core_resource_file', {
+                             'id': resource.resourceNode.id,
+                             'cidReq': course.code,
+                             'id_session': sessionObj.id,
+                             'type' : type,
+                             'tool' : tool,
+                             'filter' : 'resource_show_preview'
+                         }
+                     ) }}"
+                />
+            {% else %}
+            {% endif %}
+            <br />
+            Download file:
+            <a
+                href="{{ url('chamilo_core_resource_file', {
+                'id': resource.resourceNode.id,
+                'cidReq': course.code,
+                'id_session': sessionObj.id,
+                'type' : type,
+                'tool' : tool,
+                'mode' : 'download'
+            }
+            )
+            }}">
+                {{ resource.resourceNode.slug }}
+            </a>
+            <br />
+            Size: {{ resource.resourceNode.resourceFile.size }}
+            <br /><br />
+        {% endif %}
+    {% endautoescape %}
+{% endblock %}

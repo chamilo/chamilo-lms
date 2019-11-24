@@ -150,6 +150,9 @@ class CourseListener
                     $sessionHandler->set('session_name', $session->getName());
                     $sessionHandler->set('id_session', $session->getId());
                     $sessionHandler->set('sessionObj', $session);
+
+                    $container->get('twig')->addGlobal('sessionObj', $session);
+
                 } else {
                     throw new NotFoundHttpException($translator->trans('Session not found'));
                 }

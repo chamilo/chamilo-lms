@@ -10,8 +10,6 @@ use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
  * Class SessionAccessListener.
- *
- * @package Chamilo\CourseBundle\EventListener
  */
 class SessionAccessListener
 {
@@ -22,16 +20,27 @@ class SessionAccessListener
      */
     protected $request;
 
+    /**
+     * SessionAccessListener constructor.
+     *
+     * @param EntityManager $em
+     */
     public function __construct(EntityManager $em)
     {
         $this->em = $em;
     }
 
+    /**
+     * @param RequestStack $requestStack
+     */
     public function setRequest(RequestStack $requestStack)
     {
         $this->request = $requestStack->getCurrentRequest();
     }
 
+    /**
+     * @param SessionAccess $event
+     */
     public function onSessionAccessEvent(SessionAccess $event)
     {
         $user = $event->getUser();

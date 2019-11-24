@@ -133,7 +133,13 @@ class ResourceController extends AbstractResourceController implements CourseCon
         $translation = $this->translator;
         $courseIdentifier = $course->getCode();
 
-        $routeParams = ['tool' => $tool, 'type' => $type, 'cidReq' => $courseIdentifier, 'id'];
+        $routeParams = [
+            'tool' => $tool,
+            'type' => $type,
+            'cidReq' => $courseIdentifier,
+            'id',
+            'id_session' => $this->getSessionId(),
+        ];
 
         // Title link.
         $grid->getColumn('title')->setTitle($this->trans('Name'));
@@ -210,7 +216,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
         $grid->setHiddenColumns(['iid']);
 
         // Delete mass action.
-        if ($this->isGranted(ResourceNodeVoter::ROLE_CURRENT_COURSE_TEACHER)) {
+        if ($this->isGranted(ResourceNodeVoter::DELETE, $this->getCourse())) {
             $deleteMassAction = new MassAction(
                 'Delete',
                 'ChamiloCoreBundle:Resource:deleteMass',
@@ -240,7 +246,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
         $myRowAction->addManipulateRender($setNodeParameters);
         $grid->addRowAction($myRowAction);
 
-        if ($this->isGranted(ResourceNodeVoter::ROLE_CURRENT_COURSE_TEACHER)) {
+        if ($this->isGranted(ResourceNodeVoter::EDIT, $this->getCourse())) {
             // Edit action.
             $myRowAction = new RowAction(
                 $translation->trans('Edit'),
@@ -728,8 +734,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
         $this->setBreadCrumb( $request);
         //$helper = $this->container->get('oneup_uploader.templating.uploader_helper');
         //$endpoint = $helper->endpoint('courses');
-        $session = $this->getSession();
-        $sessionId = $session ? $session->getId() : 0;
+        $sessionId = $this->getSessionId();
 
         return $this->render(
             '@ChamiloTheme/Resource/upload.html.twig',
@@ -962,6 +967,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
                     'tool' => $tool,
                     'type' => $type,
                     'cidReq' => $this->getCourse()->getCode(),
+                    'id_session' => $this->getSessionId(),
                 ]
             );
         }

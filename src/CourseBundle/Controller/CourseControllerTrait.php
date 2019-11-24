@@ -46,4 +46,12 @@ trait CourseControllerTrait
     {
         return $this->session;
     }
+
+    /**
+     * @return int
+     */
+    public function getSessionId()
+    {
+        return $this->session ? $this->getSession()->getId() : 0;
+    }
 }

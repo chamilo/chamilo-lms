@@ -9,6 +9,7 @@ use Chamilo\CoreBundle\Entity\Resource\AbstractResource;
 use Chamilo\CoreBundle\Entity\Resource\ResourceInterface;
 use Chamilo\CoreBundle\Entity\Resource\ResourceLink;
 use Chamilo\CoreBundle\Entity\Session;
+use Chamilo\CourseBundle\Traits\ShowCourseResourcesInSessionTrait;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -31,6 +32,8 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class CDocument extends AbstractResource implements ResourceInterface
 {
+    use ShowCourseResourcesInSessionTrait;
+
     /**
      * @var int
      *

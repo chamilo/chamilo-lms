@@ -40,7 +40,6 @@
         "ext-dom": "*",
         "ext-fileinfo": "*",
         "ext-gd": "*",
-        "ext-exif": "*",
         "ext-intl": "*",
         "ext-json": "*",
         "ext-libxml": "*",

@@ -381,4 +381,12 @@ class ResourceLink
             'Deleted' => self::VISIBILITY_DELETED,
         ];
     }
+
+    /**
+     * @return string
+     */
+    public function getVisibilityName()
+    {
+        return array_flip($this->getVisibilityList())[$this->getVisibility()];
+    }
 }

@@ -15,6 +15,7 @@ use Chamilo\CoreBundle\Entity\Resource\AbstractResource;
 use Chamilo\CoreBundle\Entity\Resource\ResourceLink;
 use Chamilo\CoreBundle\Entity\Resource\ResourceNode;
 use Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter;
+use Chamilo\CourseBundle\Component\CourseCopy\Resources\Resource;
 use Chamilo\CourseBundle\Controller\CourseControllerInterface;
 use Chamilo\CourseBundle\Controller\CourseControllerTrait;
 use Chamilo\CourseBundle\Entity\CDocument;
@@ -26,6 +27,7 @@ use FOS\CKEditorBundle\Form\Type\CKEditorType;
 use League\Flysystem\Filesystem;
 use Symfony\Component\Filesystem\Exception\FileNotFoundException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -260,6 +262,38 @@ class ResourceController extends AbstractResourceController implements CourseCon
         $grid->addRowAction($myRowAction);
 
         if ($this->isGranted(ResourceNodeVoter::EDIT, $this->getCourse())) {
+            // Enable/Disable
+            $myRowAction = new RowAction(
+                '',
+                'chamilo_core_resource_change_visibility',
+                false,
+                '_self'
+            );
+
+            $setVisibleParameters = function (RowAction $action, Row $row) use ($routeParams) {
+                /** @var CDocument $resource */
+                $resource = $row->getEntity();
+                $id = $resource->getResourceNode()->getId();
+
+                $icon = 'fa-eye-slash';
+                if ($resource->getCourseSessionResourceLink()->getVisibility() === ResourceLink::VISIBILITY_PUBLISHED) {
+                    $icon = 'fa-eye';
+                }
+                $routeParams['id'] = $id;
+                $action->setRouteParameters($routeParams);
+                $attributes = [
+                    'class' => 'btn btn-secondary change_visibility',
+                    'data-id' => $id,
+                    'icon' => $icon,
+                ];
+                $action->setAttributes($attributes);
+
+                return $action;
+            };
+
+            $myRowAction->addManipulateRender($setVisibleParameters);
+            $grid->addRowAction($myRowAction);
+
             // Edit action.
             $myRowAction = new RowAction(
                 $translation->trans('Edit'),
@@ -481,6 +515,55 @@ class ResourceController extends AbstractResourceController implements CourseCon
 
         return $this->render('@ChamiloTheme/Resource/show.html.twig', $params);
     }
+
+    /**
+     * @Route("/{tool}/{type}/{id}/change_visibility", name="chamilo_core_resource_change_visibility")
+     *
+     * @param Request $request
+     *
+     * @return Response
+     */
+    public function changeVisibilityAction(Request $request): Response
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $id = $request->get('id');
+
+        $repository = $this->getRepositoryFromRequest($request);
+
+        /** @var AbstractResource $resource */
+        $resource = $repository->getRepository()->findOneBy(['resourceNode' => $id]);
+
+        if (null === $resource) {
+            throw new NotFoundHttpException();
+        }
+
+        $resourceNode = $resource->getResourceNode();
+
+        $this->denyAccessUnlessGranted(
+            ResourceNodeVoter::EDIT,
+            $resourceNode,
+            $this->trans('Unauthorised access to resource')
+        );
+        /** @var ResourceLink $link */
+        $link = $resource->getCourseSessionResourceLink();
+
+        $newVisibility = ResourceLink::VISIBILITY_PUBLISHED;
+        $icon = 'fa-eye';
+        if ($link->getVisibility() === ResourceLink::VISIBILITY_PUBLISHED) {
+            $newVisibility = ResourceLink::VISIBILITY_DRAFT;
+            $icon = 'fa-eye-slash';
+        }
+
+        $link->setVisibility($newVisibility);
+        $em->persist($link);
+        $em->flush();
+
+        $result = ['icon' => $icon];
+
+        return new JsonResponse($result);
+    }
+
 
     /**
      * @Route("/{tool}/{type}/{id}", name="chamilo_core_resource_delete")

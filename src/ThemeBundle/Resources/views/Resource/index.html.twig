@@ -36,6 +36,29 @@
                     autoStart: false
                 }
             });
+
+            $('.change_visibility').on('click', function (e) {
+                e.preventDefault();
+                var link = $(this);
+                var url = $(this).attr('href');
+                console.log(url);
+                $.ajax({
+                    type: "post",
+                    url: url,
+                    contentType: "html",
+                    beforeSend: function(){
+                        link.find('i').addClass('fa-spinner fa-spin');
+                        link.find('i').removeClass('fa-eye');
+                        link.find('i').removeClass('fa-eye-slash');
+                    },
+                    success: function (response) {
+                        link.find('i').removeClass('fa-eye');
+                        link.find('i').removeClass('fa-eye-slash');
+                        link.find('i').removeClass('fa-spinner fa-spin');
+                        link.find('i').addClass(response.icon);
+                    },
+                });
+            });
         });
     </script>
 

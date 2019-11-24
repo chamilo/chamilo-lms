@@ -165,3 +165,24 @@
     </div>
   </div>
 {% endblock grid_column_filter_type_input %}
+
+
+{# ---------------------------------------------------- grid_pager_selectpage -------------------------------------------------- #}
+{% block grid_pager_selectpage %}
+  {{ 'Page'|trans }}
+  {% spaceless %}
+    <input type="button" class="btn btn-secondary prev" {% if grid.page <= 0 %}disabled="disabled"{% endif %} value="<" onclick="return {{ grid.hash }}_previousPage();"/>
+    <input type="text" class="current" value="{{ grid.page + 1 }}" size="2" onkeypress="return {{ grid.hash }}_enterPage(event, parseInt(this.value)-1);"/>
+    <input type="button" value=">" class="btn btn-secondary next" {% if grid.page >= grid.pageCount-1 %}disabled="disabled"{% endif %} onclick="return {{ grid.hash }}_nextPage();"/> {{ 'of %count%'|trans({ '%count%' : grid.pageCount }) }}
+  {% endspaceless %}
+{% endblock grid_pager_selectpage %}
+{# ---------------------------------------------------- grid_pager_results_perpage -------------------------------------------------- #}
+{% block grid_pager_results_perpage %}
+  {{ ', Display'|trans }}
+  <select onchange="return {{ grid.hash }}_resultsPerPage(this.value);">
+    {% for key, value in grid.limits %}
+      <option value="{{ key }}"{% if (key == grid.limit) %} selected="selected"{% endif %}>{{ value }}</option>
+    {% endfor %}
+  </select> {{ 'Items per page'|trans }}
+{% endblock grid_pager_results_perpage %}
+

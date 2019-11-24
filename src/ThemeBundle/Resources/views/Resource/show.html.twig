@@ -53,9 +53,8 @@
             Added in:
             <br />
             {% for link in resource.resourceNode.resourceLinks  %}
-                Course: {{ link.course }} {% if link.session %} Session: {{ link.session }} {% endif %}
+                Course: {{ link.course }} {% if link.session %} - Session: {{ link.session }} {% endif %} - Visibility: {{ link.visibilityName | trans }}
             {% endfor %}
         {% endif %}
-
     {% endautoescape %}
 {% endblock %}

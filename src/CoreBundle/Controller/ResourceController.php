@@ -25,6 +25,7 @@ use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\QueryBuilder;
 use FOS\CKEditorBundle\Form\Type\CKEditorType;
 use League\Flysystem\Filesystem;
+use Oneup\UploaderBundle\Uploader\Response\EmptyResponse;
 use Symfony\Component\Filesystem\Exception\FileNotFoundException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -153,8 +154,8 @@ class ResourceController extends AbstractResourceController implements CourseCon
             'tool' => $tool,
             'type' => $type,
             'cidReq' => $courseIdentifier,
-            'id',
             'id_session' => $this->getSessionId(),
+            'id',
         ];
 
         // Title link.
@@ -427,6 +428,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
                             'tool' => $tool,
                             'type' => $type,
                             'cidReq' => $this->getCourse()->getCode(),
+                            'id_session' => $this->getSessionId(),
                             'id' => $resourceNodeParentId
                         )
                     ],
@@ -466,6 +468,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
                     'tool' => $tool,
                     'type' => $type,
                     'cidReq' => $this->getCourse()->getCode(),
+                    'id_session' => $this->getSessionId(),
                 ]
             );
         }
@@ -662,6 +665,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
                 'tool' => $tool,
                 'type' => $type,
                 'cidReq' => $this->getCourse()->getCode(),
+                'id_session' => $this->getSessionId(),
             ]
         );
     }
@@ -709,6 +713,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
                 'tool' => $tool,
                 'type' => $type,
                 'cidReq' => $this->getCourse()->getCode(),
+                'id_session' => $this->getSessionId(),
             ]
         );
     }
@@ -885,10 +890,18 @@ class ResourceController extends AbstractResourceController implements CourseCon
      */
     public function uploadAction(Request $request, $tool, $type, $id): Response
     {
+        $repository = $this->getRepositoryFromRequest($request);
+        $resourceNode = $repository->getResourceNodeRepository()->find($id);
+
+        $this->denyAccessUnlessGranted(
+            ResourceNodeVoter::EDIT,
+            $resourceNode,
+            $this->trans('Unauthorised access to resource')
+        );
+
         $this->setBreadCrumb( $request);
         //$helper = $this->container->get('oneup_uploader.templating.uploader_helper');
         //$endpoint = $helper->endpoint('courses');
-        $sessionId = $this->getSessionId();
 
         return $this->render(
             '@ChamiloTheme/Resource/upload.html.twig',
@@ -897,7 +910,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
                 'type' => $type,
                 'tool' => $tool,
                 'cidReq' => $this->getCourse()->getCode(),
-                'id_session' => $sessionId,
+                'id_session' => $this->getSessionId(),
             ]
         );
     }
@@ -1001,6 +1014,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
                             'tool' => $tool,
                             'type' => $type,
                             'cidReq' => $this->getCourse()->getCode(),
+                            'id_session' => $this->getSessionId(),
                             'id' => $resourceNodeParentId
                         )
                     ],

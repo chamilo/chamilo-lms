@@ -35,25 +35,22 @@ class CourseHomeController extends ToolBaseController
      */
     public function indexAction(Request $request)
     {
-        $session = $this->getSession();
         $course = $this->getCourse();
-        $courseCode = $course->getId();
         $result = $this->autoLaunch();
-
         $js = '<script>'.api_get_language_translate_html().'</script>';
         $htmlHeadXtra[] = $js;
 
         $user_id = api_get_user_id();
-        $course_code = api_get_course_id();
-        $courseId = api_get_course_int_id();
-        $sessionId = api_get_session_id();
+        $courseCode = $course->getCode();
+        $courseId = $course->getId();
+        $sessionId = $this->getSessionId();
         $show_message = '';
 
         if (api_is_invitee()) {
             $isInASession = $sessionId > 0;
             $isSubscribed = CourseManager::is_user_subscribed_in_course(
                 $user_id,
-                $course_code,
+                $courseCode,
                 $isInASession,
                 $sessionId
             );
@@ -71,7 +68,7 @@ class CourseHomeController extends ToolBaseController
 
         if ($isSpecialCourse) {
             if (isset($_GET['autoreg']) && $_GET['autoreg'] == 1) {
-                if (CourseManager::subscribeUser($user_id, $course_code, STUDENT)) {
+                if (CourseManager::subscribeUser($user_id, $courseCode, STUDENT)) {
                     Session::write('is_allowed_in_course', true);
                 }
             }
@@ -82,9 +79,9 @@ class CourseHomeController extends ToolBaseController
         if ($action == 'subscribe') {
             if (Security::check_token('get')) {
                 Security::clear_token();
-                $result = CourseManager::autoSubscribeToCourse($course_code);
+                $result = CourseManager::autoSubscribeToCourse($courseCode);
                 if ($result) {
-                    if (CourseManager::is_user_subscribed_in_course($user_id, $course_code)) {
+                    if (CourseManager::is_user_subscribed_in_course($user_id, $courseCode)) {
                         Session::write('is_allowed_in_course', true);
                     }
                 }
@@ -97,9 +94,9 @@ class CourseHomeController extends ToolBaseController
         api_protect_course_script(true);
 
         /*  STATISTICS */
-        if (!isset($coursesAlreadyVisited[$course_code])) {
+        if (!isset($coursesAlreadyVisited[$courseCode])) {
             Event::accessCourse();
-            $coursesAlreadyVisited[$course_code] = 1;
+            $coursesAlreadyVisited[$courseCode] = 1;
             Session::write('coursesAlreadyVisited', $coursesAlreadyVisited);
         }
 

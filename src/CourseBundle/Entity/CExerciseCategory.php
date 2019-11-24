@@ -18,7 +18,7 @@ use Gedmo\Timestampable\Traits\TimestampableEntity;
  *
  * @ORM\Entity(repositoryClass="Gedmo\Sortable\Entity\Repository\SortableRepository")
  *
- * @GRID\Source(columns="id, name")
+ * @GRID\Source(columns="id, name", filterable=false)
  */
 class CExerciseCategory extends AbstractResource implements ResourceInterface
 {

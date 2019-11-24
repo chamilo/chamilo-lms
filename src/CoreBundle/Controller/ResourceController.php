@@ -95,6 +95,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
     {
         $tool = $request->get('tool');
         $type = $request->get('type');
+        $id = (int) $request->get('id');
 
         $repository = $this->getRepositoryFromRequest($request);
         $class = $repository->getRepository()->getClassName();
@@ -129,16 +130,16 @@ class ResourceController extends AbstractResourceController implements CourseCon
                     'type' => $type,
                     'cidReq' => $this->getCourse()->getCode(),
                     'id_session' => $this->getSessionId(),
-                    'id' => $request->get('id'),
+                    'id' => $id,
                 ]
             )
         );
 
         $title = $grid->getColumn('title');
-        $title->setSafe(false);
+        $title->setSafe(false); // allows links in the title
 
         //$grid->hideFilters();
-        $grid->setLimits(20);
+        //$grid->setLimits(20);
         //$grid->isReadyForRedirect();
         //$grid->setMaxResults(1);
         //$grid->setLimits(2);
@@ -160,7 +161,6 @@ class ResourceController extends AbstractResourceController implements CourseCon
 
         $grid->getColumn('title')->manipulateRenderCell(
             function ($value, Row $row, $router) use ($routeParams) {
-
                 /** @var Router $router */
                 /** @var CDocument $entity */
                 $entity = $row->getEntity();

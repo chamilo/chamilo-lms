@@ -156,12 +156,12 @@ apy_data_grid:
 #    actions_columns_size: -1
 #    actions_columns_title: "Actions"
 #    actions_columns_separator: "<br />"
-#    pagerfanta:
-#        enable: false
-#        view_class: "Pagerfanta\View\DefaultView"
-#        options:
-#            prev_message: "«"
-#            next_message: "»"
+    pagerfanta:
+        enable: true
+        view_class: 'Pagerfanta\View\TwitterBootstrap4View'
+        options:
+            prev_message: "«"
+            next_message: "»"
 
 # Course settings
 chamilo_course:

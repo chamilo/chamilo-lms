@@ -121,6 +121,19 @@ class ResourceController extends AbstractResourceController implements CourseCon
         $source->initQueryBuilder($qb);
         $grid->setSource($source);
 
+        $grid->setRouteUrl(
+            $this->generateUrl(
+                'chamilo_core_resource_list',
+                [
+                    'tool' => $tool,
+                    'type' => $type,
+                    'cidReq' => $this->getCourse()->getCode(),
+                    'id_session' => $this->getSessionId(),
+                    'id' => $request->get('id'),
+                ]
+            )
+        );
+
         $title = $grid->getColumn('title');
         $title->setSafe(false);
 
@@ -180,7 +193,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
                         );
 
                         return '
-                        <video width="640" height="320" controls id="video'.$id.'" style="display:none;">
+                        <video width="640" height="320" controls id="video'.$id.'" controls preload="metadata" style="display:none;">
                             <source src="'.$url.'" type="video/mp4">
                             Your browser doesn\'t support HTML5 video tag.
                         </video>
@@ -232,7 +245,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
             'chamilo_core_resource_show',
             false,
             '_self',
-            ['class' => 'btn btn-secondary']
+            ['class' => 'btn btn-secondary', 'icon' => 'fa-info-circle']
         );
 
         $setNodeParameters = function (RowAction $action, Row $row) use ($routeParams) {

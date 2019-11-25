@@ -4468,6 +4468,11 @@ isstream@~0.1.2:
   resolved "https://registry.yarnpkg.com/isstream/-/isstream-0.1.2.tgz#47e63f7af55afa6f92e1500e690eb8b8529c099a"
   integrity sha1-R+Y/evVa+m+S4VAOaQ64uFKcCZo=
 
+jquery-contextmenu@^2.9.0:
+  version "2.9.0"
+  resolved "https://registry.yarnpkg.com/jquery-contextmenu/-/jquery-contextmenu-2.9.0.tgz#3e0635b6e9da4140dc926892543df3d66f8a84dd"
+  integrity sha512-sn0eyBNeIa7AOdU+j3lP2YZ0bbtkrTCtkp3S7UwRf8lurPVKI/3uyOV3h/pMyJclfmO6ps5shObQTfzJiaN/OQ==
+
 jquery-ui-timepicker-addon@^1.6.3:
   version "1.6.3"
   resolved "https://registry.yarnpkg.com/jquery-ui-timepicker-addon/-/jquery-ui-timepicker-addon-1.6.3.tgz#8037c39b0b630282dd0b37dd8ad7fc5e1163377f"
@@ -4488,7 +4493,7 @@ jquery.scrollbar@^0.2.11:
   resolved "https://registry.yarnpkg.com/jquery.scrollbar/-/jquery.scrollbar-0.2.11.tgz#e91bd4a97d83859463024d26e730dc36676ab59d"
   integrity sha1-6RvUqX2DhZRjAk0m5zDcNmdqtZ0=
 
-jquery@>2.1.4, jquery@>=1.10, "jquery@>=1.5.0 <4.0", jquery@>=1.6.0, jquery@>=1.7, jquery@>=1.7.0, jquery@^3.3.1, jquery@^3.4, jquery@^3.4.1:
+jquery@>2.1.4, jquery@>=1.10, "jquery@>=1.5.0 <4.0", jquery@>=1.6.0, jquery@>=1.7, jquery@^3.3.1, jquery@^3.4, jquery@^3.4.1:
   version "3.4.1"
   resolved "https://registry.yarnpkg.com/jquery/-/jquery-3.4.1.tgz#714f1f8d9dde4bdfa55764ba37ef214630d80ef2"
   integrity sha512-36+AdBzCL+y6qjw5Tx7HgzeGCzC81MDDgaUP8ld2zhx58HdqXGoBd+tHdrBMiyjGQs0Hxs/MLZTu/eHNJJuWPw==
@@ -4671,13 +4676,6 @@ lcid@^2.0.0:
   integrity sha512-avPEb8P8EGnwXKClwsNUgryVjllcRqtMYa49NTsbQagYuT1DcXnl1915oxWjoyGrXR6zH/Y0Zc96xWsPcoDKeA==
   dependencies:
     invert-kv "^2.0.0"
-
-lightgallery@^1.6.12:
-  version "1.6.12"
-  resolved "https://registry.yarnpkg.com/lightgallery/-/lightgallery-1.6.12.tgz#c024428d1488969075dc551a85dddf905adb0e4b"
-  integrity sha512-t8hIgZc3ZvGW9pG8Bd68bXcUj7FWGewaroT7ADYo2fvQTgkqcMMLtXw9yQclS7BF0soadA0B6BN3MWOEiS2pYA==
-  dependencies:
-    jquery ">=1.7.0"
 
 linkifyjs@^2.1.8:
   version "2.1.8"

@@ -249,7 +249,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
             false,
             '_self',
             [
-                'class' => 'btn btn-secondary ',
+                'class' => 'btn btn-secondary info_action',
                 'icon' => 'fa-info-circle',
                 'iframe' => true,
             ]
@@ -259,6 +259,12 @@ class ResourceController extends AbstractResourceController implements CourseCon
             $id = $row->getEntity()->getResourceNode()->getId();
             $routeParams['id'] = $id;
             $action->setRouteParameters($routeParams);
+            $attributes = $action->getAttributes();
+            $attributes['data-action'] = $action->getRoute();
+            $attributes['data-action-id'] = $action->getRoute().'_'.$id;
+            $attributes['data-node-id'] = $id;
+
+            $action->setAttributes($attributes);
 
             return $action;
         };
@@ -305,8 +311,20 @@ class ResourceController extends AbstractResourceController implements CourseCon
                 'chamilo_core_resource_edit',
                 false,
                 '_self',
-                ['class' => 'btn btn-secondary']
+                ['class' => 'btn btn-secondary', 'icon' => 'fa fa-pen']
             );
+            $myRowAction->addManipulateRender($setNodeParameters);
+            $grid->addRowAction($myRowAction);
+
+            // More action.
+            $myRowAction = new RowAction(
+                $translation->trans('More'),
+                'chamilo_core_resource_preview',
+                false,
+                '_self',
+                ['class' => 'btn btn-secondary edit_resource', 'icon' => 'fa fa-ellipsis-h']
+            );
+
             $myRowAction->addManipulateRender($setNodeParameters);
             $grid->addRowAction($myRowAction);
 
@@ -316,7 +334,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
                 'chamilo_core_resource_delete',
                 true,
                 '_self',
-                ['class' => 'btn btn-danger']
+                ['class' => 'btn btn-danger', 'hidden' => true]
             );
             $myRowAction->addManipulateRender($setNodeParameters);
             $grid->addRowAction($myRowAction);

@@ -36,6 +36,7 @@
     "fullcalendar": "^3.0",
     "highlight.js": "^9.12.0",
     "image-map-resizer": "^1.0.10",
+    "jquery-contextmenu": "^2.9.0",
     "jquery-ui": "^1.12.1",
     "jquery-ui-timepicker-addon": "^1.6.3",
     "jquery-ui-touch-punch": "^0.2.3",

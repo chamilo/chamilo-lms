@@ -30,6 +30,7 @@
 
     <script>
         $(function () {
+            // Preview action.
             $('[data-fancybox="gallery"]').fancybox({
                 toolbar: "true",
                 buttons: [
@@ -59,11 +60,11 @@
                 {#'</div>',#}
             });
 
+            // Visibility action.
             $('.change_visibility').on('click', function (e) {
                 e.preventDefault();
                 var link = $(this);
                 var url = $(this).attr('href');
-                console.log(url);
                 $.ajax({
                     type: "post",
                     url: url,
@@ -81,6 +82,42 @@
                     },
                 });
             });
+
+            // More action.
+            $.contextMenu({
+                selector: '.edit_resource',
+                callback: function(key, options, e) {
+                    e.preventDefault();
+                    var nodeId = options.$trigger.attr("data-node-id");
+                    var action = 'chamilo_core_resource_'+key+ '_'+nodeId;
+                    console.log(action);
+                    var newOption = options.$trigger.parent().find("[data-action-id='" + action + "']");
+                    var link = $(newOption).attr('href');
+
+                    if (link == 'javascript:;' || key == 'delete') {
+                        $(newOption).click();
+                    } else {
+                        window.location.href = link;
+                    }
+                    return true;
+                },
+                autoHide: false,
+                animation: {duration: 250, show: 'fadeIn', hide: 'fadeOut'},
+                trigger: 'left',
+                items: {
+                    // "preview": {name: "Preview", icon: "fas fa-search"},
+                    "show": {name: "Info", icon: "fas fa-info-circle"},
+                    "sep1": "---------",
+                    "edit": {name: "Edit", icon: "fas fa-pen"},
+                    //"download": {name: "Download", icon: "fas fa-arrow-alt-circle-down"},
+                    "delete": {name: "Delete", icon: "fas fa-trash"},
+                }
+            });
+
+            $('.edit_resource').on('click', function(e) {
+                e.preventDefault();
+                console.log('clicked', this);
+            })
         });
     </script>
 

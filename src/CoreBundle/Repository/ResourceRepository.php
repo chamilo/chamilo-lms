@@ -310,9 +310,6 @@ class ResourceRepository extends EntityRepository
         $resourceNode->setResourceFile($resourceFile);
         $em->persist($resourceNode);
 
-        /*$em->persist($resourceNode);
-        $em->flush();*/
-
         return $resourceFile;
     }
 
@@ -694,12 +691,12 @@ class ResourceRepository extends EntityRepository
 
     /**
      * @param AbstractResource $resource
-     * @param                  $visibility
+     * @param int              $visibility
      * @param bool             $recursive
      *
      * @return bool
      */
-    private function setLinkVisibility(AbstractResource $resource, $visibility, $recursive = true)
+    private function setLinkVisibility(AbstractResource $resource, int $visibility, bool $recursive = true): bool
     {
         $resourceNode = $resource->getResourceNode();
 

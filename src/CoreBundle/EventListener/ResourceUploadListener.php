@@ -9,6 +9,7 @@ use Doctrine\Common\Persistence\ObjectManager;
 use Oneup\UploaderBundle\Event\PostPersistEvent;
 use Oneup\UploaderBundle\Uploader\File\FlysystemFile;
 use Oneup\UploaderBundle\Uploader\Response\ResponseInterface;
+use Symfony\Component\Routing\RouterInterface;
 
 /**
  * Class ResourceUploadListener.
@@ -19,15 +20,17 @@ class ResourceUploadListener
      * @var ObjectManager
      */
     private $om;
+    private $router;
 
     /**
      * ResourceUploadListener constructor.
      *
      * @param ObjectManager $om
      */
-    public function __construct(ObjectManager $om)
+    public function __construct(ObjectManager $om, RouterInterface $router)
     {
         $this->om = $om;
+        $this->router = $router;
     }
 
     /**
@@ -35,22 +38,28 @@ class ResourceUploadListener
      */
     public function onUpload(PostPersistEvent $event)
     {
-        /** @var AbstractResource $file */
-        $file = $event->getFile();
-        $json = [];
+        /** @var AbstractResource $resource */
+        $resource = $event->getFile();
+        $resourceNode = $resource->getResourceNode();
 
-        $json['name'] = $file->getResourceName();
+        $tool = $resourceNode->getResourceType()->getTool();
+        $type = $resourceNode->getResourceType()->getName();
 
-        $json['url'] = '#';
-        $json['size'] = format_file_size($file->getSize());
-        $json['type'] = '';
-        $json['result'] = 'ok';
-        error_log('ResourceUploadListener:onUpload listener'.$file->getPath());
+        $output = [[
+            'name' => $resource->getResourceName(),
+            //'thumbnail_url' => '',
+            'url' => $this->router->generate(
+                'chamilo_core_resource_file',
+                ['tool' => $tool, 'type' => $type, 'id' => $resourceNode->getId()]
+            ),
+            'size' => format_file_size($resource->getSize()),
+            'type' => '',
+            'result' => 'ok',
+        ]];
 
         // If everything went fine
         $response = $event->getResponse();
-        $list[] = $json;
-        $response['files'] = $list;
+        $response['files'] = $output;
 
         return $response;
     }

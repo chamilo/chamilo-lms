@@ -19,6 +19,7 @@
       });
 
       $('#fileupload').fileupload({
+          dataType: 'json',
           formData: {
               type: '{{ type }}',
               tool: '{{ tool }}',
@@ -62,11 +63,9 @@
               progress + '%'
           );
       }).on('fileuploaddone', function (e, data) {
-
           $.each(data.result.files, function (index, file) {
               if (file.error) {
-                  var link = $('<div>')
-                      .attr({class : 'panel-image'})                            ;
+                  var link = $('<div>').attr({class : 'panel-image'});
                   $(data.context.children()[index]).parent().wrap(link);
                   // Update file name with new one from Chamilo
                   $(data.context.children()[index]).parent().find('.file_name').html(file.name);
@@ -77,8 +76,6 @@
 
                   return;
               }
-
-
               if (file.url) {
                   var link = $('<a>')
                       .attr({target: '_blank', class : 'panel-image'})
@@ -114,13 +111,7 @@
           $('#dropzone').removeClass('hover');
       });
       $('.fileinput-button').hide();
-
-
-
   });
-
-
-
 </script>
 
 {#  <input id="fileupload"#}

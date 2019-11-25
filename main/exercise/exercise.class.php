@@ -8335,7 +8335,7 @@ class Exercise
     }
 
     /**
-     * @param int $categoryId
+     * @param int    $categoryId
      * @param string $keyword
      *
      * @return string

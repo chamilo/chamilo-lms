@@ -1729,11 +1729,8 @@ abstract class Question
 
     /**
      * Function which process the creation of questions.
-     *
-     * @param FormValidator $form
-     * @param Exercise      $exercise
      */
-    public function processCreation(FormValidator $form, $exercise)
+    public function processCreation(FormValidator $form, Exercise $exercise)
     {
         $this->updateTitle($form->getSubmitValue('questionName'));
         $this->updateDescription($form->getSubmitValue('questionDescription'));

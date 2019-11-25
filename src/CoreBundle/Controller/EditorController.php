@@ -3,8 +3,6 @@
 
 namespace Chamilo\CoreBundle\Controller;
 
-use APY\DataGridBundle\Grid\Action\MassAction;
-use APY\DataGridBundle\Grid\Action\RowAction;
 use APY\DataGridBundle\Grid\Grid;
 use APY\DataGridBundle\Grid\Row;
 use APY\DataGridBundle\Grid\Source\Entity;
@@ -16,7 +14,6 @@ use Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter;
 use Chamilo\CourseBundle\Entity\CDocument;
 use Chamilo\CourseBundle\Repository\CDocumentRepository;
 use Chamilo\SettingsBundle\Manager\SettingsManager;
-use DocumentManager;
 use FM\ElfinderBundle\Connector\ElFinderConnector;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -144,12 +141,13 @@ class EditorController extends BaseController
                     $documentParams = [
                         'course' => $course->getCode(),
                         'cidReq' => $course->getCode(),
-                        'file' => $resourceNode->getPathForDisplayRemoveBase($removePath)
+                        'file' => $resourceNode->getPathForDisplayRemoveBase($removePath),
                     ];
                     $url = $router->generate(
                         'resources_document_get_file',
                         $documentParams
                     );
+
                     return $icon.'<a href="'.$url.'" class="select_to_ckeditor">'.$value.'</a>';
                 }
 
@@ -166,7 +164,6 @@ class EditorController extends BaseController
             '@ChamiloTheme/Editor/custom.html.twig',
             ['id' => $id, 'grid' => $grid]
         );
-
     }
 
     /**

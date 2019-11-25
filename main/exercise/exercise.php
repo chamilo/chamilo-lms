@@ -13,7 +13,6 @@ use Chamilo\CourseBundle\Entity\CQuiz;
  * @author Julio Montoya <gugli100@gmail.com>, lots of cleanup + several improvements
  * Modified by hubert.borderiou (question category)
  */
-
 require_once __DIR__.'/../inc/global.inc.php';
 $current_course_tool = TOOL_QUIZ;
 

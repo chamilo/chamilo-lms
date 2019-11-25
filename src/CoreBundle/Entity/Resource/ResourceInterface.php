@@ -13,8 +13,5 @@ interface ResourceInterface
      */
     public function getResourceIdentifier(): int;
 
-    /**
-     * @return string
-     */
     public function getResourceName(): string;
 }

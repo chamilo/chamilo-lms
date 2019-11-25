@@ -208,6 +208,5 @@ class CDocumentController extends ToolBaseController
 
     public function uploadAction()
     {
-
     }
 }

@@ -204,9 +204,6 @@ class ResourceFile
         $this->enabled = true;
     }
 
-    /**
-     * @return string
-     */
     public function __toString(): string
     {
         return (string) $this->getOriginalName();
@@ -308,19 +305,11 @@ class ResourceFile
         return $this;
     }
 
-    /**
-     * @return ResourceNode
-     */
     public function getResourceNode(): ResourceNode
     {
         return $this->resourceNode;
     }
 
-    /**
-     * @param ResourceNode $resourceNode
-     *
-     * @return ResourceFile
-     */
     public function setResourceNode(ResourceNode $resourceNode): ResourceFile
     {
         $this->resourceNode = $resourceNode;
@@ -387,9 +376,6 @@ class ResourceFile
         return $this;
     }
 
-    /**
-     * @return string
-     */
     public function getOriginalName(): string
     {
         return $this->originalName;
@@ -397,8 +383,6 @@ class ResourceFile
 
     /**
      * @param $originalName
-     *
-     * @return ResourceFile
      */
     public function setOriginalName($originalName): ResourceFile
     {
@@ -407,9 +391,6 @@ class ResourceFile
         return $this;
     }
 
-    /**
-     * @return array
-     */
     public function getDimensions(): array
     {
         return $this->dimensions;
@@ -417,8 +398,6 @@ class ResourceFile
 
     /**
      * @param $dimensions
-     *
-     * @return ResourceFile
      */
     public function setDimensions($dimensions): ResourceFile
     {
@@ -427,9 +406,6 @@ class ResourceFile
         return $this;
     }
 
-    /**
-     * @return int
-     */
     public function getWidth(): int
     {
         $data = $this->getDimensions();
@@ -442,9 +418,6 @@ class ResourceFile
         return 0;
     }
 
-    /**
-     * @return int
-     */
     public function getHeight(): int
     {
         $data = $this->getDimensions();

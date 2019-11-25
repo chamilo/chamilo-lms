@@ -353,17 +353,11 @@ class CDocument extends AbstractResource implements ResourceInterface
         return $this->getCourseSessionResourceLink($course, $session)->getVisibility();
     }
 
-    /**
-     * @return bool
-     */
     public function isVisible(Course $course, Session $session = null): bool
     {
         return $this->getCourseSessionResourceLink($course, $session) === ResourceLink::VISIBILITY_PUBLISHED;
     }
 
-    /**
-     *
-     */
     public function postPersist(LifecycleEventArgs $args)
     {
         // Update id with iid value
@@ -381,9 +375,6 @@ class CDocument extends AbstractResource implements ResourceInterface
         return $this->getIid();
     }
 
-    /**
-     * @return string
-     */
     public function getResourceName(): string
     {
         return $this->getTitle();

@@ -3,22 +3,17 @@
 
 namespace Chamilo\CoreBundle\Controller;
 
-use Chamilo\CoreBundle\Entity\Resource\ResourceFile;
 use Chamilo\CoreBundle\Entity\Resource\ResourceLink;
 use Chamilo\CoreBundle\Entity\Resource\ResourceNode;
 use Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter;
-use Chamilo\CourseBundle\Component\CourseCopy\Resources\Resource;
 use Chamilo\CourseBundle\Entity\CDocument;
-use Oneup\UploaderBundle\Uploader\ErrorHandler\ErrorHandlerInterface;
+use Oneup\UploaderBundle\Controller\BlueimpController;
 use Oneup\UploaderBundle\Uploader\File\FileInterface;
 use Oneup\UploaderBundle\Uploader\File\FilesystemFile;
-use Oneup\UploaderBundle\Uploader\Storage\StorageInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\HttpFoundation\File\Exception\UploadException;
-use Symfony\Component\HttpFoundation\JsonResponse;
-use Oneup\UploaderBundle\Controller\BlueimpController;
 use Oneup\UploaderBundle\Uploader\Response\EmptyResponse;
+use Symfony\Component\HttpFoundation\File\Exception\UploadException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 /**

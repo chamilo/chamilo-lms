@@ -77,12 +77,6 @@ class ResourceRepository extends EntityRepository
 
     /**
      * ResourceRepository constructor.
-     *
-     * @param AuthorizationCheckerInterface $authorizationChecker
-     * @param EntityManager                 $entityManager
-     * @param MountManager                  $mountManager
-     * @param RouterInterface               $router
-     * @param string                        $className
      */
     public function __construct(
         AuthorizationCheckerInterface $authorizationChecker,
@@ -102,9 +96,6 @@ class ResourceRepository extends EntityRepository
         $this->slugify = $slugify;
     }
 
-    /**
-     * @return AuthorizationCheckerInterface
-     */
     public function getAuthorizationChecker(): AuthorizationCheckerInterface
     {
         return $this->authorizationChecker;
@@ -118,9 +109,6 @@ class ResourceRepository extends EntityRepository
         return new $this->className();
     }
 
-    /**
-     * @return RouterInterface
-     */
     public function getRouter(): RouterInterface
     {
         return $this->router;
@@ -142,9 +130,6 @@ class ResourceRepository extends EntityRepository
         return $this->fs;
     }
 
-    /**
-     * @return EntityManager
-     */
     public function getEntityManager(): EntityManager
     {
         return $this->getRepository()->getEntityManager();
@@ -159,8 +144,6 @@ class ResourceRepository extends EntityRepository
     }
 
     /**
-     * @param FormFactory $formFactory
-     *
      * @return FormInterface
      */
     public function getForm(FormFactory $formFactory, AbstractResource $resource = null, $options = [])
@@ -170,8 +153,8 @@ class ResourceRepository extends EntityRepository
 
         $formType = str_replace('Entity\CDocument', 'Form\\Type', $className).'\\'.$shortName.'Type';
 
-        if ($resource === null){
-            $resource = new $className;
+        if ($resource === null) {
+            $resource = new $className();
         }
 
         return $formFactory->create($formType, $resource, $options);
@@ -181,29 +164,17 @@ class ResourceRepository extends EntityRepository
      * @param mixed $id
      * @param null  $lockMode
      * @param null  $lockVersion
-     *
-     * @return AbstractResource|null
      */
     public function find($id, $lockMode = null, $lockVersion = null): ?AbstractResource
     {
         return $this->getRepository()->find($id);
     }
 
-    /**
-     * @return AbstractResource|null
-     */
     public function findOneBy(array $criteria, array $orderBy = null): ?AbstractResource
     {
         return $this->getRepository()->findOneBy($criteria, $orderBy);
     }
 
-    /**
-     * @param AbstractResource  $resource
-     * @param User              $creator
-     * @param ResourceNode|null $parent
-     *
-     * @return ResourceNode
-     */
     public function createNodeForResource(AbstractResource $resource, User $creator, ResourceNode $parent = null, UploadedFile $file = null): ResourceNode
     {
         $em = $this->getEntityManager();
@@ -243,11 +214,6 @@ class ResourceRepository extends EntityRepository
         return $resourceNode;
     }
 
-    /**
-     * @param AbstractResource $resource
-     *
-     * @return ResourceNode
-     */
     public function updateNodeForResource(AbstractResource $resource): ResourceNode
     {
         $em = $this->getEntityManager();
@@ -285,9 +251,6 @@ class ResourceRepository extends EntityRepository
         return $resourceNode;
     }
 
-    /**
-     * @return ResourceFile|null
-     */
     public function addFile(AbstractResource $resource, UploadedFile $file): ?ResourceFile
     {
         $resourceNode = $resource->getResourceNode();
@@ -313,13 +276,6 @@ class ResourceRepository extends EntityRepository
         return $resourceFile;
     }
 
-    /**
-     * @param AbstractResource      $resource
-     * @param User                  $creator
-     * @param AbstractResource|null $parent
-     *
-     * @return ResourceNode
-     */
     public function addResourceNode(AbstractResource $resource, User $creator, AbstractResource $parent = null): ResourceNode
     {
         if (null !== $parent) {
@@ -329,14 +285,6 @@ class ResourceRepository extends EntityRepository
         return $this->createNodeForResource($resource, $creator, $parent);
     }
 
-    /**
-     * @param AbstractResource $resource
-     * @param int              $visibility
-     * @param User             $creator
-     * @param Course           $course
-     * @param Session|null     $session
-     * @param CGroupInfo|null  $group
-     */
     public function addResourceToCourse(AbstractResource $resource, int $visibility, User $creator, Course $course, Session $session = null, CGroupInfo $group = null)
     {
         $node = $this->createNodeForResource($resource, $creator, $course->getResourceNode());
@@ -345,11 +293,10 @@ class ResourceRepository extends EntityRepository
     }
 
     /**
-     * @param ResourceNode $resourceNode
-     * @param int          $visibility
-     * @param Course       $course
-     * @param Session      $session
-     * @param CGroupInfo   $group
+     * @param int        $visibility
+     * @param Course     $course
+     * @param Session    $session
+     * @param CGroupInfo $group
      */
     public function addResourceNodeToCourse(ResourceNode $resourceNode, $visibility, $course, $session, $group): void
     {
@@ -535,10 +482,6 @@ class ResourceRepository extends EntityRepository
     }
 
     /**
-     * @param Course          $course
-     * @param Session|null    $session
-     * @param CGroupInfo|null $group
-     *
      * @return QueryBuilder
      */
     public function getResourcesByCourse(Course $course, Session $session = null, CGroupInfo $group = null, ResourceNode $parentNode = null)
@@ -612,11 +555,7 @@ class ResourceRepository extends EntityRepository
     }
 
     /**
-     * @param RowAction $action
-     * @param Row       $row
-     * @param Session   $session
-     *
-     * @return RowAction|null
+     * @param Session $session
      */
     public function rowCanBeEdited(RowAction $action, Row $row, Session $session = null): ?RowAction
     {
@@ -632,19 +571,6 @@ class ResourceRepository extends EntityRepository
         }
 
         return $action;
-    }
-
-    /**
-     * @param string $tool
-     *
-     * @return Tool|null
-     */
-    private function getTool($tool)
-    {
-        return $this
-            ->getEntityManager()
-            ->getRepository('ChamiloCoreBundle:Tool')
-            ->findOneBy(['name' => $tool]);
     }
 
     /**
@@ -666,37 +592,101 @@ class ResourceRepository extends EntityRepository
         $this->setLinkVisibility($resource, ResourceLink::VISIBILITY_DELETED);
     }
 
-    /**
-     * @param AbstractResource $resource
-     */
     public function setVisibilityPublished(AbstractResource $resource)
     {
         $this->setLinkVisibility($resource, ResourceLink::VISIBILITY_PUBLISHED);
     }
 
-    /**
-     * @param AbstractResource $resource
-     */
     public function setVisibilityDraft(AbstractResource $resource)
     {
         $this->setLinkVisibility($resource, ResourceLink::VISIBILITY_DRAFT);
     }
 
-    /**
-     * @param AbstractResource $resource
-     */
     public function setVisibilityPending(AbstractResource $resource)
     {
         $this->setLinkVisibility($resource, ResourceLink::VISIBILITY_PENDING);
     }
 
+    public function getResourceFileContent(AbstractResource $resource): string
+    {
+        try {
+            $resourceNode = $resource->getResourceNode();
+            if ($resourceNode->hasResourceFile()) {
+                $resourceFile = $resourceNode->getResourceFile();
+                $fileName = $resourceFile->getFile()->getPathname();
+
+                return $this->fs->read($fileName);
+            }
+
+            return '';
+        } catch (\Throwable $exception) {
+            throw new FileNotFoundException($resource);
+        }
+    }
+
+    public function getResourceFileUrl(AbstractResource $resource, array $extraParams = []): string
+    {
+        try {
+            $resourceNode = $resource->getResourceNode();
+            if ($resourceNode->hasResourceFile()) {
+                $params = [
+                    'tool' => $resourceNode->getResourceType()->getTool(),
+                    'type' => $resourceNode->getResourceType(),
+                    'id' => $resourceNode->getId(),
+                ];
+
+                if (!empty($extraParams)) {
+                    $params = array_merge($params, $extraParams);
+                }
+
+                return $this->router->generate('chamilo_core_resource_file', $params);
+            }
+
+            return '';
+        } catch (\Throwable $exception) {
+            throw new FileNotFoundException($resource);
+        }
+    }
+
     /**
-     * @param AbstractResource $resource
-     * @param int              $visibility
-     * @param bool             $recursive
+     * @param string $content
      *
      * @return bool
      */
+    public function updateResourceFileContent(AbstractResource $resource, $content)
+    {
+        try {
+            $resourceNode = $resource->getResourceNode();
+            if ($resourceNode->hasResourceFile()) {
+                $resourceFile = $resourceNode->getResourceFile();
+                $fileName = $resourceFile->getFile()->getPathname();
+
+                $this->fs->update($fileName, $content);
+                $size = $this->fs->getSize($fileName);
+                $resource->setSize($size);
+                $this->entityManager->persist($resource);
+
+                return true;
+            }
+
+            return false;
+        } catch (\Throwable $exception) {
+        }
+    }
+
+    /**
+     * @param string $tool
+     *
+     * @return Tool|null
+     */
+    private function getTool($tool)
+    {
+        return $this
+            ->getEntityManager()
+            ->getRepository('ChamiloCoreBundle:Tool')
+            ->findOneBy(['name' => $tool]);
+    }
+
     private function setLinkVisibility(AbstractResource $resource, int $visibility, bool $recursive = true): bool
     {
         $resourceNode = $resource->getResourceNode();
@@ -750,78 +740,4 @@ class ResourceRepository extends EntityRepository
 
         return true;
     }
-
-    /**
-     * @param AbstractResource $resource
-     *
-     * @return string
-     */
-    public function getResourceFileContent(AbstractResource $resource): string
-    {
-        try {
-            $resourceNode = $resource->getResourceNode();
-            if ($resourceNode->hasResourceFile()) {
-                $resourceFile = $resourceNode->getResourceFile();
-                $fileName = $resourceFile->getFile()->getPathname();
-
-                return $this->fs->read($fileName);
-            }
-
-            return '';
-        } catch (\Throwable $exception) {
-            throw new FileNotFoundException($resource);
-        }
-    }
-
-    public function getResourceFileUrl(AbstractResource $resource, array $extraParams = []): string
-    {
-        try {
-            $resourceNode = $resource->getResourceNode();
-            if ($resourceNode->hasResourceFile()) {
-                $params = [
-                    'tool' => $resourceNode->getResourceType()->getTool(),
-                    'type' => $resourceNode->getResourceType(),
-                    'id' => $resourceNode->getId(),
-                ];
-
-                if (!empty($extraParams)) {
-                    $params = array_merge($params, $extraParams);
-                }
-
-                return $this->router->generate('chamilo_core_resource_file', $params);
-            }
-
-            return '';
-        } catch (\Throwable $exception) {
-            throw new FileNotFoundException($resource);
-        }
-    }
-
-    /**
-     * @param AbstractResource $resource
-     * @param string $content
-     *
-     * @return bool
-     */
-    public function updateResourceFileContent(AbstractResource $resource, $content)
-    {
-        try {
-            $resourceNode = $resource->getResourceNode();
-            if ($resourceNode->hasResourceFile()) {
-                $resourceFile = $resourceNode->getResourceFile();
-                $fileName = $resourceFile->getFile()->getPathname();
-
-                $this->fs->update($fileName, $content);
-                $size = $this->fs->getSize($fileName);
-                $resource->setSize($size);
-                $this->entityManager->persist($resource);
-
-                return true;
-            }
-
-            return false;
-        } catch (\Throwable $exception) {
-        }
-    }
-
 }

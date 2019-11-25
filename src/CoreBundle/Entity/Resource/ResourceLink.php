@@ -313,19 +313,11 @@ class ResourceLink
         return $this->resourceNode;
     }
 
-    /**
-     * @return int
-     */
     public function getVisibility(): int
     {
         return $this->visibility;
     }
 
-    /**
-     * @param int $visibility
-     *
-     * @return ResourceLink
-     */
     public function setVisibility(int $visibility): ResourceLink
     {
         if (!in_array($visibility, self::getVisibilityList())) {
@@ -369,9 +361,6 @@ class ResourceLink
         return $this;
     }
 
-    /**
-     * @return array
-     */
     public static function getVisibilityList(): array
     {
         return [

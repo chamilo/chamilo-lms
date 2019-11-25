@@ -8,7 +8,6 @@ use Chamilo\CoreBundle\Entity\Resource\AbstractResource;
 use Chamilo\CoreBundle\Entity\Resource\ResourceFile;
 use Chamilo\CoreBundle\Entity\Resource\ResourceNode;
 use Chamilo\UserBundle\Entity\User;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /**
  * Class IllustrationRepository.
@@ -16,11 +15,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 class IllustrationRepository extends ResourceRepository
 {
     /**
-     * @param AbstractResource $resource
-     * @param User             $user
-     * @param                  $uploadFile
-     *
-     * @return ResourceFile|null
+     * @param $uploadFile
      */
     public function addIllustration(AbstractResource $resource, User $user, $uploadFile): ?ResourceFile
     {
@@ -39,11 +34,6 @@ class IllustrationRepository extends ResourceRepository
         return $this->addFile($illustration, $uploadFile);
     }
 
-    /**
-     * @param AbstractResource $resource
-     *
-     * @return ResourceNode|null
-     */
     public function getIllustrationNodeFromResource(AbstractResource $resource): ?ResourceNode
     {
         $nodeRepo = $this->getResourceNodeRepository();
@@ -57,9 +47,6 @@ class IllustrationRepository extends ResourceRepository
         return $node;
     }
 
-    /**
-     * @param AbstractResource $resource
-     */
     public function deleteIllustration(AbstractResource $resource)
     {
         $node = $this->getIllustrationNodeFromResource($resource);

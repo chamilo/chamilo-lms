@@ -24,8 +24,8 @@ $_course = api_get_course_info();
 require api_get_path(LIBRARY_PATH).'geometry.lib.php';
 
 // set vars
-$questionId = (int)$_GET['modifyAnswers'];
-$exerciseId = isset($_GET['exe_id']) ? (int)$_GET['exe_id'] : 0;
+$questionId = (int) $_GET['modifyAnswers'];
+$exerciseId = isset($_GET['exe_id']) ? (int) $_GET['exe_id'] : 0;
 $questionRepo = Container::getQuestionRepository();
 /** @var CQuizQuestion $objQuestion */
 $objQuestion = $questionRepo->find($questionId);

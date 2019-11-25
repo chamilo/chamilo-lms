@@ -1,10 +1,10 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-use Chamilo\CoreBundle\Framework\Container;
-use Chamilo\CourseBundle\Entity\CQuizQuestion;
 use Chamilo\CoreBundle\Entity\TrackEHotspot;
+use Chamilo\CoreBundle\Framework\Container;
 use Chamilo\CourseBundle\Entity\CQuizAnswer;
+use Chamilo\CourseBundle\Entity\CQuizQuestion;
 
 /**
  * This file generates a json answer to the question preview.

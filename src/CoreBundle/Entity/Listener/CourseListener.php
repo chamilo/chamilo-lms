@@ -31,9 +31,6 @@ class CourseListener
 
     /**
      * CourseListener constructor.
-     *
-     * @param ToolChain       $toolChain
-     * @param SettingsManager $settingsManager
      */
     public function __construct(ToolChain $toolChain, SettingsManager $settingsManager)
     {

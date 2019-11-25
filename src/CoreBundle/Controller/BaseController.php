@@ -5,11 +5,7 @@ namespace Chamilo\CoreBundle\Controller;
 
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Session;
-use Chamilo\CoreBundle\Entity\Tool;
-use Chamilo\CoreBundle\Repository\ResourceRepository;
-use Chamilo\CoreBundle\ToolChain;
 use Knp\Menu\FactoryInterface as MenuFactoryInterface;
-use League\Flysystem\MountManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -90,9 +86,6 @@ abstract class BaseController extends AbstractController
         return $this->getDoctrine()->getManager()->find('ChamiloCoreBundle:Session', $sessionId);
     }
 
-    /**
-     * @return string
-     */
     public function getCourseUrlQuery(): string
     {
         $url = '';

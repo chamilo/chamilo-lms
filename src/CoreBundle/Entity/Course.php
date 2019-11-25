@@ -745,8 +745,6 @@ class Course extends AbstractResource implements ResourceInterface
      * Set category.
      *
      * @param CourseCategory $category
-     *
-     * @return Course
      */
     public function setCategory(CourseCategory $category = null): Course
     {

@@ -43,9 +43,6 @@ class ResourceNodeVoter extends Voter
         $this->container = $container;
     }
 
-    /**
-     * @return int
-     */
     public static function getReaderMask(): int
     {
         $builder = new MaskBuilder();
@@ -56,9 +53,6 @@ class ResourceNodeVoter extends Voter
         return $builder->get();
     }
 
-    /**
-     * @return int
-     */
     public static function getEditorMask(): int
     {
         $builder = new MaskBuilder();
@@ -97,9 +91,8 @@ class ResourceNodeVoter extends Voter
     }
 
     /**
-     * @param string         $attribute
-     * @param ResourceNode   $resourceNode
-     * @param TokenInterface $token
+     * @param string       $attribute
+     * @param ResourceNode $resourceNode
      */
     protected function voteOnAttribute($attribute, $resourceNode, TokenInterface $token): bool
     {

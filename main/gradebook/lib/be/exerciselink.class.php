@@ -74,7 +74,6 @@ class ExerciseLink extends AbstractLink
         $resultLp = Database::query($sqlLp);
         $exerciseInLP = Database::store_result($resultLp);
 
-
         $cats = [];
         if (isset($result)) {
             if (Database::num_rows($result) > 0) {

@@ -17,6 +17,7 @@ final class CQuizQuestionRepository extends ResourceRepository
             'mode' => 'show',
             'filter' => 'hotspot_question',
         ];
+
         return $this->getResourceFileUrl($resource, $params);
     }
 }

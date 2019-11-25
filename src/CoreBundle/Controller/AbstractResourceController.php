@@ -12,7 +12,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
- * Class AbstractResourceController
+ * Class AbstractResourceController.
  */
 abstract class AbstractResourceController extends BaseController
 {
@@ -49,8 +49,6 @@ abstract class AbstractResourceController extends BaseController
     }
 
     /**
-     * @param Request $request
-     *
      * @return ResourceRepository
      */
     public function getRepositoryFromRequest(Request $request)

@@ -3,7 +3,6 @@
 
 namespace Chamilo\CourseBundle\Controller\Home;
 
-use APY\DataGridBundle\Grid\Source\Entity;
 use Chamilo\CourseBundle\Controller\ToolBaseController;
 use Chamilo\CourseBundle\Entity\CTool;
 use Chamilosession as Session;

@@ -3,7 +3,6 @@
 
 use Chamilo\CoreBundle\Entity\Resource\ResourceLink;
 use Chamilo\CoreBundle\Framework\Container;
-use Chamilo\CourseBundle\Entity\CDocument;
 use Chamilo\CourseBundle\Entity\CQuizAnswer;
 use Chamilo\CourseBundle\Entity\CQuizQuestion;
 
@@ -1383,8 +1382,6 @@ abstract class Question
 
     /**
      * abstract function which creates the form to create / edit the answers of the question.
-     *
-     * @param FormValidator $form
      */
     abstract public function createAnswersForm(FormValidator $form);
 

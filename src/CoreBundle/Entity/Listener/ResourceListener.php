@@ -17,27 +17,19 @@ class ResourceListener
 
     /**
      * ResourceListener constructor.
-     *
-     * @param SlugifyInterface $slugify
      */
     public function __construct(SlugifyInterface $slugify)
     {
         $this->slugify = $slugify;
     }
 
-    /**
-     * @param AbstractResource   $resource
-     * @param LifecycleEventArgs $args
-     */
     public function prePersist(AbstractResource $resource, LifecycleEventArgs $args)
     {
         //error_log('prePersist');
     }
 
     /**
-     * When updating a Resource
-     *
-     * @param PreUpdateEventArgs $event
+     * When updating a Resource.
      */
     public function preUpdate(AbstractResource $resource, PreUpdateEventArgs $event)
     {
@@ -55,10 +47,6 @@ class ResourceListener
         }*/
     }
 
-    /**
-     * @param AbstractResource   $resource
-     * @param LifecycleEventArgs $args
-     */
     public function postUpdate(AbstractResource $resource, LifecycleEventArgs $args)
     {
         //error_log('postUpdate');

@@ -238,8 +238,6 @@ class ResourceNode
     }
 
     /**
-     * @param string $base
-     *
      * @return string
      */
     public function getPathForDisplayRemoveBase(string $base)
@@ -420,7 +418,6 @@ class ResourceNode
     public function isResourceFileAnImage()
     {
         if ($this->hasResourceFile()) {
-
             $mimeType = $this->getResourceFile()->getMimeType();
             if (strpos($mimeType, 'image') !== false) {
                 return true;
@@ -436,7 +433,6 @@ class ResourceNode
     public function isResourceFileAVideo()
     {
         if ($this->hasResourceFile()) {
-
             $mimeType = $this->getResourceFile()->getMimeType();
             if (strpos($mimeType, 'video') !== false) {
                 return true;
@@ -446,11 +442,6 @@ class ResourceNode
         return false;
     }
 
-    /**
-     * @param ResourceFile $resourceFile
-     *
-     * @return ResourceNode
-     */
     public function setResourceFile(ResourceFile $resourceFile): ResourceNode
     {
         $this->resourceFile = $resourceFile;

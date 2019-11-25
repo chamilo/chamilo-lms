@@ -10032,7 +10032,6 @@ class learnpath
         $res_quiz = Database::query($sql_quiz);
         $res_hot = Database::query($sql_hot);*/
 
-
         $currentUrl = api_get_self().'?'.api_get_cidreq().'&action=add_item&type=step&lp_id='.$this->lp_id.'#resource_tab-2';
 
         // Create a search-box

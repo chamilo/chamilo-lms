@@ -30,7 +30,6 @@ $pictureWidth = $resourceFile->getWidth();
 $pictureHeight = $resourceFile->getHeight();
 $imagePath = $questionRepo->getHotSpotImageUrl($objQuestion);
 
-
 $data = [
     'use' => 'user',
     'image' => [

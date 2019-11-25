@@ -6,7 +6,6 @@ namespace Chamilo\CourseBundle\Repository;
 use Chamilo\CoreBundle\Entity\Resource\ResourceLink;
 use Chamilo\CoreBundle\Repository\ResourceRepository;
 use Chamilo\CourseBundle\Entity\CDocument;
-use Symfony\Component\Filesystem\Exception\FileNotFoundException;
 
 /**
  * Class CDocumentRepository.
@@ -38,8 +37,6 @@ final class CDocumentRepository extends ResourceRepository
             $params
         );
     }
-
-
 
     /**
      * @return CDocument|null

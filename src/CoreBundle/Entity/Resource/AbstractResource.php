@@ -37,20 +37,11 @@ abstract class AbstractResource implements ResourceInterface
         return $this;
     }
 
-    /**
-     * @return ResourceNode
-     */
     public function getResourceNode(): ResourceNode
     {
         return $this->resourceNode;
     }
 
-    /**
-     * @param Course       $course
-     * @param Session|null $session
-     *
-     * @return ResourceLink|null
-     */
     public function getFirstResourceLinkFromCourseSession(Course $course, Session $session = null): ?ResourceLink
     {
         $criteria = Criteria::create();

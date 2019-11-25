@@ -65,6 +65,4 @@ class CourseController extends AbstractController
     {
         return $this->render('@ChamiloTheme/Course/welcome.html.twig', ['course' => $course]);
     }
-
-
 }

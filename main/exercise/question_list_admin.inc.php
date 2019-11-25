@@ -4,7 +4,6 @@
 use ChamiloSession as Session;
 
 /**
- *
  * @package chamilo.exercise
  *
  * @author Olivier Brouckaert & Julio Montoya & Hubert Borderiou 21-10-2011 (Question by category)

@@ -6,7 +6,6 @@ namespace Chamilo\CourseBundle\Entity;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Resource\AbstractResource;
 use Chamilo\CoreBundle\Entity\Resource\ResourceInterface;
-use Chamilo\CoreBundle\Entity\Resource\ResourceLink;
 use Chamilo\CourseBundle\Traits\ShowCourseResourcesInSessionTrait;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Mapping as ORM;
@@ -956,9 +955,6 @@ class CQuiz extends AbstractResource implements ResourceInterface
         return $this->getIid();
     }
 
-    /**
-     * @return string
-     */
     public function getResourceName(): string
     {
         return $this->getTitle();

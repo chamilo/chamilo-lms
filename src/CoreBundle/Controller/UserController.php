@@ -3,6 +3,7 @@
 
 namespace Chamilo\CoreBundle\Controller;
 
+use Chamilo\UserBundle\Repository\UserRepository;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -15,13 +16,13 @@ use Symfony\Component\Routing\Annotation\Route;
 class UserController extends BaseController
 {
     /**
-     * @Route("/{username}", methods={"GET"})
+     * @Route("/{username}", methods={"GET"}, name="chamilo_core_user_profile")
      *
      * @param string $username
      */
-    public function profileAction($username): array
+    public function profileAction($username, UserRepository $userRepository)
     {
-        $user = $this->container->get('fos_user.user_manager')->findUserByUsername($username);
+        $user = $userRepository->findByUsername($username);
 
         return $this->render('@ChamiloCore/User/profile.html.twig', ['user' => $user]);
     }

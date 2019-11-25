@@ -166,7 +166,7 @@ $(function () {
                     <strong>{{ app.user.username }}</strong>
                 </div>
 
-                <a class="dropdown-item" href="{{ url('legacy_main', { 'name' : 'auth/profile.php' }) }}">
+                <a class="dropdown-item" href="{{ url('chamilo_core_user_profile', { 'username' : app.user.username }) }}">
                     <i class="fa fa-user"></i>
                     {{ "My profile"|trans }}
                 </a>

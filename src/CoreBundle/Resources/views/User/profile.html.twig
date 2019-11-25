@@ -2,15 +2,16 @@
 
 {% block content %}
     {% autoescape false %}
+        <h2>{{ 'Profile' | trans }}</h2>
         <h3>{{ user.username }}</h3>
+        <a href="{{ url('chamilo_core_account_edit') }}">
+            {{ 'Edit profile' | trans }}
+        </a>
         {{ user.firstname }}
         {{ user.lastname }}
         {{ user.competences }}
         {{ user.openarea }}
         {{ user.teach }}
-
-
         {{ user.diplomas }}
-
     {% endautoescape %}
 {% endblock %}

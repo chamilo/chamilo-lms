@@ -2,7 +2,7 @@
 
 {% block content %}
     {% autoescape false %}
-        <h3>{{ resource }} </h3>
+        <h3>{{ resource }}</h3>
         {% if resource.resourceNode.resourceFile %}
             File:
             <a href="{{ url('chamilo_core_resource_file', {
@@ -18,15 +18,14 @@
                 {{ resource.resourceNode.slug }}
             </a>
             <br />
-            Size: {{ resource.resourceNode.resourceFile.size }}
+            {{ 'Size' | trans }}: {{ resource.resourceNode.resourceFile.size }}
             <br /><br />
         {% endif %}
 
-        Updated at: {{ resource.resourceNode.updatedAt | date_to_time_ago }}
+        {{ 'Created at' | trans }}: {{ resource.resourceNode.createdAt | date_to_time_ago }}<br />
+        {{ 'Updated at' | trans }}: {{ resource.resourceNode.updatedAt | date_to_time_ago }}<br />
         <br />
-        Created at: {{ resource.resourceNode.createdAt | date_to_time_ago }}<br />
-        <br />
-        Creator: {{ resource.resourceNode.creator }}
+        {{ 'Author' | trans }}: {{ resource.resourceNode.creator }}
 
         {# Show where the file was added#}
         {% if resource.resourceNode.resourceLinks %}

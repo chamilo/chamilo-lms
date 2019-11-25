@@ -78,6 +78,7 @@ class EditorController extends BaseController
 
         $course = $this->getCourse();
         $session = $this->getCourseSession();
+        $sessionId = $session ? $session->getId() : 0;
         $parent = $course->getResourceNode();
 
         if (!empty($parentId)) {
@@ -104,12 +105,25 @@ class EditorController extends BaseController
         $grid->setLimits(20);
         $grid->setHiddenColumns(['iid']);
 
+        /*$grid->setRouteUrl(
+            $this->generateUrl(
+                'chamilo_core_resource_list',
+                [
+                    'tool' => 'document',
+                    'type' => 'files',
+                    'cidReq' => $this->getCourse()->getCode(),
+                    'id_session' => $sessionId,
+                    'id' => $id,
+                ]
+            )
+        );*/
+
         $grid->getColumn('title')->setTitle($translator->trans('Name'));
         $grid->getColumn('filetype')->setTitle($translator->trans('Type'));
 
         $courseIdentifier = $course->getCode();
 
-        $routeParams = ['cidReq' => $courseIdentifier, 'id'];
+        $routeParams = ['cidReq' => $courseIdentifier, 'id', 'id_session' => $sessionId];
 
         $removePath = $course->getResourceNode()->getPath();
 
@@ -125,17 +139,18 @@ class EditorController extends BaseController
                 $myParams['parentId'] = $id;
 
                 unset($myParams[0]);
-
+                $icon = $resourceNode->getIcon().' &nbsp;';
                 if ($resourceNode->hasResourceFile()) {
                     $documentParams = [
                         'course' => $course->getCode(),
+                        'cidReq' => $course->getCode(),
                         'file' => $resourceNode->getPathForDisplayRemoveBase($removePath)
                     ];
                     $url = $router->generate(
                         'resources_document_get_file',
                         $documentParams
                     );
-                    return '<a href="'.$url.'" class="select_to_ckeditor">'.$value.'</a>';
+                    return $icon.'<a href="'.$url.'" class="select_to_ckeditor">'.$value.'</a>';
                 }
 
                 $url = $router->generate(
@@ -143,7 +158,7 @@ class EditorController extends BaseController
                     $myParams
                 );
 
-                return '<a href="'.$url.'">'.$value.'</a>';
+                return $icon.'<a href="'.$url.'">'.$value.'</a>';
             }
         );
 

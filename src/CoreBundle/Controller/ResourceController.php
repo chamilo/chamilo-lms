@@ -104,13 +104,6 @@ class ResourceController extends AbstractResourceController implements CourseCon
         $class = $repository->getRepository()->getClassName();
         $source = new Entity($class);
 
-        /*$tableAlias = $source->getTableAlias();
-        $source->manipulateQuery(function (QueryBuilder $query) use ($tableAlias, $course) {
-                $query->andWhere($tableAlias . '.cId = '.$course->getId());
-                //$query->resetDQLPart('orderBy');
-            }
-        );*/
-
         $course = $this->getCourse();
         $session = $this->getSession();
 

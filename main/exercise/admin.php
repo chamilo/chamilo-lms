@@ -286,7 +286,8 @@ if ($modifyIn === 'thisExercise') {
 }
 
 //$htmlHeadXtra[] = api_get_js('jqueryui-touch-punch/jquery.ui.touch-punch.min.js');
-$htmlHeadXtra[] = api_get_js('jquery.jsPlumb.all.js');
+//$htmlHeadXtra[] = api_get_js('jquery.jsPlumb.all.js');
+$htmlHeadXtra[] = api_get_build_js('exercise.js');
 
 $template = new Template();
 $templateName = $template->get_template('exercise/submit.js.tpl');

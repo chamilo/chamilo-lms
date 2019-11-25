@@ -1675,7 +1675,9 @@ class Rest extends WebService
         }
 
         $courseList = array_keys(SessionManager::get_course_list_by_session_id($modelSessionId));
-        if (!SessionManager::add_courses_to_session($newSessionId, $courseList)) {
+        if (is_array($courseList)
+            && !empty($courseList)
+            && !SessionManager::add_courses_to_session($newSessionId, $courseList)) {
             throw new Exception(get_lang('CoursesNotAddedToSession'));
         }
 

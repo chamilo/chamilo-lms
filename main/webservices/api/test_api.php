@@ -85,7 +85,7 @@ class V2Test extends TestCase
      *
      * @param string    $action         name of the webservice action
      * @param array     $parameters     parameters to send with the request
-     * @return string                   the error string returned by the webservice
+     * @return string                   the "message" error string returned by the webservice
      */
     protected function errorMessageString($action, $parameters = [])
     {
@@ -112,7 +112,8 @@ class V2Test extends TestCase
     {
         $decodedResponse = $this->decodedResponse($action, $parameters);
         $this->assertIsObject($decodedResponse);
-        $this->assertTrue(property_exists($decodedResponse, 'data'),
+        $this->assertTrue(
+            property_exists($decodedResponse, 'data'),
             'response data property is missing: '.print_r($decodedResponse, true));
         $data = $decodedResponse->data;
         $this->assertIsArray($data);
@@ -120,7 +121,7 @@ class V2Test extends TestCase
     }
 
     /**
-     * Posts an action request and assert the server returns an array with a single element
+     * Posts an action request and assert the server returns a single value in the "data" array of the returned object
      *
      * @param string    $action         name of the webservice action
      * @param array     $parameters     parameters to send with the request
@@ -134,7 +135,7 @@ class V2Test extends TestCase
     }
 
     /**
-     * Posts an action request and assert it returns an array with a single integer value
+     * Posts an action request and assert it returns an integer value in the "data" property
      *
      * @param string    $action         name of the webservice action
      * @param array     $parameters     parameters to send with the request
@@ -185,7 +186,7 @@ class V2Test extends TestCase
             //'expiration_date' => '',
         ];
         $params = [];
-        foreach($ORIGINAL_VALUES as $name => $value) {
+        foreach ($ORIGINAL_VALUES as $name => $value) {
             $params[strtolower($name)] = $value;
         }
         $params['extra'] =  [
@@ -195,7 +196,7 @@ class V2Test extends TestCase
 
         // compare each saved value to the original
         $user = UserManager::getManager()->find($userId);
-        foreach($ORIGINAL_VALUES as $name => $value) {
+        foreach ($ORIGINAL_VALUES as $name => $value) {
             $methodName = 'get'.ucfirst($name);
             if ($name !== 'password' and method_exists($user, "$methodName")) {
                 $this->assertSame($value, eval("return \$user->$methodName();"), $name);
@@ -256,7 +257,9 @@ class V2Test extends TestCase
             'filter' => 1,
         ]);
         SessionManager::update_session_extra_field_value(
-            $modelSessionId, $EXTRA_FIELD_NAME, $EXTRA_FIELD_VALUE_FOR_MODEL_SESSION);
+            $modelSessionId,
+            $EXTRA_FIELD_NAME,
+            $EXTRA_FIELD_VALUE_FOR_MODEL_SESSION);
 
         // create a second extra field and set its value in the model session
         // the new session will inherit the same value in this field
@@ -272,7 +275,9 @@ class V2Test extends TestCase
             'filter' => 1,
         ]);
         SessionManager::update_session_extra_field_value(
-            $modelSessionId, $SECOND_EXTRA_FIELD_NAME, $SECOND_EXTRA_FIELD_VALUE);
+            $modelSessionId,
+            $SECOND_EXTRA_FIELD_NAME,
+            $SECOND_EXTRA_FIELD_VALUE);
 
         // subscribe the model session to the promotion - the new session will inherit this too
         SessionManager::subscribe_sessions_to_promotion($promotionId, [$modelSessionId]);
@@ -281,7 +286,7 @@ class V2Test extends TestCase
         $COURSE_CODES = [ 'course A'.time(), 'course B'.time(), 'course C'.time() ];
         $courseList = [];
         $authorId = UserManager::get_user_id_from_username(self::WEBSERVICE_USERNAME);
-        foreach($COURSE_CODES as $code) {
+        foreach ($COURSE_CODES as $code) {
             $course = CourseManager::create_course(['code' => $code, 'title' => $code ], $authorId);
             $courseList[] = $course['real_id'];
         }
@@ -310,25 +315,29 @@ class V2Test extends TestCase
         // assert the new session has its own new value in the first extra field
         $extraFieldValueModel = new ExtraFieldValue('session');
         $extraFieldValue = $extraFieldValueModel->get_values_by_handler_and_field_variable(
-            $newSessionId, $EXTRA_FIELD_NAME);
+            $newSessionId,
+            $EXTRA_FIELD_NAME);
         $this->assertNotFalse($extraFieldValue);
         $this->assertSame($EXTRA_FIELD_VALUE_FOR_NEW_SESSION, $extraFieldValue['value']);
 
         // assert the model session still has its own original value in the first extra field
         $extraFieldValue = $extraFieldValueModel->get_values_by_handler_and_field_variable(
-            $modelSessionId, $EXTRA_FIELD_NAME);
+            $modelSessionId,
+            $EXTRA_FIELD_NAME);
         $this->assertNotFalse($extraFieldValue);
         $this->assertSame($EXTRA_FIELD_VALUE_FOR_MODEL_SESSION, $extraFieldValue['value']);
 
         // assert the new session has inherited the model session value in the second extra field
         $extraFieldValue = $extraFieldValueModel->get_values_by_handler_and_field_variable(
-            $newSessionId, $SECOND_EXTRA_FIELD_NAME);
+            $newSessionId,
+            $SECOND_EXTRA_FIELD_NAME);
         $this->assertNotFalse($extraFieldValue);
         $this->assertSame($SECOND_EXTRA_FIELD_VALUE, $extraFieldValue['value']);
 
         // assert the model session still has the same value in the second extra field
         $extraFieldValue = $extraFieldValueModel->get_values_by_handler_and_field_variable(
-            $modelSessionId, $SECOND_EXTRA_FIELD_NAME);
+            $modelSessionId,
+            $SECOND_EXTRA_FIELD_NAME);
         $this->assertNotFalse($extraFieldValue);
         $this->assertSame($SECOND_EXTRA_FIELD_VALUE, $extraFieldValue['value']);
 
@@ -345,7 +354,7 @@ class V2Test extends TestCase
         }
 
         // clean up
-        foreach($COURSE_CODES as $code) {
+        foreach ($COURSE_CODES as $code) {
             CourseManager::delete_course($code);
         }
         SessionManager::delete($modelSessionId);
@@ -487,7 +496,12 @@ class V2Test extends TestCase
         // create a user with initial data and extra field values
         $LOGIN_NAME = 'testUser'.time();
         $userId = UserManager::create_user(
-            'Initial first name', 'Initial last name', 5,'initial.email@local', $LOGIN_NAME, 'xXxxXxxXX');
+            'Initial first name',
+            'Initial last name',
+            5,
+            'initial.email@local',
+            $LOGIN_NAME,
+            'xXxxXxxXX');
 
         // create an extra field and initialise its value for the user
         $extraFieldModel = new ExtraField('user');
@@ -533,7 +547,7 @@ class V2Test extends TestCase
         /** @var User $user */
         $user = $userManager->find($userId);
         $userManager->reloadUser($user);
-        foreach($NEW_DATA as $k => $v) {
+        foreach ($NEW_DATA as $k => $v) {
             $kk = ucfirst($k);
             $this->assertSame($v, eval("return \$user->get$kk();"), $k);
         }

@@ -1597,16 +1597,25 @@ class Rest extends WebService
     }
 
     /**
+     * Creates a session from a model session
+     *
      * @param $modelSessionId
      * @param $sessionName
      * @param $startDate
      * @param $endDate
      * @param array $extraFields
-     * @return array
+     * @return array containing an int, the id of the new session
      * @throws Exception
      */
     public function createSessionFromModel($modelSessionId, $sessionName, $startDate, $endDate, array $extraFields = [])
     {
+        if (empty($_POST['modelSessionId'])
+            || empty($_POST['sessionName'])
+            || empty($_POST['startDate'])
+            || empty($_POST['endDate'])) {
+            throw new Exception(get_lang('NoData'));
+        }
+
         if (!SessionManager::isValidId($modelSessionId)) {
             throw new Exception(get_lang('ModelSessionDoesNotExist'));
         }
@@ -1653,11 +1662,13 @@ class Rest extends WebService
 
         $modelExtraFields = [];
         $fields = SessionManager::getFilteredExtraFields($modelSessionId);
-        foreach($fields as $field) {
-            $modelExtraFields[$field['variable']] = $field['value'];
+        if (is_array($fields) and !empty($fields)) {
+            foreach ($fields as $field) {
+                $modelExtraFields[$field['variable']] = $field['value'];
+            }
         }
         $allExtraFields = array_merge($modelExtraFields, $extraFields);
-        foreach($allExtraFields as $name => $value) {
+        foreach ($allExtraFields as $name => $value) {
             if (!SessionManager::update_session_extra_field_value($newSessionId, $name, $value)) {
                 throw new Exception(get_lang('CouldNotUpdateExtraFieldValue'));
             }
@@ -1685,9 +1696,11 @@ class Rest extends WebService
     }
 
     /**
-     * @param $sessionId
-     * @param $loginName
-     * @return array
+     * subscribes a user to a session
+     *
+     * @param int $sessionId the session id
+     * @param string $loginName the user's login name
+     * @return array containing a boolean, whether it worked
      * @throws Exception
      */
     public function subscribeUserToSessionFromUsername($sessionId, $loginName)
@@ -1702,7 +1715,10 @@ class Rest extends WebService
         }
 
         $subscribed = SessionManager::subscribeUsersToSession(
-            $sessionId, [$userId], SESSION_VISIBLE_READ_ONLY, false);
+            $sessionId,
+            [$userId],
+            SESSION_VISIBLE_READ_ONLY,
+            false);
         if (!$subscribed) {
             throw new Exception(get_lang('UserNotSubscribed'));
         }
@@ -1711,10 +1727,12 @@ class Rest extends WebService
     }
 
     /**
+     * finds the session which has a specific value in a specific extra field
+     *
      * @param $fieldName
      * @param $fieldValue
-     * @return array
-     * @throws Exception
+     * @return array containing an int, the matching session id
+     * @throws Exception when no session matched or more than one session matched
      */
     public function getSessionFromExtraField($fieldName, $fieldValue)
     {
@@ -1738,15 +1756,20 @@ class Rest extends WebService
     }
 
     /**
-     * @param $parameters
-     * @return array        [ true ] on success
-     * @throws Exception
+     * updates a user identified by its login name
+     *
+     * @param array $parameters
+     * @return array containing the boolean true on success
+     * @throws Exception on failure
      */
     public function updateUserFromUserName($parameters)
     {
         // find user
         $userId = null;
-        foreach($parameters as $name => $value) {
+        if (!is_array($parameters) || empty($parameters)) {
+            throw new Exception('NoData');
+        }
+        foreach ($parameters as $name => $value) {
             if (strtolower($name) === 'loginname') {
                 $userId = UserManager::get_user_id_from_username($value);
                 if (false === $userId) {
@@ -1771,8 +1794,8 @@ class Rest extends WebService
         }
 
         // apply submitted modifications
-        foreach($parameters as $name => $value) {
-            switch(strtolower($name)) {
+        foreach ($parameters as $name => $value) {
+            switch (strtolower($name)) {
                 case 'email':
                     $user->setEmail($value);
                     break;

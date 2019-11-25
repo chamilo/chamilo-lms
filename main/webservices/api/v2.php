@@ -292,14 +292,8 @@ try {
             $restResponse->setData(['status' => true]);
             break;
         case Rest::CREATE_SESSION_FROM_MODEL:
-            if (empty($_POST['modelSessionId'])
-                || empty($_POST['sessionName'])
-                || empty($_POST['startDate'])
-                || empty($_POST['endDate'])) {
-                throw new Exception(get_lang('NoData'));
-            }
             $newSessionId = $restApi->createSessionFromModel(
-                intval($_POST['modelSessionId']),
+                $_POST['modelSessionId'],
                 $_POST['sessionName'],
                 $_POST['startDate'],
                 $_POST['endDate'],

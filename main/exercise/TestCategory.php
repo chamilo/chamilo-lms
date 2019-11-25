@@ -97,12 +97,8 @@ class TestCategory
                 ->setDescription($this->description);
             $em = $repo->getEntityManager();
             $em->persist($category);
-            $em->flush();
 
             if ($category) {
-                $newId = $category->getIid();
-                $sql = "UPDATE $table SET id = iid WHERE iid = $newId";
-                Database::query($sql);
                 $repo->addResourceToCourse(
                     $category,
                     ResourceLink::VISIBILITY_PUBLISHED,
@@ -111,6 +107,12 @@ class TestCategory
                     api_get_session_entity(),
                     api_get_group_entity()
                 );
+
+                $repo->getEntityManager()->flush();
+
+                $newId = $category->getIid();
+                $sql = "UPDATE $table SET id = iid WHERE iid = $newId";
+                Database::query($sql);
 
                 return $newId;
             }
@@ -1096,7 +1098,7 @@ class TestCategory
             [
                 'persistence' => false,
                 'route' => 'home',
-                'filterable' => true,
+                'filterable' => false,
                 'sortable' => true,
                 'max_per_page' => 10,
             ]

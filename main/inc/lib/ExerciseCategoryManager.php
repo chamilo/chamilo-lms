@@ -174,7 +174,6 @@ class ExerciseCategoryManager extends Model
             $category->setPosition($position);
 */
         $em->persist($category);
-        $em->flush();
 
         $repo->addResourceToCourse(
             $category,
@@ -188,43 +187,6 @@ class ExerciseCategoryManager extends Model
         $em->flush();
 
         return $category;
-    }
-
-    /**
-     * @param string $token
-     *
-     * @return string
-     */
-    public function getJqgridActionLinks($token)
-    {
-        //With this function we can add actions to the jgrid (edit, delete, etc)
-        $editIcon = Display::return_icon('edit.png', get_lang('Edit'), '', ICON_SIZE_SMALL);
-        $deleteIcon = Display::return_icon('delete.png', get_lang('Delete'), '', ICON_SIZE_SMALL);
-        /*$editIcon = Display::returnFontAwesomeIcon('pencil');
-        $deleteIcon = Display::returnFontAwesomeIcon('trash');*/
-        $confirmMessage = addslashes(
-            api_htmlentities(get_lang('Please confirm your choice'), ENT_QUOTES)
-        );
-
-        $courseParams = api_get_cidreq();
-
-        $editButton = <<<JAVASCRIPT
-            <a href="?action=edit&{$courseParams}&id=' + options.rowId + '" class="">\
-                $editIcon\
-            </a>
-JAVASCRIPT;
-        $deleteButton = <<<JAVASCRIPT
-            <a \
-                onclick="if (!confirm(\'$confirmMessage\')) {return false;}" \
-                href="?sec_token=$token&{$courseParams}&id=' + options.rowId + '&action=delete" \
-                class="">\
-                $deleteIcon\
-            </a>
-JAVASCRIPT;
-
-        return "function action_formatter(cellvalue, options, rowObject) {        
-            return '$editButton $deleteButton';
-        }";
     }
 
     /**

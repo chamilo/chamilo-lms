@@ -1533,8 +1533,6 @@ class Exercise
         $expired_time = (int) $this->expired_time;
 
         $repo = Container::getExerciseRepository();
-        $courseEntity = api_get_course_entity($this->course_id);
-
         // Exercise already exists
         if ($id) {
             // we prepare date in the database using the api_get_utc_datetime() function
@@ -1697,17 +1695,20 @@ class Exercise
                 Database::query($sql);
 
                 $exercise = $repo->find($this->id);
-                $repo->addResourceToCourse(
-                    $exercise,
-                    ResourceLink::VISIBILITY_PUBLISHED,
-                    api_get_user_entity(api_get_user_id()),
-                    api_get_course_entity(),
-                    api_get_session_entity(),
-                    api_get_group_entity()
-                );
+                if ($exercise) {
+                    $repo->addResourceToCourse(
+                        $exercise,
+                        ResourceLink::VISIBILITY_PUBLISHED,
+                        api_get_user_entity(api_get_user_id()),
+                        api_get_course_entity(),
+                        api_get_session_entity(),
+                        api_get_group_entity()
+                    );
+                    $repo->getEntityManager()->flush();
 
-                if (api_get_setting('search_enabled') == 'true' && extension_loaded('xapian')) {
-                    $this->search_engine_save();
+                    if (api_get_setting('search_enabled') == 'true' && extension_loaded('xapian')) {
+                        $this->search_engine_save();
+                    }
                 }
             }
         }
@@ -8368,6 +8369,8 @@ class Exercise
 
         $editAccess = Container::getAuthorizationChecker()->isGranted(ResourceNodeVoter::ROLE_CURRENT_COURSE_TEACHER);
 
+        $allowFilters = false;
+
         // 5. Set parameters and properties.
         $grid = $builder->createBuilder(
             'grid',
@@ -8375,7 +8378,7 @@ class Exercise
             [
                 'persistence' => false,
                 'route' => 'home',
-                'filterable' => $editAccess,
+                'filterable' => $allowFilters,
                 'sortable' => $editAccess,
                 'max_per_page' => 10,
             ]
@@ -8433,7 +8436,7 @@ class Exercise
                 'legacy_main',
                 false,
                 '_self',
-                ['class' => 'btn btn-secondary']
+                ['class' => 'btn btn-secondary', 'icon' => 'fa fa-pen']
             );
 
             $myRowAction->setRouteParameters(
@@ -8475,7 +8478,7 @@ class Exercise
                 'legacy_main',
                 false,
                 '_self',
-                ['class' => 'btn btn-primary']
+                ['class' => 'btn btn-secondary']
             );
             $myRowAction->setRouteParameters(
                 [
@@ -8516,7 +8519,7 @@ class Exercise
                         $title = get_lang('Enable');
                         if ($link->getVisibility() === ResourceLink::VISIBILITY_PUBLISHED) {
                             $visibleChoice = 'disable';
-                            $attributes = ['class' => 'btn btn-danger'];
+                            $attributes = ['class' => 'btn btn-secondary'];
                             $title = get_lang('Disable');
                         }
                         $params = [

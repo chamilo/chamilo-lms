@@ -339,7 +339,8 @@ class ResourceRepository extends EntityRepository
      */
     public function addResourceToCourse(AbstractResource $resource, int $visibility, User $creator, Course $course, Session $session = null, CGroupInfo $group = null)
     {
-        $node = $this->addResourceNode($resource, $creator, $course);
+        $node = $this->createNodeForResource($resource, $creator, $course->getResourceNode());
+
         $this->addResourceNodeToCourse($node, $visibility, $course, $session, $group);
     }
 

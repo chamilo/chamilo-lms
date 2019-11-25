@@ -897,14 +897,7 @@ abstract class Question
         $exerciseId = $exercise->id;
 
         $id = $this->id;
-        $question = $this->question;
-        $description = $this->description;
-        $weighting = $this->weighting;
-        $position = $this->position;
         $type = $this->type;
-        $picture = $this->picture;
-        $level = $this->level;
-        $extra = $this->extra;
         $c_id = $this->course['real_id'];
         $categoryId = $this->category;
 

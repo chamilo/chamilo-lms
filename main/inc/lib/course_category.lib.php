@@ -145,7 +145,7 @@ class CourseCategory
                 FROM $tbl_category t1 
                 $conditions
                 LEFT JOIN $tbl_course t3 
-                ON t3.category_code=t1.code
+                ON t3.category_id=t1.id
                 WHERE 1=1
                     $whereCondition 
                 GROUP BY

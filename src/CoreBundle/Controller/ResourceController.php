@@ -404,19 +404,28 @@ class ResourceController extends AbstractResourceController implements CourseCon
     {
         $tool = $request->get('tool');
         $type = $request->get('type');
-        $nodeId = $request->get('id');
+        $resourceNodeId = $request->get('id');
 
         $this->setBreadCrumb($request);
 
         $repository = $this->getRepositoryFromRequest($request);
         /** @var AbstractResource $resource */
-        $resource = $repository->getRepository()->findOneBy(['resourceNode' => $nodeId]);
-        $node = $resource->getResourceNode();
-        $resourceNodeParentId = $node->getId();
+        $resource = $repository->getRepository()->findOneBy(['resourceNode' => $resourceNodeId]);
+        $resourceNode = $resource->getResourceNode();
+
+
+
+        $this->denyAccessUnlessGranted(
+            ResourceNodeVoter::VIEW,
+            $resourceNode,
+            $this->trans('Unauthorised access to resource')
+        );
+
+        $resourceNodeParentId = $resourceNode->getId();
 
         $form = $repository->getForm($this->container->get('form.factory'), $resource);
 
-        if ($node->isEditable()) {
+        if ($resourceNode->isEditable()) {
             $form->add(
                 'content',
                 CKEditorType::class,
@@ -606,25 +615,23 @@ class ResourceController extends AbstractResourceController implements CourseCon
             $resourceNode,
             $this->trans('Unauthorised access to resource')
         );
+
         /** @var ResourceLink $link */
         $link = $resource->getCourseSessionResourceLink();
 
-        $newVisibility = ResourceLink::VISIBILITY_PUBLISHED;
         $icon = 'fa-eye';
+        // Use repository to change settings easily.
         if ($link->getVisibility() === ResourceLink::VISIBILITY_PUBLISHED) {
-            $newVisibility = ResourceLink::VISIBILITY_DRAFT;
+            $repository->setVisibilityDraft($resource);
             $icon = 'fa-eye-slash';
+        } else {
+            $repository->setVisibilityPublished($resource);
         }
-
-        $link->setVisibility($newVisibility);
-        $em->persist($link);
-        $em->flush();
 
         $result = ['icon' => $icon];
 
         return new JsonResponse($result);
     }
-
 
     /**
      * @Route("/{tool}/{type}/{id}", name="chamilo_core_resource_delete")

@@ -112,15 +112,14 @@ class ResourceNodeVoter extends Voter
             return false;
         }
 
-        // Checking admin roles
         $authChecker = $this->container->get('security.authorization_checker');
 
-        // Admins have access to everything
+        // Checking admin roles.
         if ($authChecker->isGranted('ROLE_ADMIN')) {
             return true;
         }
 
-        // Check if I'm the owner
+        // Check if I'm the owner.
         $creator = $resourceNode->getCreator();
 
         if ($creator instanceof UserInterface &&
@@ -128,7 +127,7 @@ class ResourceNodeVoter extends Voter
             return true;
         }
 
-        // Checking possible links connected to this resource
+        // Checking links connected to this resource.
         $request = $this->container->get('request_stack')->getCurrentRequest();
 
         // @todo fix parameters.
@@ -137,7 +136,6 @@ class ResourceNodeVoter extends Voter
 
         $links = $resourceNode->getResourceLinks();
         $linkFound = false;
-
         $courseManager = $this->container->get('Chamilo\CoreBundle\Repository\CourseRepository');
 
         /** @var ResourceLink $link */

@@ -72,7 +72,7 @@ class EditorController extends BaseController
      *
      * @param int $parentId
      */
-    public function customEditorFileManager(Request $request, Grid $grid, $parentId = 0, CDocumentRepository $repository): Response
+    public function customEditorFileManager(Request $request, Grid $grid, $parentId = 0, CDocumentRepository $repository, TranslatorInterface $translator): Response
     {
         $id = $request->get('id');
 
@@ -83,6 +83,12 @@ class EditorController extends BaseController
         if (!empty($parentId)) {
             $parent = $repository->getResourceNodeRepository()->find($parentId);
         }
+
+        $this->denyAccessUnlessGranted(
+            ResourceNodeVoter::VIEW,
+            $parent,
+            $translator->trans('Unauthorised access to resource')
+        );
 
         $source = new Entity(CDocument::class);
 
@@ -95,11 +101,11 @@ class EditorController extends BaseController
         $title = $grid->getColumn('title');
         $title->setSafe(false);
 
-        //$grid->hideFilters();
         $grid->setLimits(20);
-        //$grid->isReadyForRedirect();
-        //$grid->setMaxResults(1);
-        //$grid->setLimits(2);
+        $grid->setHiddenColumns(['iid']);
+
+        $grid->getColumn('title')->setTitle($translator->trans('Name'));
+        $grid->getColumn('filetype')->setTitle($translator->trans('Type'));
 
         $courseIdentifier = $course->getCode();
 
@@ -140,28 +146,6 @@ class EditorController extends BaseController
                 return '<a href="'.$url.'">'.$value.'</a>';
             }
         );
-
-        // Show resource data
-        /*$myRowAction = new RowAction(
-            'use',
-            'chamilo_core_resource_show',
-            false,
-            '_self',
-            ['class' => 'btn btn-secondary']
-        );
-        $myRowAction->setRouteParameters($routeParams);
-
-        $setNodeParameters = function (RowAction $action, Row $row) use ($routeParams) {
-            $id = $row->getEntity()->getResourceNode()->getId();
-            $routeParams['id'] = $id;
-            $action->setRouteParameters($routeParams);
-            return $action;
-        };
-        $myRowAction->addManipulateRender($setNodeParameters);
-
-        $grid->addRowAction($myRowAction);*/
-
-        //return $this->render('@ChamiloTheme/Editor/custom.html.twig', $params);
 
         return $grid->getGridResponse(
             '@ChamiloTheme/Editor/custom.html.twig',

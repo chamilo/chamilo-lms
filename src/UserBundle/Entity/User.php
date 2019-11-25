@@ -3,7 +3,6 @@
 
 namespace Chamilo\UserBundle\Entity;
 
-//use Chamilo\CoreBundle\Entity\UserFieldValues;
 use Chamilo\CoreBundle\Entity\AccessUrl;
 use Chamilo\CoreBundle\Entity\AccessUrlRelUser;
 use Chamilo\CoreBundle\Entity\Course;
@@ -15,7 +14,6 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Mapping as ORM;
-//use FOS\UserBundle\Model\GroupInterface;
 use Sonata\UserBundle\Entity\BaseUser;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\HttpFoundation\File\File;
@@ -23,16 +21,6 @@ use Symfony\Component\Security\Core\User\EquatableInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Mapping\ClassMetadata;
-
-//use Chamilo\CoreBundle\Component\Auth;
-//use FOS\MessageBundle\Model\ParticipantInterface;
-//use Chamilo\ThemeBundle\Model\UserInterface as ThemeUser;
-//use Vich\UploaderBundle\Mapping\Annotation as Vich;
-//use Application\Sonata\MediaBundle\Entity\Media;
-//use Chamilo\UserBundle\Model\UserInterface as UserInterfaceModel;
-//use Sylius\Component\Attribute\Model\AttributeValueInterface as BaseAttributeValueInterface;
-//use Sylius\Component\Variation\Model\OptionInterface as BaseOptionInterface;
-//use Sylius\Component\Variation\Model\VariantInterface as BaseVariantInterface;
 
 /**
  * @ORM\HasLifecycleCallbacks
@@ -45,7 +33,7 @@ use Symfony\Component\Validator\Mapping\ClassMetadata;
  * )
  * @UniqueEntity("username")
  *
- * @ORM\Entity(repositoryClass="Chamilo\UserBundle\Repository\UserRepository")
+ * @ORM\Entity()
  *
  * @ORM\AttributeOverrides({
  *     @ORM\AttributeOverride(name="username",

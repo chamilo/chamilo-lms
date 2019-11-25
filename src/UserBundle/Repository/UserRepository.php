@@ -44,26 +44,39 @@ use Chamilo\CourseBundle\Entity\CSurveyAnswer;
 use Chamilo\CourseBundle\Entity\CWiki;
 use Chamilo\TicketBundle\Entity\Ticket;
 use Chamilo\UserBundle\Entity\User;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query\Expr\Join;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Normalizer\GetSetMethodNormalizer;
 use Symfony\Component\Serializer\Serializer;
-
-//use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
-//use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
+use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
+use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 
 /**
  * Class UserRepository.
  *
  * All functions that query the database (selects)
  * Functions should return query builders.
- *
- * @package Chamilo\UserBundle\Repository
  */
-class UserRepository extends EntityRepository
+class UserRepository
 {
+    /**
+     * @var EntityRepository
+     */
+    private $repository;
+
+    public function __construct(EntityManagerInterface $entityManager)
+    {
+        $this->repository = $entityManager->getRepository(User::class);
+    }
+
+    public function findByUsername(string $username): ?User
+    {
+        return $this->repository->findOneBy(['username' => $username]);
+    }
+
     /**
      * @param string $keyword
      *
@@ -71,7 +84,7 @@ class UserRepository extends EntityRepository
      */
     public function searchUserByKeyword($keyword)
     {
-        $qb = $this->createQueryBuilder('a');
+        $qb = $this->repository->createQueryBuilder('a');
 
         // Selecting user info
         $qb->select('DISTINCT b');
@@ -97,7 +110,7 @@ class UserRepository extends EntityRepository
      */
     public function findByRole($role)
     {
-        $em = $this->getEntityManager();
+        $em = $this->repository->getEntityManager();
         $qb = $em->createQueryBuilder();
 
         $qb->select('u')
@@ -184,7 +197,7 @@ class UserRepository extends EntityRepository
     public function searchUsersByStatus($query, $status, $accessUrlId = null)
     {
         $accessUrlId = (int) $accessUrlId;
-        $queryBuilder = $this->createQueryBuilder('u');
+        $queryBuilder = $this->repository->createQueryBuilder('u');
 
         if ($accessUrlId > 0) {
             $queryBuilder->innerJoin(
@@ -218,7 +231,7 @@ class UserRepository extends EntityRepository
      */
     public function getCoachesForSessionCourse(Session $session, Course $course)
     {
-        $queryBuilder = $this->createQueryBuilder('u');
+        $queryBuilder = $this->repository->createQueryBuilder('u');
 
         $queryBuilder->select('u')
             ->innerJoin(
@@ -307,7 +320,7 @@ class UserRepository extends EntityRepository
      */
     public function getSessionAdmins(User $user)
     {
-        $queryBuilder = $this->createQueryBuilder('u');
+        $queryBuilder = $this->repository->createQueryBuilder('u');
         $queryBuilder
             ->distinct()
             ->innerJoin(
@@ -340,7 +353,7 @@ class UserRepository extends EntityRepository
      */
     public function getStudentBosses(User $user)
     {
-        $queryBuilder = $this->createQueryBuilder('u');
+        $queryBuilder = $this->repository->createQueryBuilder('u');
         $queryBuilder
             ->distinct()
             ->innerJoin(
@@ -366,7 +379,7 @@ class UserRepository extends EntityRepository
      */
     public function getCountUsersByUrl(AccessUrl $url)
     {
-        return $this->createQueryBuilder('a')
+        return $this->repository->createQueryBuilder('a')
             ->select('COUNT(a)')
             ->innerJoin('a.portals', 'u')
             ->where('u.portal = :u')
@@ -382,7 +395,7 @@ class UserRepository extends EntityRepository
      */
     public function getCountTeachersByUrl(AccessUrl $url)
     {
-        $qb = $this->createQueryBuilder('a');
+        $qb = $this->repository->createQueryBuilder('a');
 
         return $qb
             ->select('COUNT(a)')
@@ -489,7 +502,7 @@ class UserRepository extends EntityRepository
      */
     public function getAssignedHrmUserList($userId, $urlId)
     {
-        $qb = $this->createQueryBuilder('user');
+        $qb = $this->repository->createQueryBuilder('user');
 
         $hrmList = $qb
             ->select('uru')

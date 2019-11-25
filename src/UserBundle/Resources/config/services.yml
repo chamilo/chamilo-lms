@@ -1,4 +1,8 @@
 services:
+    _defaults:
+        autowire: true
+        public: true
+
     chamilo_user.security.user_provider:
         class: Chamilo\UserBundle\Security\FOSUBUserProvider
         arguments:
@@ -7,4 +11,6 @@ services:
 
     chamilo_user.security.login_form_authenticator:
         class: Chamilo\UserBundle\Security\LoginFormAuthenticator
-        autowire: true
+
+    Chamilo\UserBundle\Repository\UserRepository: ~
+    Chamilo\UserBundle\Repository\GroupRepository: ~

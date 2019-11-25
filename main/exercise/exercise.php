@@ -42,7 +42,6 @@ $isDrhOfCourse = CourseManager::isUserSubscribedInCourseAsDrh(
 );
 
 $TBL_DOCUMENT = Database::get_course_table(TABLE_DOCUMENT);
-$TBL_ITEM_PROPERTY = Database::get_course_table(TABLE_ITEM_PROPERTY);
 $TBL_EXERCISE_QUESTION = Database::get_course_table(TABLE_QUIZ_TEST_QUESTION);
 $TBL_EXERCISES = Database::get_course_table(TABLE_QUIZ_TEST);
 $TBL_TRACK_EXERCISES = Database::get_main_table(TABLE_STATISTIC_TRACK_E_EXERCISES);

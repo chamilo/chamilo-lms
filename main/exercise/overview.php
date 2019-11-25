@@ -187,15 +187,8 @@ $table_content = '';
 /* Make a special case for IE, which doesn't seem to be able to handle the
  * results popup -> send it to the full results page */
 
-$browser = new Browser();
-$current_browser = $browser->getBrowser();
 $url_suffix = '';
 $btn_class = ' ';
-if ($current_browser == 'Internet Explorer') {
-    $url_suffix = '&show_headers=1';
-    $btn_class = '';
-}
-
 $blockShowAnswers = false;
 if (in_array(
     $objExercise->results_disabled,

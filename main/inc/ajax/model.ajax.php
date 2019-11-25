@@ -2290,12 +2290,7 @@ if (in_array($action, $allowed_actions)) {
                 break;
             case 'xls_html':
                 //TODO add date if exists
-                $browser = new Browser();
-                if ($browser->getPlatform() == Browser::PLATFORM_WINDOWS) {
-                    Export::export_table_xls_html($array, $fileName, 'ISO-8859-15');
-                } else {
-                    Export::export_table_xls_html($array, $fileName);
-                }
+                Export::export_table_xls_html($array, $fileName);
                 break;
             case 'csv':
             default:

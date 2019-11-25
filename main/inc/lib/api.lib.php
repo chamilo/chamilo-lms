@@ -6931,6 +6931,7 @@ function api_get_template($path_type = 'rel')
  * checked by this method. Make sure you check its definition first.
  *
  * @param string $format Can be a file format (extension like svg, webm, ...) or a feature (like autocapitalize, ...)
+ * @deprecated
  *
  * @return bool or return text array if $format=check_browser
  *
@@ -6938,6 +6939,8 @@ function api_get_template($path_type = 'rel')
  */
 function api_browser_support($format = '')
 {
+    return true;
+
     $browser = new Browser();
     $current_browser = $browser->getBrowser();
     $a_versiontemp = explode('.', $browser->getVersion());

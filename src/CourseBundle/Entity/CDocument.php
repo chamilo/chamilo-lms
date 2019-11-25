@@ -338,9 +338,9 @@ class CDocument extends AbstractResource implements ResourceInterface
     /**
      * @return ResourceLink
      */
-    public function getCourseSessionResourceLink()
+    public function getCourseSessionResourceLink(Course $course, Session $session = null)
     {
-        return $this->getFirstResourceLinkFromCourseSession($this->getCourse(), $this->getSession());
+        return $this->getFirstResourceLinkFromCourseSession($course, $session);
     }
 
     /**
@@ -348,17 +348,17 @@ class CDocument extends AbstractResource implements ResourceInterface
      *
      * @return int
      */
-    public function getVisibility()
+    public function getVisibility(Course $course, Session $session = null)
     {
-        return $this->getCourseSessionResourceLink()->getVisibility();
+        return $this->getCourseSessionResourceLink($course, $session)->getVisibility();
     }
 
     /**
      * @return bool
      */
-    public function isVisible(): bool
+    public function isVisible(Course $course, Session $session = null): bool
     {
-        return $this->getCourseSessionResourceLink() === ResourceLink::VISIBILITY_PUBLISHED;
+        return $this->getCourseSessionResourceLink($course, $session) === ResourceLink::VISIBILITY_PUBLISHED;
     }
 
     /**

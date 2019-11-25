@@ -169,10 +169,10 @@ class ResourceController extends AbstractResourceController implements CourseCon
 
                 $icon = $resourceNode->getIcon().' &nbsp;';
                 if ($resourceNode->hasResourceFile()) {
-                    $url = $router->generate(
+                    /*$url = $router->generate(
                         'chamilo_core_resource_show',
                         $myParams
-                    );
+                    );*/
 
                     if ($resourceNode->isResourceFileAnImage()) {
                         $url = $router->generate(
@@ -287,7 +287,8 @@ class ResourceController extends AbstractResourceController implements CourseCon
                 $id = $resource->getResourceNode()->getId();
 
                 $icon = 'fa-eye-slash';
-                if ($resource->getCourseSessionResourceLink()->getVisibility() === ResourceLink::VISIBILITY_PUBLISHED) {
+                $link = $resource->getCourseSessionResourceLink($this->getCourse(), $this->getSession());
+                if ($link->getVisibility() === ResourceLink::VISIBILITY_PUBLISHED) {
                     $icon = 'fa-eye';
                 }
                 $routeParams['id'] = $id;
@@ -334,7 +335,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
                 'chamilo_core_resource_delete',
                 true,
                 '_self',
-                ['class' => 'btn btn-danger', 'hidden' => true]
+                ['class' => 'btn btn-danger', 'data_hidden' => true]
             );
             $myRowAction->addManipulateRender($setNodeParameters);
             $grid->addRowAction($myRowAction);
@@ -627,11 +628,11 @@ class ResourceController extends AbstractResourceController implements CourseCon
         );
 
         /** @var ResourceLink $link */
-        $link = $resource->getCourseSessionResourceLink();
+        $link = $resource->getCourseSessionResourceLink($this->getCourse(), $this->getSession());
 
         $icon = 'fa-eye';
         // Use repository to change settings easily.
-        if ($link->getVisibility() === ResourceLink::VISIBILITY_PUBLISHED) {
+        if ($link && $link->getVisibility() === ResourceLink::VISIBILITY_PUBLISHED) {
             $repository->setVisibilityDraft($resource);
             $icon = 'fa-eye-slash';
         } else {

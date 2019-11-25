@@ -4,15 +4,15 @@
 namespace Chamilo\PluginBundle\MigrationMoodle\Task;
 
 use Chamilo\PluginBundle\MigrationMoodle\Extractor\BaseExtractor;
-use Chamilo\PluginBundle\MigrationMoodle\Loader\LpQuizQuestionsLoader;
+use Chamilo\PluginBundle\MigrationMoodle\Loader\LessonQuestionPagesQuestionLoader;
 use Chamilo\PluginBundle\MigrationMoodle\Transformer\BaseTransformer;
 use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\LoadedCourseLookup;
 use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\LoadedLpQuizLookup;
-use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\LpQuizQuestionTypeLookup;
+use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\QuizQuestionTypeFromLessonPage;
 use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\ReplaceFilePaths;
 
 /**
- * Class LpQuizQuestionsTask.
+ * Class LessonQuestionPagesQuestionTask.
  *
  * Task to convert the question pages from a moodle lesson in one chamilo question to be added in quiz already creadted.
  *
@@ -21,7 +21,7 @@ use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\ReplaceFilePaths;
  *
  * @package Chamilo\PluginBundle\MigrationMoodle\Task
  */
-class LpQuizQuestionsTask extends BaseTask
+class LessonQuestionPagesQuestionTask extends BaseTask
 {
     /**
      * @return array
@@ -58,7 +58,7 @@ class LpQuizQuestionsTask extends BaseTask
                     'properties' => ['contents', 'course'],
                 ],
                 'question_type' => [
-                    'class' => LpQuizQuestionTypeLookup::class,
+                    'class' => QuizQuestionTypeFromLessonPage::class,
                     'properties' => ['qtype', 'qoption'],
                 ],
             ],
@@ -71,7 +71,7 @@ class LpQuizQuestionsTask extends BaseTask
     public function getLoadConfiguration()
     {
         return [
-            'class' => LpQuizQuestionsLoader::class,
+            'class' => LessonQuestionPagesQuestionLoader::class,
         ];
     }
 }

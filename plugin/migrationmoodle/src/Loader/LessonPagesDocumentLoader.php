@@ -6,11 +6,13 @@ namespace Chamilo\PluginBundle\MigrationMoodle\Loader;
 use Chamilo\PluginBundle\MigrationMoodle\Interfaces\LoaderInterface;
 
 /**
- * Class LpDocumentsLoader.
+ * Class LessonPagesLoader.
+ *
+ * Loader for create a HTML document with the transformed data coming from a Moodle lesson page.
  *
  * @package Chamilo\PluginBundle\MigrationMoodle\Loader
  */
-class LpDocumentsLoader implements LoaderInterface
+class LessonPagesDocumentLoader implements LoaderInterface
 {
     /**
      * Load the data and return the ID inserted.

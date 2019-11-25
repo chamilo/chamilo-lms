@@ -6,7 +6,7 @@ namespace Chamilo\PluginBundle\MigrationMoodle\Task;
 use Chamilo\PluginBundle\MigrationMoodle\Extractor\BaseExtractor;
 use Chamilo\PluginBundle\MigrationMoodle\Loader\LessonAnswersMatchingLoader;
 use Chamilo\PluginBundle\MigrationMoodle\Transformer\BaseTransformer;
-use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\LessonAnswersMatchingScoreLookup;
+use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\LessonAnswersMatchingScore;
 use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\LoadedCourseLookup;
 use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\LoadedLpQuizLookup;
 use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\LoadedLpQuizQuestionLookup;
@@ -59,7 +59,7 @@ class LessonAnswersMatchingTask extends BaseTask
                     'properties' => ['pageid'],
                 ],
                 'score' => [
-                    'class' => LessonAnswersMatchingScoreLookup::class,
+                    'class' => LessonAnswersMatchingScore::class,
                     'properties' => ['pageid', 'lessonid', 'course'],
                 ],
                 'answer' => [

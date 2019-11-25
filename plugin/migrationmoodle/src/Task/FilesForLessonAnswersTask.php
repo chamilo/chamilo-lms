@@ -8,11 +8,11 @@ use Chamilo\PluginBundle\MigrationMoodle\Extractor\BaseExtractor;
 /**
  * Class FilesForLessonAnswersTask.
  *
- * Task for migrate the files for lesson answers.
+ * Task for migrate the files for Moodle lesson answers in the files for Chamilo course documents.
  *
  * @package Chamilo\PluginBundle\MigrationMoodle\Task
  */
-class FilesForLessonAnswersTask extends FilesForLessonPagesTask
+class FilesForLessonAnswersTask extends CourseFilesTask
 {
     /**
      * @return array

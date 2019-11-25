@@ -4,7 +4,7 @@
 namespace Chamilo\PluginBundle\MigrationMoodle\Task;
 
 use Chamilo\PluginBundle\MigrationMoodle\Extractor\BaseExtractor;
-use Chamilo\PluginBundle\MigrationMoodle\Loader\LessonAnswerTrueFalseLoader;
+use Chamilo\PluginBundle\MigrationMoodle\Loader\LessonAnswersTrueFalseLoader;
 use Chamilo\PluginBundle\MigrationMoodle\Transformer\BaseTransformer;
 use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\LoadedCourseLookup;
 use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\LoadedLpQuizLookup;
@@ -72,7 +72,7 @@ class LessonAnswersTrueFalseTask extends BaseTask
     public function getLoadConfiguration()
     {
         return [
-            'class' => LessonAnswerTrueFalseLoader::class,
+            'class' => LessonAnswersTrueFalseLoader::class,
         ];
     }
 }

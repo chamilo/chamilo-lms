@@ -3,7 +3,7 @@
 
 namespace Chamilo\PluginBundle\MigrationMoodle\Transformer\Property;
 
-use Chamilo\PluginBundle\MigrationMoodle\Task\LpQuizQuestionsTask;
+use Chamilo\PluginBundle\MigrationMoodle\Task\LessonQuestionPagesQuestionTask;
 
 /**
  * Class LoadedLpQuizQuestionLookup.
@@ -19,6 +19,6 @@ class LoadedLpQuizQuestionLookup extends LoadedKeyLookup
      */
     public function __construct()
     {
-        $this->calledClass = LpQuizQuestionsTask::class;
+        $this->calledClass = LessonQuestionPagesQuestionTask::class;
     }
 }

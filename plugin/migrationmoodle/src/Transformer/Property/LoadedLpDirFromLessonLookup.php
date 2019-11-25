@@ -3,7 +3,7 @@
 
 namespace Chamilo\PluginBundle\MigrationMoodle\Transformer\Property;
 
-use Chamilo\PluginBundle\MigrationMoodle\Task\LpDirsTask;
+use Chamilo\PluginBundle\MigrationMoodle\Task\CourseModulesLessonTask;
 use Doctrine\DBAL\DBALException;
 use Doctrine\DBAL\FetchMode;
 
@@ -19,7 +19,7 @@ class LoadedLpDirFromLessonLookup extends LoadedKeyLookup
      */
     public function __construct()
     {
-        $this->calledClass = LpDirsTask::class;
+        $this->calledClass = CourseModulesLessonTask::class;
     }
 
     public function transform(array $data)

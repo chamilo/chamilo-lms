@@ -4,22 +4,22 @@
 use Chamilo\PluginBundle\MigrationMoodle\Task\BaseTask;
 use Chamilo\PluginBundle\MigrationMoodle\Task\CourseCategoriesTask;
 use Chamilo\PluginBundle\MigrationMoodle\Task\CoursesTask;
-use Chamilo\PluginBundle\MigrationMoodle\Task\CourseUsersTask;
+use Chamilo\PluginBundle\MigrationMoodle\Task\RoleAssignmentsTask;
 use Chamilo\PluginBundle\MigrationMoodle\Task\CQuizTask;
 use Chamilo\PluginBundle\MigrationMoodle\Task\FilesForLessonAnswersTask;
-use Chamilo\PluginBundle\MigrationMoodle\Task\LearningPathsTask;
+use Chamilo\PluginBundle\MigrationMoodle\Task\CourseSectionsTask;
 use Chamilo\PluginBundle\MigrationMoodle\Task\LessonAnswersEssayTask;
 use Chamilo\PluginBundle\MigrationMoodle\Task\LessonAnswersMatchingTask;
 use Chamilo\PluginBundle\MigrationMoodle\Task\LessonAnswersMultipleAnswerTask;
 use Chamilo\PluginBundle\MigrationMoodle\Task\LessonAnswersMultipleChoiceTask;
 use Chamilo\PluginBundle\MigrationMoodle\Task\LessonAnswersShortAnswerTask;
 use Chamilo\PluginBundle\MigrationMoodle\Task\LessonAnswersTrueFalseTask;
-use Chamilo\PluginBundle\MigrationMoodle\Task\LpDirsTask;
+use Chamilo\PluginBundle\MigrationMoodle\Task\CourseModulesLessonTask;
 use Chamilo\PluginBundle\MigrationMoodle\Task\FilesForLessonPagesTask;
-use Chamilo\PluginBundle\MigrationMoodle\Task\LpDocumentsTask;
-use Chamilo\PluginBundle\MigrationMoodle\Task\LpItemsTask;
-use Chamilo\PluginBundle\MigrationMoodle\Task\LpQuizQuestionsTask;
-use Chamilo\PluginBundle\MigrationMoodle\Task\LpQuizzesTask;
+use Chamilo\PluginBundle\MigrationMoodle\Task\LessonPagesDocumentTask;
+use Chamilo\PluginBundle\MigrationMoodle\Task\LessonPagesTask;
+use Chamilo\PluginBundle\MigrationMoodle\Task\LessonQuestionPagesQuestionTask;
+use Chamilo\PluginBundle\MigrationMoodle\Task\LessonQuestionPagesQuizTask;
 use Chamilo\PluginBundle\MigrationMoodle\Task\UsersTask;
 
 require_once __DIR__.'/../../main/inc/global.inc.php';
@@ -168,31 +168,31 @@ if (!empty($action)) {
             $task = new CoursesTask();
             break;
         case 'course_users':
-            $task = new CourseUsersTask();
+            $task = new RoleAssignmentsTask();
             break;
         case 'quizzes':
             $task = new CQuizTask();
             break;
         case 'learning_paths':
-            $task = new LearningPathsTask();
+            $task = new CourseSectionsTask();
             break;
         case 'learning_path_chapters':
-            $task = new LpDirsTask();
+            $task = new CourseModulesLessonTask();
             break;
         case 'learning_path_items':
-            $task = new LpItemsTask();
+            $task = new LessonPagesTask();
             break;
         case 'learning_path_documents':
-            $task = new LpDocumentsTask();
+            $task = new LessonPagesDocumentTask();
             break;
         case 'learning_path_documents_files':
             $task = new FilesForLessonPagesTask();
             break;
         case 'learning_path_quizzes':
-            $task = new LpQuizzesTask();
+            $task = new LessonQuestionPagesQuizTask();
             break;
         case 'learnin_path_quiz_questions':
-            $task = new LpQuizQuestionsTask();
+            $task = new LessonQuestionPagesQuestionTask();
             break;
         case 'learnin_path_quiz_answers_true_false':
             $task = new LessonAnswersTrueFalseTask();

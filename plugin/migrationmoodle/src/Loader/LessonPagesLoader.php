@@ -8,9 +8,11 @@ use Chamilo\PluginBundle\MigrationMoodle\Interfaces\LoaderInterface;
 /**
  * Class LpDocumentsLoader.
  *
+ * Loader to create the items for Chamilo learning paths coming from the list of Moodle lesson pages in a course.
+ *
  * @package Chamilo\PluginBundle\MigrationMoodle\Loader
  */
-class LpItemsLoader implements LoaderInterface
+class LessonPagesLoader implements LoaderInterface
 {
     /**
      * Load the data and return the ID inserted.

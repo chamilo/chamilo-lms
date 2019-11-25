@@ -4,21 +4,23 @@
 namespace Chamilo\PluginBundle\MigrationMoodle\Task;
 
 use Chamilo\PluginBundle\MigrationMoodle\Extractor\BaseExtractor;
-use Chamilo\PluginBundle\MigrationMoodle\Loader\LpDocumentsLoader;
+use Chamilo\PluginBundle\MigrationMoodle\Loader\LessonPagesDocumentLoader;
 use Chamilo\PluginBundle\MigrationMoodle\Transformer\BaseTransformer;
 use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\LoadedCourseCodeLookup;
 use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\LoadedCourseLookup;
 use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\LoadedLpFromLessonLookup;
 use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\LoadedLpItemLookup;
 use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\ReplaceFilePaths;
-use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\WrapHtmlAndReplaceFilePaths;
+use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\WrapHtmlReplacingFilePaths;
 
 /**
- * Class LpDocumentsTask.
+ * Class LessonPagesDocumentTask.
+ *
+ * Task for convert the Moodle lesson pages in Chamilo course documents.
  *
  * @package Chamilo\PluginBundle\MigrationMoodle\Task
  */
-class LpDocumentsTask extends BaseTask
+class LessonPagesDocumentTask extends BaseTask
 {
     /**
      * @return array
@@ -56,7 +58,7 @@ class LpDocumentsTask extends BaseTask
                 ],
                 'item_title' => 'title',
                 'item_content' => [
-                    'class' => WrapHtmlAndReplaceFilePaths::class,
+                    'class' => WrapHtmlReplacingFilePaths::class,
                     'properties' => ['contents', 'course'],
                 ],
             ],
@@ -69,7 +71,7 @@ class LpDocumentsTask extends BaseTask
     public function getLoadConfiguration()
     {
         return [
-            'class' => LpDocumentsLoader::class,
+            'class' => LessonPagesDocumentLoader::class,
         ];
     }
 }

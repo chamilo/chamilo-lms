@@ -4,16 +4,18 @@
 namespace Chamilo\PluginBundle\MigrationMoodle\Task;
 
 use Chamilo\PluginBundle\MigrationMoodle\Extractor\BaseExtractor;
-use Chamilo\PluginBundle\MigrationMoodle\Loader\LearningPathsLoader;
+use Chamilo\PluginBundle\MigrationMoodle\Loader\CourseSectionsLoader;
 use Chamilo\PluginBundle\MigrationMoodle\Transformer\BaseTransformer;
 use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\LoadedCourseCodeLookup;
 
 /**
- * Class LearningPathsTask.
+ * Class CourseSectionsTask.
+ *
+ * Task to convert Moodle course sections in a Chamilo learning paths.
  *
  * @package Chamilo\PluginBundle\MigrationMoodle\Task
  */
-class LearningPathsTask extends BaseTask
+class CourseSectionsTask extends BaseTask
 {
     /**
      * @return array
@@ -50,7 +52,7 @@ class LearningPathsTask extends BaseTask
     public function getLoadConfiguration()
     {
         return [
-            'class' => LearningPathsLoader::class,
+            'class' => CourseSectionsLoader::class,
         ];
     }
 }

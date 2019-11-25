@@ -6,11 +6,11 @@ namespace Chamilo\PluginBundle\MigrationMoodle\Transformer\Property;
 use Chamilo\CoreBundle\Component\Utils\ChamiloApi;
 
 /**
- * Class WrapHtmlAndReplaceFilePaths.
+ * Class WrapHtmlReplacingFilePaths.
  *
  * @package Chamilo\PluginBundle\MigrationMoodle\Transformer\Property
  */
-class WrapHtmlAndReplaceFilePaths extends ReplaceFilePaths
+class WrapHtmlReplacingFilePaths extends ReplaceFilePaths
 {
     /**
      * @param array $data

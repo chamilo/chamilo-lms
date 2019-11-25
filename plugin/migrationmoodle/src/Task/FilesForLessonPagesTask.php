@@ -4,18 +4,18 @@
 namespace Chamilo\PluginBundle\MigrationMoodle\Task;
 
 use Chamilo\PluginBundle\MigrationMoodle\Extractor\BaseExtractor;
-use Chamilo\PluginBundle\MigrationMoodle\Loader\LpDocumentsFilesLoader;
+use Chamilo\PluginBundle\MigrationMoodle\Loader\CourseFilesLoader;
 use Chamilo\PluginBundle\MigrationMoodle\Transformer\BaseTransformer;
 use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\LoadedCourseLookup;
 
 /**
- * Class LessonPagesFilesTask.
+ * Class FilesForLessonPagesTask.
  *
- * Task for migrate the files for lesson pages.
+ * Task for migrate the files for Moodle lesson pages in the files for Chamilo course documents.
  *
  * @package Chamilo\PluginBundle\MigrationMoodle\Task
  */
-class FilesForLessonPagesTask extends BaseTask
+class FilesForLessonPagesTask extends CourseFilesLoader
 {
     /**
      * @return array
@@ -39,37 +39,6 @@ class FilesForLessonPagesTask extends BaseTask
                     AND f.filearea = 'page_contents'
                     AND c.contextlevel = 70
                     AND f.filename NOT IN ('.', '..')",
-        ];
-    }
-
-    /**
-     * @return array
-     */
-    public function getTransformConfiguration()
-    {
-        return [
-            'class' => BaseTransformer::class,
-            'map' => [
-                'contenthash' => 'contenthash',
-                'filepath' => 'filepath',
-                'filename' => 'filename',
-                'filesize' => 'filesize',
-                'mimetype' => 'mimetype',
-                'course' => [
-                    'class' => LoadedCourseLookup::class,
-                    'properties' => ['course'],
-                ],
-            ],
-        ];
-    }
-
-    /**
-     * @return array
-     */
-    public function getLoadConfiguration()
-    {
-        return [
-            'class' => LpDocumentsFilesLoader::class,
         ];
     }
 }

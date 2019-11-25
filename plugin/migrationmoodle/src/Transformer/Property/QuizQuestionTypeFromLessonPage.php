@@ -6,7 +6,7 @@ namespace Chamilo\PluginBundle\MigrationMoodle\Transformer\Property;
 use Chamilo\PluginBundle\MigrationMoodle\Interfaces\TransformPropertyInterface;
 
 /**
- * Class LpQuizQuestionTypeLookup.
+ * Class QuizQuestionTypeFromLessonPage.
  *
  * Transform the qtype from a moodle's lesson page in a type of chamilo question.
  * Get a FILL_IN_BLANKS for short answer (1) and numerical (8).
@@ -16,7 +16,7 @@ use Chamilo\PluginBundle\MigrationMoodle\Interfaces\TransformPropertyInterface;
  *
  * @package Chamilo\PluginBundle\MigrationMoodle\Transformer\Property
  */
-class LpQuizQuestionTypeLookup implements TransformPropertyInterface
+class QuizQuestionTypeFromLessonPage implements TransformPropertyInterface
 {
     /**
      * @param array $data

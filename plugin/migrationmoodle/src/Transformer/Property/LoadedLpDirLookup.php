@@ -4,7 +4,7 @@
 namespace Chamilo\PluginBundle\MigrationMoodle\Transformer\Property;
 
 use Chamilo\PluginBundle\MigrationMoodle\Interfaces\TransformPropertyInterface;
-use Chamilo\PluginBundle\MigrationMoodle\Task\LpDirsTask;
+use Chamilo\PluginBundle\MigrationMoodle\Task\CourseModulesLessonTask;
 
 /**
  * Class LoadedLpDirLookup.
@@ -18,7 +18,7 @@ class LoadedLpDirLookup extends LoadedLpLookup
      */
     public function __construct()
     {
-        $this->calledClass = LpDirsTask::class;
+        $this->calledClass = CourseModulesLessonTask::class;
     }
 
     /**

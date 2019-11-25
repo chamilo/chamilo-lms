@@ -4,18 +4,20 @@
 namespace Chamilo\PluginBundle\MigrationMoodle\Task;
 
 use Chamilo\PluginBundle\MigrationMoodle\Extractor\BaseExtractor;
-use Chamilo\PluginBundle\MigrationMoodle\Loader\LpDirsLoader;
+use Chamilo\PluginBundle\MigrationMoodle\Loader\CourseModulesLessonLoader;
 use Chamilo\PluginBundle\MigrationMoodle\Transformer\BaseTransformer;
 use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\LoadedCourseCodeLookup;
 use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\LoadedLpDirLookup;
 use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\LoadedLpLookup;
 
 /**
- * Class LpDirsTask.
+ * Class CourseModulesLessonTask.
+ *
+ * Task for convert a Moodle course module in a Chamilo learning path section.
  *
  * @package Chamilo\PluginBundle\MigrationMoodle\Task
  */
-class LpDirsTask extends BaseTask
+class CourseModulesLessonTask extends BaseTask
 {
 
     /**
@@ -65,7 +67,7 @@ class LpDirsTask extends BaseTask
     public function getLoadConfiguration()
     {
         return [
-            'class' => LpDirsLoader::class,
+            'class' => CourseModulesLessonLoader::class,
         ];
     }
 }

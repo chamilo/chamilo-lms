@@ -6,21 +6,12 @@ namespace Chamilo\PluginBundle\MigrationMoodle\Transformer\Property;
 use Chamilo\PluginBundle\MigrationMoodle\Interfaces\TransformPropertyInterface;
 
 /**
- * Class LanguageLookup.
+ * Class LpItemType.
  *
  * @package Chamilo\PluginBundle\MigrationMoodle\Transformer\Property
  */
-class LanguageLookup implements TransformPropertyInterface
+class LpItemType implements TransformPropertyInterface
 {
-    /**
-     * @var array
-     */
-    private $languages = [
-        'en' => 'english',
-        'fr' => 'english',
-        'es' => 'spanish',
-    ];
-
     /**
      * @param array $data
      *
@@ -28,12 +19,20 @@ class LanguageLookup implements TransformPropertyInterface
      */
     public function transform(array $data)
     {
-        $language = current($data);
+        $qtype = current($data);
 
-        if (array_key_exists($language, $this->languages)) {
-            return $this->languages[$language];
+        switch ($qtype) {
+            case 1:
+            case 2:
+            case 3:
+            case 5:
+            case 8:
+            case 10:
+                return 'quiz';
+            case 20:
+                return 'document';
         }
 
-        return $this->languages['en'];
+        return 'dir';
     }
 }

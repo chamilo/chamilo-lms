@@ -8,6 +8,10 @@ use Chamilo\UserBundle\Entity\User;
 
 /**
  * Class UsersLoader.
+ *
+ * Loader to create a Chamilo user coming from a Moodle user.
+ *
+ * @package Chamilo\PluginBundle\MigrationMoodle\Loader
  */
 class UsersLoader implements LoaderInterface
 {

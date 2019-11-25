@@ -4,19 +4,19 @@
 namespace Chamilo\PluginBundle\MigrationMoodle\Task;
 
 use Chamilo\PluginBundle\MigrationMoodle\Extractor\BaseExtractor;
-use Chamilo\PluginBundle\MigrationMoodle\Loader\LpQuizzesLoader;
+use Chamilo\PluginBundle\MigrationMoodle\Loader\LessonQuestionPagesQuizLoader;
 use Chamilo\PluginBundle\MigrationMoodle\Transformer\BaseTransformer;
 use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\LoadedCourseLookup;
 use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\LoadedLpItemLookup;
 
 /**
- * Class LpQuizzesTask.
+ * Class LessonQuestionPagesQuizTask.
  *
  * Task to convert the question pages from a moodle lesson in one chamilo quiz with one question.
  *
  * @package Chamilo\PluginBundle\MigrationMoodle\Task
  */
-class LpQuizzesTask extends BaseTask
+class LessonQuestionPagesQuizTask extends BaseTask
 {
     /**
      * @return array
@@ -59,7 +59,7 @@ class LpQuizzesTask extends BaseTask
     public function getLoadConfiguration()
     {
         return [
-            'class' => LpQuizzesLoader::class,
+            'class' => LessonQuestionPagesQuizLoader::class,
         ];
     }
 }

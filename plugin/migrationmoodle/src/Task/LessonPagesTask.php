@@ -4,20 +4,22 @@
 namespace Chamilo\PluginBundle\MigrationMoodle\Task;
 
 use Chamilo\PluginBundle\MigrationMoodle\Extractor\BaseExtractor;
-use Chamilo\PluginBundle\MigrationMoodle\Loader\LpItemsLoader;
+use Chamilo\PluginBundle\MigrationMoodle\Loader\LessonPagesLoader;
 use Chamilo\PluginBundle\MigrationMoodle\Transformer\BaseTransformer;
 use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\LoadedCourseCodeLookup;
 use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\LoadedLpDirFromLessonLookup;
 use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\LoadedLpFromLessonLookup;
 use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\LoadedLpItemLookup;
-use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\LpItemTypeLookup;
+use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\LpItemType;
 
 /**
- * Class LpItemsTask.
+ * Class LessonPagesTask.
+ *
+ * Task to conver the Moodle lesson pages in items for Chamilo learning paths.
  *
  * @package Chamilo\PluginBundle\MigrationMoodle\Task
  */
-class LpItemsTask extends BaseTask
+class LessonPagesTask extends BaseTask
 {
     /**
      * @return array
@@ -64,7 +66,7 @@ class LpItemsTask extends BaseTask
                     'properties' => ['prevpageid'],
                 ],
                 'item_type' => [
-                    'class' => LpItemTypeLookup::class,
+                    'class' => LpItemType::class,
                     'properties' => ['qtype'],
                 ],
                 'title' => 'title',
@@ -78,7 +80,7 @@ class LpItemsTask extends BaseTask
     public function getLoadConfiguration()
     {
         return [
-            'class' => LpItemsLoader::class,
+            'class' => LessonPagesLoader::class,
         ];
     }
 }

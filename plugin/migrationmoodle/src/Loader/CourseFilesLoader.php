@@ -5,7 +5,14 @@ namespace Chamilo\PluginBundle\MigrationMoodle\Loader;
 
 use Chamilo\PluginBundle\MigrationMoodle\Interfaces\LoaderInterface;
 
-class LpDocumentsFilesLoader implements LoaderInterface
+/**
+ * Class CourseFilesLoader.
+ *
+ * Loader to create the files needed for Chamilo course documents coming from the files in Moodle course.
+ *
+ * @package Chamilo\PluginBundle\MigrationMoodle\Loader
+ */
+class CourseFilesLoader implements LoaderInterface
 {
 
     /**

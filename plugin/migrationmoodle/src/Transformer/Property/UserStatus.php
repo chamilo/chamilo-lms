@@ -9,9 +9,11 @@ use Doctrine\DBAL\DBALException;
 use Doctrine\DBAL\FetchMode;
 
 /**
- * Class UserStatusLookup.
+ * Class UserStatus.
+ *
+ * @package Chamilo\PluginBundle\MigrationMoodle\Transformer\Property
  */
-class UserStatusLookup implements TransformPropertyInterface
+class UserStatus implements TransformPropertyInterface
 {
     const ROLES = [
         User::TEACHER => ['manager', 'coursecreator', 'editingteacher', 'teacher'],

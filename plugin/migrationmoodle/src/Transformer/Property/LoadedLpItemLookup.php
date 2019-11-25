@@ -3,7 +3,7 @@
 
 namespace Chamilo\PluginBundle\MigrationMoodle\Transformer\Property;
 
-use Chamilo\PluginBundle\MigrationMoodle\Task\LpItemsTask;
+use Chamilo\PluginBundle\MigrationMoodle\Task\LessonPagesTask;
 
 /**
  * Class LoadedLpItemLookup.
@@ -17,6 +17,6 @@ class LoadedLpItemLookup extends LoadedKeyLookup
      */
     public function __construct()
     {
-        $this->calledClass = LpItemsTask::class;
+        $this->calledClass = LessonPagesTask::class;
     }
 }

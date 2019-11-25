@@ -3,20 +3,22 @@
 namespace Chamilo\PluginBundle\MigrationMoodle\Task;
 
 use Chamilo\PluginBundle\MigrationMoodle\Extractor\BaseExtractor;
-use Chamilo\PluginBundle\MigrationMoodle\Loader\CourseUsersLoader;
+use Chamilo\PluginBundle\MigrationMoodle\Loader\RoleAssignmentsLoader;
 use Chamilo\PluginBundle\MigrationMoodle\Transformer\BaseTransformer;
-use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\CourseUserStatusLookup;
+use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\CourseUserStatus;
 use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\LoadedCourseCodeLookup;
 use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\LoadedUserLookup;
 
 /**
- * Class CourseUsersTask.
+ * Class RoleAssignmentsTask.
+ *
+ * Task to convert the Moodle role assigment in a Chamilo's user course subscription.
  *
  * @package Chamilo\PluginBundle\MigrationMoodle\Task
  */
-class CourseUsersTask extends BaseTask
+class RoleAssignmentsTask extends BaseTask
 {
-    private const CONTEXT_LEVEL_COURSE = 50;
+    const CONTEXT_LEVEL_COURSE = 50;
 
     /**
      * @return array
@@ -43,7 +45,7 @@ class CourseUsersTask extends BaseTask
             'class' => BaseTransformer::class,
             'map' => [
                 'status' => [
-                    'class' => CourseUserStatusLookup::class,
+                    'class' => CourseUserStatus::class,
                     'properties' => ['archetype'],
                 ],
                 'user_id' => [
@@ -64,7 +66,7 @@ class CourseUsersTask extends BaseTask
     public function getLoadConfiguration()
     {
         return [
-            'class' => CourseUsersLoader::class,
+            'class' => RoleAssignmentsLoader::class,
         ];
     }
 }

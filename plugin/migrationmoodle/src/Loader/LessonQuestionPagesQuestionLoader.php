@@ -6,14 +6,14 @@ namespace Chamilo\PluginBundle\MigrationMoodle\Loader;
 use Chamilo\PluginBundle\MigrationMoodle\Interfaces\LoaderInterface;
 
 /**
- * Class LpQuizQuestionsLoader.
+ * Class LessonQuestionPagesQuestionLoader.
  *
  * Loader for create a question to be added in a quiz according the transformed data
- * comming from a moodle's lesson question page.
+ * coming from a moodle's lesson question page.
  *
  * @package Chamilo\PluginBundle\MigrationMoodle\Loader
  */
-class LpQuizQuestionsLoader implements LoaderInterface
+class LessonQuestionPagesQuestionLoader implements LoaderInterface
 {
     /**
      * Load the data and return the ID inserted.

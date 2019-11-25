@@ -7,13 +7,13 @@ use Chamilo\PluginBundle\MigrationMoodle\Interfaces\TransformPropertyInterface;
 use Doctrine\DBAL\DBALException;
 
 /**
- * Class LessonAnswersMatchingScoreLookup.
+ * Class LessonAnswersMatchingScore.
  *
  * Calculate the score for Matching answers. Correct score / count of options.
  *
  * @package Chamilo\PluginBundle\MigrationMoodle\Transformer\Property
  */
-class LessonAnswersMatchingScoreLookup implements TransformPropertyInterface
+class LessonAnswersMatchingScore implements TransformPropertyInterface
 {
     /**
      * @param array $data

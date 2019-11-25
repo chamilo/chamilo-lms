@@ -3,29 +3,30 @@
 
 namespace Chamilo\PluginBundle\MigrationMoodle\Transformer\Property;
 
-use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\PluginBundle\MigrationMoodle\Interfaces\TransformPropertyInterface;
 
 /**
- * Class CourseVisibilityLookup.
+ * Class CourseCode.
  *
  * @package Chamilo\PluginBundle\MigrationMoodle\Transformer\Property
  */
-class CourseVisibilityLookup implements TransformPropertyInterface
+class CourseCode implements TransformPropertyInterface
 {
     /**
      * @param array $data
      *
-     * @return int
+     * @throws \Exception
+     *
+     * @return mixed
      */
     public function transform(array $data)
     {
-        $visible = (bool) current($data);
+        $name = current($data);
 
-        if ($visible) {
-            return Course::REGISTERED;
+        if (empty($name)) {
+            throw new \Exception('The name for the course category is empty.');
         }
 
-        return Course::HIDDEN;
+        return \CourseManager::generate_course_code($name);
     }
 }

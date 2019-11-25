@@ -6,13 +6,13 @@ namespace Chamilo\PluginBundle\MigrationMoodle\Loader;
 use Chamilo\PluginBundle\MigrationMoodle\Interfaces\LoaderInterface;
 
 /**
- * Class LessonAnswerTrueFalseLoader.
+ * Class LessonAnswersTrueFalseLoader.
  *
  * Loader for True-False answers from lesson pages.
  *
  * @package Chamilo\PluginBundle\MigrationMoodle\Loader
  */
-class LessonAnswerTrueFalseLoader implements LoaderInterface
+class LessonAnswersTrueFalseLoader implements LoaderInterface
 {
     /**
      * Load the data and return the ID inserted.

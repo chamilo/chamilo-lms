@@ -7,10 +7,10 @@ use Chamilo\PluginBundle\MigrationMoodle\Extractor\BaseExtractor;
 use Chamilo\PluginBundle\MigrationMoodle\Loader\CoursesLoader;
 use Chamilo\PluginBundle\MigrationMoodle\Transformer\BaseTransformer;
 use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\CourseCategoryLookup;
-use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\CourseVisibilityLookup;
+use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\CourseVisibility;
 use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\DateTimeObject;
 use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\IsFalse;
-use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\LanguageLookup;
+use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\Language;
 
 /**
  * Class CoursesTask.
@@ -45,20 +45,12 @@ class CoursesTask extends BaseTask
                     'properties' => ['category'],
                 ],
                 'course_language' => [
-                    'class' => LanguageLookup::class,
+                    'class' => Language::class,
                     'properties' => ['lang'],
                 ],
                 'visibility' => [
-                    'class' => CourseVisibilityLookup::class,
+                    'class' => CourseVisibility::class,
                     'properties' => ['visible'],
-                ],
-                'subscribe' => [
-                    'class' => IsFalse::class,
-                    'properties' => [],
-                ],
-                'unsubscribe' => [
-                    'class' => IsFalse::class,
-                    'properties' => [],
                 ],
                 'description' => 'summary',
                 'creation_date' => [

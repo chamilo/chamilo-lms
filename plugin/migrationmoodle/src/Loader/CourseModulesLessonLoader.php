@@ -6,11 +6,13 @@ namespace Chamilo\PluginBundle\MigrationMoodle\Loader;
 use Chamilo\PluginBundle\MigrationMoodle\Interfaces\LoaderInterface;
 
 /**
- * Class LpDirsLoader.
+ * Class CourseModulesLessonLoader.
+ *
+ * Loader for create and Chamilo learning path section coming from a Moodle course module.
  *
  * @package Chamilo\PluginBundle\MigrationMoodle\Loader
  */
-class LpDirsLoader implements LoaderInterface
+class CourseModulesLessonLoader implements LoaderInterface
 {
     /**
      * Load the data and return the ID inserted.

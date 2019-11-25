@@ -3,7 +3,7 @@
 
 namespace Chamilo\PluginBundle\MigrationMoodle\Transformer\Property;
 
-use Chamilo\PluginBundle\MigrationMoodle\Task\LearningPathsTask;
+use Chamilo\PluginBundle\MigrationMoodle\Task\CourseSectionsTask;
 use Chamilo\UserBundle\Entity\User;
 use Doctrine\DBAL\DBALException;
 use Doctrine\DBAL\FetchMode;

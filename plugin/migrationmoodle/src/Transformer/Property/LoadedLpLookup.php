@@ -3,7 +3,7 @@
 
 namespace Chamilo\PluginBundle\MigrationMoodle\Transformer\Property;
 
-use Chamilo\PluginBundle\MigrationMoodle\Task\LearningPathsTask;
+use Chamilo\PluginBundle\MigrationMoodle\Task\CourseSectionsTask;
 
 /**
  * Class LoadedLpLookup.
@@ -17,6 +17,6 @@ class LoadedLpLookup extends LoadedKeyLookup
      */
     public function __construct()
     {
-        $this->calledClass = LearningPathsTask::class;
+        $this->calledClass = CourseSectionsTask::class;
     }
 }

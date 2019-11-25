@@ -5,11 +5,13 @@ namespace Chamilo\PluginBundle\MigrationMoodle\Loader;
 use Chamilo\PluginBundle\MigrationMoodle\Interfaces\LoaderInterface;
 
 /**
- * Class CourseUsersLoader.
+ * Class RoleAssignmentsLoader.
+ *
+ * Loader to subscribe a Chamilo user in a course according their Moodle role assignment.
  *
  * @package Chamilo\PluginBundle\MigrationMoodle\Loader
  */
-class CourseUsersLoader implements LoaderInterface
+class RoleAssignmentsLoader implements LoaderInterface
 {
     /**
      * Load the data and return the ID inserted.

@@ -1,28 +1,29 @@
 <?php
-/* For licensing terms, see /license.txt */
 
 namespace Chamilo\PluginBundle\MigrationMoodle\Transformer\Property;
 
 use Chamilo\PluginBundle\MigrationMoodle\Interfaces\TransformPropertyInterface;
 
 /**
- * Class Divide.
+ * Class CourseUserStatus.
  *
  * @package Chamilo\PluginBundle\MigrationMoodle\Transformer\Property
  */
-class Divide implements TransformPropertyInterface
+class CourseUserStatus implements TransformPropertyInterface
 {
-    const SEPARATOR = '@mm@';
-
     /**
      * @param array $data
      *
-     * @return mixed
+     * @return int
      */
     public function transform(array $data)
     {
-        $value = current($data);
+        $archetype = current($data);
 
-        return explode(self::SEPARATOR, $value);
+        if (in_array($archetype, ['teacher', 'editingteacher'])) {
+            return COURSEMANAGER;
+        }
+
+        return STUDENT;
     }
 }

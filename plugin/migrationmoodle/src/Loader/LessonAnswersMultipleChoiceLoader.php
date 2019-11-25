@@ -10,7 +10,7 @@ namespace Chamilo\PluginBundle\MigrationMoodle\Loader;
  *
  * @package Chamilo\PluginBundle\MigrationMoodle\Loader
  */
-class LessonAnswersMultipleChoiceLoader extends LessonAnswerTrueFalseLoader
+class LessonAnswersMultipleChoiceLoader extends LessonAnswersTrueFalseLoader
 {
     /**
      * @param array $incomingData

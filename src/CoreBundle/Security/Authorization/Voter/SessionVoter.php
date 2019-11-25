@@ -29,9 +29,6 @@ class SessionVoter extends Voter
     private $authorizationChecker;
     private $container;
 
-    /**
-     * @param CourseManager $courseManager
-     */
     public function __construct(
         EntityManagerInterface $entityManager,
         CourseRepository $courseManager,
@@ -116,13 +113,14 @@ class SessionVoter extends Voter
                 $userIsStudent = $session->hasUserInCourse($user, $currentCourse, Session::STUDENT);
 
                 if (empty($session->getDuration())) {
-                    // General coach
+                    // General coach.
                     if ($userIsGeneralCoach && $session->isActiveForCoach()) {
                         $user->addRole(ResourceNodeVoter::ROLE_CURRENT_SESSION_COURSE_TEACHER);
 
                         return true;
                     }
-                    // Course-Coach access
+
+                    // Course-Coach access.
                     if ($userIsCourseCoach && $session->isActiveForCoach()) {
                         $user->addRole(ResourceNodeVoter::ROLE_CURRENT_SESSION_COURSE_TEACHER);
 
@@ -132,6 +130,8 @@ class SessionVoter extends Voter
                     // Student access
                     if ($userIsStudent && $session->isActiveForStudent()) {
                         $user->addRole(ResourceNodeVoter::ROLE_CURRENT_SESSION_COURSE_STUDENT);
+
+                        //$token->setUser($user);
 
                         return true;
                     }

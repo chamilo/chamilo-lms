@@ -62,7 +62,7 @@ class ResourceListener
     public function postUpdate(AbstractResource $resource, LifecycleEventArgs $args)
     {
         //error_log('postUpdate');
-        $em = $args->getEntityManager();
+        //$em = $args->getEntityManager();
         //$this->updateResourceName($resource, $resource->getResourceName(), $em);
     }
 

@@ -16,19 +16,18 @@ fos_ck_editor:
             filebrowserBrowseRoute: admin_chamilo_media_media_ckeditor_browser
 
 #            filebrowserImageBrowseRoute: editor_filemanager
-
 #            filebrowserImageBrowseRoute: editor_filemanager
 #            filebrowserImageBrowseRouteParameters:
 #                provider: sonata.media.provider.image
-            filebrowserUploadRoute: admin_chamilo_media_media_ckeditor_upload
-            filebrowserUploadRouteParameters:
-                provider: sonata.media.provider.file
+#            filebrowserUploadRoute: admin_chamilo_media_media_ckeditor_upload
+#            filebrowserUploadRouteParameters:
+#                provider: sonata.media.provider.file
             # Upload file as image when sending a file from the image dialog
-            filebrowserImageUploadRoute: admin_chamilo_media_media_ckeditor_upload
-            filebrowserImageUploadRouteParameters:
-                provider: sonata.media.provider.image
-                context: default # Optional, to upload in a custom context, see sonata_media.yaml
-                format: medium
+#            filebrowserImageUploadRoute: admin_chamilo_media_media_ckeditor_upload
+#            filebrowserImageUploadRouteParameters:
+#                provider: sonata.media.provider.image
+#                context: default # Optional, to upload in a custom context, see sonata_media.yaml
+#                format: medium
     plugins:
         wordcount:
             path: "/bundles/chamilocore/ckeditor/plugins/wordcount"

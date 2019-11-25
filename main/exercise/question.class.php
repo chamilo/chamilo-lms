@@ -278,18 +278,6 @@ abstract class Question
     }
 
     /**
-     * returns the question position.
-     *
-     * @author Olivier Brouckaert
-     *
-     * @return int - question position
-     */
-    public function selectPosition()
-    {
-        return $this->position;
-    }
-
-    /**
      * returns the answer type.
      *
      * @author Olivier Brouckaert
@@ -314,96 +302,6 @@ abstract class Question
     }
 
     /**
-     * returns the picture name.
-     *
-     * @author Olivier Brouckaert
-     *
-     * @return string - picture name
-     */
-    public function selectPicture()
-    {
-        return $this->picture;
-    }
-
-    /**
-     * @return int|string
-     */
-    public function getPictureId()
-    {
-        // for backward compatibility
-        // when in field picture we had the filename not the document id
-        if (preg_match("/quiz-.*/", $this->picture)) {
-            return DocumentManager::get_document_id(
-                $this->course,
-                $this->selectPicturePath(),
-                api_get_session_id()
-            );
-        }
-
-        return $this->picture;
-    }
-
-    /**
-     * @param int $courseId
-     * @param int $sessionId
-     *
-     * @return false|CDocument
-     */
-    public function getPicture($courseId = 0, $sessionId = 0)
-    {
-        $courseId = empty($courseId) ? api_get_course_int_id() : (int) $courseId;
-        $sessionId = empty($sessionId) ? api_get_session_id() : (int) $sessionId;
-
-        if (empty($courseId)) {
-            return false;
-        }
-
-        $pictureId = $this->getPictureId();
-        $courseInfo = $this->course;
-        $documentInfo = DocumentManager::get_document_data_by_id(
-            $pictureId,
-            $courseInfo['code'],
-            false,
-            $sessionId
-        );
-
-        if ($documentInfo) {
-            $em = Database::getManager();
-
-            /** @var CDocument $document */
-            $document = $em->getRepository('ChamiloCourseBundle:CDocument')->find($documentInfo['iid']);
-
-            return $document;
-        }
-
-        return false;
-    }
-
-    /**
-     * returns the array with the exercise ID list.
-     *
-     * @author Olivier Brouckaert
-     *
-     * @return array - list of exercise ID which the question is in
-     */
-    public function selectExerciseList()
-    {
-        return $this->exerciseList;
-    }
-
-    /**
-     * returns the number of exercises which this question is in.
-     *
-     * @author Olivier Brouckaert
-     *
-     * @return int - number of exercises
-     */
-    public function selectNbrExercises()
-    {
-        return count($this->exerciseList);
-    }
-
-    /**
      * changes the question title.
      *
      * @param string $title - question title
@@ -413,14 +311,6 @@ abstract class Question
     public function updateTitle($title)
     {
         $this->question = $title;
-    }
-
-    /**
-     * @param int $id
-     */
-    public function updateParentId($id)
-    {
-        $this->parent_id = (int) $id;
     }
 
     /**
@@ -455,26 +345,6 @@ abstract class Question
     public function updateCategory($category)
     {
         $this->category = $category;
-    }
-
-    /**
-     * @param int $value
-     *
-     * @author Hubert Borderiou 12-10-2011
-     */
-    public function updateScoreAlwaysPositive($value)
-    {
-        $this->scoreAlwaysPositive = $value;
-    }
-
-    /**
-     * @param int $value
-     *
-     * @author Hubert Borderiou 12-10-2011
-     */
-    public function updateUncheckedMayScore($value)
-    {
-        $this->uncheckedMayScore = $value;
     }
 
     /**
@@ -606,80 +476,6 @@ abstract class Question
 
             $this->type = $type;
         }
-    }
-
-    /**
-     * Get default hot spot folder in documents.
-     *
-     * @param array $courseInfo
-     *
-     * @return CDocument
-     */
-    public function getHotSpotFolderInCourse($courseInfo = [])
-    {
-        return null;
-        $courseInfo = empty($courseInfo) ? $this->course : $courseInfo;
-
-        if (empty($courseInfo) || empty($courseInfo['directory'])) {
-            // Stop everything if course is not set.
-            api_not_allowed();
-        }
-
-        $pictureAbsolutePath = api_get_path(SYS_COURSE_PATH).$courseInfo['directory'].'/document/images/';
-        $picturePath = basename($pictureAbsolutePath);
-
-        $folder = create_unexisting_directory(
-            $courseInfo,
-            api_get_user_id(),
-            0,
-            0,
-            0,
-            dirname($pictureAbsolutePath),
-            '/'.$picturePath,
-            $picturePath,
-            '',
-            false,
-            false
-        );
-
-        return $folder;
-    }
-
-    /**
-     * return the name for image use in hotspot question
-     * to be unique, name is quiz-[utc unix timestamp].jpg.
-     *
-     * @param string $prefix
-     * @param string $extension
-     *
-     * @return string
-     */
-    public function generatePictureName($prefix = 'quiz-', $extension = 'jpg')
-    {
-        // image name is quiz-xxx.jpg in folder images/
-        $utcTime = time();
-
-        return $prefix.$utcTime.'.'.$extension;
-    }
-
-    /**
-     *  Deletes a hot spot picture.
-     *
-     * @return bool - true
-     */
-    public function removePicture()
-    {
-        $picture = $this->getPicture();
-
-        if ($picture) {
-            $manager = Database::getManager();
-            $manager->remove($picture);
-            $manager->flush();
-
-            return true;
-        }
-
-        return false;
     }
 
     /**
@@ -1205,13 +1001,13 @@ abstract class Question
                         question_id = ".$id;
             Database::query($sql);
 
-            api_item_property_update(
+            /*api_item_property_update(
                 $this->course,
                 TOOL_QUIZ,
                 $id,
                 'QuizQuestionDeleted',
                 api_get_user_id()
-            );
+            );*/
             $this->removePicture();
         } else {
             // just removes the exercise from the list
@@ -1220,14 +1016,14 @@ abstract class Question
                 // disassociate question with this exercise
                 $this->search_engine_edit($deleteFromEx, false, true);
             }
-
+            /*
             api_item_property_update(
                 $this->course,
                 TOOL_QUIZ,
                 $id,
                 'QuizQuestionDeleted',
                 api_get_user_id()
-            );
+            );*/
         }
 
         return true;

@@ -1390,28 +1390,7 @@ HTML;
             echo $s;
         } elseif ($answerType == HOT_SPOT || $answerType == HOT_SPOT_DELINEATION) {
             global $exe_id;
-            // Question is a HOT_SPOT
-            // Checking document/images visibility
-            if (api_is_platform_admin() || api_is_course_admin()) {
-                $doc_id = $objQuestionTmp->getPictureId();
-                if (is_numeric($doc_id)) {
-                    $images_folder_visibility = api_get_item_visibility(
-                        $course,
-                        'document',
-                        $doc_id,
-                        api_get_session_id()
-                    );
-                    if (!$images_folder_visibility) {
-                        // Show only to the course/platform admin if the image is set to visibility = false
-                        echo Display::return_message(
-                            get_lang('Change the visibility of the current image'),
-                            'warning'
-                        );
-                    }
-                }
-            }
             $questionDescription = $objQuestionTmp->selectDescription();
-
             // Get the answers, make a list
             $objAnswerTmp = new Answer($questionId, $course_id);
             $nbrAnswers = $objAnswerTmp->selectNbrAnswers();

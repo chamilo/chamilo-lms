@@ -32,7 +32,6 @@ class ResourceUploadController extends BlueimpController
     public function upload()
     {
         error_log('upload');
-
         $container = $this->container;
         $doctrine = $container->get('doctrine');
         $em = $doctrine->getManager();
@@ -68,8 +67,7 @@ class ResourceUploadController extends BlueimpController
             return new AccessDeniedException('No permissions');
         }*/
 
-        $chunked = null !== $request->headers->get('content-range');
-
+        //$chunked = null !== $request->headers->get('content-range');
         $response = new EmptyResponse();
         $files = $this->getFiles($request->files);
         try {
@@ -86,12 +84,12 @@ class ResourceUploadController extends BlueimpController
 
                     $this->dispatchPreUploadEvent($file, $response, $request);
 
+                    // Uploading file.
                     $document = new CDocument();
                     $document
                         ->setFiletype('file')
                         ->setTitle($title)
                         ->setSize($file->getSize())
-                        ->setCourse($course)
                     ;
 
                     $em->persist($document);
@@ -104,11 +102,10 @@ class ResourceUploadController extends BlueimpController
                         $session,
                         null
                     );
-
                     $em->flush();
+                    // Finish uploading.
 
                     $this->dispatchPostEvents($document, $response, $request);
-
                     /*$chunked ?
                         $this->handleChunkedUpload($file, $response, $request) :
                         $this->handleUpload($file, $response, $request);*/

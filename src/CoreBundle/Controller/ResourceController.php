@@ -174,6 +174,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
                 $myParams['id'] = $id;
                 unset($myParams[0]);
 
+                $icon = $resourceNode->getIcon().' &nbsp;';
                 if ($resourceNode->hasResourceFile()) {
                     $url = $router->generate(
                         'chamilo_core_resource_show',
@@ -186,7 +187,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
                             $myParams
                         );
 
-                        return '<a data-fancybox="gallery" href="'.$url.'">'.$value.'</a>';
+                        return $icon.'<a data-fancybox="gallery" href="'.$url.'">'.$value.'</a>';
                     }
 
                     if ($resourceNode->isResourceFileAVideo()) {
@@ -200,7 +201,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
                             <source src="'.$url.'" type="video/mp4">
                             Your browser doesn\'t support HTML5 video tag.
                         </video>
-                        <a data-fancybox="gallery"  data-width="640" data-height="360" href="#video'.$id.'">'.$value.'</a>';
+                        '.$icon.' <a data-fancybox="gallery"  data-width="640" data-height="360" href="#video'.$id.'">'.$value.'</a>';
                     }
 
                     $url = $router->generate(
@@ -208,14 +209,14 @@ class ResourceController extends AbstractResourceController implements CourseCon
                         $myParams
                     );
 
-                    return '<a data-fancybox="gallery" data-type="iframe" data-src="'.$url.'" href="javascript:;" >'.$value.'</a>';
+                    return $icon.'<a data-fancybox="gallery" data-type="iframe" data-src="'.$url.'" href="javascript:;" >'.$value.'</a>';
                 } else {
                     $url = $router->generate(
                         'chamilo_core_resource_list',
                         $myParams
                     );
 
-                    return '<a href="'.$url.'">'.$value.'</a>';
+                    return $icon.'<a href="'.$url.'">'.$value.'</a>';
                 }
             }
         );
@@ -412,8 +413,6 @@ class ResourceController extends AbstractResourceController implements CourseCon
         /** @var AbstractResource $resource */
         $resource = $repository->getRepository()->findOneBy(['resourceNode' => $resourceNodeId]);
         $resourceNode = $resource->getResourceNode();
-
-
 
         $this->denyAccessUnlessGranted(
             ResourceNodeVoter::VIEW,

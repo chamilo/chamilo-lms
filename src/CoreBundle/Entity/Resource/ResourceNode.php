@@ -457,4 +457,24 @@ class ResourceNode
 
         return $this;
     }
+
+    /**
+     * @return string
+     */
+    public function getIcon()
+    {
+        $class = 'fa fa-folder';
+        if ($this->hasResourceFile()) {
+            $class = 'far fa-file';
+
+            if ($this->isResourceFileAnImage()) {
+                $class = 'far fa-file-image';
+            }
+            if ($this->isResourceFileAVideo()) {
+                $class = 'far fa-file-video';
+            }
+        }
+
+        return '<i class="'.$class.'"></i>';
+    }
 }

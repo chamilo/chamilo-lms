@@ -333,7 +333,7 @@
                 },
                 userSettings
             ),
-            xhrUrl = 'exercise/annotation_user.php?' + _p.web_cid_query,
+            xhrUrl = 'exercise/annotation_user.php?',
             $container = $('#annotation-canvas-' + settings.questionId);
             $.getJSON(settings.relPath + xhrUrl, {
                 question_id: parseInt(settings.questionId),

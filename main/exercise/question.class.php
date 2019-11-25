@@ -326,31 +326,6 @@ abstract class Question
     }
 
     /**
-     * @return string
-     */
-    public function selectPicturePath()
-    {
-        if (!empty($this->picture)) {
-            $router = Container::getRouter();
-            // this "filter" param is used to resize the image to width 800px see config/packages/liip_imagine.yaml
-            $params = [
-                'file' => 'images/'.$this->getPictureFilename(),
-                'mode' => 'show',
-                'filter' => 'hotspot_question',
-                'course' => api_get_course_id(),
-            ];
-            $url = $router->generate('resources_document_get_file', $params);
-
-            return $url;
-
-            /*return api_get_path(WEB_COURSE_PATH).
-                $this->course['directory'].'/document/images/'.$this->getPictureFilename().'?'.api_get_cidreq().'&type=show&filter=hotspot_question';*/
-        }
-
-        return '';
-    }
-
-    /**
      * @return int|string
      */
     public function getPictureId()
@@ -366,46 +341,6 @@ abstract class Question
         }
 
         return $this->picture;
-    }
-
-    /**
-     * @param int $courseId
-     * @param int $sessionId
-     *
-     * @return string
-     */
-    public function getPictureFilename($courseId = 0, $sessionId = 0)
-    {
-        $courseId = empty($courseId) ? api_get_course_int_id() : (int) $courseId;
-        $sessionId = empty($sessionId) ? api_get_session_id() : (int) $sessionId;
-
-        if (empty($courseId)) {
-            return '';
-        }
-        // for backward compatibility
-        // when in field picture we had the filename not the document id
-        if (preg_match("/quiz-.*/", $this->picture)) {
-            return $this->picture;
-        }
-
-        $pictureId = $this->getPictureId();
-        $courseInfo = $this->course;
-        $documentInfo = DocumentManager::get_document_data_by_id(
-            $pictureId,
-            $courseInfo['code'],
-            false,
-            $sessionId
-        );
-        $documentFilename = '';
-        if ($documentInfo) {
-            // document in document/images folder
-            $documentFilename = pathinfo(
-                $documentInfo['path'],
-                PATHINFO_BASENAME
-            );
-        }
-
-        return $documentFilename;
     }
 
     /**
@@ -682,6 +617,7 @@ abstract class Question
      */
     public function getHotSpotFolderInCourse($courseInfo = [])
     {
+        return null;
         $courseInfo = empty($courseInfo) ? $this->course : $courseInfo;
 
         if (empty($courseInfo) || empty($courseInfo['directory'])) {
@@ -707,43 +643,6 @@ abstract class Question
         );
 
         return $folder;
-    }
-
-    /**
-     * adds a picture to the question.
-     *
-     * @param array $picture - picture to upload
-     *
-     * @return bool - true if uploaded, otherwise false
-     */
-    public function uploadPicture($picture)
-    {
-        $folder = $this->getHotSpotFolderInCourse();
-
-        // if the question has got an ID
-        if ($folder && $this->id) {
-            $document = DocumentManager::upload_document(
-                ['imageUpload' => $picture],
-                '/images',
-                '',
-                '',
-                false,
-                'overwrite',
-                false,
-                true,
-                'imageUpload',
-                true,
-                $folder->getId()
-            );
-
-            if ($document) {
-                $this->picture = $document->getIid();
-
-                return true;
-            }
-        }
-
-        return false;
     }
 
     /**
@@ -795,70 +694,8 @@ abstract class Question
      */
     public function exportPicture($questionId, $courseInfo)
     {
-        if (empty($questionId) || empty($courseInfo)) {
-            return false;
-        }
-
-        $course_id = $courseInfo['real_id'];
-        $destination_path = $this->getHotSpotFolderInCourse($courseInfo);
-
-        if (empty($destination_path)) {
-            return false;
-        }
-
-        $source_path = $this->getHotSpotFolderInCourse();
-
-        // if the question has got an ID and if the picture exists
-        if (!$this->id || empty($this->picture)) {
-            return false;
-        }
-
-        $sourcePictureName = $this->getPictureFilename($course_id);
-        $picture = $this->generatePictureName();
-        $result = false;
-        if (file_exists($source_path.'/'.$sourcePictureName)) {
-            // for backward compatibility
-            $result = copy(
-                $source_path.'/'.$sourcePictureName,
-                $destination_path.'/'.$picture
-            );
-        } else {
-            $imageInfo = DocumentManager::get_document_data_by_id(
-                $this->picture,
-                $courseInfo['code']
-            );
-            if (file_exists($imageInfo['absolute_path'])) {
-                $result = @copy(
-                    $imageInfo['absolute_path'],
-                    $destination_path.'/'.$picture
-                );
-            }
-        }
-
-        // If copy was correct then add to the database
-        if (!$result) {
-            return false;
-        }
-
-        $table = Database::get_course_table(TABLE_QUIZ_QUESTION);
-        $sql = "UPDATE $table SET
-                picture = '".Database::escape_string($picture)."'
-                WHERE c_id = $course_id AND id='".intval($questionId)."'";
-        Database::query($sql);
-
-        $documentId = DocumentManager::addDocument(
-            $courseInfo,
-            '/images/'.$picture,
-            'file',
-            filesize($destination_path.'/'.$picture),
-            $picture
-        );
-
-        if (!$documentId) {
-            return false;
-        }
-
-        return true;
+        // @todo Create a resource node duplication function.
+        throw new Exception('exportPicture not available yet');
     }
 
     /**
@@ -983,6 +820,14 @@ abstract class Question
                     api_get_group_entity()
                 );
 
+                $request = Container::getRequest();
+                if ($request->files->has('imageUpload')) {
+                    $file = $request->files->get('imageUpload');
+                    $questionRepo->addFile($question, $file);
+
+                    $em->flush();
+                }
+
                 // If hotspot, create first answer
                 if ($type == HOT_SPOT || $type == HOT_SPOT_ORDER) {
                     $quizAnswer = new CQuizAnswer();
@@ -1005,7 +850,7 @@ abstract class Question
                             ->setId($id)
                             ->setIdAuto($id);
 
-                        $em->merge($quizAnswer);
+                        $em->persist($quizAnswer);
                         $em->flush();
                     }
                 }
@@ -1031,7 +876,7 @@ abstract class Question
                             ->setId($id)
                             ->setIdAuto($id);
 
-                        $em->merge($quizAnswer);
+                        $em->persist($quizAnswer);
                         $em->flush();
                     }
                 }

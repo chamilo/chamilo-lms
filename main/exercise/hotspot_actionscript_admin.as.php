@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CourseBundle\Entity\CQuizQuestion;
 use ChamiloSession as Session;
 
 /**
@@ -23,11 +25,14 @@ if (!$isAllowedToEdit) {
 
 $_course = api_get_course_info();
 $questionId = isset($_GET['modifyAnswers']) ? (int) $_GET['modifyAnswers'] : 0;
-$objQuestion = Question::read($questionId);
-$picture = $objQuestion->getPicture();
-$pictureName = $objQuestion->getPictureFilename();
-$pictureWidth = $picture->getResourceNode()->getResourceFile()->getWidth();
-$pictureHeight = $picture->getResourceNode()->getResourceFile()->getHeight();
+$questionRepo = Container::getQuestionRepository();
+/** @var CQuizQuestion $objQuestion */
+$objQuestion = $questionRepo->find($questionId);
+$resourceFile = $objQuestion->getResourceNode()->getResourceFile();
+
+$pictureWidth = $resourceFile->getWidth();
+$pictureHeight = $resourceFile->getHeight();
+$imagePath = $questionRepo->getHotSpotImageUrl($objQuestion);
 
 $data = [];
 $data['type'] = 'admin';
@@ -50,7 +55,7 @@ $data['lang'] = [
     'ClosePolygon' => get_lang('ClosePolygon'),
     'DelineationStatus1' => get_lang('DelineationStatus1'),
 ];
-$data['image'] = $objQuestion->selectPicturePath();
+$data['image'] = $imagePath;
 $data['image_width'] = $pictureWidth;
 $data['image_height'] = $pictureHeight;
 $data['courseCode'] = $_course['path'];
@@ -58,7 +63,7 @@ $data['hotspots'] = [];
 
 $i = 0;
 $nmbrTries = 0;
-$answer_type = $objQuestion->type;
+$answer_type = $objQuestion->getType();
 $answers = Session::read('tmp_answers');
 $nbrAnswers = count($answers['answer']);
 

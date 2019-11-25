@@ -69,7 +69,6 @@ class ExerciseLib
         }
 
         $answerType = $objQuestionTmp->selectType();
-        $pictureName = $objQuestionTmp->getPictureFilename();
         $s = '';
         if ($answerType != HOT_SPOT &&
             $answerType != HOT_SPOT_DELINEATION &&
@@ -1527,23 +1526,11 @@ HOTSPOT;
             global $exe_id;
             $relPath = api_get_path(WEB_CODE_PATH);
             if (api_is_platform_admin() || api_is_course_admin()) {
-                $docId = DocumentManager::get_document_id($course, '/images/'.$pictureName);
-                if ($docId) {
-                    $images_folder_visibility = api_get_item_visibility(
-                        $course,
-                        'document',
-                        $docId,
-                        api_get_session_id()
-                    );
-
-                    if (!$images_folder_visibility) {
-                        echo Display::return_message(get_lang('Change the visibility of the current image'), 'warning');
-                    }
-                }
-
+                $questionRepo = Container::getQuestionRepository();
+                $questionEntity = $questionRepo->find($questionId);
                 if ($freeze) {
                     echo Display::img(
-                        api_get_path(WEB_COURSE_PATH).$course['path'].'/document/images/'.$pictureName,
+                        $questionRepo->getHotSpotImageUrl($questionEntity),
                         $objQuestionTmp->selectTitle(),
                         ['width' => '600px']
                     );

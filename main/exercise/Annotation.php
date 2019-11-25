@@ -92,15 +92,10 @@ class Annotation extends Question
         parent::processCreation($form, $exercise);
 
         if (!empty($fileInfo['tmp_name'])) {
-            $result = $this->uploadPicture($fileInfo['tmp_name']);
-            if ($result) {
-                $this->weighting = $form->getSubmitValue('weighting');
-                $this->save($exercise);
+            $this->weighting = $form->getSubmitValue('weighting');
+            $this->save($exercise);
 
-                return true;
-            }
-
-            return false;
+            return true;
         }
 
         return false;

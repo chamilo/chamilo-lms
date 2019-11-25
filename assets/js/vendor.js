@@ -34,6 +34,8 @@ require('jquery-ui-timepicker-addon');
 require('@fancyapps/fancybox/dist/jquery.fancybox.js');
 require('@fancyapps/fancybox/src/js/media.js');
 require('jquery-contextmenu/dist/jquery.contextMenu.js');
+
+require('./annotation.js');
 // require('video.js');
 
 // doesn't work with webpack added directly in /public/libs folder

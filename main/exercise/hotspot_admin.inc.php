@@ -18,10 +18,8 @@ if (!is_object($objQuestion)) {
 
 $questionName = $objQuestion->selectTitle();
 $answerType = $objQuestion->selectType();
-$pictureName = $objQuestion->getPictureFilename();
 
-$debug = 0; // debug variable to get where we are
-$okPicture = empty($pictureName) ? false : true;
+$debug = 0;
 
 // if we come from the warning box "this question is used in several exercises"
 if ($modifyIn) {

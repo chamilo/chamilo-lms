@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CourseBundle\Entity\CQuizQuestion;
 use Chamilo\CoreBundle\Entity\TrackEHotspot;
 use Chamilo\CourseBundle\Entity\CQuizAnswer;
 
@@ -23,11 +25,6 @@ $userId = api_get_user_id();
 $courseId = api_get_course_int_id();
 $objExercise = new Exercise($courseId);
 $debug = false;
-
-if ($debug) {
-    error_log("Call to hotspot_answers.as.php");
-}
-
 $trackExerciseInfo = $objExercise->get_stat_track_exercise_info_by_exe_id($exeId);
 
 // Check if student has access to the hotspot answers
@@ -51,7 +48,18 @@ if (!api_is_allowed_to_edit(null, true)) {
     }
 }
 
-$objQuestion = Question::read($questionId, $objExercise->course);
+$questionRepo = Container::getQuestionRepository();
+/** @var CQuizQuestion $objQuestion */
+$objQuestion = $questionRepo->find($questionId);
+
+$answer_type = $objQuestion->getType(); //very important
+$TBL_ANSWERS = Database::get_course_table(TABLE_QUIZ_ANSWER);
+
+$resourceFile = $objQuestion->getResourceNode()->getResourceFile();
+$pictureWidth = $resourceFile->getWidth();
+$pictureHeight = $resourceFile->getHeight();
+$imagePath = $questionRepo->getHotSpotImageUrl($objQuestion);
+
 $objExercise->read($exerciseId);
 
 if (empty($objQuestion) || empty($objExercise)) {
@@ -59,9 +67,6 @@ if (empty($objQuestion) || empty($objExercise)) {
 }
 
 $em = Database::getManager();
-$picture = $objQuestion->getPicture();
-$pictureWidth = $picture->getResourceNode()->getResourceFile()->getWidth();
-$pictureHeight = $picture->getResourceNode()->getResourceFile()->getHeight();
 
 $data = [];
 $data['type'] = 'solution';
@@ -84,7 +89,7 @@ $data['lang'] = [
     'ClosePolygon' => get_lang('ClosePolygon'),
     'DelineationStatus1' => get_lang('DelineationStatus1'),
 ];
-$data['image'] = $objQuestion->selectPicturePath();
+$data['image'] = $imagePath;
 $data['image_width'] = $pictureWidth;
 $data['image_height'] = $pictureHeight;
 $data['courseCode'] = $_course['path'];
@@ -146,7 +151,7 @@ if (!$hideExpectedAnswer) {
         ->select('a')
         ->from('ChamiloCourseBundle:CQuizAnswer', 'a');
 
-    if ($objQuestion->selectType() == HOT_SPOT_DELINEATION) {
+    if ($objQuestion->getType() == HOT_SPOT_DELINEATION) {
         $qb
             ->where($qb->expr()->eq('a.cId', $courseId))
             ->andWhere($qb->expr()->eq('a.questionId', $questionId))

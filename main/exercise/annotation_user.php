@@ -1,6 +1,9 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CourseBundle\Entity\CQuizQuestion;
+
 session_cache_limiter('none');
 
 require_once __DIR__.'/../inc/global.inc.php';
@@ -15,18 +18,25 @@ if (empty($courseInfo)) {
 }
 
 $objQuestion = Question::read($questionId, $courseInfo);
-$documentPath = api_get_path(SYS_COURSE_PATH).$courseInfo['path'].'/document';
-$picturePath = $documentPath.'/images';
-$pictureSize = getimagesize($picturePath.'/'.$objQuestion->getPictureFilename());
-$pictureWidth = $pictureSize[0];
-$pictureHeight = $pictureSize[1];
+
+$questionRepo = Container::getQuestionRepository();
+/** @var CQuizQuestion $objQuestion */
+$objQuestion = $questionRepo->find($questionId);
+
+$answer_type = $objQuestion->getType(); //very important
+
+$resourceFile = $objQuestion->getResourceNode()->getResourceFile();
+$pictureWidth = $resourceFile->getWidth();
+$pictureHeight = $resourceFile->getHeight();
+$imagePath = $questionRepo->getHotSpotImageUrl($objQuestion);
+
 
 $data = [
     'use' => 'user',
     'image' => [
-        'path' => $objQuestion->selectPicturePath(),
-        'width' => $pictureSize[0],
-        'height' => $pictureSize[1],
+        'path' => $imagePath,
+        'width' => $pictureWidth,
+        'height' => $pictureHeight,
     ],
     'answers' => [
         'paths' => [],

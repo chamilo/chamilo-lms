@@ -1,6 +1,8 @@
 <?php
 /* For licensing terms, see /license.txt */
 
+use Chamilo\CoreBundle\Framework\Container;
+use Chamilo\CourseBundle\Entity\CQuizQuestion;
 use ChamiloSession as Session;
 
 /**
@@ -22,15 +24,19 @@ $_course = api_get_course_info();
 require api_get_path(LIBRARY_PATH).'geometry.lib.php';
 
 // set vars
-$questionId = intval($_GET['modifyAnswers']);
-$exerciseId = isset($_GET['exe_id']) ? intval($_GET['exe_id']) : 0;
-$objQuestion = Question::read($questionId);
-$answer_type = $objQuestion->selectType(); //very important
+$questionId = (int)$_GET['modifyAnswers'];
+$exerciseId = isset($_GET['exe_id']) ? (int)$_GET['exe_id'] : 0;
+$questionRepo = Container::getQuestionRepository();
+/** @var CQuizQuestion $objQuestion */
+$objQuestion = $questionRepo->find($questionId);
+
+$answer_type = $objQuestion->getType(); //very important
 $TBL_ANSWERS = Database::get_course_table(TABLE_QUIZ_ANSWER);
-$picture = $objQuestion->getPicture();
-$pictureName = $objQuestion->getPictureFilename();
-$pictureWidth = $picture->getResourceNode()->getResourceFile()->getWidth();
-$pictureHeight = $picture->getResourceNode()->getResourceFile()->getHeight();
+
+$resourceFile = $objQuestion->getResourceNode()->getResourceFile();
+$pictureWidth = $resourceFile->getWidth();
+$pictureHeight = $resourceFile->getHeight();
+$imagePath = $questionRepo->getHotSpotImageUrl($objQuestion);
 
 $course_id = api_get_course_int_id();
 
@@ -72,7 +78,7 @@ $data['lang'] = [
     'ClosePolygon' => get_lang('ClosePolygon'),
     'DelineationStatus1' => get_lang('DelineationStatus1'),
 ];
-$data['image'] = $objQuestion->selectPicturePath();
+$data['image'] = $imagePath;
 $data['image_width'] = $pictureWidth;
 $data['image_height'] = $pictureHeight;
 $data['courseCode'] = $_course['path'];

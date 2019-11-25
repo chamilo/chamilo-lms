@@ -769,7 +769,31 @@ class ResourceRepository extends EntityRepository
 
             return '';
         } catch (\Throwable $exception) {
-            throw new FileNotFoundException($id);
+            throw new FileNotFoundException($resource);
+        }
+    }
+
+    public function getResourceFileUrl(AbstractResource $resource, array $extraParams = []): string
+    {
+        try {
+            $resourceNode = $resource->getResourceNode();
+            if ($resourceNode->hasResourceFile()) {
+                $params = [
+                    'tool' => $resourceNode->getResourceType()->getTool(),
+                    'type' => $resourceNode->getResourceType(),
+                    'id' => $resourceNode->getId(),
+                ];
+
+                if (!empty($extraParams)) {
+                    $params = array_merge($params, $extraParams);
+                }
+
+                return $this->router->generate('chamilo_core_resource_file', $params);
+            }
+
+            return '';
+        } catch (\Throwable $exception) {
+            throw new FileNotFoundException($resource);
         }
     }
 

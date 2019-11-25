@@ -163,7 +163,7 @@ $(function () {
 
             <div class="dropdown-menu dropdown-menu-right">
                 <div class="dropdown-header text-center">
-                    <strong>Settings</strong>
+                    <strong>{{ app.user.username }}</strong>
                 </div>
 
                 <a class="dropdown-item" href="{{ url('legacy_main', { 'name' : 'auth/profile.php' }) }}">

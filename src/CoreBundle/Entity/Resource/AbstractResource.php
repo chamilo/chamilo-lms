@@ -64,8 +64,11 @@ abstract class AbstractResource implements ResourceInterface
         $result = null;
         if ($resourceNode && $resourceNode->getResourceLinks()) {
             $result = $resourceNode->getResourceLinks()->matching($criteria)->first();
+            if ($result) {
+                return $result;
+            }
         }
 
-        return $result;
+        return null;
     }
 }

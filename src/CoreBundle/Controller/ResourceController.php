@@ -288,6 +288,10 @@ class ResourceController extends AbstractResourceController implements CourseCon
 
                 $icon = 'fa-eye-slash';
                 $link = $resource->getCourseSessionResourceLink($this->getCourse(), $this->getSession());
+
+                if ($link === null) {
+                    return null;
+                }
                 if ($link->getVisibility() === ResourceLink::VISIBILITY_PUBLISHED) {
                     $icon = 'fa-eye';
                 }
@@ -420,14 +424,13 @@ class ResourceController extends AbstractResourceController implements CourseCon
         $resourceNodeId = $request->get('id');
 
         $this->setBreadCrumb($request);
-
         $repository = $this->getRepositoryFromRequest($request);
         /** @var AbstractResource $resource */
         $resource = $repository->getRepository()->findOneBy(['resourceNode' => $resourceNodeId]);
         $resourceNode = $resource->getResourceNode();
 
         $this->denyAccessUnlessGranted(
-            ResourceNodeVoter::VIEW,
+            ResourceNodeVoter::EDIT,
             $resourceNode,
             $this->trans('Unauthorised access to resource')
         );
@@ -606,8 +609,6 @@ class ResourceController extends AbstractResourceController implements CourseCon
      */
     public function changeVisibilityAction(Request $request): Response
     {
-        $em = $this->getDoctrine()->getManager();
-
         $id = $request->get('id');
 
         $repository = $this->getRepositoryFromRequest($request);

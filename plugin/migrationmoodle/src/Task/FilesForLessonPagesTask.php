@@ -15,7 +15,7 @@ use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\LoadedCourseLookup
  *
  * @package Chamilo\PluginBundle\MigrationMoodle\Task
  */
-class FilesForLessonPagesTask extends CourseFilesLoader
+class FilesForLessonPagesTask extends CourseFilesTask
 {
     /**
      * @return array

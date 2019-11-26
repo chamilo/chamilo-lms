@@ -16,9 +16,20 @@ services:
             - 'admin'
             - 'admin'
             - 'admin'
-            - 'admin.png'
             - ''
-            - {Chamilo\CoreBundle\Entity\AccessUrl: 'urls', Chamilo\CoreBundle\Entity\Course: 'courses', Chamilo\CoreBundle\Entity\Illustration: 'illustrations'}
+            - {Chamilo\CoreBundle\Entity\AccessUrl: 'urls', Chamilo\CoreBundle\Entity\Course: 'courses'}
+            - 1
+        tags:
+            - {name: chamilo_core.tool}
+
+    chamilo_core.tool.asset:
+        class: Chamilo\CoreBundle\Tool\Asset
+        arguments:
+            - 'asset'
+            - 'asset'
+            - 'asset'
+            - ''
+            - {Chamilo\CoreBundle\Entity\Illustration: 'illustrations'}
             - 1
         tags:
             - {name: chamilo_core.tool}
@@ -30,7 +41,6 @@ services:
             - 'agenda'
             - 'authoring'
             - 'calendar/agenda.php'
-            - 'agenda.gif'
             - chamilo_course.settings.agenda
             - {Chamilo\CourseBundle\Entity\CCalendarEvent: 'events', Chamilo\CourseBundle\Entity\CCalendarEventAttachment: 'event_attachments'}
             - 0
@@ -50,7 +60,6 @@ services:
             - 'announcement'
             - 'authoring'
             - 'announcements/announcements.php'
-            - 'valves.gif'
             - chamilo_course.settings.announcement
             - {Chamilo\CourseBundle\Entity\CAnnouncement: 'announcements', Chamilo\CourseBundle\Entity\CAnnouncementAttachment: 'announcements_attachments'}
             - 0
@@ -69,7 +78,6 @@ services:
             - 'student_publication'
             - 'interaction'
             - 'work/work.php'
-            - 'works.gif'
             - chamilo_course.settings.assignment
             - {Chamilo\CourseBundle\Entity\CStudentPublication: 'student_publications', Chamilo\CourseBundle\Entity\CStudentPublicationAssignment: 'student_publications_assignments'}
             - 0
@@ -88,7 +96,6 @@ services:
             - 'attendance'
             - 'authoring'
             - 'attendance/index.php'
-            - 'attendance.gif'
             - '@chamilo_course.settings.attendance'
             - {Chamilo\CourseBundle\Entity\CAttendance: 'attendances'}
             - 0
@@ -107,7 +114,6 @@ services:
             - 'blog'
             - 'admin'
             - 'blog/blog_admin.php'
-            - 'blog_admin.gif'
             - '@chamilo_course.settings.blog'
             - {Chamilo\CourseBundle\Entity\CBlog: 'blogs'}
             - 0
@@ -126,7 +132,6 @@ services:
             - course_description
             - authoring
             - course_description/index.php
-            - info.gif
             - '@chamilo_course.settings.course_description'
             - {Chamilo\CourseBundle\Entity\CCourseDescription: 'course_descriptions'}
             - 0
@@ -145,7 +150,6 @@ services:
             - chat
             - interaction
             - chat/chat.php
-            - chat.gif
             - '@chamilo_course.settings.chat'
             - ~
             - 0
@@ -164,7 +168,6 @@ services:
             - course_progress
             - authoring
             - course_progress/index.php
-            - course_progress.gif
             - '@chamilo_course.settings.course_progress'
             - {Chamilo\CourseBundle\Entity\CThematic: 'thematics', Chamilo\CourseBundle\Entity\CThematicAdvance: 'thematic_advance', Chamilo\CourseBundle\Entity\CThematicPlan: 'thematic_plans'}
             - 0
@@ -183,7 +186,6 @@ services:
             - document
             - authoring
             - document/document.php
-            - folder_document.gif
             - '@chamilo_course.settings.document'
             - {Chamilo\CourseBundle\Entity\CDocument: 'files'}
             - 0
@@ -202,7 +204,6 @@ services:
             - dropbox
             - interaction
             - dropbox/index.php
-            - dropbox.gif
             - '@chamilo_course.settings.dropbox'
             - {Chamilo\CourseBundle\Entity\CDropbox: 'dropbox'}
             - 0
@@ -221,7 +222,6 @@ services:
             - quiz
             - authoring
             - exercise/exercise.php
-            - quiz.gif
             - '@chamilo_course.settings.exercise'
             - {Chamilo\CourseBundle\Entity\CQuiz: 'exercises', Chamilo\CourseBundle\Entity\CQuizQuestion: 'questions', Chamilo\CourseBundle\Entity\CQuizQuestionCategory: 'question_categories', Chamilo\CourseBundle\Entity\CExerciseCategory: 'exercise_categories'}
             - 0
@@ -240,7 +240,6 @@ services:
             - forum
             - interaction
             - forum/index.php
-            - forum.gif
             - '@chamilo_course.settings.forum'
             - {Chamilo\CourseBundle\Entity\CForum: 'forums', Chamilo\CourseBundle\Entity\CForumAttachment: 'forum_attachments', Chamilo\CourseBundle\Entity\CForumCategory: 'forum_categories', Chamilo\CourseBundle\Entity\CForumPost: 'forum_posts', Chamilo\CourseBundle\Entity\CForumThread: 'forum_threads'}
             - 0
@@ -259,7 +258,6 @@ services:
             - glossary
             - authoring
             - glossary/index.php
-            - glossary.gif
             - '@chamilo_course.settings.glossary'
             - {Chamilo\CourseBundle\Entity\CGlossary: 'glossaries'}
             - 0
@@ -278,7 +276,6 @@ services:
             - gradebook
             - authoring
             - gradebook/index.php
-            - gradebook.gif
             - '@chamilo_course.settings.gradebook'
             - {Chamilo\CourseBundle\Entity\CGradebookCategory: 'gradebook_categories', Chamilo\CourseBundle\Entity\CGradebookLink: 'gradebook_links', Chamilo\CourseBundle\Entity\CGradebookEvaluation: 'gradebook_evaluations'}
             - 0
@@ -294,10 +291,9 @@ services:
     chamilo_core.tool.group:
         class: Chamilo\CoreBundle\Tool\Group
         arguments:
-            - group
-            - interaction
-            - group/group.php
-            - group.gif
+            - 'group'
+            - 'interaction'
+            - 'group/group.php'
             - '@chamilo_course.settings.group'
             - {Chamilo\CourseBundle\Entity\CGroupInfo: 'groups', Chamilo\CourseBundle\Entity\CGroupCategory: 'group_categories'}
             - 0
@@ -313,10 +309,9 @@ services:
     chamilo_core.tool.learning_path:
         class: Chamilo\CoreBundle\Tool\LearningPath
         arguments:
-            - learnpath
-            - authoring
-            - lp/lp_controller.php
-            - scorms.gif
+            - 'learnpath'
+            - 'authoring'
+            - 'lp/lp_controller.php'
             - '@chamilo_course.settings.learning_path'
             - {Chamilo\CourseBundle\Entity\CLp: 'lps', Chamilo\CourseBundle\Entity\CLpCategory: 'lp_categories'}
             - 0
@@ -332,10 +327,9 @@ services:
     chamilo_core.tool.link:
         class: Chamilo\CoreBundle\Tool\Link
         arguments:
-            - link
-            - authoring
-            - link/link.php
-            - links.gif
+            - 'link'
+            - 'authoring'
+            - 'link/link.php'
             - '@chamilo_course.settings.link'
             - {Chamilo\CourseBundle\Entity\CLink: 'links', Chamilo\CourseBundle\Entity\CLinkCategory: 'link_categories'}
             - 0
@@ -353,13 +347,24 @@ services:
         tags:
             - {name: chamilo_course.settings_schema, alias: chamilo_course.settings.maintenance, namespace: maintenance}
 
+    chamilo_core.tool.member:
+        class: Chamilo\CoreBundle\Tool\Member
+        arguments:
+            - 'member'
+            - 'interaction'
+            - 'user/user.php'
+            - '@chamilo_course.settings.user'
+            - ~
+            - 0
+        tags:
+            - {name: chamilo_core.tool}
+
     chamilo_core.tool.maintenance:
         class: Chamilo\CoreBundle\Tool\Maintenance
         arguments:
-            - course_maintenance
-            - admin
-            - course_info/maintenance.php
-            - backup.gif
+            - 'course_maintenance'
+            - 'admin'
+            - 'course_info/maintenance.php'
             - '@chamilo_course.settings.maintenance'
             - ~
             - 0
@@ -375,10 +380,9 @@ services:
     chamilo_core.tool.notebook:
         class: Chamilo\CoreBundle\Tool\Notebook
         arguments:
-            - notebook
-            - interaction
-            - notebook/index.php
-            - notebook.gif
+            - 'notebook'
+            - 'interaction'
+            - 'notebook/index.php'
             - '@chamilo_course.settings.notebook'
             - {Chamilo\CourseBundle\Entity\CNotebook: 'notebooks'}
             - 0
@@ -388,10 +392,9 @@ services:
     chamilo_core.tool.settings:
         class: Chamilo\CoreBundle\Tool\Settings
         arguments:
-            - course_setting
+            - 'course_setting'
             - admin
             - course_info/infocours.php
-            - reference.gif
             - '@chamilo_course.settings.settings'
             - ~
             - 0
@@ -407,10 +410,9 @@ services:
     chamilo_core.tool.survey:
         class: Chamilo\CoreBundle\Tool\Survey
         arguments:
-            - survey
-            - interaction
-            - survey/survey_list.php
-            - survey.gif
+            - 'survey'
+            - 'interaction'
+            - 'survey/survey_list.php'
             - '@chamilo_course.settings.survey'
             - {Chamilo\CourseBundle\Entity\CSurvey: 'surveys', Chamilo\CourseBundle\Entity\CSurveyQuestion: 'survey_questions'}
             - 0
@@ -428,7 +430,6 @@ services:
             - tracking
             - admin
             - tracking/courseLog.php
-            - statistics.gif
             - '@chamilo_course.settings.tracking'
             - ~
             - 0
@@ -446,13 +447,13 @@ services:
         arguments:
             - user
             - interaction
-            - user/user.php
-            - members.gif
-            - '@chamilo_course.settings.user'
             - ~
+            - ~
+            - {Chamilo\CoreBundle\Entity\PersonaFile: 'files'}
             - 0
         tags:
             - {name: chamilo_core.tool}
+
     # Course settings
     chamilo_course.settings.user:
         class: Chamilo\CourseBundle\Settings\UserCourseSettingsSchema
@@ -465,7 +466,6 @@ services:
             - wiki
             - interaction
             - wiki/index.php
-            - wiki.gif
             - '@chamilo_course.settings.wiki'
             - {Chamilo\CourseBundle\Entity\CWiki: 'wikis'}
             - 0

@@ -24,17 +24,16 @@ abstract class AbstractTool implements ToolInterface
      * @param string $name
      * @param string $category
      * @param string $link
-     * @param string $image
      * @param        $courseSettings
      * @param array  $types
      * @param array  $admin
      */
-    public function __construct($name, $category, $link, $image, $courseSettings, $types, $admin)
+    public function __construct($name, $category, $link, $courseSettings, $types, $admin)
     {
         $this->name = $name;
         $this->category = $category;
         $this->link = $link;
-        $this->image = $image;
+        $this->image = $name.'.png';
         $this->admin = (int) $admin;
         $this->courseSettings = $courseSettings;
         $this->types = $types;

@@ -77,8 +77,6 @@ class ToolChain
             $toolEntity = new Tool();
             $toolEntity
                 ->setName($tool->getName())
-                ->setImage($tool->getImage())
-                ->setDescription('')
             ;
 
             if ($tool->getAdmin() === 1) {

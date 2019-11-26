@@ -31,20 +31,6 @@ class Tool
     protected $name;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="image", type="string", length=255, nullable=true, unique=false)
-     */
-    protected $image;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="description", type="text", nullable=true)
-     */
-    protected $description;
-
-    /**
      * @ORM\OneToMany(targetEntity="Chamilo\CoreBundle\Entity\Resource\ResourceType", mappedBy="tool", cascade={"persist", "remove"})
      */
     protected $resourceTypes;
@@ -138,53 +124,5 @@ class Tool
     public function getName()
     {
         return $this->name;
-    }
-
-    /**
-     * Set image.
-     *
-     * @param string $image
-     *
-     * @return Tool
-     */
-    public function setImage($image)
-    {
-        $this->image = $image;
-
-        return $this;
-    }
-
-    /**
-     * Get image.
-     *
-     * @return string
-     */
-    public function getImage()
-    {
-        return $this->image;
-    }
-
-    /**
-     * Set description.
-     *
-     * @param string $description
-     *
-     * @return Tool
-     */
-    public function setDescription($description)
-    {
-        $this->description = $description;
-
-        return $this;
-    }
-
-    /**
-     * Get description.
-     *
-     * @return string
-     */
-    public function getDescription()
-    {
-        return $this->description;
     }
 }

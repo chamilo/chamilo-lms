@@ -206,7 +206,7 @@ class Template
     public function display($template)
     {
         $template = str_replace('tpl', 'html.twig', $template);
-        $templateFile = api_get_path(SYS_PATH).'main/template/'.$template;
+        $templateFile = api_get_path(SYS_CODE_PATH).'template/'.$template;
 
         $this->loadLegacyParams();
 

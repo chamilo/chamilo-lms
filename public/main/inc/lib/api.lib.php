@@ -731,7 +731,7 @@ function api_get_path($path = '', $configuration = [])
     }
 
     $course_folder = 'courses/';
-    $code_folder = 'main/';
+    $code_folder = 'public/main/';
     $root_sys = Container::getRootDir();
     $root_web = '';
     // If no $root_web has been set so far *and* no custom config has been passed to the function
@@ -812,13 +812,13 @@ function api_get_path($path = '', $configuration = [])
     if (!array_key_exists($root_web, $paths)) {
         $paths[$root_web] = [
             WEB_PATH => '',
-            SYS_PATH => '',
+            SYS_PATH => 'public/',
             REL_PATH => '',
             WEB_COURSE_PATH => '',
             SYS_COURSE_PATH => '',
             REL_COURSE_PATH => '',
             WEB_CODE_PATH => 'main/',
-            SYS_CODE_PATH => 'main/',
+            SYS_CODE_PATH => 'public/main/',
             REL_CODE_PATH => '/main/',
             SYS_LANG_PATH => 'lang/',
             WEB_IMG_PATH => 'public/img/',
@@ -871,7 +871,6 @@ function api_get_path($path = '', $configuration = [])
 
         // Initialization of a table that contains common-purpose paths.
         $paths[$root_web][REL_PATH] = $root_rel;
-        $paths[$root_web][REL_COURSE_PATH] = $root_rel.$course_folder;
         $paths[$root_web][REL_CODE_PATH] = $root_rel.$code_folder;
         $paths[$root_web][WEB_PATH] = $rootWebWithSlash;
         $paths[$root_web][WEB_CODE_PATH] = $rootWebWithSlash.$code_folder;
@@ -900,7 +899,6 @@ function api_get_path($path = '', $configuration = [])
         $paths[$root_web][SYS_FONTS_PATH] = $paths[$root_web][SYS_CODE_PATH].$paths[$root_web][SYS_FONTS_PATH];
         $paths[$root_web][SYS_ARCHIVE_PATH] = $paths[$root_web][SYS_PATH].$paths[$root_web][SYS_ARCHIVE_PATH];
         $paths[$root_web][SYS_APP_PATH] = $paths[$root_web][SYS_PATH].$paths[$root_web][SYS_APP_PATH];
-        $paths[$root_web][SYS_COURSE_PATH] = $paths[$root_web][SYS_APP_PATH].$course_folder;
         $paths[$root_web][SYS_UPLOAD_PATH] = $paths[$root_web][SYS_PATH].$paths[$root_web][SYS_UPLOAD_PATH];
         $paths[$root_web][SYS_LANG_PATH] = $paths[$root_web][SYS_CODE_PATH].$paths[$root_web][SYS_LANG_PATH];
         $paths[$root_web][SYS_HOME_PATH] = $paths[$root_web][SYS_PATH].$paths[$root_web][SYS_HOME_PATH];

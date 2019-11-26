@@ -2,26 +2,6 @@
 /* For licensing terms, see /license.txt */
 
 use Chamilo\PluginBundle\MigrationMoodle\Task\BaseTask;
-use Chamilo\PluginBundle\MigrationMoodle\Task\CourseCategoriesTask;
-use Chamilo\PluginBundle\MigrationMoodle\Task\CourseModulesQuizTask;
-use Chamilo\PluginBundle\MigrationMoodle\Task\CoursesTask;
-use Chamilo\PluginBundle\MigrationMoodle\Task\RoleAssignmentsTask;
-use Chamilo\PluginBundle\MigrationMoodle\Task\CQuizTask;
-use Chamilo\PluginBundle\MigrationMoodle\Task\FilesForLessonAnswersTask;
-use Chamilo\PluginBundle\MigrationMoodle\Task\CourseSectionsTask;
-use Chamilo\PluginBundle\MigrationMoodle\Task\LessonAnswersEssayTask;
-use Chamilo\PluginBundle\MigrationMoodle\Task\LessonAnswersMatchingTask;
-use Chamilo\PluginBundle\MigrationMoodle\Task\LessonAnswersMultipleAnswerTask;
-use Chamilo\PluginBundle\MigrationMoodle\Task\LessonAnswersMultipleChoiceTask;
-use Chamilo\PluginBundle\MigrationMoodle\Task\LessonAnswersShortAnswerTask;
-use Chamilo\PluginBundle\MigrationMoodle\Task\LessonAnswersTrueFalseTask;
-use Chamilo\PluginBundle\MigrationMoodle\Task\CourseModulesLessonTask;
-use Chamilo\PluginBundle\MigrationMoodle\Task\FilesForLessonPagesTask;
-use Chamilo\PluginBundle\MigrationMoodle\Task\LessonPagesDocumentTask;
-use Chamilo\PluginBundle\MigrationMoodle\Task\LessonPagesTask;
-use Chamilo\PluginBundle\MigrationMoodle\Task\LessonQuestionPagesQuestionTask;
-use Chamilo\PluginBundle\MigrationMoodle\Task\LessonQuestionPagesQuizTask;
-use Chamilo\PluginBundle\MigrationMoodle\Task\UsersTask;
 
 require_once __DIR__.'/../../main/inc/global.inc.php';
 
@@ -36,200 +16,108 @@ if ('true' != $plugin->get('active')) {
 }
 
 $menu = [
-    [
-        'users',
-        'Users',
-        [],
+    1 => [
+        'action' => 'users',
+        'parent' => 0,
     ],
-    [
-        'course_categories',
-        'Course categories',
-        [],
+    2 => [
+        'action' => 'course_categories',
+        'parent' => 0,
     ],
-    [
-        'courses',
-        'Courses',
-        [
-
-            [
-                'learning_paths',
-                'Learning paths',
-                [
-
-                    [
-                        'learning_path_chapters',
-                        'Sections',
-                        [
-                            [
-                                'learning_path_items',
-                                'Items',
-                                [
-
-                                    [
-                                        'learning_path_documents',
-                                        'Documents',
-                                        [
-                                            [
-                                                'learning_path_documents_files',
-                                                'Document files',
-                                                [],
-                                            ],
-                                        ],
-                                    ],
-                                    [
-                                        'learning_path_quizzes',
-                                        'Quizzes',
-                                        [
-                                            [
-                                                'learnin_path_quiz_questions',
-                                                'Questions',
-                                                [
-                                                    [
-                                                        'learnin_path_quiz_answers_true_false',
-                                                        'Answers for True-False questions',
-                                                        []
-                                                    ],
-                                                    [
-                                                        'learnin_path_quiz_answers_multiple_choice',
-                                                        'Answers for Multiple Choice questions',
-                                                        []
-                                                    ],
-                                                    [
-                                                        'learnin_path_quiz_answers_multiple_answer',
-                                                        'Answers for Multiple Answers questions',
-                                                        []
-                                                    ],
-                                                    [
-                                                        'learnin_path_quiz_answers_matching',
-                                                        'Answers for Matching questions',
-                                                        []
-                                                    ],
-                                                    [
-                                                        'learnin_path_quiz_answers_essay',
-                                                        'Answers for Essay questions',
-                                                        []
-                                                    ],
-                                                    [
-                                                        'learnin_path_quiz_answers_short_answer',
-                                                        'Answers for Short-Answer and Numerical questions',
-                                                        []
-                                                    ]
-                                                ],
-                                            ],
-                                            [
-                                                'files_for_lesson_answers',
-                                                'Files for answers',
-                                                [],
-                                            ],
-                                        ],
-                                    ],
-                                ],
-                            ],
-                        ],
-                    ],
-                    [
-                        'course_modules_quiz',
-                        'Items quizzes',
-                        []
-                    ]
-                ],
-            ],
-            [
-                'quizzes',
-                'Quizzes',
-                [],
-            ],
-        ],
+    3 => [
+        'action' => 'courses',
+        'parent' => 0,
     ],
-    [
-        'course_users',
-        'Subcribe users to courses',
-        [],
+    4 => [
+        'action' => 'course_sections',
+        'parent' => 3,
+    ],
+    5 => [
+        'action' => 'course_modules_lesson',
+        'parent' => 4,
+    ],
+    6 => [
+        'action' => 'course_modules_quiz',
+        'parent' => 4,
+    ],
+    7 => [
+        'action' => 'lesson_pages',
+        'parent' => 5,
+    ],
+    8 => [
+        'action' => 'lesson_pages_document',
+        'parent' => 7,
+    ],
+    9 => [
+        'action' => 'files_for_lesson_pages',
+        'parent' => 8,
+    ],
+    10 => [
+        'action' => 'lesson_question_pages_quiz',
+        'parent' => 7,
+    ],
+    11 => [
+        'action' => 'lesson_question_pages_question',
+        'parent' => 10,
+    ],
+    12 => [
+        'action' => 'lesson_answers_true_false',
+        'parent' => 11,
+    ],
+    13 => [
+        'action' => 'lesson_answers_multiple_choice',
+        'parent' => 11,
+    ],
+    14 => [
+        'action' => 'lesson_answers_multiple_answer',
+        'parent' => 11,
+    ],
+    15 => [
+        'action' => 'lesson_answers_matching',
+        'parent' => 11,
+    ],
+    16 => [
+        'action' => 'lesson_answers_essay',
+        'parent' => 11,
+    ],
+    17 => [
+        'action' => 'lesson_answers_short_answer',
+        'parent' => 11,
+    ],
+    18 => [
+        'action' => 'files_for_lesson_answers',
+        'parent' => 10,
+    ],
+    19 => [
+        'action' => 'c_quiz',
+        'parent' => 4,
+    ],
+    20 => [
+        'action' => 'role_assignments',
+        'parent' => 0,
     ],
 ];
 
 Display::display_header($plugin->get_title());
 
 echo '<div class="row">';
-echo '<div class="col-sm-4">';
+echo '<div class="col-sm-6">';
 echo displayMenu($menu);
 echo '</div>';
-echo '<div class="col-sm-8">';
+echo '<div class="col-sm-6">';
 
-if (!empty($action)) {
+if (!empty($action) && isAllowedAction($action, $menu)) {
+    $taskName = api_underscore_to_camel_case($action).'Task';
+
     echo Display::page_subheader(
-        getActionTitle($menu, $action)
+        $plugin->get_lang($taskName)
     );
 
-    /** @var BaseTask|null $task */
-    $task = null;
+    $taskName = 'Chamilo\\PluginBundle\\MigrationMoodle\\Task\\'.$taskName;
 
-    switch ($action) {
-        case 'users':
-            $task = new UsersTask();
-            break;
-        case 'course_categories':
-            $task = new CourseCategoriesTask();
-            break;
-        case 'courses':
-            $task = new CoursesTask();
-            break;
-        case 'course_users':
-            $task = new RoleAssignmentsTask();
-            break;
-        case 'quizzes':
-            $task = new CQuizTask();
-            break;
-        case 'learning_paths':
-            $task = new CourseSectionsTask();
-            break;
-        case 'learning_path_chapters':
-            $task = new CourseModulesLessonTask();
-            break;
-        case 'learning_path_items':
-            $task = new LessonPagesTask();
-            break;
-        case 'learning_path_documents':
-            $task = new LessonPagesDocumentTask();
-            break;
-        case 'learning_path_documents_files':
-            $task = new FilesForLessonPagesTask();
-            break;
-        case 'learning_path_quizzes':
-            $task = new LessonQuestionPagesQuizTask();
-            break;
-        case 'learnin_path_quiz_questions':
-            $task = new LessonQuestionPagesQuestionTask();
-            break;
-        case 'learnin_path_quiz_answers_true_false':
-            $task = new LessonAnswersTrueFalseTask();
-            break;
-        case 'learnin_path_quiz_answers_multiple_choice':
-            $task = new LessonAnswersMultipleChoiceTask();
-            break;
-        case 'learnin_path_quiz_answers_multiple_answer':
-            $task = new LessonAnswersMultipleAnswerTask();
-            break;
-        case 'learnin_path_quiz_answers_matching':
-            $task = new LessonAnswersMatchingTask();
-            break;
-        case 'learnin_path_quiz_answers_essay':
-            $task = new LessonAnswersEssayTask();
-            break;
-        case 'learnin_path_quiz_answers_short_answer':
-            $task = new LessonAnswersShortAnswerTask();
-            break;
-        case 'files_for_lesson_answers':
-            $task = new FilesForLessonAnswersTask();
-            break;
-        case 'course_modules_quiz':
-            $task = new CourseModulesQuizTask();
-            break;
-    }
-
-    if ($task) {
-        $task->execute();
-    }
+    /** @var BaseTask $task */
+    $task = new $taskName();
+    $task->execute();
 }
 
 echo '</div>';
@@ -239,27 +127,35 @@ Display::display_footer();
 
 /**
  * @param array $menu
+ * @param int   $parent
  *
  * @return string
  */
-function displayMenu(array $menu)
-{
+function displayMenu(array $menu, $parent = 0) {
+    /** @var MigrationMoodlePlugin $plugin */
+    $plugin = $GLOBALS['plugin'];
+
+    $items = array_filter(
+        $menu,
+        function ($item) use ($parent) {
+            return $item['parent'] == $parent;
+        }
+    );
+
     $baseUrl = api_get_self()."?action=";
 
     $html = '<ol>';
 
-    foreach ($menu as $item) {
-        list($action, $title, $subMenu) = $item;
+    foreach ($items as $key => $item) {
+        $title = api_underscore_to_camel_case($item['action']);
 
         $html .= '<li>';
         $html .= Display::url(
-            $title,
-            $baseUrl.$action
+            $plugin->get_lang($title.'Task'),
+            $baseUrl.$item['action']
         );
 
-        if ($subMenu) {
-            $html .= displayMenu($subMenu);
-        }
+        $html .= displayMenu($menu, $key);
 
         $html .= '</li>';
     }
@@ -270,30 +166,17 @@ function displayMenu(array $menu)
 }
 
 /**
- * @param array  $menu
  * @param string $action
+ * @param array  $menu
  *
- * @return string
+ * @return bool
  */
-function getActionTitle(array $menu, $action)
-{
-    $flag = false;
-    $title = '';
-
-    array_walk_recursive(
-        $menu,
-        function ($value, $key) use ($action, &$flag, &$title) {
-            if ($flag) {
-                $title = $value;
-            }
-
-            $flag = false;
-
-            if (0 == $key && $value == $action) {
-                $flag = true;
-            }
+function isAllowedAction($action, array $menu) {
+    foreach ($menu as $item) {
+        if ($item['action'] == $action) {
+            return true;
         }
-    );
+    }
 
-    return $title;
+    return false;
 }

@@ -3,6 +3,7 @@
 
 use Chamilo\PluginBundle\MigrationMoodle\Task\BaseTask;
 use Chamilo\PluginBundle\MigrationMoodle\Task\CourseCategoriesTask;
+use Chamilo\PluginBundle\MigrationMoodle\Task\CourseModulesQuizTask;
 use Chamilo\PluginBundle\MigrationMoodle\Task\CoursesTask;
 use Chamilo\PluginBundle\MigrationMoodle\Task\RoleAssignmentsTask;
 use Chamilo\PluginBundle\MigrationMoodle\Task\CQuizTask;
@@ -58,73 +59,79 @@ $menu = [
                     [
                         'learning_path_chapters',
                         'Sections',
-                        [],
-                    ],
-                    [
-                        'learning_path_items',
-                        'Items',
                         [
+                            [
+                                'learning_path_items',
+                                'Items',
+                                [
 
-                            [
-                                'learning_path_documents',
-                                'Documents',
-                                [
                                     [
-                                        'learning_path_documents_files',
-                                        'Document files',
-                                        [],
-                                    ],
-                                ],
-                            ],
-                            [
-                                'learning_path_quizzes',
-                                'Quizzes',
-                                [
-                                    [
-                                        'learnin_path_quiz_questions',
-                                        'Questions',
+                                        'learning_path_documents',
+                                        'Documents',
                                         [
                                             [
-                                                'learnin_path_quiz_answers_true_false',
-                                                'Answers for True-False questions',
-                                                []
+                                                'learning_path_documents_files',
+                                                'Document files',
+                                                [],
                                             ],
-                                            [
-                                                'learnin_path_quiz_answers_multiple_choice',
-                                                'Answers for Multiple Choice questions',
-                                                []
-                                            ],
-                                            [
-                                                'learnin_path_quiz_answers_multiple_answer',
-                                                'Answers for Multiple Answers questions',
-                                                []
-                                            ],
-                                            [
-                                                'learnin_path_quiz_answers_matching',
-                                                'Answers for Matching questions',
-                                                []
-                                            ],
-                                            [
-                                                'learnin_path_quiz_answers_essay',
-                                                'Answers for Essay questions',
-                                                []
-                                            ],
-                                            [
-                                                'learnin_path_quiz_answers_short_answer',
-                                                'Answers for Short-Answer and Numerical questions',
-                                                []
-                                            ]
                                         ],
                                     ],
                                     [
-                                        'files_for_lesson_answers',
-                                        'Files for answers',
-                                        [],
+                                        'learning_path_quizzes',
+                                        'Quizzes',
+                                        [
+                                            [
+                                                'learnin_path_quiz_questions',
+                                                'Questions',
+                                                [
+                                                    [
+                                                        'learnin_path_quiz_answers_true_false',
+                                                        'Answers for True-False questions',
+                                                        []
+                                                    ],
+                                                    [
+                                                        'learnin_path_quiz_answers_multiple_choice',
+                                                        'Answers for Multiple Choice questions',
+                                                        []
+                                                    ],
+                                                    [
+                                                        'learnin_path_quiz_answers_multiple_answer',
+                                                        'Answers for Multiple Answers questions',
+                                                        []
+                                                    ],
+                                                    [
+                                                        'learnin_path_quiz_answers_matching',
+                                                        'Answers for Matching questions',
+                                                        []
+                                                    ],
+                                                    [
+                                                        'learnin_path_quiz_answers_essay',
+                                                        'Answers for Essay questions',
+                                                        []
+                                                    ],
+                                                    [
+                                                        'learnin_path_quiz_answers_short_answer',
+                                                        'Answers for Short-Answer and Numerical questions',
+                                                        []
+                                                    ]
+                                                ],
+                                            ],
+                                            [
+                                                'files_for_lesson_answers',
+                                                'Files for answers',
+                                                [],
+                                            ],
+                                        ],
                                     ],
                                 ],
                             ],
                         ],
                     ],
+                    [
+                        'course_modules_quiz',
+                        'Items quizzes',
+                        []
+                    ]
                 ],
             ],
             [
@@ -214,6 +221,9 @@ if (!empty($action)) {
             break;
         case 'files_for_lesson_answers':
             $task = new FilesForLessonAnswersTask();
+            break;
+        case 'course_modules_quiz':
+            $task = new CourseModulesQuizTask();
             break;
     }
 

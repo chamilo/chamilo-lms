@@ -298,25 +298,25 @@ try {
                 $_POST['startDate'],
                 $_POST['endDate'],
                 isset($_POST['extraFields']) ? $_POST['extraFields'] : []);
-            $restResponse->setData($newSessionId);
+            $restResponse->setData([$newSessionId]);
             break;
         case Rest::SUBSCRIBE_USER_TO_SESSION_FROM_USERNAME:
             if (empty($_POST['sessionId']) || empty($_POST['loginName'])) {
                 throw new Exception(get_lang('NoData'));
             }
             $subscribed = $restApi->subscribeUserToSessionFromUsername($_POST['sessionId'], $_POST['loginName']);
-            $restResponse->setData($subscribed);
+            $restResponse->setData([$subscribed]);
             break;
         case Rest::GET_SESSION_FROM_EXTRA_FIELD;
             if (empty($_POST['field_name']) || empty($_POST['field_value'])) {
                 throw new Exception(get_lang('NoData'));
             }
             $idSession = $restApi->getSessionFromExtraField($_POST['field_name'], $_POST['field_value']);
-            $restResponse->setData($idSession);
+            $restResponse->setData([$idSession]);
             break;
         case Rest::UPDATE_USER_FROM_USERNAME:
             $data = $restApi->updateUserFromUserName($_POST);
-            $restResponse->setData($data);
+            $restResponse->setData([$data]);
             break;
         default:
             throw new Exception(get_lang('InvalidAction'));

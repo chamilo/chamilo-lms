@@ -4,10 +4,10 @@
 namespace Chamilo\UserBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Sonata\UserBundle\Entity\BaseGroup as BaseGroup;
+use Sonata\UserBundle\Entity\BaseGroup;
 
 /**
- * @ORM\Entity(repositoryClass="Chamilo\UserBundle\Repository\GroupRepository")
+ * @ORM\Entity()
  * @ORM\Table(name="fos_group")
  */
 class Group extends BaseGroup

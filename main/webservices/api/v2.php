@@ -2,10 +2,10 @@
 /* For licensing terms, see /license.txt */
 /**
  * Entry point for REST web services in Chamilo
- * 
+ *
  * Call it with the 'authenticate' action first, to get an api_key, then use
  * the api_key in all subsequent calls.
- * 
+ *
  * Send the REST call parameters as a 'hash' in POST or GET. The hash must be
  * JSON encoded and contain at least 'action', 'username', and either
  * 'password' for the first call or 'api_key' in subsequent calls.
@@ -290,6 +290,33 @@ try {
             $messageId = isset($_POST['message_id']) ? intval($_POST['message_id']) : 0;
             $restApi->setMessageRead($messageId);
             $restResponse->setData(['status' => true]);
+            break;
+        case Rest::CREATE_SESSION_FROM_MODEL:
+            $newSessionId = $restApi->createSessionFromModel(
+                $_POST['modelSessionId'],
+                $_POST['sessionName'],
+                $_POST['startDate'],
+                $_POST['endDate'],
+                isset($_POST['extraFields']) ? $_POST['extraFields'] : []);
+            $restResponse->setData($newSessionId);
+            break;
+        case Rest::SUBSCRIBE_USER_TO_SESSION_FROM_USERNAME:
+            if (empty($_POST['sessionId']) || empty($_POST['loginName'])) {
+                throw new Exception(get_lang('NoData'));
+            }
+            $subscribed = $restApi->subscribeUserToSessionFromUsername($_POST['sessionId'], $_POST['loginName']);
+            $restResponse->setData($subscribed);
+            break;
+        case Rest::GET_SESSION_FROM_EXTRA_FIELD;
+            if (empty($_POST['field_name']) || empty($_POST['field_value'])) {
+                throw new Exception(get_lang('NoData'));
+            }
+            $idSession = $restApi->getSessionFromExtraField($_POST['field_name'], $_POST['field_value']);
+            $restResponse->setData($idSession);
+            break;
+        case Rest::UPDATE_USER_FROM_USERNAME:
+            $data = $restApi->updateUserFromUserName($_POST);
+            $restResponse->setData($data);
             break;
         default:
             throw new Exception(get_lang('InvalidAction'));

@@ -77,7 +77,7 @@ class IllustrationRepository extends ResourceRepository
             }
 
             return $this->getRouter()->generate(
-                'chamilo_core_resource_file',
+                'chamilo_core_resource_view',
                 $params
             );
         }

@@ -168,7 +168,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
 
                     if ($resourceNode->isResourceFileAnImage()) {
                         $url = $router->generate(
-                            'chamilo_core_resource_file',
+                            'chamilo_core_resource_view',
                             $myParams
                         );
 
@@ -177,7 +177,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
 
                     if ($resourceNode->isResourceFileAVideo()) {
                         $url = $router->generate(
-                            'chamilo_core_resource_file',
+                            'chamilo_core_resource_view',
                             $myParams
                         );
 
@@ -238,7 +238,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
         // Show resource action.
         $myRowAction = new RowAction(
             $translation->trans('Info'),
-            'chamilo_core_resource_show',
+            'chamilo_core_resource_info',
             false,
             '_self',
             [
@@ -485,9 +485,9 @@ class ResourceController extends AbstractResourceController implements CourseCon
     /**
      * Shows a resource information.
      *
-     * @Route("/{tool}/{type}/{id}/show", methods={"GET"}, name="chamilo_core_resource_show")
+     * @Route("/{tool}/{type}/{id}/info", methods={"GET"}, name="chamilo_core_resource_info")
      */
-    public function showAction(Request $request): Response
+    public function infoAction(Request $request): Response
     {
         $this->setBreadCrumb($request);
         $nodeId = $request->get('id');
@@ -694,9 +694,11 @@ class ResourceController extends AbstractResourceController implements CourseCon
     }
 
     /**
-     * @Route("/{tool}/{type}/{id}/file", methods={"GET"}, name="chamilo_core_resource_file")
+     * Shows the associated resource file.
+     *
+     * @Route("/{tool}/{type}/{id}/view", methods={"GET"}, name="chamilo_core_resource_view")
      */
-    public function getResourceFileAction(Request $request, Glide $glide): Response
+    public function viewAction(Request $request, Glide $glide): Response
     {
         $id = $request->get('id');
         $filter = $request->get('filter');

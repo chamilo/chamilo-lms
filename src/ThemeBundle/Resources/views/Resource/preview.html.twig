@@ -9,7 +9,7 @@
                 <br />
                 <img src=
                      "{{ url(
-                         'chamilo_core_resource_file', {
+                         'chamilo_core_resource_view', {
                              'id': resource.resourceNode.id,
                              'cidReq': course.code,
                              'id_session': sessionObj.id,
@@ -24,7 +24,7 @@
             <br />
             Download file:
             <a
-                href="{{ url('chamilo_core_resource_file', {
+                href="{{ url('chamilo_core_resource_view', {
                 'id': resource.resourceNode.id,
                 'cidReq': course.code,
                 'id_session': sessionObj.id,

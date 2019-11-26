@@ -45,7 +45,7 @@ class ResourceUploadListener
             'name' => $resource->getResourceName(),
             //'thumbnail_url' => '',
             'url' => $this->router->generate(
-                'chamilo_core_resource_file',
+                'chamilo_core_resource_view',
                 ['tool' => $tool, 'type' => $type, 'id' => $resourceNode->getId()]
             ),
             'size' => format_file_size($resource->getSize()),

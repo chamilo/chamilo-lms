@@ -639,7 +639,7 @@ class ResourceRepository extends EntityRepository
                     $params = array_merge($params, $extraParams);
                 }
 
-                return $this->router->generate('chamilo_core_resource_file', $params);
+                return $this->router->generate('chamilo_core_resource_view', $params);
             }
 
             return '';

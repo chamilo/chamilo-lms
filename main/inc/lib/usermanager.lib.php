@@ -350,7 +350,7 @@ class UserManager
                 INVITEE => 'INVITEE',
             ];
 
-            $group = Container::$container->get('fos_user.group_manager')->findGroupBy(['code' => $statusToGroup[$status]]);
+            $group = Container::$container->get('Chamilo\UserBundle\Repository\GroupRepository')->findOneBy(['code' => $statusToGroup[$status]]);
             if ($group) {
                 $user->addGroup($group);
                 $userManager->updateUser($user);
@@ -5353,7 +5353,7 @@ class UserManager
                 Database::query($sql);
             }
 
-            $group = Container::$container->get('fos_user.group_manager')->findGroupBy(['code' => 'ADMIN']);
+            $group = Container::$container->get('Chamilo\UserBundle\Repository\GroupRepository')->findOneBy(['code' => 'ADMIN']);
             if ($group) {
                 $user->addGroup($group);
             }

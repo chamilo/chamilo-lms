@@ -8,6 +8,7 @@ use Chamilo\CoreBundle\ToolChain;
 use Chamilo\TicketBundle\Entity\Category as TicketCategory;
 use Chamilo\TicketBundle\Entity\Priority as TicketPriority;
 use Chamilo\TicketBundle\Entity\Project as TicketProject;
+use Chamilo\UserBundle\Entity\Group;
 use Doctrine\ORM\EntityManager;
 use Sonata\PageBundle\Entity\PageManager;
 use Symfony\Component\DependencyInjection\Container as SymfonyContainer;
@@ -1964,6 +1965,7 @@ function installSettings(
     $allowTeacherSelfRegistration,
     $installationProfile = ''
 ) {
+    error_log('installSettings');
     $allowTeacherSelfRegistration = $allowTeacherSelfRegistration ? 'true' : 'false';
 
     $settings = [
@@ -2859,7 +2861,6 @@ function updateEnvFile($distFile, $envFile, $params)
 function installGroups($container, $manager)
 {
     // Creating fos_group (groups and roles)
-    $groupManager = $container->get('fos_user.group_manager');
     $groups = [
         [
             'code' => 'ADMIN',
@@ -2902,18 +2903,20 @@ function installGroups($container, $manager)
             'roles' => ['ROLE_INVITEE'],
         ],
     ];
-
+    $repo = $manager->getRepository('ChamiloUserBundle:Group');
     foreach ($groups as $groupData) {
         $criteria = ['code' => $groupData['code']];
-        $groupExists = $groupManager->findGroupBy($criteria);
+        $groupExists = $repo->findOneBy($criteria);
         if (!$groupExists) {
-            $group = $groupManager->createGroup($groupData['title']);
-            $group->setCode($groupData['code']);
+            $group = new Group($groupData['title']);
+            $group
+                ->setCode($groupData['code']);
+
             foreach ($groupData['roles'] as $role) {
                 $group->addRole($role);
             }
             $manager->persist($group);
-            $groupManager->updateGroup($group, true);
+            $manager->flush();
         }
     }
 }
@@ -3149,6 +3152,7 @@ function finishInstallationWithContainer(
     $allowSelfRegProf,
     $installationProfile = ''
 ) {
+    error_log('finishInstallationWithContainer');
     $sysPath = !empty($sysPath) ? $sysPath : api_get_path(SYS_PATH);
     Container::setContainer($container);
     Container::setLegacyServices($container, false);
@@ -3255,9 +3259,9 @@ function finishInstallationWithContainer(
     $result->closeCursor();
 
     UserManager::setPasswordEncryption($encryptPassForm);
-
+    error_log('user creation - admin');
     // Create admin user.
-    $adminId = @UserManager::create_user(
+    $adminId = UserManager::create_user(
         $adminFirstName,
         $adminLastName,
         1,
@@ -3282,8 +3286,9 @@ function finishInstallationWithContainer(
         1
     );
 
+    error_log('user creation - anon');
     // Create anonymous user.
-    @UserManager::create_user(
+    UserManager::create_user(
         'Joe',
         'Anonymous',
         6,
@@ -3315,6 +3320,7 @@ function finishInstallationWithContainer(
         ['dokeos_folder = ?' => $languageForm]
     );
 
+    error_log('Access url');
     $userManager = Container::getUserManager();
     $urlRepo = $container->get('Chamilo\CoreBundle\Repository\AccessUrlRepository');
     $accessUrl = $urlRepo->find(1);

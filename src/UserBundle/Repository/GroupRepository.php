@@ -3,9 +3,9 @@
 
 namespace Chamilo\UserBundle\Repository;
 
+use Chamilo\UserBundle\Entity\Group;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
-use FOS\UserBundle\Model\Group;
 
 /**
  * Class GroupRepository.
@@ -33,5 +33,10 @@ class GroupRepository
         $group = $this->repository->findOneBy($criteria);
 
         return $group->getUsers();
+    }
+
+    public function findOneBy(array $criteria)
+    {
+        return $this->repository->findOneBy($criteria);
     }
 }

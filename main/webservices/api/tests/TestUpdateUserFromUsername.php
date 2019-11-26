@@ -78,10 +78,10 @@ class TestUpdateUserFromUsername extends V2TestCase
         $userManager = UserManager::getManager();
         $user = $userManager->find($userId);
         $userManager->reloadUser($user);
-/*        $this->assertSame($newFirstName, $user->newFirstname());
-        $this->assertSame($newLastName, $user->newLastName());
-        $this->assertSame($newStatus, $user->newStatus());
-        $this->assertSame($newEmail, $user->newEmail());*/
+        $this->assertSame($newFirstName, $user->getFirstname());
+        $this->assertSame($newLastName, $user->getLastname());
+        $this->assertSame($newStatus, $user->getStatus());
+        $this->assertSame($newEmail, $user->getEmail());
 
         // assert extra field values have been updated
         $extraFieldValueModel = new ExtraFieldValue('user');

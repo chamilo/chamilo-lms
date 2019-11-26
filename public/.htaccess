@@ -58,7 +58,7 @@ DirectoryIndex index.php
     RewriteRule ^(bundles)($|/) - [L]
     RewriteRule ^(img)($|/) - [L]
     RewriteRule ^(libs)($|/) - [L]
-    RewriteRule ^(uploads)($|/) - [L]
+    RewriteRule ^(main)($|/) - [L]
 
     # Rewrite all other queries to the front controller.
     RewriteRule ^ %{ENV:BASE}/index.php [L]

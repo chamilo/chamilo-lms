@@ -1,17 +1,17 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-require 'V2TestCase.php';
+require_once __DIR__.'/V2TestCase.php';
 
 require_once __DIR__.'/../../../../vendor/autoload.php';
 
 
 /**
- * Class TestUpdateUserFromUsername
+ * Class UpdateUserFromUsernameTest
  *
  * UPDATE_USER_FROM_USERNAME webservice unit tests
  */
-class TestUpdateUserFromUsername extends V2TestCase
+class UpdateUserFromUsernameTest extends V2TestCase
 {
     protected function action()
     {

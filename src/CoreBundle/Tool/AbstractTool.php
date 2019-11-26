@@ -52,7 +52,7 @@ abstract class AbstractTool implements ToolInterface
      */
     public function getLink()
     {
-        return $this->link;
+        return $this->link ? $this->link : '';
     }
 
     /**

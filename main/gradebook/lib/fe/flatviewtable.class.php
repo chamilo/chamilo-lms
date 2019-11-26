@@ -191,7 +191,7 @@ class FlatViewTable extends SortableTable
             if (is_array($header) && isset($header['header'])) {
                 $header = $header['header'];
             }
-            $header = strip_tags(Exercise::get_formated_title_variable($header));
+            $header = strip_tags($header);
             $dataSet->setSerieDescription('Labels', $header);
             $dataSet->setAbscissa('Labels');
             $dataSet->setAbscissaName(get_lang('GradebookSkillsRanking'));

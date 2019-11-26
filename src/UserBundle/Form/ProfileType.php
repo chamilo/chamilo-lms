@@ -4,6 +4,12 @@
 namespace Chamilo\UserBundle\Form;
 
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\BirthdayType;
+use Symfony\Component\Form\Extension\Core\Type\LocaleType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\TimezoneType;
+use Symfony\Component\Form\Extension\Core\Type\UrlType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
@@ -39,11 +45,11 @@ class ProfileType extends AbstractType
                     'required' => false,
                 ]
             )
-            ->add('official_code', 'text')
+            ->add('official_code', TextType::class)
             //->add('groups')
             ->add(
                 'locale',
-                'locale',
+                LocaleType::class,
                 [
                     'preferred_choices' => [
                         'en',
@@ -56,7 +62,7 @@ class ProfileType extends AbstractType
             )
             ->add(
                 'dateOfBirth',
-                'birthday',
+                BirthdayType::class,
                 [
                     'label' => 'form.label_date_of_birth',
                     'required' => false,
@@ -65,7 +71,7 @@ class ProfileType extends AbstractType
             )
             ->add(
                 'website',
-                'url',
+                UrlType::class,
                 [
                     'label' => 'form.label_website',
                     'required' => false,
@@ -73,7 +79,7 @@ class ProfileType extends AbstractType
             )
             ->add(
                 'biography',
-                'textarea',
+                TextareaType::class,
                 [
                     'label' => 'form.label_biography',
                     'required' => false,
@@ -85,7 +91,7 @@ class ProfileType extends AbstractType
             ))*/
             ->add(
                 'timezone',
-                'timezone',
+                TimezoneType::class,
                 [
                     'label' => 'form.label_timezone',
                     'required' => false,
@@ -100,7 +106,7 @@ class ProfileType extends AbstractType
                     'required' => false,
                 ]
             )
-            ->add(
+            /*->add(
                 'picture',
                 'sonata_media_type',
                 [
@@ -109,7 +115,7 @@ class ProfileType extends AbstractType
                     'required' => false,
                     'data_class' => 'Chamilo\MediaBundle\Entity\Media',
                 ]
-            )
+            )*/
             /*->add(
                 'extraFieldValues',
                 CollectionType::class,

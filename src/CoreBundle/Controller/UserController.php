@@ -3,6 +3,7 @@
 
 namespace Chamilo\CoreBundle\Controller;
 
+use Chamilo\ThemeBundle\Model\UserInterface;
 use Chamilo\UserBundle\Repository\UserRepository;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -23,6 +24,12 @@ class UserController extends BaseController
     public function profileAction($username, UserRepository $userRepository)
     {
         $user = $userRepository->findByUsername($username);
+
+        if (!is_object($user) || !$user instanceof UserInterface) {
+            throw $this->createAccessDeniedException(
+                'This user does not have access to this section'
+            );
+        }
 
         return $this->render('@ChamiloCore/User/profile.html.twig', ['user' => $user]);
     }

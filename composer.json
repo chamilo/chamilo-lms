@@ -19,18 +19,18 @@
             "public/legacy.php"
         ],
         "classmap": [
-            "main/auth",
-            "main/admin",
-            "main/cron/lang",
-            "main/course_description",
-            "main/dropbox",
-            "main/exercise",
-            "main/gradebook/lib",
-            "main/lp",
-            "main/inc/lib",
+            "public/main/auth",
+            "public/main/admin",
+            "public/main/cron/lang",
+            "public/main/course_description",
+            "public/main/dropbox",
+            "public/main/exercise",
+            "public/main/gradebook/lib",
+            "public/main/lp",
+            "public/main/inc/lib",
             "plugin",
-            "main/install",
-            "main/survey"
+            "public/main/install",
+            "public/main/survey"
         ]
     },
     "require": {

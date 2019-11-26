@@ -1,12 +1,12 @@
 # Legacy routes
 legacy_public:
-    path: ../public/
+    path: ./
 
 legacy_index:
-    path: ../
+    path: ./
 
 legacy_main:
-    path: ../main/{name}
+    path: /main/{name}
     defaults: {_controller: 'ChamiloCoreBundle:Legacy:classic'}
     requirements:
         name: .+

@@ -15,14 +15,14 @@ use Symfony\Component\Dotenv\Dotenv;
 // 3. Checking the login_is_email portal setting in order to accept 100 chars maximum
 define('USERNAME_MAX_LENGTH', 100);
 
-require_once __DIR__.'/../../vendor/autoload.php';
+require_once __DIR__.'/../../../vendor/autoload.php';
 
 try {
     // Check the PHP version
     api_check_php_version();
 
     // Get settings from .env.local file created.
-    $envFile = __DIR__.'/../../.env.local';
+    $envFile = __DIR__.'/../../../.env.local';
     if (file_exists($envFile)) {
         (new Dotenv())->load($envFile);
     } else {

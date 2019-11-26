@@ -1,0 +1,14 @@
+{% extends "@ChamiloTheme/Layout/layout_one_col.html.twig" %}
+
+{% block content %}
+    {% autoescape false %}
+        <h2> {{ 'Settings' | trans }}</h2>
+        <h3>{{ user.username }}</h3>
+        {{ form_start(form, { 'action': path('chamilo_core_account_edit'), 'attr': { 'class': 'edit' } }) }}
+        {{ form_widget(form) }}
+        <div>
+            <input class="btn btn-primary" type="submit" value="{{ 'Update'|trans }}" />
+        </div>
+        {{ form_end(form) }}
+    {% endautoescape %}
+{% endblock %}

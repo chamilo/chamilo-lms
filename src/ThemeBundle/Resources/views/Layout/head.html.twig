@@ -4,7 +4,7 @@
 <link href="https://chamilo.org/chamilo-lms/" rel="help"/>
 <link href="https://chamilo.org/the-association/" rel="author"/>
 <link href="https://chamilo.org/the-association/" rel="copyright"/>
-<link rel="apple-touch-icon" href="{{ url('legacy_public') ~ 'apple-touch-icon.png' }}"/>
+<link rel="apple-touch-icon" href="{{ url('home') ~ 'apple-touch-icon.png' }}"/>
 {% autoescape false %}
     {{ favico }}
 {% endautoescape %}
@@ -28,18 +28,18 @@
 {% set message_link = '' %}
 
 {# Files app.css is generated from "assets/css/app.scss" file using the file webpack.config.js #}
-<link rel="stylesheet" href="{{ url('legacy_public') ~ 'build/css/app.css' }}"/>
+<link rel="stylesheet" href="{{ url('home') ~ 'build/css/app.css' }}"/>
 {% if theme %}
-<link rel="stylesheet" href="{{ url('legacy_public') ~ 'build/css/themes/'~ theme ~'/default.css' }}"/>
+<link rel="stylesheet" href="{{ url('home') ~ 'build/css/themes/'~ theme ~'/default.css' }}"/>
 {% endif %}
-<link rel="stylesheet" media="print" href="{{ url('legacy_public') ~ 'build/css/print.css' }}"/>
+<link rel="stylesheet" media="print" href="{{ url('home') ~ 'build/css/print.css' }}"/>
 {# app.js is generated using the file webpack.config.js and using yarn read /assets/README.md for more info #}
-<script src="{{ url('legacy_public') ~ 'build/runtime.js' }}"></script>
-<script src="{{ url('legacy_public') ~ 'libs/ckeditor/ckeditor.js' }}"></script>
-<script src="{{ url('legacy_public') ~ 'build/app.js' }}"></script>
+<script src="{{ url('home') ~ 'build/runtime.js' }}"></script>
+<script src="{{ url('home') ~ 'libs/ckeditor/ckeditor.js' }}"></script>
+<script src="{{ url('home') ~ 'build/app.js' }}"></script>
 {# Add third party js libraries that can't be loaded using webpack #}
 {#<script src="{{ asset('libs/readmore-js/readmore.js') }}"></script>#}
-<script src="{{ url('legacy_public') ~ 'build/libs/js-cookie/src/js.cookie.js' }}"></script>
+<script src="{{ url('home') ~ 'build/libs/js-cookie/src/js.cookie.js' }}"></script>
 {# Check chamilo_js key in assetic.yml #}
 {% block javascripts %}
     {% block chamilo_header_js %}

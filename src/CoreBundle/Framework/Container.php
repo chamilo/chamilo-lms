@@ -134,7 +134,6 @@ class Container
         if (isset(self::$container)) {
             return self::$container->get('kernel')->getRealRootDir();
         }
-
         return str_replace('\\', '/', realpath(__DIR__.'/../../../')).'/';
     }
 

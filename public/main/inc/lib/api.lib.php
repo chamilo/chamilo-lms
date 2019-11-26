@@ -343,9 +343,6 @@ define('SYS_TEST_PATH', 'SYS_TEST_PATH');
 define('WEB_TEMPLATE_PATH', 'WEB_TEMPLATE_PATH');
 define('SYS_TEMPLATE_PATH', 'SYS_TEMPLATE_PATH');
 define('SYS_PUBLIC_PATH', 'SYS_PUBLIC_PATH');
-define('SYS_HOME_PATH', 'SYS_HOME_PATH');
-define('WEB_HOME_PATH', 'WEB_HOME_PATH');
-define('WEB_FONTS_PATH', 'WEB_FONTS_PATH');
 define('SYS_FONTS_PATH', 'SYS_FONTS_PATH');
 
 // Relations type with Course manager
@@ -770,27 +767,11 @@ function api_get_path($path = '', $configuration = [])
 
     if (isset(Container::$container)) {
         $root_web = Container::$container->get('router')->generate(
-            'legacy_index',
+            'home',
             [],
             UrlGeneratorInterface::ABSOLUTE_URL
         );
-
-        // Fix for php files inside main
-        if (strpos($root_web, 'main') !== false) {
-            $pos = (int) strpos($root_web, 'main');
-            $root_web = substr($root_web, 0, $pos);
-        }
-
-        // Fix for php files inside courses
-        if (strpos($root_web, '/courses/') !== false) {
-            $pos = (int) strpos($root_web, '/courses/');
-            $root_web = substr($root_web, 0, $pos);
-        }
-
-        $root_web = urldecode($root_web);
     }
-
-    $root_web = str_replace('public/../', '', $root_web);
 
     if (isset($configuration['multiple_access_urls']) &&
         $configuration['multiple_access_urls']
@@ -817,21 +798,18 @@ function api_get_path($path = '', $configuration = [])
             WEB_COURSE_PATH => '',
             SYS_COURSE_PATH => '',
             REL_COURSE_PATH => '',
-            WEB_CODE_PATH => 'main/',
+            WEB_CODE_PATH => '/main/',
             SYS_CODE_PATH => 'public/main/',
             REL_CODE_PATH => '/main/',
             SYS_LANG_PATH => 'lang/',
-            WEB_IMG_PATH => 'public/img/',
-            WEB_CSS_PATH => 'public/build/css/',
-            SYS_CSS_PATH => 'public/build/css/',
+            WEB_IMG_PATH => 'img/',
+            WEB_CSS_PATH => 'build/css/',
+            SYS_CSS_PATH => 'build/css/',
             SYS_PLUGIN_PATH => 'plugin/',
             WEB_PLUGIN_PATH => 'plugin/',
             WEB_PLUGIN_ASSET_PATH => 'public/plugins/',
             SYS_ARCHIVE_PATH => 'var/cache/',
             WEB_ARCHIVE_PATH => 'var/cache/',
-            SYS_HOME_PATH => 'app/home/',
-            WEB_HOME_PATH => 'app/home/',
-            REL_HOME_PATH => 'app/home/',
             SYS_APP_PATH => 'var/',
             SYS_UPLOAD_PATH => 'var/upload/',
             SYS_INC_PATH => 'inc/',
@@ -843,10 +821,9 @@ function api_get_path($path = '', $configuration = [])
             SYS_TEST_PATH => 'tests/',
             WEB_TEMPLATE_PATH => 'template/',
             SYS_TEMPLATE_PATH => 'template/',
-            WEB_UPLOAD_PATH => 'var/upload/',
-            WEB_PUBLIC_PATH => 'public/',
+            //WEB_UPLOAD_PATH => 'var/upload/',
+            WEB_PUBLIC_PATH => '/',
             SYS_PUBLIC_PATH => 'public/',
-            WEB_FONTS_PATH => 'fonts/',
             SYS_FONTS_PATH => 'fonts/',
         ];
     }
@@ -873,21 +850,19 @@ function api_get_path($path = '', $configuration = [])
         $paths[$root_web][REL_PATH] = $root_rel;
         $paths[$root_web][REL_CODE_PATH] = $root_rel.$code_folder;
         $paths[$root_web][WEB_PATH] = $rootWebWithSlash;
-        $paths[$root_web][WEB_CODE_PATH] = $rootWebWithSlash.$code_folder;
+        $paths[$root_web][WEB_CODE_PATH] = $rootWebWithSlash.'main/';
         $paths[$root_web][WEB_COURSE_PATH] = $rootWebWithSlash.$course_folder;
         $paths[$root_web][WEB_PLUGIN_PATH] = $rootWebWithSlash.$paths[$root_web][WEB_PLUGIN_PATH];
         $paths[$root_web][WEB_PLUGIN_ASSET_PATH] = $rootWebWithSlash.$paths[$root_web][WEB_PLUGIN_ASSET_PATH];
         $paths[$root_web][WEB_ARCHIVE_PATH] = $rootWebWithSlash.$paths[$root_web][WEB_ARCHIVE_PATH];
         $paths[$root_web][WEB_CSS_PATH] = $rootWebWithSlash.$paths[$root_web][WEB_CSS_PATH];
-        $paths[$root_web][WEB_UPLOAD_PATH] = $rootWebWithSlash.$paths[$root_web][WEB_UPLOAD_PATH];
-        $paths[$root_web][WEB_PUBLIC_PATH] = $rootWebWithSlash.$paths[$root_web][WEB_PUBLIC_PATH];
-        $paths[$root_web][WEB_HOME_PATH] = $rootWebWithSlash.$paths[$root_web][REL_HOME_PATH];
+        //$paths[$root_web][WEB_UPLOAD_PATH] = $rootWebWithSlash.$paths[$root_web][WEB_UPLOAD_PATH];
+        $paths[$root_web][WEB_PUBLIC_PATH] = $rootWebWithSlash;
 
         $paths[$root_web][WEB_IMG_PATH] = $rootWebWithSlash.$paths[$root_web][WEB_IMG_PATH];
         $paths[$root_web][WEB_LIBRARY_PATH] = $paths[$root_web][WEB_CODE_PATH].$paths[$root_web][WEB_LIBRARY_PATH];
         $paths[$root_web][WEB_LIBRARY_JS_PATH] = $paths[$root_web][WEB_CODE_PATH].$paths[$root_web][WEB_LIBRARY_JS_PATH];
         $paths[$root_web][WEB_AJAX_PATH] = $paths[$root_web][WEB_CODE_PATH].$paths[$root_web][WEB_AJAX_PATH];
-        $paths[$root_web][WEB_FONTS_PATH] = $paths[$root_web][WEB_CODE_PATH].$paths[$root_web][WEB_FONTS_PATH];
         $paths[$root_web][WEB_TEMPLATE_PATH] = $paths[$root_web][WEB_CODE_PATH].$paths[$root_web][WEB_TEMPLATE_PATH];
 
         $paths[$root_web][SYS_PATH] = $root_sys;
@@ -901,7 +876,6 @@ function api_get_path($path = '', $configuration = [])
         $paths[$root_web][SYS_APP_PATH] = $paths[$root_web][SYS_PATH].$paths[$root_web][SYS_APP_PATH];
         $paths[$root_web][SYS_UPLOAD_PATH] = $paths[$root_web][SYS_PATH].$paths[$root_web][SYS_UPLOAD_PATH];
         $paths[$root_web][SYS_LANG_PATH] = $paths[$root_web][SYS_CODE_PATH].$paths[$root_web][SYS_LANG_PATH];
-        $paths[$root_web][SYS_HOME_PATH] = $paths[$root_web][SYS_PATH].$paths[$root_web][SYS_HOME_PATH];
         $paths[$root_web][SYS_PLUGIN_PATH] = $paths[$root_web][SYS_PATH].$paths[$root_web][SYS_PLUGIN_PATH];
         $paths[$root_web][SYS_INC_PATH] = $paths[$root_web][SYS_CODE_PATH].$paths[$root_web][SYS_INC_PATH];
 
@@ -911,12 +885,9 @@ function api_get_path($path = '', $configuration = [])
         global $virtualChamilo;
         if (!empty($virtualChamilo)) {
             $paths[$root_web][SYS_ARCHIVE_PATH] = api_add_trailing_slash($virtualChamilo[SYS_ARCHIVE_PATH]);
-            $paths[$root_web][SYS_HOME_PATH] = api_add_trailing_slash($virtualChamilo[SYS_HOME_PATH]);
             $paths[$root_web][SYS_COURSE_PATH] = api_add_trailing_slash($virtualChamilo[SYS_COURSE_PATH]);
             $paths[$root_web][SYS_UPLOAD_PATH] = api_add_trailing_slash($virtualChamilo[SYS_UPLOAD_PATH]);
-
-            $paths[$root_web][WEB_HOME_PATH] = api_add_trailing_slash($virtualChamilo[WEB_HOME_PATH]);
-            $paths[$root_web][WEB_UPLOAD_PATH] = api_add_trailing_slash($virtualChamilo[WEB_UPLOAD_PATH]);
+            //$paths[$root_web][WEB_UPLOAD_PATH] = api_add_trailing_slash($virtualChamilo[WEB_UPLOAD_PATH]);
             $paths[$root_web][WEB_ARCHIVE_PATH] = api_add_trailing_slash($virtualChamilo[WEB_ARCHIVE_PATH]);
             //$paths[$root_web][WEB_COURSE_PATH] = api_add_trailing_slash($virtualChamilo[WEB_COURSE_PATH]);
 
@@ -2713,7 +2684,7 @@ function api_get_setting($variable)
     $variable = trim($variable);
 
     switch ($variable) {
-        case 'header_extra_content':
+        /*case 'header_extra_content':
             $filename = api_get_path(SYS_PATH).api_get_home_path().'header_extra_content.txt';
             if (file_exists($filename)) {
                 $value = file_get_contents($filename);
@@ -2732,7 +2703,7 @@ function api_get_setting($variable)
             } else {
                 return '';
             }
-            break;
+            break;*/
         case 'server_type':
             $test = ['dev', 'test'];
             $environment = Container::getEnvironment();
@@ -2765,7 +2736,7 @@ function api_get_setting($variable)
     }
 
     global $_setting;
-    if ($variable == 'header_extra_content') {
+    /*if ($variable == 'header_extra_content') {
         $filename = api_get_home_path().'header_extra_content.txt';
         if (file_exists($filename)) {
             $value = file_get_contents($filename);
@@ -2784,7 +2755,7 @@ function api_get_setting($variable)
         } else {
             return '';
         }
-    }
+    }*/
     $value = null;
     if (is_null($key)) {
         $value = ((isset($_setting[$variable]) && $_setting[$variable] != '') ? $_setting[$variable] : null);
@@ -7288,7 +7259,7 @@ function api_get_jquery_ui_js()
 
 function api_get_jqgrid_js()
 {
-    $routePublic = Container::getRouter()->generate('legacy_public');
+    $routePublic = Container::getRouter()->generate('home');
 
     return api_get_css($routePublic.'build/free-jqgrid.css').PHP_EOL
         .api_get_js_simple($routePublic.'build/free-jqgrid.js');
@@ -7436,31 +7407,6 @@ function api_get_unique_id()
     $id = md5(time().uniqid().api_get_user_id().api_get_course_id().api_get_session_id());
 
     return $id;
-}
-
-/**
- * Get home path.
- *
- * @return string
- */
-function api_get_home_path()
-{
-    // FIX : Start the routing determination from central path definition
-    $home = api_get_path(SYS_HOME_PATH);
-    if (api_get_multiple_access_url()) {
-        $access_url_id = api_get_current_access_url_id();
-        $url_info = api_get_access_url($access_url_id);
-        $url = api_remove_trailing_slash(preg_replace('/https?:\/\//i', '', $url_info['url']));
-        $clean_url = api_replace_dangerous_char($url);
-        $clean_url = str_replace('/', '-', $clean_url);
-        $clean_url .= '/';
-        if ($clean_url != 'localhost/') {
-            // means that the multiple URL was not well configured we don't rename the $home variable
-            return "{$home}{$clean_url}";
-        }
-    }
-
-    return $home;
 }
 
 /**

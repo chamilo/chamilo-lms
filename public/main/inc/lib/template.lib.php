@@ -464,8 +464,6 @@ class Template
 
         $_p = [
             'web' => api_get_path(WEB_PATH),
-            'web_public' => api_get_path(WEB_PUBLIC_PATH),
-            'web_url' => api_get_web_url(),
             'web_relative' => api_get_path(REL_PATH),
             'web_course' => api_get_path(WEB_COURSE_PATH),
             'web_main' => api_get_path(WEB_CODE_PATH),
@@ -475,14 +473,11 @@ class Template
             'web_img' => api_get_path(WEB_IMG_PATH),
             'web_plugin' => api_get_path(WEB_PLUGIN_PATH),
             'web_lib' => api_get_path(WEB_LIBRARY_PATH),
-            'web_upload' => api_get_path(WEB_UPLOAD_PATH),
             'web_self' => api_get_self(),
-            'web_query_vars' => api_htmlentities($queryString),
             'web_self_query_vars' => api_htmlentities($requestURI),
             'web_cid_query' => api_get_cidreq(),
-            'web_rel_code' => api_get_path(REL_CODE_PATH),
         ];
-
+        //var_dump(api_get_path(WEB_CODE_PATH));
         $_s = [
             'software_name' => api_get_configuration_value('software_name'),
             'system_version' => api_get_configuration_value('system_version'),

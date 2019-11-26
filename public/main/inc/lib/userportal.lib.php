@@ -25,7 +25,7 @@ class IndexManager
     public function __construct($title)
     {
         $this->tpl = new Template($title);
-        $this->home = api_get_home_path();
+        //$this->home = api_get_home_path();
         $this->user_id = api_get_user_id();
         $this->load_directories_preview = false;
 

@@ -71,13 +71,13 @@ class NavBuilder implements ContainerAwareInterface
 
         $menu = $factory->createItem('root', ['childrenAttributes' => ['class' => 'navbar-nav']]);
         $settingsManager = $container->get('chamilo.settings.manager');
-        $rootWeb = $router->generate('legacy_index');
+        $rootWeb = $router->generate('home');
 
         $menu->addChild(
             'home',
             [
                 'label' => $translator->trans('Home'),
-                'route' => 'legacy_index',
+                'route' => 'home',
                 'icon' => 'home',
             ]
         );
@@ -293,7 +293,7 @@ class NavBuilder implements ContainerAwareInterface
                     'settings',
                     [
                         'label' => $translator->trans('Advanced settings'),
-                        'uri' => $rootWeb.'public/admin/settings/platform',
+                        'uri' => $rootWeb.'admin/settings/platform',
                     ]
                 );
             }

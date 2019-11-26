@@ -27,7 +27,6 @@ require('webpack-jquery-ui/css');
 
 // @todo rework url naming
 const homePublicUrl = Routing.generate('home') + 'public/';
-const legacyIndex = Routing.generate('legacy_index');
 const mainUrl = Routing.generate('web.main');
 const webAjax = Routing.generate('web.ajax');
 

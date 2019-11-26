@@ -73,9 +73,9 @@ $(function () {
     <button class="navbar-toggler sidebar-toggler d-md-down-none" type="button" data-toggle="sidebar-lg-show">
         <span class="navbar-toggler-icon"></span>
     </button>
-    <a class="navbar-brand" href="{{ url('legacy_index') }}">
+    <a class="navbar-brand" href="{{ url('home') }}">
         <img class="navbar-brand-full" width="130"
-             src="{{ url('legacy_public') ~ 'build/css/themes/'~ theme ~'/images/logo_chamilo.svg' }}"
+             src="{{ url('home') ~ 'build/css/themes/'~ theme ~'/images/logo_chamilo.svg' }}"
              alt="Chamilo"/>
     </a>
 
@@ -144,7 +144,7 @@ $(function () {
                 {% if app.user.pictureUri is empty %}
                     <img
                         class="img-avatar"
-                        src="{{ url('legacy_public') ~ app.user.avatarOrAnonymous(32) }}"
+                        src="{{ url('home') ~ app.user.avatarOrAnonymous(32) }}"
                         alt="{{ app.user.firstname }} {{ app.user.lastname }}"
                     >
                 {% else %}
@@ -190,7 +190,7 @@ $(function () {
                 </a>
 
                 <a class="dropdown-item" id="logout_button" title="{{ "Logout"|trans }}"
-                   href="{{ path('legacy_main', { 'name' : '../public/logout'}) }}">
+                   href="{{ path('logout') }}">
                     <i class="fa fa-sign-out-alt"></i>
                     {{ "Logout"|trans }}
                 </a>
@@ -204,7 +204,7 @@ $(function () {
             </a>
         </li>
         <li class="nav-item">
-            <a class="btn btn-link" href="{{ url('legacy_main', { 'name' : '../public/login' }) }}">
+            <a class="btn btn-link" href="{{ url('login') }}">
                 <i class="fas fa-sign-in-alt"></i>
                 {{ "Sign in"|trans }}
             </a>

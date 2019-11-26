@@ -615,7 +615,6 @@ if ($useCookieValidation === 'true') {
 }
 
 $tpl->assign('web_admin_ajax_url', $admin_ajax_url);
-$tpl->assign('web_public', api_get_path(WEB_PUBLIC_PATH));
 $tpl->assign('blocks_admin', $blocks);
 
 if (api_is_platform_admin()) {

@@ -1,9 +1,3 @@
-# Legacy routes
-legacy_public:
-    path: ./
-
-legacy_index:
-    path: ./
 
 legacy_main:
     path: /main/{name}

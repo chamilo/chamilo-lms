@@ -1,7 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-require_once api_get_path(SYS_PATH).'main/inc/lib/kses-0.2.2/kses.php';
+require_once api_get_path(SYS_CODE_PATH).'inc/lib/kses-0.2.2/kses.php';
 
 /**
  * QuickForm rule to check a html.

@@ -1,4 +1,6 @@
 <?php
+/* For licensing terms, see /license.txt */
+
 require 'V2TestCase.php';
 
 require_once __DIR__.'/../../../../vendor/autoload.php';

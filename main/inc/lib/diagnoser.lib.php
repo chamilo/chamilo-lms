@@ -597,6 +597,16 @@ class Diagnoser
                 'expected' => 2,
                 'comment' => get_lang('This extension should be loaded.'),
             ],
+            'exif' => [
+                'link' => 'http://www.php.net/exif',
+                'expected' => 1,
+                'comment' => get_lang('This extension should be loaded.'),
+            ],
+            'mbstring' => [
+                'link' => 'http://www.php.net/mbstring',
+                'expected' => 1,
+                'comment' => get_lang('This extension should be loaded.'),
+            ],
         ];
 
         foreach ($extensions as $extension => $data) {

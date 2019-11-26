@@ -835,10 +835,13 @@ function display_requirements(
                 <td class="requirements-item"><a href="http://php.net/manual/en/book.curl.php" target="_blank">cURL</a>'.get_lang('Support').'</td>
                 <td class="requirements-value">'.checkExtension('curl', get_lang('Yes'), get_lang('No')).'</td>
             </tr>
-
             <tr>
-                <td class="requirements-item"><a href="http://php.net/manual/en/book.mbstring.php" target="_blank">Multibyte string</a> '.get_lang('Support').' ('.get_lang('Optional').')</td>
+                <td class="requirements-item"><a href="http://php.net/manual/en/book.mbstring.php" target="_blank">Multibyte string</a> '.get_lang('Support').'</td>
                 <td class="requirements-value">'.checkExtension('mbstring', get_lang('Yes'), get_lang('MBString extension not available'), true).'</td>
+            </tr>
+           <tr>
+                <td class="requirements-item"><a href="http://php.net/manual/en/book.exif.php" target="_blank">Exif</a> '.get_lang('Support').'</td>
+                <td class="requirements-value">'.checkExtension('exif', get_lang('Yes'), get_lang('Exif extension not available'), true).'</td>
             </tr>
             <tr>
                 <td class="requirements-item"><a href="http://php.net/opcache" target="_blank">Zend OpCache</a> '.get_lang('Support').' ('.get_lang('Optional').')</td>

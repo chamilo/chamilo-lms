@@ -127,7 +127,7 @@ class Diagnoser
     {
         global $paths;
         $list = $paths[api_get_path(WEB_PATH)];
-        $list['url_append'] = api_get_configuration_value('url_append');
+        //$list['url_append'] = api_get_configuration_value('url_append');
         asort($list);
 
         return [

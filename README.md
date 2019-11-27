@@ -64,11 +64,6 @@ Then make sure your database supports large prefixes (see [this Stack Overflow t
 Load the (your-domain)/main/install/index.php URL to start the installer (which is very similar to the installer in previous versions). 
 If the installer is pure-HTML and doesn't appear with a clean layout, that's because you didn't follow these instructions carefully. 
 Go back to the beginning of this section and try again.
-
-Finally, if you are installing this development version in a subdirectory, you will need to add "the folder" in the ".env" file in the root folder:
-```
-APP_URL_APPEND=the-folder
-```
  
 ## Changes from 1.x
 

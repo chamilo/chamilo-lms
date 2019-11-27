@@ -31,7 +31,6 @@ try {
     }
 
     $env = $_SERVER['APP_ENV'] ?? 'dev';
-    $append = $_SERVER['APP_URL_APPEND'] ?? '';
 
     $kernel = new Chamilo\Kernel($env, true);
     // Loading Request from Sonata. In order to use Sonata Pages Bundle.
@@ -44,22 +43,11 @@ try {
     // @todo fix URL loading
     $request->setBaseUrl($request->getRequestUri());
     $kernel->boot();
-    if (!empty($append)) {
-        if (substr($append, 0, 1) !== '/') {
-            echo 'APP_URL_APPEND must start with "/"';
-            exit;
-        }
-        $append = "$append/";
-        $append .= 'public';
-    } else {
-        $append .= '/public';
-    }
 
     $container = $kernel->getContainer();
     $router = $container->get('router');
     $context = $router->getContext();
 
-    $context->setBaseUrl($append);
     $router->setContext($context);
     $response = $kernel->handle($request);
     $context = Container::getRouter()->getContext();

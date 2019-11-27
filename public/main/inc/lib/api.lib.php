@@ -829,7 +829,7 @@ function api_get_path($path = '', $configuration = [])
     }
 
     $isInitialized = [];
-    $root_rel = $_SERVER['APP_URL_APPEND'] ?? '';
+    $root_rel = '';
 
     if (!empty($root_rel)) {
         // Adds "/" to the root_rel

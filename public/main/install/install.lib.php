@@ -2840,7 +2840,6 @@ function updateEnvFile($distFile, $envFile, $params)
         'DATABASE_PASSWORD',
         'APP_INSTALLED',
         'APP_ENCRYPT_METHOD',
-        'APP_URL_APPEND',
     ];
 
     foreach ($requirements as $requirement) {

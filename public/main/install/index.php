@@ -44,7 +44,6 @@ ob_implicit_flush(true);
 
 // Defaults settings
 putenv('APP_LOCALE=en');
-putenv('APP_URL_APPEND=""');
 putenv('APP_ENCRYPT_METHOD="bcrypt"');
 putenv('DATABASE_HOST=');
 putenv('DATABASE_PORT=');
@@ -572,7 +571,6 @@ if (isset($_POST['step2'])) {
             '{{DATABASE_PASSWORD}}' => $dbPassForm,
             '{{APP_INSTALLED}}' => 1,
             '{{APP_ENCRYPT_METHOD}}' => $encryptPassForm,
-            '{{APP_URL_APPEND}}' => $urlAppendPath,
             '{{APP_SECRET}}' => generateRandomToken(),
         ];
 
@@ -633,7 +631,6 @@ if (isset($_POST['step2'])) {
             '{{DATABASE_PASSWORD}}' => $dbPassForm,
             '{{APP_INSTALLED}}' => 1,
             '{{APP_ENCRYPT_METHOD}}' => $encryptPassForm,
-            '{{APP_URL_APPEND}}' => $urlAppendPath,
             '{{APP_SECRET}}' => generateRandomToken(),
         ];
 

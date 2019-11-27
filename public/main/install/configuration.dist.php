@@ -36,10 +36,6 @@ $_configuration['db_manager_enabled'] = false;
 // Path to the webroot of system, example: /var/www/
 $_configuration['root_sys'] = '{ROOT_SYS}';
 
-// Path from your WWW-root to the root of your Chamilo installation,
-// example: chamilo (this means chamilo is installed in /var/www/chamilo/
-$_configuration['url_append'] = '{URL_APPEND_PATH}';
-
 /**
  * Hosting settings - Allows you to set limits to the Chamilo portal when
  * hosting it for a third party. These settings can be overwritten by an

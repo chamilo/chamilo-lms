@@ -1136,30 +1136,6 @@ class PageController
     }
 
     /**
-     * Shows a welcome message when the user doesn't have any content in
-     * the course list.
-     *
-     * @param object A Template object used to declare variables usable in the given template
-     */
-    public function return_welcome_to_course_block($tpl)
-    {
-        if (empty($tpl)) {
-            return false;
-        }
-        $count_courses = CourseManager::count_courses();
-
-        $course_catalog_url = api_get_path(WEB_CODE_PATH).'auth/courses.php';
-        $course_list_url = api_get_path(WEB_PATH).'user_portal.php';
-
-        $tpl->assign('course_catalog_url', $course_catalog_url);
-        $tpl->assign('course_list_url', $course_list_url);
-        $tpl->assign('course_catalog_link', Display::url(get_lang('here'), $course_catalog_url));
-        $tpl->assign('course_list_link', Display::url(get_lang('here'), $course_list_url));
-        $tpl->assign('count_courses', $count_courses);
-        $tpl->assign('welcome_to_course_block', 1);
-    }
-
-    /**
      * @param array
      */
     public function returnNavigationLinks($items)

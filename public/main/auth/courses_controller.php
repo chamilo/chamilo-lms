@@ -30,7 +30,6 @@ class CoursesController
     public function __construct()
     {
         $this->toolname = 'auth';
-        //$actived_theme_path = api_get_template();
         $this->view = new View($this->toolname);
         $this->model = new Auth();
     }

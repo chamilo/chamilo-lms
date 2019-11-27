@@ -770,7 +770,7 @@ class Display
         $image = trim($image);
 
         if (isset($size)) {
-            $size = intval($size);
+            $size = (int) $size;
         } else {
             $size = ICON_SIZE_SMALL;
         }

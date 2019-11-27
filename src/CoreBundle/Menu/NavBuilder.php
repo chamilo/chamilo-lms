@@ -209,13 +209,13 @@ class NavBuilder implements ContainerAwareInterface
                         'routeParameters' => ['name' => 'social/groups.php'],
                     ]
                 );
-                $menu['social']->addChild(
+                /*$menu['social']->addChild(
                     $translator->trans('My Files'),
                     [
                         'route' => 'legacy_main',
                         'routeParameters' => ['name' => 'social/myfiles.php'],
                     ]
-                );
+                );*/
             }
 
             if ($checker->isGranted('ROLE_ADMIN')) {

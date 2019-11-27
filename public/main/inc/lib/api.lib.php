@@ -314,13 +314,11 @@ define('REL_HOME_PATH', 'REL_HOME_PATH');
 // Constants for api_get_path() and api_get_path_type(), etc. - registered path types.
 define('WEB_PATH', 'WEB_PATH');
 define('SYS_PATH', 'SYS_PATH');
-define('SYS_APP_PATH', 'SYS_APP_PATH');
 define('SYS_UPLOAD_PATH', 'SYS_UPLOAD_PATH');
 define('WEB_UPLOAD_PATH', 'WEB_UPLOAD_PATH');
 
 define('REL_PATH', 'REL_PATH');
 define('WEB_COURSE_PATH', 'WEB_COURSE_PATH');
-define('SYS_COURSE_PATH', 'SYS_COURSE_PATH');
 define('WEB_CODE_PATH', 'WEB_CODE_PATH');
 define('SYS_CODE_PATH', 'SYS_CODE_PATH');
 define('SYS_LANG_PATH', 'SYS_LANG_PATH');
@@ -333,14 +331,12 @@ define('WEB_PLUGIN_PATH', 'WEB_PLUGIN_PATH');
 define('WEB_PLUGIN_ASSET_PATH', 'WEB_PLUGIN_ASSET_PATH');
 define('SYS_ARCHIVE_PATH', 'SYS_ARCHIVE_PATH');
 define('WEB_ARCHIVE_PATH', 'WEB_ARCHIVE_PATH');
-define('SYS_INC_PATH', 'SYS_INC_PATH');
 define('LIBRARY_PATH', 'LIBRARY_PATH');
 define('CONFIGURATION_PATH', 'CONFIGURATION_PATH');
 define('WEB_LIBRARY_PATH', 'WEB_LIBRARY_PATH');
 define('WEB_LIBRARY_JS_PATH', 'WEB_LIBRARY_JS_PATH');
 define('WEB_AJAX_PATH', 'WEB_AJAX_PATH');
 define('SYS_TEST_PATH', 'SYS_TEST_PATH');
-define('WEB_TEMPLATE_PATH', 'WEB_TEMPLATE_PATH');
 define('SYS_TEMPLATE_PATH', 'SYS_TEMPLATE_PATH');
 define('SYS_PUBLIC_PATH', 'SYS_PUBLIC_PATH');
 define('SYS_FONTS_PATH', 'SYS_FONTS_PATH');
@@ -727,9 +723,7 @@ function api_get_path($path = '', $configuration = [])
         $emptyConfigurationParam = true;
     }
 
-    $course_folder = 'courses/';
-    $code_folder = 'public/main/';
-    $root_sys = Container::getRootDir();
+    $root_sys = Container::getProjectDir();
     $root_web = '';
     // If no $root_web has been set so far *and* no custom config has been passed to the function
     // then re-use the previously-calculated (run-specific) $root_web and skip this complex calculation
@@ -788,143 +782,105 @@ function api_get_path($path = '', $configuration = [])
         }
     }
 
-    $paths = [];
-    // Initialise cache with default values.
-    if (!array_key_exists($root_web, $paths)) {
-        $paths[$root_web] = [
-            WEB_PATH => '',
-            SYS_PATH => 'public/',
-            REL_PATH => '',
-            WEB_COURSE_PATH => '',
-            SYS_COURSE_PATH => '',
-            REL_COURSE_PATH => '',
-            WEB_CODE_PATH => '/main/',
-            SYS_CODE_PATH => 'public/main/',
-            REL_CODE_PATH => '/main/',
-            SYS_LANG_PATH => 'lang/',
-            WEB_IMG_PATH => 'img/',
-            WEB_CSS_PATH => 'build/css/',
-            SYS_CSS_PATH => 'build/css/',
-            SYS_PLUGIN_PATH => 'plugin/',
-            WEB_PLUGIN_PATH => 'plugin/',
-            WEB_PLUGIN_ASSET_PATH => 'public/plugins/',
-            SYS_ARCHIVE_PATH => 'var/cache/',
-            WEB_ARCHIVE_PATH => 'var/cache/',
-            SYS_APP_PATH => 'var/',
-            SYS_UPLOAD_PATH => 'var/upload/',
-            SYS_INC_PATH => 'inc/',
-            CONFIGURATION_PATH => 'app/config/',
-            LIBRARY_PATH => 'inc/lib/',
-            WEB_LIBRARY_PATH => 'inc/lib/',
-            WEB_LIBRARY_JS_PATH => 'inc/lib/javascript/',
-            WEB_AJAX_PATH => 'inc/ajax/',
-            SYS_TEST_PATH => 'tests/',
-            WEB_TEMPLATE_PATH => 'template/',
-            SYS_TEMPLATE_PATH => 'template/',
-            //WEB_UPLOAD_PATH => 'var/upload/',
-            WEB_PUBLIC_PATH => '/',
-            SYS_PUBLIC_PATH => 'public/',
-            SYS_FONTS_PATH => 'fonts/',
-        ];
-    }
+    $paths = [
+        WEB_PATH => $root_web,
+        SYS_PATH => $root_sys.'public/',
+        REL_PATH => '',
+        CONFIGURATION_PATH => 'app/config/',
+        LIBRARY_PATH => 'inc/lib/',
 
-    $isInitialized = [];
+        REL_COURSE_PATH => '',
+        REL_CODE_PATH => '/main/',
+
+        SYS_CODE_PATH => $root_sys.'public/main/',
+        SYS_CSS_PATH => $root_sys.'public/build/css/',
+        SYS_PLUGIN_PATH => $root_sys.'public/plugin/',
+        SYS_ARCHIVE_PATH => $root_sys.'var/cache/',
+        SYS_UPLOAD_PATH => 'var/upload/',
+        SYS_TEST_PATH => 'tests/',
+        SYS_TEMPLATE_PATH => $root_sys.'template/',
+        SYS_PUBLIC_PATH => $root_sys.'public/',
+        SYS_FONTS_PATH => $root_sys.'public/fonts/',
+
+        WEB_CODE_PATH => $root_web.'main/',
+        WEB_PLUGIN_ASSET_PATH => $root_web.'plugins/',
+        WEB_COURSE_PATH => $root_web.'courses/',
+        WEB_IMG_PATH => $root_web.'img/',
+        WEB_CSS_PATH => $root_web.'build/css/',
+        WEB_AJAX_PATH => $root_web.'main/inc/ajax/',
+        WEB_LIBRARY_PATH => $root_web.'inc/lib/',
+        WEB_LIBRARY_JS_PATH => $root_web.'inc/lib/javascript/',
+        WEB_PLUGIN_PATH => $root_web.'plugin/',
+        WEB_ARCHIVE_PATH => 'var/cache/',
+        //WEB_UPLOAD_PATH => 'var/upload/',
+        WEB_PUBLIC_PATH => $root_web,
+    ];
+
     $root_rel = '';
 
-    if (!empty($root_rel)) {
-        // Adds "/" to the root_rel
-        $hasSlash = substr($root_rel, 0, 1);
-        if ($hasSlash !== '/') {
-            $root_rel = '/'.$root_rel;
-        }
-    }
+    // Dealing with trailing slashes.
+    $rootWebWithSlash = api_add_trailing_slash($root_web);
+    $root_sys = api_add_trailing_slash($root_sys);
+    $root_rel = api_add_trailing_slash($root_rel);
 
-    // Web server base and system server base.
-    if (!array_key_exists($root_web, $isInitialized)) {
-        // Dealing with trailing slashes.
-        $rootWebWithSlash = api_add_trailing_slash($root_web);
-        $root_sys = api_add_trailing_slash($root_sys);
-        $root_rel = api_add_trailing_slash($root_rel);
+    // Initialization of a table that contains common-purpose paths.
+    /*$paths[$root_web][REL_PATH] = $root_rel;
+    $paths[$root_web][REL_CODE_PATH] = $root_rel.$code_folder;
+    $paths[$root_web][WEB_PATH] = $rootWebWithSlash;
+    $paths[$root_web][WEB_CODE_PATH] = $rootWebWithSlash.'main/';
+    $paths[$root_web][WEB_COURSE_PATH] = $rootWebWithSlash.$course_folder;
+    $paths[$root_web][WEB_PLUGIN_PATH] = $rootWebWithSlash.$paths[$root_web][WEB_PLUGIN_PATH];
+    $paths[$root_web][WEB_PLUGIN_ASSET_PATH] = $rootWebWithSlash.$paths[$root_web][WEB_PLUGIN_ASSET_PATH];
+    $paths[$root_web][WEB_ARCHIVE_PATH] = $rootWebWithSlash.$paths[$root_web][WEB_ARCHIVE_PATH];
+    $paths[$root_web][WEB_CSS_PATH] = $rootWebWithSlash.$paths[$root_web][WEB_CSS_PATH];
+    //$paths[$root_web][WEB_UPLOAD_PATH] = $rootWebWithSlash.$paths[$root_web][WEB_UPLOAD_PATH];
+    $paths[$root_web][WEB_PUBLIC_PATH] = $rootWebWithSlash;
 
-        // Initialization of a table that contains common-purpose paths.
-        $paths[$root_web][REL_PATH] = $root_rel;
-        $paths[$root_web][REL_CODE_PATH] = $root_rel.$code_folder;
-        $paths[$root_web][WEB_PATH] = $rootWebWithSlash;
-        $paths[$root_web][WEB_CODE_PATH] = $rootWebWithSlash.'main/';
-        $paths[$root_web][WEB_COURSE_PATH] = $rootWebWithSlash.$course_folder;
-        $paths[$root_web][WEB_PLUGIN_PATH] = $rootWebWithSlash.$paths[$root_web][WEB_PLUGIN_PATH];
-        $paths[$root_web][WEB_PLUGIN_ASSET_PATH] = $rootWebWithSlash.$paths[$root_web][WEB_PLUGIN_ASSET_PATH];
-        $paths[$root_web][WEB_ARCHIVE_PATH] = $rootWebWithSlash.$paths[$root_web][WEB_ARCHIVE_PATH];
-        $paths[$root_web][WEB_CSS_PATH] = $rootWebWithSlash.$paths[$root_web][WEB_CSS_PATH];
-        //$paths[$root_web][WEB_UPLOAD_PATH] = $rootWebWithSlash.$paths[$root_web][WEB_UPLOAD_PATH];
-        $paths[$root_web][WEB_PUBLIC_PATH] = $rootWebWithSlash;
+    $paths[$root_web][WEB_IMG_PATH] = $rootWebWithSlash.$paths[$root_web][WEB_IMG_PATH];
+    $paths[$root_web][WEB_LIBRARY_PATH] = $paths[$root_web][WEB_CODE_PATH].$paths[$root_web][WEB_LIBRARY_PATH];
+    $paths[$root_web][WEB_LIBRARY_JS_PATH] = $paths[$root_web][WEB_CODE_PATH].$paths[$root_web][WEB_LIBRARY_JS_PATH];
+    $paths[$root_web][WEB_AJAX_PATH] = $paths[$root_web][WEB_CODE_PATH].$paths[$root_web][WEB_AJAX_PATH];
 
-        $paths[$root_web][WEB_IMG_PATH] = $rootWebWithSlash.$paths[$root_web][WEB_IMG_PATH];
-        $paths[$root_web][WEB_LIBRARY_PATH] = $paths[$root_web][WEB_CODE_PATH].$paths[$root_web][WEB_LIBRARY_PATH];
-        $paths[$root_web][WEB_LIBRARY_JS_PATH] = $paths[$root_web][WEB_CODE_PATH].$paths[$root_web][WEB_LIBRARY_JS_PATH];
-        $paths[$root_web][WEB_AJAX_PATH] = $paths[$root_web][WEB_CODE_PATH].$paths[$root_web][WEB_AJAX_PATH];
-        $paths[$root_web][WEB_TEMPLATE_PATH] = $paths[$root_web][WEB_CODE_PATH].$paths[$root_web][WEB_TEMPLATE_PATH];
+    $paths[$root_web][SYS_PATH] = $root_sys;
+    $paths[$root_web][SYS_CODE_PATH] = $root_sys.$code_folder;
+    $paths[$root_web][SYS_TEST_PATH] = $paths[$root_web][SYS_PATH].$paths[$root_web][SYS_TEST_PATH];
+    $paths[$root_web][SYS_TEMPLATE_PATH] = $paths[$root_web][SYS_CODE_PATH].$paths[$root_web][SYS_TEMPLATE_PATH];
+    $paths[$root_web][SYS_PUBLIC_PATH] = $paths[$root_web][SYS_PATH].$paths[$root_web][SYS_PUBLIC_PATH];
+    $paths[$root_web][SYS_CSS_PATH] = $paths[$root_web][SYS_PATH].$paths[$root_web][SYS_CSS_PATH];
+    $paths[$root_web][SYS_FONTS_PATH] = $paths[$root_web][SYS_CODE_PATH].$paths[$root_web][SYS_FONTS_PATH];
+    $paths[$root_web][SYS_ARCHIVE_PATH] = $paths[$root_web][SYS_PATH].$paths[$root_web][SYS_ARCHIVE_PATH];
+    $paths[$root_web][SYS_APP_PATH] = $paths[$root_web][SYS_PATH].$paths[$root_web][SYS_APP_PATH];
+    $paths[$root_web][SYS_UPLOAD_PATH] = $paths[$root_web][SYS_PATH].$paths[$root_web][SYS_UPLOAD_PATH];
+    $paths[$root_web][SYS_PLUGIN_PATH] = $paths[$root_web][SYS_PATH].$paths[$root_web][SYS_PLUGIN_PATH];
+    $paths[$root_web][LIBRARY_PATH] = $paths[$root_web][SYS_CODE_PATH].$paths[$root_web][LIBRARY_PATH];
+    $paths[$root_web][CONFIGURATION_PATH] = $paths[$root_web][SYS_PATH].$paths[$root_web][CONFIGURATION_PATH];*/
 
-        $paths[$root_web][SYS_PATH] = $root_sys;
-        $paths[$root_web][SYS_CODE_PATH] = $root_sys.$code_folder;
-        $paths[$root_web][SYS_TEST_PATH] = $paths[$root_web][SYS_PATH].$paths[$root_web][SYS_TEST_PATH];
-        $paths[$root_web][SYS_TEMPLATE_PATH] = $paths[$root_web][SYS_CODE_PATH].$paths[$root_web][SYS_TEMPLATE_PATH];
-        $paths[$root_web][SYS_PUBLIC_PATH] = $paths[$root_web][SYS_PATH].$paths[$root_web][SYS_PUBLIC_PATH];
-        $paths[$root_web][SYS_CSS_PATH] = $paths[$root_web][SYS_PATH].$paths[$root_web][SYS_CSS_PATH];
-        $paths[$root_web][SYS_FONTS_PATH] = $paths[$root_web][SYS_CODE_PATH].$paths[$root_web][SYS_FONTS_PATH];
-        $paths[$root_web][SYS_ARCHIVE_PATH] = $paths[$root_web][SYS_PATH].$paths[$root_web][SYS_ARCHIVE_PATH];
-        $paths[$root_web][SYS_APP_PATH] = $paths[$root_web][SYS_PATH].$paths[$root_web][SYS_APP_PATH];
-        $paths[$root_web][SYS_UPLOAD_PATH] = $paths[$root_web][SYS_PATH].$paths[$root_web][SYS_UPLOAD_PATH];
-        $paths[$root_web][SYS_LANG_PATH] = $paths[$root_web][SYS_CODE_PATH].$paths[$root_web][SYS_LANG_PATH];
-        $paths[$root_web][SYS_PLUGIN_PATH] = $paths[$root_web][SYS_PATH].$paths[$root_web][SYS_PLUGIN_PATH];
-        $paths[$root_web][SYS_INC_PATH] = $paths[$root_web][SYS_CODE_PATH].$paths[$root_web][SYS_INC_PATH];
+    global $virtualChamilo;
+    if (!empty($virtualChamilo)) {
+        $paths[SYS_ARCHIVE_PATH] = api_add_trailing_slash($virtualChamilo[SYS_ARCHIVE_PATH]);
+        $paths[SYS_UPLOAD_PATH] = api_add_trailing_slash($virtualChamilo[SYS_UPLOAD_PATH]);
+        //$paths[$root_web][WEB_UPLOAD_PATH] = api_add_trailing_slash($virtualChamilo[WEB_UPLOAD_PATH]);
+        $paths[WEB_ARCHIVE_PATH] = api_add_trailing_slash($virtualChamilo[WEB_ARCHIVE_PATH]);
+        //$paths[$root_web][WEB_COURSE_PATH] = api_add_trailing_slash($virtualChamilo[WEB_COURSE_PATH]);
 
-        $paths[$root_web][LIBRARY_PATH] = $paths[$root_web][SYS_CODE_PATH].$paths[$root_web][LIBRARY_PATH];
-        $paths[$root_web][CONFIGURATION_PATH] = $paths[$root_web][SYS_PATH].$paths[$root_web][CONFIGURATION_PATH];
+        // WEB_UPLOAD_PATH should be handle by apache htaccess in the vhost
 
-        global $virtualChamilo;
-        if (!empty($virtualChamilo)) {
-            $paths[$root_web][SYS_ARCHIVE_PATH] = api_add_trailing_slash($virtualChamilo[SYS_ARCHIVE_PATH]);
-            $paths[$root_web][SYS_COURSE_PATH] = api_add_trailing_slash($virtualChamilo[SYS_COURSE_PATH]);
-            $paths[$root_web][SYS_UPLOAD_PATH] = api_add_trailing_slash($virtualChamilo[SYS_UPLOAD_PATH]);
-            //$paths[$root_web][WEB_UPLOAD_PATH] = api_add_trailing_slash($virtualChamilo[WEB_UPLOAD_PATH]);
-            $paths[$root_web][WEB_ARCHIVE_PATH] = api_add_trailing_slash($virtualChamilo[WEB_ARCHIVE_PATH]);
-            //$paths[$root_web][WEB_COURSE_PATH] = api_add_trailing_slash($virtualChamilo[WEB_COURSE_PATH]);
+        // RewriteEngine On
+        // RewriteRule /app/upload/(.*)$ http://localhost/other/upload/my-chamilo111-net/$1 [QSA,L]
 
-            // WEB_UPLOAD_PATH should be handle by apache htaccess in the vhost
-
-            // RewriteEngine On
-            // RewriteRule /app/upload/(.*)$ http://localhost/other/upload/my-chamilo111-net/$1 [QSA,L]
-
-            //$paths[$root_web][WEB_UPLOAD_PATH] = api_add_trailing_slash($virtualChamilo[WEB_UPLOAD_PATH]);
-            //$paths[$root_web][REL_PATH] = $virtualChamilo[REL_PATH];
-            //$paths[$root_web][REL_COURSE_PATH] = $virtualChamilo[REL_COURSE_PATH];
-        }
-
-        $isInitialized[$root_web] = true;
+        //$paths[$root_web][WEB_UPLOAD_PATH] = api_add_trailing_slash($virtualChamilo[WEB_UPLOAD_PATH]);
+        //$paths[$root_web][REL_PATH] = $virtualChamilo[REL_PATH];
+        //$paths[$root_web][REL_COURSE_PATH] = $virtualChamilo[REL_COURSE_PATH];
     }
 
     $path = trim($path);
 
     // Retrieving a common-purpose path.
-    if (isset($paths[$root_web][$path])) {
-        return $paths[$root_web][$path];
+    if (isset($paths[$path])) {
+        return $paths[$path];
     }
 
-    // Second purification.
-
-    // Replacing Windows back slashes.
-    $path = str_replace('\\', '/', $path);
-    // Query strings sometimes mighth wrongly appear in non-URLs.
-    // Let us check remove them from all types of paths.
-    if (($pos = strpos($path, '?')) !== false) {
-        $path = substr($path, 0, $pos);
-    }
-
-    // Path now is semi-absolute. It is convenient at this moment repeated slashes to be removed.
-    $path = preg_replace(REPEATED_SLASHES_PURIFIER, '/', $path);
-
-    return $path;
+    return false;
 }
 
 /**
@@ -2198,7 +2154,6 @@ function api_format_course_array(Course $course)
     $courseData['legal'] = $course->getLegal();
     $courseData['show_score'] = $course->getShowScore(); //used in the work tool
 
-    //$courseSys = api_get_path(SYS_COURSE_PATH).$course_data['directory'];
     $webCourseHome = api_get_path(WEB_COURSE_PATH).$courseData['code'];
 
     // Course password
@@ -6862,34 +6817,6 @@ function api_protect_global_admin_script()
     }
 
     return true;
-}
-
-/**
- * Get active template.
- *
- * @param string    theme type (optional: default)
- * @param string    path absolute(abs) or relative(rel) (optional:rel)
- *
- * @return string actived template path
- */
-function api_get_template($path_type = 'rel')
-{
-    $path_types = ['rel', 'abs'];
-    $template_path = '';
-    if (in_array($path_type, $path_types)) {
-        if ($path_type == 'rel') {
-            $template_path = api_get_path(SYS_TEMPLATE_PATH);
-        } else {
-            $template_path = api_get_path(WEB_TEMPLATE_PATH);
-        }
-    }
-    $actived_theme = 'default';
-    if (api_get_setting('active_template')) {
-        $actived_theme = api_get_setting('active_template');
-    }
-    $actived_theme_path = $template_path.$actived_theme.DIRECTORY_SEPARATOR;
-
-    return $actived_theme_path;
 }
 
 /**

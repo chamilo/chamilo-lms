@@ -145,9 +145,8 @@ class Diagnoser
     {
         $array = [];
         $writable_folders = [
-            api_get_path(SYS_APP_PATH).'cache',
-            api_get_path(SYS_COURSE_PATH),
-            api_get_path(SYS_APP_PATH).'upload/users/',
+            api_get_path(SYS_ARCHIVE_PATH).'cache',
+            api_get_path(SYS_PATH).'upload/users/',
         ];
         foreach ($writable_folders as $index => $folder) {
             $writable = is_writable($folder);

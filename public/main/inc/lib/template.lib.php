@@ -1557,7 +1557,7 @@ class Template
         }
 
         if (api_is_multiple_url_enabled()) {
-            $access_url_id = api_get_current_access_url_id();
+            /*$access_url_id = api_get_current_access_url_id();
             if ($access_url_id != -1) {
                 $url_info = api_get_access_url($access_url_id);
                 $url = api_remove_trailing_slash(
@@ -1572,7 +1572,7 @@ class Template
                 if (is_file($icon_real_homep.'favicon.ico')) {
                     $favico = '<link rel="shortcut icon" href="'.$homep.'favicon.ico" type="image/x-icon" />';
                 }
-            }
+            }*/
         }
 
         $this->assign('favico', $favico);

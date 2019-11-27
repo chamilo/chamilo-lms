@@ -179,7 +179,7 @@ class LeftMenuBuilder implements ContainerAwareInterface
                 ]
             );
 
-            $menu->addChild(
+            /*$menu->addChild(
                 $translator->trans('My files'),
                 [
                     'route' => 'legacy_main',
@@ -187,7 +187,7 @@ class LeftMenuBuilder implements ContainerAwareInterface
                         'name' => 'social/myfiles.php',
                     ],
                 ]
-            );
+            );*/
 
             $menu->addChild(
                 $translator->trans('Edit profile'),
@@ -304,7 +304,7 @@ class LeftMenuBuilder implements ContainerAwareInterface
                 ]
             );
 
-            $menu->addChild(
+            /*$menu->addChild(
                 $translator->trans('My files'),
                 [
                     'route' => 'legacy_main',
@@ -312,7 +312,7 @@ class LeftMenuBuilder implements ContainerAwareInterface
                         'name' => 'social/myfiles.php',
                     ],
                 ]
-            );
+            );*/
         }
 
         return $menu;

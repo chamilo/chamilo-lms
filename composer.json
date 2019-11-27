@@ -28,7 +28,7 @@
             "public/main/gradebook/lib",
             "public/main/lp",
             "public/main/inc/lib",
-            "plugin",
+            "public/plugin",
             "public/main/install",
             "public/main/survey"
         ]

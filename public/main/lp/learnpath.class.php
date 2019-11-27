@@ -6826,7 +6826,7 @@ class learnpath
     public function edit_document($_course)
     {
         $course_id = api_get_course_int_id();
-        $urlAppend = api_get_configuration_value('url_append');
+        $urlAppend = '';
         // Please, do not modify this dirname formatting.
         $postDir = isset($_POST['dir']) ? $_POST['dir'] : '';
         $dir = isset($_GET['dir']) ? $_GET['dir'] : $postDir;

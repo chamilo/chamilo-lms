@@ -387,7 +387,7 @@ class PDF
         $addDefaultCss = false,
         $completeHeader = true
     ) {
-        $urlAppend = api_get_configuration_value('url_append');
+        $urlAppend = '';
 
         if (empty($document_html)) {
             return false;

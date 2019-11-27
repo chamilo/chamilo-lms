@@ -16,7 +16,7 @@ use Symfony\Component\Filesystem\Filesystem;
  *
  * @package chamilo.admin
  */
-define('CSS_UPLOAD_PATH', api_get_path(SYS_APP_PATH).'Resources/public/css/themes/');
+define('CSS_UPLOAD_PATH', api_get_path(SYS_PATH).'Resources/public/css/themes/');
 
 /**
  * This function allows easy activating and inactivating of regions.

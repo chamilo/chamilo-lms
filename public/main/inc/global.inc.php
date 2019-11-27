@@ -56,7 +56,7 @@ try {
         echo 'Cannot load current URL';
         exit;
     }
-    $newBaseUrl = substr($currentBaseUrl, 0, $pos -1);
+    $newBaseUrl = substr($currentBaseUrl, 0, $pos - 1);
     $request->setBaseUrl($newBaseUrl);
     $context->setBaseUrl($newBaseUrl);
 

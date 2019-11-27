@@ -53,7 +53,6 @@ class Container
     public static $tempDir;
     public static $dataDir;
     public static $courseDir;
-    public static $configDir;
     public static $assets;
     public static $htmlEditor;
     public static $twig;
@@ -70,14 +69,6 @@ class Container
     public static function setContainer($container)
     {
         self::$container = $container;
-    }
-
-    /**
-     * @return string
-     */
-    public static function getConfigDir()
-    {
-        return self::$configDir;
     }
 
     /**
@@ -121,7 +112,7 @@ class Container
     /**
      * @return string
      */
-    public static function getTempDir()
+    public static function getCacheDir()
     {
         return self::$container->get('kernel')->getCacheDir().'/';
     }
@@ -129,10 +120,10 @@ class Container
     /**
      * @return string
      */
-    public static function getRootDir()
+    public static function getProjectDir()
     {
         if (isset(self::$container)) {
-            return self::$container->get('kernel')->getRealRootDir();
+            return self::$container->get('kernel')->getProjectDir().'/';
         }
 
         return str_replace('\\', '/', realpath(__DIR__.'/../../../')).'/';
@@ -144,22 +135,6 @@ class Container
     public static function isInstalled()
     {
         return self::$container->get('kernel')->isInstalled();
-    }
-
-    /**
-     * @return string
-     */
-    public static function getDataDir()
-    {
-        return self::$dataDir;
-    }
-
-    /**
-     * @return string
-     */
-    public static function getCourseDir()
-    {
-        return self::$courseDir;
     }
 
     /**
@@ -486,9 +461,6 @@ class Container
         if ($setSession) {
             self::$session = $container->get('session');
         }
-        // Setting legacy properties.
-        self::$dataDir = $container->get('kernel')->getDataDir();
-        self::$courseDir = $container->get('kernel')->getDataDir();
     }
 
     /**

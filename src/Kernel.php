@@ -52,42 +52,9 @@ class Kernel extends BaseKernel
     /**
      * @return string
      */
-    public function getRootDir()
-    {
-        if (null === $this->rootDir) {
-            $r = new \ReflectionObject($this);
-            $this->rootDir = str_replace('\\', '/', dirname($r->getFileName()));
-        }
-
-        return $this->rootDir;
-    }
-
-    /**
-     * Returns the real root path.
-     *
-     * @return string
-     */
-    public function getRealRootDir()
-    {
-        return realpath($this->getRootDir().'/../').'/';
-    }
-
-    /**
-     * Returns the data path.
-     *
-     * @return string
-     */
-    public function getDataDir()
-    {
-        return $this->getRealRootDir().'data/';
-    }
-
-    /**
-     * @return string
-     */
     public function getConfigurationFile()
     {
-        return $this->getRealRootDir().'config/configuration.php';
+        return $this->getProjectDir().'/config/configuration.php';
     }
 
     public function setApi(array $configuration)

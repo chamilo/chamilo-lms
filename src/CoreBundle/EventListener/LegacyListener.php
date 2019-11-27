@@ -50,7 +50,7 @@ class LegacyListener
         $urlId = 1;
 
         if (!empty($installed)) {
-            $access_urls = api_get_access_urls();
+            /*$access_urls = api_get_access_urls();
             $root_rel = api_get_self();
             $root_rel = substr($root_rel, 1);
             $pos = strpos($root_rel, '/');
@@ -83,7 +83,7 @@ class LegacyListener
                     $urlId = $details['id'];
                     break; //found one match, get out of foreach
                 }
-            }
+            }*/
 
             $twig = $container->get('twig');
 

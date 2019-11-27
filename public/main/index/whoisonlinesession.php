@@ -6,7 +6,7 @@
  *
  * @package chamilo.main
  */
-require_once './main/inc/global.inc.php';
+require_once '../../main/inc/global.inc.php';
 
 api_block_anonymous_users();
 

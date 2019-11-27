@@ -53,7 +53,6 @@ class NavBuilder implements ContainerAwareInterface
     public function buildCategoryMenu(ItemInterface $menu, array $options = [], $currentUri = null)
     {
         //$categories = $this->categoryManager->getCategoryTree();
-
         //$this->fillMenu($menu, $categories, $options, $currentUri);
         $menu->addChild('home', ['route' => 'home']);
     }
@@ -88,7 +87,7 @@ class NavBuilder implements ContainerAwareInterface
                 [
                     'label' => $translator->trans('Courses'),
                     'route' => 'legacy_main',
-                    'routeParameters' => ['name' => '../user_portal.php'],
+                    'routeParameters' => ['name' => 'index/user_portal.php'],
                     'icon' => 'book',
                 ]
             )->setLinkAttribute('class', 'jui');
@@ -98,7 +97,7 @@ class NavBuilder implements ContainerAwareInterface
                 [
                     'label' => $translator->trans('All my courses'),
                     'route' => 'legacy_main',
-                    'routeParameters' => ['name' => '../user_portal.php'],
+                    'routeParameters' => ['name' => 'index/user_portal.php'],
                 ]
             );
 
@@ -328,7 +327,7 @@ class NavBuilder implements ContainerAwareInterface
         ]);
 
         // Needed when loading legacy pages (inside main)
-        $isLegacy = $container->get('request_stack')->getCurrentRequest()->get('load_legacy');
+        //$isLegacy = $container->get('request_stack')->getCurrentRequest()->get('load_legacy');
         $legacyIndex = '';
 
         if ($site) {

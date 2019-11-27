@@ -94,7 +94,7 @@ $(function () {
     <ul class="nav navbar-nav ml-auto">
         {% if app.user is not null and is_granted('IS_AUTHENTICATED_FULLY') %}
         <li class="nav-item d-md-down-none">
-            <a class="nav-link" href="{{ url('legacy_main', { 'name' : '../user_portal.php' }) }}">
+            <a class="nav-link" href="{{ url('legacy_main', { 'name' : 'index/user_portal.php' }) }}">
                 {{ 'My courses'|trans }}
             </a>
         </li>

@@ -40,8 +40,7 @@ try {
     // and not called from a symfony controller from public/
     $request->request->set('load_legacy', true);
 
-    // @todo fix URL loading
-    $request->setBaseUrl($request->getRequestUri());
+    $currentBaseUrl = $request->getBaseUrl();
     $kernel->boot();
 
     $container = $kernel->getContainer();
@@ -51,7 +50,16 @@ try {
     $router->setContext($context);
     $response = $kernel->handle($request);
     $context = Container::getRouter()->getContext();
-    $context->setBaseUrl($append);
+
+    $pos = strpos($currentBaseUrl, 'main');
+    if ($pos === false) {
+        echo 'Cannot load current URL';
+        exit;
+    }
+    $newBaseUrl = substr($currentBaseUrl, 0, $pos -1);
+    $request->setBaseUrl($newBaseUrl);
+    $context->setBaseUrl($newBaseUrl);
+
     $container = $kernel->getContainer();
 
     if ($kernel->isInstalled()) {

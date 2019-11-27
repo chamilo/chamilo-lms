@@ -23,7 +23,7 @@ use ChamiloSession as Session;
 $cidReset = true;
 
 /* Included libraries */
-require_once './main/inc/global.inc.php';
+require_once '../../main/inc/global.inc.php';
 
 // For HTML editor repository.
 Session::erase('this_section');

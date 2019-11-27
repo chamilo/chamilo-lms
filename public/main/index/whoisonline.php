@@ -8,7 +8,7 @@ if (!isset($_GET['cidReq'])) {
     $cidReset = true;
 }
 
-require_once './main/inc/global.inc.php';
+require_once '../../main/inc/global.inc.php';
 
 if (isset($_GET['cidReq']) && strlen($_GET['cidReq']) > 0) {
     api_protect_course_script(true);

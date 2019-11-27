@@ -1,15 +1,17 @@
 <?php
-require 'V2TestCase.php';
+/* For licensing terms, see /license.txt */
+
+require_once __DIR__.'/V2TestCase.php';
 
 require_once __DIR__.'/../../../../vendor/autoload.php';
 
 
 /**
- * Class TestUpdateUserFromUsername
+ * Class UpdateUserFromUsernameTest
  *
  * UPDATE_USER_FROM_USERNAME webservice unit tests
  */
-class TestUpdateUserFromUsername extends V2TestCase
+class UpdateUserFromUsernameTest extends V2TestCase
 {
     protected function action()
     {
@@ -76,10 +78,10 @@ class TestUpdateUserFromUsername extends V2TestCase
         $userManager = UserManager::getManager();
         $user = $userManager->find($userId);
         $userManager->reloadUser($user);
-/*        $this->assertSame($newFirstName, $user->newFirstname());
-        $this->assertSame($newLastName, $user->newLastName());
-        $this->assertSame($newStatus, $user->newStatus());
-        $this->assertSame($newEmail, $user->newEmail());*/
+        $this->assertSame($newFirstName, $user->getFirstname());
+        $this->assertSame($newLastName, $user->getLastname());
+        $this->assertSame($newStatus, $user->getStatus());
+        $this->assertSame($newEmail, $user->getEmail());
 
         // assert extra field values have been updated
         $extraFieldValueModel = new ExtraFieldValue('user');

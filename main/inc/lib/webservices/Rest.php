@@ -1604,15 +1604,16 @@ class Rest extends WebService
      * @param $startDate
      * @param $endDate
      * @param array $extraFields
-     * @return array containing an int, the id of the new session
+     * @return int, the id of the new session
      * @throws Exception
      */
     public function createSessionFromModel($modelSessionId, $sessionName, $startDate, $endDate, array $extraFields = [])
     {
-        if (empty($_POST['modelSessionId'])
-            || empty($_POST['sessionName'])
-            || empty($_POST['startDate'])
-            || empty($_POST['endDate'])) {
+        if (empty($modelSessionId)
+            || empty($sessionName)
+            || empty($startDate)
+            || empty($endDate)
+        ) {
             throw new Exception(get_lang('NoData'));
         }
 
@@ -1694,7 +1695,7 @@ class Rest extends WebService
             UrlManager::add_session_to_url($newSessionId, 1);
         }
 
-        return [$newSessionId];
+        return $newSessionId;
     }
 
     /**
@@ -1702,7 +1703,7 @@ class Rest extends WebService
      *
      * @param int $sessionId the session id
      * @param string $loginName the user's login name
-     * @return array containing a boolean, whether it worked
+     * @return boolean, whether it worked
      * @throws Exception
      */
     public function subscribeUserToSessionFromUsername($sessionId, $loginName)
@@ -1725,7 +1726,7 @@ class Rest extends WebService
             throw new Exception(get_lang('UserNotSubscribed'));
         }
 
-        return [true];
+        return true;
     }
 
     /**
@@ -1733,7 +1734,7 @@ class Rest extends WebService
      *
      * @param $fieldName
      * @param $fieldValue
-     * @return array containing an int, the matching session id
+     * @return int, the matching session id
      * @throws Exception when no session matched or more than one session matched
      */
     public function getSessionFromExtraField($fieldName, $fieldValue)
@@ -1754,14 +1755,14 @@ class Rest extends WebService
         }
 
         // return sessionId
-        return [ intval($sessionIdList[0]['item_id']) ];
+        return intval($sessionIdList[0]['item_id']);
     }
 
     /**
      * updates a user identified by its login name
      *
      * @param array $parameters
-     * @return array containing the boolean true on success
+     * @return boolean, true on success
      * @throws Exception on failure
      */
     public function updateUserFromUserName($parameters)
@@ -1949,6 +1950,6 @@ class Rest extends WebService
             }
         }
 
-        return [ true ];
+        return true;
     }
 }

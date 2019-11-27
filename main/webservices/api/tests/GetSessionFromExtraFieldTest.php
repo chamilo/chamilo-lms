@@ -1,15 +1,17 @@
 <?php
-require 'V2TestCase.php';
+/* For licensing terms, see /license.txt */
+
+require_once __DIR__.'/V2TestCase.php';
 
 require_once __DIR__.'/../../../../vendor/autoload.php';
 
 
 /**
- * Class TestGetSessionFromExtraField
+ * Class GetSessionFromExtraFieldTest
  *
  * GET_SESSION_FROM_EXTRA_FIELD webservice unit tests
  */
-class TestGetSessionFromExtraField extends V2TestCase
+class GetSessionFromExtraFieldTest extends V2TestCase
 {
     protected function action()
     {

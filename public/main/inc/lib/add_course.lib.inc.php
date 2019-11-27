@@ -42,10 +42,9 @@ class AddCourse
             $wanted_code = '';
         }
 
+        $unique_prefix = '';
         if ($add_unique_prefix) {
             $unique_prefix = substr(md5(uniqid(rand())), 0, 10);
-        } else {
-            $unique_prefix = '';
         }
 
         $keys = [];
@@ -69,11 +68,6 @@ class AddCourse
                 $keys_are_unique = false;
                 $try_new_fsc_id++;
                 $final_suffix['CourseId'] = substr(md5(uniqid(rand())), 0, 4);
-            }
-            if (file_exists(api_get_path(SYS_COURSE_PATH).$keys_course_repository)) {
-                $keys_are_unique = false;
-                $try_new_fsc_dir++;
-                $final_suffix['CourseDir'] = substr(md5(uniqid(rand())), 0, 4);
             }
 
             if (($try_new_fsc_id + $try_new_fsc_db + $try_new_fsc_dir) > $limit_numb_try) {

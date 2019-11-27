@@ -25,7 +25,7 @@
                 <div class="item">
                     {{ 'tool_info.png' | img(64, 'Add course description'|trans ) }}
                     <div class="caption">
-                        <a href="{{ _p.web_main }}course_description/?cidReq={{ course.code }}" class="btn btn-outline-primary">
+                        <a href="{{ url('legacy_main', { 'name' : 'course_description/index.php', 'cidReq': course.code}) }}" class="btn btn-outline-primary">
                             <em class="fa fa-info-circle"></em> {{'Add course description'|trans}}
                         </a>
                     </div>
@@ -35,7 +35,7 @@
                 <div class="item">
                     {{ 'tool_folder_document.png' | img(64, 'Upload a document'|trans ) }}
                     <div class="caption">
-                        <a href="{{ _p.web_main }}document/document.php?cidReq={{ course.code }}" class="btn btn-outline-primary">
+                        <a href="{{ url('legacy_main', { 'name' : 'document/document.php', 'cidReq': course.code}) }} " class="btn btn-outline-primary">
                             <em class="fa fa-paper-plane"></em> {{'Upload a document'|trans}}
                         </a>
                     </div>
@@ -45,7 +45,7 @@
                 <div class="item">
                     {{ 'tool_forum.png' | img(64, 'Add forum'|trans ) }}
                     <div class="caption">
-                        <a href="{{ _p.web_main }}forum/index.php?cidReq={{ course.code }}" class="btn btn-outline-primary">
+                        <a href="{{ url('legacy_main', { 'name' : 'forum/index.php', 'cidReq': course.code}) }}" class="btn btn-outline-primary">
                             <em class="fa fa-users"></em> {{ 'Add forum'|trans }}
                         </a>
                     </div>
@@ -56,7 +56,7 @@
                     <div class="item">
                         {{ 'tool_members.png' | img(64, 'Subscribe user to course'|trans ) }}
                         <div class="caption">
-                            <a href="{{ _p.web_main }}user/subscribe_user.php?cidReq={{ course.code }}" class="btn btn-outline-primary">
+                            <a href="{{ url('legacy_main', { 'name' : 'user/subscribe_user.php', 'cidReq': course.code}) }}" class="btn btn-outline-primary">
                                 <em class="fa fa-user-plus"></em> {{ 'Subscribe user to course'|trans }}
                             </a>
                         </div>
@@ -67,7 +67,7 @@
                 <div class="item">
                     {{ 'tool_reference.png' | img(64, 'Course settings'|trans ) }}
                     <div class="caption">
-                        <a href="{{ _p.web_main }}course_info/infocours.php?cidReq={{ course.code }}" class="btn btn-outline-primary">
+                        <a href="{{ url('legacy_main', { 'name' : 'course_info/infocours.php', 'cidReq': course.code}) }}" class="btn btn-outline-primary">
                             <em class="fa fa-users"></em> {{ 'Change settings'|trans }}
                         </a>
                     </div>

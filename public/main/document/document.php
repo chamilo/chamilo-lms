@@ -19,7 +19,7 @@ use ChamiloSession as Session;
 $courseCode = isset($_GET['cidReq']) ? htmlentities($_GET['cidReq']) : '';
 $sessionId = isset($_GET['id_session']) ? (int) $_GET['id_session'] : 0;
 
-$url = "../../../public/resources/document/files?cidReq=$courseCode&id_session=$sessionId";
+$url = "../../../resources/document/files?cidReq=$courseCode&id_session=$sessionId";
 header("Location: $url");
 exit;
 

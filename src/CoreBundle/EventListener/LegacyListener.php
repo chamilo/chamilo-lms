@@ -128,7 +128,6 @@ class LegacyListener
 
             // Theme icon is loaded in the TwigListener src/ThemeBundle/EventListener/TwigListener.php
             //$theme = api_get_visual_theme();
-            //$twig->addGlobal('favico', \Template::getPortalIcon($theme));
             $languages = api_get_languages();
             $languageList = [];
             foreach ($languages as $isoCode => $language) {

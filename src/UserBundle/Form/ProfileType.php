@@ -4,7 +4,6 @@
 namespace Chamilo\UserBundle\Form;
 
 use Chamilo\CoreBundle\Form\Type\IllustrationType;
-use League\Flysystem\Adapter\Polyfill\StreamedTrait;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\BirthdayType;
 use Symfony\Component\Form\Extension\Core\Type\LocaleType;
@@ -114,7 +113,7 @@ class ProfileType extends AbstractType
                 [
                     'label' => 'Picture',
                     'required' => false,
-                    'mapped' => false
+                    'mapped' => false,
                 ]
             )
             /*->add(

@@ -82,6 +82,7 @@ abstract class V2TestCase extends TestCase
         $this->assertSame(200, $response->getStatusCode());
         $decodedResponse = json_decode($response->getBody()->getContents());
         $this->assertNotNull($decodedResponse);
+
         return $decodedResponse;
     }
 
@@ -102,6 +103,7 @@ abstract class V2TestCase extends TestCase
         $this->assertTrue(property_exists($decodedResponse, 'message'));
         $message = $decodedResponse->message;
         $this->assertIsString($message);
+
         return $message;
     }
 
@@ -117,9 +119,11 @@ abstract class V2TestCase extends TestCase
         $this->assertIsObject($decodedResponse);
         $this->assertTrue(
             property_exists($decodedResponse, 'data'),
-            'response data property is missing: '.print_r($decodedResponse, true));
+            'response data property is missing: '.print_r($decodedResponse, true)
+        );
         $data = $decodedResponse->data;
         $this->assertIsArray($data);
+
         return $data;
     }
 
@@ -133,6 +137,7 @@ abstract class V2TestCase extends TestCase
     {
         $data = $this->dataArray($parameters);
         $this->assertSame(1, count($data));
+
         return $data[0];
     }
 
@@ -146,6 +151,7 @@ abstract class V2TestCase extends TestCase
     {
         $value = $this->singleElementValue($parameters);
         $this->assertIsInt($value);
+
         return $value;
     }
 
@@ -159,6 +165,7 @@ abstract class V2TestCase extends TestCase
     {
         $value = $this->singleElementValue($parameters);
         $this->assertIsBool($value);
+
         return $value;
     }
 }

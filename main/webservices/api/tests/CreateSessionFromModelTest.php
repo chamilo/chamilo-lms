@@ -1,15 +1,17 @@
 <?php
-require 'V2TestCase.php';
+/* For licensing terms, see /license.txt */
+
+require_once __DIR__.'/V2TestCase.php';
 
 require_once __DIR__.'/../../../../vendor/autoload.php';
 
 
 /**
- * Class TestCreateSessionFromModel
+ * Class CreateSessionFromModelTest
  *
  * CREATE_SESSION_FROM_MODEL webservice unit tests
  */
-class TestCreateSessionFromModel extends V2TestCase
+class CreateSessionFromModelTest extends V2TestCase
 {
     protected function action()
     {
@@ -45,14 +47,19 @@ class TestCreateSessionFromModel extends V2TestCase
         );
 
         // assert the session was created and given the returned session id
-        $session = (new SessionManager)->fetch($newSessionId);
-        $this->assertIsArray($session);
+        $entityManager = Database::getManager();
+        $repository = $entityManager->getRepository('ChamiloCoreBundle:Session');
+        $newSession = $repository->find($newSessionId);
+        $this->assertIsObject($newSession);
 
         // assert the new session got the right data
-        $this->assertSame($name, $session['name']);
-        // FIXME time shift (one or two hours back)
-        // $this->assertSame($startDate, $session['display_start_date']);
-        // $this->assertSame($endDate, $session['display_end_date']);
+        $this->assertSame($name, $newSession->getName());
+        // FIXME account for UTC / local timezone shift
+        // $this->assertSame($endDate, $newSession->getDisplayEndDate());
+        // $this->assertSame($startDate, $newSession->getAccessStartDate());
+        // $this->assertSame($endDate, $newSession->getAccessEndDate());
+        // $this->assertSame($startDate, $newSession->getCoachAccessStartDate());
+        // $this->assertSame($endDate, $newSession->getCoachAccessEndDate());
 
         // clean up
         SessionManager::delete($modelSessionId);

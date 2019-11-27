@@ -1,15 +1,17 @@
 <?php
-require 'V2TestCase.php';
+/* For licensing terms, see /license.txt */
+
+require_once __DIR__.'/V2TestCase.php';
 
 require_once __DIR__.'/../../../../vendor/autoload.php';
 
 
 /**
- * Class TestSubscribeUserToSessionFromUsername
+ * Class SubscribeUserToSessionFromUsernameTest
  *
  * SUBSCRIBE_USER_TO_SESSION_FROM_USERNAME webservice unit tests
  */
-class TestSubscribeUserToSessionFromUsername extends V2TestCase
+class SubscribeUserToSessionFromUsernameTest extends V2TestCase
 {
     protected function action()
     {

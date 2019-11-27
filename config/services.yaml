@@ -4,7 +4,6 @@ parameters:
     password_encryption: '%env(APP_ENCRYPT_METHOD)%'
     secret: '%env(APP_SECRET)%'
     locale: '%env(APP_LOCALE)%'
-    url_append: '%env(APP_URL_APPEND)%'
     installed: '%env(APP_INSTALLED)%'
     twig:
         form:
@@ -16,10 +15,10 @@ parameters:
     mailer_user: admin@example.com
     mailer_password: null
     course_info_is_not_editable: false
-    sonata_media.cdn.host: '%env(APP_URL_APPEND)%/public/resource'
+    sonata_media.cdn.host: '/var/upload/media/'
     sonata_page.varnish.command: 'if [ ! -r "/etc/varnish/secret" ]; then echo "VALID ERROR :/"; else varnishadm -S /etc/varnish/secret -T 127.0.0.1:6082 {{ COMMAND }} "{{ EXPRESSION }}"; fi;'
-    router.request_context.base_url: '%env(APP_URL_APPEND)%'
-    asset.request_context.base_path: '%env(APP_URL_APPEND)%'
+#    router.request_context.base_url: '%env(APP_URL_APPEND)%'
+#    asset.request_context.base_path: '%env(APP_URL_APPEND)%'
 
     glide_config:
         source: 'oneup_flysystem.resources_filesystem'

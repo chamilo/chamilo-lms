@@ -140,14 +140,6 @@ class Container
     /**
      * @return string
      */
-    public static function getUrlAppend()
-    {
-        return self::$container->get('kernel')->getUrlAppend();
-    }
-
-    /**
-     * @return string
-     */
     public static function isInstalled()
     {
         return self::$container->get('kernel')->isInstalled();

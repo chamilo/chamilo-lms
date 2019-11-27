@@ -106,14 +106,6 @@ class Kernel extends BaseKernel
         return !empty($this->getContainer()->getParameter('installed'));
     }
 
-    /**
-     * @return string
-     */
-    public function getUrlAppend()
-    {
-        return $this->getContainer()->getParameter('url_append');
-    }
-
     protected function configureContainer(ContainerBuilder $container, LoaderInterface $loader): void
     {
         $container->addResource(new FileResource($this->getProjectDir().'/config/bundles.php'));

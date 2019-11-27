@@ -1,2 +1,2 @@
 fos_js_routing:
-    request_context_base_url: '%env(APP_URL_APPEND)%'
+    request_context_base_url: '/'

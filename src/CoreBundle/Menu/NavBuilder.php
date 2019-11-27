@@ -329,11 +329,7 @@ class NavBuilder implements ContainerAwareInterface
 
         // Needed when loading legacy pages (inside main)
         $isLegacy = $container->get('request_stack')->getCurrentRequest()->get('load_legacy');
-        $urlAppend = $container->getParameter('url_append');
         $legacyIndex = '';
-        if ($isLegacy) {
-            $legacyIndex = $urlAppend.'/public';
-        }
 
         if ($site) {
             $pageManager = $container->get('sonata.page.manager.page');

@@ -52,7 +52,6 @@ use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Normalizer\GetSetMethodNormalizer;
 use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
-use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 
 /**
  * Class UserRepository.
@@ -74,7 +73,13 @@ class UserRepository
 
     public function findByUsername(string $username): ?User
     {
-        return $this->repository->findOneBy(['username' => $username]);
+        $user = $this->repository->findOneBy(['username' => $username]);
+
+        if (null === $user) {
+            throw new UsernameNotFoundException(sprintf("User '%s' not found.", $username));
+        }
+
+        return $user;
     }
 
     /**

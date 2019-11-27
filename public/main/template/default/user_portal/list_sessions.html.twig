@@ -16,7 +16,8 @@
 
             {% if item.show_actions %}
                 <div class="float-right">
-                    <a class="btn btn-outline-secondary btn-sm" title="{{ "Edit"|get_lang }}" href="{{ _p.web_main ~ "session/resume_session.php?id_session=" ~ row.id }}">
+                    <a class="btn btn-outline-secondary btn-sm" title="{{ "Edit"|get_lang }}"
+                       href="{{ url('legacy_main', { 'name' : 'session/resume_session.php', 'id_session' : row.id }) }}">
                         <i class="fas fa-pencil-alt"></i>
                     </a>
                 </div>

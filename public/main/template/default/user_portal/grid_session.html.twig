@@ -131,7 +131,7 @@
                         {{ session_image }} {{ row.title }}
                     {% else %}
                         {# Default link #}
-                        {% set session_link = _p.web_main ~ 'session/index.php?session_id=' ~ row.id %}
+                        {% set session_link = url('legacy_main', { 'name' : 'session/index.php', 'session_id' : row.id }) %}
                         {% if row.course_list_session_style == 2 and row.courses|length == 1 %}
                             {# Linkt to first course #}
                             {% set session_link = row.courses.0.link %}
@@ -153,7 +153,7 @@
                 {% endif %}
                 {% if row.show_actions %}
                     <div class="pull-right">
-                        <a href="{{ _p.web_main ~ "session/resume_session.php?id_session=" ~ row.id }}">
+                        <a href="{{ url('legacy_main', { 'name' : 'session/resume_session.php', 'id_session' : row.id }) }}">
                             <img src="{{ "edit.png"|icon(22) }}" width="22" height="22" alt="{{ "Edit"|get_lang }}"
                                  title="{{ "Edit"|get_lang }}">
                         </a>

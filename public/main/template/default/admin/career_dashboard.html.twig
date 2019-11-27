@@ -9,7 +9,7 @@
                 <div class="panel-heading">
                     <h4>
                         {% if is_granted('ROLE_ADMIN') %}
-                            <a href="{{ _p.web }}main/admin/careers.php?action=edit&id={{ item.id }}">
+                            <a href="{{ url('legacy_main', { 'name' : 'admin/careers.php', 'action' : 'edit', 'id' : item.id }) }}">
                                 {{ item.name }}
                             </a>
                         {% else %}

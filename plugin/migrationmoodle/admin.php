@@ -96,6 +96,10 @@ $menu = [
         'action' => 'role_assignments',
         'parent' => 0,
     ],
+    21 => [
+        'action' => 'quizzes',
+        'parent' => 6,
+    ],
 ];
 
 Display::display_header($plugin->get_title());

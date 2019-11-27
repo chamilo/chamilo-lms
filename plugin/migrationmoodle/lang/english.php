@@ -29,3 +29,4 @@ $strings['CourseModulesQuizTask'] = 'Course modules: Quizzes';
 $strings['CQuizTask'] = 'C Quiz';
 $strings['RoleAssignmentsTask'] = 'Role assignments';
 $strings['QuizzesTask'] = 'Quizzes';
+$strings['FilesForQuizzesTask'] = 'Files for quizzes';

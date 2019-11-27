@@ -100,6 +100,10 @@ $menu = [
         'action' => 'quizzes',
         'parent' => 6,
     ],
+    22 => [
+        'action' => 'files_for_quizzes',
+        'parent' => 21,
+    ],
 ];
 
 Display::display_header($plugin->get_title());

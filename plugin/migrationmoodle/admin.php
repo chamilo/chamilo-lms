@@ -104,6 +104,10 @@ $menu = [
         'action' => 'files_for_quizzes',
         'parent' => 21,
     ],
+    23 => [
+        'action' => 'question_categories',
+        'parent' => 21,
+    ],
 ];
 
 Display::display_header($plugin->get_title());

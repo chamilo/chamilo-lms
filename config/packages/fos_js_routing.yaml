@@ -1,2 +1,2 @@
-fos_js_routing:
-    request_context_base_url: '/'
+#fos_js_routing:
+#    request_context_base_url: '/sub-folder/public'

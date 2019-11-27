@@ -314,6 +314,7 @@ define('REL_HOME_PATH', 'REL_HOME_PATH');
 // Constants for api_get_path() and api_get_path_type(), etc. - registered path types.
 define('WEB_PATH', 'WEB_PATH');
 define('SYS_PATH', 'SYS_PATH');
+define('SYMFONY_SYS_PATH', 'SYMFONY_SYS_PATH');
 define('SYS_UPLOAD_PATH', 'SYS_UPLOAD_PATH');
 define('WEB_UPLOAD_PATH', 'WEB_UPLOAD_PATH');
 
@@ -724,9 +725,11 @@ function api_get_path($path = '', $configuration = [])
     }
 
     $root_sys = Container::getProjectDir();
+
     $root_web = '';
     // If no $root_web has been set so far *and* no custom config has been passed to the function
     // then re-use the previously-calculated (run-specific) $root_web and skip this complex calculation
+    /*
     if (empty($root_web) || $emptyConfigurationParam === false || empty($configuration)) {
         // Resolve master hostname.
         if (!empty($configuration) && array_key_exists('root_web', $configuration)) {
@@ -757,8 +760,7 @@ function api_get_path($path = '', $configuration = [])
                 // Here we give up, so we don't touch anything.
             }
         }
-    }
-
+    }*/
     if (isset(Container::$container)) {
         $root_web = Container::$container->get('router')->generate(
             'home',
@@ -784,6 +786,7 @@ function api_get_path($path = '', $configuration = [])
 
     $paths = [
         WEB_PATH => $root_web,
+        SYMFONY_SYS_PATH => $root_sys,
         SYS_PATH => $root_sys.'public/',
         REL_PATH => '',
         CONFIGURATION_PATH => 'app/config/',
@@ -808,8 +811,8 @@ function api_get_path($path = '', $configuration = [])
         WEB_IMG_PATH => $root_web.'img/',
         WEB_CSS_PATH => $root_web.'build/css/',
         WEB_AJAX_PATH => $root_web.'main/inc/ajax/',
-        WEB_LIBRARY_PATH => $root_web.'inc/lib/',
-        WEB_LIBRARY_JS_PATH => $root_web.'inc/lib/javascript/',
+        WEB_LIBRARY_PATH => $root_web.'main/inc/lib/',
+        WEB_LIBRARY_JS_PATH => $root_web.'main/inc/lib/javascript/',
         WEB_PLUGIN_PATH => $root_web.'plugin/',
         WEB_ARCHIVE_PATH => 'var/cache/',
         //WEB_UPLOAD_PATH => 'var/upload/',

@@ -13,22 +13,20 @@ import $ from 'jquery';
 window.jQuery = $;
 window.$ = $;
 
-
 Routing.setRoutingData(routes);
 
 const locale = document.querySelector('html').lang;
 
 require('./vendor');
 require('./main');
-
-
 require('webpack-jquery-ui');
 require('webpack-jquery-ui/css');
 
 // @todo rework url naming
-const homePublicUrl = Routing.generate('home') + 'public/';
-const mainUrl = Routing.generate('web.main');
-const webAjax = Routing.generate('web.ajax');
+const homePublicUrl = Routing.generate('home');
+const mainUrl = homePublicUrl + 'main/';
+const webAjax = homePublicUrl + 'main/inc/ajax/';
+console.log(webAjax);
 
 var ajax_url = webAjax + 'chat.ajax.php';
 var online_button = '<img src="' + homePublicUrl + 'img/statusonline.png">';

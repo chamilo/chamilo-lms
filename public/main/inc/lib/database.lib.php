@@ -33,7 +33,6 @@ class Database
     ) {
         $config = self::getDoctrineConfig($entityRootPath);
         $config->setAutoGenerateProxyClasses(true);
-
         $config->setEntityNamespaces(
             [
                 'ChamiloUserBundle' => 'Chamilo\UserBundle\Entity',
@@ -49,7 +48,8 @@ class Database
         $entityManager = EntityManager::create($params, $config);
         $connection = $entityManager->getConnection();
 
-        $sysPath = !empty($sysPath) ? $sysPath : api_get_path(SYS_PATH);
+        //$sysPath = !empty($sysPath) ? $sysPath : api_get_path(SYS_PATH);
+        $sysPath = api_get_path(SYMFONY_SYS_PATH);
         AnnotationRegistry::registerFile(
             $sysPath."vendor/symfony/doctrine-bridge/Validator/Constraints/UniqueEntity.php"
         );

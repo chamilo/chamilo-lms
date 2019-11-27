@@ -15,7 +15,7 @@
  */
 if (defined('SYSTEM_INSTALLATION')) {
     // Write the system config file
-    write_system_config_file(api_get_path(SYS_PATH).'config/configuration.php');
+    write_system_config_file(api_get_path(SYMFONY_SYS_PATH).'config/configuration.php');
 } else {
     echo 'You are not allowed here !'.__FILE__;
 }

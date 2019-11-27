@@ -31,7 +31,7 @@ ini_set('memory_limit', -1);
 ini_set('max_execution_time', 0);
 error_reporting(-1);
 
-require_once __DIR__.'/../../vendor/autoload.php';
+require_once __DIR__.'/../../../vendor/autoload.php';
 
 define('SYSTEM_INSTALLATION', 1);
 define('INSTALL_TYPE_UPDATE', 'update');
@@ -76,7 +76,7 @@ if (!array_key_exists($installationLanguage, get_language_folder_list())) {
 // Set translation
 $translator = new Translator($installationLanguage);
 $translator->addLoader('po', new PoFileLoader());
-$translator->addResource('po', "../../translations/installation.$installationLanguage.po", $installationLanguage);
+$translator->addResource('po', "../../../translations/installation.$installationLanguage.po", $installationLanguage);
 Container::$translator = $translator;
 
 // The function api_get_setting() might be called within the installation scripts.
@@ -560,8 +560,8 @@ if (isset($_POST['step2'])) {
         migrateSwitch($my_old_version, $manager);
 
         // Create .env.local file
-        $envFile = api_get_path(SYS_PATH).'.env.local';
-        $distFile = api_get_path(SYS_PATH).'.env';
+        $envFile = api_get_path(SYMFONY_SYS_PATH).'.env.local';
+        $distFile = api_get_path(SYMFONY_SYS_PATH).'.env';
 
         $params = [
             '{{DATABASE_HOST}}' => $dbHostForm,
@@ -620,8 +620,8 @@ if (isset($_POST['step2'])) {
 
         $manager = $database->getManager();
         // Create .env.local file
-        $envFile = api_get_path(SYS_PATH).'.env.local';
-        $distFile = api_get_path(SYS_PATH).'.env';
+        $envFile = api_get_path(SYMFONY_SYS_PATH).'.env.local';
+        $distFile = api_get_path(SYMFONY_SYS_PATH).'.env';
 
         $params = [
             '{{DATABASE_HOST}}' => $dbHostForm,
@@ -718,11 +718,11 @@ $poweredBy = 'Powered by <a href="http://www.chamilo.org" target="_blank"> Chami
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <style type="text/css" media="screen, projection">
-        @import "../../public/build/css/app.css";
-        @import "../../public/build/css/themes/chamilo/default.css";
+        @import "../../build/css/app.css";
+        @import "../../build/css/themes/chamilo/default.css";
     </style>
-    <script type="text/javascript" src="../../public/build/runtime.js"></script>
-    <script type="text/javascript" src="../../public/build/app.js"></script>
+    <script type="text/javascript" src="../../../build/runtime.js"></script>
+    <script type="text/javascript" src="../../../build/app.js"></script>
     <script>
         $(function() {
             $("#details_button").click(function() {

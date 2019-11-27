@@ -380,7 +380,6 @@ function write_system_config_file($path)
     global $new_version;
     global $new_version_stable;
 
-    $root_sys = api_add_trailing_slash(str_replace('\\', '/', realpath($pathForm)));
     $content = file_get_contents(__DIR__.'/'.SYSTEM_CONFIG_FILENAME);
 
     $config['{DATE_GENERATED}'] = date('r');
@@ -389,8 +388,7 @@ function write_system_config_file($path)
     $config['{DATABASE_USER}'] = $dbUsernameForm;
     $config['{DATABASE_PASSWORD}'] = $dbPassForm;
     $config['{DATABASE_MAIN}'] = $dbNameForm;
-    $config['{ROOT_WEB}'] = $urlForm;
-    $config['{ROOT_SYS}'] = $root_sys;
+
     $config['{URL_APPEND_PATH}'] = $urlAppendPath;
     $config['{PLATFORM_LANGUAGE}'] = $languageForm;
     $config['{SECURITY_KEY}'] = md5(uniqid(rand().time()));
@@ -945,20 +943,16 @@ function display_requirements(
     echo '<table class="table table-bordered">
             '.$oldConf.'
             <tr>
-                <td class="requirements-item">'.api_get_path(SYS_APP_PATH).'</td>
-                <td class="requirements-value">'.check_writable(api_get_path(SYS_APP_PATH)).'</td>
+                <td class="requirements-item">'.api_get_path(SYMFONY_SYS_PATH).'config</td>
+                <td class="requirements-value">'.check_writable(api_get_path(SYMFONY_SYS_PATH).'config').'</td>
             </tr>
             <tr>
-                <td class="requirements-item">'.api_get_path(SYS_PATH).'config</td>
-                <td class="requirements-value">'.check_writable(api_get_path(SYS_PATH).'config').'</td>
+                <td class="requirements-item">'.api_get_path(SYMFONY_SYS_PATH).'vendor/</td>
+                <td class="requirements-value">'.checkReadable(api_get_path(SYMFONY_SYS_PATH).'vendor').'</td>
             </tr>
             <tr>
-                <td class="requirements-item">'.api_get_path(SYS_PATH).'vendor/</td>
-                <td class="requirements-value">'.checkReadable(api_get_path(SYS_PATH).'vendor').'</td>
-            </tr>
-            <tr>
-                <td class="requirements-item">'.api_get_path(SYS_PUBLIC_PATH).'</td>
-                <td class="requirements-value">'.check_writable(api_get_path(SYS_PUBLIC_PATH)).'</td>
+                <td class="requirements-item">'.api_get_path(SYS_PATH).'</td>
+                <td class="requirements-value">'.check_writable(api_get_path(SYS_PATH)).'</td>
             </tr>           
             <tr>
                 <td class="requirements-item">'.get_lang('Permissions for new directories').'</td>
@@ -1008,12 +1002,6 @@ function display_requirements(
         $perm = api_get_permissions_for_new_directories();
         $perm_file = api_get_permissions_for_new_files();
         $notWritable = [];
-
-        $checked_writable = api_get_path(SYS_APP_PATH);
-        if (!is_writable($checked_writable)) {
-            $notWritable[] = $checked_writable;
-            @chmod($checked_writable, $perm);
-        }
 
         $checked_writable = api_get_path(SYS_PUBLIC_PATH);
         if (!is_writable($checked_writable)) {
@@ -1113,7 +1101,7 @@ function display_license_agreement()
     echo '</div>'; ?>
     <div class="form-group">
         <pre style="overflow: auto; height: 200px; margin-top: 5px;">
-            <?php echo api_htmlentities(@file_get_contents(api_get_path(SYS_PATH).'documentation/license.txt')); ?>
+            <?php echo api_htmlentities(@file_get_contents(api_get_path(SYMFONY_SYS_PATH).'documentation/license.txt')); ?>
         </pre>
     </div>
     <div class="form-group form-check">

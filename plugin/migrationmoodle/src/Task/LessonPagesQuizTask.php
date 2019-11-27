@@ -10,13 +10,13 @@ use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\LoadedCourseLookup
 use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\LoadedLpItemLookup;
 
 /**
- * Class LessonQuestionPagesQuizTask.
+ * Class LessonPagesQuizTask.
  *
  * Task to convert the question pages from a moodle lesson in one chamilo quiz with one question.
  *
  * @package Chamilo\PluginBundle\MigrationMoodle\Task
  */
-class LessonQuestionPagesQuizTask extends BaseTask
+class LessonPagesQuizTask extends BaseTask
 {
     /**
      * @return array

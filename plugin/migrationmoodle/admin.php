@@ -53,11 +53,11 @@ $menu = [
         'parent' => 8,
     ],
     10 => [
-        'action' => 'lesson_question_pages_quiz',
+        'action' => 'lesson_pages_quiz',
         'parent' => 7,
     ],
     11 => [
-        'action' => 'lesson_question_pages_question',
+        'action' => 'lesson_pages_quiz_question',
         'parent' => 10,
     ],
     12 => [

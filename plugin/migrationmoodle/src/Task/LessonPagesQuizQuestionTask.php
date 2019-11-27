@@ -12,7 +12,7 @@ use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\QuizQuestionTypeFr
 use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\ReplaceFilePaths;
 
 /**
- * Class LessonQuestionPagesQuestionTask.
+ * Class LessonPagesQuizQuestionTask.
  *
  * Task to convert the question pages from a moodle lesson in one chamilo question to be added in quiz already creadted.
  *
@@ -21,7 +21,7 @@ use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\ReplaceFilePaths;
  *
  * @package Chamilo\PluginBundle\MigrationMoodle\Task
  */
-class LessonQuestionPagesQuestionTask extends BaseTask
+class LessonPagesQuizQuestionTask extends BaseTask
 {
     /**
      * @return array

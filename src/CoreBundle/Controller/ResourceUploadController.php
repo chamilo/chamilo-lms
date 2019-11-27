@@ -35,14 +35,14 @@ class ResourceUploadController extends BlueimpController
         $type = $request->get('type');
         $tool = $request->get('tool');
         $id = $request->get('id');
-        $courseCode = $request->get('cidReq');
-        $sessionId = $request->get('id_session');
+        $courseId = $request->get('cid');
+        $sessionId = $request->get('sid');
 
         $controller = $container->get('Chamilo\CoreBundle\Controller\ResourceController');
 
         $course = null;
-        if (!empty($courseCode)) {
-            $course = $doctrine->getRepository('ChamiloCoreBundle:Course')->findOneBy(['code' => $courseCode]);
+        if (!empty($courseId)) {
+            $course = $doctrine->getRepository('ChamiloCoreBundle:Course')->find($courseId);
         }
 
         $session = null;

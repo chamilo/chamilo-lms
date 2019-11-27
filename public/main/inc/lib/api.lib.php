@@ -1923,19 +1923,19 @@ function api_get_cidreq_params($courseCode, $sessionId = 0, $groupId = 0)
  */
 function api_get_cidreq($addSessionId = true, $addGroupId = true, $origin = '')
 {
-    $courseCode = api_get_course_id();
-    $url = empty($courseCode) ? '' : 'cidReq='.htmlspecialchars($courseCode);
+    $courseId = api_get_course_int_id();
+    $url = empty($courseId) ? '' : 'cid='.$courseId;
     $origin = empty($origin) ? api_get_origin() : Security::remove_XSS($origin);
 
     if ($addSessionId) {
         if (!empty($url)) {
-            $url .= api_get_session_id() == 0 ? '&id_session=0' : '&id_session='.api_get_session_id();
+            $url .= api_get_session_id() == 0 ? '&sid=0' : '&sid='.api_get_session_id();
         }
     }
 
     if ($addGroupId) {
         if (!empty($url)) {
-            $url .= api_get_group_id() == 0 ? '&gidReq=0' : '&gidReq='.api_get_group_id();
+            $url .= api_get_group_id() == 0 ? '&gid=0' : '&gid='.api_get_group_id();
         }
     }
 
@@ -2390,7 +2390,7 @@ function get_status_from_code($status_code)
  */
 function api_get_session_id()
 {
-    return (int) Session::read('id_session', 0);
+    return (int) Session::read('sid', 0);
 }
 
 /**
@@ -2400,7 +2400,7 @@ function api_get_session_id()
  */
 function api_get_group_id()
 {
-    return Session::read('_gid', 0);
+    return Session::read('gid', 0);
 }
 
 /**

@@ -122,8 +122,8 @@ class ResourceNodeVoter extends Voter
         $request = $this->container->get('request_stack')->getCurrentRequest();
 
         // @todo fix parameters.
-        $courseCode = $request->get('cidReq');
-        $sessionId = $request->get('id_session');
+        $courseId = $request->get('cid');
+        $sessionId = $request->get('sid');
 
         $links = $resourceNode->getResourceLinks();
         $linkFound = false;
@@ -153,10 +153,10 @@ class ResourceNodeVoter extends Voter
             // @todo Check if resource was sent to a group inside a course
             // Check if resource was sent to a course inside a session
             if ($linkSession instanceof Session && !empty($sessionId) &&
-                $linkCourse instanceof Course && !empty($courseCode)
+                $linkCourse instanceof Course && !empty($courseId)
             ) {
                 $session = $this->container->get('chamilo_core.entity.manager.session_manager')->find($sessionId);
-                $course = $courseManager->findOneByCode($courseCode);
+                $course = $courseManager->find($courseId);
                 if ($session instanceof Session &&
                     $course instanceof Course &&
                     $linkCourse->getCode() === $course->getCode() &&
@@ -168,8 +168,8 @@ class ResourceNodeVoter extends Voter
             }
 
             // Check if resource was sent to a course
-            if ($linkCourse instanceof Course && !empty($courseCode)) {
-                $course = $courseManager->findOneByCode($courseCode);
+            if ($linkCourse instanceof Course && !empty($courseId)) {
+                $course = $courseManager->find($courseId);
 
                 if ($course instanceof Course &&
                     $linkCourse->getCode() === $course->getCode()

@@ -110,18 +110,14 @@ class ResourceController extends AbstractResourceController implements CourseCon
         $source->initQueryBuilder($qb);
         $grid->setSource($source);
 
-        $grid->setRouteUrl(
-            $this->generateUrl(
-                'chamilo_core_resource_list',
-                [
-                    'tool' => $tool,
-                    'type' => $type,
-                    'cidReq' => $this->getCourse()->getCode(),
-                    'id_session' => $this->getSessionId(),
-                    'id' => $id,
-                ]
-            )
-        );
+        $courseParams = $this->getCourseParams();
+
+        $params = $courseParams;
+        $params['tool'] = $tool;
+        $params['type'] = $type;
+        $params['id'] = $id;
+
+        $grid->setRouteUrl($this->generateUrl('chamilo_core_resource_list', $params));
 
         $title = $grid->getColumn('title');
         $title->setSafe(false); // allows links in the title
@@ -133,15 +129,10 @@ class ResourceController extends AbstractResourceController implements CourseCon
         //$grid->setLimits(2);
 
         $translation = $this->translator;
-        $courseIdentifier = $course->getCode();
-
-        $routeParams = [
-            'tool' => $tool,
-            'type' => $type,
-            'cidReq' => $courseIdentifier,
-            'id_session' => $this->getSessionId(),
-            'id',
-        ];
+        $routeParams = $courseParams;
+        $routeParams['tool']  = $tool;
+        $routeParams['type']  = $type;
+        $routeParams['id']  = null;
 
         // Title link.
         $grid->getColumn('title')->setTitle($this->trans('Name'));
@@ -414,6 +405,11 @@ class ResourceController extends AbstractResourceController implements CourseCon
 
         $resourceNodeParentId = $resourceNode->getId();
 
+        $routeParams = $this->getCourseParams();
+        $routeParams['tool'] = $tool;
+        $routeParams['type'] = $type;
+        $routeParams['id'] = $resourceNodeParentId;
+
         $form = $repository->getForm($this->container->get('form.factory'), $resource);
 
         if ($resourceNode->isEditable()) {
@@ -424,13 +420,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
                     'mapped' => false,
                     'config' => [
                         'filebrowserImageBrowseRoute' => 'editor_filemanager',
-                        'filebrowserImageBrowseRouteParameters' => [
-                            'tool' => $tool,
-                            'type' => $type,
-                            'cidReq' => $this->getCourse()->getCode(),
-                            'id_session' => $this->getSessionId(),
-                            'id' => $resourceNodeParentId,
-                        ],
+                        'filebrowserImageBrowseRouteParameters' => $routeParams,
                     ],
                 ]
             );
@@ -458,19 +448,10 @@ class ResourceController extends AbstractResourceController implements CourseCon
             $this->addFlash('success', $this->trans('Updated'));
 
             if ($newResource->getResourceNode()->hasResourceFile()) {
-                $resourceNodeParentId = $newResource->getResourceNode()->getParent()->getId();
+                //$resourceNodeParentId = $newResource->getResourceNode()->getParent()->getId();
             }
 
-            return $this->redirectToRoute(
-                'chamilo_core_resource_list',
-                [
-                    'id' => $resourceNodeParentId,
-                    'tool' => $tool,
-                    'type' => $type,
-                    'cidReq' => $this->getCourse()->getCode(),
-                    'id_session' => $this->getSessionId(),
-                ]
-            );
+            return $this->redirectToRoute('chamilo_core_resource_list', $routeParams);
         }
 
         return $this->render(
@@ -637,15 +618,14 @@ class ResourceController extends AbstractResourceController implements CourseCon
         $this->addFlash('success', $this->trans('Deleted'));
         $em->flush();
 
+        $routeParams = $this->getCourseParams();
+        $routeParams['tool'] = $tool;
+        $routeParams['type'] = $type;
+        $routeParams['id'] = $parentId;
+
         return $this->redirectToRoute(
             'chamilo_core_resource_list',
-            [
-                'id' => $parentId,
-                'tool' => $tool,
-                'type' => $type,
-                'cidReq' => $this->getCourse()->getCode(),
-                'id_session' => $this->getSessionId(),
-            ]
+            $routeParams
         );
     }
 
@@ -681,16 +661,12 @@ class ResourceController extends AbstractResourceController implements CourseCon
         $this->addFlash('success', $this->trans('Deleted'));
         $em->flush();
 
-        return $this->redirectToRoute(
-            'chamilo_core_resource_list',
-            [
-                'id' => $parentId,
-                'tool' => $tool,
-                'type' => $type,
-                'cidReq' => $this->getCourse()->getCode(),
-                'id_session' => $this->getSessionId(),
-            ]
-        );
+        $routeParams = $this->getCourseParams();
+        $routeParams['tool'] = $tool;
+        $routeParams['type'] = $type;
+        $routeParams['id'] = $parentId;
+
+        return $this->redirectToRoute('chamilo_core_resource_list', $routeParams);
     }
 
     /**
@@ -867,15 +843,14 @@ class ResourceController extends AbstractResourceController implements CourseCon
         //$helper = $this->container->get('oneup_uploader.templating.uploader_helper');
         //$endpoint = $helper->endpoint('courses');
 
+        $routeParams = $this->getCourseParams();
+        $routeParams['tool'] = $tool;
+        $routeParams['type'] = $type;
+        $routeParams['id'] = $id;
+
         return $this->render(
             '@ChamiloTheme/Resource/upload.html.twig',
-            [
-                'id' => $id,
-                'type' => $type,
-                'tool' => $tool,
-                'cidReq' => $this->getCourse()->getCode(),
-                'id_session' => $this->getSessionId(),
-            ]
+            $routeParams
         );
     }
 
@@ -884,8 +859,12 @@ class ResourceController extends AbstractResourceController implements CourseCon
         $tool = $request->get('tool');
         $type = $request->get('type');
         $resourceNodeId = $request->get('id');
-        $courseCode = $request->get('cidReq');
-        $sessionId = $request->get('id_session');
+        $courseCode = $request->get('cid');
+        $sessionId = $request->get('sid');
+
+        $routeParams = $this->getCourseParams();
+        $routeParams['tool'] = $tool;
+        $routeParams['type'] = $type;
 
         if (!empty($resourceNodeId)) {
             $breadcrumb = $this->breadcrumbBlockService;
@@ -896,7 +875,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
                 [
                     'uri' => $this->generateUrl(
                         'chamilo_core_resource_index',
-                        ['tool' => $tool, 'type' => $type, 'cidReq' => $courseCode, 'id_session' => $sessionId]
+                        $routeParams
                     ),
                 ]
             );
@@ -927,35 +906,28 @@ class ResourceController extends AbstractResourceController implements CourseCon
             $parentList = array_reverse($parentList);
             /** @var AbstractResource $item */
             foreach ($parentList as $item) {
+                $params = $routeParams;
+                $params['id'] = $item->getResourceNode()->getId();
                 $breadcrumb->addChild(
                     $item->getResourceName(),
                     [
                         'uri' => $this->generateUrl(
                             'chamilo_core_resource_list',
-                            [
-                                'tool' => $tool,
-                                'type' => $type,
-                                'id' => $item->getResourceNode()->getId(),
-                                'cidReq' => $courseCode,
-                                'id_session' => $sessionId,
-                            ]
+                            $params
                         ),
                     ]
                 );
             }
+
+            $params = $routeParams;
+            $params['id'] = $originalParent->getId();
 
             $breadcrumb->addChild(
                 $originalResource->getResourceName(),
                 [
                     'uri' => $this->generateUrl(
                         'chamilo_core_resource_list',
-                        [
-                            'tool' => $tool,
-                            'type' => $type,
-                            'id' => $originalParent->getId(),
-                            'cidReq' => $courseCode,
-                            'id_session' => $sessionId,
-                        ]
+                        $params
                     ),
                 ]
             );
@@ -1045,7 +1017,14 @@ class ResourceController extends AbstractResourceController implements CourseCon
 
         $form = $repository->getForm($this->container->get('form.factory'));
 
+        $courseParams = $this->getCourseParams();
+
         if ($fileType === 'file') {
+            $params = $courseParams;
+            $params['tool'] = $tool;
+            $params['type'] = $type;
+            $params['id'] = $resourceNodeParentId;
+
             $form->add(
                 'content',
                 CKEditorType::class,
@@ -1053,13 +1032,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
                     'mapped' => false,
                     'config' => [
                         'filebrowserImageBrowseRoute' => 'editor_filemanager',
-                        'filebrowserImageBrowseRouteParameters' => [
-                            'tool' => $tool,
-                            'type' => $type,
-                            'cidReq' => $this->getCourse()->getCode(),
-                            'id_session' => $this->getSessionId(),
-                            'id' => $resourceNodeParentId,
-                        ],
+                        'filebrowserImageBrowseRouteParameters' => $params,
                     ],
                 ]
             );
@@ -1171,15 +1144,14 @@ class ResourceController extends AbstractResourceController implements CourseCon
             $em->flush();
             $this->addFlash('success', $this->trans('Saved'));
 
+            $params = $this->getCourseParams();
+            $params['tool'] = $tool;
+            $params['type'] = $type;
+            $params['id'] = $resourceNodeParentId;
+
             return $this->redirectToRoute(
                 'chamilo_core_resource_list',
-                [
-                    'id' => $resourceNodeParentId,
-                    'tool' => $tool,
-                    'type' => $type,
-                    'cidReq' => $this->getCourse()->getCode(),
-                    'id_session' => $this->getSessionId(),
-                ]
+                $params
             );
         }
 

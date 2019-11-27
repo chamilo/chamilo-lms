@@ -123,13 +123,13 @@ class LoginSuccessHandler
                 $key = array_keys($personal_course_list);
                 $course_info = $personal_course_list[$key[0]]['course_info'];
                 $id_session = isset($course_info['session_id']) ? $course_info['session_id'] : 0;
-                $url = api_get_path(WEB_COURSE_PATH).$course_info['directory'].'/index.php?id_session='.$id_session;
+                $url = api_get_path(WEB_COURSE_PATH).$course_info['directory'].'/index.php?sid='.$id_session;
             }
 
             if ($count_of_sessions == 0 && $count_of_courses_no_sessions == 1) {
                 $key = array_keys($personal_course_list);
                 $course_info = $personal_course_list[$key[0]]['course_info'];
-                $url = api_get_path(WEB_COURSE_PATH).$course_info['directory'].'/index.php?id_session=0';
+                $url = api_get_path(WEB_COURSE_PATH).$course_info['directory'].'/index.php?sid=0';
             }
         }
 

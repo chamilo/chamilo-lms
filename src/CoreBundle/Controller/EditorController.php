@@ -109,7 +109,7 @@ class EditorController extends BaseController
                     'tool' => 'document',
                     'type' => 'files',
                     'cidReq' => $this->getCourse()->getCode(),
-                    'id_session' => $sessionId,
+                    'sid' => $sessionId,
                     'id' => $id,
                 ]
             )
@@ -118,9 +118,7 @@ class EditorController extends BaseController
         $grid->getColumn('title')->setTitle($translator->trans('Name'));
         $grid->getColumn('filetype')->setTitle($translator->trans('Type'));
 
-        $courseIdentifier = $course->getCode();
-
-        $routeParams = ['cidReq' => $courseIdentifier, 'id', 'id_session' => $sessionId];
+        $routeParams = $this->getCourseParams();
 
         $removePath = $course->getResourceNode()->getPath();
 
@@ -138,11 +136,8 @@ class EditorController extends BaseController
                 unset($myParams[0]);
                 $icon = $resourceNode->getIcon().' &nbsp;';
                 if ($resourceNode->hasResourceFile()) {
-                    $documentParams = [
-                        'course' => $course->getCode(),
-                        'cidReq' => $course->getCode(),
-                        'file' => $resourceNode->getPathForDisplayRemoveBase($removePath),
-                    ];
+                    $documentParams = $this->getCourseParams();
+                    $documentParams['file'] = $resourceNode->getPathForDisplayRemoveBase($removePath);
                     $url = $router->generate(
                         'resources_document_get_file',
                         $documentParams

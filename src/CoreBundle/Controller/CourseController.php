@@ -5,6 +5,7 @@ namespace Chamilo\CoreBundle\Controller;
 
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Form\Type\CourseType;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -42,7 +43,7 @@ class CourseController extends AbstractController
 
             return $this->redirectToRoute(
                 'chamilo_core_course_welcome',
-                ['course' => $course]
+                ['cid' => $course->getId()]
             );
         }
 
@@ -53,13 +54,19 @@ class CourseController extends AbstractController
     }
 
     /**
-     * @Route("/welcome/{course}")
+     * @Route("/{courseCode}", name="chamilo_core_course_home")
      *
-     * @ParamConverter(
-     *      "course",
-     *      class="ChamiloCoreBundle:Course",
-     *      options={"repository_method" = "findOneByCode"}
-     * )
+     * @Entity("course", expr="repository.findOneByCode(courseCode)")
+     */
+    public function homeAction(Course $course): Response
+    {
+        return $this->render('@ChamiloTheme/Course/welcome.html.twig', ['course' => $course]);
+    }
+
+    /**
+     * @Route("{courseCode}/welcome/", name="chamilo_core_course_welcome")
+     *
+     * @Entity("course", expr="repository.find(cid)")
      */
     public function welcomeAction(Course $course): Response
     {

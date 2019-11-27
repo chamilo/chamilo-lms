@@ -77,7 +77,7 @@ class BreadcrumbBlockService extends BaseBreadcrumbMenuBlockService
                     'route' => 'course_home',
                     'routeParameters' => [
                         'course' => $code,
-                        'id_session' => $sessionId,
+                        'sid' => $sessionId,
                     ],
                 ]
             );

@@ -122,7 +122,7 @@ class CourseHomeController extends ToolBaseController
                     $session_key = 'lp_autolaunch_'.$session_id.'_'.api_get_course_int_id().'_'.api_get_user_id();
                     if (!isset($_SESSION[$session_key])) {
                         // Redirecting to the LP
-                        $url = api_get_path(WEB_CODE_PATH).'lp/lp_controller.php?'.api_get_cidreq().'&id_session='.$session_id;
+                        $url = api_get_path(WEB_CODE_PATH).'lp/lp_controller.php?'.api_get_cidreq();
                         $_SESSION[$session_key] = true;
                         header("Location: $url");
                         exit;
@@ -179,7 +179,7 @@ class CourseHomeController extends ToolBaseController
                     $autoLaunchWarning = get_lang('The forum\'s auto-launch setting is on. Students will be redirected to the forum tool when entering this course.');
                 }
             } else {
-                $url = api_get_path(WEB_CODE_PATH).'forum/index.php?'.api_get_cidreq().'&id_session='.$session_id;
+                $url = api_get_path(WEB_CODE_PATH).'forum/index.php?'.api_get_cidreq();
                 header("Location: $url");
                 exit;
             }
@@ -196,7 +196,7 @@ class CourseHomeController extends ToolBaseController
                     }
                 } else {
                     // Redirecting to the document
-                    $url = api_get_path(WEB_CODE_PATH).'exercise/exercise.php?'.api_get_cidreq().'&id_session='.$session_id;
+                    $url = api_get_path(WEB_CODE_PATH).'exercise/exercise.php?'.api_get_cidreq();
                     header("Location: $url");
                     exit;
                 }
@@ -231,7 +231,7 @@ class CourseHomeController extends ToolBaseController
                         $row = Database::fetch_array($result, 'ASSOC');
                         $exerciseId = $row['iid'];
                         $url = api_get_path(WEB_CODE_PATH).
-                            'exercise/overview.php?exerciseId='.$exerciseId.'&'.api_get_cidreq().'&id_session='.$session_id;
+                            'exercise/overview.php?exerciseId='.$exerciseId.'&'.api_get_cidreq();
                         header("Location: $url");
                         exit;
                     }
@@ -247,7 +247,7 @@ class CourseHomeController extends ToolBaseController
                 }
             } else {
                 // Redirecting to the document
-                $url = api_get_path(WEB_CODE_PATH).'document/document.php?'.api_get_cidreq().'&id_session='.$session_id;
+                $url = api_get_path(WEB_CODE_PATH).'document/document.php?'.api_get_cidreq();
                 header("Location: $url");
                 exit;
             }
@@ -864,7 +864,7 @@ class CourseHomeController extends ToolBaseController
                     $sessionData = Session::read($session_key);
                     if (!isset($sessionData)) {
                         //redirecting to the Exercise
-                        $url = api_get_path(WEB_CODE_PATH).'exercise/exercise.php?'.api_get_cidreq().'&id_session='.$session_id;
+                        $url = api_get_path(WEB_CODE_PATH).'exercise/exercise.php?'.api_get_cidreq();
                         $_SESSION[$session_key] = true;
 
                         header("Location: $url");
@@ -927,7 +927,7 @@ class CourseHomeController extends ToolBaseController
                     $session_key = 'lp_autolunch_'.$session_id.'_'.api_get_course_int_id().'_'.api_get_user_id();
                     if (!isset($_SESSION[$session_key])) {
                         //redirecting to the LP
-                        $url = api_get_path(WEB_CODE_PATH).'lp/lp_controller.php?'.api_get_cidreq().'&id_session='.$session_id;
+                        $url = api_get_path(WEB_CODE_PATH).'lp/lp_controller.php?'.api_get_cidreq();
                         $_SESSION[$session_key] = true;
                         header("Location: $url");
                         exit;

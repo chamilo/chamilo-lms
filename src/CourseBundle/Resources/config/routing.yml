@@ -1,7 +1,3 @@
-course_url:
-    path: courses
-#    resource: '@ChamiloCoreBundle/Controller/Admin'
-
 core_tool:
     resource: '@ChamiloCourseBundle/Controller'
     type: annotation

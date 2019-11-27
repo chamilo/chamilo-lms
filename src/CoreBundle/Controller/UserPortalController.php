@@ -292,8 +292,8 @@ class UserPortalController extends BaseController
 
                     if (!empty($course_info)) {
                         $url = api_get_path(WEB_CODE_PATH);
-                        $url .= 'course_info/start.php?cidReq=';
-                        $url .= $course_info['code'];
+                        $url .= 'course_info/start.php?cid=';
+                        $url .= $course_info['real_id'];
                         $url .= '&first=1';
                         header('Location: '.$url);
                         exit;

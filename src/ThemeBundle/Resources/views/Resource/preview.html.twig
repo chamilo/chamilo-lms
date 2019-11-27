@@ -11,8 +11,8 @@
                      "{{ url(
                          'chamilo_core_resource_view', {
                              'id': resource.resourceNode.id,
-                             'cidReq': course.code,
-                             'id_session': sessionObj.id,
+                             'cid': course.id,
+                             'sid': sessionObj.id,
                              'type' : type,
                              'tool' : tool,
                              'filter' : 'resource_show_preview'
@@ -26,8 +26,8 @@
             <a
                 href="{{ url('chamilo_core_resource_view', {
                 'id': resource.resourceNode.id,
-                'cidReq': course.code,
-                'id_session': sessionObj.id,
+                'cid': course.id,
+                'sid': sessionObj.id,
                 'type' : type,
                 'tool' : tool,
                 'mode' : 'download'

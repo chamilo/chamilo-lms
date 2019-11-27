@@ -67,7 +67,7 @@ abstract class BaseController extends AbstractController
     }
 
     /**
-     * Gets the current Chamilo session based in the "id_session" $_SESSION variable.
+     * Gets the current Chamilo session based in the "sid" $_SESSION variable.
      *
      * @return Session|null
      */
@@ -76,7 +76,7 @@ abstract class BaseController extends AbstractController
         $request = $this->getRequest();
 
         if ($request) {
-            $sessionId = $request->getSession()->get('id_session', 0);
+            $sessionId = $request->getSession()->get('sid', 0);
         }
 
         if (empty($sessionId)) {
@@ -91,17 +91,27 @@ abstract class BaseController extends AbstractController
         $url = '';
         $course = $this->getCourse();
         if ($course) {
-            $url = 'cidReq='.$course->getCode();
+            $url = 'cid='.$course->getId();
         }
         $session = $this->getCourseSession();
 
         if ($session) {
-            $url .= '&id_session='.$session->getId();
+            $url .= '&sid='.$session->getId();
         } else {
-            $url .= '&id_session=0';
+            $url .= '&sid=0';
         }
 
         return $url;
+    }
+
+    public function getCourseParams(): array
+    {
+        $routeParams = ['cid' => $this->getCourse()->getId()];
+        $session = $this->getCourseSession();
+        $sessionId = $session ? $session->getId() : 0;
+        $routeParams['sid'] = $sessionId;
+
+        return $routeParams;
     }
 
     /**

@@ -73,20 +73,14 @@ class LocaleListener implements EventSubscriberInterface
             }
 
             // 3. Check course locale
-            $courseCode = $request->get('course');
-
-            // Detect if the course was set with a cidReq:
-            if (empty($courseCode)) {
-                $courseCodeFromRequest = $request->get('cidReq');
-                $courseCode = $courseCodeFromRequest;
-            }
+            $courseId = $request->get('cid');
 
             /** @var EntityManager $em */
             $em = $container->get('doctrine')->getManager();
 
-            if (!empty($courseCode)) {
+            if (!empty($courseId)) {
                 /** @var Course $course */
-                $course = $em->getRepository('ChamiloCoreBundle:Course')->findOneByCode($courseCode);
+                $course = $em->getRepository('ChamiloCoreBundle:Course')->find($courseId);
                 // 3. Check course locale
                 /** @var Course $course */
                 if (!empty($course)) {

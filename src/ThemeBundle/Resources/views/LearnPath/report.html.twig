@@ -56,7 +56,7 @@
                 var newTD = $('<td>', {
                     colspan: 7
                 });
-                newTD.load('{{ _p.web_main ~ 'mySpace/lp_tracking.php?action=stats&extend_all=0&id_session=' ~ session_id ~ '&course=' ~ course_code ~ '&lp_id=' ~ lp_id ~ '&student_id=\' + userId + \'&origin=tracking_course&allow_extend=0' }} .table-responsive', function () {
+                newTD.load('{{ _p.web_main ~ 'mySpace/lp_tracking.php?action=stats&extend_all=0&sid=' ~ session_id ~ '&cid=' ~ course_id ~ '&lp_id=' ~ lp_id ~ '&student_id=\' + userId + \'&origin=tracking_course&allow_extend=0' }} .table-responsive', function () {
                     newTD.appendTo(trDetail);
                 });
                 trDetail.removeClass('hide');

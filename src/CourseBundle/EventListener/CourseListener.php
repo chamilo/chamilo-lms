@@ -58,23 +58,13 @@ class CourseListener
 
         $container = $this->container;
         $translator = $container->get('translator');
-        $courseCode = $request->get('course');
-
-        // Detect if the course was set with a cidReq:
-        if (empty($courseCode)) {
-            $courseCodeFromRequest = $request->get('cidReq');
-            $courseCode = $courseCodeFromRequest;
-        }
-
-        if (empty($courseCode)) {
-            if (!empty($request->get('cDir'))) {
-                $courseCode = $request->get('cDir');
+        $courseId = $request->get('cid');
+        $courseCode = null;
+        var_dump($request->get('courseCode'));
+        if (empty($courseId)) {
+            if (!empty($request->get('courseCode'))) {
+                $courseCode = $request->get('courseCode');
             }
-        }
-
-        $courseId = null;
-        if (empty($courseCode)) {
-            $courseId = $request->get('c_id');
         }
 
         /** @var EntityManager $em */
@@ -83,25 +73,18 @@ class CourseListener
         //$alreadyVisited = $sessionHandler->get('course_already_visited');
 
         $course = null;
-        if (!empty($courseCode)) {
+        if (!empty($courseId)) {
+            $course = $em->getRepository('ChamiloCoreBundle:Course')->find($courseId);
+        }
+
+        if ($course === null) {
             // Try with the course code
             /** @var Course $course */
             $course = $em->getRepository('ChamiloCoreBundle:Course')->findOneBy(['code' => $courseCode]);
-            if ($course === null) {
-                $course = $em->getRepository('ChamiloCoreBundle:Course')->findOneBy(['directory' => $courseCode]);
-                if ($course === null) {
-                    throw new NotFoundHttpException($translator->trans('Course does not exist'));
-                }
-                //throw new NotFoundHttpException($translator->trans('Course does not exist'));
-            }
         }
 
-        if ($course === null && !empty($courseId)) {
-            /** @var Course $course */
-            $course = $em->getRepository('ChamiloCoreBundle:Course')->find($courseId);
-            if ($course === null) {
-                throw new NotFoundHttpException($translator->trans('Course does not exist'));
-            }
+        if ($course === null) {
+            throw new NotFoundHttpException($translator->trans('Course does not exist'));
         }
 
         global $cidReset;
@@ -121,11 +104,11 @@ class CourseListener
             $sessionHandler->set('_course', $courseInfo);
 
             // Session
-            $sessionId = (int) $request->get('id_session');
+            $sessionId = (int) $request->get('sid');
             $session = null;
             if (empty($sessionId)) {
                 $sessionHandler->remove('session_name');
-                $sessionHandler->remove('id_session');
+                $sessionHandler->remove('sid');
                 $sessionHandler->remove('sessionObj');
                 // Check if user is allowed to this course
                 // See CourseVoter.php
@@ -148,7 +131,7 @@ class CourseListener
                     }
 
                     $sessionHandler->set('session_name', $session->getName());
-                    $sessionHandler->set('id_session', $session->getId());
+                    $sessionHandler->set('sid', $session->getId());
                     $sessionHandler->set('sessionObj', $session);
 
                     $container->get('twig')->addGlobal('sessionObj', $session);
@@ -158,7 +141,7 @@ class CourseListener
             }
 
             // Group
-            $groupId = (int) $request->get('gidReq');
+            $groupId = (int) $request->get('gid');
 
             if (!empty($groupId)) {
                 $group = $em->getRepository('ChamiloCourseBundle:CGroupInfo')->find($groupId);
@@ -240,8 +223,8 @@ class CourseListener
             }
         }*/
 
-        $groupId = (int) $request->get('gidReq');
-        $sessionId = (int) $request->get('id_session');
+        $groupId = (int) $request->get('gid');
+        $sessionId = (int) $request->get('sid');
 
         // cidReset is set in the global.inc.php files
         global $cidReset;
@@ -310,12 +293,13 @@ class CourseListener
         }
 
         $sessionHandler->remove('toolgroup');
-        $sessionHandler->remove('_gid');
+        $sessionHandler->remove('_cid');
+        $sessionHandler->remove('cid');
+        $sessionHandler->remove('sid');
+        $sessionHandler->remove('gid');
         $sessionHandler->remove('is_allowed_in_course');
         $sessionHandler->remove('_real_cid');
-        $sessionHandler->remove('_cid');
         $sessionHandler->remove('_course');
-        $sessionHandler->remove('id_session');
         $sessionHandler->remove('_locale_course');
         $sessionHandler->remove('courseObj');
         $sessionHandler->remove('sessionObj');
@@ -347,9 +331,9 @@ class CourseListener
     private function generateCourseUrl($course, $sessionId, $groupId, $origin): string
     {
         if ($course) {
-            $cidReqURL = '&cidReq='.$course->getCode();
-            $cidReqURL .= '&id_session='.$sessionId;
-            $cidReqURL .= '&gidReq='.$groupId;
+            $cidReqURL = '&cid='.$course->getId();
+            $cidReqURL .= '&sid='.$sessionId;
+            $cidReqURL .= '&gid='.$groupId;
             $cidReqURL .= '&origin='.$origin;
 
             return $cidReqURL;

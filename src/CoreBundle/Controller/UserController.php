@@ -26,9 +26,7 @@ class UserController extends BaseController
         $user = $userRepository->findByUsername($username);
 
         if (!is_object($user) || !$user instanceof UserInterface) {
-            throw $this->createAccessDeniedException(
-                'This user does not have access to this section'
-            );
+            throw $this->createAccessDeniedException('This user does not have access to this section');
         }
 
         return $this->render('@ChamiloCore/User/profile.html.twig', ['user' => $user]);

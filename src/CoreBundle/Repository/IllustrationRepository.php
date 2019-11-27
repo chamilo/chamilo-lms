@@ -19,6 +19,10 @@ class IllustrationRepository extends ResourceRepository
      */
     public function addIllustration(AbstractResource $resource, User $user, $uploadFile): ?ResourceFile
     {
+        if (null === $uploadFile) {
+            return null;
+        }
+
         $illustrationNode = $this->getIllustrationNodeFromResource($resource);
         $em = $this->getEntityManager();
 

@@ -1,4 +1,3 @@
-
 legacy_main:
     path: /main/{name}
     defaults: {_controller: 'ChamiloCoreBundle:Legacy:classic'}

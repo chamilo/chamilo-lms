@@ -3,8 +3,8 @@
 
 namespace Chamilo\CoreBundle\Controller;
 
+use Chamilo\CoreBundle\Repository\IllustrationRepository;
 use Chamilo\ThemeBundle\Model\UserInterface;
-use Chamilo\UserBundle\Entity\User;
 use Chamilo\UserBundle\Form\ProfileType;
 use Chamilo\UserBundle\Repository\UserRepository;
 use FOS\UserBundle\Model\UserManagerInterface;
@@ -35,14 +35,12 @@ class AccountController extends BaseController
      *
      * @param string $username
      */
-    public function editAction(Request $request, UserManagerInterface $userManager, TranslatorInterface $translator)
+    public function editAction(Request $request, UserManagerInterface $userManager, TranslatorInterface $translator, IllustrationRepository $illustrationRepository)
     {
         $user = $this->getUser();
 
         if (!is_object($user) || !$user instanceof UserInterface) {
-            throw $this->createAccessDeniedException(
-                'This user does not have access to this section'
-            );
+            throw $this->createAccessDeniedException('This user does not have access to this section');
         }
 
         $form = $this->createForm(ProfileType::class, $user);
@@ -51,7 +49,14 @@ class AccountController extends BaseController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            //$event = new FormEvent($form, $request);
+            $illustration = $form['illustration']->getData();
+            if ($illustration) {
+                $file = $illustrationRepository->addIllustration($resource, $this->getUser(), $illustration);
+                $em = $illustrationRepository->getEntityManager();
+                $em->persist($file);
+                $em->flush();
+            }
+
             $userManager->updateUser($user);
 
             $this->addFlash('success', $translator->trans('Updated'));
@@ -61,6 +66,6 @@ class AccountController extends BaseController
             return $response;
         }
 
-        return $this->render('@ChamiloCore/Account/edit.html.twig', ['form' => $form->createView()]);
+        return $this->render('@ChamiloCore/Account/edit.html.twig', ['form' => $form->createView(), 'user' => $user]);
     }
 }

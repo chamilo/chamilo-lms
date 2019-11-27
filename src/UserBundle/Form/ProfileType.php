@@ -3,6 +3,8 @@
 
 namespace Chamilo\UserBundle\Form;
 
+use Chamilo\CoreBundle\Form\Type\IllustrationType;
+use League\Flysystem\Adapter\Polyfill\StreamedTrait;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\BirthdayType;
 use Symfony\Component\Form\Extension\Core\Type\LocaleType;
@@ -33,19 +35,19 @@ class ProfileType extends AbstractType
                 'firstname',
                 null,
                 [
-                    'label' => 'form.label_firstname',
-                    'required' => false,
+                    'label' => 'Firstname',
+                    'required' => true,
                 ]
             )
             ->add(
                 'lastname',
                 null,
                 [
-                    'label' => 'form.label_lastname',
-                    'required' => false,
+                    'label' => 'Lastname',
+                    'required' => true,
                 ]
             )
-            ->add('official_code', TextType::class)
+            //->add('official_code', TextType::class)
             //->add('groups')
             ->add(
                 'locale',
@@ -60,7 +62,7 @@ class ProfileType extends AbstractType
                     ],
                 ]
             )
-            ->add(
+            /*->add(
                 'dateOfBirth',
                 BirthdayType::class,
                 [
@@ -68,12 +70,12 @@ class ProfileType extends AbstractType
                     'required' => false,
                     'widget' => 'single_text',
                 ]
-            )
-            ->add(
+            )*/
+            /*->add(
                 'website',
                 UrlType::class,
                 [
-                    'label' => 'form.label_website',
+                    'label' => 'Website',
                     'required' => false,
                 ]
             )
@@ -84,7 +86,7 @@ class ProfileType extends AbstractType
                     'label' => 'form.label_biography',
                     'required' => false,
                 ]
-            )
+            )*/
             /*->add('locale', 'locale', array(
                 'label'    => 'form.label_locale',
                 'required' => false,
@@ -102,8 +104,17 @@ class ProfileType extends AbstractType
                 'phone',
                 null,
                 [
-                    'label' => 'form.label_phone',
+                    'label' => 'Phone number',
                     'required' => false,
+                ]
+            )
+            ->add(
+                'illustration',
+                IllustrationType::class,
+                [
+                    'label' => 'Picture',
+                    'required' => false,
+                    'mapped' => false
                 ]
             )
             /*->add(

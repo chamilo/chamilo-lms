@@ -4071,8 +4071,7 @@ class DocumentManager
         $comment = null;
         $title = get_lang('Default certificate');
         $fileName = api_replace_dangerous_char($title);
-        $filePath = api_get_path(SYS_COURSE_PATH)."{$courseData['directory']}/document$dir";
-
+        //$filePath = api_get_path(SYS_COURSE_PATH)."{$courseData['directory']}/document$dir";
         /*if (!is_dir($filePath)) {
             mkdir($filePath, api_get_permissions_for_new_directories());
         }*/

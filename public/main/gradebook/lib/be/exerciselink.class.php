@@ -38,11 +38,10 @@ class ExerciseLink extends AbstractLink
      */
     public function get_all_links($getOnlyHotPotatoes = false)
     {
-        $tableItemProperty = Database::get_course_table(TABLE_ITEM_PROPERTY);
+        //$tableItemProperty = Database::get_course_table(TABLE_ITEM_PROPERTY);
         $exerciseTable = $this->get_exercise_table();
         $lpItemTable = Database::get_course_table(TABLE_LP_ITEM);
-
-        $documentPath = api_get_path(SYS_COURSE_PATH).$this->course_code.'/document';
+        //$documentPath = api_get_path(SYS_COURSE_PATH).$this->course_code.'/document';
         if (empty($this->course_code)) {
             return [];
         }

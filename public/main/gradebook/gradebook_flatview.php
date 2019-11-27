@@ -282,7 +282,7 @@ if (isset($_GET['isStudentView']) && $_GET['isStudentView'] == 'false') {
         $simple_search_form
     );
     $flatViewTable->display();
-} elseif (isset($_GET['selectcat']) && ($_SESSION['studentview'] == 'teacherview')) {
+} elseif (isset($_GET['selectcat']) && isset($_GET['isStudentView']) && ($_SESSION['studentview'] == 'teacherview')) {
     DisplayGradebook::display_header_reduce_flatview(
         $cat[0],
         $showeval,

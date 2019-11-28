@@ -102,7 +102,7 @@ class CourseListener
             if (empty($sessionId)) {
                 $sessionHandler->remove('session_name');
                 $sessionHandler->remove('sid');
-                $sessionHandler->remove('sessionObj');
+                $sessionHandler->remove('session');
                 // Check if user is allowed to this course
                 // See CourseVoter.php
                 if (false === $checker->isGranted(CourseVoter::VIEW, $course)) {
@@ -293,8 +293,8 @@ class CourseListener
         $sessionHandler->remove('_real_cid');
         $sessionHandler->remove('_course');
         $sessionHandler->remove('_locale_course');
-        $sessionHandler->remove('courseObj');
-        $sessionHandler->remove('sessionObj');
+        $sessionHandler->remove('course');
+        $sessionHandler->remove('session');
         $sessionHandler->remove('course_url_params');
         $sessionHandler->remove('origin');
 

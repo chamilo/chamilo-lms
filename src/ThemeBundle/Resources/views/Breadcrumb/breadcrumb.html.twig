@@ -8,7 +8,7 @@
 
     {% if course is defined %}
     <li>
-        <a href="{{ url('course_home', {'course': course }) }}">
+        <a href="{{ url('chamilo_core_course_home', {'course': course }) }}">
             <i class="fa fa-book"></i>
             {{ course.title }}
         </a>
@@ -17,10 +17,10 @@
 
     {% if tool.name is defined and tool.name != '' %}
         <li>
-            <a href="{{ url('chamilo_'~ tool.name ~'_index', {'course': course }) }}">
-                <i class="fa fa-cube"></i>
-                {{ tool.name }}
-            </a>
+{#            <a href="{{ url('chamilo_'~ tool.name ~'_index', {'course': course }) }}">#}
+{#                <i class="fa fa-cube"></i>#}
+{#                {{ tool.name }}#}
+{#            </a>#}
         </li>
     {% endif %}
 

@@ -1,7 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-namespace Chamilo\CourseBundle\Controller\Home;
+namespace Chamilo\CoreBundle\Controller;
 
 use Chamilo\CourseBundle\Controller\ToolBaseController;
 use Chamilo\CourseBundle\Entity\CTool;
@@ -22,13 +22,13 @@ use Symfony\Component\Routing\Annotation\Route;
  *
  * @author Julio Montoya <gugli100@gmail.com>
  *
- * @Route("/")
+ * @Route("/sad")
  */
 class CourseHomeController extends ToolBaseController
 {
     /**
-     * @Route("/", name="course_home")
-     * @Route("/index.php", methods={"GET"})
+     * Route("/", name="course_home")
+     * Route("/index.php", methods={"GET"})
      *
      * @return Response
      */

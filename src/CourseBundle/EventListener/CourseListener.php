@@ -49,6 +49,7 @@ class CourseListener
         if ($request->attributes->get('_route') === '_wdt') {
             return;
         }
+
         // Ignore toolbar
         if ($request->attributes->get('_profiler') === '_wdt') {
             return;
@@ -58,12 +59,11 @@ class CourseListener
 
         $container = $this->container;
         $translator = $container->get('translator');
+
         $course = null;
-
-        // Check if URL has cid value
-        if ($request->attributes->has('cid')) {
-            $courseId = $request->get('cid');
-
+        // Check if URL has cid value. Using Symfony request.
+        $courseId = $request->get('cid');
+        if (!empty($courseId)) {
             /** @var EntityManager $em */
             $em = $container->get('doctrine')->getManager();
             $checker = $container->get('security.authorization_checker');
@@ -82,16 +82,19 @@ class CourseListener
         }
 
         if (null !== $course) {
-            $sessionHandler->set('courseObj', $course);
-            $courseInfo = api_get_course_info($course->getCode());
-            $container->get('twig')->addGlobal('course', $course);
-
+            // Setting variables in the session.
+            $sessionHandler->set('course', $course);
             $sessionHandler->set('_real_cid', $course->getId());
             $sessionHandler->set('cid', $course->getId());
             $sessionHandler->set('_cid', $course->getCode());
+
+            $courseInfo = api_get_course_info($course->getCode());
             $sessionHandler->set('_course', $courseInfo);
 
-            // Session
+            // Setting variables for the twig templates.
+            $container->get('twig')->addGlobal('course', $course);
+
+            // Checking if sid is used.
             $sessionId = (int) $request->get('sid');
             $session = null;
             if (empty($sessionId)) {
@@ -120,9 +123,9 @@ class CourseListener
 
                     $sessionHandler->set('session_name', $session->getName());
                     $sessionHandler->set('sid', $session->getId());
-                    $sessionHandler->set('sessionObj', $session);
+                    $sessionHandler->set('session', $session);
 
-                    $container->get('twig')->addGlobal('sessionObj', $session);
+                    $container->get('twig')->addGlobal('session', $session);
                 } else {
                     throw new NotFoundHttpException($translator->trans('Session not found'));
                 }

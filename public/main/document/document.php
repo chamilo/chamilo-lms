@@ -16,10 +16,10 @@ use ChamiloSession as Session;
  */
 //require_once __DIR__.'/../inc/global.inc.php';
 
-$courseCode = isset($_GET['cidReq']) ? htmlentities($_GET['cidReq']) : '';
-$sessionId = isset($_GET['id_session']) ? (int) $_GET['id_session'] : 0;
+$courseCode = isset($_GET['cid']) ? (int) $_GET['cid'] : 0;
+$sessionId = isset($_GET['sid']) ? (int) $_GET['sid'] : 0;
 
-$url = "../../../resources/document/files?cidReq=$courseCode&id_session=$sessionId";
+$url = "../../../resources/document/files?cid=$courseCode&sid=$sessionId";
 header("Location: $url");
 exit;
 

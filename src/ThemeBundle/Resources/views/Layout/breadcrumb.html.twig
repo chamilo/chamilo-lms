@@ -1,20 +1,16 @@
 {% autoescape false %}
-    {# Course comes from the base-layout.html #}
-    {% if course is not defined %}
-        {% set course = '' %}
-    {% endif %}
-
     {% if legacy_breadcrumb is not defined %}
         {% set legacy_breadcrumb = '' %}
     {% endif %}
 
+    {# course and session variables are set in the src/CourseBundle/EventListener/CourseListener.php #}
     {{
         sonata_block_render_event(
             'breadcrumb',
             {
                 'context': 'chamilo_core.block.breadcrumb',
                 'course': course,
-                'session_id': session,
+                'session': session,
                 'legacy_breadcrumb': legacy_breadcrumb,
                 'current_uri': app.request.requestUri
             }

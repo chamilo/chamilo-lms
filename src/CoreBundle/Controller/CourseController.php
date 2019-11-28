@@ -54,9 +54,21 @@ class CourseController extends AbstractController
     }
 
     /**
-     * @Route("/{courseCode}", name="chamilo_core_course_home")
+     * Redirects legacy /courses/ABC/index.php to /courses/1/ (where 1 is the course id).
+     *
+     * @Route("/{courseCode}/index.php", name="chamilo_core_course_home_redirect")
      *
      * @Entity("course", expr="repository.findOneByCode(courseCode)")
+     */
+    public function homeRedirectAction(Course $course): Response
+    {
+        return $this->redirectToRoute('chamilo_core_course_home', ['cid' => $course->getId()]);
+    }
+
+    /**
+     * @Route("/{cid}", name="chamilo_core_course_home")
+     *
+     * @Entity("course", expr="repository.find(cid)")
      */
     public function homeAction(Course $course): Response
     {

@@ -4,6 +4,7 @@
 namespace Chamilo\CoreBundle\Block;
 
 use Chamilo\CoreBundle\Entity\Course;
+use Chamilo\CoreBundle\Entity\Session;
 use Sonata\BlockBundle\Block\BlockContextInterface;
 use Sonata\SeoBundle\Block\Breadcrumb\BaseBreadcrumbMenuBlockService;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -56,27 +57,27 @@ class BreadcrumbBlockService extends BaseBreadcrumbMenuBlockService
 
         $menu->addChild('Home', ['route' => 'home']);
         $sessionId = 0;
-        if ($blockContext->getBlock()->getSetting('session_id')) {
-            $sessionId = $blockContext->getBlock()->getSetting('session_id');
+        // Course/Session block are set here src/ThemeBundle/Resources/views/Layout/breadcrumb.html.twig
+        if ($blockContext->getBlock()->getSetting('session')) {
+            /** @var Session $course */
+            $session = $blockContext->getBlock()->getSetting('session');
+            if ($session) {
+                $sessionId = $session->getId();
+            }
         }
 
         // Add course
         /** @var Course $course */
         if ($course = $blockContext->getBlock()->getSetting('course')) {
-            if (is_array($course)) {
-                $title = $course['title'];
-                $code = $course['code'];
-            } else {
-                $title = $course->getTitle();
-                $code = $course->getCode();
-            }
+            $title = $course->getTitle();
+            $courseId = $course->getId();
 
             $menu->addChild(
                 $title,
                 [
-                    'route' => 'course_home',
+                    'route' => 'chamilo_core_course_home',
                     'routeParameters' => [
-                        'course' => $code,
+                        'cid' => $courseId,
                         'sid' => $sessionId,
                     ],
                 ]

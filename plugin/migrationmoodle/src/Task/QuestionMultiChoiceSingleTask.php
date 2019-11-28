@@ -12,13 +12,13 @@ use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\LoadedQuestionLook
 use Chamilo\PluginBundle\MigrationMoodle\Transformer\Property\ReplaceFilePaths;
 
 /**
- * Class QuestionMultiChoiceTask.
+ * Class QuestionMultiChoiceSingleTask.
  *
  * Task to convert Moodle question answers of multichoice type in Chamilo unique/multiple answers.
  *
  * @package Chamilo\PluginBundle\MigrationMoodle\Task
  */
-class QuestionMultiChoiceTask extends BaseTask
+class QuestionMultiChoiceSingleTask extends BaseTask
 {
     /**
      * @inheritDoc
@@ -36,10 +36,12 @@ class QuestionMultiChoiceTask extends BaseTask
                     q.id quizid,
                     q.course
                 FROM mdl_question_answers qa
-                INNER JOIN mdl_question qq ON qa.question  = qq.id
+                INNER JOIN mdl_question qq ON qa.question = qq.id
+                INNER JOIN mdl_qtype_multichoice_options qo ON qq.id = qo.questionid
                 INNER JOIN mdl_quiz_slots qs ON qq.id = qs.questionid
                 INNER JOIN mdl_quiz q ON qs.quizid = q.id
-                WHERE qq.qtype = 'multichoice'",
+                WHERE qq.qtype = 'multichoice'
+                    AND qo.single = 1",
         ];
     }
 

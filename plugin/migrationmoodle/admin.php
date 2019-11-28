@@ -113,7 +113,11 @@ $menu = [
         'parent' => 21,
     ],
     25 => [
-        'action' => 'question_multi_choice',
+        'action' => 'question_multi_choice_single',
+        'parent' => 24,
+    ],
+    26 => [
+        'action' => 'question_multi_choice_multiple',
         'parent' => 24,
     ],
 ];

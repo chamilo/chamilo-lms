@@ -61,7 +61,7 @@ class BreadcrumbBlockService extends BaseBreadcrumbMenuBlockService
         if ($blockContext->getBlock()->getSetting('session')) {
             /** @var Session $course */
             $session = $blockContext->getBlock()->getSetting('session');
-            if ($session) {
+            if ($session && $session instanceof Session) {
                 $sessionId = $session->getId();
             }
         }

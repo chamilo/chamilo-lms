@@ -54,7 +54,7 @@ class CourseController extends AbstractController
     }
 
     /**
-     * Redirects legacy /courses/ABC/index.php to /courses/1/ (where 1 is the course id) see CourseHomeController
+     * Redirects legacy /courses/ABC/index.php to /courses/1/ (where 1 is the course id) see CourseHomeController.
      *
      * @Route("/{courseCode}/index.php", name="chamilo_core_course_home_redirect")
      *

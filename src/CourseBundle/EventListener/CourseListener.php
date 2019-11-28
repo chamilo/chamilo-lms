@@ -58,33 +58,20 @@ class CourseListener
 
         $container = $this->container;
         $translator = $container->get('translator');
-        $courseId = $request->get('cid');
-        $courseCode = null;
-        var_dump($request->get('courseCode'));
-        if (empty($courseId)) {
-            if (!empty($request->get('courseCode'))) {
-                $courseCode = $request->get('courseCode');
-            }
-        }
-
-        /** @var EntityManager $em */
-        $em = $container->get('doctrine')->getManager();
-        $checker = $container->get('security.authorization_checker');
-        //$alreadyVisited = $sessionHandler->get('course_already_visited');
-
         $course = null;
-        if (!empty($courseId)) {
+
+        // Check if URL has cid value
+        if ($request->attributes->has('cid')) {
+            $courseId = $request->get('cid');
+
+            /** @var EntityManager $em */
+            $em = $container->get('doctrine')->getManager();
+            $checker = $container->get('security.authorization_checker');
             $course = $em->getRepository('ChamiloCoreBundle:Course')->find($courseId);
-        }
 
-        if ($course === null) {
-            // Try with the course code
-            /** @var Course $course */
-            $course = $em->getRepository('ChamiloCoreBundle:Course')->findOneBy(['code' => $courseCode]);
-        }
-
-        if ($course === null) {
-            throw new NotFoundHttpException($translator->trans('Course does not exist'));
+            if (null === $course) {
+                throw new NotFoundHttpException($translator->trans('Course does not exist'));
+            }
         }
 
         global $cidReset;
@@ -94,12 +81,13 @@ class CourseListener
             return;
         }
 
-        if (!empty($course)) {
+        if (null !== $course) {
             $sessionHandler->set('courseObj', $course);
             $courseInfo = api_get_course_info($course->getCode());
             $container->get('twig')->addGlobal('course', $course);
 
             $sessionHandler->set('_real_cid', $course->getId());
+            $sessionHandler->set('cid', $course->getId());
             $sessionHandler->set('_cid', $course->getCode());
             $sessionHandler->set('_course', $courseInfo);
 
@@ -156,7 +144,7 @@ class CourseListener
                     if (false === $checker->isGranted(GroupVoter::VIEW, $group)) {
                         throw new AccessDeniedException($translator->trans('Unauthorised access to group'));
                     }
-                    $sessionHandler->set('_gid', $groupId);
+                    $sessionHandler->set('gid', $groupId);
                 } else {
                     throw new AccessDeniedException($translator->trans('Group does not exist in course'));
                 }
@@ -265,12 +253,12 @@ class CourseListener
             }
 
             // Example 'chamilo_notebook.controller.notebook:indexAction'
-            $controllerAction = $request->get('_controller');
-            $controllerActionParts = explode(':', $controllerAction);
-            $controllerNameParts = explode('.', $controllerActionParts[0]);
-            $controllerName = $controllerActionParts[0];
+            //$controllerAction = $request->get('_controller');
+            //$controllerActionParts = explode(':', $controllerAction);
+            //$controllerNameParts = explode('.', $controllerActionParts[0]);
+            //$controllerName = $controllerActionParts[0];
         } else {
-            $ignore = [
+            /*$ignore = [
                 'fos_js_routing.controller:indexAction',
                 'web_profiler.controller.profiler:toolbarAction',
             ];
@@ -279,7 +267,7 @@ class CourseListener
             if (!in_array($controllerAction, $ignore)) {
                 //error_log('remove');
                 //$this->removeCourseFromSession($request);
-            }
+            }*/
         }
     }
 
@@ -327,6 +315,8 @@ class CourseListener
      * @param int    $sessionId
      * @param int    $groupId
      * @param string $origin
+     *
+     * @return string
      */
     private function generateCourseUrl($course, $sessionId, $groupId, $origin): string
     {

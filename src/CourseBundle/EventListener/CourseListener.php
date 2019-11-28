@@ -160,7 +160,9 @@ class CourseListener
                 $sessionHandler->set('origin', $origin);
             }
 
-            $sessionHandler->set('cid_req_url', $this->generateCourseUrl($course, $sessionId, $groupId, $origin));
+            $courseParams = $this->generateCourseUrl($course, $sessionId, $groupId, $origin);
+            $sessionHandler->set('course_url_params', $courseParams);
+            $container->get('twig')->addGlobal('course_url_params', $courseParams);
 
             /*if (!$alreadyVisited ||
                 isset($alreadyVisited) && $alreadyVisited != $courseCode
@@ -293,7 +295,7 @@ class CourseListener
         $sessionHandler->remove('_locale_course');
         $sessionHandler->remove('courseObj');
         $sessionHandler->remove('sessionObj');
-        $sessionHandler->remove('cid_req_url');
+        $sessionHandler->remove('course_url_params');
         $sessionHandler->remove('origin');
 
         // Remove user temp roles

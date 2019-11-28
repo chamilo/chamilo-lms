@@ -130,7 +130,7 @@
             <h2>{{ "Educational programming"|trans }}</h2>
             <img src="{{ "course_progress.png"|icon(64) }}" width="64" height="64">
             <div class="controls">
-                <a href="{{ _p.web_self }}?{{ _p.web_cid_query ~ "&action=thematic_add" ~ token }}" class="btn btn-outline-primary">
+                <a href="{{ url('legacy_main', {name : 'course_progress/index.php'}) }}?{{ course_url_params ~ "&action=thematic_add" ~ token }}" class="btn btn-outline-primary">
                     {{ "Add thematic"|trans }}
                 </a>
             </div>

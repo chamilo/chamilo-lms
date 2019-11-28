@@ -104,8 +104,8 @@ CKEDITOR.editorConfig = function (config) {
     {% endif %}
 
     // File manager (elFinder)
-    config.filebrowserBrowseUrl = '{{ url('editor_filemanager') }}?{{ app.session.get('cid_req_url') }}';
-    config.videobrowserBrowseUrl = '{{ url('editor_filemanager') }}?{{ app.session.get('cid_req_url') }}';
+    config.filebrowserBrowseUrl = '{{ url('editor_filemanager') }}?{{ app.session.get('course_url_params') }}';
+    config.videobrowserBrowseUrl = '{{ url('editor_filemanager') }}?{{ app.session.get('course_url_params') }}';
 
     // Allows to use "class" attribute inside divs and spans.
     config.allowedContent = true;

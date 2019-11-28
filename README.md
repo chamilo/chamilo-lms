@@ -17,7 +17,7 @@ This installation guide is for development environments only.
 To run Chamilo, you will need at least a web server (we recommend Apache2 for commodity reasons), a database server (we recommend MariaDB but will explain MySQL for commodity reasons) and a PHP interpreter (and a series of libraries for it). If you are working on a Debian-based system (Debian, Ubuntu, Mint, etc), just
 type
 ```
-sudo apt-get install apache2 mysql-server php libapache2-mod-php php-gd php-intl php-curl php-json php-mysql
+sudo apt-get install apache2 mysql-server php libapache2-mod-php php-gd php-intl php-curl php-json php-mysql php-zip composer
 ```
 
 ### Install Git
@@ -76,6 +76,33 @@ generate the missing files.
 On a Debian-based system, launch:
 ```
 sudo chown -R www-data:www-data app main/default_course_document/images main/lang web
+```
+
+### Configure the web server
+
+Enable the Apache web server module "rewrite" :
+```
+sudo a2enmod rewrite
+sudo systemctl restart apache2.service
+```
+
+Chamilo's .htaccess must be obeyed.
+Create /etc/apache2/conf-available/htaccessForChamilo.conf with these lines :
+```
+<Directory /var/www/html/chamilo-lms>
+	AllowOverride All
+</Directory>
+```
+
+then enable it :
+```
+sudo a2enconf htaccessForChamilo
+sudo systemctl reload apache2.service
+```
+
+If you just installed missing PHP extensions using apt, you must restart the web server to get them loaded :
+```
+sudo systemctl restart apache2.service
 ```
 
 ### Start the installer

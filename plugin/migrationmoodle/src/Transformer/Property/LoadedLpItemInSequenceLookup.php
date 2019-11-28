@@ -30,7 +30,7 @@ class LoadedLpItemInSequenceLookup extends LoadedKeyLookup
 
         $index = array_search($data['id'], $sequence);
 
-        if (false === $index) {
+        if (false === $index || !isset($sequence[$index - 1])) {
             return 0;
         }
 

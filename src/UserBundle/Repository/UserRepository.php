@@ -71,6 +71,17 @@ class UserRepository
         $this->repository = $entityManager->getRepository(User::class);
     }
 
+    public function find($id): ?User
+    {
+        $user = $this->repository->find($id);
+
+        if (null === $user) {
+            throw new UsernameNotFoundException(sprintf("User '%s' not found.", $id));
+        }
+
+        return $user;
+    }
+
     public function findByUsername(string $username): ?User
     {
         $user = $this->repository->findOneBy(['username' => $username]);

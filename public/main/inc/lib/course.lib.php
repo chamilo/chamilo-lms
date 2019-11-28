@@ -2467,6 +2467,7 @@ class CourseManager
      */
     public static function create_database_dump($course_code)
     {
+        return false;
         $sql_dump = '';
         $course_code = Database::escape_string($course_code);
         $table_course = Database::get_main_table(TABLE_MAIN_COURSE);

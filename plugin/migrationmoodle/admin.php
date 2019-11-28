@@ -108,6 +108,10 @@ $menu = [
         'action' => 'question_categories',
         'parent' => 21,
     ],
+    24 => [
+        'action' => 'questions',
+        'parent' => 21,
+    ],
 ];
 
 Display::display_header($plugin->get_title());

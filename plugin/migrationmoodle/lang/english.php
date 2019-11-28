@@ -31,3 +31,4 @@ $strings['RoleAssignmentsTask'] = 'Role assignments';
 $strings['QuizzesTask'] = 'Quizzes';
 $strings['FilesForQuizzesTask'] = 'Files for quizzes';
 $strings['QuestionCategoriesTask'] = 'Question categories';
+$strings['QuestionsTask'] = 'Questions';

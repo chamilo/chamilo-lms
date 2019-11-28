@@ -34,3 +34,4 @@ $strings['QuestionCategoriesTask'] = 'Question categories';
 $strings['QuestionsTask'] = 'Questions';
 $strings['QuestionMultiChoiceSingleTask'] = 'Answers for multichoice questions (single)';
 $strings['QuestionMultiChoiceMultipleTask'] = 'Answers for multichoice questions (multiple)';
+$strings['QuestionsTrueFalseTask'] = 'Answers for truefalse questions';

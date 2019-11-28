@@ -21,6 +21,10 @@ class ReplaceFilePaths extends LoadedCourseLookup
     {
         list($content, $mCourseId) = array_values($data);
 
+        if (empty($content)) {
+            return '';
+        }
+
         $cId = parent::transform([$mCourseId]);
         $courseInfo = api_get_course_info_by_id($cId);
 

@@ -127,12 +127,11 @@ class ResourceController extends AbstractResourceController implements CourseCon
         //$grid->isReadyForRedirect();
         //$grid->setMaxResults(1);
         //$grid->setLimits(2);
-
         $translation = $this->translator;
         $routeParams = $courseParams;
-        $routeParams['tool']  = $tool;
-        $routeParams['type']  = $type;
-        $routeParams['id']  = null;
+        $routeParams['tool'] = $tool;
+        $routeParams['type'] = $type;
+        $routeParams['id'] = null;
 
         // Title link.
         $grid->getColumn('title')->setTitle($this->trans('Name'));

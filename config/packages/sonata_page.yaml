@@ -12,14 +12,17 @@ sonata_page:
 
     ignore_uri_patterns:
         - ^/administration(.*) # sonata admin
+        - /(.*)/(.*)administration(.*)/
         - ^/account(.*) # sonata admin
         - ^/admin(.*) # chamilo admin
+        - ^/api/(.*)
+        - ^/contact(.*) # sonata admin
+        - ^/courses/(.*)
+        - ^/connect/(.*)
+        - ^/editor/(.*)
+        - ^/login/(.*)
         - ^/main(.*)
         - ^/plugin(.*)
-        - /(.*)/(.*)administration(.*)/
-        - ^/api/(.*)
-        - ^/login/(.*)
-        - ^/connect/(.*)
         - ^/packages/(.*)
         - ^/package/(.*)
         - ^install
@@ -43,11 +46,9 @@ sonata_page:
         - ^/online
         - ^/online/(.*)
         - ^/news/(.*)
-        - ^/courses/(.*)
-        - ^/editor/(.*)
         - ^/resources/(.*)
+        - ^/sessions/(.*)
         - ^/front/editor
-        - ^/contact(.*) # sonata admin
         - ^/cms/pages/latest
         - ^/cms/pages/latest/(.*)
     ignore_route_patterns:

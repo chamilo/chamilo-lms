@@ -1665,7 +1665,7 @@ class Template
 
                     $socialMeta .= '<meta property="og:title" content="'.$session->getName().' - '.$metaTitle.'" />'."\n";
                     $socialMeta .= '<meta property="twitter:title" content="'.$session->getName().' - '.$metaTitle.'" />'."\n";
-                    $socialMeta .= '<meta property="og:url" content="'.api_get_path(WEB_PATH)."session/{$session->getId()}/about/".'" />'."\n";
+                    $socialMeta .= '<meta property="og:url" content="'.api_get_path(WEB_PATH)."sessions/{$session->getId()}/about/".'" />'."\n";
 
                     $sessionValues = new ExtraFieldValue('session');
                     $sessionImage = $sessionValues->get_values_by_handler_and_field_variable($session->getId(), 'image')['value'];

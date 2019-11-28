@@ -655,7 +655,7 @@ class SessionManager
             }
             $url = api_get_path(WEB_CODE_PATH).'session/resume_session.php?id_session='.$session['id'];
             if ($extraFieldsToLoad || api_is_drh()) {
-                $url = api_get_path(WEB_PATH).'session/'.$session['id'].'/about/';
+                $url = api_get_path(WEB_PATH).'sessions/'.$session['id'].'/about/';
             }
 
             $session['name'] = Display::url($session['name'], $url);

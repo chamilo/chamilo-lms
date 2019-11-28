@@ -55,7 +55,7 @@ class UserManager
      */
     public static function getRepository()
     {
-        return Database::getManager()->getRepository('ChamiloUserBundle:User');
+        return Container::$container->get('Chamilo\UserBundle\Repository\UserRepository');
     }
 
     /**

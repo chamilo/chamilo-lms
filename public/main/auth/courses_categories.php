@@ -313,7 +313,7 @@ function returnThumbnail($course)
     $html = '';
     $title = cut($course['title'], 70);
     //$linkCourse = api_get_course_url($course['code']);
-    $linkCourse = api_get_path(WEB_PATH).'course/'.$course['real_id'].'/about';
+    $linkCourse = api_get_path(WEB_PATH).'courses/'.$course['real_id'].'/about';
     $courseEntity = api_get_course_entity($course['real_id']);
     $courseMediumImage = Display::return_icon(
         'session_default.png',
@@ -421,7 +421,7 @@ function return_teacher($courseInfo)
 function return_title($course, $registeredUser)
 {
     //$linkCourse = api_get_course_url($course['code']);
-    $linkCourse = api_get_path(WEB_PATH).'course/'.$course['real_id'].'/about';
+    $linkCourse = api_get_path(WEB_PATH).'courses/'.$course['real_id'].'/about';
     $html = '<div class="block-title"><h4 class="title">';
     $html .= '<a title="'.$course['title'].'" href="'.$linkCourse.'">'.$course['title'].'</a>';
     $html .= '</h4></div>';

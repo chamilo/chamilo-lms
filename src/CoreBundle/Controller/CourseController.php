@@ -29,16 +29,16 @@ class CourseController extends AbstractController
      */
     public function addAction(Request $request)
     {
-        $form = $this->createForm(new CourseType());
+        exit;
+        $form = $this->createForm(CourseType::class);
 
         $form->handleRequest($request);
 
-        if ($form->isValid()) {
+        if ($form->isSubmitted() && $form->isValid()) {
             $em = $this->getDoctrine()->getManager();
             $course = $form->getData();
-            $em->persist($course);
-            $em->flush();
-
+            /*$em->persist($course);
+            $em->flush();*/
             $this->addFlash('sonata_flash_success', 'Course created');
 
             return $this->redirectToRoute(
@@ -47,14 +47,11 @@ class CourseController extends AbstractController
             );
         }
 
-        /*return [
-            'form' => $form->createView(),
-        ];*/
-        //return $this->render('ChamiloThemeBundle:Default:index.html.twig');
+        return $this->render('ChamiloThemeBundle:Course:add.html.twig', ['form' => $form->createView()]);
     }
 
     /**
-     * Redirects legacy /courses/ABC/index.php to /courses/1/ (where 1 is the course id).
+     * Redirects legacy /courses/ABC/index.php to /courses/1/ (where 1 is the course id) see CourseHomeController
      *
      * @Route("/{courseCode}/index.php", name="chamilo_core_course_home_redirect")
      *
@@ -66,17 +63,7 @@ class CourseController extends AbstractController
     }
 
     /**
-     * @Route("/{cid}", name="chamilo_core_course_home")
-     *
-     * @Entity("course", expr="repository.find(cid)")
-     */
-    public function homeAction(Course $course): Response
-    {
-        return $this->render('@ChamiloTheme/Course/welcome.html.twig', ['course' => $course]);
-    }
-
-    /**
-     * @Route("{courseCode}/welcome/", name="chamilo_core_course_welcome")
+     * @Route("/{cid}/welcome", name="chamilo_core_course_welcome")
      *
      * @Entity("course", expr="repository.find(cid)")
      */

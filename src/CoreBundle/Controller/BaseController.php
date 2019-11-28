@@ -56,7 +56,7 @@ abstract class BaseController extends AbstractController
     {
         $request = $this->getRequest();
         if ($request) {
-            $courseId = $request->getSession()->get('_real_cid', 0);
+            $courseId = $request->getSession()->get('cid', 0);
         }
 
         if (empty($courseId)) {

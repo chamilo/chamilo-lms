@@ -4,7 +4,14 @@
 namespace Chamilo\CoreBundle\Form\Type;
 
 use Chamilo\CoreBundle\Entity\Course;
+use Sonata\Form\Type\DatePickerType;
+use Sonata\Form\Type\DateTimePickerType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\LocaleType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\UrlType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -20,24 +27,24 @@ class CourseType extends AbstractType
     {
         // @todo as a service to load the preferred_choices
         $builder
-            ->add('title', 'text')
+            ->add('title', TextType::class)
             //->add('code', 'text')
             ->add(
                 'course_language',
-                'locale',
+                LocaleType::class,
                 ['preferred_choices' => ['en', 'fr', 'es']]
             )
             ->add(
                 'visibility',
-                'choice',
+                ChoiceType::class,
                 ['choices' => Course::getStatusList()]
             )
-            ->add('department_name', 'text', ['required' => false])
-            ->add('department_url', 'url', ['required' => false])
+            ->add('department_name', TextType::class, ['required' => false])
+            ->add('department_url', UrlType::class, ['required' => false])
             //->add('disk_quota', 'text')
             ->add(
                 'expiration_date',
-                'sonata_type_datetime_picker',
+                DatePickerType::class,
                 ['required' => false]
             )
             /* ->add('general_coach', 'entity', array(
@@ -61,8 +68,7 @@ class CourseType extends AbstractType
              ))*/
             /*
             ->add('coach_access_end_date', 'sonata_type_datetime_picker')*/
-
-            ->add('save', 'submit', ['label' => 'Update']);
+            ->add('save', SubmitType::class, ['label' => 'Add']);
     }
 
     public function configureOptions(OptionsResolver $resolver)

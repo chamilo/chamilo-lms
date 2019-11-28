@@ -63,6 +63,7 @@ class CourseListener
         $course = null;
         // Check if URL has cid value. Using Symfony request.
         $courseId = $request->get('cid');
+
         if (!empty($courseId)) {
             /** @var EntityManager $em */
             $em = $container->get('doctrine')->getManager();
@@ -84,6 +85,7 @@ class CourseListener
         if (null !== $course) {
             // Setting variables in the session.
             $sessionHandler->set('course', $course);
+
             $sessionHandler->set('_real_cid', $course->getId());
             $sessionHandler->set('cid', $course->getId());
             $sessionHandler->set('_cid', $course->getCode());
@@ -188,7 +190,7 @@ class CourseListener
     }
 
     /**
-     * Once the onKernelRequest was fired, we check if the session object were set and we inject them in the controller.
+     * Once the onKernelRequest was fired, we check if the course/session object were set and we inject them in the controller.
      */
     public function onKernelController(ControllerEvent $event)
     {
@@ -231,9 +233,8 @@ class CourseListener
             )
         ) {
             $controller = $controllerList[0];
-
-            $session = $sessionHandler->get('sessionObj');
-            $course = $sessionHandler->get('courseObj');
+            $session = $sessionHandler->get('session');
+            $course = $sessionHandler->get('course');
 
             // Sets the controller course/session in order to use:
             // $this->getCourse() $this->getSession() in controllers
@@ -242,10 +243,8 @@ class CourseListener
 
                 // Legacy code
                 $courseCode = $course->getCode();
-
                 //$courseInfo = api_get_course_info($courseCode);
                 //$container->get('twig')->addGlobal('course', $course);
-
                 //$sessionHandler->set('_real_cid', $course->getId());
                 //$sessionHandler->set('_cid', $course->getCode());
                 //$sessionHandler->set('_course', $courseInfo);

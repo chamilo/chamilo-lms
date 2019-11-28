@@ -13,6 +13,7 @@ use Display;
 use Event;
 use ExtraFieldValue;
 use Security;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -22,15 +23,14 @@ use Symfony\Component\Routing\Annotation\Route;
  *
  * @author Julio Montoya <gugli100@gmail.com>
  *
- * @Route("/sad")
+ * @Route("/courses")
  */
 class CourseHomeController extends ToolBaseController
 {
     /**
-     * Route("/", name="course_home")
-     * Route("/index.php", methods={"GET"})
+     * @Route("/{cid}/home", name="chamilo_core_course_home")
      *
-     * @return Response
+     * @Entity("course", expr="repository.find(cid)")
      */
     public function indexAction(Request $request)
     {
@@ -39,16 +39,17 @@ class CourseHomeController extends ToolBaseController
         $js = '<script>'.api_get_language_translate_html().'</script>';
         $htmlHeadXtra[] = $js;
 
-        $user_id = api_get_user_id();
+        $userId = $this->getUser()->getId();
+
         $courseCode = $course->getCode();
         $courseId = $course->getId();
         $sessionId = $this->getSessionId();
-        $show_message = '';
+        $showMessage = '';
 
         if (api_is_invitee()) {
             $isInASession = $sessionId > 0;
             $isSubscribed = CourseManager::is_user_subscribed_in_course(
-                $user_id,
+                $userId,
                 $courseCode,
                 $isInASession,
                 $sessionId
@@ -67,7 +68,7 @@ class CourseHomeController extends ToolBaseController
 
         if ($isSpecialCourse) {
             if (isset($_GET['autoreg']) && $_GET['autoreg'] == 1) {
-                if (CourseManager::subscribeUser($user_id, $courseCode, STUDENT)) {
+                if (CourseManager::subscribeUser($userId, $courseCode, STUDENT)) {
                     Session::write('is_allowed_in_course', true);
                 }
             }
@@ -80,7 +81,7 @@ class CourseHomeController extends ToolBaseController
                 Security::clear_token();
                 $result = CourseManager::autoSubscribeToCourse($courseCode);
                 if ($result) {
-                    if (CourseManager::is_user_subscribed_in_course($user_id, $courseCode)) {
+                    if (CourseManager::is_user_subscribed_in_course($userId, $courseCode)) {
                         Session::write('is_allowed_in_course', true);
                     }
                 }
@@ -270,7 +271,7 @@ class CourseHomeController extends ToolBaseController
             the setting homepage_view is adjustable through
             the platform administration section */
         if (!empty($autoLaunchWarning)) {
-            $show_message .= Display::return_message(
+            $showMessage .= Display::return_message(
                 $autoLaunchWarning,
                 'warning'
             );
@@ -569,7 +570,7 @@ class CourseHomeController extends ToolBaseController
 
         $form->handleRequest($this->getRequest());
 
-        if ($form->isValid()) {
+        if ($form->isSubmitted() && $form->isValid()) {
             $query = $this->getDoctrine()->getManager()->createQueryBuilder('a');
             $query->select('MAX(s.id) as id');
             $query->from('Chamilo\CourseBundle\Entity\CTool', 's');

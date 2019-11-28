@@ -80,7 +80,7 @@ class QuestionType implements TransformPropertyInterface
 
         $connection->close();
 
-        if (false === $result || empty($result['single'])) {
+        if (false === $result || !empty($result['single'])) {
             return true;
         }
 

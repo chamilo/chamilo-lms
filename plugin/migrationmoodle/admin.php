@@ -112,6 +112,10 @@ $menu = [
         'action' => 'questions',
         'parent' => 21,
     ],
+    25 => [
+        'action' => 'question_multi_choice',
+        'parent' => 24,
+    ],
 ];
 
 Display::display_header($plugin->get_title());

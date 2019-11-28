@@ -32,3 +32,4 @@ $strings['QuizzesTask'] = 'Quizzes';
 $strings['FilesForQuizzesTask'] = 'Files for quizzes';
 $strings['QuestionCategoriesTask'] = 'Question categories';
 $strings['QuestionsTask'] = 'Questions';
+$strings['QuestionMultiChoiceTask'] = 'Answers for multichoice questions';

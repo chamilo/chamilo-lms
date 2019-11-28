@@ -44,7 +44,7 @@ class LessonAnswersMultipleAnswerLoader implements LoaderInterface
             );
         }
 
-        $isGoodAnswer = !empty($incomingData['score']);
+        $isGoodAnswer = !empty($incomingData['score']) && $incomingData['score'] > 0;
         $incomingData['score'] = abs($incomingData['score']);
 
         if (!$isGoodAnswer) {

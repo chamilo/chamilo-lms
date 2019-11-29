@@ -1,4 +1,4 @@
-{% set fold_session_category = 'user_portal_fold_session_category'|api_get_configuration_value %}
+{% set fold_session_category = 'user_portal_foldable_session_category'|api_get_configuration_value %}
 
 <div class="panel panel-default">
     <div class="panel-body">

@@ -7,7 +7,6 @@ use APY\DataGridBundle\Grid\Mapping as GRID;
 use Chamilo\CoreBundle\Entity\Course;
 use Chamilo\CoreBundle\Entity\Resource\AbstractResource;
 use Chamilo\CoreBundle\Entity\Resource\ResourceInterface;
-use Chamilo\CoreBundle\Entity\Resource\ResourceLink;
 use Chamilo\CoreBundle\Entity\Session;
 use Chamilo\CourseBundle\Traits\ShowCourseResourcesInSessionTrait;
 use Doctrine\ORM\Event\LifecycleEventArgs;
@@ -119,9 +118,9 @@ class CDocument extends AbstractResource implements ResourceInterface
     /**
      * @return string
      */
-    public function __toString()
+    public function __toString(): string
     {
-        return (string) $this->title;
+        return $this->getTitle();
     }
 
     /**
@@ -193,7 +192,7 @@ class CDocument extends AbstractResource implements ResourceInterface
      */
     public function getTitle()
     {
-        return $this->title;
+        return (string) $this->title;
     }
 
     /**
@@ -335,28 +334,6 @@ class CDocument extends AbstractResource implements ResourceInterface
         return $this;
     }
 
-    /**
-     * @return ResourceLink
-     */
-    public function getCourseSessionResourceLink(Course $course, Session $session = null)
-    {
-        return $this->getFirstResourceLinkFromCourseSession($course, $session);
-    }
-
-    /**
-     * See ResourceLink to see the visibility constants. Example: ResourceLink::VISIBILITY_DELETED.
-     *
-     * @return int
-     */
-    public function getVisibility(Course $course, Session $session = null)
-    {
-        return $this->getCourseSessionResourceLink($course, $session)->getVisibility();
-    }
-
-    public function isVisible(Course $course, Session $session = null): bool
-    {
-        return $this->getCourseSessionResourceLink($course, $session) === ResourceLink::VISIBILITY_PUBLISHED;
-    }
 
     public function postPersist(LifecycleEventArgs $args)
     {

@@ -8,7 +8,6 @@ services:
     # Tool chain loads the list of tool services with the tag "chamilo_core.tool"
     # Tool chain is filled in file DependencyInjection/Compiler/ToolCompilerClass.php
     Chamilo\CoreBundle\ToolChain: ~
-
     # Admin
     chamilo_core.tool.admin:
         class: Chamilo\CoreBundle\Tool\Admin
@@ -17,7 +16,12 @@ services:
             - 'admin'
             - 'admin'
             - ''
-            - {Chamilo\CoreBundle\Entity\AccessUrl: 'urls', Chamilo\CoreBundle\Entity\Course: 'courses'}
+            -   urls:
+                    entity: Chamilo\CoreBundle\Entity\AccessUrl
+                    repository: Chamilo\CoreBundle\Repository\AccessUrlRepository
+                courses:
+                    entity: Chamilo\CoreBundle\Entity\Course
+                    repository: Chamilo\CoreBundle\Repository\CourseRepository
             - 1
         tags:
             - {name: chamilo_core.tool}
@@ -187,7 +191,9 @@ services:
             - authoring
             - document/document.php
             - '@chamilo_course.settings.document'
-            - {Chamilo\CourseBundle\Entity\CDocument: 'files'}
+            - files:
+                entity: Chamilo\CourseBundle\Entity\CDocument
+                repository: Chamilo\CourseBundle\Repository\CDocumentRepository
             - 0
         tags:
             - {name: chamilo_core.tool}
@@ -331,7 +337,13 @@ services:
             - 'authoring'
             - 'link/link.php'
             - '@chamilo_course.settings.link'
-            - {Chamilo\CourseBundle\Entity\CLink: 'links', Chamilo\CourseBundle\Entity\CLinkCategory: 'link_categories'}
+            -
+                links:
+                    entity: Chamilo\CourseBundle\Entity\CLink
+                    repository: Chamilo\CourseBundle\Repository\CLinkRepository
+                link_categories:
+                    entity: Chamilo\CourseBundle\Entity\CLinkCategory
+                    repository: Chamilo\CourseBundle\Repository\CLinkRepository
             - 0
         tags:
             - {name: chamilo_core.tool}

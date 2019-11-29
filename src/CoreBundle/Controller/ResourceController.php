@@ -17,7 +17,6 @@ use Chamilo\CoreBundle\Entity\Resource\ResourceNode;
 use Chamilo\CoreBundle\Security\Authorization\Voter\ResourceNodeVoter;
 use Chamilo\CourseBundle\Controller\CourseControllerInterface;
 use Chamilo\CourseBundle\Controller\CourseControllerTrait;
-use Chamilo\CourseBundle\Entity\CDocument;
 use Chamilo\CourseBundle\Repository\CDocumentRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Criteria;
@@ -93,6 +92,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
         $id = (int) $request->get('id');
 
         $repository = $this->getRepositoryFromRequest($request);
+
         $class = $repository->getRepository()->getClassName();
         $source = new Entity($class);
 
@@ -119,6 +119,8 @@ class ResourceController extends AbstractResourceController implements CourseCon
 
         $grid->setRouteUrl($this->generateUrl('chamilo_core_resource_list', $params));
 
+        //$title = $repository->get
+
         $title = $grid->getColumn('title');
         $title->setSafe(false); // allows links in the title
 
@@ -135,12 +137,14 @@ class ResourceController extends AbstractResourceController implements CourseCon
 
         // Title link.
         $grid->getColumn('title')->setTitle($this->trans('Name'));
-        $grid->getColumn('filetype')->setTitle($this->trans('Type'));
+        if ($grid->hasColumn('filetype')) {
+            $grid->getColumn('filetype')->setTitle($this->trans('Type'));
+        }
 
         $grid->getColumn('title')->manipulateRenderCell(
             function ($value, Row $row, $router) use ($routeParams) {
                 /** @var Router $router */
-                /** @var CDocument $entity */
+                /** @var AbstractResource $entity */
                 $entity = $row->getEntity();
                 $resourceNode = $entity->getResourceNode();
                 $id = $resourceNode->getId();
@@ -196,21 +200,23 @@ class ResourceController extends AbstractResourceController implements CourseCon
             }
         );
 
-        $grid->getColumn('filetype')->manipulateRenderCell(
-            function ($value, Row $row, $router) use ($routeParams) {
-                /** @var CDocument $entity */
-                $entity = $row->getEntity();
-                $resourceNode = $entity->getResourceNode();
+        if ($grid->hasColumn('filetype')) {
+            $grid->getColumn('filetype')->manipulateRenderCell(
+                function ($value, Row $row, $router) use ($routeParams) {
+                    /** @var AbstractResource $entity */
+                    $entity = $row->getEntity();
+                    $resourceNode = $entity->getResourceNode();
 
-                if ($resourceNode->hasResourceFile()) {
-                    $file = $resourceNode->getResourceFile();
+                    if ($resourceNode->hasResourceFile()) {
+                        $file = $resourceNode->getResourceFile();
 
-                    return $file->getMimeType();
+                        return $file->getMimeType();
+                    }
+
+                    return $this->trans('Folder');
                 }
-
-                return $this->trans('Folder');
-            }
-        );
+            );
+        }
 
         $grid->setHiddenColumns(['iid']);
 
@@ -265,7 +271,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
             );
 
             $setVisibleParameters = function (RowAction $action, Row $row) use ($routeParams) {
-                /** @var CDocument $resource */
+                /** @var AbstractResource $resource */
                 $resource = $row->getEntity();
                 $id = $resource->getResourceNode()->getId();
 
@@ -430,7 +436,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            /** @var CDocument $newResource */
+            /** @var AbstractResource $newResource */
             $newResource = $form->getData();
 
             if ($form->has('content')) {
@@ -839,8 +845,6 @@ class ResourceController extends AbstractResourceController implements CourseCon
         );
 
         $this->setBreadCrumb($request);
-        //$helper = $this->container->get('oneup_uploader.templating.uploader_helper');
-        //$endpoint = $helper->endpoint('courses');
 
         $routeParams = $this->getCourseParams();
         $routeParams['tool'] = $tool;
@@ -858,8 +862,6 @@ class ResourceController extends AbstractResourceController implements CourseCon
         $tool = $request->get('tool');
         $type = $request->get('type');
         $resourceNodeId = $request->get('id');
-        $courseCode = $request->get('cid');
-        $sessionId = $request->get('sid');
 
         $routeParams = $this->getCourseParams();
         $routeParams['tool'] = $tool;
@@ -870,7 +872,7 @@ class ResourceController extends AbstractResourceController implements CourseCon
 
             // Root tool link
             $breadcrumb->addChild(
-                $this->translator->trans('Documents'),
+                $this->translator->trans($tool),
                 [
                     'uri' => $this->generateUrl(
                         'chamilo_core_resource_index',
@@ -1013,7 +1015,6 @@ class ResourceController extends AbstractResourceController implements CourseCon
         $resourceNodeParentId = $request->get('id');
 
         $repository = $this->getRepositoryFromRequest($request);
-
         $form = $repository->getForm($this->container->get('form.factory'));
 
         $courseParams = $this->getCourseParams();
@@ -1050,16 +1051,8 @@ class ResourceController extends AbstractResourceController implements CourseCon
         if ($form->isSubmitted() && $form->isValid()) {
             $em = $this->getDoctrine()->getManager();
 
-            /** @var CDocument $newResource */
-            $newResource = $form->getData();
-
-            $newResource
-                ->setCourse($course)
-                ->setSession($session)
-                ->setFiletype($fileType)
-                //->setTitle($title) // already added in $form->getData()
-                ->setReadonly(false)
-            ;
+            /** @var AbstractResource $newResource */
+            $newResource = $repository->saveResource($form, $course, $session, $fileType);
 
             $file = null;
             if ($fileType === 'file') {

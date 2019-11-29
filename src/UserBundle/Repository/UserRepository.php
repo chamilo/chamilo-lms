@@ -87,7 +87,7 @@ class UserRepository
         $user = $this->repository->findOneBy(['username' => $username]);
 
         if (null === $user) {
-            throw new UsernameNotFoundException(sprintf("User '%s' not found.", $username));
+            throw new UsernameNotFoundException(sprintf("User with id '%s' not found.", $username));
         }
 
         return $user;

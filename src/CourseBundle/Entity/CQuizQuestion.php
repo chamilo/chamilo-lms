@@ -143,7 +143,7 @@ class CQuizQuestion extends AbstractResource implements ResourceInterface
      */
     public function getQuestion()
     {
-        return $this->question;
+        return (string) $this->question;
     }
 
     /**
@@ -423,6 +423,16 @@ class CQuizQuestion extends AbstractResource implements ResourceInterface
     }
 
     public function getResourceName(): string
+    {
+        return $this->getQuestion();
+    }
+
+    public function getResourceFieldName(): string
+    {
+        return 'question';
+    }
+
+    public function __toString(): string
     {
         return $this->getQuestion();
     }

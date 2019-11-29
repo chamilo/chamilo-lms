@@ -191,4 +191,9 @@ class CExerciseCategory extends AbstractResource implements ResourceInterface
     {
         return $this->getName();
     }
+
+    public function getResourceFieldName(): string
+    {
+        return 'name';
+    }
 }

@@ -3,6 +3,7 @@
 
 namespace Chamilo\CoreBundle;
 
+use Chamilo\CoreBundle\DependencyInjection\Compiler\RepositoryCompilerClass;
 use Chamilo\CoreBundle\DependencyInjection\Compiler\ToolCompilerClass;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
@@ -16,5 +17,6 @@ class ChamiloCoreBundle extends Bundle
     {
         parent::build($container);
         $container->addCompilerPass(new ToolCompilerClass());
+        $container->addCompilerPass(new RepositoryCompilerClass());
     }
 }

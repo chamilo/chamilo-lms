@@ -87,7 +87,7 @@ class ToolChain
 
             $manager->persist($toolEntity);
 
-            $types = $tool->getTypes();
+            $types = $tool->getResourceTypes();
             if (!empty($types)) {
                 foreach ($types as $entityName => $name) {
                     $resourceType = new ResourceType();

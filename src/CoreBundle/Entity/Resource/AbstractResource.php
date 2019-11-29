@@ -25,7 +25,7 @@ abstract class AbstractResource implements ResourceInterface
      */
     public $resourceNode;
 
-    abstract public function getResourceName(): string;
+    //abstract public function getResourceName(): string;
 
     /**
      * @return $this
@@ -40,6 +40,29 @@ abstract class AbstractResource implements ResourceInterface
     public function getResourceNode(): ResourceNode
     {
         return $this->resourceNode;
+    }
+
+    /**
+     * @return ResourceLink
+     */
+    public function getCourseSessionResourceLink(Course $course, Session $session = null)
+    {
+        return $this->getFirstResourceLinkFromCourseSession($course, $session);
+    }
+
+    /**
+     * See ResourceLink to see the visibility constants. Example: ResourceLink::VISIBILITY_DELETED.
+     *
+     * @return int
+     */
+    public function getLinkVisibility(Course $course, Session $session = null)
+    {
+        return $this->getCourseSessionResourceLink($course, $session)->getVisibility();
+    }
+
+    public function isVisible(Course $course, Session $session = null): bool
+    {
+        return $this->getCourseSessionResourceLink($course, $session) === ResourceLink::VISIBILITY_PUBLISHED;
     }
 
     public function getFirstResourceLinkFromCourseSession(Course $course, Session $session = null): ?ResourceLink

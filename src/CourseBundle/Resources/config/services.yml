@@ -24,9 +24,17 @@ services:
         arguments:
             $className: 'Chamilo\CourseBundle\Entity\CDocument'
 
+    Chamilo\CourseBundle\Repository\CExerciseCategoryRepository:
+        arguments:
+            $className: 'Chamilo\CourseBundle\Entity\CExerciseCategory'
+
     Chamilo\CourseBundle\Repository\CGroupInfoRepository:
         arguments:
             $className: 'Chamilo\CourseBundle\Entity\CGroupInfo'
+
+    Chamilo\CourseBundle\Repository\CLinkRepository:
+        arguments:
+            $className: 'Chamilo\CourseBundle\Entity\CLink'
 
     Chamilo\CourseBundle\Repository\CQuizRepository:
         arguments:
@@ -35,10 +43,6 @@ services:
     Chamilo\CourseBundle\Repository\CQuizQuestionCategoryRepository:
         arguments:
             $className: 'Chamilo\CourseBundle\Entity\CQuizQuestionCategory'
-
-    Chamilo\CourseBundle\Repository\CExerciseCategoryRepository:
-        arguments:
-            $className: 'Chamilo\CourseBundle\Entity\CExerciseCategory'
 
     Chamilo\CourseBundle\Repository\CQuizQuestionRepository:
         arguments:

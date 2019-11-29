@@ -3,6 +3,8 @@
 
 namespace Chamilo\CourseBundle\Entity;
 
+use Chamilo\CoreBundle\Entity\Resource\AbstractResource;
+use Chamilo\CoreBundle\Entity\Resource\ResourceInterface;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -17,7 +19,7 @@ use Doctrine\ORM\Mapping as ORM;
  * )
  * @ORM\Entity
  */
-class CAnnouncement
+class CAnnouncement extends AbstractResource implements ResourceInterface
 {
     /**
      * @var int
@@ -284,5 +286,28 @@ class CAnnouncement
     public function getIid()
     {
         return $this->iid;
+    }
+
+    /**
+     * Resource identifier.
+     */
+    public function getResourceIdentifier(): int
+    {
+        return $this->getIid();
+    }
+
+    public function getResourceName(): string
+    {
+        return $this->getTitle();
+    }
+
+    public function getResourceFieldName(): string
+    {
+        return 'title';
+    }
+
+    public function __toString(): string
+    {
+        // TODO: Implement __toString() method.
     }
 }

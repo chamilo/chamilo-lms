@@ -17,18 +17,17 @@ abstract class AbstractTool implements ToolInterface
     protected $image;
     protected $admin;
     protected $courseSettings;
-    protected $manager;
-    protected $types;
+    protected $resourceTypes;
 
     /**
      * @param string $name
      * @param string $category
      * @param string $link
      * @param        $courseSettings
-     * @param array  $types
+     * @param array  $resourceTypes
      * @param array  $admin
      */
-    public function __construct($name, $category, $link, $courseSettings, $types, $admin)
+    public function __construct($name, $category, $link, $courseSettings, $resourceTypes, $admin)
     {
         $this->name = $name;
         $this->category = $category;
@@ -36,7 +35,7 @@ abstract class AbstractTool implements ToolInterface
         $this->image = $name.'.png';
         $this->admin = (int) $admin;
         $this->courseSettings = $courseSettings;
-        $this->types = $types;
+        $this->resourceTypes = $resourceTypes;
     }
 
     /**
@@ -93,14 +92,6 @@ abstract class AbstractTool implements ToolInterface
     }
 
     /**
-     * @return BaseEntityManager;
-     */
-    public function getManager()
-    {
-        return $this->manager;
-    }
-
-    /**
      * @param $settings
      *
      * @return int
@@ -119,18 +110,22 @@ abstract class AbstractTool implements ToolInterface
     }
 
     /**
-     * @param string $type
+     * @return array
      */
-    public function addType($type)
+    public function getResourceTypes(): array
     {
-        $this->types[] = $type;
+        return $this->resourceTypes;
     }
 
     /**
-     * @return array
+     * @param array $resourceTypes
+     *
+     * @return AbstractTool
      */
-    public function getTypes()
+    public function setResourceTypes(array $resourceTypes): AbstractTool
     {
-        return $this->types;
+        $this->resourceTypes = $resourceTypes;
+
+        return $this;
     }
 }

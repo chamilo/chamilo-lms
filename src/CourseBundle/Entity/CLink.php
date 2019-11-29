@@ -3,6 +3,9 @@
 
 namespace Chamilo\CourseBundle\Entity;
 
+use APY\DataGridBundle\Grid\Mapping as GRID;
+use Chamilo\CoreBundle\Entity\Resource\AbstractResource;
+use Chamilo\CoreBundle\Entity\Resource\ResourceInterface;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -16,8 +19,9 @@ use Doctrine\ORM\Mapping as ORM;
  *  }
  * )
  * @ORM\Entity
+ * @GRID\Source(columns="iid, title, resourceNode.createdAt", filterable=false)
  */
-class CLink
+class CLink extends AbstractResource implements ResourceInterface
 {
     /**
      * @var int
@@ -143,7 +147,7 @@ class CLink
      */
     public function getTitle()
     {
-        return $this->title;
+        return (string) $this->title;
     }
 
     /**
@@ -336,5 +340,28 @@ class CLink
     public function getCId()
     {
         return $this->cId;
+    }
+
+    /**
+     * Resource identifier.
+     */
+    public function getResourceIdentifier(): int
+    {
+        return $this->iid;
+    }
+
+    public function getResourceName(): string
+    {
+        return $this->getTitle();
+    }
+
+    public function getResourceFieldName(): string
+    {
+        return 'title';
+    }
+
+    public function __toString(): string
+    {
+        return $this->getTitle();
     }
 }

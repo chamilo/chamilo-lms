@@ -379,9 +379,9 @@ class Course extends AbstractResource implements ResourceInterface
     /**
      * @return string
      */
-    public function __toString()
+    public function __toString(): string
     {
-        return (string) $this->getTitle();
+        return $this->getTitle();
     }
 
     /**
@@ -706,7 +706,7 @@ class Course extends AbstractResource implements ResourceInterface
      */
     public function getTitle()
     {
-        return $this->title;
+        return (string) $this->title;
     }
 
     /**
@@ -1361,5 +1361,10 @@ class Course extends AbstractResource implements ResourceInterface
     public function getResourceName(): string
     {
         return $this->getCode();
+    }
+
+    public function getResourceFieldName(): string
+    {
+        return 'code';
     }
 }

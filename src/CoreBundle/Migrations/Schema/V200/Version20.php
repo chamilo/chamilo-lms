@@ -940,20 +940,34 @@ class Version20 extends AbstractMigrationChamilo
             $this->addSql("INSERT INTO settings_options (variable, value, display_text) VALUES ('configure_exercise_visibility_in_course','false','No')");
         }
 
-        //CREATE TABLE illustration (id INT AUTO_INCREMENT NOT NULL, resource_node_id INT DEFAULT NULL, name VARCHAR(255) NOT NULL, created_at DATETIME NOT NULL, updated_at DATETIME NOT NULL, UNIQUE INDEX UNIQ_D67B9A421BAD783F (resource_node_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB ROW_FORMAT = DYNAMIC;
-        //ALTER TABLE illustration ADD CONSTRAINT FK_D67B9A421BAD783F FOREIGN KEY (resource_node_id) REFERENCES resource_node (id) ON DELETE CASCADE;
-        /*ALTER TABLE c_quiz_question ADD resource_node_id INT DEFAULT NULL;
-        ALTER TABLE c_quiz_question ADD CONSTRAINT FK_9A48A59F1BAD783F FOREIGN KEY (resource_node_id) REFERENCES resource_node (id) ON DELETE CASCADE;
-        CREATE UNIQUE INDEX UNIQ_9A48A59F1BAD783F ON c_quiz_question (resource_node_id);*/
+        $this->addSql("CREATE TABLE illustration (id INT AUTO_INCREMENT NOT NULL, resource_node_id INT DEFAULT NULL, name VARCHAR(255) NOT NULL, created_at DATETIME NOT NULL, updated_at DATETIME NOT NULL, UNIQUE INDEX UNIQ_D67B9A421BAD783F (resource_node_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB ROW_FORMAT = DYNAMIC;");
+        $this->addSql("ALTER TABLE illustration ADD CONSTRAINT FK_D67B9A421BAD783F FOREIGN KEY (resource_node_id) REFERENCES resource_node (id) ON DELETE CASCADE;");
+        $this->addSql("ALTER TABLE c_quiz_question ADD resource_node_id INT DEFAULT NULL;");
+        $this->addSql("ALTER TABLE c_quiz_question ADD CONSTRAINT FK_9A48A59F1BAD783F FOREIGN KEY (resource_node_id) REFERENCES resource_node (id) ON DELETE CASCADE;");
+        $this->addSql("CREATE UNIQUE INDEX UNIQ_9A48A59F1BAD783F ON c_quiz_question (resource_node_id);");
 
-        /*ALTER TABLE c_quiz CHANGE exercise_category_id exercise_category_id BIGINT DEFAULT NULL;
-        ALTER TABLE c_quiz ADD CONSTRAINT FK_B7A1C35FB48D66 FOREIGN KEY (exercise_category_id) REFERENCES c_exercise_category (id);
-        CREATE INDEX IDX_B7A1C35FB48D66 ON c_quiz (exercise_category_id);
-        ALTER TABLE c_quiz_question_category ADD CONSTRAINT FK_1414369D91D79BD3 FOREIGN KEY (c_id) REFERENCES course (id);
-        ALTER TABLE c_document CHANGE path path VARCHAR(255) DEFAULT NULL;
-        */
+        $this->addSql("ALTER TABLE c_quiz CHANGE exercise_category_id exercise_category_id BIGINT DEFAULT NULL;");
+        $this->addSql("ALTER TABLE c_quiz ADD CONSTRAINT FK_B7A1C35FB48D66 FOREIGN KEY (exercise_category_id) REFERENCES c_exercise_category (id);");
+        $this->addSql("CREATE INDEX IDX_B7A1C35FB48D66 ON c_quiz (exercise_category_id);");
+        $this->addSql("ALTER TABLE c_quiz_question_category ADD CONSTRAINT FK_1414369D91D79BD3 FOREIGN KEY (c_id) REFERENCES course (id);");
+        $this->addSql("ALTER TABLE c_document CHANGE path path VARCHAR(255) DEFAULT NULL;");
+
+        $this->addSql("ALTER TABLE c_lp ADD resource_node_id INT DEFAULT NULL;");
+        $this->addSql("ALTER TABLE c_lp ADD CONSTRAINT FK_F67ABBEB1BAD783F FOREIGN KEY (resource_node_id) REFERENCES resource_node (id) ON DELETE CASCADE;");
+        $this->addSql("CREATE UNIQUE INDEX UNIQ_F67ABBEB1BAD783F ON c_lp (resource_node_id);");
+        $this->addSql("ALTER TABLE c_announcement ADD resource_node_id INT DEFAULT NULL;");
+        $this->addSql("ALTER TABLE c_announcement ADD CONSTRAINT FK_39912E021BAD783F FOREIGN KEY (resource_node_id) REFERENCES resource_node (id) ON DELETE CASCADE;");
+        $this->addSql("CREATE UNIQUE INDEX UNIQ_39912E021BAD783F ON c_announcement (resource_node_id);");
 
         $this->addSql("ALTER TABLE c_quiz_question ADD feedback LONGTEXT DEFAULT NULL;");
+
+        $this->addSql("ALTER TABLE c_link ADD resource_node_id INT DEFAULT NULL;");
+        $this->addSql("ALTER TABLE c_link ADD CONSTRAINT FK_9209C2A01BAD783F FOREIGN KEY (resource_node_id) REFERENCES resource_node (id) ON DELETE CASCADE;");
+        $this->addSql("CREATE UNIQUE INDEX UNIQ_9209C2A01BAD783F ON c_link (resource_node_id);");
+
+/*        $this->addSql("");
+        $this->addSql("");
+        $this->addSql("");*/
     }
 
     public function down(Schema $schema)

@@ -60,30 +60,31 @@ abstract class AbstractResourceController extends BaseController
     }
 
     /**
-     * @param string $type
+     * @param string $resourceTypeName
      *
      * @return ResourceRepository
      */
-    public function getRepository($tool, $type)
+    public function getRepository($tool, $resourceTypeName)
     {
         $checker = $this->container->get('security.authorization_checker');
         $tool = $this->toolChain->getToolFromName($tool);
+        $resourceTypeList = $tool->getResourceTypes();
 
-        $types = $tool->getTypes();
-        if (!in_array($type, $types)) {
+        if (!isset($resourceTypeList[$resourceTypeName])) {
             return null;
         }
 
-        $types = array_flip($types);
-        $type = $types[$type];
+        $type = $resourceTypeList[$resourceTypeName];
+        $repo = $type['repository'];
+        $entity = $type['entity'];
 
-        $resourceRepository = new ResourceRepository(
+        $resourceRepository = new $repo(
             $checker,
             $this->getDoctrine()->getManager(),
             $this->mountManager,
             $this->get('router'),
             $this->slugify,
-            $type
+            $entity
         );
 
         return $resourceRepository;

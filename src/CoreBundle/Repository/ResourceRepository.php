@@ -151,8 +151,8 @@ class ResourceRepository extends EntityRepository
         $className = $this->repository->getClassName();
         $shortName = (new \ReflectionClass($className))->getShortName();
 
-        $formType = str_replace('Entity\CDocument', 'Form\\Type', $className).'\\'.$shortName.'Type';
-
+        // @todo remove hardcode class loading
+        $formType = 'Chamilo\CoreBundle\Form\Resource\\'.$shortName.'Type';
         if ($resource === null) {
             $resource = new $className();
         }
@@ -740,4 +740,9 @@ class ResourceRepository extends EntityRepository
 
         return true;
     }
+
+    /*public function saveResource(FormInterface $form, $course, $session, $fileType)
+    {
+        $this->repository->saveResource($form, $course, $session, $fileType);
+    }*/
 }

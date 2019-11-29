@@ -1,7 +1,7 @@
 <?php
 /* For licensing terms, see /license.txt */
 
-namespace Chamilo\CourseBundle\Form\Type;
+namespace Chamilo\CoreBundle\Form\Resource;
 
 use Chamilo\CourseBundle\Entity\CDocument;
 use FOS\CKEditorBundle\Form\Type\CKEditorType;

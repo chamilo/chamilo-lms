@@ -150,7 +150,7 @@ class AccessUrl extends AbstractResource implements ResourceInterface
     /**
      * @return string
      */
-    public function __toString()
+    public function __toString(): string
     {
         return (string) $this->getUrl();
     }
@@ -505,5 +505,10 @@ class AccessUrl extends AbstractResource implements ResourceInterface
         $url = $url['host'];
 
         return $url;
+    }
+
+    public function getResourceFieldName(): string
+    {
+        return 'url';
     }
 }

@@ -5,13 +5,29 @@ namespace Chamilo\CourseBundle\Repository;
 
 use Chamilo\CoreBundle\Entity\Resource\ResourceLink;
 use Chamilo\CoreBundle\Repository\ResourceRepository;
+use Chamilo\CoreBundle\Repository\ResourceRepositoryInterface;
 use Chamilo\CourseBundle\Entity\CDocument;
+use Symfony\Component\Form\FormInterface;
 
 /**
  * Class CDocumentRepository.
  */
-final class CDocumentRepository extends ResourceRepository
+final class CDocumentRepository extends ResourceRepository implements ResourceRepositoryInterface
 {
+    public function saveResource(FormInterface $form, $course, $session, $fileType)
+    {
+        $newResource = $form->getData();
+        $newResource
+            ->setCourse($course)
+            ->setSession($session)
+            ->setFiletype($fileType)
+            //->setTitle($title) // already added in $form->getData()
+            ->setReadonly(false)
+        ;
+
+        return $newResource;
+    }
+
     /**
      * @return string
      */

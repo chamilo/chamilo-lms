@@ -3,6 +3,8 @@
 
 namespace Chamilo\CourseBundle\Entity;
 
+use Chamilo\CoreBundle\Entity\Resource\AbstractResource;
+use Chamilo\CoreBundle\Entity\Resource\ResourceInterface;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -17,7 +19,7 @@ use Doctrine\ORM\Mapping as ORM;
  * )
  * @ORM\Entity
  */
-class CLp
+class CLp extends AbstractResource implements ResourceInterface
 {
     /**
      * @var int
@@ -1058,5 +1060,28 @@ class CLp
     public function getSubscribeUsers()
     {
         return $this->subscribeUsers;
+    }
+
+    /**
+     * Resource identifier.
+     */
+    public function getResourceIdentifier(): int
+    {
+        return $this->getIid();
+    }
+
+    public function getResourceName(): string
+    {
+        return $this->getName();
+    }
+
+    public function getResourceFieldName(): string
+    {
+        return 'name';
+    }
+
+    public function __toString(): string
+    {
+        return $this->getName();
     }
 }

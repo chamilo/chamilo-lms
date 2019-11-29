@@ -3,7 +3,9 @@
 
 namespace Chamilo\CoreBundle\Entity;
 
+use Chamilo\CoreBundle\Entity\Resource\ResourceType;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -124,5 +126,37 @@ class Tool
     public function getName()
     {
         return $this->name;
+    }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getResourceTypes()
+    {
+        return $this->resourceTypes;
+    }
+
+    /**
+     * @param mixed $resourceTypes
+     *
+     * @return Tool
+     */
+    public function setResourceTypes($resourceTypes)
+    {
+        $this->resourceTypes = $resourceTypes;
+
+        return $this;
+    }
+
+    /**
+     * @param $name
+     *
+     * @return ResourceType
+     */
+    public function getResourceTypeByName($name)
+    {
+        $criteria = Criteria::create()->where(Criteria::expr()->eq('name', $name));
+
+        return $this->getResourceTypes()->matching($criteria)->first();
     }
 }
